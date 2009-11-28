@@ -37,7 +37,7 @@ import junit.framework.Assert;
  */
 public class EntityTester {
 
-	static public boolean testEntity(Class<?> clazz) {
+	static public boolean test(Class<?> clazz) {
 		try {
 			testConstructor(clazz);
 			testClassAnnotations(clazz);
