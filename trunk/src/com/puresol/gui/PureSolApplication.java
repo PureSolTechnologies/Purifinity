@@ -6,7 +6,6 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.MediaTracker;
 import java.awt.Toolkit;
-import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -19,10 +18,8 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JMenuBar;
-import javax.swing.KeyStroke;
 import javax.swingx.Application;
 import javax.swingx.Menu;
-import javax.swingx.MenuItem;
 import javax.swingx.SplashWindow;
 import javax.swingx.connect.Slot;
 
@@ -56,9 +53,12 @@ public class PureSolApplication extends Application {
 		 * During initialization of static elements (it's one of the first
 		 * things done during start time)the splash screen is opened.
 		 */
+		// splash = new SplashWindow(PureSolApplication.class
+		// .getResource("/META-INF/splash.jpeg"), 480, 225);
 		splash = new SplashWindow(PureSolApplication.class
-				.getResource("/META-INF/splash.jpeg"), 400, 188);
+				.getResource("/META-INF/splash.jpeg"), 640, 300);
 		splash.setClosable(true);
+		splash.setTimer(10);
 		splash.run();
 	}
 
@@ -98,30 +98,6 @@ public class PureSolApplication extends Application {
 	 */
 	private Menu getDefaultHelpMenu() {
 		Menu helpMenu = new Menu(translator.i18n("Help"));
-
-		MenuItem processHelpItem = new MenuItem(translator
-				.i18n("Process Documentation..."));
-		processHelpItem.setAccelerator(KeyStroke
-				.getKeyStroke(KeyEvent.VK_F1, 0));
-		processHelpItem.connect("start", this, "openProcessDocumentation");
-
-		MenuItem xFabHelpItem = new MenuItem(translator.i18n("X-FAB site..."));
-		xFabHelpItem.connect("start", this, "openXFabSite");
-
-		MenuItem xFabDDHelpItem = new MenuItem(translator
-				.i18n("X-FAB Dresden site..."));
-		xFabDDHelpItem.connect("start", this, "openXFabDDSite");
-
-		MenuItem sharepointHelpItem = new MenuItem(translator
-				.i18n("Sharepoint X-FAB Dresden..."));
-		sharepointHelpItem.connect("start", this, "openSharepointSite");
-
-		helpMenu.add(processHelpItem);
-		helpMenu.addSeparator();
-		helpMenu.add(xFabHelpItem);
-		helpMenu.add(xFabDDHelpItem);
-		helpMenu.add(sharepointHelpItem);
-		helpMenu.addSeparator();
 		helpMenu.addDefaultAboutItem();
 		return helpMenu;
 	}
@@ -151,12 +127,12 @@ public class PureSolApplication extends Application {
 		if ((image.getWidth(this) <= 0) || (image.getWidth(this) <= 0)) {
 			return;
 		}
-		BufferedImage logoImage = new BufferedImage(96, 36,
+		BufferedImage logoImage = new BufferedImage(192, 36,
 				BufferedImage.TYPE_INT_RGB);
 		Graphics graphics = logoImage.getGraphics();
 		graphics.setColor(Color.WHITE);
-		graphics.fillRect(1, 1, 94, 34);
-		graphics.drawImage(image, 6, 6, 84, 24, this);
+		graphics.fillRect(1, 1, 190, 34);
+		graphics.drawImage(image, 6, 6, 180, 24, this);
 		Icon icon = new ImageIcon(logoImage);
 		JLabel xFabMenu = new JLabel(icon);
 		menubar.add(xFabMenu);
