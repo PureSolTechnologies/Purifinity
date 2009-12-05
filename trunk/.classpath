@@ -23,5 +23,6 @@
 	<classpathentry kind="lib" path="/opt/JBoss/client/jbossall-client.jar"/>
 	<classpathentry kind="lib" path="/opt/JBoss/common/lib/jsp-api.jar"/>
 	<classpathentry kind="lib" path="lib/hibernate/javassist-3.9.0.GA.jar"/>
+	<classpathentry kind="lib" path="lib/antlr/antlr-3.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
