@@ -1,12 +1,13 @@
-package com.puresol.coding.antlr;
+package com.puresol.coding.java.antlr;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
-public class ANTLRJavaHelper extends ANTLRHelper {
+import com.puresol.coding.LexerHelper;
+
+public class ANTLRJavaHelper extends LexerHelper {
 
 	private static final Logger logger = Logger
 			.getLogger(ANTLRJavaHelper.class);

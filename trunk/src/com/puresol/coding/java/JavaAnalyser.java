@@ -1,4 +1,4 @@
-package com.puresol.coding;
+package com.puresol.coding.java;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -6,13 +6,17 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.antlr.runtime.ANTLRInputStream;
+import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
+import org.antlr.runtime.Token;
+import org.antlr.runtime.TokenStream;
 import org.apache.log4j.Logger;
 
-import com.puresol.coding.antlr.ANTLRJavaHelper;
-import com.puresol.coding.antlr.output.JavaAnalyseLexer;
-import com.puresol.coding.antlr.output.JavaAnalyseParser;
+import com.puresol.coding.SourceCodeAnalyser;
+import com.puresol.coding.java.antlr.JavaLexerHelper;
+import com.puresol.coding.java.antlr.output.JavaLexer;
+import com.puresol.coding.java.antlr.output.JavaParser;
 
 /**
  * 
@@ -24,7 +28,7 @@ public class JavaAnalyser implements SourceCodeAnalyser {
 	private static final Logger logger = Logger.getLogger(JavaAnalyser.class);
 
 	private File file = null;
-	private ANTLRJavaHelper helper = new ANTLRJavaHelper();
+	private JavaLexerHelper helper = new JavaLexerHelper();
 
 	public JavaAnalyser(File file) {
 		this.file = file;
@@ -34,11 +38,21 @@ public class JavaAnalyser implements SourceCodeAnalyser {
 	private void analyse() {
 		try {
 			InputStream in = new FileInputStream(file);
-			JavaAnalyseLexer lexer = new JavaAnalyseLexer(new ANTLRInputStream(
-					in), helper);
+			JavaLexer lexer = new JavaLexer(new ANTLRInputStream(in), helper);
 			CommonTokenStream cts = new CommonTokenStream(lexer);
-			JavaAnalyseParser parser = new JavaAnalyseParser(cts, helper);
-			parser.file();
+			for (Object o : cts.getTokens()) {
+				CommonToken token = (CommonToken) o;
+				System.out.println(token.getText() + "("
+						+ token.getTokenIndex() + ", " + token.getLine() + ", "
+						+ token.getType() + ")");
+			}
+			 JavaParser parser = new JavaParser(cts);
+			 parser.file();
+			 TokenStream stream = parser.getTokenStream();
+			 for (int index = 0; index < stream.size(); index++) {
+			 Token token = stream.get(index);
+			 System.out.println(token.getText());
+			 }
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
 		} catch (RecognitionException e) {
@@ -46,19 +60,8 @@ public class JavaAnalyser implements SourceCodeAnalyser {
 		}
 	}
 
-	public int getSLOCCount() {
-		return helper.getSlocCount();
-	}
-
-	public String getPackageName() {
-		return helper.getPackageName();
-	}
-
 	public static void main(String[] args) {
 		JavaAnalyser analyser = new JavaAnalyser(new File(
-				"src/com/puresol/coding/JavaAnalyser.java"));
-
-		System.out.println("Lines " + analyser.getSLOCCount());
-		System.out.println("Package " + analyser.getPackageName());
+				"src/com/puresol/coding/java/JavaAnalyser.java"));
 	}
 }
