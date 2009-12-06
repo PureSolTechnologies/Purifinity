@@ -32,19 +32,33 @@ public JavaAnalyseLexer(CharStream stream, ANTLRJavaHelper helper)
 }
 }
 
-//r : ID '#' {s = $ID.text; System.out.println("found "+s);} ;
-//ID: 'a'..'z' + ;
-//WS	:	 WS_COUNTED;
-file	:	package_decl import_decl*; /* classes* ;*/
+file	:	package_decl import_decl* (class_decl (constructor_decl | method_decl)*)* ;
 
 package_decl	:	'package' package_name SEMICOLON {helper.setPackageName($package_name.text);};
-
-//class_decl	:	MODIFIERS* 'class' (PACKAGE '.')? (ID|'*');
-
 import_decl	:	'import'  import_name SEMICOLON {helper.addImport($import_name.text);};
+class_decl	:	MODIFIERS 'class' class_name extended? implemented? {helper.addClass($class_name.text, $MODIFIERS.text, $extended.text, $implemented.text);};
+constructor_decl:	MODIFIERS ID '(' ~(')')* ')' {helper.addMethod($ID.text, $MODIFIERS.text);};
+method_decl	:	MODIFIERS ID ID '(' ~(')')* ')' {helper.addMethod($ID.text, $MODIFIERS.text);};
 
-//classes :	MODIFIERS CLASS ':' ('extends' CLASS)?;
+package_name	:	ID (DOT ID)*;
+import_name	:	(ID DOT)* (ID|STAR);
+class_name	:	(ID DOT)* ID;
 
+extended:	'extends' ID;
+implemented:	'implemented' ID (COMMA ID)*;
+
+/* 
+==========================================================================
+The next rules belong to the lexer and identify the different operants, 
+groups into tokens and removes irrelevant content like comments and 
+whitespaces.
+==========================================================================
+*/
+
+MODIFIERS 
+	:	(MODIFIER WS)*;
+
+fragment
 MODIFIER
 	:	VISIBILITY
 	|	'final'
@@ -59,14 +73,6 @@ VISIBILITY
 	|	'protected'
 	;
 
-package_name	:	ID (DOT ID)*;
-import_name	:	(ID DOT)* (ID|STAR);
-
-/* 
-* The next rules belong to the lexer and identify the different operants, groups into tokens
-* and removes irrelevant content like comments and whitespaces.
-*/
-
 BLOCK_BEGIN
 	:	'{' {helper.addBlockBegin();}
 	;
@@ -77,10 +83,27 @@ BLOCK_END
 	
 PLUS	:	'+';
 MINUS	:	'-';
-DOT	:	'.';
+SLASH	:	'/';
 STAR	:	'*';
+
+EQUAL	:	'==';
+UNEQUAL	:	'!=';
+ASSIGN	:	'=';
+
+LOGICAL_OR
+	:	'||';
+BIT_OR	:	'|';
+
+LOGICAL_AND
+	:	'&&';
+BIT_AND	:	'&';
+
+NOT	:	'!';
+
+DOT	:	'.';
 COMMA	:	',';
-EQUAL	:	'=';
+LT	:	'<';
+GT	:	'>';
 
 OPEN_RECT_BRACKET
 	:	'['
