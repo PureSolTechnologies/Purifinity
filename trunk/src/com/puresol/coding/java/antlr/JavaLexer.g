@@ -17,6 +17,9 @@ public JavaLexer(CharStream stream, JavaLexerHelper helper)
 }
 }
 
+PACKAGE	:		'package' {helper.addOperator($text);};
+IMPORT	:		'import' {helper.addOperator($text);};
+
 CLASS	:	'class' {helper.addOperator($text);};
 EXTENDS	:	'extends' {helper.addOperator($text);};
 IMPLEMENTS	:	'implements' {helper.addOperator($text);};

@@ -2,11 +2,9 @@ package com.puresol.coding;
 
 import java.util.Hashtable;
 
-import org.apache.log4j.Logger;
-
 public class LexerHelper {
 
-	private static final Logger logger = Logger.getLogger(LexerHelper.class);
+	// private static final Logger logger = Logger.getLogger(LexerHelper.class);
 
 	private int slocCount = 0;
 	private int blockLayer = 0;
@@ -23,21 +21,21 @@ public class LexerHelper {
 
 	public void incSlocCount() {
 		slocCount++;
-		logger.debug("sloc " + slocCount);
+		// logger.debug("sloc " + slocCount);
 	}
 
 	public void addBlockBegin() {
 		blockLayer++;
-		logger
-				.debug("block begin: " + blockLayer + " (line " + slocCount
-						+ ")");
+		// logger
+		// .debug("block begin: " + blockLayer + " (line " + slocCount
+		// + ")");
 	}
 
 	public void addBlockEnd() {
 		blockLayer--;
-		logger
-				.debug("block begin: " + blockLayer + " (line " + slocCount
-						+ ")");
+		// logger
+		// .debug("block begin: " + blockLayer + " (line " + slocCount
+		// + ")");
 	}
 
 	public void addOperator(String operator) {
