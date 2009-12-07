@@ -82,7 +82,6 @@ public class SLOCStatistics {
 			}
 			previous = stream.get(index);
 		}
-		System.out.println("Dealing with " + (lines + 1) + " lines!");
 		return lines + 1;
 	}
 
@@ -99,7 +98,6 @@ public class SLOCStatistics {
 		while (!previous.getText().equals("\n")) {
 			if (previous.getChannel() == 99) {
 				if (!previous.getText().trim().isEmpty()) {
-					System.out.println("Found commented line!");
 					return true;
 				}
 			}
@@ -136,7 +134,6 @@ public class SLOCStatistics {
 			}
 			previous = stream.get(index);
 		}
-		System.out.println("Found blank line!");
 		return true;
 	}
 
@@ -153,7 +150,6 @@ public class SLOCStatistics {
 		Token previous = stream.get(index);
 		while (!previous.getText().equals("\n")) {
 			if (previous.getChannel() != 99) {
-				System.out.println("Found productive line!");
 				return true;
 			}
 			index--;

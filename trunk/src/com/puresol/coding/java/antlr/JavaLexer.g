@@ -27,6 +27,9 @@ IMPLEMENTS	:	'implements' {helper.addOperator($text);};
 VOID	:	'void' {helper.addOperator($text);};
 NEW	:	'new' {helper.addOperator($text);};
 RETURN	:	'return' {helper.addOperator($text);};
+NULL	:	'null' {helper.addOperand($text);};
+THIS	:	'this' {helper.addOperand($text);};
+SUPER	:	'super' {helper.addOperand($text);};
 
 FOR	:	'for' {helper.addOperator($text);};
 DO	:	'do' {helper.addOperator($text);};
@@ -35,6 +38,10 @@ IF	:	'if' {helper.addOperator($text);};
 ELSE	:	'else' {helper.addOperator($text);};
 SWITCH	:	'switch' {helper.addOperator($text);};
 CASE	:	'case' {helper.addOperator($text);};
+
+TRY	:	'try'  {helper.addOperator($text);};
+CATCH	:	'catch'  {helper.addOperator($text);};
+FINALLY	:	'finally'  {helper.addOperator($text);};
 
 PUBLIC	:	'public' {helper.addOperator($text);};
 PRIVATE	:	'private' {helper.addOperator($text);};
@@ -92,13 +99,17 @@ OPEN_BRACKET
 	:	'(' {helper.addOperator($text);}
 	;
 	
-CLOSE_BRACKER
+CLOSE_BRACKET
 	:	')' {helper.addOperator($text);}
 	;
 
 COLON	:	':' {helper.addOperator($text);};
 SEMICOLON
 	:	';' {helper.addOperator($text);};
+
+BOOLEAN	:	'true'
+	|	'false'
+	;
 
 ID  :	('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'0'..'9'|'_')* {helper.addOperand($text);}
     ;

@@ -51,25 +51,24 @@ public class JavaAnalyser implements SourceCodeAnalyser {
 			// + token.getTokenIndex() + ", " + token.getLine() + ", "
 			// + token.getType() + ")");
 			// }
-			// JavaParser parser = new JavaParser(cts);
-			// parser.file();
-			// TokenStream stream = parser.getTokenStream();
+			JavaParser parser = new JavaParser(cts);
+			parser.file();
+			TokenStream stream = parser.getTokenStream();
 			// for (int index = 0; index < stream.size(); index++) {
 			// Token token = stream.get(index);
 			// System.out.println(token.getText() + "("
 			// + token.getTokenIndex() + ", " + token.getLine() + ", "
 			// + token.getType() + ", " + token.getChannel() + ")");
 			// }
-			// HalsteadMetric halstead = new
-			// HalsteadMetric(helper.getOperators(),
-			// helper.getOperands());
-			// halstead.printOperators();
-			// halstead.printOperands();
-			// System.out.println(halstead.toString());
+			HalsteadMetric halstead = new HalsteadMetric(helper.getOperators(),
+					helper.getOperands());
+			halstead.printOperators();
+			halstead.printOperands();
+			System.out.println(halstead.toString());
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
-			// } catch (RecognitionException e) {
-			// logger.error(e.getMessage(), e);
+		} catch (RecognitionException e) {
+			logger.error(e.getMessage(), e);
 		}
 	}
 
