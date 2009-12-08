@@ -12,12 +12,15 @@ import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.TokenStream;
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import com.puresol.coding.HalsteadMetric;
 import com.puresol.coding.SLOCStatistics;
 import com.puresol.coding.SourceCodeAnalyser;
 import com.puresol.coding.java.antlr.JavaLexerHelper;
+import com.puresol.coding.java.antlr.JavaRange;
+import com.puresol.coding.java.antlr.JavaParserHelper;
 import com.puresol.coding.java.antlr.output.JavaLexer;
 import com.puresol.coding.java.antlr.output.JavaParser;
 
@@ -43,28 +46,28 @@ public class JavaAnalyser implements SourceCodeAnalyser {
 			InputStream in = new FileInputStream(file);
 			JavaLexer lexer = new JavaLexer(new ANTLRInputStream(in), helper);
 			CommonTokenStream cts = new CommonTokenStream(lexer);
-			SLOCStatistics slocStat = new SLOCStatistics(cts);
-			slocStat.print();
-			// for (Object o : cts.getTokens()) {
-			// CommonToken token = (CommonToken) o;
-			// System.out.println(token.getText() + "("
-			// + token.getTokenIndex() + ", " + token.getLine() + ", "
-			// + token.getType() + ")");
-			// }
 			JavaParser parser = new JavaParser(cts);
 			parser.file();
-			TokenStream stream = parser.getTokenStream();
-			// for (int index = 0; index < stream.size(); index++) {
-			// Token token = stream.get(index);
-			// System.out.println(token.getText() + "("
-			// + token.getTokenIndex() + ", " + token.getLine() + ", "
-			// + token.getType() + ", " + token.getChannel() + ")");
-			// }
-			HalsteadMetric halstead = new HalsteadMetric(helper.getOperators(),
-					helper.getOperands());
+			// HalsteadMetric halstead = new
+			// HalsteadMetric(helper.getOperators(),
+			// helper.getOperands());
+			// halstead.printOperators();
+			// halstead.printOperands();
+			// System.out.println(halstead.toString());
+			JavaParserHelper helper = parser.getJavaParserHelper();
+			JavaRange range = helper.getMethods().get(3);
+			// for (JavaMethod method : helper.getMethods()) {
+			System.out.println("+++++++++++++++++++++");
+			System.out.println(range.toString());
+			System.out.println("+++++++++++++++++++++");
+			HalsteadMetric halstead = new HalsteadMetric(range.getOperators(),
+					range.getOperants());
 			halstead.printOperators();
 			halstead.printOperands();
-			System.out.println(halstead.toString());
+			System.out.println(halstead.getResultsAsString());
+			System.out.println("Cyclomatic number: ");
+			System.out.println(range.getCyclomaticNumber());
+			// }
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
 		} catch (RecognitionException e) {
@@ -73,6 +76,7 @@ public class JavaAnalyser implements SourceCodeAnalyser {
 	}
 
 	public static void main(String[] args) {
+		Logger.getRootLogger().setLevel(Level.TRACE);
 		JavaAnalyser analyser = new JavaAnalyser(new File(
 				"src/com/puresol/coding/java/JavaAnalyser.java"));
 	}

@@ -12,111 +12,97 @@ import com.puresol.coding.java.antlr.JavaParserHelper;
 }
 
 @members {
-private JavaParserHelper helper = null;
+private JavaParserHelper helper = new JavaParserHelper(this);
 
-public JavaParser(TokenStream stream, JavaParserHelper helper)
-{
-	this(stream);
-	this.helper = helper;
+public JavaParserHelper getJavaParserHelper() {
+	return helper;
 }
 }
 
 file	:	package_def imports class_def*;
 
 package_def	
-	:	PACKAGE package_name SEMICOLON //{System.out.println($text);}
-	;
-	
-fragment
-package_name
-	:	(ID DOT)* ID
+	:	package_ package_name semicolon 
 	;
 
 imports :	import_def*;
 
 import_def
-	:	IMPORT import_name SEMICOLON //{System.out.println($text);}
+	:	import_ import_name semicolon
 	;
-	
-fragment
-import_name
-	:	(ID DOT)+ (ID|STAR)
-	;
+
+
 	
 class_def
-	:	modifiers CLASS ID (EXTENDS class_name)? (IMPLEMENTS class_name (COMMA class_name)*)? block_begin class_block block_end {System.out.println("class_def " + $text);}
+	:	modifiers class_ id (extends_ class_name)? (implements_ class_name (comma class_name)*)? block_begin class_block block_end 
+		{helper.registerRange("class", $id.text, $text, retval.start.getTokenIndex(), input.LT(-1).getTokenIndex());}
 	;
+
 
 modifiers
 	:	modifier*
 	;
 
-modifier:	PUBLIC
-	|	PRIVATE
-	|	PROTECTED
-	|	STATIC
-	|	FINAL
-	|	TRANSIENT
+modifier:	public_
+	|	private_
+	|	protected_
+	|	static_
+	|	final_
+	|	transient_
 	;
 
-block_begin
-	:	OPEN_CURLY_BRACKET
-	;
-	
-block_end
-	:	CLOSE_CURLY_BRACKET
-	;
 
 class_block
 	:	(class_def | constructor_def | method_def | field_def)*
 	;
 	
 constructor_def
-	:	modifiers ID OPEN_BRACKET argument_def CLOSE_BRACKET block_begin code_block block_end {System.out.println("constructor_def: " + $text);}
+	:	modifiers id open_bracket argument_def close_bracket block_begin code_block block_end
+		{helper.registerRange("constructor", $id.text, $text, retval.start.getTokenIndex(), input.LT(-1).getTokenIndex());}
 	;
-	
+
 method_def
-	:	modifiers variable_type ID OPEN_BRACKET argument_def CLOSE_BRACKET block_begin code_block block_end {System.out.println("method_def: " + $text);}
+	:	modifiers variable_type id open_bracket argument_def close_bracket block_begin code_block block_end 
+		{helper.registerRange("method", $id.text, $text, retval.start.getTokenIndex(), input.LT(-1).getTokenIndex());}
 	;
 	
 method_call
-	:	method_name OPEN_BRACKET arguments CLOSE_BRACKET {System.out.println($text);}
+	:	method_name open_bracket arguments close_bracket (dot id open_bracket arguments close_bracket)*
 	;
 
 field_def
-	:	modifiers variable_type variable_name (ASSIGN value)? SEMICOLON {System.out.println("field_def " + $text);}
+	:	modifiers variable_type variable_name (assign value)? semicolon
 	;
 
 
 argument_def
-	:	(variable_type variable_name (COMMA variable_type variable_name)*)?
+	:	(variable_type variable_name (comma variable_type variable_name)*)?
 	;
 variable_def
-	:	variable_type variable_name (ASSIGN value)? {System.out.println("variable_def " + $text);}
+	:	variable_type variable_name (assign value)? 
 	;
 
-
-value	:	constant		{System.out.println("constant " + $text);}
-	|	class_name DOT CLASS	{System.out.println(".class " + $text);}
-	|	variable_name		{System.out.println("variable_name " + $text);}
-	|	method_call		{System.out.println("method_call " + $text);}
-	|	new_class		{System.out.println("new_class " + $text);}
+value	:	constant
+	|	class_name dot class_
+	|	variable_name
+	|	method_call
+	|	new_class
 	;
 
-constant:	INT
-	|	STRING
-	|	FLOAT
-	|	CHAR
-	|	NULL
-	|	BOOLEAN
+constant:	int_const
+	|	string_const
+	|	float_const
+	|	char_const
+	|	null_const
+	|	boolean_const
 	;
 	
 new_class
-	:	NEW class_name OPEN_BRACKET arguments CLOSE_BRACKET
+	:	new_ class_name open_bracket arguments close_bracket
 	;
 	
 arguments
-	:	(value (COMMA value)*)?
+	:	(value (comma value)*)?
 	;
 	
 code_block
@@ -124,42 +110,119 @@ code_block
 	;
 	
 statement
-	:	variable_assignment SEMICOLON
-	|	variable_def SEMICOLON
-	|	method_call SEMICOLON
+	:	variable_assignment semicolon
+	|	variable_def semicolon
+	|	method_call semicolon
 	|	try_catch
 	;
 	
 variable_assignment
-	:	(THIS DOT | SUPER DOT)? variable_name ASSIGN value 
+	:	(this_ dot | super_ dot)? variable_name assign value 
 	;
 
 try_catch
-	:	TRY block_begin code_block block_end (CATCH OPEN_BRACKET ID ID CLOSE_BRACKET block_begin code_block block_end)+ (FINALLY OPEN_BRACKET ID ID CLOSE_BRACKET block_begin code_block block_end)?
-	;
-
-fragment
-class_name
-	:	(ID DOT)* ID
-	;
-
-fragment
-method_name
-	:	(ID DOT)* ID
+	:	try_ block_begin code_block block_end (catch_ OPEN_BRACKET id id CLOSE_BRACKET block_begin code_block block_end)+ (finally_ OPEN_BRACKET id id CLOSE_BRACKET block_begin code_block block_end)?
 	;
 
 
-fragment
-variable_name
-	:	(ID DOT)* ID array?
-	;
-
-fragment
 variable_type
 	:	class_name array?
-	|	VOID
+	|	void_
 	;
-	
-fragment
-array	:	OPEN_RECT_BRACKET value? CLOSE_RECT_BRACKET
+
+id	:	ID {helper.registerOperant($text);};
+
+////////////////////////
+// Constants...
+////////////////////////
+
+int_const
+	:	INT {helper.registerOperant($text);};
+string_const
+	:	STRING {helper.registerOperant($text);};
+float_const
+	:	FLOAT {helper.registerOperant($text);};
+char_const
+	:	CHAR {helper.registerOperant($text);};
+null_const
+	:	NULL {helper.registerOperant($text);};
+boolean_const	
+	:	BOOLEAN {helper.registerOperant($text);};
+
+////////////////////////
+// Names...
+////////////////////////
+
+package_name
+	:	(ID DOT)* ID {helper.registerOperant($text);}
 	;
+
+import_name
+	:	(ID DOT)+ (ID|STAR) {helper.registerOperant($text);}
+	;
+
+class_name
+	:	(ID DOT)* ID {helper.registerOperant($text);}
+	;
+
+method_name
+	:	(ID DOT)* ID {helper.registerOperant($text);}
+	;
+
+variable_name
+	:	name array?
+	;
+
+name	:	(ID DOT)* ID {helper.registerOperant($text);};
+
+array	:	open_rect_bracket value? close_rect_bracket;
+
+////////////////////////
+// Reserved keywords...
+////////////////////////
+
+package_
+	:	PACKAGE {helper.registerOperator($text);};	
+import_
+	:	IMPORT {helper.registerOperator($text);};	
+class_	:	CLASS {helper.registerOperator($text);};
+extends_:	EXTENDS {helper.registerOperator($text);};
+implements_
+	:	IMPLEMENTS {helper.registerOperator($text);};
+this_	:	THIS {helper.registerOperant($text);};
+super_	:	SUPER {helper.registerOperant($text);};
+void_	:	VOID {helper.registerOperant($text);};
+public_	:	PUBLIC {helper.registerOperator($text);};
+private_:	PRIVATE {helper.registerOperator($text);};
+protected_
+	:	PROTECTED {helper.registerOperator($text);};
+static_	:	STATIC {helper.registerOperator($text);};
+final_	:	FINAL {helper.registerOperator($text);};
+transient_
+	:	TRANSIENT {helper.registerOperator($text);};
+new_	:	NEW {helper.registerOperator($text);};
+try_	:	TRY {helper.registerOperator($text);};
+catch_	:	CATCH {helper.registerOperator($text, 1);};
+finally_:	FINALLY {helper.registerOperator($text, 1);};
+
+////////////////////////
+// Symbols...
+////////////////////////
+
+semicolon
+	:	SEMICOLON {helper.registerOperator($text);};
+comma	:	COMMA {helper.registerOperator($text);};
+dot	:	DOT {helper.registerOperator($text);};
+assign	:	ASSIGN {helper.registerOperator($text);};
+block_begin
+	:	OPEN_CURLY_BRACKET {helper.registerOperator("{}");};
+block_end
+	:	CLOSE_CURLY_BRACKET {helper.registerOperator("");};
+open_bracket
+	:	OPEN_BRACKET {helper.registerOperator("()");};
+close_bracket
+	:	CLOSE_BRACKET  {helper.registerOperator("");};
+open_rect_bracket
+	:	OPEN_RECT_BRACKET {helper.registerOperator("[]");};
+close_rect_bracket
+	:	CLOSE_RECT_BRACKET {helper.registerOperator("");};

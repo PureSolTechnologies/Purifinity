@@ -5,7 +5,7 @@ import java.util.Hashtable;
 public class HalsteadMetric {
 
 	Hashtable<String, Integer> operators = null;
-	Hashtable<String, Integer> operands = null;
+	Hashtable<String, Integer> operants = null;
 
 	private int n1;
 	private int n2;
@@ -18,22 +18,22 @@ public class HalsteadMetric {
 	private double D;
 
 	public HalsteadMetric(Hashtable<String, Integer> operators,
-			Hashtable<String, Integer> operands) {
+			Hashtable<String, Integer> operants) {
 		this.operators = operators;
-		this.operands = operands;
+		this.operants = operants;
 		calucate();
 	}
 
 	private void calucate() {
 		n1 = operators.keySet().size();
-		n2 = operands.keySet().size();
+		n2 = operants.keySet().size();
 		N1 = 0;
 		for (String key : operators.keySet()) {
 			N1 += operators.get(key);
 		}
 		N2 = 0;
-		for (String key : operands.keySet()) {
-			N2 += operands.get(key);
+		for (String key : operants.keySet()) {
+			N2 += operants.get(key);
 		}
 		n = n1 + n2;
 		N = N1 + N2;
@@ -69,9 +69,9 @@ public class HalsteadMetric {
 		System.out.println("==============");
 		System.out.println("   OPERANDS   ");
 		System.out.println("==============");
-		for (String operand : operands.keySet()) {
+		for (String operand : operants.keySet()) {
 			System.out.println(operand + "\t"
-					+ operands.get(operand).toString());
+					+ operants.get(operand).toString());
 		}
 	}
 
