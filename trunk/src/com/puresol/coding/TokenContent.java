@@ -1,17 +1,8 @@
-package com.puresol.coding.java.antlr;
-
-import java.util.Hashtable;
-
-import org.apache.log4j.Logger;
-
-import com.puresol.exceptions.StrangeSituationException;
+package com.puresol.coding;
 
 public class TokenContent {
 
-	private static Logger logger = Logger.getLogger(TokenContent.class);
-
 	private int line;
-
 	private String operator = "";
 	private String operant = "";
 	private int cyclomaticNumber = 0;

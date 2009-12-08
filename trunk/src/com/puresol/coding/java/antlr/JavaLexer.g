@@ -4,128 +4,117 @@ options {
 }
 @header {
 package com.puresol.coding.java.antlr.output;
-
-import com.puresol.coding.java.antlr.JavaLexerHelper;
-}
-@members {
-private JavaLexerHelper helper = null;
-
-public JavaLexer(CharStream stream, JavaLexerHelper helper)
-{
-	this(stream);
-	this.helper = helper;
-}
 }
 
-PACKAGE	:		'package' {helper.addOperator($text);};
-IMPORT	:		'import' {helper.addOperator($text);};
+PACKAGE	:		'package';
+IMPORT	:		'import';
 
-CLASS	:	'class' {helper.addOperator($text);};
-EXTENDS	:	'extends' {helper.addOperator($text);};
-IMPLEMENTS	:	'implements' {helper.addOperator($text);};
+CLASS	:	'class';
+EXTENDS	:	'extends';
+IMPLEMENTS	:	'implements';
 
-VOID	:	'void' {helper.addOperator($text);};
-NEW	:	'new' {helper.addOperator($text);};
-RETURN	:	'return' {helper.addOperator($text);};
-NULL	:	'null' {helper.addOperand($text);};
-THIS	:	'this' {helper.addOperand($text);};
-SUPER	:	'super' {helper.addOperand($text);};
+VOID	:	'void';
+NEW	:	'new';
+RETURN	:	'return';
+NULL	:	'null';
+THIS	:	'this';
+SUPER	:	'super';
 
-FOR	:	'for' {helper.addOperator($text);};
-DO	:	'do' {helper.addOperator($text);};
-WHILE	:	'while' {helper.addOperator($text);};
-IF	:	'if' {helper.addOperator($text);};
-ELSE	:	'else' {helper.addOperator($text);};
-SWITCH	:	'switch' {helper.addOperator($text);};
-CASE	:	'case' {helper.addOperator($text);};
+FOR	:	'for';
+DO	:	'do';
+WHILE	:	'while';
+IF	:	'if';
+ELSE	:	'else';
+SWITCH	:	'switch';
+CASE	:	'case';
 
-TRY	:	'try'  {helper.addOperator($text);};
-CATCH	:	'catch'  {helper.addOperator($text);};
-FINALLY	:	'finally'  {helper.addOperator($text);};
+TRY	:	'try' ;
+CATCH	:	'catch' ;
+FINALLY	:	'finally' ;
 
-PUBLIC	:	'public' {helper.addOperator($text);};
-PRIVATE	:	'private' {helper.addOperator($text);};
+PUBLIC	:	'public';
+PRIVATE	:	'private';
 PROTECTED
-	:	'protected' {helper.addOperator($text);};
-FINAL	:	'final' {helper.addOperator($text);};
-STATIC	:	'static' {helper.addOperator($text);};
+	:	'protected';
+FINAL	:	'final';
+STATIC	:	'static';
 TRANSIENT
-	:	'transient' {helper.addOperator($text);};
+	:	'transient';
 
 OPEN_CURLY_BRACKET
-	:	'{' {helper.addBlockBegin();helper.addOperator($text);}
+	:	'{'
 	;
 	
 CLOSE_CURLY_BRACKET
-	:	'}' {helper.addBlockEnd();helper.addOperator($text);}
+	:	'}'
 	;
 	
-PLUS	:	'+' {helper.addOperator($text);};
-MINUS	:	'-' {helper.addOperator($text);};
-SLASH	:	'/' {helper.addOperator($text);};
-STAR	:	'*' {helper.addOperator($text);};
+PLUS	:	'+';
+MINUS	:	'-';
+SLASH	:	'/';
+STAR	:	'*';
 
-EQUAL	:	'==' {helper.addOperator($text);};
-UNEQUAL	:	'!=' {helper.addOperator($text);};
-ASSIGN	:	'=' {helper.addOperator($text);};
+EQUAL	:	'==';
+UNEQUAL	:	'!=';
+ASSIGN	:	'=';
 
-INC	:	'++' {helper.addOperator($text);};
-DEC	:	'--' {helper.addOperator($text);};
+INC	:	'++';
+DEC	:	'--';
 
 LOGICAL_OR
-	:	'||' {helper.addOperator($text);};
-BIT_OR	:	'|' {helper.addOperator($text);};
+	:	'||';
+BIT_OR	:	'|';
 
 LOGICAL_AND
-	:	'&&' {helper.addOperator($text);};
-BIT_AND	:	'&' {helper.addOperator($text);};
+	:	'&&';
+BIT_AND	:	'&';
 
-NOT	:	'!' {helper.addOperator($text);};
+NOT	:	'!';
 
-DOT	:	'.' {helper.addOperator($text);};
-COMMA	:	',' {helper.addOperator($text);};
-LT	:	'<' {helper.addOperator($text);};
-GT	:	'>' {helper.addOperator($text);};
+DOT	:	'.';
+COMMA	:	',';
+LT	:	'<';
+GT	:	'>';
 
 OPEN_RECT_BRACKET
-	:	'[' {helper.addOperator($text);}
+	:	'['
 	;
 	
 CLOSE_RECT_BRACKET
-	:	']' {helper.addOperator($text);}
+	:	']'
 	;
 	
 OPEN_BRACKET
-	:	'(' {helper.addOperator($text);}
+	:	'('
 	;
 	
 CLOSE_BRACKET
-	:	')' {helper.addOperator($text);}
+	:	')'
 	;
 
-COLON	:	':' {helper.addOperator($text);};
+COLON	:	':';
 SEMICOLON
-	:	';' {helper.addOperator($text);};
+	:	';';
 
 BOOLEAN	:	'true'
 	|	'false'
 	;
 
-ID  :	('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'0'..'9'|'_')* {helper.addOperand($text);}
+ID  :	('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'0'..'9'|'_')*
     ;
 
-INT :	'0'..'9'+ {helper.addOperand($text);}
+INT :	'0'..'9'+
     ;
 
 FLOAT
-    :   ('0'..'9')+ '.' ('0'..'9')* EXPONENT? {helper.addOperand($text);}
-    |   '.' ('0'..'9')+ EXPONENT? {helper.addOperand($text);}
-    |   ('0'..'9')+ EXPONENT {helper.addOperand($text);}
+    :   ('0'..'9')+ '.' ('0'..'9')* EXPONENT?
+    |   '.' ('0'..'9')+ EXPONENT?
+    |   ('0'..'9')+ EXPONENT
     ;
 
 COMMENT
-    :   '//' ~('\n'|'\r')* '\r'? LINEFEED {$channel=HIDDEN; helper.addOperand($text);}
-    |   '/*' ( options {greedy=false;} : (LINEFEED|~('\n')) )* '*/' {$channel=HIDDEN; helper.addOperand($text);}
+    :   '//' ~('\n'|'\r')* '\r'? LINEFEED {$channel=HIDDEN;}
+    |   '/*' ( options {greedy=false;} : (LINEFEED|~('\n')) )* '*/' {$channel=HIDDEN;}
     ;
 
 WS  :   ( ' '
@@ -136,13 +125,13 @@ WS  :   ( ' '
     ;
     
 fragment
-LINEFEED:	'\n' {helper.incSlocCount();};
+LINEFEED:	'\n';
 
 STRING
-    :  '"' ( ESC_SEQ | ~('\\'|'"') )* '"' {helper.addOperand($text);}
+    :  '"' ( ESC_SEQ | ~('\\'|'"') )* '"'
     ;
 
-CHAR:  '\'' ( ESC_SEQ | ~('\''|'\\') ) '\'' {helper.addOperand($text);}
+CHAR:  '\'' ( ESC_SEQ | ~('\''|'\\') ) '\''
     ;
 
 fragment

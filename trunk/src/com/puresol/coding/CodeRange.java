@@ -1,8 +1,8 @@
-package com.puresol.coding.java.antlr;
+package com.puresol.coding;
 
 import java.util.Hashtable;
 
-public class JavaRange {
+public class CodeRange {
 
 	Hashtable<String, Integer> operators = new Hashtable<String, Integer>();
 	Hashtable<String, Integer> operants = new Hashtable<String, Integer>();
@@ -12,7 +12,7 @@ public class JavaRange {
 	private String name;
 	private String text;
 
-	public JavaRange(String type, String name, String text) {
+	public CodeRange(String type, String name, String text) {
 		this.type = type;
 		this.name = name;
 		this.text = text;

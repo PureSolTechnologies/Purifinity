@@ -8,13 +8,13 @@ backtrack=true;
 @header {
 package com.puresol.coding.java.antlr.output;
 
-import com.puresol.coding.java.antlr.JavaParserHelper;
+import com.puresol.coding.ParserHelper;
 }
 
 @members {
-private JavaParserHelper helper = new JavaParserHelper(this);
+private ParserHelper helper = new ParserHelper(this);
 
-public JavaParserHelper getJavaParserHelper() {
+public ParserHelper getParserHelper() {
 	return helper;
 }
 }

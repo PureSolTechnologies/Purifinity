@@ -1,14 +1,15 @@
-package com.puresol.coding.java.antlr;
+package com.puresol.coding;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
+import org.antlr.runtime.Parser;
 import org.antlr.runtime.Token;
 import org.apache.log4j.Logger;
 
-import com.puresol.coding.java.antlr.output.JavaParser;
-import com.puresol.exceptions.StrangeSituationException;
+import com.puresol.coding.CodeRange;
+import com.puresol.coding.TokenContent;
 
 /**
  * This class is a helper class for JavaParser to collect all information needed
@@ -17,16 +18,15 @@ import com.puresol.exceptions.StrangeSituationException;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class JavaParserHelper {
+public class ParserHelper {
 
-	private static final Logger logger = Logger
-			.getLogger(JavaParserHelper.class);
+	private static final Logger logger = Logger.getLogger(ParserHelper.class);
 
 	private Hashtable<Integer, TokenContent> tokenContents = new Hashtable<Integer, TokenContent>();
-	private ArrayList<JavaRange> methods = new ArrayList<JavaRange>();
-	private JavaParser javaParser = null;
+	private ArrayList<CodeRange> methods = new ArrayList<CodeRange>();
+	private Parser javaParser = null;
 
-	public JavaParserHelper(JavaParser javaParser) {
+	public ParserHelper(Parser javaParser) {
 		this.javaParser = javaParser;
 	}
 
@@ -62,8 +62,9 @@ public class JavaParserHelper {
 		}
 	}
 
-	public void registerRange(String type, String name, String text, int start, int stop) {
-		JavaRange method = new JavaRange(type, name, text);
+	public void registerRange(String type, String name, String text, int start,
+			int stop) {
+		CodeRange method = new CodeRange(type, name, text);
 		for (int index = start; index <= stop; index++) {
 			if (tokenContents.containsKey(index)) {
 				TokenContent content = tokenContents.get(index);
@@ -88,7 +89,7 @@ public class JavaParserHelper {
 		methods.add(method);
 	}
 
-	public List<JavaRange> getMethods() {
+	public List<CodeRange> getMethods() {
 		return methods;
 	}
 }
