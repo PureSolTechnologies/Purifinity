@@ -3,6 +3,7 @@ parser grammar JavaParser;
 options {
 tokenVocab=JavaLexer;
 backtrack=true;
+memoize=true;
 }
 
 @header {
@@ -19,28 +20,41 @@ public ParserHelper getParserHelper() {
 }
 }
 
-file	:	package_def imports class_def*;
+file	:	package_def import_def* class_def*;
 
 package_def	
 	:	package_ package_name semicolon 
 	;
 
-imports :	import_def*;
-
 import_def
 	:	import_ import_name semicolon
 	;
-
-
 	
 class_def
-	:	modifiers class_ id (extends_ class_name)? (implements_ class_name (comma class_name)*)? block_begin class_block block_end 
+	:	annotation* modifier* class_ id (extends_ class_name)? (implements_ class_name (comma class_name)*)? class_block 
 		{helper.registerRange("class", $id.text, $text, retval.start.getTokenIndex(), input.LT(-1).getTokenIndex());}
 	;
 
+constructor_def
+	:	annotation* modifier* id open_bracket argument_def close_bracket code
+		{helper.registerRange("constructor", $id.text, $text, retval.start.getTokenIndex(), input.LT(-1).getTokenIndex());}
+	;
 
-modifiers
-	:	modifier*
+method_def
+	:	annotation* modifier* variable_type id open_bracket argument_def close_bracket code
+		{helper.registerRange("method", $id.text, $text, retval.start.getTokenIndex(), input.LT(-1).getTokenIndex());}
+	;
+	
+field_def
+	:	annotation* modifier* variable_type variable_name (assign value)? semicolon
+	;
+
+argument_def
+	:	(variable_def (comma variable_def)*)?
+	;
+
+variable_def
+	:	annotation* variable_type variable_name (assign value)? 
 	;
 
 modifier:	public_
@@ -53,40 +67,25 @@ modifier:	public_
 
 
 class_block
-	:	(class_def | constructor_def | method_def | field_def)*
-	;
-	
-constructor_def
-	:	modifiers id open_bracket argument_def close_bracket block_begin code_block block_end
-		{helper.registerRange("constructor", $id.text, $text, retval.start.getTokenIndex(), input.LT(-1).getTokenIndex());}
-	;
-
-method_def
-	:	modifiers variable_type id open_bracket argument_def close_bracket block_begin code_block block_end 
-		{helper.registerRange("method", $id.text, $text, retval.start.getTokenIndex(), input.LT(-1).getTokenIndex());}
+	:	block_begin (class_def | constructor_def | method_def | field_def)* block_end
 	;
 	
 method_call
 	:	method_name open_bracket arguments close_bracket (dot id open_bracket arguments close_bracket)*
 	;
 
-field_def
-	:	modifiers variable_type variable_name (assign value)? semicolon
+annotation
+	:	annotation_name (open_bracket value (comma value)* close_bracket)?
 	;
 
-
-argument_def
-	:	(variable_type variable_name (comma variable_type variable_name)*)?
-	;
-variable_def
-	:	variable_type variable_name (assign value)? 
-	;
-
-value	:	constant
+value	:
+	(	open_bracket
+	|	constant
 	|	class_name dot class_
 	|	variable_name
 	|	method_call
 	|	new_class
+	) 	(operator value close_bracket?)*
 	;
 
 constant:	int_const
@@ -104,9 +103,9 @@ new_class
 arguments
 	:	(value (comma value)*)?
 	;
-	
-code_block
-	:	statement*
+
+code	:	statement
+	|	block_begin statement* block_end
 	;
 	
 statement
@@ -121,7 +120,7 @@ variable_assignment
 	;
 
 try_catch
-	:	try_ block_begin code_block block_end (catch_ OPEN_BRACKET id id CLOSE_BRACKET block_begin code_block block_end)+ (finally_ OPEN_BRACKET id id CLOSE_BRACKET block_begin code_block block_end)?
+	:	try_ code (catch_ OPEN_BRACKET id id CLOSE_BRACKET code)+ (finally_ OPEN_BRACKET id id CLOSE_BRACKET code)?
 	;
 
 
@@ -131,6 +130,12 @@ variable_type
 	;
 
 id	:	ID {helper.registerOperant($text);};
+
+operator:	PLUS {helper.registerOperator($text);}
+	|	MINUS {helper.registerOperator($text);}
+	|	STAR {helper.registerOperator($text);}
+	|	SLASH {helper.registerOperator($text);}
+	;
 
 ////////////////////////
 // Constants...
@@ -172,7 +177,8 @@ method_name
 variable_name
 	:	name array?
 	;
-
+annotation_name
+	:	AT name {helper.registerOperant($text);};
 name	:	(ID DOT)* ID {helper.registerOperant($text);};
 
 array	:	open_rect_bracket value? close_rect_bracket;

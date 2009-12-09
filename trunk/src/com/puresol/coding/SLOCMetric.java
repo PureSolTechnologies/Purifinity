@@ -1,9 +1,7 @@
 package com.puresol.coding;
 
-import java.util.List;
-
-import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.Token;
+import org.antlr.runtime.TokenStream;
 
 /**
  * This class calculates a small statistics for a source code for source lines
@@ -13,9 +11,11 @@ import org.antlr.runtime.Token;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class SLOCStatistics {
+public class SLOCMetric {
 
-	private CommonTokenStream stream = null;
+	private TokenStream stream = null;
+	private int start;
+	private int stop;
 	private int phyLOC;
 	private int proLOC;
 	private int comLOC;
@@ -28,14 +28,18 @@ public class SLOCStatistics {
 	 * 
 	 * @param commonTokenStream
 	 */
-	public SLOCStatistics(CommonTokenStream stream) {
+	public SLOCMetric(TokenStream stream) {
 		this.stream = stream;
+		start = 0;
+		stop = stream.size() - 1;
 		calculate();
 	}
 
-	@SuppressWarnings("unchecked")
-	private List<Token> getTokenList() {
-		return ((List<Token>) stream.getTokens());
+	public SLOCMetric(CodeRange codeRange) {
+		this.stream = codeRange.getTokenStream();
+		start = codeRange.getStart();
+		stop = codeRange.getStop();
+		calculate();
 	}
 
 	private void calculate() {
@@ -43,7 +47,8 @@ public class SLOCStatistics {
 		proLOC = 0;
 		comLOC = 0;
 		blLOC = 0;
-		for (Token token : getTokenList()) {
+		for (int index = start; index <= stop; index++) {
+			Token token = stream.get(index);
 			if (!token.getText().endsWith("\n")) {
 				// it's not a end of line token and therefore to be skipped
 				continue;

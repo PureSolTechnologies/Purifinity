@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.antlr.runtime.Parser;
 import org.antlr.runtime.Token;
+import org.antlr.runtime.TokenStream;
 import org.apache.log4j.Logger;
 
 import com.puresol.coding.CodeRange;
@@ -64,28 +65,29 @@ public class ParserHelper {
 
 	public void registerRange(String type, String name, String text, int start,
 			int stop) {
-		CodeRange method = new CodeRange(type, name, text);
-		for (int index = start; index <= stop; index++) {
-			if (tokenContents.containsKey(index)) {
-				TokenContent content = tokenContents.get(index);
-				if (!content.getOperant().isEmpty()) {
-					method.addOperant(content.getOperant());
-				}
-				if (!content.getOperator().isEmpty()) {
-					method.addOperator(content.getOperator());
-				}
-				method.addCyclomaticNumber(content.getCyclomaticNumber());
-			} else {
-				Token token = javaParser.input.get(index);
-				if (token.getChannel() != 99) {
-					logger
-							.warn("Token '"
-									+ token.getText()
-									+ "' was not categorized to Operator or Operant! (line;"
-									+ token.getLine() + ")");
-				}
+		int current = start - 1;
+		TokenStream tokenStream = javaParser.getTokenStream();
+		while (current > 0) {
+			Token token = tokenStream.get(current);
+			if (token.getChannel() != 99) {
+				break;
 			}
+			if (!token.getText().trim().isEmpty()) {
+				start = current;
+			} else if (!token.getText().contains("\n")) {
+				start = current;
+			}
+			current--;
 		}
+		while ((stop + 1 < tokenStream.size())
+				&& (!tokenStream.get(stop).getText().endsWith("\n"))) {
+			stop++;
+		}
+		for (int index = start; index <= stop; index++) {
+			text += javaParser.getTokenStream().get(index).getText();
+		}
+		CodeRange method = new CodeRange(type, name, text, javaParser.input,
+				tokenContents, start, stop);
 		methods.add(method);
 	}
 

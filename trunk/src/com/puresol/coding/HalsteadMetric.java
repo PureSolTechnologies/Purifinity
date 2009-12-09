@@ -4,8 +4,8 @@ import java.util.Hashtable;
 
 public class HalsteadMetric {
 
-	Hashtable<String, Integer> operators = null;
-	Hashtable<String, Integer> operants = null;
+	private Hashtable<String, Integer> operators = new Hashtable<String, Integer>();
+	private Hashtable<String, Integer> operants = new Hashtable<String, Integer>();
 
 	private int n1;
 	private int n2;
@@ -13,18 +13,73 @@ public class HalsteadMetric {
 	private int N2;
 	private double n;
 	private double N;
+	/**
+	 * Halstead Length
+	 */
 	private double HL;
+	/**
+	 * Halstead Volume
+	 */
 	private double HV;
+	/**
+	 * Difficulty
+	 */
 	private double D;
+	/**
+	 * Program Level
+	 */
+	private double L;
+	/**
+	 * Implementation Effort.
+	 */
+	private double E;
+	/**
+	 * Implementation Time [s]
+	 */
+	private double T;
+	/**
+	 * Estimated Bugs
+	 */
+	private double B;
 
-	public HalsteadMetric(Hashtable<String, Integer> operators,
-			Hashtable<String, Integer> operants) {
-		this.operators = operators;
-		this.operants = operants;
-		calucate();
+	public HalsteadMetric(CodeRange codeRange) {
+		createHashtables(codeRange);
+		calculate();
 	}
 
-	private void calucate() {
+	private void createHashtables(CodeRange codeRange) {
+		Hashtable<Integer, TokenContent> tokenContents = codeRange
+				.getTokenContents();
+		for (int index = codeRange.getStart(); index <= codeRange.getStop(); index++) {
+			if (tokenContents.containsKey(index)) {
+				TokenContent content = tokenContents.get(index);
+				if (!content.getOperant().isEmpty()) {
+					addOperant(content.getOperant());
+				}
+				if (!content.getOperator().isEmpty()) {
+					addOperator(content.getOperator());
+				}
+			}
+		}
+	}
+
+	private void addOperator(String operator) {
+		if (operators.containsKey(operator)) {
+			operators.put(operator, operators.get(operator) + 1);
+		} else {
+			operators.put(operator, 1);
+		}
+	}
+
+	private void addOperant(String operant) {
+		if (operants.containsKey(operant)) {
+			operants.put(operant, operants.get(operant) + 1);
+		} else {
+			operants.put(operant, 1);
+		}
+	}
+
+	private void calculate() {
 		n1 = operators.keySet().size();
 		n2 = operants.keySet().size();
 		N1 = 0;
@@ -40,6 +95,10 @@ public class HalsteadMetric {
 		HL = n1 * Math.log(n1) / Math.log(2) + n2 * Math.log(n2) / Math.log(2);
 		HV = N * Math.log(n) / Math.log(2);
 		D = n1 / 2.0 * N2 / n2;
+		L = 1 / D;
+		E = HV * D;
+		T = E / 18.0;
+		B = Math.exp(2 / 3 * Math.log(E)) / 3000.0;
 	}
 
 	public String getResultsAsString() {
@@ -51,7 +110,11 @@ public class HalsteadMetric {
 		result += "N = " + N + "\n";
 		result += "HL = " + HL + "\n";
 		result += "HV = " + HV + "\n";
-		result += "d = " + D + "\n";
+		result += "D = " + D + "\n";
+		result += "L = " + L + "\n";
+		result += "E = " + E + "\n";
+		result += "T = " + T + "\n";
+		result += "B = " + B + "\n";
 		return result;
 	}
 
@@ -75,4 +138,63 @@ public class HalsteadMetric {
 		}
 	}
 
+	public Hashtable<String, Integer> getOperators() {
+		return operators;
+	}
+
+	public Hashtable<String, Integer> getOperants() {
+		return operants;
+	}
+
+	public int get_n1() {
+		return n1;
+	}
+
+	public int get_n2() {
+		return n2;
+	}
+
+	public int get_N1() {
+		return N1;
+	}
+
+	public int get_N2() {
+		return N2;
+	}
+
+	public double get_n() {
+		return n;
+	}
+
+	public double get_N() {
+		return N;
+	}
+
+	public double get_HL() {
+		return HL;
+	}
+
+	public double get_HV() {
+		return HV;
+	}
+
+	public double get_D() {
+		return D;
+	}
+
+	public double get_L() {
+		return L;
+	}
+
+	public double get_E() {
+		return E;
+	}
+
+	public double get_T() {
+		return T;
+	}
+
+	public double get_B() {
+		return B;
+	}
 }

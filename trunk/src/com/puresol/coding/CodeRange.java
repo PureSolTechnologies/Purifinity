@@ -2,20 +2,28 @@ package com.puresol.coding;
 
 import java.util.Hashtable;
 
-public class CodeRange {
+import org.antlr.runtime.TokenStream;
 
-	Hashtable<String, Integer> operators = new Hashtable<String, Integer>();
-	Hashtable<String, Integer> operants = new Hashtable<String, Integer>();
-	int cyclomaticNumber = 1;
+public class CodeRange {
 
 	private String type;
 	private String name;
 	private String text;
+	private TokenStream tokenStream;
+	private Hashtable<Integer, TokenContent> tokenContents;
+	private int start;
+	private int stop;
 
-	public CodeRange(String type, String name, String text) {
+	public CodeRange(String type, String name, String text,
+			TokenStream tokenStream,
+			Hashtable<Integer, TokenContent> tokenContents, int start, int stop) {
 		this.type = type;
 		this.name = name;
 		this.text = text;
+		this.tokenStream = tokenStream;
+		this.tokenContents = tokenContents;
+		this.start = start;
+		this.stop = stop;
 	}
 
 	public String getType() {
@@ -30,39 +38,23 @@ public class CodeRange {
 		return text;
 	}
 
+	public TokenStream getTokenStream() {
+		return tokenStream;
+	}
+
+	public Hashtable<Integer, TokenContent> getTokenContents() {
+		return tokenContents;
+	}
+
+	public int getStart() {
+		return start;
+	}
+
+	public int getStop() {
+		return stop;
+	}
+
 	public String toString() {
 		return getType() + ": " + getName() + "\n" + getText();
-	}
-
-	public void addOperator(String operator) {
-		if (operators.containsKey(operator)) {
-			operators.put(operator, operators.get(operator) + 1);
-		} else {
-			operators.put(operator, 1);
-		}
-	}
-
-	public void addOperant(String operant) {
-		if (operants.containsKey(operant)) {
-			operants.put(operant, operants.get(operant) + 1);
-		} else {
-			operants.put(operant, 1);
-		}
-	}
-
-	public void addCyclomaticNumber(int cyclomaticNumber) {
-		this.cyclomaticNumber += cyclomaticNumber;
-	}
-
-	public Hashtable<String, Integer> getOperators() {
-		return operators;
-	}
-
-	public Hashtable<String, Integer> getOperants() {
-		return operants;
-	}
-
-	public int getCyclomaticNumber() {
-		return cyclomaticNumber;
 	}
 }

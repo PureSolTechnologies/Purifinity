@@ -95,6 +95,8 @@ CLOSE_BRACKET
 COLON	:	':';
 SEMICOLON
 	:	';';
+AT	:	'@';
+TILDE	:	'~';
 
 BOOLEAN	:	'true'
 	|	'false'

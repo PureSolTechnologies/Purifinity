@@ -13,8 +13,10 @@ import org.apache.log4j.Logger;
 
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.HalsteadMetric;
+import com.puresol.coding.MaintainabilityIndex;
+import com.puresol.coding.McCabeMetric;
 import com.puresol.coding.ParserHelper;
-import com.puresol.coding.SLOCStatistics;
+import com.puresol.coding.SLOCMetric;
 import com.puresol.coding.java.antlr.output.JavaLexer;
 import com.puresol.coding.java.antlr.output.JavaParser;
 
@@ -29,6 +31,12 @@ public class JavaAnalyser {
 
 	private File file = null;
 
+	/**
+	 * This is the default constructor.
+	 * 
+	 * @param A
+	 *            file to be analysed.
+	 */
 	public JavaAnalyser(File file) {
 		this.file = file;
 		analyse();
@@ -39,23 +47,27 @@ public class JavaAnalyser {
 			InputStream in = new FileInputStream(file);
 			JavaLexer lexer = new JavaLexer(new ANTLRInputStream(in));
 			CommonTokenStream cts = new CommonTokenStream(lexer);
-			SLOCStatistics slocStat = new SLOCStatistics(cts);
-			slocStat.print();
 			JavaParser parser = new JavaParser(cts);
 			parser.file();
 
 			ParserHelper helper = parser.getParserHelper();
-			CodeRange range = helper.getMethods().get(0);
-			System.out.println("+++++++++++++++++++++");
-			System.out.println(range.toString());
-			System.out.println("+++++++++++++++++++++");
-			HalsteadMetric halstead = new HalsteadMetric(range.getOperators(),
-					range.getOperants());
-			halstead.printOperators();
-			halstead.printOperands();
-			System.out.println(halstead.getResultsAsString());
-			System.out.println("Cyclomatic number: ");
-			System.out.println(range.getCyclomaticNumber());
+			for (int index = 0; index < helper.getMethods().size(); index++) {
+				CodeRange range = helper.getMethods().get(index);
+				System.out.println("+++++++++++++++++++++");
+				System.out.println(range.toString());
+				System.out.println("+++++++++++++++++++++");
+				HalsteadMetric halstead = new HalsteadMetric(range);
+				halstead.printOperators();
+				halstead.printOperands();
+				System.out.println(halstead.getResultsAsString());
+				McCabeMetric mcCabe = new McCabeMetric(range);
+				System.out.println("Cyclomatic number: ");
+				System.out.println(mcCabe.getCyclomaticNumber());
+				SLOCMetric slocStat = new SLOCMetric(range);
+				slocStat.print();
+				MaintainabilityIndex mi = new MaintainabilityIndex(range);
+				mi.print();
+			}
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
 		} catch (RecognitionException e) {
