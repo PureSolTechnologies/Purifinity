@@ -1,84 +1,95 @@
-// $ANTLR 3.2 Sep 23, 2009 12:02:23 /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g 2009-12-09 13:36:09
+// $ANTLR 3.2 Sep 23, 2009 12:02:23 /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g 2009-12-09 20:38:05
 
 package com.puresol.coding.java.antlr.output;
 
 
 import org.antlr.runtime.*;
-import java.util.Stack;
-import java.util.List;
-import java.util.ArrayList;
 
 public class JavaLexer extends Lexer {
     public static final int PACKAGE=4;
-    public static final int PROTECTED=27;
-    public static final int DEC=41;
-    public static final int EXPONENT=62;
-    public static final int LT=49;
+    public static final int DEC=51;
+    public static final int PROTECTED=29;
+    public static final int EXPONENT=76;
+    public static final int LT=63;
     public static final int CLASS=6;
-    public static final int STAR=36;
-    public static final int BIT_AND=45;
-    public static final int WHILE=17;
-    public static final int OCTAL_ESC=72;
-    public static final int CASE=21;
-    public static final int CHAR=69;
+    public static final int STAR=55;
+    public static final int INCASSIGN=48;
+    public static final int BIT_AND=59;
+    public static final int WHILE=19;
+    public static final int OCTAL_ESC=86;
+    public static final int CASE=23;
     public static final int NEW=10;
-    public static final int DO=16;
-    public static final int FOR=15;
-    public static final int FLOAT=63;
-    public static final int NOT=46;
-    public static final int ID=60;
-    public static final int CLOSE_RECT_BRACKET=52;
+    public static final int CHAR=35;
+    public static final int DO=18;
+    public static final int FOR=17;
+    public static final int FLOAT=39;
+    public static final int NOT=60;
+    public static final int ID=74;
+    public static final int CLOSE_RECT_BRACKET=66;
     public static final int EOF=-1;
-    public static final int LOGICAL_AND=44;
-    public static final int LINEFEED=64;
-    public static final int IF=18;
-    public static final int AT=57;
-    public static final int OPEN_BRACKET=53;
-    public static final int FINAL=28;
-    public static final int INC=40;
+    public static final int LOGICAL_AND=58;
+    public static final int BREAK=12;
+    public static final int FLOAT_CONST=77;
+    public static final int CHAR_CONST=83;
+    public static final int LINEFEED=78;
+    public static final int IF=20;
+    public static final int AT=71;
+    public static final int OPEN_BRACKET=67;
+    public static final int INC=50;
+    public static final int FINAL=30;
     public static final int IMPORT=5;
-    public static final int ESC_SEQ=67;
-    public static final int BOOLEAN=59;
-    public static final int SLASH=35;
+    public static final int ESC_SEQ=81;
+    public static final int SLASH=54;
+    public static final int BOOLEAN=33;
     public static final int IMPLEMENTS=8;
-    public static final int BIT_OR=43;
-    public static final int COMMA=48;
-    public static final int TRANSIENT=30;
-    public static final int EQUAL=37;
-    public static final int TILDE=58;
-    public static final int THIS=13;
+    public static final int BIT_OR=57;
+    public static final int CONTINUE=13;
+    public static final int COMMA=62;
+    public static final int TRANSIENT=32;
+    public static final int STRING_CONST=82;
+    public static final int EQUAL=45;
+    public static final int TILDE=72;
+    public static final int LOGICAL_OR=56;
+    public static final int THIS=15;
     public static final int RETURN=11;
-    public static final int LOGICAL_OR=42;
-    public static final int PLUS=33;
+    public static final int DOUBLE=40;
+    public static final int PLUS=52;
     public static final int VOID=9;
-    public static final int SUPER=14;
-    public static final int COMMENT=65;
-    public static final int DOT=47;
-    public static final int OPEN_CURLY_BRACKET=31;
-    public static final int PRIVATE=26;
-    public static final int STATIC=29;
-    public static final int SWITCH=20;
-    public static final int UNICODE_ESC=71;
-    public static final int NULL=12;
-    public static final int ELSE=19;
-    public static final int CLOSE_CURLY_BRACKET=32;
-    public static final int HEX_DIGIT=70;
-    public static final int INT=61;
-    public static final int SEMICOLON=56;
-    public static final int MINUS=34;
-    public static final int TRY=22;
-    public static final int UNEQUAL=38;
-    public static final int COLON=55;
-    public static final int WS=66;
-    public static final int FINALLY=24;
-    public static final int ASSIGN=39;
-    public static final int GT=50;
-    public static final int OPEN_RECT_BRACKET=51;
-    public static final int CATCH=23;
+    public static final int SUPER=16;
+    public static final int COMMENT=79;
+    public static final int DOT=61;
+    public static final int INTEGER=37;
+    public static final int GE=44;
+    public static final int BYTE=34;
+    public static final int OPEN_CURLY_BRACKET=41;
+    public static final int PRIVATE=28;
+    public static final int STATIC=31;
+    public static final int SWITCH=22;
+    public static final int UNICODE_ESC=85;
+    public static final int NULL=14;
+    public static final int ELSE=21;
+    public static final int CLOSE_CURLY_BRACKET=42;
+    public static final int INT_CONST=75;
+    public static final int HEX_DIGIT=84;
+    public static final int SHORT=36;
+    public static final int SEMICOLON=70;
+    public static final int DECASSIGN=49;
+    public static final int MINUS=53;
+    public static final int TRY=24;
+    public static final int UNEQUAL=46;
+    public static final int COLON=69;
+    public static final int WS=80;
+    public static final int FINALLY=26;
+    public static final int ASSIGN=47;
+    public static final int GT=64;
+    public static final int OPEN_RECT_BRACKET=65;
+    public static final int CATCH=25;
+    public static final int LONG=38;
+    public static final int BOOL_CONST=73;
     public static final int EXTENDS=7;
-    public static final int PUBLIC=25;
-    public static final int STRING=68;
-    public static final int CLOSE_BRACKET=54;
+    public static final int PUBLIC=27;
+    public static final int LE=43;
+    public static final int CLOSE_BRACKET=68;
 
     // delegates
     // delegators
@@ -91,15 +102,15 @@ public class JavaLexer extends Lexer {
         super(input,state);
 
     }
-    public String getGrammarFileName() { return "/home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g"; }
+    public String getGrammarFileName() { return "/home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g"; }
 
     // $ANTLR start "PACKAGE"
     public final void mPACKAGE() throws RecognitionException {
         try {
             int _type = PACKAGE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:9:9: ( 'package' )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:9:12: 'package'
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:9:9: ( 'package' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:9:12: 'package'
             {
             match("package"); 
 
@@ -119,8 +130,8 @@ public class JavaLexer extends Lexer {
         try {
             int _type = IMPORT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:10:8: ( 'import' )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:10:11: 'import'
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:10:8: ( 'import' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:10:11: 'import'
             {
             match("import"); 
 
@@ -140,8 +151,8 @@ public class JavaLexer extends Lexer {
         try {
             int _type = CLASS;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:12:7: ( 'class' )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:12:9: 'class'
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:12:7: ( 'class' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:12:9: 'class'
             {
             match("class"); 
 
@@ -161,8 +172,8 @@ public class JavaLexer extends Lexer {
         try {
             int _type = EXTENDS;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:13:9: ( 'extends' )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:13:11: 'extends'
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:13:9: ( 'extends' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:13:11: 'extends'
             {
             match("extends"); 
 
@@ -182,8 +193,8 @@ public class JavaLexer extends Lexer {
         try {
             int _type = IMPLEMENTS;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:14:12: ( 'implements' )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:14:14: 'implements'
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:14:12: ( 'implements' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:14:14: 'implements'
             {
             match("implements"); 
 
@@ -203,8 +214,8 @@ public class JavaLexer extends Lexer {
         try {
             int _type = VOID;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:16:6: ( 'void' )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:16:8: 'void'
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:16:6: ( 'void' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:16:8: 'void'
             {
             match("void"); 
 
@@ -224,8 +235,8 @@ public class JavaLexer extends Lexer {
         try {
             int _type = NEW;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:17:5: ( 'new' )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:17:7: 'new'
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:17:5: ( 'new' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:17:7: 'new'
             {
             match("new"); 
 
@@ -245,8 +256,8 @@ public class JavaLexer extends Lexer {
         try {
             int _type = RETURN;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:18:8: ( 'return' )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:18:10: 'return'
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:18:8: ( 'return' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:18:10: 'return'
             {
             match("return"); 
 
@@ -261,13 +272,55 @@ public class JavaLexer extends Lexer {
     }
     // $ANTLR end "RETURN"
 
+    // $ANTLR start "BREAK"
+    public final void mBREAK() throws RecognitionException {
+        try {
+            int _type = BREAK;
+            int _channel = DEFAULT_TOKEN_CHANNEL;
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:19:7: ( 'break' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:19:9: 'break'
+            {
+            match("break"); 
+
+
+            }
+
+            state.type = _type;
+            state.channel = _channel;
+        }
+        finally {
+        }
+    }
+    // $ANTLR end "BREAK"
+
+    // $ANTLR start "CONTINUE"
+    public final void mCONTINUE() throws RecognitionException {
+        try {
+            int _type = CONTINUE;
+            int _channel = DEFAULT_TOKEN_CHANNEL;
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:20:9: ( 'continue' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:20:11: 'continue'
+            {
+            match("continue"); 
+
+
+            }
+
+            state.type = _type;
+            state.channel = _channel;
+        }
+        finally {
+        }
+    }
+    // $ANTLR end "CONTINUE"
+
     // $ANTLR start "NULL"
     public final void mNULL() throws RecognitionException {
         try {
             int _type = NULL;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:19:6: ( 'null' )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:19:8: 'null'
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:21:6: ( 'null' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:21:8: 'null'
             {
             match("null"); 
 
@@ -287,8 +340,8 @@ public class JavaLexer extends Lexer {
         try {
             int _type = THIS;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:20:6: ( 'this' )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:20:8: 'this'
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:22:6: ( 'this' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:22:8: 'this'
             {
             match("this"); 
 
@@ -308,8 +361,8 @@ public class JavaLexer extends Lexer {
         try {
             int _type = SUPER;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:21:7: ( 'super' )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:21:9: 'super'
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:23:7: ( 'super' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:23:9: 'super'
             {
             match("super"); 
 
@@ -329,8 +382,8 @@ public class JavaLexer extends Lexer {
         try {
             int _type = FOR;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:23:5: ( 'for' )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:23:7: 'for'
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:25:5: ( 'for' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:25:7: 'for'
             {
             match("for"); 
 
@@ -350,8 +403,8 @@ public class JavaLexer extends Lexer {
         try {
             int _type = DO;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:24:4: ( 'do' )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:24:6: 'do'
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:26:4: ( 'do' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:26:6: 'do'
             {
             match("do"); 
 
@@ -371,8 +424,8 @@ public class JavaLexer extends Lexer {
         try {
             int _type = WHILE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:25:7: ( 'while' )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:25:9: 'while'
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:27:7: ( 'while' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:27:9: 'while'
             {
             match("while"); 
 
@@ -392,8 +445,8 @@ public class JavaLexer extends Lexer {
         try {
             int _type = IF;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:26:4: ( 'if' )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:26:6: 'if'
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:28:4: ( 'if' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:28:6: 'if'
             {
             match("if"); 
 
@@ -413,8 +466,8 @@ public class JavaLexer extends Lexer {
         try {
             int _type = ELSE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:27:6: ( 'else' )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:27:8: 'else'
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:29:6: ( 'else' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:29:8: 'else'
             {
             match("else"); 
 
@@ -434,8 +487,8 @@ public class JavaLexer extends Lexer {
         try {
             int _type = SWITCH;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:28:8: ( 'switch' )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:28:10: 'switch'
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:30:8: ( 'switch' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:30:10: 'switch'
             {
             match("switch"); 
 
@@ -455,8 +508,8 @@ public class JavaLexer extends Lexer {
         try {
             int _type = CASE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:29:6: ( 'case' )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:29:8: 'case'
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:31:6: ( 'case' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:31:8: 'case'
             {
             match("case"); 
 
@@ -476,8 +529,8 @@ public class JavaLexer extends Lexer {
         try {
             int _type = TRY;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:31:5: ( 'try' )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:31:7: 'try'
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:33:5: ( 'try' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:33:7: 'try'
             {
             match("try"); 
 
@@ -497,8 +550,8 @@ public class JavaLexer extends Lexer {
         try {
             int _type = CATCH;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:32:7: ( 'catch' )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:32:9: 'catch'
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:34:7: ( 'catch' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:34:9: 'catch'
             {
             match("catch"); 
 
@@ -518,8 +571,8 @@ public class JavaLexer extends Lexer {
         try {
             int _type = FINALLY;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:33:9: ( 'finally' )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:33:11: 'finally'
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:35:9: ( 'finally' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:35:11: 'finally'
             {
             match("finally"); 
 
@@ -539,8 +592,8 @@ public class JavaLexer extends Lexer {
         try {
             int _type = PUBLIC;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:35:8: ( 'public' )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:35:10: 'public'
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:37:8: ( 'public' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:37:10: 'public'
             {
             match("public"); 
 
@@ -560,8 +613,8 @@ public class JavaLexer extends Lexer {
         try {
             int _type = PRIVATE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:36:9: ( 'private' )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:36:11: 'private'
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:38:9: ( 'private' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:38:11: 'private'
             {
             match("private"); 
 
@@ -581,8 +634,8 @@ public class JavaLexer extends Lexer {
         try {
             int _type = PROTECTED;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:38:2: ( 'protected' )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:38:4: 'protected'
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:40:2: ( 'protected' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:40:4: 'protected'
             {
             match("protected"); 
 
@@ -602,8 +655,8 @@ public class JavaLexer extends Lexer {
         try {
             int _type = FINAL;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:39:7: ( 'final' )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:39:9: 'final'
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:41:7: ( 'final' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:41:9: 'final'
             {
             match("final"); 
 
@@ -623,8 +676,8 @@ public class JavaLexer extends Lexer {
         try {
             int _type = STATIC;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:40:8: ( 'static' )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:40:10: 'static'
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:42:8: ( 'static' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:42:10: 'static'
             {
             match("static"); 
 
@@ -644,8 +697,8 @@ public class JavaLexer extends Lexer {
         try {
             int _type = TRANSIENT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:42:2: ( 'transient' )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:42:4: 'transient'
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:44:2: ( 'transient' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:44:4: 'transient'
             {
             match("transient"); 
 
@@ -660,13 +713,181 @@ public class JavaLexer extends Lexer {
     }
     // $ANTLR end "TRANSIENT"
 
+    // $ANTLR start "BOOLEAN"
+    public final void mBOOLEAN() throws RecognitionException {
+        try {
+            int _type = BOOLEAN;
+            int _channel = DEFAULT_TOKEN_CHANNEL;
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:46:9: ( 'boolean' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:46:11: 'boolean'
+            {
+            match("boolean"); 
+
+
+            }
+
+            state.type = _type;
+            state.channel = _channel;
+        }
+        finally {
+        }
+    }
+    // $ANTLR end "BOOLEAN"
+
+    // $ANTLR start "BYTE"
+    public final void mBYTE() throws RecognitionException {
+        try {
+            int _type = BYTE;
+            int _channel = DEFAULT_TOKEN_CHANNEL;
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:47:6: ( 'byte' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:47:8: 'byte'
+            {
+            match("byte"); 
+
+
+            }
+
+            state.type = _type;
+            state.channel = _channel;
+        }
+        finally {
+        }
+    }
+    // $ANTLR end "BYTE"
+
+    // $ANTLR start "CHAR"
+    public final void mCHAR() throws RecognitionException {
+        try {
+            int _type = CHAR;
+            int _channel = DEFAULT_TOKEN_CHANNEL;
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:48:6: ( 'char' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:48:8: 'char'
+            {
+            match("char"); 
+
+
+            }
+
+            state.type = _type;
+            state.channel = _channel;
+        }
+        finally {
+        }
+    }
+    // $ANTLR end "CHAR"
+
+    // $ANTLR start "SHORT"
+    public final void mSHORT() throws RecognitionException {
+        try {
+            int _type = SHORT;
+            int _channel = DEFAULT_TOKEN_CHANNEL;
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:49:7: ( 'short' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:49:9: 'short'
+            {
+            match("short"); 
+
+
+            }
+
+            state.type = _type;
+            state.channel = _channel;
+        }
+        finally {
+        }
+    }
+    // $ANTLR end "SHORT"
+
+    // $ANTLR start "INTEGER"
+    public final void mINTEGER() throws RecognitionException {
+        try {
+            int _type = INTEGER;
+            int _channel = DEFAULT_TOKEN_CHANNEL;
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:50:9: ( 'int' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:50:11: 'int'
+            {
+            match("int"); 
+
+
+            }
+
+            state.type = _type;
+            state.channel = _channel;
+        }
+        finally {
+        }
+    }
+    // $ANTLR end "INTEGER"
+
+    // $ANTLR start "LONG"
+    public final void mLONG() throws RecognitionException {
+        try {
+            int _type = LONG;
+            int _channel = DEFAULT_TOKEN_CHANNEL;
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:51:6: ( 'long' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:51:8: 'long'
+            {
+            match("long"); 
+
+
+            }
+
+            state.type = _type;
+            state.channel = _channel;
+        }
+        finally {
+        }
+    }
+    // $ANTLR end "LONG"
+
+    // $ANTLR start "FLOAT"
+    public final void mFLOAT() throws RecognitionException {
+        try {
+            int _type = FLOAT;
+            int _channel = DEFAULT_TOKEN_CHANNEL;
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:52:7: ( 'float' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:52:9: 'float'
+            {
+            match("float"); 
+
+
+            }
+
+            state.type = _type;
+            state.channel = _channel;
+        }
+        finally {
+        }
+    }
+    // $ANTLR end "FLOAT"
+
+    // $ANTLR start "DOUBLE"
+    public final void mDOUBLE() throws RecognitionException {
+        try {
+            int _type = DOUBLE;
+            int _channel = DEFAULT_TOKEN_CHANNEL;
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:53:8: ( 'double' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:53:10: 'double'
+            {
+            match("double"); 
+
+
+            }
+
+            state.type = _type;
+            state.channel = _channel;
+        }
+        finally {
+        }
+    }
+    // $ANTLR end "DOUBLE"
+
     // $ANTLR start "OPEN_CURLY_BRACKET"
     public final void mOPEN_CURLY_BRACKET() throws RecognitionException {
         try {
             int _type = OPEN_CURLY_BRACKET;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:45:2: ( '{' )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:45:4: '{'
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:56:2: ( '{' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:56:4: '{'
             {
             match('{'); 
 
@@ -685,8 +906,8 @@ public class JavaLexer extends Lexer {
         try {
             int _type = CLOSE_CURLY_BRACKET;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:49:2: ( '}' )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:49:4: '}'
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:60:2: ( '}' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:60:4: '}'
             {
             match('}'); 
 
@@ -700,15 +921,16 @@ public class JavaLexer extends Lexer {
     }
     // $ANTLR end "CLOSE_CURLY_BRACKET"
 
-    // $ANTLR start "PLUS"
-    public final void mPLUS() throws RecognitionException {
+    // $ANTLR start "LE"
+    public final void mLE() throws RecognitionException {
         try {
-            int _type = PLUS;
+            int _type = LE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:52:6: ( '+' )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:52:8: '+'
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:63:4: ( '<=' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:63:6: '<='
             {
-            match('+'); 
+            match("<="); 
+
 
             }
 
@@ -718,17 +940,18 @@ public class JavaLexer extends Lexer {
         finally {
         }
     }
-    // $ANTLR end "PLUS"
+    // $ANTLR end "LE"
 
-    // $ANTLR start "MINUS"
-    public final void mMINUS() throws RecognitionException {
+    // $ANTLR start "GE"
+    public final void mGE() throws RecognitionException {
         try {
-            int _type = MINUS;
+            int _type = GE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:53:7: ( '-' )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:53:9: '-'
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:64:4: ( '>=' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:64:6: '>='
             {
-            match('-'); 
+            match(">="); 
+
 
             }
 
@@ -738,55 +961,15 @@ public class JavaLexer extends Lexer {
         finally {
         }
     }
-    // $ANTLR end "MINUS"
-
-    // $ANTLR start "SLASH"
-    public final void mSLASH() throws RecognitionException {
-        try {
-            int _type = SLASH;
-            int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:54:7: ( '/' )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:54:9: '/'
-            {
-            match('/'); 
-
-            }
-
-            state.type = _type;
-            state.channel = _channel;
-        }
-        finally {
-        }
-    }
-    // $ANTLR end "SLASH"
-
-    // $ANTLR start "STAR"
-    public final void mSTAR() throws RecognitionException {
-        try {
-            int _type = STAR;
-            int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:55:6: ( '*' )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:55:8: '*'
-            {
-            match('*'); 
-
-            }
-
-            state.type = _type;
-            state.channel = _channel;
-        }
-        finally {
-        }
-    }
-    // $ANTLR end "STAR"
+    // $ANTLR end "GE"
 
     // $ANTLR start "EQUAL"
     public final void mEQUAL() throws RecognitionException {
         try {
             int _type = EQUAL;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:57:7: ( '==' )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:57:9: '=='
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:65:7: ( '==' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:65:9: '=='
             {
             match("=="); 
 
@@ -806,8 +989,8 @@ public class JavaLexer extends Lexer {
         try {
             int _type = UNEQUAL;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:58:9: ( '!=' )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:58:11: '!='
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:66:9: ( '!=' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:66:11: '!='
             {
             match("!="); 
 
@@ -827,8 +1010,8 @@ public class JavaLexer extends Lexer {
         try {
             int _type = ASSIGN;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:59:8: ( '=' )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:59:10: '='
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:67:8: ( '=' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:67:10: '='
             {
             match('='); 
 
@@ -842,13 +1025,55 @@ public class JavaLexer extends Lexer {
     }
     // $ANTLR end "ASSIGN"
 
+    // $ANTLR start "INCASSIGN"
+    public final void mINCASSIGN() throws RecognitionException {
+        try {
+            int _type = INCASSIGN;
+            int _channel = DEFAULT_TOKEN_CHANNEL;
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:69:2: ( '+=' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:69:4: '+='
+            {
+            match("+="); 
+
+
+            }
+
+            state.type = _type;
+            state.channel = _channel;
+        }
+        finally {
+        }
+    }
+    // $ANTLR end "INCASSIGN"
+
+    // $ANTLR start "DECASSIGN"
+    public final void mDECASSIGN() throws RecognitionException {
+        try {
+            int _type = DECASSIGN;
+            int _channel = DEFAULT_TOKEN_CHANNEL;
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:71:2: ( '-=' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:71:4: '-='
+            {
+            match("-="); 
+
+
+            }
+
+            state.type = _type;
+            state.channel = _channel;
+        }
+        finally {
+        }
+    }
+    // $ANTLR end "DECASSIGN"
+
     // $ANTLR start "INC"
     public final void mINC() throws RecognitionException {
         try {
             int _type = INC;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:61:5: ( '++' )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:61:7: '++'
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:73:5: ( '++' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:73:7: '++'
             {
             match("++"); 
 
@@ -868,8 +1093,8 @@ public class JavaLexer extends Lexer {
         try {
             int _type = DEC;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:62:5: ( '--' )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:62:7: '--'
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:74:5: ( '--' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:74:7: '--'
             {
             match("--"); 
 
@@ -884,13 +1109,93 @@ public class JavaLexer extends Lexer {
     }
     // $ANTLR end "DEC"
 
+    // $ANTLR start "PLUS"
+    public final void mPLUS() throws RecognitionException {
+        try {
+            int _type = PLUS;
+            int _channel = DEFAULT_TOKEN_CHANNEL;
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:76:6: ( '+' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:76:8: '+'
+            {
+            match('+'); 
+
+            }
+
+            state.type = _type;
+            state.channel = _channel;
+        }
+        finally {
+        }
+    }
+    // $ANTLR end "PLUS"
+
+    // $ANTLR start "MINUS"
+    public final void mMINUS() throws RecognitionException {
+        try {
+            int _type = MINUS;
+            int _channel = DEFAULT_TOKEN_CHANNEL;
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:77:7: ( '-' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:77:9: '-'
+            {
+            match('-'); 
+
+            }
+
+            state.type = _type;
+            state.channel = _channel;
+        }
+        finally {
+        }
+    }
+    // $ANTLR end "MINUS"
+
+    // $ANTLR start "SLASH"
+    public final void mSLASH() throws RecognitionException {
+        try {
+            int _type = SLASH;
+            int _channel = DEFAULT_TOKEN_CHANNEL;
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:78:7: ( '/' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:78:9: '/'
+            {
+            match('/'); 
+
+            }
+
+            state.type = _type;
+            state.channel = _channel;
+        }
+        finally {
+        }
+    }
+    // $ANTLR end "SLASH"
+
+    // $ANTLR start "STAR"
+    public final void mSTAR() throws RecognitionException {
+        try {
+            int _type = STAR;
+            int _channel = DEFAULT_TOKEN_CHANNEL;
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:79:6: ( '*' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:79:8: '*'
+            {
+            match('*'); 
+
+            }
+
+            state.type = _type;
+            state.channel = _channel;
+        }
+        finally {
+        }
+    }
+    // $ANTLR end "STAR"
+
     // $ANTLR start "LOGICAL_OR"
     public final void mLOGICAL_OR() throws RecognitionException {
         try {
             int _type = LOGICAL_OR;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:65:2: ( '||' )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:65:4: '||'
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:82:2: ( '||' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:82:4: '||'
             {
             match("||"); 
 
@@ -910,8 +1215,8 @@ public class JavaLexer extends Lexer {
         try {
             int _type = BIT_OR;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:66:8: ( '|' )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:66:10: '|'
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:83:8: ( '|' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:83:10: '|'
             {
             match('|'); 
 
@@ -930,8 +1235,8 @@ public class JavaLexer extends Lexer {
         try {
             int _type = LOGICAL_AND;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:69:2: ( '&&' )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:69:4: '&&'
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:86:2: ( '&&' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:86:4: '&&'
             {
             match("&&"); 
 
@@ -951,8 +1256,8 @@ public class JavaLexer extends Lexer {
         try {
             int _type = BIT_AND;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:70:9: ( '&' )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:70:11: '&'
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:87:9: ( '&' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:87:11: '&'
             {
             match('&'); 
 
@@ -971,8 +1276,8 @@ public class JavaLexer extends Lexer {
         try {
             int _type = NOT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:72:5: ( '!' )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:72:7: '!'
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:89:5: ( '!' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:89:7: '!'
             {
             match('!'); 
 
@@ -991,8 +1296,8 @@ public class JavaLexer extends Lexer {
         try {
             int _type = DOT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:74:5: ( '.' )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:74:7: '.'
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:91:5: ( '.' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:91:7: '.'
             {
             match('.'); 
 
@@ -1011,8 +1316,8 @@ public class JavaLexer extends Lexer {
         try {
             int _type = COMMA;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:75:7: ( ',' )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:75:9: ','
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:92:7: ( ',' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:92:9: ','
             {
             match(','); 
 
@@ -1031,8 +1336,8 @@ public class JavaLexer extends Lexer {
         try {
             int _type = LT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:76:4: ( '<' )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:76:6: '<'
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:93:4: ( '<' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:93:6: '<'
             {
             match('<'); 
 
@@ -1051,8 +1356,8 @@ public class JavaLexer extends Lexer {
         try {
             int _type = GT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:77:4: ( '>' )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:77:6: '>'
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:94:4: ( '>' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:94:6: '>'
             {
             match('>'); 
 
@@ -1071,8 +1376,8 @@ public class JavaLexer extends Lexer {
         try {
             int _type = OPEN_RECT_BRACKET;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:80:2: ( '[' )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:80:4: '['
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:97:2: ( '[' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:97:4: '['
             {
             match('['); 
 
@@ -1091,8 +1396,8 @@ public class JavaLexer extends Lexer {
         try {
             int _type = CLOSE_RECT_BRACKET;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:84:2: ( ']' )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:84:4: ']'
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:101:2: ( ']' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:101:4: ']'
             {
             match(']'); 
 
@@ -1111,8 +1416,8 @@ public class JavaLexer extends Lexer {
         try {
             int _type = OPEN_BRACKET;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:88:2: ( '(' )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:88:4: '('
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:105:2: ( '(' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:105:4: '('
             {
             match('('); 
 
@@ -1131,8 +1436,8 @@ public class JavaLexer extends Lexer {
         try {
             int _type = CLOSE_BRACKET;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:92:2: ( ')' )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:92:4: ')'
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:109:2: ( ')' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:109:4: ')'
             {
             match(')'); 
 
@@ -1151,8 +1456,8 @@ public class JavaLexer extends Lexer {
         try {
             int _type = COLON;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:95:7: ( ':' )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:95:9: ':'
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:112:7: ( ':' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:112:9: ':'
             {
             match(':'); 
 
@@ -1171,8 +1476,8 @@ public class JavaLexer extends Lexer {
         try {
             int _type = SEMICOLON;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:97:2: ( ';' )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:97:4: ';'
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:114:2: ( ';' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:114:4: ';'
             {
             match(';'); 
 
@@ -1191,8 +1496,8 @@ public class JavaLexer extends Lexer {
         try {
             int _type = AT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:98:4: ( '@' )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:98:6: '@'
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:115:4: ( '@' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:115:6: '@'
             {
             match('@'); 
 
@@ -1211,8 +1516,8 @@ public class JavaLexer extends Lexer {
         try {
             int _type = TILDE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:99:7: ( '~' )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:99:9: '~'
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:116:7: ( '~' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:116:9: '~'
             {
             match('~'); 
 
@@ -1226,12 +1531,12 @@ public class JavaLexer extends Lexer {
     }
     // $ANTLR end "TILDE"
 
-    // $ANTLR start "BOOLEAN"
-    public final void mBOOLEAN() throws RecognitionException {
+    // $ANTLR start "BOOL_CONST"
+    public final void mBOOL_CONST() throws RecognitionException {
         try {
-            int _type = BOOLEAN;
+            int _type = BOOL_CONST;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:101:9: ( 'true' | 'false' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:119:2: ( 'true' | 'false' )
             int alt1=2;
             int LA1_0 = input.LA(1);
 
@@ -1249,7 +1554,7 @@ public class JavaLexer extends Lexer {
             }
             switch (alt1) {
                 case 1 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:101:11: 'true'
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:119:4: 'true'
                     {
                     match("true"); 
 
@@ -1257,7 +1562,7 @@ public class JavaLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:102:4: 'false'
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:120:4: 'false'
                     {
                     match("false"); 
 
@@ -1272,15 +1577,15 @@ public class JavaLexer extends Lexer {
         finally {
         }
     }
-    // $ANTLR end "BOOLEAN"
+    // $ANTLR end "BOOL_CONST"
 
     // $ANTLR start "ID"
     public final void mID() throws RecognitionException {
         try {
             int _type = ID;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:105:5: ( ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )* )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:105:7: ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )*
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:123:4: ( ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )* )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:123:6: ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )*
             {
             if ( (input.LA(1)>='A' && input.LA(1)<='Z')||input.LA(1)=='_'||(input.LA(1)>='a' && input.LA(1)<='z') ) {
                 input.consume();
@@ -1291,7 +1596,7 @@ public class JavaLexer extends Lexer {
                 recover(mse);
                 throw mse;}
 
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:105:31: ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )*
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:123:30: ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )*
             loop2:
             do {
                 int alt2=2;
@@ -1304,7 +1609,7 @@ public class JavaLexer extends Lexer {
 
                 switch (alt2) {
             	case 1 :
-            	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:
+            	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:
             	    {
             	    if ( (input.LA(1)>='0' && input.LA(1)<='9')||(input.LA(1)>='A' && input.LA(1)<='Z')||input.LA(1)=='_'||(input.LA(1)>='a' && input.LA(1)<='z') ) {
             	        input.consume();
@@ -1335,15 +1640,15 @@ public class JavaLexer extends Lexer {
     }
     // $ANTLR end "ID"
 
-    // $ANTLR start "INT"
-    public final void mINT() throws RecognitionException {
+    // $ANTLR start "INT_CONST"
+    public final void mINT_CONST() throws RecognitionException {
         try {
-            int _type = INT;
+            int _type = INT_CONST;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:108:5: ( ( '0' .. '9' )+ )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:108:7: ( '0' .. '9' )+
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:127:2: ( ( '0' .. '9' )+ )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:127:4: ( '0' .. '9' )+
             {
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:108:7: ( '0' .. '9' )+
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:127:4: ( '0' .. '9' )+
             int cnt3=0;
             loop3:
             do {
@@ -1357,7 +1662,7 @@ public class JavaLexer extends Lexer {
 
                 switch (alt3) {
             	case 1 :
-            	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:108:7: '0' .. '9'
+            	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:127:4: '0' .. '9'
             	    {
             	    matchRange('0','9'); 
 
@@ -1382,21 +1687,21 @@ public class JavaLexer extends Lexer {
         finally {
         }
     }
-    // $ANTLR end "INT"
+    // $ANTLR end "INT_CONST"
 
-    // $ANTLR start "FLOAT"
-    public final void mFLOAT() throws RecognitionException {
+    // $ANTLR start "FLOAT_CONST"
+    public final void mFLOAT_CONST() throws RecognitionException {
         try {
-            int _type = FLOAT;
+            int _type = FLOAT_CONST;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:112:5: ( ( '0' .. '9' )+ '.' ( '0' .. '9' )* ( EXPONENT )? | '.' ( '0' .. '9' )+ ( EXPONENT )? | ( '0' .. '9' )+ EXPONENT )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:131:2: ( ( '0' .. '9' )+ '.' ( '0' .. '9' )* ( EXPONENT )? | '.' ( '0' .. '9' )+ ( EXPONENT )? | ( '0' .. '9' )+ EXPONENT )
             int alt10=3;
             alt10 = dfa10.predict(input);
             switch (alt10) {
                 case 1 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:112:9: ( '0' .. '9' )+ '.' ( '0' .. '9' )* ( EXPONENT )?
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:131:6: ( '0' .. '9' )+ '.' ( '0' .. '9' )* ( EXPONENT )?
                     {
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:112:9: ( '0' .. '9' )+
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:131:6: ( '0' .. '9' )+
                     int cnt4=0;
                     loop4:
                     do {
@@ -1410,7 +1715,7 @@ public class JavaLexer extends Lexer {
 
                         switch (alt4) {
                     	case 1 :
-                    	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:112:10: '0' .. '9'
+                    	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:131:7: '0' .. '9'
                     	    {
                     	    matchRange('0','9'); 
 
@@ -1427,7 +1732,7 @@ public class JavaLexer extends Lexer {
                     } while (true);
 
                     match('.'); 
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:112:25: ( '0' .. '9' )*
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:131:22: ( '0' .. '9' )*
                     loop5:
                     do {
                         int alt5=2;
@@ -1440,7 +1745,7 @@ public class JavaLexer extends Lexer {
 
                         switch (alt5) {
                     	case 1 :
-                    	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:112:26: '0' .. '9'
+                    	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:131:23: '0' .. '9'
                     	    {
                     	    matchRange('0','9'); 
 
@@ -1452,7 +1757,7 @@ public class JavaLexer extends Lexer {
                         }
                     } while (true);
 
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:112:37: ( EXPONENT )?
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:131:34: ( EXPONENT )?
                     int alt6=2;
                     int LA6_0 = input.LA(1);
 
@@ -1461,7 +1766,7 @@ public class JavaLexer extends Lexer {
                     }
                     switch (alt6) {
                         case 1 :
-                            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:112:37: EXPONENT
+                            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:131:34: EXPONENT
                             {
                             mEXPONENT(); 
 
@@ -1474,10 +1779,10 @@ public class JavaLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:113:9: '.' ( '0' .. '9' )+ ( EXPONENT )?
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:132:6: '.' ( '0' .. '9' )+ ( EXPONENT )?
                     {
                     match('.'); 
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:113:13: ( '0' .. '9' )+
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:132:10: ( '0' .. '9' )+
                     int cnt7=0;
                     loop7:
                     do {
@@ -1491,7 +1796,7 @@ public class JavaLexer extends Lexer {
 
                         switch (alt7) {
                     	case 1 :
-                    	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:113:14: '0' .. '9'
+                    	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:132:11: '0' .. '9'
                     	    {
                     	    matchRange('0','9'); 
 
@@ -1507,7 +1812,7 @@ public class JavaLexer extends Lexer {
                         cnt7++;
                     } while (true);
 
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:113:25: ( EXPONENT )?
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:132:22: ( EXPONENT )?
                     int alt8=2;
                     int LA8_0 = input.LA(1);
 
@@ -1516,7 +1821,7 @@ public class JavaLexer extends Lexer {
                     }
                     switch (alt8) {
                         case 1 :
-                            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:113:25: EXPONENT
+                            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:132:22: EXPONENT
                             {
                             mEXPONENT(); 
 
@@ -1529,9 +1834,9 @@ public class JavaLexer extends Lexer {
                     }
                     break;
                 case 3 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:114:9: ( '0' .. '9' )+ EXPONENT
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:133:6: ( '0' .. '9' )+ EXPONENT
                     {
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:114:9: ( '0' .. '9' )+
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:133:6: ( '0' .. '9' )+
                     int cnt9=0;
                     loop9:
                     do {
@@ -1545,7 +1850,7 @@ public class JavaLexer extends Lexer {
 
                         switch (alt9) {
                     	case 1 :
-                    	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:114:10: '0' .. '9'
+                    	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:133:7: '0' .. '9'
                     	    {
                     	    matchRange('0','9'); 
 
@@ -1573,14 +1878,14 @@ public class JavaLexer extends Lexer {
         finally {
         }
     }
-    // $ANTLR end "FLOAT"
+    // $ANTLR end "FLOAT_CONST"
 
     // $ANTLR start "COMMENT"
     public final void mCOMMENT() throws RecognitionException {
         try {
             int _type = COMMENT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:118:5: ( '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' )? LINEFEED | '/*' ( options {greedy=false; } : ( LINEFEED | ~ ( '\\n' ) ) )* '*/' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:137:2: ( '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' )? LINEFEED | '/*' ( options {greedy=false; } : ( LINEFEED | ~ ( '\\n' ) ) )* '*/' )
             int alt15=2;
             int LA15_0 = input.LA(1);
 
@@ -1608,11 +1913,11 @@ public class JavaLexer extends Lexer {
             }
             switch (alt15) {
                 case 1 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:118:9: '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' )? LINEFEED
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:137:6: '//' (~ ( '\\n' | '\\r' ) )* ( '\\r' )? LINEFEED
                     {
                     match("//"); 
 
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:118:14: (~ ( '\\n' | '\\r' ) )*
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:137:11: (~ ( '\\n' | '\\r' ) )*
                     loop11:
                     do {
                         int alt11=2;
@@ -1625,7 +1930,7 @@ public class JavaLexer extends Lexer {
 
                         switch (alt11) {
                     	case 1 :
-                    	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:118:14: ~ ( '\\n' | '\\r' )
+                    	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:137:11: ~ ( '\\n' | '\\r' )
                     	    {
                     	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='\t')||(input.LA(1)>='\u000B' && input.LA(1)<='\f')||(input.LA(1)>='\u000E' && input.LA(1)<='\uFFFF') ) {
                     	        input.consume();
@@ -1645,7 +1950,7 @@ public class JavaLexer extends Lexer {
                         }
                     } while (true);
 
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:118:28: ( '\\r' )?
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:137:25: ( '\\r' )?
                     int alt12=2;
                     int LA12_0 = input.LA(1);
 
@@ -1654,7 +1959,7 @@ public class JavaLexer extends Lexer {
                     }
                     switch (alt12) {
                         case 1 :
-                            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:118:28: '\\r'
+                            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:137:25: '\\r'
                             {
                             match('\r'); 
 
@@ -1669,11 +1974,11 @@ public class JavaLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:119:9: '/*' ( options {greedy=false; } : ( LINEFEED | ~ ( '\\n' ) ) )* '*/'
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:138:6: '/*' ( options {greedy=false; } : ( LINEFEED | ~ ( '\\n' ) ) )* '*/'
                     {
                     match("/*"); 
 
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:119:14: ( options {greedy=false; } : ( LINEFEED | ~ ( '\\n' ) ) )*
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:138:11: ( options {greedy=false; } : ( LINEFEED | ~ ( '\\n' ) ) )*
                     loop14:
                     do {
                         int alt14=2;
@@ -1698,9 +2003,9 @@ public class JavaLexer extends Lexer {
 
                         switch (alt14) {
                     	case 1 :
-                    	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:119:42: ( LINEFEED | ~ ( '\\n' ) )
+                    	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:138:39: ( LINEFEED | ~ ( '\\n' ) )
                     	    {
-                    	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:119:42: ( LINEFEED | ~ ( '\\n' ) )
+                    	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:138:39: ( LINEFEED | ~ ( '\\n' ) )
                     	    int alt13=2;
                     	    int LA13_0 = input.LA(1);
 
@@ -1718,14 +2023,14 @@ public class JavaLexer extends Lexer {
                     	    }
                     	    switch (alt13) {
                     	        case 1 :
-                    	            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:119:43: LINEFEED
+                    	            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:138:40: LINEFEED
                     	            {
                     	            mLINEFEED(); 
 
                     	            }
                     	            break;
                     	        case 2 :
-                    	            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:119:52: ~ ( '\\n' )
+                    	            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:138:49: ~ ( '\\n' )
                     	            {
                     	            if ( (input.LA(1)>='\u0000' && input.LA(1)<='\t')||(input.LA(1)>='\u000B' && input.LA(1)<='\uFFFF') ) {
                     	                input.consume();
@@ -1772,8 +2077,8 @@ public class JavaLexer extends Lexer {
         try {
             int _type = WS;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:122:5: ( ( ' ' | '\\t' | '\\r' | LINEFEED ) )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:122:9: ( ' ' | '\\t' | '\\r' | LINEFEED )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:141:4: ( ( ' ' | '\\t' | '\\r' | LINEFEED ) )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:141:8: ( ' ' | '\\t' | '\\r' | LINEFEED )
             {
             if ( (input.LA(1)>='\t' && input.LA(1)<='\n')||input.LA(1)=='\r'||input.LA(1)==' ' ) {
                 input.consume();
@@ -1799,8 +2104,8 @@ public class JavaLexer extends Lexer {
     // $ANTLR start "LINEFEED"
     public final void mLINEFEED() throws RecognitionException {
         try {
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:130:9: ( '\\n' )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:130:11: '\\n'
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:149:9: ( '\\n' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:149:11: '\\n'
             {
             match('\n'); 
 
@@ -1812,16 +2117,16 @@ public class JavaLexer extends Lexer {
     }
     // $ANTLR end "LINEFEED"
 
-    // $ANTLR start "STRING"
-    public final void mSTRING() throws RecognitionException {
+    // $ANTLR start "STRING_CONST"
+    public final void mSTRING_CONST() throws RecognitionException {
         try {
-            int _type = STRING;
+            int _type = STRING_CONST;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:133:5: ( '\"' ( ESC_SEQ | ~ ( '\\\\' | '\"' ) )* '\"' )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:133:8: '\"' ( ESC_SEQ | ~ ( '\\\\' | '\"' ) )* '\"'
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:152:2: ( '\"' ( ESC_SEQ | ~ ( '\\\\' | '\"' ) )* '\"' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:152:5: '\"' ( ESC_SEQ | ~ ( '\\\\' | '\"' ) )* '\"'
             {
             match('\"'); 
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:133:12: ( ESC_SEQ | ~ ( '\\\\' | '\"' ) )*
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:152:9: ( ESC_SEQ | ~ ( '\\\\' | '\"' ) )*
             loop16:
             do {
                 int alt16=3;
@@ -1837,14 +2142,14 @@ public class JavaLexer extends Lexer {
 
                 switch (alt16) {
             	case 1 :
-            	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:133:14: ESC_SEQ
+            	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:152:11: ESC_SEQ
             	    {
             	    mESC_SEQ(); 
 
             	    }
             	    break;
             	case 2 :
-            	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:133:24: ~ ( '\\\\' | '\"' )
+            	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:152:21: ~ ( '\\\\' | '\"' )
             	    {
             	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='!')||(input.LA(1)>='#' && input.LA(1)<='[')||(input.LA(1)>=']' && input.LA(1)<='\uFFFF') ) {
             	        input.consume();
@@ -1874,18 +2179,18 @@ public class JavaLexer extends Lexer {
         finally {
         }
     }
-    // $ANTLR end "STRING"
+    // $ANTLR end "STRING_CONST"
 
-    // $ANTLR start "CHAR"
-    public final void mCHAR() throws RecognitionException {
+    // $ANTLR start "CHAR_CONST"
+    public final void mCHAR_CONST() throws RecognitionException {
         try {
-            int _type = CHAR;
+            int _type = CHAR_CONST;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:136:5: ( '\\'' ( ESC_SEQ | ~ ( '\\'' | '\\\\' ) ) '\\'' )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:136:8: '\\'' ( ESC_SEQ | ~ ( '\\'' | '\\\\' ) ) '\\''
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:156:2: ( '\\'' ( ESC_SEQ | ~ ( '\\'' | '\\\\' ) ) '\\'' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:156:5: '\\'' ( ESC_SEQ | ~ ( '\\'' | '\\\\' ) ) '\\''
             {
             match('\''); 
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:136:13: ( ESC_SEQ | ~ ( '\\'' | '\\\\' ) )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:156:10: ( ESC_SEQ | ~ ( '\\'' | '\\\\' ) )
             int alt17=2;
             int LA17_0 = input.LA(1);
 
@@ -1903,14 +2208,14 @@ public class JavaLexer extends Lexer {
             }
             switch (alt17) {
                 case 1 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:136:15: ESC_SEQ
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:156:12: ESC_SEQ
                     {
                     mESC_SEQ(); 
 
                     }
                     break;
                 case 2 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:136:25: ~ ( '\\'' | '\\\\' )
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:156:22: ~ ( '\\'' | '\\\\' )
                     {
                     if ( (input.LA(1)>='\u0000' && input.LA(1)<='&')||(input.LA(1)>='(' && input.LA(1)<='[')||(input.LA(1)>=']' && input.LA(1)<='\uFFFF') ) {
                         input.consume();
@@ -1937,13 +2242,13 @@ public class JavaLexer extends Lexer {
         finally {
         }
     }
-    // $ANTLR end "CHAR"
+    // $ANTLR end "CHAR_CONST"
 
     // $ANTLR start "EXPONENT"
     public final void mEXPONENT() throws RecognitionException {
         try {
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:140:10: ( ( 'e' | 'E' ) ( '+' | '-' )? ( '0' .. '9' )+ )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:140:12: ( 'e' | 'E' ) ( '+' | '-' )? ( '0' .. '9' )+
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:160:10: ( ( 'e' | 'E' ) ( '+' | '-' )? ( '0' .. '9' )+ )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:160:12: ( 'e' | 'E' ) ( '+' | '-' )? ( '0' .. '9' )+
             {
             if ( input.LA(1)=='E'||input.LA(1)=='e' ) {
                 input.consume();
@@ -1954,7 +2259,7 @@ public class JavaLexer extends Lexer {
                 recover(mse);
                 throw mse;}
 
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:140:22: ( '+' | '-' )?
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:160:22: ( '+' | '-' )?
             int alt18=2;
             int LA18_0 = input.LA(1);
 
@@ -1963,7 +2268,7 @@ public class JavaLexer extends Lexer {
             }
             switch (alt18) {
                 case 1 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:
                     {
                     if ( input.LA(1)=='+'||input.LA(1)=='-' ) {
                         input.consume();
@@ -1980,7 +2285,7 @@ public class JavaLexer extends Lexer {
 
             }
 
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:140:33: ( '0' .. '9' )+
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:160:33: ( '0' .. '9' )+
             int cnt19=0;
             loop19:
             do {
@@ -1994,7 +2299,7 @@ public class JavaLexer extends Lexer {
 
                 switch (alt19) {
             	case 1 :
-            	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:140:34: '0' .. '9'
+            	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:160:34: '0' .. '9'
             	    {
             	    matchRange('0','9'); 
 
@@ -2022,8 +2327,8 @@ public class JavaLexer extends Lexer {
     // $ANTLR start "HEX_DIGIT"
     public final void mHEX_DIGIT() throws RecognitionException {
         try {
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:143:11: ( ( '0' .. '9' | 'a' .. 'f' | 'A' .. 'F' ) )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:143:13: ( '0' .. '9' | 'a' .. 'f' | 'A' .. 'F' )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:163:11: ( ( '0' .. '9' | 'a' .. 'f' | 'A' .. 'F' ) )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:163:13: ( '0' .. '9' | 'a' .. 'f' | 'A' .. 'F' )
             {
             if ( (input.LA(1)>='0' && input.LA(1)<='9')||(input.LA(1)>='A' && input.LA(1)<='F')||(input.LA(1)>='a' && input.LA(1)<='f') ) {
                 input.consume();
@@ -2046,7 +2351,7 @@ public class JavaLexer extends Lexer {
     // $ANTLR start "ESC_SEQ"
     public final void mESC_SEQ() throws RecognitionException {
         try {
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:147:5: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\\\"' | '\\'' | '\\\\' ) | UNICODE_ESC | OCTAL_ESC )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:167:5: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\\\"' | '\\'' | '\\\\' ) | UNICODE_ESC | OCTAL_ESC )
             int alt20=3;
             int LA20_0 = input.LA(1);
 
@@ -2097,7 +2402,7 @@ public class JavaLexer extends Lexer {
             }
             switch (alt20) {
                 case 1 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:147:9: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\\\"' | '\\'' | '\\\\' )
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:167:9: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\\\"' | '\\'' | '\\\\' )
                     {
                     match('\\'); 
                     if ( input.LA(1)=='\"'||input.LA(1)=='\''||input.LA(1)=='\\'||input.LA(1)=='b'||input.LA(1)=='f'||input.LA(1)=='n'||input.LA(1)=='r'||input.LA(1)=='t' ) {
@@ -2113,14 +2418,14 @@ public class JavaLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:148:9: UNICODE_ESC
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:168:9: UNICODE_ESC
                     {
                     mUNICODE_ESC(); 
 
                     }
                     break;
                 case 3 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:149:9: OCTAL_ESC
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:169:9: OCTAL_ESC
                     {
                     mOCTAL_ESC(); 
 
@@ -2137,7 +2442,7 @@ public class JavaLexer extends Lexer {
     // $ANTLR start "OCTAL_ESC"
     public final void mOCTAL_ESC() throws RecognitionException {
         try {
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:154:5: ( '\\\\' ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' ) | '\\\\' ( '0' .. '7' ) ( '0' .. '7' ) | '\\\\' ( '0' .. '7' ) )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:174:5: ( '\\\\' ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' ) | '\\\\' ( '0' .. '7' ) ( '0' .. '7' ) | '\\\\' ( '0' .. '7' ) )
             int alt21=3;
             int LA21_0 = input.LA(1);
 
@@ -2183,25 +2488,25 @@ public class JavaLexer extends Lexer {
             }
             switch (alt21) {
                 case 1 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:154:9: '\\\\' ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' )
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:174:9: '\\\\' ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' )
                     {
                     match('\\'); 
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:154:14: ( '0' .. '3' )
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:154:15: '0' .. '3'
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:174:14: ( '0' .. '3' )
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:174:15: '0' .. '3'
                     {
                     matchRange('0','3'); 
 
                     }
 
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:154:25: ( '0' .. '7' )
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:154:26: '0' .. '7'
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:174:25: ( '0' .. '7' )
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:174:26: '0' .. '7'
                     {
                     matchRange('0','7'); 
 
                     }
 
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:154:36: ( '0' .. '7' )
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:154:37: '0' .. '7'
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:174:36: ( '0' .. '7' )
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:174:37: '0' .. '7'
                     {
                     matchRange('0','7'); 
 
@@ -2211,18 +2516,18 @@ public class JavaLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:155:9: '\\\\' ( '0' .. '7' ) ( '0' .. '7' )
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:175:9: '\\\\' ( '0' .. '7' ) ( '0' .. '7' )
                     {
                     match('\\'); 
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:155:14: ( '0' .. '7' )
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:155:15: '0' .. '7'
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:175:14: ( '0' .. '7' )
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:175:15: '0' .. '7'
                     {
                     matchRange('0','7'); 
 
                     }
 
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:155:25: ( '0' .. '7' )
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:155:26: '0' .. '7'
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:175:25: ( '0' .. '7' )
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:175:26: '0' .. '7'
                     {
                     matchRange('0','7'); 
 
@@ -2232,11 +2537,11 @@ public class JavaLexer extends Lexer {
                     }
                     break;
                 case 3 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:156:9: '\\\\' ( '0' .. '7' )
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:176:9: '\\\\' ( '0' .. '7' )
                     {
                     match('\\'); 
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:156:14: ( '0' .. '7' )
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:156:15: '0' .. '7'
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:176:14: ( '0' .. '7' )
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:176:15: '0' .. '7'
                     {
                     matchRange('0','7'); 
 
@@ -2256,8 +2561,8 @@ public class JavaLexer extends Lexer {
     // $ANTLR start "UNICODE_ESC"
     public final void mUNICODE_ESC() throws RecognitionException {
         try {
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:161:5: ( '\\\\' 'u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:161:9: '\\\\' 'u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:181:5: ( '\\\\' 'u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:181:9: '\\\\' 'u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT
             {
             match('\\'); 
             match('u'); 
@@ -2275,448 +2580,546 @@ public class JavaLexer extends Lexer {
     // $ANTLR end "UNICODE_ESC"
 
     public void mTokens() throws RecognitionException {
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:8: ( PACKAGE | IMPORT | CLASS | EXTENDS | IMPLEMENTS | VOID | NEW | RETURN | NULL | THIS | SUPER | FOR | DO | WHILE | IF | ELSE | SWITCH | CASE | TRY | CATCH | FINALLY | PUBLIC | PRIVATE | PROTECTED | FINAL | STATIC | TRANSIENT | OPEN_CURLY_BRACKET | CLOSE_CURLY_BRACKET | PLUS | MINUS | SLASH | STAR | EQUAL | UNEQUAL | ASSIGN | INC | DEC | LOGICAL_OR | BIT_OR | LOGICAL_AND | BIT_AND | NOT | DOT | COMMA | LT | GT | OPEN_RECT_BRACKET | CLOSE_RECT_BRACKET | OPEN_BRACKET | CLOSE_BRACKET | COLON | SEMICOLON | AT | TILDE | BOOLEAN | ID | INT | FLOAT | COMMENT | WS | STRING | CHAR )
-        int alt22=63;
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:8: ( PACKAGE | IMPORT | CLASS | EXTENDS | IMPLEMENTS | VOID | NEW | RETURN | BREAK | CONTINUE | NULL | THIS | SUPER | FOR | DO | WHILE | IF | ELSE | SWITCH | CASE | TRY | CATCH | FINALLY | PUBLIC | PRIVATE | PROTECTED | FINAL | STATIC | TRANSIENT | BOOLEAN | BYTE | CHAR | SHORT | INTEGER | LONG | FLOAT | DOUBLE | OPEN_CURLY_BRACKET | CLOSE_CURLY_BRACKET | LE | GE | EQUAL | UNEQUAL | ASSIGN | INCASSIGN | DECASSIGN | INC | DEC | PLUS | MINUS | SLASH | STAR | LOGICAL_OR | BIT_OR | LOGICAL_AND | BIT_AND | NOT | DOT | COMMA | LT | GT | OPEN_RECT_BRACKET | CLOSE_RECT_BRACKET | OPEN_BRACKET | CLOSE_BRACKET | COLON | SEMICOLON | AT | TILDE | BOOL_CONST | ID | INT_CONST | FLOAT_CONST | COMMENT | WS | STRING_CONST | CHAR_CONST )
+        int alt22=77;
         alt22 = dfa22.predict(input);
         switch (alt22) {
             case 1 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:10: PACKAGE
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:10: PACKAGE
                 {
                 mPACKAGE(); 
 
                 }
                 break;
             case 2 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:18: IMPORT
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:18: IMPORT
                 {
                 mIMPORT(); 
 
                 }
                 break;
             case 3 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:25: CLASS
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:25: CLASS
                 {
                 mCLASS(); 
 
                 }
                 break;
             case 4 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:31: EXTENDS
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:31: EXTENDS
                 {
                 mEXTENDS(); 
 
                 }
                 break;
             case 5 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:39: IMPLEMENTS
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:39: IMPLEMENTS
                 {
                 mIMPLEMENTS(); 
 
                 }
                 break;
             case 6 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:50: VOID
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:50: VOID
                 {
                 mVOID(); 
 
                 }
                 break;
             case 7 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:55: NEW
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:55: NEW
                 {
                 mNEW(); 
 
                 }
                 break;
             case 8 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:59: RETURN
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:59: RETURN
                 {
                 mRETURN(); 
 
                 }
                 break;
             case 9 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:66: NULL
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:66: BREAK
+                {
+                mBREAK(); 
+
+                }
+                break;
+            case 10 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:72: CONTINUE
+                {
+                mCONTINUE(); 
+
+                }
+                break;
+            case 11 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:81: NULL
                 {
                 mNULL(); 
 
                 }
                 break;
-            case 10 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:71: THIS
+            case 12 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:86: THIS
                 {
                 mTHIS(); 
 
                 }
                 break;
-            case 11 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:76: SUPER
+            case 13 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:91: SUPER
                 {
                 mSUPER(); 
 
                 }
                 break;
-            case 12 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:82: FOR
+            case 14 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:97: FOR
                 {
                 mFOR(); 
 
                 }
                 break;
-            case 13 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:86: DO
+            case 15 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:101: DO
                 {
                 mDO(); 
 
                 }
                 break;
-            case 14 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:89: WHILE
+            case 16 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:104: WHILE
                 {
                 mWHILE(); 
 
                 }
                 break;
-            case 15 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:95: IF
+            case 17 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:110: IF
                 {
                 mIF(); 
 
                 }
                 break;
-            case 16 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:98: ELSE
+            case 18 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:113: ELSE
                 {
                 mELSE(); 
 
                 }
                 break;
-            case 17 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:103: SWITCH
+            case 19 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:118: SWITCH
                 {
                 mSWITCH(); 
 
                 }
                 break;
-            case 18 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:110: CASE
+            case 20 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:125: CASE
                 {
                 mCASE(); 
 
                 }
                 break;
-            case 19 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:115: TRY
+            case 21 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:130: TRY
                 {
                 mTRY(); 
 
                 }
                 break;
-            case 20 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:119: CATCH
+            case 22 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:134: CATCH
                 {
                 mCATCH(); 
 
                 }
                 break;
-            case 21 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:125: FINALLY
+            case 23 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:140: FINALLY
                 {
                 mFINALLY(); 
 
                 }
                 break;
-            case 22 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:133: PUBLIC
+            case 24 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:148: PUBLIC
                 {
                 mPUBLIC(); 
 
                 }
                 break;
-            case 23 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:140: PRIVATE
+            case 25 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:155: PRIVATE
                 {
                 mPRIVATE(); 
 
                 }
                 break;
-            case 24 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:148: PROTECTED
+            case 26 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:163: PROTECTED
                 {
                 mPROTECTED(); 
 
                 }
                 break;
-            case 25 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:158: FINAL
+            case 27 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:173: FINAL
                 {
                 mFINAL(); 
 
                 }
                 break;
-            case 26 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:164: STATIC
+            case 28 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:179: STATIC
                 {
                 mSTATIC(); 
 
                 }
                 break;
-            case 27 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:171: TRANSIENT
+            case 29 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:186: TRANSIENT
                 {
                 mTRANSIENT(); 
 
                 }
                 break;
-            case 28 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:181: OPEN_CURLY_BRACKET
-                {
-                mOPEN_CURLY_BRACKET(); 
-
-                }
-                break;
-            case 29 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:200: CLOSE_CURLY_BRACKET
-                {
-                mCLOSE_CURLY_BRACKET(); 
-
-                }
-                break;
             case 30 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:220: PLUS
-                {
-                mPLUS(); 
-
-                }
-                break;
-            case 31 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:225: MINUS
-                {
-                mMINUS(); 
-
-                }
-                break;
-            case 32 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:231: SLASH
-                {
-                mSLASH(); 
-
-                }
-                break;
-            case 33 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:237: STAR
-                {
-                mSTAR(); 
-
-                }
-                break;
-            case 34 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:242: EQUAL
-                {
-                mEQUAL(); 
-
-                }
-                break;
-            case 35 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:248: UNEQUAL
-                {
-                mUNEQUAL(); 
-
-                }
-                break;
-            case 36 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:256: ASSIGN
-                {
-                mASSIGN(); 
-
-                }
-                break;
-            case 37 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:263: INC
-                {
-                mINC(); 
-
-                }
-                break;
-            case 38 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:267: DEC
-                {
-                mDEC(); 
-
-                }
-                break;
-            case 39 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:271: LOGICAL_OR
-                {
-                mLOGICAL_OR(); 
-
-                }
-                break;
-            case 40 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:282: BIT_OR
-                {
-                mBIT_OR(); 
-
-                }
-                break;
-            case 41 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:289: LOGICAL_AND
-                {
-                mLOGICAL_AND(); 
-
-                }
-                break;
-            case 42 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:301: BIT_AND
-                {
-                mBIT_AND(); 
-
-                }
-                break;
-            case 43 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:309: NOT
-                {
-                mNOT(); 
-
-                }
-                break;
-            case 44 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:313: DOT
-                {
-                mDOT(); 
-
-                }
-                break;
-            case 45 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:317: COMMA
-                {
-                mCOMMA(); 
-
-                }
-                break;
-            case 46 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:323: LT
-                {
-                mLT(); 
-
-                }
-                break;
-            case 47 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:326: GT
-                {
-                mGT(); 
-
-                }
-                break;
-            case 48 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:329: OPEN_RECT_BRACKET
-                {
-                mOPEN_RECT_BRACKET(); 
-
-                }
-                break;
-            case 49 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:347: CLOSE_RECT_BRACKET
-                {
-                mCLOSE_RECT_BRACKET(); 
-
-                }
-                break;
-            case 50 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:366: OPEN_BRACKET
-                {
-                mOPEN_BRACKET(); 
-
-                }
-                break;
-            case 51 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:379: CLOSE_BRACKET
-                {
-                mCLOSE_BRACKET(); 
-
-                }
-                break;
-            case 52 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:393: COLON
-                {
-                mCOLON(); 
-
-                }
-                break;
-            case 53 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:399: SEMICOLON
-                {
-                mSEMICOLON(); 
-
-                }
-                break;
-            case 54 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:409: AT
-                {
-                mAT(); 
-
-                }
-                break;
-            case 55 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:412: TILDE
-                {
-                mTILDE(); 
-
-                }
-                break;
-            case 56 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:418: BOOLEAN
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:196: BOOLEAN
                 {
                 mBOOLEAN(); 
 
                 }
                 break;
-            case 57 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:426: ID
+            case 31 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:204: BYTE
                 {
-                mID(); 
+                mBYTE(); 
 
                 }
                 break;
-            case 58 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:429: INT
+            case 32 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:209: CHAR
                 {
-                mINT(); 
+                mCHAR(); 
 
                 }
                 break;
-            case 59 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:433: FLOAT
+            case 33 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:214: SHORT
+                {
+                mSHORT(); 
+
+                }
+                break;
+            case 34 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:220: INTEGER
+                {
+                mINTEGER(); 
+
+                }
+                break;
+            case 35 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:228: LONG
+                {
+                mLONG(); 
+
+                }
+                break;
+            case 36 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:233: FLOAT
                 {
                 mFLOAT(); 
 
                 }
                 break;
+            case 37 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:239: DOUBLE
+                {
+                mDOUBLE(); 
+
+                }
+                break;
+            case 38 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:246: OPEN_CURLY_BRACKET
+                {
+                mOPEN_CURLY_BRACKET(); 
+
+                }
+                break;
+            case 39 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:265: CLOSE_CURLY_BRACKET
+                {
+                mCLOSE_CURLY_BRACKET(); 
+
+                }
+                break;
+            case 40 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:285: LE
+                {
+                mLE(); 
+
+                }
+                break;
+            case 41 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:288: GE
+                {
+                mGE(); 
+
+                }
+                break;
+            case 42 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:291: EQUAL
+                {
+                mEQUAL(); 
+
+                }
+                break;
+            case 43 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:297: UNEQUAL
+                {
+                mUNEQUAL(); 
+
+                }
+                break;
+            case 44 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:305: ASSIGN
+                {
+                mASSIGN(); 
+
+                }
+                break;
+            case 45 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:312: INCASSIGN
+                {
+                mINCASSIGN(); 
+
+                }
+                break;
+            case 46 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:322: DECASSIGN
+                {
+                mDECASSIGN(); 
+
+                }
+                break;
+            case 47 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:332: INC
+                {
+                mINC(); 
+
+                }
+                break;
+            case 48 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:336: DEC
+                {
+                mDEC(); 
+
+                }
+                break;
+            case 49 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:340: PLUS
+                {
+                mPLUS(); 
+
+                }
+                break;
+            case 50 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:345: MINUS
+                {
+                mMINUS(); 
+
+                }
+                break;
+            case 51 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:351: SLASH
+                {
+                mSLASH(); 
+
+                }
+                break;
+            case 52 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:357: STAR
+                {
+                mSTAR(); 
+
+                }
+                break;
+            case 53 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:362: LOGICAL_OR
+                {
+                mLOGICAL_OR(); 
+
+                }
+                break;
+            case 54 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:373: BIT_OR
+                {
+                mBIT_OR(); 
+
+                }
+                break;
+            case 55 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:380: LOGICAL_AND
+                {
+                mLOGICAL_AND(); 
+
+                }
+                break;
+            case 56 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:392: BIT_AND
+                {
+                mBIT_AND(); 
+
+                }
+                break;
+            case 57 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:400: NOT
+                {
+                mNOT(); 
+
+                }
+                break;
+            case 58 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:404: DOT
+                {
+                mDOT(); 
+
+                }
+                break;
+            case 59 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:408: COMMA
+                {
+                mCOMMA(); 
+
+                }
+                break;
             case 60 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:439: COMMENT
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:414: LT
+                {
+                mLT(); 
+
+                }
+                break;
+            case 61 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:417: GT
+                {
+                mGT(); 
+
+                }
+                break;
+            case 62 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:420: OPEN_RECT_BRACKET
+                {
+                mOPEN_RECT_BRACKET(); 
+
+                }
+                break;
+            case 63 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:438: CLOSE_RECT_BRACKET
+                {
+                mCLOSE_RECT_BRACKET(); 
+
+                }
+                break;
+            case 64 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:457: OPEN_BRACKET
+                {
+                mOPEN_BRACKET(); 
+
+                }
+                break;
+            case 65 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:470: CLOSE_BRACKET
+                {
+                mCLOSE_BRACKET(); 
+
+                }
+                break;
+            case 66 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:484: COLON
+                {
+                mCOLON(); 
+
+                }
+                break;
+            case 67 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:490: SEMICOLON
+                {
+                mSEMICOLON(); 
+
+                }
+                break;
+            case 68 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:500: AT
+                {
+                mAT(); 
+
+                }
+                break;
+            case 69 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:503: TILDE
+                {
+                mTILDE(); 
+
+                }
+                break;
+            case 70 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:509: BOOL_CONST
+                {
+                mBOOL_CONST(); 
+
+                }
+                break;
+            case 71 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:520: ID
+                {
+                mID(); 
+
+                }
+                break;
+            case 72 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:523: INT_CONST
+                {
+                mINT_CONST(); 
+
+                }
+                break;
+            case 73 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:533: FLOAT_CONST
+                {
+                mFLOAT_CONST(); 
+
+                }
+                break;
+            case 74 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:545: COMMENT
                 {
                 mCOMMENT(); 
 
                 }
                 break;
-            case 61 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:447: WS
+            case 75 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:553: WS
                 {
                 mWS(); 
 
                 }
                 break;
-            case 62 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:450: STRING
+            case 76 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:556: STRING_CONST
                 {
-                mSTRING(); 
+                mSTRING_CONST(); 
 
                 }
                 break;
-            case 63 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaLexer.g:1:457: CHAR
+            case 77 :
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaLexer.g:1:569: CHAR_CONST
                 {
-                mCHAR(); 
+                mCHAR_CONST(); 
 
                 }
                 break;
@@ -2778,269 +3181,343 @@ public class JavaLexer extends Lexer {
             this.transition = DFA10_transition;
         }
         public String getDescription() {
-            return "111:1: FLOAT : ( ( '0' .. '9' )+ '.' ( '0' .. '9' )* ( EXPONENT )? | '.' ( '0' .. '9' )+ ( EXPONENT )? | ( '0' .. '9' )+ EXPONENT );";
+            return "130:1: FLOAT_CONST : ( ( '0' .. '9' )+ '.' ( '0' .. '9' )* ( EXPONENT )? | '.' ( '0' .. '9' )+ ( EXPONENT )? | ( '0' .. '9' )+ EXPONENT );";
         }
     }
     static final String DFA22_eotS =
-        "\1\uffff\14\43\2\uffff\1\100\1\102\1\104\1\uffff\1\106\1\110\1\112"+
-        "\1\114\1\115\14\uffff\1\117\3\uffff\4\43\1\125\20\43\1\151\1\43"+
-        "\21\uffff\5\43\1\uffff\6\43\1\167\3\43\1\173\5\43\1\u0081\2\43\1"+
-        "\uffff\10\43\1\u008c\2\43\1\u008f\1\u0090\1\uffff\1\u0091\1\43\1"+
-        "\u0093\1\uffff\1\43\1\u0095\3\43\1\uffff\11\43\1\u00a2\1\uffff\1"+
-        "\u00a3\1\43\3\uffff\1\43\1\uffff\1\43\1\uffff\1\u00a7\2\43\1\u00ab"+
-        "\1\u0095\1\u00ac\1\43\1\u00ae\2\43\1\u00b1\1\43\2\uffff\1\43\1\u00b4"+
-        "\1\43\1\uffff\1\u00b6\1\u00b7\1\43\2\uffff\1\u00b9\1\uffff\1\u00ba"+
-        "\1\43\1\uffff\1\43\1\u00bd\1\uffff\1\43\2\uffff\1\u00bf\2\uffff"+
-        "\2\43\1\uffff\1\43\1\uffff\1\u00c3\1\43\1\u00c5\1\uffff\1\u00c6"+
-        "\2\uffff";
+        "\1\uffff\16\45\2\uffff\1\113\1\115\1\117\1\121\1\124\1\127\1\131"+
+        "\1\uffff\1\133\1\135\1\136\12\uffff\1\140\3\uffff\4\45\1\146\30"+
+        "\45\1\u0083\2\45\27\uffff\5\45\1\uffff\1\u008c\10\45\1\u0095\6\45"+
+        "\1\u009c\6\45\1\u00a3\4\45\1\uffff\10\45\1\uffff\2\45\1\u00b2\1"+
+        "\45\1\u00b4\1\45\1\u00b6\1\u00b7\1\uffff\1\u00b8\3\45\1\u00bc\1"+
+        "\u00bd\1\uffff\1\45\1\u00bf\4\45\1\uffff\5\45\1\u00c9\6\45\1\u00d0"+
+        "\1\45\1\uffff\1\u00d2\1\uffff\1\45\3\uffff\1\45\1\u00d5\1\45\2\uffff"+
+        "\1\45\1\uffff\1\u00d8\2\45\1\u00db\1\u00dd\1\u00de\1\u00bf\1\45"+
+        "\1\u00e0\1\uffff\1\45\1\u00e2\2\45\1\u00e5\1\45\1\uffff\1\45\1\uffff"+
+        "\1\45\1\u00e9\1\uffff\2\45\1\uffff\1\u00ec\1\u00ed\1\uffff\1\45"+
+        "\2\uffff\1\u00ef\1\uffff\1\u00f0\1\uffff\1\u00f1\1\45\1\uffff\2"+
+        "\45\1\u00f5\1\uffff\1\u00f6\1\45\2\uffff\1\u00f8\3\uffff\2\45\1"+
+        "\u00fb\2\uffff\1\45\1\uffff\1\u00fd\1\45\1\uffff\1\u00ff\1\uffff"+
+        "\1\u0100\2\uffff";
     static final String DFA22_eofS =
-        "\u00c7\uffff";
+        "\u0101\uffff";
     static final String DFA22_minS =
-        "\1\11\1\141\1\146\1\141\1\154\1\157\2\145\1\150\1\164\1\141\1\157"+
-        "\1\150\2\uffff\1\53\1\55\1\52\1\uffff\2\75\1\174\1\46\1\60\14\uffff"+
-        "\1\56\3\uffff\1\143\1\142\1\151\1\160\1\60\1\141\1\163\1\164\1\163"+
-        "\1\151\1\167\1\154\1\164\1\151\1\141\1\160\1\151\1\141\1\162\1\156"+
-        "\1\154\1\60\1\151\21\uffff\1\153\1\154\1\166\1\164\1\154\1\uffff"+
-        "\1\163\1\145\1\143\2\145\1\144\1\60\1\154\1\165\1\163\1\60\1\156"+
-        "\2\145\2\164\1\60\1\141\1\163\1\uffff\1\154\1\141\1\151\1\141\1"+
-        "\145\1\162\1\145\1\163\1\60\1\150\1\156\2\60\1\uffff\1\60\1\162"+
-        "\1\60\1\uffff\1\163\1\60\1\162\1\143\1\151\1\uffff\1\154\2\145\1"+
-        "\147\1\143\1\164\1\143\1\164\1\155\1\60\1\uffff\1\60\1\144\3\uffff"+
-        "\1\156\1\uffff\1\151\1\uffff\1\60\1\150\1\143\3\60\1\145\1\60\1"+
-        "\145\1\164\1\60\1\145\2\uffff\1\163\1\60\1\145\1\uffff\2\60\1\171"+
-        "\2\uffff\1\60\1\uffff\1\60\1\145\1\uffff\1\156\1\60\1\uffff\1\156"+
-        "\2\uffff\1\60\2\uffff\1\144\1\164\1\uffff\1\164\1\uffff\1\60\1\163"+
-        "\1\60\1\uffff\1\60\2\uffff";
+        "\1\11\1\141\1\146\1\141\1\154\1\157\2\145\1\157\2\150\1\141\1\157"+
+        "\1\150\1\157\2\uffff\4\75\1\53\1\55\1\52\1\uffff\1\174\1\46\1\60"+
+        "\12\uffff\1\56\3\uffff\1\143\1\142\1\151\1\160\1\60\1\164\1\141"+
+        "\1\156\1\163\1\141\1\164\1\163\1\151\1\167\1\154\1\164\1\145\1\157"+
+        "\1\164\1\151\1\141\1\160\1\151\1\141\1\157\1\162\1\156\1\157\1\154"+
+        "\1\60\1\151\1\156\27\uffff\1\153\1\154\1\166\1\164\1\154\1\uffff"+
+        "\1\60\1\163\1\164\1\145\1\143\1\162\2\145\1\144\1\60\1\154\1\165"+
+        "\1\141\1\154\1\145\1\163\1\60\1\156\2\145\2\164\1\162\1\60\2\141"+
+        "\1\163\1\142\1\uffff\1\154\1\147\1\141\1\151\1\141\1\145\1\162\1"+
+        "\145\1\uffff\1\163\1\151\1\60\1\150\1\60\1\156\2\60\1\uffff\1\60"+
+        "\1\162\1\153\1\145\2\60\1\uffff\1\163\1\60\1\162\1\143\1\151\1\164"+
+        "\1\uffff\1\154\1\164\1\145\1\154\1\145\1\60\1\147\1\143\1\164\1"+
+        "\143\1\164\1\155\1\60\1\156\1\uffff\1\60\1\uffff\1\144\3\uffff\1"+
+        "\156\1\60\1\141\2\uffff\1\151\1\uffff\1\60\1\150\1\143\4\60\1\145"+
+        "\1\60\1\uffff\1\145\1\60\1\145\1\164\1\60\1\145\1\uffff\1\165\1"+
+        "\uffff\1\163\1\60\1\uffff\1\156\1\145\1\uffff\2\60\1\uffff\1\171"+
+        "\2\uffff\1\60\1\uffff\1\60\1\uffff\1\60\1\145\1\uffff\1\156\1\145"+
+        "\1\60\1\uffff\1\60\1\156\2\uffff\1\60\3\uffff\1\144\1\164\1\60\2"+
+        "\uffff\1\164\1\uffff\1\60\1\163\1\uffff\1\60\1\uffff\1\60\2\uffff";
     static final String DFA22_maxS =
-        "\1\176\1\165\1\155\1\154\1\170\1\157\1\165\1\145\1\162\1\167\2\157"+
-        "\1\150\2\uffff\1\53\1\55\1\57\1\uffff\2\75\1\174\1\46\1\71\14\uffff"+
-        "\1\145\3\uffff\1\143\1\142\1\157\1\160\1\172\1\141\2\164\1\163\1"+
-        "\151\1\167\1\154\1\164\1\151\1\171\1\160\1\151\1\141\1\162\1\156"+
-        "\1\154\1\172\1\151\21\uffff\1\153\1\154\1\166\1\164\1\157\1\uffff"+
-        "\1\163\1\145\1\143\2\145\1\144\1\172\1\154\1\165\1\163\1\172\1\156"+
-        "\2\145\2\164\1\172\1\141\1\163\1\uffff\1\154\1\141\1\151\1\141\1"+
-        "\145\1\162\1\145\1\163\1\172\1\150\1\156\2\172\1\uffff\1\172\1\162"+
-        "\1\172\1\uffff\1\163\1\172\1\162\1\143\1\151\1\uffff\1\154\2\145"+
-        "\1\147\1\143\1\164\1\143\1\164\1\155\1\172\1\uffff\1\172\1\144\3"+
-        "\uffff\1\156\1\uffff\1\151\1\uffff\1\172\1\150\1\143\3\172\1\145"+
-        "\1\172\1\145\1\164\1\172\1\145\2\uffff\1\163\1\172\1\145\1\uffff"+
-        "\2\172\1\171\2\uffff\1\172\1\uffff\1\172\1\145\1\uffff\1\156\1\172"+
-        "\1\uffff\1\156\2\uffff\1\172\2\uffff\1\144\1\164\1\uffff\1\164\1"+
-        "\uffff\1\172\1\163\1\172\1\uffff\1\172\2\uffff";
+        "\1\176\1\165\1\156\1\157\1\170\1\157\1\165\1\145\1\171\1\162\1\167"+
+        "\2\157\1\150\1\157\2\uffff\6\75\1\57\1\uffff\1\174\1\46\1\71\12"+
+        "\uffff\1\145\3\uffff\1\143\1\142\1\157\1\160\1\172\1\164\1\141\1"+
+        "\156\1\164\1\141\1\164\1\163\1\151\1\167\1\154\1\164\1\145\1\157"+
+        "\1\164\1\151\1\171\1\160\1\151\1\141\1\157\1\162\1\156\1\157\1\154"+
+        "\1\172\1\151\1\156\27\uffff\1\153\1\154\1\166\1\164\1\157\1\uffff"+
+        "\1\172\1\163\1\164\1\145\1\143\1\162\2\145\1\144\1\172\1\154\1\165"+
+        "\1\141\1\154\1\145\1\163\1\172\1\156\2\145\2\164\1\162\1\172\2\141"+
+        "\1\163\1\142\1\uffff\1\154\1\147\1\141\1\151\1\141\1\145\1\162\1"+
+        "\145\1\uffff\1\163\1\151\1\172\1\150\1\172\1\156\2\172\1\uffff\1"+
+        "\172\1\162\1\153\1\145\2\172\1\uffff\1\163\1\172\1\162\1\143\1\151"+
+        "\1\164\1\uffff\1\154\1\164\1\145\1\154\1\145\1\172\1\147\1\143\1"+
+        "\164\1\143\1\164\1\155\1\172\1\156\1\uffff\1\172\1\uffff\1\144\3"+
+        "\uffff\1\156\1\172\1\141\2\uffff\1\151\1\uffff\1\172\1\150\1\143"+
+        "\4\172\1\145\1\172\1\uffff\1\145\1\172\1\145\1\164\1\172\1\145\1"+
+        "\uffff\1\165\1\uffff\1\163\1\172\1\uffff\1\156\1\145\1\uffff\2\172"+
+        "\1\uffff\1\171\2\uffff\1\172\1\uffff\1\172\1\uffff\1\172\1\145\1"+
+        "\uffff\1\156\1\145\1\172\1\uffff\1\172\1\156\2\uffff\1\172\3\uffff"+
+        "\1\144\1\164\1\172\2\uffff\1\164\1\uffff\1\172\1\163\1\uffff\1\172"+
+        "\1\uffff\1\172\2\uffff";
     static final String DFA22_acceptS =
-        "\15\uffff\1\34\1\35\3\uffff\1\41\5\uffff\1\55\1\56\1\57\1\60\1\61"+
-        "\1\62\1\63\1\64\1\65\1\66\1\67\1\71\1\uffff\1\75\1\76\1\77\27\uffff"+
-        "\1\45\1\36\1\46\1\37\1\74\1\40\1\42\1\44\1\43\1\53\1\47\1\50\1\51"+
-        "\1\52\1\54\1\73\1\72\5\uffff\1\17\23\uffff\1\15\15\uffff\1\7\3\uffff"+
-        "\1\23\5\uffff\1\14\12\uffff\1\22\2\uffff\1\20\1\6\1\11\1\uffff\1"+
-        "\12\1\uffff\1\70\14\uffff\1\3\1\24\3\uffff\1\13\3\uffff\1\31\1\16"+
-        "\1\uffff\1\26\2\uffff\1\2\2\uffff\1\10\1\uffff\1\21\1\32\1\uffff"+
-        "\1\1\1\27\2\uffff\1\4\1\uffff\1\25\3\uffff\1\30\1\uffff\1\33\1\5";
+        "\17\uffff\1\46\1\47\7\uffff\1\64\3\uffff\1\73\1\76\1\77\1\100\1"+
+        "\101\1\102\1\103\1\104\1\105\1\107\1\uffff\1\113\1\114\1\115\40"+
+        "\uffff\1\50\1\74\1\51\1\75\1\52\1\54\1\53\1\71\1\55\1\57\1\61\1"+
+        "\56\1\60\1\62\1\112\1\63\1\65\1\66\1\67\1\70\1\72\1\111\1\110\5"+
+        "\uffff\1\21\34\uffff\1\17\10\uffff\1\42\10\uffff\1\7\6\uffff\1\25"+
+        "\6\uffff\1\16\16\uffff\1\24\1\uffff\1\40\1\uffff\1\22\1\6\1\13\3"+
+        "\uffff\1\37\1\14\1\uffff\1\106\11\uffff\1\43\6\uffff\1\3\1\uffff"+
+        "\1\26\2\uffff\1\11\2\uffff\1\15\2\uffff\1\41\1\uffff\1\33\1\44\1"+
+        "\uffff\1\20\1\uffff\1\30\2\uffff\1\2\3\uffff\1\10\2\uffff\1\23\1"+
+        "\34\1\uffff\1\45\1\1\1\31\3\uffff\1\4\1\36\1\uffff\1\27\2\uffff"+
+        "\1\12\1\uffff\1\32\1\uffff\1\35\1\5";
     static final String DFA22_specialS =
-        "\u00c7\uffff}>";
+        "\u0101\uffff}>";
     static final String[] DFA22_transitionS = {
-            "\2\45\2\uffff\1\45\22\uffff\1\45\1\24\1\46\3\uffff\1\26\1\47"+
-            "\1\35\1\36\1\22\1\17\1\30\1\20\1\27\1\21\12\44\1\37\1\40\1\31"+
-            "\1\23\1\32\1\uffff\1\41\32\43\1\33\1\uffff\1\34\1\uffff\1\43"+
-            "\1\uffff\2\43\1\3\1\13\1\4\1\12\2\43\1\2\4\43\1\6\1\43\1\1\1"+
-            "\43\1\7\1\11\1\10\1\43\1\5\1\14\3\43\1\15\1\25\1\16\1\42",
-            "\1\50\20\uffff\1\52\2\uffff\1\51",
-            "\1\54\6\uffff\1\53",
-            "\1\56\12\uffff\1\55",
-            "\1\60\13\uffff\1\57",
-            "\1\61",
-            "\1\62\17\uffff\1\63",
-            "\1\64",
-            "\1\65\11\uffff\1\66",
-            "\1\71\1\67\1\uffff\1\70",
-            "\1\74\7\uffff\1\73\5\uffff\1\72",
-            "\1\75",
-            "\1\76",
-            "",
-            "",
-            "\1\77",
-            "\1\101",
-            "\1\103\4\uffff\1\103",
-            "",
-            "\1\105",
+            "\2\47\2\uffff\1\47\22\uffff\1\47\1\24\1\50\3\uffff\1\32\1\51"+
+            "\1\37\1\40\1\30\1\25\1\34\1\26\1\33\1\27\12\46\1\41\1\42\1\21"+
+            "\1\23\1\22\1\uffff\1\43\32\45\1\35\1\uffff\1\36\1\uffff\1\45"+
+            "\1\uffff\1\45\1\10\1\3\1\14\1\4\1\13\2\45\1\2\2\45\1\16\1\45"+
+            "\1\6\1\45\1\1\1\45\1\7\1\12\1\11\1\45\1\5\1\15\3\45\1\17\1\31"+
+            "\1\20\1\44",
+            "\1\52\20\uffff\1\54\2\uffff\1\53",
+            "\1\56\6\uffff\1\55\1\57",
+            "\1\62\6\uffff\1\63\3\uffff\1\60\2\uffff\1\61",
+            "\1\65\13\uffff\1\64",
+            "\1\66",
+            "\1\67\17\uffff\1\70",
+            "\1\71",
+            "\1\73\2\uffff\1\72\6\uffff\1\74",
+            "\1\75\11\uffff\1\76",
+            "\1\102\13\uffff\1\101\1\77\1\uffff\1\100",
+            "\1\106\7\uffff\1\104\2\uffff\1\105\2\uffff\1\103",
             "\1\107",
+            "\1\110",
             "\1\111",
-            "\1\113",
-            "\12\116",
             "",
             "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "\1\116\1\uffff\12\44\13\uffff\1\116\37\uffff\1\116",
-            "",
-            "",
-            "",
+            "\1\112",
+            "\1\114",
+            "\1\116",
             "\1\120",
-            "\1\121",
-            "\1\122\5\uffff\1\123",
-            "\1\124",
-            "\12\43\7\uffff\32\43\4\uffff\1\43\1\uffff\32\43",
-            "\1\126",
-            "\1\127\1\130",
-            "\1\131",
+            "\1\123\21\uffff\1\122",
+            "\1\126\17\uffff\1\125",
+            "\1\130\4\uffff\1\130",
+            "",
             "\1\132",
-            "\1\133",
             "\1\134",
-            "\1\135",
-            "\1\136",
-            "\1\137",
-            "\1\141\23\uffff\1\142\3\uffff\1\140",
-            "\1\143",
-            "\1\144",
+            "\12\137",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "\1\137\1\uffff\12\46\13\uffff\1\137\37\uffff\1\137",
+            "",
+            "",
+            "",
+            "\1\141",
+            "\1\142",
+            "\1\143\5\uffff\1\144",
             "\1\145",
-            "\1\146",
+            "\12\45\7\uffff\32\45\4\uffff\1\45\1\uffff\32\45",
             "\1\147",
             "\1\150",
-            "\12\43\7\uffff\32\43\4\uffff\1\43\1\uffff\32\43",
-            "\1\152",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "\1\153",
+            "\1\151",
+            "\1\152\1\153",
             "\1\154",
             "\1\155",
             "\1\156",
-            "\1\160\2\uffff\1\157",
-            "",
+            "\1\157",
+            "\1\160",
             "\1\161",
             "\1\162",
             "\1\163",
             "\1\164",
             "\1\165",
             "\1\166",
-            "\12\43\7\uffff\32\43\4\uffff\1\43\1\uffff\32\43",
-            "\1\170",
-            "\1\171",
+            "\1\170\23\uffff\1\171\3\uffff\1\167",
             "\1\172",
-            "\12\43\7\uffff\32\43\4\uffff\1\43\1\uffff\32\43",
+            "\1\173",
             "\1\174",
             "\1\175",
             "\1\176",
             "\1\177",
             "\1\u0080",
-            "\12\43\7\uffff\32\43\4\uffff\1\43\1\uffff\32\43",
-            "\1\u0082",
-            "\1\u0083",
-            "",
+            "\1\u0081",
+            "\12\45\7\uffff\32\45\4\uffff\1\45\1\uffff\24\45\1\u0082\5\45",
             "\1\u0084",
             "\1\u0085",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
             "\1\u0086",
             "\1\u0087",
             "\1\u0088",
             "\1\u0089",
-            "\1\u008a",
-            "\1\u008b",
-            "\12\43\7\uffff\32\43\4\uffff\1\43\1\uffff\32\43",
+            "\1\u008b\2\uffff\1\u008a",
+            "",
+            "\12\45\7\uffff\32\45\4\uffff\1\45\1\uffff\32\45",
             "\1\u008d",
             "\1\u008e",
-            "\12\43\7\uffff\32\43\4\uffff\1\43\1\uffff\32\43",
-            "\12\43\7\uffff\32\43\4\uffff\1\43\1\uffff\32\43",
-            "",
-            "\12\43\7\uffff\32\43\4\uffff\1\43\1\uffff\32\43",
+            "\1\u008f",
+            "\1\u0090",
+            "\1\u0091",
             "\1\u0092",
-            "\12\43\7\uffff\32\43\4\uffff\1\43\1\uffff\32\43",
-            "",
+            "\1\u0093",
             "\1\u0094",
-            "\12\43\7\uffff\32\43\4\uffff\1\43\1\uffff\32\43",
+            "\12\45\7\uffff\32\45\4\uffff\1\45\1\uffff\32\45",
             "\1\u0096",
             "\1\u0097",
             "\1\u0098",
-            "",
             "\1\u0099",
             "\1\u009a",
             "\1\u009b",
-            "\1\u009c",
+            "\12\45\7\uffff\32\45\4\uffff\1\45\1\uffff\32\45",
             "\1\u009d",
             "\1\u009e",
             "\1\u009f",
             "\1\u00a0",
             "\1\u00a1",
-            "\12\43\7\uffff\32\43\4\uffff\1\43\1\uffff\32\43",
-            "",
-            "\12\43\7\uffff\32\43\4\uffff\1\43\1\uffff\32\43",
+            "\1\u00a2",
+            "\12\45\7\uffff\32\45\4\uffff\1\45\1\uffff\32\45",
             "\1\u00a4",
-            "",
-            "",
-            "",
             "\1\u00a5",
-            "",
             "\1\u00a6",
+            "\1\u00a7",
             "",
-            "\12\43\7\uffff\32\43\4\uffff\1\43\1\uffff\32\43",
             "\1\u00a8",
             "\1\u00a9",
-            "\12\43\7\uffff\32\43\4\uffff\1\43\1\uffff\13\43\1\u00aa\16"+
-            "\43",
-            "\12\43\7\uffff\32\43\4\uffff\1\43\1\uffff\32\43",
-            "\12\43\7\uffff\32\43\4\uffff\1\43\1\uffff\32\43",
+            "\1\u00aa",
+            "\1\u00ab",
+            "\1\u00ac",
             "\1\u00ad",
-            "\12\43\7\uffff\32\43\4\uffff\1\43\1\uffff\32\43",
+            "\1\u00ae",
             "\1\u00af",
+            "",
             "\1\u00b0",
-            "\12\43\7\uffff\32\43\4\uffff\1\43\1\uffff\32\43",
-            "\1\u00b2",
-            "",
-            "",
+            "\1\u00b1",
+            "\12\45\7\uffff\32\45\4\uffff\1\45\1\uffff\32\45",
             "\1\u00b3",
-            "\12\43\7\uffff\32\43\4\uffff\1\43\1\uffff\32\43",
+            "\12\45\7\uffff\32\45\4\uffff\1\45\1\uffff\32\45",
             "\1\u00b5",
+            "\12\45\7\uffff\32\45\4\uffff\1\45\1\uffff\32\45",
+            "\12\45\7\uffff\32\45\4\uffff\1\45\1\uffff\32\45",
             "",
-            "\12\43\7\uffff\32\43\4\uffff\1\43\1\uffff\32\43",
-            "\12\43\7\uffff\32\43\4\uffff\1\43\1\uffff\32\43",
-            "\1\u00b8",
-            "",
-            "",
-            "\12\43\7\uffff\32\43\4\uffff\1\43\1\uffff\32\43",
-            "",
-            "\12\43\7\uffff\32\43\4\uffff\1\43\1\uffff\32\43",
+            "\12\45\7\uffff\32\45\4\uffff\1\45\1\uffff\32\45",
+            "\1\u00b9",
+            "\1\u00ba",
             "\1\u00bb",
-            "",
-            "\1\u00bc",
-            "\12\43\7\uffff\32\43\4\uffff\1\43\1\uffff\32\43",
+            "\12\45\7\uffff\32\45\4\uffff\1\45\1\uffff\32\45",
+            "\12\45\7\uffff\32\45\4\uffff\1\45\1\uffff\32\45",
             "",
             "\1\u00be",
-            "",
-            "",
-            "\12\43\7\uffff\32\43\4\uffff\1\43\1\uffff\32\43",
-            "",
-            "",
+            "\12\45\7\uffff\32\45\4\uffff\1\45\1\uffff\32\45",
             "\1\u00c0",
             "\1\u00c1",
-            "",
             "\1\u00c2",
+            "\1\u00c3",
             "",
-            "\12\43\7\uffff\32\43\4\uffff\1\43\1\uffff\32\43",
             "\1\u00c4",
-            "\12\43\7\uffff\32\43\4\uffff\1\43\1\uffff\32\43",
+            "\1\u00c5",
+            "\1\u00c6",
+            "\1\u00c7",
+            "\1\u00c8",
+            "\12\45\7\uffff\32\45\4\uffff\1\45\1\uffff\32\45",
+            "\1\u00ca",
+            "\1\u00cb",
+            "\1\u00cc",
+            "\1\u00cd",
+            "\1\u00ce",
+            "\1\u00cf",
+            "\12\45\7\uffff\32\45\4\uffff\1\45\1\uffff\32\45",
+            "\1\u00d1",
             "",
-            "\12\43\7\uffff\32\43\4\uffff\1\43\1\uffff\32\43",
+            "\12\45\7\uffff\32\45\4\uffff\1\45\1\uffff\32\45",
+            "",
+            "\1\u00d3",
+            "",
+            "",
+            "",
+            "\1\u00d4",
+            "\12\45\7\uffff\32\45\4\uffff\1\45\1\uffff\32\45",
+            "\1\u00d6",
+            "",
+            "",
+            "\1\u00d7",
+            "",
+            "\12\45\7\uffff\32\45\4\uffff\1\45\1\uffff\32\45",
+            "\1\u00d9",
+            "\1\u00da",
+            "\12\45\7\uffff\32\45\4\uffff\1\45\1\uffff\32\45",
+            "\12\45\7\uffff\32\45\4\uffff\1\45\1\uffff\13\45\1\u00dc\16"+
+            "\45",
+            "\12\45\7\uffff\32\45\4\uffff\1\45\1\uffff\32\45",
+            "\12\45\7\uffff\32\45\4\uffff\1\45\1\uffff\32\45",
+            "\1\u00df",
+            "\12\45\7\uffff\32\45\4\uffff\1\45\1\uffff\32\45",
+            "",
+            "\1\u00e1",
+            "\12\45\7\uffff\32\45\4\uffff\1\45\1\uffff\32\45",
+            "\1\u00e3",
+            "\1\u00e4",
+            "\12\45\7\uffff\32\45\4\uffff\1\45\1\uffff\32\45",
+            "\1\u00e6",
+            "",
+            "\1\u00e7",
+            "",
+            "\1\u00e8",
+            "\12\45\7\uffff\32\45\4\uffff\1\45\1\uffff\32\45",
+            "",
+            "\1\u00ea",
+            "\1\u00eb",
+            "",
+            "\12\45\7\uffff\32\45\4\uffff\1\45\1\uffff\32\45",
+            "\12\45\7\uffff\32\45\4\uffff\1\45\1\uffff\32\45",
+            "",
+            "\1\u00ee",
+            "",
+            "",
+            "\12\45\7\uffff\32\45\4\uffff\1\45\1\uffff\32\45",
+            "",
+            "\12\45\7\uffff\32\45\4\uffff\1\45\1\uffff\32\45",
+            "",
+            "\12\45\7\uffff\32\45\4\uffff\1\45\1\uffff\32\45",
+            "\1\u00f2",
+            "",
+            "\1\u00f3",
+            "\1\u00f4",
+            "\12\45\7\uffff\32\45\4\uffff\1\45\1\uffff\32\45",
+            "",
+            "\12\45\7\uffff\32\45\4\uffff\1\45\1\uffff\32\45",
+            "\1\u00f7",
+            "",
+            "",
+            "\12\45\7\uffff\32\45\4\uffff\1\45\1\uffff\32\45",
+            "",
+            "",
+            "",
+            "\1\u00f9",
+            "\1\u00fa",
+            "\12\45\7\uffff\32\45\4\uffff\1\45\1\uffff\32\45",
+            "",
+            "",
+            "\1\u00fc",
+            "",
+            "\12\45\7\uffff\32\45\4\uffff\1\45\1\uffff\32\45",
+            "\1\u00fe",
+            "",
+            "\12\45\7\uffff\32\45\4\uffff\1\45\1\uffff\32\45",
+            "",
+            "\12\45\7\uffff\32\45\4\uffff\1\45\1\uffff\32\45",
             "",
             ""
     };
@@ -3075,7 +3552,7 @@ public class JavaLexer extends Lexer {
             this.transition = DFA22_transition;
         }
         public String getDescription() {
-            return "1:1: Tokens : ( PACKAGE | IMPORT | CLASS | EXTENDS | IMPLEMENTS | VOID | NEW | RETURN | NULL | THIS | SUPER | FOR | DO | WHILE | IF | ELSE | SWITCH | CASE | TRY | CATCH | FINALLY | PUBLIC | PRIVATE | PROTECTED | FINAL | STATIC | TRANSIENT | OPEN_CURLY_BRACKET | CLOSE_CURLY_BRACKET | PLUS | MINUS | SLASH | STAR | EQUAL | UNEQUAL | ASSIGN | INC | DEC | LOGICAL_OR | BIT_OR | LOGICAL_AND | BIT_AND | NOT | DOT | COMMA | LT | GT | OPEN_RECT_BRACKET | CLOSE_RECT_BRACKET | OPEN_BRACKET | CLOSE_BRACKET | COLON | SEMICOLON | AT | TILDE | BOOLEAN | ID | INT | FLOAT | COMMENT | WS | STRING | CHAR );";
+            return "1:1: Tokens : ( PACKAGE | IMPORT | CLASS | EXTENDS | IMPLEMENTS | VOID | NEW | RETURN | BREAK | CONTINUE | NULL | THIS | SUPER | FOR | DO | WHILE | IF | ELSE | SWITCH | CASE | TRY | CATCH | FINALLY | PUBLIC | PRIVATE | PROTECTED | FINAL | STATIC | TRANSIENT | BOOLEAN | BYTE | CHAR | SHORT | INTEGER | LONG | FLOAT | DOUBLE | OPEN_CURLY_BRACKET | CLOSE_CURLY_BRACKET | LE | GE | EQUAL | UNEQUAL | ASSIGN | INCASSIGN | DECASSIGN | INC | DEC | PLUS | MINUS | SLASH | STAR | LOGICAL_OR | BIT_OR | LOGICAL_AND | BIT_AND | NOT | DOT | COMMA | LT | GT | OPEN_RECT_BRACKET | CLOSE_RECT_BRACKET | OPEN_BRACKET | CLOSE_BRACKET | COLON | SEMICOLON | AT | TILDE | BOOL_CONST | ID | INT_CONST | FLOAT_CONST | COMMENT | WS | STRING_CONST | CHAR_CONST );";
         }
     }
  

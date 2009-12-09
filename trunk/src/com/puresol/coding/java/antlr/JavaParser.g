@@ -50,7 +50,7 @@ field_def
 	;
 
 argument_def
-	:	(variable_def (comma variable_def)*)?
+	:	(variable_type variable_name (comma variable_type variable_name)*)?
 	;
 
 variable_def
@@ -79,13 +79,20 @@ annotation
 	;
 
 value	:
-	(	open_bracket
-	|	constant
+	(	constant
 	|	class_name dot class_
-	|	variable_name
+	|	unary? variable_name unary?
 	|	method_call
 	|	new_class
-	) 	(operator value close_bracket?)*
+	) 	(binary_operator value)*
+	|
+	(	open_bracket	(
+	|	constant
+	|	class_name dot class_
+	|	unary? variable_name unary?
+	|	method_call
+	|	new_class
+	)) 	(binary_operator value )* close_bracket
 	;
 
 constant:	int_const
@@ -112,47 +119,108 @@ statement
 	:	variable_assignment semicolon
 	|	variable_def semicolon
 	|	method_call semicolon
+	| 	semicolon
+	|	return_statement
+	|	unary? variable_name unary?
+	|	for_loop
+	|	while_loop
+	|	do_loop
+	|	if_else
 	|	try_catch
+	;
+
+statement_wosemicolon
+	:	variable_assignment
+	|	variable_def
+	|	method_call
+	|	return_statement
+	|	unary? variable_name unary?
+	|	for_loop
+	|	while_loop
+	|	do_loop
+	|	if_else
+	|	try_catch
+	;
+
+return_statement	
+	:	return_ value semicolon
 	;
 	
 variable_assignment
 	:	(this_ dot | super_ dot)? variable_name assign value 
 	;
 
+for_loop:	for_ OPEN_BRACKET (variable_def (comma variable_def)*)? semicolon value? semicolon (statement_wosemicolon (comma statement_wosemicolon)*)? CLOSE_BRACKET code
+	|	for_ OPEN_BRACKET variable_type variable_name colon value CLOSE_BRACKET code
+	;
+	
+while_loop
+	:	while_ OPEN_BRACKET value CLOSE_BRACKET code
+	;
+	
+do_loop	:	do_ code while_ OPEN_BRACKET value CLOSE_BRACKET
+	;
+	
+if_else	:	if_ OPEN_BRACKET value CLOSE_BRACKET code else_ code
+	;
+
 try_catch
-	:	try_ code (catch_ OPEN_BRACKET id id CLOSE_BRACKET code)+ (finally_ OPEN_BRACKET id id CLOSE_BRACKET code)?
+	:	try_ code (catch_ OPEN_BRACKET id id CLOSE_BRACKET code)+ (finally_ code)?
 	;
 
 
 variable_type
-	:	class_name array?
+	:	primitive array?
+	|	class_name array?
 	|	void_
 	;
 
 id	:	ID {helper.registerOperant($text);};
 
-operator:	PLUS {helper.registerOperator($text);}
+binary_operator:	PLUS {helper.registerOperator($text);}
 	|	MINUS {helper.registerOperator($text);}
 	|	STAR {helper.registerOperator($text);}
 	|	SLASH {helper.registerOperator($text);}
+	|	EQUAL {helper.registerOperator($text);}
+	|	UNEQUAL {helper.registerOperator($text);}
+	|	LT {helper.registerOperator($text);}
+	|	GT {helper.registerOperator($text);}
+	|	LE {helper.registerOperator($text);}
+	|	GE {helper.registerOperator($text);}
 	;
+
+unary	:	INC {helper.registerOperator($text);}
+	|	DEC {helper.registerOperator($text);}
+	;
+
+primitive
+	:	BOOLEAN {helper.registerOperant($text);}
+	|	BYTE {helper.registerOperant($text);}
+	|	CHAR {helper.registerOperant($text);}
+	|	SHORT {helper.registerOperant($text);}
+	|	INTEGER {helper.registerOperant($text);}
+	|	LONG {helper.registerOperant($text);}
+	|	FLOAT {helper.registerOperant($text);}
+	|	DOUBLE {helper.registerOperant($text);}
+	;
+
 
 ////////////////////////
 // Constants...
 ////////////////////////
 
 int_const
-	:	INT {helper.registerOperant($text);};
+	:	INT_CONST {helper.registerOperant($text);};
 string_const
-	:	STRING {helper.registerOperant($text);};
+	:	STRING_CONST {helper.registerOperant($text);};
 float_const
-	:	FLOAT {helper.registerOperant($text);};
+	:	FLOAT_CONST {helper.registerOperant($text);};
 char_const
-	:	CHAR {helper.registerOperant($text);};
+	:	CHAR_CONST {helper.registerOperant($text);};
 null_const
 	:	NULL {helper.registerOperant($text);};
 boolean_const	
-	:	BOOLEAN {helper.registerOperant($text);};
+	:	BOOL_CONST {helper.registerOperant($text);};
 
 ////////////////////////
 // Names...
@@ -211,6 +279,17 @@ try_	:	TRY {helper.registerOperator($text);};
 catch_	:	CATCH {helper.registerOperator($text, 1);};
 finally_:	FINALLY {helper.registerOperator($text, 1);};
 
+for_	:	FOR {helper.registerOperator("for()", 1);};
+while_	:	WHILE {helper.registerOperator("while()", 1);};
+do_	:	DO {helper.registerOperator("do()", 1);};
+if_	:	IF {helper.registerOperator("if()", 1);};
+else_	:	ELSE {helper.registerOperator("else");};
+
+return_	:	RETURN {helper.registerOperator($text);};
+break_	:	BREAK {helper.registerOperator($text);};
+continue_
+	:	CONTINUE {helper.registerOperator($text);};
+
 ////////////////////////
 // Symbols...
 ////////////////////////
@@ -218,8 +297,13 @@ finally_:	FINALLY {helper.registerOperator($text, 1);};
 semicolon
 	:	SEMICOLON {helper.registerOperator($text);};
 comma	:	COMMA {helper.registerOperator($text);};
+colon	:	COLON {helper.registerOperator($text);};
 dot	:	DOT {helper.registerOperator($text);};
-assign	:	ASSIGN {helper.registerOperator($text);};
+assign	:	ASSIGN {helper.registerOperator($text);}
+	|	ASSIGN {helper.registerOperator($text);}
+	|	INCASSIGN {helper.registerOperator($text);}
+	|	DECASSIGN {helper.registerOperator($text);}
+	;
 block_begin
 	:	OPEN_CURLY_BRACKET {helper.registerOperator("{}");};
 block_end

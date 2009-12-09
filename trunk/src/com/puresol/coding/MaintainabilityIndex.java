@@ -40,4 +40,16 @@ public class MaintainabilityIndex {
 		System.out.println("MIcw = " + MIcw);
 		System.out.println("MI = " + MI);
 	}
+
+	public double getMIWoc() {
+		return MIwoc;
+	}
+
+	public double getMIcw() {
+		return MIcw;
+	}
+
+	public double getMI() {
+		return MI;
+	}
 }

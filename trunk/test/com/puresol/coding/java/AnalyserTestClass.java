@@ -1,5 +1,7 @@
 package com.puresol.coding.java;
 
+import java.io.File;
+
 /**
  * This is a test class for JavaAnalyser unit test.
  * 
@@ -17,7 +19,6 @@ public class AnalyserTestClass {
 	public AnalyserTestClass() {
 	}
 
-	@SuppressWarnings("unchecked")
 	private void testVariableAssignments() {
 		@SuppressWarnings("unused")
 		String string = "This is a string.";
@@ -27,10 +28,33 @@ public class AnalyserTestClass {
 		testVariableAssignments();
 	}
 
-	public void testMath(int a, String b, boolean c) {
+	public int testMath(int a, String b, boolean c) {
 		int x = 1;
 		int y = 2;
 		int z = x + 1;
-		// return z;
+		return z + y;
+	}
+
+	public void testFor() {
+		for (int index = 0; index < Math.log10(10); index++) {
+			System.out.println("Hallo Welt!");
+		}
+	}
+
+	public void testTryCatch() {
+		try {
+			File file = new File("test");
+			file.hashCode();
+		} catch (IllegalArgumentException e) {
+			System.out.println("Exception");
+		} finally {
+			System.out.println("Finally");
+		}
+	}
+
+	public static void main(String[] args) {
+		JavaAnalyser analyser = new JavaAnalyser(new File(
+				"src/com/puresol/coding/java/JavaAnalyser.java"));
+		analyser.hashCode();
 	}
 }

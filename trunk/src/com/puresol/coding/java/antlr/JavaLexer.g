@@ -16,6 +16,8 @@ IMPLEMENTS	:	'implements';
 VOID	:	'void';
 NEW	:	'new';
 RETURN	:	'return';
+BREAK	:	'break';
+CONTINUE:	'continue';
 NULL	:	'null';
 THIS	:	'this';
 SUPER	:	'super';
@@ -41,6 +43,15 @@ STATIC	:	'static';
 TRANSIENT
 	:	'transient';
 
+BOOLEAN	:	'boolean';
+BYTE	:	'byte';
+CHAR	:	'char';
+SHORT	:	'short';
+INTEGER	:	'int';
+LONG	:	'long';
+FLOAT	:	'float';
+DOUBLE	:	'double';
+
 OPEN_CURLY_BRACKET
 	:	'{'
 	;
@@ -49,17 +60,23 @@ CLOSE_CURLY_BRACKET
 	:	'}'
 	;
 	
+LE	:	'<=';
+GE	:	'>=';
+EQUAL	:	'==';
+UNEQUAL	:	'!=';
+ASSIGN	:	'=';
+INCASSIGN	
+	:	'+=';
+DECASSIGN
+	:	'-=';
+
+INC	:	'++';
+DEC	:	'--';
+
 PLUS	:	'+';
 MINUS	:	'-';
 SLASH	:	'/';
 STAR	:	'*';
-
-EQUAL	:	'==';
-UNEQUAL	:	'!=';
-ASSIGN	:	'=';
-
-INC	:	'++';
-DEC	:	'--';
 
 LOGICAL_OR
 	:	'||';
@@ -98,43 +115,46 @@ SEMICOLON
 AT	:	'@';
 TILDE	:	'~';
 
-BOOLEAN	:	'true'
+BOOL_CONST	
+	:	'true'
 	|	'false'
 	;
 
-ID  :	('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'0'..'9'|'_')*
-    ;
+ID	:	('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'0'..'9'|'_')*
+	;
 
-INT :	'0'..'9'+
-    ;
+INT_CONST
+	:	'0'..'9'+
+    	;
 
-FLOAT
-    :   ('0'..'9')+ '.' ('0'..'9')* EXPONENT?
-    |   '.' ('0'..'9')+ EXPONENT?
-    |   ('0'..'9')+ EXPONENT
-    ;
+FLOAT_CONST
+	:   ('0'..'9')+ '.' ('0'..'9')* EXPONENT?
+	|   '.' ('0'..'9')+ EXPONENT?
+	|   ('0'..'9')+ EXPONENT
+	;
 
 COMMENT
-    :   '//' ~('\n'|'\r')* '\r'? LINEFEED {$channel=HIDDEN;}
-    |   '/*' ( options {greedy=false;} : (LINEFEED|~('\n')) )* '*/' {$channel=HIDDEN;}
-    ;
+	:   '//' ~('\n'|'\r')* '\r'? LINEFEED {$channel=HIDDEN;}
+	|   '/*' ( options {greedy=false;} : (LINEFEED|~('\n')) )* '*/' {$channel=HIDDEN;}
+	;
 
-WS  :   ( ' '
-        | '\t'
-        | '\r'
-        | LINEFEED
-        ) {$channel=HIDDEN;}
-    ;
+WS	:   ( ' '
+	| '\t'
+	| '\r'
+	| LINEFEED
+	) {$channel=HIDDEN;}
+	;
     
 fragment
 LINEFEED:	'\n';
 
-STRING
-    :  '"' ( ESC_SEQ | ~('\\'|'"') )* '"'
-    ;
+STRING_CONST
+	:  '"' ( ESC_SEQ | ~('\\'|'"') )* '"'
+	;
 
-CHAR:  '\'' ( ESC_SEQ | ~('\''|'\\') ) '\''
-    ;
+CHAR_CONST
+	:  '\'' ( ESC_SEQ | ~('\''|'\\') ) '\''
+	;
 
 fragment
 EXPONENT : ('e'|'E') ('+'|'-')? ('0'..'9')+ ;

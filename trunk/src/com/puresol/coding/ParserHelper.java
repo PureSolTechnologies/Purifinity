@@ -83,6 +83,7 @@ public class ParserHelper {
 				&& (!tokenStream.get(stop).getText().endsWith("\n"))) {
 			stop++;
 		}
+		text = "";
 		for (int index = start; index <= stop; index++) {
 			text += javaParser.getTokenStream().get(index).getText();
 		}

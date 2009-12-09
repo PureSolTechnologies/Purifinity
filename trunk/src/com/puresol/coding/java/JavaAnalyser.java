@@ -51,7 +51,7 @@ public class JavaAnalyser {
 			parser.file();
 
 			ParserHelper helper = parser.getParserHelper();
-			for (int index = 0; index < helper.getMethods().size(); index++) {
+			for (int index = 0; index < 4; index++) {
 				CodeRange range = helper.getMethods().get(index);
 				System.out.println("+++++++++++++++++++++");
 				System.out.println(range.toString());
@@ -67,6 +67,13 @@ public class JavaAnalyser {
 				slocStat.print();
 				MaintainabilityIndex mi = new MaintainabilityIndex(range);
 				mi.print();
+				if (mi.getMI() > 85) {
+					System.out.println("SUPER!!!");
+				} else if (mi.getMI() > 65) {
+					System.out.println("OK.");
+				} else {
+					System.out.println("Do it again!!!");
+				}
 			}
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
