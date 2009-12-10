@@ -62,8 +62,8 @@ public class ParserHelper {
 		}
 	}
 
-	public void registerRange(CodeRangeType type, String name, String text, int start,
-			int stop) {
+	public void registerRange(CodeRangeType type, String name, String text,
+			int start, int stop) {
 		int current = start - 1;
 		TokenStream tokenStream = parser.getTokenStream();
 		while (current > 0) {

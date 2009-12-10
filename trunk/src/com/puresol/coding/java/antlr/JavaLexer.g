@@ -10,6 +10,9 @@ PACKAGE	:		'package';
 IMPORT	:		'import';
 
 CLASS	:	'class';
+INTERFACE
+	:	'interface';
+ENUM	:	'enum';
 EXTENDS	:	'extends';
 IMPLEMENTS	:	'implements';
 
@@ -33,6 +36,8 @@ CASE	:	'case';
 TRY	:	'try' ;
 CATCH	:	'catch' ;
 FINALLY	:	'finally' ;
+THROW	:	'throw';
+THROWS	:	'throws';
 
 PUBLIC	:	'public';
 PRIVATE	:	'private';
@@ -125,6 +130,10 @@ ID	:	('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'0'..'9'|'_')*
 
 INT_CONST
 	:	'0'..'9'+
+    	;
+
+LONG_CONST
+	:	'0'..'9'+ 'L'
     	;
 
 FLOAT_CONST

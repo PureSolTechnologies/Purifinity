@@ -21,8 +21,8 @@ public ParserHelper getParserHelper() {
 }
 }
 
-file	:	package_def import_def* class_def*
-		;
+file	:	package_def import_def* (class_def | enum_def | interface_def)+
+	;
 
 package_def	
 	:	package_ package_name semicolon 
@@ -37,13 +37,23 @@ class_def
 		{helper.registerRange(CodeRangeType.CLASS, $id.text, $text, retval.start.getTokenIndex(), input.LT(-1).getTokenIndex());}
 	;
 
+enum_def
+	:	annotation* modifier* enum_ id generic? (extends_ class_name generic?)? enum_block 
+		{helper.registerRange(CodeRangeType.ENUMERATION, $id.text, $text, retval.start.getTokenIndex(), input.LT(-1).getTokenIndex());}
+	;
+
+interface_def
+	:	annotation* modifier* interface_ id generic? (extends_ class_name generic?)? interface_block 
+		{helper.registerRange(CodeRangeType.INTERFACE, $id.text, $text, retval.start.getTokenIndex(), input.LT(-1).getTokenIndex());}
+	;
+
 constructor_def
 	:	annotation* modifier* id open_bracket argument_def close_bracket code
 		{helper.registerRange(CodeRangeType.CONSTRUCTOR, $id.text, $text, retval.start.getTokenIndex(), input.LT(-1).getTokenIndex());}
 	;
 
 method_def
-	:	annotation* modifier* variable_type id open_bracket argument_def close_bracket code
+	:	annotation* modifier* variable_type id open_bracket argument_def close_bracket (throws_ class_name (comma class_name)*)? code
 		{helper.registerRange(CodeRangeType.METHOD, $id.text, $text, retval.start.getTokenIndex(), input.LT(-1).getTokenIndex());}
 	;
 	
@@ -71,9 +81,23 @@ modifier:	public_
 class_block
 	:	block_begin (class_def | constructor_def | method_def | field_def)* block_end
 	;
+
+enum_block
+	:	block_begin (class_def | constructor_def | method_def | field_def | enum_content)* block_end
+	;
+
+enum_content
+	:	id (open_bracket arguments close_bracket)? (comma id (open_bracket arguments close_bracket)?)* semicolon
+	;
+	
+interface_block
+	:	block_begin (annotation* modifier* variable_type id open_bracket argument_def close_bracket semicolon)* block_end
+	;
 	
 method_call
-	:	method_name open_bracket arguments close_bracket (dot id open_bracket arguments close_bracket)*
+	:	method_name open_bracket arguments close_bracket (dot id (open_bracket arguments close_bracket)?)*
+	|	super_ open_bracket arguments close_bracket (dot id (open_bracket arguments close_bracket)?)*
+	|	this_ open_bracket arguments close_bracket (dot id (open_bracket arguments close_bracket)?)*
 	;
 
 annotation
@@ -84,21 +108,18 @@ generic	:	LT (id (comma id)*) GT {helper.registerOperator("<>");}
 	;
 
 
-value	:
-	(	unary? constant unary? 
+value	: cast? unary? single_value unary? (binary_operator value)?
+	| open_bracket value close_bracket
+	;
+
+single_value
+	:	constant
 	|	class_name dot class_
-	|	unary? variable_name unary?
-	|	unary? method_call unary? 
+	|	variable_name
+	|	method_call
 	|	new_class
-	) 	(binary_operator value)*
-	|
-	(	open_bracket	(
-	|	unary? constant unary? 
-	|	class_name dot class_
-	|	unary? variable_name unary?
-	|	unary? method_call unary? 
-	|	new_class
-	)) 	(binary_operator value )* close_bracket
+	|	this_
+	|	super_
 	;
 
 constant:	int_const
@@ -107,6 +128,7 @@ constant:	int_const
 	|	char_const
 	|	null_const
 	|	boolean_const
+	|	long_const
 	;
 	
 new_class
@@ -135,12 +157,13 @@ statement
 	|	do_loop
 	|	if_else
 	|	try_catch
+	|	throw_ value semicolon
 	;
 
 statement_wosemicolon
 	:	variable_assignment
 	|	variable_def
-	|	method_call
+	|	method_call	
 	|	return_statement
 	|	unary? variable_name unary?
 	|	for_loop
@@ -176,6 +199,8 @@ try_catch
 	:	try_ code (catch_ OPEN_BRACKET id id CLOSE_BRACKET code)+ (finally_ code)?
 	;
 
+cast	:	OPEN_BRACKET variable_type CLOSE_BRACKET {helper.registerOperator("(cast)");}
+	;
 
 variable_type
 	:	primitive array?
@@ -185,7 +210,8 @@ variable_type
 
 id	:	ID {helper.registerOperant($text);};
 
-binary_operator:	PLUS {helper.registerOperator($text);}
+binary_operator
+	:	PLUS {helper.registerOperator($text);}
 	|	MINUS {helper.registerOperator($text);}
 	|	STAR {helper.registerOperator($text);}
 	|	SLASH {helper.registerOperator($text);}
@@ -195,6 +221,10 @@ binary_operator:	PLUS {helper.registerOperator($text);}
 	|	GT {helper.registerOperator($text);}
 	|	LE {helper.registerOperator($text);}
 	|	GE {helper.registerOperator($text);}
+	|	LOGICAL_OR {helper.registerOperator($text);}
+	|	BIT_OR {helper.registerOperator($text);}
+	|	LOGICAL_AND {helper.registerOperator($text);}
+	|	BIT_AND {helper.registerOperator($text);}
 	;
 
 unary	:	INC {helper.registerOperator($text);}
@@ -220,6 +250,8 @@ primitive
 
 int_const
 	:	INT_CONST {helper.registerOperant($text);};
+long_const
+	:	LONG_CONST {helper.registerOperant($text);};
 string_const
 	:	STRING_CONST {helper.registerOperant($text);};
 float_const
@@ -269,6 +301,9 @@ package_
 import_
 	:	IMPORT {helper.registerOperator($text);};	
 class_	:	CLASS {helper.registerOperator($text);};
+enum_	:	ENUM {helper.registerOperator($text);};
+interface_
+	:	INTERFACE {helper.registerOperator($text);};
 extends_:	EXTENDS {helper.registerOperator($text);};
 implements_
 	:	IMPLEMENTS {helper.registerOperator($text);};
@@ -287,6 +322,8 @@ new_	:	NEW {helper.registerOperator($text);};
 try_	:	TRY {helper.registerOperator($text);};
 catch_	:	CATCH {helper.registerOperator($text, 1);};
 finally_:	FINALLY {helper.registerOperator($text, 1);};
+throws_	:	THROWS {helper.registerOperator($text, 1);};
+throw_	:	THROW {helper.registerOperator($text, 1);};
 
 for_	:	FOR {helper.registerOperator("for()", 1);};
 while_	:	WHILE {helper.registerOperator("while()", 1);};

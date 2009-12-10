@@ -8,6 +8,7 @@ import java.util.Set;
 
 import javax.i18n4j.FileSearch;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import com.puresol.coding.java.JavaAnalyser;
@@ -66,14 +67,19 @@ public class ProjectAnalyser {
 	}
 
 	public static void main(String[] args) {
+		Logger.getRootLogger().setLevel(Level.TRACE);
 		ProjectAnalyser analyser = new ProjectAnalyser(
-				"src/com/puresol/coding/SLOCMetric.java");
+				"src/com/puresol/coding/ParserHelper.java");
 		analyser.analyse();
 		int sloc = 0;
 		Set<File> files = analyser.getFiles();
 		for (File file : files) {
 			ArrayList<CodeRange> ranges = analyser.getCodeRanges(file);
 			for (CodeRange range : ranges) {
+				System.out.println("=======================");
+				System.out.println(range.getName());
+				System.out.println("=======================");
+//				System.out.println(range.getText());
 				HalsteadMetric halsteadMetric = new HalsteadMetric(range);
 				halsteadMetric.printOperators();
 				halsteadMetric.printOperands();

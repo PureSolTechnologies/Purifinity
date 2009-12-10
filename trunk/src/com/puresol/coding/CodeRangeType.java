@@ -7,5 +7,5 @@ package com.puresol.coding;
  * 
  */
 public enum CodeRangeType {
-	FILE, CLASS, CONSTRUCTOR, METHOD, FUNCTION;
+	FILE, CLASS, INTERFACE, ENUMERATION, CONSTRUCTOR, METHOD, FUNCTION;
 }
