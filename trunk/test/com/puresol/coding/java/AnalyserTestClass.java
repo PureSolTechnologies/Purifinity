@@ -1,6 +1,8 @@
 package com.puresol.coding.java;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This is a test class for JavaAnalyser unit test.
@@ -41,6 +43,35 @@ public class AnalyserTestClass {
 		}
 	}
 
+	public void testIf() {
+		int a = 5;
+		if (a > 4) {
+			System.out.println("number is larger than 4");
+		}
+		if (a < 5) {
+			System.out.println("number is smaller than 5");
+		} else {
+			System.out.println("number is 5 or greater");
+		}
+		if (a < 5) {
+			System.out.println("number is smaller than 5");
+		} else if (a > 5) {
+			System.out.println("number is greater than 5");
+		} else {
+			System.out.println("number is 5");
+		}
+		boolean bool = true;
+		if (bool) {
+			System.out.print("true");
+		} else
+			System.out.println("false");
+		if (!bool)
+			System.out.print("false");
+		else {
+			System.out.println("true");
+		}
+	}
+
 	public void testTryCatch() {
 		try {
 			File file = new File("test");
@@ -52,9 +83,14 @@ public class AnalyserTestClass {
 		}
 	}
 
+	public List<Float> testGenerics() {
+		List<Float> test = new ArrayList<Float>();
+		return test;
+	}
+
 	public static void main(String[] args) {
 		JavaAnalyser analyser = new JavaAnalyser(new File(
-				"src/com/puresol/coding/java/JavaAnalyser.java"));
+				"test/com/puresol/coding/java/AnalyserTestClass.java"));
 		analyser.hashCode();
 	}
 }

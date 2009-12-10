@@ -6,7 +6,7 @@ import org.antlr.runtime.TokenStream;
 
 public class CodeRange {
 
-	private String type;
+	private CodeRangeType type;
 	private String name;
 	private String text;
 	private TokenStream tokenStream;
@@ -14,7 +14,7 @@ public class CodeRange {
 	private int start;
 	private int stop;
 
-	public CodeRange(String type, String name, String text,
+	public CodeRange(CodeRangeType type, String name, String text,
 			TokenStream tokenStream,
 			Hashtable<Integer, TokenContent> tokenContents, int start, int stop) {
 		this.type = type;
@@ -26,7 +26,7 @@ public class CodeRange {
 		this.stop = stop;
 	}
 
-	public String getType() {
+	public CodeRangeType getType() {
 		return type;
 	}
 

@@ -37,4 +37,8 @@ public class McCabeMetric {
 	public int getCyclomaticNumber() {
 		return cyclomaticNumber;
 	}
+
+	public void print() {
+		System.out.println("v(G) = " + cyclomaticNumber);
+	}
 }

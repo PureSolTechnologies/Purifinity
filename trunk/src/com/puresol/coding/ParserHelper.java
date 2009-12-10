@@ -2,7 +2,6 @@ package com.puresol.coding;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.List;
 
 import org.antlr.runtime.Parser;
 import org.antlr.runtime.Token;
@@ -24,15 +23,15 @@ public class ParserHelper {
 	private static final Logger logger = Logger.getLogger(ParserHelper.class);
 
 	private Hashtable<Integer, TokenContent> tokenContents = new Hashtable<Integer, TokenContent>();
-	private ArrayList<CodeRange> methods = new ArrayList<CodeRange>();
-	private Parser javaParser = null;
+	private ArrayList<CodeRange> codeRanges = new ArrayList<CodeRange>();
+	private Parser parser = null;
 
 	public ParserHelper(Parser javaParser) {
-		this.javaParser = javaParser;
+		this.parser = javaParser;
 	}
 
 	private int getCurrentPosition() {
-		return javaParser.input.index();
+		return parser.input.index();
 	}
 
 	public void registerOperator(String operator, int cyclomaticNumber) {
@@ -63,10 +62,10 @@ public class ParserHelper {
 		}
 	}
 
-	public void registerRange(String type, String name, String text, int start,
+	public void registerRange(CodeRangeType type, String name, String text, int start,
 			int stop) {
 		int current = start - 1;
-		TokenStream tokenStream = javaParser.getTokenStream();
+		TokenStream tokenStream = parser.getTokenStream();
 		while (current > 0) {
 			Token token = tokenStream.get(current);
 			if (token.getChannel() != 99) {
@@ -85,14 +84,14 @@ public class ParserHelper {
 		}
 		text = "";
 		for (int index = start; index <= stop; index++) {
-			text += javaParser.getTokenStream().get(index).getText();
+			text += parser.getTokenStream().get(index).getText();
 		}
-		CodeRange method = new CodeRange(type, name, text, javaParser.input,
+		CodeRange method = new CodeRange(type, name, text, parser.input,
 				tokenContents, start, stop);
-		methods.add(method);
+		codeRanges.add(method);
 	}
 
-	public List<CodeRange> getMethods() {
-		return methods;
+	public ArrayList<CodeRange> getCodeRanges() {
+		return codeRanges;
 	}
 }

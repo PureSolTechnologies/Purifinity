@@ -197,4 +197,20 @@ public class HalsteadMetric {
 	public double get_B() {
 		return B;
 	}
+
+	public void print() {
+		System.out.println("n1 = " + n1);
+		System.out.println("n2 = " + n2);
+		System.out.println("N1 = " + N1);
+		System.out.println("N2 = " + N2);
+		System.out.println("n = " + n);
+		System.out.println("N = " + N);
+		System.out.println("HL = " + HL);
+		System.out.println("HV = " + HV);
+		System.out.println("D = " + D);
+		System.out.println("L = " + L);
+		System.out.println("E = " + E);
+		System.out.println("T = " + T);
+		System.out.println("B = " + B);
+	}
 }

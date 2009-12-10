@@ -9,6 +9,7 @@ memoize=true;
 @header {
 package com.puresol.coding.java.antlr.output;
 
+import com.puresol.coding.CodeRangeType;
 import com.puresol.coding.ParserHelper;
 }
 
@@ -20,7 +21,8 @@ public ParserHelper getParserHelper() {
 }
 }
 
-file	:	package_def import_def* class_def*;
+file	:	package_def import_def* class_def*
+		;
 
 package_def	
 	:	package_ package_name semicolon 
@@ -31,18 +33,18 @@ import_def
 	;
 	
 class_def
-	:	annotation* modifier* class_ id (extends_ class_name)? (implements_ class_name (comma class_name)*)? class_block 
-		{helper.registerRange("class", $id.text, $text, retval.start.getTokenIndex(), input.LT(-1).getTokenIndex());}
+	:	annotation* modifier* class_ id generic? (extends_ class_name generic?)? (implements_ class_name (comma class_name)*)? class_block 
+		{helper.registerRange(CodeRangeType.CLASS, $id.text, $text, retval.start.getTokenIndex(), input.LT(-1).getTokenIndex());}
 	;
 
 constructor_def
 	:	annotation* modifier* id open_bracket argument_def close_bracket code
-		{helper.registerRange("constructor", $id.text, $text, retval.start.getTokenIndex(), input.LT(-1).getTokenIndex());}
+		{helper.registerRange(CodeRangeType.CONSTRUCTOR, $id.text, $text, retval.start.getTokenIndex(), input.LT(-1).getTokenIndex());}
 	;
 
 method_def
 	:	annotation* modifier* variable_type id open_bracket argument_def close_bracket code
-		{helper.registerRange("method", $id.text, $text, retval.start.getTokenIndex(), input.LT(-1).getTokenIndex());}
+		{helper.registerRange(CodeRangeType.METHOD, $id.text, $text, retval.start.getTokenIndex(), input.LT(-1).getTokenIndex());}
 	;
 	
 field_def
@@ -78,19 +80,23 @@ annotation
 	:	annotation_name (open_bracket value (comma value)* close_bracket)?
 	;
 
+generic	:	LT (id (comma id)*) GT {helper.registerOperator("<>");}
+	;
+
+
 value	:
-	(	constant
+	(	unary? constant unary? 
 	|	class_name dot class_
 	|	unary? variable_name unary?
-	|	method_call
+	|	unary? method_call unary? 
 	|	new_class
 	) 	(binary_operator value)*
 	|
 	(	open_bracket	(
-	|	constant
+	|	unary? constant unary? 
 	|	class_name dot class_
 	|	unary? variable_name unary?
-	|	method_call
+	|	unary? method_call unary? 
 	|	new_class
 	)) 	(binary_operator value )* close_bracket
 	;
@@ -104,7 +110,7 @@ constant:	int_const
 	;
 	
 new_class
-	:	new_ class_name open_bracket arguments close_bracket
+	:	new_ class_name generic? open_bracket arguments close_bracket
 	;
 	
 arguments
@@ -121,6 +127,8 @@ statement
 	|	method_call semicolon
 	| 	semicolon
 	|	return_statement
+	|	continue_
+	|	break_
 	|	unary? variable_name unary?
 	|	for_loop
 	|	while_loop
@@ -161,7 +169,7 @@ while_loop
 do_loop	:	do_ code while_ OPEN_BRACKET value CLOSE_BRACKET
 	;
 	
-if_else	:	if_ OPEN_BRACKET value CLOSE_BRACKET code else_ code
+if_else	:	if_ OPEN_BRACKET value CLOSE_BRACKET code (else_ code)?
 	;
 
 try_catch
@@ -171,7 +179,7 @@ try_catch
 
 variable_type
 	:	primitive array?
-	|	class_name array?
+	|	class_name generic? array?
 	|	void_
 	;
 
@@ -191,6 +199,7 @@ binary_operator:	PLUS {helper.registerOperator($text);}
 
 unary	:	INC {helper.registerOperator($text);}
 	|	DEC {helper.registerOperator($text);}
+	|	NOT {helper.registerOperator($text);}
 	;
 
 primitive
@@ -300,7 +309,6 @@ comma	:	COMMA {helper.registerOperator($text);};
 colon	:	COLON {helper.registerOperator($text);};
 dot	:	DOT {helper.registerOperator($text);};
 assign	:	ASSIGN {helper.registerOperator($text);}
-	|	ASSIGN {helper.registerOperator($text);}
 	|	INCASSIGN {helper.registerOperator($text);}
 	|	DECASSIGN {helper.registerOperator($text);}
 	;
