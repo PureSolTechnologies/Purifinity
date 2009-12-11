@@ -32,6 +32,7 @@ IF	:	'if';
 ELSE	:	'else';
 SWITCH	:	'switch';
 CASE	:	'case';
+DEFAULT	:	'default';
 
 TRY	:	'try' ;
 CATCH	:	'catch' ;
@@ -82,6 +83,7 @@ PLUS	:	'+';
 MINUS	:	'-';
 SLASH	:	'/';
 STAR	:	'*';
+QUESTION:	'?';
 
 LOGICAL_OR
 	:	'||';
@@ -132,8 +134,16 @@ INT_CONST
 	:	'0'..'9'+
     	;
 
+HEX_CONST
+	:	'0x' HEX_DIGIT+
+    	;
+
 LONG_CONST
-	:	'0'..'9'+ 'L'
+	:	INT_CONST 'L'
+    	;
+
+HEX_LONG_CONST
+	:	HEX_CONST 'L'
     	;
 
 FLOAT_CONST

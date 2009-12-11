@@ -47,6 +47,10 @@ interface_def
 		{helper.registerRange(CodeRangeType.INTERFACE, $id.text, $text, retval.start.getTokenIndex(), input.LT(-1).getTokenIndex());}
 	;
 
+static_init
+	:	static_ code semicolon?
+	;
+
 constructor_def
 	:	annotation* modifier* id open_bracket argument_def close_bracket code
 		{helper.registerRange(CodeRangeType.CONSTRUCTOR, $id.text, $text, retval.start.getTokenIndex(), input.LT(-1).getTokenIndex());}
@@ -79,11 +83,11 @@ modifier:	public_
 
 
 class_block
-	:	block_begin (class_def | constructor_def | method_def | field_def)* block_end
+	:	block_begin (class_def | static_init | constructor_def | method_def | field_def)* block_end semicolon? 
 	;
 
 enum_block
-	:	block_begin (class_def | constructor_def | method_def | field_def | enum_content)* block_end
+	:	block_begin (class_def | constructor_def | method_def | field_def | enum_content)* block_end semicolon?
 	;
 
 enum_content
@@ -91,7 +95,7 @@ enum_content
 	;
 	
 interface_block
-	:	block_begin (annotation* modifier* variable_type id open_bracket argument_def close_bracket semicolon)* block_end
+	:	block_begin (annotation* modifier* variable_type id open_bracket argument_def close_bracket semicolon)* block_end semicolon?
 	;
 	
 method_call
@@ -108,8 +112,8 @@ generic	:	LT (id (comma id)*) GT {helper.registerOperator("<>");}
 	;
 
 
-value	: cast? unary? single_value unary? (binary_operator value)?
-	| open_bracket value close_bracket
+value	: cast? left_unary? single_value right_unary? (binary_operator value)? (question_ value colon value)?
+	| open_bracket value close_bracket (binary_operator value)?
 	;
 
 single_value
@@ -122,17 +126,20 @@ single_value
 	|	super_
 	;
 
-constant:	int_const
+constant:	hex_long_const
+	|	hex_const
+	|	long_const
+	|	int_const
 	|	string_const
 	|	float_const
 	|	char_const
 	|	null_const
 	|	boolean_const
-	|	long_const
+	|	array_const
 	;
 	
 new_class
-	:	new_ class_name generic? open_bracket arguments close_bracket
+	:	new_ (class_name generic? | primitive) (array array_const)? (open_bracket arguments close_bracket)? 
 	;
 	
 arguments
@@ -140,41 +147,48 @@ arguments
 	;
 
 code	:	statement
-	|	block_begin statement* block_end
+	|	block_begin code* block_end semicolon?
 	;
 	
 statement
-	:	variable_assignment semicolon
+	:	label	
+	|	variable_assignment semicolon
 	|	variable_def semicolon
 	|	method_call semicolon
 	| 	semicolon
 	|	return_statement
 	|	continue_
 	|	break_
-	|	unary? variable_name unary?
+	|	left_unary? variable_name right_unary?
 	|	for_loop
 	|	while_loop
 	|	do_loop
+	|	switch_case
 	|	if_else
 	|	try_catch
 	|	throw_ value semicolon
 	;
 
 statement_wosemicolon
-	:	variable_assignment
+	:	label
+	|	variable_assignment
 	|	variable_def
 	|	method_call	
 	|	return_statement
-	|	unary? variable_name unary?
+	|	continue_
+	|	break_
+	|	left_unary? variable_name right_unary?
 	|	for_loop
 	|	while_loop
 	|	do_loop
+	|	switch_case
 	|	if_else
 	|	try_catch
+	|	throw_ value semicolon
 	;
 
 return_statement	
-	:	return_ value semicolon
+	:	return_ value? semicolon
 	;
 	
 variable_assignment
@@ -191,6 +205,16 @@ while_loop
 	
 do_loop	:	do_ code while_ OPEN_BRACKET value CLOSE_BRACKET
 	;
+
+switch_case
+	:	switch_ OPEN_BRACKET value CLOSE_BRACKET block_begin 
+		(
+			(case_  (constant | variable_name) colon)+ (code | statement)* (break_ semicolon)?
+		|
+			default_ colon (code | statement)*
+		)+
+		block_end
+	;
 	
 if_else	:	if_ OPEN_BRACKET value CLOSE_BRACKET code (else_ code)?
 	;
@@ -198,6 +222,8 @@ if_else	:	if_ OPEN_BRACKET value CLOSE_BRACKET code (else_ code)?
 try_catch
 	:	try_ code (catch_ OPEN_BRACKET id id CLOSE_BRACKET code)+ (finally_ code)?
 	;
+
+label	:	id colon;
 
 cast	:	OPEN_BRACKET variable_type CLOSE_BRACKET {helper.registerOperator("(cast)");}
 	;
@@ -211,8 +237,8 @@ variable_type
 id	:	ID {helper.registerOperant($text);};
 
 binary_operator
-	:	PLUS {helper.registerOperator($text);}
-	|	MINUS {helper.registerOperator($text);}
+	:	plus
+	|	minus
 	|	STAR {helper.registerOperator($text);}
 	|	SLASH {helper.registerOperator($text);}
 	|	EQUAL {helper.registerOperator($text);}
@@ -227,7 +253,16 @@ binary_operator
 	|	BIT_AND {helper.registerOperator($text);}
 	;
 
-unary	:	INC {helper.registerOperator($text);}
+left_unary	
+	:	INC {helper.registerOperator($text);}
+	|	DEC {helper.registerOperator($text);}
+	|	NOT {helper.registerOperator($text);}
+	|	MINUS {helper.registerOperator($text);}
+	|	PLUS {helper.registerOperator($text);}
+	;
+
+right_unary	
+	:	INC {helper.registerOperator($text);}
 	|	DEC {helper.registerOperator($text);}
 	|	NOT {helper.registerOperator($text);}
 	;
@@ -252,6 +287,10 @@ int_const
 	:	INT_CONST {helper.registerOperant($text);};
 long_const
 	:	LONG_CONST {helper.registerOperant($text);};
+hex_const
+	:	HEX_CONST {helper.registerOperant($text);};
+hex_long_const
+	:	HEX_LONG_CONST {helper.registerOperant($text);};
 string_const
 	:	STRING_CONST {helper.registerOperant($text);};
 float_const
@@ -262,7 +301,8 @@ null_const
 	:	NULL {helper.registerOperant($text);};
 boolean_const	
 	:	BOOL_CONST {helper.registerOperant($text);};
-
+array_const
+	:	(block_begin value (comma value)* block_end)?;
 ////////////////////////
 // Names...
 ////////////////////////
@@ -290,7 +330,7 @@ annotation_name
 	:	AT name {helper.registerOperant($text);};
 name	:	(ID DOT)* ID {helper.registerOperant($text);};
 
-array	:	open_rect_bracket value? close_rect_bracket;
+array	:	(open_rect_bracket value? close_rect_bracket)+;
 
 ////////////////////////
 // Reserved keywords...
@@ -331,8 +371,14 @@ do_	:	DO {helper.registerOperator("do()", 1);};
 if_	:	IF {helper.registerOperator("if()", 1);};
 else_	:	ELSE {helper.registerOperator("else");};
 
+switch_	:	SWITCH {helper.registerOperator("switch()");};
+case_	:	CASE {helper.registerOperator("switch()");};
+default_:	DEFAULT {helper.registerOperator("switch()");};
+
 return_	:	RETURN {helper.registerOperator($text);};
-break_	:	BREAK {helper.registerOperator($text);};
+break_	:	BREAK id {helper.registerOperator($BREAK.text);}
+	|	BREAK {helper.registerOperator($text);}
+	;
 continue_
 	:	CONTINUE {helper.registerOperator($text);};
 
@@ -344,6 +390,10 @@ semicolon
 	:	SEMICOLON {helper.registerOperator($text);};
 comma	:	COMMA {helper.registerOperator($text);};
 colon	:	COLON {helper.registerOperator($text);};
+question_
+	:	QUESTION {helper.registerOperator($text);};
+plus	:	PLUS {helper.registerOperator($text);};
+minus	:	MINUS {helper.registerOperator($text);};
 dot	:	DOT {helper.registerOperator($text);};
 assign	:	ASSIGN {helper.registerOperator($text);}
 	|	INCASSIGN {helper.registerOperator($text);}

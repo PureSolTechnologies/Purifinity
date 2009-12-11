@@ -69,7 +69,7 @@ public class ProjectAnalyser {
 	public static void main(String[] args) {
 		Logger.getRootLogger().setLevel(Level.TRACE);
 		ProjectAnalyser analyser = new ProjectAnalyser(
-				"src/com/puresol/coding/ParserHelper.java");
+				"src/com/puresol/coding/java/antlr/output/JavaParser.java");
 		analyser.analyse();
 		int sloc = 0;
 		Set<File> files = analyser.getFiles();
@@ -79,7 +79,7 @@ public class ProjectAnalyser {
 				System.out.println("=======================");
 				System.out.println(range.getName());
 				System.out.println("=======================");
-//				System.out.println(range.getText());
+				// System.out.println(range.getText());
 				HalsteadMetric halsteadMetric = new HalsteadMetric(range);
 				halsteadMetric.printOperators();
 				halsteadMetric.printOperands();

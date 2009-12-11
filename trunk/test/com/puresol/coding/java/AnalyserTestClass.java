@@ -12,6 +12,8 @@ import java.util.List;
  */
 public class AnalyserTestClass {
 
+	static final String[] lines = new String[] { "Line1", "Line2", "Line3" };
+
 	public static final Integer INTEGER_CONSTANT = 0;
 	public static final int INT_CONSTANT = 42;
 
