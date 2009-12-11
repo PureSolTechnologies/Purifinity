@@ -1,15 +1,11 @@
 package com.puresol.gui;
 
 import java.awt.Color;
-import java.awt.Desktop;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.MediaTracker;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.net.URL;
 
 import javax.i18n4j.Translator;
@@ -21,7 +17,6 @@ import javax.swing.JMenuBar;
 import javax.swingx.Application;
 import javax.swingx.Menu;
 import javax.swingx.SplashWindow;
-import javax.swingx.connect.Slot;
 
 import org.apache.log4j.Logger;
 
@@ -136,49 +131,5 @@ public class PureSolApplication extends Application {
 		Icon icon = new ImageIcon(logoImage);
 		JLabel xFabMenu = new JLabel(icon);
 		menubar.add(xFabMenu);
-	}
-
-	@Slot
-	public void openXFabSite() {
-		openURLInDefaultBrowser("http://www.xfab.com");
-	}
-
-	@Slot
-	public void openXFabDDSite() {
-		openURLInDefaultBrowser("http://intranet.drs.xfab.de");
-	}
-
-	@Slot
-	public void openSharepointSite() {
-		openURLInDefaultBrowser("http://sp.drs.xfab.de");
-	}
-
-	@Slot
-	public void openProcessDocumentation() {
-		openURLInDefaultBrowser("http://pcmcenter/operating/scripts/desktop.php?lang=en&menu=operating");
-	}
-
-	private void openURLInDefaultBrowser(String urlString) {
-		try {
-			openURLInDefaultBrowser(new URL(urlString));
-		} catch (MalformedURLException e) {
-			logger.error(e.getMessage(), e);
-		}
-	}
-
-	private void openURLInDefaultBrowser(URL url) {
-		try {
-			Desktop desktop = Desktop.getDesktop();
-			if (!desktop.isSupported(Desktop.Action.BROWSE)) {
-				logger
-						.error("Desktop doesn't support the browse action (fatal)");
-				return;
-			}
-			desktop.browse(url.toURI());
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-		} catch (URISyntaxException e) {
-			logger.error(e.getMessage(), e);
-		}
 	}
 }

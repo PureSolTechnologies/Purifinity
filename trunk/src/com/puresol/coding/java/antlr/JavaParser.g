@@ -3,7 +3,7 @@ parser grammar JavaParser;
 options {
 tokenVocab=JavaLexer;
 backtrack=true;
-memoize=true;
+//memoize=true;
 }
 
 @header {
@@ -159,14 +159,14 @@ statement
 	|	return_statement
 	|	continue_
 	|	break_
-	|	left_unary? variable_name right_unary?
 	|	for_loop
 	|	while_loop
-	|	do_loop
+	|	do_loop semicolon
 	|	switch_case
 	|	if_else
 	|	try_catch
 	|	throw_ value semicolon
+	|	left_unary? variable_name right_unary?
 	;
 
 statement_wosemicolon
@@ -177,7 +177,6 @@ statement_wosemicolon
 	|	return_statement
 	|	continue_
 	|	break_
-	|	left_unary? variable_name right_unary?
 	|	for_loop
 	|	while_loop
 	|	do_loop
@@ -185,6 +184,7 @@ statement_wosemicolon
 	|	if_else
 	|	try_catch
 	|	throw_ value semicolon
+	|	left_unary? variable_name right_unary?
 	;
 
 return_statement	
@@ -220,7 +220,7 @@ if_else	:	if_ OPEN_BRACKET value CLOSE_BRACKET code (else_ code)?
 	;
 
 try_catch
-	:	try_ code (catch_ OPEN_BRACKET id id CLOSE_BRACKET code)+ (finally_ code)?
+	:	try_ code (catch_ OPEN_BRACKET id id CLOSE_BRACKET code)* (finally_ code)?
 	;
 
 label	:	id colon;

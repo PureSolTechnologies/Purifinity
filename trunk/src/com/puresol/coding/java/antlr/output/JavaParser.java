@@ -1,4 +1,4 @@
-// $ANTLR 3.2 Sep 23, 2009 12:02:23 /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g 2009-12-11 17:22:08
+// $ANTLR 3.2 Sep 23, 2009 12:02:23 /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g 2009-12-11 20:09:32
 
 package com.puresol.coding.java.antlr.output;
 
@@ -119,14 +119,12 @@ public class JavaParser extends Parser {
         }
         public JavaParser(TokenStream input, RecognizerSharedState state) {
             super(input, state);
-            this.state.ruleMemo = new HashMap[309+1];
-             
              
         }
         
 
     public String[] getTokenNames() { return JavaParser.tokenNames; }
-    public String getGrammarFileName() { return "/home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g"; }
+    public String getGrammarFileName() { return "/home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g"; }
 
 
     private ParserHelper helper = new ParserHelper(this);
@@ -138,20 +136,18 @@ public class JavaParser extends Parser {
 
 
     // $ANTLR start "file"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:24:1: file : package_def ( import_def )* ( class_def | enum_def | interface_def )+ ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:24:1: file : package_def ( import_def )* ( class_def | enum_def | interface_def )+ ;
     public final void file() throws RecognitionException {
-        int file_StartIndex = input.index();
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 1) ) { return ; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:24:6: ( package_def ( import_def )* ( class_def | enum_def | interface_def )+ )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:24:8: package_def ( import_def )* ( class_def | enum_def | interface_def )+
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:24:6: ( package_def ( import_def )* ( class_def | enum_def | interface_def )+ )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:24:8: package_def ( import_def )* ( class_def | enum_def | interface_def )+
             {
-            pushFollow(FOLLOW_package_def_in_file44);
+            pushFollow(FOLLOW_package_def_in_file40);
             package_def();
 
             state._fsp--;
             if (state.failed) return ;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:24:20: ( import_def )*
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:24:20: ( import_def )*
             loop1:
             do {
                 int alt1=2;
@@ -164,9 +160,9 @@ public class JavaParser extends Parser {
 
                 switch (alt1) {
             	case 1 :
-            	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: import_def
+            	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: import_def
             	    {
-            	    pushFollow(FOLLOW_import_def_in_file46);
+            	    pushFollow(FOLLOW_import_def_in_file42);
             	    import_def();
 
             	    state._fsp--;
@@ -180,7 +176,7 @@ public class JavaParser extends Parser {
                 }
             } while (true);
 
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:24:32: ( class_def | enum_def | interface_def )+
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:24:32: ( class_def | enum_def | interface_def )+
             int cnt2=0;
             loop2:
             do {
@@ -188,9 +184,9 @@ public class JavaParser extends Parser {
                 alt2 = dfa2.predict(input);
                 switch (alt2) {
             	case 1 :
-            	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:24:33: class_def
+            	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:24:33: class_def
             	    {
-            	    pushFollow(FOLLOW_class_def_in_file50);
+            	    pushFollow(FOLLOW_class_def_in_file46);
             	    class_def();
 
             	    state._fsp--;
@@ -199,9 +195,9 @@ public class JavaParser extends Parser {
             	    }
             	    break;
             	case 2 :
-            	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:24:45: enum_def
+            	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:24:45: enum_def
             	    {
-            	    pushFollow(FOLLOW_enum_def_in_file54);
+            	    pushFollow(FOLLOW_enum_def_in_file50);
             	    enum_def();
 
             	    state._fsp--;
@@ -210,9 +206,9 @@ public class JavaParser extends Parser {
             	    }
             	    break;
             	case 3 :
-            	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:24:56: interface_def
+            	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:24:56: interface_def
             	    {
-            	    pushFollow(FOLLOW_interface_def_in_file58);
+            	    pushFollow(FOLLOW_interface_def_in_file54);
             	    interface_def();
 
             	    state._fsp--;
@@ -240,7 +236,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 1, file_StartIndex); }
         }
         return ;
     }
@@ -248,25 +243,23 @@ public class JavaParser extends Parser {
 
 
     // $ANTLR start "package_def"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:27:1: package_def : package_ package_name semicolon ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:27:1: package_def : package_ package_name semicolon ;
     public final void package_def() throws RecognitionException {
-        int package_def_StartIndex = input.index();
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 2) ) { return ; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:28:2: ( package_ package_name semicolon )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:28:4: package_ package_name semicolon
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:28:2: ( package_ package_name semicolon )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:28:4: package_ package_name semicolon
             {
-            pushFollow(FOLLOW_package__in_package_def72);
+            pushFollow(FOLLOW_package__in_package_def68);
             package_();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_package_name_in_package_def74);
+            pushFollow(FOLLOW_package_name_in_package_def70);
             package_name();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_semicolon_in_package_def76);
+            pushFollow(FOLLOW_semicolon_in_package_def72);
             semicolon();
 
             state._fsp--;
@@ -280,7 +273,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 2, package_def_StartIndex); }
         }
         return ;
     }
@@ -288,25 +280,23 @@ public class JavaParser extends Parser {
 
 
     // $ANTLR start "import_def"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:31:1: import_def : import_ import_name semicolon ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:31:1: import_def : import_ import_name semicolon ;
     public final void import_def() throws RecognitionException {
-        int import_def_StartIndex = input.index();
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 3) ) { return ; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:32:2: ( import_ import_name semicolon )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:32:4: import_ import_name semicolon
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:32:2: ( import_ import_name semicolon )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:32:4: import_ import_name semicolon
             {
-            pushFollow(FOLLOW_import__in_import_def88);
+            pushFollow(FOLLOW_import__in_import_def84);
             import_();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_import_name_in_import_def90);
+            pushFollow(FOLLOW_import_name_in_import_def86);
             import_name();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_semicolon_in_import_def92);
+            pushFollow(FOLLOW_semicolon_in_import_def88);
             semicolon();
 
             state._fsp--;
@@ -320,7 +310,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 3, import_def_StartIndex); }
         }
         return ;
     }
@@ -330,20 +319,19 @@ public class JavaParser extends Parser {
     };
 
     // $ANTLR start "class_def"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:35:1: class_def : ( annotation )* ( modifier )* class_ id ( generic )? ( extends_ class_name ( generic )? )? ( implements_ class_name ( comma class_name )* )? class_block ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:35:1: class_def : ( annotation )* ( modifier )* class_ id ( generic )? ( extends_ class_name ( generic )? )? ( implements_ class_name ( comma class_name )* )? class_block ;
     public final JavaParser.class_def_return class_def() throws RecognitionException {
         JavaParser.class_def_return retval = new JavaParser.class_def_return();
         retval.start = input.LT(1);
-        int class_def_StartIndex = input.index();
+
         JavaParser.id_return id1 = null;
 
 
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 4) ) { return retval; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:36:2: ( ( annotation )* ( modifier )* class_ id ( generic )? ( extends_ class_name ( generic )? )? ( implements_ class_name ( comma class_name )* )? class_block )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:36:4: ( annotation )* ( modifier )* class_ id ( generic )? ( extends_ class_name ( generic )? )? ( implements_ class_name ( comma class_name )* )? class_block
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:36:2: ( ( annotation )* ( modifier )* class_ id ( generic )? ( extends_ class_name ( generic )? )? ( implements_ class_name ( comma class_name )* )? class_block )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:36:4: ( annotation )* ( modifier )* class_ id ( generic )? ( extends_ class_name ( generic )? )? ( implements_ class_name ( comma class_name )* )? class_block
             {
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:36:4: ( annotation )*
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:36:4: ( annotation )*
             loop3:
             do {
                 int alt3=2;
@@ -356,9 +344,9 @@ public class JavaParser extends Parser {
 
                 switch (alt3) {
             	case 1 :
-            	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: annotation
+            	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: annotation
             	    {
-            	    pushFollow(FOLLOW_annotation_in_class_def104);
+            	    pushFollow(FOLLOW_annotation_in_class_def100);
             	    annotation();
 
             	    state._fsp--;
@@ -372,7 +360,7 @@ public class JavaParser extends Parser {
                 }
             } while (true);
 
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:36:16: ( modifier )*
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:36:16: ( modifier )*
             loop4:
             do {
                 int alt4=2;
@@ -385,9 +373,9 @@ public class JavaParser extends Parser {
 
                 switch (alt4) {
             	case 1 :
-            	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: modifier
+            	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: modifier
             	    {
-            	    pushFollow(FOLLOW_modifier_in_class_def107);
+            	    pushFollow(FOLLOW_modifier_in_class_def103);
             	    modifier();
 
             	    state._fsp--;
@@ -401,17 +389,17 @@ public class JavaParser extends Parser {
                 }
             } while (true);
 
-            pushFollow(FOLLOW_class__in_class_def110);
+            pushFollow(FOLLOW_class__in_class_def106);
             class_();
 
             state._fsp--;
             if (state.failed) return retval;
-            pushFollow(FOLLOW_id_in_class_def112);
+            pushFollow(FOLLOW_id_in_class_def108);
             id1=id();
 
             state._fsp--;
             if (state.failed) return retval;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:36:36: ( generic )?
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:36:36: ( generic )?
             int alt5=2;
             int LA5_0 = input.LA(1);
 
@@ -420,9 +408,9 @@ public class JavaParser extends Parser {
             }
             switch (alt5) {
                 case 1 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: generic
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: generic
                     {
-                    pushFollow(FOLLOW_generic_in_class_def114);
+                    pushFollow(FOLLOW_generic_in_class_def110);
                     generic();
 
                     state._fsp--;
@@ -433,7 +421,7 @@ public class JavaParser extends Parser {
 
             }
 
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:36:45: ( extends_ class_name ( generic )? )?
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:36:45: ( extends_ class_name ( generic )? )?
             int alt7=2;
             int LA7_0 = input.LA(1);
 
@@ -442,19 +430,19 @@ public class JavaParser extends Parser {
             }
             switch (alt7) {
                 case 1 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:36:46: extends_ class_name ( generic )?
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:36:46: extends_ class_name ( generic )?
                     {
-                    pushFollow(FOLLOW_extends__in_class_def118);
+                    pushFollow(FOLLOW_extends__in_class_def114);
                     extends_();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    pushFollow(FOLLOW_class_name_in_class_def120);
+                    pushFollow(FOLLOW_class_name_in_class_def116);
                     class_name();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:36:66: ( generic )?
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:36:66: ( generic )?
                     int alt6=2;
                     int LA6_0 = input.LA(1);
 
@@ -463,9 +451,9 @@ public class JavaParser extends Parser {
                     }
                     switch (alt6) {
                         case 1 :
-                            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: generic
+                            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: generic
                             {
-                            pushFollow(FOLLOW_generic_in_class_def122);
+                            pushFollow(FOLLOW_generic_in_class_def118);
                             generic();
 
                             state._fsp--;
@@ -482,7 +470,7 @@ public class JavaParser extends Parser {
 
             }
 
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:36:77: ( implements_ class_name ( comma class_name )* )?
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:36:77: ( implements_ class_name ( comma class_name )* )?
             int alt9=2;
             int LA9_0 = input.LA(1);
 
@@ -491,19 +479,19 @@ public class JavaParser extends Parser {
             }
             switch (alt9) {
                 case 1 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:36:78: implements_ class_name ( comma class_name )*
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:36:78: implements_ class_name ( comma class_name )*
                     {
-                    pushFollow(FOLLOW_implements__in_class_def128);
+                    pushFollow(FOLLOW_implements__in_class_def124);
                     implements_();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    pushFollow(FOLLOW_class_name_in_class_def130);
+                    pushFollow(FOLLOW_class_name_in_class_def126);
                     class_name();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:36:101: ( comma class_name )*
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:36:101: ( comma class_name )*
                     loop8:
                     do {
                         int alt8=2;
@@ -516,14 +504,14 @@ public class JavaParser extends Parser {
 
                         switch (alt8) {
                     	case 1 :
-                    	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:36:102: comma class_name
+                    	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:36:102: comma class_name
                     	    {
-                    	    pushFollow(FOLLOW_comma_in_class_def133);
+                    	    pushFollow(FOLLOW_comma_in_class_def129);
                     	    comma();
 
                     	    state._fsp--;
                     	    if (state.failed) return retval;
-                    	    pushFollow(FOLLOW_class_name_in_class_def135);
+                    	    pushFollow(FOLLOW_class_name_in_class_def131);
                     	    class_name();
 
                     	    state._fsp--;
@@ -543,7 +531,7 @@ public class JavaParser extends Parser {
 
             }
 
-            pushFollow(FOLLOW_class_block_in_class_def141);
+            pushFollow(FOLLOW_class_block_in_class_def137);
             class_block();
 
             state._fsp--;
@@ -562,7 +550,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 4, class_def_StartIndex); }
         }
         return retval;
     }
@@ -572,20 +559,19 @@ public class JavaParser extends Parser {
     };
 
     // $ANTLR start "enum_def"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:40:1: enum_def : ( annotation )* ( modifier )* enum_ id ( generic )? ( extends_ class_name ( generic )? )? enum_block ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:40:1: enum_def : ( annotation )* ( modifier )* enum_ id ( generic )? ( extends_ class_name ( generic )? )? enum_block ;
     public final JavaParser.enum_def_return enum_def() throws RecognitionException {
         JavaParser.enum_def_return retval = new JavaParser.enum_def_return();
         retval.start = input.LT(1);
-        int enum_def_StartIndex = input.index();
+
         JavaParser.id_return id2 = null;
 
 
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 5) ) { return retval; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:41:2: ( ( annotation )* ( modifier )* enum_ id ( generic )? ( extends_ class_name ( generic )? )? enum_block )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:41:4: ( annotation )* ( modifier )* enum_ id ( generic )? ( extends_ class_name ( generic )? )? enum_block
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:41:2: ( ( annotation )* ( modifier )* enum_ id ( generic )? ( extends_ class_name ( generic )? )? enum_block )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:41:4: ( annotation )* ( modifier )* enum_ id ( generic )? ( extends_ class_name ( generic )? )? enum_block
             {
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:41:4: ( annotation )*
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:41:4: ( annotation )*
             loop10:
             do {
                 int alt10=2;
@@ -598,9 +584,9 @@ public class JavaParser extends Parser {
 
                 switch (alt10) {
             	case 1 :
-            	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: annotation
+            	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: annotation
             	    {
-            	    pushFollow(FOLLOW_annotation_in_enum_def157);
+            	    pushFollow(FOLLOW_annotation_in_enum_def153);
             	    annotation();
 
             	    state._fsp--;
@@ -614,7 +600,7 @@ public class JavaParser extends Parser {
                 }
             } while (true);
 
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:41:16: ( modifier )*
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:41:16: ( modifier )*
             loop11:
             do {
                 int alt11=2;
@@ -627,9 +613,9 @@ public class JavaParser extends Parser {
 
                 switch (alt11) {
             	case 1 :
-            	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: modifier
+            	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: modifier
             	    {
-            	    pushFollow(FOLLOW_modifier_in_enum_def160);
+            	    pushFollow(FOLLOW_modifier_in_enum_def156);
             	    modifier();
 
             	    state._fsp--;
@@ -643,17 +629,17 @@ public class JavaParser extends Parser {
                 }
             } while (true);
 
-            pushFollow(FOLLOW_enum__in_enum_def163);
+            pushFollow(FOLLOW_enum__in_enum_def159);
             enum_();
 
             state._fsp--;
             if (state.failed) return retval;
-            pushFollow(FOLLOW_id_in_enum_def165);
+            pushFollow(FOLLOW_id_in_enum_def161);
             id2=id();
 
             state._fsp--;
             if (state.failed) return retval;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:41:35: ( generic )?
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:41:35: ( generic )?
             int alt12=2;
             int LA12_0 = input.LA(1);
 
@@ -662,9 +648,9 @@ public class JavaParser extends Parser {
             }
             switch (alt12) {
                 case 1 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: generic
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: generic
                     {
-                    pushFollow(FOLLOW_generic_in_enum_def167);
+                    pushFollow(FOLLOW_generic_in_enum_def163);
                     generic();
 
                     state._fsp--;
@@ -675,7 +661,7 @@ public class JavaParser extends Parser {
 
             }
 
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:41:44: ( extends_ class_name ( generic )? )?
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:41:44: ( extends_ class_name ( generic )? )?
             int alt14=2;
             int LA14_0 = input.LA(1);
 
@@ -684,19 +670,19 @@ public class JavaParser extends Parser {
             }
             switch (alt14) {
                 case 1 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:41:45: extends_ class_name ( generic )?
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:41:45: extends_ class_name ( generic )?
                     {
-                    pushFollow(FOLLOW_extends__in_enum_def171);
+                    pushFollow(FOLLOW_extends__in_enum_def167);
                     extends_();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    pushFollow(FOLLOW_class_name_in_enum_def173);
+                    pushFollow(FOLLOW_class_name_in_enum_def169);
                     class_name();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:41:65: ( generic )?
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:41:65: ( generic )?
                     int alt13=2;
                     int LA13_0 = input.LA(1);
 
@@ -705,9 +691,9 @@ public class JavaParser extends Parser {
                     }
                     switch (alt13) {
                         case 1 :
-                            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: generic
+                            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: generic
                             {
-                            pushFollow(FOLLOW_generic_in_enum_def175);
+                            pushFollow(FOLLOW_generic_in_enum_def171);
                             generic();
 
                             state._fsp--;
@@ -724,7 +710,7 @@ public class JavaParser extends Parser {
 
             }
 
-            pushFollow(FOLLOW_enum_block_in_enum_def180);
+            pushFollow(FOLLOW_enum_block_in_enum_def176);
             enum_block();
 
             state._fsp--;
@@ -743,7 +729,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 5, enum_def_StartIndex); }
         }
         return retval;
     }
@@ -753,20 +738,19 @@ public class JavaParser extends Parser {
     };
 
     // $ANTLR start "interface_def"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:45:1: interface_def : ( annotation )* ( modifier )* interface_ id ( generic )? ( extends_ class_name ( generic )? )? interface_block ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:45:1: interface_def : ( annotation )* ( modifier )* interface_ id ( generic )? ( extends_ class_name ( generic )? )? interface_block ;
     public final JavaParser.interface_def_return interface_def() throws RecognitionException {
         JavaParser.interface_def_return retval = new JavaParser.interface_def_return();
         retval.start = input.LT(1);
-        int interface_def_StartIndex = input.index();
+
         JavaParser.id_return id3 = null;
 
 
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 6) ) { return retval; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:46:2: ( ( annotation )* ( modifier )* interface_ id ( generic )? ( extends_ class_name ( generic )? )? interface_block )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:46:4: ( annotation )* ( modifier )* interface_ id ( generic )? ( extends_ class_name ( generic )? )? interface_block
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:46:2: ( ( annotation )* ( modifier )* interface_ id ( generic )? ( extends_ class_name ( generic )? )? interface_block )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:46:4: ( annotation )* ( modifier )* interface_ id ( generic )? ( extends_ class_name ( generic )? )? interface_block
             {
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:46:4: ( annotation )*
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:46:4: ( annotation )*
             loop15:
             do {
                 int alt15=2;
@@ -779,9 +763,9 @@ public class JavaParser extends Parser {
 
                 switch (alt15) {
             	case 1 :
-            	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: annotation
+            	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: annotation
             	    {
-            	    pushFollow(FOLLOW_annotation_in_interface_def196);
+            	    pushFollow(FOLLOW_annotation_in_interface_def192);
             	    annotation();
 
             	    state._fsp--;
@@ -795,7 +779,7 @@ public class JavaParser extends Parser {
                 }
             } while (true);
 
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:46:16: ( modifier )*
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:46:16: ( modifier )*
             loop16:
             do {
                 int alt16=2;
@@ -808,9 +792,9 @@ public class JavaParser extends Parser {
 
                 switch (alt16) {
             	case 1 :
-            	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: modifier
+            	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: modifier
             	    {
-            	    pushFollow(FOLLOW_modifier_in_interface_def199);
+            	    pushFollow(FOLLOW_modifier_in_interface_def195);
             	    modifier();
 
             	    state._fsp--;
@@ -824,17 +808,17 @@ public class JavaParser extends Parser {
                 }
             } while (true);
 
-            pushFollow(FOLLOW_interface__in_interface_def202);
+            pushFollow(FOLLOW_interface__in_interface_def198);
             interface_();
 
             state._fsp--;
             if (state.failed) return retval;
-            pushFollow(FOLLOW_id_in_interface_def204);
+            pushFollow(FOLLOW_id_in_interface_def200);
             id3=id();
 
             state._fsp--;
             if (state.failed) return retval;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:46:40: ( generic )?
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:46:40: ( generic )?
             int alt17=2;
             int LA17_0 = input.LA(1);
 
@@ -843,9 +827,9 @@ public class JavaParser extends Parser {
             }
             switch (alt17) {
                 case 1 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: generic
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: generic
                     {
-                    pushFollow(FOLLOW_generic_in_interface_def206);
+                    pushFollow(FOLLOW_generic_in_interface_def202);
                     generic();
 
                     state._fsp--;
@@ -856,7 +840,7 @@ public class JavaParser extends Parser {
 
             }
 
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:46:49: ( extends_ class_name ( generic )? )?
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:46:49: ( extends_ class_name ( generic )? )?
             int alt19=2;
             int LA19_0 = input.LA(1);
 
@@ -865,19 +849,19 @@ public class JavaParser extends Parser {
             }
             switch (alt19) {
                 case 1 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:46:50: extends_ class_name ( generic )?
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:46:50: extends_ class_name ( generic )?
                     {
-                    pushFollow(FOLLOW_extends__in_interface_def210);
+                    pushFollow(FOLLOW_extends__in_interface_def206);
                     extends_();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    pushFollow(FOLLOW_class_name_in_interface_def212);
+                    pushFollow(FOLLOW_class_name_in_interface_def208);
                     class_name();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:46:70: ( generic )?
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:46:70: ( generic )?
                     int alt18=2;
                     int LA18_0 = input.LA(1);
 
@@ -886,9 +870,9 @@ public class JavaParser extends Parser {
                     }
                     switch (alt18) {
                         case 1 :
-                            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: generic
+                            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: generic
                             {
-                            pushFollow(FOLLOW_generic_in_interface_def214);
+                            pushFollow(FOLLOW_generic_in_interface_def210);
                             generic();
 
                             state._fsp--;
@@ -905,7 +889,7 @@ public class JavaParser extends Parser {
 
             }
 
-            pushFollow(FOLLOW_interface_block_in_interface_def219);
+            pushFollow(FOLLOW_interface_block_in_interface_def215);
             interface_block();
 
             state._fsp--;
@@ -924,7 +908,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 6, interface_def_StartIndex); }
         }
         return retval;
     }
@@ -932,25 +915,23 @@ public class JavaParser extends Parser {
 
 
     // $ANTLR start "static_init"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:50:1: static_init : static_ code ( semicolon )? ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:50:1: static_init : static_ code ( semicolon )? ;
     public final void static_init() throws RecognitionException {
-        int static_init_StartIndex = input.index();
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 7) ) { return ; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:51:2: ( static_ code ( semicolon )? )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:51:4: static_ code ( semicolon )?
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:51:2: ( static_ code ( semicolon )? )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:51:4: static_ code ( semicolon )?
             {
-            pushFollow(FOLLOW_static__in_static_init235);
+            pushFollow(FOLLOW_static__in_static_init231);
             static_();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_code_in_static_init237);
+            pushFollow(FOLLOW_code_in_static_init233);
             code();
 
             state._fsp--;
             if (state.failed) return ;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:51:17: ( semicolon )?
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:51:17: ( semicolon )?
             int alt20=2;
             int LA20_0 = input.LA(1);
 
@@ -959,9 +940,9 @@ public class JavaParser extends Parser {
             }
             switch (alt20) {
                 case 1 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: semicolon
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: semicolon
                     {
-                    pushFollow(FOLLOW_semicolon_in_static_init239);
+                    pushFollow(FOLLOW_semicolon_in_static_init235);
                     semicolon();
 
                     state._fsp--;
@@ -981,7 +962,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 7, static_init_StartIndex); }
         }
         return ;
     }
@@ -991,20 +971,19 @@ public class JavaParser extends Parser {
     };
 
     // $ANTLR start "constructor_def"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:54:1: constructor_def : ( annotation )* ( modifier )* id open_bracket argument_def close_bracket code ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:54:1: constructor_def : ( annotation )* ( modifier )* id open_bracket argument_def close_bracket code ;
     public final JavaParser.constructor_def_return constructor_def() throws RecognitionException {
         JavaParser.constructor_def_return retval = new JavaParser.constructor_def_return();
         retval.start = input.LT(1);
-        int constructor_def_StartIndex = input.index();
+
         JavaParser.id_return id4 = null;
 
 
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 8) ) { return retval; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:55:2: ( ( annotation )* ( modifier )* id open_bracket argument_def close_bracket code )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:55:4: ( annotation )* ( modifier )* id open_bracket argument_def close_bracket code
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:55:2: ( ( annotation )* ( modifier )* id open_bracket argument_def close_bracket code )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:55:4: ( annotation )* ( modifier )* id open_bracket argument_def close_bracket code
             {
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:55:4: ( annotation )*
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:55:4: ( annotation )*
             loop21:
             do {
                 int alt21=2;
@@ -1017,9 +996,9 @@ public class JavaParser extends Parser {
 
                 switch (alt21) {
             	case 1 :
-            	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: annotation
+            	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: annotation
             	    {
-            	    pushFollow(FOLLOW_annotation_in_constructor_def251);
+            	    pushFollow(FOLLOW_annotation_in_constructor_def247);
             	    annotation();
 
             	    state._fsp--;
@@ -1033,7 +1012,7 @@ public class JavaParser extends Parser {
                 }
             } while (true);
 
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:55:16: ( modifier )*
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:55:16: ( modifier )*
             loop22:
             do {
                 int alt22=2;
@@ -1046,9 +1025,9 @@ public class JavaParser extends Parser {
 
                 switch (alt22) {
             	case 1 :
-            	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: modifier
+            	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: modifier
             	    {
-            	    pushFollow(FOLLOW_modifier_in_constructor_def254);
+            	    pushFollow(FOLLOW_modifier_in_constructor_def250);
             	    modifier();
 
             	    state._fsp--;
@@ -1062,27 +1041,27 @@ public class JavaParser extends Parser {
                 }
             } while (true);
 
-            pushFollow(FOLLOW_id_in_constructor_def257);
+            pushFollow(FOLLOW_id_in_constructor_def253);
             id4=id();
 
             state._fsp--;
             if (state.failed) return retval;
-            pushFollow(FOLLOW_open_bracket_in_constructor_def259);
+            pushFollow(FOLLOW_open_bracket_in_constructor_def255);
             open_bracket();
 
             state._fsp--;
             if (state.failed) return retval;
-            pushFollow(FOLLOW_argument_def_in_constructor_def261);
+            pushFollow(FOLLOW_argument_def_in_constructor_def257);
             argument_def();
 
             state._fsp--;
             if (state.failed) return retval;
-            pushFollow(FOLLOW_close_bracket_in_constructor_def263);
+            pushFollow(FOLLOW_close_bracket_in_constructor_def259);
             close_bracket();
 
             state._fsp--;
             if (state.failed) return retval;
-            pushFollow(FOLLOW_code_in_constructor_def265);
+            pushFollow(FOLLOW_code_in_constructor_def261);
             code();
 
             state._fsp--;
@@ -1101,7 +1080,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 8, constructor_def_StartIndex); }
         }
         return retval;
     }
@@ -1111,20 +1089,19 @@ public class JavaParser extends Parser {
     };
 
     // $ANTLR start "method_def"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:59:1: method_def : ( annotation )* ( modifier )* variable_type id open_bracket argument_def close_bracket ( throws_ class_name ( comma class_name )* )? code ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:59:1: method_def : ( annotation )* ( modifier )* variable_type id open_bracket argument_def close_bracket ( throws_ class_name ( comma class_name )* )? code ;
     public final JavaParser.method_def_return method_def() throws RecognitionException {
         JavaParser.method_def_return retval = new JavaParser.method_def_return();
         retval.start = input.LT(1);
-        int method_def_StartIndex = input.index();
+
         JavaParser.id_return id5 = null;
 
 
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 9) ) { return retval; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:60:2: ( ( annotation )* ( modifier )* variable_type id open_bracket argument_def close_bracket ( throws_ class_name ( comma class_name )* )? code )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:60:4: ( annotation )* ( modifier )* variable_type id open_bracket argument_def close_bracket ( throws_ class_name ( comma class_name )* )? code
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:60:2: ( ( annotation )* ( modifier )* variable_type id open_bracket argument_def close_bracket ( throws_ class_name ( comma class_name )* )? code )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:60:4: ( annotation )* ( modifier )* variable_type id open_bracket argument_def close_bracket ( throws_ class_name ( comma class_name )* )? code
             {
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:60:4: ( annotation )*
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:60:4: ( annotation )*
             loop23:
             do {
                 int alt23=2;
@@ -1137,9 +1114,9 @@ public class JavaParser extends Parser {
 
                 switch (alt23) {
             	case 1 :
-            	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: annotation
+            	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: annotation
             	    {
-            	    pushFollow(FOLLOW_annotation_in_method_def280);
+            	    pushFollow(FOLLOW_annotation_in_method_def276);
             	    annotation();
 
             	    state._fsp--;
@@ -1153,7 +1130,7 @@ public class JavaParser extends Parser {
                 }
             } while (true);
 
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:60:16: ( modifier )*
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:60:16: ( modifier )*
             loop24:
             do {
                 int alt24=2;
@@ -1166,9 +1143,9 @@ public class JavaParser extends Parser {
 
                 switch (alt24) {
             	case 1 :
-            	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: modifier
+            	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: modifier
             	    {
-            	    pushFollow(FOLLOW_modifier_in_method_def283);
+            	    pushFollow(FOLLOW_modifier_in_method_def279);
             	    modifier();
 
             	    state._fsp--;
@@ -1182,32 +1159,32 @@ public class JavaParser extends Parser {
                 }
             } while (true);
 
-            pushFollow(FOLLOW_variable_type_in_method_def286);
+            pushFollow(FOLLOW_variable_type_in_method_def282);
             variable_type();
 
             state._fsp--;
             if (state.failed) return retval;
-            pushFollow(FOLLOW_id_in_method_def288);
+            pushFollow(FOLLOW_id_in_method_def284);
             id5=id();
 
             state._fsp--;
             if (state.failed) return retval;
-            pushFollow(FOLLOW_open_bracket_in_method_def290);
+            pushFollow(FOLLOW_open_bracket_in_method_def286);
             open_bracket();
 
             state._fsp--;
             if (state.failed) return retval;
-            pushFollow(FOLLOW_argument_def_in_method_def292);
+            pushFollow(FOLLOW_argument_def_in_method_def288);
             argument_def();
 
             state._fsp--;
             if (state.failed) return retval;
-            pushFollow(FOLLOW_close_bracket_in_method_def294);
+            pushFollow(FOLLOW_close_bracket_in_method_def290);
             close_bracket();
 
             state._fsp--;
             if (state.failed) return retval;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:60:83: ( throws_ class_name ( comma class_name )* )?
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:60:83: ( throws_ class_name ( comma class_name )* )?
             int alt26=2;
             int LA26_0 = input.LA(1);
 
@@ -1216,19 +1193,19 @@ public class JavaParser extends Parser {
             }
             switch (alt26) {
                 case 1 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:60:84: throws_ class_name ( comma class_name )*
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:60:84: throws_ class_name ( comma class_name )*
                     {
-                    pushFollow(FOLLOW_throws__in_method_def297);
+                    pushFollow(FOLLOW_throws__in_method_def293);
                     throws_();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    pushFollow(FOLLOW_class_name_in_method_def299);
+                    pushFollow(FOLLOW_class_name_in_method_def295);
                     class_name();
 
                     state._fsp--;
                     if (state.failed) return retval;
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:60:103: ( comma class_name )*
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:60:103: ( comma class_name )*
                     loop25:
                     do {
                         int alt25=2;
@@ -1241,14 +1218,14 @@ public class JavaParser extends Parser {
 
                         switch (alt25) {
                     	case 1 :
-                    	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:60:104: comma class_name
+                    	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:60:104: comma class_name
                     	    {
-                    	    pushFollow(FOLLOW_comma_in_method_def302);
+                    	    pushFollow(FOLLOW_comma_in_method_def298);
                     	    comma();
 
                     	    state._fsp--;
                     	    if (state.failed) return retval;
-                    	    pushFollow(FOLLOW_class_name_in_method_def304);
+                    	    pushFollow(FOLLOW_class_name_in_method_def300);
                     	    class_name();
 
                     	    state._fsp--;
@@ -1268,7 +1245,7 @@ public class JavaParser extends Parser {
 
             }
 
-            pushFollow(FOLLOW_code_in_method_def310);
+            pushFollow(FOLLOW_code_in_method_def306);
             code();
 
             state._fsp--;
@@ -1287,7 +1264,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 9, method_def_StartIndex); }
         }
         return retval;
     }
@@ -1295,15 +1271,13 @@ public class JavaParser extends Parser {
 
 
     // $ANTLR start "field_def"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:64:1: field_def : ( annotation )* ( modifier )* variable_type variable_name ( assign value )? semicolon ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:64:1: field_def : ( annotation )* ( modifier )* variable_type variable_name ( assign value )? semicolon ;
     public final void field_def() throws RecognitionException {
-        int field_def_StartIndex = input.index();
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 10) ) { return ; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:65:2: ( ( annotation )* ( modifier )* variable_type variable_name ( assign value )? semicolon )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:65:4: ( annotation )* ( modifier )* variable_type variable_name ( assign value )? semicolon
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:65:2: ( ( annotation )* ( modifier )* variable_type variable_name ( assign value )? semicolon )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:65:4: ( annotation )* ( modifier )* variable_type variable_name ( assign value )? semicolon
             {
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:65:4: ( annotation )*
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:65:4: ( annotation )*
             loop27:
             do {
                 int alt27=2;
@@ -1316,9 +1290,9 @@ public class JavaParser extends Parser {
 
                 switch (alt27) {
             	case 1 :
-            	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: annotation
+            	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: annotation
             	    {
-            	    pushFollow(FOLLOW_annotation_in_field_def326);
+            	    pushFollow(FOLLOW_annotation_in_field_def322);
             	    annotation();
 
             	    state._fsp--;
@@ -1332,7 +1306,7 @@ public class JavaParser extends Parser {
                 }
             } while (true);
 
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:65:16: ( modifier )*
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:65:16: ( modifier )*
             loop28:
             do {
                 int alt28=2;
@@ -1345,9 +1319,9 @@ public class JavaParser extends Parser {
 
                 switch (alt28) {
             	case 1 :
-            	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: modifier
+            	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: modifier
             	    {
-            	    pushFollow(FOLLOW_modifier_in_field_def329);
+            	    pushFollow(FOLLOW_modifier_in_field_def325);
             	    modifier();
 
             	    state._fsp--;
@@ -1361,17 +1335,17 @@ public class JavaParser extends Parser {
                 }
             } while (true);
 
-            pushFollow(FOLLOW_variable_type_in_field_def332);
+            pushFollow(FOLLOW_variable_type_in_field_def328);
             variable_type();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_variable_name_in_field_def334);
+            pushFollow(FOLLOW_variable_name_in_field_def330);
             variable_name();
 
             state._fsp--;
             if (state.failed) return ;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:65:54: ( assign value )?
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:65:54: ( assign value )?
             int alt29=2;
             int LA29_0 = input.LA(1);
 
@@ -1380,14 +1354,14 @@ public class JavaParser extends Parser {
             }
             switch (alt29) {
                 case 1 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:65:55: assign value
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:65:55: assign value
                     {
-                    pushFollow(FOLLOW_assign_in_field_def337);
+                    pushFollow(FOLLOW_assign_in_field_def333);
                     assign();
 
                     state._fsp--;
                     if (state.failed) return ;
-                    pushFollow(FOLLOW_value_in_field_def339);
+                    pushFollow(FOLLOW_value_in_field_def335);
                     value();
 
                     state._fsp--;
@@ -1398,7 +1372,7 @@ public class JavaParser extends Parser {
 
             }
 
-            pushFollow(FOLLOW_semicolon_in_field_def343);
+            pushFollow(FOLLOW_semicolon_in_field_def339);
             semicolon();
 
             state._fsp--;
@@ -1412,7 +1386,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 10, field_def_StartIndex); }
         }
         return ;
     }
@@ -1420,15 +1393,13 @@ public class JavaParser extends Parser {
 
 
     // $ANTLR start "argument_def"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:68:1: argument_def : ( variable_type variable_name ( comma variable_type variable_name )* )? ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:68:1: argument_def : ( variable_type variable_name ( comma variable_type variable_name )* )? ;
     public final void argument_def() throws RecognitionException {
-        int argument_def_StartIndex = input.index();
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 11) ) { return ; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:69:2: ( ( variable_type variable_name ( comma variable_type variable_name )* )? )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:69:4: ( variable_type variable_name ( comma variable_type variable_name )* )?
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:69:2: ( ( variable_type variable_name ( comma variable_type variable_name )* )? )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:69:4: ( variable_type variable_name ( comma variable_type variable_name )* )?
             {
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:69:4: ( variable_type variable_name ( comma variable_type variable_name )* )?
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:69:4: ( variable_type variable_name ( comma variable_type variable_name )* )?
             int alt31=2;
             int LA31_0 = input.LA(1);
 
@@ -1437,19 +1408,19 @@ public class JavaParser extends Parser {
             }
             switch (alt31) {
                 case 1 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:69:5: variable_type variable_name ( comma variable_type variable_name )*
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:69:5: variable_type variable_name ( comma variable_type variable_name )*
                     {
-                    pushFollow(FOLLOW_variable_type_in_argument_def355);
+                    pushFollow(FOLLOW_variable_type_in_argument_def351);
                     variable_type();
 
                     state._fsp--;
                     if (state.failed) return ;
-                    pushFollow(FOLLOW_variable_name_in_argument_def357);
+                    pushFollow(FOLLOW_variable_name_in_argument_def353);
                     variable_name();
 
                     state._fsp--;
                     if (state.failed) return ;
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:69:33: ( comma variable_type variable_name )*
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:69:33: ( comma variable_type variable_name )*
                     loop30:
                     do {
                         int alt30=2;
@@ -1462,19 +1433,19 @@ public class JavaParser extends Parser {
 
                         switch (alt30) {
                     	case 1 :
-                    	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:69:34: comma variable_type variable_name
+                    	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:69:34: comma variable_type variable_name
                     	    {
-                    	    pushFollow(FOLLOW_comma_in_argument_def360);
+                    	    pushFollow(FOLLOW_comma_in_argument_def356);
                     	    comma();
 
                     	    state._fsp--;
                     	    if (state.failed) return ;
-                    	    pushFollow(FOLLOW_variable_type_in_argument_def362);
+                    	    pushFollow(FOLLOW_variable_type_in_argument_def358);
                     	    variable_type();
 
                     	    state._fsp--;
                     	    if (state.failed) return ;
-                    	    pushFollow(FOLLOW_variable_name_in_argument_def364);
+                    	    pushFollow(FOLLOW_variable_name_in_argument_def360);
                     	    variable_name();
 
                     	    state._fsp--;
@@ -1503,7 +1474,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 11, argument_def_StartIndex); }
         }
         return ;
     }
@@ -1511,15 +1481,13 @@ public class JavaParser extends Parser {
 
 
     // $ANTLR start "variable_def"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:72:1: variable_def : ( annotation )* variable_type variable_name ( assign value )? ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:72:1: variable_def : ( annotation )* variable_type variable_name ( assign value )? ;
     public final void variable_def() throws RecognitionException {
-        int variable_def_StartIndex = input.index();
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 12) ) { return ; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:73:2: ( ( annotation )* variable_type variable_name ( assign value )? )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:73:4: ( annotation )* variable_type variable_name ( assign value )?
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:73:2: ( ( annotation )* variable_type variable_name ( assign value )? )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:73:4: ( annotation )* variable_type variable_name ( assign value )?
             {
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:73:4: ( annotation )*
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:73:4: ( annotation )*
             loop32:
             do {
                 int alt32=2;
@@ -1532,9 +1500,9 @@ public class JavaParser extends Parser {
 
                 switch (alt32) {
             	case 1 :
-            	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: annotation
+            	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: annotation
             	    {
-            	    pushFollow(FOLLOW_annotation_in_variable_def379);
+            	    pushFollow(FOLLOW_annotation_in_variable_def375);
             	    annotation();
 
             	    state._fsp--;
@@ -1548,17 +1516,17 @@ public class JavaParser extends Parser {
                 }
             } while (true);
 
-            pushFollow(FOLLOW_variable_type_in_variable_def382);
+            pushFollow(FOLLOW_variable_type_in_variable_def378);
             variable_type();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_variable_name_in_variable_def384);
+            pushFollow(FOLLOW_variable_name_in_variable_def380);
             variable_name();
 
             state._fsp--;
             if (state.failed) return ;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:73:44: ( assign value )?
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:73:44: ( assign value )?
             int alt33=2;
             int LA33_0 = input.LA(1);
 
@@ -1567,14 +1535,14 @@ public class JavaParser extends Parser {
             }
             switch (alt33) {
                 case 1 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:73:45: assign value
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:73:45: assign value
                     {
-                    pushFollow(FOLLOW_assign_in_variable_def387);
+                    pushFollow(FOLLOW_assign_in_variable_def383);
                     assign();
 
                     state._fsp--;
                     if (state.failed) return ;
-                    pushFollow(FOLLOW_value_in_variable_def389);
+                    pushFollow(FOLLOW_value_in_variable_def385);
                     value();
 
                     state._fsp--;
@@ -1594,7 +1562,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 12, variable_def_StartIndex); }
         }
         return ;
     }
@@ -1602,12 +1569,10 @@ public class JavaParser extends Parser {
 
 
     // $ANTLR start "modifier"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:76:1: modifier : ( public_ | private_ | protected_ | static_ | final_ | transient_ );
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:76:1: modifier : ( public_ | private_ | protected_ | static_ | final_ | transient_ );
     public final void modifier() throws RecognitionException {
-        int modifier_StartIndex = input.index();
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 13) ) { return ; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:76:9: ( public_ | private_ | protected_ | static_ | final_ | transient_ )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:76:9: ( public_ | private_ | protected_ | static_ | final_ | transient_ )
             int alt34=6;
             switch ( input.LA(1) ) {
             case PUBLIC:
@@ -1650,9 +1615,9 @@ public class JavaParser extends Parser {
 
             switch (alt34) {
                 case 1 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:76:11: public_
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:76:11: public_
                     {
-                    pushFollow(FOLLOW_public__in_modifier401);
+                    pushFollow(FOLLOW_public__in_modifier397);
                     public_();
 
                     state._fsp--;
@@ -1661,9 +1626,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:77:4: private_
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:77:4: private_
                     {
-                    pushFollow(FOLLOW_private__in_modifier406);
+                    pushFollow(FOLLOW_private__in_modifier402);
                     private_();
 
                     state._fsp--;
@@ -1672,9 +1637,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:78:4: protected_
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:78:4: protected_
                     {
-                    pushFollow(FOLLOW_protected__in_modifier411);
+                    pushFollow(FOLLOW_protected__in_modifier407);
                     protected_();
 
                     state._fsp--;
@@ -1683,9 +1648,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 4 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:79:4: static_
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:79:4: static_
                     {
-                    pushFollow(FOLLOW_static__in_modifier416);
+                    pushFollow(FOLLOW_static__in_modifier412);
                     static_();
 
                     state._fsp--;
@@ -1694,9 +1659,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 5 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:80:4: final_
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:80:4: final_
                     {
-                    pushFollow(FOLLOW_final__in_modifier421);
+                    pushFollow(FOLLOW_final__in_modifier417);
                     final_();
 
                     state._fsp--;
@@ -1705,9 +1670,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 6 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:81:4: transient_
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:81:4: transient_
                     {
-                    pushFollow(FOLLOW_transient__in_modifier426);
+                    pushFollow(FOLLOW_transient__in_modifier422);
                     transient_();
 
                     state._fsp--;
@@ -1723,7 +1688,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 13, modifier_StartIndex); }
         }
         return ;
     }
@@ -1731,29 +1695,27 @@ public class JavaParser extends Parser {
 
 
     // $ANTLR start "class_block"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:85:1: class_block : block_begin ( class_def | static_init | constructor_def | method_def | field_def )* block_end ( semicolon )? ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:85:1: class_block : block_begin ( class_def | static_init | constructor_def | method_def | field_def )* block_end ( semicolon )? ;
     public final void class_block() throws RecognitionException {
-        int class_block_StartIndex = input.index();
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 14) ) { return ; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:86:2: ( block_begin ( class_def | static_init | constructor_def | method_def | field_def )* block_end ( semicolon )? )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:86:4: block_begin ( class_def | static_init | constructor_def | method_def | field_def )* block_end ( semicolon )?
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:86:2: ( block_begin ( class_def | static_init | constructor_def | method_def | field_def )* block_end ( semicolon )? )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:86:4: block_begin ( class_def | static_init | constructor_def | method_def | field_def )* block_end ( semicolon )?
             {
-            pushFollow(FOLLOW_block_begin_in_class_block438);
+            pushFollow(FOLLOW_block_begin_in_class_block434);
             block_begin();
 
             state._fsp--;
             if (state.failed) return ;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:86:16: ( class_def | static_init | constructor_def | method_def | field_def )*
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:86:16: ( class_def | static_init | constructor_def | method_def | field_def )*
             loop35:
             do {
                 int alt35=6;
                 alt35 = dfa35.predict(input);
                 switch (alt35) {
             	case 1 :
-            	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:86:17: class_def
+            	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:86:17: class_def
             	    {
-            	    pushFollow(FOLLOW_class_def_in_class_block441);
+            	    pushFollow(FOLLOW_class_def_in_class_block437);
             	    class_def();
 
             	    state._fsp--;
@@ -1762,9 +1724,9 @@ public class JavaParser extends Parser {
             	    }
             	    break;
             	case 2 :
-            	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:86:29: static_init
+            	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:86:29: static_init
             	    {
-            	    pushFollow(FOLLOW_static_init_in_class_block445);
+            	    pushFollow(FOLLOW_static_init_in_class_block441);
             	    static_init();
 
             	    state._fsp--;
@@ -1773,9 +1735,9 @@ public class JavaParser extends Parser {
             	    }
             	    break;
             	case 3 :
-            	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:86:43: constructor_def
+            	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:86:43: constructor_def
             	    {
-            	    pushFollow(FOLLOW_constructor_def_in_class_block449);
+            	    pushFollow(FOLLOW_constructor_def_in_class_block445);
             	    constructor_def();
 
             	    state._fsp--;
@@ -1784,9 +1746,9 @@ public class JavaParser extends Parser {
             	    }
             	    break;
             	case 4 :
-            	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:86:61: method_def
+            	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:86:61: method_def
             	    {
-            	    pushFollow(FOLLOW_method_def_in_class_block453);
+            	    pushFollow(FOLLOW_method_def_in_class_block449);
             	    method_def();
 
             	    state._fsp--;
@@ -1795,9 +1757,9 @@ public class JavaParser extends Parser {
             	    }
             	    break;
             	case 5 :
-            	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:86:74: field_def
+            	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:86:74: field_def
             	    {
-            	    pushFollow(FOLLOW_field_def_in_class_block457);
+            	    pushFollow(FOLLOW_field_def_in_class_block453);
             	    field_def();
 
             	    state._fsp--;
@@ -1811,12 +1773,12 @@ public class JavaParser extends Parser {
                 }
             } while (true);
 
-            pushFollow(FOLLOW_block_end_in_class_block461);
+            pushFollow(FOLLOW_block_end_in_class_block457);
             block_end();
 
             state._fsp--;
             if (state.failed) return ;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:86:96: ( semicolon )?
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:86:96: ( semicolon )?
             int alt36=2;
             int LA36_0 = input.LA(1);
 
@@ -1825,9 +1787,9 @@ public class JavaParser extends Parser {
             }
             switch (alt36) {
                 case 1 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: semicolon
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: semicolon
                     {
-                    pushFollow(FOLLOW_semicolon_in_class_block463);
+                    pushFollow(FOLLOW_semicolon_in_class_block459);
                     semicolon();
 
                     state._fsp--;
@@ -1847,7 +1809,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 14, class_block_StartIndex); }
         }
         return ;
     }
@@ -1855,29 +1816,27 @@ public class JavaParser extends Parser {
 
 
     // $ANTLR start "enum_block"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:89:1: enum_block : block_begin ( class_def | constructor_def | method_def | field_def | enum_content )* block_end ( semicolon )? ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:89:1: enum_block : block_begin ( class_def | constructor_def | method_def | field_def | enum_content )* block_end ( semicolon )? ;
     public final void enum_block() throws RecognitionException {
-        int enum_block_StartIndex = input.index();
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 15) ) { return ; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:90:2: ( block_begin ( class_def | constructor_def | method_def | field_def | enum_content )* block_end ( semicolon )? )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:90:4: block_begin ( class_def | constructor_def | method_def | field_def | enum_content )* block_end ( semicolon )?
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:90:2: ( block_begin ( class_def | constructor_def | method_def | field_def | enum_content )* block_end ( semicolon )? )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:90:4: block_begin ( class_def | constructor_def | method_def | field_def | enum_content )* block_end ( semicolon )?
             {
-            pushFollow(FOLLOW_block_begin_in_enum_block476);
+            pushFollow(FOLLOW_block_begin_in_enum_block472);
             block_begin();
 
             state._fsp--;
             if (state.failed) return ;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:90:16: ( class_def | constructor_def | method_def | field_def | enum_content )*
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:90:16: ( class_def | constructor_def | method_def | field_def | enum_content )*
             loop37:
             do {
                 int alt37=6;
                 alt37 = dfa37.predict(input);
                 switch (alt37) {
             	case 1 :
-            	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:90:17: class_def
+            	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:90:17: class_def
             	    {
-            	    pushFollow(FOLLOW_class_def_in_enum_block479);
+            	    pushFollow(FOLLOW_class_def_in_enum_block475);
             	    class_def();
 
             	    state._fsp--;
@@ -1886,9 +1845,9 @@ public class JavaParser extends Parser {
             	    }
             	    break;
             	case 2 :
-            	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:90:29: constructor_def
+            	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:90:29: constructor_def
             	    {
-            	    pushFollow(FOLLOW_constructor_def_in_enum_block483);
+            	    pushFollow(FOLLOW_constructor_def_in_enum_block479);
             	    constructor_def();
 
             	    state._fsp--;
@@ -1897,9 +1856,9 @@ public class JavaParser extends Parser {
             	    }
             	    break;
             	case 3 :
-            	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:90:47: method_def
+            	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:90:47: method_def
             	    {
-            	    pushFollow(FOLLOW_method_def_in_enum_block487);
+            	    pushFollow(FOLLOW_method_def_in_enum_block483);
             	    method_def();
 
             	    state._fsp--;
@@ -1908,9 +1867,9 @@ public class JavaParser extends Parser {
             	    }
             	    break;
             	case 4 :
-            	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:90:60: field_def
+            	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:90:60: field_def
             	    {
-            	    pushFollow(FOLLOW_field_def_in_enum_block491);
+            	    pushFollow(FOLLOW_field_def_in_enum_block487);
             	    field_def();
 
             	    state._fsp--;
@@ -1919,9 +1878,9 @@ public class JavaParser extends Parser {
             	    }
             	    break;
             	case 5 :
-            	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:90:72: enum_content
+            	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:90:72: enum_content
             	    {
-            	    pushFollow(FOLLOW_enum_content_in_enum_block495);
+            	    pushFollow(FOLLOW_enum_content_in_enum_block491);
             	    enum_content();
 
             	    state._fsp--;
@@ -1935,12 +1894,12 @@ public class JavaParser extends Parser {
                 }
             } while (true);
 
-            pushFollow(FOLLOW_block_end_in_enum_block499);
+            pushFollow(FOLLOW_block_end_in_enum_block495);
             block_end();
 
             state._fsp--;
             if (state.failed) return ;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:90:97: ( semicolon )?
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:90:97: ( semicolon )?
             int alt38=2;
             int LA38_0 = input.LA(1);
 
@@ -1949,9 +1908,9 @@ public class JavaParser extends Parser {
             }
             switch (alt38) {
                 case 1 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: semicolon
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: semicolon
                     {
-                    pushFollow(FOLLOW_semicolon_in_enum_block501);
+                    pushFollow(FOLLOW_semicolon_in_enum_block497);
                     semicolon();
 
                     state._fsp--;
@@ -1971,7 +1930,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 15, enum_block_StartIndex); }
         }
         return ;
     }
@@ -1979,20 +1937,18 @@ public class JavaParser extends Parser {
 
 
     // $ANTLR start "enum_content"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:93:1: enum_content : id ( open_bracket arguments close_bracket )? ( comma id ( open_bracket arguments close_bracket )? )* semicolon ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:93:1: enum_content : id ( open_bracket arguments close_bracket )? ( comma id ( open_bracket arguments close_bracket )? )* semicolon ;
     public final void enum_content() throws RecognitionException {
-        int enum_content_StartIndex = input.index();
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 16) ) { return ; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:94:2: ( id ( open_bracket arguments close_bracket )? ( comma id ( open_bracket arguments close_bracket )? )* semicolon )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:94:4: id ( open_bracket arguments close_bracket )? ( comma id ( open_bracket arguments close_bracket )? )* semicolon
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:94:2: ( id ( open_bracket arguments close_bracket )? ( comma id ( open_bracket arguments close_bracket )? )* semicolon )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:94:4: id ( open_bracket arguments close_bracket )? ( comma id ( open_bracket arguments close_bracket )? )* semicolon
             {
-            pushFollow(FOLLOW_id_in_enum_content513);
+            pushFollow(FOLLOW_id_in_enum_content509);
             id();
 
             state._fsp--;
             if (state.failed) return ;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:94:7: ( open_bracket arguments close_bracket )?
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:94:7: ( open_bracket arguments close_bracket )?
             int alt39=2;
             int LA39_0 = input.LA(1);
 
@@ -2001,19 +1957,19 @@ public class JavaParser extends Parser {
             }
             switch (alt39) {
                 case 1 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:94:8: open_bracket arguments close_bracket
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:94:8: open_bracket arguments close_bracket
                     {
-                    pushFollow(FOLLOW_open_bracket_in_enum_content516);
+                    pushFollow(FOLLOW_open_bracket_in_enum_content512);
                     open_bracket();
 
                     state._fsp--;
                     if (state.failed) return ;
-                    pushFollow(FOLLOW_arguments_in_enum_content518);
+                    pushFollow(FOLLOW_arguments_in_enum_content514);
                     arguments();
 
                     state._fsp--;
                     if (state.failed) return ;
-                    pushFollow(FOLLOW_close_bracket_in_enum_content520);
+                    pushFollow(FOLLOW_close_bracket_in_enum_content516);
                     close_bracket();
 
                     state._fsp--;
@@ -2024,7 +1980,7 @@ public class JavaParser extends Parser {
 
             }
 
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:94:47: ( comma id ( open_bracket arguments close_bracket )? )*
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:94:47: ( comma id ( open_bracket arguments close_bracket )? )*
             loop41:
             do {
                 int alt41=2;
@@ -2037,19 +1993,19 @@ public class JavaParser extends Parser {
 
                 switch (alt41) {
             	case 1 :
-            	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:94:48: comma id ( open_bracket arguments close_bracket )?
+            	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:94:48: comma id ( open_bracket arguments close_bracket )?
             	    {
-            	    pushFollow(FOLLOW_comma_in_enum_content525);
+            	    pushFollow(FOLLOW_comma_in_enum_content521);
             	    comma();
 
             	    state._fsp--;
             	    if (state.failed) return ;
-            	    pushFollow(FOLLOW_id_in_enum_content527);
+            	    pushFollow(FOLLOW_id_in_enum_content523);
             	    id();
 
             	    state._fsp--;
             	    if (state.failed) return ;
-            	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:94:57: ( open_bracket arguments close_bracket )?
+            	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:94:57: ( open_bracket arguments close_bracket )?
             	    int alt40=2;
             	    int LA40_0 = input.LA(1);
 
@@ -2058,19 +2014,19 @@ public class JavaParser extends Parser {
             	    }
             	    switch (alt40) {
             	        case 1 :
-            	            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:94:58: open_bracket arguments close_bracket
+            	            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:94:58: open_bracket arguments close_bracket
             	            {
-            	            pushFollow(FOLLOW_open_bracket_in_enum_content530);
+            	            pushFollow(FOLLOW_open_bracket_in_enum_content526);
             	            open_bracket();
 
             	            state._fsp--;
             	            if (state.failed) return ;
-            	            pushFollow(FOLLOW_arguments_in_enum_content532);
+            	            pushFollow(FOLLOW_arguments_in_enum_content528);
             	            arguments();
 
             	            state._fsp--;
             	            if (state.failed) return ;
-            	            pushFollow(FOLLOW_close_bracket_in_enum_content534);
+            	            pushFollow(FOLLOW_close_bracket_in_enum_content530);
             	            close_bracket();
 
             	            state._fsp--;
@@ -2090,7 +2046,7 @@ public class JavaParser extends Parser {
                 }
             } while (true);
 
-            pushFollow(FOLLOW_semicolon_in_enum_content540);
+            pushFollow(FOLLOW_semicolon_in_enum_content536);
             semicolon();
 
             state._fsp--;
@@ -2104,7 +2060,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 16, enum_content_StartIndex); }
         }
         return ;
     }
@@ -2112,20 +2067,18 @@ public class JavaParser extends Parser {
 
 
     // $ANTLR start "interface_block"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:97:1: interface_block : block_begin ( ( annotation )* ( modifier )* variable_type id open_bracket argument_def close_bracket semicolon )* block_end ( semicolon )? ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:97:1: interface_block : block_begin ( ( annotation )* ( modifier )* variable_type id open_bracket argument_def close_bracket semicolon )* block_end ( semicolon )? ;
     public final void interface_block() throws RecognitionException {
-        int interface_block_StartIndex = input.index();
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 17) ) { return ; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:98:2: ( block_begin ( ( annotation )* ( modifier )* variable_type id open_bracket argument_def close_bracket semicolon )* block_end ( semicolon )? )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:98:4: block_begin ( ( annotation )* ( modifier )* variable_type id open_bracket argument_def close_bracket semicolon )* block_end ( semicolon )?
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:98:2: ( block_begin ( ( annotation )* ( modifier )* variable_type id open_bracket argument_def close_bracket semicolon )* block_end ( semicolon )? )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:98:4: block_begin ( ( annotation )* ( modifier )* variable_type id open_bracket argument_def close_bracket semicolon )* block_end ( semicolon )?
             {
-            pushFollow(FOLLOW_block_begin_in_interface_block552);
+            pushFollow(FOLLOW_block_begin_in_interface_block548);
             block_begin();
 
             state._fsp--;
             if (state.failed) return ;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:98:16: ( ( annotation )* ( modifier )* variable_type id open_bracket argument_def close_bracket semicolon )*
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:98:16: ( ( annotation )* ( modifier )* variable_type id open_bracket argument_def close_bracket semicolon )*
             loop44:
             do {
                 int alt44=2;
@@ -2138,9 +2091,9 @@ public class JavaParser extends Parser {
 
                 switch (alt44) {
             	case 1 :
-            	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:98:17: ( annotation )* ( modifier )* variable_type id open_bracket argument_def close_bracket semicolon
+            	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:98:17: ( annotation )* ( modifier )* variable_type id open_bracket argument_def close_bracket semicolon
             	    {
-            	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:98:17: ( annotation )*
+            	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:98:17: ( annotation )*
             	    loop42:
             	    do {
             	        int alt42=2;
@@ -2153,9 +2106,9 @@ public class JavaParser extends Parser {
 
             	        switch (alt42) {
             	    	case 1 :
-            	    	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: annotation
+            	    	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: annotation
             	    	    {
-            	    	    pushFollow(FOLLOW_annotation_in_interface_block555);
+            	    	    pushFollow(FOLLOW_annotation_in_interface_block551);
             	    	    annotation();
 
             	    	    state._fsp--;
@@ -2169,7 +2122,7 @@ public class JavaParser extends Parser {
             	        }
             	    } while (true);
 
-            	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:98:29: ( modifier )*
+            	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:98:29: ( modifier )*
             	    loop43:
             	    do {
             	        int alt43=2;
@@ -2182,9 +2135,9 @@ public class JavaParser extends Parser {
 
             	        switch (alt43) {
             	    	case 1 :
-            	    	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: modifier
+            	    	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: modifier
             	    	    {
-            	    	    pushFollow(FOLLOW_modifier_in_interface_block558);
+            	    	    pushFollow(FOLLOW_modifier_in_interface_block554);
             	    	    modifier();
 
             	    	    state._fsp--;
@@ -2198,32 +2151,32 @@ public class JavaParser extends Parser {
             	        }
             	    } while (true);
 
-            	    pushFollow(FOLLOW_variable_type_in_interface_block561);
+            	    pushFollow(FOLLOW_variable_type_in_interface_block557);
             	    variable_type();
 
             	    state._fsp--;
             	    if (state.failed) return ;
-            	    pushFollow(FOLLOW_id_in_interface_block563);
+            	    pushFollow(FOLLOW_id_in_interface_block559);
             	    id();
 
             	    state._fsp--;
             	    if (state.failed) return ;
-            	    pushFollow(FOLLOW_open_bracket_in_interface_block565);
+            	    pushFollow(FOLLOW_open_bracket_in_interface_block561);
             	    open_bracket();
 
             	    state._fsp--;
             	    if (state.failed) return ;
-            	    pushFollow(FOLLOW_argument_def_in_interface_block567);
+            	    pushFollow(FOLLOW_argument_def_in_interface_block563);
             	    argument_def();
 
             	    state._fsp--;
             	    if (state.failed) return ;
-            	    pushFollow(FOLLOW_close_bracket_in_interface_block569);
+            	    pushFollow(FOLLOW_close_bracket_in_interface_block565);
             	    close_bracket();
 
             	    state._fsp--;
             	    if (state.failed) return ;
-            	    pushFollow(FOLLOW_semicolon_in_interface_block571);
+            	    pushFollow(FOLLOW_semicolon_in_interface_block567);
             	    semicolon();
 
             	    state._fsp--;
@@ -2237,12 +2190,12 @@ public class JavaParser extends Parser {
                 }
             } while (true);
 
-            pushFollow(FOLLOW_block_end_in_interface_block575);
+            pushFollow(FOLLOW_block_end_in_interface_block571);
             block_end();
 
             state._fsp--;
             if (state.failed) return ;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:98:118: ( semicolon )?
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:98:118: ( semicolon )?
             int alt45=2;
             int LA45_0 = input.LA(1);
 
@@ -2251,9 +2204,9 @@ public class JavaParser extends Parser {
             }
             switch (alt45) {
                 case 1 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: semicolon
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: semicolon
                     {
-                    pushFollow(FOLLOW_semicolon_in_interface_block577);
+                    pushFollow(FOLLOW_semicolon_in_interface_block573);
                     semicolon();
 
                     state._fsp--;
@@ -2273,7 +2226,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 17, interface_block_StartIndex); }
         }
         return ;
     }
@@ -2281,12 +2233,10 @@ public class JavaParser extends Parser {
 
 
     // $ANTLR start "method_call"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:101:1: method_call : ( method_name open_bracket arguments close_bracket ( dot id ( open_bracket arguments close_bracket )? )* | super_ open_bracket arguments close_bracket ( dot id ( open_bracket arguments close_bracket )? )* | this_ open_bracket arguments close_bracket ( dot id ( open_bracket arguments close_bracket )? )* );
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:101:1: method_call : ( method_name open_bracket arguments close_bracket ( dot id ( open_bracket arguments close_bracket )? )* | super_ open_bracket arguments close_bracket ( dot id ( open_bracket arguments close_bracket )? )* | this_ open_bracket arguments close_bracket ( dot id ( open_bracket arguments close_bracket )? )* );
     public final void method_call() throws RecognitionException {
-        int method_call_StartIndex = input.index();
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 18) ) { return ; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:102:2: ( method_name open_bracket arguments close_bracket ( dot id ( open_bracket arguments close_bracket )? )* | super_ open_bracket arguments close_bracket ( dot id ( open_bracket arguments close_bracket )? )* | this_ open_bracket arguments close_bracket ( dot id ( open_bracket arguments close_bracket )? )* )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:102:2: ( method_name open_bracket arguments close_bracket ( dot id ( open_bracket arguments close_bracket )? )* | super_ open_bracket arguments close_bracket ( dot id ( open_bracket arguments close_bracket )? )* | this_ open_bracket arguments close_bracket ( dot id ( open_bracket arguments close_bracket )? )* )
             int alt52=3;
             switch ( input.LA(1) ) {
             case ID:
@@ -2314,29 +2264,29 @@ public class JavaParser extends Parser {
 
             switch (alt52) {
                 case 1 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:102:4: method_name open_bracket arguments close_bracket ( dot id ( open_bracket arguments close_bracket )? )*
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:102:4: method_name open_bracket arguments close_bracket ( dot id ( open_bracket arguments close_bracket )? )*
                     {
-                    pushFollow(FOLLOW_method_name_in_method_call590);
+                    pushFollow(FOLLOW_method_name_in_method_call586);
                     method_name();
 
                     state._fsp--;
                     if (state.failed) return ;
-                    pushFollow(FOLLOW_open_bracket_in_method_call592);
+                    pushFollow(FOLLOW_open_bracket_in_method_call588);
                     open_bracket();
 
                     state._fsp--;
                     if (state.failed) return ;
-                    pushFollow(FOLLOW_arguments_in_method_call594);
+                    pushFollow(FOLLOW_arguments_in_method_call590);
                     arguments();
 
                     state._fsp--;
                     if (state.failed) return ;
-                    pushFollow(FOLLOW_close_bracket_in_method_call596);
+                    pushFollow(FOLLOW_close_bracket_in_method_call592);
                     close_bracket();
 
                     state._fsp--;
                     if (state.failed) return ;
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:102:53: ( dot id ( open_bracket arguments close_bracket )? )*
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:102:53: ( dot id ( open_bracket arguments close_bracket )? )*
                     loop47:
                     do {
                         int alt47=2;
@@ -2349,19 +2299,19 @@ public class JavaParser extends Parser {
 
                         switch (alt47) {
                     	case 1 :
-                    	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:102:54: dot id ( open_bracket arguments close_bracket )?
+                    	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:102:54: dot id ( open_bracket arguments close_bracket )?
                     	    {
-                    	    pushFollow(FOLLOW_dot_in_method_call599);
+                    	    pushFollow(FOLLOW_dot_in_method_call595);
                     	    dot();
 
                     	    state._fsp--;
                     	    if (state.failed) return ;
-                    	    pushFollow(FOLLOW_id_in_method_call601);
+                    	    pushFollow(FOLLOW_id_in_method_call597);
                     	    id();
 
                     	    state._fsp--;
                     	    if (state.failed) return ;
-                    	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:102:61: ( open_bracket arguments close_bracket )?
+                    	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:102:61: ( open_bracket arguments close_bracket )?
                     	    int alt46=2;
                     	    int LA46_0 = input.LA(1);
 
@@ -2370,19 +2320,19 @@ public class JavaParser extends Parser {
                     	    }
                     	    switch (alt46) {
                     	        case 1 :
-                    	            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:102:62: open_bracket arguments close_bracket
+                    	            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:102:62: open_bracket arguments close_bracket
                     	            {
-                    	            pushFollow(FOLLOW_open_bracket_in_method_call604);
+                    	            pushFollow(FOLLOW_open_bracket_in_method_call600);
                     	            open_bracket();
 
                     	            state._fsp--;
                     	            if (state.failed) return ;
-                    	            pushFollow(FOLLOW_arguments_in_method_call606);
+                    	            pushFollow(FOLLOW_arguments_in_method_call602);
                     	            arguments();
 
                     	            state._fsp--;
                     	            if (state.failed) return ;
-                    	            pushFollow(FOLLOW_close_bracket_in_method_call608);
+                    	            pushFollow(FOLLOW_close_bracket_in_method_call604);
                     	            close_bracket();
 
                     	            state._fsp--;
@@ -2406,29 +2356,29 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:103:4: super_ open_bracket arguments close_bracket ( dot id ( open_bracket arguments close_bracket )? )*
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:103:4: super_ open_bracket arguments close_bracket ( dot id ( open_bracket arguments close_bracket )? )*
                     {
-                    pushFollow(FOLLOW_super__in_method_call617);
+                    pushFollow(FOLLOW_super__in_method_call613);
                     super_();
 
                     state._fsp--;
                     if (state.failed) return ;
-                    pushFollow(FOLLOW_open_bracket_in_method_call619);
+                    pushFollow(FOLLOW_open_bracket_in_method_call615);
                     open_bracket();
 
                     state._fsp--;
                     if (state.failed) return ;
-                    pushFollow(FOLLOW_arguments_in_method_call621);
+                    pushFollow(FOLLOW_arguments_in_method_call617);
                     arguments();
 
                     state._fsp--;
                     if (state.failed) return ;
-                    pushFollow(FOLLOW_close_bracket_in_method_call623);
+                    pushFollow(FOLLOW_close_bracket_in_method_call619);
                     close_bracket();
 
                     state._fsp--;
                     if (state.failed) return ;
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:103:48: ( dot id ( open_bracket arguments close_bracket )? )*
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:103:48: ( dot id ( open_bracket arguments close_bracket )? )*
                     loop49:
                     do {
                         int alt49=2;
@@ -2441,19 +2391,19 @@ public class JavaParser extends Parser {
 
                         switch (alt49) {
                     	case 1 :
-                    	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:103:49: dot id ( open_bracket arguments close_bracket )?
+                    	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:103:49: dot id ( open_bracket arguments close_bracket )?
                     	    {
-                    	    pushFollow(FOLLOW_dot_in_method_call626);
+                    	    pushFollow(FOLLOW_dot_in_method_call622);
                     	    dot();
 
                     	    state._fsp--;
                     	    if (state.failed) return ;
-                    	    pushFollow(FOLLOW_id_in_method_call628);
+                    	    pushFollow(FOLLOW_id_in_method_call624);
                     	    id();
 
                     	    state._fsp--;
                     	    if (state.failed) return ;
-                    	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:103:56: ( open_bracket arguments close_bracket )?
+                    	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:103:56: ( open_bracket arguments close_bracket )?
                     	    int alt48=2;
                     	    int LA48_0 = input.LA(1);
 
@@ -2462,19 +2412,19 @@ public class JavaParser extends Parser {
                     	    }
                     	    switch (alt48) {
                     	        case 1 :
-                    	            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:103:57: open_bracket arguments close_bracket
+                    	            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:103:57: open_bracket arguments close_bracket
                     	            {
-                    	            pushFollow(FOLLOW_open_bracket_in_method_call631);
+                    	            pushFollow(FOLLOW_open_bracket_in_method_call627);
                     	            open_bracket();
 
                     	            state._fsp--;
                     	            if (state.failed) return ;
-                    	            pushFollow(FOLLOW_arguments_in_method_call633);
+                    	            pushFollow(FOLLOW_arguments_in_method_call629);
                     	            arguments();
 
                     	            state._fsp--;
                     	            if (state.failed) return ;
-                    	            pushFollow(FOLLOW_close_bracket_in_method_call635);
+                    	            pushFollow(FOLLOW_close_bracket_in_method_call631);
                     	            close_bracket();
 
                     	            state._fsp--;
@@ -2498,29 +2448,29 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:104:4: this_ open_bracket arguments close_bracket ( dot id ( open_bracket arguments close_bracket )? )*
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:104:4: this_ open_bracket arguments close_bracket ( dot id ( open_bracket arguments close_bracket )? )*
                     {
-                    pushFollow(FOLLOW_this__in_method_call644);
+                    pushFollow(FOLLOW_this__in_method_call640);
                     this_();
 
                     state._fsp--;
                     if (state.failed) return ;
-                    pushFollow(FOLLOW_open_bracket_in_method_call646);
+                    pushFollow(FOLLOW_open_bracket_in_method_call642);
                     open_bracket();
 
                     state._fsp--;
                     if (state.failed) return ;
-                    pushFollow(FOLLOW_arguments_in_method_call648);
+                    pushFollow(FOLLOW_arguments_in_method_call644);
                     arguments();
 
                     state._fsp--;
                     if (state.failed) return ;
-                    pushFollow(FOLLOW_close_bracket_in_method_call650);
+                    pushFollow(FOLLOW_close_bracket_in_method_call646);
                     close_bracket();
 
                     state._fsp--;
                     if (state.failed) return ;
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:104:47: ( dot id ( open_bracket arguments close_bracket )? )*
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:104:47: ( dot id ( open_bracket arguments close_bracket )? )*
                     loop51:
                     do {
                         int alt51=2;
@@ -2533,19 +2483,19 @@ public class JavaParser extends Parser {
 
                         switch (alt51) {
                     	case 1 :
-                    	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:104:48: dot id ( open_bracket arguments close_bracket )?
+                    	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:104:48: dot id ( open_bracket arguments close_bracket )?
                     	    {
-                    	    pushFollow(FOLLOW_dot_in_method_call653);
+                    	    pushFollow(FOLLOW_dot_in_method_call649);
                     	    dot();
 
                     	    state._fsp--;
                     	    if (state.failed) return ;
-                    	    pushFollow(FOLLOW_id_in_method_call655);
+                    	    pushFollow(FOLLOW_id_in_method_call651);
                     	    id();
 
                     	    state._fsp--;
                     	    if (state.failed) return ;
-                    	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:104:55: ( open_bracket arguments close_bracket )?
+                    	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:104:55: ( open_bracket arguments close_bracket )?
                     	    int alt50=2;
                     	    int LA50_0 = input.LA(1);
 
@@ -2554,19 +2504,19 @@ public class JavaParser extends Parser {
                     	    }
                     	    switch (alt50) {
                     	        case 1 :
-                    	            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:104:56: open_bracket arguments close_bracket
+                    	            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:104:56: open_bracket arguments close_bracket
                     	            {
-                    	            pushFollow(FOLLOW_open_bracket_in_method_call658);
+                    	            pushFollow(FOLLOW_open_bracket_in_method_call654);
                     	            open_bracket();
 
                     	            state._fsp--;
                     	            if (state.failed) return ;
-                    	            pushFollow(FOLLOW_arguments_in_method_call660);
+                    	            pushFollow(FOLLOW_arguments_in_method_call656);
                     	            arguments();
 
                     	            state._fsp--;
                     	            if (state.failed) return ;
-                    	            pushFollow(FOLLOW_close_bracket_in_method_call662);
+                    	            pushFollow(FOLLOW_close_bracket_in_method_call658);
                     	            close_bracket();
 
                     	            state._fsp--;
@@ -2597,7 +2547,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 18, method_call_StartIndex); }
         }
         return ;
     }
@@ -2605,20 +2554,18 @@ public class JavaParser extends Parser {
 
 
     // $ANTLR start "annotation"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:107:1: annotation : annotation_name ( open_bracket value ( comma value )* close_bracket )? ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:107:1: annotation : annotation_name ( open_bracket value ( comma value )* close_bracket )? ;
     public final void annotation() throws RecognitionException {
-        int annotation_StartIndex = input.index();
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 19) ) { return ; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:108:2: ( annotation_name ( open_bracket value ( comma value )* close_bracket )? )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:108:4: annotation_name ( open_bracket value ( comma value )* close_bracket )?
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:108:2: ( annotation_name ( open_bracket value ( comma value )* close_bracket )? )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:108:4: annotation_name ( open_bracket value ( comma value )* close_bracket )?
             {
-            pushFollow(FOLLOW_annotation_name_in_annotation677);
+            pushFollow(FOLLOW_annotation_name_in_annotation673);
             annotation_name();
 
             state._fsp--;
             if (state.failed) return ;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:108:20: ( open_bracket value ( comma value )* close_bracket )?
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:108:20: ( open_bracket value ( comma value )* close_bracket )?
             int alt54=2;
             int LA54_0 = input.LA(1);
 
@@ -2627,19 +2574,19 @@ public class JavaParser extends Parser {
             }
             switch (alt54) {
                 case 1 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:108:21: open_bracket value ( comma value )* close_bracket
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:108:21: open_bracket value ( comma value )* close_bracket
                     {
-                    pushFollow(FOLLOW_open_bracket_in_annotation680);
+                    pushFollow(FOLLOW_open_bracket_in_annotation676);
                     open_bracket();
 
                     state._fsp--;
                     if (state.failed) return ;
-                    pushFollow(FOLLOW_value_in_annotation682);
+                    pushFollow(FOLLOW_value_in_annotation678);
                     value();
 
                     state._fsp--;
                     if (state.failed) return ;
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:108:40: ( comma value )*
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:108:40: ( comma value )*
                     loop53:
                     do {
                         int alt53=2;
@@ -2652,14 +2599,14 @@ public class JavaParser extends Parser {
 
                         switch (alt53) {
                     	case 1 :
-                    	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:108:41: comma value
+                    	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:108:41: comma value
                     	    {
-                    	    pushFollow(FOLLOW_comma_in_annotation685);
+                    	    pushFollow(FOLLOW_comma_in_annotation681);
                     	    comma();
 
                     	    state._fsp--;
                     	    if (state.failed) return ;
-                    	    pushFollow(FOLLOW_value_in_annotation687);
+                    	    pushFollow(FOLLOW_value_in_annotation683);
                     	    value();
 
                     	    state._fsp--;
@@ -2673,7 +2620,7 @@ public class JavaParser extends Parser {
                         }
                     } while (true);
 
-                    pushFollow(FOLLOW_close_bracket_in_annotation691);
+                    pushFollow(FOLLOW_close_bracket_in_annotation687);
                     close_bracket();
 
                     state._fsp--;
@@ -2693,7 +2640,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 19, annotation_StartIndex); }
         }
         return ;
     }
@@ -2701,24 +2647,22 @@ public class JavaParser extends Parser {
 
 
     // $ANTLR start "generic"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:111:1: generic : LT ( id ( comma id )* ) GT ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:111:1: generic : LT ( id ( comma id )* ) GT ;
     public final void generic() throws RecognitionException {
-        int generic_StartIndex = input.index();
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 20) ) { return ; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:111:9: ( LT ( id ( comma id )* ) GT )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:111:11: LT ( id ( comma id )* ) GT
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:111:9: ( LT ( id ( comma id )* ) GT )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:111:11: LT ( id ( comma id )* ) GT
             {
-            match(input,LT,FOLLOW_LT_in_generic703); if (state.failed) return ;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:111:14: ( id ( comma id )* )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:111:15: id ( comma id )*
+            match(input,LT,FOLLOW_LT_in_generic699); if (state.failed) return ;
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:111:14: ( id ( comma id )* )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:111:15: id ( comma id )*
             {
-            pushFollow(FOLLOW_id_in_generic706);
+            pushFollow(FOLLOW_id_in_generic702);
             id();
 
             state._fsp--;
             if (state.failed) return ;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:111:18: ( comma id )*
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:111:18: ( comma id )*
             loop55:
             do {
                 int alt55=2;
@@ -2731,14 +2675,14 @@ public class JavaParser extends Parser {
 
                 switch (alt55) {
             	case 1 :
-            	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:111:19: comma id
+            	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:111:19: comma id
             	    {
-            	    pushFollow(FOLLOW_comma_in_generic709);
+            	    pushFollow(FOLLOW_comma_in_generic705);
             	    comma();
 
             	    state._fsp--;
             	    if (state.failed) return ;
-            	    pushFollow(FOLLOW_id_in_generic711);
+            	    pushFollow(FOLLOW_id_in_generic707);
             	    id();
 
             	    state._fsp--;
@@ -2755,7 +2699,7 @@ public class JavaParser extends Parser {
 
             }
 
-            match(input,GT,FOLLOW_GT_in_generic716); if (state.failed) return ;
+            match(input,GT,FOLLOW_GT_in_generic712); if (state.failed) return ;
             if ( state.backtracking==0 ) {
               helper.registerOperator("<>");
             }
@@ -2768,7 +2712,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 20, generic_StartIndex); }
         }
         return ;
     }
@@ -2776,19 +2719,17 @@ public class JavaParser extends Parser {
 
 
     // $ANTLR start "value"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:115:1: value : ( ( cast )? ( left_unary )? single_value ( right_unary )? ( binary_operator value )? ( question_ value colon value )? | open_bracket value close_bracket ( binary_operator value )? );
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:115:1: value : ( ( cast )? ( left_unary )? single_value ( right_unary )? ( binary_operator value )? ( question_ value colon value )? | open_bracket value close_bracket ( binary_operator value )? );
     public final void value() throws RecognitionException {
-        int value_StartIndex = input.index();
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 21) ) { return ; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:115:7: ( ( cast )? ( left_unary )? single_value ( right_unary )? ( binary_operator value )? ( question_ value colon value )? | open_bracket value close_bracket ( binary_operator value )? )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:115:7: ( ( cast )? ( left_unary )? single_value ( right_unary )? ( binary_operator value )? ( question_ value colon value )? | open_bracket value close_bracket ( binary_operator value )? )
             int alt62=2;
             alt62 = dfa62.predict(input);
             switch (alt62) {
                 case 1 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:115:9: ( cast )? ( left_unary )? single_value ( right_unary )? ( binary_operator value )? ( question_ value colon value )?
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:115:9: ( cast )? ( left_unary )? single_value ( right_unary )? ( binary_operator value )? ( question_ value colon value )?
                     {
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:115:9: ( cast )?
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:115:9: ( cast )?
                     int alt56=2;
                     int LA56_0 = input.LA(1);
 
@@ -2797,9 +2738,9 @@ public class JavaParser extends Parser {
                     }
                     switch (alt56) {
                         case 1 :
-                            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: cast
+                            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: cast
                             {
-                            pushFollow(FOLLOW_cast_in_value729);
+                            pushFollow(FOLLOW_cast_in_value725);
                             cast();
 
                             state._fsp--;
@@ -2810,7 +2751,7 @@ public class JavaParser extends Parser {
 
                     }
 
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:115:15: ( left_unary )?
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:115:15: ( left_unary )?
                     int alt57=2;
                     switch ( input.LA(1) ) {
                         case INC:
@@ -2862,9 +2803,9 @@ public class JavaParser extends Parser {
 
                     switch (alt57) {
                         case 1 :
-                            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: left_unary
+                            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: left_unary
                             {
-                            pushFollow(FOLLOW_left_unary_in_value732);
+                            pushFollow(FOLLOW_left_unary_in_value728);
                             left_unary();
 
                             state._fsp--;
@@ -2875,12 +2816,12 @@ public class JavaParser extends Parser {
 
                     }
 
-                    pushFollow(FOLLOW_single_value_in_value735);
+                    pushFollow(FOLLOW_single_value_in_value731);
                     single_value();
 
                     state._fsp--;
                     if (state.failed) return ;
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:115:40: ( right_unary )?
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:115:40: ( right_unary )?
                     int alt58=2;
                     int LA58_0 = input.LA(1);
 
@@ -2889,9 +2830,9 @@ public class JavaParser extends Parser {
                     }
                     switch (alt58) {
                         case 1 :
-                            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: right_unary
+                            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: right_unary
                             {
-                            pushFollow(FOLLOW_right_unary_in_value737);
+                            pushFollow(FOLLOW_right_unary_in_value733);
                             right_unary();
 
                             state._fsp--;
@@ -2902,7 +2843,7 @@ public class JavaParser extends Parser {
 
                     }
 
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:115:53: ( binary_operator value )?
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:115:53: ( binary_operator value )?
                     int alt59=2;
                     int LA59_0 = input.LA(1);
 
@@ -2911,14 +2852,14 @@ public class JavaParser extends Parser {
                     }
                     switch (alt59) {
                         case 1 :
-                            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:115:54: binary_operator value
+                            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:115:54: binary_operator value
                             {
-                            pushFollow(FOLLOW_binary_operator_in_value741);
+                            pushFollow(FOLLOW_binary_operator_in_value737);
                             binary_operator();
 
                             state._fsp--;
                             if (state.failed) return ;
-                            pushFollow(FOLLOW_value_in_value743);
+                            pushFollow(FOLLOW_value_in_value739);
                             value();
 
                             state._fsp--;
@@ -2929,7 +2870,7 @@ public class JavaParser extends Parser {
 
                     }
 
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:115:78: ( question_ value colon value )?
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:115:78: ( question_ value colon value )?
                     int alt60=2;
                     int LA60_0 = input.LA(1);
 
@@ -2942,24 +2883,24 @@ public class JavaParser extends Parser {
                     }
                     switch (alt60) {
                         case 1 :
-                            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:115:79: question_ value colon value
+                            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:115:79: question_ value colon value
                             {
-                            pushFollow(FOLLOW_question__in_value748);
+                            pushFollow(FOLLOW_question__in_value744);
                             question_();
 
                             state._fsp--;
                             if (state.failed) return ;
-                            pushFollow(FOLLOW_value_in_value750);
+                            pushFollow(FOLLOW_value_in_value746);
                             value();
 
                             state._fsp--;
                             if (state.failed) return ;
-                            pushFollow(FOLLOW_colon_in_value752);
+                            pushFollow(FOLLOW_colon_in_value748);
                             colon();
 
                             state._fsp--;
                             if (state.failed) return ;
-                            pushFollow(FOLLOW_value_in_value754);
+                            pushFollow(FOLLOW_value_in_value750);
                             value();
 
                             state._fsp--;
@@ -2974,24 +2915,24 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:116:4: open_bracket value close_bracket ( binary_operator value )?
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:116:4: open_bracket value close_bracket ( binary_operator value )?
                     {
-                    pushFollow(FOLLOW_open_bracket_in_value761);
+                    pushFollow(FOLLOW_open_bracket_in_value757);
                     open_bracket();
 
                     state._fsp--;
                     if (state.failed) return ;
-                    pushFollow(FOLLOW_value_in_value763);
+                    pushFollow(FOLLOW_value_in_value759);
                     value();
 
                     state._fsp--;
                     if (state.failed) return ;
-                    pushFollow(FOLLOW_close_bracket_in_value765);
+                    pushFollow(FOLLOW_close_bracket_in_value761);
                     close_bracket();
 
                     state._fsp--;
                     if (state.failed) return ;
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:116:37: ( binary_operator value )?
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:116:37: ( binary_operator value )?
                     int alt61=2;
                     int LA61_0 = input.LA(1);
 
@@ -3000,14 +2941,14 @@ public class JavaParser extends Parser {
                     }
                     switch (alt61) {
                         case 1 :
-                            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:116:38: binary_operator value
+                            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:116:38: binary_operator value
                             {
-                            pushFollow(FOLLOW_binary_operator_in_value768);
+                            pushFollow(FOLLOW_binary_operator_in_value764);
                             binary_operator();
 
                             state._fsp--;
                             if (state.failed) return ;
-                            pushFollow(FOLLOW_value_in_value770);
+                            pushFollow(FOLLOW_value_in_value766);
                             value();
 
                             state._fsp--;
@@ -3029,7 +2970,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 21, value_StartIndex); }
         }
         return ;
     }
@@ -3037,19 +2977,17 @@ public class JavaParser extends Parser {
 
 
     // $ANTLR start "single_value"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:119:1: single_value : ( constant | class_name dot class_ | variable_name | method_call | new_class | this_ | super_ );
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:119:1: single_value : ( constant | class_name dot class_ | variable_name | method_call | new_class | this_ | super_ );
     public final void single_value() throws RecognitionException {
-        int single_value_StartIndex = input.index();
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 22) ) { return ; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:120:2: ( constant | class_name dot class_ | variable_name | method_call | new_class | this_ | super_ )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:120:2: ( constant | class_name dot class_ | variable_name | method_call | new_class | this_ | super_ )
             int alt63=7;
             alt63 = dfa63.predict(input);
             switch (alt63) {
                 case 1 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:120:4: constant
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:120:4: constant
                     {
-                    pushFollow(FOLLOW_constant_in_single_value783);
+                    pushFollow(FOLLOW_constant_in_single_value779);
                     constant();
 
                     state._fsp--;
@@ -3058,19 +2996,19 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:121:4: class_name dot class_
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:121:4: class_name dot class_
                     {
-                    pushFollow(FOLLOW_class_name_in_single_value788);
+                    pushFollow(FOLLOW_class_name_in_single_value784);
                     class_name();
 
                     state._fsp--;
                     if (state.failed) return ;
-                    pushFollow(FOLLOW_dot_in_single_value790);
+                    pushFollow(FOLLOW_dot_in_single_value786);
                     dot();
 
                     state._fsp--;
                     if (state.failed) return ;
-                    pushFollow(FOLLOW_class__in_single_value792);
+                    pushFollow(FOLLOW_class__in_single_value788);
                     class_();
 
                     state._fsp--;
@@ -3079,9 +3017,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:122:4: variable_name
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:122:4: variable_name
                     {
-                    pushFollow(FOLLOW_variable_name_in_single_value797);
+                    pushFollow(FOLLOW_variable_name_in_single_value793);
                     variable_name();
 
                     state._fsp--;
@@ -3090,9 +3028,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 4 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:123:4: method_call
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:123:4: method_call
                     {
-                    pushFollow(FOLLOW_method_call_in_single_value802);
+                    pushFollow(FOLLOW_method_call_in_single_value798);
                     method_call();
 
                     state._fsp--;
@@ -3101,9 +3039,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 5 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:124:4: new_class
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:124:4: new_class
                     {
-                    pushFollow(FOLLOW_new_class_in_single_value807);
+                    pushFollow(FOLLOW_new_class_in_single_value803);
                     new_class();
 
                     state._fsp--;
@@ -3112,9 +3050,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 6 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:125:4: this_
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:125:4: this_
                     {
-                    pushFollow(FOLLOW_this__in_single_value812);
+                    pushFollow(FOLLOW_this__in_single_value808);
                     this_();
 
                     state._fsp--;
@@ -3123,9 +3061,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 7 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:126:4: super_
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:126:4: super_
                     {
-                    pushFollow(FOLLOW_super__in_single_value817);
+                    pushFollow(FOLLOW_super__in_single_value813);
                     super_();
 
                     state._fsp--;
@@ -3141,7 +3079,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 22, single_value_StartIndex); }
         }
         return ;
     }
@@ -3149,12 +3086,10 @@ public class JavaParser extends Parser {
 
 
     // $ANTLR start "constant"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:129:1: constant : ( hex_long_const | hex_const | long_const | int_const | string_const | float_const | char_const | null_const | boolean_const | array_const );
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:129:1: constant : ( hex_long_const | hex_const | long_const | int_const | string_const | float_const | char_const | null_const | boolean_const | array_const );
     public final void constant() throws RecognitionException {
-        int constant_StartIndex = input.index();
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 23) ) { return ; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:129:9: ( hex_long_const | hex_const | long_const | int_const | string_const | float_const | char_const | null_const | boolean_const | array_const )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:129:9: ( hex_long_const | hex_const | long_const | int_const | string_const | float_const | char_const | null_const | boolean_const | array_const )
             int alt64=10;
             switch ( input.LA(1) ) {
             case HEX_LONG_CONST:
@@ -3243,9 +3178,9 @@ public class JavaParser extends Parser {
 
             switch (alt64) {
                 case 1 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:129:11: hex_long_const
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:129:11: hex_long_const
                     {
-                    pushFollow(FOLLOW_hex_long_const_in_constant826);
+                    pushFollow(FOLLOW_hex_long_const_in_constant822);
                     hex_long_const();
 
                     state._fsp--;
@@ -3254,9 +3189,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:130:4: hex_const
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:130:4: hex_const
                     {
-                    pushFollow(FOLLOW_hex_const_in_constant831);
+                    pushFollow(FOLLOW_hex_const_in_constant827);
                     hex_const();
 
                     state._fsp--;
@@ -3265,9 +3200,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:131:4: long_const
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:131:4: long_const
                     {
-                    pushFollow(FOLLOW_long_const_in_constant836);
+                    pushFollow(FOLLOW_long_const_in_constant832);
                     long_const();
 
                     state._fsp--;
@@ -3276,9 +3211,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 4 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:132:4: int_const
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:132:4: int_const
                     {
-                    pushFollow(FOLLOW_int_const_in_constant841);
+                    pushFollow(FOLLOW_int_const_in_constant837);
                     int_const();
 
                     state._fsp--;
@@ -3287,9 +3222,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 5 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:133:4: string_const
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:133:4: string_const
                     {
-                    pushFollow(FOLLOW_string_const_in_constant846);
+                    pushFollow(FOLLOW_string_const_in_constant842);
                     string_const();
 
                     state._fsp--;
@@ -3298,9 +3233,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 6 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:134:4: float_const
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:134:4: float_const
                     {
-                    pushFollow(FOLLOW_float_const_in_constant851);
+                    pushFollow(FOLLOW_float_const_in_constant847);
                     float_const();
 
                     state._fsp--;
@@ -3309,9 +3244,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 7 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:135:4: char_const
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:135:4: char_const
                     {
-                    pushFollow(FOLLOW_char_const_in_constant856);
+                    pushFollow(FOLLOW_char_const_in_constant852);
                     char_const();
 
                     state._fsp--;
@@ -3320,9 +3255,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 8 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:136:4: null_const
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:136:4: null_const
                     {
-                    pushFollow(FOLLOW_null_const_in_constant861);
+                    pushFollow(FOLLOW_null_const_in_constant857);
                     null_const();
 
                     state._fsp--;
@@ -3331,9 +3266,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 9 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:137:4: boolean_const
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:137:4: boolean_const
                     {
-                    pushFollow(FOLLOW_boolean_const_in_constant866);
+                    pushFollow(FOLLOW_boolean_const_in_constant862);
                     boolean_const();
 
                     state._fsp--;
@@ -3342,9 +3277,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 10 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:138:4: array_const
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:138:4: array_const
                     {
-                    pushFollow(FOLLOW_array_const_in_constant871);
+                    pushFollow(FOLLOW_array_const_in_constant867);
                     array_const();
 
                     state._fsp--;
@@ -3360,7 +3295,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 23, constant_StartIndex); }
         }
         return ;
     }
@@ -3368,20 +3302,18 @@ public class JavaParser extends Parser {
 
 
     // $ANTLR start "new_class"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:141:1: new_class : new_ ( class_name ( generic )? | primitive ) ( array array_const )? ( open_bracket arguments close_bracket )? ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:141:1: new_class : new_ ( class_name ( generic )? | primitive ) ( array array_const )? ( open_bracket arguments close_bracket )? ;
     public final void new_class() throws RecognitionException {
-        int new_class_StartIndex = input.index();
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 24) ) { return ; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:142:2: ( new_ ( class_name ( generic )? | primitive ) ( array array_const )? ( open_bracket arguments close_bracket )? )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:142:4: new_ ( class_name ( generic )? | primitive ) ( array array_const )? ( open_bracket arguments close_bracket )?
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:142:2: ( new_ ( class_name ( generic )? | primitive ) ( array array_const )? ( open_bracket arguments close_bracket )? )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:142:4: new_ ( class_name ( generic )? | primitive ) ( array array_const )? ( open_bracket arguments close_bracket )?
             {
-            pushFollow(FOLLOW_new__in_new_class883);
+            pushFollow(FOLLOW_new__in_new_class879);
             new_();
 
             state._fsp--;
             if (state.failed) return ;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:142:9: ( class_name ( generic )? | primitive )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:142:9: ( class_name ( generic )? | primitive )
             int alt66=2;
             int LA66_0 = input.LA(1);
 
@@ -3400,21 +3332,21 @@ public class JavaParser extends Parser {
             }
             switch (alt66) {
                 case 1 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:142:10: class_name ( generic )?
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:142:10: class_name ( generic )?
                     {
-                    pushFollow(FOLLOW_class_name_in_new_class886);
+                    pushFollow(FOLLOW_class_name_in_new_class882);
                     class_name();
 
                     state._fsp--;
                     if (state.failed) return ;
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:142:21: ( generic )?
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:142:21: ( generic )?
                     int alt65=2;
                     alt65 = dfa65.predict(input);
                     switch (alt65) {
                         case 1 :
-                            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: generic
+                            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: generic
                             {
-                            pushFollow(FOLLOW_generic_in_new_class888);
+                            pushFollow(FOLLOW_generic_in_new_class884);
                             generic();
 
                             state._fsp--;
@@ -3429,9 +3361,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:142:32: primitive
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:142:32: primitive
                     {
-                    pushFollow(FOLLOW_primitive_in_new_class893);
+                    pushFollow(FOLLOW_primitive_in_new_class889);
                     primitive();
 
                     state._fsp--;
@@ -3442,7 +3374,7 @@ public class JavaParser extends Parser {
 
             }
 
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:142:43: ( array array_const )?
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:142:43: ( array array_const )?
             int alt67=2;
             int LA67_0 = input.LA(1);
 
@@ -3451,14 +3383,14 @@ public class JavaParser extends Parser {
             }
             switch (alt67) {
                 case 1 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:142:44: array array_const
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:142:44: array array_const
                     {
-                    pushFollow(FOLLOW_array_in_new_class897);
+                    pushFollow(FOLLOW_array_in_new_class893);
                     array();
 
                     state._fsp--;
                     if (state.failed) return ;
-                    pushFollow(FOLLOW_array_const_in_new_class899);
+                    pushFollow(FOLLOW_array_const_in_new_class895);
                     array_const();
 
                     state._fsp--;
@@ -3469,7 +3401,7 @@ public class JavaParser extends Parser {
 
             }
 
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:142:64: ( open_bracket arguments close_bracket )?
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:142:64: ( open_bracket arguments close_bracket )?
             int alt68=2;
             int LA68_0 = input.LA(1);
 
@@ -3478,19 +3410,19 @@ public class JavaParser extends Parser {
             }
             switch (alt68) {
                 case 1 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:142:65: open_bracket arguments close_bracket
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:142:65: open_bracket arguments close_bracket
                     {
-                    pushFollow(FOLLOW_open_bracket_in_new_class904);
+                    pushFollow(FOLLOW_open_bracket_in_new_class900);
                     open_bracket();
 
                     state._fsp--;
                     if (state.failed) return ;
-                    pushFollow(FOLLOW_arguments_in_new_class906);
+                    pushFollow(FOLLOW_arguments_in_new_class902);
                     arguments();
 
                     state._fsp--;
                     if (state.failed) return ;
-                    pushFollow(FOLLOW_close_bracket_in_new_class908);
+                    pushFollow(FOLLOW_close_bracket_in_new_class904);
                     close_bracket();
 
                     state._fsp--;
@@ -3510,7 +3442,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 24, new_class_StartIndex); }
         }
         return ;
     }
@@ -3518,15 +3449,13 @@ public class JavaParser extends Parser {
 
 
     // $ANTLR start "arguments"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:145:1: arguments : ( value ( comma value )* )? ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:145:1: arguments : ( value ( comma value )* )? ;
     public final void arguments() throws RecognitionException {
-        int arguments_StartIndex = input.index();
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 25) ) { return ; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:146:2: ( ( value ( comma value )* )? )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:146:4: ( value ( comma value )* )?
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:146:2: ( ( value ( comma value )* )? )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:146:4: ( value ( comma value )* )?
             {
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:146:4: ( value ( comma value )* )?
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:146:4: ( value ( comma value )* )?
             int alt70=2;
             int LA70_0 = input.LA(1);
 
@@ -3542,14 +3471,14 @@ public class JavaParser extends Parser {
             }
             switch (alt70) {
                 case 1 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:146:5: value ( comma value )*
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:146:5: value ( comma value )*
                     {
-                    pushFollow(FOLLOW_value_in_arguments924);
+                    pushFollow(FOLLOW_value_in_arguments920);
                     value();
 
                     state._fsp--;
                     if (state.failed) return ;
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:146:11: ( comma value )*
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:146:11: ( comma value )*
                     loop69:
                     do {
                         int alt69=2;
@@ -3562,14 +3491,14 @@ public class JavaParser extends Parser {
 
                         switch (alt69) {
                     	case 1 :
-                    	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:146:12: comma value
+                    	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:146:12: comma value
                     	    {
-                    	    pushFollow(FOLLOW_comma_in_arguments927);
+                    	    pushFollow(FOLLOW_comma_in_arguments923);
                     	    comma();
 
                     	    state._fsp--;
                     	    if (state.failed) return ;
-                    	    pushFollow(FOLLOW_value_in_arguments929);
+                    	    pushFollow(FOLLOW_value_in_arguments925);
                     	    value();
 
                     	    state._fsp--;
@@ -3598,7 +3527,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 25, arguments_StartIndex); }
         }
         return ;
     }
@@ -3606,12 +3534,10 @@ public class JavaParser extends Parser {
 
 
     // $ANTLR start "code"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:149:1: code : ( statement | block_begin ( code )* block_end ( semicolon )? );
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:149:1: code : ( statement | block_begin ( code )* block_end ( semicolon )? );
     public final void code() throws RecognitionException {
-        int code_StartIndex = input.index();
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 26) ) { return ; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:149:6: ( statement | block_begin ( code )* block_end ( semicolon )? )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:149:6: ( statement | block_begin ( code )* block_end ( semicolon )? )
             int alt73=2;
             int LA73_0 = input.LA(1);
 
@@ -3630,9 +3556,9 @@ public class JavaParser extends Parser {
             }
             switch (alt73) {
                 case 1 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:149:8: statement
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:149:8: statement
                     {
-                    pushFollow(FOLLOW_statement_in_code943);
+                    pushFollow(FOLLOW_statement_in_code939);
                     statement();
 
                     state._fsp--;
@@ -3641,14 +3567,14 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:150:4: block_begin ( code )* block_end ( semicolon )?
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:150:4: block_begin ( code )* block_end ( semicolon )?
                     {
-                    pushFollow(FOLLOW_block_begin_in_code948);
+                    pushFollow(FOLLOW_block_begin_in_code944);
                     block_begin();
 
                     state._fsp--;
                     if (state.failed) return ;
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:150:16: ( code )*
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:150:16: ( code )*
                     loop71:
                     do {
                         int alt71=2;
@@ -3661,9 +3587,9 @@ public class JavaParser extends Parser {
 
                         switch (alt71) {
                     	case 1 :
-                    	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: code
+                    	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: code
                     	    {
-                    	    pushFollow(FOLLOW_code_in_code950);
+                    	    pushFollow(FOLLOW_code_in_code946);
                     	    code();
 
                     	    state._fsp--;
@@ -3677,12 +3603,12 @@ public class JavaParser extends Parser {
                         }
                     } while (true);
 
-                    pushFollow(FOLLOW_block_end_in_code953);
+                    pushFollow(FOLLOW_block_end_in_code949);
                     block_end();
 
                     state._fsp--;
                     if (state.failed) return ;
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:150:32: ( semicolon )?
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:150:32: ( semicolon )?
                     int alt72=2;
                     int LA72_0 = input.LA(1);
 
@@ -3695,9 +3621,9 @@ public class JavaParser extends Parser {
                     }
                     switch (alt72) {
                         case 1 :
-                            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: semicolon
+                            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: semicolon
                             {
-                            pushFollow(FOLLOW_semicolon_in_code955);
+                            pushFollow(FOLLOW_semicolon_in_code951);
                             semicolon();
 
                             state._fsp--;
@@ -3719,7 +3645,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 26, code_StartIndex); }
         }
         return ;
     }
@@ -3727,19 +3652,17 @@ public class JavaParser extends Parser {
 
 
     // $ANTLR start "statement"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:153:1: statement : ( label | variable_assignment semicolon | variable_def semicolon | method_call semicolon | semicolon | return_statement | continue_ | break_ | ( left_unary )? variable_name ( right_unary )? | for_loop | while_loop | do_loop | switch_case | if_else | try_catch | throw_ value semicolon );
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:153:1: statement : ( label | variable_assignment semicolon | variable_def semicolon | method_call semicolon | semicolon | return_statement | continue_ | break_ | for_loop | while_loop | do_loop semicolon | switch_case | if_else | try_catch | throw_ value semicolon | ( left_unary )? variable_name ( right_unary )? );
     public final void statement() throws RecognitionException {
-        int statement_StartIndex = input.index();
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 27) ) { return ; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:154:2: ( label | variable_assignment semicolon | variable_def semicolon | method_call semicolon | semicolon | return_statement | continue_ | break_ | ( left_unary )? variable_name ( right_unary )? | for_loop | while_loop | do_loop | switch_case | if_else | try_catch | throw_ value semicolon )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:154:2: ( label | variable_assignment semicolon | variable_def semicolon | method_call semicolon | semicolon | return_statement | continue_ | break_ | for_loop | while_loop | do_loop semicolon | switch_case | if_else | try_catch | throw_ value semicolon | ( left_unary )? variable_name ( right_unary )? )
             int alt76=16;
             alt76 = dfa76.predict(input);
             switch (alt76) {
                 case 1 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:154:4: label
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:154:4: label
                     {
-                    pushFollow(FOLLOW_label_in_statement968);
+                    pushFollow(FOLLOW_label_in_statement964);
                     label();
 
                     state._fsp--;
@@ -3748,14 +3671,14 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:155:4: variable_assignment semicolon
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:155:4: variable_assignment semicolon
                     {
-                    pushFollow(FOLLOW_variable_assignment_in_statement974);
+                    pushFollow(FOLLOW_variable_assignment_in_statement970);
                     variable_assignment();
 
                     state._fsp--;
                     if (state.failed) return ;
-                    pushFollow(FOLLOW_semicolon_in_statement976);
+                    pushFollow(FOLLOW_semicolon_in_statement972);
                     semicolon();
 
                     state._fsp--;
@@ -3764,14 +3687,14 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:156:4: variable_def semicolon
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:156:4: variable_def semicolon
                     {
-                    pushFollow(FOLLOW_variable_def_in_statement981);
+                    pushFollow(FOLLOW_variable_def_in_statement977);
                     variable_def();
 
                     state._fsp--;
                     if (state.failed) return ;
-                    pushFollow(FOLLOW_semicolon_in_statement983);
+                    pushFollow(FOLLOW_semicolon_in_statement979);
                     semicolon();
 
                     state._fsp--;
@@ -3780,14 +3703,14 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 4 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:157:4: method_call semicolon
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:157:4: method_call semicolon
                     {
-                    pushFollow(FOLLOW_method_call_in_statement988);
+                    pushFollow(FOLLOW_method_call_in_statement984);
                     method_call();
 
                     state._fsp--;
                     if (state.failed) return ;
-                    pushFollow(FOLLOW_semicolon_in_statement990);
+                    pushFollow(FOLLOW_semicolon_in_statement986);
                     semicolon();
 
                     state._fsp--;
@@ -3796,9 +3719,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 5 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:158:5: semicolon
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:158:5: semicolon
                     {
-                    pushFollow(FOLLOW_semicolon_in_statement996);
+                    pushFollow(FOLLOW_semicolon_in_statement992);
                     semicolon();
 
                     state._fsp--;
@@ -3807,9 +3730,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 6 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:159:4: return_statement
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:159:4: return_statement
                     {
-                    pushFollow(FOLLOW_return_statement_in_statement1001);
+                    pushFollow(FOLLOW_return_statement_in_statement997);
                     return_statement();
 
                     state._fsp--;
@@ -3818,9 +3741,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 7 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:160:4: continue_
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:160:4: continue_
                     {
-                    pushFollow(FOLLOW_continue__in_statement1006);
+                    pushFollow(FOLLOW_continue__in_statement1002);
                     continue_();
 
                     state._fsp--;
@@ -3829,9 +3752,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 8 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:161:4: break_
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:161:4: break_
                     {
-                    pushFollow(FOLLOW_break__in_statement1011);
+                    pushFollow(FOLLOW_break__in_statement1007);
                     break_();
 
                     state._fsp--;
@@ -3840,9 +3763,101 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 9 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:162:4: ( left_unary )? variable_name ( right_unary )?
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:162:4: for_loop
                     {
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:162:4: ( left_unary )?
+                    pushFollow(FOLLOW_for_loop_in_statement1012);
+                    for_loop();
+
+                    state._fsp--;
+                    if (state.failed) return ;
+
+                    }
+                    break;
+                case 10 :
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:163:4: while_loop
+                    {
+                    pushFollow(FOLLOW_while_loop_in_statement1017);
+                    while_loop();
+
+                    state._fsp--;
+                    if (state.failed) return ;
+
+                    }
+                    break;
+                case 11 :
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:164:4: do_loop semicolon
+                    {
+                    pushFollow(FOLLOW_do_loop_in_statement1022);
+                    do_loop();
+
+                    state._fsp--;
+                    if (state.failed) return ;
+                    pushFollow(FOLLOW_semicolon_in_statement1024);
+                    semicolon();
+
+                    state._fsp--;
+                    if (state.failed) return ;
+
+                    }
+                    break;
+                case 12 :
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:165:4: switch_case
+                    {
+                    pushFollow(FOLLOW_switch_case_in_statement1029);
+                    switch_case();
+
+                    state._fsp--;
+                    if (state.failed) return ;
+
+                    }
+                    break;
+                case 13 :
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:166:4: if_else
+                    {
+                    pushFollow(FOLLOW_if_else_in_statement1034);
+                    if_else();
+
+                    state._fsp--;
+                    if (state.failed) return ;
+
+                    }
+                    break;
+                case 14 :
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:167:4: try_catch
+                    {
+                    pushFollow(FOLLOW_try_catch_in_statement1039);
+                    try_catch();
+
+                    state._fsp--;
+                    if (state.failed) return ;
+
+                    }
+                    break;
+                case 15 :
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:168:4: throw_ value semicolon
+                    {
+                    pushFollow(FOLLOW_throw__in_statement1044);
+                    throw_();
+
+                    state._fsp--;
+                    if (state.failed) return ;
+                    pushFollow(FOLLOW_value_in_statement1046);
+                    value();
+
+                    state._fsp--;
+                    if (state.failed) return ;
+                    pushFollow(FOLLOW_semicolon_in_statement1048);
+                    semicolon();
+
+                    state._fsp--;
+                    if (state.failed) return ;
+
+                    }
+                    break;
+                case 16 :
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:169:4: ( left_unary )? variable_name ( right_unary )?
+                    {
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:169:4: ( left_unary )?
                     int alt74=2;
                     int LA74_0 = input.LA(1);
 
@@ -3851,9 +3866,9 @@ public class JavaParser extends Parser {
                     }
                     switch (alt74) {
                         case 1 :
-                            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: left_unary
+                            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: left_unary
                             {
-                            pushFollow(FOLLOW_left_unary_in_statement1016);
+                            pushFollow(FOLLOW_left_unary_in_statement1053);
                             left_unary();
 
                             state._fsp--;
@@ -3864,19 +3879,19 @@ public class JavaParser extends Parser {
 
                     }
 
-                    pushFollow(FOLLOW_variable_name_in_statement1019);
+                    pushFollow(FOLLOW_variable_name_in_statement1056);
                     variable_name();
 
                     state._fsp--;
                     if (state.failed) return ;
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:162:30: ( right_unary )?
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:169:30: ( right_unary )?
                     int alt75=2;
                     switch ( input.LA(1) ) {
                         case INC:
                             {
                             int LA75_1 = input.LA(2);
 
-                            if ( (synpred111_JavaParser()) ) {
+                            if ( (synpred118_JavaParser()) ) {
                                 alt75=1;
                             }
                             }
@@ -3885,7 +3900,7 @@ public class JavaParser extends Parser {
                             {
                             int LA75_2 = input.LA(2);
 
-                            if ( (synpred111_JavaParser()) ) {
+                            if ( (synpred118_JavaParser()) ) {
                                 alt75=1;
                             }
                             }
@@ -3894,7 +3909,7 @@ public class JavaParser extends Parser {
                             {
                             int LA75_3 = input.LA(2);
 
-                            if ( (synpred111_JavaParser()) ) {
+                            if ( (synpred118_JavaParser()) ) {
                                 alt75=1;
                             }
                             }
@@ -3903,9 +3918,9 @@ public class JavaParser extends Parser {
 
                     switch (alt75) {
                         case 1 :
-                            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: right_unary
+                            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: right_unary
                             {
-                            pushFollow(FOLLOW_right_unary_in_statement1021);
+                            pushFollow(FOLLOW_right_unary_in_statement1058);
                             right_unary();
 
                             state._fsp--;
@@ -3919,93 +3934,6 @@ public class JavaParser extends Parser {
 
                     }
                     break;
-                case 10 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:163:4: for_loop
-                    {
-                    pushFollow(FOLLOW_for_loop_in_statement1027);
-                    for_loop();
-
-                    state._fsp--;
-                    if (state.failed) return ;
-
-                    }
-                    break;
-                case 11 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:164:4: while_loop
-                    {
-                    pushFollow(FOLLOW_while_loop_in_statement1032);
-                    while_loop();
-
-                    state._fsp--;
-                    if (state.failed) return ;
-
-                    }
-                    break;
-                case 12 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:165:4: do_loop
-                    {
-                    pushFollow(FOLLOW_do_loop_in_statement1037);
-                    do_loop();
-
-                    state._fsp--;
-                    if (state.failed) return ;
-
-                    }
-                    break;
-                case 13 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:166:4: switch_case
-                    {
-                    pushFollow(FOLLOW_switch_case_in_statement1042);
-                    switch_case();
-
-                    state._fsp--;
-                    if (state.failed) return ;
-
-                    }
-                    break;
-                case 14 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:167:4: if_else
-                    {
-                    pushFollow(FOLLOW_if_else_in_statement1047);
-                    if_else();
-
-                    state._fsp--;
-                    if (state.failed) return ;
-
-                    }
-                    break;
-                case 15 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:168:4: try_catch
-                    {
-                    pushFollow(FOLLOW_try_catch_in_statement1052);
-                    try_catch();
-
-                    state._fsp--;
-                    if (state.failed) return ;
-
-                    }
-                    break;
-                case 16 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:169:4: throw_ value semicolon
-                    {
-                    pushFollow(FOLLOW_throw__in_statement1057);
-                    throw_();
-
-                    state._fsp--;
-                    if (state.failed) return ;
-                    pushFollow(FOLLOW_value_in_statement1059);
-                    value();
-
-                    state._fsp--;
-                    if (state.failed) return ;
-                    pushFollow(FOLLOW_semicolon_in_statement1061);
-                    semicolon();
-
-                    state._fsp--;
-                    if (state.failed) return ;
-
-                    }
-                    break;
 
             }
         }
@@ -4014,7 +3942,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 27, statement_StartIndex); }
         }
         return ;
     }
@@ -4022,19 +3949,17 @@ public class JavaParser extends Parser {
 
 
     // $ANTLR start "statement_wosemicolon"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:172:1: statement_wosemicolon : ( label | variable_assignment | variable_def | method_call | return_statement | continue_ | break_ | ( left_unary )? variable_name ( right_unary )? | for_loop | while_loop | do_loop | switch_case | if_else | try_catch | throw_ value semicolon );
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:172:1: statement_wosemicolon : ( label | variable_assignment | variable_def | method_call | return_statement | continue_ | break_ | for_loop | while_loop | do_loop | switch_case | if_else | try_catch | throw_ value semicolon | ( left_unary )? variable_name ( right_unary )? );
     public final void statement_wosemicolon() throws RecognitionException {
-        int statement_wosemicolon_StartIndex = input.index();
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 28) ) { return ; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:173:2: ( label | variable_assignment | variable_def | method_call | return_statement | continue_ | break_ | ( left_unary )? variable_name ( right_unary )? | for_loop | while_loop | do_loop | switch_case | if_else | try_catch | throw_ value semicolon )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:173:2: ( label | variable_assignment | variable_def | method_call | return_statement | continue_ | break_ | for_loop | while_loop | do_loop | switch_case | if_else | try_catch | throw_ value semicolon | ( left_unary )? variable_name ( right_unary )? )
             int alt79=15;
             alt79 = dfa79.predict(input);
             switch (alt79) {
                 case 1 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:173:4: label
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:173:4: label
                     {
-                    pushFollow(FOLLOW_label_in_statement_wosemicolon1072);
+                    pushFollow(FOLLOW_label_in_statement_wosemicolon1070);
                     label();
 
                     state._fsp--;
@@ -4043,9 +3968,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:174:4: variable_assignment
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:174:4: variable_assignment
                     {
-                    pushFollow(FOLLOW_variable_assignment_in_statement_wosemicolon1077);
+                    pushFollow(FOLLOW_variable_assignment_in_statement_wosemicolon1075);
                     variable_assignment();
 
                     state._fsp--;
@@ -4054,9 +3979,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:175:4: variable_def
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:175:4: variable_def
                     {
-                    pushFollow(FOLLOW_variable_def_in_statement_wosemicolon1082);
+                    pushFollow(FOLLOW_variable_def_in_statement_wosemicolon1080);
                     variable_def();
 
                     state._fsp--;
@@ -4065,9 +3990,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 4 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:176:4: method_call
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:176:4: method_call
                     {
-                    pushFollow(FOLLOW_method_call_in_statement_wosemicolon1087);
+                    pushFollow(FOLLOW_method_call_in_statement_wosemicolon1085);
                     method_call();
 
                     state._fsp--;
@@ -4076,9 +4001,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 5 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:177:4: return_statement
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:177:4: return_statement
                     {
-                    pushFollow(FOLLOW_return_statement_in_statement_wosemicolon1093);
+                    pushFollow(FOLLOW_return_statement_in_statement_wosemicolon1091);
                     return_statement();
 
                     state._fsp--;
@@ -4087,9 +4012,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 6 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:178:4: continue_
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:178:4: continue_
                     {
-                    pushFollow(FOLLOW_continue__in_statement_wosemicolon1098);
+                    pushFollow(FOLLOW_continue__in_statement_wosemicolon1096);
                     continue_();
 
                     state._fsp--;
@@ -4098,9 +4023,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 7 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:179:4: break_
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:179:4: break_
                     {
-                    pushFollow(FOLLOW_break__in_statement_wosemicolon1103);
+                    pushFollow(FOLLOW_break__in_statement_wosemicolon1101);
                     break_();
 
                     state._fsp--;
@@ -4109,9 +4034,96 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 8 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:180:4: ( left_unary )? variable_name ( right_unary )?
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:180:4: for_loop
                     {
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:180:4: ( left_unary )?
+                    pushFollow(FOLLOW_for_loop_in_statement_wosemicolon1106);
+                    for_loop();
+
+                    state._fsp--;
+                    if (state.failed) return ;
+
+                    }
+                    break;
+                case 9 :
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:181:4: while_loop
+                    {
+                    pushFollow(FOLLOW_while_loop_in_statement_wosemicolon1111);
+                    while_loop();
+
+                    state._fsp--;
+                    if (state.failed) return ;
+
+                    }
+                    break;
+                case 10 :
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:182:4: do_loop
+                    {
+                    pushFollow(FOLLOW_do_loop_in_statement_wosemicolon1116);
+                    do_loop();
+
+                    state._fsp--;
+                    if (state.failed) return ;
+
+                    }
+                    break;
+                case 11 :
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:183:4: switch_case
+                    {
+                    pushFollow(FOLLOW_switch_case_in_statement_wosemicolon1121);
+                    switch_case();
+
+                    state._fsp--;
+                    if (state.failed) return ;
+
+                    }
+                    break;
+                case 12 :
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:184:4: if_else
+                    {
+                    pushFollow(FOLLOW_if_else_in_statement_wosemicolon1126);
+                    if_else();
+
+                    state._fsp--;
+                    if (state.failed) return ;
+
+                    }
+                    break;
+                case 13 :
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:185:4: try_catch
+                    {
+                    pushFollow(FOLLOW_try_catch_in_statement_wosemicolon1131);
+                    try_catch();
+
+                    state._fsp--;
+                    if (state.failed) return ;
+
+                    }
+                    break;
+                case 14 :
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:186:4: throw_ value semicolon
+                    {
+                    pushFollow(FOLLOW_throw__in_statement_wosemicolon1136);
+                    throw_();
+
+                    state._fsp--;
+                    if (state.failed) return ;
+                    pushFollow(FOLLOW_value_in_statement_wosemicolon1138);
+                    value();
+
+                    state._fsp--;
+                    if (state.failed) return ;
+                    pushFollow(FOLLOW_semicolon_in_statement_wosemicolon1140);
+                    semicolon();
+
+                    state._fsp--;
+                    if (state.failed) return ;
+
+                    }
+                    break;
+                case 15 :
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:187:4: ( left_unary )? variable_name ( right_unary )?
+                    {
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:187:4: ( left_unary )?
                     int alt77=2;
                     int LA77_0 = input.LA(1);
 
@@ -4120,9 +4132,9 @@ public class JavaParser extends Parser {
                     }
                     switch (alt77) {
                         case 1 :
-                            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: left_unary
+                            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: left_unary
                             {
-                            pushFollow(FOLLOW_left_unary_in_statement_wosemicolon1108);
+                            pushFollow(FOLLOW_left_unary_in_statement_wosemicolon1145);
                             left_unary();
 
                             state._fsp--;
@@ -4133,12 +4145,12 @@ public class JavaParser extends Parser {
 
                     }
 
-                    pushFollow(FOLLOW_variable_name_in_statement_wosemicolon1111);
+                    pushFollow(FOLLOW_variable_name_in_statement_wosemicolon1148);
                     variable_name();
 
                     state._fsp--;
                     if (state.failed) return ;
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:180:30: ( right_unary )?
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:187:30: ( right_unary )?
                     int alt78=2;
                     int LA78_0 = input.LA(1);
 
@@ -4147,9 +4159,9 @@ public class JavaParser extends Parser {
                     }
                     switch (alt78) {
                         case 1 :
-                            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: right_unary
+                            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: right_unary
                             {
-                            pushFollow(FOLLOW_right_unary_in_statement_wosemicolon1113);
+                            pushFollow(FOLLOW_right_unary_in_statement_wosemicolon1150);
                             right_unary();
 
                             state._fsp--;
@@ -4163,93 +4175,6 @@ public class JavaParser extends Parser {
 
                     }
                     break;
-                case 9 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:181:4: for_loop
-                    {
-                    pushFollow(FOLLOW_for_loop_in_statement_wosemicolon1119);
-                    for_loop();
-
-                    state._fsp--;
-                    if (state.failed) return ;
-
-                    }
-                    break;
-                case 10 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:182:4: while_loop
-                    {
-                    pushFollow(FOLLOW_while_loop_in_statement_wosemicolon1124);
-                    while_loop();
-
-                    state._fsp--;
-                    if (state.failed) return ;
-
-                    }
-                    break;
-                case 11 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:183:4: do_loop
-                    {
-                    pushFollow(FOLLOW_do_loop_in_statement_wosemicolon1129);
-                    do_loop();
-
-                    state._fsp--;
-                    if (state.failed) return ;
-
-                    }
-                    break;
-                case 12 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:184:4: switch_case
-                    {
-                    pushFollow(FOLLOW_switch_case_in_statement_wosemicolon1134);
-                    switch_case();
-
-                    state._fsp--;
-                    if (state.failed) return ;
-
-                    }
-                    break;
-                case 13 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:185:4: if_else
-                    {
-                    pushFollow(FOLLOW_if_else_in_statement_wosemicolon1139);
-                    if_else();
-
-                    state._fsp--;
-                    if (state.failed) return ;
-
-                    }
-                    break;
-                case 14 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:186:4: try_catch
-                    {
-                    pushFollow(FOLLOW_try_catch_in_statement_wosemicolon1144);
-                    try_catch();
-
-                    state._fsp--;
-                    if (state.failed) return ;
-
-                    }
-                    break;
-                case 15 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:187:4: throw_ value semicolon
-                    {
-                    pushFollow(FOLLOW_throw__in_statement_wosemicolon1149);
-                    throw_();
-
-                    state._fsp--;
-                    if (state.failed) return ;
-                    pushFollow(FOLLOW_value_in_statement_wosemicolon1151);
-                    value();
-
-                    state._fsp--;
-                    if (state.failed) return ;
-                    pushFollow(FOLLOW_semicolon_in_statement_wosemicolon1153);
-                    semicolon();
-
-                    state._fsp--;
-                    if (state.failed) return ;
-
-                    }
-                    break;
 
             }
         }
@@ -4258,7 +4183,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 28, statement_wosemicolon_StartIndex); }
         }
         return ;
     }
@@ -4266,20 +4190,18 @@ public class JavaParser extends Parser {
 
 
     // $ANTLR start "return_statement"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:190:1: return_statement : return_ ( value )? semicolon ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:190:1: return_statement : return_ ( value )? semicolon ;
     public final void return_statement() throws RecognitionException {
-        int return_statement_StartIndex = input.index();
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 29) ) { return ; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:191:2: ( return_ ( value )? semicolon )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:191:4: return_ ( value )? semicolon
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:191:2: ( return_ ( value )? semicolon )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:191:4: return_ ( value )? semicolon
             {
-            pushFollow(FOLLOW_return__in_return_statement1165);
+            pushFollow(FOLLOW_return__in_return_statement1163);
             return_();
 
             state._fsp--;
             if (state.failed) return ;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:191:12: ( value )?
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:191:12: ( value )?
             int alt80=2;
             int LA80_0 = input.LA(1);
 
@@ -4295,9 +4217,9 @@ public class JavaParser extends Parser {
             }
             switch (alt80) {
                 case 1 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: value
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: value
                     {
-                    pushFollow(FOLLOW_value_in_return_statement1167);
+                    pushFollow(FOLLOW_value_in_return_statement1165);
                     value();
 
                     state._fsp--;
@@ -4308,7 +4230,7 @@ public class JavaParser extends Parser {
 
             }
 
-            pushFollow(FOLLOW_semicolon_in_return_statement1170);
+            pushFollow(FOLLOW_semicolon_in_return_statement1168);
             semicolon();
 
             state._fsp--;
@@ -4322,7 +4244,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 29, return_statement_StartIndex); }
         }
         return ;
     }
@@ -4330,15 +4251,13 @@ public class JavaParser extends Parser {
 
 
     // $ANTLR start "variable_assignment"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:194:1: variable_assignment : ( this_ dot | super_ dot )? variable_name assign value ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:194:1: variable_assignment : ( this_ dot | super_ dot )? variable_name assign value ;
     public final void variable_assignment() throws RecognitionException {
-        int variable_assignment_StartIndex = input.index();
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 30) ) { return ; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:195:2: ( ( this_ dot | super_ dot )? variable_name assign value )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:195:4: ( this_ dot | super_ dot )? variable_name assign value
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:195:2: ( ( this_ dot | super_ dot )? variable_name assign value )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:195:4: ( this_ dot | super_ dot )? variable_name assign value
             {
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:195:4: ( this_ dot | super_ dot )?
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:195:4: ( this_ dot | super_ dot )?
             int alt81=3;
             int LA81_0 = input.LA(1);
 
@@ -4350,14 +4269,14 @@ public class JavaParser extends Parser {
             }
             switch (alt81) {
                 case 1 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:195:5: this_ dot
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:195:5: this_ dot
                     {
-                    pushFollow(FOLLOW_this__in_variable_assignment1183);
+                    pushFollow(FOLLOW_this__in_variable_assignment1181);
                     this_();
 
                     state._fsp--;
                     if (state.failed) return ;
-                    pushFollow(FOLLOW_dot_in_variable_assignment1185);
+                    pushFollow(FOLLOW_dot_in_variable_assignment1183);
                     dot();
 
                     state._fsp--;
@@ -4366,14 +4285,14 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:195:17: super_ dot
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:195:17: super_ dot
                     {
-                    pushFollow(FOLLOW_super__in_variable_assignment1189);
+                    pushFollow(FOLLOW_super__in_variable_assignment1187);
                     super_();
 
                     state._fsp--;
                     if (state.failed) return ;
-                    pushFollow(FOLLOW_dot_in_variable_assignment1191);
+                    pushFollow(FOLLOW_dot_in_variable_assignment1189);
                     dot();
 
                     state._fsp--;
@@ -4384,17 +4303,17 @@ public class JavaParser extends Parser {
 
             }
 
-            pushFollow(FOLLOW_variable_name_in_variable_assignment1195);
+            pushFollow(FOLLOW_variable_name_in_variable_assignment1193);
             variable_name();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_assign_in_variable_assignment1197);
+            pushFollow(FOLLOW_assign_in_variable_assignment1195);
             assign();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_value_in_variable_assignment1199);
+            pushFollow(FOLLOW_value_in_variable_assignment1197);
             value();
 
             state._fsp--;
@@ -4408,7 +4327,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 30, variable_assignment_StartIndex); }
         }
         return ;
     }
@@ -4416,12 +4334,10 @@ public class JavaParser extends Parser {
 
 
     // $ANTLR start "for_loop"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:198:1: for_loop : ( for_ OPEN_BRACKET ( variable_def ( comma variable_def )* )? semicolon ( value )? semicolon ( statement_wosemicolon ( comma statement_wosemicolon )* )? CLOSE_BRACKET code | for_ OPEN_BRACKET variable_type variable_name colon value CLOSE_BRACKET code );
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:198:1: for_loop : ( for_ OPEN_BRACKET ( variable_def ( comma variable_def )* )? semicolon ( value )? semicolon ( statement_wosemicolon ( comma statement_wosemicolon )* )? CLOSE_BRACKET code | for_ OPEN_BRACKET variable_type variable_name colon value CLOSE_BRACKET code );
     public final void for_loop() throws RecognitionException {
-        int for_loop_StartIndex = input.index();
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 31) ) { return ; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:198:9: ( for_ OPEN_BRACKET ( variable_def ( comma variable_def )* )? semicolon ( value )? semicolon ( statement_wosemicolon ( comma statement_wosemicolon )* )? CLOSE_BRACKET code | for_ OPEN_BRACKET variable_type variable_name colon value CLOSE_BRACKET code )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:198:9: ( for_ OPEN_BRACKET ( variable_def ( comma variable_def )* )? semicolon ( value )? semicolon ( statement_wosemicolon ( comma statement_wosemicolon )* )? CLOSE_BRACKET code | for_ OPEN_BRACKET variable_type variable_name colon value CLOSE_BRACKET code )
             int alt87=2;
             int LA87_0 = input.LA(1);
 
@@ -4451,15 +4367,15 @@ public class JavaParser extends Parser {
             }
             switch (alt87) {
                 case 1 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:198:11: for_ OPEN_BRACKET ( variable_def ( comma variable_def )* )? semicolon ( value )? semicolon ( statement_wosemicolon ( comma statement_wosemicolon )* )? CLOSE_BRACKET code
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:198:11: for_ OPEN_BRACKET ( variable_def ( comma variable_def )* )? semicolon ( value )? semicolon ( statement_wosemicolon ( comma statement_wosemicolon )* )? CLOSE_BRACKET code
                     {
-                    pushFollow(FOLLOW_for__in_for_loop1209);
+                    pushFollow(FOLLOW_for__in_for_loop1207);
                     for_();
 
                     state._fsp--;
                     if (state.failed) return ;
-                    match(input,OPEN_BRACKET,FOLLOW_OPEN_BRACKET_in_for_loop1211); if (state.failed) return ;
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:198:29: ( variable_def ( comma variable_def )* )?
+                    match(input,OPEN_BRACKET,FOLLOW_OPEN_BRACKET_in_for_loop1209); if (state.failed) return ;
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:198:29: ( variable_def ( comma variable_def )* )?
                     int alt83=2;
                     int LA83_0 = input.LA(1);
 
@@ -4468,14 +4384,14 @@ public class JavaParser extends Parser {
                     }
                     switch (alt83) {
                         case 1 :
-                            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:198:30: variable_def ( comma variable_def )*
+                            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:198:30: variable_def ( comma variable_def )*
                             {
-                            pushFollow(FOLLOW_variable_def_in_for_loop1214);
+                            pushFollow(FOLLOW_variable_def_in_for_loop1212);
                             variable_def();
 
                             state._fsp--;
                             if (state.failed) return ;
-                            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:198:43: ( comma variable_def )*
+                            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:198:43: ( comma variable_def )*
                             loop82:
                             do {
                                 int alt82=2;
@@ -4488,14 +4404,14 @@ public class JavaParser extends Parser {
 
                                 switch (alt82) {
                             	case 1 :
-                            	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:198:44: comma variable_def
+                            	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:198:44: comma variable_def
                             	    {
-                            	    pushFollow(FOLLOW_comma_in_for_loop1217);
+                            	    pushFollow(FOLLOW_comma_in_for_loop1215);
                             	    comma();
 
                             	    state._fsp--;
                             	    if (state.failed) return ;
-                            	    pushFollow(FOLLOW_variable_def_in_for_loop1219);
+                            	    pushFollow(FOLLOW_variable_def_in_for_loop1217);
                             	    variable_def();
 
                             	    state._fsp--;
@@ -4515,12 +4431,12 @@ public class JavaParser extends Parser {
 
                     }
 
-                    pushFollow(FOLLOW_semicolon_in_for_loop1225);
+                    pushFollow(FOLLOW_semicolon_in_for_loop1223);
                     semicolon();
 
                     state._fsp--;
                     if (state.failed) return ;
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:198:77: ( value )?
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:198:77: ( value )?
                     int alt84=2;
                     int LA84_0 = input.LA(1);
 
@@ -4536,9 +4452,9 @@ public class JavaParser extends Parser {
                     }
                     switch (alt84) {
                         case 1 :
-                            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: value
+                            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: value
                             {
-                            pushFollow(FOLLOW_value_in_for_loop1227);
+                            pushFollow(FOLLOW_value_in_for_loop1225);
                             value();
 
                             state._fsp--;
@@ -4549,12 +4465,12 @@ public class JavaParser extends Parser {
 
                     }
 
-                    pushFollow(FOLLOW_semicolon_in_for_loop1230);
+                    pushFollow(FOLLOW_semicolon_in_for_loop1228);
                     semicolon();
 
                     state._fsp--;
                     if (state.failed) return ;
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:198:94: ( statement_wosemicolon ( comma statement_wosemicolon )* )?
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:198:94: ( statement_wosemicolon ( comma statement_wosemicolon )* )?
                     int alt86=2;
                     int LA86_0 = input.LA(1);
 
@@ -4563,14 +4479,14 @@ public class JavaParser extends Parser {
                     }
                     switch (alt86) {
                         case 1 :
-                            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:198:95: statement_wosemicolon ( comma statement_wosemicolon )*
+                            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:198:95: statement_wosemicolon ( comma statement_wosemicolon )*
                             {
-                            pushFollow(FOLLOW_statement_wosemicolon_in_for_loop1233);
+                            pushFollow(FOLLOW_statement_wosemicolon_in_for_loop1231);
                             statement_wosemicolon();
 
                             state._fsp--;
                             if (state.failed) return ;
-                            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:198:117: ( comma statement_wosemicolon )*
+                            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:198:117: ( comma statement_wosemicolon )*
                             loop85:
                             do {
                                 int alt85=2;
@@ -4583,14 +4499,14 @@ public class JavaParser extends Parser {
 
                                 switch (alt85) {
                             	case 1 :
-                            	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:198:118: comma statement_wosemicolon
+                            	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:198:118: comma statement_wosemicolon
                             	    {
-                            	    pushFollow(FOLLOW_comma_in_for_loop1236);
+                            	    pushFollow(FOLLOW_comma_in_for_loop1234);
                             	    comma();
 
                             	    state._fsp--;
                             	    if (state.failed) return ;
-                            	    pushFollow(FOLLOW_statement_wosemicolon_in_for_loop1238);
+                            	    pushFollow(FOLLOW_statement_wosemicolon_in_for_loop1236);
                             	    statement_wosemicolon();
 
                             	    state._fsp--;
@@ -4610,8 +4526,8 @@ public class JavaParser extends Parser {
 
                     }
 
-                    match(input,CLOSE_BRACKET,FOLLOW_CLOSE_BRACKET_in_for_loop1244); if (state.failed) return ;
-                    pushFollow(FOLLOW_code_in_for_loop1246);
+                    match(input,CLOSE_BRACKET,FOLLOW_CLOSE_BRACKET_in_for_loop1242); if (state.failed) return ;
+                    pushFollow(FOLLOW_code_in_for_loop1244);
                     code();
 
                     state._fsp--;
@@ -4620,36 +4536,36 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:199:4: for_ OPEN_BRACKET variable_type variable_name colon value CLOSE_BRACKET code
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:199:4: for_ OPEN_BRACKET variable_type variable_name colon value CLOSE_BRACKET code
                     {
-                    pushFollow(FOLLOW_for__in_for_loop1251);
+                    pushFollow(FOLLOW_for__in_for_loop1249);
                     for_();
 
                     state._fsp--;
                     if (state.failed) return ;
-                    match(input,OPEN_BRACKET,FOLLOW_OPEN_BRACKET_in_for_loop1253); if (state.failed) return ;
-                    pushFollow(FOLLOW_variable_type_in_for_loop1255);
+                    match(input,OPEN_BRACKET,FOLLOW_OPEN_BRACKET_in_for_loop1251); if (state.failed) return ;
+                    pushFollow(FOLLOW_variable_type_in_for_loop1253);
                     variable_type();
 
                     state._fsp--;
                     if (state.failed) return ;
-                    pushFollow(FOLLOW_variable_name_in_for_loop1257);
+                    pushFollow(FOLLOW_variable_name_in_for_loop1255);
                     variable_name();
 
                     state._fsp--;
                     if (state.failed) return ;
-                    pushFollow(FOLLOW_colon_in_for_loop1259);
+                    pushFollow(FOLLOW_colon_in_for_loop1257);
                     colon();
 
                     state._fsp--;
                     if (state.failed) return ;
-                    pushFollow(FOLLOW_value_in_for_loop1261);
+                    pushFollow(FOLLOW_value_in_for_loop1259);
                     value();
 
                     state._fsp--;
                     if (state.failed) return ;
-                    match(input,CLOSE_BRACKET,FOLLOW_CLOSE_BRACKET_in_for_loop1263); if (state.failed) return ;
-                    pushFollow(FOLLOW_code_in_for_loop1265);
+                    match(input,CLOSE_BRACKET,FOLLOW_CLOSE_BRACKET_in_for_loop1261); if (state.failed) return ;
+                    pushFollow(FOLLOW_code_in_for_loop1263);
                     code();
 
                     state._fsp--;
@@ -4665,7 +4581,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 31, for_loop_StartIndex); }
         }
         return ;
     }
@@ -4673,27 +4588,25 @@ public class JavaParser extends Parser {
 
 
     // $ANTLR start "while_loop"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:202:1: while_loop : while_ OPEN_BRACKET value CLOSE_BRACKET code ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:202:1: while_loop : while_ OPEN_BRACKET value CLOSE_BRACKET code ;
     public final void while_loop() throws RecognitionException {
-        int while_loop_StartIndex = input.index();
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 32) ) { return ; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:203:2: ( while_ OPEN_BRACKET value CLOSE_BRACKET code )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:203:4: while_ OPEN_BRACKET value CLOSE_BRACKET code
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:203:2: ( while_ OPEN_BRACKET value CLOSE_BRACKET code )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:203:4: while_ OPEN_BRACKET value CLOSE_BRACKET code
             {
-            pushFollow(FOLLOW_while__in_while_loop1277);
+            pushFollow(FOLLOW_while__in_while_loop1275);
             while_();
 
             state._fsp--;
             if (state.failed) return ;
-            match(input,OPEN_BRACKET,FOLLOW_OPEN_BRACKET_in_while_loop1279); if (state.failed) return ;
-            pushFollow(FOLLOW_value_in_while_loop1281);
+            match(input,OPEN_BRACKET,FOLLOW_OPEN_BRACKET_in_while_loop1277); if (state.failed) return ;
+            pushFollow(FOLLOW_value_in_while_loop1279);
             value();
 
             state._fsp--;
             if (state.failed) return ;
-            match(input,CLOSE_BRACKET,FOLLOW_CLOSE_BRACKET_in_while_loop1283); if (state.failed) return ;
-            pushFollow(FOLLOW_code_in_while_loop1285);
+            match(input,CLOSE_BRACKET,FOLLOW_CLOSE_BRACKET_in_while_loop1281); if (state.failed) return ;
+            pushFollow(FOLLOW_code_in_while_loop1283);
             code();
 
             state._fsp--;
@@ -4707,7 +4620,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 32, while_loop_StartIndex); }
         }
         return ;
     }
@@ -4715,36 +4627,34 @@ public class JavaParser extends Parser {
 
 
     // $ANTLR start "do_loop"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:206:1: do_loop : do_ code while_ OPEN_BRACKET value CLOSE_BRACKET ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:206:1: do_loop : do_ code while_ OPEN_BRACKET value CLOSE_BRACKET ;
     public final void do_loop() throws RecognitionException {
-        int do_loop_StartIndex = input.index();
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 33) ) { return ; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:206:9: ( do_ code while_ OPEN_BRACKET value CLOSE_BRACKET )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:206:11: do_ code while_ OPEN_BRACKET value CLOSE_BRACKET
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:206:9: ( do_ code while_ OPEN_BRACKET value CLOSE_BRACKET )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:206:11: do_ code while_ OPEN_BRACKET value CLOSE_BRACKET
             {
-            pushFollow(FOLLOW_do__in_do_loop1296);
+            pushFollow(FOLLOW_do__in_do_loop1294);
             do_();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_code_in_do_loop1298);
+            pushFollow(FOLLOW_code_in_do_loop1296);
             code();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_while__in_do_loop1300);
+            pushFollow(FOLLOW_while__in_do_loop1298);
             while_();
 
             state._fsp--;
             if (state.failed) return ;
-            match(input,OPEN_BRACKET,FOLLOW_OPEN_BRACKET_in_do_loop1302); if (state.failed) return ;
-            pushFollow(FOLLOW_value_in_do_loop1304);
+            match(input,OPEN_BRACKET,FOLLOW_OPEN_BRACKET_in_do_loop1300); if (state.failed) return ;
+            pushFollow(FOLLOW_value_in_do_loop1302);
             value();
 
             state._fsp--;
             if (state.failed) return ;
-            match(input,CLOSE_BRACKET,FOLLOW_CLOSE_BRACKET_in_do_loop1306); if (state.failed) return ;
+            match(input,CLOSE_BRACKET,FOLLOW_CLOSE_BRACKET_in_do_loop1304); if (state.failed) return ;
 
             }
 
@@ -4754,7 +4664,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 33, do_loop_StartIndex); }
         }
         return ;
     }
@@ -4762,32 +4671,30 @@ public class JavaParser extends Parser {
 
 
     // $ANTLR start "switch_case"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:209:1: switch_case : switch_ OPEN_BRACKET value CLOSE_BRACKET block_begin ( ( case_ ( constant | variable_name ) colon )+ ( code | statement )* ( break_ semicolon )? | default_ colon ( code | statement )* )+ block_end ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:209:1: switch_case : switch_ OPEN_BRACKET value CLOSE_BRACKET block_begin ( ( case_ ( constant | variable_name ) colon )+ ( code | statement )* ( break_ semicolon )? | default_ colon ( code | statement )* )+ block_end ;
     public final void switch_case() throws RecognitionException {
-        int switch_case_StartIndex = input.index();
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 34) ) { return ; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:210:2: ( switch_ OPEN_BRACKET value CLOSE_BRACKET block_begin ( ( case_ ( constant | variable_name ) colon )+ ( code | statement )* ( break_ semicolon )? | default_ colon ( code | statement )* )+ block_end )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:210:4: switch_ OPEN_BRACKET value CLOSE_BRACKET block_begin ( ( case_ ( constant | variable_name ) colon )+ ( code | statement )* ( break_ semicolon )? | default_ colon ( code | statement )* )+ block_end
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:210:2: ( switch_ OPEN_BRACKET value CLOSE_BRACKET block_begin ( ( case_ ( constant | variable_name ) colon )+ ( code | statement )* ( break_ semicolon )? | default_ colon ( code | statement )* )+ block_end )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:210:4: switch_ OPEN_BRACKET value CLOSE_BRACKET block_begin ( ( case_ ( constant | variable_name ) colon )+ ( code | statement )* ( break_ semicolon )? | default_ colon ( code | statement )* )+ block_end
             {
-            pushFollow(FOLLOW_switch__in_switch_case1317);
+            pushFollow(FOLLOW_switch__in_switch_case1315);
             switch_();
 
             state._fsp--;
             if (state.failed) return ;
-            match(input,OPEN_BRACKET,FOLLOW_OPEN_BRACKET_in_switch_case1319); if (state.failed) return ;
-            pushFollow(FOLLOW_value_in_switch_case1321);
+            match(input,OPEN_BRACKET,FOLLOW_OPEN_BRACKET_in_switch_case1317); if (state.failed) return ;
+            pushFollow(FOLLOW_value_in_switch_case1319);
             value();
 
             state._fsp--;
             if (state.failed) return ;
-            match(input,CLOSE_BRACKET,FOLLOW_CLOSE_BRACKET_in_switch_case1323); if (state.failed) return ;
-            pushFollow(FOLLOW_block_begin_in_switch_case1325);
+            match(input,CLOSE_BRACKET,FOLLOW_CLOSE_BRACKET_in_switch_case1321); if (state.failed) return ;
+            pushFollow(FOLLOW_block_begin_in_switch_case1323);
             block_begin();
 
             state._fsp--;
             if (state.failed) return ;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:211:3: ( ( case_ ( constant | variable_name ) colon )+ ( code | statement )* ( break_ semicolon )? | default_ colon ( code | statement )* )+
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:211:3: ( ( case_ ( constant | variable_name ) colon )+ ( code | statement )* ( break_ semicolon )? | default_ colon ( code | statement )* )+
             int cnt93=0;
             loop93:
             do {
@@ -4804,9 +4711,9 @@ public class JavaParser extends Parser {
 
                 switch (alt93) {
             	case 1 :
-            	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:212:4: ( case_ ( constant | variable_name ) colon )+ ( code | statement )* ( break_ semicolon )?
+            	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:212:4: ( case_ ( constant | variable_name ) colon )+ ( code | statement )* ( break_ semicolon )?
             	    {
-            	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:212:4: ( case_ ( constant | variable_name ) colon )+
+            	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:212:4: ( case_ ( constant | variable_name ) colon )+
             	    int cnt89=0;
             	    loop89:
             	    do {
@@ -4826,14 +4733,14 @@ public class JavaParser extends Parser {
 
             	        switch (alt89) {
             	    	case 1 :
-            	    	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:212:5: case_ ( constant | variable_name ) colon
+            	    	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:212:5: case_ ( constant | variable_name ) colon
             	    	    {
-            	    	    pushFollow(FOLLOW_case__in_switch_case1336);
+            	    	    pushFollow(FOLLOW_case__in_switch_case1334);
             	    	    case_();
 
             	    	    state._fsp--;
             	    	    if (state.failed) return ;
-            	    	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:212:12: ( constant | variable_name )
+            	    	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:212:12: ( constant | variable_name )
             	    	    int alt88=2;
             	    	    int LA88_0 = input.LA(1);
 
@@ -4852,9 +4759,9 @@ public class JavaParser extends Parser {
             	    	    }
             	    	    switch (alt88) {
             	    	        case 1 :
-            	    	            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:212:13: constant
+            	    	            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:212:13: constant
             	    	            {
-            	    	            pushFollow(FOLLOW_constant_in_switch_case1340);
+            	    	            pushFollow(FOLLOW_constant_in_switch_case1338);
             	    	            constant();
 
             	    	            state._fsp--;
@@ -4863,9 +4770,9 @@ public class JavaParser extends Parser {
             	    	            }
             	    	            break;
             	    	        case 2 :
-            	    	            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:212:24: variable_name
+            	    	            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:212:24: variable_name
             	    	            {
-            	    	            pushFollow(FOLLOW_variable_name_in_switch_case1344);
+            	    	            pushFollow(FOLLOW_variable_name_in_switch_case1342);
             	    	            variable_name();
 
             	    	            state._fsp--;
@@ -4876,7 +4783,7 @@ public class JavaParser extends Parser {
 
             	    	    }
 
-            	    	    pushFollow(FOLLOW_colon_in_switch_case1347);
+            	    	    pushFollow(FOLLOW_colon_in_switch_case1345);
             	    	    colon();
 
             	    	    state._fsp--;
@@ -4895,16 +4802,16 @@ public class JavaParser extends Parser {
             	        cnt89++;
             	    } while (true);
 
-            	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:212:47: ( code | statement )*
+            	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:212:47: ( code | statement )*
             	    loop90:
             	    do {
             	        int alt90=3;
             	        alt90 = dfa90.predict(input);
             	        switch (alt90) {
             	    	case 1 :
-            	    	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:212:48: code
+            	    	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:212:48: code
             	    	    {
-            	    	    pushFollow(FOLLOW_code_in_switch_case1352);
+            	    	    pushFollow(FOLLOW_code_in_switch_case1350);
             	    	    code();
 
             	    	    state._fsp--;
@@ -4913,9 +4820,9 @@ public class JavaParser extends Parser {
             	    	    }
             	    	    break;
             	    	case 2 :
-            	    	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:212:55: statement
+            	    	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:212:55: statement
             	    	    {
-            	    	    pushFollow(FOLLOW_statement_in_switch_case1356);
+            	    	    pushFollow(FOLLOW_statement_in_switch_case1354);
             	    	    statement();
 
             	    	    state._fsp--;
@@ -4929,7 +4836,7 @@ public class JavaParser extends Parser {
             	        }
             	    } while (true);
 
-            	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:212:67: ( break_ semicolon )?
+            	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:212:67: ( break_ semicolon )?
             	    int alt91=2;
             	    int LA91_0 = input.LA(1);
 
@@ -4938,14 +4845,14 @@ public class JavaParser extends Parser {
             	    }
             	    switch (alt91) {
             	        case 1 :
-            	            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:212:68: break_ semicolon
+            	            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:212:68: break_ semicolon
             	            {
-            	            pushFollow(FOLLOW_break__in_switch_case1361);
+            	            pushFollow(FOLLOW_break__in_switch_case1359);
             	            break_();
 
             	            state._fsp--;
             	            if (state.failed) return ;
-            	            pushFollow(FOLLOW_semicolon_in_switch_case1363);
+            	            pushFollow(FOLLOW_semicolon_in_switch_case1361);
             	            semicolon();
 
             	            state._fsp--;
@@ -4960,28 +4867,28 @@ public class JavaParser extends Parser {
             	    }
             	    break;
             	case 2 :
-            	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:214:4: default_ colon ( code | statement )*
+            	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:214:4: default_ colon ( code | statement )*
             	    {
-            	    pushFollow(FOLLOW_default__in_switch_case1374);
+            	    pushFollow(FOLLOW_default__in_switch_case1372);
             	    default_();
 
             	    state._fsp--;
             	    if (state.failed) return ;
-            	    pushFollow(FOLLOW_colon_in_switch_case1376);
+            	    pushFollow(FOLLOW_colon_in_switch_case1374);
             	    colon();
 
             	    state._fsp--;
             	    if (state.failed) return ;
-            	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:214:19: ( code | statement )*
+            	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:214:19: ( code | statement )*
             	    loop92:
             	    do {
             	        int alt92=3;
             	        alt92 = dfa92.predict(input);
             	        switch (alt92) {
             	    	case 1 :
-            	    	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:214:20: code
+            	    	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:214:20: code
             	    	    {
-            	    	    pushFollow(FOLLOW_code_in_switch_case1379);
+            	    	    pushFollow(FOLLOW_code_in_switch_case1377);
             	    	    code();
 
             	    	    state._fsp--;
@@ -4990,9 +4897,9 @@ public class JavaParser extends Parser {
             	    	    }
             	    	    break;
             	    	case 2 :
-            	    	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:214:27: statement
+            	    	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:214:27: statement
             	    	    {
-            	    	    pushFollow(FOLLOW_statement_in_switch_case1383);
+            	    	    pushFollow(FOLLOW_statement_in_switch_case1381);
             	    	    statement();
 
             	    	    state._fsp--;
@@ -5020,7 +4927,7 @@ public class JavaParser extends Parser {
                 cnt93++;
             } while (true);
 
-            pushFollow(FOLLOW_block_end_in_switch_case1394);
+            pushFollow(FOLLOW_block_end_in_switch_case1392);
             block_end();
 
             state._fsp--;
@@ -5034,7 +4941,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 34, switch_case_StartIndex); }
         }
         return ;
     }
@@ -5042,32 +4948,30 @@ public class JavaParser extends Parser {
 
 
     // $ANTLR start "if_else"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:219:1: if_else : if_ OPEN_BRACKET value CLOSE_BRACKET code ( else_ code )? ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:219:1: if_else : if_ OPEN_BRACKET value CLOSE_BRACKET code ( else_ code )? ;
     public final void if_else() throws RecognitionException {
-        int if_else_StartIndex = input.index();
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 35) ) { return ; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:219:9: ( if_ OPEN_BRACKET value CLOSE_BRACKET code ( else_ code )? )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:219:11: if_ OPEN_BRACKET value CLOSE_BRACKET code ( else_ code )?
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:219:9: ( if_ OPEN_BRACKET value CLOSE_BRACKET code ( else_ code )? )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:219:11: if_ OPEN_BRACKET value CLOSE_BRACKET code ( else_ code )?
             {
-            pushFollow(FOLLOW_if__in_if_else1405);
+            pushFollow(FOLLOW_if__in_if_else1403);
             if_();
 
             state._fsp--;
             if (state.failed) return ;
-            match(input,OPEN_BRACKET,FOLLOW_OPEN_BRACKET_in_if_else1407); if (state.failed) return ;
-            pushFollow(FOLLOW_value_in_if_else1409);
+            match(input,OPEN_BRACKET,FOLLOW_OPEN_BRACKET_in_if_else1405); if (state.failed) return ;
+            pushFollow(FOLLOW_value_in_if_else1407);
             value();
 
             state._fsp--;
             if (state.failed) return ;
-            match(input,CLOSE_BRACKET,FOLLOW_CLOSE_BRACKET_in_if_else1411); if (state.failed) return ;
-            pushFollow(FOLLOW_code_in_if_else1413);
+            match(input,CLOSE_BRACKET,FOLLOW_CLOSE_BRACKET_in_if_else1409); if (state.failed) return ;
+            pushFollow(FOLLOW_code_in_if_else1411);
             code();
 
             state._fsp--;
             if (state.failed) return ;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:219:53: ( else_ code )?
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:219:53: ( else_ code )?
             int alt94=2;
             int LA94_0 = input.LA(1);
 
@@ -5080,14 +4984,14 @@ public class JavaParser extends Parser {
             }
             switch (alt94) {
                 case 1 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:219:54: else_ code
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:219:54: else_ code
                     {
-                    pushFollow(FOLLOW_else__in_if_else1416);
+                    pushFollow(FOLLOW_else__in_if_else1414);
                     else_();
 
                     state._fsp--;
                     if (state.failed) return ;
-                    pushFollow(FOLLOW_code_in_if_else1418);
+                    pushFollow(FOLLOW_code_in_if_else1416);
                     code();
 
                     state._fsp--;
@@ -5107,7 +5011,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 35, if_else_StartIndex); }
         }
         return ;
     }
@@ -5115,26 +5018,23 @@ public class JavaParser extends Parser {
 
 
     // $ANTLR start "try_catch"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:222:1: try_catch : try_ code ( catch_ OPEN_BRACKET id id CLOSE_BRACKET code )+ ( finally_ code )? ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:222:1: try_catch : try_ code ( catch_ OPEN_BRACKET id id CLOSE_BRACKET code )* ( finally_ code )? ;
     public final void try_catch() throws RecognitionException {
-        int try_catch_StartIndex = input.index();
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 36) ) { return ; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:223:2: ( try_ code ( catch_ OPEN_BRACKET id id CLOSE_BRACKET code )+ ( finally_ code )? )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:223:4: try_ code ( catch_ OPEN_BRACKET id id CLOSE_BRACKET code )+ ( finally_ code )?
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:223:2: ( try_ code ( catch_ OPEN_BRACKET id id CLOSE_BRACKET code )* ( finally_ code )? )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:223:4: try_ code ( catch_ OPEN_BRACKET id id CLOSE_BRACKET code )* ( finally_ code )?
             {
-            pushFollow(FOLLOW_try__in_try_catch1431);
+            pushFollow(FOLLOW_try__in_try_catch1429);
             try_();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_code_in_try_catch1433);
+            pushFollow(FOLLOW_code_in_try_catch1431);
             code();
 
             state._fsp--;
             if (state.failed) return ;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:223:14: ( catch_ OPEN_BRACKET id id CLOSE_BRACKET code )+
-            int cnt95=0;
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:223:14: ( catch_ OPEN_BRACKET id id CLOSE_BRACKET code )*
             loop95:
             do {
                 int alt95=2;
@@ -5153,26 +5053,26 @@ public class JavaParser extends Parser {
 
                 switch (alt95) {
             	case 1 :
-            	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:223:15: catch_ OPEN_BRACKET id id CLOSE_BRACKET code
+            	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:223:15: catch_ OPEN_BRACKET id id CLOSE_BRACKET code
             	    {
-            	    pushFollow(FOLLOW_catch__in_try_catch1436);
+            	    pushFollow(FOLLOW_catch__in_try_catch1434);
             	    catch_();
 
             	    state._fsp--;
             	    if (state.failed) return ;
-            	    match(input,OPEN_BRACKET,FOLLOW_OPEN_BRACKET_in_try_catch1438); if (state.failed) return ;
+            	    match(input,OPEN_BRACKET,FOLLOW_OPEN_BRACKET_in_try_catch1436); if (state.failed) return ;
+            	    pushFollow(FOLLOW_id_in_try_catch1438);
+            	    id();
+
+            	    state._fsp--;
+            	    if (state.failed) return ;
             	    pushFollow(FOLLOW_id_in_try_catch1440);
             	    id();
 
             	    state._fsp--;
             	    if (state.failed) return ;
-            	    pushFollow(FOLLOW_id_in_try_catch1442);
-            	    id();
-
-            	    state._fsp--;
-            	    if (state.failed) return ;
-            	    match(input,CLOSE_BRACKET,FOLLOW_CLOSE_BRACKET_in_try_catch1444); if (state.failed) return ;
-            	    pushFollow(FOLLOW_code_in_try_catch1446);
+            	    match(input,CLOSE_BRACKET,FOLLOW_CLOSE_BRACKET_in_try_catch1442); if (state.failed) return ;
+            	    pushFollow(FOLLOW_code_in_try_catch1444);
             	    code();
 
             	    state._fsp--;
@@ -5182,16 +5082,11 @@ public class JavaParser extends Parser {
             	    break;
 
             	default :
-            	    if ( cnt95 >= 1 ) break loop95;
-            	    if (state.backtracking>0) {state.failed=true; return ;}
-                        EarlyExitException eee =
-                            new EarlyExitException(95, input);
-                        throw eee;
+            	    break loop95;
                 }
-                cnt95++;
             } while (true);
 
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:223:62: ( finally_ code )?
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:223:62: ( finally_ code )?
             int alt96=2;
             int LA96_0 = input.LA(1);
 
@@ -5204,14 +5099,14 @@ public class JavaParser extends Parser {
             }
             switch (alt96) {
                 case 1 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:223:63: finally_ code
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:223:63: finally_ code
                     {
-                    pushFollow(FOLLOW_finally__in_try_catch1451);
+                    pushFollow(FOLLOW_finally__in_try_catch1449);
                     finally_();
 
                     state._fsp--;
                     if (state.failed) return ;
-                    pushFollow(FOLLOW_code_in_try_catch1453);
+                    pushFollow(FOLLOW_code_in_try_catch1451);
                     code();
 
                     state._fsp--;
@@ -5231,7 +5126,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 36, try_catch_StartIndex); }
         }
         return ;
     }
@@ -5239,20 +5133,18 @@ public class JavaParser extends Parser {
 
 
     // $ANTLR start "label"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:226:1: label : id colon ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:226:1: label : id colon ;
     public final void label() throws RecognitionException {
-        int label_StartIndex = input.index();
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 37) ) { return ; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:226:7: ( id colon )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:226:9: id colon
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:226:7: ( id colon )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:226:9: id colon
             {
-            pushFollow(FOLLOW_id_in_label1465);
+            pushFollow(FOLLOW_id_in_label1463);
             id();
 
             state._fsp--;
             if (state.failed) return ;
-            pushFollow(FOLLOW_colon_in_label1467);
+            pushFollow(FOLLOW_colon_in_label1465);
             colon();
 
             state._fsp--;
@@ -5266,7 +5158,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 37, label_StartIndex); }
         }
         return ;
     }
@@ -5274,21 +5165,19 @@ public class JavaParser extends Parser {
 
 
     // $ANTLR start "cast"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:228:1: cast : OPEN_BRACKET variable_type CLOSE_BRACKET ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:228:1: cast : OPEN_BRACKET variable_type CLOSE_BRACKET ;
     public final void cast() throws RecognitionException {
-        int cast_StartIndex = input.index();
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 38) ) { return ; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:228:6: ( OPEN_BRACKET variable_type CLOSE_BRACKET )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:228:8: OPEN_BRACKET variable_type CLOSE_BRACKET
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:228:6: ( OPEN_BRACKET variable_type CLOSE_BRACKET )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:228:8: OPEN_BRACKET variable_type CLOSE_BRACKET
             {
-            match(input,OPEN_BRACKET,FOLLOW_OPEN_BRACKET_in_cast1475); if (state.failed) return ;
-            pushFollow(FOLLOW_variable_type_in_cast1477);
+            match(input,OPEN_BRACKET,FOLLOW_OPEN_BRACKET_in_cast1473); if (state.failed) return ;
+            pushFollow(FOLLOW_variable_type_in_cast1475);
             variable_type();
 
             state._fsp--;
             if (state.failed) return ;
-            match(input,CLOSE_BRACKET,FOLLOW_CLOSE_BRACKET_in_cast1479); if (state.failed) return ;
+            match(input,CLOSE_BRACKET,FOLLOW_CLOSE_BRACKET_in_cast1477); if (state.failed) return ;
             if ( state.backtracking==0 ) {
               helper.registerOperator("(cast)");
             }
@@ -5301,7 +5190,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 38, cast_StartIndex); }
         }
         return ;
     }
@@ -5309,12 +5197,10 @@ public class JavaParser extends Parser {
 
 
     // $ANTLR start "variable_type"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:231:1: variable_type : ( primitive ( array )? | class_name ( generic )? ( array )? | void_ );
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:231:1: variable_type : ( primitive ( array )? | class_name ( generic )? ( array )? | void_ );
     public final void variable_type() throws RecognitionException {
-        int variable_type_StartIndex = input.index();
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 39) ) { return ; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:232:2: ( primitive ( array )? | class_name ( generic )? ( array )? | void_ )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:232:2: ( primitive ( array )? | class_name ( generic )? ( array )? | void_ )
             int alt100=3;
             switch ( input.LA(1) ) {
             case BOOLEAN:
@@ -5349,14 +5235,14 @@ public class JavaParser extends Parser {
 
             switch (alt100) {
                 case 1 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:232:4: primitive ( array )?
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:232:4: primitive ( array )?
                     {
-                    pushFollow(FOLLOW_primitive_in_variable_type1492);
+                    pushFollow(FOLLOW_primitive_in_variable_type1490);
                     primitive();
 
                     state._fsp--;
                     if (state.failed) return ;
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:232:14: ( array )?
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:232:14: ( array )?
                     int alt97=2;
                     int LA97_0 = input.LA(1);
 
@@ -5365,9 +5251,9 @@ public class JavaParser extends Parser {
                     }
                     switch (alt97) {
                         case 1 :
-                            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: array
+                            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: array
                             {
-                            pushFollow(FOLLOW_array_in_variable_type1494);
+                            pushFollow(FOLLOW_array_in_variable_type1492);
                             array();
 
                             state._fsp--;
@@ -5382,14 +5268,14 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:233:4: class_name ( generic )? ( array )?
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:233:4: class_name ( generic )? ( array )?
                     {
-                    pushFollow(FOLLOW_class_name_in_variable_type1500);
+                    pushFollow(FOLLOW_class_name_in_variable_type1498);
                     class_name();
 
                     state._fsp--;
                     if (state.failed) return ;
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:233:15: ( generic )?
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:233:15: ( generic )?
                     int alt98=2;
                     int LA98_0 = input.LA(1);
 
@@ -5398,9 +5284,9 @@ public class JavaParser extends Parser {
                     }
                     switch (alt98) {
                         case 1 :
-                            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: generic
+                            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: generic
                             {
-                            pushFollow(FOLLOW_generic_in_variable_type1502);
+                            pushFollow(FOLLOW_generic_in_variable_type1500);
                             generic();
 
                             state._fsp--;
@@ -5411,7 +5297,7 @@ public class JavaParser extends Parser {
 
                     }
 
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:233:24: ( array )?
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:233:24: ( array )?
                     int alt99=2;
                     int LA99_0 = input.LA(1);
 
@@ -5420,9 +5306,9 @@ public class JavaParser extends Parser {
                     }
                     switch (alt99) {
                         case 1 :
-                            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: array
+                            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: array
                             {
-                            pushFollow(FOLLOW_array_in_variable_type1505);
+                            pushFollow(FOLLOW_array_in_variable_type1503);
                             array();
 
                             state._fsp--;
@@ -5437,9 +5323,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:234:4: void_
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:234:4: void_
                     {
-                    pushFollow(FOLLOW_void__in_variable_type1511);
+                    pushFollow(FOLLOW_void__in_variable_type1509);
                     void_();
 
                     state._fsp--;
@@ -5455,7 +5341,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 39, variable_type_StartIndex); }
         }
         return ;
     }
@@ -5465,17 +5350,16 @@ public class JavaParser extends Parser {
     };
 
     // $ANTLR start "id"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:237:1: id : ID ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:237:1: id : ID ;
     public final JavaParser.id_return id() throws RecognitionException {
         JavaParser.id_return retval = new JavaParser.id_return();
         retval.start = input.LT(1);
-        int id_StartIndex = input.index();
+
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 40) ) { return retval; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:237:4: ( ID )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:237:6: ID
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:237:4: ( ID )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:237:6: ID
             {
-            match(input,ID,FOLLOW_ID_in_id1521); if (state.failed) return retval;
+            match(input,ID,FOLLOW_ID_in_id1519); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
               helper.registerOperant(input.toString(retval.start,input.LT(-1)));
             }
@@ -5490,7 +5374,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 40, id_StartIndex); }
         }
         return retval;
     }
@@ -5500,14 +5383,13 @@ public class JavaParser extends Parser {
     };
 
     // $ANTLR start "binary_operator"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:239:1: binary_operator : ( plus | minus | STAR | SLASH | EQUAL | UNEQUAL | LT | GT | LE | GE | LOGICAL_OR | BIT_OR | LOGICAL_AND | BIT_AND );
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:239:1: binary_operator : ( plus | minus | STAR | SLASH | EQUAL | UNEQUAL | LT | GT | LE | GE | LOGICAL_OR | BIT_OR | LOGICAL_AND | BIT_AND );
     public final JavaParser.binary_operator_return binary_operator() throws RecognitionException {
         JavaParser.binary_operator_return retval = new JavaParser.binary_operator_return();
         retval.start = input.LT(1);
-        int binary_operator_StartIndex = input.index();
+
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 41) ) { return retval; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:240:2: ( plus | minus | STAR | SLASH | EQUAL | UNEQUAL | LT | GT | LE | GE | LOGICAL_OR | BIT_OR | LOGICAL_AND | BIT_AND )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:240:2: ( plus | minus | STAR | SLASH | EQUAL | UNEQUAL | LT | GT | LE | GE | LOGICAL_OR | BIT_OR | LOGICAL_AND | BIT_AND )
             int alt101=14;
             switch ( input.LA(1) ) {
             case PLUS:
@@ -5590,9 +5472,9 @@ public class JavaParser extends Parser {
 
             switch (alt101) {
                 case 1 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:240:4: plus
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:240:4: plus
                     {
-                    pushFollow(FOLLOW_plus_in_binary_operator1532);
+                    pushFollow(FOLLOW_plus_in_binary_operator1530);
                     plus();
 
                     state._fsp--;
@@ -5601,9 +5483,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:241:4: minus
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:241:4: minus
                     {
-                    pushFollow(FOLLOW_minus_in_binary_operator1537);
+                    pushFollow(FOLLOW_minus_in_binary_operator1535);
                     minus();
 
                     state._fsp--;
@@ -5612,9 +5494,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:242:4: STAR
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:242:4: STAR
                     {
-                    match(input,STAR,FOLLOW_STAR_in_binary_operator1542); if (state.failed) return retval;
+                    match(input,STAR,FOLLOW_STAR_in_binary_operator1540); if (state.failed) return retval;
                     if ( state.backtracking==0 ) {
                       helper.registerOperator(input.toString(retval.start,input.LT(-1)));
                     }
@@ -5622,9 +5504,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 4 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:243:4: SLASH
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:243:4: SLASH
                     {
-                    match(input,SLASH,FOLLOW_SLASH_in_binary_operator1549); if (state.failed) return retval;
+                    match(input,SLASH,FOLLOW_SLASH_in_binary_operator1547); if (state.failed) return retval;
                     if ( state.backtracking==0 ) {
                       helper.registerOperator(input.toString(retval.start,input.LT(-1)));
                     }
@@ -5632,9 +5514,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 5 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:244:4: EQUAL
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:244:4: EQUAL
                     {
-                    match(input,EQUAL,FOLLOW_EQUAL_in_binary_operator1556); if (state.failed) return retval;
+                    match(input,EQUAL,FOLLOW_EQUAL_in_binary_operator1554); if (state.failed) return retval;
                     if ( state.backtracking==0 ) {
                       helper.registerOperator(input.toString(retval.start,input.LT(-1)));
                     }
@@ -5642,9 +5524,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 6 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:245:4: UNEQUAL
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:245:4: UNEQUAL
                     {
-                    match(input,UNEQUAL,FOLLOW_UNEQUAL_in_binary_operator1563); if (state.failed) return retval;
+                    match(input,UNEQUAL,FOLLOW_UNEQUAL_in_binary_operator1561); if (state.failed) return retval;
                     if ( state.backtracking==0 ) {
                       helper.registerOperator(input.toString(retval.start,input.LT(-1)));
                     }
@@ -5652,9 +5534,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 7 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:246:4: LT
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:246:4: LT
                     {
-                    match(input,LT,FOLLOW_LT_in_binary_operator1570); if (state.failed) return retval;
+                    match(input,LT,FOLLOW_LT_in_binary_operator1568); if (state.failed) return retval;
                     if ( state.backtracking==0 ) {
                       helper.registerOperator(input.toString(retval.start,input.LT(-1)));
                     }
@@ -5662,9 +5544,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 8 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:247:4: GT
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:247:4: GT
                     {
-                    match(input,GT,FOLLOW_GT_in_binary_operator1577); if (state.failed) return retval;
+                    match(input,GT,FOLLOW_GT_in_binary_operator1575); if (state.failed) return retval;
                     if ( state.backtracking==0 ) {
                       helper.registerOperator(input.toString(retval.start,input.LT(-1)));
                     }
@@ -5672,9 +5554,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 9 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:248:4: LE
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:248:4: LE
                     {
-                    match(input,LE,FOLLOW_LE_in_binary_operator1584); if (state.failed) return retval;
+                    match(input,LE,FOLLOW_LE_in_binary_operator1582); if (state.failed) return retval;
                     if ( state.backtracking==0 ) {
                       helper.registerOperator(input.toString(retval.start,input.LT(-1)));
                     }
@@ -5682,9 +5564,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 10 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:249:4: GE
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:249:4: GE
                     {
-                    match(input,GE,FOLLOW_GE_in_binary_operator1591); if (state.failed) return retval;
+                    match(input,GE,FOLLOW_GE_in_binary_operator1589); if (state.failed) return retval;
                     if ( state.backtracking==0 ) {
                       helper.registerOperator(input.toString(retval.start,input.LT(-1)));
                     }
@@ -5692,9 +5574,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 11 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:250:4: LOGICAL_OR
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:250:4: LOGICAL_OR
                     {
-                    match(input,LOGICAL_OR,FOLLOW_LOGICAL_OR_in_binary_operator1598); if (state.failed) return retval;
+                    match(input,LOGICAL_OR,FOLLOW_LOGICAL_OR_in_binary_operator1596); if (state.failed) return retval;
                     if ( state.backtracking==0 ) {
                       helper.registerOperator(input.toString(retval.start,input.LT(-1)));
                     }
@@ -5702,9 +5584,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 12 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:251:4: BIT_OR
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:251:4: BIT_OR
                     {
-                    match(input,BIT_OR,FOLLOW_BIT_OR_in_binary_operator1605); if (state.failed) return retval;
+                    match(input,BIT_OR,FOLLOW_BIT_OR_in_binary_operator1603); if (state.failed) return retval;
                     if ( state.backtracking==0 ) {
                       helper.registerOperator(input.toString(retval.start,input.LT(-1)));
                     }
@@ -5712,9 +5594,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 13 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:252:4: LOGICAL_AND
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:252:4: LOGICAL_AND
                     {
-                    match(input,LOGICAL_AND,FOLLOW_LOGICAL_AND_in_binary_operator1612); if (state.failed) return retval;
+                    match(input,LOGICAL_AND,FOLLOW_LOGICAL_AND_in_binary_operator1610); if (state.failed) return retval;
                     if ( state.backtracking==0 ) {
                       helper.registerOperator(input.toString(retval.start,input.LT(-1)));
                     }
@@ -5722,9 +5604,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 14 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:253:4: BIT_AND
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:253:4: BIT_AND
                     {
-                    match(input,BIT_AND,FOLLOW_BIT_AND_in_binary_operator1619); if (state.failed) return retval;
+                    match(input,BIT_AND,FOLLOW_BIT_AND_in_binary_operator1617); if (state.failed) return retval;
                     if ( state.backtracking==0 ) {
                       helper.registerOperator(input.toString(retval.start,input.LT(-1)));
                     }
@@ -5741,7 +5623,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 41, binary_operator_StartIndex); }
         }
         return retval;
     }
@@ -5751,14 +5632,13 @@ public class JavaParser extends Parser {
     };
 
     // $ANTLR start "left_unary"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:256:1: left_unary : ( INC | DEC | NOT | MINUS | PLUS );
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:256:1: left_unary : ( INC | DEC | NOT | MINUS | PLUS );
     public final JavaParser.left_unary_return left_unary() throws RecognitionException {
         JavaParser.left_unary_return retval = new JavaParser.left_unary_return();
         retval.start = input.LT(1);
-        int left_unary_StartIndex = input.index();
+
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 42) ) { return retval; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:257:2: ( INC | DEC | NOT | MINUS | PLUS )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:257:2: ( INC | DEC | NOT | MINUS | PLUS )
             int alt102=5;
             switch ( input.LA(1) ) {
             case INC:
@@ -5796,9 +5676,9 @@ public class JavaParser extends Parser {
 
             switch (alt102) {
                 case 1 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:257:4: INC
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:257:4: INC
                     {
-                    match(input,INC,FOLLOW_INC_in_left_unary1633); if (state.failed) return retval;
+                    match(input,INC,FOLLOW_INC_in_left_unary1631); if (state.failed) return retval;
                     if ( state.backtracking==0 ) {
                       helper.registerOperator(input.toString(retval.start,input.LT(-1)));
                     }
@@ -5806,9 +5686,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:258:4: DEC
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:258:4: DEC
                     {
-                    match(input,DEC,FOLLOW_DEC_in_left_unary1640); if (state.failed) return retval;
+                    match(input,DEC,FOLLOW_DEC_in_left_unary1638); if (state.failed) return retval;
                     if ( state.backtracking==0 ) {
                       helper.registerOperator(input.toString(retval.start,input.LT(-1)));
                     }
@@ -5816,9 +5696,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:259:4: NOT
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:259:4: NOT
                     {
-                    match(input,NOT,FOLLOW_NOT_in_left_unary1647); if (state.failed) return retval;
+                    match(input,NOT,FOLLOW_NOT_in_left_unary1645); if (state.failed) return retval;
                     if ( state.backtracking==0 ) {
                       helper.registerOperator(input.toString(retval.start,input.LT(-1)));
                     }
@@ -5826,9 +5706,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 4 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:260:4: MINUS
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:260:4: MINUS
                     {
-                    match(input,MINUS,FOLLOW_MINUS_in_left_unary1654); if (state.failed) return retval;
+                    match(input,MINUS,FOLLOW_MINUS_in_left_unary1652); if (state.failed) return retval;
                     if ( state.backtracking==0 ) {
                       helper.registerOperator(input.toString(retval.start,input.LT(-1)));
                     }
@@ -5836,9 +5716,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 5 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:261:4: PLUS
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:261:4: PLUS
                     {
-                    match(input,PLUS,FOLLOW_PLUS_in_left_unary1661); if (state.failed) return retval;
+                    match(input,PLUS,FOLLOW_PLUS_in_left_unary1659); if (state.failed) return retval;
                     if ( state.backtracking==0 ) {
                       helper.registerOperator(input.toString(retval.start,input.LT(-1)));
                     }
@@ -5855,7 +5735,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 42, left_unary_StartIndex); }
         }
         return retval;
     }
@@ -5865,14 +5744,13 @@ public class JavaParser extends Parser {
     };
 
     // $ANTLR start "right_unary"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:264:1: right_unary : ( INC | DEC | NOT );
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:264:1: right_unary : ( INC | DEC | NOT );
     public final JavaParser.right_unary_return right_unary() throws RecognitionException {
         JavaParser.right_unary_return retval = new JavaParser.right_unary_return();
         retval.start = input.LT(1);
-        int right_unary_StartIndex = input.index();
+
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 43) ) { return retval; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:265:2: ( INC | DEC | NOT )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:265:2: ( INC | DEC | NOT )
             int alt103=3;
             switch ( input.LA(1) ) {
             case INC:
@@ -5900,9 +5778,9 @@ public class JavaParser extends Parser {
 
             switch (alt103) {
                 case 1 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:265:4: INC
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:265:4: INC
                     {
-                    match(input,INC,FOLLOW_INC_in_right_unary1675); if (state.failed) return retval;
+                    match(input,INC,FOLLOW_INC_in_right_unary1673); if (state.failed) return retval;
                     if ( state.backtracking==0 ) {
                       helper.registerOperator(input.toString(retval.start,input.LT(-1)));
                     }
@@ -5910,9 +5788,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:266:4: DEC
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:266:4: DEC
                     {
-                    match(input,DEC,FOLLOW_DEC_in_right_unary1682); if (state.failed) return retval;
+                    match(input,DEC,FOLLOW_DEC_in_right_unary1680); if (state.failed) return retval;
                     if ( state.backtracking==0 ) {
                       helper.registerOperator(input.toString(retval.start,input.LT(-1)));
                     }
@@ -5920,9 +5798,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:267:4: NOT
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:267:4: NOT
                     {
-                    match(input,NOT,FOLLOW_NOT_in_right_unary1689); if (state.failed) return retval;
+                    match(input,NOT,FOLLOW_NOT_in_right_unary1687); if (state.failed) return retval;
                     if ( state.backtracking==0 ) {
                       helper.registerOperator(input.toString(retval.start,input.LT(-1)));
                     }
@@ -5939,7 +5817,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 43, right_unary_StartIndex); }
         }
         return retval;
     }
@@ -5949,14 +5826,13 @@ public class JavaParser extends Parser {
     };
 
     // $ANTLR start "primitive"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:270:1: primitive : ( BOOLEAN | BYTE | CHAR | SHORT | INTEGER | LONG | FLOAT | DOUBLE );
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:270:1: primitive : ( BOOLEAN | BYTE | CHAR | SHORT | INTEGER | LONG | FLOAT | DOUBLE );
     public final JavaParser.primitive_return primitive() throws RecognitionException {
         JavaParser.primitive_return retval = new JavaParser.primitive_return();
         retval.start = input.LT(1);
-        int primitive_StartIndex = input.index();
+
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 44) ) { return retval; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:271:2: ( BOOLEAN | BYTE | CHAR | SHORT | INTEGER | LONG | FLOAT | DOUBLE )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:271:2: ( BOOLEAN | BYTE | CHAR | SHORT | INTEGER | LONG | FLOAT | DOUBLE )
             int alt104=8;
             switch ( input.LA(1) ) {
             case BOOLEAN:
@@ -6009,9 +5885,9 @@ public class JavaParser extends Parser {
 
             switch (alt104) {
                 case 1 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:271:4: BOOLEAN
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:271:4: BOOLEAN
                     {
-                    match(input,BOOLEAN,FOLLOW_BOOLEAN_in_primitive1702); if (state.failed) return retval;
+                    match(input,BOOLEAN,FOLLOW_BOOLEAN_in_primitive1700); if (state.failed) return retval;
                     if ( state.backtracking==0 ) {
                       helper.registerOperant(input.toString(retval.start,input.LT(-1)));
                     }
@@ -6019,9 +5895,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:272:4: BYTE
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:272:4: BYTE
                     {
-                    match(input,BYTE,FOLLOW_BYTE_in_primitive1709); if (state.failed) return retval;
+                    match(input,BYTE,FOLLOW_BYTE_in_primitive1707); if (state.failed) return retval;
                     if ( state.backtracking==0 ) {
                       helper.registerOperant(input.toString(retval.start,input.LT(-1)));
                     }
@@ -6029,9 +5905,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:273:4: CHAR
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:273:4: CHAR
                     {
-                    match(input,CHAR,FOLLOW_CHAR_in_primitive1716); if (state.failed) return retval;
+                    match(input,CHAR,FOLLOW_CHAR_in_primitive1714); if (state.failed) return retval;
                     if ( state.backtracking==0 ) {
                       helper.registerOperant(input.toString(retval.start,input.LT(-1)));
                     }
@@ -6039,9 +5915,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 4 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:274:4: SHORT
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:274:4: SHORT
                     {
-                    match(input,SHORT,FOLLOW_SHORT_in_primitive1723); if (state.failed) return retval;
+                    match(input,SHORT,FOLLOW_SHORT_in_primitive1721); if (state.failed) return retval;
                     if ( state.backtracking==0 ) {
                       helper.registerOperant(input.toString(retval.start,input.LT(-1)));
                     }
@@ -6049,9 +5925,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 5 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:275:4: INTEGER
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:275:4: INTEGER
                     {
-                    match(input,INTEGER,FOLLOW_INTEGER_in_primitive1730); if (state.failed) return retval;
+                    match(input,INTEGER,FOLLOW_INTEGER_in_primitive1728); if (state.failed) return retval;
                     if ( state.backtracking==0 ) {
                       helper.registerOperant(input.toString(retval.start,input.LT(-1)));
                     }
@@ -6059,9 +5935,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 6 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:276:4: LONG
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:276:4: LONG
                     {
-                    match(input,LONG,FOLLOW_LONG_in_primitive1737); if (state.failed) return retval;
+                    match(input,LONG,FOLLOW_LONG_in_primitive1735); if (state.failed) return retval;
                     if ( state.backtracking==0 ) {
                       helper.registerOperant(input.toString(retval.start,input.LT(-1)));
                     }
@@ -6069,9 +5945,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 7 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:277:4: FLOAT
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:277:4: FLOAT
                     {
-                    match(input,FLOAT,FOLLOW_FLOAT_in_primitive1744); if (state.failed) return retval;
+                    match(input,FLOAT,FOLLOW_FLOAT_in_primitive1742); if (state.failed) return retval;
                     if ( state.backtracking==0 ) {
                       helper.registerOperant(input.toString(retval.start,input.LT(-1)));
                     }
@@ -6079,9 +5955,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 8 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:278:4: DOUBLE
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:278:4: DOUBLE
                     {
-                    match(input,DOUBLE,FOLLOW_DOUBLE_in_primitive1751); if (state.failed) return retval;
+                    match(input,DOUBLE,FOLLOW_DOUBLE_in_primitive1749); if (state.failed) return retval;
                     if ( state.backtracking==0 ) {
                       helper.registerOperant(input.toString(retval.start,input.LT(-1)));
                     }
@@ -6098,7 +5974,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 44, primitive_StartIndex); }
         }
         return retval;
     }
@@ -6108,17 +5983,16 @@ public class JavaParser extends Parser {
     };
 
     // $ANTLR start "int_const"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:286:1: int_const : INT_CONST ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:286:1: int_const : INT_CONST ;
     public final JavaParser.int_const_return int_const() throws RecognitionException {
         JavaParser.int_const_return retval = new JavaParser.int_const_return();
         retval.start = input.LT(1);
-        int int_const_StartIndex = input.index();
+
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 45) ) { return retval; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:287:2: ( INT_CONST )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:287:4: INT_CONST
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:287:2: ( INT_CONST )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:287:4: INT_CONST
             {
-            match(input,INT_CONST,FOLLOW_INT_CONST_in_int_const1769); if (state.failed) return retval;
+            match(input,INT_CONST,FOLLOW_INT_CONST_in_int_const1767); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
               helper.registerOperant(input.toString(retval.start,input.LT(-1)));
             }
@@ -6133,7 +6007,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 45, int_const_StartIndex); }
         }
         return retval;
     }
@@ -6143,17 +6016,16 @@ public class JavaParser extends Parser {
     };
 
     // $ANTLR start "long_const"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:288:1: long_const : LONG_CONST ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:288:1: long_const : LONG_CONST ;
     public final JavaParser.long_const_return long_const() throws RecognitionException {
         JavaParser.long_const_return retval = new JavaParser.long_const_return();
         retval.start = input.LT(1);
-        int long_const_StartIndex = input.index();
+
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 46) ) { return retval; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:289:2: ( LONG_CONST )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:289:4: LONG_CONST
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:289:2: ( LONG_CONST )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:289:4: LONG_CONST
             {
-            match(input,LONG_CONST,FOLLOW_LONG_CONST_in_long_const1779); if (state.failed) return retval;
+            match(input,LONG_CONST,FOLLOW_LONG_CONST_in_long_const1777); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
               helper.registerOperant(input.toString(retval.start,input.LT(-1)));
             }
@@ -6168,7 +6040,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 46, long_const_StartIndex); }
         }
         return retval;
     }
@@ -6178,17 +6049,16 @@ public class JavaParser extends Parser {
     };
 
     // $ANTLR start "hex_const"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:290:1: hex_const : HEX_CONST ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:290:1: hex_const : HEX_CONST ;
     public final JavaParser.hex_const_return hex_const() throws RecognitionException {
         JavaParser.hex_const_return retval = new JavaParser.hex_const_return();
         retval.start = input.LT(1);
-        int hex_const_StartIndex = input.index();
+
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 47) ) { return retval; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:291:2: ( HEX_CONST )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:291:4: HEX_CONST
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:291:2: ( HEX_CONST )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:291:4: HEX_CONST
             {
-            match(input,HEX_CONST,FOLLOW_HEX_CONST_in_hex_const1789); if (state.failed) return retval;
+            match(input,HEX_CONST,FOLLOW_HEX_CONST_in_hex_const1787); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
               helper.registerOperant(input.toString(retval.start,input.LT(-1)));
             }
@@ -6203,7 +6073,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 47, hex_const_StartIndex); }
         }
         return retval;
     }
@@ -6213,17 +6082,16 @@ public class JavaParser extends Parser {
     };
 
     // $ANTLR start "hex_long_const"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:292:1: hex_long_const : HEX_LONG_CONST ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:292:1: hex_long_const : HEX_LONG_CONST ;
     public final JavaParser.hex_long_const_return hex_long_const() throws RecognitionException {
         JavaParser.hex_long_const_return retval = new JavaParser.hex_long_const_return();
         retval.start = input.LT(1);
-        int hex_long_const_StartIndex = input.index();
+
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 48) ) { return retval; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:293:2: ( HEX_LONG_CONST )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:293:4: HEX_LONG_CONST
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:293:2: ( HEX_LONG_CONST )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:293:4: HEX_LONG_CONST
             {
-            match(input,HEX_LONG_CONST,FOLLOW_HEX_LONG_CONST_in_hex_long_const1799); if (state.failed) return retval;
+            match(input,HEX_LONG_CONST,FOLLOW_HEX_LONG_CONST_in_hex_long_const1797); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
               helper.registerOperant(input.toString(retval.start,input.LT(-1)));
             }
@@ -6238,7 +6106,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 48, hex_long_const_StartIndex); }
         }
         return retval;
     }
@@ -6248,17 +6115,16 @@ public class JavaParser extends Parser {
     };
 
     // $ANTLR start "string_const"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:294:1: string_const : STRING_CONST ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:294:1: string_const : STRING_CONST ;
     public final JavaParser.string_const_return string_const() throws RecognitionException {
         JavaParser.string_const_return retval = new JavaParser.string_const_return();
         retval.start = input.LT(1);
-        int string_const_StartIndex = input.index();
+
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 49) ) { return retval; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:295:2: ( STRING_CONST )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:295:4: STRING_CONST
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:295:2: ( STRING_CONST )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:295:4: STRING_CONST
             {
-            match(input,STRING_CONST,FOLLOW_STRING_CONST_in_string_const1809); if (state.failed) return retval;
+            match(input,STRING_CONST,FOLLOW_STRING_CONST_in_string_const1807); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
               helper.registerOperant(input.toString(retval.start,input.LT(-1)));
             }
@@ -6273,7 +6139,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 49, string_const_StartIndex); }
         }
         return retval;
     }
@@ -6283,17 +6148,16 @@ public class JavaParser extends Parser {
     };
 
     // $ANTLR start "float_const"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:296:1: float_const : FLOAT_CONST ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:296:1: float_const : FLOAT_CONST ;
     public final JavaParser.float_const_return float_const() throws RecognitionException {
         JavaParser.float_const_return retval = new JavaParser.float_const_return();
         retval.start = input.LT(1);
-        int float_const_StartIndex = input.index();
+
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 50) ) { return retval; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:297:2: ( FLOAT_CONST )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:297:4: FLOAT_CONST
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:297:2: ( FLOAT_CONST )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:297:4: FLOAT_CONST
             {
-            match(input,FLOAT_CONST,FOLLOW_FLOAT_CONST_in_float_const1819); if (state.failed) return retval;
+            match(input,FLOAT_CONST,FOLLOW_FLOAT_CONST_in_float_const1817); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
               helper.registerOperant(input.toString(retval.start,input.LT(-1)));
             }
@@ -6308,7 +6172,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 50, float_const_StartIndex); }
         }
         return retval;
     }
@@ -6318,17 +6181,16 @@ public class JavaParser extends Parser {
     };
 
     // $ANTLR start "char_const"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:298:1: char_const : CHAR_CONST ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:298:1: char_const : CHAR_CONST ;
     public final JavaParser.char_const_return char_const() throws RecognitionException {
         JavaParser.char_const_return retval = new JavaParser.char_const_return();
         retval.start = input.LT(1);
-        int char_const_StartIndex = input.index();
+
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 51) ) { return retval; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:299:2: ( CHAR_CONST )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:299:4: CHAR_CONST
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:299:2: ( CHAR_CONST )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:299:4: CHAR_CONST
             {
-            match(input,CHAR_CONST,FOLLOW_CHAR_CONST_in_char_const1829); if (state.failed) return retval;
+            match(input,CHAR_CONST,FOLLOW_CHAR_CONST_in_char_const1827); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
               helper.registerOperant(input.toString(retval.start,input.LT(-1)));
             }
@@ -6343,7 +6205,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 51, char_const_StartIndex); }
         }
         return retval;
     }
@@ -6353,17 +6214,16 @@ public class JavaParser extends Parser {
     };
 
     // $ANTLR start "null_const"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:300:1: null_const : NULL ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:300:1: null_const : NULL ;
     public final JavaParser.null_const_return null_const() throws RecognitionException {
         JavaParser.null_const_return retval = new JavaParser.null_const_return();
         retval.start = input.LT(1);
-        int null_const_StartIndex = input.index();
+
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 52) ) { return retval; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:301:2: ( NULL )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:301:4: NULL
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:301:2: ( NULL )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:301:4: NULL
             {
-            match(input,NULL,FOLLOW_NULL_in_null_const1839); if (state.failed) return retval;
+            match(input,NULL,FOLLOW_NULL_in_null_const1837); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
               helper.registerOperant(input.toString(retval.start,input.LT(-1)));
             }
@@ -6378,7 +6238,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 52, null_const_StartIndex); }
         }
         return retval;
     }
@@ -6388,17 +6247,16 @@ public class JavaParser extends Parser {
     };
 
     // $ANTLR start "boolean_const"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:302:1: boolean_const : BOOL_CONST ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:302:1: boolean_const : BOOL_CONST ;
     public final JavaParser.boolean_const_return boolean_const() throws RecognitionException {
         JavaParser.boolean_const_return retval = new JavaParser.boolean_const_return();
         retval.start = input.LT(1);
-        int boolean_const_StartIndex = input.index();
+
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 53) ) { return retval; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:303:2: ( BOOL_CONST )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:303:4: BOOL_CONST
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:303:2: ( BOOL_CONST )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:303:4: BOOL_CONST
             {
-            match(input,BOOL_CONST,FOLLOW_BOOL_CONST_in_boolean_const1850); if (state.failed) return retval;
+            match(input,BOOL_CONST,FOLLOW_BOOL_CONST_in_boolean_const1848); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
               helper.registerOperant(input.toString(retval.start,input.LT(-1)));
             }
@@ -6413,7 +6271,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 53, boolean_const_StartIndex); }
         }
         return retval;
     }
@@ -6421,15 +6278,13 @@ public class JavaParser extends Parser {
 
 
     // $ANTLR start "array_const"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:304:1: array_const : ( block_begin value ( comma value )* block_end )? ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:304:1: array_const : ( block_begin value ( comma value )* block_end )? ;
     public final void array_const() throws RecognitionException {
-        int array_const_StartIndex = input.index();
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 54) ) { return ; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:305:2: ( ( block_begin value ( comma value )* block_end )? )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:305:4: ( block_begin value ( comma value )* block_end )?
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:305:2: ( ( block_begin value ( comma value )* block_end )? )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:305:4: ( block_begin value ( comma value )* block_end )?
             {
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:305:4: ( block_begin value ( comma value )* block_end )?
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:305:4: ( block_begin value ( comma value )* block_end )?
             int alt106=2;
             int LA106_0 = input.LA(1);
 
@@ -6438,19 +6293,19 @@ public class JavaParser extends Parser {
             }
             switch (alt106) {
                 case 1 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:305:5: block_begin value ( comma value )* block_end
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:305:5: block_begin value ( comma value )* block_end
                     {
-                    pushFollow(FOLLOW_block_begin_in_array_const1861);
+                    pushFollow(FOLLOW_block_begin_in_array_const1859);
                     block_begin();
 
                     state._fsp--;
                     if (state.failed) return ;
-                    pushFollow(FOLLOW_value_in_array_const1863);
+                    pushFollow(FOLLOW_value_in_array_const1861);
                     value();
 
                     state._fsp--;
                     if (state.failed) return ;
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:305:23: ( comma value )*
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:305:23: ( comma value )*
                     loop105:
                     do {
                         int alt105=2;
@@ -6463,14 +6318,14 @@ public class JavaParser extends Parser {
 
                         switch (alt105) {
                     	case 1 :
-                    	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:305:24: comma value
+                    	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:305:24: comma value
                     	    {
-                    	    pushFollow(FOLLOW_comma_in_array_const1866);
+                    	    pushFollow(FOLLOW_comma_in_array_const1864);
                     	    comma();
 
                     	    state._fsp--;
                     	    if (state.failed) return ;
-                    	    pushFollow(FOLLOW_value_in_array_const1868);
+                    	    pushFollow(FOLLOW_value_in_array_const1866);
                     	    value();
 
                     	    state._fsp--;
@@ -6484,7 +6339,7 @@ public class JavaParser extends Parser {
                         }
                     } while (true);
 
-                    pushFollow(FOLLOW_block_end_in_array_const1872);
+                    pushFollow(FOLLOW_block_end_in_array_const1870);
                     block_end();
 
                     state._fsp--;
@@ -6504,7 +6359,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 54, array_const_StartIndex); }
         }
         return ;
     }
@@ -6514,17 +6368,16 @@ public class JavaParser extends Parser {
     };
 
     // $ANTLR start "package_name"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:310:1: package_name : ( ID DOT )* ID ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:310:1: package_name : ( ID DOT )* ID ;
     public final JavaParser.package_name_return package_name() throws RecognitionException {
         JavaParser.package_name_return retval = new JavaParser.package_name_return();
         retval.start = input.LT(1);
-        int package_name_StartIndex = input.index();
+
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 55) ) { return retval; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:311:2: ( ( ID DOT )* ID )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:311:4: ( ID DOT )* ID
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:311:2: ( ( ID DOT )* ID )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:311:4: ( ID DOT )* ID
             {
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:311:4: ( ID DOT )*
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:311:4: ( ID DOT )*
             loop107:
             do {
                 int alt107=2;
@@ -6543,10 +6396,10 @@ public class JavaParser extends Parser {
 
                 switch (alt107) {
             	case 1 :
-            	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:311:5: ID DOT
+            	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:311:5: ID DOT
             	    {
-            	    match(input,ID,FOLLOW_ID_in_package_name1887); if (state.failed) return retval;
-            	    match(input,DOT,FOLLOW_DOT_in_package_name1889); if (state.failed) return retval;
+            	    match(input,ID,FOLLOW_ID_in_package_name1885); if (state.failed) return retval;
+            	    match(input,DOT,FOLLOW_DOT_in_package_name1887); if (state.failed) return retval;
 
             	    }
             	    break;
@@ -6556,7 +6409,7 @@ public class JavaParser extends Parser {
                 }
             } while (true);
 
-            match(input,ID,FOLLOW_ID_in_package_name1893); if (state.failed) return retval;
+            match(input,ID,FOLLOW_ID_in_package_name1891); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
               helper.registerOperant(input.toString(retval.start,input.LT(-1)));
             }
@@ -6571,7 +6424,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 55, package_name_StartIndex); }
         }
         return retval;
     }
@@ -6581,17 +6433,16 @@ public class JavaParser extends Parser {
     };
 
     // $ANTLR start "import_name"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:314:1: import_name : ( ID DOT )+ ( ID | STAR ) ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:314:1: import_name : ( ID DOT )+ ( ID | STAR ) ;
     public final JavaParser.import_name_return import_name() throws RecognitionException {
         JavaParser.import_name_return retval = new JavaParser.import_name_return();
         retval.start = input.LT(1);
-        int import_name_StartIndex = input.index();
+
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 56) ) { return retval; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:315:2: ( ( ID DOT )+ ( ID | STAR ) )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:315:4: ( ID DOT )+ ( ID | STAR )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:315:2: ( ( ID DOT )+ ( ID | STAR ) )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:315:4: ( ID DOT )+ ( ID | STAR )
             {
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:315:4: ( ID DOT )+
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:315:4: ( ID DOT )+
             int cnt108=0;
             loop108:
             do {
@@ -6611,10 +6462,10 @@ public class JavaParser extends Parser {
 
                 switch (alt108) {
             	case 1 :
-            	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:315:5: ID DOT
+            	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:315:5: ID DOT
             	    {
-            	    match(input,ID,FOLLOW_ID_in_import_name1907); if (state.failed) return retval;
-            	    match(input,DOT,FOLLOW_DOT_in_import_name1909); if (state.failed) return retval;
+            	    match(input,ID,FOLLOW_ID_in_import_name1905); if (state.failed) return retval;
+            	    match(input,DOT,FOLLOW_DOT_in_import_name1907); if (state.failed) return retval;
 
             	    }
             	    break;
@@ -6653,7 +6504,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 56, import_name_StartIndex); }
         }
         return retval;
     }
@@ -6663,17 +6513,16 @@ public class JavaParser extends Parser {
     };
 
     // $ANTLR start "class_name"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:318:1: class_name : ( ID DOT )* ID ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:318:1: class_name : ( ID DOT )* ID ;
     public final JavaParser.class_name_return class_name() throws RecognitionException {
         JavaParser.class_name_return retval = new JavaParser.class_name_return();
         retval.start = input.LT(1);
-        int class_name_StartIndex = input.index();
+
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 57) ) { return retval; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:319:2: ( ( ID DOT )* ID )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:319:4: ( ID DOT )* ID
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:319:2: ( ( ID DOT )* ID )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:319:4: ( ID DOT )* ID
             {
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:319:4: ( ID DOT )*
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:319:4: ( ID DOT )*
             loop109:
             do {
                 int alt109=2;
@@ -6698,10 +6547,10 @@ public class JavaParser extends Parser {
 
                 switch (alt109) {
             	case 1 :
-            	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:319:5: ID DOT
+            	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:319:5: ID DOT
             	    {
-            	    match(input,ID,FOLLOW_ID_in_class_name1931); if (state.failed) return retval;
-            	    match(input,DOT,FOLLOW_DOT_in_class_name1933); if (state.failed) return retval;
+            	    match(input,ID,FOLLOW_ID_in_class_name1929); if (state.failed) return retval;
+            	    match(input,DOT,FOLLOW_DOT_in_class_name1931); if (state.failed) return retval;
 
             	    }
             	    break;
@@ -6711,7 +6560,7 @@ public class JavaParser extends Parser {
                 }
             } while (true);
 
-            match(input,ID,FOLLOW_ID_in_class_name1937); if (state.failed) return retval;
+            match(input,ID,FOLLOW_ID_in_class_name1935); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
               helper.registerOperant(input.toString(retval.start,input.LT(-1)));
             }
@@ -6726,7 +6575,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 57, class_name_StartIndex); }
         }
         return retval;
     }
@@ -6736,17 +6584,16 @@ public class JavaParser extends Parser {
     };
 
     // $ANTLR start "method_name"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:322:1: method_name : ( ID DOT )* ID ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:322:1: method_name : ( ID DOT )* ID ;
     public final JavaParser.method_name_return method_name() throws RecognitionException {
         JavaParser.method_name_return retval = new JavaParser.method_name_return();
         retval.start = input.LT(1);
-        int method_name_StartIndex = input.index();
+
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 58) ) { return retval; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:323:2: ( ( ID DOT )* ID )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:323:4: ( ID DOT )* ID
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:323:2: ( ( ID DOT )* ID )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:323:4: ( ID DOT )* ID
             {
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:323:4: ( ID DOT )*
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:323:4: ( ID DOT )*
             loop110:
             do {
                 int alt110=2;
@@ -6765,10 +6612,10 @@ public class JavaParser extends Parser {
 
                 switch (alt110) {
             	case 1 :
-            	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:323:5: ID DOT
+            	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:323:5: ID DOT
             	    {
-            	    match(input,ID,FOLLOW_ID_in_method_name1951); if (state.failed) return retval;
-            	    match(input,DOT,FOLLOW_DOT_in_method_name1953); if (state.failed) return retval;
+            	    match(input,ID,FOLLOW_ID_in_method_name1949); if (state.failed) return retval;
+            	    match(input,DOT,FOLLOW_DOT_in_method_name1951); if (state.failed) return retval;
 
             	    }
             	    break;
@@ -6778,7 +6625,7 @@ public class JavaParser extends Parser {
                 }
             } while (true);
 
-            match(input,ID,FOLLOW_ID_in_method_name1957); if (state.failed) return retval;
+            match(input,ID,FOLLOW_ID_in_method_name1955); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
               helper.registerOperant(input.toString(retval.start,input.LT(-1)));
             }
@@ -6793,7 +6640,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 58, method_name_StartIndex); }
         }
         return retval;
     }
@@ -6801,20 +6647,18 @@ public class JavaParser extends Parser {
 
 
     // $ANTLR start "variable_name"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:326:1: variable_name : name ( array )? ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:326:1: variable_name : name ( array )? ;
     public final void variable_name() throws RecognitionException {
-        int variable_name_StartIndex = input.index();
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 59) ) { return ; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:327:2: ( name ( array )? )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:327:4: name ( array )?
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:327:2: ( name ( array )? )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:327:4: name ( array )?
             {
-            pushFollow(FOLLOW_name_in_variable_name1970);
+            pushFollow(FOLLOW_name_in_variable_name1968);
             name();
 
             state._fsp--;
             if (state.failed) return ;
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:327:9: ( array )?
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:327:9: ( array )?
             int alt111=2;
             int LA111_0 = input.LA(1);
 
@@ -6823,9 +6667,9 @@ public class JavaParser extends Parser {
             }
             switch (alt111) {
                 case 1 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: array
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: array
                     {
-                    pushFollow(FOLLOW_array_in_variable_name1972);
+                    pushFollow(FOLLOW_array_in_variable_name1970);
                     array();
 
                     state._fsp--;
@@ -6845,7 +6689,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 59, variable_name_StartIndex); }
         }
         return ;
     }
@@ -6855,18 +6698,17 @@ public class JavaParser extends Parser {
     };
 
     // $ANTLR start "annotation_name"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:329:1: annotation_name : AT name ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:329:1: annotation_name : AT name ;
     public final JavaParser.annotation_name_return annotation_name() throws RecognitionException {
         JavaParser.annotation_name_return retval = new JavaParser.annotation_name_return();
         retval.start = input.LT(1);
-        int annotation_name_StartIndex = input.index();
+
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 60) ) { return retval; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:330:2: ( AT name )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:330:4: AT name
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:330:2: ( AT name )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:330:4: AT name
             {
-            match(input,AT,FOLLOW_AT_in_annotation_name1983); if (state.failed) return retval;
-            pushFollow(FOLLOW_name_in_annotation_name1985);
+            match(input,AT,FOLLOW_AT_in_annotation_name1981); if (state.failed) return retval;
+            pushFollow(FOLLOW_name_in_annotation_name1983);
             name();
 
             state._fsp--;
@@ -6885,7 +6727,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 60, annotation_name_StartIndex); }
         }
         return retval;
     }
@@ -6895,17 +6736,16 @@ public class JavaParser extends Parser {
     };
 
     // $ANTLR start "name"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:331:1: name : ( ID DOT )* ID ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:331:1: name : ( ID DOT )* ID ;
     public final JavaParser.name_return name() throws RecognitionException {
         JavaParser.name_return retval = new JavaParser.name_return();
         retval.start = input.LT(1);
-        int name_StartIndex = input.index();
+
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 61) ) { return retval; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:331:6: ( ( ID DOT )* ID )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:331:8: ( ID DOT )* ID
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:331:6: ( ( ID DOT )* ID )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:331:8: ( ID DOT )* ID
             {
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:331:8: ( ID DOT )*
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:331:8: ( ID DOT )*
             loop112:
             do {
                 int alt112=2;
@@ -6924,10 +6764,10 @@ public class JavaParser extends Parser {
 
                 switch (alt112) {
             	case 1 :
-            	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:331:9: ID DOT
+            	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:331:9: ID DOT
             	    {
-            	    match(input,ID,FOLLOW_ID_in_name1995); if (state.failed) return retval;
-            	    match(input,DOT,FOLLOW_DOT_in_name1997); if (state.failed) return retval;
+            	    match(input,ID,FOLLOW_ID_in_name1993); if (state.failed) return retval;
+            	    match(input,DOT,FOLLOW_DOT_in_name1995); if (state.failed) return retval;
 
             	    }
             	    break;
@@ -6937,7 +6777,7 @@ public class JavaParser extends Parser {
                 }
             } while (true);
 
-            match(input,ID,FOLLOW_ID_in_name2001); if (state.failed) return retval;
+            match(input,ID,FOLLOW_ID_in_name1999); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
               helper.registerOperant(input.toString(retval.start,input.LT(-1)));
             }
@@ -6952,7 +6792,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 61, name_StartIndex); }
         }
         return retval;
     }
@@ -6960,15 +6799,13 @@ public class JavaParser extends Parser {
 
 
     // $ANTLR start "array"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:333:1: array : ( open_rect_bracket ( value )? close_rect_bracket )+ ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:333:1: array : ( open_rect_bracket ( value )? close_rect_bracket )+ ;
     public final void array() throws RecognitionException {
-        int array_StartIndex = input.index();
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 62) ) { return ; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:333:7: ( ( open_rect_bracket ( value )? close_rect_bracket )+ )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:333:9: ( open_rect_bracket ( value )? close_rect_bracket )+
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:333:7: ( ( open_rect_bracket ( value )? close_rect_bracket )+ )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:333:9: ( open_rect_bracket ( value )? close_rect_bracket )+
             {
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:333:9: ( open_rect_bracket ( value )? close_rect_bracket )+
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:333:9: ( open_rect_bracket ( value )? close_rect_bracket )+
             int cnt114=0;
             loop114:
             do {
@@ -6982,14 +6819,14 @@ public class JavaParser extends Parser {
 
                 switch (alt114) {
             	case 1 :
-            	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:333:10: open_rect_bracket ( value )? close_rect_bracket
+            	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:333:10: open_rect_bracket ( value )? close_rect_bracket
             	    {
-            	    pushFollow(FOLLOW_open_rect_bracket_in_array2012);
+            	    pushFollow(FOLLOW_open_rect_bracket_in_array2010);
             	    open_rect_bracket();
 
             	    state._fsp--;
             	    if (state.failed) return ;
-            	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:333:28: ( value )?
+            	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:333:28: ( value )?
             	    int alt113=2;
             	    int LA113_0 = input.LA(1);
 
@@ -7005,9 +6842,9 @@ public class JavaParser extends Parser {
             	    }
             	    switch (alt113) {
             	        case 1 :
-            	            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: value
+            	            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: value
             	            {
-            	            pushFollow(FOLLOW_value_in_array2014);
+            	            pushFollow(FOLLOW_value_in_array2012);
             	            value();
 
             	            state._fsp--;
@@ -7018,7 +6855,7 @@ public class JavaParser extends Parser {
 
             	    }
 
-            	    pushFollow(FOLLOW_close_rect_bracket_in_array2017);
+            	    pushFollow(FOLLOW_close_rect_bracket_in_array2015);
             	    close_rect_bracket();
 
             	    state._fsp--;
@@ -7046,7 +6883,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 62, array_StartIndex); }
         }
         return ;
     }
@@ -7056,17 +6892,16 @@ public class JavaParser extends Parser {
     };
 
     // $ANTLR start "package_"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:339:1: package_ : PACKAGE ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:339:1: package_ : PACKAGE ;
     public final JavaParser.package__return package_() throws RecognitionException {
         JavaParser.package__return retval = new JavaParser.package__return();
         retval.start = input.LT(1);
-        int package__StartIndex = input.index();
+
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 63) ) { return retval; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:340:2: ( PACKAGE )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:340:4: PACKAGE
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:340:2: ( PACKAGE )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:340:4: PACKAGE
             {
-            match(input,PACKAGE,FOLLOW_PACKAGE_in_package_2032); if (state.failed) return retval;
+            match(input,PACKAGE,FOLLOW_PACKAGE_in_package_2030); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
               helper.registerOperator(input.toString(retval.start,input.LT(-1)));
             }
@@ -7081,7 +6916,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 63, package__StartIndex); }
         }
         return retval;
     }
@@ -7091,17 +6925,16 @@ public class JavaParser extends Parser {
     };
 
     // $ANTLR start "import_"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:341:1: import_ : IMPORT ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:341:1: import_ : IMPORT ;
     public final JavaParser.import__return import_() throws RecognitionException {
         JavaParser.import__return retval = new JavaParser.import__return();
         retval.start = input.LT(1);
-        int import__StartIndex = input.index();
+
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 64) ) { return retval; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:342:2: ( IMPORT )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:342:4: IMPORT
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:342:2: ( IMPORT )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:342:4: IMPORT
             {
-            match(input,IMPORT,FOLLOW_IMPORT_in_import_2043); if (state.failed) return retval;
+            match(input,IMPORT,FOLLOW_IMPORT_in_import_2041); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
               helper.registerOperator(input.toString(retval.start,input.LT(-1)));
             }
@@ -7116,7 +6949,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 64, import__StartIndex); }
         }
         return retval;
     }
@@ -7126,17 +6958,16 @@ public class JavaParser extends Parser {
     };
 
     // $ANTLR start "class_"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:343:1: class_ : CLASS ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:343:1: class_ : CLASS ;
     public final JavaParser.class__return class_() throws RecognitionException {
         JavaParser.class__return retval = new JavaParser.class__return();
         retval.start = input.LT(1);
-        int class__StartIndex = input.index();
+
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 65) ) { return retval; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:343:8: ( CLASS )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:343:10: CLASS
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:343:8: ( CLASS )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:343:10: CLASS
             {
-            match(input,CLASS,FOLLOW_CLASS_in_class_2053); if (state.failed) return retval;
+            match(input,CLASS,FOLLOW_CLASS_in_class_2051); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
               helper.registerOperator(input.toString(retval.start,input.LT(-1)));
             }
@@ -7151,7 +6982,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 65, class__StartIndex); }
         }
         return retval;
     }
@@ -7161,17 +6991,16 @@ public class JavaParser extends Parser {
     };
 
     // $ANTLR start "enum_"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:344:1: enum_ : ENUM ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:344:1: enum_ : ENUM ;
     public final JavaParser.enum__return enum_() throws RecognitionException {
         JavaParser.enum__return retval = new JavaParser.enum__return();
         retval.start = input.LT(1);
-        int enum__StartIndex = input.index();
+
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 66) ) { return retval; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:344:7: ( ENUM )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:344:9: ENUM
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:344:7: ( ENUM )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:344:9: ENUM
             {
-            match(input,ENUM,FOLLOW_ENUM_in_enum_2062); if (state.failed) return retval;
+            match(input,ENUM,FOLLOW_ENUM_in_enum_2060); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
               helper.registerOperator(input.toString(retval.start,input.LT(-1)));
             }
@@ -7186,7 +7015,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 66, enum__StartIndex); }
         }
         return retval;
     }
@@ -7196,17 +7024,16 @@ public class JavaParser extends Parser {
     };
 
     // $ANTLR start "interface_"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:345:1: interface_ : INTERFACE ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:345:1: interface_ : INTERFACE ;
     public final JavaParser.interface__return interface_() throws RecognitionException {
         JavaParser.interface__return retval = new JavaParser.interface__return();
         retval.start = input.LT(1);
-        int interface__StartIndex = input.index();
+
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 67) ) { return retval; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:346:2: ( INTERFACE )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:346:4: INTERFACE
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:346:2: ( INTERFACE )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:346:4: INTERFACE
             {
-            match(input,INTERFACE,FOLLOW_INTERFACE_in_interface_2072); if (state.failed) return retval;
+            match(input,INTERFACE,FOLLOW_INTERFACE_in_interface_2070); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
               helper.registerOperator(input.toString(retval.start,input.LT(-1)));
             }
@@ -7221,7 +7048,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 67, interface__StartIndex); }
         }
         return retval;
     }
@@ -7231,17 +7057,16 @@ public class JavaParser extends Parser {
     };
 
     // $ANTLR start "extends_"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:347:1: extends_ : EXTENDS ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:347:1: extends_ : EXTENDS ;
     public final JavaParser.extends__return extends_() throws RecognitionException {
         JavaParser.extends__return retval = new JavaParser.extends__return();
         retval.start = input.LT(1);
-        int extends__StartIndex = input.index();
+
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 68) ) { return retval; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:347:9: ( EXTENDS )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:347:11: EXTENDS
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:347:9: ( EXTENDS )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:347:11: EXTENDS
             {
-            match(input,EXTENDS,FOLLOW_EXTENDS_in_extends_2080); if (state.failed) return retval;
+            match(input,EXTENDS,FOLLOW_EXTENDS_in_extends_2078); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
               helper.registerOperator(input.toString(retval.start,input.LT(-1)));
             }
@@ -7256,7 +7081,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 68, extends__StartIndex); }
         }
         return retval;
     }
@@ -7266,17 +7090,16 @@ public class JavaParser extends Parser {
     };
 
     // $ANTLR start "implements_"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:348:1: implements_ : IMPLEMENTS ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:348:1: implements_ : IMPLEMENTS ;
     public final JavaParser.implements__return implements_() throws RecognitionException {
         JavaParser.implements__return retval = new JavaParser.implements__return();
         retval.start = input.LT(1);
-        int implements__StartIndex = input.index();
+
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 69) ) { return retval; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:349:2: ( IMPLEMENTS )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:349:4: IMPLEMENTS
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:349:2: ( IMPLEMENTS )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:349:4: IMPLEMENTS
             {
-            match(input,IMPLEMENTS,FOLLOW_IMPLEMENTS_in_implements_2090); if (state.failed) return retval;
+            match(input,IMPLEMENTS,FOLLOW_IMPLEMENTS_in_implements_2088); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
               helper.registerOperator(input.toString(retval.start,input.LT(-1)));
             }
@@ -7291,7 +7114,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 69, implements__StartIndex); }
         }
         return retval;
     }
@@ -7301,17 +7123,16 @@ public class JavaParser extends Parser {
     };
 
     // $ANTLR start "this_"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:350:1: this_ : THIS ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:350:1: this_ : THIS ;
     public final JavaParser.this__return this_() throws RecognitionException {
         JavaParser.this__return retval = new JavaParser.this__return();
         retval.start = input.LT(1);
-        int this__StartIndex = input.index();
+
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 70) ) { return retval; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:350:7: ( THIS )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:350:9: THIS
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:350:7: ( THIS )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:350:9: THIS
             {
-            match(input,THIS,FOLLOW_THIS_in_this_2099); if (state.failed) return retval;
+            match(input,THIS,FOLLOW_THIS_in_this_2097); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
               helper.registerOperant(input.toString(retval.start,input.LT(-1)));
             }
@@ -7326,7 +7147,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 70, this__StartIndex); }
         }
         return retval;
     }
@@ -7336,17 +7156,16 @@ public class JavaParser extends Parser {
     };
 
     // $ANTLR start "super_"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:351:1: super_ : SUPER ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:351:1: super_ : SUPER ;
     public final JavaParser.super__return super_() throws RecognitionException {
         JavaParser.super__return retval = new JavaParser.super__return();
         retval.start = input.LT(1);
-        int super__StartIndex = input.index();
+
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 71) ) { return retval; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:351:8: ( SUPER )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:351:10: SUPER
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:351:8: ( SUPER )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:351:10: SUPER
             {
-            match(input,SUPER,FOLLOW_SUPER_in_super_2108); if (state.failed) return retval;
+            match(input,SUPER,FOLLOW_SUPER_in_super_2106); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
               helper.registerOperant(input.toString(retval.start,input.LT(-1)));
             }
@@ -7361,7 +7180,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 71, super__StartIndex); }
         }
         return retval;
     }
@@ -7371,17 +7189,16 @@ public class JavaParser extends Parser {
     };
 
     // $ANTLR start "void_"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:352:1: void_ : VOID ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:352:1: void_ : VOID ;
     public final JavaParser.void__return void_() throws RecognitionException {
         JavaParser.void__return retval = new JavaParser.void__return();
         retval.start = input.LT(1);
-        int void__StartIndex = input.index();
+
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 72) ) { return retval; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:352:7: ( VOID )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:352:9: VOID
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:352:7: ( VOID )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:352:9: VOID
             {
-            match(input,VOID,FOLLOW_VOID_in_void_2117); if (state.failed) return retval;
+            match(input,VOID,FOLLOW_VOID_in_void_2115); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
               helper.registerOperant(input.toString(retval.start,input.LT(-1)));
             }
@@ -7396,7 +7213,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 72, void__StartIndex); }
         }
         return retval;
     }
@@ -7406,17 +7222,16 @@ public class JavaParser extends Parser {
     };
 
     // $ANTLR start "public_"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:353:1: public_ : PUBLIC ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:353:1: public_ : PUBLIC ;
     public final JavaParser.public__return public_() throws RecognitionException {
         JavaParser.public__return retval = new JavaParser.public__return();
         retval.start = input.LT(1);
-        int public__StartIndex = input.index();
+
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 73) ) { return retval; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:353:9: ( PUBLIC )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:353:11: PUBLIC
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:353:9: ( PUBLIC )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:353:11: PUBLIC
             {
-            match(input,PUBLIC,FOLLOW_PUBLIC_in_public_2126); if (state.failed) return retval;
+            match(input,PUBLIC,FOLLOW_PUBLIC_in_public_2124); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
               helper.registerOperator(input.toString(retval.start,input.LT(-1)));
             }
@@ -7431,7 +7246,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 73, public__StartIndex); }
         }
         return retval;
     }
@@ -7441,17 +7255,16 @@ public class JavaParser extends Parser {
     };
 
     // $ANTLR start "private_"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:354:1: private_ : PRIVATE ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:354:1: private_ : PRIVATE ;
     public final JavaParser.private__return private_() throws RecognitionException {
         JavaParser.private__return retval = new JavaParser.private__return();
         retval.start = input.LT(1);
-        int private__StartIndex = input.index();
+
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 74) ) { return retval; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:354:9: ( PRIVATE )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:354:11: PRIVATE
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:354:9: ( PRIVATE )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:354:11: PRIVATE
             {
-            match(input,PRIVATE,FOLLOW_PRIVATE_in_private_2134); if (state.failed) return retval;
+            match(input,PRIVATE,FOLLOW_PRIVATE_in_private_2132); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
               helper.registerOperator(input.toString(retval.start,input.LT(-1)));
             }
@@ -7466,7 +7279,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 74, private__StartIndex); }
         }
         return retval;
     }
@@ -7476,17 +7288,16 @@ public class JavaParser extends Parser {
     };
 
     // $ANTLR start "protected_"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:355:1: protected_ : PROTECTED ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:355:1: protected_ : PROTECTED ;
     public final JavaParser.protected__return protected_() throws RecognitionException {
         JavaParser.protected__return retval = new JavaParser.protected__return();
         retval.start = input.LT(1);
-        int protected__StartIndex = input.index();
+
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 75) ) { return retval; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:356:2: ( PROTECTED )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:356:4: PROTECTED
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:356:2: ( PROTECTED )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:356:4: PROTECTED
             {
-            match(input,PROTECTED,FOLLOW_PROTECTED_in_protected_2144); if (state.failed) return retval;
+            match(input,PROTECTED,FOLLOW_PROTECTED_in_protected_2142); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
               helper.registerOperator(input.toString(retval.start,input.LT(-1)));
             }
@@ -7501,7 +7312,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 75, protected__StartIndex); }
         }
         return retval;
     }
@@ -7511,17 +7321,16 @@ public class JavaParser extends Parser {
     };
 
     // $ANTLR start "static_"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:357:1: static_ : STATIC ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:357:1: static_ : STATIC ;
     public final JavaParser.static__return static_() throws RecognitionException {
         JavaParser.static__return retval = new JavaParser.static__return();
         retval.start = input.LT(1);
-        int static__StartIndex = input.index();
+
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 76) ) { return retval; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:357:9: ( STATIC )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:357:11: STATIC
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:357:9: ( STATIC )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:357:11: STATIC
             {
-            match(input,STATIC,FOLLOW_STATIC_in_static_2153); if (state.failed) return retval;
+            match(input,STATIC,FOLLOW_STATIC_in_static_2151); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
               helper.registerOperator(input.toString(retval.start,input.LT(-1)));
             }
@@ -7536,7 +7345,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 76, static__StartIndex); }
         }
         return retval;
     }
@@ -7546,17 +7354,16 @@ public class JavaParser extends Parser {
     };
 
     // $ANTLR start "final_"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:358:1: final_ : FINAL ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:358:1: final_ : FINAL ;
     public final JavaParser.final__return final_() throws RecognitionException {
         JavaParser.final__return retval = new JavaParser.final__return();
         retval.start = input.LT(1);
-        int final__StartIndex = input.index();
+
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 77) ) { return retval; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:358:8: ( FINAL )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:358:10: FINAL
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:358:8: ( FINAL )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:358:10: FINAL
             {
-            match(input,FINAL,FOLLOW_FINAL_in_final_2162); if (state.failed) return retval;
+            match(input,FINAL,FOLLOW_FINAL_in_final_2160); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
               helper.registerOperator(input.toString(retval.start,input.LT(-1)));
             }
@@ -7571,7 +7378,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 77, final__StartIndex); }
         }
         return retval;
     }
@@ -7581,17 +7387,16 @@ public class JavaParser extends Parser {
     };
 
     // $ANTLR start "transient_"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:359:1: transient_ : TRANSIENT ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:359:1: transient_ : TRANSIENT ;
     public final JavaParser.transient__return transient_() throws RecognitionException {
         JavaParser.transient__return retval = new JavaParser.transient__return();
         retval.start = input.LT(1);
-        int transient__StartIndex = input.index();
+
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 78) ) { return retval; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:360:2: ( TRANSIENT )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:360:4: TRANSIENT
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:360:2: ( TRANSIENT )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:360:4: TRANSIENT
             {
-            match(input,TRANSIENT,FOLLOW_TRANSIENT_in_transient_2172); if (state.failed) return retval;
+            match(input,TRANSIENT,FOLLOW_TRANSIENT_in_transient_2170); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
               helper.registerOperator(input.toString(retval.start,input.LT(-1)));
             }
@@ -7606,7 +7411,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 78, transient__StartIndex); }
         }
         return retval;
     }
@@ -7616,17 +7420,16 @@ public class JavaParser extends Parser {
     };
 
     // $ANTLR start "new_"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:361:1: new_ : NEW ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:361:1: new_ : NEW ;
     public final JavaParser.new__return new_() throws RecognitionException {
         JavaParser.new__return retval = new JavaParser.new__return();
         retval.start = input.LT(1);
-        int new__StartIndex = input.index();
+
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 79) ) { return retval; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:361:6: ( NEW )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:361:8: NEW
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:361:6: ( NEW )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:361:8: NEW
             {
-            match(input,NEW,FOLLOW_NEW_in_new_2181); if (state.failed) return retval;
+            match(input,NEW,FOLLOW_NEW_in_new_2179); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
               helper.registerOperator(input.toString(retval.start,input.LT(-1)));
             }
@@ -7641,7 +7444,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 79, new__StartIndex); }
         }
         return retval;
     }
@@ -7651,17 +7453,16 @@ public class JavaParser extends Parser {
     };
 
     // $ANTLR start "try_"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:362:1: try_ : TRY ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:362:1: try_ : TRY ;
     public final JavaParser.try__return try_() throws RecognitionException {
         JavaParser.try__return retval = new JavaParser.try__return();
         retval.start = input.LT(1);
-        int try__StartIndex = input.index();
+
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 80) ) { return retval; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:362:6: ( TRY )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:362:8: TRY
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:362:6: ( TRY )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:362:8: TRY
             {
-            match(input,TRY,FOLLOW_TRY_in_try_2190); if (state.failed) return retval;
+            match(input,TRY,FOLLOW_TRY_in_try_2188); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
               helper.registerOperator(input.toString(retval.start,input.LT(-1)));
             }
@@ -7676,7 +7477,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 80, try__StartIndex); }
         }
         return retval;
     }
@@ -7686,17 +7486,16 @@ public class JavaParser extends Parser {
     };
 
     // $ANTLR start "catch_"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:363:1: catch_ : CATCH ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:363:1: catch_ : CATCH ;
     public final JavaParser.catch__return catch_() throws RecognitionException {
         JavaParser.catch__return retval = new JavaParser.catch__return();
         retval.start = input.LT(1);
-        int catch__StartIndex = input.index();
+
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 81) ) { return retval; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:363:8: ( CATCH )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:363:10: CATCH
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:363:8: ( CATCH )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:363:10: CATCH
             {
-            match(input,CATCH,FOLLOW_CATCH_in_catch_2199); if (state.failed) return retval;
+            match(input,CATCH,FOLLOW_CATCH_in_catch_2197); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
               helper.registerOperator(input.toString(retval.start,input.LT(-1)), 1);
             }
@@ -7711,7 +7510,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 81, catch__StartIndex); }
         }
         return retval;
     }
@@ -7721,17 +7519,16 @@ public class JavaParser extends Parser {
     };
 
     // $ANTLR start "finally_"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:364:1: finally_ : FINALLY ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:364:1: finally_ : FINALLY ;
     public final JavaParser.finally__return finally_() throws RecognitionException {
         JavaParser.finally__return retval = new JavaParser.finally__return();
         retval.start = input.LT(1);
-        int finally__StartIndex = input.index();
+
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 82) ) { return retval; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:364:9: ( FINALLY )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:364:11: FINALLY
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:364:9: ( FINALLY )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:364:11: FINALLY
             {
-            match(input,FINALLY,FOLLOW_FINALLY_in_finally_2207); if (state.failed) return retval;
+            match(input,FINALLY,FOLLOW_FINALLY_in_finally_2205); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
               helper.registerOperator(input.toString(retval.start,input.LT(-1)), 1);
             }
@@ -7746,7 +7543,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 82, finally__StartIndex); }
         }
         return retval;
     }
@@ -7756,17 +7552,16 @@ public class JavaParser extends Parser {
     };
 
     // $ANTLR start "throws_"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:365:1: throws_ : THROWS ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:365:1: throws_ : THROWS ;
     public final JavaParser.throws__return throws_() throws RecognitionException {
         JavaParser.throws__return retval = new JavaParser.throws__return();
         retval.start = input.LT(1);
-        int throws__StartIndex = input.index();
+
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 83) ) { return retval; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:365:9: ( THROWS )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:365:11: THROWS
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:365:9: ( THROWS )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:365:11: THROWS
             {
-            match(input,THROWS,FOLLOW_THROWS_in_throws_2216); if (state.failed) return retval;
+            match(input,THROWS,FOLLOW_THROWS_in_throws_2214); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
               helper.registerOperator(input.toString(retval.start,input.LT(-1)), 1);
             }
@@ -7781,7 +7576,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 83, throws__StartIndex); }
         }
         return retval;
     }
@@ -7791,17 +7585,16 @@ public class JavaParser extends Parser {
     };
 
     // $ANTLR start "throw_"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:366:1: throw_ : THROW ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:366:1: throw_ : THROW ;
     public final JavaParser.throw__return throw_() throws RecognitionException {
         JavaParser.throw__return retval = new JavaParser.throw__return();
         retval.start = input.LT(1);
-        int throw__StartIndex = input.index();
+
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 84) ) { return retval; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:366:8: ( THROW )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:366:10: THROW
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:366:8: ( THROW )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:366:10: THROW
             {
-            match(input,THROW,FOLLOW_THROW_in_throw_2225); if (state.failed) return retval;
+            match(input,THROW,FOLLOW_THROW_in_throw_2223); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
               helper.registerOperator(input.toString(retval.start,input.LT(-1)), 1);
             }
@@ -7816,7 +7609,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 84, throw__StartIndex); }
         }
         return retval;
     }
@@ -7824,15 +7616,13 @@ public class JavaParser extends Parser {
 
 
     // $ANTLR start "for_"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:368:1: for_ : FOR ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:368:1: for_ : FOR ;
     public final void for_() throws RecognitionException {
-        int for__StartIndex = input.index();
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 85) ) { return ; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:368:6: ( FOR )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:368:8: FOR
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:368:6: ( FOR )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:368:8: FOR
             {
-            match(input,FOR,FOLLOW_FOR_in_for_2235); if (state.failed) return ;
+            match(input,FOR,FOLLOW_FOR_in_for_2233); if (state.failed) return ;
             if ( state.backtracking==0 ) {
               helper.registerOperator("for()", 1);
             }
@@ -7845,7 +7635,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 85, for__StartIndex); }
         }
         return ;
     }
@@ -7853,15 +7642,13 @@ public class JavaParser extends Parser {
 
 
     // $ANTLR start "while_"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:369:1: while_ : WHILE ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:369:1: while_ : WHILE ;
     public final void while_() throws RecognitionException {
-        int while__StartIndex = input.index();
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 86) ) { return ; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:369:8: ( WHILE )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:369:10: WHILE
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:369:8: ( WHILE )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:369:10: WHILE
             {
-            match(input,WHILE,FOLLOW_WHILE_in_while_2244); if (state.failed) return ;
+            match(input,WHILE,FOLLOW_WHILE_in_while_2242); if (state.failed) return ;
             if ( state.backtracking==0 ) {
               helper.registerOperator("while()", 1);
             }
@@ -7874,7 +7661,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 86, while__StartIndex); }
         }
         return ;
     }
@@ -7882,15 +7668,13 @@ public class JavaParser extends Parser {
 
 
     // $ANTLR start "do_"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:370:1: do_ : DO ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:370:1: do_ : DO ;
     public final void do_() throws RecognitionException {
-        int do__StartIndex = input.index();
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 87) ) { return ; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:370:5: ( DO )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:370:7: DO
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:370:5: ( DO )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:370:7: DO
             {
-            match(input,DO,FOLLOW_DO_in_do_2253); if (state.failed) return ;
+            match(input,DO,FOLLOW_DO_in_do_2251); if (state.failed) return ;
             if ( state.backtracking==0 ) {
               helper.registerOperator("do()", 1);
             }
@@ -7903,7 +7687,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 87, do__StartIndex); }
         }
         return ;
     }
@@ -7911,15 +7694,13 @@ public class JavaParser extends Parser {
 
 
     // $ANTLR start "if_"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:371:1: if_ : IF ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:371:1: if_ : IF ;
     public final void if_() throws RecognitionException {
-        int if__StartIndex = input.index();
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 88) ) { return ; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:371:5: ( IF )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:371:7: IF
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:371:5: ( IF )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:371:7: IF
             {
-            match(input,IF,FOLLOW_IF_in_if_2262); if (state.failed) return ;
+            match(input,IF,FOLLOW_IF_in_if_2260); if (state.failed) return ;
             if ( state.backtracking==0 ) {
               helper.registerOperator("if()", 1);
             }
@@ -7932,7 +7713,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 88, if__StartIndex); }
         }
         return ;
     }
@@ -7940,15 +7720,13 @@ public class JavaParser extends Parser {
 
 
     // $ANTLR start "else_"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:372:1: else_ : ELSE ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:372:1: else_ : ELSE ;
     public final void else_() throws RecognitionException {
-        int else__StartIndex = input.index();
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 89) ) { return ; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:372:7: ( ELSE )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:372:9: ELSE
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:372:7: ( ELSE )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:372:9: ELSE
             {
-            match(input,ELSE,FOLLOW_ELSE_in_else_2271); if (state.failed) return ;
+            match(input,ELSE,FOLLOW_ELSE_in_else_2269); if (state.failed) return ;
             if ( state.backtracking==0 ) {
               helper.registerOperator("else");
             }
@@ -7961,7 +7739,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 89, else__StartIndex); }
         }
         return ;
     }
@@ -7969,15 +7746,13 @@ public class JavaParser extends Parser {
 
 
     // $ANTLR start "switch_"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:374:1: switch_ : SWITCH ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:374:1: switch_ : SWITCH ;
     public final void switch_() throws RecognitionException {
-        int switch__StartIndex = input.index();
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 90) ) { return ; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:374:9: ( SWITCH )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:374:11: SWITCH
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:374:9: ( SWITCH )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:374:11: SWITCH
             {
-            match(input,SWITCH,FOLLOW_SWITCH_in_switch_2281); if (state.failed) return ;
+            match(input,SWITCH,FOLLOW_SWITCH_in_switch_2279); if (state.failed) return ;
             if ( state.backtracking==0 ) {
               helper.registerOperator("switch()");
             }
@@ -7990,7 +7765,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 90, switch__StartIndex); }
         }
         return ;
     }
@@ -7998,15 +7772,13 @@ public class JavaParser extends Parser {
 
 
     // $ANTLR start "case_"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:375:1: case_ : CASE ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:375:1: case_ : CASE ;
     public final void case_() throws RecognitionException {
-        int case__StartIndex = input.index();
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 91) ) { return ; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:375:7: ( CASE )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:375:9: CASE
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:375:7: ( CASE )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:375:9: CASE
             {
-            match(input,CASE,FOLLOW_CASE_in_case_2290); if (state.failed) return ;
+            match(input,CASE,FOLLOW_CASE_in_case_2288); if (state.failed) return ;
             if ( state.backtracking==0 ) {
               helper.registerOperator("switch()");
             }
@@ -8019,7 +7791,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 91, case__StartIndex); }
         }
         return ;
     }
@@ -8027,15 +7798,13 @@ public class JavaParser extends Parser {
 
 
     // $ANTLR start "default_"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:376:1: default_ : DEFAULT ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:376:1: default_ : DEFAULT ;
     public final void default_() throws RecognitionException {
-        int default__StartIndex = input.index();
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 92) ) { return ; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:376:9: ( DEFAULT )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:376:11: DEFAULT
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:376:9: ( DEFAULT )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:376:11: DEFAULT
             {
-            match(input,DEFAULT,FOLLOW_DEFAULT_in_default_2298); if (state.failed) return ;
+            match(input,DEFAULT,FOLLOW_DEFAULT_in_default_2296); if (state.failed) return ;
             if ( state.backtracking==0 ) {
               helper.registerOperator("switch()");
             }
@@ -8048,7 +7817,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 92, default__StartIndex); }
         }
         return ;
     }
@@ -8058,17 +7826,16 @@ public class JavaParser extends Parser {
     };
 
     // $ANTLR start "return_"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:378:1: return_ : RETURN ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:378:1: return_ : RETURN ;
     public final JavaParser.return__return return_() throws RecognitionException {
         JavaParser.return__return retval = new JavaParser.return__return();
         retval.start = input.LT(1);
-        int return__StartIndex = input.index();
+
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 93) ) { return retval; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:378:9: ( RETURN )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:378:11: RETURN
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:378:9: ( RETURN )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:378:11: RETURN
             {
-            match(input,RETURN,FOLLOW_RETURN_in_return_2308); if (state.failed) return retval;
+            match(input,RETURN,FOLLOW_RETURN_in_return_2306); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
               helper.registerOperator(input.toString(retval.start,input.LT(-1)));
             }
@@ -8083,7 +7850,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 93, return__StartIndex); }
         }
         return retval;
     }
@@ -8093,16 +7859,15 @@ public class JavaParser extends Parser {
     };
 
     // $ANTLR start "break_"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:379:1: break_ : ( BREAK id | BREAK );
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:379:1: break_ : ( BREAK id | BREAK );
     public final JavaParser.break__return break_() throws RecognitionException {
         JavaParser.break__return retval = new JavaParser.break__return();
         retval.start = input.LT(1);
-        int break__StartIndex = input.index();
+
         Token BREAK6=null;
 
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 94) ) { return retval; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:379:8: ( BREAK id | BREAK )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:379:8: ( BREAK id | BREAK )
             int alt115=2;
             int LA115_0 = input.LA(1);
 
@@ -8146,10 +7911,10 @@ public class JavaParser extends Parser {
             }
             switch (alt115) {
                 case 1 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:379:10: BREAK id
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:379:10: BREAK id
                     {
-                    BREAK6=(Token)match(input,BREAK,FOLLOW_BREAK_in_break_2317); if (state.failed) return retval;
-                    pushFollow(FOLLOW_id_in_break_2319);
+                    BREAK6=(Token)match(input,BREAK,FOLLOW_BREAK_in_break_2315); if (state.failed) return retval;
+                    pushFollow(FOLLOW_id_in_break_2317);
                     id();
 
                     state._fsp--;
@@ -8161,9 +7926,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:380:4: BREAK
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:380:4: BREAK
                     {
-                    match(input,BREAK,FOLLOW_BREAK_in_break_2326); if (state.failed) return retval;
+                    match(input,BREAK,FOLLOW_BREAK_in_break_2324); if (state.failed) return retval;
                     if ( state.backtracking==0 ) {
                       helper.registerOperator(input.toString(retval.start,input.LT(-1)));
                     }
@@ -8180,7 +7945,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 94, break__StartIndex); }
         }
         return retval;
     }
@@ -8190,17 +7954,16 @@ public class JavaParser extends Parser {
     };
 
     // $ANTLR start "continue_"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:382:1: continue_ : CONTINUE ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:382:1: continue_ : CONTINUE ;
     public final JavaParser.continue__return continue_() throws RecognitionException {
         JavaParser.continue__return retval = new JavaParser.continue__return();
         retval.start = input.LT(1);
-        int continue__StartIndex = input.index();
+
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 95) ) { return retval; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:383:2: ( CONTINUE )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:383:4: CONTINUE
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:383:2: ( CONTINUE )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:383:4: CONTINUE
             {
-            match(input,CONTINUE,FOLLOW_CONTINUE_in_continue_2338); if (state.failed) return retval;
+            match(input,CONTINUE,FOLLOW_CONTINUE_in_continue_2336); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
               helper.registerOperator(input.toString(retval.start,input.LT(-1)));
             }
@@ -8215,7 +7978,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 95, continue__StartIndex); }
         }
         return retval;
     }
@@ -8225,17 +7987,16 @@ public class JavaParser extends Parser {
     };
 
     // $ANTLR start "semicolon"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:389:1: semicolon : SEMICOLON ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:389:1: semicolon : SEMICOLON ;
     public final JavaParser.semicolon_return semicolon() throws RecognitionException {
         JavaParser.semicolon_return retval = new JavaParser.semicolon_return();
         retval.start = input.LT(1);
-        int semicolon_StartIndex = input.index();
+
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 96) ) { return retval; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:390:2: ( SEMICOLON )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:390:4: SEMICOLON
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:390:2: ( SEMICOLON )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:390:4: SEMICOLON
             {
-            match(input,SEMICOLON,FOLLOW_SEMICOLON_in_semicolon2353); if (state.failed) return retval;
+            match(input,SEMICOLON,FOLLOW_SEMICOLON_in_semicolon2351); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
               helper.registerOperator(input.toString(retval.start,input.LT(-1)));
             }
@@ -8250,7 +8011,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 96, semicolon_StartIndex); }
         }
         return retval;
     }
@@ -8260,17 +8020,16 @@ public class JavaParser extends Parser {
     };
 
     // $ANTLR start "comma"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:391:1: comma : COMMA ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:391:1: comma : COMMA ;
     public final JavaParser.comma_return comma() throws RecognitionException {
         JavaParser.comma_return retval = new JavaParser.comma_return();
         retval.start = input.LT(1);
-        int comma_StartIndex = input.index();
+
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 97) ) { return retval; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:391:7: ( COMMA )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:391:9: COMMA
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:391:7: ( COMMA )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:391:9: COMMA
             {
-            match(input,COMMA,FOLLOW_COMMA_in_comma2362); if (state.failed) return retval;
+            match(input,COMMA,FOLLOW_COMMA_in_comma2360); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
               helper.registerOperator(input.toString(retval.start,input.LT(-1)));
             }
@@ -8285,7 +8044,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 97, comma_StartIndex); }
         }
         return retval;
     }
@@ -8295,17 +8053,16 @@ public class JavaParser extends Parser {
     };
 
     // $ANTLR start "colon"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:392:1: colon : COLON ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:392:1: colon : COLON ;
     public final JavaParser.colon_return colon() throws RecognitionException {
         JavaParser.colon_return retval = new JavaParser.colon_return();
         retval.start = input.LT(1);
-        int colon_StartIndex = input.index();
+
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 98) ) { return retval; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:392:7: ( COLON )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:392:9: COLON
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:392:7: ( COLON )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:392:9: COLON
             {
-            match(input,COLON,FOLLOW_COLON_in_colon2371); if (state.failed) return retval;
+            match(input,COLON,FOLLOW_COLON_in_colon2369); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
               helper.registerOperator(input.toString(retval.start,input.LT(-1)));
             }
@@ -8320,7 +8077,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 98, colon_StartIndex); }
         }
         return retval;
     }
@@ -8330,17 +8086,16 @@ public class JavaParser extends Parser {
     };
 
     // $ANTLR start "question_"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:393:1: question_ : QUESTION ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:393:1: question_ : QUESTION ;
     public final JavaParser.question__return question_() throws RecognitionException {
         JavaParser.question__return retval = new JavaParser.question__return();
         retval.start = input.LT(1);
-        int question__StartIndex = input.index();
+
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 99) ) { return retval; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:394:2: ( QUESTION )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:394:4: QUESTION
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:394:2: ( QUESTION )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:394:4: QUESTION
             {
-            match(input,QUESTION,FOLLOW_QUESTION_in_question_2381); if (state.failed) return retval;
+            match(input,QUESTION,FOLLOW_QUESTION_in_question_2379); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
               helper.registerOperator(input.toString(retval.start,input.LT(-1)));
             }
@@ -8355,7 +8110,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 99, question__StartIndex); }
         }
         return retval;
     }
@@ -8365,17 +8119,16 @@ public class JavaParser extends Parser {
     };
 
     // $ANTLR start "plus"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:395:1: plus : PLUS ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:395:1: plus : PLUS ;
     public final JavaParser.plus_return plus() throws RecognitionException {
         JavaParser.plus_return retval = new JavaParser.plus_return();
         retval.start = input.LT(1);
-        int plus_StartIndex = input.index();
+
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 100) ) { return retval; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:395:6: ( PLUS )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:395:8: PLUS
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:395:6: ( PLUS )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:395:8: PLUS
             {
-            match(input,PLUS,FOLLOW_PLUS_in_plus2390); if (state.failed) return retval;
+            match(input,PLUS,FOLLOW_PLUS_in_plus2388); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
               helper.registerOperator(input.toString(retval.start,input.LT(-1)));
             }
@@ -8390,7 +8143,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 100, plus_StartIndex); }
         }
         return retval;
     }
@@ -8400,17 +8152,16 @@ public class JavaParser extends Parser {
     };
 
     // $ANTLR start "minus"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:396:1: minus : MINUS ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:396:1: minus : MINUS ;
     public final JavaParser.minus_return minus() throws RecognitionException {
         JavaParser.minus_return retval = new JavaParser.minus_return();
         retval.start = input.LT(1);
-        int minus_StartIndex = input.index();
+
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 101) ) { return retval; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:396:7: ( MINUS )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:396:9: MINUS
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:396:7: ( MINUS )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:396:9: MINUS
             {
-            match(input,MINUS,FOLLOW_MINUS_in_minus2399); if (state.failed) return retval;
+            match(input,MINUS,FOLLOW_MINUS_in_minus2397); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
               helper.registerOperator(input.toString(retval.start,input.LT(-1)));
             }
@@ -8425,7 +8176,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 101, minus_StartIndex); }
         }
         return retval;
     }
@@ -8435,17 +8185,16 @@ public class JavaParser extends Parser {
     };
 
     // $ANTLR start "dot"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:397:1: dot : DOT ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:397:1: dot : DOT ;
     public final JavaParser.dot_return dot() throws RecognitionException {
         JavaParser.dot_return retval = new JavaParser.dot_return();
         retval.start = input.LT(1);
-        int dot_StartIndex = input.index();
+
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 102) ) { return retval; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:397:5: ( DOT )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:397:7: DOT
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:397:5: ( DOT )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:397:7: DOT
             {
-            match(input,DOT,FOLLOW_DOT_in_dot2408); if (state.failed) return retval;
+            match(input,DOT,FOLLOW_DOT_in_dot2406); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
               helper.registerOperator(input.toString(retval.start,input.LT(-1)));
             }
@@ -8460,7 +8209,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 102, dot_StartIndex); }
         }
         return retval;
     }
@@ -8470,14 +8218,13 @@ public class JavaParser extends Parser {
     };
 
     // $ANTLR start "assign"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:398:1: assign : ( ASSIGN | INCASSIGN | DECASSIGN );
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:398:1: assign : ( ASSIGN | INCASSIGN | DECASSIGN );
     public final JavaParser.assign_return assign() throws RecognitionException {
         JavaParser.assign_return retval = new JavaParser.assign_return();
         retval.start = input.LT(1);
-        int assign_StartIndex = input.index();
+
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 103) ) { return retval; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:398:8: ( ASSIGN | INCASSIGN | DECASSIGN )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:398:8: ( ASSIGN | INCASSIGN | DECASSIGN )
             int alt116=3;
             switch ( input.LA(1) ) {
             case ASSIGN:
@@ -8505,9 +8252,9 @@ public class JavaParser extends Parser {
 
             switch (alt116) {
                 case 1 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:398:10: ASSIGN
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:398:10: ASSIGN
                     {
-                    match(input,ASSIGN,FOLLOW_ASSIGN_in_assign2417); if (state.failed) return retval;
+                    match(input,ASSIGN,FOLLOW_ASSIGN_in_assign2415); if (state.failed) return retval;
                     if ( state.backtracking==0 ) {
                       helper.registerOperator(input.toString(retval.start,input.LT(-1)));
                     }
@@ -8515,9 +8262,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:399:4: INCASSIGN
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:399:4: INCASSIGN
                     {
-                    match(input,INCASSIGN,FOLLOW_INCASSIGN_in_assign2424); if (state.failed) return retval;
+                    match(input,INCASSIGN,FOLLOW_INCASSIGN_in_assign2422); if (state.failed) return retval;
                     if ( state.backtracking==0 ) {
                       helper.registerOperator(input.toString(retval.start,input.LT(-1)));
                     }
@@ -8525,9 +8272,9 @@ public class JavaParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:400:4: DECASSIGN
+                    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:400:4: DECASSIGN
                     {
-                    match(input,DECASSIGN,FOLLOW_DECASSIGN_in_assign2431); if (state.failed) return retval;
+                    match(input,DECASSIGN,FOLLOW_DECASSIGN_in_assign2429); if (state.failed) return retval;
                     if ( state.backtracking==0 ) {
                       helper.registerOperator(input.toString(retval.start,input.LT(-1)));
                     }
@@ -8544,7 +8291,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 103, assign_StartIndex); }
         }
         return retval;
     }
@@ -8552,15 +8298,13 @@ public class JavaParser extends Parser {
 
 
     // $ANTLR start "block_begin"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:402:1: block_begin : OPEN_CURLY_BRACKET ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:402:1: block_begin : OPEN_CURLY_BRACKET ;
     public final void block_begin() throws RecognitionException {
-        int block_begin_StartIndex = input.index();
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 104) ) { return ; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:403:2: ( OPEN_CURLY_BRACKET )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:403:4: OPEN_CURLY_BRACKET
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:403:2: ( OPEN_CURLY_BRACKET )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:403:4: OPEN_CURLY_BRACKET
             {
-            match(input,OPEN_CURLY_BRACKET,FOLLOW_OPEN_CURLY_BRACKET_in_block_begin2443); if (state.failed) return ;
+            match(input,OPEN_CURLY_BRACKET,FOLLOW_OPEN_CURLY_BRACKET_in_block_begin2441); if (state.failed) return ;
             if ( state.backtracking==0 ) {
               helper.registerOperator("{}");
             }
@@ -8573,7 +8317,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 104, block_begin_StartIndex); }
         }
         return ;
     }
@@ -8581,15 +8324,13 @@ public class JavaParser extends Parser {
 
 
     // $ANTLR start "block_end"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:404:1: block_end : CLOSE_CURLY_BRACKET ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:404:1: block_end : CLOSE_CURLY_BRACKET ;
     public final void block_end() throws RecognitionException {
-        int block_end_StartIndex = input.index();
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 105) ) { return ; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:405:2: ( CLOSE_CURLY_BRACKET )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:405:4: CLOSE_CURLY_BRACKET
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:405:2: ( CLOSE_CURLY_BRACKET )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:405:4: CLOSE_CURLY_BRACKET
             {
-            match(input,CLOSE_CURLY_BRACKET,FOLLOW_CLOSE_CURLY_BRACKET_in_block_end2453); if (state.failed) return ;
+            match(input,CLOSE_CURLY_BRACKET,FOLLOW_CLOSE_CURLY_BRACKET_in_block_end2451); if (state.failed) return ;
             if ( state.backtracking==0 ) {
               helper.registerOperator("");
             }
@@ -8602,7 +8343,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 105, block_end_StartIndex); }
         }
         return ;
     }
@@ -8610,15 +8350,13 @@ public class JavaParser extends Parser {
 
 
     // $ANTLR start "open_bracket"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:406:1: open_bracket : OPEN_BRACKET ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:406:1: open_bracket : OPEN_BRACKET ;
     public final void open_bracket() throws RecognitionException {
-        int open_bracket_StartIndex = input.index();
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 106) ) { return ; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:407:2: ( OPEN_BRACKET )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:407:4: OPEN_BRACKET
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:407:2: ( OPEN_BRACKET )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:407:4: OPEN_BRACKET
             {
-            match(input,OPEN_BRACKET,FOLLOW_OPEN_BRACKET_in_open_bracket2463); if (state.failed) return ;
+            match(input,OPEN_BRACKET,FOLLOW_OPEN_BRACKET_in_open_bracket2461); if (state.failed) return ;
             if ( state.backtracking==0 ) {
               helper.registerOperator("()");
             }
@@ -8631,7 +8369,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 106, open_bracket_StartIndex); }
         }
         return ;
     }
@@ -8639,15 +8376,13 @@ public class JavaParser extends Parser {
 
 
     // $ANTLR start "close_bracket"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:408:1: close_bracket : CLOSE_BRACKET ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:408:1: close_bracket : CLOSE_BRACKET ;
     public final void close_bracket() throws RecognitionException {
-        int close_bracket_StartIndex = input.index();
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 107) ) { return ; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:409:2: ( CLOSE_BRACKET )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:409:4: CLOSE_BRACKET
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:409:2: ( CLOSE_BRACKET )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:409:4: CLOSE_BRACKET
             {
-            match(input,CLOSE_BRACKET,FOLLOW_CLOSE_BRACKET_in_close_bracket2473); if (state.failed) return ;
+            match(input,CLOSE_BRACKET,FOLLOW_CLOSE_BRACKET_in_close_bracket2471); if (state.failed) return ;
             if ( state.backtracking==0 ) {
               helper.registerOperator("");
             }
@@ -8660,7 +8395,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 107, close_bracket_StartIndex); }
         }
         return ;
     }
@@ -8668,15 +8402,13 @@ public class JavaParser extends Parser {
 
 
     // $ANTLR start "open_rect_bracket"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:410:1: open_rect_bracket : OPEN_RECT_BRACKET ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:410:1: open_rect_bracket : OPEN_RECT_BRACKET ;
     public final void open_rect_bracket() throws RecognitionException {
-        int open_rect_bracket_StartIndex = input.index();
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 108) ) { return ; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:411:2: ( OPEN_RECT_BRACKET )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:411:4: OPEN_RECT_BRACKET
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:411:2: ( OPEN_RECT_BRACKET )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:411:4: OPEN_RECT_BRACKET
             {
-            match(input,OPEN_RECT_BRACKET,FOLLOW_OPEN_RECT_BRACKET_in_open_rect_bracket2484); if (state.failed) return ;
+            match(input,OPEN_RECT_BRACKET,FOLLOW_OPEN_RECT_BRACKET_in_open_rect_bracket2482); if (state.failed) return ;
             if ( state.backtracking==0 ) {
               helper.registerOperator("[]");
             }
@@ -8689,7 +8421,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 108, open_rect_bracket_StartIndex); }
         }
         return ;
     }
@@ -8697,15 +8428,13 @@ public class JavaParser extends Parser {
 
 
     // $ANTLR start "close_rect_bracket"
-    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:412:1: close_rect_bracket : CLOSE_RECT_BRACKET ;
+    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:412:1: close_rect_bracket : CLOSE_RECT_BRACKET ;
     public final void close_rect_bracket() throws RecognitionException {
-        int close_rect_bracket_StartIndex = input.index();
         try {
-            if ( state.backtracking>0 && alreadyParsedRule(input, 109) ) { return ; }
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:413:2: ( CLOSE_RECT_BRACKET )
-            // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:413:4: CLOSE_RECT_BRACKET
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:413:2: ( CLOSE_RECT_BRACKET )
+            // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:413:4: CLOSE_RECT_BRACKET
             {
-            match(input,CLOSE_RECT_BRACKET,FOLLOW_CLOSE_RECT_BRACKET_in_close_rect_bracket2494); if (state.failed) return ;
+            match(input,CLOSE_RECT_BRACKET,FOLLOW_CLOSE_RECT_BRACKET_in_close_rect_bracket2492); if (state.failed) return ;
             if ( state.backtracking==0 ) {
               helper.registerOperator("");
             }
@@ -8718,7 +8447,6 @@ public class JavaParser extends Parser {
             recover(input,re);
         }
         finally {
-            if ( state.backtracking>0 ) { memoize(input, 109, close_rect_bracket_StartIndex); }
         }
         return ;
     }
@@ -8726,10 +8454,10 @@ public class JavaParser extends Parser {
 
     // $ANTLR start synpred2_JavaParser
     public final void synpred2_JavaParser_fragment() throws RecognitionException {   
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:24:33: ( class_def )
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:24:33: class_def
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:24:33: ( class_def )
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:24:33: class_def
         {
-        pushFollow(FOLLOW_class_def_in_synpred2_JavaParser50);
+        pushFollow(FOLLOW_class_def_in_synpred2_JavaParser46);
         class_def();
 
         state._fsp--;
@@ -8741,10 +8469,10 @@ public class JavaParser extends Parser {
 
     // $ANTLR start synpred3_JavaParser
     public final void synpred3_JavaParser_fragment() throws RecognitionException {   
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:24:45: ( enum_def )
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:24:45: enum_def
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:24:45: ( enum_def )
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:24:45: enum_def
         {
-        pushFollow(FOLLOW_enum_def_in_synpred3_JavaParser54);
+        pushFollow(FOLLOW_enum_def_in_synpred3_JavaParser50);
         enum_def();
 
         state._fsp--;
@@ -8756,10 +8484,10 @@ public class JavaParser extends Parser {
 
     // $ANTLR start synpred4_JavaParser
     public final void synpred4_JavaParser_fragment() throws RecognitionException {   
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:24:56: ( interface_def )
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:24:56: interface_def
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:24:56: ( interface_def )
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:24:56: interface_def
         {
-        pushFollow(FOLLOW_interface_def_in_synpred4_JavaParser58);
+        pushFollow(FOLLOW_interface_def_in_synpred4_JavaParser54);
         interface_def();
 
         state._fsp--;
@@ -8771,10 +8499,10 @@ public class JavaParser extends Parser {
 
     // $ANTLR start synpred41_JavaParser
     public final void synpred41_JavaParser_fragment() throws RecognitionException {   
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:86:17: ( class_def )
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:86:17: class_def
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:86:17: ( class_def )
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:86:17: class_def
         {
-        pushFollow(FOLLOW_class_def_in_synpred41_JavaParser441);
+        pushFollow(FOLLOW_class_def_in_synpred41_JavaParser437);
         class_def();
 
         state._fsp--;
@@ -8786,10 +8514,10 @@ public class JavaParser extends Parser {
 
     // $ANTLR start synpred42_JavaParser
     public final void synpred42_JavaParser_fragment() throws RecognitionException {   
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:86:29: ( static_init )
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:86:29: static_init
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:86:29: ( static_init )
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:86:29: static_init
         {
-        pushFollow(FOLLOW_static_init_in_synpred42_JavaParser445);
+        pushFollow(FOLLOW_static_init_in_synpred42_JavaParser441);
         static_init();
 
         state._fsp--;
@@ -8801,10 +8529,10 @@ public class JavaParser extends Parser {
 
     // $ANTLR start synpred43_JavaParser
     public final void synpred43_JavaParser_fragment() throws RecognitionException {   
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:86:43: ( constructor_def )
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:86:43: constructor_def
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:86:43: ( constructor_def )
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:86:43: constructor_def
         {
-        pushFollow(FOLLOW_constructor_def_in_synpred43_JavaParser449);
+        pushFollow(FOLLOW_constructor_def_in_synpred43_JavaParser445);
         constructor_def();
 
         state._fsp--;
@@ -8816,10 +8544,10 @@ public class JavaParser extends Parser {
 
     // $ANTLR start synpred44_JavaParser
     public final void synpred44_JavaParser_fragment() throws RecognitionException {   
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:86:61: ( method_def )
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:86:61: method_def
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:86:61: ( method_def )
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:86:61: method_def
         {
-        pushFollow(FOLLOW_method_def_in_synpred44_JavaParser453);
+        pushFollow(FOLLOW_method_def_in_synpred44_JavaParser449);
         method_def();
 
         state._fsp--;
@@ -8831,10 +8559,10 @@ public class JavaParser extends Parser {
 
     // $ANTLR start synpred45_JavaParser
     public final void synpred45_JavaParser_fragment() throws RecognitionException {   
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:86:74: ( field_def )
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:86:74: field_def
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:86:74: ( field_def )
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:86:74: field_def
         {
-        pushFollow(FOLLOW_field_def_in_synpred45_JavaParser457);
+        pushFollow(FOLLOW_field_def_in_synpred45_JavaParser453);
         field_def();
 
         state._fsp--;
@@ -8846,10 +8574,10 @@ public class JavaParser extends Parser {
 
     // $ANTLR start synpred47_JavaParser
     public final void synpred47_JavaParser_fragment() throws RecognitionException {   
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:90:17: ( class_def )
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:90:17: class_def
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:90:17: ( class_def )
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:90:17: class_def
         {
-        pushFollow(FOLLOW_class_def_in_synpred47_JavaParser479);
+        pushFollow(FOLLOW_class_def_in_synpred47_JavaParser475);
         class_def();
 
         state._fsp--;
@@ -8861,10 +8589,10 @@ public class JavaParser extends Parser {
 
     // $ANTLR start synpred48_JavaParser
     public final void synpred48_JavaParser_fragment() throws RecognitionException {   
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:90:29: ( constructor_def )
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:90:29: constructor_def
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:90:29: ( constructor_def )
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:90:29: constructor_def
         {
-        pushFollow(FOLLOW_constructor_def_in_synpred48_JavaParser483);
+        pushFollow(FOLLOW_constructor_def_in_synpred48_JavaParser479);
         constructor_def();
 
         state._fsp--;
@@ -8876,10 +8604,10 @@ public class JavaParser extends Parser {
 
     // $ANTLR start synpred49_JavaParser
     public final void synpred49_JavaParser_fragment() throws RecognitionException {   
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:90:47: ( method_def )
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:90:47: method_def
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:90:47: ( method_def )
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:90:47: method_def
         {
-        pushFollow(FOLLOW_method_def_in_synpred49_JavaParser487);
+        pushFollow(FOLLOW_method_def_in_synpred49_JavaParser483);
         method_def();
 
         state._fsp--;
@@ -8891,10 +8619,10 @@ public class JavaParser extends Parser {
 
     // $ANTLR start synpred50_JavaParser
     public final void synpred50_JavaParser_fragment() throws RecognitionException {   
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:90:60: ( field_def )
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:90:60: field_def
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:90:60: ( field_def )
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:90:60: field_def
         {
-        pushFollow(FOLLOW_field_def_in_synpred50_JavaParser491);
+        pushFollow(FOLLOW_field_def_in_synpred50_JavaParser487);
         field_def();
 
         state._fsp--;
@@ -8906,10 +8634,10 @@ public class JavaParser extends Parser {
 
     // $ANTLR start synpred51_JavaParser
     public final void synpred51_JavaParser_fragment() throws RecognitionException {   
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:90:72: ( enum_content )
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:90:72: enum_content
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:90:72: ( enum_content )
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:90:72: enum_content
         {
-        pushFollow(FOLLOW_enum_content_in_synpred51_JavaParser495);
+        pushFollow(FOLLOW_enum_content_in_synpred51_JavaParser491);
         enum_content();
 
         state._fsp--;
@@ -8921,10 +8649,10 @@ public class JavaParser extends Parser {
 
     // $ANTLR start synpred72_JavaParser
     public final void synpred72_JavaParser_fragment() throws RecognitionException {   
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:115:15: ( left_unary )
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:115:15: left_unary
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:115:15: ( left_unary )
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:115:15: left_unary
         {
-        pushFollow(FOLLOW_left_unary_in_synpred72_JavaParser732);
+        pushFollow(FOLLOW_left_unary_in_synpred72_JavaParser728);
         left_unary();
 
         state._fsp--;
@@ -8936,25 +8664,25 @@ public class JavaParser extends Parser {
 
     // $ANTLR start synpred75_JavaParser
     public final void synpred75_JavaParser_fragment() throws RecognitionException {   
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:115:79: ( question_ value colon value )
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:115:79: question_ value colon value
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:115:79: ( question_ value colon value )
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:115:79: question_ value colon value
         {
-        pushFollow(FOLLOW_question__in_synpred75_JavaParser748);
+        pushFollow(FOLLOW_question__in_synpred75_JavaParser744);
         question_();
 
         state._fsp--;
         if (state.failed) return ;
-        pushFollow(FOLLOW_value_in_synpred75_JavaParser750);
+        pushFollow(FOLLOW_value_in_synpred75_JavaParser746);
         value();
 
         state._fsp--;
         if (state.failed) return ;
-        pushFollow(FOLLOW_colon_in_synpred75_JavaParser752);
+        pushFollow(FOLLOW_colon_in_synpred75_JavaParser748);
         colon();
 
         state._fsp--;
         if (state.failed) return ;
-        pushFollow(FOLLOW_value_in_synpred75_JavaParser754);
+        pushFollow(FOLLOW_value_in_synpred75_JavaParser750);
         value();
 
         state._fsp--;
@@ -8966,10 +8694,10 @@ public class JavaParser extends Parser {
 
     // $ANTLR start synpred76_JavaParser
     public final void synpred76_JavaParser_fragment() throws RecognitionException {   
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:115:9: ( ( cast )? ( left_unary )? single_value ( right_unary )? ( binary_operator value )? ( question_ value colon value )? )
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:115:9: ( cast )? ( left_unary )? single_value ( right_unary )? ( binary_operator value )? ( question_ value colon value )?
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:115:9: ( ( cast )? ( left_unary )? single_value ( right_unary )? ( binary_operator value )? ( question_ value colon value )? )
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:115:9: ( cast )? ( left_unary )? single_value ( right_unary )? ( binary_operator value )? ( question_ value colon value )?
         {
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:115:9: ( cast )?
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:115:9: ( cast )?
         int alt134=2;
         int LA134_0 = input.LA(1);
 
@@ -8978,9 +8706,9 @@ public class JavaParser extends Parser {
         }
         switch (alt134) {
             case 1 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: cast
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: cast
                 {
-                pushFollow(FOLLOW_cast_in_synpred76_JavaParser729);
+                pushFollow(FOLLOW_cast_in_synpred76_JavaParser725);
                 cast();
 
                 state._fsp--;
@@ -8991,7 +8719,7 @@ public class JavaParser extends Parser {
 
         }
 
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:115:15: ( left_unary )?
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:115:15: ( left_unary )?
         int alt135=2;
         switch ( input.LA(1) ) {
             case INC:
@@ -9043,9 +8771,9 @@ public class JavaParser extends Parser {
 
         switch (alt135) {
             case 1 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: left_unary
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: left_unary
                 {
-                pushFollow(FOLLOW_left_unary_in_synpred76_JavaParser732);
+                pushFollow(FOLLOW_left_unary_in_synpred76_JavaParser728);
                 left_unary();
 
                 state._fsp--;
@@ -9056,12 +8784,12 @@ public class JavaParser extends Parser {
 
         }
 
-        pushFollow(FOLLOW_single_value_in_synpred76_JavaParser735);
+        pushFollow(FOLLOW_single_value_in_synpred76_JavaParser731);
         single_value();
 
         state._fsp--;
         if (state.failed) return ;
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:115:40: ( right_unary )?
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:115:40: ( right_unary )?
         int alt136=2;
         int LA136_0 = input.LA(1);
 
@@ -9070,9 +8798,9 @@ public class JavaParser extends Parser {
         }
         switch (alt136) {
             case 1 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: right_unary
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: right_unary
                 {
-                pushFollow(FOLLOW_right_unary_in_synpred76_JavaParser737);
+                pushFollow(FOLLOW_right_unary_in_synpred76_JavaParser733);
                 right_unary();
 
                 state._fsp--;
@@ -9083,7 +8811,7 @@ public class JavaParser extends Parser {
 
         }
 
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:115:53: ( binary_operator value )?
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:115:53: ( binary_operator value )?
         int alt137=2;
         int LA137_0 = input.LA(1);
 
@@ -9092,14 +8820,14 @@ public class JavaParser extends Parser {
         }
         switch (alt137) {
             case 1 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:115:54: binary_operator value
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:115:54: binary_operator value
                 {
-                pushFollow(FOLLOW_binary_operator_in_synpred76_JavaParser741);
+                pushFollow(FOLLOW_binary_operator_in_synpred76_JavaParser737);
                 binary_operator();
 
                 state._fsp--;
                 if (state.failed) return ;
-                pushFollow(FOLLOW_value_in_synpred76_JavaParser743);
+                pushFollow(FOLLOW_value_in_synpred76_JavaParser739);
                 value();
 
                 state._fsp--;
@@ -9110,7 +8838,7 @@ public class JavaParser extends Parser {
 
         }
 
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:115:78: ( question_ value colon value )?
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:115:78: ( question_ value colon value )?
         int alt138=2;
         int LA138_0 = input.LA(1);
 
@@ -9119,24 +8847,24 @@ public class JavaParser extends Parser {
         }
         switch (alt138) {
             case 1 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:115:79: question_ value colon value
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:115:79: question_ value colon value
                 {
-                pushFollow(FOLLOW_question__in_synpred76_JavaParser748);
+                pushFollow(FOLLOW_question__in_synpred76_JavaParser744);
                 question_();
 
                 state._fsp--;
                 if (state.failed) return ;
-                pushFollow(FOLLOW_value_in_synpred76_JavaParser750);
+                pushFollow(FOLLOW_value_in_synpred76_JavaParser746);
                 value();
 
                 state._fsp--;
                 if (state.failed) return ;
-                pushFollow(FOLLOW_colon_in_synpred76_JavaParser752);
+                pushFollow(FOLLOW_colon_in_synpred76_JavaParser748);
                 colon();
 
                 state._fsp--;
                 if (state.failed) return ;
-                pushFollow(FOLLOW_value_in_synpred76_JavaParser754);
+                pushFollow(FOLLOW_value_in_synpred76_JavaParser750);
                 value();
 
                 state._fsp--;
@@ -9154,10 +8882,10 @@ public class JavaParser extends Parser {
 
     // $ANTLR start synpred93_JavaParser
     public final void synpred93_JavaParser_fragment() throws RecognitionException {   
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:142:21: ( generic )
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:142:21: generic
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:142:21: ( generic )
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:142:21: generic
         {
-        pushFollow(FOLLOW_generic_in_synpred93_JavaParser888);
+        pushFollow(FOLLOW_generic_in_synpred93_JavaParser884);
         generic();
 
         state._fsp--;
@@ -9169,15 +8897,15 @@ public class JavaParser extends Parser {
 
     // $ANTLR start synpred98_JavaParser
     public final void synpred98_JavaParser_fragment() throws RecognitionException {   
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:146:5: ( value ( comma value )* )
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:146:5: value ( comma value )*
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:146:5: ( value ( comma value )* )
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:146:5: value ( comma value )*
         {
-        pushFollow(FOLLOW_value_in_synpred98_JavaParser924);
+        pushFollow(FOLLOW_value_in_synpred98_JavaParser920);
         value();
 
         state._fsp--;
         if (state.failed) return ;
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:146:11: ( comma value )*
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:146:11: ( comma value )*
         loop140:
         do {
             int alt140=2;
@@ -9190,14 +8918,14 @@ public class JavaParser extends Parser {
 
             switch (alt140) {
         	case 1 :
-        	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:146:12: comma value
+        	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:146:12: comma value
         	    {
-        	    pushFollow(FOLLOW_comma_in_synpred98_JavaParser927);
+        	    pushFollow(FOLLOW_comma_in_synpred98_JavaParser923);
         	    comma();
 
         	    state._fsp--;
         	    if (state.failed) return ;
-        	    pushFollow(FOLLOW_value_in_synpred98_JavaParser929);
+        	    pushFollow(FOLLOW_value_in_synpred98_JavaParser925);
         	    value();
 
         	    state._fsp--;
@@ -9218,10 +8946,10 @@ public class JavaParser extends Parser {
 
     // $ANTLR start synpred101_JavaParser
     public final void synpred101_JavaParser_fragment() throws RecognitionException {   
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:150:32: ( semicolon )
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:150:32: semicolon
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:150:32: ( semicolon )
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:150:32: semicolon
         {
-        pushFollow(FOLLOW_semicolon_in_synpred101_JavaParser955);
+        pushFollow(FOLLOW_semicolon_in_synpred101_JavaParser951);
         semicolon();
 
         state._fsp--;
@@ -9233,10 +8961,10 @@ public class JavaParser extends Parser {
 
     // $ANTLR start synpred102_JavaParser
     public final void synpred102_JavaParser_fragment() throws RecognitionException {   
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:154:4: ( label )
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:154:4: label
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:154:4: ( label )
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:154:4: label
         {
-        pushFollow(FOLLOW_label_in_synpred102_JavaParser968);
+        pushFollow(FOLLOW_label_in_synpred102_JavaParser964);
         label();
 
         state._fsp--;
@@ -9248,15 +8976,15 @@ public class JavaParser extends Parser {
 
     // $ANTLR start synpred103_JavaParser
     public final void synpred103_JavaParser_fragment() throws RecognitionException {   
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:155:4: ( variable_assignment semicolon )
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:155:4: variable_assignment semicolon
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:155:4: ( variable_assignment semicolon )
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:155:4: variable_assignment semicolon
         {
-        pushFollow(FOLLOW_variable_assignment_in_synpred103_JavaParser974);
+        pushFollow(FOLLOW_variable_assignment_in_synpred103_JavaParser970);
         variable_assignment();
 
         state._fsp--;
         if (state.failed) return ;
-        pushFollow(FOLLOW_semicolon_in_synpred103_JavaParser976);
+        pushFollow(FOLLOW_semicolon_in_synpred103_JavaParser972);
         semicolon();
 
         state._fsp--;
@@ -9268,15 +8996,15 @@ public class JavaParser extends Parser {
 
     // $ANTLR start synpred104_JavaParser
     public final void synpred104_JavaParser_fragment() throws RecognitionException {   
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:156:4: ( variable_def semicolon )
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:156:4: variable_def semicolon
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:156:4: ( variable_def semicolon )
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:156:4: variable_def semicolon
         {
-        pushFollow(FOLLOW_variable_def_in_synpred104_JavaParser981);
+        pushFollow(FOLLOW_variable_def_in_synpred104_JavaParser977);
         variable_def();
 
         state._fsp--;
         if (state.failed) return ;
-        pushFollow(FOLLOW_semicolon_in_synpred104_JavaParser983);
+        pushFollow(FOLLOW_semicolon_in_synpred104_JavaParser979);
         semicolon();
 
         state._fsp--;
@@ -9288,15 +9016,15 @@ public class JavaParser extends Parser {
 
     // $ANTLR start synpred105_JavaParser
     public final void synpred105_JavaParser_fragment() throws RecognitionException {   
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:157:4: ( method_call semicolon )
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:157:4: method_call semicolon
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:157:4: ( method_call semicolon )
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:157:4: method_call semicolon
         {
-        pushFollow(FOLLOW_method_call_in_synpred105_JavaParser988);
+        pushFollow(FOLLOW_method_call_in_synpred105_JavaParser984);
         method_call();
 
         state._fsp--;
         if (state.failed) return ;
-        pushFollow(FOLLOW_semicolon_in_synpred105_JavaParser990);
+        pushFollow(FOLLOW_semicolon_in_synpred105_JavaParser986);
         semicolon();
 
         state._fsp--;
@@ -9306,12 +9034,12 @@ public class JavaParser extends Parser {
     }
     // $ANTLR end synpred105_JavaParser
 
-    // $ANTLR start synpred111_JavaParser
-    public final void synpred111_JavaParser_fragment() throws RecognitionException {   
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:162:30: ( right_unary )
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:162:30: right_unary
+    // $ANTLR start synpred118_JavaParser
+    public final void synpred118_JavaParser_fragment() throws RecognitionException {   
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:169:30: ( right_unary )
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:169:30: right_unary
         {
-        pushFollow(FOLLOW_right_unary_in_synpred111_JavaParser1021);
+        pushFollow(FOLLOW_right_unary_in_synpred118_JavaParser1058);
         right_unary();
 
         state._fsp--;
@@ -9319,73 +9047,14 @@ public class JavaParser extends Parser {
 
         }
     }
-    // $ANTLR end synpred111_JavaParser
-
-    // $ANTLR start synpred112_JavaParser
-    public final void synpred112_JavaParser_fragment() throws RecognitionException {   
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:162:4: ( ( left_unary )? variable_name ( right_unary )? )
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:162:4: ( left_unary )? variable_name ( right_unary )?
-        {
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:162:4: ( left_unary )?
-        int alt141=2;
-        int LA141_0 = input.LA(1);
-
-        if ( ((LA141_0>=INC && LA141_0<=MINUS)||LA141_0==NOT) ) {
-            alt141=1;
-        }
-        switch (alt141) {
-            case 1 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: left_unary
-                {
-                pushFollow(FOLLOW_left_unary_in_synpred112_JavaParser1016);
-                left_unary();
-
-                state._fsp--;
-                if (state.failed) return ;
-
-                }
-                break;
-
-        }
-
-        pushFollow(FOLLOW_variable_name_in_synpred112_JavaParser1019);
-        variable_name();
-
-        state._fsp--;
-        if (state.failed) return ;
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:162:30: ( right_unary )?
-        int alt142=2;
-        int LA142_0 = input.LA(1);
-
-        if ( ((LA142_0>=INC && LA142_0<=DEC)||LA142_0==NOT) ) {
-            alt142=1;
-        }
-        switch (alt142) {
-            case 1 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: right_unary
-                {
-                pushFollow(FOLLOW_right_unary_in_synpred112_JavaParser1021);
-                right_unary();
-
-                state._fsp--;
-                if (state.failed) return ;
-
-                }
-                break;
-
-        }
-
-
-        }
-    }
-    // $ANTLR end synpred112_JavaParser
+    // $ANTLR end synpred118_JavaParser
 
     // $ANTLR start synpred119_JavaParser
     public final void synpred119_JavaParser_fragment() throws RecognitionException {   
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:173:4: ( label )
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:173:4: label
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:173:4: ( label )
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:173:4: label
         {
-        pushFollow(FOLLOW_label_in_synpred119_JavaParser1072);
+        pushFollow(FOLLOW_label_in_synpred119_JavaParser1070);
         label();
 
         state._fsp--;
@@ -9397,10 +9066,10 @@ public class JavaParser extends Parser {
 
     // $ANTLR start synpred120_JavaParser
     public final void synpred120_JavaParser_fragment() throws RecognitionException {   
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:174:4: ( variable_assignment )
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:174:4: variable_assignment
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:174:4: ( variable_assignment )
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:174:4: variable_assignment
         {
-        pushFollow(FOLLOW_variable_assignment_in_synpred120_JavaParser1077);
+        pushFollow(FOLLOW_variable_assignment_in_synpred120_JavaParser1075);
         variable_assignment();
 
         state._fsp--;
@@ -9412,10 +9081,10 @@ public class JavaParser extends Parser {
 
     // $ANTLR start synpred121_JavaParser
     public final void synpred121_JavaParser_fragment() throws RecognitionException {   
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:175:4: ( variable_def )
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:175:4: variable_def
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:175:4: ( variable_def )
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:175:4: variable_def
         {
-        pushFollow(FOLLOW_variable_def_in_synpred121_JavaParser1082);
+        pushFollow(FOLLOW_variable_def_in_synpred121_JavaParser1080);
         variable_def();
 
         state._fsp--;
@@ -9427,10 +9096,10 @@ public class JavaParser extends Parser {
 
     // $ANTLR start synpred122_JavaParser
     public final void synpred122_JavaParser_fragment() throws RecognitionException {   
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:176:4: ( method_call )
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:176:4: method_call
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:176:4: ( method_call )
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:176:4: method_call
         {
-        pushFollow(FOLLOW_method_call_in_synpred122_JavaParser1087);
+        pushFollow(FOLLOW_method_call_in_synpred122_JavaParser1085);
         method_call();
 
         state._fsp--;
@@ -9440,71 +9109,12 @@ public class JavaParser extends Parser {
     }
     // $ANTLR end synpred122_JavaParser
 
-    // $ANTLR start synpred128_JavaParser
-    public final void synpred128_JavaParser_fragment() throws RecognitionException {   
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:180:4: ( ( left_unary )? variable_name ( right_unary )? )
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:180:4: ( left_unary )? variable_name ( right_unary )?
-        {
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:180:4: ( left_unary )?
-        int alt143=2;
-        int LA143_0 = input.LA(1);
-
-        if ( ((LA143_0>=INC && LA143_0<=MINUS)||LA143_0==NOT) ) {
-            alt143=1;
-        }
-        switch (alt143) {
-            case 1 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: left_unary
-                {
-                pushFollow(FOLLOW_left_unary_in_synpred128_JavaParser1108);
-                left_unary();
-
-                state._fsp--;
-                if (state.failed) return ;
-
-                }
-                break;
-
-        }
-
-        pushFollow(FOLLOW_variable_name_in_synpred128_JavaParser1111);
-        variable_name();
-
-        state._fsp--;
-        if (state.failed) return ;
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:180:30: ( right_unary )?
-        int alt144=2;
-        int LA144_0 = input.LA(1);
-
-        if ( ((LA144_0>=INC && LA144_0<=DEC)||LA144_0==NOT) ) {
-            alt144=1;
-        }
-        switch (alt144) {
-            case 1 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: right_unary
-                {
-                pushFollow(FOLLOW_right_unary_in_synpred128_JavaParser1113);
-                right_unary();
-
-                state._fsp--;
-                if (state.failed) return ;
-
-                }
-                break;
-
-        }
-
-
-        }
-    }
-    // $ANTLR end synpred128_JavaParser
-
     // $ANTLR start synpred135_JavaParser
     public final void synpred135_JavaParser_fragment() throws RecognitionException {   
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:191:12: ( value )
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:191:12: value
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:191:12: ( value )
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:191:12: value
         {
-        pushFollow(FOLLOW_value_in_synpred135_JavaParser1167);
+        pushFollow(FOLLOW_value_in_synpred135_JavaParser1165);
         value();
 
         state._fsp--;
@@ -9516,10 +9126,10 @@ public class JavaParser extends Parser {
 
     // $ANTLR start synpred140_JavaParser
     public final void synpred140_JavaParser_fragment() throws RecognitionException {   
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:198:77: ( value )
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:198:77: value
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:198:77: ( value )
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:198:77: value
         {
-        pushFollow(FOLLOW_value_in_synpred140_JavaParser1227);
+        pushFollow(FOLLOW_value_in_synpred140_JavaParser1225);
         value();
 
         state._fsp--;
@@ -9531,52 +9141,52 @@ public class JavaParser extends Parser {
 
     // $ANTLR start synpred143_JavaParser
     public final void synpred143_JavaParser_fragment() throws RecognitionException {   
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:198:11: ( for_ OPEN_BRACKET ( variable_def ( comma variable_def )* )? semicolon ( value )? semicolon ( statement_wosemicolon ( comma statement_wosemicolon )* )? CLOSE_BRACKET code )
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:198:11: for_ OPEN_BRACKET ( variable_def ( comma variable_def )* )? semicolon ( value )? semicolon ( statement_wosemicolon ( comma statement_wosemicolon )* )? CLOSE_BRACKET code
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:198:11: ( for_ OPEN_BRACKET ( variable_def ( comma variable_def )* )? semicolon ( value )? semicolon ( statement_wosemicolon ( comma statement_wosemicolon )* )? CLOSE_BRACKET code )
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:198:11: for_ OPEN_BRACKET ( variable_def ( comma variable_def )* )? semicolon ( value )? semicolon ( statement_wosemicolon ( comma statement_wosemicolon )* )? CLOSE_BRACKET code
         {
-        pushFollow(FOLLOW_for__in_synpred143_JavaParser1209);
+        pushFollow(FOLLOW_for__in_synpred143_JavaParser1207);
         for_();
 
         state._fsp--;
         if (state.failed) return ;
-        match(input,OPEN_BRACKET,FOLLOW_OPEN_BRACKET_in_synpred143_JavaParser1211); if (state.failed) return ;
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:198:29: ( variable_def ( comma variable_def )* )?
-        int alt148=2;
-        int LA148_0 = input.LA(1);
+        match(input,OPEN_BRACKET,FOLLOW_OPEN_BRACKET_in_synpred143_JavaParser1209); if (state.failed) return ;
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:198:29: ( variable_def ( comma variable_def )* )?
+        int alt144=2;
+        int LA144_0 = input.LA(1);
 
-        if ( (LA148_0==VOID||(LA148_0>=BOOLEAN && LA148_0<=DOUBLE)||LA148_0==AT||LA148_0==ID) ) {
-            alt148=1;
+        if ( (LA144_0==VOID||(LA144_0>=BOOLEAN && LA144_0<=DOUBLE)||LA144_0==AT||LA144_0==ID) ) {
+            alt144=1;
         }
-        switch (alt148) {
+        switch (alt144) {
             case 1 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:198:30: variable_def ( comma variable_def )*
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:198:30: variable_def ( comma variable_def )*
                 {
-                pushFollow(FOLLOW_variable_def_in_synpred143_JavaParser1214);
+                pushFollow(FOLLOW_variable_def_in_synpred143_JavaParser1212);
                 variable_def();
 
                 state._fsp--;
                 if (state.failed) return ;
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:198:43: ( comma variable_def )*
-                loop147:
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:198:43: ( comma variable_def )*
+                loop143:
                 do {
-                    int alt147=2;
-                    int LA147_0 = input.LA(1);
+                    int alt143=2;
+                    int LA143_0 = input.LA(1);
 
-                    if ( (LA147_0==COMMA) ) {
-                        alt147=1;
+                    if ( (LA143_0==COMMA) ) {
+                        alt143=1;
                     }
 
 
-                    switch (alt147) {
+                    switch (alt143) {
                 	case 1 :
-                	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:198:44: comma variable_def
+                	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:198:44: comma variable_def
                 	    {
-                	    pushFollow(FOLLOW_comma_in_synpred143_JavaParser1217);
+                	    pushFollow(FOLLOW_comma_in_synpred143_JavaParser1215);
                 	    comma();
 
                 	    state._fsp--;
                 	    if (state.failed) return ;
-                	    pushFollow(FOLLOW_variable_def_in_synpred143_JavaParser1219);
+                	    pushFollow(FOLLOW_variable_def_in_synpred143_JavaParser1217);
                 	    variable_def();
 
                 	    state._fsp--;
@@ -9586,7 +9196,7 @@ public class JavaParser extends Parser {
                 	    break;
 
                 	default :
-                	    break loop147;
+                	    break loop143;
                     }
                 } while (true);
 
@@ -9596,30 +9206,30 @@ public class JavaParser extends Parser {
 
         }
 
-        pushFollow(FOLLOW_semicolon_in_synpred143_JavaParser1225);
+        pushFollow(FOLLOW_semicolon_in_synpred143_JavaParser1223);
         semicolon();
 
         state._fsp--;
         if (state.failed) return ;
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:198:77: ( value )?
-        int alt149=2;
-        int LA149_0 = input.LA(1);
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:198:77: ( value )?
+        int alt145=2;
+        int LA145_0 = input.LA(1);
 
-        if ( (LA149_0==NEW||(LA149_0>=NULL && LA149_0<=SUPER)||LA149_0==OPEN_CURLY_BRACKET||(LA149_0>=LE && LA149_0<=UNEQUAL)||(LA149_0>=INC && LA149_0<=NOT)||(LA149_0>=LT && LA149_0<=GT)||LA149_0==OPEN_BRACKET||(LA149_0>=BOOL_CONST && LA149_0<=INT_CONST)||(LA149_0>=HEX_CONST && LA149_0<=HEX_LONG_CONST)||LA149_0==FLOAT_CONST||(LA149_0>=STRING_CONST && LA149_0<=CHAR_CONST)) ) {
-            alt149=1;
+        if ( (LA145_0==NEW||(LA145_0>=NULL && LA145_0<=SUPER)||LA145_0==OPEN_CURLY_BRACKET||(LA145_0>=LE && LA145_0<=UNEQUAL)||(LA145_0>=INC && LA145_0<=NOT)||(LA145_0>=LT && LA145_0<=GT)||LA145_0==OPEN_BRACKET||(LA145_0>=BOOL_CONST && LA145_0<=INT_CONST)||(LA145_0>=HEX_CONST && LA145_0<=HEX_LONG_CONST)||LA145_0==FLOAT_CONST||(LA145_0>=STRING_CONST && LA145_0<=CHAR_CONST)) ) {
+            alt145=1;
         }
-        else if ( (LA149_0==SEMICOLON) ) {
-            int LA149_2 = input.LA(2);
+        else if ( (LA145_0==SEMICOLON) ) {
+            int LA145_2 = input.LA(2);
 
             if ( (synpred140_JavaParser()) ) {
-                alt149=1;
+                alt145=1;
             }
         }
-        switch (alt149) {
+        switch (alt145) {
             case 1 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: value
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:0:0: value
                 {
-                pushFollow(FOLLOW_value_in_synpred143_JavaParser1227);
+                pushFollow(FOLLOW_value_in_synpred143_JavaParser1225);
                 value();
 
                 state._fsp--;
@@ -9630,48 +9240,48 @@ public class JavaParser extends Parser {
 
         }
 
-        pushFollow(FOLLOW_semicolon_in_synpred143_JavaParser1230);
+        pushFollow(FOLLOW_semicolon_in_synpred143_JavaParser1228);
         semicolon();
 
         state._fsp--;
         if (state.failed) return ;
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:198:94: ( statement_wosemicolon ( comma statement_wosemicolon )* )?
-        int alt151=2;
-        int LA151_0 = input.LA(1);
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:198:94: ( statement_wosemicolon ( comma statement_wosemicolon )* )?
+        int alt147=2;
+        int LA147_0 = input.LA(1);
 
-        if ( (LA151_0==VOID||(LA151_0>=RETURN && LA151_0<=CONTINUE)||(LA151_0>=THIS && LA151_0<=IF)||LA151_0==SWITCH||LA151_0==TRY||LA151_0==THROW||(LA151_0>=BOOLEAN && LA151_0<=DOUBLE)||(LA151_0>=INC && LA151_0<=MINUS)||LA151_0==NOT||LA151_0==AT||LA151_0==ID) ) {
-            alt151=1;
+        if ( (LA147_0==VOID||(LA147_0>=RETURN && LA147_0<=CONTINUE)||(LA147_0>=THIS && LA147_0<=IF)||LA147_0==SWITCH||LA147_0==TRY||LA147_0==THROW||(LA147_0>=BOOLEAN && LA147_0<=DOUBLE)||(LA147_0>=INC && LA147_0<=MINUS)||LA147_0==NOT||LA147_0==AT||LA147_0==ID) ) {
+            alt147=1;
         }
-        switch (alt151) {
+        switch (alt147) {
             case 1 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:198:95: statement_wosemicolon ( comma statement_wosemicolon )*
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:198:95: statement_wosemicolon ( comma statement_wosemicolon )*
                 {
-                pushFollow(FOLLOW_statement_wosemicolon_in_synpred143_JavaParser1233);
+                pushFollow(FOLLOW_statement_wosemicolon_in_synpred143_JavaParser1231);
                 statement_wosemicolon();
 
                 state._fsp--;
                 if (state.failed) return ;
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:198:117: ( comma statement_wosemicolon )*
-                loop150:
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:198:117: ( comma statement_wosemicolon )*
+                loop146:
                 do {
-                    int alt150=2;
-                    int LA150_0 = input.LA(1);
+                    int alt146=2;
+                    int LA146_0 = input.LA(1);
 
-                    if ( (LA150_0==COMMA) ) {
-                        alt150=1;
+                    if ( (LA146_0==COMMA) ) {
+                        alt146=1;
                     }
 
 
-                    switch (alt150) {
+                    switch (alt146) {
                 	case 1 :
-                	    // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:198:118: comma statement_wosemicolon
+                	    // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:198:118: comma statement_wosemicolon
                 	    {
-                	    pushFollow(FOLLOW_comma_in_synpred143_JavaParser1236);
+                	    pushFollow(FOLLOW_comma_in_synpred143_JavaParser1234);
                 	    comma();
 
                 	    state._fsp--;
                 	    if (state.failed) return ;
-                	    pushFollow(FOLLOW_statement_wosemicolon_in_synpred143_JavaParser1238);
+                	    pushFollow(FOLLOW_statement_wosemicolon_in_synpred143_JavaParser1236);
                 	    statement_wosemicolon();
 
                 	    state._fsp--;
@@ -9681,7 +9291,7 @@ public class JavaParser extends Parser {
                 	    break;
 
                 	default :
-                	    break loop150;
+                	    break loop146;
                     }
                 } while (true);
 
@@ -9691,8 +9301,8 @@ public class JavaParser extends Parser {
 
         }
 
-        match(input,CLOSE_BRACKET,FOLLOW_CLOSE_BRACKET_in_synpred143_JavaParser1244); if (state.failed) return ;
-        pushFollow(FOLLOW_code_in_synpred143_JavaParser1246);
+        match(input,CLOSE_BRACKET,FOLLOW_CLOSE_BRACKET_in_synpred143_JavaParser1242); if (state.failed) return ;
+        pushFollow(FOLLOW_code_in_synpred143_JavaParser1244);
         code();
 
         state._fsp--;
@@ -9704,36 +9314,36 @@ public class JavaParser extends Parser {
 
     // $ANTLR start synpred145_JavaParser
     public final void synpred145_JavaParser_fragment() throws RecognitionException {   
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:212:5: ( case_ ( constant | variable_name ) colon )
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:212:5: case_ ( constant | variable_name ) colon
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:212:5: ( case_ ( constant | variable_name ) colon )
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:212:5: case_ ( constant | variable_name ) colon
         {
-        pushFollow(FOLLOW_case__in_synpred145_JavaParser1336);
+        pushFollow(FOLLOW_case__in_synpred145_JavaParser1334);
         case_();
 
         state._fsp--;
         if (state.failed) return ;
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:212:12: ( constant | variable_name )
-        int alt152=2;
-        int LA152_0 = input.LA(1);
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:212:12: ( constant | variable_name )
+        int alt148=2;
+        int LA148_0 = input.LA(1);
 
-        if ( (LA152_0==EOF||LA152_0==NULL||(LA152_0>=OPEN_CURLY_BRACKET && LA152_0<=UNEQUAL)||(LA152_0>=INC && LA152_0<=NOT)||(LA152_0>=COMMA && LA152_0<=GT)||(LA152_0>=CLOSE_RECT_BRACKET && LA152_0<=SEMICOLON)||LA152_0==BOOL_CONST||LA152_0==INT_CONST||(LA152_0>=HEX_CONST && LA152_0<=HEX_LONG_CONST)||LA152_0==FLOAT_CONST||(LA152_0>=STRING_CONST && LA152_0<=CHAR_CONST)) ) {
-            alt152=1;
+        if ( (LA148_0==EOF||LA148_0==NULL||(LA148_0>=OPEN_CURLY_BRACKET && LA148_0<=UNEQUAL)||(LA148_0>=INC && LA148_0<=NOT)||(LA148_0>=COMMA && LA148_0<=GT)||(LA148_0>=CLOSE_RECT_BRACKET && LA148_0<=SEMICOLON)||LA148_0==BOOL_CONST||LA148_0==INT_CONST||(LA148_0>=HEX_CONST && LA148_0<=HEX_LONG_CONST)||LA148_0==FLOAT_CONST||(LA148_0>=STRING_CONST && LA148_0<=CHAR_CONST)) ) {
+            alt148=1;
         }
-        else if ( (LA152_0==ID) ) {
-            alt152=2;
+        else if ( (LA148_0==ID) ) {
+            alt148=2;
         }
         else {
             if (state.backtracking>0) {state.failed=true; return ;}
             NoViableAltException nvae =
-                new NoViableAltException("", 152, 0, input);
+                new NoViableAltException("", 148, 0, input);
 
             throw nvae;
         }
-        switch (alt152) {
+        switch (alt148) {
             case 1 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:212:13: constant
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:212:13: constant
                 {
-                pushFollow(FOLLOW_constant_in_synpred145_JavaParser1340);
+                pushFollow(FOLLOW_constant_in_synpred145_JavaParser1338);
                 constant();
 
                 state._fsp--;
@@ -9742,9 +9352,9 @@ public class JavaParser extends Parser {
                 }
                 break;
             case 2 :
-                // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:212:24: variable_name
+                // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:212:24: variable_name
                 {
-                pushFollow(FOLLOW_variable_name_in_synpred145_JavaParser1344);
+                pushFollow(FOLLOW_variable_name_in_synpred145_JavaParser1342);
                 variable_name();
 
                 state._fsp--;
@@ -9755,7 +9365,7 @@ public class JavaParser extends Parser {
 
         }
 
-        pushFollow(FOLLOW_colon_in_synpred145_JavaParser1347);
+        pushFollow(FOLLOW_colon_in_synpred145_JavaParser1345);
         colon();
 
         state._fsp--;
@@ -9767,10 +9377,10 @@ public class JavaParser extends Parser {
 
     // $ANTLR start synpred146_JavaParser
     public final void synpred146_JavaParser_fragment() throws RecognitionException {   
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:212:48: ( code )
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:212:48: code
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:212:48: ( code )
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:212:48: code
         {
-        pushFollow(FOLLOW_code_in_synpred146_JavaParser1352);
+        pushFollow(FOLLOW_code_in_synpred146_JavaParser1350);
         code();
 
         state._fsp--;
@@ -9782,10 +9392,10 @@ public class JavaParser extends Parser {
 
     // $ANTLR start synpred147_JavaParser
     public final void synpred147_JavaParser_fragment() throws RecognitionException {   
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:212:55: ( statement )
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:212:55: statement
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:212:55: ( statement )
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:212:55: statement
         {
-        pushFollow(FOLLOW_statement_in_synpred147_JavaParser1356);
+        pushFollow(FOLLOW_statement_in_synpred147_JavaParser1354);
         statement();
 
         state._fsp--;
@@ -9797,10 +9407,10 @@ public class JavaParser extends Parser {
 
     // $ANTLR start synpred150_JavaParser
     public final void synpred150_JavaParser_fragment() throws RecognitionException {   
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:214:20: ( code )
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:214:20: code
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:214:20: ( code )
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:214:20: code
         {
-        pushFollow(FOLLOW_code_in_synpred150_JavaParser1379);
+        pushFollow(FOLLOW_code_in_synpred150_JavaParser1377);
         code();
 
         state._fsp--;
@@ -9812,10 +9422,10 @@ public class JavaParser extends Parser {
 
     // $ANTLR start synpred151_JavaParser
     public final void synpred151_JavaParser_fragment() throws RecognitionException {   
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:214:27: ( statement )
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:214:27: statement
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:214:27: ( statement )
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:214:27: statement
         {
-        pushFollow(FOLLOW_statement_in_synpred151_JavaParser1383);
+        pushFollow(FOLLOW_statement_in_synpred151_JavaParser1381);
         statement();
 
         state._fsp--;
@@ -9827,15 +9437,15 @@ public class JavaParser extends Parser {
 
     // $ANTLR start synpred153_JavaParser
     public final void synpred153_JavaParser_fragment() throws RecognitionException {   
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:219:54: ( else_ code )
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:219:54: else_ code
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:219:54: ( else_ code )
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:219:54: else_ code
         {
-        pushFollow(FOLLOW_else__in_synpred153_JavaParser1416);
+        pushFollow(FOLLOW_else__in_synpred153_JavaParser1414);
         else_();
 
         state._fsp--;
         if (state.failed) return ;
-        pushFollow(FOLLOW_code_in_synpred153_JavaParser1418);
+        pushFollow(FOLLOW_code_in_synpred153_JavaParser1416);
         code();
 
         state._fsp--;
@@ -9847,27 +9457,27 @@ public class JavaParser extends Parser {
 
     // $ANTLR start synpred154_JavaParser
     public final void synpred154_JavaParser_fragment() throws RecognitionException {   
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:223:15: ( catch_ OPEN_BRACKET id id CLOSE_BRACKET code )
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:223:15: catch_ OPEN_BRACKET id id CLOSE_BRACKET code
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:223:15: ( catch_ OPEN_BRACKET id id CLOSE_BRACKET code )
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:223:15: catch_ OPEN_BRACKET id id CLOSE_BRACKET code
         {
-        pushFollow(FOLLOW_catch__in_synpred154_JavaParser1436);
+        pushFollow(FOLLOW_catch__in_synpred154_JavaParser1434);
         catch_();
 
         state._fsp--;
         if (state.failed) return ;
-        match(input,OPEN_BRACKET,FOLLOW_OPEN_BRACKET_in_synpred154_JavaParser1438); if (state.failed) return ;
+        match(input,OPEN_BRACKET,FOLLOW_OPEN_BRACKET_in_synpred154_JavaParser1436); if (state.failed) return ;
+        pushFollow(FOLLOW_id_in_synpred154_JavaParser1438);
+        id();
+
+        state._fsp--;
+        if (state.failed) return ;
         pushFollow(FOLLOW_id_in_synpred154_JavaParser1440);
         id();
 
         state._fsp--;
         if (state.failed) return ;
-        pushFollow(FOLLOW_id_in_synpred154_JavaParser1442);
-        id();
-
-        state._fsp--;
-        if (state.failed) return ;
-        match(input,CLOSE_BRACKET,FOLLOW_CLOSE_BRACKET_in_synpred154_JavaParser1444); if (state.failed) return ;
-        pushFollow(FOLLOW_code_in_synpred154_JavaParser1446);
+        match(input,CLOSE_BRACKET,FOLLOW_CLOSE_BRACKET_in_synpred154_JavaParser1442); if (state.failed) return ;
+        pushFollow(FOLLOW_code_in_synpred154_JavaParser1444);
         code();
 
         state._fsp--;
@@ -9879,15 +9489,15 @@ public class JavaParser extends Parser {
 
     // $ANTLR start synpred155_JavaParser
     public final void synpred155_JavaParser_fragment() throws RecognitionException {   
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:223:63: ( finally_ code )
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:223:63: finally_ code
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:223:63: ( finally_ code )
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:223:63: finally_ code
         {
-        pushFollow(FOLLOW_finally__in_synpred155_JavaParser1451);
+        pushFollow(FOLLOW_finally__in_synpred155_JavaParser1449);
         finally_();
 
         state._fsp--;
         if (state.failed) return ;
-        pushFollow(FOLLOW_code_in_synpred155_JavaParser1453);
+        pushFollow(FOLLOW_code_in_synpred155_JavaParser1451);
         code();
 
         state._fsp--;
@@ -9899,10 +9509,10 @@ public class JavaParser extends Parser {
 
     // $ANTLR start synpred196_JavaParser
     public final void synpred196_JavaParser_fragment() throws RecognitionException {   
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:333:28: ( value )
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:333:28: value
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:333:28: ( value )
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:333:28: value
         {
-        pushFollow(FOLLOW_value_in_synpred196_JavaParser2014);
+        pushFollow(FOLLOW_value_in_synpred196_JavaParser2012);
         value();
 
         state._fsp--;
@@ -9914,11 +9524,11 @@ public class JavaParser extends Parser {
 
     // $ANTLR start synpred198_JavaParser
     public final void synpred198_JavaParser_fragment() throws RecognitionException {   
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:379:10: ( BREAK id )
-        // /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/JavaParser.g:379:10: BREAK id
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:379:10: ( BREAK id )
+        // /home/ludwig/workspace/PureSolTechnolgies_API/src/com/puresol/coding/java/antlr/JavaParser.g:379:10: BREAK id
         {
-        match(input,BREAK,FOLLOW_BREAK_in_synpred198_JavaParser2317); if (state.failed) return ;
-        pushFollow(FOLLOW_id_in_synpred198_JavaParser2319);
+        match(input,BREAK,FOLLOW_BREAK_in_synpred198_JavaParser2315); if (state.failed) return ;
+        pushFollow(FOLLOW_id_in_synpred198_JavaParser2317);
         id();
 
         state._fsp--;
@@ -9949,20 +9559,6 @@ public class JavaParser extends Parser {
         int start = input.mark();
         try {
             synpred75_JavaParser_fragment(); // can never throw exception
-        } catch (RecognitionException re) {
-            System.err.println("impossible: "+re);
-        }
-        boolean success = !state.failed;
-        input.rewind(start);
-        state.backtracking--;
-        state.failed=false;
-        return success;
-    }
-    public final boolean synpred112_JavaParser() {
-        state.backtracking++;
-        int start = input.mark();
-        try {
-            synpred112_JavaParser_fragment(); // can never throw exception
         } catch (RecognitionException re) {
             System.err.println("impossible: "+re);
         }
@@ -10070,20 +9666,6 @@ public class JavaParser extends Parser {
         state.failed=false;
         return success;
     }
-    public final boolean synpred111_JavaParser() {
-        state.backtracking++;
-        int start = input.mark();
-        try {
-            synpred111_JavaParser_fragment(); // can never throw exception
-        } catch (RecognitionException re) {
-            System.err.println("impossible: "+re);
-        }
-        boolean success = !state.failed;
-        input.rewind(start);
-        state.backtracking--;
-        state.failed=false;
-        return success;
-    }
     public final boolean synpred198_JavaParser() {
         state.backtracking++;
         int start = input.mark();
@@ -10103,20 +9685,6 @@ public class JavaParser extends Parser {
         int start = input.mark();
         try {
             synpred72_JavaParser_fragment(); // can never throw exception
-        } catch (RecognitionException re) {
-            System.err.println("impossible: "+re);
-        }
-        boolean success = !state.failed;
-        input.rewind(start);
-        state.backtracking--;
-        state.failed=false;
-        return success;
-    }
-    public final boolean synpred128_JavaParser() {
-        state.backtracking++;
-        int start = input.mark();
-        try {
-            synpred128_JavaParser_fragment(); // can never throw exception
         } catch (RecognitionException re) {
             System.err.println("impossible: "+re);
         }
@@ -10182,11 +9750,11 @@ public class JavaParser extends Parser {
         state.failed=false;
         return success;
     }
-    public final boolean synpred119_JavaParser() {
+    public final boolean synpred42_JavaParser() {
         state.backtracking++;
         int start = input.mark();
         try {
-            synpred119_JavaParser_fragment(); // can never throw exception
+            synpred42_JavaParser_fragment(); // can never throw exception
         } catch (RecognitionException re) {
             System.err.println("impossible: "+re);
         }
@@ -10196,11 +9764,11 @@ public class JavaParser extends Parser {
         state.failed=false;
         return success;
     }
-    public final boolean synpred42_JavaParser() {
+    public final boolean synpred119_JavaParser() {
         state.backtracking++;
         int start = input.mark();
         try {
-            synpred42_JavaParser_fragment(); // can never throw exception
+            synpred119_JavaParser_fragment(); // can never throw exception
         } catch (RecognitionException re) {
             System.err.println("impossible: "+re);
         }
@@ -10523,6 +10091,20 @@ public class JavaParser extends Parser {
         int start = input.mark();
         try {
             synpred140_JavaParser_fragment(); // can never throw exception
+        } catch (RecognitionException re) {
+            System.err.println("impossible: "+re);
+        }
+        boolean success = !state.failed;
+        input.rewind(start);
+        state.backtracking--;
+        state.failed=false;
+        return success;
+    }
+    public final boolean synpred118_JavaParser() {
+        state.backtracking++;
+        int start = input.mark();
+        try {
+            synpred118_JavaParser_fragment(); // can never throw exception
         } catch (RecognitionException re) {
             System.err.println("impossible: "+re);
         }
@@ -11663,15 +11245,15 @@ public class JavaParser extends Parser {
     static final String DFA65_eotS =
         "\13\uffff";
     static final String DFA65_eofS =
-        "\2\2\1\uffff\1\2\1\uffff\1\2\1\uffff\1\2\1\uffff\2\2";
+        "\2\2\1\uffff\1\2\1\uffff\1\2\1\uffff\2\2\1\uffff\1\2";
     static final String DFA65_minS =
-        "\1\57\1\14\1\uffff\1\57\1\0\1\13\1\uffff\1\57\1\0\1\13\1\57";
+        "\1\57\1\14\1\uffff\1\57\1\0\1\13\1\uffff\1\57\1\13\1\0\1\57";
     static final String DFA65_maxS =
-        "\1\114\1\135\1\uffff\1\114\1\0\1\135\1\uffff\1\120\1\0\1\135\1\120";
+        "\1\114\1\135\1\uffff\1\114\1\0\1\135\1\uffff\1\120\1\135\1\0\1\120";
     static final String DFA65_acceptS =
         "\2\uffff\1\2\3\uffff\1\1\4\uffff";
     static final String DFA65_specialS =
-        "\4\uffff\1\0\3\uffff\1\1\2\uffff}>";
+        "\4\uffff\1\0\4\uffff\1\1\1\uffff}>";
     static final String[] DFA65_transitionS = {
             "\5\2\3\uffff\14\2\1\uffff\1\2\1\1\7\2",
             "\1\2\3\uffff\3\2\33\uffff\6\2\3\uffff\14\2\1\uffff\3\2\1\uffff"+
@@ -11683,12 +11265,12 @@ public class JavaParser extends Parser {
             "\14\2\1\uffff\3\2\2\uffff\2\2\2\uffff\1\2\1\uffff\1\2\1\7\1"+
             "\2\1\uffff\3\2\1\uffff\1\2\4\uffff\2\2",
             "",
-            "\25\2\1\11\1\2\1\10\1\2\1\uffff\3\2\4\uffff\1\2",
-            "\1\uffff",
+            "\25\2\1\10\1\2\1\11\1\2\1\uffff\3\2\4\uffff\1\2",
             "\14\2\1\uffff\1\2\2\uffff\1\2\2\uffff\1\2\7\uffff\16\2\3\uffff"+
             "\14\2\1\uffff\3\2\2\uffff\2\2\2\uffff\1\2\1\uffff\1\2\1\12\1"+
             "\2\1\uffff\3\2\1\uffff\1\2\4\uffff\2\2",
-            "\25\2\1\11\1\2\1\10\1\2\1\uffff\3\2\4\uffff\1\2"
+            "\1\uffff",
+            "\25\2\1\10\1\2\1\11\1\2\1\uffff\3\2\4\uffff\1\2"
     };
 
     static final short[] DFA65_eot = DFA.unpackEncodedString(DFA65_eotS);
@@ -11743,10 +11325,10 @@ public class JavaParser extends Parser {
                         if ( s>=0 ) return s;
                         break;
                     case 1 : 
-                        int LA65_8 = input.LA(1);
+                        int LA65_9 = input.LA(1);
 
                          
-                        int index65_8 = input.index();
+                        int index65_9 = input.index();
                         input.rewind();
                         s = -1;
                         if ( (synpred93_JavaParser()) ) {s = 6;}
@@ -11754,7 +11336,7 @@ public class JavaParser extends Parser {
                         else if ( (true) ) {s = 2;}
 
                          
-                        input.seek(index65_8);
+                        input.seek(index65_9);
                         if ( s>=0 ) return s;
                         break;
             }
@@ -11774,14 +11356,14 @@ public class JavaParser extends Parser {
     static final String DFA76_maxS =
         "\1\120\3\0\35\uffff";
     static final String DFA76_acceptS =
-        "\4\uffff\1\3\11\uffff\1\5\1\6\1\7\1\10\1\11\4\uffff\1\12\1\13\1"+
-        "\14\1\15\1\16\1\17\1\20\1\1\1\2\1\4";
+        "\4\uffff\1\3\11\uffff\1\5\1\6\1\7\1\10\1\11\1\12\1\13\1\14\1\15"+
+        "\1\16\1\17\1\20\4\uffff\1\1\1\2\1\4";
     static final String DFA76_specialS =
         "\1\uffff\1\0\1\1\1\2\35\uffff}>";
     static final String[] DFA76_transitionS = {
-            "\1\4\1\uffff\1\17\1\21\1\20\1\uffff\1\2\1\3\1\27\1\31\1\30\1"+
-            "\33\1\uffff\1\32\2\uffff\1\34\2\uffff\1\35\7\uffff\10\4\11\uffff"+
-            "\4\22\7\uffff\1\22\11\uffff\1\16\1\4\2\uffff\1\1",
+            "\1\4\1\uffff\1\17\1\21\1\20\1\uffff\1\2\1\3\1\22\1\24\1\23\1"+
+            "\26\1\uffff\1\25\2\uffff\1\27\2\uffff\1\30\7\uffff\10\4\11\uffff"+
+            "\4\31\7\uffff\1\31\11\uffff\1\16\1\4\2\uffff\1\1",
             "\1\uffff",
             "\1\uffff",
             "\1\uffff",
@@ -11846,7 +11428,7 @@ public class JavaParser extends Parser {
             this.transition = DFA76_transition;
         }
         public String getDescription() {
-            return "153:1: statement : ( label | variable_assignment semicolon | variable_def semicolon | method_call semicolon | semicolon | return_statement | continue_ | break_ | ( left_unary )? variable_name ( right_unary )? | for_loop | while_loop | do_loop | switch_case | if_else | try_catch | throw_ value semicolon );";
+            return "153:1: statement : ( label | variable_assignment semicolon | variable_def semicolon | method_call semicolon | semicolon | return_statement | continue_ | break_ | for_loop | while_loop | do_loop semicolon | switch_case | if_else | try_catch | throw_ value semicolon | ( left_unary )? variable_name ( right_unary )? );";
         }
         public int specialStateTransition(int s, IntStream _input) throws NoViableAltException {
             TokenStream input = (TokenStream)_input;
@@ -11867,7 +11449,7 @@ public class JavaParser extends Parser {
 
                         else if ( (synpred105_JavaParser()) ) {s = 32;}
 
-                        else if ( (synpred112_JavaParser()) ) {s = 18;}
+                        else if ( (true) ) {s = 25;}
 
                          
                         input.seek(index76_1);
@@ -11920,14 +11502,14 @@ public class JavaParser extends Parser {
     static final String DFA79_maxS =
         "\1\120\3\0\34\uffff";
     static final String DFA79_acceptS =
-        "\4\uffff\1\3\11\uffff\1\5\1\6\1\7\1\10\4\uffff\1\11\1\12\1\13\1"+
-        "\14\1\15\1\16\1\17\1\1\1\2\1\4";
+        "\4\uffff\1\3\11\uffff\1\5\1\6\1\7\1\10\1\11\1\12\1\13\1\14\1\15"+
+        "\1\16\1\17\4\uffff\1\1\1\2\1\4";
     static final String DFA79_specialS =
         "\1\uffff\1\0\1\1\1\2\34\uffff}>";
     static final String[] DFA79_transitionS = {
-            "\1\4\1\uffff\1\16\1\20\1\17\1\uffff\1\2\1\3\1\26\1\30\1\27\1"+
-            "\32\1\uffff\1\31\2\uffff\1\33\2\uffff\1\34\7\uffff\10\4\11\uffff"+
-            "\4\21\7\uffff\1\21\12\uffff\1\4\2\uffff\1\1",
+            "\1\4\1\uffff\1\16\1\20\1\17\1\uffff\1\2\1\3\1\21\1\23\1\22\1"+
+            "\25\1\uffff\1\24\2\uffff\1\26\2\uffff\1\27\7\uffff\10\4\11\uffff"+
+            "\4\30\7\uffff\1\30\12\uffff\1\4\2\uffff\1\1",
             "\1\uffff",
             "\1\uffff",
             "\1\uffff",
@@ -11991,7 +11573,7 @@ public class JavaParser extends Parser {
             this.transition = DFA79_transition;
         }
         public String getDescription() {
-            return "172:1: statement_wosemicolon : ( label | variable_assignment | variable_def | method_call | return_statement | continue_ | break_ | ( left_unary )? variable_name ( right_unary )? | for_loop | while_loop | do_loop | switch_case | if_else | try_catch | throw_ value semicolon );";
+            return "172:1: statement_wosemicolon : ( label | variable_assignment | variable_def | method_call | return_statement | continue_ | break_ | for_loop | while_loop | do_loop | switch_case | if_else | try_catch | throw_ value semicolon | ( left_unary )? variable_name ( right_unary )? );";
         }
         public int specialStateTransition(int s, IntStream _input) throws NoViableAltException {
             TokenStream input = (TokenStream)_input;
@@ -12012,7 +11594,7 @@ public class JavaParser extends Parser {
 
                         else if ( (synpred122_JavaParser()) ) {s = 31;}
 
-                        else if ( (synpred128_JavaParser()) ) {s = 17;}
+                        else if ( (true) ) {s = 24;}
 
                          
                         input.seek(index79_1);
@@ -12071,10 +11653,10 @@ public class JavaParser extends Parser {
         "\1\13\1\14\1\15\1\16\1\17\1\20\1\21\1\22\1\23\1\24\1\25\1\26\1\27"+
         "\1\30\1\31\1\32\1\33\1\34\2\uffff}>";
     static final String[] DFA90_transitionS = {
-            "\1\21\1\uffff\1\23\1\1\1\24\1\uffff\1\6\1\7\1\32\1\34\1\33\1"+
-            "\36\1\uffff\1\35\2\2\1\37\2\uffff\1\40\7\uffff\1\11\1\12\1\13"+
-            "\1\14\1\15\1\16\1\17\1\20\1\41\1\2\7\uffff\1\25\1\26\1\31\1"+
-            "\30\7\uffff\1\27\11\uffff\1\22\1\10\2\uffff\1\5",
+            "\1\21\1\uffff\1\23\1\1\1\24\1\uffff\1\6\1\7\1\25\1\27\1\26\1"+
+            "\31\1\uffff\1\30\2\2\1\32\2\uffff\1\33\7\uffff\1\11\1\12\1\13"+
+            "\1\14\1\15\1\16\1\17\1\20\1\41\1\2\7\uffff\1\34\1\35\1\40\1"+
+            "\37\7\uffff\1\36\11\uffff\1\22\1\10\2\uffff\1\5",
             "\1\uffff",
             "",
             "",
@@ -12607,10 +12189,10 @@ public class JavaParser extends Parser {
         "\1\15\1\16\1\17\1\20\1\21\1\22\1\23\1\24\1\25\1\26\1\27\1\30\1\31"+
         "\1\32\1\33\1\34\2\uffff}>";
     static final String[] DFA92_transitionS = {
-            "\1\20\1\uffff\1\22\1\24\1\23\1\uffff\1\5\1\6\1\32\1\34\1\33"+
-            "\1\36\1\uffff\1\35\2\1\1\37\2\uffff\1\40\7\uffff\1\10\1\11\1"+
-            "\12\1\13\1\14\1\15\1\16\1\17\1\41\1\1\7\uffff\1\25\1\26\1\31"+
-            "\1\30\7\uffff\1\27\11\uffff\1\21\1\7\2\uffff\1\4",
+            "\1\20\1\uffff\1\22\1\24\1\23\1\uffff\1\5\1\6\1\25\1\27\1\26"+
+            "\1\31\1\uffff\1\30\2\1\1\32\2\uffff\1\33\7\uffff\1\10\1\11\1"+
+            "\12\1\13\1\14\1\15\1\16\1\17\1\41\1\1\7\uffff\1\34\1\35\1\40"+
+            "\1\37\7\uffff\1\36\11\uffff\1\21\1\7\2\uffff\1\4",
             "",
             "",
             "",
@@ -13128,553 +12710,548 @@ public class JavaParser extends Parser {
     }
  
 
-    public static final BitSet FOLLOW_package_def_in_file44 = new BitSet(new long[]{0x0000003F000001E0L,0x0000000000002000L});
-    public static final BitSet FOLLOW_import_def_in_file46 = new BitSet(new long[]{0x0000003F000001E0L,0x0000000000002000L});
-    public static final BitSet FOLLOW_class_def_in_file50 = new BitSet(new long[]{0x0000003F000001E2L,0x0000000000002000L});
-    public static final BitSet FOLLOW_enum_def_in_file54 = new BitSet(new long[]{0x0000003F000001E2L,0x0000000000002000L});
-    public static final BitSet FOLLOW_interface_def_in_file58 = new BitSet(new long[]{0x0000003F000001E2L,0x0000000000002000L});
-    public static final BitSet FOLLOW_package__in_package_def72 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
-    public static final BitSet FOLLOW_package_name_in_package_def74 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001000L});
-    public static final BitSet FOLLOW_semicolon_in_package_def76 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_import__in_import_def88 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
-    public static final BitSet FOLLOW_import_name_in_import_def90 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001000L});
-    public static final BitSet FOLLOW_semicolon_in_import_def92 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_annotation_in_class_def104 = new BitSet(new long[]{0x0000003F00000040L,0x0000000000002000L});
-    public static final BitSet FOLLOW_modifier_in_class_def107 = new BitSet(new long[]{0x0000003F00000040L,0x0000000000002000L});
-    public static final BitSet FOLLOW_class__in_class_def110 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
-    public static final BitSet FOLLOW_id_in_class_def112 = new BitSet(new long[]{0x0000400000000600L,0x0000000000000020L});
-    public static final BitSet FOLLOW_generic_in_class_def114 = new BitSet(new long[]{0x0000400000000600L,0x0000000000000020L});
-    public static final BitSet FOLLOW_extends__in_class_def118 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
-    public static final BitSet FOLLOW_class_name_in_class_def120 = new BitSet(new long[]{0x0000400000000600L,0x0000000000000020L});
-    public static final BitSet FOLLOW_generic_in_class_def122 = new BitSet(new long[]{0x0000400000000600L,0x0000000000000020L});
-    public static final BitSet FOLLOW_implements__in_class_def128 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
-    public static final BitSet FOLLOW_class_name_in_class_def130 = new BitSet(new long[]{0x0000400000000600L,0x0000000000000030L});
-    public static final BitSet FOLLOW_comma_in_class_def133 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
-    public static final BitSet FOLLOW_class_name_in_class_def135 = new BitSet(new long[]{0x0000400000000600L,0x0000000000000030L});
-    public static final BitSet FOLLOW_class_block_in_class_def141 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_annotation_in_enum_def157 = new BitSet(new long[]{0x0000003F00000100L,0x0000000000002000L});
-    public static final BitSet FOLLOW_modifier_in_enum_def160 = new BitSet(new long[]{0x0000003F00000100L,0x0000000000002000L});
-    public static final BitSet FOLLOW_enum__in_enum_def163 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
-    public static final BitSet FOLLOW_id_in_enum_def165 = new BitSet(new long[]{0x0000400000000600L,0x0000000000000020L});
-    public static final BitSet FOLLOW_generic_in_enum_def167 = new BitSet(new long[]{0x0000400000000600L,0x0000000000000020L});
-    public static final BitSet FOLLOW_extends__in_enum_def171 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
-    public static final BitSet FOLLOW_class_name_in_enum_def173 = new BitSet(new long[]{0x0000400000000600L,0x0000000000000020L});
-    public static final BitSet FOLLOW_generic_in_enum_def175 = new BitSet(new long[]{0x0000400000000600L,0x0000000000000020L});
-    public static final BitSet FOLLOW_enum_block_in_enum_def180 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_annotation_in_interface_def196 = new BitSet(new long[]{0x0000003F000001E0L,0x0000000000002000L});
-    public static final BitSet FOLLOW_modifier_in_interface_def199 = new BitSet(new long[]{0x0000003F000001E0L,0x0000000000002000L});
-    public static final BitSet FOLLOW_interface__in_interface_def202 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
-    public static final BitSet FOLLOW_id_in_interface_def204 = new BitSet(new long[]{0x0000400000000600L,0x0000000000000020L});
-    public static final BitSet FOLLOW_generic_in_interface_def206 = new BitSet(new long[]{0x0000400000000600L,0x0000000000000020L});
-    public static final BitSet FOLLOW_extends__in_interface_def210 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
-    public static final BitSet FOLLOW_class_name_in_interface_def212 = new BitSet(new long[]{0x0000400000000600L,0x0000000000000020L});
-    public static final BitSet FOLLOW_generic_in_interface_def214 = new BitSet(new long[]{0x0000400000000600L,0x0000000000000020L});
-    public static final BitSet FOLLOW_interface_block_in_interface_def219 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_static__in_static_init235 = new BitSet(new long[]{0x07807FC0497EEE00L,0x0000000000013024L});
-    public static final BitSet FOLLOW_code_in_static_init237 = new BitSet(new long[]{0x0000000000000002L,0x0000000000001000L});
-    public static final BitSet FOLLOW_semicolon_in_static_init239 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_annotation_in_constructor_def251 = new BitSet(new long[]{0x0000003F00000000L,0x0000000000012000L});
-    public static final BitSet FOLLOW_modifier_in_constructor_def254 = new BitSet(new long[]{0x0000003F00000000L,0x0000000000010000L});
-    public static final BitSet FOLLOW_id_in_constructor_def257 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000200L});
-    public static final BitSet FOLLOW_open_bracket_in_constructor_def259 = new BitSet(new long[]{0x00003FC000000800L,0x0000000000012400L});
-    public static final BitSet FOLLOW_argument_def_in_constructor_def261 = new BitSet(new long[]{0x00003FC000000800L,0x0000000000012400L});
-    public static final BitSet FOLLOW_close_bracket_in_constructor_def263 = new BitSet(new long[]{0x07807FC0497EEE00L,0x0000000000013024L});
-    public static final BitSet FOLLOW_code_in_constructor_def265 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_annotation_in_method_def280 = new BitSet(new long[]{0x00003FFF00000800L,0x0000000000012000L});
-    public static final BitSet FOLLOW_modifier_in_method_def283 = new BitSet(new long[]{0x00003FFF00000800L,0x0000000000012000L});
-    public static final BitSet FOLLOW_variable_type_in_method_def286 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
-    public static final BitSet FOLLOW_id_in_method_def288 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000200L});
-    public static final BitSet FOLLOW_open_bracket_in_method_def290 = new BitSet(new long[]{0x00003FC000000800L,0x0000000000012400L});
-    public static final BitSet FOLLOW_argument_def_in_method_def292 = new BitSet(new long[]{0x00003FC000000800L,0x0000000000012400L});
-    public static final BitSet FOLLOW_close_bracket_in_method_def294 = new BitSet(new long[]{0x07807FC0C97EEE00L,0x0000000000013024L});
-    public static final BitSet FOLLOW_throws__in_method_def297 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
-    public static final BitSet FOLLOW_class_name_in_method_def299 = new BitSet(new long[]{0x07807FC0497EEE00L,0x0000000000013034L});
-    public static final BitSet FOLLOW_comma_in_method_def302 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
-    public static final BitSet FOLLOW_class_name_in_method_def304 = new BitSet(new long[]{0x07807FC0497EEE00L,0x0000000000013034L});
-    public static final BitSet FOLLOW_code_in_method_def310 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_annotation_in_field_def326 = new BitSet(new long[]{0x00003FFF00000800L,0x0000000000012000L});
-    public static final BitSet FOLLOW_modifier_in_field_def329 = new BitSet(new long[]{0x00003FFF00000800L,0x0000000000012000L});
-    public static final BitSet FOLLOW_variable_type_in_field_def332 = new BitSet(new long[]{0x0000000000060000L,0x0000000000010000L});
-    public static final BitSet FOLLOW_variable_name_in_field_def334 = new BitSet(new long[]{0x0070000000000000L,0x0000000000001000L});
-    public static final BitSet FOLLOW_assign_in_field_def337 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
-    public static final BitSet FOLLOW_value_in_field_def339 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001000L});
-    public static final BitSet FOLLOW_semicolon_in_field_def343 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_variable_type_in_argument_def355 = new BitSet(new long[]{0x0000000000060000L,0x0000000000010000L});
-    public static final BitSet FOLLOW_variable_name_in_argument_def357 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000010L});
-    public static final BitSet FOLLOW_comma_in_argument_def360 = new BitSet(new long[]{0x00003FC000000800L,0x0000000000012000L});
-    public static final BitSet FOLLOW_variable_type_in_argument_def362 = new BitSet(new long[]{0x0000000000060000L,0x0000000000010000L});
-    public static final BitSet FOLLOW_variable_name_in_argument_def364 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000010L});
-    public static final BitSet FOLLOW_annotation_in_variable_def379 = new BitSet(new long[]{0x00003FC000000800L,0x0000000000012000L});
-    public static final BitSet FOLLOW_variable_type_in_variable_def382 = new BitSet(new long[]{0x0000000000060000L,0x0000000000010000L});
-    public static final BitSet FOLLOW_variable_name_in_variable_def384 = new BitSet(new long[]{0x0070000000000002L});
-    public static final BitSet FOLLOW_assign_in_variable_def387 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
-    public static final BitSet FOLLOW_value_in_variable_def389 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_public__in_modifier401 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_private__in_modifier406 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_protected__in_modifier411 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_static__in_modifier416 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_final__in_modifier421 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_transient__in_modifier426 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_block_begin_in_class_block438 = new BitSet(new long[]{0x0000BFFF00000840L,0x0000000000012000L});
-    public static final BitSet FOLLOW_class_def_in_class_block441 = new BitSet(new long[]{0x0000BFFF00000840L,0x0000000000012000L});
-    public static final BitSet FOLLOW_static_init_in_class_block445 = new BitSet(new long[]{0x0000BFFF00000840L,0x0000000000012000L});
-    public static final BitSet FOLLOW_constructor_def_in_class_block449 = new BitSet(new long[]{0x0000BFFF00000840L,0x0000000000012000L});
-    public static final BitSet FOLLOW_method_def_in_class_block453 = new BitSet(new long[]{0x0000BFFF00000840L,0x0000000000012000L});
-    public static final BitSet FOLLOW_field_def_in_class_block457 = new BitSet(new long[]{0x0000BFFF00000840L,0x0000000000012000L});
-    public static final BitSet FOLLOW_block_end_in_class_block461 = new BitSet(new long[]{0x0000000000000002L,0x0000000000001000L});
-    public static final BitSet FOLLOW_semicolon_in_class_block463 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_block_begin_in_enum_block476 = new BitSet(new long[]{0x0000BFFF00000840L,0x0000000000012000L});
-    public static final BitSet FOLLOW_class_def_in_enum_block479 = new BitSet(new long[]{0x0000BFFF00000840L,0x0000000000012000L});
-    public static final BitSet FOLLOW_constructor_def_in_enum_block483 = new BitSet(new long[]{0x0000BFFF00000840L,0x0000000000012000L});
-    public static final BitSet FOLLOW_method_def_in_enum_block487 = new BitSet(new long[]{0x0000BFFF00000840L,0x0000000000012000L});
-    public static final BitSet FOLLOW_field_def_in_enum_block491 = new BitSet(new long[]{0x0000BFFF00000840L,0x0000000000012000L});
-    public static final BitSet FOLLOW_enum_content_in_enum_block495 = new BitSet(new long[]{0x0000BFFF00000840L,0x0000000000012000L});
-    public static final BitSet FOLLOW_block_end_in_enum_block499 = new BitSet(new long[]{0x0000000000000002L,0x0000000000001000L});
-    public static final BitSet FOLLOW_semicolon_in_enum_block501 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_id_in_enum_content513 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001210L});
-    public static final BitSet FOLLOW_open_bracket_in_enum_content516 = new BitSet(new long[]{0x07807FC000071E00L,0x0000000030BBA624L});
-    public static final BitSet FOLLOW_arguments_in_enum_content518 = new BitSet(new long[]{0x00003FC000000800L,0x0000000000012400L});
-    public static final BitSet FOLLOW_close_bracket_in_enum_content520 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001010L});
-    public static final BitSet FOLLOW_comma_in_enum_content525 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
-    public static final BitSet FOLLOW_id_in_enum_content527 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001210L});
-    public static final BitSet FOLLOW_open_bracket_in_enum_content530 = new BitSet(new long[]{0x07807FC000071E00L,0x0000000030BBA624L});
-    public static final BitSet FOLLOW_arguments_in_enum_content532 = new BitSet(new long[]{0x00003FC000000800L,0x0000000000012400L});
-    public static final BitSet FOLLOW_close_bracket_in_enum_content534 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001010L});
-    public static final BitSet FOLLOW_semicolon_in_enum_content540 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_block_begin_in_interface_block552 = new BitSet(new long[]{0x0000BFFF00000840L,0x0000000000012000L});
-    public static final BitSet FOLLOW_annotation_in_interface_block555 = new BitSet(new long[]{0x00003FFF00000800L,0x0000000000012000L});
-    public static final BitSet FOLLOW_modifier_in_interface_block558 = new BitSet(new long[]{0x00003FFF00000800L,0x0000000000012000L});
-    public static final BitSet FOLLOW_variable_type_in_interface_block561 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
-    public static final BitSet FOLLOW_id_in_interface_block563 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000200L});
-    public static final BitSet FOLLOW_open_bracket_in_interface_block565 = new BitSet(new long[]{0x00003FC000000800L,0x0000000000012400L});
-    public static final BitSet FOLLOW_argument_def_in_interface_block567 = new BitSet(new long[]{0x00003FC000000800L,0x0000000000012400L});
-    public static final BitSet FOLLOW_close_bracket_in_interface_block569 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001000L});
-    public static final BitSet FOLLOW_semicolon_in_interface_block571 = new BitSet(new long[]{0x0000BFFF00000840L,0x0000000000012000L});
-    public static final BitSet FOLLOW_block_end_in_interface_block575 = new BitSet(new long[]{0x0000000000000002L,0x0000000000001000L});
-    public static final BitSet FOLLOW_semicolon_in_interface_block577 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_method_name_in_method_call590 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000200L});
-    public static final BitSet FOLLOW_open_bracket_in_method_call592 = new BitSet(new long[]{0x07807FC000071E00L,0x0000000030BBA624L});
-    public static final BitSet FOLLOW_arguments_in_method_call594 = new BitSet(new long[]{0x00003FC000000800L,0x0000000000012400L});
-    public static final BitSet FOLLOW_close_bracket_in_method_call596 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000008L});
-    public static final BitSet FOLLOW_dot_in_method_call599 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
-    public static final BitSet FOLLOW_id_in_method_call601 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000208L});
-    public static final BitSet FOLLOW_open_bracket_in_method_call604 = new BitSet(new long[]{0x07807FC000071E00L,0x0000000030BBA624L});
-    public static final BitSet FOLLOW_arguments_in_method_call606 = new BitSet(new long[]{0x00003FC000000800L,0x0000000000012400L});
-    public static final BitSet FOLLOW_close_bracket_in_method_call608 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000008L});
-    public static final BitSet FOLLOW_super__in_method_call617 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000200L});
-    public static final BitSet FOLLOW_open_bracket_in_method_call619 = new BitSet(new long[]{0x07807FC000071E00L,0x0000000030BBA624L});
-    public static final BitSet FOLLOW_arguments_in_method_call621 = new BitSet(new long[]{0x00003FC000000800L,0x0000000000012400L});
-    public static final BitSet FOLLOW_close_bracket_in_method_call623 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000008L});
-    public static final BitSet FOLLOW_dot_in_method_call626 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
-    public static final BitSet FOLLOW_id_in_method_call628 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000208L});
-    public static final BitSet FOLLOW_open_bracket_in_method_call631 = new BitSet(new long[]{0x07807FC000071E00L,0x0000000030BBA624L});
-    public static final BitSet FOLLOW_arguments_in_method_call633 = new BitSet(new long[]{0x00003FC000000800L,0x0000000000012400L});
-    public static final BitSet FOLLOW_close_bracket_in_method_call635 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000008L});
-    public static final BitSet FOLLOW_this__in_method_call644 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000200L});
-    public static final BitSet FOLLOW_open_bracket_in_method_call646 = new BitSet(new long[]{0x07807FC000071E00L,0x0000000030BBA624L});
-    public static final BitSet FOLLOW_arguments_in_method_call648 = new BitSet(new long[]{0x00003FC000000800L,0x0000000000012400L});
-    public static final BitSet FOLLOW_close_bracket_in_method_call650 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000008L});
-    public static final BitSet FOLLOW_dot_in_method_call653 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
-    public static final BitSet FOLLOW_id_in_method_call655 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000208L});
-    public static final BitSet FOLLOW_open_bracket_in_method_call658 = new BitSet(new long[]{0x07807FC000071E00L,0x0000000030BBA624L});
-    public static final BitSet FOLLOW_arguments_in_method_call660 = new BitSet(new long[]{0x00003FC000000800L,0x0000000000012400L});
-    public static final BitSet FOLLOW_close_bracket_in_method_call662 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000008L});
-    public static final BitSet FOLLOW_annotation_name_in_annotation677 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000200L});
-    public static final BitSet FOLLOW_open_bracket_in_annotation680 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
-    public static final BitSet FOLLOW_value_in_annotation682 = new BitSet(new long[]{0x00003FC000000800L,0x0000000000012410L});
-    public static final BitSet FOLLOW_comma_in_annotation685 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
-    public static final BitSet FOLLOW_value_in_annotation687 = new BitSet(new long[]{0x00003FC000000800L,0x0000000000012410L});
-    public static final BitSet FOLLOW_close_bracket_in_annotation691 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_LT_in_generic703 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
-    public static final BitSet FOLLOW_id_in_generic706 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000050L});
-    public static final BitSet FOLLOW_comma_in_generic709 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
-    public static final BitSet FOLLOW_id_in_generic711 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000050L});
-    public static final BitSet FOLLOW_GT_in_generic716 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_cast_in_value729 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
-    public static final BitSet FOLLOW_left_unary_in_value732 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
-    public static final BitSet FOLLOW_single_value_in_value735 = new BitSet(new long[]{0xFF8F000000000002L,0x0000000000000067L});
-    public static final BitSet FOLLOW_right_unary_in_value737 = new BitSet(new long[]{0xFE0F000000000002L,0x0000000000000063L});
-    public static final BitSet FOLLOW_binary_operator_in_value741 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
-    public static final BitSet FOLLOW_value_in_value743 = new BitSet(new long[]{0x2000000000000002L});
-    public static final BitSet FOLLOW_question__in_value748 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
-    public static final BitSet FOLLOW_value_in_value750 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000800L});
-    public static final BitSet FOLLOW_colon_in_value752 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
-    public static final BitSet FOLLOW_value_in_value754 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_open_bracket_in_value761 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
-    public static final BitSet FOLLOW_value_in_value763 = new BitSet(new long[]{0x00003FC000000800L,0x0000000000012400L});
-    public static final BitSet FOLLOW_close_bracket_in_value765 = new BitSet(new long[]{0xDE0F000000000002L,0x0000000000000063L});
-    public static final BitSet FOLLOW_binary_operator_in_value768 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
-    public static final BitSet FOLLOW_value_in_value770 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_constant_in_single_value783 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_class_name_in_single_value788 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000008L});
-    public static final BitSet FOLLOW_dot_in_single_value790 = new BitSet(new long[]{0x0000003F00000040L,0x0000000000002000L});
-    public static final BitSet FOLLOW_class__in_single_value792 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_variable_name_in_single_value797 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_method_call_in_single_value802 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_new_class_in_single_value807 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_this__in_single_value812 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_super__in_single_value817 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_hex_long_const_in_constant826 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_hex_const_in_constant831 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_long_const_in_constant836 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_int_const_in_constant841 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_string_const_in_constant846 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_float_const_in_constant851 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_char_const_in_constant856 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_null_const_in_constant861 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_boolean_const_in_constant866 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_array_const_in_constant871 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_new__in_new_class883 = new BitSet(new long[]{0x00003FC000000000L,0x0000000000010000L});
-    public static final BitSet FOLLOW_class_name_in_new_class886 = new BitSet(new long[]{0x0000000000000002L,0x00000000000002A0L});
-    public static final BitSet FOLLOW_generic_in_new_class888 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000280L});
-    public static final BitSet FOLLOW_primitive_in_new_class893 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000280L});
-    public static final BitSet FOLLOW_array_in_new_class897 = new BitSet(new long[]{0x0000400000000600L,0x0000000000000220L});
-    public static final BitSet FOLLOW_array_const_in_new_class899 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000200L});
-    public static final BitSet FOLLOW_open_bracket_in_new_class904 = new BitSet(new long[]{0x07807FC000071E00L,0x0000000030BBA624L});
-    public static final BitSet FOLLOW_arguments_in_new_class906 = new BitSet(new long[]{0x00003FC000000800L,0x0000000000012400L});
-    public static final BitSet FOLLOW_close_bracket_in_new_class908 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_value_in_arguments924 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000010L});
-    public static final BitSet FOLLOW_comma_in_arguments927 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
-    public static final BitSet FOLLOW_value_in_arguments929 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000010L});
-    public static final BitSet FOLLOW_statement_in_code943 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_block_begin_in_code948 = new BitSet(new long[]{0x0780FFFF497EEE40L,0x0000000000013024L});
-    public static final BitSet FOLLOW_code_in_code950 = new BitSet(new long[]{0x0780FFFF497EEE40L,0x0000000000013024L});
-    public static final BitSet FOLLOW_block_end_in_code953 = new BitSet(new long[]{0x0000000000000002L,0x0000000000001000L});
-    public static final BitSet FOLLOW_semicolon_in_code955 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_label_in_statement968 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_variable_assignment_in_statement974 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001000L});
-    public static final BitSet FOLLOW_semicolon_in_statement976 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_variable_def_in_statement981 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001000L});
-    public static final BitSet FOLLOW_semicolon_in_statement983 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_method_call_in_statement988 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001000L});
-    public static final BitSet FOLLOW_semicolon_in_statement990 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_semicolon_in_statement996 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_return_statement_in_statement1001 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_continue__in_statement1006 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_break__in_statement1011 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_left_unary_in_statement1016 = new BitSet(new long[]{0x0000000000060000L,0x0000000000010000L});
-    public static final BitSet FOLLOW_variable_name_in_statement1019 = new BitSet(new long[]{0x0180000000000002L,0x0000000000000004L});
-    public static final BitSet FOLLOW_right_unary_in_statement1021 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_for_loop_in_statement1027 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_while_loop_in_statement1032 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_do_loop_in_statement1037 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_switch_case_in_statement1042 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_if_else_in_statement1047 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_try_catch_in_statement1052 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_throw__in_statement1057 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
-    public static final BitSet FOLLOW_value_in_statement1059 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001000L});
-    public static final BitSet FOLLOW_semicolon_in_statement1061 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_label_in_statement_wosemicolon1072 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_variable_assignment_in_statement_wosemicolon1077 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_variable_def_in_statement_wosemicolon1082 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_method_call_in_statement_wosemicolon1087 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_return_statement_in_statement_wosemicolon1093 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_continue__in_statement_wosemicolon1098 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_break__in_statement_wosemicolon1103 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_left_unary_in_statement_wosemicolon1108 = new BitSet(new long[]{0x0000000000060000L,0x0000000000010000L});
-    public static final BitSet FOLLOW_variable_name_in_statement_wosemicolon1111 = new BitSet(new long[]{0x0180000000000002L,0x0000000000000004L});
-    public static final BitSet FOLLOW_right_unary_in_statement_wosemicolon1113 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_for_loop_in_statement_wosemicolon1119 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_while_loop_in_statement_wosemicolon1124 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_do_loop_in_statement_wosemicolon1129 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_switch_case_in_statement_wosemicolon1134 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_if_else_in_statement_wosemicolon1139 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_try_catch_in_statement_wosemicolon1144 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_throw__in_statement_wosemicolon1149 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
-    public static final BitSet FOLLOW_value_in_statement_wosemicolon1151 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001000L});
-    public static final BitSet FOLLOW_semicolon_in_statement_wosemicolon1153 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_return__in_return_statement1165 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB9224L});
-    public static final BitSet FOLLOW_value_in_return_statement1167 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001000L});
-    public static final BitSet FOLLOW_semicolon_in_return_statement1170 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_this__in_variable_assignment1183 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000008L});
-    public static final BitSet FOLLOW_dot_in_variable_assignment1185 = new BitSet(new long[]{0x0000000000060000L,0x0000000000010000L});
-    public static final BitSet FOLLOW_super__in_variable_assignment1189 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000008L});
-    public static final BitSet FOLLOW_dot_in_variable_assignment1191 = new BitSet(new long[]{0x0000000000060000L,0x0000000000010000L});
-    public static final BitSet FOLLOW_variable_name_in_variable_assignment1195 = new BitSet(new long[]{0x0070000000000000L});
-    public static final BitSet FOLLOW_assign_in_variable_assignment1197 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
-    public static final BitSet FOLLOW_value_in_variable_assignment1199 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_for__in_for_loop1209 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000200L});
-    public static final BitSet FOLLOW_OPEN_BRACKET_in_for_loop1211 = new BitSet(new long[]{0x00003FC000000800L,0x0000000000013000L});
-    public static final BitSet FOLLOW_variable_def_in_for_loop1214 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001010L});
-    public static final BitSet FOLLOW_comma_in_for_loop1217 = new BitSet(new long[]{0x00003FC000000800L,0x0000000000012000L});
-    public static final BitSet FOLLOW_variable_def_in_for_loop1219 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001010L});
-    public static final BitSet FOLLOW_semicolon_in_for_loop1225 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB9224L});
-    public static final BitSet FOLLOW_value_in_for_loop1227 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001000L});
-    public static final BitSet FOLLOW_semicolon_in_for_loop1230 = new BitSet(new long[]{0x07803FC0497EE800L,0x0000000000013404L});
-    public static final BitSet FOLLOW_statement_wosemicolon_in_for_loop1233 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000410L});
-    public static final BitSet FOLLOW_comma_in_for_loop1236 = new BitSet(new long[]{0x07803FC0497EE800L,0x0000000000013004L});
-    public static final BitSet FOLLOW_statement_wosemicolon_in_for_loop1238 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000410L});
-    public static final BitSet FOLLOW_CLOSE_BRACKET_in_for_loop1244 = new BitSet(new long[]{0x07807FC0497EEE00L,0x0000000000013024L});
-    public static final BitSet FOLLOW_code_in_for_loop1246 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_for__in_for_loop1251 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000200L});
-    public static final BitSet FOLLOW_OPEN_BRACKET_in_for_loop1253 = new BitSet(new long[]{0x00003FC000000800L,0x0000000000012000L});
-    public static final BitSet FOLLOW_variable_type_in_for_loop1255 = new BitSet(new long[]{0x0000000000060000L,0x0000000000010000L});
-    public static final BitSet FOLLOW_variable_name_in_for_loop1257 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000800L});
-    public static final BitSet FOLLOW_colon_in_for_loop1259 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
-    public static final BitSet FOLLOW_value_in_for_loop1261 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000400L});
-    public static final BitSet FOLLOW_CLOSE_BRACKET_in_for_loop1263 = new BitSet(new long[]{0x07807FC0497EEE00L,0x0000000000013024L});
-    public static final BitSet FOLLOW_code_in_for_loop1265 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_while__in_while_loop1277 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000200L});
-    public static final BitSet FOLLOW_OPEN_BRACKET_in_while_loop1279 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
-    public static final BitSet FOLLOW_value_in_while_loop1281 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000400L});
-    public static final BitSet FOLLOW_CLOSE_BRACKET_in_while_loop1283 = new BitSet(new long[]{0x07807FC0497EEE00L,0x0000000000013024L});
-    public static final BitSet FOLLOW_code_in_while_loop1285 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_do__in_do_loop1296 = new BitSet(new long[]{0x07807FC0497EEE00L,0x0000000000013024L});
-    public static final BitSet FOLLOW_code_in_do_loop1298 = new BitSet(new long[]{0x0000000000200000L});
-    public static final BitSet FOLLOW_while__in_do_loop1300 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000200L});
-    public static final BitSet FOLLOW_OPEN_BRACKET_in_do_loop1302 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
-    public static final BitSet FOLLOW_value_in_do_loop1304 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000400L});
-    public static final BitSet FOLLOW_CLOSE_BRACKET_in_do_loop1306 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_switch__in_switch_case1317 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000200L});
-    public static final BitSet FOLLOW_OPEN_BRACKET_in_switch_case1319 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
-    public static final BitSet FOLLOW_value_in_switch_case1321 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000400L});
-    public static final BitSet FOLLOW_CLOSE_BRACKET_in_switch_case1323 = new BitSet(new long[]{0x0000400000000600L,0x0000000000000020L});
-    public static final BitSet FOLLOW_block_begin_in_switch_case1325 = new BitSet(new long[]{0x0000000006000000L});
-    public static final BitSet FOLLOW_case__in_switch_case1336 = new BitSet(new long[]{0x0000400000070600L,0x0000000030BB8020L});
-    public static final BitSet FOLLOW_constant_in_switch_case1340 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000800L});
-    public static final BitSet FOLLOW_variable_name_in_switch_case1344 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000800L});
-    public static final BitSet FOLLOW_colon_in_switch_case1347 = new BitSet(new long[]{0x0780FFFF4F7EEE40L,0x0000000000013024L});
-    public static final BitSet FOLLOW_code_in_switch_case1352 = new BitSet(new long[]{0x0780FFFF4F7EEE40L,0x0000000000013024L});
-    public static final BitSet FOLLOW_statement_in_switch_case1356 = new BitSet(new long[]{0x0780FFFF4F7EEE40L,0x0000000000013024L});
-    public static final BitSet FOLLOW_break__in_switch_case1361 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001000L});
-    public static final BitSet FOLLOW_semicolon_in_switch_case1363 = new BitSet(new long[]{0x0000BFFF06000840L,0x0000000000012000L});
-    public static final BitSet FOLLOW_default__in_switch_case1374 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000800L});
-    public static final BitSet FOLLOW_colon_in_switch_case1376 = new BitSet(new long[]{0x0780FFFF4F7EEE40L,0x0000000000013024L});
-    public static final BitSet FOLLOW_code_in_switch_case1379 = new BitSet(new long[]{0x0780FFFF4F7EEE40L,0x0000000000013024L});
-    public static final BitSet FOLLOW_statement_in_switch_case1383 = new BitSet(new long[]{0x0780FFFF4F7EEE40L,0x0000000000013024L});
-    public static final BitSet FOLLOW_block_end_in_switch_case1394 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_if__in_if_else1405 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000200L});
-    public static final BitSet FOLLOW_OPEN_BRACKET_in_if_else1407 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
-    public static final BitSet FOLLOW_value_in_if_else1409 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000400L});
-    public static final BitSet FOLLOW_CLOSE_BRACKET_in_if_else1411 = new BitSet(new long[]{0x07807FC0497EEE00L,0x0000000000013024L});
-    public static final BitSet FOLLOW_code_in_if_else1413 = new BitSet(new long[]{0x0000000000800002L});
-    public static final BitSet FOLLOW_else__in_if_else1416 = new BitSet(new long[]{0x07807FC0497EEE00L,0x0000000000013024L});
-    public static final BitSet FOLLOW_code_in_if_else1418 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_try__in_try_catch1431 = new BitSet(new long[]{0x07807FC0497EEE00L,0x0000000000013024L});
-    public static final BitSet FOLLOW_code_in_try_catch1433 = new BitSet(new long[]{0x0000000010000000L});
-    public static final BitSet FOLLOW_catch__in_try_catch1436 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000200L});
-    public static final BitSet FOLLOW_OPEN_BRACKET_in_try_catch1438 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
-    public static final BitSet FOLLOW_id_in_try_catch1440 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
-    public static final BitSet FOLLOW_id_in_try_catch1442 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000400L});
-    public static final BitSet FOLLOW_CLOSE_BRACKET_in_try_catch1444 = new BitSet(new long[]{0x07807FC0497EEE00L,0x0000000000013024L});
-    public static final BitSet FOLLOW_code_in_try_catch1446 = new BitSet(new long[]{0x0000000030000002L});
-    public static final BitSet FOLLOW_finally__in_try_catch1451 = new BitSet(new long[]{0x07807FC0497EEE00L,0x0000000000013024L});
-    public static final BitSet FOLLOW_code_in_try_catch1453 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_id_in_label1465 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000800L});
-    public static final BitSet FOLLOW_colon_in_label1467 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_OPEN_BRACKET_in_cast1475 = new BitSet(new long[]{0x00003FC000000800L,0x0000000000012000L});
-    public static final BitSet FOLLOW_variable_type_in_cast1477 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000400L});
-    public static final BitSet FOLLOW_CLOSE_BRACKET_in_cast1479 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_primitive_in_variable_type1492 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000080L});
-    public static final BitSet FOLLOW_array_in_variable_type1494 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_class_name_in_variable_type1500 = new BitSet(new long[]{0x0000000000000002L,0x00000000000000A0L});
-    public static final BitSet FOLLOW_generic_in_variable_type1502 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000080L});
-    public static final BitSet FOLLOW_array_in_variable_type1505 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_void__in_variable_type1511 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ID_in_id1521 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_plus_in_binary_operator1532 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_minus_in_binary_operator1537 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_STAR_in_binary_operator1542 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_SLASH_in_binary_operator1549 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_EQUAL_in_binary_operator1556 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_UNEQUAL_in_binary_operator1563 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_LT_in_binary_operator1570 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_GT_in_binary_operator1577 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_LE_in_binary_operator1584 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_GE_in_binary_operator1591 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_LOGICAL_OR_in_binary_operator1598 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_BIT_OR_in_binary_operator1605 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_LOGICAL_AND_in_binary_operator1612 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_BIT_AND_in_binary_operator1619 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_INC_in_left_unary1633 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_DEC_in_left_unary1640 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_NOT_in_left_unary1647 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_MINUS_in_left_unary1654 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_PLUS_in_left_unary1661 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_INC_in_right_unary1675 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_DEC_in_right_unary1682 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_NOT_in_right_unary1689 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_BOOLEAN_in_primitive1702 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_BYTE_in_primitive1709 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_CHAR_in_primitive1716 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_SHORT_in_primitive1723 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_INTEGER_in_primitive1730 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_LONG_in_primitive1737 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_FLOAT_in_primitive1744 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_DOUBLE_in_primitive1751 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_INT_CONST_in_int_const1769 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_LONG_CONST_in_long_const1779 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_HEX_CONST_in_hex_const1789 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_HEX_LONG_CONST_in_hex_long_const1799 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_STRING_CONST_in_string_const1809 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_FLOAT_CONST_in_float_const1819 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_CHAR_CONST_in_char_const1829 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_NULL_in_null_const1839 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_BOOL_CONST_in_boolean_const1850 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_block_begin_in_array_const1861 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
-    public static final BitSet FOLLOW_value_in_array_const1863 = new BitSet(new long[]{0x0000BFFF00000840L,0x0000000000012010L});
-    public static final BitSet FOLLOW_comma_in_array_const1866 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
-    public static final BitSet FOLLOW_value_in_array_const1868 = new BitSet(new long[]{0x0000BFFF00000840L,0x0000000000012010L});
-    public static final BitSet FOLLOW_block_end_in_array_const1872 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ID_in_package_name1887 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000008L});
-    public static final BitSet FOLLOW_DOT_in_package_name1889 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
-    public static final BitSet FOLLOW_ID_in_package_name1893 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ID_in_import_name1907 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000008L});
-    public static final BitSet FOLLOW_DOT_in_import_name1909 = new BitSet(new long[]{0x1000000000000000L,0x0000000000010000L});
-    public static final BitSet FOLLOW_set_in_import_name1913 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ID_in_class_name1931 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000008L});
-    public static final BitSet FOLLOW_DOT_in_class_name1933 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
-    public static final BitSet FOLLOW_ID_in_class_name1937 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ID_in_method_name1951 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000008L});
-    public static final BitSet FOLLOW_DOT_in_method_name1953 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
-    public static final BitSet FOLLOW_ID_in_method_name1957 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_name_in_variable_name1970 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000080L});
-    public static final BitSet FOLLOW_array_in_variable_name1972 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_AT_in_annotation_name1983 = new BitSet(new long[]{0x0000000000060000L,0x0000000000010000L});
-    public static final BitSet FOLLOW_name_in_annotation_name1985 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ID_in_name1995 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000008L});
-    public static final BitSet FOLLOW_DOT_in_name1997 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
-    public static final BitSet FOLLOW_ID_in_name2001 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_open_rect_bracket_in_array2012 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8324L});
-    public static final BitSet FOLLOW_value_in_array2014 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8324L});
-    public static final BitSet FOLLOW_close_rect_bracket_in_array2017 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000080L});
-    public static final BitSet FOLLOW_PACKAGE_in_package_2032 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_IMPORT_in_import_2043 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_CLASS_in_class_2053 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ENUM_in_enum_2062 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_INTERFACE_in_interface_2072 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_EXTENDS_in_extends_2080 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_IMPLEMENTS_in_implements_2090 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_THIS_in_this_2099 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_SUPER_in_super_2108 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_VOID_in_void_2117 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_PUBLIC_in_public_2126 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_PRIVATE_in_private_2134 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_PROTECTED_in_protected_2144 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_STATIC_in_static_2153 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_FINAL_in_final_2162 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_TRANSIENT_in_transient_2172 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_NEW_in_new_2181 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_TRY_in_try_2190 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_CATCH_in_catch_2199 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_FINALLY_in_finally_2207 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_THROWS_in_throws_2216 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_THROW_in_throw_2225 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_FOR_in_for_2235 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_WHILE_in_while_2244 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_DO_in_do_2253 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_IF_in_if_2262 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ELSE_in_else_2271 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_SWITCH_in_switch_2281 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_CASE_in_case_2290 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_DEFAULT_in_default_2298 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_RETURN_in_return_2308 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_BREAK_in_break_2317 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
-    public static final BitSet FOLLOW_id_in_break_2319 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_BREAK_in_break_2326 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_CONTINUE_in_continue_2338 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_SEMICOLON_in_semicolon2353 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_COMMA_in_comma2362 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_COLON_in_colon2371 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_QUESTION_in_question_2381 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_PLUS_in_plus2390 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_MINUS_in_minus2399 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_DOT_in_dot2408 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ASSIGN_in_assign2417 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_INCASSIGN_in_assign2424 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_DECASSIGN_in_assign2431 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_OPEN_CURLY_BRACKET_in_block_begin2443 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_CLOSE_CURLY_BRACKET_in_block_end2453 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_OPEN_BRACKET_in_open_bracket2463 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_CLOSE_BRACKET_in_close_bracket2473 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_OPEN_RECT_BRACKET_in_open_rect_bracket2484 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_CLOSE_RECT_BRACKET_in_close_rect_bracket2494 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_class_def_in_synpred2_JavaParser50 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_enum_def_in_synpred3_JavaParser54 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_interface_def_in_synpred4_JavaParser58 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_class_def_in_synpred41_JavaParser441 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_static_init_in_synpred42_JavaParser445 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_constructor_def_in_synpred43_JavaParser449 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_method_def_in_synpred44_JavaParser453 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_field_def_in_synpred45_JavaParser457 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_class_def_in_synpred47_JavaParser479 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_constructor_def_in_synpred48_JavaParser483 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_method_def_in_synpred49_JavaParser487 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_field_def_in_synpred50_JavaParser491 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_enum_content_in_synpred51_JavaParser495 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_left_unary_in_synpred72_JavaParser732 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_question__in_synpred75_JavaParser748 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
-    public static final BitSet FOLLOW_value_in_synpred75_JavaParser750 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000800L});
-    public static final BitSet FOLLOW_colon_in_synpred75_JavaParser752 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
-    public static final BitSet FOLLOW_value_in_synpred75_JavaParser754 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_cast_in_synpred76_JavaParser729 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
-    public static final BitSet FOLLOW_left_unary_in_synpred76_JavaParser732 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
-    public static final BitSet FOLLOW_single_value_in_synpred76_JavaParser735 = new BitSet(new long[]{0xFF8F000000000002L,0x0000000000000067L});
-    public static final BitSet FOLLOW_right_unary_in_synpred76_JavaParser737 = new BitSet(new long[]{0xFE0F000000000002L,0x0000000000000063L});
-    public static final BitSet FOLLOW_binary_operator_in_synpred76_JavaParser741 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
-    public static final BitSet FOLLOW_value_in_synpred76_JavaParser743 = new BitSet(new long[]{0x2000000000000002L});
-    public static final BitSet FOLLOW_question__in_synpred76_JavaParser748 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
-    public static final BitSet FOLLOW_value_in_synpred76_JavaParser750 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000800L});
-    public static final BitSet FOLLOW_colon_in_synpred76_JavaParser752 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
-    public static final BitSet FOLLOW_value_in_synpred76_JavaParser754 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_generic_in_synpred93_JavaParser888 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_value_in_synpred98_JavaParser924 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000010L});
-    public static final BitSet FOLLOW_comma_in_synpred98_JavaParser927 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
-    public static final BitSet FOLLOW_value_in_synpred98_JavaParser929 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000010L});
-    public static final BitSet FOLLOW_semicolon_in_synpred101_JavaParser955 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_label_in_synpred102_JavaParser968 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_variable_assignment_in_synpred103_JavaParser974 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001000L});
-    public static final BitSet FOLLOW_semicolon_in_synpred103_JavaParser976 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_variable_def_in_synpred104_JavaParser981 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001000L});
-    public static final BitSet FOLLOW_semicolon_in_synpred104_JavaParser983 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_method_call_in_synpred105_JavaParser988 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001000L});
-    public static final BitSet FOLLOW_semicolon_in_synpred105_JavaParser990 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_right_unary_in_synpred111_JavaParser1021 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_left_unary_in_synpred112_JavaParser1016 = new BitSet(new long[]{0x0000000000060000L,0x0000000000010000L});
-    public static final BitSet FOLLOW_variable_name_in_synpred112_JavaParser1019 = new BitSet(new long[]{0x0180000000000002L,0x0000000000000004L});
-    public static final BitSet FOLLOW_right_unary_in_synpred112_JavaParser1021 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_label_in_synpred119_JavaParser1072 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_variable_assignment_in_synpred120_JavaParser1077 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_variable_def_in_synpred121_JavaParser1082 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_method_call_in_synpred122_JavaParser1087 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_left_unary_in_synpred128_JavaParser1108 = new BitSet(new long[]{0x0000000000060000L,0x0000000000010000L});
-    public static final BitSet FOLLOW_variable_name_in_synpred128_JavaParser1111 = new BitSet(new long[]{0x0180000000000002L,0x0000000000000004L});
-    public static final BitSet FOLLOW_right_unary_in_synpred128_JavaParser1113 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_value_in_synpred135_JavaParser1167 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_value_in_synpred140_JavaParser1227 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_for__in_synpred143_JavaParser1209 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000200L});
-    public static final BitSet FOLLOW_OPEN_BRACKET_in_synpred143_JavaParser1211 = new BitSet(new long[]{0x00003FC000000800L,0x0000000000013000L});
-    public static final BitSet FOLLOW_variable_def_in_synpred143_JavaParser1214 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001010L});
-    public static final BitSet FOLLOW_comma_in_synpred143_JavaParser1217 = new BitSet(new long[]{0x00003FC000000800L,0x0000000000012000L});
-    public static final BitSet FOLLOW_variable_def_in_synpred143_JavaParser1219 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001010L});
-    public static final BitSet FOLLOW_semicolon_in_synpred143_JavaParser1225 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB9224L});
-    public static final BitSet FOLLOW_value_in_synpred143_JavaParser1227 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001000L});
-    public static final BitSet FOLLOW_semicolon_in_synpred143_JavaParser1230 = new BitSet(new long[]{0x07803FC0497EE800L,0x0000000000013404L});
-    public static final BitSet FOLLOW_statement_wosemicolon_in_synpred143_JavaParser1233 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000410L});
-    public static final BitSet FOLLOW_comma_in_synpred143_JavaParser1236 = new BitSet(new long[]{0x07803FC0497EE800L,0x0000000000013004L});
-    public static final BitSet FOLLOW_statement_wosemicolon_in_synpred143_JavaParser1238 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000410L});
-    public static final BitSet FOLLOW_CLOSE_BRACKET_in_synpred143_JavaParser1244 = new BitSet(new long[]{0x07807FC0497EEE00L,0x0000000000013024L});
-    public static final BitSet FOLLOW_code_in_synpred143_JavaParser1246 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_case__in_synpred145_JavaParser1336 = new BitSet(new long[]{0x0000400000070600L,0x0000000030BB8020L});
-    public static final BitSet FOLLOW_constant_in_synpred145_JavaParser1340 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000800L});
-    public static final BitSet FOLLOW_variable_name_in_synpred145_JavaParser1344 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000800L});
-    public static final BitSet FOLLOW_colon_in_synpred145_JavaParser1347 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_code_in_synpred146_JavaParser1352 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_statement_in_synpred147_JavaParser1356 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_code_in_synpred150_JavaParser1379 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_statement_in_synpred151_JavaParser1383 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_else__in_synpred153_JavaParser1416 = new BitSet(new long[]{0x07807FC0497EEE00L,0x0000000000013024L});
-    public static final BitSet FOLLOW_code_in_synpred153_JavaParser1418 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_catch__in_synpred154_JavaParser1436 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000200L});
-    public static final BitSet FOLLOW_OPEN_BRACKET_in_synpred154_JavaParser1438 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
-    public static final BitSet FOLLOW_id_in_synpred154_JavaParser1440 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
-    public static final BitSet FOLLOW_id_in_synpred154_JavaParser1442 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000400L});
-    public static final BitSet FOLLOW_CLOSE_BRACKET_in_synpred154_JavaParser1444 = new BitSet(new long[]{0x07807FC0497EEE00L,0x0000000000013024L});
-    public static final BitSet FOLLOW_code_in_synpred154_JavaParser1446 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_finally__in_synpred155_JavaParser1451 = new BitSet(new long[]{0x07807FC0497EEE00L,0x0000000000013024L});
-    public static final BitSet FOLLOW_code_in_synpred155_JavaParser1453 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_value_in_synpred196_JavaParser2014 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_BREAK_in_synpred198_JavaParser2317 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
-    public static final BitSet FOLLOW_id_in_synpred198_JavaParser2319 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_package_def_in_file40 = new BitSet(new long[]{0x0000003F000001E0L,0x0000000000002000L});
+    public static final BitSet FOLLOW_import_def_in_file42 = new BitSet(new long[]{0x0000003F000001E0L,0x0000000000002000L});
+    public static final BitSet FOLLOW_class_def_in_file46 = new BitSet(new long[]{0x0000003F000001E2L,0x0000000000002000L});
+    public static final BitSet FOLLOW_enum_def_in_file50 = new BitSet(new long[]{0x0000003F000001E2L,0x0000000000002000L});
+    public static final BitSet FOLLOW_interface_def_in_file54 = new BitSet(new long[]{0x0000003F000001E2L,0x0000000000002000L});
+    public static final BitSet FOLLOW_package__in_package_def68 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
+    public static final BitSet FOLLOW_package_name_in_package_def70 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001000L});
+    public static final BitSet FOLLOW_semicolon_in_package_def72 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_import__in_import_def84 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
+    public static final BitSet FOLLOW_import_name_in_import_def86 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001000L});
+    public static final BitSet FOLLOW_semicolon_in_import_def88 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_annotation_in_class_def100 = new BitSet(new long[]{0x0000003F00000040L,0x0000000000002000L});
+    public static final BitSet FOLLOW_modifier_in_class_def103 = new BitSet(new long[]{0x0000003F00000040L,0x0000000000002000L});
+    public static final BitSet FOLLOW_class__in_class_def106 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
+    public static final BitSet FOLLOW_id_in_class_def108 = new BitSet(new long[]{0x0000400000000600L,0x0000000000000020L});
+    public static final BitSet FOLLOW_generic_in_class_def110 = new BitSet(new long[]{0x0000400000000600L,0x0000000000000020L});
+    public static final BitSet FOLLOW_extends__in_class_def114 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
+    public static final BitSet FOLLOW_class_name_in_class_def116 = new BitSet(new long[]{0x0000400000000600L,0x0000000000000020L});
+    public static final BitSet FOLLOW_generic_in_class_def118 = new BitSet(new long[]{0x0000400000000600L,0x0000000000000020L});
+    public static final BitSet FOLLOW_implements__in_class_def124 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
+    public static final BitSet FOLLOW_class_name_in_class_def126 = new BitSet(new long[]{0x0000400000000600L,0x0000000000000030L});
+    public static final BitSet FOLLOW_comma_in_class_def129 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
+    public static final BitSet FOLLOW_class_name_in_class_def131 = new BitSet(new long[]{0x0000400000000600L,0x0000000000000030L});
+    public static final BitSet FOLLOW_class_block_in_class_def137 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_annotation_in_enum_def153 = new BitSet(new long[]{0x0000003F00000100L,0x0000000000002000L});
+    public static final BitSet FOLLOW_modifier_in_enum_def156 = new BitSet(new long[]{0x0000003F00000100L,0x0000000000002000L});
+    public static final BitSet FOLLOW_enum__in_enum_def159 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
+    public static final BitSet FOLLOW_id_in_enum_def161 = new BitSet(new long[]{0x0000400000000600L,0x0000000000000020L});
+    public static final BitSet FOLLOW_generic_in_enum_def163 = new BitSet(new long[]{0x0000400000000600L,0x0000000000000020L});
+    public static final BitSet FOLLOW_extends__in_enum_def167 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
+    public static final BitSet FOLLOW_class_name_in_enum_def169 = new BitSet(new long[]{0x0000400000000600L,0x0000000000000020L});
+    public static final BitSet FOLLOW_generic_in_enum_def171 = new BitSet(new long[]{0x0000400000000600L,0x0000000000000020L});
+    public static final BitSet FOLLOW_enum_block_in_enum_def176 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_annotation_in_interface_def192 = new BitSet(new long[]{0x0000003F000001E0L,0x0000000000002000L});
+    public static final BitSet FOLLOW_modifier_in_interface_def195 = new BitSet(new long[]{0x0000003F000001E0L,0x0000000000002000L});
+    public static final BitSet FOLLOW_interface__in_interface_def198 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
+    public static final BitSet FOLLOW_id_in_interface_def200 = new BitSet(new long[]{0x0000400000000600L,0x0000000000000020L});
+    public static final BitSet FOLLOW_generic_in_interface_def202 = new BitSet(new long[]{0x0000400000000600L,0x0000000000000020L});
+    public static final BitSet FOLLOW_extends__in_interface_def206 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
+    public static final BitSet FOLLOW_class_name_in_interface_def208 = new BitSet(new long[]{0x0000400000000600L,0x0000000000000020L});
+    public static final BitSet FOLLOW_generic_in_interface_def210 = new BitSet(new long[]{0x0000400000000600L,0x0000000000000020L});
+    public static final BitSet FOLLOW_interface_block_in_interface_def215 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_static__in_static_init231 = new BitSet(new long[]{0x07807FC0497EEE00L,0x0000000000013024L});
+    public static final BitSet FOLLOW_code_in_static_init233 = new BitSet(new long[]{0x0000000000000002L,0x0000000000001000L});
+    public static final BitSet FOLLOW_semicolon_in_static_init235 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_annotation_in_constructor_def247 = new BitSet(new long[]{0x0000003F00000000L,0x0000000000012000L});
+    public static final BitSet FOLLOW_modifier_in_constructor_def250 = new BitSet(new long[]{0x0000003F00000000L,0x0000000000010000L});
+    public static final BitSet FOLLOW_id_in_constructor_def253 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000200L});
+    public static final BitSet FOLLOW_open_bracket_in_constructor_def255 = new BitSet(new long[]{0x00003FC000000800L,0x0000000000012400L});
+    public static final BitSet FOLLOW_argument_def_in_constructor_def257 = new BitSet(new long[]{0x00003FC000000800L,0x0000000000012400L});
+    public static final BitSet FOLLOW_close_bracket_in_constructor_def259 = new BitSet(new long[]{0x07807FC0497EEE00L,0x0000000000013024L});
+    public static final BitSet FOLLOW_code_in_constructor_def261 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_annotation_in_method_def276 = new BitSet(new long[]{0x00003FFF00000800L,0x0000000000012000L});
+    public static final BitSet FOLLOW_modifier_in_method_def279 = new BitSet(new long[]{0x00003FFF00000800L,0x0000000000012000L});
+    public static final BitSet FOLLOW_variable_type_in_method_def282 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
+    public static final BitSet FOLLOW_id_in_method_def284 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000200L});
+    public static final BitSet FOLLOW_open_bracket_in_method_def286 = new BitSet(new long[]{0x00003FC000000800L,0x0000000000012400L});
+    public static final BitSet FOLLOW_argument_def_in_method_def288 = new BitSet(new long[]{0x00003FC000000800L,0x0000000000012400L});
+    public static final BitSet FOLLOW_close_bracket_in_method_def290 = new BitSet(new long[]{0x07807FC0C97EEE00L,0x0000000000013024L});
+    public static final BitSet FOLLOW_throws__in_method_def293 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
+    public static final BitSet FOLLOW_class_name_in_method_def295 = new BitSet(new long[]{0x07807FC0497EEE00L,0x0000000000013034L});
+    public static final BitSet FOLLOW_comma_in_method_def298 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
+    public static final BitSet FOLLOW_class_name_in_method_def300 = new BitSet(new long[]{0x07807FC0497EEE00L,0x0000000000013034L});
+    public static final BitSet FOLLOW_code_in_method_def306 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_annotation_in_field_def322 = new BitSet(new long[]{0x00003FFF00000800L,0x0000000000012000L});
+    public static final BitSet FOLLOW_modifier_in_field_def325 = new BitSet(new long[]{0x00003FFF00000800L,0x0000000000012000L});
+    public static final BitSet FOLLOW_variable_type_in_field_def328 = new BitSet(new long[]{0x0000000000060000L,0x0000000000010000L});
+    public static final BitSet FOLLOW_variable_name_in_field_def330 = new BitSet(new long[]{0x0070000000000000L,0x0000000000001000L});
+    public static final BitSet FOLLOW_assign_in_field_def333 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
+    public static final BitSet FOLLOW_value_in_field_def335 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001000L});
+    public static final BitSet FOLLOW_semicolon_in_field_def339 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_variable_type_in_argument_def351 = new BitSet(new long[]{0x0000000000060000L,0x0000000000010000L});
+    public static final BitSet FOLLOW_variable_name_in_argument_def353 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000010L});
+    public static final BitSet FOLLOW_comma_in_argument_def356 = new BitSet(new long[]{0x00003FC000000800L,0x0000000000012000L});
+    public static final BitSet FOLLOW_variable_type_in_argument_def358 = new BitSet(new long[]{0x0000000000060000L,0x0000000000010000L});
+    public static final BitSet FOLLOW_variable_name_in_argument_def360 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000010L});
+    public static final BitSet FOLLOW_annotation_in_variable_def375 = new BitSet(new long[]{0x00003FC000000800L,0x0000000000012000L});
+    public static final BitSet FOLLOW_variable_type_in_variable_def378 = new BitSet(new long[]{0x0000000000060000L,0x0000000000010000L});
+    public static final BitSet FOLLOW_variable_name_in_variable_def380 = new BitSet(new long[]{0x0070000000000002L});
+    public static final BitSet FOLLOW_assign_in_variable_def383 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
+    public static final BitSet FOLLOW_value_in_variable_def385 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_public__in_modifier397 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_private__in_modifier402 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_protected__in_modifier407 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_static__in_modifier412 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_final__in_modifier417 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_transient__in_modifier422 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_block_begin_in_class_block434 = new BitSet(new long[]{0x0000BFFF00000840L,0x0000000000012000L});
+    public static final BitSet FOLLOW_class_def_in_class_block437 = new BitSet(new long[]{0x0000BFFF00000840L,0x0000000000012000L});
+    public static final BitSet FOLLOW_static_init_in_class_block441 = new BitSet(new long[]{0x0000BFFF00000840L,0x0000000000012000L});
+    public static final BitSet FOLLOW_constructor_def_in_class_block445 = new BitSet(new long[]{0x0000BFFF00000840L,0x0000000000012000L});
+    public static final BitSet FOLLOW_method_def_in_class_block449 = new BitSet(new long[]{0x0000BFFF00000840L,0x0000000000012000L});
+    public static final BitSet FOLLOW_field_def_in_class_block453 = new BitSet(new long[]{0x0000BFFF00000840L,0x0000000000012000L});
+    public static final BitSet FOLLOW_block_end_in_class_block457 = new BitSet(new long[]{0x0000000000000002L,0x0000000000001000L});
+    public static final BitSet FOLLOW_semicolon_in_class_block459 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_block_begin_in_enum_block472 = new BitSet(new long[]{0x0000BFFF00000840L,0x0000000000012000L});
+    public static final BitSet FOLLOW_class_def_in_enum_block475 = new BitSet(new long[]{0x0000BFFF00000840L,0x0000000000012000L});
+    public static final BitSet FOLLOW_constructor_def_in_enum_block479 = new BitSet(new long[]{0x0000BFFF00000840L,0x0000000000012000L});
+    public static final BitSet FOLLOW_method_def_in_enum_block483 = new BitSet(new long[]{0x0000BFFF00000840L,0x0000000000012000L});
+    public static final BitSet FOLLOW_field_def_in_enum_block487 = new BitSet(new long[]{0x0000BFFF00000840L,0x0000000000012000L});
+    public static final BitSet FOLLOW_enum_content_in_enum_block491 = new BitSet(new long[]{0x0000BFFF00000840L,0x0000000000012000L});
+    public static final BitSet FOLLOW_block_end_in_enum_block495 = new BitSet(new long[]{0x0000000000000002L,0x0000000000001000L});
+    public static final BitSet FOLLOW_semicolon_in_enum_block497 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_id_in_enum_content509 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001210L});
+    public static final BitSet FOLLOW_open_bracket_in_enum_content512 = new BitSet(new long[]{0x07807FC000071E00L,0x0000000030BBA624L});
+    public static final BitSet FOLLOW_arguments_in_enum_content514 = new BitSet(new long[]{0x00003FC000000800L,0x0000000000012400L});
+    public static final BitSet FOLLOW_close_bracket_in_enum_content516 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001010L});
+    public static final BitSet FOLLOW_comma_in_enum_content521 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
+    public static final BitSet FOLLOW_id_in_enum_content523 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001210L});
+    public static final BitSet FOLLOW_open_bracket_in_enum_content526 = new BitSet(new long[]{0x07807FC000071E00L,0x0000000030BBA624L});
+    public static final BitSet FOLLOW_arguments_in_enum_content528 = new BitSet(new long[]{0x00003FC000000800L,0x0000000000012400L});
+    public static final BitSet FOLLOW_close_bracket_in_enum_content530 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001010L});
+    public static final BitSet FOLLOW_semicolon_in_enum_content536 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_block_begin_in_interface_block548 = new BitSet(new long[]{0x0000BFFF00000840L,0x0000000000012000L});
+    public static final BitSet FOLLOW_annotation_in_interface_block551 = new BitSet(new long[]{0x00003FFF00000800L,0x0000000000012000L});
+    public static final BitSet FOLLOW_modifier_in_interface_block554 = new BitSet(new long[]{0x00003FFF00000800L,0x0000000000012000L});
+    public static final BitSet FOLLOW_variable_type_in_interface_block557 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
+    public static final BitSet FOLLOW_id_in_interface_block559 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000200L});
+    public static final BitSet FOLLOW_open_bracket_in_interface_block561 = new BitSet(new long[]{0x00003FC000000800L,0x0000000000012400L});
+    public static final BitSet FOLLOW_argument_def_in_interface_block563 = new BitSet(new long[]{0x00003FC000000800L,0x0000000000012400L});
+    public static final BitSet FOLLOW_close_bracket_in_interface_block565 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001000L});
+    public static final BitSet FOLLOW_semicolon_in_interface_block567 = new BitSet(new long[]{0x0000BFFF00000840L,0x0000000000012000L});
+    public static final BitSet FOLLOW_block_end_in_interface_block571 = new BitSet(new long[]{0x0000000000000002L,0x0000000000001000L});
+    public static final BitSet FOLLOW_semicolon_in_interface_block573 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_method_name_in_method_call586 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000200L});
+    public static final BitSet FOLLOW_open_bracket_in_method_call588 = new BitSet(new long[]{0x07807FC000071E00L,0x0000000030BBA624L});
+    public static final BitSet FOLLOW_arguments_in_method_call590 = new BitSet(new long[]{0x00003FC000000800L,0x0000000000012400L});
+    public static final BitSet FOLLOW_close_bracket_in_method_call592 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000008L});
+    public static final BitSet FOLLOW_dot_in_method_call595 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
+    public static final BitSet FOLLOW_id_in_method_call597 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000208L});
+    public static final BitSet FOLLOW_open_bracket_in_method_call600 = new BitSet(new long[]{0x07807FC000071E00L,0x0000000030BBA624L});
+    public static final BitSet FOLLOW_arguments_in_method_call602 = new BitSet(new long[]{0x00003FC000000800L,0x0000000000012400L});
+    public static final BitSet FOLLOW_close_bracket_in_method_call604 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000008L});
+    public static final BitSet FOLLOW_super__in_method_call613 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000200L});
+    public static final BitSet FOLLOW_open_bracket_in_method_call615 = new BitSet(new long[]{0x07807FC000071E00L,0x0000000030BBA624L});
+    public static final BitSet FOLLOW_arguments_in_method_call617 = new BitSet(new long[]{0x00003FC000000800L,0x0000000000012400L});
+    public static final BitSet FOLLOW_close_bracket_in_method_call619 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000008L});
+    public static final BitSet FOLLOW_dot_in_method_call622 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
+    public static final BitSet FOLLOW_id_in_method_call624 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000208L});
+    public static final BitSet FOLLOW_open_bracket_in_method_call627 = new BitSet(new long[]{0x07807FC000071E00L,0x0000000030BBA624L});
+    public static final BitSet FOLLOW_arguments_in_method_call629 = new BitSet(new long[]{0x00003FC000000800L,0x0000000000012400L});
+    public static final BitSet FOLLOW_close_bracket_in_method_call631 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000008L});
+    public static final BitSet FOLLOW_this__in_method_call640 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000200L});
+    public static final BitSet FOLLOW_open_bracket_in_method_call642 = new BitSet(new long[]{0x07807FC000071E00L,0x0000000030BBA624L});
+    public static final BitSet FOLLOW_arguments_in_method_call644 = new BitSet(new long[]{0x00003FC000000800L,0x0000000000012400L});
+    public static final BitSet FOLLOW_close_bracket_in_method_call646 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000008L});
+    public static final BitSet FOLLOW_dot_in_method_call649 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
+    public static final BitSet FOLLOW_id_in_method_call651 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000208L});
+    public static final BitSet FOLLOW_open_bracket_in_method_call654 = new BitSet(new long[]{0x07807FC000071E00L,0x0000000030BBA624L});
+    public static final BitSet FOLLOW_arguments_in_method_call656 = new BitSet(new long[]{0x00003FC000000800L,0x0000000000012400L});
+    public static final BitSet FOLLOW_close_bracket_in_method_call658 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000008L});
+    public static final BitSet FOLLOW_annotation_name_in_annotation673 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000200L});
+    public static final BitSet FOLLOW_open_bracket_in_annotation676 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
+    public static final BitSet FOLLOW_value_in_annotation678 = new BitSet(new long[]{0x00003FC000000800L,0x0000000000012410L});
+    public static final BitSet FOLLOW_comma_in_annotation681 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
+    public static final BitSet FOLLOW_value_in_annotation683 = new BitSet(new long[]{0x00003FC000000800L,0x0000000000012410L});
+    public static final BitSet FOLLOW_close_bracket_in_annotation687 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_LT_in_generic699 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
+    public static final BitSet FOLLOW_id_in_generic702 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000050L});
+    public static final BitSet FOLLOW_comma_in_generic705 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
+    public static final BitSet FOLLOW_id_in_generic707 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000050L});
+    public static final BitSet FOLLOW_GT_in_generic712 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_cast_in_value725 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
+    public static final BitSet FOLLOW_left_unary_in_value728 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
+    public static final BitSet FOLLOW_single_value_in_value731 = new BitSet(new long[]{0xFF8F000000000002L,0x0000000000000067L});
+    public static final BitSet FOLLOW_right_unary_in_value733 = new BitSet(new long[]{0xFE0F000000000002L,0x0000000000000063L});
+    public static final BitSet FOLLOW_binary_operator_in_value737 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
+    public static final BitSet FOLLOW_value_in_value739 = new BitSet(new long[]{0x2000000000000002L});
+    public static final BitSet FOLLOW_question__in_value744 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
+    public static final BitSet FOLLOW_value_in_value746 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000800L});
+    public static final BitSet FOLLOW_colon_in_value748 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
+    public static final BitSet FOLLOW_value_in_value750 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_open_bracket_in_value757 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
+    public static final BitSet FOLLOW_value_in_value759 = new BitSet(new long[]{0x00003FC000000800L,0x0000000000012400L});
+    public static final BitSet FOLLOW_close_bracket_in_value761 = new BitSet(new long[]{0xDE0F000000000002L,0x0000000000000063L});
+    public static final BitSet FOLLOW_binary_operator_in_value764 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
+    public static final BitSet FOLLOW_value_in_value766 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_constant_in_single_value779 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_class_name_in_single_value784 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000008L});
+    public static final BitSet FOLLOW_dot_in_single_value786 = new BitSet(new long[]{0x0000003F00000040L,0x0000000000002000L});
+    public static final BitSet FOLLOW_class__in_single_value788 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_variable_name_in_single_value793 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_method_call_in_single_value798 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_new_class_in_single_value803 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_this__in_single_value808 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_super__in_single_value813 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_hex_long_const_in_constant822 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_hex_const_in_constant827 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_long_const_in_constant832 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_int_const_in_constant837 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_string_const_in_constant842 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_float_const_in_constant847 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_char_const_in_constant852 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_null_const_in_constant857 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_boolean_const_in_constant862 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_array_const_in_constant867 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_new__in_new_class879 = new BitSet(new long[]{0x00003FC000000000L,0x0000000000010000L});
+    public static final BitSet FOLLOW_class_name_in_new_class882 = new BitSet(new long[]{0x0000000000000002L,0x00000000000002A0L});
+    public static final BitSet FOLLOW_generic_in_new_class884 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000280L});
+    public static final BitSet FOLLOW_primitive_in_new_class889 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000280L});
+    public static final BitSet FOLLOW_array_in_new_class893 = new BitSet(new long[]{0x0000400000000600L,0x0000000000000220L});
+    public static final BitSet FOLLOW_array_const_in_new_class895 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000200L});
+    public static final BitSet FOLLOW_open_bracket_in_new_class900 = new BitSet(new long[]{0x07807FC000071E00L,0x0000000030BBA624L});
+    public static final BitSet FOLLOW_arguments_in_new_class902 = new BitSet(new long[]{0x00003FC000000800L,0x0000000000012400L});
+    public static final BitSet FOLLOW_close_bracket_in_new_class904 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_value_in_arguments920 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000010L});
+    public static final BitSet FOLLOW_comma_in_arguments923 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
+    public static final BitSet FOLLOW_value_in_arguments925 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000010L});
+    public static final BitSet FOLLOW_statement_in_code939 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_block_begin_in_code944 = new BitSet(new long[]{0x0780FFFF497EEE40L,0x0000000000013024L});
+    public static final BitSet FOLLOW_code_in_code946 = new BitSet(new long[]{0x0780FFFF497EEE40L,0x0000000000013024L});
+    public static final BitSet FOLLOW_block_end_in_code949 = new BitSet(new long[]{0x0000000000000002L,0x0000000000001000L});
+    public static final BitSet FOLLOW_semicolon_in_code951 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_label_in_statement964 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_variable_assignment_in_statement970 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001000L});
+    public static final BitSet FOLLOW_semicolon_in_statement972 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_variable_def_in_statement977 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001000L});
+    public static final BitSet FOLLOW_semicolon_in_statement979 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_method_call_in_statement984 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001000L});
+    public static final BitSet FOLLOW_semicolon_in_statement986 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_semicolon_in_statement992 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_return_statement_in_statement997 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_continue__in_statement1002 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_break__in_statement1007 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_for_loop_in_statement1012 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_while_loop_in_statement1017 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_do_loop_in_statement1022 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001000L});
+    public static final BitSet FOLLOW_semicolon_in_statement1024 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_switch_case_in_statement1029 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_if_else_in_statement1034 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_try_catch_in_statement1039 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_throw__in_statement1044 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
+    public static final BitSet FOLLOW_value_in_statement1046 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001000L});
+    public static final BitSet FOLLOW_semicolon_in_statement1048 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_left_unary_in_statement1053 = new BitSet(new long[]{0x0000000000060000L,0x0000000000010000L});
+    public static final BitSet FOLLOW_variable_name_in_statement1056 = new BitSet(new long[]{0x0180000000000002L,0x0000000000000004L});
+    public static final BitSet FOLLOW_right_unary_in_statement1058 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_label_in_statement_wosemicolon1070 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_variable_assignment_in_statement_wosemicolon1075 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_variable_def_in_statement_wosemicolon1080 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_method_call_in_statement_wosemicolon1085 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_return_statement_in_statement_wosemicolon1091 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_continue__in_statement_wosemicolon1096 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_break__in_statement_wosemicolon1101 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_for_loop_in_statement_wosemicolon1106 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_while_loop_in_statement_wosemicolon1111 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_do_loop_in_statement_wosemicolon1116 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_switch_case_in_statement_wosemicolon1121 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_if_else_in_statement_wosemicolon1126 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_try_catch_in_statement_wosemicolon1131 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_throw__in_statement_wosemicolon1136 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
+    public static final BitSet FOLLOW_value_in_statement_wosemicolon1138 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001000L});
+    public static final BitSet FOLLOW_semicolon_in_statement_wosemicolon1140 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_left_unary_in_statement_wosemicolon1145 = new BitSet(new long[]{0x0000000000060000L,0x0000000000010000L});
+    public static final BitSet FOLLOW_variable_name_in_statement_wosemicolon1148 = new BitSet(new long[]{0x0180000000000002L,0x0000000000000004L});
+    public static final BitSet FOLLOW_right_unary_in_statement_wosemicolon1150 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_return__in_return_statement1163 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB9224L});
+    public static final BitSet FOLLOW_value_in_return_statement1165 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001000L});
+    public static final BitSet FOLLOW_semicolon_in_return_statement1168 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_this__in_variable_assignment1181 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000008L});
+    public static final BitSet FOLLOW_dot_in_variable_assignment1183 = new BitSet(new long[]{0x0000000000060000L,0x0000000000010000L});
+    public static final BitSet FOLLOW_super__in_variable_assignment1187 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000008L});
+    public static final BitSet FOLLOW_dot_in_variable_assignment1189 = new BitSet(new long[]{0x0000000000060000L,0x0000000000010000L});
+    public static final BitSet FOLLOW_variable_name_in_variable_assignment1193 = new BitSet(new long[]{0x0070000000000000L});
+    public static final BitSet FOLLOW_assign_in_variable_assignment1195 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
+    public static final BitSet FOLLOW_value_in_variable_assignment1197 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_for__in_for_loop1207 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000200L});
+    public static final BitSet FOLLOW_OPEN_BRACKET_in_for_loop1209 = new BitSet(new long[]{0x00003FC000000800L,0x0000000000013000L});
+    public static final BitSet FOLLOW_variable_def_in_for_loop1212 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001010L});
+    public static final BitSet FOLLOW_comma_in_for_loop1215 = new BitSet(new long[]{0x00003FC000000800L,0x0000000000012000L});
+    public static final BitSet FOLLOW_variable_def_in_for_loop1217 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001010L});
+    public static final BitSet FOLLOW_semicolon_in_for_loop1223 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB9224L});
+    public static final BitSet FOLLOW_value_in_for_loop1225 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001000L});
+    public static final BitSet FOLLOW_semicolon_in_for_loop1228 = new BitSet(new long[]{0x07803FC0497EE800L,0x0000000000012404L});
+    public static final BitSet FOLLOW_statement_wosemicolon_in_for_loop1231 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000410L});
+    public static final BitSet FOLLOW_comma_in_for_loop1234 = new BitSet(new long[]{0x07803FC0497EE800L,0x0000000000012004L});
+    public static final BitSet FOLLOW_statement_wosemicolon_in_for_loop1236 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000410L});
+    public static final BitSet FOLLOW_CLOSE_BRACKET_in_for_loop1242 = new BitSet(new long[]{0x07807FC0497EEE00L,0x0000000000013024L});
+    public static final BitSet FOLLOW_code_in_for_loop1244 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_for__in_for_loop1249 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000200L});
+    public static final BitSet FOLLOW_OPEN_BRACKET_in_for_loop1251 = new BitSet(new long[]{0x00003FC000000800L,0x0000000000012000L});
+    public static final BitSet FOLLOW_variable_type_in_for_loop1253 = new BitSet(new long[]{0x0000000000060000L,0x0000000000010000L});
+    public static final BitSet FOLLOW_variable_name_in_for_loop1255 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000800L});
+    public static final BitSet FOLLOW_colon_in_for_loop1257 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
+    public static final BitSet FOLLOW_value_in_for_loop1259 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000400L});
+    public static final BitSet FOLLOW_CLOSE_BRACKET_in_for_loop1261 = new BitSet(new long[]{0x07807FC0497EEE00L,0x0000000000013024L});
+    public static final BitSet FOLLOW_code_in_for_loop1263 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_while__in_while_loop1275 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000200L});
+    public static final BitSet FOLLOW_OPEN_BRACKET_in_while_loop1277 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
+    public static final BitSet FOLLOW_value_in_while_loop1279 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000400L});
+    public static final BitSet FOLLOW_CLOSE_BRACKET_in_while_loop1281 = new BitSet(new long[]{0x07807FC0497EEE00L,0x0000000000013024L});
+    public static final BitSet FOLLOW_code_in_while_loop1283 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_do__in_do_loop1294 = new BitSet(new long[]{0x07807FC0497EEE00L,0x0000000000013024L});
+    public static final BitSet FOLLOW_code_in_do_loop1296 = new BitSet(new long[]{0x0000000000200000L});
+    public static final BitSet FOLLOW_while__in_do_loop1298 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000200L});
+    public static final BitSet FOLLOW_OPEN_BRACKET_in_do_loop1300 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
+    public static final BitSet FOLLOW_value_in_do_loop1302 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000400L});
+    public static final BitSet FOLLOW_CLOSE_BRACKET_in_do_loop1304 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_switch__in_switch_case1315 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000200L});
+    public static final BitSet FOLLOW_OPEN_BRACKET_in_switch_case1317 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
+    public static final BitSet FOLLOW_value_in_switch_case1319 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000400L});
+    public static final BitSet FOLLOW_CLOSE_BRACKET_in_switch_case1321 = new BitSet(new long[]{0x0000400000000600L,0x0000000000000020L});
+    public static final BitSet FOLLOW_block_begin_in_switch_case1323 = new BitSet(new long[]{0x0000000006000000L});
+    public static final BitSet FOLLOW_case__in_switch_case1334 = new BitSet(new long[]{0x0000400000070600L,0x0000000030BB8020L});
+    public static final BitSet FOLLOW_constant_in_switch_case1338 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000800L});
+    public static final BitSet FOLLOW_variable_name_in_switch_case1342 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000800L});
+    public static final BitSet FOLLOW_colon_in_switch_case1345 = new BitSet(new long[]{0x0780FFFF4F7EEE40L,0x0000000000013024L});
+    public static final BitSet FOLLOW_code_in_switch_case1350 = new BitSet(new long[]{0x0780FFFF4F7EEE40L,0x0000000000013024L});
+    public static final BitSet FOLLOW_statement_in_switch_case1354 = new BitSet(new long[]{0x0780FFFF4F7EEE40L,0x0000000000013024L});
+    public static final BitSet FOLLOW_break__in_switch_case1359 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001000L});
+    public static final BitSet FOLLOW_semicolon_in_switch_case1361 = new BitSet(new long[]{0x0000BFFF06000840L,0x0000000000012000L});
+    public static final BitSet FOLLOW_default__in_switch_case1372 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000800L});
+    public static final BitSet FOLLOW_colon_in_switch_case1374 = new BitSet(new long[]{0x0780FFFF4F7EEE40L,0x0000000000013024L});
+    public static final BitSet FOLLOW_code_in_switch_case1377 = new BitSet(new long[]{0x0780FFFF4F7EEE40L,0x0000000000013024L});
+    public static final BitSet FOLLOW_statement_in_switch_case1381 = new BitSet(new long[]{0x0780FFFF4F7EEE40L,0x0000000000013024L});
+    public static final BitSet FOLLOW_block_end_in_switch_case1392 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_if__in_if_else1403 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000200L});
+    public static final BitSet FOLLOW_OPEN_BRACKET_in_if_else1405 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
+    public static final BitSet FOLLOW_value_in_if_else1407 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000400L});
+    public static final BitSet FOLLOW_CLOSE_BRACKET_in_if_else1409 = new BitSet(new long[]{0x07807FC0497EEE00L,0x0000000000013024L});
+    public static final BitSet FOLLOW_code_in_if_else1411 = new BitSet(new long[]{0x0000000000800002L});
+    public static final BitSet FOLLOW_else__in_if_else1414 = new BitSet(new long[]{0x07807FC0497EEE00L,0x0000000000013024L});
+    public static final BitSet FOLLOW_code_in_if_else1416 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_try__in_try_catch1429 = new BitSet(new long[]{0x07807FC0497EEE00L,0x0000000000013024L});
+    public static final BitSet FOLLOW_code_in_try_catch1431 = new BitSet(new long[]{0x0000000030000002L});
+    public static final BitSet FOLLOW_catch__in_try_catch1434 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000200L});
+    public static final BitSet FOLLOW_OPEN_BRACKET_in_try_catch1436 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
+    public static final BitSet FOLLOW_id_in_try_catch1438 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
+    public static final BitSet FOLLOW_id_in_try_catch1440 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000400L});
+    public static final BitSet FOLLOW_CLOSE_BRACKET_in_try_catch1442 = new BitSet(new long[]{0x07807FC0497EEE00L,0x0000000000013024L});
+    public static final BitSet FOLLOW_code_in_try_catch1444 = new BitSet(new long[]{0x0000000030000002L});
+    public static final BitSet FOLLOW_finally__in_try_catch1449 = new BitSet(new long[]{0x07807FC0497EEE00L,0x0000000000013024L});
+    public static final BitSet FOLLOW_code_in_try_catch1451 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_id_in_label1463 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000800L});
+    public static final BitSet FOLLOW_colon_in_label1465 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_OPEN_BRACKET_in_cast1473 = new BitSet(new long[]{0x00003FC000000800L,0x0000000000012000L});
+    public static final BitSet FOLLOW_variable_type_in_cast1475 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000400L});
+    public static final BitSet FOLLOW_CLOSE_BRACKET_in_cast1477 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_primitive_in_variable_type1490 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000080L});
+    public static final BitSet FOLLOW_array_in_variable_type1492 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_class_name_in_variable_type1498 = new BitSet(new long[]{0x0000000000000002L,0x00000000000000A0L});
+    public static final BitSet FOLLOW_generic_in_variable_type1500 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000080L});
+    public static final BitSet FOLLOW_array_in_variable_type1503 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_void__in_variable_type1509 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ID_in_id1519 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_plus_in_binary_operator1530 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_minus_in_binary_operator1535 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_STAR_in_binary_operator1540 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_SLASH_in_binary_operator1547 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_EQUAL_in_binary_operator1554 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_UNEQUAL_in_binary_operator1561 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_LT_in_binary_operator1568 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_GT_in_binary_operator1575 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_LE_in_binary_operator1582 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_GE_in_binary_operator1589 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_LOGICAL_OR_in_binary_operator1596 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_BIT_OR_in_binary_operator1603 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_LOGICAL_AND_in_binary_operator1610 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_BIT_AND_in_binary_operator1617 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_INC_in_left_unary1631 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_DEC_in_left_unary1638 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_NOT_in_left_unary1645 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_MINUS_in_left_unary1652 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_PLUS_in_left_unary1659 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_INC_in_right_unary1673 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_DEC_in_right_unary1680 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_NOT_in_right_unary1687 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_BOOLEAN_in_primitive1700 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_BYTE_in_primitive1707 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_CHAR_in_primitive1714 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_SHORT_in_primitive1721 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_INTEGER_in_primitive1728 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_LONG_in_primitive1735 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_FLOAT_in_primitive1742 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_DOUBLE_in_primitive1749 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_INT_CONST_in_int_const1767 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_LONG_CONST_in_long_const1777 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_HEX_CONST_in_hex_const1787 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_HEX_LONG_CONST_in_hex_long_const1797 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_STRING_CONST_in_string_const1807 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_FLOAT_CONST_in_float_const1817 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_CHAR_CONST_in_char_const1827 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_NULL_in_null_const1837 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_BOOL_CONST_in_boolean_const1848 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_block_begin_in_array_const1859 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
+    public static final BitSet FOLLOW_value_in_array_const1861 = new BitSet(new long[]{0x0000BFFF00000840L,0x0000000000012010L});
+    public static final BitSet FOLLOW_comma_in_array_const1864 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
+    public static final BitSet FOLLOW_value_in_array_const1866 = new BitSet(new long[]{0x0000BFFF00000840L,0x0000000000012010L});
+    public static final BitSet FOLLOW_block_end_in_array_const1870 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ID_in_package_name1885 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000008L});
+    public static final BitSet FOLLOW_DOT_in_package_name1887 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
+    public static final BitSet FOLLOW_ID_in_package_name1891 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ID_in_import_name1905 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000008L});
+    public static final BitSet FOLLOW_DOT_in_import_name1907 = new BitSet(new long[]{0x1000000000000000L,0x0000000000010000L});
+    public static final BitSet FOLLOW_set_in_import_name1911 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ID_in_class_name1929 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000008L});
+    public static final BitSet FOLLOW_DOT_in_class_name1931 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
+    public static final BitSet FOLLOW_ID_in_class_name1935 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ID_in_method_name1949 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000008L});
+    public static final BitSet FOLLOW_DOT_in_method_name1951 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
+    public static final BitSet FOLLOW_ID_in_method_name1955 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_name_in_variable_name1968 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000080L});
+    public static final BitSet FOLLOW_array_in_variable_name1970 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_AT_in_annotation_name1981 = new BitSet(new long[]{0x0000000000060000L,0x0000000000010000L});
+    public static final BitSet FOLLOW_name_in_annotation_name1983 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ID_in_name1993 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000008L});
+    public static final BitSet FOLLOW_DOT_in_name1995 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
+    public static final BitSet FOLLOW_ID_in_name1999 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_open_rect_bracket_in_array2010 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8324L});
+    public static final BitSet FOLLOW_value_in_array2012 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8324L});
+    public static final BitSet FOLLOW_close_rect_bracket_in_array2015 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000080L});
+    public static final BitSet FOLLOW_PACKAGE_in_package_2030 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_IMPORT_in_import_2041 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_CLASS_in_class_2051 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ENUM_in_enum_2060 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_INTERFACE_in_interface_2070 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_EXTENDS_in_extends_2078 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_IMPLEMENTS_in_implements_2088 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_THIS_in_this_2097 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_SUPER_in_super_2106 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_VOID_in_void_2115 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_PUBLIC_in_public_2124 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_PRIVATE_in_private_2132 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_PROTECTED_in_protected_2142 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_STATIC_in_static_2151 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_FINAL_in_final_2160 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_TRANSIENT_in_transient_2170 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_NEW_in_new_2179 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_TRY_in_try_2188 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_CATCH_in_catch_2197 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_FINALLY_in_finally_2205 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_THROWS_in_throws_2214 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_THROW_in_throw_2223 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_FOR_in_for_2233 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_WHILE_in_while_2242 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_DO_in_do_2251 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_IF_in_if_2260 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ELSE_in_else_2269 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_SWITCH_in_switch_2279 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_CASE_in_case_2288 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_DEFAULT_in_default_2296 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_RETURN_in_return_2306 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_BREAK_in_break_2315 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
+    public static final BitSet FOLLOW_id_in_break_2317 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_BREAK_in_break_2324 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_CONTINUE_in_continue_2336 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_SEMICOLON_in_semicolon2351 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_COMMA_in_comma2360 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_COLON_in_colon2369 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_QUESTION_in_question_2379 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_PLUS_in_plus2388 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_MINUS_in_minus2397 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_DOT_in_dot2406 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ASSIGN_in_assign2415 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_INCASSIGN_in_assign2422 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_DECASSIGN_in_assign2429 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_OPEN_CURLY_BRACKET_in_block_begin2441 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_CLOSE_CURLY_BRACKET_in_block_end2451 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_OPEN_BRACKET_in_open_bracket2461 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_CLOSE_BRACKET_in_close_bracket2471 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_OPEN_RECT_BRACKET_in_open_rect_bracket2482 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_CLOSE_RECT_BRACKET_in_close_rect_bracket2492 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_class_def_in_synpred2_JavaParser46 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_enum_def_in_synpred3_JavaParser50 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_interface_def_in_synpred4_JavaParser54 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_class_def_in_synpred41_JavaParser437 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_static_init_in_synpred42_JavaParser441 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_constructor_def_in_synpred43_JavaParser445 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_method_def_in_synpred44_JavaParser449 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_field_def_in_synpred45_JavaParser453 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_class_def_in_synpred47_JavaParser475 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_constructor_def_in_synpred48_JavaParser479 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_method_def_in_synpred49_JavaParser483 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_field_def_in_synpred50_JavaParser487 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_enum_content_in_synpred51_JavaParser491 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_left_unary_in_synpred72_JavaParser728 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_question__in_synpred75_JavaParser744 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
+    public static final BitSet FOLLOW_value_in_synpred75_JavaParser746 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000800L});
+    public static final BitSet FOLLOW_colon_in_synpred75_JavaParser748 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
+    public static final BitSet FOLLOW_value_in_synpred75_JavaParser750 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_cast_in_synpred76_JavaParser725 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
+    public static final BitSet FOLLOW_left_unary_in_synpred76_JavaParser728 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
+    public static final BitSet FOLLOW_single_value_in_synpred76_JavaParser731 = new BitSet(new long[]{0xFF8F000000000002L,0x0000000000000067L});
+    public static final BitSet FOLLOW_right_unary_in_synpred76_JavaParser733 = new BitSet(new long[]{0xFE0F000000000002L,0x0000000000000063L});
+    public static final BitSet FOLLOW_binary_operator_in_synpred76_JavaParser737 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
+    public static final BitSet FOLLOW_value_in_synpred76_JavaParser739 = new BitSet(new long[]{0x2000000000000002L});
+    public static final BitSet FOLLOW_question__in_synpred76_JavaParser744 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
+    public static final BitSet FOLLOW_value_in_synpred76_JavaParser746 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000800L});
+    public static final BitSet FOLLOW_colon_in_synpred76_JavaParser748 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
+    public static final BitSet FOLLOW_value_in_synpred76_JavaParser750 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_generic_in_synpred93_JavaParser884 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_value_in_synpred98_JavaParser920 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000010L});
+    public static final BitSet FOLLOW_comma_in_synpred98_JavaParser923 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB8224L});
+    public static final BitSet FOLLOW_value_in_synpred98_JavaParser925 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000010L});
+    public static final BitSet FOLLOW_semicolon_in_synpred101_JavaParser951 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_label_in_synpred102_JavaParser964 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_variable_assignment_in_synpred103_JavaParser970 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001000L});
+    public static final BitSet FOLLOW_semicolon_in_synpred103_JavaParser972 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_variable_def_in_synpred104_JavaParser977 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001000L});
+    public static final BitSet FOLLOW_semicolon_in_synpred104_JavaParser979 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_method_call_in_synpred105_JavaParser984 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001000L});
+    public static final BitSet FOLLOW_semicolon_in_synpred105_JavaParser986 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_right_unary_in_synpred118_JavaParser1058 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_label_in_synpred119_JavaParser1070 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_variable_assignment_in_synpred120_JavaParser1075 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_variable_def_in_synpred121_JavaParser1080 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_method_call_in_synpred122_JavaParser1085 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_value_in_synpred135_JavaParser1165 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_value_in_synpred140_JavaParser1225 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_for__in_synpred143_JavaParser1207 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000200L});
+    public static final BitSet FOLLOW_OPEN_BRACKET_in_synpred143_JavaParser1209 = new BitSet(new long[]{0x00003FC000000800L,0x0000000000013000L});
+    public static final BitSet FOLLOW_variable_def_in_synpred143_JavaParser1212 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001010L});
+    public static final BitSet FOLLOW_comma_in_synpred143_JavaParser1215 = new BitSet(new long[]{0x00003FC000000800L,0x0000000000012000L});
+    public static final BitSet FOLLOW_variable_def_in_synpred143_JavaParser1217 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001010L});
+    public static final BitSet FOLLOW_semicolon_in_synpred143_JavaParser1223 = new BitSet(new long[]{0x0780400000071600L,0x0000000030BB9224L});
+    public static final BitSet FOLLOW_value_in_synpred143_JavaParser1225 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001000L});
+    public static final BitSet FOLLOW_semicolon_in_synpred143_JavaParser1228 = new BitSet(new long[]{0x07803FC0497EE800L,0x0000000000012404L});
+    public static final BitSet FOLLOW_statement_wosemicolon_in_synpred143_JavaParser1231 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000410L});
+    public static final BitSet FOLLOW_comma_in_synpred143_JavaParser1234 = new BitSet(new long[]{0x07803FC0497EE800L,0x0000000000012004L});
+    public static final BitSet FOLLOW_statement_wosemicolon_in_synpred143_JavaParser1236 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000410L});
+    public static final BitSet FOLLOW_CLOSE_BRACKET_in_synpred143_JavaParser1242 = new BitSet(new long[]{0x07807FC0497EEE00L,0x0000000000013024L});
+    public static final BitSet FOLLOW_code_in_synpred143_JavaParser1244 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_case__in_synpred145_JavaParser1334 = new BitSet(new long[]{0x0000400000070600L,0x0000000030BB8020L});
+    public static final BitSet FOLLOW_constant_in_synpred145_JavaParser1338 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000800L});
+    public static final BitSet FOLLOW_variable_name_in_synpred145_JavaParser1342 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000800L});
+    public static final BitSet FOLLOW_colon_in_synpred145_JavaParser1345 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_code_in_synpred146_JavaParser1350 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_statement_in_synpred147_JavaParser1354 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_code_in_synpred150_JavaParser1377 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_statement_in_synpred151_JavaParser1381 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_else__in_synpred153_JavaParser1414 = new BitSet(new long[]{0x07807FC0497EEE00L,0x0000000000013024L});
+    public static final BitSet FOLLOW_code_in_synpred153_JavaParser1416 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_catch__in_synpred154_JavaParser1434 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000200L});
+    public static final BitSet FOLLOW_OPEN_BRACKET_in_synpred154_JavaParser1436 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
+    public static final BitSet FOLLOW_id_in_synpred154_JavaParser1438 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
+    public static final BitSet FOLLOW_id_in_synpred154_JavaParser1440 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000400L});
+    public static final BitSet FOLLOW_CLOSE_BRACKET_in_synpred154_JavaParser1442 = new BitSet(new long[]{0x07807FC0497EEE00L,0x0000000000013024L});
+    public static final BitSet FOLLOW_code_in_synpred154_JavaParser1444 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_finally__in_synpred155_JavaParser1449 = new BitSet(new long[]{0x07807FC0497EEE00L,0x0000000000013024L});
+    public static final BitSet FOLLOW_code_in_synpred155_JavaParser1451 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_value_in_synpred196_JavaParser2012 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_BREAK_in_synpred198_JavaParser2315 = new BitSet(new long[]{0x0000000000000000L,0x0000000000010000L});
+    public static final BitSet FOLLOW_id_in_synpred198_JavaParser2317 = new BitSet(new long[]{0x0000000000000002L});
 
 }

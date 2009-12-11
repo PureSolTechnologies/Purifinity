@@ -8,7 +8,6 @@ import java.util.Set;
 
 import javax.i18n4j.FileSearch;
 
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import com.puresol.coding.java.JavaAnalyser;
@@ -67,13 +66,16 @@ public class ProjectAnalyser {
 	}
 
 	public static void main(String[] args) {
-		Logger.getRootLogger().setLevel(Level.TRACE);
+		// Logger.getRootLogger().setLevel(Level.TRACE);
 		ProjectAnalyser analyser = new ProjectAnalyser(
-				"src/com/puresol/coding/java/antlr/output/JavaParser.java");
+				"src/com/puresol/coding/*.java");
 		analyser.analyse();
 		int sloc = 0;
 		Set<File> files = analyser.getFiles();
 		for (File file : files) {
+			System.out.println("=======================");
+			System.out.println(file.getPath());
+			System.out.println("=======================");
 			ArrayList<CodeRange> ranges = analyser.getCodeRanges(file);
 			for (CodeRange range : ranges) {
 				System.out.println("=======================");
