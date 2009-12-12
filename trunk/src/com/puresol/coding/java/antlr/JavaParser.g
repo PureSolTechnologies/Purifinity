@@ -241,6 +241,7 @@ binary_operator
 	|	minus
 	|	STAR {helper.registerOperator($text);}
 	|	SLASH {helper.registerOperator($text);}
+	|	PERCENT {helper.registerOperator($text);}
 	|	EQUAL {helper.registerOperator($text);}
 	|	UNEQUAL {helper.registerOperator($text);}
 	|	LT {helper.registerOperator($text);}

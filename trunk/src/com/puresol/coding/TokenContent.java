@@ -23,7 +23,7 @@ public class TokenContent {
 		this.operator = operator;
 	}
 
-	public String getOperant() {
+	public String getOperand() {
 		return operant;
 	}
 

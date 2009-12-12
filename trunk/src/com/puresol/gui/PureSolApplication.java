@@ -1,11 +1,15 @@
 package com.puresol.gui;
 
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.MediaTracker;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 import javax.i18n4j.Translator;
@@ -14,9 +18,12 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JMenuBar;
+import javax.swing.JOptionPane;
 import javax.swingx.Application;
 import javax.swingx.Menu;
+import javax.swingx.MenuItem;
 import javax.swingx.SplashWindow;
+import javax.swingx.connect.Slot;
 
 import org.apache.log4j.Logger;
 
@@ -93,6 +100,13 @@ public class PureSolApplication extends Application {
 	 */
 	private Menu getDefaultHelpMenu() {
 		Menu helpMenu = new Menu(translator.i18n("Help"));
+
+		MenuItem webItem = new MenuItem(translator
+				.i18n("PureSol-Technologies Website..."));
+		webItem.connect("start", this, "openPureSolTechnologiesWebsite");
+
+		helpMenu.add(webItem);
+		helpMenu.addSeparator();
 		helpMenu.addDefaultAboutItem();
 		return helpMenu;
 	}
@@ -131,5 +145,24 @@ public class PureSolApplication extends Application {
 		Icon icon = new ImageIcon(logoImage);
 		JLabel xFabMenu = new JLabel(icon);
 		menubar.add(xFabMenu);
+	}
+
+	@Slot
+	public void openPureSolTechnologiesWebsite() {
+		try {
+			Desktop desktop = Desktop.getDesktop();
+			desktop.browse(new URI("http://www.puresol-technologies.com"));
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e);
+			JOptionPane.showConfirmDialog(this, translator
+					.i18n("IO error during opening the URI."), translator
+					.i18n("IO error"), JOptionPane.OK_OPTION,
+					JOptionPane.ERROR_MESSAGE);
+		} catch (URISyntaxException e) {
+			logger.error(e.getMessage(), e);
+			JOptionPane.showConfirmDialog(this, translator
+					.i18n("URI is invalid."), translator.i18n("URI error"),
+					JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE);
+		}
 	}
 }

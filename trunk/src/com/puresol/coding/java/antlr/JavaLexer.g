@@ -84,6 +84,7 @@ MINUS	:	'-';
 SLASH	:	'/';
 STAR	:	'*';
 QUESTION:	'?';
+PERCENT	:	'%';
 
 LOGICAL_OR
 	:	'||';

@@ -7,5 +7,17 @@ package com.puresol.coding;
  * 
  */
 public enum CodeRangeType {
-	FILE, CLASS, INTERFACE, ENUMERATION, CONSTRUCTOR, METHOD, FUNCTION;
+	FILE("file"), CLASS("class"), INTERFACE("interface"), ENUMERATION(
+			"enumerator"), CONSTRUCTOR("constructor"), METHOD("method"), FUNCTION(
+			"function");
+
+	private String name;
+
+	private CodeRangeType(String name) {
+		this.name = name;
+	}
+
+	public String getName() {
+		return name;
+	}
 }

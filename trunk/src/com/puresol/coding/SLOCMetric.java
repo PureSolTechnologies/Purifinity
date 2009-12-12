@@ -11,7 +11,7 @@ import org.antlr.runtime.TokenStream;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class SLOCMetric {
+public class SLOCMetric extends AbstractMetric {
 
 	private TokenStream stream = null;
 	private int start;
@@ -21,21 +21,8 @@ public class SLOCMetric {
 	private int comLOC;
 	private int blLOC;
 
-	/**
-	 * This constructor takes as argument a CommonTokenStream which comes out of
-	 * a ANTLR lexer. The lexer should have marked the line feeds and has to
-	 * hide the comments.
-	 * 
-	 * @param commonTokenStream
-	 */
-	public SLOCMetric(TokenStream stream) {
-		this.stream = stream;
-		start = 0;
-		stop = stream.size() - 1;
-		calculate();
-	}
-
 	public SLOCMetric(CodeRange codeRange) {
+		super(codeRange);
 		this.stream = codeRange.getTokenStream();
 		start = codeRange.getStart();
 		stop = codeRange.getStop();
@@ -187,5 +174,33 @@ public class SLOCMetric {
 		System.out.println("productive lines: " + proLOC);
 		System.out.println("commented lines: " + comLOC);
 		System.out.println("blank lines: " + blLOC);
+	}
+
+	@Override
+	public QualityLevel getQualityLevel() {
+		CodeRange range = getCodeRange();
+		if ((range.getType() == CodeRangeType.FILE)
+				|| (range.getType() == CodeRangeType.CLASS)
+				|| (range.getType() == CodeRangeType.ENUMERATION)) {
+			if (phyLOC > 2500) {
+				return QualityLevel.LOW;
+			}
+			if (phyLOC > 1000) {
+				return QualityLevel.MEDIUM;
+			}
+			return QualityLevel.HIGH;
+		} else if ((range.getType() == CodeRangeType.CONSTRUCTOR)
+				|| (range.getType() == CodeRangeType.METHOD)
+				|| (range.getType() == CodeRangeType.FUNCTION)
+				|| (range.getType() == CodeRangeType.INTERFACE)) {
+			if (phyLOC > 40) {
+				return QualityLevel.LOW;
+			}
+			if (phyLOC > 25) {
+				return QualityLevel.MEDIUM;
+			}
+			return QualityLevel.HIGH;
+		}
+		return QualityLevel.HIGH; // not evaluated...
 	}
 }

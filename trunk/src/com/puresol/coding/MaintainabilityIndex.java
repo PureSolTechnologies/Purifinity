@@ -1,8 +1,6 @@
 package com.puresol.coding;
 
-public class MaintainabilityIndex {
-
-	private CodeRange codeRange;
+public class MaintainabilityIndex extends AbstractMetric {
 
 	/**
 	 * MaintainabilityIndex without comment.
@@ -18,11 +16,12 @@ public class MaintainabilityIndex {
 	private double MI;
 
 	public MaintainabilityIndex(CodeRange codeRange) {
-		this.codeRange = codeRange;
+		super(codeRange);
 		calculate();
 	}
 
 	private void calculate() {
+		CodeRange codeRange = getCodeRange();
 		SLOCMetric slocMetric = new SLOCMetric(codeRange);
 		McCabeMetric mcCabeMetric = new McCabeMetric(codeRange);
 		HalsteadMetric halsteadMetric = new HalsteadMetric(codeRange);
@@ -51,5 +50,33 @@ public class MaintainabilityIndex {
 
 	public double getMI() {
 		return MI;
+	}
+
+	@Override
+	public QualityLevel getQualityLevel() {
+		CodeRange range = getCodeRange();
+		if ((range.getType() == CodeRangeType.FILE)
+				|| (range.getType() == CodeRangeType.CLASS)
+				|| (range.getType() == CodeRangeType.ENUMERATION)) {
+			if (MI > 86) {
+				return QualityLevel.HIGH;
+			}
+			if (MI > 65) {
+				return QualityLevel.MEDIUM;
+			}
+			return QualityLevel.LOW;
+		} else if ((range.getType() == CodeRangeType.CONSTRUCTOR)
+				|| (range.getType() == CodeRangeType.METHOD)
+				|| (range.getType() == CodeRangeType.FUNCTION)
+				|| (range.getType() == CodeRangeType.INTERFACE)) {
+			if (MI > 85) {
+				return QualityLevel.HIGH;
+			}
+			if (MI > 65) {
+				return QualityLevel.MEDIUM;
+			}
+			return QualityLevel.LOW;
+		}
+		return QualityLevel.HIGH; // not evaluated...
 	}
 }

@@ -61,6 +61,10 @@ public class ProjectAnalyser {
 		return analysis.keySet();
 	}
 
+	public Analyser getAnalyser(File file) {
+		return analysis.get(file);
+	}
+
 	public ArrayList<CodeRange> getCodeRanges(File file) {
 		return analysis.get(file).getCodeRanges();
 	}
