@@ -46,6 +46,7 @@ PRIVATE	:	'private';
 PROTECTED
 	:	'protected';
 FINAL	:	'final';
+VOLATILE:	'volatile';
 SYNCHRONIZED
 	:	'synchronized';
 STATIC	:	'static';
@@ -79,6 +80,10 @@ INCASSIGN
 	:	'+=';
 DECASSIGN
 	:	'-=';
+BITORASSIGN
+	:	'|=';
+BITANDASSIGN
+	:	'&=';
 
 INC	:	'++';
 DEC	:	'--';

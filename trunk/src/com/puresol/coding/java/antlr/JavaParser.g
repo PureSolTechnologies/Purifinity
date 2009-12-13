@@ -234,9 +234,9 @@ cast	:	OPEN_BRACKET variable_type CLOSE_BRACKET {helper.registerOperator("(cast)
 	;
 
 variable_type
-	:	final_? primitive array?
-	|	final_? class_name array?
-	|	final_? void_
+	:	(final_ | volatile_)? primitive array?
+	|	(final_ | volatile_)? class_name array?
+	|	(final_ | volatile_)? void_
 	;
 
 id	:	ID {helper.registerOperant($text);};
@@ -310,7 +310,7 @@ boolean_const
 array_const
 	:	block_begin value (comma value)* block_end;
 class_const
-	:	class_name dot class_;	
+	:	(class_name | primitive | void_) dot class_;	
 
 
 ////////////////////////
@@ -374,6 +374,8 @@ protected_
 	:	PROTECTED {helper.registerOperator($text);};
 static_	:	STATIC {helper.registerOperator($text);};
 final_	:	FINAL {helper.registerOperator($text);};
+volatile_	
+	:	VOLATILE {helper.registerOperator($text);};
 synchronized_
 	:	SYNCHRONIZED {helper.registerOperator($text);};
 abstract_
@@ -421,6 +423,8 @@ dot	:	DOT {helper.registerOperator($text);};
 assign	:	ASSIGN {helper.registerOperator($text);}
 	|	INCASSIGN {helper.registerOperator($text);}
 	|	DECASSIGN {helper.registerOperator($text);}
+	|	BITORASSIGN {helper.registerOperator($text);}
+	|	BITANDASSIGN {helper.registerOperator($text);}
 	;
 block_begin
 	:	OPEN_CURLY_BRACKET {helper.registerOperator("{}");};
