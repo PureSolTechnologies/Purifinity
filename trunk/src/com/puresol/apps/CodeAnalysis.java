@@ -11,6 +11,9 @@ import javax.swingx.MenuBar;
 import javax.swingx.MenuItem;
 import javax.swingx.connect.Slot;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
 import com.puresol.coding.ProjectAnalyser;
 import com.puresol.gui.PureSolApplication;
 import com.puresol.gui.coding.ProjectAnalysisBrowser;
@@ -78,6 +81,7 @@ public class CodeAnalysis extends PureSolApplication {
 	}
 
 	public static void main(String[] args) {
+		Logger.getRootLogger().setLevel(Level.INFO);
 		new CodeAnalysis("Code Analysis").run();
 	}
 }

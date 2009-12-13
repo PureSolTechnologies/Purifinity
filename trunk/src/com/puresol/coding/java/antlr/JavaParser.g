@@ -33,17 +33,17 @@ import_def
 	;
 	
 class_def
-	:	annotation* modifier* class_ id generic? (extends_ class_name generic?)? (implements_ class_name (comma class_name)*)? class_block 
+	:	annotation* modifier* class_ id generic? (extends_ class_name)? (implements_ class_name (comma class_name)*)? class_block 
 		{helper.registerRange(CodeRangeType.CLASS, $id.text, $text, retval.start.getTokenIndex(), input.LT(-1).getTokenIndex());}
 	;
 
 enum_def
-	:	annotation* modifier* enum_ id generic? (extends_ class_name generic?)? enum_block 
+	:	annotation* modifier* enum_ id generic? (extends_ class_name)? enum_block 
 		{helper.registerRange(CodeRangeType.ENUMERATION, $id.text, $text, retval.start.getTokenIndex(), input.LT(-1).getTokenIndex());}
 	;
 
 interface_def
-	:	annotation* modifier* interface_ id generic? (extends_ class_name generic?)? interface_block 
+	:	annotation* modifier* interface_ id generic? (extends_ class_name)? interface_block 
 		{helper.registerRange(CodeRangeType.INTERFACE, $id.text, $text, retval.start.getTokenIndex(), input.LT(-1).getTokenIndex());}
 	;
 
@@ -66,7 +66,7 @@ field_def
 	;
 
 argument_def
-	:	(variable_type variable_name (comma variable_type variable_name)*)?
+	:	(variable_type (dot dot dot)? variable_name (comma variable_type (dot dot dot)? variable_name)*)?
 	;
 
 variable_def
@@ -77,8 +77,9 @@ modifier:	public_
 	|	private_
 	|	protected_
 	|	static_
-	|	final_
 	|	transient_
+	|	synchronized_
+	|	abstract_
 	;
 
 
@@ -99,34 +100,33 @@ interface_block
 	;
 	
 method_call
-	:	method_name open_bracket arguments close_bracket (dot id (open_bracket arguments close_bracket)?)*
-	|	super_ open_bracket arguments close_bracket (dot id (open_bracket arguments close_bracket)?)*
-	|	this_ open_bracket arguments close_bracket (dot id (open_bracket arguments close_bracket)?)*
+	:	method_name open_bracket arguments close_bracket (dot (id | class_) (open_bracket arguments close_bracket)?)*
 	;
 
 annotation
 	:	annotation_name (open_bracket value (comma value)* close_bracket)?
 	;
 
-generic	:	LT (id (comma id)*) GT {helper.registerOperator("<>");}
+generic	:	LT ((variable_type | question_) (comma (variable_type | question_))*)? GT {helper.registerOperator("<>");}
 	;
 
 
 value	: cast? left_unary? single_value right_unary? (binary_operator value)? (question_ value colon value)?
-	| open_bracket value close_bracket (binary_operator value)?
+	| open_bracket value close_bracket (binary_operator value)? (question_ value colon value)?
 	;
 
 single_value
 	:	constant
-	|	class_name dot class_
-	|	variable_name
 	|	method_call
+	| 	variable_assignment
+	|	variable_name
 	|	new_class
 	|	this_
 	|	super_
 	;
 
-constant:	hex_long_const
+constant:	class_const
+	|	hex_long_const
 	|	hex_const
 	|	long_const
 	|	int_const
@@ -139,7 +139,7 @@ constant:	hex_long_const
 	;
 	
 new_class
-	:	new_ (class_name generic? | primitive) (array array_const)? (open_bracket arguments close_bracket)? 
+	:	new_ (class_name | primitive) (array array_const?)? (open_bracket arguments close_bracket)? 
 	;
 	
 arguments
@@ -165,6 +165,7 @@ statement
 	|	switch_case
 	|	if_else
 	|	try_catch
+	|	synchronized_block
 	|	throw_ value semicolon
 	|	left_unary? variable_name right_unary?
 	;
@@ -183,6 +184,7 @@ statement_wosemicolon
 	|	switch_case
 	|	if_else
 	|	try_catch
+	|	synchronized_block
 	|	throw_ value semicolon
 	|	left_unary? variable_name right_unary?
 	;
@@ -222,6 +224,9 @@ if_else	:	if_ OPEN_BRACKET value CLOSE_BRACKET code (else_ code)?
 try_catch
 	:	try_ code (catch_ OPEN_BRACKET id id CLOSE_BRACKET code)* (finally_ code)?
 	;
+synchronized_block
+	:	synchronized_ code
+	;
 
 label	:	id colon;
 
@@ -229,9 +234,9 @@ cast	:	OPEN_BRACKET variable_type CLOSE_BRACKET {helper.registerOperator("(cast)
 	;
 
 variable_type
-	:	primitive array?
-	|	class_name generic? array?
-	|	void_
+	:	final_? primitive array?
+	|	final_? class_name array?
+	|	final_? void_
 	;
 
 id	:	ID {helper.registerOperant($text);};
@@ -239,7 +244,7 @@ id	:	ID {helper.registerOperant($text);};
 binary_operator
 	:	plus
 	|	minus
-	|	STAR {helper.registerOperator($text);}
+	|	star
 	|	SLASH {helper.registerOperator($text);}
 	|	PERCENT {helper.registerOperator($text);}
 	|	EQUAL {helper.registerOperator($text);}
@@ -303,33 +308,45 @@ null_const
 boolean_const	
 	:	BOOL_CONST {helper.registerOperant($text);};
 array_const
-	:	(block_begin value (comma value)* block_end)?;
+	:	block_begin value (comma value)* block_end;
+class_const
+	:	class_name dot class_;	
+
+
 ////////////////////////
 // Names...
 ////////////////////////
 
 package_name
-	:	(ID DOT)* ID {helper.registerOperant($text);}
+	:	(id dot)* id {helper.registerOperant($text);}
 	;
 
 import_name
-	:	(ID DOT)+ (ID|STAR) {helper.registerOperant($text);}
+	:	(id dot)+ (id | star)
 	;
 
 class_name
-	:	(ID DOT)* ID {helper.registerOperant($text);}
+	:	id (dot id)* generic?
 	;
 
 method_name
-	:	(ID DOT)* ID {helper.registerOperant($text);}
+	:	(
+			(super_ | this_ | new_class) dot
+		)?
+		variable_name 
+		(
+			dot (class_ | variable_name)
+		)*
+	|	super_
+	|	this_
 	;
 
 variable_name
 	:	name array?
 	;
 annotation_name
-	:	AT name {helper.registerOperant($text);};
-name	:	(ID DOT)* ID {helper.registerOperant($text);};
+	:	AT ID {helper.registerOperant($text);};
+name	:	(id dot)* id;
 
 array	:	(open_rect_bracket value? close_rect_bracket)+;
 
@@ -357,6 +374,10 @@ protected_
 	:	PROTECTED {helper.registerOperator($text);};
 static_	:	STATIC {helper.registerOperator($text);};
 final_	:	FINAL {helper.registerOperator($text);};
+synchronized_
+	:	SYNCHRONIZED {helper.registerOperator($text);};
+abstract_
+	:	ABSTRACT {helper.registerOperator($text);};
 transient_
 	:	TRANSIENT {helper.registerOperator($text);};
 new_	:	NEW {helper.registerOperator($text);};
@@ -395,6 +416,7 @@ question_
 	:	QUESTION {helper.registerOperator($text);};
 plus	:	PLUS {helper.registerOperator($text);};
 minus	:	MINUS {helper.registerOperator($text);};
+star	:	STAR {helper.registerOperator($text);};
 dot	:	DOT {helper.registerOperator($text);};
 assign	:	ASSIGN {helper.registerOperator($text);}
 	|	INCASSIGN {helper.registerOperator($text);}

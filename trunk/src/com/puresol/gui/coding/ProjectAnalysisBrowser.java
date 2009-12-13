@@ -7,11 +7,9 @@ import java.util.Hashtable;
 import java.util.Set;
 
 import javax.i18n4j.Translator;
-import javax.swing.JTextPane;
 import javax.swing.border.TitledBorder;
-import javax.swing.text.Document;
-import javax.swing.text.html.HTMLEditorKit;
 import javax.swingx.FreeList;
+import javax.swingx.HTMLTextPane;
 import javax.swingx.Panel;
 import javax.swingx.ScrollPane;
 import javax.swingx.connect.Slot;
@@ -30,7 +28,7 @@ public class ProjectAnalysisBrowser extends Panel {
 
 	private ProjectAnalyser project = null;
 	private FreeList codeRanges = null;
-	private JTextPane results = null;
+	private HTMLTextPane results = null;
 	private ScrollPane resultsScroller = null;
 	private Hashtable<CodeRange, HTMLAnalysisReport> reports = new Hashtable<CodeRange, HTMLAnalysisReport>();
 
@@ -52,14 +50,8 @@ public class ProjectAnalysisBrowser extends Panel {
 		codeRanges.setBorder(new TitledBorder(translator.i18n("Source File")));
 		resultsScroller = new ScrollPane(codeRanges);
 		add(resultsScroller, BorderLayout.WEST);
-		results = new JTextPane();
 
-		HTMLEditorKit kit = new HTMLEditorKit();
-		results.setEditorKit(kit);
-		Document doc = kit.createDefaultDocument();
-		results.setDocument(doc);
-		results.setEditable(false);
-
+		results = new HTMLTextPane();
 		add(new ScrollPane(results), BorderLayout.CENTER);
 	}
 

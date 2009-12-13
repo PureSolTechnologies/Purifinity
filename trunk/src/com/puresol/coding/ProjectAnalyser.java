@@ -38,7 +38,11 @@ public class ProjectAnalyser {
 
 	public void analyse(File file) {
 		try {
-			analysis.put(file, findAnalyser(file));
+			if (file.isFile()) {
+				if (!file.getPath().contains("/.")) {
+					analysis.put(file, findAnalyser(file));
+				}
+			}
 		} catch (LanguageNotSupportedException e) {
 			logger
 					.warn("File '"
@@ -49,6 +53,7 @@ public class ProjectAnalyser {
 
 	private Analyser findAnalyser(File file)
 			throws LanguageNotSupportedException {
+		logger.info("Analyse file '" + file.getPath() + "'...");
 		if (JavaAnalyser.isSuitable(file)) {
 			return new JavaAnalyser(file);
 		} else {

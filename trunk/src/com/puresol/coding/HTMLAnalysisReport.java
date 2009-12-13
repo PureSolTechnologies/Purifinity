@@ -2,6 +2,8 @@ package com.puresol.coding;
 
 import javax.i18n4j.Translator;
 
+import com.puresol.html.HTMLStandards;
+
 public class HTMLAnalysisReport extends AbstractAnalysisReport {
 
 	private static final Translator translator = Translator
@@ -12,26 +14,18 @@ public class HTMLAnalysisReport extends AbstractAnalysisReport {
 	}
 
 	public String getReport() {
-		String report = getHTMLHeader();
+		String report = HTMLStandards.getStandardHeader();
 		report += getTitle();
 		report += getOverview();
 		report += getMetricReport();
-		report += getHTMLFooter();
+		report += HTMLStandards.getStandardFooter();
 		return report;
-	}
-
-	private String getHTMLHeader() {
-		return "<html><body>";
 	}
 
 	private String getTitle() {
 		CodeRange range = getCodeRange();
 		return "<h1> AnalysisReport for " + range.getType().getName() + " '"
 				+ range.getName() + "'</h1>";
-	}
-
-	private String getHTMLFooter() {
-		return "</body></html>";
 	}
 
 	private String getOverview() {
@@ -192,8 +186,7 @@ public class HTMLAnalysisReport extends AbstractAnalysisReport {
 				+ "</td></tr>";
 		report += "<tr><td>normRedundancy</td><td>"
 				+ round(entropy.getNormRedundancy()) + "</td><td>"
-				+ translator.i18n("ratio of redundand vocables")
-				+ "</td></tr>";
+				+ translator.i18n("ratio of redundand vocables") + "</td></tr>";
 		report += "</table>";
 		return report;
 	}

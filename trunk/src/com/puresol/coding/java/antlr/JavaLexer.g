@@ -6,15 +6,16 @@ options {
 package com.puresol.coding.java.antlr.output;
 }
 
-PACKAGE	:		'package';
-IMPORT	:		'import';
+PACKAGE	:	'package';
+IMPORT	:	'import';
 
 CLASS	:	'class';
 INTERFACE
 	:	'interface';
 ENUM	:	'enum';
 EXTENDS	:	'extends';
-IMPLEMENTS	:	'implements';
+IMPLEMENTS	
+	:	'implements';
 
 VOID	:	'void';
 NEW	:	'new';
@@ -45,9 +46,12 @@ PRIVATE	:	'private';
 PROTECTED
 	:	'protected';
 FINAL	:	'final';
+SYNCHRONIZED
+	:	'synchronized';
 STATIC	:	'static';
 TRANSIENT
 	:	'transient';
+ABSTRACT:	'abstract';
 
 BOOLEAN	:	'boolean';
 BYTE	:	'byte';
