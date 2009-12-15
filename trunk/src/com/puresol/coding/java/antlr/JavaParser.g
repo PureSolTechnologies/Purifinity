@@ -57,12 +57,12 @@ static_init
 	;
 
 constructor_def
-	:	annotation* method_modifier* id open_bracket argument_def close_bracket (throws_ class_name (comma class_name)*)? code
+	:	annotation* method_modifier* id open_bracket argument_def close_bracket throws_exception? code
 		{helper.registerRange(CodeRangeType.CONSTRUCTOR, $id.text, $text, retval.start.getTokenIndex(), input.LT(-1).getTokenIndex());}
 	;
 
 method_def
-	:	annotation* method_modifier* variable_type id open_bracket argument_def close_bracket (throws_ class_name (comma class_name)*)? code
+	:	annotation* method_modifier* variable_type id open_bracket argument_def close_bracket throws_exception? code
 		{helper.registerRange(CodeRangeType.METHOD, $id.text, $text, retval.start.getTokenIndex(), input.LT(-1).getTokenIndex());}
 	;
 	
@@ -111,6 +111,10 @@ variable_modifier
 	:	final_
 	;
 
+throws_exception
+	:	(throws_ class_name (comma class_name)*)?
+	;
+
 class_block
 	:	block_begin (class_def | static_init | constructor_def | method_def | field_def)* block_end semicolon? 
 	;
@@ -124,7 +128,7 @@ enum_content
 	;
 	
 interface_block
-	:	block_begin (annotation* method_modifier* variable_type id open_bracket argument_def close_bracket (throws_ class_name (comma class_name)*)? semicolon)* block_end semicolon?
+	:	block_begin (annotation* method_modifier* variable_type id open_bracket argument_def close_bracket throws_exception? semicolon)* block_end semicolon?
 	;
 	
 method_call
@@ -190,7 +194,7 @@ statement
 	:	label	
 	|	variable_assignment semicolon
 	|	variable_def semicolon
-	|	method_call semicolon
+	|	value semicolon
 	| 	semicolon
 	|	return_statement
 	|	continue_
@@ -203,14 +207,13 @@ statement
 	|	try_catch
 	|	synchronized_block
 	|	throw_ value semicolon
-	|	left_unary? variable_name right_unary?
 	;
 
 statement_wosemicolon
 	:	label
 	|	variable_assignment
 	|	variable_def
-	|	method_call	
+	|	value
 	|	return_statement
 	|	continue_
 	|	break_
@@ -222,7 +225,6 @@ statement_wosemicolon
 	|	try_catch
 	|	synchronized_block
 	|	throw_ value semicolon
-	|	left_unary? variable_name right_unary?
 	;
 
 return_statement	
@@ -369,7 +371,7 @@ method_name
 	:	(
 			(super_ | this_ | new_class) dot
 		)?
-		variable_name 
+		variable_name
 		(
 			dot (class_ | variable_name)
 		)*

@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import org.antlr.runtime.ANTLRInputStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
+import org.antlr.runtime.Token;
+import org.antlr.runtime.TokenStream;
+import org.antlr.runtime.tree.Tree;
 import org.apache.log4j.Logger;
 
 import com.puresol.coding.Analyser;
@@ -51,7 +54,16 @@ public class JavaAnalyser implements Analyser {
 			lexer = new JavaLexer(new ANTLRInputStream(in));
 			CommonTokenStream cts = new CommonTokenStream(lexer);
 			parser = new JavaParser(cts);
-			parser.file();
+			JavaParser.compilationUnit_return result = parser.compilationUnit();
+			Tree t = (Tree) result.getTree();
+			System.out.println(t.toStringTree());
+			TokenStream ts = parser.getTokenStream();
+			for (int index = 0; index < ts.size(); index++) {
+				Token token = ts.get(index);
+				if (token.getChannel() == Token.HIDDEN_CHANNEL)
+					continue;
+				System.out.println(token.getText());
+			}
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
 		} catch (RecognitionException e) {
@@ -69,5 +81,10 @@ public class JavaAnalyser implements Analyser {
 
 	public File getFile() {
 		return file;
+	}
+
+	public static void main(String[] args) {
+		File file = new File("src/com/puresol/coding/java/JavaAnalyser.java");
+		new JavaAnalyser(file);
 	}
 }
