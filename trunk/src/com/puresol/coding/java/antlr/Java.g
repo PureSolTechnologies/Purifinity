@@ -164,21 +164,21 @@
  *      Character.isJavaIdentifierPart(int) returns true."
  */
 grammar Java;
-options {backtrack=true; memoize=true; output=AST;}
+options {
+	backtrack=true; 
+	memoize=true; 
+	output=AST;
+}
+tokens {
+	CODERANGE_CLASS;
+	CODERANGE_METHOD;
+}
 
 @header {
 package com.puresol.coding.java.antlr.output;
-
-import com.puresol.coding.CodeRangeType;
-import com.puresol.coding.ParserHelper;
 }
 
 @members {
-private ParserHelper helper = new ParserHelper(this);
-
-public ParserHelper getParserHelper() {
-	return helper;
-}
 }
 
 @lexer::header {
@@ -214,13 +214,15 @@ typeDeclaration
     |   ';'
     ;
     
-classOrInterfaceDeclaration
-    :   classOrInterfaceModifiers (classDeclaration | interfaceDeclaration)
-    ;
-    
+
 classOrInterfaceModifiers
     :   classOrInterfaceModifier*
     ;
+classOrInterfaceDeclaration
+    :   classOrInterfaceModifiers classDeclaration -> ^(CODERANGE_CLASS classOrInterfaceModifiers classDeclaration)
+    | 	classOrInterfaceModifiers interfaceDeclaration -> ^(CODERANGE_CLASS classOrInterfaceModifiers interfaceDeclaration)
+    ;
+    
 
 classOrInterfaceModifier
     :   annotation   // class or interface
@@ -304,8 +306,8 @@ interfaceBody
 
 classBodyDeclaration
     :   ';'
-    |   'static'? block
-    |   modifiers memberDecl
+    |   'static'? block -> ^(CODERANGE_METHOD 'static'? block)
+    |   modifiers memberDecl -> ^(CODERANGE_METHOD modifiers memberDecl)
     ;
     
 memberDecl

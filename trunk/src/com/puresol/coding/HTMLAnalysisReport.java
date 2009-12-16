@@ -1,5 +1,7 @@
 package com.puresol.coding;
 
+import java.util.Hashtable;
+
 import javax.i18n4j.Translator;
 
 import com.puresol.html.HTMLStandards;
@@ -135,6 +137,15 @@ public class HTMLAnalysisReport extends AbstractAnalysisReport {
 		report += "<tr><td>B</td><td>" + round(halstead.get_B()) + "</td><td>"
 				+ translator.i18n("Number of delivered bugs") + "</td></tr>";
 		report += "</table>";
+		report += "<h3>Operators</h3>";
+		Hashtable<String, Integer> operators = halstead.getOperators();
+		for (String operator : operators.keySet()) {
+		}
+		Hashtable<String, Integer> operands = halstead.getOperands();
+		for (String opernad : operands.keySet()) {
+			
+		}
+		report += "<h3>Operands</h3>";
 		return report;
 	}
 

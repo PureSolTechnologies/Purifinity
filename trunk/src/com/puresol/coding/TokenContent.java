@@ -2,9 +2,12 @@ package com.puresol.coding;
 
 public class TokenContent {
 
-	private int line;
-	private String operator = "";
-	private String operant = "";
+	private int line = 0;
+	private String text = "";
+	private int operator = 0;
+	private int operand = 0;
+	private boolean isKeyword = false;
+	private boolean isSymbol = false;
 	private int cyclomaticNumber = 0;
 
 	public TokenContent(int line) {
@@ -15,20 +18,12 @@ public class TokenContent {
 		return line;
 	}
 
-	public String getOperator() {
-		return operator;
+	public String getText() {
+		return text;
 	}
 
-	public void setOperator(String operator) {
-		this.operator = operator;
-	}
-
-	public String getOperand() {
-		return operant;
-	}
-
-	public void setOperant(String operant) {
-		this.operant = operant;
+	public void setText(String text) {
+		this.text = text;
 	}
 
 	public int getCyclomaticNumber() {
@@ -37,5 +32,37 @@ public class TokenContent {
 
 	public void setCyclomaticNumber(int cyclomaticNumber) {
 		this.cyclomaticNumber = cyclomaticNumber;
+	}
+
+	public void setOperator(int num) {
+		operator = num;
+	}
+
+	public boolean isOperator() {
+		return (operator != 0);
+	}
+
+	public void setOperand(int num) {
+		operand = num;
+	}
+
+	public boolean isOperand() {
+		return (operand != 0);
+	}
+
+	public void setKeyword(boolean isKeyword) {
+		this.isKeyword = isKeyword;
+	}
+
+	public boolean isKeyword() {
+		return this.isKeyword;
+	}
+
+	public void setSymbolc(boolean isSymbol) {
+		this.isSymbol = isSymbol;
+	}
+
+	public boolean isSymbol() {
+		return this.isSymbol;
 	}
 }

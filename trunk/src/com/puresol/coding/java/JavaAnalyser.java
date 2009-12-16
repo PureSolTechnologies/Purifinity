@@ -9,9 +9,6 @@ import java.util.ArrayList;
 import org.antlr.runtime.ANTLRInputStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
-import org.antlr.runtime.Token;
-import org.antlr.runtime.TokenStream;
-import org.antlr.runtime.tree.Tree;
 import org.apache.log4j.Logger;
 
 import com.puresol.coding.Analyser;
@@ -29,9 +26,10 @@ public class JavaAnalyser implements Analyser {
 
 	private static final Logger logger = Logger.getLogger(JavaAnalyser.class);
 
-	private File file;
-	private JavaLexer lexer;
-	private JavaParser parser;
+	private File file = null;
+	private JavaLexer lexer = null;
+	private JavaParser parser = null;
+	private JavaTreeVisitor visitor = null;
 
 	public static boolean isSuitable(File file) {
 		return file.getPath().endsWith(".java");
@@ -54,15 +52,10 @@ public class JavaAnalyser implements Analyser {
 			lexer = new JavaLexer(new ANTLRInputStream(in));
 			CommonTokenStream cts = new CommonTokenStream(lexer);
 			parser = new JavaParser(cts);
-			JavaParser.compilationUnit_return result = parser.compilationUnit();
-			Tree t = (Tree) result.getTree();
-			System.out.println(t.toStringTree());
-			TokenStream ts = parser.getTokenStream();
-			for (int index = 0; index < ts.size(); index++) {
-				Token token = ts.get(index);
-				if (token.getChannel() == Token.HIDDEN_CHANNEL)
-					continue;
-				System.out.println(token.getText());
+			visitor = new JavaTreeVisitor(parser);
+			ArrayList<CodeRange> ranges = visitor.getCodeRanges();
+			for (CodeRange range: ranges) {
+				System.out.println(range.getText());
 			}
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
@@ -72,7 +65,7 @@ public class JavaAnalyser implements Analyser {
 	}
 
 	public ArrayList<CodeRange> getCodeRanges() {
-		return parser.getParserHelper().getCodeRanges();
+		return visitor.getCodeRanges();
 	}
 
 	public Language getLanguage() {

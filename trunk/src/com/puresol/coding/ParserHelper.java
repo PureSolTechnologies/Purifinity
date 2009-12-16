@@ -36,7 +36,7 @@ public class ParserHelper {
 
 	public void registerOperator(String operator, int cyclomaticNumber) {
 		TokenContent tokenContent = new TokenContent(getCurrentPosition());
-		tokenContent.setOperator(operator);
+		tokenContent.setOperator(1);
 		tokenContent.setCyclomaticNumber(cyclomaticNumber);
 		tokenContents.put(getCurrentPosition(), tokenContent);
 		if (logger.isTraceEnabled()) {
@@ -46,7 +46,7 @@ public class ParserHelper {
 
 	public void registerOperator(String operator) {
 		TokenContent tokenContent = new TokenContent(getCurrentPosition());
-		tokenContent.setOperator(operator);
+		tokenContent.setOperator(1);
 		tokenContents.put(getCurrentPosition(), tokenContent);
 		if (logger.isTraceEnabled()) {
 			logger.trace("Register operator: '" + operator + "'");
@@ -55,7 +55,7 @@ public class ParserHelper {
 
 	public void registerOperant(String operant) {
 		TokenContent tokenContent = new TokenContent(getCurrentPosition());
-		tokenContent.setOperant(operant);
+		tokenContent.setOperand(1);
 		tokenContents.put(getCurrentPosition(), tokenContent);
 		if (logger.isTraceEnabled()) {
 			logger.trace("Register operant: '" + operant + "'");

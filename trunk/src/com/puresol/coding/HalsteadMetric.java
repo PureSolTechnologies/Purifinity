@@ -73,11 +73,11 @@ public class HalsteadMetric extends AbstractMetric {
 		for (int index = codeRange.getStart(); index <= codeRange.getStop(); index++) {
 			if (tokenContents.containsKey(index)) {
 				TokenContent content = tokenContents.get(index);
-				if (!content.getOperand().isEmpty()) {
-					addOperand(content.getOperand());
+				if (content.isOperand()) {
+					addOperand(content.getText());
 				}
-				if (!content.getOperator().isEmpty()) {
-					addOperator(content.getOperator());
+				if (content.isOperator()) {
+					addOperator(content.getText());
 				}
 			}
 		}
