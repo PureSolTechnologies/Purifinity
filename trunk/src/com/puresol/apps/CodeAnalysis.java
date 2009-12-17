@@ -76,7 +76,7 @@ public class CodeAnalysis extends PureSolApplication {
 		File file = directory.getSelectedFile();
 		this.directory.setText(file.getPath());
 		analyser = new ProjectAnalyser(file.getPath() + "**/*");
-		analyser.analyse();
+		analyser.update();
 		browser.setProjectAnalyser(analyser);
 	}
 

@@ -4,4 +4,5 @@ public interface Analysis {
 
 	public QualityLevel getQualityLevel();
 
+	public boolean isSuitable(CodeRange codeRange);
 }

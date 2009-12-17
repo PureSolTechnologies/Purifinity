@@ -1,9 +1,6 @@
 package com.puresol.coding;
 
-import java.io.File;
 import java.util.Hashtable;
-
-import com.puresol.coding.java.JavaAnalyser;
 
 /**
  * This class calculates entropy and redundancy for a code range. The entropy is
@@ -102,15 +99,5 @@ public class EntropyMetric extends HalsteadMetric {
 			return QualityLevel.MEDIUM;
 		}
 		return QualityLevel.HIGH;
-	}
-
-	public static void main(String[] args) {
-		JavaAnalyser analyser = new JavaAnalyser(new File(
-				"src/com/puresol/coding/java/JavaAnalyser.java"));
-		analyser.analyse();
-		CodeRange range = analyser.getCodeRanges().get(2);
-		System.out.println(range.getName());
-		EntropyMetric em = new EntropyMetric(range);
-		em.print();
 	}
 }

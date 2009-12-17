@@ -10,37 +10,35 @@ import javax.i18n4j.FileSearch;
 
 import org.apache.log4j.Logger;
 
-import com.puresol.coding.java.JavaAnalyser;
-
 public class ProjectAnalyser {
 
 	private static final Logger logger = Logger
 			.getLogger(ProjectAnalyser.class);
 
 	private String pattern;
-	private Hashtable<File, Analyser> analysis = new Hashtable<File, Analyser>();
+	private Hashtable<File, Analyser> analysers = new Hashtable<File, Analyser>();
 
 	public ProjectAnalyser(String pattern) {
 		this.pattern = pattern;
 	}
 
 	public void update() {
-		analysis.clear();
+		analysers = new Hashtable<File, Analyser>();
 		analyse();
 	}
 
-	public void analyse() {
+	private void analyse() {
 		List<File> files = FileSearch.find(pattern);
 		for (File file : files) {
-			analyse(file);
+			analyseFile(file);
 		}
 	}
 
-	public void analyse(File file) {
+	private void analyseFile(File file) {
 		try {
 			if (file.isFile()) {
 				if (!file.getPath().contains("/.")) {
-					analysis.put(file, findAnalyser(file));
+					analysers.put(file, AnalyserFactory.createAnalyser(file));
 				}
 			}
 		} catch (LanguageNotSupportedException e) {
@@ -51,60 +49,27 @@ public class ProjectAnalyser {
 		}
 	}
 
-	private Analyser findAnalyser(File file)
-			throws LanguageNotSupportedException {
-		logger.info("Analyse file '" + file.getPath() + "'...");
-		if (JavaAnalyser.isSuitable(file)) {
-			return new JavaAnalyser(file);
-		} else {
-			throw new LanguageNotSupportedException(
-					"No coding language found for file " + file.getPath());
-		}
-	}
-
 	public Set<File> getFiles() {
-		return analysis.keySet();
+		return analysers.keySet();
 	}
 
 	public Analyser getAnalyser(File file) {
-		return analysis.get(file);
+		return analysers.get(file);
 	}
 
 	public ArrayList<CodeRange> getCodeRanges(File file) {
-		return analysis.get(file).getCodeRanges();
+		Analyser analyser = analysers.get(file);
+		if (analyser == null) {
+			return null;
+		}
+		return analysers.get(file).getCodeRanges();
 	}
 
-	public static void main(String[] args) {
-		// Logger.getRootLogger().setLevel(Level.TRACE);
-		ProjectAnalyser analyser = new ProjectAnalyser(
-				"src/com/puresol/coding/*.java");
-		analyser.analyse();
-		int sloc = 0;
-		Set<File> files = analyser.getFiles();
-		for (File file : files) {
-			System.out.println("=======================");
-			System.out.println(file.getPath());
-			System.out.println("=======================");
-			ArrayList<CodeRange> ranges = analyser.getCodeRanges(file);
-			for (CodeRange range : ranges) {
-				System.out.println("=======================");
-				System.out.println(range.getName());
-				System.out.println("=======================");
-				// System.out.println(range.getText());
-				HalsteadMetric halsteadMetric = new HalsteadMetric(range);
-				halsteadMetric.printOperators();
-				halsteadMetric.printOperands();
-				halsteadMetric.print();
-				McCabeMetric mcCabeMetric = new McCabeMetric(range);
-				mcCabeMetric.print();
-				SLOCMetric slocMetric = new SLOCMetric(range);
-				slocMetric.print();
-				sloc += slocMetric.getPhyLOC();
-				MaintainabilityIndex mi = new MaintainabilityIndex(range);
-				mi.print();
-			}
+	public CodeRangeMetrics getMetrics(File file, CodeRange codeRange) {
+		Analyser analyser = analysers.get(file);
+		if (analyser == null) {
+			return null;
 		}
-		CoCoMo cocomo = new CoCoMo(sloc);
-		cocomo.print();
+		return analyser.getMetrics(codeRange);
 	}
 }

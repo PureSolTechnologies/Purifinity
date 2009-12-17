@@ -4,15 +4,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 
 import org.antlr.runtime.ANTLRInputStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
 import org.apache.log4j.Logger;
 
-import com.puresol.coding.Analyser;
-import com.puresol.coding.CodeRange;
+import com.puresol.coding.AbstractAnalyser;
 import com.puresol.coding.Language;
 import com.puresol.coding.java.antlr.output.JavaLexer;
 import com.puresol.coding.java.antlr.output.JavaParser;
@@ -22,11 +20,10 @@ import com.puresol.coding.java.antlr.output.JavaParser;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class JavaAnalyser implements Analyser {
+public class JavaAnalyser extends AbstractAnalyser {
 
 	private static final Logger logger = Logger.getLogger(JavaAnalyser.class);
 
-	private File file = null;
 	private JavaLexer lexer = null;
 	private JavaParser parser = null;
 	private JavaTreeVisitor visitor = null;
@@ -42,21 +39,18 @@ public class JavaAnalyser implements Analyser {
 	 *            file to be analysed.
 	 */
 	public JavaAnalyser(File file) {
-		this.file = file;
-		analyse();
+		super(file);
+		parse();
 	}
 
-	public void analyse() {
+	private void parse() {
 		try {
-			InputStream in = new FileInputStream(file);
+			InputStream in = new FileInputStream(getFile());
 			lexer = new JavaLexer(new ANTLRInputStream(in));
 			CommonTokenStream cts = new CommonTokenStream(lexer);
 			parser = new JavaParser(cts);
 			visitor = new JavaTreeVisitor(parser);
-			ArrayList<CodeRange> ranges = visitor.getCodeRanges();
-			for (CodeRange range: ranges) {
-				System.out.println(range.getText());
-			}
+			setCodeRanges(visitor.getCodeRanges());
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
 		} catch (RecognitionException e) {
@@ -64,20 +58,7 @@ public class JavaAnalyser implements Analyser {
 		}
 	}
 
-	public ArrayList<CodeRange> getCodeRanges() {
-		return visitor.getCodeRanges();
-	}
-
 	public Language getLanguage() {
 		return Language.JAVA;
-	}
-
-	public File getFile() {
-		return file;
-	}
-
-	public static void main(String[] args) {
-		File file = new File("src/com/puresol/coding/java/JavaAnalyser.java");
-		new JavaAnalyser(file);
 	}
 }

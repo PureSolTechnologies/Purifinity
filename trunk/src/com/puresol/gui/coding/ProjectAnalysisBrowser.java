@@ -1,25 +1,12 @@
 package com.puresol.gui.coding;
 
-import java.awt.BorderLayout;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.Set;
-
 import javax.i18n4j.Translator;
-import javax.swing.border.TitledBorder;
-import javax.swingx.FreeList;
 import javax.swingx.HTMLTextPane;
-import javax.swingx.Panel;
-import javax.swingx.ScrollPane;
-import javax.swingx.connect.Slot;
+import javax.swingx.TabbedPane;
 
-import com.puresol.coding.CodeRange;
-import com.puresol.coding.HTMLAnalysisReport;
 import com.puresol.coding.ProjectAnalyser;
-import com.puresol.coding.QualityLevel;
 
-public class ProjectAnalysisBrowser extends Panel {
+public class ProjectAnalysisBrowser extends TabbedPane {
 
 	private static final long serialVersionUID = 3469716304984536673L;
 
@@ -27,10 +14,8 @@ public class ProjectAnalysisBrowser extends Panel {
 			.getTranslator(ProjectAnalysisBrowser.class);
 
 	private ProjectAnalyser project = null;
-	private FreeList codeRanges = null;
-	private HTMLTextPane results = null;
-	private ScrollPane resultsScroller = null;
-	private Hashtable<CodeRange, HTMLAnalysisReport> reports = new Hashtable<CodeRange, HTMLAnalysisReport>();
+	private CodeRangeAnalysisBrowser codeRangeBrowser = null;
+	private HTMLTextPane projectOverview = null;
 
 	public ProjectAnalysisBrowser() {
 		super();
@@ -44,62 +29,20 @@ public class ProjectAnalysisBrowser extends Panel {
 	}
 
 	private void initUI() {
-		setLayout(new BorderLayout());
-		codeRanges = new FreeList();
-		codeRanges.connect("indexChanged", this, "showResults", int.class);
-		codeRanges.setBorder(new TitledBorder(translator.i18n("Source File")));
-		resultsScroller = new ScrollPane(codeRanges);
-		add(resultsScroller, BorderLayout.WEST);
-
-		results = new HTMLTextPane();
-		add(new ScrollPane(results), BorderLayout.CENTER);
+		addTab(translator.i18n("Overview"),
+				projectOverview = new HTMLTextPane());
+		addTab(translator.i18n("Modules"),
+				codeRangeBrowser = new CodeRangeAnalysisBrowser());
 	}
 
 	public void setProjectAnalyser(ProjectAnalyser project) {
 		this.project = project;
-		update();
+		codeRangeBrowser.setProjectAnalyser(project);
+		projectOverview
+				.setText("<html><body>Project Metrics Summary</body></html>");
 	}
 
-	public void update() {
-		if (project == null) {
-			return;
-		}
-		Hashtable<Object, Object> listData = new Hashtable<Object, Object>();
-		Set<File> files = project.getFiles();
-		for (File file : files) {
-			ArrayList<CodeRange> ranges = project.getCodeRanges(file);
-			for (CodeRange range : ranges) {
-				calculateReport(range);
-				String html = "<html><body>";
-				if (reports.get(range).getQualityLevel() == QualityLevel.HIGH) {
-					html += "<table width=\"100%\" bgcolor=\"#00ff00\">";
-				} else if (reports.get(range).getQualityLevel() == QualityLevel.MEDIUM) {
-					html += "<table width=\"100%\" bgcolor=\"#ffff00\">";
-				} else {
-					html += "<table width=\"100%\" bgcolor=\"#ff0000\">";
-				}
-				html += "<tr><td>" + file.getPath() + "</td></tr><tr><td>"
-						+ range.getType().getName() + ":" + range.getName()
-						+ "</td></tr></table></body></html>";
-				listData.put(html, range);
-
-			}
-		}
-		codeRanges.setListData(listData);
-	}
-
-	private void calculateReport(CodeRange range) {
-		reports.put(range, new HTMLAnalysisReport(range));
-	}
-
-	@Slot
-	public void showResults(int index) {
-		Object[] objs = codeRanges.getSelectedValues();
-		if (objs.length != 1) {
-			results.setText("");
-			return;
-		}
-		CodeRange range = (CodeRange) objs[0];
-		results.setText(reports.get(range).getReport());
+	public ProjectAnalyser getProjectAnalyser() {
+		return project;
 	}
 }

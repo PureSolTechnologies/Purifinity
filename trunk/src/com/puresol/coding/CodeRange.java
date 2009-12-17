@@ -14,16 +14,22 @@ public class CodeRange {
 	private int start;
 	private int stop;
 
-	public CodeRange(CodeRangeType type, String name, String text,
-			TokenStream tokenStream,
+	public CodeRange(CodeRangeType type, String name, TokenStream tokenStream,
 			Hashtable<Integer, TokenContent> tokenContents, int start, int stop) {
 		this.type = type;
 		this.name = name;
-		this.text = text;
 		this.tokenStream = tokenStream;
 		this.tokenContents = tokenContents;
 		this.start = start;
 		this.stop = stop;
+		createText();
+	}
+
+	private void createText() {
+		text = "";
+		for (int index = start; index < stop; index++) {
+			text += tokenStream.get(index).getText();
+		}
 	}
 
 	public CodeRangeType getType() {

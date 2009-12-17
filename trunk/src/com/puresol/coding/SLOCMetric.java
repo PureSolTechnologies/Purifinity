@@ -203,4 +203,9 @@ public class SLOCMetric extends AbstractMetric {
 		}
 		return QualityLevel.HIGH; // not evaluated...
 	}
+
+	@Override
+	public boolean isSuitable(CodeRange codeRange) {
+		return true;
+	}
 }

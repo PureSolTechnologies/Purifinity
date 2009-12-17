@@ -11,8 +11,8 @@ public class HTMLAnalysisReport extends AbstractAnalysisReport {
 	private static final Translator translator = Translator
 			.getTranslator(HTMLAnalysisReport.class);
 
-	public HTMLAnalysisReport(CodeRange range) {
-		super(range);
+	public HTMLAnalysisReport(CodeRangeMetrics metrics) {
+		super(metrics);
 	}
 
 	public String getReport() {
@@ -25,18 +25,19 @@ public class HTMLAnalysisReport extends AbstractAnalysisReport {
 	}
 
 	private String getTitle() {
-		CodeRange range = getCodeRange();
+		CodeRange range = getMetrics().getCodeRange();
 		return "<h1> AnalysisReport for " + range.getType().getName() + " '"
 				+ range.getName() + "'</h1>";
 	}
 
 	private String getOverview() {
 		String report = "<h2>Overview</h2>";
-		SLOCMetric sloc = getSLOCMetric();
-		McCabeMetric mcCabe = getMcCabeMetric();
-		HalsteadMetric halstead = getHalsteadMetric();
-		MaintainabilityIndex maintainability = getMaintainabilityIndex();
-		EntropyMetric entropy = getEntropyMetric();
+		SLOCMetric sloc = getMetrics().getSLOCMetric();
+		McCabeMetric mcCabe = getMetrics().getMcCabeMetric();
+		HalsteadMetric halstead = getMetrics().getHalsteadMetric();
+		MaintainabilityIndex maintainability = getMetrics()
+				.getMaintainabilityIndex();
+		EntropyMetric entropy = getMetrics().getEntropyMetric();
 		report += "<table>";
 		report += "<tr><td>SLOC Metric</td><td>" + getQualitySign(sloc)
 				+ "</td><td>"
@@ -74,7 +75,7 @@ public class HTMLAnalysisReport extends AbstractAnalysisReport {
 
 	private String getSLOCReport() {
 		String report = "<h2>SLOC Metrics</h2>";
-		SLOCMetric sloc = getSLOCMetric();
+		SLOCMetric sloc = getMetrics().getSLOCMetric();
 		report += getQualitySign(sloc);
 		report += "<br/>";
 		report += "<table>";
@@ -92,7 +93,7 @@ public class HTMLAnalysisReport extends AbstractAnalysisReport {
 
 	private String getMcCabeReport() {
 		String report = "<h2>McCabe Cyclomatic Number</h2>";
-		McCabeMetric mcCabe = getMcCabeMetric();
+		McCabeMetric mcCabe = getMetrics().getMcCabeMetric();
 		report += getQualitySign(mcCabe);
 		report += "<br/>";
 		report += translator.i18n("Cyclomatic number v(G)") + "="
@@ -102,7 +103,7 @@ public class HTMLAnalysisReport extends AbstractAnalysisReport {
 
 	private String getHalsteadReport() {
 		String report = "<h2>Halstead Metric</h2>";
-		HalsteadMetric halstead = getHalsteadMetric();
+		HalsteadMetric halstead = getMetrics().getHalsteadMetric();
 		report += getQualitySign(halstead);
 		report += "<br/>";
 		report += "<table>";
@@ -138,20 +139,30 @@ public class HTMLAnalysisReport extends AbstractAnalysisReport {
 				+ translator.i18n("Number of delivered bugs") + "</td></tr>";
 		report += "</table>";
 		report += "<h3>Operators</h3>";
+		report += "<table>";
 		Hashtable<String, Integer> operators = halstead.getOperators();
 		for (String operator : operators.keySet()) {
+			int number = operators.get(operator);
+			report += "<tr><td>" + operator + "</td><td>" + number
+					+ "</td></tr>";
 		}
-		Hashtable<String, Integer> operands = halstead.getOperands();
-		for (String opernad : operands.keySet()) {
-			
-		}
+		report += "</table>";
 		report += "<h3>Operands</h3>";
+		report += "<table>";
+		Hashtable<String, Integer> operands = halstead.getOperands();
+		for (String operand : operands.keySet()) {
+			int number = operands.get(operand);
+			report += "<tr><td>" + operand + "</td><td>" + number
+					+ "</td></tr>";
+		}
+		report += "</table>";
 		return report;
 	}
 
 	private String getMaintainabilityReport() {
 		String report = "<h2>Maintainability Index</h2>";
-		MaintainabilityIndex maintainability = getMaintainabilityIndex();
+		MaintainabilityIndex maintainability = getMetrics()
+				.getMaintainabilityIndex();
 		report += getQualitySign(maintainability);
 		report += "<br/>";
 		report += "<table>";
@@ -172,7 +183,7 @@ public class HTMLAnalysisReport extends AbstractAnalysisReport {
 
 	private String getEntropyReport() {
 		String report = "<h2>Entropy from Information Theory</h2>";
-		EntropyMetric entropy = getEntropyMetric();
+		EntropyMetric entropy = getMetrics().getEntropyMetric();
 		report += getQualitySign(entropy);
 		report += "<br/>";
 		report += "<table>";
@@ -205,9 +216,9 @@ public class HTMLAnalysisReport extends AbstractAnalysisReport {
 	private String getSource() {
 		String report = "<h2>" + translator.i18n("Source Code") + "</h2>";
 		report += "<tt>";
-		report += getCodeRange().getText().replaceAll("\n", "<br/>")
-				.replaceAll(" ", "&nbsp;").replaceAll("\t",
-						"&nbsp;&nbsp;&nbsp;&nbsp;");
+		report += getMetrics().getCodeRange().getText().replaceAll("\n",
+				"<br/>").replaceAll(" ", "&nbsp;").replaceAll("\t",
+				"&nbsp;&nbsp;&nbsp;&nbsp;");
 		report += "</tt>";
 		return report;
 	}
@@ -226,22 +237,4 @@ public class HTMLAnalysisReport extends AbstractAnalysisReport {
 		return Math.round(d * 100.0) / 100.0;
 	}
 
-	@Override
-	public QualityLevel getQualityLevel() {
-		QualityLevel level = getSLOCMetric().getQualityLevel();
-		if (level.getLevel() > getMcCabeMetric().getQualityLevel().getLevel()) {
-			level = getMcCabeMetric().getQualityLevel();
-		}
-		if (level.getLevel() > getHalsteadMetric().getQualityLevel().getLevel()) {
-			level = getHalsteadMetric().getQualityLevel();
-		}
-		if (level.getLevel() > getMaintainabilityIndex().getQualityLevel()
-				.getLevel()) {
-			level = getMaintainabilityIndex().getQualityLevel();
-		}
-		if (level.getLevel() > getEntropyMetric().getQualityLevel().getLevel()) {
-			level = getEntropyMetric().getQualityLevel();
-		}
-		return level;
-	}
 }

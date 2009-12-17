@@ -11,4 +11,5 @@ public interface Analyser {
 
 	public ArrayList<CodeRange> getCodeRanges();
 
+	public CodeRangeMetrics getMetrics(CodeRange codeRange);
 }

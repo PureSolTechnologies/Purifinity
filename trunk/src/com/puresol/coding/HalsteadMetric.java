@@ -240,7 +240,7 @@ public class HalsteadMetric extends AbstractMetric {
 		if ((range.getType() == CodeRangeType.FILE)
 				|| (range.getType() == CodeRangeType.CLASS)
 				|| (range.getType() == CodeRangeType.ENUMERATION)) {
-			if (HV < 100) {
+			if (HV < 80) {
 				return QualityLevel.MEDIUM;
 			}
 			if (HV > 8000) {
@@ -254,7 +254,7 @@ public class HalsteadMetric extends AbstractMetric {
 				|| (range.getType() == CodeRangeType.METHOD)
 				|| (range.getType() == CodeRangeType.FUNCTION)
 				|| (range.getType() == CodeRangeType.INTERFACE)) {
-			if (HV < 20) {
+			if (HV < 10) {
 				return QualityLevel.MEDIUM;
 			}
 			if (HV > 1000) {
@@ -266,5 +266,10 @@ public class HalsteadMetric extends AbstractMetric {
 			return QualityLevel.HIGH;
 		}
 		return QualityLevel.HIGH; // not evaluated...
+	}
+
+	@Override
+	public boolean isSuitable(CodeRange codeRange) {
+		return true;
 	}
 }

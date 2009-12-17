@@ -79,4 +79,12 @@ public class MaintainabilityIndex extends AbstractMetric {
 		}
 		return QualityLevel.HIGH; // not evaluated...
 	}
+
+	@Override
+	public boolean isSuitable(CodeRange codeRange) {
+		if (codeRange.getType() == CodeRangeType.FILE) {
+			return false;
+		}
+		return true;
+	}
 }
