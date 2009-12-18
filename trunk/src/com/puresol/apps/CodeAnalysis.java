@@ -5,15 +5,17 @@ import java.io.File;
 import javax.i18n4j.Translator;
 import javax.swing.JFileChooser;
 import javax.swingx.BorderLayoutWidget;
-import javax.swingx.Label;
 import javax.swingx.Menu;
 import javax.swingx.MenuBar;
 import javax.swingx.MenuItem;
+import javax.swingx.ToggleButton;
+import javax.swingx.ToolBar;
 import javax.swingx.connect.Slot;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
+import com.puresol.coding.CodeEvaluationSystem;
 import com.puresol.coding.ProjectAnalyser;
 import com.puresol.gui.PureSolApplication;
 import com.puresol.gui.coding.ProjectAnalysisBrowser;
@@ -25,9 +27,14 @@ public class CodeAnalysis extends PureSolApplication {
 	private static final Translator translator = Translator
 			.getTranslator(CodeAnalysis.class);
 
-	private Label directory = null;
 	private ProjectAnalysisBrowser browser = null;
 	private ProjectAnalyser analyser = null;
+	private ToolBar toolBar = null;
+	private ToggleButton slocButton = null;
+	private ToggleButton mcCabeButton = null;
+	private ToggleButton halsteadButton = null;
+	private ToggleButton entropyButton = null;
+	private ToggleButton maintainabilityButton = null;
 
 	public CodeAnalysis(String title) {
 		super(title);
@@ -59,10 +66,38 @@ public class CodeAnalysis extends PureSolApplication {
 	private void initDesktop() {
 		BorderLayoutWidget widget = new BorderLayoutWidget();
 		setContentPane(widget);
+
 		browser = new ProjectAnalysisBrowser();
+		toolBar = new ToolBar();
+		toolBar.add(slocButton = new ToggleButton("SLOC"));
+		toolBar.add(mcCabeButton = new ToggleButton("McCabe"));
+		toolBar.add(halsteadButton = new ToggleButton("Halstead"));
+		toolBar.add(entropyButton = new ToggleButton("Entropy"));
+		toolBar
+				.add(maintainabilityButton = new ToggleButton("Maintainability"));
+
+		slocButton.setSelected(CodeEvaluationSystem.isEvaluateSLOCMetric());
+		mcCabeButton.setSelected(CodeEvaluationSystem.isEvaluateMcCabeMetric());
+		halsteadButton.setSelected(CodeEvaluationSystem
+				.isEvaluateHalsteadMetric());
+		entropyButton.setSelected(CodeEvaluationSystem
+				.isEvaluateEntropyMetric());
+		maintainabilityButton.setSelected(CodeEvaluationSystem
+				.isEvaluateMaintainabilityIndex());
+
+		slocButton.connect("valueChanged", this, "setEvaluateSLOCMetric",
+				Boolean.class);
+		mcCabeButton.connect("valueChanged", this, "setEvaluateMcCabeMetric",
+				Boolean.class);
+		halsteadButton.connect("valueChanged", this,
+				"setEvaluateHalsteadMetric", Boolean.class);
+		entropyButton.connect("valueChanged", this, "setEvaluateEntropyMetric",
+				Boolean.class);
+		maintainabilityButton.connect("valueChanged", this,
+				"setEvaluateMaintainability", Boolean.class);
+
 		widget.setCenter(browser);
-		directory = new Label("");
-		widget.setNorth(directory);
+		widget.setNorth(toolBar);
 	}
 
 	@Slot
@@ -74,10 +109,39 @@ public class CodeAnalysis extends PureSolApplication {
 			return;
 		}
 		File file = directory.getSelectedFile();
-		this.directory.setText(file.getPath());
 		analyser = new ProjectAnalyser(file, "**/*");
 		analyser.update();
 		browser.setProjectAnalyser(analyser);
+	}
+
+	@Slot
+	public void setEvaluateSLOCMetric(Boolean value) {
+		CodeEvaluationSystem.setEvaluateSLOCMetric(value);
+		browser.refresh();
+	}
+
+	@Slot
+	public void setEvaluateMcCabeMetric(Boolean value) {
+		CodeEvaluationSystem.setEvaluateMcCabeMetric(value);
+		browser.refresh();
+	}
+
+	@Slot
+	public void setEvaluateHalsteadMetric(Boolean value) {
+		CodeEvaluationSystem.setEvaluateHalsteadMetric(value);
+		browser.refresh();
+	}
+
+	@Slot
+	public void setEvaluateEntropyMetric(Boolean value) {
+		CodeEvaluationSystem.setEvaluateEntropyMetric(value);
+		browser.refresh();
+	}
+
+	@Slot
+	public void setEvaluateMaintainability(Boolean value) {
+		CodeEvaluationSystem.setEvaluateMaintainabilityIndex(value);
+		browser.refresh();
 	}
 
 	public static void main(String[] args) {

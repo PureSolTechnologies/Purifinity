@@ -13,434 +13,367 @@ import com.puresol.statistics.Statistics;
 
 /**
  * This class calculates a small statistics for a source code for source lines
- * of code. It's a simple counting statistics for productive, comment and
- * blank lines.
+ * of code. It's a simple counting statistics for productive, comment and blank
+ * lines.
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
 public class SLOCMetric extends AbstractMetric {
 
-    private static final Translator translator =
-	    Translator.getTranslator(SLOCMetric.class);
+	private static final Translator translator = Translator
+			.getTranslator(SLOCMetric.class);
 
-    private TokenStream stream = null;
-    private int phyLOC;
-    private int proLOC;
-    private int comLOC;
-    private int blLOC;
-    private ArrayList<Integer> lineLengths;
-    private ArrayList<Integer> lineLengthsTrimmed;
-    private ArrayList<Integer> lineLengthsProductive;
-    private ArrayList<Integer> lineLengthsTrimmedProductive;
-    private Statistics lineStatistics;
-    private Statistics trimmedLineStatistics;
-    private Statistics productiveLineStatistics;
-    private Statistics trimmedProductiveLineStatistics;
+	private TokenStream stream = null;
+	private int phyLOC;
+	private int proLOC;
+	private int comLOC;
+	private int blLOC;
+	private ArrayList<Integer> lineLengths;
+	private ArrayList<Integer> lineLengthsTrimmed;
+	private ArrayList<Integer> lineLengthsProductive;
+	private ArrayList<Integer> lineLengthsTrimmedProductive;
+	private Statistics lineStatistics;
+	private Statistics trimmedLineStatistics;
+	private Statistics productiveLineStatistics;
+	private Statistics trimmedProductiveLineStatistics;
 
-    public SLOCMetric(CodeRange codeRange) {
-	super(codeRange);
-	this.stream = codeRange.getTokenStream();
-	calculate();
-    }
-
-    private void calculate() {
-	countLines();
-	collectLineLengths();
-    }
-
-    private void countLines() {
-	phyLOC = 0;
-	proLOC = 0;
-	comLOC = 0;
-	blLOC = 0;
-	for (int index = getCodeRange().getStart(); index <= getCodeRange()
-		.getStop(); index++) {
-	    Token token = stream.get(index);
-	    if (!token.getText().endsWith("\n")) {
-		// it's not a end of line token and therefore to be skipped
-		continue;
-	    }
-	    int lines = countLinesInToken(token);
-	    phyLOC += lines;
-	    if (isComment(token)) {
-		comLOC += lines;
-	    }
-	    if (isBlank(token)) {
-		blLOC += lines;
-	    }
-	    if (isProductive(token)) {
-		proLOC += lines;
-	    }
+	public SLOCMetric(CodeRange codeRange) {
+		super(codeRange);
+		this.stream = codeRange.getTokenStream();
+		calculate();
 	}
-    }
 
-    /**
-     * This method calculates how much lines are encoded in the current token
-     * and the tokens before which do not end with a new line.
-     * 
-     * @param token
-     * @return
-     */
-    private int countLinesInToken(Token token) {
-	int index = token.getTokenIndex();
-	index--;
-	int lines = 0;
-	Token previous = stream.get(index);
-	while (!previous.getText().endsWith("\n")) {
-	    lines +=
-		    previous.getText().split("\n").length - 1;
-	    index--;
-	    if (index < 0) {
-		break;
-	    }
-	    previous = stream.get(index);
+	private void calculate() {
+		countLines();
+		collectLineLengths();
 	}
-	return lines + 1;
-    }
 
-    private boolean isComment(Token token) {
-	/*
-	 * A comment is a trimmed non-empty string!
-	 */
-	int index = token.getTokenIndex();
-	if (index == 0) {
-	    return false;
-	}
-	index--;
-	Token previous = stream.get(index);
-	while (!previous.getText().equals("\n")) {
-	    if (previous.getChannel() == Token.HIDDEN_CHANNEL) {
-		if (!previous.getText().trim().isEmpty()) {
-		    return true;
+	private void countLines() {
+		phyLOC = 0;
+		proLOC = 0;
+		comLOC = 0;
+		blLOC = 0;
+		for (int index = getCodeRange().getStart(); index <= getCodeRange()
+				.getStop(); index++) {
+			Token token = stream.get(index);
+			if (!token.getText().endsWith("\n")) {
+				// it's not a end of line token and therefore to be skipped
+				continue;
+			}
+			int lines = countLinesInToken(token);
+			phyLOC += lines;
+			if (isComment(token)) {
+				comLOC += lines;
+			}
+			if (isBlank(token)) {
+				blLOC += lines;
+			}
+			if (isProductive(token)) {
+				proLOC += lines;
+			}
 		}
-	    }
-	    index--;
-	    if (index < 0) {
-		break;
-	    }
-	    previous = stream.get(index);
 	}
-	return false;
-    }
 
-    private boolean isBlank(Token token) {
-	/*
-	 * A blank lines consists only of channel 99 tokens with are trimmed
-	 * empty.
+	/**
+	 * This method calculates how much lines are encoded in the current token
+	 * and the tokens before which do not end with a new line.
+	 * 
+	 * @param token
+	 * @return
 	 */
-	int index = token.getTokenIndex();
-	if (index == 0) {
-	    return false;
+	private int countLinesInToken(Token token) {
+		int index = token.getTokenIndex();
+		index--;
+		int lines = 0;
+		Token previous = stream.get(index);
+		while (!previous.getText().endsWith("\n")) {
+			lines += previous.getText().split("\n").length - 1;
+			index--;
+			if (index < 0) {
+				break;
+			}
+			previous = stream.get(index);
+		}
+		return lines + 1;
 	}
-	index--;
-	Token previous = stream.get(index);
-	while (!previous.getText().equals("\n")) {
-	    if (previous.getChannel() != 99) {
-		return false;
-	    }
-	    if (!previous.getText().trim().isEmpty()) {
-		return false;
-	    }
-	    index--;
-	    if (index < 0) {
-		break;
-	    }
-	    previous = stream.get(index);
-	}
-	return true;
-    }
 
-    private boolean isProductive(Token token) {
-	/*
-	 * A productive line is a line with at least one token not in channel
-	 * 99!
-	 */
-	int index = token.getTokenIndex();
-	if (index == 0) {
-	    return false;
+	private boolean isComment(Token token) {
+		/*
+		 * A comment is a trimmed non-empty string!
+		 */
+		int index = token.getTokenIndex();
+		if (index == 0) {
+			return false;
+		}
+		index--;
+		Token previous = stream.get(index);
+		while (!previous.getText().equals("\n")) {
+			if (previous.getChannel() == Token.HIDDEN_CHANNEL) {
+				if (!previous.getText().trim().isEmpty()) {
+					return true;
+				}
+			}
+			index--;
+			if (index < 0) {
+				break;
+			}
+			previous = stream.get(index);
+		}
+		return false;
 	}
-	index--;
-	Token previous = stream.get(index);
-	while (!previous.getText().equals("\n")) {
-	    if (previous.getChannel() != 99) {
+
+	private boolean isBlank(Token token) {
+		/*
+		 * A blank lines consists only of channel 99 tokens with are trimmed
+		 * empty.
+		 */
+		int index = token.getTokenIndex();
+		if (index == 0) {
+			return false;
+		}
+		index--;
+		Token previous = stream.get(index);
+		while (!previous.getText().equals("\n")) {
+			if (previous.getChannel() != 99) {
+				return false;
+			}
+			if (!previous.getText().trim().isEmpty()) {
+				return false;
+			}
+			index--;
+			if (index < 0) {
+				break;
+			}
+			previous = stream.get(index);
+		}
 		return true;
-	    }
-	    index--;
-	    if (index < 0) {
-		break;
-	    }
-	    previous = stream.get(index);
-	}
-	return false;
-    }
-
-    private void collectLineLengths() {
-	StringBuffer completeLines = new StringBuffer();
-	StringBuffer productiveLines = new StringBuffer();
-	lineLengths = new ArrayList<Integer>();
-	lineLengthsTrimmed = new ArrayList<Integer>();
-	lineLengthsProductive = new ArrayList<Integer>();
-	lineLengthsTrimmedProductive =
-		new ArrayList<Integer>();
-	for (int index = getCodeRange().getStart(); index <= getCodeRange()
-		.getStop(); index++) {
-	    Token token = stream.get(index);
-	    completeLines.append(token.getText());
-	    if (token.getChannel() != Token.HIDDEN_CHANNEL) {
-		productiveLines.append(token.getText());
-	    } else if (token.getText().trim().isEmpty()) {
-		productiveLines.append(token.getText());
-	    } else if (token.getText().contains("\n")) {
-		productiveLines.append("\n");
-	    }
-	}
-	String[] lines =
-		completeLines.toString().split("\n");
-	for (String line : lines) {
-	    String trimmed = line.trim();
-	    if (trimmed.isEmpty()) {
-		continue;
-	    }
-	    lineLengths.add(line.length());
-	    lineLengthsTrimmed.add(trimmed.length());
 	}
 
-	lines = productiveLines.toString().split("\n");
-	for (String line : lines) {
-	    String trimmed = line.trim();
-	    if (trimmed.isEmpty()) {
-		continue;
-	    }
-	    lineLengthsProductive.add(line.length());
-	    lineLengthsTrimmedProductive.add(trimmed
-		    .length());
+	private boolean isProductive(Token token) {
+		/*
+		 * A productive line is a line with at least one token not in channel
+		 * 99!
+		 */
+		int index = token.getTokenIndex();
+		if (index == 0) {
+			return false;
+		}
+		index--;
+		Token previous = stream.get(index);
+		while (!previous.getText().equals("\n")) {
+			if (previous.getChannel() != 99) {
+				return true;
+			}
+			index--;
+			if (index < 0) {
+				break;
+			}
+			previous = stream.get(index);
+		}
+		return false;
 	}
-	lineStatistics =
-		new Statistics(toDouble(lineLengths));
-	trimmedLineStatistics =
-		new Statistics(toDouble(lineLengthsTrimmed));
-	productiveLineStatistics =
-		new Statistics(
-			toDouble(lineLengthsProductive));
-	trimmedProductiveLineStatistics =
-		new Statistics(
-			toDouble(lineLengthsTrimmedProductive));
-    }
 
-    private List<Double> toDouble(List<Integer> ints) {
-	ArrayList<Double> d = new ArrayList<Double>();
-	for (int i : ints) {
-	    d.add((double) i);
+	private void collectLineLengths() {
+		StringBuffer completeLines = new StringBuffer();
+		StringBuffer productiveLines = new StringBuffer();
+		lineLengths = new ArrayList<Integer>();
+		lineLengthsTrimmed = new ArrayList<Integer>();
+		lineLengthsProductive = new ArrayList<Integer>();
+		lineLengthsTrimmedProductive = new ArrayList<Integer>();
+		for (int index = getCodeRange().getStart(); index <= getCodeRange()
+				.getStop(); index++) {
+			Token token = stream.get(index);
+			completeLines.append(token.getText());
+			if (token.getChannel() != Token.HIDDEN_CHANNEL) {
+				productiveLines.append(token.getText());
+			} else if (token.getText().trim().isEmpty()) {
+				productiveLines.append(token.getText());
+			} else if (token.getText().contains("\n")) {
+				productiveLines.append("\n");
+			}
+		}
+		String[] lines = completeLines.toString().split("\n");
+		for (String line : lines) {
+			String trimmed = line.trim();
+			if (trimmed.isEmpty()) {
+				continue;
+			}
+			lineLengths.add(line.length());
+			lineLengthsTrimmed.add(trimmed.length());
+		}
+
+		lines = productiveLines.toString().split("\n");
+		for (String line : lines) {
+			String trimmed = line.trim();
+			if (trimmed.isEmpty()) {
+				continue;
+			}
+			lineLengthsProductive.add(line.length());
+			lineLengthsTrimmedProductive.add(trimmed.length());
+		}
+		lineStatistics = new Statistics(toDouble(lineLengths));
+		trimmedLineStatistics = new Statistics(toDouble(lineLengthsTrimmed));
+		productiveLineStatistics = new Statistics(
+				toDouble(lineLengthsProductive));
+		trimmedProductiveLineStatistics = new Statistics(
+				toDouble(lineLengthsTrimmedProductive));
 	}
-	return d;
-    }
 
-    public int getPhyLOC() {
-	return phyLOC;
-    }
-
-    public int getProLOC() {
-	return proLOC;
-    }
-
-    public int getComLOC() {
-	return comLOC;
-    }
-
-    public int getBlLOC() {
-	return blLOC;
-    }
-
-    public Statistics getLineStatistics() {
-	return lineStatistics;
-    }
-
-    public Statistics getTrimmedLineStatistics() {
-	return trimmedLineStatistics;
-    }
-
-    public Statistics getProductiveLineStatistics() {
-	return productiveLineStatistics;
-    }
-
-    public Statistics getTrimmedProductiveLineStatistics() {
-	return trimmedProductiveLineStatistics;
-    }
-
-    public void print() {
-	System.out.println("physical lines: " + phyLOC);
-	System.out.println("productive lines: " + proLOC);
-	System.out.println("commented lines: " + comLOC);
-	System.out.println("blank lines: " + blLOC);
-    }
-
-    @Override
-    public QualityLevel getQualityLevel() {
-	QualityLevel levelLineCount =
-		getQualityLevelLineCount();
-	QualityLevel levelLineLength =
-		this.getQualityLevelLineLength();
-	if (levelLineCount.getLevel() < levelLineLength
-		.getLevel()) {
-	    return levelLineCount;
+	private List<Double> toDouble(List<Integer> ints) {
+		ArrayList<Double> d = new ArrayList<Double>();
+		for (int i : ints) {
+			d.add((double) i);
+		}
+		return d;
 	}
-	return levelLineLength;
-    }
 
-    private QualityLevel getQualityLevelLineCount() {
-	CodeRange range = getCodeRange();
-	if ((range.getType() == CodeRangeType.FILE)
-		|| (range.getType() == CodeRangeType.CLASS)
-		|| (range.getType() == CodeRangeType.ENUMERATION)) {
-	    if (phyLOC > 2500) {
-		return QualityLevel.LOW;
-	    }
-	    if (phyLOC > 1000) {
-		return QualityLevel.MEDIUM;
-	    }
-	    return QualityLevel.HIGH;
-	} else if ((range.getType() == CodeRangeType.CONSTRUCTOR)
-		|| (range.getType() == CodeRangeType.METHOD)
-		|| (range.getType() == CodeRangeType.FUNCTION)
-		|| (range.getType() == CodeRangeType.INTERFACE)) {
-	    if (phyLOC > 40) {
-		return QualityLevel.LOW;
-	    }
-	    if (phyLOC > 25) {
-		return QualityLevel.MEDIUM;
-	    }
-	    return QualityLevel.HIGH;
+	public int getPhyLOC() {
+		return phyLOC;
 	}
-	return QualityLevel.HIGH; // not evaluated...
-    }
 
-    private QualityLevel getQualityLevelLineLength() {
-	if ((trimmedProductiveLineStatistics.getMax() > 80)
-		|| (productiveLineStatistics.getMax() > 80)
-		|| (lineStatistics.getMax() > 80)) {
-	    return QualityLevel.LOW;
+	public int getProLOC() {
+		return proLOC;
 	}
-	if ((trimmedProductiveLineStatistics.getAvg() > 40)
-		|| (productiveLineStatistics.getAvg() > 50)
-		|| (lineStatistics.getAvg() > 50)) {
-	    return QualityLevel.MEDIUM;
+
+	public int getComLOC() {
+		return comLOC;
 	}
-	return QualityLevel.HIGH;
-    }
 
-    @Override
-    public boolean isSuitable(CodeRange codeRange) {
-	return true;
-    }
+	public int getBlLOC() {
+		return blLOC;
+	}
 
-    public String getLineCountReport() {
-	String report =
-		"phyLoc\t"
-			+ getPhyLOC()
-			+ "\t"
-			+ translator
-				.i18n("physical lines of code")
-			+ "\n";
-	report +=
-		"proLoc\t"
-			+ getProLOC()
-			+ "\t"
-			+ translator
-				.i18n("productive lines of code")
-			+ "\n";
-	report +=
-		"comLoc\t"
-			+ getComLOC()
-			+ "\t"
-			+ translator
-				.i18n("commented lines of code")
-			+ "\n";
-	report +=
-		"blLoc\t" + getBlLOC() + "\t"
-			+ translator.i18n("blank lines")
-			+ "\n";
-	return report;
-    }
+	public Statistics getLineStatistics() {
+		return lineStatistics;
+	}
 
-    public String getHTMLLineCountReport() {
-	return HTMLStandards
-		.convertTSVToTable(getLineCountReport());
-    }
+	public Statistics getTrimmedLineStatistics() {
+		return trimmedLineStatistics;
+	}
 
-    public String getLineLengthReport() {
-	Statistics normal = getLineStatistics();
-	Statistics trimmed = getTrimmedLineStatistics();
-	Statistics prod = getProductiveLineStatistics();
-	Statistics prodTrimmed =
-		getTrimmedProductiveLineStatistics();
-	String report =
-		"\tnormal\ttrimmed\tproductive"
-			+ "\tproductive trimmed\n";
-	report +=
-		"avg\t"
-			+ Math
-				.round(normal.getAvg() * 100.0)
-			/ 100.0
-			+ "\t"
-			+ Math
-				.round(trimmed.getAvg() * 100.0)
-			/ 100.0
-			+ "\t"
-			+ Math.round(prod.getAvg() * 100.0)
-			/ 100.0
-			+ "\t"
-			+ Math
-				.round(prodTrimmed.getAvg() * 100.0)
-			/ 100.0 + "\n";
-	report +=
-		"median\t"
-			+ Math.round(normal.getMedian())
-			+ "\t"
-			+ Math.round(trimmed.getMedian())
-			+ "\t"
-			+ Math.round(prod.getMedian())
-			+ "\t"
-			+ Math.round(prodTrimmed
-				.getMedian()) + "\n";
-	report +=
-		"standard deviation\t"
-			+ Math
-				.round(normal.getStdDev() * 100.0)
-			/ 100.0
-			+ "\t"
-			+ Math
-				.round(trimmed.getStdDev() * 100.0)
-			/ 100.0
-			+ "\t"
-			+ Math
-				.round(prod.getStdDev() * 100.0)
-			/ 100.0
-			+ "\t"
-			+ Math.round(prodTrimmed
-				.getStdDev() * 100.0)
-			/ 100.0 + "\n";
-	report +=
-		"min\t" + Math.round(normal.getMin())
-			+ "\t"
-			+ Math.round(trimmed.getMin())
-			+ "\t" + Math.round(prod.getMin())
-			+ "\t"
-			+ Math.round(prodTrimmed.getMin())
-			+ "\n";
-	report +=
-		"max\t" + Math.round(normal.getMax())
-			+ "\t"
-			+ Math.round(trimmed.getMax())
-			+ "\t" + Math.round(prod.getMax())
-			+ "\t"
-			+ Math.round(prodTrimmed.getMax())
-			+ "\n";
-	return report;
-    }
+	public Statistics getProductiveLineStatistics() {
+		return productiveLineStatistics;
+	}
 
-    public String getHTMLLineLengthReport() {
-	return HTMLStandards
-		.convertTSVToTable(getLineLengthReport());
-    }
+	public Statistics getTrimmedProductiveLineStatistics() {
+		return trimmedProductiveLineStatistics;
+	}
+
+	public void print() {
+		System.out.println("physical lines: " + phyLOC);
+		System.out.println("productive lines: " + proLOC);
+		System.out.println("commented lines: " + comLOC);
+		System.out.println("blank lines: " + blLOC);
+	}
+
+	@Override
+	public QualityLevel getQualityLevel() {
+		if (!CodeEvaluationSystem.isEvaluateSLOCMetric()) {
+			return QualityLevel.HIGH;
+		}
+		QualityLevel levelLineCount = getQualityLevelLineCount();
+		QualityLevel levelLineLength = this.getQualityLevelLineLength();
+		if (levelLineCount.getLevel() < levelLineLength.getLevel()) {
+			return levelLineCount;
+		}
+		return levelLineLength;
+	}
+
+	private QualityLevel getQualityLevelLineCount() {
+		CodeRange range = getCodeRange();
+		if ((range.getType() == CodeRangeType.FILE)
+				|| (range.getType() == CodeRangeType.CLASS)
+				|| (range.getType() == CodeRangeType.ENUMERATION)) {
+			if (phyLOC > 2500) {
+				return QualityLevel.LOW;
+			}
+			if (phyLOC > 1000) {
+				return QualityLevel.MEDIUM;
+			}
+			return QualityLevel.HIGH;
+		} else if ((range.getType() == CodeRangeType.CONSTRUCTOR)
+				|| (range.getType() == CodeRangeType.METHOD)
+				|| (range.getType() == CodeRangeType.FUNCTION)
+				|| (range.getType() == CodeRangeType.INTERFACE)) {
+			if (phyLOC > 40) {
+				return QualityLevel.LOW;
+			}
+			if (phyLOC > 25) {
+				return QualityLevel.MEDIUM;
+			}
+			return QualityLevel.HIGH;
+		}
+		return QualityLevel.HIGH; // not evaluated...
+	}
+
+	private QualityLevel getQualityLevelLineLength() {
+		if ((trimmedProductiveLineStatistics.getMax() > 80)
+				|| (productiveLineStatistics.getMax() > 80)
+				|| (lineStatistics.getMax() > 80)) {
+			return QualityLevel.LOW;
+		}
+		if ((trimmedProductiveLineStatistics.getAvg() > 40)
+				|| (productiveLineStatistics.getAvg() > 50)
+				|| (lineStatistics.getAvg() > 50)) {
+			return QualityLevel.MEDIUM;
+		}
+		return QualityLevel.HIGH;
+	}
+
+	@Override
+	public boolean isSuitable(CodeRange codeRange) {
+		return true;
+	}
+
+	public String getLineCountReport() {
+		String report = "phyLoc\t" + getPhyLOC() + "\t"
+				+ translator.i18n("physical lines of code") + "\n";
+		report += "proLoc\t" + getProLOC() + "\t"
+				+ translator.i18n("productive lines of code") + "\n";
+		report += "comLoc\t" + getComLOC() + "\t"
+				+ translator.i18n("commented lines of code") + "\n";
+		report += "blLoc\t" + getBlLOC() + "\t"
+				+ translator.i18n("blank lines") + "\n";
+		return report;
+	}
+
+	public String getHTMLLineCountReport() {
+		return HTMLStandards.convertTSVToTable(getLineCountReport());
+	}
+
+	public String getLineLengthReport() {
+		Statistics normal = getLineStatistics();
+		Statistics trimmed = getTrimmedLineStatistics();
+		Statistics prod = getProductiveLineStatistics();
+		Statistics prodTrimmed = getTrimmedProductiveLineStatistics();
+		String report = "\tnormal\ttrimmed\tproductive"
+				+ "\tproductive trimmed\n";
+		report += "avg\t" + Math.round(normal.getAvg() * 100.0) / 100.0 + "\t"
+				+ Math.round(trimmed.getAvg() * 100.0) / 100.0 + "\t"
+				+ Math.round(prod.getAvg() * 100.0) / 100.0 + "\t"
+				+ Math.round(prodTrimmed.getAvg() * 100.0) / 100.0 + "\n";
+		report += "median\t" + Math.round(normal.getMedian()) + "\t"
+				+ Math.round(trimmed.getMedian()) + "\t"
+				+ Math.round(prod.getMedian()) + "\t"
+				+ Math.round(prodTrimmed.getMedian()) + "\n";
+		report += "standard deviation\t"
+				+ Math.round(normal.getStdDev() * 100.0) / 100.0 + "\t"
+				+ Math.round(trimmed.getStdDev() * 100.0) / 100.0 + "\t"
+				+ Math.round(prod.getStdDev() * 100.0) / 100.0 + "\t"
+				+ Math.round(prodTrimmed.getStdDev() * 100.0) / 100.0 + "\n";
+		report += "min\t" + Math.round(normal.getMin()) + "\t"
+				+ Math.round(trimmed.getMin()) + "\t"
+				+ Math.round(prod.getMin()) + "\t"
+				+ Math.round(prodTrimmed.getMin()) + "\n";
+		report += "max\t" + Math.round(normal.getMax()) + "\t"
+				+ Math.round(trimmed.getMax()) + "\t"
+				+ Math.round(prod.getMax()) + "\t"
+				+ Math.round(prodTrimmed.getMax()) + "\n";
+		return report;
+	}
+
+	public String getHTMLLineLengthReport() {
+		return HTMLStandards.convertTSVToTable(getLineLengthReport());
+	}
 }

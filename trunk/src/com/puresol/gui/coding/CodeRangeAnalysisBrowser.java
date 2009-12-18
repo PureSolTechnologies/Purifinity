@@ -67,6 +67,10 @@ public class CodeRangeAnalysisBrowser extends Panel {
 
 	public void setProjectAnalyser(ProjectAnalyser project) {
 		this.project = project;
+		refresh();
+	}
+
+	public void refresh() {
 		updateFiles();
 	}
 

@@ -54,6 +54,9 @@ public class MaintainabilityIndex extends AbstractMetric {
 
 	@Override
 	public QualityLevel getQualityLevel() {
+		if (!CodeEvaluationSystem.isEvaluateMaintainabilityIndex()) {
+			return QualityLevel.HIGH;
+		}
 		CodeRange range = getCodeRange();
 		if ((range.getType() == CodeRangeType.FILE)
 				|| (range.getType() == CodeRangeType.CLASS)

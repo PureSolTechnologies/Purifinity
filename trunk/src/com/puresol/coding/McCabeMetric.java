@@ -44,6 +44,9 @@ public class McCabeMetric extends AbstractMetric {
 
 	@Override
 	public QualityLevel getQualityLevel() {
+		if (!CodeEvaluationSystem.isEvaluateMcCabeMetric()) {
+			return QualityLevel.HIGH;
+		}
 		CodeRange range = getCodeRange();
 		if ((range.getType() == CodeRangeType.FILE)
 				|| (range.getType() == CodeRangeType.CLASS)

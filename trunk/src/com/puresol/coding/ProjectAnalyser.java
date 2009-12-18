@@ -59,6 +59,10 @@ public class ProjectAnalyser {
 
 	}
 
+	public File getProjectDirectory() {
+		return projectDirectory;
+	}
+
 	public Set<File> getFiles() {
 		return analysers.keySet();
 	}

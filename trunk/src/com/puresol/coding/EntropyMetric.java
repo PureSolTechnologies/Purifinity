@@ -92,6 +92,9 @@ public class EntropyMetric extends HalsteadMetric {
 
 	@Override
 	public QualityLevel getQualityLevel() {
+		if (!CodeEvaluationSystem.isEvaluateEntropyMetric()) {
+			return QualityLevel.HIGH;
+		}
 		if (normalizedRedundancy > 0.40) {
 			return QualityLevel.LOW;
 		}
