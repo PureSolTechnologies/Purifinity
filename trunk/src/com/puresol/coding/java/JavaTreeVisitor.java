@@ -1,5 +1,6 @@
 package com.puresol.coding.java;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
@@ -8,21 +9,29 @@ import org.antlr.runtime.Token;
 import org.antlr.runtime.TokenStream;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
+import org.apache.log4j.Logger;
 
 import com.puresol.coding.ANTLRTreeVisitor;
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.CodeRangeType;
 import com.puresol.coding.TokenContent;
+import com.puresol.coding.TokenStreamScanner;
 import com.puresol.coding.java.antlr.output.JavaParser;
 
 public class JavaTreeVisitor extends ANTLRTreeVisitor {
 
+	private static final Logger logger = Logger
+			.getLogger(JavaTreeVisitor.class);
+
+	private File file = null;
 	private JavaParser parser = null;
 	private ArrayList<CodeRange> codeRanges = null;
 	private Hashtable<Integer, TokenContent> tokenContents = null;
 
-	public JavaTreeVisitor(JavaParser parser) throws RecognitionException {
+	public JavaTreeVisitor(File file, JavaParser parser)
+			throws RecognitionException {
 		super((CommonTree) parser.compilationUnit().getTree());
+		this.file = file;
 		this.parser = parser;
 		analyse();
 	}
@@ -58,9 +67,9 @@ public class JavaTreeVisitor extends ANTLRTreeVisitor {
 	 */
 	private void createCodeRanges() {
 		codeRanges = new ArrayList<CodeRange>();
-		codeRanges.add(new CodeRange(CodeRangeType.FILE,
-				parser.getSourceName(), parser.getTokenStream(), tokenContents,
-				0, parser.getTokenStream().size() - 1));
+		codeRanges.add(new CodeRange(file, CodeRangeType.FILE, parser
+				.getSourceName(), parser.getTokenStream(), tokenContents, 0,
+				parser.getTokenStream().size() - 1));
 		CommonTree tree = getTree();
 		findCodeRanges(tree, codeRanges);
 	}
@@ -72,8 +81,11 @@ public class JavaTreeVisitor extends ANTLRTreeVisitor {
 		for (int child = 0; child < tree.getChildCount(); child++) {
 			Tree childTree = tree.getChild(child);
 			if (childTree.getText().startsWith("CODERANGE_")) {
+				logger.trace("Found '" + childTree.getText() + "'");
 				CodeRange range = getCodeRange(childTree);
 				ranges.add(range);
+				logger.debug("range: '" + range.getName() + "'");
+				logger.trace("#ranges '" + ranges.size() + "'");
 			}
 			findCodeRanges(childTree, ranges);
 		}
@@ -111,7 +123,18 @@ public class JavaTreeVisitor extends ANTLRTreeVisitor {
 		if (tree.getText().endsWith("METHOD")) {
 			type = CodeRangeType.METHOD;
 		}
-		return new CodeRange(type, type.getName(), parser.input, tokenContents,
+		String name = type.getName();
+		TokenStreamScanner scanner = new TokenStreamScanner(tokenStream);
+		if (type == CodeRangeType.CLASS) {
+			int classIndex = scanner.findNextToken("class", start);
+			int nameIndex = scanner.findNextToken(classIndex);
+			name = tokenStream.get(nameIndex).getText();
+		} else if (type == CodeRangeType.METHOD) {
+			int bracketIndex = scanner.findNextToken("(", start);
+			int nameIndex = scanner.findPreviousToken(bracketIndex);
+			name = tokenStream.get(nameIndex).getText();
+		}
+		return new CodeRange(file, type, name, parser.input, tokenContents,
 				start, stop);
 	}
 

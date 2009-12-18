@@ -11,11 +11,11 @@ public class AnalyserFactory {
 	private static final Logger logger = Logger
 			.getLogger(AnalyserFactory.class);
 
-	public static Analyser createAnalyser(File file)
+	public static Analyser createAnalyser(File projectDirectory, File file)
 			throws LanguageNotSupportedException {
 		logger.info("Create analyser for file '" + file.getPath() + "'...");
 		if (JavaAnalyser.isSuitable(file)) {
-			return new JavaAnalyser(file);
+			return new JavaAnalyser(projectDirectory, file);
 		} else {
 			logger.warn("No analyser for file '" + file.getPath() + "' found!");
 			throw new LanguageNotSupportedException(

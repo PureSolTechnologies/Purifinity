@@ -15,20 +15,24 @@ public class ProjectAnalyser {
 	private static final Logger logger = Logger
 			.getLogger(ProjectAnalyser.class);
 
+	private File projectDirectory;
 	private String pattern;
 	private Hashtable<File, Analyser> analysers = new Hashtable<File, Analyser>();
 
-	public ProjectAnalyser(String pattern) {
+	public ProjectAnalyser(File projectDirectory, String pattern) {
+		this.projectDirectory = projectDirectory;
 		this.pattern = pattern;
 	}
 
 	public void update() {
 		analysers = new Hashtable<File, Analyser>();
-		analyse();
+		analyseFiles();
+		calculateStatistics();
 	}
 
-	private void analyse() {
-		List<File> files = FileSearch.find(pattern);
+	private void analyseFiles() {
+		List<File> files = FileSearch.find(projectDirectory.getPath() + "/"
+				+ pattern);
 		for (File file : files) {
 			analyseFile(file);
 		}
@@ -36,10 +40,12 @@ public class ProjectAnalyser {
 
 	private void analyseFile(File file) {
 		try {
-			if (file.isFile()) {
-				if (!file.getPath().contains("/.")) {
-					analysers.put(file, AnalyserFactory.createAnalyser(file));
-				}
+			if ((file.isFile()) && (!file.getPath().contains("/."))) {
+				String fileString = file.getPath().toString().substring(
+						projectDirectory.getPath().length());
+				file = new File(fileString);
+				analysers.put(file, AnalyserFactory.createAnalyser(
+						projectDirectory, file));
 			}
 		} catch (LanguageNotSupportedException e) {
 			logger
@@ -47,6 +53,10 @@ public class ProjectAnalyser {
 							+ file.getPath()
 							+ "' could not be analysed due to containing no supported language.");
 		}
+	}
+
+	private void calculateStatistics() {
+
 	}
 
 	public Set<File> getFiles() {

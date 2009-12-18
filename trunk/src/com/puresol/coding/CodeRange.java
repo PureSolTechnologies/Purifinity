@@ -1,11 +1,13 @@
 package com.puresol.coding;
 
+import java.io.File;
 import java.util.Hashtable;
 
 import org.antlr.runtime.TokenStream;
 
 public class CodeRange {
 
+	private File file;
 	private CodeRangeType type;
 	private String name;
 	private String text;
@@ -14,7 +16,8 @@ public class CodeRange {
 	private int start;
 	private int stop;
 
-	public CodeRange(CodeRangeType type, String name, TokenStream tokenStream,
+	public CodeRange(File file, CodeRangeType type, String name,
+			TokenStream tokenStream,
 			Hashtable<Integer, TokenContent> tokenContents, int start, int stop) {
 		this.type = type;
 		this.name = name;
@@ -30,6 +33,10 @@ public class CodeRange {
 		for (int index = start; index < stop; index++) {
 			text += tokenStream.get(index).getText();
 		}
+	}
+
+	public File getFile() {
+		return file;
 	}
 
 	public CodeRangeType getType() {

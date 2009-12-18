@@ -100,7 +100,8 @@ public class AnalyserTestClass {
 
 	public static void main(String[] args) {
 		JavaAnalyser analyser = new JavaAnalyser(new File(
-				"test/com/puresol/coding/java/AnalyserTestClass.java"));
+				"test/com/puresol/coding/java"), new File(
+				"AnalyserTestClass.java"));
 		analyser.hashCode();
 	}
 }

@@ -3,8 +3,8 @@ package com.puresol.gui.coding;
 import java.awt.BorderLayout;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Hashtable;
-import java.util.Set;
 
 import javax.i18n4j.Translator;
 import javax.swing.BoxLayout;
@@ -17,7 +17,6 @@ import javax.swingx.connect.Slot;
 
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.HTMLAnalysisReport;
-import com.puresol.coding.CodeRangeMetrics;
 import com.puresol.coding.ProjectAnalyser;
 import com.puresol.coding.QualityLevel;
 
@@ -32,7 +31,7 @@ public class CodeRangeAnalysisBrowser extends Panel {
 	private FreeList fileList = null;
 	private FreeList codeRangeList = null;
 	private HTMLTextPane results = null;
-	private Hashtable<CodeRangeMetrics, HTMLAnalysisReport> reports = new Hashtable<CodeRangeMetrics, HTMLAnalysisReport>();
+	private Hashtable<CodeRange, HTMLAnalysisReport> reports = new Hashtable<CodeRange, HTMLAnalysisReport>();
 
 	public CodeRangeAnalysisBrowser() {
 		super();
@@ -77,12 +76,13 @@ public class CodeRangeAnalysisBrowser extends Panel {
 		if (project == null) {
 			return;
 		}
-		Hashtable<Object, Object> listData = new Hashtable<Object, Object>();
-		Set<File> files = project.getFiles();
+		ArrayList<File> files = new ArrayList<File>(project.getFiles());
+		ArrayList<String> htmls = new ArrayList<String>();
+		Collections.sort(files);
 		for (File file : files) {
 			ArrayList<CodeRange> ranges = project.getCodeRanges(file);
 			for (CodeRange range : ranges) {
-				calculateReport(project.getMetrics(file, range));
+				calculateReport(file, range);
 			}
 			QualityLevel quality = getQualityLevel(file);
 			String html = "<html><body>";
@@ -95,10 +95,11 @@ public class CodeRangeAnalysisBrowser extends Panel {
 			}
 			html += "<tr><td>" + file.getPath()
 					+ "</td></tr></table></body></html>";
-			listData.put(html, file);
+			htmls.add(html);
 
 		}
-		fileList.setListData(listData);
+		fileList.setListData(new ArrayList<Object>(htmls),
+				new ArrayList<Object>(files));
 	}
 
 	private void updateCodeRanges(File file) {
@@ -108,7 +109,9 @@ public class CodeRangeAnalysisBrowser extends Panel {
 		}
 		Hashtable<Object, Object> listData = new Hashtable<Object, Object>();
 		ArrayList<CodeRange> ranges = project.getCodeRanges(file);
+		int index = 0;
 		for (CodeRange range : ranges) {
+			index++;
 			String html = "<html><body>";
 			QualityLevel quality = project.getMetrics(file, range)
 					.getQualityLevel();
@@ -119,23 +122,24 @@ public class CodeRangeAnalysisBrowser extends Panel {
 			} else {
 				html += "<table width=\"100%\" bgcolor=\"#ff0000\">";
 			}
-			html += "<tr><td>" + range.getType().getName() + ":"
+			html += "<tr><td>" + index + ": " + range.getType().getName() + ":"
 					+ range.getName() + "</td></tr></table></body></html>";
 			listData.put(html, range);
 		}
 		codeRangeList.setListData(listData);
 	}
 
-	private void calculateReport(CodeRangeMetrics metrics) {
-		reports.put(metrics, new HTMLAnalysisReport(metrics));
+	private void calculateReport(File file, CodeRange codeRange) {
+		reports.put(codeRange, new HTMLAnalysisReport(project.getMetrics(file,
+				codeRange)));
 	}
 
 	private QualityLevel getQualityLevel(File file) {
 		QualityLevel level = QualityLevel.HIGH;
 		for (CodeRange range : project.getCodeRanges(file)) {
-			CodeRangeMetrics metrics = project.getMetrics(file, range);
-			if (level.getLevel() > metrics.getQualityLevel().getLevel()) {
-				level = metrics.getQualityLevel();
+			QualityLevel qualityInReport = reports.get(range).getQualityLevel();
+			if (level.getLevel() > qualityInReport.getLevel()) {
+				level = qualityInReport;
 			}
 		}
 		return level;
@@ -150,15 +154,10 @@ public class CodeRangeAnalysisBrowser extends Panel {
 
 	@Slot
 	public void showCodeRange(int index) {
-		File file = (File) fileList.getSelectedValue();
-		if (file == null) {
-			return;
-		}
 		CodeRange codeRange = (CodeRange) codeRangeList.getSelectedValue();
 		if (codeRange == null) {
 			return;
 		}
-		CodeRangeMetrics metrics = project.getMetrics(file, codeRange);
-		results.setText(reports.get(metrics).getReport());
+		results.setText(reports.get(codeRange).getReport());
 	}
 }

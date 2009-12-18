@@ -6,13 +6,19 @@ import java.util.Hashtable;
 
 abstract public class AbstractAnalyser implements Analyser {
 
+	private File projectDirectory = null;
 	private File file = null;
 
 	private Hashtable<CodeRange, CodeRangeMetrics> metrics = new Hashtable<CodeRange, CodeRangeMetrics>();
 	private ArrayList<CodeRange> codeRanges = null;
 
-	public AbstractAnalyser(File file) {
+	public AbstractAnalyser(File projectDirectory, File file) {
+		this.projectDirectory = projectDirectory;
 		this.file = file;
+	}
+
+	public File getProjectDirectory() {
+		return projectDirectory;
 	}
 
 	public File getFile() {

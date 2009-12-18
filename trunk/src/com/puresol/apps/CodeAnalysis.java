@@ -75,13 +75,13 @@ public class CodeAnalysis extends PureSolApplication {
 		}
 		File file = directory.getSelectedFile();
 		this.directory.setText(file.getPath());
-		analyser = new ProjectAnalyser(file.getPath() + "**/*");
+		analyser = new ProjectAnalyser(file, "**/*");
 		analyser.update();
 		browser.setProjectAnalyser(analyser);
 	}
 
 	public static void main(String[] args) {
-		Logger.getRootLogger().setLevel(Level.INFO);
+		Logger.getRootLogger().setLevel(Level.TRACE);
 		new CodeAnalysis("Code Analysis").run();
 	}
 }

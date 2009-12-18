@@ -6,7 +6,15 @@ import org.antlr.runtime.Token;
 import org.antlr.runtime.TokenStream;
 
 import com.puresol.coding.TokenContent;
+import com.puresol.coding.TokenStreamScanner;
 
+/**
+ * This class was inherited from TokenContent to support Java language
+ * specialities and Java keywords.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class JavaTokenContent extends TokenContent {
 
 	public static final ArrayList<String> OPERATORS;
@@ -25,6 +33,7 @@ public class JavaTokenContent extends TokenContent {
 		OPERATORS.add("||");
 		OPERATORS.add("&&");
 		OPERATORS.add("!");
+		OPERATORS.add("?");
 		OPERATORS.add("==");
 		OPERATORS.add("!=");
 		OPERATORS.add("+=");
@@ -45,6 +54,7 @@ public class JavaTokenContent extends TokenContent {
 		OPERATORS.add(",");
 		OPERATORS.add(";");
 		OPERATORS.add(":");
+		OPERATORS.add("@");
 
 		OPERATORS.add("static");
 		OPERATORS.add("public");
@@ -78,6 +88,8 @@ public class JavaTokenContent extends TokenContent {
 
 		OPERATORS.add("try");
 		OPERATORS.add("catch");
+		OPERATORS.add("throw");
+		OPERATORS.add("throws");
 	}
 
 	public JavaTokenContent(Token token, TokenStream tokenStream) {
@@ -90,58 +102,81 @@ public class JavaTokenContent extends TokenContent {
 
 	private void register(Token token, TokenStream tokenStream) {
 		String text = token.getText();
-
-		String prevText = "";
-		int index = token.getTokenIndex();
-		if (token.getTokenIndex() > 0) {
-			index--;
-			while ((index > 0)
-					&& (tokenStream.get(index).getChannel() == Token.HIDDEN_CHANNEL)) {
-				index--;
-			}
-			prevText = tokenStream.get(index).getText();
-		}
-
 		setText(text);
 		if (OPERATORS.contains(text)) {
-			setOperator(1);
-			if (text.equals("(")) {
-				if (prevText.equals("for") || prevText.equals("if")
-						|| prevText.equals("while") || prevText.equals("catch")) {
-					setOperator(0);
-				}
-				setText("()");
-			} else if (text.equals("{")) {
-				setText("{}");
-			} else if (text.equals("[")) {
-				setText("[]");
-			} else if (text.equals(")")) {
-				setText("()");
-				setOperator(0);
-			} else if (text.equals("]")) {
-				setText("[]");
-				setOperator(0);
-			} else if (text.equals("}")) {
-				setText("{}");
-				setOperator(0);
-			} else if (text.equals("for")) {
-				setText("for()");
-				setCyclomaticNumber(1);
-			} else if (text.equals("while")) {
-				setText("while()");
-				setCyclomaticNumber(1);
-			} else if (text.equals("if")) {
-				setText("if()");
-				setCyclomaticNumber(1);
-			} else if (text.equals("switch")) {
-				setText("switch()");
-				setCyclomaticNumber(1);
-			} else if (text.equals("catch")) {
-				setText("catch()");
-				setCyclomaticNumber(1);
-			}
+			setOperatorWithCorrections(token, tokenStream);
 		} else {
 			setOperand(1);
 		}
 	}
+
+	private void setOperatorWithCorrections(Token token, TokenStream tokenStream) {
+		setOperator(1);
+		correctCount(token, tokenStream);
+		correctText(token, tokenStream);
+		setCyclomaticNumber(token, tokenStream);
+	}
+
+	private void correctCount(Token token, TokenStream tokenStream) {
+		String text = getText();
+		if (text.equals("(")) {
+			TokenStreamScanner scanner = new TokenStreamScanner(tokenStream);
+			int prevTextIndex = scanner
+					.findPreviousToken(token.getTokenIndex());
+			String prevText = tokenStream.get(prevTextIndex).getText();
+			if (prevText.equals("for") || prevText.equals("if")
+					|| prevText.equals("while") || prevText.equals("catch")) {
+				setOperator(0);
+			}
+		} else if (text.equals(")")) {
+			setOperator(0);
+		} else if (text.equals("]")) {
+			setOperator(0);
+		} else if (text.equals("}")) {
+			setOperator(0);
+		}
+	}
+
+	private void correctText(Token token, TokenStream tokenStream) {
+		String text = getText();
+		if (text.equals("(")) {
+			setText("()");
+		} else if (text.equals("{")) {
+			setText("{}");
+		} else if (text.equals("[")) {
+			setText("[]");
+		} else if (text.equals(")")) {
+			setText("()");
+		} else if (text.equals("]")) {
+			setText("[]");
+		} else if (text.equals("}")) {
+			setText("{}");
+		} else if (text.equals("for")) {
+			setText("for ()");
+		} else if (text.equals("while")) {
+			setText("while ()");
+		} else if (text.equals("if")) {
+			setText("if ()");
+		} else if (text.equals("switch")) {
+			setText("switch ()");
+		} else if (text.equals("catch")) {
+			setText("catch ()");
+		}
+	}
+
+	private void setCyclomaticNumber(Token token, TokenStream tokenStream) {
+		String text = getText();
+		if (text.equals("for ()")) {
+			setCyclomaticNumber(1);
+		} else if (text.equals("while ()")) {
+			setCyclomaticNumber(1);
+		} else if (text.equals("if ()")) {
+			setCyclomaticNumber(1);
+		} else if (text.equals("switch ()")) {
+			setCyclomaticNumber(1);
+		} else if (text.equals("catch ()")) {
+			setCyclomaticNumber(1);
+		}
+	}
+
 }
