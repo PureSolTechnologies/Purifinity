@@ -34,7 +34,7 @@ public class EntropyMetric extends HalsteadMetric {
 	}
 
 	private void calculate() {
-		Hashtable<String, Integer> operands = getOperands();
+		Hashtable<String, Integer> operands = getOperants();
 
 		maxEntropy = -Math.log(1 / (double) get_n2()) / Math.log(2.0);
 		Entropy = 0.0;

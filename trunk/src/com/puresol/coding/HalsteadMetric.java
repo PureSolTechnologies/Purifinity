@@ -12,7 +12,7 @@ public class HalsteadMetric extends AbstractMetric {
 			.getTranslator(HalsteadMetric.class);
 
 	private Hashtable<String, Integer> operators = new Hashtable<String, Integer>();
-	private Hashtable<String, Integer> operands = new Hashtable<String, Integer>();
+	private Hashtable<String, Integer> operants = new Hashtable<String, Integer>();
 
 	/**
 	 * number of different operators
@@ -99,23 +99,23 @@ public class HalsteadMetric extends AbstractMetric {
 	}
 
 	private void addOperand(String operand) {
-		if (operands.containsKey(operand)) {
-			operands.put(operand, operands.get(operand) + 1);
+		if (operants.containsKey(operand)) {
+			operants.put(operand, operants.get(operand) + 1);
 		} else {
-			operands.put(operand, 1);
+			operants.put(operand, 1);
 		}
 	}
 
 	private void calculate() {
 		n1 = operators.keySet().size();
-		n2 = operands.keySet().size();
+		n2 = operants.keySet().size();
 		N1 = 0;
 		for (String key : operators.keySet()) {
 			N1 += operators.get(key);
 		}
 		N2 = 0;
-		for (String key : operands.keySet()) {
-			N2 += operands.get(key);
+		for (String key : operants.keySet()) {
+			N2 += operants.get(key);
 		}
 		n = n1 + n2;
 		N = N1 + N2;
@@ -142,9 +142,9 @@ public class HalsteadMetric extends AbstractMetric {
 		System.out.println("==============");
 		System.out.println("   OPERANDS   ");
 		System.out.println("==============");
-		for (String operand : operands.keySet()) {
+		for (String operand : operants.keySet()) {
 			System.out.println(operand + "\t"
-					+ operands.get(operand).toString());
+					+ operants.get(operand).toString());
 		}
 	}
 
@@ -152,8 +152,8 @@ public class HalsteadMetric extends AbstractMetric {
 		return operators;
 	}
 
-	public Hashtable<String, Integer> getOperands() {
-		return operands;
+	public Hashtable<String, Integer> getOperants() {
+		return operants;
 	}
 
 	public int get_n1() {
@@ -298,5 +298,31 @@ public class HalsteadMetric extends AbstractMetric {
 
 	public String getHTMLReport() {
 		return HTMLStandards.convertTSVToTable(getReport());
+	}
+
+	public String getOperatorReport() {
+		String report = "";
+		for (String operator : getOperators().keySet()) {
+			int number = operators.get(operator);
+			report += operator + "\t" + number + "\n";
+		}
+		return report;
+	}
+
+	public String getHTMLOperatorReport() {
+		return HTMLStandards.convertTSVToTable(getOperatorReport());
+	}
+
+	public String getOperantReport() {
+		String report = "";
+		for (String operant : getOperants().keySet()) {
+			int number = operants.get(operant);
+			report += operant + "\t" + number + "\n";
+		}
+		return report;
+	}
+
+	public String getHTMLOperantReport() {
+		return HTMLStandards.convertTSVToTable(getOperantReport());
 	}
 }
