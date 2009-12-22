@@ -97,7 +97,7 @@ public class CodeRangeAnalysisBrowser extends Panel {
 	    for (CodeRange range : ranges) {
 		calculateReport(file, range);
 	    }
-	    QualityLevel quality = getQualityLevel(file);
+	    QualityLevel quality = project.getQualityLevel(file);
 	    String html = "<html><body>";
 	    if (quality == QualityLevel.HIGH) {
 		html += "<table width=\"100%\" bgcolor=\"#00ff00\">";
@@ -152,18 +152,6 @@ public class CodeRangeAnalysisBrowser extends Panel {
     private void calculateReport(File file, CodeRange codeRange) {
 	reports.put(codeRange, new HTMLAnalysisReport(project.getMetrics(
 		file, codeRange)));
-    }
-
-    private QualityLevel getQualityLevel(File file) {
-	QualityLevel level = QualityLevel.HIGH;
-	for (CodeRange range : project.getCodeRanges(file)) {
-	    QualityLevel qualityInReport =
-		    reports.get(range).getQualityLevel();
-	    if (level.getLevel() > qualityInReport.getLevel()) {
-		level = qualityInReport;
-	    }
-	}
-	return level;
     }
 
     @Slot

@@ -6,7 +6,7 @@ import javax.i18n4j.Translator;
 
 import com.puresol.html.HTMLStandards;
 
-public class HalsteadMetric extends AbstractMetric {
+abstract public class HalsteadMetric extends AbstractMetric {
 
     private static final Translator translator =
 	    Translator.getTranslator(HalsteadMetric.class);
@@ -227,43 +227,6 @@ public class HalsteadMetric extends AbstractMetric {
 	System.out.println("E = " + E);
 	System.out.println("T = " + T);
 	System.out.println("B = " + B);
-    }
-
-    @Override
-    public QualityLevel getQualityLevel() {
-	if (!CodeEvaluationSystem.isEvaluateHalsteadMetric()) {
-	    return QualityLevel.HIGH;
-	}
-	CodeRange range = getCodeRange();
-	if ((range.getType() == CodeRangeType.FILE)
-		|| (range.getType() == CodeRangeType.CLASS)
-		|| (range.getType() == CodeRangeType.ENUMERATION)) {
-	    if (HV < 80) {
-		return QualityLevel.MEDIUM;
-	    }
-	    if (HV > 8000) {
-		return QualityLevel.MEDIUM;
-	    }
-	    if (HV > 10000) {
-		return QualityLevel.LOW;
-	    }
-	    return QualityLevel.HIGH;
-	} else if ((range.getType() == CodeRangeType.CONSTRUCTOR)
-		|| (range.getType() == CodeRangeType.METHOD)
-		|| (range.getType() == CodeRangeType.FUNCTION)
-		|| (range.getType() == CodeRangeType.INTERFACE)) {
-	    if (HV < 10) {
-		return QualityLevel.MEDIUM;
-	    }
-	    if (HV > 1000) {
-		return QualityLevel.MEDIUM;
-	    }
-	    if (HV > 1250) {
-		return QualityLevel.LOW;
-	    }
-	    return QualityLevel.HIGH;
-	}
-	return QualityLevel.HIGH; // not evaluated...
     }
 
     public static boolean isSuitable(CodeRange codeRange) {

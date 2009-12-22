@@ -4,6 +4,7 @@ import java.io.File;
 
 import javax.i18n4j.Translator;
 import javax.swing.JFileChooser;
+import javax.swingx.Application;
 import javax.swingx.BorderLayoutWidget;
 import javax.swingx.MemoryMonitor;
 import javax.swingx.Menu;
@@ -17,6 +18,7 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import com.puresol.coding.CodeEvaluationSystem;
+import com.puresol.coding.HTMLAnalysisProject;
 import com.puresol.coding.ProjectAnalyser;
 import com.puresol.gui.PureSolApplication;
 import com.puresol.gui.coding.ProjectAnalysisBrowser;
@@ -49,6 +51,9 @@ public class CodeAnalysis extends PureSolApplication {
 	Menu fileMenu = new Menu(translator.i18n("File"));
 	Menu projectMenu = new Menu(translator.i18n("Project"));
 
+	MenuItem createHTML = new MenuItem("Create HTML...");
+	createHTML.connect("start", this, "createHTML");
+
 	MenuItem exit = new MenuItem("Exit");
 	exit.connect("start", this, "quit");
 
@@ -56,6 +61,8 @@ public class CodeAnalysis extends PureSolApplication {
 	analyse.connect("start", this, "analyse");
 
 	menuBar.add(fileMenu);
+	fileMenu.add(createHTML);
+	fileMenu.addSeparator();
 	fileMenu.add(exit);
 
 	menuBar.add(projectMenu);
@@ -102,6 +109,18 @@ public class CodeAnalysis extends PureSolApplication {
 	widget.setCenter(browser);
 	widget.setNorth(toolBar);
 	widget.setSouth(new MemoryMonitor());
+    }
+
+    @Slot
+    public void createHTML() {
+	JFileChooser chooser = new JFileChooser();
+	chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+	int result = chooser.showSaveDialog(Application.getInstance());
+	if (result == JFileChooser.CANCEL_OPTION) {
+	    return;
+	}
+	HTMLAnalysisProject.create(chooser.getSelectedFile(), browser
+		.getProjectAnalyser());
     }
 
     @Slot

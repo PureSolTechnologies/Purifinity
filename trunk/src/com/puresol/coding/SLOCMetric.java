@@ -19,7 +19,7 @@ import com.puresol.statistics.Statistics;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class SLOCMetric extends AbstractMetric {
+abstract public class SLOCMetric extends AbstractMetric {
 
     private static final Translator translator =
 	    Translator.getTranslator(SLOCMetric.class);
@@ -266,60 +266,6 @@ public class SLOCMetric extends AbstractMetric {
 	System.out.println("productive lines: " + proLOC);
 	System.out.println("commented lines: " + comLOC);
 	System.out.println("blank lines: " + blLOC);
-    }
-
-    @Override
-    public QualityLevel getQualityLevel() {
-	if (!CodeEvaluationSystem.isEvaluateSLOCMetric()) {
-	    return QualityLevel.HIGH;
-	}
-	QualityLevel levelLineCount = getQualityLevelLineCount();
-	QualityLevel levelLineLength = this.getQualityLevelLineLength();
-	if (levelLineCount.getLevel() < levelLineLength.getLevel()) {
-	    return levelLineCount;
-	}
-	return levelLineLength;
-    }
-
-    private QualityLevel getQualityLevelLineCount() {
-	CodeRange range = getCodeRange();
-	if ((range.getType() == CodeRangeType.FILE)
-		|| (range.getType() == CodeRangeType.CLASS)
-		|| (range.getType() == CodeRangeType.ENUMERATION)) {
-	    if (phyLOC > 2500) {
-		return QualityLevel.LOW;
-	    }
-	    if (phyLOC > 1000) {
-		return QualityLevel.MEDIUM;
-	    }
-	    return QualityLevel.HIGH;
-	} else if ((range.getType() == CodeRangeType.CONSTRUCTOR)
-		|| (range.getType() == CodeRangeType.METHOD)
-		|| (range.getType() == CodeRangeType.FUNCTION)
-		|| (range.getType() == CodeRangeType.INTERFACE)) {
-	    if (phyLOC > 40) {
-		return QualityLevel.LOW;
-	    }
-	    if (phyLOC > 25) {
-		return QualityLevel.MEDIUM;
-	    }
-	    return QualityLevel.HIGH;
-	}
-	return QualityLevel.HIGH; // not evaluated...
-    }
-
-    private QualityLevel getQualityLevelLineLength() {
-	if ((trimmedProductiveLineStatistics.getMax() > 80)
-		|| (productiveLineStatistics.getMax() > 80)
-		|| (lineStatistics.getMax() > 80)) {
-	    return QualityLevel.LOW;
-	}
-	if ((trimmedProductiveLineStatistics.getAvg() > 40)
-		|| (productiveLineStatistics.getAvg() > 50)
-		|| (lineStatistics.getAvg() > 50)) {
-	    return QualityLevel.MEDIUM;
-	}
-	return QualityLevel.HIGH;
     }
 
     public static boolean isSuitable(CodeRange codeRange) {

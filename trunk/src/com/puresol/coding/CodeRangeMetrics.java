@@ -1,6 +1,6 @@
 package com.puresol.coding;
 
-public class CodeRangeMetrics {
+abstract public class CodeRangeMetrics {
 
     private CodeRange codeRange = null;
     private McCabeMetric mcCabe = null;
@@ -14,42 +14,47 @@ public class CodeRangeMetrics {
 	calculate();
     }
 
-    private void calculate() {
-	if (McCabeMetric.isSuitable(codeRange)) {
-	    mcCabe = new McCabeMetric(codeRange);
-	}
-	if (HalsteadMetric.isSuitable(codeRange)) {
-	    halstead = new HalsteadMetric(codeRange);
-	}
-	if (SLOCMetric.isSuitable(codeRange)) {
-	    sloc = new SLOCMetric(codeRange);
-	}
-	if (MaintainabilityIndex.isSuitable(codeRange)) {
-	    maintainability = new MaintainabilityIndex(codeRange);
-	}
-	if (EntropyMetric.isSuitable(codeRange)) {
-	    entropy = new EntropyMetric(codeRange);
-	}
-    }
+    abstract protected void calculate();
 
     public CodeRange getCodeRange() {
 	return codeRange;
+    }
+
+    protected void setMcCabeMetric(McCabeMetric mcCabe) {
+	this.mcCabe = mcCabe;
     }
 
     public McCabeMetric getMcCabeMetric() {
 	return mcCabe;
     }
 
+    protected void setHalsteadMetric(HalsteadMetric halstead) {
+	this.halstead = halstead;
+    }
+
     public HalsteadMetric getHalsteadMetric() {
 	return halstead;
+    }
+
+    protected void setSLOCMetric(SLOCMetric sloc) {
+	this.sloc = sloc;
     }
 
     public SLOCMetric getSLOCMetric() {
 	return sloc;
     }
 
+    protected void setMaintainabilityIndex(
+	    MaintainabilityIndex maintainability) {
+	this.maintainability = maintainability;
+    }
+
     public MaintainabilityIndex getMaintainabilityIndex() {
 	return maintainability;
+    }
+
+    protected void setEntropyMetric(EntropyMetric entropy) {
+	this.entropy = entropy;
     }
 
     public EntropyMetric getEntropyMetric() {

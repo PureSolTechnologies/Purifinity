@@ -89,7 +89,7 @@ public class HTMLAnalysisReport extends AbstractAnalysisReport {
 	report += getHalsteadReport();
 	report += getMaintainabilityReport();
 	report += getEntropyReport();
-	report += getSource();
+	report += getSourceCode();
 	return report;
     }
 
@@ -170,7 +170,7 @@ public class HTMLAnalysisReport extends AbstractAnalysisReport {
 	return report;
     }
 
-    private String getSource() {
+    private String getSourceCode() {
 	String report = "<h2>" + translator.i18n("Source Code") + "</h2>";
 	report += "<tt>";
 	report +=
@@ -183,15 +183,16 @@ public class HTMLAnalysisReport extends AbstractAnalysisReport {
 
     private String getQualitySign(Analysis analysis) {
 	if (analysis.getQualityLevel() == QualityLevel.HIGH) {
-	    return "<font bgcolor=\"#00ff00\">HIGH</font>";
+	    return "<font color=\"#00ff00\">HIGH</font>";
 	}
 	if (analysis.getQualityLevel() == QualityLevel.MEDIUM) {
-	    return "<font bgcolor=\"#ffff00\">MEDIUM</font>";
+	    return "<font color=\"#ffff00\">MEDIUM</font>";
 	}
-	return "<font bgcolor=\"#ff0000\">LOW</font>";
+	return "<font color=\"#ff0000\">LOW</font>";
     }
 
     public QualityLevel getQualityLevel() {
 	return getMetrics().getQualityLevel();
     }
+
 }

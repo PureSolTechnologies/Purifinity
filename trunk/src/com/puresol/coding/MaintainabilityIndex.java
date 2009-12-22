@@ -4,7 +4,7 @@ import javax.i18n4j.Translator;
 
 import com.puresol.html.HTMLStandards;
 
-public class MaintainabilityIndex extends AbstractMetric {
+abstract public class MaintainabilityIndex implements Analysis {
 
     private static final Translator translator =
 	    Translator.getTranslator(MaintainabilityIndex.class);
@@ -22,17 +22,38 @@ public class MaintainabilityIndex extends AbstractMetric {
      */
     private double MI;
 
-    public MaintainabilityIndex(CodeRange codeRange) {
-	super(codeRange);
+    private CodeRange codeRange;
+    private SLOCMetric slocMetric;
+    private McCabeMetric mcCabeMetric;
+    private HalsteadMetric halsteadMetric;
+
+    public MaintainabilityIndex(CodeRange codeRange,
+	    SLOCMetric slocMetric, McCabeMetric mcCabeMetric,
+	    HalsteadMetric halsteadMetric) {
+	this.codeRange = codeRange;
+	this.slocMetric = slocMetric;
+	this.mcCabeMetric = mcCabeMetric;
+	this.halsteadMetric = halsteadMetric;
+	checkInput();
 	calculate();
     }
 
-    private void calculate() {
-	CodeRange codeRange = getCodeRange();
-	SLOCMetric slocMetric = new SLOCMetric(codeRange);
-	McCabeMetric mcCabeMetric = new McCabeMetric(codeRange);
-	HalsteadMetric halsteadMetric = new HalsteadMetric(codeRange);
+    private void checkInput() {
+	if (codeRange != slocMetric.getCodeRange()) {
+	    throw new IllegalArgumentException(
+		    "Code ranges must be same!!!");
+	}
+	if (codeRange != mcCabeMetric.getCodeRange()) {
+	    throw new IllegalArgumentException(
+		    "Code ranges must be same!!!");
+	}
+	if (codeRange != halsteadMetric.getCodeRange()) {
+	    throw new IllegalArgumentException(
+		    "Code ranges must be same!!!");
+	}
+    }
 
+    private void calculate() {
 	MIwoc =
 		171.0 - 5.2 * Math.log(halsteadMetric.get_HV()) - 0.23
 			* mcCabeMetric.getCyclomaticNumber() - 16.2
@@ -60,37 +81,6 @@ public class MaintainabilityIndex extends AbstractMetric {
 
     public double getMI() {
 	return MI;
-    }
-
-    @Override
-    public QualityLevel getQualityLevel() {
-	if (!CodeEvaluationSystem.isEvaluateMaintainabilityIndex()) {
-	    return QualityLevel.HIGH;
-	}
-	CodeRange range = getCodeRange();
-	if ((range.getType() == CodeRangeType.FILE)
-		|| (range.getType() == CodeRangeType.CLASS)
-		|| (range.getType() == CodeRangeType.ENUMERATION)) {
-	    if (MI > 86) {
-		return QualityLevel.HIGH;
-	    }
-	    if (MI > 65) {
-		return QualityLevel.MEDIUM;
-	    }
-	    return QualityLevel.LOW;
-	} else if ((range.getType() == CodeRangeType.CONSTRUCTOR)
-		|| (range.getType() == CodeRangeType.METHOD)
-		|| (range.getType() == CodeRangeType.FUNCTION)
-		|| (range.getType() == CodeRangeType.INTERFACE)) {
-	    if (MI > 85) {
-		return QualityLevel.HIGH;
-	    }
-	    if (MI > 65) {
-		return QualityLevel.MEDIUM;
-	    }
-	    return QualityLevel.LOW;
-	}
-	return QualityLevel.HIGH; // not evaluated...
     }
 
     public static boolean isSuitable(CodeRange codeRange) {
@@ -128,5 +118,9 @@ public class MaintainabilityIndex extends AbstractMetric {
 
     public String getHTMLReport() {
 	return HTMLStandards.convertTSVToTable(getReport());
+    }
+
+    public CodeRange getCodeRange() {
+	return codeRange;
     }
 }

@@ -15,7 +15,7 @@ import com.puresol.html.HTMLStandards;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class EntropyMetric extends HalsteadMetric {
+abstract public class EntropyMetric extends HalsteadMetric {
 
     private static final Translator translator =
 	    Translator.getTranslator(EntropyMetric.class);
@@ -97,20 +97,6 @@ public class EntropyMetric extends HalsteadMetric {
 
     public void print() {
 	System.out.println(getResultsAsString());
-    }
-
-    @Override
-    public QualityLevel getQualityLevel() {
-	if (!CodeEvaluationSystem.isEvaluateEntropyMetric()) {
-	    return QualityLevel.HIGH;
-	}
-	if (normalizedRedundancy > 0.40) {
-	    return QualityLevel.LOW;
-	}
-	if (normalizedRedundancy > 0.20) {
-	    return QualityLevel.MEDIUM;
-	}
-	return QualityLevel.HIGH;
     }
 
     public String getReport() {
