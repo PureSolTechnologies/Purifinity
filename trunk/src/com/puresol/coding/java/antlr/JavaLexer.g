@@ -1,211 +1,581 @@
 lexer grammar JavaLexer;
+
 options {
-	language=Java;
+  language = Java;
 }
+
 @header {
 package com.puresol.coding.java.antlr.output;
 }
 
-PACKAGE	:	'package';
-IMPORT	:	'import';
+PACKAGE
+  :
+  'package'
+  ;
 
-CLASS	:	'class';
+IMPORT
+  :
+  'import'
+  ;
+
+CLASS
+  :
+  'class'
+  ;
+
 INTERFACE
-	:	'interface';
-ENUM	:	'enum';
-EXTENDS	:	'extends';
-IMPLEMENTS	
-	:	'implements';
+  :
+  'interface'
+  ;
 
-VOID	:	'void';
-NEW	:	'new';
-RETURN	:	'return';
-BREAK	:	'break';
-CONTINUE:	'continue';
-NULL	:	'null';
-THIS	:	'this';
-SUPER	:	'super';
+ENUM
+  :
+  'enum'
+  ;
 
-FOR	:	'for';
-DO	:	'do';
-WHILE	:	'while';
-IF	:	'if';
-ELSE	:	'else';
-SWITCH	:	'switch';
-CASE	:	'case';
-DEFAULT	:	'default';
+EXTENDS
+  :
+  'extends'
+  ;
 
-TRY	:	'try' ;
-CATCH	:	'catch' ;
-FINALLY	:	'finally' ;
-THROW	:	'throw';
-THROWS	:	'throws';
+IMPLEMENTS
+  :
+  'implements'
+  ;
 
-PUBLIC	:	'public';
-PRIVATE	:	'private';
+VOID
+  :
+  'void'
+  ;
+
+NEW
+  :
+  'new'
+  ;
+
+RETURN
+  :
+  'return'
+  ;
+
+BREAK
+  :
+  'break'
+  ;
+
+CONTINUE
+  :
+  'continue'
+  ;
+
+NULL
+  :
+  'null'
+  ;
+
+THIS
+  :
+  'this'
+  ;
+
+SUPER
+  :
+  'super'
+  ;
+
+FOR
+  :
+  'for'
+  ;
+
+DO
+  :
+  'do'
+  ;
+
+WHILE
+  :
+  'while'
+  ;
+
+IF
+  :
+  'if'
+  ;
+
+ELSE
+  :
+  'else'
+  ;
+
+SWITCH
+  :
+  'switch'
+  ;
+
+CASE
+  :
+  'case'
+  ;
+
+DEFAULT
+  :
+  'default'
+  ;
+
+TRY
+  :
+  'try'
+  ;
+
+CATCH
+  :
+  'catch'
+  ;
+
+FINALLY
+  :
+  'finally'
+  ;
+
+THROW
+  :
+  'throw'
+  ;
+
+THROWS
+  :
+  'throws'
+  ;
+
+PUBLIC
+  :
+  'public'
+  ;
+
+PRIVATE
+  :
+  'private'
+  ;
+
 PROTECTED
-	:	'protected';
-FINAL	:	'final';
-VOLATILE:	'volatile';
-SYNCHRONIZED
-	:	'synchronized';
-STATIC	:	'static';
-TRANSIENT
-	:	'transient';
-ABSTRACT:	'abstract';
+  :
+  'protected'
+  ;
 
-BOOLEAN	:	'boolean';
-BYTE	:	'byte';
-CHAR	:	'char';
-SHORT	:	'short';
-INTEGER	:	'int';
-LONG	:	'long';
-FLOAT	:	'float';
-DOUBLE	:	'double';
+FINAL
+  :
+  'final'
+  ;
+
+VOLATILE
+  :
+  'volatile'
+  ;
+
+SYNCHRONIZED
+  :
+  'synchronized'
+  ;
+
+STATIC
+  :
+  'static'
+  ;
+
+TRANSIENT
+  :
+  'transient'
+  ;
+
+ABSTRACT
+  :
+  'abstract'
+  ;
+
+BOOLEAN
+  :
+  'boolean'
+  ;
+
+BYTE
+  :
+  'byte'
+  ;
+
+CHAR
+  :
+  'char'
+  ;
+
+SHORT
+  :
+  'short'
+  ;
+
+INTEGER
+  :
+  'int'
+  ;
+
+LONG
+  :
+  'long'
+  ;
+
+FLOAT
+  :
+  'float'
+  ;
+
+DOUBLE
+  :
+  'double'
+  ;
 
 OPEN_CURLY_BRACKET
-	:	'{'
-	;
-	
+  :
+  '{'
+  ;
+
 CLOSE_CURLY_BRACKET
-	:	'}'
-	;
-	
-LE	:	'<=';
-GE	:	'>=';
-EQUAL	:	'==';
-UNEQUAL	:	'!=';
-ASSIGN	:	'=';
-INCASSIGN	
-	:	'+=';
+  :
+  '}'
+  ;
+
+LE
+  :
+  '<='
+  ;
+
+GE
+  :
+  '>='
+  ;
+
+EQUAL
+  :
+  '=='
+  ;
+
+UNEQUAL
+  :
+  '!='
+  ;
+
+ASSIGN
+  :
+  '='
+  ;
+
+INCASSIGN
+  :
+  '+='
+  ;
+
 DECASSIGN
-	:	'-=';
+  :
+  '-='
+  ;
+
 BITORASSIGN
-	:	'|=';
+  :
+  '|='
+  ;
+
 BITANDASSIGN
-	:	'&=';
+  :
+  '&='
+  ;
 
-INC	:	'++';
-DEC	:	'--';
+INC
+  :
+  '++'
+  ;
 
-PLUS	:	'+';
-MINUS	:	'-';
-SLASH	:	'/';
-STAR	:	'*';
-QUESTION:	'?';
-PERCENT	:	'%';
+DEC
+  :
+  '--'
+  ;
+
+PLUS
+  :
+  '+'
+  ;
+
+MINUS
+  :
+  '-'
+  ;
+
+SLASH
+  :
+  '/'
+  ;
+
+STAR
+  :
+  '*'
+  ;
+
+QUESTION
+  :
+  '?'
+  ;
+
+PERCENT
+  :
+  '%'
+  ;
 
 LOGICAL_OR
-	:	'||';
-BIT_OR	:	'|';
+  :
+  '||'
+  ;
+
+BIT_OR
+  :
+  '|'
+  ;
 
 LOGICAL_AND
-	:	'&&';
-BIT_AND	:	'&';
+  :
+  '&&'
+  ;
 
-NOT	:	'!';
+BIT_AND
+  :
+  '&'
+  ;
 
-DOT	:	'.';
-COMMA	:	',';
-LT	:	'<';
-GT	:	'>';
+NOT
+  :
+  '!'
+  ;
+
+DOT
+  :
+  '.'
+  ;
+
+COMMA
+  :
+  ','
+  ;
+
+LT
+  :
+  '<'
+  ;
+
+GT
+  :
+  '>'
+  ;
 
 OPEN_RECT_BRACKET
-	:	'['
-	;
-	
+  :
+  '['
+  ;
+
 CLOSE_RECT_BRACKET
-	:	']'
-	;
-	
+  :
+  ']'
+  ;
+
 OPEN_BRACKET
-	:	'('
-	;
-	
+  :
+  '('
+  ;
+
 CLOSE_BRACKET
-	:	')'
-	;
+  :
+  ')'
+  ;
 
-COLON	:	':';
+COLON
+  :
+  ':'
+  ;
+
 SEMICOLON
-	:	';';
-AT	:	'@';
-TILDE	:	'~';
+  :
+  ';'
+  ;
 
-BOOL_CONST	
-	:	'true'
-	|	'false'
-	;
+AT
+  :
+  '@'
+  ;
 
-ID	:	('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'0'..'9'|'_')*
-	;
+TILDE
+  :
+  '~'
+  ;
+
+BOOL_CONST
+  :
+  'true'
+  | 'false'
+  ;
+
+ID
+  :
+  (
+    'a'..'z'
+    | 'A'..'Z'
+    | '_'
+  )
+  (
+    'a'..'z'
+    | 'A'..'Z'
+    | '0'..'9'
+    | '_'
+  )*
+  ;
 
 INT_CONST
-	:	'0'..'9'+
-    	;
+  :
+  '0'..'9'+
+  ;
 
 HEX_CONST
-	:	'0x' HEX_DIGIT+
-    	;
+  :
+  '0x' HEX_DIGIT+
+  ;
 
 LONG_CONST
-	:	INT_CONST 'L'
-    	;
+  :
+  INT_CONST 'L'
+  ;
 
 HEX_LONG_CONST
-	:	HEX_CONST 'L'
-    	;
+  :
+  HEX_CONST 'L'
+  ;
 
 FLOAT_CONST
-	:   ('0'..'9')+ '.' ('0'..'9')* EXPONENT?
-	|   '.' ('0'..'9')+ EXPONENT?
-	|   ('0'..'9')+ EXPONENT
-	;
+  :
+  ('0'..'9')+ '.' ('0'..'9')* EXPONENT?
+  | '.' ('0'..'9')+ EXPONENT?
+  | ('0'..'9')+ EXPONENT
+  ;
 
 COMMENT
-	:   '//' ~('\n'|'\r')* '\r'? LINEFEED {$channel=HIDDEN;}
-	|   '/*' ( options {greedy=false;} : (LINEFEED|~('\n')) )* '*/' {$channel=HIDDEN;}
-	;
+  :
+  '//'
+  ~(
+    '\n'
+    | '\r'
+   )*
+  '\r'? LINEFEED {$channel=HIDDEN;}
+  | '/*'
+  ( options {greedy=false;}:
+    (
+      LINEFEED
+      | ~('\n' )
+    )
+  )*
+  '*/' {$channel=HIDDEN;}
+  ;
 
-WS	:   ( ' '
-	| '\t'
-	| '\r'
-	| LINEFEED
-	) {$channel=HIDDEN;}
-	;
-    
+WS
+  :
+  (
+    ' '
+    | '\t'
+    | '\r'
+    | LINEFEED
+  )
+  {$channel=HIDDEN;}
+  ;
+
 fragment
-LINEFEED:	'\n';
+LINEFEED
+  :
+  '\n'
+  ;
 
 STRING_CONST
-	:  '"' ( ESC_SEQ | ~('\\'|'"') )* '"'
-	;
+  :
+  '"'
+  (
+    ESC_SEQ
+    |
+    ~(
+      '\\'
+      | '"'
+     )
+  )*
+  '"'
+  ;
 
 CHAR_CONST
-	:  '\'' ( ESC_SEQ | ~('\''|'\\') ) '\''
-	;
+  :
+  '\''
+  (
+    ESC_SEQ
+    |
+    ~(
+      '\''
+      | '\\'
+     )
+  )
+  '\''
+  ;
 
 fragment
-EXPONENT : ('e'|'E') ('+'|'-')? ('0'..'9')+ ;
+EXPONENT
+  :
+  (
+    'e'
+    | 'E'
+  )
+  (
+    '+'
+    | '-'
+  )?
+  ('0'..'9')+
+  ;
 
 fragment
-HEX_DIGIT : ('0'..'9'|'a'..'f'|'A'..'F') ;
+HEX_DIGIT
+  :
+  (
+    '0'..'9'
+    | 'a'..'f'
+    | 'A'..'F'
+  )
+  ;
 
 fragment
 ESC_SEQ
-    :   '\\' ('b'|'t'|'n'|'f'|'r'|'\"'|'\''|'\\')
-    |   UNICODE_ESC
-    |   OCTAL_ESC
-    ;
+  :
+  '\\'
+  (
+    'b'
+    | 't'
+    | 'n'
+    | 'f'
+    | 'r'
+    | '\"'
+    | '\''
+    | '\\'
+  )
+  | UNICODE_ESC
+  | OCTAL_ESC
+  ;
 
 fragment
 OCTAL_ESC
-    :   '\\' ('0'..'3') ('0'..'7') ('0'..'7')
-    |   '\\' ('0'..'7') ('0'..'7')
-    |   '\\' ('0'..'7')
-    ;
+  :
+  '\\' ('0'..'3') ('0'..'7') ('0'..'7')
+  | '\\' ('0'..'7') ('0'..'7')
+  | '\\' ('0'..'7')
+  ;
 
 fragment
 UNICODE_ESC
-    :   '\\' 'u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT
-    ;
+  :
+  '\\' 'u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT
+  ;
