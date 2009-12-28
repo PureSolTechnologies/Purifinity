@@ -1,38 +1,36 @@
 package com.puresol.coding.java;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.util.Hashtable;
 
-import org.antlr.runtime.ANTLRInputStream;
-import org.antlr.runtime.CommonTokenStream;
-import org.antlr.runtime.RecognitionException;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
 import org.junit.Test;
 
-import com.puresol.coding.java.antlr.output.JavaLexer;
-import com.puresol.coding.java.antlr.output.JavaParser;
+import com.puresol.coding.Analyser;
 
+import junit.framework.Assert;
 import junit.framework.TestCase;
 
 public class JavaAnalyserTest extends TestCase {
 
-	@Test
-	public void testJavaParser() throws IOException {
-		Logger.getRootLogger().setLevel(Level.TRACE);
-		File file = new File("test/com/puresol/coding/java/Test.java");
-		//new JavaAnalyser(file);
-		InputStream in = new FileInputStream(file);
-		JavaLexer lexer = new JavaLexer(new ANTLRInputStream(in));
-		CommonTokenStream cts = new CommonTokenStream(lexer);
-		JavaParser parser = new JavaParser(cts);
-		try {
-			JavaParser.compilationUnit_return result = parser.compilationUnit();
-		} catch (RecognitionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+    @Test
+    public void testGetLexerAndParserTokens() {
+	Analyser analyser =
+		new JavaAnalyser(
+			new File("."),
+			new File(
+				"test/com/puresol/coding/java/JavaAnalyserTest.java"));
+	Hashtable<Integer, String> tokens = analyser.getLexerTokens();
+	Assert.assertNotNull(tokens);
+	Assert.assertTrue(tokens.size() > 0);
+
+	tokens = analyser.getParserTokens();
+	Assert.assertNotNull(tokens);
+	Assert.assertTrue(tokens.size() > 0);
+    }
+
+    @Test
+    public void testIsSuitable() {
+	Assert.assertTrue(JavaAnalyser.isSuitable(new File("Java.java")));
+	Assert.assertFalse(JavaAnalyser.isSuitable(new File("NotJava.f")));
+    }
 }

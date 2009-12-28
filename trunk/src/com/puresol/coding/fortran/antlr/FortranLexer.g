@@ -8,20 +8,41 @@ options {
 package com.puresol.coding.fortran.antlr.output;
 }
 
+PROGRAM	:	P R O G R A M;
 SUBROUTINE 
 	:	S U B R O U T I N E;
-
+FUNCTION:	F U N C T I O N;
 INTEGER
 	:	I N T E G E R ;
 REAL
 	:	R E A L;
-
+DOUBLE_PRECISION
+	:	D O U B L E WS+ P R E C I S I O N;
+COMPLEX	:	C O M P L E X;
+CHARACTER
+	:	C H A R A C T E R;
+LOGICAL	:	L O G I C A L;
+IMPLICIT:	I M P L I C I T;
+NONE	:	N O N E;
+ALLOCATE:	A L L O C A T E;
+PARAMETER
+	:	P A R A M E T E R;
 IF
 	:	I F;
 THEN
 	:	T H E N;
-END_IF
-	:	E N D WS+ I F;
+ELSE	:	E L S E;
+DO	:	D O;
+WHILE	:	W H I L E;
+ENDDO	:	E N D D O;
+END 	:	E N D;
+CALL 	:	C A L L;
+GOTO	:	G O WS+ T O;
+RETURN	:	R E T U R N;
+CONTINUE:	C O N T I N U E;
+EXTERNAL:	E X T E R N A L;
+INTRINSIC
+	:	I N T R I N S I C;
 
 // Need 4 lookahead for logical operators (eg .NE. and .NEQV.)
 
@@ -215,6 +236,13 @@ COMMENT
     | '\r'
    )*
   '\r'? LINEFEED {$channel=HIDDEN;}
+  |
+  '!'
+  ~(
+    '\n'
+    | '\r'
+   )*
+  '\r'? LINEFEED {$channel=HIDDEN;}
   ;
 
 WS
@@ -241,29 +269,17 @@ NOTNL
  
 STRING_CONST
   :
-  '"'
+  '\''
   (
+    '\'' '\''
+    |
     ESC_SEQ
     |
     ~(
       '\\'
-      | '"'
+      | '\''
      )
   )*
-  '"'
-  ;
-
-CHAR_CONST
-  :
-  '\''
-  (
-    ESC_SEQ
-    |
-    ~(
-      '\''
-      | '\\'
-     )
-  )
   '\''
   ;
 
@@ -273,6 +289,8 @@ EXPONENT
   (
     'e'
     | 'E'
+    | 'd'
+    | 'D'
   )
   (
     '+'

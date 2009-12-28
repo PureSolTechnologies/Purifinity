@@ -1,22 +1,30 @@
-parser grammar JavaParser;
+parser grammar FortranParser;
 
 options {
-  tokenVocab = JavaLexer;
+  tokenVocab = FortranLexer;
   backtrack  = true;
 //memoize=true;
 }
 
 @header {
-package com.puresol.coding.java.antlr.output;
+package com.puresol.coding.fortran.antlr.output;
 
 import com.puresol.coding.CodeRangeType;
 import com.puresol.coding.ParserHelper;
+import java.io.File;
 }
 
 @members {
-private ParserHelper helper = new ParserHelper(this);
+private ParserHelper helper = null;
+
+public FortranParser(File file, TokenStream input) {
+	this(input, new RecognizerSharedState());
+	helper = new ParserHelper(file, this);
+}
 
 public ParserHelper getParserHelper() {
 	return helper;
 }
 }
+
+file	:	(~WS | WS)*;

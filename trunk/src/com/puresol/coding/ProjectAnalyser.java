@@ -1,6 +1,7 @@
 package com.puresol.coding;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -16,13 +17,13 @@ public class ProjectAnalyser {
     private static final Logger logger =
 	    Logger.getLogger(ProjectAnalyser.class);
 
-    private File projectDirectory;
+    private File directory;
     private String pattern;
     private Hashtable<File, Analyser> analysers =
 	    new Hashtable<File, Analyser>();
 
-    public ProjectAnalyser(File projectDirectory, String pattern) {
-	this.projectDirectory = projectDirectory;
+    public ProjectAnalyser(File directory, String pattern) {
+	this.directory = directory;
 	this.pattern = pattern;
     }
 
@@ -33,9 +34,7 @@ public class ProjectAnalyser {
     }
 
     private void analyseFiles() {
-	List<File> files =
-		FileSearch
-			.find(projectDirectory.getPath() + "/" + pattern);
+	List<File> files = FileSearch.find(directory, pattern);
 	for (File file : files) {
 	    analyseFile(file);
 	}
@@ -43,13 +42,11 @@ public class ProjectAnalyser {
 
     private void analyseFile(File file) {
 	try {
-	    if ((file.isFile()) && (!file.getPath().contains("/."))) {
-		String fileString =
-			file.getPath().toString().substring(
-				projectDirectory.getPath().length());
-		file = new File(fileString);
+	    if ((new File(directory.getPath() + "/" + file.getPath())
+		    .isFile())
+		    && (!file.getPath().contains("/."))) {
 		analysers.put(file, AnalyserFactory.createAnalyser(
-			projectDirectory, file));
+			directory, file));
 	    }
 	} catch (RewriteEmptyStreamException e) {
 	    logger
@@ -61,6 +58,8 @@ public class ProjectAnalyser {
 		    .warn("File '"
 			    + file.getPath()
 			    + "' could not be analysed due to containing no supported language.");
+	} catch (FileNotFoundException e) {
+	    logger.warn("File '" + file.getPath() + "' is not existing!");
 	}
     }
 
@@ -69,7 +68,7 @@ public class ProjectAnalyser {
     }
 
     public File getProjectDirectory() {
-	return projectDirectory;
+	return directory;
     }
 
     public Set<File> getFiles() {
@@ -115,5 +114,13 @@ public class ProjectAnalyser {
 	    return null;
 	}
 	return analyser.getMetrics(codeRange);
+    }
+
+    public Hashtable<Integer, String> getLexerTokens(File file) {
+	return getAnalyser(file).getLexerTokens();
+    }
+
+    public Hashtable<Integer, String> getParserTokens(File file) {
+	return getAnalyser(file).getParserTokens();
     }
 }

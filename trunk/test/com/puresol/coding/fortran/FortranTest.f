@@ -125,4 +125,5 @@
 *
 *     End of SCOPY
 *
+      write (*,*) 'This isn''t a Test!'
       END
