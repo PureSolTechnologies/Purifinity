@@ -3,7 +3,6 @@ parser grammar FortranParser;
 options {
   tokenVocab = FortranLexer;
   backtrack  = true;
-//memoize=true;
 }
 
 @header {
@@ -27,4 +26,10 @@ public ParserHelper getParserHelper() {
 }
 }
 
-file	:	(~WS | WS)*;
+file
+  :
+  (
+    ~WS
+    | WS
+  )*
+  ;

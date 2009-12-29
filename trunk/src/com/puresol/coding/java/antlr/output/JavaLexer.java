@@ -1,4 +1,12 @@
-// $ANTLR 3.2 Sep 23, 2009 12:02:23 /home/ludwig/privat/PureSolTechnologiesAPI/src/com/puresol/coding/java/antlr/Java.g 2009-12-16 15:50:53
+/***************************************************************************
+ *
+ *   JavaLexer.java
+ *   -------------------
+ *   copyright            : (c) 2009 by PureSol-Technologies
+ *   author               : Rick-Rainer Ludwig
+ *   email                : ludwig@puresol-technologies.com
+ *
+ ***************************************************************************/
 
 package com.puresol.coding.java.antlr.output;
 

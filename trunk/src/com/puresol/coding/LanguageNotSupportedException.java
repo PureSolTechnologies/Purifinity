@@ -1,3 +1,13 @@
+/***************************************************************************
+ *
+ *   LanguageNotSupportedException.java
+ *   -------------------
+ *   copyright            : (c) 2009 by PureSol-Technologies
+ *   author               : Rick-Rainer Ludwig
+ *   email                : ludwig@puresol-technologies.com
+ *
+ ***************************************************************************/
+
 package com.puresol.coding;
 
 /**
@@ -9,22 +19,21 @@ package com.puresol.coding;
  */
 public class LanguageNotSupportedException extends Exception {
 
-	private static final long serialVersionUID = 6057970328936737422L;
+    private static final long serialVersionUID = 6057970328936737422L;
 
-	public LanguageNotSupportedException() {
-		super();
-	}
+    public LanguageNotSupportedException() {
+	super();
+    }
 
-	public LanguageNotSupportedException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    public LanguageNotSupportedException(String message, Throwable cause) {
+	super(message, cause);
+    }
 
-	public LanguageNotSupportedException(String message) {
-		super(message);
-	}
+    public LanguageNotSupportedException(String message) {
+	super(message);
+    }
 
-	public LanguageNotSupportedException(Throwable cause) {
-		super(cause);
-	}
-
+    public LanguageNotSupportedException(Throwable cause) {
+	super(cause);
+    }
 }

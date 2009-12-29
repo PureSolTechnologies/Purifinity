@@ -1,3 +1,13 @@
+/***************************************************************************
+ *
+ *   HTMLAnalysisReport.java
+ *   -------------------
+ *   copyright            : (c) 2009 by PureSol-Technologies
+ *   author               : Rick-Rainer Ludwig
+ *   email                : ludwig@puresol-technologies.com
+ *
+ ***************************************************************************/
+
 package com.puresol.coding;
 
 import javax.i18n4j.Translator;

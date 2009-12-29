@@ -1,3 +1,13 @@
+/***************************************************************************
+ *
+ *   HTMLAnalysisProject.java
+ *   -------------------
+ *   copyright            : (c) 2009 by PureSol-Technologies
+ *   author               : Rick-Rainer Ludwig
+ *   email                : ludwig@puresol-technologies.com
+ *
+ ***************************************************************************/
+
 package com.puresol.coding;
 
 import java.io.File;
@@ -129,7 +139,6 @@ public class HTMLAnalysisProject {
 	return writeFile(directory, "files.html", html);
     }
 
-    @SuppressWarnings("unchecked")
     private boolean createCodeRangeIndizes(File directory) {
 	for (File file : analyser.getFiles()) {
 	    String html = HTMLStandards.getStandardHeader();

@@ -1,3 +1,13 @@
+/***************************************************************************
+ *
+ *   StrangeSituationException.java
+ *   -------------------
+ *   copyright            : (c) 2009 by PureSol-Technologies
+ *   author               : Rick-Rainer Ludwig
+ *   email                : ludwig@puresol-technologies.com
+ *
+ ***************************************************************************/
+
 package com.puresol.exceptions;
 
 import org.apache.log4j.Logger;

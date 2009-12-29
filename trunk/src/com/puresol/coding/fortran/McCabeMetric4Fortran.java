@@ -1,3 +1,13 @@
+/***************************************************************************
+ *
+ *   McCabeMetric4Fortran.java
+ *   -------------------
+ *   copyright            : (c) 2009 by PureSol-Technologies
+ *   author               : Rick-Rainer Ludwig
+ *   email                : ludwig@puresol-technologies.com
+ *
+ ***************************************************************************/
+
 package com.puresol.coding.fortran;
 
 import com.puresol.coding.CodeEvaluationSystem;

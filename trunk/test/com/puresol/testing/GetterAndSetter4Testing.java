@@ -1,3 +1,13 @@
+/***************************************************************************
+ *
+ *   GetterAndSetter4Testing.java
+ *   -------------------
+ *   copyright            : (c) 2009 by PureSol-Technologies
+ *   author               : Rick-Rainer Ludwig
+ *   email                : ludwig@puresol-technologies.com
+ *
+ ***************************************************************************/
+
 package com.puresol.testing;
 
 public class GetterAndSetter4Testing {
