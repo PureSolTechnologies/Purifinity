@@ -10,9 +10,15 @@
 
 package com.puresol.coding;
 
+/**
+ * This is a simple interface to a single code range analysis.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public interface Analysis {
 
-    public CodeRange getCodeRange();
+	public CodeRange getCodeRange();
 
-    public QualityLevel getQualityLevel();
+	public QualityLevel getQualityLevel();
 }

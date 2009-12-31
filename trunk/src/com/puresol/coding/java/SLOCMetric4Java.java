@@ -14,7 +14,7 @@ import com.puresol.coding.CodeEvaluationSystem;
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.CodeRangeType;
 import com.puresol.coding.QualityLevel;
-import com.puresol.coding.SLOCMetric;
+import com.puresol.coding.AbstractSLOCMetric;
 
 /**
  * This class calculates a small statistics for a source code for source
@@ -24,7 +24,7 @@ import com.puresol.coding.SLOCMetric;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class SLOCMetric4Java extends SLOCMetric {
+public class SLOCMetric4Java extends AbstractSLOCMetric {
 
     public SLOCMetric4Java(CodeRange codeRange) {
 	super(codeRange);

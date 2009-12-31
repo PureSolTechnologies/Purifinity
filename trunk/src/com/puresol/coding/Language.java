@@ -18,5 +18,5 @@ package com.puresol.coding;
  * 
  */
 public enum Language {
-	CPP, FORTRAN, JAVA, PERL, PHP;
+	CPP, FORTRAN, JAVA, PERL, PHP, TEXT;
 }

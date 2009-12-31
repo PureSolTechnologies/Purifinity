@@ -18,11 +18,11 @@ import java.util.Hashtable;
  * @author Rick-Rainer Ludwig
  * 
  */
-abstract public class McCabeMetric extends AbstractMetric {
+abstract public class AbstractMcCabeMetric extends AbstractMetric {
 
     private int cyclomaticNumber = 1;
 
-    public McCabeMetric(CodeRange codeRange) {
+    public AbstractMcCabeMetric(CodeRange codeRange) {
 	super(codeRange);
 	calculate();
     }

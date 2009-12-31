@@ -13,7 +13,7 @@ package com.puresol.coding.java;
 import com.puresol.coding.CodeEvaluationSystem;
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.CodeRangeType;
-import com.puresol.coding.McCabeMetric;
+import com.puresol.coding.AbstractMcCabeMetric;
 import com.puresol.coding.QualityLevel;
 
 /**
@@ -22,7 +22,7 @@ import com.puresol.coding.QualityLevel;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class McCabeMetric4Java extends McCabeMetric {
+public class McCabeMetric4Java extends AbstractMcCabeMetric {
 
     public McCabeMetric4Java(CodeRange codeRange) {
 	super(codeRange);

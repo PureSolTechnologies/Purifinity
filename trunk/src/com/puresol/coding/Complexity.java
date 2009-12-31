@@ -12,6 +12,14 @@ package com.puresol.coding;
 
 import com.puresol.exceptions.StrangeSituationException;
 
+/**
+ * This enumeration stands for a complexity. This was derived from the
+ * categories of the CoCoMo model. The complexity is defined in three levels:
+ * low, medium and high complexity.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public enum Complexity {
 	LOW, MEDIUM, HIGH;
 

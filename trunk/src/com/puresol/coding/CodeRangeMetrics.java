@@ -13,11 +13,11 @@ package com.puresol.coding;
 abstract public class CodeRangeMetrics {
 
     private CodeRange codeRange = null;
-    private McCabeMetric mcCabe = null;
-    private HalsteadMetric halstead = null;
-    private SLOCMetric sloc = null;
-    private MaintainabilityIndex maintainability = null;
-    private EntropyMetric entropy = null;
+    private AbstractMcCabeMetric mcCabe = null;
+    private AbstractHalsteadMetric halstead = null;
+    private AbstractSLOCMetric sloc = null;
+    private AbstractMaintainabilityIndex maintainability = null;
+    private AbstractEntropyMetric entropy = null;
 
     public CodeRangeMetrics(CodeRange codeRange) {
 	this.codeRange = codeRange;
@@ -30,44 +30,44 @@ abstract public class CodeRangeMetrics {
 	return codeRange;
     }
 
-    protected void setMcCabeMetric(McCabeMetric mcCabe) {
+    protected void setMcCabeMetric(AbstractMcCabeMetric mcCabe) {
 	this.mcCabe = mcCabe;
     }
 
-    public McCabeMetric getMcCabeMetric() {
+    public AbstractMcCabeMetric getMcCabeMetric() {
 	return mcCabe;
     }
 
-    protected void setHalsteadMetric(HalsteadMetric halstead) {
+    protected void setHalsteadMetric(AbstractHalsteadMetric halstead) {
 	this.halstead = halstead;
     }
 
-    public HalsteadMetric getHalsteadMetric() {
+    public AbstractHalsteadMetric getHalsteadMetric() {
 	return halstead;
     }
 
-    protected void setSLOCMetric(SLOCMetric sloc) {
+    protected void setSLOCMetric(AbstractSLOCMetric sloc) {
 	this.sloc = sloc;
     }
 
-    public SLOCMetric getSLOCMetric() {
+    public AbstractSLOCMetric getSLOCMetric() {
 	return sloc;
     }
 
     protected void setMaintainabilityIndex(
-	    MaintainabilityIndex maintainability) {
+	    AbstractMaintainabilityIndex maintainability) {
 	this.maintainability = maintainability;
     }
 
-    public MaintainabilityIndex getMaintainabilityIndex() {
+    public AbstractMaintainabilityIndex getMaintainabilityIndex() {
 	return maintainability;
     }
 
-    protected void setEntropyMetric(EntropyMetric entropy) {
+    protected void setEntropyMetric(AbstractEntropyMetric entropy) {
 	this.entropy = entropy;
     }
 
-    public EntropyMetric getEntropyMetric() {
+    public AbstractEntropyMetric getEntropyMetric() {
 	return entropy;
     }
 

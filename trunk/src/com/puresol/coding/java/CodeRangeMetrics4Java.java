@@ -12,11 +12,11 @@ package com.puresol.coding.java;
 
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.CodeRangeMetrics;
-import com.puresol.coding.EntropyMetric;
-import com.puresol.coding.HalsteadMetric;
-import com.puresol.coding.MaintainabilityIndex;
-import com.puresol.coding.McCabeMetric;
-import com.puresol.coding.SLOCMetric;
+import com.puresol.coding.AbstractEntropyMetric;
+import com.puresol.coding.AbstractHalsteadMetric;
+import com.puresol.coding.AbstractMaintainabilityIndex;
+import com.puresol.coding.AbstractMcCabeMetric;
+import com.puresol.coding.AbstractSLOCMetric;
 
 public class CodeRangeMetrics4Java extends CodeRangeMetrics {
 
@@ -26,21 +26,21 @@ public class CodeRangeMetrics4Java extends CodeRangeMetrics {
 
     @Override
     protected void calculate() {
-	if (McCabeMetric.isSuitable(getCodeRange())) {
+	if (AbstractMcCabeMetric.isSuitable(getCodeRange())) {
 	    setMcCabeMetric(new McCabeMetric4Java(getCodeRange()));
 	}
-	if (HalsteadMetric.isSuitable(getCodeRange())) {
+	if (AbstractHalsteadMetric.isSuitable(getCodeRange())) {
 	    setHalsteadMetric(new HalsteadMetric4Java(getCodeRange()));
 	}
-	if (SLOCMetric.isSuitable(getCodeRange())) {
+	if (AbstractSLOCMetric.isSuitable(getCodeRange())) {
 	    setSLOCMetric(new SLOCMetric4Java(getCodeRange()));
 	}
-	if (MaintainabilityIndex.isSuitable(getCodeRange())) {
+	if (AbstractMaintainabilityIndex.isSuitable(getCodeRange())) {
 	    setMaintainabilityIndex(new MaintainabilityIndex4Java(
 		    getCodeRange(), getSLOCMetric(), getMcCabeMetric(),
 		    getHalsteadMetric()));
 	}
-	if (EntropyMetric.isSuitable(getCodeRange())) {
+	if (AbstractEntropyMetric.isSuitable(getCodeRange())) {
 	    setEntropyMetric(new EntropyMetric4Java(getCodeRange()));
 	}
     }

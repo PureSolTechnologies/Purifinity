@@ -14,10 +14,10 @@ import javax.i18n4j.Translator;
 
 import com.puresol.html.HTMLStandards;
 
-abstract public class MaintainabilityIndex implements Analysis {
+abstract public class AbstractMaintainabilityIndex implements Analysis {
 
     private static final Translator translator =
-	    Translator.getTranslator(MaintainabilityIndex.class);
+	    Translator.getTranslator(AbstractMaintainabilityIndex.class);
 
     /**
      * MaintainabilityIndex without comment.
@@ -33,13 +33,13 @@ abstract public class MaintainabilityIndex implements Analysis {
     private double MI;
 
     private CodeRange codeRange;
-    private SLOCMetric slocMetric;
-    private McCabeMetric mcCabeMetric;
-    private HalsteadMetric halsteadMetric;
+    private AbstractSLOCMetric slocMetric;
+    private AbstractMcCabeMetric mcCabeMetric;
+    private AbstractHalsteadMetric halsteadMetric;
 
-    public MaintainabilityIndex(CodeRange codeRange,
-	    SLOCMetric slocMetric, McCabeMetric mcCabeMetric,
-	    HalsteadMetric halsteadMetric) {
+    public AbstractMaintainabilityIndex(CodeRange codeRange,
+	    AbstractSLOCMetric slocMetric, AbstractMcCabeMetric mcCabeMetric,
+	    AbstractHalsteadMetric halsteadMetric) {
 	this.codeRange = codeRange;
 	this.slocMetric = slocMetric;
 	this.mcCabeMetric = mcCabeMetric;

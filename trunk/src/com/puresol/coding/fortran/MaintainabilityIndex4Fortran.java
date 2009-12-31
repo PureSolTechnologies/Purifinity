@@ -13,17 +13,17 @@ package com.puresol.coding.fortran;
 import com.puresol.coding.CodeEvaluationSystem;
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.CodeRangeType;
-import com.puresol.coding.HalsteadMetric;
-import com.puresol.coding.MaintainabilityIndex;
-import com.puresol.coding.McCabeMetric;
+import com.puresol.coding.AbstractHalsteadMetric;
+import com.puresol.coding.AbstractMaintainabilityIndex;
+import com.puresol.coding.AbstractMcCabeMetric;
 import com.puresol.coding.QualityLevel;
-import com.puresol.coding.SLOCMetric;
+import com.puresol.coding.AbstractSLOCMetric;
 
-public class MaintainabilityIndex4Fortran extends MaintainabilityIndex {
+public class MaintainabilityIndex4Fortran extends AbstractMaintainabilityIndex {
 
     public MaintainabilityIndex4Fortran(CodeRange codeRange,
-	    SLOCMetric slocMetric, McCabeMetric mcCabeMetric,
-	    HalsteadMetric halsteadMetric) {
+	    AbstractSLOCMetric slocMetric, AbstractMcCabeMetric mcCabeMetric,
+	    AbstractHalsteadMetric halsteadMetric) {
 	super(codeRange, slocMetric, mcCabeMetric, halsteadMetric);
     }
 

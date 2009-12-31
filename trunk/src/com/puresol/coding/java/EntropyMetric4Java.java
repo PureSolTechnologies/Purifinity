@@ -12,7 +12,7 @@ package com.puresol.coding.java;
 
 import com.puresol.coding.CodeEvaluationSystem;
 import com.puresol.coding.CodeRange;
-import com.puresol.coding.EntropyMetric;
+import com.puresol.coding.AbstractEntropyMetric;
 import com.puresol.coding.QualityLevel;
 
 /**
@@ -24,7 +24,7 @@ import com.puresol.coding.QualityLevel;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class EntropyMetric4Java extends EntropyMetric {
+public class EntropyMetric4Java extends AbstractEntropyMetric {
     public EntropyMetric4Java(CodeRange codeRange) {
 	super(codeRange);
     }

@@ -40,12 +40,12 @@ public class HTMLAnalysisReport extends AbstractAnalysisReport {
 
     private String getOverview() {
 	String report = "<h2>Overview</h2>";
-	SLOCMetric sloc = getMetrics().getSLOCMetric();
-	McCabeMetric mcCabe = getMetrics().getMcCabeMetric();
-	HalsteadMetric halstead = getMetrics().getHalsteadMetric();
-	MaintainabilityIndex maintainability =
+	AbstractSLOCMetric sloc = getMetrics().getSLOCMetric();
+	AbstractMcCabeMetric mcCabe = getMetrics().getMcCabeMetric();
+	AbstractHalsteadMetric halstead = getMetrics().getHalsteadMetric();
+	AbstractMaintainabilityIndex maintainability =
 		getMetrics().getMaintainabilityIndex();
-	EntropyMetric entropy = getMetrics().getEntropyMetric();
+	AbstractEntropyMetric entropy = getMetrics().getEntropyMetric();
 	report += "<table>";
 	if (sloc != null) {
 	    report +=
@@ -105,7 +105,7 @@ public class HTMLAnalysisReport extends AbstractAnalysisReport {
 
     private String getSLOCReport() {
 	String report = "<h2>SLOC Metrics</h2>";
-	SLOCMetric sloc = getMetrics().getSLOCMetric();
+	AbstractSLOCMetric sloc = getMetrics().getSLOCMetric();
 	if (sloc != null) {
 	    report += getQualitySign(sloc);
 	    report += "<br/>";
@@ -121,7 +121,7 @@ public class HTMLAnalysisReport extends AbstractAnalysisReport {
 
     private String getMcCabeReport() {
 	String report = "<h2>McCabe Cyclomatic Number</h2>";
-	McCabeMetric mcCabe = getMetrics().getMcCabeMetric();
+	AbstractMcCabeMetric mcCabe = getMetrics().getMcCabeMetric();
 	if (mcCabe != null) {
 	    report += getQualitySign(mcCabe);
 	    report += "<br/>";
@@ -136,7 +136,7 @@ public class HTMLAnalysisReport extends AbstractAnalysisReport {
 
     private String getHalsteadReport() {
 	String report = "<h2>Halstead Metric</h2>";
-	HalsteadMetric halstead = getMetrics().getHalsteadMetric();
+	AbstractHalsteadMetric halstead = getMetrics().getHalsteadMetric();
 	if (halstead != null) {
 	    report += getQualitySign(halstead);
 	    report += "<br/>";
@@ -155,7 +155,7 @@ public class HTMLAnalysisReport extends AbstractAnalysisReport {
 
     private String getMaintainabilityReport() {
 	String report = "<h2>Maintainability Index</h2>";
-	MaintainabilityIndex maintainability =
+	AbstractMaintainabilityIndex maintainability =
 		getMetrics().getMaintainabilityIndex();
 	if (maintainability != null) {
 	    report += getQualitySign(maintainability);
@@ -169,7 +169,7 @@ public class HTMLAnalysisReport extends AbstractAnalysisReport {
 
     private String getEntropyReport() {
 	String report = "<h2>Entropy from Information Theory</h2>";
-	EntropyMetric entropy = getMetrics().getEntropyMetric();
+	AbstractEntropyMetric entropy = getMetrics().getEntropyMetric();
 	if (entropy != null) {
 	    report += getQualitySign(entropy);
 	    report += "<br/>";

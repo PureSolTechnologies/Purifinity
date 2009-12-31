@@ -25,10 +25,10 @@ import com.puresol.html.HTMLStandards;
  * @author Rick-Rainer Ludwig
  * 
  */
-abstract public class EntropyMetric extends HalsteadMetric {
+abstract public class AbstractEntropyMetric extends AbstractHalsteadMetric {
 
     private static final Translator translator =
-	    Translator.getTranslator(EntropyMetric.class);
+	    Translator.getTranslator(AbstractEntropyMetric.class);
 
     /**
      * entropy
@@ -46,7 +46,7 @@ abstract public class EntropyMetric extends HalsteadMetric {
     private double Redundancy;
     private double normalizedRedundancy;
 
-    public EntropyMetric(CodeRange codeRange) {
+    public AbstractEntropyMetric(CodeRange codeRange) {
 	super(codeRange);
 	calculate();
     }

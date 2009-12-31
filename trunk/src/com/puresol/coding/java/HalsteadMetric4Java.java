@@ -13,10 +13,10 @@ package com.puresol.coding.java;
 import com.puresol.coding.CodeEvaluationSystem;
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.CodeRangeType;
-import com.puresol.coding.HalsteadMetric;
+import com.puresol.coding.AbstractHalsteadMetric;
 import com.puresol.coding.QualityLevel;
 
-public class HalsteadMetric4Java extends HalsteadMetric {
+public class HalsteadMetric4Java extends AbstractHalsteadMetric {
 
     public HalsteadMetric4Java(CodeRange codeRange) {
 	super(codeRange);

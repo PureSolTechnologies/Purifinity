@@ -16,10 +16,10 @@ import javax.i18n4j.Translator;
 
 import com.puresol.html.HTMLStandards;
 
-abstract public class HalsteadMetric extends AbstractMetric {
+abstract public class AbstractHalsteadMetric extends AbstractMetric {
 
     private static final Translator translator =
-	    Translator.getTranslator(HalsteadMetric.class);
+	    Translator.getTranslator(AbstractHalsteadMetric.class);
 
     private Hashtable<String, Integer> operators =
 	    new Hashtable<String, Integer>();
@@ -79,7 +79,7 @@ abstract public class HalsteadMetric extends AbstractMetric {
      */
     private double B;
 
-    public HalsteadMetric(CodeRange codeRange) {
+    public AbstractHalsteadMetric(CodeRange codeRange) {
 	super(codeRange);
 	createHashtables();
 	calculate();

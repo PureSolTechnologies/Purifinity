@@ -13,7 +13,7 @@ package com.puresol.coding.fortran;
 import com.puresol.coding.CodeEvaluationSystem;
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.CodeRangeType;
-import com.puresol.coding.McCabeMetric;
+import com.puresol.coding.AbstractMcCabeMetric;
 import com.puresol.coding.QualityLevel;
 
 /**
@@ -22,7 +22,7 @@ import com.puresol.coding.QualityLevel;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class McCabeMetric4Fortran extends McCabeMetric {
+public class McCabeMetric4Fortran extends AbstractMcCabeMetric {
 
     public McCabeMetric4Fortran(CodeRange codeRange) {
 	super(codeRange);

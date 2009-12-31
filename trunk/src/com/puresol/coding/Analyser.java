@@ -14,19 +14,62 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
+/**
+ * This is a interface to a analyser. It's used to implement a language
+ * independent way to access a single analyser.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public interface Analyser {
 
-    public Language getLanguage();
+	/**
+	 * Returns the language of the file analysed.
+	 * 
+	 * @return The language is returned.
+	 */
+	public Language getLanguage();
 
-    public File getFile();
+	/**
+	 * The file which was analysed is returned.
+	 * 
+	 * @return The file is returned.
+	 */
+	public File getFile();
 
-    public ArrayList<CodeRange> getCodeRanges();
+	/**
+	 * This method returns all code ranges analysed within the analysed file.
+	 * 
+	 * @return
+	 */
+	public ArrayList<CodeRange> getCodeRanges();
 
-    public CodeRangeMetrics getMetrics(CodeRange codeRange);
+	/**
+	 * Returns the metrics for a single code range.
+	 * 
+	 * @param codeRange
+	 * @return
+	 */
+	public CodeRangeMetrics getMetrics(CodeRange codeRange);
 
-    public int getLineNumber();
+	/**
+	 * Returns the total number of lines in the file.
+	 * 
+	 * @return
+	 */
+	public int getLineNumber();
 
-    public Hashtable<Integer, String> getLexerTokens();
+	/**
+	 * This method returns a list of all lexer tokens.
+	 * 
+	 * @return
+	 */
+	public Hashtable<Integer, String> getLexerTokens();
 
-    public Hashtable<Integer, String> getParserTokens();
+	/**
+	 * This method returns a list of all parser tokens.
+	 * 
+	 * @return
+	 */
+	public Hashtable<Integer, String> getParserTokens();
 }
