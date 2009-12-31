@@ -8,7 +8,7 @@
  *
  ***************************************************************************/
 
-package com.puresol.apps;
+package apps;
 
 import java.io.File;
 
