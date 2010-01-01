@@ -10,6 +10,14 @@ import javax.security.auth.callback.TextOutputCallback;
 import javax.security.auth.callback.UnsupportedCallbackException;
 import javax.swingx.PasswordDialog;
 
+/**
+ * This is a special CallbackHandler for Login without username and password. In
+ * this case this callback handler is used and a PasswordDialog shows up within
+ * the current Application.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class PasswordDialogCallbackHandler implements CallbackHandler {
 
 	@Override

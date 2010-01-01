@@ -47,7 +47,7 @@ public class TestJAAS implements UA {
 	private void login(String context, CallbackHandler callbackHandler)
 			throws LoginException {
 		this.context = context;
-		loginContext = new LoginContext("context", callbackHandler);
+		loginContext = new LoginContext(context, callbackHandler);
 		loginContext.login();
 
 		Set<Principal> principals = loginContext.getSubject().getPrincipals();

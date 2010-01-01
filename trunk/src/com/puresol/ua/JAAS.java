@@ -10,6 +10,13 @@ import javax.security.auth.login.LoginException;
 
 import org.apache.log4j.Logger;
 
+/**
+ * This UA module is for JAAS usage. JAAS framework is used completely. The
+ * configuration is done in "/config/JAAS.conf".
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class JAAS implements UA {
 
 	private static final Logger logger = Logger.getLogger(JAAS.class);
@@ -47,7 +54,7 @@ public class JAAS implements UA {
 	private void login(String context, CallbackHandler callbackHandler)
 			throws LoginException {
 		this.context = context;
-		loginContext = new LoginContext("context", callbackHandler);
+		loginContext = new LoginContext(context, callbackHandler);
 		loginContext.login();
 
 		Set<Principal> principals = loginContext.getSubject().getPrincipals();
@@ -79,6 +86,7 @@ public class JAAS implements UA {
 		return context;
 	}
 
+	@Override
 	public Subject getSubject() {
 		return loginContext.getSubject();
 	}

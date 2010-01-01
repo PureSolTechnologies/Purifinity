@@ -25,6 +25,13 @@ import org.apache.log4j.Logger;
 
 import com.puresol.ua.ExtPrincipal;
 
+/**
+ * This login module is designed for LDAP authentication against a LDAP server
+ * with PureSolTechnologies schema.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class LdapLoginModule implements LoginModule {
 
 	private static final Logger logger = Logger
