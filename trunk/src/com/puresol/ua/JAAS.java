@@ -2,6 +2,7 @@ package com.puresol.ua;
 
 import java.security.Principal;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.security.auth.Subject;
 import javax.security.auth.callback.CallbackHandler;
@@ -24,9 +25,8 @@ public class JAAS implements UA {
 	private String context = "";
 	private LoginContext loginContext = null;
 
-	public JAAS() {
-		System.setProperty("java.security.auth.login.config", getClass()
-				.getResource("/config/JAAS.conf").toString());
+	protected JAAS(String configFile) {
+		System.setProperty("java.security.auth.login.config", configFile);
 	}
 
 	@Override
@@ -89,5 +89,31 @@ public class JAAS implements UA {
 	@Override
 	public Subject getSubject() {
 		return loginContext.getSubject();
+	}
+
+	@Override
+	public Set<Principal> getPrincipals() {
+		return loginContext.getSubject().getPrincipals();
+	}
+
+	@Override
+	public Set<Principal> getPrincipals(Class<? extends Principal> principal) {
+		Set<Principal> principals = new TreeSet<Principal>();
+		for (Principal p : loginContext.getSubject().getPrincipals()) {
+			if (p.getClass().equals(principal)) {
+				principals.add(p);
+			}
+		}
+		return principals;
+	}
+
+	@Override
+	public SubjectInformation getInformation() {
+		for (Principal principal : getPrincipals()) {
+			if (principal.getClass().equals(SubjectInformation.class)) {
+				return (SubjectInformation) principal;
+			}
+		}
+		return null;
 	}
 }

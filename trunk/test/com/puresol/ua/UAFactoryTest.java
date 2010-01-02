@@ -6,6 +6,8 @@ import javax.swingx.config.ClassRegistryElementType;
 
 import org.junit.Test;
 
+import com.puresol.gui.ua.SubjectInformationDialog;
+
 import junit.framework.Assert;
 import junit.framework.TestCase;
 
@@ -42,8 +44,10 @@ public class UAFactoryTest extends TestCase {
 	 */
 	public static void main(String[] args) {
 		UA ua = UAFactory.create();
-		if (ua.login("PureSolTechnologies")) {
+		if (ua.login("PureSolTechnologies", "ludwig", "26Elke03")) {
 			System.out.println("Success!!!");
 		}
+		ua.getInformation().print();
+		new SubjectInformationDialog(ua.getInformation()).run();
 	}
 }

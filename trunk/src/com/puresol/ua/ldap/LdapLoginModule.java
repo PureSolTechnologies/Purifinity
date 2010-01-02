@@ -20,10 +20,12 @@ import javax.security.auth.callback.TextOutputCallback;
 import javax.security.auth.callback.UnsupportedCallbackException;
 import javax.security.auth.login.LoginException;
 import javax.security.auth.spi.LoginModule;
+import javax.swing.ImageIcon;
 
 import org.apache.log4j.Logger;
 
 import com.puresol.ua.ExtPrincipal;
+import com.puresol.ua.SubjectInformation;
 
 /**
  * This login module is designed for LDAP authentication against a LDAP server
@@ -46,6 +48,7 @@ public class LdapLoginModule implements LoginModule {
 	private boolean debug = false;
 	private ExtPrincipal principal = null;
 	private DirContext ctx = null;
+	private SubjectInformation subjectInformation = null;
 
 	@Override
 	public void initialize(Subject subject, CallbackHandler callbackHandler,
@@ -55,10 +58,6 @@ public class LdapLoginModule implements LoginModule {
 		this.sharedState = sharedState;
 		this.options = options;
 		debug = "true".equalsIgnoreCase((String) options.get("debug"));
-		for (String key : options.keySet()) {
-			System.out.println("options: " + key + " / "
-					+ options.get(key).toString());
-		}
 	}
 
 	@Override
@@ -94,14 +93,23 @@ public class LdapLoginModule implements LoginModule {
 
 			ctx = new InitialDirContext(env);
 
-			Attributes attribs = ctx
-					.getAttributes("uid=ludwig,ou=users,ou=system");
+			subjectInformation = new SubjectInformation();
+			Attributes attribs = ctx.getAttributes("uid="
+					+ nameCallback.getName()
+					+ ",ou=people,o=PureSolTechnologies");
 			NamingEnumeration<?> enumAttrib = attribs.getAll();
 			while (enumAttrib.hasMore()) {
 				// TODO put here some meaningful principals in for the different
 				// sections...
 				Attribute attrib = (Attribute) enumAttrib.nextElement();
-				System.out.println(attrib);
+				if (attrib.getID().equals("photo")) {
+					Object photo = attrib.get();
+					byte[] buf = (byte[]) photo;
+					subjectInformation.setPicture(new ImageIcon(buf));
+				} else if (attrib.getID().equals("sn")) {
+					subjectInformation.setSurname((String) attrib.get());
+				}
+				System.out.println(attrib.getID());
 				System.out.println(attrib.getClass().getName());
 			}
 
@@ -118,6 +126,9 @@ public class LdapLoginModule implements LoginModule {
 
 	@Override
 	public boolean commit() throws LoginException {
+		if (subjectInformation != null) {
+			subject.getPrincipals().add(subjectInformation);
+		}
 		principal = new ExtPrincipal();
 		subject.getPrincipals().add(principal);
 		return true;

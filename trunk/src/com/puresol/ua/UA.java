@@ -1,5 +1,8 @@
 package com.puresol.ua;
 
+import java.security.Principal;
+import java.util.Set;
+
 import javax.security.auth.Subject;
 
 /**
@@ -24,4 +27,9 @@ public interface UA {
 
 	public Subject getSubject();
 
+	public Set<Principal> getPrincipals();
+
+	public Set<Principal> getPrincipals(Class<? extends Principal> principal);
+	
+	public SubjectInformation getInformation();
 }
