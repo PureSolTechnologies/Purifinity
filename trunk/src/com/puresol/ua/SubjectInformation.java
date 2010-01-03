@@ -1,14 +1,21 @@
 package com.puresol.ua;
 
 import java.security.Principal;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
+
+import com.puresol.data.Address;
+import com.puresol.data.PhoneNumber;
 
 public class SubjectInformation implements Principal {
 
 	private ImageIcon picture = null;
 	private String givenName = null;
 	private String surname = null;
+	private String room = null;
+	private ArrayList<PhoneNumber> phoneNumbers;
+	private ArrayList<Address> addresses;
 
 	/**
 	 * @return the picture
@@ -101,6 +108,49 @@ public class SubjectInformation implements Principal {
 		} else if (!surname.equals(other.surname))
 			return false;
 		return true;
+	}
+
+	/**
+	 * @return the room
+	 */
+	public String getRoom() {
+		return room;
+	}
+
+	/**
+	 * @param room
+	 *            the room to set
+	 */
+	public void setRoom(String room) {
+		this.room = room;
+	}
+
+	/**
+	 * @return the phoneNumbers
+	 */
+	public ArrayList<PhoneNumber> getPhoneNumbers() {
+		return phoneNumbers;
+	}
+
+	/**
+	 * @param phoneNumbers the phoneNumbers to set
+	 */
+	public void setPhoneNumbers(ArrayList<PhoneNumber> phoneNumbers) {
+		this.phoneNumbers = phoneNumbers;
+	}
+
+	/**
+	 * @return the addresses
+	 */
+	public ArrayList<Address> getAddresses() {
+		return addresses;
+	}
+
+	/**
+	 * @param addresses the addresses to set
+	 */
+	public void setAddresses(ArrayList<Address> addresses) {
+		this.addresses = addresses;
 	}
 
 }

@@ -93,7 +93,13 @@ public class JAAS implements UA {
 
 	@Override
 	public Set<Principal> getPrincipals() {
-		return loginContext.getSubject().getPrincipals();
+		if (loginContext != null) {
+			Subject subject = loginContext.getSubject();
+			if (subject != null) {
+				return subject.getPrincipals();
+			}
+		}
+		return null;
 	}
 
 	@Override
@@ -109,9 +115,12 @@ public class JAAS implements UA {
 
 	@Override
 	public SubjectInformation getInformation() {
-		for (Principal principal : getPrincipals()) {
-			if (principal.getClass().equals(SubjectInformation.class)) {
-				return (SubjectInformation) principal;
+		Set<Principal> principals = getPrincipals();
+		if (principals != null) {
+			for (Principal principal : principals) {
+				if (principal.getClass().equals(SubjectInformation.class)) {
+					return (SubjectInformation) principal;
+				}
 			}
 		}
 		return null;
