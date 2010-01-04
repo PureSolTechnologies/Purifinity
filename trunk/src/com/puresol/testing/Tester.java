@@ -10,6 +10,7 @@
 
 package com.puresol.testing;
 
+import com.puresol.data.Identifiable;
 import com.puresol.entities.EntityTester;
 
 /**
@@ -31,5 +32,9 @@ public class Tester {
 
 	public static boolean testEntity(Class<?> clazz) {
 		return EntityTester.test(clazz);
+	}
+
+	public static boolean testIdentifiable(Class<? extends Identifiable> clazz) {
+		return IdentifiableTester.test(clazz);
 	}
 }
