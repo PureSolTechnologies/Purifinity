@@ -34,11 +34,11 @@ public class HalsteadMetric4Java extends AbstractHalsteadMetric {
 	    if (get_HV() < 80) {
 		return QualityLevel.MEDIUM;
 	    }
-	    if (get_HV() > 8000) {
-		return QualityLevel.MEDIUM;
-	    }
 	    if (get_HV() > 10000) {
 		return QualityLevel.LOW;
+	    }
+	    if (get_HV() > 8000) {
+		return QualityLevel.MEDIUM;
 	    }
 	    return QualityLevel.HIGH;
 	} else if ((range.getType() == CodeRangeType.CONSTRUCTOR)
@@ -48,11 +48,11 @@ public class HalsteadMetric4Java extends AbstractHalsteadMetric {
 	    if (get_HV() < 10) {
 		return QualityLevel.MEDIUM;
 	    }
-	    if (get_HV() > 1000) {
-		return QualityLevel.MEDIUM;
-	    }
 	    if (get_HV() > 1250) {
 		return QualityLevel.LOW;
+	    }
+	    if (get_HV() > 1000) {
+		return QualityLevel.MEDIUM;
 	    }
 	    return QualityLevel.HIGH;
 	}
