@@ -7,7 +7,7 @@ import com.puresol.testing.Tester;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 
-public class PublicityTypeTester extends TestCase {
+public class PublicityTypeTest extends TestCase {
 
 	@Test
 	public void testIdentifiable() {
