@@ -9,9 +9,13 @@ import junit.framework.TestCase;
 
 public class PersonNamePartTypeTest extends TestCase {
 
-    @Test
-    public void testIdentifiable() {
-	Assert.assertTrue(Tester
-		.testIdentifiable(PersonNamePartType.class));
-    }
+	@Test
+	public void testIdentifiable() {
+		Assert.assertTrue(Tester.testIdentifiable(PersonNamePartType.class));
+	}
+
+	@Test
+	public void testStandards() {
+		Assert.assertTrue(Tester.testStandards(PersonNamePartType.class));
+	}
 }

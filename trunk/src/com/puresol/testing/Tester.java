@@ -37,4 +37,8 @@ public class Tester {
 	public static boolean testIdentifiable(Class<? extends Identifiable> clazz) {
 		return IdentifiableTester.test(clazz);
 	}
+
+	public static boolean testStandards(Class<?> clazz) {
+		return StandardsTester.test(clazz);
+	}
 }
