@@ -24,5 +24,10 @@
 	<classpathentry kind="lib" path="lib/antlr/antlr-3.2.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/i18n4java"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/swingx"/>
+	<classpathentry kind="lib" path="lib/mail/dsn.jar"/>
+	<classpathentry kind="lib" path="lib/mail/imap.jar"/>
+	<classpathentry kind="lib" path="lib/mail/mailapi.jar"/>
+	<classpathentry kind="lib" path="lib/mail/pop3.jar"/>
+	<classpathentry kind="lib" path="lib/mail/smtp.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
