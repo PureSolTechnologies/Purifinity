@@ -18,8 +18,6 @@
 	<classpathentry kind="lib" path="lib/hibernate/slf4j-log4j12.jar"/>
 	<classpathentry kind="lib" path="lib/jboss/jboss-client.jar"/>
 	<classpathentry kind="lib" path="lib/junit/junit-4.6.jar"/>
-	<classpathentry kind="lib" path="/opt/JBoss/client/jbossall-client.jar"/>
-	<classpathentry kind="lib" path="/opt/JBoss/common/lib/jsp-api.jar"/>
 	<classpathentry kind="lib" path="lib/hibernate/javassist-3.9.0.GA.jar"/>
 	<classpathentry kind="lib" path="lib/antlr/antlr-3.2.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/i18n4java"/>
@@ -29,5 +27,7 @@
 	<classpathentry kind="lib" path="lib/mail/mailapi.jar"/>
 	<classpathentry kind="lib" path="lib/mail/pop3.jar"/>
 	<classpathentry kind="lib" path="lib/mail/smtp.jar"/>
+	<classpathentry kind="lib" path="lib/jboss/jboss-javaee.jar"/>
+	<classpathentry kind="lib" path="lib/jboss/jsp-api.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
