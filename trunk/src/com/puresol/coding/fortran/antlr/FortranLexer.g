@@ -33,10 +33,19 @@ REAL
   R E A L
   ;
 
+DOUBLE_COMPLEX
+	:	
+	DOUBLE WS+ COMPLEX
+	;
+
 DOUBLE_PRECISION
   :
-  D O U B L E WS+ P R E C I S I O N
+  DOUBLE WS+ P R E C I S I O N
   ;
+
+DOUBLE	:	
+	D O U B L E
+	;
 
 COMPLEX
   :
@@ -324,6 +333,7 @@ COMMENT
   | {getCharPositionInLine()==0}?=>
   (
     'c'
+    | 'C'
     | '*'
   )
   ~(

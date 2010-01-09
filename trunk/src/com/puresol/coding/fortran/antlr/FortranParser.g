@@ -146,7 +146,7 @@ else_
   ELSE
   ;
 
-do
+do_
   :
   DO
   ;
@@ -171,7 +171,7 @@ call_
   CALL
   ;
 
-goto
+goto_
   :
   GOTO
   ;

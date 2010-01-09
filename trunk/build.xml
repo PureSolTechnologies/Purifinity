@@ -281,7 +281,7 @@
           target: doc
          ================================= -->
 	<target name="doc" description="create documentation">
-		<javadoc packagenames="com.qsys.*" sourcepath="${src.dir}" destdir="${doc.dir}" windowtitle="I18N API Documentation">
+		<javadoc packagenames="*" sourcepath="${src.dir}" destdir="${doc.dir}" windowtitle="I18N API Documentation">
 			<classpath>
 				<pathelement location="${bin.dir}" />
 			</classpath>
