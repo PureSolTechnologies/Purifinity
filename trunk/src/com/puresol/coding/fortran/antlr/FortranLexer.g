@@ -63,6 +63,11 @@ NONE
   N O N E
   ;
 
+DATA
+  :
+  D A T A
+  ;
+
 ALLOCATE
   :
   A L L O C A T E

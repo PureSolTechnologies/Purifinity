@@ -35,12 +35,6 @@
 		</fileset>
 	</path>
 
-	<path id="drv.classpath">
-		<fileset dir="${drv.dir}">
-			<include name="**/*.jar" />
-		</fileset>
-	</path>
-
 	<!-- ================================= 
           target: all              
          ================================= -->
@@ -87,12 +81,10 @@
          ================================= -->
 	<target name="compile" depends="init" description="compile the whole tree">
 		<javac srcdir="${src.dir}" destdir="${bin.dir}" debug="yes">
-			<classpath refid="drv.classpath" />
 			<classpath refid="lib.classpath" />
 		</javac>
 		<javac srcdir="${test.dir}" destdir="${bin.dir}" debug="yes">
 			<classpath refid="lib.classpath" />
-			<classpath refid="drv.classpath" />
 		</javac>
 		<copy todir="${bin.dir}">
 			<fileset dir="${res.dir}" />
@@ -109,7 +101,6 @@
 				<pathelement location="${test.dir}" />
 			</classpath>
 			<classpath refid="lib.classpath" />
-			<classpath refid="drv.classpath" />
 			<formatter type="plain" />
 			<batchtest todir="${junit.text.dir}" unless="testcase">
 				<fileset dir="${test.dir}">
@@ -138,7 +129,6 @@
 				-->
 			</classpath>
 			<classpath refid="lib.classpath" />
-			<classpath refid="drv.classpath" />
 			<formatter type="xml" />
 			<test name="${testcase}" todir="${junit.xml.dir}" if="testcase" />
 			<batchtest todir="${junit.xml.dir}" unless="testcase">
@@ -296,7 +286,6 @@
 				<pathelement location="${bin.dir}" />
 			</classpath>
 			<classpath refid="lib.classpath" />
-			<classpath refid="drv.classpath" />
 		</javadoc>
 	</target>
 
