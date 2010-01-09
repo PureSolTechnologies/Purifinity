@@ -10,6 +10,8 @@
 
 package com.puresol.exceptions;
 
+import javax.i18n4j.Translator;
+
 import org.apache.log4j.Logger;
 
 /**
@@ -29,12 +31,16 @@ import org.apache.log4j.Logger;
 public class StrangeSituationException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
+
 	private static final Logger logger = Logger
 			.getLogger(StrangeSituationException.class);
+	private static final Translator translator = Translator
+			.getTranslator(StrangeSituationException.class);
 
-	static public final String STRANGE_SITUATION_MESSAGE = "Something very strange is going on here!\n"
-			+ "Nothing can be done to proceed here.\n"
-			+ "Aborting is the only option (if not miracle is happening)... ;-(";
+	static public final String STRANGE_SITUATION_MESSAGE = translator
+			.i18n("Something very strange is going on here!\n"
+					+ "Nothing can be done to proceed here.\n"
+					+ "Aborting is the only option (if not miracle is happening)... ;-(");
 
 	public StrangeSituationException(Throwable e) {
 		super(STRANGE_SITUATION_MESSAGE);

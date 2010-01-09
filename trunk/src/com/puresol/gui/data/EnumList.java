@@ -21,6 +21,17 @@ public class EnumList extends AbstractExtendedList {
 		super(listModel);
 	}
 
+	public EnumList(Class<? extends Identifiable> enumeration) {
+		super();
+		setEnum(enumeration);
+	}
+
+	public EnumList(Class<? extends Identifiable> enumeration,
+			ListModel listModel) {
+		super(listModel);
+		setEnum(enumeration);
+	}
+
 	public void setEnum(Class<? extends Identifiable> enumeration) {
 		this.removeAll();
 		if (enumeration == null) {
@@ -33,7 +44,7 @@ public class EnumList extends AbstractExtendedList {
 		}
 		setListData(listData);
 	}
-	
+
 	public static void main(String[] args) {
 		Dialog dialog = new Dialog("Test", true);
 		EnumList el = new EnumList();

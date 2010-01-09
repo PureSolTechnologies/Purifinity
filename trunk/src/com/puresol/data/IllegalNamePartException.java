@@ -4,13 +4,14 @@ import javax.i18n4j.Translator;
 
 public class IllegalNamePartException extends Exception {
 
-    private static final long serialVersionUID = 5714017686556808402L;
+	private static final long serialVersionUID = 5714017686556808402L;
 
-    private static final Translator translator =
-	    Translator.getTranslator(IllegalNamePartException.class);
+	private static final Translator translator = Translator
+			.getTranslator(IllegalNamePartException.class);
 
-    public IllegalNamePartException(PersonNamePart namePart) {
-	super(translator.i18n("Name part '{0}' is invalid!", namePart));
-    }
+	public IllegalNamePartException(PersonNamePart namePart) {
+		super(translator.i18n("Name part \"{0}\" is invalid!", namePart
+				.toString()));
+	}
 
 }

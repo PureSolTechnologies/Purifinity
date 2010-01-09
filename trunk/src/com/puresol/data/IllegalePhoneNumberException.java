@@ -10,7 +10,7 @@ public class IllegalePhoneNumberException extends Exception {
 	    Translator.getTranslator(IllegalePhoneNumberException.class);
 
     public IllegalePhoneNumberException(PhoneNumber phone) {
-	super(translator.i18n("Phone number '{0}' is invalid!", phone
+	super(translator.i18n("Phone number \"{0}\" is invalid!", phone
 		.toString()));
     }
 }

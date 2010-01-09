@@ -16,9 +16,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URI;
+import java.net.URL;
 
 import javax.swing.JOptionPane;
 import javax.swingx.Application;
+import javax.swingx.config.APIConfig;
 import javax.swingx.data.Time;
 
 import org.apache.log4j.Logger;
@@ -51,7 +53,9 @@ public class HTMLStandards {
 
 	public static String getStandardFooter() {
 		String footer = "<hr/>\n";
-		footer += "(c) by <a href=\"http://www.puresol-technologies.com\">PureSol-Technologies</a>"
+		footer += "(c) "
+				+ APIConfig.PACKAGE_YEARS
+				+ " by <a href=\"http://www.puresol-technologies.com\">PureSol-Technologies</a>"
 				+ Time.getFullTimeString() + "\n";
 		footer += "</body>\n";
 		footer += "</html>\n";
@@ -120,5 +124,23 @@ public class HTMLStandards {
 		result = result.replace("\n", "</td></tr><tr><td>");
 		result = result.replace("\t", "</td><td>");
 		return "<table><tr><td>" + result + "</td></tr></table>";
+	}
+
+	public static String getLink(URL url) {
+		return getLink(url, url.toString());
+	}
+
+	public static String getLink(URL url, String text) {
+		return getLink(url, text, LinkTargets.DEFAULT);
+	}
+
+	public static String getLink(URL url, String text, LinkTargets target) {
+		String targetString = "";
+		if (target != LinkTargets.DEFAULT) {
+			targetString = " target=\"" + target.getKeyword() + "\"";
+		}
+		String link = "<a href=\"" + url.toString() + "\"" + targetString + ">"
+				+ text + "</a>";
+		return link;
 	}
 }
