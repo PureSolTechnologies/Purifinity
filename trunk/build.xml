@@ -9,7 +9,7 @@
 ############################################## 
 -->
 
-<project name="I18N" default="all" basedir=".">
+<project name="PureSolTechnologiesAPI" default="all" basedir=".">
 
 	<description>
 	PureSolTechnologiesAPI is a non open API library for PureSol-Technology internal usage.
