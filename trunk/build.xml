@@ -200,7 +200,7 @@
 			<ignore regex="org.apache.log4j.*" />
 			<classpath refid="lib.classpath" />
 			<classpath>
-			    <pathelement location="lib/cobertura.jar" />
+				<pathelement location="lib/cobertura.jar" />
 			</classpath>
 			<fileset dir="${bin.dir}">
 				<!--
@@ -234,7 +234,7 @@
           target: findbugs
          ================================= -->
 	<target name="findbugs" depends="compile" description="Runs FindBugs code analysis tool against whole source tree.">
-		<findbugs home="${findbugs.dir}" projectFile="findbugs.fbp" output="html" outputFile="${findbugs.html.dir}/findbugs_report.html" reportLevel="low" effort="max">
+		<findbugs home="${findbugs.dir}" projectFile="findbugs.fbp" output="html" outputFile="${findbugs.html.dir}/findbugs_report.html" reportLevel="low" effort="max" jvmargs="-Xmx512m">
 			<!-- sourcePath path="src" / -->
 			<!-- class location="bin" / -->
 			<!-- auxClasspath location="tools/junit/junit.jar" / -->
