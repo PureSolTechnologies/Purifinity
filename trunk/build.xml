@@ -234,7 +234,7 @@
           target: findbugs
          ================================= -->
 	<target name="findbugs" depends="compile" description="Runs FindBugs code analysis tool against whole source tree.">
-		<findbugs home="${findbugs.dir}" projectFile="findbugs.fbp" output="html" outputFile="${findbugs.html.dir}/findbugs_report.html" reportLevel="low" effort="max" jvmargs="-Xmx512m">
+		<findbugs home="${findbugs.dir}" projectFile="findbugs.fbp" output="html" outputFile="${findbugs.html.dir}/findbugs_report.html" reportLevel="low" effort="max" jvmargs="-Xmx1024m">
 			<!-- sourcePath path="src" / -->
 			<!-- class location="bin" / -->
 			<!-- auxClasspath location="tools/junit/junit.jar" / -->
