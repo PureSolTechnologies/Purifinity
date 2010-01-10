@@ -38,8 +38,6 @@ public class FortranAnalyser extends AbstractAnalyser {
 
 	private FortranLexer lexer = null;
 	private int lineNumber = 0;
-	ArrayList<Integer> lineLengths = null;
-	ArrayList<Integer> lineLengthsTrimmed = null;
 
 	public static boolean isSuitable(File file) {
 		return (file.getPath().endsWith(".f")

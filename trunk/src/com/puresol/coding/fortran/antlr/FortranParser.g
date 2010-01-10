@@ -30,6 +30,8 @@ file
   :
   program_file
   |
+  subroutine_file
+  |
   (
     ~WS
     | WS
@@ -45,6 +47,12 @@ program_file
   )
   end
   ;
+
+subroutine_file
+	:	subroutine id lparen (id (comma id)*)? rparen
+	(~WS | WS)
+	end
+	;
 
 implicit_none
   :

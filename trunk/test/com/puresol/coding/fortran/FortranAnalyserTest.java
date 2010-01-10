@@ -52,7 +52,7 @@ public class FortranAnalyserTest extends TestCase {
 	@Test
 	public void test() {
 		Analyser analyser = new FortranAnalyser(new File("."), new File(
-				"test/com/puresol/coding/fortran/FortranTest.f"));
+				"test/com/puresol/coding/fortran/samples/FortranTest.f"));
 		ArrayList<CodeRange> ranges = analyser.getCodeRanges();
 		TokenStream stream = ranges.get(0).getTokenStream();
 		Hashtable<Integer, String> tokens = analyser.getLexerTokens();

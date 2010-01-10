@@ -5,10 +5,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintStream;
 
 import org.antlr.runtime.ANTLRInputStream;
 import org.antlr.runtime.CommonTokenStream;
+import org.antlr.runtime.RecognitionException;
 import org.junit.Test;
 
 import com.puresol.coding.ANTLRUtilities;
@@ -33,12 +33,16 @@ public class JavaParserTest extends TestCase {
 			InputStream in = new FileInputStream(file);
 			JavaLexer lexer = new JavaLexer(new ANTLRInputStream(in));
 			JavaParser parser = new JavaParser(new CommonTokenStream(lexer));
-			ANTLRUtilities.printTokenStream(parser.getTokenStream(),
-					new PrintStream(new File("/dev/null")));
+			parser.compilationUnit();
+			// ANTLRUtilities.printTokenStream(parser.getTokenStream(),
+			// new PrintStream(new File("/dev/null")));
+			ANTLRUtilities.printTokenStream(parser.getTokenStream());
 			return true;
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (RecognitionException e) {
 			e.printStackTrace();
 		}
 		return false;
