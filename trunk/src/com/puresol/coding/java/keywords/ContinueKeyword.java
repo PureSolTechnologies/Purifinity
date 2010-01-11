@@ -1,12 +1,12 @@
 package com.puresol.coding.java.keywords;
 
-import com.puresol.parser.AbstractTokenDefinition;
+import com.puresol.coding.tokentypes.Operator;
 
-public class ContinueKeyword extends AbstractTokenDefinition {
+public class ContinueKeyword extends Operator {
 
-    @Override
-    public String getPatternString() {
-	return "continue";
-    }
+	@Override
+	public String getPatternString() {
+		return "continue";
+	}
 
 }

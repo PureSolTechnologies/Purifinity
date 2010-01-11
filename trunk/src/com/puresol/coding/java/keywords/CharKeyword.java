@@ -1,12 +1,12 @@
 package com.puresol.coding.java.keywords;
 
-import com.puresol.parser.AbstractTokenDefinition;
+import com.puresol.coding.tokentypes.PrimitiveDataType;
 
-public class CharKeyword extends AbstractTokenDefinition {
+public class CharKeyword extends PrimitiveDataType {
 
-    @Override
-    public String getPatternString() {
-	return "char";
-    }
+	@Override
+	public String getPatternString() {
+		return "char";
+	}
 
 }

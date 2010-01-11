@@ -1,12 +1,12 @@
 package com.puresol.coding.java.tokens;
 
-import com.puresol.parser.AbstractTokenDefinition;
+import com.puresol.coding.tokentypes.Operant;
 
-public class BooleanLiteral extends AbstractTokenDefinition {
+public class BooleanLiteral extends Operant {
 
-    @Override
-    public String getPatternString() {
-	return "(true|false)";
-    }
+	@Override
+	public String getPatternString() {
+		return "(true|false)";
+	}
 
 }

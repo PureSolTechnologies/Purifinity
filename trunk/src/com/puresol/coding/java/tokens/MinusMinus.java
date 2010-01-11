@@ -1,12 +1,12 @@
 package com.puresol.coding.java.tokens;
 
-import com.puresol.parser.AbstractTokenDefinition;
+import com.puresol.coding.tokentypes.Operator;
 
-public class MinusMinus extends AbstractTokenDefinition {
+public class MinusMinus extends Operator {
 
-    @Override
-    public String getPatternString() {
-	return "--";
-    }
+	@Override
+	public String getPatternString() {
+		return "--";
+	}
 
 }

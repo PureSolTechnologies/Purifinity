@@ -1,4 +1,4 @@
-package com.puresol.parser.java.tokendef;
+package com.puresol.coding.java.tokens;
 
 import org.junit.Test;
 

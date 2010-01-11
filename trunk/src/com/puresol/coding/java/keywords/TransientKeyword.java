@@ -1,12 +1,12 @@
 package com.puresol.coding.java.keywords;
 
-import com.puresol.parser.AbstractTokenDefinition;
+import com.puresol.coding.tokentypes.Operator;
 
-public class TransientKeyword extends AbstractTokenDefinition {
+public class TransientKeyword extends Operator {
 
-    @Override
-    public String getPatternString() {
-	return "transient";
-    }
+	@Override
+	public String getPatternString() {
+		return "transient";
+	}
 
 }

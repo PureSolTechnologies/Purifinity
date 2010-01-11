@@ -1,12 +1,12 @@
 package com.puresol.coding.java.keywords;
 
-import com.puresol.parser.AbstractTokenDefinition;
+import com.puresol.coding.tokentypes.Operator;
 
-public class BreakKeyword extends AbstractTokenDefinition {
+public class BreakKeyword extends Operator {
 
-    @Override
-    public String getPatternString() {
-	return "break";
-    }
+	@Override
+	public String getPatternString() {
+		return "break";
+	}
 
 }

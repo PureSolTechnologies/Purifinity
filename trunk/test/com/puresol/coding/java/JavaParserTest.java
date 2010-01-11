@@ -1,4 +1,4 @@
-package com.puresol.parser.java;
+package com.puresol.coding.java;
 
 import java.io.File;
 import java.io.FileNotFoundException;

@@ -1,12 +1,12 @@
 package com.puresol.coding.java.tokens;
 
-import com.puresol.parser.AbstractTokenDefinition;
+import com.puresol.coding.tokentypes.Operant;
 
-public class FloatingPointLiteral extends AbstractTokenDefinition {
+public class FloatingPointLiteral extends Operant {
 
-    @Override
-    public String getPatternString() {
-	return "(\\+|-)?\\d*\\.\\d+((e|E)(\\+|-)?\\d+)?";
-    }
+	@Override
+	public String getPatternString() {
+		return "(\\+|-)?\\d*\\.\\d+((e|E)(\\+|-)?\\d+)?";
+	}
 
 }

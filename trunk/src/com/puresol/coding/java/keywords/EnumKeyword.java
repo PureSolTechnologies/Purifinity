@@ -1,12 +1,12 @@
 package com.puresol.coding.java.keywords;
 
-import com.puresol.parser.AbstractTokenDefinition;
+import com.puresol.coding.tokentypes.Operator;
 
-public class EnumKeyword extends AbstractTokenDefinition {
+public class EnumKeyword extends Operator {
 
-    @Override
-    public String getPatternString() {
-	return "enum";
-    }
+	@Override
+	public String getPatternString() {
+		return "enum";
+	}
 
 }
