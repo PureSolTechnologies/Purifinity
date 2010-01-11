@@ -25,7 +25,7 @@ public class JavaParserTest extends TestCase {
 	public void test() {
 		try {
 			DefaultPreConditioner conditioner = new DefaultPreConditioner(
-					new File("test/com/puresol/parser/java/JavaLexerTest.java"));
+					new File("test/com/puresol/coding/java/JavaLexerTest.java"));
 			TokenStream tokenStream = conditioner.getTokenStream();
 			Lexer lexer = new Lexer(tokenStream);
 			lexer.addDefinitions(JavaKeywords.class);

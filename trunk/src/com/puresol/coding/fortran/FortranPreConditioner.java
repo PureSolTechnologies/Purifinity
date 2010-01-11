@@ -12,8 +12,7 @@ public class FortranPreConditioner extends DefaultPreConditioner {
 		super(file);
 	}
 
-	public FortranPreConditioner(InputStream stream) {
-		super(stream);
+	public FortranPreConditioner(String name, InputStream stream) {
+		super(name, stream);
 	}
-
 }

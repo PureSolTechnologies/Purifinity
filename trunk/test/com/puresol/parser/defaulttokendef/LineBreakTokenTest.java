@@ -2,7 +2,7 @@ package com.puresol.parser.defaulttokendef;
 
 import org.junit.Test;
 
-import com.puresol.parser.defaulttokens.LineBreak;
+import com.puresol.coding.java.tokens.LineBreak;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;

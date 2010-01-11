@@ -1,38 +1,38 @@
 package com.puresol.coding.java;
 
 import com.puresol.coding.java.tokens.Assign;
+import com.puresol.coding.java.tokens.At;
 import com.puresol.coding.java.tokens.BooleanLiteral;
+import com.puresol.coding.java.tokens.Colon;
+import com.puresol.coding.java.tokens.Dot;
 import com.puresol.coding.java.tokens.Equal;
 import com.puresol.coding.java.tokens.FloatingPointLiteral;
 import com.puresol.coding.java.tokens.GreaterEqual;
+import com.puresol.coding.java.tokens.GreaterThan;
 import com.puresol.coding.java.tokens.IdLiteral;
 import com.puresol.coding.java.tokens.IntegerLiteral;
+import com.puresol.coding.java.tokens.LCurlyBracket;
+import com.puresol.coding.java.tokens.LParen;
+import com.puresol.coding.java.tokens.LRectBracket;
 import com.puresol.coding.java.tokens.LessEqual;
+import com.puresol.coding.java.tokens.LessThan;
+import com.puresol.coding.java.tokens.LineBreak;
+import com.puresol.coding.java.tokens.Minus;
 import com.puresol.coding.java.tokens.MinusMinus;
+import com.puresol.coding.java.tokens.Percent;
+import com.puresol.coding.java.tokens.Plus;
 import com.puresol.coding.java.tokens.PlusAssign;
 import com.puresol.coding.java.tokens.PlusPlus;
+import com.puresol.coding.java.tokens.RCurlyBracket;
+import com.puresol.coding.java.tokens.RParen;
+import com.puresol.coding.java.tokens.RRectBracket;
+import com.puresol.coding.java.tokens.Semicolon;
+import com.puresol.coding.java.tokens.Slash;
+import com.puresol.coding.java.tokens.Star;
 import com.puresol.coding.java.tokens.StringLiteral;
 import com.puresol.coding.java.tokens.Unequal;
+import com.puresol.coding.java.tokens.WhiteSpace;
 import com.puresol.parser.AbstractTokenDefinitions;
-import com.puresol.parser.defaulttokens.At;
-import com.puresol.parser.defaulttokens.Colon;
-import com.puresol.parser.defaulttokens.Dot;
-import com.puresol.parser.defaulttokens.GreaterThan;
-import com.puresol.parser.defaulttokens.LCurlyBracket;
-import com.puresol.parser.defaulttokens.LParen;
-import com.puresol.parser.defaulttokens.LRectBracket;
-import com.puresol.parser.defaulttokens.LessThan;
-import com.puresol.parser.defaulttokens.LineBreak;
-import com.puresol.parser.defaulttokens.Minus;
-import com.puresol.parser.defaulttokens.Percent;
-import com.puresol.parser.defaulttokens.Plus;
-import com.puresol.parser.defaulttokens.RCurlyBracket;
-import com.puresol.parser.defaulttokens.RParen;
-import com.puresol.parser.defaulttokens.RRectBracket;
-import com.puresol.parser.defaulttokens.Semicolon;
-import com.puresol.parser.defaulttokens.Slash;
-import com.puresol.parser.defaulttokens.Star;
-import com.puresol.parser.defaulttokens.WhiteSpace;
 
 public class JavaSymbols extends AbstractTokenDefinitions {
 

@@ -1,16 +1,25 @@
 package com.puresol.coding.tokentypes;
 
 import com.puresol.parser.AbstractTokenDefinition;
-import com.puresol.parser.TokenPublicity;
+import com.puresol.parser.Token;
+import com.puresol.parser.TokenStream;
 
 public abstract class AbstractProgrammingLanguageTokenDefinition extends
-		AbstractTokenDefinition {
+		AbstractTokenDefinition implements ProgrammingLanguageTokenDefinition {
 
-	public abstract TokenPublicity getDefaultPublicity();
+	@Override
+	public boolean countForHalstead() {
+		return true;
+	}
 
-	public abstract int changeBlockLayer();
+	@Override
+	public int getCyclomaticNumber(Token token, TokenStream tokenStream) {
+		return 0;
+	}
 
-	public abstract SymbolType getSymbolType();
+	@Override
+	public String getHalsteadSymbol() {
+		return getPatternString();
+	}
 
-	public abstract boolean isPrimitiveDataType();
 }

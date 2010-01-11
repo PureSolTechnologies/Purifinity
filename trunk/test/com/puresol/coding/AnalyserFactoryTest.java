@@ -42,7 +42,7 @@ public class AnalyserFactoryTest extends TestCase {
 		try {
 			Analyser analyser = AnalyserFactory.createAnalyser(
 					new File("test"), new File(
-							"com/puresol/coding/java/JavaAnalyserTest.java"));
+							"com/puresol/coding/java/JavaParserTest.java"));
 			Assert.assertEquals(JavaAnalyser.class, analyser.getClass());
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

@@ -11,18 +11,22 @@ import com.puresol.exceptions.StrangeSituationException;
 
 public class DefaultPreConditioner extends AbstractPreConditioner {
 
+	private final String name;
+
 	public DefaultPreConditioner(File file) throws FileNotFoundException {
 		super(file);
+		this.name = file.getPath();
 	}
 
-	public DefaultPreConditioner(InputStream stream) {
+	public DefaultPreConditioner(String name, InputStream stream) {
 		super(stream);
+		this.name = name;
 	}
 
 	@Override
 	protected void generateTokenStream() throws IOException {
 		try {
-			TokenStream tokenStream = new TokenStream(getStream());
+			TokenStream tokenStream = new TokenStream(name, getStream());
 			String text = readStream();
 			Token token = new Token(getStream(), 0, TokenPublicity.VISIBLE, 0,
 					text.length(), text, 0, text

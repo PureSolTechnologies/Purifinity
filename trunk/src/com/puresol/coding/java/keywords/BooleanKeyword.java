@@ -8,5 +8,4 @@ public class BooleanKeyword extends PrimitiveDataType {
 	public String getPatternString() {
 		return "boolean";
 	}
-
 }
