@@ -8,6 +8,8 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
+import com.puresol.coding.java.JavaKeywords;
+import com.puresol.coding.java.JavaSymbols;
 import com.puresol.parser.DefaultPreConditioner;
 import com.puresol.parser.Lexer;
 import com.puresol.parser.NoMatchingTokenDefintionFound;

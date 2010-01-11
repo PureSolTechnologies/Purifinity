@@ -6,13 +6,15 @@ import java.io.IOException;
 
 import org.junit.Test;
 
+import com.puresol.coding.java.JavaKeywords;
+import com.puresol.coding.java.JavaSymbols;
+import com.puresol.coding.java.partdef.JavaFile;
 import com.puresol.parser.DefaultPreConditioner;
 import com.puresol.parser.Lexer;
 import com.puresol.parser.NoMatchingTokenDefintionFound;
 import com.puresol.parser.Parser;
 import com.puresol.parser.PartDoesNotMatchException;
 import com.puresol.parser.TokenStream;
-import com.puresol.parser.java.partdef.JavaFile;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;

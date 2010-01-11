@@ -2,6 +2,8 @@ package com.puresol.parser.java.tokendef;
 
 import org.junit.Test;
 
+import com.puresol.coding.java.tokendef.StringLiteral;
+
 import junit.framework.Assert;
 import junit.framework.TestCase;
 

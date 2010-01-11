@@ -23,6 +23,7 @@ import com.puresol.coding.CodeRange;
 import com.puresol.coding.CodeRangeType;
 import com.puresol.coding.Language;
 import com.puresol.coding.TokenContent;
+import com.puresol.coding.fortran.metrics.CodeRangeMetrics4Fortran;
 import com.puresol.parser.Lexer;
 import com.puresol.parser.NoMatchingTokenDefintionFound;
 import com.puresol.parser.Parser;

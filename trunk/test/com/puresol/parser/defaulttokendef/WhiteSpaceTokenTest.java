@@ -2,6 +2,8 @@ package com.puresol.parser.defaulttokendef;
 
 import org.junit.Test;
 
+import com.puresol.parser.defaulttokens.WhiteSpace;
+
 import junit.framework.Assert;
 
 public class WhiteSpaceTokenTest {
