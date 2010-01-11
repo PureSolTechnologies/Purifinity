@@ -77,14 +77,14 @@ public class Lexer {
 		tokenDefinitions.addAll(definitions);
 	}
 
-	public TokenStream getTokenStream() throws NoMatchingTokenDefintionFound {
+	public TokenStream getTokenStream() throws NoMatchingTokenDefinitionFound {
 		if (outputStream == null) {
 			createOutputStream();
 		}
 		return outputStream;
 	}
 
-	private void createOutputStream() throws NoMatchingTokenDefintionFound {
+	private void createOutputStream() throws NoMatchingTokenDefinitionFound {
 		outputStream = new TokenStream(inputStream.getName(), inputStream
 				.getInputStream());
 		int lineNumber = 0;
@@ -94,7 +94,7 @@ public class Lexer {
 	}
 
 	private int processToken(int lineNumber, Token token)
-			throws NoMatchingTokenDefintionFound {
+			throws NoMatchingTokenDefinitionFound {
 		try {
 			int id = outputStream.getSize();
 			int pos = 0;
@@ -119,7 +119,7 @@ public class Lexer {
 					}
 				}
 				if (!found) {
-					throw new NoMatchingTokenDefintionFound(lineNumber, pos,
+					throw new NoMatchingTokenDefinitionFound(lineNumber, pos,
 							text);
 				}
 			}

@@ -41,4 +41,15 @@ public class TokenStream {
 	public int getSize() {
 		return tokens.size();
 	}
+
+	public Token findPreviousToken(int tokenID) throws NoMatchingTokenException {
+		int position = tokenID - 1;
+		while (get(position).getPublicity() == TokenPublicity.HIDDEN) {
+			if (position == 0) {
+				throw new NoMatchingTokenException();
+			}
+			position--;
+		}
+		return get(position);
+	}
 }

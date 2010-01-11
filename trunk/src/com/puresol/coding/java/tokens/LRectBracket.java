@@ -1,6 +1,8 @@
 package com.puresol.coding.java.tokens;
 
 import com.puresol.coding.tokentypes.Operator;
+import com.puresol.parser.Token;
+import com.puresol.parser.TokenStream;
 
 public class LRectBracket extends Operator {
 
@@ -15,7 +17,7 @@ public class LRectBracket extends Operator {
 	}
 
 	@Override
-	public boolean countForHalstead() {
+	public boolean countForHalstead(Token token, TokenStream tokenStream) {
 		return true;
 	}
 

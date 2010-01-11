@@ -1,24 +1,23 @@
-package com.puresol.coding.java.tokens;
+package com.puresol.coding.java.keywords;
 
 import com.puresol.coding.tokentypes.Operator;
 import com.puresol.parser.Token;
 import com.puresol.parser.TokenStream;
 
-public class RParen extends Operator {
+public class IfKeyword extends Operator {
 
 	@Override
 	public String getPatternString() {
-		return "\\)";
+		return "if";
 	}
 
 	@Override
 	public String getHalsteadSymbol() {
-		return "()";
+		return "if()";
 	}
 
 	@Override
-	public boolean countForHalstead(Token token, TokenStream tokenStream) {
-		return false;
+	public int getCyclomaticNumber(Token token, TokenStream tokenStream) {
+		return 1;
 	}
-
 }

@@ -25,7 +25,7 @@ import com.puresol.coding.Language;
 import com.puresol.coding.TokenContent;
 import com.puresol.coding.fortran.metrics.CodeRangeMetrics4Fortran;
 import com.puresol.parser.Lexer;
-import com.puresol.parser.NoMatchingTokenDefintionFound;
+import com.puresol.parser.NoMatchingTokenDefinitionFound;
 import com.puresol.parser.Parser;
 import com.puresol.parser.PartDoesNotMatchException;
 import com.puresol.parser.TokenStream;
@@ -73,7 +73,7 @@ public class FortranAnalyser extends AbstractAnalyser {
 			logger.error(e.getMessage(), e);
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
-		} catch (NoMatchingTokenDefintionFound e) {
+		} catch (NoMatchingTokenDefinitionFound e) {
 			logger.error(e.getMessage(), e);
 		} catch (PartDoesNotMatchException e) {
 			logger.error(e.getMessage(), e);

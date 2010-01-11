@@ -11,7 +11,7 @@ import com.puresol.coding.java.JavaSymbols;
 import com.puresol.coding.java.parts.JavaFile;
 import com.puresol.parser.DefaultPreConditioner;
 import com.puresol.parser.Lexer;
-import com.puresol.parser.NoMatchingTokenDefintionFound;
+import com.puresol.parser.NoMatchingTokenDefinitionFound;
 import com.puresol.parser.Parser;
 import com.puresol.parser.PartDoesNotMatchException;
 import com.puresol.parser.TokenStream;
@@ -39,7 +39,7 @@ public class JavaParserTest extends TestCase {
 		} catch (IOException e) {
 			e.printStackTrace();
 			Assert.fail("No exception was expected!");
-		} catch (NoMatchingTokenDefintionFound e) {
+		} catch (NoMatchingTokenDefinitionFound e) {
 			e.printStackTrace();
 			Assert.fail("No exception was expected!");
 		} catch (PartDoesNotMatchException e) {

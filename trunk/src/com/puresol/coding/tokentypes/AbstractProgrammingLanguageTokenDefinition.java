@@ -8,7 +8,7 @@ public abstract class AbstractProgrammingLanguageTokenDefinition extends
 		AbstractTokenDefinition implements ProgrammingLanguageTokenDefinition {
 
 	@Override
-	public boolean countForHalstead() {
+	public boolean countForHalstead(Token token, TokenStream tokenStream) {
 		return true;
 	}
 

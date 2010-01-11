@@ -15,7 +15,8 @@ public interface ProgrammingLanguageTokenDefinition {
 
 	public abstract int getCyclomaticNumber(Token token, TokenStream tokenStream);
 
-	public abstract boolean countForHalstead();
+	public abstract boolean countForHalstead(Token token,
+			TokenStream tokenStream);
 
 	public abstract String getHalsteadSymbol();
 }

@@ -22,7 +22,7 @@ import com.puresol.coding.java.metrics.CodeRangeMetrics4Java;
 import com.puresol.coding.java.parts.JavaFile;
 import com.puresol.parser.DefaultPreConditioner;
 import com.puresol.parser.Lexer;
-import com.puresol.parser.NoMatchingTokenDefintionFound;
+import com.puresol.parser.NoMatchingTokenDefinitionFound;
 import com.puresol.parser.Parser;
 import com.puresol.parser.PartDoesNotMatchException;
 import com.puresol.parser.TokenStream;
@@ -66,7 +66,7 @@ public class JavaAnalyser extends AbstractAnalyser {
 			// TODO implement code ranges!
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
-		} catch (NoMatchingTokenDefintionFound e) {
+		} catch (NoMatchingTokenDefinitionFound e) {
 			logger.error(e.getMessage(), e);
 		} catch (PartDoesNotMatchException e) {
 			logger.error(e.getMessage(), e);

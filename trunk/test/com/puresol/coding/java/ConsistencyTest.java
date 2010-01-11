@@ -55,5 +55,18 @@ public class ConsistencyTest {
 		for (TokenDefinition definition : tokens) {
 			Assert.assertTrue(classes.contains(definition.getClass()));
 		}
+		for (Class<?> clazz : classes) {
+			boolean found = false;
+			for (TokenDefinition definition : tokens) {
+				if (definition.getClass().equals(clazz)) {
+					found = true;
+					break;
+				}
+			}
+			if (!found) {
+				Assert.fail(clazz.getName()
+						+ " is not registered in JavaKeywords!");
+			}
+		}
 	}
 }
