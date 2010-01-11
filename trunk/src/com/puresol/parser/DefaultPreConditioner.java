@@ -11,45 +11,37 @@ import com.puresol.exceptions.StrangeSituationException;
 
 public class DefaultPreConditioner extends AbstractPreConditioner {
 
-    public DefaultPreConditioner(File file) throws FileNotFoundException {
-	super(file);
-    }
-
-    public DefaultPreConditioner(InputStream stream) {
-	super(stream);
-    }
-
-    @Override
-    protected void generateTokenStream() throws IOException {
-	try {
-	    TokenStream tokenStream = new TokenStream(getStream());
-	    String text = readStream();
-	    Token token =
-		    new Token(
-			    getStream(),
-			    0,
-			    TokenPublicity.VISIBLE,
-			    0,
-			    text.length(),
-			    text,
-			    0,
-			    text.split(LineEnd.UNIX.getString()).length - 1,
-			    null);
-	    tokenStream.addToken(token);
-	    setTokenStream(tokenStream);
-	} catch (InvalidInputStreamException e) {
-	    throw new StrangeSituationException(e);
+	public DefaultPreConditioner(File file) throws FileNotFoundException {
+		super(file);
 	}
-    }
 
-    private String readStream() throws IOException {
-	StringBuffer text = new StringBuffer();
-	InputStream stream = getStream();
-	byte[] buffer = new byte[1024];
-	int size;
-	while ((size = stream.read(buffer)) >= 0) {
-	    text.append(new String(buffer, 0, size));
+	public DefaultPreConditioner(InputStream stream) {
+		super(stream);
 	}
-	return text.toString();
-    }
+
+	@Override
+	protected void generateTokenStream() throws IOException {
+		try {
+			TokenStream tokenStream = new TokenStream(getStream());
+			String text = readStream();
+			Token token = new Token(getStream(), 0, TokenPublicity.VISIBLE, 0,
+					text.length(), text, 0, text
+							.split(LineEnd.UNIX.getString()).length - 1, null);
+			tokenStream.addToken(token);
+			setTokenStream(tokenStream);
+		} catch (InvalidInputStreamException e) {
+			throw new StrangeSituationException(e);
+		}
+	}
+
+	private String readStream() throws IOException {
+		StringBuffer text = new StringBuffer();
+		InputStream stream = getStream();
+		byte[] buffer = new byte[1024];
+		int size;
+		while ((size = stream.read(buffer)) >= 0) {
+			text.append(new String(buffer, 0, size));
+		}
+		return text.toString();
+	}
 }

@@ -12,7 +12,6 @@ package com.puresol.coding;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Hashtable;
 
 /**
  * This is a interface to a analyser. It's used to implement a language
@@ -58,18 +57,4 @@ public interface Analyser {
 	 * @return
 	 */
 	public int getLineNumber();
-
-	/**
-	 * This method returns a list of all lexer tokens.
-	 * 
-	 * @return
-	 */
-	public Hashtable<Integer, String> getLexerTokens();
-
-	/**
-	 * This method returns a list of all parser tokens.
-	 * 
-	 * @return
-	 */
-	public Hashtable<Integer, String> getParserTokens();
 }

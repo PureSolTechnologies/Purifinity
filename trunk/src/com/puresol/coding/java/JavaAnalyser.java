@@ -11,21 +11,20 @@
 package com.puresol.coding.java;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.Hashtable;
 
-import org.antlr.runtime.ANTLRInputStream;
-import org.antlr.runtime.CommonTokenStream;
-import org.antlr.runtime.RecognitionException;
 import org.apache.log4j.Logger;
 
 import com.puresol.coding.AbstractAnalyser;
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.Language;
-import com.puresol.coding.java.antlr.output.JavaLexer;
-import com.puresol.coding.java.antlr.output.JavaParser;
+import com.puresol.parser.DefaultPreConditioner;
+import com.puresol.parser.Lexer;
+import com.puresol.parser.NoMatchingTokenDefintionFound;
+import com.puresol.parser.Parser;
+import com.puresol.parser.PartDoesNotMatchException;
+import com.puresol.parser.TokenStream;
+import com.puresol.parser.java.partdef.JavaFile;
 
 /**
  * 
@@ -36,9 +35,8 @@ public class JavaAnalyser extends AbstractAnalyser {
 
 	private static final Logger logger = Logger.getLogger(JavaAnalyser.class);
 
-	private JavaLexer lexer = null;
-	private JavaParser parser = null;
-	private JavaTreeVisitor visitor = null;
+	private Lexer lexer = null;
+	private Parser parser = null;
 	private int lineNumber = 0;
 
 	public static boolean isSuitable(File file) {
@@ -58,19 +56,18 @@ public class JavaAnalyser extends AbstractAnalyser {
 
 	private void parse() {
 		try {
-			InputStream in = new FileInputStream(getProjectDirectory()
-					.toString()
-					+ "/" + getFile().toString());
-			lexer = new JavaLexer(new ANTLRInputStream(in));
-			CommonTokenStream cts = new CommonTokenStream(lexer);
-			parser = new JavaParser(cts);
-			visitor = new JavaTreeVisitor(getFile(), parser);
-			setCodeRanges(visitor.getCodeRanges());
-			logger.debug("#ranges in '" + getFile().getName() + "': "
-					+ getCodeRanges().size());
+			lexer = new Lexer(new DefaultPreConditioner(new File(
+					getProjectDirectory().toString() + "/"
+							+ getFile().toString())).getTokenStream());
+			TokenStream tokenStream = lexer.getTokenStream();
+			parser = new Parser(tokenStream);
+			parser.parse(JavaFile.class);
+			// TODO implement code ranges!
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
-		} catch (RecognitionException e) {
+		} catch (NoMatchingTokenDefintionFound e) {
+			logger.error(e.getMessage(), e);
+		} catch (PartDoesNotMatchException e) {
 			logger.error(e.getMessage(), e);
 		}
 	}
@@ -90,15 +87,5 @@ public class JavaAnalyser extends AbstractAnalyser {
 	@Override
 	public int getLineNumber() {
 		return lineNumber;
-	}
-
-	@Override
-	public Hashtable<Integer, String> getLexerTokens() {
-		return getLexerTokens(JavaLexer.class);
-	}
-
-	@Override
-	public Hashtable<Integer, String> getParserTokens() {
-		return getParserTokens(JavaParser.class);
 	}
 }

@@ -12,11 +12,11 @@ package com.puresol.coding.java;
 
 import java.util.ArrayList;
 
-import org.antlr.runtime.Token;
-import org.antlr.runtime.TokenStream;
-
 import com.puresol.coding.TokenContent;
 import com.puresol.coding.TokenStreamScanner;
+import com.puresol.parser.Token;
+import com.puresol.parser.TokenPublicity;
+import com.puresol.parser.TokenStream;
 
 /**
  * This class was inherited from TokenContent to support Java language
@@ -103,8 +103,8 @@ public class JavaTokenContent extends TokenContent {
 	}
 
 	public JavaTokenContent(Token token, TokenStream tokenStream) {
-		super(token.getLine());
-		if (token.getChannel() == Token.HIDDEN_CHANNEL) {
+		super(token.getStartLine());
+		if (token.getPublicity() == TokenPublicity.HIDDEN) {
 			throw new IllegalArgumentException("Token is hidden!");
 		}
 		register(token, tokenStream);
@@ -131,8 +131,7 @@ public class JavaTokenContent extends TokenContent {
 		String text = getText();
 		if (text.equals("(")) {
 			TokenStreamScanner scanner = new TokenStreamScanner(tokenStream);
-			int prevTextIndex = scanner
-					.findPreviousToken(token.getTokenIndex());
+			int prevTextIndex = scanner.findPreviousToken(token.getTokenID());
 			String prevText = tokenStream.get(prevTextIndex).getText();
 			if (prevText.equals("for") || prevText.equals("if")
 					|| prevText.equals("while") || prevText.equals("catch")) {

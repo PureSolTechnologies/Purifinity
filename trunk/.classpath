@@ -19,7 +19,6 @@
 	<classpathentry kind="lib" path="lib/jboss/jboss-client.jar"/>
 	<classpathentry kind="lib" path="lib/junit/junit-4.6.jar"/>
 	<classpathentry kind="lib" path="lib/hibernate/javassist-3.9.0.GA.jar"/>
-	<classpathentry kind="lib" path="lib/antlr/antlr-3.2.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/i18n4java"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/swingx"/>
 	<classpathentry kind="lib" path="lib/mail/dsn.jar"/>

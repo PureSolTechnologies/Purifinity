@@ -10,8 +10,9 @@
 
 package com.puresol.coding;
 
-import org.antlr.runtime.Token;
-import org.antlr.runtime.TokenStream;
+import com.puresol.parser.Token;
+import com.puresol.parser.TokenPublicity;
+import com.puresol.parser.TokenStream;
 
 public class TokenStreamScanner {
 
@@ -22,14 +23,14 @@ public class TokenStreamScanner {
 	}
 
 	public int findPreviousToken(String text) {
-		if (tokenStream.size() == 0) {
+		if (tokenStream.getSize() == 0) {
 			return -1;
 		}
-		return findPreviousToken(text, tokenStream.size() - 1);
+		return findPreviousToken(text, tokenStream.getSize() - 1);
 	}
 
 	public int findPreviousToken(String text, int startIndex) {
-		if (tokenStream.size() == 0) {
+		if (tokenStream.getSize() == 0) {
 			return -1;
 		}
 		for (int index = startIndex - 1; index >= 0; index--) {
@@ -42,12 +43,12 @@ public class TokenStreamScanner {
 	}
 
 	public int findPreviousToken(int startIndex) {
-		if (tokenStream.size() == 0) {
+		if (tokenStream.getSize() == 0) {
 			return -1;
 		}
 		for (int index = startIndex - 1; index >= 0; index--) {
 			Token token = tokenStream.get(index);
-			if (token.getChannel() != Token.HIDDEN_CHANNEL) {
+			if (token.getPublicity() != TokenPublicity.HIDDEN) {
 				return index;
 			}
 		}
@@ -59,7 +60,7 @@ public class TokenStreamScanner {
 	}
 
 	public int findNextToken(String text, int startIndex) {
-		for (int index = startIndex + 1; index < tokenStream.size(); index++) {
+		for (int index = startIndex + 1; index < tokenStream.getSize(); index++) {
 			Token token = tokenStream.get(index);
 			if (token.getText().equals(text)) {
 				return index;
@@ -69,9 +70,9 @@ public class TokenStreamScanner {
 	}
 
 	public int findNextToken(int startIndex) {
-		for (int index = startIndex + 1; index < tokenStream.size(); index++) {
+		for (int index = startIndex + 1; index < tokenStream.getSize(); index++) {
 			Token token = tokenStream.get(index);
-			if (token.getChannel() != Token.HIDDEN_CHANNEL) {
+			if (token.getPublicity() != TokenPublicity.HIDDEN) {
 				return index;
 			}
 		}
