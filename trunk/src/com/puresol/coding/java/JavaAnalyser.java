@@ -19,7 +19,7 @@ import com.puresol.coding.AbstractAnalyser;
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.Language;
 import com.puresol.coding.java.metrics.CodeRangeMetrics4Java;
-import com.puresol.coding.java.partdef.JavaFile;
+import com.puresol.coding.java.parts.JavaFile;
 import com.puresol.parser.DefaultPreConditioner;
 import com.puresol.parser.Lexer;
 import com.puresol.parser.NoMatchingTokenDefintionFound;

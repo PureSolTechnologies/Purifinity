@@ -1,12 +1,12 @@
 package com.puresol.coding.java;
 
-import com.puresol.coding.java.tokendef.BooleanKeyword;
-import com.puresol.coding.java.tokendef.ByteKeyword;
-import com.puresol.coding.java.tokendef.CharKeyword;
-import com.puresol.coding.java.tokendef.IntKeyword;
-import com.puresol.coding.java.tokendef.LongKeyword;
-import com.puresol.coding.java.tokendef.ShortKeyword;
-import com.puresol.coding.java.tokendef.VoidKeyword;
+import com.puresol.coding.java.tokens.BooleanKeyword;
+import com.puresol.coding.java.tokens.ByteKeyword;
+import com.puresol.coding.java.tokens.CharKeyword;
+import com.puresol.coding.java.tokens.IntKeyword;
+import com.puresol.coding.java.tokens.LongKeyword;
+import com.puresol.coding.java.tokens.ShortKeyword;
+import com.puresol.coding.java.tokens.VoidKeyword;
 import com.puresol.parser.AbstractTokenDefinitions;
 
 public class Primitives extends AbstractTokenDefinitions {
