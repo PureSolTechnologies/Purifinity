@@ -5,7 +5,7 @@ import com.puresol.coding.java.tokens.BooleanLiteral;
 import com.puresol.coding.java.tokens.Equal;
 import com.puresol.coding.java.tokens.FloatingPointLiteral;
 import com.puresol.coding.java.tokens.GreaterEqual;
-import com.puresol.coding.java.tokens.ID;
+import com.puresol.coding.java.tokens.IdLiteral;
 import com.puresol.coding.java.tokens.IntegerLiteral;
 import com.puresol.coding.java.tokens.LessEqual;
 import com.puresol.coding.java.tokens.MinusMinus;
@@ -36,46 +36,46 @@ import com.puresol.parser.defaulttokens.WhiteSpace;
 
 public class JavaSymbols extends AbstractTokenDefinitions {
 
-    @Override
-    protected void initialize() {
-	addKeyword(LineBreak.class);
-	addKeyword(WhiteSpace.class);
+	@Override
+	protected void initialize() {
+		addKeyword(LineBreak.class);
+		addKeyword(WhiteSpace.class);
 
-	addKeyword(LParen.class);
-	addKeyword(RParen.class);
-	addKeyword(LCurlyBracket.class);
-	addKeyword(RCurlyBracket.class);
-	addKeyword(LRectBracket.class);
-	addKeyword(RRectBracket.class);
+		addKeyword(LParen.class);
+		addKeyword(RParen.class);
+		addKeyword(LCurlyBracket.class);
+		addKeyword(RCurlyBracket.class);
+		addKeyword(LRectBracket.class);
+		addKeyword(RRectBracket.class);
 
-	addKeyword(LessEqual.class);
-	addKeyword(GreaterEqual.class);
-	addKeyword(LessThan.class);
-	addKeyword(GreaterThan.class);
-	addKeyword(Equal.class);
-	addKeyword(Unequal.class);
-	addKeyword(PlusAssign.class);
-	addKeyword(Assign.class);
-	addKeyword(At.class);
+		addKeyword(LessEqual.class);
+		addKeyword(GreaterEqual.class);
+		addKeyword(LessThan.class);
+		addKeyword(GreaterThan.class);
+		addKeyword(Equal.class);
+		addKeyword(Unequal.class);
+		addKeyword(PlusAssign.class);
+		addKeyword(Assign.class);
+		addKeyword(At.class);
 
-	addKeyword(PlusPlus.class);
-	addKeyword(MinusMinus.class);
+		addKeyword(PlusPlus.class);
+		addKeyword(MinusMinus.class);
 
-	addKeyword(Plus.class);
-	addKeyword(Minus.class);
-	addKeyword(Slash.class);
-	addKeyword(Star.class);
-	addKeyword(Percent.class);
+		addKeyword(Plus.class);
+		addKeyword(Minus.class);
+		addKeyword(Slash.class);
+		addKeyword(Star.class);
+		addKeyword(Percent.class);
 
-	addKeyword(Semicolon.class);
-	addKeyword(Colon.class);
-	addKeyword(Dot.class);
+		addKeyword(Semicolon.class);
+		addKeyword(Colon.class);
+		addKeyword(Dot.class);
 
-	addKeyword(FloatingPointLiteral.class);
-	addKeyword(IntegerLiteral.class);
-	addKeyword(StringLiteral.class);
-	addKeyword(BooleanLiteral.class);
+		addKeyword(FloatingPointLiteral.class);
+		addKeyword(IntegerLiteral.class);
+		addKeyword(StringLiteral.class);
+		addKeyword(BooleanLiteral.class);
 
-	addKeyword(ID.class);
-    }
+		addKeyword(IdLiteral.class);
+	}
 }

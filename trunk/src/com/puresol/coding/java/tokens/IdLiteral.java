@@ -2,11 +2,11 @@ package com.puresol.coding.java.tokens;
 
 import com.puresol.parser.AbstractTokenDefinition;
 
-public class ClassKeyword extends AbstractTokenDefinition {
+public class IdLiteral extends AbstractTokenDefinition {
 
     @Override
     public String getPatternString() {
-	return "class";
+	return "[a-zA-Z_]([a-zA-Z_0-9])*";
     }
 
 }

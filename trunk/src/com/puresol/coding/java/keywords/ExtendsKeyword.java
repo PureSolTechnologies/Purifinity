@@ -1,4 +1,4 @@
-package com.puresol.coding.java.tokens;
+package com.puresol.coding.java.keywords;
 
 import com.puresol.parser.AbstractTokenDefinition;
 

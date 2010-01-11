@@ -1,7 +1,7 @@
 package com.puresol.coding.java.parts;
 
-import com.puresol.coding.java.tokens.ID;
-import com.puresol.coding.java.tokens.PackageKeyword;
+import com.puresol.coding.java.keywords.PackageKeyword;
+import com.puresol.coding.java.tokens.IdLiteral;
 import com.puresol.parser.AbstractPart;
 import com.puresol.parser.PartDoesNotMatchException;
 import com.puresol.parser.TokenStream;
@@ -18,10 +18,10 @@ public class PackageDeclaration extends AbstractPart {
     public void scan()
 	    throws PartDoesNotMatchException {
 	processToken(PackageKeyword.class);
-	processToken(ID.class);
+	processToken(IdLiteral.class);
 	while (isToken(Dot.class)) {
 	    processToken(Dot.class);
-	    processToken(ID.class);
+	    processToken(IdLiteral.class);
 	}
 	processToken(Semicolon.class);
     }
