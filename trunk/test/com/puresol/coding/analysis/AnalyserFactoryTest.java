@@ -45,7 +45,7 @@ public class AnalyserFactoryTest extends TestCase {
 		try {
 			Analyser analyser = AnalyserFactory.createAnalyser(
 					new File("test"), new File(
-							"com/puresol/coding/java/JavaParserTest.java"));
+							"com/puresol/coding/lang/java/JavaParserTest.java"));
 			Assert.assertEquals(JavaAnalyser.class, analyser.getClass());
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -61,7 +61,7 @@ public class AnalyserFactoryTest extends TestCase {
 		try {
 			Analyser analyser = AnalyserFactory
 					.createAnalyser(new File("test"), new File(
-							"com/puresol/coding/fortran/samples/FortranTest.f"));
+							"com/puresol/coding/lang/fortran/samples/FortranTest.f"));
 			Assert.assertEquals(FortranAnalyser.class, analyser.getClass());
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

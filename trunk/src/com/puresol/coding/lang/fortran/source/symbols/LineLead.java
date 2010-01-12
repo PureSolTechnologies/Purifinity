@@ -1,0 +1,12 @@
+package com.puresol.coding.lang.fortran.source.symbols;
+
+import com.puresol.coding.tokentypes.Hidden;
+
+public class LineLead extends Hidden {
+
+	@Override
+	public String getPatternString() {
+		return "......";
+	}
+
+}

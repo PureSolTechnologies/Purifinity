@@ -22,10 +22,9 @@ public class JavaPrimitivesTest {
 	@Test
 	public void testPrimitives() {
 		try {
-			Class<?>[] classes = ExtentedPackage
-					.getClassesWithSuperclass(
-							"com.puresol.coding.java.keywords",
-							PrimitiveDataType.class);
+			Class<?>[] classes = ExtentedPackage.getClassesWithSuperclass(
+					"com.puresol.coding.lang.java.source.keywords",
+					PrimitiveDataType.class);
 			Assert.assertEquals(8, classes.length);
 			Vector<Class<?>> classVector = new Vector<Class<?>>();
 			for (Class<?> clazz : classes) {

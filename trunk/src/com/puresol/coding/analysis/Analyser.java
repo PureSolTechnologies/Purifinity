@@ -53,11 +53,4 @@ public interface Analyser {
 	 * @return
 	 */
 	public CodeRangeMetrics getMetrics(CodeRange codeRange);
-
-	/**
-	 * Returns the total number of lines in the file.
-	 * 
-	 * @return
-	 */
-	public int getLineNumber();
 }

@@ -7,8 +7,6 @@ import java.io.InputStream;
 
 import javax.swingx.data.LineEnd;
 
-import com.puresol.exceptions.StrangeSituationException;
-
 public class DefaultPreConditioner extends AbstractPreConditioner {
 
 	private final String name;
@@ -23,19 +21,18 @@ public class DefaultPreConditioner extends AbstractPreConditioner {
 		this.name = name;
 	}
 
+	public String getName() {
+		return name;
+	}
+
 	@Override
 	protected void generateTokenStream() throws IOException {
-		try {
-			TokenStream tokenStream = new TokenStream(name, getStream());
-			String text = readStream();
-			Token token = new Token(getStream(), 0, TokenPublicity.VISIBLE, 0,
-					text.length(), text, 0, text
-							.split(LineEnd.UNIX.getString()).length - 1, null);
-			tokenStream.addToken(token);
-			setTokenStream(tokenStream);
-		} catch (InvalidInputStreamException e) {
-			throw new StrangeSituationException(e);
-		}
+		TokenStream tokenStream = new TokenStream(name);
+		String text = readStream();
+		Token token = new Token(0, TokenPublicity.VISIBLE, 0, text.length(),
+				text, 0, text.split(LineEnd.UNIX.getString()).length - 1, null);
+		tokenStream.addToken(token);
+		setTokenStream(tokenStream);
 	}
 
 	private String readStream() throws IOException {

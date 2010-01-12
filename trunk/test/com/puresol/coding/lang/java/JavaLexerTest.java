@@ -22,7 +22,7 @@ public class JavaLexerTest {
 	    DefaultPreConditioner conditioner =
 		    new DefaultPreConditioner(
 			    new File(
-				    "test/com/puresol/coding/java/JavaLexerTest.java"));
+				    "test/com/puresol/coding/lang/java/JavaLexerTest.java"));
 	    TokenStream tokenStream = conditioner.getTokenStream();
 	    JavaLexer lexer = new JavaLexer(tokenStream);
 	    TokenStream tokenStream2 = lexer.getTokenStream();

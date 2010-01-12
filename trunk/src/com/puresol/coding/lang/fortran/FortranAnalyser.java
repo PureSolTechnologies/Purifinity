@@ -20,7 +20,6 @@ import com.puresol.coding.CodeRange;
 import com.puresol.coding.analysis.AbstractAnalyser;
 import com.puresol.coding.lang.Language;
 import com.puresol.coding.lang.fortran.metrics.CodeRangeMetrics4Fortran;
-import com.puresol.parser.Lexer;
 import com.puresol.parser.NoMatchingTokenDefinitionFound;
 import com.puresol.parser.PartDoesNotMatchException;
 import com.puresol.parser.TokenStream;
@@ -28,9 +27,6 @@ import com.puresol.parser.TokenStream;
 public class FortranAnalyser extends AbstractAnalyser {
 	private static final Logger logger = Logger
 			.getLogger(FortranAnalyser.class);
-
-	private Lexer lexer = null;
-	private int lineNumber = 0;
 
 	public static boolean isSuitable(File file) {
 		return (file.getPath().endsWith(".f")
@@ -52,8 +48,8 @@ public class FortranAnalyser extends AbstractAnalyser {
 
 	private void parse() {
 		try {
-			lexer = new Lexer(new FortranPreConditioner(new File(
-					getProjectDirectory().toString() + "/"
+			FortranLexer lexer = new FortranLexer(new FortranPreConditioner(
+					new File(getProjectDirectory().toString() + "/"
 							+ getFile().toString())).getTokenStream());
 			TokenStream tokenStream = lexer.getTokenStream();
 			FortranParser parser = new FortranParser(tokenStream);
@@ -80,10 +76,5 @@ public class FortranAnalyser extends AbstractAnalyser {
 
 	public Language getLanguage() {
 		return Language.FORTRAN;
-	}
-
-	@Override
-	public int getLineNumber() {
-		return lineNumber;
 	}
 }

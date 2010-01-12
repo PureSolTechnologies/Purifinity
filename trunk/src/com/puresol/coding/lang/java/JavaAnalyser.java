@@ -33,10 +33,6 @@ public class JavaAnalyser extends AbstractAnalyser {
 
 	private static final Logger logger = Logger.getLogger(JavaAnalyser.class);
 
-	private JavaLexer lexer = null;
-	private JavaParser parser = null;
-	private int lineNumber = 0;
-
 	public static boolean isSuitable(File file) {
 		return file.getPath().endsWith(".java");
 	}
@@ -58,9 +54,9 @@ public class JavaAnalyser extends AbstractAnalyser {
 					new File(getProjectDirectory().toString() + "/"
 							+ getFile().toString()));
 			TokenStream tokenStream = conditioner.getTokenStream();
-			lexer = new JavaLexer(tokenStream);
+			JavaLexer lexer = new JavaLexer(tokenStream);
 			tokenStream = lexer.getTokenStream();
-			parser = new JavaParser(tokenStream);
+			JavaParser parser = new JavaParser(tokenStream);
 			parser.scan();
 			setCodeRanges(parser.getCodeRanges());
 		} catch (IOException e) {
@@ -82,10 +78,5 @@ public class JavaAnalyser extends AbstractAnalyser {
 
 	public Language getLanguage() {
 		return Language.JAVA;
-	}
-
-	@Override
-	public int getLineNumber() {
-		return lineNumber;
 	}
 }
