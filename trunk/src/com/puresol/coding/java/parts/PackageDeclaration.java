@@ -3,9 +3,9 @@ package com.puresol.coding.java.parts;
 import com.puresol.coding.AbstractSourceCodePart;
 import com.puresol.coding.SourceCodeParser;
 import com.puresol.coding.java.keywords.PackageKeyword;
-import com.puresol.coding.java.tokens.Dot;
-import com.puresol.coding.java.tokens.IdLiteral;
-import com.puresol.coding.java.tokens.Semicolon;
+import com.puresol.coding.java.literals.IdLiteral;
+import com.puresol.coding.java.symbols.Dot;
+import com.puresol.coding.java.symbols.Semicolon;
 import com.puresol.parser.PartDoesNotMatchException;
 import com.puresol.parser.TokenStream;
 

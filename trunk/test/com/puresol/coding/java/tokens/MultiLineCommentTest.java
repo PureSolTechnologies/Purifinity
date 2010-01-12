@@ -5,6 +5,8 @@ import junit.framework.TestCase;
 
 import org.junit.Test;
 
+import com.puresol.coding.java.symbols.MultiLineComment;
+
 public class MultiLineCommentTest extends TestCase {
 
     @Test

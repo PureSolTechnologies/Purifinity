@@ -7,11 +7,11 @@ import com.puresol.coding.SourceCodeParser;
 import com.puresol.coding.java.keywords.ClassKeyword;
 import com.puresol.coding.java.keywords.ExtendsKeyword;
 import com.puresol.coding.java.keywords.ImplementsKeyword;
+import com.puresol.coding.java.literals.IdLiteral;
+import com.puresol.coding.java.symbols.Comma;
+import com.puresol.coding.java.symbols.LCurlyBracket;
+import com.puresol.coding.java.symbols.RCurlyBracket;
 import com.puresol.coding.java.tokengroups.ClassModifiers;
-import com.puresol.coding.java.tokens.Comma;
-import com.puresol.coding.java.tokens.IdLiteral;
-import com.puresol.coding.java.tokens.LCurlyBracket;
-import com.puresol.coding.java.tokens.RCurlyBracket;
 import com.puresol.parser.PartDoesNotMatchException;
 import com.puresol.parser.TokenStream;
 

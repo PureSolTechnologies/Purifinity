@@ -2,7 +2,7 @@ package com.puresol.coding.java.tokens;
 
 import org.junit.Test;
 
-import com.puresol.coding.java.tokens.StringLiteral;
+import com.puresol.coding.java.literals.StringLiteral;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
