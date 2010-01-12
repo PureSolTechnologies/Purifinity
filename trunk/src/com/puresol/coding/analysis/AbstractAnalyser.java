@@ -8,11 +8,13 @@
  *
  ***************************************************************************/
 
-package com.puresol.coding;
+package com.puresol.coding.analysis;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Hashtable;
+
+import com.puresol.coding.CodeRange;
 
 abstract public class AbstractAnalyser implements Analyser {
 

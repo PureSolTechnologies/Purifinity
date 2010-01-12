@@ -10,11 +10,11 @@
 
 package com.puresol.coding.lang.fortran.metrics;
 
-import com.puresol.coding.CodeEvaluationSystem;
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.CodeRangeType;
-import com.puresol.coding.AbstractHalsteadMetric;
-import com.puresol.coding.QualityLevel;
+import com.puresol.coding.analysis.AbstractHalsteadMetric;
+import com.puresol.coding.analysis.CodeEvaluationSystem;
+import com.puresol.coding.analysis.QualityLevel;
 
 public class HalsteadMetric4Fortran extends AbstractHalsteadMetric {
 

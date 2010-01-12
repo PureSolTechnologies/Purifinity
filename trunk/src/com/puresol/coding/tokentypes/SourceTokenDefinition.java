@@ -3,7 +3,7 @@ package com.puresol.coding.tokentypes;
 import com.puresol.parser.Token;
 import com.puresol.parser.TokenStream;
 
-public interface ProgrammingLanguageTokenDefinition {
+public interface SourceTokenDefinition {
 
     public abstract int changeBlockLayer();
 

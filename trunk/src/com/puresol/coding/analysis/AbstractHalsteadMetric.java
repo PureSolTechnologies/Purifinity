@@ -8,13 +8,14 @@
  *
  ***************************************************************************/
 
-package com.puresol.coding;
+package com.puresol.coding.analysis;
 
 import java.util.Hashtable;
 
 import javax.i18n4j.Translator;
 
-import com.puresol.coding.tokentypes.ProgrammingLanguageTokenDefinition;
+import com.puresol.coding.CodeRange;
+import com.puresol.coding.tokentypes.SourceTokenDefinition;
 import com.puresol.coding.tokentypes.SymbolType;
 import com.puresol.html.HTMLStandards;
 import com.puresol.parser.Token;
@@ -97,8 +98,8 @@ abstract public class AbstractHalsteadMetric extends AbstractMetric {
 		.getStop(); index++) {
 	    Token token = tokenStream.get(index);
 	    if (token.getPublicity() != TokenPublicity.HIDDEN) {
-		ProgrammingLanguageTokenDefinition def =
-			(ProgrammingLanguageTokenDefinition) token
+		SourceTokenDefinition def =
+			(SourceTokenDefinition) token
 				.getDefinitionInstance();
 		if (def.countForHalstead(token, tokenStream)) {
 		    if (def.getSymbolType() == SymbolType.OPERANT) {

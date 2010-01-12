@@ -11,12 +11,12 @@
 package com.puresol.coding.lang.java.metrics;
 
 import com.puresol.coding.CodeRange;
-import com.puresol.coding.CodeRangeMetrics;
-import com.puresol.coding.AbstractEntropyMetric;
-import com.puresol.coding.AbstractHalsteadMetric;
-import com.puresol.coding.AbstractMaintainabilityIndex;
-import com.puresol.coding.AbstractMcCabeMetric;
-import com.puresol.coding.AbstractSLOCMetric;
+import com.puresol.coding.analysis.AbstractEntropyMetric;
+import com.puresol.coding.analysis.AbstractHalsteadMetric;
+import com.puresol.coding.analysis.AbstractMaintainabilityIndex;
+import com.puresol.coding.analysis.AbstractMcCabeMetric;
+import com.puresol.coding.analysis.AbstractSLOCMetric;
+import com.puresol.coding.analysis.CodeRangeMetrics;
 
 public class CodeRangeMetrics4Java extends CodeRangeMetrics {
 

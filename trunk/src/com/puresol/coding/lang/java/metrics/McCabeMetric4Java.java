@@ -10,11 +10,11 @@
 
 package com.puresol.coding.lang.java.metrics;
 
-import com.puresol.coding.CodeEvaluationSystem;
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.CodeRangeType;
-import com.puresol.coding.AbstractMcCabeMetric;
-import com.puresol.coding.QualityLevel;
+import com.puresol.coding.analysis.AbstractMcCabeMetric;
+import com.puresol.coding.analysis.CodeEvaluationSystem;
+import com.puresol.coding.analysis.QualityLevel;
 
 /**
  * This class calculates the cyclomatic number v(G) from a code range.

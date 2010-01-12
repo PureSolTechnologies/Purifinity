@@ -8,7 +8,7 @@
  *
  ***************************************************************************/
 
-package com.puresol.coding;
+package com.puresol.coding.analysis;
 
 import com.puresol.exceptions.StrangeSituationException;
 

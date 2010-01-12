@@ -8,7 +8,7 @@
  *
  ***************************************************************************/
 
-package com.puresol.coding;
+package com.puresol.coding.analysis;
 
 /**
  * This enum stands for a quality level. There are three levels defined: low,

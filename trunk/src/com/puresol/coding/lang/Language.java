@@ -1,6 +1,6 @@
 /***************************************************************************
  *
- *   AnalysisReport.java
+ *   Language.java
  *   -------------------
  *   copyright            : (c) 2009 by PureSol-Technologies
  *   author               : Rick-Rainer Ludwig
@@ -8,9 +8,15 @@
  *
  ***************************************************************************/
 
-package com.puresol.coding;
+package com.puresol.coding.lang;
 
-public interface AnalysisReport {
-
-	public String getReport();
+/**
+ * This enumeration reflects all supported programming languages. This enum also
+ * lists languages which are planned to be supported.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
+public enum Language {
+	CPP, FORTRAN, JAVA, PERL, PHP, TEXT;
 }

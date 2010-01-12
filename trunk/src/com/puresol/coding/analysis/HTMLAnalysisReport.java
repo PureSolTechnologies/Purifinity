@@ -8,10 +8,11 @@
  *
  ***************************************************************************/
 
-package com.puresol.coding;
+package com.puresol.coding.analysis;
 
 import javax.i18n4j.Translator;
 
+import com.puresol.coding.CodeRange;
 import com.puresol.html.HTMLStandards;
 
 public class HTMLAnalysisReport extends AbstractAnalysisReport {

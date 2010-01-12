@@ -8,7 +8,8 @@
  *
  ***************************************************************************/
 
-package com.puresol.coding;
+package com.puresol.coding.analysis;
+
 
 /**
  * This class calculates the CoCoMo for a set number of sloc and a given average

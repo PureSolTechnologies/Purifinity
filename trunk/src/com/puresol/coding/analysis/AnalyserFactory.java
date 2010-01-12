@@ -8,7 +8,7 @@
  *
  ***************************************************************************/
 
-package com.puresol.coding;
+package com.puresol.coding.analysis;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -19,6 +19,7 @@ import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
+import com.puresol.coding.lang.LanguageNotSupportedException;
 import com.puresol.coding.lang.fortran.FortranAnalyser;
 import com.puresol.coding.lang.java.JavaAnalyser;
 import com.puresol.exceptions.StrangeSituationException;

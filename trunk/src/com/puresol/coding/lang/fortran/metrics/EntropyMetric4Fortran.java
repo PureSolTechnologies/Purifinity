@@ -10,10 +10,10 @@
 
 package com.puresol.coding.lang.fortran.metrics;
 
-import com.puresol.coding.CodeEvaluationSystem;
 import com.puresol.coding.CodeRange;
-import com.puresol.coding.AbstractEntropyMetric;
-import com.puresol.coding.QualityLevel;
+import com.puresol.coding.analysis.AbstractEntropyMetric;
+import com.puresol.coding.analysis.CodeEvaluationSystem;
+import com.puresol.coding.analysis.QualityLevel;
 
 /**
  * This class calculates entropy and redundancy for a code range. The

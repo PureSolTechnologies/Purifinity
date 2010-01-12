@@ -8,7 +8,7 @@
  *
  ***************************************************************************/
 
-package com.puresol.gui.coding;
+package com.puresol.gui.coding.analysis;
 
 import java.awt.BorderLayout;
 import java.io.File;
@@ -26,9 +26,9 @@ import javax.swingx.ScrollPane;
 import javax.swingx.connect.Slot;
 
 import com.puresol.coding.CodeRange;
-import com.puresol.coding.HTMLAnalysisReport;
 import com.puresol.coding.ProjectAnalyser;
-import com.puresol.coding.QualityLevel;
+import com.puresol.coding.analysis.HTMLAnalysisReport;
+import com.puresol.coding.analysis.QualityLevel;
 
 public class CodeRangeAnalysisBrowser extends Panel {
 

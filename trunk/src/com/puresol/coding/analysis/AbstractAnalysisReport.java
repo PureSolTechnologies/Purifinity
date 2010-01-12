@@ -8,7 +8,8 @@
  *
  ***************************************************************************/
 
-package com.puresol.coding;
+package com.puresol.coding.analysis;
+
 
 abstract public class AbstractAnalysisReport implements AnalysisReport {
 

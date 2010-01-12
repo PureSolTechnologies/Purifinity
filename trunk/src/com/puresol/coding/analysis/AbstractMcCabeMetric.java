@@ -8,9 +8,10 @@
  *
  ***************************************************************************/
 
-package com.puresol.coding;
+package com.puresol.coding.analysis;
 
-import com.puresol.coding.tokentypes.ProgrammingLanguageTokenDefinition;
+import com.puresol.coding.CodeRange;
+import com.puresol.coding.tokentypes.SourceTokenDefinition;
 import com.puresol.parser.Token;
 import com.puresol.parser.TokenPublicity;
 import com.puresol.parser.TokenStream;
@@ -37,8 +38,8 @@ abstract public class AbstractMcCabeMetric extends AbstractMetric {
 		.getStop(); index++) {
 	    Token token = tokenStream.get(index);
 	    if (token.getPublicity() != TokenPublicity.HIDDEN) {
-		ProgrammingLanguageTokenDefinition def =
-			(ProgrammingLanguageTokenDefinition) token
+		SourceTokenDefinition def =
+			(SourceTokenDefinition) token
 				.getDefinitionInstance();
 		addCyclomaticNumber(def.getCyclomaticNumber(token,
 			tokenStream));

@@ -10,14 +10,14 @@
 
 package com.puresol.coding.lang.fortran.metrics;
 
-import com.puresol.coding.CodeEvaluationSystem;
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.CodeRangeType;
-import com.puresol.coding.AbstractHalsteadMetric;
-import com.puresol.coding.AbstractMaintainabilityIndex;
-import com.puresol.coding.AbstractMcCabeMetric;
-import com.puresol.coding.QualityLevel;
-import com.puresol.coding.AbstractSLOCMetric;
+import com.puresol.coding.analysis.AbstractHalsteadMetric;
+import com.puresol.coding.analysis.AbstractMaintainabilityIndex;
+import com.puresol.coding.analysis.AbstractMcCabeMetric;
+import com.puresol.coding.analysis.AbstractSLOCMetric;
+import com.puresol.coding.analysis.CodeEvaluationSystem;
+import com.puresol.coding.analysis.QualityLevel;
 
 public class MaintainabilityIndex4Fortran extends AbstractMaintainabilityIndex {
 

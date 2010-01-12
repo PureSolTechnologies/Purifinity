@@ -24,11 +24,11 @@ import javax.swingx.ToggleButton;
 import javax.swingx.ToolBar;
 import javax.swingx.connect.Slot;
 
-import com.puresol.coding.CodeEvaluationSystem;
-import com.puresol.coding.HTMLAnalysisProject;
 import com.puresol.coding.ProjectAnalyser;
+import com.puresol.coding.analysis.CodeEvaluationSystem;
+import com.puresol.coding.analysis.HTMLAnalysisProject;
 import com.puresol.gui.PureSolApplication;
-import com.puresol.gui.coding.ProjectAnalysisBrowser;
+import com.puresol.gui.coding.analysis.ProjectAnalysisBrowser;
 
 /**
  * This is PureSolTechnologies' code analysis tool for automated source code

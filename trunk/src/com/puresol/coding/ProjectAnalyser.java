@@ -21,6 +21,12 @@ import javax.i18n4j.FileSearch;
 
 import org.apache.log4j.Logger;
 
+import com.puresol.coding.analysis.Analyser;
+import com.puresol.coding.analysis.AnalyserFactory;
+import com.puresol.coding.analysis.CodeRangeMetrics;
+import com.puresol.coding.analysis.QualityLevel;
+import com.puresol.coding.lang.LanguageNotSupportedException;
+
 public class ProjectAnalyser {
 
     private static final Logger logger =

@@ -8,13 +8,14 @@
  *
  ***************************************************************************/
 
-package com.puresol.coding;
+package com.puresol.coding.analysis;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.i18n4j.Translator;
 
+import com.puresol.coding.CodeRange;
 import com.puresol.html.HTMLStandards;
 import com.puresol.parser.Token;
 import com.puresol.parser.TokenPublicity;

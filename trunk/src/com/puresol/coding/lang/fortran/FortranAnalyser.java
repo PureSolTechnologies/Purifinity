@@ -16,9 +16,9 @@ import java.io.IOException;
 
 import org.apache.log4j.Logger;
 
-import com.puresol.coding.AbstractAnalyser;
 import com.puresol.coding.CodeRange;
-import com.puresol.coding.Language;
+import com.puresol.coding.analysis.AbstractAnalyser;
+import com.puresol.coding.lang.Language;
 import com.puresol.coding.lang.fortran.metrics.CodeRangeMetrics4Fortran;
 import com.puresol.parser.Lexer;
 import com.puresol.parser.NoMatchingTokenDefinitionFound;

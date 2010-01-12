@@ -8,7 +8,7 @@
  *
  ***************************************************************************/
 
-package com.puresol.coding;
+package com.puresol.coding.analysis;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -20,6 +20,8 @@ import java.util.Hashtable;
 
 import org.apache.log4j.Logger;
 
+import com.puresol.coding.CodeRange;
+import com.puresol.coding.ProjectAnalyser;
 import com.puresol.html.HTMLStandards;
 
 public class HTMLAnalysisProject {

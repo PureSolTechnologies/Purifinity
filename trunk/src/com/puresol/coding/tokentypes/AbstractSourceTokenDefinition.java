@@ -4,8 +4,8 @@ import com.puresol.parser.AbstractTokenDefinition;
 import com.puresol.parser.Token;
 import com.puresol.parser.TokenStream;
 
-public abstract class AbstractProgrammingLanguageTokenDefinition extends
-		AbstractTokenDefinition implements ProgrammingLanguageTokenDefinition {
+public abstract class AbstractSourceTokenDefinition extends
+		AbstractTokenDefinition implements SourceTokenDefinition {
 
 	@Override
 	public boolean countForHalstead(Token token, TokenStream tokenStream) {

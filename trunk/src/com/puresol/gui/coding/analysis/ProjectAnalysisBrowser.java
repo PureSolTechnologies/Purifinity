@@ -8,7 +8,7 @@
  *
  ***************************************************************************/
 
-package com.puresol.gui.coding;
+package com.puresol.gui.coding.analysis;
 
 import java.awt.BorderLayout;
 

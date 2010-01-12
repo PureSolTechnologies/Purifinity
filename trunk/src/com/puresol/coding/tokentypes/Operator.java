@@ -3,7 +3,7 @@ package com.puresol.coding.tokentypes;
 import com.puresol.parser.TokenPublicity;
 
 public abstract class Operator extends
-	AbstractProgrammingLanguageTokenDefinition {
+	AbstractSourceTokenDefinition {
 
     @Override
     public int changeBlockLayer() {
