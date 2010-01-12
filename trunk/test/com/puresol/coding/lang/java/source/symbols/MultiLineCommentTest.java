@@ -1,4 +1,4 @@
-package com.puresol.coding.lang.java.source.tokens;
+package com.puresol.coding.lang.java.source.symbols;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;

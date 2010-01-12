@@ -1,4 +1,4 @@
-package com.puresol.coding.lang.java.source.keywords;
+package com.puresol.coding.lang.java.source.tokengroups;
 
 import java.util.Vector;
 
