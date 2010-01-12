@@ -1,11 +1,11 @@
-package com.puresol.coding.java.source.tokens;
+package com.puresol.coding.lang.java.source.tokens;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
 
 import org.junit.Test;
 
-import com.puresol.coding.java.source.symbols.MultiLineComment;
+import com.puresol.coding.lang.java.source.symbols.MultiLineComment;
 
 public class MultiLineCommentTest extends TestCase {
 

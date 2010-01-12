@@ -1,8 +1,8 @@
-package com.puresol.coding.java.source.tokens;
+package com.puresol.coding.lang.java.source.tokens;
 
 import org.junit.Test;
 
-import com.puresol.coding.java.source.literals.StringLiteral;
+import com.puresol.coding.lang.java.source.literals.StringLiteral;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;

@@ -1,4 +1,4 @@
-package com.puresol.coding.java;
+package com.puresol.coding.lang.java;
 
 import java.util.ArrayList;
 
@@ -9,8 +9,8 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.puresol.coding.java.source.tokengroups.JavaKeywords;
-import com.puresol.coding.tokentypes.ProgrammingLanguageTokenDefinition;
+import com.puresol.coding.lang.java.source.tokengroups.JavaKeywords;
+import com.puresol.coding.tokentypes.SourceTokenDefinition;
 import com.puresol.parser.TokenDefinition;
 
 public class ConsistencyTest {
@@ -43,7 +43,7 @@ public class ConsistencyTest {
 			if (clazz.getName().endsWith("Test")) {
 				continue;
 			}
-			if (!ProgrammingLanguageTokenDefinition.class
+			if (!SourceTokenDefinition.class
 					.isAssignableFrom(clazz)) {
 				Assert.fail(clazz.getName() + " has not the right interface!");
 			}

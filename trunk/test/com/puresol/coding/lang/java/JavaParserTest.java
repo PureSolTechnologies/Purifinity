@@ -1,7 +1,7 @@
 /**
  * Test //
  */
-package com.puresol.coding.java;
+package com.puresol.coding.lang.java;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -11,6 +11,8 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
+import com.puresol.coding.lang.java.JavaLexer;
+import com.puresol.coding.lang.java.JavaParser;
 import com.puresol.parser.DefaultPreConditioner;
 import com.puresol.parser.NoMatchingTokenDefinitionFound;
 import com.puresol.parser.PartDoesNotMatchException;

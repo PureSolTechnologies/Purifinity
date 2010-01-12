@@ -1,4 +1,4 @@
-package com.puresol.coding.java.source.keywords;
+package com.puresol.coding.lang.java.source.keywords;
 
 import java.util.Vector;
 
@@ -6,14 +6,14 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import com.puresol.coding.java.source.keywords.BooleanKeyword;
-import com.puresol.coding.java.source.keywords.ByteKeyword;
-import com.puresol.coding.java.source.keywords.CharKeyword;
-import com.puresol.coding.java.source.keywords.DoubleKeyword;
-import com.puresol.coding.java.source.keywords.FloatKeyword;
-import com.puresol.coding.java.source.keywords.IntKeyword;
-import com.puresol.coding.java.source.keywords.LongKeyword;
-import com.puresol.coding.java.source.keywords.ShortKeyword;
+import com.puresol.coding.lang.java.source.keywords.BooleanKeyword;
+import com.puresol.coding.lang.java.source.keywords.ByteKeyword;
+import com.puresol.coding.lang.java.source.keywords.CharKeyword;
+import com.puresol.coding.lang.java.source.keywords.DoubleKeyword;
+import com.puresol.coding.lang.java.source.keywords.FloatKeyword;
+import com.puresol.coding.lang.java.source.keywords.IntKeyword;
+import com.puresol.coding.lang.java.source.keywords.LongKeyword;
+import com.puresol.coding.lang.java.source.keywords.ShortKeyword;
 import com.puresol.coding.tokentypes.PrimitiveDataType;
 import com.puresol.introspect.ExtentedPackage;
 

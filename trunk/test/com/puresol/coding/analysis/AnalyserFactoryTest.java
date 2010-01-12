@@ -8,15 +8,18 @@
  *
  ***************************************************************************/
 
-package com.puresol.coding;
+package com.puresol.coding.analysis;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 
 import org.junit.Test;
 
-import com.puresol.coding.fortran.FortranAnalyser;
-import com.puresol.coding.java.JavaAnalyser;
+import com.puresol.coding.analysis.Analyser;
+import com.puresol.coding.analysis.AnalyserFactory;
+import com.puresol.coding.lang.LanguageNotSupportedException;
+import com.puresol.coding.lang.fortran.FortranAnalyser;
+import com.puresol.coding.lang.java.JavaAnalyser;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
