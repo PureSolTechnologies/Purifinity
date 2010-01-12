@@ -26,66 +26,64 @@ import com.puresol.parser.PartDoesNotMatchException;
 import com.puresol.parser.TokenStream;
 
 public class FortranAnalyser extends AbstractAnalyser {
-    private static final Logger logger =
-	    Logger.getLogger(FortranAnalyser.class);
+	private static final Logger logger = Logger
+			.getLogger(FortranAnalyser.class);
 
-    private Lexer lexer = null;
-    private int lineNumber = 0;
+	private Lexer lexer = null;
+	private int lineNumber = 0;
 
-    public static boolean isSuitable(File file) {
-	return (file.getPath().endsWith(".f")
-		|| file.getPath().endsWith(".f77")
-		|| file.getPath().endsWith(".f90") || file.getPath()
-		.endsWith(".f95"));
-    }
-
-    /**
-     * This is the default constructor.
-     * 
-     * @param A
-     *            file to be analysed.
-     */
-    public FortranAnalyser(File projectDirectory, File file) {
-	super(projectDirectory, file);
-	parse();
-    }
-
-    private void parse() {
-	try {
-	    lexer =
-		    new Lexer(new FortranPreConditioner(new File(
-			    getProjectDirectory().toString() + "/"
-				    + getFile().toString()))
-			    .getTokenStream());
-	    TokenStream tokenStream = lexer.getTokenStream();
-	    FortranParser parser = new FortranParser(tokenStream);
-	    parser.parse(FortranFile.class);
-	    setCodeRanges(parser.getCodeRanges());
-	} catch (FileNotFoundException e) {
-	    logger.error(e.getMessage(), e);
-	} catch (IOException e) {
-	    logger.error(e.getMessage(), e);
-	} catch (NoMatchingTokenDefinitionFound e) {
-	    logger.error(e.getMessage(), e);
-	} catch (PartDoesNotMatchException e) {
-	    logger.error(e.getMessage(), e);
+	public static boolean isSuitable(File file) {
+		return (file.getPath().endsWith(".f")
+				|| file.getPath().endsWith(".f77")
+				|| file.getPath().endsWith(".f90") || file.getPath().endsWith(
+				".f95"));
 	}
-    }
 
-    @Override
-    protected void calculate() {
-	clearAllMetrics();
-	for (CodeRange codeRange : getCodeRanges()) {
-	    addMetrics(codeRange, new CodeRangeMetrics4Fortran(codeRange));
+	/**
+	 * This is the default constructor.
+	 * 
+	 * @param A
+	 *            file to be analysed.
+	 */
+	public FortranAnalyser(File projectDirectory, File file) {
+		super(projectDirectory, file);
+		parse();
 	}
-    }
 
-    public Language getLanguage() {
-	return Language.FORTRAN;
-    }
+	private void parse() {
+		try {
+			lexer = new Lexer(new FortranPreConditioner(new File(
+					getProjectDirectory().toString() + "/"
+							+ getFile().toString())).getTokenStream());
+			TokenStream tokenStream = lexer.getTokenStream();
+			FortranParser parser = new FortranParser(tokenStream);
+			parser.scan();
+			setCodeRanges(parser.getCodeRanges());
+		} catch (FileNotFoundException e) {
+			logger.error(e.getMessage(), e);
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e);
+		} catch (NoMatchingTokenDefinitionFound e) {
+			logger.error(e.getMessage(), e);
+		} catch (PartDoesNotMatchException e) {
+			logger.error(e.getMessage(), e);
+		}
+	}
 
-    @Override
-    public int getLineNumber() {
-	return lineNumber;
-    }
+	@Override
+	protected void calculate() {
+		clearAllMetrics();
+		for (CodeRange codeRange : getCodeRanges()) {
+			addMetrics(codeRange, new CodeRangeMetrics4Fortran(codeRange));
+		}
+	}
+
+	public Language getLanguage() {
+		return Language.FORTRAN;
+	}
+
+	@Override
+	public int getLineNumber() {
+		return lineNumber;
+	}
 }

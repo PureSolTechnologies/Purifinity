@@ -19,7 +19,6 @@ import com.puresol.coding.AbstractAnalyser;
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.Language;
 import com.puresol.coding.java.metrics.CodeRangeMetrics4Java;
-import com.puresol.coding.java.source.parts.JavaFile;
 import com.puresol.parser.DefaultPreConditioner;
 import com.puresol.parser.NoMatchingTokenDefinitionFound;
 import com.puresol.parser.PartDoesNotMatchException;
@@ -32,63 +31,61 @@ import com.puresol.parser.TokenStream;
  */
 public class JavaAnalyser extends AbstractAnalyser {
 
-    private static final Logger logger =
-	    Logger.getLogger(JavaAnalyser.class);
+	private static final Logger logger = Logger.getLogger(JavaAnalyser.class);
 
-    private JavaLexer lexer = null;
-    private JavaParser parser = null;
-    private int lineNumber = 0;
+	private JavaLexer lexer = null;
+	private JavaParser parser = null;
+	private int lineNumber = 0;
 
-    public static boolean isSuitable(File file) {
-	return file.getPath().endsWith(".java");
-    }
-
-    /**
-     * This is the default constructor.
-     * 
-     * @param A
-     *            file to be analysed.
-     */
-    public JavaAnalyser(File projectDirectory, File file) {
-	super(projectDirectory, file);
-	parse();
-    }
-
-    private void parse() {
-	try {
-	    DefaultPreConditioner conditioner =
-		    new DefaultPreConditioner(new File(
-			    getProjectDirectory().toString() + "/"
-				    + getFile().toString()));
-	    TokenStream tokenStream = conditioner.getTokenStream();
-	    lexer = new JavaLexer(tokenStream);
-	    tokenStream = lexer.getTokenStream();
-	    parser = new JavaParser(tokenStream);
-	    parser.parse(JavaFile.class);
-	    setCodeRanges(parser.getCodeRanges());
-	} catch (IOException e) {
-	    logger.error(e.getMessage(), e);
-	} catch (NoMatchingTokenDefinitionFound e) {
-	    logger.error(e.getMessage(), e);
-	} catch (PartDoesNotMatchException e) {
-	    logger.error(e.getMessage(), e);
+	public static boolean isSuitable(File file) {
+		return file.getPath().endsWith(".java");
 	}
-    }
 
-    @Override
-    protected void calculate() {
-	clearAllMetrics();
-	for (CodeRange codeRange : getCodeRanges()) {
-	    addMetrics(codeRange, new CodeRangeMetrics4Java(codeRange));
+	/**
+	 * This is the default constructor.
+	 * 
+	 * @param A
+	 *            file to be analysed.
+	 */
+	public JavaAnalyser(File projectDirectory, File file) {
+		super(projectDirectory, file);
+		parse();
 	}
-    }
 
-    public Language getLanguage() {
-	return Language.JAVA;
-    }
+	private void parse() {
+		try {
+			DefaultPreConditioner conditioner = new DefaultPreConditioner(
+					new File(getProjectDirectory().toString() + "/"
+							+ getFile().toString()));
+			TokenStream tokenStream = conditioner.getTokenStream();
+			lexer = new JavaLexer(tokenStream);
+			tokenStream = lexer.getTokenStream();
+			parser = new JavaParser(tokenStream);
+			parser.scan();
+			setCodeRanges(parser.getCodeRanges());
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e);
+		} catch (NoMatchingTokenDefinitionFound e) {
+			logger.error(e.getMessage(), e);
+		} catch (PartDoesNotMatchException e) {
+			logger.error(e.getMessage(), e);
+		}
+	}
 
-    @Override
-    public int getLineNumber() {
-	return lineNumber;
-    }
+	@Override
+	protected void calculate() {
+		clearAllMetrics();
+		for (CodeRange codeRange : getCodeRanges()) {
+			addMetrics(codeRange, new CodeRangeMetrics4Java(codeRange));
+		}
+	}
+
+	public Language getLanguage() {
+		return Language.JAVA;
+	}
+
+	@Override
+	public int getLineNumber() {
+		return lineNumber;
+	}
 }

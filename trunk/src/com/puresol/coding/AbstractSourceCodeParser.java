@@ -6,31 +6,42 @@ import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
-import com.puresol.parser.NoMatchingTokenException;
+import com.puresol.parser.AbstractParser;
 import com.puresol.parser.Parser;
-import com.puresol.parser.Part;
 import com.puresol.parser.PartDoesNotMatchException;
 import com.puresol.parser.TokenStream;
 
-public class SourceCodeParser extends Parser {
+public abstract class AbstractSourceCodeParser extends AbstractParser {
 
 	private static final Logger logger = Logger
-			.getLogger(SourceCodeParser.class);
+			.getLogger(AbstractSourceCodeParser.class);
 
 	private ArrayList<CodeRange> codeRanges = new ArrayList<CodeRange>();
 
-	public SourceCodeParser(TokenStream tokenStream) {
-		super(tokenStream);
+	public AbstractSourceCodeParser(TokenStream tokenStream, int startPos) {
+		super(tokenStream, startPos);
 	}
 
-	public void parse(Class<? extends Part> rootPart)
+	protected void addCodeRange(CodeRange codeRange) {
+		codeRanges.add(codeRange);
+	}
+
+	public ArrayList<CodeRange> getCodeRanges() {
+		return codeRanges;
+	}
+
+	@Override
+	protected void processPart(Class<? extends Parser> part, boolean moveForward)
 			throws PartDoesNotMatchException {
 		try {
-			Constructor<? extends Part> constructor = rootPart.getConstructor(
-					getClass(), TokenStream.class, int.class);
-			Part rootPartInstance = (Part) constructor.newInstance(this,
-					getTokenStream(), getTokenStream().getFirstVisbleTokenID());
-			rootPartInstance.scan();
+			Constructor<?> constructor = part.getConstructor(TokenStream.class,
+					int.class);
+			Parser partInstance = (Parser) constructor.newInstance(
+					getTokenStream(), getCurrentPosition());
+			partInstance.scan();
+			if (moveForward) {
+				moveForward(partInstance.getNumberOfTokens());
+			}
 		} catch (SecurityException e) {
 			logger.error(e.getMessage(), e);
 		} catch (NoSuchMethodException e) {
@@ -43,17 +54,6 @@ public class SourceCodeParser extends Parser {
 			logger.error(e.getMessage(), e);
 		} catch (InvocationTargetException e) {
 			logger.error(e.getMessage(), e);
-		} catch (NoMatchingTokenException e) {
-			logger.warn(e.getMessage(), e);
 		}
 	}
-
-	public void addCodeRange(CodeRange codeRange) {
-		codeRanges.add(codeRange);
-	}
-
-	public ArrayList<CodeRange> getCodeRanges() {
-		return codeRanges;
-	}
-
 }

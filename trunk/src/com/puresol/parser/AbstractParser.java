@@ -5,17 +5,15 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.apache.log4j.Logger;
 
-public abstract class AbstractPart implements Part {
+public abstract class AbstractParser implements Parser {
 
-	private static final Logger logger = Logger.getLogger(AbstractPart.class);
+	private static final Logger logger = Logger.getLogger(AbstractParser.class);
 
-	private Parser parser = null;
 	private TokenStream tokenStream = null;
 	private int startPos;
 	private int currentPos;
 
-	public AbstractPart(Parser parser, TokenStream tokenStream, int startPos) {
-		this.parser = parser;
+	public AbstractParser(TokenStream tokenStream, int startPos) {
 		this.tokenStream = tokenStream;
 		this.startPos = startPos;
 		this.currentPos = startPos;
@@ -43,10 +41,6 @@ public abstract class AbstractPart implements Part {
 
 	public TokenStream getTokenStream() {
 		return tokenStream;
-	}
-
-	public Parser getParser() {
-		return parser;
 	}
 
 	protected void moveForward(int steps) throws PartDoesNotMatchException {
@@ -106,12 +100,12 @@ public abstract class AbstractPart implements Part {
 		}
 	}
 
-	protected void processPart(Class<? extends Part> part, boolean moveForward)
+	protected void processPart(Class<? extends Parser> part, boolean moveForward)
 			throws PartDoesNotMatchException {
 		try {
 			Constructor<?> constructor = part.getConstructor(Parser.class,
 					TokenStream.class, int.class);
-			Part partInstance = (Part) constructor.newInstance(tokenStream,
+			Parser partInstance = (Parser) constructor.newInstance(tokenStream,
 					getCurrentPosition());
 			partInstance.scan();
 			if (moveForward) {
@@ -132,12 +126,12 @@ public abstract class AbstractPart implements Part {
 		}
 	}
 
-	protected void processPart(Class<? extends Part> part)
+	protected void processPart(Class<? extends Parser> part)
 			throws PartDoesNotMatchException {
 		processPart(part, true);
 	}
 
-	protected boolean isPart(Class<? extends Part> part) {
+	protected boolean isPart(Class<? extends Parser> part) {
 		try {
 			processPart(part, false);
 			return true;
