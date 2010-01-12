@@ -1,4 +1,4 @@
-package com.puresol.coding.java.keywords;
+package com.puresol.coding.java.source.keywords;
 
 import java.util.Vector;
 

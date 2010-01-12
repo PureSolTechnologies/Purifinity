@@ -7,17 +7,17 @@ import com.puresol.parser.TokenStream;
 
 public class JavaFile extends AbstractSourceCodePart {
 
-    public JavaFile(SourceCodeParser parser, TokenStream tokenStream,
-	    int startPos) {
-	super(parser, tokenStream, startPos);
-    }
-
-    @Override
-    public void scan() throws PartDoesNotMatchException {
-	processPart(PackageDeclaration.class);
-	while (isPart(Import.class)) {
-	    processPart(Import.class);
+	public JavaFile(SourceCodeParser parser, TokenStream tokenStream,
+			int startPos) {
+		super(parser, tokenStream, startPos);
 	}
-	processPart(ClassDeclaration.class);
-    }
+
+	@Override
+	public void scan() throws PartDoesNotMatchException {
+		processPart(PackageDeclaration.class);
+		while (isPart(Import.class)) {
+			processPart(Import.class);
+		}
+		processPart(ClassDeclaration.class);
+	}
 }
