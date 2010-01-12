@@ -19,8 +19,8 @@ import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
-import com.puresol.coding.fortran.FortranAnalyser;
-import com.puresol.coding.java.JavaAnalyser;
+import com.puresol.coding.lang.fortran.FortranAnalyser;
+import com.puresol.coding.lang.java.JavaAnalyser;
 import com.puresol.exceptions.StrangeSituationException;
 
 /**
