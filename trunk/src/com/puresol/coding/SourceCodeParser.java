@@ -1,39 +1,37 @@
-package com.puresol.parser;
+package com.puresol.coding;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
-/**
- * Reads a token stream from lexer and looks for a configured structure.
- * 
- * @author Rick-Rainer Ludwig
- * 
- */
-public class Parser {
+import com.puresol.parser.NoMatchingTokenException;
+import com.puresol.parser.Parser;
+import com.puresol.parser.Part;
+import com.puresol.parser.PartDoesNotMatchException;
+import com.puresol.parser.TokenStream;
 
-    private static final Logger logger = Logger.getLogger(Parser.class);
+public class SourceCodeParser extends Parser {
 
-    private TokenStream tokenStream = null;
+    private static final Logger logger =
+	    Logger.getLogger(SourceCodeParser.class);
 
-    public Parser(TokenStream tokenStream) {
-	this.tokenStream = tokenStream;
-    }
+    private ArrayList<CodeRange> codeRanges = new ArrayList<CodeRange>();
 
-    public TokenStream getTokenStream() {
-	return tokenStream;
+    public SourceCodeParser(TokenStream tokenStream) {
+	super(tokenStream);
     }
 
     public void parse(Class<? extends Part> rootPart)
 	    throws PartDoesNotMatchException {
 	try {
 	    Constructor<? extends Part> constructor =
-		    rootPart.getConstructor(Parser.class,
+		    rootPart.getConstructor(SourceCodeParser.class,
 			    TokenStream.class, int.class);
 	    Part rootPartInstance =
-		    (Part) constructor.newInstance(this, tokenStream,
-			    tokenStream.getFirstVisbleTokenID());
+		    (Part) constructor.newInstance(this, getTokenStream(),
+			    getTokenStream().getFirstVisbleTokenID());
 	    rootPartInstance.scan();
 	} catch (SecurityException e) {
 	    logger.error(e.getMessage(), e);
@@ -51,4 +49,13 @@ public class Parser {
 	    logger.warn(e.getMessage(), e);
 	}
     }
+
+    public void addCodeRange(CodeRange codeRange) {
+	codeRanges.add(codeRange);
+    }
+
+    public ArrayList<CodeRange> getCodeRanges() {
+	return codeRanges;
+    }
+
 }

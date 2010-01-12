@@ -10,7 +10,10 @@
 
 package com.puresol.coding;
 
-import java.util.Hashtable;
+import com.puresol.coding.tokentypes.ProgrammingLanguageTokenDefinition;
+import com.puresol.parser.Token;
+import com.puresol.parser.TokenPublicity;
+import com.puresol.parser.TokenStream;
 
 /**
  * This class calculates the cyclomatic number v(G) from a code range.
@@ -29,13 +32,16 @@ abstract public class AbstractMcCabeMetric extends AbstractMetric {
 
     private void calculate() {
 	CodeRange codeRange = getCodeRange();
-	Hashtable<Integer, TokenContent> tokenContents =
-		codeRange.getTokenContents();
+	TokenStream tokenStream = codeRange.getTokenStream();
 	for (int index = codeRange.getStart(); index <= codeRange
 		.getStop(); index++) {
-	    if (tokenContents.containsKey(index)) {
-		TokenContent content = tokenContents.get(index);
-		addCyclomaticNumber(content.getCyclomaticNumber());
+	    Token token = tokenStream.get(index);
+	    if (token.getPublicity() != TokenPublicity.HIDDEN) {
+		ProgrammingLanguageTokenDefinition def =
+			(ProgrammingLanguageTokenDefinition) token
+				.getDefinitionInstance();
+		addCyclomaticNumber(def.getCyclomaticNumber(token,
+			tokenStream));
 	    }
 	}
 

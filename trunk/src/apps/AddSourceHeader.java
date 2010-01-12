@@ -18,8 +18,8 @@ public class AddSourceHeader {
 
     public static void main(String[] args) {
 	SourceHeader.addHeaderToFiles(new File(
-	"res/config/SourceFileHeader.template"), new File(
-	"res/config/about"), new File("src"), "**/*.java");
+		"res/config/SourceFileHeader.template"), new File(
+		"res/config/about"), new File("src"), "**/*.java");
 	SourceHeader.addHeaderToFiles(new File(
 		"res/config/SourceFileHeader.template"), new File(
 		"res/config/about"), new File("test"), "**/*.java");

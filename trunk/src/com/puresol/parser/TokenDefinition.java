@@ -10,6 +10,8 @@ public interface TokenDefinition {
 
     public TokenPublicity getPublicity();
 
+    public boolean matches(String string);
+
     public boolean included(String string);
 
     public boolean atStart(String string);

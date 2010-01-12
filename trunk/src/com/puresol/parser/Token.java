@@ -1,8 +1,14 @@
 package com.puresol.parser;
 
 import java.io.InputStream;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
+import org.apache.log4j.Logger;
 
 public class Token {
+
+    private static final Logger logger = Logger.getLogger(Token.class);
 
     private InputStream stream;
     private int tokenID;
@@ -65,6 +71,27 @@ public class Token {
 	return definition;
     }
 
+    public TokenDefinition getDefinitionInstance() {
+	try {
+	    Constructor<? extends TokenDefinition> constructor =
+		    definition.getConstructor();
+	    return (TokenDefinition) constructor.newInstance();
+	} catch (IllegalArgumentException e) {
+	    logger.warn(e.getMessage(), e);
+	} catch (InstantiationException e) {
+	    logger.warn(e.getMessage(), e);
+	} catch (IllegalAccessException e) {
+	    logger.warn(e.getMessage(), e);
+	} catch (InvocationTargetException e) {
+	    logger.warn(e.getMessage(), e);
+	} catch (SecurityException e) {
+	    logger.warn(e.getMessage(), e);
+	} catch (NoSuchMethodException e) {
+	    logger.warn(e.getMessage(), e);
+	}
+	return null;
+    }
+
     public String toString() {
 	String output = String.valueOf(tokenID) + " ";
 	if (stopLine != startLine) {
@@ -73,7 +100,9 @@ public class Token {
 	    output += String.valueOf(startLine);
 	}
 	output += " (" + startPos + "/" + length + "): '" + text + "'";
-	output += " (" + definition.getClass().getSimpleName() + ")";
+	if (definition != null) {
+	    output += " (" + definition.getClass().getName() + ")";
+	}
 	if (publicity == TokenPublicity.HIDDEN) {
 	    output += " (hidden!)";
 	} else if (publicity == TokenPublicity.ADDED) {

@@ -14,7 +14,12 @@ import java.util.Hashtable;
 
 import javax.i18n4j.Translator;
 
+import com.puresol.coding.tokentypes.ProgrammingLanguageTokenDefinition;
+import com.puresol.coding.tokentypes.SymbolType;
 import com.puresol.html.HTMLStandards;
+import com.puresol.parser.Token;
+import com.puresol.parser.TokenPublicity;
+import com.puresol.parser.TokenStream;
 
 abstract public class AbstractHalsteadMetric extends AbstractMetric {
 
@@ -87,17 +92,21 @@ abstract public class AbstractHalsteadMetric extends AbstractMetric {
 
     private void createHashtables() {
 	CodeRange codeRange = getCodeRange();
-	Hashtable<Integer, TokenContent> tokenContents =
-		codeRange.getTokenContents();
+	TokenStream tokenStream = codeRange.getTokenStream();
 	for (int index = codeRange.getStart(); index <= codeRange
 		.getStop(); index++) {
-	    if (tokenContents.containsKey(index)) {
-		TokenContent content = tokenContents.get(index);
-		if (content.isOperand()) {
-		    addOperand(content.getText());
-		}
-		if (content.isOperator()) {
-		    addOperator(content.getText());
+	    Token token = tokenStream.get(index);
+	    if (token.getPublicity() != TokenPublicity.HIDDEN) {
+		ProgrammingLanguageTokenDefinition def =
+			(ProgrammingLanguageTokenDefinition) token
+				.getDefinitionInstance();
+		if (def.countForHalstead(token, tokenStream)) {
+		    if (def.getSymbolType() == SymbolType.OPERANT) {
+			addOperand(def.getHalsteadSymbol());
+		    }
+		    if (def.getSymbolType() == SymbolType.OPERATOR) {
+			addOperator(def.getHalsteadSymbol());
+		    }
 		}
 	    }
 	}

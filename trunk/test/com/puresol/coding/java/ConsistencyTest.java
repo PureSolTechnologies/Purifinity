@@ -9,6 +9,7 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.puresol.coding.java.tokengroups.JavaKeywords;
 import com.puresol.coding.tokentypes.ProgrammingLanguageTokenDefinition;
 import com.puresol.parser.TokenDefinition;
 

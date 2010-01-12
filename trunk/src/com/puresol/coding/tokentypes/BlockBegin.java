@@ -11,7 +11,7 @@ public abstract class BlockBegin extends
 	}
 
 	@Override
-	public TokenPublicity getDefaultPublicity() {
+	public TokenPublicity getPublicity() {
 		return TokenPublicity.VISIBLE;
 	}
 

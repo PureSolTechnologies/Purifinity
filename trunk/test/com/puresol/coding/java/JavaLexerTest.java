@@ -8,10 +8,7 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import com.puresol.coding.java.JavaKeywords;
-import com.puresol.coding.java.JavaSymbols;
 import com.puresol.parser.DefaultPreConditioner;
-import com.puresol.parser.Lexer;
 import com.puresol.parser.NoMatchingTokenDefinitionFound;
 import com.puresol.parser.Token;
 import com.puresol.parser.TokenStream;
@@ -26,9 +23,7 @@ public class JavaLexerTest {
 			    new File(
 				    "test/com/puresol/coding/java/JavaLexerTest.java"));
 	    TokenStream tokenStream = conditioner.getTokenStream();
-	    Lexer lexer = new Lexer(tokenStream);
-	    lexer.addDefinitions(JavaKeywords.class);
-	    lexer.addDefinitions(JavaSymbols.class);
+	    JavaLexer lexer = new JavaLexer(tokenStream);
 	    TokenStream tokenStream2 = lexer.getTokenStream();
 	    for (Token token : tokenStream2.getTokens()) {
 		System.out.println(token.toString());

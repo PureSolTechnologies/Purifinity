@@ -52,6 +52,11 @@ public abstract class AbstractTokenDefinition implements TokenDefinition {
     }
 
     @Override
+    public boolean matches(String string) {
+	return pattern.matcher(string).matches();
+    }
+
+    @Override
     public String getTokenAtStart(String string) {
 	Matcher matcher = startPattern.matcher(string);
 	if (!matcher.find()) {
