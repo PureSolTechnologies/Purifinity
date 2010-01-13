@@ -103,17 +103,17 @@ public class ProjectAnalyser {
 
     public ArrayList<CodeRange> getCodeRanges(File file) {
 	if (analysers == null) {
-	    return null;
+	    return new ArrayList<CodeRange>();
 	}
 	if (file == null) {
-	    return null;
+	    return new ArrayList<CodeRange>();
 	}
 	if (!analysers.containsKey(file)) {
-	    return null;
+	    return new ArrayList<CodeRange>();
 	}
 	Analyser analyser = analysers.get(file);
 	if (analyser == null) {
-	    return null;
+	    return new ArrayList<CodeRange>();
 	}
 	return analysers.get(file).getCodeRanges();
     }

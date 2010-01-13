@@ -4,9 +4,14 @@ import com.puresol.coding.tokentypes.Operator;
 
 public class Plus extends Operator {
 
-	@Override
-	public String getPatternString() {
-		return "\\+";
-	}
+    @Override
+    public String getPatternString() {
+	return "\\+";
+    }
+
+    @Override
+    public String getHalsteadSymbol() {
+	return "+";
+    }
 
 }

@@ -16,39 +16,39 @@ import com.puresol.parser.TokenStream;
 
 public class ClassDeclaration extends AbstractSourceCodeParser {
 
-	public ClassDeclaration(TokenStream tokenStream, int startPos) {
-		super(tokenStream, startPos);
-	}
+    public ClassDeclaration(TokenStream tokenStream, int startPos) {
+	super(tokenStream, startPos);
+    }
 
-	@Override
-	public void scan() throws PartDoesNotMatchException {
-		int startPosition = getCurrentPosition();
-		processOneTokenOf(ClassModifiers.class);
-		while (isOneTokenOf(ClassModifiers.class)) {
-			processOneTokenOf(ClassModifiers.class);
-		}
-		processToken(ClassKeyword.class);
-		String name = getCurrentToken().getText();
-		processToken(IdLiteral.class);
-		if (isToken(ExtendsKeyword.class)) {
-			processToken(ExtendsKeyword.class);
-			processToken(IdLiteral.class);
-		}
-		if (isToken(ImplementsKeyword.class)) {
-			processToken(ImplementsKeyword.class);
-			processToken(IdLiteral.class);
-			while (isToken(Comma.class)) {
-				processToken(Comma.class);
-				processToken(IdLiteral.class);
-			}
-		}
-		if (!isToken(LCurlyBracket.class)) {
-			abort();
-		}
-		skipNested(LCurlyBracket.class, RCurlyBracket.class);
-		int stopPosition = getCurrentPosition();
-		addCodeRange(new CodeRange(getTokenStream().getName(),
-				CodeRangeType.CLASS, name, getTokenStream(), startPosition,
-				stopPosition));
+    @Override
+    public void scan() throws PartDoesNotMatchException {
+	processOneTokenOf(ClassModifiers.class);
+	while (isOneTokenOf(ClassModifiers.class)) {
+	    processOneTokenOf(ClassModifiers.class);
 	}
+	processToken(ClassKeyword.class);
+	String name = getCurrentToken().getText();
+	processToken(IdLiteral.class);
+	if (isToken(ExtendsKeyword.class)) {
+	    processToken(ExtendsKeyword.class);
+	    processToken(IdLiteral.class);
+	}
+	if (isToken(ImplementsKeyword.class)) {
+	    processToken(ImplementsKeyword.class);
+	    processToken(IdLiteral.class);
+	    while (isToken(Comma.class)) {
+		processToken(Comma.class);
+		processToken(IdLiteral.class);
+	    }
+	}
+	if (!isToken(LCurlyBracket.class)) {
+	    abort();
+	}
+	skipNested(LCurlyBracket.class, RCurlyBracket.class);
+	int startPosition = getStartPositionWithLeadingHidden();
+	int stopPosition = getPositionOfNextLineBreak();
+	addCodeRange(new CodeRange(getTokenStream().getName(),
+		CodeRangeType.CLASS, name, getTokenStream(),
+		startPosition, stopPosition));
+    }
 }

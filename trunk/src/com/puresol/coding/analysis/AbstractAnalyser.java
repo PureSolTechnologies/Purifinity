@@ -23,7 +23,7 @@ abstract public class AbstractAnalyser implements Analyser {
 
     private Hashtable<CodeRange, CodeRangeMetrics> metrics =
 	    new Hashtable<CodeRange, CodeRangeMetrics>();
-    private ArrayList<CodeRange> codeRanges = null;
+    private ArrayList<CodeRange> codeRanges = new ArrayList<CodeRange>();
 
     public AbstractAnalyser(File projectDirectory, File file) {
 	this.projectDirectory = projectDirectory;
@@ -42,8 +42,8 @@ abstract public class AbstractAnalyser implements Analyser {
 	return metrics.get(codeRange);
     }
 
-    protected void setCodeRanges(ArrayList<CodeRange> codeRanges) {
-	this.codeRanges = codeRanges;
+    protected void addCodeRanges(ArrayList<CodeRange> codeRanges) {
+	this.codeRanges.addAll(codeRanges);
 	calculate();
     }
 

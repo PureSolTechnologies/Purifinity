@@ -103,7 +103,7 @@ abstract public class AbstractHalsteadMetric extends AbstractMetric {
 				.getDefinitionInstance();
 		if (def.countForHalstead(token, tokenStream)) {
 		    if (def.getSymbolType() == SymbolType.OPERANT) {
-			addOperand(def.getHalsteadSymbol());
+			addOperant(token.getText());
 		    }
 		    if (def.getSymbolType() == SymbolType.OPERATOR) {
 			addOperator(def.getHalsteadSymbol());
@@ -121,7 +121,7 @@ abstract public class AbstractHalsteadMetric extends AbstractMetric {
 	}
     }
 
-    private void addOperand(String operand) {
+    private void addOperant(String operand) {
 	if (operants.containsKey(operand)) {
 	    operants.put(operand, operants.get(operand) + 1);
 	} else {

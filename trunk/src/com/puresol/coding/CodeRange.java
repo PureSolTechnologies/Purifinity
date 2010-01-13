@@ -35,7 +35,7 @@ public class CodeRange implements Comparable<CodeRange> {
 
     private void createText() {
 	text = "";
-	for (int index = start; index < stop; index++) {
+	for (int index = start; index <= stop; index++) {
 	    text += tokenStream.get(index).getText();
 	}
     }
