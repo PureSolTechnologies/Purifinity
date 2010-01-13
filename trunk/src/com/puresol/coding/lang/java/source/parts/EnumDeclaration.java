@@ -3,19 +3,19 @@ package com.puresol.coding.lang.java.source.parts;
 import com.puresol.coding.AbstractSourceCodeParser;
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.CodeRangeType;
-import com.puresol.coding.lang.java.source.keywords.ClassKeyword;
-import com.puresol.coding.lang.java.source.keywords.ExtendsKeyword;
-import com.puresol.coding.lang.java.source.keywords.ImplementsKeyword;
+import com.puresol.coding.lang.java.source.keywords.EnumKeyword;
 import com.puresol.coding.lang.java.source.literals.IdLiteral;
 import com.puresol.coding.lang.java.source.symbols.Comma;
 import com.puresol.coding.lang.java.source.symbols.GreaterThan;
+import com.puresol.coding.lang.java.source.symbols.LCurlyBracket;
 import com.puresol.coding.lang.java.source.symbols.LessThan;
+import com.puresol.coding.lang.java.source.symbols.RCurlyBracket;
 import com.puresol.parser.PartDoesNotMatchException;
 import com.puresol.parser.TokenStream;
 
-public class ClassDeclaration extends AbstractSourceCodeParser {
+public class EnumDeclaration extends AbstractSourceCodeParser {
 
-	public ClassDeclaration(TokenStream tokenStream, int startPos) {
+	public EnumDeclaration(TokenStream tokenStream, int startPos) {
 		super(tokenStream, startPos);
 	}
 
@@ -24,7 +24,7 @@ public class ClassDeclaration extends AbstractSourceCodeParser {
 		while (processPartIfPossible(Annotation.class))
 			;
 		processPart(ClassModifiers.class);
-		processToken(ClassKeyword.class);
+		processToken(EnumKeyword.class);
 		if (isToken(LessThan.class)) {
 			processToken(LessThan.class);
 			processToken(IdLiteral.class);
@@ -35,24 +35,12 @@ public class ClassDeclaration extends AbstractSourceCodeParser {
 		}
 		String name = getCurrentToken().getText();
 		processToken(IdLiteral.class);
-		if (processTokenIfPossible(ExtendsKeyword.class)) {
-			processToken(IdLiteral.class);
-			processPartIfPossible(Generic.class);
-		}
-		if (processTokenIfPossible(ImplementsKeyword.class)) {
-			processToken(IdLiteral.class);
-			processPartIfPossible(Generic.class);
-			while (processTokenIfPossible(Comma.class)) {
-				processToken(IdLiteral.class);
-				processPartIfPossible(Generic.class);
-			}
-		}
-		processPart(ClassBody.class);
+		skipNested(LCurlyBracket.class, RCurlyBracket.class);
 		int startPosition = getStartPositionWithLeadingHidden();
 		int stopPosition = getPositionOfLastVisible();
 		stopPosition = this.getPositionOfNextLineBreak(stopPosition);
 		addCodeRange(new CodeRange(getTokenStream().getName(),
-				CodeRangeType.CLASS, name, getTokenStream(), startPosition,
-				stopPosition));
+				CodeRangeType.ENUMERATION, name, getTokenStream(),
+				startPosition, stopPosition));
 	}
 }
