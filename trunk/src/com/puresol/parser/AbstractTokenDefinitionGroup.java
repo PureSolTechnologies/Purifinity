@@ -21,7 +21,7 @@ public abstract class AbstractTokenDefinitionGroup implements TokenDefinitionGro
     protected abstract void initialize();
 
     @Override
-    public void addKeyword(Class<? extends TokenDefinition> keyword) {
+    public void addTokenDefinition(Class<? extends TokenDefinition> keyword) {
 	try {
 	    Constructor<?> constructor;
 	    constructor = keyword.getConstructor();
@@ -42,17 +42,17 @@ public abstract class AbstractTokenDefinitionGroup implements TokenDefinitionGro
     }
 
     @Override
-    public void addKeyword(TokenDefinition keyword) {
+    public void addTokenDefinition(TokenDefinition keyword) {
 	definitions.add(keyword);
     }
 
     @Override
-    public void addKeywords(Class<? extends TokenDefinitionGroup> definitions) {
+    public void addTokenDefinitions(Class<? extends TokenDefinitionGroup> definitions) {
 	try {
 	    Constructor<?> constructor = definitions.getConstructor();
 	    TokenDefinitionGroup definitionsInstance =
 		    (TokenDefinitionGroup) constructor.newInstance();
-	    this.definitions.addAll(definitionsInstance.getKeywords());
+	    this.definitions.addAll(definitionsInstance.getTokenDefinitions());
 	} catch (SecurityException e) {
 	    logger.error(e.getMessage());
 	} catch (NoSuchMethodException e) {
@@ -69,12 +69,12 @@ public abstract class AbstractTokenDefinitionGroup implements TokenDefinitionGro
     }
 
     @Override
-    public void addKeywords(TokenDefinitionGroup definitions) {
-	this.definitions.addAll(definitions.getKeywords());
+    public void addTokenDefinitions(TokenDefinitionGroup definitions) {
+	this.definitions.addAll(definitions.getTokenDefinitions());
     }
 
     @Override
-    public ArrayList<TokenDefinition> getKeywords() {
+    public ArrayList<TokenDefinition> getTokenDefinitions() {
 	return definitions;
     }
 }

@@ -6,7 +6,7 @@ public class MultiLineComment extends Comment {
 
     @Override
     public String getPatternString() {
-	return "/\\*([^*]|\\*[^/])*\\*/";
+	return "/\\*([^*]+|\\*[^/])*\\*/";
     }
 
 }

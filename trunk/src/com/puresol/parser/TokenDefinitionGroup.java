@@ -11,13 +11,13 @@ import java.util.ArrayList;
  */
 public interface TokenDefinitionGroup {
 
-    public void addKeyword(Class<? extends TokenDefinition> keyword);
+    public void addTokenDefinition(Class<? extends TokenDefinition> keyword);
 
-    public void addKeyword(TokenDefinition keyword);
+    public void addTokenDefinition(TokenDefinition keyword);
 
-    public ArrayList<TokenDefinition> getKeywords();
+    public ArrayList<TokenDefinition> getTokenDefinitions();
 
-    public void addKeywords(Class<? extends TokenDefinitionGroup> keywords);
+    public void addTokenDefinitions(Class<? extends TokenDefinitionGroup> keywords);
 
-    public void addKeywords(TokenDefinitionGroup keywords);
+    public void addTokenDefinitions(TokenDefinitionGroup keywords);
 }

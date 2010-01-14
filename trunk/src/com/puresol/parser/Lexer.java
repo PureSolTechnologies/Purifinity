@@ -1,8 +1,12 @@
 package com.puresol.parser;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.swingx.data.LineEnd;
 
@@ -19,20 +23,40 @@ public class Lexer {
 
     private static final Logger logger = Logger.getLogger(Lexer.class);
 
-    private TokenStream inputStream = null;
-    private TokenStream outputStream = null;
-    private ArrayList<TokenDefinition> tokenDefinitions =
+    private final TokenStream inputStream;
+    private final TokenStream outputStream;
+    private final ArrayList<TokenDefinition> tokenDefinitions =
 	    new ArrayList<TokenDefinition>();
+
+    private int lineNumber;
+    private int tokenId;
+    private int streamPos;
 
     public Lexer(TokenStream stream) {
 	this.inputStream = stream;
+	outputStream = new TokenStream(inputStream.getName());
+	init();
     }
 
-    public void addDefinition(TokenDefinition definition) {
+    public Lexer(File file) throws FileNotFoundException, IOException {
+	this.inputStream =
+		new DefaultPreConditioner(file).getTokenStream();
+	outputStream = new TokenStream(inputStream.getName());
+	init();
+    }
+
+    private void init() {
+	lineNumber = 0;
+	tokenId = 0;
+	streamPos = 0;
+    }
+
+    public final void addDefinition(TokenDefinition definition) {
 	tokenDefinitions.add(definition);
     }
 
-    public void addDefinition(Class<? extends TokenDefinition> definition) {
+    public final void addDefinition(
+	    Class<? extends TokenDefinition> definition) {
 	try {
 	    Constructor<?> constructor = definition.getConstructor();
 	    tokenDefinitions.add((TokenDefinition) constructor
@@ -52,13 +76,15 @@ public class Lexer {
 	}
     }
 
-    public void addDefinitions(
+    public final void addDefinitions(
 	    Class<? extends TokenDefinitionGroup> definitions) {
 	try {
 	    Constructor<?> constructor = definitions.getConstructor();
 	    TokenDefinitionGroup definitionsInstance =
 		    (TokenDefinitionGroup) constructor.newInstance();
-	    tokenDefinitions.addAll(definitionsInstance.getKeywords());
+	    Collections.sort(definitionsInstance.getTokenDefinitions());
+	    tokenDefinitions.addAll(definitionsInstance
+		    .getTokenDefinitions());
 	} catch (SecurityException e) {
 	    logger.error(e.getMessage(), e);
 	} catch (NoSuchMethodException e) {
@@ -74,13 +100,18 @@ public class Lexer {
 	}
     }
 
-    public void addDefinitions(ArrayList<TokenDefinition> definitions) {
+    public final void addDefinitions(ArrayList<TokenDefinition> definitions) {
+	Collections.sort(definitions);
 	tokenDefinitions.addAll(definitions);
     }
 
-    public TokenStream getTokenStream()
+    public final ArrayList<TokenDefinition> getDefinitions() {
+	return tokenDefinitions;
+    }
+
+    public final TokenStream getTokenStream()
 	    throws NoMatchingTokenDefinitionFound {
-	if (outputStream == null) {
+	if (outputStream.getSize() == 0) {
 	    createOutputStream();
 	}
 	return outputStream;
@@ -88,45 +119,74 @@ public class Lexer {
 
     private void createOutputStream()
 	    throws NoMatchingTokenDefinitionFound {
-	outputStream = new TokenStream(inputStream.getName());
-	int lineNumber = 0;
 	for (Token token : inputStream.getTokens()) {
-	    lineNumber = processToken(lineNumber, token);
+	    processToken(token);
 	}
     }
 
-    private int processToken(int lineNumber, Token token)
+    private void processToken(Token token)
 	    throws NoMatchingTokenDefinitionFound {
-	int id = outputStream.getSize();
-	int pos = 0;
+	if (token.getPublicity() == TokenPublicity.VISIBLE) {
+	    processVisibleToken(token);
+	} else if (token.getPublicity() == TokenPublicity.HIDDEN) {
+	    processHiddenToken(token);
+	} else if (token.getPublicity() == TokenPublicity.ADDED) {
+	    processAddedToken(token);
+	}
+    }
+
+    private void processVisibleToken(Token token)
+	    throws NoMatchingTokenDefinitionFound {
 	String text = token.getText();
-	while (pos < text.length()) {
+	int tokenPos = 0;
+	while (tokenPos < text.length()) {
 	    boolean found = false;
 	    for (TokenDefinition definition : tokenDefinitions) {
-		if (definition.atStart(text.substring(pos))) {
+		if (definition.atStart(text.substring(tokenPos))) {
+		    logger.trace("Found definition '"
+			    + definition.getClass().getSimpleName()
+			    + "' for '"
+			    + definition.getTokenAtStart(text
+				    .substring(tokenPos)) + "'.");
 		    String tokenText =
-			    definition
-				    .getTokenAtStart(text.substring(pos));
+			    definition.getTokenAtStart(text
+				    .substring(tokenPos));
 		    int numberOfLines = getNumberOfLines(tokenText);
-		    outputStream
-			    .addToken(new Token(id, definition
-				    .getPublicity(), pos, tokenText
-				    .length(), tokenText, lineNumber,
-				    lineNumber + numberOfLines, definition
-					    .getClass()));
-		    id++;
-		    lineNumber += numberOfLines;
-		    pos += tokenText.length();
+		    addToken(new Token(tokenId, definition.getPublicity(),
+			    streamPos, tokenText.length(), tokenText,
+			    lineNumber, lineNumber + numberOfLines,
+			    definition.getClass()));
+		    tokenPos += tokenText.length();
 		    found = true;
 		    break;
 		}
 	    }
 	    if (!found) {
-		throw new NoMatchingTokenDefinitionFound(lineNumber, pos,
-			text);
+		throw new NoMatchingTokenDefinitionFound(lineNumber,
+			tokenPos, text);
 	    }
 	}
-	return lineNumber;
+    }
+
+    private void processHiddenToken(Token token) {
+	int numberOfLines = getNumberOfLines(token.getText());
+	addToken(new Token(tokenId, token.getPublicity(), streamPos, token
+		.getText().length(), token.getText(), lineNumber,
+		lineNumber + numberOfLines, token.getDefinition()));
+    }
+
+    private void processAddedToken(Token token) {
+	int numberOfLines = getNumberOfLines(token.getText());
+	addToken(new Token(tokenId, token.getPublicity(), streamPos, token
+		.getText().length(), token.getText(), lineNumber,
+		lineNumber + numberOfLines, token.getDefinition()));
+    }
+
+    private void addToken(Token token) {
+	outputStream.addToken(token);
+	tokenId++;
+	lineNumber += token.getStopLine() - token.getStartLine();
+	streamPos += token.getText().length();
     }
 
     private int getNumberOfLines(String text) {

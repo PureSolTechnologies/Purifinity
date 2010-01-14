@@ -2,6 +2,7 @@ package com.puresol.coding.lang.java.source.tokengroups;
 
 import com.puresol.coding.lang.java.source.symbols.Assign;
 import com.puresol.coding.lang.java.source.symbols.At;
+import com.puresol.coding.lang.java.source.symbols.BackSlash;
 import com.puresol.coding.lang.java.source.symbols.BitAnd;
 import com.puresol.coding.lang.java.source.symbols.BitOr;
 import com.puresol.coding.lang.java.source.symbols.Colon;
@@ -20,6 +21,7 @@ import com.puresol.coding.lang.java.source.symbols.LineComment;
 import com.puresol.coding.lang.java.source.symbols.LogicalAnd;
 import com.puresol.coding.lang.java.source.symbols.LogicalOr;
 import com.puresol.coding.lang.java.source.symbols.Minus;
+import com.puresol.coding.lang.java.source.symbols.MinusAssign;
 import com.puresol.coding.lang.java.source.symbols.MinusMinus;
 import com.puresol.coding.lang.java.source.symbols.MultiLineComment;
 import com.puresol.coding.lang.java.source.symbols.Not;
@@ -33,7 +35,9 @@ import com.puresol.coding.lang.java.source.symbols.RParen;
 import com.puresol.coding.lang.java.source.symbols.RRectBracket;
 import com.puresol.coding.lang.java.source.symbols.Semicolon;
 import com.puresol.coding.lang.java.source.symbols.Slash;
+import com.puresol.coding.lang.java.source.symbols.SlashAssign;
 import com.puresol.coding.lang.java.source.symbols.Star;
+import com.puresol.coding.lang.java.source.symbols.StarAssign;
 import com.puresol.coding.lang.java.source.symbols.Unequal;
 import com.puresol.coding.lang.java.source.symbols.WhiteSpace;
 import com.puresol.parser.AbstractTokenDefinitionGroup;
@@ -42,49 +46,53 @@ public class JavaSymbols extends AbstractTokenDefinitionGroup {
 
     @Override
     protected void initialize() {
-	addKeyword(MultiLineComment.class);
-	addKeyword(LineComment.class);
-	addKeyword(LineBreak.class);
-	addKeyword(WhiteSpace.class);
+	addTokenDefinition(MultiLineComment.class);
+	addTokenDefinition(LineComment.class);
+	addTokenDefinition(LineBreak.class);
+	addTokenDefinition(WhiteSpace.class);
 
-	addKeyword(LParen.class);
-	addKeyword(RParen.class);
-	addKeyword(LCurlyBracket.class);
-	addKeyword(RCurlyBracket.class);
-	addKeyword(LRectBracket.class);
-	addKeyword(RRectBracket.class);
+	addTokenDefinition(LParen.class);
+	addTokenDefinition(RParen.class);
+	addTokenDefinition(LCurlyBracket.class);
+	addTokenDefinition(RCurlyBracket.class);
+	addTokenDefinition(LRectBracket.class);
+	addTokenDefinition(RRectBracket.class);
 
-	addKeyword(LessEqual.class);
-	addKeyword(GreaterEqual.class);
-	addKeyword(LessThan.class);
-	addKeyword(GreaterThan.class);
-	addKeyword(Equal.class);
-	addKeyword(Unequal.class);
-	addKeyword(PlusAssign.class);
-	addKeyword(Assign.class);
-	addKeyword(At.class);
-	addKeyword(BitOr.class);
+	addTokenDefinition(LessEqual.class);
+	addTokenDefinition(GreaterEqual.class);
+	addTokenDefinition(LessThan.class);
+	addTokenDefinition(GreaterThan.class);
+	addTokenDefinition(Equal.class);
+	addTokenDefinition(Unequal.class);
+	addTokenDefinition(PlusAssign.class);
+	addTokenDefinition(MinusAssign.class);
+	addTokenDefinition(SlashAssign.class);
+	addTokenDefinition(StarAssign.class);
+	addTokenDefinition(Assign.class);
+	addTokenDefinition(At.class);
+	addTokenDefinition(BitOr.class);
 
-	addKeyword(PlusPlus.class);
-	addKeyword(MinusMinus.class);
+	addTokenDefinition(PlusPlus.class);
+	addTokenDefinition(MinusMinus.class);
 
-	addKeyword(Plus.class);
-	addKeyword(Minus.class);
-	addKeyword(Slash.class);
-	addKeyword(Star.class);
-	addKeyword(Percent.class);
+	addTokenDefinition(Plus.class);
+	addTokenDefinition(Minus.class);
+	addTokenDefinition(Slash.class);
+	addTokenDefinition(Star.class);
+	addTokenDefinition(Percent.class);
+	addTokenDefinition(BackSlash.class);
 
-	addKeyword(LogicalAnd.class);
-	addKeyword(BitAnd.class);
-	addKeyword(LogicalOr.class);
-	addKeyword(BitOr.class);
-	addKeyword(Not.class);
+	addTokenDefinition(LogicalAnd.class);
+	addTokenDefinition(BitAnd.class);
+	addTokenDefinition(LogicalOr.class);
+	addTokenDefinition(BitOr.class);
+	addTokenDefinition(Not.class);
 
-	addKeyword(QuestionMark.class);
+	addTokenDefinition(QuestionMark.class);
 
-	addKeyword(Semicolon.class);
-	addKeyword(Comma.class);
-	addKeyword(Colon.class);
-	addKeyword(Dot.class);
+	addTokenDefinition(Semicolon.class);
+	addTokenDefinition(Comma.class);
+	addTokenDefinition(Colon.class);
+	addTokenDefinition(Dot.class);
     }
 }

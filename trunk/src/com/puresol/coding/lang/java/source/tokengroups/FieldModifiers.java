@@ -12,12 +12,12 @@ public class FieldModifiers extends AbstractTokenDefinitionGroup {
 
 	@Override
 	protected void initialize() {
-		addKeyword(PublicKeyword.class);
-		addKeyword(ProtectedKeyword.class);
-		addKeyword(PrivateKeyword.class);
-		addKeyword(FinalKeyword.class);
-		addKeyword(StaticKeyword.class);
-		addKeyword(TransientKeyword.class);
+		addTokenDefinition(PublicKeyword.class);
+		addTokenDefinition(ProtectedKeyword.class);
+		addTokenDefinition(PrivateKeyword.class);
+		addTokenDefinition(FinalKeyword.class);
+		addTokenDefinition(StaticKeyword.class);
+		addTokenDefinition(TransientKeyword.class);
 	}
 
 }

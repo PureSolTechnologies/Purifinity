@@ -12,12 +12,12 @@ public class JavaLiterals extends AbstractTokenDefinitionGroup {
 
     @Override
     protected void initialize() {
-	addKeyword(FloatingPointLiteral.class);
-	addKeyword(IntegerLiteral.class);
-	addKeyword(CharacterLiteral.class);
-	addKeyword(StringLiteral.class);
-	addKeyword(BooleanLiteral.class);
+	addTokenDefinition(FloatingPointLiteral.class);
+	addTokenDefinition(IntegerLiteral.class);
+	addTokenDefinition(CharacterLiteral.class);
+	addTokenDefinition(StringLiteral.class);
+	addTokenDefinition(BooleanLiteral.class);
 
-	addKeyword(IdLiteral.class);
+	addTokenDefinition(IdLiteral.class);
     }
 }

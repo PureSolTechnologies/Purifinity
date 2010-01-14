@@ -13,12 +13,12 @@ public class Primitives extends AbstractTokenDefinitionGroup {
 
 	@Override
 	protected void initialize() {
-		addKeyword(BooleanKeyword.class);
-		addKeyword(CharKeyword.class);
-		addKeyword(ByteKeyword.class);
-		addKeyword(ShortKeyword.class);
-		addKeyword(IntKeyword.class);
-		addKeyword(LongKeyword.class);
-		addKeyword(VoidKeyword.class);
+		addTokenDefinition(BooleanKeyword.class);
+		addTokenDefinition(CharKeyword.class);
+		addTokenDefinition(ByteKeyword.class);
+		addTokenDefinition(ShortKeyword.class);
+		addTokenDefinition(IntKeyword.class);
+		addTokenDefinition(LongKeyword.class);
+		addTokenDefinition(VoidKeyword.class);
 	}
 }

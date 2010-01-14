@@ -1,8 +1,10 @@
 package com.puresol.coding.lang.java.source.tokengroups;
 
+import com.puresol.coding.lang.java.source.keywords.AbstractKeyword;
 import com.puresol.coding.lang.java.source.keywords.BooleanKeyword;
 import com.puresol.coding.lang.java.source.keywords.BreakKeyword;
 import com.puresol.coding.lang.java.source.keywords.ByteKeyword;
+import com.puresol.coding.lang.java.source.keywords.CaseKeyword;
 import com.puresol.coding.lang.java.source.keywords.CatchKeyword;
 import com.puresol.coding.lang.java.source.keywords.CharKeyword;
 import com.puresol.coding.lang.java.source.keywords.ClassKeyword;
@@ -22,6 +24,7 @@ import com.puresol.coding.lang.java.source.keywords.ImportKeyword;
 import com.puresol.coding.lang.java.source.keywords.IntKeyword;
 import com.puresol.coding.lang.java.source.keywords.InterfaceKeyword;
 import com.puresol.coding.lang.java.source.keywords.LongKeyword;
+import com.puresol.coding.lang.java.source.keywords.NewKeyword;
 import com.puresol.coding.lang.java.source.keywords.NullKeyword;
 import com.puresol.coding.lang.java.source.keywords.PackageKeyword;
 import com.puresol.coding.lang.java.source.keywords.PrivateKeyword;
@@ -31,6 +34,7 @@ import com.puresol.coding.lang.java.source.keywords.ReturnKeyword;
 import com.puresol.coding.lang.java.source.keywords.ShortKeyword;
 import com.puresol.coding.lang.java.source.keywords.StaticKeyword;
 import com.puresol.coding.lang.java.source.keywords.SuperKeyword;
+import com.puresol.coding.lang.java.source.keywords.SwitchKeyword;
 import com.puresol.coding.lang.java.source.keywords.ThisKeyword;
 import com.puresol.coding.lang.java.source.keywords.ThrowKeyword;
 import com.puresol.coding.lang.java.source.keywords.ThrowsKeyword;
@@ -42,52 +46,56 @@ import com.puresol.parser.AbstractTokenDefinitionGroup;
 
 public class JavaKeywords extends AbstractTokenDefinitionGroup {
 
-	@Override
-	protected void initialize() {
-		addKeyword(PackageKeyword.class);
-		addKeyword(ImportKeyword.class);
+    @Override
+    protected void initialize() {
+	addTokenDefinition(PackageKeyword.class);
+	addTokenDefinition(ImportKeyword.class);
 
-		addKeyword(ClassKeyword.class);
-		addKeyword(InterfaceKeyword.class);
-		addKeyword(EnumKeyword.class);
-		addKeyword(ExtendsKeyword.class);
-		addKeyword(ImplementsKeyword.class);
+	addTokenDefinition(ClassKeyword.class);
+	addTokenDefinition(InterfaceKeyword.class);
+	addTokenDefinition(EnumKeyword.class);
+	addTokenDefinition(ExtendsKeyword.class);
+	addTokenDefinition(ImplementsKeyword.class);
+	addTokenDefinition(NewKeyword.class);
 
-		addKeyword(PublicKeyword.class);
-		addKeyword(ProtectedKeyword.class);
-		addKeyword(PrivateKeyword.class);
-		addKeyword(StaticKeyword.class);
-		addKeyword(FinalKeyword.class);
-		addKeyword(TransientKeyword.class);
+	addTokenDefinition(PublicKeyword.class);
+	addTokenDefinition(ProtectedKeyword.class);
+	addTokenDefinition(PrivateKeyword.class);
+	addTokenDefinition(StaticKeyword.class);
+	addTokenDefinition(FinalKeyword.class);
+	addTokenDefinition(TransientKeyword.class);
+	addTokenDefinition(AbstractKeyword.class);
 
-		addKeyword(ReturnKeyword.class);
-		addKeyword(BreakKeyword.class);
-		addKeyword(ContinueKeyword.class);
+	addTokenDefinition(ReturnKeyword.class);
+	addTokenDefinition(BreakKeyword.class);
+	addTokenDefinition(ContinueKeyword.class);
 
-		addKeyword(IfKeyword.class);
-		addKeyword(ElseKeyword.class);
-		addKeyword(WhileKeyword.class);
-		addKeyword(DoKeyword.class);
-		addKeyword(ForKeyword.class);
+	addTokenDefinition(IfKeyword.class);
+	addTokenDefinition(ElseKeyword.class);
+	addTokenDefinition(WhileKeyword.class);
+	addTokenDefinition(DoKeyword.class);
+	addTokenDefinition(ForKeyword.class);
+	addTokenDefinition(SwitchKeyword.class);
+	addTokenDefinition(CaseKeyword.class);
 
-		addKeyword(TryKeyword.class);
-		addKeyword(CatchKeyword.class);
-		addKeyword(FinallyKeyword.class);
-		addKeyword(ThrowsKeyword.class);
-		addKeyword(ThrowKeyword.class);
+	addTokenDefinition(TryKeyword.class);
+	addTokenDefinition(CatchKeyword.class);
+	addTokenDefinition(FinallyKeyword.class);
+	addTokenDefinition(ThrowsKeyword.class);
+	addTokenDefinition(ThrowKeyword.class);
 
-		addKeyword(SuperKeyword.class);
-		addKeyword(ThisKeyword.class);
-		addKeyword(NullKeyword.class);
+	addTokenDefinition(SuperKeyword.class);
+	addTokenDefinition(ThisKeyword.class);
+	addTokenDefinition(NullKeyword.class);
 
-		addKeyword(VoidKeyword.class);
-		addKeyword(BooleanKeyword.class);
-		addKeyword(CharKeyword.class);
-		addKeyword(ByteKeyword.class);
-		addKeyword(ShortKeyword.class);
-		addKeyword(IntKeyword.class);
-		addKeyword(LongKeyword.class);
-		addKeyword(FloatKeyword.class);
-		addKeyword(DoubleKeyword.class);
-	}
+	addTokenDefinition(VoidKeyword.class);
+	addTokenDefinition(BooleanKeyword.class);
+	addTokenDefinition(CharKeyword.class);
+	addTokenDefinition(ByteKeyword.class);
+	addTokenDefinition(ShortKeyword.class);
+	addTokenDefinition(IntKeyword.class);
+	addTokenDefinition(LongKeyword.class);
+	addTokenDefinition(FloatKeyword.class);
+	addTokenDefinition(DoubleKeyword.class);
+    }
 }

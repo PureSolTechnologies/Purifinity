@@ -10,10 +10,10 @@ public class FortranLiterals extends AbstractTokenDefinitionGroup {
 
 	@Override
 	protected void initialize() {
-		addKeyword(StringLiteral.class);
-		addKeyword(FloatingPointLiteral.class);
-		addKeyword(IntegerLiteral.class);
+		addTokenDefinition(StringLiteral.class);
+		addTokenDefinition(FloatingPointLiteral.class);
+		addTokenDefinition(IntegerLiteral.class);
 
-		addKeyword(IdLiteral.class);
+		addTokenDefinition(IdLiteral.class);
 	}
 }

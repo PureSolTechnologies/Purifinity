@@ -2,7 +2,7 @@ package com.puresol.parser;
 
 import java.util.regex.Pattern;
 
-public interface TokenDefinition {
+public interface TokenDefinition extends Comparable<TokenDefinition> {
 
     public Pattern getStartPattern();
 

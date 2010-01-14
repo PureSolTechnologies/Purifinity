@@ -8,7 +8,6 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import com.puresol.parser.DefaultPreConditioner;
 import com.puresol.parser.NoMatchingTokenDefinitionFound;
 import com.puresol.parser.Token;
 import com.puresol.parser.TokenStream;
@@ -18,7 +17,7 @@ public class FortranLexerTest {
 	@Test
 	public void testLexer() {
 		try {
-			DefaultPreConditioner conditioner = new DefaultPreConditioner(
+			FortranPreConditioner conditioner = new FortranPreConditioner(
 					new File(
 							"test/com/puresol/coding/lang/fortran/samples/zgerc.f"));
 			TokenStream tokenStream = conditioner.getTokenStream();

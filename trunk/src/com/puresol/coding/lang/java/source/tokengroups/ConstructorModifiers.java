@@ -10,10 +10,10 @@ public class ConstructorModifiers extends AbstractTokenDefinitionGroup {
 
 	@Override
 	protected void initialize() {
-		addKeyword(PublicKeyword.class);
-		addKeyword(ProtectedKeyword.class);
-		addKeyword(PrivateKeyword.class);
-		addKeyword(FinalKeyword.class);
+		addTokenDefinition(PublicKeyword.class);
+		addTokenDefinition(ProtectedKeyword.class);
+		addTokenDefinition(PrivateKeyword.class);
+		addTokenDefinition(FinalKeyword.class);
 	}
 
 }

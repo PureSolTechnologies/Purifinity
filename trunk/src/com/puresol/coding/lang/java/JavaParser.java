@@ -16,35 +16,36 @@ import com.puresol.parser.TokenStream;
 
 public class JavaParser extends AbstractSourceCodeParser {
 
-	private static final Translator translator = Translator
-			.getTranslator(JavaParser.class);
+    private static final Translator translator =
+	    Translator.getTranslator(JavaParser.class);
 
-	public JavaParser(TokenStream tokenStream) {
-		super(tokenStream, 0);
+    public JavaParser(TokenStream tokenStream) {
+	setTokenStream(tokenStream);
+	setStartPosition(0);
+    }
+
+    @Override
+    public void scan() throws PartDoesNotMatchException {
+	TokenStream tokenStream = getTokenStream();
+	addCodeRange(new CodeRange(tokenStream.getName(),
+		CodeRangeType.FILE, translator.i18n("File"), tokenStream,
+		0, tokenStream.getSize() - 1));
+
+	try {
+	    moveForward(0);
+	} catch (EndOfTokenStreamException e) {
+	    // this may happen if there is an empty file...
+	    return;
 	}
-
-	@Override
-	public void scan() throws PartDoesNotMatchException {
-		TokenStream tokenStream = getTokenStream();
-		addCodeRange(new CodeRange(tokenStream.getName(), CodeRangeType.FILE,
-				translator.i18n("File"), tokenStream, 0,
-				tokenStream.getSize() - 1));
-
-		try {
-			moveForward(0);
-		} catch (EndOfTokenStreamException e) {
-			// this may happen if there is an empty file...
-			return;
-		}
-		processPart(PackageDeclaration.class);
-		while (isPart(Import.class)) {
-			processPart(Import.class);
-		}
-		if (processPartIfPossible(ClassDeclaration.class)) {
-		} else if (!processPartIfPossible(InterfaceDeclaration.class)) {
-		} else if (!processPartIfPossible(EnumDeclaration.class)) {
-		} else {
-			throw new PartDoesNotMatchException(this);
-		}
+	processPart(PackageDeclaration.class);
+	while (isPart(Import.class)) {
+	    processPart(Import.class);
 	}
+	if (processPartIfPossible(ClassDeclaration.class)) {
+	} else if (!processPartIfPossible(InterfaceDeclaration.class)) {
+	} else if (!processPartIfPossible(EnumDeclaration.class)) {
+	} else {
+	    throw new PartDoesNotMatchException(this);
+	}
+    }
 }

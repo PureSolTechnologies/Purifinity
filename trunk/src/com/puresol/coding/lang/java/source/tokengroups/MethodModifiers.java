@@ -12,12 +12,12 @@ public class MethodModifiers extends AbstractTokenDefinitionGroup {
 
 	@Override
 	protected void initialize() {
-		addKeyword(PublicKeyword.class);
-		addKeyword(ProtectedKeyword.class);
-		addKeyword(PrivateKeyword.class);
-		addKeyword(FinalKeyword.class);
-		addKeyword(StaticKeyword.class);
-		addKeyword(AbstractKeyword.class);
+		addTokenDefinition(PublicKeyword.class);
+		addTokenDefinition(ProtectedKeyword.class);
+		addTokenDefinition(PrivateKeyword.class);
+		addTokenDefinition(FinalKeyword.class);
+		addTokenDefinition(StaticKeyword.class);
+		addTokenDefinition(AbstractKeyword.class);
 	}
 
 }

@@ -2,6 +2,11 @@ package com.puresol.coding.lang.fortran.source.tokengroups;
 
 import com.puresol.coding.lang.fortran.source.symbols.Assign;
 import com.puresol.coding.lang.fortran.source.symbols.Comma;
+import com.puresol.coding.lang.fortran.source.symbols.DotEQDot;
+import com.puresol.coding.lang.fortran.source.symbols.DotGTDot;
+import com.puresol.coding.lang.fortran.source.symbols.DotLTDot;
+import com.puresol.coding.lang.fortran.source.symbols.DotNEDot;
+import com.puresol.coding.lang.fortran.source.symbols.DotORDot;
 import com.puresol.coding.lang.fortran.source.symbols.LParen;
 import com.puresol.coding.lang.fortran.source.symbols.LineBreak;
 import com.puresol.coding.lang.fortran.source.symbols.Minus;
@@ -14,20 +19,27 @@ import com.puresol.parser.AbstractTokenDefinitionGroup;
 
 public class FortranSymbols extends AbstractTokenDefinitionGroup {
 
-	@Override
-	protected void initialize() {
-		addKeyword(LineBreak.class);
-		addKeyword(WhiteSpace.class);
-		addKeyword(LParen.class);
-		addKeyword(RParen.class);
+    @Override
+    protected void initialize() {
+	addTokenDefinition(LineBreak.class);
+	addTokenDefinition(WhiteSpace.class);
+	addTokenDefinition(LParen.class);
+	addTokenDefinition(RParen.class);
 
-		addKeyword(Assign.class);
+	addTokenDefinition(DotEQDot.class);
+	addTokenDefinition(DotNEDot.class);
+	addTokenDefinition(DotLTDot.class);
+	addTokenDefinition(DotGTDot.class);
 
-		addKeyword(Power.class);
-		addKeyword(Star.class);
-		addKeyword(Minus.class);
-		addKeyword(Plus.class);
+	addTokenDefinition(DotORDot.class);
 
-		addKeyword(Comma.class);
-	}
+	addTokenDefinition(Assign.class);
+
+	addTokenDefinition(Power.class);
+	addTokenDefinition(Star.class);
+	addTokenDefinition(Minus.class);
+	addTokenDefinition(Plus.class);
+
+	addTokenDefinition(Comma.class);
+    }
 }

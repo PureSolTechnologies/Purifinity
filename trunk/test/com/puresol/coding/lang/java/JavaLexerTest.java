@@ -20,9 +20,8 @@ public class JavaLexerTest {
     public void testLexer() {
 	try {
 	    DefaultPreConditioner conditioner =
-		    new DefaultPreConditioner(
-			    new File(
-				    "src/apps/CodeAnalysis.java"));
+		    new DefaultPreConditioner(new File(
+			    "src/apps/CodeAnalysis.java"));
 	    TokenStream tokenStream = conditioner.getTokenStream();
 	    JavaLexer lexer = new JavaLexer(tokenStream);
 	    TokenStream tokenStream2 = lexer.getTokenStream();
@@ -40,4 +39,5 @@ public class JavaLexerTest {
 	    Assert.fail("No exception was expected!");
 	}
     }
+
 }
