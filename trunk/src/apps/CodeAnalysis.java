@@ -26,7 +26,8 @@ import javax.swingx.connect.Slot;
 
 import com.puresol.coding.ProjectAnalyser;
 import com.puresol.coding.analysis.CodeEvaluationSystem;
-import com.puresol.coding.analysis.HTMLAnalysisProject;
+import com.puresol.coding.analysis.html.HTMLAnalysisProject;
+import com.puresol.coding.analysis.out.TSVFile;
 import com.puresol.gui.PureSolApplication;
 import com.puresol.gui.coding.analysis.ProjectAnalysisBrowser;
 
@@ -64,6 +65,9 @@ public class CodeAnalysis extends PureSolApplication {
 		Menu fileMenu = new Menu(translator.i18n("File"));
 		Menu projectMenu = new Menu(translator.i18n("Project"));
 
+		MenuItem createTSV = new MenuItem("Save as TSV...");
+		createTSV.connect("start", this, "createTSV");
+
 		MenuItem createHTML = new MenuItem("Create HTML...");
 		createHTML.connect("start", this, "createHTML");
 
@@ -74,6 +78,7 @@ public class CodeAnalysis extends PureSolApplication {
 		analyse.connect("start", this, "analyse");
 
 		menuBar.add(fileMenu);
+		fileMenu.add(createTSV);
 		fileMenu.add(createHTML);
 		fileMenu.addSeparator();
 		fileMenu.add(exit);
@@ -120,6 +125,16 @@ public class CodeAnalysis extends PureSolApplication {
 		widget.setCenter(browser);
 		widget.setNorth(toolBar);
 		widget.setSouth(new MemoryMonitor());
+	}
+
+	@Slot
+	public void createTSV() {
+		JFileChooser chooser = new JFileChooser();
+		int result = chooser.showSaveDialog(Application.getInstance());
+		if (result == JFileChooser.CANCEL_OPTION) {
+			return;
+		}
+		TSVFile.create(chooser.getSelectedFile(), browser.getProjectAnalyser());
 	}
 
 	@Slot
