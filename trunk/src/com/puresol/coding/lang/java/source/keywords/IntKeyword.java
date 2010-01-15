@@ -4,9 +4,9 @@ import com.puresol.coding.tokentypes.PrimitiveDataType;
 
 public class IntKeyword extends PrimitiveDataType {
 
-	@Override
-	public String getPatternString() {
-		return "integer";
-	}
+    @Override
+    public String getPatternString() {
+	return "integer";
+    }
 
 }

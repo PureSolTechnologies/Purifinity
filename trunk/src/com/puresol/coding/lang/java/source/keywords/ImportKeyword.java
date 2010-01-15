@@ -1,12 +1,12 @@
 package com.puresol.coding.lang.java.source.keywords;
 
-import com.puresol.coding.tokentypes.Operator;
+import com.puresol.coding.tokentypes.KeywordOperator;
 
-public class ImportKeyword extends Operator {
+public class ImportKeyword extends KeywordOperator {
 
-	@Override
-	public String getPatternString() {
-		return "import";
-	}
+    @Override
+    public String getPatternString() {
+	return "import";
+    }
 
 }

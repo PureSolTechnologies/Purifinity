@@ -40,9 +40,6 @@ public abstract class AbstractParser implements Parser {
 
     public Token getCurrentToken() {
 	Token token = tokenStream.get(currentPos);
-	if (logger.isTraceEnabled()) {
-	    logger.trace("Current token:" + token.toString());
-	}
 	return token;
     }
 
@@ -133,7 +130,14 @@ public abstract class AbstractParser implements Parser {
 
     protected void processToken(Class<? extends TokenDefinition> definition)
 	    throws PartDoesNotMatchException {
+	Token token = null;
+	if (logger.isDebugEnabled()) {
+	    token = getCurrentToken();
+	}
 	processToken(definition, true);
+	if (logger.isDebugEnabled()) {
+	    logger.debug("Processed token: " + token.toString());
+	}
     }
 
     protected boolean isToken(Class<? extends TokenDefinition> definition) {
@@ -148,7 +152,14 @@ public abstract class AbstractParser implements Parser {
     protected boolean processTokenIfPossible(
 	    Class<? extends TokenDefinition> definition) {
 	try {
+	    Token token = null;
+	    if (logger.isDebugEnabled()) {
+		token = getCurrentToken();
+	    }
 	    processToken(definition, true);
+	    if (logger.isDebugEnabled()) {
+		logger.debug("Processed token: " + token.toString());
+	    }
 	    return true;
 	} catch (PartDoesNotMatchException e) {
 	    return false;
@@ -205,12 +216,16 @@ public abstract class AbstractParser implements Parser {
 
     protected void processPart(Class<? extends Parser> part)
 	    throws PartDoesNotMatchException {
+	logger.debug("Process part: " + part.getSimpleName());
 	processPart(part, true);
+	logger.debug("done for " + part.getSimpleName());
     }
 
     protected boolean isPart(Class<? extends Parser> part) {
 	try {
+	    logger.debug("Is part(?): " + part.getSimpleName());
 	    processPart(part, false);
+	    logger.debug("true for " + part.getSimpleName());
 	    return true;
 	} catch (PartDoesNotMatchException e) {
 	    return false;
@@ -219,7 +234,10 @@ public abstract class AbstractParser implements Parser {
 
     protected boolean processPartIfPossible(Class<? extends Parser> part) {
 	try {
+	    logger.debug("Process part if possible: "
+		    + part.getSimpleName());
 	    processPart(part, true);
+	    logger.debug("processed for " + part.getSimpleName());
 	    return true;
 	} catch (PartDoesNotMatchException e) {
 	    return false;

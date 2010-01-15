@@ -6,7 +6,7 @@ public class FloatingPointLiteral extends Operant {
 
 	@Override
 	public String getPatternString() {
-		return "(\\+|-)?\\d*\\.\\d+((e|E)(\\+|-)?\\d+)?";
+		return "(\\+|-)?\\d*\\.\\d+((e|E)(\\+|-)?\\d+)?(?!\\w)";
 	}
 
 }

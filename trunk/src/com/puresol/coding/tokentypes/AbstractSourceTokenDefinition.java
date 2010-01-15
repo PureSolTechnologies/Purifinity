@@ -5,21 +5,21 @@ import com.puresol.parser.Token;
 import com.puresol.parser.TokenStream;
 
 public abstract class AbstractSourceTokenDefinition extends
-		AbstractTokenDefinition implements SourceTokenDefinition {
+	AbstractTokenDefinition implements SourceTokenDefinition {
 
-	@Override
-	public boolean countForHalstead(Token token, TokenStream tokenStream) {
-		return true;
-	}
+    @Override
+    public boolean countForHalstead(Token token, TokenStream tokenStream) {
+	return true;
+    }
 
-	@Override
-	public int getCyclomaticNumber(Token token, TokenStream tokenStream) {
-		return 0;
-	}
+    @Override
+    public int getCyclomaticNumber(Token token, TokenStream tokenStream) {
+	return 0;
+    }
 
-	@Override
-	public String getHalsteadSymbol() {
-		return getPatternString();
-	}
+    @Override
+    public String getHalsteadSymbol() {
+	return getPatternString();
+    }
 
 }

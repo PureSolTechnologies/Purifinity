@@ -16,6 +16,7 @@ public class ConstructorDeclaration extends AbstractSourceCodeParser {
 	String name = getCurrentToken().getText();
 	processToken(IdLiteral.class);
 	skipNested(LParen.class, RParen.class);
+	processPartIfPossible(ThrowsDeclaration.class);
 	processPart(CodeBlock.class);
 	int startPosition = getStartPositionWithLeadingHidden();
 	int stopPosition = getPositionOfLastVisible();

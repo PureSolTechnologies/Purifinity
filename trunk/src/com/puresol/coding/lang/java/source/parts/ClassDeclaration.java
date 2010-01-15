@@ -8,8 +8,6 @@ import com.puresol.coding.lang.java.source.keywords.ExtendsKeyword;
 import com.puresol.coding.lang.java.source.keywords.ImplementsKeyword;
 import com.puresol.coding.lang.java.source.literals.IdLiteral;
 import com.puresol.coding.lang.java.source.symbols.Comma;
-import com.puresol.coding.lang.java.source.symbols.GreaterThan;
-import com.puresol.coding.lang.java.source.symbols.LessThan;
 import com.puresol.parser.PartDoesNotMatchException;
 
 public class ClassDeclaration extends AbstractSourceCodeParser {
@@ -20,16 +18,9 @@ public class ClassDeclaration extends AbstractSourceCodeParser {
 	    ;
 	processPart(ClassModifiers.class);
 	processToken(ClassKeyword.class);
-	if (isToken(LessThan.class)) {
-	    processToken(LessThan.class);
-	    processToken(IdLiteral.class);
-	    while (processTokenIfPossible(Comma.class)) {
-		processToken(LessThan.class);
-	    }
-	    processToken(GreaterThan.class);
-	}
 	String name = getCurrentToken().getText();
 	processToken(IdLiteral.class);
+	processPartIfPossible(Generic.class);
 	if (processTokenIfPossible(ExtendsKeyword.class)) {
 	    processToken(IdLiteral.class);
 	    processPartIfPossible(Generic.class);

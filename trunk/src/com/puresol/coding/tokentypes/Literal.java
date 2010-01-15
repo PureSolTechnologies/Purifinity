@@ -24,4 +24,8 @@ public abstract class Literal extends AbstractSourceTokenDefinition {
 	return false;
     }
 
+    @Override
+    public String getLookAheadPatternString() {
+	return "(?!\\w)";
+    }
 }

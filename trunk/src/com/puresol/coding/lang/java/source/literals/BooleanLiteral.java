@@ -1,12 +1,12 @@
 package com.puresol.coding.lang.java.source.literals;
 
-import com.puresol.coding.tokentypes.Operant;
+import com.puresol.coding.tokentypes.Literal;
 
-public class BooleanLiteral extends Operant {
+public class BooleanLiteral extends Literal {
 
-	@Override
-	public String getPatternString() {
-		return "(true|false)";
-	}
+    @Override
+    public String getPatternString() {
+	return "(true|false)";
+    }
 
 }

@@ -6,7 +6,7 @@ public class IdLiteral extends Operant {
 
 	@Override
 	public String getPatternString() {
-		return "[a-zA-Z_]([a-zA-Z_0-9])*";
+		return "[a-zA-Z_]([a-zA-Z_0-9])*(?!\\w)";
 	}
 
 }

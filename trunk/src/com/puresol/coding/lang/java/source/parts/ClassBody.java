@@ -14,6 +14,7 @@ public class ClassBody extends AbstractSourceCodeParser {
 	while ((processPartIfPossible(FieldDeclaration.class))
 		|| (processPartIfPossible(MethodDeclaration.class))
 		|| (processPartIfPossible(ConstructorDeclaration.class))
+		|| (processPartIfPossible(MethodDefinition.class))
 		|| (processPartIfPossible(StaticBlock.class))) {
 
 	}

@@ -6,18 +6,20 @@ import com.puresol.coding.lang.java.source.keywords.PrivateKeyword;
 import com.puresol.coding.lang.java.source.keywords.ProtectedKeyword;
 import com.puresol.coding.lang.java.source.keywords.PublicKeyword;
 import com.puresol.coding.lang.java.source.keywords.StaticKeyword;
+import com.puresol.coding.lang.java.source.keywords.SynchronizedKeyword;
 import com.puresol.parser.AbstractTokenDefinitionGroup;
 
 public class MethodModifiers extends AbstractTokenDefinitionGroup {
 
-	@Override
-	protected void initialize() {
-		addTokenDefinition(PublicKeyword.class);
-		addTokenDefinition(ProtectedKeyword.class);
-		addTokenDefinition(PrivateKeyword.class);
-		addTokenDefinition(FinalKeyword.class);
-		addTokenDefinition(StaticKeyword.class);
-		addTokenDefinition(AbstractKeyword.class);
-	}
+    @Override
+    protected void initialize() {
+	addTokenDefinition(PublicKeyword.class);
+	addTokenDefinition(ProtectedKeyword.class);
+	addTokenDefinition(PrivateKeyword.class);
+	addTokenDefinition(FinalKeyword.class);
+	addTokenDefinition(StaticKeyword.class);
+	addTokenDefinition(AbstractKeyword.class);
+	addTokenDefinition(SynchronizedKeyword.class);
+    }
 
 }

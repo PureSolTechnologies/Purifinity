@@ -35,6 +35,7 @@ import com.puresol.coding.lang.java.source.keywords.ShortKeyword;
 import com.puresol.coding.lang.java.source.keywords.StaticKeyword;
 import com.puresol.coding.lang.java.source.keywords.SuperKeyword;
 import com.puresol.coding.lang.java.source.keywords.SwitchKeyword;
+import com.puresol.coding.lang.java.source.keywords.SynchronizedKeyword;
 import com.puresol.coding.lang.java.source.keywords.ThisKeyword;
 import com.puresol.coding.lang.java.source.keywords.ThrowKeyword;
 import com.puresol.coding.lang.java.source.keywords.ThrowsKeyword;
@@ -65,6 +66,7 @@ public class JavaKeywords extends AbstractTokenDefinitionGroup {
 	addTokenDefinition(FinalKeyword.class);
 	addTokenDefinition(TransientKeyword.class);
 	addTokenDefinition(AbstractKeyword.class);
+	addTokenDefinition(SynchronizedKeyword.class);
 
 	addTokenDefinition(ReturnKeyword.class);
 	addTokenDefinition(BreakKeyword.class);

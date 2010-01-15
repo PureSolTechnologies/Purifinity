@@ -1,8 +1,8 @@
 package com.puresol.coding.lang.java.source.literals;
 
-import com.puresol.coding.tokentypes.Operant;
+import com.puresol.coding.tokentypes.Literal;
 
-public class CharacterLiteral extends Operant {
+public class CharacterLiteral extends Literal {
 
     @Override
     public String getPatternString() {

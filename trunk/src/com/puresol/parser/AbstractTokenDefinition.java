@@ -23,20 +23,27 @@ public abstract class AbstractTokenDefinition implements TokenDefinition {
 
     private void compilePattern() {
 	if (isCaseSensitive) {
-	    pattern = Pattern.compile("(" + getPatternString() + ")");
+	    pattern =
+		    Pattern.compile("(" + getPatternString()
+			    + getLookAheadPatternString() + ")");
 	    startPattern =
-		    Pattern.compile("^(" + getPatternString() + ")");
+		    Pattern.compile("^(" + getPatternString()
+			    + getLookAheadPatternString() + ")");
 	} else {
 	    pattern =
-		    Pattern.compile("(" + getPatternString() + ")",
+		    Pattern.compile("(" + getPatternString()
+			    + getLookAheadPatternString() + ")",
 			    Pattern.CASE_INSENSITIVE);
 	    startPattern =
-		    Pattern.compile("^(" + getPatternString() + ")",
+		    Pattern.compile("^(" + getPatternString()
+			    + getLookAheadPatternString() + ")",
 			    Pattern.CASE_INSENSITIVE);
 	}
     }
 
     abstract public String getPatternString();
+
+    abstract public String getLookAheadPatternString();
 
     protected void setCaseSensitive() {
 	if (!isCaseSensitive) {

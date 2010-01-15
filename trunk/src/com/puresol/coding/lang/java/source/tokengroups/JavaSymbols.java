@@ -5,6 +5,7 @@ import com.puresol.coding.lang.java.source.symbols.At;
 import com.puresol.coding.lang.java.source.symbols.BackSlash;
 import com.puresol.coding.lang.java.source.symbols.BitAnd;
 import com.puresol.coding.lang.java.source.symbols.BitOr;
+import com.puresol.coding.lang.java.source.symbols.Caret;
 import com.puresol.coding.lang.java.source.symbols.Colon;
 import com.puresol.coding.lang.java.source.symbols.Comma;
 import com.puresol.coding.lang.java.source.symbols.Dot;
@@ -71,6 +72,7 @@ public class JavaSymbols extends AbstractTokenDefinitionGroup {
 	addTokenDefinition(Assign.class);
 	addTokenDefinition(At.class);
 	addTokenDefinition(BitOr.class);
+	addTokenDefinition(Caret.class);
 
 	addTokenDefinition(PlusPlus.class);
 	addTokenDefinition(MinusMinus.class);

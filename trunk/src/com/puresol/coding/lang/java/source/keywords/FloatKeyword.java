@@ -4,9 +4,9 @@ import com.puresol.coding.tokentypes.PrimitiveDataType;
 
 public class FloatKeyword extends PrimitiveDataType {
 
-	@Override
-	public String getPatternString() {
-		return "float";
-	}
+    @Override
+    public String getPatternString() {
+	return "float";
+    }
 
 }

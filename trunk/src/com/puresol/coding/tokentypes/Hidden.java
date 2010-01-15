@@ -2,8 +2,7 @@ package com.puresol.coding.tokentypes;
 
 import com.puresol.parser.TokenPublicity;
 
-public abstract class Hidden extends
-	AbstractSourceTokenDefinition {
+public abstract class Hidden extends AbstractSourceTokenDefinition {
 
     @Override
     public int changeBlockLayer() {
@@ -23,5 +22,10 @@ public abstract class Hidden extends
     @Override
     public boolean isPrimitiveDataType() {
 	return false;
+    }
+
+    @Override
+    public String getLookAheadPatternString() {
+	return "";
     }
 }

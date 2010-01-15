@@ -9,7 +9,7 @@ public class Generic extends AbstractSourceCodeParser {
 
     @Override
     public void scan() throws PartDoesNotMatchException {
-	skipNested(LessThan.class, GreaterThan.class);
+	skipNested(LessThan.class, GreaterThan.class); // TODO
     }
 
 }

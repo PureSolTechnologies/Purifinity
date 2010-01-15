@@ -1,13 +1,13 @@
 package com.puresol.coding.lang.fortran.source.keywords;
 
-import com.puresol.coding.tokentypes.Operator;
+import com.puresol.coding.tokentypes.KeywordOperator;
 
-public class EndKeyword extends Operator {
+public class EndKeyword extends KeywordOperator {
 
-	@Override
-	public String getPatternString() {
-		setCaseInsensitive();
-		return "END";
-	}
+    @Override
+    public String getPatternString() {
+	setCaseInsensitive();
+	return "END";
+    }
 
 }

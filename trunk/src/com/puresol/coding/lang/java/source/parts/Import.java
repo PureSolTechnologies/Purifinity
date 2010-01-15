@@ -1,6 +1,7 @@
 package com.puresol.coding.lang.java.source.parts;
 
 import com.puresol.coding.AbstractSourceCodeParser;
+import com.puresol.coding.lang.fortran.source.symbols.Star;
 import com.puresol.coding.lang.java.source.keywords.ImportKeyword;
 import com.puresol.coding.lang.java.source.literals.IdLiteral;
 import com.puresol.coding.lang.java.source.symbols.Dot;
@@ -15,6 +16,10 @@ public class Import extends AbstractSourceCodeParser {
 	processToken(IdLiteral.class);
 	while (isToken(Dot.class)) {
 	    processToken(Dot.class);
+	    if (isToken(Star.class)) {
+		processToken(Star.class);
+		break;
+	    }
 	    processToken(IdLiteral.class);
 	}
 	processToken(Semicolon.class);

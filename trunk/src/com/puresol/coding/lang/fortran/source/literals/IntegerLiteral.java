@@ -6,7 +6,7 @@ public class IntegerLiteral extends Operant {
 
 	@Override
 	public String getPatternString() {
-		return "\\d+";
+		return "\\d+(?!\\w)";
 	}
 
 }

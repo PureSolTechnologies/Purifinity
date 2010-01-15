@@ -42,8 +42,8 @@ public class JavaParser extends AbstractSourceCodeParser {
 	    processPart(Import.class);
 	}
 	if (processPartIfPossible(ClassDeclaration.class)) {
-	} else if (!processPartIfPossible(InterfaceDeclaration.class)) {
-	} else if (!processPartIfPossible(EnumDeclaration.class)) {
+	} else if (processPartIfPossible(InterfaceDeclaration.class)) {
+	} else if (processPartIfPossible(EnumDeclaration.class)) {
 	} else {
 	    throw new PartDoesNotMatchException(this);
 	}
