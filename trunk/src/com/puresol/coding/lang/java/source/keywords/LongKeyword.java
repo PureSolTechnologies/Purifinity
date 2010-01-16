@@ -4,9 +4,10 @@ import com.puresol.coding.tokentypes.PrimitiveDataType;
 
 public class LongKeyword extends PrimitiveDataType {
 
-    @Override
-    public String getPatternString() {
-	return "long";
-    }
+	@Override
+	protected void initialize() {
+		super.initialize();
+		setPatternString("long");
+	}
 
 }

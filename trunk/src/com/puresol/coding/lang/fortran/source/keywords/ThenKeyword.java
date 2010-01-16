@@ -4,10 +4,11 @@ import com.puresol.coding.tokentypes.KeywordOperator;
 
 public class ThenKeyword extends KeywordOperator {
 
-    @Override
-    public String getPatternString() {
-	setCaseInsensitive();
-	return "THEN";
-    }
+	@Override
+	protected void initialize() {
+		super.initialize();
+		setCaseInsensitive();
+		setPatternString("THEN");
+	}
 
 }

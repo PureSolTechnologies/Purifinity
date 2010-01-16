@@ -4,10 +4,11 @@ import com.puresol.coding.tokentypes.KeywordOperator;
 
 public class DoubleKeyword extends KeywordOperator {
 
-    @Override
-    public String getPatternString() {
-	setCaseInsensitive();
-	return "DOUBLE";
-    }
+	@Override
+	protected void initialize() {
+		super.initialize();
+		setCaseInsensitive();
+		setPatternString("DOUBLE");
+	}
 
 }

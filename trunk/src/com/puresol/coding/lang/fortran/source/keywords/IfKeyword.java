@@ -4,10 +4,11 @@ import com.puresol.coding.tokentypes.KeywordOperator;
 
 public class IfKeyword extends KeywordOperator {
 
-    @Override
-    public String getPatternString() {
-	setCaseInsensitive();
-	return "IF";
-    }
+	@Override
+	protected void initialize() {
+		super.initialize();
+		setCaseInsensitive();
+		setPatternString("IF");
+	}
 
 }

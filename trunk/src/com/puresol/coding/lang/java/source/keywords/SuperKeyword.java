@@ -4,9 +4,10 @@ import com.puresol.coding.tokentypes.KeywordOperant;
 
 public class SuperKeyword extends KeywordOperant {
 
-    @Override
-    public String getPatternString() {
-	return "super";
-    }
+	@Override
+	protected void initialize() {
+		super.initialize();
+		setPatternString("super");
+	}
 
 }

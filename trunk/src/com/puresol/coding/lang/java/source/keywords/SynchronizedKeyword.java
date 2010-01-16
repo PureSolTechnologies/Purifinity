@@ -4,9 +4,10 @@ import com.puresol.coding.tokentypes.PrimitiveDataType;
 
 public class SynchronizedKeyword extends PrimitiveDataType {
 
-    @Override
-    public String getPatternString() {
-	return "synchronized";
-    }
+	@Override
+	protected void initialize() {
+		super.initialize();
+		setPatternString("synchronized");
+	}
 
 }

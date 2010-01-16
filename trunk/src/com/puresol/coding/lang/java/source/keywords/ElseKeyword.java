@@ -4,9 +4,10 @@ import com.puresol.coding.tokentypes.KeywordOperator;
 
 public class ElseKeyword extends KeywordOperator {
 
-    @Override
-    public String getPatternString() {
-	return "else";
-    }
+	@Override
+	protected void initialize() {
+		super.initialize();
+		setPatternString("else");
+	}
 
 }

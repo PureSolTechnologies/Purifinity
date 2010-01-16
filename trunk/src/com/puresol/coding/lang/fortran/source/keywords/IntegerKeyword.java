@@ -4,10 +4,11 @@ import com.puresol.coding.tokentypes.PrimitiveDataType;
 
 public class IntegerKeyword extends PrimitiveDataType {
 
-    @Override
-    public String getPatternString() {
-	setCaseInsensitive();
-	return "INTEGER";
-    }
+	@Override
+	protected void initialize() {
+		super.initialize();
+		setCaseInsensitive();
+		setPatternString("INTEGER");
+	}
 
 }

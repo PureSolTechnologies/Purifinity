@@ -5,7 +5,8 @@ import com.puresol.coding.tokentypes.PrimitiveDataType;
 public class BooleanKeyword extends PrimitiveDataType {
 
 	@Override
-	public String getPatternString() {
-		return "boolean";
+	protected void initialize() {
+		super.initialize();
+		setPatternString("boolean");
 	}
 }

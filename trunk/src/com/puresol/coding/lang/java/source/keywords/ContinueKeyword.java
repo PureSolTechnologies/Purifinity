@@ -4,9 +4,10 @@ import com.puresol.coding.tokentypes.KeywordOperator;
 
 public class ContinueKeyword extends KeywordOperator {
 
-    @Override
-    public String getPatternString() {
-	return "continue";
-    }
+	@Override
+	protected void initialize() {
+		super.initialize();
+		setPatternString("continue");
+	}
 
 }

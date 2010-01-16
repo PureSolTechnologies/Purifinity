@@ -5,8 +5,9 @@ import com.puresol.coding.tokentypes.PrimitiveDataType;
 public class CharKeyword extends PrimitiveDataType {
 
 	@Override
-	public String getPatternString() {
-		return "char";
+	protected void initialize() {
+		super.initialize();
+		setPatternString("char");
 	}
 
 }

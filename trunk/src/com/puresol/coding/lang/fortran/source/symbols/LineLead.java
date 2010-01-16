@@ -5,8 +5,10 @@ import com.puresol.coding.tokentypes.Hidden;
 public class LineLead extends Hidden {
 
 	@Override
-	public String getPatternString() {
-		return "......";
+	protected void initialize() {
+		super.initialize();
+		setCaseInsensitive();
+		setPatternString("......");
 	}
 
 }

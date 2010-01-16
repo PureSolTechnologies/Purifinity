@@ -4,9 +4,10 @@ import com.puresol.coding.tokentypes.KeywordOperator;
 
 public class EnumKeyword extends KeywordOperator {
 
-    @Override
-    public String getPatternString() {
-	return "enum";
-    }
+	@Override
+	protected void initialize() {
+		super.initialize();
+		setPatternString("enum");
+	}
 
 }

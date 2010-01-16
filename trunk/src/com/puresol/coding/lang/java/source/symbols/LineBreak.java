@@ -5,8 +5,9 @@ import com.puresol.coding.tokentypes.Hidden;
 public class LineBreak extends Hidden {
 
 	@Override
-	public String getPatternString() {
-		return "(\\r\\n|\\n)";
+	protected void initialize() {
+		super.initialize();
+		setPatternString("(\\r\\n|\\n)");
 	}
 
 }

@@ -5,8 +5,10 @@ import com.puresol.coding.tokentypes.Operator;
 public class Star extends Operator {
 
 	@Override
-	public String getPatternString() {
-		return "\\*";
+	protected void initialize() {
+		super.initialize();
+		setCaseInsensitive();
+		setPatternString("\\*");
 	}
 
 }

@@ -4,9 +4,10 @@ import com.puresol.coding.tokentypes.Literal;
 
 public class IntegerLiteral extends Literal {
 
-    @Override
-    public String getPatternString() {
-	return "\\d+L?";
-    }
+	@Override
+	protected void initialize() {
+		super.initialize();
+		setPatternString("\\d+L?");
+	}
 
 }

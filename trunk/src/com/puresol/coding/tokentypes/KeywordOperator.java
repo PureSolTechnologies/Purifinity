@@ -1,32 +1,25 @@
 package com.puresol.coding.tokentypes;
 
-import com.puresol.parser.TokenPublicity;
+public abstract class KeywordOperator extends Operator {
 
-public abstract class KeywordOperator extends
-	AbstractSourceTokenDefinition {
+	@Override
+	protected void initialize() {
+		super.initialize();
+		setLookAheadPatternString("(?!\\w)");
+	}
 
-    @Override
-    public int changeBlockLayer() {
-	return 0;
-    }
+	@Override
+	public int changeBlockLayer() {
+		return 0;
+	}
 
-    @Override
-    public TokenPublicity getPublicity() {
-	return TokenPublicity.VISIBLE;
-    }
+	@Override
+	public SymbolType getSymbolType() {
+		return SymbolType.OPERATOR;
+	}
 
-    @Override
-    public SymbolType getSymbolType() {
-	return SymbolType.OPERATOR;
-    }
-
-    @Override
-    public boolean isPrimitiveDataType() {
-	return false;
-    }
-
-    @Override
-    public String getLookAheadPatternString() {
-	return "(?!\\w)";
-    }
+	@Override
+	public boolean isPrimitiveDataType() {
+		return false;
+	}
 }

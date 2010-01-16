@@ -4,10 +4,11 @@ import com.puresol.coding.tokentypes.KeywordOperator;
 
 public class IntrinsicKeyword extends KeywordOperator {
 
-    @Override
-    public String getPatternString() {
-	setCaseInsensitive();
-	return "INTRINSIC";
-    }
+	@Override
+	protected void initialize() {
+		super.initialize();
+		setCaseInsensitive();
+		setPatternString("INTRINSIC");
+	}
 
 }

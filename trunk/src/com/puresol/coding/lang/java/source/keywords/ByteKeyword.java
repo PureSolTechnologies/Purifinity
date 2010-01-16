@@ -5,8 +5,9 @@ import com.puresol.coding.tokentypes.PrimitiveDataType;
 public class ByteKeyword extends PrimitiveDataType {
 
 	@Override
-	public String getPatternString() {
-		return "byte";
+	protected void initialize() {
+		super.initialize();
+		setPatternString("byte");
 	}
 
 }

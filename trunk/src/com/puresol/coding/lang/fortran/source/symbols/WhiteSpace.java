@@ -5,8 +5,10 @@ import com.puresol.coding.tokentypes.Hidden;
 public class WhiteSpace extends Hidden {
 
 	@Override
-	public String getPatternString() {
-		return "( |\\t)";
+	protected void initialize() {
+		super.initialize();
+		setCaseInsensitive();
+		setPatternString("( |\\t)");
 	}
 
 }

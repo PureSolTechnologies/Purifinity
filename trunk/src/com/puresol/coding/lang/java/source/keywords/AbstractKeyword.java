@@ -4,9 +4,10 @@ import com.puresol.coding.tokentypes.KeywordOperator;
 
 public class AbstractKeyword extends KeywordOperator {
 
-    @Override
-    public String getPatternString() {
-	return "abstract";
-    }
+	@Override
+	protected void initialize() {
+		super.initialize();
+		setPatternString("abstract");
+	}
 
 }

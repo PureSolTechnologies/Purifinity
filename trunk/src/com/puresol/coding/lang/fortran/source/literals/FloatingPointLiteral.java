@@ -5,8 +5,10 @@ import com.puresol.coding.tokentypes.Operant;
 public class FloatingPointLiteral extends Operant {
 
 	@Override
-	public String getPatternString() {
-		return "(\\+|-)?\\d*\\.\\d+((e|E)(\\+|-)?\\d+)?(?!\\w)";
+	protected void initialize() {
+		super.initialize();
+		setCaseInsensitive();
+		setPatternString("(\\+|-)?\\d*\\.\\d+((E|D)(\\+|-)?\\d+)?(?!\\w)");
 	}
 
 }

@@ -12,8 +12,10 @@ import com.puresol.parser.TokenStream;
 public class LParen extends Operator {
 
 	@Override
-	public String getPatternString() {
-		return "\\(";
+	protected void initialize() {
+		super.initialize();
+		setCaseInsensitive();
+		setPatternString("\\(");
 	}
 
 	@Override

@@ -5,8 +5,9 @@ import com.puresol.coding.tokentypes.Operator;
 public class PlusPlus extends Operator {
 
 	@Override
-	public String getPatternString() {
-		return "\\+\\+";
+	protected void initialize() {
+		super.initialize();
+		setPatternString("\\+\\+");
 	}
 
 }

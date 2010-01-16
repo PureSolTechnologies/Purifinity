@@ -7,8 +7,9 @@ import com.puresol.parser.TokenStream;
 public class RRectBracket extends Operator {
 
 	@Override
-	public String getPatternString() {
-		return "\\]";
+	protected void initialize() {
+		super.initialize();
+		setPatternString("\\]");
 	}
 
 	@Override

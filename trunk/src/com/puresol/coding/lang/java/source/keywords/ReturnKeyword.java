@@ -4,9 +4,10 @@ import com.puresol.coding.tokentypes.KeywordOperator;
 
 public class ReturnKeyword extends KeywordOperator {
 
-    @Override
-    public String getPatternString() {
-	return "return";
-    }
+	@Override
+	protected void initialize() {
+		super.initialize();
+		setPatternString("return");
+	}
 
 }

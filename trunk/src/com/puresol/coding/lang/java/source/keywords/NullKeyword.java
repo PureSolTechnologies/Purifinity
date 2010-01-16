@@ -4,9 +4,10 @@ import com.puresol.coding.tokentypes.KeywordOperant;
 
 public class NullKeyword extends KeywordOperant {
 
-    @Override
-    public String getPatternString() {
-	return "null";
-    }
+	@Override
+	protected void initialize() {
+		super.initialize();
+		setPatternString("null");
+	}
 
 }

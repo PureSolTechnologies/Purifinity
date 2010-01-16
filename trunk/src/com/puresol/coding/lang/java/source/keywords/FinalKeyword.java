@@ -4,9 +4,10 @@ import com.puresol.coding.tokentypes.KeywordOperator;
 
 public class FinalKeyword extends KeywordOperator {
 
-    @Override
-    public String getPatternString() {
-	return "final";
-    }
+	@Override
+	protected void initialize() {
+		super.initialize();
+		setPatternString("final");
+	}
 
 }

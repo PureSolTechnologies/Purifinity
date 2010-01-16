@@ -4,9 +4,11 @@ import com.puresol.coding.tokentypes.Operator;
 
 public class DotLTDot extends Operator {
 
-    @Override
-    public String getPatternString() {
-	return ".LT.";
-    }
+	@Override
+	protected void initialize() {
+		super.initialize();
+		setCaseInsensitive();
+		setPatternString(".LT.");
+	}
 
 }

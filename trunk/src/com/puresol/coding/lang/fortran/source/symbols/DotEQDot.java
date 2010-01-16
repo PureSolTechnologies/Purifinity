@@ -4,9 +4,11 @@ import com.puresol.coding.tokentypes.Operator;
 
 public class DotEQDot extends Operator {
 
-    @Override
-    public String getPatternString() {
-	return ".EQ.";
-    }
+	@Override
+	protected void initialize() {
+		super.initialize();
+		setCaseInsensitive();
+		setPatternString(".EQ.");
+	}
 
 }

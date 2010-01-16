@@ -4,9 +4,10 @@ import com.puresol.coding.tokentypes.KeywordOperator;
 
 public class ProtectedKeyword extends KeywordOperator {
 
-    @Override
-    public String getPatternString() {
-	return "protected";
-    }
+	@Override
+	protected void initialize() {
+		super.initialize();
+		setPatternString("protected");
+	}
 
 }

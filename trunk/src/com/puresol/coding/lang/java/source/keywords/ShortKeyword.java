@@ -4,9 +4,10 @@ import com.puresol.coding.tokentypes.PrimitiveDataType;
 
 public class ShortKeyword extends PrimitiveDataType {
 
-    @Override
-    public String getPatternString() {
-	return "short";
-    }
+	@Override
+	protected void initialize() {
+		super.initialize();
+		setPatternString("short");
+	}
 
 }

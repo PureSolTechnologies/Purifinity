@@ -6,18 +6,19 @@ import com.puresol.parser.TokenStream;
 
 public class WhileKeyword extends KeywordOperator {
 
-    @Override
-    public String getPatternString() {
-	return "while";
-    }
+	@Override
+	protected void initialize() {
+		super.initialize();
+		setPatternString("while");
+	}
 
-    @Override
-    public String getHalsteadSymbol() {
-	return "while()";
-    }
+	@Override
+	public String getHalsteadSymbol() {
+		return "while()";
+	}
 
-    @Override
-    public int getCyclomaticNumber(Token token, TokenStream tokenStream) {
-	return 1;
-    }
+	@Override
+	public int getCyclomaticNumber(Token token, TokenStream tokenStream) {
+		return 1;
+	}
 }

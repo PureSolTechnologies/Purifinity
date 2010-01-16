@@ -4,9 +4,11 @@ import com.puresol.coding.tokentypes.Operator;
 
 public class DotNEDot extends Operator {
 
-    @Override
-    public String getPatternString() {
-	return ".NE.";
-    }
+	@Override
+	protected void initialize() {
+		super.initialize();
+		setCaseInsensitive();
+		setPatternString(".NE.");
+	}
 
 }

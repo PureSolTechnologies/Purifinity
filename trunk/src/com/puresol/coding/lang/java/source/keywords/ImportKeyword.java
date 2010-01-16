@@ -4,9 +4,10 @@ import com.puresol.coding.tokentypes.KeywordOperator;
 
 public class ImportKeyword extends KeywordOperator {
 
-    @Override
-    public String getPatternString() {
-	return "import";
-    }
+	@Override
+	protected void initialize() {
+		super.initialize();
+		setPatternString("import");
+	}
 
 }

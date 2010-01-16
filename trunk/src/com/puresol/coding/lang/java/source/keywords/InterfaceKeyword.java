@@ -4,9 +4,10 @@ import com.puresol.coding.tokentypes.KeywordOperator;
 
 public class InterfaceKeyword extends KeywordOperator {
 
-    @Override
-    public String getPatternString() {
-	return "interface";
-    }
+	@Override
+	protected void initialize() {
+		super.initialize();
+		setPatternString("interface");
+	}
 
 }

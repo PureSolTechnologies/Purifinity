@@ -1,14 +1,15 @@
 package com.puresol.coding.tokentypes;
 
-public abstract class PrimitiveDataType extends Operant {
+public abstract class PrimitiveDataType extends KeywordOperant {
 
-    @Override
-    public boolean isPrimitiveDataType() {
-	return true;
-    }
+	@Override
+	protected void initialize() {
+		super.initialize();
+	}
 
-    @Override
-    public String getLookAheadPatternString() {
-	return "(?!\\w)";
-    }
+	@Override
+	public boolean isPrimitiveDataType() {
+		return true;
+	}
+
 }

@@ -4,9 +4,10 @@ import com.puresol.coding.tokentypes.KeywordOperant;
 
 public class VoidKeyword extends KeywordOperant {
 
-    @Override
-    public String getPatternString() {
-	return "void";
-    }
+	@Override
+	protected void initialize() {
+		super.initialize();
+		setPatternString("void");
+	}
 
 }

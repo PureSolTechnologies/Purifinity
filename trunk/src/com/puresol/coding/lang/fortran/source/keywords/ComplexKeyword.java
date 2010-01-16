@@ -4,10 +4,11 @@ import com.puresol.coding.tokentypes.PrimitiveDataType;
 
 public class ComplexKeyword extends PrimitiveDataType {
 
-    @Override
-    public String getPatternString() {
-	setCaseInsensitive();
-	return "COMPLEX";
-    }
+	@Override
+	protected void initialize() {
+		super.initialize();
+		setCaseInsensitive();
+		setPatternString("COMPLEX");
+	}
 
 }

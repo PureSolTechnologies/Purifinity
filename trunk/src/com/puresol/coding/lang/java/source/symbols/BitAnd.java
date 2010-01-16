@@ -4,9 +4,10 @@ import com.puresol.coding.tokentypes.Operator;
 
 public class BitAnd extends Operator {
 
-    @Override
-    public String getPatternString() {
-	return "&";
-    }
+	@Override
+	protected void initialize() {
+		super.initialize();
+		setPatternString("&");
+	}
 
 }

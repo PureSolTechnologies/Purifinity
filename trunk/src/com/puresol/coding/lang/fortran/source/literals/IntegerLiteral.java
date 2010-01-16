@@ -5,8 +5,10 @@ import com.puresol.coding.tokentypes.Operant;
 public class IntegerLiteral extends Operant {
 
 	@Override
-	public String getPatternString() {
-		return "\\d+(?!\\w)";
+	protected void initialize() {
+		super.initialize();
+		setCaseInsensitive();
+		setPatternString("\\d+(?!\\w)");
 	}
 
 }

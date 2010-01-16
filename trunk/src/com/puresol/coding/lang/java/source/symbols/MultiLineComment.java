@@ -4,9 +4,10 @@ import com.puresol.coding.tokentypes.Comment;
 
 public class MultiLineComment extends Comment {
 
-    @Override
-    public String getPatternString() {
-	return "/\\*([^*]+|\\*[^/])*\\*/";
-    }
+	@Override
+	protected void initialize() {
+		super.initialize();
+		setPatternString("/\\*([^*]+|\\*[^/])*\\*/");
+	}
 
 }

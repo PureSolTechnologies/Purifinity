@@ -4,9 +4,10 @@ import com.puresol.coding.tokentypes.PrimitiveDataType;
 
 public class DoubleKeyword extends PrimitiveDataType {
 
-    @Override
-    public String getPatternString() {
-	return "double";
-    }
+	@Override
+	protected void initialize() {
+		super.initialize();
+		setPatternString("double");
+	}
 
 }

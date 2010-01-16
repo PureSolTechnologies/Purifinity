@@ -6,18 +6,19 @@ import com.puresol.parser.TokenStream;
 
 public class ForKeyword extends KeywordOperator {
 
-    @Override
-    public String getPatternString() {
-	return "for";
-    }
+	@Override
+	protected void initialize() {
+		super.initialize();
+		setPatternString("for");
+	}
 
-    @Override
-    public String getHalsteadSymbol() {
-	return "for()";
-    }
+	@Override
+	public String getHalsteadSymbol() {
+		return "for()";
+	}
 
-    @Override
-    public int getCyclomaticNumber(Token token, TokenStream tokenStream) {
-	return 1;
-    }
+	@Override
+	public int getCyclomaticNumber(Token token, TokenStream tokenStream) {
+		return 1;
+	}
 }

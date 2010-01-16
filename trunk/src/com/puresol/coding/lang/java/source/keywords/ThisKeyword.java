@@ -4,9 +4,10 @@ import com.puresol.coding.tokentypes.KeywordOperant;
 
 public class ThisKeyword extends KeywordOperant {
 
-    @Override
-    public String getPatternString() {
-	return "this";
-    }
+	@Override
+	protected void initialize() {
+		super.initialize();
+		setPatternString("this");
+	}
 
 }

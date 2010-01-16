@@ -4,9 +4,10 @@ import com.puresol.coding.tokentypes.KeywordOperator;
 
 public class TransientKeyword extends KeywordOperator {
 
-    @Override
-    public String getPatternString() {
-	return "transient";
-    }
+	@Override
+	protected void initialize() {
+		super.initialize();
+		setPatternString("transient");
+	}
 
 }

@@ -4,9 +4,10 @@ import com.puresol.coding.tokentypes.Literal;
 
 public class IdLiteral extends Literal {
 
-    @Override
-    public String getPatternString() {
-	return "[a-zA-Z_]([a-zA-Z_0-9])*";
-    }
+	@Override
+	protected void initialize() {
+		super.initialize();
+		setPatternString("[a-zA-Z_]([a-zA-Z_0-9])*");
+	}
 
 }

@@ -7,8 +7,9 @@ import com.puresol.parser.TokenStream;
 public class RCurlyBracket extends BlockEnd {
 
 	@Override
-	public String getPatternString() {
-		return "\\}";
+	protected void initialize() {
+		super.initialize();
+		setPatternString("\\}");
 	}
 
 	@Override

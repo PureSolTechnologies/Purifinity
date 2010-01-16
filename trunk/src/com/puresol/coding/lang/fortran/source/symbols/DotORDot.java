@@ -4,9 +4,11 @@ import com.puresol.coding.tokentypes.Operator;
 
 public class DotORDot extends Operator {
 
-    @Override
-    public String getPatternString() {
-	return ".OR.";
-    }
+	@Override
+	protected void initialize() {
+		super.initialize();
+		setCaseInsensitive();
+		setPatternString(".OR.");
+	}
 
 }

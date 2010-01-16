@@ -4,9 +4,10 @@ import com.puresol.coding.tokentypes.KeywordOperant;
 
 public class ThrowKeyword extends KeywordOperant {
 
-    @Override
-    public String getPatternString() {
-	return "throw";
-    }
+	@Override
+	protected void initialize() {
+		super.initialize();
+		setPatternString("throw");
+	}
 
 }

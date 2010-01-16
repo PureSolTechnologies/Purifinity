@@ -4,8 +4,9 @@ import com.puresol.coding.tokentypes.KeywordOperator;
 
 public class TryKeyword extends KeywordOperator {
 
-    @Override
-    public String getPatternString() {
-	return "try";
-    }
+	@Override
+	protected void initialize() {
+		super.initialize();
+		setPatternString("try");
+	}
 }

@@ -4,9 +4,10 @@ import com.puresol.coding.tokentypes.Literal;
 
 public class BooleanLiteral extends Literal {
 
-    @Override
-    public String getPatternString() {
-	return "(true|false)";
-    }
+	@Override
+	protected void initialize() {
+		super.initialize();
+		setPatternString("(true|false)");
+	}
 
 }
