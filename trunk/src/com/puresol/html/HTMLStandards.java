@@ -10,16 +10,11 @@
 
 package com.puresol.html;
 
-import java.awt.Desktop;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URI;
-import java.net.URL;
 
-import javax.swing.JOptionPane;
-import javax.swingx.Application;
 import javax.swingx.config.APIConfig;
 import javax.swingx.data.Time;
 
@@ -100,17 +95,6 @@ public class HTMLStandards {
 		return "";
 	}
 
-	public static void openURLWithDefaultBrowser(URI uri) {
-		try {
-			Desktop.getDesktop().browse(uri);
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-			JOptionPane.showConfirmDialog(Application.getInstance(),
-					"Could not open link!", "IO Error", JOptionPane.OK_OPTION,
-					JOptionPane.ERROR_MESSAGE);
-		}
-	}
-
 	public static String convertWhiteSpaces(final String text) {
 		String result = text;
 		result = result.replaceAll(" ", "&nbsp;");
@@ -126,21 +110,4 @@ public class HTMLStandards {
 		return "<table><tr><td>" + result + "</td></tr></table>";
 	}
 
-	public static String getLink(URL url) {
-		return getLink(url, url.toString());
-	}
-
-	public static String getLink(URL url, String text) {
-		return getLink(url, text, LinkTargets.DEFAULT);
-	}
-
-	public static String getLink(URL url, String text, LinkTargets target) {
-		String targetString = "";
-		if (target != LinkTargets.DEFAULT) {
-			targetString = " target=\"" + target.getKeyword() + "\"";
-		}
-		String link = "<a href=\"" + url.toString() + "\"" + targetString + ">"
-				+ text + "</a>";
-		return link;
-	}
 }

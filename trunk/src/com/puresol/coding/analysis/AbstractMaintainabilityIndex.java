@@ -10,15 +10,9 @@
 
 package com.puresol.coding.analysis;
 
-import javax.i18n4j.Translator;
-
 import com.puresol.coding.CodeRange;
-import com.puresol.html.HTMLStandards;
 
 abstract public class AbstractMaintainabilityIndex implements Analysis {
-
-	private static final Translator translator = Translator
-			.getTranslator(AbstractMaintainabilityIndex.class);
 
 	/**
 	 * MaintainabilityIndex without comment.
@@ -90,23 +84,6 @@ abstract public class AbstractMaintainabilityIndex implements Analysis {
 
 	public static boolean isSuitable(CodeRange codeRange) {
 		return true;
-	}
-
-	public String getReport() {
-		String report = "MIwoc\t" + Math.round(getMIWoc() * 100.0) / 100.0
-				+ "\t"
-				+ translator.i18n("Maintainability index without comments")
-				+ "\n";
-		report += "MIcw\t" + Math.round(getMIcw() * 100.0) / 100.0 + "\t"
-				+ translator.i18n("Maintainability index comment weight")
-				+ "\n";
-		report += "MI\t" + Math.round(getMI() * 100.0) / 100.0 + "\t"
-				+ translator.i18n("Maintainability index") + "\n";
-		return report;
-	}
-
-	public String getHTMLReport() {
-		return HTMLStandards.convertTSVToTable(getReport());
 	}
 
 	public CodeRange getCodeRange() {

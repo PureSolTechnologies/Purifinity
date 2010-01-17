@@ -28,7 +28,7 @@ import javax.swingx.connect.Slot;
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.ProjectAnalyser;
 import com.puresol.coding.analysis.QualityLevel;
-import com.puresol.coding.analysis.html.HTMLAnalysisReport;
+import com.puresol.coding.analysis.reports.HTMLAnalysisReport;
 
 public class CodeRangeAnalysisBrowser extends Panel {
 

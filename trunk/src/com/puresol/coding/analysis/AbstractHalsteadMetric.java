@@ -12,20 +12,14 @@ package com.puresol.coding.analysis;
 
 import java.util.Hashtable;
 
-import javax.i18n4j.Translator;
-
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.tokentypes.SourceTokenDefinition;
 import com.puresol.coding.tokentypes.SymbolType;
-import com.puresol.html.HTMLStandards;
 import com.puresol.parser.Token;
 import com.puresol.parser.TokenPublicity;
 import com.puresol.parser.TokenStream;
 
 abstract public class AbstractHalsteadMetric extends AbstractMetric {
-
-	private static final Translator translator = Translator
-			.getTranslator(AbstractHalsteadMetric.class);
 
 	private Hashtable<String, Integer> operators = new Hashtable<String, Integer>();
 	private Hashtable<String, Integer> operants = new Hashtable<String, Integer>();
@@ -247,63 +241,4 @@ abstract public class AbstractHalsteadMetric extends AbstractMetric {
 		return true;
 	}
 
-	public String getReport() {
-		String report = "n1\t" + get_n1() + "\t"
-				+ translator.i18n("Number of different operators") + "\n";
-		report += "N1\t" + get_N1() + "\t"
-				+ translator.i18n("Total number operators") + "\n";
-		report += "n2\t" + get_n2() + "\t"
-				+ translator.i18n("Number of different operands") + "\n";
-		report += "N2\t" + get_N2() + "\t"
-				+ translator.i18n("Total number of operands") + "\n";
-		report += "n\t" + Math.round(get_n() * 100.0) / 100.0 + "\t"
-				+ translator.i18n("Vocabulary size") + "\n";
-		report += "N\t" + Math.round(get_N() * 100.0) / 100.0 + "\t"
-				+ translator.i18n("Program length") + "\n";
-		report += "HL\t" + Math.round(get_HL() * 100.0) / 100.0 + "\t"
-				+ translator.i18n("Halstead length") + "\n";
-		report += "HV\t" + Math.round(get_HV() * 100.0) / 100.0 + "\t"
-				+ translator.i18n("Halstead volume") + "\n";
-		report += "D\t" + Math.round(get_D() * 100.0) / 100.0 + "\t"
-				+ translator.i18n("Difficulty level") + "\n";
-		report += "L\t" + Math.round(get_L() * 100.0) / 100.0 + "\t"
-				+ translator.i18n("Program level") + "\n";
-		report += "E\t" + Math.round(get_E() * 100.0) / 100.0 + "\t"
-				+ translator.i18n("Effort to implement") + "\n";
-		report += "T\t" + Math.round(get_T() * 100.0) / 100.0 + "\t"
-				+ translator.i18n("Implementatiom time [s]") + "\n";
-		report += "B\t" + Math.round(get_B() * 100.0) / 100.0 + "\t"
-				+ translator.i18n("Number of delivered bugs") + "\n";
-		return report;
-	}
-
-	public String getHTMLReport() {
-		return HTMLStandards.convertTSVToTable(getReport());
-	}
-
-	public String getOperatorReport() {
-		String report = "";
-		for (String operator : getOperators().keySet()) {
-			int number = operators.get(operator);
-			report += operator + "\t" + number + "\n";
-		}
-		return report;
-	}
-
-	public String getHTMLOperatorReport() {
-		return HTMLStandards.convertTSVToTable(getOperatorReport());
-	}
-
-	public String getOperantReport() {
-		String report = "";
-		for (String operant : getOperants().keySet()) {
-			int number = operants.get(operant);
-			report += operant + "\t" + number + "\n";
-		}
-		return report;
-	}
-
-	public String getHTMLOperantReport() {
-		return HTMLStandards.convertTSVToTable(getOperantReport());
-	}
 }

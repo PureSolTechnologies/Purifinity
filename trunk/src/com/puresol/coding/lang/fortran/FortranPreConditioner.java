@@ -11,7 +11,6 @@ import org.apache.log4j.Logger;
 
 import com.puresol.coding.lang.fortran.source.VirtualStatementEnd;
 import com.puresol.coding.lang.fortran.source.symbols.LineLead;
-import com.puresol.coding.lang.fortran.source.symbols.WhiteSpace;
 import com.puresol.coding.tokentypes.Comment;
 import com.puresol.parser.DefaultPreConditioner;
 import com.puresol.parser.Token;

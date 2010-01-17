@@ -8,7 +8,7 @@
  *
  ***************************************************************************/
 
-package com.puresol.coding.analysis.html;
+package com.puresol.coding.analysis.reports;
 
 import java.io.File;
 import java.io.FileNotFoundException;

@@ -4,15 +4,15 @@ import javax.i18n4j.Translator;
 
 import com.puresol.data.Identifiable;
 
-public enum LinkTargets implements Identifiable {
+public enum LinkTarget implements Identifiable {
 	DEFAULT(""), BLANK("_blank"), SELF("_self"), TOP("_top");
 
 	private static final Translator translator = Translator
-			.getTranslator(LinkTargets.class);
+			.getTranslator(LinkTarget.class);
 
 	private String keyword;
 
-	private LinkTargets(String keyword) {
+	private LinkTarget(String keyword) {
 		this.keyword = keyword;
 	}
 

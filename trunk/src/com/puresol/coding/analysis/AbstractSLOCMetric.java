@@ -13,10 +13,7 @@ package com.puresol.coding.analysis;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.i18n4j.Translator;
-
 import com.puresol.coding.CodeRange;
-import com.puresol.html.HTMLStandards;
 import com.puresol.parser.Token;
 import com.puresol.parser.TokenPublicity;
 import com.puresol.parser.TokenStream;
@@ -31,9 +28,6 @@ import com.puresol.statistics.Statistics;
  * 
  */
 abstract public class AbstractSLOCMetric extends AbstractMetric {
-
-	private static final Translator translator = Translator
-			.getTranslator(AbstractSLOCMetric.class);
 
 	private TokenStream stream = null;
 	private int phyLOC;
@@ -285,54 +279,4 @@ abstract public class AbstractSLOCMetric extends AbstractMetric {
 		return true;
 	}
 
-	public String getLineCountReport() {
-		String report = "phyLoc\t" + getPhyLOC() + "\t"
-				+ translator.i18n("physical lines of code") + "\n";
-		report += "proLoc\t" + getProLOC() + "\t"
-				+ translator.i18n("productive lines of code") + "\n";
-		report += "comLoc\t" + getComLOC() + "\t"
-				+ translator.i18n("commented lines of code") + "\n";
-		report += "blLoc\t" + getBlLOC() + "\t"
-				+ translator.i18n("blank lines") + "\n";
-		return report;
-	}
-
-	public String getHTMLLineCountReport() {
-		return HTMLStandards.convertTSVToTable(getLineCountReport());
-	}
-
-	public String getLineLengthReport() {
-		Statistics normal = getLineStatistics();
-		Statistics trimmed = getTrimmedLineStatistics();
-		Statistics prod = getProductiveLineStatistics();
-		Statistics prodTrimmed = getTrimmedProductiveLineStatistics();
-		String report = "\tnormal\ttrimmed\tproductive"
-				+ "\tproductive trimmed\n";
-		report += "avg\t" + Math.round(normal.getAvg() * 100.0) / 100.0 + "\t"
-				+ Math.round(trimmed.getAvg() * 100.0) / 100.0 + "\t"
-				+ Math.round(prod.getAvg() * 100.0) / 100.0 + "\t"
-				+ Math.round(prodTrimmed.getAvg() * 100.0) / 100.0 + "\n";
-		report += "median\t" + Math.round(normal.getMedian()) + "\t"
-				+ Math.round(trimmed.getMedian()) + "\t"
-				+ Math.round(prod.getMedian()) + "\t"
-				+ Math.round(prodTrimmed.getMedian()) + "\n";
-		report += "standard deviation\t"
-				+ Math.round(normal.getStdDev() * 100.0) / 100.0 + "\t"
-				+ Math.round(trimmed.getStdDev() * 100.0) / 100.0 + "\t"
-				+ Math.round(prod.getStdDev() * 100.0) / 100.0 + "\t"
-				+ Math.round(prodTrimmed.getStdDev() * 100.0) / 100.0 + "\n";
-		report += "min\t" + Math.round(normal.getMin()) + "\t"
-				+ Math.round(trimmed.getMin()) + "\t"
-				+ Math.round(prod.getMin()) + "\t"
-				+ Math.round(prodTrimmed.getMin()) + "\n";
-		report += "max\t" + Math.round(normal.getMax()) + "\t"
-				+ Math.round(trimmed.getMax()) + "\t"
-				+ Math.round(prod.getMax()) + "\t"
-				+ Math.round(prodTrimmed.getMax()) + "\n";
-		return report;
-	}
-
-	public String getHTMLLineLengthReport() {
-		return HTMLStandards.convertTSVToTable(getLineLengthReport());
-	}
 }

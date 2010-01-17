@@ -142,13 +142,11 @@ public class Lexer {
 			throws NoMatchingTokenDefinitionFound {
 		ArrayList<Token> tokens = new ArrayList<Token>();
 		String text = token.getText();
-		while (tokenPos < text.length()) {
-			boolean found = false;
+		if (tokenPos < text.length()) {
 			for (TokenDefinition definition : tokenDefinitions) {
-				try {
-					ArrayList<Token> newTokens = tryProcessDefinition(
-							definition, token, tokenPos, tokenId, lineNumber,
-							streamPos);
+				ArrayList<Token> newTokens = tryProcessDefinition(definition,
+						token, tokenPos, tokenId, lineNumber, streamPos);
+				if (newTokens != null) {
 					for (Token newToken : newTokens) {
 						tokenPos += newToken.getText().length();
 						tokenId++;
@@ -157,16 +155,11 @@ public class Lexer {
 						streamPos += newToken.getText().length();
 						tokens.add(newToken);
 					}
-					found = true;
-					break;
-				} catch (NoMatchingTokenDefinitionFound e) {
-					// didn't work out, let's try the next definition...
+					return tokens;
 				}
 			}
-			if (!found) {
-				throw new NoMatchingTokenDefinitionFound(inputStream.getName(),
-						lineNumber, tokenPos, text);
-			}
+			throw new NoMatchingTokenDefinitionFound(inputStream.getName(),
+					lineNumber, tokenPos, text);
 		}
 		return tokens;
 	}
@@ -186,20 +179,18 @@ public class Lexer {
 	private ArrayList<Token> tryProcessDefinition(TokenDefinition definition,
 			Token token, int tokenPos, int tokenId, int lineNumber,
 			int streamPos) throws NoMatchingTokenDefinitionFound {
-		ArrayList<Token> tokens = new ArrayList<Token>();
 		String text = token.getText();
 		if (!definition.atStart(text.substring(tokenPos))) {
-			throw new NoMatchingTokenDefinitionFound(inputStream.getName(),
-					lineNumber, tokenPos, text);
+			return null;
 		}
 		if (logger.isTraceEnabled()) {
 			logger.trace("Possibly found definition for '"
 					+ definition.getTokenAtStart(text.substring(tokenPos))
-					+ "' (" + definition.getClass().getSimpleName() + "): "
-					+ token.toString());
+					+ "' (" + definition.getClass().getSimpleName() + ")");
 		}
 		String tokenText = definition.getTokenAtStart(text.substring(tokenPos));
 		int numberOfLines = getNumberOfLines(tokenText);
+		ArrayList<Token> tokens = new ArrayList<Token>();
 		tokens.add(new Token(tokenId, definition.getPublicity(), streamPos,
 				tokenText.length(), tokenText, lineNumber, lineNumber
 						+ numberOfLines, definition.getClass()));

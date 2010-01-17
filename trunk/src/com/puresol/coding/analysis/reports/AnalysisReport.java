@@ -8,7 +8,7 @@
  *
  ***************************************************************************/
 
-package com.puresol.coding.analysis;
+package com.puresol.coding.analysis.reports;
 
 public interface AnalysisReport {
 

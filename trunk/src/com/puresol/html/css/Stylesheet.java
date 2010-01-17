@@ -1,6 +1,7 @@
 package com.puresol.html.css;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Stylesheet {
 
@@ -11,6 +12,7 @@ public class Stylesheet {
 	}
 
 	public String toCSSString() {
+		Collections.sort(styles);
 		String css = "";
 		for (Style style : styles) {
 			if (!css.isEmpty()) {

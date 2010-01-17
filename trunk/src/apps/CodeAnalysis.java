@@ -26,8 +26,8 @@ import javax.swingx.connect.Slot;
 
 import com.puresol.coding.ProjectAnalyser;
 import com.puresol.coding.analysis.CodeEvaluationSystem;
-import com.puresol.coding.analysis.html.HTMLAnalysisProject;
 import com.puresol.coding.analysis.out.TSVFile;
+import com.puresol.coding.analysis.reports.HTMLAnalysisProject;
 import com.puresol.gui.PureSolApplication;
 import com.puresol.gui.coding.analysis.ProjectAnalysisBrowser;
 
