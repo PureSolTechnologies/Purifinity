@@ -1,14 +1,14 @@
-package com.puresol.coding.lang.fortran.source.symbols;
+package com.puresol.coding.lang.fortran.source.keywords;
 
 import com.puresol.coding.tokentypes.Operator;
 
-public class DotNOTDot extends Operator {
+public class DotGTDot extends Operator {
 
 	@Override
 	protected void initialize() {
 		super.initialize();
 		setCaseInsensitive();
-		setPatternString(".NOT.");
+		setPatternString("\\.GT\\.");
 	}
 
 }

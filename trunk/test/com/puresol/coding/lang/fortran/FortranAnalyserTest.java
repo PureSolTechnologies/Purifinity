@@ -28,44 +28,10 @@ import junit.framework.TestCase;
  */
 public class FortranAnalyserTest extends TestCase {
 
-	@Test
-	public void test() {
-		FortranAnalyser analyser = new FortranAnalyser(new File("test"),
-				new File("com/puresol/coding/lang/fortran/samples/zgerc.f"));
-		ArrayList<CodeRange> codeRanges = analyser.getCodeRanges();
-		Assert.assertNotNull(codeRanges);
-		for (CodeRange codeRange : codeRanges) {
-			System.out.println(codeRange.toString());
-		}
-		Assert.assertTrue(codeRanges.size() > 0);
-	}
-
-	// @Test
-	// public void test2() {
-	// ArrayList<File> files = FileSearch
-	// .find("/usr/src/compile/ATLAS/**/*.f");
-	// for (File file : files) {
-	// System.out.println(file.getPath());
-	// FortranAnalyser analyser = new FortranAnalyser(new File("/"), file);
-	// ArrayList<CodeRange> codeRanges = analyser.getCodeRanges();
-	// Assert.assertNotNull(codeRanges);
-	// Assert.assertTrue(codeRanges.size() > 0);
-	// }
-	// }
-
 //	@Test
-//	public void test3() {
-//		String s = "10x, ";
-//		FormatLiteral f = new FormatLiteral();
-//
-//		Pattern p = f.getStartPattern();
-//		Matcher m = p.matcher(s);
-//		Assert.assertTrue(m.find());
-//		System.out.println(m.group());
-//		Assert.assertTrue(f.atStart(s));
-//		Logger.getRootLogger().setLevel(Level.TRACE);
-//		FortranAnalyser analyser = new FortranAnalyser(new File("/"), new File(
-//				"/usr/src/compile/ATLAS/interfaces/blas/C/testing/c_cblat2.f"));
+//	public void test() {
+//		FortranAnalyser analyser = new FortranAnalyser(new File("test"),
+//				new File("com/puresol/coding/lang/fortran/samples/zgerc.f"));
 //		ArrayList<CodeRange> codeRanges = analyser.getCodeRanges();
 //		Assert.assertNotNull(codeRanges);
 //		for (CodeRange codeRange : codeRanges) {
@@ -73,4 +39,38 @@ public class FortranAnalyserTest extends TestCase {
 //		}
 //		Assert.assertTrue(codeRanges.size() > 0);
 //	}
+
+//	@Test
+//	public void test2() {
+//		ArrayList<File> files = FileSearch
+//				.find("/usr/src/compile/ATLAS/**/*.f");
+//		for (File file : files) {
+//			System.out.println(file.getPath());
+//			FortranAnalyser analyser = new FortranAnalyser(new File("/"), file);
+//			ArrayList<CodeRange> codeRanges = analyser.getCodeRanges();
+//			Assert.assertNotNull(codeRanges);
+//			Assert.assertTrue(codeRanges.size() > 0);
+//		}
+//	}
+
+	// @Test
+	// public void test3() {
+	// String s = "10x, ";
+	// FormatLiteral f = new FormatLiteral();
+	//
+	// Pattern p = f.getStartPattern();
+	// Matcher m = p.matcher(s);
+	// Assert.assertTrue(m.find());
+	// System.out.println(m.group());
+	// Assert.assertTrue(f.atStart(s));
+	// Logger.getRootLogger().setLevel(Level.TRACE);
+	// FortranAnalyser analyser = new FortranAnalyser(new File("/"), new File(
+	// "/usr/src/compile/ATLAS/interfaces/blas/C/testing/c_cblat2.f"));
+	// ArrayList<CodeRange> codeRanges = analyser.getCodeRanges();
+	// Assert.assertNotNull(codeRanges);
+	// for (CodeRange codeRange : codeRanges) {
+	// System.out.println(codeRange.toString());
+	// }
+	// Assert.assertTrue(codeRanges.size() > 0);
+	// }
 }

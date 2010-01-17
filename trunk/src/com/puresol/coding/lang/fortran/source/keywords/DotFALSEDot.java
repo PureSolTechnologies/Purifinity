@@ -1,14 +1,14 @@
-package com.puresol.coding.lang.fortran.source.symbols;
+package com.puresol.coding.lang.fortran.source.keywords;
 
 import com.puresol.coding.tokentypes.Operator;
 
-public class DotEQDot extends Operator {
+public class DotFALSEDot extends Operator {
 
 	@Override
 	protected void initialize() {
 		super.initialize();
 		setCaseInsensitive();
-		setPatternString(".EQ.");
+		setPatternString("\\.FALSE\\.");
 	}
 
 }
