@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import javax.swingx.Application;
 import javax.swingx.config.APIConfig;
 import javax.swingx.data.Time;
 
@@ -31,16 +32,17 @@ public class HTMLStandards {
 	private static final Logger logger = Logger.getLogger(HTMLStandards.class);
 
 	public static String getStandardHeader() {
-		return getStandardHeader("");
+		return getStandardHeader("", "", true);
 	}
 
-	public static String getStandardHeader(String title) {
+	public static String getStandardHeader(String title, String css,
+			boolean inlineCSS) {
 		String header = "<html>\n";
 		header += "<head>\n";
 		if (!title.isEmpty()) {
 			header += "<title>" + title + "</title>\n";
 		}
-		header += getStylesheet();
+		header += getCSS(css, inlineCSS);
 		header += "</head>\n";
 		header += "<body>\n";
 		return header;
@@ -48,10 +50,9 @@ public class HTMLStandards {
 
 	public static String getStandardFooter() {
 		String footer = "<hr/>\n";
-		footer += "(c) "
-				+ APIConfig.PACKAGE_YEARS
-				+ " by <a href=\"http://www.puresol-technologies.com\">PureSol-Technologies</a>"
-				+ Time.getFullTimeString() + "\n";
+		footer += "<p>(c) " + APIConfig.PACKAGE_YEARS + " "
+				+ Link.getPureSolTechnolgiesHomePage().toHTML() + "<br/>(page created: "
+				+ Time.getFullTimeString() + ")</p>\n";
 		footer += "</body>\n";
 		footer += "</html>\n";
 		return footer;
@@ -67,7 +68,6 @@ public class HTMLStandards {
 		if (!title.isEmpty()) {
 			header += "<title>" + title + "</title>\n";
 		}
-		header += getStylesheet();
 		header += "</head>\n";
 		return header;
 	}
@@ -76,10 +76,31 @@ public class HTMLStandards {
 		return "</html>\n";
 	}
 
-	public static String getStylesheet() {
+	public static String getCSS(String css, boolean inlineCSS) {
+		if (inlineCSS) {
+			return getInlineCSS(css);
+		} else {
+			return getExternalCSS(css);
+		}
+	}
+
+	public static String getCopyright() {
+		Application application = Application.getInstance();
+		String html = "<b>" + application.getApplicationTitle() + " "
+				+ application.getApplicationVersion() + "</b><br/>";
+		html += "<i>(c) " + APIConfig.PACKAGE_YEARS + " "
+				+ APIConfig.PACKAGE_OWNER + "<br/>";
+		html += "author: " + APIConfig.PACKAGE_AUTHOR + "<br/>";
+		html += "bug reports: " + APIConfig.PACKAGE_BUGREPORT;
+		return html;
+	}
+
+	public static String getInlineCSS(String css) {
+		if (css.isEmpty()) {
+			return "";
+		}
 		try {
-			InputStream is = HTMLStandards.class
-					.getResourceAsStream("/config/stylesheet.css");
+			InputStream is = HTMLStandards.class.getResourceAsStream(css);
 			BufferedReader reader = new BufferedReader(
 					new InputStreamReader(is));
 			String html = "<style type=\"text/css\">\n";
@@ -93,6 +114,14 @@ public class HTMLStandards {
 			logger.error(e.getMessage(), e);
 		}
 		return "";
+	}
+
+	public static String getExternalCSS(String css) {
+		if (css.isEmpty()) {
+			return "";
+		}
+		return "<link rel=\"stylesheet\" type=\"text/css\" href=\"" + css
+				+ "\">";
 	}
 
 	public static String convertWhiteSpaces(final String text) {

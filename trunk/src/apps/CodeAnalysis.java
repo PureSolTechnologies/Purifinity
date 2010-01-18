@@ -54,7 +54,7 @@ public class CodeAnalysis extends PureSolApplication {
 	private ToggleButton maintainabilityButton = null;
 
 	public CodeAnalysis() {
-		super("Code Analysis");
+		super("Code Analysis", "v0.0.1");
 		initMenu();
 		initDesktop();
 	}
@@ -158,6 +158,7 @@ public class CodeAnalysis extends PureSolApplication {
 			return;
 		}
 		File file = directory.getSelectedFile();
+		setApplicationSubtitle(file.getPath());
 		analyser = new ProjectAnalyser(file, "**/*");
 		analyser.update();
 		browser.setProjectAnalyser(analyser);

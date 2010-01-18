@@ -34,7 +34,7 @@ public class Link {
 		this.target = target;
 	}
 
-	public String toHTMLText() {
+	public String toHTML() {
 		String targetString = "";
 		if (target != LinkTarget.DEFAULT) {
 			targetString = " target=\"" + target.getKeyword() + "\"";

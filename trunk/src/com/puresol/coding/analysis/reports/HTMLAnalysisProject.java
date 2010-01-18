@@ -24,9 +24,10 @@ import com.puresol.coding.CodeRange;
 import com.puresol.coding.ProjectAnalyser;
 import com.puresol.coding.analysis.QualityLevel;
 import com.puresol.html.HTMLStandards;
+import com.puresol.html.Link;
+import com.puresol.jars.JarFile;
 
 public class HTMLAnalysisProject {
-
 
 	public static boolean create(File directory, ProjectAnalyser analyser) {
 		return new HTMLAnalysisProject(analyser).createHTMLProject(directory);
@@ -49,8 +50,15 @@ public class HTMLAnalysisProject {
 				return false;
 			}
 		}
+		JarFile.extractResource(HTMLAnalysisProject.class
+				.getResource("/config/logo.jpeg"), new File(directory.getPath()
+				+ "/logo.jpeg"));
+		JarFile.extractResource(HTMLAnalysisProject.class
+				.getResource("/css/report.css"), new File(directory.getPath()
+				+ "/report.css"));
 		createIndexHTML(directory);
 		createStartHTML(directory);
+		createEmptyHTML(directory);
 		createFileIndex(directory);
 		createCodeRangeIndizes(directory);
 		createReports(directory);
@@ -85,7 +93,7 @@ public class HTMLAnalysisProject {
 		html += "<frameset cols=\"20%,80%\">";
 		html += "<frameset rows=\"30%,40%\">";
 		html += "<frame src=\"files.html\" name=\"files\"/>";
-		html += "<frame src=\"start.html\" name=\"file\"/>";
+		html += "<frame src=\"empty.html\" name=\"file\"/>";
 		html += "</frameset>";
 		html += "<frame src=\"start.html\" name=\"report\"/>";
 		html += "</frameset>";
@@ -94,10 +102,19 @@ public class HTMLAnalysisProject {
 	}
 
 	private boolean createStartHTML(File directory) {
-		String html = HTMLStandards.getStandardHeader();
-		html += "Created with CodeAnalysis...";
+		String html = HTMLStandards.getStandardHeader("CodeAnalysis",
+				"report.css", false);
+		html += "<img src=\"logo.jpeg\"/> <h1>CodeAnalysis</h1>";
+		html += "<p>" + HTMLStandards.getCopyright() + "</p>";
+		html += "<p>For more information have a look to "
+				+ Link.getPureSolTechnolgiesHomePage().toHTML() + "</p>";
 		html += HTMLStandards.getStandardFooter();
 		return writeFile(directory, "start.html", html);
+	}
+
+	private boolean createEmptyHTML(File directory) {
+		String html = "<html><head></head><body></body></html>";
+		return writeFile(directory, "empty.html", html);
 	}
 
 	private boolean createFileIndex(File directory) {
@@ -180,7 +197,7 @@ public class HTMLAnalysisProject {
 				HTMLAnalysisReport report = new HTMLAnalysisReport(analyser
 						.getMetrics(file, range));
 				if (!writeFile(directory, codeRangeIndex.get(range) + ".html",
-						report.getReport())) {
+						report.getReport("report.css", false))) {
 					return false;
 				}
 			}

@@ -1,8 +1,8 @@
 package com.puresol.coding.lang.java.source.keywords;
 
-import com.puresol.coding.tokentypes.KeywordOperant;
+import com.puresol.coding.tokentypes.KeywordOperator;
 
-public class ThrowsKeyword extends KeywordOperant {
+public class ThrowsKeyword extends KeywordOperator {
 
 	@Override
 	protected void initialize() {

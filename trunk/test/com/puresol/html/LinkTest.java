@@ -18,7 +18,7 @@ public class LinkTest extends TestCase {
 							"<a href=\"http://www.puresol-technologies.com\">http://www.puresol-technologies.com</a>",
 							new Link(new URL(
 									"http://www.puresol-technologies.com"))
-									.toHTMLText());
+									.toHTML());
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 			Assert.fail("No exception was expected!");
@@ -33,7 +33,7 @@ public class LinkTest extends TestCase {
 							"<a href=\"http://www.puresol-technologies.com\">PureSol-Technologies</a>",
 							new Link(new URL(
 									"http://www.puresol-technologies.com"),
-									"PureSol-Technologies").toHTMLText());
+									"PureSol-Technologies").toHTML());
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 			Assert.fail("No exception was expected!");
@@ -49,7 +49,7 @@ public class LinkTest extends TestCase {
 							new Link(new URL(
 									"http://www.puresol-technologies.com"),
 									"PureSol-Technologies", LinkTarget.BLANK)
-									.toHTMLText());
+									.toHTML());
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 			Assert.fail("No exception was expected!");

@@ -32,7 +32,12 @@ public class HTMLAnalysisReport extends AbstractAnalysisReport {
 	}
 
 	public String getReport() {
-		String report = HTMLStandards.getStandardHeader();
+		return getReport("", true);
+	}
+
+	public String getReport(String css, boolean inlineCSS) {
+		String report = HTMLStandards.getStandardHeader("CodeMetrics for "
+				+ getMetrics().getCodeRange().getName(), css, inlineCSS);
 		report += getTitle();
 		report += getOverview();
 		report += getMetricReport();
@@ -42,8 +47,10 @@ public class HTMLAnalysisReport extends AbstractAnalysisReport {
 
 	private String getTitle() {
 		CodeRange range = getMetrics().getCodeRange();
-		return "<h1> AnalysisReport for " + range.getType().getName() + " '"
+		String html = "<img src=\"logo.jpeg\"/>";
+		html += "<h1> AnalysisReport for " + range.getType().getName() + " '"
 				+ range.getName() + "'</h1>";
+		return html;
 	}
 
 	private String getOverview() {
@@ -104,8 +111,8 @@ public class HTMLAnalysisReport extends AbstractAnalysisReport {
 
 	private String getSourceCode() {
 		String report = "<h2>" + translator.i18n("Source Code") + "</h2>";
-		report += ReportStandards.convertSourceCodeToHTML(getMetrics().getCodeRange()
-				.getText());
+		report += ReportStandards.convertSourceCodeToHTML(getMetrics()
+				.getCodeRange().getText());
 		return report;
 	}
 

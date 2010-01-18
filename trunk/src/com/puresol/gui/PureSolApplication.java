@@ -72,14 +72,14 @@ public class PureSolApplication extends Application {
 		 * things done during start time)the splash screen is opened.
 		 */
 		splash = new SplashWindow(PureSolApplication.class
-				.getResource("/META-INF/splash.jpeg"), 640, 300);
+				.getResource("/config/splash.jpeg"), 640, 300);
 		splash.setClosable(true);
 		splash.setTimer(10);
 		splash.run();
 	}
 
-	public PureSolApplication(String title) {
-		super(title);
+	public PureSolApplication(String title, String version) {
+		super(title, version);
 		setLookAndFeel();
 	}
 
@@ -170,7 +170,7 @@ public class PureSolApplication extends Application {
 	private void addXFabLink(JMenuBar menubar) {
 		Image image = null;
 
-		URL imageURL = this.getClass().getResource("/META-INF/logo.jpeg");
+		URL imageURL = this.getClass().getResource("/config/logo.jpeg");
 		if (imageURL == null) {
 			return;
 		}
