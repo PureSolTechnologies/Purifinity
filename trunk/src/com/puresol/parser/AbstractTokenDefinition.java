@@ -151,7 +151,7 @@ public abstract class AbstractTokenDefinition implements TokenDefinition {
 		if (pattern == null) {
 			if (other.pattern != null)
 				return false;
-		} else if (!pattern.equals(other.pattern))
+		} else if (!pattern.toString().equals(other.pattern.toString()))
 			return false;
 		if (publicity == null) {
 			if (other.publicity != null)
@@ -161,7 +161,8 @@ public abstract class AbstractTokenDefinition implements TokenDefinition {
 		if (startPattern == null) {
 			if (other.startPattern != null)
 				return false;
-		} else if (!startPattern.equals(other.startPattern))
+		} else if (!startPattern.toString().equals(
+				other.startPattern.toString()))
 			return false;
 		return true;
 	}

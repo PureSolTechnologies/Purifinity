@@ -102,4 +102,69 @@ public class Token {
 		}
 		return output;
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((definition == null) ? 0 : definition.hashCode());
+		result = prime * result + length;
+		result = prime * result
+				+ ((publicity == null) ? 0 : publicity.hashCode());
+		result = prime * result + startLine;
+		result = prime * result + startPos;
+		result = prime * result + stopLine;
+		result = prime * result + ((text == null) ? 0 : text.hashCode());
+		result = prime * result + tokenID;
+		return result;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Token other = (Token) obj;
+		if (definition == null) {
+			if (other.definition != null)
+				return false;
+		} else if (!definition.equals(other.definition))
+			return false;
+		if (length != other.length)
+			return false;
+		if (publicity == null) {
+			if (other.publicity != null)
+				return false;
+		} else if (!publicity.equals(other.publicity))
+			return false;
+		if (startLine != other.startLine)
+			return false;
+		if (startPos != other.startPos)
+			return false;
+		if (stopLine != other.stopLine)
+			return false;
+		if (text == null) {
+			if (other.text != null)
+				return false;
+		} else if (!text.equals(other.text))
+			return false;
+		if (tokenID != other.tokenID)
+			return false;
+		return true;
+	}
+
 }
