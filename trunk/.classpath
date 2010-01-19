@@ -28,5 +28,7 @@
 	<classpathentry kind="lib" path="lib/mail/smtp.jar"/>
 	<classpathentry kind="lib" path="lib/jboss/jboss-javaee.jar"/>
 	<classpathentry kind="lib" path="lib/jboss/jsp-api.jar"/>
+	<classpathentry kind="lib" path="lib/commons-net/commons-net-2.0.jar"/>
+	<classpathentry kind="lib" path="lib/commons-net/commons-net-ftp-2.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
