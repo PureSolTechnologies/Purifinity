@@ -10,70 +10,72 @@
 
 package com.puresol.coding;
 
+import java.io.File;
+
 import com.puresol.parser.TokenStream;
 
 public class CodeRange implements Comparable<CodeRange> {
 
-    private String file;
-    private CodeRangeType type;
-    private String name;
-    private String text;
-    private TokenStream tokenStream;
-    private int start;
-    private int stop;
+	private File file;
+	private CodeRangeType type;
+	private String name;
+	private String text;
+	private TokenStream tokenStream;
+	private int start;
+	private int stop;
 
-    public CodeRange(String file, CodeRangeType type, String name,
-	    TokenStream tokenStream, int start, int stop) {
-	this.file = file;
-	this.type = type;
-	this.name = name;
-	this.tokenStream = tokenStream;
-	this.start = start;
-	this.stop = stop;
-	createText();
-    }
-
-    private void createText() {
-	text = "";
-	for (int index = start; index <= stop; index++) {
-	    text += tokenStream.get(index).getText();
+	public CodeRange(File file, CodeRangeType type, String name,
+			TokenStream tokenStream, int start, int stop) {
+		this.file = file;
+		this.type = type;
+		this.name = name;
+		this.tokenStream = tokenStream;
+		this.start = start;
+		this.stop = stop;
+		createText();
 	}
-    }
 
-    public String getFile() {
-	return file;
-    }
+	private void createText() {
+		text = "";
+		for (int index = start; index <= stop; index++) {
+			text += tokenStream.get(index).getText();
+		}
+	}
 
-    public CodeRangeType getType() {
-	return type;
-    }
+	public File getFile() {
+		return file;
+	}
 
-    public String getName() {
-	return name;
-    }
+	public CodeRangeType getType() {
+		return type;
+	}
 
-    public String getText() {
-	return text;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public TokenStream getTokenStream() {
-	return tokenStream;
-    }
+	public String getText() {
+		return text;
+	}
 
-    public int getStart() {
-	return start;
-    }
+	public TokenStream getTokenStream() {
+		return tokenStream;
+	}
 
-    public int getStop() {
-	return stop;
-    }
+	public int getStart() {
+		return start;
+	}
 
-    public String toString() {
-	return getType() + ": " + getName() + "\n" + getText();
-    }
+	public int getStop() {
+		return stop;
+	}
 
-    @Override
-    public int compareTo(CodeRange other) {
-	return toString().compareTo(other.toString());
-    }
+	public String toString() {
+		return getType() + ": " + getName() + "\n" + getText();
+	}
+
+	@Override
+	public int compareTo(CodeRange other) {
+		return toString().compareTo(other.toString());
+	}
 }

@@ -37,9 +37,9 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swingx.Application;
 import javax.swingx.Menu;
 import javax.swingx.MenuItem;
-import javax.swingx.SplashWindow;
 import javax.swingx.connect.Slot;
 import javax.swingx.log.LoggingDialog;
+import javax.swingx.progress.SplashWindow;
 
 import org.apache.log4j.Logger;
 

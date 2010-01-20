@@ -1,6 +1,6 @@
 package com.puresol.coding;
 
-public class DummyClassForCodeDuplicationSearch {
+public class DummyClassForDuplicationScannerTest {
 
 	public void method1() {
 		int a = 0;

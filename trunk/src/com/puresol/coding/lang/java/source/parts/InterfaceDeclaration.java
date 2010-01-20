@@ -29,7 +29,7 @@ public class InterfaceDeclaration extends AbstractSourceCodeParser {
 	int startPosition = getStartPositionWithLeadingHidden();
 	int stopPosition = getPositionOfLastVisible();
 	stopPosition = this.getPositionOfNextLineBreak(stopPosition);
-	addCodeRange(new CodeRange(getTokenStream().getName(),
+	addCodeRange(new CodeRange(getTokenStream().getFile(),
 		CodeRangeType.INTERFACE, name, getTokenStream(),
 		startPosition, stopPosition));
     }

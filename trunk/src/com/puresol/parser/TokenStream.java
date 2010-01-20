@@ -1,18 +1,19 @@
 package com.puresol.parser;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class TokenStream {
 
-	private final String name;
+	private final File file;
 	private final ArrayList<Token> tokens = new ArrayList<Token>();
 
-	public TokenStream(String name) {
-		this.name = name;
+	public TokenStream(File file) {
+		this.file = file;
 	}
 
-	public String getName() {
-		return name;
+	public File getFile() {
+		return file;
 	}
 
 	public ArrayList<Token> getTokens() {

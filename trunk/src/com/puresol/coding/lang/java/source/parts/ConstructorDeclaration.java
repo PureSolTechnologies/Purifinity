@@ -21,7 +21,7 @@ public class ConstructorDeclaration extends AbstractSourceCodeParser {
 	int startPosition = getStartPositionWithLeadingHidden();
 	int stopPosition = getPositionOfLastVisible();
 	stopPosition = this.getPositionOfNextLineBreak(stopPosition);
-	addCodeRange(new CodeRange(getTokenStream().getName(),
+	addCodeRange(new CodeRange(getTokenStream().getFile(),
 		CodeRangeType.CONSTRUCTOR, name, getTokenStream(),
 		startPosition, stopPosition));
     }

@@ -31,6 +31,7 @@ public class ProjectAnalysisBrowser extends Panel {
 	private Label directory = null;
 	private TabbedPane tabbedPane = null;
 	private CodeRangeAnalysisBrowser codeRangeBrowser = null;
+	private DuplicationScannerPanel duplicationScanner = null;
 	private HTMLTextPane projectOverview = null;
 
 	public ProjectAnalysisBrowser() {
@@ -50,14 +51,17 @@ public class ProjectAnalysisBrowser extends Panel {
 		add(tabbedPane = new TabbedPane(), BorderLayout.CENTER);
 		tabbedPane.addTab(translator.i18n("Overview"),
 				projectOverview = new HTMLTextPane());
-		tabbedPane.addTab(translator.i18n("Modules"),
+		tabbedPane.addTab(translator.i18n("Code Metrics"),
 				codeRangeBrowser = new CodeRangeAnalysisBrowser());
+		tabbedPane.addTab(translator.i18n("Duplication Scanner"),
+				duplicationScanner = new DuplicationScannerPanel());
 	}
 
 	public void setProjectAnalyser(ProjectAnalyser project) {
 		this.project = project;
 		directory.setText(project.getProjectDirectory().getPath());
 		codeRangeBrowser.setProjectAnalyser(project);
+		duplicationScanner.setProjectAnalyser(project);
 		projectOverview
 				.setText("<html><body>Project Metrics Summary</body></html>");
 	}
@@ -65,7 +69,7 @@ public class ProjectAnalysisBrowser extends Panel {
 	public ProjectAnalyser getProjectAnalyser() {
 		return project;
 	}
-	
+
 	public void refresh() {
 		codeRangeBrowser.refresh();
 	}

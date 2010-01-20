@@ -27,7 +27,7 @@ public class JavaParser extends AbstractSourceCodeParser {
     @Override
     public void scan() throws PartDoesNotMatchException {
 	TokenStream tokenStream = getTokenStream();
-	addCodeRange(new CodeRange(tokenStream.getName(),
+	addCodeRange(new CodeRange(tokenStream.getFile(),
 		CodeRangeType.FILE, translator.i18n("File"), tokenStream,
 		0, tokenStream.getSize() - 1));
 

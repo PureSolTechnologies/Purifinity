@@ -9,25 +9,25 @@ import javax.swingx.data.LineEnd;
 
 public class DefaultPreConditioner extends AbstractPreConditioner {
 
-	private final String name;
+	private final File file;
 
 	public DefaultPreConditioner(File file) throws FileNotFoundException {
 		super(file);
-		this.name = file.getPath();
+		this.file = file;
 	}
 
-	public DefaultPreConditioner(String name, InputStream stream) {
+	public DefaultPreConditioner(File file, InputStream stream) {
 		super(stream);
-		this.name = name;
+		this.file = file;
 	}
 
-	public String getName() {
-		return name;
+	public File getName() {
+		return file;
 	}
 
 	@Override
 	protected void generateTokenStream() throws IOException {
-		TokenStream tokenStream = new TokenStream(name);
+		TokenStream tokenStream = new TokenStream(file);
 		String text = readStream();
 		Token token = new Token(0, TokenPublicity.VISIBLE, 0, text.length(),
 				text, 0, text.split(LineEnd.UNIX.getString()).length - 1, null);

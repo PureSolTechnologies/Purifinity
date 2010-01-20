@@ -30,8 +30,8 @@ public class FortranPreConditioner extends DefaultPreConditioner {
 		super(file);
 	}
 
-	public FortranPreConditioner(String name, InputStream stream) {
-		super(name, stream);
+	public FortranPreConditioner(File file, InputStream stream) {
+		super(file, stream);
 	}
 
 	@Override
