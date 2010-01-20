@@ -138,25 +138,33 @@ public class Lexer {
     private void processVisibleToken(Token token)
 	    throws NoMatchingTokenDefinitionFound {
 	int tokenPos = 0;
-	processVisibleToken(token, tokenPos, tokenId, lineNumber,
-		streamPos);
+	ArrayList<Token> newTokens =
+		processVisibleToken(token, tokenPos, tokenId, lineNumber,
+			streamPos);
+	addTokens(newTokens);
     }
 
-    private void processVisibleToken(Token token, int tokenPos,
-	    int tokenId, int lineNumber, int streamPos)
+    private ArrayList<Token> processVisibleToken(Token token,
+	    int tokenPos, int tokenId, int lineNumber, int streamPos)
 	    throws NoMatchingTokenDefinitionFound {
-	String text = token.getText();
-	if (tokenPos < text.length()) {
-	    for (TokenDefinition definition : tokenDefinitions) {
-		if (tryProcessDefinition(definition, token, tokenPos,
-			tokenId, lineNumber, streamPos)) {
-		    return;
-		}
-	    }
-	    throw new NoMatchingTokenDefinitionFound(
-		    inputStream.getName(), lineNumber, tokenPos, text);
+	if (tokenPos == token.getLength() - 1) {
+	    return new ArrayList<Token>();
 	}
-	return;
+	if (tokenPos > token.getLength() - 1) {
+	    throw new NoMatchingTokenDefinitionFound(
+		    inputStream.getName(), lineNumber, tokenPos, token
+			    .getText());
+	}
+	for (TokenDefinition definition : tokenDefinitions) {
+	    ArrayList<Token> tokens =
+		    tryProcessDefinitionRecursively(definition, token,
+			    tokenPos, tokenId, lineNumber, streamPos);
+	    if (tokens != null) {
+		return tokens;
+	    }
+	}
+	throw new NoMatchingTokenDefinitionFound(inputStream.getName(),
+		lineNumber, tokenPos, token.getText());
     }
 
     /**
@@ -171,32 +179,29 @@ public class Lexer {
      * @return
      * @throws NoMatchingTokenDefinitionFound
      */
-    private boolean tryProcessDefinition(TokenDefinition definition,
-	    Token token, int tokenPos, int tokenId, int lineNumber,
-	    int streamPos) throws NoMatchingTokenDefinitionFound {
+    private ArrayList<Token> tryProcessDefinitionRecursively(
+	    TokenDefinition definition, Token token, int tokenPos,
+	    int tokenId, int lineNumber, int streamPos)
+	    throws NoMatchingTokenDefinitionFound {
 	String text = token.getText();
-	if (logger.isTraceEnabled()) {
-	    logger.trace("Try '" + definition.getClass().getSimpleName());
-	}
 	if (!definition.atStart(text.substring(tokenPos))) {
-	    return false;
-	}
-	if (logger.isTraceEnabled()) {
-	    logger.trace("Possibly found definition for '"
-		    + definition.getTokenAtStart(text.substring(tokenPos))
-		    + "' (" + definition.getClass().getSimpleName() + ")");
+	    return null;
 	}
 	String tokenText =
 		definition.getTokenAtStart(text.substring(tokenPos));
+	if (logger.isTraceEnabled()) {
+	    logger.trace(inputStream.getName() + ":" + lineNumber + ": "
+		    + tokenText);
+	}
 	int numberOfLines = getNumberOfLines(tokenText);
-	outputStream.addTokenAtBegining(new Token(tokenId, definition
-		.getPublicity(), streamPos, tokenText.length(), tokenText,
-		lineNumber, lineNumber + numberOfLines, definition
-			.getClass()));
-	processVisibleToken(token, tokenPos + tokenText.length(),
-		tokenId + 1, lineNumber + numberOfLines, streamPos
-			+ tokenText.length());
-	return true;
+	ArrayList<Token> newTokens =
+		processVisibleToken(token, tokenPos + tokenText.length(),
+			tokenId + 1, lineNumber + numberOfLines, streamPos
+				+ tokenText.length());
+	newTokens.add(0, new Token(tokenId, definition.getPublicity(),
+		streamPos, tokenText.length(), tokenText, lineNumber,
+		lineNumber + numberOfLines, definition.getClass()));
+	return newTokens;
     }
 
     private void processHiddenToken(Token token) {

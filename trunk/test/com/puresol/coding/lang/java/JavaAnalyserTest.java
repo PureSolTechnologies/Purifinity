@@ -23,20 +23,23 @@ import junit.framework.TestCase;
  */
 public class JavaAnalyserTest extends TestCase {
 
-	@Test
-	public void test() {
-		Logger.getRootLogger().setLevel(Level.TRACE);
-		JavaAnalyser analyser = new JavaAnalyser(new File("src"), new File(
-				"apps/CodeAnalysis.java"));
-		ArrayList<CodeRange> codeRanges = analyser.getCodeRanges();
-		Assert.assertNotNull(codeRanges);
-		for (CodeRange codeRange : codeRanges) {
-			System.out.println(codeRange.toString());
-		}
-		Assert.assertTrue(codeRanges.size() > 1);
+    @Test
+    public void test() {
+	Logger.getRootLogger().setLevel(Level.TRACE);
+	JavaAnalyser analyser =
+		new JavaAnalyser(
+			new File("test"),
+			new File(
+				"com/puresol/coding/lang/java/samples/RandomNumbers.java"));
+	ArrayList<CodeRange> codeRanges = analyser.getCodeRanges();
+	Assert.assertNotNull(codeRanges);
+	for (CodeRange codeRange : codeRanges) {
+	    System.out.println(codeRange.toString());
 	}
+	Assert.assertTrue(codeRanges.size() > 1);
+    }
 
-	public static void main(String[] args) {
-		new JavaAnalyserTest().test();
-	}
+    public static void main(String[] args) {
+	new JavaAnalyserTest().test();
+    }
 }

@@ -13,7 +13,7 @@ public class CodeDuplicationSearchTest extends TestCase {
 		ProjectAnalyser projectAnalyser = new ProjectAnalyser(new File(
 				"test/com/puresol/coding"),
 				"DummyClassForCodeDuplicationSearch.java");
-		projectAnalyser.update();
+		projectAnalyser.run();
 		CodeDuplicationSearch search = new CodeDuplicationSearch(
 				projectAnalyser);
 		search.scan();

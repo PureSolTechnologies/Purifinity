@@ -42,5 +42,4 @@ public class JavaLexerTest {
 	    Assert.fail("No exception was expected!");
 	}
     }
-
 }
