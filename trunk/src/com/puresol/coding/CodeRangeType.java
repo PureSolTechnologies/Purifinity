@@ -17,17 +17,27 @@ package com.puresol.coding;
  * 
  */
 public enum CodeRangeType {
-	FILE("file"), CLASS("class"), INTERFACE("interface"), ENUMERATION(
-			"enumerator"), CONSTRUCTOR("constructor"), METHOD("method"), FUNCTION(
-			"function");
+    FILE("file"), CLASS("class"), INTERFACE("interface"), ENUMERATION(
+	    "enumerator"), CONSTRUCTOR("constructor"), METHOD("method"), FUNCTION(
+	    "function");
 
-	private String name;
+    private String name;
 
-	private CodeRangeType(String name) {
-		this.name = name;
+    private CodeRangeType(String name) {
+	this.name = name;
+    }
+
+    public String getName() {
+	return name;
+    }
+
+    public boolean isRunnableCodeSegment() {
+	if (this == METHOD) {
+	    return true;
 	}
-
-	public String getName() {
-		return name;
+	if (this == FUNCTION) {
+	    return true;
 	}
+	return false;
+    }
 }

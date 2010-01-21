@@ -54,6 +54,7 @@ public class ProjectAnalyser implements ProgressObservable {
 		if (progressMonitor != null) {
 			progressMonitor.setRange(0, files.size());
 			progressMonitor.setStatus(0);
+			progressMonitor.showProgressPercent();
 		}
 		for (int index = 0; index < files.size(); index++) {
 			File file = files.get(index);
