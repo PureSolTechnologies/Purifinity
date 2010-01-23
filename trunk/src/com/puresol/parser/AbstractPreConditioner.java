@@ -16,31 +16,31 @@ import java.io.InputStream;
  */
 public abstract class AbstractPreConditioner {
 
-    private InputStream inputStream = null;
-    private TokenStream tokenStream = null;
+	private InputStream inputStream = null;
+	private TokenStream tokenStream = null;
 
-    public AbstractPreConditioner(File file) throws FileNotFoundException {
-	this.inputStream = new FileInputStream(file);
-    }
-
-    public AbstractPreConditioner(InputStream stream) {
-	this.inputStream = stream;
-    }
-
-    public InputStream getStream() {
-	return inputStream;
-    }
-
-    public TokenStream getTokenStream() throws IOException {
-	if (tokenStream == null) {
-	    generateTokenStream();
+	public AbstractPreConditioner(File file) throws FileNotFoundException {
+		this.inputStream = new FileInputStream(file);
 	}
-	return tokenStream;
-    }
 
-    protected void setTokenStream(TokenStream stream) {
-	this.tokenStream = stream;
-    }
+	public AbstractPreConditioner(InputStream stream) {
+		this.inputStream = stream;
+	}
 
-    protected abstract void generateTokenStream() throws IOException;
+	public InputStream getInputStream() {
+		return inputStream;
+	}
+
+	public TokenStream getTokenStream() throws IOException {
+		if (tokenStream == null) {
+			generateTokenStream();
+		}
+		return tokenStream;
+	}
+
+	protected void setTokenStream(TokenStream stream) {
+		this.tokenStream = stream;
+	}
+
+	protected abstract void generateTokenStream() throws IOException;
 }

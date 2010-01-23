@@ -4,12 +4,21 @@ public class Duplication implements Comparable<Duplication> {
 
 	private CodeRange left;
 	private CodeRange right;
-	private int rangeSize;
+	private int matchSize;
+	private double correlation;
 
-	public Duplication(CodeRange left, CodeRange right, int rangeSize) {
+	public Duplication(CodeRange left, CodeRange right, int matchSize) {
 		this.left = left;
 		this.right = right;
-		this.rangeSize = rangeSize;
+		this.matchSize = matchSize;
+		init();
+	}
+
+	private void init() {
+		correlation = left.getStop() - left.getStart();
+		correlation += right.getStop() - right.getStart();
+		correlation /= 2;
+		correlation = (double) matchSize / correlation;
 	}
 
 	public CodeRange getLeft() {
@@ -18,6 +27,14 @@ public class Duplication implements Comparable<Duplication> {
 
 	public CodeRange getRight() {
 		return right;
+	}
+
+	public int getMatchSize() {
+		return matchSize;
+	}
+
+	public double getCorrelation() {
+		return correlation;
 	}
 
 	/*
@@ -30,7 +47,7 @@ public class Duplication implements Comparable<Duplication> {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((left == null) ? 0 : left.hashCode());
-		result = prime * result + rangeSize;
+		result = prime * result + matchSize;
 		result = prime * result + ((right == null) ? 0 : right.hashCode());
 		return result;
 	}
@@ -54,7 +71,7 @@ public class Duplication implements Comparable<Duplication> {
 				return false;
 		} else if (!left.equals(other.left))
 			return false;
-		if (rangeSize != other.rangeSize)
+		if (matchSize != other.matchSize)
 			return false;
 		if (right == null) {
 			if (other.right != null)
@@ -66,10 +83,10 @@ public class Duplication implements Comparable<Duplication> {
 
 	@Override
 	public int compareTo(Duplication other) {
-		if (this.rangeSize < other.rangeSize) {
+		if (this.matchSize < other.matchSize) {
 			return -1;
 		}
-		if (this.rangeSize > other.rangeSize) {
+		if (this.matchSize > other.matchSize) {
 			return +1;
 		}
 		return 0;

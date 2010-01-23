@@ -36,7 +36,7 @@ public class FortranPreConditioner extends DefaultPreConditioner {
 
 	@Override
 	protected void generateTokenStream() throws IOException {
-		TokenStream tokenStream = new TokenStream(getName());
+		TokenStream tokenStream = new TokenStream(getFile());
 		setTokenStream(tokenStream);
 		String line = readLine();
 		if ((line.getBytes()[0] == '*') || (line.getBytes()[0] == 'c')
@@ -117,7 +117,7 @@ public class FortranPreConditioner extends DefaultPreConditioner {
 	private String readLine() {
 		try {
 			String line = "";
-			InputStream stream = getStream();
+			InputStream stream = getInputStream();
 			int data;
 			do {
 				data = stream.read();

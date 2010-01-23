@@ -7,22 +7,44 @@ import java.io.InputStream;
 
 import javax.swingx.data.LineEnd;
 
+import com.puresol.utils.Files;
+
 public class DefaultPreConditioner extends AbstractPreConditioner {
 
+	private final File directory;
 	private final File file;
+
+	public DefaultPreConditioner(File directory, File file)
+			throws FileNotFoundException {
+		super(Files.addPaths(directory, file));
+		this.directory = directory;
+		this.file = file;
+	}
+
+	public DefaultPreConditioner(File directory, File file, InputStream stream) {
+		super(stream);
+		this.directory = directory;
+		this.file = file;
+	}
 
 	public DefaultPreConditioner(File file) throws FileNotFoundException {
 		super(file);
+		this.directory = null;
 		this.file = file;
 	}
 
 	public DefaultPreConditioner(File file, InputStream stream) {
 		super(stream);
+		this.directory = null;
 		this.file = file;
 	}
 
-	public File getName() {
+	public File getFile() {
 		return file;
+	}
+
+	public File getDirectory() {
+		return directory;
 	}
 
 	@Override
@@ -37,7 +59,7 @@ public class DefaultPreConditioner extends AbstractPreConditioner {
 
 	private String readStream() throws IOException {
 		StringBuffer text = new StringBuffer();
-		InputStream stream = getStream();
+		InputStream stream = getInputStream();
 		byte[] buffer = new byte[1024];
 		int size;
 		while ((size = stream.read(buffer)) >= 0) {
