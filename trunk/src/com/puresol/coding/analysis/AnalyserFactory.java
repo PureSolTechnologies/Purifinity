@@ -20,82 +20,90 @@ import java.util.ArrayList;
 import org.apache.log4j.Logger;
 
 import com.puresol.coding.lang.LanguageNotSupportedException;
+import com.puresol.coding.lang.cpp.CPPAnalyser;
 import com.puresol.coding.lang.fortran.FortranAnalyser;
 import com.puresol.coding.lang.java.JavaAnalyser;
 import com.puresol.exceptions.StrangeSituationException;
+import com.puresol.utils.Files;
 
 /**
- * This factory creates an Analyser class for a given File in dependence for its
- * implementation language.
+ * This factory creates an Analyser class for a given File in dependence
+ * for its implementation language.
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
 public class AnalyserFactory {
 
-	private static final Logger logger = Logger
-			.getLogger(AnalyserFactory.class);
+    private static final Logger logger =
+	    Logger.getLogger(AnalyserFactory.class);
 
-	private static ArrayList<Class<? extends Analyser>> analysers;
-	static {
-		analysers = new ArrayList<Class<? extends Analyser>>();
-		analysers.add(JavaAnalyser.class);
-		analysers.add(FortranAnalyser.class);
-	}
+    private static ArrayList<Class<? extends Analyser>> analysers;
+    static {
+	analysers = new ArrayList<Class<? extends Analyser>>();
+	analysers.add(JavaAnalyser.class);
+	analysers.add(CPPAnalyser.class);
+	analysers.add(FortranAnalyser.class);
+    }
 
-	public static Analyser createAnalyser(File projectDirectory, File file)
-			throws LanguageNotSupportedException, FileNotFoundException {
-		logger.info("Create analyser for file '" + file.getPath() + "'...");
-		checkFile(projectDirectory, file);
-		return create(projectDirectory, file);
-	}
+    public static Analyser createAnalyser(File projectDirectory, File file)
+	    throws LanguageNotSupportedException, FileNotFoundException {
+	logger
+		.info("Create analyser for file '" + file.getPath()
+			+ "'...");
+	checkFile(projectDirectory, file);
+	return create(projectDirectory, file);
+    }
 
-	private static void checkFile(File projectDirectory, File file)
-			throws FileNotFoundException {
-		if (!new File(projectDirectory.getPath() + "/" + file.getPath())
-				.exists()) {
-			logger.warn("File '" + file.getPath() + "' is not existing!");
-			throw new FileNotFoundException("File '" + file.getPath()
-					+ "' is not existing!");
-		}
+    private static void checkFile(File projectDirectory, File file)
+	    throws FileNotFoundException {
+	if (!Files.addPaths(projectDirectory, file).exists()) {
+	    logger.warn("File '" + file.getPath() + "' is not existing!");
+	    throw new FileNotFoundException("File '" + file.getPath()
+		    + "' is not existing!");
 	}
+    }
 
-	private static Analyser create(File projectDirectory, File file)
-			throws LanguageNotSupportedException {
-		for (Class<? extends Analyser> analyserClass : analysers) {
-			Analyser analyser = checkAndCreate(analyserClass, projectDirectory,
-					file);
-			if (analyser != null) {
-				return analyser;
-			}
-		}
-		logger.warn("No analyser for file '" + file.getPath() + "' found!");
-		throw new LanguageNotSupportedException(
-				"No coding language found for file " + file.getPath());
+    private static Analyser create(File projectDirectory, File file)
+	    throws LanguageNotSupportedException {
+	for (Class<? extends Analyser> analyserClass : analysers) {
+	    Analyser analyser =
+		    checkAndCreate(analyserClass, projectDirectory, file);
+	    if (analyser != null) {
+		return analyser;
+	    }
 	}
+	logger
+		.warn("No analyser for file '" + file.getPath()
+			+ "' found!");
+	throw new LanguageNotSupportedException(
+		"No coding language found for file " + file.getPath());
+    }
 
-	private static Analyser checkAndCreate(Class<? extends Analyser> clazz,
-			File projectDirectory, File file) {
-		try {
-			Method isSuitable = clazz.getMethod("isSuitable", File.class);
-			if (!(Boolean) isSuitable.invoke(null, file)) {
-				return null;
-			}
-			Constructor<?> constructor = clazz.getConstructor(File.class,
-					File.class);
-			return (Analyser) constructor.newInstance(projectDirectory, file);
-		} catch (SecurityException e) {
-			throw new StrangeSituationException(e);
-		} catch (NoSuchMethodException e) {
-			throw new StrangeSituationException(e);
-		} catch (IllegalArgumentException e) {
-			throw new StrangeSituationException(e);
-		} catch (IllegalAccessException e) {
-			throw new StrangeSituationException(e);
-		} catch (InvocationTargetException e) {
-			throw new StrangeSituationException(e);
-		} catch (InstantiationException e) {
-			throw new StrangeSituationException(e);
-		}
+    private static Analyser checkAndCreate(
+	    Class<? extends Analyser> clazz, File projectDirectory,
+	    File file) {
+	try {
+	    Method isSuitable = clazz.getMethod("isSuitable", File.class);
+	    if (!(Boolean) isSuitable.invoke(null, file)) {
+		return null;
+	    }
+	    Constructor<?> constructor =
+		    clazz.getConstructor(File.class, File.class);
+	    return (Analyser) constructor.newInstance(projectDirectory,
+		    file);
+	} catch (SecurityException e) {
+	    throw new StrangeSituationException(e);
+	} catch (NoSuchMethodException e) {
+	    throw new StrangeSituationException(e);
+	} catch (IllegalArgumentException e) {
+	    throw new StrangeSituationException(e);
+	} catch (IllegalAccessException e) {
+	    throw new StrangeSituationException(e);
+	} catch (InvocationTargetException e) {
+	    throw new StrangeSituationException(e);
+	} catch (InstantiationException e) {
+	    throw new StrangeSituationException(e);
 	}
+    }
 }

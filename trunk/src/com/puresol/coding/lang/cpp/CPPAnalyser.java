@@ -1,6 +1,6 @@
 /***************************************************************************
  *
- *   FortranAnalyser.java
+ *   JavaAnalyser.java
  *   -------------------
  *   copyright            : (c) 2009 by PureSol-Technologies
  *   author               : Rick-Rainer Ludwig
@@ -8,10 +8,9 @@
  *
  ***************************************************************************/
 
-package com.puresol.coding.lang.fortran;
+package com.puresol.coding.lang.cpp;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.apache.log4j.Logger;
@@ -19,18 +18,24 @@ import org.apache.log4j.Logger;
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.analysis.AbstractAnalyser;
 import com.puresol.coding.lang.Language;
-import com.puresol.coding.lang.fortran.metrics.CodeRangeMetrics4Fortran;
+import com.puresol.coding.lang.cpp.metrics.CodeRangeMetrics4CPP;
+import com.puresol.parser.DefaultPreConditioner;
 import com.puresol.parser.NoMatchingTokenDefinitionFound;
 import com.puresol.parser.PartDoesNotMatchException;
 import com.puresol.parser.TokenStream;
 
-public class FortranAnalyser extends AbstractAnalyser {
+/**
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
+public class CPPAnalyser extends AbstractAnalyser {
 
     private static final Logger logger =
-	    Logger.getLogger(FortranAnalyser.class);
+	    Logger.getLogger(CPPAnalyser.class);
 
     private static final String[] FILE_SUFFIXES =
-	    { ".f", ".f77", ".f90", ".f95" };
+	    { ".h", ".c", ".hpp", ".cpp", ".hxx", ".cxx" };
 
     public static boolean isSuitable(File file) {
 	String name = file.getName();
@@ -48,24 +53,22 @@ public class FortranAnalyser extends AbstractAnalyser {
      * @param A
      *            file to be analysed.
      */
-    public FortranAnalyser(File projectDirectory, File file) {
+    public CPPAnalyser(File projectDirectory, File file) {
 	super(projectDirectory, file);
 	parse();
     }
 
     private void parse() {
 	try {
-	    FortranLexer lexer =
-		    new FortranLexer(new FortranPreConditioner(new File(
-			    getProjectDirectory().toString() + "/"
-				    + getFile().toString()))
-			    .getTokenStream());
-	    TokenStream tokenStream = lexer.getTokenStream();
-	    FortranParser parser = new FortranParser(tokenStream);
+	    DefaultPreConditioner conditioner =
+		    new DefaultPreConditioner(getProjectDirectory(),
+			    getFile());
+	    TokenStream tokenStream = conditioner.getTokenStream();
+	    CPPLexer lexer = new CPPLexer(tokenStream);
+	    tokenStream = lexer.getTokenStream();
+	    CPPParser parser = new CPPParser(tokenStream);
 	    parser.scan();
 	    addCodeRanges(parser.getCodeRanges());
-	} catch (FileNotFoundException e) {
-	    logger.error(e.getMessage(), e);
 	} catch (IOException e) {
 	    logger.error(e.getMessage(), e);
 	} catch (NoMatchingTokenDefinitionFound e) {
@@ -79,11 +82,11 @@ public class FortranAnalyser extends AbstractAnalyser {
     protected void calculate() {
 	clearAllMetrics();
 	for (CodeRange codeRange : getCodeRanges()) {
-	    addMetrics(codeRange, new CodeRangeMetrics4Fortran(codeRange));
+	    addMetrics(codeRange, new CodeRangeMetrics4CPP(codeRange));
 	}
     }
 
     public Language getLanguage() {
-	return Language.FORTRAN;
+	return Language.JAVA;
     }
 }
