@@ -12,70 +12,78 @@ package com.puresol.coding;
 
 import java.io.File;
 
+import com.puresol.coding.lang.Language;
 import com.puresol.parser.TokenStream;
 
 public class CodeRange implements Comparable<CodeRange> {
 
-	private File file;
-	private CodeRangeType type;
-	private String name;
-	private String text;
-	private TokenStream tokenStream;
-	private int start;
-	private int stop;
+    private final File file;
+    private final Language language;
+    private final CodeRangeType type;
+    private final String name;
+    private final String text;
+    private final TokenStream tokenStream;
+    private final int start;
+    private final int stop;
 
-	public CodeRange(File file, CodeRangeType type, String name,
-			TokenStream tokenStream, int start, int stop) {
-		this.file = file;
-		this.type = type;
-		this.name = name;
-		this.tokenStream = tokenStream;
-		this.start = start;
-		this.stop = stop;
-		createText();
-	}
+    public CodeRange(File file, Language language, CodeRangeType type,
+	    String name, TokenStream tokenStream, int start, int stop) {
+	this.file = file;
+	this.language = language;
+	this.type = type;
+	this.name = name;
+	this.tokenStream = tokenStream;
+	this.start = start;
+	this.stop = stop;
+	this.text = createText();
+    }
 
-	private void createText() {
-		text = "";
-		for (int index = start; index <= stop; index++) {
-			text += tokenStream.get(index).getText();
-		}
+    private String createText() {
+	String text = "";
+	for (int index = start; index <= stop; index++) {
+	    text += tokenStream.get(index).getText();
 	}
+	return text;
+    }
 
-	public File getFile() {
-		return file;
-	}
+    public File getFile() {
+	return file;
+    }
 
-	public CodeRangeType getType() {
-		return type;
-	}
+    public Language getLanguage() {
+	return language;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public CodeRangeType getType() {
+	return type;
+    }
 
-	public String getText() {
-		return text;
-	}
+    public String getName() {
+	return name;
+    }
 
-	public TokenStream getTokenStream() {
-		return tokenStream;
-	}
+    public String getText() {
+	return text;
+    }
 
-	public int getStart() {
-		return start;
-	}
+    public TokenStream getTokenStream() {
+	return tokenStream;
+    }
 
-	public int getStop() {
-		return stop;
-	}
+    public int getStart() {
+	return start;
+    }
 
-	public String toString() {
-		return getType() + ": " + getName() + "\n" + getText();
-	}
+    public int getStop() {
+	return stop;
+    }
 
-	@Override
-	public int compareTo(CodeRange other) {
-		return toString().compareTo(other.toString());
-	}
+    public String toString() {
+	return getType() + ": " + getName() + "\n" + getText();
+    }
+
+    @Override
+    public int compareTo(CodeRange other) {
+	return toString().compareTo(other.toString());
+    }
 }

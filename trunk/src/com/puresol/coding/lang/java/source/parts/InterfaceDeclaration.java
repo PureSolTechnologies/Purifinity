@@ -1,8 +1,8 @@
 package com.puresol.coding.lang.java.source.parts;
 
 import com.puresol.coding.AbstractSourceCodeParser;
-import com.puresol.coding.CodeRange;
 import com.puresol.coding.CodeRangeType;
+import com.puresol.coding.lang.Language;
 import com.puresol.coding.lang.java.source.keywords.ExtendsKeyword;
 import com.puresol.coding.lang.java.source.keywords.InterfaceKeyword;
 import com.puresol.coding.lang.java.source.literals.IdLiteral;
@@ -29,8 +29,7 @@ public class InterfaceDeclaration extends AbstractSourceCodeParser {
 	int startPosition = getStartPositionWithLeadingHidden();
 	int stopPosition = getPositionOfLastVisible();
 	stopPosition = this.getPositionOfNextLineBreak(stopPosition);
-	addCodeRange(new CodeRange(getTokenStream().getFile(),
-		CodeRangeType.INTERFACE, name, getTokenStream(),
-		startPosition, stopPosition));
+	addCodeRange(Language.JAVA, CodeRangeType.INTERFACE, name,
+		startPosition, stopPosition);
     }
 }

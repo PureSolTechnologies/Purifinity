@@ -1,10 +1,8 @@
 package com.puresol.coding.lang.cpp;
 
-import javax.i18n4j.Translator;
-
 import com.puresol.coding.AbstractSourceCodeParser;
-import com.puresol.coding.CodeRange;
 import com.puresol.coding.CodeRangeType;
+import com.puresol.coding.lang.Language;
 import com.puresol.coding.lang.java.source.parts.ClassDeclaration;
 import com.puresol.coding.lang.java.source.parts.EnumDeclaration;
 import com.puresol.coding.lang.java.source.parts.Import;
@@ -16,9 +14,6 @@ import com.puresol.parser.TokenStream;
 
 public class CPPParser extends AbstractSourceCodeParser {
 
-    private static final Translator translator =
-	    Translator.getTranslator(CPPParser.class);
-
     public CPPParser(TokenStream tokenStream) {
 	setTokenStream(tokenStream);
 	setStartPosition(0);
@@ -27,9 +22,8 @@ public class CPPParser extends AbstractSourceCodeParser {
     @Override
     public void scan() throws PartDoesNotMatchException {
 	TokenStream tokenStream = getTokenStream();
-	addCodeRange(new CodeRange(tokenStream.getFile(),
-		CodeRangeType.FILE, translator.i18n("File"), tokenStream,
-		0, tokenStream.getSize() - 1));
+	addCodeRange(Language.CPP, CodeRangeType.FILE, 0, tokenStream
+		.getSize() - 1);
 
 	try {
 	    moveForward(0);

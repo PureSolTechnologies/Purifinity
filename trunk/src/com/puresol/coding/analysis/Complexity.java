@@ -10,28 +10,35 @@
 
 package com.puresol.coding.analysis;
 
-import com.puresol.exceptions.StrangeSituationException;
+import javax.i18n4j.Translator;
+
+import com.puresol.data.Identifiable;
 
 /**
  * This enumeration stands for a complexity. This was derived from the
- * categories of the CoCoMo model. The complexity is defined in three levels:
- * low, medium and high complexity.
+ * categories of the CoCoMo model. The complexity is defined in three
+ * levels: low, medium and high complexity.
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public enum Complexity {
-	LOW, MEDIUM, HIGH;
+public enum Complexity implements Identifiable {
+    LOW, MEDIUM, HIGH;
 
-	public String toString() {
-		if (this == LOW) {
-			return "low";
-		} else if (this == MEDIUM) {
-			return "medium";
-		} else if (this == HIGH) {
-			return "high";
-		}
-		throw new StrangeSituationException(
-				"Here is a text for a complexity missing!");
+    private static final Translator translator =
+	    Translator.getTranslator(Complexity.class);
+
+    @Override
+    public String getIdentifier() {
+	if (this == LOW) {
+	    return translator.i18n("low");
 	}
+	if (this == MEDIUM) {
+	    return translator.i18n("medium");
+	}
+	if (this == HIGH) {
+	    return translator.i18n("high");
+	}
+	return null;
+    }
 }

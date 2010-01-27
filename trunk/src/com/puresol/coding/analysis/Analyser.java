@@ -25,32 +25,25 @@ import com.puresol.coding.lang.Language;
  */
 public interface Analyser {
 
-	/**
-	 * Returns the language of the file analysed.
-	 * 
-	 * @return The language is returned.
-	 */
-	public Language getLanguage();
+    /**
+     * Returns the language of the file analysed.
+     * 
+     * @return The language is returned.
+     */
+    public Language getLanguage();
 
-	/**
-	 * The file which was analysed is returned.
-	 * 
-	 * @return The file is returned.
-	 */
-	public File getFile();
+    /**
+     * The file which was analysed is returned.
+     * 
+     * @return The file is returned.
+     */
+    public File getFile();
 
-	/**
-	 * This method returns all code ranges analysed within the analysed file.
-	 * 
-	 * @return
-	 */
-	public ArrayList<CodeRange> getCodeRanges();
-
-	/**
-	 * Returns the metrics for a single code range.
-	 * 
-	 * @param codeRange
-	 * @return
-	 */
-	public CodeRangeMetrics getMetrics(CodeRange codeRange);
+    /**
+     * This method returns all code ranges analysed within the analysed
+     * file.
+     * 
+     * @return
+     */
+    public ArrayList<CodeRange> getCodeRanges();
 }

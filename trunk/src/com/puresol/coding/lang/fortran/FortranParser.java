@@ -1,18 +1,13 @@
 package com.puresol.coding.lang.fortran;
 
-import javax.i18n4j.Translator;
-
 import com.puresol.coding.AbstractSourceCodeParser;
-import com.puresol.coding.CodeRange;
 import com.puresol.coding.CodeRangeType;
+import com.puresol.coding.lang.Language;
 import com.puresol.parser.EndOfTokenStreamException;
 import com.puresol.parser.PartDoesNotMatchException;
 import com.puresol.parser.TokenStream;
 
 public class FortranParser extends AbstractSourceCodeParser {
-
-    private static final Translator translator =
-	    Translator.getTranslator(FortranParser.class);
 
     public FortranParser(TokenStream tokenStream) {
 	setTokenStream(tokenStream);
@@ -22,9 +17,8 @@ public class FortranParser extends AbstractSourceCodeParser {
     @Override
     public void scan() throws PartDoesNotMatchException {
 	TokenStream tokenStream = getTokenStream();
-	addCodeRange(new CodeRange(tokenStream.getFile(),
-		CodeRangeType.FILE, translator.i18n("File"), tokenStream,
-		0, tokenStream.getSize() - 1));
+	addCodeRange(Language.FORTRAN, CodeRangeType.FILE, 0, tokenStream
+		.getSize() - 1);
 
 	try {
 	    moveForward(0);

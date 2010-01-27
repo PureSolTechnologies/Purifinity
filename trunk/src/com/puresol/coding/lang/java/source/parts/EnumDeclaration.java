@@ -1,8 +1,8 @@
 package com.puresol.coding.lang.java.source.parts;
 
 import com.puresol.coding.AbstractSourceCodeParser;
-import com.puresol.coding.CodeRange;
 import com.puresol.coding.CodeRangeType;
+import com.puresol.coding.lang.Language;
 import com.puresol.coding.lang.java.source.keywords.EnumKeyword;
 import com.puresol.coding.lang.java.source.literals.IdLiteral;
 import com.puresol.coding.lang.java.source.symbols.Comma;
@@ -34,8 +34,7 @@ public class EnumDeclaration extends AbstractSourceCodeParser {
 	int startPosition = getStartPositionWithLeadingHidden();
 	int stopPosition = getPositionOfLastVisible();
 	stopPosition = this.getPositionOfNextLineBreak(stopPosition);
-	addCodeRange(new CodeRange(getTokenStream().getFile(),
-		CodeRangeType.ENUMERATION, name, getTokenStream(),
-		startPosition, stopPosition));
+	addCodeRange(Language.JAVA, CodeRangeType.ENUMERATION, name,
+		startPosition, stopPosition);
     }
 }

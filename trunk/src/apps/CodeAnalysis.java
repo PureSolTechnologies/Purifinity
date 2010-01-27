@@ -45,8 +45,8 @@ public class CodeAnalysis extends PureSolApplication {
 	private static final Translator translator = Translator
 			.getTranslator(CodeAnalysis.class);
 
-	private ProjectAnalysisBrowser browser = null;
 	private ProjectAnalyser analyser = null;
+	private ProjectAnalysisBrowser browser = null;
 	private ToolBar toolBar = null;
 	private ToggleButton slocButton = null;
 	private ToggleButton mcCabeButton = null;

@@ -15,10 +15,8 @@ import java.io.IOException;
 
 import org.apache.log4j.Logger;
 
-import com.puresol.coding.CodeRange;
 import com.puresol.coding.analysis.AbstractAnalyser;
 import com.puresol.coding.lang.Language;
-import com.puresol.coding.lang.cpp.metrics.CodeRangeMetrics4CPP;
 import com.puresol.parser.DefaultPreConditioner;
 import com.puresol.parser.NoMatchingTokenDefinitionFound;
 import com.puresol.parser.PartDoesNotMatchException;
@@ -75,14 +73,6 @@ public class CPPAnalyser extends AbstractAnalyser {
 	    logger.error(e.getMessage(), e);
 	} catch (PartDoesNotMatchException e) {
 	    logger.error(e.getMessage(), e);
-	}
-    }
-
-    @Override
-    protected void calculate() {
-	clearAllMetrics();
-	for (CodeRange codeRange : getCodeRanges()) {
-	    addMetrics(codeRange, new CodeRangeMetrics4CPP(codeRange));
 	}
     }
 

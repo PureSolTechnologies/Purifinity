@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
+import com.puresol.coding.lang.Language;
 import com.puresol.parser.AbstractParser;
 import com.puresol.parser.EndOfTokenStreamException;
 import com.puresol.parser.Parser;
@@ -19,7 +20,17 @@ public abstract class AbstractSourceCodeParser extends AbstractParser
 
     private ArrayList<CodeRange> codeRanges = new ArrayList<CodeRange>();
 
-    protected void addCodeRange(CodeRange codeRange) {
+    protected void addCodeRange(Language language,
+	    CodeRangeType codeRangeType, int start, int stop) {
+	addCodeRange(language, codeRangeType, codeRangeType
+		.getIdentifier(), start, stop);
+    }
+
+    protected void addCodeRange(Language language,
+	    CodeRangeType codeRangeType, String name, int start, int stop) {
+	CodeRange codeRange =
+		new CodeRange(getTokenStream().getFile(), language,
+			codeRangeType, name, getTokenStream(), start, stop);
 	if (!codeRanges.contains(codeRange)) {
 	    codeRanges.add(codeRange);
 	}
