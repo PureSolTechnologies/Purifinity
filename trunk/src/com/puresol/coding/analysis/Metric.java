@@ -18,7 +18,7 @@ import com.puresol.coding.CodeRange;
  * @author Rick-Rainer Ludwig
  * 
  */
-public interface Analysis {
+public interface Metric {
 
 	public CodeRange getCodeRange();
 
