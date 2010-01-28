@@ -2,7 +2,7 @@ package com.puresol.coding.analysis.reports;
 
 import javax.i18n4j.Translator;
 
-import com.puresol.coding.analysis.AbstractEntropyMetric;
+import com.puresol.coding.analysis.EntropyMetric;
 import com.puresol.html.HTMLStandards;
 
 public class EntropyReport {
@@ -10,7 +10,7 @@ public class EntropyReport {
 	private static final Translator translator = Translator
 			.getTranslator(EntropyReport.class);
 
-	public static String getReport(AbstractEntropyMetric entropy) {
+	public static String getReport(EntropyMetric entropy) {
 		String report = "n\t" + Math.round(entropy.get_n() * 100.0) / 100.0
 				+ "\t" + translator.i18n("Vocabulary size") + "\n";
 		report += "N\t" + Math.round(entropy.get_N() * 100.0) / 100.0 + "\t"
@@ -34,12 +34,12 @@ public class EntropyReport {
 		return report;
 	}
 
-	public static String getHTMLReport(AbstractEntropyMetric entropy) {
+	public static String getHTMLReport(EntropyMetric entropyMetric) {
 		String report = "<h2>Entropy from Information Theory</h2>";
-		if (entropy != null) {
-			report += ReportStandards.getQualitySign(entropy);
+		if (entropyMetric != null) {
+			report += ReportStandards.getQualitySign(entropyMetric);
 			report += "<br/>";
-			report += HTMLStandards.convertTSVToTable(getReport(entropy));
+			report += HTMLStandards.convertTSVToTable(getReport(entropyMetric));
 		} else {
 			report += "<p>No measureable for this kind of code range!</p>";
 		}

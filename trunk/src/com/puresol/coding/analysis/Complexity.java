@@ -23,22 +23,28 @@ import com.puresol.data.Identifiable;
  * 
  */
 public enum Complexity implements Identifiable {
-    LOW, MEDIUM, HIGH;
+    LOW {
+	@Override
+	public String getIdentifier() {
+	    return translator.i18n("low");
+	}
+    },
+    MEDIUM {
+	@Override
+	public String getIdentifier() {
+	    return translator.i18n("medium");
+	}
+    },
+    HIGH {
+	@Override
+	public String getIdentifier() {
+	    return translator.i18n("high");
+	}
+    };
 
     private static final Translator translator =
 	    Translator.getTranslator(Complexity.class);
 
     @Override
-    public String getIdentifier() {
-	if (this == LOW) {
-	    return translator.i18n("low");
-	}
-	if (this == MEDIUM) {
-	    return translator.i18n("medium");
-	}
-	if (this == HIGH) {
-	    return translator.i18n("high");
-	}
-	return null;
-    }
+    public abstract String getIdentifier();
 }

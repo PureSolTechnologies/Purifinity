@@ -20,28 +20,38 @@ import com.puresol.data.Identifiable;
  * 
  */
 public enum Language implements Identifiable {
-    CPP, FORTRAN, JAVA, PERL, PHP, TEXT;
-
-    @Override
-    public String getIdentifier() {
-	if (this == CPP) {
+    CPP {
+	public String getIdentifier() {
 	    return "C/C++";
 	}
-	if (this == FORTRAN) {
+    },
+    FORTRAN {
+	public String getIdentifier() {
 	    return "Fortran";
 	}
-	if (this == JAVA) {
+    },
+    JAVA {
+	public String getIdentifier() {
 	    return "Java";
 	}
-	if (this == PERL) {
+    },
+    PERL {
+	public String getIdentifier() {
 	    return "Perl";
 	}
-	if (this == PHP) {
+    },
+    PHP {
+	public String getIdentifier() {
 	    return "PHP";
 	}
-	if (this == TEXT) {
+    },
+    TEXT {
+	public String getIdentifier() {
 	    return "Text";
 	}
-	return null;
-    }
+    };
+
+    @Override
+    public abstract String getIdentifier();
+
 }

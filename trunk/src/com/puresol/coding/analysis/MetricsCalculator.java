@@ -8,16 +8,10 @@ import java.util.Hashtable;
 import javax.swingx.progress.ProgressObservable;
 import javax.swingx.progress.ProgressObserver;
 
-import org.apache.log4j.Logger;
-
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.ProjectAnalyser;
-import com.puresol.coding.lang.LanguageNotSupportedException;
 
 public class MetricsCalculator implements ProgressObservable {
-
-    private static final Logger logger =
-	    Logger.getLogger(MetricsCalculator.class);
 
     private ProgressObserver observer;
     private final ProjectAnalyser analyser;
@@ -78,24 +72,17 @@ public class MetricsCalculator implements ProgressObservable {
     }
 
     private void calculateMetric(CodeRange codeRange) {
-	try {
-	    metrics.put(codeRange, MetricsFactory.create(codeRange));
-	} catch (LanguageNotSupportedException e) {
-	    logger.warn(e.getMessage());
-	}
+	metrics.put(codeRange, new CodeRangeMetrics(codeRange));
     }
 
     public QualityLevel getQualityLevel(File file) {
 	QualityLevel level = QualityLevel.HIGH;
 	ArrayList<CodeRange> ranges = codeRanges.get(file);
-	if (ranges == null) {
-	    return level;
-	}
-	for (CodeRange range : codeRanges.get(file)) {
-	    QualityLevel qualityInReport =
-		    metrics.get(range).getQualityLevel();
-	    if (level.getLevel() > qualityInReport.getLevel()) {
-		level = qualityInReport;
+	if (ranges != null) {
+	    for (CodeRange range : ranges) {
+		QualityLevel rangeQualityLevel =
+			metrics.get(range).getQualityLevel();
+		level = QualityLevel.getMinLevel(level, rangeQualityLevel);
 	    }
 	}
 	return level;

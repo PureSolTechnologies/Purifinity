@@ -5,11 +5,11 @@ import com.puresol.coding.tokentypes.SourceTokenDefinition;
 import com.puresol.parser.Token;
 import com.puresol.parser.TokenStream;
 
-public abstract class AbstractCodeDepth extends AbstractMetric {
+public class CodeDepth extends AbstractMetric {
 
     private int maxLayer = 0;
 
-    public AbstractCodeDepth(CodeRange range) {
+    public CodeDepth(CodeRange range) {
 	super(range);
 	calculate();
     }
@@ -31,7 +31,22 @@ public abstract class AbstractCodeDepth extends AbstractMetric {
 	}
     }
 
-    public int maxLayer() {
+    public int getMaxLayer() {
 	return maxLayer;
+    }
+
+    public static boolean isSuitable(CodeRange codeRange) {
+	return true;
+    }
+
+    @Override
+    public QualityLevel getQualityLevel() {
+	int maxLayer = getMaxLayer();
+	if (maxLayer > 6) {
+	    return QualityLevel.LOW;
+	} else if (maxLayer > 4) {
+	    return QualityLevel.MEDIUM;
+	}
+	return QualityLevel.HIGH;
     }
 }

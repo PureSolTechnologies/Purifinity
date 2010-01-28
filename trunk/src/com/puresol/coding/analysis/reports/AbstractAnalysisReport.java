@@ -12,16 +12,16 @@ package com.puresol.coding.analysis.reports;
 
 import com.puresol.coding.analysis.CodeRangeMetrics;
 
-
 abstract public class AbstractAnalysisReport implements AnalysisReport {
 
-	private CodeRangeMetrics metrics = null;
+    private CodeRangeMetrics metrics = null;
 
-	public AbstractAnalysisReport(CodeRangeMetrics metrics) {
-		this.metrics = metrics;
-	}
+    public AbstractAnalysisReport(CodeRangeMetrics metrics) {
+	this.metrics = metrics;
+    }
 
-	public CodeRangeMetrics getMetrics() {
-		return metrics;
-	}
+    public CodeRangeMetrics getMetrics() {
+	return metrics;
+    }
+
 }

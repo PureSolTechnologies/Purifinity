@@ -8,32 +8,37 @@ import javax.swingx.data.VerticalDataFileFormat;
 
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.ProjectAnalyser;
-import com.puresol.coding.analysis.AbstractHalsteadMetric;
-import com.puresol.coding.analysis.AbstractMaintainabilityIndex;
-import com.puresol.coding.analysis.AbstractMcCabeMetric;
-import com.puresol.coding.analysis.AbstractSLOCMetric;
+import com.puresol.coding.analysis.AvailableMetrics;
+import com.puresol.coding.analysis.CodeDepth;
 import com.puresol.coding.analysis.CodeRangeMetrics;
+import com.puresol.coding.analysis.HalsteadMetric;
+import com.puresol.coding.analysis.MaintainabilityIndex;
+import com.puresol.coding.analysis.McCabeMetric;
 import com.puresol.coding.analysis.MetricsCalculator;
+import com.puresol.coding.analysis.SLOCMetric;
+import com.puresol.data.Storable;
+import com.puresol.data.StoreType;
 
-public class TSVFile {
+public class TSVFile implements Storable {
 
-    public static boolean create(File file, ProjectAnalyser analyser) {
-	return new TSVFile(analyser).save(file);
+    public static void create(File file, ProjectAnalyser analyser) {
+	new TSVFile(analyser).store(file);
     }
 
     private final ProjectAnalyser analyser;
     private final MetricsCalculator metrics;
 
-    private TSVFile(ProjectAnalyser analyser) {
+    public TSVFile(ProjectAnalyser analyser) {
 	this.analyser = analyser;
 	this.metrics = new MetricsCalculator(analyser);
     }
 
-    private boolean save(File file) {
+    @Override
+    public void store(File file) {
 	VerticalDataFile raFile = new VerticalDataFile();
 	raFile.setFileFormat(VerticalDataFileFormat.TAB_SEPARATED);
 	VerticalData verticalData = getVerticalData();
-	return raFile.write(file, verticalData);
+	raFile.write(file, verticalData);
     }
 
     private VerticalData getVerticalData() {
@@ -45,6 +50,7 @@ public class TSVFile {
 	verticalData.addColumn("SLOC proLOC", Integer.class);
 	verticalData.addColumn("SLOC comLOC", Integer.class);
 	verticalData.addColumn("SLOC blLOC", Integer.class);
+	verticalData.addColumn("Code depth", Integer.class);
 	verticalData.addColumn("McCabe v(G)", Integer.class);
 	verticalData.addColumn("Halstead n1", Integer.class);
 	verticalData.addColumn("Halstead N1", Integer.class);
@@ -77,15 +83,24 @@ public class TSVFile {
     private void processCodeRange(VerticalData data, File file,
 	    CodeRange range) {
 	CodeRangeMetrics metrics = this.metrics.getMetrics(range);
-	AbstractSLOCMetric sloc = metrics.getSLOCMetric();
-	AbstractMcCabeMetric mcCabe = metrics.getMcCabeMetric();
-	AbstractHalsteadMetric halstead = metrics.getHalsteadMetric();
-	AbstractMaintainabilityIndex maintainability =
-		metrics.getMaintainabilityIndex();
+	SLOCMetric sloc =
+		(SLOCMetric) metrics.getMetric(AvailableMetrics.SLOC);
+	McCabeMetric mcCabe =
+		(McCabeMetric) metrics.getMetric(AvailableMetrics.MC_CABE);
+	HalsteadMetric halstead =
+		(HalsteadMetric) metrics
+			.getMetric(AvailableMetrics.HALSTEAD);
+	MaintainabilityIndex maintainability =
+		(MaintainabilityIndex) metrics
+			.getMetric(AvailableMetrics.MAINTAINABILITY);
+	CodeDepth codeDepth =
+		(CodeDepth) metrics
+			.getMetric(AvailableMetrics.MAINTAINABILITY);
 	int phyLOC = sloc.getPhyLOC();
 	int proLOC = sloc.getProLOC();
 	int comLOC = sloc.getComLOC();
 	int blLOC = sloc.getBlLOC();
+	int depth = codeDepth.getMaxLayer();
 	int vG = mcCabe.getCyclomaticNumber();
 	int n1 = halstead.get_n1();
 	int N1 = halstead.get_N1();
@@ -110,7 +125,13 @@ public class TSVFile {
 		maintainability != null ? maintainability.getMI() : 100.0;
 
 	data.addRow(file, range.getType().getIdentifier(),
-		range.getName(), phyLOC, proLOC, comLOC, blLOC, vG, n1,
-		N1, n2, N2, n, N, HL, HV, D, L, E, T, B, MIwoc, MIcw, MI);
+		range.getName(), phyLOC, proLOC, comLOC, blLOC, depth, vG,
+		n1, N1, n2, N2, n, N, HL, HV, D, L, E, T, B, MIwoc, MIcw,
+		MI);
+    }
+
+    @Override
+    public StoreType getStoreType() {
+	return StoreType.SINGLE_FILE;
     }
 }

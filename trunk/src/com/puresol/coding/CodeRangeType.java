@@ -21,45 +21,100 @@ import com.puresol.data.Identifiable;
  * 
  */
 public enum CodeRangeType implements Identifiable {
-    FILE, CLASS, INTERFACE, ENUMERATION, CONSTRUCTOR, METHOD, FUNCTION;
+    FILE {
+	@Override
+	public String getIdentifier() {
+	    return translator.i18n("File");
+	}
+
+	@Override
+	public boolean isRunnableCodeSegment() {
+	    return false;
+	}
+    },
+    CLASS {
+	@Override
+	public String getIdentifier() {
+	    return translator.i18n("Class");
+	}
+
+	@Override
+	public boolean isRunnableCodeSegment() {
+	    return false;
+	}
+    },
+    INTERFACE {
+	@Override
+	public String getIdentifier() {
+	    return translator.i18n("Interface");
+	}
+
+	@Override
+	public boolean isRunnableCodeSegment() {
+	    return false;
+	}
+    },
+    ENUMERATION {
+	@Override
+	public String getIdentifier() {
+	    return translator.i18n("Enumeration");
+	}
+
+	@Override
+	public boolean isRunnableCodeSegment() {
+	    return false;
+	}
+    },
+    CONSTRUCTOR {
+	@Override
+	public String getIdentifier() {
+	    return translator.i18n("Constructor");
+	}
+
+	@Override
+	public boolean isRunnableCodeSegment() {
+	    return true;
+	}
+    },
+    DESTRUCTOR {
+	@Override
+	public String getIdentifier() {
+	    return translator.i18n("Destructor");
+	}
+
+	@Override
+	public boolean isRunnableCodeSegment() {
+	    return true;
+	}
+    },
+    METHOD {
+	@Override
+	public String getIdentifier() {
+	    return translator.i18n("Method");
+	}
+
+	@Override
+	public boolean isRunnableCodeSegment() {
+	    return true;
+	}
+    },
+    FUNCTION {
+	@Override
+	public String getIdentifier() {
+	    return translator.i18n("Function");
+	}
+
+	@Override
+	public boolean isRunnableCodeSegment() {
+	    return true;
+	}
+    };
 
     private static final Translator translator =
 	    Translator.getTranslator(CodeRangeType.class);
 
-    public boolean isRunnableCodeSegment() {
-	if (this == METHOD) {
-	    return true;
-	}
-	if (this == FUNCTION) {
-	    return true;
-	}
-	return false;
-    }
+    public abstract boolean isRunnableCodeSegment();
 
     @Override
-    public String getIdentifier() {
-	if (this == FILE) {
-	    return translator.i18n("File");
-	}
-	if (this == CLASS) {
-	    return translator.i18n("Class");
-	}
-	if (this == INTERFACE) {
-	    return translator.i18n("Interface");
-	}
-	if (this == ENUMERATION) {
-	    return translator.i18n("Enumeration");
-	}
-	if (this == CONSTRUCTOR) {
-	    return translator.i18n("Constructor");
-	}
-	if (this == METHOD) {
-	    return translator.i18n("Method");
-	}
-	if (this == FUNCTION) {
-	    return translator.i18n("Function");
-	}
-
-	return "";
-    }
+    public abstract String getIdentifier();
 }

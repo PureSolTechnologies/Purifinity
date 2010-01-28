@@ -1,6 +1,6 @@
 /***************************************************************************
  *
- *   McCabeMetric4Java.java
+ *   McCabeMetric.java
  *   -------------------
  *   copyright            : (c) 2009 by PureSol-Technologies
  *   author               : Rick-Rainer Ludwig
@@ -8,13 +8,14 @@
  *
  ***************************************************************************/
 
-package com.puresol.coding.lang.cpp.metrics;
+package com.puresol.coding.analysis;
 
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.CodeRangeType;
-import com.puresol.coding.analysis.AbstractMcCabeMetric;
-import com.puresol.coding.analysis.CodeEvaluationSystem;
-import com.puresol.coding.analysis.QualityLevel;
+import com.puresol.coding.tokentypes.SourceTokenDefinition;
+import com.puresol.parser.Token;
+import com.puresol.parser.TokenPublicity;
+import com.puresol.parser.TokenStream;
 
 /**
  * This class calculates the cyclomatic number v(G) from a code range.
@@ -22,17 +23,54 @@ import com.puresol.coding.analysis.QualityLevel;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class McCabeMetric4CPP extends AbstractMcCabeMetric {
+public class McCabeMetric extends AbstractMetric {
 
-    public McCabeMetric4CPP(CodeRange codeRange) {
+    private int cyclomaticNumber = 1;
+
+    public McCabeMetric(CodeRange codeRange) {
 	super(codeRange);
+	calculate();
+    }
+
+    private void calculate() {
+	CodeRange codeRange = getCodeRange();
+	TokenStream tokenStream = codeRange.getTokenStream();
+	for (int index = codeRange.getStart(); index <= codeRange
+		.getStop(); index++) {
+	    Token token = tokenStream.get(index);
+	    if (token.getPublicity() != TokenPublicity.HIDDEN) {
+		SourceTokenDefinition def =
+			(SourceTokenDefinition) token
+				.getDefinitionInstance();
+		addCyclomaticNumber(def.getCyclomaticNumber(token,
+			tokenStream));
+	    }
+	}
+    }
+
+    private void addCyclomaticNumber(int cyclomaticNumber) {
+	this.cyclomaticNumber += cyclomaticNumber;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.puresol.coding.analysis.McCabeMetric#getCyclomaticNumber()
+     */
+    public int getCyclomaticNumber() {
+	return cyclomaticNumber;
+    }
+
+    public void print() {
+	System.out.println("v(G) = " + cyclomaticNumber);
+    }
+
+    public static boolean isSuitable(CodeRange codeRange) {
+	return true;
     }
 
     @Override
     public QualityLevel getQualityLevel() {
-	if (!CodeEvaluationSystem.isEvaluateMcCabeMetric()) {
-	    return QualityLevel.HIGH;
-	}
 	CodeRange range = getCodeRange();
 	if ((range.getType() == CodeRangeType.FILE)
 		|| (range.getType() == CodeRangeType.CLASS)

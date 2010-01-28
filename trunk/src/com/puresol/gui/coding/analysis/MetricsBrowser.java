@@ -92,6 +92,7 @@ public class MetricsBrowser extends BorderLayoutWidget {
 
     public void setProjectAnalyser(ProjectAnalyser project) {
 	this.project = project;
+	refresh();
     }
 
     @Slot

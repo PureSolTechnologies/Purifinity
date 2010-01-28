@@ -22,6 +22,7 @@ import org.apache.log4j.Logger;
 
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.ProjectAnalyser;
+import com.puresol.coding.analysis.CodeRangeMetrics;
 import com.puresol.coding.analysis.MetricsCalculator;
 import com.puresol.coding.analysis.QualityLevel;
 import com.puresol.html.HTMLStandards;
@@ -175,13 +176,17 @@ public class HTMLAnalysisProject {
 	    Collections.sort(ranges);
 	    int index = 0;
 	    for (CodeRange range : ranges) {
+		CodeRangeMetrics codeRangeMetrics =
+			metrics.getMetrics(range);
+		if (codeRangeMetrics == null) {
+		    continue;
+		}
 		index++;
 		codeRangeIndex.put(range, fileIndex.get(file)
 			+ "_coderange" + index);
 		html += "<tr>\n";
 		html += "<td>" + index + "</td>";
-		QualityLevel level =
-			metrics.getMetrics(range).getQualityLevel();
+		QualityLevel level = codeRangeMetrics.getQualityLevel();
 		if (level == QualityLevel.HIGH) {
 		    html += "<td bgcolor=\"green\">";
 		} else if (level == QualityLevel.MEDIUM) {
@@ -208,8 +213,9 @@ public class HTMLAnalysisProject {
 	for (File file : analyser.getFiles()) {
 	    ArrayList<CodeRange> ranges = analyser.getCodeRanges(file);
 	    for (CodeRange range : ranges) {
+		CodeRangeMetrics codeRangeMetrics = metrics.getMetrics(range);
 		HTMLAnalysisReport report =
-			new HTMLAnalysisReport(metrics.getMetrics(range));
+			new HTMLAnalysisReport(codeRangeMetrics);
 		if (!writeFile(directory, codeRangeIndex.get(range)
 			+ ".html", report.getReport("report.css", false))) {
 		    return false;

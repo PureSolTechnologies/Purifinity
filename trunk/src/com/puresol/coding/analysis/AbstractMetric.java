@@ -12,9 +12,9 @@ package com.puresol.coding.analysis;
 
 import com.puresol.coding.CodeRange;
 
-abstract public class AbstractMetric implements Analysis {
+abstract public class AbstractMetric implements Metric {
 
-    private CodeRange range = null;
+    private final CodeRange range;
 
     public AbstractMetric(CodeRange range) {
 	this.range = range;

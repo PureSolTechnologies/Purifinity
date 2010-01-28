@@ -10,63 +10,49 @@
 
 package com.puresol.coding.analysis;
 
+import java.util.ArrayList;
+import java.util.Hashtable;
+
 public class CodeEvaluationSystem {
 
-    private static boolean evaluateSLOCMetric = true;
-    private static boolean evaluateMcCabeMetric = true;
-    private static boolean evaluateHalsteadMetric = true;
-    private static boolean evaluateEntropyMetric = true;
-    private static boolean evaluateMaintainabilityIndex =
-	    true;
-
-    public static boolean isEvaluateSLOCMetric() {
-	return evaluateSLOCMetric;
+    private static final ArrayList<AvailableMetrics> metrics =
+	    new ArrayList<AvailableMetrics>();
+    static {
+	for (AvailableMetrics metric : AvailableMetrics.class
+		.getEnumConstants()) {
+	    metrics.add(metric);
+	}
     }
 
-    public static boolean isEvaluateMcCabeMetric() {
-	return evaluateMcCabeMetric;
+    private static final ArrayList<Class<? extends Metric>> metricClasses =
+	    new ArrayList<Class<? extends Metric>>();
+    static {
+	for (AvailableMetrics metric : metrics) {
+	    metricClasses.add(metric.getMetricClass());
+	}
     }
 
-    public static boolean isEvaluateHalsteadMetric() {
-	return evaluateHalsteadMetric;
+    private static final Hashtable<AvailableMetrics, Boolean> evaluate =
+	    new Hashtable<AvailableMetrics, Boolean>();
+
+    public static ArrayList<AvailableMetrics> getMetrics() {
+	return metrics;
     }
 
-    public static boolean isEvaluateEntropyMetric() {
-	return evaluateEntropyMetric;
+    public static ArrayList<Class<? extends Metric>> getMetricClasses() {
+	return metricClasses;
     }
 
-    public static boolean isEvaluateMaintainabilityIndex() {
-	return evaluateMaintainabilityIndex;
+    public static void setEvaluate(AvailableMetrics metric,
+	    boolean evaluate) {
+	CodeEvaluationSystem.evaluate.put(metric, evaluate);
     }
 
-    public static void setEvaluateSLOCMetric(
-	    boolean evaluateSLOCMetric) {
-	CodeEvaluationSystem.evaluateSLOCMetric =
-		evaluateSLOCMetric;
+    public static boolean isEvaluate(AvailableMetrics metric) {
+	Boolean bool = evaluate.get(metric);
+	if (bool == null) {
+	    return false;
+	}
+	return bool;
     }
-
-    public static void setEvaluateMcCabeMetric(
-	    boolean evaluateMcCabeMetric) {
-	CodeEvaluationSystem.evaluateMcCabeMetric =
-		evaluateMcCabeMetric;
-    }
-
-    public static void setEvaluateHalsteadMetric(
-	    boolean evaluateHalsteadMetric) {
-	CodeEvaluationSystem.evaluateHalsteadMetric =
-		evaluateHalsteadMetric;
-    }
-
-    public static void setEvaluateEntropyMetric(
-	    boolean evaluateEntropyMetric) {
-	CodeEvaluationSystem.evaluateEntropyMetric =
-		evaluateEntropyMetric;
-    }
-
-    public static void setEvaluateMaintainabilityIndex(
-	    boolean evaluateMaintainabilityIndex) {
-	CodeEvaluationSystem.evaluateMaintainabilityIndex =
-		evaluateMaintainabilityIndex;
-    }
-
 }

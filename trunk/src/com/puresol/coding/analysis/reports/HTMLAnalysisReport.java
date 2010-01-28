@@ -13,12 +13,9 @@ package com.puresol.coding.analysis.reports;
 import javax.i18n4j.Translator;
 
 import com.puresol.coding.CodeRange;
-import com.puresol.coding.analysis.AbstractEntropyMetric;
-import com.puresol.coding.analysis.AbstractHalsteadMetric;
-import com.puresol.coding.analysis.AbstractMaintainabilityIndex;
-import com.puresol.coding.analysis.AbstractMcCabeMetric;
-import com.puresol.coding.analysis.AbstractSLOCMetric;
+import com.puresol.coding.analysis.AvailableMetrics;
 import com.puresol.coding.analysis.CodeRangeMetrics;
+import com.puresol.coding.analysis.Metric;
 import com.puresol.coding.analysis.QualityLevel;
 import com.puresol.html.HTMLStandards;
 
@@ -51,7 +48,7 @@ public class HTMLAnalysisReport extends AbstractAnalysisReport {
 	CodeRange range = getMetrics().getCodeRange();
 	String html = "<img src=\"logo.jpeg\"/>";
 	html +=
-		"<h1> AnalysisReport for "
+		"<h1>AnalysisReport for "
 			+ range.getType().getIdentifier() + " '"
 			+ range.getName() + "'</h1>";
 	return html;
@@ -59,55 +56,15 @@ public class HTMLAnalysisReport extends AbstractAnalysisReport {
 
     private String getOverview() {
 	String report = "<h2>Overview</h2>";
-	AbstractSLOCMetric sloc = getMetrics().getSLOCMetric();
-	AbstractMcCabeMetric mcCabe = getMetrics().getMcCabeMetric();
-	AbstractHalsteadMetric halstead = getMetrics().getHalsteadMetric();
-	AbstractMaintainabilityIndex maintainability =
-		getMetrics().getMaintainabilityIndex();
-	AbstractEntropyMetric entropy = getMetrics().getEntropyMetric();
 	report += "<table>";
-	if (sloc != null) {
+	for (AvailableMetrics availMetric : getMetrics()
+		.getCalculatedMetrics()) {
+	    Metric metric = getMetrics().getMetric(availMetric);
 	    report +=
-		    "<tr><td>SLOC Metric</td><td>"
-			    + ReportStandards.getQualitySign(sloc)
-			    + "</td><td>"
-			    + translator
-				    .i18n("Statistics on source code fo lines")
-			    + "</td></tr>";
-	}
-	if (mcCabe != null) {
-	    report +=
-		    "<tr><td>McCabe Metric</td><td>"
-			    + ReportStandards.getQualitySign(mcCabe)
-			    + "</td><td>"
-			    + translator.i18n("Cyclomatic number")
-			    + "</td></tr>";
-	}
-	if (halstead != null) {
-	    report +=
-		    "<tr><td>Halstead Metric</td><td>"
-			    + ReportStandards.getQualitySign(halstead)
-			    + "</td><td>"
-			    + translator
-				    .i18n("Statistics on operators and operands")
-			    + "</td></tr>";
-	}
-	if (maintainability != null) {
-	    report +=
-		    "<tr><td>Maintainability Index</td><td>"
-			    + ReportStandards
-				    .getQualitySign(maintainability)
-			    + "</td><td>"
-			    + translator.i18n("Maintainability Index")
-			    + "</td></tr>";
-	}
-	if (entropy != null) {
-	    report +=
-		    "<tr><td>Entropy Metric</td><td>"
-			    + ReportStandards.getQualitySign(entropy)
-			    + "</td><td>"
-			    + translator
-				    .i18n("Inspections on basis of entropy calculations")
+		    "<tr><td><a href=\"" + availMetric.getIdentifier()
+			    + "\">" + availMetric.getIdentifier()
+			    + "</a></td><td>"
+			    + ReportStandards.getQualitySign(metric)
 			    + "</td></tr>";
 	}
 	report += "</table>";
@@ -115,19 +72,13 @@ public class HTMLAnalysisReport extends AbstractAnalysisReport {
     }
 
     private String getMetricReport() {
-	String report =
-		SLOCReport.getHTMLReport(getMetrics().getSLOCMetric());
-	report +=
-		McCabeReport.getHTMLReport(getMetrics().getMcCabeMetric());
-	report +=
-		HalsteadReport.getHTMLReport(getMetrics()
-			.getHalsteadMetric());
-	report +=
-		MaintainabilityReport.getHTMLReport(getMetrics()
-			.getMaintainabilityIndex());
-	report +=
-		EntropyReport.getHTMLReport(getMetrics()
-			.getEntropyMetric());
+	String report = "";
+	for (AvailableMetrics availMetric : getMetrics()
+		.getCalculatedMetrics()) {
+	    report +=
+		    ReportStandards.getReport(getMetrics().getMetric(
+			    availMetric));
+	}
 	report += getSourceCode();
 	return report;
     }
