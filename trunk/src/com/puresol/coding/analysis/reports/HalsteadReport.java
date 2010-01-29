@@ -2,7 +2,9 @@ package com.puresol.coding.analysis.reports;
 
 import javax.i18n4j.Translator;
 
+import com.puresol.coding.analysis.AvailableMetrics;
 import com.puresol.coding.analysis.HalsteadMetric;
+import com.puresol.html.Anchor;
 import com.puresol.html.HTMLStandards;
 
 public class HalsteadReport {
@@ -90,7 +92,10 @@ public class HalsteadReport {
     }
 
     public static String getHTMLReport(HalsteadMetric halsteadMetric) {
-	String report = "<h2>Halstead Metric</h2>";
+	String report =
+		Anchor.generate(AvailableMetrics.HALSTEAD.getIdentifier(),
+			"<h2>" + translator.i18n("Halstead Metric")
+				+ "</h2>");
 	if (halsteadMetric != null) {
 	    report += ReportStandards.getQualitySign(halsteadMetric);
 	    report += "<br/>";
@@ -104,13 +109,8 @@ public class HalsteadReport {
 	    report += "<h3>" + translator.i18n("Operands") + "</h3>";
 	    report += getHTMLOperantReport(halsteadMetric);
 	} else {
-	    report +=
-		    "<p>"
-			    + translator
-				    .i18n("No measureable for this kind of code range!")
-			    + "</p>";
+	    report += ReportStandards.notMeasurableForCodeRangeMessage();
 	}
 	return report;
     }
-
 }

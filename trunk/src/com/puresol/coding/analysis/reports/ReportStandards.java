@@ -1,5 +1,7 @@
 package com.puresol.coding.analysis.reports;
 
+import javax.i18n4j.Translator;
+
 import com.puresol.coding.analysis.CodeDepth;
 import com.puresol.coding.analysis.EntropyMetric;
 import com.puresol.coding.analysis.HalsteadMetric;
@@ -11,6 +13,9 @@ import com.puresol.coding.analysis.SLOCMetric;
 
 public class ReportStandards {
 
+    private static final Translator translator =
+	    Translator.getTranslator(ReportStandards.class);
+
     public static String getQualitySign(Metric analysis) {
 	if (analysis.getQualityLevel() == QualityLevel.HIGH) {
 	    return "<font color=\"#00ff00\">HIGH</font>";
@@ -19,16 +24,6 @@ public class ReportStandards {
 	    return "<font color=\"#ffff00\">MEDIUM</font>";
 	}
 	return "<font color=\"#ff0000\">LOW</font>";
-    }
-
-    public static String convertSourceCodeToHTML(String sourceCode) {
-	String sourceCodeHTML = "<tt>";
-	sourceCodeHTML +=
-		sourceCode.replaceAll("\n", "<br/>").replaceAll(" ",
-			"&nbsp;").replaceAll("\t",
-			"&nbsp;&nbsp;&nbsp;&nbsp;");
-	sourceCodeHTML += "</tt>";
-	return sourceCodeHTML;
     }
 
     public static String getReport(Metric metric) {
@@ -52,5 +47,12 @@ public class ReportStandards {
 	    return EntropyReport.getHTMLReport((EntropyMetric) metric);
 	}
 	throw new IllegalArgumentException();
+    }
+
+    public static String notMeasurableForCodeRangeMessage() {
+	return "<p>"
+		+ translator
+			.i18n("No measureable for this kind of code range!")
+		+ "</p>";
     }
 }

@@ -2,7 +2,9 @@ package com.puresol.coding.analysis.reports;
 
 import javax.i18n4j.Translator;
 
+import com.puresol.coding.analysis.AvailableMetrics;
 import com.puresol.coding.analysis.McCabeMetric;
+import com.puresol.html.Anchor;
 
 public class McCabeReport {
 
@@ -10,7 +12,12 @@ public class McCabeReport {
 	    Translator.getTranslator(McCabeReport.class);
 
     public static String getHTMLReport(McCabeMetric mcCabe) {
-	String report = "<h2>McCabe Cyclomatic Number</h2>";
+	String report =
+		Anchor.generate(AvailableMetrics.MC_CABE.getIdentifier(),
+			"<h2>"
+				+ translator
+					.i18n("McCabe Cyclomatic Number")
+				+ "</h2>");
 	if (mcCabe != null) {
 	    report += ReportStandards.getQualitySign(mcCabe);
 	    report += "<br/>";
@@ -18,9 +25,8 @@ public class McCabeReport {
 		    translator.i18n("Cyclomatic number v(G)") + "="
 			    + mcCabe.getCyclomaticNumber();
 	} else {
-	    report += "<p>No measureable for this kind of code range!</p>";
+	    report += ReportStandards.notMeasurableForCodeRangeMessage();
 	}
 	return report;
     }
-
 }

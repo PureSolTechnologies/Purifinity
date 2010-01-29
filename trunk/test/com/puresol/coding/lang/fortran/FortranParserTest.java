@@ -7,8 +7,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
 import org.junit.Test;
 
 import com.puresol.coding.CodeRange;
@@ -26,7 +24,6 @@ public class FortranParserTest extends TestCase {
     public void test() {
 	FortranParser parser = null;
 	try {
-	    Logger.getRootLogger().setLevel(Level.TRACE);
 	    FortranPreConditioner conditioner =
 		    new FortranPreConditioner(
 			    new File(

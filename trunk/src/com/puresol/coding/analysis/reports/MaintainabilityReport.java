@@ -2,7 +2,9 @@ package com.puresol.coding.analysis.reports;
 
 import javax.i18n4j.Translator;
 
+import com.puresol.coding.analysis.AvailableMetrics;
 import com.puresol.coding.analysis.MaintainabilityIndex;
+import com.puresol.html.Anchor;
 import com.puresol.html.HTMLStandards;
 
 public class MaintainabilityReport {
@@ -36,7 +38,11 @@ public class MaintainabilityReport {
 
     public static String getHTMLReport(
 	    MaintainabilityIndex maintainabilityIndex) {
-	String report = "<h2>Maintainability Index</h2>";
+	String report =
+		Anchor.generate(AvailableMetrics.MAINTAINABILITY
+			.getIdentifier(), "<h2>"
+			+ translator.i18n("Maintainability Index")
+			+ "</h2>");
 	if (maintainabilityIndex != null) {
 	    report += ReportStandards.getQualitySign(maintainabilityIndex);
 	    report += "<br/>";
@@ -44,9 +50,8 @@ public class MaintainabilityReport {
 		    HTMLStandards
 			    .convertTSVToTable(getReport(maintainabilityIndex));
 	} else {
-	    report += "<p>No measureable for this kind of code range!</p>";
+	    report += ReportStandards.notMeasurableForCodeRangeMessage();
 	}
 	return report;
     }
-
 }

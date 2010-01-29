@@ -6,8 +6,6 @@ import java.io.IOException;
 
 import junit.framework.Assert;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
 import org.junit.Test;
 
 import com.puresol.coding.lang.java.JavaLexer;
@@ -21,7 +19,6 @@ public class JavaLexerTest {
     @Test
     public void testLexer() {
 	try {
-	    Logger.getRootLogger().setLevel(Level.TRACE);
 	    DefaultPreConditioner conditioner =
 		    new DefaultPreConditioner(new File(
 			    "src/apps/CodeAnalysis.java"));

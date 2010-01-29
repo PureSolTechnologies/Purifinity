@@ -12,5 +12,5 @@ package com.puresol.coding.analysis.reports;
 
 public interface AnalysisReport {
 
-	public String getReport();
+    public String getReport();
 }

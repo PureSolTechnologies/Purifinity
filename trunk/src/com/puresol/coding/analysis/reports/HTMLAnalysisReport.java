@@ -61,7 +61,7 @@ public class HTMLAnalysisReport extends AbstractAnalysisReport {
 		.getCalculatedMetrics()) {
 	    Metric metric = getMetrics().getMetric(availMetric);
 	    report +=
-		    "<tr><td><a href=\"" + availMetric.getIdentifier()
+		    "<tr><td><a href=\"#" + availMetric.getIdentifier()
 			    + "\">" + availMetric.getIdentifier()
 			    + "</a></td><td>"
 			    + ReportStandards.getQualitySign(metric)
@@ -86,7 +86,7 @@ public class HTMLAnalysisReport extends AbstractAnalysisReport {
     private String getSourceCode() {
 	String report = "<h2>" + translator.i18n("Source Code") + "</h2>";
 	report +=
-		ReportStandards.convertSourceCodeToHTML(getMetrics()
+		HTMLStandards.convertSourceCodeToHTML(getMetrics()
 			.getCodeRange().getText());
 	return report;
     }

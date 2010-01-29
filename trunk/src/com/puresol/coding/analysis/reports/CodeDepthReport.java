@@ -2,7 +2,9 @@ package com.puresol.coding.analysis.reports;
 
 import javax.i18n4j.Translator;
 
+import com.puresol.coding.analysis.AvailableMetrics;
 import com.puresol.coding.analysis.CodeDepth;
+import com.puresol.html.Anchor;
 
 public class CodeDepthReport {
 
@@ -14,7 +16,10 @@ public class CodeDepthReport {
     }
 
     public static String getHTMLReport(CodeDepth codeDepth) {
-	String report = "<h2>" + translator.i18n("CodeDepth") + "</h2>";
+	String report =
+		Anchor.generate(AvailableMetrics.CODE_DEPTH
+			.getIdentifier(), "<h2>"
+			+ translator.i18n("CodeDepth") + "</h2>");
 	if (codeDepth != null) {
 	    report += ReportStandards.getQualitySign(codeDepth);
 	    report += "<br/>";
@@ -23,7 +28,7 @@ public class CodeDepthReport {
 			    + "</p>";
 	    report += codeDepth.getMaxLayer();
 	} else {
-	    report += "<p>No measureable for this kind of code range!</p>";
+	    report +=ReportStandards.notMeasurableForCodeRangeMessage();
 	}
 	return report;
     }

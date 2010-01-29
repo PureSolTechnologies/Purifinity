@@ -101,7 +101,6 @@ h2 {
     font-weight: bold; 
     font-style: italic; 
     margin-top:0.5em; 
-    border-bottom:1pt solid black; 
     text-align:left;
     width:62%;
 }
@@ -110,7 +109,6 @@ h3 {
     font-weight: bold; 
     font-style: italic; 
     margin-top:0.5em; 
-    border-bottom:1pt solid black; 
     text-align:left;
     width:39%;
 }
@@ -145,7 +143,7 @@ tt {
     border:0pt solid darkred;
 }
 
-a.footer:link{    
+a.footer:link{
     color:white; 
     border-bottom:1pt dashed white; 
     text-decoration:none; 

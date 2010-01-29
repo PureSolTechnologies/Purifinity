@@ -4,6 +4,7 @@ import javax.i18n4j.Translator;
 
 import com.puresol.coding.analysis.AvailableMetrics;
 import com.puresol.coding.analysis.SLOCMetric;
+import com.puresol.html.Anchor;
 import com.puresol.html.HTMLStandards;
 import com.puresol.statistics.Statistics;
 
@@ -81,9 +82,10 @@ public class SLOCReport {
 
     public static String getHTMLReport(SLOCMetric sloc) {
 	String report =
-		"<a name=\"" + AvailableMetrics.SLOC.getIdentifier()
-			+ "\"/>";
-	report += "<h2>SLOC Metrics</h2>";
+		Anchor
+			.generate(AvailableMetrics.SLOC.getIdentifier(),
+				"<h2>" + translator.i18n("SLOC Metrics")
+					+ "</h2>");
 	if (sloc != null) {
 	    report += ReportStandards.getQualitySign(sloc);
 	    report += "<br/>";
@@ -92,7 +94,7 @@ public class SLOCReport {
 	    report += "<h3>Line Lengths</h3>";
 	    report += getHTMLLineLengthReport(sloc);
 	} else {
-	    report += "<p>No measureable for this kind of code range!</p>";
+	    report += ReportStandards.notMeasurableForCodeRangeMessage();
 	}
 	return report;
 

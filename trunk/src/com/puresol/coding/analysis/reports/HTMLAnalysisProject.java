@@ -46,6 +46,7 @@ public class HTMLAnalysisProject {
     private HTMLAnalysisProject(ProjectAnalyser analyser) {
 	this.analyser = analyser;
 	this.metrics = new MetricsCalculator(analyser);
+	metrics.run();
     }
 
     private static final Logger logger =
@@ -178,9 +179,6 @@ public class HTMLAnalysisProject {
 	    for (CodeRange range : ranges) {
 		CodeRangeMetrics codeRangeMetrics =
 			metrics.getMetrics(range);
-		if (codeRangeMetrics == null) {
-		    continue;
-		}
 		index++;
 		codeRangeIndex.put(range, fileIndex.get(file)
 			+ "_coderange" + index);
@@ -213,7 +211,8 @@ public class HTMLAnalysisProject {
 	for (File file : analyser.getFiles()) {
 	    ArrayList<CodeRange> ranges = analyser.getCodeRanges(file);
 	    for (CodeRange range : ranges) {
-		CodeRangeMetrics codeRangeMetrics = metrics.getMetrics(range);
+		CodeRangeMetrics codeRangeMetrics =
+			metrics.getMetrics(range);
 		HTMLAnalysisReport report =
 			new HTMLAnalysisReport(codeRangeMetrics);
 		if (!writeFile(directory, codeRangeIndex.get(range)
