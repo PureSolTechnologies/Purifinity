@@ -8,7 +8,7 @@ public class EndProgramKeyword extends KeywordOperator {
     protected void initialize() {
 	super.initialize();
 	setCaseInsensitive();
-	setPatternString("END\\s+PROGRAM");
+	setPatternString("END\\s*PROGRAM");
     }
 
 }

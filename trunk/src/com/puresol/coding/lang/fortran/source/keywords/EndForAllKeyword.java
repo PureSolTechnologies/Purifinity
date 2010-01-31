@@ -8,7 +8,7 @@ public class EndForAllKeyword extends KeywordOperator {
     protected void initialize() {
 	super.initialize();
 	setCaseInsensitive();
-	setPatternString("END\\s+FORALL");
+	setPatternString("END\\s*FORALL");
     }
 
 }

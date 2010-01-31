@@ -8,7 +8,7 @@ public class EndSubroutineKeyword extends KeywordOperator {
     protected void initialize() {
 	super.initialize();
 	setCaseInsensitive();
-	setPatternString("END\\s+SUBROUTINE");
+	setPatternString("END\\s*SUBROUTINE");
     }
 
 }
