@@ -8,7 +8,7 @@ public class FormatLiteral extends KeywordOperant {
 	protected void initialize() {
 		super.initialize();
 		setCaseInsensitive();
-		setPatternString("[0-9ADEFGIPX.]+");
+		setPatternString("[0-9A-Z.]+");
 	}
 
 }

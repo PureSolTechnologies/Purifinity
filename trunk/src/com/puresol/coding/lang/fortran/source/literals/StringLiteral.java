@@ -16,6 +16,6 @@ public class StringLiteral extends Operant {
 		"(" + defaultSequences + "|" + octalSequence + "|"
 			+ unicodeSequence + ")";
 	setPatternString("('(" + escapeSequences + "|[^'])*'|\"("
-		+ escapeSequences + "|[^\"])*\"");
+		+ escapeSequences + "|[^\"])*\")");
     }
 }

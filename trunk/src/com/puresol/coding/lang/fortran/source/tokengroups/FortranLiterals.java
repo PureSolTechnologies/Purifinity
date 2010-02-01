@@ -5,6 +5,8 @@ import com.puresol.coding.lang.fortran.source.literals.FormatLiteral;
 import com.puresol.coding.lang.fortran.source.literals.IdLiteral;
 import com.puresol.coding.lang.fortran.source.literals.IntegerLiteral;
 import com.puresol.coding.lang.fortran.source.literals.StringLiteral;
+import com.puresol.coding.lang.fortran.source.literals.StringStartLiteral;
+import com.puresol.coding.lang.fortran.source.literals.StringStopLiteral;
 import com.puresol.parser.AbstractTokenDefinitionGroup;
 
 public class FortranLiterals extends AbstractTokenDefinitionGroup {
@@ -12,9 +14,11 @@ public class FortranLiterals extends AbstractTokenDefinitionGroup {
 	@Override
 	protected void initialize() {
 		addTokenDefinition(StringLiteral.class);
+		addTokenDefinition(StringStartLiteral.class);
+		addTokenDefinition(StringStopLiteral.class);
 		addTokenDefinition(FloatingPointLiteral.class);
 		addTokenDefinition(IntegerLiteral.class);
-		
+
 		addTokenDefinition(FormatLiteral.class);
 		addTokenDefinition(IdLiteral.class);
 	}

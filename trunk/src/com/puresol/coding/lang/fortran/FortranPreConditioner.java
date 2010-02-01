@@ -47,6 +47,21 @@ public class FortranPreConditioner extends DefaultPreConditioner {
 		}
 	}
 
+	private void defaultPreConditioner(String line) {
+		try {
+			String text = "";
+			while (line != null) {
+				text += line;
+				line = readLine();
+			}
+			addToken(new Token(0, TokenPublicity.VISIBLE, 0, text.length(),
+					text, 0, text.split(LineEnd.UNIX.getString()).length - 1,
+					null));
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e);
+		}
+	}
+
 	private void preconditionFortran77(String line) {
 		try {
 			while (line != null) {
@@ -97,21 +112,6 @@ public class FortranPreConditioner extends DefaultPreConditioner {
 		processLineLead(lead);
 		addToken(new Token(counter, TokenPublicity.VISIBLE, pos, line.length(),
 				line, lineNum, lineNum, null));
-	}
-
-	private void defaultPreConditioner(String line) {
-		try {
-			String text = "";
-			while (line != null) {
-				text += line;
-				line = readLine();
-			}
-			addToken(new Token(0, TokenPublicity.VISIBLE, 0, text.length(),
-					text, 0, text.split(LineEnd.UNIX.getString()).length - 1,
-					null));
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-		}
 	}
 
 	private String readLine() {
