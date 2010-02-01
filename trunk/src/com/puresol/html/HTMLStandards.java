@@ -49,7 +49,7 @@ public class HTMLStandards {
 	return header;
     }
 
-    public static String getStandardFooter() {
+    public static String getStandardCopyrightFooter() {
 	String footer = "<hr/>\n";
 	footer +=
 		"<p>(c) " + APIConfig.PACKAGE_YEARS + " "
@@ -57,6 +57,12 @@ public class HTMLStandards {
 			+ "<br/>(page created: "
 			+ Time.getFullTimeString() + ")</p>\n";
 	footer += "</body>\n";
+	footer += "</html>\n";
+	return footer;
+    }
+
+    public static String getStandardFooter() {
+	String footer = "</body>\n";
 	footer += "</html>\n";
 	return footer;
     }

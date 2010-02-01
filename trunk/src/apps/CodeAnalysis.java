@@ -25,7 +25,7 @@ import javax.swingx.progress.ProgressWindow;
 
 import com.puresol.coding.ProjectAnalyser;
 import com.puresol.coding.analysis.out.TSVFile;
-import com.puresol.coding.analysis.reports.HTMLAnalysisProject;
+import com.puresol.coding.analysis.reports.HTMLProject;
 import com.puresol.gui.PureSolApplication;
 import com.puresol.gui.coding.analysis.MetricSelectionToolBar;
 import com.puresol.gui.coding.analysis.ProjectAnalysisBrowser;
@@ -114,7 +114,7 @@ public class CodeAnalysis extends PureSolApplication {
 	if (result == JFileChooser.CANCEL_OPTION) {
 	    return;
 	}
-	HTMLAnalysisProject.create(chooser.getSelectedFile(), browser
+	HTMLProject.create(chooser.getSelectedFile(), browser
 		.getProjectAnalyser());
     }
 

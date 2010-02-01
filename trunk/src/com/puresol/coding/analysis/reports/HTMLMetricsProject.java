@@ -26,48 +26,45 @@ import com.puresol.coding.analysis.CodeRangeMetrics;
 import com.puresol.coding.analysis.MetricsCalculator;
 import com.puresol.coding.analysis.QualityLevel;
 import com.puresol.html.HTMLStandards;
-import com.puresol.html.Link;
-import com.puresol.jars.JarFile;
+import com.puresol.utils.Directories;
+import com.puresol.utils.Files;
 
-public class HTMLAnalysisProject {
+public class HTMLMetricsProject {
 
     public static boolean create(File directory, ProjectAnalyser analyser) {
-	return new HTMLAnalysisProject(analyser)
-		.createHTMLProject(directory);
+	return new HTMLMetricsProject(directory, analyser)
+		.createHTMLProject();
     }
 
     private final ProjectAnalyser analyser;
+    private final File directory;
+
     private final MetricsCalculator metrics;
     private final Hashtable<File, String> fileIndex =
 	    new Hashtable<File, String>();
     private final Hashtable<CodeRange, String> codeRangeIndex =
 	    new Hashtable<CodeRange, String>();
 
-    private HTMLAnalysisProject(ProjectAnalyser analyser) {
+    private HTMLMetricsProject(File directory, ProjectAnalyser analyser) {
+	this.directory = directory;
 	this.analyser = analyser;
 	this.metrics = new MetricsCalculator(analyser);
 	metrics.run();
     }
 
     private static final Logger logger =
-	    Logger.getLogger(HTMLAnalysisProject.class);
+	    Logger.getLogger(HTMLMetricsProject.class);
 
-    public boolean createHTMLProject(File directory) {
-	if (!directory.exists()) {
-	    if (!directory.mkdir()) {
-		return false;
-	    }
+    private boolean createHTMLProject() {
+	if (!Directories.checkAndCreateDirectory(directory)) {
+	    return false;
 	}
-	JarFile.extractResource(HTMLAnalysisProject.class
-		.getResource("/config/logo.jpeg"), new File(directory
-		.getPath()
-		+ "/logo.jpeg"));
-	JarFile.extractResource(HTMLAnalysisProject.class
-		.getResource("/css/report.css"), new File(directory
-		.getPath()
-		+ "/report.css"));
+	ReportStandards.createLogo(Files.addPaths(directory, new File(
+		"logo.jpeg")));
+	ReportStandards.createCSS(Files.addPaths(directory, new File(
+		"report.css")));
 	createIndexHTML(directory);
-	createStartHTML(directory);
+	ReportStandards.createStartHTML(directory, "CodeAnalysis");
 	createEmptyHTML(directory);
 	createFileIndex(directory);
 	createCodeRangeIndizes(directory);
@@ -110,20 +107,6 @@ public class HTMLAnalysisProject {
 	html += "</frameset>";
 	html += HTMLStandards.getStandardFrameSetFooter();
 	return writeFile(directory, "index.html", html);
-    }
-
-    private boolean createStartHTML(File directory) {
-	String html =
-		HTMLStandards.getStandardHeader("CodeAnalysis",
-			"report.css", false);
-	html += "<img src=\"logo.jpeg\"/> <h1>CodeAnalysis</h1>";
-	html += "<p>" + HTMLStandards.getCopyright() + "</p>";
-	html +=
-		"<p>For more information have a look to "
-			+ Link.getPureSolTechnolgiesHomePage().toHTML()
-			+ "</p>";
-	html += HTMLStandards.getStandardFooter();
-	return writeFile(directory, "start.html", html);
     }
 
     private boolean createEmptyHTML(File directory) {
@@ -213,8 +196,8 @@ public class HTMLAnalysisProject {
 	    for (CodeRange range : ranges) {
 		CodeRangeMetrics codeRangeMetrics =
 			metrics.getMetrics(range);
-		HTMLAnalysisReport report =
-			new HTMLAnalysisReport(codeRangeMetrics);
+		HTMLMetricsReport report =
+			new HTMLMetricsReport(codeRangeMetrics);
 		if (!writeFile(directory, codeRangeIndex.get(range)
 			+ ".html", report.getReport("report.css", false))) {
 		    return false;

@@ -19,12 +19,12 @@ import com.puresol.coding.analysis.Metric;
 import com.puresol.coding.analysis.QualityLevel;
 import com.puresol.html.HTMLStandards;
 
-public class HTMLAnalysisReport extends AbstractAnalysisReport {
+public class HTMLMetricsReport extends AbstractAnalysisReport {
 
     private static final Translator translator =
-	    Translator.getTranslator(HTMLAnalysisReport.class);
+	    Translator.getTranslator(HTMLMetricsReport.class);
 
-    public HTMLAnalysisReport(CodeRangeMetrics metrics) {
+    public HTMLMetricsReport(CodeRangeMetrics metrics) {
 	super(metrics);
     }
 
@@ -40,7 +40,7 @@ public class HTMLAnalysisReport extends AbstractAnalysisReport {
 	report += getTitle();
 	report += getOverview();
 	report += getMetricReport();
-	report += HTMLStandards.getStandardFooter();
+	report += HTMLStandards.getStandardCopyrightFooter();
 	return report;
     }
 

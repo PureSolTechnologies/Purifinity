@@ -32,7 +32,7 @@ import com.puresol.coding.CodeRange;
 import com.puresol.coding.ProjectAnalyser;
 import com.puresol.coding.analysis.MetricsCalculator;
 import com.puresol.coding.analysis.QualityLevel;
-import com.puresol.coding.analysis.reports.HTMLAnalysisReport;
+import com.puresol.coding.analysis.reports.HTMLMetricsReport;
 
 public class MetricsBrowser extends BorderLayoutWidget {
 
@@ -47,8 +47,8 @@ public class MetricsBrowser extends BorderLayoutWidget {
     private FreeList fileList = null;
     private FreeList codeRangeList = null;
     private HTMLTextPane results = null;
-    private Hashtable<CodeRange, HTMLAnalysisReport> reports =
-	    new Hashtable<CodeRange, HTMLAnalysisReport>();
+    private Hashtable<CodeRange, HTMLMetricsReport> reports =
+	    new Hashtable<CodeRange, HTMLMetricsReport>();
 
     public MetricsBrowser() {
 	super();
@@ -178,7 +178,7 @@ public class MetricsBrowser extends BorderLayoutWidget {
     }
 
     private void calculateReport(CodeRange codeRange) {
-	reports.put(codeRange, new HTMLAnalysisReport(metrics
+	reports.put(codeRange, new HTMLMetricsReport(metrics
 		.getMetrics(codeRange)));
     }
 

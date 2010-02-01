@@ -1,5 +1,7 @@
 package com.puresol.coding.analysis.reports;
 
+import java.io.File;
+
 import javax.i18n4j.Translator;
 
 import com.puresol.coding.analysis.CodeDepth;
@@ -10,6 +12,10 @@ import com.puresol.coding.analysis.McCabeMetric;
 import com.puresol.coding.analysis.Metric;
 import com.puresol.coding.analysis.QualityLevel;
 import com.puresol.coding.analysis.SLOCMetric;
+import com.puresol.html.HTMLStandards;
+import com.puresol.html.Link;
+import com.puresol.jars.JarFile;
+import com.puresol.utils.Files;
 
 public class ReportStandards {
 
@@ -54,5 +60,28 @@ public class ReportStandards {
 		+ translator
 			.i18n("No measureable for this kind of code range!")
 		+ "</p>";
+    }
+
+    public static void createLogo(File logo) {
+	JarFile.extractResource(HTMLMetricsProject.class
+		.getResource("/config/logo.jpeg"), logo);
+    }
+
+    public static void createCSS(File css) {
+	JarFile.extractResource(HTMLMetricsProject.class
+		.getResource("/css/report.css"), css);
+    }
+
+    public static boolean createStartHTML(File directory, String name) {
+	String html =
+		HTMLStandards.getStandardHeader(name, "report.css", false);
+	html += "<img src=\"logo.jpeg\"/> <h1>" + name + "</h1>";
+	html += "<p>" + HTMLStandards.getCopyright() + "</p>";
+	html +=
+		"<p>For more information have a look to "
+			+ Link.getPureSolTechnolgiesHomePage().toHTML()
+			+ "</p>";
+	html += HTMLStandards.getStandardFooter();
+	return Files.writeFile(directory, "start.html", html);
     }
 }
