@@ -32,6 +32,7 @@ public class ProjectAnalysisBrowser extends Panel {
     private ProjectSummaryViewer projectSummary = null;
     private CodeRangeBrowser codeRangeBrowser = null;
     private MetricsBrowser metricsBrowser = null;
+    private CopyAndPasteScannerPanel copyAndPasteScanner = null;
     private DuplicationScannerPanel duplicationScanner = null;
 
     public ProjectAnalysisBrowser() {
@@ -55,6 +56,8 @@ public class ProjectAnalysisBrowser extends Panel {
 		codeRangeBrowser = new CodeRangeBrowser());
 	tabbedPane.addTab(translator.i18n("Metrics Ranges"),
 		metricsBrowser = new MetricsBrowser());
+	tabbedPane.addTab(translator.i18n("Copy&Paste Scanner"),
+		copyAndPasteScanner = new CopyAndPasteScannerPanel());
 	tabbedPane.addTab(translator.i18n("Duplication Scanner"),
 		duplicationScanner = new DuplicationScannerPanel());
     }
@@ -65,6 +68,7 @@ public class ProjectAnalysisBrowser extends Panel {
 	projectSummary.setProjectAnalyser(project);
 	codeRangeBrowser.setProjectAnalyser(project);
 	metricsBrowser.setProjectAnalyser(project);
+	copyAndPasteScanner.setProjectAnalyser(project);
 	duplicationScanner.setProjectAnalyser(project);
     }
 

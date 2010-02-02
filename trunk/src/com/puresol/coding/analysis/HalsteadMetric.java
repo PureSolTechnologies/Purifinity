@@ -12,19 +12,25 @@ package com.puresol.coding.analysis;
 
 import java.util.Hashtable;
 
+import org.apache.log4j.Logger;
+
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.CodeRangeType;
 import com.puresol.coding.tokentypes.SourceTokenDefinition;
 import com.puresol.coding.tokentypes.SymbolType;
 import com.puresol.parser.Token;
+import com.puresol.parser.TokenException;
 import com.puresol.parser.TokenPublicity;
 import com.puresol.parser.TokenStream;
 
 public class HalsteadMetric extends AbstractMetric {
 
-    private Hashtable<String, Integer> operators =
+    private static final Logger logger =
+	    Logger.getLogger(HalsteadMetric.class);
+
+    private final Hashtable<String, Integer> operators =
 	    new Hashtable<String, Integer>();
-    private Hashtable<String, Integer> operants =
+    private final Hashtable<String, Integer> operants =
 	    new Hashtable<String, Integer>();
 
     /**
@@ -82,18 +88,27 @@ public class HalsteadMetric extends AbstractMetric {
 
     public HalsteadMetric(CodeRange codeRange) {
 	super(codeRange);
-	createHashtables();
 	calculate();
     }
 
-    private void createHashtables() {
+    private void calculate() {
+	try {
+	    createHashtables();
+	    calculateValues();
+	} catch (TokenException e) {
+	    logger.error(e);
+	}
+    }
+
+    private void createHashtables() throws TokenException {
 	CodeRange codeRange = getCodeRange();
 	TokenStream tokenStream = codeRange.getTokenStream();
 	for (int index = codeRange.getStart(); index <= codeRange
 		.getStop(); index++) {
 	    Token token = tokenStream.get(index);
 	    if (token.getPublicity() != TokenPublicity.HIDDEN) {
-		SourceTokenDefinition def =
+		SourceTokenDefinition def;
+		def =
 			(SourceTokenDefinition) token
 				.getDefinitionInstance();
 		if (def.countForHalstead(token, tokenStream)) {
@@ -116,15 +131,15 @@ public class HalsteadMetric extends AbstractMetric {
 	}
     }
 
-    private void addOperant(String operand) {
-	if (operants.containsKey(operand)) {
-	    operants.put(operand, operants.get(operand) + 1);
+    private void addOperant(String operant) {
+	if (operants.containsKey(operant)) {
+	    operants.put(operant, operants.get(operant) + 1);
 	} else {
-	    operants.put(operand, 1);
+	    operants.put(operant, 1);
 	}
     }
 
-    private void calculate() {
+    private void calculateValues() {
 	n1 = operators.keySet().size();
 	n2 = operants.keySet().size();
 	N1 = 0;

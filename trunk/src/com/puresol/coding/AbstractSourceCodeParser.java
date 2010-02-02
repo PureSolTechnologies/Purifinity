@@ -1,32 +1,29 @@
 package com.puresol.coding;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-
-import org.apache.log4j.Logger;
 
 import com.puresol.coding.lang.Language;
 import com.puresol.parser.AbstractParser;
 import com.puresol.parser.EndOfTokenStreamException;
 import com.puresol.parser.Parser;
+import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
+import com.puresol.utils.ClassInstantiationException;
+import com.puresol.utils.Instances;
 
 public abstract class AbstractSourceCodeParser extends AbstractParser
 	implements SourceCodeParser {
 
-    private static final Logger logger =
-	    Logger.getLogger(AbstractSourceCodeParser.class);
+    private final ArrayList<CodeRange> codeRanges =
+	    new ArrayList<CodeRange>();
 
-    private ArrayList<CodeRange> codeRanges = new ArrayList<CodeRange>();
-
-    protected void addCodeRange(Language language,
+    protected final void addCodeRange(Language language,
 	    CodeRangeType codeRangeType, int start, int stop) {
 	addCodeRange(language, codeRangeType, codeRangeType
 		.getIdentifier(), start, stop);
     }
 
-    protected void addCodeRange(Language language,
+    protected final void addCodeRange(Language language,
 	    CodeRangeType codeRangeType, String name, int start, int stop) {
 	CodeRange codeRange =
 		new CodeRange(getTokenStream().getFile(), language,
@@ -36,47 +33,42 @@ public abstract class AbstractSourceCodeParser extends AbstractParser
 	}
     }
 
-    protected void addCodeRanges(ArrayList<CodeRange> codeRanges) {
+    protected final void addCodeRanges(ArrayList<CodeRange> codeRanges) {
 	this.codeRanges.addAll(codeRanges);
     }
 
-    public ArrayList<CodeRange> getCodeRanges() {
+    public final ArrayList<CodeRange> getCodeRanges() {
 	return codeRanges;
     }
 
     @Override
-    protected void processPart(Class<? extends Parser> part,
-	    boolean moveForward) throws PartDoesNotMatchException {
+    protected final void processPart(Class<? extends Parser> part,
+	    boolean moveForward) throws PartDoesNotMatchException,
+	    ParserException {
 	try {
-	    Constructor<?> constructor = part.getConstructor();
-	    Parser parser = (Parser) constructor.newInstance();
-	    ((AbstractSourceCodeParser) parser)
-		    .setTokenStream(getTokenStream());
-	    ((AbstractSourceCodeParser) parser)
-		    .setStartPosition(getCurrentPosition());
-	    parser.scan();
-	    if (parser instanceof SourceCodeParser) {
-		ArrayList<CodeRange> ranges =
-			((SourceCodeParser) parser).getCodeRanges();
-		addCodeRanges(ranges);
+	    if (SourceCodeParser.class.isAssignableFrom(part)) {
+		AbstractSourceCodeParser parser =
+			(AbstractSourceCodeParser) Instances
+				.createInstance(part);
+		parser.setTokenStream(getTokenStream());
+		parser.setStartPosition(getCurrentPosition());
+		parser.scan();
+		if (parser instanceof SourceCodeParser) {
+		    ArrayList<CodeRange> ranges =
+			    ((SourceCodeParser) parser).getCodeRanges();
+		    addCodeRanges(ranges);
+		}
+		if (moveForward) {
+		    moveForward(parser.getNumberOfTokens());
+		}
+	    } else {
+		super.processPart(part, moveForward);
 	    }
-	    if (moveForward) {
-		moveForward(parser.getNumberOfTokens());
-	    }
-	} catch (SecurityException e) {
-	    logger.error(e.getMessage(), e);
-	} catch (NoSuchMethodException e) {
-	    logger.error(e.getMessage(), e);
-	} catch (IllegalArgumentException e) {
-	    logger.error(e.getMessage(), e);
-	} catch (InstantiationException e) {
-	    logger.error(e.getMessage(), e);
-	} catch (IllegalAccessException e) {
-	    logger.error(e.getMessage(), e);
-	} catch (InvocationTargetException e) {
-	    logger.error(e.getMessage(), e);
 	} catch (EndOfTokenStreamException e) {
 	    // this may happen at the end of a file...
+	} catch (ClassInstantiationException e) {
+	    throw new ParserException("Could not create instance for '"
+		    + part.getName() + "'!");
 	}
     }
 }

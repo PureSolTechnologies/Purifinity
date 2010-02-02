@@ -2,7 +2,7 @@ package com.puresol.parser;
 
 public interface Parser {
 
-    public void scan() throws PartDoesNotMatchException;
+    public void scan() throws PartDoesNotMatchException, ParserException;
 
     public int getNumberOfTokens();
 

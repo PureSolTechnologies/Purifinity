@@ -9,6 +9,7 @@ import junit.framework.Assert;
 import org.junit.Test;
 
 import com.puresol.parser.DefaultPreConditioner;
+import com.puresol.parser.LexerException;
 import com.puresol.parser.NoMatchingTokenDefinitionFound;
 import com.puresol.parser.Token;
 import com.puresol.parser.TokenStream;
@@ -35,6 +36,9 @@ public class CPPLexerTest {
 	    e.printStackTrace();
 	    Assert.fail("No exception was expected!");
 	} catch (NoMatchingTokenDefinitionFound e) {
+	    e.printStackTrace();
+	    Assert.fail("No exception was expected!");
+	} catch (LexerException e) {
 	    e.printStackTrace();
 	    Assert.fail("No exception was expected!");
 	}

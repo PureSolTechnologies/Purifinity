@@ -12,9 +12,6 @@ package com.puresol.coding.analysis;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
@@ -24,7 +21,10 @@ import com.puresol.coding.lang.cpp.CPPAnalyser;
 import com.puresol.coding.lang.fortran.FortranAnalyser;
 import com.puresol.coding.lang.java.JavaAnalyser;
 import com.puresol.exceptions.StrangeSituationException;
+import com.puresol.utils.ClassInstantiationException;
 import com.puresol.utils.Files;
+import com.puresol.utils.Instances;
+import com.puresol.utils.MethodInvokationException;
 
 /**
  * This factory creates an Analyser class for a given File in dependence
@@ -84,25 +84,15 @@ public class AnalyserFactory {
 	    Class<? extends Analyser> clazz, File projectDirectory,
 	    File file) {
 	try {
-	    Method isSuitable = clazz.getMethod("isSuitable", File.class);
-	    if (!(Boolean) isSuitable.invoke(null, file)) {
+
+	    if (!Instances.runStaticMethod(clazz, "isSuitable",
+		    boolean.class, file)) {
 		return null;
 	    }
-	    Constructor<?> constructor =
-		    clazz.getConstructor(File.class, File.class);
-	    return (Analyser) constructor.newInstance(projectDirectory,
-		    file);
-	} catch (SecurityException e) {
+	    return Instances.createInstance(clazz, projectDirectory, file);
+	} catch (MethodInvokationException e) {
 	    throw new StrangeSituationException(e);
-	} catch (NoSuchMethodException e) {
-	    throw new StrangeSituationException(e);
-	} catch (IllegalArgumentException e) {
-	    throw new StrangeSituationException(e);
-	} catch (IllegalAccessException e) {
-	    throw new StrangeSituationException(e);
-	} catch (InvocationTargetException e) {
-	    throw new StrangeSituationException(e);
-	} catch (InstantiationException e) {
+	} catch (ClassInstantiationException e) {
 	    throw new StrangeSituationException(e);
 	}
     }

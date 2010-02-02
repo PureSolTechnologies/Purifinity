@@ -1,11 +1,16 @@
 package com.puresol.coding.analysis;
 
+import org.apache.log4j.Logger;
+
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.tokentypes.SourceTokenDefinition;
 import com.puresol.parser.Token;
+import com.puresol.parser.TokenException;
 import com.puresol.parser.TokenStream;
 
 public class CodeDepth extends AbstractMetric {
+
+    private static final Logger logger = Logger.getLogger(CodeDepth.class);
 
     private int maxLayer = 0;
 
@@ -15,19 +20,25 @@ public class CodeDepth extends AbstractMetric {
     }
 
     private void calculate() {
-	CodeRange range = getCodeRange();
-	TokenStream stream = range.getTokenStream();
-	int layer = 0;
-	for (int index = range.getStart(); index <= range.getStop(); index++) {
-	    Token token = stream.get(index);
-	    SourceTokenDefinition def =
-		    (SourceTokenDefinition) token.getDefinitionInstance();
-	    if (def.changeBlockLayer() != 0) {
-		layer += def.changeBlockLayer();
+	try {
+	    CodeRange range = getCodeRange();
+	    TokenStream stream = range.getTokenStream();
+	    int layer = 0;
+	    for (int index = range.getStart(); index <= range.getStop(); index++) {
+		Token token = stream.get(index);
+		SourceTokenDefinition def;
+		def =
+			(SourceTokenDefinition) token
+				.getDefinitionInstance();
+		if (def.changeBlockLayer() != 0) {
+		    layer += def.changeBlockLayer();
+		}
+		if (layer > maxLayer) {
+		    maxLayer = layer;
+		}
 	    }
-	    if (layer > maxLayer) {
-		maxLayer = layer;
-	    }
+	} catch (TokenException e) {
+	    logger.error(e);
 	}
     }
 

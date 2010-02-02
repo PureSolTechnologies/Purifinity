@@ -13,7 +13,9 @@ import com.puresol.coding.CodeRange;
 import com.puresol.coding.lang.java.JavaLexer;
 import com.puresol.coding.lang.java.JavaParser;
 import com.puresol.parser.DefaultPreConditioner;
+import com.puresol.parser.LexerException;
 import com.puresol.parser.NoMatchingTokenDefinitionFound;
+import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 import com.puresol.parser.Token;
 import com.puresol.parser.TokenStream;
@@ -27,14 +29,14 @@ public class JavaParserTest extends TestCase {
     public void test() {
 	JavaParser parser = null;
 	try {
-	    DefaultPreConditioner conditioner =
-		    new DefaultPreConditioner(
-			    new File(
-				    "test/com/puresol/coding/lang/java/samples/RandomNumbers.java"));
 	    // DefaultPreConditioner conditioner =
 	    // new DefaultPreConditioner(
 	    // new File(
-	    // "test/com/puresol/coding/lang/java/JavaParserTest.java"));
+	    // "test/com/puresol/coding/lang/java/samples/RandomNumbers.java"));
+	    DefaultPreConditioner conditioner =
+		    new DefaultPreConditioner(
+			    new File(
+				    "test/com/puresol/coding/lang/java/JavaParserTest.java"));
 	    TokenStream tokenStream = conditioner.getTokenStream();
 	    JavaLexer lexer = new JavaLexer(tokenStream);
 	    TokenStream tokenStream2 = lexer.getTokenStream();
@@ -56,6 +58,12 @@ public class JavaParserTest extends TestCase {
 	    e.printStackTrace();
 	    Assert.fail("No exception was expected!");
 	} catch (PartDoesNotMatchException e) {
+	    e.printStackTrace();
+	    Assert.fail("No exception was expected!");
+	} catch (ParserException e) {
+	    e.printStackTrace();
+	    Assert.fail("No exception was expected!");
+	} catch (LexerException e) {
 	    e.printStackTrace();
 	    Assert.fail("No exception was expected!");
 	}

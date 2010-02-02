@@ -9,6 +9,7 @@ import com.puresol.coding.lang.java.source.parts.Import;
 import com.puresol.coding.lang.java.source.parts.InterfaceDeclaration;
 import com.puresol.coding.lang.java.source.parts.PackageDeclaration;
 import com.puresol.parser.EndOfTokenStreamException;
+import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 import com.puresol.parser.TokenStream;
 
@@ -20,7 +21,7 @@ public class JavaParser extends AbstractSourceCodeParser {
     }
 
     @Override
-    public void scan() throws PartDoesNotMatchException {
+    public void scan() throws PartDoesNotMatchException, ParserException {
 	TokenStream tokenStream = getTokenStream();
 	addCodeRange(Language.JAVA, CodeRangeType.FILE, 0, tokenStream
 		.getSize() - 1);

@@ -23,7 +23,7 @@ import com.puresol.coding.CodeRange;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class EntropyMetric extends HalsteadMetric {
+public class EntropyMetric implements Metric {
 
     /**
      * entropy
@@ -40,29 +40,41 @@ public class EntropyMetric extends HalsteadMetric {
     private double EntropyRedundancy;
     private double Redundancy;
     private double normalizedRedundancy;
+    private final HalsteadMetric halstead;
 
     public EntropyMetric(CodeRange codeRange) {
-	super(codeRange);
+	halstead = new HalsteadMetric(codeRange);
 	calculate();
     }
 
     private void calculate() {
-	Hashtable<String, Integer> operands = getOperants();
+	Hashtable<String, Integer> operands = halstead.getOperants();
 
-	maxEntropy = -Math.log(1 / (double) get_n2()) / Math.log(2.0);
+	maxEntropy =
+		-Math.log(1 / (double) halstead.get_n2()) / Math.log(2.0);
 	Entropy = 0.0;
 	for (String operand : operands.keySet()) {
 	    int count = operands.get(operand);
 	    Entropy +=
-		    (double) count / (double) get_N2()
-			    * Math.log((double) count / (double) get_N2())
+		    (double) count
+			    / (double) halstead.get_N2()
+			    * Math.log((double) count
+				    / (double) halstead.get_N2())
 			    / Math.log(2.0);
 	}
 	Entropy *= -1.0;
 	normEntropy = Entropy / maxEntropy;
 	EntropyRedundancy = maxEntropy - Entropy;
-	Redundancy = EntropyRedundancy * get_n2() / maxEntropy;
-	normalizedRedundancy = Redundancy / get_n2();
+	Redundancy = EntropyRedundancy * halstead.get_n2() / maxEntropy;
+	normalizedRedundancy = Redundancy / halstead.get_n2();
+    }
+
+    public double get_n() {
+	return halstead.get_n();
+    }
+
+    public double get_N() {
+	return halstead.get_N();
     }
 
     /*
@@ -121,7 +133,7 @@ public class EntropyMetric extends HalsteadMetric {
     }
 
     public String getResultsAsString() {
-	String result = "number of symbols = " + get_n() + "\n";
+	String result = "number of symbols = " + halstead.get_n() + "\n";
 	result += "max entropy = " + maxEntropy + "\n";
 	result += "entropy = " + Entropy + "\n";
 	result += "normalized entropy = " + normEntropy + "\n";
@@ -144,5 +156,10 @@ public class EntropyMetric extends HalsteadMetric {
 	    return QualityLevel.MEDIUM;
 	}
 	return QualityLevel.HIGH;
+    }
+
+    @Override
+    public CodeRange getCodeRange() {
+	return halstead.getCodeRange();
     }
 }

@@ -1,5 +1,7 @@
 package com.puresol.coding.lang.fortran.source.tokengroups;
 
+import org.apache.log4j.Logger;
+
 import com.puresol.coding.lang.fortran.source.keywords.CallKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.CaseDefaultKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.CaseKeyword;
@@ -53,72 +55,79 @@ import com.puresol.coding.lang.fortran.source.keywords.ThenKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.WhereKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.WriteKeyword;
 import com.puresol.parser.AbstractTokenDefinitionGroup;
+import com.puresol.parser.TokenException;
 
 public class FortranKeywords extends AbstractTokenDefinitionGroup {
 
-	@Override
-	protected void initialize() {
-		addTokenDefinition(ProgramKeyword.class);
-		addTokenDefinition(SubroutineKeyword.class);
-		addTokenDefinition(FunctionKeyword.class);
-		addTokenDefinition(ModuleKeyword.class);
-		addTokenDefinition(EndProgramKeyword.class);
-		addTokenDefinition(EndSubroutineKeyword.class);
-		addTokenDefinition(EndFunctionKeyword.class);
-		addTokenDefinition(EndModuleKeyword.class);
+    private static final Logger logger =
+	    Logger.getLogger(FortranKeywords.class);
 
-		addTokenDefinition(ForAllKeyword.class);
-		addTokenDefinition(ContinueKeyword.class);
-		addTokenDefinition(DoWhileKeyword.class);
-		addTokenDefinition(DoKeyword.class);
-		addTokenDefinition(IfKeyword.class);
-		addTokenDefinition(ThenKeyword.class);
-		addTokenDefinition(EndDoKeyword.class);
-		addTokenDefinition(EndIfKeyword.class);
-		addTokenDefinition(EndForAllKeyword.class);
-		addTokenDefinition(EndKeyword.class);
-		addTokenDefinition(ElseKeyword.class);
-		addTokenDefinition(ExitKeyword.class);
-		addTokenDefinition(StopKeyword.class);
-		addTokenDefinition(CycleKeyword.class);
-		addTokenDefinition(GotoKeyword.class);
+    @Override
+    protected void initialize() {
+	try {
+	    addTokenDefinition(ProgramKeyword.class);
+	    addTokenDefinition(SubroutineKeyword.class);
+	    addTokenDefinition(FunctionKeyword.class);
+	    addTokenDefinition(ModuleKeyword.class);
+	    addTokenDefinition(EndProgramKeyword.class);
+	    addTokenDefinition(EndSubroutineKeyword.class);
+	    addTokenDefinition(EndFunctionKeyword.class);
+	    addTokenDefinition(EndModuleKeyword.class);
 
-		addTokenDefinition(CallKeyword.class);
-		addTokenDefinition(ReturnKeyword.class);
+	    addTokenDefinition(ForAllKeyword.class);
+	    addTokenDefinition(ContinueKeyword.class);
+	    addTokenDefinition(DoWhileKeyword.class);
+	    addTokenDefinition(DoKeyword.class);
+	    addTokenDefinition(IfKeyword.class);
+	    addTokenDefinition(ThenKeyword.class);
+	    addTokenDefinition(EndDoKeyword.class);
+	    addTokenDefinition(EndIfKeyword.class);
+	    addTokenDefinition(EndForAllKeyword.class);
+	    addTokenDefinition(EndKeyword.class);
+	    addTokenDefinition(ElseKeyword.class);
+	    addTokenDefinition(ExitKeyword.class);
+	    addTokenDefinition(StopKeyword.class);
+	    addTokenDefinition(CycleKeyword.class);
+	    addTokenDefinition(GotoKeyword.class);
 
-		addTokenDefinition(ReadKeyword.class);
-		addTokenDefinition(WriteKeyword.class);
-		addTokenDefinition(RewindKeyword.class);
+	    addTokenDefinition(CallKeyword.class);
+	    addTokenDefinition(ReturnKeyword.class);
 
-		addTokenDefinition(SwitchCaseKeyword.class);
-		addTokenDefinition(CaseDefaultKeyword.class);
-		addTokenDefinition(CaseKeyword.class);
-		addTokenDefinition(WhereKeyword.class);
-		addTokenDefinition(ElseWhereKeyword.class);
+	    addTokenDefinition(ReadKeyword.class);
+	    addTokenDefinition(WriteKeyword.class);
+	    addTokenDefinition(RewindKeyword.class);
 
-		addTokenDefinition(ParameterKeyword.class);
-		addTokenDefinition(ExternalKeyword.class);
-		addTokenDefinition(IntrinsicKeyword.class);
+	    addTokenDefinition(SwitchCaseKeyword.class);
+	    addTokenDefinition(CaseDefaultKeyword.class);
+	    addTokenDefinition(CaseKeyword.class);
+	    addTokenDefinition(WhereKeyword.class);
+	    addTokenDefinition(ElseWhereKeyword.class);
 
-		addTokenDefinition(PointerKeyword.class);
-		addTokenDefinition(DimensionKeyword.class);
+	    addTokenDefinition(ParameterKeyword.class);
+	    addTokenDefinition(ExternalKeyword.class);
+	    addTokenDefinition(IntrinsicKeyword.class);
 
-		addTokenDefinition(ComplexKeyword.class);
-		addTokenDefinition(DoubleKeyword.class);
-		addTokenDefinition(IntegerKeyword.class);
+	    addTokenDefinition(PointerKeyword.class);
+	    addTokenDefinition(DimensionKeyword.class);
 
-		addTokenDefinition(DotEQDot.class);
-		addTokenDefinition(DotNEDot.class);
-		addTokenDefinition(DotLTDot.class);
-		addTokenDefinition(DotGTDot.class);
-		addTokenDefinition(DotLEDot.class);
-		addTokenDefinition(DotGEDot.class);
+	    addTokenDefinition(ComplexKeyword.class);
+	    addTokenDefinition(DoubleKeyword.class);
+	    addTokenDefinition(IntegerKeyword.class);
 
-		addTokenDefinition(DotORDot.class);
-		addTokenDefinition(DotANDDot.class);
-		addTokenDefinition(DotNOTDot.class);
-		addTokenDefinition(DotTRUEDot.class);
-		addTokenDefinition(DotFALSEDot.class);
+	    addTokenDefinition(DotEQDot.class);
+	    addTokenDefinition(DotNEDot.class);
+	    addTokenDefinition(DotLTDot.class);
+	    addTokenDefinition(DotGTDot.class);
+	    addTokenDefinition(DotLEDot.class);
+	    addTokenDefinition(DotGEDot.class);
 
+	    addTokenDefinition(DotORDot.class);
+	    addTokenDefinition(DotANDDot.class);
+	    addTokenDefinition(DotNOTDot.class);
+	    addTokenDefinition(DotTRUEDot.class);
+	    addTokenDefinition(DotFALSEDot.class);
+	} catch (TokenException e) {
+	    logger.error(e.getMessage());
 	}
+    }
 }

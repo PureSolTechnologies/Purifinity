@@ -8,12 +8,13 @@ import com.puresol.coding.lang.java.source.keywords.InterfaceKeyword;
 import com.puresol.coding.lang.java.source.literals.IdLiteral;
 import com.puresol.coding.lang.java.source.symbols.LCurlyBracket;
 import com.puresol.coding.lang.java.source.symbols.RCurlyBracket;
+import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
 public class InterfaceDeclaration extends AbstractSourceCodeParser {
 
     @Override
-    public void scan() throws PartDoesNotMatchException {
+    public void scan() throws PartDoesNotMatchException, ParserException {
 	while (processPartIfPossible(Annotation.class))
 	    ;
 	processPart(ClassModifiers.class);

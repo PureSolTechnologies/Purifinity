@@ -1,13 +1,12 @@
 package com.puresol.coding.analysis;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-
 import javax.i18n4j.Translator;
 
 import com.puresol.coding.CodeRange;
 import com.puresol.data.Identifiable;
 import com.puresol.exceptions.StrangeSituationException;
+import com.puresol.utils.ClassInstantiationException;
+import com.puresol.utils.Instances;
 
 public enum AvailableMetrics implements Identifiable {
 
@@ -88,21 +87,8 @@ public enum AvailableMetrics implements Identifiable {
 
     public Metric newInstance(CodeRange codeRange) {
 	try {
-	    Class<? extends Metric> clazz = getMetricClass();
-	    Constructor<? extends Metric> constructor =
-		    clazz.getConstructor(CodeRange.class);
-	    return constructor.newInstance(codeRange);
-	} catch (SecurityException e) {
-	    throw new StrangeSituationException(e);
-	} catch (NoSuchMethodException e) {
-	    throw new StrangeSituationException(e);
-	} catch (IllegalArgumentException e) {
-	    throw new StrangeSituationException(e);
-	} catch (InstantiationException e) {
-	    throw new StrangeSituationException(e);
-	} catch (IllegalAccessException e) {
-	    throw new StrangeSituationException(e);
-	} catch (InvocationTargetException e) {
+	    return Instances.createInstance(getMetricClass(), codeRange);
+	} catch (ClassInstantiationException e) {
 	    throw new StrangeSituationException(e);
 	}
     }

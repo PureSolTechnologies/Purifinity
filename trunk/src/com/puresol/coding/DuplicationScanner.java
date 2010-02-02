@@ -7,17 +7,23 @@ import java.util.Hashtable;
 import javax.swingx.progress.ProgressObservable;
 import javax.swingx.progress.ProgressObserver;
 
+import org.apache.log4j.Logger;
+
 import com.puresol.coding.tokentypes.AbstractSourceTokenDefinition;
 import com.puresol.coding.tokentypes.SourceTokenDefinition;
 import com.puresol.coding.tokentypes.SymbolType;
 import com.puresol.parser.NoMatchingTokenException;
 import com.puresol.parser.Token;
+import com.puresol.parser.TokenException;
 import com.puresol.parser.TokenPublicity;
 import com.puresol.parser.TokenStream;
 
 public class DuplicationScanner implements ProgressObservable {
 
-    public static final int OPERATOR_THRESHOLD = 35;
+    public static final int OPERATOR_THRESHOLD = 50;
+
+    private static final Logger logger =
+	    Logger.getLogger(DuplicationScanner.class);
 
     private ProgressObserver observer;
     private final ProjectAnalyser analyser;
@@ -37,16 +43,20 @@ public class DuplicationScanner implements ProgressObservable {
 
     @Override
     public void run() {
-	clearDuplications();
-	getAllCodeRanges();
-	checkForDuplications();
+	try {
+	    clearDuplications();
+	    getAllCodeRanges();
+	    checkForDuplications();
+	} catch (TokenException e) {
+	    logger.error(e);
+	}
     }
 
     private void clearDuplications() {
 	duplications.clear();
     }
 
-    private void getAllCodeRanges() {
+    private void getAllCodeRanges() throws TokenException {
 	for (File file : analyser.getFiles()) {
 	    for (CodeRange codeRange : analyser.getCodeRanges(file)) {
 		if (!codeRange.getType().isRunnableCodeSegment()) {
@@ -66,11 +76,11 @@ public class DuplicationScanner implements ProgressObservable {
 	}
     }
 
-    private void checkForDuplications() {
+    private void checkForDuplications() throws TokenException {
 	CodeRange[] ranges = codeRanges.keySet().toArray(new CodeRange[0]);
 	if (observer != null) {
 	    observer
-		    .setRange(0, (ranges.length - 1) * (ranges.length - 1));
+		    .setRange(0, ((ranges.length + 1) * ranges.length) / 2);
 	    observer.setStatus(0);
 	    observer.showProgressPercent();
 	}
@@ -84,7 +94,8 @@ public class DuplicationScanner implements ProgressObservable {
 		    return;
 		}
 		if (observer != null) {
-		    observer.setStatus(left * ranges.length + right);
+		    observer.setStatus(((2 * ranges.length - left - 1))
+			    * (left + 1) / 2);
 		}
 		CodeRange rightRange = ranges[right];
 		if (hashCheck(leftRange, rightRange)) {
@@ -121,7 +132,8 @@ public class DuplicationScanner implements ProgressObservable {
 	return false;
     }
 
-    private void check(CodeRange left, CodeRange right) {
+    private void check(CodeRange left, CodeRange right)
+	    throws TokenException {
 	TokenStream leftStream = left.getTokenStream();
 	TokenStream rightStream = right.getTokenStream();
 	for (int leftIndex = left.getStart(); leftIndex <= left.getStop(); leftIndex++) {
@@ -162,8 +174,9 @@ public class DuplicationScanner implements ProgressObservable {
     }
 
     private Duplication checkDetails(CodeRange left, int leftIndex,
-	    CodeRange right, int rightIndex) {
-	int counter = 0;
+	    CodeRange right, int rightIndex) throws TokenException {
+	int operatorCounter = 0;
+	int operantCounter = 0;
 	TokenStream leftStream = left.getTokenStream();
 	TokenStream rightStream = right.getTokenStream();
 	Token leftToken = leftStream.get(leftIndex);
@@ -187,12 +200,12 @@ public class DuplicationScanner implements ProgressObservable {
 		}
 		if (leftDefinition.getSymbolType() == SymbolType.OPERANT) {
 		    if (leftToken.getText().equals(rightToken.getText())) {
-			counter++;
+			operantCounter++;
 		    }
 		    continue;
 		}
 		if (leftDefinition.equals(rightDefinition)) {
-		    counter++;
+		    operatorCounter++;
 		    continue;
 		}
 		break;
@@ -202,7 +215,7 @@ public class DuplicationScanner implements ProgressObservable {
 	    // it's not to be tracked here...
 	}
 	Duplication duplication = null;
-	if (counter > OPERATOR_THRESHOLD) {
+	if ((operatorCounter + operantCounter) > OPERATOR_THRESHOLD) {
 	    CodeRange leftDuplication =
 		    new CodeRange(leftStream.getFile(),
 			    left.getLanguage(), left.getType(), left
@@ -215,9 +228,8 @@ public class DuplicationScanner implements ProgressObservable {
 			    rightToken.getTokenID());
 	    duplication =
 		    new Duplication(leftDuplication, rightDuplication,
-			    counter);
+			    operatorCounter + operantCounter);
 	    addDuplication(duplication);
-	    System.out.println(counter);
 	}
 	return duplication;
     }

@@ -1,5 +1,7 @@
 package com.puresol.coding.lang.cpp.source.tokengroups;
 
+import org.apache.log4j.Logger;
+
 import com.puresol.coding.lang.cpp.source.keywords.BoolKeyword;
 import com.puresol.coding.lang.cpp.source.keywords.BreakKeyword;
 import com.puresol.coding.lang.cpp.source.keywords.CaseKeyword;
@@ -32,48 +34,55 @@ import com.puresol.coding.lang.cpp.source.keywords.ThisKeyword;
 import com.puresol.coding.lang.cpp.source.keywords.VoidKeyword;
 import com.puresol.coding.lang.cpp.source.keywords.WhileKeyword;
 import com.puresol.parser.AbstractTokenDefinitionGroup;
+import com.puresol.parser.TokenException;
 
 public class CPPKeywords extends AbstractTokenDefinitionGroup {
 
+    private static final Logger logger =
+	    Logger.getLogger(CPPKeywords.class);
+
     @Override
     protected void initialize() {
+	try {
+	    addTokenDefinition(PPIncludeKeyword.class);
+	    addTokenDefinition(PPDefineKeyword.class);
+	    addTokenDefinition(PPIfDefKeyword.class);
+	    addTokenDefinition(PPEndIfKeyword.class);
+	    addTokenDefinition(PPElseKeyword.class);
 
-	addTokenDefinition(PPIncludeKeyword.class);
-	addTokenDefinition(PPDefineKeyword.class);
-	addTokenDefinition(PPIfDefKeyword.class);
-	addTokenDefinition(PPEndIfKeyword.class);
-	addTokenDefinition(PPElseKeyword.class);
+	    addTokenDefinition(ClassKeyword.class);
+	    addTokenDefinition(NewKeyword.class);
 
-	addTokenDefinition(ClassKeyword.class);
-	addTokenDefinition(NewKeyword.class);
+	    addTokenDefinition(PublicKeyword.class);
+	    addTokenDefinition(ProtectedKeyword.class);
+	    addTokenDefinition(PrivateKeyword.class);
+	    addTokenDefinition(StaticKeyword.class);
 
-	addTokenDefinition(PublicKeyword.class);
-	addTokenDefinition(ProtectedKeyword.class);
-	addTokenDefinition(PrivateKeyword.class);
-	addTokenDefinition(StaticKeyword.class);
+	    addTokenDefinition(ReturnKeyword.class);
+	    addTokenDefinition(BreakKeyword.class);
+	    addTokenDefinition(ContinueKeyword.class);
 
-	addTokenDefinition(ReturnKeyword.class);
-	addTokenDefinition(BreakKeyword.class);
-	addTokenDefinition(ContinueKeyword.class);
+	    addTokenDefinition(IfKeyword.class);
+	    addTokenDefinition(ElseKeyword.class);
+	    addTokenDefinition(WhileKeyword.class);
+	    addTokenDefinition(DoKeyword.class);
+	    addTokenDefinition(ForKeyword.class);
+	    addTokenDefinition(SwitchKeyword.class);
+	    addTokenDefinition(CaseKeyword.class);
 
-	addTokenDefinition(IfKeyword.class);
-	addTokenDefinition(ElseKeyword.class);
-	addTokenDefinition(WhileKeyword.class);
-	addTokenDefinition(DoKeyword.class);
-	addTokenDefinition(ForKeyword.class);
-	addTokenDefinition(SwitchKeyword.class);
-	addTokenDefinition(CaseKeyword.class);
+	    addTokenDefinition(ThisKeyword.class);
+	    addTokenDefinition(NullKeyword.class);
 
-	addTokenDefinition(ThisKeyword.class);
-	addTokenDefinition(NullKeyword.class);
-
-	addTokenDefinition(VoidKeyword.class);
-	addTokenDefinition(ConstKeyword.class);
-	addTokenDefinition(BoolKeyword.class);
-	addTokenDefinition(CharKeyword.class);
-	addTokenDefinition(IntKeyword.class);
-	addTokenDefinition(LongKeyword.class);
-	addTokenDefinition(FloatKeyword.class);
-	addTokenDefinition(DoubleKeyword.class);
+	    addTokenDefinition(VoidKeyword.class);
+	    addTokenDefinition(ConstKeyword.class);
+	    addTokenDefinition(BoolKeyword.class);
+	    addTokenDefinition(CharKeyword.class);
+	    addTokenDefinition(IntKeyword.class);
+	    addTokenDefinition(LongKeyword.class);
+	    addTokenDefinition(FloatKeyword.class);
+	    addTokenDefinition(DoubleKeyword.class);
+	} catch (TokenException e) {
+	    logger.error(e.getMessage());
+	}
     }
 }

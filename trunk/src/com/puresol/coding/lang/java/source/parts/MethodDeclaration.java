@@ -6,12 +6,13 @@ import com.puresol.coding.lang.Language;
 import com.puresol.coding.lang.java.source.literals.IdLiteral;
 import com.puresol.coding.lang.java.source.symbols.LParen;
 import com.puresol.coding.lang.java.source.symbols.RParen;
+import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
 public class MethodDeclaration extends AbstractSourceCodeParser {
 
     @Override
-    public void scan() throws PartDoesNotMatchException {
+    public void scan() throws PartDoesNotMatchException, ParserException {
 	while (processPartIfPossible(Annotation.class))
 	    ;
 	processPartIfPossible(MethodModifiers.class);

@@ -18,6 +18,7 @@ import org.apache.log4j.Logger;
 import com.puresol.coding.analysis.AbstractAnalyser;
 import com.puresol.coding.lang.Language;
 import com.puresol.parser.DefaultPreConditioner;
+import com.puresol.parser.LexerException;
 import com.puresol.parser.NoMatchingTokenDefinitionFound;
 import com.puresol.parser.PartDoesNotMatchException;
 import com.puresol.parser.TokenStream;
@@ -50,6 +51,7 @@ public class CPPAnalyser extends AbstractAnalyser {
      * 
      * @param A
      *            file to be analysed.
+     * @throws LexerException
      */
     public CPPAnalyser(File projectDirectory, File file) {
 	super(projectDirectory, file);
@@ -72,6 +74,8 @@ public class CPPAnalyser extends AbstractAnalyser {
 	} catch (NoMatchingTokenDefinitionFound e) {
 	    logger.error(e.getMessage(), e);
 	} catch (PartDoesNotMatchException e) {
+	    logger.error(e.getMessage(), e);
+	} catch (LexerException e) {
 	    logger.error(e.getMessage(), e);
 	}
     }

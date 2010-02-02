@@ -18,7 +18,7 @@ import java.util.Hashtable;
 
 import org.apache.log4j.Logger;
 
-import com.puresol.introspect.IntrospectionUtilities;
+import com.puresol.utils.IntrospectionUtilities;
 
 public class CloneTester {
 

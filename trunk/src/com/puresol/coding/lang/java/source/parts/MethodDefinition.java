@@ -7,12 +7,13 @@ import com.puresol.coding.lang.java.source.symbols.LCurlyBracket;
 import com.puresol.coding.lang.java.source.symbols.LParen;
 import com.puresol.coding.lang.java.source.symbols.RParen;
 import com.puresol.coding.lang.java.source.symbols.Semicolon;
+import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
 public class MethodDefinition extends AbstractSourceCodeParser {
 
     @Override
-    public void scan() throws PartDoesNotMatchException {
+    public void scan() throws PartDoesNotMatchException, ParserException {
 	while (processPartIfPossible(Annotation.class))
 	    ;
 	processPartIfPossible(MethodModifiers.class);

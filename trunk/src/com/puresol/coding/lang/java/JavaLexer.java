@@ -4,11 +4,12 @@ import com.puresol.coding.lang.java.source.tokengroups.JavaKeywords;
 import com.puresol.coding.lang.java.source.tokengroups.JavaLiterals;
 import com.puresol.coding.lang.java.source.tokengroups.JavaSymbols;
 import com.puresol.parser.Lexer;
+import com.puresol.parser.LexerException;
 import com.puresol.parser.TokenStream;
 
 public class JavaLexer extends Lexer {
 
-    public JavaLexer(TokenStream stream) {
+    public JavaLexer(TokenStream stream) throws LexerException {
 	super(stream);
 	addDefinitions(JavaKeywords.class);
 	addDefinitions(JavaLiterals.class);

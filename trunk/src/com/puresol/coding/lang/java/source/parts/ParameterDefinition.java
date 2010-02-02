@@ -4,12 +4,13 @@ import com.puresol.coding.AbstractSourceCodeParser;
 import com.puresol.coding.lang.fortran.source.symbols.Comma;
 import com.puresol.coding.lang.java.source.symbols.LParen;
 import com.puresol.coding.lang.java.source.symbols.RParen;
+import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
 public class ParameterDefinition extends AbstractSourceCodeParser {
 
     @Override
-    public void scan() throws PartDoesNotMatchException {
+    public void scan() throws PartDoesNotMatchException, ParserException {
 	processToken(LParen.class);
 	if (processPartIfPossible(VariableType.class)) {
 	    processPart(VariableName.class);

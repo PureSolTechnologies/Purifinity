@@ -11,11 +11,13 @@
 package com.puresol.coding;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import com.puresol.coding.lang.Language;
+import com.puresol.parser.Token;
 import com.puresol.parser.TokenStream;
 
-public class CodeRange implements Comparable<CodeRange> {
+public final class CodeRange implements Comparable<CodeRange> {
 
     private final File file;
     private final Language language;
@@ -68,6 +70,14 @@ public class CodeRange implements Comparable<CodeRange> {
 
     public TokenStream getTokenStream() {
 	return tokenStream;
+    }
+
+    public ArrayList<Token> getTokens() {
+	ArrayList<Token> tokens = new ArrayList<Token>();
+	for (int index = getStart(); index <= getStop(); index++) {
+	    tokens.add(tokenStream.get(index));
+	}
+	return tokens;
     }
 
     public int getStart() {

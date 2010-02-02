@@ -1,9 +1,9 @@
 package com.puresol.parser;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-
 import org.apache.log4j.Logger;
+
+import com.puresol.utils.ClassInstantiationException;
+import com.puresol.utils.Instances;
 
 public abstract class AbstractParser implements Parser {
 
@@ -17,41 +17,43 @@ public abstract class AbstractParser implements Parser {
     @StartPositionInjection
     private int currentPos = 0;
 
-    protected void setStartPosition(int startPos) {
+    protected final void setStartPosition(int startPos) {
 	this.startPos = startPos;
 	this.currentPos = startPos;
     }
 
-    public int getStartPosition() {
+    public final int getStartPosition() {
 	return startPos;
     }
 
-    public int getCurrentPosition() {
+    @Override
+    public final int getCurrentPosition() {
 	return currentPos;
     }
 
-    public int getNumberOfTokens() {
+    @Override
+    public final int getNumberOfTokens() {
 	return currentPos - startPos;
     }
 
-    public Token getToken(int pos) {
+    public final Token getToken(int pos) {
 	return tokenStream.get(pos);
     }
 
-    public Token getCurrentToken() {
-	Token token = tokenStream.get(currentPos);
-	return token;
+    public final Token getCurrentToken() {
+	return tokenStream.get(currentPos);
     }
 
-    protected void setTokenStream(TokenStream tokenStream) {
+    protected final void setTokenStream(TokenStream tokenStream) {
 	this.tokenStream = tokenStream;
     }
 
-    public TokenStream getTokenStream() {
+    @Override
+    public final TokenStream getTokenStream() {
 	return tokenStream;
     }
 
-    protected int getStartPositionWithLeadingHidden() {
+    protected final int getStartPositionWithLeadingHidden() {
 	int pos = getStartPosition();
 	while ((getToken(pos - 1).getPublicity() == TokenPublicity.HIDDEN)
 		&& (pos > 0)) {
@@ -60,18 +62,18 @@ public abstract class AbstractParser implements Parser {
 	return getPositionOfNextLineBreak(pos) + 1;
     }
 
-    protected int getPositionOfNextLineBreak(int pos) {
+    protected final int getPositionOfNextLineBreak(int pos) {
 	while (!getToken(pos).getText().contains("\n")) {
 	    pos++;
 	}
 	return pos;
     }
 
-    protected int getPositionOfNextLineBreak() {
+    protected final int getPositionOfNextLineBreak() {
 	return getPositionOfNextLineBreak(getCurrentPosition());
     }
 
-    protected int getPositionOfLastVisible(int pos) {
+    protected final int getPositionOfLastVisible(int pos) {
 	pos--;
 	while (getToken(pos).getPublicity() != TokenPublicity.VISIBLE) {
 	    pos--;
@@ -79,11 +81,12 @@ public abstract class AbstractParser implements Parser {
 	return pos;
     }
 
-    protected int getPositionOfLastVisible() {
+    protected final int getPositionOfLastVisible() {
 	return getPositionOfLastVisible(getCurrentPosition());
     }
 
-    protected void moveForward(int steps) throws EndOfTokenStreamException {
+    protected final void moveForward(int steps)
+	    throws EndOfTokenStreamException {
 	if (currentPos >= tokenStream.getSize() - 1) {
 	    throw new EndOfTokenStreamException(this);
 	}
@@ -96,13 +99,22 @@ public abstract class AbstractParser implements Parser {
 	}
     }
 
+    private <C> C createInstance(Class<C> clazz) throws ParserException {
+	try {
+	    return Instances.createInstance(clazz);
+	} catch (ClassInstantiationException e) {
+	    logger.error(e.getMessage());
+	    throw new ParserException(e.getMessage());
+	}
+    }
+
     private void processToken(Class<? extends TokenDefinition> definition,
-	    boolean moveForward) throws PartDoesNotMatchException {
+	    boolean moveForward) throws PartDoesNotMatchException,
+	    ParserException {
 	try {
 	    if (!getCurrentToken().getDefinition().equals(definition)) {
-		Constructor<?> constructor = definition.getConstructor();
 		TokenDefinition definitionInstance =
-			(TokenDefinition) constructor.newInstance();
+			createInstance(definition);
 		if (!definitionInstance.matches(getCurrentToken()
 			.getText())) {
 		    throw new PartDoesNotMatchException(this);
@@ -111,25 +123,14 @@ public abstract class AbstractParser implements Parser {
 	    if (moveForward) {
 		moveForward(1);
 	    }
-	} catch (SecurityException e) {
-	    logger.error(e.getMessage(), e);
-	} catch (NoSuchMethodException e) {
-	    logger.error(e.getMessage(), e);
-	} catch (IllegalArgumentException e) {
-	    logger.error(e.getMessage(), e);
-	} catch (InstantiationException e) {
-	    logger.error(e.getMessage(), e);
-	} catch (IllegalAccessException e) {
-	    logger.error(e.getMessage(), e);
-	} catch (InvocationTargetException e) {
-	    logger.error(e.getMessage(), e);
 	} catch (EndOfTokenStreamException e) {
 	    // this may happen at the end of a file...
 	}
     }
 
-    protected void processToken(Class<? extends TokenDefinition> definition)
-	    throws PartDoesNotMatchException {
+    protected final void processToken(
+	    Class<? extends TokenDefinition> definition)
+	    throws PartDoesNotMatchException, ParserException {
 	Token token = null;
 	if (logger.isDebugEnabled()) {
 	    token = getCurrentToken();
@@ -140,7 +141,7 @@ public abstract class AbstractParser implements Parser {
 	}
     }
 
-    protected void processToken(String text)
+    protected final void processToken(String text)
 	    throws PartDoesNotMatchException {
 	try {
 	    Token token = null;
@@ -160,7 +161,9 @@ public abstract class AbstractParser implements Parser {
 	}
     }
 
-    protected boolean isToken(Class<? extends TokenDefinition> definition) {
+    protected final boolean isToken(
+	    Class<? extends TokenDefinition> definition)
+	    throws ParserException {
 	try {
 	    processToken(definition, false);
 	    return true;
@@ -169,8 +172,9 @@ public abstract class AbstractParser implements Parser {
 	}
     }
 
-    protected boolean processTokenIfPossible(
-	    Class<? extends TokenDefinition> definition) {
+    protected final boolean processTokenIfPossible(
+	    Class<? extends TokenDefinition> definition)
+	    throws ParserException {
 	try {
 	    Token token = null;
 	    if (logger.isDebugEnabled()) {
@@ -186,62 +190,44 @@ public abstract class AbstractParser implements Parser {
 	}
     }
 
-    protected void skipTokensUntil(
+    protected final void skipTokensUntil(
 	    Class<? extends TokenDefinition> definition)
-	    throws PartDoesNotMatchException {
-	while (!isToken(definition)) {
-	    try {
+	    throws PartDoesNotMatchException, ParserException {
+	try {
+	    while (!isToken(definition)) {
 		moveForward(1);
-	    } catch (EndOfTokenStreamException e) {
-		throw new PartDoesNotMatchException(this);
 	    }
+	} catch (EndOfTokenStreamException e) {
+	    throw new PartDoesNotMatchException(this);
 	}
     }
 
-    private Parser getPartInstance(Class<? extends Parser> part)
-	    throws SecurityException, NoSuchMethodException,
-	    IllegalArgumentException, InstantiationException,
-	    IllegalAccessException, InvocationTargetException {
-	Constructor<?> constructor = part.getConstructor();
-	Parser parser = (Parser) constructor.newInstance();
-	((AbstractParser) parser).setTokenStream(tokenStream);
-	((AbstractParser) parser).setStartPosition(currentPos);
-	return parser;
-    }
-
     protected void processPart(Class<? extends Parser> part,
-	    boolean moveForward) throws PartDoesNotMatchException {
+	    boolean moveForward) throws PartDoesNotMatchException,
+	    ParserException {
 	try {
-	    Parser partInstance = getPartInstance(part);
+	    AbstractParser partInstance =
+		    (AbstractParser) createInstance(part);
+	    partInstance.setTokenStream(tokenStream);
+	    partInstance.setStartPosition(currentPos);
 	    partInstance.scan();
 	    if (moveForward) {
 		moveForward(partInstance.getNumberOfTokens());
 	    }
-	} catch (SecurityException e) {
-	    logger.error(e.getMessage(), e);
-	} catch (NoSuchMethodException e) {
-	    logger.error(e.getMessage(), e);
-	} catch (IllegalArgumentException e) {
-	    logger.error(e.getMessage(), e);
-	} catch (InstantiationException e) {
-	    logger.error(e.getMessage(), e);
-	} catch (IllegalAccessException e) {
-	    logger.error(e.getMessage(), e);
-	} catch (InvocationTargetException e) {
-	    logger.error(e.getMessage(), e);
 	} catch (EndOfTokenStreamException e) {
 	    // this may happen at the end of a file...
 	}
     }
 
     protected void processPart(Class<? extends Parser> part)
-	    throws PartDoesNotMatchException {
+	    throws PartDoesNotMatchException, ParserException {
 	logger.debug("Process part: " + part.getSimpleName());
 	processPart(part, true);
 	logger.debug("done for " + part.getSimpleName());
     }
 
-    protected boolean isPart(Class<? extends Parser> part) {
+    protected boolean isPart(Class<? extends Parser> part)
+	    throws ParserException {
 	try {
 	    logger.debug("Is part(?): " + part.getSimpleName());
 	    processPart(part, false);
@@ -252,7 +238,8 @@ public abstract class AbstractParser implements Parser {
 	}
     }
 
-    protected boolean processPartIfPossible(Class<? extends Parser> part) {
+    protected boolean processPartIfPossible(Class<? extends Parser> part)
+	    throws ParserException {
 	try {
 	    logger.debug("Process part if possible: "
 		    + part.getSimpleName());
@@ -266,58 +253,29 @@ public abstract class AbstractParser implements Parser {
 
     protected void processOneOf(
 	    Class<? extends TokenDefinitionGroup> definitions)
-	    throws PartDoesNotMatchException {
-	try {
-	    Constructor<?> constructor = definitions.getConstructor();
-	    TokenDefinitionGroup tokenDefinitions =
-		    (TokenDefinitionGroup) constructor.newInstance();
-	    for (TokenDefinition definition : tokenDefinitions
-		    .getTokenDefinitions()) {
-		if (isToken(definition.getClass())) {
-		    processToken(definition.getClass());
-		    return;
-		}
+	    throws PartDoesNotMatchException, ParserException {
+	TokenDefinitionGroup tokenDefinitions =
+		createInstance(definitions);
+	for (TokenDefinition definition : tokenDefinitions
+		.getTokenDefinitions()) {
+	    if (isToken(definition.getClass())) {
+		processToken(definition.getClass());
+		return;
 	    }
-	    throw new PartDoesNotMatchException(this);
-	} catch (SecurityException e) {
-	    logger.error(e.getMessage(), e);
-	} catch (NoSuchMethodException e) {
-	    logger.error(e.getMessage(), e);
-	} catch (IllegalArgumentException e) {
-	    logger.error(e.getMessage(), e);
-	} catch (InstantiationException e) {
-	    logger.error(e.getMessage(), e);
-	} catch (IllegalAccessException e) {
-	    logger.error(e.getMessage(), e);
-	} catch (InvocationTargetException e) {
-	    logger.error(e.getMessage(), e);
 	}
+	throw new PartDoesNotMatchException(this);
     }
 
     protected boolean isCurrentOneOf(
-	    Class<? extends TokenDefinitionGroup> definitions) {
-	try {
-	    Constructor<?> constructor = definitions.getConstructor();
-	    TokenDefinitionGroup tokenDefinitions =
-		    (TokenDefinitionGroup) constructor.newInstance();
-	    for (TokenDefinition definition : tokenDefinitions
-		    .getTokenDefinitions()) {
-		if (isToken(definition.getClass())) {
-		    return true;
-		}
+	    Class<? extends TokenDefinitionGroup> definitions)
+	    throws ParserException {
+	TokenDefinitionGroup tokenDefinitions =
+		createInstance(definitions);
+	for (TokenDefinition definition : tokenDefinitions
+		.getTokenDefinitions()) {
+	    if (isToken(definition.getClass())) {
+		return true;
 	    }
-	} catch (SecurityException e) {
-	    logger.error(e.getMessage(), e);
-	} catch (NoSuchMethodException e) {
-	    logger.error(e.getMessage(), e);
-	} catch (IllegalArgumentException e) {
-	    logger.error(e.getMessage(), e);
-	} catch (InstantiationException e) {
-	    logger.error(e.getMessage(), e);
-	} catch (IllegalAccessException e) {
-	    logger.error(e.getMessage(), e);
-	} catch (InvocationTargetException e) {
-	    logger.error(e.getMessage(), e);
 	}
 	return false;
     }
@@ -328,7 +286,7 @@ public abstract class AbstractParser implements Parser {
 
     protected void skipNested(Class<? extends TokenDefinition> left,
 	    Class<? extends TokenDefinition> right)
-	    throws PartDoesNotMatchException {
+	    throws PartDoesNotMatchException, ParserException {
 	try {
 	    processToken(left);
 	    int count = 1;

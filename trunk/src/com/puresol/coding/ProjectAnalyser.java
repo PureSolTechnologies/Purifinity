@@ -25,6 +25,7 @@ import org.apache.log4j.Logger;
 import com.puresol.coding.analysis.Analyser;
 import com.puresol.coding.analysis.AnalyserFactory;
 import com.puresol.coding.lang.LanguageNotSupportedException;
+import com.puresol.utils.Files;
 
 public class ProjectAnalyser implements ProgressObservable {
 
@@ -73,8 +74,7 @@ public class ProjectAnalyser implements ProgressObservable {
 
     private void analyseFile(File file) {
 	try {
-	    if ((new File(directory.getPath() + "/" + file.getPath())
-		    .isFile())
+	    if ((Files.addPaths(directory, file).isFile())
 		    && (!file.getPath().contains("/."))) {
 		analysers.put(file, AnalyserFactory.createAnalyser(
 			directory, file));

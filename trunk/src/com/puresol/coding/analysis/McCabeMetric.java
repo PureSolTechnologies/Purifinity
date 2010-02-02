@@ -10,10 +10,13 @@
 
 package com.puresol.coding.analysis;
 
+import org.apache.log4j.Logger;
+
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.CodeRangeType;
 import com.puresol.coding.tokentypes.SourceTokenDefinition;
 import com.puresol.parser.Token;
+import com.puresol.parser.TokenException;
 import com.puresol.parser.TokenPublicity;
 import com.puresol.parser.TokenStream;
 
@@ -25,6 +28,9 @@ import com.puresol.parser.TokenStream;
  */
 public class McCabeMetric extends AbstractMetric {
 
+    private static final Logger logger =
+	    Logger.getLogger(McCabeMetric.class);
+
     private int cyclomaticNumber = 1;
 
     public McCabeMetric(CodeRange codeRange) {
@@ -33,18 +39,22 @@ public class McCabeMetric extends AbstractMetric {
     }
 
     private void calculate() {
-	CodeRange codeRange = getCodeRange();
-	TokenStream tokenStream = codeRange.getTokenStream();
-	for (int index = codeRange.getStart(); index <= codeRange
-		.getStop(); index++) {
-	    Token token = tokenStream.get(index);
-	    if (token.getPublicity() != TokenPublicity.HIDDEN) {
-		SourceTokenDefinition def =
-			(SourceTokenDefinition) token
-				.getDefinitionInstance();
-		addCyclomaticNumber(def.getCyclomaticNumber(token,
-			tokenStream));
+	try {
+	    CodeRange codeRange = getCodeRange();
+	    TokenStream tokenStream = codeRange.getTokenStream();
+	    for (int index = codeRange.getStart(); index <= codeRange
+		    .getStop(); index++) {
+		Token token = tokenStream.get(index);
+		if (token.getPublicity() != TokenPublicity.HIDDEN) {
+		    SourceTokenDefinition def =
+			    (SourceTokenDefinition) token
+				    .getDefinitionInstance();
+		    addCyclomaticNumber(def.getCyclomaticNumber(token,
+			    tokenStream));
+		}
 	    }
+	} catch (TokenException e) {
+	    logger.error(e);
 	}
     }
 

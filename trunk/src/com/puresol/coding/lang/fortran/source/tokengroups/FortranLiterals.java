@@ -1,5 +1,7 @@
 package com.puresol.coding.lang.fortran.source.tokengroups;
 
+import org.apache.log4j.Logger;
+
 import com.puresol.coding.lang.fortran.source.literals.FloatingPointLiteral;
 import com.puresol.coding.lang.fortran.source.literals.FormatLiteral;
 import com.puresol.coding.lang.fortran.source.literals.IdLiteral;
@@ -8,18 +10,26 @@ import com.puresol.coding.lang.fortran.source.literals.StringLiteral;
 import com.puresol.coding.lang.fortran.source.literals.StringStartLiteral;
 import com.puresol.coding.lang.fortran.source.literals.StringStopLiteral;
 import com.puresol.parser.AbstractTokenDefinitionGroup;
+import com.puresol.parser.TokenException;
 
 public class FortranLiterals extends AbstractTokenDefinitionGroup {
 
-	@Override
-	protected void initialize() {
-		addTokenDefinition(StringLiteral.class);
-		addTokenDefinition(StringStartLiteral.class);
-		addTokenDefinition(StringStopLiteral.class);
-		addTokenDefinition(FloatingPointLiteral.class);
-		addTokenDefinition(IntegerLiteral.class);
+    private static final Logger logger =
+	    Logger.getLogger(FortranLiterals.class);
 
-		addTokenDefinition(FormatLiteral.class);
-		addTokenDefinition(IdLiteral.class);
+    @Override
+    protected void initialize() {
+	try {
+	    addTokenDefinition(StringLiteral.class);
+	    addTokenDefinition(StringStartLiteral.class);
+	    addTokenDefinition(StringStopLiteral.class);
+	    addTokenDefinition(FloatingPointLiteral.class);
+	    addTokenDefinition(IntegerLiteral.class);
+
+	    addTokenDefinition(FormatLiteral.class);
+	    addTokenDefinition(IdLiteral.class);
+	} catch (TokenException e) {
+	    logger.error(e.getMessage());
 	}
+    }
 }

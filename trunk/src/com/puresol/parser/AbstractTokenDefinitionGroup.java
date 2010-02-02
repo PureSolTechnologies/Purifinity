@@ -1,17 +1,14 @@
 package com.puresol.parser;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
-import org.apache.log4j.Logger;
+import com.puresol.utils.ClassInstantiationException;
+import com.puresol.utils.Instances;
 
-public abstract class AbstractTokenDefinitionGroup implements TokenDefinitionGroup {
+public abstract class AbstractTokenDefinitionGroup implements
+	TokenDefinitionGroup {
 
-    private static final Logger logger =
-	    Logger.getLogger(AbstractTokenDefinition.class);
-
-    public ArrayList<TokenDefinition> definitions =
+    public final ArrayList<TokenDefinition> definitions =
 	    new ArrayList<TokenDefinition>();
 
     public AbstractTokenDefinitionGroup() {
@@ -21,60 +18,42 @@ public abstract class AbstractTokenDefinitionGroup implements TokenDefinitionGro
     protected abstract void initialize();
 
     @Override
-    public void addTokenDefinition(Class<? extends TokenDefinition> keyword) {
+    public final void addTokenDefinition(
+	    Class<? extends TokenDefinition> keyword)
+	    throws TokenException {
 	try {
-	    Constructor<?> constructor;
-	    constructor = keyword.getConstructor();
-	    definitions.add((TokenDefinition) constructor.newInstance());
-	} catch (SecurityException e) {
-	    logger.error(e.getMessage(), e);
-	} catch (NoSuchMethodException e) {
-	    logger.error(e.getMessage(), e);
-	} catch (IllegalArgumentException e) {
-	    logger.error(e.getMessage(), e);
-	} catch (InstantiationException e) {
-	    logger.error(e.getMessage(), e);
-	} catch (IllegalAccessException e) {
-	    logger.error(e.getMessage(), e);
-	} catch (InvocationTargetException e) {
-	    logger.error(e.getMessage(), e);
+	    definitions.add(Instances.createInstance(keyword));
+	} catch (ClassInstantiationException e) {
+	    throw new TokenException(e.getMessage());
 	}
     }
 
     @Override
-    public void addTokenDefinition(TokenDefinition keyword) {
+    public final void addTokenDefinition(TokenDefinition keyword) {
 	definitions.add(keyword);
     }
 
     @Override
-    public void addTokenDefinitions(Class<? extends TokenDefinitionGroup> definitions) {
+    public final void addTokenDefinitions(
+	    Class<? extends TokenDefinitionGroup> definitions)
+	    throws TokenException {
 	try {
-	    Constructor<?> constructor = definitions.getConstructor();
 	    TokenDefinitionGroup definitionsInstance =
-		    (TokenDefinitionGroup) constructor.newInstance();
-	    this.definitions.addAll(definitionsInstance.getTokenDefinitions());
-	} catch (SecurityException e) {
-	    logger.error(e.getMessage());
-	} catch (NoSuchMethodException e) {
-	    logger.error(e.getMessage());
-	} catch (IllegalArgumentException e) {
-	    logger.error(e.getMessage());
-	} catch (InstantiationException e) {
-	    logger.error(e.getMessage());
-	} catch (IllegalAccessException e) {
-	    logger.error(e.getMessage());
-	} catch (InvocationTargetException e) {
-	    logger.error(e.getMessage());
+		    Instances.createInstance(definitions);
+	    this.definitions.addAll(definitionsInstance
+		    .getTokenDefinitions());
+	} catch (ClassInstantiationException e) {
+	    throw new TokenException(e.getMessage());
 	}
     }
 
     @Override
-    public void addTokenDefinitions(TokenDefinitionGroup definitions) {
+    public final void addTokenDefinitions(TokenDefinitionGroup definitions) {
 	this.definitions.addAll(definitions.getTokenDefinitions());
     }
 
     @Override
-    public ArrayList<TokenDefinition> getTokenDefinitions() {
+    public final ArrayList<TokenDefinition> getTokenDefinitions() {
 	return definitions;
     }
 }

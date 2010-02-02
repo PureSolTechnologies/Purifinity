@@ -10,6 +10,7 @@ import java.io.IOException;
 import org.junit.Test;
 
 import com.puresol.coding.CodeRange;
+import com.puresol.parser.LexerException;
 import com.puresol.parser.NoMatchingTokenDefinitionFound;
 import com.puresol.parser.PartDoesNotMatchException;
 import com.puresol.parser.Token;
@@ -53,6 +54,9 @@ public class FortranParserTest extends TestCase {
 	    e.printStackTrace();
 	    Assert.fail("No exception was expected!");
 	} catch (PartDoesNotMatchException e) {
+	    e.printStackTrace();
+	    Assert.fail("No exception was expected!");
+	} catch (LexerException e) {
 	    e.printStackTrace();
 	    Assert.fail("No exception was expected!");
 	}
