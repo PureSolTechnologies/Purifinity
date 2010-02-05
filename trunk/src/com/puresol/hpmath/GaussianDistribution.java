@@ -13,6 +13,9 @@ public class GaussianDistribution {
     private double average = 0.0;
     private double standardDeviation = 1.0;
 
+    /**
+     * This constructor leads to a normalized Gaussian Distribution.
+     */
     public GaussianDistribution() {
     }
 
@@ -65,28 +68,29 @@ public class GaussianDistribution {
      *            is the number of intervals to be used.
      * @return The integrated value is returned.
      */
-    public double simepleIntegration(double left, double right,
+    public double simpleIntegration(double left, double right,
 	    int intervals) {
-	double leftEdge = average - 10.0 * standardDeviation;
-	double rightEdge = average + 10.0 * standardDeviation;
-	double intWidth = (rightEdge - leftEdge) / (double) intervals;
+	double intWidth = (right - left) / (double) intervals;
 
 	double result = 0.0;
 	for (int interval = 0; interval < intervals; interval++) {
-	    double x = leftEdge + intWidth * (0.5 + (double) interval);
-	    double y =
-		    Math
-			    .exp(-0.5
-				    * sqr((x - average)
-					    / standardDeviation));
-	    result += y * intWidth;
+	    double x1 = left + intWidth * (double) interval;
+	    double y1 =
+		    Math.exp(-0.5
+			    * sqr((x1 - average) / standardDeviation));
+	    double x2 = x1 + intWidth;
+	    double y2 =
+		    Math.exp(-0.5
+			    * sqr((x2 - average) / standardDeviation));
+	    result += (y1 + y2) / 2.0 * intWidth;
 	}
 	result /= (Math.sqrt(2.0 * Math.PI) * standardDeviation);
 	return result;
     }
 
     public double phi(double x) {
-	return 0.5 * (1.0 + ErrorFunction.erf(x / Math.sqrt(2.0)));
+	return 0.5 * (1.0 + ErrorFunction.erf(x / Math.sqrt(2.0), average,
+		standardDeviation));
     }
 
     /**
@@ -101,11 +105,4 @@ public class GaussianDistribution {
 	return phi(right) - phi(left);
     }
 
-    public static double confidence(double n) {
-	return ErrorFunction.erf(n / Math.sqrt(2.0));
-    }
-
-    public static double sigmaLevel(double confidence) {
-	return Math.sqrt(2.0) * ErrorFunction.erfc(confidence);
-    }
 }

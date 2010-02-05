@@ -17,6 +17,11 @@ public class ErrorFunction {
     private static final Translator translator =
 	    Translator.getTranslator(ErrorFunction.class);
 
+    public static double erf(double x, double average,
+	    double standardDeviation) {
+	return erf((x - average) / standardDeviation);
+    }
+
     public static double erf(double x) {
 	if (x <= -5.0) {
 	    return -1.0;
@@ -33,8 +38,12 @@ public class ErrorFunction {
 
     private static double sum(double x) {
 	double result = 0.0;
-	for (int n = 0; n <= 100; n++) {
-	    result += x / (2.0 * (double) n + 1.0) * product(x, n);
+	for (int n = 0; n <= 10000; n++) {
+	    double summand = x / (2.0 * (double) n + 1.0) * product(x, n);
+	    result += summand;
+	    if (Math.abs(summand / result) < 1e-9) {
+		break;
+	    }
 	}
 	return result;
     }

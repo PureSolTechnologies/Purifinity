@@ -20,8 +20,6 @@ public class ErrorFunctionTest extends TestCase {
 
     @Test
     public void testErfc() {
-	System.out.println(ErrorFunction.erfc(-1.0));
-
 	Assert.assertEquals(-5.0, ErrorFunction.erfc(-1.0), 1e-7);
 	Assert.assertEquals(-0.5, ErrorFunction.erfc(-0.5204999), 1e-7);
 	Assert.assertEquals(0.0, ErrorFunction.erfc(0.0), 1e-7);
