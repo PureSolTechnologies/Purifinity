@@ -16,6 +16,12 @@ import com.puresol.data.PersonName;
 import com.puresol.data.PersonNamePart;
 import com.puresol.exceptions.StrangeSituationException;
 
+/**
+ * This class provides a GUI for input of extended names.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class NamePanel extends Panel {
 
 	private static final long serialVersionUID = 7298257976109780145L;

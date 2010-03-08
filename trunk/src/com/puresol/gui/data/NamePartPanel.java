@@ -11,6 +11,13 @@ import com.puresol.data.IllegalNamePartException;
 import com.puresol.data.PersonNamePart;
 import com.puresol.data.PersonNamePartType;
 
+/**
+ * This class provides a part of NamePanel to specify a name part with the
+ * specification of the type.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class NamePartPanel extends Panel {
 
 	private static final long serialVersionUID = -6012865138878226773L;
