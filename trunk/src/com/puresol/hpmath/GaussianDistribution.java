@@ -84,8 +84,8 @@ public class GaussianDistribution {
 	}
 
 	public double phi(double x) {
-		return 0.5 * (1.0 + ErrorFunction.erf(x / Math.sqrt(2.0), average,
-				standardDeviation));
+		return 0.5 * (1.0 + ErrorFunction.erf((x - average) / standardDeviation
+				/ Math.sqrt(2.0)));
 	}
 
 	/**

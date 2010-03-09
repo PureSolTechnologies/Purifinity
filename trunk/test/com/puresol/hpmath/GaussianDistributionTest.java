@@ -57,4 +57,14 @@ public class GaussianDistributionTest extends TestCase {
 		System.out.println(gd.simpleIntegration(-2.0, 4.0, 10000));
 		System.out.println(gd.integration(-2.0, 4.0));
 	}
+
+	@Test
+	public void testIntegrationAgainstErrorFunction() {
+		GaussianDistribution gd = new GaussianDistribution(1.0, 1.0);
+		System.out.println(gd.simpleIntegration(-10.0, -0.0, 1000));
+		System.out.println(gd.phi(-0.0));
+		Assert.assertEquals(gd.simpleIntegration(-10.0, 0.0, 1000),
+				gd.phi(0.0), 1e-4);
+	}
 }
+
