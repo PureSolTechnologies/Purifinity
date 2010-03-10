@@ -2,7 +2,7 @@ package com.puresol.coding.analysis.evaluator;
 
 import javax.i18n4j.Translator;
 
-import com.puresol.coding.CodeRange;
+import com.puresol.coding.analysis.CodeRange;
 import com.puresol.data.Identifiable;
 import com.puresol.exceptions.StrangeSituationException;
 import com.puresol.utils.ClassInstantiationException;

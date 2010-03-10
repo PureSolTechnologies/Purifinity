@@ -17,7 +17,7 @@ import javax.swingx.Label;
 import javax.swingx.Panel;
 import javax.swingx.TabbedPane;
 
-import com.puresol.coding.ProjectAnalyser;
+import com.puresol.coding.analysis.ProjectAnalyser;
 
 public class ProjectAnalysisBrowser extends Panel {
 

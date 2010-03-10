@@ -10,8 +10,8 @@
 
 package com.puresol.coding.analysis.metrics;
 
-import com.puresol.coding.CodeRange;
-import com.puresol.coding.CodeRangeType;
+import com.puresol.coding.analysis.CodeRange;
+import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.analysis.QualityLevel;
 
 public class MaintainabilityIndex implements Metric {

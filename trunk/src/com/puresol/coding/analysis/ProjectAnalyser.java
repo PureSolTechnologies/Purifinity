@@ -8,7 +8,7 @@
  *
  ***************************************************************************/
 
-package com.puresol.coding;
+package com.puresol.coding.analysis;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -22,8 +22,6 @@ import javax.swingx.progress.ProgressObserver;
 
 import org.apache.log4j.Logger;
 
-import com.puresol.coding.analysis.Analyser;
-import com.puresol.coding.analysis.AnalyserFactory;
 import com.puresol.coding.lang.LanguageNotSupportedException;
 import com.puresol.utils.Files;
 

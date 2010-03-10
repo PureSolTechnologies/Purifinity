@@ -6,7 +6,7 @@ import javax.swingx.BorderLayoutWidget;
 import javax.swingx.Label;
 import javax.swingx.ScrollPane;
 
-import com.puresol.coding.CodeRange;
+import com.puresol.coding.analysis.CodeRange;
 import com.puresol.parser.TokenStream;
 
 public class CodeRangeViewer extends BorderLayoutWidget {

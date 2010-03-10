@@ -20,8 +20,8 @@ import java.util.Hashtable;
 
 import org.apache.log4j.Logger;
 
-import com.puresol.coding.CodeRange;
-import com.puresol.coding.ProjectAnalyser;
+import com.puresol.coding.analysis.CodeRange;
+import com.puresol.coding.analysis.ProjectAnalyser;
 import com.puresol.coding.analysis.QualityLevel;
 import com.puresol.coding.analysis.metrics.CodeRangeMetrics;
 import com.puresol.coding.analysis.metrics.MetricsCalculator;

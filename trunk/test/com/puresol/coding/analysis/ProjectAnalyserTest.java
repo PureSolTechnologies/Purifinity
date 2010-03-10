@@ -15,8 +15,6 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
-import com.puresol.coding.CodeRange;
-import com.puresol.coding.ProjectAnalyser;
 import com.puresol.parser.Token;
 import com.puresol.parser.TokenPublicity;
 import com.puresol.parser.TokenStream;

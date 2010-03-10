@@ -1,6 +1,6 @@
 package com.puresol.coding.lang.java.source.parts;
 
-import com.puresol.coding.AbstractSourceCodeParser;
+import com.puresol.coding.analysis.AbstractSourceCodeParser;
 import com.puresol.coding.lang.fortran.source.symbols.Comma;
 import com.puresol.coding.lang.java.source.symbols.LParen;
 import com.puresol.coding.lang.java.source.symbols.RParen;

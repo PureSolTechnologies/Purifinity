@@ -3,7 +3,7 @@ package com.puresol.gui.coding.analysis;
 import javax.swingx.BorderLayoutWidget;
 import javax.swingx.TabbedPane;
 
-import com.puresol.coding.ProjectAnalyser;
+import com.puresol.coding.analysis.ProjectAnalyser;
 import com.puresol.coding.analysis.ProjectStatistics;
 import com.puresol.coding.analysis.metrics.CoCoMo;
 import com.puresol.gui.coding.CodeViewer;

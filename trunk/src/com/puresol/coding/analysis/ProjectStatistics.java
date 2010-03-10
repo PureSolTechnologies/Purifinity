@@ -2,9 +2,6 @@ package com.puresol.coding.analysis;
 
 import java.io.File;
 
-import com.puresol.coding.CodeRange;
-import com.puresol.coding.CodeRangeType;
-import com.puresol.coding.ProjectAnalyser;
 
 public class ProjectStatistics {
 

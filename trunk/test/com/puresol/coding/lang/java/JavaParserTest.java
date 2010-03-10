@@ -9,7 +9,7 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-import com.puresol.coding.CodeRange;
+import com.puresol.coding.analysis.CodeRange;
 import com.puresol.coding.lang.java.JavaLexer;
 import com.puresol.coding.lang.java.JavaParser;
 import com.puresol.parser.DefaultPreConditioner;

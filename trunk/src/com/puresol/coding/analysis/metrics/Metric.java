@@ -10,7 +10,7 @@
 
 package com.puresol.coding.analysis.metrics;
 
-import com.puresol.coding.CodeRange;
+import com.puresol.coding.analysis.CodeRange;
 import com.puresol.coding.analysis.QualityLevel;
 
 /**

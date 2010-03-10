@@ -1,6 +1,6 @@
 package com.puresol.coding.lang.java.source.parts;
 
-import com.puresol.coding.AbstractSourceCodeParser;
+import com.puresol.coding.analysis.AbstractSourceCodeParser;
 import com.puresol.coding.lang.java.source.keywords.PackageKeyword;
 import com.puresol.coding.lang.java.source.literals.IdLiteral;
 import com.puresol.coding.lang.java.source.symbols.Dot;

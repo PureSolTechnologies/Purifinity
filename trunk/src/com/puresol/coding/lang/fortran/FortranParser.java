@@ -1,7 +1,7 @@
 package com.puresol.coding.lang.fortran;
 
-import com.puresol.coding.AbstractSourceCodeParser;
-import com.puresol.coding.CodeRangeType;
+import com.puresol.coding.analysis.AbstractSourceCodeParser;
+import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.Language;
 import com.puresol.parser.EndOfTokenStreamException;
 import com.puresol.parser.PartDoesNotMatchException;

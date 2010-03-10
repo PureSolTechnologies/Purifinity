@@ -13,7 +13,6 @@ package com.puresol.coding.analysis;
 import java.io.File;
 import java.util.ArrayList;
 
-import com.puresol.coding.CodeRange;
 import com.puresol.coding.lang.Language;
 
 /**

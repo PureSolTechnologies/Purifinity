@@ -6,9 +6,9 @@ import javax.swingx.data.VerticalData;
 import javax.swingx.data.VerticalDataFile;
 import javax.swingx.data.VerticalDataFileFormat;
 
-import com.puresol.coding.CodeRange;
-import com.puresol.coding.ProjectAnalyser;
 import com.puresol.coding.analysis.AvailableMetrics;
+import com.puresol.coding.analysis.CodeRange;
+import com.puresol.coding.analysis.ProjectAnalyser;
 import com.puresol.coding.analysis.metrics.CodeDepth;
 import com.puresol.coding.analysis.metrics.CodeRangeMetrics;
 import com.puresol.coding.analysis.metrics.HalsteadMetric;

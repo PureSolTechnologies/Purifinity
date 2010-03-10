@@ -10,7 +10,7 @@ import javax.i18n4j.FileSearch;
 
 import org.junit.Test;
 
-import com.puresol.coding.CodeRange;
+import com.puresol.coding.analysis.CodeRange;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;

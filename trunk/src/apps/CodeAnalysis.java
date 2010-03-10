@@ -23,7 +23,7 @@ import javax.swingx.MenuItem;
 import javax.swingx.connect.Slot;
 import javax.swingx.progress.ProgressWindow;
 
-import com.puresol.coding.ProjectAnalyser;
+import com.puresol.coding.analysis.ProjectAnalyser;
 import com.puresol.coding.analysis.reports.HTMLProject;
 import com.puresol.coding.analysis.reports.TSVFile;
 import com.puresol.gui.PureSolApplication;

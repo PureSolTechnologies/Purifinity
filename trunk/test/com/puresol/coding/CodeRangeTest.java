@@ -2,6 +2,8 @@ package com.puresol.coding;
 
 import org.junit.Test;
 
+import com.puresol.coding.analysis.CodeRange;
+import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.Language;
 import com.puresol.parser.TokenStream;
 import com.puresol.parser.TokenStreamTest;

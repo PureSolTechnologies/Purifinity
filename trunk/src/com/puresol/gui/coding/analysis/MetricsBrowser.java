@@ -28,8 +28,8 @@ import javax.swingx.ToolBar;
 import javax.swingx.connect.Slot;
 import javax.swingx.progress.ProgressWindow;
 
-import com.puresol.coding.CodeRange;
-import com.puresol.coding.ProjectAnalyser;
+import com.puresol.coding.analysis.CodeRange;
+import com.puresol.coding.analysis.ProjectAnalyser;
 import com.puresol.coding.analysis.QualityLevel;
 import com.puresol.coding.analysis.metrics.MetricsCalculator;
 import com.puresol.coding.analysis.reports.HTMLMetricsReport;

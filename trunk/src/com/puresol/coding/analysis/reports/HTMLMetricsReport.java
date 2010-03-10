@@ -12,8 +12,8 @@ package com.puresol.coding.analysis.reports;
 
 import javax.i18n4j.Translator;
 
-import com.puresol.coding.CodeRange;
 import com.puresol.coding.analysis.AvailableMetrics;
+import com.puresol.coding.analysis.CodeRange;
 import com.puresol.coding.analysis.QualityLevel;
 import com.puresol.coding.analysis.metrics.CodeRangeMetrics;
 import com.puresol.coding.analysis.metrics.Metric;

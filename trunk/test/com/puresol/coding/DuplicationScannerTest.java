@@ -5,6 +5,10 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
+import com.puresol.coding.analysis.ProjectAnalyser;
+import com.puresol.coding.analysis.evaluator.duplication.Duplication;
+import com.puresol.coding.analysis.evaluator.duplication.DuplicationScanner;
+
 import junit.framework.TestCase;
 
 public class DuplicationScannerTest extends TestCase {

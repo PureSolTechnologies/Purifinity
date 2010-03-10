@@ -1,6 +1,6 @@
 package com.puresol.coding.analysis.evaluator;
 
-import com.puresol.coding.CodeRange;
+import com.puresol.coding.analysis.CodeRange;
 import com.puresol.coding.analysis.QualityLevel;
 
 /**

@@ -2,8 +2,8 @@ package com.puresol.coding.analysis.metrics;
 
 import org.apache.log4j.Logger;
 
-import com.puresol.coding.CodeRange;
 import com.puresol.coding.analysis.AbstractMetric;
+import com.puresol.coding.analysis.CodeRange;
 import com.puresol.coding.analysis.QualityLevel;
 import com.puresol.coding.tokentypes.SourceTokenDefinition;
 import com.puresol.parser.Token;

@@ -2,7 +2,6 @@ package com.puresol.coding.analysis;
 
 import javax.i18n4j.Translator;
 
-import com.puresol.coding.CodeRange;
 import com.puresol.coding.analysis.metrics.CodeDepth;
 import com.puresol.coding.analysis.metrics.EntropyMetric;
 import com.puresol.coding.analysis.metrics.HalsteadMetric;

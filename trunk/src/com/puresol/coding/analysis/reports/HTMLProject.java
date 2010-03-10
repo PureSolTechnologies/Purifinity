@@ -2,7 +2,7 @@ package com.puresol.coding.analysis.reports;
 
 import java.io.File;
 
-import com.puresol.coding.ProjectAnalyser;
+import com.puresol.coding.analysis.ProjectAnalyser;
 import com.puresol.html.HTMLStandards;
 import com.puresol.jars.JarFile;
 import com.puresol.utils.Directories;

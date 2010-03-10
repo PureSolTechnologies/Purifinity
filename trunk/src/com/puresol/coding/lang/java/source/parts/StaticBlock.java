@@ -1,6 +1,6 @@
 package com.puresol.coding.lang.java.source.parts;
 
-import com.puresol.coding.AbstractSourceCodeParser;
+import com.puresol.coding.analysis.AbstractSourceCodeParser;
 import com.puresol.coding.lang.java.source.keywords.StaticKeyword;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;

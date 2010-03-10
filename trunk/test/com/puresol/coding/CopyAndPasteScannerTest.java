@@ -5,6 +5,10 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
+import com.puresol.coding.analysis.ProjectAnalyser;
+import com.puresol.coding.analysis.evaluator.duplication.CopyAndPasteScanner;
+import com.puresol.coding.analysis.evaluator.duplication.Duplication;
+
 import junit.framework.Assert;
 import junit.framework.TestCase;
 

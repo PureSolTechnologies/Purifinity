@@ -1,6 +1,6 @@
 package com.puresol.coding.lang.java.source.parts;
 
-import com.puresol.coding.AbstractSourceCodeParser;
+import com.puresol.coding.analysis.AbstractSourceCodeParser;
 import com.puresol.coding.lang.java.source.symbols.LCurlyBracket;
 import com.puresol.coding.lang.java.source.symbols.RCurlyBracket;
 import com.puresol.parser.ParserException;

@@ -11,8 +11,8 @@ import javax.swingx.FreeList;
 import javax.swingx.ScrollPane;
 import javax.swingx.connect.Slot;
 
-import com.puresol.coding.CodeRange;
-import com.puresol.coding.Duplication;
+import com.puresol.coding.analysis.CodeRange;
+import com.puresol.coding.analysis.evaluator.duplication.Duplication;
 
 public class DuplicationBrowser extends BorderLayoutWidget {
 

@@ -8,8 +8,8 @@ import java.util.Hashtable;
 import javax.swingx.progress.ProgressObservable;
 import javax.swingx.progress.ProgressObserver;
 
-import com.puresol.coding.CodeRange;
-import com.puresol.coding.ProjectAnalyser;
+import com.puresol.coding.analysis.CodeRange;
+import com.puresol.coding.analysis.ProjectAnalyser;
 import com.puresol.coding.analysis.QualityLevel;
 
 public class MetricsCalculator implements ProgressObservable {

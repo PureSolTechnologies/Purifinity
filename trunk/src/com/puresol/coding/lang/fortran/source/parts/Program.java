@@ -1,6 +1,6 @@
 package com.puresol.coding.lang.fortran.source.parts;
 
-import com.puresol.coding.AbstractSourceCodeParser;
+import com.puresol.coding.analysis.AbstractSourceCodeParser;
 import com.puresol.coding.lang.fortran.source.keywords.EndProgramKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.ProgramKeyword;
 import com.puresol.parser.ParserException;

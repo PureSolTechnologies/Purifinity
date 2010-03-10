@@ -1,4 +1,6 @@
-package com.puresol.coding;
+package com.puresol.coding.analysis.evaluator.duplication;
+
+import com.puresol.coding.analysis.CodeRange;
 
 public class Duplication implements Comparable<Duplication> {
 

@@ -13,9 +13,9 @@ package com.puresol.coding.analysis.metrics;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
-import com.puresol.coding.CodeRange;
 import com.puresol.coding.analysis.AvailableMetrics;
 import com.puresol.coding.analysis.CodeEvaluationSystem;
+import com.puresol.coding.analysis.CodeRange;
 import com.puresol.coding.analysis.QualityLevel;
 
 public class CodeRangeMetrics {
