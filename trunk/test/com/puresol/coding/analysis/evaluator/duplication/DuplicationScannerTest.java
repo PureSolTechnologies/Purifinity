@@ -1,4 +1,4 @@
-package com.puresol.coding;
+package com.puresol.coding.analysis.evaluator.duplication;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ public class DuplicationScannerTest extends TestCase {
 	@Test
 	public void testOnDummyClass() {
 		ProjectAnalyser projectAnalyser = new ProjectAnalyser(new File(
-				"test/com/puresol/coding"),
+				"test/com/puresol/coding/analysis/evaluator/duplication"),
 				"DummyClassForDuplicationScannerTest.java");
 		projectAnalyser.run();
 		DuplicationScanner search = new DuplicationScanner(projectAnalyser);
