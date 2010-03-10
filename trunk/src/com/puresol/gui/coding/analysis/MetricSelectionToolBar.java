@@ -37,7 +37,7 @@ public class MetricSelectionToolBar extends ToolBar implements Mediator {
     private void initUI() {
 	for (AvailableMetrics metric : CodeEvaluationSystem.getMetrics()) {
 	    ToggleButton button = new ToggleButton(metric.getIdentifier());
-	    button.setSelected(CodeEvaluationSystem.isEvaluate(metric));
+	    button.setSelected(CodeEvaluationSystem.isMetricEvaluate(metric));
 	    buttons.put(button, metric);
 	    button.addMediator(this);
 	    add(button);
@@ -49,7 +49,7 @@ public class MetricSelectionToolBar extends ToolBar implements Mediator {
     public void widgetChanged(Widget widget) {
 	ToggleButton button = (ToggleButton) widget;
 	AvailableMetrics metric = buttons.get(button);
-	CodeEvaluationSystem.setEvaluate(metric, button.isSelected());
+	CodeEvaluationSystem.setMetricEvaluate(metric, button.isSelected());
 	logger.debug("Eval of " + metric.getIdentifier()
 		+ " was switched to " + button.isSelected());
 	refresh();

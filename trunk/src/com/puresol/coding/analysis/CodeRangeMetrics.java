@@ -47,7 +47,7 @@ public class CodeRangeMetrics {
     public QualityLevel getQualityLevel() {
 	QualityLevel level = QualityLevel.HIGH;
 	for (AvailableMetrics metric : metrics.keySet()) {
-	    if (CodeEvaluationSystem.isEvaluate(metric)) {
+	    if (CodeEvaluationSystem.isMetricEvaluate(metric)) {
 		level =
 			QualityLevel.getMinLevel(level, metrics
 				.get(metric).getQualityLevel());
