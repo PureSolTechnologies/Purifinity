@@ -30,8 +30,8 @@ import javax.swingx.progress.ProgressWindow;
 
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.ProjectAnalyser;
-import com.puresol.coding.analysis.MetricsCalculator;
 import com.puresol.coding.analysis.QualityLevel;
+import com.puresol.coding.analysis.metrics.MetricsCalculator;
 import com.puresol.coding.analysis.reports.HTMLMetricsReport;
 
 public class MetricsBrowser extends BorderLayoutWidget {

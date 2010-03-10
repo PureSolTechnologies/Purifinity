@@ -1,4 +1,4 @@
-package com.puresol.coding.analysis;
+package com.puresol.coding.analysis.metrics;
 
 import java.io.File;
 
@@ -10,6 +10,7 @@ import javax.swingx.progress.ProgressObserver;
 
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.ProjectAnalyser;
+import com.puresol.coding.analysis.QualityLevel;
 
 public class MetricsCalculator implements ProgressObservable {
 

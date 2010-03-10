@@ -24,8 +24,8 @@ import javax.swingx.connect.Slot;
 import javax.swingx.progress.ProgressWindow;
 
 import com.puresol.coding.ProjectAnalyser;
-import com.puresol.coding.analysis.out.TSVFile;
 import com.puresol.coding.analysis.reports.HTMLProject;
+import com.puresol.coding.analysis.reports.TSVFile;
 import com.puresol.gui.PureSolApplication;
 import com.puresol.gui.coding.analysis.MetricSelectionToolBar;
 import com.puresol.gui.coding.analysis.ProjectAnalysisBrowser;

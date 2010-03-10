@@ -8,9 +8,10 @@
  *
  ***************************************************************************/
 
-package com.puresol.coding.analysis;
+package com.puresol.coding.analysis.metrics;
 
 import com.puresol.coding.CodeRange;
+import com.puresol.coding.analysis.QualityLevel;
 
 /**
  * This is a simple interface to a single code range analysis.

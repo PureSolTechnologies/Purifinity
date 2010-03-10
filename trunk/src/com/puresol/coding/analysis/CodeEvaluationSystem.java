@@ -13,8 +13,9 @@ package com.puresol.coding.analysis;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
-import com.puresol.coding.evaluator.AvailableEvaluators;
-import com.puresol.coding.evaluator.CodeEvaluator;
+import com.puresol.coding.analysis.evaluator.AvailableEvaluators;
+import com.puresol.coding.analysis.evaluator.CodeEvaluator;
+import com.puresol.coding.analysis.metrics.Metric;
 
 public class CodeEvaluationSystem {
 

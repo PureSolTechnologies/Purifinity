@@ -3,6 +3,13 @@ package com.puresol.coding.analysis;
 import javax.i18n4j.Translator;
 
 import com.puresol.coding.CodeRange;
+import com.puresol.coding.analysis.metrics.CodeDepth;
+import com.puresol.coding.analysis.metrics.EntropyMetric;
+import com.puresol.coding.analysis.metrics.HalsteadMetric;
+import com.puresol.coding.analysis.metrics.MaintainabilityIndex;
+import com.puresol.coding.analysis.metrics.McCabeMetric;
+import com.puresol.coding.analysis.metrics.Metric;
+import com.puresol.coding.analysis.metrics.SLOCMetric;
 import com.puresol.data.Identifiable;
 import com.puresol.exceptions.StrangeSituationException;
 import com.puresol.utils.ClassInstantiationException;

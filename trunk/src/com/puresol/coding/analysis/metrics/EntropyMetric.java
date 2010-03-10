@@ -8,11 +8,12 @@
  *
  ***************************************************************************/
 
-package com.puresol.coding.analysis;
+package com.puresol.coding.analysis.metrics;
 
 import java.util.Hashtable;
 
 import com.puresol.coding.CodeRange;
+import com.puresol.coding.analysis.QualityLevel;
 
 /**
  * This class calculates entropy and redundancy for a code range. The

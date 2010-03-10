@@ -3,7 +3,7 @@ package com.puresol.coding.analysis.reports;
 import javax.i18n4j.Translator;
 
 import com.puresol.coding.analysis.AvailableMetrics;
-import com.puresol.coding.analysis.SLOCMetric;
+import com.puresol.coding.analysis.metrics.SLOCMetric;
 import com.puresol.html.Anchor;
 import com.puresol.html.HTMLStandards;
 import com.puresol.statistics.Statistics;

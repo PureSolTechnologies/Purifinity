@@ -1,4 +1,4 @@
-package com.puresol.coding.evaluator;
+package com.puresol.coding.analysis.evaluator;
 
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.analysis.QualityLevel;

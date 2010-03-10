@@ -3,7 +3,7 @@ package com.puresol.coding.analysis.reports;
 import javax.i18n4j.Translator;
 
 import com.puresol.coding.analysis.AvailableMetrics;
-import com.puresol.coding.analysis.McCabeMetric;
+import com.puresol.coding.analysis.metrics.McCabeMetric;
 import com.puresol.html.Anchor;
 
 public class McCabeReport {

@@ -8,7 +8,7 @@
  *
  ***************************************************************************/
 
-package com.puresol.coding.analysis;
+package com.puresol.coding.analysis.metrics;
 
 import javax.i18n4j.Translator;
 

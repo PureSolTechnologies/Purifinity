@@ -8,13 +8,15 @@
  *
  ***************************************************************************/
 
-package com.puresol.coding.analysis;
+package com.puresol.coding.analysis.metrics;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.CodeRangeType;
+import com.puresol.coding.analysis.AbstractMetric;
+import com.puresol.coding.analysis.QualityLevel;
 import com.puresol.parser.Token;
 import com.puresol.parser.TokenPublicity;
 import com.puresol.parser.TokenStream;

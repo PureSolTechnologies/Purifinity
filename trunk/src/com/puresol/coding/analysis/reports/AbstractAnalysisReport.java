@@ -10,7 +10,7 @@
 
 package com.puresol.coding.analysis.reports;
 
-import com.puresol.coding.analysis.CodeRangeMetrics;
+import com.puresol.coding.analysis.metrics.CodeRangeMetrics;
 
 abstract public class AbstractAnalysisReport implements AnalysisReport {
 

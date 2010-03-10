@@ -1,4 +1,4 @@
-package com.puresol.coding.analysis.out;
+package com.puresol.coding.analysis.reports;
 
 import java.io.File;
 
@@ -9,13 +9,13 @@ import javax.swingx.data.VerticalDataFileFormat;
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.ProjectAnalyser;
 import com.puresol.coding.analysis.AvailableMetrics;
-import com.puresol.coding.analysis.CodeDepth;
-import com.puresol.coding.analysis.CodeRangeMetrics;
-import com.puresol.coding.analysis.HalsteadMetric;
-import com.puresol.coding.analysis.MaintainabilityIndex;
-import com.puresol.coding.analysis.McCabeMetric;
-import com.puresol.coding.analysis.MetricsCalculator;
-import com.puresol.coding.analysis.SLOCMetric;
+import com.puresol.coding.analysis.metrics.CodeDepth;
+import com.puresol.coding.analysis.metrics.CodeRangeMetrics;
+import com.puresol.coding.analysis.metrics.HalsteadMetric;
+import com.puresol.coding.analysis.metrics.MaintainabilityIndex;
+import com.puresol.coding.analysis.metrics.McCabeMetric;
+import com.puresol.coding.analysis.metrics.MetricsCalculator;
+import com.puresol.coding.analysis.metrics.SLOCMetric;
 import com.puresol.data.Storable;
 import com.puresol.data.StoreType;
 
