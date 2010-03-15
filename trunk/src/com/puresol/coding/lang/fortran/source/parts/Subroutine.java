@@ -3,6 +3,7 @@ package com.puresol.coding.lang.fortran.source.parts;
 import com.puresol.coding.analysis.AbstractSourceCodeParser;
 import com.puresol.coding.lang.cpp.source.symbols.LParen;
 import com.puresol.coding.lang.cpp.source.symbols.RParen;
+import com.puresol.coding.lang.fortran.source.keywords.EndKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.EndProgramKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.EndSubroutineKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.SubroutineKeyword;
@@ -21,7 +22,7 @@ public class Subroutine extends AbstractSourceCodeParser {
 	this.skipNested(LParen.class, RParen.class);
 
 	// TODO read here the code...
-	this.skipTokensUntil(EndProgramKeyword.class);
+	this.skipTokensUntil(EndSubroutineKeyword.class);
 
 	processToken(EndSubroutineKeyword.class);
 	processToken(name);

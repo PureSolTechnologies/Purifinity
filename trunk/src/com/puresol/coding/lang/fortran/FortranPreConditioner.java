@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 import javax.swingx.data.LineEnd;
 
@@ -36,23 +37,31 @@ public class FortranPreConditioner extends DefaultPreConditioner {
 
 	@Override
 	protected void generateTokenStream() throws IOException {
-		TokenStream tokenStream = new TokenStream(getFile());
-		setTokenStream(tokenStream);
-		String line = readLine();
+		setTokenStream(new TokenStream(getFile()));
+		ArrayList<String> buffer = readToBuffer();
+		String line = buffer.get(0);
 		if ((line.getBytes()[0] == '*') || (line.getBytes()[0] == 'c')
 				|| (line.getBytes()[0] == 'C') || (line.getBytes()[0] == ' ')) {
-			preconditionFortran77(line);
+			preconditionFortran77(buffer);
 		} else {
-			defaultPreConditioner(line);
+			defaultPreConditioner(buffer);
 		}
 	}
 
-	private void defaultPreConditioner(String line) {
+	private ArrayList<String> readToBuffer() {
+		ArrayList<String> buffer = new ArrayList<String>();
+		String line;
+		while ((line = readLine()) != null) {
+			buffer.add(line);
+		}
+		return buffer;
+	}
+
+	private void defaultPreConditioner(ArrayList<String> buffer) {
 		try {
 			String text = "";
-			while (line != null) {
+			for (String line : buffer) {
 				text += line;
-				line = readLine();
 			}
 			addToken(new Token(0, TokenPublicity.VISIBLE, 0, text.length(),
 					text, 0, text.split(LineEnd.UNIX.getString()).length - 1,
@@ -62,9 +71,9 @@ public class FortranPreConditioner extends DefaultPreConditioner {
 		}
 	}
 
-	private void preconditionFortran77(String line) {
+	private void preconditionFortran77(ArrayList<String> buffer) {
 		try {
-			while (line != null) {
+			for (String line : buffer) {
 				if (line.getBytes()[0] != ' ') {
 					processCommentLine(line);
 				} else if (line.length() <= 6) {
@@ -73,7 +82,6 @@ public class FortranPreConditioner extends DefaultPreConditioner {
 					processNormalLine(line);
 				}
 				lineNum++;
-				line = readLine();
 			}
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);

@@ -15,32 +15,32 @@ import com.puresol.parser.TokenStream;
 
 public class JavaParser extends AbstractSourceCodeParser {
 
-    public JavaParser(TokenStream tokenStream) {
-	setTokenStream(tokenStream);
-	setStartPosition(0);
-    }
+	public JavaParser(TokenStream tokenStream) {
+		setTokenStream(tokenStream);
+		setStartPosition(0);
+	}
 
-    @Override
-    public void scan() throws PartDoesNotMatchException, ParserException {
-	TokenStream tokenStream = getTokenStream();
-	addCodeRange(Language.JAVA, CodeRangeType.FILE, 0, tokenStream
-		.getSize() - 1);
+	@Override
+	public void scan() throws PartDoesNotMatchException, ParserException {
+		TokenStream tokenStream = getTokenStream();
+		addCodeRange(Language.JAVA, CodeRangeType.FILE, 0, tokenStream
+				.getSize() - 1);
 
-	try {
-	    moveForward(0);
-	} catch (EndOfTokenStreamException e) {
-	    // this may happen if there is an empty file...
-	    return;
+		try {
+			moveForward(0);
+		} catch (EndOfTokenStreamException e) {
+			// this may happen if there is an empty file...
+			return;
+		}
+		processPart(PackageDeclaration.class);
+		while (isPart(Import.class)) {
+			processPart(Import.class);
+		}
+		if (processPartIfPossible(ClassDeclaration.class)) {
+		} else if (processPartIfPossible(InterfaceDeclaration.class)) {
+		} else if (processPartIfPossible(EnumDeclaration.class)) {
+		} else {
+			throw new PartDoesNotMatchException(this);
+		}
 	}
-	processPart(PackageDeclaration.class);
-	while (isPart(Import.class)) {
-	    processPart(Import.class);
-	}
-	if (processPartIfPossible(ClassDeclaration.class)) {
-	} else if (processPartIfPossible(InterfaceDeclaration.class)) {
-	} else if (processPartIfPossible(EnumDeclaration.class)) {
-	} else {
-	    throw new PartDoesNotMatchException(this);
-	}
-    }
 }

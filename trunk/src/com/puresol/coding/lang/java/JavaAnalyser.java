@@ -31,49 +31,47 @@ import com.puresol.parser.TokenStream;
  */
 public class JavaAnalyser extends AbstractAnalyser {
 
-    private static final Logger logger =
-	    Logger.getLogger(JavaAnalyser.class);
+	private static final Logger logger = Logger.getLogger(JavaAnalyser.class);
 
-    public static boolean isSuitable(File file) {
-	return file.getPath().endsWith(".java");
-    }
-
-    /**
-     * This is the default constructor.
-     * 
-     * @param A
-     *            file to be analysed.
-     */
-    public JavaAnalyser(File projectDirectory, File file) {
-	super(projectDirectory, file);
-	parse();
-    }
-
-    private void parse() {
-	try {
-	    DefaultPreConditioner conditioner =
-		    new DefaultPreConditioner(getProjectDirectory(),
-			    getFile());
-	    TokenStream tokenStream = conditioner.getTokenStream();
-	    JavaLexer lexer = new JavaLexer(tokenStream);
-	    tokenStream = lexer.getTokenStream();
-	    JavaParser parser = new JavaParser(tokenStream);
-	    parser.scan();
-	    addCodeRanges(parser.getCodeRanges());
-	} catch (IOException e) {
-	    logger.error(e.getMessage(), e);
-	} catch (NoMatchingTokenDefinitionFound e) {
-	    logger.error(e.getMessage(), e);
-	} catch (PartDoesNotMatchException e) {
-	    logger.error(e.getMessage(), e);
-	} catch (ParserException e) {
-	    logger.error(e.getMessage(), e);
-	} catch (LexerException e) {
-	    logger.error(e.getMessage(), e);
+	public static boolean isSuitable(File file) {
+		return file.getPath().endsWith(".java");
 	}
-    }
 
-    public Language getLanguage() {
-	return Language.JAVA;
-    }
+	/**
+	 * This is the default constructor.
+	 * 
+	 * @param A
+	 *            file to be analysed.
+	 */
+	public JavaAnalyser(File projectDirectory, File file) {
+		super(projectDirectory, file);
+		parse();
+	}
+
+	private void parse() {
+		try {
+			DefaultPreConditioner conditioner = new DefaultPreConditioner(
+					getProjectDirectory(), getFile());
+			TokenStream tokenStream = conditioner.getTokenStream();
+			JavaLexer lexer = new JavaLexer(tokenStream);
+			tokenStream = lexer.getTokenStream();
+			JavaParser parser = new JavaParser(tokenStream);
+			parser.scan();
+			addCodeRanges(parser.getCodeRanges());
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e);
+		} catch (NoMatchingTokenDefinitionFound e) {
+			logger.error(e.getMessage(), e);
+		} catch (PartDoesNotMatchException e) {
+			logger.error(e.getMessage(), e);
+		} catch (ParserException e) {
+			logger.error(e.getMessage(), e);
+		} catch (LexerException e) {
+			logger.error(e.getMessage(), e);
+		}
+	}
+
+	public Language getLanguage() {
+		return Language.JAVA;
+	}
 }

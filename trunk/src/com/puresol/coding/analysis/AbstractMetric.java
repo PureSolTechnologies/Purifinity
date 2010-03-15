@@ -14,13 +14,13 @@ import com.puresol.coding.analysis.metrics.Metric;
 
 abstract public class AbstractMetric implements Metric {
 
-    private final CodeRange range;
+	private final CodeRange range;
 
-    public AbstractMetric(CodeRange range) {
-	this.range = range;
-    }
+	public AbstractMetric(CodeRange range) {
+		this.range = range;
+	}
 
-    public CodeRange getCodeRange() {
-	return range;
-    }
+	public final CodeRange getCodeRange() {
+		return range;
+	}
 }

@@ -1,6 +1,5 @@
 package com.puresol.coding.analysis.evaluator;
 
-import com.puresol.coding.analysis.CodeRange;
 import com.puresol.coding.analysis.QualityLevel;
 
 /**
@@ -13,8 +12,6 @@ import com.puresol.coding.analysis.QualityLevel;
 public interface CodeEvaluator {
 
 	public String getName();
-
-	public boolean isSuitable(CodeRange codeRange);
 
 	public boolean isValid();
 

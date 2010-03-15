@@ -20,63 +20,64 @@ import com.puresol.coding.analysis.AbstractAnalyser;
 import com.puresol.coding.lang.Language;
 import com.puresol.parser.LexerException;
 import com.puresol.parser.NoMatchingTokenDefinitionFound;
+import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 import com.puresol.parser.TokenStream;
 
 public class FortranAnalyser extends AbstractAnalyser {
 
-    private static final Logger logger =
-	    Logger.getLogger(FortranAnalyser.class);
+	private static final Logger logger = Logger
+			.getLogger(FortranAnalyser.class);
 
-    private static final String[] FILE_SUFFIXES =
-	    { ".f", ".f77", ".f90", ".f95" };
+	private static final String[] FILE_SUFFIXES = { ".f", ".f77", ".f90",
+			".f95" };
 
-    public static boolean isSuitable(File file) {
-	String name = file.getName();
-	for (String suffix : FILE_SUFFIXES) {
-	    if (name.endsWith(suffix)) {
-		return true;
-	    }
+	public static boolean isSuitable(File file) {
+		String name = file.getName();
+		for (String suffix : FILE_SUFFIXES) {
+			if (name.endsWith(suffix)) {
+				return true;
+			}
+		}
+		return false;
 	}
-	return false;
-    }
 
-    /**
-     * This is the default constructor.
-     * 
-     * @param A
-     *            file to be analysed.
-     */
-    public FortranAnalyser(File projectDirectory, File file) {
-	super(projectDirectory, file);
-	parse();
-    }
-
-    private void parse() {
-	try {
-	    FortranLexer lexer =
-		    new FortranLexer(new FortranPreConditioner(new File(
-			    getProjectDirectory().toString() + "/"
-				    + getFile().toString()))
-			    .getTokenStream());
-	    TokenStream tokenStream = lexer.getTokenStream();
-	    FortranParser parser = new FortranParser(tokenStream);
-	    parser.scan();
-	    addCodeRanges(parser.getCodeRanges());
-	} catch (FileNotFoundException e) {
-	    logger.error(e.getMessage(), e);
-	} catch (IOException e) {
-	    logger.error(e.getMessage(), e);
-	} catch (NoMatchingTokenDefinitionFound e) {
-	    logger.error(e.getMessage(), e);
-	} catch (PartDoesNotMatchException e) {
-	    logger.error(e.getMessage(), e);
-	} catch (LexerException e) {
-	    logger.error(e.getMessage(), e);
+	/**
+	 * This is the default constructor.
+	 * 
+	 * @param A
+	 *            file to be analysed.
+	 */
+	public FortranAnalyser(File projectDirectory, File file) {
+		super(projectDirectory, file);
+		parse();
 	}
-    }
 
-    public Language getLanguage() {
-	return Language.FORTRAN;
-    }
+	private void parse() {
+		try {
+			FortranLexer lexer = new FortranLexer(new FortranPreConditioner(
+					new File(getProjectDirectory().toString() + "/"
+							+ getFile().toString())).getTokenStream());
+			TokenStream tokenStream = lexer.getTokenStream();
+			FortranParser parser = new FortranParser(tokenStream);
+			parser.scan();
+			addCodeRanges(parser.getCodeRanges());
+		} catch (FileNotFoundException e) {
+			logger.error(e.getMessage(), e);
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e);
+		} catch (NoMatchingTokenDefinitionFound e) {
+			logger.error(e.getMessage(), e);
+		} catch (PartDoesNotMatchException e) {
+			logger.error(e.getMessage(), e);
+		} catch (LexerException e) {
+			logger.error(e.getMessage(), e);
+		} catch (ParserException e) {
+			logger.error(e.getMessage(), e);
+		}
+	}
+
+	public Language getLanguage() {
+		return Language.FORTRAN;
+	}
 }
