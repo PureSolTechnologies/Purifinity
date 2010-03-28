@@ -13,14 +13,20 @@ package com.puresol.coding.analysis.metrics;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
-import com.puresol.coding.analysis.AvailableMetrics;
+import org.apache.log4j.Logger;
+
 import com.puresol.coding.analysis.CodeEvaluationSystem;
 import com.puresol.coding.analysis.CodeRange;
 import com.puresol.coding.analysis.QualityLevel;
+import com.puresol.utils.ClassInstantiationException;
+import com.puresol.utils.Instances;
 
 public class CodeRangeMetrics {
 
-	private final Hashtable<AvailableMetrics, Metric> metrics = new Hashtable<AvailableMetrics, Metric>();
+	private static final Logger logger = Logger
+			.getLogger(CodeRangeMetrics.class);
+
+	private final Hashtable<Class<? extends Metric>, Metric> metrics = new Hashtable<Class<? extends Metric>, Metric>();
 	private final CodeRange codeRange;
 
 	public CodeRangeMetrics(CodeRange codeRange) {
@@ -29,8 +35,15 @@ public class CodeRangeMetrics {
 	}
 
 	private void calculate() {
-		for (AvailableMetrics metric : CodeEvaluationSystem.getMetrics()) {
-			metrics.put(metric, metric.newInstance(codeRange));
+		for (Class<? extends Metric> metric : CodeEvaluationSystem
+				.getMetricClasses()) {
+			try {
+				metrics
+						.put(metric, Instances
+								.createInstance(metric, codeRange));
+			} catch (ClassInstantiationException e) {
+				logger.warn(e.getMessage(), e);
+			}
 		}
 	}
 
@@ -38,17 +51,17 @@ public class CodeRangeMetrics {
 		return codeRange;
 	}
 
-	public ArrayList<AvailableMetrics> getCalculatedMetrics() {
-		return new ArrayList<AvailableMetrics>(metrics.keySet());
+	public ArrayList<Class<? extends Metric>> getCalculatedMetrics() {
+		return new ArrayList<Class<? extends Metric>>(metrics.keySet());
 	}
 
-	public Metric getMetric(AvailableMetrics metric) {
+	public Metric getMetric(Class<? extends Metric> metric) {
 		return metrics.get(metric);
 	}
 
 	public QualityLevel getQualityLevel() {
 		QualityLevel level = QualityLevel.HIGH;
-		for (AvailableMetrics metric : metrics.keySet()) {
+		for (Class<? extends Metric> metric : metrics.keySet()) {
 			if (CodeEvaluationSystem.isMetricEvaluate(metric)) {
 				level = QualityLevel.getMinLevel(level, metrics.get(metric)
 						.getQualityLevel());

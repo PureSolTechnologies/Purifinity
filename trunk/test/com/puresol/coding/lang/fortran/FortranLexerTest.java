@@ -15,31 +15,56 @@ import com.puresol.parser.TokenStream;
 
 public class FortranLexerTest {
 
-    @Test
-    public void testLexer() {
-	try {
-	    FortranPreConditioner conditioner =
-		    new FortranPreConditioner(
-			    new File(
-				    "test/com/puresol/coding/lang/fortran/samples/zgerc.f"));
-	    TokenStream tokenStream = conditioner.getTokenStream();
-	    FortranLexer lexer = new FortranLexer(tokenStream);
-	    TokenStream tokenStream2 = lexer.getTokenStream();
-	    for (Token token : tokenStream2.getTokens()) {
-		System.out.println(token.toString());
-	    }
-	} catch (FileNotFoundException e) {
-	    e.printStackTrace();
-	    Assert.fail("No exception was expected!");
-	} catch (IOException e) {
-	    e.printStackTrace();
-	    Assert.fail("No exception was expected!");
-	} catch (NoMatchingTokenDefinitionFound e) {
-	    e.printStackTrace();
-	    Assert.fail("No exception was expected!");
-	} catch (LexerException e) {
-	    e.printStackTrace();
-	    Assert.fail("No exception was expected!");
+	@Test
+	public void testLexer() {
+		try {
+			FortranPreConditioner conditioner = new FortranPreConditioner(
+					new File(
+							"test/com/puresol/coding/lang/fortran/samples/zgerc.f"));
+			TokenStream tokenStream = conditioner.getTokenStream();
+			FortranLexer lexer = new FortranLexer(tokenStream);
+			TokenStream tokenStream2 = lexer.getTokenStream();
+			for (Token token : tokenStream2.getTokens()) {
+				System.out.println(token.toString());
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			Assert.fail("No exception was expected!");
+		} catch (IOException e) {
+			e.printStackTrace();
+			Assert.fail("No exception was expected!");
+		} catch (NoMatchingTokenDefinitionFound e) {
+			e.printStackTrace();
+			Assert.fail("No exception was expected!");
+		} catch (LexerException e) {
+			e.printStackTrace();
+			Assert.fail("No exception was expected!");
+		}
 	}
-    }
+
+	public static void main(String args[]) {
+		try {
+			FortranPreConditioner conditioner = new FortranPreConditioner(
+					new File(
+							"/media/secured/home/ludwig/workspace/Dyn3D/src/fort/xenoca.f"));
+			TokenStream tokenStream = conditioner.getTokenStream();
+			FortranLexer lexer = new FortranLexer(tokenStream);
+			TokenStream tokenStream2 = lexer.getTokenStream();
+			for (Token token : tokenStream2.getTokens()) {
+				System.out.println(token.toString());
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			Assert.fail("No exception was expected!");
+		} catch (IOException e) {
+			e.printStackTrace();
+			Assert.fail("No exception was expected!");
+		} catch (NoMatchingTokenDefinitionFound e) {
+			e.printStackTrace();
+			Assert.fail("No exception was expected!");
+		} catch (LexerException e) {
+			e.printStackTrace();
+			Assert.fail("No exception was expected!");
+		}
+	}
 }

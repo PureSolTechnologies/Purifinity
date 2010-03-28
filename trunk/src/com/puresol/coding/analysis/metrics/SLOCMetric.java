@@ -13,6 +13,8 @@ package com.puresol.coding.analysis.metrics;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.i18n4j.Translator;
+
 import com.puresol.coding.analysis.AbstractMetric;
 import com.puresol.coding.analysis.CodeRange;
 import com.puresol.coding.analysis.CodeRangeType;
@@ -31,6 +33,9 @@ import com.puresol.statistics.Statistics;
  * 
  */
 public class SLOCMetric extends AbstractMetric {
+
+	private static final Translator translator = Translator
+			.getTranslator(SLOCMetric.class);
 
 	private final TokenStream stream;
 	private int phyLOC;
@@ -372,4 +377,8 @@ public class SLOCMetric extends AbstractMetric {
 		return QualityLevel.HIGH;
 	}
 
+	@Override
+	public String getName() {
+		return translator.i18n("SLOC metric");
+	}
 }

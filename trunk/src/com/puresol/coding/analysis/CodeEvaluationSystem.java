@@ -13,28 +13,43 @@ package com.puresol.coding.analysis;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
+import org.apache.log4j.Logger;
+
 import com.puresol.coding.analysis.evaluator.AvailableEvaluators;
 import com.puresol.coding.analysis.evaluator.CodeEvaluator;
 import com.puresol.coding.analysis.metrics.Metric;
+import com.puresol.exceptions.StrangeSituationException;
+import com.puresol.utils.ClassInstantiationException;
+import com.puresol.utils.Instances;
 
 public class CodeEvaluationSystem {
 
-	private static final ArrayList<AvailableMetrics> metrics = new ArrayList<AvailableMetrics>();
+	private static final Logger logger = Logger
+			.getLogger(CodeEvaluationSystem.class);
+
+	private static ArrayList<Class<? extends Metric>> metricClasses = new ArrayList<Class<? extends Metric>>();
 	static {
-		for (AvailableMetrics metric : AvailableMetrics.class
-				.getEnumConstants()) {
-			metrics.add(metric);
+		for (String analyser : CodeAnalysisProperties.getPropertyValue(
+				"CodeAnalysis.Metrics").split(",")) {
+			Class<? extends Metric> clazz = getMetricForName(analyser);
+			if (clazz != null) {
+				metricClasses.add(clazz);
+			}
 		}
 	}
 
-	private static final ArrayList<Class<? extends Metric>> metricClasses = new ArrayList<Class<? extends Metric>>();
-	static {
-		for (AvailableMetrics metric : metrics) {
-			metricClasses.add(metric.getMetricClass());
+	@SuppressWarnings("unchecked")
+	private static Class<? extends Metric> getMetricForName(String metric) {
+		try {
+			return (Class<? extends Metric>) Class.forName(metric);
+		} catch (ClassNotFoundException e) {
+			logger.error("Class '" + metric
+					+ "' was not found, but set in CodeAnalysis.properties!");
 		}
+		return null;
 	}
 
-	private static final Hashtable<AvailableMetrics, Boolean> evaluateMetrics = new Hashtable<AvailableMetrics, Boolean>();
+	private static final Hashtable<Class<? extends Metric>, Boolean> evaluateMetrics = new Hashtable<Class<? extends Metric>, Boolean>();
 
 	private static final ArrayList<AvailableEvaluators> evaluators = new ArrayList<AvailableEvaluators>();
 	static {
@@ -53,25 +68,30 @@ public class CodeEvaluationSystem {
 
 	private static final Hashtable<AvailableEvaluators, Boolean> evaluateEvaluator = new Hashtable<AvailableEvaluators, Boolean>();
 
-	public static ArrayList<AvailableMetrics> getMetrics() {
-		return metrics;
-	}
-
 	public static ArrayList<Class<? extends Metric>> getMetricClasses() {
 		return metricClasses;
 	}
 
-	public static void setMetricEvaluate(AvailableMetrics metric,
+	public static void setMetricEvaluate(Class<? extends Metric> metric,
 			boolean evaluate) {
 		CodeEvaluationSystem.evaluateMetrics.put(metric, evaluate);
 	}
 
-	public static boolean isMetricEvaluate(AvailableMetrics metric) {
+	public static boolean isMetricEvaluate(Class<? extends Metric> metric) {
 		Boolean bool = evaluateMetrics.get(metric);
 		if (bool == null) {
 			return false;
 		}
 		return bool;
+	}
+
+	public Metric newMetricInstance(Class<? extends Metric> metric,
+			CodeRange codeRange) {
+		try {
+			return Instances.createInstance(metric, codeRange);
+		} catch (ClassInstantiationException e) {
+			throw new StrangeSituationException(e);
+		}
 	}
 
 	public static ArrayList<AvailableEvaluators> getEvaluators() {

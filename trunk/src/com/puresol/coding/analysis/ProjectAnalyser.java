@@ -34,6 +34,7 @@ public class ProjectAnalyser implements ProgressObservable {
 	private final String pattern;
 	private final Hashtable<File, Analyser> analysers = new Hashtable<File, Analyser>();
 	private ProgressObserver progressMonitor = null;
+	private AnalyserFactory analyserFactory = AnalyserFactory.createFactory();
 
 	public ProjectAnalyser(File directory, String pattern) {
 		this.directory = directory;
@@ -76,7 +77,7 @@ public class ProjectAnalyser implements ProgressObservable {
 		try {
 			if ((Files.addPaths(directory, file).isFile())
 					&& (!file.getPath().contains("/."))) {
-				analysers.put(file, AnalyserFactory.createAnalyser(directory,
+				analysers.put(file, analyserFactory.create(directory,
 						file));
 			}
 		} catch (LanguageNotSupportedException e) {

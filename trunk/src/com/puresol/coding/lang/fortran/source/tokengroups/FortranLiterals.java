@@ -14,22 +14,22 @@ import com.puresol.parser.TokenException;
 
 public class FortranLiterals extends AbstractTokenDefinitionGroup {
 
-    private static final Logger logger =
-	    Logger.getLogger(FortranLiterals.class);
+	private static final Logger logger = Logger
+			.getLogger(FortranLiterals.class);
 
-    @Override
-    protected void initialize() {
-	try {
-	    addTokenDefinition(StringLiteral.class);
-	    addTokenDefinition(StringStartLiteral.class);
-	    addTokenDefinition(StringStopLiteral.class);
-	    addTokenDefinition(FloatingPointLiteral.class);
-	    addTokenDefinition(IntegerLiteral.class);
+	@Override
+	protected void initialize() {
+		try {
+			addTokenDefinition(StringLiteral.class);
+			addTokenDefinition(StringStartLiteral.class);
+			addTokenDefinition(StringStopLiteral.class);
+			addTokenDefinition(FloatingPointLiteral.class);
+			addTokenDefinition(IntegerLiteral.class);
 
-	    addTokenDefinition(FormatLiteral.class);
-	    addTokenDefinition(IdLiteral.class);
-	} catch (TokenException e) {
-	    logger.error(e.getMessage());
+			addTokenDefinition(IdLiteral.class); // is subset of FormatLiteral!
+			addTokenDefinition(FormatLiteral.class);
+		} catch (TokenException e) {
+			logger.error(e.getMessage());
+		}
 	}
-    }
 }

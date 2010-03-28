@@ -21,6 +21,8 @@ import com.puresol.coding.analysis.QualityLevel;
  */
 public interface Metric {
 
+	public String getName();
+
 	public CodeRange getCodeRange();
 
 	public QualityLevel getQualityLevel();

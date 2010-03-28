@@ -30,7 +30,7 @@ public class FortranAnalyser extends AbstractAnalyser {
 			.getLogger(FortranAnalyser.class);
 
 	private static final String[] FILE_SUFFIXES = { ".f", ".f77", ".f90",
-			".f95" };
+			".f95", ".for" };
 
 	public static boolean isSuitable(File file) {
 		String name = file.getName();
@@ -42,12 +42,6 @@ public class FortranAnalyser extends AbstractAnalyser {
 		return false;
 	}
 
-	/**
-	 * This is the default constructor.
-	 * 
-	 * @param A
-	 *            file to be analysed.
-	 */
 	public FortranAnalyser(File projectDirectory, File file) {
 		super(projectDirectory, file);
 		parse();

@@ -30,11 +30,11 @@ public class FortranParser extends AbstractSourceCodeParser {
 			// this may happen if there is an empty file...
 			return;
 		}
-		if (processPartIfPossible(Program.class)) {
-		} else if (processPartIfPossible(Subroutine.class)) {
-		} else if (processPartIfPossible(Function.class)) {
-		} else {
-			throw new PartDoesNotMatchException(this);
-		}
+//		if (processPartIfPossible(Program.class)) {
+//		} else if (processPartIfPossible(Subroutine.class)) {
+//		} else if (processPartIfPossible(Function.class)) {
+//		} else {
+//			throw new PartDoesNotMatchException(this);
+//		}
 	}
 }

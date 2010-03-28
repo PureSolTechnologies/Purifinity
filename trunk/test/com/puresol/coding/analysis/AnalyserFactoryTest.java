@@ -26,10 +26,21 @@ import junit.framework.TestCase;
 
 public class AnalyserFactoryTest extends TestCase {
 
+	private AnalyserFactory analyserFactory = AnalyserFactory.createFactory();
+
+	@Test
+	public void testAnalysers() {
+		System.out.println("Classes:");
+		for (Class<?> clazz : AnalyserFactory.getAnalysers()) {
+			System.out.println(clazz.getName());
+		}
+		Assert.assertTrue(AnalyserFactory.getAnalysers().size() > 0);
+	}
+
 	@Test
 	public void testFileNotFound() {
 		try {
-			AnalyserFactory.createAnalyser(new File("test"), new File(
+			analyserFactory.create(new File("test"), new File(
 					"FileNotPresent.java"));
 			Assert.fail("FileNotFoundExceptionWasExpected!");
 		} catch (FileNotFoundException e) {
@@ -43,8 +54,8 @@ public class AnalyserFactoryTest extends TestCase {
 	@Test
 	public void testJava() {
 		try {
-			Analyser analyser = AnalyserFactory.createAnalyser(
-					new File("test"), new File(
+			Analyser analyser = analyserFactory
+					.create(new File("test"), new File(
 							"com/puresol/coding/lang/java/JavaParserTest.java"));
 			Assert.assertEquals(JavaAnalyser.class, analyser.getClass());
 		} catch (FileNotFoundException e) {
@@ -59,9 +70,11 @@ public class AnalyserFactoryTest extends TestCase {
 	@Test
 	public void testFortran() {
 		try {
-			Analyser analyser = AnalyserFactory
-					.createAnalyser(new File("test"), new File(
-							"com/puresol/coding/lang/fortran/samples/FortranTest.f"));
+			Analyser analyser = analyserFactory
+					.create(
+							new File("test"),
+							new File(
+									"com/puresol/coding/lang/fortran/samples/FortranTest.f"));
 			Assert.assertEquals(FortranAnalyser.class, analyser.getClass());
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
