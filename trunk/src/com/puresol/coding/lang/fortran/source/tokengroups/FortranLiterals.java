@@ -2,6 +2,7 @@ package com.puresol.coding.lang.fortran.source.tokengroups;
 
 import org.apache.log4j.Logger;
 
+import com.puresol.coding.lang.fortran.source.literals.FloatingPointDoublePrecessionLiteral;
 import com.puresol.coding.lang.fortran.source.literals.FloatingPointLiteral;
 import com.puresol.coding.lang.fortran.source.literals.FormatLiteral;
 import com.puresol.coding.lang.fortran.source.literals.IdLiteral;
@@ -23,6 +24,7 @@ public class FortranLiterals extends AbstractTokenDefinitionGroup {
 			addTokenDefinition(StringLiteral.class);
 			addTokenDefinition(StringStartLiteral.class);
 			addTokenDefinition(StringStopLiteral.class);
+			addTokenDefinition(FloatingPointDoublePrecessionLiteral.class);
 			addTokenDefinition(FloatingPointLiteral.class);
 			addTokenDefinition(IntegerLiteral.class);
 

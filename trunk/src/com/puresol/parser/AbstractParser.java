@@ -90,7 +90,7 @@ public abstract class AbstractParser implements Parser {
 			throw new EndOfTokenStreamException(this);
 		}
 		currentPos += steps;
-		while (getCurrentToken().getPublicity() == TokenPublicity.HIDDEN) {
+		while (getCurrentToken().getPublicity() != TokenPublicity.VISIBLE) {
 			if (currentPos >= tokenStream.getSize() - 1) {
 				throw new EndOfTokenStreamException(this);
 			}

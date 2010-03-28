@@ -14,6 +14,7 @@ public class Function extends AbstractSourceCodeParser {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
+		processPartIfPossible(VariableType.class);
 		processToken(FunctionKeyword.class);
 
 		String name = getCurrentToken().getText();

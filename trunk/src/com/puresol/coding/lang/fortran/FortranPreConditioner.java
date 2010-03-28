@@ -5,8 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-
-import javax.swingx.data.LineEnd;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
@@ -22,6 +22,13 @@ public class FortranPreConditioner extends DefaultPreConditioner {
 
 	private static final Logger logger = Logger
 			.getLogger(FortranPreConditioner.class);
+
+	private static final Pattern lineLeadPattern = Pattern
+			.compile("^([^\\t\\r\\n])([^\\t\\r\\n]{4})([^\\t\\r\\n])");
+
+	public static Pattern getLineLeadPattern() {
+		return lineLeadPattern;
+	}
 
 	int counter = 0;
 	int pos = 0;
@@ -39,13 +46,7 @@ public class FortranPreConditioner extends DefaultPreConditioner {
 	protected void generateTokenStream() throws IOException {
 		setTokenStream(new TokenStream(getFile()));
 		ArrayList<String> buffer = readToBuffer();
-		String line = buffer.get(0);
-		if ((line.getBytes()[0] == '*') || (line.getBytes()[0] == 'c')
-				|| (line.getBytes()[0] == 'C') || (line.getBytes()[0] == ' ')) {
-			preconditionFortran77(buffer);
-		} else {
-			defaultPreConditioner(buffer);
-		}
+		preconditioner(buffer);
 	}
 
 	private ArrayList<String> readToBuffer() {
@@ -57,29 +58,32 @@ public class FortranPreConditioner extends DefaultPreConditioner {
 		return buffer;
 	}
 
-	private void defaultPreConditioner(ArrayList<String> buffer) {
-		try {
-			String text = "";
-			for (String line : buffer) {
-				text += line;
-			}
-			addToken(new Token(0, TokenPublicity.VISIBLE, 0, text.length(),
-					text, 0, text.split(LineEnd.UNIX.getString()).length - 1,
-					null));
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-		}
-	}
-
-	private void preconditionFortran77(ArrayList<String> buffer) {
+	private void preconditioner(ArrayList<String> buffer) {
 		try {
 			for (String line : buffer) {
-				if (line.getBytes()[0] != ' ') {
-					processCommentLine(line);
-				} else if (line.length() <= 6) {
-					processLineLead(line);
+				Matcher matcher = getLineLeadPattern().matcher(line);
+				if (matcher.find()) {
+					String lineLead = matcher.group();
+					boolean comment = matcher.group(0).getBytes()[0] != ' ';
+					// String label = matcher.group(1);
+					boolean lineContinuation = !matcher.group(2).equals(" ");
+					if (!lineContinuation) {
+						addLineBreak();
+					}
+					if (comment) {
+						addCommentLine(line);
+					} else {
+						addLineLead(lineLead);
+						addLine(line.substring(6));
+					}
 				} else {
-					processNormalLine(line);
+					if (Pattern.compile("^\\S").matcher(line).find()) {
+						addLineBreak();
+						addCommentLine(line);
+					} else {
+						addLineBreak();
+						addLine(line);
+					}
 				}
 				lineNum++;
 			}
@@ -88,38 +92,30 @@ public class FortranPreConditioner extends DefaultPreConditioner {
 		}
 	}
 
-	private void processCommentLine(String line) throws IOException {
-		Token token = new Token(counter, TokenPublicity.HIDDEN, pos, line
-				.length(), line, lineNum, lineNum + 1, Comment.class);
-		getTokenStream().addToken(token);
-		pos += line.length();
-		counter++;
+	private void addLineBreak() throws IOException {
+		addToken(new Token(counter, TokenPublicity.ADDED, pos, 0, "", lineNum,
+				lineNum, VirtualStatementEnd.class));
+	}
+
+	private void addLineLead(String line) throws IOException {
+		addToken(new Token(counter, TokenPublicity.HIDDEN, pos, line.length(),
+				line, lineNum, lineNum + 1, LineLead.class));
+	}
+
+	private void addLine(String line) throws IOException {
+		addToken(new Token(counter, TokenPublicity.VISIBLE, pos, line.length(),
+				line, lineNum, lineNum + 1, null));
+	}
+
+	private void addCommentLine(String line) throws IOException {
+		addToken(new Token(counter, TokenPublicity.HIDDEN, pos, line.length(),
+				line, lineNum, lineNum + 1, Comment.class));
 	}
 
 	private void addToken(Token token) throws IOException {
 		getTokenStream().addToken(token);
 		pos += token.getText().length();
 		counter++;
-	}
-
-	private void processLineLead(String line) throws IOException {
-		if (line.length() == 6) {
-			byte[] bytes = line.getBytes();
-			if (bytes[5] == ' ') {
-				addToken(new Token(counter, TokenPublicity.ADDED, pos, 0, "",
-						lineNum, lineNum, VirtualStatementEnd.class));
-			}
-		}
-		addToken(new Token(counter, TokenPublicity.VISIBLE, pos, line.length(),
-				line, lineNum, lineNum + 1, LineLead.class));
-	}
-
-	private void processNormalLine(String line) throws IOException {
-		String lead = line.substring(0, 5);
-		line = line.substring(6);
-		processLineLead(lead);
-		addToken(new Token(counter, TokenPublicity.VISIBLE, pos, line.length(),
-				line, lineNum, lineNum, null));
 	}
 
 	private String readLine() {
