@@ -22,7 +22,6 @@ import javax.swingx.progress.ProgressObserver;
 
 import org.apache.log4j.Logger;
 
-import com.puresol.coding.lang.LanguageNotSupportedException;
 import com.puresol.utils.Files;
 
 public class ProjectAnalyser implements ProgressObservable {

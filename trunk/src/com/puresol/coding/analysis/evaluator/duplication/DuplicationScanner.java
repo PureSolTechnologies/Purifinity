@@ -210,12 +210,10 @@ public class DuplicationScanner implements ProgressObservable {
 		}
 		Duplication duplication = null;
 		if ((operatorCounter + operantCounter) > OPERATOR_THRESHOLD) {
-			CodeRange leftDuplication = new CodeRange(leftStream.getFile(),
-					left.getLanguage(), left.getType(), left.getName(),
-					leftStream, leftIndex, leftToken.getTokenID());
-			CodeRange rightDuplication = new CodeRange(rightStream.getFile(),
-					right.getLanguage(), right.getType(), right.getName(),
-					rightStream, rightIndex, rightToken.getTokenID());
+			CodeRange leftDuplication = left.createPartialCodeRange(leftIndex,
+					leftToken.getTokenID());
+			CodeRange rightDuplication = right.createPartialCodeRange(
+					rightIndex, rightToken.getTokenID());
 			duplication = new Duplication(leftDuplication, rightDuplication,
 					operatorCounter + operantCounter);
 			addDuplication(duplication);

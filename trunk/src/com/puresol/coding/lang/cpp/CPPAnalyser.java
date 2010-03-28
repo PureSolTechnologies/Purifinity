@@ -16,7 +16,6 @@ import java.io.IOException;
 import org.apache.log4j.Logger;
 
 import com.puresol.coding.analysis.AbstractAnalyser;
-import com.puresol.coding.lang.Language;
 import com.puresol.parser.DefaultPreConditioner;
 import com.puresol.parser.LexerException;
 import com.puresol.parser.NoMatchingTokenDefinitionFound;
@@ -78,7 +77,7 @@ public class CPPAnalyser extends AbstractAnalyser {
 		}
 	}
 
-	public Language getLanguage() {
-		return Language.JAVA;
+	public String getLanguage() {
+		return "C++";
 	}
 }

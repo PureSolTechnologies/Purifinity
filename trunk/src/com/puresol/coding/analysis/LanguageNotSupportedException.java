@@ -8,7 +8,7 @@
  *
  ***************************************************************************/
 
-package com.puresol.coding.lang;
+package com.puresol.coding.analysis;
 
 /**
  * This exception is thrown in case of a programming language which is not

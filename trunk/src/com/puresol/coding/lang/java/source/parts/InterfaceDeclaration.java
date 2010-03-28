@@ -1,8 +1,7 @@
 package com.puresol.coding.lang.java.source.parts;
 
 import com.puresol.coding.analysis.AbstractSourceCodeParser;
-import com.puresol.coding.analysis.CodeRangeType;
-import com.puresol.coding.lang.Language;
+import com.puresol.coding.lang.java.source.coderanges.JavaInterface;
 import com.puresol.coding.lang.java.source.keywords.ExtendsKeyword;
 import com.puresol.coding.lang.java.source.keywords.InterfaceKeyword;
 import com.puresol.coding.lang.java.source.literals.IdLiteral;
@@ -13,24 +12,24 @@ import com.puresol.parser.PartDoesNotMatchException;
 
 public class InterfaceDeclaration extends AbstractSourceCodeParser {
 
-    @Override
-    public void scan() throws PartDoesNotMatchException, ParserException {
-	while (processPartIfPossible(Annotation.class))
-	    ;
-	processPart(ClassModifiers.class);
-	processToken(InterfaceKeyword.class);
-	String name = getCurrentToken().getText();
-	processToken(IdLiteral.class);
-	processPartIfPossible(Generic.class);
-	if (processTokenIfPossible(ExtendsKeyword.class)) {
-	    processToken(IdLiteral.class);
-	    processPartIfPossible(Generic.class);
+	@Override
+	public void scan() throws PartDoesNotMatchException, ParserException {
+		while (processPartIfPossible(Annotation.class))
+			;
+		processPart(ClassModifiers.class);
+		processToken(InterfaceKeyword.class);
+		String name = getCurrentToken().getText();
+		processToken(IdLiteral.class);
+		processPartIfPossible(Generic.class);
+		if (processTokenIfPossible(ExtendsKeyword.class)) {
+			processToken(IdLiteral.class);
+			processPartIfPossible(Generic.class);
+		}
+		skipNested(LCurlyBracket.class, RCurlyBracket.class);
+		int startPosition = getStartPositionWithLeadingHidden();
+		int stopPosition = getPositionOfLastVisible();
+		stopPosition = this.getPositionOfNextLineBreak(stopPosition);
+		addCodeRange(new JavaInterface(name, getTokenStream(), startPosition,
+				stopPosition));
 	}
-	skipNested(LCurlyBracket.class, RCurlyBracket.class);
-	int startPosition = getStartPositionWithLeadingHidden();
-	int stopPosition = getPositionOfLastVisible();
-	stopPosition = this.getPositionOfNextLineBreak(stopPosition);
-	addCodeRange(Language.JAVA, CodeRangeType.INTERFACE, name,
-		startPosition, stopPosition);
-    }
 }

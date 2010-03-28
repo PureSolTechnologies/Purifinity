@@ -12,18 +12,19 @@ import com.puresol.parser.PartDoesNotMatchException;
 
 public class MethodDefinition extends AbstractSourceCodeParser {
 
-    @Override
-    public void scan() throws PartDoesNotMatchException, ParserException {
-	while (processPartIfPossible(Annotation.class))
-	    ;
-	processPartIfPossible(MethodModifiers.class);
-	processPart(MethodReturnType.class);
-	processToken(IdLiteral.class);
-	skipNested(LParen.class, RParen.class);
-	if (processTokenIfPossible(ThrowsKeyword.class)) {
-	    skipTokensUntil(LCurlyBracket.class);
+	@SuppressWarnings("unchecked")
+	@Override
+	public void scan() throws PartDoesNotMatchException, ParserException {
+		while (processPartIfPossible(Annotation.class))
+			;
+		processPartIfPossible(MethodModifiers.class);
+		processPart(MethodReturnType.class);
+		processToken(IdLiteral.class);
+		skipNested(LParen.class, RParen.class);
+		if (processTokenIfPossible(ThrowsKeyword.class)) {
+			skipTokensUntil(LCurlyBracket.class);
+		}
+		processToken(Semicolon.class);
 	}
-	processToken(Semicolon.class);
-    }
 
 }

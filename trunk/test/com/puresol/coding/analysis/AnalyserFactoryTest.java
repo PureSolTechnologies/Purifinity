@@ -17,7 +17,6 @@ import org.junit.Test;
 
 import com.puresol.coding.analysis.Analyser;
 import com.puresol.coding.analysis.AnalyserFactory;
-import com.puresol.coding.lang.LanguageNotSupportedException;
 import com.puresol.coding.lang.fortran.FortranAnalyser;
 import com.puresol.coding.lang.java.JavaAnalyser;
 

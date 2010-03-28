@@ -1,8 +1,7 @@
 package com.puresol.coding.lang.java;
 
 import com.puresol.coding.analysis.AbstractSourceCodeParser;
-import com.puresol.coding.analysis.CodeRangeType;
-import com.puresol.coding.lang.Language;
+import com.puresol.coding.lang.java.source.coderanges.JavaFile;
 import com.puresol.coding.lang.java.source.parts.ClassDeclaration;
 import com.puresol.coding.lang.java.source.parts.EnumDeclaration;
 import com.puresol.coding.lang.java.source.parts.Import;
@@ -23,8 +22,8 @@ public class JavaParser extends AbstractSourceCodeParser {
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
 		TokenStream tokenStream = getTokenStream();
-		addCodeRange(Language.JAVA, CodeRangeType.FILE, 0, tokenStream
-				.getSize() - 1);
+		addCodeRange(new JavaFile(tokenStream.getFile().getName(), tokenStream,
+				0, tokenStream.getSize() - 1));
 
 		try {
 			moveForward(0);

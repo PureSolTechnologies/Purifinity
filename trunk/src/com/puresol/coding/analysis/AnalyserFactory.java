@@ -16,7 +16,6 @@ import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
-import com.puresol.coding.lang.LanguageNotSupportedException;
 import com.puresol.exceptions.StrangeSituationException;
 import com.puresol.utils.ClassInstantiationException;
 import com.puresol.utils.Files;

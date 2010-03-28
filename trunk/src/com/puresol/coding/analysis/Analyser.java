@@ -13,8 +13,6 @@ package com.puresol.coding.analysis;
 import java.io.File;
 import java.util.ArrayList;
 
-import com.puresol.coding.lang.Language;
-
 /**
  * This is a interface to a analyser. It's used to implement a language
  * independent way to access a single analyser.
@@ -24,25 +22,24 @@ import com.puresol.coding.lang.Language;
  */
 public interface Analyser {
 
-    /**
-     * Returns the language of the file analysed.
-     * 
-     * @return The language is returned.
-     */
-    public Language getLanguage();
+	/**
+	 * Returns the language of the file analysed.
+	 * 
+	 * @return The language is returned.
+	 */
+	public String getLanguage();
 
-    /**
-     * The file which was analysed is returned.
-     * 
-     * @return The file is returned.
-     */
-    public File getFile();
+	/**
+	 * The file which was analysed is returned.
+	 * 
+	 * @return The file is returned.
+	 */
+	public File getFile();
 
-    /**
-     * This method returns all code ranges analysed within the analysed
-     * file.
-     * 
-     * @return
-     */
-    public ArrayList<CodeRange> getCodeRanges();
+	/**
+	 * This method returns all code ranges analysed within the analysed file.
+	 * 
+	 * @return
+	 */
+	public ArrayList<CodeRange> getCodeRanges();
 }

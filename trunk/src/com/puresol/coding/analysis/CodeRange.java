@@ -1,99 +1,44 @@
-/***************************************************************************
- *
- *   CodeRange.java
- *   -------------------
- *   copyright            : (c) 2009 by PureSol-Technologies
- *   author               : Rick-Rainer Ludwig
- *   email                : ludwig@puresol-technologies.com
- *
- ***************************************************************************/
-
 package com.puresol.coding.analysis;
 
 import java.io.File;
 import java.util.ArrayList;
 
-import com.puresol.coding.lang.Language;
 import com.puresol.parser.Token;
 import com.puresol.parser.TokenStream;
 
-public final class CodeRange implements Comparable<CodeRange> {
+/**
+ * This is a general interface for all kinds of code ranges. It's used for
+ * general code range handling.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
+public interface CodeRange extends Comparable<CodeRange>, Cloneable {
 
-    private final File file;
-    private final Language language;
-    private final CodeRangeType type;
-    private final String name;
-    private final String text;
-    private final TokenStream tokenStream;
-    private final int start;
-    private final int stop;
+	public File getFile();
 
-    public CodeRange(File file, Language language, CodeRangeType type,
-	    String name, TokenStream tokenStream, int start, int stop) {
-	this.file = file;
-	this.language = language;
-	this.type = type;
-	this.name = name;
-	this.tokenStream = tokenStream;
-	this.start = start;
-	this.stop = stop;
-	this.text = createText();
-    }
+	public String getLanguage();
 
-    private String createText() {
-	String text = "";
-	for (int index = start; index <= stop; index++) {
-	    text += tokenStream.get(index).getText();
-	}
-	return text;
-    }
+	public String getTypeName();
 
-    public File getFile() {
-	return file;
-    }
+	public CodeRangeType getType();
 
-    public Language getLanguage() {
-	return language;
-    }
+	public String getName();
 
-    public CodeRangeType getType() {
-	return type;
-    }
+	public String getText();
 
-    public String getName() {
-	return name;
-    }
+	public TokenStream getTokenStream();
 
-    public String getText() {
-	return text;
-    }
+	public ArrayList<Token> getTokens();
 
-    public TokenStream getTokenStream() {
-	return tokenStream;
-    }
+	public int getStart();
 
-    public ArrayList<Token> getTokens() {
-	ArrayList<Token> tokens = new ArrayList<Token>();
-	for (int index = getStart(); index <= getStop(); index++) {
-	    tokens.add(tokenStream.get(index));
-	}
-	return tokens;
-    }
+	public int getStop();
 
-    public int getStart() {
-	return start;
-    }
+	public String toString();
 
-    public int getStop() {
-	return stop;
-    }
+	public CodeRange createPartialCodeRange(int newStart, int newStop);
 
-    public String toString() {
-	return getType() + ": " + getName() + "\n" + getText();
-    }
-
-    @Override
-    public int compareTo(CodeRange other) {
-	return toString().compareTo(other.toString());
-    }
+	@Override
+	public int compareTo(CodeRange other);
 }
