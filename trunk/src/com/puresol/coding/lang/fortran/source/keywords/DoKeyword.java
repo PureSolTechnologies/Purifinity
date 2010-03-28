@@ -1,6 +1,8 @@
 package com.puresol.coding.lang.fortran.source.keywords;
 
 import com.puresol.coding.tokentypes.KeywordOperator;
+import com.puresol.parser.Token;
+import com.puresol.parser.TokenStream;
 
 public class DoKeyword extends KeywordOperator {
 
@@ -9,6 +11,14 @@ public class DoKeyword extends KeywordOperator {
 		super.initialize();
 		setCaseInsensitive();
 		setPatternString("DO");
+	}
+
+	public int getCyclomaticNumber(Token token, TokenStream tokenStream) {
+		return 1;
+	}
+
+	public int changeBlockLayer() {
+		return 1;
 	}
 
 }

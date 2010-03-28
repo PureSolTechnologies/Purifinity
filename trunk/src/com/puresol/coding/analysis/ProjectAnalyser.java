@@ -32,6 +32,7 @@ public class ProjectAnalyser implements ProgressObservable {
 	private final File directory;
 	private final String pattern;
 	private final Hashtable<File, Analyser> analysers = new Hashtable<File, Analyser>();
+	private final ArrayList<File> failedFiles = new ArrayList<File>();
 	private ProgressObserver progressMonitor = null;
 	private AnalyserFactory analyserFactory = AnalyserFactory.createFactory();
 
@@ -47,6 +48,7 @@ public class ProjectAnalyser implements ProgressObservable {
 
 	private void clear() {
 		analysers.clear();
+		failedFiles.clear();
 	}
 
 	private void analyseFiles() {
@@ -76,16 +78,17 @@ public class ProjectAnalyser implements ProgressObservable {
 		try {
 			if ((Files.addPaths(directory, file).isFile())
 					&& (!file.getPath().contains("/."))) {
-				analysers.put(file, analyserFactory.create(directory,
-						file));
+				analysers.put(file, analyserFactory.create(directory, file));
 			}
 		} catch (LanguageNotSupportedException e) {
 			logger
 					.warn("File '"
 							+ file.getPath()
 							+ "' could not be analysed due to containing no supported language.");
+			failedFiles.add(file);
 		} catch (FileNotFoundException e) {
 			logger.warn("File '" + file.getPath() + "' is not existing!");
+			failedFiles.add(file);
 		}
 	}
 
@@ -95,6 +98,10 @@ public class ProjectAnalyser implements ProgressObservable {
 
 	public ArrayList<File> getFiles() {
 		return new ArrayList<File>(analysers.keySet());
+	}
+
+	public ArrayList<File> getFailedFiles() {
+		return failedFiles;
 	}
 
 	public Analyser getAnalyser(File file) {

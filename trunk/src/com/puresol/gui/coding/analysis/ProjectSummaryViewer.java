@@ -10,37 +10,38 @@ import com.puresol.gui.coding.CodeViewer;
 
 public class ProjectSummaryViewer extends BorderLayoutWidget {
 
-    /**
+	/**
      * 
      */
-    private static final long serialVersionUID = 6698435471544803926L;
-    private ProjectAnalyser analyser = null;
-    private TabbedPane tabbedPane = null;
-    private CodeViewer cocomoViewer = null;
+	private static final long serialVersionUID = 6698435471544803926L;
+	private ProjectAnalyser analyser = null;
+	private TabbedPane tabbedPane = null;
+	private CodeViewer cocomoViewer = null;
 
-    public ProjectSummaryViewer() {
-	initUI();
-    }
+	public ProjectSummaryViewer() {
+		initUI();
+	}
 
-    public ProjectSummaryViewer(ProjectAnalyser analyser) {
-	setProjectAnalyser(analyser);
-	initUI();
-    }
+	public ProjectSummaryViewer(ProjectAnalyser analyser) {
+		setProjectAnalyser(analyser);
+		initUI();
+	}
 
-    private void initUI() {
-	setCenter(tabbedPane = new TabbedPane());
-	tabbedPane.add("CoCoMo", cocomoViewer = new CodeViewer());
-    }
+	private void initUI() {
+		setCenter(tabbedPane = new TabbedPane());
+		tabbedPane.add("CoCoMo", cocomoViewer = new CodeViewer());
+	}
 
-    public void setProjectAnalyser(ProjectAnalyser analyser) {
-	this.analyser = analyser;
-	refresh();
-    }
+	public void setProjectAnalyser(ProjectAnalyser analyser) {
+		this.analyser = analyser;
+		refresh();
+	}
 
-    public void refresh() {
-	ProjectStatistics stat = new ProjectStatistics(analyser);
-	CoCoMo cocomo = new CoCoMo(stat.getSLOC());
-	cocomoViewer.setText(cocomo.toReport());
-
-    }
+	public void refresh() {
+		if (analyser != null) {
+			ProjectStatistics stat = new ProjectStatistics(analyser);
+			CoCoMo cocomo = new CoCoMo(stat.getSLOC());
+			cocomoViewer.setText(cocomo.toReport());
+		}
+	}
 }

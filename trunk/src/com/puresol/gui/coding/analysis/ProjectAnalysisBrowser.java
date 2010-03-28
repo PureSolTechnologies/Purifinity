@@ -64,7 +64,11 @@ public class ProjectAnalysisBrowser extends Panel {
 
 	public void setProjectAnalyser(ProjectAnalyser project) {
 		this.project = project;
-		directory.setText(project.getProjectDirectory().getPath());
+		if (project != null) {
+			directory.setText(project.getProjectDirectory().getPath());
+		} else {
+			directory.setText("");
+		}
 		projectSummary.setProjectAnalyser(project);
 		codeRangeBrowser.setProjectAnalyser(project);
 		metricsBrowser.setProjectAnalyser(project);

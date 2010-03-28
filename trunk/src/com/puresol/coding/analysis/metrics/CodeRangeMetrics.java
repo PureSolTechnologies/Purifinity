@@ -10,6 +10,7 @@
 
 package com.puresol.coding.analysis.metrics;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
@@ -18,8 +19,6 @@ import org.apache.log4j.Logger;
 import com.puresol.coding.analysis.CodeEvaluationSystem;
 import com.puresol.coding.analysis.CodeRange;
 import com.puresol.coding.analysis.QualityLevel;
-import com.puresol.utils.ClassInstantiationException;
-import com.puresol.utils.Instances;
 
 public class CodeRangeMetrics {
 
@@ -38,10 +37,20 @@ public class CodeRangeMetrics {
 		for (Class<? extends Metric> metric : CodeEvaluationSystem
 				.getMetricClasses()) {
 			try {
-				metrics
-						.put(metric, Instances
-								.createInstance(metric, codeRange));
-			} catch (ClassInstantiationException e) {
+				Metric metricClass = metric.getConstructor(CodeRange.class)
+						.newInstance(codeRange);
+				metrics.put(metric, metricClass);
+			} catch (IllegalArgumentException e) {
+				logger.warn(e.getMessage(), e);
+			} catch (SecurityException e) {
+				logger.warn(e.getMessage(), e);
+			} catch (InstantiationException e) {
+				logger.warn(e.getMessage(), e);
+			} catch (IllegalAccessException e) {
+				logger.warn(e.getMessage(), e);
+			} catch (InvocationTargetException e) {
+				logger.warn(e.getMessage(), e);
+			} catch (NoSuchMethodException e) {
 				logger.warn(e.getMessage(), e);
 			}
 		}

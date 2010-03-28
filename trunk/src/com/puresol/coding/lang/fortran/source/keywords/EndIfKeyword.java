@@ -11,4 +11,8 @@ public class EndIfKeyword extends KeywordOperator {
 		setPatternString("END\\s*IF");
 	}
 
+	public int changeBlockLayer() {
+		return -1;
+	}
+
 }

@@ -11,4 +11,8 @@ public class ThenKeyword extends KeywordOperator {
 		setPatternString("THEN");
 	}
 
+	public int changeBlockLayer() {
+		return 1;
+	}
+
 }

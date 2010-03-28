@@ -28,6 +28,8 @@ import javax.swingx.ToolBar;
 import javax.swingx.connect.Slot;
 import javax.swingx.progress.ProgressWindow;
 
+import org.apache.log4j.Logger;
+
 import com.puresol.coding.analysis.CodeRange;
 import com.puresol.coding.analysis.ProjectAnalyser;
 import com.puresol.coding.analysis.QualityLevel;
@@ -38,6 +40,7 @@ public class MetricsBrowser extends BorderLayoutWidget {
 
 	private static final long serialVersionUID = 3469716304984536673L;
 
+	private static final Logger logger = Logger.getLogger(MetricsBrowser.class);
 	private static final Translator translator = Translator
 			.getTranslator(MetricsBrowser.class);
 
@@ -133,6 +136,7 @@ public class MetricsBrowser extends BorderLayoutWidget {
 			}
 			html += "<tr><td>" + file.getPath()
 					+ "</td></tr></table></body></html>";
+			logger.debug(html);
 			htmls.add(html);
 
 		}

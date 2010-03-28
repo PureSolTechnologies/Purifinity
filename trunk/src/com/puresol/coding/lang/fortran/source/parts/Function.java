@@ -3,6 +3,7 @@ package com.puresol.coding.lang.fortran.source.parts;
 import com.puresol.coding.analysis.AbstractSourceCodeParser;
 import com.puresol.coding.lang.cpp.source.symbols.LParen;
 import com.puresol.coding.lang.cpp.source.symbols.RParen;
+import com.puresol.coding.lang.fortran.source.coderanges.FortranFunction;
 import com.puresol.coding.lang.fortran.source.keywords.EndFunctionKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.EndKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.FunctionKeyword;
@@ -27,5 +28,12 @@ public class Function extends AbstractSourceCodeParser {
 
 		processToken(EndKeyword.class, EndFunctionKeyword.class);
 		processTokenIfPossible(name);
+
+		int startPosition = getStartPositionWithLeadingHidden();
+		int stopPosition = getPositionOfLastVisible();
+		stopPosition = this.getPositionOfNextLineBreak(stopPosition);
+
+		addCodeRange(new FortranFunction(name, getTokenStream(), startPosition,
+				stopPosition));
 	}
 }

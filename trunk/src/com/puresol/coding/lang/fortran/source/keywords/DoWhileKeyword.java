@@ -4,11 +4,15 @@ import com.puresol.coding.tokentypes.KeywordOperator;
 
 public class DoWhileKeyword extends KeywordOperator {
 
-    @Override
-    protected void initialize() {
-	super.initialize();
-	setCaseInsensitive();
-	setPatternString("DO\\s+WHILE");
-    }
+	@Override
+	protected void initialize() {
+		super.initialize();
+		setCaseInsensitive();
+		setPatternString("DO\\s+WHILE");
+	}
+
+	public int changeBlockLayer() {
+		return 1;
+	}
 
 }

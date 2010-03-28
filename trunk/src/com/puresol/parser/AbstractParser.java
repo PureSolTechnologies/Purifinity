@@ -54,9 +54,15 @@ public abstract class AbstractParser implements Parser {
 
 	protected final int getStartPositionWithLeadingHidden() {
 		int pos = getStartPosition();
-		while ((getToken(pos - 1).getPublicity() == TokenPublicity.HIDDEN)
+		if (pos == 0) {
+			return 0;
+		}
+		while ((getToken(pos - 1).getPublicity() != TokenPublicity.VISIBLE)
 				&& (pos > 0)) {
 			pos--;
+			if (pos == 0) {
+				return 0;
+			}
 		}
 		return getPositionOfNextLineBreak(pos) + 1;
 	}

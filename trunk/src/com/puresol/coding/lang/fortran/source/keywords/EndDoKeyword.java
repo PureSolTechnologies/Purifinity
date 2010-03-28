@@ -11,4 +11,8 @@ public class EndDoKeyword extends KeywordOperator {
 		setPatternString("END\\s*DO");
 	}
 
+	public int changeBlockLayer() {
+		return -1;
+	}
+
 }

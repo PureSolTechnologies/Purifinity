@@ -11,4 +11,8 @@ public class ForAllKeyword extends KeywordOperator {
 		setPatternString("FORALL");
 	}
 
+	public int changeBlockLayer() {
+		return 1;
+	}
+
 }

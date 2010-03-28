@@ -1,6 +1,7 @@
 package com.puresol.coding.lang.fortran.source.parts;
 
 import com.puresol.coding.analysis.AbstractSourceCodeParser;
+import com.puresol.coding.lang.fortran.source.coderanges.FortranProgram;
 import com.puresol.coding.lang.fortran.source.keywords.EndKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.EndProgramKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.ProgramKeyword;
@@ -22,5 +23,12 @@ public class Program extends AbstractSourceCodeParser {
 
 		processToken(EndKeyword.class, EndProgramKeyword.class);
 		processTokenIfPossible(name);
+
+		int startPosition = getStartPositionWithLeadingHidden();
+		int stopPosition = getPositionOfLastVisible();
+		stopPosition = this.getPositionOfNextLineBreak(stopPosition);
+
+		addCodeRange(new FortranProgram(name, getTokenStream(), startPosition,
+				stopPosition));
 	}
 }

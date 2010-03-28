@@ -1,6 +1,8 @@
 package com.puresol.coding.lang.fortran.source.keywords;
 
 import com.puresol.coding.tokentypes.KeywordOperator;
+import com.puresol.parser.Token;
+import com.puresol.parser.TokenStream;
 
 public class IfKeyword extends KeywordOperator {
 
@@ -11,4 +13,7 @@ public class IfKeyword extends KeywordOperator {
 		setPatternString("IF");
 	}
 
+	public int getCyclomaticNumber(Token token, TokenStream tokenStream) {
+		return 1;
+	}
 }
