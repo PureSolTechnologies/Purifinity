@@ -180,6 +180,14 @@ public abstract class AbstractParser implements Parser {
 		}
 	}
 
+	protected final boolean isToken(String text)
+			throws PartDoesNotMatchException {
+		if (getCurrentToken().getText().equals(text)) {
+			return true;
+		}
+		return false;
+	}
+
 	protected final boolean processTokenIfPossible(
 			Class<? extends TokenDefinition> definition) throws ParserException {
 		try {
@@ -188,6 +196,23 @@ public abstract class AbstractParser implements Parser {
 				token = getCurrentToken();
 			}
 			processToken(definition, true);
+			if (logger.isDebugEnabled()) {
+				logger.debug("Processed token: " + token.toString());
+			}
+			return true;
+		} catch (PartDoesNotMatchException e) {
+			return false;
+		}
+	}
+
+	protected final boolean processTokenIfPossible(String text)
+			throws ParserException {
+		try {
+			Token token = null;
+			if (logger.isDebugEnabled()) {
+				token = getCurrentToken();
+			}
+			processToken(text);
 			if (logger.isDebugEnabled()) {
 				logger.debug("Processed token: " + token.toString());
 			}

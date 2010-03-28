@@ -36,7 +36,7 @@ public class MetricSelectionToolBar extends ToolBar implements Mediator {
 	private void initUI() {
 		for (Class<? extends Metric> metric : CodeEvaluationSystem
 				.getMetricClasses()) {
-			ToggleButton button = new ToggleButton(metric.getName());
+			ToggleButton button = new ToggleButton(metric.getSimpleName());
 			button.setSelected(CodeEvaluationSystem.isMetricEvaluate(metric));
 			buttons.put(button, metric);
 			button.addMediator(this);

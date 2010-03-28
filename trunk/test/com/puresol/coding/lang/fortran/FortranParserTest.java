@@ -64,4 +64,47 @@ public class FortranParserTest extends TestCase {
 			Assert.fail("No exception was expected!");
 		}
 	}
+
+	@Test
+	public static void main(String args[]) {
+		FortranParser parser = null;
+		try {
+			FortranPreConditioner conditioner = new FortranPreConditioner(
+					new File(
+							"/home/ludwig/workspace/Dyn3D/src/modlib/cndnorm.f"));
+			// DefaultPreConditioner conditioner =
+			// new DefaultPreConditioner(
+			// new File(
+			// "test/com/puresol/coding/lang/java/FortranParserTest.java"));
+			TokenStream tokenStream = conditioner.getTokenStream();
+			FortranLexer lexer = new FortranLexer(tokenStream);
+			TokenStream tokenStream2 = lexer.getTokenStream();
+			for (Token token : tokenStream2.getTokens()) {
+				System.out.println(token.toString());
+			}
+			parser = new FortranParser(tokenStream2);
+			parser.scan();
+			for (CodeRange codeRange : parser.getCodeRanges()) {
+				System.out.println(codeRange.toString());
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			Assert.fail("No exception was expected!");
+		} catch (IOException e) {
+			e.printStackTrace();
+			Assert.fail("No exception was expected!");
+		} catch (NoMatchingTokenDefinitionFound e) {
+			e.printStackTrace();
+			Assert.fail("No exception was expected!");
+		} catch (PartDoesNotMatchException e) {
+			e.printStackTrace();
+			Assert.fail("No exception was expected!");
+		} catch (LexerException e) {
+			e.printStackTrace();
+			Assert.fail("No exception was expected!");
+		} catch (ParserException e) {
+			e.printStackTrace();
+			Assert.fail("No exception was expected!");
+		}
+	}
 }

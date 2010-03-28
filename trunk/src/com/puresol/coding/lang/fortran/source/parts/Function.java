@@ -19,11 +19,12 @@ public class Function extends AbstractSourceCodeParser {
 		String name = getCurrentToken().getText();
 		processToken(name);
 
-		this.skipNested(LParen.class, RParen.class);
+		skipNested(LParen.class, RParen.class);
 
 		// TODO read here the code...
-		this.skipTokensUntil(EndKeyword.class, EndFunctionKeyword.class);
+		skipTokensUntil(EndKeyword.class, EndFunctionKeyword.class);
 
 		processToken(EndKeyword.class, EndFunctionKeyword.class);
+		processTokenIfPossible(name);
 	}
 }

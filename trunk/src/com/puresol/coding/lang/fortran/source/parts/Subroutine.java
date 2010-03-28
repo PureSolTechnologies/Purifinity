@@ -19,11 +19,14 @@ public class Subroutine extends AbstractSourceCodeParser {
 		String name = getCurrentToken().getText();
 		processToken(name);
 
-		this.skipNested(LParen.class, RParen.class);
+		if (isToken(LParen.class)) {
+			skipNested(LParen.class, RParen.class);
+		}
 
 		// TODO read here the code...
-		this.skipTokensUntil(EndKeyword.class, EndSubroutineKeyword.class);
+		skipTokensUntil(EndKeyword.class, EndSubroutineKeyword.class);
 
 		processToken(EndKeyword.class, EndSubroutineKeyword.class);
+		processTokenIfPossible(name);
 	}
 }
