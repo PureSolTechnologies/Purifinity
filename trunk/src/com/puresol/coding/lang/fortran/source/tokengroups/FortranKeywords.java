@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import com.puresol.coding.lang.fortran.source.keywords.CallKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.CaseDefaultKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.CaseKeyword;
+import com.puresol.coding.lang.fortran.source.keywords.CharacterKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.ComplexKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.ContinueKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.CycleKeyword;
@@ -47,6 +48,7 @@ import com.puresol.coding.lang.fortran.source.keywords.ParameterKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.PointerKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.ProgramKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.ReadKeyword;
+import com.puresol.coding.lang.fortran.source.keywords.RealKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.ReturnKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.RewindKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.StopKeyword;
@@ -113,7 +115,9 @@ public class FortranKeywords extends AbstractTokenDefinitionGroup {
 			addTokenDefinition(DimensionKeyword.class);
 
 			addTokenDefinition(ComplexKeyword.class);
+			addTokenDefinition(CharacterKeyword.class);
 			addTokenDefinition(DoubleKeyword.class);
+			addTokenDefinition(RealKeyword.class);
 			addTokenDefinition(IntegerKeyword.class);
 
 			addTokenDefinition(DotEQDot.class);

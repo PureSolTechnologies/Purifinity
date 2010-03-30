@@ -1,36 +1,55 @@
 package com.puresol.coding.analysis.evaluator;
 
-import com.puresol.coding.analysis.CodeRange;
+import java.io.File;
+
+import javax.i18n4j.Translator;
+
+import com.puresol.coding.analysis.ProjectAnalyser;
 import com.puresol.coding.analysis.QualityLevel;
 
-public class TranslatorImplementation extends AbstractCodeEvaluator {
+public class TranslatorImplementation extends AbstractEvaluator {
 
-	public TranslatorImplementation(CodeRange codeRange) {
+	private static final Translator translator = Translator
+			.getTranslator(TranslatorImplementation.class);
 
+	public TranslatorImplementation(ProjectAnalyser analyser) {
+		super(analyser);
 	}
 
 	@Override
 	public String getName() {
+		return "Translator Implementation";
+	}
+
+	@Override
+	public String getDescription() {
+		return translator
+				.i18n("This evaluator checks for a Translator implementation"
+						+ "recommended by PureSol-Technologies.");
+	}
+
+	@Override
+	public QualityLevel getQuality(File file) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public QualityLevel getQuality() {
+	public String getFileEvaluationComment(File file) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public String getReport() {
+	public String getProjectEvaluationComment() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public boolean isValid() {
+	public QualityLevel getProjectQuality() {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
 
 }

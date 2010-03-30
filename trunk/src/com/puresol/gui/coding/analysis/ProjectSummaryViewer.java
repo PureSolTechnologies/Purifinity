@@ -4,16 +4,13 @@ import javax.swingx.BorderLayoutWidget;
 import javax.swingx.TabbedPane;
 
 import com.puresol.coding.analysis.ProjectAnalyser;
-import com.puresol.coding.analysis.ProjectStatistics;
 import com.puresol.coding.analysis.metrics.CoCoMo;
 import com.puresol.gui.coding.CodeViewer;
 
 public class ProjectSummaryViewer extends BorderLayoutWidget {
 
-	/**
-     * 
-     */
 	private static final long serialVersionUID = 6698435471544803926L;
+
 	private ProjectAnalyser analyser = null;
 	private TabbedPane tabbedPane = null;
 	private CodeViewer cocomoViewer = null;
@@ -39,9 +36,8 @@ public class ProjectSummaryViewer extends BorderLayoutWidget {
 
 	public void refresh() {
 		if (analyser != null) {
-			ProjectStatistics stat = new ProjectStatistics(analyser);
-			CoCoMo cocomo = new CoCoMo(stat.getSLOC());
-			cocomoViewer.setText(cocomo.toReport());
+			CoCoMo cocomo = new CoCoMo(analyser);
+			cocomoViewer.setText(cocomo.getProjectEvaluationComment());
 		}
 	}
 }

@@ -140,8 +140,14 @@ public class TextLexerEngine {
 	/**
 	 * No token was found, so roll back one position and try next token
 	 * definition...
+	 * 
+	 * @throws NoMatchingTokenDefinitionFound
 	 */
-	private void removeTokenAndRollBack() {
+	private void removeTokenAndRollBack() throws NoMatchingTokenDefinitionFound {
+		if (lexerStack.size() == 0) {
+			throw new NoMatchingTokenDefinitionFound(lineNumber, textPosition,
+					text);
+		}
 		LexerPosition oldPosition = lexerStack.pop();
 		Token token = oldPosition.getToken();
 

@@ -15,8 +15,7 @@ import java.util.Hashtable;
 
 import org.apache.log4j.Logger;
 
-import com.puresol.coding.analysis.evaluator.AvailableEvaluators;
-import com.puresol.coding.analysis.evaluator.CodeEvaluator;
+import com.puresol.coding.analysis.evaluator.Evaluator;
 import com.puresol.coding.analysis.metrics.Metric;
 import com.puresol.exceptions.StrangeSituationException;
 import com.puresol.utils.ClassInstantiationException;
@@ -51,22 +50,30 @@ public class CodeEvaluationSystem {
 
 	private static final Hashtable<Class<? extends Metric>, Boolean> evaluateMetrics = new Hashtable<Class<? extends Metric>, Boolean>();
 
-	private static final ArrayList<AvailableEvaluators> evaluators = new ArrayList<AvailableEvaluators>();
+	private static final ArrayList<Class<? extends Evaluator>> evaluatorClasses = new ArrayList<Class<? extends Evaluator>>();
 	static {
-		for (AvailableEvaluators evaluator : AvailableEvaluators.class
-				.getEnumConstants()) {
-			evaluators.add(evaluator);
+		for (String evaluator : CodeAnalysisProperties.getPropertyValue(
+				"CodeAnalysis.Evaluators").split(",")) {
+			Class<? extends Evaluator> clazz = getEvaluatorForName(evaluator);
+			if (clazz != null) {
+				evaluatorClasses.add(clazz);
+			}
 		}
 	}
 
-	private static final ArrayList<Class<? extends CodeEvaluator>> evaluatorClasses = new ArrayList<Class<? extends CodeEvaluator>>();
-	static {
-		for (AvailableEvaluators evaluator : evaluators) {
-			evaluatorClasses.add(evaluator.getEvaluatorClass());
+	@SuppressWarnings("unchecked")
+	private static Class<? extends Evaluator> getEvaluatorForName(
+			String evaluator) {
+		try {
+			return (Class<? extends Evaluator>) Class.forName(evaluator);
+		} catch (ClassNotFoundException e) {
+			logger.error("Class '" + evaluator
+					+ "' was not found, but set in CodeAnalysis.properties!");
 		}
+		return null;
 	}
 
-	private static final Hashtable<AvailableEvaluators, Boolean> evaluateEvaluator = new Hashtable<AvailableEvaluators, Boolean>();
+	private static final Hashtable<Class<? extends Evaluator>, Boolean> evaluateEvaluator = new Hashtable<Class<? extends Evaluator>, Boolean>();
 
 	public static ArrayList<Class<? extends Metric>> getMetricClasses() {
 		return metricClasses;
@@ -94,20 +101,17 @@ public class CodeEvaluationSystem {
 		}
 	}
 
-	public static ArrayList<AvailableEvaluators> getEvaluators() {
-		return evaluators;
-	}
-
-	public static ArrayList<Class<? extends CodeEvaluator>> getEvaluatorClasses() {
+	public static ArrayList<Class<? extends Evaluator>> getEvaluatorClasses() {
 		return evaluatorClasses;
 	}
 
-	public static void setEvaluatorEvaluate(AvailableEvaluators evaluator,
-			boolean evaluate) {
+	public static void setEvaluatorEvaluate(
+			Class<? extends Evaluator> evaluator, boolean evaluate) {
 		CodeEvaluationSystem.evaluateEvaluator.put(evaluator, evaluate);
 	}
 
-	public static boolean isEvaluatorEvaluate(AvailableEvaluators evaluator) {
+	public static boolean isEvaluatorEvaluate(
+			Class<? extends Evaluator> evaluator) {
 		Boolean bool = evaluateEvaluator.get(evaluator);
 		if (bool == null) {
 			return false;

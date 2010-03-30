@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
+import javax.i18n4j.Translator;
 import javax.swingx.progress.ProgressObservable;
 import javax.swingx.progress.ProgressObserver;
 
@@ -11,6 +12,8 @@ import org.apache.log4j.Logger;
 
 import com.puresol.coding.analysis.CodeRange;
 import com.puresol.coding.analysis.ProjectAnalyser;
+import com.puresol.coding.analysis.QualityLevel;
+import com.puresol.coding.analysis.evaluator.AbstractEvaluator;
 import com.puresol.coding.tokentypes.AbstractSourceTokenDefinition;
 import com.puresol.coding.tokentypes.SourceTokenDefinition;
 import com.puresol.coding.tokentypes.SymbolType;
@@ -20,20 +23,22 @@ import com.puresol.parser.TokenException;
 import com.puresol.parser.TokenPublicity;
 import com.puresol.parser.TokenStream;
 
-public class DuplicationScanner implements ProgressObservable {
+public class DuplicationScanner extends AbstractEvaluator implements
+		ProgressObservable {
 
 	public static final int OPERATOR_THRESHOLD = 50;
 
 	private static final Logger logger = Logger
 			.getLogger(DuplicationScanner.class);
+	private static final Translator translator = Translator
+			.getTranslator(DuplicationScanner.class);
 
 	private ProgressObserver observer;
-	private final ProjectAnalyser analyser;
 	private final Hashtable<CodeRange, ArrayList<Integer>> codeRanges = new Hashtable<CodeRange, ArrayList<Integer>>();
 	private final ArrayList<Duplication> duplications = new ArrayList<Duplication>();
 
 	public DuplicationScanner(ProjectAnalyser analyser) {
-		this.analyser = analyser;
+		super(analyser);
 	}
 
 	@Override
@@ -57,8 +62,9 @@ public class DuplicationScanner implements ProgressObservable {
 	}
 
 	private void getAllCodeRanges() throws TokenException {
-		for (File file : analyser.getFiles()) {
-			for (CodeRange codeRange : analyser.getCodeRanges(file)) {
+		for (File file : getProjectAnalyser().getFiles()) {
+			this.addFile(file);
+			for (CodeRange codeRange : getProjectAnalyser().getCodeRanges(file)) {
 				if (!codeRange.getType().isRunnableCodeSegment()) {
 					continue;
 				}
@@ -227,5 +233,39 @@ public class DuplicationScanner implements ProgressObservable {
 
 	public ArrayList<Duplication> getDuplications() {
 		return duplications;
+	}
+
+	@Override
+	public String getName() {
+		return "Code Duplication Scanner";
+	}
+
+	@Override
+	public String getDescription() {
+		return translator
+				.i18n("This evaluator scans for simmilar functional code.");
+	}
+
+	@Override
+	public String getProjectEvaluationComment() {
+		return "";
+	}
+
+	@Override
+	public String getFileEvaluationComment(File file) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public QualityLevel getProjectQuality() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public QualityLevel getQuality(File file) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

@@ -2,6 +2,14 @@ package com.puresol.coding.analysis.evaluator.duplication;
 
 import com.puresol.coding.analysis.CodeRange;
 
+/**
+ * This class keeps the information of a single duplication found by a scanner.
+ * Both code ranges for the duplication are named left and right for the
+ * recommended presentation style on the screen.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class Duplication implements Comparable<Duplication> {
 
 	private CodeRange left;

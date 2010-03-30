@@ -10,7 +10,19 @@
 
 package com.puresol.coding.analysis.metrics;
 
+import java.io.File;
+import java.util.ArrayList;
+
 import javax.i18n4j.Translator;
+
+import com.puresol.coding.analysis.Analyser;
+import com.puresol.coding.analysis.CodeRange;
+import com.puresol.coding.analysis.CodeRangeType;
+import com.puresol.coding.analysis.ProjectAnalyser;
+import com.puresol.coding.analysis.QualityLevel;
+import com.puresol.coding.analysis.evaluator.AbstractEvaluator;
+import com.puresol.parser.Token;
+import com.puresol.parser.TokenPublicity;
 
 /**
  * This class calculates the CoCoMo for a set number of sloc and a given average
@@ -19,12 +31,12 @@ import javax.i18n4j.Translator;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class CoCoMo {
+public class CoCoMo extends AbstractEvaluator {
 
 	private static final Translator translator = Translator
 			.getTranslator(CoCoMo.class);
 
-	private int sloc;
+	private double sloc;
 	private double ksloc;
 	private double personMonth;
 	private double personYears;
@@ -39,14 +51,15 @@ public class CoCoMo {
 	private double averageSalary;
 	private String currency;
 
-	public CoCoMo(int sloc) {
-		this.sloc = sloc;
+	public CoCoMo(ProjectAnalyser analyser) {
+		super(analyser);
 		setComplexity(Complexity.LOW);
 		setAverageSalary(56286, "$");
 		calculate();
 	}
 
 	private void calculate() {
+		sloc = getSLOC();
 		ksloc = sloc / 1000.0;
 		personMonth = c1 * Math.exp(c2 * Math.log(ksloc));
 		personYears = personMonth / 12.0;
@@ -55,6 +68,41 @@ public class CoCoMo {
 		teamSize = personMonth / scheduledMonth;
 		estimatedCosts = personYears * averageSalary * 2.4 / 1000;
 
+	}
+
+	private int getSLOC() {
+		ProjectAnalyser projectAnalyser = getProjectAnalyser();
+		ArrayList<File> files = projectAnalyser.getFiles();
+		int sloc = 0;
+		for (File file : files) {
+			sloc += getSLOC(projectAnalyser.getAnalyser(file));
+		}
+		return sloc;
+	}
+
+	private int getSLOC(Analyser analyser) {
+		int sloc = 0;
+		ArrayList<CodeRange> codeRanges = analyser.getCodeRanges();
+		for (CodeRange codeRange : codeRanges) {
+			if (codeRange.getType() == CodeRangeType.FILE) {
+				sloc += getSLOC(codeRange);
+			}
+		}
+		return sloc;
+	}
+
+	private int getSLOC(CodeRange codeRange) {
+		int sloc = 0;
+		int oldLine = -1;
+		for (Token token : codeRange.getTokens()) {
+			if (token.getPublicity() == TokenPublicity.VISIBLE) {
+				if (token.getStartLine() != oldLine) {
+					oldLine = token.getStartLine();
+					sloc++;
+				}
+			}
+		}
+		return sloc;
 	}
 
 	public void setComplexity(Complexity complexity) {
@@ -109,7 +157,19 @@ public class CoCoMo {
 		return estimatedCosts;
 	}
 
-	public String toReport() {
+	@Override
+	public String getName() {
+		return "COst COnstruction MOdel";
+	}
+
+	@Override
+	public String getDescription() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getProjectEvaluationComment() {
 		String text = translator
 				.i18n(
 						"Total Physical Source Lines of Code (SLOC)                = {0}",
@@ -149,5 +209,21 @@ public class CoCoMo {
 				averageSalary, currency)
 				+ "\n";
 		return text;
+	}
+
+	@Override
+	public String getFileEvaluationComment(File file) {
+		return "";
+	}
+
+	@Override
+	public QualityLevel getProjectQuality() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public QualityLevel getQuality(File file) {
+		return QualityLevel.HIGH;
 	}
 }
