@@ -36,6 +36,7 @@ public class DuplicationScanner extends AbstractEvaluator implements
 	private ProgressObserver observer;
 	private final Hashtable<CodeRange, ArrayList<Integer>> codeRanges = new Hashtable<CodeRange, ArrayList<Integer>>();
 	private final ArrayList<Duplication> duplications = new ArrayList<Duplication>();
+	private final Hashtable<File, ArrayList<Duplication>> fileDuplications = new Hashtable<File, ArrayList<Duplication>>();
 
 	public DuplicationScanner(ProjectAnalyser analyser) {
 		super(analyser);
@@ -59,6 +60,7 @@ public class DuplicationScanner extends AbstractEvaluator implements
 
 	private void clearDuplications() {
 		duplications.clear();
+		fileDuplications.clear();
 	}
 
 	private void getAllCodeRanges() throws TokenException {
@@ -229,10 +231,24 @@ public class DuplicationScanner extends AbstractEvaluator implements
 
 	private void addDuplication(Duplication duplication) {
 		duplications.add(duplication);
+		if (!fileDuplications.containsKey(duplication.getLeft().getFile())) {
+			fileDuplications.put(duplication.getLeft().getFile(),
+					new ArrayList<Duplication>());
+		}
+		if (!fileDuplications.containsKey(duplication.getRight().getFile())) {
+			fileDuplications.put(duplication.getRight().getFile(),
+					new ArrayList<Duplication>());
+		}
+		fileDuplications.get(duplication.getLeft().getFile()).add(duplication);
+		fileDuplications.get(duplication.getRight().getFile()).add(duplication);
 	}
 
 	public ArrayList<Duplication> getDuplications() {
 		return duplications;
+	}
+
+	public ArrayList<Duplication> getDuplications(File file) {
+		return fileDuplications.get(file);
 	}
 
 	@Override
@@ -253,8 +269,12 @@ public class DuplicationScanner extends AbstractEvaluator implements
 
 	@Override
 	public String getFileEvaluationComment(File file) {
-		// TODO Auto-generated method stub
-		return null;
+		String report = "";
+		ArrayList<Duplication> duplications = getDuplications(file);
+		for (Duplication duplication : duplications) {
+			report += duplication.toString() + "\n\n";
+		}
+		return report;
 	}
 
 	@Override
