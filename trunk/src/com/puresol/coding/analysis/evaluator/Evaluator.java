@@ -3,6 +3,8 @@ package com.puresol.coding.analysis.evaluator;
 import java.io.File;
 import java.util.ArrayList;
 
+import javax.swingx.progress.ProgressObservable;
+
 import com.puresol.coding.analysis.QualityLevel;
 
 /**
@@ -12,7 +14,7 @@ import com.puresol.coding.analysis.QualityLevel;
  * @author Rick-Rainer Ludwig
  * 
  */
-public interface Evaluator {
+public interface Evaluator extends ProgressObservable {
 
 	/**
 	 * This is the name of the evaluator. This is used for section heads in

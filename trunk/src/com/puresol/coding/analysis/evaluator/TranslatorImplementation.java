@@ -3,6 +3,7 @@ package com.puresol.coding.analysis.evaluator;
 import java.io.File;
 
 import javax.i18n4j.Translator;
+import javax.swingx.progress.ProgressObserver;
 
 import com.puresol.coding.analysis.ProjectAnalyser;
 import com.puresol.coding.analysis.QualityLevel;
@@ -50,6 +51,16 @@ public class TranslatorImplementation extends AbstractEvaluator {
 	public QualityLevel getProjectQuality() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void setMonitor(ProgressObserver observer) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
 	}
 
 }

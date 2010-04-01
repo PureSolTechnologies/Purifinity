@@ -4,36 +4,34 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
-import javax.swingx.progress.ProgressObservable;
+import javax.i18n4j.Translator;
 import javax.swingx.progress.ProgressObserver;
 
 import org.apache.log4j.Logger;
 
 import com.puresol.coding.analysis.CodeRange;
 import com.puresol.coding.analysis.ProjectAnalyser;
+import com.puresol.coding.analysis.QualityLevel;
+import com.puresol.coding.analysis.evaluator.AbstractEvaluator;
 import com.puresol.parser.Token;
 import com.puresol.parser.TokenException;
 import com.puresol.parser.TokenStream;
 
-public class CopyAndPasteScanner implements ProgressObservable {
+public class CopyAndPasteScanner extends AbstractEvaluator {
 
 	public static final int THRESHOLD = 50;
 
 	private static final Logger logger = Logger
 			.getLogger(CopyAndPasteScanner.class);
+	private static final Translator translator = Translator
+			.getTranslator(CopyAndPasteScanner.class);
 
-	private ProgressObserver observer;
-	private final ProjectAnalyser analyser;
 	private final Hashtable<CodeRange, ArrayList<Integer>> codeRanges = new Hashtable<CodeRange, ArrayList<Integer>>();
 	private final ArrayList<Duplication> duplications = new ArrayList<Duplication>();
+	private final Hashtable<File, ArrayList<Duplication>> fileDuplications = new Hashtable<File, ArrayList<Duplication>>();
 
 	public CopyAndPasteScanner(ProjectAnalyser analyser) {
-		this.analyser = analyser;
-	}
-
-	@Override
-	public void setMonitor(ProgressObserver observer) {
-		this.observer = observer;
+		super(analyser);
 	}
 
 	@Override
@@ -49,11 +47,13 @@ public class CopyAndPasteScanner implements ProgressObservable {
 
 	private void clearDuplications() {
 		duplications.clear();
+		fileDuplications.clear();
 	}
 
 	private void getAllCodeRanges() throws TokenException {
-		for (File file : analyser.getFiles()) {
-			for (CodeRange codeRange : analyser.getCodeRanges(file)) {
+		for (File file : getProjectAnalyser().getFiles()) {
+			addFile(file);
+			for (CodeRange codeRange : getProjectAnalyser().getCodeRanges(file)) {
 				if (!codeRange.getType().isRunnableCodeSegment()) {
 					continue;
 				}
@@ -68,6 +68,7 @@ public class CopyAndPasteScanner implements ProgressObservable {
 
 	private void checkForDuplications() throws TokenException {
 		CodeRange[] ranges = codeRanges.keySet().toArray(new CodeRange[0]);
+		ProgressObserver observer = getMonitor();
 		if (observer != null) {
 			observer.setRange(0, ((ranges.length + 1) * ranges.length) / 2);
 			observer.setStatus(0);
@@ -164,9 +165,61 @@ public class CopyAndPasteScanner implements ProgressObservable {
 
 	private void addDuplication(Duplication duplication) {
 		duplications.add(duplication);
+		if (!fileDuplications.containsKey(duplication.getLeft().getFile())) {
+			fileDuplications.put(duplication.getLeft().getFile(),
+					new ArrayList<Duplication>());
+		}
+		if (!fileDuplications.containsKey(duplication.getRight().getFile())) {
+			fileDuplications.put(duplication.getRight().getFile(),
+					new ArrayList<Duplication>());
+		}
+		fileDuplications.get(duplication.getLeft().getFile()).add(duplication);
+		fileDuplications.get(duplication.getRight().getFile()).add(duplication);
 	}
 
 	public ArrayList<Duplication> getDuplications() {
 		return duplications;
+	}
+
+	public ArrayList<Duplication> getDuplications(File file) {
+		return fileDuplications.get(file);
+	}
+
+	@Override
+	public String getName() {
+		return "Copy & Paste Scanner";
+	}
+
+	@Override
+	public String getDescription() {
+		return translator
+				.i18n("This evaluator scans for code which was copy and pasted.");
+	}
+
+	@Override
+	public String getFileEvaluationComment(File file) {
+		String report = "";
+		ArrayList<Duplication> duplications = getDuplications(file);
+		for (Duplication duplication : duplications) {
+			report += duplication.toString() + "\n\n";
+		}
+		return report;
+	}
+
+	@Override
+	public String getProjectEvaluationComment() {
+		return "";
+	}
+
+	@Override
+	public QualityLevel getProjectQuality() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public QualityLevel getQuality(File file) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

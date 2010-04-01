@@ -33,18 +33,12 @@ public class DuplicationScanner extends AbstractEvaluator implements
 	private static final Translator translator = Translator
 			.getTranslator(DuplicationScanner.class);
 
-	private ProgressObserver observer;
 	private final Hashtable<CodeRange, ArrayList<Integer>> codeRanges = new Hashtable<CodeRange, ArrayList<Integer>>();
 	private final ArrayList<Duplication> duplications = new ArrayList<Duplication>();
 	private final Hashtable<File, ArrayList<Duplication>> fileDuplications = new Hashtable<File, ArrayList<Duplication>>();
 
 	public DuplicationScanner(ProjectAnalyser analyser) {
 		super(analyser);
-	}
-
-	@Override
-	public void setMonitor(ProgressObserver observer) {
-		this.observer = observer;
 	}
 
 	@Override
@@ -65,7 +59,7 @@ public class DuplicationScanner extends AbstractEvaluator implements
 
 	private void getAllCodeRanges() throws TokenException {
 		for (File file : getProjectAnalyser().getFiles()) {
-			this.addFile(file);
+			addFile(file);
 			for (CodeRange codeRange : getProjectAnalyser().getCodeRanges(file)) {
 				if (!codeRange.getType().isRunnableCodeSegment()) {
 					continue;
@@ -86,6 +80,7 @@ public class DuplicationScanner extends AbstractEvaluator implements
 
 	private void checkForDuplications() throws TokenException {
 		CodeRange[] ranges = codeRanges.keySet().toArray(new CodeRange[0]);
+		ProgressObserver observer = getMonitor();
 		if (observer != null) {
 			observer.setRange(0, ((ranges.length + 1) * ranges.length) / 2);
 			observer.setStatus(0);

@@ -55,10 +55,10 @@ public class CoCoMo extends AbstractEvaluator {
 		super(analyser);
 		setComplexity(Complexity.LOW);
 		setAverageSalary(56286, "$");
-		calculate();
 	}
 
-	private void calculate() {
+	@Override
+	public void run() {
 		sloc = getSLOC();
 		ksloc = sloc / 1000.0;
 		personMonth = c1 * Math.exp(c2 * Math.log(ksloc));
@@ -120,13 +120,13 @@ public class CoCoMo extends AbstractEvaluator {
 			c2 = 1.20;
 			c3 = 0.32;
 		}
-		calculate();
+		run();
 	}
 
 	public void setAverageSalary(double salary, String currency) {
 		this.averageSalary = salary;
 		this.currency = currency;
-		calculate();
+		run();
 	}
 
 	public double getAverageSalary() {
@@ -164,8 +164,9 @@ public class CoCoMo extends AbstractEvaluator {
 
 	@Override
 	public String getDescription() {
-		// TODO Auto-generated method stub
-		return null;
+		return translator.i18n("The COst COnstruction MOdel is a simple way "
+				+ "to estimate the construction costs of a "
+				+ "software project by couting the physical lines of code.");
 	}
 
 	@Override
