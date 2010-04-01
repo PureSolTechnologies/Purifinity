@@ -24,110 +24,120 @@ import org.apache.log4j.Logger;
 
 import com.puresol.utils.Files;
 
+/**
+ * This class is for analysing a whole project. All source code found is checked
+ * for a known language and parsed to CodeRange objects. These CodeRange objects
+ * can be used for Evaluator and Metric calculations.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class ProjectAnalyser implements ProgressObservable {
 
-	private static final Logger logger = Logger
-			.getLogger(ProjectAnalyser.class);
+    private static final Logger logger = Logger
+	    .getLogger(ProjectAnalyser.class);
 
-	private final File directory;
-	private final String pattern;
-	private final Hashtable<File, Analyser> analysers = new Hashtable<File, Analyser>();
-	private final ArrayList<File> failedFiles = new ArrayList<File>();
-	private ProgressObserver progressMonitor = null;
-	private AnalyserFactory analyserFactory = AnalyserFactory.createFactory();
+    private final File directory;
+    private final String pattern;
+    private final Hashtable<File, Analyser> analysers = new Hashtable<File, Analyser>();
+    private final ArrayList<File> failedFiles = new ArrayList<File>();
+    private final AnalyserFactory analyserFactory = AnalyserFactory
+	    .createFactory();
 
-	public ProjectAnalyser(File directory, String pattern) {
-		this.directory = directory;
-		this.pattern = pattern;
+    private ProgressObserver progressMonitor = null;
+
+    public ProjectAnalyser(File directory, String pattern) {
+	this.directory = directory;
+	this.pattern = pattern;
+    }
+
+    public void run() {
+	clear();
+	analyseFiles();
+    }
+
+    private void clear() {
+	analysers.clear();
+	failedFiles.clear();
+    }
+
+    private void analyseFiles() {
+	List<File> files = FileSearch.find(directory, pattern);
+	if (progressMonitor != null) {
+	    progressMonitor.setRange(0, files.size());
+	    progressMonitor.setStatus(0);
+	    progressMonitor.showProgressPercent();
 	}
-
-	public void run() {
-		clear();
-		analyseFiles();
+	for (int index = 0; index < files.size(); index++) {
+	    File file = files.get(index);
+	    if (progressMonitor != null) {
+		progressMonitor.setStatus(index);
+		progressMonitor.setText(file.getPath());
+	    }
+	    analyseFile(file);
+	    if (Thread.interrupted()) {
+		return;
+	    }
 	}
-
-	private void clear() {
-		analysers.clear();
-		failedFiles.clear();
+	if (progressMonitor != null) {
+	    progressMonitor.finish();
 	}
+    }
 
-	private void analyseFiles() {
-		List<File> files = FileSearch.find(directory, pattern);
-		if (progressMonitor != null) {
-			progressMonitor.setRange(0, files.size());
-			progressMonitor.setStatus(0);
-			progressMonitor.showProgressPercent();
-		}
-		for (int index = 0; index < files.size(); index++) {
-			File file = files.get(index);
-			if (progressMonitor != null) {
-				progressMonitor.setStatus(index);
-				progressMonitor.setText(file.getPath());
-			}
-			analyseFile(file);
-			if (Thread.interrupted()) {
-				return;
-			}
-		}
-		if (progressMonitor != null) {
-			progressMonitor.finish();
-		}
+    private void analyseFile(File file) {
+	try {
+	    if ((Files.addPaths(directory, file).isFile())
+		    && (!file.getPath().contains("/."))) {
+		analysers.put(file, analyserFactory.create(directory, file));
+	    }
+	} catch (LanguageNotSupportedException e) {
+	    logger
+		    .warn("File '"
+			    + file.getPath()
+			    + "' could not be analysed due to containing no supported language.");
+	    failedFiles.add(file);
+	} catch (FileNotFoundException e) {
+	    logger.warn("File '" + file.getPath() + "' is not existing!");
+	    failedFiles.add(file);
 	}
+    }
 
-	private void analyseFile(File file) {
-		try {
-			if ((Files.addPaths(directory, file).isFile())
-					&& (!file.getPath().contains("/."))) {
-				analysers.put(file, analyserFactory.create(directory, file));
-			}
-		} catch (LanguageNotSupportedException e) {
-			logger
-					.warn("File '"
-							+ file.getPath()
-							+ "' could not be analysed due to containing no supported language.");
-			failedFiles.add(file);
-		} catch (FileNotFoundException e) {
-			logger.warn("File '" + file.getPath() + "' is not existing!");
-			failedFiles.add(file);
-		}
-	}
+    public File getProjectDirectory() {
+	return directory;
+    }
 
-	public File getProjectDirectory() {
-		return directory;
-	}
+    public ArrayList<File> getFiles() {
+	return new ArrayList<File>(analysers.keySet());
+    }
 
-	public ArrayList<File> getFiles() {
-		return new ArrayList<File>(analysers.keySet());
-	}
+    public ArrayList<File> getFailedFiles() {
+	return failedFiles;
+    }
 
-	public ArrayList<File> getFailedFiles() {
-		return failedFiles;
-	}
+    public Analyser getAnalyser(File file) {
+	return analysers.get(file);
+    }
 
-	public Analyser getAnalyser(File file) {
-		return analysers.get(file);
+    public ArrayList<CodeRange> getCodeRanges(File file) {
+	if (analysers == null) {
+	    return new ArrayList<CodeRange>();
 	}
+	if (file == null) {
+	    return new ArrayList<CodeRange>();
+	}
+	if (!analysers.containsKey(file)) {
+	    return new ArrayList<CodeRange>();
+	}
+	Analyser analyser = analysers.get(file);
+	if (analyser == null) {
+	    return new ArrayList<CodeRange>();
+	}
+	return analysers.get(file).getCodeRanges();
+    }
 
-	public ArrayList<CodeRange> getCodeRanges(File file) {
-		if (analysers == null) {
-			return new ArrayList<CodeRange>();
-		}
-		if (file == null) {
-			return new ArrayList<CodeRange>();
-		}
-		if (!analysers.containsKey(file)) {
-			return new ArrayList<CodeRange>();
-		}
-		Analyser analyser = analysers.get(file);
-		if (analyser == null) {
-			return new ArrayList<CodeRange>();
-		}
-		return analysers.get(file).getCodeRanges();
-	}
-
-	@Override
-	public void setMonitor(ProgressObserver observer) {
-		progressMonitor = observer;
-	}
+    @Override
+    public void setMonitor(ProgressObserver observer) {
+	progressMonitor = observer;
+    }
 
 }

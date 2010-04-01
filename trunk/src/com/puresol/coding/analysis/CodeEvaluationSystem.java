@@ -11,111 +11,70 @@
 package com.puresol.coding.analysis;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
+
+import javax.swingx.progress.ProgressObservable;
+import javax.swingx.progress.ProgressObserver;
 
 import org.apache.log4j.Logger;
 
 import com.puresol.coding.analysis.evaluator.Evaluator;
-import com.puresol.coding.analysis.metrics.Metric;
-import com.puresol.exceptions.StrangeSituationException;
 import com.puresol.utils.ClassInstantiationException;
 import com.puresol.utils.Instances;
 
-public class CodeEvaluationSystem {
+/**
+ * This is the central class for managing all information for the code
+ * evaluation system. All metrics and evaluator classes are managed here.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
+public class CodeEvaluationSystem implements ProgressObservable {
 
-	private static final Logger logger = Logger
-			.getLogger(CodeEvaluationSystem.class);
+    private static final Logger logger = Logger
+	    .getLogger(CodeEvaluationSystem.class);
 
-	private static ArrayList<Class<? extends Metric>> metricClasses = new ArrayList<Class<? extends Metric>>();
-	static {
-		for (String analyser : CodeAnalysisProperties.getPropertyValue(
-				"CodeAnalysis.Metrics").split(",")) {
-			Class<? extends Metric> clazz = getMetricForName(analyser);
-			if (clazz != null) {
-				metricClasses.add(clazz);
-			}
-		}
+    private final ProjectAnalyser projectAnalyser;
+    private final ArrayList<Evaluator> evaluators = new ArrayList<Evaluator>();
+    private ProgressObserver observer = null;
+
+    public CodeEvaluationSystem(ProjectAnalyser projectAnalyser) {
+	this.projectAnalyser = projectAnalyser;
+    }
+
+    @Override
+    public void run() {
+	evaluators.clear();
+	ArrayList<Class<? extends Evaluator>> evaluatorClasses = EvaluatorManager
+		.getEvaluatorClasses();
+	if (observer != null) {
+	    observer.setDescription("Code Evaluation");
+	    observer.setRange(0, evaluatorClasses.size());
 	}
-
-	@SuppressWarnings("unchecked")
-	private static Class<? extends Metric> getMetricForName(String metric) {
-		try {
-			return (Class<? extends Metric>) Class.forName(metric);
-		} catch (ClassNotFoundException e) {
-			logger.error("Class '" + metric
-					+ "' was not found, but set in CodeAnalysis.properties!");
-		}
-		return null;
+	int count = 0;
+	for (Class<? extends Evaluator> evaluatorClass : evaluatorClasses) {
+	    if (observer != null) {
+		count++;
+		observer.setStatus(count);
+	    }
+	    try {
+		Evaluator evaluator = Instances.createInstance(evaluatorClass,
+			projectAnalyser);
+		evaluators.add(evaluator);
+	    } catch (ClassInstantiationException e) {
+		logger.error(e.getMessage(), e);
+	    }
 	}
-
-	private static final Hashtable<Class<? extends Metric>, Boolean> evaluateMetrics = new Hashtable<Class<? extends Metric>, Boolean>();
-
-	private static final ArrayList<Class<? extends Evaluator>> evaluatorClasses = new ArrayList<Class<? extends Evaluator>>();
-	static {
-		for (String evaluator : CodeAnalysisProperties.getPropertyValue(
-				"CodeAnalysis.Evaluators").split(",")) {
-			Class<? extends Evaluator> clazz = getEvaluatorForName(evaluator);
-			if (clazz != null) {
-				evaluatorClasses.add(clazz);
-			}
-		}
+	if (observer != null) {
+	    observer.finish();
 	}
+    }
 
-	@SuppressWarnings("unchecked")
-	private static Class<? extends Evaluator> getEvaluatorForName(
-			String evaluator) {
-		try {
-			return (Class<? extends Evaluator>) Class.forName(evaluator);
-		} catch (ClassNotFoundException e) {
-			logger.error("Class '" + evaluator
-					+ "' was not found, but set in CodeAnalysis.properties!");
-		}
-		return null;
-	}
+    @Override
+    public void setMonitor(ProgressObserver observer) {
+	this.observer = observer;
+    }
 
-	private static final Hashtable<Class<? extends Evaluator>, Boolean> evaluateEvaluator = new Hashtable<Class<? extends Evaluator>, Boolean>();
-
-	public static ArrayList<Class<? extends Metric>> getMetricClasses() {
-		return metricClasses;
-	}
-
-	public static void setMetricEvaluate(Class<? extends Metric> metric,
-			boolean evaluate) {
-		CodeEvaluationSystem.evaluateMetrics.put(metric, evaluate);
-	}
-
-	public static boolean isMetricEvaluate(Class<? extends Metric> metric) {
-		Boolean bool = evaluateMetrics.get(metric);
-		if (bool == null) {
-			return false;
-		}
-		return bool;
-	}
-
-	public Metric newMetricInstance(Class<? extends Metric> metric,
-			CodeRange codeRange) {
-		try {
-			return Instances.createInstance(metric, codeRange);
-		} catch (ClassInstantiationException e) {
-			throw new StrangeSituationException(e);
-		}
-	}
-
-	public static ArrayList<Class<? extends Evaluator>> getEvaluatorClasses() {
-		return evaluatorClasses;
-	}
-
-	public static void setEvaluatorEvaluate(
-			Class<? extends Evaluator> evaluator, boolean evaluate) {
-		CodeEvaluationSystem.evaluateEvaluator.put(evaluator, evaluate);
-	}
-
-	public static boolean isEvaluatorEvaluate(
-			Class<? extends Evaluator> evaluator) {
-		Boolean bool = evaluateEvaluator.get(evaluator);
-		if (bool == null) {
-			return false;
-		}
-		return bool;
-	}
+    public ArrayList<Evaluator> getEvaluators() {
+	return evaluators;
+    }
 }
