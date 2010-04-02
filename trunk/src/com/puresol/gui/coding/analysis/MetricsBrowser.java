@@ -32,9 +32,9 @@ import org.apache.log4j.Logger;
 
 import com.puresol.coding.analysis.CodeRange;
 import com.puresol.coding.analysis.ProjectAnalyser;
-import com.puresol.coding.analysis.reports.HTMLMetricsReport;
 import com.puresol.coding.evaluator.QualityLevel;
 import com.puresol.coding.evaluator.metric.MetricsEvaluator;
+import com.puresol.coding.evaluator.metric.report.HTMLMetricsReport;
 
 public class MetricsBrowser extends BorderLayoutWidget {
 

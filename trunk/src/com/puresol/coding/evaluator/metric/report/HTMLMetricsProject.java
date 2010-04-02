@@ -8,7 +8,7 @@
  *
  ***************************************************************************/
 
-package com.puresol.coding.analysis.reports;
+package com.puresol.coding.evaluator.metric.report;
 
 import java.io.File;
 import java.io.FileNotFoundException;

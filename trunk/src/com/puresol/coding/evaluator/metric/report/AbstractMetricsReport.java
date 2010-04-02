@@ -8,15 +8,15 @@
  *
  ***************************************************************************/
 
-package com.puresol.coding.analysis.reports;
+package com.puresol.coding.evaluator.metric.report;
 
 import com.puresol.coding.evaluator.metric.CodeRangeMetrics;
 
-abstract public class AbstractAnalysisReport implements AnalysisReport {
+abstract public class AbstractMetricsReport implements AnalysisReport {
 
     private CodeRangeMetrics metrics = null;
 
-    public AbstractAnalysisReport(CodeRangeMetrics metrics) {
+    public AbstractMetricsReport(CodeRangeMetrics metrics) {
 	this.metrics = metrics;
     }
 

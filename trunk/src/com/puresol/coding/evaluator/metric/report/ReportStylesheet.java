@@ -1,4 +1,4 @@
-package com.puresol.coding.analysis.reports;
+package com.puresol.coding.evaluator.metric.report;
 
 import com.puresol.html.css.Stylesheet;
 

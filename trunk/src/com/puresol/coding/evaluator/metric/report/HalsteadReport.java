@@ -1,4 +1,4 @@
-package com.puresol.coding.analysis.reports;
+package com.puresol.coding.evaluator.metric.report;
 
 import javax.i18n4j.Translator;
 

@@ -8,7 +8,7 @@
  *
  ***************************************************************************/
 
-package com.puresol.coding.analysis.reports;
+package com.puresol.coding.evaluator.metric.report;
 
 import javax.i18n4j.Translator;
 
@@ -18,7 +18,7 @@ import com.puresol.coding.evaluator.metric.CodeRangeMetrics;
 import com.puresol.coding.evaluator.metric.Metric;
 import com.puresol.html.HTMLStandards;
 
-public class HTMLMetricsReport extends AbstractAnalysisReport {
+public class HTMLMetricsReport extends AbstractMetricsReport {
 
 	private static final Translator translator = Translator
 			.getTranslator(HTMLMetricsReport.class);
