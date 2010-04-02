@@ -12,6 +12,7 @@ import com.puresol.coding.analysis.CodeRange;
 import com.puresol.coding.analysis.ProjectAnalyser;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.evaluator.QualityLevel;
+import com.puresol.reporting.ReportingFormat;
 import com.puresol.utils.Property;
 
 public class MetricsEvaluator extends AbstractEvaluator {
@@ -123,17 +124,18 @@ public class MetricsEvaluator extends AbstractEvaluator {
 	}
 
 	@Override
-	public String getProjectComment() {
+	public String getProjectComment(ReportingFormat format) {
 		return getProjectQuality().getIdentifier();
 	}
 
 	@Override
-	public String getFileComment(File file) {
+	public String getFileComment(File file, ReportingFormat format) {
 		return getQuality(file).getIdentifier();
 	}
 
 	@Override
-	public String getCodeRangeComment(CodeRange codeRange) {
+	public String getCodeRangeComment(CodeRange codeRange,
+			ReportingFormat format) {
 		return getQuality(codeRange).getIdentifier();
 	}
 

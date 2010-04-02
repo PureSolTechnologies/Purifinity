@@ -22,6 +22,7 @@ import com.puresol.parser.Token;
 import com.puresol.parser.TokenException;
 import com.puresol.parser.TokenPublicity;
 import com.puresol.parser.TokenStream;
+import com.puresol.reporting.ReportingFormat;
 import com.puresol.utils.Property;
 
 public class DuplicationScanner extends AbstractEvaluator implements
@@ -263,12 +264,12 @@ public class DuplicationScanner extends AbstractEvaluator implements
 	}
 
 	@Override
-	public String getProjectComment() {
+	public String getProjectComment(ReportingFormat format) {
 		return "";
 	}
 
 	@Override
-	public String getFileComment(File file) {
+	public String getFileComment(File file, ReportingFormat format) {
 		String report = "";
 		ArrayList<Duplication> duplications = getDuplications(file);
 		for (Duplication duplication : duplications) {
@@ -288,7 +289,8 @@ public class DuplicationScanner extends AbstractEvaluator implements
 	}
 
 	@Override
-	public String getCodeRangeComment(CodeRange codeRange) {
+	public String getCodeRangeComment(CodeRange codeRange,
+			ReportingFormat format) {
 		return "";
 	}
 

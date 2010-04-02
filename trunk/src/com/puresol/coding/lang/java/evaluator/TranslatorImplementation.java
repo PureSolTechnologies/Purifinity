@@ -8,6 +8,7 @@ import com.puresol.coding.analysis.CodeRange;
 import com.puresol.coding.analysis.ProjectAnalyser;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.evaluator.QualityLevel;
+import com.puresol.reporting.ReportingFormat;
 
 public class TranslatorImplementation extends AbstractEvaluator {
 
@@ -36,12 +37,12 @@ public class TranslatorImplementation extends AbstractEvaluator {
 	}
 
 	@Override
-	public String getFileComment(File file) {
+	public String getFileComment(File file, ReportingFormat format) {
 		return "";
 	}
 
 	@Override
-	public String getProjectComment() {
+	public String getProjectComment(ReportingFormat format) {
 		return "";
 	}
 
@@ -58,7 +59,8 @@ public class TranslatorImplementation extends AbstractEvaluator {
 	}
 
 	@Override
-	public String getCodeRangeComment(CodeRange codeRange) {
+	public String getCodeRangeComment(CodeRange codeRange,
+			ReportingFormat format) {
 		return "";
 	}
 

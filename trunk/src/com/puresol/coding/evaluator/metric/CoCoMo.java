@@ -24,6 +24,7 @@ import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.evaluator.QualityLevel;
 import com.puresol.parser.Token;
 import com.puresol.parser.TokenPublicity;
+import com.puresol.reporting.ReportingFormat;
 import com.puresol.utils.Property;
 
 /**
@@ -137,12 +138,20 @@ public class CoCoMo extends AbstractEvaluator {
 	}
 
 	@Override
-	public String getProjectComment() {
+	public String getProjectComment(ReportingFormat format) {
+		if (format == ReportingFormat.HTML) {
+			return translator.i18n("Project Result:<br/><br/>")
+					+ cocomoValues.toHTML();
+		}
 		return translator.i18n("Project Result:\n\n") + cocomoValues.toString();
 	}
 
 	@Override
-	public String getFileComment(File file) {
+	public String getFileComment(File file, ReportingFormat format) {
+		if (format == ReportingFormat.HTML) {
+			return translator.i18n("File Result:<br/><br/>")
+					+ fileCoCoMoValues.get(file).toHTML();
+		}
 		return fileCoCoMoValues.get(file).toString();
 	}
 
@@ -157,7 +166,8 @@ public class CoCoMo extends AbstractEvaluator {
 	}
 
 	@Override
-	public String getCodeRangeComment(CodeRange codeRange) {
+	public String getCodeRangeComment(CodeRange codeRange,
+			ReportingFormat format) {
 		return "";
 	}
 

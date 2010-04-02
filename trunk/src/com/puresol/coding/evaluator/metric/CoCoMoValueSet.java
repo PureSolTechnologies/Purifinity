@@ -2,6 +2,8 @@ package com.puresol.coding.evaluator.metric;
 
 import javax.i18n4j.Translator;
 
+import com.puresol.reporting.html.HTMLStandards;
+
 public class CoCoMoValueSet {
 
 	private static final Translator translator = Translator
@@ -167,54 +169,81 @@ public class CoCoMoValueSet {
 	}
 
 	private void refresh() {
-		ksloc = (double)sloc / 1000.0;
-		personMonth = c1 * Math.exp(c2 * Math.log(ksloc));
-		personYears = personMonth / 12.0;
-		scheduledMonth = 2.5 * Math.exp(c3 * Math.log(personMonth));
-		scheduledYears = scheduledMonth / 12;
-		teamSize = personMonth / scheduledMonth;
-		estimatedCosts = personYears * averageSalary * 2.4 / 1000;
+		ksloc = (double) sloc / 1000.0;
+		personMonth = Math.round(c1 * Math.exp(c2 * Math.log(ksloc)) * 100.0) / 100.0;
+		personYears = Math.round(personMonth / 12.0 * 100.0) / 100.0;
+		scheduledMonth = Math.round(2.5 * Math.exp(c3 * Math.log(personMonth)) * 100.0) / 100.0;
+		scheduledYears = Math.round(scheduledMonth / 12 * 100.0) / 100.0;
+		teamSize = Math.round(personMonth / scheduledMonth * 100.0) / 100.0;
+		estimatedCosts = Math.round(personYears * averageSalary * 2.4 / 1000 * 100.0) / 100.0;
 	}
 
 	public String toString() {
 		String text = translator
-				.i18n(
-						"Total Physical Source Lines of Code (SLOC)                = {0}",
-						sloc)
-				+ "\n";
+				.i18n("Total Physical Source Lines of Code (SLOC)")
+				+ "                = " + sloc + "\n";
 		text += translator.i18n("Calculation for a {0} complexity project.",
 				complexity.getIdentifier())
 				+ "\n";
 		text += translator
-				.i18n(
-						"Development Effort Estimate, Person-Years (Person-Months) = {0} ({1})",
-						personYears, personMonth)
-				+ "\n";
+				.i18n("Development Effort Estimate, Person-Years (Person-Months)")
+				+ " = " + personYears + " (" + personMonth + ")\n";
 		text += translator
 				.i18n(" (Basic COCOMO model, Person-Months = 2.4 * (KSLOC**1.05))")
 				+ "\n";
-		text += translator
-				.i18n(
-						"Schedule Estimate, Years (Months)                         = {0} ({1})",
-						scheduledYears, scheduledMonth)
-				+ "\n";
+		text += translator.i18n("Schedule Estimate, Years (Months)")
+				+ "                         = " + scheduledYears + " ("
+				+ scheduledMonth + ")\n";
 		text += translator
 				.i18n(" (Basic COCOMO model, Months = 2.5 * (person-months**0.38))")
 				+ "\n";
 		text += translator
-				.i18n(
-						"Estimated Average Number of Developers (Effort/Schedule)  = {0}",
-						teamSize)
-				+ "\n";
-		text += translator
-				.i18n(
-						"Total Estimated Cost to Develop                           = {0}k{1}",
-						estimatedCosts, currency)
-				+ "\n";
+				.i18n("Estimated Average Number of Developers (Effort/Schedule)")
+				+ "  = " + teamSize + "\n";
+		text += translator.i18n("Total Estimated Cost to Develop")
+				+ "                           = " + estimatedCosts + "k"
+				+ currency + "\n";
 		text += translator.i18n(
 				" (average salary = {0}{1}/year, overhead = 2.40)",
 				averageSalary, currency)
 				+ "\n";
 		return text;
+	}
+
+	public String toHTML() {
+		// String text ="<table>";
+		// text+="<tr><td>"+translator
+		// .i18n("Total Physical Source Lines of Code (SLOC)")
+		// + "</td><td>=</td><td>" + sloc + "</td></tr>\n";
+		// text +=
+		// "<tr><td>"+translator.i18n("Calculation for a {0} complexity project.",
+		// complexity.getIdentifier())
+		// + "</td><td></td><td></td></tr>\n";
+		// text += "<tr><td>"+translator
+		// .i18n("Development Effort Estimate, Person-Years (Person-Months)")
+		// + "</td><td>=</td><td>" + personYears + " (" + personMonth +
+		// ")</td></tr>\n";
+		// text += "<tr><td>"+translator
+		// .i18n(" (Basic COCOMO model, Person-Months = 2.4 * (KSLOC**1.05))")
+		// + "</td><td></td><td></td></tr>\n";
+		// text +=
+		// "<tr><td>"+translator.i18n("Schedule Estimate, Years (Months)")
+		// + "</td><td>=</td><td>" + scheduledYears + " ("
+		// + scheduledMonth + ")</td></tr>\n";
+		// text += "<tr><td>"+translator
+		// .i18n(" (Basic COCOMO model, Months = 2.5 * (person-months**0.38))")
+		// + "</td><td></td><td></td></tr>\n";
+		// text += "<tr><td>"+translator
+		// .i18n("Estimated Average Number of Developers (Effort/Schedule)")
+		// + "</td><td>=</td><td>" + teamSize + "</td></tr>\n";
+		// text += "<tr><td>"+translator.i18n("Total Estimated Cost to Develop")
+		// + "</td><td>=</td><td>" + estimatedCosts + "k"
+		// + currency + "</td></tr>\n";
+		// text += "<tr><td>"+translator.i18n(
+		// " (average salary = {0}{1}/year, overhead = 2.40)",
+		// averageSalary, currency)
+		// + "</td><td></td><td></td></tr>\n";
+		// text+="</table>";
+		return HTMLStandards.convertSourceCodeToHTML(toString());
 	}
 }

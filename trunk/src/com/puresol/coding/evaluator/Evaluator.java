@@ -7,6 +7,7 @@ import javax.swingx.progress.ProgressObservable;
 
 import com.puresol.coding.analysis.CodeRange;
 import com.puresol.coding.analysis.ProjectAnalyser;
+import com.puresol.reporting.ReportingFormat;
 
 /**
  * This interface is the standard interface for all project evaluators used
@@ -64,7 +65,7 @@ public interface Evaluator extends ProgressObservable {
 	 * 
 	 * @return A String with the comment is returned.
 	 */
-	public String getProjectComment();
+	public String getProjectComment(ReportingFormat format);
 
 	/**
 	 * This method returns the evaluator comment for the file.
@@ -73,7 +74,7 @@ public interface Evaluator extends ProgressObservable {
 	 *            is the file to be checked for a comment.
 	 * @return A String with the comment is returned.
 	 */
-	public String getFileComment(File file);
+	public String getFileComment(File file, ReportingFormat format);
 
 	/**
 	 * This method returns the evaluator comment for the file.
@@ -82,7 +83,8 @@ public interface Evaluator extends ProgressObservable {
 	 *            is the file to be checked for a comment.
 	 * @return A String with the comment is returned.
 	 */
-	public String getCodeRangeComment(CodeRange codeRange);
+	public String getCodeRangeComment(CodeRange codeRange,
+			ReportingFormat format);
 
 	/**
 	 * This method returns the overall project quality.

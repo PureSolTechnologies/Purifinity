@@ -7,6 +7,7 @@ import javax.i18n4j.Translator;
 import javax.swing.BoxLayout;
 import javax.swingx.BorderLayoutWidget;
 import javax.swingx.FreeList;
+import javax.swingx.HTMLTextPane;
 import javax.swingx.Panel;
 import javax.swingx.ScrollPane;
 import javax.swingx.TabbedPane;
@@ -14,7 +15,7 @@ import javax.swingx.TextField;
 import javax.swingx.connect.Slot;
 
 import com.puresol.coding.evaluator.Evaluator;
-import com.puresol.gui.coding.CodeViewer;
+import com.puresol.reporting.ReportingFormat;
 
 public class EvaluatorViewer extends BorderLayoutWidget {
 
@@ -25,10 +26,10 @@ public class EvaluatorViewer extends BorderLayoutWidget {
 
 	private Evaluator evaluator = null;
 	private TextField evaluatorName;
-	private CodeViewer description;
-	private CodeViewer projectSummary;
+	private HTMLTextPane description;
+	private HTMLTextPane projectSummary;
 	private FreeList fileList;
-	private CodeViewer evaluatorFileComment;
+	private HTMLTextPane evaluatorFileComment;
 
 	public EvaluatorViewer() {
 		super();
@@ -39,9 +40,9 @@ public class EvaluatorViewer extends BorderLayoutWidget {
 		setNorth(evaluatorName = new TextField());
 		TabbedPane tabbedPane = new TabbedPane();
 		setCenter(tabbedPane);
-		tabbedPane.add(new ScrollPane(description = new CodeViewer()),
+		tabbedPane.add(new ScrollPane(description = new HTMLTextPane()),
 				translator.i18n("Evaluator Description"));
-		tabbedPane.add(new ScrollPane(projectSummary = new CodeViewer()),
+		tabbedPane.add(new ScrollPane(projectSummary = new HTMLTextPane()),
 				translator.i18n("Project Summary"));
 		Panel filePanel = new Panel();
 		filePanel.setLayout(new BoxLayout(filePanel, BoxLayout.X_AXIS));
@@ -49,7 +50,8 @@ public class EvaluatorViewer extends BorderLayoutWidget {
 
 		filePanel.add(new ScrollPane(fileList = new FreeList()));
 		fileList.connect("valueChanged", this, "fileChanged", Object.class);
-		filePanel.add(new ScrollPane(evaluatorFileComment = new CodeViewer()));
+		filePanel
+				.add(new ScrollPane(evaluatorFileComment = new HTMLTextPane()));
 	}
 
 	/**
@@ -71,7 +73,8 @@ public class EvaluatorViewer extends BorderLayoutWidget {
 	private void refresh() {
 		evaluatorName.setText(evaluator.getName());
 		description.setText(evaluator.getDescription());
-		projectSummary.setText(evaluator.getProjectComment());
+		projectSummary.setText(evaluator
+				.getProjectComment(ReportingFormat.HTML));
 		evaluatorFileComment.setText("");
 		refreshFileList();
 	}
@@ -91,6 +94,7 @@ public class EvaluatorViewer extends BorderLayoutWidget {
 	public void fileChanged(Object o) {
 		File file = (File) o;
 		System.out.println(file);
-		evaluatorFileComment.setText(evaluator.getFileComment(file));
+		evaluatorFileComment.setText(evaluator.getFileComment(file,
+				ReportingFormat.HTML));
 	}
 }
