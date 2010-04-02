@@ -1,4 +1,4 @@
-package com.puresol.html;
+package com.puresol.reporting.html;
 
 import java.net.MalformedURLException;
 import java.net.URL;

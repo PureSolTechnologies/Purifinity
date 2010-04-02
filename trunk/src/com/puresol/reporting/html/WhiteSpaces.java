@@ -8,19 +8,17 @@
  *
  ***************************************************************************/
 
-package com.puresol.html;
+package com.puresol.reporting.html;
 
-public enum Entities {
+public enum WhiteSpaces {
 
-    AMP("&", "&amp;"), LT("<", "&lt;"), GT(">", "&gt;"), QUOT("\"",
-	    "&quot;"), UUML("ü", "&uuml;"), UUML_C("Ü", "&Uuml;"), OUML(
-	    "ö", "&ouml;"), OUML_C("Ö", "&Ouml;"), AUML("ä", "&auml;"), AUML_C(
-	    "Ä", "&Auml;"), SZLIG("ß", "&szlig;");
+    SPACE(" ", "&nbsp;"), TAB("\t", "&nbsp;&nbsp;&nbsp;&nbsp;"), LINE_BREAK(
+	    "\n", "<br/>");
 
     private final String sign;
     private final String entity;
 
-    private Entities(String sign, String entity) {
+    private WhiteSpaces(String sign, String entity) {
 	this.sign = sign;
 	this.entity = entity;
     }
@@ -33,7 +31,7 @@ public enum Entities {
 	return entity;
     }
 
-    public static String convertToEntities(final String text) {
+    public static String convertFromWhiteSpaces(final String text) {
 	String result = text;
 	for (Entities entity : Entities.class.getEnumConstants()) {
 	    result =
@@ -44,7 +42,7 @@ public enum Entities {
 	return result;
     }
 
-    public static String convertFromEntities(final String text) {
+    public static String convertToWhiteSpaces(final String text) {
 	String result = text;
 	for (Entities entity : Entities.class.getEnumConstants()) {
 	    result =

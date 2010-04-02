@@ -8,7 +8,7 @@
  *
  ***************************************************************************/
 
-package com.puresol.html;
+package com.puresol.reporting.html;
 
 import java.io.BufferedReader;
 import java.io.IOException;

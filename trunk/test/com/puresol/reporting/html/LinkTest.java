@@ -1,9 +1,12 @@
-package com.puresol.html;
+package com.puresol.reporting.html;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.junit.Test;
+
+import com.puresol.reporting.html.Link;
+import com.puresol.reporting.html.LinkTarget;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;

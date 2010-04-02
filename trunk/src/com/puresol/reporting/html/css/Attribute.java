@@ -1,4 +1,4 @@
-package com.puresol.html.css;
+package com.puresol.reporting.html.css;
 
 public class Attribute implements Comparable<Attribute> {
 

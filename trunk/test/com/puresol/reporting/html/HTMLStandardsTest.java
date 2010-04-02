@@ -1,6 +1,8 @@
-package com.puresol.html;
+package com.puresol.reporting.html;
 
 import org.junit.Test;
+
+import com.puresol.reporting.html.HTMLStandards;
 
 import junit.framework.TestCase;
 

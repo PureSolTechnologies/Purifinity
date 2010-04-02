@@ -16,7 +16,7 @@ import com.puresol.coding.analysis.CodeRange;
 import com.puresol.coding.evaluator.QualityLevel;
 import com.puresol.coding.evaluator.metric.CodeRangeMetrics;
 import com.puresol.coding.evaluator.metric.Metric;
-import com.puresol.html.HTMLStandards;
+import com.puresol.reporting.html.HTMLStandards;
 
 public class HTMLMetricsReport extends AbstractMetricsReport {
 

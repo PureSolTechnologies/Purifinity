@@ -3,7 +3,7 @@ package com.puresol.coding.evaluator.metric.report;
 import javax.i18n4j.Translator;
 
 import com.puresol.coding.evaluator.metric.CodeDepth;
-import com.puresol.html.Anchor;
+import com.puresol.reporting.html.Anchor;
 
 public class CodeDepthReport {
 

@@ -12,9 +12,9 @@ import com.puresol.coding.evaluator.metric.MaintainabilityIndex;
 import com.puresol.coding.evaluator.metric.McCabeMetric;
 import com.puresol.coding.evaluator.metric.Metric;
 import com.puresol.coding.evaluator.metric.SLOCMetric;
-import com.puresol.html.HTMLStandards;
-import com.puresol.html.Link;
 import com.puresol.jars.JarFile;
+import com.puresol.reporting.html.HTMLStandards;
+import com.puresol.reporting.html.Link;
 import com.puresol.utils.Files;
 
 public class ReportStandards {

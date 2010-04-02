@@ -1,4 +1,4 @@
-package com.puresol.html;
+package com.puresol.reporting.html;
 
 import javax.i18n4j.Translator;
 

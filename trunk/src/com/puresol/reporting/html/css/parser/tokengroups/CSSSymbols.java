@@ -1,4 +1,4 @@
-package com.puresol.html.css.parser.tokengroups;
+package com.puresol.reporting.html.css.parser.tokengroups;
 
 import com.puresol.coding.lang.java.source.symbols.Colon;
 import com.puresol.coding.lang.java.source.symbols.Dot;

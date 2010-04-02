@@ -1,4 +1,4 @@
-package com.puresol.html.css;
+package com.puresol.reporting.html.css;
 
 import java.util.ArrayList;
 import java.util.Collections;

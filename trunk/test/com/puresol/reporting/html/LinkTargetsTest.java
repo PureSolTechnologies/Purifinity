@@ -1,7 +1,8 @@
-package com.puresol.html;
+package com.puresol.reporting.html;
 
 import org.junit.Test;
 
+import com.puresol.reporting.html.LinkTarget;
 import com.puresol.testing.Tester;
 
 import junit.framework.Assert;

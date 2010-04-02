@@ -1,4 +1,4 @@
-package com.puresol.html.css;
+package com.puresol.reporting.html.css;
 
 public enum MeasurementUnits {
 	POINT("pt"), PICA("pc"), INCH("in"), MILLIMETER("mm"), CENTIMETER("cm"), PIXEL(

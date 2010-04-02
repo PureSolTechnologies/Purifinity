@@ -1,4 +1,4 @@
-package com.puresol.html;
+package com.puresol.reporting.html;
 
 public class Paragraph {
 

@@ -1,6 +1,8 @@
-package com.puresol.html;
+package com.puresol.reporting.html;
 
 import org.junit.Test;
+
+import com.puresol.reporting.html.Entities;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;

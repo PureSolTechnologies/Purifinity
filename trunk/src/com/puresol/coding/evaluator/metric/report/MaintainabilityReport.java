@@ -3,8 +3,8 @@ package com.puresol.coding.evaluator.metric.report;
 import javax.i18n4j.Translator;
 
 import com.puresol.coding.evaluator.metric.MaintainabilityIndex;
-import com.puresol.html.Anchor;
-import com.puresol.html.HTMLStandards;
+import com.puresol.reporting.html.Anchor;
+import com.puresol.reporting.html.HTMLStandards;
 
 public class MaintainabilityReport {
 

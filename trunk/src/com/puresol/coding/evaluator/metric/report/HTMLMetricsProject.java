@@ -25,7 +25,7 @@ import com.puresol.coding.analysis.ProjectAnalyser;
 import com.puresol.coding.evaluator.QualityLevel;
 import com.puresol.coding.evaluator.metric.CodeRangeMetrics;
 import com.puresol.coding.evaluator.metric.MetricsEvaluator;
-import com.puresol.html.HTMLStandards;
+import com.puresol.reporting.html.HTMLStandards;
 import com.puresol.utils.Directories;
 import com.puresol.utils.Files;
 
