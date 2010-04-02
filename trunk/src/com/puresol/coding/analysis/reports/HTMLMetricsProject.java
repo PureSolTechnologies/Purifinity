@@ -22,9 +22,9 @@ import org.apache.log4j.Logger;
 
 import com.puresol.coding.analysis.CodeRange;
 import com.puresol.coding.analysis.ProjectAnalyser;
-import com.puresol.coding.analysis.QualityLevel;
-import com.puresol.coding.analysis.metrics.CodeRangeMetrics;
-import com.puresol.coding.analysis.metrics.MetricsCalculator;
+import com.puresol.coding.evaluator.QualityLevel;
+import com.puresol.coding.evaluator.metric.CodeRangeMetrics;
+import com.puresol.coding.evaluator.metric.MetricsCalculator;
 import com.puresol.html.HTMLStandards;
 import com.puresol.utils.Directories;
 import com.puresol.utils.Files;

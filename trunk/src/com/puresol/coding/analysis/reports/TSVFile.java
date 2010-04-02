@@ -8,13 +8,13 @@ import javax.swingx.data.VerticalDataFileFormat;
 
 import com.puresol.coding.analysis.CodeRange;
 import com.puresol.coding.analysis.ProjectAnalyser;
-import com.puresol.coding.analysis.metrics.CodeDepth;
-import com.puresol.coding.analysis.metrics.CodeRangeMetrics;
-import com.puresol.coding.analysis.metrics.HalsteadMetric;
-import com.puresol.coding.analysis.metrics.MaintainabilityIndex;
-import com.puresol.coding.analysis.metrics.McCabeMetric;
-import com.puresol.coding.analysis.metrics.MetricsCalculator;
-import com.puresol.coding.analysis.metrics.SLOCMetric;
+import com.puresol.coding.evaluator.metric.CodeDepth;
+import com.puresol.coding.evaluator.metric.CodeRangeMetrics;
+import com.puresol.coding.evaluator.metric.HalsteadMetric;
+import com.puresol.coding.evaluator.metric.MaintainabilityIndex;
+import com.puresol.coding.evaluator.metric.McCabeMetric;
+import com.puresol.coding.evaluator.metric.MetricsCalculator;
+import com.puresol.coding.evaluator.metric.SLOCMetric;
 import com.puresol.data.Storable;
 import com.puresol.data.StoreType;
 

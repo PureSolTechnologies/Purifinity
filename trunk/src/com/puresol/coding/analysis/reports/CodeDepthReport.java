@@ -2,7 +2,7 @@ package com.puresol.coding.analysis.reports;
 
 import javax.i18n4j.Translator;
 
-import com.puresol.coding.analysis.metrics.CodeDepth;
+import com.puresol.coding.evaluator.metric.CodeDepth;
 import com.puresol.html.Anchor;
 
 public class CodeDepthReport {

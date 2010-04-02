@@ -8,7 +8,7 @@ import javax.swingx.connect.Slot;
 import javax.swingx.progress.ProgressWindow;
 
 import com.puresol.coding.analysis.ProjectAnalyser;
-import com.puresol.coding.analysis.evaluator.duplication.CopyAndPasteScanner;
+import com.puresol.coding.evaluator.duplication.CopyAndPasteScanner;
 
 public class CopyAndPasteScannerPanel extends BorderLayoutWidget {
 

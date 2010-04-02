@@ -4,14 +4,14 @@ import java.io.File;
 
 import javax.i18n4j.Translator;
 
-import com.puresol.coding.analysis.QualityLevel;
-import com.puresol.coding.analysis.metrics.CodeDepth;
-import com.puresol.coding.analysis.metrics.EntropyMetric;
-import com.puresol.coding.analysis.metrics.HalsteadMetric;
-import com.puresol.coding.analysis.metrics.MaintainabilityIndex;
-import com.puresol.coding.analysis.metrics.McCabeMetric;
-import com.puresol.coding.analysis.metrics.Metric;
-import com.puresol.coding.analysis.metrics.SLOCMetric;
+import com.puresol.coding.evaluator.QualityLevel;
+import com.puresol.coding.evaluator.metric.CodeDepth;
+import com.puresol.coding.evaluator.metric.EntropyMetric;
+import com.puresol.coding.evaluator.metric.HalsteadMetric;
+import com.puresol.coding.evaluator.metric.MaintainabilityIndex;
+import com.puresol.coding.evaluator.metric.McCabeMetric;
+import com.puresol.coding.evaluator.metric.Metric;
+import com.puresol.coding.evaluator.metric.SLOCMetric;
 import com.puresol.html.HTMLStandards;
 import com.puresol.html.Link;
 import com.puresol.jars.JarFile;

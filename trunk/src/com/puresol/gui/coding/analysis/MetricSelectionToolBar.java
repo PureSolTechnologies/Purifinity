@@ -11,52 +11,55 @@ import javax.swingx.connect.Slot;
 
 import org.apache.log4j.Logger;
 
-import com.puresol.coding.analysis.EvaluatorManager;
-import com.puresol.coding.analysis.metrics.Metric;
+import com.puresol.coding.evaluator.EvaluatorManager;
+import com.puresol.coding.evaluator.metric.Metric;
 
 public class MetricSelectionToolBar extends ToolBar implements Mediator {
 
-    private static final long serialVersionUID = -8325154422631866367L;
+	private static final long serialVersionUID = -8325154422631866367L;
 
-    private static final Logger logger = Logger
-	    .getLogger(MetricSelectionToolBar.class);
+	private static final Logger logger = Logger
+			.getLogger(MetricSelectionToolBar.class);
 
-    private final Hashtable<ToggleButton, Class<? extends Metric>> buttons = new Hashtable<ToggleButton, Class<? extends Metric>>();
+	private final Hashtable<ToggleButton, Class<? extends Metric>> buttons = new Hashtable<ToggleButton, Class<? extends Metric>>();
 
-    public MetricSelectionToolBar() {
-	super();
-	initUI();
-    }
-
-    public MetricSelectionToolBar(String name, int direction) {
-	super(name, direction);
-	initUI();
-    }
-
-    private void initUI() {
-	for (Class<? extends Metric> metric : EvaluatorManager
-		.getMetricClasses()) {
-	    ToggleButton button = new ToggleButton(metric.getSimpleName());
-	    button.setSelected(EvaluatorManager.isMetricEvaluate(metric));
-	    buttons.put(button, metric);
-	    button.addMediator(this);
-	    add(button);
+	public MetricSelectionToolBar() {
+		super();
+		initUI();
 	}
-    }
 
-    @Slot
-    @Override
-    public void widgetChanged(Widget widget) {
-	ToggleButton button = (ToggleButton) widget;
-	Class<? extends Metric> metric = buttons.get(button);
-	EvaluatorManager.setMetricEvaluate(metric, button.isSelected());
-	logger.debug("Eval of " + metric.getName() + " was switched to "
-		+ button.isSelected());
-	refresh();
-    }
+	public MetricSelectionToolBar(String name, int direction) {
+		super(name, direction);
+		initUI();
+	}
 
-    @Signal
-    public void refresh() {
-	connectionManager.emitSignal("refresh");
-    }
+	private void initUI() {
+		EvaluatorManager evaluatorManager = EvaluatorManager.getInstance();
+		for (Class<? extends Metric> metric : evaluatorManager
+				.getMetricClasses()) {
+			ToggleButton button = new ToggleButton(evaluatorManager
+					.getName(metric));
+			button.setSelected(evaluatorManager.isMetricEvaluate(metric));
+			buttons.put(button, metric);
+			button.addMediator(this);
+			add(button);
+		}
+	}
+
+	@Slot
+	@Override
+	public void widgetChanged(Widget widget) {
+		ToggleButton button = (ToggleButton) widget;
+		Class<? extends Metric> metric = buttons.get(button);
+		EvaluatorManager.getInstance()
+				.setMetricEvaluate(metric, button.isSelected());
+		logger.debug("Eval of " + metric.getName() + " was switched to "
+				+ button.isSelected());
+		refresh();
+	}
+
+	@Signal
+	public void refresh() {
+		connectionManager.emitSignal("refresh");
+	}
 }

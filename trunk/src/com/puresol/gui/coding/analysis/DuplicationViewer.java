@@ -5,7 +5,7 @@ import javax.swing.BoxLayout;
 import javax.swing.border.TitledBorder;
 import javax.swingx.Panel;
 
-import com.puresol.coding.analysis.evaluator.duplication.Duplication;
+import com.puresol.coding.evaluator.duplication.Duplication;
 import com.puresol.gui.coding.CodeRangeViewer;
 
 public class DuplicationViewer extends Panel {

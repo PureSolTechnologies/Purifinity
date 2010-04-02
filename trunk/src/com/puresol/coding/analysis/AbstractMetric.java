@@ -10,7 +10,7 @@
 
 package com.puresol.coding.analysis;
 
-import com.puresol.coding.analysis.metrics.Metric;
+import com.puresol.coding.evaluator.metric.Metric;
 
 abstract public class AbstractMetric implements Metric {
 

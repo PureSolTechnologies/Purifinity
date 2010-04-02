@@ -16,10 +16,4 @@ public class CodeAnalysisPropertiesTest extends TestCase {
 				.isEmpty());
 	}
 
-	@Test
-	public void testLoadingMetrics() {
-		Assert.assertFalse(properties.getProperty("CodeAnalysis.Metrics")
-				.isEmpty());
-	}
-
 }

@@ -2,7 +2,7 @@ package com.puresol.coding.analysis.reports;
 
 import javax.i18n4j.Translator;
 
-import com.puresol.coding.analysis.metrics.MaintainabilityIndex;
+import com.puresol.coding.evaluator.metric.MaintainabilityIndex;
 import com.puresol.html.Anchor;
 import com.puresol.html.HTMLStandards;
 

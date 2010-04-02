@@ -2,7 +2,7 @@ package com.puresol.coding.analysis.reports;
 
 import javax.i18n4j.Translator;
 
-import com.puresol.coding.analysis.metrics.EntropyMetric;
+import com.puresol.coding.evaluator.metric.EntropyMetric;
 import com.puresol.html.Anchor;
 import com.puresol.html.HTMLStandards;
 

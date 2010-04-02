@@ -2,7 +2,7 @@ package com.puresol.coding.analysis.reports;
 
 import javax.i18n4j.Translator;
 
-import com.puresol.coding.analysis.metrics.HalsteadMetric;
+import com.puresol.coding.evaluator.metric.HalsteadMetric;
 import com.puresol.html.Anchor;
 import com.puresol.html.HTMLStandards;
 

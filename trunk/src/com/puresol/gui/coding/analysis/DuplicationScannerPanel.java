@@ -8,7 +8,7 @@ import javax.swingx.connect.Slot;
 import javax.swingx.progress.ProgressWindow;
 
 import com.puresol.coding.analysis.ProjectAnalyser;
-import com.puresol.coding.analysis.evaluator.duplication.DuplicationScanner;
+import com.puresol.coding.evaluator.duplication.DuplicationScanner;
 
 public class DuplicationScannerPanel extends BorderLayoutWidget {
 

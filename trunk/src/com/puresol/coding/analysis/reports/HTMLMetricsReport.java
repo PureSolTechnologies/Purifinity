@@ -13,9 +13,9 @@ package com.puresol.coding.analysis.reports;
 import javax.i18n4j.Translator;
 
 import com.puresol.coding.analysis.CodeRange;
-import com.puresol.coding.analysis.QualityLevel;
-import com.puresol.coding.analysis.metrics.CodeRangeMetrics;
-import com.puresol.coding.analysis.metrics.Metric;
+import com.puresol.coding.evaluator.QualityLevel;
+import com.puresol.coding.evaluator.metric.CodeRangeMetrics;
+import com.puresol.coding.evaluator.metric.Metric;
 import com.puresol.html.HTMLStandards;
 
 public class HTMLMetricsReport extends AbstractAnalysisReport {

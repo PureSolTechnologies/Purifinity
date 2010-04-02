@@ -10,9 +10,9 @@ import javax.swingx.ToolBar;
 import javax.swingx.connect.Slot;
 import javax.swingx.progress.ProgressWindow;
 
-import com.puresol.coding.analysis.CodeEvaluationSystem;
 import com.puresol.coding.analysis.ProjectAnalyser;
-import com.puresol.coding.analysis.evaluator.Evaluator;
+import com.puresol.coding.evaluator.CodeEvaluationSystem;
+import com.puresol.coding.evaluator.Evaluator;
 
 public class CodeEvaluationPanel extends BorderLayoutWidget {
 
@@ -40,8 +40,8 @@ public class CodeEvaluationPanel extends BorderLayoutWidget {
 
 	private void initUI() {
 		ToolBar tools = new ToolBar();
-		tools.add(search = new Button(translator.i18n("Search...")));
-		search.connect("start", this, "search");
+		tools.add(search = new Button(translator.i18n("Evaluate...")));
+		search.connect("start", this, "evaluate");
 		setNorth(tools);
 		setWest(evaluatorList = new FreeList());
 		evaluatorList.connect("valueChanged", this, "changedEvaluator",
@@ -54,7 +54,7 @@ public class CodeEvaluationPanel extends BorderLayoutWidget {
 	}
 
 	@Slot
-	public void search() {
+	public void evaluate() {
 		codeEvaluationSystem = new CodeEvaluationSystem(project);
 		ProgressWindow progress = new ProgressWindow(codeEvaluationSystem);
 		progress.connect("finished", this, "refresh");
