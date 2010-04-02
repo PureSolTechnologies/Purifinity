@@ -1,9 +1,10 @@
 package com.puresol.coding.evaluator;
 
 import java.io.IOException;
-import java.util.Properties;
 
-public class CodeEvaluationProperties extends Properties {
+import com.puresol.utils.PropertyHandler;
+
+public class CodeEvaluationProperties extends PropertyHandler {
 
 	private static final long serialVersionUID = 5354088286642883581L;
 

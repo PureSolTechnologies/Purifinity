@@ -16,6 +16,7 @@ import com.puresol.coding.evaluator.QualityLevel;
 import com.puresol.parser.Token;
 import com.puresol.parser.TokenException;
 import com.puresol.parser.TokenStream;
+import com.puresol.utils.Property;
 
 /**
  * This evaluator checks for simple copy and pasted areas and reports
@@ -32,6 +33,11 @@ public class CopyAndPasteScanner extends AbstractEvaluator {
 			.getLogger(CopyAndPasteScanner.class);
 	private static final Translator translator = Translator
 			.getTranslator(CopyAndPasteScanner.class);
+
+	public static final String NAME = "Copy & Paste Scanner";
+	public static final String DESCRIPTION = translator
+			.i18n("This evaluator scans for code which was copy and pasted.");
+	public static final ArrayList<Property> SUPPORTED_PROPERTIES = new ArrayList<Property>();
 
 	private final Hashtable<CodeRange, ArrayList<Integer>> codeRanges = new Hashtable<CodeRange, ArrayList<Integer>>();
 	private final ArrayList<Duplication> duplications = new ArrayList<Duplication>();
@@ -194,13 +200,12 @@ public class CopyAndPasteScanner extends AbstractEvaluator {
 
 	@Override
 	public String getName() {
-		return "Copy & Paste Scanner";
+		return NAME;
 	}
 
 	@Override
 	public String getDescription() {
-		return translator
-				.i18n("This evaluator scans for code which was copy and pasted.");
+		return DESCRIPTION;
 	}
 
 	@Override

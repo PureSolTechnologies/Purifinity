@@ -24,7 +24,7 @@ import com.puresol.coding.analysis.CodeRange;
 import com.puresol.coding.analysis.ProjectAnalyser;
 import com.puresol.coding.evaluator.QualityLevel;
 import com.puresol.coding.evaluator.metric.CodeRangeMetrics;
-import com.puresol.coding.evaluator.metric.MetricsCalculator;
+import com.puresol.coding.evaluator.metric.MetricsEvaluator;
 import com.puresol.html.HTMLStandards;
 import com.puresol.utils.Directories;
 import com.puresol.utils.Files;
@@ -39,7 +39,7 @@ public class HTMLMetricsProject {
     private final ProjectAnalyser analyser;
     private final File directory;
 
-    private final MetricsCalculator metrics;
+    private final MetricsEvaluator metrics;
     private final Hashtable<File, String> fileIndex =
 	    new Hashtable<File, String>();
     private final Hashtable<CodeRange, String> codeRangeIndex =
@@ -48,7 +48,7 @@ public class HTMLMetricsProject {
     private HTMLMetricsProject(File directory, ProjectAnalyser analyser) {
 	this.directory = directory;
 	this.analyser = analyser;
-	this.metrics = new MetricsCalculator(analyser);
+	this.metrics = new MetricsEvaluator(analyser);
 	metrics.run();
     }
 
@@ -133,7 +133,7 @@ public class HTMLMetricsProject {
 		name = name + index;
 	    }
 	    fileIndex.put(file, name);
-	    QualityLevel level = metrics.getQualityLevel(file);
+	    QualityLevel level = metrics.getQuality(file);
 	    if (level == QualityLevel.HIGH) {
 		html += "<td bgcolor=\"green\">";
 	    } else if (level == QualityLevel.MEDIUM) {

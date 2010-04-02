@@ -17,6 +17,7 @@ import java.util.Hashtable;
 import org.apache.log4j.Logger;
 
 import com.puresol.coding.analysis.CodeRange;
+import com.puresol.coding.evaluator.CodeEvaluationProperties;
 import com.puresol.coding.evaluator.EvaluatorManager;
 import com.puresol.coding.evaluator.QualityLevel;
 
@@ -71,7 +72,8 @@ public class CodeRangeMetrics {
 	public QualityLevel getQualityLevel() {
 		QualityLevel level = QualityLevel.HIGH;
 		for (Class<? extends Metric> metric : metrics.keySet()) {
-			if (EvaluatorManager.getInstance().isMetricEvaluate(metric)) {
+			if (Boolean.valueOf(CodeEvaluationProperties.getInstance()
+					.getProperty(metric, "enabled"))) {
 				level = QualityLevel.getMinLevel(level, metrics.get(metric)
 						.getQualityLevel());
 			}

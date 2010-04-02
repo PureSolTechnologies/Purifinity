@@ -10,6 +10,7 @@
 
 package com.puresol.coding.evaluator.metric;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 
 import javax.i18n4j.Translator;
@@ -26,12 +27,21 @@ import com.puresol.parser.Token;
 import com.puresol.parser.TokenException;
 import com.puresol.parser.TokenPublicity;
 import com.puresol.parser.TokenStream;
+import com.puresol.utils.Property;
 
 public class HalsteadMetric extends AbstractMetric {
 
 	private static final Logger logger = Logger.getLogger(HalsteadMetric.class);
 	private static final Translator translator = Translator
 			.getTranslator(HalsteadMetric.class);
+
+	public static final String NAME = "Halstead Metric"; 
+	public static final ArrayList<Property> SUPPORTED_PROPERTIES = new ArrayList<Property>();
+	static {
+		SUPPORTED_PROPERTIES.add(new Property(HalsteadMetric.class, "enabled",
+				"Switches calculation of Halstead Metric on and off.", Boolean.class,
+				"true"));
+	}
 
 	private final Hashtable<String, Integer> operators = new Hashtable<String, Integer>();
 	private final Hashtable<String, Integer> operants = new Hashtable<String, Integer>();

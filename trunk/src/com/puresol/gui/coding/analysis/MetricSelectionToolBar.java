@@ -11,6 +11,7 @@ import javax.swingx.connect.Slot;
 
 import org.apache.log4j.Logger;
 
+import com.puresol.coding.evaluator.CodeEvaluationProperties;
 import com.puresol.coding.evaluator.EvaluatorManager;
 import com.puresol.coding.evaluator.metric.Metric;
 
@@ -39,7 +40,8 @@ public class MetricSelectionToolBar extends ToolBar implements Mediator {
 				.getMetricClasses()) {
 			ToggleButton button = new ToggleButton(evaluatorManager
 					.getName(metric));
-			button.setSelected(evaluatorManager.isMetricEvaluate(metric));
+			button.setSelected(Boolean.valueOf(CodeEvaluationProperties
+					.getInstance().getProperty(metric, "enabled")));
 			buttons.put(button, metric);
 			button.addMediator(this);
 			add(button);
@@ -51,8 +53,8 @@ public class MetricSelectionToolBar extends ToolBar implements Mediator {
 	public void widgetChanged(Widget widget) {
 		ToggleButton button = (ToggleButton) widget;
 		Class<? extends Metric> metric = buttons.get(button);
-		EvaluatorManager.getInstance()
-				.setMetricEvaluate(metric, button.isSelected());
+		CodeEvaluationProperties.getInstance().setProperty(metric, "enabled",
+				String.valueOf(button.isSelected()));
 		logger.debug("Eval of " + metric.getName() + " was switched to "
 				+ button.isSelected());
 		refresh();

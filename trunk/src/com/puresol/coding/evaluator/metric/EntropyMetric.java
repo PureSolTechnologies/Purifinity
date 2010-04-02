@@ -10,12 +10,14 @@
 
 package com.puresol.coding.evaluator.metric;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 
 import javax.i18n4j.Translator;
 
 import com.puresol.coding.analysis.CodeRange;
 import com.puresol.coding.evaluator.QualityLevel;
+import com.puresol.utils.Property;
 
 /**
  * This class calculates entropy and redundancy for a code range. The entropy is
@@ -29,6 +31,14 @@ public class EntropyMetric implements Metric {
 
 	private static final Translator translator = Translator
 			.getTranslator(EntropyMetric.class);
+
+	public static final String NAME = "Entropy Metric"; 
+	public static final ArrayList<Property> SUPPORTED_PROPERTIES = new ArrayList<Property>();
+	static {
+		SUPPORTED_PROPERTIES.add(new Property(EntropyMetric.class, "enabled",
+				"Switches calculation of EntropyMetric on and off.", Boolean.class,
+				"true"));
+	}
 
 	/**
 	 * entropy

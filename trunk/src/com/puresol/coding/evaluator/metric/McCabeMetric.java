@@ -10,6 +10,8 @@
 
 package com.puresol.coding.evaluator.metric;
 
+import java.util.ArrayList;
+
 import javax.i18n4j.Translator;
 
 import org.apache.log4j.Logger;
@@ -23,6 +25,7 @@ import com.puresol.parser.Token;
 import com.puresol.parser.TokenException;
 import com.puresol.parser.TokenPublicity;
 import com.puresol.parser.TokenStream;
+import com.puresol.utils.Property;
 
 /**
  * This class calculates the cyclomatic number v(G) from a code range.
@@ -35,6 +38,14 @@ public class McCabeMetric extends AbstractMetric {
 	private static final Logger logger = Logger.getLogger(McCabeMetric.class);
 	private static final Translator translator = Translator
 			.getTranslator(McCabeMetric.class);
+
+	public static final String NAME = "McCabe Metric"; 
+	public static final ArrayList<Property> SUPPORTED_PROPERTIES = new ArrayList<Property>();
+	static {
+		SUPPORTED_PROPERTIES.add(new Property(McCabeMetric.class, "enabled",
+				"Switches calculation of McCabe Metric on and off.", Boolean.class,
+				"true"));
+	}
 
 	private int cyclomaticNumber = 1;
 

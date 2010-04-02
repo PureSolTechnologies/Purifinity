@@ -6,6 +6,7 @@ import java.util.Hashtable;
 import org.apache.log4j.Logger;
 
 import com.puresol.coding.evaluator.metric.Metric;
+import com.puresol.utils.Property;
 
 /**
  * This singleton class is the central manager for all metrics and evaluators
@@ -35,10 +36,10 @@ public class EvaluatorManager {
 	}
 
 	private final ArrayList<Class<? extends Metric>> metricClasses = new ArrayList<Class<? extends Metric>>();
-	private final Hashtable<Class<? extends Metric>, Boolean> evaluateMetrics = new Hashtable<Class<? extends Metric>, Boolean>();
 	private final ArrayList<Class<? extends Evaluator>> evaluatorClasses = new ArrayList<Class<? extends Evaluator>>();
-	private final Hashtable<Class<? extends Evaluator>, Boolean> evaluateEvaluator = new Hashtable<Class<? extends Evaluator>, Boolean>();
+
 	private final Hashtable<Class<?>, String> names = new Hashtable<Class<?>, String>();
+	private final Hashtable<Class<?>, String> descriptions = new Hashtable<Class<?>, String>();
 
 	private EvaluatorManager() {
 		initStatics();
@@ -51,10 +52,13 @@ public class EvaluatorManager {
 
 	private void initMetrics() {
 		for (String analyser : CodeEvaluationProperties.getPropertyValue(
-				"CodeAnalysis.Metrics").split(",")) {
+				"CodeEvaluation.Metrics").split(",")) {
 			Class<? extends Metric> clazz = getMetricForName(analyser);
 			if (clazz != null) {
 				metricClasses.add(clazz);
+				registerName(clazz);
+				registerDescription(clazz);
+				registerSupportedProperties(clazz);
 			}
 		}
 	}
@@ -72,10 +76,14 @@ public class EvaluatorManager {
 
 	private void initEvaluators() {
 		for (String evaluator : CodeEvaluationProperties.getPropertyValue(
-				"CodeAnalysis.Evaluators").split(",")) {
+				"CodeEvaluation.Evaluators").split(",")) {
 			Class<? extends Evaluator> clazz = getEvaluatorForName(evaluator);
 			if (clazz != null) {
+				logger.info("Initialize Evaluator '" + clazz.getName() + "'");
 				evaluatorClasses.add(clazz);
+				registerName(clazz);
+				registerDescription(clazz);
+				registerSupportedProperties(clazz);
 			}
 		}
 	}
@@ -95,43 +103,76 @@ public class EvaluatorManager {
 		return metricClasses;
 	}
 
-	public void setMetricEvaluate(Class<? extends Metric> metric,
-			boolean evaluate) {
-		evaluateMetrics.put(metric, evaluate);
-	}
-
-	public boolean isMetricEvaluate(Class<? extends Metric> metric) {
-		Boolean bool = evaluateMetrics.get(metric);
-		if (bool == null) {
-			return false;
-		}
-		return bool;
-	}
-
 	public ArrayList<Class<? extends Evaluator>> getEvaluatorClasses() {
 		return evaluatorClasses;
 	}
 
-	public void setEvaluatorEvaluate(Class<? extends Evaluator> evaluator,
-			boolean evaluate) {
-		evaluateEvaluator.put(evaluator, evaluate);
-	}
-
-	public boolean isEvaluatorEvaluate(Class<? extends Evaluator> evaluator) {
-		Boolean bool = evaluateEvaluator.get(evaluator);
-		if (bool == null) {
-			return false;
+	private void registerName(Class<?> clazz) {
+		try {
+			logger.info("Register name for '" + clazz.getName() + "'");
+			names.put(clazz, (String) clazz.getField("NAME").get(null));
+			logger.info("Name: '" + getName(clazz) + "'");
+			return;
+		} catch (SecurityException e) {
+			logger.error(e.getMessage(), e);
+		} catch (IllegalArgumentException e) {
+			logger.error(e.getMessage(), e);
+		} catch (IllegalAccessException e) {
+			logger.error(e.getMessage(), e);
+		} catch (NoSuchFieldException e) {
 		}
-		return bool;
+		logger.warn("Setting defaults...");
+		names.put(clazz, clazz.getSimpleName());
 	}
 
-	public void setName(Class<?> clazz, String name) {
-		logger.info("Register class '" + clazz.getName() + "' with name '"
-				+ name + "'");
-		names.put(clazz, name);
+	private void registerDescription(Class<?> clazz) {
+		try {
+			logger.info("Register description for '" + clazz.getName() + "'");
+			descriptions.put(clazz, (String) clazz.getField("DESCRIPTION").get(
+					null));
+			logger.info("Description: '" + getDescription(clazz) + "'");
+			return;
+		} catch (SecurityException e) {
+			logger.error(e.getMessage(), e);
+		} catch (IllegalArgumentException e) {
+			logger.error(e.getMessage(), e);
+		} catch (IllegalAccessException e) {
+			logger.error(e.getMessage(), e);
+		} catch (NoSuchFieldException e) {
+		}
+		logger.warn("Setting defaults...");
+		descriptions.put(clazz, clazz.getName());
+	}
+
+	@SuppressWarnings("unchecked")
+	private void registerSupportedProperties(Class<?> clazz) {
+		try {
+			logger.info("Register properties for '" + clazz.getName() + "'");
+			CodeEvaluationProperties codeEvaluationProperties = CodeEvaluationProperties
+					.getInstance();
+			ArrayList<Property> properties = (ArrayList<Property>) clazz
+					.getField("SUPPORTED_PROPERTIES").get(null);
+			codeEvaluationProperties.registerProperties(properties);
+			logger.info("Properties:");
+			for (Property property : properties) {
+				logger.info(property.toString());
+			}
+			return;
+		} catch (SecurityException e) {
+			logger.error(e.getMessage(), e);
+		} catch (IllegalArgumentException e) {
+			logger.error(e.getMessage(), e);
+		} catch (IllegalAccessException e) {
+			logger.error(e.getMessage(), e);
+		} catch (NoSuchFieldException e) {
+		}
 	}
 
 	public String getName(Class<?> clazz) {
 		return names.get(clazz);
+	}
+
+	public String getDescription(Class<?> clazz) {
+		return descriptions.get(clazz);
 	}
 }

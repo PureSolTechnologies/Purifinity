@@ -11,7 +11,7 @@ import javax.swingx.connect.Slot;
 import javax.swingx.progress.ProgressWindow;
 
 import com.puresol.coding.analysis.ProjectAnalyser;
-import com.puresol.coding.evaluator.CodeEvaluationSystem;
+import com.puresol.coding.evaluator.CodeEvaluator;
 import com.puresol.coding.evaluator.Evaluator;
 
 public class CodeEvaluationPanel extends BorderLayoutWidget {
@@ -23,7 +23,7 @@ public class CodeEvaluationPanel extends BorderLayoutWidget {
 
 	private ProjectAnalyser project = null;
 	private Button search = null;
-	private CodeEvaluationSystem codeEvaluationSystem = null;
+	private CodeEvaluator codeEvaluationSystem = null;
 	private FreeList evaluatorList;
 	private EvaluatorViewer evaluatorViewer;
 
@@ -55,7 +55,7 @@ public class CodeEvaluationPanel extends BorderLayoutWidget {
 
 	@Slot
 	public void evaluate() {
-		codeEvaluationSystem = new CodeEvaluationSystem(project);
+		codeEvaluationSystem = new CodeEvaluator(project);
 		ProgressWindow progress = new ProgressWindow(codeEvaluationSystem);
 		progress.connect("finished", this, "refresh");
 		progress.run();

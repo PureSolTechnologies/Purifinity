@@ -34,7 +34,7 @@ import com.puresol.coding.analysis.CodeRange;
 import com.puresol.coding.analysis.ProjectAnalyser;
 import com.puresol.coding.analysis.reports.HTMLMetricsReport;
 import com.puresol.coding.evaluator.QualityLevel;
-import com.puresol.coding.evaluator.metric.MetricsCalculator;
+import com.puresol.coding.evaluator.metric.MetricsEvaluator;
 
 public class MetricsBrowser extends BorderLayoutWidget {
 
@@ -46,7 +46,7 @@ public class MetricsBrowser extends BorderLayoutWidget {
 
 	private ProjectAnalyser project = null;
 	private Button search = null;
-	private MetricsCalculator metrics = null;
+	private MetricsEvaluator metrics = null;
 	private FreeList fileList = null;
 	private FreeList codeRangeList = null;
 	private HTMLTextPane results = null;
@@ -98,7 +98,7 @@ public class MetricsBrowser extends BorderLayoutWidget {
 
 	@Slot
 	public void search() {
-		metrics = new MetricsCalculator(project);
+		metrics = new MetricsEvaluator(project);
 		ProgressWindow progress = new ProgressWindow(metrics);
 		progress.connect("finished", this, "refresh");
 		progress.run();
@@ -125,7 +125,7 @@ public class MetricsBrowser extends BorderLayoutWidget {
 			for (CodeRange range : ranges) {
 				calculateReport(range);
 			}
-			QualityLevel quality = metrics.getQualityLevel(file);
+			QualityLevel quality = metrics.getQuality(file);
 			String html = "<html><body>";
 			if (quality == QualityLevel.HIGH) {
 				html += "<table width=\"100%\" bgcolor=\"#00ff00\">";

@@ -12,6 +12,15 @@ import com.puresol.coding.analysis.ProjectAnalyser;
  * This interface is the standard interface for all project evaluators used
  * within coding analysis.
  * 
+ * Additionally to this fixed interface, Evaluator might have some standardized
+ * static methods:
+ * 
+ * - public static String name();
+ * 
+ * - public static String description();
+ * 
+ * - public static ArrayList<Property> supportedProperties();
+ * 
  * @author Rick-Rainer Ludwig
  * 
  */

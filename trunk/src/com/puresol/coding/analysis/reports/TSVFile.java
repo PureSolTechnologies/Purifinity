@@ -13,7 +13,7 @@ import com.puresol.coding.evaluator.metric.CodeRangeMetrics;
 import com.puresol.coding.evaluator.metric.HalsteadMetric;
 import com.puresol.coding.evaluator.metric.MaintainabilityIndex;
 import com.puresol.coding.evaluator.metric.McCabeMetric;
-import com.puresol.coding.evaluator.metric.MetricsCalculator;
+import com.puresol.coding.evaluator.metric.MetricsEvaluator;
 import com.puresol.coding.evaluator.metric.SLOCMetric;
 import com.puresol.data.Storable;
 import com.puresol.data.StoreType;
@@ -25,11 +25,11 @@ public class TSVFile implements Storable {
 	}
 
 	private final ProjectAnalyser analyser;
-	private final MetricsCalculator metrics;
+	private final MetricsEvaluator metrics;
 
 	public TSVFile(ProjectAnalyser analyser) {
 		this.analyser = analyser;
-		this.metrics = new MetricsCalculator(analyser);
+		this.metrics = new MetricsEvaluator(analyser);
 	}
 
 	@Override

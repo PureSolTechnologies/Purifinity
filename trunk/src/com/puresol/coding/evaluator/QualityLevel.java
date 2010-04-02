@@ -75,6 +75,15 @@ public enum QualityLevel implements Identifiable, Comparable<QualityLevel> {
 	@Override
 	public abstract String getIdentifier();
 
+	public static QualityLevel fromLevel(int level) {
+		for (QualityLevel qualityLevel : QualityLevel.class.getEnumConstants()) {
+			if (level == qualityLevel.getLevel()) {
+				return qualityLevel;
+			}
+		}
+		return QualityLevel.UNSPECIFIED;
+	}
+
 	public static QualityLevel getMinLevel(QualityLevel level1,
 			QualityLevel level2) {
 		if ((level1 == null) && (level2 == null)) {

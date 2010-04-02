@@ -28,16 +28,16 @@ import com.puresol.utils.Instances;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class CodeEvaluationSystem implements ProgressObservable {
+public class CodeEvaluator implements ProgressObservable {
 
 	private static final Logger logger = Logger
-			.getLogger(CodeEvaluationSystem.class);
+			.getLogger(CodeEvaluator.class);
 
 	private final ProjectAnalyser projectAnalyser;
 	private final ArrayList<Evaluator> evaluators = new ArrayList<Evaluator>();
 	private ProgressObserver observer = null;
 
-	public CodeEvaluationSystem(ProjectAnalyser projectAnalyser) {
+	public CodeEvaluator(ProjectAnalyser projectAnalyser) {
 		this.projectAnalyser = projectAnalyser;
 	}
 

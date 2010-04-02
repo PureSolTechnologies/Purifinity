@@ -10,16 +10,28 @@
 
 package com.puresol.coding.evaluator.metric;
 
+import java.util.ArrayList;
+
 import javax.i18n4j.Translator;
 
 import com.puresol.coding.analysis.CodeRange;
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.evaluator.QualityLevel;
+import com.puresol.utils.Property;
 
 public class MaintainabilityIndex implements Metric {
 
 	private static final Translator translator = Translator
 			.getTranslator(MaintainabilityIndex.class);
+
+	public static final String NAME = "Maintainability Index";
+	public static final ArrayList<Property> SUPPORTED_PROPERTIES = new ArrayList<Property>();
+	static {
+		SUPPORTED_PROPERTIES.add(new Property(MaintainabilityIndex.class,
+				"enabled",
+				"Switches calculation of Maintainability Index on and off.",
+				Boolean.class, "true"));
+	}
 
 	/**
 	 * MaintainabilityIndex without comment.

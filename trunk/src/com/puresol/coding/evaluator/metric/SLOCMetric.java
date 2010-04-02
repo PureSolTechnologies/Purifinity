@@ -23,6 +23,7 @@ import com.puresol.parser.Token;
 import com.puresol.parser.TokenPublicity;
 import com.puresol.parser.TokenStream;
 import com.puresol.statistics.Statistics;
+import com.puresol.utils.Property;
 
 /**
  * This class calculates a small statistics for a source code for source lines
@@ -36,6 +37,14 @@ public class SLOCMetric extends AbstractMetric {
 
 	private static final Translator translator = Translator
 			.getTranslator(SLOCMetric.class);
+
+	public static final String NAME = "SLOC Metric";
+	public static final ArrayList<Property> SUPPORTED_PROPERTIES = new ArrayList<Property>();
+	static {
+		SUPPORTED_PROPERTIES.add(new Property(SLOCMetric.class, "enabled",
+				"Switches calculation of SLOC Metric on and off.",
+				Boolean.class, "true"));
+	}
 
 	private final TokenStream stream;
 	private int phyLOC;

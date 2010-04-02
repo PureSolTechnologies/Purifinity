@@ -16,17 +16,15 @@ import java.util.Hashtable;
 
 import javax.i18n4j.Translator;
 
-import org.apache.log4j.Logger;
-
 import com.puresol.coding.analysis.Analyser;
 import com.puresol.coding.analysis.CodeRange;
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.analysis.ProjectAnalyser;
 import com.puresol.coding.evaluator.AbstractEvaluator;
-import com.puresol.coding.evaluator.EvaluatorManager;
 import com.puresol.coding.evaluator.QualityLevel;
 import com.puresol.parser.Token;
 import com.puresol.parser.TokenPublicity;
+import com.puresol.utils.Property;
 
 /**
  * This class calculates the CoCoMo for a set number of sloc and a given average
@@ -37,17 +35,18 @@ import com.puresol.parser.TokenPublicity;
  */
 public class CoCoMo extends AbstractEvaluator {
 
-	private static final Logger logger = Logger.getLogger(CoCoMo.class);
 	private static final Translator translator = Translator
 			.getTranslator(CoCoMo.class);
 
-	static {
-		logger.info("Initial static initialization...");
-		EvaluatorManager.getInstance().setName(CoCoMo.class, "CoCoMo");
-	}
-
 	private final CoCoMoValueSet cocomoValues = new CoCoMoValueSet();
 	private final Hashtable<File, CoCoMoValueSet> fileCoCoMoValues = new Hashtable<File, CoCoMoValueSet>();
+
+	public static final String NAME = "COst COnstruction MOdel";
+	public static final String DESCRIPTION = translator
+			.i18n("The COst COnstruction MOdel is a simple way "
+					+ "to estimate the construction costs of a "
+					+ "software project by couting the physical lines of code.");
+	public static final ArrayList<Property> SUPPORTED_PROPERTIES = new ArrayList<Property>();
 
 	public CoCoMo(ProjectAnalyser analyser) {
 		super(analyser);
@@ -129,14 +128,12 @@ public class CoCoMo extends AbstractEvaluator {
 
 	@Override
 	public String getName() {
-		return "COst COnstruction MOdel";
+		return NAME;
 	}
 
 	@Override
 	public String getDescription() {
-		return translator.i18n("The COst COnstruction MOdel is a simple way "
-				+ "to estimate the construction costs of a "
-				+ "software project by couting the physical lines of code.");
+		return DESCRIPTION;
 	}
 
 	@Override

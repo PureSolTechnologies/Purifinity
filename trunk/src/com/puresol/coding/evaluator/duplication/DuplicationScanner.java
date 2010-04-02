@@ -22,6 +22,7 @@ import com.puresol.parser.Token;
 import com.puresol.parser.TokenException;
 import com.puresol.parser.TokenPublicity;
 import com.puresol.parser.TokenStream;
+import com.puresol.utils.Property;
 
 public class DuplicationScanner extends AbstractEvaluator implements
 		ProgressObservable {
@@ -32,6 +33,11 @@ public class DuplicationScanner extends AbstractEvaluator implements
 			.getLogger(DuplicationScanner.class);
 	private static final Translator translator = Translator
 			.getTranslator(DuplicationScanner.class);
+
+	public static final String NAME = "Code Duplication Scanner";
+	public static final String DESCRIPTION = translator
+			.i18n("This evaluator scans for simmilar functional code.");
+	public static final ArrayList<Property> SUPPORTED_PROPERTIES = new ArrayList<Property>();
 
 	private final Hashtable<CodeRange, ArrayList<Integer>> codeRanges = new Hashtable<CodeRange, ArrayList<Integer>>();
 	private final ArrayList<Duplication> duplications = new ArrayList<Duplication>();
@@ -248,13 +254,12 @@ public class DuplicationScanner extends AbstractEvaluator implements
 
 	@Override
 	public String getName() {
-		return "Code Duplication Scanner";
+		return NAME;
 	}
 
 	@Override
 	public String getDescription() {
-		return translator
-				.i18n("This evaluator scans for simmilar functional code.");
+		return DESCRIPTION;
 	}
 
 	@Override
