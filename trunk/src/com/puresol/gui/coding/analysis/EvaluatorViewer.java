@@ -72,7 +72,7 @@ public class EvaluatorViewer extends BorderLayoutWidget {
 
 	private void refresh() {
 		evaluatorName.setText(evaluator.getName());
-		description.setText(evaluator.getDescription());
+		description.setText(evaluator.getDescription(ReportingFormat.HTML));
 		projectSummary.setText(evaluator
 				.getProjectComment(ReportingFormat.HTML));
 		evaluatorFileComment.setText("");

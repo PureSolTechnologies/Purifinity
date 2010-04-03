@@ -8,6 +8,7 @@ import javax.i18n4j.Translator;
 import com.puresol.coding.evaluator.metric.report.HTMLMetricsProject;
 import com.puresol.jars.JarFile;
 import com.puresol.reporting.html.HTMLStandards;
+import com.puresol.reporting.html.Image;
 import com.puresol.reporting.html.Link;
 import com.puresol.utils.Files;
 
@@ -79,9 +80,19 @@ public class StandardReport {
 	public void createFile(File file, String title, String bodyText)
 			throws IOException {
 		createStandardFiles();
-
-		String output = generateFinalText(title, bodyText);
+		String output = generateFinalText(file, title, bodyText);
 		writeFile(file, output);
+	}
+
+	public String createLogoIMGTag(File file) {
+		return new Image(Files.getRelativePath(file, logoFile)).toHTML();
+
+	}
+
+	public String createLogoIMGTag(File file, int widht, int height,
+			boolean relativeSize) {
+		return new Image(Files.getRelativePath(file, logoFile), widht, height,
+				relativeSize).toHTML();
 	}
 
 	public void createFile(File file, String html) throws IOException {
@@ -90,12 +101,15 @@ public class StandardReport {
 	}
 
 	public void createStandardFiles() {
-		createLogo();
-		createCSS();
+		createLogoFile();
+		createCSSFile();
 	}
 
-	private String generateFinalText(String title, String bodyText) {
-		String output = HTMLStandards.getStandardHeader(title, cssFile, false);
+	private String generateFinalText(File file, String title, String bodyText) {
+		String output = HTMLStandards.getStandardHeader(title, Files
+				.getRelativePath(file, cssFile), false);
+		output += createLogoIMGTag(file);
+		output += "<h1>" + title + "</h1>";
 		output += bodyText;
 		if (copyrightFooter) {
 			output += HTMLStandards.getStandardCopyrightFooter();
@@ -109,7 +123,7 @@ public class StandardReport {
 		Files.writeFile(projectDirectory, file, text);
 	}
 
-	private void createLogo() {
+	private void createLogoFile() {
 
 		if (logoFile != null) {
 			File logo = Files.addPaths(projectDirectory, logoFile);
@@ -120,7 +134,7 @@ public class StandardReport {
 		}
 	}
 
-	private void createCSS() {
+	private void createCSSFile() {
 		if (cssFile != null) {
 			File css = Files.addPaths(projectDirectory, cssFile);
 			if (!css.exists()) {
@@ -138,12 +152,5 @@ public class StandardReport {
 				+ " " + Link.getPureSolTechnolgiesHomePage().toHTML() + "</p>";
 		html += HTMLStandards.getStandardFooter();
 		return Files.writeFile(projectDirectory, new File("start.html"), html);
-	}
-	
-	public static void main(String args[]) {
-		StandardReport standardReport = new StandardReport(new File("/home/ludwig/CodeAnalysis"));
-		standardReport.setCssFile(new File("css/report.css"));
-		standardReport.setLogoFile(new File("graphics/logo.jpeg"));
-		standardReport.createStandardFiles();
 	}
 }

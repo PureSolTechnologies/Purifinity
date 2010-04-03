@@ -13,6 +13,7 @@ import com.puresol.coding.analysis.ProjectAnalyser;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.evaluator.QualityLevel;
 import com.puresol.reporting.ReportingFormat;
+import com.puresol.reporting.html.HTMLStandards;
 import com.puresol.utils.Property;
 
 public class MetricsEvaluator extends AbstractEvaluator {
@@ -119,7 +120,10 @@ public class MetricsEvaluator extends AbstractEvaluator {
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription(ReportingFormat format) {
+		if (format == ReportingFormat.HTML) {
+			return HTMLStandards.convertFlowTextToHTML(DESCRIPTION);
+		}
 		return DESCRIPTION;
 	}
 

@@ -1,6 +1,7 @@
 package com.puresol.coding.lang.java.evaluator;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import javax.i18n4j.Translator;
 
@@ -9,11 +10,19 @@ import com.puresol.coding.analysis.ProjectAnalyser;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.evaluator.QualityLevel;
 import com.puresol.reporting.ReportingFormat;
+import com.puresol.reporting.html.HTMLStandards;
+import com.puresol.utils.Property;
 
 public class TranslatorImplementation extends AbstractEvaluator {
 
 	private static final Translator translator = Translator
 			.getTranslator(TranslatorImplementation.class);
+
+	public static final String NAME = "Translator Implementation for Java";
+	public static final String DESCRIPTION = translator
+			.i18n("This evaluator checks for a Translator implementation"
+					+ "recommended by PureSol-Technologies.");
+	public static final ArrayList<Property> SUPPORTED_PROPERTIES = new ArrayList<Property>();
 
 	public TranslatorImplementation(ProjectAnalyser analyser) {
 		super(analyser);
@@ -21,14 +30,15 @@ public class TranslatorImplementation extends AbstractEvaluator {
 
 	@Override
 	public String getName() {
-		return "Translator Implementation";
+		return NAME;
 	}
 
 	@Override
-	public String getDescription() {
-		return translator
-				.i18n("This evaluator checks for a Translator implementation"
-						+ "recommended by PureSol-Technologies.");
+	public String getDescription(ReportingFormat format) {
+		if (format == ReportingFormat.HTML) {
+			return HTMLStandards.convertFlowTextToHTML(DESCRIPTION);
+		}
+		return DESCRIPTION;
 	}
 
 	@Override

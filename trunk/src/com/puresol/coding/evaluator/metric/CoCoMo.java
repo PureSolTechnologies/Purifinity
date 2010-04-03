@@ -25,6 +25,7 @@ import com.puresol.coding.evaluator.QualityLevel;
 import com.puresol.parser.Token;
 import com.puresol.parser.TokenPublicity;
 import com.puresol.reporting.ReportingFormat;
+import com.puresol.reporting.html.HTMLStandards;
 import com.puresol.utils.Property;
 
 /**
@@ -133,7 +134,10 @@ public class CoCoMo extends AbstractEvaluator {
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription(ReportingFormat format) {
+		if (format == ReportingFormat.HTML) {
+			return HTMLStandards.convertFlowTextToHTML(DESCRIPTION);
+		}
 		return DESCRIPTION;
 	}
 

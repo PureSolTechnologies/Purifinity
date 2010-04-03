@@ -23,6 +23,7 @@ import com.puresol.parser.TokenException;
 import com.puresol.parser.TokenPublicity;
 import com.puresol.parser.TokenStream;
 import com.puresol.reporting.ReportingFormat;
+import com.puresol.reporting.html.HTMLStandards;
 import com.puresol.utils.Property;
 
 public class DuplicationScanner extends AbstractEvaluator implements
@@ -259,7 +260,10 @@ public class DuplicationScanner extends AbstractEvaluator implements
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription(ReportingFormat format) {
+		if (format == ReportingFormat.HTML) {
+			return HTMLStandards.convertFlowTextToHTML(DESCRIPTION);
+		}
 		return DESCRIPTION;
 	}
 
@@ -272,8 +276,10 @@ public class DuplicationScanner extends AbstractEvaluator implements
 	public String getFileComment(File file, ReportingFormat format) {
 		String report = "";
 		ArrayList<Duplication> duplications = getDuplications(file);
-		for (Duplication duplication : duplications) {
-			report += duplication.toString() + "\n\n";
+		if (duplications != null) {
+			for (Duplication duplication : duplications) {
+				report += duplication.toString() + "\n\n";
+			}
 		}
 		return report;
 	}

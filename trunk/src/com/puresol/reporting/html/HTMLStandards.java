@@ -141,11 +141,18 @@ public class HTMLStandards {
 	}
 
 	public static String convertSourceCodeToHTML(String sourceCode) {
-		String sourceCodeHTML = "<tt>";
+		String sourceCodeHTML = "<tt>\n";
 		sourceCodeHTML += sourceCode.replaceAll("\n", "<br/>\n").replaceAll(
 				" ", "&nbsp;").replaceAll("\t", "&nbsp;&nbsp;&nbsp;&nbsp;");
-		sourceCodeHTML += "</tt>";
+		sourceCodeHTML += "</tt>\n";
 		return sourceCodeHTML;
+	}
+
+	public static String convertFlowTextToHTML(String flowText) {
+		String flowTextHTML = "<p>\n";
+		flowTextHTML += flowText.replaceAll("\n\n", "\n</p>\n</p>\n");
+		flowTextHTML += "</p>\n";
+		return flowTextHTML;
 	}
 
 }

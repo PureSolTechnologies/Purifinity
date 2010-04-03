@@ -41,7 +41,7 @@ public interface Evaluator extends ProgressObservable {
 	 * 
 	 * @return A string with the text is returned.
 	 */
-	public String getDescription();
+	public String getDescription(ReportingFormat format);
 
 	public ProjectAnalyser getProjectAnalyser();
 

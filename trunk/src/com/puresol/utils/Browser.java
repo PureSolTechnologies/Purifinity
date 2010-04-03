@@ -1,4 +1,4 @@
-package com.puresol.reporting.html;
+package com.puresol.utils;
 
 import java.awt.Desktop;
 import java.io.IOException;

@@ -10,6 +10,7 @@
 
 package com.puresol.coding.evaluator;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import javax.swingx.progress.ProgressObservable;
@@ -30,8 +31,7 @@ import com.puresol.utils.Instances;
  */
 public class CodeEvaluator implements ProgressObservable {
 
-	private static final Logger logger = Logger
-			.getLogger(CodeEvaluator.class);
+	private static final Logger logger = Logger.getLogger(CodeEvaluator.class);
 
 	private final ProjectAnalyser projectAnalyser;
 	private final ArrayList<Evaluator> evaluators = new ArrayList<Evaluator>();
@@ -77,5 +77,13 @@ public class CodeEvaluator implements ProgressObservable {
 
 	public ArrayList<Evaluator> getEvaluators() {
 		return evaluators;
+	}
+
+	public ArrayList<File> getFiles() {
+		return projectAnalyser.getFiles();
+	}
+
+	public ArrayList<File> getFailedFiles() {
+		return projectAnalyser.getFailedFiles();
 	}
 }
