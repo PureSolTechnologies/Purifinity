@@ -18,6 +18,7 @@ import javax.swingx.Panel;
 import javax.swingx.TabbedPane;
 
 import com.puresol.coding.analysis.ProjectAnalyser;
+import com.puresol.coding.evaluator.CodeEvaluator;
 
 public class ProjectAnalysisBrowser extends Panel {
 
@@ -82,5 +83,9 @@ public class ProjectAnalysisBrowser extends Panel {
 
 	public void refresh() {
 		codeRangeBrowser.refresh();
+	}
+	
+	public CodeEvaluator getCodeEvaluator() {
+		return codeEvaluation.getCodeEvaluator();
 	}
 }

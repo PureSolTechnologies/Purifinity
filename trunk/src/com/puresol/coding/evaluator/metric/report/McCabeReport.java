@@ -3,6 +3,7 @@ package com.puresol.coding.evaluator.metric.report;
 import javax.i18n4j.Translator;
 
 import com.puresol.coding.evaluator.metric.McCabeMetric;
+import com.puresol.coding.reporting.HTMLConverter;
 import com.puresol.reporting.html.Anchor;
 
 public class McCabeReport {
@@ -14,12 +15,13 @@ public class McCabeReport {
 		String report = Anchor.generate(mcCabe.getName(), "<h2>"
 				+ translator.i18n("McCabe Cyclomatic Number") + "</h2>");
 		if (mcCabe != null) {
-			report += ReportStandards.getQualitySign(mcCabe);
+			report += HTMLConverter.convertQualityLevelToHTML(mcCabe
+					.getQualityLevel());
 			report += "<br/>";
 			report += translator.i18n("Cyclomatic number v(G)") + "="
 					+ mcCabe.getCyclomaticNumber();
 		} else {
-			report += ReportStandards.notMeasurableForCodeRangeMessage();
+			report += HTMLMetricsReport.notMeasurableForCodeRangeMessage();
 		}
 		return report;
 	}

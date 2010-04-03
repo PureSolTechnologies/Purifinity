@@ -1,18 +1,29 @@
 package com.puresol.coding.evaluator;
 
-import javax.swing.text.DefaultStyledDocument;
-import javax.swing.text.StyledDocument;
+import java.io.File;
+
+import com.puresol.reporting.ReportingFormat;
 
 public class EvaluationReport {
 
-	private final CodeEvaluator evaluator;
-
-	public EvaluationReport(CodeEvaluator evaluator) {
-		this.evaluator = evaluator;
+	public static void report(CodeEvaluator evaluator, File outputDirectory,
+			ReportingFormat format) throws UnsupportedReportingFormatException {
+		new EvaluationReport(evaluator, format).createReport(outputDirectory);
 	}
-	
-	public StyledDocument getReport() {
-		return new DefaultStyledDocument();
+
+	private final CodeEvaluator evaluator;
+	private final ReportingFormat format;
+
+	private EvaluationReport(CodeEvaluator evaluator, ReportingFormat format) {
+		this.evaluator = evaluator;
+		this.format = format;
+	}
+
+	private void createReport(File outputDirectory)
+			throws UnsupportedReportingFormatException {
+		ReportGenerator generator = ReportGeneratorFactory.create(evaluator,
+				outputDirectory, format);
+		generator.createProject(outputDirectory);
 	}
 
 }

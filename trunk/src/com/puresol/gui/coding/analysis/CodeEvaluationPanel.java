@@ -23,7 +23,7 @@ public class CodeEvaluationPanel extends BorderLayoutWidget {
 
 	private ProjectAnalyser project = null;
 	private Button search = null;
-	private CodeEvaluator codeEvaluationSystem = null;
+	private CodeEvaluator codeEvaluator = null;
 	private FreeList evaluatorList;
 	private EvaluatorViewer evaluatorViewer;
 
@@ -55,8 +55,8 @@ public class CodeEvaluationPanel extends BorderLayoutWidget {
 
 	@Slot
 	public void evaluate() {
-		codeEvaluationSystem = new CodeEvaluator(project);
-		ProgressWindow progress = new ProgressWindow(codeEvaluationSystem);
+		codeEvaluator = new CodeEvaluator(project);
+		ProgressWindow progress = new ProgressWindow(codeEvaluator);
 		progress.connect("finished", this, "refresh");
 		progress.run();
 	}
@@ -64,7 +64,7 @@ public class CodeEvaluationPanel extends BorderLayoutWidget {
 	@Slot
 	public void refresh() {
 		Hashtable<Object, Object> listData = new Hashtable<Object, Object>();
-		for (Evaluator evaluator : codeEvaluationSystem.getEvaluators()) {
+		for (Evaluator evaluator : codeEvaluator.getEvaluators()) {
 			listData.put(evaluator.getName(), evaluator);
 		}
 		evaluatorList.setListData(listData);
@@ -74,5 +74,9 @@ public class CodeEvaluationPanel extends BorderLayoutWidget {
 	public void changedEvaluator(Object value) {
 		Evaluator evaluator = (Evaluator) value;
 		evaluatorViewer.setEvaluator(evaluator);
+	}
+
+	public CodeEvaluator getCodeEvaluator() {
+		return codeEvaluator;
 	}
 }

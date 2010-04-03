@@ -14,6 +14,12 @@ public class JarFile {
 
 	public static boolean extractResource(URL resource, File destination) {
 		try {
+			File parent = destination.getParentFile();
+			if (parent != null) {
+				if (!parent.exists()) {
+					parent.mkdirs();
+				}
+			}
 			InputStream inStream = resource.openStream();
 			FileOutputStream outStream = new FileOutputStream(destination);
 			byte[] buffer = new byte[1024];

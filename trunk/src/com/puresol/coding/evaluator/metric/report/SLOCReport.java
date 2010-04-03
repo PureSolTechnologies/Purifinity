@@ -3,6 +3,7 @@ package com.puresol.coding.evaluator.metric.report;
 import javax.i18n4j.Translator;
 
 import com.puresol.coding.evaluator.metric.SLOCMetric;
+import com.puresol.coding.reporting.HTMLConverter;
 import com.puresol.reporting.html.Anchor;
 import com.puresol.reporting.html.HTMLStandards;
 import com.puresol.statistics.Statistics;
@@ -67,14 +68,15 @@ public class SLOCReport {
 		String report = Anchor.generate(sloc.getName(), "<h2>"
 				+ translator.i18n("SLOC Metrics") + "</h2>");
 		if (sloc != null) {
-			report += ReportStandards.getQualitySign(sloc);
+			report += HTMLConverter.convertQualityLevelToHTML(sloc
+					.getQualityLevel());
 			report += "<br/>";
 			report += "<h3>Line Counts</h3>";
 			report += getHTMLLineCountReport(sloc);
 			report += "<h3>Line Lengths</h3>";
 			report += getHTMLLineLengthReport(sloc);
 		} else {
-			report += ReportStandards.notMeasurableForCodeRangeMessage();
+			report += HTMLMetricsReport.notMeasurableForCodeRangeMessage();
 		}
 		return report;
 

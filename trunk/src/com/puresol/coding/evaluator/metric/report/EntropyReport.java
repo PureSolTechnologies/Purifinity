@@ -3,6 +3,7 @@ package com.puresol.coding.evaluator.metric.report;
 import javax.i18n4j.Translator;
 
 import com.puresol.coding.evaluator.metric.EntropyMetric;
+import com.puresol.coding.reporting.HTMLConverter;
 import com.puresol.reporting.html.Anchor;
 import com.puresol.reporting.html.HTMLStandards;
 
@@ -39,11 +40,12 @@ public class EntropyReport {
 		String report = Anchor.generate(entropyMetric.getName(), "<h2>"
 				+ translator.i18n("Entropy from Information Theory") + "</h2>");
 		if (entropyMetric != null) {
-			report += ReportStandards.getQualitySign(entropyMetric);
+			report += HTMLConverter.convertQualityLevelToHTML(entropyMetric
+					.getQualityLevel());
 			report += "<br/>";
 			report += HTMLStandards.convertTSVToTable(getReport(entropyMetric));
 		} else {
-			report += ReportStandards.notMeasurableForCodeRangeMessage();
+			report += HTMLMetricsReport.notMeasurableForCodeRangeMessage();
 		}
 		return report;
 	}

@@ -133,7 +133,7 @@ public class PureSolApplication extends Application {
 	public void setJMenuBar(JMenuBar menubar) {
 		menubar.add(Box.createHorizontalGlue());
 		menubar.add(getDefaultHelpMenu());
-		addXFabLink(menubar);
+		addPureSolTechnologiesLink(menubar);
 		super.setJMenuBar(menubar);
 	}
 
@@ -167,7 +167,7 @@ public class PureSolApplication extends Application {
 	 * @param menubar
 	 *            is the menubar to add the logo to.
 	 */
-	private void addXFabLink(JMenuBar menubar) {
+	private void addPureSolTechnologiesLink(JMenuBar menubar) {
 		Image image = null;
 
 		URL imageURL = this.getClass().getResource("/config/logo.jpeg");

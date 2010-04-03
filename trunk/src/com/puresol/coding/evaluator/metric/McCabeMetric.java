@@ -39,12 +39,12 @@ public class McCabeMetric extends AbstractMetric {
 	private static final Translator translator = Translator
 			.getTranslator(McCabeMetric.class);
 
-	public static final String NAME = "McCabe Metric"; 
+	public static final String NAME = translator.i18n("McCabe Metric");
 	public static final ArrayList<Property> SUPPORTED_PROPERTIES = new ArrayList<Property>();
 	static {
 		SUPPORTED_PROPERTIES.add(new Property(McCabeMetric.class, "enabled",
-				"Switches calculation of McCabe Metric on and off.", Boolean.class,
-				"true"));
+				"Switches calculation of McCabe Metric on and off.",
+				Boolean.class, "true"));
 	}
 
 	private int cyclomaticNumber = 1;
@@ -123,6 +123,6 @@ public class McCabeMetric extends AbstractMetric {
 
 	@Override
 	public String getName() {
-		return translator.i18n("McCabe metric");
+		return NAME;
 	}
 }

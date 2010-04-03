@@ -38,7 +38,7 @@ public class SLOCMetric extends AbstractMetric {
 	private static final Translator translator = Translator
 			.getTranslator(SLOCMetric.class);
 
-	public static final String NAME = "SLOC Metric";
+	public static final String NAME = translator.i18n("SLOC Metric");
 	public static final ArrayList<Property> SUPPORTED_PROPERTIES = new ArrayList<Property>();
 	static {
 		SUPPORTED_PROPERTIES.add(new Property(SLOCMetric.class, "enabled",
@@ -388,6 +388,6 @@ public class SLOCMetric extends AbstractMetric {
 
 	@Override
 	public String getName() {
-		return translator.i18n("SLOC metric");
+		return NAME;
 	}
 }

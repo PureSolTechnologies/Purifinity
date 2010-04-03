@@ -3,6 +3,7 @@ package com.puresol.coding.evaluator.metric.report;
 import javax.i18n4j.Translator;
 
 import com.puresol.coding.evaluator.metric.MaintainabilityIndex;
+import com.puresol.coding.reporting.HTMLConverter;
 import com.puresol.reporting.html.Anchor;
 import com.puresol.reporting.html.HTMLStandards;
 
@@ -29,12 +30,14 @@ public class MaintainabilityReport {
 		String report = Anchor.generate(maintainabilityIndex.getName(), "<h2>"
 				+ translator.i18n("Maintainability Index") + "</h2>");
 		if (maintainabilityIndex != null) {
-			report += ReportStandards.getQualitySign(maintainabilityIndex);
+			report += HTMLConverter
+					.convertQualityLevelToHTML(maintainabilityIndex
+							.getQualityLevel());
 			report += "<br/>";
 			report += HTMLStandards
 					.convertTSVToTable(getReport(maintainabilityIndex));
 		} else {
-			report += ReportStandards.notMeasurableForCodeRangeMessage();
+			report += HTMLMetricsReport.notMeasurableForCodeRangeMessage();
 		}
 		return report;
 	}

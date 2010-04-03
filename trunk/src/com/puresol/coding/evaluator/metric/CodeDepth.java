@@ -21,7 +21,7 @@ public class CodeDepth extends AbstractMetric {
 	private static final Translator translator = Translator
 			.getTranslator(CodeDepth.class);
 
-	public static final String NAME = "CodeDepth Metric"; 
+	public static final String NAME = translator.i18n("Code Depth Metric");
 	public static final ArrayList<Property> SUPPORTED_PROPERTIES = new ArrayList<Property>();
 	static {
 		SUPPORTED_PROPERTIES.add(new Property(CodeDepth.class, "enabled",
@@ -78,6 +78,6 @@ public class CodeDepth extends AbstractMetric {
 
 	@Override
 	public String getName() {
-		return translator.i18n("Code depth metric");
+		return NAME;
 	}
 }

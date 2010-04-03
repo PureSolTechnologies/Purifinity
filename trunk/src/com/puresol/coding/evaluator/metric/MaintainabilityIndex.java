@@ -24,7 +24,7 @@ public class MaintainabilityIndex implements Metric {
 	private static final Translator translator = Translator
 			.getTranslator(MaintainabilityIndex.class);
 
-	public static final String NAME = "Maintainability Index";
+	public static final String NAME = translator.i18n("Maintainability Index");
 	public static final ArrayList<Property> SUPPORTED_PROPERTIES = new ArrayList<Property>();
 	static {
 		SUPPORTED_PROPERTIES.add(new Property(MaintainabilityIndex.class,
@@ -152,6 +152,6 @@ public class MaintainabilityIndex implements Metric {
 
 	@Override
 	public String getName() {
-		return translator.i18n("Maintainability index");
+		return NAME;
 	}
 }

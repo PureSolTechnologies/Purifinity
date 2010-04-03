@@ -32,12 +32,12 @@ public class EntropyMetric implements Metric {
 	private static final Translator translator = Translator
 			.getTranslator(EntropyMetric.class);
 
-	public static final String NAME = "Entropy Metric"; 
+	public static final String NAME = translator.i18n("Entropy Metric");
 	public static final ArrayList<Property> SUPPORTED_PROPERTIES = new ArrayList<Property>();
 	static {
 		SUPPORTED_PROPERTIES.add(new Property(EntropyMetric.class, "enabled",
-				"Switches calculation of EntropyMetric on and off.", Boolean.class,
-				"true"));
+				"Switches calculation of EntropyMetric on and off.",
+				Boolean.class, "true"));
 	}
 
 	/**
@@ -175,6 +175,6 @@ public class EntropyMetric implements Metric {
 
 	@Override
 	public String getName() {
-		return translator.i18n("Entropy metric");
+		return NAME;
 	}
 }

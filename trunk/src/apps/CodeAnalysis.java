@@ -10,10 +10,15 @@
 
 package apps;
 
+import java.awt.Desktop;
 import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import javax.i18n4j.Translator;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swingx.Application;
 import javax.swingx.BorderLayoutWidget;
 import javax.swingx.MemoryMonitor;
@@ -23,12 +28,19 @@ import javax.swingx.MenuItem;
 import javax.swingx.connect.Slot;
 import javax.swingx.progress.ProgressWindow;
 
+import org.apache.log4j.Logger;
+
 import com.puresol.coding.analysis.ProjectAnalyser;
+import com.puresol.coding.evaluator.CodeEvaluator;
+import com.puresol.coding.evaluator.EvaluationReport;
+import com.puresol.coding.evaluator.UnsupportedReportingFormatException;
 import com.puresol.coding.evaluator.metric.report.HTMLMetricsProject;
 import com.puresol.coding.evaluator.metric.report.tsv.TSVFile;
 import com.puresol.gui.PureSolApplication;
 import com.puresol.gui.coding.analysis.MetricSelectionToolBar;
 import com.puresol.gui.coding.analysis.ProjectAnalysisBrowser;
+import com.puresol.reporting.ReportingFormat;
+import com.puresol.utils.Files;
 
 /**
  * This is PureSolTechnologies' code analysis tool for automated source code
@@ -40,6 +52,7 @@ public class CodeAnalysis extends PureSolApplication {
 
 	private static final long serialVersionUID = -3002673096551916032L;
 
+	private static final Logger logger = Logger.getLogger(CodeAnalysis.class);
 	private static final Translator translator = Translator
 			.getTranslator(CodeAnalysis.class);
 
@@ -62,8 +75,11 @@ public class CodeAnalysis extends PureSolApplication {
 		MenuItem createTSV = new MenuItem("Save as TSV...");
 		createTSV.connect("start", this, "createTSV");
 
-		MenuItem createHTML = new MenuItem("Create HTML...");
-		createHTML.connect("start", this, "createHTML");
+		MenuItem createMetricsHTML = new MenuItem("Create Metrics HTML...");
+		createMetricsHTML.connect("start", this, "createMetricsHTML");
+
+		MenuItem createEvaluatorHTML = new MenuItem("Create Evaluator HTML...");
+		createEvaluatorHTML.connect("start", this, "createEvaluatorHTML");
 
 		MenuItem exit = new MenuItem("Exit");
 		exit.connect("start", this, "quit");
@@ -73,7 +89,8 @@ public class CodeAnalysis extends PureSolApplication {
 
 		menuBar.add(fileMenu);
 		fileMenu.add(createTSV);
-		fileMenu.add(createHTML);
+		fileMenu.add(createMetricsHTML);
+		fileMenu.add(createEvaluatorHTML);
 		fileMenu.addSeparator();
 		fileMenu.add(exit);
 
@@ -106,7 +123,7 @@ public class CodeAnalysis extends PureSolApplication {
 	}
 
 	@Slot
-	public void createHTML() {
+	public void createMetricsHTML() {
 		JFileChooser chooser = new JFileChooser();
 		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		int result = chooser.showSaveDialog(Application.getInstance());
@@ -115,6 +132,53 @@ public class CodeAnalysis extends PureSolApplication {
 		}
 		HTMLMetricsProject.create(chooser.getSelectedFile(), browser
 				.getProjectAnalyser());
+		try {
+			Desktop.getDesktop().browse(
+					new URI("file://"
+							+ Files.addPaths(chooser.getSelectedFile(),
+									new File("index.html"))));
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e);
+		} catch (URISyntaxException e) {
+			logger.error(e.getMessage(), e);
+		}
+	}
+
+	@Slot
+	public void createEvaluatorHTML() {
+		JFileChooser chooser = new JFileChooser();
+		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		int result = chooser.showSaveDialog(Application.getInstance());
+		if (result == JFileChooser.CANCEL_OPTION) {
+			return;
+		}
+		CodeEvaluator evaluator = browser.getCodeEvaluator();
+		if (evaluator != null) {
+			try {
+				EvaluationReport.report(evaluator, chooser.getSelectedFile(),
+						ReportingFormat.HTML);
+				Desktop.getDesktop().browse(
+						new URI("file://"
+								+ Files.addPaths(chooser.getSelectedFile(),
+										new File("index.html"))));
+			} catch (UnsupportedReportingFormatException e) {
+				JOptionPane.showMessageDialog(Application.getInstance(),
+						translator.i18n("No report generation possible!")
+								+ "\n" + e.getMessage(), translator
+								.i18n("Error"), JOptionPane.ERROR_MESSAGE);
+			} catch (IOException e) {
+				logger.error(e.getMessage(), e);
+			} catch (URISyntaxException e) {
+				logger.error(e.getMessage(), e);
+			}
+		} else {
+			JOptionPane
+					.showMessageDialog(
+							Application.getInstance(),
+							translator
+									.i18n("No report generation possible!\nNo evaluation was performed."),
+							translator.i18n("Error"), JOptionPane.ERROR_MESSAGE);
+		}
 	}
 
 	@Slot

@@ -3,6 +3,7 @@ package com.puresol.coding.evaluator.metric.report;
 import javax.i18n4j.Translator;
 
 import com.puresol.coding.evaluator.metric.HalsteadMetric;
+import com.puresol.coding.reporting.HTMLConverter;
 import com.puresol.reporting.html.Anchor;
 import com.puresol.reporting.html.HTMLStandards;
 
@@ -71,7 +72,8 @@ public class HalsteadReport {
 		String report = Anchor.generate(halsteadMetric.getName(), "<h2>"
 				+ translator.i18n("Halstead Metric") + "</h2>");
 		if (halsteadMetric != null) {
-			report += ReportStandards.getQualitySign(halsteadMetric);
+			report += HTMLConverter.convertQualityLevelToHTML(halsteadMetric
+					.getQualityLevel());
 			report += "<br/>";
 			report += HTMLStandards
 					.convertTSVToTable(getNumberReport(halsteadMetric));
@@ -82,7 +84,7 @@ public class HalsteadReport {
 			report += "<h3>" + translator.i18n("Operands") + "</h3>";
 			report += getHTMLOperantReport(halsteadMetric);
 		} else {
-			report += ReportStandards.notMeasurableForCodeRangeMessage();
+			report += HTMLMetricsReport.notMeasurableForCodeRangeMessage();
 		}
 		return report;
 	}

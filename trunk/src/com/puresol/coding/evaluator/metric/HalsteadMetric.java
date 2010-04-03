@@ -35,12 +35,12 @@ public class HalsteadMetric extends AbstractMetric {
 	private static final Translator translator = Translator
 			.getTranslator(HalsteadMetric.class);
 
-	public static final String NAME = "Halstead Metric"; 
+	public static final String NAME = translator.i18n("Halstead Metric");
 	public static final ArrayList<Property> SUPPORTED_PROPERTIES = new ArrayList<Property>();
 	static {
 		SUPPORTED_PROPERTIES.add(new Property(HalsteadMetric.class, "enabled",
-				"Switches calculation of Halstead Metric on and off.", Boolean.class,
-				"true"));
+				"Switches calculation of Halstead Metric on and off.",
+				Boolean.class, "true"));
 	}
 
 	private final Hashtable<String, Integer> operators = new Hashtable<String, Integer>();
@@ -307,6 +307,6 @@ public class HalsteadMetric extends AbstractMetric {
 
 	@Override
 	public String getName() {
-		return translator.i18n("Halstead metric");
+		return NAME;
 	}
 }

@@ -11,6 +11,7 @@
 package com.puresol.reporting.html;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -32,10 +33,10 @@ public class HTMLStandards {
 	private static final Logger logger = Logger.getLogger(HTMLStandards.class);
 
 	public static String getStandardHeader() {
-		return getStandardHeader("", "", true);
+		return getStandardHeader("", null, true);
 	}
 
-	public static String getStandardHeader(String title, String css,
+	public static String getStandardHeader(String title, File css,
 			boolean inlineCSS) {
 		String header = "<html>\n";
 		header += "<head>\n";
@@ -52,7 +53,8 @@ public class HTMLStandards {
 		String footer = "<hr/>\n";
 		footer += "<p>(c) " + APIConfig.PACKAGE_YEARS + " "
 				+ Link.getPureSolTechnolgiesHomePage().toHTML()
-				+ "<br/>\n(page created: " + Time.getFullTimeString() + ")</p>\n";
+				+ "<br/>\n(page created: " + Time.getFullTimeString()
+				+ ")</p>\n";
 		footer += "</body>\n";
 		footer += "</html>\n";
 		return footer;
@@ -82,7 +84,7 @@ public class HTMLStandards {
 		return "</html>\n";
 	}
 
-	public static String getCSS(String css, boolean inlineCSS) {
+	public static String getCSS(File css, boolean inlineCSS) {
 		if (inlineCSS) {
 			return getInlineCSS(css);
 		} else {
@@ -101,12 +103,13 @@ public class HTMLStandards {
 		return html;
 	}
 
-	public static String getInlineCSS(String css) {
-		if (css.isEmpty()) {
+	public static String getInlineCSS(File css) {
+		if (css == null) {
 			return "";
 		}
 		try {
-			InputStream is = HTMLStandards.class.getResourceAsStream(css);
+			InputStream is = HTMLStandards.class.getResourceAsStream(css
+					.getPath());
 			BufferedReader reader = new BufferedReader(
 					new InputStreamReader(is));
 			String html = "<style type=\"text/css\">\n";
@@ -122,8 +125,8 @@ public class HTMLStandards {
 		return "";
 	}
 
-	public static String getExternalCSS(String css) {
-		if (css.isEmpty()) {
+	public static String getExternalCSS(File css) {
+		if (css == null) {
 			return "";
 		}
 		return "<link rel=\"stylesheet\" type=\"text/css\" href=\"" + css
@@ -139,8 +142,8 @@ public class HTMLStandards {
 
 	public static String convertSourceCodeToHTML(String sourceCode) {
 		String sourceCodeHTML = "<tt>";
-		sourceCodeHTML += sourceCode.replaceAll("\n", "<br/>\n").replaceAll(" ",
-				"&nbsp;").replaceAll("\t", "&nbsp;&nbsp;&nbsp;&nbsp;");
+		sourceCodeHTML += sourceCode.replaceAll("\n", "<br/>\n").replaceAll(
+				" ", "&nbsp;").replaceAll("\t", "&nbsp;&nbsp;&nbsp;&nbsp;");
 		sourceCodeHTML += "</tt>";
 		return sourceCodeHTML;
 	}
