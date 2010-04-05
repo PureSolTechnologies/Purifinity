@@ -49,8 +49,7 @@ public class FortranAnalyser extends AbstractAnalyser {
 	private void parse() {
 		try {
 			FortranLexer lexer = new FortranLexer(new FortranPreConditioner(
-					new File(getProjectDirectory().toString() + "/"
-							+ getFile().toString())).getTokenStream());
+					getProjectDirectory(), getFile()).getTokenStream());
 			TokenStream tokenStream = lexer.getTokenStream();
 			FortranParser parser = new FortranParser(tokenStream);
 			parser.scan();

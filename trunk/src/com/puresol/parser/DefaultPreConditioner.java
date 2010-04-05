@@ -27,18 +27,6 @@ public class DefaultPreConditioner extends AbstractPreConditioner {
 		this.file = file;
 	}
 
-	public DefaultPreConditioner(File file) throws FileNotFoundException {
-		super(file);
-		this.directory = null;
-		this.file = file;
-	}
-
-	public DefaultPreConditioner(File file, InputStream stream) {
-		super(stream);
-		this.directory = null;
-		this.file = file;
-	}
-
 	public File getFile() {
 		return file;
 	}

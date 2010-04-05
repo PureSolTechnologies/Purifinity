@@ -30,8 +30,8 @@ public class FortranParserTest extends TestCase {
 		FortranParser parser = null;
 		try {
 			FortranPreConditioner conditioner = new FortranPreConditioner(
-					new File(
-							"test/com/puresol/coding/lang/fortran/samples/zgerc.f"));
+					new File("test"), new File(
+							"com/puresol/coding/lang/fortran/samples/zgerc.f"));
 			// DefaultPreConditioner conditioner =
 			// new DefaultPreConditioner(
 			// new File(
@@ -46,6 +46,9 @@ public class FortranParserTest extends TestCase {
 			parser.scan();
 			for (CodeRange codeRange : parser.getCodeRanges()) {
 				System.out.println(codeRange.toString());
+				Assert.assertEquals(new File(
+						"com/puresol/coding/lang/fortran/samples/zgerc.f"),
+						codeRange.getFile());
 			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -74,7 +77,8 @@ public class FortranParserTest extends TestCase {
 		FortranParser parser = null;
 		try {
 			FortranPreConditioner conditioner = new FortranPreConditioner(
-					new File("/home/ludwig/workspace/Dyn3D/src/fort/libapr.f"));
+					new File("/home/ludwig/workspace/Dyn3D/src"), new File(
+							"/fort/libapr.f"));
 			// DefaultPreConditioner conditioner =
 			// new DefaultPreConditioner(
 			// new File(

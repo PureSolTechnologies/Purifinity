@@ -31,8 +31,10 @@ public class Lexer {
 		this.inputStream = stream;
 	}
 
-	public Lexer(File file) throws FileNotFoundException, IOException {
-		this.inputStream = new DefaultPreConditioner(file).getTokenStream();
+	public Lexer(File directory, File file) throws FileNotFoundException,
+			IOException {
+		this.inputStream = new DefaultPreConditioner(directory, file)
+				.getTokenStream();
 	}
 
 	public final void addDefinition(TokenDefinition definition) {

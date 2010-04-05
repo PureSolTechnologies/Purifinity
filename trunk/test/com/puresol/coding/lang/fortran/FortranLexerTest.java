@@ -19,8 +19,8 @@ public class FortranLexerTest {
 	public void testLexer() {
 		try {
 			FortranPreConditioner conditioner = new FortranPreConditioner(
-					new File(
-							"test/com/puresol/coding/lang/fortran/samples/zgerc.f"));
+					new File("test"), new File(
+							"/com/puresol/coding/lang/fortran/samples/zgerc.f"));
 			TokenStream tokenStream = conditioner.getTokenStream();
 			FortranLexer lexer = new FortranLexer(tokenStream);
 			TokenStream tokenStream2 = lexer.getTokenStream();

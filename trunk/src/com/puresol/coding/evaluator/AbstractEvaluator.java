@@ -55,7 +55,11 @@ public abstract class AbstractEvaluator implements Evaluator {
 
 	@Override
 	public final ArrayList<CodeRange> getCodeRanges(File file) {
-		return codeRanges.get(file);
+		ArrayList<CodeRange> ranges = codeRanges.get(file);
+		if (ranges == null) {
+			return new ArrayList<CodeRange>();
+		}
+		return ranges;
 	}
 
 	@Override

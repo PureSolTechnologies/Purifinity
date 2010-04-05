@@ -27,16 +27,18 @@ public class DefaultPreConditionerTest extends TestCase {
 	@Test
 	public void testConstructor() {
 		try {
-			File file = new File(
-					"test/com/puresol/parser/DefaultPreConditionerTest.java");
-			DefaultPreConditioner conditioner = new DefaultPreConditioner(file);
+			DefaultPreConditioner conditioner = new DefaultPreConditioner(
+					new File("test"),
+					new File(
+							"com/puresol/parser/DefaultPreConditionerTest.java"));
 			TokenStream stream = conditioner.getTokenStream();
 			Assert.assertNotNull(stream);
 			ArrayList<Token> tokens = stream.getTokens();
 			Assert.assertEquals(1, tokens.size());
 			Token token = tokens.get(0);
 
-			String text = readFile(file);
+			String text = readFile(new File(
+					"test/com/puresol/parser/DefaultPreConditionerTest.java"));
 
 			Assert.assertEquals(0, token.getTokenID());
 			Assert.assertEquals(TokenPublicity.VISIBLE, token.getPublicity());

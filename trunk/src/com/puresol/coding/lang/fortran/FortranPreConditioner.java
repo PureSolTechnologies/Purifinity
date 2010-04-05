@@ -34,12 +34,9 @@ public class FortranPreConditioner extends DefaultPreConditioner {
 	int pos = 0;
 	int lineNum = 0;
 
-	public FortranPreConditioner(File file) throws FileNotFoundException {
-		super(file);
-	}
-
-	public FortranPreConditioner(File file, InputStream stream) {
-		super(file, stream);
+	public FortranPreConditioner(File directory, File file)
+			throws FileNotFoundException {
+		super(directory, file);
 	}
 
 	@Override

@@ -33,6 +33,7 @@ import org.apache.log4j.Logger;
 import com.puresol.coding.analysis.CodeRange;
 import com.puresol.coding.analysis.ProjectAnalyser;
 import com.puresol.coding.evaluator.QualityLevel;
+import com.puresol.coding.evaluator.metric.CodeRangeMetrics;
 import com.puresol.coding.evaluator.metric.MetricsEvaluator;
 import com.puresol.coding.evaluator.metric.report.HTMLMetricsReport;
 
@@ -158,18 +159,21 @@ public class MetricsBrowser extends BorderLayoutWidget {
 		for (CodeRange range : ranges) {
 			index++;
 			String html = "<html><body>";
-			QualityLevel quality = metrics.getMetrics(range).getQualityLevel();
-			if (quality == QualityLevel.HIGH) {
-				html += "<table width=\"100%\" bgcolor=\"#00ff00\">";
-			} else if (quality == QualityLevel.MEDIUM) {
-				html += "<table width=\"100%\" bgcolor=\"#ffff00\">";
-			} else {
-				html += "<table width=\"100%\" bgcolor=\"#ff0000\">";
+			CodeRangeMetrics codeRangeMetrics = metrics.getMetrics(range);
+			if (codeRangeMetrics != null) {
+				QualityLevel quality = codeRangeMetrics.getQualityLevel();
+				if (quality == QualityLevel.HIGH) {
+					html += "<table width=\"100%\" bgcolor=\"#00ff00\">";
+				} else if (quality == QualityLevel.MEDIUM) {
+					html += "<table width=\"100%\" bgcolor=\"#ffff00\">";
+				} else {
+					html += "<table width=\"100%\" bgcolor=\"#ff0000\">";
+				}
+				html += "<tr><td>" + index + ": "
+						+ range.getType().getIdentifier() + ":"
+						+ range.getName() + "</td></tr></table></body></html>";
+				listData.put(html, range);
 			}
-			html += "<tr><td>" + index + ": " + range.getType().getIdentifier()
-					+ ":" + range.getName()
-					+ "</td></tr></table></body></html>";
-			listData.put(html, range);
 		}
 		codeRangeList.setListData(listData);
 	}

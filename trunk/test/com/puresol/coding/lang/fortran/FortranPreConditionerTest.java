@@ -30,8 +30,8 @@ public class FortranPreConditionerTest {
 	public void testLexer() {
 		try {
 			FortranPreConditioner conditioner = new FortranPreConditioner(
-					new File(
-							"test/com/puresol/coding/lang/fortran/samples/zgerc.f"));
+					new File("test"), new File(
+							"/com/puresol/coding/lang/fortran/samples/zgerc.f"));
 			TokenStream tokenStream = conditioner.getTokenStream();
 			for (Token token : tokenStream.getTokens()) {
 				System.out.println(token.toString());
