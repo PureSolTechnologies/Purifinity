@@ -14,13 +14,18 @@ import javax.swingx.TabbedPane;
 import javax.swingx.TextField;
 import javax.swingx.connect.Slot;
 
+import org.apache.log4j.Logger;
+
 import com.puresol.coding.evaluator.Evaluator;
+import com.puresol.coding.evaluator.UnsupportedReportingFormatException;
 import com.puresol.reporting.ReportingFormat;
 
 public class EvaluatorViewer extends BorderLayoutWidget {
 
 	private static final long serialVersionUID = 7729851519489273274L;
 
+	private static final Logger logger = Logger
+			.getLogger(EvaluatorViewer.class);
 	private static final Translator translator = Translator
 			.getTranslator(EvaluatorViewer.class);
 
@@ -72,9 +77,24 @@ public class EvaluatorViewer extends BorderLayoutWidget {
 
 	private void refresh() {
 		evaluatorName.setText(evaluator.getName());
-		description.setText(evaluator.getDescription(ReportingFormat.HTML));
-		projectSummary.setText(evaluator
-				.getProjectComment(ReportingFormat.HTML));
+		try {
+			description.setText(evaluator.getDescription(ReportingFormat.HTML));
+		} catch (UnsupportedReportingFormatException e) {
+			description.setText(translator.i18n(
+					"Evaluator does not (yet) support {0} reporting format.",
+					ReportingFormat.HTML));
+			logger.warn(e.getMessage(), e);
+		}
+
+		try {
+			projectSummary.setText(evaluator
+					.getProjectComment(ReportingFormat.HTML));
+		} catch (UnsupportedReportingFormatException e) {
+			projectSummary.setText(translator.i18n(
+					"Evaluator does not (yet) support {0} reporting format.",
+					ReportingFormat.HTML));
+			logger.warn(e.getMessage(), e);
+		}
 		evaluatorFileComment.setText("");
 		refreshFileList();
 	}
@@ -94,7 +114,14 @@ public class EvaluatorViewer extends BorderLayoutWidget {
 	public void fileChanged(Object o) {
 		File file = (File) o;
 		System.out.println(file);
-		evaluatorFileComment.setText(evaluator.getFileComment(file,
-				ReportingFormat.HTML));
+		try {
+			evaluatorFileComment.setText(evaluator.getFileComment(file,
+					ReportingFormat.HTML));
+		} catch (UnsupportedReportingFormatException e) {
+			evaluatorFileComment.setText(translator.i18n(
+					"Evaluator does not (yet) support {0} reporting format.",
+					ReportingFormat.HTML));
+			logger.warn(e.getMessage(), e);
+		}
 	}
 }

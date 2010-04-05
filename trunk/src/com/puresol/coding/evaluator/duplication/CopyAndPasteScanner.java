@@ -13,6 +13,7 @@ import com.puresol.coding.analysis.CodeRange;
 import com.puresol.coding.analysis.ProjectAnalyser;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.evaluator.QualityLevel;
+import com.puresol.coding.evaluator.UnsupportedReportingFormatException;
 import com.puresol.parser.Token;
 import com.puresol.parser.TokenException;
 import com.puresol.parser.TokenStream;
@@ -87,6 +88,7 @@ public class CopyAndPasteScanner extends AbstractEvaluator {
 		if (observer != null) {
 			observer.setRange(0, ((ranges.length + 1) * ranges.length) / 2);
 			observer.setStatus(0);
+			observer.setDescription(NAME);
 			observer.showProgressPercent();
 		}
 		for (int left = 0; left < ranges.length - 1; left++) {
@@ -137,17 +139,14 @@ public class CopyAndPasteScanner extends AbstractEvaluator {
 	}
 
 	private void check(CodeRange left, CodeRange right) throws TokenException {
-		for (int leftIndex = left.getStart(); leftIndex <= left.getStop(); leftIndex++) {
-			for (int rightIndex = right.getStart(); rightIndex <= right
-					.getStop(); rightIndex++) {
-				Duplication duplication = checkDetails(left, leftIndex, right,
-						rightIndex);
-				if (duplication != null) {
-					leftIndex = duplication.getLeft().getStop();
-					rightIndex = duplication.getRight().getStop();
-				}
+		for (int index = 0; (left.getStart() + index <= left.getStop())
+				&& (right.getStart() + index <= right.getStop()); index++) {
+			Duplication duplication = checkDetails(left, left.getStart()
+					+ index, right, right.getStart() + index);
+			if (duplication != null) {
+				index += duplication.getLeft().getStop()
+						- duplication.getLeft().getStart();
 			}
-
 		}
 	}
 
@@ -171,8 +170,8 @@ public class CopyAndPasteScanner extends AbstractEvaluator {
 					leftIndex + counter - 1);
 			CodeRange rightDuplication = right.createPartialCodeRange(
 					rightIndex, rightIndex + counter - 1);
-			duplication = new Duplication(leftDuplication, rightDuplication,
-					counter);
+			duplication = new Duplication(left, right, leftDuplication,
+					rightDuplication);
 			addDuplication(duplication);
 		}
 		return duplication;
@@ -206,20 +205,63 @@ public class CopyAndPasteScanner extends AbstractEvaluator {
 	}
 
 	@Override
-	public String getDescription(ReportingFormat format) {
+	public String getDescription(ReportingFormat format)
+			throws UnsupportedReportingFormatException {
 		if (format == ReportingFormat.HTML) {
 			return HTMLStandards.convertFlowTextToHTML(DESCRIPTION);
+		} else if (format == ReportingFormat.TEXT) {
+			return DESCRIPTION;
 		}
-		return DESCRIPTION;
+		throw new UnsupportedReportingFormatException(format);
 	}
 
 	@Override
-	public String getFileComment(File file, ReportingFormat format) {
-		String report = "";
+	public String getFileComment(File file, ReportingFormat format)
+			throws UnsupportedReportingFormatException {
+		if (format == ReportingFormat.HTML) {
+			return getHTMLFileComment(file);
+		} else if (format == ReportingFormat.TEXT) {
+			return getTextFileComment(file);
+		}
+		throw new UnsupportedReportingFormatException(format);
+	}
+
+	private String getHTMLFileComment(File file)
+			throws UnsupportedReportingFormatException {
 		ArrayList<Duplication> duplications = getDuplications(file);
+		if (duplications == null) {
+			return "";
+		}
+		String report = "<p>"
+				+ translator
+						.i18n(
+								"{0} possible duplications were found within file {1}.",
+								duplications.size(), file) + "</p>";
 		if (duplications != null) {
 			for (Duplication duplication : duplications) {
-				report += duplication.toString() + "\n\n";
+				report += duplication.toString(ReportingFormat.HTML);
+			}
+		}
+		return report;
+	}
+
+	private String getTextFileComment(File file)
+			throws UnsupportedReportingFormatException {
+		ArrayList<Duplication> duplications = getDuplications(file);
+		if (duplications == null) {
+			return "";
+		}
+		String report = translator.i18n(
+				"{0} possible duplications were found within file {1}.",
+				duplications.size(), file);
+		report += "\n\n";
+		if (duplications != null) {
+			int count = 0;
+			for (Duplication duplication : duplications) {
+				count++;
+				report += "<p>" + translator.i18n("Duplication {0}:", count)
+						+ "</p>";
+				report += duplication.toString(ReportingFormat.TEXT) + "\n\n";
 			}
 		}
 		return report;
@@ -250,4 +292,13 @@ public class CopyAndPasteScanner extends AbstractEvaluator {
 	public QualityLevel getQuality(CodeRange codeRange) {
 		return QualityLevel.UNSPECIFIED;
 	}
+
+	public static void main(String args[]) {
+		ProjectAnalyser analyser = new ProjectAnalyser(new File(
+				"/home/ludwig/workspace/i18n4java"), "src/javax/i18n4j/*.java");
+		analyser.run();
+		CopyAndPasteScanner cnpScanner = new CopyAndPasteScanner(analyser);
+		cnpScanner.run();
+	}
+
 }

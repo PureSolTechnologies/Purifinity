@@ -1,34 +1,27 @@
 package com.puresol.reporting.html;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
-import com.puresol.exceptions.StrangeSituationException;
-
 public class Link {
 
+	public static final String PURESOL_TECHNOLOGIES_WEBPAGE = ("http://www.puresol-technologies.com");
+
 	public static Link getPureSolTechnolgiesHomePage() {
-		try {
-			return new Link(new URL("http://www.puresol-technologies.com"),
-					"PureSol-Technologies", LinkTarget.BLANK);
-		} catch (MalformedURLException e) {
-			throw new StrangeSituationException(e);
-		}
+		return new Link(PURESOL_TECHNOLOGIES_WEBPAGE, "PureSol-Technologies",
+				LinkTarget.TOP);
 	}
 
-	private final URL url;
+	private final String url;
 	private final String text;
 	private final LinkTarget target;
 
-	public Link(URL url) {
+	public Link(String url) {
 		this(url, url.toString());
 	}
 
-	public Link(URL url, String text) {
+	public Link(String url, String text) {
 		this(url, text, LinkTarget.DEFAULT);
 	}
 
-	public Link(URL url, String text, LinkTarget target) {
+	public Link(String url, String text, LinkTarget target) {
 		this.url = url;
 		this.text = text;
 		this.target = target;
@@ -42,6 +35,18 @@ public class Link {
 		String link = "<a href=\"" + url.toString() + "\"" + targetString + ">"
 				+ text + "</a>";
 		return link;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public String getText() {
+		return text;
+	}
+
+	public LinkTarget getTarget() {
+		return target;
 	}
 
 	/*

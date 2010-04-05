@@ -54,4 +54,16 @@ public class AbstractCodeRangeTest {
 		CRange crange = new CRange("Test", tokenStream, 1, 3);
 		Tester.testClone(crange);
 	}
+
+	@Test
+	public void testCreatePartialCodeRange() {
+		TokenStream tokenStream = TokenStreamTest.newTestTokenStream();
+		CRange codeRange = new CRange("CodeRangeName", tokenStream, 5, 15);
+		CodeRange partialCodeRange = codeRange.createPartialCodeRange(8, 12);
+		Assert.assertEquals(CRange.class, partialCodeRange.getClass());
+		Assert.assertEquals(8, partialCodeRange.getStart());
+		Assert.assertEquals(12, partialCodeRange.getStop());
+		System.out.println(codeRange.getText());
+		System.out.println(partialCodeRange.getText());
+	}
 }

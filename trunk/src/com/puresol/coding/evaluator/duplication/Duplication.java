@@ -1,6 +1,11 @@
 package com.puresol.coding.evaluator.duplication;
 
+import javax.i18n4j.Translator;
+
 import com.puresol.coding.analysis.CodeRange;
+import com.puresol.coding.evaluator.UnsupportedReportingFormatException;
+import com.puresol.parser.Token;
+import com.puresol.reporting.ReportingFormat;
 
 /**
  * This class keeps the information of a single duplication found by a scanner.
@@ -12,23 +17,35 @@ import com.puresol.coding.analysis.CodeRange;
  */
 public class Duplication implements Comparable<Duplication> {
 
-	private CodeRange left;
-	private CodeRange right;
-	private int matchSize;
-	private double correlation;
+	private static final Translator translator = Translator
+			.getTranslator(Duplication.class);
 
-	public Duplication(CodeRange left, CodeRange right, int matchSize) {
+	private final CodeRange left;
+	private final CodeRange right;
+	private final CodeRange leftDuplicationRange;
+	private final CodeRange rightDuplicationRange;
+	private double correlation;
+	private double matchingNumber;
+
+	public Duplication(CodeRange left, CodeRange right,
+			CodeRange leftDuplicationRange, CodeRange rightDuplicationRange) {
 		this.left = left;
 		this.right = right;
-		this.matchSize = matchSize;
+		this.leftDuplicationRange = leftDuplicationRange;
+		this.rightDuplicationRange = rightDuplicationRange;
 		init();
 	}
 
 	private void init() {
-		correlation = left.getStop() - left.getStart();
-		correlation += right.getStop() - right.getStart();
-		correlation /= 2;
-		correlation = (double) matchSize / correlation;
+		double avgCodeRangeSize = (double) ((left.getStop() - left.getStart()
+				+ right.getStop() - right.getStart())) / 2.0;
+		double avgDuplicationRangeSize = (double) ((leftDuplicationRange
+				.getStop()
+				- leftDuplicationRange.getStart()
+				+ rightDuplicationRange.getStop() - rightDuplicationRange
+				.getStart())) / 2.0;
+		correlation = avgDuplicationRangeSize / avgCodeRangeSize;
+		matchingNumber = correlation * avgCodeRangeSize;
 	}
 
 	public CodeRange getLeft() {
@@ -39,12 +56,20 @@ public class Duplication implements Comparable<Duplication> {
 		return right;
 	}
 
-	public int getMatchSize() {
-		return matchSize;
+	public CodeRange getLeftDuplicationRange() {
+		return leftDuplicationRange;
+	}
+
+	public CodeRange getRightDuplicationRange() {
+		return rightDuplicationRange;
 	}
 
 	public double getCorrelation() {
 		return correlation;
+	}
+
+	public double getMatchingNumner() {
+		return matchingNumber;
 	}
 
 	/*
@@ -56,9 +81,19 @@ public class Duplication implements Comparable<Duplication> {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		long temp;
+		temp = Double.doubleToLongBits(correlation);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
 		result = prime * result + ((left == null) ? 0 : left.hashCode());
-		result = prime * result + matchSize;
+		result = prime
+				* result
+				+ ((leftDuplicationRange == null) ? 0 : leftDuplicationRange
+						.hashCode());
 		result = prime * result + ((right == null) ? 0 : right.hashCode());
+		result = prime
+				* result
+				+ ((rightDuplicationRange == null) ? 0 : rightDuplicationRange
+						.hashCode());
 		return result;
 	}
 
@@ -76,30 +111,102 @@ public class Duplication implements Comparable<Duplication> {
 		if (getClass() != obj.getClass())
 			return false;
 		Duplication other = (Duplication) obj;
+		if (Double.doubleToLongBits(correlation) != Double
+				.doubleToLongBits(other.correlation))
+			return false;
 		if (left == null) {
 			if (other.left != null)
 				return false;
 		} else if (!left.equals(other.left))
 			return false;
-		if (matchSize != other.matchSize)
+		if (leftDuplicationRange == null) {
+			if (other.leftDuplicationRange != null)
+				return false;
+		} else if (!leftDuplicationRange.equals(other.leftDuplicationRange))
 			return false;
 		if (right == null) {
 			if (other.right != null)
 				return false;
 		} else if (!right.equals(other.right))
 			return false;
+		if (rightDuplicationRange == null) {
+			if (other.rightDuplicationRange != null)
+				return false;
+		} else if (!rightDuplicationRange.equals(other.rightDuplicationRange))
+			return false;
 		return true;
 	}
 
 	@Override
 	public int compareTo(Duplication other) {
-		if (this.matchSize < other.matchSize) {
+		if (this.matchingNumber < other.matchingNumber) {
 			return -1;
 		}
-		if (this.matchSize > other.matchSize) {
+		if (this.matchingNumber > other.matchingNumber) {
 			return +1;
 		}
 		return 0;
 	}
 
+	public String toString(ReportingFormat format)
+			throws UnsupportedReportingFormatException {
+		if (format == ReportingFormat.TEXT) {
+			return toTextString();
+		} else if (format == ReportingFormat.HTML) {
+			return toHTMLString();
+		}
+		throw new UnsupportedReportingFormatException(format);
+	}
+
+	private String toTextString() throws UnsupportedReportingFormatException {
+		CodeRange left = getLeft();
+		CodeRange right = getRight();
+		String output = translator.i18n("left:") + "\n";
+		output += left.getTitleString(ReportingFormat.TEXT);
+		output += "\n";
+		output += translator.i18n("right:") + "\n";
+		output += right.getTitleString(ReportingFormat.TEXT);
+		return output;
+	}
+
+	private String toHTMLString() throws UnsupportedReportingFormatException {
+		CodeRange left = getLeft();
+		CodeRange right = getRight();
+		String output = "<table border=\"1\" padding=\"10pt\"><tr><th>left</th><th>right</th></tr><tr>\n";
+		output += "<td>" + getHTMLString(left, leftDuplicationRange) + "</td>";
+		output += "<td>" + getHTMLString(right, rightDuplicationRange)
+				+ "</td>";
+		output += "</tr></table>";
+		return output;
+	}
+
+	private String getHTMLString(CodeRange range, CodeRange duplicationRange)
+			throws UnsupportedReportingFormatException {
+		String output = range.getTitleString(ReportingFormat.HTML);
+		output += "<tt>\n";
+		boolean marked = false;
+		for (Token token : range.getTokens()) {
+			if (!marked) {
+				if ((token.getTokenID() >= duplicationRange.getStart())
+						&& (token.getTokenID() <= duplicationRange.getStop())) {
+					marked = true;
+					output += "<font class=\"highlighted\">\n";
+				}
+			} else {
+				if ((token.getTokenID() < duplicationRange.getStart())
+						|| (token.getTokenID() > duplicationRange.getStop())) {
+					marked = false;
+					output += "</font>\n";
+				}
+			}
+			output += token.getText().replaceAll("\\n", "<br/>\n").replaceAll(
+					" ", "&nbsp;")
+					.replaceAll("\\t", "&nbsp;&nbsp;&nbsp;&nbsp;");
+		}
+		if (marked) {
+			output += "</font>\n";
+		}
+		output += "<tt>\n";
+		return output;
+	}
 }

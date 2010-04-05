@@ -21,6 +21,7 @@ public class StandardReport {
 	private boolean copyrightFooter = false;
 	private File cssFile = null;
 	private File logoFile = null;
+	private File favIconFile = null;
 
 	public StandardReport(File projectDirectory) {
 		this.projectDirectory = projectDirectory;
@@ -77,6 +78,21 @@ public class StandardReport {
 		this.logoFile = logoFile;
 	}
 
+	/**
+	 * @return the favIconFile
+	 */
+	public File getFavIconFile() {
+		return favIconFile;
+	}
+
+	/**
+	 * @param favIconFile
+	 *            the favIconFile to set
+	 */
+	public void setFavIconFile(File favIconFile) {
+		this.favIconFile = favIconFile;
+	}
+
 	public void createFile(File file, String title, String bodyText)
 			throws IOException {
 		createStandardFiles();
@@ -103,12 +119,14 @@ public class StandardReport {
 	public void createStandardFiles() {
 		createLogoFile();
 		createCSSFile();
+		createFavIconFile();
 	}
 
 	private String generateFinalText(File file, String title, String bodyText) {
 		String output = HTMLStandards.getStandardHeader(title, Files
-				.getRelativePath(file, cssFile), false);
-		output += createLogoIMGTag(file);
+				.getRelativePath(file, cssFile), false, Files.getRelativePath(
+				file, favIconFile));
+		output += createLogoIMGTag(file, 400, 0, false);
 		output += "<h1>" + title + "</h1>";
 		output += bodyText;
 		if (copyrightFooter) {
@@ -129,7 +147,7 @@ public class StandardReport {
 			File logo = Files.addPaths(projectDirectory, logoFile);
 			if (!logo.exists()) {
 				JarFile.extractResource(HTMLMetricsProject.class
-						.getResource("/config/logo.jpeg"), logo);
+						.getResource("/config/logo.png"), logo);
 			}
 		}
 	}
@@ -144,13 +162,47 @@ public class StandardReport {
 		}
 	}
 
+	private void createFavIconFile() {
+		if (favIconFile != null) {
+			File favIcon = Files.addPaths(projectDirectory, favIconFile);
+			if (!favIcon.exists()) {
+				JarFile.extractResource(HTMLMetricsProject.class
+						.getResource("/config/favicon.png"), favIcon);
+			}
+		}
+	}
+
 	public boolean createStartHTML(String name) {
-		String html = HTMLStandards.getStandardHeader(name, cssFile, false);
-		html += "<img src=\"graphics/logo.jpeg\"/> <h1>" + name + "</h1>";
+		File outputFile = new File("start.html");
+		String html = HTMLStandards.getStandardHeader(name, cssFile, false,
+				favIconFile);
+		html += createLogoIMGTag(outputFile, 400, 0, false) + " <h1>" + name
+				+ "</h1>";
 		html += "<p>" + HTMLStandards.getCopyright() + "</p>";
 		html += "<p>" + translator.i18n("For more information have a look to:")
 				+ " " + Link.getPureSolTechnolgiesHomePage().toHTML() + "</p>";
 		html += HTMLStandards.getStandardFooter();
-		return Files.writeFile(projectDirectory, new File("start.html"), html);
+		return Files.writeFile(projectDirectory, outputFile, html);
 	}
+
+	public boolean createCopyrightHTML() {
+		String name = translator.i18n("Copyright Information");
+		File outputFile = new File("copyright.html");
+		String html = HTMLStandards.getStandardHeader(name, cssFile, false,
+				favIconFile);
+		html += createLogoIMGTag(outputFile, 400, 0, false) + "<h1>" + name
+				+ "</h1>";
+		html += "<p>" + HTMLStandards.getCopyright() + "</p>";
+		html += "<p>\n";
+		html += "Permission to use, copy, modify and distribute<br/>\n";
+		html += "this Software its accompanying documentation<br/>\n";
+		html += "for any purpose is not allowed without further<br/>\n";
+		html += "permission of the copyright holder.\n";
+		html += "</p>\n";
+		html += "<p>" + translator.i18n("For more information have a look to:")
+				+ " " + Link.getPureSolTechnolgiesHomePage().toHTML() + "</p>";
+		html += HTMLStandards.getStandardFooter();
+		return Files.writeFile(projectDirectory, outputFile, html);
+	}
+
 }

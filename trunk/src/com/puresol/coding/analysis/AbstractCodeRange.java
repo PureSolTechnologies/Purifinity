@@ -3,9 +3,12 @@ package com.puresol.coding.analysis;
 import java.io.File;
 import java.util.ArrayList;
 
+import com.puresol.coding.evaluator.UnsupportedReportingFormatException;
 import com.puresol.exceptions.StrangeSituationException;
 import com.puresol.parser.Token;
 import com.puresol.parser.TokenStream;
+import com.puresol.reporting.ReportingFormat;
+import com.puresol.reporting.html.HTMLStandards;
 
 /**
  * This is a base implementation of CodeRange with all information always
@@ -17,8 +20,8 @@ import com.puresol.parser.TokenStream;
 public abstract class AbstractCodeRange implements CodeRange {
 
 	private final String name;
-	private final String text;
 	private final TokenStream tokenStream;
+	private String text;
 	private int start; // not final for sub range creation!
 	private int stop; // not final for sub range creation!
 
@@ -26,17 +29,20 @@ public abstract class AbstractCodeRange implements CodeRange {
 			int stop) {
 		this.name = name;
 		this.tokenStream = tokenStream;
-		this.start = start;
-		this.stop = stop;
-		this.text = createText();
+		setPosition(start, stop);
 	}
 
-	private String createText() {
-		String text = "";
+	private void setPosition(int start, int stop) {
+		this.start = start;
+		this.stop = stop;
+		createText();
+	}
+
+	private void createText() {
+		text = "";
 		for (int index = start; index <= stop; index++) {
 			text += tokenStream.get(index).getText();
 		}
-		return text;
 	}
 
 	public File getFile() {
@@ -71,14 +77,53 @@ public abstract class AbstractCodeRange implements CodeRange {
 		return stop;
 	}
 
-	public String toString() {
-		return getType() + ": " + getName() + "\n" + getText();
+	public String getTitleString(ReportingFormat format)
+			throws UnsupportedReportingFormatException {
+		if (format == ReportingFormat.TEXT) {
+			return getTextTitleString();
+		} else if (format == ReportingFormat.HTML) {
+			return getHTMLTitleString();
+		}
+		throw new UnsupportedReportingFormatException(format);
+	}
+
+	private String getTextTitleString() {
+		return getType() + ": " + getName() + "\n" + getFile() + ": "
+				+ getStart() + "-" + getStop();
+	}
+
+	private String getHTMLTitleString() {
+		String output = "<b>" + getType() + ": " + getName() + "</b><br/>\n";
+		output += "<i>" + getFile() + ": " + getStart() + "-" + getStop()
+				+ "</i>\n";
+		return output;
+	}
+
+	public String toString(ReportingFormat format)
+			throws UnsupportedReportingFormatException {
+		if (format == ReportingFormat.TEXT) {
+			return toTextString();
+		} else if (format == ReportingFormat.HTML) {
+			return toHTMLString();
+		}
+		throw new UnsupportedReportingFormatException(format);
+	}
+
+	private String toTextString() {
+		return getTextTitleString() + "\n" + getText();
+	}
+
+	private String toHTMLString() {
+		String output = "<p>\n";
+		output += getHTMLTitleString() + "<br/>\n";
+		output += "<br/>\n";
+		output += HTMLStandards.convertSourceCodeToHTML(getText());
+		return output;
 	}
 
 	public CodeRange createPartialCodeRange(int newStart, int newStop) {
 		AbstractCodeRange newRange = (AbstractCodeRange) this.clone();
-		newRange.start = newStart;
-		newRange.stop = newStop;
+		newRange.setPosition(newStart, newStop);
 		return newRange;
 	}
 

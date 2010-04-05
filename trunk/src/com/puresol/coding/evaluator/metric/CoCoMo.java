@@ -22,6 +22,7 @@ import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.analysis.ProjectAnalyser;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.evaluator.QualityLevel;
+import com.puresol.coding.evaluator.UnsupportedReportingFormatException;
 import com.puresol.parser.Token;
 import com.puresol.parser.TokenPublicity;
 import com.puresol.reporting.ReportingFormat;
@@ -60,8 +61,7 @@ public class CoCoMo extends AbstractEvaluator {
 		ArrayList<File> files = projectAnalyser.getFiles();
 		if (getMonitor() != null) {
 			getMonitor().setRange(0, files.size());
-			getMonitor().setDescription(
-					"CoCoMo - Cost Construction Model calculation");
+			getMonitor().setDescription(NAME);
 		}
 		int sloc = 0;
 		int count = 0;
@@ -134,29 +134,39 @@ public class CoCoMo extends AbstractEvaluator {
 	}
 
 	@Override
-	public String getDescription(ReportingFormat format) {
+	public String getDescription(ReportingFormat format)
+			throws UnsupportedReportingFormatException {
 		if (format == ReportingFormat.HTML) {
 			return HTMLStandards.convertFlowTextToHTML(DESCRIPTION);
+		} else if (format == ReportingFormat.TEXT) {
+			return DESCRIPTION;
 		}
-		return DESCRIPTION;
+		throw new UnsupportedReportingFormatException(format);
 	}
 
 	@Override
-	public String getProjectComment(ReportingFormat format) {
+	public String getProjectComment(ReportingFormat format)
+			throws UnsupportedReportingFormatException {
 		if (format == ReportingFormat.HTML) {
 			return translator.i18n("Project Result:<br/><br/>")
-					+ cocomoValues.toHTML();
+					+ cocomoValues.toString(format);
+		} else if (format == ReportingFormat.TEXT) {
+			return translator.i18n("Project Result:\n\n")
+					+ cocomoValues.toString(format);
 		}
-		return translator.i18n("Project Result:\n\n") + cocomoValues.toString();
+		throw new UnsupportedReportingFormatException(format);
 	}
 
 	@Override
-	public String getFileComment(File file, ReportingFormat format) {
+	public String getFileComment(File file, ReportingFormat format)
+			throws UnsupportedReportingFormatException {
 		if (format == ReportingFormat.HTML) {
 			return translator.i18n("File Result:<br/><br/>")
-					+ fileCoCoMoValues.get(file).toHTML();
+					+ fileCoCoMoValues.get(file).toString(format);
+		} else if (format == ReportingFormat.TEXT) {
+			return fileCoCoMoValues.get(file).toString(format);
 		}
-		return fileCoCoMoValues.get(file).toString();
+		throw new UnsupportedReportingFormatException(format);
 	}
 
 	@Override

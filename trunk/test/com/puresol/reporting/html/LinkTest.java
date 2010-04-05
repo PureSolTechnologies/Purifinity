@@ -1,8 +1,5 @@
 package com.puresol.reporting.html;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
 import org.junit.Test;
 
 import com.puresol.reporting.html.Link;
@@ -15,47 +12,29 @@ public class LinkTest extends TestCase {
 
 	@Test
 	public void testGetLinkURL() {
-		try {
-			Assert
-					.assertEquals(
-							"<a href=\"http://www.puresol-technologies.com\">http://www.puresol-technologies.com</a>",
-							new Link(new URL(
-									"http://www.puresol-technologies.com"))
-									.toHTML());
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-			Assert.fail("No exception was expected!");
-		}
+		Assert
+				.assertEquals(
+						"<a href=\"http://www.puresol-technologies.com\">http://www.puresol-technologies.com</a>",
+						new Link("http://www.puresol-technologies.com")
+								.toHTML());
 	}
 
 	@Test
 	public void testGetLinkURLAndText() {
-		try {
-			Assert
-					.assertEquals(
-							"<a href=\"http://www.puresol-technologies.com\">PureSol-Technologies</a>",
-							new Link(new URL(
-									"http://www.puresol-technologies.com"),
-									"PureSol-Technologies").toHTML());
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-			Assert.fail("No exception was expected!");
-		}
+		Assert
+				.assertEquals(
+						"<a href=\"http://www.puresol-technologies.com\">PureSol-Technologies</a>",
+						new Link("http://www.puresol-technologies.com",
+								"PureSol-Technologies").toHTML());
 	}
 
 	@Test
 	public void testGetLinkURLAndTextAndTargets() {
-		try {
-			Assert
-					.assertEquals(
-							"<a href=\"http://www.puresol-technologies.com\" target=\"_blank\">PureSol-Technologies</a>",
-							new Link(new URL(
-									"http://www.puresol-technologies.com"),
-									"PureSol-Technologies", LinkTarget.BLANK)
-									.toHTML());
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-			Assert.fail("No exception was expected!");
-		}
+		Assert
+				.assertEquals(
+						"<a href=\"http://www.puresol-technologies.com\" target=\"_blank\">PureSol-Technologies</a>",
+						new Link("http://www.puresol-technologies.com",
+								"PureSol-Technologies", LinkTarget.BLANK)
+								.toHTML());
 	}
 }

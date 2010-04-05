@@ -43,11 +43,17 @@ public class HTMLMetricsReport extends AbstractMetricsReport {
 
 	public String getReport(File cssFile, boolean inlineCSS) {
 		String report = HTMLStandards.getStandardHeader("CodeMetrics for "
-				+ getMetrics().getCodeRange().getName(), cssFile, inlineCSS);
+				+ getMetrics().getCodeRange().getName(), cssFile, inlineCSS,
+				null);
 		report += getTitle();
-		report += getOverview();
-		report += getMetricReport();
+		report += getReportText();
 		report += HTMLStandards.getStandardCopyrightFooter();
+		return report;
+	}
+
+	public String getReportText() {
+		String report = getOverview();
+		report += getMetricReport();
 		return report;
 	}
 
@@ -60,7 +66,7 @@ public class HTMLMetricsReport extends AbstractMetricsReport {
 	}
 
 	private String getOverview() {
-		String report = "<h2>Overview</h2>";
+		String report = "<h3>Overview</h3>";
 		report += "<table>";
 		for (Class<? extends Metric> availMetric : getMetrics()
 				.getCalculatedMetrics()) {
@@ -88,7 +94,7 @@ public class HTMLMetricsReport extends AbstractMetricsReport {
 	}
 
 	private String getSourceCode() {
-		String report = "<h2>" + translator.i18n("Source Code") + "</h2>";
+		String report = "<h3>" + translator.i18n("Source Code") + "</h3>";
 		report += HTMLStandards.convertSourceCodeToHTML(getMetrics()
 				.getCodeRange().getText());
 		return report;

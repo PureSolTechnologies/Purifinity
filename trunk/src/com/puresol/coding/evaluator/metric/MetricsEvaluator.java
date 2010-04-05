@@ -9,9 +9,13 @@ import javax.i18n4j.Translator;
 import javax.swingx.progress.ProgressObserver;
 
 import com.puresol.coding.analysis.CodeRange;
+import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.analysis.ProjectAnalyser;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.evaluator.QualityLevel;
+import com.puresol.coding.evaluator.UnsupportedReportingFormatException;
+import com.puresol.coding.evaluator.metric.report.HTMLMetricsReport;
+import com.puresol.coding.reporting.HTMLConverter;
 import com.puresol.reporting.ReportingFormat;
 import com.puresol.reporting.html.HTMLStandards;
 import com.puresol.utils.Property;
@@ -84,6 +88,9 @@ public class MetricsEvaluator extends AbstractEvaluator {
 		ProgressObserver observer = getMonitor();
 		if (observer != null) {
 			observer.setRange(0, getFiles().size());
+			observer.setStatus(0);
+			observer.setDescription(NAME);
+			observer.showProgressPercent();
 		}
 		int index = 0;
 		for (File file : getFiles()) {
@@ -120,21 +127,68 @@ public class MetricsEvaluator extends AbstractEvaluator {
 	}
 
 	@Override
-	public String getDescription(ReportingFormat format) {
+	public String getDescription(ReportingFormat format)
+			throws UnsupportedReportingFormatException {
 		if (format == ReportingFormat.HTML) {
 			return HTMLStandards.convertFlowTextToHTML(DESCRIPTION);
+		} else if (format == ReportingFormat.TEXT) {
+			return DESCRIPTION;
 		}
-		return DESCRIPTION;
+		throw new UnsupportedReportingFormatException(format);
 	}
 
 	@Override
-	public String getProjectComment(ReportingFormat format) {
-		return getProjectQuality().getIdentifier();
+	public String getProjectComment(ReportingFormat format)
+			throws UnsupportedReportingFormatException {
+		if (format == ReportingFormat.TEXT) {
+			return getTextProjectComment();
+		} else if (format == ReportingFormat.HTML) {
+			return getHTMLProjectComment();
+		}
+		throw new UnsupportedReportingFormatException(format);
+	}
+
+	private String getTextProjectComment() {
+		return translator.i18n("The overall project quality is: ")
+				+ getProjectQuality().getIdentifier();
+	}
+
+	private String getHTMLProjectComment() {
+		return "<p>" + translator.i18n("The overall project quality is: ")
+				+ HTMLConverter.convertQualityLevelToHTML(getProjectQuality())
+				+ "</p>";
 	}
 
 	@Override
-	public String getFileComment(File file, ReportingFormat format) {
-		return getQuality(file).getIdentifier();
+	public String getFileComment(File file, ReportingFormat format)
+			throws UnsupportedReportingFormatException {
+		if (format == ReportingFormat.TEXT) {
+			return getTextFileComment(file);
+		} else if (format == ReportingFormat.HTML) {
+			return getHTMLFileComment(file);
+		}
+		throw new UnsupportedReportingFormatException(format);
+	}
+
+	private String getTextFileComment(File file) {
+		return translator.i18n("The overall file quality is: ")
+				+ getQuality(file).getIdentifier();
+	}
+
+	private String getHTMLFileComment(File file) {
+		String output = "<p>"
+				+ translator.i18n("The overall file quality is: ")
+				+ HTMLConverter.convertQualityLevelToHTML(getQuality(file))
+				+ "</p>";
+		ArrayList<CodeRange> codeRanges = getCodeRanges(file);
+		for (CodeRange codeRange : codeRanges) {
+			if (codeRange.getType() == CodeRangeType.FILE) {
+				output += new HTMLMetricsReport(getMetrics(codeRange))
+						.getReportText();
+				break;
+			}
+		}
+		return output;
 	}
 
 	@Override

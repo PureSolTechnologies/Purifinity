@@ -13,7 +13,7 @@ public class UnsupportedReportingFormatException extends Exception {
 
 	public UnsupportedReportingFormatException(ReportingFormat format) {
 		super(translator.i18n("Reporting format '" + format.getIdentifier()
-				+ "' is not supported!"));
+				+ "' is not (yet) supported!"));
 	}
 
 }

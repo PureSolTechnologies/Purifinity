@@ -41,7 +41,8 @@ public interface Evaluator extends ProgressObservable {
 	 * 
 	 * @return A string with the text is returned.
 	 */
-	public String getDescription(ReportingFormat format);
+	public String getDescription(ReportingFormat format)
+			throws UnsupportedReportingFormatException;
 
 	public ProjectAnalyser getProjectAnalyser();
 
@@ -65,7 +66,8 @@ public interface Evaluator extends ProgressObservable {
 	 * 
 	 * @return A String with the comment is returned.
 	 */
-	public String getProjectComment(ReportingFormat format);
+	public String getProjectComment(ReportingFormat format)
+			throws UnsupportedReportingFormatException;
 
 	/**
 	 * This method returns the evaluator comment for the file.
@@ -74,7 +76,8 @@ public interface Evaluator extends ProgressObservable {
 	 *            is the file to be checked for a comment.
 	 * @return A String with the comment is returned.
 	 */
-	public String getFileComment(File file, ReportingFormat format);
+	public String getFileComment(File file, ReportingFormat format)
+			throws UnsupportedReportingFormatException;
 
 	/**
 	 * This method returns the evaluator comment for the file.
@@ -84,7 +87,7 @@ public interface Evaluator extends ProgressObservable {
 	 * @return A String with the comment is returned.
 	 */
 	public String getCodeRangeComment(CodeRange codeRange,
-			ReportingFormat format);
+			ReportingFormat format) throws UnsupportedReportingFormatException;
 
 	/**
 	 * This method returns the overall project quality.

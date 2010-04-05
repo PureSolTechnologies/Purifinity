@@ -14,6 +14,7 @@ import com.puresol.coding.analysis.CodeRange;
 import com.puresol.coding.analysis.ProjectAnalyser;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.evaluator.QualityLevel;
+import com.puresol.coding.evaluator.UnsupportedReportingFormatException;
 import com.puresol.coding.tokentypes.AbstractSourceTokenDefinition;
 import com.puresol.coding.tokentypes.SourceTokenDefinition;
 import com.puresol.coding.tokentypes.SymbolType;
@@ -92,6 +93,7 @@ public class DuplicationScanner extends AbstractEvaluator implements
 		if (observer != null) {
 			observer.setRange(0, ((ranges.length + 1) * ranges.length) / 2);
 			observer.setStatus(0);
+			observer.setDescription(NAME);
 			observer.showProgressPercent();
 		}
 		for (int left = 0; left < ranges.length - 1; left++) {
@@ -225,8 +227,8 @@ public class DuplicationScanner extends AbstractEvaluator implements
 					leftToken.getTokenID());
 			CodeRange rightDuplication = right.createPartialCodeRange(
 					rightIndex, rightToken.getTokenID());
-			duplication = new Duplication(leftDuplication, rightDuplication,
-					operatorCounter + operantCounter);
+			duplication = new Duplication(left, right, leftDuplication,
+					rightDuplication);
 			addDuplication(duplication);
 		}
 		return duplication;
@@ -260,11 +262,14 @@ public class DuplicationScanner extends AbstractEvaluator implements
 	}
 
 	@Override
-	public String getDescription(ReportingFormat format) {
+	public String getDescription(ReportingFormat format)
+			throws UnsupportedReportingFormatException {
 		if (format == ReportingFormat.HTML) {
 			return HTMLStandards.convertFlowTextToHTML(DESCRIPTION);
+		} else if (format == ReportingFormat.TEXT) {
+			return DESCRIPTION;
 		}
-		return DESCRIPTION;
+		throw new UnsupportedReportingFormatException(format);
 	}
 
 	@Override
@@ -273,12 +278,52 @@ public class DuplicationScanner extends AbstractEvaluator implements
 	}
 
 	@Override
-	public String getFileComment(File file, ReportingFormat format) {
-		String report = "";
+	public String getFileComment(File file, ReportingFormat format)
+			throws UnsupportedReportingFormatException {
+		if (format == ReportingFormat.HTML) {
+			return getHTMLFileComment(file);
+		} else if (format == ReportingFormat.TEXT) {
+			return getTextFileComment(file);
+		}
+		throw new UnsupportedReportingFormatException(format);
+	}
+
+	private String getHTMLFileComment(File file)
+			throws UnsupportedReportingFormatException {
 		ArrayList<Duplication> duplications = getDuplications(file);
+		if (duplications == null) {
+			return "";
+		}
+		String report = "<p>"
+				+ translator
+						.i18n(
+								"{0} possible duplications were found within file {1}.",
+								duplications.size(), file) + "</p>";
+		if (duplications != null) {
+			int count = 0;
+			for (Duplication duplication : duplications) {
+				count++;
+				report += "<p>" + translator.i18n("Duplication {0}:", count)
+						+ "</p>";
+				report += duplication.toString(ReportingFormat.HTML);
+			}
+		}
+		return report;
+	}
+
+	private String getTextFileComment(File file)
+			throws UnsupportedReportingFormatException {
+		ArrayList<Duplication> duplications = getDuplications(file);
+		if (duplications == null) {
+			return "";
+		}
+		String report = translator.i18n(
+				"{0} possible duplications were found within file {1}.",
+				duplications.size(), file);
+		report += "\n\n";
 		if (duplications != null) {
 			for (Duplication duplication : duplications) {
-				report += duplication.toString() + "\n\n";
+				report += duplication.toString(ReportingFormat.TEXT) + "\n\n";
 			}
 		}
 		return report;
