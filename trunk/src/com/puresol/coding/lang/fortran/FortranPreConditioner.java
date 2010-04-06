@@ -16,7 +16,6 @@ import com.puresol.coding.tokentypes.Comment;
 import com.puresol.parser.DefaultPreConditioner;
 import com.puresol.parser.Token;
 import com.puresol.parser.TokenPublicity;
-import com.puresol.parser.TokenStream;
 
 public class FortranPreConditioner extends DefaultPreConditioner {
 
@@ -41,7 +40,6 @@ public class FortranPreConditioner extends DefaultPreConditioner {
 
 	@Override
 	protected void generateTokenStream() throws IOException {
-		setTokenStream(new TokenStream(getFile()));
 		ArrayList<String> buffer = readToBuffer();
 		preconditioner(buffer);
 	}
@@ -107,12 +105,6 @@ public class FortranPreConditioner extends DefaultPreConditioner {
 	private void addCommentLine(String line) throws IOException {
 		addToken(new Token(counter, TokenPublicity.HIDDEN, pos, line.length(),
 				line, lineNum, lineNum + 1, Comment.class));
-	}
-
-	private void addToken(Token token) throws IOException {
-		getTokenStream().addToken(token);
-		pos += token.getText().length();
-		counter++;
 	}
 
 	private String readLine() {

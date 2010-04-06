@@ -18,32 +18,40 @@ import com.puresol.utils.Files;
  */
 public abstract class AbstractPreConditioner {
 
-    private InputStream inputStream = null;
-    private TokenStream tokenStream = null;
+	private final InputStream inputStream;
+	private final TokenStream tokenStream;
 
-    public AbstractPreConditioner(File directory, File file)
-	    throws FileNotFoundException {
-	this.inputStream = new FileInputStream(Files.addPaths(directory, file));
-    }
-
-    public AbstractPreConditioner(InputStream stream) {
-	this.inputStream = stream;
-    }
-
-    public InputStream getInputStream() {
-	return inputStream;
-    }
-
-    public TokenStream getTokenStream() throws IOException {
-	if (tokenStream == null) {
-	    generateTokenStream();
+	public AbstractPreConditioner(File directory, File file)
+			throws FileNotFoundException {
+		this.inputStream = new FileInputStream(Files.addPaths(directory, file));
+		this.tokenStream = new TokenStream(file);
 	}
-	return tokenStream;
-    }
 
-    protected void setTokenStream(TokenStream stream) {
-	this.tokenStream = stream;
-    }
+	public AbstractPreConditioner(InputStream stream, File file) {
+		this.inputStream = stream;
+		this.tokenStream = new TokenStream(file);
+	}
 
-    protected abstract void generateTokenStream() throws IOException;
+	public final InputStream getInputStream() {
+		return inputStream;
+	}
+
+	public final TokenStream getTokenStream() throws IOException {
+		if (tokenStream == null) {
+			generateTokenStream();
+		}
+		return tokenStream;
+	}
+
+	/**
+	 * This method is used to add tokens to the token stream to be generated.
+	 * 
+	 * @param token
+	 *            to be added.
+	 */
+	protected final void addToken(Token token) {
+		tokenStream.addToken(token);
+	}
+
+	protected abstract void generateTokenStream() throws IOException;
 }
