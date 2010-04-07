@@ -37,13 +37,13 @@ public class Duplication implements Comparable<Duplication> {
 	}
 
 	private void init() {
-		double avgCodeRangeSize = (double) ((left.getStop() - left.getStart()
-				+ right.getStop() - right.getStart())) / 2.0;
+		double avgCodeRangeSize = (double) ((left.getStopId() - left.getStartId()
+				+ right.getStopId() - right.getStartId())) / 2.0;
 		double avgDuplicationRangeSize = (double) ((leftDuplicationRange
-				.getStop()
-				- leftDuplicationRange.getStart()
-				+ rightDuplicationRange.getStop() - rightDuplicationRange
-				.getStart())) / 2.0;
+				.getStopId()
+				- leftDuplicationRange.getStartId()
+				+ rightDuplicationRange.getStopId() - rightDuplicationRange
+				.getStartId())) / 2.0;
 		correlation = avgDuplicationRangeSize / avgCodeRangeSize;
 		matchingNumber = correlation * avgCodeRangeSize;
 	}
@@ -187,14 +187,14 @@ public class Duplication implements Comparable<Duplication> {
 		boolean marked = false;
 		for (Token token : range.getTokens()) {
 			if (!marked) {
-				if ((token.getTokenID() >= duplicationRange.getStart())
-						&& (token.getTokenID() <= duplicationRange.getStop())) {
+				if ((token.getTokenID() >= duplicationRange.getStartId())
+						&& (token.getTokenID() <= duplicationRange.getStopId())) {
 					marked = true;
 					output += "<font class=\"highlighted\">\n";
 				}
 			} else {
-				if ((token.getTokenID() < duplicationRange.getStart())
-						|| (token.getTokenID() > duplicationRange.getStop())) {
+				if ((token.getTokenID() < duplicationRange.getStartId())
+						|| (token.getTokenID() > duplicationRange.getStopId())) {
 					marked = false;
 					output += "</font>\n";
 				}

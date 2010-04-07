@@ -41,7 +41,7 @@ public class CodeDepth extends AbstractMetric {
 			CodeRange range = getCodeRange();
 			TokenStream stream = range.getTokenStream();
 			int layer = 0;
-			for (int index = range.getStart(); index <= range.getStop(); index++) {
+			for (int index = range.getStartId(); index <= range.getStopId(); index++) {
 				Token token = stream.get(index);
 				SourceTokenDefinition def;
 				def = (SourceTokenDefinition) token.getDefinitionInstance();

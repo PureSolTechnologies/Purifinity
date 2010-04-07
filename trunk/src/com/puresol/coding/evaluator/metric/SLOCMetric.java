@@ -76,8 +76,8 @@ public class SLOCMetric extends AbstractMetric {
 		proLOC = 0;
 		comLOC = 0;
 		blLOC = 0;
-		for (int index = getCodeRange().getStart(); index <= getCodeRange()
-				.getStop(); index++) {
+		for (int index = getCodeRange().getStartId(); index <= getCodeRange()
+				.getStopId(); index++) {
 			Token token = stream.get(index);
 			if (!token.getText().endsWith("\n")) {
 				// it's not a end of line token and therefore to be skipped
@@ -206,8 +206,8 @@ public class SLOCMetric extends AbstractMetric {
 		lineLengthsTrimmed = new ArrayList<Integer>();
 		lineLengthsProductive = new ArrayList<Integer>();
 		lineLengthsTrimmedProductive = new ArrayList<Integer>();
-		for (int index = getCodeRange().getStart(); index <= getCodeRange()
-				.getStop(); index++) {
+		for (int index = getCodeRange().getStartId(); index <= getCodeRange()
+				.getStopId(); index++) {
 			Token token = stream.get(index);
 			completeLines.append(token.getText());
 			if (token.getPublicity() != TokenPublicity.HIDDEN) {

@@ -17,8 +17,8 @@ public class JavaClassTest extends TestCase {
 		JavaClass javaClass = new JavaClass("Name", tokenStream, 1, 3);
 		Assert.assertEquals("Name", javaClass.getName());
 		Assert.assertSame(tokenStream, javaClass.getTokenStream());
-		Assert.assertEquals(1, javaClass.getStart());
-		Assert.assertEquals(3, javaClass.getStop());
+		Assert.assertEquals(1, javaClass.getStartId());
+		Assert.assertEquals(3, javaClass.getStopId());
 		Assert.assertEquals("Java", javaClass.getLanguage());
 		Assert.assertEquals(CodeRangeType.CLASS, javaClass.getType());
 	}

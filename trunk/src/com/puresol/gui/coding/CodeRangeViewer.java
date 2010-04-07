@@ -52,9 +52,9 @@ public class CodeRangeViewer extends BorderLayoutWidget {
 	if (codeRange != null) {
 	    TokenStream tokenStream = codeRange.getTokenStream();
 	    int startLine =
-		    tokenStream.get(codeRange.getStart()).getStartLine();
+		    tokenStream.get(codeRange.getStartId()).getStartLine();
 	    int stopLine =
-		    tokenStream.get(codeRange.getStop()).getStopLine();
+		    tokenStream.get(codeRange.getStopId()).getStopLine();
 	    information.setText("<html><body>"
 		    + tokenStream.getFile().getName() + ":" + startLine
 		    + "-" + stopLine + "<br/>"

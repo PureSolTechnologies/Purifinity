@@ -59,7 +59,7 @@ public class HTMLMetricsReport extends AbstractMetricsReport {
 
 	private String getTitle() {
 		CodeRange range = getMetrics().getCodeRange();
-		String html = "<img src=\"graphics/logo.jpeg\"/>";
+		String html = "<img src=\"graphics/logo.jpeg\" width=\"400\"/>";
 		html += "<h1>AnalysisReport for " + range.getType().getIdentifier()
 				+ " '" + range.getName() + "'</h1>";
 		return html;

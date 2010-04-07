@@ -116,7 +116,7 @@ public class HalsteadMetric extends AbstractMetric {
 	private void createHashtables() throws TokenException {
 		CodeRange codeRange = getCodeRange();
 		TokenStream tokenStream = codeRange.getTokenStream();
-		for (int index = codeRange.getStart(); index <= codeRange.getStop(); index++) {
+		for (int index = codeRange.getStartId(); index <= codeRange.getStopId(); index++) {
 			Token token = tokenStream.get(index);
 			if (token.getPublicity() != TokenPublicity.HIDDEN) {
 				SourceTokenDefinition def;

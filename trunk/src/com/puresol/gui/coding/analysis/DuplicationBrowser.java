@@ -70,10 +70,10 @@ public class DuplicationBrowser extends BorderLayoutWidget {
 		} else {
 			entry += "<table bgcolor=\"#ffffff\">";
 		}
-		entry += "<tr><td>" + left.getFile() + ":" + left.getStart() + "-"
-				+ left.getStop() + "</td></tr>";
-		entry += "<tr><td>" + right.getFile() + ":" + right.getStart() + "-"
-				+ right.getStop() + "</td></tr>";
+		entry += "<tr><td>" + left.getFile() + ":" + left.getStartId() + "-"
+				+ left.getStopId() + "</td></tr>";
+		entry += "<tr><td>" + right.getFile() + ":" + right.getStartId() + "-"
+				+ right.getStopId() + "</td></tr>";
 		entry += "<tr><td><b>" + left.getName() + " <--> " + right.getName()
 				+ "</b></td></tr>";
 		entry += "<tr><td><b>"

@@ -139,13 +139,13 @@ public class CopyAndPasteScanner extends AbstractEvaluator {
 	}
 
 	private void check(CodeRange left, CodeRange right) throws TokenException {
-		for (int index = 0; (left.getStart() + index <= left.getStop())
-				&& (right.getStart() + index <= right.getStop()); index++) {
-			Duplication duplication = checkDetails(left, left.getStart()
-					+ index, right, right.getStart() + index);
+		for (int index = 0; (left.getStartId() + index <= left.getStopId())
+				&& (right.getStartId() + index <= right.getStopId()); index++) {
+			Duplication duplication = checkDetails(left, left.getStartId()
+					+ index, right, right.getStartId() + index);
 			if (duplication != null) {
-				index += duplication.getLeft().getStop()
-						- duplication.getLeft().getStart();
+				index += duplication.getLeft().getStopId()
+						- duplication.getLeft().getStartId();
 			}
 		}
 	}
@@ -155,8 +155,8 @@ public class CopyAndPasteScanner extends AbstractEvaluator {
 		int counter = 0;
 		TokenStream leftTokens = left.getTokenStream();
 		TokenStream rightTokens = right.getTokenStream();
-		while ((leftIndex + counter < left.getStop())
-				&& (rightIndex + counter < right.getStop())) {
+		while ((leftIndex + counter < left.getStopId())
+				&& (rightIndex + counter < right.getStopId())) {
 			Token leftToken = leftTokens.get(leftIndex + counter);
 			Token rightToken = rightTokens.get(rightIndex + counter);
 			if (!leftToken.getText().equals(rightToken.getText())) {

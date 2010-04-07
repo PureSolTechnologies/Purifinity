@@ -33,9 +33,13 @@ public interface CodeRange extends Comparable<CodeRange>, Cloneable {
 
 	public ArrayList<Token> getTokens();
 
-	public int getStart();
+	public int getStartId();
 
-	public int getStop();
+	public int getStopId();
+
+	public int getStartLine();
+
+	public int getStopLine();
 
 	public String getTitleString(ReportingFormat format)
 			throws UnsupportedReportingFormatException;

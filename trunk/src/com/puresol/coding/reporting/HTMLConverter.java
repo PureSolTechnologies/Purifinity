@@ -22,8 +22,8 @@ public class HTMLConverter {
 	public static String convertCodeRangeToHTML(CodeRange codeRange) {
 		String output = codeRange.getType().getIdentifier() + " \""
 				+ codeRange.getName() + "\"<br/>\n";
-		output += "(" + codeRange.getFile() + ":" + codeRange.getStart() + "-"
-				+ codeRange.getStop();
+		output += "(" + codeRange.getFile() + ":" + codeRange.getStartId() + "-"
+				+ codeRange.getStopId();
 		output += HTMLStandards.convertSourceCodeToHTML(codeRange.getText());
 		return output;
 	}

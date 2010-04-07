@@ -74,8 +74,8 @@ public class DuplicationScanner extends AbstractEvaluator implements
 					continue;
 				}
 				ArrayList<Integer> hashStream = new ArrayList<Integer>();
-				for (int index = codeRange.getStart(); index <= codeRange
-						.getStop(); index++) {
+				for (int index = codeRange.getStartId(); index <= codeRange
+						.getStopId(); index++) {
 					Token token = codeRange.getTokenStream().get(index);
 					if (((SourceTokenDefinition) token.getDefinitionInstance())
 							.getSymbolType() == SymbolType.OPERATOR) {
@@ -147,7 +147,7 @@ public class DuplicationScanner extends AbstractEvaluator implements
 	private void check(CodeRange left, CodeRange right) throws TokenException {
 		TokenStream leftStream = left.getTokenStream();
 		TokenStream rightStream = right.getTokenStream();
-		for (int leftIndex = left.getStart(); leftIndex <= left.getStop(); leftIndex++) {
+		for (int leftIndex = left.getStartId(); leftIndex <= left.getStopId(); leftIndex++) {
 			Token leftToken = leftStream.get(leftIndex);
 			if (leftToken.getPublicity() != TokenPublicity.VISIBLE) {
 				continue;
@@ -156,8 +156,8 @@ public class DuplicationScanner extends AbstractEvaluator implements
 					.getDefinitionInstance()).getSymbolType() != SymbolType.OPERATOR) {
 				continue;
 			}
-			for (int rightIndex = right.getStart(); rightIndex <= right
-					.getStop(); rightIndex++) {
+			for (int rightIndex = right.getStartId(); rightIndex <= right
+					.getStopId(); rightIndex++) {
 				Token rightToken = rightStream.get(rightIndex);
 				if (rightToken.getPublicity() != TokenPublicity.VISIBLE) {
 					continue;
@@ -176,8 +176,8 @@ public class DuplicationScanner extends AbstractEvaluator implements
 				Duplication duplication = checkDetails(left, leftIndex, right,
 						rightIndex);
 				if (duplication != null) {
-					leftIndex = duplication.getLeft().getStop();
-					rightIndex = duplication.getRight().getStop();
+					leftIndex = duplication.getLeft().getStopId();
+					rightIndex = duplication.getRight().getStopId();
 				}
 			}
 
@@ -193,8 +193,8 @@ public class DuplicationScanner extends AbstractEvaluator implements
 		Token leftToken = leftStream.get(leftIndex);
 		Token rightToken = rightStream.get(rightIndex);
 		try {
-			while ((leftToken.getTokenID() < left.getStop())
-					&& (rightToken.getTokenID() < right.getStop())) {
+			while ((leftToken.getTokenID() < left.getStopId())
+					&& (rightToken.getTokenID() < right.getStopId())) {
 				leftToken = leftStream.findNextToken(leftToken.getTokenID());
 				rightToken = rightStream.findNextToken(rightToken.getTokenID());
 				SourceTokenDefinition leftDefinition = (SourceTokenDefinition) leftToken

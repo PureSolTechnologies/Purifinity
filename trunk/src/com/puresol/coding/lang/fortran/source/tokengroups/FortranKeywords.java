@@ -41,9 +41,11 @@ import com.puresol.coding.lang.fortran.source.keywords.ForAllKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.FunctionKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.GotoKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.IfKeyword;
+import com.puresol.coding.lang.fortran.source.keywords.ImplicitKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.IntegerKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.IntrinsicKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.ModuleKeyword;
+import com.puresol.coding.lang.fortran.source.keywords.NoneKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.ParameterKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.PointerKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.ProgramKeyword;
@@ -110,6 +112,8 @@ public class FortranKeywords extends AbstractTokenDefinitionGroup {
 			addTokenDefinition(ParameterKeyword.class);
 			addTokenDefinition(ExternalKeyword.class);
 			addTokenDefinition(IntrinsicKeyword.class);
+			addTokenDefinition(ImplicitKeyword.class);
+			addTokenDefinition(NoneKeyword.class);
 
 			addTokenDefinition(PointerKeyword.class);
 			addTokenDefinition(DimensionKeyword.class);

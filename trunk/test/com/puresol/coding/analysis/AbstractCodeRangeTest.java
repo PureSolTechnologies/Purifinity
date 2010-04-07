@@ -43,8 +43,8 @@ public class AbstractCodeRangeTest {
 		Assert.assertEquals("Language", codeRange.getLanguage());
 		Assert.assertEquals("CodeRangeName", codeRange.getName());
 		Assert.assertSame(tokenStream, codeRange.getTokenStream());
-		Assert.assertEquals(1, codeRange.getStart());
-		Assert.assertEquals(3, codeRange.getStop());
+		Assert.assertEquals(1, codeRange.getStartId());
+		Assert.assertEquals(3, codeRange.getStopId());
 		Assert.assertEquals("Token1\nToken2\nToken3\n", codeRange.getText());
 	}
 
@@ -61,8 +61,8 @@ public class AbstractCodeRangeTest {
 		CRange codeRange = new CRange("CodeRangeName", tokenStream, 5, 15);
 		CodeRange partialCodeRange = codeRange.createPartialCodeRange(8, 12);
 		Assert.assertEquals(CRange.class, partialCodeRange.getClass());
-		Assert.assertEquals(8, partialCodeRange.getStart());
-		Assert.assertEquals(12, partialCodeRange.getStop());
+		Assert.assertEquals(8, partialCodeRange.getStartId());
+		Assert.assertEquals(12, partialCodeRange.getStopId());
 		System.out.println(codeRange.getText());
 		System.out.println(partialCodeRange.getText());
 	}

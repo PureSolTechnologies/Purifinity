@@ -63,18 +63,26 @@ public abstract class AbstractCodeRange implements CodeRange {
 
 	public ArrayList<Token> getTokens() {
 		ArrayList<Token> tokens = new ArrayList<Token>();
-		for (int index = getStart(); index <= getStop(); index++) {
+		for (int index = getStartId(); index <= getStopId(); index++) {
 			tokens.add(tokenStream.get(index));
 		}
 		return tokens;
 	}
 
-	public int getStart() {
+	public int getStartId() {
 		return start;
 	}
 
-	public int getStop() {
+	public int getStopId() {
 		return stop;
+	}
+
+	public int getStartLine() {
+		return tokenStream.get(getStartId()).getStartLine();
+	}
+
+	public int getStopLine() {
+		return tokenStream.get(getStopId()).getStopLine();
 	}
 
 	public String getTitleString(ReportingFormat format)
@@ -89,13 +97,13 @@ public abstract class AbstractCodeRange implements CodeRange {
 
 	private String getTextTitleString() {
 		return getType() + ": " + getName() + "\n" + getFile() + ": "
-				+ getStart() + "-" + getStop();
+				+ getStartId() + "-" + getStopId();
 	}
 
 	private String getHTMLTitleString() {
 		String output = "<b>" + getType() + ": " + getName() + "</b><br/>\n";
-		output += "<i>" + getFile() + ": " + getStart() + "-" + getStop()
-				+ "</i>\n";
+		output += "<i>" + getFile() + ": " + getStartLine() + "-"
+				+ getStopLine() + "</i>\n";
 		return output;
 	}
 
