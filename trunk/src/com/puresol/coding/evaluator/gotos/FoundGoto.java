@@ -2,7 +2,12 @@ package com.puresol.coding.evaluator.gotos;
 
 import java.io.Serializable;
 
+import javax.i18n4j.Translator;
+
 import com.puresol.coding.analysis.CodeRange;
+import com.puresol.coding.evaluator.UnsupportedReportingFormatException;
+import com.puresol.parser.Token;
+import com.puresol.reporting.ReportingFormat;
 
 /**
  * This class represents a single goto statement found by GotoEvaluator.
@@ -12,74 +17,93 @@ import com.puresol.coding.analysis.CodeRange;
  */
 public class FoundGoto implements Serializable {
 
-	private static final long serialVersionUID = -8139337956175324114L;
+    private static final long serialVersionUID = -8139337956175324114L;
 
-	private final CodeRange codeRange;
-	private final int tokenId;
-	private final String labelName;
+    private static final Translator translator = Translator
+	    .getTranslator(FoundGoto.class);
 
-	public FoundGoto(CodeRange codeRange, int tokenId, String labelName) {
-		this.codeRange = codeRange;
-		this.tokenId = tokenId;
-		this.labelName = labelName;
+    private final CodeRange codeRange;
+    private final int tokenId;
+    private final String labelName;
+
+    public FoundGoto(CodeRange codeRange, int tokenId, String labelName) {
+	this.codeRange = codeRange;
+	this.tokenId = tokenId;
+	this.labelName = labelName;
+    }
+
+    public CodeRange getCodeRange() {
+	return codeRange;
+    }
+
+    public int getTokenId() {
+	return tokenId;
+    }
+
+    public String getLabelName() {
+	return labelName;
+    }
+
+    public String toString(ReportingFormat format)
+	    throws UnsupportedReportingFormatException {
+	if (format == ReportingFormat.TEXT) {
+	    Token gotoToken = codeRange.getTokenStream().get(tokenId);
+	    return translator.i18n("line") + " " + gotoToken.getStartLine()
+		    + ": '" + gotoToken.getText() + " " + labelName + "'";
+	} else if (format == ReportingFormat.HTML) {
+	    Token gotoToken = codeRange.getTokenStream().get(tokenId);
+	    Token labelToken = codeRange.getTokenStream().get(tokenId + 1);
+	    return translator.i18n("line") + " " + gotoToken.getStartLine()
+		    + ": '" + gotoToken.getText() + " " + labelToken.getText()
+		    + "'";
 	}
+	throw new UnsupportedReportingFormatException(format);
+    }
 
-	public CodeRange getCodeRange() {
-		return codeRange;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+	final int prime = 31;
+	int result = 1;
+	result = prime * result
+		+ ((codeRange == null) ? 0 : codeRange.hashCode());
+	result = prime * result
+		+ ((labelName == null) ? 0 : labelName.hashCode());
+	result = prime * result + tokenId;
+	return result;
+    }
 
-	public int getTokenId() {
-		return tokenId;
-	}
-
-	public String getLabelName() {
-		return labelName;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result
-				+ ((codeRange == null) ? 0 : codeRange.hashCode());
-		result = prime * result
-				+ ((labelName == null) ? 0 : labelName.hashCode());
-		result = prime * result + tokenId;
-		return result;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		FoundGoto other = (FoundGoto) obj;
-		if (codeRange == null) {
-			if (other.codeRange != null)
-				return false;
-		} else if (!codeRange.equals(other.codeRange))
-			return false;
-		if (labelName == null) {
-			if (other.labelName != null)
-				return false;
-		} else if (!labelName.equals(other.labelName))
-			return false;
-		if (tokenId != other.tokenId)
-			return false;
-		return true;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+	if (this == obj)
+	    return true;
+	if (obj == null)
+	    return false;
+	if (getClass() != obj.getClass())
+	    return false;
+	FoundGoto other = (FoundGoto) obj;
+	if (codeRange == null) {
+	    if (other.codeRange != null)
+		return false;
+	} else if (!codeRange.equals(other.codeRange))
+	    return false;
+	if (labelName == null) {
+	    if (other.labelName != null)
+		return false;
+	} else if (!labelName.equals(other.labelName))
+	    return false;
+	if (tokenId != other.tokenId)
+	    return false;
+	return true;
+    }
 
 }

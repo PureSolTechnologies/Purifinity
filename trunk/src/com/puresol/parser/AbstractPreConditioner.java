@@ -2,7 +2,6 @@ package com.puresol.parser;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -18,40 +17,53 @@ import com.puresol.utils.Files;
  */
 public abstract class AbstractPreConditioner {
 
-	private final InputStream inputStream;
-	private final TokenStream tokenStream;
+    private final InputStream inputStream;
+    private final TokenStream tokenStream;
+    private final File directory;
+    private final File file;
 
-	public AbstractPreConditioner(File directory, File file)
-			throws FileNotFoundException {
-		this.inputStream = new FileInputStream(Files.addPaths(directory, file));
-		this.tokenStream = new TokenStream(file);
-	}
+    public AbstractPreConditioner(File directory, File file) throws IOException {
+	this.inputStream = new FileInputStream(Files.addPaths(directory, file));
+	this.tokenStream = new TokenStream(file);
+	this.directory = directory;
+	this.file = file;
+	generateTokenStream();
+    }
 
-	public AbstractPreConditioner(InputStream stream, File file) {
-		this.inputStream = stream;
-		this.tokenStream = new TokenStream(file);
-	}
+    public AbstractPreConditioner(InputStream stream, File file)
+	    throws IOException {
+	this.inputStream = stream;
+	this.tokenStream = new TokenStream(file);
+	this.directory = new File("");
+	this.file = file;
+	generateTokenStream();
+    }
 
-	public final InputStream getInputStream() {
-		return inputStream;
-	}
+    public File getFile() {
+	return file;
+    }
 
-	public final TokenStream getTokenStream() throws IOException {
-		if (tokenStream == null) {
-			generateTokenStream();
-		}
-		return tokenStream;
-	}
+    public File getDirectory() {
+	return directory;
+    }
 
-	/**
-	 * This method is used to add tokens to the token stream to be generated.
-	 * 
-	 * @param token
-	 *            to be added.
-	 */
-	protected final void addToken(Token token) {
-		tokenStream.addToken(token);
-	}
+    public final InputStream getInputStream() {
+	return inputStream;
+    }
 
-	protected abstract void generateTokenStream() throws IOException;
+    public final TokenStream getTokenStream() throws IOException {
+	return tokenStream;
+    }
+
+    /**
+     * This method is used to add tokens to the token stream to be generated.
+     * 
+     * @param token
+     *            to be added.
+     */
+    protected final void addToken(Token token) {
+	tokenStream.addToken(token);
+    }
+
+    protected abstract void generateTokenStream() throws IOException;
 }

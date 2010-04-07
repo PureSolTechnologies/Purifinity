@@ -2,6 +2,7 @@ package com.puresol.coding.lang.fortran.evaluator;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 import javax.i18n4j.Translator;
 import javax.swingx.progress.ProgressObserver;
@@ -11,6 +12,10 @@ import com.puresol.coding.analysis.ProjectAnalyser;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.evaluator.QualityLevel;
 import com.puresol.coding.evaluator.UnsupportedReportingFormatException;
+import com.puresol.coding.lang.fortran.source.keywords.ImplicitKeyword;
+import com.puresol.coding.lang.fortran.source.keywords.NoneKeyword;
+import com.puresol.parser.Token;
+import com.puresol.parser.TokenStream;
 import com.puresol.reporting.ReportingFormat;
 import com.puresol.reporting.html.HTMLStandards;
 import com.puresol.utils.Property;
@@ -27,6 +32,8 @@ public class ImplicitEvaluator extends AbstractEvaluator {
 		    + "Explicit declarations are obvious and should be used as the only method if possible.");
     public static final ArrayList<Property> SUPPORTED_PROPERTIES = new ArrayList<Property>();
 
+    private final Hashtable<CodeRange, ArrayList<FoundImplicit>> implicits = new Hashtable<CodeRange, ArrayList<FoundImplicit>>();
+
     public ImplicitEvaluator(ProjectAnalyser analyser) {
 	super(analyser);
     }
@@ -38,11 +45,58 @@ public class ImplicitEvaluator extends AbstractEvaluator {
 	    observer.setDescription(NAME);
 	    observer.setRange(0, getFiles().size());
 	}
-	// TODO Auto-generated method stub
-
+	int count = 0;
+	for (File file : getProjectAnalyser().getFiles()) {
+	    for (CodeRange codeRange : getProjectAnalyser().getCodeRanges(file)) {
+		count++;
+		if (!codeRange.getLanguage().equals("Fortran")) {
+		    continue;
+		}
+		if (observer != null) {
+		    observer.setStatus(count);
+		}
+		addFile(file);
+		addCodeRange(codeRange);
+		analyse(codeRange);
+	    }
+	}
 	if (observer != null) {
 	    observer.finish();
 	}
+    }
+
+    private void analyse(CodeRange codeRange) {
+	boolean foundImplicitNone = false;
+	boolean foundImplicit = false;
+	TokenStream tokenStream = codeRange.getTokenStream();
+	for (Token token : codeRange.getTokens()) {
+	    if (!token.getDefinition().equals(ImplicitKeyword.class)) {
+		continue;
+	    }
+	    Token nextToken = tokenStream.get(token.getTokenID() + 1);
+	    if (nextToken.getDefinition().equals(NoneKeyword.class)) {
+		foundImplicitNone = true;
+	    } else {
+		foundImplicitNone = true;
+	    }
+	    int pos = token.getTokenID();
+	    Token currentToken = tokenStream.get(pos);
+	    String text = currentToken.getText();
+	    pos++;
+	    do {
+		currentToken = tokenStream.get(pos);
+		text += currentToken.getText();
+	    } while (!currentToken.getText().contains("\n"));
+	    addImplicit(codeRange, new FoundImplicit(codeRange, token
+		    .getTokenID(), text));
+	}
+    }
+
+    private void addImplicit(CodeRange codeRange, FoundImplicit foundImplicit) {
+	if (!implicits.containsKey(codeRange)) {
+	    implicits.put(codeRange, new ArrayList<FoundImplicit>());
+	}
+	implicits.get(codeRange).add(foundImplicit);
     }
 
     @Override
