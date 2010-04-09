@@ -6,23 +6,25 @@ import com.puresol.parser.TokenStream;
 
 public class JavaEnum extends AbstractCodeRange {
 
-	public JavaEnum(String name, TokenStream tokenStream, int start, int stop) {
-		super(name, tokenStream, start, stop);
-	}
+    private static final long serialVersionUID = -7124659610112698136L;
 
-	@Override
-	public String getLanguage() {
-		return "Java";
-	}
+    public JavaEnum(String name, TokenStream tokenStream, int start, int stop) {
+	super(name, tokenStream, start, stop);
+    }
 
-	@Override
-	public CodeRangeType getType() {
-		return CodeRangeType.ENUMERATION;
-	}
+    @Override
+    public String getLanguage() {
+	return "Java";
+    }
 
-	@Override
-	public String getTypeName() {
-		return getType().getIdentifier();
-	}
+    @Override
+    public CodeRangeType getType() {
+	return CodeRangeType.ENUMERATION;
+    }
+
+    @Override
+    public String getTypeName() {
+	return getType().getIdentifier();
+    }
 
 }

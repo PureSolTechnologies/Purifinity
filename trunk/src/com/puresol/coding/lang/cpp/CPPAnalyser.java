@@ -29,55 +29,57 @@ import com.puresol.parser.TokenStream;
  */
 public class CPPAnalyser extends AbstractAnalyser {
 
-	private static final Logger logger = Logger.getLogger(CPPAnalyser.class);
+    private static final long serialVersionUID = 876077325823124163L;
 
-	private static final String[] FILE_SUFFIXES = { ".h", ".c", ".hpp", ".cpp",
-			".hxx", ".cxx" };
+    private static final Logger logger = Logger.getLogger(CPPAnalyser.class);
 
-	public static boolean isSuitable(File file) {
-		String name = file.getName();
-		for (String suffix : FILE_SUFFIXES) {
-			if (name.endsWith(suffix)) {
-				return true;
-			}
-		}
-		return false;
+    private static final String[] FILE_SUFFIXES = { ".h", ".c", ".hpp", ".cpp",
+	    ".hxx", ".cxx" };
+
+    public static boolean isSuitable(File file) {
+	String name = file.getName();
+	for (String suffix : FILE_SUFFIXES) {
+	    if (name.endsWith(suffix)) {
+		return true;
+	    }
 	}
+	return false;
+    }
 
-	/**
-	 * This is the default constructor.
-	 * 
-	 * @param A
-	 *            file to be analysed.
-	 * @throws LexerException
-	 */
-	public CPPAnalyser(File projectDirectory, File file) {
-		super(projectDirectory, file);
-		parse();
-	}
+    /**
+     * This is the default constructor.
+     * 
+     * @param A
+     *            file to be analysed.
+     * @throws LexerException
+     */
+    public CPPAnalyser(File projectDirectory, File file) {
+	super(projectDirectory, file);
+	parse();
+    }
 
-	private void parse() {
-		try {
-			DefaultPreConditioner conditioner = new DefaultPreConditioner(
-					getProjectDirectory(), getFile());
-			TokenStream tokenStream = conditioner.getTokenStream();
-			CPPLexer lexer = new CPPLexer(tokenStream);
-			tokenStream = lexer.getTokenStream();
-			CPPParser parser = new CPPParser(tokenStream);
-			parser.scan();
-			addCodeRanges(parser.getCodeRanges());
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-		} catch (NoMatchingTokenDefinitionFound e) {
-			logger.error(e.getMessage(), e);
-		} catch (PartDoesNotMatchException e) {
-			logger.error(e.getMessage(), e);
-		} catch (LexerException e) {
-			logger.error(e.getMessage(), e);
-		}
+    private void parse() {
+	try {
+	    DefaultPreConditioner conditioner = new DefaultPreConditioner(
+		    getProjectDirectory(), getFile());
+	    TokenStream tokenStream = conditioner.getTokenStream();
+	    CPPLexer lexer = new CPPLexer(tokenStream);
+	    tokenStream = lexer.getTokenStream();
+	    CPPParser parser = new CPPParser(tokenStream);
+	    parser.scan();
+	    addCodeRanges(parser.getCodeRanges());
+	} catch (IOException e) {
+	    logger.error(e.getMessage(), e);
+	} catch (NoMatchingTokenDefinitionFound e) {
+	    logger.error(e.getMessage(), e);
+	} catch (PartDoesNotMatchException e) {
+	    logger.error(e.getMessage(), e);
+	} catch (LexerException e) {
+	    logger.error(e.getMessage(), e);
 	}
+    }
 
-	public String getLanguage() {
-		return "C++";
-	}
+    public String getLanguage() {
+	return "C++";
+    }
 }

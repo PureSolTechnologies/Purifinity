@@ -6,24 +6,26 @@ import com.puresol.parser.TokenStream;
 
 public class FortranModule extends AbstractCodeRange {
 
-	public FortranModule(String name, TokenStream tokenStream, int start,
-			int stop) {
-		super(name, tokenStream, start, stop);
-	}
+    private static final long serialVersionUID = 4371603282581257340L;
 
-	@Override
-	public String getLanguage() {
-		return "Fortran";
-	}
+    public FortranModule(String name, TokenStream tokenStream, int start,
+	    int stop) {
+	super(name, tokenStream, start, stop);
+    }
 
-	@Override
-	public CodeRangeType getType() {
-		return CodeRangeType.MODULE;
-	}
+    @Override
+    public String getLanguage() {
+	return "Fortran";
+    }
 
-	@Override
-	public String getTypeName() {
-		return getType().getIdentifier();
-	}
+    @Override
+    public CodeRangeType getType() {
+	return CodeRangeType.MODULE;
+    }
+
+    @Override
+    public String getTypeName() {
+	return getType().getIdentifier();
+    }
 
 }

@@ -11,6 +11,7 @@
 package com.puresol.coding.analysis;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -20,26 +21,26 @@ import java.util.ArrayList;
  * @author Rick-Rainer Ludwig
  * 
  */
-public interface Analyser {
+public interface Analyser extends Serializable {
 
-	/**
-	 * Returns the language of the file analysed.
-	 * 
-	 * @return The language is returned.
-	 */
-	public String getLanguage();
+    /**
+     * Returns the language of the file analysed.
+     * 
+     * @return The language is returned.
+     */
+    public String getLanguage();
 
-	/**
-	 * The file which was analysed is returned.
-	 * 
-	 * @return The file is returned.
-	 */
-	public File getFile();
+    /**
+     * The file which was analysed is returned.
+     * 
+     * @return The file is returned.
+     */
+    public File getFile();
 
-	/**
-	 * This method returns all code ranges analysed within the analysed file.
-	 * 
-	 * @return
-	 */
-	public ArrayList<CodeRange> getCodeRanges();
+    /**
+     * This method returns all code ranges analysed within the analysed file.
+     * 
+     * @return
+     */
+    public ArrayList<CodeRange> getCodeRanges();
 }

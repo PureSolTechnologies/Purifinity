@@ -6,23 +6,25 @@ import com.puresol.parser.TokenStream;
 
 public class CPPFile extends AbstractCodeRange {
 
-	public CPPFile(String name, TokenStream tokenStream, int start, int stop) {
-		super(name, tokenStream, start, stop);
-	}
+    private static final long serialVersionUID = 6421501489297264897L;
 
-	@Override
-	public String getLanguage() {
-		return "C++";
-	}
+    public CPPFile(String name, TokenStream tokenStream, int start, int stop) {
+	super(name, tokenStream, start, stop);
+    }
 
-	@Override
-	public CodeRangeType getType() {
-		return CodeRangeType.FILE;
-	}
+    @Override
+    public String getLanguage() {
+	return "C++";
+    }
 
-	@Override
-	public String getTypeName() {
-		return getType().getIdentifier();
-	}
+    @Override
+    public CodeRangeType getType() {
+	return CodeRangeType.FILE;
+    }
+
+    @Override
+    public String getTypeName() {
+	return getType().getIdentifier();
+    }
 
 }

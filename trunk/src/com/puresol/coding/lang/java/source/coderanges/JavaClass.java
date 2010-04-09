@@ -6,23 +6,25 @@ import com.puresol.parser.TokenStream;
 
 public class JavaClass extends AbstractCodeRange {
 
-	public JavaClass(String name, TokenStream tokenStream, int start, int stop) {
-		super(name, tokenStream, start, stop);
-	}
+    private static final long serialVersionUID = 2738259501511201827L;
 
-	@Override
-	public String getLanguage() {
-		return "Java";
-	}
+    public JavaClass(String name, TokenStream tokenStream, int start, int stop) {
+	super(name, tokenStream, start, stop);
+    }
 
-	@Override
-	public CodeRangeType getType() {
-		return CodeRangeType.CLASS;
-	}
+    @Override
+    public String getLanguage() {
+	return "Java";
+    }
 
-	@Override
-	public String getTypeName() {
-		return getType().getIdentifier();
-	}
+    @Override
+    public CodeRangeType getType() {
+	return CodeRangeType.CLASS;
+    }
+
+    @Override
+    public String getTypeName() {
+	return getType().getIdentifier();
+    }
 
 }

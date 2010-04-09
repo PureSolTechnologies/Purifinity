@@ -13,8 +13,9 @@ package com.puresol.coding.analysis;
 import java.io.File;
 import java.util.ArrayList;
 
-
 abstract public class AbstractAnalyser implements Analyser {
+
+    private static final long serialVersionUID = -2593701440766091118L;
 
     private File projectDirectory = null;
     private File file = null;

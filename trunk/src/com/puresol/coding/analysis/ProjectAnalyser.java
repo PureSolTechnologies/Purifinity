@@ -12,6 +12,7 @@ package com.puresol.coding.analysis;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -32,7 +33,9 @@ import com.puresol.utils.Files;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class ProjectAnalyser implements ProgressObservable {
+public class ProjectAnalyser implements Serializable, ProgressObservable {
+
+    private static final long serialVersionUID = -5080062306149072901L;
 
     private static final Logger logger = Logger
 	    .getLogger(ProjectAnalyser.class);
@@ -41,10 +44,10 @@ public class ProjectAnalyser implements ProgressObservable {
     private final String pattern;
     private final Hashtable<File, Analyser> analysers = new Hashtable<File, Analyser>();
     private final ArrayList<File> failedFiles = new ArrayList<File>();
-    private final AnalyserFactory analyserFactory = AnalyserFactory
+    private transient final AnalyserFactory analyserFactory = AnalyserFactory
 	    .createFactory();
 
-    private ProgressObserver progressMonitor = null;
+    private transient ProgressObserver progressMonitor = null;
 
     public ProjectAnalyser(File directory, String pattern) {
 	this.directory = directory;

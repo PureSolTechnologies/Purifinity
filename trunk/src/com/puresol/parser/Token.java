@@ -1,5 +1,7 @@
 package com.puresol.parser;
 
+import java.io.Serializable;
+
 import com.puresol.utils.ClassInstantiationException;
 import com.puresol.utils.Instances;
 
@@ -10,7 +12,9 @@ import com.puresol.utils.Instances;
  * @author Rick-Rainer Ludwig
  * 
  */
-public final class Token {
+public final class Token implements Serializable {
+
+    private static final long serialVersionUID = 1688116172490111060L;
 
     private final int tokenID;
     private final int startPos;
@@ -97,15 +101,11 @@ public final class Token {
     public int hashCode() {
 	final int prime = 31;
 	int result = 1;
-	result =
-		prime
-			* result
-			+ ((definition == null) ? 0 : definition
-				.hashCode());
+	result = prime * result
+		+ ((definition == null) ? 0 : definition.hashCode());
 	result = prime * result + length;
-	result =
-		prime * result
-			+ ((publicity == null) ? 0 : publicity.hashCode());
+	result = prime * result
+		+ ((publicity == null) ? 0 : publicity.hashCode());
 	result = prime * result + startLine;
 	result = prime * result + startPos;
 	result = prime * result + stopLine;

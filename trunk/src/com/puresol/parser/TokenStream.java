@@ -1,17 +1,20 @@
 package com.puresol.parser;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- * TokenStream is a special kind of stream for processing of text inputs.
- * The sum of all (non-added) token texts are the complete content of the
- * previous input.
+ * TokenStream is a special kind of stream for processing of text inputs. The
+ * sum of all (non-added) token texts are the complete content of the previous
+ * input.
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public final class TokenStream {
+public final class TokenStream implements Serializable {
+
+    private static final long serialVersionUID = -4128486002145990691L;
 
     private final File file;
     private final ArrayList<Token> tokens = new ArrayList<Token>();
@@ -49,8 +52,7 @@ public final class TokenStream {
 	return tokens.size();
     }
 
-    public Token findPreviousToken(int tokenID)
-	    throws NoMatchingTokenException {
+    public Token findPreviousToken(int tokenID) throws NoMatchingTokenException {
 	if (tokenID <= 0) {
 	    throw new NoMatchingTokenException();
 	}
@@ -64,8 +66,7 @@ public final class TokenStream {
 	return get(position);
     }
 
-    public Token findNextToken(int tokenID)
-	    throws NoMatchingTokenException {
+    public Token findNextToken(int tokenID) throws NoMatchingTokenException {
 	if (tokenID >= getSize() - 2) {
 	    throw new NoMatchingTokenException();
 	}
