@@ -18,7 +18,7 @@ import javax.swingx.Panel;
 import javax.swingx.TabbedPane;
 
 import com.puresol.coding.analysis.ProjectAnalyser;
-import com.puresol.coding.evaluator.CodeEvaluator;
+import com.puresol.coding.evaluator.ProjectEvaluator;
 
 public class ProjectAnalysisBrowser extends Panel {
 
@@ -28,13 +28,13 @@ public class ProjectAnalysisBrowser extends Panel {
 			.getTranslator(ProjectAnalysisBrowser.class);
 
 	private ProjectAnalyser project = null;
-	private Label directory = null;
-	private TabbedPane tabbedPane = null;
-	private CodeRangeBrowser codeRangeBrowser = null;
-	private MetricsBrowser metricsBrowser = null;
-	private CopyAndPasteScannerPanel copyAndPasteScanner = null;
-	private DuplicationScannerPanel duplicationScanner = null;
-	private CodeEvaluationPanel codeEvaluation = null;
+
+	private final Label directory = new Label();
+	private final TabbedPane tabbedPane = new TabbedPane();
+	private final CodeRangeBrowser codeRangeBrowser = new CodeRangeBrowser();
+	private final EvaluatorPanel evaluatorPanel = new EvaluatorPanel();
+	private final MetricsBrowser metricsBrowser = new MetricsBrowser();
+	private final ProjectEvaluatorPanel codeEvaluation = new ProjectEvaluatorPanel();
 
 	public ProjectAnalysisBrowser() {
 		super();
@@ -49,18 +49,14 @@ public class ProjectAnalysisBrowser extends Panel {
 
 	private void initUI() {
 		setLayout(new BorderLayout());
-		add(directory = new Label(), BorderLayout.NORTH);
-		add(tabbedPane = new TabbedPane(), BorderLayout.CENTER);
-		tabbedPane.addTab(translator.i18n("Code Ranges"),
-				codeRangeBrowser = new CodeRangeBrowser());
-		tabbedPane.addTab(translator.i18n("Metrics Ranges"),
-				metricsBrowser = new MetricsBrowser());
-		tabbedPane.addTab(translator.i18n("Copy&Paste Scanner"),
-				copyAndPasteScanner = new CopyAndPasteScannerPanel());
-		tabbedPane.addTab(translator.i18n("Duplication Scanner"),
-				duplicationScanner = new DuplicationScannerPanel());
-		tabbedPane.addTab(translator.i18n("Source Code Evaluation"),
-				codeEvaluation = new CodeEvaluationPanel());
+		add(directory, BorderLayout.NORTH);
+		add(tabbedPane, BorderLayout.CENTER);
+
+		tabbedPane.addTab(translator.i18n("Code Ranges"), codeRangeBrowser);
+		tabbedPane.addTab(translator.i18n("Code Evaluators"), evaluatorPanel);
+		tabbedPane.addTab(translator.i18n("Metrics Ranges"), metricsBrowser);
+		tabbedPane
+				.addTab(translator.i18n("Project Evaluation"), codeEvaluation);
 	}
 
 	public void setProjectAnalyser(ProjectAnalyser project) {
@@ -71,9 +67,8 @@ public class ProjectAnalysisBrowser extends Panel {
 			directory.setText("");
 		}
 		codeRangeBrowser.setProjectAnalyser(project);
+		evaluatorPanel.setProjectAnalyser(project);
 		metricsBrowser.setProjectAnalyser(project);
-		copyAndPasteScanner.setProjectAnalyser(project);
-		duplicationScanner.setProjectAnalyser(project);
 		codeEvaluation.setProjectAnalyser(project);
 	}
 
@@ -84,8 +79,8 @@ public class ProjectAnalysisBrowser extends Panel {
 	public void refresh() {
 		codeRangeBrowser.refresh();
 	}
-	
-	public CodeEvaluator getCodeEvaluator() {
+
+	public ProjectEvaluator getCodeEvaluator() {
 		return codeEvaluation.getCodeEvaluator();
 	}
 }

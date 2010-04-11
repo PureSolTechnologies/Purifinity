@@ -31,7 +31,7 @@ public class HTMLReportGenerator extends AbstractReportGenerator {
 	private final Link evaluatorsLink = new Link("evaluators.html",
 			"Evaluators");
 
-	public HTMLReportGenerator(CodeEvaluator codeEvaluator, File outputDirectory) {
+	public HTMLReportGenerator(ProjectEvaluator codeEvaluator, File outputDirectory) {
 		super(codeEvaluator);
 		report = new StandardReport(outputDirectory);
 		report.setCopyrightFooter(true);
@@ -59,7 +59,7 @@ public class HTMLReportGenerator extends AbstractReportGenerator {
 	}
 
 	private void createProjectReport() {
-		CodeEvaluator evaluator = getCodeEvaluator();
+		ProjectEvaluator evaluator = getCodeEvaluator();
 		String title = translator.i18n("Project Evaluation Summary");
 		String text = "<h2>" + translator.i18n("Analysis Overview") + "</h2>";
 		text += "<p>"
@@ -125,7 +125,7 @@ public class HTMLReportGenerator extends AbstractReportGenerator {
 	}
 
 	private void createFileReports() {
-		CodeEvaluator evaluator = getCodeEvaluator();
+		ProjectEvaluator evaluator = getCodeEvaluator();
 		for (File file : evaluator.getFiles()) {
 			createFileReport(file);
 		}

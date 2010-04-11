@@ -63,12 +63,12 @@ public class EntropyMetric implements Metric {
 	}
 
 	private void calculate() {
-		Hashtable<String, Integer> operands = halstead.getOperants();
+		Hashtable<String, Integer> operants = halstead.getOperants();
 
-		maxEntropy = -Math.log(1 / (double) halstead.get_n2()) / Math.log(2.0);
+		maxEntropy = Math.log((double) halstead.get_n2()) / Math.log(2.0);
 		Entropy = 0.0;
-		for (String operand : operands.keySet()) {
-			int count = operands.get(operand);
+		for (String operant : operants.keySet()) {
+			int count = operants.get(operant);
 			Entropy += (double) count / (double) halstead.get_N2()
 					* Math.log((double) count / (double) halstead.get_N2())
 					/ Math.log(2.0);

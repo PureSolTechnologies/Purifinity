@@ -6,7 +6,7 @@ import com.puresol.reporting.ReportingFormat;
 
 public class ReportGeneratorFactory {
 
-	public static ReportGenerator create(CodeEvaluator evaluator,
+	public static ReportGenerator create(ProjectEvaluator evaluator,
 			File outputDirectory, ReportingFormat format)
 			throws UnsupportedReportingFormatException {
 		if (format == ReportingFormat.HTML) {

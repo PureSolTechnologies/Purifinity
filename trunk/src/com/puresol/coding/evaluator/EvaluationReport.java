@@ -6,15 +6,15 @@ import com.puresol.reporting.ReportingFormat;
 
 public class EvaluationReport {
 
-	public static void report(CodeEvaluator evaluator, File outputDirectory,
+	public static void report(ProjectEvaluator evaluator, File outputDirectory,
 			ReportingFormat format) throws UnsupportedReportingFormatException {
 		new EvaluationReport(evaluator, format).createReport(outputDirectory);
 	}
 
-	private final CodeEvaluator evaluator;
+	private final ProjectEvaluator evaluator;
 	private final ReportingFormat format;
 
-	private EvaluationReport(CodeEvaluator evaluator, ReportingFormat format) {
+	private EvaluationReport(ProjectEvaluator evaluator, ReportingFormat format) {
 		this.evaluator = evaluator;
 		this.format = format;
 	}

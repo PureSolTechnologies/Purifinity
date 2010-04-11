@@ -48,9 +48,15 @@ public class GotoEvaluator extends AbstractGotoEvaluator {
 				String label = token.getText().substring(1, 4);
 				label = label.trim();
 				if (!label.isEmpty()) {
-					FoundLabel foundLabel = new FoundLabel(codeRange, pos,
-							label);
-					addLabel(codeRange, foundLabel);
+					try {
+						Token next = tokenStream.findNextToken(pos);
+						if (!next.getText().toUpperCase().equals("FORMAT")) {
+							FoundLabel foundLabel = new FoundLabel(codeRange,
+									pos, label);
+							addLabel(codeRange, foundLabel);
+						}
+					} catch (NoMatchingTokenException e) {
+					}
 				}
 			}
 		}

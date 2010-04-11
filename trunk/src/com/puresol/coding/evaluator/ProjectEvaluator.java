@@ -20,7 +20,6 @@ import org.apache.log4j.Logger;
 
 import com.puresol.coding.analysis.ProjectAnalyser;
 import com.puresol.utils.ClassInstantiationException;
-import com.puresol.utils.Instances;
 
 /**
  * This is the central class for managing all information for the code
@@ -29,15 +28,16 @@ import com.puresol.utils.Instances;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class CodeEvaluator implements ProgressObservable {
+public class ProjectEvaluator implements ProgressObservable {
 
-	private static final Logger logger = Logger.getLogger(CodeEvaluator.class);
+	private static final Logger logger = Logger
+			.getLogger(ProjectEvaluator.class);
 
 	private final ProjectAnalyser projectAnalyser;
 	private final ArrayList<Evaluator> evaluators = new ArrayList<Evaluator>();
 	private ProgressObserver observer = null;
 
-	public CodeEvaluator(ProjectAnalyser projectAnalyser) {
+	public ProjectEvaluator(ProjectAnalyser projectAnalyser) {
 		this.projectAnalyser = projectAnalyser;
 	}
 
@@ -57,8 +57,8 @@ public class CodeEvaluator implements ProgressObservable {
 				observer.setStatus(count);
 			}
 			try {
-				Evaluator evaluator = Instances.createInstance(evaluatorClass,
-						projectAnalyser);
+				Evaluator evaluator = EvaluatorManager.createEvaluatorInstance(
+						evaluatorClass, projectAnalyser);
 				observer.startSubProgress(evaluator);
 				evaluators.add(evaluator);
 			} catch (ClassInstantiationException e) {
