@@ -27,8 +27,8 @@ public class MaintainabilityReport {
 	}
 
 	public static String getHTMLReport(MaintainabilityIndex maintainabilityIndex) {
-		String report = Anchor.generate(maintainabilityIndex.getName(), "<h2>"
-				+ translator.i18n("Maintainability Index") + "</h2>");
+		String report = Anchor.generate(maintainabilityIndex.getName(), "<h3>"
+				+ translator.i18n("Maintainability Index") + "</h3>");
 		if (maintainabilityIndex != null) {
 			report += HTMLConverter
 					.convertQualityLevelToHTML(maintainabilityIndex

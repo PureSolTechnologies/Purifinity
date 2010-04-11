@@ -8,14 +8,14 @@ public class HTMLConverter {
 
 	public static String convertQualityLevelToHTML(QualityLevel qualityLevel) {
 		if (qualityLevel == QualityLevel.HIGH) {
-			return "<font color=\"#00ff00\">" + qualityLevel.getIdentifier()
+			return "<font color=\"#00c000\">" + qualityLevel.getIdentifier()
 					+ "</font>";
 		}
 		if (qualityLevel == QualityLevel.MEDIUM) {
-			return "<font color=\"#ffff00\">" + qualityLevel.getIdentifier()
+			return "<font color=\"#c0c000\">" + qualityLevel.getIdentifier()
 					+ "</font>";
 		}
-		return "<font color=\"#ff0000\">" + qualityLevel.getIdentifier()
+		return "<font color=\"#c00000\">" + qualityLevel.getIdentifier()
 				+ "</font>";
 	}
 

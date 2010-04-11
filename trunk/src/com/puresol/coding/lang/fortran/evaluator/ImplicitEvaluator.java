@@ -119,39 +119,39 @@ public class ImplicitEvaluator extends AbstractEvaluator {
 	public String getCodeRangeComment(CodeRange codeRange,
 			ReportingFormat format) throws UnsupportedReportingFormatException {
 		// TODO Auto-generated method stub
-		return null;
+		return "";
 	}
 
 	@Override
 	public String getFileComment(File file, ReportingFormat format)
 			throws UnsupportedReportingFormatException {
 		// TODO Auto-generated method stub
-		return null;
+		return "";
 	}
 
 	@Override
 	public String getProjectComment(ReportingFormat format)
 			throws UnsupportedReportingFormatException {
 		// TODO Auto-generated method stub
-		return null;
+		return "";
 	}
 
 	@Override
 	public QualityLevel getProjectQuality() {
 		// TODO Auto-generated method stub
-		return null;
+		return QualityLevel.UNSPECIFIED;
 	}
 
 	@Override
 	public QualityLevel getQuality(File file) {
 		// TODO Auto-generated method stub
-		return null;
+		return QualityLevel.UNSPECIFIED;
 	}
 
 	@Override
 	public QualityLevel getQuality(CodeRange codeRange) {
 		// TODO Auto-generated method stub
-		return null;
+		return QualityLevel.UNSPECIFIED;
 	}
 
 }

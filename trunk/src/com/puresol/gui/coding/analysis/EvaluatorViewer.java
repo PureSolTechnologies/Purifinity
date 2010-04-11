@@ -1,13 +1,13 @@
 package com.puresol.gui.coding.analysis;
 
 import java.io.File;
-import java.util.Hashtable;
+import java.util.Collections;
 
 import javax.i18n4j.Translator;
 import javax.swing.BoxLayout;
 import javax.swingx.BorderLayoutWidget;
-import javax.swingx.FreeList;
 import javax.swingx.HTMLTextPane;
+import javax.swingx.List;
 import javax.swingx.Panel;
 import javax.swingx.ScrollPane;
 import javax.swingx.TabbedPane;
@@ -32,7 +32,7 @@ public class EvaluatorViewer extends BorderLayoutWidget {
 	private final TextField evaluatorName = new TextField();
 	private final HTMLTextPane description = new HTMLTextPane();
 	private final HTMLTextPane projectSummary = new HTMLTextPane();
-	private final FreeList fileList = new FreeList();
+	private final List fileList = new List();
 	private final HTMLTextPane evaluatorFileComment = new HTMLTextPane();
 
 	private Evaluator evaluator = null;
@@ -107,11 +107,9 @@ public class EvaluatorViewer extends BorderLayoutWidget {
 
 	private void refreshFileList() {
 		fileList.removeAll();
-		Hashtable<Object, Object> listData = new Hashtable<Object, Object>();
-		for (File file : evaluator.getFiles()) {
-			listData.put(file.getName(), file);
-		}
-		fileList.setListData(listData);
+		java.util.List<File> files = evaluator.getFiles();
+		Collections.sort(files);
+		fileList.setListData(files.toArray());
 	}
 
 	@Slot

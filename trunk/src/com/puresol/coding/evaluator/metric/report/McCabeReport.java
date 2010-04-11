@@ -12,8 +12,8 @@ public class McCabeReport {
 			.getTranslator(McCabeReport.class);
 
 	public static String getHTMLReport(McCabeMetric mcCabe) {
-		String report = Anchor.generate(mcCabe.getName(), "<h2>"
-				+ translator.i18n("McCabe Cyclomatic Number") + "</h2>");
+		String report = Anchor.generate(mcCabe.getName(), "<h3>"
+				+ translator.i18n("McCabe Cyclomatic Number") + "</h3>");
 		if (mcCabe != null) {
 			report += HTMLConverter.convertQualityLevelToHTML(mcCabe
 					.getQualityLevel());

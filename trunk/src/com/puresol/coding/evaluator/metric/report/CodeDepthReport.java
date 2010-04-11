@@ -16,8 +16,8 @@ public class CodeDepthReport {
 	}
 
 	public static String getHTMLReport(CodeDepth codeDepth) {
-		String report = Anchor.generate(codeDepth.getName(), "<h2>"
-				+ translator.i18n("CodeDepth") + "</h2>");
+		String report = Anchor.generate(codeDepth.getName(), "<h3>"
+				+ translator.i18n("CodeDepth") + "</h3>");
 		if (codeDepth != null) {
 			report += HTMLConverter.convertQualityLevelToHTML(codeDepth
 					.getQualityLevel());

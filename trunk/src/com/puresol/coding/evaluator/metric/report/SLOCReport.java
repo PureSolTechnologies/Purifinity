@@ -65,15 +65,15 @@ public class SLOCReport {
 	}
 
 	public static String getHTMLReport(SLOCMetric sloc) {
-		String report = Anchor.generate(sloc.getName(), "<h2>"
-				+ translator.i18n("SLOC Metrics") + "</h2>");
+		String report = Anchor.generate(sloc.getName(), "<h3>"
+				+ translator.i18n("SLOC Metrics") + "</h3>");
 		if (sloc != null) {
 			report += HTMLConverter.convertQualityLevelToHTML(sloc
 					.getQualityLevel());
 			report += "<br/>";
-			report += "<h3>Line Counts</h3>";
+			report += "<b>Line Counts</b>";
 			report += getHTMLLineCountReport(sloc);
-			report += "<h3>Line Lengths</h3>";
+			report += "<b>Line Lengths</b>";
 			report += getHTMLLineLengthReport(sloc);
 		} else {
 			report += HTMLMetricsReport.notMeasurableForCodeRangeMessage();

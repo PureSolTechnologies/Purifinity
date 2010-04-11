@@ -15,31 +15,31 @@ import java.util.ArrayList;
 
 abstract public class AbstractAnalyser implements Analyser {
 
-    private static final long serialVersionUID = -2593701440766091118L;
+	private static final long serialVersionUID = -2593701440766091118L;
 
-    private File projectDirectory = null;
-    private File file = null;
+	private File projectDirectory = null;
+	private File file = null;
 
-    private ArrayList<CodeRange> codeRanges = new ArrayList<CodeRange>();
+	private ArrayList<CodeRange> codeRanges = new ArrayList<CodeRange>();
 
-    public AbstractAnalyser(File projectDirectory, File file) {
-	this.projectDirectory = projectDirectory;
-	this.file = file;
-    }
+	public AbstractAnalyser(File projectDirectory, File file) {
+		this.projectDirectory = projectDirectory;
+		this.file = file;
+	}
 
-    public File getProjectDirectory() {
-	return projectDirectory;
-    }
+	public File getProjectDirectory() {
+		return projectDirectory;
+	}
 
-    public File getFile() {
-	return file;
-    }
+	public File getFile() {
+		return file;
+	}
 
-    protected void addCodeRanges(ArrayList<CodeRange> codeRanges) {
-	this.codeRanges.addAll(codeRanges);
-    }
+	protected void addCodeRanges(ArrayList<CodeRange> codeRanges) {
+		this.codeRanges.addAll(codeRanges);
+	}
 
-    public ArrayList<CodeRange> getCodeRanges() {
-	return codeRanges;
-    }
+	public ArrayList<CodeRange> getCodeRanges() {
+		return codeRanges;
+	}
 }

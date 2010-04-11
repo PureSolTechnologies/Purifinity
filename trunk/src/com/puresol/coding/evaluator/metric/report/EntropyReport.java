@@ -21,7 +21,7 @@ public class EntropyReport {
 				/ 100.0 + "\t" + translator.i18n("entropy") + "\n";
 		report += "maxEntropy\t" + Math.round(entropy.getMaxEntropy() * 100.0)
 				/ 100.0 + "\t" + translator.i18n("maximized entropy") + "\n";
-		report += ">normEntropy\t"
+		report += "normEntropy\t"
 				+ Math.round(entropy.getNormEntropy() * 100.0) / 100.0 + "\t"
 				+ translator.i18n("normalized entropy") + "\n";
 		report += "Entropy Redundance\t"
@@ -37,8 +37,8 @@ public class EntropyReport {
 	}
 
 	public static String getHTMLReport(EntropyMetric entropyMetric) {
-		String report = Anchor.generate(entropyMetric.getName(), "<h2>"
-				+ translator.i18n("Entropy from Information Theory") + "</h2>");
+		String report = Anchor.generate(entropyMetric.getName(), "<h3>"
+				+ translator.i18n("Entropy from Information Theory") + "</h3>");
 		if (entropyMetric != null) {
 			report += HTMLConverter.convertQualityLevelToHTML(entropyMetric
 					.getQualityLevel());

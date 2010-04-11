@@ -148,11 +148,9 @@ public class CoCoMo extends AbstractEvaluator {
 	public String getProjectComment(ReportingFormat format)
 			throws UnsupportedReportingFormatException {
 		if (format == ReportingFormat.HTML) {
-			return translator.i18n("Project Result:<br/><br/>")
-					+ cocomoValues.toString(format);
+			return cocomoValues.toString(format);
 		} else if (format == ReportingFormat.TEXT) {
-			return translator.i18n("Project Result:\n\n")
-					+ cocomoValues.toString(format);
+			return cocomoValues.toString(format);
 		}
 		throw new UnsupportedReportingFormatException(format);
 	}

@@ -3,7 +3,9 @@ package com.puresol.coding.evaluator;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Hashtable;
+import java.util.List;
 
 import javax.i18n4j.Translator;
 
@@ -11,8 +13,10 @@ import org.apache.log4j.Logger;
 
 import com.puresol.coding.reporting.StandardReport;
 import com.puresol.reporting.ReportingFormat;
+import com.puresol.reporting.html.Anchor;
 import com.puresol.reporting.html.HTMLStandards;
 import com.puresol.reporting.html.Link;
+import com.puresol.reporting.html.LinkTarget;
 import com.puresol.utils.Files;
 
 public class HTMLReportGenerator extends AbstractReportGenerator {
@@ -31,7 +35,8 @@ public class HTMLReportGenerator extends AbstractReportGenerator {
 	private final Link evaluatorsLink = new Link("evaluators.html",
 			"Evaluators");
 
-	public HTMLReportGenerator(ProjectEvaluator codeEvaluator, File outputDirectory) {
+	public HTMLReportGenerator(ProjectEvaluator codeEvaluator,
+			File outputDirectory) {
 		super(codeEvaluator);
 		report = new StandardReport(outputDirectory);
 		report.setCopyrightFooter(true);
@@ -126,18 +131,40 @@ public class HTMLReportGenerator extends AbstractReportGenerator {
 
 	private void createFileReports() {
 		ProjectEvaluator evaluator = getCodeEvaluator();
-		for (File file : evaluator.getFiles()) {
+		List<File> files = evaluator.getFiles();
+		Collections.sort(files);
+		for (File file : files) {
 			createFileReport(file);
 		}
 	}
 
 	private void createFileReport(File file) {
 		String title = translator.i18n("Summary for File") + " '" + file + "'";
-		String text = "";
+		String text = getTableOfContents(file);
 		for (Evaluator evaluator : getCodeEvaluator().getEvaluators()) {
 			text += createFileReport(file, evaluator);
 		}
 		createFileReport(file, title, text);
+	}
+
+	private String getTableOfContents(File file) {
+		String text = "<h2>" + translator.i18n("Table of Contents") + "</h2>\n";
+		text += "<ol>\n";
+		for (Evaluator evaluator : getCodeEvaluator().getEvaluators()) {
+			try {
+				if (evaluator.getFileComment(file, ReportingFormat.HTML)
+						.isEmpty()) {
+					continue;
+				}
+			} catch (UnsupportedReportingFormatException e) {
+				continue;
+			}
+			text += "<li>"
+					+ new Link("#" + evaluator.getName(), evaluator.getName(),
+							LinkTarget.SELF).toHTML() + "</li>\n";
+		}
+		text += "</ol>\n";
+		return text;
 	}
 
 	private String createFileReport(File file, Evaluator evaluator) {
@@ -146,7 +173,9 @@ public class HTMLReportGenerator extends AbstractReportGenerator {
 			String comment = evaluator.getFileComment(file,
 					ReportingFormat.HTML);
 			if (!comment.isEmpty()) {
-				text += "<h2>" + evaluator.getName() + "</h2>";
+				text += new Anchor(evaluator.getName(), "<h2>"
+						+ evaluator.getName() + "</h2>").toHTML()
+						+ "\n";
 				text += "<h3>" + translator.i18n("Description") + "</h3>";
 				text += evaluator.getDescription(ReportingFormat.HTML);
 				text += "<h3>" + translator.i18n("Results for") + " '"
@@ -189,7 +218,7 @@ public class HTMLReportGenerator extends AbstractReportGenerator {
 
 	private void createOverview() {
 		String text = translator
-				.i18n("<p>This project pages where create automatically during a cod evaluation process.</p>");
+				.i18n("<p>This project pages where create automatically during a code evaluation process.</p>");
 		try {
 			report.createFile(new File("overview.html"), translator
 					.i18n("Overview"), text);
@@ -281,7 +310,9 @@ public class HTMLReportGenerator extends AbstractReportGenerator {
 
 	private String createFilesSubMenu() {
 		ArrayList<Link> links = new ArrayList<Link>();
-		for (File file : files.keySet()) {
+		List<File> fileList = new ArrayList<File>(files.keySet());
+		Collections.sort(fileList);
+		for (File file : fileList) {
 			links.add(new Link(file.toString(), files.get(file)));
 		}
 		return HTMLStandards.getStandardSubMenu("viewer", null, links

@@ -69,8 +69,8 @@ public class HalsteadReport {
 	}
 
 	public static String getHTMLReport(HalsteadMetric halsteadMetric) {
-		String report = Anchor.generate(halsteadMetric.getName(), "<h2>"
-				+ translator.i18n("Halstead Metric") + "</h2>");
+		String report = Anchor.generate(halsteadMetric.getName(), "<h3>"
+				+ translator.i18n("Halstead Metric") + "</h3>");
 		if (halsteadMetric != null) {
 			report += HTMLConverter.convertQualityLevelToHTML(halsteadMetric
 					.getQualityLevel());
@@ -78,10 +78,10 @@ public class HalsteadReport {
 			report += HTMLStandards
 					.convertTSVToTable(getNumberReport(halsteadMetric));
 
-			report += "<h3>" + translator.i18n("Operators") + "</h3>";
+			report += "<b>" + translator.i18n("Operators") + "</b>";
 			report += getHTMLOperatorReport(halsteadMetric);
 
-			report += "<h3>" + translator.i18n("Operands") + "</h3>";
+			report += "<b>" + translator.i18n("Operands") + "</b>";
 			report += getHTMLOperantReport(halsteadMetric);
 		} else {
 			report += HTMLMetricsReport.notMeasurableForCodeRangeMessage();

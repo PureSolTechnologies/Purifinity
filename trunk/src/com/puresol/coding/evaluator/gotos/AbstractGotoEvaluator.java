@@ -40,19 +40,29 @@ abstract public class AbstractGotoEvaluator extends AbstractEvaluator {
 		ProgressObserver observer = getMonitor();
 		if (observer != null) {
 			observer.setDescription(NAME);
-			observer.setRange(0, getFiles().size());
+			observer.setRange(0, getProjectAnalyser().getFiles().size());
+			observer.setStatus(0);
+			observer.showProgressPercent();
 		}
 		int count = 0;
 		for (File file : getProjectAnalyser().getFiles()) {
+			if (Thread.interrupted()) {
+				return;
+			}
+			count++;
+			if (observer != null) {
+				observer.setStatus(count);
+			}
 			for (CodeRange codeRange : getProjectAnalyser().getCodeRanges(file)) {
-				count++;
+				if (Thread.interrupted()) {
+					return;
+				}
 				if (!codeRange.getLanguage().equals(getLanguage())) {
 					continue;
 				}
-				if (observer != null) {
-					observer.setStatus(count);
+				if (!getFiles().contains(file)) {
+					addFile(file);
 				}
-				addFile(file);
 				addCodeRange(codeRange);
 				analyse(codeRange);
 			}
