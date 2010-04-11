@@ -60,6 +60,9 @@ abstract public class AbstractGotoEvaluator extends AbstractEvaluator {
 				if (!codeRange.getLanguage().equals(getLanguage())) {
 					continue;
 				}
+				if (!codeRange.getType().isRunnableCodeSegment()) {
+					continue;
+				}
 				if (!getFiles().contains(file)) {
 					addFile(file);
 				}

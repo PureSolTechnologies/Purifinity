@@ -18,11 +18,14 @@ public class FoundImplicit {
 	private final CodeRange codeRange;
 	private final int tokenId;
 	private final String text;
+	private final boolean implicitNone;
 
-	public FoundImplicit(CodeRange codeRange, int tokenId, String text) {
+	public FoundImplicit(CodeRange codeRange, int tokenId, String text,
+			boolean implicitNone) {
 		this.codeRange = codeRange;
 		this.tokenId = tokenId;
 		this.text = text;
+		this.implicitNone = implicitNone;
 	}
 
 	public CodeRange getCodeRange() {
@@ -35,6 +38,10 @@ public class FoundImplicit {
 
 	public String getText() {
 		return text;
+	}
+
+	public boolean isImplicitNone() {
+		return implicitNone;
 	}
 
 	public String toString(ReportingFormat format)
