@@ -1,7 +1,9 @@
 package com.puresol.coding.lang.fortran.source.coderanges;
 
+import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.analysis.AbstractCodeRange;
 import com.puresol.coding.analysis.CodeRangeType;
+import com.puresol.coding.lang.fortran.Fortran;
 import com.puresol.parser.TokenStream;
 
 public class FortranFunction extends AbstractCodeRange {
@@ -14,8 +16,8 @@ public class FortranFunction extends AbstractCodeRange {
     }
 
     @Override
-    public String getLanguage() {
-	return "Fortran";
+    public ProgrammingLanguage getLanguage() {
+	return Fortran.getInstance();
     }
 
     @Override

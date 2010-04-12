@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.evaluator.UnsupportedReportingFormatException;
 import com.puresol.parser.Token;
 import com.puresol.parser.TokenStream;
@@ -21,7 +22,7 @@ public interface CodeRange extends Serializable, Comparable<CodeRange>,
 
     public File getFile();
 
-    public String getLanguage();
+    public ProgrammingLanguage getLanguage();
 
     public String getTypeName();
 

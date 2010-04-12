@@ -1,7 +1,9 @@
 package com.puresol.coding.lang.java.source.coderanges;
 
+import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.analysis.AbstractCodeRange;
 import com.puresol.coding.analysis.CodeRangeType;
+import com.puresol.coding.lang.java.Java;
 import com.puresol.parser.TokenStream;
 
 public class JavaInterface extends AbstractCodeRange {
@@ -14,8 +16,8 @@ public class JavaInterface extends AbstractCodeRange {
     }
 
     @Override
-    public String getLanguage() {
-	return "Java";
+    public ProgrammingLanguage getLanguage() {
+	return Java.getInstance();
     }
 
     @Override

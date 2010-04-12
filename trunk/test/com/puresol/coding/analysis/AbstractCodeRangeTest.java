@@ -4,13 +4,15 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
+import com.puresol.coding.ProgrammingLanguage;
+import com.puresol.coding.TestProgrammingLanguage;
 import com.puresol.parser.TokenStream;
 import com.puresol.parser.TokenStreamTest;
 import com.puresol.testing.Tester;
 
 public class AbstractCodeRangeTest {
 
-    class CRange extends AbstractCodeRange {
+    static class CRange extends AbstractCodeRange {
 
 	private static final long serialVersionUID = -3340207564337273511L;
 
@@ -19,8 +21,8 @@ public class AbstractCodeRangeTest {
 	}
 
 	@Override
-	public String getLanguage() {
-	    return "Language";
+	public ProgrammingLanguage getLanguage() {
+	    return TestProgrammingLanguage.getInstance();
 	}
 
 	@Override
@@ -42,7 +44,8 @@ public class AbstractCodeRangeTest {
 	Assert.assertNotNull(codeRange);
 	Assert.assertSame(tokenStream.getFile(), codeRange.getFile());
 	Assert.assertEquals(CodeRangeType.FILE, codeRange.getType());
-	Assert.assertEquals("Language", codeRange.getLanguage());
+	Assert.assertEquals(TestProgrammingLanguage.getInstance(), codeRange
+		.getLanguage());
 	Assert.assertEquals("CodeRangeName", codeRange.getName());
 	Assert.assertSame(tokenStream, codeRange.getTokenStream());
 	Assert.assertEquals(1, codeRange.getStartId());

@@ -1,7 +1,9 @@
 package com.puresol.coding.lang.cpp.source.coderanges;
 
+import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.analysis.AbstractCodeRange;
 import com.puresol.coding.analysis.CodeRangeType;
+import com.puresol.coding.lang.cpp.CPlusPlus;
 import com.puresol.parser.TokenStream;
 
 public class CPPFile extends AbstractCodeRange {
@@ -13,8 +15,8 @@ public class CPPFile extends AbstractCodeRange {
     }
 
     @Override
-    public String getLanguage() {
-	return "C++";
+    public ProgrammingLanguage getLanguage() {
+	return CPlusPlus.getInstance();
     }
 
     @Override
