@@ -12,7 +12,7 @@ public class CodeAnalysisPropertiesTest extends TestCase {
 
 	@Test
 	public void testLoadingAnalysers() {
-		Assert.assertFalse(properties.getProperty("CodeAnalysis.Analysers")
+		Assert.assertFalse(properties.getProperty("CodeAnalysis.Languages")
 				.isEmpty());
 	}
 

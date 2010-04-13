@@ -12,15 +12,14 @@ package com.puresol.coding.analysis;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
+import com.puresol.coding.ProgrammingLanguage;
+import com.puresol.coding.ProgrammingLanguages;
 import com.puresol.exceptions.StrangeSituationException;
 import com.puresol.utils.ClassInstantiationException;
 import com.puresol.utils.Files;
-import com.puresol.utils.Instances;
-import com.puresol.utils.MethodInvokationException;
 
 /**
  * This factory creates an Analyser class for a given File in dependence for its
@@ -33,32 +32,6 @@ public class AnalyserFactory {
 
 	private static final Logger logger = Logger
 			.getLogger(AnalyserFactory.class);
-
-	private static ArrayList<Class<? extends Analyser>> analysers = new ArrayList<Class<? extends Analyser>>();
-	static {
-		for (String analyser : CodeAnalysisProperties.getPropertyValue(
-				"CodeAnalysis.Analysers").split(",")) {
-			Class<? extends Analyser> clazz = getAnalyserForName(analyser);
-			if (clazz != null) {
-				analysers.add(clazz);
-			}
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	private static Class<? extends Analyser> getAnalyserForName(String analyser) {
-		try {
-			return (Class<? extends Analyser>) Class.forName(analyser);
-		} catch (ClassNotFoundException e) {
-			logger.error("Class '" + analyser
-					+ "' was not found, but set in CodeAnalysis.properties!");
-		}
-		return null;
-	}
-
-	public static ArrayList<Class<? extends Analyser>> getAnalysers() {
-		return analysers;
-	}
 
 	private static AnalyserFactory instance = null;
 
@@ -97,9 +70,9 @@ public class AnalyserFactory {
 
 	private Analyser createAnalyser(File projectDirectory, File file)
 			throws LanguageNotSupportedException {
-		for (Class<? extends Analyser> analyserClass : analysers) {
-			Analyser analyser = checkAndCreate(analyserClass, projectDirectory,
-					file);
+		for (ProgrammingLanguage language : ProgrammingLanguages.getInstance()
+				.getLanguages()) {
+			Analyser analyser = checkAndCreate(language, projectDirectory, file);
 			if (analyser != null) {
 				return analyser;
 			}
@@ -109,17 +82,13 @@ public class AnalyserFactory {
 				"No coding language found for file " + file.getPath());
 	}
 
-	private Analyser checkAndCreate(Class<? extends Analyser> clazz,
+	private Analyser checkAndCreate(ProgrammingLanguage clazz,
 			File projectDirectory, File file) {
 		try {
-
-			if (!Instances.runStaticMethod(clazz, "isSuitable", boolean.class,
-					file)) {
+			if (!clazz.isSuitable(Files.addPaths(projectDirectory, file))) {
 				return null;
 			}
-			return Instances.createInstance(clazz, projectDirectory, file);
-		} catch (MethodInvokationException e) {
-			throw new StrangeSituationException(e);
+			return clazz.createAnalyser(projectDirectory, file);
 		} catch (ClassInstantiationException e) {
 			throw new StrangeSituationException(e);
 		}

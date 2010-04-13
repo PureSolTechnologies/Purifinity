@@ -8,7 +8,6 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
-import com.puresol.coding.analysis.CodeAnalysisProperties;
 import com.puresol.coding.analysis.CodeRange;
 
 import junit.framework.Assert;
@@ -21,13 +20,6 @@ import junit.framework.TestCase;
  * 
  */
 public class JavaAnalyserTest extends TestCase {
-
-	@Test
-	public void testRegistrationInCodeAnalysisProperties() {
-		Assert.assertTrue(CodeAnalysisProperties.getPropertyValue(
-				"CodeAnalysis.Analysers")
-				.contains(JavaAnalyser.class.getName()));
-	}
 
 	@Test
 	public void test() {

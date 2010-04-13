@@ -28,15 +28,6 @@ public class AnalyserFactoryTest extends TestCase {
 	private AnalyserFactory analyserFactory = AnalyserFactory.createFactory();
 
 	@Test
-	public void testAnalysers() {
-		System.out.println("Classes:");
-		for (Class<?> clazz : AnalyserFactory.getAnalysers()) {
-			System.out.println(clazz.getName());
-		}
-		Assert.assertTrue(AnalyserFactory.getAnalysers().size() > 0);
-	}
-
-	@Test
 	public void testFileNotFound() {
 		try {
 			analyserFactory.create(new File("test"), new File(
