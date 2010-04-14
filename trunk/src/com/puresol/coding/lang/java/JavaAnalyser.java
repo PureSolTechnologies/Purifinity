@@ -15,6 +15,7 @@ import java.io.IOException;
 
 import org.apache.log4j.Logger;
 
+import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.analysis.AbstractAnalyser;
 import com.puresol.parser.DefaultPreConditioner;
 import com.puresol.parser.LexerException;
@@ -68,7 +69,7 @@ public class JavaAnalyser extends AbstractAnalyser {
 		}
 	}
 
-	public String getLanguage() {
-		return "Java";
+	public ProgrammingLanguage getLanguage() {
+		return Java.getInstance();
 	}
 }

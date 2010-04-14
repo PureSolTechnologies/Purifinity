@@ -38,6 +38,8 @@ import com.puresol.parser.TokenException;
 
 public class CPPKeywords extends AbstractTokenDefinitionGroup {
 
+	public static final CPPKeywords INSTANCE = new CPPKeywords();
+	
     private static final Logger logger =
 	    Logger.getLogger(CPPKeywords.class);
 

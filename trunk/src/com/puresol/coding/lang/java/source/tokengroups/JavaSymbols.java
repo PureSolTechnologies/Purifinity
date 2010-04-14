@@ -48,63 +48,64 @@ import com.puresol.parser.TokenException;
 
 public class JavaSymbols extends AbstractTokenDefinitionGroup {
 
-    private static final Logger logger =
-	    Logger.getLogger(JavaSymbols.class);
+	public static final JavaSymbols INSTANCE = new JavaSymbols();
 
-    @Override
-    protected void initialize() {
-	try {
-	    addTokenDefinition(MultiLineComment.class);
-	    addTokenDefinition(LineComment.class);
-	    addTokenDefinition(LineBreak.class);
-	    addTokenDefinition(WhiteSpace.class);
+	private static final Logger logger = Logger.getLogger(JavaSymbols.class);
 
-	    addTokenDefinition(LParen.class);
-	    addTokenDefinition(RParen.class);
-	    addTokenDefinition(LCurlyBracket.class);
-	    addTokenDefinition(RCurlyBracket.class);
-	    addTokenDefinition(LRectBracket.class);
-	    addTokenDefinition(RRectBracket.class);
+	@Override
+	protected void initialize() {
+		try {
+			addTokenDefinition(MultiLineComment.class);
+			addTokenDefinition(LineComment.class);
+			addTokenDefinition(LineBreak.class);
+			addTokenDefinition(WhiteSpace.class);
 
-	    addTokenDefinition(LessEqual.class);
-	    addTokenDefinition(GreaterEqual.class);
-	    addTokenDefinition(LessThan.class);
-	    addTokenDefinition(GreaterThan.class);
-	    addTokenDefinition(Equal.class);
-	    addTokenDefinition(Unequal.class);
-	    addTokenDefinition(PlusAssign.class);
-	    addTokenDefinition(MinusAssign.class);
-	    addTokenDefinition(SlashAssign.class);
-	    addTokenDefinition(StarAssign.class);
-	    addTokenDefinition(Assign.class);
-	    addTokenDefinition(At.class);
-	    addTokenDefinition(BitOr.class);
-	    addTokenDefinition(Caret.class);
+			addTokenDefinition(LParen.class);
+			addTokenDefinition(RParen.class);
+			addTokenDefinition(LCurlyBracket.class);
+			addTokenDefinition(RCurlyBracket.class);
+			addTokenDefinition(LRectBracket.class);
+			addTokenDefinition(RRectBracket.class);
 
-	    addTokenDefinition(PlusPlus.class);
-	    addTokenDefinition(MinusMinus.class);
+			addTokenDefinition(LessEqual.class);
+			addTokenDefinition(GreaterEqual.class);
+			addTokenDefinition(LessThan.class);
+			addTokenDefinition(GreaterThan.class);
+			addTokenDefinition(Equal.class);
+			addTokenDefinition(Unequal.class);
+			addTokenDefinition(PlusAssign.class);
+			addTokenDefinition(MinusAssign.class);
+			addTokenDefinition(SlashAssign.class);
+			addTokenDefinition(StarAssign.class);
+			addTokenDefinition(Assign.class);
+			addTokenDefinition(At.class);
+			addTokenDefinition(BitOr.class);
+			addTokenDefinition(Caret.class);
 
-	    addTokenDefinition(Plus.class);
-	    addTokenDefinition(Minus.class);
-	    addTokenDefinition(Slash.class);
-	    addTokenDefinition(Star.class);
-	    addTokenDefinition(Percent.class);
-	    addTokenDefinition(BackSlash.class);
+			addTokenDefinition(PlusPlus.class);
+			addTokenDefinition(MinusMinus.class);
 
-	    addTokenDefinition(LogicalAnd.class);
-	    addTokenDefinition(BitAnd.class);
-	    addTokenDefinition(LogicalOr.class);
-	    addTokenDefinition(BitOr.class);
-	    addTokenDefinition(Not.class);
+			addTokenDefinition(Plus.class);
+			addTokenDefinition(Minus.class);
+			addTokenDefinition(Slash.class);
+			addTokenDefinition(Star.class);
+			addTokenDefinition(Percent.class);
+			addTokenDefinition(BackSlash.class);
 
-	    addTokenDefinition(QuestionMark.class);
+			addTokenDefinition(LogicalAnd.class);
+			addTokenDefinition(BitAnd.class);
+			addTokenDefinition(LogicalOr.class);
+			addTokenDefinition(BitOr.class);
+			addTokenDefinition(Not.class);
 
-	    addTokenDefinition(Semicolon.class);
-	    addTokenDefinition(Comma.class);
-	    addTokenDefinition(Colon.class);
-	    addTokenDefinition(Dot.class);
-	} catch (TokenException e) {
-	    logger.error(e.getMessage());
+			addTokenDefinition(QuestionMark.class);
+
+			addTokenDefinition(Semicolon.class);
+			addTokenDefinition(Comma.class);
+			addTokenDefinition(Colon.class);
+			addTokenDefinition(Dot.class);
+		} catch (TokenException e) {
+			logger.error(e.getMessage());
+		}
 	}
-    }
 }

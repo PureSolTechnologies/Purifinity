@@ -30,43 +30,44 @@ import com.puresol.parser.TokenException;
 
 public class FortranSymbols extends AbstractTokenDefinitionGroup {
 
-    private static final Logger logger =
-	    Logger.getLogger(FortranSymbols.class);
+	public static final FortranSymbols INSTANCE = new FortranSymbols();
 
-    @Override
-    protected void initialize() {
-	try {
-	    addTokenDefinition(LineComment.class);
+	private static final Logger logger = Logger.getLogger(FortranSymbols.class);
 
-	    addTokenDefinition(LineBreak.class);
-	    addTokenDefinition(WhiteSpace.class);
-	    addTokenDefinition(LParen.class);
-	    addTokenDefinition(RParen.class);
+	@Override
+	protected void initialize() {
+		try {
+			addTokenDefinition(LineComment.class);
 
-	    addTokenDefinition(Equal.class);
-	    addTokenDefinition(Unequal.class);
-	    addTokenDefinition(LessThan.class);
-	    addTokenDefinition(GreaterThan.class);
-	    addTokenDefinition(LessEqual.class);
-	    addTokenDefinition(GreaterEqual.class);
+			addTokenDefinition(LineBreak.class);
+			addTokenDefinition(WhiteSpace.class);
+			addTokenDefinition(LParen.class);
+			addTokenDefinition(RParen.class);
 
-	    addTokenDefinition(PointerAssign.class);
+			addTokenDefinition(Equal.class);
+			addTokenDefinition(Unequal.class);
+			addTokenDefinition(LessThan.class);
+			addTokenDefinition(GreaterThan.class);
+			addTokenDefinition(LessEqual.class);
+			addTokenDefinition(GreaterEqual.class);
 
-	    addTokenDefinition(Assign.class);
-	    addTokenDefinition(Slash.class);
+			addTokenDefinition(PointerAssign.class);
 
-	    addTokenDefinition(Power.class);
-	    addTokenDefinition(Star.class);
-	    addTokenDefinition(Minus.class);
-	    addTokenDefinition(Plus.class);
+			addTokenDefinition(Assign.class);
+			addTokenDefinition(Slash.class);
 
-	    addTokenDefinition(Comma.class);
-	    addTokenDefinition(Colon.class);
-	    addTokenDefinition(Semicolon.class);
-	    addTokenDefinition(Ampersand.class);
-	    addTokenDefinition(Question.class);
-	} catch (TokenException e) {
-	    logger.error(e.getMessage());
+			addTokenDefinition(Power.class);
+			addTokenDefinition(Star.class);
+			addTokenDefinition(Minus.class);
+			addTokenDefinition(Plus.class);
+
+			addTokenDefinition(Comma.class);
+			addTokenDefinition(Colon.class);
+			addTokenDefinition(Semicolon.class);
+			addTokenDefinition(Ampersand.class);
+			addTokenDefinition(Question.class);
+		} catch (TokenException e) {
+			logger.error(e.getMessage());
+		}
 	}
-    }
 }

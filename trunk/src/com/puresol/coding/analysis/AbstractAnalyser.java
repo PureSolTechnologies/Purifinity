@@ -12,15 +12,17 @@ package com.puresol.coding.analysis;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 abstract public class AbstractAnalyser implements Analyser {
 
 	private static final long serialVersionUID = -2593701440766091118L;
 
-	private File projectDirectory = null;
-	private File file = null;
+	private final File projectDirectory;
+	private final File file;
 
-	private ArrayList<CodeRange> codeRanges = new ArrayList<CodeRange>();
+	private final List<CodeRange> codeRanges = new ArrayList<CodeRange>();
+	private final SymbolTable symbols = new SymbolTable();
 
 	public AbstractAnalyser(File projectDirectory, File file) {
 		this.projectDirectory = projectDirectory;
@@ -31,15 +33,26 @@ abstract public class AbstractAnalyser implements Analyser {
 		return projectDirectory;
 	}
 
+	@Override
 	public File getFile() {
 		return file;
 	}
 
-	protected void addCodeRanges(ArrayList<CodeRange> codeRanges) {
+	protected void addCodeRanges(List<CodeRange> codeRanges) {
 		this.codeRanges.addAll(codeRanges);
 	}
 
-	public ArrayList<CodeRange> getCodeRanges() {
+	@Override
+	public List<CodeRange> getCodeRanges() {
 		return codeRanges;
+	}
+
+	protected void addSymbol(Symbol symbol) {
+		symbols.add(symbol);
+	}
+
+	@Override
+	public SymbolTable getSymbols() {
+		return symbols;
 	}
 }

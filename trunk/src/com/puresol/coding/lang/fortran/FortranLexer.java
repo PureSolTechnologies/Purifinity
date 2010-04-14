@@ -9,10 +9,10 @@ import com.puresol.parser.TokenStream;
 
 public class FortranLexer extends Lexer {
 
-    public FortranLexer(TokenStream stream) throws LexerException {
-	super(stream);
-	addDefinitions(FortranKeywords.class);
-	addDefinitions(FortranLiterals.class);
-	addDefinitions(FortranSymbols.class);
-    }
+	public FortranLexer(TokenStream stream) throws LexerException {
+		super(stream);
+		addDefinitions(FortranKeywords.INSTANCE);
+		addDefinitions(FortranLiterals.INSTANCE);
+		addDefinitions(FortranSymbols.INSTANCE);
+	}
 }

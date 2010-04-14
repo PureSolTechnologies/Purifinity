@@ -1,7 +1,7 @@
 package com.puresol.coding.reporting;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -16,7 +16,7 @@ public class HTMLConverterTest extends TestCase {
 	public void testConvertCodeRangeToHTML() {
 		JavaAnalyser analyser = new JavaAnalyser(new File("test"), new File(
 				"com/puresol/coding/reporting/HTMLConverterTest.java"));
-		ArrayList<CodeRange> codeRanges = analyser.getCodeRanges();
+		List<CodeRange> codeRanges = analyser.getCodeRanges();
 		System.out.println(HTMLConverter.convertCodeRangeToHTML(codeRanges
 				.get(0)));
 	}

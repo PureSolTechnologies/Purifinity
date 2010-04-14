@@ -12,7 +12,9 @@ package com.puresol.coding.analysis;
 
 import java.io.File;
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.List;
+
+import com.puresol.coding.ProgrammingLanguage;
 
 /**
  * This is a interface to a analyser. It's used to implement a language
@@ -23,24 +25,26 @@ import java.util.ArrayList;
  */
 public interface Analyser extends Serializable {
 
-    /**
-     * Returns the language of the file analysed.
-     * 
-     * @return The language is returned.
-     */
-    public String getLanguage();
+	/**
+	 * Returns the language of the file analysed.
+	 * 
+	 * @return The language is returned.
+	 */
+	public ProgrammingLanguage getLanguage();
 
-    /**
-     * The file which was analysed is returned.
-     * 
-     * @return The file is returned.
-     */
-    public File getFile();
+	/**
+	 * The file which was analysed is returned.
+	 * 
+	 * @return The file is returned.
+	 */
+	public File getFile();
 
-    /**
-     * This method returns all code ranges analysed within the analysed file.
-     * 
-     * @return
-     */
-    public ArrayList<CodeRange> getCodeRanges();
+	/**
+	 * This method returns all code ranges analysed within the analysed file.
+	 * 
+	 * @return
+	 */
+	public List<CodeRange> getCodeRanges();
+
+	public SymbolTable getSymbols();
 }

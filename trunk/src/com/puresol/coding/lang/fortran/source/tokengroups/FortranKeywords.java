@@ -64,6 +64,8 @@ import com.puresol.parser.TokenException;
 
 public class FortranKeywords extends AbstractTokenDefinitionGroup {
 
+	public static final FortranKeywords INSTANCE = new FortranKeywords();
+
 	private static final Logger logger = Logger
 			.getLogger(FortranKeywords.class);
 

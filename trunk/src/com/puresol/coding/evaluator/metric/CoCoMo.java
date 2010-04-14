@@ -13,6 +13,7 @@ package com.puresol.coding.evaluator.metric;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 
 import javax.i18n4j.Translator;
 
@@ -49,7 +50,7 @@ public class CoCoMo extends AbstractEvaluator {
 			.i18n("The COst COnstruction MOdel is a simple way "
 					+ "to estimate the construction costs of a "
 					+ "software project by couting the physical lines of code.");
-	public static final ArrayList<Property> SUPPORTED_PROPERTIES = new ArrayList<Property>();
+	public static final List<Property> SUPPORTED_PROPERTIES = new ArrayList<Property>();
 
 	public CoCoMo(ProjectAnalyser analyser) {
 		super(analyser);
@@ -58,7 +59,7 @@ public class CoCoMo extends AbstractEvaluator {
 	@Override
 	public void run() {
 		ProjectAnalyser projectAnalyser = getProjectAnalyser();
-		ArrayList<File> files = projectAnalyser.getFiles();
+		List<File> files = projectAnalyser.getFiles();
 		if (getMonitor() != null) {
 			getMonitor().setRange(0, files.size());
 			getMonitor().setDescription(NAME);
@@ -88,7 +89,7 @@ public class CoCoMo extends AbstractEvaluator {
 
 	private int getFileSLOC(Analyser analyser) {
 		int sloc = 0;
-		ArrayList<CodeRange> codeRanges = analyser.getCodeRanges();
+		List<CodeRange> codeRanges = analyser.getCodeRanges();
 		for (CodeRange codeRange : codeRanges) {
 			if (codeRange.getType() == CodeRangeType.FILE) {
 				sloc += getSLOC(codeRange);

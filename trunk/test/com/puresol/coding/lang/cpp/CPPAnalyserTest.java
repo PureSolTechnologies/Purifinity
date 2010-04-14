@@ -4,7 +4,7 @@
 package com.puresol.coding.lang.cpp;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -25,7 +25,7 @@ public class CPPAnalyserTest extends TestCase {
 	public void test() {
 		CPPAnalyser analyser = new CPPAnalyser(new File("test"), new File(
 				"com/puresol/coding/lang/cpp/samples/String.cpp"));
-		ArrayList<CodeRange> codeRanges = analyser.getCodeRanges();
+		List<CodeRange> codeRanges = analyser.getCodeRanges();
 		Assert.assertNotNull(codeRanges);
 		for (CodeRange codeRange : codeRanges) {
 			System.out.println(codeRange.toString());

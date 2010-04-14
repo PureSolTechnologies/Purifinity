@@ -16,6 +16,7 @@ import java.io.IOException;
 
 import org.apache.log4j.Logger;
 
+import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.analysis.AbstractAnalyser;
 import com.puresol.parser.LexerException;
 import com.puresol.parser.NoMatchingTokenDefinitionFound;
@@ -59,7 +60,7 @@ public class FortranAnalyser extends AbstractAnalyser {
 	}
 
 	@Override
-	public String getLanguage() {
-		return "Fortran";
+	public ProgrammingLanguage getLanguage() {
+		return Fortran.getInstance();
 	}
 }

@@ -11,9 +11,9 @@ public class JavaLexer extends Lexer {
 
 	public JavaLexer(TokenStream stream) throws LexerException {
 		super(stream);
-		addDefinitions(JavaKeywords.class);
-		addDefinitions(JavaLiterals.class);
-		addDefinitions(JavaSymbols.class);
+		addDefinitions(JavaKeywords.INSTANCE);
+		addDefinitions(JavaLiterals.INSTANCE);
+		addDefinitions(JavaSymbols.INSTANCE);
 	}
 
 }

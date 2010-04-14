@@ -14,6 +14,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Hashtable;
+import java.util.List;
 
 import javax.i18n4j.Translator;
 import javax.swing.BoxLayout;
@@ -122,7 +123,7 @@ public class MetricsBrowser extends BorderLayoutWidget {
 		ArrayList<String> htmls = new ArrayList<String>();
 		Collections.sort(files);
 		for (File file : files) {
-			ArrayList<CodeRange> ranges = project.getCodeRanges(file);
+			List<CodeRange> ranges = project.getCodeRanges(file);
 			for (CodeRange range : ranges) {
 				calculateReport(range);
 			}
@@ -150,7 +151,7 @@ public class MetricsBrowser extends BorderLayoutWidget {
 		if (project == null) {
 			return;
 		}
-		ArrayList<CodeRange> ranges = project.getCodeRanges(file);
+		List<CodeRange> ranges = project.getCodeRanges(file);
 		if (ranges == null) {
 			return;
 		}

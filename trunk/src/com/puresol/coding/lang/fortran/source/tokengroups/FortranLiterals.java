@@ -15,6 +15,8 @@ import com.puresol.parser.TokenException;
 
 public class FortranLiterals extends AbstractTokenDefinitionGroup {
 
+	public static final FortranLiterals INSTANCE = new FortranLiterals();
+
 	private static final Logger logger = Logger
 			.getLogger(FortranLiterals.class);
 

@@ -8,12 +8,16 @@ import com.puresol.parser.Parser;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 import com.puresol.utils.ClassInstantiationException;
+import com.puresol.utils.Inject;
 import com.puresol.utils.Instances;
 
 public abstract class AbstractSourceCodeParser extends AbstractParser implements
 		SourceCodeParser {
 
 	private final ArrayList<CodeRange> codeRanges = new ArrayList<CodeRange>();
+
+	@Inject(SymbolTable.class)
+	private SymbolTable symbols = null;
 
 	protected final void addCodeRange(CodeRange codeRange) {
 		if (!codeRanges.contains(codeRange)) {
@@ -27,6 +31,10 @@ public abstract class AbstractSourceCodeParser extends AbstractParser implements
 
 	public final ArrayList<CodeRange> getCodeRanges() {
 		return codeRanges;
+	}
+
+	public final SymbolTable getSymbolTable() {
+		return symbols;
 	}
 
 	@Override

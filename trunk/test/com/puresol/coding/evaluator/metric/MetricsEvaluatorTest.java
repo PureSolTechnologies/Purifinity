@@ -1,7 +1,7 @@
 package com.puresol.coding.evaluator.metric;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -18,9 +18,9 @@ public class MetricsEvaluatorTest extends TestCase {
 		ProjectAnalyser projectAnalyser = new ProjectAnalyser(new File("test"),
 				"com/puresol/coding/lang/fortran/samples/zgerc.f");
 		projectAnalyser.run();
-		ArrayList<File> files = projectAnalyser.getFiles();
+		List<File> files = projectAnalyser.getFiles();
 		Assert.assertEquals(1, files.size());
-		ArrayList<CodeRange> codeRanges = projectAnalyser.getCodeRanges(files.get(0));
+		List<CodeRange> codeRanges = projectAnalyser.getCodeRanges(files.get(0));
 		Assert.assertNotNull(codeRanges);
 		MetricsEvaluator evaluator = new MetricsEvaluator(projectAnalyser);
 		evaluator.run();

@@ -50,64 +50,65 @@ import com.puresol.parser.TokenException;
 
 public class JavaKeywords extends AbstractTokenDefinitionGroup {
 
-    private static final Logger logger =
-	    Logger.getLogger(JavaKeywords.class);
+	public static final JavaKeywords INSTANCE = new JavaKeywords();
 
-    @Override
-    protected void initialize() {
-	try {
-	    addTokenDefinition(PackageKeyword.class);
-	    addTokenDefinition(ImportKeyword.class);
+	private static final Logger logger = Logger.getLogger(JavaKeywords.class);
 
-	    addTokenDefinition(ClassKeyword.class);
-	    addTokenDefinition(InterfaceKeyword.class);
-	    addTokenDefinition(EnumKeyword.class);
-	    addTokenDefinition(ExtendsKeyword.class);
-	    addTokenDefinition(ImplementsKeyword.class);
-	    addTokenDefinition(NewKeyword.class);
+	@Override
+	protected void initialize() {
+		try {
+			addTokenDefinition(PackageKeyword.class);
+			addTokenDefinition(ImportKeyword.class);
 
-	    addTokenDefinition(PublicKeyword.class);
-	    addTokenDefinition(ProtectedKeyword.class);
-	    addTokenDefinition(PrivateKeyword.class);
-	    addTokenDefinition(StaticKeyword.class);
-	    addTokenDefinition(FinalKeyword.class);
-	    addTokenDefinition(TransientKeyword.class);
-	    addTokenDefinition(AbstractKeyword.class);
-	    addTokenDefinition(SynchronizedKeyword.class);
+			addTokenDefinition(ClassKeyword.class);
+			addTokenDefinition(InterfaceKeyword.class);
+			addTokenDefinition(EnumKeyword.class);
+			addTokenDefinition(ExtendsKeyword.class);
+			addTokenDefinition(ImplementsKeyword.class);
+			addTokenDefinition(NewKeyword.class);
 
-	    addTokenDefinition(ReturnKeyword.class);
-	    addTokenDefinition(BreakKeyword.class);
-	    addTokenDefinition(ContinueKeyword.class);
+			addTokenDefinition(PublicKeyword.class);
+			addTokenDefinition(ProtectedKeyword.class);
+			addTokenDefinition(PrivateKeyword.class);
+			addTokenDefinition(StaticKeyword.class);
+			addTokenDefinition(FinalKeyword.class);
+			addTokenDefinition(TransientKeyword.class);
+			addTokenDefinition(AbstractKeyword.class);
+			addTokenDefinition(SynchronizedKeyword.class);
 
-	    addTokenDefinition(IfKeyword.class);
-	    addTokenDefinition(ElseKeyword.class);
-	    addTokenDefinition(WhileKeyword.class);
-	    addTokenDefinition(DoKeyword.class);
-	    addTokenDefinition(ForKeyword.class);
-	    addTokenDefinition(SwitchKeyword.class);
-	    addTokenDefinition(CaseKeyword.class);
+			addTokenDefinition(ReturnKeyword.class);
+			addTokenDefinition(BreakKeyword.class);
+			addTokenDefinition(ContinueKeyword.class);
 
-	    addTokenDefinition(TryKeyword.class);
-	    addTokenDefinition(CatchKeyword.class);
-	    addTokenDefinition(FinallyKeyword.class);
-	    addTokenDefinition(ThrowsKeyword.class);
-	    addTokenDefinition(ThrowKeyword.class);
+			addTokenDefinition(IfKeyword.class);
+			addTokenDefinition(ElseKeyword.class);
+			addTokenDefinition(WhileKeyword.class);
+			addTokenDefinition(DoKeyword.class);
+			addTokenDefinition(ForKeyword.class);
+			addTokenDefinition(SwitchKeyword.class);
+			addTokenDefinition(CaseKeyword.class);
 
-	    addTokenDefinition(SuperKeyword.class);
-	    addTokenDefinition(ThisKeyword.class);
-	    addTokenDefinition(NullKeyword.class);
+			addTokenDefinition(TryKeyword.class);
+			addTokenDefinition(CatchKeyword.class);
+			addTokenDefinition(FinallyKeyword.class);
+			addTokenDefinition(ThrowsKeyword.class);
+			addTokenDefinition(ThrowKeyword.class);
 
-	    addTokenDefinition(VoidKeyword.class);
-	    addTokenDefinition(BooleanKeyword.class);
-	    addTokenDefinition(CharKeyword.class);
-	    addTokenDefinition(ByteKeyword.class);
-	    addTokenDefinition(ShortKeyword.class);
-	    addTokenDefinition(IntKeyword.class);
-	    addTokenDefinition(LongKeyword.class);
-	    addTokenDefinition(FloatKeyword.class);
-	    addTokenDefinition(DoubleKeyword.class);
-	} catch (TokenException e) {
-	    logger.error(e.getMessage());
+			addTokenDefinition(SuperKeyword.class);
+			addTokenDefinition(ThisKeyword.class);
+			addTokenDefinition(NullKeyword.class);
+
+			addTokenDefinition(VoidKeyword.class);
+			addTokenDefinition(BooleanKeyword.class);
+			addTokenDefinition(CharKeyword.class);
+			addTokenDefinition(ByteKeyword.class);
+			addTokenDefinition(ShortKeyword.class);
+			addTokenDefinition(IntKeyword.class);
+			addTokenDefinition(LongKeyword.class);
+			addTokenDefinition(FloatKeyword.class);
+			addTokenDefinition(DoubleKeyword.class);
+		} catch (TokenException e) {
+			logger.error(e.getMessage());
+		}
 	}
-    }
 }

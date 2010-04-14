@@ -13,20 +13,21 @@ import com.puresol.parser.TokenException;
 
 public class JavaLiterals extends AbstractTokenDefinitionGroup {
 
-    private static final Logger logger =
-	    Logger.getLogger(JavaLiterals.class);
+	public static final JavaLiterals INSTANCE = new JavaLiterals();
 
-    @Override
-    protected void initialize() {
-	try {
-	    addTokenDefinition(FloatingPointLiteral.class);
-	    addTokenDefinition(IntegerLiteral.class);
-	    addTokenDefinition(CharacterLiteral.class);
-	    addTokenDefinition(StringLiteral.class);
-	    addTokenDefinition(BooleanLiteral.class);
-	    addTokenDefinition(IdLiteral.class);
-	} catch (TokenException e) {
-	    logger.error(e.getMessage());
+	private static final Logger logger = Logger.getLogger(JavaLiterals.class);
+
+	@Override
+	protected void initialize() {
+		try {
+			addTokenDefinition(FloatingPointLiteral.class);
+			addTokenDefinition(IntegerLiteral.class);
+			addTokenDefinition(CharacterLiteral.class);
+			addTokenDefinition(StringLiteral.class);
+			addTokenDefinition(BooleanLiteral.class);
+			addTokenDefinition(IdLiteral.class);
+		} catch (TokenException e) {
+			logger.error(e.getMessage());
+		}
 	}
-    }
 }

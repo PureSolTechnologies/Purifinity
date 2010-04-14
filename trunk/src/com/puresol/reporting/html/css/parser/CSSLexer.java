@@ -15,17 +15,17 @@ public class CSSLexer extends Lexer {
 
 	public CSSLexer(TokenStream stream) throws LexerException {
 		super(stream);
-		addDefinitions(CSSKeywords.class);
-		addDefinitions(CSSLiterals.class);
-		addDefinitions(CSSSymbols.class);
+		addDefinitions(CSSKeywords.INSTANCE);
+		addDefinitions(CSSLiterals.INSTANCE);
+		addDefinitions(CSSSymbols.INSTANCE);
 	}
 
 	public CSSLexer(File directory, File file) throws FileNotFoundException,
 			IOException, LexerException {
 		super(directory, file);
-		addDefinitions(CSSKeywords.class);
-		addDefinitions(CSSLiterals.class);
-		addDefinitions(CSSSymbols.class);
+		addDefinitions(CSSKeywords.INSTANCE);
+		addDefinitions(CSSLiterals.INSTANCE);
+		addDefinitions(CSSSymbols.INSTANCE);
 	}
 
 }

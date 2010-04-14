@@ -5,11 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-
-import org.apache.log4j.Logger;
-
-import com.puresol.utils.ClassInstantiationException;
-import com.puresol.utils.Instances;
+import java.util.List;
 
 /**
  * Lexer reads a preconditioned token stream and checks lexically tokens and
@@ -20,8 +16,6 @@ import com.puresol.utils.Instances;
  * 
  */
 public class Lexer {
-
-	private static final Logger logger = Logger.getLogger(Lexer.class);
 
 	private final TokenStream inputStream;
 	private TokenStream outputStream = null;
@@ -41,26 +35,11 @@ public class Lexer {
 		tokenDefinitions.add(definition);
 	}
 
-	private <C> C createInstance(Class<C> clazz) throws LexerException {
-		try {
-			return Instances.createInstance(clazz);
-		} catch (ClassInstantiationException e) {
-			logger.error(e);
-			throw new LexerException(e.getMessage());
-		}
-	}
-
-	public final void addDefinition(Class<? extends TokenDefinition> definition)
-			throws LexerException {
-		tokenDefinitions.add(createInstance(definition));
-	}
-
-	public final void addDefinitions(
-			Class<? extends TokenDefinitionGroup> definitions)
-			throws LexerException {
-		TokenDefinitionGroup definitionsInstance = createInstance(definitions);
-		Collections.sort(definitionsInstance.getTokenDefinitions());
-		tokenDefinitions.addAll(definitionsInstance.getTokenDefinitions());
+	public final void addDefinitions(TokenDefinitionGroup definitions) {
+		List<TokenDefinition> definitionsList = definitions
+				.getTokenDefinitions();
+		Collections.sort(definitionsList);
+		tokenDefinitions.addAll(definitionsList);
 	}
 
 	public final void addDefinitions(ArrayList<TokenDefinition> definitions) {

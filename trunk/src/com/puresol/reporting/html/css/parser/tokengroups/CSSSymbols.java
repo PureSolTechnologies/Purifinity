@@ -9,20 +9,18 @@ import com.puresol.parser.TokenException;
 
 public class CSSSymbols extends AbstractTokenDefinitionGroup {
 
-    public CSSSymbols() throws TokenException {
-	super();
-    }
+	public static final CSSSymbols INSTANCE = new CSSSymbols();
 
-    @Override
-    protected void initialize() {
-	try {
-	    addTokenDefinition(LCurlyBracket.class);
-	    addTokenDefinition(RCurlyBracket.class);
-	    addTokenDefinition(Colon.class);
-	    addTokenDefinition(Dot.class);
-	} catch (TokenException e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
+	@Override
+	protected void initialize() {
+		try {
+			addTokenDefinition(LCurlyBracket.class);
+			addTokenDefinition(RCurlyBracket.class);
+			addTokenDefinition(Colon.class);
+			addTokenDefinition(Dot.class);
+		} catch (TokenException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
-    }
 }
