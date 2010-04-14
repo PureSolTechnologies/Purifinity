@@ -5,6 +5,8 @@ import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
+import com.puresol.coding.analysis.CodeAnalysisProperties;
+
 public class ProgrammingLanguages {
 
     private final ArrayList<ProgrammingLanguage> languages = new ArrayList<ProgrammingLanguage>();
@@ -33,8 +35,8 @@ public class ProgrammingLanguages {
 
     private void init() {
 	try {
-	    for (String analyser : CodingProperties.getPropertyValue(
-		    "coding.languages").split(",")) {
+	    for (String analyser : CodeAnalysisProperties
+		    .getLanguageClassNames()) {
 		Class<? extends ProgrammingLanguage> clazz = getLanguageForName(analyser);
 		if (clazz != null) {
 		    registerLanguage((ProgrammingLanguage) clazz.getMethod(
