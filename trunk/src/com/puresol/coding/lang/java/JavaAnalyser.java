@@ -23,6 +23,8 @@ import com.puresol.parser.NoMatchingTokenDefinitionFound;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 import com.puresol.parser.TokenStream;
+import com.puresol.utils.ClassInstantiationException;
+import com.puresol.utils.Instances;
 
 /**
  * 
@@ -53,7 +55,9 @@ public class JavaAnalyser extends AbstractAnalyser {
 			TokenStream tokenStream = conditioner.getTokenStream();
 			JavaLexer lexer = new JavaLexer(tokenStream);
 			tokenStream = lexer.getTokenStream();
-			JavaParser parser = new JavaParser(tokenStream);
+			JavaParser parser = Instances.createInstance(JavaParser.class);
+			parser.setTokenStream(tokenStream);
+			parser.setSymbolTable(getSymbols());
 			parser.scan();
 			addCodeRanges(parser.getCodeRanges());
 		} catch (IOException e) {
@@ -65,6 +69,8 @@ public class JavaAnalyser extends AbstractAnalyser {
 		} catch (ParserException e) {
 			logger.error(e.getMessage(), e);
 		} catch (LexerException e) {
+			logger.error(e.getMessage(), e);
+		} catch (ClassInstantiationException e) {
 			logger.error(e.getMessage(), e);
 		}
 	}

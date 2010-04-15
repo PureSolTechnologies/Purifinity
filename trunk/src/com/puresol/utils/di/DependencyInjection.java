@@ -1,11 +1,20 @@
-package com.puresol.utils;
+package com.puresol.utils.di;
 
 import java.lang.reflect.Field;
 
 public class DependencyInjection {
 
-	public static Object inject(Object client, Object... injections) {
-		Field[] fields = client.getClass().getDeclaredFields();
+	public static <T> T inject(T client, Object... injections) {
+		Class<?> clazz = client.getClass();
+		do {
+			inject(clazz, client, injections);
+			clazz = clazz.getSuperclass();
+		} while (clazz != null);
+		return client;
+	}
+
+	public static <T> T inject(Class<?> clazz, T client, Object... injections) {
+		Field[] fields = clazz.getDeclaredFields();
 		for (Field field : fields) {
 			Inject inject = field.getAnnotation(Inject.class);
 			if (inject != null) {
@@ -18,12 +27,15 @@ public class DependencyInjection {
 	private static void inject(Field field, Inject inject, Object client,
 			Object... injections) {
 		try {
+			Class<?> fieldType = field.getType();
 			for (Object injection : injections) {
-				if (injection.getClass().equals(inject.value())) {
-					field.setAccessible(true);
-					field.set(client, injection);
-					field.setAccessible(false);
-					return;
+				if (injection != null) {
+					if (injection.getClass().equals(fieldType)) {
+						field.setAccessible(true);
+						field.set(client, injection);
+						field.setAccessible(false);
+						return;
+					}
 				}
 			}
 		} catch (IllegalArgumentException e) {

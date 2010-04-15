@@ -9,11 +9,8 @@ public abstract class AbstractParser implements Parser {
 
 	private static final Logger logger = Logger.getLogger(AbstractParser.class);
 
-	@TokenStreamInjection
 	private TokenStream tokenStream = null;
-	@StartPositionInjection
 	private int startPos = 0;
-	@StartPositionInjection
 	private int currentPos = 0;
 
 	protected final void setStartPosition(int startPos) {
@@ -43,7 +40,7 @@ public abstract class AbstractParser implements Parser {
 		return tokenStream.get(currentPos);
 	}
 
-	protected final void setTokenStream(TokenStream tokenStream) {
+	public final void setTokenStream(TokenStream tokenStream) {
 		this.tokenStream = tokenStream;
 	}
 
@@ -104,21 +101,13 @@ public abstract class AbstractParser implements Parser {
 		}
 	}
 
-	private <C> C createInstance(Class<C> clazz) throws ParserException {
-		try {
-			return Instances.createInstance(clazz);
-		} catch (ClassInstantiationException e) {
-			logger.error(e.getMessage());
-			throw new ParserException(e.getMessage());
-		}
-	}
-
 	private void processToken(Class<? extends TokenDefinition> definition,
 			boolean moveForward) throws PartDoesNotMatchException,
 			ParserException {
 		try {
 			if (!getCurrentToken().getDefinition().equals(definition)) {
-				TokenDefinition definitionInstance = createInstance(definition);
+				TokenDefinition definitionInstance = Instances
+						.createInstance(definition);
 				if (!definitionInstance.matches(getCurrentToken().getText())) {
 					throw new PartDoesNotMatchException(this);
 				}
@@ -128,6 +117,9 @@ public abstract class AbstractParser implements Parser {
 			}
 		} catch (EndOfTokenStreamException e) {
 			// this may happen at the end of a file...
+		} catch (ClassInstantiationException e) {
+			logger.error(e.getMessage());
+			throw new ParserException(e.getMessage());
 		}
 	}
 
@@ -248,15 +240,19 @@ public abstract class AbstractParser implements Parser {
 	protected void processPart(Class<? extends Parser> part, boolean moveForward)
 			throws PartDoesNotMatchException, ParserException {
 		try {
-			AbstractParser partInstance = (AbstractParser) createInstance(part);
-			partInstance.setTokenStream(tokenStream);
+			AbstractParser partInstance = (AbstractParser) Instances
+					.createInstance(part);
 			partInstance.setStartPosition(currentPos);
+			partInstance.setTokenStream(tokenStream);
 			partInstance.scan();
 			if (moveForward) {
 				moveForward(partInstance.getNumberOfTokens());
 			}
 		} catch (EndOfTokenStreamException e) {
 			// this may happen at the end of a file...
+		} catch (ClassInstantiationException e) {
+			logger.error(e.getMessage(), e);
+			throw new ParserException(e.getMessage());
 		}
 	}
 
@@ -294,28 +290,40 @@ public abstract class AbstractParser implements Parser {
 	protected void processOneOf(
 			Class<? extends TokenDefinitionGroup> definitions)
 			throws PartDoesNotMatchException, ParserException {
-		TokenDefinitionGroup tokenDefinitions = createInstance(definitions);
-		for (TokenDefinition definition : tokenDefinitions
-				.getTokenDefinitions()) {
-			if (isToken(definition.getClass())) {
-				processToken(definition.getClass());
-				return;
+		try {
+			TokenDefinitionGroup tokenDefinitions = Instances
+					.createInstance(definitions);
+			for (TokenDefinition definition : tokenDefinitions
+					.getTokenDefinitions()) {
+				if (isToken(definition.getClass())) {
+					processToken(definition.getClass());
+					return;
+				}
 			}
+			throw new PartDoesNotMatchException(this);
+		} catch (ClassInstantiationException e) {
+			logger.error(e.getMessage());
+			throw new ParserException(e.getMessage());
 		}
-		throw new PartDoesNotMatchException(this);
 	}
 
 	protected boolean isCurrentOneOf(
 			Class<? extends TokenDefinitionGroup> definitions)
 			throws ParserException {
-		TokenDefinitionGroup tokenDefinitions = createInstance(definitions);
-		for (TokenDefinition definition : tokenDefinitions
-				.getTokenDefinitions()) {
-			if (isToken(definition.getClass())) {
-				return true;
+		try {
+			TokenDefinitionGroup tokenDefinitions = Instances
+					.createInstance(definitions);
+			for (TokenDefinition definition : tokenDefinitions
+					.getTokenDefinitions()) {
+				if (isToken(definition.getClass())) {
+					return true;
+				}
 			}
+			return false;
+		} catch (ClassInstantiationException e) {
+			logger.error(e.getMessage());
+			throw new ParserException(e.getMessage());
 		}
-		return false;
 	}
 
 	protected void abort() throws PartDoesNotMatchException {

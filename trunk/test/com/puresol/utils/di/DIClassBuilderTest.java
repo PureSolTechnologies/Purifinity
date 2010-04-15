@@ -1,6 +1,8 @@
-package com.puresol.utils;
+package com.puresol.utils.di;
 
 import org.junit.Test;
+
+import com.puresol.utils.ClassInstantiationException;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
@@ -9,11 +11,10 @@ public class DIClassBuilderTest extends TestCase {
 
 	@Test
 	public void testClassBuilder() {
-		DIClassBuilder<DITestClass> builder = new DIClassBuilder<DITestClass>(
-				DITestClass.class);
-		builder.setInjection(Integer.valueOf(42));
+		DIClassBuilder builder = DIClassBuilder.forInjections(Integer
+				.valueOf(42));
 		try {
-			DITestClass testClass = builder.createInstance();
+			DITestClass testClass = builder.createInstance(DITestClass.class);
 			Assert.assertEquals(Integer.valueOf(42), testClass.getI());
 		} catch (ClassInstantiationException e) {
 			e.printStackTrace();

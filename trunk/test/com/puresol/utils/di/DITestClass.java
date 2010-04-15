@@ -1,8 +1,8 @@
-package com.puresol.utils;
+package com.puresol.utils.di;
 
 public class DITestClass {
 
-	@Inject(Integer.class)
+	@Inject
 	private Integer i = null;
 
 	public Integer getI() {

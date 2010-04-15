@@ -23,6 +23,8 @@ import com.puresol.parser.NoMatchingTokenDefinitionFound;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 import com.puresol.parser.TokenStream;
+import com.puresol.utils.ClassInstantiationException;
+import com.puresol.utils.Instances;
 
 public class FortranAnalyser extends AbstractAnalyser {
 
@@ -41,7 +43,10 @@ public class FortranAnalyser extends AbstractAnalyser {
 			FortranLexer lexer = new FortranLexer(new FortranPreConditioner(
 					getProjectDirectory(), getFile()).getTokenStream());
 			TokenStream tokenStream = lexer.getTokenStream();
-			FortranParser parser = new FortranParser(tokenStream);
+			FortranParser parser = Instances
+					.createInstance(FortranParser.class);
+			parser.setTokenStream(tokenStream);
+			parser.setSymbolTable(getSymbols());
 			parser.scan();
 			addCodeRanges(parser.getCodeRanges());
 		} catch (FileNotFoundException e) {
@@ -55,6 +60,8 @@ public class FortranAnalyser extends AbstractAnalyser {
 		} catch (LexerException e) {
 			logger.error(e.getMessage(), e);
 		} catch (ParserException e) {
+			logger.error(e.getMessage(), e);
+		} catch (ClassInstantiationException e) {
 			logger.error(e.getMessage(), e);
 		}
 	}

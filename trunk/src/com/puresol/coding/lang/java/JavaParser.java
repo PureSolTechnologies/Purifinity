@@ -14,11 +14,6 @@ import com.puresol.parser.TokenStream;
 
 public class JavaParser extends AbstractSourceCodeParser {
 
-	public JavaParser(TokenStream tokenStream) {
-		setTokenStream(tokenStream);
-		setStartPosition(0);
-	}
-
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
 		TokenStream tokenStream = getTokenStream();

@@ -8,11 +8,6 @@ import com.puresol.parser.TokenStream;
 
 public class CPPParser extends AbstractSourceCodeParser {
 
-	public CPPParser(TokenStream tokenStream) {
-		setTokenStream(tokenStream);
-		setStartPosition(0);
-	}
-
 	@Override
 	public void scan() throws PartDoesNotMatchException {
 		try {

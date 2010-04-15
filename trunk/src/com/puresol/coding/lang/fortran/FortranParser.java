@@ -13,11 +13,6 @@ import com.puresol.parser.TokenStream;
 
 public class FortranParser extends AbstractSourceCodeParser {
 
-	public FortranParser(TokenStream tokenStream) {
-		setTokenStream(tokenStream);
-		setStartPosition(0);
-	}
-
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
 		TokenStream tokenStream = getTokenStream();

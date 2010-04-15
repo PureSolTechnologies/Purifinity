@@ -19,6 +19,9 @@ import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 import com.puresol.parser.Token;
 import com.puresol.parser.TokenStream;
+import com.puresol.utils.ClassInstantiationException;
+import com.puresol.utils.Instances;
+import com.puresol.utils.di.DIClassBuilder;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
@@ -42,7 +45,8 @@ public class JavaParserTest extends TestCase {
 			for (Token token : tokenStream2.getTokens()) {
 				System.out.println(token.toString());
 			}
-			parser = new JavaParser(tokenStream2);
+			parser = Instances.createInstance(JavaParser.class);
+			parser.setTokenStream(tokenStream2);
 			parser.scan();
 			for (CodeRange codeRange : parser.getCodeRanges()) {
 				System.out.println(codeRange.toString());
@@ -63,6 +67,9 @@ public class JavaParserTest extends TestCase {
 			e.printStackTrace();
 			Assert.fail("No exception was expected!");
 		} catch (LexerException e) {
+			e.printStackTrace();
+			Assert.fail("No exception was expected!");
+		} catch (ClassInstantiationException e) {
 			e.printStackTrace();
 			Assert.fail("No exception was expected!");
 		}

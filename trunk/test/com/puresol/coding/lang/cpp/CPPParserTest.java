@@ -40,7 +40,8 @@ public class CPPParserTest extends TestCase {
 			for (Token token : tokenStream2.getTokens()) {
 				System.out.println(token.toString());
 			}
-			parser = new CPPParser(tokenStream2);
+			parser = new CPPParser();
+			parser.setTokenStream(tokenStream2);
 			parser.scan();
 			for (CodeRange codeRange : parser.getCodeRanges()) {
 				System.out.println(codeRange.toString());
