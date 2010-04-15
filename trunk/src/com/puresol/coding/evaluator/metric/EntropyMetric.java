@@ -29,6 +29,8 @@ import com.puresol.utils.Property;
  */
 public class EntropyMetric implements Metric {
 
+	private static final long serialVersionUID = 1300404171923622327L;
+
 	private static final Translator translator = Translator
 			.getTranslator(EntropyMetric.class);
 

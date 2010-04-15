@@ -1,11 +1,15 @@
 package com.puresol.coding.evaluator.metric;
 
+import java.io.Serializable;
+
 import javax.i18n4j.Translator;
 
 import com.puresol.coding.evaluator.UnsupportedReportingFormatException;
 import com.puresol.reporting.ReportingFormat;
 
-public class CoCoMoValueSet {
+public class CoCoMoValueSet implements Serializable {
+
+	private static final long serialVersionUID = -6007918694918476936L;
 
 	private static final Translator translator = Translator
 			.getTranslator(CoCoMoValueSet.class);

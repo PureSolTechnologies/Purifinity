@@ -10,6 +10,7 @@
 
 package com.puresol.coding.evaluator.metric;
 
+import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -21,7 +22,9 @@ import com.puresol.coding.evaluator.CodeEvaluationProperties;
 import com.puresol.coding.evaluator.EvaluatorManager;
 import com.puresol.coding.evaluator.QualityLevel;
 
-public class CodeRangeMetrics {
+public class CodeRangeMetrics implements Serializable {
+
+	private static final long serialVersionUID = -4868326123760027594L;
 
 	private static final Logger logger = Logger
 			.getLogger(CodeRangeMetrics.class);

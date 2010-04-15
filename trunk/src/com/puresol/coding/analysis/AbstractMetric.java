@@ -14,6 +14,8 @@ import com.puresol.coding.evaluator.metric.Metric;
 
 abstract public class AbstractMetric implements Metric {
 
+	private static final long serialVersionUID = 538037000519050562L;
+
 	private final CodeRange range;
 
 	public AbstractMetric(CodeRange range) {

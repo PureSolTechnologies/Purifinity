@@ -22,11 +22,13 @@ import com.puresol.coding.analysis.ProjectAnalyser;
  */
 public abstract class AbstractEvaluator implements Evaluator {
 
+	private static final long serialVersionUID = 1296590575296210481L;
+
 	private final ProjectAnalyser analyser;
 	private final ArrayList<File> files = new ArrayList<File>();
 	private final Hashtable<File, ArrayList<CodeRange>> codeRanges = new Hashtable<File, ArrayList<CodeRange>>();
 
-	private ProgressObserver observer = null;
+	transient private ProgressObserver observer = null;
 
 	public AbstractEvaluator(ProjectAnalyser analyser) {
 		this.analyser = analyser;

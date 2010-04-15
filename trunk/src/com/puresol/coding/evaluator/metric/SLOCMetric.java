@@ -35,6 +35,8 @@ import com.puresol.utils.Property;
  */
 public class SLOCMetric extends AbstractMetric {
 
+	private static final long serialVersionUID = -4313208925226028154L;
+
 	private static final Translator translator = Translator
 			.getTranslator(SLOCMetric.class);
 

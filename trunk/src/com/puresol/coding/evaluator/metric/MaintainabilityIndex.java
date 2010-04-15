@@ -21,6 +21,8 @@ import com.puresol.utils.Property;
 
 public class MaintainabilityIndex implements Metric {
 
+	private static final long serialVersionUID = 2789695185933616684L;
+
 	private static final Translator translator = Translator
 			.getTranslator(MaintainabilityIndex.class);
 

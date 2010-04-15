@@ -39,6 +39,8 @@ import com.puresol.utils.Property;
  */
 public class CoCoMo extends AbstractEvaluator {
 
+	private static final long serialVersionUID = 5098378023541671490L;
+
 	private static final Translator translator = Translator
 			.getTranslator(CoCoMo.class);
 

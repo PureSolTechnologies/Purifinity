@@ -10,6 +10,8 @@
 
 package com.puresol.coding.evaluator.metric;
 
+import java.io.Serializable;
+
 import com.puresol.coding.analysis.CodeRange;
 import com.puresol.coding.evaluator.QualityLevel;
 
@@ -19,7 +21,7 @@ import com.puresol.coding.evaluator.QualityLevel;
  * @author Rick-Rainer Ludwig
  * 
  */
-public interface Metric {
+public interface Metric extends Serializable {
 
 	public String getName();
 

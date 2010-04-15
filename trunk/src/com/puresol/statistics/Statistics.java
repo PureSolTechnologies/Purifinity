@@ -10,12 +10,15 @@
 
 package com.puresol.statistics;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
-public class Statistics {
+public class Statistics implements Serializable {
+
+	private static final long serialVersionUID = 951111394731975571L;
 
 	private static final Logger logger = Logger.getLogger(Statistics.class);
 

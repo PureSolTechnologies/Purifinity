@@ -26,6 +26,8 @@ import com.puresol.reporting.ReportingFormat;
 
 public class GotoEvaluator extends AbstractGotoEvaluator {
 
+	private static final long serialVersionUID = 5675509692839948804L;
+
 	private static final Logger logger = Logger.getLogger(GotoEvaluator.class);
 
 	private static final Translator translator = Translator

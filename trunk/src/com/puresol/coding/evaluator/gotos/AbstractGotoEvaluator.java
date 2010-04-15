@@ -17,6 +17,8 @@ import com.puresol.utils.Property;
 
 abstract public class AbstractGotoEvaluator extends AbstractEvaluator {
 
+	private static final long serialVersionUID = -7084982170701655570L;
+
 	private static final Translator translator = Translator
 			.getTranslator(AbstractGotoEvaluator.class);
 

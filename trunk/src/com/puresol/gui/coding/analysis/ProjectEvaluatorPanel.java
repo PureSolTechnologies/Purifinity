@@ -26,7 +26,7 @@ public class ProjectEvaluatorPanel extends BorderLayoutWidget {
 	private final EvaluatorViewer evaluatorViewer = new EvaluatorViewer();
 
 	private ProjectAnalyser projectAnalyser = null;
-	private ProjectEvaluator codeEvaluator = null;
+	private ProjectEvaluator projectEvaluator = null;
 
 	public ProjectEvaluatorPanel() {
 		super();
@@ -56,8 +56,8 @@ public class ProjectEvaluatorPanel extends BorderLayoutWidget {
 
 	@Slot
 	public void evaluate() {
-		codeEvaluator = new ProjectEvaluator(projectAnalyser);
-		ProgressWindow progress = new ProgressWindow(codeEvaluator);
+		projectEvaluator = new ProjectEvaluator(projectAnalyser);
+		ProgressWindow progress = new ProgressWindow(projectEvaluator);
 		progress.connect("finished", this, "refresh");
 		progress.run();
 	}
@@ -65,7 +65,7 @@ public class ProjectEvaluatorPanel extends BorderLayoutWidget {
 	@Slot
 	public void refresh() {
 		Hashtable<Object, Object> listData = new Hashtable<Object, Object>();
-		for (Evaluator evaluator : codeEvaluator.getEvaluators()) {
+		for (Evaluator evaluator : projectEvaluator.getEvaluators()) {
 			listData.put(evaluator.getName(), evaluator);
 		}
 		evaluatorList.setListData(listData);
@@ -77,7 +77,12 @@ public class ProjectEvaluatorPanel extends BorderLayoutWidget {
 		evaluatorViewer.setEvaluator(evaluator);
 	}
 
-	public ProjectEvaluator getCodeEvaluator() {
-		return codeEvaluator;
+	public ProjectEvaluator getProjectEvaluator() {
+		return projectEvaluator;
+	}
+
+	public void setProjectEvaluator(ProjectEvaluator projectEvaluator) {
+		this.projectEvaluator = projectEvaluator;
+		refresh();
 	}
 }

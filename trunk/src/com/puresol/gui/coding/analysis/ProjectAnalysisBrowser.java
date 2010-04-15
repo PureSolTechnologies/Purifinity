@@ -81,6 +81,14 @@ public class ProjectAnalysisBrowser extends Panel {
 	}
 
 	public ProjectEvaluator getCodeEvaluator() {
-		return codeEvaluation.getCodeEvaluator();
+		return codeEvaluation.getProjectEvaluator();
+	}
+
+	public ProjectEvaluator getProjectEvaluator() {
+		return codeEvaluation.getProjectEvaluator();
+	}
+
+	public void setProjectEvaluator(ProjectEvaluator projectEvaluator) {
+		codeEvaluation.setProjectEvaluator(projectEvaluator);
 	}
 }

@@ -16,6 +16,9 @@ import com.puresol.reporting.html.HTMLStandards;
 import com.puresol.utils.Property;
 
 public class FixedFormEvaluator extends AbstractEvaluator {
+
+	private static final long serialVersionUID = -254846196228367041L;
+
 	private static final Translator translator = Translator
 			.getTranslator(FixedFormEvaluator.class);
 

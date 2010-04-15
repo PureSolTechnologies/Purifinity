@@ -1,6 +1,7 @@
 package com.puresol.coding.evaluator;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import javax.swingx.progress.ProgressObservable;
@@ -25,7 +26,7 @@ import com.puresol.reporting.ReportingFormat;
  * @author Rick-Rainer Ludwig
  * 
  */
-public interface Evaluator extends ProgressObservable {
+public interface Evaluator extends ProgressObservable, Serializable {
 
 	/**
 	 * This is the name of the evaluator. This is used for section heads in

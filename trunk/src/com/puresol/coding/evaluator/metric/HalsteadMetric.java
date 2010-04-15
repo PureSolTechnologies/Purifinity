@@ -31,6 +31,8 @@ import com.puresol.utils.Property;
 
 public class HalsteadMetric extends AbstractMetric {
 
+	private static final long serialVersionUID = -7823038852668468658L;
+
 	private static final Logger logger = Logger.getLogger(HalsteadMetric.class);
 	private static final Translator translator = Translator
 			.getTranslator(HalsteadMetric.class);

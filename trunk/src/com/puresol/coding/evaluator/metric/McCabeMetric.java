@@ -35,6 +35,8 @@ import com.puresol.utils.Property;
  */
 public class McCabeMetric extends AbstractMetric {
 
+	private static final long serialVersionUID = 4402746003873908301L;
+
 	private static final Logger logger = Logger.getLogger(McCabeMetric.class);
 	private static final Translator translator = Translator
 			.getTranslator(McCabeMetric.class);
@@ -58,7 +60,8 @@ public class McCabeMetric extends AbstractMetric {
 		try {
 			CodeRange codeRange = getCodeRange();
 			TokenStream tokenStream = codeRange.getTokenStream();
-			for (int index = codeRange.getStartId(); index <= codeRange.getStopId(); index++) {
+			for (int index = codeRange.getStartId(); index <= codeRange
+					.getStopId(); index++) {
 				Token token = tokenStream.get(index);
 				if (token.getPublicity() != TokenPublicity.HIDDEN) {
 					SourceTokenDefinition def = (SourceTokenDefinition) token

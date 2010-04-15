@@ -1,5 +1,7 @@
 package com.puresol.coding.evaluator.duplication;
 
+import java.io.Serializable;
+
 import javax.i18n4j.Translator;
 
 import com.puresol.coding.analysis.CodeRange;
@@ -15,7 +17,9 @@ import com.puresol.reporting.ReportingFormat;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class Duplication implements Comparable<Duplication> {
+public class Duplication implements Comparable<Duplication>, Serializable {
+
+	private static final long serialVersionUID = -3213681933345753869L;
 
 	private static final Translator translator = Translator
 			.getTranslator(Duplication.class);
@@ -37,8 +41,8 @@ public class Duplication implements Comparable<Duplication> {
 	}
 
 	private void init() {
-		double avgCodeRangeSize = (double) ((left.getStopId() - left.getStartId()
-				+ right.getStopId() - right.getStartId())) / 2.0;
+		double avgCodeRangeSize = (double) ((left.getStopId()
+				- left.getStartId() + right.getStopId() - right.getStartId())) / 2.0;
 		double avgDuplicationRangeSize = (double) ((leftDuplicationRange
 				.getStopId()
 				- leftDuplicationRange.getStartId()

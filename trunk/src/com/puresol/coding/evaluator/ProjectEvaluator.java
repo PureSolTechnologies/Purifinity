@@ -11,6 +11,7 @@
 package com.puresol.coding.evaluator;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import javax.swingx.progress.ProgressObservable;
@@ -28,14 +29,16 @@ import com.puresol.utils.ClassInstantiationException;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class ProjectEvaluator implements ProgressObservable {
+public class ProjectEvaluator implements ProgressObservable, Serializable {
+
+	private static final long serialVersionUID = -3421021424023319623L;
 
 	private static final Logger logger = Logger
 			.getLogger(ProjectEvaluator.class);
 
 	private final ProjectAnalyser projectAnalyser;
 	private final ArrayList<Evaluator> evaluators = new ArrayList<Evaluator>();
-	private ProgressObserver observer = null;
+	transient private ProgressObserver observer = null;
 
 	public ProjectEvaluator(ProjectAnalyser projectAnalyser) {
 		this.projectAnalyser = projectAnalyser;
@@ -85,5 +88,9 @@ public class ProjectEvaluator implements ProgressObservable {
 
 	public ArrayList<File> getFailedFiles() {
 		return projectAnalyser.getFailedFiles();
+	}
+
+	public ProjectAnalyser getProjectAnalyser() {
+		return projectAnalyser;
 	}
 }

@@ -17,6 +17,8 @@ import com.puresol.utils.Property;
 
 public class CodeDepth extends AbstractMetric {
 
+	private static final long serialVersionUID = -2151200082569811564L;
+
 	private static final Logger logger = Logger.getLogger(CodeDepth.class);
 	private static final Translator translator = Translator
 			.getTranslator(CodeDepth.class);

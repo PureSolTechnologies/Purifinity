@@ -87,6 +87,12 @@ public class CodeAnalysis extends PureSolApplication {
 		MenuItem saveAnalyser = new MenuItem("Save Analyser...");
 		saveAnalyser.connect("start", this, "saveAnalyser");
 
+		MenuItem openEvaluator = new MenuItem("Open Project Evaluator ...");
+		openEvaluator.connect("start", this, "openEvaluator");
+
+		MenuItem saveEvaluator = new MenuItem("Save Project Evaluator ...");
+		saveEvaluator.connect("start", this, "saveEvaluator");
+
 		MenuItem createTSV = new MenuItem("Save as TSV...");
 		createTSV.connect("start", this, "createTSV");
 
@@ -106,6 +112,9 @@ public class CodeAnalysis extends PureSolApplication {
 		fileMenu.add(newAnalyser);
 		fileMenu.add(openAnalyser);
 		fileMenu.add(saveAnalyser);
+		fileMenu.addSeparator();
+		fileMenu.add(openEvaluator);
+		fileMenu.add(saveEvaluator);
 		fileMenu.addSeparator();
 		fileMenu.add(createTSV);
 		fileMenu.add(createMetricsHTML);
@@ -182,6 +191,57 @@ public class CodeAnalysis extends PureSolApplication {
 		}
 		try {
 			Persistence.persist(analyser, file.getSelectedFile());
+		} catch (PersistenceException e) {
+			logger.error(e.getMessage(), e);
+			JOptionPane
+					.showMessageDialog(
+							Application.getInstance(),
+							translator
+									.i18n(
+											"Saving the analyser was not successful!\n\nMessage: {0}",
+											e.getMessage()), translator
+									.i18n("Error"), JOptionPane.ERROR_MESSAGE);
+		}
+	}
+
+	@Slot
+	public void openEvaluator() {
+		JFileChooser file = new JFileChooser();
+		file.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		int result = file.showOpenDialog(this);
+		if (result == JFileChooser.CANCEL_OPTION) {
+			return;
+		}
+		try {
+			ProjectEvaluator evaluator = (ProjectEvaluator) Persistence
+					.restore(file.getSelectedFile());
+			browser.setProjectEvaluator(evaluator);
+			analyser = evaluator.getProjectAnalyser();
+			refresh();
+		} catch (PersistenceException e) {
+			logger.error(e.getMessage(), e);
+			JOptionPane
+					.showMessageDialog(
+							Application.getInstance(),
+							translator
+									.i18n(
+											"Loading the analyser was not successful!\n\nMessage: {0}",
+											e.getMessage()), translator
+									.i18n("Error"), JOptionPane.ERROR_MESSAGE);
+		}
+	}
+
+	@Slot
+	public void saveEvaluator() {
+		JFileChooser file = new JFileChooser();
+		file.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		int result = file.showOpenDialog(this);
+		if (result == JFileChooser.CANCEL_OPTION) {
+			return;
+		}
+		try {
+			Persistence.persist(browser.getProjectEvaluator(), file
+					.getSelectedFile());
 		} catch (PersistenceException e) {
 			logger.error(e.getMessage(), e);
 			JOptionPane

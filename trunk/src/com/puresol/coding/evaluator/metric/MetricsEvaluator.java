@@ -23,6 +23,8 @@ import com.puresol.utils.Property;
 
 public class MetricsEvaluator extends AbstractEvaluator {
 
+	private static final long serialVersionUID = 895546832156565427L;
+
 	private static final Translator translator = Translator
 			.getTranslator(MetricsEvaluator.class);
 

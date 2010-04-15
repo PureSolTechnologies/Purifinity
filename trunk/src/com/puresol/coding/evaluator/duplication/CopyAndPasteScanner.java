@@ -30,6 +30,8 @@ import com.puresol.utils.Property;
  */
 public class CopyAndPasteScanner extends AbstractEvaluator {
 
+	private static final long serialVersionUID = -1786580958941615151L;
+
 	public static final int THRESHOLD = 50;
 
 	private static final Logger logger = Logger

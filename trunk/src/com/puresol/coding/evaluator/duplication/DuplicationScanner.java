@@ -30,6 +30,8 @@ import com.puresol.utils.Property;
 public class DuplicationScanner extends AbstractEvaluator implements
 		ProgressObservable {
 
+	private static final long serialVersionUID = -7419706267204649008L;
+
 	public static final int OPERATOR_THRESHOLD = 50;
 
 	private static final Logger logger = Logger

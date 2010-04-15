@@ -26,6 +26,8 @@ import com.puresol.utils.Property;
 
 public class ImplicitEvaluator extends AbstractEvaluator {
 
+	private static final long serialVersionUID = -1777491557023428085L;
+
 	private static final Translator translator = Translator
 			.getTranslator(ImplicitEvaluator.class);
 
