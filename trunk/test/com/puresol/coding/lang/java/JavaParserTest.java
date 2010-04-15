@@ -21,7 +21,6 @@ import com.puresol.parser.Token;
 import com.puresol.parser.TokenStream;
 import com.puresol.utils.ClassInstantiationException;
 import com.puresol.utils.Instances;
-import com.puresol.utils.di.DIClassBuilder;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;

@@ -7,6 +7,7 @@ import java.util.Hashtable;
 import javax.i18n4j.Translator;
 import javax.swingx.progress.ProgressObserver;
 
+import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.analysis.CodeRange;
 import com.puresol.coding.analysis.ProjectAnalyser;
 import com.puresol.coding.evaluator.AbstractEvaluator;
@@ -35,7 +36,7 @@ abstract public class AbstractGotoEvaluator extends AbstractEvaluator {
 		super(analyser);
 	}
 
-	abstract public String getLanguage();
+	abstract public ProgrammingLanguage getLanguage();
 
 	@Override
 	public final void run() {
@@ -59,7 +60,7 @@ abstract public class AbstractGotoEvaluator extends AbstractEvaluator {
 				if (Thread.interrupted()) {
 					return;
 				}
-				if (!codeRange.getLanguage().equals(getLanguage())) {
+				if (codeRange.getLanguage() != getLanguage()) {
 					continue;
 				}
 				if (!codeRange.getType().isRunnableCodeSegment()) {

@@ -9,6 +9,7 @@ import javax.i18n4j.Translator;
 
 import org.apache.log4j.Logger;
 
+import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.analysis.CodeRange;
 import com.puresol.coding.analysis.ProjectAnalyser;
 import com.puresol.coding.evaluator.QualityLevel;
@@ -16,6 +17,7 @@ import com.puresol.coding.evaluator.UnsupportedReportingFormatException;
 import com.puresol.coding.evaluator.gotos.AbstractGotoEvaluator;
 import com.puresol.coding.evaluator.gotos.FoundGoto;
 import com.puresol.coding.evaluator.gotos.FoundLabel;
+import com.puresol.coding.lang.fortran.Fortran;
 import com.puresol.coding.lang.fortran.source.keywords.GotoKeyword;
 import com.puresol.coding.lang.fortran.source.symbols.LineLead;
 import com.puresol.coding.reporting.HTMLConverter;
@@ -38,8 +40,8 @@ public class GotoEvaluator extends AbstractGotoEvaluator {
 	}
 
 	@Override
-	public String getLanguage() {
-		return "Fortran";
+	public ProgrammingLanguage getLanguage() {
+		return Fortran.getInstance();
 	}
 
 	protected void analyse(CodeRange codeRange) {

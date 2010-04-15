@@ -56,6 +56,8 @@ public class FoundLabel implements Serializable {
 
 	public String toString(ReportingFormat format)
 			throws UnsupportedReportingFormatException {
+		int labelLine = getCodeRange().getTokenStream().get(getTokenId())
+				.getStartLine();
 		if (format == ReportingFormat.TEXT) {
 			Token labelToken = codeRange.getTokenStream().get(tokenId);
 			String text = translator.i18n("line") + " "
@@ -67,7 +69,8 @@ public class FoundLabel implements Serializable {
 					text += "\t" + foundGoto.toString(format) + "\n";
 				}
 			} else {
-				text += "No goto is using this label! Is it a jump from outside of this code range?\n";
+				text += translator
+						.i18n("No goto is using this label! Is it a jump from outside of this code range or an old forgotten label?\n");
 			}
 			return text;
 		} else if (format == ReportingFormat.HTML) {
@@ -79,11 +82,23 @@ public class FoundLabel implements Serializable {
 				text += "targeted from:<br/>\n";
 				text += "<ol>\n";
 				for (FoundGoto foundGoto : assignedGotos) {
-					text += "<li>" + foundGoto.toString(format) + "</li>\n";
+					text += "<li>" + foundGoto.toString(format);
+					int gotoLine = foundGoto.getCodeRange().getTokenStream()
+							.get(foundGoto.getTokenId()).getStartLine();
+					int distance = Math.abs(gotoLine - labelLine);
+					if (distance > 40) {
+						text += "<b>"
+								+ translator
+										.i18n(
+												"Attention: Vertical distance is equal or greater than 40! ({0})",
+												distance) + "</b>";
+					}
+					text += "</li>\n";
 				}
 				text += "</ol>\n";
 			} else {
-				text += "No goto is using this label! Is it a jump from outside of this code range?\n";
+				text += translator
+						.i18n("No goto is using this label! Is it a jump from outside of this code range or an old forgotten label?\n");
 			}
 			return text;
 		}

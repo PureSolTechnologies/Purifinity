@@ -15,6 +15,7 @@ import com.puresol.coding.analysis.ProjectAnalyser;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.evaluator.QualityLevel;
 import com.puresol.coding.evaluator.UnsupportedReportingFormatException;
+import com.puresol.coding.lang.fortran.Fortran;
 import com.puresol.coding.lang.fortran.source.keywords.ImplicitKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.NoneKeyword;
 import com.puresol.coding.reporting.HTMLConverter;
@@ -50,6 +51,7 @@ public class ImplicitEvaluator extends AbstractEvaluator {
 		if (observer != null) {
 			observer.setDescription(NAME);
 			observer.setRange(0, getProjectAnalyser().getFiles().size());
+			observer.setStatus(0);
 		}
 		int count = 0;
 		for (File file : getProjectAnalyser().getFiles()) {
@@ -64,7 +66,7 @@ public class ImplicitEvaluator extends AbstractEvaluator {
 				if (Thread.interrupted()) {
 					return;
 				}
-				if (!codeRange.getLanguage().equals("Fortran")) {
+				if (codeRange.getLanguage() != Fortran.getInstance()) {
 					continue;
 				}
 				if (!codeRange.getType().isRunnableCodeSegment()) {
