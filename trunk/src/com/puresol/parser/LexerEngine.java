@@ -2,8 +2,6 @@ package com.puresol.parser;
 
 import java.util.ArrayList;
 
-import javax.swingx.data.LineEnd;
-
 /**
  * This is a separated lexer engine which lexically scans a token stream and
  * cuts it to tokens defined by an ArrayList of TokenDefinition.
@@ -79,43 +77,23 @@ public class LexerEngine {
 		ArrayList<Token> newTokens = TextLexerEngine.process(token.getText(),
 				tokenDefinitions);
 		for (Token newToken : newTokens) {
-			addToken(newToken.getPublicity(), newToken.getText(), newToken
-					.getDefinition());
+			addToken(newToken);
 		}
 	}
 
 	private void processHiddenToken(Token token) {
-		addToken(token.getPublicity(), token.getText(), token.getDefinition());
+		addToken(token);
 	}
 
 	private void processAddedToken(Token token) {
-		addToken(token.getPublicity(), token.getText(), token.getDefinition());
-	}
-
-	private void addToken(TokenPublicity publicity, String text,
-			Class<? extends TokenDefinition> definition) {
-		addToken(new Token(tokenId, publicity, streamPos, text.length(), text,
-				lineNumber, lineNumber + getNumberOfLines(text), definition));
+		addToken(token);
 	}
 
 	private void addToken(Token token) {
-		outputStream.addToken(token);
+		outputStream.addToken(Token.createWithNewPositions(token, tokenId,
+				streamPos, lineNumber));
 		tokenId++;
 		lineNumber += token.getStopLine() - token.getStartLine();
 		streamPos += token.getText().length();
 	}
-
-	private int getNumberOfLines(String text) {
-		int numberOfLines = 0;
-		if (text.contains(LineEnd.UNIX.getString())) {
-			byte[] bytes = text.getBytes();
-			for (int index = 0; index < bytes.length; index++) {
-				if ((char) bytes[index] == '\n') {
-					numberOfLines++;
-				}
-			}
-		}
-		return numberOfLines;
-	}
-
 }

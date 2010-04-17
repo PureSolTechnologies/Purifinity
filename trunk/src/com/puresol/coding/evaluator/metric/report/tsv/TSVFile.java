@@ -20,16 +20,16 @@ import com.puresol.data.StoreType;
 
 public class TSVFile implements Storable {
 
-	public static void create(File file, ProjectAnalyser analyser) {
-		new TSVFile(analyser).store(file);
+	public static void create(File file, MetricsEvaluator metrics) {
+		new TSVFile(metrics).store(file);
 	}
 
 	private final ProjectAnalyser analyser;
 	private final MetricsEvaluator metrics;
 
-	public TSVFile(ProjectAnalyser analyser) {
-		this.analyser = analyser;
-		this.metrics = new MetricsEvaluator(analyser);
+	public TSVFile(MetricsEvaluator metricsEvaluator) {
+		this.metrics = metricsEvaluator;
+		this.analyser = metrics.getProjectAnalyser();
 	}
 
 	@Override
@@ -81,6 +81,9 @@ public class TSVFile implements Storable {
 
 	private void processCodeRange(VerticalData data, File file, CodeRange range) {
 		CodeRangeMetrics metrics = this.metrics.getMetrics(range);
+		if (metrics == null) {
+			return;
+		}
 		SLOCMetric sloc = (SLOCMetric) metrics.getMetric(SLOCMetric.class);
 		McCabeMetric mcCabe = (McCabeMetric) metrics
 				.getMetric(McCabeMetric.class);

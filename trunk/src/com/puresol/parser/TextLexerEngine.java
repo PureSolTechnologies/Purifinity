@@ -100,6 +100,7 @@ public class TextLexerEngine {
 			}
 		}
 		return createTokenList();
+
 	}
 
 	/**
@@ -125,15 +126,13 @@ public class TextLexerEngine {
 	private void storeTokenAndMoveOn() {
 		String tokenText = definition.getTokenAtStart(text
 				.substring(textPosition));
-		int numberOfLines = tokenText.split("\n").length - 1;
-		Token token = new Token(tokenIndex, definition.getPublicity(),
-				textPosition, tokenText.length(), tokenText, lineNumber,
-				lineNumber + numberOfLines, definition.getClass());
+		Token token = Token.createByDefinition(definition, tokenIndex,
+				textPosition, lineNumber, tokenText);
 		lexerStack.push(new LexerPosition(definitionIndex, token));
 
 		textPosition += token.getLength();
 		tokenIndex += token.getLength();
-		lineNumber += numberOfLines;
+		lineNumber += tokenText.split("\n").length - 1;
 		startDefinitionIndex = 0;
 	}
 

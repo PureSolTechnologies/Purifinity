@@ -199,4 +199,8 @@ public class MetricsBrowser extends BorderLayoutWidget {
 		}
 		results.setText(reports.get(codeRange).getReport());
 	}
+
+	public MetricsEvaluator getMetricsEvaluator() {
+		return metrics;
+	}
 }

@@ -32,6 +32,9 @@ public class Instances {
 	public static <C> C createInstance(Class<C> clazz, Object... params)
 			throws ClassInstantiationException {
 		Class<?>[] parameterClasses = params2Classes(params);
+		if (clazz == null) {
+			throw new ClassInstantiationException("null", parameterClasses);
+		}
 		try {
 			Constructor<C> constructor = clazz.getConstructor(parameterClasses);
 			return constructor.newInstance(params);

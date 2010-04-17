@@ -5,6 +5,7 @@ import java.io.File;
 import org.junit.Test;
 
 import com.puresol.coding.lang.java.source.literals.IdLiteral;
+import com.puresol.coding.tokentypes.Comment;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
@@ -12,22 +13,31 @@ import junit.framework.TestCase;
 public class TokenStreamTest extends TestCase {
 
 	public static TokenStream newTestTokenStream() {
-		TokenStream tokenStream = new TokenStream(new File("TestTokenStream"));
-		int startPos = 0;
-		int line = 0;
-		for (int index = 0; index <= 20; index++) {
-			String text = "Token" + index + "\n";
-			TokenPublicity publicity = TokenPublicity.VISIBLE;
-			if (index % 2 == 0) {
-				publicity = TokenPublicity.HIDDEN;
+		try {
+			TokenStream tokenStream = new TokenStream(new File(
+					"TestTokenStream"));
+			int startPos = 0;
+			int line = 0;
+			for (int index = 0; index <= 20; index++) {
+				String text = "Token" + index + "\n";
+				Token token;
+				if (index % 2 == 0) {
+					token = Token.createByDefinition(Comment.class, index,
+							startPos, line, text);
+				} else {
+					token = Token.createByDefinition(IdLiteral.class, index,
+							startPos, line, text);
+				}
+				tokenStream.addToken(token);
+				startPos += text.length();
+				line++;
 			}
-			Token token = new Token(index, publicity, startPos, text.length(),
-					text, line, line + 1, IdLiteral.class);
-			tokenStream.addToken(token);
-			startPos += text.length();
-			line++;
+			return tokenStream;
+		} catch (TokenException e) {
+			e.printStackTrace();
+			Assert.fail("No exception was expected!");
 		}
-		return tokenStream;
+		return null;
 	}
 
 	@Test

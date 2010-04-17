@@ -19,6 +19,7 @@ import javax.swingx.TabbedPane;
 
 import com.puresol.coding.analysis.ProjectAnalyser;
 import com.puresol.coding.evaluator.ProjectEvaluator;
+import com.puresol.coding.evaluator.metric.MetricsEvaluator;
 
 public class ProjectAnalysisBrowser extends Panel {
 
@@ -90,5 +91,9 @@ public class ProjectAnalysisBrowser extends Panel {
 
 	public void setProjectEvaluator(ProjectEvaluator projectEvaluator) {
 		codeEvaluation.setProjectEvaluator(projectEvaluator);
+	}
+
+	public MetricsEvaluator getMetricsEvaluator() {
+		return metricsBrowser.getMetricsEvaluator();
 	}
 }

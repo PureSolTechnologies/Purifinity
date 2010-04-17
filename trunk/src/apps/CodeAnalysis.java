@@ -262,7 +262,7 @@ public class CodeAnalysis extends PureSolApplication {
 		if (result == JFileChooser.CANCEL_OPTION) {
 			return;
 		}
-		TSVFile.create(chooser.getSelectedFile(), browser.getProjectAnalyser());
+		TSVFile.create(chooser.getSelectedFile(), browser.getMetricsEvaluator());
 	}
 
 	@Slot

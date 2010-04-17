@@ -11,4 +11,9 @@ public class ContinueKeyword extends KeywordOperator {
 		setPatternString("CONTINUE");
 	}
 
+	@Override
+	public int changeBlockLayer() {
+		return -1;
+	}
+
 }

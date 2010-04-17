@@ -14,69 +14,85 @@ import java.util.ArrayList;
  */
 public final class TokenStream implements Serializable {
 
-    private static final long serialVersionUID = -4128486002145990691L;
+	private static final long serialVersionUID = -4128486002145990691L;
 
-    private final File file;
-    private final ArrayList<Token> tokens = new ArrayList<Token>();
+	private final File file;
+	private final ArrayList<Token> tokens = new ArrayList<Token>();
 
-    public TokenStream(File file) {
-	this.file = file;
-    }
-
-    public File getFile() {
-	return file;
-    }
-
-    public ArrayList<Token> getTokens() {
-	return tokens;
-    }
-
-    public void addToken(Token token) {
-	tokens.add(token);
-    }
-
-    public Token get(int index) {
-	return tokens.get(index);
-    }
-
-    public int getFirstVisbleTokenID() throws NoMatchingTokenException {
-	for (int index = 0; index < tokens.size(); index++) {
-	    if (get(index).getPublicity() != TokenPublicity.HIDDEN) {
-		return index;
-	    }
+	public TokenStream(File file) {
+		this.file = file;
 	}
-	throw new NoMatchingTokenException();
-    }
 
-    public int getSize() {
-	return tokens.size();
-    }
-
-    public Token findPreviousToken(int tokenID) throws NoMatchingTokenException {
-	if (tokenID <= 0) {
-	    throw new NoMatchingTokenException();
+	public File getFile() {
+		return file;
 	}
-	int position = tokenID - 1;
-	while (get(position).getPublicity() == TokenPublicity.HIDDEN) {
-	    if (position == 0) {
+
+	public ArrayList<Token> getTokens() {
+		return tokens;
+	}
+
+	public void addToken(Token token) {
+		tokens.add(token);
+	}
+
+	public Token get(int index) {
+		return tokens.get(index);
+	}
+
+	public int getFirstVisbleTokenID() throws NoMatchingTokenException {
+		for (int index = 0; index < tokens.size(); index++) {
+			if (get(index).getPublicity() != TokenPublicity.HIDDEN) {
+				return index;
+			}
+		}
 		throw new NoMatchingTokenException();
-	    }
-	    position--;
 	}
-	return get(position);
-    }
 
-    public Token findNextToken(int tokenID) throws NoMatchingTokenException {
-	if (tokenID >= getSize() - 2) {
-	    throw new NoMatchingTokenException();
+	public int getSize() {
+		return tokens.size();
 	}
-	int position = tokenID + 1;
-	while (get(position).getPublicity() == TokenPublicity.HIDDEN) {
-	    if (position >= getSize() - 2) {
-		throw new NoMatchingTokenException();
-	    }
-	    position++;
+
+	public Token findPreviousToken(int tokenID) throws NoMatchingTokenException {
+		if (tokenID <= 0) {
+			throw new NoMatchingTokenException();
+		}
+		int position = tokenID - 1;
+		while (get(position).getPublicity() == TokenPublicity.HIDDEN) {
+			if (position == 0) {
+				throw new NoMatchingTokenException();
+			}
+			position--;
+		}
+		return get(position);
 	}
-	return get(position);
-    }
+
+	public Token findNextToken(int tokenID) throws NoMatchingTokenException {
+		if (tokenID >= getSize() - 2) {
+			throw new NoMatchingTokenException();
+		}
+		int position = tokenID + 1;
+		while (get(position).getPublicity() == TokenPublicity.HIDDEN) {
+			if (position >= getSize() - 2) {
+				throw new NoMatchingTokenException();
+			}
+			position++;
+		}
+		return get(position);
+	}
+
+	public TokenStream getLineStream(int line) {
+		TokenStream tokenStream = new TokenStream(getFile());
+		int tokenID = 0;
+		for (Token token : tokens) {
+			if ((token.getStartLine() <= line) && (token.getStopLine() >= line)) {
+				if ((token.getStopLine() != line)
+						|| (!token.getText().endsWith("\n"))) {
+					Token lineToken = Token.createWithNewID(token, tokenID);
+					tokenStream.addToken(lineToken);
+					tokenID++;
+				}
+			}
+		}
+		return tokenStream;
+	}
 }

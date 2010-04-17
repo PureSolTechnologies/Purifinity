@@ -78,125 +78,49 @@ public class SLOCMetric extends AbstractMetric {
 		proLOC = 0;
 		comLOC = 0;
 		blLOC = 0;
-		for (int index = getCodeRange().getStartId(); index <= getCodeRange()
-				.getStopId(); index++) {
-			Token token = stream.get(index);
-			if (!token.getText().endsWith("\n")) {
-				// it's not a end of line token and therefore to be skipped
-				continue;
+		for (int line = getCodeRange().getStartLine(); line <= getCodeRange()
+				.getStopLine(); line++) {
+			TokenStream lineStream = stream.getLineStream(line);
+			phyLOC += 1;
+			if (isComment(lineStream)) {
+				comLOC += 1;
 			}
-			int lines = countLinesInToken(token);
-			phyLOC += lines;
-			if (isComment(token)) {
-				comLOC += lines;
+			if (isBlank(lineStream)) {
+				blLOC += 1;
 			}
-			if (isBlank(token)) {
-				blLOC += lines;
-			}
-			if (isProductive(token)) {
-				proLOC += lines;
+			if (isProductive(lineStream)) {
+				proLOC += 1;
 			}
 		}
 	}
 
-	/**
-	 * This method calculates how much lines are encoded in the current token
-	 * and the tokens before which do not end with a new line.
-	 * 
-	 * @param token
-	 * @return
-	 */
-	private int countLinesInToken(Token token) {
-		int index = token.getTokenID();
-		if (index == 0) {
-			return 0;
-		}
-		index--;
-		int lines = 0;
-		Token previous = stream.get(index);
-		while (!previous.getText().endsWith("\n")) {
-			lines += previous.getText().split("\n").length - 1;
-			index--;
-			if (index < 0) {
-				break;
-			}
-			previous = stream.get(index);
-		}
-		return lines + 1;
-	}
-
-	private boolean isComment(Token token) {
-		/*
-		 * A comment is a trimmed non-empty string!
-		 */
-		int index = token.getTokenID();
-		if (index == 0) {
-			return false;
-		}
-		index--;
-		Token previous = stream.get(index);
-		while (!previous.getText().equals("\n")) {
-			if (previous.getPublicity() == TokenPublicity.HIDDEN) {
-				if (!previous.getText().trim().isEmpty()) {
+	private boolean isComment(TokenStream tokenStream) {
+		for (Token token : tokenStream.getTokens()) {
+			if (token.getPublicity() == TokenPublicity.HIDDEN) {
+				if (token.getText().trim().length() > 0) {
 					return true;
 				}
 			}
-			index--;
-			if (index < 0) {
-				break;
-			}
-			previous = stream.get(index);
 		}
 		return false;
 	}
 
-	private boolean isBlank(Token token) {
-		/*
-		 * A blank lines consists only of channel 99 tokens with are trimmed
-		 * empty.
-		 */
-		int index = token.getTokenID();
-		if (index == 0) {
-			return false;
-		}
-		index--;
-		Token previous = stream.get(index);
-		while (!previous.getText().equals("\n")) {
-			if (previous.getPublicity() != TokenPublicity.HIDDEN) {
+	private boolean isBlank(TokenStream tokenStream) {
+		for (Token token : tokenStream.getTokens()) {
+			if (token.getText().trim().length() > 0) {
 				return false;
 			}
-			if (!previous.getText().trim().isEmpty()) {
-				return false;
-			}
-			index--;
-			if (index < 0) {
-				break;
-			}
-			previous = stream.get(index);
 		}
 		return true;
 	}
 
-	private boolean isProductive(Token token) {
-		/*
-		 * A productive line is a line with at least one token not in channel
-		 * 99!
-		 */
-		int index = token.getTokenID();
-		if (index == 0) {
-			return false;
-		}
-		index--;
-		Token previous = stream.get(index);
-		while (!previous.getText().equals("\n")) {
-			if (previous.getPublicity() != TokenPublicity.HIDDEN) {
-				return true;
+	private boolean isProductive(TokenStream tokenStream) {
+		for (Token token : tokenStream.getTokens()) {
+			if (token.getPublicity() != TokenPublicity.HIDDEN) {
+				if (token.getText().trim().length() > 0) {
+					return true;
+				}
 			}
-			index--;
-			if (index < 0) {
-				break;
-			}
-			previous = stream.get(index);
 		}
 		return false;
 	}
