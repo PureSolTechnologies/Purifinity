@@ -185,7 +185,7 @@ public class CodeAnalysis extends PureSolApplication {
 	public void saveAnalyser() {
 		JFileChooser file = new JFileChooser();
 		file.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		int result = file.showOpenDialog(this);
+		int result = file.showSaveDialog(this);
 		if (result == JFileChooser.CANCEL_OPTION) {
 			return;
 		}
@@ -235,7 +235,7 @@ public class CodeAnalysis extends PureSolApplication {
 	public void saveEvaluator() {
 		JFileChooser file = new JFileChooser();
 		file.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		int result = file.showOpenDialog(this);
+		int result = file.showSaveDialog(this);
 		if (result == JFileChooser.CANCEL_OPTION) {
 			return;
 		}
@@ -262,7 +262,9 @@ public class CodeAnalysis extends PureSolApplication {
 		if (result == JFileChooser.CANCEL_OPTION) {
 			return;
 		}
-		TSVFile.create(chooser.getSelectedFile(), browser.getMetricsEvaluator());
+		TSVFile
+				.create(chooser.getSelectedFile(), browser
+						.getMetricsEvaluator());
 	}
 
 	@Slot
