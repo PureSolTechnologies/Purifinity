@@ -11,9 +11,9 @@ public class CPPLexer extends Lexer {
 
     public CPPLexer(TokenStream stream) throws LexerException {
 	super(stream);
-	addDefinitions(CPPKeywords.INSTANCE);
-	addDefinitions(CPPLiterals.INSTANCE);
-	addDefinitions(CPPSymbols.INSTANCE);
+	addDefinitions(CPPKeywords.DEFINITIONS);
+	addDefinitions(CPPLiterals.DEFINITIONS);
+	addDefinitions(CPPSymbols.DEFINITIONS);
     }
 
 }

@@ -1,6 +1,7 @@
 package com.puresol.coding.lang.java.source.tokengroups;
 
-import org.apache.log4j.Logger;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.puresol.coding.lang.java.source.literals.BooleanLiteral;
 import com.puresol.coding.lang.java.source.literals.CharacterLiteral;
@@ -8,26 +9,18 @@ import com.puresol.coding.lang.java.source.literals.FloatingPointLiteral;
 import com.puresol.coding.lang.java.source.literals.IdLiteral;
 import com.puresol.coding.lang.java.source.literals.IntegerLiteral;
 import com.puresol.coding.lang.java.source.literals.StringLiteral;
-import com.puresol.parser.AbstractTokenDefinitionGroup;
-import com.puresol.parser.TokenException;
+import com.puresol.parser.TokenDefinition;
 
-public class JavaLiterals extends AbstractTokenDefinitionGroup {
+public class JavaLiterals {
 
-	public static final JavaLiterals INSTANCE = new JavaLiterals();
+    public static final List<Class<? extends TokenDefinition>> DEFINITIONS = new ArrayList<Class<? extends TokenDefinition>>();
 
-	private static final Logger logger = Logger.getLogger(JavaLiterals.class);
-
-	@Override
-	protected void initialize() {
-		try {
-			addTokenDefinition(FloatingPointLiteral.class);
-			addTokenDefinition(IntegerLiteral.class);
-			addTokenDefinition(CharacterLiteral.class);
-			addTokenDefinition(StringLiteral.class);
-			addTokenDefinition(BooleanLiteral.class);
-			addTokenDefinition(IdLiteral.class);
-		} catch (TokenException e) {
-			logger.error(e.getMessage());
-		}
-	}
+    static {
+	DEFINITIONS.add(FloatingPointLiteral.class);
+	DEFINITIONS.add(IntegerLiteral.class);
+	DEFINITIONS.add(CharacterLiteral.class);
+	DEFINITIONS.add(StringLiteral.class);
+	DEFINITIONS.add(BooleanLiteral.class);
+	DEFINITIONS.add(IdLiteral.class);
+    }
 }

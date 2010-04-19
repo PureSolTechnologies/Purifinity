@@ -9,11 +9,11 @@ import com.puresol.parser.TokenStream;
 
 public class JavaLexer extends Lexer {
 
-	public JavaLexer(TokenStream stream) throws LexerException {
-		super(stream);
-		addDefinitions(JavaKeywords.INSTANCE);
-		addDefinitions(JavaLiterals.INSTANCE);
-		addDefinitions(JavaSymbols.INSTANCE);
-	}
+    public JavaLexer(TokenStream stream) throws LexerException {
+	super(stream);
+	addDefinitions(JavaKeywords.DEFINITIONS);
+	addDefinitions(JavaLiterals.DEFINITIONS);
+	addDefinitions(JavaSymbols.DEFINITIONS);
+    }
 
 }

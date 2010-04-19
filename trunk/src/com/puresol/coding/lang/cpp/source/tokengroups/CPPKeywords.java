@@ -1,6 +1,7 @@
 package com.puresol.coding.lang.cpp.source.tokengroups;
 
-import org.apache.log4j.Logger;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.puresol.coding.lang.cpp.source.keywords.BoolKeyword;
 import com.puresol.coding.lang.cpp.source.keywords.BreakKeyword;
@@ -33,58 +34,49 @@ import com.puresol.coding.lang.cpp.source.keywords.SwitchKeyword;
 import com.puresol.coding.lang.cpp.source.keywords.ThisKeyword;
 import com.puresol.coding.lang.cpp.source.keywords.VoidKeyword;
 import com.puresol.coding.lang.cpp.source.keywords.WhileKeyword;
-import com.puresol.parser.AbstractTokenDefinitionGroup;
-import com.puresol.parser.TokenException;
+import com.puresol.parser.TokenDefinition;
 
-public class CPPKeywords extends AbstractTokenDefinitionGroup {
+public class CPPKeywords {
 
-	public static final CPPKeywords INSTANCE = new CPPKeywords();
-	
-    private static final Logger logger =
-	    Logger.getLogger(CPPKeywords.class);
+    public static final List<Class<? extends TokenDefinition>> DEFINITIONS = new ArrayList<Class<? extends TokenDefinition>>();
 
-    @Override
-    protected void initialize() {
-	try {
-	    addTokenDefinition(PPIncludeKeyword.class);
-	    addTokenDefinition(PPDefineKeyword.class);
-	    addTokenDefinition(PPIfDefKeyword.class);
-	    addTokenDefinition(PPEndIfKeyword.class);
-	    addTokenDefinition(PPElseKeyword.class);
+    static {
+	DEFINITIONS.add(PPIncludeKeyword.class);
+	DEFINITIONS.add(PPDefineKeyword.class);
+	DEFINITIONS.add(PPIfDefKeyword.class);
+	DEFINITIONS.add(PPEndIfKeyword.class);
+	DEFINITIONS.add(PPElseKeyword.class);
 
-	    addTokenDefinition(ClassKeyword.class);
-	    addTokenDefinition(NewKeyword.class);
+	DEFINITIONS.add(ClassKeyword.class);
+	DEFINITIONS.add(NewKeyword.class);
 
-	    addTokenDefinition(PublicKeyword.class);
-	    addTokenDefinition(ProtectedKeyword.class);
-	    addTokenDefinition(PrivateKeyword.class);
-	    addTokenDefinition(StaticKeyword.class);
+	DEFINITIONS.add(PublicKeyword.class);
+	DEFINITIONS.add(ProtectedKeyword.class);
+	DEFINITIONS.add(PrivateKeyword.class);
+	DEFINITIONS.add(StaticKeyword.class);
 
-	    addTokenDefinition(ReturnKeyword.class);
-	    addTokenDefinition(BreakKeyword.class);
-	    addTokenDefinition(ContinueKeyword.class);
+	DEFINITIONS.add(ReturnKeyword.class);
+	DEFINITIONS.add(BreakKeyword.class);
+	DEFINITIONS.add(ContinueKeyword.class);
 
-	    addTokenDefinition(IfKeyword.class);
-	    addTokenDefinition(ElseKeyword.class);
-	    addTokenDefinition(WhileKeyword.class);
-	    addTokenDefinition(DoKeyword.class);
-	    addTokenDefinition(ForKeyword.class);
-	    addTokenDefinition(SwitchKeyword.class);
-	    addTokenDefinition(CaseKeyword.class);
+	DEFINITIONS.add(IfKeyword.class);
+	DEFINITIONS.add(ElseKeyword.class);
+	DEFINITIONS.add(WhileKeyword.class);
+	DEFINITIONS.add(DoKeyword.class);
+	DEFINITIONS.add(ForKeyword.class);
+	DEFINITIONS.add(SwitchKeyword.class);
+	DEFINITIONS.add(CaseKeyword.class);
 
-	    addTokenDefinition(ThisKeyword.class);
-	    addTokenDefinition(NullKeyword.class);
+	DEFINITIONS.add(ThisKeyword.class);
+	DEFINITIONS.add(NullKeyword.class);
 
-	    addTokenDefinition(VoidKeyword.class);
-	    addTokenDefinition(ConstKeyword.class);
-	    addTokenDefinition(BoolKeyword.class);
-	    addTokenDefinition(CharKeyword.class);
-	    addTokenDefinition(IntKeyword.class);
-	    addTokenDefinition(LongKeyword.class);
-	    addTokenDefinition(FloatKeyword.class);
-	    addTokenDefinition(DoubleKeyword.class);
-	} catch (TokenException e) {
-	    logger.error(e.getMessage());
-	}
+	DEFINITIONS.add(VoidKeyword.class);
+	DEFINITIONS.add(ConstKeyword.class);
+	DEFINITIONS.add(BoolKeyword.class);
+	DEFINITIONS.add(CharKeyword.class);
+	DEFINITIONS.add(IntKeyword.class);
+	DEFINITIONS.add(LongKeyword.class);
+	DEFINITIONS.add(FloatKeyword.class);
+	DEFINITIONS.add(DoubleKeyword.class);
     }
 }

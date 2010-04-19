@@ -1,29 +1,22 @@
 package com.puresol.coding.lang.java.source.tokengroups;
 
-import org.apache.log4j.Logger;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.puresol.coding.lang.java.source.keywords.AbstractKeyword;
 import com.puresol.coding.lang.java.source.keywords.FinalKeyword;
 import com.puresol.coding.lang.java.source.keywords.ProtectedKeyword;
 import com.puresol.coding.lang.java.source.keywords.PublicKeyword;
-import com.puresol.parser.AbstractTokenDefinitionGroup;
-import com.puresol.parser.TokenException;
+import com.puresol.parser.TokenDefinition;
 
-public class ClassModifiers extends AbstractTokenDefinitionGroup {
+public class ClassModifiers {
 
-    private static final Logger logger =
-	    Logger.getLogger(ClassModifiers.class);
-
-    @Override
-    protected void initialize() {
-	try {
-	    addTokenDefinition(PublicKeyword.class);
-	    addTokenDefinition(ProtectedKeyword.class);
-	    addTokenDefinition(FinalKeyword.class);
-	    addTokenDefinition(AbstractKeyword.class);
-	} catch (TokenException e) {
-	    logger.error(e.getMessage());
-	}
+    public static final List<Class<? extends TokenDefinition>> DEFINITIONS = new ArrayList<Class<? extends TokenDefinition>>();
+    static {
+	DEFINITIONS.add(PublicKeyword.class);
+	DEFINITIONS.add(ProtectedKeyword.class);
+	DEFINITIONS.add(FinalKeyword.class);
+	DEFINITIONS.add(AbstractKeyword.class);
     }
 
 }

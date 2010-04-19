@@ -167,18 +167,4 @@ public abstract class AbstractTokenDefinition implements TokenDefinition {
 		return true;
 	}
 
-	@Override
-	public final int compareTo(TokenDefinition other) {
-		if (this.equals(other)) {
-			return 0;
-		}
-		if (other.atStart(this.patternString)) {
-			return -1;
-		}
-		if (this.atStart(((AbstractTokenDefinition) other).patternString)) {
-			return 1;
-		}
-		return this.patternString
-				.compareTo(((AbstractTokenDefinition) other).patternString);
-	}
 }

@@ -1,6 +1,7 @@
 package com.puresol.coding.lang.cpp.source.tokengroups;
 
-import org.apache.log4j.Logger;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.puresol.coding.lang.cpp.source.literals.BooleanLiteral;
 import com.puresol.coding.lang.cpp.source.literals.CharacterLiteral;
@@ -8,27 +9,19 @@ import com.puresol.coding.lang.cpp.source.literals.FloatingPointLiteral;
 import com.puresol.coding.lang.cpp.source.literals.IdLiteral;
 import com.puresol.coding.lang.cpp.source.literals.IntegerLiteral;
 import com.puresol.coding.lang.cpp.source.literals.StringLiteral;
-import com.puresol.parser.AbstractTokenDefinitionGroup;
-import com.puresol.parser.TokenException;
+import com.puresol.parser.TokenDefinition;
 
-public class CPPLiterals extends AbstractTokenDefinitionGroup {
+public class CPPLiterals {
 
-	public static final CPPLiterals INSTANCE = new CPPLiterals();
+    public static final List<Class<? extends TokenDefinition>> DEFINITIONS = new ArrayList<Class<? extends TokenDefinition>>();
 
-	private static final Logger logger = Logger.getLogger(CPPLiterals.class);
+    static {
+	DEFINITIONS.add(FloatingPointLiteral.class);
+	DEFINITIONS.add(IntegerLiteral.class);
+	DEFINITIONS.add(CharacterLiteral.class);
+	DEFINITIONS.add(StringLiteral.class);
+	DEFINITIONS.add(BooleanLiteral.class);
 
-	@Override
-	protected void initialize() {
-		try {
-			addTokenDefinition(FloatingPointLiteral.class);
-			addTokenDefinition(IntegerLiteral.class);
-			addTokenDefinition(CharacterLiteral.class);
-			addTokenDefinition(StringLiteral.class);
-			addTokenDefinition(BooleanLiteral.class);
-
-			addTokenDefinition(IdLiteral.class);
-		} catch (TokenException e) {
-			logger.error(e.getMessage());
-		}
-	}
+	DEFINITIONS.add(IdLiteral.class);
+    }
 }

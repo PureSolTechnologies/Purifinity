@@ -1,6 +1,7 @@
 package com.puresol.coding.lang.java.source.tokengroups;
 
-import org.apache.log4j.Logger;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.puresol.coding.lang.java.source.symbols.Assign;
 import com.puresol.coding.lang.java.source.symbols.At;
@@ -43,69 +44,61 @@ import com.puresol.coding.lang.java.source.symbols.Star;
 import com.puresol.coding.lang.java.source.symbols.StarAssign;
 import com.puresol.coding.lang.java.source.symbols.Unequal;
 import com.puresol.coding.lang.java.source.symbols.WhiteSpace;
-import com.puresol.parser.AbstractTokenDefinitionGroup;
-import com.puresol.parser.TokenException;
+import com.puresol.parser.TokenDefinition;
 
-public class JavaSymbols extends AbstractTokenDefinitionGroup {
+public class JavaSymbols {
 
-	public static final JavaSymbols INSTANCE = new JavaSymbols();
+    public static final List<Class<? extends TokenDefinition>> DEFINITIONS = new ArrayList<Class<? extends TokenDefinition>>();
 
-	private static final Logger logger = Logger.getLogger(JavaSymbols.class);
+    static {
+	DEFINITIONS.add(MultiLineComment.class);
+	DEFINITIONS.add(LineComment.class);
+	DEFINITIONS.add(LineBreak.class);
+	DEFINITIONS.add(WhiteSpace.class);
 
-	@Override
-	protected void initialize() {
-		try {
-			addTokenDefinition(MultiLineComment.class);
-			addTokenDefinition(LineComment.class);
-			addTokenDefinition(LineBreak.class);
-			addTokenDefinition(WhiteSpace.class);
+	DEFINITIONS.add(LParen.class);
+	DEFINITIONS.add(RParen.class);
+	DEFINITIONS.add(LCurlyBracket.class);
+	DEFINITIONS.add(RCurlyBracket.class);
+	DEFINITIONS.add(LRectBracket.class);
+	DEFINITIONS.add(RRectBracket.class);
 
-			addTokenDefinition(LParen.class);
-			addTokenDefinition(RParen.class);
-			addTokenDefinition(LCurlyBracket.class);
-			addTokenDefinition(RCurlyBracket.class);
-			addTokenDefinition(LRectBracket.class);
-			addTokenDefinition(RRectBracket.class);
+	DEFINITIONS.add(LessEqual.class);
+	DEFINITIONS.add(GreaterEqual.class);
+	DEFINITIONS.add(LessThan.class);
+	DEFINITIONS.add(GreaterThan.class);
+	DEFINITIONS.add(Equal.class);
+	DEFINITIONS.add(Unequal.class);
+	DEFINITIONS.add(PlusAssign.class);
+	DEFINITIONS.add(MinusAssign.class);
+	DEFINITIONS.add(SlashAssign.class);
+	DEFINITIONS.add(StarAssign.class);
+	DEFINITIONS.add(Assign.class);
+	DEFINITIONS.add(At.class);
+	DEFINITIONS.add(BitOr.class);
+	DEFINITIONS.add(Caret.class);
 
-			addTokenDefinition(LessEqual.class);
-			addTokenDefinition(GreaterEqual.class);
-			addTokenDefinition(LessThan.class);
-			addTokenDefinition(GreaterThan.class);
-			addTokenDefinition(Equal.class);
-			addTokenDefinition(Unequal.class);
-			addTokenDefinition(PlusAssign.class);
-			addTokenDefinition(MinusAssign.class);
-			addTokenDefinition(SlashAssign.class);
-			addTokenDefinition(StarAssign.class);
-			addTokenDefinition(Assign.class);
-			addTokenDefinition(At.class);
-			addTokenDefinition(BitOr.class);
-			addTokenDefinition(Caret.class);
+	DEFINITIONS.add(PlusPlus.class);
+	DEFINITIONS.add(MinusMinus.class);
 
-			addTokenDefinition(PlusPlus.class);
-			addTokenDefinition(MinusMinus.class);
+	DEFINITIONS.add(Plus.class);
+	DEFINITIONS.add(Minus.class);
+	DEFINITIONS.add(Slash.class);
+	DEFINITIONS.add(Star.class);
+	DEFINITIONS.add(Percent.class);
+	DEFINITIONS.add(BackSlash.class);
 
-			addTokenDefinition(Plus.class);
-			addTokenDefinition(Minus.class);
-			addTokenDefinition(Slash.class);
-			addTokenDefinition(Star.class);
-			addTokenDefinition(Percent.class);
-			addTokenDefinition(BackSlash.class);
+	DEFINITIONS.add(LogicalAnd.class);
+	DEFINITIONS.add(BitAnd.class);
+	DEFINITIONS.add(LogicalOr.class);
+	DEFINITIONS.add(BitOr.class);
+	DEFINITIONS.add(Not.class);
 
-			addTokenDefinition(LogicalAnd.class);
-			addTokenDefinition(BitAnd.class);
-			addTokenDefinition(LogicalOr.class);
-			addTokenDefinition(BitOr.class);
-			addTokenDefinition(Not.class);
+	DEFINITIONS.add(QuestionMark.class);
 
-			addTokenDefinition(QuestionMark.class);
-
-			addTokenDefinition(Semicolon.class);
-			addTokenDefinition(Comma.class);
-			addTokenDefinition(Colon.class);
-			addTokenDefinition(Dot.class);
-		} catch (TokenException e) {
-			logger.error(e.getMessage());
-		}
-	}
+	DEFINITIONS.add(Semicolon.class);
+	DEFINITIONS.add(Comma.class);
+	DEFINITIONS.add(Colon.class);
+	DEFINITIONS.add(Dot.class);
+    }
 }

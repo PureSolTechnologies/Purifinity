@@ -1,6 +1,7 @@
 package com.puresol.coding.lang.fortran.source.tokengroups;
 
-import org.apache.log4j.Logger;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.puresol.coding.lang.fortran.source.symbols.Ampersand;
 import com.puresol.coding.lang.fortran.source.symbols.Assign;
@@ -25,49 +26,41 @@ import com.puresol.coding.lang.fortran.source.symbols.Slash;
 import com.puresol.coding.lang.fortran.source.symbols.Star;
 import com.puresol.coding.lang.fortran.source.symbols.Unequal;
 import com.puresol.coding.lang.fortran.source.symbols.WhiteSpace;
-import com.puresol.parser.AbstractTokenDefinitionGroup;
-import com.puresol.parser.TokenException;
+import com.puresol.parser.TokenDefinition;
 
-public class FortranSymbols extends AbstractTokenDefinitionGroup {
+public class FortranSymbols {
 
-	public static final FortranSymbols INSTANCE = new FortranSymbols();
+    public static final List<Class<? extends TokenDefinition>> DEFINITIONS = new ArrayList<Class<? extends TokenDefinition>>();
 
-	private static final Logger logger = Logger.getLogger(FortranSymbols.class);
+    static {
+	DEFINITIONS.add(LineComment.class);
 
-	@Override
-	protected void initialize() {
-		try {
-			addTokenDefinition(LineComment.class);
+	DEFINITIONS.add(LineBreak.class);
+	DEFINITIONS.add(WhiteSpace.class);
+	DEFINITIONS.add(LParen.class);
+	DEFINITIONS.add(RParen.class);
 
-			addTokenDefinition(LineBreak.class);
-			addTokenDefinition(WhiteSpace.class);
-			addTokenDefinition(LParen.class);
-			addTokenDefinition(RParen.class);
+	DEFINITIONS.add(Equal.class);
+	DEFINITIONS.add(Unequal.class);
+	DEFINITIONS.add(LessThan.class);
+	DEFINITIONS.add(GreaterThan.class);
+	DEFINITIONS.add(LessEqual.class);
+	DEFINITIONS.add(GreaterEqual.class);
 
-			addTokenDefinition(Equal.class);
-			addTokenDefinition(Unequal.class);
-			addTokenDefinition(LessThan.class);
-			addTokenDefinition(GreaterThan.class);
-			addTokenDefinition(LessEqual.class);
-			addTokenDefinition(GreaterEqual.class);
+	DEFINITIONS.add(PointerAssign.class);
 
-			addTokenDefinition(PointerAssign.class);
+	DEFINITIONS.add(Assign.class);
+	DEFINITIONS.add(Slash.class);
 
-			addTokenDefinition(Assign.class);
-			addTokenDefinition(Slash.class);
+	DEFINITIONS.add(Power.class);
+	DEFINITIONS.add(Star.class);
+	DEFINITIONS.add(Minus.class);
+	DEFINITIONS.add(Plus.class);
 
-			addTokenDefinition(Power.class);
-			addTokenDefinition(Star.class);
-			addTokenDefinition(Minus.class);
-			addTokenDefinition(Plus.class);
-
-			addTokenDefinition(Comma.class);
-			addTokenDefinition(Colon.class);
-			addTokenDefinition(Semicolon.class);
-			addTokenDefinition(Ampersand.class);
-			addTokenDefinition(Question.class);
-		} catch (TokenException e) {
-			logger.error(e.getMessage());
-		}
-	}
+	DEFINITIONS.add(Comma.class);
+	DEFINITIONS.add(Colon.class);
+	DEFINITIONS.add(Semicolon.class);
+	DEFINITIONS.add(Ampersand.class);
+	DEFINITIONS.add(Question.class);
+    }
 }

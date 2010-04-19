@@ -4,8 +4,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+
+import org.apache.log4j.Logger;
+
+import com.puresol.utils.ClassInstantiationException;
+import com.puresol.utils.Instances;
 
 /**
  * Lexer reads a preconditioned token stream and checks lexically tokens and
@@ -17,52 +21,57 @@ import java.util.List;
  */
 public class Lexer {
 
-	private final TokenStream inputStream;
-	private TokenStream outputStream = null;
-	private final ArrayList<TokenDefinition> tokenDefinitions = new ArrayList<TokenDefinition>();
+    private static final Logger logger = Logger.getLogger(Lexer.class);
 
-	public Lexer(TokenStream stream) {
-		this.inputStream = stream;
-	}
+    private final TokenStream inputStream;
+    private TokenStream outputStream = null;
+    private final ArrayList<TokenDefinition> tokenDefinitions = new ArrayList<TokenDefinition>();
 
-	public Lexer(File directory, File file) throws FileNotFoundException,
-			IOException {
-		this.inputStream = new DefaultPreConditioner(directory, file)
-				.getTokenStream();
-	}
+    public Lexer(TokenStream stream) {
+	this.inputStream = stream;
+    }
 
-	public final void addDefinition(TokenDefinition definition) {
-		tokenDefinitions.add(definition);
-	}
+    public Lexer(File directory, File file) throws FileNotFoundException,
+	    IOException {
+	this.inputStream = new DefaultPreConditioner(directory, file)
+		.getTokenStream();
+    }
 
-	public final void addDefinitions(TokenDefinitionGroup definitions) {
-		List<TokenDefinition> definitionsList = definitions
-				.getTokenDefinitions();
-		Collections.sort(definitionsList);
-		tokenDefinitions.addAll(definitionsList);
+    public final void addDefinition(Class<? extends TokenDefinition> definition)
+	    throws LexerException {
+	try {
+	    tokenDefinitions.add(Instances.createInstance(definition));
+	} catch (ClassInstantiationException e) {
+	    logger.error(e.getMessage(), e);
+	    throw new LexerException("Could not instantiate '"
+		    + definition.getName() + "'!");
 	}
+    }
 
-	public final void addDefinitions(ArrayList<TokenDefinition> definitions) {
-		Collections.sort(definitions);
-		tokenDefinitions.addAll(definitions);
+    public final void addDefinitions(
+	    List<Class<? extends TokenDefinition>> definitions)
+	    throws LexerException {
+	for (Class<? extends TokenDefinition> definition : definitions) {
+	    addDefinition(definition);
 	}
+    }
 
-	public final ArrayList<TokenDefinition> getDefinitions() {
-		return tokenDefinitions;
-	}
+    public final ArrayList<TokenDefinition> getDefinitions() {
+	return tokenDefinitions;
+    }
 
-	public final TokenStream getTokenStream()
-			throws NoMatchingTokenDefinitionFound {
-		if (outputStream == null) {
-			createOutputStream();
-		}
-		return outputStream;
+    public final TokenStream getTokenStream()
+	    throws NoMatchingTokenDefinitionFound {
+	if (outputStream == null) {
+	    createOutputStream();
 	}
+	return outputStream;
+    }
 
-	private final synchronized void createOutputStream()
-			throws NoMatchingTokenDefinitionFound {
-		if (outputStream == null) {
-			outputStream = LexerEngine.process(inputStream, tokenDefinitions);
-		}
+    private final synchronized void createOutputStream()
+	    throws NoMatchingTokenDefinitionFound {
+	if (outputStream == null) {
+	    outputStream = LexerEngine.process(inputStream, tokenDefinitions);
 	}
+    }
 }

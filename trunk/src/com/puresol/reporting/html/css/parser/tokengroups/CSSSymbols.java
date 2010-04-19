@@ -1,26 +1,24 @@
 package com.puresol.reporting.html.css.parser.tokengroups;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.puresol.coding.lang.java.source.symbols.Colon;
 import com.puresol.coding.lang.java.source.symbols.Dot;
 import com.puresol.coding.lang.java.source.symbols.LCurlyBracket;
 import com.puresol.coding.lang.java.source.symbols.RCurlyBracket;
-import com.puresol.parser.AbstractTokenDefinitionGroup;
-import com.puresol.parser.TokenException;
+import com.puresol.parser.TokenDefinition;
 
-public class CSSSymbols extends AbstractTokenDefinitionGroup {
+public class CSSSymbols {
 
-	public static final CSSSymbols INSTANCE = new CSSSymbols();
+    public static final CSSSymbols INSTANCE = new CSSSymbols();
 
-	@Override
-	protected void initialize() {
-		try {
-			addTokenDefinition(LCurlyBracket.class);
-			addTokenDefinition(RCurlyBracket.class);
-			addTokenDefinition(Colon.class);
-			addTokenDefinition(Dot.class);
-		} catch (TokenException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+    public static final List<Class<? extends TokenDefinition>> DEFINITIONS = new ArrayList<Class<? extends TokenDefinition>>();
+
+    static {
+	DEFINITIONS.add(LCurlyBracket.class);
+	DEFINITIONS.add(RCurlyBracket.class);
+	DEFINITIONS.add(Colon.class);
+	DEFINITIONS.add(Dot.class);
+    }
 }

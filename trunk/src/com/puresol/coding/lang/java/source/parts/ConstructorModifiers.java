@@ -8,8 +8,8 @@ public class ConstructorModifiers extends AbstractSourceCodeParser {
 
     @Override
     public void scan() throws PartDoesNotMatchException, ParserException {
-	while (isCurrentOneOf(com.puresol.coding.lang.java.source.tokengroups.ConstructorModifiers.class)) {
-	    processOneOf(com.puresol.coding.lang.java.source.tokengroups.ConstructorModifiers.class);
+	while (isCurrentOneOf(com.puresol.coding.lang.java.source.tokengroups.ConstructorModifiers.DEFINITIONS)) {
+	    processOneOf(com.puresol.coding.lang.java.source.tokengroups.ConstructorModifiers.DEFINITIONS);
 	}
     }
 

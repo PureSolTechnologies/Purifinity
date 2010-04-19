@@ -11,8 +11,8 @@ public class VariableType extends AbstractSourceCodeParser {
 
     @Override
     public void scan() throws PartDoesNotMatchException, ParserException {
-	if (isCurrentOneOf(Primitives.class)) {
-	    processOneOf(Primitives.class);
+	if (isCurrentOneOf(Primitives.DEFINITIONS)) {
+	    processOneOf(Primitives.DEFINITIONS);
 	} else {
 	    processPart(ObjectType.class);
 	}

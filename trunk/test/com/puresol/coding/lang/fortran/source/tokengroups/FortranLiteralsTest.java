@@ -1,6 +1,7 @@
 package com.puresol.coding.lang.fortran.source.tokengroups;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swingx.config.ExtentedPackage;
 
@@ -11,6 +12,8 @@ import org.junit.Test;
 
 import com.puresol.coding.tokentypes.SourceTokenDefinition;
 import com.puresol.parser.TokenDefinition;
+import com.puresol.utils.ClassInstantiationException;
+import com.puresol.utils.Instances;
 
 public class FortranLiteralsTest {
 
@@ -39,37 +42,41 @@ public class FortranLiteralsTest {
 		continue;
 	    }
 	    if (!SourceTokenDefinition.class.isAssignableFrom(clazz)) {
-		Assert.fail(clazz.getName()
-			+ " has not the right interface!");
+		Assert.fail(clazz.getName() + " has not the right interface!");
 	    }
 	}
     }
 
     @Test
     public void testLiteralsCompleteness() {
-	ArrayList<TokenDefinition> tokens =
-		new FortranLiterals().getTokenDefinitions();
-	for (TokenDefinition definition : tokens) {
-	    if (!literals.contains(definition.getClass())) {
-		Assert.fail(definition.getClass()
-			+ " is not included in FortranKeywords!");
-	    }
-	}
-	for (Class<?> clazz : literals) {
-	    if (clazz.getName().endsWith("Test")) {
-		continue;
-	    }
-	    boolean found = false;
+	try {
+	    List<TokenDefinition> tokens = Instances.createInstanceList(
+		    TokenDefinition.class, FortranLiterals.DEFINITIONS);
 	    for (TokenDefinition definition : tokens) {
-		if (definition.getClass().equals(clazz)) {
-		    found = true;
-		    break;
+		if (!literals.contains(definition.getClass())) {
+		    Assert.fail(definition.getClass()
+			    + " is not included in FortranKeywords!");
 		}
 	    }
-	    if (!found) {
-		Assert.fail(clazz.getName()
-			+ " is not registered in FortranKeywords!");
+	    for (Class<?> clazz : literals) {
+		if (clazz.getName().endsWith("Test")) {
+		    continue;
+		}
+		boolean found = false;
+		for (TokenDefinition definition : tokens) {
+		    if (definition.getClass().equals(clazz)) {
+			found = true;
+			break;
+		    }
+		}
+		if (!found) {
+		    Assert.fail(clazz.getName()
+			    + " is not registered in FortranKeywords!");
+		}
 	    }
+	} catch (ClassInstantiationException e) {
+	    e.printStackTrace();
+	    Assert.fail("No exception was expected!");
 	}
     }
 

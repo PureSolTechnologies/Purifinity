@@ -1,6 +1,7 @@
 package com.puresol.coding.lang.fortran.source.tokengroups;
 
-import org.apache.log4j.Logger;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.puresol.coding.lang.fortran.source.literals.FloatingPointDoublePrecessionLiteral;
 import com.puresol.coding.lang.fortran.source.literals.FloatingPointLiteral;
@@ -10,30 +11,21 @@ import com.puresol.coding.lang.fortran.source.literals.IntegerLiteral;
 import com.puresol.coding.lang.fortran.source.literals.StringLiteral;
 import com.puresol.coding.lang.fortran.source.literals.StringStartLiteral;
 import com.puresol.coding.lang.fortran.source.literals.StringStopLiteral;
-import com.puresol.parser.AbstractTokenDefinitionGroup;
-import com.puresol.parser.TokenException;
+import com.puresol.parser.TokenDefinition;
 
-public class FortranLiterals extends AbstractTokenDefinitionGroup {
+public class FortranLiterals {
 
-	public static final FortranLiterals INSTANCE = new FortranLiterals();
+    public static final List<Class<? extends TokenDefinition>> DEFINITIONS = new ArrayList<Class<? extends TokenDefinition>>();
 
-	private static final Logger logger = Logger
-			.getLogger(FortranLiterals.class);
+    static {
+	DEFINITIONS.add(StringLiteral.class);
+	DEFINITIONS.add(StringStartLiteral.class);
+	DEFINITIONS.add(StringStopLiteral.class);
+	DEFINITIONS.add(FloatingPointDoublePrecessionLiteral.class);
+	DEFINITIONS.add(FloatingPointLiteral.class);
+	DEFINITIONS.add(IntegerLiteral.class);
 
-	@Override
-	protected void initialize() {
-		try {
-			addTokenDefinition(StringLiteral.class);
-			addTokenDefinition(StringStartLiteral.class);
-			addTokenDefinition(StringStopLiteral.class);
-			addTokenDefinition(FloatingPointDoublePrecessionLiteral.class);
-			addTokenDefinition(FloatingPointLiteral.class);
-			addTokenDefinition(IntegerLiteral.class);
-
-			addTokenDefinition(IdLiteral.class); // is subset of FormatLiteral!
-			addTokenDefinition(FormatLiteral.class);
-		} catch (TokenException e) {
-			logger.error(e.getMessage());
-		}
-	}
+	DEFINITIONS.add(IdLiteral.class); // is subset of FormatLiteral!
+	DEFINITIONS.add(FormatLiteral.class);
+    }
 }

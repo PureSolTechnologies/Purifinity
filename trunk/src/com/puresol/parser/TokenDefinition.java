@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
  * @author Rick-Rainer Ludwig
  * 
  */
-public interface TokenDefinition extends Comparable<TokenDefinition> {
+public interface TokenDefinition {
 
     /**
      * Returns the start regexp pattern.

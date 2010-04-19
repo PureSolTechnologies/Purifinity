@@ -8,8 +8,8 @@ public class MethodModifiers extends AbstractSourceCodeParser {
 
     @Override
     public void scan() throws PartDoesNotMatchException, ParserException {
-	while (isCurrentOneOf(com.puresol.coding.lang.java.source.tokengroups.MethodModifiers.class)) {
-	    processOneOf(com.puresol.coding.lang.java.source.tokengroups.MethodModifiers.class);
+	while (isCurrentOneOf(com.puresol.coding.lang.java.source.tokengroups.MethodModifiers.DEFINITIONS)) {
+	    processOneOf(com.puresol.coding.lang.java.source.tokengroups.MethodModifiers.DEFINITIONS);
 	}
     }
 

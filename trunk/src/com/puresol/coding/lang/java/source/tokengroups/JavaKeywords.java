@@ -1,6 +1,7 @@
 package com.puresol.coding.lang.java.source.tokengroups;
 
-import org.apache.log4j.Logger;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.puresol.coding.lang.java.source.keywords.AbstractKeyword;
 import com.puresol.coding.lang.java.source.keywords.BooleanKeyword;
@@ -45,70 +46,62 @@ import com.puresol.coding.lang.java.source.keywords.TransientKeyword;
 import com.puresol.coding.lang.java.source.keywords.TryKeyword;
 import com.puresol.coding.lang.java.source.keywords.VoidKeyword;
 import com.puresol.coding.lang.java.source.keywords.WhileKeyword;
-import com.puresol.parser.AbstractTokenDefinitionGroup;
-import com.puresol.parser.TokenException;
+import com.puresol.parser.TokenDefinition;
 
-public class JavaKeywords extends AbstractTokenDefinitionGroup {
+public class JavaKeywords {
 
-	public static final JavaKeywords INSTANCE = new JavaKeywords();
+    public static final List<Class<? extends TokenDefinition>> DEFINITIONS = new ArrayList<Class<? extends TokenDefinition>>();
 
-	private static final Logger logger = Logger.getLogger(JavaKeywords.class);
+    static {
+	DEFINITIONS.add(PackageKeyword.class);
+	DEFINITIONS.add(ImportKeyword.class);
 
-	@Override
-	protected void initialize() {
-		try {
-			addTokenDefinition(PackageKeyword.class);
-			addTokenDefinition(ImportKeyword.class);
+	DEFINITIONS.add(ClassKeyword.class);
+	DEFINITIONS.add(InterfaceKeyword.class);
+	DEFINITIONS.add(EnumKeyword.class);
+	DEFINITIONS.add(ExtendsKeyword.class);
+	DEFINITIONS.add(ImplementsKeyword.class);
+	DEFINITIONS.add(NewKeyword.class);
 
-			addTokenDefinition(ClassKeyword.class);
-			addTokenDefinition(InterfaceKeyword.class);
-			addTokenDefinition(EnumKeyword.class);
-			addTokenDefinition(ExtendsKeyword.class);
-			addTokenDefinition(ImplementsKeyword.class);
-			addTokenDefinition(NewKeyword.class);
+	DEFINITIONS.add(PublicKeyword.class);
+	DEFINITIONS.add(ProtectedKeyword.class);
+	DEFINITIONS.add(PrivateKeyword.class);
+	DEFINITIONS.add(StaticKeyword.class);
+	DEFINITIONS.add(FinalKeyword.class);
+	DEFINITIONS.add(TransientKeyword.class);
+	DEFINITIONS.add(AbstractKeyword.class);
+	DEFINITIONS.add(SynchronizedKeyword.class);
 
-			addTokenDefinition(PublicKeyword.class);
-			addTokenDefinition(ProtectedKeyword.class);
-			addTokenDefinition(PrivateKeyword.class);
-			addTokenDefinition(StaticKeyword.class);
-			addTokenDefinition(FinalKeyword.class);
-			addTokenDefinition(TransientKeyword.class);
-			addTokenDefinition(AbstractKeyword.class);
-			addTokenDefinition(SynchronizedKeyword.class);
+	DEFINITIONS.add(ReturnKeyword.class);
+	DEFINITIONS.add(BreakKeyword.class);
+	DEFINITIONS.add(ContinueKeyword.class);
 
-			addTokenDefinition(ReturnKeyword.class);
-			addTokenDefinition(BreakKeyword.class);
-			addTokenDefinition(ContinueKeyword.class);
+	DEFINITIONS.add(IfKeyword.class);
+	DEFINITIONS.add(ElseKeyword.class);
+	DEFINITIONS.add(WhileKeyword.class);
+	DEFINITIONS.add(DoKeyword.class);
+	DEFINITIONS.add(ForKeyword.class);
+	DEFINITIONS.add(SwitchKeyword.class);
+	DEFINITIONS.add(CaseKeyword.class);
 
-			addTokenDefinition(IfKeyword.class);
-			addTokenDefinition(ElseKeyword.class);
-			addTokenDefinition(WhileKeyword.class);
-			addTokenDefinition(DoKeyword.class);
-			addTokenDefinition(ForKeyword.class);
-			addTokenDefinition(SwitchKeyword.class);
-			addTokenDefinition(CaseKeyword.class);
+	DEFINITIONS.add(TryKeyword.class);
+	DEFINITIONS.add(CatchKeyword.class);
+	DEFINITIONS.add(FinallyKeyword.class);
+	DEFINITIONS.add(ThrowsKeyword.class);
+	DEFINITIONS.add(ThrowKeyword.class);
 
-			addTokenDefinition(TryKeyword.class);
-			addTokenDefinition(CatchKeyword.class);
-			addTokenDefinition(FinallyKeyword.class);
-			addTokenDefinition(ThrowsKeyword.class);
-			addTokenDefinition(ThrowKeyword.class);
+	DEFINITIONS.add(SuperKeyword.class);
+	DEFINITIONS.add(ThisKeyword.class);
+	DEFINITIONS.add(NullKeyword.class);
 
-			addTokenDefinition(SuperKeyword.class);
-			addTokenDefinition(ThisKeyword.class);
-			addTokenDefinition(NullKeyword.class);
-
-			addTokenDefinition(VoidKeyword.class);
-			addTokenDefinition(BooleanKeyword.class);
-			addTokenDefinition(CharKeyword.class);
-			addTokenDefinition(ByteKeyword.class);
-			addTokenDefinition(ShortKeyword.class);
-			addTokenDefinition(IntKeyword.class);
-			addTokenDefinition(LongKeyword.class);
-			addTokenDefinition(FloatKeyword.class);
-			addTokenDefinition(DoubleKeyword.class);
-		} catch (TokenException e) {
-			logger.error(e.getMessage());
-		}
-	}
+	DEFINITIONS.add(VoidKeyword.class);
+	DEFINITIONS.add(BooleanKeyword.class);
+	DEFINITIONS.add(CharKeyword.class);
+	DEFINITIONS.add(ByteKeyword.class);
+	DEFINITIONS.add(ShortKeyword.class);
+	DEFINITIONS.add(IntKeyword.class);
+	DEFINITIONS.add(LongKeyword.class);
+	DEFINITIONS.add(FloatKeyword.class);
+	DEFINITIONS.add(DoubleKeyword.class);
+    }
 }

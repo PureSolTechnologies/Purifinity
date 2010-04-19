@@ -1,12 +1,11 @@
 package com.puresol.reporting.html.css.parser.tokengroups;
 
-import com.puresol.parser.AbstractTokenDefinitionGroup;
+import java.util.ArrayList;
+import java.util.List;
 
-public class CSSLiterals extends AbstractTokenDefinitionGroup {
+import com.puresol.parser.TokenDefinition;
 
-	public static final CSSLiterals INSTANCE = new CSSLiterals();
+public class CSSLiterals {
 
-	@Override
-	protected void initialize() {
-	}
+    public static final List<Class<? extends TokenDefinition>> DEFINITIONS = new ArrayList<Class<? extends TokenDefinition>>();
 }
