@@ -9,7 +9,7 @@ public class MethodModifiers extends AbstractSourceCodeParser {
     @Override
     public void scan() throws PartDoesNotMatchException, ParserException {
 	while (isCurrentOneOf(com.puresol.coding.lang.java.source.tokengroups.MethodModifiers.DEFINITIONS)) {
-	    processOneOf(com.puresol.coding.lang.java.source.tokengroups.MethodModifiers.DEFINITIONS);
+	    expectOneOf(com.puresol.coding.lang.java.source.tokengroups.MethodModifiers.DEFINITIONS);
 	}
     }
 

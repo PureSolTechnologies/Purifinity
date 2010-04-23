@@ -6,32 +6,58 @@ import org.apache.log4j.Logger;
 
 import com.puresol.utils.ClassInstantiationException;
 import com.puresol.utils.Instances;
+import com.puresol.utils.di.DIClassBuilder;
+import com.puresol.utils.di.Inject;
+import com.puresol.utils.di.Injection;
 
+/**
+ * This class is the abstract base implementation for a parser based on
+ * TokenStream, Token and TokenDefinition.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public abstract class AbstractParser implements Parser {
 
     private static final Logger logger = Logger.getLogger(AbstractParser.class);
 
-    private TokenStream tokenStream = null;
-    private int startPos = 0;
-    private int currentPos = 0;
+    @Inject("TokenStream")
+    private final TokenStream tokenStream = null;
 
-    protected final void setStartPosition(int startPos) {
-	this.startPos = startPos;
-	this.currentPos = startPos;
+    @Inject("StartPosition")
+    private final Integer startPosition = 0;
+
+    @Inject("StartPosition")
+    private Integer currentPosition = 0;
+
+    @Inject("EndPosition")
+    private Integer endPosition = 0;
+
+    @Inject("ParentParser")
+    private final Parser parent = null;
+
+    /**
+     * Default Constructor...
+     */
+    public AbstractParser() {
     }
 
     public final int getStartPosition() {
-	return startPos;
+	return startPosition;
     }
 
     @Override
     public final int getCurrentPosition() {
-	return currentPos;
+	return currentPosition;
+    }
+
+    public final int getEndPosition() {
+	return endPosition;
     }
 
     @Override
     public final int getNumberOfTokens() {
-	return currentPos - startPos;
+	return endPosition - startPosition;
     }
 
     public final Token getToken(int pos) {
@@ -39,16 +65,31 @@ public abstract class AbstractParser implements Parser {
     }
 
     public final Token getCurrentToken() {
-	return tokenStream.get(currentPos);
-    }
-
-    public final void setTokenStream(TokenStream tokenStream) {
-	this.tokenStream = tokenStream;
+	return tokenStream.get(currentPosition);
     }
 
     @Override
     public final TokenStream getTokenStream() {
 	return tokenStream;
+    }
+
+    protected final Parser getParent() {
+	return parent;
+    }
+
+    protected Parser createParserInstance(Class<? extends Parser> clazz)
+	    throws ParserException {
+	try {
+	    return DIClassBuilder.forInjections(
+		    Injection.named("StartPosition", Integer
+			    .valueOf(currentPosition)),
+		    Injection.named("TokenStream", getTokenStream()),
+		    Injection.named("ParentParser", this))
+		    .createInstance(clazz);
+	} catch (ClassInstantiationException e) {
+	    logger.error(e.getMessage(), e);
+	    throw new ParserException(e.getMessage());
+	}
     }
 
     protected final int getStartPositionWithLeadingHidden() {
@@ -89,21 +130,26 @@ public abstract class AbstractParser implements Parser {
 	return getPositionOfLastVisible(getCurrentPosition());
     }
 
-    protected final void moveForward(int steps)
+    protected final void move(int steps) {
+	currentPosition += steps;
+	endPosition = currentPosition;
+    }
+
+    protected final void moveToNextVisible(int steps)
 	    throws EndOfTokenStreamException {
-	if (currentPos >= tokenStream.getSize() - 1) {
+	if (currentPosition >= tokenStream.getSize() - 1) {
 	    throw new EndOfTokenStreamException(this);
 	}
-	currentPos += steps;
+	move(steps);
 	while (getCurrentToken().getPublicity() != TokenPublicity.VISIBLE) {
-	    if (currentPos >= tokenStream.getSize() - 1) {
+	    if (currentPosition >= tokenStream.getSize() - 1) {
 		throw new EndOfTokenStreamException(this);
 	    }
-	    currentPos++;
+	    move(1);
 	}
     }
 
-    private void processToken(Class<? extends TokenDefinition> definition,
+    private void expectToken(Class<? extends TokenDefinition> definition,
 	    boolean moveForward) throws PartDoesNotMatchException,
 	    ParserException {
 	try {
@@ -115,7 +161,7 @@ public abstract class AbstractParser implements Parser {
 		}
 	    }
 	    if (moveForward) {
-		moveForward(1);
+		moveToNextVisible(1);
 	    }
 	} catch (EndOfTokenStreamException e) {
 	    // this may happen at the end of a file...
@@ -125,32 +171,31 @@ public abstract class AbstractParser implements Parser {
 	}
     }
 
-    protected final void processToken(
-	    Class<? extends TokenDefinition> definition)
+    protected final void expectToken(Class<? extends TokenDefinition> definition)
 	    throws PartDoesNotMatchException, ParserException {
 	Token token = null;
 	if (logger.isDebugEnabled()) {
 	    token = getCurrentToken();
 	}
-	processToken(definition, true);
+	expectToken(definition, true);
 	if (logger.isDebugEnabled()) {
 	    logger.debug("Processed token: " + token.toString());
 	}
     }
 
-    protected final void processToken(
+    protected final void expectToken(
 	    Class<? extends TokenDefinition>... definitions)
 	    throws PartDoesNotMatchException, ParserException {
 	for (Class<? extends TokenDefinition> definition : definitions) {
 	    if (isToken(definition)) {
-		processToken(definition);
+		expectToken(definition);
 		return;
 	    }
 	}
 	throw new PartDoesNotMatchException(this);
     }
 
-    protected final void processToken(String text)
+    protected final void expectToken(String text)
 	    throws PartDoesNotMatchException {
 	try {
 	    Token token = null;
@@ -158,7 +203,7 @@ public abstract class AbstractParser implements Parser {
 		token = getCurrentToken();
 	    }
 	    if (getCurrentToken().getText().equals(text)) {
-		moveForward(1);
+		moveToNextVisible(1);
 	    } else {
 		throw new PartDoesNotMatchException(this);
 	    }
@@ -173,7 +218,7 @@ public abstract class AbstractParser implements Parser {
     protected final boolean isToken(Class<? extends TokenDefinition> definition)
 	    throws ParserException {
 	try {
-	    processToken(definition, false);
+	    expectToken(definition, false);
 	    return true;
 	} catch (PartDoesNotMatchException e) {
 	    return false;
@@ -188,14 +233,14 @@ public abstract class AbstractParser implements Parser {
 	return false;
     }
 
-    protected final boolean processTokenIfPossible(
+    protected final boolean acceptToken(
 	    Class<? extends TokenDefinition> definition) throws ParserException {
 	try {
 	    Token token = null;
 	    if (logger.isDebugEnabled()) {
 		token = getCurrentToken();
 	    }
-	    processToken(definition, true);
+	    expectToken(definition, true);
 	    if (logger.isDebugEnabled()) {
 		logger.debug("Processed token: " + token.toString());
 	    }
@@ -205,14 +250,13 @@ public abstract class AbstractParser implements Parser {
 	}
     }
 
-    protected final boolean processTokenIfPossible(String text)
-	    throws ParserException {
+    protected final boolean acceptToken(String text) throws ParserException {
 	try {
 	    Token token = null;
 	    if (logger.isDebugEnabled()) {
 		token = getCurrentToken();
 	    }
-	    processToken(text);
+	    expectToken(text);
 	    if (logger.isDebugEnabled()) {
 		logger.debug("Processed token: " + token.toString());
 	    }
@@ -222,8 +266,7 @@ public abstract class AbstractParser implements Parser {
 	}
     }
 
-    protected final void skipTokensUntil(
-	    Class<? extends TokenDefinition>... definitions)
+    protected final void skipTo(Class<? extends TokenDefinition>... definitions)
 	    throws PartDoesNotMatchException, ParserException {
 	try {
 	    for (;;) {
@@ -232,36 +275,30 @@ public abstract class AbstractParser implements Parser {
 			return;
 		    }
 		}
-		moveForward(1);
+		moveToNextVisible(1);
 	    }
 	} catch (EndOfTokenStreamException e) {
 	    throw new PartDoesNotMatchException(this);
 	}
     }
 
-    protected void processPart(Class<? extends Parser> part, boolean moveForward)
+    protected void expectPart(Class<? extends Parser> part, boolean moveForward)
 	    throws PartDoesNotMatchException, ParserException {
 	try {
-	    AbstractParser partInstance = (AbstractParser) Instances
-		    .createInstance(part);
-	    partInstance.setStartPosition(currentPos);
-	    partInstance.setTokenStream(tokenStream);
+	    AbstractParser partInstance = (AbstractParser) createParserInstance(part);
 	    partInstance.scan();
 	    if (moveForward) {
-		moveForward(partInstance.getNumberOfTokens());
+		moveToNextVisible(partInstance.getNumberOfTokens());
 	    }
 	} catch (EndOfTokenStreamException e) {
 	    // this may happen at the end of a file...
-	} catch (ClassInstantiationException e) {
-	    logger.error(e.getMessage(), e);
-	    throw new ParserException(e.getMessage());
 	}
     }
 
-    protected void processPart(Class<? extends Parser> part)
+    protected void expectPart(Class<? extends Parser> part)
 	    throws PartDoesNotMatchException, ParserException {
 	logger.debug("Process part: " + part.getSimpleName());
-	processPart(part, true);
+	expectPart(part, true);
 	logger.debug("done for " + part.getSimpleName());
     }
 
@@ -269,7 +306,7 @@ public abstract class AbstractParser implements Parser {
 	    throws ParserException {
 	try {
 	    logger.debug("Is part(?): " + part.getSimpleName());
-	    processPart(part, false);
+	    expectPart(part, false);
 	    logger.debug("true for " + part.getSimpleName());
 	    return true;
 	} catch (PartDoesNotMatchException e) {
@@ -277,11 +314,11 @@ public abstract class AbstractParser implements Parser {
 	}
     }
 
-    protected boolean processPartIfPossible(Class<? extends Parser> part)
+    protected boolean acceptPart(Class<? extends Parser> part)
 	    throws ParserException {
 	try {
 	    logger.debug("Process part if possible: " + part.getSimpleName());
-	    processPart(part, true);
+	    expectPart(part, true);
 	    logger.debug("processed for " + part.getSimpleName());
 	    return true;
 	} catch (PartDoesNotMatchException e) {
@@ -289,7 +326,7 @@ public abstract class AbstractParser implements Parser {
 	}
     }
 
-    protected void processOneOf(
+    protected void expectOneOf(
 	    List<Class<? extends TokenDefinition>> definitions)
 	    throws PartDoesNotMatchException, ParserException {
 	try {
@@ -297,7 +334,7 @@ public abstract class AbstractParser implements Parser {
 		TokenDefinition definition = Instances
 			.createInstance(definitionClass);
 		if (isToken(definition.getClass())) {
-		    processToken(definition.getClass());
+		    expectToken(definition.getClass());
 		    return;
 		}
 	    }
@@ -334,17 +371,17 @@ public abstract class AbstractParser implements Parser {
 	    Class<? extends TokenDefinition> right)
 	    throws PartDoesNotMatchException, ParserException {
 	try {
-	    processToken(left);
+	    expectToken(left);
 	    int count = 1;
 	    do {
 		if (isToken(right)) {
-		    processToken(right);
+		    expectToken(right);
 		    count--;
 		} else if (isToken(left)) {
-		    processToken(left);
+		    expectToken(left);
 		    count++;
 		} else {
-		    moveForward(1);
+		    moveToNextVisible(1);
 		}
 	    } while (count > 0);
 	} catch (EndOfTokenStreamException e) {

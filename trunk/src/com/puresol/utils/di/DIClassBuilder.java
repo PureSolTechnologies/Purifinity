@@ -8,25 +8,26 @@ import com.puresol.utils.Instances;
 
 public class DIClassBuilder {
 
-	public static DIClassBuilder forInjections(Object... injections) {
-		return new DIClassBuilder(injections);
-	}
+    public static DIClassBuilder forInjections(Injection... injections) {
+	return new DIClassBuilder(injections);
+    }
 
-	private final List<Object> injections = new ArrayList<Object>();
+    private final List<Injection> injectionsList = new ArrayList<Injection>();
 
-	private DIClassBuilder(Object... injections) {
-		addInjections(injections);
-	}
+    private DIClassBuilder(Injection... injections) {
+	addInjections(injections);
+    }
 
-	public void addInjections(Object... injections) {
-		for (Object injection : injections) {
-			this.injections.add(injection);
-		}
+    public void addInjections(Injection... injections) {
+	for (Injection injection : injections) {
+	    this.injectionsList.add(injection);
 	}
+    }
 
-	public <T> T createInstance(Class<T> clazz, Object... parameter)
-			throws ClassInstantiationException {
-		T instance = Instances.createInstance(clazz, parameter);
-		return DependencyInjection.inject(instance, injections.toArray());
-	}
+    public <T> T createInstance(Class<T> clazz, Object... parameter)
+	    throws ClassInstantiationException {
+	T instance = Instances.createInstance(clazz, parameter);
+	return DependencyInjection.inject(instance, injectionsList
+		.toArray(new Injection[0]));
+    }
 }

@@ -14,16 +14,16 @@ public class InterfaceDeclaration extends AbstractSourceCodeParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		while (processPartIfPossible(Annotation.class))
+		while (acceptPart(Annotation.class))
 			;
-		processPart(ClassModifiers.class);
-		processToken(InterfaceKeyword.class);
+		expectPart(ClassModifiers.class);
+		expectToken(InterfaceKeyword.class);
 		String name = getCurrentToken().getText();
-		processToken(IdLiteral.class);
-		processPartIfPossible(Generic.class);
-		if (processTokenIfPossible(ExtendsKeyword.class)) {
-			processToken(IdLiteral.class);
-			processPartIfPossible(Generic.class);
+		expectToken(IdLiteral.class);
+		acceptPart(Generic.class);
+		if (acceptToken(ExtendsKeyword.class)) {
+			expectToken(IdLiteral.class);
+			acceptPart(Generic.class);
 		}
 		skipNested(LCurlyBracket.class, RCurlyBracket.class);
 		int startPosition = getStartPositionWithLeadingHidden();

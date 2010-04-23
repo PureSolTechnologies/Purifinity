@@ -12,12 +12,12 @@ public class ConstructorDeclaration extends AbstractSourceCodeParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		processPartIfPossible(ConstructorModifiers.class);
+		acceptPart(ConstructorModifiers.class);
 		String name = getCurrentToken().getText();
-		processToken(IdLiteral.class);
+		expectToken(IdLiteral.class);
 		skipNested(LParen.class, RParen.class);
-		processPartIfPossible(ThrowsDeclaration.class);
-		processPart(CodeBlock.class);
+		acceptPart(ThrowsDeclaration.class);
+		expectPart(CodeBlock.class);
 		int startPosition = getStartPositionWithLeadingHidden();
 		int stopPosition = getPositionOfLastVisible();
 		stopPosition = this.getPositionOfNextLineBreak(stopPosition);

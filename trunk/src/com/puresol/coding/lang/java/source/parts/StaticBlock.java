@@ -9,8 +9,8 @@ public class StaticBlock extends AbstractSourceCodeParser {
 
     @Override
     public void scan() throws PartDoesNotMatchException, ParserException {
-	processToken(StaticKeyword.class);
-	processPart(CodeBlock.class);
+	expectToken(StaticKeyword.class);
+	expectPart(CodeBlock.class);
     }
 
 }

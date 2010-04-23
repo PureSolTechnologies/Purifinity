@@ -16,20 +16,20 @@ public class EnumDeclaration extends AbstractSourceCodeParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		while (processPartIfPossible(Annotation.class))
+		while (acceptPart(Annotation.class))
 			;
-		processPart(ClassModifiers.class);
-		processToken(EnumKeyword.class);
+		expectPart(ClassModifiers.class);
+		expectToken(EnumKeyword.class);
 		if (isToken(LessThan.class)) {
-			processToken(LessThan.class);
-			processToken(IdLiteral.class);
-			while (processTokenIfPossible(Comma.class)) {
-				processToken(LessThan.class);
+			expectToken(LessThan.class);
+			expectToken(IdLiteral.class);
+			while (acceptToken(Comma.class)) {
+				expectToken(LessThan.class);
 			}
-			processToken(GreaterThan.class);
+			expectToken(GreaterThan.class);
 		}
 		String name = getCurrentToken().getText();
-		processToken(IdLiteral.class);
+		expectToken(IdLiteral.class);
 		skipNested(LCurlyBracket.class, RCurlyBracket.class);
 		int startPosition = getStartPositionWithLeadingHidden();
 		int stopPosition = getPositionOfLastVisible();

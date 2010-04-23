@@ -12,12 +12,12 @@ public class PackageDeclaration extends AbstractSourceCodeParser {
 
     @Override
     public void scan() throws PartDoesNotMatchException, ParserException {
-	processToken(PackageKeyword.class);
-	processToken(IdLiteral.class);
+	expectToken(PackageKeyword.class);
+	expectToken(IdLiteral.class);
 	while (isToken(Dot.class)) {
-	    processToken(Dot.class);
-	    processToken(IdLiteral.class);
+	    expectToken(Dot.class);
+	    expectToken(IdLiteral.class);
 	}
-	processToken(Semicolon.class);
+	expectToken(Semicolon.class);
     }
 }

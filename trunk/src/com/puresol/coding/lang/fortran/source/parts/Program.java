@@ -1,6 +1,6 @@
 package com.puresol.coding.lang.fortran.source.parts;
 
-import com.puresol.coding.analysis.AbstractSourceCodeParser;
+import com.puresol.coding.lang.fortran.AbstractFortranParser;
 import com.puresol.coding.lang.fortran.source.coderanges.FortranProgram;
 import com.puresol.coding.lang.fortran.source.keywords.EndKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.EndProgramKeyword;
@@ -8,27 +8,29 @@ import com.puresol.coding.lang.fortran.source.keywords.ProgramKeyword;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
-public class Program extends AbstractSourceCodeParser {
+public class Program extends AbstractFortranParser {
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public void scan() throws PartDoesNotMatchException, ParserException {
-		processToken(ProgramKeyword.class);
+    private static final long serialVersionUID = -1171971633742387488L;
 
-		String name = getCurrentToken().getText();
-		processToken(name);
+    @SuppressWarnings("unchecked")
+    @Override
+    public void scan() throws PartDoesNotMatchException, ParserException {
+	expectToken(ProgramKeyword.class);
 
-		// TODO read here the code...
-		skipTokensUntil(EndKeyword.class, EndProgramKeyword.class);
+	String name = getCurrentToken().getText();
+	expectToken(name);
 
-		processToken(EndKeyword.class, EndProgramKeyword.class);
-		processTokenIfPossible(name);
+	// TODO read here the code...
+	skipTo(EndKeyword.class, EndProgramKeyword.class);
 
-		int startPosition = getStartPositionWithLeadingHidden();
-		int stopPosition = getPositionOfLastVisible();
-		stopPosition = this.getPositionOfNextLineBreak(stopPosition);
+	expectToken(EndKeyword.class, EndProgramKeyword.class);
+	acceptToken(name);
 
-		addCodeRange(new FortranProgram(name, getTokenStream(), startPosition,
-				stopPosition));
-	}
+	int startPosition = getStartPositionWithLeadingHidden();
+	int stopPosition = getPositionOfLastVisible();
+	stopPosition = this.getPositionOfNextLineBreak(stopPosition);
+
+	addCodeRange(new FortranProgram(name, getTokenStream(), startPosition,
+		stopPosition));
+    }
 }

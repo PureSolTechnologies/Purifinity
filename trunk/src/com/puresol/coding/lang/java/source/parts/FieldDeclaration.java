@@ -12,12 +12,12 @@ public class FieldDeclaration extends AbstractSourceCodeParser {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		processPartIfPossible(FieldModifiers.class);
-		processPart(VariableType.class);
-		processPart(VariableName.class);
+		acceptPart(FieldModifiers.class);
+		expectPart(VariableType.class);
+		expectPart(VariableName.class);
 		if (isToken(Assign.class) || isToken(Comma.class)) {
-			skipTokensUntil(Semicolon.class);
+			skipTo(Semicolon.class);
 		}
-		processToken(Semicolon.class);
+		expectToken(Semicolon.class);
 	}
 }

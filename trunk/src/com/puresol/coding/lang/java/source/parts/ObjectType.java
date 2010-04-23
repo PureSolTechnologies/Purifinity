@@ -10,11 +10,11 @@ public class ObjectType extends AbstractSourceCodeParser {
 
     @Override
     public void scan() throws PartDoesNotMatchException, ParserException {
-	processToken(IdLiteral.class);
-	while (processTokenIfPossible(Dot.class)) {
-	    processToken(IdLiteral.class);
+	expectToken(IdLiteral.class);
+	while (acceptToken(Dot.class)) {
+	    expectToken(IdLiteral.class);
 	}
-	processPartIfPossible(Generic.class);
+	acceptPart(Generic.class);
     }
 
 }

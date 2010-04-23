@@ -9,7 +9,7 @@ public class FieldModifiers extends AbstractSourceCodeParser {
     @Override
     public void scan() throws PartDoesNotMatchException, ParserException {
 	while (isCurrentOneOf(com.puresol.coding.lang.java.source.tokengroups.FieldModifiers.DEFINITIONS)) {
-	    processOneOf(com.puresol.coding.lang.java.source.tokengroups.FieldModifiers.DEFINITIONS);
+	    expectOneOf(com.puresol.coding.lang.java.source.tokengroups.FieldModifiers.DEFINITIONS);
 	}
     }
 

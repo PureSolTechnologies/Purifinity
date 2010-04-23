@@ -15,16 +15,16 @@ public class MethodDefinition extends AbstractSourceCodeParser {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		while (processPartIfPossible(Annotation.class))
+		while (acceptPart(Annotation.class))
 			;
-		processPartIfPossible(MethodModifiers.class);
-		processPart(MethodReturnType.class);
-		processToken(IdLiteral.class);
+		acceptPart(MethodModifiers.class);
+		expectPart(MethodReturnType.class);
+		expectToken(IdLiteral.class);
 		skipNested(LParen.class, RParen.class);
-		if (processTokenIfPossible(ThrowsKeyword.class)) {
-			skipTokensUntil(LCurlyBracket.class);
+		if (acceptToken(ThrowsKeyword.class)) {
+			skipTo(LCurlyBracket.class);
 		}
-		processToken(Semicolon.class);
+		expectToken(Semicolon.class);
 	}
 
 }

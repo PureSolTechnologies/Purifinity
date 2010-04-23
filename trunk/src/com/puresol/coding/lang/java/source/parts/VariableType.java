@@ -12,14 +12,14 @@ public class VariableType extends AbstractSourceCodeParser {
     @Override
     public void scan() throws PartDoesNotMatchException, ParserException {
 	if (isCurrentOneOf(Primitives.DEFINITIONS)) {
-	    processOneOf(Primitives.DEFINITIONS);
+	    expectOneOf(Primitives.DEFINITIONS);
 	} else {
-	    processPart(ObjectType.class);
+	    expectPart(ObjectType.class);
 	}
-	processPartIfPossible(Generic.class);
+	acceptPart(Generic.class);
 	if (isToken(LRectBracket.class)) {
-	    processToken(LRectBracket.class);
-	    processToken(RRectBracket.class);
+	    expectToken(LRectBracket.class);
+	    expectToken(RRectBracket.class);
 	}
     }
 

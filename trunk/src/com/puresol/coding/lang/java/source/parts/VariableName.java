@@ -11,9 +11,9 @@ public class VariableName extends AbstractSourceCodeParser {
 
     @Override
     public void scan() throws PartDoesNotMatchException, ParserException {
-	processToken(IdLiteral.class);
-	if (processTokenIfPossible(LRectBracket.class)) {
-	    processToken(RRectBracket.class);
+	expectToken(IdLiteral.class);
+	if (acceptToken(LRectBracket.class)) {
+	    expectToken(RRectBracket.class);
 	}
     }
 

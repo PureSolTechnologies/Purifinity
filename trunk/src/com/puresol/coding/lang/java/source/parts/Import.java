@@ -13,16 +13,16 @@ public class Import extends AbstractSourceCodeParser {
 
     @Override
     public void scan() throws PartDoesNotMatchException, ParserException {
-	processToken(ImportKeyword.class);
-	processToken(IdLiteral.class);
+	expectToken(ImportKeyword.class);
+	expectToken(IdLiteral.class);
 	while (isToken(Dot.class)) {
-	    processToken(Dot.class);
+	    expectToken(Dot.class);
 	    if (isToken(Star.class)) {
-		processToken(Star.class);
+		expectToken(Star.class);
 		break;
 	    }
-	    processToken(IdLiteral.class);
+	    expectToken(IdLiteral.class);
 	}
-	processToken(Semicolon.class);
+	expectToken(Semicolon.class);
     }
 }

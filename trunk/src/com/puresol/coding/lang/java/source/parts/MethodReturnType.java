@@ -9,10 +9,10 @@ public class MethodReturnType extends AbstractSourceCodeParser {
 
     @Override
     public void scan() throws PartDoesNotMatchException, ParserException {
-	if (processTokenIfPossible(VoidKeyword.class)) {
+	if (acceptToken(VoidKeyword.class)) {
 	    return;
 	}
-	processPart(VariableType.class);
+	expectPart(VariableType.class);
     }
 
 }

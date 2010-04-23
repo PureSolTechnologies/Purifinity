@@ -11,12 +11,12 @@ public class ThrowsDeclaration extends AbstractSourceCodeParser {
 
     @Override
     public void scan() throws PartDoesNotMatchException, ParserException {
-	if (!processTokenIfPossible(ThrowsKeyword.class)) {
+	if (!acceptToken(ThrowsKeyword.class)) {
 	    return;
 	}
-	processToken(IdLiteral.class);
-	while (processTokenIfPossible(Comma.class)) {
-	    processToken(IdLiteral.class);
+	expectToken(IdLiteral.class);
+	while (acceptToken(Comma.class)) {
+	    expectToken(IdLiteral.class);
 	}
     }
 

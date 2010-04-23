@@ -11,15 +11,15 @@ public class ParameterDefinition extends AbstractSourceCodeParser {
 
     @Override
     public void scan() throws PartDoesNotMatchException, ParserException {
-	processToken(LParen.class);
-	if (processPartIfPossible(VariableType.class)) {
-	    processPart(VariableName.class);
-	    while (processTokenIfPossible(Comma.class)) {
-		processPart(VariableType.class);
-		processPart(VariableName.class);
+	expectToken(LParen.class);
+	if (acceptPart(VariableType.class)) {
+	    expectPart(VariableName.class);
+	    while (acceptToken(Comma.class)) {
+		expectPart(VariableType.class);
+		expectPart(VariableName.class);
 	    }
 	}
-	processToken(RParen.class);
+	expectToken(RParen.class);
     }
 
 }

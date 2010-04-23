@@ -9,7 +9,7 @@ public class ConstructorModifiers extends AbstractSourceCodeParser {
     @Override
     public void scan() throws PartDoesNotMatchException, ParserException {
 	while (isCurrentOneOf(com.puresol.coding.lang.java.source.tokengroups.ConstructorModifiers.DEFINITIONS)) {
-	    processOneOf(com.puresol.coding.lang.java.source.tokengroups.ConstructorModifiers.DEFINITIONS);
+	    expectOneOf(com.puresol.coding.lang.java.source.tokengroups.ConstructorModifiers.DEFINITIONS);
 	}
     }
 
