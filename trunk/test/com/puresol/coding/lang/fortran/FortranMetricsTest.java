@@ -19,13 +19,13 @@ public class FortranMetricsTest extends TestCase {
 
 	@Test
 	public void testSLOCMetrics() {
-		CodeRange fileCodeRange = analyser.getCodeRanges().get(0);
+		CodeRange fileCodeRange = analyser.getRootCodeRange();
 		Assert.assertEquals(CodeRangeType.FILE, fileCodeRange.getType());
 		SLOCMetric sloc = new SLOCMetric(fileCodeRange);
-		Assert.assertEquals(160, sloc.getPhyLOC());
+		Assert.assertEquals(159, sloc.getPhyLOC());
 		Assert.assertEquals(62, sloc.getProLOC());
 		Assert.assertEquals(97, sloc.getComLOC());
-		Assert.assertEquals(1, sloc.getBlLOC());
+		Assert.assertEquals(0, sloc.getBlLOC());
 	}
 
 }

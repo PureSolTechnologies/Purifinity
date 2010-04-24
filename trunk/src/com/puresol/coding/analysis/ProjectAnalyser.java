@@ -54,6 +54,7 @@ public class ProjectAnalyser implements Serializable, ProgressObservable {
 		this.pattern = pattern;
 	}
 
+	@Override
 	public void run() {
 		clear();
 		analyseFiles();
@@ -121,26 +122,12 @@ public class ProjectAnalyser implements Serializable, ProgressObservable {
 		return analysers.get(file);
 	}
 
-	public List<CodeRange> getCodeRanges(File file) {
-		if (analysers == null) {
-			return new ArrayList<CodeRange>();
-		}
-		if (file == null) {
-			return new ArrayList<CodeRange>();
-		}
-		if (!analysers.containsKey(file)) {
-			return new ArrayList<CodeRange>();
-		}
-		Analyser analyser = analysers.get(file);
-		if (analyser == null) {
-			return new ArrayList<CodeRange>();
-		}
-		return analysers.get(file).getCodeRanges();
-	}
-
 	@Override
 	public void setMonitor(ProgressObserver observer) {
 		progressMonitor = observer;
 	}
 
+	public List<CodeRange> getNamedCodeRanges(File file) {
+		return getAnalyser(file).getNamedCodeRanges();
+	}
 }

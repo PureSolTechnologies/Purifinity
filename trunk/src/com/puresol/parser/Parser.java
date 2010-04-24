@@ -14,5 +14,5 @@ public interface Parser {
 
     public TokenStream getTokenStream();
 
-    public List<CodeRange> getCodeRanges();
+    public List<CodeRange> getChildCodeRanges();
 }

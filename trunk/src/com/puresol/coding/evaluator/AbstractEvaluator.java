@@ -3,6 +3,7 @@ package com.puresol.coding.evaluator;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 
 import javax.swingx.progress.ProgressObserver;
 
@@ -71,5 +72,23 @@ public abstract class AbstractEvaluator implements Evaluator {
 
 	protected final ProgressObserver getMonitor() {
 		return observer;
+	}
+
+	protected final List<CodeRange> getEvaluableCodeRanges(File file) {
+		List<CodeRange> ranges = new ArrayList<CodeRange>();
+		getEvaluableCodeRanges(ranges, analyser.getAnalyser(file)
+				.getRootCodeRange());
+		return ranges;
+	}
+
+	private final void getEvaluableCodeRanges(List<CodeRange> ranges,
+			CodeRange parent) {
+		if (parent == null)
+			return;
+		if (!parent.getName().isEmpty()) {
+			ranges.add(parent);
+		}
+		for (CodeRange child : parent.getChildCodeRanges())
+			getEvaluableCodeRanges(ranges, child);
 	}
 }

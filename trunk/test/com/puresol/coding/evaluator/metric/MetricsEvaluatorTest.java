@@ -20,7 +20,7 @@ public class MetricsEvaluatorTest extends TestCase {
 		projectAnalyser.run();
 		List<File> files = projectAnalyser.getFiles();
 		Assert.assertEquals(1, files.size());
-		List<CodeRange> codeRanges = projectAnalyser.getCodeRanges(files.get(0));
+		List<CodeRange> codeRanges = projectAnalyser.getNamedCodeRanges(files.get(0));
 		Assert.assertNotNull(codeRanges);
 		MetricsEvaluator evaluator = new MetricsEvaluator(projectAnalyser);
 		evaluator.run();

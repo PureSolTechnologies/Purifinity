@@ -17,8 +17,10 @@ public class CodeRangeMetricsTest extends TestCase {
 	public void testFortranMetrics() {
 		FortranAnalyser analyser = new FortranAnalyser(new File("test"),
 				new File("com/puresol/coding/lang/fortran/samples/zgerc.f"));
-		Assert.assertTrue(analyser.getCodeRanges().size() > 1);
-		for (CodeRange codeRange : analyser.getCodeRanges()) {
+		CodeRange root = analyser.getRootCodeRange();
+		Assert.assertNotNull(root);
+		Assert.assertTrue(root.getChildCodeRanges().size() == 1);
+		for (CodeRange codeRange : root.getChildCodeRanges()) {
 			CodeRangeMetrics metrics = new CodeRangeMetrics(codeRange);
 			Assert.assertTrue(metrics.getCalculatedMetrics().size() > 0);
 			Assert.assertEquals(EvaluatorManager.getInstance()

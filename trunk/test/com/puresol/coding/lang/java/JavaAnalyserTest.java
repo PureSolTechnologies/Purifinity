@@ -4,7 +4,6 @@
 package com.puresol.coding.lang.java;
 
 import java.io.File;
-import java.util.List;
 
 import org.junit.Test;
 
@@ -25,12 +24,12 @@ public class JavaAnalyserTest extends TestCase {
 	public void test() {
 		JavaAnalyser analyser = new JavaAnalyser(new File("test"), new File(
 				"com/puresol/coding/lang/java/samples/RandomNumbers.java"));
-		List<CodeRange> codeRanges = analyser.getCodeRanges();
-		Assert.assertNotNull(codeRanges);
-		for (CodeRange codeRange : codeRanges) {
+		CodeRange rootCodeRange = analyser.getRootCodeRange();
+		Assert.assertNotNull(rootCodeRange);
+		for (CodeRange codeRange : rootCodeRange.getChildCodeRanges()) {
 			System.out.println(codeRange.toString());
 		}
-		Assert.assertTrue(codeRanges.size() > 1);
+		Assert.assertTrue(rootCodeRange.getChildCodeRanges().size() > 1);
 	}
 
 	public static void main(String[] args) {

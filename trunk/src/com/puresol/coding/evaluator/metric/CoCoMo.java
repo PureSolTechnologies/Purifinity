@@ -17,7 +17,6 @@ import java.util.List;
 
 import javax.i18n4j.Translator;
 
-import com.puresol.coding.analysis.Analyser;
 import com.puresol.coding.analysis.CodeRange;
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.analysis.ProjectAnalyser;
@@ -73,7 +72,7 @@ public class CoCoMo extends AbstractEvaluator {
 				count++;
 				getMonitor().setStatus(count);
 			}
-			int fileSLOC = getSLOC(projectAnalyser.getAnalyser(file));
+			int fileSLOC = getSLOC(file);
 			sloc += fileSLOC;
 			addFile(file);
 		}
@@ -83,15 +82,15 @@ public class CoCoMo extends AbstractEvaluator {
 		}
 	}
 
-	private int getSLOC(Analyser analyser) {
-		int sloc = getFileSLOC(analyser);
-		addFileCoCoMo(analyser, sloc);
+	private int getSLOC(File file) {
+		int sloc = getFileSLOC(file);
+		addFileCoCoMo(file, sloc);
 		return sloc;
 	}
 
-	private int getFileSLOC(Analyser analyser) {
+	private int getFileSLOC(File file) {
 		int sloc = 0;
-		List<CodeRange> codeRanges = analyser.getCodeRanges();
+		List<CodeRange> codeRanges = getEvaluableCodeRanges(file);
 		for (CodeRange codeRange : codeRanges) {
 			if (codeRange.getType() == CodeRangeType.FILE) {
 				sloc += getSLOC(codeRange);
@@ -114,13 +113,13 @@ public class CoCoMo extends AbstractEvaluator {
 		return sloc;
 	}
 
-	private void addFileCoCoMo(Analyser analyser, int sloc) {
+	private void addFileCoCoMo(File file, int sloc) {
 		CoCoMoValueSet valueSet = new CoCoMoValueSet();
 		valueSet.setSloc(sloc);
 		valueSet.setComplexity(cocomoValues.getComplexity());
 		valueSet.setAverageSalary(cocomoValues.getAverageSalary(), cocomoValues
 				.getCurrency());
-		fileCoCoMoValues.put(analyser.getFile(), valueSet);
+		fileCoCoMoValues.put(file, valueSet);
 
 	}
 

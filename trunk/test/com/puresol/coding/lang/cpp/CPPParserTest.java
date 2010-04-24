@@ -47,7 +47,7 @@ public class CPPParserTest extends TestCase {
 		    Injection.named("TokenStream", tokenStream2))
 		    .createInstance(CPPParser.class);
 	    parser.scan();
-	    for (CodeRange codeRange : parser.getCodeRanges()) {
+	    for (CodeRange codeRange : parser.getChildCodeRanges()) {
 		System.out.println(codeRange.toString());
 	    }
 	} catch (FileNotFoundException e) {

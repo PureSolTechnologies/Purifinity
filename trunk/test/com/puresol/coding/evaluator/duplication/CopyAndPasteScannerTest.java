@@ -20,8 +20,6 @@ public class CopyAndPasteScannerTest extends TestCase {
 				"test/com/puresol/coding/evaluator/duplication"),
 				"DummyClassForDuplicationScannerTest.java");
 		projectAnalyser.run();
-		Assert.assertEquals(6, projectAnalyser.getCodeRanges(
-				new File("/DummyClassForDuplicationScannerTest.java")).size());
 		CopyAndPasteScanner search = new CopyAndPasteScanner(projectAnalyser);
 		search.run();
 		ArrayList<Duplication> duplications = search.getDuplications();

@@ -4,7 +4,6 @@
 package com.puresol.coding.lang.fortran;
 
 import java.io.File;
-import java.util.List;
 
 import org.junit.Test;
 
@@ -25,12 +24,12 @@ public class FortranAnalyserTest extends TestCase {
 	public void test() {
 		FortranAnalyser analyser = new FortranAnalyser(new File("test"),
 				new File("com/puresol/coding/lang/fortran/samples/zgerc.f"));
-		List<CodeRange> codeRanges = analyser.getCodeRanges();
-		Assert.assertNotNull(codeRanges);
-		for (CodeRange codeRange : codeRanges) {
+		CodeRange rootCodeRange = analyser.getRootCodeRange();
+		Assert.assertNotNull(rootCodeRange);
+		for (CodeRange codeRange : rootCodeRange.getChildCodeRanges()) {
 			System.out.println(codeRange.toString());
 		}
-		Assert.assertTrue(codeRanges.size() > 0);
+		Assert.assertTrue(rootCodeRange.getChildCodeRanges().size() > 0);
 	}
 
 	// @Test

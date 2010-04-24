@@ -74,12 +74,14 @@ public class TSVFile implements Storable {
 	}
 
 	private void processFile(VerticalData data, File file) {
-		for (CodeRange range : analyser.getCodeRanges(file)) {
-			processCodeRange(data, file, range);
-		}
+		processCodeRange(data, file, analyser.getAnalyser(file)
+				.getRootCodeRange());
 	}
 
 	private void processCodeRange(VerticalData data, File file, CodeRange range) {
+		if (range.getName().isEmpty()) {
+			return;
+		}
 		CodeRangeMetrics metrics = this.metrics.getMetrics(range);
 		if (metrics == null) {
 			return;
@@ -120,6 +122,9 @@ public class TSVFile implements Storable {
 		data.addRow(file, range.getType().getIdentifier(), range.getName(),
 				phyLOC, proLOC, comLOC, blLOC, depth, vG, n1, N1, n2, N2, n, N,
 				HL, HV, D, L, E, T, B, MIwoc, MIcw, MI);
+		for (CodeRange child : range.getChildCodeRanges()) {
+			processCodeRange(data, file, child);
+		}
 	}
 
 	@Override

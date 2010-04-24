@@ -1,18 +1,11 @@
 package com.puresol.utils.di;
 
-public class DITestClass3 extends DITestClass {
+public class DITestClass3 extends DITestClass2 {
 
-    @Inject
-    private Double j = null;
+	@Inject("TestName")
+	private Double j2 = null;
 
-    @Inject("TestName")
-    private Double j2 = null;
-
-    public Double getJ() {
-	return j;
-    }
-
-    public Double getJ2() {
-	return j2;
-    }
+	public Double getJ2() {
+		return j2;
+	}
 }

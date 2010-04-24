@@ -51,12 +51,12 @@ public class FortranLexerTest {
 					"../Dyn3D/src"), "fort/dyn3d_3.f");
 			projectAnalyser.run();
 			Assert.assertTrue(projectAnalyser.getFiles().size() > 0);
-			for (File file:projectAnalyser.getFiles()) {
-				System.out.println(file+"\n");
+			for (File file : projectAnalyser.getFiles()) {
+				System.out.println(file + "\n");
 			}
 			Analyser analyser = projectAnalyser.getAnalyser(new File(
 					"/fort/dyn3d_3.f"));
-			TokenStream tokenStream = analyser.getCodeRanges().get(0)
+			TokenStream tokenStream = analyser.getRootCodeRange()
 					.getTokenStream();
 			FortranLexer lexer = new FortranLexer(tokenStream);
 			TokenStream tokenStream2 = lexer.getTokenStream();

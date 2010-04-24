@@ -25,60 +25,78 @@ import com.puresol.utils.di.Injection;
 
 abstract public class AbstractAnalyser implements Analyser {
 
-    private static final long serialVersionUID = -2593701440766091118L;
+	private static final long serialVersionUID = -2593701440766091118L;
 
-    private static final Logger logger = Logger
-	    .getLogger(AbstractAnalyser.class);
+	private static final Logger logger = Logger
+			.getLogger(AbstractAnalyser.class);
 
-    private final File projectDirectory;
-    private final File file;
+	private final File projectDirectory;
+	private final File file;
 
-    private final List<CodeRange> codeRanges = new ArrayList<CodeRange>();
-    private final SymbolTable symbols = new SymbolTable();
+	private CodeRange rootCodeRange = null;
+	private final SymbolTable symbols = new SymbolTable();
 
-    public AbstractAnalyser(File projectDirectory, File file) {
-	this.projectDirectory = projectDirectory;
-	this.file = file;
-    }
-
-    public File getProjectDirectory() {
-	return projectDirectory;
-    }
-
-    @Override
-    public File getFile() {
-	return file;
-    }
-
-    protected void addCodeRanges(List<CodeRange> codeRanges) {
-	this.codeRanges.addAll(codeRanges);
-    }
-
-    @Override
-    public List<CodeRange> getCodeRanges() {
-	return codeRanges;
-    }
-
-    protected void addSymbol(Symbol symbol) {
-	symbols.add(symbol);
-    }
-
-    @Override
-    public SymbolTable getSymbols() {
-	return symbols;
-    }
-
-    protected Parser createParserInstance(Class<? extends Parser> clazz,
-	    TokenStream tokenStream) throws ParserException {
-	try {
-	    return DIClassBuilder.forInjections(
-		    Injection.named("StartPosition", Integer.valueOf(0)),
-		    Injection.named("TokenStream", tokenStream),
-		    Injection.named("SymbolTable", symbols)).createInstance(
-		    clazz);
-	} catch (ClassInstantiationException e) {
-	    logger.error(e.getMessage(), e);
-	    throw new ParserException(e.getMessage());
+	public AbstractAnalyser(File projectDirectory, File file) {
+		this.projectDirectory = projectDirectory;
+		this.file = file;
 	}
-    }
+
+	public File getProjectDirectory() {
+		return projectDirectory;
+	}
+
+	@Override
+	public File getFile() {
+		return file;
+	}
+
+	protected void setRootCodeRange(CodeRange rootCodeRange) {
+		this.rootCodeRange = rootCodeRange;
+	}
+
+	@Override
+	public CodeRange getRootCodeRange() {
+		return rootCodeRange;
+	}
+
+	protected void addSymbol(Symbol symbol) {
+		symbols.add(symbol);
+	}
+
+	@Override
+	public SymbolTable getSymbols() {
+		return symbols;
+	}
+
+	protected Parser createParserInstance(Class<? extends Parser> clazz,
+			TokenStream tokenStream) throws ParserException {
+		try {
+			return DIClassBuilder.forInjections(
+					Injection.named("StartPosition", Integer.valueOf(0)),
+					Injection.named("TokenStream", tokenStream),
+					Injection.named("SymbolTable", symbols)).createInstance(
+					clazz);
+		} catch (ClassInstantiationException e) {
+			logger.error(e.getMessage(), e);
+			throw new ParserException(e.getMessage());
+		}
+	}
+
+	@Override
+	public final List<CodeRange> getNamedCodeRanges() {
+		List<CodeRange> ranges = new ArrayList<CodeRange>();
+		getNamedCodeRanges(ranges, rootCodeRange);
+		return ranges;
+	}
+
+	private final void getNamedCodeRanges(List<CodeRange> ranges,
+			CodeRange parent) {
+		if (parent == null)
+			return;
+		if (!parent.getName().isEmpty()) {
+			ranges.add(parent);
+		}
+		for (CodeRange child : parent.getChildCodeRanges())
+			this.getNamedCodeRanges(ranges, child);
+	}
 }

@@ -56,7 +56,7 @@ abstract public class AbstractGotoEvaluator extends AbstractEvaluator {
 			if (observer != null) {
 				observer.setStatus(count);
 			}
-			for (CodeRange codeRange : getProjectAnalyser().getCodeRanges(file)) {
+			for (CodeRange codeRange : getEvaluableCodeRanges(file)) {
 				if (Thread.interrupted()) {
 					return;
 				}

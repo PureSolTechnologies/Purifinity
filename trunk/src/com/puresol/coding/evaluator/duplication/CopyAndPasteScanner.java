@@ -71,7 +71,7 @@ public class CopyAndPasteScanner extends AbstractEvaluator {
 	private void getAllCodeRanges() throws TokenException {
 		for (File file : getProjectAnalyser().getFiles()) {
 			addFile(file);
-			for (CodeRange codeRange : getProjectAnalyser().getCodeRanges(file)) {
+			for (CodeRange codeRange : getEvaluableCodeRanges(file)) {
 				if (!codeRange.getType().isRunnableCodeSegment()) {
 					continue;
 				}

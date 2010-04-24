@@ -151,7 +151,7 @@ public class HTMLMetricsProject {
 		for (File file : analyser.getFiles()) {
 			String html = HTMLStandards.getStandardHeader();
 			html += "<table>";
-			List<CodeRange> ranges = analyser.getCodeRanges(file);
+			List<CodeRange> ranges = analyser.getNamedCodeRanges(file);
 			Collections.sort(ranges);
 			int index = 0;
 			for (CodeRange range : ranges) {
@@ -186,7 +186,7 @@ public class HTMLMetricsProject {
 	private boolean createReports(File directory) {
 		try {
 			for (File file : analyser.getFiles()) {
-				List<CodeRange> ranges = analyser.getCodeRanges(file);
+				List<CodeRange> ranges = analyser.getNamedCodeRanges(file);
 				for (CodeRange range : ranges) {
 					CodeRangeMetrics codeRangeMetrics = metrics
 							.getMetrics(range);

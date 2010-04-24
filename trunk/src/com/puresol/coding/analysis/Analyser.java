@@ -44,7 +44,9 @@ public interface Analyser extends Serializable {
 	 * 
 	 * @return
 	 */
-	public List<CodeRange> getCodeRanges();
+	public CodeRange getRootCodeRange();
 
 	public SymbolTable getSymbols();
+
+	public List<CodeRange> getNamedCodeRanges();
 }

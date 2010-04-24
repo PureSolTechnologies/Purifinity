@@ -62,7 +62,7 @@ public class ImplicitEvaluator extends AbstractEvaluator {
 			if (observer != null) {
 				observer.setStatus(count);
 			}
-			for (CodeRange codeRange : getProjectAnalyser().getCodeRanges(file)) {
+			for (CodeRange codeRange : getEvaluableCodeRanges(file)) {
 				if (Thread.interrupted()) {
 					return;
 				}
@@ -194,14 +194,10 @@ public class ImplicitEvaluator extends AbstractEvaluator {
 
 	private String getTextFileComment(File file)
 			throws UnsupportedReportingFormatException {
-		List<CodeRange> codeRanges = getProjectAnalyser().getCodeRanges(file);
-		if (codeRanges == null) {
-			return "";
-		}
 		String text = "";
 		text += file + ": " + translator.i18n("Quality:") + " "
 				+ getQuality(file).getIdentifier() + "\n";
-		for (CodeRange codeRange : codeRanges) {
+		for (CodeRange codeRange : getEvaluableCodeRanges(file)) {
 			text += getTextCodeRangeComment(codeRange) + "\n\n";
 		}
 		return text;
@@ -209,16 +205,12 @@ public class ImplicitEvaluator extends AbstractEvaluator {
 
 	private String getHTMLFileComment(File file)
 			throws UnsupportedReportingFormatException {
-		List<CodeRange> codeRanges = getProjectAnalyser().getCodeRanges(file);
-		if (codeRanges == null) {
-			return "";
-		}
 		String text = "";
 		text += "<h3>" + file + "</h3>\n";
 		text += "<p>" + translator.i18n("Overall quality:") + " "
 				+ HTMLConverter.convertQualityLevelToHTML(getQuality(file))
 				+ "</p>\n";
-		for (CodeRange codeRange : codeRanges) {
+		for (CodeRange codeRange : getEvaluableCodeRanges(file)) {
 			text += getHTMLCodeRangeComment(codeRange) + "\n\n";
 		}
 		return text;
@@ -338,12 +330,8 @@ public class ImplicitEvaluator extends AbstractEvaluator {
 
 	@Override
 	public QualityLevel getQuality(File file) {
-		List<CodeRange> codeRanges = getProjectAnalyser().getCodeRanges(file);
-		if (codeRanges == null) {
-			return QualityLevel.HIGH;
-		}
 		QualityLevel level = QualityLevel.HIGH;
-		for (CodeRange codeRange : codeRanges) {
+		for (CodeRange codeRange : getEvaluableCodeRanges(file)) {
 			level = QualityLevel.getMinLevel(level, getQuality(codeRange));
 		}
 		return level;

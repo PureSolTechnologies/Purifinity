@@ -101,7 +101,7 @@ public class CodeRangeBrowser extends Panel {
 		if (project == null) {
 			return;
 		}
-		java.util.List<CodeRange> ranges = project.getCodeRanges(file);
+		java.util.List<CodeRange> ranges = project.getNamedCodeRanges(file);
 		if (ranges == null) {
 			return;
 		}

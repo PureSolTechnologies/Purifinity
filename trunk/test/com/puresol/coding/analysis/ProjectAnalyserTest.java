@@ -29,7 +29,7 @@ public class ProjectAnalyserTest extends TestCase {
 				"/usr/src/compile/ATLAS/src/blas/f77reference"), "**/zgerc.f");
 		analyser.run();
 		for (File file : analyser.getFiles()) {
-			List<CodeRange> ranges = analyser.getCodeRanges(file);
+			List<CodeRange> ranges = analyser.getNamedCodeRanges(file);
 			for (CodeRange range : ranges) {
 				TokenStream stream = range.getTokenStream();
 				for (int index = 0; index < stream.getSize(); index++) {

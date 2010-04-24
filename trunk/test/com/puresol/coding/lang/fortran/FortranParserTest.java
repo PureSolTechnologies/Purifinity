@@ -49,7 +49,7 @@ public class FortranParserTest extends TestCase {
 		    Injection.named("TokenStream", tokenStream2))
 		    .createInstance(FortranParser.class);
 	    parser.scan();
-	    for (CodeRange codeRange : parser.getCodeRanges()) {
+	    for (CodeRange codeRange : parser.getChildCodeRanges()) {
 		System.out.println(codeRange.toString());
 		Assert.assertEquals(new File(
 			"com/puresol/coding/lang/fortran/samples/zgerc.f"),
@@ -108,7 +108,7 @@ public class FortranParserTest extends TestCase {
 		    Injection.unnamed(tokenStream2)).createInstance(
 		    FortranParser.class);
 	    parser.scan();
-	    for (CodeRange codeRange : parser.getCodeRanges()) {
+	    for (CodeRange codeRange : parser.getChildCodeRanges()) {
 		System.out.println(codeRange.toString());
 	    }
 	} catch (FileNotFoundException e) {

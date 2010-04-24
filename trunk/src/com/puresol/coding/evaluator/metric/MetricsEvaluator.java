@@ -81,7 +81,7 @@ public class MetricsEvaluator extends AbstractEvaluator {
 	private void getAllCodeRanges() {
 		for (File file : analyser.getFiles()) {
 			addFile(file);
-			for (CodeRange codeRange : analyser.getCodeRanges(file)) {
+			for (CodeRange codeRange : analyser.getNamedCodeRanges(file)) {
 				addCodeRange(codeRange);
 			}
 		}

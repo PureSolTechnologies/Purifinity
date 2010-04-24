@@ -141,6 +141,17 @@ public enum CodeRangeType implements Identifiable {
 		public boolean isRunnableCodeSegment() {
 			return true;
 		}
+	},
+	FRAGMENT {
+		@Override
+		public String getIdentifier() {
+			return translator.i18n("Code Fragment");
+		}
+
+		@Override
+		public boolean isRunnableCodeSegment() {
+			return false;
+		}
 	};
 
 	private static final Translator translator = Translator

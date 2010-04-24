@@ -19,7 +19,6 @@ import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.analysis.AbstractAnalyser;
 import com.puresol.parser.LexerException;
 import com.puresol.parser.NoMatchingTokenDefinitionFound;
-import com.puresol.parser.Parser;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
@@ -30,43 +29,43 @@ import com.puresol.parser.PartDoesNotMatchException;
  */
 public class CPPAnalyser extends AbstractAnalyser {
 
-    private static final long serialVersionUID = 876077325823124163L;
+	private static final long serialVersionUID = 876077325823124163L;
 
-    private static final Logger logger = Logger.getLogger(CPPAnalyser.class);
+	private static final Logger logger = Logger.getLogger(CPPAnalyser.class);
 
-    /**
-     * This is the default constructor.
-     * 
-     * @param A
-     *            file to be analysed.
-     * @throws LexerException
-     */
-    public CPPAnalyser(File projectDirectory, File file) {
-	super(projectDirectory, file);
-	parse();
-    }
-
-    private void parse() {
-	try {
-	    CPPLexer lexer = new CPPLexer(getProjectDirectory(), getFile());
-	    Parser parser = createParserInstance(CPPParser.class, lexer
-		    .getTokenStream());
-	    parser.scan();
-	    addCodeRanges(parser.getCodeRanges());
-	} catch (IOException e) {
-	    logger.error(e.getMessage(), e);
-	} catch (NoMatchingTokenDefinitionFound e) {
-	    logger.error(e.getMessage(), e);
-	} catch (PartDoesNotMatchException e) {
-	    logger.error(e.getMessage(), e);
-	} catch (LexerException e) {
-	    logger.error(e.getMessage(), e);
-	} catch (ParserException e) {
-	    logger.error(e.getMessage(), e);
+	/**
+	 * This is the default constructor.
+	 * 
+	 * @param A
+	 *            file to be analysed.
+	 * @throws LexerException
+	 */
+	public CPPAnalyser(File projectDirectory, File file) {
+		super(projectDirectory, file);
+		parse();
 	}
-    }
 
-    public ProgrammingLanguage getLanguage() {
-	return CPlusPlus.getInstance();
-    }
+	private void parse() {
+		try {
+			CPPLexer lexer = new CPPLexer(getProjectDirectory(), getFile());
+			CPPParser parser = (CPPParser) createParserInstance(
+					CPPParser.class, lexer.getTokenStream());
+			parser.scan();
+			setRootCodeRange(parser);
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e);
+		} catch (NoMatchingTokenDefinitionFound e) {
+			logger.error(e.getMessage(), e);
+		} catch (PartDoesNotMatchException e) {
+			logger.error(e.getMessage(), e);
+		} catch (LexerException e) {
+			logger.error(e.getMessage(), e);
+		} catch (ParserException e) {
+			logger.error(e.getMessage(), e);
+		}
+	}
+
+	public ProgrammingLanguage getLanguage() {
+		return CPlusPlus.getInstance();
+	}
 }

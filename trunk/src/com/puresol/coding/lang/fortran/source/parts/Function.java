@@ -1,9 +1,9 @@
 package com.puresol.coding.lang.fortran.source.parts;
 
+import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.cpp.source.symbols.LParen;
 import com.puresol.coding.lang.cpp.source.symbols.RParen;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
-import com.puresol.coding.lang.fortran.source.coderanges.FortranFunction;
 import com.puresol.coding.lang.fortran.source.keywords.EndFunctionKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.EndKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.FunctionKeyword;
@@ -12,30 +12,30 @@ import com.puresol.parser.PartDoesNotMatchException;
 
 public class Function extends AbstractFortranParser {
 
-    private static final long serialVersionUID = -3467867032565700073L;
+	private static final long serialVersionUID = -3467867032565700073L;
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public void scan() throws PartDoesNotMatchException, ParserException {
-	acceptPart(VariableType.class);
-	expectToken(FunctionKeyword.class);
+	@SuppressWarnings("unchecked")
+	@Override
+	public void scan() throws PartDoesNotMatchException, ParserException {
+		acceptPart(VariableType.class);
+		expectToken(FunctionKeyword.class);
 
-	String name = getCurrentToken().getText();
-	expectToken(name);
+		String name = getCurrentToken().getText();
+		expectToken(name);
 
-	skipNested(LParen.class, RParen.class);
+		skipNested(LParen.class, RParen.class);
 
-	// TODO read here the code...
-	skipTo(EndKeyword.class, EndFunctionKeyword.class);
+		// TODO read here the code...
+		skipTo(EndKeyword.class, EndFunctionKeyword.class);
 
-	expectToken(EndKeyword.class, EndFunctionKeyword.class);
-	acceptToken(name);
+		expectToken(EndKeyword.class, EndFunctionKeyword.class);
+		acceptToken(name);
 
-	int startPosition = getStartPositionWithLeadingHidden();
-	int stopPosition = getPositionOfLastVisible();
-	stopPosition = this.getPositionOfNextLineBreak(stopPosition);
+		finish(name);
+	}
 
-	addCodeRange(new FortranFunction(name, getTokenStream(), startPosition,
-		stopPosition));
-    }
+	@Override
+	public CodeRangeType getType() {
+		return CodeRangeType.FUNCTION;
+	}
 }

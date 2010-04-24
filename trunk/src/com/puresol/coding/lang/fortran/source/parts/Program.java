@@ -1,7 +1,7 @@
 package com.puresol.coding.lang.fortran.source.parts;
 
+import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
-import com.puresol.coding.lang.fortran.source.coderanges.FortranProgram;
 import com.puresol.coding.lang.fortran.source.keywords.EndKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.EndProgramKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.ProgramKeyword;
@@ -10,27 +10,27 @@ import com.puresol.parser.PartDoesNotMatchException;
 
 public class Program extends AbstractFortranParser {
 
-    private static final long serialVersionUID = -1171971633742387488L;
+	private static final long serialVersionUID = -1171971633742387488L;
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public void scan() throws PartDoesNotMatchException, ParserException {
-	expectToken(ProgramKeyword.class);
+	@SuppressWarnings("unchecked")
+	@Override
+	public void scan() throws PartDoesNotMatchException, ParserException {
+		expectToken(ProgramKeyword.class);
 
-	String name = getCurrentToken().getText();
-	expectToken(name);
+		String name = getCurrentToken().getText();
+		expectToken(name);
 
-	// TODO read here the code...
-	skipTo(EndKeyword.class, EndProgramKeyword.class);
+		// TODO read here the code...
+		skipTo(EndKeyword.class, EndProgramKeyword.class);
 
-	expectToken(EndKeyword.class, EndProgramKeyword.class);
-	acceptToken(name);
+		expectToken(EndKeyword.class, EndProgramKeyword.class);
+		acceptToken(name);
 
-	int startPosition = getStartPositionWithLeadingHidden();
-	int stopPosition = getPositionOfLastVisible();
-	stopPosition = this.getPositionOfNextLineBreak(stopPosition);
+		finish(name);
+	}
 
-	addCodeRange(new FortranProgram(name, getTokenStream(), startPosition,
-		stopPosition));
-    }
+	@Override
+	public CodeRangeType getType() {
+		return CodeRangeType.PROGRAM;
+	}
 }
