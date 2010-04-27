@@ -30,8 +30,6 @@ public interface CodeRange extends Parser, Serializable, Comparable<CodeRange>,
 
 	public CodeRangeType getType();
 
-	public String getName();
-
 	public String getText();
 
 	public TokenStream getTokenStream();
@@ -47,6 +45,8 @@ public interface CodeRange extends Parser, Serializable, Comparable<CodeRange>,
 	public int getStopLine();
 
 	public List<CodeRange> getChildCodeRanges();
+
+	public <T> List<T> getChildCodeRanges(Class<T> codeRange);
 
 	public CodeRange getParentCodeRange();
 

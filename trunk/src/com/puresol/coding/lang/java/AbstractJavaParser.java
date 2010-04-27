@@ -5,10 +5,10 @@ import com.puresol.coding.analysis.AbstractSourceCodeParser;
 
 abstract public class AbstractJavaParser extends AbstractSourceCodeParser {
 
-    private static final long serialVersionUID = 5924444641661017582L;
+	private static final long serialVersionUID = 5924444641661017582L;
 
-    @Override
-    public ProgrammingLanguage getLanguage() {
-	return Java.getInstance();
-    }
+	@Override
+	public ProgrammingLanguage getLanguage() {
+		return Java.getInstance();
+	}
 }

@@ -6,6 +6,7 @@ package com.puresol.coding.lang.java;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -14,6 +15,9 @@ import org.junit.Test;
 import com.puresol.coding.analysis.CodeRange;
 import com.puresol.coding.lang.java.JavaLexer;
 import com.puresol.coding.lang.java.JavaParser;
+import com.puresol.coding.lang.java.source.parts.ClassDeclaration;
+import com.puresol.coding.langelements.ClassLanguageElement;
+import com.puresol.coding.langelements.VariableLanguageElement;
 import com.puresol.parser.DefaultPreConditioner;
 import com.puresol.parser.LexerException;
 import com.puresol.parser.NoMatchingTokenDefinitionFound;
@@ -30,15 +34,13 @@ import junit.framework.TestCase;
 
 public class JavaParserTest extends TestCase {
 
+	public int testInt;
+
 	@Test
 	public void test() {
 		Logger.getRootLogger().setLevel(Level.DEBUG);
 		JavaParser parser = null;
 		try {
-			// DefaultPreConditioner conditioner =
-			// new DefaultPreConditioner(
-			// new File(
-			// "test/com/puresol/coding/lang/java/samples/RandomNumbers.java"));
 			DefaultPreConditioner conditioner = new DefaultPreConditioner(
 					new File("test"), new File(
 							"com/puresol/coding/lang/java/JavaParserTest.java"));
@@ -55,6 +57,16 @@ public class JavaParserTest extends TestCase {
 			for (CodeRange codeRange : parser.getChildCodeRanges()) {
 				System.out.println(codeRange.toString());
 			}
+			List<ClassDeclaration> classes = parser
+					.getChildCodeRanges(ClassDeclaration.class);
+			Assert.assertEquals(1, classes.size());
+			List<ClassLanguageElement> classElements = parser
+					.getChildCodeRanges(ClassLanguageElement.class);
+			Assert.assertEquals(1, classElements.size());
+			List<VariableLanguageElement> fieldElements = classElements.get(0)
+					.getFields();
+			Assert.assertEquals(1, fieldElements.size());
+			Assert.assertEquals("testInt", fieldElements.get(0).getName());
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			Assert.fail("No exception was expected!");

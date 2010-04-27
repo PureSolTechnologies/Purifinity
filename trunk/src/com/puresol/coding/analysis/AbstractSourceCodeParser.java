@@ -32,12 +32,13 @@ public abstract class AbstractSourceCodeParser extends AbstractParser implements
 	@Inject("SymbolTable")
 	private SymbolTable symbols = null;
 
-	private String name = "";
-
 	protected AbstractSourceCodeParser() {
 		super();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected Parser createParserInstance(Class<? extends Parser> clazz)
 			throws ParserException {
@@ -56,9 +57,18 @@ public abstract class AbstractSourceCodeParser extends AbstractParser implements
 
 	@Override
 	public final List<CodeRange> getChildCodeRanges() {
-		List<CodeRange> ranges = new ArrayList<CodeRange>();
-		for (Parser parser : getChildParsers()) {
-			ranges.add((CodeRange) parser);
+		return getChildParsers(CodeRange.class);
+	}
+
+	@Override
+	public final <T> List<T> getChildCodeRanges(Class<T> codeRangeClass) {
+		List<T> ranges = new ArrayList<T>();
+		for (Parser parser : getChildParsers(CodeRange.class)) {
+			if (codeRangeClass.isAssignableFrom(parser.getClass())) {
+				@SuppressWarnings("unchecked")
+				T t = (T) parser;
+				ranges.add(t);
+			}
 		}
 		return ranges;
 	}
@@ -193,11 +203,6 @@ public abstract class AbstractSourceCodeParser extends AbstractParser implements
 	}
 
 	@Override
-	public final String getName() {
-		return name;
-	}
-
-	@Override
 	public final String getTypeName() {
 		return getType().getIdentifier();
 	}
@@ -213,17 +218,11 @@ public abstract class AbstractSourceCodeParser extends AbstractParser implements
 	protected final void finish() {
 		int startPosition = getStartPositionWithLeadingHidden();
 		int stopPosition = getPositionOfLastVisible();
-		// stopPosition = getPositionOfNextLineBreak(stopPosition);
 
-		DependencyInjection.inject(this, Injection.named("StartPosition",
-				Integer.valueOf(startPosition)), Injection.named(
-				"CurrentPosition", Integer.valueOf(stopPosition)), Injection
-				.named("EndPosition", Integer.valueOf(stopPosition)));
+		setStartPosition(startPosition);
+		setCurrentPosition(stopPosition);
+		setEndPosition(stopPosition);
 
-		CodeRange parent = getParentCodeRange();
-		if (parent != null) {
-			parent.addCodeRange(this);
-		}
 		super.finish();
 	}
 
@@ -236,7 +235,7 @@ public abstract class AbstractSourceCodeParser extends AbstractParser implements
 	 *            is the name to be given to this code range.
 	 */
 	protected final void finish(String name) {
-		this.name = name;
+		setName(name);
 		finish();
 	}
 }

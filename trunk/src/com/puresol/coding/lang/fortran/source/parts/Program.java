@@ -5,10 +5,12 @@ import com.puresol.coding.lang.fortran.AbstractFortranParser;
 import com.puresol.coding.lang.fortran.source.keywords.EndKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.EndProgramKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.ProgramKeyword;
+import com.puresol.coding.langelements.ProgramLanguageElement;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
-public class Program extends AbstractFortranParser {
+public class Program extends AbstractFortranParser implements
+		ProgramLanguageElement {
 
 	private static final long serialVersionUID = -1171971633742387488L;
 

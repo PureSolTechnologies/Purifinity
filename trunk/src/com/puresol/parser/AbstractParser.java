@@ -26,7 +26,7 @@ public abstract class AbstractParser implements Parser {
 	private final TokenStream tokenStream = null;
 
 	@Inject("StartPosition")
-	private final Integer startPosition = 0;
+	private Integer startPosition = 0;
 
 	@Inject("CurrentPosition")
 	private Integer currentPosition = 0;
@@ -37,36 +37,70 @@ public abstract class AbstractParser implements Parser {
 	@Inject("ParentParser")
 	private final Parser parentParser = null;
 
+	private String name = "";
 	private final List<Parser> childParsers = new ArrayList<Parser>();
 	private boolean finished = false;
 
 	/**
-	 * Default Constructor...
+	 * This is the default Constructor. It is specified to make clear, that this
+	 * class and all other inherited classes should always have a default
+	 * constructor. This make inheritance easier due to not creating any other
+	 * constructors and to use Dependency Injection instead. Therefore, creating
+	 * smaller sub parsers is much easier.
 	 */
 	public AbstractParser() {
 	}
 
+	protected final void setStartPosition(int startPosition) {
+		this.startPosition = startPosition;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public final int getStartPosition() {
 		return startPosition;
 	}
 
+	protected final void setCurrentPosition(int currentPosition) {
+		this.currentPosition = currentPosition;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public final int getCurrentPosition() {
 		return currentPosition;
 	}
 
+	protected final void setEndPosition(int endPosition) {
+		this.endPosition = endPosition;
+	}
+
 	/**
-	 * This method returns the current end position of the parser range.
-	 * 
-	 * @return
+	 * {@inheritDoc}
 	 */
+	@Override
 	public final int getEndPosition() {
 		return endPosition;
 	}
 
+	protected final void setName(String name) {
+		this.name = name;
+	}
+
 	/**
-	 * This method returns the current number of tokens within this parser
-	 * range.
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final String getName() {
+		return name;
+	}
+
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	public final int getNumberOfTokens() {
@@ -81,6 +115,9 @@ public abstract class AbstractParser implements Parser {
 		return tokenStream.get(currentPosition);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public final TokenStream getTokenStream() {
 		return tokenStream;
@@ -98,8 +135,29 @@ public abstract class AbstractParser implements Parser {
 		childParsers.add(childParser);
 	}
 
+	@Override
 	public List<Parser> getChildParsers() {
 		return childParsers;
+	}
+
+	@Override
+	public <T> List<T> getChildParsers(Class<T> parserClass) {
+		List<T> parsers = new ArrayList<T>();
+		for (Parser childParser : childParsers) {
+			if (parserClass.isAssignableFrom(childParser.getClass())) {
+				@SuppressWarnings("unchecked")
+				T t = (T) childParser;
+				parsers.add(t);
+			}
+		}
+		return parsers;
+	}
+
+	protected void addSelfToParent() {
+		Parser parent = getParentParser();
+		if (parent != null) {
+			((AbstractParser) parentParser).addChildParser(this);
+		}
 	}
 
 	protected Parser createParserInstance(Class<? extends Parser> clazz)
@@ -226,8 +284,7 @@ public abstract class AbstractParser implements Parser {
 			Class<? extends TokenDefinition>... definitions)
 			throws PartDoesNotMatchException, ParserException {
 		for (Class<? extends TokenDefinition> definition : definitions) {
-			if (isToken(definition)) {
-				expectToken(definition);
+			if (acceptToken(definition)) {
 				return;
 			}
 		}
@@ -321,7 +378,7 @@ public abstract class AbstractParser implements Parser {
 		}
 	}
 
-	protected void expectPart(Class<? extends Parser> part, boolean moveForward)
+	private void expectPart(Class<? extends Parser> part, boolean moveForward)
 			throws PartDoesNotMatchException, ParserException {
 		try {
 			AbstractParser partInstance = (AbstractParser) createParserInstance(part);
@@ -378,8 +435,7 @@ public abstract class AbstractParser implements Parser {
 			for (Class<? extends TokenDefinition> definitionClass : definitions) {
 				TokenDefinition definition = Instances
 						.createInstance(definitionClass);
-				if (isToken(definition.getClass())) {
-					expectToken(definition.getClass());
+				if (acceptToken(definition.getClass())) {
 					return;
 				}
 			}
@@ -408,14 +464,35 @@ public abstract class AbstractParser implements Parser {
 		}
 	}
 
+	/**
+	 * This method checks if the current parser is marked as finished.
+	 * 
+	 * @return
+	 */
 	protected boolean isFinish() {
 		return finished;
 	}
 
+	/**
+	 * This method marks the current parser as "finished parsing" and adds it to
+	 * the parents child parser list.
+	 * 
+	 * This method is to be called after a successful scan of a parser.
+	 */
 	protected void finish() {
+		addSelfToParent();
 		finished = true;
 	}
 
+	/**
+	 * This method aborts the current parsing run and throws a
+	 * PartDoesNotMatchException.
+	 * 
+	 * This method is to be called if a parser can not go further on due to a
+	 * leak of alternatives. There is an error within the text parsed.
+	 * 
+	 * @throws PartDoesNotMatchException
+	 */
 	protected void abort() throws PartDoesNotMatchException {
 		throw new PartDoesNotMatchException(this);
 	}
@@ -427,11 +504,9 @@ public abstract class AbstractParser implements Parser {
 			expectToken(left);
 			int count = 1;
 			do {
-				if (isToken(right)) {
-					expectToken(right);
+				if (acceptToken(right)) {
 					count--;
-				} else if (isToken(left)) {
-					expectToken(left);
+				} else if (acceptToken(left)) {
 					count++;
 				} else {
 					moveToNextVisible(1);
