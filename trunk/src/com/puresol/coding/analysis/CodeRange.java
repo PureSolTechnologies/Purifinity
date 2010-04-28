@@ -20,47 +20,45 @@ import com.puresol.reporting.ReportingFormat;
  * 
  */
 public interface CodeRange extends Parser, Serializable, Comparable<CodeRange>,
-		Cloneable {
+	Cloneable {
 
-	public File getFile();
+    public File getFile();
 
-	public ProgrammingLanguage getLanguage();
+    public ProgrammingLanguage getLanguage();
 
-	public String getTypeName();
+    public CodeRangeType getCodeRangeType();
 
-	public CodeRangeType getType();
+    public String getText();
 
-	public String getText();
+    public TokenStream getTokenStream();
 
-	public TokenStream getTokenStream();
+    public ArrayList<Token> getTokens();
 
-	public ArrayList<Token> getTokens();
+    public int getStartId();
 
-	public int getStartId();
+    public int getStopId();
 
-	public int getStopId();
+    public int getStartLine();
 
-	public int getStartLine();
+    public int getStopLine();
 
-	public int getStopLine();
+    public List<CodeRange> getChildCodeRanges();
 
-	public List<CodeRange> getChildCodeRanges();
+    public <T> List<T> getChildCodeRanges(Class<T> codeRange);
 
-	public <T> List<T> getChildCodeRanges(Class<T> codeRange);
+    public CodeRange getParentCodeRange();
 
-	public CodeRange getParentCodeRange();
+    public void addCodeRange(CodeRange codeRange);
 
-	public void addCodeRange(CodeRange codeRange);
+    public String getTitleString(ReportingFormat format)
+	    throws UnsupportedReportingFormatException;
 
-	public String getTitleString(ReportingFormat format)
-			throws UnsupportedReportingFormatException;
+    public String toString(ReportingFormat format)
+	    throws UnsupportedReportingFormatException;
 
-	public String toString(ReportingFormat format)
-			throws UnsupportedReportingFormatException;
+    public CodeRange createPartialCodeRange(int newStart, int newStop);
 
-	public CodeRange createPartialCodeRange(int newStart, int newStop);
-
-	@Override
-	public int compareTo(CodeRange other);
+    @Override
+    public int compareTo(CodeRange other);
 
 }

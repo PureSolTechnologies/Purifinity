@@ -9,23 +9,24 @@ import com.puresol.parser.PartDoesNotMatchException;
 
 public class Expression extends AbstractJavaParser {
 
-	private static final long serialVersionUID = 6464754895556318548L;
+    private static final long serialVersionUID = 6464754895556318548L;
 
-	@Override
-	public void scan() throws PartDoesNotMatchException, ParserException {
-		if (acceptToken(Plus.class)) {
-		} else if (acceptToken(Minus.class)) {
-		}
-		expectPart(Term.class);
-		while (acceptToken(Plus.class) || (acceptToken(Minus.class))) {
-			expectPart(Term.class);
-		}
-		finish();
+    @Override
+    public void scan() throws PartDoesNotMatchException, ParserException {
+	if (acceptToken(Plus.class) != null) {
+	} else if (acceptToken(Minus.class) != null) {
 	}
+	expectPart(Term.class);
+	while ((acceptToken(Plus.class) != null)
+		|| (acceptToken(Minus.class) != null)) {
+	    expectPart(Term.class);
+	}
+	finish();
+    }
 
-	@Override
-	public CodeRangeType getType() {
-		return CodeRangeType.FRAGMENT;
-	}
+    @Override
+    public CodeRangeType getCodeRangeType() {
+	return CodeRangeType.FRAGMENT;
+    }
 
 }

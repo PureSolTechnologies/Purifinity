@@ -8,19 +8,19 @@ import com.puresol.parser.PartDoesNotMatchException;
 
 public class MethodReturnType extends AbstractJavaParser {
 
-	private static final long serialVersionUID = -750943534076760838L;
+    private static final long serialVersionUID = -750943534076760838L;
 
-	@Override
-	public void scan() throws PartDoesNotMatchException, ParserException {
-		if (!acceptToken(VoidKeyword.class)) {
-			expectPart(VariableType.class);
-		}
-		finish();
+    @Override
+    public void scan() throws PartDoesNotMatchException, ParserException {
+	if (acceptToken(VoidKeyword.class) == null) {
+	    expectPart(VariableType.class);
 	}
+	finish();
+    }
 
-	@Override
-	public CodeRangeType getType() {
-		return CodeRangeType.FRAGMENT;
-	}
+    @Override
+    public CodeRangeType getCodeRangeType() {
+	return CodeRangeType.FRAGMENT;
+    }
 
 }

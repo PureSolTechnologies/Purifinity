@@ -14,6 +14,10 @@ public interface Parser {
 
 	public String getName();
 
+	public String getText();
+	
+	public String getContinuousText();
+	
 	/**
 	 * This method returns the current number of tokens within this parser
 	 * range.

@@ -92,7 +92,7 @@ public class CoCoMo extends AbstractEvaluator {
 		int sloc = 0;
 		List<CodeRange> codeRanges = getEvaluableCodeRanges(file);
 		for (CodeRange codeRange : codeRanges) {
-			if (codeRange.getType() == CodeRangeType.FILE) {
+			if (codeRange.getCodeRangeType() == CodeRangeType.FILE) {
 				sloc += getSLOC(codeRange);
 			}
 		}

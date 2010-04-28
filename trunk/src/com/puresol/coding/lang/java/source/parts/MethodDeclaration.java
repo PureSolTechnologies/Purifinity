@@ -13,29 +13,29 @@ import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
 public class MethodDeclaration extends AbstractJavaParser implements
-		MethodLanguageElement {
+	MethodLanguageElement {
 
-	private static final long serialVersionUID = 7410581812232089806L;
+    private static final long serialVersionUID = 7410581812232089806L;
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public void scan() throws PartDoesNotMatchException, ParserException {
-		while (acceptPart(Annotation.class))
-			;
-		acceptPart(MethodModifiers.class);
-		expectPart(MethodReturnType.class);
-		expectToken(IdLiteral.class);
-		skipNested(LParen.class, RParen.class);
-		if (acceptToken(ThrowsKeyword.class)) {
-			skipTo(LCurlyBracket.class);
-		}
-		expectToken(Semicolon.class);
-		finish();
+    @SuppressWarnings("unchecked")
+    @Override
+    public void scan() throws PartDoesNotMatchException, ParserException {
+	while (acceptPart(Annotation.class) != null)
+	    ;
+	acceptPart(MethodModifiers.class);
+	expectPart(MethodReturnType.class);
+	expectToken(IdLiteral.class);
+	skipNested(LParen.class, RParen.class);
+	if (acceptToken(ThrowsKeyword.class) != null) {
+	    skipTo(LCurlyBracket.class);
 	}
+	expectToken(Semicolon.class);
+	finish();
+    }
 
-	@Override
-	public CodeRangeType getType() {
-		return CodeRangeType.FRAGMENT;
-	}
+    @Override
+    public CodeRangeType getCodeRangeType() {
+	return CodeRangeType.FRAGMENT;
+    }
 
 }

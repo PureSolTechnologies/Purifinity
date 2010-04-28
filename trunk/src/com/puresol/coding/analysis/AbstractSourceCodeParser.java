@@ -84,7 +84,7 @@ public abstract class AbstractSourceCodeParser extends AbstractParser implements
 
 	@Override
 	public int compareTo(CodeRange other) {
-		return this.getType().compareTo(other.getType());
+		return this.getCodeRangeType().compareTo(other.getCodeRangeType());
 	}
 
 	@Override
@@ -104,12 +104,12 @@ public abstract class AbstractSourceCodeParser extends AbstractParser implements
 	}
 
 	private String getTextTitleString() {
-		return getType() + ": " + getName() + "\n" + getFile() + ": "
+		return getCodeRangeType() + ": " + getName() + "\n" + getFile() + ": "
 				+ getStartId() + "-" + getStopId();
 	}
 
 	private String getHTMLTitleString() {
-		String output = "<b>" + getType() + ": " + getName() + "</b><br/>\n";
+		String output = "<b>" + getCodeRangeType() + ": " + getName() + "</b><br/>\n";
 		output += "<i>" + getFile() + ": " + getStartLine() + "-"
 				+ getStopLine() + "</i>\n";
 		return output;
@@ -200,11 +200,6 @@ public abstract class AbstractSourceCodeParser extends AbstractParser implements
 		} catch (CloneNotSupportedException e) {
 			throw new StrangeSituationException(e);
 		}
-	}
-
-	@Override
-	public final String getTypeName() {
-		return getType().getIdentifier();
 	}
 
 	/**

@@ -119,7 +119,7 @@ public class TSVFile implements Storable {
 				: 100.0;
 		double MI = maintainability != null ? maintainability.getMI() : 100.0;
 
-		data.addRow(file, range.getType().getIdentifier(), range.getName(),
+		data.addRow(file, range.getCodeRangeType().getIdentifier(), range.getName(),
 				phyLOC, proLOC, comLOC, blLOC, depth, vG, n1, N1, n2, N2, n, N,
 				HL, HV, D, L, E, T, B, MIwoc, MIcw, MI);
 		for (CodeRange child : range.getChildCodeRanges()) {

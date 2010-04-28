@@ -29,7 +29,7 @@ public class ConstructorDefinition extends AbstractJavaParser implements
 	}
 
 	@Override
-	public CodeRangeType getType() {
+	public CodeRangeType getCodeRangeType() {
 		return CodeRangeType.CONSTRUCTOR;
 	}
 

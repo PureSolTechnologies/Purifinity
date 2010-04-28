@@ -12,30 +12,30 @@ import com.puresol.parser.PartDoesNotMatchException;
 
 public class JavaParser extends AbstractJavaParser {
 
-	private static final long serialVersionUID = -5271390812159304045L;
+    private static final long serialVersionUID = -5271390812159304045L;
 
-	@Override
-	public void scan() throws PartDoesNotMatchException, ParserException {
-		try {
-			moveToNextVisible(0);
-		} catch (EndOfTokenStreamException e) {
-			// this may happen if there is an empty file...
-			return;
-		}
-		expectPart(PackageDeclaration.class);
-		while (acceptPart(Import.class))
-			;
-		if (acceptPart(ClassDeclaration.class)) {
-		} else if (acceptPart(InterfaceDeclaration.class)) {
-		} else if (acceptPart(EnumDeclaration.class)) {
-		} else {
-			throw new PartDoesNotMatchException(this);
-		}
-		finish(getFile().getName());
+    @Override
+    public void scan() throws PartDoesNotMatchException, ParserException {
+	try {
+	    moveToNextVisible(0);
+	} catch (EndOfTokenStreamException e) {
+	    // this may happen if there is an empty file...
+	    return;
 	}
+	expectPart(PackageDeclaration.class);
+	while (acceptPart(Import.class) != null)
+	    ;
+	if (acceptPart(ClassDeclaration.class) != null) {
+	} else if (acceptPart(InterfaceDeclaration.class) != null) {
+	} else if (acceptPart(EnumDeclaration.class) != null) {
+	} else {
+	    throw new PartDoesNotMatchException(this);
+	}
+	finish(getFile().getName());
+    }
 
-	@Override
-	public CodeRangeType getType() {
-		return CodeRangeType.FILE;
-	}
+    @Override
+    public CodeRangeType getCodeRangeType() {
+	return CodeRangeType.FILE;
+    }
 }

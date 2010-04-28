@@ -20,7 +20,7 @@ public class FortranMetricsTest extends TestCase {
 	@Test
 	public void testSLOCMetrics() {
 		CodeRange fileCodeRange = analyser.getRootCodeRange();
-		Assert.assertEquals(CodeRangeType.FILE, fileCodeRange.getType());
+		Assert.assertEquals(CodeRangeType.FILE, fileCodeRange.getCodeRangeType());
 		SLOCMetric sloc = new SLOCMetric(fileCodeRange);
 		Assert.assertEquals(159, sloc.getPhyLOC());
 		Assert.assertEquals(62, sloc.getProLOC());

@@ -20,7 +20,7 @@ public class HTMLConverter {
 	}
 
 	public static String convertCodeRangeToHTML(CodeRange codeRange) {
-		String output = codeRange.getType().getIdentifier() + " \""
+		String output = codeRange.getCodeRangeType().getIdentifier() + " \""
 				+ codeRange.getName() + "\"<br/>\n";
 		output += "(" + codeRange.getFile() + ":" + codeRange.getStartId() + "-"
 				+ codeRange.getStopId();

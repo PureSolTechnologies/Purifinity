@@ -9,21 +9,21 @@ import com.puresol.parser.PartDoesNotMatchException;
 
 public class ObjectType extends AbstractJavaParser {
 
-	private static final long serialVersionUID = 8377330018615004538L;
+    private static final long serialVersionUID = 8377330018615004538L;
 
-	@Override
-	public void scan() throws PartDoesNotMatchException, ParserException {
-		expectToken(IdLiteral.class);
-		while (acceptToken(Dot.class)) {
-			expectToken(IdLiteral.class);
-		}
-		acceptPart(Generic.class);
-		finish();
+    @Override
+    public void scan() throws PartDoesNotMatchException, ParserException {
+	expectToken(IdLiteral.class);
+	while (acceptToken(Dot.class) != null) {
+	    expectToken(IdLiteral.class);
 	}
+	acceptPart(Generic.class);
+	finish();
+    }
 
-	@Override
-	public CodeRangeType getType() {
-		return CodeRangeType.FRAGMENT;
-	}
+    @Override
+    public CodeRangeType getCodeRangeType() {
+	return CodeRangeType.FRAGMENT;
+    }
 
 }

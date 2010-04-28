@@ -32,7 +32,7 @@ public class Module extends AbstractFortranParser implements
 	}
 
 	@Override
-	public CodeRangeType getType() {
+	public CodeRangeType getCodeRangeType() {
 		return CodeRangeType.MODULE;
 	}
 }

@@ -68,7 +68,7 @@ public class FixedFormEvaluator extends AbstractEvaluator {
 				if (codeRange.getLanguage() != Fortran.getInstance()) {
 					continue;
 				}
-				if (codeRange.getType() != CodeRangeType.FILE) {
+				if (codeRange.getCodeRangeType() != CodeRangeType.FILE) {
 					continue;
 				}
 				if (!getFiles().contains(file)) {

@@ -27,7 +27,7 @@ public class VariableType extends AbstractFortranParser {
 	}
 
 	@Override
-	public CodeRangeType getType() {
+	public CodeRangeType getCodeRangeType() {
 		return CodeRangeType.FRAGMENT;
 	}
 }

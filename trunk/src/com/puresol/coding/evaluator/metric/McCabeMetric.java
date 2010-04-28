@@ -99,9 +99,9 @@ public class McCabeMetric extends AbstractMetric {
 	@Override
 	public QualityLevel getQualityLevel() {
 		CodeRange range = getCodeRange();
-		if ((range.getType() == CodeRangeType.FILE)
-				|| (range.getType() == CodeRangeType.CLASS)
-				|| (range.getType() == CodeRangeType.ENUMERATION)) {
+		if ((range.getCodeRangeType() == CodeRangeType.FILE)
+				|| (range.getCodeRangeType() == CodeRangeType.CLASS)
+				|| (range.getCodeRangeType() == CodeRangeType.ENUMERATION)) {
 			if (getCyclomaticNumber() < 100) {
 				return QualityLevel.HIGH;
 			}
@@ -109,10 +109,10 @@ public class McCabeMetric extends AbstractMetric {
 				return QualityLevel.MEDIUM;
 			}
 			return QualityLevel.LOW;
-		} else if ((range.getType() == CodeRangeType.CONSTRUCTOR)
-				|| (range.getType() == CodeRangeType.METHOD)
-				|| (range.getType() == CodeRangeType.FUNCTION)
-				|| (range.getType() == CodeRangeType.INTERFACE)) {
+		} else if ((range.getCodeRangeType() == CodeRangeType.CONSTRUCTOR)
+				|| (range.getCodeRangeType() == CodeRangeType.METHOD)
+				|| (range.getCodeRangeType() == CodeRangeType.FUNCTION)
+				|| (range.getCodeRangeType() == CodeRangeType.INTERFACE)) {
 			if (getCyclomaticNumber() < 15) {
 				return QualityLevel.HIGH;
 			}

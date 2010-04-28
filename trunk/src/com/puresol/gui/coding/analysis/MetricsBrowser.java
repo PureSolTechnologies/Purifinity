@@ -171,7 +171,7 @@ public class MetricsBrowser extends BorderLayoutWidget {
 					html += "<table width=\"100%\" bgcolor=\"#ff0000\">";
 				}
 				html += "<tr><td>" + index + ": "
-						+ range.getType().getIdentifier() + ":"
+						+ range.getCodeRangeType().getIdentifier() + ":"
 						+ range.getName() + "</td></tr></table></body></html>";
 				listData.put(html, range);
 			}

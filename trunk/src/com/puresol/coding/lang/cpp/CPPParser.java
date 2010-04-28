@@ -21,7 +21,7 @@ public class CPPParser extends AbstractCPPParser {
 	}
 
 	@Override
-	public CodeRangeType getType() {
+	public CodeRangeType getCodeRangeType() {
 		return CodeRangeType.FILE;
 	}
 }

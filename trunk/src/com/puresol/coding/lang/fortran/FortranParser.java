@@ -11,28 +11,28 @@ import com.puresol.parser.PartDoesNotMatchException;
 
 public class FortranParser extends AbstractFortranParser {
 
-	private static final long serialVersionUID = 5137487026150640755L;
+    private static final long serialVersionUID = 5137487026150640755L;
 
-	@Override
-	public void scan() throws PartDoesNotMatchException, ParserException {
-		try {
-			moveToNextVisible(0);
-		} catch (EndOfTokenStreamException e) {
-			// this may happen if there is an empty file...
-			return;
-		}
-		if (acceptPart(Program.class)) {
-		} else if (acceptPart(Subroutine.class)) {
-		} else if (acceptPart(Function.class)) {
-		} else if (acceptPart(Module.class)) {
-		} else {
-			throw new PartDoesNotMatchException(this);
-		}
-		finish(getFile().getName());
+    @Override
+    public void scan() throws PartDoesNotMatchException, ParserException {
+	try {
+	    moveToNextVisible(0);
+	} catch (EndOfTokenStreamException e) {
+	    // this may happen if there is an empty file...
+	    return;
 	}
+	if (acceptPart(Program.class) != null) {
+	} else if (acceptPart(Subroutine.class) != null) {
+	} else if (acceptPart(Function.class) != null) {
+	} else if (acceptPart(Module.class) != null) {
+	} else {
+	    throw new PartDoesNotMatchException(this);
+	}
+	finish(getFile().getName());
+    }
 
-	@Override
-	public CodeRangeType getType() {
-		return CodeRangeType.FILE;
-	}
+    @Override
+    public CodeRangeType getCodeRangeType() {
+	return CodeRangeType.FILE;
+    }
 }

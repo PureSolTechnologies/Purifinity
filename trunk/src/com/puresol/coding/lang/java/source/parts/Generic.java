@@ -18,7 +18,7 @@ public class Generic extends AbstractJavaParser {
 	}
 
 	@Override
-	public CodeRangeType getType() {
+	public CodeRangeType getCodeRangeType() {
 		return CodeRangeType.FRAGMENT;
 	}
 

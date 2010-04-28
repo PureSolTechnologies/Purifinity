@@ -14,32 +14,32 @@ import com.puresol.parser.PartDoesNotMatchException;
 
 public class EnumDeclaration extends AbstractJavaParser {
 
-	private static final long serialVersionUID = -5500980743550485400L;
+    private static final long serialVersionUID = -5500980743550485400L;
 
-	@Override
-	public void scan() throws PartDoesNotMatchException, ParserException {
-		while (acceptPart(Annotation.class))
-			;
-		expectPart(ClassModifiers.class);
-		expectToken(EnumKeyword.class);
-		if (isToken(LessThan.class)) {
-			expectToken(LessThan.class);
-			expectToken(IdLiteral.class);
-			while (acceptToken(Comma.class)) {
-				expectToken(LessThan.class);
-			}
-			expectToken(GreaterThan.class);
-		}
-		String name = getCurrentToken().getText();
-
-		expectToken(IdLiteral.class);
-		skipNested(LCurlyBracket.class, RCurlyBracket.class);
-
-		finish(name);
+    @Override
+    public void scan() throws PartDoesNotMatchException, ParserException {
+	while (acceptPart(Annotation.class) != null)
+	    ;
+	expectPart(ClassModifiers.class);
+	expectToken(EnumKeyword.class);
+	if (isToken(LessThan.class)) {
+	    expectToken(LessThan.class);
+	    expectToken(IdLiteral.class);
+	    while (acceptToken(Comma.class) != null) {
+		expectToken(LessThan.class);
+	    }
+	    expectToken(GreaterThan.class);
 	}
+	String name = getCurrentToken().getText();
 
-	@Override
-	public CodeRangeType getType() {
-		return CodeRangeType.ENUMERATION;
-	}
+	expectToken(IdLiteral.class);
+	skipNested(LCurlyBracket.class, RCurlyBracket.class);
+
+	finish(name);
+    }
+
+    @Override
+    public CodeRangeType getCodeRangeType() {
+	return CodeRangeType.ENUMERATION;
+    }
 }

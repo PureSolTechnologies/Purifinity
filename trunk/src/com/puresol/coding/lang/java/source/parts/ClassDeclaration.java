@@ -15,43 +15,43 @@ import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
 public class ClassDeclaration extends AbstractJavaParser implements
-		ClassLanguageElement {
+	ClassLanguageElement {
 
-	private static final long serialVersionUID = -1812295859556451418L;
+    private static final long serialVersionUID = -1812295859556451418L;
 
-	@Override
-	public void scan() throws PartDoesNotMatchException, ParserException {
-		while (acceptPart(Annotation.class))
-			;
-		expectPart(ClassModifiers.class);
-		expectToken(ClassKeyword.class);
-		String name = getCurrentToken().getText();
+    @Override
+    public void scan() throws PartDoesNotMatchException, ParserException {
+	while (acceptPart(Annotation.class) != null)
+	    ;
+	expectPart(ClassModifiers.class);
+	expectToken(ClassKeyword.class);
+	String name = getCurrentToken().getText();
+	expectToken(IdLiteral.class);
+	acceptPart(Generic.class);
+	if (acceptToken(ExtendsKeyword.class) != null) {
+	    expectToken(IdLiteral.class);
+	    acceptPart(Generic.class);
+	}
+	if (acceptToken(ImplementsKeyword.class) != null) {
+	    expectToken(IdLiteral.class);
+	    acceptPart(Generic.class);
+	    while (acceptToken(Comma.class) != null) {
 		expectToken(IdLiteral.class);
 		acceptPart(Generic.class);
-		if (acceptToken(ExtendsKeyword.class)) {
-			expectToken(IdLiteral.class);
-			acceptPart(Generic.class);
-		}
-		if (acceptToken(ImplementsKeyword.class)) {
-			expectToken(IdLiteral.class);
-			acceptPart(Generic.class);
-			while (acceptToken(Comma.class)) {
-				expectToken(IdLiteral.class);
-				acceptPart(Generic.class);
-			}
-		}
-		expectPart(ClassBody.class);
-
-		finish(name);
+	    }
 	}
+	expectPart(ClassBody.class);
 
-	@Override
-	public CodeRangeType getType() {
-		return CodeRangeType.CLASS;
-	}
+	finish(name);
+    }
 
-	@Override
-	public List<VariableLanguageElement> getFields() {
-		return getChildCodeRanges(ClassBody.class).get(0).getFields();
-	}
+    @Override
+    public CodeRangeType getCodeRangeType() {
+	return CodeRangeType.CLASS;
+    }
+
+    @Override
+    public List<VariableLanguageElement> getFields() {
+	return getChildCodeRanges(ClassBody.class).get(0).getFields();
+    }
 }

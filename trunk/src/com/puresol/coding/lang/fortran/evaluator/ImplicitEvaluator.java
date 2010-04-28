@@ -69,7 +69,7 @@ public class ImplicitEvaluator extends AbstractEvaluator {
 				if (codeRange.getLanguage() != Fortran.getInstance()) {
 					continue;
 				}
-				if (!codeRange.getType().isRunnableCodeSegment()) {
+				if (!codeRange.getCodeRangeType().isRunnableCodeSegment()) {
 					continue;
 				}
 				addFile(file);
@@ -229,7 +229,7 @@ public class ImplicitEvaluator extends AbstractEvaluator {
 
 	private String getTextCodeRangeComment(CodeRange codeRange)
 			throws UnsupportedReportingFormatException {
-		if (codeRange.getType() == CodeRangeType.FILE) {
+		if (codeRange.getCodeRangeType() == CodeRangeType.FILE) {
 			return "";
 		}
 		String text = codeRange.getTitleString(ReportingFormat.TEXT) + "\n\n";
@@ -272,7 +272,7 @@ public class ImplicitEvaluator extends AbstractEvaluator {
 
 	private String getHTMLCodeRangeComment(CodeRange codeRange)
 			throws UnsupportedReportingFormatException {
-		if (codeRange.getType() == CodeRangeType.FILE) {
+		if (codeRange.getCodeRangeType() == CodeRangeType.FILE) {
 			return "";
 		}
 		String text = codeRange.getTitleString(ReportingFormat.HTML) + "\n";

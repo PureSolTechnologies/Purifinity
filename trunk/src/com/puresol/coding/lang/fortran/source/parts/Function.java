@@ -37,7 +37,7 @@ public class Function extends AbstractFortranParser implements
 	}
 
 	@Override
-	public CodeRangeType getType() {
+	public CodeRangeType getCodeRangeType() {
 		return CodeRangeType.FUNCTION;
 	}
 }

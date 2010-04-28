@@ -72,7 +72,7 @@ public class DuplicationScanner extends AbstractEvaluator implements
 		for (File file : getProjectAnalyser().getFiles()) {
 			addFile(file);
 			for (CodeRange codeRange : getEvaluableCodeRanges(file)) {
-				if (!codeRange.getType().isRunnableCodeSegment()) {
+				if (!codeRange.getCodeRangeType().isRunnableCodeSegment()) {
 					continue;
 				}
 				ArrayList<Integer> hashStream = new ArrayList<Integer>();

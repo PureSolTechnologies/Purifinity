@@ -273,9 +273,9 @@ public class SLOCMetric extends AbstractMetric {
 
 	public QualityLevel getQualityLevelLineCount() {
 		CodeRange range = getCodeRange();
-		if ((range.getType() == CodeRangeType.FILE)
-				|| (range.getType() == CodeRangeType.CLASS)
-				|| (range.getType() == CodeRangeType.ENUMERATION)) {
+		if ((range.getCodeRangeType() == CodeRangeType.FILE)
+				|| (range.getCodeRangeType() == CodeRangeType.CLASS)
+				|| (range.getCodeRangeType() == CodeRangeType.ENUMERATION)) {
 			if (getPhyLOC() > 2500) {
 				return QualityLevel.LOW;
 			}
@@ -283,10 +283,10 @@ public class SLOCMetric extends AbstractMetric {
 				return QualityLevel.MEDIUM;
 			}
 			return QualityLevel.HIGH;
-		} else if ((range.getType() == CodeRangeType.CONSTRUCTOR)
-				|| (range.getType() == CodeRangeType.METHOD)
-				|| (range.getType() == CodeRangeType.FUNCTION)
-				|| (range.getType() == CodeRangeType.INTERFACE)) {
+		} else if ((range.getCodeRangeType() == CodeRangeType.CONSTRUCTOR)
+				|| (range.getCodeRangeType() == CodeRangeType.METHOD)
+				|| (range.getCodeRangeType() == CodeRangeType.FUNCTION)
+				|| (range.getCodeRangeType() == CodeRangeType.INTERFACE)) {
 			if (getPhyLOC() > 40) {
 				return QualityLevel.LOW;
 			}

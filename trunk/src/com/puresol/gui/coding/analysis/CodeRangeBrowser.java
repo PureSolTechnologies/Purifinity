@@ -109,7 +109,7 @@ public class CodeRangeBrowser extends Panel {
 		Hashtable<Object, Object> listData = new Hashtable<Object, Object>();
 		for (CodeRange range : ranges) {
 			index++;
-			String entry = index + ": " + range.getType().getIdentifier() + ":"
+			String entry = index + ": " + range.getCodeRangeType().getIdentifier() + ":"
 					+ range.getName();
 			listData.put(entry, range);
 		}

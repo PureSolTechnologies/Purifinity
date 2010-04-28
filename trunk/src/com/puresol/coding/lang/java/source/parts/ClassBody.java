@@ -12,29 +12,29 @@ import com.puresol.parser.PartDoesNotMatchException;
 
 public class ClassBody extends AbstractJavaParser {
 
-	private static final long serialVersionUID = -2656071830287957232L;
+    private static final long serialVersionUID = -2656071830287957232L;
 
-	@Override
-	public void scan() throws PartDoesNotMatchException, ParserException {
-		expectToken(LCurlyBracket.class);
-		while ((acceptPart(FieldDeclaration.class))
-				|| (acceptPart(MethodDefinition.class))
-				|| (acceptPart(ConstructorDefinition.class))
-				|| (acceptPart(MethodDeclaration.class))
-				|| (acceptPart(StaticBlock.class))) {
-
-		}
-		expectToken(RCurlyBracket.class);
-		finish();
+    @Override
+    public void scan() throws PartDoesNotMatchException, ParserException {
+	expectToken(LCurlyBracket.class);
+	while ((acceptPart(FieldDeclaration.class) != null)
+		|| (acceptPart(MethodDefinition.class) != null)
+		|| (acceptPart(ConstructorDefinition.class) != null)
+		|| (acceptPart(MethodDeclaration.class) != null)
+		|| (acceptPart(StaticBlock.class) != null)) {
 
 	}
+	expectToken(RCurlyBracket.class);
+	finish();
 
-	@Override
-	public CodeRangeType getType() {
-		return CodeRangeType.FRAGMENT;
-	}
+    }
 
-	public List<VariableLanguageElement> getFields() {
-		return getChildCodeRanges(VariableLanguageElement.class);
-	}
+    @Override
+    public CodeRangeType getCodeRangeType() {
+	return CodeRangeType.FRAGMENT;
+    }
+
+    public List<VariableLanguageElement> getFields() {
+	return getChildCodeRanges(VariableLanguageElement.class);
+    }
 }
