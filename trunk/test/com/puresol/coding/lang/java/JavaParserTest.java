@@ -16,8 +16,7 @@ import com.puresol.coding.analysis.CodeRange;
 import com.puresol.coding.lang.java.JavaLexer;
 import com.puresol.coding.lang.java.JavaParser;
 import com.puresol.coding.lang.java.source.parts.ClassDeclaration;
-import com.puresol.coding.langelements.ClassLanguageElement;
-import com.puresol.coding.langelements.VariableLanguageElement;
+import com.puresol.coding.lang.java.source.parts.FieldDeclaration;
 import com.puresol.parser.DefaultPreConditioner;
 import com.puresol.parser.LexerException;
 import com.puresol.parser.NoMatchingTokenDefinitionFound;
@@ -60,10 +59,10 @@ public class JavaParserTest extends TestCase {
 			List<ClassDeclaration> classes = parser
 					.getChildCodeRanges(ClassDeclaration.class);
 			Assert.assertEquals(1, classes.size());
-			List<ClassLanguageElement> classElements = parser
-					.getChildCodeRanges(ClassLanguageElement.class);
+			List<ClassDeclaration> classElements = parser
+					.getChildCodeRanges(ClassDeclaration.class);
 			Assert.assertEquals(1, classElements.size());
-			List<VariableLanguageElement> fieldElements = classElements.get(0)
+			List<FieldDeclaration> fieldElements = classElements.get(0)
 					.getFields();
 			Assert.assertEquals(1, fieldElements.size());
 			Assert.assertEquals("testInt", fieldElements.get(0).getName());

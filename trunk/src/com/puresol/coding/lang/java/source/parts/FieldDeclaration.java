@@ -7,44 +7,40 @@ import com.puresol.coding.lang.fortran.source.symbols.Assign;
 import com.puresol.coding.lang.java.AbstractJavaParser;
 import com.puresol.coding.lang.java.source.symbols.Comma;
 import com.puresol.coding.lang.java.source.symbols.Semicolon;
-import com.puresol.coding.langelements.VariableLanguageElement;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
-public class FieldDeclaration extends AbstractJavaParser implements
-	VariableLanguageElement {
+public class FieldDeclaration extends AbstractJavaParser {
 
-    private static final long serialVersionUID = -8995105296970831547L;
+	private static final long serialVersionUID = -8995105296970831547L;
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public void scan() throws PartDoesNotMatchException, ParserException {
-	acceptPart(FieldModifiers.class);
-	expectPart(VariableType.class);
-	String name = getCurrentToken().getText();
-	expectPart(VariableName.class);
-	if (isToken(Assign.class) || isToken(Comma.class)) {
-	    skipTo(Semicolon.class);
+	@SuppressWarnings("unchecked")
+	@Override
+	public void scan() throws PartDoesNotMatchException, ParserException {
+		acceptPart(FieldModifiers.class);
+		expectPart(VariableType.class);
+		String name = getCurrentToken().getText();
+		expectPart(VariableName.class);
+		if (isToken(Assign.class) || isToken(Comma.class)) {
+			skipTo(Semicolon.class);
+		}
+		expectToken(Semicolon.class);
+		finish(name);
 	}
-	expectToken(Semicolon.class);
-	finish(name);
-    }
 
-    @Override
-    public CodeRangeType getCodeRangeType() {
-	return CodeRangeType.FRAGMENT;
-    }
+	@Override
+	public CodeRangeType getCodeRangeType() {
+		return CodeRangeType.FRAGMENT;
+	}
 
-    @Override
-    public List<String> getModifiers() {
-	FieldModifiers modifiers = getChildCodeRanges(FieldModifiers.class)
-		.get(0);
-	return modifiers.getModifiers();
-    }
+	public List<String> getModifiers() {
+		FieldModifiers modifiers = getChildCodeRanges(FieldModifiers.class)
+				.get(0);
+		return modifiers.getModifiers();
+	}
 
-    @Override
-    public String getVariableType() {
-	VariableType type = getChildCodeRanges(VariableType.class).get(0);
-	return type.getVariableTypeName();
-    }
+	public String getVariableType() {
+		VariableType type = getChildCodeRanges(VariableType.class).get(0);
+		return type.getVariableTypeName();
+	}
 }

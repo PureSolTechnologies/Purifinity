@@ -7,12 +7,10 @@ import com.puresol.coding.lang.fortran.AbstractFortranParser;
 import com.puresol.coding.lang.fortran.source.keywords.EndFunctionKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.EndKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.FunctionKeyword;
-import com.puresol.coding.langelements.FunctionLanguageElement;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
-public class Function extends AbstractFortranParser implements
-		FunctionLanguageElement {
+public class Function extends AbstractFortranParser {
 
 	private static final long serialVersionUID = -3467867032565700073L;
 

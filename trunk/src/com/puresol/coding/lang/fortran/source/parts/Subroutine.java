@@ -7,12 +7,10 @@ import com.puresol.coding.lang.fortran.AbstractFortranParser;
 import com.puresol.coding.lang.fortran.source.keywords.EndKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.EndSubroutineKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.SubroutineKeyword;
-import com.puresol.coding.langelements.SubroutineLanguageElement;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
-public class Subroutine extends AbstractFortranParser implements
-		SubroutineLanguageElement {
+public class Subroutine extends AbstractFortranParser {
 
 	private static final long serialVersionUID = -8790882661090444385L;
 
