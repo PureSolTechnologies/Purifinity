@@ -109,7 +109,8 @@ public abstract class AbstractSourceCodeParser extends AbstractParser implements
 	}
 
 	private String getHTMLTitleString() {
-		String output = "<b>" + getCodeRangeType() + ": " + getName() + "</b><br/>\n";
+		String output = "<b>" + getCodeRangeType() + ": " + getName()
+				+ "</b><br/>\n";
 		output += "<i>" + getFile() + ": " + getStartLine() + "-"
 				+ getStopLine() + "</i>\n";
 		return output;
@@ -233,4 +234,45 @@ public abstract class AbstractSourceCodeParser extends AbstractParser implements
 		setName(name);
 		finish();
 	}
+
+	@Override
+	public String toString() {
+		return getCodeRangeType().getIdentifier() + " '" + getName() + "'";
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((symbols == null) ? 0 : symbols.hashCode());
+		return result;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		AbstractSourceCodeParser other = (AbstractSourceCodeParser) obj;
+		if (symbols == null) {
+			if (other.symbols != null)
+				return false;
+		} else if (!symbols.equals(other.symbols))
+			return false;
+		return true;
+	}
+
 }

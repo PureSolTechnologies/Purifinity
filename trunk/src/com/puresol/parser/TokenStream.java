@@ -95,4 +95,46 @@ public final class TokenStream implements Serializable {
 		}
 		return tokenStream;
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((file == null) ? 0 : file.hashCode());
+		result = prime * result + ((tokens == null) ? 0 : tokens.hashCode());
+		return result;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		TokenStream other = (TokenStream) obj;
+		if (file == null) {
+			if (other.file != null)
+				return false;
+		} else if (!file.equals(other.file))
+			return false;
+		if (tokens == null) {
+			if (other.tokens != null)
+				return false;
+		} else if (!tokens.equals(other.tokens))
+			return false;
+		return true;
+	}
+
 }

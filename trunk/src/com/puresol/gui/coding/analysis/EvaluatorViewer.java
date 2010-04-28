@@ -1,6 +1,7 @@
 package com.puresol.gui.coding.analysis;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collections;
 
 import javax.i18n4j.Translator;
@@ -16,6 +17,7 @@ import javax.swingx.connect.Slot;
 
 import org.apache.log4j.Logger;
 
+import com.puresol.coding.analysis.CodeRange;
 import com.puresol.coding.evaluator.Evaluator;
 import com.puresol.coding.evaluator.UnsupportedReportingFormatException;
 import com.puresol.reporting.ReportingFormat;
@@ -32,8 +34,8 @@ public class EvaluatorViewer extends BorderLayoutWidget {
 	private final TextField evaluatorName = new TextField();
 	private final HTMLTextPane description = new HTMLTextPane();
 	private final HTMLTextPane projectSummary = new HTMLTextPane();
-	private final List fileList = new List();
-	private final HTMLTextPane evaluatorFileComment = new HTMLTextPane();
+	private final List codeRangeList = new List();
+	private final HTMLTextPane evaluatorCodeRangeComment = new HTMLTextPane();
 
 	private Evaluator evaluator = null;
 
@@ -56,13 +58,14 @@ public class EvaluatorViewer extends BorderLayoutWidget {
 				.i18n("Evaluator Description"));
 		tabbedPane.add(new ScrollPane(projectSummary), translator
 				.i18n("Project Summary"));
-		Panel filePanel = new Panel();
-		filePanel.setLayout(new BoxLayout(filePanel, BoxLayout.X_AXIS));
-		tabbedPane.add(filePanel, translator.i18n("Evaluators File Summary"));
+		Panel codeRangePanel = new Panel();
+		codeRangePanel.setLayout(new BoxLayout(codeRangePanel, BoxLayout.X_AXIS));
+		tabbedPane.add(codeRangePanel, translator.i18n("Evaluators Code Range Summary"));
 
-		filePanel.add(new ScrollPane(fileList));
-		fileList.connect("valueChanged", this, "fileChanged", Object.class);
-		filePanel.add(new ScrollPane(evaluatorFileComment));
+		codeRangePanel.add(new ScrollPane(codeRangeList));
+		codeRangeList.connect("valueChanged", this, "codeRangeChanged",
+				Object.class);
+		codeRangePanel.add(new ScrollPane(evaluatorCodeRangeComment));
 	}
 
 	/**
@@ -101,26 +104,28 @@ public class EvaluatorViewer extends BorderLayoutWidget {
 					ReportingFormat.HTML));
 			logger.warn(e.getMessage(), e);
 		}
-		evaluatorFileComment.setText("");
-		refreshFileList();
+		evaluatorCodeRangeComment.setText("");
+		refreshCodeRangeList();
 	}
 
-	private void refreshFileList() {
-		fileList.removeAll();
-		java.util.List<File> files = evaluator.getFiles();
-		Collections.sort(files);
-		fileList.setListData(files.toArray());
+	private void refreshCodeRangeList() {
+		codeRangeList.removeAll();
+		java.util.List<CodeRange> codeRanges = new ArrayList<CodeRange>();
+		for (File file : evaluator.getFiles())
+			codeRanges.addAll(evaluator.getCodeRanges(file));
+		Collections.sort(codeRanges);
+		codeRangeList.setListData(codeRanges.toArray());
 	}
 
 	@Slot
-	public void fileChanged(Object o) {
-		File file = (File) o;
-		System.out.println(file);
+	public void codeRangeChanged(Object o) {
+		CodeRange codeRange = (CodeRange) o;
+		System.out.println(codeRange);
 		try {
-			evaluatorFileComment.setText(evaluator.getFileComment(file,
-					ReportingFormat.HTML));
+			evaluatorCodeRangeComment.setText(evaluator.getCodeRangeComment(
+					codeRange, ReportingFormat.HTML));
 		} catch (UnsupportedReportingFormatException e) {
-			evaluatorFileComment.setText(translator.i18n(
+			evaluatorCodeRangeComment.setText(translator.i18n(
 					"Evaluator does not (yet) support {0} reporting format.",
 					ReportingFormat.HTML));
 			logger.warn(e.getMessage(), e);

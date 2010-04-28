@@ -68,13 +68,15 @@ public class CoCoMo extends AbstractEvaluator {
 		int sloc = 0;
 		int count = 0;
 		for (File file : files) {
+			if (Thread.interrupted()) {
+				return;
+			}
 			if (getMonitor() != null) {
 				count++;
 				getMonitor().setStatus(count);
 			}
 			int fileSLOC = getSLOC(file);
 			sloc += fileSLOC;
-			addFile(file);
 		}
 		cocomoValues.setSloc(sloc);
 		if (getMonitor() != null) {
@@ -89,14 +91,15 @@ public class CoCoMo extends AbstractEvaluator {
 	}
 
 	private int getFileSLOC(File file) {
-		int sloc = 0;
 		List<CodeRange> codeRanges = getEvaluableCodeRanges(file);
 		for (CodeRange codeRange : codeRanges) {
 			if (codeRange.getCodeRangeType() == CodeRangeType.FILE) {
-				sloc += getSLOC(codeRange);
+				addFile(file);
+				addCodeRange(codeRange);
+				return getSLOC(codeRange);
 			}
 		}
-		return sloc;
+		return 0;
 	}
 
 	private int getSLOC(CodeRange codeRange) {
@@ -158,24 +161,7 @@ public class CoCoMo extends AbstractEvaluator {
 	}
 
 	@Override
-	public String getFileComment(File file, ReportingFormat format)
-			throws UnsupportedReportingFormatException {
-		if (format == ReportingFormat.HTML) {
-			return translator.i18n("File Result:<br/><br/>")
-					+ fileCoCoMoValues.get(file).toString(format);
-		} else if (format == ReportingFormat.TEXT) {
-			return fileCoCoMoValues.get(file).toString(format);
-		}
-		throw new UnsupportedReportingFormatException(format);
-	}
-
-	@Override
 	public QualityLevel getProjectQuality() {
-		return QualityLevel.UNSPECIFIED;
-	}
-
-	@Override
-	public QualityLevel getQuality(File file) {
 		return QualityLevel.UNSPECIFIED;
 	}
 

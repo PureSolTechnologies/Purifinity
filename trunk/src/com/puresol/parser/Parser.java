@@ -1,5 +1,6 @@
 package com.puresol.parser;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -8,16 +9,16 @@ import java.util.List;
  * @author Rick-Rainer Ludwig
  * 
  */
-public interface Parser {
+public interface Parser extends Serializable {
 
 	public void scan() throws PartDoesNotMatchException, ParserException;
 
 	public String getName();
 
 	public String getText();
-	
+
 	public String getContinuousText();
-	
+
 	/**
 	 * This method returns the current number of tokens within this parser
 	 * range.

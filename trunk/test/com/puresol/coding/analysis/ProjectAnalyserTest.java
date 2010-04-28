@@ -18,10 +18,30 @@ import org.junit.Test;
 import com.puresol.parser.Token;
 import com.puresol.parser.TokenPublicity;
 import com.puresol.parser.TokenStream;
+import com.puresol.utils.Persistence;
+import com.puresol.utils.PersistenceException;
 
+import junit.framework.Assert;
 import junit.framework.TestCase;
 
 public class ProjectAnalyserTest extends TestCase {
+
+	@Test
+	public void testSerialization() {
+		try {
+			ProjectAnalyser projectAnalyser = TestProjectAnalysers.MINIMAL_PROJECT_ANALYSER;
+
+			Persistence.persist(projectAnalyser, new File("test/persist.test"));
+			ProjectAnalyser restored = (ProjectAnalyser) Persistence
+					.restore(new File("test/persist.test"));
+
+			Assert.assertNotSame(projectAnalyser, restored);
+			Assert.assertEquals(projectAnalyser, restored);
+		} catch (PersistenceException e) {
+			e.printStackTrace();
+			Assert.fail("No exception was expected!");
+		}
+	}
 
 	@Test
 	public void testFortran() {

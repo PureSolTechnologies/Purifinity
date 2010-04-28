@@ -145,9 +145,13 @@ public class FixedFormEvaluator extends AbstractEvaluator {
 		List<File> files = new ArrayList<File>(violations.keySet());
 		Collections.sort(files);
 		for (File file : files) {
-			text += file + ": "
-					+ HTMLConverter.convertQualityLevelToHTML(getQuality(file))
-					+ "\n";
+			for (CodeRange codeRange : getCodeRanges(file)) {
+				text += file
+						+ ": "
+						+ HTMLConverter
+								.convertQualityLevelToHTML(getQuality(codeRange))
+						+ "\n";
+			}
 		}
 		return text;
 	}
@@ -164,43 +168,16 @@ public class FixedFormEvaluator extends AbstractEvaluator {
 		List<File> files = new ArrayList<File>(violations.keySet());
 		Collections.sort(files);
 		for (File file : files) {
-			text += "<li>" + file + ": "
-					+ HTMLConverter.convertQualityLevelToHTML(getQuality(file))
-					+ "</li>\n";
+			for (CodeRange codeRange : getCodeRanges(file)) {
+				text += "<li>"
+						+ file
+						+ ": "
+						+ HTMLConverter
+								.convertQualityLevelToHTML(getQuality(codeRange))
+						+ "</li>\n";
+			}
 		}
 		text += "</ul>\n";
-		return text;
-	}
-
-	@Override
-	public String getFileComment(File file, ReportingFormat format)
-			throws UnsupportedReportingFormatException {
-		if (format == ReportingFormat.TEXT) {
-			return getTextFileComment(file);
-		} else if (format == ReportingFormat.HTML) {
-			return getHTMLFileComment(file);
-		}
-		throw new UnsupportedReportingFormatException(format);
-	}
-
-	private String getTextFileComment(File file)
-			throws UnsupportedReportingFormatException {
-		String text = translator.i18n("Violations:") + "\n\n";
-		for (FormViolation violation : violations.get(file)) {
-			text += violation.toString(ReportingFormat.TEXT);
-		}
-		return text;
-	}
-
-	private String getHTMLFileComment(File file)
-			throws UnsupportedReportingFormatException {
-		String text = "<p>" + translator.i18n("Violations:") + "</p>\n";
-		text += "<ol>\n";
-		for (FormViolation violation : violations.get(file)) {
-			text += "<li>" + violation.toString(ReportingFormat.TEXT)
-					+ "</li>\n";
-		}
-		text += "</ol>\n";
 		return text;
 	}
 
@@ -213,26 +190,21 @@ public class FixedFormEvaluator extends AbstractEvaluator {
 	@Override
 	public QualityLevel getProjectQuality() {
 		int violations = 0;
+		int total = 0;
 		List<File> files = getProjectAnalyser().getFiles();
 		for (File file : files) {
-			if (getQuality(file) != QualityLevel.HIGH) {
-				violations++;
+			for (CodeRange codeRange : getCodeRanges(file)) {
+				total++;
+				if (getQuality(codeRange) != QualityLevel.HIGH)
+					violations++;
 			}
 		}
-		double ratio = (double) violations / (double) files.size();
+		double ratio = (double) violations / (double) total;
 		if (ratio > 0.1) {
 			return QualityLevel.LOW;
 		}
 		if (ratio > 0.0) {
 			return QualityLevel.MEDIUM;
-		}
-		return QualityLevel.HIGH;
-	}
-
-	@Override
-	public QualityLevel getQuality(File file) {
-		if (violations.size() > 0) {
-			return QualityLevel.LOW;
 		}
 		return QualityLevel.HIGH;
 	}

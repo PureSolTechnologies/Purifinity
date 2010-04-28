@@ -127,7 +127,7 @@ public class MetricsBrowser extends BorderLayoutWidget {
 			for (CodeRange range : ranges) {
 				calculateReport(range);
 			}
-			QualityLevel quality = metrics.getQuality(file);
+			QualityLevel quality = getFileQuality(file);
 			String html = "<html><body>";
 			if (quality == QualityLevel.HIGH) {
 				html += "<table width=\"100%\" bgcolor=\"#00ff00\">";
@@ -144,6 +144,15 @@ public class MetricsBrowser extends BorderLayoutWidget {
 		}
 		fileList.setListData(new ArrayList<Object>(htmls),
 				new ArrayList<Object>(files));
+	}
+
+	private QualityLevel getFileQuality(File file) {
+		QualityLevel level = QualityLevel.HIGH;
+		for (CodeRange codeRange : metrics.getCodeRanges(file)) {
+			level = QualityLevel.getMinLevel(level, metrics
+					.getQuality(codeRange));
+		}
+		return level;
 	}
 
 	private void updateCodeRanges(File file) {

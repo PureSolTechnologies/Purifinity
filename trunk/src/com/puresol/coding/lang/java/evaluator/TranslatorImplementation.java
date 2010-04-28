@@ -47,8 +47,7 @@ public class TranslatorImplementation extends AbstractEvaluator {
 			observer.setStatus(0);
 		}
 		int count = 0;
-		ProjectAnalyser projectAnalyser = getProjectAnalyser();
-		for (File file : projectAnalyser.getFiles()) {
+		for (File file : getProjectAnalyser().getFiles()) {
 			if (Thread.interrupted()) {
 				return;
 			}
@@ -56,24 +55,28 @@ public class TranslatorImplementation extends AbstractEvaluator {
 			if (observer != null) {
 				observer.setStatus(count);
 			}
-			Analyser analyser = projectAnalyser.getAnalyser(file);
-			for (CodeRange codeRange : analyser.getNamedCodeRanges()) {
-				if (Thread.interrupted()) {
-					return;
-				}
-				if (codeRange.getLanguage() != Java.getInstance()) {
-					continue;
-				}
-				if (!codeRange.getClass().equals(ClassDeclaration.class)) {
-					continue;
-				}
-				addFile(file);
-				addCodeRange(codeRange);
-				analyse(codeRange);
-			}
+			analyse(file);
 		}
 		if (observer != null) {
 			observer.finish();
+		}
+	}
+
+	private void analyse(File file) {
+		Analyser analyser = getProjectAnalyser().getAnalyser(file);
+		for (CodeRange codeRange : analyser.getNamedCodeRanges()) {
+			if (Thread.interrupted()) {
+				return;
+			}
+			if (codeRange.getLanguage() != Java.getInstance()) {
+				continue;
+			}
+			if (!codeRange.getClass().equals(ClassDeclaration.class)) {
+				continue;
+			}
+			addFile(file);
+			addCodeRange(codeRange);
+			analyse(codeRange);
 		}
 	}
 
@@ -115,16 +118,6 @@ public class TranslatorImplementation extends AbstractEvaluator {
 			return HTMLStandards.convertFlowTextToHTML(DESCRIPTION);
 		}
 		return DESCRIPTION;
-	}
-
-	@Override
-	public QualityLevel getQuality(File file) {
-		return QualityLevel.UNSPECIFIED;
-	}
-
-	@Override
-	public String getFileComment(File file, ReportingFormat format) {
-		return "";
 	}
 
 	@Override

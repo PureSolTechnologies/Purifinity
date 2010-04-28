@@ -151,8 +151,10 @@ public class ImplicitEvaluator extends AbstractEvaluator {
 		List<File> files = getFiles();
 		Collections.sort(files);
 		for (File file : files) {
-			text += file + ": " + translator.i18n("Quality:") + " "
-					+ getQuality(file).getIdentifier() + "\n";
+			for (CodeRange codeRange : getCodeRanges(file)) {
+				text += file + ": " + translator.i18n("Quality:") + " "
+						+ getQuality(codeRange).getIdentifier() + "\n";
+			}
 		}
 		return text;
 	}
@@ -171,48 +173,18 @@ public class ImplicitEvaluator extends AbstractEvaluator {
 		List<File> files = getFiles();
 		Collections.sort(files);
 		for (File file : files) {
-			text += "<tr>\n";
-			text += "<td>" + file + "</td><td>"
-					+ HTMLConverter.convertQualityLevelToHTML(getQuality(file))
-					+ "</td>\n";
-			text += "<td>\n";
+			for (CodeRange codeRange : getCodeRanges(file)) {
+				text += "<tr>\n";
+				text += "<td>"
+						+ file
+						+ "</td><td>"
+						+ HTMLConverter
+								.convertQualityLevelToHTML(getQuality(codeRange))
+						+ "</td>\n";
+				text += "<td>\n";
+			}
 		}
 		text += "</table>\n";
-		return text;
-	}
-
-	@Override
-	public String getFileComment(File file, ReportingFormat format)
-			throws UnsupportedReportingFormatException {
-		if (format == ReportingFormat.TEXT) {
-			return getTextFileComment(file);
-		} else if (format == ReportingFormat.HTML) {
-			return getHTMLFileComment(file);
-		}
-		throw new UnsupportedReportingFormatException(format);
-	}
-
-	private String getTextFileComment(File file)
-			throws UnsupportedReportingFormatException {
-		String text = "";
-		text += file + ": " + translator.i18n("Quality:") + " "
-				+ getQuality(file).getIdentifier() + "\n";
-		for (CodeRange codeRange : getEvaluableCodeRanges(file)) {
-			text += getTextCodeRangeComment(codeRange) + "\n\n";
-		}
-		return text;
-	}
-
-	private String getHTMLFileComment(File file)
-			throws UnsupportedReportingFormatException {
-		String text = "";
-		text += "<h3>" + file + "</h3>\n";
-		text += "<p>" + translator.i18n("Overall quality:") + " "
-				+ HTMLConverter.convertQualityLevelToHTML(getQuality(file))
-				+ "</p>\n";
-		for (CodeRange codeRange : getEvaluableCodeRanges(file)) {
-			text += getHTMLCodeRangeComment(codeRange) + "\n\n";
-		}
 		return text;
 	}
 
@@ -323,16 +295,9 @@ public class ImplicitEvaluator extends AbstractEvaluator {
 		}
 		QualityLevel level = QualityLevel.HIGH;
 		for (File file : files) {
-			level = QualityLevel.getMinLevel(level, getQuality(file));
-		}
-		return level;
-	}
-
-	@Override
-	public QualityLevel getQuality(File file) {
-		QualityLevel level = QualityLevel.HIGH;
-		for (CodeRange codeRange : getEvaluableCodeRanges(file)) {
-			level = QualityLevel.getMinLevel(level, getQuality(codeRange));
+			for (CodeRange codeRange : getCodeRanges(file)) {
+				level = QualityLevel.getMinLevel(level, getQuality(codeRange));
+			}
 		}
 		return level;
 	}

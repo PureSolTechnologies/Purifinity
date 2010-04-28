@@ -11,6 +11,7 @@ import javax.i18n4j.Translator;
 
 import org.apache.log4j.Logger;
 
+import com.puresol.coding.analysis.CodeRange;
 import com.puresol.coding.reporting.StandardReport;
 import com.puresol.reporting.ReportingFormat;
 import com.puresol.reporting.html.Anchor;
@@ -50,11 +51,11 @@ public class HTMLReportGenerator extends AbstractReportGenerator {
 		createStandardFiles();
 		createProjectReport();
 		createEvaluatorReports();
-		createFileReports();
+		createCodeRangeReports();
 		createOverview();
 		createOverviewViewer();
 		createEvaluatorViewer();
-		createFileViewer();
+		createCodeRangeViewer();
 	}
 
 	private void createStandardFiles() {
@@ -129,7 +130,7 @@ public class HTMLReportGenerator extends AbstractReportGenerator {
 				+ ".html"));
 	}
 
-	private void createFileReports() {
+	private void createCodeRangeReports() {
 		ProjectEvaluator evaluator = getCodeEvaluator();
 		List<File> files = evaluator.getFiles();
 		Collections.sort(files);
@@ -142,7 +143,9 @@ public class HTMLReportGenerator extends AbstractReportGenerator {
 		String title = translator.i18n("Summary for File") + " '" + file + "'";
 		String text = getTableOfContents(file);
 		for (Evaluator evaluator : getCodeEvaluator().getEvaluators()) {
-			text += createFileReport(file, evaluator);
+			for (CodeRange codeRange : evaluator.getCodeRanges(file)) {
+				text += createCodeRangeReport(codeRange, evaluator);
+			}
 		}
 		createFileReport(file, title, text);
 	}
@@ -151,26 +154,30 @@ public class HTMLReportGenerator extends AbstractReportGenerator {
 		String text = "<h2>" + translator.i18n("Table of Contents") + "</h2>\n";
 		text += "<ol>\n";
 		for (Evaluator evaluator : getCodeEvaluator().getEvaluators()) {
-			try {
-				if (evaluator.getFileComment(file, ReportingFormat.HTML)
-						.isEmpty()) {
+			for (CodeRange codeRange : evaluator.getCodeRanges(file)) {
+				try {
+					if (evaluator.getCodeRangeComment(codeRange,
+							ReportingFormat.HTML).isEmpty()) {
+						continue;
+					}
+				} catch (UnsupportedReportingFormatException e) {
 					continue;
 				}
-			} catch (UnsupportedReportingFormatException e) {
-				continue;
+				text += "<li>"
+						+ new Link("#" + evaluator.getName(), evaluator
+								.getName(), LinkTarget.SELF).toHTML()
+						+ "</li>\n";
 			}
-			text += "<li>"
-					+ new Link("#" + evaluator.getName(), evaluator.getName(),
-							LinkTarget.SELF).toHTML() + "</li>\n";
 		}
 		text += "</ol>\n";
 		return text;
 	}
 
-	private String createFileReport(File file, Evaluator evaluator) {
+	private String createCodeRangeReport(CodeRange codeRange,
+			Evaluator evaluator) {
 		String text = "";
 		try {
-			String comment = evaluator.getFileComment(file,
+			String comment = evaluator.getCodeRangeComment(codeRange,
 					ReportingFormat.HTML);
 			if (!comment.isEmpty()) {
 				text += new Anchor(evaluator.getName(), "<h2>"
@@ -279,7 +286,7 @@ public class HTMLReportGenerator extends AbstractReportGenerator {
 		}
 	}
 
-	private void createFileViewer() {
+	private void createCodeRangeViewer() {
 		File file = new File("files.html");
 		String html = HTMLStandards.getStandardHeader("File Results", Files
 				.getRelativePath(file, report.getCssFile()), false, Files

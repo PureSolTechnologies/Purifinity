@@ -1,7 +1,6 @@
 package com.puresol.coding.lang.fortran.evaluator;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -97,9 +96,11 @@ public class GotoEvaluator extends AbstractGotoEvaluator {
 		List<File> files = getFiles();
 		Collections.sort(files);
 		for (File file : files) {
-			text += file + ": " + this.getGotoNum(file) + " GOTOs; "
-					+ translator.i18n("Quality:") + " "
-					+ getQuality(file).getIdentifier() + "\n";
+			for (CodeRange codeRange : getCodeRanges(file)) {
+				text += file + ": " + this.getGotoNum(file) + " GOTOs; "
+						+ translator.i18n("Quality:") + " "
+						+ getQuality(codeRange).getIdentifier() + "\n";
+			}
 		}
 		return text;
 	}
@@ -118,105 +119,20 @@ public class GotoEvaluator extends AbstractGotoEvaluator {
 		List<File> files = getFiles();
 		Collections.sort(files);
 		for (File file : files) {
-			text += "<tr>\n";
-			text += "<td>" + file + "</td><td>" + this.getGotoNum(file)
-					+ "</td><td>"
-					+ HTMLConverter.convertQualityLevelToHTML(getQuality(file))
-					+ "</td>\n";
-			text += "<td>\n";
+			for (CodeRange codeRange : getCodeRanges(file)) {
+				text += "<tr>\n";
+				text += "<td>"
+						+ file
+						+ "</td><td>"
+						+ this.getGotoNum(file)
+						+ "</td><td>"
+						+ HTMLConverter
+								.convertQualityLevelToHTML(getQuality(codeRange))
+						+ "</td>\n";
+				text += "<td>\n";
+			}
 		}
 		text += "</table>\n";
-		return text;
-	}
-
-	@Override
-	public String getFileComment(File file, ReportingFormat format)
-			throws UnsupportedReportingFormatException {
-		if (format == ReportingFormat.TEXT) {
-			return getTextFileComment(file);
-		} else if (format == ReportingFormat.HTML) {
-			return getHTMLFileComment(file);
-		}
-		throw new UnsupportedReportingFormatException(format);
-	}
-
-	private String getTextFileComment(File file)
-			throws UnsupportedReportingFormatException {
-		String text = "";
-		text += file + ": " + translator.i18n("Quality:") + " "
-				+ getQuality(file).getIdentifier() + "\n";
-		for (CodeRange codeRange : getCodeRanges(file)) {
-			if (getGotoNum(codeRange) == 0) {
-				continue;
-			}
-			text += codeRange.getTitleString(ReportingFormat.TEXT);
-			for (FoundGoto foundGoto : getGotos(codeRange)) {
-				text += foundGoto.toString(ReportingFormat.TEXT);
-			}
-		}
-		return text;
-	}
-
-	private String getHTMLFileComment(File file)
-			throws UnsupportedReportingFormatException {
-		String text = "";
-		text += "<h3>" + file + "</h3>\n";
-		text += "<p>" + translator.i18n("Overall quality:") + " "
-				+ HTMLConverter.convertQualityLevelToHTML(getQuality(file))
-				+ "</p>\n";
-		text += "<p><b><u>GOTOs:</u></b></p>";
-		text += "<ol>\n";
-		for (CodeRange codeRange : getCodeRanges(file)) {
-			ArrayList<FoundGoto> gotos = getGotos(codeRange);
-			if (gotos != null) {
-				text += "<li>\n";
-				text += codeRange.getTitleString(ReportingFormat.HTML);
-				text += "<ul>\n";
-				for (FoundGoto foundGoto : gotos) {
-					text += "<li>";
-					text += foundGoto.toString(ReportingFormat.HTML);
-					String labelName = foundGoto.getLabelName().toUpperCase();
-					boolean found = false;
-					List<FoundLabel> labels = getLabels(codeRange);
-					if (labels != null) {
-						for (FoundLabel label : labels) {
-							if (label.getLabelName().toUpperCase().equals(
-									labelName)) {
-								found = true;
-								break;
-							}
-						}
-					}
-					if (!found) {
-						text += "<b>"
-								+ translator
-										.i18n("There was not an explicit label found! Is it a reusage of a loop label? This might be confusing and should be avoided.")
-								+ "</b>";
-					}
-					text += "</li>\n";
-				}
-				text += "</ul>\n";
-				text += "</li>\n";
-			}
-		}
-		text += "</ol>\n";
-		text += "<p><b><u>Labels:</u></b></p>";
-		text += "<ol>\n";
-		for (CodeRange codeRange : getCodeRanges(file)) {
-			ArrayList<FoundLabel> labels = getLabels(codeRange);
-			if (labels != null) {
-				text += "<li>\n";
-				text += codeRange.getTitleString(ReportingFormat.HTML);
-				text += "<ul>\n";
-				for (FoundLabel foundLabel : labels) {
-					text += "<li>" + foundLabel.toString(ReportingFormat.HTML)
-							+ "</li>\n";
-				}
-				text += "</ul>\n";
-				text += "</li>\n";
-			}
-		}
-		text += "</ol>\n";
 		return text;
 	}
 
@@ -242,20 +158,6 @@ public class GotoEvaluator extends AbstractGotoEvaluator {
 		}
 		if (getGotoNum() > 0) {
 			return QualityLevel.MEDIUM;
-		}
-		return QualityLevel.HIGH;
-	}
-
-	@Override
-	public QualityLevel getQuality(File file) {
-		for (CodeRange codeRange : getCodeRanges(file)) {
-			List<FoundGoto> gotos = getGotos(codeRange);
-			if (gotos == null) {
-				continue;
-			}
-			if (gotos.size() > 0) {
-				return QualityLevel.LOW;
-			}
 		}
 		return QualityLevel.HIGH;
 	}

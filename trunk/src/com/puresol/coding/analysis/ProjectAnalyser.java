@@ -130,4 +130,61 @@ public class ProjectAnalyser implements Serializable, ProgressObservable {
 	public List<CodeRange> getNamedCodeRanges(File file) {
 		return getAnalyser(file).getNamedCodeRanges();
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((analysers == null) ? 0 : analysers.hashCode());
+		result = prime * result
+				+ ((directory == null) ? 0 : directory.hashCode());
+		result = prime * result
+				+ ((failedFiles == null) ? 0 : failedFiles.hashCode());
+		result = prime * result + ((pattern == null) ? 0 : pattern.hashCode());
+		return result;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ProjectAnalyser other = (ProjectAnalyser) obj;
+		if (analysers == null) {
+			if (other.analysers != null)
+				return false;
+		} else if (!analysers.equals(other.analysers))
+			return false;
+		if (directory == null) {
+			if (other.directory != null)
+				return false;
+		} else if (!directory.equals(other.directory))
+			return false;
+		if (failedFiles == null) {
+			if (other.failedFiles != null)
+				return false;
+		} else if (!failedFiles.equals(other.failedFiles))
+			return false;
+		if (pattern == null) {
+			if (other.pattern != null)
+				return false;
+		} else if (!pattern.equals(other.pattern))
+			return false;
+		return true;
+	}
+
 }

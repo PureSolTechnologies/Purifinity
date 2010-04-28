@@ -73,16 +73,6 @@ public interface Evaluator extends ProgressObservable, Serializable {
 	/**
 	 * This method returns the evaluator comment for the file.
 	 * 
-	 * @param file
-	 *            is the file to be checked for a comment.
-	 * @return A String with the comment is returned.
-	 */
-	public String getFileComment(File file, ReportingFormat format)
-			throws UnsupportedReportingFormatException;
-
-	/**
-	 * This method returns the evaluator comment for the file.
-	 * 
 	 * @param codeRange
 	 *            is the file to be checked for a comment.
 	 * @return A String with the comment is returned.
@@ -96,14 +86,6 @@ public interface Evaluator extends ProgressObservable, Serializable {
 	 * @return
 	 */
 	public QualityLevel getProjectQuality();
-
-	/**
-	 * This method returns the single quality statement for a single file.
-	 * 
-	 * @param file
-	 * @return
-	 */
-	public QualityLevel getQuality(File file);
 
 	/**
 	 * This method returns the single quality statement for a single file.

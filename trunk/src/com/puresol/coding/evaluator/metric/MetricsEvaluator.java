@@ -15,7 +15,6 @@ import com.puresol.coding.analysis.ProjectAnalyser;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.evaluator.QualityLevel;
 import com.puresol.coding.evaluator.UnsupportedReportingFormatException;
-import com.puresol.coding.evaluator.metric.report.HTMLMetricsReport;
 import com.puresol.coding.reporting.HTMLConverter;
 import com.puresol.reporting.ReportingFormat;
 import com.puresol.reporting.html.HTMLStandards;
@@ -169,52 +168,19 @@ public class MetricsEvaluator extends AbstractEvaluator {
 		List<File> files = getFiles();
 		Collections.sort(files);
 		for (File file : files) {
-			text += "<tr>";
-			text += "<td>" + file + "</td><td>"
-					+ HTMLConverter.convertQualityLevelToHTML(getQuality(file))
-					+ "</td>";
-			text += "</tr>\n";
+			for (CodeRange codeRange : getCodeRanges(file)) {
+				text += "<tr>";
+				text += "<td>"
+						+ file
+						+ "</td><td>"
+						+ HTMLConverter
+								.convertQualityLevelToHTML(getQuality(codeRange))
+						+ "</td>";
+				text += "</tr>\n";
+			}
 		}
 		text += "</table>\n";
 		return text;
-	}
-
-	@Override
-	public String getFileComment(File file, ReportingFormat format)
-			throws UnsupportedReportingFormatException {
-		if (format == ReportingFormat.TEXT) {
-			return getTextFileComment(file);
-		} else if (format == ReportingFormat.HTML) {
-			return getHTMLFileComment(file);
-		}
-		throw new UnsupportedReportingFormatException(format);
-	}
-
-	private String getTextFileComment(File file) {
-		return translator.i18n("The overall file quality is: ")
-				+ getQuality(file).getIdentifier();
-	}
-
-	private String getHTMLFileComment(File file) {
-		String output = "<p>"
-				+ translator.i18n("The overall file quality is: ")
-				+ HTMLConverter.convertQualityLevelToHTML(getQuality(file))
-				+ "</p>";
-		ArrayList<CodeRange> codeRanges = getCodeRanges(file);
-		Collections.sort(codeRanges);
-		for (CodeRange codeRange : codeRanges) {
-			output += "<hr/>";
-			try {
-				output += "<h3>"
-						+ codeRange.getTitleString(ReportingFormat.HTML)
-						+ "</h3>";
-			} catch (UnsupportedReportingFormatException e) {
-				output += "<h3>" + codeRange.getName() + "</h3>";
-			}
-			output += new HTMLMetricsReport(getMetrics(codeRange))
-					.getReportText();
-		}
-		return output;
 	}
 
 	@Override
@@ -228,25 +194,17 @@ public class MetricsEvaluator extends AbstractEvaluator {
 		int qualityLevel = 0;
 		int count = 0;
 		for (File file : getFiles()) {
-			QualityLevel fileQuality = getQuality(file);
-			if (fileQuality != QualityLevel.UNSPECIFIED) {
-				qualityLevel += fileQuality.getLevel();
-				count++;
+			for (CodeRange codeRange : getCodeRanges(file)) {
+				QualityLevel fileQuality = getQuality(codeRange);
+				if (fileQuality != QualityLevel.UNSPECIFIED) {
+					qualityLevel += fileQuality.getLevel();
+					count++;
+				}
 			}
 		}
 		double avgQuality = (double) qualityLevel / (double) count;
 		qualityLevel = (int) Math.round(avgQuality);
 		return QualityLevel.fromLevel(qualityLevel);
-	}
-
-	@Override
-	public QualityLevel getQuality(File file) {
-		QualityLevel level = QualityLevel.HIGH;
-		for (CodeRange range : getCodeRanges(file)) {
-			QualityLevel rangeQualityLevel = getQuality(range);
-			level = QualityLevel.getMinLevel(level, rangeQualityLevel);
-		}
-		return level;
 	}
 
 	@Override

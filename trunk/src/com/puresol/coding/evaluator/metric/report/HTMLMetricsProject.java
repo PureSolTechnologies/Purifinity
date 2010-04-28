@@ -129,7 +129,7 @@ public class HTMLMetricsProject {
 				name = name + index;
 			}
 			fileIndex.put(file, name);
-			QualityLevel level = metrics.getQuality(file);
+			QualityLevel level = getFileQuality(file);
 			if (level == QualityLevel.HIGH) {
 				html += "<td bgcolor=\"green\">";
 			} else if (level == QualityLevel.MEDIUM) {
@@ -145,6 +145,15 @@ public class HTMLMetricsProject {
 		html += "</table>\n";
 		html += HTMLStandards.getStandardFooter();
 		return writeFile(directory, "files.html", html);
+	}
+
+	private QualityLevel getFileQuality(File file) {
+		QualityLevel level = QualityLevel.HIGH;
+		for (CodeRange codeRange : metrics.getCodeRanges(file)) {
+			level = QualityLevel.getMinLevel(level, metrics
+					.getQuality(codeRange));
+		}
+		return level;
 	}
 
 	private boolean createCodeRangeIndizes(File directory) {

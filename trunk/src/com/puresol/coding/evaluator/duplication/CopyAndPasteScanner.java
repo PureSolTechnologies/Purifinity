@@ -218,69 +218,12 @@ public class CopyAndPasteScanner extends AbstractEvaluator {
 	}
 
 	@Override
-	public String getFileComment(File file, ReportingFormat format)
-			throws UnsupportedReportingFormatException {
-		if (format == ReportingFormat.HTML) {
-			return getHTMLFileComment(file);
-		} else if (format == ReportingFormat.TEXT) {
-			return getTextFileComment(file);
-		}
-		throw new UnsupportedReportingFormatException(format);
-	}
-
-	private String getHTMLFileComment(File file)
-			throws UnsupportedReportingFormatException {
-		ArrayList<Duplication> duplications = getDuplications(file);
-		if (duplications == null) {
-			return "";
-		}
-		String report = "<p>"
-				+ translator
-						.i18n(
-								"{0} possible duplications were found within file {1}.",
-								duplications.size(), file) + "</p>";
-		if (duplications != null) {
-			for (Duplication duplication : duplications) {
-				report += duplication.toString(ReportingFormat.HTML);
-			}
-		}
-		return report;
-	}
-
-	private String getTextFileComment(File file)
-			throws UnsupportedReportingFormatException {
-		ArrayList<Duplication> duplications = getDuplications(file);
-		if (duplications == null) {
-			return "";
-		}
-		String report = translator.i18n(
-				"{0} possible duplications were found within file {1}.",
-				duplications.size(), file);
-		report += "\n\n";
-		if (duplications != null) {
-			int count = 0;
-			for (Duplication duplication : duplications) {
-				count++;
-				report += "<p>" + translator.i18n("Duplication {0}:", count)
-						+ "</p>";
-				report += duplication.toString(ReportingFormat.TEXT) + "\n\n";
-			}
-		}
-		return report;
-	}
-
-	@Override
 	public String getProjectComment(ReportingFormat format) {
 		return "";
 	}
 
 	@Override
 	public QualityLevel getProjectQuality() {
-		return QualityLevel.UNSPECIFIED;
-	}
-
-	@Override
-	public QualityLevel getQuality(File file) {
 		return QualityLevel.UNSPECIFIED;
 	}
 
