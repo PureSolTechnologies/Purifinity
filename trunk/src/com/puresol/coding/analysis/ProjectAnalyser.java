@@ -16,6 +16,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 
 import javax.i18n4j.FileSearch;
 import javax.swingx.progress.ProgressObservable;
@@ -42,8 +43,8 @@ public class ProjectAnalyser implements Serializable, ProgressObservable {
 
 	private final File directory;
 	private final String pattern;
-	private final Hashtable<File, Analyser> analysers = new Hashtable<File, Analyser>();
-	private final ArrayList<File> failedFiles = new ArrayList<File>();
+	private final Map<File, Analyser> analysers = new Hashtable<File, Analyser>();
+	private final List<File> failedFiles = new ArrayList<File>();
 	private transient final AnalyserFactory analyserFactory = AnalyserFactory
 			.createFactory();
 
@@ -114,7 +115,7 @@ public class ProjectAnalyser implements Serializable, ProgressObservable {
 		return new ArrayList<File>(analysers.keySet());
 	}
 
-	public ArrayList<File> getFailedFiles() {
+	public List<File> getFailedFiles() {
 		return failedFiles;
 	}
 

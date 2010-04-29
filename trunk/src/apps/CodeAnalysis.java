@@ -19,6 +19,7 @@ import java.net.URISyntaxException;
 import javax.i18n4j.Translator;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swingx.Application;
 import javax.swingx.BorderLayoutWidget;
 import javax.swingx.MemoryMonitor;
@@ -158,7 +159,10 @@ public class CodeAnalysis extends PureSolApplication {
 
 	@Slot
 	public void openAnalyser() {
+		FileNameExtensionFilter filter = new FileNameExtensionFilter(
+				"Persistence Files", "persist");
 		JFileChooser file = new JFileChooser();
+		file.setFileFilter(filter);
 		file.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		int result = file.showOpenDialog(this);
 		if (result == JFileChooser.CANCEL_OPTION) {
@@ -183,7 +187,10 @@ public class CodeAnalysis extends PureSolApplication {
 
 	@Slot
 	public void saveAnalyser() {
+		FileNameExtensionFilter filter = new FileNameExtensionFilter(
+				"Persistence Files", "persist");
 		JFileChooser file = new JFileChooser();
+		file.setFileFilter(filter);
 		file.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		int result = file.showSaveDialog(this);
 		if (result == JFileChooser.CANCEL_OPTION) {

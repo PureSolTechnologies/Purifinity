@@ -13,6 +13,7 @@ package com.puresol.coding.evaluator;
 import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swingx.progress.ProgressObservable;
 import javax.swingx.progress.ProgressObserver;
@@ -86,7 +87,7 @@ public class ProjectEvaluator implements ProgressObservable, Serializable {
 		return projectAnalyser.getFiles();
 	}
 
-	public ArrayList<File> getFailedFiles() {
+	public List<File> getFailedFiles() {
 		return projectAnalyser.getFailedFiles();
 	}
 
