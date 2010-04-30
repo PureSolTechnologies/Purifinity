@@ -27,14 +27,19 @@ public class Lexer {
     private TokenStream outputStream = null;
     private final ArrayList<TokenDefinition> tokenDefinitions = new ArrayList<TokenDefinition>();
 
-    public Lexer(TokenStream stream) {
-	this.inputStream = stream;
+    public Lexer(TokenStream inputStream) {
+	this.inputStream = inputStream;
     }
 
     public Lexer(File directory, File file) throws FileNotFoundException,
 	    IOException {
-	this.inputStream = new DefaultPreConditioner(directory, file)
+	inputStream = new DefaultPreConditioner(directory, file)
 		.getTokenStream();
+    }
+
+    public Lexer(String fileName, String text) {
+	inputStream = new TokenStream(new File(fileName));
+	inputStream.addToken(Token.createPrimitiveFromString(0, 0, 0, text));
     }
 
     public final void addDefinition(Class<? extends TokenDefinition> definition)

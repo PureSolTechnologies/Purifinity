@@ -24,6 +24,11 @@ public class JavaLexer extends Lexer {
 	init();
     }
 
+    public JavaLexer(String fileName, String text) throws LexerException {
+	super(fileName, text);
+	init();
+    }
+
     private void init() throws LexerException {
 	addDefinitions(JavaKeywords.DEFINITIONS);
 	addDefinitions(JavaLiterals.DEFINITIONS);
