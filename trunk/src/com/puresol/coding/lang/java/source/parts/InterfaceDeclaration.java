@@ -4,7 +4,10 @@ import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.java.AbstractJavaParser;
 import com.puresol.coding.lang.java.source.keywords.ExtendsKeyword;
 import com.puresol.coding.lang.java.source.keywords.InterfaceKeyword;
-import com.puresol.coding.lang.java.source.literals.IdLiteral;
+import com.puresol.coding.lang.java.source.literals.Identifier;
+import com.puresol.coding.lang.java.source.parts.classes.ClassModifiers;
+import com.puresol.coding.lang.java.source.parts.interfaces.NormalAnnotation;
+import com.puresol.coding.lang.java.source.parts.types_values_variables.TypeArguments;
 import com.puresol.coding.lang.java.source.symbols.LCurlyBracket;
 import com.puresol.coding.lang.java.source.symbols.RCurlyBracket;
 import com.puresol.parser.ParserException;
@@ -12,30 +15,30 @@ import com.puresol.parser.PartDoesNotMatchException;
 
 public class InterfaceDeclaration extends AbstractJavaParser {
 
-    private static final long serialVersionUID = -412314699502485047L;
+	private static final long serialVersionUID = -412314699502485047L;
 
-    @Override
-    public void scan() throws PartDoesNotMatchException, ParserException {
-	while (acceptPart(Annotation.class) != null)
-	    ;
-	expectPart(ClassModifiers.class);
-	expectToken(InterfaceKeyword.class);
+	@Override
+	public void scan() throws PartDoesNotMatchException, ParserException {
+		while (acceptPart(NormalAnnotation.class) != null)
+			;
+		expectPart(ClassModifiers.class);
+		expectToken(InterfaceKeyword.class);
 
-	String name = getCurrentToken().getText();
+		String name = getCurrentToken().getText();
 
-	expectToken(IdLiteral.class);
-	acceptPart(Generic.class);
-	if (acceptToken(ExtendsKeyword.class) != null) {
-	    expectToken(IdLiteral.class);
-	    acceptPart(Generic.class);
+		expectToken(Identifier.class);
+		acceptPart(TypeArguments.class);
+		if (acceptToken(ExtendsKeyword.class) != null) {
+			expectToken(Identifier.class);
+			acceptPart(TypeArguments.class);
+		}
+		skipNested(LCurlyBracket.class, RCurlyBracket.class);
+
+		finish(name);
 	}
-	skipNested(LCurlyBracket.class, RCurlyBracket.class);
 
-	finish(name);
-    }
-
-    @Override
-    public CodeRangeType getCodeRangeType() {
-	return CodeRangeType.INTERFACE;
-    }
+	@Override
+	public CodeRangeType getCodeRangeType() {
+		return CodeRangeType.INTERFACE;
+	}
 }

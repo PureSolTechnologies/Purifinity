@@ -24,7 +24,7 @@ public class Condition extends AbstractJavaParser {
 	    expectToken(RParen.class);
 	} else {
 	    expectPart(Expression.class);
-	    expectOneOf(Conditionals.DEFINITIONS);
+	    expectOneTokenOf(Conditionals.DEFINITIONS);
 	    expectPart(Expression.class);
 	}
 

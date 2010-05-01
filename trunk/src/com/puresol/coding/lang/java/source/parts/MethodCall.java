@@ -2,7 +2,7 @@ package com.puresol.coding.lang.java.source.parts;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.java.AbstractJavaParser;
-import com.puresol.coding.lang.java.source.literals.IdLiteral;
+import com.puresol.coding.lang.java.source.literals.Identifier;
 import com.puresol.coding.lang.java.source.symbols.Comma;
 import com.puresol.coding.lang.java.source.symbols.LParen;
 import com.puresol.coding.lang.java.source.symbols.RParen;
@@ -15,7 +15,7 @@ public class MethodCall extends AbstractJavaParser {
 
     @Override
     public void scan() throws PartDoesNotMatchException, ParserException {
-	expectToken(IdLiteral.class);
+	expectToken(Identifier.class);
 	expectToken(LParen.class);
 	if (acceptPart(Term.class) != null) {
 	    while (acceptPart(Term.class) != null) {

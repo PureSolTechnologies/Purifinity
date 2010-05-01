@@ -18,7 +18,7 @@ public class TermTest extends TestCase {
     @Test
     public void testConstant() {
 	try {
-	    JavaLexer lexer = new JavaLexer("test", "-1.234 * ( 1 + 2 ) / 2 - (1 / 2)");
+	    JavaLexer lexer = new JavaLexer("test", "-1.234e1 * ( 1 + 2 ) / 2 - (1 / 2)");
 	    Term term = new Term();
 	    DependencyInjection.inject(term, Injection.named("TokenStream",
 		    lexer.getTokenStream()));

@@ -47,8 +47,8 @@ public class JavaAnalyser extends AbstractAnalyser {
 	private void parse() {
 		try {
 			JavaLexer lexer = new JavaLexer(getProjectDirectory(), getFile());
-			JavaParser parser = (JavaParser) createParserInstance(
-					JavaParser.class, lexer.getTokenStream());
+			CompilationUnit parser = (CompilationUnit) createParserInstance(
+					CompilationUnit.class, lexer.getTokenStream());
 			parser.scan();
 			setRootCodeRange(parser);
 		} catch (IOException e) {

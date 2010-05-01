@@ -23,7 +23,7 @@ public class NumericalConstant extends AbstractJavaParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		expectOneOf(classes);
+		expectOneTokenOf(classes);
 		finish();
 	}
 

@@ -4,7 +4,7 @@ import java.io.File;
 
 import org.junit.Test;
 
-import com.puresol.coding.lang.java.source.literals.IdLiteral;
+import com.puresol.coding.lang.java.source.literals.Identifier;
 import com.puresol.coding.tokentypes.Comment;
 
 import junit.framework.Assert;
@@ -25,7 +25,7 @@ public class TokenStreamTest extends TestCase {
 					token = Token.createByDefinition(Comment.class, index,
 							startPos, line, text);
 				} else {
-					token = Token.createByDefinition(IdLiteral.class, index,
+					token = Token.createByDefinition(Identifier.class, index,
 							startPos, line, text);
 				}
 				tokenStream.addToken(token);

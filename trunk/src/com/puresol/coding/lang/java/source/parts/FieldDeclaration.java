@@ -5,6 +5,7 @@ import java.util.List;
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.source.symbols.Assign;
 import com.puresol.coding.lang.java.AbstractJavaParser;
+import com.puresol.coding.lang.java.source.parts.types_values_variables.Type;
 import com.puresol.coding.lang.java.source.symbols.Comma;
 import com.puresol.coding.lang.java.source.symbols.Semicolon;
 import com.puresol.parser.ParserException;
@@ -18,7 +19,7 @@ public class FieldDeclaration extends AbstractJavaParser {
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
 		acceptPart(FieldModifiers.class);
-		expectPart(VariableType.class);
+		expectPart(Type.class);
 		String name = getCurrentToken().getText();
 		expectPart(VariableName.class);
 		if (isToken(Assign.class) || isToken(Comma.class)) {
@@ -40,7 +41,7 @@ public class FieldDeclaration extends AbstractJavaParser {
 	}
 
 	public String getVariableType() {
-		VariableType type = getChildCodeRanges(VariableType.class).get(0);
+		Type type = getChildCodeRanges(Type.class).get(0);
 		return type.getVariableTypeName();
 	}
 }

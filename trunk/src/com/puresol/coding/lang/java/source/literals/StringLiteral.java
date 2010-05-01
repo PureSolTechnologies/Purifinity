@@ -2,6 +2,12 @@ package com.puresol.coding.lang.java.source.literals;
 
 import com.puresol.coding.tokentypes.Literal;
 
+/**
+ * This is a Java Programming Language Literal.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class StringLiteral extends Literal {
 
 	@Override

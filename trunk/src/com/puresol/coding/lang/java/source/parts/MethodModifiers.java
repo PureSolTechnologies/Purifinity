@@ -11,8 +11,8 @@ public class MethodModifiers extends AbstractJavaParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		while (isCurrentOneOf(com.puresol.coding.lang.java.source.tokengroups.MethodModifiers.DEFINITIONS)) {
-			expectOneOf(com.puresol.coding.lang.java.source.tokengroups.MethodModifiers.DEFINITIONS);
+		while (isCurrentTokenOneOf(com.puresol.coding.lang.java.source.tokengroups.MethodModifiers.DEFINITIONS)) {
+			expectOneTokenOf(com.puresol.coding.lang.java.source.tokengroups.MethodModifiers.DEFINITIONS);
 		}
 		finish();
 	}

@@ -1,5 +1,6 @@
 package com.puresol.coding.lang.java.source.symbols;
 
+import com.puresol.coding.lang.java.LexicalStructure;
 import com.puresol.coding.tokentypes.Comment;
 
 /**
@@ -13,7 +14,7 @@ public class EndOfLineComment extends Comment {
 	@Override
 	protected void initialize() {
 		super.initialize();
-		setPatternString("//[^\\n]*");
+		setPatternString(LexicalStructure.END_OF_LINE_COMMENT);
 	}
 
 }

@@ -11,8 +11,8 @@ public class ConstructorModifiers extends AbstractJavaParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		while (isCurrentOneOf(com.puresol.coding.lang.java.source.tokengroups.ConstructorModifiers.DEFINITIONS)) {
-			expectOneOf(com.puresol.coding.lang.java.source.tokengroups.ConstructorModifiers.DEFINITIONS);
+		while (isCurrentTokenOneOf(com.puresol.coding.lang.java.source.tokengroups.ConstructorModifiers.DEFINITIONS)) {
+			expectOneTokenOf(com.puresol.coding.lang.java.source.tokengroups.ConstructorModifiers.DEFINITIONS);
 		}
 		finish();
 	}
