@@ -8,12 +8,12 @@ import com.puresol.coding.tokentypes.KeywordOperator;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class StaticKeyword extends KeywordOperator {
+public class DefaultKeyword extends KeywordOperator {
 
 	@Override
 	protected void initialize() {
 		super.initialize();
-		setPatternString("static");
+		setPatternString("default");
 	}
 
 }

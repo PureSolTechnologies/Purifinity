@@ -1,4 +1,4 @@
-package com.puresol.coding.lang.java.source.keywords;
+package com.puresol.coding.lang.java.source.literals;
 
 import com.puresol.coding.tokentypes.KeywordOperant;
 

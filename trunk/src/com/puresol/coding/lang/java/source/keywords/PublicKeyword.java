@@ -2,6 +2,12 @@ package com.puresol.coding.lang.java.source.keywords;
 
 import com.puresol.coding.tokentypes.KeywordOperator;
 
+/**
+ * This is a keyword of Java Programming Language.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class PublicKeyword extends KeywordOperator {
 
 	@Override

@@ -4,6 +4,12 @@ import com.puresol.coding.tokentypes.KeywordOperator;
 import com.puresol.parser.Token;
 import com.puresol.parser.TokenStream;
 
+/**
+ * This is a keyword of Java Programming Language.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class ForKeyword extends KeywordOperator {
 
 	@Override

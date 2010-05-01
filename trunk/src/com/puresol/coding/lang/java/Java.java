@@ -3,6 +3,14 @@ package com.puresol.coding.lang.java;
 import com.puresol.coding.AbstractProgrammingLanguage;
 import com.puresol.coding.analysis.Analyser;
 
+/**
+ * This is the base class for Java Programming Language. The lexical and
+ * syntactical information were taken out of "The Java™ Language Specification
+ * -- Third Edition".
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class Java extends AbstractProgrammingLanguage {
 
 	private static final String[] FILE_SUFFIXES = { ".java" };
