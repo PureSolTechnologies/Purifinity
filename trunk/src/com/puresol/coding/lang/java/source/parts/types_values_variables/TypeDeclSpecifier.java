@@ -14,18 +14,18 @@ public class TypeDeclSpecifier extends AbstractJavaParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		try {
-			if (lookAhead(1).getDefinition().equals(Dot.class)) {
-				expectPart(ClassOrInterfaceType.class);
-				expectToken(Dot.class);
-				expectToken(Identifier.class);
-			} else {
-				expectPart(TypeName.class);
-			}
-			finish();
-		} catch (EndOfTokenStreamException e) {
+		if (!isToken(Identifier.class)) {
+			/* This test was included to avoid an endless loop! */
 			abort();
 		}
+		if (acceptPart(TypeName.class) != null) {
+
+		} else {
+			expectPart(ClassOrInterfaceType.class);
+			expectToken(Dot.class);
+			expectToken(Identifier.class);
+		}
+		finish();
 	}
 
 	@Override

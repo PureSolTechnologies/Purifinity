@@ -3,6 +3,7 @@ package com.puresol.coding.lang.java.source.parts;
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.java.AbstractJavaParser;
 import com.puresol.coding.lang.java.source.literals.Identifier;
+import com.puresol.coding.lang.java.source.parts.interfaces.Annotation;
 import com.puresol.coding.lang.java.source.parts.interfaces.NormalAnnotation;
 import com.puresol.coding.lang.java.source.symbols.LParen;
 import com.puresol.coding.lang.java.source.symbols.RParen;
@@ -15,7 +16,7 @@ public class MethodDefinition extends AbstractJavaParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		while (acceptPart(NormalAnnotation.class) != null)
+		while (acceptPart(Annotation.class) != null)
 			;
 		acceptPart(MethodModifiers.class);
 		expectPart(MethodReturnType.class);

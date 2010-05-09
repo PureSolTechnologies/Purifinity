@@ -30,7 +30,7 @@ public class CompilationUnit extends AbstractJavaParser {
 		acceptPart(PackageDeclaration.class);
 		acceptPart(ImportDeclarations.class);
 		acceptPart(TypeDeclarations.class);
-		if (getCurrentPosition() < getTokenStream().getSize()) {
+		if (getCurrentPosition() < getTokenStream().getSize() - 1) {
 			// we are not at end; therefore, we stopped unexpected...
 			throw new PartDoesNotMatchException(this);
 		}

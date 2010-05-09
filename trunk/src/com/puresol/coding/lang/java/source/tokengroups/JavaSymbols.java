@@ -3,6 +3,7 @@ package com.puresol.coding.lang.java.source.tokengroups;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.puresol.coding.lang.java.source.symbols.Ampersand;
 import com.puresol.coding.lang.java.source.symbols.Assign;
 import com.puresol.coding.lang.java.source.symbols.At;
 import com.puresol.coding.lang.java.source.symbols.BackSlash;
@@ -82,6 +83,7 @@ public class JavaSymbols {
 		DEFINITIONS.add(PlusPlus.class);
 		DEFINITIONS.add(MinusMinus.class);
 
+		DEFINITIONS.add(Ampersand.class);
 		DEFINITIONS.add(Plus.class);
 		DEFINITIONS.add(Minus.class);
 		DEFINITIONS.add(Slash.class);

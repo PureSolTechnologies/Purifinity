@@ -7,6 +7,7 @@ import javax.i18n4j.Translator;
 
 import org.apache.log4j.Logger;
 
+import com.puresol.coding.lang.java.CompilationUnit;
 import com.puresol.utils.ClassInstantiationException;
 import com.puresol.utils.Instances;
 import com.puresol.utils.di.DIClassBuilder;
@@ -159,7 +160,13 @@ public abstract class AbstractParser implements Parser {
 	}
 
 	public void addChildParser(Parser childParser) {
-		childParsers.add(childParser);
+		if (getClass().equals(CompilationUnit.class)) {
+			System.out.println("Add '" + childParser.toString()
+					+ "' to CompilationUnit!");
+		}
+		if (!hasChildParser(childParser)) {
+			childParsers.add(childParser);
+		}
 	}
 
 	@Override
@@ -186,7 +193,7 @@ public abstract class AbstractParser implements Parser {
 		}
 	}
 
-	protected void addSelfToParent() {
+	private void addThisToParentsChildParsers() {
 		Parser parent = getParentParser();
 		if (parent != null) {
 			((AbstractParser) parentParser).addChildParser(this);
@@ -438,7 +445,7 @@ public abstract class AbstractParser implements Parser {
 		}
 	}
 
-	private Parser expectPart(Class<? extends Parser> part, boolean moveForward)
+	private Parser processPart(Class<? extends Parser> part, boolean moveForward)
 			throws PartDoesNotMatchException, ParserException {
 		AbstractParser partInstance = null;
 		try {
@@ -462,7 +469,7 @@ public abstract class AbstractParser implements Parser {
 	protected Parser expectPart(Class<? extends Parser> part)
 			throws PartDoesNotMatchException, ParserException {
 		logger.debug("Process part: " + part.getSimpleName());
-		Parser retValue = expectPart(part, true);
+		Parser retValue = processPart(part, true);
 		logger.debug("done for " + part.getSimpleName());
 		return retValue;
 	}
@@ -480,7 +487,7 @@ public abstract class AbstractParser implements Parser {
 			throws ParserException {
 		try {
 			logger.debug("Is part(?): " + part.getSimpleName());
-			expectPart(part, false);
+			processPart(part, false);
 			logger.debug("true for " + part.getSimpleName());
 			return true;
 		} catch (PartDoesNotMatchException e) {
@@ -492,7 +499,7 @@ public abstract class AbstractParser implements Parser {
 			throws ParserException {
 		try {
 			logger.debug("Process part if possible: " + part.getSimpleName());
-			Parser retValue = expectPart(part, true);
+			Parser retValue = processPart(part, true);
 			logger.debug("processed for " + part.getSimpleName());
 			return retValue;
 		} catch (PartDoesNotMatchException e) {
@@ -568,7 +575,7 @@ public abstract class AbstractParser implements Parser {
 	 * This method is to be called after a successful scan of a parser.
 	 */
 	protected void finish() {
-		addSelfToParent();
+		addThisToParentsChildParsers();
 		finished = true;
 	}
 
