@@ -58,7 +58,6 @@ public interface CodeRange extends Parser, Serializable, Comparable<CodeRange>,
 
     public CodeRange createPartialCodeRange(int newStart, int newStop);
 
-    @Override
     public int compareTo(CodeRange other);
 
 }

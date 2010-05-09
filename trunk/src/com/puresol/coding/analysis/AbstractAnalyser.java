@@ -91,13 +91,15 @@ abstract public class AbstractAnalyser implements Analyser {
 
 	private final void getNamedCodeRanges(List<CodeRange> ranges,
 			CodeRange parent) {
-		if (parent == null)
+		if (parent == null) {
 			return;
+		}
 		if (!parent.getName().isEmpty()) {
 			ranges.add(parent);
 		}
-		for (CodeRange child : parent.getChildCodeRanges())
-			this.getNamedCodeRanges(ranges, child);
+		for (CodeRange child : parent.getChildCodeRanges()) {
+			getNamedCodeRanges(ranges, child);
+		}
 	}
 
 	/*

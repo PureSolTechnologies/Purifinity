@@ -7,7 +7,6 @@ import javax.i18n4j.Translator;
 
 import org.apache.log4j.Logger;
 
-import com.puresol.coding.lang.java.CompilationUnit;
 import com.puresol.utils.ClassInstantiationException;
 import com.puresol.utils.Instances;
 import com.puresol.utils.di.DIClassBuilder;
@@ -160,10 +159,6 @@ public abstract class AbstractParser implements Parser {
 	}
 
 	public void addChildParser(Parser childParser) {
-		if (getClass().equals(CompilationUnit.class)) {
-			System.out.println("Add '" + childParser.toString()
-					+ "' to CompilationUnit!");
-		}
 		if (!hasChildParser(childParser)) {
 			childParsers.add(childParser);
 		}
@@ -445,7 +440,7 @@ public abstract class AbstractParser implements Parser {
 		}
 	}
 
-	private Parser processPart(Class<? extends Parser> part, boolean moveForward)
+	private Parser processPart(Class<? extends Parser> part)
 			throws PartDoesNotMatchException, ParserException {
 		AbstractParser partInstance = null;
 		try {
@@ -455,11 +450,9 @@ public abstract class AbstractParser implements Parser {
 				throw new ParserException("Part " + partInstance.getClass()
 						+ " was not correctly finished!");
 			}
-			if (moveForward) {
-				// move to the end of part and one further for next token
-				moveToNextVisible(partInstance.getEndPosition()
-						- getCurrentPosition() + 1);
-			}
+			// move to the end of part and one further for next token
+			moveToNextVisible(partInstance.getEndPosition()
+					- getCurrentPosition() + 1);
 		} catch (EndOfTokenStreamException e) {
 			// this may happen at the end of a file...
 		}
@@ -469,7 +462,7 @@ public abstract class AbstractParser implements Parser {
 	protected Parser expectPart(Class<? extends Parser> part)
 			throws PartDoesNotMatchException, ParserException {
 		logger.debug("Process part: " + part.getSimpleName());
-		Parser retValue = processPart(part, true);
+		Parser retValue = processPart(part);
 		logger.debug("done for " + part.getSimpleName());
 		return retValue;
 	}
@@ -483,23 +476,11 @@ public abstract class AbstractParser implements Parser {
 		throw new PartDoesNotMatchException(this);
 	}
 
-	protected boolean isPart(Class<? extends Parser> part)
-			throws ParserException {
-		try {
-			logger.debug("Is part(?): " + part.getSimpleName());
-			processPart(part, false);
-			logger.debug("true for " + part.getSimpleName());
-			return true;
-		} catch (PartDoesNotMatchException e) {
-			return false;
-		}
-	}
-
 	protected Parser acceptPart(Class<? extends Parser> part)
 			throws ParserException {
 		try {
 			logger.debug("Process part if possible: " + part.getSimpleName());
-			Parser retValue = processPart(part, true);
+			Parser retValue = processPart(part);
 			logger.debug("processed for " + part.getSimpleName());
 			return retValue;
 		} catch (PartDoesNotMatchException e) {
@@ -509,16 +490,13 @@ public abstract class AbstractParser implements Parser {
 
 	protected Parser acceptOnePartOf(List<Class<? extends Parser>> parts)
 			throws ParserException {
-		try {
-			for (Class<? extends Parser> part : parts) {
-				if (isPart(part)) {
-					return expectPart(part);
-				}
+		for (Class<? extends Parser> part : parts) {
+			Parser parser = acceptPart(part);
+			if (parser != null) {
+				return parser;
 			}
-			return null;
-		} catch (PartDoesNotMatchException e) {
-			return null;
 		}
+		return null;
 	}
 
 	protected TokenDefinition expectOneTokenOf(
