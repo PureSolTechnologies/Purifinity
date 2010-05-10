@@ -7,6 +7,7 @@ import java.io.File;
 
 import org.junit.Test;
 
+import com.puresol.coding.analysis.AnalyserException;
 import com.puresol.coding.analysis.CodeRange;
 
 import junit.framework.Assert;
@@ -22,14 +23,20 @@ public class FortranAnalyserTest extends TestCase {
 
 	@Test
 	public void test() {
-		FortranAnalyser analyser = new FortranAnalyser(new File("test"),
-				new File("com/puresol/coding/lang/fortran/samples/zgerc.f"));
-		CodeRange rootCodeRange = analyser.getRootCodeRange();
-		Assert.assertNotNull(rootCodeRange);
-		for (CodeRange codeRange : rootCodeRange.getChildCodeRanges()) {
-			System.out.println(codeRange.toString());
+		try {
+			FortranAnalyser analyser = new FortranAnalyser(new File("test"),
+					new File("com/puresol/coding/lang/fortran/samples/zgerc.f"));
+			analyser.parse();
+			CodeRange rootCodeRange = analyser.getRootCodeRange();
+			Assert.assertNotNull(rootCodeRange);
+			for (CodeRange codeRange : rootCodeRange.getChildCodeRanges()) {
+				System.out.println(codeRange.toString());
+			}
+			Assert.assertTrue(rootCodeRange.getChildCodeRanges().size() > 0);
+		} catch (AnalyserException e) {
+			e.printStackTrace();
+			Assert.fail("No exception was expected!");
 		}
-		Assert.assertTrue(rootCodeRange.getChildCodeRanges().size() > 0);
 	}
 
 	// @Test

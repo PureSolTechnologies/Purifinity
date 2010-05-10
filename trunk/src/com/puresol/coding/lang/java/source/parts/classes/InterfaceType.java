@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.java.AbstractJavaParser;
-import com.puresol.coding.lang.java.source.parts.FieldDeclaration;
 import com.puresol.coding.lang.java.source.parts.types_values_variables.TypeArguments;
 import com.puresol.coding.lang.java.source.parts.types_values_variables.TypeDeclSpecifier;
 import com.puresol.parser.ParserException;
@@ -17,7 +16,7 @@ public class InterfaceType extends AbstractJavaParser {
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
 		expectPart(TypeDeclSpecifier.class);
-		expectPart(TypeArguments.class);
+		acceptPart(TypeArguments.class);
 		finish();
 	}
 
@@ -26,7 +25,7 @@ public class InterfaceType extends AbstractJavaParser {
 		return CodeRangeType.CLASS;
 	}
 
-	public List<FieldDeclaration> getFields() {
+	public List<VariableDeclarator> getFields() {
 		return getChildCodeRanges(ClassBody.class).get(0).getFields();
 	}
 }

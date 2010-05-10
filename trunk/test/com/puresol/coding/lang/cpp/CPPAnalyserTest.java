@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.puresol.coding.analysis.AnalyserException;
 import com.puresol.coding.analysis.CodeRange;
 
 import junit.framework.Assert;
@@ -23,12 +24,18 @@ public class CPPAnalyserTest extends TestCase {
 
 	@Test
 	public void test() {
-		CPPAnalyser analyser = new CPPAnalyser(new File("test"), new File(
-				"com/puresol/coding/lang/cpp/samples/String.cpp"));
-		Assert.assertNotNull(analyser.getRootCodeRange());
-		List<CodeRange> codeRanges = analyser.getRootCodeRange()
-				.getChildCodeRanges();
-		Assert.assertNotNull(codeRanges);
+		try {
+			CPPAnalyser analyser = new CPPAnalyser(new File("test"), new File(
+					"com/puresol/coding/lang/cpp/samples/String.cpp"));
+			analyser.parse();
+			Assert.assertNotNull(analyser.getRootCodeRange());
+			List<CodeRange> codeRanges = analyser.getRootCodeRange()
+					.getChildCodeRanges();
+			Assert.assertNotNull(codeRanges);
+		} catch (AnalyserException e) {
+			e.printStackTrace();
+			Assert.fail("No exception was expected!");
+		}
 	}
 
 	public static void main(String[] args) {

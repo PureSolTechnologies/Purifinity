@@ -1,12 +1,10 @@
-package com.puresol.coding.lang.java.source.parts;
+package com.puresol.coding.lang.java.source.parts.classes;
 
 import java.util.List;
 
 import com.puresol.coding.analysis.CodeRangeType;
-import com.puresol.coding.lang.fortran.source.symbols.Assign;
 import com.puresol.coding.lang.java.AbstractJavaParser;
 import com.puresol.coding.lang.java.source.parts.types_values_variables.Type;
-import com.puresol.coding.lang.java.source.symbols.Comma;
 import com.puresol.coding.lang.java.source.symbols.Semicolon;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
@@ -15,18 +13,13 @@ public class FieldDeclaration extends AbstractJavaParser {
 
 	private static final long serialVersionUID = -8995105296970831547L;
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
 		acceptPart(FieldModifiers.class);
 		expectPart(Type.class);
-		String name = getCurrentToken().getText();
-		expectPart(VariableName.class);
-		if (isToken(Assign.class) || isToken(Comma.class)) {
-			skipTo(Semicolon.class);
-		}
+		expectPart(VariableDeclarators.class);
 		expectToken(Semicolon.class);
-		finish(name);
+		finish();
 	}
 
 	@Override

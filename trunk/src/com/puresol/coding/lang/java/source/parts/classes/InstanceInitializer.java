@@ -2,18 +2,17 @@ package com.puresol.coding.lang.java.source.parts.classes;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.java.AbstractJavaParser;
+import com.puresol.coding.lang.java.source.parts.Block;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
-public class ClassModifiers extends AbstractJavaParser {
+public class InstanceInitializer extends AbstractJavaParser {
 
-	private static final long serialVersionUID = -5845018908537488666L;
+	private static final long serialVersionUID = -5505554029543650160L;
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		expectPart(ClassModifier.class);
-		while (acceptPart(ClassModifier.class) != null) {
-		}
+		expectPart(Block.class);
 		finish();
 	}
 

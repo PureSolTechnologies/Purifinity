@@ -23,7 +23,7 @@ public class MethodDefinition extends AbstractJavaParser {
 		expectToken(Identifier.class);
 		skipNested(LParen.class, RParen.class);
 		acceptPart(ThrowsDeclaration.class);
-		expectPart(CodeBlock.class);
+		expectPart(Block.class);
 
 		finish(name);
 	}

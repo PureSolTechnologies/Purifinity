@@ -93,7 +93,13 @@ public class ProjectAnalyser implements Serializable, ProgressObservable {
 		try {
 			if ((Files.addPaths(directory, file).isFile())
 					&& (!file.getPath().contains("/."))) {
-				analysers.put(file, analyserFactory.create(directory, file));
+				Analyser analyser = analyserFactory.create(directory, file);
+				if (analyser != null) {
+					analyser.parse();
+					analysers.put(file, analyser);
+				} else {
+					failedFiles.add(file);
+				}
 			}
 		} catch (LanguageNotSupportedException e) {
 			logger
@@ -103,6 +109,9 @@ public class ProjectAnalyser implements Serializable, ProgressObservable {
 			failedFiles.add(file);
 		} catch (FileNotFoundException e) {
 			logger.warn("File '" + file.getPath() + "' is not existing!");
+			failedFiles.add(file);
+		} catch (AnalyserException e) {
+			logger.warn("File '" + file.getPath() + "' is parsable!");
 			failedFiles.add(file);
 		}
 	}

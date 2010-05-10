@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.java.AbstractJavaParser;
-import com.puresol.coding.lang.java.source.parts.FieldDeclaration;
 import com.puresol.parser.Parser;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
@@ -31,7 +30,7 @@ public class ClassDeclaration extends AbstractJavaParser {
 		return CodeRangeType.CLASS;
 	}
 
-	public List<FieldDeclaration> getFields() {
+	public List<VariableDeclarator> getFields() {
 		return getChildCodeRanges(ClassBody.class).get(0).getFields();
 	}
 }

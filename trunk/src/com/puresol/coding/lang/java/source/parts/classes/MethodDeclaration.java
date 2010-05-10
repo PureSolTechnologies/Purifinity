@@ -1,9 +1,11 @@
-package com.puresol.coding.lang.java.source.parts;
+package com.puresol.coding.lang.java.source.parts.classes;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.java.AbstractJavaParser;
 import com.puresol.coding.lang.java.source.keywords.ThrowsKeyword;
 import com.puresol.coding.lang.java.source.literals.Identifier;
+import com.puresol.coding.lang.java.source.parts.MethodModifiers;
+import com.puresol.coding.lang.java.source.parts.MethodReturnType;
 import com.puresol.coding.lang.java.source.parts.interfaces.Annotation;
 import com.puresol.coding.lang.java.source.symbols.LCurlyBracket;
 import com.puresol.coding.lang.java.source.symbols.LParen;

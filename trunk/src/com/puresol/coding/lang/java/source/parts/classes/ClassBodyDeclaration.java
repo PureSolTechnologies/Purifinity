@@ -4,20 +4,22 @@ import java.util.List;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.java.AbstractJavaParser;
-import com.puresol.coding.lang.java.source.symbols.LCurlyBracket;
-import com.puresol.coding.lang.java.source.symbols.RCurlyBracket;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
-public class ClassBody extends AbstractJavaParser {
+public class ClassBodyDeclaration extends AbstractJavaParser {
 
 	private static final long serialVersionUID = -2656071830287957232L;
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		expectToken(LCurlyBracket.class);
-		acceptPart(ClassBodyDeclarations.class);
-		expectToken(RCurlyBracket.class);
+		if (acceptPart(ClassMemberDeclaration.class) != null) {
+		} else if (acceptPart(InstanceInitializer.class) != null) {
+		} else if (acceptPart(StaticInitializer.class) != null) {
+		} else if (acceptPart(ConstructorDeclaration.class) != null) {
+		} else {
+			throw new PartDoesNotMatchException(this);
+		}
 		finish();
 
 	}
@@ -27,7 +29,7 @@ public class ClassBody extends AbstractJavaParser {
 		return CodeRangeType.FRAGMENT;
 	}
 
-	public List<VariableDeclarator> getFields() {
-		return getChildCodeRanges(VariableDeclarator.class);
+	public List<FieldDeclaration> getFields() {
+		return getChildCodeRanges(FieldDeclaration.class);
 	}
 }

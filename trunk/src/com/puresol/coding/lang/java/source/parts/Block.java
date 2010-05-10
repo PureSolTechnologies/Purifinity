@@ -7,35 +7,14 @@ import com.puresol.coding.lang.java.source.symbols.RCurlyBracket;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
-public class CodeBlock extends AbstractJavaParser {
+public class Block extends AbstractJavaParser {
 
 	private static final long serialVersionUID = 1202904051316374607L;
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
 		skipNested(LCurlyBracket.class, RCurlyBracket.class);
-//	    if (accept(constsym)) {
-//	        do {
-//	            expect(ident);
-//	            expect(eql);
-//	            expect(number);
-//	        } while (accept(comma));
-//	        expect(semicolon);
-//	    }
-//	    if (accept(varsym)) {
-//	        do {
-//	            expect(ident);
-//	        } while (accept(comma));
-//	        expect(semicolon);
-//	    }
-//	    while (accept(procsym)) {
-//	        expect(ident);
-//	        expect(semicolon);
-//	        block();
-//	        expect(semicolon);
-//	    }
-//	    statement();
-
+		// TODO
 		finish();
 	}
 

@@ -1,11 +1,8 @@
 package com.puresol.coding.lang.java.source.parts.classes;
 
-import java.util.List;
-
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.java.AbstractJavaParser;
 import com.puresol.coding.lang.java.source.literals.Identifier;
-import com.puresol.coding.lang.java.source.parts.FieldDeclaration;
 import com.puresol.coding.lang.java.source.symbols.Comma;
 import com.puresol.coding.lang.java.source.symbols.GreaterThan;
 import com.puresol.coding.lang.java.source.symbols.LessThan;
@@ -30,9 +27,5 @@ public class TypeParameters extends AbstractJavaParser {
 	@Override
 	public CodeRangeType getCodeRangeType() {
 		return CodeRangeType.CLASS;
-	}
-
-	public List<FieldDeclaration> getFields() {
-		return getChildCodeRanges(ClassBody.class).get(0).getFields();
 	}
 }

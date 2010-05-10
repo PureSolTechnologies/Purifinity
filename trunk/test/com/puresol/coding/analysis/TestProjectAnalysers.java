@@ -19,6 +19,9 @@ public class TestProjectAnalysers {
 	static {
 		MINIMAL_PROJECT_ANALYSER.run();
 		Assert.assertEquals(1, MINIMAL_PROJECT_ANALYSER.getFiles().size());
+		Assert
+				.assertEquals(0, MINIMAL_PROJECT_ANALYSER.getFailedFiles()
+						.size());
 	}
 
 }

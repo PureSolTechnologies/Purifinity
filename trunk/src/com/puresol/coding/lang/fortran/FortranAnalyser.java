@@ -18,6 +18,7 @@ import org.apache.log4j.Logger;
 
 import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.analysis.AbstractAnalyser;
+import com.puresol.coding.analysis.AnalyserException;
 import com.puresol.parser.LexerException;
 import com.puresol.parser.NoMatchingTokenDefinitionFound;
 import com.puresol.parser.ParserException;
@@ -33,10 +34,10 @@ public class FortranAnalyser extends AbstractAnalyser {
 
 	public FortranAnalyser(File projectDirectory, File file) {
 		super(projectDirectory, file);
-		parse();
 	}
 
-	private void parse() {
+	@Override
+	public void parse() throws AnalyserException {
 		try {
 			FortranLexer lexer = new FortranLexer(new FortranPreConditioner(
 					getProjectDirectory(), getFile()).getTokenStream());
@@ -45,6 +46,7 @@ public class FortranAnalyser extends AbstractAnalyser {
 					FortranParser.class, tokenStream);
 			parser.scan();
 			setRootCodeRange(parser);
+			return;
 		} catch (FileNotFoundException e) {
 			logger.error(e.getMessage(), e);
 		} catch (IOException e) {
@@ -58,6 +60,7 @@ public class FortranAnalyser extends AbstractAnalyser {
 		} catch (ParserException e) {
 			logger.error(e.getMessage(), e);
 		}
+		throw new AnalyserException(this);
 	}
 
 	@Override

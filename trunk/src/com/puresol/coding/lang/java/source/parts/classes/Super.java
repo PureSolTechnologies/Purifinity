@@ -1,11 +1,8 @@
 package com.puresol.coding.lang.java.source.parts.classes;
 
-import java.util.List;
-
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.java.AbstractJavaParser;
 import com.puresol.coding.lang.java.source.keywords.ExtendsKeyword;
-import com.puresol.coding.lang.java.source.parts.FieldDeclaration;
 import com.puresol.coding.lang.java.source.parts.types_values_variables.ClassType;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
@@ -24,9 +21,5 @@ public class Super extends AbstractJavaParser {
 	@Override
 	public CodeRangeType getCodeRangeType() {
 		return CodeRangeType.CLASS;
-	}
-
-	public List<FieldDeclaration> getFields() {
-		return getChildCodeRanges(ClassBody.class).get(0).getFields();
 	}
 }

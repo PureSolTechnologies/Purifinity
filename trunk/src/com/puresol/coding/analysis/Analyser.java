@@ -33,7 +33,7 @@ public interface Analyser extends Serializable {
 	public ProgrammingLanguage getLanguage();
 
 	/**
-	 * The file which was analysed is returned.
+	 * The file which was analyzed is returned.
 	 * 
 	 * @return The file is returned.
 	 */
@@ -49,4 +49,6 @@ public interface Analyser extends Serializable {
 	public SymbolTable getSymbols();
 
 	public List<CodeRange> getNamedCodeRanges();
+
+	public void parse() throws AnalyserException;
 }

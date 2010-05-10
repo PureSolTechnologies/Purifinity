@@ -17,6 +17,7 @@ import org.apache.log4j.Logger;
 
 import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.analysis.AbstractAnalyser;
+import com.puresol.coding.analysis.AnalyserException;
 import com.puresol.parser.LexerException;
 import com.puresol.parser.NoMatchingTokenDefinitionFound;
 import com.puresol.parser.ParserException;
@@ -42,16 +43,17 @@ public class CPPAnalyser extends AbstractAnalyser {
 	 */
 	public CPPAnalyser(File projectDirectory, File file) {
 		super(projectDirectory, file);
-		parse();
 	}
 
-	private void parse() {
+	@Override
+	public void parse() throws AnalyserException {
 		try {
 			CPPLexer lexer = new CPPLexer(getProjectDirectory(), getFile());
 			CPPParser parser = (CPPParser) createParserInstance(
 					CPPParser.class, lexer.getTokenStream());
 			parser.scan();
 			setRootCodeRange(parser);
+			return;
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
 		} catch (NoMatchingTokenDefinitionFound e) {
@@ -63,6 +65,7 @@ public class CPPAnalyser extends AbstractAnalyser {
 		} catch (ParserException e) {
 			logger.error(e.getMessage(), e);
 		}
+		throw new AnalyserException(this);
 	}
 
 	public ProgrammingLanguage getLanguage() {

@@ -9,6 +9,7 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
+import com.puresol.coding.analysis.AnalyserException;
 import com.puresol.coding.analysis.CodeRange;
 
 import junit.framework.Assert;
@@ -24,15 +25,23 @@ public class JavaAnalyserTest extends TestCase {
 
 	@Test
 	public void test() {
-		Logger.getRootLogger().setLevel(Level.DEBUG);
-		JavaAnalyser analyser = new JavaAnalyser(new File("test"), new File(
-				"com/puresol/coding/lang/java/CompilationUnitTest.java"));
-		CodeRange rootCodeRange = analyser.getRootCodeRange();
-		Assert.assertNotNull(rootCodeRange);
-		for (CodeRange codeRange : rootCodeRange.getChildCodeRanges()) {
-			System.out.println(codeRange.toString());
+		try {
+			Logger.getRootLogger().setLevel(Level.DEBUG);
+			JavaAnalyser analyser = new JavaAnalyser(
+					new File("test"),
+					new File(
+							"com/puresol/coding/lang/java/CompilationUnitTest.java"));
+			analyser.parse();
+			CodeRange rootCodeRange = analyser.getRootCodeRange();
+			Assert.assertNotNull(rootCodeRange);
+			for (CodeRange codeRange : rootCodeRange.getChildCodeRanges()) {
+				System.out.println(codeRange.toString());
+			}
+			Assert.assertTrue(rootCodeRange.getChildCodeRanges().size() > 1);
+		} catch (AnalyserException e) {
+			e.printStackTrace();
+			Assert.fail("No exception was expected!");
 		}
-		Assert.assertTrue(rootCodeRange.getChildCodeRanges().size() > 1);
 	}
 
 	public static void main(String[] args) {

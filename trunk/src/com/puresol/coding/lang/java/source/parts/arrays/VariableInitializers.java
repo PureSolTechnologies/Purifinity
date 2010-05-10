@@ -1,32 +1,27 @@
-package com.puresol.coding.lang.java.source.parts.classes;
-
-import java.util.List;
+package com.puresol.coding.lang.java.source.parts.arrays;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.java.AbstractJavaParser;
+import com.puresol.coding.lang.java.source.parts.classes.VariableInitializer;
 import com.puresol.coding.lang.java.source.symbols.Comma;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
-public class InterfaceTypeList extends AbstractJavaParser {
+public class VariableInitializers extends AbstractJavaParser {
 
-	private static final long serialVersionUID = -1812295859556451418L;
+	private static final long serialVersionUID = -8995105296970831547L;
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		expectPart(InterfaceType.class);
+		expectPart(VariableInitializer.class);
 		while (acceptToken(Comma.class) != null) {
-			expectPart(InterfaceType.class);
+			expectPart(VariableInitializer.class);
 		}
 		finish();
 	}
 
 	@Override
 	public CodeRangeType getCodeRangeType() {
-		return CodeRangeType.CLASS;
-	}
-
-	public List<VariableDeclarator> getFields() {
-		return getChildCodeRanges(ClassBody.class).get(0).getFields();
+		return CodeRangeType.FRAGMENT;
 	}
 }
