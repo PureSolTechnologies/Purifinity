@@ -27,7 +27,6 @@ public class Condition extends AbstractJavaParser {
 	    expectOneTokenOf(Conditionals.DEFINITIONS);
 	    expectPart(Expression.class);
 	}
-
 	finish();
     }
 
