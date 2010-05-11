@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.java.AbstractJavaParser;
-import com.puresol.coding.lang.java.source.parts.Expression;
 import com.puresol.coding.lang.java.source.parts.arrays.ArrayInitializer;
 import com.puresol.coding.lang.java.source.parts.types_values_variables.Type;
 import com.puresol.parser.ParserException;

@@ -5,7 +5,6 @@ import java.util.List;
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.java.AbstractJavaParser;
 import com.puresol.coding.lang.java.source.literals.Identifier;
-import com.puresol.coding.lang.java.source.parts.InterfaceDeclaration;
 import com.puresol.coding.lang.java.source.parts.classes.ClassDeclaration;
 import com.puresol.coding.lang.java.source.parts.classes.EnumDeclaration;
 import com.puresol.coding.lang.java.source.parts.types_values_variables.Type;

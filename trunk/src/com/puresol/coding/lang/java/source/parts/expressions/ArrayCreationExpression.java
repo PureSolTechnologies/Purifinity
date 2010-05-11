@@ -3,15 +3,9 @@ package com.puresol.coding.lang.java.source.parts.expressions;
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.java.AbstractJavaParser;
 import com.puresol.coding.lang.java.source.keywords.NewKeyword;
-import com.puresol.coding.lang.java.source.literals.Identifier;
 import com.puresol.coding.lang.java.source.parts.arrays.ArrayInitializer;
-import com.puresol.coding.lang.java.source.parts.classes.ClassBody;
 import com.puresol.coding.lang.java.source.parts.types_values_variables.ClassOrInterfaceType;
 import com.puresol.coding.lang.java.source.parts.types_values_variables.PrimitiveType;
-import com.puresol.coding.lang.java.source.parts.types_values_variables.TypeArguments;
-import com.puresol.coding.lang.java.source.symbols.Dot;
-import com.puresol.coding.lang.java.source.symbols.LParen;
-import com.puresol.coding.lang.java.source.symbols.RParen;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 

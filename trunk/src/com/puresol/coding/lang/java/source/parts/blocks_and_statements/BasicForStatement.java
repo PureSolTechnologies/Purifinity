@@ -4,7 +4,6 @@ import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.java.AbstractJavaParser;
 import com.puresol.coding.lang.java.source.keywords.ForKeyword;
 import com.puresol.coding.lang.java.source.keywords.WhileKeyword;
-import com.puresol.coding.lang.java.source.parts.Expression;
 import com.puresol.coding.lang.java.source.symbols.LParen;
 import com.puresol.coding.lang.java.source.symbols.RParen;
 import com.puresol.coding.lang.java.source.symbols.Semicolon;

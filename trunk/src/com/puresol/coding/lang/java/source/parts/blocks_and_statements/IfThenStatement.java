@@ -3,7 +3,6 @@ package com.puresol.coding.lang.java.source.parts.blocks_and_statements;
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.java.AbstractJavaParser;
 import com.puresol.coding.lang.java.source.keywords.IfKeyword;
-import com.puresol.coding.lang.java.source.parts.Expression;
 import com.puresol.coding.lang.java.source.symbols.LParen;
 import com.puresol.coding.lang.java.source.symbols.RParen;
 import com.puresol.parser.ParserException;

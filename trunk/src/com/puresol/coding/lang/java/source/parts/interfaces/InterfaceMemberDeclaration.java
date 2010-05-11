@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.java.AbstractJavaParser;
-import com.puresol.coding.lang.java.source.parts.InterfaceDeclaration;
 import com.puresol.coding.lang.java.source.parts.classes.ClassDeclaration;
 import com.puresol.coding.lang.java.source.symbols.Semicolon;
 import com.puresol.parser.ParserException;
@@ -24,7 +23,6 @@ public class InterfaceMemberDeclaration extends AbstractJavaParser {
 			expectToken(Semicolon.class);
 		}
 		finish();
-
 	}
 
 	@Override

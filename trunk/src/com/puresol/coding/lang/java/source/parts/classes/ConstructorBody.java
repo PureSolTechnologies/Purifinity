@@ -1,11 +1,8 @@
 package com.puresol.coding.lang.java.source.parts.classes;
 
 import com.puresol.coding.analysis.CodeRangeType;
-import com.puresol.coding.lang.fortran.source.literals.IdLiteral;
-import com.puresol.coding.lang.fortran.source.symbols.LParen;
-import com.puresol.coding.lang.fortran.source.symbols.RParen;
 import com.puresol.coding.lang.java.AbstractJavaParser;
-import com.puresol.coding.lang.java.source.parts.blocks_and_statements.Block;
+import com.puresol.coding.lang.java.source.parts.blocks_and_statements.BlockStatements;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
