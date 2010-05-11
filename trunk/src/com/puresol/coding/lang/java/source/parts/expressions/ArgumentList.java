@@ -2,7 +2,6 @@ package com.puresol.coding.lang.java.source.parts.expressions;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.java.AbstractJavaParser;
-import com.puresol.coding.lang.java.source.parts.Expression;
 import com.puresol.coding.lang.java.source.symbols.Comma;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;

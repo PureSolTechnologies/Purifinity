@@ -1,4 +1,4 @@
-package com.puresol.coding.lang.java.source.parts;
+package com.puresol.coding.lang.java.source.parts.classes;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.java.AbstractJavaParser;
@@ -11,8 +11,8 @@ public class ConstructorModifiers extends AbstractJavaParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		while (isCurrentTokenOneOf(com.puresol.coding.lang.java.source.tokengroups.ConstructorModifiers.DEFINITIONS)) {
-			expectOneTokenOf(com.puresol.coding.lang.java.source.tokengroups.ConstructorModifiers.DEFINITIONS);
+		expectPart(ConstructorModifier.class);
+		while (acceptPart(ConstructorModifier.class) != null) {
 		}
 		finish();
 	}

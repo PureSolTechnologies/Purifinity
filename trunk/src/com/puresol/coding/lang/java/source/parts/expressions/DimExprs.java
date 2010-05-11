@@ -1,18 +1,18 @@
-package com.puresol.coding.lang.java.source.parts.classes;
+package com.puresol.coding.lang.java.source.parts.expressions;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.java.AbstractJavaParser;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
-public class MethodModifiers extends AbstractJavaParser {
+public class DimExprs extends AbstractJavaParser {
 
-	private static final long serialVersionUID = 1473518113210442270L;
+	private static final long serialVersionUID = 6464754895556318548L;
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		expectPart(MethodModifier.class);
-		while (acceptPart(MethodModifier.class) != null) {
+		expectPart(DimExpr.class);
+		while (acceptPart(DimExpr.class) != null) {
 		}
 		finish();
 	}

@@ -15,7 +15,7 @@ public class ElementValuePair extends AbstractJavaParser {
 	public void scan() throws PartDoesNotMatchException, ParserException {
 		expectToken(Identifier.class);
 		expectToken(Assign.class);
-		expectPart(ElementValue_not_finished.class);
+		expectPart(ElementValue.class);
 		finish();
 	}
 

@@ -1,27 +1,28 @@
-package com.puresol.coding.lang.java.source.parts;
+package com.puresol.coding.lang.java.source.parts.expressions;
 
 import com.puresol.coding.analysis.CodeRangeType;
-import com.puresol.coding.lang.fortran.source.symbols.LParen;
-import com.puresol.coding.lang.fortran.source.symbols.RParen;
 import com.puresol.coding.lang.java.AbstractJavaParser;
+import com.puresol.coding.lang.java.source.keywords.SuperKeyword;
 import com.puresol.coding.lang.java.source.literals.Identifier;
+import com.puresol.coding.lang.java.source.symbols.Dot;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
-public class Factor extends AbstractJavaParser {
+public class FieldAccess extends AbstractJavaParser {
 
 	private static final long serialVersionUID = 6464754895556318548L;
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		if (acceptPart(NumericalConstant.class) != null) {
-
-		} else if (acceptToken(LParen.class) != null) {
-			expectPart(Expression.class);
-			expectToken(RParen.class);
+		if (acceptPart(Primary.class) != null) {
+		} else if (acceptToken(SuperKeyword.class) != null) {
 		} else {
-			expectToken(Identifier.class);
+			expectPart(ClassName.class);
+			expectToken(Dot.class);
+			expectToken(SuperKeyword.class);
 		}
+		expectToken(Dot.class);
+		expectToken(Identifier.class);
 		finish();
 	}
 

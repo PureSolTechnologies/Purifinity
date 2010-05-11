@@ -6,14 +6,19 @@ import com.puresol.coding.lang.java.source.symbols.Semicolon;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
-public class LocalVariableDeclarationStatement extends AbstractJavaParser {
+public class StatementNoShortIf extends AbstractJavaParser {
 
 	private static final long serialVersionUID = 1202904051316374607L;
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		expectPart(LocalVariableDeclaration.class);
-		expectToken(Semicolon.class);
+		if (acceptPart(StatementWithoutTrailingSubstatement.class) != null) {
+		} else if (acceptPart(LabeledStatementNoShortIf.class) != null) {
+		} else if (acceptPart(IfThenElseStatementNoShortIf.class) != null) {
+		} else if (acceptPart(WhileStatementNoShortIf.class) != null) {
+		} else {
+			expectPart(ForStatementNoShortIf.class);
+		}
 		finish();
 	}
 
