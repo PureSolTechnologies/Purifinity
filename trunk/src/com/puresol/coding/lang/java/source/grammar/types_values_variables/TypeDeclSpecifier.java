@@ -17,7 +17,7 @@ public class TypeDeclSpecifier extends AbstractJavaParser {
 			/* This test was included to avoid an endless loop! */
 			abort();
 		}
-		if (acceptPart(TypeName.class) != null) {
+		if (acceptPart(QualifiedName.class) != null) {
 
 		} else {
 			expectPart(ClassOrInterfaceType.class);

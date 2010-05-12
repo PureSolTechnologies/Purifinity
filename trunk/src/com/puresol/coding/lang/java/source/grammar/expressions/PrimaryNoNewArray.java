@@ -2,7 +2,7 @@ package com.puresol.coding.lang.java.source.grammar.expressions;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.java.AbstractJavaParser;
-import com.puresol.coding.lang.java.source.grammar.types_values_variables.ClassName;
+import com.puresol.coding.lang.java.source.grammar.types_values_variables.QualifiedName;
 import com.puresol.coding.lang.java.source.grammar.types_values_variables.Type;
 import com.puresol.coding.lang.java.source.keywords.ClassKeyword;
 import com.puresol.coding.lang.java.source.keywords.ThisKeyword;
@@ -27,7 +27,7 @@ public class PrimaryNoNewArray extends AbstractJavaParser {
 		} else if (acceptToken(LParen.class) != null) {
 			expectPart(Expression.class);
 			expectToken(RParen.class);
-		} else if (acceptPart(ClassInstanceCreationExpression.class) != null) {
+		} else if (acceptPart(UnqualifiedClassInstanceCreationExpression.class) != null) {
 		} else if (acceptPart(FieldAccess.class) != null) {
 		} else if (acceptPart(MethodInvocation.class) != null) {
 		} else if (acceptPart(ArrayAccess.class) != null) {
@@ -35,10 +35,12 @@ public class PrimaryNoNewArray extends AbstractJavaParser {
 			expectToken(Dot.class);
 			expectToken(ClassKeyword.class);
 		} else {
-			expectPart(ClassName.class);
+			expectPart(QualifiedName.class);
 			expectToken(Dot.class);
 			expectToken(ThisKeyword.class);
 		}
+		while (acceptPart(QualifiedClassInstanceCreationExpression.class) != null)
+			;
 		finish();
 	}
 

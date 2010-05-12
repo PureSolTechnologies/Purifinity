@@ -2,7 +2,7 @@ package com.puresol.coding.lang.java.source.grammar.expressions;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.java.AbstractJavaParser;
-import com.puresol.coding.lang.java.source.grammar.types_values_variables.ExpressionName;
+import com.puresol.coding.lang.java.source.grammar.types_values_variables.QualifiedName;
 import com.puresol.coding.lang.java.source.symbols.LRectBracket;
 import com.puresol.coding.lang.java.source.symbols.RRectBracket;
 import com.puresol.parser.ParserException;
@@ -14,7 +14,7 @@ public class ArrayAccess extends AbstractJavaParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		if (acceptPart(ExpressionName.class) != null) {
+		if (acceptPart(QualifiedName.class) != null) {
 		} else {
 			expectPart(PrimaryNoNewArray.class);
 		}

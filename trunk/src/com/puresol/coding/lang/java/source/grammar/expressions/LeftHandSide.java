@@ -2,7 +2,7 @@ package com.puresol.coding.lang.java.source.grammar.expressions;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.java.AbstractJavaParser;
-import com.puresol.coding.lang.java.source.grammar.types_values_variables.ExpressionName;
+import com.puresol.coding.lang.java.source.grammar.types_values_variables.QualifiedName;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
@@ -12,7 +12,7 @@ public class LeftHandSide extends AbstractJavaParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		expectPart(ExpressionName.class);
+		expectPart(QualifiedName.class);
 		expectPart(FieldAccess.class);
 		expectPart(ArrayAccess.class);
 		finish();

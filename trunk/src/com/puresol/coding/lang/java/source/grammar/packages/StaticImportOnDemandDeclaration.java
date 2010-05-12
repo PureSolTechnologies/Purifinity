@@ -2,7 +2,7 @@ package com.puresol.coding.lang.java.source.grammar.packages;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.java.AbstractJavaParser;
-import com.puresol.coding.lang.java.source.grammar.types_values_variables.TypeName;
+import com.puresol.coding.lang.java.source.grammar.types_values_variables.QualifiedName;
 import com.puresol.coding.lang.java.source.keywords.ImportKeyword;
 import com.puresol.coding.lang.java.source.keywords.StaticKeyword;
 import com.puresol.coding.lang.java.source.symbols.Dot;
@@ -19,7 +19,7 @@ public class StaticImportOnDemandDeclaration extends AbstractJavaParser {
 	public void scan() throws PartDoesNotMatchException, ParserException {
 		expectToken(StaticKeyword.class);
 		expectToken(ImportKeyword.class);
-		expectPart(TypeName.class);
+		expectPart(QualifiedName.class);
 		expectToken(Dot.class);
 		expectToken(Star.class);
 		expectToken(Semicolon.class);
