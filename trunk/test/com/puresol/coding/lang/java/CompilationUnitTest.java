@@ -15,6 +15,8 @@ import org.junit.Test;
 import com.puresol.coding.analysis.CodeRange;
 import com.puresol.coding.lang.java.JavaLexer;
 import com.puresol.coding.lang.java.CompilationUnit;
+import com.puresol.coding.lang.java.source.grammar.classes.ClassDeclaration;
+import com.puresol.coding.lang.java.source.grammar.classes.VariableDeclarator;
 import com.puresol.parser.DefaultPreConditioner;
 import com.puresol.parser.LexerException;
 import com.puresol.parser.NoMatchingTokenDefinitionFound;
