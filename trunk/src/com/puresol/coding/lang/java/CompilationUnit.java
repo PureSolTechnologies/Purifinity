@@ -1,9 +1,6 @@
 package com.puresol.coding.lang.java;
 
 import com.puresol.coding.analysis.CodeRangeType;
-import com.puresol.coding.lang.java.source.parts.packages.ImportDeclarations;
-import com.puresol.coding.lang.java.source.parts.packages.PackageDeclaration;
-import com.puresol.coding.lang.java.source.parts.packages.TypeDeclarations;
 import com.puresol.parser.EndOfTokenStreamException;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;

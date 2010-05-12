@@ -16,8 +16,6 @@ import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.evaluator.QualityLevel;
 import com.puresol.coding.evaluator.UnsupportedReportingFormatException;
 import com.puresol.coding.lang.java.Java;
-import com.puresol.coding.lang.java.source.parts.classes.ClassDeclaration;
-import com.puresol.coding.lang.java.source.parts.classes.VariableDeclarator;
 import com.puresol.coding.reporting.HTMLConverter;
 import com.puresol.reporting.ReportingFormat;
 import com.puresol.reporting.html.HTMLStandards;
