@@ -22,8 +22,9 @@ public class StatementWithoutTrailingSubstatement extends AbstractJavaParser {
 		} else if (acceptPart(ReturnStatement.class) != null) {
 		} else if (acceptPart(SynchronizedStatement.class) != null) {
 		} else if (acceptPart(ThrowStatement.class) != null) {
+		} else if (acceptPart(TryStatement.class) != null) {
 		} else {
-			expectPart(TryStatement.class);
+			abort();
 		}
 		finish();
 	}

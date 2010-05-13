@@ -26,8 +26,9 @@ public class StatementExpression extends AbstractJavaParser {
 		} else if (acceptPart(PostDecrementExpression.class) != null) {
 		} else if (acceptPart(MethodInvocation.class) != null) {
 		} else if (acceptPart(UnqualifiedClassInstanceCreationExpression.class) != null) {
+		} else if (acceptPart(QualifiedClassInstanceCreationExpression.class) != null) {
 		} else {
-			expectPart(QualifiedClassInstanceCreationExpression.class);
+			abort();
 		}
 		finish();
 	}

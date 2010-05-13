@@ -19,29 +19,42 @@ public class MethodInvocation extends AbstractJavaParser {
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
 		if (acceptPart(QualifiedName.class) != null) {
+			expectToken(LParen.class);
+			acceptPart(ArgumentList.class);
+			expectToken(RParen.class);
 		} else if (acceptPart(Primary.class) != null) {
 			expectToken(Dot.class);
 			acceptPart(NonWildTypeArguments.class);
 			expectToken(Identifier.class);
+			expectToken(LParen.class);
+			acceptPart(ArgumentList.class);
+			expectToken(RParen.class);
 		} else if (acceptToken(SuperKeyword.class) != null) {
 			expectToken(Dot.class);
 			acceptPart(NonWildTypeArguments.class);
 			expectToken(Identifier.class);
+			expectToken(LParen.class);
+			acceptPart(ArgumentList.class);
+			expectToken(RParen.class);
 		} else if (acceptPart(QualifiedName.class) != null) {
 			expectToken(Dot.class);
 			expectToken(SuperKeyword.class);
 			expectToken(Dot.class);
 			acceptPart(NonWildTypeArguments.class);
 			expectToken(Identifier.class);
-		} else {
-			expectPart(QualifiedName.class);
+			expectToken(LParen.class);
+			acceptPart(ArgumentList.class);
+			expectToken(RParen.class);
+		} else if (acceptPart(QualifiedName.class) != null) {
 			expectToken(Dot.class);
 			expectPart(NonWildTypeArguments.class);
 			expectToken(Identifier.class);
+			expectToken(LParen.class);
+			acceptPart(ArgumentList.class);
+			expectToken(RParen.class);
+		} else {
+			abort();
 		}
-		expectToken(LParen.class);
-		acceptPart(ArgumentList.class);
-		expectToken(RParen.class);
 		finish();
 	}
 

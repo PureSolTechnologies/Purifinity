@@ -19,8 +19,9 @@ public class UnaryExpression extends AbstractJavaParser {
 			expectPart(UnaryExpression.class);
 		} else if (acceptToken(Minus.class) != null) {
 			expectPart(UnaryExpression.class);
+		} else if (acceptPart(UnaryExpressionNotPlusMinus.class) != null) {
 		} else {
-			expectPart(UnaryExpressionNotPlusMinus.class);
+			abort();
 		}
 		finish();
 	}

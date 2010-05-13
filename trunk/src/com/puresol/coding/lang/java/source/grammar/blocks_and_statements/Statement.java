@@ -13,11 +13,12 @@ public class Statement extends AbstractJavaParser {
 	public void scan() throws PartDoesNotMatchException, ParserException {
 		if (acceptPart(StatementWithoutTrailingSubstatement.class) != null) {
 		} else if (acceptPart(LabeledStatement.class) != null) {
-		} else if (acceptPart(IfThenStatement.class) != null) {
 		} else if (acceptPart(IfThenElseStatement.class) != null) {
+		} else if (acceptPart(IfThenStatement.class) != null) {
 		} else if (acceptPart(WhileStatement.class) != null) {
+		} else if (acceptPart(ForStatement.class) != null) {
 		} else {
-			expectPart(ForStatement.class);
+			throw new PartDoesNotMatchException(this);
 		}
 		finish();
 	}
@@ -26,5 +27,4 @@ public class Statement extends AbstractJavaParser {
 	public CodeRangeType getCodeRangeType() {
 		return CodeRangeType.FRAGMENT;
 	}
-
 }

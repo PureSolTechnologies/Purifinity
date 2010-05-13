@@ -9,19 +9,19 @@ import com.puresol.parser.PartDoesNotMatchException;
 
 public class NonWildTypeArguments extends AbstractJavaParser {
 
-    private static final long serialVersionUID = -5105706064635403458L;
+	private static final long serialVersionUID = -5105706064635403458L;
 
-    @Override
-    public void scan() throws PartDoesNotMatchException, ParserException {
-	expectToken(LessThan.class);
-	expectPart(ReferenceTypeList.class);
-	expectToken(GreaterThan.class);
-	finish();
-    }
+	@Override
+	public void scan() throws PartDoesNotMatchException, ParserException {
+		expectToken(LessThan.class);
+		expectPart(ReferenceTypeList.class);
+		expectToken(GreaterThan.class);
+		finish();
+	}
 
-    @Override
-    public CodeRangeType getCodeRangeType() {
-	return CodeRangeType.CONSTRUCTOR;
-    }
+	@Override
+	public CodeRangeType getCodeRangeType() {
+		return CodeRangeType.FRAGMENT;
+	}
 
 }

@@ -15,8 +15,9 @@ public class PostfixExpression extends AbstractJavaParser {
 		if (acceptPart(Primary.class) != null) {
 		} else if (acceptPart(QualifiedName.class) != null) {
 		} else if (acceptPart(PostIncrementExpression.class) != null) {
+		} else if (acceptPart(PostDecrementExpression.class) != null) {
 		} else {
-			expectPart(PostDecrementExpression.class);
+			abort();
 		}
 		finish();
 	}
