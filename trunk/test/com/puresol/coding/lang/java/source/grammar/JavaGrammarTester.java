@@ -38,7 +38,10 @@ public class JavaGrammarTester {
 							.getTokenStream()));
 			Parser parser = classBuilder.createInstance(grammarPart);
 			parser.scan();
-			return true;
+			System.out.println(string);
+			System.out.println(parser.getText());
+			System.out.println(parser.getText().equals(string));
+			return parser.getText().equals(string);
 		} catch (LexerException e) {
 			e.printStackTrace();
 		} catch (PartDoesNotMatchException e) {

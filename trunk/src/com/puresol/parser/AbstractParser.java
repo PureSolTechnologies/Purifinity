@@ -279,7 +279,7 @@ public abstract class AbstractParser implements Parser {
 	protected final void moveToNextVisible(int steps)
 			throws EndOfTokenStreamException {
 		if (currentPosition >= tokenStream.getSize() - steps) {
-			moveTo(tokenStream.getSize() - 1);
+			moveTo(tokenStream.getSize());
 			throw new EndOfTokenStreamException(this);
 		}
 		move(steps);
@@ -318,16 +318,7 @@ public abstract class AbstractParser implements Parser {
 			}
 			definitionInstance = currentToken.getDefinitionInstance();
 			if (!getCurrentToken().getDefinition().equals(definition)) {
-				/*
-				 * The next lines where removed due to unneeded token
-				 * instantiation. The Lexer should do the job to find the
-				 * correct definitions.
-				 */
-				// definitionInstance = Instances.createInstance(definition);
-				// if (!definitionInstance.matches(getCurrentToken().getText()))
-				// {
 				throw new PartDoesNotMatchException(this);
-				// }
 			} else {
 				definitionInstance = getCurrentToken().getDefinitionInstance();
 			}
