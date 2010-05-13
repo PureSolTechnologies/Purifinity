@@ -137,4 +137,30 @@ public class Files {
 		}
 		return new File(normalizedFile);
 	}
+
+	public static String readFileToString(File directory, File fileName) {
+		RandomAccessFile ra = null;
+		try {
+			StringBuffer text = new StringBuffer();
+			File source = Files.addPaths(directory, fileName);
+			ra = new RandomAccessFile(source, "r");
+			String line;
+			while ((line = ra.readLine()) != null) {
+				text.append(line);
+			}
+			ra.close();
+			return text.toString();
+		} catch (FileNotFoundException e) {
+			logger.error(e.getMessage(), e);
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e);
+		}
+		if (ra != null) {
+			try {
+				ra.close();
+			} catch (IOException e) {
+			}
+		}
+		return "";
+	}
 }
