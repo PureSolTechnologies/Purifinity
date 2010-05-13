@@ -22,20 +22,23 @@ public class MethodInvocation extends AbstractJavaParser {
 		} else if (acceptPart(Primary.class) != null) {
 			expectToken(Dot.class);
 			acceptPart(NonWildTypeArguments.class);
+			expectToken(Identifier.class);
 		} else if (acceptToken(SuperKeyword.class) != null) {
 			expectToken(Dot.class);
 			acceptPart(NonWildTypeArguments.class);
+			expectToken(Identifier.class);
 		} else if (acceptPart(QualifiedName.class) != null) {
 			expectToken(Dot.class);
 			expectToken(SuperKeyword.class);
 			expectToken(Dot.class);
 			acceptPart(NonWildTypeArguments.class);
+			expectToken(Identifier.class);
 		} else {
 			expectPart(QualifiedName.class);
 			expectToken(Dot.class);
 			expectPart(NonWildTypeArguments.class);
+			expectToken(Identifier.class);
 		}
-		expectToken(Identifier.class);
 		expectToken(LParen.class);
 		acceptPart(ArgumentList.class);
 		expectToken(RParen.class);

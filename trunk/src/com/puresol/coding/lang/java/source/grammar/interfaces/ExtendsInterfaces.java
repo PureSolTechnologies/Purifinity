@@ -2,7 +2,7 @@ package com.puresol.coding.lang.java.source.grammar.interfaces;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.java.AbstractJavaParser;
-import com.puresol.coding.lang.java.source.grammar.types_values_variables.InterfaceType;
+import com.puresol.coding.lang.java.source.grammar.types_values_variables.ClassOrInterfaceType;
 import com.puresol.coding.lang.java.source.keywords.ExtendsKeyword;
 import com.puresol.coding.lang.java.source.symbols.Comma;
 import com.puresol.parser.ParserException;
@@ -15,9 +15,9 @@ public class ExtendsInterfaces extends AbstractJavaParser {
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
 		expectToken(ExtendsKeyword.class);
-		acceptPart(InterfaceType.class);
+		acceptPart(ClassOrInterfaceType.class);
 		while (acceptToken(Comma.class) != null) {
-			acceptPart(InterfaceType.class);
+			acceptPart(ClassOrInterfaceType.class);
 		}
 		finish();
 	}

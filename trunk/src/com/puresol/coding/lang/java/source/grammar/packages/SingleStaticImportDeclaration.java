@@ -5,7 +5,9 @@ import com.puresol.coding.lang.java.AbstractJavaParser;
 import com.puresol.coding.lang.java.source.grammar.types_values_variables.PackageOrTypeName;
 import com.puresol.coding.lang.java.source.keywords.ImportKeyword;
 import com.puresol.coding.lang.java.source.keywords.StaticKeyword;
+import com.puresol.coding.lang.java.source.symbols.Dot;
 import com.puresol.coding.lang.java.source.symbols.Semicolon;
+import com.puresol.parser.Parser;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
@@ -15,9 +17,18 @@ public class SingleStaticImportDeclaration extends AbstractJavaParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		expectToken(StaticKeyword.class);
 		expectToken(ImportKeyword.class);
-		expectPart(PackageOrTypeName.class);
+		expectToken(StaticKeyword.class);
+		Parser name = expectPart(PackageOrTypeName.class);
+		if ((name.getEndPosition() - name.getStartPosition() <= 1)
+				|| (!name.getTokenStream().get(name.getStartPosition() + 1)
+						.getDefinition().equals(Dot.class))) {
+			/*
+			 * In this case the name is just a single identifier, but at least a
+			 * package name and one identifier is expected!
+			 */
+			throw new PartDoesNotMatchException(this);
+		}
 		expectToken(Semicolon.class);
 		finish();
 	}

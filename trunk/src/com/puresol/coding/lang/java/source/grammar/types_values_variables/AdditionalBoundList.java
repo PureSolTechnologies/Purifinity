@@ -12,7 +12,8 @@ public class AdditionalBoundList extends AbstractJavaParser {
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
 		expectPart(AdditionalBound.class);
-		acceptPart(AdditionalBoundList.class);
+		while (acceptPart(AdditionalBound.class) != null)
+			;
 		finish();
 	}
 

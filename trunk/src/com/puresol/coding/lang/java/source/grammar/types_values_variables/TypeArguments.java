@@ -14,7 +14,7 @@ public class TypeArguments extends AbstractJavaParser {
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
 		expectToken(LessThan.class);
-		acceptPart(ActualTypeArgumentList.class);
+		acceptPart(TypeArgumentList.class);
 		expectToken(GreaterThan.class);
 		finish();
 	}

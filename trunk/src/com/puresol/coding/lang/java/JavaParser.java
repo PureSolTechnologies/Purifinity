@@ -1,9 +1,7 @@
 package com.puresol.coding.lang.java;
 
 import com.puresol.coding.analysis.CodeRangeType;
-import com.puresol.coding.lang.java.source.grammar.packages.ImportDeclarations;
-import com.puresol.coding.lang.java.source.grammar.packages.PackageDeclaration;
-import com.puresol.coding.lang.java.source.grammar.packages.TypeDeclarations;
+import com.puresol.coding.lang.java.source.grammar.CompilationUnit;
 import com.puresol.parser.EndOfTokenStreamException;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
@@ -15,7 +13,7 @@ import com.puresol.parser.PartDoesNotMatchException;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class CompilationUnit extends AbstractJavaParser {
+public class JavaParser extends CompilationUnit {
 
 	private static final long serialVersionUID = -5271390812159304045L;
 
@@ -24,17 +22,23 @@ public class CompilationUnit extends AbstractJavaParser {
 		try {
 			moveToNextVisible(0);
 		} catch (EndOfTokenStreamException e) {
-			// this may happen if there is an empty file...
+			/*
+			 * this may happen if there is an empty file...
+			 */
 			return;
 		}
-		acceptPart(PackageDeclaration.class);
-		acceptPart(ImportDeclarations.class);
-		acceptPart(TypeDeclarations.class);
-		if (getCurrentPosition() < getTokenStream().getSize() - 1) {
-			// we are not at end; therefore, we stopped unexpected...
+		super.scan();
+		try {
+			moveToNextVisible(getCurrentPosition());
+			/*
+			 * There are some things left in files which do not fit there...
+			 */
 			throw new PartDoesNotMatchException(this);
+		} catch (EndOfTokenStreamException e) {
+			/*
+			 * This is expected, because we should at the end of the file... ;-)
+			 */
 		}
-		finish(getFile().getName());
 	}
 
 	@Override

@@ -17,8 +17,8 @@ public class StaticImportOnDemandDeclaration extends AbstractJavaParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		expectToken(StaticKeyword.class);
 		expectToken(ImportKeyword.class);
+		expectToken(StaticKeyword.class);
 		expectPart(QualifiedName.class);
 		expectToken(Dot.class);
 		expectToken(Star.class);

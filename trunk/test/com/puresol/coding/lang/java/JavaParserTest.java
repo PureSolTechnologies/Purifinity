@@ -14,7 +14,7 @@ import org.junit.Test;
 
 import com.puresol.coding.analysis.CodeRange;
 import com.puresol.coding.lang.java.JavaLexer;
-import com.puresol.coding.lang.java.CompilationUnit;
+import com.puresol.coding.lang.java.JavaParser;
 import com.puresol.coding.lang.java.source.grammar.classes.ClassDeclaration;
 import com.puresol.coding.lang.java.source.grammar.classes.VariableDeclarator;
 import com.puresol.parser.DefaultPreConditioner;
@@ -31,19 +31,19 @@ import com.puresol.utils.di.Injection;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 
-public class CompilationUnitTest extends TestCase {
+public class JavaParserTest extends TestCase {
 
 	public int testInt;
 
 	@Test
 	public void test() {
 		Logger.getRootLogger().setLevel(Level.DEBUG);
-		CompilationUnit parser = null;
+		JavaParser parser = null;
 		try {
 			DefaultPreConditioner conditioner = new DefaultPreConditioner(
-					new File("test"),
-					new File(
-							"com/puresol/coding/lang/java/CompilationUnitTest.java"));
+					new File("test"), new File(JavaParserTest.class.getName()
+							.replaceAll("\\.", "/")
+							+ ".java"));
 			TokenStream tokenStream = conditioner.getTokenStream();
 			JavaLexer lexer = new JavaLexer(tokenStream);
 			TokenStream tokenStream2 = lexer.getTokenStream();
@@ -52,7 +52,7 @@ public class CompilationUnitTest extends TestCase {
 			}
 			parser = DIClassBuilder.forInjections(
 					Injection.named("TokenStream", tokenStream2))
-					.createInstance(CompilationUnit.class);
+					.createInstance(JavaParser.class);
 			parser.scan();
 			for (CodeRange codeRange : parser.getChildCodeRanges()) {
 				System.out.println(codeRange.toString());

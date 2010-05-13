@@ -1,5 +1,5 @@
 package com.puresol.coding.lang.java.samples;
 
-public interface ClassSkeleton {
+public interface InterfaceSkeleton {
 
 }

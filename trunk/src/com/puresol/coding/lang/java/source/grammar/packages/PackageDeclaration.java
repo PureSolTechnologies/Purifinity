@@ -3,6 +3,7 @@ package com.puresol.coding.lang.java.source.grammar.packages;
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.java.AbstractJavaParser;
 import com.puresol.coding.lang.java.source.grammar.interfaces.Annotations;
+import com.puresol.coding.lang.java.source.grammar.types_values_variables.QualifiedName;
 import com.puresol.coding.lang.java.source.keywords.PackageKeyword;
 import com.puresol.coding.lang.java.source.symbols.Semicolon;
 import com.puresol.parser.ParserException;
@@ -16,7 +17,7 @@ public class PackageDeclaration extends AbstractJavaParser {
 	public void scan() throws PartDoesNotMatchException, ParserException {
 		acceptPart(Annotations.class);
 		expectToken(PackageKeyword.class);
-		expectPart(PackageName.class);
+		expectPart(QualifiedName.class);
 		expectToken(Semicolon.class);
 		finish();
 	}

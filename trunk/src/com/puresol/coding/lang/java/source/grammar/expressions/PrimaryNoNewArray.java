@@ -28,19 +28,21 @@ public class PrimaryNoNewArray extends AbstractJavaParser {
 			expectPart(Expression.class);
 			expectToken(RParen.class);
 		} else if (acceptPart(UnqualifiedClassInstanceCreationExpression.class) != null) {
-		} else if (acceptPart(FieldAccess.class) != null) {
-		} else if (acceptPart(MethodInvocation.class) != null) {
-		} else if (acceptPart(ArrayAccess.class) != null) {
 		} else if (acceptPart(Type.class) != null) {
 			expectToken(Dot.class);
 			expectToken(ClassKeyword.class);
-		} else {
-			expectPart(QualifiedName.class);
+		} else if (acceptPart(QualifiedName.class) != null) {
 			expectToken(Dot.class);
 			expectToken(ThisKeyword.class);
+			/* vvv the next parts cause an endless loop! */
+		} else if (acceptPart(QualifiedClassInstanceCreationExpression.class) != null) {
+		} else if (acceptPart(FieldAccess.class) != null) {
+		} else if (acceptPart(MethodInvocation.class) != null) {
+		} else if (acceptPart(ArrayAccess.class) != null) {
+			/* ^^^ */
+		} else {
+			throw new PartDoesNotMatchException(this);
 		}
-		while (acceptPart(QualifiedClassInstanceCreationExpression.class) != null)
-			;
 		finish();
 	}
 

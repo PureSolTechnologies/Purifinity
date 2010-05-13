@@ -24,6 +24,8 @@ public class QualifiedName extends AbstractJavaParser {
 				if (nextToken.getDefinition().equals(Identifier.class)) {
 					expectToken(Dot.class);
 					expectToken(Identifier.class);
+				} else {
+					break;
 				}
 			}
 			finish();

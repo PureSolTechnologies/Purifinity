@@ -8,23 +8,21 @@ import com.puresol.parser.PartDoesNotMatchException;
 
 public class BlockStatement extends AbstractJavaParser {
 
-    private static final long serialVersionUID = 1202904051316374607L;
+	private static final long serialVersionUID = 1202904051316374607L;
 
-    @Override
-    public void scan() throws PartDoesNotMatchException, ParserException {
-	if (acceptPart(LocalVariableDeclarationStatement.class) != null) {
-
-	} else if (acceptPart(ClassDeclaration.class) != null) {
-
-	} else {
-	    expectPart(Statement.class);
+	@Override
+	public void scan() throws PartDoesNotMatchException, ParserException {
+		if (acceptPart(LocalVariableDeclarationStatement.class) != null) {
+		} else if (acceptPart(ClassDeclaration.class) != null) {
+		} else {
+			expectPart(Statement.class);
+		}
+		finish();
 	}
-	finish();
-    }
 
-    @Override
-    public CodeRangeType getCodeRangeType() {
-	return CodeRangeType.FRAGMENT;
-    }
+	@Override
+	public CodeRangeType getCodeRangeType() {
+		return CodeRangeType.FRAGMENT;
+	}
 
 }

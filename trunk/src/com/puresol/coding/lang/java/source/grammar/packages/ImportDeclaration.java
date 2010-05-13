@@ -23,7 +23,7 @@ public class ImportDeclaration extends AbstractJavaParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		expectPart(SingleTypeImportDeclaration.class);
+		expectOnePartOf(IMPORT_DECLARATIONS);
 		finish();
 	}
 

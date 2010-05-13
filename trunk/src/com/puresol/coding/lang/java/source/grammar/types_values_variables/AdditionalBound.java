@@ -13,7 +13,7 @@ public class AdditionalBound extends AbstractJavaParser {
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
 		expectToken(Ampersand.class);
-		acceptPart(InterfaceType.class);
+		acceptPart(ClassOrInterfaceType.class);
 		finish();
 	}
 

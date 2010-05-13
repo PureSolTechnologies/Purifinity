@@ -36,6 +36,9 @@ public final class TokenStream implements Serializable {
 	}
 
 	public Token get(int index) {
+		if ((index >= tokens.size()) || (index < 0)) {
+			return null;
+		}
 		return tokens.get(index);
 	}
 
@@ -67,12 +70,12 @@ public final class TokenStream implements Serializable {
 	}
 
 	public Token findNextToken(int tokenID) throws NoMatchingTokenException {
-		if (tokenID >= getSize() - 2) {
+		if (tokenID >= getSize() - 1) {
 			throw new NoMatchingTokenException();
 		}
 		int position = tokenID + 1;
 		while (get(position).getPublicity() == TokenPublicity.HIDDEN) {
-			if (position >= getSize() - 2) {
+			if (position >= getSize() - 1) {
 				throw new NoMatchingTokenException();
 			}
 			position++;

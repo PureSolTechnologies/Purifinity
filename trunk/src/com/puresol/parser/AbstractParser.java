@@ -154,6 +154,16 @@ public abstract class AbstractParser implements Parser {
 		return parentParser;
 	}
 
+	protected final List<Parser> getAllParentParsers() {
+		List<Parser> ancestors = new ArrayList<Parser>();
+		Parser ancestor = this.getParentParser();
+		while (ancestor != null) {
+			ancestors.add(ancestor);
+			ancestor = ((AbstractParser) ancestor).getParentParser();
+		}
+		return ancestors;
+	}
+
 	public boolean hasChildParser(Parser childParser) {
 		return childParsers.contains(childParser);
 	}
@@ -302,12 +312,22 @@ public abstract class AbstractParser implements Parser {
 			throws PartDoesNotMatchException, ParserException {
 		TokenDefinition definitionInstance = null;
 		try {
-			definitionInstance = getCurrentToken().getDefinitionInstance();
+			Token currentToken = getCurrentToken();
+			if (currentToken == null) {
+				throw new PartDoesNotMatchException(this);
+			}
+			definitionInstance = currentToken.getDefinitionInstance();
 			if (!getCurrentToken().getDefinition().equals(definition)) {
-				definitionInstance = Instances.createInstance(definition);
-				if (!definitionInstance.matches(getCurrentToken().getText())) {
-					throw new PartDoesNotMatchException(this);
-				}
+				/*
+				 * The next lines where removed due to unneeded token
+				 * instantiation. The Lexer should do the job to find the
+				 * correct definitions.
+				 */
+				// definitionInstance = Instances.createInstance(definition);
+				// if (!definitionInstance.matches(getCurrentToken().getText()))
+				// {
+				throw new PartDoesNotMatchException(this);
+				// }
 			} else {
 				definitionInstance = getCurrentToken().getDefinitionInstance();
 			}
@@ -315,10 +335,12 @@ public abstract class AbstractParser implements Parser {
 				moveToNextVisible(1);
 			}
 		} catch (EndOfTokenStreamException e) {
-			// this may happen at the end of a file...
-		} catch (ClassInstantiationException e) {
-			logger.error(e.getMessage());
-			throw new ParserException(e.getMessage());
+			/*
+			 * EndOfTokenStreamException may happen at the end of a file...
+			 */
+			// } catch (ClassInstantiationException e) {
+			// logger.error(e.getMessage());
+			// throw new ParserException(e.getMessage());
 		} catch (TokenException e) {
 			logger.error(e.getMessage());
 			throw new ParserException(e.getMessage());
@@ -440,6 +462,26 @@ public abstract class AbstractParser implements Parser {
 		}
 	}
 
+	/**
+	 * This method checks whether a unprocessed part of the same type is in the
+	 * parents list at the same position. This is a sign for an endless loop
+	 * within the grammar definition. This endless loop will not proceed anymore
+	 * and will cause a stack overflow sooner or later.
+	 * 
+	 * @return True is returned if the parser is in an endless loop.
+	 */
+	private boolean isEndlessLoop(Class<? extends Parser> part) {
+		List<Parser> ancestors = getAllParentParsers();
+		for (Parser ancestor : ancestors) {
+			if (ancestor.getClass().equals(part)) {
+				if (ancestor.getStartPosition() == getCurrentPosition()) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
 	private Parser processPart(Class<? extends Parser> part)
 			throws PartDoesNotMatchException, ParserException {
 		AbstractParser partInstance = null;
@@ -462,6 +504,13 @@ public abstract class AbstractParser implements Parser {
 	protected Parser expectPart(Class<? extends Parser> part)
 			throws PartDoesNotMatchException, ParserException {
 		logger.debug("Process part: " + part.getSimpleName());
+		if (isEndlessLoop(part)) {
+			throw new PartDoesNotMatchException(
+					"An endless loop was entered! Current part: '" + getName()
+							+ "'; next part needed: '" + part.getName()
+							+ "'; current Token: "
+							+ getCurrentToken().toString());
+		}
 		Parser retValue = processPart(part);
 		logger.debug("done for " + part.getSimpleName());
 		return retValue;
@@ -480,8 +529,11 @@ public abstract class AbstractParser implements Parser {
 			throws ParserException {
 		try {
 			logger.debug("Process part if possible: " + part.getSimpleName());
+			if (isEndlessLoop(part)) {
+				throw new PartDoesNotMatchException(this);
+			}
 			Parser retValue = processPart(part);
-			logger.debug("processed for " + part.getSimpleName());
+			logger.debug("Processed part " + part.getSimpleName());
 			return retValue;
 		} catch (PartDoesNotMatchException e) {
 			return null;

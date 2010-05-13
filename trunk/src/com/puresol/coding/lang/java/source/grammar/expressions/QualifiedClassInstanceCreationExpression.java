@@ -12,6 +12,13 @@ import com.puresol.coding.lang.java.source.symbols.RParen;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
+/**
+ * This is a part of the original ClassInstanceCreationExpression. It's the
+ * qualified part.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class QualifiedClassInstanceCreationExpression extends
 		AbstractJavaParser {
 

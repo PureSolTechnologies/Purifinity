@@ -13,6 +13,10 @@ public class Files {
 
 	private static final Logger logger = Logger.getLogger(Files.class);
 
+	public static File classToRelativePackagePath(Class<?> clazz) {
+		return new File(clazz.getName().replaceAll("\\.", "/") + ".java");
+	}
+
 	public static File addPaths(File path1, File path2) {
 		return new File(path1, path2.toString());
 	}

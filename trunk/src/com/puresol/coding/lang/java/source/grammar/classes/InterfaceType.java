@@ -4,8 +4,8 @@ import java.util.List;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.java.AbstractJavaParser;
+import com.puresol.coding.lang.java.source.grammar.types_values_variables.QualifiedName;
 import com.puresol.coding.lang.java.source.grammar.types_values_variables.TypeArguments;
-import com.puresol.coding.lang.java.source.grammar.types_values_variables.TypeDeclSpecifier;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
@@ -15,7 +15,7 @@ public class InterfaceType extends AbstractJavaParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		expectPart(TypeDeclSpecifier.class);
+		expectPart(QualifiedName.class);
 		acceptPart(TypeArguments.class);
 		finish();
 	}
