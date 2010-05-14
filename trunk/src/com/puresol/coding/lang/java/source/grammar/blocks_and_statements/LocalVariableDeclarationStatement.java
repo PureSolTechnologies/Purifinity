@@ -6,6 +6,12 @@ import com.puresol.coding.lang.java.source.symbols.Semicolon;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
+/**
+ * localVariableDeclarationStatement : localVariableDeclaration ';' ;
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class LocalVariableDeclarationStatement extends AbstractJavaParser {
 
 	private static final long serialVersionUID = 1202904051316374607L;

@@ -6,6 +6,12 @@ import com.puresol.coding.lang.java.source.keywords.FinallyKeyword;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
+/**
+ * 'finally' block
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class Finally extends AbstractJavaParser {
 
 	private static final long serialVersionUID = 1202904051316374607L;

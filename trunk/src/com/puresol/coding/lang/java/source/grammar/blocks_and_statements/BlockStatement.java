@@ -6,6 +6,13 @@ import com.puresol.coding.lang.java.source.grammar.classes.ClassDeclaration;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
+/**
+ * blockStatement : localVariableDeclarationStatement |
+ * classOrInterfaceDeclaration | statement ;
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class BlockStatement extends AbstractJavaParser {
 
 	private static final long serialVersionUID = 1202904051316374607L;
@@ -14,8 +21,9 @@ public class BlockStatement extends AbstractJavaParser {
 	public void scan() throws PartDoesNotMatchException, ParserException {
 		if (acceptPart(LocalVariableDeclarationStatement.class) != null) {
 		} else if (acceptPart(ClassDeclaration.class) != null) {
+		} else if (acceptPart(Statement.class) != null) {
 		} else {
-			expectPart(Statement.class);
+			abort();
 		}
 		finish();
 	}

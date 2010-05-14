@@ -3,6 +3,7 @@ package com.puresol.coding.lang.java.source.grammar.blocks_and_statements;
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.java.AbstractJavaParser;
 import com.puresol.coding.lang.java.source.grammar.expressions.Expression;
+import com.puresol.coding.lang.java.source.grammar.expressions.ExpressionList;
 import com.puresol.coding.lang.java.source.keywords.ForKeyword;
 import com.puresol.coding.lang.java.source.symbols.LParen;
 import com.puresol.coding.lang.java.source.symbols.RParen;
@@ -22,7 +23,7 @@ public class ForStatementNoShortIf extends AbstractJavaParser {
 		expectToken(Semicolon.class);
 		acceptPart(Expression.class);
 		expectToken(Semicolon.class);
-		acceptPart(ForUpdate.class);
+		acceptPart(ExpressionList.class);
 		expectToken(RParen.class);
 		expectPart(StatementNoShortIf.class);
 		finish();

@@ -11,7 +11,7 @@ public class StatementNoShortIf extends AbstractJavaParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		if (acceptPart(StatementWithoutTrailingSubstatement.class) != null) {
+		if (acceptPart(Statement.class) != null) {
 		} else if (acceptPart(LabeledStatementNoShortIf.class) != null) {
 		} else if (acceptPart(IfThenElseStatementNoShortIf.class) != null) {
 		} else if (acceptPart(WhileStatementNoShortIf.class) != null) {

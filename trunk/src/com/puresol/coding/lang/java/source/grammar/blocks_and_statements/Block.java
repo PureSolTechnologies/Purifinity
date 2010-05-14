@@ -7,6 +7,12 @@ import com.puresol.coding.lang.java.source.symbols.RCurlyBracket;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
+/**
+ * block : '{' (blockStatement )* '}' ;
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class Block extends AbstractJavaParser {
 
 	private static final long serialVersionUID = 1202904051316374607L;

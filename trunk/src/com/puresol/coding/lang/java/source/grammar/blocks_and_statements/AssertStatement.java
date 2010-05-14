@@ -5,9 +5,16 @@ import com.puresol.coding.lang.java.AbstractJavaParser;
 import com.puresol.coding.lang.java.source.grammar.expressions.Expression;
 import com.puresol.coding.lang.java.source.keywords.AssertKeyword;
 import com.puresol.coding.lang.java.source.symbols.Colon;
+import com.puresol.coding.lang.java.source.symbols.Semicolon;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
+/**
+ * 'assert' expression (':' expression)? ';'
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class AssertStatement extends AbstractJavaParser {
 
 	private static final long serialVersionUID = 1202904051316374607L;
@@ -19,6 +26,7 @@ public class AssertStatement extends AbstractJavaParser {
 		if (acceptToken(Colon.class) != null) {
 			expectPart(Expression.class);
 		}
+		expectToken(Semicolon.class);
 		finish();
 	}
 

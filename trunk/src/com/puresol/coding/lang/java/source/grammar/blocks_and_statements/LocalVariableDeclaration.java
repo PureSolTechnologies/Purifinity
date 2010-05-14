@@ -8,6 +8,13 @@ import com.puresol.coding.lang.java.source.grammar.types_values_variables.Type;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
+/**
+ * localVariableDeclaration : variableModifiers type variableDeclarator (','
+ * variableDeclarator )* ;
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class LocalVariableDeclaration extends AbstractJavaParser {
 
 	private static final long serialVersionUID = 1202904051316374607L;

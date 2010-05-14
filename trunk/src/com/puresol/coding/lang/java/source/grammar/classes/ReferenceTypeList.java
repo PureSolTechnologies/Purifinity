@@ -9,20 +9,20 @@ import com.puresol.parser.PartDoesNotMatchException;
 
 public class ReferenceTypeList extends AbstractJavaParser {
 
-    private static final long serialVersionUID = 7410581812232089806L;
+	private static final long serialVersionUID = 7410581812232089806L;
 
-    @Override
-    public void scan() throws PartDoesNotMatchException, ParserException {
-	expectPart(ClassOrInterfaceType.class);
-	while (acceptToken(Comma.class) != null) {
-	    expectPart(ClassOrInterfaceType.class);
+	@Override
+	public void scan() throws PartDoesNotMatchException, ParserException {
+		expectPart(ClassOrInterfaceType.class);
+		while (acceptToken(Comma.class) != null) {
+			expectPart(ClassOrInterfaceType.class);
+		}
+		finish();
 	}
-	finish();
-    }
 
-    @Override
-    public CodeRangeType getCodeRangeType() {
-	return CodeRangeType.FRAGMENT;
-    }
+	@Override
+	public CodeRangeType getCodeRangeType() {
+		return CodeRangeType.FRAGMENT;
+	}
 
 }

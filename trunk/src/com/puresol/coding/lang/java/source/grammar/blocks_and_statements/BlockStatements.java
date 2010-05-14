@@ -5,6 +5,12 @@ import com.puresol.coding.lang.java.AbstractJavaParser;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
+/**
+ * (blockStatement )+
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class BlockStatements extends AbstractJavaParser {
 
 	private static final long serialVersionUID = 1202904051316374607L;
