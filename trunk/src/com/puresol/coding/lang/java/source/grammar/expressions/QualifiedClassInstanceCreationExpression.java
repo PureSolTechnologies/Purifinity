@@ -32,7 +32,7 @@ public class QualifiedClassInstanceCreationExpression extends
 		expectToken(Identifier.class);
 		acceptPart(TypeArguments.class);
 		expectToken(LParen.class);
-		acceptPart(ArgumentList.class);
+		acceptPart(ExpressionList.class);
 		expectToken(RParen.class);
 		acceptPart(ClassBody.class);
 		finish();

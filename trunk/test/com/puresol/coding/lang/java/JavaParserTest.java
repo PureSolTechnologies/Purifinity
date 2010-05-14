@@ -16,7 +16,6 @@ import com.puresol.coding.analysis.CodeRange;
 import com.puresol.coding.lang.java.JavaLexer;
 import com.puresol.coding.lang.java.JavaParser;
 import com.puresol.coding.lang.java.source.grammar.classes.ClassDeclaration;
-import com.puresol.coding.lang.java.source.grammar.classes.VariableDeclarator;
 import com.puresol.parser.DefaultPreConditioner;
 import com.puresol.parser.LexerException;
 import com.puresol.parser.NoMatchingTokenDefinitionFound;
@@ -63,10 +62,6 @@ public class JavaParserTest extends TestCase {
 			List<ClassDeclaration> classElements = parser
 					.getChildCodeRanges(ClassDeclaration.class);
 			Assert.assertEquals(1, classElements.size());
-			List<VariableDeclarator> fieldElements = classElements.get(0)
-					.getFields();
-			Assert.assertEquals(1, fieldElements.size());
-			Assert.assertEquals("testInt", fieldElements.get(0).getName());
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			Assert.fail("No exception was expected!");

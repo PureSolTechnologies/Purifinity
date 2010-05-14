@@ -1,10 +1,10 @@
 package com.puresol.coding.lang.java.source.grammar.classes;
 
-import java.util.List;
-
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.java.AbstractJavaParser;
+import com.puresol.coding.lang.java.source.grammar.expressions.Dims;
 import com.puresol.coding.lang.java.source.grammar.types_values_variables.Type;
+import com.puresol.coding.lang.java.source.literals.Identifier;
 import com.puresol.coding.lang.java.source.symbols.Dot;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
@@ -21,16 +21,13 @@ public class LastFormalParameter extends AbstractJavaParser {
 	    expectToken(Dot.class);
 	    expectToken(Dot.class);
 	}
-	expectPart(VariableDeclaratorId.class);
+	expectToken(Identifier.class);
+	expectPart(Dims.class);
 	finish();
     }
 
     @Override
     public CodeRangeType getCodeRangeType() {
-	return CodeRangeType.CLASS;
-    }
-
-    public List<VariableDeclarator> getFields() {
-	return getChildCodeRanges(ClassBody.class).get(0).getFields();
+	return CodeRangeType.FRAGMENT;
     }
 }

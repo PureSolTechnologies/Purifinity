@@ -1,30 +1,28 @@
-package com.puresol.coding.lang.java.source.grammar.packages;
+package com.puresol.coding.lang.java.source.grammar.classes;
 
 import com.puresol.coding.analysis.CodeRangeType;
+import com.puresol.coding.lang.cpp.source.symbols.Comma;
 import com.puresol.coding.lang.java.AbstractJavaParser;
-import com.puresol.coding.lang.java.source.grammar.interfaces.Annotations;
 import com.puresol.coding.lang.java.source.grammar.types_values_variables.QualifiedName;
-import com.puresol.coding.lang.java.source.keywords.PackageKeyword;
-import com.puresol.coding.lang.java.source.symbols.Semicolon;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
 /**
- * packageDeclaration : 'package' qualifiedName ';' ;
+ * qualifiedNameList : qualifiedName (',' qualifiedName )* ;
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class PackageDeclaration extends AbstractJavaParser {
+public class QualifiedNameList extends AbstractJavaParser {
 
-    private static final long serialVersionUID = -3655022757942995084L;
+    private static final long serialVersionUID = 7410581812232089806L;
 
     @Override
     public void scan() throws PartDoesNotMatchException, ParserException {
-	acceptPart(Annotations.class);
-	expectToken(PackageKeyword.class);
 	expectPart(QualifiedName.class);
-	expectToken(Semicolon.class);
+	while (acceptToken(Comma.class) != null) {
+	    expectPart(QualifiedName.class);
+	}
 	finish();
     }
 

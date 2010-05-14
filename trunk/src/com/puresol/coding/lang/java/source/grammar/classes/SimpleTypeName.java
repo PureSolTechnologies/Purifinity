@@ -3,8 +3,6 @@ package com.puresol.coding.lang.java.source.grammar.classes;
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.java.AbstractJavaParser;
 import com.puresol.coding.lang.java.source.literals.Identifier;
-import com.puresol.coding.lang.java.source.symbols.LParen;
-import com.puresol.coding.lang.java.source.symbols.RParen;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
@@ -17,9 +15,7 @@ public class SimpleTypeName extends AbstractJavaParser {
 	acceptPart(TypeParameters.class);
 	String name = getCurrentToken().getText();
 	expectToken(Identifier.class);
-	expectToken(LParen.class);
-	acceptPart(FormalParameterList.class);
-	expectToken(RParen.class);
+	expectPart(FormalParameters.class);
 	finish(name);
     }
 

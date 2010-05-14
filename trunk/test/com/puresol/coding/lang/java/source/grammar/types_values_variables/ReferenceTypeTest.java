@@ -11,11 +11,11 @@ public class ReferenceTypeTest extends TestCase {
 
 	@Test
 	public void testValidVariableTypes() {
-		Assert.assertTrue(JavaGrammarTester.valid("Test", ReferenceType.class));
+		Assert.assertTrue(JavaGrammarTester.valid("Test", ClassOrInterfaceType.class));
 		Assert.assertTrue(JavaGrammarTester.valid("Test.test",
-				ReferenceType.class));
+				ClassOrInterfaceType.class));
 		Assert.assertTrue(JavaGrammarTester.valid("Test.test[]",
-				ReferenceType.class));
+				ClassOrInterfaceType.class));
 	}
 
 	@Test

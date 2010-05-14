@@ -7,23 +7,29 @@ import com.puresol.coding.lang.java.source.symbols.RRectBracket;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
+/**
+ * ('[' ']' )+
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class Dims extends AbstractJavaParser {
 
-	private static final long serialVersionUID = 6464754895556318548L;
+    private static final long serialVersionUID = 6464754895556318548L;
 
-	@Override
-	public void scan() throws PartDoesNotMatchException, ParserException {
-		expectToken(LRectBracket.class);
-		expectToken(RRectBracket.class);
-		while (acceptToken(LRectBracket.class) != null) {
-			expectToken(RRectBracket.class);
-		}
-		finish();
+    @Override
+    public void scan() throws PartDoesNotMatchException, ParserException {
+	expectToken(LRectBracket.class);
+	expectToken(RRectBracket.class);
+	while (acceptToken(LRectBracket.class) != null) {
+	    expectToken(RRectBracket.class);
 	}
+	finish();
+    }
 
-	@Override
-	public CodeRangeType getCodeRangeType() {
-		return CodeRangeType.FRAGMENT;
-	}
+    @Override
+    public CodeRangeType getCodeRangeType() {
+	return CodeRangeType.FRAGMENT;
+    }
 
 }

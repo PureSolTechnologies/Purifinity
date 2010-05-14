@@ -2,7 +2,7 @@ package com.puresol.coding.lang.java.source.grammar.expressions;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.java.AbstractJavaParser;
-import com.puresol.coding.lang.java.source.grammar.types_values_variables.ReferenceType;
+import com.puresol.coding.lang.java.source.grammar.types_values_variables.ClassOrInterfaceType;
 import com.puresol.coding.lang.java.source.keywords.InstanceofKeyword;
 import com.puresol.coding.lang.java.source.symbols.GreaterEqual;
 import com.puresol.coding.lang.java.source.symbols.GreaterThan;
@@ -27,7 +27,7 @@ public class RelationalExpression extends AbstractJavaParser {
 		} else if (acceptToken(GreaterEqual.class) != null) {
 			expectPart(RelationalExpression.class);
 		} else if (acceptToken(InstanceofKeyword.class) != null) {
-			expectPart(ReferenceType.class);
+			expectPart(ClassOrInterfaceType.class);
 		}
 		finish();
 	}

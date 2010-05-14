@@ -2,35 +2,35 @@ package com.puresol.coding.lang.java.source.grammar.classes;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.java.AbstractJavaParser;
-import com.puresol.coding.lang.java.source.keywords.EnumKeyword;
+import com.puresol.coding.lang.java.source.grammar.types_values_variables.Type;
 import com.puresol.coding.lang.java.source.literals.Identifier;
+import com.puresol.coding.lang.java.source.symbols.Dot;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
 /**
- * enumDeclaration : modifiers ('enum' ) IDENTIFIER ('implements' typeList )?
- * enumBody ;
+ * ellipsisParameterDecl : variableModifiers type '...' IDENTIFIER ;
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class EnumDeclaration extends AbstractJavaParser {
+public class EllipsisParameterDeclaration extends AbstractJavaParser {
 
-    private static final long serialVersionUID = -5500980743550485400L;
+    private static final long serialVersionUID = -1812295859556451418L;
 
     @Override
     public void scan() throws PartDoesNotMatchException, ParserException {
-	acceptPart(ClassModifiers.class);
-	expectToken(EnumKeyword.class);
-	String name = getCurrentToken().getText();
+	acceptPart(VariableModifiers.class);
+	expectPart(Type.class);
+	expectToken(Dot.class);
+	expectToken(Dot.class);
+	expectToken(Dot.class);
 	expectToken(Identifier.class);
-	acceptPart(Interfaces.class);
-	expectPart(EnumBody.class);
-	finish(name);
+	finish();
     }
 
     @Override
     public CodeRangeType getCodeRangeType() {
-	return CodeRangeType.ENUMERATION;
+	return CodeRangeType.CLASS;
     }
 }

@@ -20,7 +20,7 @@ public class SingleMethodInvocation extends AbstractJavaParser {
 		acceptPart(NonWildTypeArguments.class);
 		expectToken(Identifier.class);
 		expectToken(LParen.class);
-		acceptPart(ArgumentList.class);
+		acceptPart(ExpressionList.class);
 		expectToken(RParen.class);
 		finish();
 	}

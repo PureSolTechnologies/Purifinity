@@ -6,6 +6,12 @@ import com.puresol.coding.lang.java.source.keywords.ThrowsKeyword;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
+/**
+ * 'throws' qualifiedNameList
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class Throws extends AbstractJavaParser {
 
     private static final long serialVersionUID = 7410581812232089806L;
@@ -13,7 +19,7 @@ public class Throws extends AbstractJavaParser {
     @Override
     public void scan() throws PartDoesNotMatchException, ParserException {
 	expectToken(ThrowsKeyword.class);
-	expectPart(ExceptionTypeList.class);
+	expectPart(QualifiedNameList.class);
 	finish();
     }
 

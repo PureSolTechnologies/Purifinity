@@ -3,7 +3,7 @@ package com.puresol.coding.lang.java.source.grammar.expressions;
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.java.AbstractJavaParser;
 import com.puresol.coding.lang.java.source.grammar.types_values_variables.PrimitiveType;
-import com.puresol.coding.lang.java.source.grammar.types_values_variables.ReferenceType;
+import com.puresol.coding.lang.java.source.grammar.types_values_variables.ClassOrInterfaceType;
 import com.puresol.coding.lang.java.source.symbols.LParen;
 import com.puresol.coding.lang.java.source.symbols.RParen;
 import com.puresol.parser.ParserException;
@@ -21,7 +21,7 @@ public class CastExpression extends AbstractJavaParser {
 			expectToken(RParen.class);
 			expectPart(UnaryExpression.class);
 		} else {
-			expectPart(ReferenceType.class);
+			expectPart(ClassOrInterfaceType.class);
 			expectToken(RParen.class);
 			expectPart(UnaryExpressionNotPlusMinus.class);
 		}

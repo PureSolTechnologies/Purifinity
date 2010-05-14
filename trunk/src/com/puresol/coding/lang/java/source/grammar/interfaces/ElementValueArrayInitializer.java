@@ -8,6 +8,18 @@ import com.puresol.coding.lang.java.source.symbols.RCurlyBracket;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
+/**
+ * elementValueArrayInitializer 
+    :   '{'
+        (elementValue
+            (',' elementValue
+            )*
+        )? (',')? '}'
+    ;
+
+ * @author Rick-Rainer Ludwig
+ *
+ */
 public class ElementValueArrayInitializer extends AbstractJavaParser {
 
 	private static final long serialVersionUID = 6464754895556318548L;

@@ -6,10 +6,11 @@ import java.util.List;
 import com.puresol.coding.lang.java.source.keywords.BooleanKeyword;
 import com.puresol.coding.lang.java.source.keywords.ByteKeyword;
 import com.puresol.coding.lang.java.source.keywords.CharKeyword;
+import com.puresol.coding.lang.java.source.keywords.DoubleKeyword;
+import com.puresol.coding.lang.java.source.keywords.FloatKeyword;
 import com.puresol.coding.lang.java.source.keywords.IntKeyword;
 import com.puresol.coding.lang.java.source.keywords.LongKeyword;
 import com.puresol.coding.lang.java.source.keywords.ShortKeyword;
-import com.puresol.coding.lang.java.source.keywords.VoidKeyword;
 import com.puresol.parser.TokenDefinition;
 
 public class Primitives {
@@ -23,6 +24,7 @@ public class Primitives {
 	DEFINITIONS.add(ShortKeyword.class);
 	DEFINITIONS.add(IntKeyword.class);
 	DEFINITIONS.add(LongKeyword.class);
-	DEFINITIONS.add(VoidKeyword.class);
+	DEFINITIONS.add(FloatKeyword.class);
+	DEFINITIONS.add(DoubleKeyword.class);
     }
 }

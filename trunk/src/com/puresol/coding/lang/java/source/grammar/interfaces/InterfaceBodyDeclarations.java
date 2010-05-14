@@ -1,20 +1,18 @@
-package com.puresol.coding.lang.java.source.grammar.classes;
+package com.puresol.coding.lang.java.source.grammar.interfaces;
 
 import com.puresol.coding.analysis.CodeRangeType;
-import com.puresol.coding.lang.cpp.source.symbols.Comma;
 import com.puresol.coding.lang.java.AbstractJavaParser;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
-public class ExceptionTypeList extends AbstractJavaParser {
+public class InterfaceBodyDeclarations extends AbstractJavaParser {
 
-    private static final long serialVersionUID = 7410581812232089806L;
+    private static final long serialVersionUID = -5845018908537488666L;
 
     @Override
     public void scan() throws PartDoesNotMatchException, ParserException {
-	expectPart(ExceptionType.class);
-	while (acceptToken(Comma.class) != null) {
-	    expectPart(ExceptionType.class);
+	expectPart(InterfaceBodyDeclaration.class);
+	while (acceptPart(InterfaceBodyDeclaration.class) != null) {
 	}
 	finish();
     }
