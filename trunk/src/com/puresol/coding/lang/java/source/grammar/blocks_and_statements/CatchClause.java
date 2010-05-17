@@ -8,23 +8,29 @@ import com.puresol.coding.lang.java.source.symbols.RParen;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
+/**
+ * catchClause : 'catch' '(' formalParameter ')' block ;
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class CatchClause extends AbstractJavaParser {
 
-	private static final long serialVersionUID = 1202904051316374607L;
+    private static final long serialVersionUID = 1202904051316374607L;
 
-	@Override
-	public void scan() throws PartDoesNotMatchException, ParserException {
-		expectToken(CatchKeyword.class);
-		expectToken(LParen.class);
-		expectPart(FormalParameter.class);
-		expectToken(RParen.class);
-		expectPart(Block.class);
-		finish();
-	}
+    @Override
+    public void scan() throws PartDoesNotMatchException, ParserException {
+	expectToken(CatchKeyword.class);
+	expectToken(LParen.class);
+	expectPart(FormalParameter.class);
+	expectToken(RParen.class);
+	expectPart(Block.class);
+	finish();
+    }
 
-	@Override
-	public CodeRangeType getCodeRangeType() {
-		return CodeRangeType.FRAGMENT;
-	}
+    @Override
+    public CodeRangeType getCodeRangeType() {
+	return CodeRangeType.FRAGMENT;
+    }
 
 }

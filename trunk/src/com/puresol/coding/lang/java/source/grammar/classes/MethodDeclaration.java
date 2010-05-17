@@ -11,6 +11,7 @@ import com.puresol.coding.lang.java.source.literals.Identifier;
 import com.puresol.coding.lang.java.source.symbols.LCurlyBracket;
 import com.puresol.coding.lang.java.source.symbols.RCurlyBracket;
 import com.puresol.coding.lang.java.source.symbols.Semicolon;
+import com.puresol.parser.EndOfTokenStreamException;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
@@ -31,40 +32,44 @@ public class MethodDeclaration extends AbstractJavaParser {
 
     @Override
     public void scan() throws PartDoesNotMatchException, ParserException {
-	acceptPart(MethodModifiers.class);
-	acceptPart(TypeParameters.class);
-	if (getCurrentToken().getDefinition().equals(Identifier.class)) {
-	    // constructor...
-	    expectToken(Identifier.class);
-	    expectPart(FormalParameters.class);
-	    acceptPart(Throws.class);
-	    expectToken(LCurlyBracket.class);
-	    acceptPart(ExplicitConstructorInvocation.class);
-	    acceptPart(BlockStatements.class);
-	    expectToken(RCurlyBracket.class);
-	} else {
-	    // method...
-	    if (acceptPart(Type.class) != null) {
-	    } else if (acceptToken(VoidKeyword.class) != null) {
+	try {
+	    acceptPart(MethodModifiers.class);
+	    acceptPart(TypeParameters.class);
+	    if (getCurrentToken().getDefinition().equals(Identifier.class)) {
+		// constructor...
+		expectToken(Identifier.class);
+		expectPart(FormalParameters.class);
+		acceptPart(Throws.class);
+		expectToken(LCurlyBracket.class);
+		acceptPart(ExplicitConstructorInvocation.class);
+		acceptPart(BlockStatements.class);
+		expectToken(RCurlyBracket.class);
 	    } else {
-		abort();
+		// method...
+		if (acceptPart(Type.class) != null) {
+		} else if (acceptToken(VoidKeyword.class) != null) {
+		} else {
+		    abort();
+		}
+		expectToken(Identifier.class);
+		expectPart(FormalParameters.class);
+		acceptPart(Dims.class);
+		acceptPart(Throws.class);
+		if (acceptPart(Block.class) != null) {
+		} else if (acceptToken(Semicolon.class) != null) {
+		} else {
+		    abort();
+		}
 	    }
-	    expectToken(Identifier.class);
-	    expectPart(FormalParameters.class);
-	    acceptPart(Dims.class);
-	    acceptPart(Throws.class);
-	    if (acceptPart(Block.class) != null) {
-	    } else if (acceptToken(Semicolon.class) != null) {
-	    } else {
-		abort();
-	    }
+	    finish();
+	} catch (EndOfTokenStreamException e) {
+	    throw new PartDoesNotMatchException(this);
 	}
-	finish();
     }
 
     @Override
     public CodeRangeType getCodeRangeType() {
-	return CodeRangeType.FRAGMENT;
+	return CodeRangeType.METHOD;
     }
 
 }

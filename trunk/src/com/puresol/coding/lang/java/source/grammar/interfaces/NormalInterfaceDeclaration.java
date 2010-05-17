@@ -5,6 +5,7 @@ import com.puresol.coding.lang.java.AbstractJavaParser;
 import com.puresol.coding.lang.java.source.grammar.classes.TypeParameters;
 import com.puresol.coding.lang.java.source.keywords.InterfaceKeyword;
 import com.puresol.coding.lang.java.source.literals.Identifier;
+import com.puresol.parser.EndOfTokenStreamException;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
@@ -21,15 +22,18 @@ public class NormalInterfaceDeclaration extends AbstractJavaParser {
 
     @Override
     public void scan() throws PartDoesNotMatchException, ParserException {
-	acceptPart(InterfaceModifiers.class);
-	expectToken(InterfaceKeyword.class);
-	String name = getCurrentToken().getText();
-	expectToken(Identifier.class);
-	acceptPart(TypeParameters.class);
-	acceptPart(ExtendsInterfaces.class);
-	expectPart(InterfaceBody.class);
-
-	finish(name);
+	try {
+	    acceptPart(InterfaceModifiers.class);
+	    expectToken(InterfaceKeyword.class);
+	    String name = getCurrentToken().getText();
+	    expectToken(Identifier.class);
+	    acceptPart(TypeParameters.class);
+	    acceptPart(ExtendsInterfaces.class);
+	    expectPart(InterfaceBody.class);
+	    finish(name);
+	} catch (EndOfTokenStreamException e) {
+	    throw new PartDoesNotMatchException(this);
+	}
     }
 
     @Override

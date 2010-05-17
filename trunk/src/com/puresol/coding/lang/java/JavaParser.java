@@ -15,34 +15,34 @@ import com.puresol.parser.PartDoesNotMatchException;
  */
 public class JavaParser extends CompilationUnit {
 
-	private static final long serialVersionUID = -5271390812159304045L;
+    private static final long serialVersionUID = -5271390812159304045L;
 
-	@Override
-	public void scan() throws PartDoesNotMatchException, ParserException {
-		try {
-			moveToNextVisible(0);
-		} catch (EndOfTokenStreamException e) {
-			/*
-			 * this may happen if there is an empty file...
-			 */
-			return;
-		}
-		super.scan();
-		try {
-			moveToNextVisible(getCurrentPosition());
-			/*
-			 * There are some things left in files which do not fit there...
-			 */
-			throw new PartDoesNotMatchException(this);
-		} catch (EndOfTokenStreamException e) {
-			/*
-			 * This is expected, because we should at the end of the file... ;-)
-			 */
-		}
+    @Override
+    public void scan() throws PartDoesNotMatchException, ParserException {
+	try {
+	    moveToNextVisible(0);
+	} catch (EndOfTokenStreamException e) {
+	    /*
+	     * this may happen if there is an empty file...
+	     */
+	    return;
 	}
+	super.scan();
+	try {
+	    moveToNextVisible(getCurrentPosition());
+	    /*
+	     * There are some things left in files which do not fit there...
+	     */
+	    throw new PartDoesNotMatchException(this);
+	} catch (EndOfTokenStreamException e) {
+	    /*
+	     * This is expected, because we should at the end of the file... ;-)
+	     */
+	}
+    }
 
-	@Override
-	public CodeRangeType getCodeRangeType() {
-		return CodeRangeType.FILE;
-	}
+    @Override
+    public CodeRangeType getCodeRangeType() {
+	return CodeRangeType.FILE;
+    }
 }

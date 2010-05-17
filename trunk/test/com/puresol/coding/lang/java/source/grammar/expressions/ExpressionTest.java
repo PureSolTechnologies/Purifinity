@@ -13,7 +13,7 @@ public class ExpressionTest extends TestCase {
 	@Test
 	public void testAssignment() {
 		Assert.assertTrue(JavaGrammarTester.valid(
-				"a = -1.234e-1 * ( 1 + 2 ) / 2 - (1 / 2);", Expression.class));
+				"a = -1.234e-1 * ( 1 + 2 ) / 2 - (1 / 2)", Expression.class));
 	}
 
 }

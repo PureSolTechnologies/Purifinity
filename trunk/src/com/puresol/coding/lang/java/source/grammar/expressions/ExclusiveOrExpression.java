@@ -6,22 +6,30 @@ import com.puresol.coding.lang.java.source.symbols.Caret;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
+/**
+ * exclusiveOrExpression : andExpression ('^' andExpression )* ;
+ * 
+ * Fix: Chained exclusive ORs are allowed.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class ExclusiveOrExpression extends AbstractJavaParser {
 
-	private static final long serialVersionUID = 6464754895556318548L;
+    private static final long serialVersionUID = 6464754895556318548L;
 
-	@Override
-	public void scan() throws PartDoesNotMatchException, ParserException {
-		expectPart(AndExpression.class);
-		if (acceptToken(Caret.class) != null) {
-			expectPart(ExclusiveOrExpression.class);
-		}
-		finish();
+    @Override
+    public void scan() throws PartDoesNotMatchException, ParserException {
+	expectPart(AndExpression.class);
+	if (acceptToken(Caret.class) != null) {
+	    expectPart(ExclusiveOrExpression.class);
 	}
+	finish();
+    }
 
-	@Override
-	public CodeRangeType getCodeRangeType() {
-		return CodeRangeType.FRAGMENT;
-	}
+    @Override
+    public CodeRangeType getCodeRangeType() {
+	return CodeRangeType.FRAGMENT;
+    }
 
 }

@@ -8,21 +8,37 @@ import com.puresol.coding.lang.java.source.symbols.RCurlyBracket;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
+/**
+ * <pre>
+ * arrayInitializer 
+ *     :   '{' 
+ *             (variableInitializer
+ *                 (',' variableInitializer
+ *                 )*
+ *             )? 
+ *             (',')? 
+ *         '}'             //Yang's fix, position change.
+ *     ;
+ *</pre>
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class ArrayInitializer extends AbstractJavaParser {
 
-	private static final long serialVersionUID = 4903744780392938101L;
+    private static final long serialVersionUID = 4903744780392938101L;
 
-	@Override
-	public void scan() throws PartDoesNotMatchException, ParserException {
-		expectToken(LCurlyBracket.class);
-		acceptPart(VariableInitializers.class);
-		acceptToken(Comma.class);
-		expectToken(RCurlyBracket.class);
-		finish();
-	}
+    @Override
+    public void scan() throws PartDoesNotMatchException, ParserException {
+	expectToken(LCurlyBracket.class);
+	acceptPart(VariableInitializers.class);
+	acceptToken(Comma.class);
+	expectToken(RCurlyBracket.class);
+	finish();
+    }
 
-	@Override
-	public CodeRangeType getCodeRangeType() {
-		return CodeRangeType.FRAGMENT;
-	}
+    @Override
+    public CodeRangeType getCodeRangeType() {
+	return CodeRangeType.FRAGMENT;
+    }
 }

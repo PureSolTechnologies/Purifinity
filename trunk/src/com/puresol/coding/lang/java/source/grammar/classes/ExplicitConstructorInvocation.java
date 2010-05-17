@@ -29,7 +29,7 @@ public class ExplicitConstructorInvocation extends AbstractJavaParser {
     @Override
     public void scan() throws PartDoesNotMatchException, ParserException {
 	try {
-	    acceptPart(NonWildTypeArguments.class);
+	    acceptPart(NonWildcardTypeArguments.class);
 	    if (acceptToken(SuperKeyword.class) != null) {
 	    } else if (acceptToken(ThisKeyword.class) != null) {
 	    } else {
@@ -42,7 +42,7 @@ public class ExplicitConstructorInvocation extends AbstractJavaParser {
 	} catch (PartDoesNotMatchException e) {
 	    expectPart(Primary.class);
 	    expectToken(Dot.class);
-	    acceptPart(NonWildTypeArguments.class);
+	    acceptPart(NonWildcardTypeArguments.class);
 	    expectToken(SuperKeyword.class);
 	    expectPart(Arguments.class);
 	    expectToken(Semicolon.class);

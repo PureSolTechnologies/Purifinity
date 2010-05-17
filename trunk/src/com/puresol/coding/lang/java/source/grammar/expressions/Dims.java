@@ -2,8 +2,6 @@ package com.puresol.coding.lang.java.source.grammar.expressions;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.java.AbstractJavaParser;
-import com.puresol.coding.lang.java.source.symbols.LRectBracket;
-import com.puresol.coding.lang.java.source.symbols.RRectBracket;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
@@ -19,11 +17,9 @@ public class Dims extends AbstractJavaParser {
 
     @Override
     public void scan() throws PartDoesNotMatchException, ParserException {
-	expectToken(LRectBracket.class);
-	expectToken(RRectBracket.class);
-	while (acceptToken(LRectBracket.class) != null) {
-	    expectToken(RRectBracket.class);
-	}
+	expectPart(Dim.class);
+	while (acceptPart(Dim.class) != null)
+	    ;
 	finish();
     }
 

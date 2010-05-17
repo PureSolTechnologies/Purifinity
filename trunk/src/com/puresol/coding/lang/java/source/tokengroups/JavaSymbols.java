@@ -38,6 +38,7 @@ import com.puresol.coding.lang.java.source.symbols.Minus;
 import com.puresol.coding.lang.java.source.symbols.MinusAssign;
 import com.puresol.coding.lang.java.source.symbols.MinusMinus;
 import com.puresol.coding.lang.java.source.symbols.PercentAssign;
+import com.puresol.coding.lang.java.source.symbols.Tilde;
 import com.puresol.coding.lang.java.source.symbols.TraditionalComment;
 import com.puresol.coding.lang.java.source.symbols.Not;
 import com.puresol.coding.lang.java.source.symbols.Percent;
@@ -111,6 +112,7 @@ public class JavaSymbols {
 	DEFINITIONS.add(Star.class);
 	DEFINITIONS.add(Percent.class);
 	DEFINITIONS.add(BackSlash.class);
+	DEFINITIONS.add(Tilde.class);
 
 	DEFINITIONS.add(Ampersand.class);
 	DEFINITIONS.add(LogicalAnd.class);

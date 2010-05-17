@@ -6,6 +6,12 @@ import com.puresol.coding.lang.java.source.symbols.Comma;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
+/**
+ * expressionList : expression (',' expression )* ;
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class ExpressionList extends AbstractJavaParser {
 
     private static final long serialVersionUID = 6464754895556318548L;

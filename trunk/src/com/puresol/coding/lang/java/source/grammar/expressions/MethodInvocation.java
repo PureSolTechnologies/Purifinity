@@ -2,7 +2,7 @@ package com.puresol.coding.lang.java.source.grammar.expressions;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.java.AbstractJavaParser;
-import com.puresol.coding.lang.java.source.grammar.classes.NonWildTypeArguments;
+import com.puresol.coding.lang.java.source.grammar.classes.NonWildcardTypeArguments;
 import com.puresol.coding.lang.java.source.grammar.types_values_variables.QualifiedName;
 import com.puresol.coding.lang.java.source.keywords.SuperKeyword;
 import com.puresol.coding.lang.java.source.literals.Identifier;
@@ -24,14 +24,14 @@ public class MethodInvocation extends AbstractJavaParser {
 			expectToken(RParen.class);
 		} else if (acceptPart(Primary.class) != null) {
 			expectToken(Dot.class);
-			acceptPart(NonWildTypeArguments.class);
+			acceptPart(NonWildcardTypeArguments.class);
 			expectToken(Identifier.class);
 			expectToken(LParen.class);
 			acceptPart(ExpressionList.class);
 			expectToken(RParen.class);
 		} else if (acceptToken(SuperKeyword.class) != null) {
 			expectToken(Dot.class);
-			acceptPart(NonWildTypeArguments.class);
+			acceptPart(NonWildcardTypeArguments.class);
 			expectToken(Identifier.class);
 			expectToken(LParen.class);
 			acceptPart(ExpressionList.class);
@@ -40,14 +40,14 @@ public class MethodInvocation extends AbstractJavaParser {
 			expectToken(Dot.class);
 			expectToken(SuperKeyword.class);
 			expectToken(Dot.class);
-			acceptPart(NonWildTypeArguments.class);
+			acceptPart(NonWildcardTypeArguments.class);
 			expectToken(Identifier.class);
 			expectToken(LParen.class);
 			acceptPart(ExpressionList.class);
 			expectToken(RParen.class);
 		} else if (acceptPart(QualifiedName.class) != null) {
 			expectToken(Dot.class);
-			expectPart(NonWildTypeArguments.class);
+			expectPart(NonWildcardTypeArguments.class);
 			expectToken(Identifier.class);
 			expectToken(LParen.class);
 			acceptPart(ExpressionList.class);

@@ -21,7 +21,7 @@ public class LocalVariableDeclaration extends AbstractJavaParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		expectPart(VariableModifiers.class);
+		acceptPart(VariableModifiers.class);
 		expectPart(Type.class);
 		expectPart(VariableDeclarators.class);
 		finish();

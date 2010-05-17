@@ -7,21 +7,27 @@ import com.puresol.coding.lang.java.source.symbols.Colon;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
+/**
+ * IDENTIFIER ':' statement
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class LabeledStatement extends AbstractJavaParser {
 
-	private static final long serialVersionUID = 1202904051316374607L;
+    private static final long serialVersionUID = 1202904051316374607L;
 
-	@Override
-	public void scan() throws PartDoesNotMatchException, ParserException {
-		expectToken(Identifier.class);
-		expectToken(Colon.class);
-		expectPart(Statement.class);
-		finish();
-	}
+    @Override
+    public void scan() throws PartDoesNotMatchException, ParserException {
+	expectToken(Identifier.class);
+	expectToken(Colon.class);
+	expectPart(Statement.class);
+	finish();
+    }
 
-	@Override
-	public CodeRangeType getCodeRangeType() {
-		return CodeRangeType.FRAGMENT;
-	}
+    @Override
+    public CodeRangeType getCodeRangeType() {
+	return CodeRangeType.FRAGMENT;
+    }
 
 }

@@ -52,7 +52,6 @@ public class Statement extends AbstractJavaParser {
 		} else if (acceptPart(WhileStatement.class) != null) {
 		} else if (acceptPart(DoStatement.class) != null) {
 		} else if (acceptPart(TryStatement.class) != null) {
-			// TODO: proceed here!!!
 		} else if (acceptPart(SwitchStatement.class) != null) {
 		} else if (acceptPart(SynchronizedStatement.class) != null) {
 		} else if (acceptPart(ReturnStatement.class) != null) {

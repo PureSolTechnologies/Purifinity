@@ -2,7 +2,7 @@ package com.puresol.coding.lang.java.source.grammar.expressions;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.java.AbstractJavaParser;
-import com.puresol.coding.lang.java.source.grammar.classes.NonWildTypeArguments;
+import com.puresol.coding.lang.java.source.grammar.classes.NonWildcardTypeArguments;
 import com.puresol.coding.lang.java.source.literals.Identifier;
 import com.puresol.coding.lang.java.source.symbols.Dot;
 import com.puresol.coding.lang.java.source.symbols.LParen;
@@ -17,7 +17,7 @@ public class SingleMethodInvocation extends AbstractJavaParser {
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
 		expectToken(Dot.class);
-		acceptPart(NonWildTypeArguments.class);
+		acceptPart(NonWildcardTypeArguments.class);
 		expectToken(Identifier.class);
 		expectToken(LParen.class);
 		acceptPart(ExpressionList.class);

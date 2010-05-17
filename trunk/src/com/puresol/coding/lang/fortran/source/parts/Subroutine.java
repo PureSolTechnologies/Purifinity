@@ -7,36 +7,41 @@ import com.puresol.coding.lang.fortran.AbstractFortranParser;
 import com.puresol.coding.lang.fortran.source.keywords.EndKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.EndSubroutineKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.SubroutineKeyword;
+import com.puresol.parser.EndOfTokenStreamException;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
 public class Subroutine extends AbstractFortranParser {
 
-	private static final long serialVersionUID = -8790882661090444385L;
+    private static final long serialVersionUID = -8790882661090444385L;
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public void scan() throws PartDoesNotMatchException, ParserException {
-		expectToken(SubroutineKeyword.class);
+    @SuppressWarnings("unchecked")
+    @Override
+    public void scan() throws PartDoesNotMatchException, ParserException {
+	try {
+	    expectToken(SubroutineKeyword.class);
 
-		String name = getCurrentToken().getText();
-		expectToken(name);
+	    String name = getCurrentToken().getText();
+	    expectToken(name);
 
-		if (isToken(LParen.class)) {
-			skipNested(LParen.class, RParen.class);
-		}
+	    if (isToken(LParen.class)) {
+		skipNested(LParen.class, RParen.class);
+	    }
 
-		// TODO read here the code...
-		skipTo(EndKeyword.class, EndSubroutineKeyword.class);
+	    // TODO read here the code...
+	    skipTo(EndKeyword.class, EndSubroutineKeyword.class);
 
-		expectToken(EndKeyword.class, EndSubroutineKeyword.class);
-		acceptToken(name);
+	    expectToken(EndKeyword.class, EndSubroutineKeyword.class);
+	    acceptToken(name);
 
-		finish(name);
+	    finish(name);
+	} catch (EndOfTokenStreamException e) {
+	    throw new PartDoesNotMatchException(this);
 	}
+    }
 
-	@Override
-	public CodeRangeType getCodeRangeType() {
-		return CodeRangeType.SUBROUTINE;
-	}
+    @Override
+    public CodeRangeType getCodeRangeType() {
+	return CodeRangeType.SUBROUTINE;
+    }
 }

@@ -7,35 +7,40 @@ import com.puresol.coding.lang.fortran.AbstractFortranParser;
 import com.puresol.coding.lang.fortran.source.keywords.EndFunctionKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.EndKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.FunctionKeyword;
+import com.puresol.parser.EndOfTokenStreamException;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
 public class Function extends AbstractFortranParser {
 
-	private static final long serialVersionUID = -3467867032565700073L;
+    private static final long serialVersionUID = -3467867032565700073L;
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public void scan() throws PartDoesNotMatchException, ParserException {
-		acceptPart(VariableType.class);
-		expectToken(FunctionKeyword.class);
+    @SuppressWarnings("unchecked")
+    @Override
+    public void scan() throws PartDoesNotMatchException, ParserException {
+	try {
+	    acceptPart(VariableType.class);
+	    expectToken(FunctionKeyword.class);
 
-		String name = getCurrentToken().getText();
-		expectToken(name);
+	    String name = getCurrentToken().getText();
+	    expectToken(name);
 
-		skipNested(LParen.class, RParen.class);
+	    skipNested(LParen.class, RParen.class);
 
-		// TODO read here the code...
-		skipTo(EndKeyword.class, EndFunctionKeyword.class);
+	    // TODO read here the code...
+	    skipTo(EndKeyword.class, EndFunctionKeyword.class);
 
-		expectToken(EndKeyword.class, EndFunctionKeyword.class);
-		acceptToken(name);
+	    expectToken(EndKeyword.class, EndFunctionKeyword.class);
+	    acceptToken(name);
 
-		finish(name);
+	    finish(name);
+	} catch (EndOfTokenStreamException e) {
+	    throw new PartDoesNotMatchException(this);
 	}
+    }
 
-	@Override
-	public CodeRangeType getCodeRangeType() {
-		return CodeRangeType.FUNCTION;
-	}
+    @Override
+    public CodeRangeType getCodeRangeType() {
+	return CodeRangeType.FUNCTION;
+    }
 }

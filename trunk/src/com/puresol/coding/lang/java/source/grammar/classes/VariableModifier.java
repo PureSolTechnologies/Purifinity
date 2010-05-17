@@ -8,7 +8,7 @@ import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
 /**
- * variableModifiers : ( 'final' | annotation )* ;
+ * variableModifiers : 'final' | annotation ;
  * 
  * @author Rick-Rainer Ludwig
  * 

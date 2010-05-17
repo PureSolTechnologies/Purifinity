@@ -3,6 +3,7 @@ package com.puresol.parser;
 import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * TokenStream is a special kind of stream for processing of text inputs. The
@@ -14,130 +15,134 @@ import java.util.ArrayList;
  */
 public final class TokenStream implements Serializable {
 
-	private static final long serialVersionUID = -4128486002145990691L;
+    private static final long serialVersionUID = -4128486002145990691L;
 
-	private final File file;
-	private final ArrayList<Token> tokens = new ArrayList<Token>();
+    private final File file;
+    private final List<Token> tokens = new ArrayList<Token>();
 
-	public TokenStream(File file) {
-		this.file = file;
+    public TokenStream(File file) {
+	this.file = file;
+    }
+
+    public final File getFile() {
+	return file;
+    }
+
+    public final List<Token> getTokens() {
+	return tokens;
+    }
+
+    public final void addToken(Token token) {
+	tokens.add(token);
+    }
+
+    public final Token get(int index) {
+	if ((index >= tokens.size()) || (index < 0)) {
+	    return null;
 	}
+	return tokens.get(index);
+    }
 
-	public File getFile() {
-		return file;
+    public TokenStreamReader getIterator() {
+	return new TokenStreamReader(this);
+    }
+    
+    public int getFirstVisbleTokenID() throws NoMatchingTokenException {
+	for (int index = 0; index < tokens.size(); index++) {
+	    if (get(index).getPublicity() != TokenPublicity.HIDDEN) {
+		return index;
+	    }
 	}
+	throw new NoMatchingTokenException();
+    }
 
-	public ArrayList<Token> getTokens() {
-		return tokens;
+    public int getSize() {
+	return tokens.size();
+    }
+
+    public Token findPreviousToken(int tokenID) throws NoMatchingTokenException {
+	if (tokenID <= 0) {
+	    throw new NoMatchingTokenException();
 	}
-
-	public void addToken(Token token) {
-		tokens.add(token);
-	}
-
-	public Token get(int index) {
-		if ((index >= tokens.size()) || (index < 0)) {
-			return null;
-		}
-		return tokens.get(index);
-	}
-
-	public int getFirstVisbleTokenID() throws NoMatchingTokenException {
-		for (int index = 0; index < tokens.size(); index++) {
-			if (get(index).getPublicity() != TokenPublicity.HIDDEN) {
-				return index;
-			}
-		}
+	int position = tokenID - 1;
+	while (get(position).getPublicity() == TokenPublicity.HIDDEN) {
+	    if (position == 0) {
 		throw new NoMatchingTokenException();
+	    }
+	    position--;
 	}
+	return get(position);
+    }
 
-	public int getSize() {
-		return tokens.size();
+    public Token findNextToken(int tokenID) throws NoMatchingTokenException {
+	if (tokenID >= getSize() - 1) {
+	    throw new NoMatchingTokenException();
 	}
+	int position = tokenID + 1;
+	while (get(position).getPublicity() == TokenPublicity.HIDDEN) {
+	    if (position >= getSize() - 1) {
+		throw new NoMatchingTokenException();
+	    }
+	    position++;
+	}
+	return get(position);
+    }
 
-	public Token findPreviousToken(int tokenID) throws NoMatchingTokenException {
-		if (tokenID <= 0) {
-			throw new NoMatchingTokenException();
+    public TokenStream getLineStream(int line) {
+	TokenStream tokenStream = new TokenStream(getFile());
+	int tokenID = 0;
+	for (Token token : tokens) {
+	    if ((token.getStartLine() <= line) && (token.getStopLine() >= line)) {
+		if ((token.getStopLine() != line)
+			|| (!token.getText().endsWith("\n"))) {
+		    Token lineToken = Token.createWithNewID(token, tokenID);
+		    tokenStream.addToken(lineToken);
+		    tokenID++;
 		}
-		int position = tokenID - 1;
-		while (get(position).getPublicity() == TokenPublicity.HIDDEN) {
-			if (position == 0) {
-				throw new NoMatchingTokenException();
-			}
-			position--;
-		}
-		return get(position);
+	    }
 	}
+	return tokenStream;
+    }
 
-	public Token findNextToken(int tokenID) throws NoMatchingTokenException {
-		if (tokenID >= getSize() - 1) {
-			throw new NoMatchingTokenException();
-		}
-		int position = tokenID + 1;
-		while (get(position).getPublicity() == TokenPublicity.HIDDEN) {
-			if (position >= getSize() - 1) {
-				throw new NoMatchingTokenException();
-			}
-			position++;
-		}
-		return get(position);
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+	final int prime = 31;
+	int result = 1;
+	result = prime * result + ((file == null) ? 0 : file.hashCode());
+	result = prime * result + ((tokens == null) ? 0 : tokens.hashCode());
+	return result;
+    }
 
-	public TokenStream getLineStream(int line) {
-		TokenStream tokenStream = new TokenStream(getFile());
-		int tokenID = 0;
-		for (Token token : tokens) {
-			if ((token.getStartLine() <= line) && (token.getStopLine() >= line)) {
-				if ((token.getStopLine() != line)
-						|| (!token.getText().endsWith("\n"))) {
-					Token lineToken = Token.createWithNewID(token, tokenID);
-					tokenStream.addToken(lineToken);
-					tokenID++;
-				}
-			}
-		}
-		return tokenStream;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((file == null) ? 0 : file.hashCode());
-		result = prime * result + ((tokens == null) ? 0 : tokens.hashCode());
-		return result;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		TokenStream other = (TokenStream) obj;
-		if (file == null) {
-			if (other.file != null)
-				return false;
-		} else if (!file.equals(other.file))
-			return false;
-		if (tokens == null) {
-			if (other.tokens != null)
-				return false;
-		} else if (!tokens.equals(other.tokens))
-			return false;
-		return true;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+	if (this == obj)
+	    return true;
+	if (obj == null)
+	    return false;
+	if (getClass() != obj.getClass())
+	    return false;
+	TokenStream other = (TokenStream) obj;
+	if (file == null) {
+	    if (other.file != null)
+		return false;
+	} else if (!file.equals(other.file))
+	    return false;
+	if (tokens == null) {
+	    if (other.tokens != null)
+		return false;
+	} else if (!tokens.equals(other.tokens))
+	    return false;
+	return true;
+    }
 
 }

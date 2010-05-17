@@ -11,26 +11,33 @@ import com.puresol.coding.lang.java.source.literals.StringLiteral;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
+/**
+ * literal : INTLITERAL | LONGLITERAL | FLOATLITERAL | DOUBLELITERAL |
+ * CHARLITERAL | STRINGLITERAL | TRUE | FALSE | NULL ;
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class Literal extends AbstractJavaParser {
 
-	private static final long serialVersionUID = 6464754895556318548L;
+    private static final long serialVersionUID = 6464754895556318548L;
 
-	@Override
-	public void scan() throws PartDoesNotMatchException, ParserException {
-		if (acceptToken(IntegerLiteral.class) != null) {
-		} else if (acceptToken(FloatingPointLiteral.class) != null) {
-		} else if (acceptToken(BooleanLiteral.class) != null) {
-		} else if (acceptToken(CharacterLiteral.class) != null) {
-		} else if (acceptToken(StringLiteral.class) != null) {
-		} else {
-			expectToken(NullLiteral.class);
-		}
-		finish();
+    @Override
+    public void scan() throws PartDoesNotMatchException, ParserException {
+	if (acceptToken(IntegerLiteral.class) != null) {
+	} else if (acceptToken(FloatingPointLiteral.class) != null) {
+	} else if (acceptToken(BooleanLiteral.class) != null) {
+	} else if (acceptToken(CharacterLiteral.class) != null) {
+	} else if (acceptToken(StringLiteral.class) != null) {
+	} else {
+	    expectToken(NullLiteral.class);
 	}
+	finish();
+    }
 
-	@Override
-	public CodeRangeType getCodeRangeType() {
-		return CodeRangeType.FRAGMENT;
-	}
+    @Override
+    public CodeRangeType getCodeRangeType() {
+	return CodeRangeType.FRAGMENT;
+    }
 
 }

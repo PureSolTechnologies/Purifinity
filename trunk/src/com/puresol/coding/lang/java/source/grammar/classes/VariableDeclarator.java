@@ -8,6 +8,7 @@ import com.puresol.coding.lang.java.AbstractJavaParser;
 import com.puresol.coding.lang.java.source.grammar.expressions.Dims;
 import com.puresol.coding.lang.java.source.grammar.types_values_variables.Type;
 import com.puresol.coding.lang.java.source.literals.Identifier;
+import com.puresol.parser.EndOfTokenStreamException;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
@@ -23,13 +24,17 @@ public class VariableDeclarator extends AbstractJavaParser {
 
     @Override
     public void scan() throws PartDoesNotMatchException, ParserException {
-	String name = getCurrentToken().getText();
-	expectToken(Identifier.class);
-	acceptPart(Dims.class);
-	if (acceptToken(Assign.class) != null) {
-	    expectPart(VariableInitializer.class);
+	try {
+	    String name = getCurrentToken().getText();
+	    expectToken(Identifier.class);
+	    acceptPart(Dims.class);
+	    if (acceptToken(Assign.class) != null) {
+		expectPart(VariableInitializer.class);
+	    }
+	    finish(name);
+	} catch (EndOfTokenStreamException e) {
+	    throw new PartDoesNotMatchException(this);
 	}
-	finish(name);
     }
 
     @Override

@@ -17,23 +17,43 @@ import com.puresol.coding.lang.java.source.symbols.SlashAssign;
 import com.puresol.coding.lang.java.source.symbols.StarAssign;
 import com.puresol.parser.TokenDefinition;
 
+/**
+ * <pre>
+ * assignmentOperator 
+ *     :   '='
+ *     |   '+='
+ *     |   '-='
+ *     |   '*='
+ *     |   '/='
+ *     |   '&='
+ *     |   '|='
+ *     |   '^='
+ *     |   '%='
+ *     |    '<' '<' '='
+ *     |    '>' '>' '>' '='
+ *     |    '>' '>' '='
+ *     ;
+ * </pre>
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class AssignmentOperators {
 
     public static final List<Class<? extends TokenDefinition>> DEFINITIONS = new ArrayList<Class<? extends TokenDefinition>>();
     static {
 	DEFINITIONS.add(Assign.class);
-	DEFINITIONS.add(StarAssign.class);
-	DEFINITIONS.add(SlashAssign.class);
-	DEFINITIONS.add(PercentAssign.class);
 	DEFINITIONS.add(PlusAssign.class);
 	DEFINITIONS.add(MinusAssign.class);
-	DEFINITIONS.add(LessThanLessThanAssign.class);
-	DEFINITIONS.add(GreaterThanGreaterThanAssign.class);
-	DEFINITIONS.add(GreaterThanGreaterThanGreaterThanAssign.class);
+	DEFINITIONS.add(StarAssign.class);
+	DEFINITIONS.add(SlashAssign.class);
 	DEFINITIONS.add(AmpersandAssign.class);
-	DEFINITIONS.add(CaretAssign.class);
 	DEFINITIONS.add(BitOrAssign.class);
-
+	DEFINITIONS.add(CaretAssign.class);
+	DEFINITIONS.add(PercentAssign.class);
+	DEFINITIONS.add(LessThanLessThanAssign.class);
+	DEFINITIONS.add(GreaterThanGreaterThanGreaterThanAssign.class);
+	DEFINITIONS.add(GreaterThanGreaterThanAssign.class);
     }
 
 }

@@ -5,21 +5,26 @@ import com.puresol.coding.lang.java.AbstractJavaParser;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
+/**
+ * switchBlockStatementGroups : (switchBlockStatementGroup )* ;
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class SwitchBlockStatementGroups extends AbstractJavaParser {
 
-	private static final long serialVersionUID = 1202904051316374607L;
+    private static final long serialVersionUID = 1202904051316374607L;
 
-	@Override
-	public void scan() throws PartDoesNotMatchException, ParserException {
-		expectPart(SwitchBlockStatementGroup.class);
-		while (acceptPart(SwitchBlockStatementGroup.class) != null) {
-		}
-		finish();
-	}
+    @Override
+    public void scan() throws PartDoesNotMatchException, ParserException {
+	while (acceptPart(SwitchBlockStatementGroup.class) != null)
+	    ;
+	finish();
+    }
 
-	@Override
-	public CodeRangeType getCodeRangeType() {
-		return CodeRangeType.FRAGMENT;
-	}
+    @Override
+    public CodeRangeType getCodeRangeType() {
+	return CodeRangeType.FRAGMENT;
+    }
 
 }

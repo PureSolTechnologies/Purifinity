@@ -6,19 +6,40 @@ import com.puresol.coding.lang.java.source.tokengroups.AssignmentOperators;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
+/**
+ * <pre>
+ * assignmentOperator 
+ *     :   '='
+ *     |   '+='
+ *     |   '-='
+ *     |   '*='
+ *     |   '/='
+ *     |   '&='
+ *     |   '|='
+ *     |   '^='
+ *     |   '%='
+ *     |    '<' '<' '='
+ *     |    '>' '>' '>' '='
+ *     |    '>' '>' '='
+ *     ;
+ * </pre>
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class AssignmentOperator extends AbstractJavaParser {
 
-	private static final long serialVersionUID = 6464754895556318548L;
+    private static final long serialVersionUID = 6464754895556318548L;
 
-	@Override
-	public void scan() throws PartDoesNotMatchException, ParserException {
-		expectOneTokenOf(AssignmentOperators.DEFINITIONS);
-		finish();
-	}
+    @Override
+    public void scan() throws PartDoesNotMatchException, ParserException {
+	expectOneTokenOf(AssignmentOperators.DEFINITIONS);
+	finish();
+    }
 
-	@Override
-	public CodeRangeType getCodeRangeType() {
-		return CodeRangeType.FRAGMENT;
-	}
+    @Override
+    public CodeRangeType getCodeRangeType() {
+	return CodeRangeType.FRAGMENT;
+    }
 
 }
