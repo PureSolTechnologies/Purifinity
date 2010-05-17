@@ -1,7 +1,6 @@
 package com.puresol.coding.lang.cpp;
 
 import com.puresol.coding.analysis.CodeRangeType;
-import com.puresol.parser.EndOfTokenStreamException;
 import com.puresol.parser.PartDoesNotMatchException;
 
 public class CPPParser extends AbstractCPPParser {
@@ -10,13 +9,8 @@ public class CPPParser extends AbstractCPPParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException {
-		try {
-			moveToNextVisible(0);
-			// TODO
-		} catch (EndOfTokenStreamException e) {
-			// this may happen if there is an empty file...
-			return;
-		}
+		moveToNextProcessibleToken(0);
+		// TODO
 		finish(getFile().getName());
 	}
 

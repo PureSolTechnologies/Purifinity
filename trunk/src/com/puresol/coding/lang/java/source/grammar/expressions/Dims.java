@@ -13,19 +13,19 @@ import com.puresol.parser.PartDoesNotMatchException;
  */
 public class Dims extends AbstractJavaParser {
 
-    private static final long serialVersionUID = 6464754895556318548L;
+	private static final long serialVersionUID = 6464754895556318548L;
 
-    @Override
-    public void scan() throws PartDoesNotMatchException, ParserException {
-	expectPart(Dim.class);
-	while (acceptPart(Dim.class) != null)
-	    ;
-	finish();
-    }
+	@Override
+	public void scan() throws PartDoesNotMatchException, ParserException {
+		expectPart(Dim.class);
+		while (acceptPart(Dim.class) != null)
+			;
+		finish();
+	}
 
-    @Override
-    public CodeRangeType getCodeRangeType() {
-	return CodeRangeType.FRAGMENT;
-    }
+	@Override
+	public CodeRangeType getCodeRangeType() {
+		return CodeRangeType.FRAGMENT;
+	}
 
 }

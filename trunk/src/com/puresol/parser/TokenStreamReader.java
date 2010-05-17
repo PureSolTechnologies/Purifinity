@@ -1,43 +1,64 @@
 package com.puresol.parser;
 
-public class TokenStreamReader {
+import java.io.Serializable;
 
-    private final TokenStream tokenStream;
-    private int currentPosition = 0;
+public final class TokenStreamReader implements Serializable {
 
-    public TokenStreamReader(TokenStream tokenStream) {
-	this.tokenStream = tokenStream;
-    }
+	private static final long serialVersionUID = -3522940623822464768L;
 
-    public int getCurrentPosition() {
-	return currentPosition;
-    }
+	private final TokenStream tokenStream;
+	private int position = 0;
 
-    public int getSize() {
-	return tokenStream.getSize();
-    }
-
-    public boolean hasNext() {
-	return currentPosition < (tokenStream.getSize() - 1);
-    }
-
-    public boolean hasPrevious() {
-	return currentPosition > 0;
-    }
-
-    public Token next() {
-	if (!hasNext()) {
-	    throw new IllegalStateException();
+	public TokenStreamReader(TokenStream tokenStream) {
+		this.tokenStream = tokenStream;
 	}
-	currentPosition++;
-	return tokenStream.get(currentPosition);
-    }
 
-    public Token previous() {
-	if (!hasPrevious()) {
-	    throw new IllegalStateException();
+	public TokenStreamReader(TokenStream tokenStream, int position) {
+		this.tokenStream = tokenStream;
+		if ((position < 0) || (position > tokenStream.getSize())) {
+			throw new IllegalArgumentException(
+					"Initial position of TokenStream is out of range!");
+		}
+		this.position = position;
 	}
-	currentPosition--;
-	return tokenStream.get(currentPosition);
-    }
+
+	public final int getPosition() {
+		return position;
+	}
+
+	public final int getSize() {
+		return tokenStream.getSize();
+	}
+
+	public final boolean canGoForward() {
+		return position < (tokenStream.getSize());
+	}
+
+	public final boolean canGoBackward() {
+		return position > 0;
+	}
+
+	public final Token forward() {
+		if (!canGoForward()) {
+			throw new IllegalStateException();
+		}
+		position++;
+		return tokenStream.get(position);
+	}
+
+	public final Token backward() {
+		if (!canGoBackward()) {
+			throw new IllegalStateException();
+		}
+		position--;
+		return tokenStream.get(position);
+	}
+
+	public final boolean isEOS() {
+		return (position >= tokenStream.getSize());
+	}
+
+	public final Token getToken() {
+		return tokenStream.get(position);
+	}
 }

@@ -14,9 +14,11 @@ import com.puresol.coding.lang.java.source.grammar.JavaGrammarTester;
  */
 public class DimsTest extends TestCase {
 
-    @Test
-    public void testValids() {
-	assertTrue(JavaGrammarTester.valid("[]", Dims.class));
-    }
+	@Test
+	public void testValids() {
+//		assertTrue(JavaGrammarTester.valid("[]", Dims.class));
+//		assertTrue(JavaGrammarTester.valid("[][]", Dims.class));
+		assertTrue(JavaGrammarTester.valid("[][][]", Dims.class));
+	}
 
 }

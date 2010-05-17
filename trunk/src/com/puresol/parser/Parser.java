@@ -25,7 +25,7 @@ public interface Parser extends Serializable {
 	 * 
 	 * @return
 	 */
-	public int getNumberOfTokens();
+	public int getTokenCount();
 
 	public int getStartPosition();
 
