@@ -31,6 +31,6 @@ public class TypeBound extends AbstractJavaParser {
     }
 
     public String getVariableTypeName() {
-	return getContinuousText();
+	return getVisibleText();
     }
 }

@@ -34,6 +34,6 @@ public class Type extends AbstractJavaParser {
     }
 
     public String getVariableTypeName() {
-	return getContinuousText();
+	return getVisibleText();
     }
 }

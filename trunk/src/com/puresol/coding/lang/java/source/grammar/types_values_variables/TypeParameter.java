@@ -32,6 +32,6 @@ public class TypeParameter extends AbstractJavaParser {
     }
 
     public String getVariableTypeName() {
-	return getContinuousText();
+	return getVisibleText();
     }
 }

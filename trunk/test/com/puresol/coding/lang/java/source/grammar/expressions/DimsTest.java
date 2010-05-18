@@ -16,8 +16,8 @@ public class DimsTest extends TestCase {
 
 	@Test
 	public void testValids() {
-//		assertTrue(JavaGrammarTester.valid("[]", Dims.class));
-//		assertTrue(JavaGrammarTester.valid("[][]", Dims.class));
+		assertTrue(JavaGrammarTester.valid("[]", Dims.class));
+		assertTrue(JavaGrammarTester.valid("[][]", Dims.class));
 		assertTrue(JavaGrammarTester.valid("[][][]", Dims.class));
 	}
 

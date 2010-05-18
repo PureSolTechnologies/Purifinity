@@ -17,7 +17,7 @@ public interface Parser extends Serializable {
 
 	public String getText();
 
-	public String getContinuousText();
+	public String getVisibleText();
 
 	/**
 	 * This method returns the current number of tokens within this parser

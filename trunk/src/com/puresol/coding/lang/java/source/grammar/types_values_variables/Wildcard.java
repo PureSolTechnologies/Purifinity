@@ -29,6 +29,6 @@ public class Wildcard extends AbstractJavaParser {
     }
 
     public String getVariableTypeName() {
-	return getContinuousText();
+	return getVisibleText();
     }
 }

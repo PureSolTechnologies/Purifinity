@@ -34,6 +34,6 @@ public class WildcardBounds extends AbstractJavaParser {
     }
 
     public String getVariableTypeName() {
-	return getContinuousText();
+	return getVisibleText();
     }
 }

@@ -29,6 +29,6 @@ public class PrimitiveType extends AbstractJavaParser {
     }
 
     public String getVariableTypeName() {
-	return getContinuousText();
+	return getVisibleText();
     }
 }
