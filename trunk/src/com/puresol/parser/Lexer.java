@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import com.puresol.exceptions.StrangeSituationException;
 import com.puresol.utils.ClassInstantiationException;
 import com.puresol.utils.Instances;
 
@@ -75,9 +76,14 @@ public class Lexer {
 
 	private final synchronized void createOutputStream()
 			throws NoMatchingTokenDefinitionFound {
-		if (outputStream == null) {
-			outputStream = LexerEngine.process(inputStream, tokenDefinitions);
-			outputStream.lock();
+		try {
+			if (outputStream == null) {
+				outputStream = LexerEngine.process(inputStream,
+						tokenDefinitions);
+				outputStream.lock();
+			}
+		} catch (TokenException e) {
+			throw new StrangeSituationException("Could not lock token stream!");
 		}
 	}
 }

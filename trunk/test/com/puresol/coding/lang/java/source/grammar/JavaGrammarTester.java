@@ -12,62 +12,62 @@ import com.puresol.utils.di.Injection;
 
 public class JavaGrammarTester {
 
-    public static boolean valid(String string,
-	    Class<? extends Parser> grammarPart) {
-	return new JavaGrammarTester(string, grammarPart).valid();
-    }
-
-    public static boolean invalid(String string,
-	    Class<? extends Parser> grammarPart) {
-	return new JavaGrammarTester(string, grammarPart).invalid();
-    }
-
-    private final String string;
-    private final Class<? extends Parser> grammarPart;
-
-    private JavaGrammarTester(String string, Class<? extends Parser> grammarPart) {
-	this.string = string;
-	this.grammarPart = grammarPart;
-    }
-
-    private boolean valid() {
-	try {
-	    JavaLexer lexer = new JavaLexer(getClass().getSimpleName(), string);
-	    DIClassBuilder classBuilder = DIClassBuilder
-		    .forInjections(Injection.named("TokenStream", lexer
-			    .getTokenStream()));
-	    Parser parser = classBuilder.createInstance(grammarPart);
-	    parser.scan();
-	    return parser.getText().equals(string);
-	} catch (LexerException e) {
-	    e.printStackTrace();
-	} catch (PartDoesNotMatchException e) {
-	    e.printStackTrace();
-	} catch (ParserException e) {
-	    e.printStackTrace();
-	} catch (NoMatchingTokenDefinitionFound e) {
-	    e.printStackTrace();
-	} catch (ClassInstantiationException e) {
-	    e.printStackTrace();
+	public static boolean valid(String string,
+			Class<? extends Parser> grammarPart) {
+		return new JavaGrammarTester(string, grammarPart).valid();
 	}
-	return false;
-    }
 
-    private boolean invalid() {
-	try {
-	    JavaLexer lexer = new JavaLexer(getClass().getSimpleName(), string);
-	    DIClassBuilder classBuilder = DIClassBuilder
-		    .forInjections(Injection.named("TokenStream", lexer
-			    .getTokenStream()));
-	    Parser parser = classBuilder.createInstance(grammarPart);
-	    parser.scan();
-	    return false; // should not have worked!
-	} catch (LexerException e) {
-	} catch (PartDoesNotMatchException e) {
-	} catch (ParserException e) {
-	} catch (NoMatchingTokenDefinitionFound e) {
-	} catch (ClassInstantiationException e) {
+	public static boolean invalid(String string,
+			Class<? extends Parser> grammarPart) {
+		return new JavaGrammarTester(string, grammarPart).invalid();
 	}
-	return true; // was expected!
-    }
+
+	private final String string;
+	private final Class<? extends Parser> grammarPart;
+
+	private JavaGrammarTester(String string, Class<? extends Parser> grammarPart) {
+		this.string = string;
+		this.grammarPart = grammarPart;
+	}
+
+	private boolean valid() {
+		try {
+			JavaLexer lexer = new JavaLexer(getClass().getSimpleName(), string);
+			DIClassBuilder classBuilder = DIClassBuilder
+					.forInjections(Injection.named("TokenStream", lexer
+							.getTokenStream()));
+			Parser parser = classBuilder.createInstance(grammarPart);
+			parser.scan();
+			return parser.getText().equals(string);
+		} catch (LexerException e) {
+			e.printStackTrace();
+		} catch (PartDoesNotMatchException e) {
+			e.printStackTrace();
+		} catch (ParserException e) {
+			e.printStackTrace();
+		} catch (NoMatchingTokenDefinitionFound e) {
+			e.printStackTrace();
+		} catch (ClassInstantiationException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	private boolean invalid() {
+		try {
+			JavaLexer lexer = new JavaLexer(getClass().getSimpleName(), string);
+			DIClassBuilder classBuilder = DIClassBuilder
+					.forInjections(Injection.named("TokenStream", lexer
+							.getTokenStream()));
+			Parser parser = classBuilder.createInstance(grammarPart);
+			parser.scan();
+			return !parser.getText().equals(string);
+		} catch (LexerException e) {
+		} catch (PartDoesNotMatchException e) {
+		} catch (ParserException e) {
+		} catch (NoMatchingTokenDefinitionFound e) {
+		} catch (ClassInstantiationException e) {
+		}
+		return true; // was expected!
+	}
 }

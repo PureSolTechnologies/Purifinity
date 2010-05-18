@@ -21,9 +21,9 @@ import com.puresol.parser.LexerException;
 import com.puresol.parser.NoMatchingTokenDefinitionFound;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
-import com.puresol.parser.Token;
 import com.puresol.parser.TokenStream;
 import com.puresol.utils.ClassInstantiationException;
+import com.puresol.utils.Files;
 import com.puresol.utils.di.DIClassBuilder;
 import com.puresol.utils.di.Injection;
 
@@ -40,15 +40,14 @@ public class JavaParserTest extends TestCase {
 		JavaParser parser = null;
 		try {
 			DefaultPreConditioner conditioner = new DefaultPreConditioner(
-					new File("test"), new File(JavaParserTest.class.getName()
-							.replaceAll("\\.", "/")
-							+ ".java"));
+					new File("test"), Files
+							.classToRelativePackagePath(JavaParserTest.class));
 			TokenStream tokenStream = conditioner.getTokenStream();
 			JavaLexer lexer = new JavaLexer(tokenStream);
 			TokenStream tokenStream2 = lexer.getTokenStream();
-			for (Token token : tokenStream2.getTokens()) {
-				System.out.println(token.toString());
-			}
+			// for (Token token : tokenStream2.getTokens()) {
+			// System.out.println(token.toString());
+			// }
 			parser = DIClassBuilder.forInjections(
 					Injection.named("TokenStream", tokenStream2))
 					.createInstance(JavaParser.class);

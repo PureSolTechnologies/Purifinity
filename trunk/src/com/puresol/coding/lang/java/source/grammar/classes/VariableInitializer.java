@@ -15,20 +15,20 @@ import com.puresol.parser.PartDoesNotMatchException;
  */
 public class VariableInitializer extends AbstractJavaParser {
 
-    private static final long serialVersionUID = -8995105296970831547L;
+	private static final long serialVersionUID = -8995105296970831547L;
 
-    @Override
-    public void scan() throws PartDoesNotMatchException, ParserException {
-	if (acceptPart(ArrayInitializer.class) != null) {
-	} else if (acceptPart(Expression.class) != null) {
-	} else {
-	    abort();
+	@Override
+	public void scan() throws PartDoesNotMatchException, ParserException {
+		if (acceptPart(ArrayInitializer.class) != null) {
+		} else if (acceptPart(Expression.class) != null) {
+		} else {
+			abort();
+		}
+		finish();
 	}
-	finish();
-    }
 
-    @Override
-    public CodeRangeType getCodeRangeType() {
-	return CodeRangeType.FRAGMENT;
-    }
+	@Override
+	public CodeRangeType getCodeRangeType() {
+		return CodeRangeType.FRAGMENT;
+	}
 }

@@ -37,7 +37,16 @@ public final class TokenStream implements Serializable {
 		return locked;
 	}
 
-	public final void lock() {
+	public final void lock() throws TokenException {
+		if (tokens.size() > 0) {
+			Token lastToken = tokens.get(tokens.size() - 1);
+			addToken(Token.createByDefinition(EndOfTokenStream.class, lastToken
+					.getTokenID() + 1, lastToken.getStartPos()
+					+ lastToken.getLength(), lastToken.getStopLine(), ""));
+		} else {
+			addToken(Token.createByDefinition(EndOfTokenStream.class, 0, 0, 0,
+					""));
+		}
 		locked = true;
 	}
 

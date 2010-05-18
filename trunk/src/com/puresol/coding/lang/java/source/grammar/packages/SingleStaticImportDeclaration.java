@@ -21,7 +21,7 @@ public class SingleStaticImportDeclaration extends AbstractJavaParser {
 		expectToken(StaticKeyword.class);
 		Parser name = expectPart(PackageOrTypeName.class);
 		if ((name.getEndPosition() - name.getStartPosition() <= 1)
-				|| (!name.getTokenStream().get(name.getStartPosition() + 1)
+				|| (!name.getTokenStream().get(name.getEndPosition() - 1)
 						.getDefinition().equals(Dot.class))) {
 			/*
 			 * In this case the name is just a single identifier, but at least a
