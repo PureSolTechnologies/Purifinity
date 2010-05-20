@@ -31,7 +31,7 @@ import com.puresol.parser.PartDoesNotMatchException;
  *     ;
  * </pre>
  * 
- * @author rludwig
+ * @author Rick-Rainer Ludwig
  * 
  */
 public class IdentifierSuffix extends AbstractJavaParser {

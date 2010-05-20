@@ -29,8 +29,9 @@ public class Literal extends AbstractJavaParser {
 	} else if (acceptToken(BooleanLiteral.class) != null) {
 	} else if (acceptToken(CharacterLiteral.class) != null) {
 	} else if (acceptToken(StringLiteral.class) != null) {
+	} else if (acceptToken(NullLiteral.class) != null) {
 	} else {
-	    expectToken(NullLiteral.class);
+	    abort();
 	}
 	finish();
     }

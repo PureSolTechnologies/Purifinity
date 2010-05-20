@@ -21,7 +21,7 @@ public class FormalParameter extends AbstractJavaParser {
 
     @Override
     public void scan() throws PartDoesNotMatchException, ParserException {
-	expectPart(VariableModifiers.class);
+	acceptPart(VariableModifiers.class);
 	expectPart(Type.class);
 	expectToken(Identifier.class);
 	acceptPart(Dims.class);

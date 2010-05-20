@@ -2,7 +2,6 @@ package com.puresol.coding.lang.java.source.grammar.types_values_variables;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.java.AbstractJavaParser;
-import com.puresol.coding.lang.java.source.grammar.classes.Arguments;
 import com.puresol.coding.lang.java.source.literals.Identifier;
 import com.puresol.coding.lang.java.source.symbols.Dot;
 import com.puresol.parser.ParserException;
@@ -22,10 +21,10 @@ public class ClassOrInterfaceType extends AbstractJavaParser {
     @Override
     public void scan() throws PartDoesNotMatchException, ParserException {
 	expectToken(Identifier.class);
-	acceptPart(Arguments.class);
+	acceptPart(TypeArguments.class);
 	while (acceptToken(Dot.class) != null) {
 	    expectToken(Identifier.class);
-	    acceptPart(Arguments.class);
+	    acceptPart(TypeArguments.class);
 	}
 	finish();
     }

@@ -36,7 +36,7 @@ public class JavaParserTest extends TestCase {
 
 	@Test
 	public void test() {
-		Logger.getRootLogger().setLevel(Level.DEBUG);
+		//Logger.getRootLogger().setLevel(Level.DEBUG);
 		JavaParser parser = null;
 		try {
 			DefaultPreConditioner conditioner = new DefaultPreConditioner(

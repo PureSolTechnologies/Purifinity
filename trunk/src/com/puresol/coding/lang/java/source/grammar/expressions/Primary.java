@@ -40,7 +40,7 @@ import com.puresol.parser.PartDoesNotMatchException;
  *     ;
  * </pre>
  * 
- * @author rludwig
+ * @author Rick-Rainer Ludwig
  * 
  */
 public class Primary extends AbstractJavaParser {
@@ -56,16 +56,17 @@ public class Primary extends AbstractJavaParser {
 	    }
 	    acceptPart(IdentifierSuffix.class);
 	} else if (acceptToken(Identifier.class) != null) {
-	    while (acceptToken(Dot.class) != null) {
-		expectToken(Identifier.class);
+	    while (acceptPart(IdentifierSuffix.class) == null) {
+		if (acceptToken(Dot.class) != null) {
+		    expectToken(Identifier.class);
+		} else {
+		    break;
+		}
 	    }
-	    acceptPart(IdentifierSuffix.class);
 	} else if (acceptToken(SuperKeyword.class) != null) {
 	    expectPart(SuperSuffix.class);
 	} else if (acceptPart(Literal.class) != null) {
-
 	} else if (acceptPart(Creator.class) != null) {
-
 	} else if (acceptPart(PrimitiveType.class) != null) {
 	    acceptPart(Dims.class);
 	    expectToken(Dot.class);

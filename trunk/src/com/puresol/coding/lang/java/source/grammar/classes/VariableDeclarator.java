@@ -20,36 +20,36 @@ import com.puresol.parser.PartDoesNotMatchException;
  */
 public class VariableDeclarator extends AbstractJavaParser {
 
-	private static final long serialVersionUID = -8995105296970831547L;
+    private static final long serialVersionUID = -8995105296970831547L;
 
-	@Override
-	public void scan() throws PartDoesNotMatchException, ParserException {
-		try {
-			String name = getCurrentToken().getText();
-			expectToken(Identifier.class);
-			acceptPart(Dims.class);
-			if (acceptToken(Assign.class) != null) {
-				expectPart(VariableInitializer.class);
-			}
-			finish(name);
-		} catch (EndOfTokenStreamException e) {
-			throw new PartDoesNotMatchException(this);
-		}
+    @Override
+    public void scan() throws PartDoesNotMatchException, ParserException {
+	try {
+	    String name = getCurrentToken().getText();
+	    expectToken(Identifier.class);
+	    acceptPart(Dims.class);
+	    if (acceptToken(Assign.class) != null) {
+		expectPart(VariableInitializer.class);
+	    }
+	    finish(name);
+	} catch (EndOfTokenStreamException e) {
+	    abort();
 	}
+    }
 
-	@Override
-	public CodeRangeType getCodeRangeType() {
-		return CodeRangeType.FRAGMENT;
-	}
+    @Override
+    public CodeRangeType getCodeRangeType() {
+	return CodeRangeType.FRAGMENT;
+    }
 
-	public List<String> getModifiers() {
-		FieldModifiers modifiers = getChildCodeRanges(FieldModifiers.class)
-				.get(0);
-		return modifiers.getModifiers();
-	}
+    public List<String> getModifiers() {
+	FieldModifiers modifiers = getChildCodeRanges(FieldModifiers.class)
+		.get(0);
+	return modifiers.getModifiers();
+    }
 
-	public String getVariableType() {
-		Type type = getChildCodeRanges(Type.class).get(0);
-		return type.getVariableTypeName();
-	}
+    public String getVariableType() {
+	Type type = getChildCodeRanges(Type.class).get(0);
+	return type.getVariableTypeName();
+    }
 }

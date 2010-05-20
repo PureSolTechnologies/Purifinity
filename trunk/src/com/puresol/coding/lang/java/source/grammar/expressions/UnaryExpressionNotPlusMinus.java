@@ -24,33 +24,35 @@ import com.puresol.parser.PartDoesNotMatchException;
  *     ;
  * </pre>
  * 
- * @author rludwig
+ * @author Rick-Rainer Ludwig
  * 
  */
 public class UnaryExpressionNotPlusMinus extends AbstractJavaParser {
 
-	private static final long serialVersionUID = 6464754895556318548L;
+    private static final long serialVersionUID = 6464754895556318548L;
 
-	@Override
-	public void scan() throws PartDoesNotMatchException, ParserException {
-		if (acceptToken(Tilde.class) != null) {
-			expectPart(UnaryExpression.class);
-		} else if (acceptToken(Not.class) != null) {
-			expectPart(UnaryExpression.class);
-		} else if (acceptPart(CastExpression.class) != null) {
-		} else if (acceptPart(Primary.class) != null) {
-			while (acceptPart(Selector.class) != null)
-				;
-			if (acceptToken(PlusPlus.class) != null) {
-			} else if (acceptToken(MinusMinus.class) != null) {
-			}
-		}
-		finish();
+    @Override
+    public void scan() throws PartDoesNotMatchException, ParserException {
+	if (acceptToken(Tilde.class) != null) {
+	    expectPart(UnaryExpression.class);
+	} else if (acceptToken(Not.class) != null) {
+	    expectPart(UnaryExpression.class);
+	} else if (acceptPart(CastExpression.class) != null) {
+	} else if (acceptPart(Primary.class) != null) {
+	    while (acceptPart(Selector.class) != null)
+		;
+	    if (acceptToken(PlusPlus.class) != null) {
+	    } else if (acceptToken(MinusMinus.class) != null) {
+	    }
+	} else {
+	    abort();
 	}
+	finish();
+    }
 
-	@Override
-	public CodeRangeType getCodeRangeType() {
-		return CodeRangeType.FRAGMENT;
-	}
+    @Override
+    public CodeRangeType getCodeRangeType() {
+	return CodeRangeType.FRAGMENT;
+    }
 
 }
