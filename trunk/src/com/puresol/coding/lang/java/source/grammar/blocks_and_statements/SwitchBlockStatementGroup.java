@@ -15,6 +15,9 @@ public class SwitchBlockStatementGroup extends AbstractJavaParser {
 
     private static final long serialVersionUID = 1202904051316374607L;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void scan() throws PartDoesNotMatchException, ParserException {
 	expectPart(SwitchLabel.class);
@@ -23,6 +26,9 @@ public class SwitchBlockStatementGroup extends AbstractJavaParser {
 	finish();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CodeRangeType getCodeRangeType() {
 	return CodeRangeType.FRAGMENT;

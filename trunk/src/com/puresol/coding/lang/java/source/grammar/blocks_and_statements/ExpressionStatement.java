@@ -17,6 +17,9 @@ public class ExpressionStatement extends AbstractJavaParser {
 
     private static final long serialVersionUID = 1202904051316374607L;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void scan() throws PartDoesNotMatchException, ParserException {
 	expectPart(Expression.class);
@@ -24,6 +27,9 @@ public class ExpressionStatement extends AbstractJavaParser {
 	finish();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CodeRangeType getCodeRangeType() {
 	return CodeRangeType.FRAGMENT;

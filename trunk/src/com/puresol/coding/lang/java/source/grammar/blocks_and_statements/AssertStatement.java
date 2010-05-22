@@ -17,22 +17,28 @@ import com.puresol.parser.PartDoesNotMatchException;
  */
 public class AssertStatement extends AbstractJavaParser {
 
-	private static final long serialVersionUID = 1202904051316374607L;
+    private static final long serialVersionUID = 1202904051316374607L;
 
-	@Override
-	public void scan() throws PartDoesNotMatchException, ParserException {
-		expectToken(AssertKeyword.class);
-		expectPart(Expression.class);
-		if (acceptToken(Colon.class) != null) {
-			expectPart(Expression.class);
-		}
-		expectToken(Semicolon.class);
-		finish();
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void scan() throws PartDoesNotMatchException, ParserException {
+	expectToken(AssertKeyword.class);
+	expectPart(Expression.class);
+	if (acceptToken(Colon.class) != null) {
+	    expectPart(Expression.class);
 	}
+	expectToken(Semicolon.class);
+	finish();
+    }
 
-	@Override
-	public CodeRangeType getCodeRangeType() {
-		return CodeRangeType.FRAGMENT;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public CodeRangeType getCodeRangeType() {
+	return CodeRangeType.FRAGMENT;
+    }
 
 }

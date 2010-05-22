@@ -12,6 +12,8 @@ import com.puresol.parser.PartDoesNotMatchException;
 /**
  * formalParameter : variableModifiers type IDENTIFIER ('[' ']' )* ;
  * 
+ * Fix: Changes variableModifiers to acceptPart due to different implementation.
+ * 
  * @author Rick-Rainer Ludwig
  * 
  */
@@ -19,6 +21,9 @@ public class FormalParameter extends AbstractJavaParser {
 
     private static final long serialVersionUID = 1202904051316374607L;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void scan() throws PartDoesNotMatchException, ParserException {
 	acceptPart(VariableModifiers.class);
@@ -28,6 +33,9 @@ public class FormalParameter extends AbstractJavaParser {
 	finish();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CodeRangeType getCodeRangeType() {
 	return CodeRangeType.FRAGMENT;

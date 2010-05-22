@@ -17,21 +17,27 @@ import com.puresol.parser.PartDoesNotMatchException;
  */
 public class DoStatement extends AbstractJavaParser {
 
-	private static final long serialVersionUID = 1202904051316374607L;
+    private static final long serialVersionUID = 1202904051316374607L;
 
-	@Override
-	public void scan() throws PartDoesNotMatchException, ParserException {
-		expectToken(DoKeyword.class);
-		expectPart(Statement.class);
-		expectToken(WhileKeyword.class);
-		expectPart(ParExpression.class);
-		expectToken(Semicolon.class);
-		finish();
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void scan() throws PartDoesNotMatchException, ParserException {
+	expectToken(DoKeyword.class);
+	expectPart(Statement.class);
+	expectToken(WhileKeyword.class);
+	expectPart(ParExpression.class);
+	expectToken(Semicolon.class);
+	finish();
+    }
 
-	@Override
-	public CodeRangeType getCodeRangeType() {
-		return CodeRangeType.FRAGMENT;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public CodeRangeType getCodeRangeType() {
+	return CodeRangeType.FRAGMENT;
+    }
 
 }

@@ -17,18 +17,24 @@ import com.puresol.parser.PartDoesNotMatchException;
  */
 public class CompilationUnit extends AbstractJavaParser {
 
-	private static final long serialVersionUID = -5271390812159304045L;
+    private static final long serialVersionUID = -5271390812159304045L;
 
-	@Override
-	public void scan() throws PartDoesNotMatchException, ParserException {
-		acceptPart(PackageDeclaration.class);
-		acceptPart(ImportDeclarations.class);
-		acceptPart(TypeDeclarations.class);
-		finish(getFile().getName());
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void scan() throws PartDoesNotMatchException, ParserException {
+	acceptPart(PackageDeclaration.class);
+	acceptPart(ImportDeclarations.class);
+	acceptPart(TypeDeclarations.class);
+	finish(getFile().getName());
+    }
 
-	@Override
-	public CodeRangeType getCodeRangeType() {
-		return CodeRangeType.FILE;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public CodeRangeType getCodeRangeType() {
+	return CodeRangeType.FILE;
+    }
 }

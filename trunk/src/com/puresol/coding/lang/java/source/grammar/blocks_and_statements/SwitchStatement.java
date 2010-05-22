@@ -19,6 +19,9 @@ public class SwitchStatement extends AbstractJavaParser {
 
     private static final long serialVersionUID = 1202904051316374607L;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void scan() throws PartDoesNotMatchException, ParserException {
 	expectToken(SwitchKeyword.class);
@@ -29,6 +32,9 @@ public class SwitchStatement extends AbstractJavaParser {
 	finish();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CodeRangeType getCodeRangeType() {
 	return CodeRangeType.FRAGMENT;

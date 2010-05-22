@@ -29,21 +29,27 @@ import com.puresol.parser.PartDoesNotMatchException;
  */
 public class ForStatement extends AbstractJavaParser {
 
-	private static final long serialVersionUID = 1202904051316374607L;
+    private static final long serialVersionUID = 1202904051316374607L;
 
-	@Override
-	public void scan() throws PartDoesNotMatchException, ParserException {
-		if (acceptPart(BasicForStatement.class) != null) {
-		} else if (acceptPart(EnhancedForStatement.class) != null) {
-		} else {
-			abort();
-		}
-		finish();
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void scan() throws PartDoesNotMatchException, ParserException {
+	if (acceptPart(BasicForStatement.class) != null) {
+	} else if (acceptPart(EnhancedForStatement.class) != null) {
+	} else {
+	    abort();
 	}
+	finish();
+    }
 
-	@Override
-	public CodeRangeType getCodeRangeType() {
-		return CodeRangeType.FRAGMENT;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public CodeRangeType getCodeRangeType() {
+	return CodeRangeType.FRAGMENT;
+    }
 
 }

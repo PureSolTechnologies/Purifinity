@@ -28,6 +28,9 @@ public class ArrayInitializer extends AbstractJavaParser {
 
     private static final long serialVersionUID = 4903744780392938101L;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void scan() throws PartDoesNotMatchException, ParserException {
 	expectToken(LCurlyBracket.class);
@@ -37,6 +40,9 @@ public class ArrayInitializer extends AbstractJavaParser {
 	finish();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CodeRangeType getCodeRangeType() {
 	return CodeRangeType.FRAGMENT;

@@ -18,6 +18,9 @@ public class CatchClause extends AbstractJavaParser {
 
     private static final long serialVersionUID = 1202904051316374607L;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void scan() throws PartDoesNotMatchException, ParserException {
 	expectToken(CatchKeyword.class);
@@ -28,6 +31,9 @@ public class CatchClause extends AbstractJavaParser {
 	finish();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CodeRangeType getCodeRangeType() {
 	return CodeRangeType.FRAGMENT;

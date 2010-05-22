@@ -13,19 +13,25 @@ import com.puresol.parser.PartDoesNotMatchException;
  */
 public class Catches extends AbstractJavaParser {
 
-	private static final long serialVersionUID = 1202904051316374607L;
+    private static final long serialVersionUID = 1202904051316374607L;
 
-	@Override
-	public void scan() throws PartDoesNotMatchException, ParserException {
-		expectPart(CatchClause.class);
-		while (acceptPart(CatchClause.class) != null)
-			;
-		finish();
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void scan() throws PartDoesNotMatchException, ParserException {
+	expectPart(CatchClause.class);
+	while (acceptPart(CatchClause.class) != null)
+	    ;
+	finish();
+    }
 
-	@Override
-	public CodeRangeType getCodeRangeType() {
-		return CodeRangeType.FRAGMENT;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public CodeRangeType getCodeRangeType() {
+	return CodeRangeType.FRAGMENT;
+    }
 
 }

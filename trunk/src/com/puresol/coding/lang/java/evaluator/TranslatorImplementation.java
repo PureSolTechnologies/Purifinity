@@ -155,17 +155,17 @@ public class TranslatorImplementation extends AbstractEvaluator {
 			String text = translator.i18n("Quality Level:") + " "
 					+ qualityLevel.getIdentifier();
 			text += "\n";
-			text += fields.get(codeRange).toString(format);
+			text += fields.get(codeRange).getReportingString(format);
 			text += "\n";
-			text += codeRange.toString(format);
+			text += codeRange.getReportingString(format);
 			return text;
 		} else if (format == ReportingFormat.HTML) {
 			String text = translator.i18n("Quality Level:") + " "
 					+ HTMLConverter.convertQualityLevelToHTML(qualityLevel);
 			text += "<br/>";
-			text += fields.get(codeRange).toString(format);
+			text += fields.get(codeRange).getReportingString(format);
 			text += "<br/>";
-			text += codeRange.toString(format);
+			text += codeRange.getReportingString(format);
 			return text;
 		}
 		throw new UnsupportedReportingFormatException(format);

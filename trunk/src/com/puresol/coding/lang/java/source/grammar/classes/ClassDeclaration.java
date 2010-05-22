@@ -25,17 +25,28 @@ public class ClassDeclaration extends AbstractJavaParser {
 	CLASS_DECLARATIONS.add(EnumDeclaration.class);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void scan() throws PartDoesNotMatchException, ParserException {
 	Parser result = expectOnePartOf(CLASS_DECLARATIONS);
 	finish(result.getName());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CodeRangeType getCodeRangeType() {
 	return CodeRangeType.CLASS;
     }
 
+    /**
+     * Returns a list of declared fields.
+     * 
+     * @return A list of declared fields is returned.
+     */
     public List<VariableDeclarator> getFields() {
 	return getChildCodeRanges(VariableDeclarator.class);
     }

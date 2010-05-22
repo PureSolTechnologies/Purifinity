@@ -17,6 +17,9 @@ public class ClassBody extends AbstractJavaParser {
 
     private static final long serialVersionUID = -2656071830287957232L;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void scan() throws PartDoesNotMatchException, ParserException {
 	expectToken(LCurlyBracket.class);
@@ -26,6 +29,9 @@ public class ClassBody extends AbstractJavaParser {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CodeRangeType getCodeRangeType() {
 	return CodeRangeType.FRAGMENT;

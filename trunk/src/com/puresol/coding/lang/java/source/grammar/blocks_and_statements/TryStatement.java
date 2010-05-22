@@ -22,23 +22,29 @@ import com.puresol.parser.PartDoesNotMatchException;
  */
 public class TryStatement extends AbstractJavaParser {
 
-	private static final long serialVersionUID = 1202904051316374607L;
+    private static final long serialVersionUID = 1202904051316374607L;
 
-	@Override
-	public void scan() throws PartDoesNotMatchException, ParserException {
-		expectToken(TryKeyword.class);
-		expectPart(Block.class);
-		if (acceptPart(Catches.class) != null) {
-			acceptPart(Finally.class);
-		} else {
-			expectPart(Finally.class);
-		}
-		finish();
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void scan() throws PartDoesNotMatchException, ParserException {
+	expectToken(TryKeyword.class);
+	expectPart(Block.class);
+	if (acceptPart(Catches.class) != null) {
+	    acceptPart(Finally.class);
+	} else {
+	    expectPart(Finally.class);
 	}
+	finish();
+    }
 
-	@Override
-	public CodeRangeType getCodeRangeType() {
-		return CodeRangeType.FRAGMENT;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public CodeRangeType getCodeRangeType() {
+	return CodeRangeType.FRAGMENT;
+    }
 
 }

@@ -17,6 +17,9 @@ public class VariableInitializers extends AbstractJavaParser {
 
     private static final long serialVersionUID = -8995105296970831547L;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void scan() throws PartDoesNotMatchException, ParserException {
 	expectPart(VariableInitializer.class);
@@ -26,6 +29,9 @@ public class VariableInitializers extends AbstractJavaParser {
 	finish();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CodeRangeType getCodeRangeType() {
 	return CodeRangeType.FRAGMENT;
