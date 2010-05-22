@@ -9,17 +9,17 @@ import junit.framework.TestCase;
 
 public class StatementTest extends TestCase {
 
-    @Test
-    public void testPrimary() {
-	Assert.assertTrue(JavaGrammarTester
-		.valid("a.b().c();", Statement.class));
-    }
+	@Test
+	public void testPrimary() {
+		Assert.assertTrue(JavaGrammarTester
+				.valid("a.b().c();", Statement.class));
+	}
 
-    @Test
-    public void testVariableAssignment() {
-	Assert
-		.assertTrue(JavaGrammarTester.valid("a = null;",
-			Statement.class));
-    }
+	@Test
+	public void testVariableAssignment() {
+		Assert
+				.assertTrue(JavaGrammarTester.valid("a = null;",
+						Statement.class));
+	}
 
 }

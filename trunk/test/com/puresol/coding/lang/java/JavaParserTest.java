@@ -30,53 +30,53 @@ import junit.framework.TestCase;
 
 public class JavaParserTest extends TestCase {
 
-    public int testInt;
+	public int testInt;
 
-    @Test
-    public void test() {
-	// Logger.getRootLogger().setLevel(Level.DEBUG);
-	JavaParser parser = null;
-	try {
-	    DefaultPreConditioner conditioner = new DefaultPreConditioner(
-		    new File("test"), Files
-			    .classToRelativePackagePath(JavaParserTest.class));
-	    TokenStream tokenStream = conditioner.getTokenStream();
-	    JavaLexer lexer = new JavaLexer(tokenStream);
-	    TokenStream tokenStream2 = lexer.getTokenStream();
-	    parser = DIClassBuilder.forInjections(
-		    Injection.named("TokenStream", tokenStream2))
-		    .createInstance(JavaParser.class);
-	    parser.scan();
-	    for (CodeRange codeRange : parser.getChildCodeRanges()) {
-		System.out.println(codeRange.toString());
-	    }
-	    List<ClassDeclaration> classes = parser
-		    .getChildCodeRanges(ClassDeclaration.class);
-	    Assert.assertEquals(1, classes.size());
-	    List<ClassDeclaration> classElements = parser
-		    .getChildCodeRanges(ClassDeclaration.class);
-	    Assert.assertEquals(1, classElements.size());
-	} catch (FileNotFoundException e) {
-	    e.printStackTrace();
-	    Assert.fail("No exception was expected!");
-	} catch (IOException e) {
-	    e.printStackTrace();
-	    Assert.fail("No exception was expected!");
-	} catch (NoMatchingTokenDefinitionFound e) {
-	    e.printStackTrace();
-	    Assert.fail("No exception was expected!");
-	} catch (PartDoesNotMatchException e) {
-	    e.printStackTrace();
-	    Assert.fail("No exception was expected!");
-	} catch (ParserException e) {
-	    e.printStackTrace();
-	    Assert.fail("No exception was expected!");
-	} catch (LexerException e) {
-	    e.printStackTrace();
-	    Assert.fail("No exception was expected!");
-	} catch (ClassInstantiationException e) {
-	    e.printStackTrace();
-	    Assert.fail("No exception was expected!");
+	@Test
+	public void test() {
+		// Logger.getRootLogger().setLevel(Level.DEBUG);
+		JavaParser parser = null;
+		try {
+			DefaultPreConditioner conditioner = new DefaultPreConditioner(
+					new File("test"), Files
+							.classToRelativePackagePath(JavaParserTest.class));
+			TokenStream tokenStream = conditioner.getTokenStream();
+			JavaLexer lexer = new JavaLexer(tokenStream);
+			TokenStream tokenStream2 = lexer.getTokenStream();
+			parser = DIClassBuilder.forInjections(
+					Injection.named("TokenStream", tokenStream2))
+					.createInstance(JavaParser.class);
+			parser.scan();
+			for (CodeRange codeRange : parser.getChildCodeRanges()) {
+				System.out.println(codeRange.toString());
+			}
+			List<ClassDeclaration> classes = parser
+					.getChildCodeRanges(ClassDeclaration.class);
+			Assert.assertEquals(1, classes.size());
+			List<ClassDeclaration> classElements = parser
+					.getChildCodeRanges(ClassDeclaration.class);
+			Assert.assertEquals(1, classElements.size());
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			Assert.fail("No exception was expected!");
+		} catch (IOException e) {
+			e.printStackTrace();
+			Assert.fail("No exception was expected!");
+		} catch (NoMatchingTokenDefinitionFound e) {
+			e.printStackTrace();
+			Assert.fail("No exception was expected!");
+		} catch (PartDoesNotMatchException e) {
+			e.printStackTrace();
+			Assert.fail("No exception was expected!");
+		} catch (ParserException e) {
+			e.printStackTrace();
+			Assert.fail("No exception was expected!");
+		} catch (LexerException e) {
+			e.printStackTrace();
+			Assert.fail("No exception was expected!");
+		} catch (ClassInstantiationException e) {
+			e.printStackTrace();
+			Assert.fail("No exception was expected!");
+		}
 	}
-    }
 }
