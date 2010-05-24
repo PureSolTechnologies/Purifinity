@@ -16,5 +16,11 @@ public class BlockStatementTest extends TestCase {
 								+ "new File(\"test\"),"
 								+ " Files.classToRelativePackagePath(JavaParserTest.class));",
 						BlockStatement.class));
+
+		assertTrue(JavaGrammarTester
+				.valid(
+						"logger.debug(\"Creating instance for class '\" + clazz.getName() + \"'\");",
+						BlockStatement.class));
+
 	}
 }

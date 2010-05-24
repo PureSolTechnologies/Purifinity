@@ -35,37 +35,31 @@ import com.puresol.parser.PartDoesNotMatchException;
  */
 public class ArrayCreator extends AbstractJavaParser {
 
-    private static final long serialVersionUID = 6464754895556318548L;
+	private static final long serialVersionUID = 6464754895556318548L;
 
-    @Override
-    public void scan() throws PartDoesNotMatchException, ParserException {
-	try {
-	    expectToken(NewKeyword.class);
-	    expectPart(CreatedName.class);
-	    expectPart(Dim.class);
-	    acceptPart(Dims.class);
-	    expectPart(ArrayInitializer.class);
-	    finish();
-	    return;
-	} catch (PartDoesNotMatchException e) {
-	    // expected, alternative follows...
+	@Override
+	public void scan() throws PartDoesNotMatchException, ParserException {
+		expectToken(NewKeyword.class);
+		expectPart(CreatedName.class);
+		if (acceptPart(Dim.class) != null) {
+			acceptPart(Dims.class);
+			expectPart(ArrayInitializer.class);
+		} else {
+			expectToken(LRectBracket.class);
+			expectPart(Expression.class);
+			expectToken(RRectBracket.class);
+			while (acceptToken(LRectBracket.class) != null) {
+				expectPart(Expression.class);
+				expectToken(RRectBracket.class);
+			}
+			acceptPart(Dims.class);
+		}
+		finish();
 	}
-	expectToken(NewKeyword.class);
-	expectPart(CreatedName.class);
-	expectToken(LRectBracket.class);
-	expectPart(Expression.class);
-	expectToken(RRectBracket.class);
-	while (acceptToken(LRectBracket.class) != null) {
-	    expectPart(Expression.class);
-	    expectToken(RRectBracket.class);
-	}
-	acceptPart(Dims.class);
-	finish();
-    }
 
-    @Override
-    public CodeRangeType getCodeRangeType() {
-	return CodeRangeType.FRAGMENT;
-    }
+	@Override
+	public CodeRangeType getCodeRangeType() {
+		return CodeRangeType.FRAGMENT;
+	}
 
 }

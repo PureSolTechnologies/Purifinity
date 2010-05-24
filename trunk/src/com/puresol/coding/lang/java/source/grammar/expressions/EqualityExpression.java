@@ -11,29 +11,29 @@ import com.puresol.parser.PartDoesNotMatchException;
  * equalityExpression : instanceOfExpression ( ( '==' | '!=' )
  * instanceOfExpression )* ;
  * 
- * Fix: Chained equality expressions are allowed.
+ * Fixed chaining!
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
 public class EqualityExpression extends AbstractJavaParser {
 
-    private static final long serialVersionUID = 6464754895556318548L;
+	private static final long serialVersionUID = 6464754895556318548L;
 
-    @Override
-    public void scan() throws PartDoesNotMatchException, ParserException {
-	expectPart(InstanceOfExpression.class);
-	if (acceptToken(Equal.class) != null) {
-	    expectPart(EqualityExpression.class);
-	} else if (acceptToken(Unequal.class) != null) {
-	    expectPart(EqualityExpression.class);
+	@Override
+	public void scan() throws PartDoesNotMatchException, ParserException {
+		expectPart(InstanceOfExpression.class);
+		if (acceptToken(Equal.class) != null) {
+			expectPart(EqualityExpression.class);
+		} else if (acceptToken(Unequal.class) != null) {
+			expectPart(EqualityExpression.class);
+		}
+		finish();
 	}
-	finish();
-    }
 
-    @Override
-    public CodeRangeType getCodeRangeType() {
-	return CodeRangeType.FRAGMENT;
-    }
+	@Override
+	public CodeRangeType getCodeRangeType() {
+		return CodeRangeType.FRAGMENT;
+	}
 
 }

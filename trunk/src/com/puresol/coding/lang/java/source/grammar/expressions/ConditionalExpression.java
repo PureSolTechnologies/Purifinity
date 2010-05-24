@@ -11,27 +11,27 @@ import com.puresol.parser.PartDoesNotMatchException;
  * conditionalExpression : conditionalOrExpression ('?' expression ':'
  * conditionalExpression )? ;
  * 
- * @author rludwig
+ * @author Rick-Rainer Ludwig
  * 
  */
 public class ConditionalExpression extends AbstractJavaParser {
 
-    private static final long serialVersionUID = 6464754895556318548L;
+	private static final long serialVersionUID = 6464754895556318548L;
 
-    @Override
-    public void scan() throws PartDoesNotMatchException, ParserException {
-	expectPart(ConditionalOrExpression.class);
-	if (acceptToken(QuestionMark.class) != null) {
-	    expectPart(Expression.class);
-	    expectToken(Colon.class);
-	    expectPart(ConditionalExpression.class);
+	@Override
+	public void scan() throws PartDoesNotMatchException, ParserException {
+		expectPart(ConditionalOrExpression.class);
+		if (acceptToken(QuestionMark.class) != null) {
+			expectPart(Expression.class);
+			expectToken(Colon.class);
+			expectPart(ConditionalExpression.class);
+		}
+		finish();
 	}
-	finish();
-    }
 
-    @Override
-    public CodeRangeType getCodeRangeType() {
-	return CodeRangeType.FRAGMENT;
-    }
+	@Override
+	public CodeRangeType getCodeRangeType() {
+		return CodeRangeType.FRAGMENT;
+	}
 
 }

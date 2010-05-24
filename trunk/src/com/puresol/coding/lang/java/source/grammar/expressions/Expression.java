@@ -13,20 +13,20 @@ import com.puresol.parser.PartDoesNotMatchException;
  */
 public class Expression extends AbstractJavaParser {
 
-    private static final long serialVersionUID = 6464754895556318548L;
+	private static final long serialVersionUID = 6464754895556318548L;
 
-    @Override
-    public void scan() throws PartDoesNotMatchException, ParserException {
-	expectPart(ConditionalExpression.class);
-	if (acceptPart(AssignmentOperator.class) != null) {
-	    expectPart(Expression.class);
+	@Override
+	public void scan() throws PartDoesNotMatchException, ParserException {
+		expectPart(ConditionalExpression.class);
+		if (acceptPart(AssignmentOperator.class) != null) {
+			expectPart(Expression.class);
+		}
+		finish();
 	}
-	finish();
-    }
 
-    @Override
-    public CodeRangeType getCodeRangeType() {
-	return CodeRangeType.FRAGMENT;
-    }
+	@Override
+	public CodeRangeType getCodeRangeType() {
+		return CodeRangeType.FRAGMENT;
+	}
 
 }

@@ -61,7 +61,7 @@ public class LexicalStructure {
 			+ NOT_SLASH + ")*\\*/";
 
 	public static final String END_OF_LINE_COMMENT = "//" + CHARACTERS_IN_LINE
-			+ "?";
+			+ "?" + "\\n";
 	public static final String TRADITIONAL_COMMENT = "/*" + COMMENT_TAIL;
 	public static final String COMMENT = "(" + TRADITIONAL_COMMENT + "|"
 			+ END_OF_LINE_COMMENT + ")";

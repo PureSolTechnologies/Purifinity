@@ -23,28 +23,28 @@ import com.puresol.parser.PartDoesNotMatchException;
  */
 public class UnaryExpression extends AbstractJavaParser {
 
-    private static final long serialVersionUID = 6464754895556318548L;
+	private static final long serialVersionUID = 6464754895556318548L;
 
-    @Override
-    public void scan() throws PartDoesNotMatchException, ParserException {
-	if (acceptToken(Plus.class) != null) {
-	    expectPart(UnaryExpression.class);
-	} else if (acceptToken(Minus.class) != null) {
-	    expectPart(UnaryExpression.class);
-	} else if (acceptToken(PlusPlus.class) != null) {
-	    expectPart(UnaryExpression.class);
-	} else if (acceptToken(MinusMinus.class) != null) {
-	    expectPart(UnaryExpression.class);
-	} else if (acceptPart(UnaryExpressionNotPlusMinus.class) != null) {
-	} else {
-	    abort();
+	@Override
+	public void scan() throws PartDoesNotMatchException, ParserException {
+		if (acceptToken(Plus.class) != null) {
+			expectPart(UnaryExpression.class);
+		} else if (acceptToken(Minus.class) != null) {
+			expectPart(UnaryExpression.class);
+		} else if (acceptToken(PlusPlus.class) != null) {
+			expectPart(UnaryExpression.class);
+		} else if (acceptToken(MinusMinus.class) != null) {
+			expectPart(UnaryExpression.class);
+		} else if (acceptPart(UnaryExpressionNotPlusMinus.class) != null) {
+		} else {
+			abort();
+		}
+		finish();
 	}
-	finish();
-    }
 
-    @Override
-    public CodeRangeType getCodeRangeType() {
-	return CodeRangeType.FRAGMENT;
-    }
+	@Override
+	public CodeRangeType getCodeRangeType() {
+		return CodeRangeType.FRAGMENT;
+	}
 
 }

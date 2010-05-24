@@ -9,27 +9,27 @@ import com.puresol.parser.PartDoesNotMatchException;
 /**
  * inclusiveOrExpression : exclusiveOrExpression ('|' exclusiveOrExpression )* ;
  * 
- * Fix: Chained inclusive ORs are allowed.
+ * Fixed chaining!
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
 public class InclusiveOrExpression extends AbstractJavaParser {
 
-    private static final long serialVersionUID = 6464754895556318548L;
+	private static final long serialVersionUID = 6464754895556318548L;
 
-    @Override
-    public void scan() throws PartDoesNotMatchException, ParserException {
-	expectPart(ExclusiveOrExpression.class);
-	if (acceptToken(BitOr.class) != null) {
-	    expectPart(InclusiveOrExpression.class);
+	@Override
+	public void scan() throws PartDoesNotMatchException, ParserException {
+		expectPart(ExclusiveOrExpression.class);
+		if (acceptToken(BitOr.class) != null) {
+			expectPart(InclusiveOrExpression.class);
+		}
+		finish();
 	}
-	finish();
-    }
 
-    @Override
-    public CodeRangeType getCodeRangeType() {
-	return CodeRangeType.FRAGMENT;
-    }
+	@Override
+	public CodeRangeType getCodeRangeType() {
+		return CodeRangeType.FRAGMENT;
+	}
 
 }

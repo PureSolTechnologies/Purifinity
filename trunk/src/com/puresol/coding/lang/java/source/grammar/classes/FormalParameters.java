@@ -15,18 +15,18 @@ import com.puresol.parser.PartDoesNotMatchException;
  */
 public class FormalParameters extends AbstractJavaParser {
 
-    private static final long serialVersionUID = -1812295859556451418L;
+	private static final long serialVersionUID = -1812295859556451418L;
 
-    @Override
-    public void scan() throws PartDoesNotMatchException, ParserException {
-	expectToken(LParen.class);
-	acceptPart(FormalParameterDeclarations.class);
-	expectToken(RParen.class);
-	finish();
-    }
+	@Override
+	public void scan() throws PartDoesNotMatchException, ParserException {
+		expectToken(LParen.class);
+		acceptPart(FormalParameterDeclarations.class);
+		expectToken(RParen.class);
+		finish();
+	}
 
-    @Override
-    public CodeRangeType getCodeRangeType() {
-	return CodeRangeType.CLASS;
-    }
+	@Override
+	public CodeRangeType getCodeRangeType() {
+		return CodeRangeType.CLASS;
+	}
 }

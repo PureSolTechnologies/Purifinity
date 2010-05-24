@@ -8,8 +8,9 @@ import junit.framework.TestCase;
 
 public class CreatorTest extends TestCase {
 
-    @Test
-    public void testValids() {
-	assertTrue(JavaGrammarTester.valid("new Object()", Creator.class));
-    }
+	@Test
+	public void testValids() {
+		assertTrue(JavaGrammarTester.valid("new Object()", Creator.class));
+		assertTrue(JavaGrammarTester.valid("new Locale[0]", Creator.class));
+	}
 }

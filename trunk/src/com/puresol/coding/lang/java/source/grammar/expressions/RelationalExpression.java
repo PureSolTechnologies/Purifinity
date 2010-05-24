@@ -12,7 +12,7 @@ import com.puresol.parser.PartDoesNotMatchException;
 /**
  * relationalExpression : shiftExpression (relationalOp shiftExpression )* ;
  * 
- * Fix: Chained relational expressions are allowed.
+ * Fixed chaining!
  * 
  * relationalOp 
     :    '<' '='
@@ -26,26 +26,26 @@ import com.puresol.parser.PartDoesNotMatchException;
  */
 public class RelationalExpression extends AbstractJavaParser {
 
-    private static final long serialVersionUID = 6464754895556318548L;
+	private static final long serialVersionUID = 6464754895556318548L;
 
-    @Override
-    public void scan() throws PartDoesNotMatchException, ParserException {
-	expectPart(ShiftExpression.class);
-	if (acceptToken(LessThan.class) != null) {
-	    expectPart(RelationalExpression.class);
-	} else if (acceptToken(GreaterThan.class) != null) {
-	    expectPart(RelationalExpression.class);
-	} else if (acceptToken(LessEqual.class) != null) {
-	    expectPart(RelationalExpression.class);
-	} else if (acceptToken(GreaterEqual.class) != null) {
-	    expectPart(RelationalExpression.class);
+	@Override
+	public void scan() throws PartDoesNotMatchException, ParserException {
+		expectPart(ShiftExpression.class);
+		if (acceptToken(LessThan.class) != null) {
+			expectPart(RelationalExpression.class);
+		} else if (acceptToken(GreaterThan.class) != null) {
+			expectPart(RelationalExpression.class);
+		} else if (acceptToken(LessEqual.class) != null) {
+			expectPart(RelationalExpression.class);
+		} else if (acceptToken(GreaterEqual.class) != null) {
+			expectPart(RelationalExpression.class);
+		}
+		finish();
 	}
-	finish();
-    }
 
-    @Override
-    public CodeRangeType getCodeRangeType() {
-	return CodeRangeType.FRAGMENT;
-    }
+	@Override
+	public CodeRangeType getCodeRangeType() {
+		return CodeRangeType.FRAGMENT;
+	}
 
 }

@@ -10,27 +10,27 @@ import com.puresol.parser.PartDoesNotMatchException;
  * conditionalOrExpression : conditionalAndExpression ('||'
  * conditionalAndExpression )* ;
  * 
- * Fix: Chained conditional ORs are allowed.
+ * Fixed Chaining!
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
 public class ConditionalOrExpression extends AbstractJavaParser {
 
-    private static final long serialVersionUID = 6464754895556318548L;
+	private static final long serialVersionUID = 6464754895556318548L;
 
-    @Override
-    public void scan() throws PartDoesNotMatchException, ParserException {
-	expectPart(ConditionalAndExpression.class);
-	if (acceptToken(LogicalOr.class) != null) {
-	    expectPart(ConditionalOrExpression.class);
+	@Override
+	public void scan() throws PartDoesNotMatchException, ParserException {
+		expectPart(ConditionalAndExpression.class);
+		if (acceptToken(LogicalOr.class) != null) {
+			expectPart(ConditionalOrExpression.class);
+		}
+		finish();
 	}
-	finish();
-    }
 
-    @Override
-    public CodeRangeType getCodeRangeType() {
-	return CodeRangeType.FRAGMENT;
-    }
+	@Override
+	public CodeRangeType getCodeRangeType() {
+		return CodeRangeType.FRAGMENT;
+	}
 
 }

@@ -14,26 +14,26 @@ import com.puresol.parser.PartDoesNotMatchException;
  */
 public class Type extends AbstractJavaParser {
 
-    private static final long serialVersionUID = 7523184950953085838L;
+	private static final long serialVersionUID = 7523184950953085838L;
 
-    @Override
-    public void scan() throws PartDoesNotMatchException, ParserException {
-	if (acceptPart(ClassOrInterfaceType.class) != null) {
-	    acceptPart(Dims.class);
-	} else if (acceptPart(PrimitiveType.class) != null) {
-	    acceptPart(Dims.class);
-	} else {
-	    abort();
+	@Override
+	public void scan() throws PartDoesNotMatchException, ParserException {
+		if (acceptPart(ClassOrInterfaceType.class) != null) {
+			acceptPart(Dims.class);
+		} else if (acceptPart(PrimitiveType.class) != null) {
+			acceptPart(Dims.class);
+		} else {
+			abort();
+		}
+		finish();
 	}
-	finish();
-    }
 
-    @Override
-    public CodeRangeType getCodeRangeType() {
-	return CodeRangeType.FRAGMENT;
-    }
+	@Override
+	public CodeRangeType getCodeRangeType() {
+		return CodeRangeType.FRAGMENT;
+	}
 
-    public String getVariableTypeName() {
-	return getVisibleText();
-    }
+	public String getVariableTypeName() {
+		return getVisibleText();
+	}
 }

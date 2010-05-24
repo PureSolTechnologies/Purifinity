@@ -12,31 +12,31 @@ import com.puresol.parser.PartDoesNotMatchException;
  * multiplicativeExpression : unaryExpression ( ( '*' | '/' | '%' )
  * unaryExpression )* ;
  * 
- * Fix: Chained multiplicative expressions are allowed.
+ * Fixed chaining!
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
 public class MultiplicativeExpression extends AbstractJavaParser {
 
-    private static final long serialVersionUID = 6464754895556318548L;
+	private static final long serialVersionUID = 6464754895556318548L;
 
-    @Override
-    public void scan() throws PartDoesNotMatchException, ParserException {
-	expectPart(UnaryExpression.class);
-	if (acceptToken(Star.class) != null) {
-	    expectPart(MultiplicativeExpression.class);
-	} else if (acceptToken(Slash.class) != null) {
-	    expectPart(MultiplicativeExpression.class);
-	} else if (acceptToken(Percent.class) != null) {
-	    expectPart(MultiplicativeExpression.class);
+	@Override
+	public void scan() throws PartDoesNotMatchException, ParserException {
+		expectPart(UnaryExpression.class);
+		if (acceptToken(Star.class) != null) {
+			expectPart(MultiplicativeExpression.class);
+		} else if (acceptToken(Slash.class) != null) {
+			expectPart(MultiplicativeExpression.class);
+		} else if (acceptToken(Percent.class) != null) {
+			expectPart(MultiplicativeExpression.class);
+		}
+		finish();
 	}
-	finish();
-    }
 
-    @Override
-    public CodeRangeType getCodeRangeType() {
-	return CodeRangeType.FRAGMENT;
-    }
+	@Override
+	public CodeRangeType getCodeRangeType() {
+		return CodeRangeType.FRAGMENT;
+	}
 
 }

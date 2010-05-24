@@ -26,25 +26,25 @@ import com.puresol.parser.PartDoesNotMatchException;
  */
 public class ArrayInitializer extends AbstractJavaParser {
 
-    private static final long serialVersionUID = 4903744780392938101L;
+	private static final long serialVersionUID = 4903744780392938101L;
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void scan() throws PartDoesNotMatchException, ParserException {
-	expectToken(LCurlyBracket.class);
-	acceptPart(VariableInitializers.class);
-	acceptToken(Comma.class);
-	expectToken(RCurlyBracket.class);
-	finish();
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void scan() throws PartDoesNotMatchException, ParserException {
+		expectToken(LCurlyBracket.class);
+		acceptPart(VariableInitializers.class);
+		acceptToken(Comma.class);
+		expectToken(RCurlyBracket.class);
+		finish();
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public CodeRangeType getCodeRangeType() {
-	return CodeRangeType.FRAGMENT;
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public CodeRangeType getCodeRangeType() {
+		return CodeRangeType.FRAGMENT;
+	}
 }

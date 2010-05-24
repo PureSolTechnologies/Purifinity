@@ -10,27 +10,27 @@ import com.puresol.parser.PartDoesNotMatchException;
  * conditionalAndExpression : inclusiveOrExpression ('&&' inclusiveOrExpression
  * )* ;
  * 
- * Fix: Chained conditional ANDs are allowed.
+ * Fixed chaining!
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
 public class ConditionalAndExpression extends AbstractJavaParser {
 
-    private static final long serialVersionUID = 6464754895556318548L;
+	private static final long serialVersionUID = 6464754895556318548L;
 
-    @Override
-    public void scan() throws PartDoesNotMatchException, ParserException {
-	expectPart(InclusiveOrExpression.class);
-	if (acceptToken(LogicalAnd.class) != null) {
-	    expectPart(ConditionalAndExpression.class);
+	@Override
+	public void scan() throws PartDoesNotMatchException, ParserException {
+		expectPart(InclusiveOrExpression.class);
+		if (acceptToken(LogicalAnd.class) != null) {
+			expectPart(ConditionalAndExpression.class);
+		}
+		finish();
 	}
-	finish();
-    }
 
-    @Override
-    public CodeRangeType getCodeRangeType() {
-	return CodeRangeType.FRAGMENT;
-    }
+	@Override
+	public CodeRangeType getCodeRangeType() {
+		return CodeRangeType.FRAGMENT;
+	}
 
 }

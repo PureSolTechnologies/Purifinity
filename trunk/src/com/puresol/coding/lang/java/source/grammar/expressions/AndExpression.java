@@ -9,27 +9,27 @@ import com.puresol.parser.PartDoesNotMatchException;
 /**
  * andExpression : equalityExpression ('&' equalityExpression )* ;
  * 
- * Fix: Chained ANDs are allowed.
+ * Fixed chaining!
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
 public class AndExpression extends AbstractJavaParser {
 
-    private static final long serialVersionUID = 6464754895556318548L;
+	private static final long serialVersionUID = 6464754895556318548L;
 
-    @Override
-    public void scan() throws PartDoesNotMatchException, ParserException {
-	expectPart(EqualityExpression.class);
-	if (acceptToken(Ampersand.class) != null) {
-	    expectPart(AndExpression.class);
+	@Override
+	public void scan() throws PartDoesNotMatchException, ParserException {
+		expectPart(EqualityExpression.class);
+		if (acceptToken(Ampersand.class) != null) {
+			expectPart(AndExpression.class);
+		}
+		finish();
 	}
-	finish();
-    }
 
-    @Override
-    public CodeRangeType getCodeRangeType() {
-	return CodeRangeType.FRAGMENT;
-    }
+	@Override
+	public CodeRangeType getCodeRangeType() {
+		return CodeRangeType.FRAGMENT;
+	}
 
 }

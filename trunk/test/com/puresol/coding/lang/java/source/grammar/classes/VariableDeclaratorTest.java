@@ -14,6 +14,8 @@ public class VariableDeclaratorTest extends TestCase {
 		assertTrue(JavaGrammarTester.valid("a[]", VariableDeclarator.class));
 		assertTrue(JavaGrammarTester
 				.valid("a = null", VariableDeclarator.class));
+		assertTrue(JavaGrammarTester.valid("additionalLocales = new Locale[0]",
+				VariableDeclarator.class));
 	}
 
 }

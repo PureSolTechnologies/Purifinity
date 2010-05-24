@@ -3,6 +3,8 @@ package com.puresol.parser;
 import java.util.ArrayList;
 import java.util.Stack;
 
+import org.apache.log4j.Logger;
+
 /**
  * This is the core lexer engine for scanning texts to an ArrayList of tokens.
  * It is not implemented as a recursive scan due to the stack limitation for
@@ -13,6 +15,9 @@ import java.util.Stack;
  * 
  */
 public class TextLexerEngine {
+
+	private static final Logger logger = Logger
+			.getLogger(TextLexerEngine.class);
 
 	/**
 	 * This is the only access method to use the engine. Everything else is only
@@ -112,7 +117,7 @@ public class TextLexerEngine {
 		definition = null;
 		for (definitionIndex = startDefinitionIndex; definitionIndex < tokenDefinitions
 				.size(); definitionIndex++) {
-			definition = this.tokenDefinitions.get(definitionIndex);
+			definition = tokenDefinitions.get(definitionIndex);
 			if (definition.atStart(text.substring(textPosition))) {
 				return true;
 			}
@@ -131,9 +136,21 @@ public class TextLexerEngine {
 		lexerStack.push(new LexerPosition(definitionIndex, token));
 
 		textPosition += token.getLength();
-		tokenIndex += token.getLength();
-		lineNumber += tokenText.split("\n").length - 1;
+		tokenIndex++;
+		lineNumber += countNewLines(tokenText);
 		startDefinitionIndex = 0;
+		logger.debug("store token: " + token.toString());
+	}
+
+	private int countNewLines(String text) {
+		char[] chars = text.toCharArray();
+		int counter = 0;
+		for (int index = 0; index < text.length(); index++) {
+			if (chars[index] == '\n') {
+				counter++;
+			}
+		}
+		return counter;
 	}
 
 	/**
@@ -152,8 +169,9 @@ public class TextLexerEngine {
 
 		textPosition -= token.getLength();
 		tokenIndex--;
-		lineNumber -= token.getStopLine() - token.getStopLine();
+		lineNumber -= token.getStopLine() - token.getStartLine();
 		startDefinitionIndex = oldPosition.getDefinitionIndex() + 1;
+		logger.debug("rollback: " + token.toString());
 	}
 
 	/**

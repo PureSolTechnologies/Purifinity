@@ -4,7 +4,7 @@ import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.java.AbstractJavaParser;
 import com.puresol.coding.lang.java.source.grammar.types_values_variables.Type;
 import com.puresol.coding.lang.java.source.literals.Identifier;
-import com.puresol.coding.lang.java.source.symbols.Dot;
+import com.puresol.coding.lang.java.source.symbols.DotDotDot;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
@@ -16,21 +16,19 @@ import com.puresol.parser.PartDoesNotMatchException;
  */
 public class EllipsisParameterDeclaration extends AbstractJavaParser {
 
-    private static final long serialVersionUID = -1812295859556451418L;
+	private static final long serialVersionUID = -1812295859556451418L;
 
-    @Override
-    public void scan() throws PartDoesNotMatchException, ParserException {
-	acceptPart(VariableModifiers.class);
-	expectPart(Type.class);
-	expectToken(Dot.class);
-	expectToken(Dot.class);
-	expectToken(Dot.class);
-	expectToken(Identifier.class);
-	finish();
-    }
+	@Override
+	public void scan() throws PartDoesNotMatchException, ParserException {
+		acceptPart(VariableModifiers.class);
+		expectPart(Type.class);
+		expectToken(DotDotDot.class);
+		expectToken(Identifier.class);
+		finish();
+	}
 
-    @Override
-    public CodeRangeType getCodeRangeType() {
-	return CodeRangeType.CLASS;
-    }
+	@Override
+	public CodeRangeType getCodeRangeType() {
+		return CodeRangeType.CLASS;
+	}
 }

@@ -17,28 +17,28 @@ import com.puresol.parser.PartDoesNotMatchException;
  */
 public class IfThenElseStatement extends AbstractJavaParser {
 
-    private static final long serialVersionUID = 1202904051316374607L;
+	private static final long serialVersionUID = 1202904051316374607L;
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void scan() throws PartDoesNotMatchException, ParserException {
-	expectToken(IfKeyword.class);
-	expectPart(ParExpression.class);
-	expectPart(Statement.class);
-	if (acceptToken(ElseKeyword.class) != null) {
-	    expectPart(Statement.class);
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void scan() throws PartDoesNotMatchException, ParserException {
+		expectToken(IfKeyword.class);
+		expectPart(ParExpression.class);
+		expectPart(Statement.class);
+		if (acceptToken(ElseKeyword.class) != null) {
+			expectPart(Statement.class);
+		}
+		finish();
 	}
-	finish();
-    }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public CodeRangeType getCodeRangeType() {
-	return CodeRangeType.FRAGMENT;
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public CodeRangeType getCodeRangeType() {
+		return CodeRangeType.FRAGMENT;
+	}
 
 }

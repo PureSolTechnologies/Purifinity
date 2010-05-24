@@ -11,7 +11,7 @@ import com.puresol.parser.PartDoesNotMatchException;
 /**
  * shiftExpression : additiveExpression (shiftOp additiveExpression )* ;
  * 
- * Fix: Chained shift expressions are allowed.
+ * Fixed chaining!
  * 
  * shiftOp 
     :    '<' '<'
@@ -24,24 +24,24 @@ import com.puresol.parser.PartDoesNotMatchException;
  */
 public class ShiftExpression extends AbstractJavaParser {
 
-    private static final long serialVersionUID = 6464754895556318548L;
+	private static final long serialVersionUID = 6464754895556318548L;
 
-    @Override
-    public void scan() throws PartDoesNotMatchException, ParserException {
-	expectPart(AdditiveExpression.class);
-	if (acceptToken(LessThanLessThan.class) != null) {
-	    expectPart(ShiftExpression.class);
-	} else if (acceptToken(GreaterThanGreaterThan.class) != null) {
-	    expectPart(ShiftExpression.class);
-	} else if (acceptToken(GreaterThanGreaterThanGreaterThan.class) != null) {
-	    expectPart(ShiftExpression.class);
+	@Override
+	public void scan() throws PartDoesNotMatchException, ParserException {
+		expectPart(AdditiveExpression.class);
+		if (acceptToken(LessThanLessThan.class) != null) {
+			expectPart(ShiftExpression.class);
+		} else if (acceptToken(GreaterThanGreaterThan.class) != null) {
+			expectPart(ShiftExpression.class);
+		} else if (acceptToken(GreaterThanGreaterThanGreaterThan.class) != null) {
+			expectPart(ShiftExpression.class);
+		}
+		finish();
 	}
-	finish();
-    }
 
-    @Override
-    public CodeRangeType getCodeRangeType() {
-	return CodeRangeType.FRAGMENT;
-    }
+	@Override
+	public CodeRangeType getCodeRangeType() {
+		return CodeRangeType.FRAGMENT;
+	}
 
 }

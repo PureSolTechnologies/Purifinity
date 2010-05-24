@@ -1,11 +1,11 @@
 package com.puresol.coding.lang.java.source.grammar.interfaces;
 
 import com.puresol.coding.analysis.CodeRangeType;
-import com.puresol.coding.lang.fortran.source.symbols.LParen;
-import com.puresol.coding.lang.fortran.source.symbols.RParen;
 import com.puresol.coding.lang.java.AbstractJavaParser;
 import com.puresol.coding.lang.java.source.literals.Identifier;
 import com.puresol.coding.lang.java.source.symbols.At;
+import com.puresol.coding.lang.java.source.symbols.LParen;
+import com.puresol.coding.lang.java.source.symbols.RParen;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 

@@ -22,24 +22,24 @@ import com.puresol.parser.PartDoesNotMatchException;
  */
 public class Creator extends AbstractJavaParser {
 
-    private static final long serialVersionUID = 6464754895556318548L;
+	private static final long serialVersionUID = 6464754895556318548L;
 
-    @Override
-    public void scan() throws PartDoesNotMatchException, ParserException {
-	if (acceptToken(NewKeyword.class) != null) {
-	    acceptPart(NonWildcardTypeArguments.class);
-	    expectPart(ClassOrInterfaceType.class);
-	    expectPart(ClassCreatorRest.class);
-	} else if (acceptPart(ArrayCreator.class) != null) {
-	} else {
-	    abort();
+	@Override
+	public void scan() throws PartDoesNotMatchException, ParserException {
+		if (acceptPart(ArrayCreator.class) != null) {
+		} else if (acceptToken(NewKeyword.class) != null) {
+			acceptPart(NonWildcardTypeArguments.class);
+			expectPart(ClassOrInterfaceType.class);
+			expectPart(ClassCreatorRest.class);
+		} else {
+			abort();
+		}
+		finish();
 	}
-	finish();
-    }
 
-    @Override
-    public CodeRangeType getCodeRangeType() {
-	return CodeRangeType.FRAGMENT;
-    }
+	@Override
+	public CodeRangeType getCodeRangeType() {
+		return CodeRangeType.FRAGMENT;
+	}
 
 }

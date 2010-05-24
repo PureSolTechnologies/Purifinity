@@ -11,29 +11,29 @@ import com.puresol.parser.PartDoesNotMatchException;
  * additiveExpression : multiplicativeExpression ( ( '+' | '-' )
  * multiplicativeExpression )* ;
  * 
- * Fix: Chained additive expressions are allowed.
+ * Fixed chaining!
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
 public class AdditiveExpression extends AbstractJavaParser {
 
-    private static final long serialVersionUID = 6464754895556318548L;
+	private static final long serialVersionUID = 6464754895556318548L;
 
-    @Override
-    public void scan() throws PartDoesNotMatchException, ParserException {
-	expectPart(MultiplicativeExpression.class);
-	if (acceptToken(Plus.class) != null) {
-	    expectPart(AdditiveExpression.class);
-	} else if (acceptToken(Minus.class) != null) {
-	    expectPart(AdditiveExpression.class);
+	@Override
+	public void scan() throws PartDoesNotMatchException, ParserException {
+		expectPart(MultiplicativeExpression.class);
+		if (acceptToken(Plus.class) != null) {
+			expectPart(AdditiveExpression.class);
+		} else if (acceptToken(Minus.class) != null) {
+			expectPart(AdditiveExpression.class);
+		}
+		finish();
 	}
-	finish();
-    }
 
-    @Override
-    public CodeRangeType getCodeRangeType() {
-	return CodeRangeType.FRAGMENT;
-    }
+	@Override
+	public CodeRangeType getCodeRangeType() {
+		return CodeRangeType.FRAGMENT;
+	}
 
 }
