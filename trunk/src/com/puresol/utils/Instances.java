@@ -7,6 +7,15 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+/**
+ * This class is the implementation for utilities to handle different instances
+ * of different classes. This class can be used a simple factory or a singleton
+ * manager. For the Flyweight Pattern this class can be the manager for the fly
+ * weighted classes.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class Instances {
 
     private static final Logger logger = Logger.getLogger(Instances.class);
@@ -86,12 +95,22 @@ public class Instances {
 		parameterClasses);
     }
 
+    /**
+     * This method creates classes for a complete list of Class<?>.
+     * 
+     * @param <C>
+     * @param clazz
+     * @param classes
+     * @param params
+     * @return
+     * @throws ClassInstantiationException
+     */
     public static <C> List<C> createInstanceList(Class<C> clazz,
 	    List<Class<? extends C>> classes, Object... params)
 	    throws ClassInstantiationException {
 	List<C> list = new ArrayList<C>();
 	for (Class<? extends C> c : classes) {
-	    list.add(Instances.createInstance(c, params));
+	    list.add(createInstance(c, params));
 	}
 	return list;
     }

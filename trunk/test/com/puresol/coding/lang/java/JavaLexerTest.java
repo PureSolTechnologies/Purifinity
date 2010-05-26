@@ -8,7 +8,7 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import com.puresol.coding.lang.java.JavaLexer;
+import com.puresol.coding.SourceCodeLexer;
 import com.puresol.parser.DefaultPreConditioner;
 import com.puresol.parser.LexerException;
 import com.puresol.parser.NoMatchingTokenDefinitionFound;
@@ -17,29 +17,30 @@ import com.puresol.parser.TokenStream;
 
 public class JavaLexerTest {
 
-	@Test
-	public void testLexer() {
-		try {
-			DefaultPreConditioner conditioner = new DefaultPreConditioner(
-					new File("src"), new File("apps/CodeAnalysis.java"));
-			TokenStream tokenStream = conditioner.getTokenStream();
-			JavaLexer lexer = new JavaLexer(tokenStream);
-			TokenStream tokenStream2 = lexer.getTokenStream();
-			for (Token token : tokenStream2.getTokens()) {
-				System.out.println(token.toString());
-			}
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			Assert.fail("No exception was expected!");
-		} catch (IOException e) {
-			e.printStackTrace();
-			Assert.fail("No exception was expected!");
-		} catch (NoMatchingTokenDefinitionFound e) {
-			e.printStackTrace();
-			Assert.fail("No exception was expected!");
-		} catch (LexerException e) {
-			e.printStackTrace();
-			Assert.fail("No exception was expected!");
-		}
+    @Test
+    public void testLexer() {
+	try {
+	    DefaultPreConditioner conditioner = new DefaultPreConditioner(
+		    new File("src"), new File("apps/CodeAnalysis.java"));
+	    TokenStream tokenStream = conditioner.getTokenStream();
+	    SourceCodeLexer lexer = new SourceCodeLexer(Java.getInstance(),
+		    tokenStream);
+	    TokenStream tokenStream2 = lexer.getTokenStream();
+	    for (Token token : tokenStream2.getTokens()) {
+		System.out.println(token.toString());
+	    }
+	} catch (FileNotFoundException e) {
+	    e.printStackTrace();
+	    Assert.fail("No exception was expected!");
+	} catch (IOException e) {
+	    e.printStackTrace();
+	    Assert.fail("No exception was expected!");
+	} catch (NoMatchingTokenDefinitionFound e) {
+	    e.printStackTrace();
+	    Assert.fail("No exception was expected!");
+	} catch (LexerException e) {
+	    e.printStackTrace();
+	    Assert.fail("No exception was expected!");
 	}
+    }
 }

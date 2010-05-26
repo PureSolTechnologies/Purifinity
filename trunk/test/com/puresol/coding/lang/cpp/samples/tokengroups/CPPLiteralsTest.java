@@ -10,7 +10,7 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.puresol.coding.lang.cpp.source.tokengroups.CPPLiterals;
+import com.puresol.coding.lang.cpp.CPlusPlus;
 import com.puresol.coding.tokentypes.SourceTokenDefinition;
 import com.puresol.parser.TokenDefinition;
 import com.puresol.utils.ClassInstantiationException;
@@ -52,7 +52,8 @@ public class CPPLiteralsTest {
     public void testLiteralsCompleteness() {
 	try {
 	    List<TokenDefinition> tokens = Instances.createInstanceList(
-		    TokenDefinition.class, CPPLiterals.DEFINITIONS);
+		    TokenDefinition.class, CPlusPlus.getInstance()
+			    .getLiterals());
 	    for (TokenDefinition definition : tokens) {
 		if (!literals.contains(definition.getClass())) {
 		    Assert.fail(definition.getClass()

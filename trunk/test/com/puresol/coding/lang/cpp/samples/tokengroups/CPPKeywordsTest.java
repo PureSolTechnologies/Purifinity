@@ -10,7 +10,7 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.puresol.coding.lang.cpp.source.tokengroups.CPPKeywords;
+import com.puresol.coding.lang.cpp.CPlusPlus;
 import com.puresol.coding.tokentypes.AbstractSourceTokenDefinition;
 import com.puresol.coding.tokentypes.SourceTokenDefinition;
 import com.puresol.parser.TokenDefinition;
@@ -53,7 +53,8 @@ public class CPPKeywordsTest {
     public void testKeywordsCompleteness() {
 	try {
 	    List<TokenDefinition> tokens = Instances.createInstanceList(
-		    TokenDefinition.class, CPPKeywords.DEFINITIONS);
+		    TokenDefinition.class, CPlusPlus.getInstance()
+			    .getKeywords());
 	    for (TokenDefinition definition : tokens) {
 		if (!keywords.contains(definition.getClass())) {
 		    Assert.fail(definition.getClass()
@@ -84,7 +85,8 @@ public class CPPKeywordsTest {
     public void testKeywordCompleteness2() {
 	try {
 	    List<TokenDefinition> tokens = Instances.createInstanceList(
-		    TokenDefinition.class, CPPKeywords.DEFINITIONS);
+		    TokenDefinition.class, CPlusPlus.getInstance()
+			    .getKeywords());
 	    for (Class<?> clazz : keywords) {
 		if (clazz.getName().endsWith("Test")) {
 		    continue;

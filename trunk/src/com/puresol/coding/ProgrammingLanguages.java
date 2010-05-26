@@ -2,11 +2,24 @@ package com.puresol.coding;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
 import com.puresol.coding.analysis.CodeAnalysisProperties;
 
+/**
+ * This is the central programming languages specification manager. All
+ * available programming languages should register itself here in this manager.
+ * All tools and evaluators ask for supported languages and features within this
+ * class.
+ * 
+ * This class is designed as singleton to avoid data inconsistencies during
+ * different initializations.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class ProgrammingLanguages {
 
     private final ArrayList<ProgrammingLanguage> languages = new ArrayList<ProgrammingLanguage>();
@@ -70,11 +83,15 @@ public class ProgrammingLanguages {
 	return null;
     }
 
-    public ArrayList<ProgrammingLanguage> getLanguages() {
+    public List<ProgrammingLanguage> getLanguages() {
 	return languages;
     }
 
     public void registerLanguage(ProgrammingLanguage language) {
 	languages.add(language);
+    }
+
+    public void unregisterLanguage(ProgrammingLanguage language) {
+	languages.remove(language);
     }
 }

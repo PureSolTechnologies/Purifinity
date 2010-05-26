@@ -17,6 +17,7 @@ import java.io.IOException;
 import org.apache.log4j.Logger;
 
 import com.puresol.coding.ProgrammingLanguage;
+import com.puresol.coding.SourceCodeLexer;
 import com.puresol.coding.analysis.AbstractAnalyser;
 import com.puresol.coding.analysis.AnalyserException;
 import com.puresol.parser.LexerException;
@@ -27,44 +28,45 @@ import com.puresol.parser.TokenStream;
 
 public class FortranAnalyser extends AbstractAnalyser {
 
-	private static final long serialVersionUID = 2265150343844799735L;
+    private static final long serialVersionUID = 2265150343844799735L;
 
-	private static final Logger logger = Logger
-			.getLogger(FortranAnalyser.class);
+    private static final Logger logger = Logger
+	    .getLogger(FortranAnalyser.class);
 
-	public FortranAnalyser(File projectDirectory, File file) {
-		super(projectDirectory, file);
+    public FortranAnalyser(File projectDirectory, File file) {
+	super(projectDirectory, file);
+    }
+
+    @Override
+    public void parse() throws AnalyserException {
+	try {
+	    SourceCodeLexer lexer = new SourceCodeLexer(Fortran.getInstance(),
+		    new FortranPreConditioner(getProjectDirectory(), getFile())
+			    .getTokenStream());
+	    TokenStream tokenStream = lexer.getTokenStream();
+	    FortranParser parser = (FortranParser) createParserInstance(
+		    FortranParser.class, tokenStream);
+	    parser.scan();
+	    setRootCodeRange(parser);
+	    return;
+	} catch (FileNotFoundException e) {
+	    logger.error(e.getMessage(), e);
+	} catch (IOException e) {
+	    logger.error(e.getMessage(), e);
+	} catch (NoMatchingTokenDefinitionFound e) {
+	    logger.error(e.getMessage(), e);
+	} catch (PartDoesNotMatchException e) {
+	    logger.error(e.getMessage(), e);
+	} catch (LexerException e) {
+	    logger.error(e.getMessage(), e);
+	} catch (ParserException e) {
+	    logger.error(e.getMessage(), e);
 	}
+	throw new AnalyserException(this);
+    }
 
-	@Override
-	public void parse() throws AnalyserException {
-		try {
-			FortranLexer lexer = new FortranLexer(new FortranPreConditioner(
-					getProjectDirectory(), getFile()).getTokenStream());
-			TokenStream tokenStream = lexer.getTokenStream();
-			FortranParser parser = (FortranParser) createParserInstance(
-					FortranParser.class, tokenStream);
-			parser.scan();
-			setRootCodeRange(parser);
-			return;
-		} catch (FileNotFoundException e) {
-			logger.error(e.getMessage(), e);
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-		} catch (NoMatchingTokenDefinitionFound e) {
-			logger.error(e.getMessage(), e);
-		} catch (PartDoesNotMatchException e) {
-			logger.error(e.getMessage(), e);
-		} catch (LexerException e) {
-			logger.error(e.getMessage(), e);
-		} catch (ParserException e) {
-			logger.error(e.getMessage(), e);
-		}
-		throw new AnalyserException(this);
-	}
-
-	@Override
-	public ProgrammingLanguage getLanguage() {
-		return Fortran.getInstance();
-	}
+    @Override
+    public ProgrammingLanguage getLanguage() {
+	return Fortran.getInstance();
+    }
 }

@@ -10,6 +10,7 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.puresol.coding.lang.fortran.Fortran;
 import com.puresol.coding.tokentypes.SourceTokenDefinition;
 import com.puresol.parser.TokenDefinition;
 import com.puresol.utils.ClassInstantiationException;
@@ -51,7 +52,7 @@ public class FortranLiteralsTest {
     public void testLiteralsCompleteness() {
 	try {
 	    List<TokenDefinition> tokens = Instances.createInstanceList(
-		    TokenDefinition.class, FortranLiterals.DEFINITIONS);
+		    TokenDefinition.class, Fortran.getInstance().getLiterals());
 	    for (TokenDefinition definition : tokens) {
 		if (!literals.contains(definition.getClass())) {
 		    Assert.fail(definition.getClass()

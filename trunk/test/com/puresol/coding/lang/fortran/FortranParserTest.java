@@ -11,6 +11,7 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
+import com.puresol.coding.SourceCodeLexer;
 import com.puresol.coding.analysis.CodeRange;
 import com.puresol.parser.LexerException;
 import com.puresol.parser.NoMatchingTokenDefinitionFound;
@@ -40,7 +41,8 @@ public class FortranParserTest extends TestCase {
 	    // new File(
 	    // "test/com/puresol/coding/lang/java/FortranParserTest.java"));
 	    TokenStream tokenStream = conditioner.getTokenStream();
-	    FortranLexer lexer = new FortranLexer(tokenStream);
+	    SourceCodeLexer lexer = new SourceCodeLexer(Fortran.getInstance(),
+		    tokenStream);
 	    TokenStream tokenStream2 = lexer.getTokenStream();
 	    for (Token token : tokenStream2.getTokens()) {
 		System.out.println(token.toString());
@@ -97,7 +99,8 @@ public class FortranParserTest extends TestCase {
 		    System.out.println(token.toString());
 		}
 	    }
-	    FortranLexer lexer = new FortranLexer(tokenStream);
+	    SourceCodeLexer lexer = new SourceCodeLexer(Fortran.getInstance(),
+		    tokenStream);
 	    TokenStream tokenStream2 = lexer.getTokenStream();
 	    for (Token token : tokenStream2.getTokens()) {
 		if (token.getPublicity() == TokenPublicity.VISIBLE) {

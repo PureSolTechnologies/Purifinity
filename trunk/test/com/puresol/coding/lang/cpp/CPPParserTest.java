@@ -9,6 +9,7 @@ import java.io.IOException;
 
 import org.junit.Test;
 
+import com.puresol.coding.SourceCodeLexer;
 import com.puresol.coding.analysis.CodeRange;
 import com.puresol.parser.DefaultPreConditioner;
 import com.puresol.parser.LexerException;
@@ -38,7 +39,8 @@ public class CPPParserTest extends TestCase {
 	    // new File(
 	    // "test/com/puresol/coding/lang/java/JavaParserTest.java"));
 	    TokenStream tokenStream = conditioner.getTokenStream();
-	    CPPLexer lexer = new CPPLexer(tokenStream);
+	    SourceCodeLexer lexer = new SourceCodeLexer(
+		    CPlusPlus.getInstance(), tokenStream);
 	    TokenStream tokenStream2 = lexer.getTokenStream();
 	    for (Token token : tokenStream2.getTokens()) {
 		System.out.println(token.toString());

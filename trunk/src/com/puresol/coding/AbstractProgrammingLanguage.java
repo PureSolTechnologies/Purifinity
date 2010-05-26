@@ -7,38 +7,58 @@ import com.puresol.utils.ClassInstantiationException;
 import com.puresol.utils.Instances;
 
 abstract public class AbstractProgrammingLanguage implements
-		ProgrammingLanguage {
+	ProgrammingLanguage {
 
-	private final String name;
+    private final String name;
 
-	protected AbstractProgrammingLanguage(String name) {
-		this.name = name;
+    protected AbstractProgrammingLanguage(String name) {
+	this.name = name;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public final String getName() {
+	return name;
+    }
+
+    /**
+     * This method returns the valid suffixes for source files of the language.
+     * 
+     * @return A String array is returned containing the suffixes.
+     */
+    abstract protected String[] getValidFileSuffixes();
+
+    /**
+     * This method returns the class for the related Analyser.
+     * 
+     * @return The class for the Analyser is returned which has to be of
+     *         interface Analyser.
+     */
+    abstract protected Class<? extends Analyser> getAnalyserClass();
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Analyser createAnalyser(File directory, File file)
+	    throws ClassInstantiationException {
+	return Instances.createInstance(getAnalyserClass(), directory, file);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isSuitable(File file) {
+	String name = file.getName();
+	for (String suffix : getValidFileSuffixes()) {
+	    if (name.endsWith(suffix)) {
+		return true;
+	    }
 	}
-
-	@Override
-	public final String getName() {
-		return name;
-	}
-
-	abstract protected String[] getValidFileSuffixes();
-
-	abstract protected Class<? extends Analyser> getAnalyserClass();
-
-	@Override
-	public Analyser createAnalyser(File directory, File file)
-			throws ClassInstantiationException {
-		return Instances.createInstance(getAnalyserClass(), directory, file);
-	}
-
-	@Override
-	public boolean isSuitable(File file) {
-		String name = file.getName();
-		for (String suffix : getValidFileSuffixes()) {
-			if (name.endsWith(suffix)) {
-				return true;
-			}
-		}
-		return false;
-	}
+	return false;
+    }
 
 }
