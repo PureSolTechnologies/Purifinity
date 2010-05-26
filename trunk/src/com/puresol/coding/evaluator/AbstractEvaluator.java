@@ -85,7 +85,7 @@ public abstract class AbstractEvaluator implements Evaluator {
 			CodeRange parent) {
 		if (parent == null)
 			return;
-		if (!parent.getName().isEmpty()) {
+		if (parent.getCodeRangeType().isEvaluatable()) {
 			ranges.add(parent);
 		}
 		for (CodeRange child : parent.getChildCodeRanges())

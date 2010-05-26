@@ -11,6 +11,8 @@ import org.junit.Test;
 
 import com.puresol.coding.analysis.AnalyserException;
 import com.puresol.coding.analysis.CodeRange;
+import com.puresol.coding.lang.java.source.grammar.CompilationUnitTest;
+import com.puresol.utils.Files;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
@@ -27,10 +29,8 @@ public class JavaAnalyserTest extends TestCase {
 	public void test() {
 		try {
 			Logger.getRootLogger().setLevel(Level.DEBUG);
-			JavaAnalyser analyser = new JavaAnalyser(
-					new File("test"),
-					new File(
-							"com/puresol/coding/lang/java/CompilationUnitTest.java"));
+			JavaAnalyser analyser = new JavaAnalyser(new File("test"), Files
+					.classToRelativePackagePath(CompilationUnitTest.class));
 			analyser.parse();
 			CodeRange rootCodeRange = analyser.getRootCodeRange();
 			Assert.assertNotNull(rootCodeRange);

@@ -26,50 +26,49 @@ import junit.framework.TestCase;
 
 public class CPPParserTest extends TestCase {
 
-    @Test
-    public void test() {
-	CPPParser parser = null;
-	try {
-	    DefaultPreConditioner conditioner = new DefaultPreConditioner(
-		    new File("test"),
-		    new File(
-			    "/com/puresol/coding/lang/java/samples/RandomNumbers.java"));
-	    // DefaultPreConditioner conditioner =
-	    // new DefaultPreConditioner(
-	    // new File(
-	    // "test/com/puresol/coding/lang/java/JavaParserTest.java"));
-	    TokenStream tokenStream = conditioner.getTokenStream();
-	    SourceCodeLexer lexer = new SourceCodeLexer(
-		    CPlusPlus.getInstance(), tokenStream);
-	    TokenStream tokenStream2 = lexer.getTokenStream();
-	    for (Token token : tokenStream2.getTokens()) {
-		System.out.println(token.toString());
-	    }
-	    parser = DIClassBuilder.forInjections(
-		    Injection.named("TokenStream", tokenStream2))
-		    .createInstance(CPPParser.class);
-	    parser.scan();
-	    for (CodeRange codeRange : parser.getChildCodeRanges()) {
-		System.out.println(codeRange.toString());
-	    }
-	} catch (FileNotFoundException e) {
-	    e.printStackTrace();
-	    Assert.fail("No exception was expected!");
-	} catch (IOException e) {
-	    e.printStackTrace();
-	    Assert.fail("No exception was expected!");
-	} catch (NoMatchingTokenDefinitionFound e) {
-	    e.printStackTrace();
-	    Assert.fail("No exception was expected!");
-	} catch (PartDoesNotMatchException e) {
-	    e.printStackTrace();
-	    Assert.fail("No exception was expected!");
-	} catch (LexerException e) {
-	    e.printStackTrace();
-	    Assert.fail("No exception was expected!");
-	} catch (ClassInstantiationException e) {
-	    e.printStackTrace();
-	    Assert.fail("No exception was expected!");
+	@Test
+	public void test() {
+		CPPParser parser = null;
+		try {
+			DefaultPreConditioner conditioner = new DefaultPreConditioner(
+					new File("test"), new File(
+							"com/puresol/coding/lang/cpp/samples/String.cpp"));
+			// DefaultPreConditioner conditioner =
+			// new DefaultPreConditioner(
+			// new File(
+			// "test/com/puresol/coding/lang/java/JavaParserTest.java"));
+			TokenStream tokenStream = conditioner.getTokenStream();
+			SourceCodeLexer lexer = new SourceCodeLexer(
+					CPlusPlus.getInstance(), tokenStream);
+			TokenStream tokenStream2 = lexer.getTokenStream();
+			for (Token token : tokenStream2.getTokens()) {
+				System.out.println(token.toString());
+			}
+			parser = DIClassBuilder.forInjections(
+					Injection.named("TokenStream", tokenStream2))
+					.createInstance(CPPParser.class);
+			parser.scan();
+			for (CodeRange codeRange : parser.getChildCodeRanges()) {
+				System.out.println(codeRange.toString());
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			Assert.fail("No exception was expected!");
+		} catch (IOException e) {
+			e.printStackTrace();
+			Assert.fail("No exception was expected!");
+		} catch (NoMatchingTokenDefinitionFound e) {
+			e.printStackTrace();
+			Assert.fail("No exception was expected!");
+		} catch (PartDoesNotMatchException e) {
+			e.printStackTrace();
+			Assert.fail("No exception was expected!");
+		} catch (LexerException e) {
+			e.printStackTrace();
+			Assert.fail("No exception was expected!");
+		} catch (ClassInstantiationException e) {
+			e.printStackTrace();
+			Assert.fail("No exception was expected!");
+		}
 	}
-    }
 }

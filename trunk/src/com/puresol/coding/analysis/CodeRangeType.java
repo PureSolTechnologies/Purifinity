@@ -31,6 +31,7 @@ public enum CodeRangeType implements Identifiable {
 		public boolean isRunnableCodeSegment() {
 			return false;
 		}
+
 	},
 	CLASS {
 		@Override
@@ -161,4 +162,11 @@ public enum CodeRangeType implements Identifiable {
 
 	@Override
 	public abstract String getIdentifier();
+
+	public boolean isEvaluatable() {
+		if (this != FRAGMENT) {
+			return true;
+		}
+		return false;
+	}
 }
