@@ -9,9 +9,9 @@ import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
-public class Files {
+public class FileUtilities {
 
-	private static final Logger logger = Logger.getLogger(Files.class);
+	private static final Logger logger = Logger.getLogger(FileUtilities.class);
 
 	public static File classToRelativePackagePath(Class<?> clazz) {
 		return new File(clazz.getName().replaceAll("\\.", "/") + ".java");
@@ -24,7 +24,7 @@ public class Files {
 	public static boolean writeFile(File directory, File fileName, String text) {
 		RandomAccessFile ra = null;
 		try {
-			File destination = Files.addPaths(directory, fileName);
+			File destination = FileUtilities.addPaths(directory, fileName);
 			File parent = destination.getParentFile();
 			if (!parent.exists()) {
 				if (!parent.mkdirs()) {
@@ -103,7 +103,7 @@ public class Files {
 			return to;
 		}
 		parent = parent.replaceAll("[^/]+", "..");
-		return Files.addPaths(new File(parent), to);
+		return FileUtilities.addPaths(new File(parent), to);
 	}
 
 	/**
@@ -142,7 +142,7 @@ public class Files {
 		RandomAccessFile ra = null;
 		try {
 			StringBuffer text = new StringBuffer();
-			File source = Files.addPaths(directory, fileName);
+			File source = FileUtilities.addPaths(directory, fileName);
 			ra = new RandomAccessFile(source, "r");
 			String line;
 			while ((line = ra.readLine()) != null) {
@@ -162,5 +162,21 @@ public class Files {
 			}
 		}
 		return "";
+	}
+
+	/**
+	 * Utility method used to delete the profile directory when run as a
+	 * stand-alone application.
+	 * 
+	 * @param file
+	 *            The file to recursively delete.
+	 **/
+	public static void deleteFileOrDir(File file) {
+		if (file.isDirectory()) {
+			for (File child : file.listFiles()) {
+				deleteFileOrDir(child);
+			}
+		}
+		file.delete();
 	}
 }

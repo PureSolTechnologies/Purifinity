@@ -5,7 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import com.puresol.utils.Files;
+import com.puresol.utils.FileUtilities;
 
 /**
  * PreConditioner is for reading an InputStream and creating a basic token
@@ -23,7 +23,7 @@ public abstract class AbstractPreConditioner {
     private final File file;
 
     public AbstractPreConditioner(File directory, File file) throws IOException {
-	this.inputStream = new FileInputStream(Files.addPaths(directory, file));
+	this.inputStream = new FileInputStream(FileUtilities.addPaths(directory, file));
 	this.tokenStream = new TokenStream(file);
 	this.directory = directory;
 	this.file = file;

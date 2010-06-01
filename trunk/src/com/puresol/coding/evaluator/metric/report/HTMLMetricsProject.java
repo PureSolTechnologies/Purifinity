@@ -28,7 +28,7 @@ import com.puresol.coding.evaluator.metric.CodeRangeMetrics;
 import com.puresol.coding.evaluator.metric.MetricsEvaluator;
 import com.puresol.coding.reporting.StandardReport;
 import com.puresol.reporting.html.HTMLStandards;
-import com.puresol.utils.Directories;
+import com.puresol.utils.DirectoryUtilities;
 
 public class HTMLMetricsProject {
 
@@ -56,7 +56,7 @@ public class HTMLMetricsProject {
 			.getLogger(HTMLMetricsProject.class);
 
 	private boolean createHTMLProject() {
-		if (!Directories.checkAndCreateDirectory(directory)) {
+		if (!DirectoryUtilities.checkAndCreateDirectory(directory)) {
 			return false;
 		}
 		report.createStandardFiles();

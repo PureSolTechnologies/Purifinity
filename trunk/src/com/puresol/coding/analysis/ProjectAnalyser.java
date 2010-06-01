@@ -24,7 +24,7 @@ import javax.swingx.progress.ProgressObserver;
 
 import org.apache.log4j.Logger;
 
-import com.puresol.utils.Files;
+import com.puresol.utils.FileUtilities;
 
 /**
  * This class is for analysing a whole project. All source code found is checked
@@ -91,7 +91,7 @@ public class ProjectAnalyser implements Serializable, ProgressObservable {
 
 	private void analyseFile(File file) {
 		try {
-			if ((Files.addPaths(directory, file).isFile())
+			if ((FileUtilities.addPaths(directory, file).isFile())
 					&& (!file.getPath().contains("/."))) {
 				Analyser analyser = analyserFactory.create(directory, file);
 				if (analyser != null) {

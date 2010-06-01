@@ -18,7 +18,7 @@ import com.puresol.reporting.html.Anchor;
 import com.puresol.reporting.html.HTMLStandards;
 import com.puresol.reporting.html.Link;
 import com.puresol.reporting.html.LinkTarget;
-import com.puresol.utils.Files;
+import com.puresol.utils.FileUtilities;
 
 public class HTMLReportGenerator extends AbstractReportGenerator {
 
@@ -125,7 +125,7 @@ public class HTMLReportGenerator extends AbstractReportGenerator {
 	}
 
 	private File generateFile(Evaluator evaluator) {
-		return Files.addPaths(new File("evaluators"), new File(evaluator
+		return FileUtilities.addPaths(new File("evaluators"), new File(evaluator
 				.getClass().getName().replaceAll("\\.", "_")
 				+ ".html"));
 	}
@@ -220,7 +220,7 @@ public class HTMLReportGenerator extends AbstractReportGenerator {
 		if (fileName.startsWith("_")) {
 			fileName = fileName.replaceFirst("_", "");
 		}
-		return Files.addPaths(new File("files"), new File(fileName));
+		return FileUtilities.addPaths(new File("files"), new File(fileName));
 	}
 
 	private void createOverview() {
@@ -237,9 +237,9 @@ public class HTMLReportGenerator extends AbstractReportGenerator {
 	private void createOverviewViewer() {
 		File file = new File("index.html");
 		String html = HTMLStandards.getStandardHeader("Evaluation Overview",
-				Files.getRelativePath(file, report.getCssFile()), false, Files
+				FileUtilities.getRelativePath(file, report.getCssFile()), false, FileUtilities
 						.getRelativePath(file, report.getFavIconFile()));
-		html += HTMLStandards.getStandardPageStart(Files.getRelativePath(file,
+		html += HTMLStandards.getStandardPageStart(FileUtilities.getRelativePath(file,
 				report.getLogoFile()), "PureSol-Technologies", null, "");
 		html += getStandardMainMenu(overviewLink);
 		String overviewSubMenu = HTMLStandards.getStandardSubMenu("viewer",
@@ -265,9 +265,9 @@ public class HTMLReportGenerator extends AbstractReportGenerator {
 	private void createEvaluatorViewer() {
 		File file = new File("evaluators.html");
 		String html = HTMLStandards.getStandardHeader("Evaluator Results",
-				Files.getRelativePath(file, report.getCssFile()), false, Files
+				FileUtilities.getRelativePath(file, report.getCssFile()), false, FileUtilities
 						.getRelativePath(file, report.getFavIconFile()));
-		html += HTMLStandards.getStandardPageStart(Files.getRelativePath(file,
+		html += HTMLStandards.getStandardPageStart(FileUtilities.getRelativePath(file,
 				report.getLogoFile()), "PureSol-Technologies", null, "");
 		html += getStandardMainMenu(evaluatorsLink);
 		html += HTMLStandards
@@ -288,10 +288,10 @@ public class HTMLReportGenerator extends AbstractReportGenerator {
 
 	private void createCodeRangeViewer() {
 		File file = new File("files.html");
-		String html = HTMLStandards.getStandardHeader("File Results", Files
-				.getRelativePath(file, report.getCssFile()), false, Files
+		String html = HTMLStandards.getStandardHeader("File Results", FileUtilities
+				.getRelativePath(file, report.getCssFile()), false, FileUtilities
 				.getRelativePath(file, report.getFavIconFile()));
-		html += HTMLStandards.getStandardPageStart(Files.getRelativePath(file,
+		html += HTMLStandards.getStandardPageStart(FileUtilities.getRelativePath(file,
 				report.getLogoFile()), "PureSol-Technologies", null, "");
 		html += getStandardMainMenu(filesLink);
 		html += HTMLStandards

@@ -20,7 +20,7 @@ import com.puresol.coding.analysis.AnalyserFactory;
 import com.puresol.coding.lang.fortran.FortranAnalyser;
 import com.puresol.coding.lang.java.JavaAnalyser;
 import com.puresol.coding.lang.java.JavaParserTest;
-import com.puresol.utils.Files;
+import com.puresol.utils.FileUtilities;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
@@ -46,7 +46,7 @@ public class AnalyserFactoryTest extends TestCase {
 	@Test
 	public void testJava() {
 		try {
-			Analyser analyser = analyserFactory.create(new File("test"), Files
+			Analyser analyser = analyserFactory.create(new File("test"), FileUtilities
 					.classToRelativePackagePath(JavaParserTest.class));
 			Assert.assertEquals(JavaAnalyser.class, analyser.getClass());
 		} catch (FileNotFoundException e) {

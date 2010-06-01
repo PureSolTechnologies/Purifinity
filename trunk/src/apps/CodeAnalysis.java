@@ -43,7 +43,7 @@ import com.puresol.gui.PureSolApplication;
 import com.puresol.gui.coding.analysis.MetricSelectionToolBar;
 import com.puresol.gui.coding.analysis.ProjectAnalysisBrowser;
 import com.puresol.reporting.ReportingFormat;
-import com.puresol.utils.Files;
+import com.puresol.utils.FileUtilities;
 import com.puresol.utils.Persistence;
 import com.puresol.utils.PersistenceException;
 import com.puresol.utils.Property;
@@ -287,7 +287,7 @@ public class CodeAnalysis extends PureSolApplication {
 		try {
 			Desktop.getDesktop().browse(
 					new URI("file://"
-							+ Files.addPaths(chooser.getSelectedFile(),
+							+ FileUtilities.addPaths(chooser.getSelectedFile(),
 									new File("index.html"))));
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
@@ -311,7 +311,7 @@ public class CodeAnalysis extends PureSolApplication {
 						ReportingFormat.HTML);
 				Desktop.getDesktop().browse(
 						new URI("file://"
-								+ Files.addPaths(chooser.getSelectedFile(),
+								+ FileUtilities.addPaths(chooser.getSelectedFile(),
 										new File("index.html"))));
 			} catch (UnsupportedReportingFormatException e) {
 				JOptionPane.showMessageDialog(Application.getInstance(),

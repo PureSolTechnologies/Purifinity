@@ -9,7 +9,7 @@ import com.puresol.coding.analysis.CodeRange;
 import com.puresol.coding.lang.java.JavaParser;
 import com.puresol.coding.lang.java.JavaAnalyser;
 import com.puresol.coding.lang.java.samples.InterfaceSkeleton;
-import com.puresol.utils.Files;
+import com.puresol.utils.FileUtilities;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
@@ -19,7 +19,7 @@ public class InterfaceSkeletonTest extends TestCase {
 	@Test
 	public void test() {
 		try {
-			JavaAnalyser analyser = new JavaAnalyser(new File("test"), Files
+			JavaAnalyser analyser = new JavaAnalyser(new File("test"), FileUtilities
 					.classToRelativePackagePath(InterfaceSkeleton.class));
 			analyser.parse();
 			CodeRange codeRange = analyser.getRootCodeRange();

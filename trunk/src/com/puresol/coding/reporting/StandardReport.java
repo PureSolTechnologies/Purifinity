@@ -10,7 +10,7 @@ import com.puresol.jars.JarFile;
 import com.puresol.reporting.html.HTMLStandards;
 import com.puresol.reporting.html.Image;
 import com.puresol.reporting.html.Link;
-import com.puresol.utils.Files;
+import com.puresol.utils.FileUtilities;
 
 public class StandardReport {
 
@@ -101,13 +101,13 @@ public class StandardReport {
 	}
 
 	public String createLogoIMGTag(File file) {
-		return new Image(Files.getRelativePath(file, logoFile)).toHTML();
+		return new Image(FileUtilities.getRelativePath(file, logoFile)).toHTML();
 
 	}
 
 	public String createLogoIMGTag(File file, int widht, int height,
 			boolean relativeSize) {
-		return new Image(Files.getRelativePath(file, logoFile), widht, height,
+		return new Image(FileUtilities.getRelativePath(file, logoFile), widht, height,
 				relativeSize).toHTML();
 	}
 
@@ -123,8 +123,8 @@ public class StandardReport {
 	}
 
 	private String generateFinalText(File file, String title, String bodyText) {
-		String output = HTMLStandards.getStandardHeader(title, Files
-				.getRelativePath(file, cssFile), false, Files.getRelativePath(
+		String output = HTMLStandards.getStandardHeader(title, FileUtilities
+				.getRelativePath(file, cssFile), false, FileUtilities.getRelativePath(
 				file, favIconFile));
 		output += createLogoIMGTag(file, 400, 0, false);
 		output += "<h1>" + title + "</h1>";
@@ -138,13 +138,13 @@ public class StandardReport {
 	}
 
 	private void writeFile(File file, String text) throws IOException {
-		Files.writeFile(projectDirectory, file, text);
+		FileUtilities.writeFile(projectDirectory, file, text);
 	}
 
 	private void createLogoFile() {
 
 		if (logoFile != null) {
-			File logo = Files.addPaths(projectDirectory, logoFile);
+			File logo = FileUtilities.addPaths(projectDirectory, logoFile);
 			if (!logo.exists()) {
 				JarFile.extractResource(HTMLMetricsProject.class
 						.getResource("/config/logo.png"), logo);
@@ -154,7 +154,7 @@ public class StandardReport {
 
 	private void createCSSFile() {
 		if (cssFile != null) {
-			File css = Files.addPaths(projectDirectory, cssFile);
+			File css = FileUtilities.addPaths(projectDirectory, cssFile);
 			if (!css.exists()) {
 				JarFile.extractResource(HTMLMetricsProject.class
 						.getResource("/css/report.css"), css);
@@ -164,7 +164,7 @@ public class StandardReport {
 
 	private void createFavIconFile() {
 		if (favIconFile != null) {
-			File favIcon = Files.addPaths(projectDirectory, favIconFile);
+			File favIcon = FileUtilities.addPaths(projectDirectory, favIconFile);
 			if (!favIcon.exists()) {
 				JarFile.extractResource(HTMLMetricsProject.class
 						.getResource("/config/favicon.png"), favIcon);
@@ -182,7 +182,7 @@ public class StandardReport {
 		html += "<p>" + translator.i18n("For more information have a look to:")
 				+ " " + Link.getPureSolTechnolgiesHomePage().toHTML() + "</p>";
 		html += HTMLStandards.getStandardFooter();
-		return Files.writeFile(projectDirectory, outputFile, html);
+		return FileUtilities.writeFile(projectDirectory, outputFile, html);
 	}
 
 	public boolean createCopyrightHTML() {
@@ -202,7 +202,7 @@ public class StandardReport {
 		html += "<p>" + translator.i18n("For more information have a look to:")
 				+ " " + Link.getPureSolTechnolgiesHomePage().toHTML() + "</p>";
 		html += HTMLStandards.getStandardFooter();
-		return Files.writeFile(projectDirectory, outputFile, html);
+		return FileUtilities.writeFile(projectDirectory, outputFile, html);
 	}
 
 }

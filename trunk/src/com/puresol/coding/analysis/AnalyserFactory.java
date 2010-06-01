@@ -19,7 +19,7 @@ import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.ProgrammingLanguages;
 import com.puresol.exceptions.StrangeSituationException;
 import com.puresol.utils.ClassInstantiationException;
-import com.puresol.utils.Files;
+import com.puresol.utils.FileUtilities;
 
 /**
  * This factory creates an Analyser class for a given File in dependence for its
@@ -61,7 +61,7 @@ public class AnalyserFactory {
 
 	private void checkFile(File projectDirectory, File file)
 			throws FileNotFoundException {
-		if (!Files.addPaths(projectDirectory, file).exists()) {
+		if (!FileUtilities.addPaths(projectDirectory, file).exists()) {
 			logger.warn("File '" + file.getPath() + "' is not existing!");
 			throw new FileNotFoundException("File '" + file.getPath()
 					+ "' is not existing!");
@@ -85,7 +85,7 @@ public class AnalyserFactory {
 	private Analyser checkAndCreate(ProgrammingLanguage clazz,
 			File projectDirectory, File file) {
 		try {
-			if (!clazz.isSuitable(Files.addPaths(projectDirectory, file))) {
+			if (!clazz.isSuitable(FileUtilities.addPaths(projectDirectory, file))) {
 				return null;
 			}
 			return clazz.createAnalyser(projectDirectory, file);

@@ -21,7 +21,7 @@ import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 import com.puresol.parser.TokenStream;
 import com.puresol.utils.ClassInstantiationException;
-import com.puresol.utils.Files;
+import com.puresol.utils.FileUtilities;
 import com.puresol.utils.di.DIClassBuilder;
 import com.puresol.utils.di.Injection;
 
@@ -38,7 +38,7 @@ public class JavaParserTest extends TestCase {
 	JavaParser parser = null;
 	try {
 	    DefaultPreConditioner conditioner = new DefaultPreConditioner(
-		    new File("test"), Files
+		    new File("test"), FileUtilities
 			    .classToRelativePackagePath(JavaParserTest.class));
 	    TokenStream tokenStream = conditioner.getTokenStream();
 	    SourceCodeLexer lexer = new SourceCodeLexer(Java.getInstance(),

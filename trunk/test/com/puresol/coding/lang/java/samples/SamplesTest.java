@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import com.puresol.coding.analysis.AnalyserException;
 import com.puresol.coding.lang.java.JavaAnalyser;
-import com.puresol.utils.Files;
+import com.puresol.utils.FileUtilities;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
@@ -70,7 +70,7 @@ public class SamplesTest extends TestCase {
 	public void testI18NJavaParser() {
 		Logger.getRootLogger().setLevel(Level.DEBUG);
 		try {
-			JavaAnalyser analyser = new JavaAnalyser(new File("test"), Files
+			JavaAnalyser analyser = new JavaAnalyser(new File("test"), FileUtilities
 					.classToRelativePackagePath(I18NJavaParser.class));
 			analyser.parse();
 		} catch (AnalyserException e) {
