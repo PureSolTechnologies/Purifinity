@@ -30,6 +30,7 @@ import javax.swingx.connect.Slot;
 import javax.swingx.progress.ProgressWindow;
 
 import org.apache.log4j.Logger;
+import org.osgi.framework.BundleException;
 
 import com.puresol.coding.analysis.ProjectAnalyser;
 import com.puresol.coding.evaluator.CodeEvaluationProperties;
@@ -42,6 +43,9 @@ import com.puresol.gui.PropertyDialog;
 import com.puresol.gui.PureSolApplication;
 import com.puresol.gui.coding.analysis.MetricSelectionToolBar;
 import com.puresol.gui.coding.analysis.ProjectAnalysisBrowser;
+import com.puresol.gui.osgi.BundleManager;
+import com.puresol.osgi.OSGi;
+import com.puresol.osgi.OSGiException;
 import com.puresol.reporting.ReportingFormat;
 import com.puresol.utils.FileUtilities;
 import com.puresol.utils.Persistence;
@@ -67,8 +71,9 @@ public class CodeAnalysis extends PureSolApplication {
 	private ProjectAnalysisBrowser browser = null;
 	private MetricSelectionToolBar toolBar = null;
 
-	public CodeAnalysis() {
+	public CodeAnalysis() throws OSGiException, BundleException {
 		super("Code Analysis", "v0.0.1");
+		OSGi.getStartedInstance();
 		initMenu();
 		initDesktop();
 	}
@@ -109,6 +114,9 @@ public class CodeAnalysis extends PureSolApplication {
 		MenuItem propertyEditor = new MenuItem("Property Editor...");
 		propertyEditor.connect("start", this, "propertyEditor");
 
+		MenuItem pluginManager = new MenuItem("Plugin Manager...");
+		pluginManager.connect("start", this, "pluginManager");
+
 		menuBar.add(fileMenu);
 		fileMenu.add(newAnalyser);
 		fileMenu.add(openAnalyser);
@@ -125,6 +133,7 @@ public class CodeAnalysis extends PureSolApplication {
 
 		menuBar.add(optionsMenu);
 		optionsMenu.add(propertyEditor);
+		optionsMenu.add(pluginManager);
 
 		setJMenuBar(menuBar);
 	}
@@ -311,8 +320,9 @@ public class CodeAnalysis extends PureSolApplication {
 						ReportingFormat.HTML);
 				Desktop.getDesktop().browse(
 						new URI("file://"
-								+ FileUtilities.addPaths(chooser.getSelectedFile(),
-										new File("index.html"))));
+								+ FileUtilities.addPaths(chooser
+										.getSelectedFile(), new File(
+										"index.html"))));
 			} catch (UnsupportedReportingFormatException e) {
 				JOptionPane.showMessageDialog(Application.getInstance(),
 						translator.i18n("No report generation possible!")
@@ -351,11 +361,59 @@ public class CodeAnalysis extends PureSolApplication {
 	}
 
 	@Slot
+	public void pluginManager() {
+		try {
+			if (OSGi.isStarted()) {
+				new BundleManager(OSGi.getStartedInstance().getContext()).run();
+			} else {
+				JOptionPane
+						.showConfirmDialog(
+								getInstance(),
+								translator
+										.i18n("No plugin system was started. There is nothing to manage."),
+								translator.i18n("Information"),
+								JOptionPane.DEFAULT_OPTION,
+								JOptionPane.INFORMATION_MESSAGE);
+			}
+		} catch (OSGiException e) {
+			logger.error(e.getMessage(), e);
+			Application.showStandardErrorMessage(translator
+					.i18n("An error within the plugin system occured!"), e);
+		} catch (BundleException e) {
+			logger.error(e.getMessage(), e);
+			Application.showStandardErrorMessage(translator
+					.i18n("An error within the plugin system occured!"), e);
+		}
+	}
+
+	@Slot
 	public void refresh() {
 		browser.setProjectAnalyser(analyser);
 	}
 
+	@Slot
+	@Override
+	public void quit() {
+		try {
+			OSGi.stopAndKillInstance();
+		} catch (BundleException e) {
+			logger.error(e.getMessage(), e);
+		}
+		super.quit();
+	}
+
 	public static void main(String[] args) {
-		new CodeAnalysis().run();
+		try {
+			CodeAnalysis analysis = new CodeAnalysis();
+			analysis.run();
+		} catch (OSGiException e) {
+			logger.error(e.getMessage(), e);
+			Application.showStandardErrorMessage(translator
+					.i18n("An error within the plugin system occured!"), e);
+		} catch (BundleException e) {
+			logger.error(e.getMessage(), e);
+			Application.showStandardErrorMessage(translator
+					.i18n("An error within the plugin system occured!"), e);
+		}
 	}
 }

@@ -53,6 +53,10 @@ public class OSGi {
 		}
 	}
 
+	public static boolean isStarted() {
+		return (instance != null);
+	}
+
 	private Framework framework = null;
 	private BundleContext context = null;
 
@@ -60,6 +64,7 @@ public class OSGi {
 	}
 
 	private void start() throws OSGiException, BundleException {
+		logger.info("Starting OSGi framework...");
 		if (framework != null) {
 			stop();
 		}
@@ -74,6 +79,7 @@ public class OSGi {
 		framework = factory.newFramework(getConfiguration());
 		framework.start();
 		context = framework.getBundleContext();
+		logger.info("OSGi framework started.");
 	}
 
 	private Map<String, Object> getConfiguration() {
@@ -94,6 +100,11 @@ public class OSGi {
 				try {
 					for (String s = br.readLine(); s != null; s = br.readLine()) {
 						s = s.trim();
+						logger
+								.info("Found class for OSGi FrameworkFactory in "
+										+ "'META-INF/services/org.osgi.framework.launch.FrameworkFactory': '"
+										+ s + "'");
+						logger.info("Creating instance...");
 						// Try to load first non-empty, non-commented line.
 						if ((s.length() > 0) && (s.charAt(0) != '#')) {
 							return (FrameworkFactory) Class.forName(s)
@@ -118,9 +129,11 @@ public class OSGi {
 	}
 
 	private void stop() throws BundleException {
+		logger.info("Stopping OSGi framework...");
 		context = null;
 		framework.stop();
 		framework = null;
+		logger.info("OSGi framework stopped.");
 	}
 
 	public BundleContext getContext() {
