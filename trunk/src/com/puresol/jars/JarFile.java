@@ -8,37 +8,36 @@ import java.net.URL;
 
 import org.apache.log4j.Logger;
 
+/**
+ * This class provides some utilities for handling jar files and their content.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class JarFile {
 
-	private static final Logger logger = Logger.getLogger(JarFile.class);
+    private static final Logger logger = Logger.getLogger(JarFile.class);
 
-	public static boolean extractResource(URL resource, File destination) {
-		try {
-			File parent = destination.getParentFile();
-			if (parent != null) {
-				if (!parent.exists()) {
-					parent.mkdirs();
-				}
-			}
-			InputStream inStream = resource.openStream();
-			FileOutputStream outStream = new FileOutputStream(destination);
-			byte[] buffer = new byte[1024];
-			while (inStream.read(buffer) >= 0) {
-				outStream.write(buffer);
-			}
-			outStream.close();
-			inStream.close();
-			return true;
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
+    public static boolean extractResource(URL resource, File destination) {
+	try {
+	    File parent = destination.getParentFile();
+	    if (parent != null) {
+		if (!parent.exists()) {
+		    parent.mkdirs();
 		}
-		return false;
+	    }
+	    InputStream inStream = resource.openStream();
+	    FileOutputStream outStream = new FileOutputStream(destination);
+	    byte[] buffer = new byte[1024];
+	    while (inStream.read(buffer) >= 0) {
+		outStream.write(buffer);
+	    }
+	    outStream.close();
+	    inStream.close();
+	    return true;
+	} catch (IOException e) {
+	    logger.error(e.getMessage(), e);
 	}
-
-	public static void main(String[] args) {
-		JarFile.extractResource(JarFile.class
-				.getResource("/META-INF/logo.jpeg"), new File(
-				"/home/ludwig/logo.jpeg"));
-	}
-
+	return false;
+    }
 }
