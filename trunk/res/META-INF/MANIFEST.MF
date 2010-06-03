@@ -4,5 +4,6 @@ Bundle-SymbolicName: com.puresol.coding.lang.java
 Bundle-Description: Contains the plugin for working with Java programming language. 
 Bundle-Vendor: Puresol Technologies
 Bundle-Version: 1.0.0
-Import-Package: com.puresol.coding.lang.java,org.osgi.framework
+Bundle-Activator: com.puresol.coding.lang.java.Activator
+Import-Package: com.puresol.coding.lang.java,org.osgi.framework,com.puresol
 Export-Package: com.puresol.coding.lang.java

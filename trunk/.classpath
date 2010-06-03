@@ -9,5 +9,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/swingx"/>
 	<classpathentry kind="lib" path="lib/log4j.jar"/>
 	<classpathentry kind="lib" path="lib/junit/junit-4.6.jar"/>
+	<classpathentry kind="lib" path="lib/felix/felix.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
