@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.i18n4j.Translator;
+import javax.swing.JFileChooser;
 import javax.swingx.Application;
 import javax.swingx.Button;
 import javax.swingx.Dialog;
@@ -88,7 +89,18 @@ public class BundleManager extends Dialog {
 
 	@Slot
 	public void installBundle() {
-		Application.showNotImplementedMessage();
+		try {
+			JFileChooser fileDialog = new JFileChooser();
+			fileDialog.setFileSelectionMode(JFileChooser.FILES_ONLY);
+			if (fileDialog.showOpenDialog(Application.getInstance()) == JFileChooser.APPROVE_OPTION) {
+				bundleContext.installBundle("file:"
+						+ fileDialog.getSelectedFile().toString());
+				update();
+			}
+		} catch (BundleException e) {
+			Application.showStandardErrorMessage(
+					"Selected bundle could not be uninstalled.", e);
+		}
 	}
 
 	@Slot
