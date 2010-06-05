@@ -13,5 +13,13 @@ public class FieldDeclarationTest extends TestCase {
 		assertTrue(JavaGrammarTester.valid(
 				"private static Locale[] additionalLocales = new Locale[0];",
 				FieldDeclaration.class));
+		assertTrue(JavaGrammarTester.valid(
+				"private static final String defaults [] = {\n"
+						+ "\"1\", \"2\", \"3\"\n" + "};",
+				FieldDeclaration.class));
+		assertTrue(JavaGrammarTester.valid(
+				"private static final String defaults [] = {\n"
+						+ "\"1\", \"2\", \"3\",\n" + "};",
+				FieldDeclaration.class));
 	}
 }

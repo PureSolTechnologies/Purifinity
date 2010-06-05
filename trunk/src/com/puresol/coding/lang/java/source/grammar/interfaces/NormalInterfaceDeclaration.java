@@ -18,26 +18,26 @@ import com.puresol.parser.PartDoesNotMatchException;
  */
 public class NormalInterfaceDeclaration extends AbstractJavaParser {
 
-    private static final long serialVersionUID = -1812295859556451418L;
+	private static final long serialVersionUID = -1812295859556451418L;
 
-    @Override
-    public void scan() throws PartDoesNotMatchException, ParserException {
-	try {
-	    acceptPart(InterfaceModifiers.class);
-	    expectToken(InterfaceKeyword.class);
-	    String name = getCurrentToken().getText();
-	    expectToken(Identifier.class);
-	    acceptPart(TypeParameters.class);
-	    acceptPart(ExtendsInterfaces.class);
-	    expectPart(InterfaceBody.class);
-	    finish(name);
-	} catch (EndOfTokenStreamException e) {
-	    throw new PartDoesNotMatchException(this);
+	@Override
+	public void scan() throws PartDoesNotMatchException, ParserException {
+		try {
+			acceptPart(InterfaceModifiers.class);
+			expectToken(InterfaceKeyword.class);
+			String name = getCurrentToken().getText();
+			expectToken(Identifier.class);
+			acceptPart(TypeParameters.class);
+			acceptPart(ExtendsInterfaces.class);
+			expectPart(InterfaceBody.class);
+			finish(name);
+		} catch (EndOfTokenStreamException e) {
+			throw new PartDoesNotMatchException(this);
+		}
 	}
-    }
 
-    @Override
-    public CodeRangeType getCodeRangeType() {
-	return CodeRangeType.INTERFACE;
-    }
+	@Override
+	public CodeRangeType getCodeRangeType() {
+		return CodeRangeType.INTERFACE;
+	}
 }

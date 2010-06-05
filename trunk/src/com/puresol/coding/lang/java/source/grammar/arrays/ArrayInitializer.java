@@ -2,6 +2,7 @@ package com.puresol.coding.lang.java.source.grammar.arrays;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.java.AbstractJavaParser;
+import com.puresol.coding.lang.java.source.grammar.classes.VariableInitializer;
 import com.puresol.coding.lang.java.source.symbols.Comma;
 import com.puresol.coding.lang.java.source.symbols.LCurlyBracket;
 import com.puresol.coding.lang.java.source.symbols.RCurlyBracket;
@@ -34,8 +35,12 @@ public class ArrayInitializer extends AbstractJavaParser {
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
 		expectToken(LCurlyBracket.class);
-		acceptPart(VariableInitializers.class);
-		acceptToken(Comma.class);
+		expectPart(VariableInitializer.class);
+		while (acceptToken(Comma.class) != null) {
+			if (acceptPart(VariableInitializer.class) == null) {
+				break;
+			}
+		}
 		expectToken(RCurlyBracket.class);
 		finish();
 	}

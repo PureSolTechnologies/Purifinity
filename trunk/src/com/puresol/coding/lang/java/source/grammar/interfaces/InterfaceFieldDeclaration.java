@@ -5,6 +5,7 @@ import com.puresol.coding.lang.java.AbstractJavaParser;
 import com.puresol.coding.lang.java.source.grammar.classes.FieldModifiers;
 import com.puresol.coding.lang.java.source.grammar.classes.VariableDeclarators;
 import com.puresol.coding.lang.java.source.grammar.types_values_variables.Type;
+import com.puresol.coding.lang.java.source.symbols.Semicolon;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
@@ -23,18 +24,19 @@ import com.puresol.parser.PartDoesNotMatchException;
  */
 public class InterfaceFieldDeclaration extends AbstractJavaParser {
 
-    private static final long serialVersionUID = -2656071830287957232L;
+	private static final long serialVersionUID = -2656071830287957232L;
 
-    @Override
-    public void scan() throws PartDoesNotMatchException, ParserException {
-	acceptPart(FieldModifiers.class);
-	expectPart(Type.class);
-	expectPart(VariableDeclarators.class);
-	finish();
-    }
+	@Override
+	public void scan() throws PartDoesNotMatchException, ParserException {
+		acceptPart(FieldModifiers.class);
+		expectPart(Type.class);
+		expectPart(VariableDeclarators.class);
+		expectToken(Semicolon.class);
+		finish();
+	}
 
-    @Override
-    public CodeRangeType getCodeRangeType() {
-	return CodeRangeType.FRAGMENT;
-    }
+	@Override
+	public CodeRangeType getCodeRangeType() {
+		return CodeRangeType.FRAGMENT;
+	}
 }

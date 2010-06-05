@@ -2,9 +2,6 @@ package com.puresol.coding.lang.java.source.grammar.expressions;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.java.AbstractJavaParser;
-import com.puresol.coding.lang.java.source.symbols.GreaterThanGreaterThan;
-import com.puresol.coding.lang.java.source.symbols.GreaterThanGreaterThanGreaterThan;
-import com.puresol.coding.lang.java.source.symbols.LessThanLessThan;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
@@ -29,11 +26,11 @@ public class ShiftExpression extends AbstractJavaParser {
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
 		expectPart(AdditiveExpression.class);
-		if (acceptToken(LessThanLessThan.class) != null) {
+		if (acceptPart(LessThanLessThan.class) != null) {
 			expectPart(ShiftExpression.class);
-		} else if (acceptToken(GreaterThanGreaterThan.class) != null) {
+		} else if (acceptPart(GreaterThanGreaterThanGreaterThan.class) != null) {
 			expectPart(ShiftExpression.class);
-		} else if (acceptToken(GreaterThanGreaterThanGreaterThan.class) != null) {
+		} else if (acceptPart(GreaterThanGreaterThan.class) != null) {
 			expectPart(ShiftExpression.class);
 		}
 		finish();

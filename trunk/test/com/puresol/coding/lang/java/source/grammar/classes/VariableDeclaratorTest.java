@@ -16,6 +16,8 @@ public class VariableDeclaratorTest extends TestCase {
 				.valid("a = null", VariableDeclarator.class));
 		assertTrue(JavaGrammarTester.valid("additionalLocales = new Locale[0]",
 				VariableDeclarator.class));
+		assertTrue(JavaGrammarTester.valid("defaults [] = {\n"
+				+ "\"1\", \"2\", \"3\",\n" + "}", VariableDeclarator.class));
 	}
 
 }
