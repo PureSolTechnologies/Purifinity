@@ -1,9 +1,9 @@
 package com.puresol.coding.lang.java.source.grammar.classes;
 
 import com.puresol.coding.analysis.CodeRangeType;
-import com.puresol.coding.lang.cpp.source.symbols.Comma;
 import com.puresol.coding.lang.java.AbstractJavaParser;
 import com.puresol.coding.lang.java.source.grammar.types_values_variables.QualifiedName;
+import com.puresol.coding.lang.java.source.symbols.Comma;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 

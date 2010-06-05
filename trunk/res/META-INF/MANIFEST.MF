@@ -5,5 +5,5 @@ Bundle-Description: Contains the plugin for working with Java programming langua
 Bundle-Vendor: Puresol Technologies
 Bundle-Version: 1.0.0
 Bundle-Activator: com.puresol.coding.lang.java.Activator
-Import-Package: com.puresol.coding.lang.java,org.osgi.framework,com.puresol
+Import-Package: com.puresol.coding.lang.java,org.osgi.framework
 Export-Package: com.puresol.coding.lang.java
