@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<jardesc>
+    <jar path="FortranLanguagePack/jar/FortranLanguagePack.jar"/>
+    <options buildIfNeeded="true" compress="true" descriptionLocation="/FortranLanguagePack/jar/FortranLanguagePack.jardesc" exportErrors="false" exportWarnings="true" includeDirectoryEntries="true" overwrite="false" saveDescription="true" storeRefactorings="false" useSourceFolders="false"/>
+    <storedRefactorings deprecationInfo="true" structuralOnly="false"/>
+    <selectedProjects/>
+    <manifest generateManifest="false" manifestLocation="/FortranLanguagePack/res/META-INF/MANIFEST.MF" manifestVersion="1.0" reuseManifest="true" saveManifest="true" usesManifest="true">
+        <sealing sealJar="false">
+            <packagesToSeal/>
+            <packagesToUnSeal/>
+        </sealing>
+    </manifest>
+    <selectedElements exportClassFiles="true" exportJavaFiles="true" exportOutputFolder="false">
+        <javaElement handleIdentifier="=FortranLanguagePack/src"/>
+        <javaElement handleIdentifier="=FortranLanguagePack/res"/>
+    </selectedElements>
+</jardesc>
