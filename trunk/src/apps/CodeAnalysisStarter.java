@@ -13,6 +13,7 @@ package apps;
 import java.io.File;
 
 import com.puresol.jars.JarLoader;
+import com.puresol.utils.ConsoleUtils;
 
 /**
  * This is PureSolTechnologies' code analysis tool for automated source code
@@ -23,6 +24,8 @@ import com.puresol.jars.JarLoader;
 public class CodeAnalysisStarter {
 
     public static void main(String[] args) {
+	ConsoleUtils.printSystemProperties();
+	ConsoleUtils.printSystemProperties();
 	JarLoader.loadJarsFromDirectory(new File("lib"), true);
 	CodeAnalysis analysis = new CodeAnalysis();
 	analysis.run();

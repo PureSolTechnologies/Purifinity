@@ -2,7 +2,7 @@ package com.puresol.parser;
 
 import org.junit.Test;
 
-import com.puresol.coding.lang.java.source.literals.Identifier;
+import com.puresol.coding.tokentypes.Literal;
 import com.puresol.testing.Tester;
 
 import junit.framework.Assert;
@@ -24,7 +24,7 @@ public class TokenTest extends TestCase {
 	public void testCreateByDefinitionClass() {
 		String text = "Hello!\nThis is a test String!\nCiao!";
 		try {
-			Token token = Token.createByDefinition(Identifier.class, 42, 123,
+			Token token = Token.createByDefinition(Literal.class, 42, 123,
 					21, text);
 			Assert.assertEquals(42, token.getTokenID());
 			Assert.assertEquals(TokenPublicity.VISIBLE, token.getPublicity());
@@ -33,12 +33,12 @@ public class TokenTest extends TestCase {
 			Assert.assertEquals(text.length(), token.getLength());
 			Assert.assertEquals(21, token.getStartLine());
 			Assert.assertEquals(23, token.getStopLine());
-			Assert.assertEquals(Identifier.class, token.getDefinition());
+			Assert.assertEquals(Literal.class, token.getDefinition());
 
-			Identifier definitionInstance = (Identifier) token
+			Literal definitionInstance = (Literal) token
 					.getDefinitionInstance();
 			Assert.assertNotNull(definitionInstance);
-			Assert.assertEquals(Identifier.class, definitionInstance.getClass());
+			Assert.assertEquals(Literal.class, definitionInstance.getClass());
 		} catch (TokenException e) {
 			e.printStackTrace();
 			Assert.fail("No exception was expected!");

@@ -3,11 +3,11 @@ package com.puresol.reporting.html.css.parser.tokengroups;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.puresol.coding.lang.java.source.symbols.Colon;
-import com.puresol.coding.lang.java.source.symbols.Dot;
-import com.puresol.coding.lang.java.source.symbols.LCurlyBracket;
-import com.puresol.coding.lang.java.source.symbols.RCurlyBracket;
 import com.puresol.parser.TokenDefinition;
+import com.puresol.reporting.html.css.parser.symbols.Colon;
+import com.puresol.reporting.html.css.parser.symbols.Dot;
+import com.puresol.reporting.html.css.parser.symbols.LCurlyBracket;
+import com.puresol.reporting.html.css.parser.symbols.RCurlyBracket;
 
 public class CSSSymbols {
 
