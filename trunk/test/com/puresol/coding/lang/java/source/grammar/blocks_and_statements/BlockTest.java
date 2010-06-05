@@ -24,5 +24,8 @@ public class BlockTest extends TestCase {
 								+ "logger.debug(\"Creating instance for class '\" + clazz.getName() + \"'\");"
 								+ "return new Translator(clazz);" + "}",
 						Block.class));
+		assertTrue(JavaGrammarTester.valid("{"
+				+ "Properties p1 = translateMantisProperties(_props);" + "}",
+				Block.class));
 	}
 }

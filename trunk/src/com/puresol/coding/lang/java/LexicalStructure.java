@@ -57,7 +57,8 @@ public class LexicalStructure {
 	public static final String NOT_STAR = "([^*]|" + LINE_TERMINATOR + ")";
 	public static final String NOT_SLASH = "([^/]|" + LINE_TERMINATOR + ")";
 
-	public static final String COMMENT_TAIL = "(" + NOT_STAR + "+|\\*+(?!/))*\\*/";
+	public static final String COMMENT_TAIL = "(" + NOT_STAR
+			+ "+|\\*+(?!/))*\\*/";
 
 	public static final String END_OF_LINE_COMMENT = "//(" + CHARACTERS_IN_LINE
 			+ ")?" + "\\n";
@@ -162,8 +163,8 @@ public class LexicalStructure {
 	public static final String OCTAL_INTEGER_LITERAL = OCTAL_NUMERAL
 			+ INTEGER_TYPE_SUFFIX + "?";
 
-	public static final String INTEGER_LITERAL = "(" + DECIMAL_INTEGER_LITERAL
-			+ "|" + HEX_INTEGER_LITERAL + "|" + OCTAL_INTEGER_LITERAL + ")";
+	public static final String INTEGER_LITERAL = "(" + HEX_INTEGER_LITERAL
+			+ "|" + OCTAL_INTEGER_LITERAL + "|" + DECIMAL_INTEGER_LITERAL + ")";
 
 	/*
 	 * 3.10.2 Floating-Point Literals
@@ -176,7 +177,7 @@ public class LexicalStructure {
 	public static final String BINARY_EXPONENT = BINARY_EXPONENT_INDICATOR
 			+ SIGNED_INTEGER;
 	public static final String HEX_SIGNIFICAND = "(" + HEX_NUMERAL
-			+ "\\.?||0[xX](" + HEX_DIGITS + ")?\\." + HEX_DIGITS + ")";
+			+ "\\.?|0[xX](" + HEX_DIGITS + ")?\\." + HEX_DIGITS + ")";
 	public static final String HEXADECIMAL_FLOATING_POINT_LITERAL = HEX_SIGNIFICAND
 			+ BINARY_EXPONENT + FLOAT_TYPE_SUFFIX + "?";
 

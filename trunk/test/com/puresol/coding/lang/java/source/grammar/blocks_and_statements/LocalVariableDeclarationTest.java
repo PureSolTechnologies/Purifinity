@@ -18,6 +18,9 @@ public class LocalVariableDeclarationTest extends TestCase {
 				LocalVariableDeclaration.class));
 		assertTrue(JavaGrammarTester.valid("Object a = new Object()",
 				LocalVariableDeclaration.class));
+		assertTrue(JavaGrammarTester.valid(
+				"Properties p1 = translateMantisProperties(_props)",
+				LocalVariableDeclaration.class));
 	}
 
 }

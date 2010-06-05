@@ -6,17 +6,14 @@ package com.puresol.coding.lang.java;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.List;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
 import com.puresol.coding.SourceCodeLexer;
-import com.puresol.coding.analysis.CodeRange;
 import com.puresol.coding.lang.java.JavaParser;
 import com.puresol.coding.lang.java.samples.ProgrammingLanguage;
-import com.puresol.coding.lang.java.source.grammar.classes.ClassDeclaration;
 import com.puresol.parser.DefaultPreConditioner;
 import com.puresol.parser.LexerException;
 import com.puresol.parser.NoMatchingTokenDefinitionFound;

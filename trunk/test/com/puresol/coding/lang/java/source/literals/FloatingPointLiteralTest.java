@@ -8,12 +8,19 @@ import junit.framework.TestCase;
 public class FloatingPointLiteralTest extends TestCase {
 
 	@Test
-	public void test() {
+	public void testValids() {
 		FloatingPointLiteral floatingPointLiteral = new FloatingPointLiteral();
 		Assert.assertTrue(floatingPointLiteral.atStart("1.2345 "));
 		Assert.assertTrue(floatingPointLiteral.atStart("1.e+1 "));
 		Assert.assertTrue(floatingPointLiteral.atStart("1.e-1 "));
 		Assert.assertTrue(floatingPointLiteral.atStart(".1e+1 "));
 		Assert.assertTrue(floatingPointLiteral.atStart(".1e-1 "));
+	}
+
+	@Test
+	public void testInvalids() {
+		FloatingPointLiteral floatingPointLiteral = new FloatingPointLiteral();
+		Assert.assertFalse(floatingPointLiteral.atStart("p1"));
+
 	}
 }

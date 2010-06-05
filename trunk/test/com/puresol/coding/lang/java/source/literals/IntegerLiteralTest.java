@@ -10,9 +10,9 @@ public class IntegerLiteralTest extends TestCase {
 	@Test
 	public void test() {
 		IntegerLiteral integerLiteral = new IntegerLiteral();
-		Assert.assertTrue(integerLiteral.atStart("0"));
-		Assert.assertTrue(integerLiteral.atStart("1"));
-		Assert.assertTrue(integerLiteral.atStart("0x1"));
-		Assert.assertTrue(integerLiteral.atStart("01"));
+		Assert.assertEquals("0",integerLiteral.getTokenAtStart("0"));
+		Assert.assertEquals("1",integerLiteral.getTokenAtStart("1"));
+		Assert.assertEquals("0x1", integerLiteral.getTokenAtStart("0x1"));
+		Assert.assertEquals("01",integerLiteral.getTokenAtStart("01"));
 	}
 }

@@ -29,11 +29,14 @@ public class JavaSourceCodeDistributionTesting {
 
 	@Test
 	public void test() {
-		Logger.getRootLogger().setLevel(Level.TRACE);
+		Logger.getRootLogger().setLevel(Level.DEBUG);
 		try {
-			Analyser analyser = Java.getInstance().createAnalyser(
-					new File(INSTALL_DIRECTORY),
-					new File("/deploy/src/common/share/classes/com/sun/deploy/config/Config.java"));
+			Analyser analyser = Java
+					.getInstance()
+					.createAnalyser(
+							new File(INSTALL_DIRECTORY),
+							new File(
+									"deploy/src/common/share/classes/com/sun/deploy/config/Config.java"));
 			analyser.parse();
 		} catch (ClassInstantiationException e) {
 			e.printStackTrace();

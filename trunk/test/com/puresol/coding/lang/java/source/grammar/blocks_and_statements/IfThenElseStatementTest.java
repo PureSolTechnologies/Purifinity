@@ -13,7 +13,9 @@ public class IfThenElseStatementTest extends TestCase {
 		assertTrue(JavaGrammarTester.valid(
 				"if ((args.length == 0) || (args.length > 1)) {" + "}",
 				IfThenElseStatement.class));
-
+		assertTrue(JavaGrammarTester.valid(
+				"if (ver == null || ver.compareTo(\"1.5.0\") < 0) {"
+						+ "Properties p1 = translateMantisProperties(_props);"
+						+ "}", IfThenElseStatement.class));
 	}
-
 }
