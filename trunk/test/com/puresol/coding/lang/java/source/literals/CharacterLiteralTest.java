@@ -21,5 +21,7 @@ public class CharacterLiteralTest extends TestCase {
 		Assert.assertTrue(characterLiteral.atStart("'\\\\'"));
 
 		Assert.assertTrue(characterLiteral.atStart("'\\02'"));
+
+		Assert.assertTrue(characterLiteral.atStart("'\\u0020'"));
 }
 }

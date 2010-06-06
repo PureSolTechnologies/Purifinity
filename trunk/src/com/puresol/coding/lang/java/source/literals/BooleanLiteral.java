@@ -14,6 +14,7 @@ public class BooleanLiteral extends Literal {
 	@Override
 	protected void initialize() {
 		super.initialize();
+		setLookAheadPatternString("(?!\\w)");
 		setPatternString(LexicalStructure.BOOLEAN_LITERAL);
 	}
 

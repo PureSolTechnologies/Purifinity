@@ -214,13 +214,6 @@ public class Java extends AbstractProgrammingLanguage {
 		SYMBOLS.add(LRectBracket.class);
 		SYMBOLS.add(RRectBracket.class);
 
-		SYMBOLS.add(LessEqual.class);
-		SYMBOLS.add(GreaterEqual.class);
-		SYMBOLS.add(LessThan.class);
-		SYMBOLS.add(GreaterThan.class);
-		SYMBOLS.add(Equal.class);
-		SYMBOLS.add(Unequal.class);
-
 		SYMBOLS.add(PlusAssign.class);
 		SYMBOLS.add(MinusAssign.class);
 		SYMBOLS.add(LessThanLessThanAssign.class);
@@ -229,6 +222,13 @@ public class Java extends AbstractProgrammingLanguage {
 		SYMBOLS.add(AmpersandAssign.class);
 		SYMBOLS.add(CaretAssign.class);
 		SYMBOLS.add(BitOrAssign.class);
+
+		SYMBOLS.add(LessEqual.class);
+		SYMBOLS.add(GreaterEqual.class);
+		SYMBOLS.add(LessThan.class);
+		SYMBOLS.add(GreaterThan.class);
+		SYMBOLS.add(Equal.class);
+		SYMBOLS.add(Unequal.class);
 
 		SYMBOLS.add(SlashAssign.class);
 		SYMBOLS.add(StarAssign.class);

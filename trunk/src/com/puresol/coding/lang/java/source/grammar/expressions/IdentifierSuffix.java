@@ -26,7 +26,7 @@ import com.puresol.parser.PartDoesNotMatchException;
  *     |   '.' 'class'
  *     |   '.' nonWildcardTypeArguments IDENTIFIER arguments
  *     |   '.' 'this'
- *     |   '.' 'super' arguments
+ *     |   '.' 'super'           FIX: --arguments-- --> superSuffix!
  *     |   innerCreator
  *     ;
  * </pre>
@@ -36,46 +36,46 @@ import com.puresol.parser.PartDoesNotMatchException;
  */
 public class IdentifierSuffix extends AbstractJavaParser {
 
-    private static final long serialVersionUID = 6464754895556318548L;
+	private static final long serialVersionUID = 6464754895556318548L;
 
-    @Override
-    public void scan() throws PartDoesNotMatchException, ParserException {
-	if (acceptToken(LRectBracket.class) != null) {
-	    if (acceptToken(RRectBracket.class) != null) {
-		acceptPart(Dims.class);
-		expectToken(Dot.class);
-		expectToken(ClassKeyword.class);
-	    } else if (acceptPart(Expression.class) != null) {
-		expectToken(RRectBracket.class);
-		while (acceptToken(LRectBracket.class) != null) {
-		    expectPart(Expression.class);
-		    expectToken(RRectBracket.class);
+	@Override
+	public void scan() throws PartDoesNotMatchException, ParserException {
+		if (acceptToken(LRectBracket.class) != null) {
+			if (acceptToken(RRectBracket.class) != null) {
+				acceptPart(Dims.class);
+				expectToken(Dot.class);
+				expectToken(ClassKeyword.class);
+			} else if (acceptPart(Expression.class) != null) {
+				expectToken(RRectBracket.class);
+				while (acceptToken(LRectBracket.class) != null) {
+					expectPart(Expression.class);
+					expectToken(RRectBracket.class);
+				}
+			} else {
+				abort();
+			}
+		} else if (acceptPart(Arguments.class) != null) {
+		} else if (acceptToken(Dot.class) != null) {
+			if (acceptToken(ClassKeyword.class) != null) {
+			} else if (acceptPart(NonWildcardTypeArguments.class) != null) {
+				expectToken(Identifier.class);
+				expectPart(Arguments.class);
+			} else if (acceptToken(ThisKeyword.class) != null) {
+			} else if (acceptToken(SuperKeyword.class) != null) {
+				acceptPart(SuperSuffix.class);
+			} else {
+				abort();
+			}
+		} else if (acceptPart(InnerCreator.class) != null) {
+		} else {
+			abort();
 		}
-	    } else {
-		abort();
-	    }
-	} else if (acceptPart(Arguments.class) != null) {
-	} else if (acceptToken(Dot.class) != null) {
-	    if (acceptToken(ClassKeyword.class) != null) {
-	    } else if (acceptPart(NonWildcardTypeArguments.class) != null) {
-		expectToken(Identifier.class);
-		expectPart(Arguments.class);
-	    } else if (acceptToken(ThisKeyword.class) != null) {
-	    } else if (acceptToken(SuperKeyword.class) != null) {
-		expectPart(Arguments.class);
-	    } else {
-		abort();
-	    }
-	} else if (acceptPart(InnerCreator.class) != null) {
-	} else {
-	    abort();
+		finish();
 	}
-	finish();
-    }
 
-    @Override
-    public CodeRangeType getCodeRangeType() {
-	return CodeRangeType.FRAGMENT;
-    }
+	@Override
+	public CodeRangeType getCodeRangeType() {
+		return CodeRangeType.FRAGMENT;
+	}
 
 }

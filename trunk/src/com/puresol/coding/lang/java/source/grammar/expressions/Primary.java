@@ -45,44 +45,44 @@ import com.puresol.parser.PartDoesNotMatchException;
  */
 public class Primary extends AbstractJavaParser {
 
-    private static final long serialVersionUID = 6464754895556318548L;
+	private static final long serialVersionUID = 6464754895556318548L;
 
-    @Override
-    public void scan() throws PartDoesNotMatchException, ParserException {
-	if (acceptPart(ParExpression.class) != null) {
-	} else if (acceptToken(ThisKeyword.class) != null) {
-	    if (acceptToken(Dot.class) != null) {
-		expectToken(Identifier.class);
-	    }
-	    acceptPart(IdentifierSuffix.class);
-	} else if (acceptToken(Identifier.class) != null) {
-	    while (acceptPart(IdentifierSuffix.class) == null) {
-		if (acceptToken(Dot.class) != null) {
-		    expectToken(Identifier.class);
+	@Override
+	public void scan() throws PartDoesNotMatchException, ParserException {
+		if (acceptPart(ParExpression.class) != null) {
+		} else if (acceptToken(ThisKeyword.class) != null) {
+			if (acceptToken(Dot.class) != null) {
+				expectToken(Identifier.class);
+			}
+			acceptPart(IdentifierSuffix.class);
+		} else if (acceptToken(Identifier.class) != null) {
+			while (acceptPart(IdentifierSuffix.class) == null) {
+				if (acceptToken(Dot.class) != null) {
+					expectToken(Identifier.class);
+				} else {
+					break;
+				}
+			}
+		} else if (acceptToken(SuperKeyword.class) != null) {
+			expectPart(SuperSuffix.class);
+		} else if (acceptPart(Literal.class) != null) {
+		} else if (acceptPart(Creator.class) != null) {
+		} else if (acceptPart(PrimitiveType.class) != null) {
+			acceptPart(Dims.class);
+			expectToken(Dot.class);
+			expectToken(ClassKeyword.class);
+		} else if (acceptToken(VoidKeyword.class) != null) {
+			expectToken(Dot.class);
+			expectToken(ClassKeyword.class);
 		} else {
-		    break;
+			abort();
 		}
-	    }
-	} else if (acceptToken(SuperKeyword.class) != null) {
-	    expectPart(SuperSuffix.class);
-	} else if (acceptPart(Literal.class) != null) {
-	} else if (acceptPart(Creator.class) != null) {
-	} else if (acceptPart(PrimitiveType.class) != null) {
-	    acceptPart(Dims.class);
-	    expectToken(Dot.class);
-	    expectToken(ClassKeyword.class);
-	} else if (acceptToken(VoidKeyword.class) != null) {
-	    expectToken(Dot.class);
-	    expectToken(ClassKeyword.class);
-	} else {
-	    abort();
+		finish();
 	}
-	finish();
-    }
 
-    @Override
-    public CodeRangeType getCodeRangeType() {
-	return CodeRangeType.FRAGMENT;
-    }
+	@Override
+	public CodeRangeType getCodeRangeType() {
+		return CodeRangeType.FRAGMENT;
+	}
 
 }

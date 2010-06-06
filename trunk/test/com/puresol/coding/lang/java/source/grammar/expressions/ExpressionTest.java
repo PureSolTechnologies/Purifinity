@@ -19,7 +19,9 @@ public class ExpressionTest extends TestCase {
 		assertTrue(JavaGrammarTester.valid("a = 1.2 * ( 1 + 2 ) / 2 - (1 / 2)",
 				Expression.class));
 		assertTrue(JavaGrammarTester.valid(
-				"p1 = translateMantisProperties(_props)",
+				"p1 = translateMantisProperties(_props)", Expression.class));
+		assertTrue(JavaGrammarTester.valid("l <<= 4", Expression.class));
+		assertTrue(JavaGrammarTester.valid("readBytes(addrVal, 1)[0]",
 				Expression.class));
 	}
 

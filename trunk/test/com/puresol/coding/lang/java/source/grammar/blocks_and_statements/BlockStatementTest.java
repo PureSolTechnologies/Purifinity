@@ -24,5 +24,6 @@ public class BlockStatementTest extends TestCase {
 				.valid(
 						"Certificate[][] certsToRemove = new Certificate[selectedRows.length][];",
 						BlockStatement.class));
+		assertTrue(JavaGrammarTester.valid("l <<= 4;", BlockStatement.class));
 	}
 }

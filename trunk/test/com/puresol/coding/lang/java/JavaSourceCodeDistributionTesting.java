@@ -39,7 +39,7 @@ public class JavaSourceCodeDistributionTesting {
 					.createAnalyser(
 							new File(INSTALL_DIRECTORY),
 							new File(
-									"deploy/src/javaws/share/classes/com/sun/javaws/ui/JavawsSysRun.java"));
+									"hotspot/agent/src/share/classes/sun/jvm/hotspot/utilities/HeapGXLWriter.java"));
 			analyser.parse();
 		} catch (ClassInstantiationException e) {
 			e.printStackTrace();
@@ -65,7 +65,8 @@ public class JavaSourceCodeDistributionTesting {
 			for (File file : files) {
 				counter++;
 				System.out.print(ConsoleUtils.createPercentageBar(22,
-						(double) counter / (double) files.size(), true) + "\t");
+						(double) counter / (double) files.size(), true)
+						+ "\t");
 				System.out.println(file);
 				if (successes.contains(file.toString())) {
 					continue;
