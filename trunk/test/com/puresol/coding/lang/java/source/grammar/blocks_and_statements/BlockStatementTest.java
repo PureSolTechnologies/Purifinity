@@ -16,13 +16,13 @@ public class BlockStatementTest extends TestCase {
 								+ "new File(\"test\"),"
 								+ " Files.classToRelativePackagePath(JavaParserTest.class));",
 						BlockStatement.class));
-
 		assertTrue(JavaGrammarTester
 				.valid(
 						"logger.debug(\"Creating instance for class '\" + clazz.getName() + \"'\");",
 						BlockStatement.class));
-		assertTrue(JavaGrammarTester.valid(
-				"Properties p1 = translateMantisProperties(_props);",
-				BlockStatement.class));
+		assertTrue(JavaGrammarTester
+				.valid(
+						"Certificate[][] certsToRemove = new Certificate[selectedRows.length][];",
+						BlockStatement.class));
 	}
 }

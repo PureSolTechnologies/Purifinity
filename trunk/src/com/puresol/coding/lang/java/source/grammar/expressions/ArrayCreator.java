@@ -7,6 +7,7 @@ import com.puresol.coding.lang.java.source.grammar.types_values_variables.Create
 import com.puresol.coding.lang.java.source.keywords.NewKeyword;
 import com.puresol.coding.lang.java.source.symbols.LRectBracket;
 import com.puresol.coding.lang.java.source.symbols.RRectBracket;
+import com.puresol.parser.NoMatchingTokenException;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
@@ -48,9 +49,18 @@ public class ArrayCreator extends AbstractJavaParser {
 			expectToken(LRectBracket.class);
 			expectPart(Expression.class);
 			expectToken(RRectBracket.class);
-			while (acceptToken(LRectBracket.class) != null) {
-				expectPart(Expression.class);
-				expectToken(RRectBracket.class);
+			try {
+				while (!getTokenStream().findNextToken(
+						this.getCurrentPosition()).getDefinition().equals(
+						RRectBracket.class)) {
+					if (acceptToken(LRectBracket.class) != null) {
+						expectPart(Expression.class);
+						expectToken(RRectBracket.class);
+					} else {
+						break;
+					}
+				}
+			} catch (NoMatchingTokenException e) {
 			}
 			acceptPart(Dims.class);
 		}

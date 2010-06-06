@@ -35,11 +35,14 @@ public class ArrayInitializer extends AbstractJavaParser {
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
 		expectToken(LCurlyBracket.class);
-		expectPart(VariableInitializer.class);
-		while (acceptToken(Comma.class) != null) {
-			if (acceptPart(VariableInitializer.class) == null) {
-				break;
+		if (acceptPart(VariableInitializer.class) != null) {
+			while (acceptToken(Comma.class) != null) {
+				if (acceptPart(VariableInitializer.class) == null) {
+					break;
+				}
 			}
+		} else {
+			acceptToken(Comma.class);
 		}
 		expectToken(RCurlyBracket.class);
 		finish();

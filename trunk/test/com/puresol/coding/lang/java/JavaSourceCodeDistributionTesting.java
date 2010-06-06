@@ -1,6 +1,9 @@
 package com.puresol.coding.lang.java;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +39,7 @@ public class JavaSourceCodeDistributionTesting {
 					.createAnalyser(
 							new File(INSTALL_DIRECTORY),
 							new File(
-									"deploy/src/common/share/classes/com/sun/deploy/config/Config.java"));
+									"deploy/src/javaws/share/classes/com/sun/javaws/ui/JavawsSysRun.java"));
 			analyser.parse();
 		} catch (ClassInstantiationException e) {
 			e.printStackTrace();
@@ -46,32 +49,50 @@ public class JavaSourceCodeDistributionTesting {
 	}
 
 	public static void main(String args[]) {
-		List<File> files = FileSearch.find(new File(INSTALL_DIRECTORY),
-				"/**/*.java");
-		int counter = 0;
-		Java java = Java.getInstance();
-		List<File> errors = new ArrayList<File>();
-		for (File file : files) {
-			counter++;
-			System.out.print(ConsoleUtils.createPercentageBar(22,
-					(double) counter / (double) files.size(), true)
-					+ "\t");
-			System.out.println(file);
-			try {
-				Analyser analyser = java.createAnalyser(new File(
-						INSTALL_DIRECTORY), file);
-				analyser.parse();
-			} catch (ClassInstantiationException e) {
-				e.printStackTrace();
-				return;
-			} catch (AnalyserException e) {
-				e.printStackTrace();
-				errors.add(file);
+		try {
+			List<File> files = FileSearch.find(new File(INSTALL_DIRECTORY),
+					"/**/*.java");
+			List<String> successes = new ArrayList<String>();
+			RandomAccessFile raFile = new RandomAccessFile("succeeded.txt",
+					"rw");
+			String line;
+			while ((line = raFile.readLine()) != null) {
+				successes.add(line);
 			}
-		}
-		System.out.println("\n\nERRORS FOR FILES:\n\n");
-		for (File file : errors) {
-			System.out.println(file);
+			int counter = 0;
+			Java java = Java.getInstance();
+			List<File> errors = new ArrayList<File>();
+			for (File file : files) {
+				counter++;
+				System.out.print(ConsoleUtils.createPercentageBar(22,
+						(double) counter / (double) files.size(), true) + "\t");
+				System.out.println(file);
+				if (successes.contains(file.toString())) {
+					continue;
+				}
+				try {
+					Analyser analyser = java.createAnalyser(new File(
+							INSTALL_DIRECTORY), file);
+					analyser.parse();
+					raFile.writeBytes(file.toString() + "\n");
+				} catch (ClassInstantiationException e) {
+					e.printStackTrace();
+					raFile.close();
+					return;
+				} catch (AnalyserException e) {
+					e.printStackTrace();
+					errors.add(file);
+				}
+			}
+			raFile.close();
+			System.out.println("\n\nERRORS FOR FILES:\n\n");
+			for (File file : errors) {
+				System.out.println(file);
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 

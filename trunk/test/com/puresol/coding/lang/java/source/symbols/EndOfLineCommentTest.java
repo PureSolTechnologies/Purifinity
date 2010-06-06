@@ -17,7 +17,6 @@ public class EndOfLineCommentTest extends TestCase {
 				.getTokenAtStart("// Normal Comment...\n"));
 		assertEquals("// /* check nesting\n", comment
 				.getTokenAtStart("// /* check nesting\n"));
-
 		assertTrue(comment.atStart("// how many characters have been read\n\n"));
 	}
 }

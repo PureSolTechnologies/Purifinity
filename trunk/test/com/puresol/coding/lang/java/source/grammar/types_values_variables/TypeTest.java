@@ -13,5 +13,7 @@ public class TypeTest extends TestCase {
 	public void testPrimitive() {
 		Assert.assertTrue(JavaGrammarTester.valid("int", Type.class));
 		Assert.assertTrue(JavaGrammarTester.valid("Locale", Type.class));
+		Assert.assertTrue(JavaGrammarTester
+				.valid("Certificate[][]", Type.class));
 	}
 }

@@ -10,6 +10,7 @@ public class ArrayInitializerTest extends TestCase {
 
 	@Test
 	public void testValids() {
+		assertTrue(JavaGrammarTester.valid("{}", ArrayInitializer.class));
 		assertTrue(JavaGrammarTester.valid("{1,2}", ArrayInitializer.class));
 		assertTrue(JavaGrammarTester.valid("{1,2,}", ArrayInitializer.class));
 		assertTrue(JavaGrammarTester.valid("{\n" + "\"1\", \"2\", \"3\",\n"

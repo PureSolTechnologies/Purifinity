@@ -21,6 +21,11 @@ public class LocalVariableDeclarationTest extends TestCase {
 		assertTrue(JavaGrammarTester.valid(
 				"Properties p1 = translateMantisProperties(_props)",
 				LocalVariableDeclaration.class));
+		assertTrue(JavaGrammarTester
+				.valid(
+						"Certificate[][] certsToRemove = new Certificate[selectedRows.length][]",
+						LocalVariableDeclaration.class));
+
 	}
 
 }

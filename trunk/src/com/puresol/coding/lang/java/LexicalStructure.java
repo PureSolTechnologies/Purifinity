@@ -52,16 +52,14 @@ public class LexicalStructure {
 	 * 3.7 Comments
 	 ********************************/
 	public static final String CHARACTERS_IN_LINE = INPUT_CHARACTER + "+";
-	public static final String NOT_STAR_NOT_SLASH = "([^*/]|" + LINE_TERMINATOR
-			+ ")";
+
 	public static final String NOT_STAR = "([^*]|" + LINE_TERMINATOR + ")";
-	public static final String NOT_SLASH = "([^/]|" + LINE_TERMINATOR + ")";
 
 	public static final String COMMENT_TAIL = "(" + NOT_STAR
 			+ "+|\\*+(?!/))*\\*/";
 
 	public static final String END_OF_LINE_COMMENT = "//(" + CHARACTERS_IN_LINE
-			+ ")?" + "\\n";
+			+ ")?" + LINE_TERMINATOR;
 	public static final String TRADITIONAL_COMMENT = "/\\*\\*?" + COMMENT_TAIL;
 	public static final String COMMENT = "(" + TRADITIONAL_COMMENT + "|"
 			+ END_OF_LINE_COMMENT + ")";
