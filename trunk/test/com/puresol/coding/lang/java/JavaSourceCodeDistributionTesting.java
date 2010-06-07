@@ -39,7 +39,7 @@ public class JavaSourceCodeDistributionTesting {
 					.createAnalyser(
 							new File(INSTALL_DIRECTORY),
 							new File(
-									"hotspot/agent/src/share/classes/sun/jvm/hotspot/utilities/HeapGXLWriter.java"));
+									"j2se/make/tools/swing-nimbus/classes/org/jdesktop/swingx/designer/BlendingMode.java"));
 			analyser.parse();
 		} catch (ClassInstantiationException e) {
 			e.printStackTrace();

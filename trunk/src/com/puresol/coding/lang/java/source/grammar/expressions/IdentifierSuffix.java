@@ -26,7 +26,8 @@ import com.puresol.parser.PartDoesNotMatchException;
  *     |   '.' 'class'
  *     |   '.' nonWildcardTypeArguments IDENTIFIER arguments
  *     |   '.' 'this'
- *     |   '.' 'super'           FIX: --arguments-- --> superSuffix!
+ *     |   '.' 'super'           // FIX: --arguments-- --> superSuffix!
+ *     |   '.' 'new' (NonWildcardTypeArguments)? InnerCreator
  *     |   innerCreator
  *     ;
  * </pre>
@@ -55,6 +56,7 @@ public class IdentifierSuffix extends AbstractJavaParser {
 				abort();
 			}
 		} else if (acceptPart(Arguments.class) != null) {
+		} else if (acceptPart(InnerCreator.class) != null) {
 		} else if (acceptToken(Dot.class) != null) {
 			if (acceptToken(ClassKeyword.class) != null) {
 			} else if (acceptPart(NonWildcardTypeArguments.class) != null) {
@@ -66,7 +68,6 @@ public class IdentifierSuffix extends AbstractJavaParser {
 			} else {
 				abort();
 			}
-		} else if (acceptPart(InnerCreator.class) != null) {
 		} else {
 			abort();
 		}

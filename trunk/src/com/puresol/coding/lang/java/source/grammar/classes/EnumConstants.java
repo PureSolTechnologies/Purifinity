@@ -14,19 +14,21 @@ import com.puresol.parser.PartDoesNotMatchException;
  */
 public class EnumConstants extends AbstractJavaParser {
 
-    private static final long serialVersionUID = -5500980743550485400L;
+	private static final long serialVersionUID = -5500980743550485400L;
 
-    @Override
-    public void scan() throws PartDoesNotMatchException, ParserException {
-	expectPart(EnumConstant.class);
-	while (acceptToken(Comma.class) != null) {
-	    expectPart(EnumConstant.class);
+	@Override
+	public void scan() throws PartDoesNotMatchException, ParserException {
+		expectPart(EnumConstant.class);
+		while (acceptToken(Comma.class) != null) {
+			if (acceptPart(EnumConstant.class) == null) {
+				break;
+			}
+		}
+		finish();
 	}
-	finish();
-    }
 
-    @Override
-    public CodeRangeType getCodeRangeType() {
-	return CodeRangeType.FRAGMENT;
-    }
+	@Override
+	public CodeRangeType getCodeRangeType() {
+		return CodeRangeType.FRAGMENT;
+	}
 }
