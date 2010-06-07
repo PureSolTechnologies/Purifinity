@@ -2,13 +2,13 @@ package com.puresol.coding.lang.fortran.source.keywords;
 
 import com.puresol.coding.tokentypes.KeywordOperator;
 
-public class GotoKeyword extends KeywordOperator {
+public class EndSelectKeyword extends KeywordOperator {
 
     @Override
     protected void initialize() {
 	super.initialize();
 	setCaseInsensitive();
-	setPatternString("GO\\s*TO");
+	setPatternString("END\\s*SELECT");
     }
 
 }

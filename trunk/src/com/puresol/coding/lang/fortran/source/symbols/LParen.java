@@ -1,5 +1,6 @@
 package com.puresol.coding.lang.fortran.source.symbols;
 
+import com.puresol.coding.lang.fortran.LexicalStructure;
 import com.puresol.coding.tokentypes.Operator;
 import com.puresol.parser.Token;
 import com.puresol.parser.TokenStream;
@@ -10,7 +11,7 @@ public class LParen extends Operator {
     protected void initialize() {
 	super.initialize();
 	setCaseInsensitive();
-	setPatternString("\\(");
+	setPatternString(LexicalStructure.LEFT_PARENTHESIS);
     }
 
     @Override

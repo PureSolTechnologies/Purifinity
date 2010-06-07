@@ -6,15 +6,15 @@ import com.puresol.parser.TokenStream;
 
 public class ElseWhereKeyword extends KeywordOperator {
 
-	@Override
-	protected void initialize() {
-		super.initialize();
-		setCaseInsensitive();
-		setPatternString("ELSEWHERE");
-	}
+    @Override
+    protected void initialize() {
+	super.initialize();
+	setCaseInsensitive();
+	setPatternString("ELSE\\s*WHERE");
+    }
 
-	public int getCyclomaticNumber(Token token, TokenStream tokenStream) {
-		return 1;
-	}
+    public int getCyclomaticNumber(Token token, TokenStream tokenStream) {
+	return 1;
+    }
 
 }

@@ -71,28 +71,36 @@ import com.puresol.coding.lang.fortran.source.literals.StringLiteral;
 import com.puresol.coding.lang.fortran.source.literals.StringStartLiteral;
 import com.puresol.coding.lang.fortran.source.literals.StringStopLiteral;
 import com.puresol.coding.lang.fortran.source.symbols.Ampersand;
-import com.puresol.coding.lang.fortran.source.symbols.Assign;
+import com.puresol.coding.lang.fortran.source.symbols.Apostrophe;
+import com.puresol.coding.lang.fortran.source.symbols.Backslash;
+import com.puresol.coding.lang.fortran.source.symbols.Blank;
+import com.puresol.coding.lang.fortran.source.symbols.CircumflexAccent;
 import com.puresol.coding.lang.fortran.source.symbols.Colon;
 import com.puresol.coding.lang.fortran.source.symbols.Comma;
-import com.puresol.coding.lang.fortran.source.symbols.Equal;
-import com.puresol.coding.lang.fortran.source.symbols.GreaterEqual;
+import com.puresol.coding.lang.fortran.source.symbols.CommercialAt;
+import com.puresol.coding.lang.fortran.source.symbols.CurrencySymbol;
+import com.puresol.coding.lang.fortran.source.symbols.DecimalPoint;
+import com.puresol.coding.lang.fortran.source.symbols.Equals;
+import com.puresol.coding.lang.fortran.source.symbols.GraveAccent;
 import com.puresol.coding.lang.fortran.source.symbols.GreaterThan;
+import com.puresol.coding.lang.fortran.source.symbols.LCurlyBracket;
 import com.puresol.coding.lang.fortran.source.symbols.LParen;
-import com.puresol.coding.lang.fortran.source.symbols.LessEqual;
+import com.puresol.coding.lang.fortran.source.symbols.LSquareBracket;
 import com.puresol.coding.lang.fortran.source.symbols.LessThan;
-import com.puresol.coding.lang.fortran.source.symbols.LineBreak;
-import com.puresol.coding.lang.fortran.source.symbols.LineComment;
+import com.puresol.coding.lang.fortran.source.symbols.LineTerminator;
 import com.puresol.coding.lang.fortran.source.symbols.Minus;
+import com.puresol.coding.lang.fortran.source.symbols.NumberSign;
+import com.puresol.coding.lang.fortran.source.symbols.Percent;
 import com.puresol.coding.lang.fortran.source.symbols.Plus;
-import com.puresol.coding.lang.fortran.source.symbols.PointerAssign;
-import com.puresol.coding.lang.fortran.source.symbols.Power;
-import com.puresol.coding.lang.fortran.source.symbols.Question;
+import com.puresol.coding.lang.fortran.source.symbols.QuestionMark;
+import com.puresol.coding.lang.fortran.source.symbols.RCurlyBracket;
 import com.puresol.coding.lang.fortran.source.symbols.RParen;
+import com.puresol.coding.lang.fortran.source.symbols.RSquareBracket;
 import com.puresol.coding.lang.fortran.source.symbols.Semicolon;
 import com.puresol.coding.lang.fortran.source.symbols.Slash;
-import com.puresol.coding.lang.fortran.source.symbols.Star;
-import com.puresol.coding.lang.fortran.source.symbols.Unequal;
-import com.puresol.coding.lang.fortran.source.symbols.WhiteSpace;
+import com.puresol.coding.lang.fortran.source.symbols.Asterik;
+import com.puresol.coding.lang.fortran.source.symbols.Tilde;
+import com.puresol.coding.lang.fortran.source.symbols.VerticalLine;
 import com.puresol.parser.TokenDefinition;
 
 public class Fortran extends AbstractProgrammingLanguage {
@@ -185,35 +193,37 @@ public class Fortran extends AbstractProgrammingLanguage {
 
     private static final List<Class<? extends TokenDefinition>> SYMBOLS = new ArrayList<Class<? extends TokenDefinition>>();
     static {
-	SYMBOLS.add(LineComment.class);
-
-	SYMBOLS.add(LineBreak.class);
-	SYMBOLS.add(WhiteSpace.class);
-	SYMBOLS.add(LParen.class);
-	SYMBOLS.add(RParen.class);
-
-	SYMBOLS.add(Equal.class);
-	SYMBOLS.add(Unequal.class);
-	SYMBOLS.add(LessThan.class);
-	SYMBOLS.add(GreaterThan.class);
-	SYMBOLS.add(LessEqual.class);
-	SYMBOLS.add(GreaterEqual.class);
-
-	SYMBOLS.add(PointerAssign.class);
-
-	SYMBOLS.add(Assign.class);
-	SYMBOLS.add(Slash.class);
-
-	SYMBOLS.add(Power.class);
-	SYMBOLS.add(Star.class);
-	SYMBOLS.add(Minus.class);
-	SYMBOLS.add(Plus.class);
-
-	SYMBOLS.add(Comma.class);
-	SYMBOLS.add(Colon.class);
-	SYMBOLS.add(Semicolon.class);
 	SYMBOLS.add(Ampersand.class);
-	SYMBOLS.add(Question.class);
+	SYMBOLS.add(Apostrophe.class);
+	SYMBOLS.add(Asterik.class);
+	SYMBOLS.add(Backslash.class);
+	SYMBOLS.add(Blank.class);
+	SYMBOLS.add(CircumflexAccent.class);
+	SYMBOLS.add(Colon.class);
+	SYMBOLS.add(Comma.class);
+	SYMBOLS.add(CommercialAt.class);
+	SYMBOLS.add(CurrencySymbol.class);
+	SYMBOLS.add(DecimalPoint.class);
+	SYMBOLS.add(Equals.class);
+	SYMBOLS.add(GraveAccent.class);
+	SYMBOLS.add(GreaterThan.class);
+	SYMBOLS.add(LCurlyBracket.class);
+	SYMBOLS.add(LessThan.class);
+	SYMBOLS.add(LineTerminator.class);
+	SYMBOLS.add(LParen.class);
+	SYMBOLS.add(LSquareBracket.class);
+	SYMBOLS.add(Minus.class);
+	SYMBOLS.add(NumberSign.class);
+	SYMBOLS.add(Percent.class);
+	SYMBOLS.add(Plus.class);
+	SYMBOLS.add(QuestionMark.class);
+	SYMBOLS.add(RCurlyBracket.class);
+	SYMBOLS.add(RParen.class);
+	SYMBOLS.add(RSquareBracket.class);
+	SYMBOLS.add(Semicolon.class);
+	SYMBOLS.add(Slash.class);
+	SYMBOLS.add(Tilde.class);
+	SYMBOLS.add(VerticalLine.class);
     }
 
     private static Fortran instance = null;
