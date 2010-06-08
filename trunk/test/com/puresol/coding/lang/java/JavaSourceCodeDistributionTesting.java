@@ -39,7 +39,7 @@ public class JavaSourceCodeDistributionTesting {
 					.createAnalyser(
 							new File(INSTALL_DIRECTORY),
 							new File(
-									"j2se/make/tools/swing-nimbus/classes/org/jdesktop/swingx/designer/BlendingMode.java"));
+									"j2se/src/share/classes/com/sun/java/util/jar/pack/Attribute.java"));
 			analyser.parse();
 		} catch (ClassInstantiationException e) {
 			e.printStackTrace();

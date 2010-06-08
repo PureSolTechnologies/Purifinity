@@ -15,43 +15,40 @@ import com.puresol.parser.PartDoesNotMatchException;
  * here
  * 
  * explicitConstructorInvocation : (nonWildcardTypeArguments )? ('this' |'super'
- * ) arguments ';'
- * 
- * | primary '.' (nonWildcardTypeArguments )? 'super' arguments ';' ;
+ * ) arguments ';' | primary '.' (nonWildcardTypeArguments )? 'super' arguments
+ * ';' ;
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
 public class ExplicitConstructorInvocation extends AbstractJavaParser {
 
-    private static final long serialVersionUID = -5105706064635403458L;
+	private static final long serialVersionUID = -5105706064635403458L;
 
-    @Override
-    public void scan() throws PartDoesNotMatchException, ParserException {
-	try {
-	    acceptPart(NonWildcardTypeArguments.class);
-	    if (acceptToken(SuperKeyword.class) != null) {
-	    } else if (acceptToken(ThisKeyword.class) != null) {
-	    } else {
-		abort();
-	    }
-	    expectPart(Arguments.class);
-	    expectToken(Semicolon.class);
-	    finish();
-	    return;
-	} catch (PartDoesNotMatchException e) {
-	    expectPart(Primary.class);
-	    expectToken(Dot.class);
-	    acceptPart(NonWildcardTypeArguments.class);
-	    expectToken(SuperKeyword.class);
-	    expectPart(Arguments.class);
-	    expectToken(Semicolon.class);
+	@Override
+	public void scan() throws PartDoesNotMatchException, ParserException {
+		if (acceptPart(Primary.class) != null) {
+			expectToken(Dot.class);
+			acceptPart(NonWildcardTypeArguments.class);
+			expectToken(SuperKeyword.class);
+			expectPart(Arguments.class);
+			expectToken(Semicolon.class);
+		} else {
+			acceptPart(NonWildcardTypeArguments.class);
+			if (acceptToken(SuperKeyword.class) != null) {
+			} else if (acceptToken(ThisKeyword.class) != null) {
+			} else {
+				abort();
+			}
+			expectPart(Arguments.class);
+			expectToken(Semicolon.class);
+		}
+		finish();
 	}
-    }
 
-    @Override
-    public CodeRangeType getCodeRangeType() {
-	return CodeRangeType.CONSTRUCTOR;
-    }
+	@Override
+	public CodeRangeType getCodeRangeType() {
+		return CodeRangeType.CONSTRUCTOR;
+	}
 
 }
