@@ -105,4 +105,39 @@ public class LexicalStructure {
 	    + RIGHT_PARENTHESIS + "|" + SLASH + "|" + LEFT_SQUARE_BRACKET + "|"
 	    + RIGHT_SQUARE_BRACKET + "|" + LEFT_PARENTHESIS + SLASH + "|"
 	    + SLASH + RIGHT_PARENTHESIS + ")";
+
+    /* *************************
+     * 
+     * 4 Types
+     * 
+     * ************************
+     */
+
+    /*
+     * 4.4.2.2 Integer type
+     */
+
+    public static final String SIGN = "[+-]";
+    public static final String DIGIT_STRING = "\\d+";
+    public static final String SIGNED_DIGIT_STRING = SIGN + "?" + DIGIT_STRING;
+    /*
+     * In following rule NAME = SCALAR-INT-CONSTANT-NAME!
+     */
+    public static final String KIND_PARAM = "(" + DIGIT_STRING + "|" + NAME
+	    + ")";
+    public static final String INT_LITERAL_CONSTANT = DIGIT_STRING + "(_"
+	    + KIND_PARAM + ")?";
+    public static final String SIGNED_INT_LITERAL_CONSTANT = SIGN + "?"
+	    + INT_LITERAL_CONSTANT;
+
+    /*
+     * 4.4.2.3 Real type
+     */
+    public static final String EXPONENT = SIGNED_DIGIT_STRING;
+    public static final String EXPONENT_LETTER = "[ED]";
+    public static final String SIGNIFICANT = "(" + DIGIT_STRING + "\\.("
+	    + DIGIT_STRING + ")?|\\." + DIGIT_STRING + ")";
+    public static final String REAL_LITERAL_CONSTANT = "(" + SIGNIFICANT + "("
+	    + EXPONENT_LETTER + EXPONENT + ")?(_" + KIND_PARAM + ")?|"
+	    + DIGIT_STRING + EXPONENT_LETTER + ")(_" + KIND_PARAM + ")?)";
 }
