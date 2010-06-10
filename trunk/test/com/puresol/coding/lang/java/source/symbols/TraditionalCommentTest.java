@@ -44,9 +44,9 @@ public class TraditionalCommentTest extends TestCase {
 				+ "         * action from EDT comes. In such case we will create and show dialog.\n"
 				+ "         * And then wait in the listener until we can add action to queue.\n"
 				+ "         * This way we will have event pump started and will not interfere with\n"
-				+ "         * action in progress.\n"
-				+ "     */";
+				+ "         * action in progress.\n" + "     */";
 		assertEquals(commentString, comment.getTokenAtStart(commentString));
+		assertEquals("/**/", comment.getTokenAtStart("/**/"));
 	}
 
 }

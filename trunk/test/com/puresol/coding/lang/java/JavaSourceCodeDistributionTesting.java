@@ -32,14 +32,14 @@ public class JavaSourceCodeDistributionTesting {
 
 	@Test
 	public void test() {
-		Logger.getRootLogger().setLevel(Level.DEBUG);
+		Logger.getRootLogger().setLevel(Level.TRACE);
 		try {
 			Analyser analyser = Java
 					.getInstance()
 					.createAnalyser(
 							new File(INSTALL_DIRECTORY),
 							new File(
-									"j2se/src/share/classes/com/sun/java/util/jar/pack/Attribute.java"));
+									"j2se/src/share/classes/java/util/Formatter.java"));
 			analyser.parse();
 		} catch (ClassInstantiationException e) {
 			e.printStackTrace();
