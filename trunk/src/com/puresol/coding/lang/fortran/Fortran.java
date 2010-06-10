@@ -63,13 +63,10 @@ import com.puresol.coding.lang.fortran.source.keywords.ThenKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.WhereKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.WriteKeyword;
 import com.puresol.coding.lang.fortran.source.literals.FloatingPointDoublePrecessionLiteral;
-import com.puresol.coding.lang.fortran.source.literals.FloatingPointLiteral;
-import com.puresol.coding.lang.fortran.source.literals.FormatLiteral;
-import com.puresol.coding.lang.fortran.source.literals.IdLiteral;
+import com.puresol.coding.lang.fortran.source.literals.RealLiteral;
+import com.puresol.coding.lang.fortran.source.literals.NameLiteral;
 import com.puresol.coding.lang.fortran.source.literals.IntegerLiteral;
-import com.puresol.coding.lang.fortran.source.literals.StringLiteral;
-import com.puresol.coding.lang.fortran.source.literals.StringStartLiteral;
-import com.puresol.coding.lang.fortran.source.literals.StringStopLiteral;
+import com.puresol.coding.lang.fortran.source.literals.CharLiteral;
 import com.puresol.coding.lang.fortran.source.symbols.Ampersand;
 import com.puresol.coding.lang.fortran.source.symbols.Apostrophe;
 import com.puresol.coding.lang.fortran.source.symbols.Backslash;
@@ -105,173 +102,169 @@ import com.puresol.parser.TokenDefinition;
 
 public class Fortran extends AbstractProgrammingLanguage {
 
-    private static final String[] FILE_SUFFIXES = { ".f", ".f77", ".f90",
-	    ".f95", ".for" };
+	private static final String[] FILE_SUFFIXES = { ".f", ".f77", ".f90",
+			".f95", ".for" };
 
-    private static final List<Class<? extends TokenDefinition>> KEYWORDS = new ArrayList<Class<? extends TokenDefinition>>();
-    static {
-	KEYWORDS.add(ProgramKeyword.class);
-	KEYWORDS.add(SubroutineKeyword.class);
-	KEYWORDS.add(FunctionKeyword.class);
-	KEYWORDS.add(ModuleKeyword.class);
-	KEYWORDS.add(EndProgramKeyword.class);
-	KEYWORDS.add(EndSubroutineKeyword.class);
-	KEYWORDS.add(EndFunctionKeyword.class);
-	KEYWORDS.add(EndModuleKeyword.class);
+	private static final List<Class<? extends TokenDefinition>> KEYWORDS = new ArrayList<Class<? extends TokenDefinition>>();
+	static {
+		KEYWORDS.add(ProgramKeyword.class);
+		KEYWORDS.add(SubroutineKeyword.class);
+		KEYWORDS.add(FunctionKeyword.class);
+		KEYWORDS.add(ModuleKeyword.class);
+		KEYWORDS.add(EndProgramKeyword.class);
+		KEYWORDS.add(EndSubroutineKeyword.class);
+		KEYWORDS.add(EndFunctionKeyword.class);
+		KEYWORDS.add(EndModuleKeyword.class);
 
-	KEYWORDS.add(ForAllKeyword.class);
-	KEYWORDS.add(ContinueKeyword.class);
-	KEYWORDS.add(DoWhileKeyword.class);
-	KEYWORDS.add(DoKeyword.class);
-	KEYWORDS.add(IfKeyword.class);
-	KEYWORDS.add(ThenKeyword.class);
-	KEYWORDS.add(EndDoKeyword.class);
-	KEYWORDS.add(EndIfKeyword.class);
-	KEYWORDS.add(EndForAllKeyword.class);
-	KEYWORDS.add(EndKeyword.class);
-	KEYWORDS.add(ElseIfKeyword.class);
-	KEYWORDS.add(ElseKeyword.class);
-	KEYWORDS.add(ExitKeyword.class);
-	KEYWORDS.add(StopKeyword.class);
-	KEYWORDS.add(CycleKeyword.class);
-	KEYWORDS.add(GotoKeyword.class);
+		KEYWORDS.add(ForAllKeyword.class);
+		KEYWORDS.add(ContinueKeyword.class);
+		KEYWORDS.add(DoWhileKeyword.class);
+		KEYWORDS.add(DoKeyword.class);
+		KEYWORDS.add(IfKeyword.class);
+		KEYWORDS.add(ThenKeyword.class);
+		KEYWORDS.add(EndDoKeyword.class);
+		KEYWORDS.add(EndIfKeyword.class);
+		KEYWORDS.add(EndForAllKeyword.class);
+		KEYWORDS.add(EndKeyword.class);
+		KEYWORDS.add(ElseIfKeyword.class);
+		KEYWORDS.add(ElseKeyword.class);
+		KEYWORDS.add(ExitKeyword.class);
+		KEYWORDS.add(StopKeyword.class);
+		KEYWORDS.add(CycleKeyword.class);
+		KEYWORDS.add(GotoKeyword.class);
 
-	KEYWORDS.add(CallKeyword.class);
-	KEYWORDS.add(ReturnKeyword.class);
+		KEYWORDS.add(CallKeyword.class);
+		KEYWORDS.add(ReturnKeyword.class);
 
-	KEYWORDS.add(ReadKeyword.class);
-	KEYWORDS.add(WriteKeyword.class);
-	KEYWORDS.add(RewindKeyword.class);
+		KEYWORDS.add(ReadKeyword.class);
+		KEYWORDS.add(WriteKeyword.class);
+		KEYWORDS.add(RewindKeyword.class);
 
-	KEYWORDS.add(SwitchCaseKeyword.class);
-	KEYWORDS.add(CaseDefaultKeyword.class);
-	KEYWORDS.add(CaseKeyword.class);
-	KEYWORDS.add(WhereKeyword.class);
-	KEYWORDS.add(ElseWhereKeyword.class);
+		KEYWORDS.add(SwitchCaseKeyword.class);
+		KEYWORDS.add(CaseDefaultKeyword.class);
+		KEYWORDS.add(CaseKeyword.class);
+		KEYWORDS.add(WhereKeyword.class);
+		KEYWORDS.add(ElseWhereKeyword.class);
 
-	KEYWORDS.add(ParameterKeyword.class);
-	KEYWORDS.add(ExternalKeyword.class);
-	KEYWORDS.add(IntrinsicKeyword.class);
-	KEYWORDS.add(ImplicitKeyword.class);
-	KEYWORDS.add(NoneKeyword.class);
+		KEYWORDS.add(ParameterKeyword.class);
+		KEYWORDS.add(ExternalKeyword.class);
+		KEYWORDS.add(IntrinsicKeyword.class);
+		KEYWORDS.add(ImplicitKeyword.class);
+		KEYWORDS.add(NoneKeyword.class);
 
-	KEYWORDS.add(PointerKeyword.class);
-	KEYWORDS.add(DimensionKeyword.class);
+		KEYWORDS.add(PointerKeyword.class);
+		KEYWORDS.add(DimensionKeyword.class);
 
-	KEYWORDS.add(ComplexKeyword.class);
-	KEYWORDS.add(CharacterKeyword.class);
-	KEYWORDS.add(DoubleKeyword.class);
-	KEYWORDS.add(RealKeyword.class);
-	KEYWORDS.add(IntegerKeyword.class);
+		KEYWORDS.add(ComplexKeyword.class);
+		KEYWORDS.add(CharacterKeyword.class);
+		KEYWORDS.add(DoubleKeyword.class);
+		KEYWORDS.add(RealKeyword.class);
+		KEYWORDS.add(IntegerKeyword.class);
 
-	KEYWORDS.add(DotEQDot.class);
-	KEYWORDS.add(DotNEDot.class);
-	KEYWORDS.add(DotLTDot.class);
-	KEYWORDS.add(DotGTDot.class);
-	KEYWORDS.add(DotLEDot.class);
-	KEYWORDS.add(DotGEDot.class);
+		KEYWORDS.add(DotEQDot.class);
+		KEYWORDS.add(DotNEDot.class);
+		KEYWORDS.add(DotLTDot.class);
+		KEYWORDS.add(DotGTDot.class);
+		KEYWORDS.add(DotLEDot.class);
+		KEYWORDS.add(DotGEDot.class);
 
-	KEYWORDS.add(DotORDot.class);
-	KEYWORDS.add(DotANDDot.class);
-	KEYWORDS.add(DotNOTDot.class);
-	KEYWORDS.add(DotTRUEDot.class);
-	KEYWORDS.add(DotFALSEDot.class);
-    }
-
-    private static final List<Class<? extends TokenDefinition>> LITERALS = new ArrayList<Class<? extends TokenDefinition>>();
-    static {
-	LITERALS.add(StringLiteral.class);
-	LITERALS.add(StringStartLiteral.class);
-	LITERALS.add(StringStopLiteral.class);
-	LITERALS.add(FloatingPointDoublePrecessionLiteral.class);
-	LITERALS.add(FloatingPointLiteral.class);
-	LITERALS.add(IntegerLiteral.class);
-
-	LITERALS.add(IdLiteral.class); // is subset of FormatLiteral!
-	LITERALS.add(FormatLiteral.class);
-    }
-
-    private static final List<Class<? extends TokenDefinition>> SYMBOLS = new ArrayList<Class<? extends TokenDefinition>>();
-    static {
-	SYMBOLS.add(Ampersand.class);
-	SYMBOLS.add(Apostrophe.class);
-	SYMBOLS.add(Asterik.class);
-	SYMBOLS.add(Backslash.class);
-	SYMBOLS.add(Blank.class);
-	SYMBOLS.add(CircumflexAccent.class);
-	SYMBOLS.add(Colon.class);
-	SYMBOLS.add(Comma.class);
-	SYMBOLS.add(CommercialAt.class);
-	SYMBOLS.add(CurrencySymbol.class);
-	SYMBOLS.add(DecimalPoint.class);
-	SYMBOLS.add(Equals.class);
-	SYMBOLS.add(GraveAccent.class);
-	SYMBOLS.add(GreaterThan.class);
-	SYMBOLS.add(LCurlyBracket.class);
-	SYMBOLS.add(LessThan.class);
-	SYMBOLS.add(LineTerminator.class);
-	SYMBOLS.add(LParen.class);
-	SYMBOLS.add(LSquareBracket.class);
-	SYMBOLS.add(Minus.class);
-	SYMBOLS.add(NumberSign.class);
-	SYMBOLS.add(Percent.class);
-	SYMBOLS.add(Plus.class);
-	SYMBOLS.add(QuestionMark.class);
-	SYMBOLS.add(RCurlyBracket.class);
-	SYMBOLS.add(RParen.class);
-	SYMBOLS.add(RSquareBracket.class);
-	SYMBOLS.add(Semicolon.class);
-	SYMBOLS.add(Slash.class);
-	SYMBOLS.add(Tilde.class);
-	SYMBOLS.add(VerticalLine.class);
-    }
-
-    private static Fortran instance = null;
-
-    public static Fortran getInstance() {
-	if (instance == null) {
-	    createInstance();
+		KEYWORDS.add(DotORDot.class);
+		KEYWORDS.add(DotANDDot.class);
+		KEYWORDS.add(DotNOTDot.class);
+		KEYWORDS.add(DotTRUEDot.class);
+		KEYWORDS.add(DotFALSEDot.class);
 	}
-	return instance;
-    }
 
-    private static synchronized void createInstance() {
-	if (instance == null) {
-	    instance = new Fortran();
+	private static final List<Class<? extends TokenDefinition>> LITERALS = new ArrayList<Class<? extends TokenDefinition>>();
+	static {
+		LITERALS.add(CharLiteral.class);
+		LITERALS.add(FloatingPointDoublePrecessionLiteral.class);
+		LITERALS.add(RealLiteral.class);
+		LITERALS.add(IntegerLiteral.class);
+		LITERALS.add(NameLiteral.class); // is subset of FormatLiteral!
 	}
-    }
 
-    private Fortran() {
-	super("Fortran");
-    }
+	private static final List<Class<? extends TokenDefinition>> SYMBOLS = new ArrayList<Class<? extends TokenDefinition>>();
+	static {
+		SYMBOLS.add(Ampersand.class);
+		SYMBOLS.add(Apostrophe.class);
+		SYMBOLS.add(Asterik.class);
+		SYMBOLS.add(Backslash.class);
+		SYMBOLS.add(Blank.class);
+		SYMBOLS.add(CircumflexAccent.class);
+		SYMBOLS.add(Colon.class);
+		SYMBOLS.add(Comma.class);
+		SYMBOLS.add(CommercialAt.class);
+		SYMBOLS.add(CurrencySymbol.class);
+		SYMBOLS.add(DecimalPoint.class);
+		SYMBOLS.add(Equals.class);
+		SYMBOLS.add(GraveAccent.class);
+		SYMBOLS.add(GreaterThan.class);
+		SYMBOLS.add(LCurlyBracket.class);
+		SYMBOLS.add(LessThan.class);
+		SYMBOLS.add(LineTerminator.class);
+		SYMBOLS.add(LParen.class);
+		SYMBOLS.add(LSquareBracket.class);
+		SYMBOLS.add(Minus.class);
+		SYMBOLS.add(NumberSign.class);
+		SYMBOLS.add(Percent.class);
+		SYMBOLS.add(Plus.class);
+		SYMBOLS.add(QuestionMark.class);
+		SYMBOLS.add(RCurlyBracket.class);
+		SYMBOLS.add(RParen.class);
+		SYMBOLS.add(RSquareBracket.class);
+		SYMBOLS.add(Semicolon.class);
+		SYMBOLS.add(Slash.class);
+		SYMBOLS.add(Tilde.class);
+		SYMBOLS.add(VerticalLine.class);
+	}
 
-    @Override
-    public boolean isObjectOriented() {
-	return false;
-    }
+	private static Fortran instance = null;
 
-    @Override
-    protected Class<? extends Analyser> getAnalyserClass() {
-	return FortranAnalyser.class;
-    }
+	public static Fortran getInstance() {
+		if (instance == null) {
+			createInstance();
+		}
+		return instance;
+	}
 
-    @Override
-    protected String[] getValidFileSuffixes() {
-	return FILE_SUFFIXES;
-    }
+	private static synchronized void createInstance() {
+		if (instance == null) {
+			instance = new Fortran();
+		}
+	}
 
-    @Override
-    public List<Class<? extends TokenDefinition>> getKeywords() {
-	return KEYWORDS;
-    }
+	private Fortran() {
+		super("Fortran");
+	}
 
-    @Override
-    public List<Class<? extends TokenDefinition>> getLiterals() {
-	return LITERALS;
-    }
+	@Override
+	public boolean isObjectOriented() {
+		return false;
+	}
 
-    @Override
-    public List<Class<? extends TokenDefinition>> getSymbols() {
-	return SYMBOLS;
-    }
+	@Override
+	protected Class<? extends Analyser> getAnalyserClass() {
+		return FortranAnalyser.class;
+	}
+
+	@Override
+	protected String[] getValidFileSuffixes() {
+		return FILE_SUFFIXES;
+	}
+
+	@Override
+	public List<Class<? extends TokenDefinition>> getKeywords() {
+		return KEYWORDS;
+	}
+
+	@Override
+	public List<Class<? extends TokenDefinition>> getLiterals() {
+		return LITERALS;
+	}
+
+	@Override
+	public List<Class<? extends TokenDefinition>> getSymbols() {
+		return SYMBOLS;
+	}
 }

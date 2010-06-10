@@ -8,13 +8,13 @@ public class StringLiteralTest {
 
 	@Test
 	public void testDoubleQuote() {
-		StringLiteral literal = new StringLiteral();
+		CharLiteral literal = new CharLiteral();
 		Assert.assertTrue(literal.atStart("\"Test\""));
 	}
 
 	@Test
 	public void testSingleQuote() {
-		StringLiteral literal = new StringLiteral();
+		CharLiteral literal = new CharLiteral();
 		Assert.assertTrue(literal.atStart("'Test'"));
 	}
 	

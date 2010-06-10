@@ -158,14 +158,22 @@ public class LexicalStructure {
 	 * 4.4.3.2 Character type specifier
 	 */
 
-	// public static final String CHAR_LENGTH = "(\\(" + TYPE_PARAM_VALUE +
-	// "\\)|"
-	// + INT_LITERAL_CONSTANT + ")";
-	//
-	// public static final String LENGTH_SELECTOR = "(\\((LEN=)?"
-	// + TYPE_PARAM_VALUE + "\\)|\\*" + CHAR_LENGTH + ",?)";
-	
+	public static final String REP_CHAR_SINGLE_QUOTE = "([^']+|'')";
+	public static final String REP_CHAR_DOUBLE_QUOTE = "([^\"]+|\"\")";
+	public static final String CHAR_LITERAL_CONSTANT = "(" + KIND_PARAM
+			+ "_)?(\"" + REP_CHAR_DOUBLE_QUOTE + "*\"|'"
+			+ REP_CHAR_SINGLE_QUOTE + "*')";
+
 	/*
-	 * 4.4.4
+	 * 4.4.4 Logical Type
+	 */
+	public static final String LogicalLiteralConstant = "(\\.TRUE\\.|\\.FALSE\\.)(_"
+			+ KIND_PARAM + ")?";
+
+	/* *****************************************
+	 * 
+	 * 4.7
+	 * 
+	 * *****************************************
 	 */
 }
