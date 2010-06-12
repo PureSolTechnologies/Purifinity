@@ -2,7 +2,7 @@ package com.puresol.coding.lang.fortran.source.keywords;
 
 import com.puresol.coding.tokentypes.KeywordOperator;
 
-public class AllocatabkeKeyword extends KeywordOperator {
+public class AllocatableKeyword extends KeywordOperator {
 
     @Override
     protected void initialize() {
