@@ -2,23 +2,23 @@ package com.puresol.coding.lang.fortran.source.grammar.types.derivedtypes;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
+import com.puresol.coding.lang.fortran.source.literals.NameLiteral;
+import com.puresol.coding.lang.fortran.source.symbols.Equals;
+import com.puresol.coding.lang.fortran.source.symbols.GreaterThan;
+import com.puresol.coding.lang.fortran.source.symbols.LParen;
+import com.puresol.coding.lang.fortran.source.symbols.RParen;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
 /**
  * <pre>
- * R425 derived-type-def is derived-type-stmt
- * [ type-param-def-stmt ] ...
- * [ private-or-sequence ] ...
- * [ component-part ]
- * [ type-bound-procedure-part ]
- * end-type-stmt
+ * 453 derived-type-spec is type-name [ ( type-param-spec-list ) ]
  * </pre>
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class DerivedTypeDef extends AbstractFortranParser {
+public class DerivedTypeSpec extends AbstractFortranParser {
 
 	private static final long serialVersionUID = 2177336093526924891L;
 
@@ -29,14 +29,11 @@ public class DerivedTypeDef extends AbstractFortranParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		expectPart(DerivedTypeStmt.class);
-		while (acceptPart(TypeParamDefStmt.class) != null)
-			;
-		while (acceptPart(PrivateOrSequence.class) != null)
-			;
-		acceptPart(ComponentPart.class);
-		acceptPart(TypeBoundProcedurePart.class);
-		expectPart(EndTypeStmt.class);
+		expectToken(NameLiteral.class);
+		if (acceptToken(LParen.class) != null) {
+			expectPart(TypeParamSpecList.class);
+			expectToken(RParen.class);
+		}
 		finish();
 	}
 

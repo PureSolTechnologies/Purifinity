@@ -2,23 +2,20 @@ package com.puresol.coding.lang.fortran.source.grammar.types.derivedtypes;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
+import com.puresol.coding.lang.fortran.source.keywords.FinalKeyword;
+import com.puresol.coding.lang.fortran.source.symbols.Colon;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
 /**
  * <pre>
- * R425 derived-type-def is derived-type-stmt
- * [ type-param-def-stmt ] ...
- * [ private-or-sequence ] ...
- * [ component-part ]
- * [ type-bound-procedure-part ]
- * end-type-stmt
+ * R452 final-procedure-stmt is FINAL [ :: ] final-subroutine-name-list
  * </pre>
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class DerivedTypeDef extends AbstractFortranParser {
+public class FinalProcedureStmt extends AbstractFortranParser {
 
 	private static final long serialVersionUID = 2177336093526924891L;
 
@@ -29,14 +26,11 @@ public class DerivedTypeDef extends AbstractFortranParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		expectPart(DerivedTypeStmt.class);
-		while (acceptPart(TypeParamDefStmt.class) != null)
-			;
-		while (acceptPart(PrivateOrSequence.class) != null)
-			;
-		acceptPart(ComponentPart.class);
-		acceptPart(TypeBoundProcedurePart.class);
-		expectPart(EndTypeStmt.class);
+		expectToken(FinalKeyword.class);
+		if (acceptToken(Colon.class) != null) {
+			expectToken(Colon.class);
+		}
+		expectPart(FinalSubroutineNameList.class);
 		finish();
 	}
 

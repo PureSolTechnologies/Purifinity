@@ -7,18 +7,15 @@ import com.puresol.parser.PartDoesNotMatchException;
 
 /**
  * <pre>
- * R425 derived-type-def is derived-type-stmt
- * [ type-param-def-stmt ] ...
- * [ private-or-sequence ] ...
- * [ component-part ]
- * [ type-bound-procedure-part ]
- * end-type-stmt
+ * R447 type-bound-proc-binding is type-bound-procedure-stmt
+ * or type-bound-generic-stmt
+ * or final-procedure-stmt
  * </pre>
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class DerivedTypeDef extends AbstractFortranParser {
+public class TypeBoundProcBinding extends AbstractFortranParser {
 
 	private static final long serialVersionUID = 2177336093526924891L;
 
@@ -29,15 +26,12 @@ public class DerivedTypeDef extends AbstractFortranParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		expectPart(DerivedTypeStmt.class);
-		while (acceptPart(TypeParamDefStmt.class) != null)
-			;
-		while (acceptPart(PrivateOrSequence.class) != null)
-			;
-		acceptPart(ComponentPart.class);
-		acceptPart(TypeBoundProcedurePart.class);
-		expectPart(EndTypeStmt.class);
+		if (acceptPart(TypeBoundProcedureStmt.class) != null) {
+		} else if (acceptPart(TypeBoundGenericStmt.class) != null) {
+		} else if (acceptPart(FinalProcedureStmt.class) != null) {
+		} else {
+			abort();
+		}
 		finish();
 	}
-
 }
