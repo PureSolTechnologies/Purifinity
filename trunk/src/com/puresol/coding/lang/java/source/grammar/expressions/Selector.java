@@ -35,7 +35,8 @@ public class Selector extends AbstractJavaParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		if (acceptToken(Dot.class) != null) {
+		if (acceptPart(InnerCreator.class) != null) {
+		} else if (acceptToken(Dot.class) != null) {
 			if (acceptToken(Identifier.class) != null) {
 				acceptPart(Arguments.class);
 			} else if (acceptToken(ThisKeyword.class) != null) {
@@ -44,7 +45,6 @@ public class Selector extends AbstractJavaParser {
 			} else {
 				abort();
 			}
-		} else if (acceptPart(InnerCreator.class) != null) {
 		} else if (acceptToken(LRectBracket.class) != null) {
 			expectPart(Expression.class);
 			expectToken(RRectBracket.class);

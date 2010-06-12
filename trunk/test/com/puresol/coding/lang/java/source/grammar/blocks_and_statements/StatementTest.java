@@ -22,4 +22,12 @@ public class StatementTest extends TestCase {
 						Statement.class));
 	}
 
+	@Test
+	public void testValids() {
+		Assert
+				.assertTrue(JavaGrammarTester
+						.valid(
+								"((Activation) state).groupTable.put(id, ((Activation) state).new GroupEntry(id, desc));",
+								Statement.class));
+	}
 }

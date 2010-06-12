@@ -39,7 +39,7 @@ public class JavaSourceCodeDistributionTesting {
 					.createAnalyser(
 							new File(INSTALL_DIRECTORY),
 							new File(
-									"j2se/src/share/classes/java/util/Formatter.java"));
+									"j2se/src/share/classes/sun/rmi/server/Activation.java"));
 			analyser.parse();
 		} catch (ClassInstantiationException e) {
 			e.printStackTrace();
