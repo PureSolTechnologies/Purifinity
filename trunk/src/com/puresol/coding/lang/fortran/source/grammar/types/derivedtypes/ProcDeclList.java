@@ -2,18 +2,22 @@ package com.puresol.coding.lang.fortran.source.grammar.types.derivedtypes;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
+import com.puresol.coding.lang.fortran.source.keywords.ProcedureKeyword;
+import com.puresol.coding.lang.fortran.source.symbols.Colon;
+import com.puresol.coding.lang.fortran.source.symbols.Comma;
+import com.puresol.coding.lang.fortran.source.symbols.LParen;
+import com.puresol.coding.lang.fortran.source.symbols.RParen;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
 /**
  * <pre>
- * R434 component-part is [ component-def-stmt ] ...
  * </pre>
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class ComponentPart extends AbstractFortranParser {
+public class ProcDeclList extends AbstractFortranParser {
 
 	private static final long serialVersionUID = 2177336093526924891L;
 
@@ -24,9 +28,10 @@ public class ComponentPart extends AbstractFortranParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		while (acceptPart(ComponentDefStmt.class) != null)
-			;
+		expectPart(ProcDecl.class);
+		while (acceptToken(Comma.class) != null) {
+			expectPart(ProcDecl.class);
+		}
 		finish();
 	}
-
 }

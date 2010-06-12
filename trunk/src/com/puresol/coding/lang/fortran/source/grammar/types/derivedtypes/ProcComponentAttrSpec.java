@@ -3,10 +3,9 @@ package com.puresol.coding.lang.fortran.source.grammar.types.derivedtypes;
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
 import com.puresol.coding.lang.fortran.source.grammar.attrspecdecl.attributes.AccessSpec;
-import com.puresol.coding.lang.fortran.source.keywords.AbstractKeyword;
-import com.puresol.coding.lang.fortran.source.keywords.BindKeyword;
-import com.puresol.coding.lang.fortran.source.keywords.CKeyword;
-import com.puresol.coding.lang.fortran.source.keywords.ExtendsKeyword;
+import com.puresol.coding.lang.fortran.source.keywords.NoPassKeyword;
+import com.puresol.coding.lang.fortran.source.keywords.PassKeyword;
+import com.puresol.coding.lang.fortran.source.keywords.PointerKeyword;
 import com.puresol.coding.lang.fortran.source.literals.NameLiteral;
 import com.puresol.coding.lang.fortran.source.symbols.LParen;
 import com.puresol.coding.lang.fortran.source.symbols.RParen;
@@ -15,16 +14,16 @@ import com.puresol.parser.PartDoesNotMatchException;
 
 /**
  * <pre>
- * R427 type-attr-spec is ABSTRACT
+ * R441 proc-component-attr-spec is POINTER
+ * or PASS [ (arg-name) ]
+ * or NOPASS
  * or access-spec
- * or BIND (C)
- * or EXTENDS ( parent-type-name )
  * </pre>
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class TypeAttrSpec extends AbstractFortranParser {
+public class ProcComponentAttrSpec extends AbstractFortranParser {
 
 	private static final long serialVersionUID = 2177336093526924891L;
 
@@ -35,20 +34,17 @@ public class TypeAttrSpec extends AbstractFortranParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		if (acceptToken(AbstractKeyword.class) != null) {
+		if (acceptToken(PointerKeyword.class) != null) {
+		} else if (acceptToken(PassKeyword.class) != null) {
+			if (acceptToken(LParen.class) != null) {
+				expectToken(NameLiteral.class);
+				expectToken(RParen.class);
+			}
+		} else if (acceptToken(NoPassKeyword.class) != null) {
 		} else if (acceptPart(AccessSpec.class) != null) {
-		} else if (acceptToken(BindKeyword.class) != null) {
-			expectToken(LParen.class);
-			expectToken(CKeyword.class);
-			expectToken(RParen.class);
-		} else if (acceptToken(ExtendsKeyword.class) != null) {
-			expectToken(LParen.class);
-			expectToken(NameLiteral.class);
-			expectToken(RParen.class);
 		} else {
 			abort();
 		}
 		finish();
 	}
-
 }
