@@ -11,7 +11,7 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
-import com.puresol.coding.SourceCodeLexer;
+import com.puresol.coding.analysis.SourceCodeLexer;
 import com.puresol.coding.lang.java.JavaParser;
 import com.puresol.coding.lang.java.samples.ProgrammingLanguage;
 import com.puresol.parser.DefaultPreConditioner;

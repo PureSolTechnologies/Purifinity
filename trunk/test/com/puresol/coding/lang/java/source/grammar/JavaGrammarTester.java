@@ -1,6 +1,6 @@
 package com.puresol.coding.lang.java.source.grammar;
 
-import com.puresol.coding.SourceCodeLexer;
+import com.puresol.coding.analysis.SourceCodeLexer;
 import com.puresol.coding.lang.java.Java;
 import com.puresol.parser.LexerException;
 import com.puresol.parser.NoMatchingTokenDefinitionFound;

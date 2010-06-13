@@ -8,7 +8,7 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import com.puresol.coding.SourceCodeLexer;
+import com.puresol.coding.analysis.SourceCodeLexer;
 import com.puresol.coding.lang.java.samples.Translator;
 import com.puresol.parser.DefaultPreConditioner;
 import com.puresol.parser.LexerException;
