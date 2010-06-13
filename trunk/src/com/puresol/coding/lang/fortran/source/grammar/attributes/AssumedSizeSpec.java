@@ -1,26 +1,22 @@
-package com.puresol.coding.lang.fortran.source.grammar.attrspecdecl;
+package com.puresol.coding.lang.fortran.source.grammar.attributes;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
-import com.puresol.coding.lang.fortran.source.grammar.types.ExplicitShapeSpecList;
-import com.puresol.coding.lang.fortran.source.keywords.DimensionKeyword;
 import com.puresol.coding.lang.fortran.source.symbols.Colon;
 import com.puresol.coding.lang.fortran.source.symbols.Comma;
-import com.puresol.coding.lang.fortran.source.symbols.LParen;
-import com.puresol.coding.lang.fortran.source.symbols.RParen;
 import com.puresol.coding.lang.fortran.source.symbols.Star;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
 /**
  * <pre>
- * R516 explicit-shape-spec is [ lower-bound : ] upper-bound
+ * R521 assumed-size-spec is [ explicit-shape-spec , ]... [ lower-bound : ] *
  * </pre>
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class ExplicitShapeSpec extends AbstractFortranParser {
+public class AssumedSizeSpec extends AbstractFortranParser {
 
 	private static final long serialVersionUID = 2177336093526924891L;
 
@@ -31,10 +27,13 @@ public class ExplicitShapeSpec extends AbstractFortranParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		expectPart(SpecificationExpr.class);
-		if (acceptToken(Colon.class) != null) {
-			expectPart(SpecificationExpr.class);
+		while (acceptPart(ExplicitShapeSpec.class) != null) {
+			expectToken(Comma.class);
 		}
+		if (acceptPart(SpecificationExpr.class) != null) {
+			expectToken(Colon.class);
+		}
+		expectToken(Star.class);
 		finish();
 	}
 }

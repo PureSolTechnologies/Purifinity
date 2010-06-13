@@ -1,4 +1,4 @@
-package com.puresol.coding.lang.fortran.source.grammar.attrspecdecl;
+package com.puresol.coding.lang.fortran.source.grammar.attributes;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
@@ -13,7 +13,7 @@ import com.puresol.parser.PartDoesNotMatchException;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class AssumedShapeSpecList extends AbstractFortranParser {
+public class ImpliedShapeSpecList extends AbstractFortranParser {
 
 	private static final long serialVersionUID = 2177336093526924891L;
 
@@ -24,9 +24,9 @@ public class AssumedShapeSpecList extends AbstractFortranParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		expectPart(AssumedShapeSpec.class);
+		expectPart(ImpliedShapeSpec.class);
 		while (acceptToken(Comma.class) != null) {
-			expectPart(AssumedShapeSpec.class);
+			expectPart(ImpliedShapeSpec.class);
 		}
 		finish();
 	}

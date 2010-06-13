@@ -1,4 +1,4 @@
-package com.puresol.coding.lang.fortran.source.grammar.attrspecdecl;
+package com.puresol.coding.lang.fortran.source.grammar.attributes;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;

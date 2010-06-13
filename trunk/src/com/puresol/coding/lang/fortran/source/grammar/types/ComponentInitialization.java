@@ -2,7 +2,7 @@ package com.puresol.coding.lang.fortran.source.grammar.types;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
-import com.puresol.coding.lang.fortran.source.grammar.attrspecdecl.NullInit;
+import com.puresol.coding.lang.fortran.source.grammar.attributes.NullInit;
 import com.puresol.coding.lang.fortran.source.keywords.NoPassKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.PassKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.PointerKeyword;

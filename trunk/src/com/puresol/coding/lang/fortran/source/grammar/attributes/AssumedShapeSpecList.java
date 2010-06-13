@@ -1,8 +1,7 @@
-package com.puresol.coding.lang.fortran.source.grammar.attrspecdecl;
+package com.puresol.coding.lang.fortran.source.grammar.attributes;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
-import com.puresol.coding.lang.fortran.source.literals.NameLiteral;
 import com.puresol.coding.lang.fortran.source.symbols.Comma;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
@@ -14,7 +13,7 @@ import com.puresol.parser.PartDoesNotMatchException;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class EntityDeclList extends AbstractFortranParser {
+public class AssumedShapeSpecList extends AbstractFortranParser {
 
 	private static final long serialVersionUID = 2177336093526924891L;
 
@@ -25,9 +24,9 @@ public class EntityDeclList extends AbstractFortranParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		expectToken(EntityDecl.class);
+		expectPart(AssumedShapeSpec.class);
 		while (acceptToken(Comma.class) != null) {
-			expectToken(EntityDecl.class);
+			expectPart(AssumedShapeSpec.class);
 		}
 		finish();
 	}

@@ -1,22 +1,22 @@
-package com.puresol.coding.lang.fortran.source.grammar.attrspecdecl;
+package com.puresol.coding.lang.fortran.source.grammar.attributes;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
-import com.puresol.coding.lang.fortran.source.keywords.PrivateKeyword;
-import com.puresol.coding.lang.fortran.source.keywords.PublicKeyword;
+import com.puresol.coding.lang.fortran.source.symbols.Colon;
+import com.puresol.coding.lang.fortran.source.symbols.Comma;
+import com.puresol.coding.lang.fortran.source.symbols.Star;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
 /**
  * <pre>
- * R507 access-spec is PUBLIC
- * or PRIVATE
+ * R522 implied-shape-spec is [ lower-bound : ] *
  * </pre>
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class AccessSpec extends AbstractFortranParser {
+public class ImpliedShapeSpec extends AbstractFortranParser {
 
 	private static final long serialVersionUID = 2177336093526924891L;
 
@@ -27,11 +27,10 @@ public class AccessSpec extends AbstractFortranParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		if (acceptToken(PublicKeyword.class) != null) {
-		} else if (acceptToken(PrivateKeyword.class) != null) {
-		} else {
-			abort();
+		if (acceptPart(SpecificationExpr.class) != null) {
+			expectToken(Colon.class);
 		}
+		expectToken(Star.class);
 		finish();
 	}
 }

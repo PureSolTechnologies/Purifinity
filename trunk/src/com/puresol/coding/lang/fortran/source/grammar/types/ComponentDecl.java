@@ -2,7 +2,7 @@ package com.puresol.coding.lang.fortran.source.grammar.types;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
-import com.puresol.coding.lang.fortran.source.grammar.attrspecdecl.CoarraySpec;
+import com.puresol.coding.lang.fortran.source.grammar.attributes.CoarraySpec;
 import com.puresol.coding.lang.fortran.source.literals.NameLiteral;
 import com.puresol.coding.lang.fortran.source.symbols.LParen;
 import com.puresol.coding.lang.fortran.source.symbols.LSquareBracket;

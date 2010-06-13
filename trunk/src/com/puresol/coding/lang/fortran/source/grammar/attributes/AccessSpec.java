@@ -1,19 +1,22 @@
-package com.puresol.coding.lang.fortran.source.grammar.attrspecdecl;
+package com.puresol.coding.lang.fortran.source.grammar.attributes;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
-import com.puresol.coding.lang.fortran.source.symbols.Comma;
+import com.puresol.coding.lang.fortran.source.keywords.PrivateKeyword;
+import com.puresol.coding.lang.fortran.source.keywords.PublicKeyword;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
 /**
  * <pre>
+ * R507 access-spec is PUBLIC
+ * or PRIVATE
  * </pre>
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class DeferredCoshapeSpecList extends AbstractFortranParser {
+public class AccessSpec extends AbstractFortranParser {
 
 	private static final long serialVersionUID = 2177336093526924891L;
 
@@ -24,11 +27,11 @@ public class DeferredCoshapeSpecList extends AbstractFortranParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		expectPart(DeferredCoshapeSpec.class);
-		while (acceptToken(Comma.class) != null) {
-			expectPart(DeferredCoshapeSpec.class);
+		if (acceptToken(PublicKeyword.class) != null) {
+		} else if (acceptToken(PrivateKeyword.class) != null) {
+		} else {
+			abort();
 		}
 		finish();
 	}
-
 }

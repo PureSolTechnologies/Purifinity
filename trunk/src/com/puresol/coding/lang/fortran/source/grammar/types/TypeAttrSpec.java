@@ -2,7 +2,7 @@ package com.puresol.coding.lang.fortran.source.grammar.types;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
-import com.puresol.coding.lang.fortran.source.grammar.attrspecdecl.AccessSpec;
+import com.puresol.coding.lang.fortran.source.grammar.attributes.AccessSpec;
 import com.puresol.coding.lang.fortran.source.keywords.AbstractKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.BindKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.CKeyword;

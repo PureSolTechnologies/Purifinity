@@ -1,4 +1,4 @@
-package com.puresol.coding.lang.fortran.source.grammar.attrspecdecl;
+package com.puresol.coding.lang.fortran.source.grammar.attributes;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
@@ -32,15 +32,13 @@ import com.puresol.parser.PartDoesNotMatchException;
 
 /**
  * <pre>
- * R505 initialization is = constant-expr
- * or => null-init
- * or => initial-data-target
+ * R506 null-init is function-reference
  * </pre>
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class Initialization extends AbstractFortranParser {
+public class NullInit extends AbstractFortranParser {
 
 	private static final long serialVersionUID = 2177336093526924891L;
 
@@ -51,15 +49,7 @@ public class Initialization extends AbstractFortranParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		expectToken(Equals.class);
-		if (acceptPart(ConstantExpression.class) != null) {
-		} else {
-			expectToken(GreaterThan.class);
-			if (acceptPart(NullInit.class) != null) {
-			} else {
-				expectPart(InitalDataTarget.class);
-			}
-		}
+		expectPart(FunctionReference.class);
 		finish();
 	}
 }
