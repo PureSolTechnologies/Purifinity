@@ -11,8 +11,8 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
-import com.puresol.coding.SourceCodeLexer;
 import com.puresol.coding.analysis.CodeRange;
+import com.puresol.coding.analysis.SourceCodeLexer;
 import com.puresol.parser.LexerException;
 import com.puresol.parser.NoMatchingTokenDefinitionFound;
 import com.puresol.parser.ParserException;
