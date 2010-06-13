@@ -93,6 +93,9 @@ public class ProjectAnalyser implements Serializable, ProgressObservable {
 		try {
 			if ((FileUtilities.addPaths(directory, file).isFile())
 					&& (!file.getPath().contains("/."))) {
+				/*
+				 * only non hidden files are analysed...
+				 */
 				Analyser analyser = analyserFactory.create(directory, file);
 				if (analyser != null) {
 					analyser.parse();
@@ -135,10 +138,6 @@ public class ProjectAnalyser implements Serializable, ProgressObservable {
 	@Override
 	public void setMonitor(ProgressObserver observer) {
 		progressMonitor = observer;
-	}
-
-	public List<CodeRange> getNamedCodeRanges(File file) {
-		return getAnalyser(file).getNamedCodeRanges();
 	}
 
 	/*

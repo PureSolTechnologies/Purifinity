@@ -17,7 +17,6 @@ import javax.i18n4j.Translator;
 
 import org.apache.log4j.Logger;
 
-import com.puresol.coding.analysis.AbstractMetric;
 import com.puresol.coding.analysis.CodeRange;
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.evaluator.QualityLevel;

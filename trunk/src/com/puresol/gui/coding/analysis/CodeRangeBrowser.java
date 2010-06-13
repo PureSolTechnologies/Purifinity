@@ -12,7 +12,6 @@ package com.puresol.gui.coding.analysis;
 
 import java.awt.BorderLayout;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Hashtable;
 import java.util.Vector;
@@ -88,7 +87,7 @@ public class CodeRangeBrowser extends Panel {
 		if (project == null) {
 			return;
 		}
-		ArrayList<File> files = project.getFiles();
+		java.util.List<File> files = project.getFiles();
 		if (files == null) {
 			return;
 		}
@@ -101,7 +100,8 @@ public class CodeRangeBrowser extends Panel {
 		if (project == null) {
 			return;
 		}
-		java.util.List<CodeRange> ranges = project.getNamedCodeRanges(file);
+		java.util.List<CodeRange> ranges = project.getAnalyser(file)
+				.getNamedCodeRanges();
 		if (ranges == null) {
 			return;
 		}
@@ -109,7 +109,8 @@ public class CodeRangeBrowser extends Panel {
 		Hashtable<Object, Object> listData = new Hashtable<Object, Object>();
 		for (CodeRange range : ranges) {
 			index++;
-			String entry = index + ": " + range.getCodeRangeType().getIdentifier() + ":"
+			String entry = index + ": "
+					+ range.getCodeRangeType().getIdentifier() + ":"
 					+ range.getName();
 			listData.put(entry, range);
 		}

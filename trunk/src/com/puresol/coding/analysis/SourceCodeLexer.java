@@ -1,9 +1,10 @@
-package com.puresol.coding;
+package com.puresol.coding.analysis;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.parser.Lexer;
 import com.puresol.parser.LexerException;
 import com.puresol.parser.TokenStream;

@@ -123,7 +123,8 @@ public class MetricsBrowser extends BorderLayoutWidget {
 		ArrayList<String> htmls = new ArrayList<String>();
 		Collections.sort(files);
 		for (File file : files) {
-			List<CodeRange> ranges = project.getNamedCodeRanges(file);
+			List<CodeRange> ranges = project.getAnalyser(file)
+					.getNamedCodeRanges();
 			for (CodeRange range : ranges) {
 				calculateReport(range);
 			}
@@ -160,7 +161,7 @@ public class MetricsBrowser extends BorderLayoutWidget {
 		if (project == null) {
 			return;
 		}
-		List<CodeRange> ranges = project.getNamedCodeRanges(file);
+		List<CodeRange> ranges = project.getAnalyser(file).getNamedCodeRanges();
 		if (ranges == null) {
 			return;
 		}

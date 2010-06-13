@@ -17,35 +17,35 @@ import java.util.List;
  */
 public class ProgrammingLanguages {
 
-    private final ArrayList<ProgrammingLanguage> languages = new ArrayList<ProgrammingLanguage>();
+	private final List<ProgrammingLanguage> languages = new ArrayList<ProgrammingLanguage>();
 
-    private static ProgrammingLanguages instance = null;
+	private static ProgrammingLanguages instance = null;
 
-    public static ProgrammingLanguages getInstance() {
-	if (instance == null) {
-	    createInstance();
+	public static ProgrammingLanguages getInstance() {
+		if (instance == null) {
+			createInstance();
+		}
+		return instance;
 	}
-	return instance;
-    }
 
-    private static synchronized void createInstance() {
-	if (instance == null) {
-	    instance = new ProgrammingLanguages();
+	private static synchronized void createInstance() {
+		if (instance == null) {
+			instance = new ProgrammingLanguages();
+		}
 	}
-    }
 
-    private ProgrammingLanguages() {
-    }
+	private ProgrammingLanguages() {
+	}
 
-    public List<ProgrammingLanguage> getLanguages() {
-	return languages;
-    }
+	public List<ProgrammingLanguage> getLanguages() {
+		return languages;
+	}
 
-    public void registerLanguage(ProgrammingLanguage language) {
-	languages.add(language);
-    }
+	public void registerLanguage(ProgrammingLanguage language) {
+		languages.add(language);
+	}
 
-    public void unregisterLanguage(ProgrammingLanguage language) {
-	languages.remove(language);
-    }
+	public void unregisterLanguage(ProgrammingLanguage language) {
+		languages.remove(language);
+	}
 }

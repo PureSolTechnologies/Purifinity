@@ -8,9 +8,9 @@
  *
  ***************************************************************************/
 
-package com.puresol.coding.analysis;
+package com.puresol.coding.evaluator.metric;
 
-import com.puresol.coding.evaluator.metric.Metric;
+import com.puresol.coding.analysis.CodeRange;
 
 abstract public class AbstractMetric implements Metric {
 

@@ -6,6 +6,13 @@ import java.util.List;
 
 import com.puresol.exceptions.StrangeSituationException;
 
+/**
+ * This class is an implementation for a symbol lookup table for source code
+ * scanners which need context information.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class SymbolTable implements Cloneable, Serializable {
 
 	private static final long serialVersionUID = -5965509627847174126L;

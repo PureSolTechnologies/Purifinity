@@ -23,206 +23,207 @@ import com.puresol.utils.Property;
 
 public class MetricsEvaluator extends AbstractEvaluator {
 
-    private static final long serialVersionUID = 895546832156565427L;
+	private static final long serialVersionUID = 895546832156565427L;
 
-    private static final Translator translator = Translator
-	    .getTranslator(MetricsEvaluator.class);
+	private static final Translator translator = Translator
+			.getTranslator(MetricsEvaluator.class);
 
-    public static final String NAME = "Metrics Evaluator";
-    public static final String DESCRIPTION = translator
-	    .i18n("This evaluator calculates the most common code metrics.");
-    public static final ArrayList<Property> SUPPORTED_PROPERTIES = new ArrayList<Property>();
-    static {
-	SUPPORTED_PROPERTIES.add(new Property(
-		"CodeEvaluation.Evaluators.Metrics.EnableSLOC",
-		"Switches the calculation of SLOC Metric on and off.",
-		Boolean.class, "true"));
-	SUPPORTED_PROPERTIES.add(new Property(
-		"CodeEvaluation.Evaluators.Metrics.EnableMcCabe",
-		"Switches the calculation of McCabe Metric on and off.",
-		Boolean.class, "true"));
-	SUPPORTED_PROPERTIES.add(new Property(
-		"CodeEvaluation.Evaluators.Metrics.EnableHalstead",
-		"Switches the calculation of Halstead Metric on and off.",
-		Boolean.class, "true"));
-	SUPPORTED_PROPERTIES
-		.add(new Property(
-			"CodeEvaluation.Evaluators.Metrics.EnableMaintainability",
-			"Switches the calculation of Maintainability Index on and off.",
-			Boolean.class, "true"));
-	SUPPORTED_PROPERTIES.add(new Property(
-		"CodeEvaluation.Evaluators.Metrics.EnableCodeDepth",
-		"Switches the calculation of CodeDepth Metric on and off.",
-		Boolean.class, "true"));
-	SUPPORTED_PROPERTIES.add(new Property(
-		"CodeEvaluation.Evaluators.Metrics.EnableEntropy",
-		"Switches the calculation of Entropy Metric on and off.",
-		Boolean.class, "true"));
-    }
-
-    private final ProjectAnalyser analyser;
-    private final Hashtable<CodeRange, CodeRangeMetrics> metrics = new Hashtable<CodeRange, CodeRangeMetrics>();
-
-    public MetricsEvaluator(ProjectAnalyser analyser) {
-	super(analyser);
-	this.analyser = analyser;
-    }
-
-    @Override
-    public void run() {
-	getAllCodeRanges();
-	calculateMetrics();
-    }
-
-    /**
-     * This method reads all code ranges and adds them to the class's code range
-     * ArrayList due to the calcuation of metrics for all code ranges.
-     */
-    private void getAllCodeRanges() {
-	for (File file : analyser.getFiles()) {
-	    addFile(file);
-	    for (CodeRange codeRange : analyser.getNamedCodeRanges(file)) {
-		addCodeRange(codeRange);
-	    }
+	public static final String NAME = "Metrics Evaluator";
+	public static final String DESCRIPTION = translator
+			.i18n("This evaluator calculates the most common code metrics.");
+	public static final ArrayList<Property> SUPPORTED_PROPERTIES = new ArrayList<Property>();
+	static {
+		SUPPORTED_PROPERTIES.add(new Property(
+				"CodeEvaluation.Evaluators.Metrics.EnableSLOC",
+				"Switches the calculation of SLOC Metric on and off.",
+				Boolean.class, "true"));
+		SUPPORTED_PROPERTIES.add(new Property(
+				"CodeEvaluation.Evaluators.Metrics.EnableMcCabe",
+				"Switches the calculation of McCabe Metric on and off.",
+				Boolean.class, "true"));
+		SUPPORTED_PROPERTIES.add(new Property(
+				"CodeEvaluation.Evaluators.Metrics.EnableHalstead",
+				"Switches the calculation of Halstead Metric on and off.",
+				Boolean.class, "true"));
+		SUPPORTED_PROPERTIES
+				.add(new Property(
+						"CodeEvaluation.Evaluators.Metrics.EnableMaintainability",
+						"Switches the calculation of Maintainability Index on and off.",
+						Boolean.class, "true"));
+		SUPPORTED_PROPERTIES.add(new Property(
+				"CodeEvaluation.Evaluators.Metrics.EnableCodeDepth",
+				"Switches the calculation of CodeDepth Metric on and off.",
+				Boolean.class, "true"));
+		SUPPORTED_PROPERTIES.add(new Property(
+				"CodeEvaluation.Evaluators.Metrics.EnableEntropy",
+				"Switches the calculation of Entropy Metric on and off.",
+				Boolean.class, "true"));
 	}
-    }
 
-    private void calculateMetrics() {
-	ProgressObserver observer = getMonitor();
-	if (observer != null) {
-	    observer.setRange(0, getFiles().size());
-	    observer.setStatus(0);
-	    observer.setDescription(NAME);
-	    observer.showProgressPercent();
+	private final ProjectAnalyser analyser;
+	private final Hashtable<CodeRange, CodeRangeMetrics> metrics = new Hashtable<CodeRange, CodeRangeMetrics>();
+
+	public MetricsEvaluator(ProjectAnalyser analyser) {
+		super(analyser);
+		this.analyser = analyser;
 	}
-	int index = 0;
-	for (File file : getFiles()) {
-	    index++;
-	    if (observer != null) {
-		observer.setStatus(index);
-	    }
-	    for (CodeRange codeRange : getCodeRanges(file)) {
-		if (Thread.interrupted()) {
-		    return;
+
+	@Override
+	public void run() {
+		getAllCodeRanges();
+		calculateMetrics();
+	}
+
+	/**
+	 * This method reads all code ranges and adds them to the class's code range
+	 * ArrayList due to the calcuation of metrics for all code ranges.
+	 */
+	private void getAllCodeRanges() {
+		for (File file : analyser.getFiles()) {
+			addFile(file);
+			for (CodeRange codeRange : analyser.getAnalyser(file)
+					.getNamedCodeRanges()) {
+				addCodeRange(codeRange);
+			}
+		}
+	}
+
+	private void calculateMetrics() {
+		ProgressObserver observer = getMonitor();
+		if (observer != null) {
+			observer.setRange(0, getFiles().size());
+			observer.setStatus(0);
+			observer.setDescription(NAME);
+			observer.showProgressPercent();
+		}
+		int index = 0;
+		for (File file : getFiles()) {
+			index++;
+			if (observer != null) {
+				observer.setStatus(index);
+			}
+			for (CodeRange codeRange : getCodeRanges(file)) {
+				if (Thread.interrupted()) {
+					return;
+				}
+				if (observer != null) {
+					observer.setStatus(index);
+				}
+				calculateMetric(codeRange);
+			}
 		}
 		if (observer != null) {
-		    observer.setStatus(index);
+			observer.finish();
 		}
-		calculateMetric(codeRange);
-	    }
 	}
-	if (observer != null) {
-	    observer.finish();
+
+	private void calculateMetric(CodeRange codeRange) {
+		metrics.put(codeRange, new CodeRangeMetrics(codeRange));
 	}
-    }
 
-    private void calculateMetric(CodeRange codeRange) {
-	metrics.put(codeRange, new CodeRangeMetrics(codeRange));
-    }
-
-    public CodeRangeMetrics getMetrics(CodeRange codeRange) {
-	return metrics.get(codeRange);
-    }
-
-    @Override
-    public String getName() {
-	return NAME;
-    }
-
-    @Override
-    public String getDescription(ReportingFormat format)
-	    throws UnsupportedReportingFormatException {
-	if (format == ReportingFormat.HTML) {
-	    return HTMLStandards.convertFlowTextToHTML(DESCRIPTION);
-	} else if (format == ReportingFormat.TEXT) {
-	    return DESCRIPTION;
+	public CodeRangeMetrics getMetrics(CodeRange codeRange) {
+		return metrics.get(codeRange);
 	}
-	throw new UnsupportedReportingFormatException(format);
-    }
 
-    @Override
-    public String getProjectComment(ReportingFormat format)
-	    throws UnsupportedReportingFormatException {
-	if (format == ReportingFormat.TEXT) {
-	    return getTextProjectComment();
-	} else if (format == ReportingFormat.HTML) {
-	    return getHTMLProjectComment();
+	@Override
+	public String getName() {
+		return NAME;
 	}
-	throw new UnsupportedReportingFormatException(format);
-    }
 
-    private String getTextProjectComment() {
-	return translator.i18n("The overall project quality is: ")
-		+ getProjectQuality().getIdentifier();
-    }
+	@Override
+	public String getDescription(ReportingFormat format)
+			throws UnsupportedReportingFormatException {
+		if (format == ReportingFormat.HTML) {
+			return HTMLStandards.convertFlowTextToHTML(DESCRIPTION);
+		} else if (format == ReportingFormat.TEXT) {
+			return DESCRIPTION;
+		}
+		throw new UnsupportedReportingFormatException(format);
+	}
 
-    private String getHTMLProjectComment() {
-	String text = "<p>"
-		+ translator.i18n("The overall project quality is: ")
-		+ HTMLConverter.convertQualityLevelToHTML(getProjectQuality())
-		+ "</p>";
-	text += "<table>\n";
-	text += "<tr>";
-	text += "<th>" + translator.i18n("File") + "</th>";
-	text += "<th>" + translator.i18n("Quality Level") + "</th>";
-	text += "</tr>\n";
-	List<File> files = getFiles();
-	Collections.sort(files);
-	for (File file : files) {
-	    for (CodeRange codeRange : getCodeRanges(file)) {
+	@Override
+	public String getProjectComment(ReportingFormat format)
+			throws UnsupportedReportingFormatException {
+		if (format == ReportingFormat.TEXT) {
+			return getTextProjectComment();
+		} else if (format == ReportingFormat.HTML) {
+			return getHTMLProjectComment();
+		}
+		throw new UnsupportedReportingFormatException(format);
+	}
+
+	private String getTextProjectComment() {
+		return translator.i18n("The overall project quality is: ")
+				+ getProjectQuality().getIdentifier();
+	}
+
+	private String getHTMLProjectComment() {
+		String text = "<p>"
+				+ translator.i18n("The overall project quality is: ")
+				+ HTMLConverter.convertQualityLevelToHTML(getProjectQuality())
+				+ "</p>";
+		text += "<table>\n";
 		text += "<tr>";
-		text += "<td>"
-			+ file
-			+ "</td><td>"
-			+ HTMLConverter
-				.convertQualityLevelToHTML(getQuality(codeRange))
-			+ "</td>";
+		text += "<th>" + translator.i18n("File") + "</th>";
+		text += "<th>" + translator.i18n("Quality Level") + "</th>";
 		text += "</tr>\n";
-	    }
-	}
-	text += "</table>\n";
-	return text;
-    }
-
-    @Override
-    public String getCodeRangeComment(CodeRange codeRange,
-	    ReportingFormat format) throws UnsupportedReportingFormatException {
-	if (format == ReportingFormat.TEXT) {
-	    HTMLMetricsReport report = new HTMLMetricsReport(metrics
-		    .get(codeRange));
-	    return report.getReportText();
-	} else if (format == ReportingFormat.HTML) {
-	    HTMLMetricsReport report = new HTMLMetricsReport(metrics
-		    .get(codeRange));
-	    return report.getReport();
-	}
-	throw new UnsupportedReportingFormatException(format);
-    }
-
-    @Override
-    public QualityLevel getProjectQuality() {
-	int qualityLevel = 0;
-	int count = 0;
-	for (File file : getFiles()) {
-	    for (CodeRange codeRange : getCodeRanges(file)) {
-		QualityLevel fileQuality = getQuality(codeRange);
-		if (fileQuality != QualityLevel.UNSPECIFIED) {
-		    qualityLevel += fileQuality.getLevel();
-		    count++;
+		List<File> files = getFiles();
+		Collections.sort(files);
+		for (File file : files) {
+			for (CodeRange codeRange : getCodeRanges(file)) {
+				text += "<tr>";
+				text += "<td>"
+						+ file
+						+ "</td><td>"
+						+ HTMLConverter
+								.convertQualityLevelToHTML(getQuality(codeRange))
+						+ "</td>";
+				text += "</tr>\n";
+			}
 		}
-	    }
+		text += "</table>\n";
+		return text;
 	}
-	double avgQuality = (double) qualityLevel / (double) count;
-	qualityLevel = (int) Math.round(avgQuality);
-	return QualityLevel.fromLevel(qualityLevel);
-    }
 
-    @Override
-    public QualityLevel getQuality(CodeRange codeRange) {
-	CodeRangeMetrics codeRangeMetrics = metrics.get(codeRange);
-	if (codeRangeMetrics == null) {
-	    return QualityLevel.UNSPECIFIED;
+	@Override
+	public String getCodeRangeComment(CodeRange codeRange,
+			ReportingFormat format) throws UnsupportedReportingFormatException {
+		if (format == ReportingFormat.TEXT) {
+			HTMLMetricsReport report = new HTMLMetricsReport(metrics
+					.get(codeRange));
+			return report.getReportText();
+		} else if (format == ReportingFormat.HTML) {
+			HTMLMetricsReport report = new HTMLMetricsReport(metrics
+					.get(codeRange));
+			return report.getReport();
+		}
+		throw new UnsupportedReportingFormatException(format);
 	}
-	return codeRangeMetrics.getQualityLevel();
-    }
+
+	@Override
+	public QualityLevel getProjectQuality() {
+		int qualityLevel = 0;
+		int count = 0;
+		for (File file : getFiles()) {
+			for (CodeRange codeRange : getCodeRanges(file)) {
+				QualityLevel fileQuality = getQuality(codeRange);
+				if (fileQuality != QualityLevel.UNSPECIFIED) {
+					qualityLevel += fileQuality.getLevel();
+					count++;
+				}
+			}
+		}
+		double avgQuality = (double) qualityLevel / (double) count;
+		qualityLevel = (int) Math.round(avgQuality);
+		return QualityLevel.fromLevel(qualityLevel);
+	}
+
+	@Override
+	public QualityLevel getQuality(CodeRange codeRange) {
+		CodeRangeMetrics codeRangeMetrics = metrics.get(codeRange);
+		if (codeRangeMetrics == null) {
+			return QualityLevel.UNSPECIFIED;
+		}
+		return codeRangeMetrics.getQualityLevel();
+	}
 }
