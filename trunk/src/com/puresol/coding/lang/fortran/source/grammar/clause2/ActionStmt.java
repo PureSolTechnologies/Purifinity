@@ -67,7 +67,7 @@ public class ActionStmt extends AbstractFortranParser {
 	public void scan() throws PartDoesNotMatchException, ParserException {
 		if (acceptPart(AllocateStmt.class) != null) {
 		} else if (acceptPart(AssignmentStmt.class) != null) {
-		} else if (acceptPart(backspaceStmt.class) != null) {
+		} else if (acceptPart(BackspaceStmt.class) != null) {
 		} else if (acceptPart(CallStmt.class) != null) {
 		} else if (acceptPart(CloseStmt.class) != null) {
 		} else if (acceptPart(ContinueStmt.class) != null) {
