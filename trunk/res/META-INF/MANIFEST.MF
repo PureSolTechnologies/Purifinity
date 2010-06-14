@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Bundle-Name: JavaLanguagePlugin
+Bundle-Name: JavaLanguagePack
 Bundle-SymbolicName: com.puresol.coding.lang.java
 Bundle-Description: Contains the plugin for working with Java programming language. 
 Bundle-Vendor: Puresol Technologies
