@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-Name: MetricsBasePack
+Bundle-SymbolicName: com.puresol.coding.lang.java
+Bundle-Description: Contains some language independent metrics and base\
+ classes for metrics implemented in special language packs
+Bundle-Vendor: Puresol Technologies
+Bundle-Version: 1.0.0
+Bundle-Activator: com.puresol.coding.metrics.Activator
+Import-Package: com.puresol.coding.lang.java,org.osgi.framework
+Export-Package: com.puresol.coding.lang.java
