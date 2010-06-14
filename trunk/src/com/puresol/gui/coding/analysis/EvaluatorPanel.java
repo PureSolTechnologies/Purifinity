@@ -19,10 +19,10 @@ import javax.swingx.progress.ProgressWindow;
 
 import org.apache.log4j.Logger;
 
-import com.puresol.coding.EvaluatorFactory;
-import com.puresol.coding.Evaluators;
 import com.puresol.coding.analysis.ProjectAnalyser;
 import com.puresol.coding.evaluator.Evaluator;
+import com.puresol.coding.evaluator.EvaluatorFactory;
+import com.puresol.coding.evaluator.Evaluators;
 import com.puresol.coding.evaluator.NotSupportedException;
 
 public class EvaluatorPanel extends Panel {

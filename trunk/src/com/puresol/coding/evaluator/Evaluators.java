@@ -1,8 +1,15 @@
-package com.puresol.coding;
+package com.puresol.coding.evaluator;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This is the manager class for all evaluator factories which provide evaluator
+ * functionality to the code analysis system.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class Evaluators {
 
 	private final List<EvaluatorFactory> evaluators = new ArrayList<EvaluatorFactory>();
@@ -29,12 +36,12 @@ public class Evaluators {
 		return evaluators;
 	}
 
-	public void registerLanguage(EvaluatorFactory language) {
-		evaluators.add(language);
+	public void registerEvaluator(EvaluatorFactory evaluator) {
+		evaluators.add(evaluator);
 	}
 
-	public void unregisterLanguage(EvaluatorFactory language) {
-		evaluators.remove(language);
+	public void unregisterEvaluator(EvaluatorFactory evaluator) {
+		evaluators.remove(evaluator);
 	}
 
 }

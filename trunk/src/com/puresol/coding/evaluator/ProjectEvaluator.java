@@ -20,8 +20,6 @@ import javax.swingx.progress.ProgressObserver;
 
 import org.apache.log4j.Logger;
 
-import com.puresol.coding.EvaluatorFactory;
-import com.puresol.coding.Evaluators;
 import com.puresol.coding.analysis.ProjectAnalyser;
 
 /**

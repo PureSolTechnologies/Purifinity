@@ -2,11 +2,11 @@ package com.puresol.coding.evaluator.duplication;
 
 import java.util.List;
 
-import com.puresol.coding.EvaluatorFactory;
 import com.puresol.coding.analysis.Analyser;
 import com.puresol.coding.analysis.CodeRange;
 import com.puresol.coding.analysis.ProjectAnalyser;
 import com.puresol.coding.evaluator.Evaluator;
+import com.puresol.coding.evaluator.EvaluatorFactory;
 import com.puresol.coding.evaluator.NotSupportedException;
 import com.puresol.utils.Property;
 
