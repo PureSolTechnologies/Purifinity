@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 
 import javax.swingx.progress.ProgressObserver;
 
@@ -26,8 +27,8 @@ public abstract class AbstractEvaluator implements Evaluator {
 	private static final long serialVersionUID = 1296590575296210481L;
 
 	private final ProjectAnalyser analyser;
-	private final ArrayList<File> files = new ArrayList<File>();
-	private final Hashtable<File, ArrayList<CodeRange>> codeRanges = new Hashtable<File, ArrayList<CodeRange>>();
+	private final List<File> files = new ArrayList<File>();
+	private final Map<File, List<CodeRange>> codeRanges = new Hashtable<File, List<CodeRange>>();
 
 	transient private ProgressObserver observer = null;
 
@@ -45,7 +46,7 @@ public abstract class AbstractEvaluator implements Evaluator {
 	}
 
 	@Override
-	public final ArrayList<File> getFiles() {
+	public final List<File> getFiles() {
 		return files;
 	}
 
@@ -57,8 +58,8 @@ public abstract class AbstractEvaluator implements Evaluator {
 	}
 
 	@Override
-	public final ArrayList<CodeRange> getCodeRanges(File file) {
-		ArrayList<CodeRange> ranges = codeRanges.get(file);
+	public final List<CodeRange> getCodeRanges(File file) {
+		List<CodeRange> ranges = codeRanges.get(file);
 		if (ranges == null) {
 			return new ArrayList<CodeRange>();
 		}

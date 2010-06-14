@@ -50,7 +50,7 @@ public class ProjectAnalyserTest extends TestCase {
 		analyser.run();
 		for (File file : analyser.getFiles()) {
 			List<CodeRange> ranges = analyser.getAnalyser(file)
-					.getNamedCodeRanges();
+					.getNonFragmentCodeRangesRecursively();
 			for (CodeRange range : ranges) {
 				TokenStream stream = range.getTokenStream();
 				for (int index = 0; index < stream.getSize(); index++) {

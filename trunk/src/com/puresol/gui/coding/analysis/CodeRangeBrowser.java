@@ -101,7 +101,7 @@ public class CodeRangeBrowser extends Panel {
 			return;
 		}
 		java.util.List<CodeRange> ranges = project.getAnalyser(file)
-				.getNamedCodeRanges();
+				.getNonFragmentCodeRangesRecursively();
 		if (ranges == null) {
 			return;
 		}

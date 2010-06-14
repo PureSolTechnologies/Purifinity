@@ -48,7 +48,7 @@ public interface Analyser extends Serializable {
 
 	public SymbolTable getSymbols();
 
-	public List<CodeRange> getNamedCodeRanges();
+	public List<CodeRange> getNonFragmentCodeRangesRecursively();
 
 	public void parse() throws AnalyserException;
 }

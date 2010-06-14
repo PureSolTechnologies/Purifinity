@@ -212,13 +212,16 @@ public abstract class AbstractParser implements Parser {
 
 	private <T> void getChildParsers(Class<T> parserClass,
 			List<T> childParsers, Parser parser) {
+		if (parser == null) {
+			return;
+		}
+		if (parserClass.isAssignableFrom(parser.getClass())) {
+			@SuppressWarnings("unchecked")
+			T t = (T) parser;
+			childParsers.add(t);
+		}
 		for (Parser childParser : parser.getChildParsers()) {
 			getChildParsers(parserClass, childParsers, childParser);
-			if (parserClass.isAssignableFrom(childParser.getClass())) {
-				@SuppressWarnings("unchecked")
-				T t = (T) childParser;
-				childParsers.add(t);
-			}
 		}
 	}
 

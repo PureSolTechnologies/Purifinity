@@ -1,7 +1,7 @@
 package com.puresol.coding.evaluator.duplication;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -21,7 +21,7 @@ public class DuplicationScannerTest extends TestCase {
 		projectAnalyser.run();
 		DuplicationScanner search = new DuplicationScanner(projectAnalyser);
 		search.run();
-		ArrayList<Duplication> duplications = search.getDuplications();
+		List<Duplication> duplications = search.getDuplications();
 		for (Duplication duplication : duplications) {
 			System.out.println(duplication.getLeft().toString());
 			System.out.println(duplication.getRight().toString());

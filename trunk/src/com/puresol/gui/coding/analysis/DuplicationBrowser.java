@@ -3,6 +3,7 @@ package com.puresol.gui.coding.analysis;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Hashtable;
+import java.util.List;
 
 import javax.i18n4j.Translator;
 import javax.swing.border.TitledBorder;
@@ -21,7 +22,7 @@ public class DuplicationBrowser extends BorderLayoutWidget {
 	private static final Translator translator = Translator
 			.getTranslator(DuplicationBrowser.class);
 
-	private ArrayList<Duplication> duplications = new ArrayList<Duplication>();
+	private List<Duplication> duplications = new ArrayList<Duplication>();
 	private FreeList duplicationList = null;
 	private DuplicationViewer viewer;
 	private boolean color = true;
@@ -46,7 +47,7 @@ public class DuplicationBrowser extends BorderLayoutWidget {
 				Object.class);
 	}
 
-	public void setDuplications(ArrayList<Duplication> duplications) {
+	public void setDuplications(List<Duplication> duplications) {
 		this.duplications = duplications;
 		refresh();
 	}

@@ -1,7 +1,7 @@
 package com.puresol.coding.evaluator.duplication;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -23,7 +23,7 @@ public class CopyAndPasteScannerTest extends TestCase {
 		projectAnalyser.run();
 		CopyAndPasteScanner search = new CopyAndPasteScanner(projectAnalyser);
 		search.run();
-		ArrayList<Duplication> duplications = search.getDuplications();
+		List<Duplication> duplications = search.getDuplications();
 		Assert.assertEquals(1, duplications.size());
 	}
 }

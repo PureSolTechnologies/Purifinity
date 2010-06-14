@@ -83,23 +83,15 @@ abstract public class AbstractAnalyser implements Analyser {
 	}
 
 	@Override
-	public final List<CodeRange> getNamedCodeRanges() {
-		List<CodeRange> ranges = new ArrayList<CodeRange>();
-		getNamedCodeRanges(ranges, rootCodeRange);
-		return ranges;
-	}
-
-	private final void getNamedCodeRanges(List<CodeRange> ranges,
-			CodeRange parent) {
-		if (parent == null) {
-			return;
+	public final List<CodeRange> getNonFragmentCodeRangesRecursively() {
+		List<CodeRange> childCodeRanges = rootCodeRange.getChildCodeRanges();
+		List<CodeRange> nonFragmentCodeRanges = new ArrayList<CodeRange>();
+		for (CodeRange codeRange : childCodeRanges) {
+			if (codeRange.getCodeRangeType() != CodeRangeType.FRAGMENT) {
+				nonFragmentCodeRanges.add(codeRange);
+			}
 		}
-		if (!parent.getName().isEmpty()) {
-			ranges.add(parent);
-		}
-		for (CodeRange child : parent.getChildCodeRanges()) {
-			getNamedCodeRanges(ranges, child);
-		}
+		return nonFragmentCodeRanges;
 	}
 
 	/*

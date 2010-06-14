@@ -3,6 +3,8 @@ package com.puresol.coding.evaluator.duplication;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
 
 import javax.i18n4j.Translator;
 import javax.swingx.progress.ProgressObserver;
@@ -44,9 +46,9 @@ public class CopyAndPasteScanner extends AbstractEvaluator {
 			.i18n("This evaluator scans for code which was copy and pasted.");
 	public static final ArrayList<Property> SUPPORTED_PROPERTIES = new ArrayList<Property>();
 
-	private final Hashtable<CodeRange, ArrayList<Integer>> codeRanges = new Hashtable<CodeRange, ArrayList<Integer>>();
-	private final ArrayList<Duplication> duplications = new ArrayList<Duplication>();
-	private final Hashtable<File, ArrayList<Duplication>> fileDuplications = new Hashtable<File, ArrayList<Duplication>>();
+	private final Map<CodeRange, List<Integer>> codeRanges = new Hashtable<CodeRange, List<Integer>>();
+	private final List<Duplication> duplications = new ArrayList<Duplication>();
+	private final Map<File, List<Duplication>> fileDuplications = new Hashtable<File, List<Duplication>>();
 
 	public CopyAndPasteScanner(ProjectAnalyser analyser) {
 		super(analyser);
@@ -119,8 +121,8 @@ public class CopyAndPasteScanner extends AbstractEvaluator {
 	}
 
 	private boolean hashCheck(CodeRange left, CodeRange right) {
-		ArrayList<Integer> leftHashes = codeRanges.get(left);
-		ArrayList<Integer> rightHashes = codeRanges.get(right);
+		List<Integer> leftHashes = codeRanges.get(left);
+		List<Integer> rightHashes = codeRanges.get(right);
 		for (int leftIndex = 0; leftIndex < leftHashes.size() - THRESHOLD; leftIndex++) {
 			for (int rightIndex = 0; rightIndex < rightHashes.size()
 					- THRESHOLD; rightIndex++) {
@@ -193,11 +195,11 @@ public class CopyAndPasteScanner extends AbstractEvaluator {
 		fileDuplications.get(duplication.getRight().getFile()).add(duplication);
 	}
 
-	public ArrayList<Duplication> getDuplications() {
+	public List<Duplication> getDuplications() {
 		return duplications;
 	}
 
-	public ArrayList<Duplication> getDuplications(File file) {
+	public List<Duplication> getDuplications(File file) {
 		return fileDuplications.get(file);
 	}
 

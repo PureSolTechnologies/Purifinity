@@ -2,7 +2,7 @@ package com.puresol.coding.evaluator;
 
 import java.io.File;
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.swingx.progress.ProgressObservable;
 
@@ -52,14 +52,14 @@ public interface Evaluator extends ProgressObservable, Serializable {
 	 * 
 	 * @return An ArrayList of File is returned containing these files.
 	 */
-	public ArrayList<File> getFiles();
+	public List<File> getFiles();
 
 	/**
 	 * This method returns a complete list of files evaluated by the evaluator.
 	 * 
 	 * @return An ArrayList of File is returned containing these files.
 	 */
-	public ArrayList<CodeRange> getCodeRanges(File file);
+	public List<CodeRange> getCodeRanges(File file);
 
 	/**
 	 * Here a comment as String is returned for the evaluation result of the
