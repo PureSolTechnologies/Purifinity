@@ -37,6 +37,6 @@ public class FormalParameterDeclarations extends AbstractJavaParser {
 
 	@Override
 	public CodeRangeType getCodeRangeType() {
-		return CodeRangeType.CLASS;
+		return CodeRangeType.FRAGMENT;
 	}
 }

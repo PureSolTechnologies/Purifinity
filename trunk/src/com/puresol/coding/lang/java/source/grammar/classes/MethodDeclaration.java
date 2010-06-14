@@ -32,7 +32,7 @@ public class MethodDeclaration extends AbstractJavaParser {
 
 	@Override
 	public CodeRangeType getCodeRangeType() {
-		return CodeRangeType.METHOD;
+		return CodeRangeType.FRAGMENT;
 	}
 
 }

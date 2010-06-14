@@ -20,11 +20,11 @@ public class FieldModifiers extends AbstractJavaParser {
 		expectPart(FieldModifier.class);
 		while (acceptPart(FieldModifier.class) != null) {
 		}
+		finish();
 		List<CodeRange> children = getChildCodeRanges();
 		for (CodeRange child : children) {
 			modifiers.add(child.getText());
 		}
-		finish();
 	}
 
 	@Override

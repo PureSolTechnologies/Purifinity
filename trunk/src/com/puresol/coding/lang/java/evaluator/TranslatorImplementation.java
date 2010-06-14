@@ -70,7 +70,7 @@ public class TranslatorImplementation extends AbstractEvaluator {
 
 	private void analyse(File file) {
 		Analyser analyser = getProjectAnalyser().getAnalyser(file);
-		for (CodeRange codeRange : analyser.getNamedCodeRanges()) {
+		for (CodeRange codeRange : analyser.getNonFragmentCodeRangesRecursively()) {
 			if (Thread.interrupted()) {
 				return;
 			}
