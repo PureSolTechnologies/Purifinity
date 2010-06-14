@@ -20,8 +20,9 @@ import javax.swingx.progress.ProgressObserver;
 
 import org.apache.log4j.Logger;
 
+import com.puresol.coding.EvaluatorFactory;
+import com.puresol.coding.Evaluators;
 import com.puresol.coding.analysis.ProjectAnalyser;
-import com.puresol.utils.ClassInstantiationException;
 
 /**
  * This is the central class for managing all information for the code
@@ -48,25 +49,24 @@ public class ProjectEvaluator implements ProgressObservable, Serializable {
 	@Override
 	public void run() {
 		evaluators.clear();
-		ArrayList<Class<? extends Evaluator>> evaluatorClasses = EvaluatorManager
-				.getInstance().getEvaluatorClasses();
+		List<EvaluatorFactory> evaluatorFactories = Evaluators.getInstance()
+				.getEvaluators();
 		if (observer != null) {
 			observer.setDescription("Code Evaluation");
-			observer.setRange(0, evaluatorClasses.size());
+			observer.setRange(0, evaluatorFactories.size());
 		}
 		int count = 0;
-		for (Class<? extends Evaluator> evaluatorClass : evaluatorClasses) {
+		for (EvaluatorFactory evaluatorFactory : evaluatorFactories) {
 			if (observer != null) {
 				count++;
 				observer.setStatus(count);
 			}
 			try {
-				Evaluator evaluator = EvaluatorManager.createEvaluatorInstance(
-						evaluatorClass, projectAnalyser);
+				Evaluator evaluator = evaluatorFactory.create(projectAnalyser);
 				observer.startSubProgress(evaluator);
 				evaluators.add(evaluator);
-			} catch (ClassInstantiationException e) {
-				logger.error(e.getMessage(), e);
+			} catch (NotSupportedException e) {
+				logger.warn(e.getMessage(), e);
 			}
 		}
 		if (observer != null) {

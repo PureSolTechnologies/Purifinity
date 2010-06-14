@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Evaluators {
 
-	private final List<EvaluatorFactory> languages = new ArrayList<EvaluatorFactory>();
+	private final List<EvaluatorFactory> evaluators = new ArrayList<EvaluatorFactory>();
 
 	private static Evaluators instance = null;
 
@@ -25,16 +25,16 @@ public class Evaluators {
 	private Evaluators() {
 	}
 
-	public List<EvaluatorFactory> getLanguages() {
-		return languages;
+	public List<EvaluatorFactory> getEvaluators() {
+		return evaluators;
 	}
 
 	public void registerLanguage(EvaluatorFactory language) {
-		languages.add(language);
+		evaluators.add(language);
 	}
 
 	public void unregisterLanguage(EvaluatorFactory language) {
-		languages.remove(language);
+		evaluators.remove(language);
 	}
 
 }

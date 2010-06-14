@@ -5,7 +5,6 @@ import java.io.IOException;
 
 import javax.i18n4j.Translator;
 
-import com.puresol.coding.evaluator.metric.report.HTMLMetricsProject;
 import com.puresol.jars.JarFile;
 import com.puresol.reporting.html.HTMLStandards;
 import com.puresol.reporting.html.Image;
@@ -101,14 +100,15 @@ public class StandardReport {
 	}
 
 	public String createLogoIMGTag(File file) {
-		return new Image(FileUtilities.getRelativePath(file, logoFile)).toHTML();
+		return new Image(FileUtilities.getRelativePath(file, logoFile))
+				.toHTML();
 
 	}
 
 	public String createLogoIMGTag(File file, int widht, int height,
 			boolean relativeSize) {
-		return new Image(FileUtilities.getRelativePath(file, logoFile), widht, height,
-				relativeSize).toHTML();
+		return new Image(FileUtilities.getRelativePath(file, logoFile), widht,
+				height, relativeSize).toHTML();
 	}
 
 	public void createFile(File file, String html) throws IOException {
@@ -124,8 +124,8 @@ public class StandardReport {
 
 	private String generateFinalText(File file, String title, String bodyText) {
 		String output = HTMLStandards.getStandardHeader(title, FileUtilities
-				.getRelativePath(file, cssFile), false, FileUtilities.getRelativePath(
-				file, favIconFile));
+				.getRelativePath(file, cssFile), false, FileUtilities
+				.getRelativePath(file, favIconFile));
 		output += createLogoIMGTag(file, 400, 0, false);
 		output += "<h1>" + title + "</h1>";
 		output += bodyText;
@@ -146,8 +146,8 @@ public class StandardReport {
 		if (logoFile != null) {
 			File logo = FileUtilities.addPaths(projectDirectory, logoFile);
 			if (!logo.exists()) {
-				JarFile.extractResource(HTMLMetricsProject.class
-						.getResource("/config/logo.png"), logo);
+				JarFile.extractResource(getClass().getResource(
+						"/config/logo.png"), logo);
 			}
 		}
 	}
@@ -156,18 +156,19 @@ public class StandardReport {
 		if (cssFile != null) {
 			File css = FileUtilities.addPaths(projectDirectory, cssFile);
 			if (!css.exists()) {
-				JarFile.extractResource(HTMLMetricsProject.class
-						.getResource("/css/report.css"), css);
+				JarFile.extractResource(getClass().getResource(
+						"/css/report.css"), css);
 			}
 		}
 	}
 
 	private void createFavIconFile() {
 		if (favIconFile != null) {
-			File favIcon = FileUtilities.addPaths(projectDirectory, favIconFile);
+			File favIcon = FileUtilities
+					.addPaths(projectDirectory, favIconFile);
 			if (!favIcon.exists()) {
-				JarFile.extractResource(HTMLMetricsProject.class
-						.getResource("/config/favicon.png"), favIcon);
+				JarFile.extractResource(getClass().getResource(
+						"/config/favicon.png"), favIcon);
 			}
 		}
 	}

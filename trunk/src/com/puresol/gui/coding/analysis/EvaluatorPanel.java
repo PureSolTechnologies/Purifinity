@@ -1,8 +1,8 @@
 package com.puresol.gui.coding.analysis;
 
 import java.awt.BorderLayout;
-import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 
 import javax.i18n4j.Translator;
 import javax.swing.JSplitPane;
@@ -17,15 +17,19 @@ import javax.swingx.connect.Slot;
 import javax.swingx.progress.ProgressObservable;
 import javax.swingx.progress.ProgressWindow;
 
+import org.apache.log4j.Logger;
+
+import com.puresol.coding.EvaluatorFactory;
+import com.puresol.coding.Evaluators;
 import com.puresol.coding.analysis.ProjectAnalyser;
 import com.puresol.coding.evaluator.Evaluator;
-import com.puresol.coding.evaluator.EvaluatorManager;
-import com.puresol.utils.ClassInstantiationException;
+import com.puresol.coding.evaluator.NotSupportedException;
 
 public class EvaluatorPanel extends Panel {
 
 	private static final long serialVersionUID = 7855693564694783199L;
 
+	private static final Logger logger = Logger.getLogger(EvaluatorPanel.class);
 	private static final Translator translator = Translator
 			.getTranslator(EvaluatorPanel.class);
 
@@ -68,12 +72,11 @@ public class EvaluatorPanel extends Panel {
 	}
 
 	private void addEvaluators() {
-		EvaluatorManager manager = EvaluatorManager.getInstance();
-		ArrayList<Class<? extends Evaluator>> evaluatorClasses = manager
-				.getEvaluatorClasses();
+		List<EvaluatorFactory> evaluatorFactories = Evaluators.getInstance()
+				.getEvaluators();
 		Hashtable<Object, Object> values = new Hashtable<Object, Object>();
-		for (Class<? extends Evaluator> evaluatorClass : evaluatorClasses) {
-			values.put(manager.getName(evaluatorClass), evaluatorClass);
+		for (EvaluatorFactory evaluatorFactory : evaluatorFactories) {
+			values.put(evaluatorFactory.getEvaluatorName(), evaluatorFactory);
 		}
 		evaluators.setListData(values);
 	}
@@ -88,22 +91,19 @@ public class EvaluatorPanel extends Panel {
 
 	@Slot
 	public void run() {
-		@SuppressWarnings("unchecked")
-		Class<? extends Evaluator> clazz = (Class<? extends Evaluator>) evaluators
+		EvaluatorFactory evaluatorFactory = (EvaluatorFactory) evaluators
 				.getSelectedValue();
-		if ((clazz == null) || (projectAnalyser == null)) {
+		if ((evaluatorFactory == null) || (projectAnalyser == null)) {
 			return;
 		}
 		try {
-			Evaluator evaluator = EvaluatorManager.createEvaluatorInstance(
-					clazz, projectAnalyser);
+			Evaluator evaluator = evaluatorFactory.create(projectAnalyser);
 			ProgressWindow progress = new ProgressWindow(evaluator);
 			progress.run();
 			progress.connect("finished", this, "finished",
 					ProgressObservable.class);
-		} catch (ClassInstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (NotSupportedException e) {
+			logger.warn(e.getMessage(), e);
 		}
 	}
 
@@ -116,13 +116,11 @@ public class EvaluatorPanel extends Panel {
 
 	@Slot
 	public void evaluatorChanged(Object o) {
-		@SuppressWarnings("unchecked")
-		Class<? extends Evaluator> clazz = (Class<? extends Evaluator>) o;
-		if (clazz == null) {
+		EvaluatorFactory evaluatorFactory = (EvaluatorFactory) o;
+		if (evaluatorFactory == null) {
 			description.setText("");
 		} else {
-			description.setText(EvaluatorManager.getInstance().getDescription(
-					clazz));
+			description.setText(evaluatorFactory.getEvaluatorDescription());
 		}
 	}
 }
