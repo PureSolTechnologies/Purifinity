@@ -47,8 +47,8 @@ public class ClassDeclaration extends AbstractJavaParser {
 	 * 
 	 * @return A list of declared fields is returned.
 	 */
-	public List<VariableDeclarator> getFields() {
-		return getChildCodeRanges(VariableDeclarator.class);
+	public List<FieldDeclaration> getFields() {
+		return getChildCodeRanges(FieldDeclaration.class);
 	}
 
 }

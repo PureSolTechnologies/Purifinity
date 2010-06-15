@@ -17,6 +17,7 @@ import com.puresol.coding.evaluator.QualityLevel;
 import com.puresol.coding.evaluator.UnsupportedReportingFormatException;
 import com.puresol.coding.lang.java.Java;
 import com.puresol.coding.lang.java.source.grammar.classes.ClassDeclaration;
+import com.puresol.coding.lang.java.source.grammar.classes.FieldDeclaration;
 import com.puresol.coding.lang.java.source.grammar.classes.VariableDeclarator;
 import com.puresol.coding.reporting.HTMLConverter;
 import com.puresol.reporting.ReportingFormat;
@@ -38,7 +39,7 @@ public class TranslatorImplementation extends AbstractEvaluator {
 	public static final ArrayList<Property> SUPPORTED_PROPERTIES = new ArrayList<Property>();
 
 	private static Map<CodeRange, QualityLevel> levels = new Hashtable<CodeRange, QualityLevel>();
-	private static Map<CodeRange, VariableDeclarator> fields = new Hashtable<CodeRange, VariableDeclarator>();
+	private static Map<CodeRange, FieldDeclaration> fields = new Hashtable<CodeRange, FieldDeclaration>();
 
 	public TranslatorImplementation(ProjectAnalyser analyser) {
 		super(analyser);
@@ -70,7 +71,8 @@ public class TranslatorImplementation extends AbstractEvaluator {
 
 	private void analyse(File file) {
 		Analyser analyser = getProjectAnalyser().getAnalyser(file);
-		for (CodeRange codeRange : analyser.getNonFragmentCodeRangesRecursively()) {
+		for (CodeRange codeRange : analyser
+				.getNonFragmentCodeRangesRecursively()) {
 			if (Thread.interrupted()) {
 				return;
 			}
@@ -86,7 +88,7 @@ public class TranslatorImplementation extends AbstractEvaluator {
 
 	private void analyse(CodeRange codeRange) {
 		ClassDeclaration classDeclaration = (ClassDeclaration) codeRange;
-		for (VariableDeclarator field : classDeclaration.getFields()) {
+		for (FieldDeclaration field : classDeclaration.getFields()) {
 			if (!(field.getVariableType().equals(
 					Translator.class.getSimpleName()) || field
 					.getVariableType().equals(Translator.class.getName()))) {
@@ -112,7 +114,13 @@ public class TranslatorImplementation extends AbstractEvaluator {
 				levels.put(codeRange, QualityLevel.MEDIUM);
 				continue;
 			}
-			if (!field.getName().equals("translator")) {
+			List<VariableDeclarator> declarators = field
+					.getChildCodeRanges(VariableDeclarator.class);
+			if (declarators.size() != 1) {
+				levels.put(codeRange, QualityLevel.LOW);
+				continue;
+			}
+			if (!declarators.get(0).getName().equals("translator")) {
 				levels.put(codeRange, QualityLevel.MEDIUM);
 				continue;
 			}
