@@ -94,7 +94,7 @@ public class ProjectAnalyser implements Serializable, ProgressObservable {
 			if ((FileUtilities.addPaths(directory, file).isFile())
 					&& (!file.getPath().contains("/."))) {
 				/*
-				 * only non hidden files are analysed...
+				 * only non hidden files are analyzed...
 				 */
 				Analyser analyser = analyserFactory.create(directory, file);
 				if (analyser != null) {
@@ -114,7 +114,7 @@ public class ProjectAnalyser implements Serializable, ProgressObservable {
 			logger.warn("File '" + file.getPath() + "' is not existing!");
 			failedFiles.add(file);
 		} catch (AnalyserException e) {
-			logger.warn("File '" + file.getPath() + "' is parsable!");
+			logger.warn("File '" + file.getPath() + "' is not parsable!");
 			failedFiles.add(file);
 		}
 	}
