@@ -17,9 +17,10 @@ public class CopyAndPasteScannerTest extends TestCase {
 
 	@Test
 	public void testScanner() {
-		ProjectAnalyser projectAnalyser = new ProjectAnalyser(new File("test"),
+		ProjectAnalyser projectAnalyser = new ProjectAnalyser(new File("test",
 				FileUtilities.classToRelativePackagePath(
-						DummyClassForDuplicationScannerTest.class).toString());
+						DummyClassForDuplicationScannerTest.class).toString()),
+				new File("workspace"));
 		projectAnalyser.run();
 		CopyAndPasteScanner search = new CopyAndPasteScanner(projectAnalyser);
 		search.run();

@@ -52,27 +52,27 @@ public class AnalyserFactory {
 		// needs to be private...
 	}
 
-	public Analyser create(File projectDirectory, File file)
+	public Analyser create(File file)
 			throws LanguageNotSupportedException, FileNotFoundException {
 		logger.info("Create analyser for file '" + file.getPath() + "'...");
-		checkFile(projectDirectory, file);
-		return createAnalyser(projectDirectory, file);
+		checkFile(file);
+		return createAnalyser(file);
 	}
 
-	private void checkFile(File projectDirectory, File file)
+	private void checkFile(File file)
 			throws FileNotFoundException {
-		if (!FileUtilities.addPaths(projectDirectory, file).exists()) {
+		if (!file.exists()) {
 			logger.warn("File '" + file.getPath() + "' is not existing!");
 			throw new FileNotFoundException("File '" + file.getPath()
 					+ "' is not existing!");
 		}
 	}
 
-	private Analyser createAnalyser(File projectDirectory, File file)
+	private Analyser createAnalyser(File file)
 			throws LanguageNotSupportedException {
 		for (ProgrammingLanguage language : ProgrammingLanguages.getInstance()
 				.getLanguages()) {
-			Analyser analyser = checkAndCreate(language, projectDirectory, file);
+			Analyser analyser = checkAndCreate(language, file);
 			if (analyser != null) {
 				return analyser;
 			}
@@ -83,12 +83,12 @@ public class AnalyserFactory {
 	}
 
 	private Analyser checkAndCreate(ProgrammingLanguage clazz,
-			File projectDirectory, File file) {
+			File file) {
 		try {
-			if (!clazz.isSuitable(FileUtilities.addPaths(projectDirectory, file))) {
+			if (!clazz.isSuitable(file)) {
 				return null;
 			}
-			return clazz.createAnalyser(projectDirectory, file);
+			return clazz.createAnalyser(file);
 		} catch (ClassInstantiationException e) {
 			throw new StrangeSituationException(e);
 		}

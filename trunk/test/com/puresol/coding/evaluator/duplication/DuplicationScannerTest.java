@@ -15,9 +15,10 @@ public class DuplicationScannerTest extends TestCase {
 
 	@Test
 	public void testOnDummyClass() {
-		ProjectAnalyser projectAnalyser = new ProjectAnalyser(new File(
-				"test/com/puresol/coding/analysis/evaluator/duplication"),
-				"DummyClassForDuplicationScannerTest.java");
+		ProjectAnalyser projectAnalyser = new ProjectAnalyser(
+				new File(
+						"test/com/puresol/coding/analysis/evaluator/duplication/DummyClassForDuplicationScannerTest.java"),
+				new File("workspace"));
 		projectAnalyser.run();
 		DuplicationScanner search = new DuplicationScanner(projectAnalyser);
 		search.run();

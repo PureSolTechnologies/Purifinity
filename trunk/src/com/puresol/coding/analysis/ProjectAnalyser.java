@@ -41,8 +41,8 @@ public class ProjectAnalyser implements Serializable, ProgressObservable {
 	private static final Logger logger = Logger
 			.getLogger(ProjectAnalyser.class);
 
-	private final File directory;
-	private final String pattern;
+	private final File projectDirectory;
+	private final File workspaceDirectory;
 	private final Map<File, Analyser> analysers = new Hashtable<File, Analyser>();
 	private final List<File> failedFiles = new ArrayList<File>();
 	private transient final AnalyserFactory analyserFactory = AnalyserFactory
@@ -50,9 +50,19 @@ public class ProjectAnalyser implements Serializable, ProgressObservable {
 
 	private transient ProgressObserver progressMonitor = null;
 
-	public ProjectAnalyser(File directory, String pattern) {
-		this.directory = directory;
-		this.pattern = pattern;
+	public ProjectAnalyser(File projectDirectory, File workspaceDirectory) {
+		this.projectDirectory = projectDirectory;
+		this.workspaceDirectory = workspaceDirectory;
+		checkAndCreateWorkspaceDirectory();
+	}
+
+	private void checkAndCreateWorkspaceDirectory() {
+		if (!workspaceDirectory.exists()) {
+			workspaceDirectory.mkdirs();
+		} else if (!workspaceDirectory.isDirectory()) {
+			throw new IllegalArgumentException("'" + workspaceDirectory
+					+ "' is not a directory!");
+		}
 	}
 
 	@Override
@@ -67,7 +77,7 @@ public class ProjectAnalyser implements Serializable, ProgressObservable {
 	}
 
 	private void analyseFiles() {
-		List<File> files = FileSearch.find(directory, pattern);
+		List<File> files = FileSearch.find(projectDirectory, "**/*");
 		if (progressMonitor != null) {
 			progressMonitor.setRange(0, files.size());
 			progressMonitor.setStatus(0);
@@ -91,12 +101,12 @@ public class ProjectAnalyser implements Serializable, ProgressObservable {
 
 	private void analyseFile(File file) {
 		try {
-			if ((FileUtilities.addPaths(directory, file).isFile())
+			if ((FileUtilities.addPaths(projectDirectory, file).isFile())
 					&& (!file.getPath().contains("/."))) {
 				/*
 				 * only non hidden files are analyzed...
 				 */
-				Analyser analyser = analyserFactory.create(directory, file);
+				Analyser analyser = analyserFactory.create(file);
 				if (analyser != null) {
 					analyser.parse();
 					analysers.put(file, analyser);
@@ -120,7 +130,7 @@ public class ProjectAnalyser implements Serializable, ProgressObservable {
 	}
 
 	public File getProjectDirectory() {
-		return directory;
+		return projectDirectory;
 	}
 
 	public ArrayList<File> getFiles() {
@@ -151,11 +161,11 @@ public class ProjectAnalyser implements Serializable, ProgressObservable {
 		int result = 1;
 		result = prime * result
 				+ ((analysers == null) ? 0 : analysers.hashCode());
-		result = prime * result
-				+ ((directory == null) ? 0 : directory.hashCode());
+		result = prime
+				* result
+				+ ((projectDirectory == null) ? 0 : projectDirectory.hashCode());
 		result = prime * result
 				+ ((failedFiles == null) ? 0 : failedFiles.hashCode());
-		result = prime * result + ((pattern == null) ? 0 : pattern.hashCode());
 		return result;
 	}
 
@@ -178,20 +188,15 @@ public class ProjectAnalyser implements Serializable, ProgressObservable {
 				return false;
 		} else if (!analysers.equals(other.analysers))
 			return false;
-		if (directory == null) {
-			if (other.directory != null)
+		if (projectDirectory == null) {
+			if (other.projectDirectory != null)
 				return false;
-		} else if (!directory.equals(other.directory))
+		} else if (!projectDirectory.equals(other.projectDirectory))
 			return false;
 		if (failedFiles == null) {
 			if (other.failedFiles != null)
 				return false;
 		} else if (!failedFiles.equals(other.failedFiles))
-			return false;
-		if (pattern == null) {
-			if (other.pattern != null)
-				return false;
-		} else if (!pattern.equals(other.pattern))
 			return false;
 		return true;
 	}

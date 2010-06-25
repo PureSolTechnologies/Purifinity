@@ -13,19 +13,19 @@ import com.puresol.reporting.html.css.parser.tokengroups.CSSSymbols;
 
 public class CSSLexer extends Lexer {
 
-    public CSSLexer(TokenStream stream) throws LexerException {
-	super(stream);
-	addDefinitions(CSSKeywords.DEFINITIONS);
-	addDefinitions(CSSLiterals.DEFINITIONS);
-	addDefinitions(CSSSymbols.DEFINITIONS);
-    }
+	public CSSLexer(TokenStream stream) throws LexerException {
+		super(stream);
+		addDefinitions(CSSKeywords.DEFINITIONS);
+		addDefinitions(CSSLiterals.DEFINITIONS);
+		addDefinitions(CSSSymbols.DEFINITIONS);
+	}
 
-    public CSSLexer(File directory, File file) throws FileNotFoundException,
-	    IOException, LexerException {
-	super(directory, file);
-	addDefinitions(CSSKeywords.DEFINITIONS);
-	addDefinitions(CSSLiterals.DEFINITIONS);
-	addDefinitions(CSSSymbols.DEFINITIONS);
-    }
+	public CSSLexer(File file) throws FileNotFoundException, IOException,
+			LexerException {
+		super(file);
+		addDefinitions(CSSKeywords.DEFINITIONS);
+		addDefinitions(CSSLiterals.DEFINITIONS);
+		addDefinitions(CSSSymbols.DEFINITIONS);
+	}
 
 }

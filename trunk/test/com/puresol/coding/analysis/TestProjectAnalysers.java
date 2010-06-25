@@ -14,8 +14,9 @@ import junit.framework.Assert;
 public class TestProjectAnalysers {
 
 	public static final ProjectAnalyser MINIMAL_PROJECT_ANALYSER = new ProjectAnalyser(
-			new File("test/com/puresol/coding/analysis"),
-			"TestProjectAnalysers.java");
+			new File(
+					"test/com/puresol/coding/analysis/TestProjectAnalysers.java"),
+			new File("workspace"));
 	static {
 		MINIMAL_PROJECT_ANALYSER.run();
 		Assert.assertEquals(1, MINIMAL_PROJECT_ANALYSER.getFiles().size());

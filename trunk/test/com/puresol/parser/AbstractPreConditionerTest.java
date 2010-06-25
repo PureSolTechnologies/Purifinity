@@ -13,8 +13,8 @@ import junit.framework.TestCase;
 public class AbstractPreConditionerTest extends TestCase {
 
 	class TestPreConditioner extends AbstractPreConditioner {
-		public TestPreConditioner(File directory, File file) throws IOException {
-			super(directory, file);
+		public TestPreConditioner(File file) throws IOException {
+			super(file);
 		}
 
 		public TestPreConditioner(InputStream stream, File file)
@@ -41,7 +41,7 @@ public class AbstractPreConditionerTest extends TestCase {
 	public void testConstructor() {
 		try {
 			TestPreConditioner conditioner = new TestPreConditioner(new File(
-					"test"), new File(
+					new File("test"),
 					"com/puresol/parser/AbstractPreConditionerTest.java"));
 			Assert.assertNotNull(conditioner.getInputStream());
 			Assert.assertNotNull(conditioner.getTokenStream());

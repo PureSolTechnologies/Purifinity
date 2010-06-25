@@ -37,6 +37,7 @@ import com.puresol.coding.evaluator.ProjectEvaluator;
 import com.puresol.coding.evaluator.EvaluationReport;
 import com.puresol.coding.evaluator.UnsupportedReportingFormatException;
 import com.puresol.gui.PureSolApplication;
+import com.puresol.gui.coding.analysis.NewProjectAnalyserDialog;
 import com.puresol.gui.coding.analysis.ProjectAnalysisBrowser;
 import com.puresol.gui.osgi.BundleManager;
 import com.puresol.osgi.OSGi;
@@ -145,15 +146,13 @@ public class CodeAnalysis extends PureSolApplication {
 
 	@Slot
 	void newAnalyser() {
-		JFileChooser directory = new JFileChooser();
-		directory.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		int result = directory.showOpenDialog(this);
-		if (result == JFileChooser.CANCEL_OPTION) {
+		NewProjectAnalyserDialog dialog = new NewProjectAnalyserDialog();
+		if (!dialog.run()) {
 			return;
 		}
-		File file = directory.getSelectedFile();
-		setApplicationSubtitle(file.getPath());
-		analyser = new ProjectAnalyser(file, "**/*");
+		setApplicationSubtitle(dialog.getWorkspaceDirectory().toString());
+		analyser = new ProjectAnalyser(dialog.getSourceDirectory(), dialog
+				.getWorkspaceDirectory());
 		ProgressWindow progress = new ProgressWindow(analyser);
 		progress.connect("finished", this, "refresh");
 		progress.run();

@@ -239,13 +239,4 @@ public class CopyAndPasteScanner extends AbstractEvaluator {
 	public QualityLevel getQuality(CodeRange codeRange) {
 		return QualityLevel.UNSPECIFIED;
 	}
-
-	public static void main(String args[]) {
-		ProjectAnalyser analyser = new ProjectAnalyser(new File(
-				"/home/ludwig/workspace/i18n4java"), "src/javax/i18n4j/*.java");
-		analyser.run();
-		CopyAndPasteScanner cnpScanner = new CopyAndPasteScanner(analyser);
-		cnpScanner.run();
-	}
-
 }

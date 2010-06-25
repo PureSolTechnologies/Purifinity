@@ -46,7 +46,8 @@ public class ProjectAnalyserTest extends TestCase {
 	@Test
 	public void testFortran() {
 		ProjectAnalyser analyser = new ProjectAnalyser(new File(
-				"/usr/src/compile/ATLAS/src/blas/f77reference"), "**/zgerc.f");
+				"/usr/src/compile/ATLAS/src/blas/f77reference/zgerc.f"),
+				new File("workspace"));
 		analyser.run();
 		for (File file : analyser.getFiles()) {
 			List<CodeRange> ranges = analyser.getAnalyser(file)

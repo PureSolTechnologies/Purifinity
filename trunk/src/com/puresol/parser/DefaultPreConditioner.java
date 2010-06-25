@@ -6,11 +6,11 @@ import java.io.InputStream;
 
 public class DefaultPreConditioner extends AbstractPreConditioner {
 
-	public DefaultPreConditioner(File directory, File file) throws IOException {
-		super(directory, file);
+	public DefaultPreConditioner(File file) throws IOException {
+		super(file);
 	}
 
-	public DefaultPreConditioner(File directory, File file, InputStream stream)
+	public DefaultPreConditioner(File file, InputStream stream)
 			throws IOException {
 		super(stream, file);
 	}

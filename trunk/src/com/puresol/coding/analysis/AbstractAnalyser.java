@@ -30,19 +30,13 @@ abstract public class AbstractAnalyser implements Analyser {
 	private static final Logger logger = Logger
 			.getLogger(AbstractAnalyser.class);
 
-	private final File projectDirectory;
 	private final File file;
 
 	private CodeRange rootCodeRange = null;
 	private final SymbolTable symbols = new SymbolTable();
 
-	public AbstractAnalyser(File projectDirectory, File file) {
-		this.projectDirectory = projectDirectory;
+	public AbstractAnalyser(File file) {
 		this.file = file;
-	}
-
-	public File getProjectDirectory() {
-		return projectDirectory;
 	}
 
 	@Override
@@ -104,9 +98,6 @@ abstract public class AbstractAnalyser implements Analyser {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((file == null) ? 0 : file.hashCode());
-		result = prime
-				* result
-				+ ((projectDirectory == null) ? 0 : projectDirectory.hashCode());
 		result = prime * result
 				+ ((rootCodeRange == null) ? 0 : rootCodeRange.hashCode());
 		result = prime * result + ((symbols == null) ? 0 : symbols.hashCode());
@@ -131,11 +122,6 @@ abstract public class AbstractAnalyser implements Analyser {
 			if (other.file != null)
 				return false;
 		} else if (!file.equals(other.file))
-			return false;
-		if (projectDirectory == null) {
-			if (other.projectDirectory != null)
-				return false;
-		} else if (!projectDirectory.equals(other.projectDirectory))
 			return false;
 		if (rootCodeRange == null) {
 			if (other.rootCodeRange != null)
