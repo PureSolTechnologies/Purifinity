@@ -24,173 +24,145 @@ import org.osgi.framework.launch.FrameworkFactory;
  */
 public class OSGi {
 
-    private static final Logger logger = Logger.getLogger(OSGi.class);
+	private static final Logger logger = Logger.getLogger(OSGi.class);
 
-    public static final String OSGI_CONFIGURATION_RESOURCE = "/META-INF/services/osgi.properties";
+	public static final String OSGI_FRAMEWORK_FACTORY_PROPERTIES = "META-INF/services/org.osgi.framework.launch.FrameworkFactory";
+	public static final String OSGI_PROPERTIES = "/META-INF/services/osgi.properties";
 
-    private static OSGi instance = null;
+	private Framework framework = null;
+	private BundleContext context = null;
+	private Map<String, Object> configuration;
 
-    /**
-     * This method creates a new instance of an OSGi framework and returns its
-     * reference. During this process the framework is automatically started and
-     * ready for usage.
-     * 
-     * @return An instance of OSGi is returned.
-     * @throws BundleException
-     * @throws OSGiException
-     */
-    public static OSGi getStartedInstance() throws OSGiException,
-	    BundleException {
-	if (instance == null) {
-	    createAndStartInstance();
+	/**
+	 * Used to force this class into singleton pattern.
+	 */
+	public OSGi() {
+		loadConfiguration();
 	}
-	return instance;
-    }
 
-    private static synchronized void createAndStartInstance()
-	    throws OSGiException, BundleException {
-	if (instance == null) {
-	    instance = new OSGi();
-	    instance.start();
+	public OSGi(Properties properties) {
+		setConfiguration(properties);
 	}
-    }
 
-    /**
-     * This method stops the OSGi framework and all its services. Aftwards the
-     * singleton instance is killed and goes the way of the dodo.
-     * 
-     * @throws BundleException
-     */
-    public static synchronized void stopAndKillInstance()
-	    throws BundleException {
-	if (instance != null) {
-	    instance.stop();
-	    instance = null;
+	public OSGi(Map<String, Object> configuration) {
+		setConfiguration(configuration);
 	}
-    }
 
-    /**
-     * This mehtod is used to check the current status of the OSGi framework.
-     * 
-     * @return True is returned if the framework is running. Otherwise false is
-     *         returned.
-     */
-    public static boolean isStarted() {
-	return (instance != null);
-    }
-
-    private Framework framework = null;
-    private BundleContext context = null;
-
-    /**
-     * Used to force this class into singleton pattern.
-     */
-    private OSGi() {
-    }
-
-    private void start() throws OSGiException, BundleException {
-	logger.info("Starting OSGi framework...");
-	if (framework != null) {
-	    stop();
+	private void setConfiguration(Map<String, Object> configuration) {
+		this.configuration = configuration;
 	}
-	FrameworkFactory factory = null;
-	try {
-	    factory = getFrameworkFactory();
-	} catch (Exception e) {
-	    logger.error(e.getMessage(), e);
-	    throw new OSGiException(
-		    "Could not create factory for OSGi framwork!");
-	}
-	framework = factory.newFramework(getConfiguration());
-	framework.start();
-	context = framework.getBundleContext();
-	logger.info("OSGi framework started.");
-	System.out.println(context.getProperty("org.osgi.framework.storage"));
-    }
 
-    private Map<String, Object> getConfiguration() {
-	try {
-	    Map<String, Object> map = new HashMap<String, Object>();
-	    Properties props = new Properties();
-	    InputStream inputStream = getClass().getResourceAsStream(
-		    OSGi.OSGI_CONFIGURATION_RESOURCE);
-	    if (inputStream == null) {
-		logger
-			.warn("No '"
-				+ OSGI_CONFIGURATION_RESOURCE
-				+ "' file was found. Defaults from OSGi framework will be used!");
-		return null;
-	    }
-	    props.load(inputStream);
-	    for (Object key : props.keySet()) {
-		logger.info("OSGi setting: " + key.toString() + " --> "
-			+ props.getProperty(key.toString()));
-		map.put((String) key, props.getProperty((String) key));
-	    }
-	    return map;
-	} catch (IOException e) {
-	    logger
-		    .warn("No '"
-			    + OSGI_CONFIGURATION_RESOURCE
-			    + "' file was found. Defaults from OSGi framework will be used!");
-	    return null;
-	}
-    }
-
-    private FrameworkFactory getFrameworkFactory() throws OSGiException {
-	try {
-	    URL url = OSGi.class
-		    .getClassLoader()
-		    .getResource(
-			    "META-INF/services/org.osgi.framework.launch.FrameworkFactory");
-	    if (url != null) {
-		BufferedReader br = new BufferedReader(new InputStreamReader(
-			url.openStream()));
-		try {
-		    for (String s = br.readLine(); s != null; s = br.readLine()) {
-			s = s.trim();
-			logger
-				.info("Found class for OSGi FrameworkFactory in "
-					+ "'META-INF/services/org.osgi.framework.launch.FrameworkFactory': '"
-					+ s + "'");
-			logger.info("Creating instance...");
-			// Try to load first non-empty, non-commented line.
-			if ((s.length() > 0) && (s.charAt(0) != '#')) {
-			    return (FrameworkFactory) Class.forName(s)
-				    .newInstance();
-			}
-		    }
-		} finally {
-		    if (br != null)
-			br.close();
+	private void setConfiguration(Properties properties) {
+		Map<String, Object> configuration = new HashMap<String, Object>();
+		for (Object key : properties.keySet()) {
+			logger.info("OSGi setting: " + key.toString() + " --> "
+					+ properties.getProperty(key.toString()));
+			configuration.put((String) key, properties
+					.getProperty((String) key));
 		}
-	    }
-	} catch (InstantiationException e) {
-	    logger.error(e.getMessage(), e);
-	} catch (IllegalAccessException e) {
-	    logger.error(e.getMessage(), e);
-	} catch (ClassNotFoundException e) {
-	    logger.error(e.getMessage(), e);
-	} catch (IOException e) {
-	    logger.error(e.getMessage(), e);
+		setConfiguration(configuration);
 	}
-	throw new OSGiException("Could not find framework factory.");
-    }
 
-    private void stop() throws BundleException {
-	logger.info("Stopping OSGi framework...");
-	context = null;
-	framework.stop();
-	framework = null;
-	logger.info("OSGi framework stopped.");
-    }
+	public void start() throws OSGiException, BundleException {
+		logger.info("Starting OSGi framework...");
+		if (framework != null) {
+			stop();
+		}
+		FrameworkFactory factory = null;
+		try {
+			factory = getFrameworkFactory();
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			throw new OSGiException(
+					"Could not create factory for OSGi framwork!");
+		}
+		framework = factory.newFramework(configuration);
+		framework.start();
+		context = framework.getBundleContext();
+		logger.info("OSGi framework started.");
+		logger.info("Bundle directory is '"
+				+ context.getProperty("org.osgi.framework.storage") + "'");
+	}
 
-    /**
-     * This method returns the frameworks BundleContext.
-     * 
-     * @return The bundle context is returned.
-     */
-    public BundleContext getContext() {
-	return context;
-    }
+	private void loadConfiguration() {
+		try {
+			Properties props = new Properties();
+			InputStream inputStream = getClass().getResourceAsStream(
+					OSGi.OSGI_PROPERTIES);
+			if (inputStream == null) {
+				logger
+						.warn("No '"
+								+ OSGI_PROPERTIES
+								+ "' file was found. Defaults from OSGi framework will be used!");
+				return;
+			}
+			props.load(inputStream);
+			setConfiguration(props);
+		} catch (IOException e) {
+			logger
+					.warn("No '"
+							+ OSGI_PROPERTIES
+							+ "' file was found. Defaults from OSGi framework will be used!");
+			return;
+		}
+	}
+
+	private FrameworkFactory getFrameworkFactory() throws OSGiException {
+		try {
+			URL url = OSGi.class.getClassLoader().getResource(
+					OSGI_FRAMEWORK_FACTORY_PROPERTIES);
+			if (url != null) {
+				BufferedReader br = new BufferedReader(new InputStreamReader(
+						url.openStream()));
+				try {
+					for (String s = br.readLine(); s != null; s = br.readLine()) {
+						s = s.trim();
+						logger
+								.info("Found class for OSGi FrameworkFactory in "
+										+ "'META-INF/services/org.osgi.framework.launch.FrameworkFactory': '"
+										+ s + "'");
+						logger.info("Creating instance...");
+						// Try to load first non-empty, non-commented line.
+						if ((s.length() > 0) && (s.charAt(0) != '#')) {
+							return (FrameworkFactory) Class.forName(s)
+									.newInstance();
+						}
+					}
+				} finally {
+					if (br != null)
+						br.close();
+				}
+			}
+		} catch (InstantiationException e) {
+			logger.error(e.getMessage(), e);
+		} catch (IllegalAccessException e) {
+			logger.error(e.getMessage(), e);
+		} catch (ClassNotFoundException e) {
+			logger.error(e.getMessage(), e);
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e);
+		}
+		throw new OSGiException("Could not find framework factory.");
+	}
+
+	public void stop() throws BundleException {
+		logger.info("Stopping OSGi framework...");
+		context = null;
+		framework.stop();
+		framework = null;
+		logger.info("OSGi framework stopped.");
+	}
+
+	/**
+	 * This method returns the frameworks BundleContext.
+	 * 
+	 * @return The bundle context is returned.
+	 */
+	public BundleContext getContext() {
+		return context;
+	}
+
+	public boolean isStarted() {
+		return (context != null);
+	}
 }

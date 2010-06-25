@@ -11,14 +11,16 @@ public class OSGiTest extends TestCase {
 	@Test
 	public void testStartupAndSingleton() {
 		try {
-			OSGi osgi = OSGi.getStartedInstance();
+			OSGi osgi = new OSGi();
 			assertNotNull(osgi);
-			OSGi osgi2 = OSGi.getStartedInstance();
-			assertSame(osgi, osgi2);
+			assertFalse(osgi.isStarted());
+			osgi.start();
+			assertTrue(osgi.isStarted());
 			BundleContext context = osgi.getContext();
 			assertNotNull(context);
 			assertTrue(context.getBundles().length > 0);
-			OSGi.stopAndKillInstance();
+			osgi.stop();
+			assertFalse(osgi.isStarted());
 		} catch (OSGiException e) {
 			e.printStackTrace();
 			fail("No exception was expected!");

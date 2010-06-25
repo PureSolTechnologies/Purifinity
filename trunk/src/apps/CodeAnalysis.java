@@ -60,6 +60,7 @@ public class CodeAnalysis extends PureSolApplication {
 	private static final Translator translator = Translator
 			.getTranslator(CodeAnalysis.class);
 
+	private final OSGi osgi = new OSGi();
 	private ProjectAnalyser analyser = null;
 	private ProjectAnalysisBrowser browser = null;
 
@@ -72,7 +73,7 @@ public class CodeAnalysis extends PureSolApplication {
 
 	private void startOSGi() {
 		try {
-			OSGi.getStartedInstance();
+			osgi.start();
 		} catch (OSGiException e) {
 			logger.error(e.getMessage(), e);
 			Application.showStandardErrorMessage(translator
@@ -303,27 +304,17 @@ public class CodeAnalysis extends PureSolApplication {
 
 	@Slot
 	void pluginManager() {
-		try {
-			if (OSGi.isStarted()) {
-				new BundleManager(OSGi.getStartedInstance().getContext()).run();
-			} else {
-				JOptionPane
-						.showConfirmDialog(
-								getInstance(),
-								translator
-										.i18n("No plugin system was started. There is nothing to manage."),
-								translator.i18n("Information"),
-								JOptionPane.DEFAULT_OPTION,
-								JOptionPane.INFORMATION_MESSAGE);
-			}
-		} catch (OSGiException e) {
-			logger.error(e.getMessage(), e);
-			Application.showStandardErrorMessage(translator
-					.i18n("An error within the plugin system occured!"), e);
-		} catch (BundleException e) {
-			logger.error(e.getMessage(), e);
-			Application.showStandardErrorMessage(translator
-					.i18n("An error within the plugin system occured!"), e);
+		if (osgi.isStarted()) {
+			new BundleManager(osgi.getContext()).run();
+		} else {
+			JOptionPane
+					.showConfirmDialog(
+							getInstance(),
+							translator
+									.i18n("No plugin system was started. There is nothing to manage."),
+							translator.i18n("Information"),
+							JOptionPane.DEFAULT_OPTION,
+							JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
 
@@ -336,7 +327,7 @@ public class CodeAnalysis extends PureSolApplication {
 	@Override
 	public void quit() {
 		try {
-			OSGi.stopAndKillInstance();
+			osgi.stop();
 		} catch (BundleException e) {
 			logger.error(e.getMessage(), e);
 		}

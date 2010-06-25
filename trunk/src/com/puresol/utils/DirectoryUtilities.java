@@ -27,6 +27,20 @@ public class DirectoryUtilities {
 
 	public static File getInstallationDirectory(Class<?> clazz,
 			boolean findRootOfPackage) {
+		String installDir = System.getProperty("app.installdir");
+		if ((installDir != null) && (!installDir.isEmpty())) {
+			return new File(installDir);
+		}
+		File installDirectory = findInstallationDirectory(clazz,
+				findRootOfPackage);
+		if (installDirectory != null) {
+			System.setProperty("app.installdir", installDirectory.toString());
+		}
+		return installDirectory;
+	}
+
+	private static File findInstallationDirectory(Class<?> clazz,
+			boolean findRootOfPackage) {
 		try {
 			// get the resource url and path. Closest thing we have to physical
 			// location
@@ -38,7 +52,8 @@ public class DirectoryUtilities {
 				urlPath = urlPath.substring(5);
 				// remove everything behind the '!'
 				urlPath = urlPath.substring(0, urlPath.indexOf("!"));
-				return new File(urlPath).getParentFile();
+				File homeLocation = new File(urlPath).getParentFile();
+				return homeLocation;
 			} else if (url.getProtocol().equals("file")) {
 				String urlPath = url.getPath();
 				// decode it and get the parent
@@ -53,10 +68,11 @@ public class DirectoryUtilities {
 				if (p == null) {
 					return null;
 				}
-				// work your way up as many times as the target class has
-				// packages
-				// so package com.foo.bar will move up 3 levels in the
-				// directory
+				/*
+				 * work your way up as many times as the target class has
+				 * packages so package com.foo.bar will move up 3 levels in the
+				 * directory
+				 */
 				String[] arrs = p.getName().split("[.]");
 				// kill the stuff after the end of the jar file name
 				for (int i = 0; i < arrs.length; i++) {

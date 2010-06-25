@@ -18,9 +18,12 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 
-import com.puresol.osgi.OSGi;
-import com.puresol.osgi.OSGiException;
-
+/**
+ * This class provides a simple BundleManager GUI for OSGi bundles.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class BundleManager extends Dialog {
 
 	private static final long serialVersionUID = -1851664339619930401L;
@@ -157,14 +160,5 @@ public class BundleManager extends Dialog {
 			Application.showStandardErrorMessage(
 					"Selected bundle could not be stopped.", e);
 		}
-	}
-
-	public static void main(String args[]) throws OSGiException,
-			BundleException {
-		OSGi osgi = OSGi.getStartedInstance();
-		System.out.println("start");
-		new BundleManager(osgi.getContext()).run();
-		System.out.println("end");
-		OSGi.stopAndKillInstance();
 	}
 }
