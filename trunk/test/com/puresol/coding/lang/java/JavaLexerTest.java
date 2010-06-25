@@ -23,8 +23,9 @@ public class JavaLexerTest {
 	public void testLexer() {
 		try {
 			DefaultPreConditioner conditioner = new DefaultPreConditioner(
-					new File("test"), FileUtilities
-							.classToRelativePackagePath(Translator.class));
+					new File(new File("test"), FileUtilities
+							.classToRelativePackagePath(Translator.class)
+							.toString()));
 			TokenStream tokenStream = conditioner.getTokenStream();
 			SourceCodeLexer lexer = new SourceCodeLexer(Java.getInstance(),
 					tokenStream);

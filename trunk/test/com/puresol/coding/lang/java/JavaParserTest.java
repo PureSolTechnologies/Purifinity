@@ -38,9 +38,9 @@ public class JavaParserTest extends TestCase {
 		JavaParser parser = null;
 		try {
 			DefaultPreConditioner conditioner = new DefaultPreConditioner(
-					new File("test"),
-					FileUtilities
-							.classToRelativePackagePath(ProgrammingLanguage.class));
+					new File(new File("test"), FileUtilities
+							.classToRelativePackagePath(
+									ProgrammingLanguage.class).toString()));
 			TokenStream tokenStream = conditioner.getTokenStream();
 			SourceCodeLexer lexer = new SourceCodeLexer(Java.getInstance(),
 					tokenStream);

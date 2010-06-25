@@ -29,8 +29,9 @@ public class JavaAnalyserTest extends TestCase {
 	public void test() {
 		try {
 			Logger.getRootLogger().setLevel(Level.DEBUG);
-			JavaAnalyser analyser = new JavaAnalyser(new File("test"), FileUtilities
-					.classToRelativePackagePath(CompilationUnitTest.class));
+			JavaAnalyser analyser = new JavaAnalyser(new File(new File("test"),
+					FileUtilities.classToRelativePackagePath(
+							CompilationUnitTest.class).toString()));
 			analyser.parse();
 			CodeRange rootCodeRange = analyser.getRootCodeRange();
 			Assert.assertNotNull(rootCodeRange);

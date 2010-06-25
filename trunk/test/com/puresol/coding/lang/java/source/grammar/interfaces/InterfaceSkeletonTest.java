@@ -19,8 +19,9 @@ public class InterfaceSkeletonTest extends TestCase {
 	@Test
 	public void test() {
 		try {
-			JavaAnalyser analyser = new JavaAnalyser(new File("test"), FileUtilities
-					.classToRelativePackagePath(InterfaceSkeleton.class));
+			JavaAnalyser analyser = new JavaAnalyser(new File(new File("test"),
+					FileUtilities.classToRelativePackagePath(
+							InterfaceSkeleton.class).toString()));
 			analyser.parse();
 			CodeRange codeRange = analyser.getRootCodeRange();
 			Assert.assertEquals(JavaParser.class, codeRange.getClass());

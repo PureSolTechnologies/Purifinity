@@ -37,8 +37,7 @@ public class JavaSourceCodeDistributionTesting {
 			Analyser analyser = Java
 					.getInstance()
 					.createAnalyser(
-							new File(INSTALL_DIRECTORY),
-							new File(
+							new File(new File(INSTALL_DIRECTORY),
 									"j2se/src/share/classes/sun/rmi/server/Activation.java"));
 			analyser.parse();
 		} catch (ClassInstantiationException e) {
@@ -72,8 +71,8 @@ public class JavaSourceCodeDistributionTesting {
 					continue;
 				}
 				try {
-					Analyser analyser = java.createAnalyser(new File(
-							INSTALL_DIRECTORY), file);
+					Analyser analyser = java.createAnalyser(new File(new File(
+							INSTALL_DIRECTORY), file.toString()));
 					analyser.parse();
 					raFile.writeBytes(file.toString() + "\n");
 				} catch (ClassInstantiationException e) {
