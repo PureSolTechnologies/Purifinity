@@ -1,10 +1,14 @@
 package com.puresol.coding.lang.java;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.puresol.coding.AbstractProgrammingLanguage;
-import com.puresol.coding.analysis.Analyser;
+import com.puresol.coding.analysis.Analyzer;
 import com.puresol.coding.lang.java.source.keywords.AbstractKeyword;
 import com.puresol.coding.lang.java.source.keywords.AssertKeyword;
 import com.puresol.coding.lang.java.source.keywords.BooleanKeyword;
@@ -114,6 +118,7 @@ import com.puresol.coding.lang.java.source.symbols.TraditionalComment;
 import com.puresol.coding.lang.java.source.symbols.Unequal;
 import com.puresol.coding.lang.java.source.symbols.WhiteSpace;
 import com.puresol.parser.TokenDefinition;
+import com.puresol.utils.PersistenceException;
 
 /**
  * This is the base class for Java Programming Language. The lexical and
@@ -296,7 +301,7 @@ public class Java extends AbstractProgrammingLanguage {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected Class<? extends Analyser> getAnalyserClass() {
+	protected Class<? extends Analyzer> getAnalyserClass() {
 		return JavaAnalyser.class;
 	}
 
@@ -330,6 +335,25 @@ public class Java extends AbstractProgrammingLanguage {
 	@Override
 	public List<Class<? extends TokenDefinition>> getSymbols() {
 		return SYMBOLS;
+	}
+
+	@Override
+	public Analyzer restoreAnalyzer(File file) throws PersistenceException {
+		ObjectInputStream ois = null;
+		try {
+			ois = new ObjectInputStream(new FileInputStream(file));
+			Analyzer analyzer = (Analyzer) ois.readObject();
+			ois.close();
+			return analyzer;
+		} catch (Throwable e) {
+			if (ois != null) {
+				try {
+					ois.close();
+				} catch (IOException e1) {
+				}
+			}
+			throw new PersistenceException(e);
+		}
 	}
 
 }

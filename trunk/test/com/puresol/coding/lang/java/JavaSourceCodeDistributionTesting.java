@@ -13,7 +13,7 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
-import com.puresol.coding.analysis.Analyser;
+import com.puresol.coding.analysis.Analyzer;
 import com.puresol.coding.analysis.AnalyserException;
 import com.puresol.utils.ClassInstantiationException;
 import com.puresol.utils.ConsoleUtils;
@@ -34,7 +34,7 @@ public class JavaSourceCodeDistributionTesting {
 	public void test() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
 		try {
-			Analyser analyser = Java
+			Analyzer analyser = Java
 					.getInstance()
 					.createAnalyser(
 							new File(new File(INSTALL_DIRECTORY),
@@ -71,7 +71,7 @@ public class JavaSourceCodeDistributionTesting {
 					continue;
 				}
 				try {
-					Analyser analyser = java.createAnalyser(new File(new File(
+					Analyzer analyser = java.createAnalyser(new File(new File(
 							INSTALL_DIRECTORY), file.toString()));
 					analyser.parse();
 					raFile.writeBytes(file.toString() + "\n");

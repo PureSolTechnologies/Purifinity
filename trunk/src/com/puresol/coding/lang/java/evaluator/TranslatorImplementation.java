@@ -9,9 +9,9 @@ import java.util.Map;
 import javax.i18n4j.Translator;
 import javax.swingx.progress.ProgressObserver;
 
-import com.puresol.coding.analysis.Analyser;
+import com.puresol.coding.analysis.Analyzer;
 import com.puresol.coding.analysis.CodeRange;
-import com.puresol.coding.analysis.ProjectAnalyser;
+import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.evaluator.QualityLevel;
 import com.puresol.coding.evaluator.UnsupportedReportingFormatException;
@@ -41,7 +41,7 @@ public class TranslatorImplementation extends AbstractEvaluator {
 	private static Map<CodeRange, QualityLevel> levels = new Hashtable<CodeRange, QualityLevel>();
 	private static Map<CodeRange, FieldDeclaration> fields = new Hashtable<CodeRange, FieldDeclaration>();
 
-	public TranslatorImplementation(ProjectAnalyser analyser) {
+	public TranslatorImplementation(ProjectAnalyzer analyser) {
 		super(analyser);
 	}
 
@@ -70,7 +70,7 @@ public class TranslatorImplementation extends AbstractEvaluator {
 	}
 
 	private void analyse(File file) {
-		Analyser analyser = getProjectAnalyser().getAnalyser(file);
+		Analyzer analyser = getProjectAnalyser().getAnalyzer(file);
 		for (CodeRange codeRange : analyser
 				.getNonFragmentCodeRangesRecursively()) {
 			if (Thread.interrupted()) {

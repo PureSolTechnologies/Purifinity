@@ -3,7 +3,7 @@ package com.puresol.coding.lang.java.samples;
 import java.io.File;
 import java.util.List;
 
-import com.puresol.coding.analysis.Analyser;
+import com.puresol.coding.analysis.Analyzer;
 import com.puresol.parser.TokenDefinition;
 import com.puresol.utils.ClassInstantiationException;
 
@@ -48,7 +48,7 @@ public interface ProgrammingLanguage {
      * @return
      * @throws ClassInstantiationException
      */
-    public Analyser createAnalyser(File directory, File file)
+    public Analyzer createAnalyser(File directory, File file)
 	    throws ClassInstantiationException;
 
     /**
