@@ -23,7 +23,7 @@ import com.puresol.coding.ProgrammingLanguage;
  * @author Rick-Rainer Ludwig
  * 
  */
-public interface Analyser extends Serializable {
+public interface Analyzer extends Serializable {
 
 	/**
 	 * Returns the language of the file analysed.
@@ -51,4 +51,12 @@ public interface Analyser extends Serializable {
 	public List<CodeRange> getNonFragmentCodeRangesRecursively();
 
 	public void parse() throws AnalyserException;
+
+	/**
+	 * This method persists the analyzer into a file specified.
+	 * 
+	 * @param file
+	 * @return
+	 */
+	boolean persist(File file);
 }

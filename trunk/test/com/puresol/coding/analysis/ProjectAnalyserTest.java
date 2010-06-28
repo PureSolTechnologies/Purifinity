@@ -26,13 +26,16 @@ import junit.framework.TestCase;
 
 public class ProjectAnalyserTest extends TestCase {
 
+	private static final File WORKSPACE_DIRECTORY = new File(
+			ProjectAnalyserTest.class.getSimpleName() + "workspace");
+
 	@Test
 	public void testSerialization() {
 		try {
-			ProjectAnalyser projectAnalyser = TestProjectAnalysers.MINIMAL_PROJECT_ANALYSER;
+			ProjectAnalyzer projectAnalyser = TestProjectAnalysers.MINIMAL_PROJECT_ANALYSER;
 
 			Persistence.persist(projectAnalyser, new File("test/persist.test"));
-			ProjectAnalyser restored = (ProjectAnalyser) Persistence
+			ProjectAnalyzer restored = (ProjectAnalyzer) Persistence
 					.restore(new File("test/persist.test"));
 
 			Assert.assertNotSame(projectAnalyser, restored);
@@ -45,12 +48,12 @@ public class ProjectAnalyserTest extends TestCase {
 
 	@Test
 	public void testFortran() {
-		ProjectAnalyser analyser = new ProjectAnalyser(new File(
+		ProjectAnalyzer analyser = ProjectAnalyzer.create(new File(
 				"/usr/src/compile/ATLAS/src/blas/f77reference/zgerc.f"),
-				new File("workspace"));
+				WORKSPACE_DIRECTORY);
 		analyser.run();
 		for (File file : analyser.getFiles()) {
-			List<CodeRange> ranges = analyser.getAnalyser(file)
+			List<CodeRange> ranges = analyser.getAnalyzer(file)
 					.getNonFragmentCodeRangesRecursively();
 			for (CodeRange range : ranges) {
 				TokenStream stream = range.getTokenStream();
@@ -67,5 +70,6 @@ public class ProjectAnalyserTest extends TestCase {
 				}
 			}
 		}
+		WORKSPACE_DIRECTORY.delete();
 	}
 }

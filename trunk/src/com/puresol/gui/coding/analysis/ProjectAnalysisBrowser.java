@@ -17,7 +17,7 @@ import javax.swingx.Label;
 import javax.swingx.Panel;
 import javax.swingx.TabbedPane;
 
-import com.puresol.coding.analysis.ProjectAnalyser;
+import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.evaluator.ProjectEvaluator;
 
 public class ProjectAnalysisBrowser extends Panel {
@@ -27,7 +27,7 @@ public class ProjectAnalysisBrowser extends Panel {
 	private static final Translator translator = Translator
 			.getTranslator(ProjectAnalysisBrowser.class);
 
-	private ProjectAnalyser project = null;
+	private ProjectAnalyzer project = null;
 
 	private final Label directory = new Label();
 	private final TabbedPane tabbedPane = new TabbedPane();
@@ -40,7 +40,7 @@ public class ProjectAnalysisBrowser extends Panel {
 		initUI();
 	}
 
-	public ProjectAnalysisBrowser(ProjectAnalyser project) {
+	public ProjectAnalysisBrowser(ProjectAnalyzer project) {
 		super();
 		initUI();
 		setProjectAnalyser(project);
@@ -57,7 +57,7 @@ public class ProjectAnalysisBrowser extends Panel {
 				.addTab(translator.i18n("Project Evaluation"), codeEvaluation);
 	}
 
-	public void setProjectAnalyser(ProjectAnalyser project) {
+	public void setProjectAnalyser(ProjectAnalyzer project) {
 		this.project = project;
 		if (project != null) {
 			directory.setText(project.getProjectDirectory().getPath());
@@ -69,7 +69,7 @@ public class ProjectAnalysisBrowser extends Panel {
 		codeEvaluation.setProjectAnalyser(project);
 	}
 
-	public ProjectAnalyser getProjectAnalyser() {
+	public ProjectAnalyzer getProjectAnalyser() {
 		return project;
 	}
 

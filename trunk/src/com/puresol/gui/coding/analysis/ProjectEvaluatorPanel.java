@@ -10,7 +10,7 @@ import javax.swingx.ToolBar;
 import javax.swingx.connect.Slot;
 import javax.swingx.progress.ProgressWindow;
 
-import com.puresol.coding.analysis.ProjectAnalyser;
+import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.evaluator.ProjectEvaluator;
 import com.puresol.coding.evaluator.Evaluator;
 
@@ -25,7 +25,7 @@ public class ProjectEvaluatorPanel extends BorderLayoutWidget {
 	private final FreeList evaluatorList = new FreeList();
 	private final EvaluatorViewer evaluatorViewer = new EvaluatorViewer();
 
-	private ProjectAnalyser projectAnalyser = null;
+	private ProjectAnalyzer projectAnalyser = null;
 	private ProjectEvaluator projectEvaluator = null;
 
 	public ProjectEvaluatorPanel() {
@@ -33,7 +33,7 @@ public class ProjectEvaluatorPanel extends BorderLayoutWidget {
 		initUI();
 	}
 
-	public ProjectEvaluatorPanel(ProjectAnalyser projectAnalyser) {
+	public ProjectEvaluatorPanel(ProjectAnalyzer projectAnalyser) {
 		super();
 		initUI();
 		setProjectAnalyser(projectAnalyser);
@@ -50,7 +50,7 @@ public class ProjectEvaluatorPanel extends BorderLayoutWidget {
 		setCenter(evaluatorViewer);
 	}
 
-	public void setProjectAnalyser(ProjectAnalyser projectAnalyser) {
+	public void setProjectAnalyser(ProjectAnalyzer projectAnalyser) {
 		this.projectAnalyser = projectAnalyser;
 	}
 

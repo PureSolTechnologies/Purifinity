@@ -20,10 +20,12 @@ import com.puresol.parser.Parser;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.TokenStream;
 import com.puresol.utils.ClassInstantiationException;
+import com.puresol.utils.Persistence;
+import com.puresol.utils.PersistenceException;
 import com.puresol.utils.di.DIClassBuilder;
 import com.puresol.utils.di.Injection;
 
-abstract public class AbstractAnalyser implements Analyser {
+abstract public class AbstractAnalyser implements Analyzer {
 
 	private static final long serialVersionUID = -2593701440766091118L;
 
@@ -86,6 +88,23 @@ abstract public class AbstractAnalyser implements Analyser {
 			}
 		}
 		return nonFragmentCodeRanges;
+	}
+
+	@Override
+	public boolean persist(File file) {
+		try {
+			File persistDirectory = file.getParentFile();
+			if (!persistDirectory.exists()) {
+				if (!persistDirectory.mkdirs()) {
+					return false;
+				}
+			}
+			Persistence.persist(this, file);
+			return true;
+		} catch (PersistenceException e) {
+			logger.error(e.getMessage(), e);
+			return false;
+		}
 	}
 
 	/*

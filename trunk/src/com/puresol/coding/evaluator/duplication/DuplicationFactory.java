@@ -2,9 +2,9 @@ package com.puresol.coding.evaluator.duplication;
 
 import java.util.List;
 
-import com.puresol.coding.analysis.Analyser;
+import com.puresol.coding.analysis.Analyzer;
 import com.puresol.coding.analysis.CodeRange;
-import com.puresol.coding.analysis.ProjectAnalyser;
+import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.evaluator.Evaluator;
 import com.puresol.coding.evaluator.EvaluatorFactory;
 import com.puresol.coding.evaluator.NotSupportedException;
@@ -18,12 +18,12 @@ public class DuplicationFactory implements EvaluatorFactory {
 	}
 
 	@Override
-	public Evaluator create(Analyser analyser) throws NotSupportedException {
+	public Evaluator create(Analyzer analyser) throws NotSupportedException {
 		throw new NotSupportedException();
 	}
 
 	@Override
-	public Evaluator create(ProjectAnalyser projectAnalyser)
+	public Evaluator create(ProjectAnalyzer projectAnalyser)
 			throws NotSupportedException {
 		return new DuplicationScanner(projectAnalyser);
 	}

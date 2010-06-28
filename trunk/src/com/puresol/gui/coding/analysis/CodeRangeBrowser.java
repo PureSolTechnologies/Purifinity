@@ -26,7 +26,7 @@ import javax.swingx.ScrollPane;
 import javax.swingx.connect.Slot;
 
 import com.puresol.coding.analysis.CodeRange;
-import com.puresol.coding.analysis.ProjectAnalyser;
+import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.gui.coding.CodeRangeViewer;
 
 public class CodeRangeBrowser extends Panel {
@@ -36,8 +36,9 @@ public class CodeRangeBrowser extends Panel {
 	private static final Translator translator = Translator
 			.getTranslator(CodeRangeBrowser.class);
 
-	private ProjectAnalyser project = null;
+	private ProjectAnalyzer project = null;
 	private List fileList = null;
+	private List failedFilesList = null;
 	private FreeList codeRangeList = null;
 	private CodeRangeViewer codeRangeViewer = null;
 
@@ -46,7 +47,7 @@ public class CodeRangeBrowser extends Panel {
 		initUI();
 	}
 
-	public CodeRangeBrowser(ProjectAnalyser project) {
+	public CodeRangeBrowser(ProjectAnalyzer project) {
 		super();
 		initUI();
 		setProjectAnalyser(project);
@@ -65,6 +66,8 @@ public class CodeRangeBrowser extends Panel {
 				.setBorder(new TitledBorder(translator.i18n("Source Files")));
 		listsPanel.add(fileScroller);
 
+		failedFilesList = new List();
+
 		codeRangeList = new FreeList();
 		codeRangeList.connect("indexChanged", this, "showCodeRange", int.class);
 		ScrollPane codeRangeScroller = new ScrollPane(codeRangeList);
@@ -74,9 +77,10 @@ public class CodeRangeBrowser extends Panel {
 
 		add(listsPanel, BorderLayout.WEST);
 		add(codeRangeViewer = new CodeRangeViewer(), BorderLayout.CENTER);
+		add(new ScrollPane(failedFilesList), BorderLayout.EAST);
 	}
 
-	public void setProjectAnalyser(ProjectAnalyser project) {
+	public void setProjectAnalyser(ProjectAnalyzer project) {
 		this.project = project;
 		refresh();
 	}
@@ -88,11 +92,15 @@ public class CodeRangeBrowser extends Panel {
 			return;
 		}
 		java.util.List<File> files = project.getFiles();
-		if (files == null) {
-			return;
+		if (files != null) {
+			Collections.sort(files);
+			fileList.setListData(new Vector<File>(files));
 		}
-		Collections.sort(files);
-		fileList.setListData(new Vector<File>(files));
+		files = project.getFailedFiles();
+		if (files != null) {
+			Collections.sort(files);
+			failedFilesList.setListData(new Vector<File>(files));
+		}
 	}
 
 	private void updateCodeRanges(File file) {
@@ -100,7 +108,7 @@ public class CodeRangeBrowser extends Panel {
 		if (project == null) {
 			return;
 		}
-		java.util.List<CodeRange> ranges = project.getAnalyser(file)
+		java.util.List<CodeRange> ranges = project.getAnalyzer(file)
 				.getNonFragmentCodeRangesRecursively();
 		if (ranges == null) {
 			return;

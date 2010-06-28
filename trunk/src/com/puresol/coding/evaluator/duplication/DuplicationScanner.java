@@ -13,7 +13,7 @@ import javax.swingx.progress.ProgressObserver;
 import org.apache.log4j.Logger;
 
 import com.puresol.coding.analysis.CodeRange;
-import com.puresol.coding.analysis.ProjectAnalyser;
+import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.evaluator.QualityLevel;
 import com.puresol.coding.evaluator.UnsupportedReportingFormatException;
@@ -50,7 +50,7 @@ public class DuplicationScanner extends AbstractEvaluator implements
 	private final List<Duplication> duplications = new ArrayList<Duplication>();
 	private final Map<File, List<Duplication>> fileDuplications = new Hashtable<File, List<Duplication>>();
 
-	public DuplicationScanner(ProjectAnalyser analyser) {
+	public DuplicationScanner(ProjectAnalyzer analyser) {
 		super(analyser);
 	}
 

@@ -19,7 +19,6 @@ import java.net.URISyntaxException;
 import javax.i18n4j.Translator;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swingx.Application;
 import javax.swingx.BorderLayoutWidget;
 import javax.swingx.MemoryMonitor;
@@ -32,7 +31,7 @@ import javax.swingx.progress.ProgressWindow;
 import org.apache.log4j.Logger;
 import org.osgi.framework.BundleException;
 
-import com.puresol.coding.analysis.ProjectAnalyser;
+import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.evaluator.ProjectEvaluator;
 import com.puresol.coding.evaluator.EvaluationReport;
 import com.puresol.coding.evaluator.UnsupportedReportingFormatException;
@@ -44,8 +43,6 @@ import com.puresol.osgi.OSGi;
 import com.puresol.osgi.OSGiException;
 import com.puresol.reporting.ReportingFormat;
 import com.puresol.utils.FileUtilities;
-import com.puresol.utils.Persistence;
-import com.puresol.utils.PersistenceException;
 
 /**
  * This is PureSolTechnologies' code analysis tool for automated source code
@@ -62,7 +59,7 @@ public class CodeAnalysis extends PureSolApplication {
 			.getTranslator(CodeAnalysis.class);
 
 	private final OSGi osgi = new OSGi();
-	private ProjectAnalyser analyser = null;
+	private ProjectAnalyzer analyser = null;
 	private ProjectAnalysisBrowser browser = null;
 
 	public CodeAnalysis() {
@@ -100,15 +97,6 @@ public class CodeAnalysis extends PureSolApplication {
 		MenuItem openAnalyser = new MenuItem("Open Analyser...");
 		openAnalyser.connect("start", this, "openAnalyser");
 
-		MenuItem saveAnalyser = new MenuItem("Save Analyser...");
-		saveAnalyser.connect("start", this, "saveAnalyser");
-
-		MenuItem openEvaluator = new MenuItem("Open Project Evaluator ...");
-		openEvaluator.connect("start", this, "openEvaluator");
-
-		MenuItem saveEvaluator = new MenuItem("Save Project Evaluator ...");
-		saveEvaluator.connect("start", this, "saveEvaluator");
-
 		MenuItem createEvaluatorHTML = new MenuItem("Create Evaluator HTML...");
 		createEvaluatorHTML.connect("start", this, "createEvaluatorHTML");
 
@@ -121,10 +109,6 @@ public class CodeAnalysis extends PureSolApplication {
 		menuBar.add(fileMenu);
 		fileMenu.add(newAnalyser);
 		fileMenu.add(openAnalyser);
-		fileMenu.add(saveAnalyser);
-		fileMenu.addSeparator();
-		fileMenu.add(openEvaluator);
-		fileMenu.add(saveEvaluator);
 		fileMenu.addSeparator();
 		fileMenu.add(createEvaluatorHTML);
 		fileMenu.addSeparator();
@@ -151,116 +135,30 @@ public class CodeAnalysis extends PureSolApplication {
 			return;
 		}
 		setApplicationSubtitle(dialog.getWorkspaceDirectory().toString());
-		analyser = new ProjectAnalyser(dialog.getSourceDirectory(), dialog
-				.getWorkspaceDirectory());
-		ProgressWindow progress = new ProgressWindow(analyser);
-		progress.connect("finished", this, "refresh");
-		progress.run();
+		analyser = ProjectAnalyzer.create(dialog.getSourceDirectory(),
+				dialog.getWorkspaceDirectory());
+		if (analyser != null) {
+			ProgressWindow progress = new ProgressWindow(analyser);
+			progress.connect("finished", this, "refresh");
+			progress.run();
+		} else {
+			JOptionPane
+					.showMessageDialog(this, translator
+							.i18n("Could not create new analyser workspace!"),
+							translator.i18n("Error"), JOptionPane.ERROR_MESSAGE);
+		}
 	}
 
 	@Slot
 	void openAnalyser() {
-		FileNameExtensionFilter filter = new FileNameExtensionFilter(
-				"Persistence Files", "persist");
 		JFileChooser file = new JFileChooser();
-		file.setFileFilter(filter);
-		file.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		int result = file.showOpenDialog(this);
-		if (result == JFileChooser.CANCEL_OPTION) {
+		file.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		file.setName(translator.i18n("Open Analysis Workspace"));
+		if (file.showOpenDialog(this) == JFileChooser.CANCEL_OPTION) {
 			return;
 		}
-		try {
-			analyser = (ProjectAnalyser) Persistence.restore(file
-					.getSelectedFile());
-			refresh();
-		} catch (PersistenceException e) {
-			logger.error(e.getMessage(), e);
-			JOptionPane
-					.showMessageDialog(
-							Application.getInstance(),
-							translator
-									.i18n(
-											"Loading the analyser was not successful!\n\nMessage: {0}",
-											e.getMessage()), translator
-									.i18n("Error"), JOptionPane.ERROR_MESSAGE);
-		}
-	}
-
-	@Slot
-	void saveAnalyser() {
-		FileNameExtensionFilter filter = new FileNameExtensionFilter(
-				"Persistence Files", "persist");
-		JFileChooser file = new JFileChooser();
-		file.setFileFilter(filter);
-		file.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		int result = file.showSaveDialog(this);
-		if (result == JFileChooser.CANCEL_OPTION) {
-			return;
-		}
-		try {
-			Persistence.persist(analyser, file.getSelectedFile());
-		} catch (PersistenceException e) {
-			logger.error(e.getMessage(), e);
-			JOptionPane
-					.showMessageDialog(
-							Application.getInstance(),
-							translator
-									.i18n(
-											"Saving the analyser was not successful!\n\nMessage: {0}",
-											e.getMessage()), translator
-									.i18n("Error"), JOptionPane.ERROR_MESSAGE);
-		}
-	}
-
-	@Slot
-	void openEvaluator() {
-		JFileChooser file = new JFileChooser();
-		file.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		int result = file.showOpenDialog(this);
-		if (result == JFileChooser.CANCEL_OPTION) {
-			return;
-		}
-		try {
-			ProjectEvaluator evaluator = (ProjectEvaluator) Persistence
-					.restore(file.getSelectedFile());
-			browser.setProjectEvaluator(evaluator);
-			analyser = evaluator.getProjectAnalyser();
-			refresh();
-		} catch (PersistenceException e) {
-			logger.error(e.getMessage(), e);
-			JOptionPane
-					.showMessageDialog(
-							Application.getInstance(),
-							translator
-									.i18n(
-											"Loading the analyser was not successful!\n\nMessage: {0}",
-											e.getMessage()), translator
-									.i18n("Error"), JOptionPane.ERROR_MESSAGE);
-		}
-	}
-
-	@Slot
-	void saveEvaluator() {
-		JFileChooser file = new JFileChooser();
-		file.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		int result = file.showSaveDialog(this);
-		if (result == JFileChooser.CANCEL_OPTION) {
-			return;
-		}
-		try {
-			Persistence.persist(browser.getProjectEvaluator(), file
-					.getSelectedFile());
-		} catch (PersistenceException e) {
-			logger.error(e.getMessage(), e);
-			JOptionPane
-					.showMessageDialog(
-							Application.getInstance(),
-							translator
-									.i18n(
-											"Saving the analyser was not successful!\n\nMessage: {0}",
-											e.getMessage()), translator
-									.i18n("Error"), JOptionPane.ERROR_MESSAGE);
-		}
+		analyser = ProjectAnalyzer.open(file.getSelectedFile());
+		refresh();
 	}
 
 	@Slot
@@ -284,8 +182,8 @@ public class CodeAnalysis extends PureSolApplication {
 			} catch (UnsupportedReportingFormatException e) {
 				JOptionPane.showMessageDialog(Application.getInstance(),
 						translator.i18n("No report generation possible!")
-								+ "\n" + e.getMessage(), translator
-								.i18n("Error"), JOptionPane.ERROR_MESSAGE);
+								+ "\n" + e.getMessage(),
+						translator.i18n("Error"), JOptionPane.ERROR_MESSAGE);
 			} catch (IOException e) {
 				logger.error(e.getMessage(), e);
 			} catch (URISyntaxException e) {

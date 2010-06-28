@@ -7,7 +7,7 @@ import java.util.List;
 import javax.swingx.progress.ProgressObservable;
 
 import com.puresol.coding.analysis.CodeRange;
-import com.puresol.coding.analysis.ProjectAnalyser;
+import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.reporting.ReportingFormat;
 
 /**
@@ -45,7 +45,7 @@ public interface Evaluator extends ProgressObservable, Serializable {
 	public String getDescription(ReportingFormat format)
 			throws UnsupportedReportingFormatException;
 
-	public ProjectAnalyser getProjectAnalyser();
+	public ProjectAnalyzer getProjectAnalyser();
 
 	/**
 	 * This method returns a complete list of files evaluated by the evaluator.

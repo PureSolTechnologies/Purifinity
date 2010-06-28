@@ -13,16 +13,17 @@ import junit.framework.Assert;
  */
 public class TestProjectAnalysers {
 
-	public static final ProjectAnalyser MINIMAL_PROJECT_ANALYSER = new ProjectAnalyser(
-			new File(
+	private static final File WORKSPACE_DIRECTORY = new File(
+			TestProjectAnalysers.class.getSimpleName() + "workspace");
+	public static final ProjectAnalyzer MINIMAL_PROJECT_ANALYSER = ProjectAnalyzer
+			.create(new File(
 					"test/com/puresol/coding/analysis/TestProjectAnalysers.java"),
-			new File("workspace"));
+					WORKSPACE_DIRECTORY);
 	static {
 		MINIMAL_PROJECT_ANALYSER.run();
 		Assert.assertEquals(1, MINIMAL_PROJECT_ANALYSER.getFiles().size());
-		Assert
-				.assertEquals(0, MINIMAL_PROJECT_ANALYSER.getFailedFiles()
-						.size());
+		Assert.assertEquals(0, MINIMAL_PROJECT_ANALYSER.getFailedFiles().size());
+		WORKSPACE_DIRECTORY.delete();
 	}
 
 }

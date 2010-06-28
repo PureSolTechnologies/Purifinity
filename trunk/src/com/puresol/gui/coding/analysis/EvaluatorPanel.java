@@ -19,7 +19,7 @@ import javax.swingx.progress.ProgressWindow;
 
 import org.apache.log4j.Logger;
 
-import com.puresol.coding.analysis.ProjectAnalyser;
+import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.evaluator.Evaluator;
 import com.puresol.coding.evaluator.EvaluatorFactory;
 import com.puresol.coding.evaluator.Evaluators;
@@ -33,7 +33,7 @@ public class EvaluatorPanel extends Panel {
 	private static final Translator translator = Translator
 			.getTranslator(EvaluatorPanel.class);
 
-	private ProjectAnalyser projectAnalyser = null;
+	private ProjectAnalyzer projectAnalyser = null;
 
 	private final FreeList evaluators = new FreeList();
 	private final TabbedPane tabbedPane = new TabbedPane();
@@ -45,7 +45,7 @@ public class EvaluatorPanel extends Panel {
 		initUI();
 	}
 
-	public EvaluatorPanel(ProjectAnalyser projectAnalyser) {
+	public EvaluatorPanel(ProjectAnalyzer projectAnalyser) {
 		super();
 		this.projectAnalyser = projectAnalyser;
 		initUI();
@@ -81,11 +81,11 @@ public class EvaluatorPanel extends Panel {
 		evaluators.setListData(values);
 	}
 
-	public ProjectAnalyser getProjectAnlayser() {
+	public ProjectAnalyzer getProjectAnlayser() {
 		return projectAnalyser;
 	}
 
-	public void setProjectAnalyser(ProjectAnalyser projectAnalyser) {
+	public void setProjectAnalyser(ProjectAnalyzer projectAnalyser) {
 		this.projectAnalyser = projectAnalyser;
 	}
 

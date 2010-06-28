@@ -9,7 +9,7 @@ public class AnalyserException extends Exception {
 	private static final Translator translator = Translator
 			.getTranslator(AnalyserException.class);
 
-	public AnalyserException(Analyser analyser) {
+	public AnalyserException(Analyzer analyser) {
 		super(translator.i18n("Analyser {0} is not suitable for file {1}",
 				analyser.getClass(), analyser.getFile()));
 	}

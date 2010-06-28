@@ -21,6 +21,25 @@ public class DirectoryUtilities {
 		return true;
 	}
 
+	public static boolean deleteDirectoryRecursivly(File directory) {
+		for (String entryName : directory.list()) {
+			File entry = new File(entryName);
+			if (entry.isDirectory()) {
+				if (!deleteDirectoryRecursivly(entry)) {
+					return false;
+				}
+			} else {
+				if (!entry.delete()) {
+					return false;
+				}
+			}
+		}
+		if (!directory.delete()) {
+			return false;
+		}
+		return true;
+	}
+
 	public static File getExecutionDirectory() {
 		return new File(System.getProperty("user.dir", ".").toString());
 	}
@@ -57,8 +76,8 @@ public class DirectoryUtilities {
 			} else if (url.getProtocol().equals("file")) {
 				String urlPath = url.getPath();
 				// decode it and get the parent
-				File homeLocation = new File(URLDecoder
-						.decode(urlPath, "UTF-8")).getParentFile();
+				File homeLocation = new File(
+						URLDecoder.decode(urlPath, "UTF-8")).getParentFile();
 				// if we should unwind the package to the classpath root.
 				if (!findRootOfPackage) {
 					return homeLocation;

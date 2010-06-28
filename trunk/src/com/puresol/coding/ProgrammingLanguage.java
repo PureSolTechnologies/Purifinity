@@ -3,9 +3,10 @@ package com.puresol.coding;
 import java.io.File;
 import java.util.List;
 
-import com.puresol.coding.analysis.Analyser;
+import com.puresol.coding.analysis.Analyzer;
 import com.puresol.parser.TokenDefinition;
 import com.puresol.utils.ClassInstantiationException;
+import com.puresol.utils.PersistenceException;
 
 /**
  * This interface is the central interface for a programming language
@@ -48,7 +49,7 @@ public interface ProgrammingLanguage {
 	 * @return
 	 * @throws ClassInstantiationException
 	 */
-	public Analyser createAnalyser(File file)
+	public Analyzer createAnalyser(File file)
 			throws ClassInstantiationException;
 
 	/**
@@ -76,4 +77,6 @@ public interface ProgrammingLanguage {
 	 * @return
 	 */
 	public List<Class<? extends TokenDefinition>> getSymbols();
+
+	public Analyzer restoreAnalyzer(File file) throws PersistenceException;
 }

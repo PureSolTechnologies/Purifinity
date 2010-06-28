@@ -46,16 +46,7 @@ public class Persistence {
 			Object o = ois.readObject();
 			ois.close();
 			return o;
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-			if (ois != null) {
-				try {
-					ois.close();
-				} catch (IOException e1) {
-				}
-			}
-			throw new PersistenceException(e);
-		} catch (ClassNotFoundException e) {
+		} catch (Throwable e) {
 			if (ois != null) {
 				try {
 					ois.close();

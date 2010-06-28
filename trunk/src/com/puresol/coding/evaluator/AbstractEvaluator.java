@@ -9,7 +9,7 @@ import java.util.Map;
 import javax.swingx.progress.ProgressObserver;
 
 import com.puresol.coding.analysis.CodeRange;
-import com.puresol.coding.analysis.ProjectAnalyser;
+import com.puresol.coding.analysis.ProjectAnalyzer;
 
 /**
  * This is the base implementation of an abstract Evaluator. The implementation
@@ -26,18 +26,18 @@ public abstract class AbstractEvaluator implements Evaluator {
 
 	private static final long serialVersionUID = 1296590575296210481L;
 
-	private final ProjectAnalyser analyser;
+	private final ProjectAnalyzer analyser;
 	private final List<File> files = new ArrayList<File>();
 	private final Map<File, List<CodeRange>> codeRanges = new Hashtable<File, List<CodeRange>>();
 
 	transient private ProgressObserver observer = null;
 
-	public AbstractEvaluator(ProjectAnalyser analyser) {
+	public AbstractEvaluator(ProjectAnalyzer analyser) {
 		this.analyser = analyser;
 	}
 
 	@Override
-	public final ProjectAnalyser getProjectAnalyser() {
+	public final ProjectAnalyzer getProjectAnalyser() {
 		return analyser;
 	}
 
@@ -77,7 +77,7 @@ public abstract class AbstractEvaluator implements Evaluator {
 
 	protected final List<CodeRange> getEvaluableCodeRanges(File file) {
 		List<CodeRange> ranges = new ArrayList<CodeRange>();
-		getEvaluableCodeRanges(ranges, analyser.getAnalyser(file)
+		getEvaluableCodeRanges(ranges, analyser.getAnalyzer(file)
 				.getRootCodeRange());
 		return ranges;
 	}

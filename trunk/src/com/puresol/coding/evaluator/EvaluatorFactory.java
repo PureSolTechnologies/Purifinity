@@ -2,9 +2,9 @@ package com.puresol.coding.evaluator;
 
 import java.util.List;
 
-import com.puresol.coding.analysis.Analyser;
+import com.puresol.coding.analysis.Analyzer;
 import com.puresol.coding.analysis.CodeRange;
-import com.puresol.coding.analysis.ProjectAnalyser;
+import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.utils.Property;
 
 /**
@@ -31,8 +31,8 @@ public interface EvaluatorFactory {
 
 	public Evaluator create(CodeRange codeRange) throws NotSupportedException;
 
-	public Evaluator create(Analyser analyser) throws NotSupportedException;
+	public Evaluator create(Analyzer analyser) throws NotSupportedException;
 
-	public Evaluator create(ProjectAnalyser projectAnalyser)
+	public Evaluator create(ProjectAnalyzer projectAnalyser)
 			throws NotSupportedException;
 }

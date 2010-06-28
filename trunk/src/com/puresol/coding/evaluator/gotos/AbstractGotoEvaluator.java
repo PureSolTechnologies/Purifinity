@@ -9,7 +9,7 @@ import javax.swingx.progress.ProgressObserver;
 
 import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.analysis.CodeRange;
-import com.puresol.coding.analysis.ProjectAnalyser;
+import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.evaluator.UnsupportedReportingFormatException;
 import com.puresol.reporting.ReportingFormat;
@@ -32,7 +32,7 @@ abstract public class AbstractGotoEvaluator extends AbstractEvaluator {
 	private final Hashtable<CodeRange, ArrayList<FoundGoto>> gotos = new Hashtable<CodeRange, ArrayList<FoundGoto>>();
 	private final Hashtable<CodeRange, ArrayList<FoundLabel>> labels = new Hashtable<CodeRange, ArrayList<FoundLabel>>();
 
-	public AbstractGotoEvaluator(ProjectAnalyser analyser) {
+	public AbstractGotoEvaluator(ProjectAnalyzer analyser) {
 		super(analyser);
 	}
 

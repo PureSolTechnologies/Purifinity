@@ -20,7 +20,7 @@ import javax.swingx.progress.ProgressObserver;
 
 import org.apache.log4j.Logger;
 
-import com.puresol.coding.analysis.ProjectAnalyser;
+import com.puresol.coding.analysis.ProjectAnalyzer;
 
 /**
  * This is the central class for managing all information for the code
@@ -36,11 +36,11 @@ public class ProjectEvaluator implements ProgressObservable, Serializable {
 	private static final Logger logger = Logger
 			.getLogger(ProjectEvaluator.class);
 
-	private final ProjectAnalyser projectAnalyser;
+	private final ProjectAnalyzer projectAnalyser;
 	private final ArrayList<Evaluator> evaluators = new ArrayList<Evaluator>();
 	transient private ProgressObserver observer = null;
 
-	public ProjectEvaluator(ProjectAnalyser projectAnalyser) {
+	public ProjectEvaluator(ProjectAnalyzer projectAnalyser) {
 		this.projectAnalyser = projectAnalyser;
 	}
 
@@ -81,7 +81,7 @@ public class ProjectEvaluator implements ProgressObservable, Serializable {
 		return evaluators;
 	}
 
-	public ArrayList<File> getFiles() {
+	public List<File> getFiles() {
 		return projectAnalyser.getFiles();
 	}
 
@@ -89,7 +89,7 @@ public class ProjectEvaluator implements ProgressObservable, Serializable {
 		return projectAnalyser.getFailedFiles();
 	}
 
-	public ProjectAnalyser getProjectAnalyser() {
+	public ProjectAnalyzer getProjectAnalyser() {
 		return projectAnalyser;
 	}
 }

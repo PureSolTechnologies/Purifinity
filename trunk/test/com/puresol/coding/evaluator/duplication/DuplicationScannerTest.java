@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.puresol.coding.analysis.ProjectAnalyser;
+import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.evaluator.duplication.Duplication;
 import com.puresol.coding.evaluator.duplication.DuplicationScanner;
 
@@ -13,12 +13,15 @@ import junit.framework.TestCase;
 
 public class DuplicationScannerTest extends TestCase {
 
+	private static final File WORKSPACE_DIRECTORY = new File(
+			DuplicationScannerTest.class.getSimpleName() + "workspace");
+
 	@Test
 	public void testOnDummyClass() {
-		ProjectAnalyser projectAnalyser = new ProjectAnalyser(
-				new File(
+		ProjectAnalyzer projectAnalyser = ProjectAnalyzer
+				.create(new File(
 						"test/com/puresol/coding/analysis/evaluator/duplication/DummyClassForDuplicationScannerTest.java"),
-				new File("workspace"));
+						WORKSPACE_DIRECTORY);
 		projectAnalyser.run();
 		DuplicationScanner search = new DuplicationScanner(projectAnalyser);
 		search.run();
@@ -27,5 +30,6 @@ public class DuplicationScannerTest extends TestCase {
 			System.out.println(duplication.getLeft().toString());
 			System.out.println(duplication.getRight().toString());
 		}
+		WORKSPACE_DIRECTORY.delete();
 	}
 }

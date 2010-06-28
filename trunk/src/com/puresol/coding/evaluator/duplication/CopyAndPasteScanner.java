@@ -12,7 +12,7 @@ import javax.swingx.progress.ProgressObserver;
 import org.apache.log4j.Logger;
 
 import com.puresol.coding.analysis.CodeRange;
-import com.puresol.coding.analysis.ProjectAnalyser;
+import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.evaluator.QualityLevel;
 import com.puresol.coding.evaluator.UnsupportedReportingFormatException;
@@ -50,7 +50,7 @@ public class CopyAndPasteScanner extends AbstractEvaluator {
 	private final List<Duplication> duplications = new ArrayList<Duplication>();
 	private final Map<File, List<Duplication>> fileDuplications = new Hashtable<File, List<Duplication>>();
 
-	public CopyAndPasteScanner(ProjectAnalyser analyser) {
+	public CopyAndPasteScanner(ProjectAnalyzer analyser) {
 		super(analyser);
 	}
 

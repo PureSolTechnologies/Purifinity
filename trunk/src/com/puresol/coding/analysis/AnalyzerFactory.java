@@ -19,7 +19,8 @@ import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.ProgrammingLanguages;
 import com.puresol.exceptions.StrangeSituationException;
 import com.puresol.utils.ClassInstantiationException;
-import com.puresol.utils.FileUtilities;
+import com.puresol.utils.Persistence;
+import com.puresol.utils.PersistenceException;
 
 /**
  * This factory creates an Analyser class for a given File in dependence for its
@@ -28,14 +29,14 @@ import com.puresol.utils.FileUtilities;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class AnalyserFactory {
+public class AnalyzerFactory {
 
 	private static final Logger logger = Logger
-			.getLogger(AnalyserFactory.class);
+			.getLogger(AnalyzerFactory.class);
 
-	private static AnalyserFactory instance = null;
+	private static AnalyzerFactory instance = null;
 
-	public static AnalyserFactory createFactory() {
+	public static AnalyzerFactory createFactory() {
 		if (instance == null) {
 			createInstance();
 		}
@@ -44,23 +45,22 @@ public class AnalyserFactory {
 
 	private static synchronized void createInstance() {
 		if (instance == null) {
-			instance = new AnalyserFactory();
+			instance = new AnalyzerFactory();
 		}
 	}
 
-	private AnalyserFactory() {
+	private AnalyzerFactory() {
 		// needs to be private...
 	}
 
-	public Analyser create(File file)
-			throws LanguageNotSupportedException, FileNotFoundException {
+	public Analyzer create(File file) throws LanguageNotSupportedException,
+			FileNotFoundException {
 		logger.info("Create analyser for file '" + file.getPath() + "'...");
 		checkFile(file);
 		return createAnalyser(file);
 	}
 
-	private void checkFile(File file)
-			throws FileNotFoundException {
+	private void checkFile(File file) throws FileNotFoundException {
 		if (!file.exists()) {
 			logger.warn("File '" + file.getPath() + "' is not existing!");
 			throw new FileNotFoundException("File '" + file.getPath()
@@ -68,11 +68,11 @@ public class AnalyserFactory {
 		}
 	}
 
-	private Analyser createAnalyser(File file)
+	private Analyzer createAnalyser(File file)
 			throws LanguageNotSupportedException {
 		for (ProgrammingLanguage language : ProgrammingLanguages.getInstance()
 				.getLanguages()) {
-			Analyser analyser = checkAndCreate(language, file);
+			Analyzer analyser = checkAndCreate(language, file);
 			if (analyser != null) {
 				return analyser;
 			}
@@ -82,8 +82,7 @@ public class AnalyserFactory {
 				"No coding language found for file " + file.getPath());
 	}
 
-	private Analyser checkAndCreate(ProgrammingLanguage clazz,
-			File file) {
+	private Analyzer checkAndCreate(ProgrammingLanguage clazz, File file) {
 		try {
 			if (!clazz.isSuitable(file)) {
 				return null;
@@ -91,6 +90,22 @@ public class AnalyserFactory {
 			return clazz.createAnalyser(file);
 		} catch (ClassInstantiationException e) {
 			throw new StrangeSituationException(e);
+		}
+	}
+
+	public Analyzer restore(File persistFile) {
+		try {
+			for (ProgrammingLanguage language : ProgrammingLanguages
+					.getInstance().getLanguages()) {
+				Analyzer analyzer = language.restoreAnalyzer(persistFile);
+				if (analyzer != null) {
+					return analyzer;
+				}
+			}
+			return null;
+		} catch (PersistenceException e) {
+			logger.error(e.getMessage(), e);
+			return null;
 		}
 	}
 }

@@ -7,7 +7,7 @@ import javax.swingx.ToolBar;
 import javax.swingx.connect.Slot;
 import javax.swingx.progress.ProgressWindow;
 
-import com.puresol.coding.analysis.ProjectAnalyser;
+import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.evaluator.duplication.CopyAndPasteScanner;
 
 public class CopyAndPasteScannerPanel extends BorderLayoutWidget {
@@ -17,7 +17,7 @@ public class CopyAndPasteScannerPanel extends BorderLayoutWidget {
     private static final Translator translator =
 	    Translator.getTranslator(DuplicationScannerPanel.class);
 
-    private ProjectAnalyser project = null;
+    private ProjectAnalyzer project = null;
     private Button search = null;
     private DuplicationBrowser duplicationBrowser = null;
     private CopyAndPasteScanner scanner = null;
@@ -27,7 +27,7 @@ public class CopyAndPasteScannerPanel extends BorderLayoutWidget {
 	initUI();
     }
 
-    public CopyAndPasteScannerPanel(ProjectAnalyser project) {
+    public CopyAndPasteScannerPanel(ProjectAnalyzer project) {
 	super();
 	initUI();
 	setProjectAnalyser(project);
@@ -41,7 +41,7 @@ public class CopyAndPasteScannerPanel extends BorderLayoutWidget {
 	setCenter(duplicationBrowser = new DuplicationBrowser());
     }
 
-    public void setProjectAnalyser(ProjectAnalyser project) {
+    public void setProjectAnalyser(ProjectAnalyzer project) {
 	this.project = project;
     }
 
