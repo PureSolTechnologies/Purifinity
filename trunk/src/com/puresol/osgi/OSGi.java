@@ -15,6 +15,9 @@ import org.osgi.framework.BundleException;
 import org.osgi.framework.launch.Framework;
 import org.osgi.framework.launch.FrameworkFactory;
 
+import com.puresol.utils.DirectoryUtilities;
+import com.puresol.utils.RegExpUtilities;
+
 /**
  * This is a small wrapper and utility class for starting and using a OSGi
  * framework.
@@ -28,6 +31,8 @@ public class OSGi {
 
 	public static final String OSGI_FRAMEWORK_FACTORY_PROPERTIES = "META-INF/services/org.osgi.framework.launch.FrameworkFactory";
 	public static final String OSGI_PROPERTIES = "/META-INF/services/osgi.properties";
+	private static final String INSTALLDIR_KEY = "$installdir";
+	private static final String USERDIR_KEY = "$userdir";
 
 	private Framework framework = null;
 	private BundleContext context = null;
@@ -55,10 +60,22 @@ public class OSGi {
 	private void setConfiguration(Properties properties) {
 		Map<String, Object> configuration = new HashMap<String, Object>();
 		for (Object key : properties.keySet()) {
-			logger.info("OSGi setting: " + key.toString() + " --> "
-					+ properties.getProperty(key.toString()));
-			configuration.put((String) key, properties
-					.getProperty((String) key));
+			String value = (String) properties.get(key);
+			logger.info("OSGi setting: " + key.toString() + " --> " + value);
+			if (value.contains(INSTALLDIR_KEY)) {
+				value = value.replaceAll(
+						RegExpUtilities.string2RegExp(INSTALLDIR_KEY),
+						DirectoryUtilities.getInstallationDirectory(getClass(),
+								true).toString());
+				logger.info("replacement: " + key.toString() + " --> " + value);
+			}
+			if (value.contains(USERDIR_KEY)) {
+				value = value.replaceAll(
+						RegExpUtilities.string2RegExp(USERDIR_KEY),
+						DirectoryUtilities.getUserDirectory().toString());
+				logger.info("replacement: " + key.toString() + " --> " + value);
+			}
+			configuration.put((String) key, value);
 		}
 		setConfiguration(configuration);
 	}
@@ -90,19 +107,17 @@ public class OSGi {
 			InputStream inputStream = getClass().getResourceAsStream(
 					OSGi.OSGI_PROPERTIES);
 			if (inputStream == null) {
-				logger
-						.warn("No '"
-								+ OSGI_PROPERTIES
-								+ "' file was found. Defaults from OSGi framework will be used!");
+				logger.warn("No '"
+						+ OSGI_PROPERTIES
+						+ "' file was found. Defaults from OSGi framework will be used!");
 				return;
 			}
 			props.load(inputStream);
 			setConfiguration(props);
 		} catch (IOException e) {
-			logger
-					.warn("No '"
-							+ OSGI_PROPERTIES
-							+ "' file was found. Defaults from OSGi framework will be used!");
+			logger.warn("No '"
+					+ OSGI_PROPERTIES
+					+ "' file was found. Defaults from OSGi framework will be used!");
 			return;
 		}
 	}
@@ -117,10 +132,9 @@ public class OSGi {
 				try {
 					for (String s = br.readLine(); s != null; s = br.readLine()) {
 						s = s.trim();
-						logger
-								.info("Found class for OSGi FrameworkFactory in "
-										+ "'META-INF/services/org.osgi.framework.launch.FrameworkFactory': '"
-										+ s + "'");
+						logger.info("Found class for OSGi FrameworkFactory in "
+								+ "'META-INF/services/org.osgi.framework.launch.FrameworkFactory': '"
+								+ s + "'");
 						logger.info("Creating instance...");
 						// Try to load first non-empty, non-commented line.
 						if ((s.length() > 0) && (s.charAt(0) != '#')) {

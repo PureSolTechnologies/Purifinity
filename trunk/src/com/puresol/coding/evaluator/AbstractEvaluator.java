@@ -26,19 +26,19 @@ public abstract class AbstractEvaluator implements Evaluator {
 
 	private static final long serialVersionUID = 1296590575296210481L;
 
-	private final ProjectAnalyzer analyser;
+	private final ProjectAnalyzer analyzer;
 	private final List<File> files = new ArrayList<File>();
 	private final Map<File, List<CodeRange>> codeRanges = new Hashtable<File, List<CodeRange>>();
 
 	transient private ProgressObserver observer = null;
 
 	public AbstractEvaluator(ProjectAnalyzer analyser) {
-		this.analyser = analyser;
+		this.analyzer = analyser;
 	}
 
 	@Override
 	public final ProjectAnalyzer getProjectAnalyser() {
-		return analyser;
+		return analyzer;
 	}
 
 	protected final void addFile(File file) {
@@ -77,19 +77,21 @@ public abstract class AbstractEvaluator implements Evaluator {
 
 	protected final List<CodeRange> getEvaluableCodeRanges(File file) {
 		List<CodeRange> ranges = new ArrayList<CodeRange>();
-		getEvaluableCodeRanges(ranges, analyser.getAnalyzer(file)
+		getEvaluableCodeRanges(ranges, analyzer.getAnalyzer(file)
 				.getRootCodeRange());
 		return ranges;
 	}
 
 	private final void getEvaluableCodeRanges(List<CodeRange> ranges,
-			CodeRange parent) {
-		if (parent == null)
+			CodeRange current) {
+		if (current == null) {
 			return;
-		if (parent.getCodeRangeType().isEvaluatable()) {
-			ranges.add(parent);
 		}
-		for (CodeRange child : parent.getChildCodeRanges())
+		if (current.getCodeRangeType().isEvaluable()) {
+			ranges.add(current);
+		}
+		for (CodeRange child : current.getChildCodeRanges()) {
 			getEvaluableCodeRanges(ranges, child);
+		}
 	}
 }

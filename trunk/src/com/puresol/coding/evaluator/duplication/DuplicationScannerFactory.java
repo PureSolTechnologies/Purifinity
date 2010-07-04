@@ -10,7 +10,7 @@ import com.puresol.coding.evaluator.EvaluatorFactory;
 import com.puresol.coding.evaluator.NotSupportedException;
 import com.puresol.utils.Property;
 
-public class DuplicationFactory implements EvaluatorFactory {
+public class DuplicationScannerFactory implements EvaluatorFactory {
 
 	@Override
 	public Evaluator create(CodeRange codeRange) throws NotSupportedException {

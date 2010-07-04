@@ -42,8 +42,18 @@ public abstract class AbstractParser implements Parser {
 	@Inject("ParentParser")
 	private final Parser parentParser = null;
 
+	/**
+	 * This variable is the name of the parser. Per default it's just the class
+	 * name, but it should be replaced during the parsing process with something
+	 * more meaningful.
+	 */
 	private String name = getClass().getName();
 	private final List<Parser> childParsers = new ArrayList<Parser>();
+
+	/**
+	 * This flag is used to signalize a finished parsing process. It's also used
+	 * as a lock for all values to avoid a change after the process.
+	 */
 	private boolean finished = false;
 
 	/**
@@ -174,7 +184,11 @@ public abstract class AbstractParser implements Parser {
 		return tokenStream;
 	}
 
-	protected final Parser getParentParser() {
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final Parser getParentParser() {
 		return parentParser;
 	}
 
@@ -193,7 +207,8 @@ public abstract class AbstractParser implements Parser {
 	}
 
 	public final void addChildParser(Parser childParser) {
-		if (!hasChildParser(childParser)) {
+		if ((childParser != this) && (!hasChildParser(childParser))) {
+			assert childParser.getParentParser() == this;
 			childParsers.add(childParser);
 		}
 	}
@@ -236,12 +251,12 @@ public abstract class AbstractParser implements Parser {
 			throws ParserException {
 		try {
 			return DIClassBuilder.forInjections(
-					Injection.named("StartPosition", Integer
-							.valueOf(currentPosition)),
-					Injection.named("CurrentPosition", Integer
-							.valueOf(currentPosition)),
-					Injection.named("EndPosition", Integer
-							.valueOf(currentPosition)),
+					Injection.named("StartPosition",
+							Integer.valueOf(currentPosition)),
+					Injection.named("CurrentPosition",
+							Integer.valueOf(currentPosition)),
+					Injection.named("EndPosition",
+							Integer.valueOf(currentPosition)),
 					Injection.named("TokenStream", getTokenStream()),
 					Injection.named("ParentParser", this))
 					.createInstance(clazz);

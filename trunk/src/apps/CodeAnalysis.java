@@ -230,4 +230,8 @@ public class CodeAnalysis extends PureSolApplication {
 		}
 		super.quit();
 	}
+
+	public static void main(String[] args) {
+		new CodeAnalysis().run();
+	}
 }

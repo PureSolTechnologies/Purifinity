@@ -163,7 +163,7 @@ public enum CodeRangeType implements Identifiable {
 	@Override
 	public abstract String getIdentifier();
 
-	public boolean isEvaluatable() {
+	public boolean isEvaluable() {
 		if (this != FRAGMENT) {
 			return true;
 		}

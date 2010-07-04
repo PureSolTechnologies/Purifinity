@@ -48,7 +48,7 @@ public class CopyAndPasteScanner extends AbstractEvaluator {
 
 	private final Map<CodeRange, List<Integer>> codeRanges = new Hashtable<CodeRange, List<Integer>>();
 	private final List<Duplication> duplications = new ArrayList<Duplication>();
-	private final Map<File, List<Duplication>> fileDuplications = new Hashtable<File, List<Duplication>>();
+	private final Map<File, List<Duplication>> filewiseDuplications = new Hashtable<File, List<Duplication>>();
 
 	public CopyAndPasteScanner(ProjectAnalyzer analyser) {
 		super(analyser);
@@ -67,7 +67,7 @@ public class CopyAndPasteScanner extends AbstractEvaluator {
 
 	private void clearDuplications() {
 		duplications.clear();
-		fileDuplications.clear();
+		filewiseDuplications.clear();
 	}
 
 	private void getAllCodeRanges() throws TokenException {
@@ -183,16 +183,16 @@ public class CopyAndPasteScanner extends AbstractEvaluator {
 
 	private void addDuplication(Duplication duplication) {
 		duplications.add(duplication);
-		if (!fileDuplications.containsKey(duplication.getLeft().getFile())) {
-			fileDuplications.put(duplication.getLeft().getFile(),
+		if (!filewiseDuplications.containsKey(duplication.getLeft().getFile())) {
+			filewiseDuplications.put(duplication.getLeft().getFile(),
 					new ArrayList<Duplication>());
 		}
-		if (!fileDuplications.containsKey(duplication.getRight().getFile())) {
-			fileDuplications.put(duplication.getRight().getFile(),
+		if (!filewiseDuplications.containsKey(duplication.getRight().getFile())) {
+			filewiseDuplications.put(duplication.getRight().getFile(),
 					new ArrayList<Duplication>());
 		}
-		fileDuplications.get(duplication.getLeft().getFile()).add(duplication);
-		fileDuplications.get(duplication.getRight().getFile()).add(duplication);
+		filewiseDuplications.get(duplication.getLeft().getFile()).add(duplication);
+		filewiseDuplications.get(duplication.getRight().getFile()).add(duplication);
 	}
 
 	public List<Duplication> getDuplications() {
@@ -200,7 +200,7 @@ public class CopyAndPasteScanner extends AbstractEvaluator {
 	}
 
 	public List<Duplication> getDuplications(File file) {
-		return fileDuplications.get(file);
+		return filewiseDuplications.get(file);
 	}
 
 	@Override

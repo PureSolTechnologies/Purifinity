@@ -19,7 +19,6 @@ import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.ProgrammingLanguages;
 import com.puresol.exceptions.StrangeSituationException;
 import com.puresol.utils.ClassInstantiationException;
-import com.puresol.utils.Persistence;
 import com.puresol.utils.PersistenceException;
 
 /**

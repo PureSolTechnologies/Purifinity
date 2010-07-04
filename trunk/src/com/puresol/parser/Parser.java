@@ -40,6 +40,8 @@ public interface Parser extends Serializable {
 
 	public TokenStream getTokenStream();
 
+	public Parser getParentParser();
+
 	public List<Parser> getChildParsers();
 
 	public <T> List<T> getChildParsers(Class<T> parser);

@@ -43,8 +43,8 @@ public abstract class AbstractSourceCodeParser extends AbstractParser implements
 	protected Parser createParserInstance(Class<? extends Parser> clazz)
 			throws ParserException {
 		Parser parser = super.createParserInstance(clazz);
-		DependencyInjection.inject(parser, Injection.named("SymbolTable",
-				symbols));
+		DependencyInjection.inject(parser,
+				Injection.named("SymbolTable", symbols));
 		return parser;
 	}
 
@@ -53,7 +53,7 @@ public abstract class AbstractSourceCodeParser extends AbstractParser implements
 	 */
 	@Override
 	public final void addChildCodeRange(CodeRange codeRange) {
-		if (!hasChildParser(codeRange)) {
+		if ((codeRange != this) && (!hasChildParser(codeRange))) {
 			addChildParser(codeRange);
 		}
 	}
@@ -186,11 +186,10 @@ public abstract class AbstractSourceCodeParser extends AbstractParser implements
 	public final CodeRange createPartialCodeRange(int newStartPosition,
 			int newEndPosition) {
 		AbstractSourceCodeParser parser = (AbstractSourceCodeParser) clone();
-		DependencyInjection
-				.inject(parser, Injection.named("StartPosition",
-						newStartPosition), Injection.named("CurrentPosition",
-						newEndPosition), Injection.named("EndPosition",
-						newEndPosition));
+		DependencyInjection.inject(parser,
+				Injection.named("StartPosition", newStartPosition),
+				Injection.named("CurrentPosition", newEndPosition),
+				Injection.named("EndPosition", newEndPosition));
 		return parser;
 	}
 

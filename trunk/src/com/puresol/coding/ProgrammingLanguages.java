@@ -3,6 +3,8 @@ package com.puresol.coding;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 /**
  * This is the central programming languages specification manager. All
  * available programming languages should register itself here in this manager.
@@ -17,7 +19,8 @@ import java.util.List;
  */
 public class ProgrammingLanguages {
 
-	private final List<ProgrammingLanguage> languages = new ArrayList<ProgrammingLanguage>();
+	private static final Logger logger = Logger
+			.getLogger(ProgrammingLanguage.class);
 
 	private static ProgrammingLanguages instance = null;
 
@@ -34,6 +37,8 @@ public class ProgrammingLanguages {
 		}
 	}
 
+	private final List<ProgrammingLanguage> languages = new ArrayList<ProgrammingLanguage>();
+
 	private ProgrammingLanguages() {
 	}
 
@@ -42,10 +47,14 @@ public class ProgrammingLanguages {
 	}
 
 	public void registerLanguage(ProgrammingLanguage language) {
+		logger.info("Register programminglanguage '"
+				+ language.getClass().getName() + "'...");
 		languages.add(language);
 	}
 
 	public void unregisterLanguage(ProgrammingLanguage language) {
+		logger.info("Unregister programminglanguage '"
+				+ language.getClass().getName() + "'...");
 		languages.remove(language);
 	}
 }

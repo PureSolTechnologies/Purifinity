@@ -43,12 +43,13 @@ public class JarLoader {
 		int counter = 0;
 		for (String file : files) {
 			counter++;
+			File library = new File(dir, file);
 			if (verbose) {
 				System.out.print(ConsoleUtils.createPercentageBar(12,
 						(double) counter / (double) files.length, true));
-				System.out.println(" load: " + file);
+				System.out.println(library.toString());
 			}
-			JarLoader.load(new File("lib/" + file));
+			JarLoader.load(library);
 		}
 		System.out.println();
 	}
