@@ -10,20 +10,20 @@ import org.apache.log4j.Logger;
 
 import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.analysis.CodeRange;
-import com.puresol.coding.analysis.ProjectAnalyser;
-import com.puresol.coding.evaluator.QualityLevel;
-import com.puresol.coding.evaluator.UnsupportedReportingFormatException;
+import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.evaluator.gotos.AbstractGotoEvaluator;
 import com.puresol.coding.evaluator.gotos.FoundGoto;
 import com.puresol.coding.evaluator.gotos.FoundLabel;
 import com.puresol.coding.lang.fortran.Fortran;
 import com.puresol.coding.lang.fortran.source.keywords.GotoKeyword;
 import com.puresol.coding.lang.fortran.source.symbols.LineLead;
+import com.puresol.coding.quality.QualityLevel;
 import com.puresol.coding.reporting.HTMLConverter;
 import com.puresol.parser.NoMatchingTokenException;
 import com.puresol.parser.Token;
 import com.puresol.parser.TokenStream;
 import com.puresol.reporting.ReportingFormat;
+import com.puresol.reporting.UnsupportedFormatException;
 
 public class GotoEvaluator extends AbstractGotoEvaluator {
 
@@ -34,7 +34,7 @@ public class GotoEvaluator extends AbstractGotoEvaluator {
 	private static final Translator translator = Translator
 			.getTranslator(GotoEvaluator.class);
 
-	public GotoEvaluator(ProjectAnalyser analyser) {
+	public GotoEvaluator(ProjectAnalyzer analyser) {
 		super(analyser);
 	}
 
@@ -77,13 +77,13 @@ public class GotoEvaluator extends AbstractGotoEvaluator {
 
 	@Override
 	public String getProjectComment(ReportingFormat format)
-			throws UnsupportedReportingFormatException {
+			throws UnsupportedFormatException {
 		if (format == ReportingFormat.TEXT) {
 			return getTextProjectComment();
 		} else if (format == ReportingFormat.HTML) {
 			return getHTMLProjectComment();
 		}
-		throw new UnsupportedReportingFormatException(format);
+		throw new UnsupportedFormatException(format);
 	}
 
 	private String getTextProjectComment() {
@@ -138,7 +138,7 @@ public class GotoEvaluator extends AbstractGotoEvaluator {
 
 	@Override
 	public String getCodeRangeComment(CodeRange codeRange,
-			ReportingFormat format) throws UnsupportedReportingFormatException {
+			ReportingFormat format) throws UnsupportedFormatException {
 		String text = "";
 		text += codeRange.getTitleString(format) + "\n";
 		if (getGotoNum(codeRange) == 0) {

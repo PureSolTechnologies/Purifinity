@@ -11,17 +11,17 @@ import javax.swingx.progress.ProgressObserver;
 
 import com.puresol.coding.analysis.CodeRange;
 import com.puresol.coding.analysis.CodeRangeType;
-import com.puresol.coding.analysis.ProjectAnalyser;
+import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.evaluator.AbstractEvaluator;
-import com.puresol.coding.evaluator.QualityLevel;
-import com.puresol.coding.evaluator.UnsupportedReportingFormatException;
 import com.puresol.coding.lang.fortran.Fortran;
 import com.puresol.coding.lang.fortran.source.keywords.ImplicitKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.NoneKeyword;
+import com.puresol.coding.quality.QualityLevel;
 import com.puresol.coding.reporting.HTMLConverter;
 import com.puresol.parser.Token;
 import com.puresol.parser.TokenStream;
 import com.puresol.reporting.ReportingFormat;
+import com.puresol.reporting.UnsupportedFormatException;
 import com.puresol.reporting.html.HTMLStandards;
 import com.puresol.utils.Property;
 
@@ -41,7 +41,7 @@ public class ImplicitEvaluator extends AbstractEvaluator {
 
 	private final Hashtable<CodeRange, ArrayList<FoundImplicit>> implicits = new Hashtable<CodeRange, ArrayList<FoundImplicit>>();
 
-	public ImplicitEvaluator(ProjectAnalyser analyser) {
+	public ImplicitEvaluator(ProjectAnalyzer analyser) {
 		super(analyser);
 	}
 
@@ -120,24 +120,24 @@ public class ImplicitEvaluator extends AbstractEvaluator {
 
 	@Override
 	public String getDescription(ReportingFormat format)
-			throws UnsupportedReportingFormatException {
+			throws UnsupportedFormatException {
 		if (format == ReportingFormat.TEXT) {
 			return DESCRIPTION;
 		} else if (format == ReportingFormat.HTML) {
 			return HTMLStandards.convertFlowTextToHTML(DESCRIPTION);
 		}
-		throw new UnsupportedReportingFormatException(format);
+		throw new UnsupportedFormatException(format);
 	}
 
 	@Override
 	public String getProjectComment(ReportingFormat format)
-			throws UnsupportedReportingFormatException {
+			throws UnsupportedFormatException {
 		if (format == ReportingFormat.TEXT) {
 			return getTextProjectComment();
 		} else if (format == ReportingFormat.HTML) {
 			return getHTMLProjectComment();
 		}
-		throw new UnsupportedReportingFormatException(format);
+		throw new UnsupportedFormatException(format);
 	}
 
 	private String getTextProjectComment() {
@@ -190,17 +190,17 @@ public class ImplicitEvaluator extends AbstractEvaluator {
 
 	@Override
 	public String getCodeRangeComment(CodeRange codeRange,
-			ReportingFormat format) throws UnsupportedReportingFormatException {
+			ReportingFormat format) throws UnsupportedFormatException {
 		if (format == ReportingFormat.TEXT) {
 			return getTextCodeRangeComment(codeRange);
 		} else if (format == ReportingFormat.HTML) {
 			return getHTMLCodeRangeComment(codeRange);
 		}
-		throw new UnsupportedReportingFormatException(format);
+		throw new UnsupportedFormatException(format);
 	}
 
 	private String getTextCodeRangeComment(CodeRange codeRange)
-			throws UnsupportedReportingFormatException {
+			throws UnsupportedFormatException {
 		if (codeRange.getCodeRangeType() == CodeRangeType.FILE) {
 			return "";
 		}
@@ -243,7 +243,7 @@ public class ImplicitEvaluator extends AbstractEvaluator {
 	}
 
 	private String getHTMLCodeRangeComment(CodeRange codeRange)
-			throws UnsupportedReportingFormatException {
+			throws UnsupportedFormatException {
 		if (codeRange.getCodeRangeType() == CodeRangeType.FILE) {
 			return "";
 		}

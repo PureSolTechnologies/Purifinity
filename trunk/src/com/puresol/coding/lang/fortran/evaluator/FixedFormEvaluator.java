@@ -11,17 +11,17 @@ import javax.swingx.progress.ProgressObserver;
 
 import com.puresol.coding.analysis.CodeRange;
 import com.puresol.coding.analysis.CodeRangeType;
-import com.puresol.coding.analysis.ProjectAnalyser;
+import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.evaluator.AbstractEvaluator;
-import com.puresol.coding.evaluator.QualityLevel;
-import com.puresol.coding.evaluator.UnsupportedReportingFormatException;
 import com.puresol.coding.lang.fortran.Fortran;
 import com.puresol.coding.lang.fortran.source.symbols.LineLead;
+import com.puresol.coding.quality.QualityLevel;
 import com.puresol.coding.reporting.HTMLConverter;
 import com.puresol.coding.tokentypes.Comment;
 import com.puresol.parser.Token;
 import com.puresol.parser.TokenStream;
 import com.puresol.reporting.ReportingFormat;
+import com.puresol.reporting.UnsupportedFormatException;
 import com.puresol.reporting.html.HTMLStandards;
 import com.puresol.utils.Property;
 
@@ -40,7 +40,7 @@ public class FixedFormEvaluator extends AbstractEvaluator {
 
 	private final Hashtable<File, List<FormViolation>> violations = new Hashtable<File, List<FormViolation>>();
 
-	public FixedFormEvaluator(ProjectAnalyser analyser) {
+	public FixedFormEvaluator(ProjectAnalyzer analyser) {
 		super(analyser);
 	}
 
@@ -118,24 +118,24 @@ public class FixedFormEvaluator extends AbstractEvaluator {
 
 	@Override
 	public String getDescription(ReportingFormat format)
-			throws UnsupportedReportingFormatException {
+			throws UnsupportedFormatException {
 		if (format == ReportingFormat.TEXT) {
 			return DESCRIPTION;
 		} else if (format == ReportingFormat.HTML) {
 			return HTMLStandards.convertFlowTextToHTML(DESCRIPTION);
 		}
-		throw new UnsupportedReportingFormatException(format);
+		throw new UnsupportedFormatException(format);
 	}
 
 	@Override
 	public String getProjectComment(ReportingFormat format)
-			throws UnsupportedReportingFormatException {
+			throws UnsupportedFormatException {
 		if (format == ReportingFormat.TEXT) {
 			return getTextProjectComment();
 		} else if (format == ReportingFormat.HTML) {
 			return getHTMLProjectComment();
 		}
-		throw new UnsupportedReportingFormatException(format);
+		throw new UnsupportedFormatException(format);
 	}
 
 	private String getTextProjectComment() {
@@ -183,7 +183,7 @@ public class FixedFormEvaluator extends AbstractEvaluator {
 
 	@Override
 	public String getCodeRangeComment(CodeRange codeRange,
-			ReportingFormat format) throws UnsupportedReportingFormatException {
+			ReportingFormat format) throws UnsupportedFormatException {
 		return "";
 	}
 

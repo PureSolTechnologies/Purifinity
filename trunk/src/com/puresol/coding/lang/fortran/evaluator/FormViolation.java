@@ -3,10 +3,10 @@ package com.puresol.coding.lang.fortran.evaluator;
 import javax.i18n4j.Translator;
 
 import com.puresol.coding.analysis.CodeRange;
-import com.puresol.coding.evaluator.UnsupportedReportingFormatException;
 import com.puresol.coding.evaluator.gotos.FoundGoto;
 import com.puresol.parser.Token;
 import com.puresol.reporting.ReportingFormat;
+import com.puresol.reporting.UnsupportedFormatException;
 
 public class FormViolation {
 
@@ -32,14 +32,14 @@ public class FormViolation {
 	}
 
 	public String toString(ReportingFormat format)
-			throws UnsupportedReportingFormatException {
+			throws UnsupportedFormatException {
 		Token gotoToken = codeRange.getTokenStream().get(tokenId);
 		if (format == ReportingFormat.TEXT) {
 			return translator.i18n("line") + " " + gotoToken.getStartLine();
 		} else if (format == ReportingFormat.HTML) {
 			return translator.i18n("line") + " " + gotoToken.getStartLine();
 		}
-		throw new UnsupportedReportingFormatException(format);
+		throw new UnsupportedFormatException(format);
 	}
 
 }

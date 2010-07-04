@@ -32,8 +32,8 @@ public class FortranPreConditioner extends DefaultPreConditioner {
 	int pos = 0;
 	int lineNum = 0;
 
-	public FortranPreConditioner(File directory, File file) throws IOException {
-		super(directory, file);
+	public FortranPreConditioner(File file) throws IOException {
+		super(file);
 	}
 
 	@Override
@@ -100,8 +100,8 @@ public class FortranPreConditioner extends DefaultPreConditioner {
 	}
 
 	private void addCommentLine(String line) throws TokenException {
-		addToken(Token.createByDefinition(Comment.class, counter, pos,
-				lineNum, line));
+		addToken(Token.createByDefinition(Comment.class, counter, pos, lineNum,
+				line));
 	}
 
 	private String readLine() {

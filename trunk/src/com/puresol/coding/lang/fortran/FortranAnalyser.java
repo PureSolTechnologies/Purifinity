@@ -33,16 +33,15 @@ public class FortranAnalyser extends AbstractAnalyser {
 	private static final Logger logger = Logger
 			.getLogger(FortranAnalyser.class);
 
-	public FortranAnalyser(File projectDirectory, File file) {
-		super(projectDirectory, file);
+	public FortranAnalyser(File file) {
+		super(file);
 	}
 
 	@Override
 	public void parse() throws AnalyserException {
 		try {
 			SourceCodeLexer lexer = new SourceCodeLexer(Fortran.getInstance(),
-					new FortranPreConditioner(getProjectDirectory(), getFile())
-							.getTokenStream());
+					new FortranPreConditioner(getFile()).getTokenStream());
 			TokenStream tokenStream = lexer.getTokenStream();
 			Program parser = (Program) createParserInstance(Program.class,
 					tokenStream);

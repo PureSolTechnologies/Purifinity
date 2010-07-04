@@ -24,8 +24,8 @@ public class FortranAnalyserTest extends TestCase {
 	@Test
 	public void test() {
 		try {
-			FortranAnalyser analyser = new FortranAnalyser(new File("test"),
-					new File("com/puresol/coding/lang/fortran/samples/zgerc.f"));
+			FortranAnalyser analyser = new FortranAnalyser(new File(
+					"test/com/puresol/coding/lang/fortran/samples/zgerc.f"));
 			analyser.parse();
 			CodeRange rootCodeRange = analyser.getRootCodeRange();
 			Assert.assertNotNull(rootCodeRange);

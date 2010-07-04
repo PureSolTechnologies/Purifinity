@@ -1,10 +1,14 @@
 package com.puresol.coding.lang.fortran;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.puresol.coding.AbstractProgrammingLanguage;
-import com.puresol.coding.analysis.Analyser;
+import com.puresol.coding.analysis.Analyzer;
 import com.puresol.coding.lang.fortran.source.keywords.CallKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.CaseDefaultKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.CaseKeyword;
@@ -99,6 +103,7 @@ import com.puresol.coding.lang.fortran.source.symbols.Asterik;
 import com.puresol.coding.lang.fortran.source.symbols.Tilde;
 import com.puresol.coding.lang.fortran.source.symbols.VerticalLine;
 import com.puresol.parser.TokenDefinition;
+import com.puresol.utils.PersistenceException;
 
 public class Fortran extends AbstractProgrammingLanguage {
 
@@ -244,7 +249,7 @@ public class Fortran extends AbstractProgrammingLanguage {
 	}
 
 	@Override
-	protected Class<? extends Analyser> getAnalyserClass() {
+	protected Class<? extends Analyzer> getAnalyserClass() {
 		return FortranAnalyser.class;
 	}
 
@@ -266,5 +271,24 @@ public class Fortran extends AbstractProgrammingLanguage {
 	@Override
 	public List<Class<? extends TokenDefinition>> getSymbols() {
 		return SYMBOLS;
+	}
+
+	@Override
+	public Analyzer restoreAnalyzer(File file) throws PersistenceException {
+		ObjectInputStream ois = null;
+		try {
+			ois = new ObjectInputStream(new FileInputStream(file));
+			Analyzer analyzer = (Analyzer) ois.readObject();
+			ois.close();
+			return analyzer;
+		} catch (Throwable e) {
+			if (ois != null) {
+				try {
+					ois.close();
+				} catch (IOException e1) {
+				}
+			}
+			throw new PersistenceException(e);
+		}
 	}
 }

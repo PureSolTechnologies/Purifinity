@@ -34,8 +34,8 @@ public class ProgramTest extends TestCase {
 		Program program = null;
 		try {
 			FortranPreConditioner conditioner = new FortranPreConditioner(
-					new File("test"), new File(
-							"com/puresol/coding/lang/fortran/samples/zgerc.f"));
+					new File(
+							"test/com/puresol/coding/lang/fortran/samples/zgerc.f"));
 			// DefaultPreConditioner conditioner =
 			// new DefaultPreConditioner(
 			// new File(
@@ -87,8 +87,7 @@ public class ProgramTest extends TestCase {
 		Program program = null;
 		try {
 			FortranPreConditioner conditioner = new FortranPreConditioner(
-					new File("/home/ludwig/workspace/Dyn3D/src"), new File(
-							"/fort/libapr.f"));
+					new File("/home/ludwig/workspace/Dyn3D/src/fort/libapr.f"));
 			// DefaultPreConditioner conditioner =
 			// new DefaultPreConditioner(
 			// new File(
