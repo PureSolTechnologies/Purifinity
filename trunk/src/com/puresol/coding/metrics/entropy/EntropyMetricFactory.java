@@ -1,4 +1,4 @@
-package com.puresol.coding.metrics.halstead;
+package com.puresol.coding.metrics.entropy;
 
 import java.util.List;
 
@@ -8,31 +8,31 @@ import com.puresol.coding.evaluator.CodeRangeEvaluatorFactory;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.utils.Property;
 
-public class HalsteadFactory implements CodeRangeEvaluatorFactory {
+public class EntropyMetricFactory implements CodeRangeEvaluatorFactory {
 
 	@Override
 	public CodeRangeEvaluator create(CodeRange codeRange) {
-		return new HalsteadMetric(codeRange);
+		return new EntropyMetric(codeRange);
 	}
 
 	@Override
 	public String getDescription() {
-		return HalsteadMetric.DESCRIPTION;
+		return EntropyMetric.DESCRIPTION;
 	}
 
 	@Override
 	public String getName() {
-		return HalsteadMetric.NAME;
+		return EntropyMetric.NAME;
 	}
 
 	@Override
 	public List<Property> getEvaluatorProperties() {
-		return HalsteadMetric.SUPPORTED_PROPERTIES;
+		return EntropyMetric.SUPPORTED_PROPERTIES;
 	}
 
 	@Override
 	public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
-		return HalsteadMetric.EVALUATED_QUALITY_CHARACTERISTICS;
+		return EntropyMetric.EVALUATED_QUALITY_CHARACTERISTICS;
 	}
 
 }

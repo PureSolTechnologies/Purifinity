@@ -1,4 +1,4 @@
-package com.puresol.coding.metrics.sloc;
+package com.puresol.coding.metrics.maintainability;
 
 import java.util.List;
 
@@ -8,31 +8,31 @@ import com.puresol.coding.evaluator.CodeRangeEvaluatorFactory;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.utils.Property;
 
-public class SLOCFactory implements CodeRangeEvaluatorFactory {
+public class MaintainabilityIndexFactory implements CodeRangeEvaluatorFactory {
 
 	@Override
 	public CodeRangeEvaluator create(CodeRange codeRange) {
-		return new SLOCMetric(codeRange);
+		return new MaintainabilityIndex(codeRange);
 	}
 
 	@Override
 	public String getDescription() {
-		return SLOCMetric.DESCRIPTION;
+		return MaintainabilityIndex.DESCRIPTION;
 	}
 
 	@Override
 	public String getName() {
-		return SLOCMetric.NAME;
+		return MaintainabilityIndex.NAME;
 	}
 
 	@Override
 	public List<Property> getEvaluatorProperties() {
-		return SLOCMetric.SUPPORTED_PROPERTIES;
+		return MaintainabilityIndex.SUPPORTED_PROPERTIES;
 	}
 
 	@Override
 	public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
-		return SLOCMetric.EVALUATED_QUALITY_CHARACTERISTICS;
+		return MaintainabilityIndex.EVALUATED_QUALITY_CHARACTERISTICS;
 	}
 
 }

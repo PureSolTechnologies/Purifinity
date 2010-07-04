@@ -1,4 +1,4 @@
-package com.puresol.coding.metrics.maintainability;
+package com.puresol.coding.metrics.codedepth;
 
 import java.util.List;
 
@@ -8,31 +8,31 @@ import com.puresol.coding.evaluator.CodeRangeEvaluatorFactory;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.utils.Property;
 
-public class MaintainabilityFactory implements CodeRangeEvaluatorFactory {
+public class CodeDepthMetricFactory implements CodeRangeEvaluatorFactory {
 
 	@Override
 	public CodeRangeEvaluator create(CodeRange codeRange) {
-		return new MaintainabilityIndex(codeRange);
+		return new CodeDepth(codeRange);
 	}
 
 	@Override
 	public String getDescription() {
-		return MaintainabilityIndex.DESCRIPTION;
+		return CodeDepth.DESCRIPTION;
 	}
 
 	@Override
 	public String getName() {
-		return MaintainabilityIndex.NAME;
+		return CodeDepth.NAME;
 	}
 
 	@Override
 	public List<Property> getEvaluatorProperties() {
-		return MaintainabilityIndex.SUPPORTED_PROPERTIES;
+		return CodeDepth.SUPPORTED_PROPERTIES;
 	}
 
 	@Override
 	public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
-		return MaintainabilityIndex.EVALUATED_QUALITY_CHARACTERISTICS;
+		return CodeDepth.EVALUATED_QUALITY_CHARACTERISTICS;
 	}
 
 }
