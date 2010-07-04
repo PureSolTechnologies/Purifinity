@@ -3,38 +3,25 @@ package com.puresol.coding.lang.java.evaluator;
 import java.util.List;
 
 import com.puresol.coding.analysis.Analyzer;
-import com.puresol.coding.analysis.CodeRange;
-import com.puresol.coding.analysis.ProjectAnalyzer;
-import com.puresol.coding.evaluator.Evaluator;
-import com.puresol.coding.evaluator.EvaluatorFactory;
-import com.puresol.coding.evaluator.NotSupportedException;
+import com.puresol.coding.evaluator.FileEvaluator;
+import com.puresol.coding.evaluator.FileEvaluatorFactory;
+import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.utils.Property;
 
-public class TranslatorImplementationFactory implements EvaluatorFactory {
+public class TranslatorImplementationFactory implements FileEvaluatorFactory {
 
 	@Override
-	public Evaluator create(CodeRange codeRange) throws NotSupportedException {
-		throw new NotSupportedException();
+	public FileEvaluator create(Analyzer analyser) {
+		return new TranslatorImplementation(analyser);
 	}
 
 	@Override
-	public Evaluator create(Analyzer analyser) throws NotSupportedException {
-		throw new NotSupportedException();
-	}
-
-	@Override
-	public Evaluator create(ProjectAnalyzer projectAnalyser)
-			throws NotSupportedException {
-		return new TranslatorImplementation(projectAnalyser);
-	}
-
-	@Override
-	public String getEvaluatorDescription() {
+	public String getDescription() {
 		return TranslatorImplementation.DESCRIPTION;
 	}
 
 	@Override
-	public String getEvaluatorName() {
+	public String getName() {
 		return TranslatorImplementation.NAME;
 	}
 
@@ -44,18 +31,8 @@ public class TranslatorImplementationFactory implements EvaluatorFactory {
 	}
 
 	@Override
-	public boolean isCodeRangeEvaluator() {
-		return false;
-	}
-
-	@Override
-	public boolean isFileEvaluator() {
-		return false;
-	}
-
-	@Override
-	public boolean isProjectEvaluator() {
-		return true;
+	public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
+		return TranslatorImplementation.EVALUATED_QUALITY_CHARACTERISTICS;
 	}
 
 }

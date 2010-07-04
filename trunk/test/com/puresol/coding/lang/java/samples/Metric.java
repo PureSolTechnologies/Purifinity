@@ -13,7 +13,7 @@ package com.puresol.coding.lang.java.samples;
 import java.io.Serializable;
 
 import com.puresol.coding.analysis.CodeRange;
-import com.puresol.coding.evaluator.QualityLevel;
+import com.puresol.coding.quality.QualityLevel;
 
 /**
  * This is a simple interface to a single code range analysis.

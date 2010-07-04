@@ -1,30 +1,28 @@
 package com.puresol.coding.lang.java.evaluator;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
 import javax.i18n4j.Translator;
-import javax.swingx.progress.ProgressObserver;
 
 import com.puresol.coding.analysis.Analyzer;
 import com.puresol.coding.analysis.CodeRange;
-import com.puresol.coding.analysis.ProjectAnalyzer;
-import com.puresol.coding.evaluator.AbstractEvaluator;
-import com.puresol.coding.evaluator.QualityLevel;
-import com.puresol.coding.evaluator.UnsupportedReportingFormatException;
+import com.puresol.coding.evaluator.AbstractFileEvaluator;
 import com.puresol.coding.lang.java.Java;
 import com.puresol.coding.lang.java.source.grammar.classes.ClassDeclaration;
 import com.puresol.coding.lang.java.source.grammar.classes.FieldDeclaration;
 import com.puresol.coding.lang.java.source.grammar.classes.VariableDeclarator;
+import com.puresol.coding.quality.QualityCharacteristic;
+import com.puresol.coding.quality.QualityLevel;
 import com.puresol.coding.reporting.HTMLConverter;
 import com.puresol.reporting.ReportingFormat;
+import com.puresol.reporting.UnsupportedReportingFormatException;
 import com.puresol.reporting.html.HTMLStandards;
 import com.puresol.utils.Property;
 
-public class TranslatorImplementation extends AbstractEvaluator {
+public class TranslatorImplementation extends AbstractFileEvaluator {
 
 	private static final long serialVersionUID = 7618097301047375380L;
 
@@ -37,40 +35,27 @@ public class TranslatorImplementation extends AbstractEvaluator {
 					+ "recommended by PureSol-Technologies."
 					+ "Recommendation: \"private static final Translator translator = Translator.getTranslator(<class>);\"");
 	public static final ArrayList<Property> SUPPORTED_PROPERTIES = new ArrayList<Property>();
+	public static final List<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new ArrayList<QualityCharacteristic>();
+	static {
+		EVALUATED_QUALITY_CHARACTERISTICS.add(QualityCharacteristic.ACCURACY);
+		EVALUATED_QUALITY_CHARACTERISTICS
+				.add(QualityCharacteristic.UNDERSTANDABILITY);
+		EVALUATED_QUALITY_CHARACTERISTICS
+				.add(QualityCharacteristic.ANALYSABILITY);
+		EVALUATED_QUALITY_CHARACTERISTICS
+				.add(QualityCharacteristic.TESTABILITY);
+	}
 
 	private static Map<CodeRange, QualityLevel> levels = new Hashtable<CodeRange, QualityLevel>();
 	private static Map<CodeRange, FieldDeclaration> fields = new Hashtable<CodeRange, FieldDeclaration>();
 
-	public TranslatorImplementation(ProjectAnalyzer analyser) {
+	public TranslatorImplementation(Analyzer analyser) {
 		super(analyser);
 	}
 
 	@Override
 	public void run() {
-		ProgressObserver observer = getMonitor();
-		if (observer != null) {
-			observer.setDescription(NAME);
-			observer.setRange(0, getProjectAnalyser().getFiles().size());
-			observer.setStatus(0);
-		}
-		int count = 0;
-		for (File file : getProjectAnalyser().getFiles()) {
-			if (Thread.interrupted()) {
-				return;
-			}
-			count++;
-			if (observer != null) {
-				observer.setStatus(count);
-			}
-			analyse(file);
-		}
-		if (observer != null) {
-			observer.finish();
-		}
-	}
-
-	private void analyse(File file) {
-		Analyzer analyser = getProjectAnalyser().getAnalyzer(file);
+		Analyzer analyser = getAnalyzer();
 		for (CodeRange codeRange : analyser
 				.getNonFragmentCodeRangesRecursively()) {
 			if (Thread.interrupted()) {
@@ -94,8 +79,6 @@ public class TranslatorImplementation extends AbstractEvaluator {
 					.getVariableType().equals(Translator.class.getName()))) {
 				continue;
 			}
-			addFile(codeRange.getFile());
-			addCodeRange(codeRange);
 			fields.put(codeRange, field);
 			List<String> modifiers = field.getModifiers();
 			if (modifiers.size() != 3) {
@@ -143,18 +126,26 @@ public class TranslatorImplementation extends AbstractEvaluator {
 	}
 
 	@Override
-	public String getProjectComment(ReportingFormat format) {
-		return "";
+	public String getReport(ReportingFormat format)
+			throws UnsupportedReportingFormatException {
+		StringBuffer buffer = new StringBuffer();
+		for (CodeRange codeRange : levels.keySet()) {
+			buffer.append(getReport(codeRange, format));
+		}
+		return buffer.toString();
 	}
 
 	@Override
-	public QualityLevel getProjectQuality() {
-		return QualityLevel.UNSPECIFIED;
+	public QualityLevel getQuality() {
+		QualityLevel level = QualityLevel.HIGH;
+		for (CodeRange codeRange : levels.keySet()) {
+			level = QualityLevel.getMinLevel(level, getQuality(codeRange));
+		}
+		return level;
 	}
 
-	@Override
-	public String getCodeRangeComment(CodeRange codeRange,
-			ReportingFormat format) throws UnsupportedReportingFormatException {
+	public String getReport(CodeRange codeRange, ReportingFormat format)
+			throws UnsupportedReportingFormatException {
 		QualityLevel qualityLevel = levels.get(codeRange);
 		if (qualityLevel == null) {
 			return "";
@@ -179,13 +170,17 @@ public class TranslatorImplementation extends AbstractEvaluator {
 		throw new UnsupportedReportingFormatException(format);
 	}
 
-	@Override
 	public QualityLevel getQuality(CodeRange codeRange) {
 		QualityLevel qualityLevel = levels.get(codeRange);
 		if (qualityLevel == null) {
 			return QualityLevel.UNSPECIFIED;
 		}
 		return qualityLevel;
+	}
+
+	@Override
+	public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
+		return EVALUATED_QUALITY_CHARACTERISTICS;
 	}
 
 }
