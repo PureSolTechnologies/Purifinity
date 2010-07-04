@@ -8,7 +8,7 @@
  *
  ***************************************************************************/
 
-package com.puresol.introspect;
+package com.puresol.utils;
 
 import java.io.File;
 import java.net.URL;
