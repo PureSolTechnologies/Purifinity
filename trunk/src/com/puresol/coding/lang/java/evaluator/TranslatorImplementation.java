@@ -18,7 +18,7 @@ import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.QualityLevel;
 import com.puresol.coding.reporting.HTMLConverter;
 import com.puresol.reporting.ReportingFormat;
-import com.puresol.reporting.UnsupportedReportingFormatException;
+import com.puresol.reporting.UnsupportedFormatException;
 import com.puresol.reporting.html.HTMLStandards;
 import com.puresol.utils.Property;
 
@@ -127,7 +127,7 @@ public class TranslatorImplementation extends AbstractFileEvaluator {
 
 	@Override
 	public String getReport(ReportingFormat format)
-			throws UnsupportedReportingFormatException {
+			throws UnsupportedFormatException {
 		StringBuffer buffer = new StringBuffer();
 		for (CodeRange codeRange : levels.keySet()) {
 			buffer.append(getReport(codeRange, format));
@@ -145,7 +145,7 @@ public class TranslatorImplementation extends AbstractFileEvaluator {
 	}
 
 	public String getReport(CodeRange codeRange, ReportingFormat format)
-			throws UnsupportedReportingFormatException {
+			throws UnsupportedFormatException {
 		QualityLevel qualityLevel = levels.get(codeRange);
 		if (qualityLevel == null) {
 			return "";
@@ -167,7 +167,7 @@ public class TranslatorImplementation extends AbstractFileEvaluator {
 			text += codeRange.getReportingString(format);
 			return text;
 		}
-		throw new UnsupportedReportingFormatException(format);
+		throw new UnsupportedFormatException(format);
 	}
 
 	public QualityLevel getQuality(CodeRange codeRange) {

@@ -26,7 +26,7 @@ public class Activator implements BundleActivator {
 		logger.info("Starting Java Language Pack...");
 		ProgrammingLanguages.getInstance().registerLanguage(Java.getInstance());
 		translatorImplementationFactory = new TranslatorImplementationFactory();
-		Evaluators.getInstance().registerEvaluator(
+		Evaluators.getInstance().registerFileEvaluator(
 				translatorImplementationFactory);
 		logger.info("Started.");
 	}
@@ -34,7 +34,7 @@ public class Activator implements BundleActivator {
 	@Override
 	public void stop(BundleContext context) throws Exception {
 		logger.info("Stopping Java Language Pack...");
-		Evaluators.getInstance().unregisterEvaluator(
+		Evaluators.getInstance().unregisterFileEvaluator(
 				translatorImplementationFactory);
 		translatorImplementationFactory = null;
 		ProgrammingLanguages.getInstance().unregisterLanguage(
