@@ -11,7 +11,7 @@ import com.puresol.parser.ParserException;
 import com.puresol.parser.Token;
 import com.puresol.parser.TokenStream;
 import com.puresol.reporting.ReportingFormat;
-import com.puresol.reporting.UnsupportedReportingFormatException;
+import com.puresol.reporting.UnsupportedFormatException;
 import com.puresol.reporting.html.HTMLStandards;
 import com.puresol.utils.di.DependencyInjection;
 import com.puresol.utils.di.Inject;
@@ -115,13 +115,13 @@ public abstract class AbstractSourceCodeParser extends AbstractParser implements
 	 */
 	@Override
 	public String getTitleString(ReportingFormat format)
-			throws UnsupportedReportingFormatException {
+			throws UnsupportedFormatException {
 		if (format == ReportingFormat.TEXT) {
 			return getTextTitleString();
 		} else if (format == ReportingFormat.HTML) {
 			return getHTMLTitleString();
 		}
-		throw new UnsupportedReportingFormatException(format);
+		throw new UnsupportedFormatException(format);
 	}
 
 	private String getTextTitleString() {
@@ -142,13 +142,13 @@ public abstract class AbstractSourceCodeParser extends AbstractParser implements
 	 */
 	@Override
 	public String getReportingString(ReportingFormat format)
-			throws UnsupportedReportingFormatException {
+			throws UnsupportedFormatException {
 		if (format == ReportingFormat.TEXT) {
 			return toTextString();
 		} else if (format == ReportingFormat.HTML) {
 			return toHTMLString();
 		}
-		throw new UnsupportedReportingFormatException(format);
+		throw new UnsupportedFormatException(format);
 	}
 
 	private String toTextString() {

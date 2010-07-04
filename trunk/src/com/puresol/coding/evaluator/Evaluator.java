@@ -9,7 +9,7 @@ import javax.swingx.progress.ProgressObservable;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.QualityLevel;
 import com.puresol.reporting.ReportingFormat;
-import com.puresol.reporting.UnsupportedReportingFormatException;
+import com.puresol.reporting.UnsupportedFormatException;
 
 /**
  * This interface is the main interface for all evaluators and the general
@@ -27,10 +27,10 @@ public interface Evaluator extends ProgressObservable, Runnable, Serializable {
 	public String getName();
 
 	public String getDescription(ReportingFormat format)
-			throws UnsupportedReportingFormatException;
+			throws UnsupportedFormatException;
 
 	public String getReport(ReportingFormat format)
-			throws UnsupportedReportingFormatException;
+			throws UnsupportedFormatException;
 
 	public QualityLevel getQuality();
 

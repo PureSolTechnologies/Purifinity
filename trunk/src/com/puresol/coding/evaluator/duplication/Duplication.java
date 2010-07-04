@@ -7,7 +7,7 @@ import javax.i18n4j.Translator;
 import com.puresol.coding.analysis.CodeRange;
 import com.puresol.parser.Token;
 import com.puresol.reporting.ReportingFormat;
-import com.puresol.reporting.UnsupportedReportingFormatException;
+import com.puresol.reporting.UnsupportedFormatException;
 
 /**
  * This class keeps the information of a single duplication found by a scanner.
@@ -153,16 +153,16 @@ public class Duplication implements Comparable<Duplication>, Serializable {
 	}
 
 	public String toString(ReportingFormat format)
-			throws UnsupportedReportingFormatException {
+			throws UnsupportedFormatException {
 		if (format == ReportingFormat.TEXT) {
 			return toTextString();
 		} else if (format == ReportingFormat.HTML) {
 			return toHTMLString();
 		}
-		throw new UnsupportedReportingFormatException(format);
+		throw new UnsupportedFormatException(format);
 	}
 
-	private String toTextString() throws UnsupportedReportingFormatException {
+	private String toTextString() throws UnsupportedFormatException {
 		CodeRange left = getLeft();
 		CodeRange right = getRight();
 		String output = translator.i18n("left:") + "\n";
@@ -173,7 +173,7 @@ public class Duplication implements Comparable<Duplication>, Serializable {
 		return output;
 	}
 
-	private String toHTMLString() throws UnsupportedReportingFormatException {
+	private String toHTMLString() throws UnsupportedFormatException {
 		CodeRange left = getLeft();
 		CodeRange right = getRight();
 		String output = "<table border=\"1\" padding=\"10pt\"><tr><th>left</th><th>right</th></tr><tr>\n";
@@ -185,7 +185,7 @@ public class Duplication implements Comparable<Duplication>, Serializable {
 	}
 
 	private String getHTMLString(CodeRange range, CodeRange duplicationRange)
-			throws UnsupportedReportingFormatException {
+			throws UnsupportedFormatException {
 		String output = range.getTitleString(ReportingFormat.HTML);
 		output += "<tt>\n";
 		boolean marked = false;

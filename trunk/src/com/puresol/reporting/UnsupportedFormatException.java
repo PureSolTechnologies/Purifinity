@@ -3,14 +3,14 @@ package com.puresol.reporting;
 import javax.i18n4j.Translator;
 
 
-public class UnsupportedReportingFormatException extends Exception {
+public class UnsupportedFormatException extends Exception {
 
 	private static final long serialVersionUID = -4781856011865619824L;
 
 	private static final Translator translator = Translator
-			.getTranslator(UnsupportedReportingFormatException.class);
+			.getTranslator(UnsupportedFormatException.class);
 
-	public UnsupportedReportingFormatException(ReportingFormat format) {
+	public UnsupportedFormatException(ReportingFormat format) {
 		super(translator.i18n("Reporting format '" + format.getIdentifier()
 				+ "' is not (yet) supported!"));
 	}

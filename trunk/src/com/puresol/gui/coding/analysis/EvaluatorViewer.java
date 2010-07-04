@@ -13,7 +13,7 @@ import org.apache.log4j.Logger;
 
 import com.puresol.coding.evaluator.Evaluator;
 import com.puresol.reporting.ReportingFormat;
-import com.puresol.reporting.UnsupportedReportingFormatException;
+import com.puresol.reporting.UnsupportedFormatException;
 
 public class EvaluatorViewer extends BorderLayoutWidget {
 
@@ -80,7 +80,7 @@ public class EvaluatorViewer extends BorderLayoutWidget {
 		evaluatorName.setText(evaluator.getName());
 		try {
 			description.setText(evaluator.getDescription(ReportingFormat.HTML));
-		} catch (UnsupportedReportingFormatException e) {
+		} catch (UnsupportedFormatException e) {
 			description.setText(translator.i18n(
 					"Evaluator does not (yet) support {0} reporting format.",
 					ReportingFormat.HTML));
@@ -89,7 +89,7 @@ public class EvaluatorViewer extends BorderLayoutWidget {
 
 		try {
 			report.setText(evaluator.getReport(ReportingFormat.HTML));
-		} catch (UnsupportedReportingFormatException e) {
+		} catch (UnsupportedFormatException e) {
 			report.setText(translator.i18n(
 					"Evaluator does not (yet) support {0} reporting format.",
 					ReportingFormat.HTML));

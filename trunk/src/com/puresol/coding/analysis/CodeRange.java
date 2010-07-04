@@ -9,7 +9,7 @@ import com.puresol.parser.Parser;
 import com.puresol.parser.Token;
 import com.puresol.parser.TokenStream;
 import com.puresol.reporting.ReportingFormat;
-import com.puresol.reporting.UnsupportedReportingFormatException;
+import com.puresol.reporting.UnsupportedFormatException;
 
 /**
  * This is a general interface for all kinds of code ranges. It's used for
@@ -147,12 +147,12 @@ public interface CodeRange extends Parser, Serializable, Comparable<CodeRange>,
      * @param format
      *            is the format to create as output.
      * @return A String is created as title string.
-     * @throws UnsupportedReportingFormatException
+     * @throws UnsupportedFormatException
      *             is thrown in case of a reporting format which is not
      *             implemented.
      */
     public String getTitleString(ReportingFormat format)
-	    throws UnsupportedReportingFormatException;
+	    throws UnsupportedFormatException;
 
     /**
      * This method returns the content of the code range in a specified format
@@ -161,12 +161,12 @@ public interface CodeRange extends Parser, Serializable, Comparable<CodeRange>,
      * @param format
      *            is the format to create as output.
      * @return A String is created as title string.
-     * @throws UnsupportedReportingFormatException
+     * @throws UnsupportedFormatException
      *             is thrown in case of a reporting format which is not
      *             implemented.
      */
     public String getReportingString(ReportingFormat format)
-	    throws UnsupportedReportingFormatException;
+	    throws UnsupportedFormatException;
 
     /**
      * This method creates a new code range with same attributes, but with a sub

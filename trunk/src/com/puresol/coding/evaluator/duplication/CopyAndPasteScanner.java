@@ -20,7 +20,7 @@ import com.puresol.parser.Token;
 import com.puresol.parser.TokenException;
 import com.puresol.parser.TokenStream;
 import com.puresol.reporting.ReportingFormat;
-import com.puresol.reporting.UnsupportedReportingFormatException;
+import com.puresol.reporting.UnsupportedFormatException;
 import com.puresol.reporting.html.HTMLStandards;
 import com.puresol.utils.Property;
 
@@ -228,13 +228,13 @@ public class CopyAndPasteScanner extends AbstractProjectEvaluator {
 
 	@Override
 	public String getDescription(ReportingFormat format)
-			throws UnsupportedReportingFormatException {
+			throws UnsupportedFormatException {
 		if (format == ReportingFormat.HTML) {
 			return HTMLStandards.convertFlowTextToHTML(DESCRIPTION);
 		} else if (format == ReportingFormat.TEXT) {
 			return DESCRIPTION;
 		}
-		throw new UnsupportedReportingFormatException(format);
+		throw new UnsupportedFormatException(format);
 	}
 
 	@Override

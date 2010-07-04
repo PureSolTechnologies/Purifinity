@@ -44,37 +44,45 @@ public class Evaluators {
 		return projectEvaluators;
 	}
 
-	public void registerEvaluator(ProjectEvaluatorFactory evaluator) {
+	public List<FileEvaluatorFactory> getFileEvaluators() {
+		return fileEvaluators;
+	}
+
+	public List<CodeRangeEvaluatorFactory> getCodeRangeEvaluators() {
+		return codeRangeEvaluators;
+	}
+
+	public void registerProjectEvaluator(ProjectEvaluatorFactory evaluator) {
 		logger.info("Register evaluator '" + evaluator.getClass().getName()
 				+ "'...");
 		projectEvaluators.add(evaluator);
 	}
 
-	public void unregisterEvaluator(ProjectEvaluatorFactory evaluator) {
+	public void unregisterProjectEvaluator(ProjectEvaluatorFactory evaluator) {
 		logger.info("Unregister evaluator '" + evaluator.getClass().getName()
 				+ "'...");
 		projectEvaluators.remove(evaluator);
 	}
 
-	public void registerEvaluator(FileEvaluatorFactory evaluator) {
+	public void registerFileEvaluator(FileEvaluatorFactory evaluator) {
 		logger.info("Register evaluator '" + evaluator.getClass().getName()
 				+ "'...");
 		fileEvaluators.add(evaluator);
 	}
 
-	public void unregisterEvaluator(FileEvaluatorFactory evaluator) {
+	public void unregisterFileEvaluator(FileEvaluatorFactory evaluator) {
 		logger.info("Unregister evaluator '" + evaluator.getClass().getName()
 				+ "'...");
 		fileEvaluators.remove(evaluator);
 	}
 
-	public void registerEvaluator(CodeRangeEvaluatorFactory evaluator) {
+	public void registerCodeRangeEvaluator(CodeRangeEvaluatorFactory evaluator) {
 		logger.info("Register evaluator '" + evaluator.getClass().getName()
 				+ "'...");
 		codeRangeEvaluators.add(evaluator);
 	}
 
-	public void unregisterEvaluator(CodeRangeEvaluatorFactory evaluator) {
+	public void unregisterCodeRangeEvaluator(CodeRangeEvaluatorFactory evaluator) {
 		logger.info("Unregister evaluator '" + evaluator.getClass().getName()
 				+ "'...");
 		codeRangeEvaluators.remove(evaluator);
