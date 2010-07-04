@@ -17,19 +17,16 @@ import javax.swingx.connect.Slot;
 import javax.swingx.progress.ProgressObservable;
 import javax.swingx.progress.ProgressWindow;
 
-import org.apache.log4j.Logger;
-
 import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.evaluator.Evaluator;
 import com.puresol.coding.evaluator.EvaluatorFactory;
 import com.puresol.coding.evaluator.Evaluators;
-import com.puresol.coding.evaluator.NotSupportedException;
+import com.puresol.coding.evaluator.ProjectEvaluatorFactory;
 
 public class EvaluatorPanel extends Panel {
 
 	private static final long serialVersionUID = 7855693564694783199L;
 
-	private static final Logger logger = Logger.getLogger(EvaluatorPanel.class);
 	private static final Translator translator = Translator
 			.getTranslator(EvaluatorPanel.class);
 
@@ -72,11 +69,11 @@ public class EvaluatorPanel extends Panel {
 	}
 
 	private void addEvaluators() {
-		List<EvaluatorFactory> evaluatorFactories = Evaluators.getInstance()
-				.getEvaluators();
+		List<ProjectEvaluatorFactory> evaluatorFactories = Evaluators
+				.getInstance().getProjectEvaluators();
 		Hashtable<Object, Object> values = new Hashtable<Object, Object>();
 		for (EvaluatorFactory evaluatorFactory : evaluatorFactories) {
-			values.put(evaluatorFactory.getEvaluatorName(), evaluatorFactory);
+			values.put(evaluatorFactory.getName(), evaluatorFactory);
 		}
 		evaluators.setListData(values);
 	}
@@ -91,20 +88,15 @@ public class EvaluatorPanel extends Panel {
 
 	@Slot
 	public void run() {
-		EvaluatorFactory evaluatorFactory = (EvaluatorFactory) evaluators
+		ProjectEvaluatorFactory evaluatorFactory = (ProjectEvaluatorFactory) evaluators
 				.getSelectedValue();
 		if ((evaluatorFactory == null) || (projectAnalyser == null)) {
 			return;
 		}
-		try {
-			Evaluator evaluator = evaluatorFactory.create(projectAnalyser);
-			ProgressWindow progress = new ProgressWindow(evaluator);
-			progress.run();
-			progress.connect("finished", this, "finished",
-					ProgressObservable.class);
-		} catch (NotSupportedException e) {
-			logger.warn(e.getMessage(), e);
-		}
+		Evaluator evaluator = evaluatorFactory.create(projectAnalyser);
+		ProgressWindow progress = new ProgressWindow(evaluator);
+		progress.run();
+		progress.connect("finished", this, "finished", ProgressObservable.class);
 	}
 
 	@Slot
@@ -120,7 +112,7 @@ public class EvaluatorPanel extends Panel {
 		if (evaluatorFactory == null) {
 			description.setText("");
 		} else {
-			description.setText(evaluatorFactory.getEvaluatorDescription());
+			description.setText(evaluatorFactory.getDescription());
 		}
 	}
 }

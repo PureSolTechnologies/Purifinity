@@ -12,6 +12,7 @@ package com.puresol.coding.analysis;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -36,9 +37,16 @@ abstract public class AbstractAnalyser implements Analyzer {
 
 	private CodeRange rootCodeRange = null;
 	private final SymbolTable symbols = new SymbolTable();
+	private final Date timeStamp;
 
 	public AbstractAnalyser(File file) {
 		this.file = file;
+		timeStamp = new Date();
+	}
+
+	@Override
+	public Date getTimeStamp() {
+		return timeStamp;
 	}
 
 	@Override

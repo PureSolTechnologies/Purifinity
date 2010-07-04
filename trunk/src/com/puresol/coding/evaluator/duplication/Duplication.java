@@ -5,9 +5,9 @@ import java.io.Serializable;
 import javax.i18n4j.Translator;
 
 import com.puresol.coding.analysis.CodeRange;
-import com.puresol.coding.evaluator.UnsupportedReportingFormatException;
 import com.puresol.parser.Token;
 import com.puresol.reporting.ReportingFormat;
+import com.puresol.reporting.UnsupportedReportingFormatException;
 
 /**
  * This class keeps the information of a single duplication found by a scanner.
@@ -203,8 +203,8 @@ public class Duplication implements Comparable<Duplication>, Serializable {
 					output += "</font>\n";
 				}
 			}
-			output += token.getText().replaceAll("\\n", "<br/>\n").replaceAll(
-					" ", "&nbsp;")
+			output += token.getText().replaceAll("\\n", "<br/>\n")
+					.replaceAll(" ", "&nbsp;")
 					.replaceAll("\\t", "&nbsp;&nbsp;&nbsp;&nbsp;");
 		}
 		if (marked) {

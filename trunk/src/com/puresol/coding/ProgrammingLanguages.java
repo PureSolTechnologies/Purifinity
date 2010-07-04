@@ -39,20 +39,24 @@ public class ProgrammingLanguages {
 
 	private final List<ProgrammingLanguage> languages = new ArrayList<ProgrammingLanguage>();
 
+	/*
+	 * Implementation...
+	 */
+	
 	private ProgrammingLanguages() {
 	}
 
-	public List<ProgrammingLanguage> getLanguages() {
+	public final List<ProgrammingLanguage> getLanguages() {
 		return languages;
 	}
 
-	public void registerLanguage(ProgrammingLanguage language) {
+	public final void registerLanguage(ProgrammingLanguage language) {
 		logger.info("Register programminglanguage '"
 				+ language.getClass().getName() + "'...");
 		languages.add(language);
 	}
 
-	public void unregisterLanguage(ProgrammingLanguage language) {
+	public final void unregisterLanguage(ProgrammingLanguage language) {
 		logger.info("Unregister programminglanguage '"
 				+ language.getClass().getName() + "'...");
 		languages.remove(language);

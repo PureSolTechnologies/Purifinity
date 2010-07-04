@@ -5,11 +5,11 @@ import java.io.IOException;
 
 import javax.i18n4j.Translator;
 
-import com.puresol.jars.JarFile;
 import com.puresol.reporting.html.HTMLStandards;
 import com.puresol.reporting.html.Image;
 import com.puresol.reporting.html.Link;
 import com.puresol.utils.FileUtilities;
+import com.puresol.utils.JarFileUtilities;
 
 public class StandardReport {
 
@@ -146,7 +146,7 @@ public class StandardReport {
 		if (logoFile != null) {
 			File logo = FileUtilities.addPaths(projectDirectory, logoFile);
 			if (!logo.exists()) {
-				JarFile.extractResource(getClass().getResource(
+				JarFileUtilities.extractResource(getClass().getResource(
 						"/config/logo.png"), logo);
 			}
 		}
@@ -156,7 +156,7 @@ public class StandardReport {
 		if (cssFile != null) {
 			File css = FileUtilities.addPaths(projectDirectory, cssFile);
 			if (!css.exists()) {
-				JarFile.extractResource(getClass().getResource(
+				JarFileUtilities.extractResource(getClass().getResource(
 						"/css/report.css"), css);
 			}
 		}
@@ -167,7 +167,7 @@ public class StandardReport {
 			File favIcon = FileUtilities
 					.addPaths(projectDirectory, favIconFile);
 			if (!favIcon.exists()) {
-				JarFile.extractResource(getClass().getResource(
+				JarFileUtilities.extractResource(getClass().getResource(
 						"/config/favicon.png"), favIcon);
 			}
 		}

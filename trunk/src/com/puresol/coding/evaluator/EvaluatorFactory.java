@@ -2,9 +2,7 @@ package com.puresol.coding.evaluator;
 
 import java.util.List;
 
-import com.puresol.coding.analysis.Analyzer;
-import com.puresol.coding.analysis.CodeRange;
-import com.puresol.coding.analysis.ProjectAnalyzer;
+import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.utils.Property;
 
 /**
@@ -17,22 +15,12 @@ import com.puresol.utils.Property;
  */
 public interface EvaluatorFactory {
 
-	public String getEvaluatorName();
+	public String getName();
 
-	public String getEvaluatorDescription();
+	public String getDescription();
 
 	public List<Property> getEvaluatorProperties();
 
-	public boolean isCodeRangeEvaluator();
+	public List<QualityCharacteristic> getEvaluatedQualityCharacteristics();
 
-	public boolean isFileEvaluator();
-
-	public boolean isProjectEvaluator();
-
-	public Evaluator create(CodeRange codeRange) throws NotSupportedException;
-
-	public Evaluator create(Analyzer analyser) throws NotSupportedException;
-
-	public Evaluator create(ProjectAnalyzer projectAnalyser)
-			throws NotSupportedException;
 }

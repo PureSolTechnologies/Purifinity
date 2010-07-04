@@ -2,39 +2,26 @@ package com.puresol.coding.evaluator.duplication;
 
 import java.util.List;
 
-import com.puresol.coding.analysis.Analyzer;
-import com.puresol.coding.analysis.CodeRange;
 import com.puresol.coding.analysis.ProjectAnalyzer;
-import com.puresol.coding.evaluator.Evaluator;
-import com.puresol.coding.evaluator.EvaluatorFactory;
-import com.puresol.coding.evaluator.NotSupportedException;
+import com.puresol.coding.evaluator.ProjectEvaluator;
+import com.puresol.coding.evaluator.ProjectEvaluatorFactory;
+import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.utils.Property;
 
-public class DuplicationScannerFactory implements EvaluatorFactory {
+public class DuplicationScannerFactory implements ProjectEvaluatorFactory {
 
 	@Override
-	public Evaluator create(CodeRange codeRange) throws NotSupportedException {
-		throw new NotSupportedException();
-	}
-
-	@Override
-	public Evaluator create(Analyzer analyser) throws NotSupportedException {
-		throw new NotSupportedException();
-	}
-
-	@Override
-	public Evaluator create(ProjectAnalyzer projectAnalyser)
-			throws NotSupportedException {
+	public ProjectEvaluator create(ProjectAnalyzer projectAnalyser) {
 		return new DuplicationScanner(projectAnalyser);
 	}
 
 	@Override
-	public String getEvaluatorDescription() {
+	public String getDescription() {
 		return DuplicationScanner.DESCRIPTION;
 	}
 
 	@Override
-	public String getEvaluatorName() {
+	public String getName() {
 		return DuplicationScanner.NAME;
 	}
 
@@ -44,18 +31,8 @@ public class DuplicationScannerFactory implements EvaluatorFactory {
 	}
 
 	@Override
-	public boolean isCodeRangeEvaluator() {
-		return false;
-	}
-
-	@Override
-	public boolean isFileEvaluator() {
-		return false;
-	}
-
-	@Override
-	public boolean isProjectEvaluator() {
-		return true;
+	public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
+		return DuplicationScanner.EVALUATED_QUALITY_CHARACTERISTICS;
 	}
 
 }

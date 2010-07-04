@@ -18,7 +18,6 @@ import javax.swingx.Panel;
 import javax.swingx.TabbedPane;
 
 import com.puresol.coding.analysis.ProjectAnalyzer;
-import com.puresol.coding.evaluator.ProjectEvaluator;
 
 public class ProjectAnalysisBrowser extends Panel {
 
@@ -33,7 +32,6 @@ public class ProjectAnalysisBrowser extends Panel {
 	private final TabbedPane tabbedPane = new TabbedPane();
 	private final CodeRangeBrowser codeRangeBrowser = new CodeRangeBrowser();
 	private final EvaluatorPanel evaluatorPanel = new EvaluatorPanel();
-	private final ProjectEvaluatorPanel codeEvaluation = new ProjectEvaluatorPanel();
 
 	public ProjectAnalysisBrowser() {
 		super();
@@ -53,8 +51,6 @@ public class ProjectAnalysisBrowser extends Panel {
 
 		tabbedPane.addTab(translator.i18n("Code Ranges"), codeRangeBrowser);
 		tabbedPane.addTab(translator.i18n("Code Evaluators"), evaluatorPanel);
-		tabbedPane
-				.addTab(translator.i18n("Project Evaluation"), codeEvaluation);
 	}
 
 	public void setProjectAnalyser(ProjectAnalyzer project) {
@@ -66,7 +62,6 @@ public class ProjectAnalysisBrowser extends Panel {
 		}
 		codeRangeBrowser.setProjectAnalyser(project);
 		evaluatorPanel.setProjectAnalyser(project);
-		codeEvaluation.setProjectAnalyser(project);
 	}
 
 	public ProjectAnalyzer getProjectAnalyser() {
@@ -77,15 +72,4 @@ public class ProjectAnalysisBrowser extends Panel {
 		codeRangeBrowser.refresh();
 	}
 
-	public ProjectEvaluator getCodeEvaluator() {
-		return codeEvaluation.getProjectEvaluator();
-	}
-
-	public ProjectEvaluator getProjectEvaluator() {
-		return codeEvaluation.getProjectEvaluator();
-	}
-
-	public void setProjectEvaluator(ProjectEvaluator projectEvaluator) {
-		codeEvaluation.setProjectEvaluator(projectEvaluator);
-	}
 }

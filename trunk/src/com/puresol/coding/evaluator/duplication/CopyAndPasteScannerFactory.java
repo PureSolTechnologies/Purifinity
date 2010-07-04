@@ -2,39 +2,26 @@ package com.puresol.coding.evaluator.duplication;
 
 import java.util.List;
 
-import com.puresol.coding.analysis.Analyzer;
-import com.puresol.coding.analysis.CodeRange;
 import com.puresol.coding.analysis.ProjectAnalyzer;
-import com.puresol.coding.evaluator.Evaluator;
-import com.puresol.coding.evaluator.EvaluatorFactory;
-import com.puresol.coding.evaluator.NotSupportedException;
+import com.puresol.coding.evaluator.ProjectEvaluator;
+import com.puresol.coding.evaluator.ProjectEvaluatorFactory;
+import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.utils.Property;
 
-public class CopyAndPasteScannerFactory implements EvaluatorFactory {
+public class CopyAndPasteScannerFactory implements ProjectEvaluatorFactory {
 
 	@Override
-	public Evaluator create(CodeRange codeRange) throws NotSupportedException {
-		throw new NotSupportedException();
-	}
-
-	@Override
-	public Evaluator create(Analyzer analyser) throws NotSupportedException {
-		throw new NotSupportedException();
-	}
-
-	@Override
-	public Evaluator create(ProjectAnalyzer projectAnalyser)
-			throws NotSupportedException {
+	public ProjectEvaluator create(ProjectAnalyzer projectAnalyser) {
 		return new CopyAndPasteScanner(projectAnalyser);
 	}
 
 	@Override
-	public String getEvaluatorDescription() {
+	public String getDescription() {
 		return CopyAndPasteScanner.DESCRIPTION;
 	}
 
 	@Override
-	public String getEvaluatorName() {
+	public String getName() {
 		return CopyAndPasteScanner.NAME;
 	}
 
@@ -44,18 +31,8 @@ public class CopyAndPasteScannerFactory implements EvaluatorFactory {
 	}
 
 	@Override
-	public boolean isCodeRangeEvaluator() {
-		return false;
-	}
-
-	@Override
-	public boolean isFileEvaluator() {
-		return false;
-	}
-
-	@Override
-	public boolean isProjectEvaluator() {
-		return true;
+	public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
+		return CopyAndPasteScanner.EVALUATED_QUALITY_CHARACTERISTICS;
 	}
 
 }

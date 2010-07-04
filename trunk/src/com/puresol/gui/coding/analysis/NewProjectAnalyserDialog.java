@@ -1,7 +1,6 @@
 package com.puresol.gui.coding.analysis;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
 import java.io.File;
 
 import javax.i18n4j.Translator;

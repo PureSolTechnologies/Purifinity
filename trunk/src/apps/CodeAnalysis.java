@@ -10,12 +10,6 @@
 
 package apps;
 
-import java.awt.Desktop;
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-
 import javax.i18n4j.Translator;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -32,17 +26,12 @@ import org.apache.log4j.Logger;
 import org.osgi.framework.BundleException;
 
 import com.puresol.coding.analysis.ProjectAnalyzer;
-import com.puresol.coding.evaluator.ProjectEvaluator;
-import com.puresol.coding.evaluator.EvaluationReport;
-import com.puresol.coding.evaluator.UnsupportedReportingFormatException;
 import com.puresol.gui.PureSolApplication;
 import com.puresol.gui.coding.analysis.NewProjectAnalyserDialog;
 import com.puresol.gui.coding.analysis.ProjectAnalysisBrowser;
 import com.puresol.gui.osgi.BundleManager;
 import com.puresol.osgi.OSGi;
 import com.puresol.osgi.OSGiException;
-import com.puresol.reporting.ReportingFormat;
-import com.puresol.utils.FileUtilities;
 
 /**
  * This is PureSolTechnologies' code analysis tool for automated source code
@@ -163,40 +152,42 @@ public class CodeAnalysis extends PureSolApplication {
 
 	@Slot
 	void createEvaluatorHTML() {
-		JFileChooser chooser = new JFileChooser();
-		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		int result = chooser.showSaveDialog(Application.getInstance());
-		if (result == JFileChooser.CANCEL_OPTION) {
-			return;
-		}
-		ProjectEvaluator evaluator = browser.getCodeEvaluator();
-		if (evaluator != null) {
-			try {
-				EvaluationReport.report(evaluator, chooser.getSelectedFile(),
-						ReportingFormat.HTML);
-				Desktop.getDesktop().browse(
-						new URI("file://"
-								+ FileUtilities.addPaths(chooser
-										.getSelectedFile(), new File(
-										"index.html"))));
-			} catch (UnsupportedReportingFormatException e) {
-				JOptionPane.showMessageDialog(Application.getInstance(),
-						translator.i18n("No report generation possible!")
-								+ "\n" + e.getMessage(),
-						translator.i18n("Error"), JOptionPane.ERROR_MESSAGE);
-			} catch (IOException e) {
-				logger.error(e.getMessage(), e);
-			} catch (URISyntaxException e) {
-				logger.error(e.getMessage(), e);
-			}
-		} else {
-			JOptionPane
-					.showMessageDialog(
-							Application.getInstance(),
-							translator
-									.i18n("No report generation possible!\nNo evaluation was performed."),
-							translator.i18n("Error"), JOptionPane.ERROR_MESSAGE);
-		}
+		// TODO
+		Application.showNotImplementedMessage();
+		// JFileChooser chooser = new JFileChooser();
+		// chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		// int result = chooser.showSaveDialog(Application.getInstance());
+		// if (result == JFileChooser.CANCEL_OPTION) {
+		// return;
+		// }
+		// CentralProjectEvaluator evaluator = browser.getCodeEvaluator();
+		// if (evaluator != null) {
+		// try {
+		// EvaluationReport.report(evaluator, chooser.getSelectedFile(),
+		// ReportingFormat.HTML);
+		// Desktop.getDesktop().browse(
+		// new URI("file://"
+		// + FileUtilities.addPaths(chooser
+		// .getSelectedFile(), new File(
+		// "index.html"))));
+		// } catch (UnsupportedReportingFormatException e) {
+		// JOptionPane.showMessageDialog(Application.getInstance(),
+		// translator.i18n("No report generation possible!")
+		// + "\n" + e.getMessage(),
+		// translator.i18n("Error"), JOptionPane.ERROR_MESSAGE);
+		// } catch (IOException e) {
+		// logger.error(e.getMessage(), e);
+		// } catch (URISyntaxException e) {
+		// logger.error(e.getMessage(), e);
+		// }
+		// } else {
+		// JOptionPane
+		// .showMessageDialog(
+		// Application.getInstance(),
+		// translator
+		// .i18n("No report generation possible!\nNo evaluation was performed."),
+		// translator.i18n("Error"), JOptionPane.ERROR_MESSAGE);
+		// }
 	}
 
 	@Slot

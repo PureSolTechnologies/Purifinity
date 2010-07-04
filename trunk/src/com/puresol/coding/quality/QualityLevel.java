@@ -8,7 +8,7 @@
  *
  ***************************************************************************/
 
-package com.puresol.coding.evaluator;
+package com.puresol.coding.quality;
 
 import javax.i18n4j.Translator;
 
@@ -76,7 +76,7 @@ public enum QualityLevel implements Identifiable, Comparable<QualityLevel> {
 	public abstract String getIdentifier();
 
 	public static QualityLevel fromLevel(int level) {
-		for (QualityLevel qualityLevel : QualityLevel.class.getEnumConstants()) {
+		for (QualityLevel qualityLevel : QualityLevel.values()) {
 			if (level == qualityLevel.getLevel()) {
 				return qualityLevel;
 			}

@@ -7,16 +7,15 @@ import java.util.List;
 import java.util.Map;
 
 import javax.i18n4j.Translator;
-import javax.swingx.progress.ProgressObservable;
 import javax.swingx.progress.ProgressObserver;
 
 import org.apache.log4j.Logger;
 
 import com.puresol.coding.analysis.CodeRange;
 import com.puresol.coding.analysis.ProjectAnalyzer;
-import com.puresol.coding.evaluator.AbstractEvaluator;
-import com.puresol.coding.evaluator.QualityLevel;
-import com.puresol.coding.evaluator.UnsupportedReportingFormatException;
+import com.puresol.coding.evaluator.AbstractProjectEvaluator;
+import com.puresol.coding.quality.QualityCharacteristic;
+import com.puresol.coding.quality.QualityLevel;
 import com.puresol.coding.tokentypes.AbstractSourceTokenDefinition;
 import com.puresol.coding.tokentypes.SourceTokenDefinition;
 import com.puresol.coding.tokentypes.SymbolType;
@@ -26,11 +25,11 @@ import com.puresol.parser.TokenException;
 import com.puresol.parser.TokenPublicity;
 import com.puresol.parser.TokenStream;
 import com.puresol.reporting.ReportingFormat;
+import com.puresol.reporting.UnsupportedReportingFormatException;
 import com.puresol.reporting.html.HTMLStandards;
 import com.puresol.utils.Property;
 
-public class DuplicationScanner extends AbstractEvaluator implements
-		ProgressObservable {
+public class DuplicationScanner extends AbstractProjectEvaluator {
 
 	private static final long serialVersionUID = -7419706267204649008L;
 
@@ -41,11 +40,26 @@ public class DuplicationScanner extends AbstractEvaluator implements
 	private static final Translator translator = Translator
 			.getTranslator(DuplicationScanner.class);
 
+	/*
+	 * Static information...
+	 */
 	public static final String NAME = "Code Duplication Scanner";
 	public static final String DESCRIPTION = translator
 			.i18n("This evaluator scans for simmilar functional code.");
 	public static final ArrayList<Property> SUPPORTED_PROPERTIES = new ArrayList<Property>();
+	public static final List<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new ArrayList<QualityCharacteristic>();
+	static {
+		EVALUATED_QUALITY_CHARACTERISTICS
+				.add(QualityCharacteristic.ANALYSABILITY);
+		EVALUATED_QUALITY_CHARACTERISTICS
+				.add(QualityCharacteristic.CHANGEABILITY);
+		EVALUATED_QUALITY_CHARACTERISTICS
+				.add(QualityCharacteristic.TESTABILITY);
+	}
 
+	/*
+	 * Implementation...
+	 */
 	private final Map<CodeRange, List<Integer>> codeRanges = new Hashtable<CodeRange, List<Integer>>();
 	private final List<Duplication> duplications = new ArrayList<Duplication>();
 	private final Map<File, List<Duplication>> fileDuplications = new Hashtable<File, List<Duplication>>();
@@ -72,8 +86,8 @@ public class DuplicationScanner extends AbstractEvaluator implements
 
 	private void getAllCodeRanges() throws TokenException {
 		for (File file : getProjectAnalyser().getFiles()) {
-			addFile(file);
-			for (CodeRange codeRange : getEvaluableCodeRanges(file)) {
+			for (CodeRange codeRange : getProjectAnalyser().getAnalyzer(file)
+					.getNonFragmentCodeRangesRecursively()) {
 				if (!codeRange.getCodeRangeType().isRunnableCodeSegment()) {
 					continue;
 				}
@@ -277,23 +291,17 @@ public class DuplicationScanner extends AbstractEvaluator implements
 	}
 
 	@Override
-	public String getProjectComment(ReportingFormat format) {
+	public String getReport(ReportingFormat format) {
 		return "";
 	}
 
 	@Override
-	public QualityLevel getProjectQuality() {
+	public QualityLevel getQuality() {
 		return QualityLevel.UNSPECIFIED;
 	}
 
 	@Override
-	public String getCodeRangeComment(CodeRange codeRange,
-			ReportingFormat format) {
-		return "";
-	}
-
-	@Override
-	public QualityLevel getQuality(CodeRange codeRange) {
-		return QualityLevel.UNSPECIFIED;
+	public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
+		return EVALUATED_QUALITY_CHARACTERISTICS;
 	}
 }

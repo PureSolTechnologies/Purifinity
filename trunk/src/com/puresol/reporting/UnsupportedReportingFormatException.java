@@ -1,8 +1,7 @@
-package com.puresol.coding.evaluator;
+package com.puresol.reporting;
 
 import javax.i18n4j.Translator;
 
-import com.puresol.reporting.ReportingFormat;
 
 public class UnsupportedReportingFormatException extends Exception {
 

@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.puresol.coding.evaluator.UnsupportedReportingFormatException;
 import com.puresol.exceptions.StrangeSituationException;
 import com.puresol.parser.AbstractParser;
 import com.puresol.parser.Parser;
@@ -12,6 +11,7 @@ import com.puresol.parser.ParserException;
 import com.puresol.parser.Token;
 import com.puresol.parser.TokenStream;
 import com.puresol.reporting.ReportingFormat;
+import com.puresol.reporting.UnsupportedReportingFormatException;
 import com.puresol.reporting.html.HTMLStandards;
 import com.puresol.utils.di.DependencyInjection;
 import com.puresol.utils.di.Inject;

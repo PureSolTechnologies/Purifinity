@@ -1,4 +1,4 @@
-package com.puresol.jars;
+package com.puresol.utils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -14,9 +14,9 @@ import org.apache.log4j.Logger;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class JarFile {
+public class JarFileUtilities {
 
-    private static final Logger logger = Logger.getLogger(JarFile.class);
+    private static final Logger logger = Logger.getLogger(JarFileUtilities.class);
 
     public static boolean extractResource(URL resource, File destination) {
 	try {

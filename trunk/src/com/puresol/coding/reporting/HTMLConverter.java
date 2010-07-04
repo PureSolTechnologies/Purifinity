@@ -1,7 +1,7 @@
 package com.puresol.coding.reporting;
 
 import com.puresol.coding.analysis.CodeRange;
-import com.puresol.coding.evaluator.QualityLevel;
+import com.puresol.coding.quality.QualityLevel;
 import com.puresol.reporting.html.HTMLStandards;
 
 public class HTMLConverter {

@@ -12,6 +12,7 @@ package com.puresol.coding.analysis;
 
 import java.io.File;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import com.puresol.coding.ProgrammingLanguage;
@@ -24,6 +25,14 @@ import com.puresol.coding.ProgrammingLanguage;
  * 
  */
 public interface Analyzer extends Serializable {
+
+	/**
+	 * This method returns the time stamp of the analysis. This can be used for
+	 * validity analysis by time stamp comparison for evaluators.
+	 * 
+	 * @return
+	 */
+	public Date getTimeStamp();
 
 	/**
 	 * Returns the language of the file analysed.

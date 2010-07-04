@@ -1,4 +1,4 @@
-package com.puresol.coding.evaluator;
+package com.puresol.exceptions;
 
 public class NotSupportedException extends Exception {
 

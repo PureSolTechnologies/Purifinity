@@ -5,8 +5,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import com.puresol.utils.FileUtilities;
-
 /**
  * PreConditioner is for reading an InputStream and creating a basic token
  * stream. This is needed for all parsing which is related on additional

@@ -5,9 +5,6 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import com.puresol.coding.evaluator.duplication.CopyAndPasteScannerFactory;
-import com.puresol.coding.evaluator.duplication.DuplicationScannerFactory;
-
 /**
  * This is the manager class for all evaluator factories which provide evaluator
  * functionality to the code analysis system.
@@ -33,36 +30,54 @@ public class Evaluators {
 		if (instance == null) {
 			logger.info("Create Evaluators instance...");
 			instance = new Evaluators();
-			// TODO remove the next two lines and put them somewhere else in a
-			// bundle or so...
-			instance.registerEvaluator(new CopyAndPasteScannerFactory());
-			instance.registerEvaluator(new DuplicationScannerFactory());
 		}
 	}
 
-	private final List<EvaluatorFactory> evaluators = new ArrayList<EvaluatorFactory>();
+	private final List<ProjectEvaluatorFactory> projectEvaluators = new ArrayList<ProjectEvaluatorFactory>();
+	private final List<FileEvaluatorFactory> fileEvaluators = new ArrayList<FileEvaluatorFactory>();
+	private final List<CodeRangeEvaluatorFactory> codeRangeEvaluators = new ArrayList<CodeRangeEvaluatorFactory>();
 
 	private Evaluators() {
 	}
 
-	public List<EvaluatorFactory> getEvaluators() {
-		return evaluators;
+	public List<ProjectEvaluatorFactory> getProjectEvaluators() {
+		return projectEvaluators;
 	}
 
-	public void registerEvaluator(EvaluatorFactory evaluator) {
+	public void registerEvaluator(ProjectEvaluatorFactory evaluator) {
 		logger.info("Register evaluator '" + evaluator.getClass().getName()
 				+ "'...");
-		evaluators.add(evaluator);
-		logger.info("Now we have " + evaluators.size()
-				+ " evaluators available.");
+		projectEvaluators.add(evaluator);
 	}
 
-	public void unregisterEvaluator(EvaluatorFactory evaluator) {
+	public void unregisterEvaluator(ProjectEvaluatorFactory evaluator) {
 		logger.info("Unregister evaluator '" + evaluator.getClass().getName()
 				+ "'...");
-		evaluators.remove(evaluator);
-		logger.info("Now we have " + evaluators.size()
-				+ " evaluators available.");
+		projectEvaluators.remove(evaluator);
+	}
+
+	public void registerEvaluator(FileEvaluatorFactory evaluator) {
+		logger.info("Register evaluator '" + evaluator.getClass().getName()
+				+ "'...");
+		fileEvaluators.add(evaluator);
+	}
+
+	public void unregisterEvaluator(FileEvaluatorFactory evaluator) {
+		logger.info("Unregister evaluator '" + evaluator.getClass().getName()
+				+ "'...");
+		fileEvaluators.remove(evaluator);
+	}
+
+	public void registerEvaluator(CodeRangeEvaluatorFactory evaluator) {
+		logger.info("Register evaluator '" + evaluator.getClass().getName()
+				+ "'...");
+		codeRangeEvaluators.add(evaluator);
+	}
+
+	public void unregisterEvaluator(CodeRangeEvaluatorFactory evaluator) {
+		logger.info("Unregister evaluator '" + evaluator.getClass().getName()
+				+ "'...");
+		codeRangeEvaluators.remove(evaluator);
 	}
 
 }

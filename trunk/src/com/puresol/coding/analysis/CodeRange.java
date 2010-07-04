@@ -5,11 +5,11 @@ import java.io.Serializable;
 import java.util.List;
 
 import com.puresol.coding.ProgrammingLanguage;
-import com.puresol.coding.evaluator.UnsupportedReportingFormatException;
 import com.puresol.parser.Parser;
 import com.puresol.parser.Token;
 import com.puresol.parser.TokenStream;
 import com.puresol.reporting.ReportingFormat;
+import com.puresol.reporting.UnsupportedReportingFormatException;
 
 /**
  * This is a general interface for all kinds of code ranges. It's used for
