@@ -4,8 +4,8 @@ import java.io.Serializable;
 
 import javax.i18n4j.Translator;
 
-import com.puresol.coding.evaluator.UnsupportedReportingFormatException;
 import com.puresol.reporting.ReportingFormat;
+import com.puresol.reporting.UnsupportedFormatException;
 
 public class CoCoMoValueSet implements Serializable {
 
@@ -186,13 +186,13 @@ public class CoCoMoValueSet implements Serializable {
 	}
 
 	public String toString(ReportingFormat format)
-			throws UnsupportedReportingFormatException {
+			throws UnsupportedFormatException {
 		if (format == ReportingFormat.TEXT) {
 			return toTextString();
 		} else if (format == ReportingFormat.HTML) {
 			return toHTMLString();
 		}
-		throw new UnsupportedReportingFormatException(format);
+		throw new UnsupportedFormatException(format);
 	}
 
 	public String toTextString() {

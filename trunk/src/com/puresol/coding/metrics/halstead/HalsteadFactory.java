@@ -1,4 +1,4 @@
-package com.puresol.coding.metrics.codedepth;
+package com.puresol.coding.metrics.halstead;
 
 import java.util.List;
 
@@ -8,31 +8,31 @@ import com.puresol.coding.evaluator.CodeRangeEvaluatorFactory;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.utils.Property;
 
-public class CodeDepthFactory implements CodeRangeEvaluatorFactory {
+public class HalsteadFactory implements CodeRangeEvaluatorFactory {
 
 	@Override
 	public CodeRangeEvaluator create(CodeRange codeRange) {
-		return new CodeDepth(codeRange);
+		return new HalsteadMetric(codeRange);
 	}
 
 	@Override
 	public String getDescription() {
-		return CodeDepth.DESCRIPTION;
+		return HalsteadMetric.DESCRIPTION;
 	}
 
 	@Override
 	public String getName() {
-		return CodeDepth.NAME;
+		return HalsteadMetric.NAME;
 	}
 
 	@Override
 	public List<Property> getEvaluatorProperties() {
-		return CodeDepth.SUPPORTED_PROPERTIES;
+		return HalsteadMetric.SUPPORTED_PROPERTIES;
 	}
 
 	@Override
 	public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
-		return CodeDepth.EVALUATED_QUALITY_CHARACTERISTICS;
+		return HalsteadMetric.EVALUATED_QUALITY_CHARACTERISTICS;
 	}
 
 }

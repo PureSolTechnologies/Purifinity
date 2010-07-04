@@ -19,13 +19,14 @@ import javax.i18n4j.Translator;
 
 import com.puresol.coding.analysis.CodeRange;
 import com.puresol.coding.analysis.CodeRangeType;
-import com.puresol.coding.analysis.ProjectAnalyser;
-import com.puresol.coding.evaluator.AbstractEvaluator;
-import com.puresol.coding.evaluator.QualityLevel;
-import com.puresol.coding.evaluator.UnsupportedReportingFormatException;
+import com.puresol.coding.analysis.ProjectAnalyzer;
+import com.puresol.coding.evaluator.AbstractProjectEvaluator;
+import com.puresol.coding.quality.QualityCharacteristic;
+import com.puresol.coding.quality.QualityLevel;
 import com.puresol.parser.Token;
 import com.puresol.parser.TokenPublicity;
 import com.puresol.reporting.ReportingFormat;
+import com.puresol.reporting.UnsupportedFormatException;
 import com.puresol.reporting.html.HTMLStandards;
 import com.puresol.utils.Property;
 
@@ -36,7 +37,7 @@ import com.puresol.utils.Property;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class CoCoMo extends AbstractEvaluator {
+public class CoCoMo extends AbstractProjectEvaluator {
 
 	private static final long serialVersionUID = 5098378023541671490L;
 
@@ -52,14 +53,15 @@ public class CoCoMo extends AbstractEvaluator {
 					+ "to estimate the construction costs of a "
 					+ "software project by couting the physical lines of code.");
 	public static final List<Property> SUPPORTED_PROPERTIES = new ArrayList<Property>();
+	public static final List<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new ArrayList<QualityCharacteristic>();
 
-	public CoCoMo(ProjectAnalyser analyser) {
+	public CoCoMo(ProjectAnalyzer analyser) {
 		super(analyser);
 	}
 
 	@Override
 	public void run() {
-		ProjectAnalyser projectAnalyser = getProjectAnalyser();
+		ProjectAnalyzer projectAnalyser = getProjectAnalyser();
 		List<File> files = projectAnalyser.getFiles();
 		if (getMonitor() != null) {
 			getMonitor().setRange(0, files.size());
@@ -85,11 +87,10 @@ public class CoCoMo extends AbstractEvaluator {
 	}
 
 	private int getFileSLOC(File file) {
-		List<CodeRange> codeRanges = getEvaluableCodeRanges(file);
+		List<CodeRange> codeRanges = getProjectAnalyser().getAnalyzer(file)
+				.getNonFragmentCodeRangesRecursively();
 		for (CodeRange codeRange : codeRanges) {
 			if (codeRange.getCodeRangeType() == CodeRangeType.FILE) {
-				addFile(file);
-				addCodeRange(codeRange);
 				int sloc = getSLOC(codeRange);
 				addCodeRangeCoCoMo(codeRange, sloc);
 				return sloc;
@@ -116,8 +117,8 @@ public class CoCoMo extends AbstractEvaluator {
 		CoCoMoValueSet valueSet = new CoCoMoValueSet();
 		valueSet.setSloc(sloc);
 		valueSet.setComplexity(cocomoValues.getComplexity());
-		valueSet.setAverageSalary(cocomoValues.getAverageSalary(), cocomoValues
-				.getCurrency());
+		valueSet.setAverageSalary(cocomoValues.getAverageSalary(),
+				cocomoValues.getCurrency());
 		fileCoCoMoValues.put(codeRange, valueSet);
 	}
 
@@ -135,50 +136,34 @@ public class CoCoMo extends AbstractEvaluator {
 
 	@Override
 	public String getDescription(ReportingFormat format)
-			throws UnsupportedReportingFormatException {
+			throws UnsupportedFormatException {
 		if (format == ReportingFormat.HTML) {
 			return HTMLStandards.convertFlowTextToHTML(DESCRIPTION);
 		} else if (format == ReportingFormat.TEXT) {
 			return DESCRIPTION;
 		}
-		throw new UnsupportedReportingFormatException(format);
+		throw new UnsupportedFormatException(format);
 	}
 
 	@Override
-	public String getProjectComment(ReportingFormat format)
-			throws UnsupportedReportingFormatException {
+	public String getReport(ReportingFormat format)
+			throws UnsupportedFormatException {
 		if (format == ReportingFormat.HTML) {
 			return cocomoValues.toString(format);
 		} else if (format == ReportingFormat.TEXT) {
 			return cocomoValues.toString(format);
 		}
-		throw new UnsupportedReportingFormatException(format);
+		throw new UnsupportedFormatException(format);
 	}
 
 	@Override
-	public QualityLevel getProjectQuality() {
+	public QualityLevel getQuality() {
 		return QualityLevel.UNSPECIFIED;
 	}
 
 	@Override
-	public String getCodeRangeComment(CodeRange codeRange,
-			ReportingFormat format) throws UnsupportedReportingFormatException {
-		CoCoMoValueSet cocomo = fileCoCoMoValues.get(codeRange);
-		if (cocomo == null) {
-			return "";
-		}
-		if (format == ReportingFormat.HTML) {
-			return translator.i18n("Code Range Result:") + "<br/><br/>"
-					+ cocomo.toString(format);
-		} else if (format == ReportingFormat.TEXT) {
-			return translator.i18n("Code Range Result:") + "\n"
-					+ cocomo.toString(format);
-		}
-		throw new UnsupportedReportingFormatException(format);
+	public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
+		return EVALUATED_QUALITY_CHARACTERISTICS;
 	}
 
-	@Override
-	public QualityLevel getQuality(CodeRange codeRange) {
-		return QualityLevel.UNSPECIFIED;
-	}
 }

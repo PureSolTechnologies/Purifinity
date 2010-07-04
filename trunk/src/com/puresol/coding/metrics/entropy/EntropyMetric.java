@@ -12,11 +12,20 @@ package com.puresol.coding.metrics.entropy;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 
 import javax.i18n4j.Translator;
 
 import com.puresol.coding.analysis.CodeRange;
-import com.puresol.coding.evaluator.QualityLevel;
+import com.puresol.coding.evaluator.AbstractCodeRangeEvaluator;
+import com.puresol.coding.metrics.halstead.HalsteadMetric;
+import com.puresol.coding.quality.QualityCharacteristic;
+import com.puresol.coding.quality.QualityLevel;
+import com.puresol.coding.reporting.HTMLConverter;
+import com.puresol.reporting.ReportingFormat;
+import com.puresol.reporting.UnsupportedFormatException;
+import com.puresol.reporting.html.Anchor;
+import com.puresol.reporting.html.HTMLStandards;
 import com.puresol.utils.Property;
 
 /**
@@ -27,7 +36,7 @@ import com.puresol.utils.Property;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class EntropyMetric implements Metric {
+public class EntropyMetric extends AbstractCodeRangeEvaluator {
 
 	private static final long serialVersionUID = 1300404171923622327L;
 
@@ -35,11 +44,18 @@ public class EntropyMetric implements Metric {
 			.getTranslator(EntropyMetric.class);
 
 	public static final String NAME = translator.i18n("Entropy Metric");
+	public static final String DESCRIPTION = translator
+			.i18n("Entropy Metric calculation.");
 	public static final ArrayList<Property> SUPPORTED_PROPERTIES = new ArrayList<Property>();
 	static {
 		SUPPORTED_PROPERTIES.add(new Property(EntropyMetric.class, "enabled",
 				"Switches calculation of EntropyMetric on and off.",
 				Boolean.class, "true"));
+	}
+	public static final List<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new ArrayList<QualityCharacteristic>();
+	static {
+		EVALUATED_QUALITY_CHARACTERISTICS
+				.add(QualityCharacteristic.ANALYSABILITY);
 	}
 
 	/**
@@ -57,14 +73,15 @@ public class EntropyMetric implements Metric {
 	private double EntropyRedundancy;
 	private double Redundancy;
 	private double normalizedRedundancy;
-	private final HalsteadMetric halstead;
+	private HalsteadMetric halstead = null;
 
 	public EntropyMetric(CodeRange codeRange) {
-		halstead = new HalsteadMetric(codeRange);
-		calculate();
+		super(codeRange);
 	}
 
-	private void calculate() {
+	@Override
+	public void run() {
+		halstead = new HalsteadMetric(getCodeRange());
 		Hashtable<String, Integer> operants = halstead.getOperants();
 
 		maxEntropy = Math.log((double) halstead.get_n2()) / Math.log(2.0);
@@ -160,7 +177,7 @@ public class EntropyMetric implements Metric {
 	}
 
 	@Override
-	public QualityLevel getQualityLevel() {
+	public QualityLevel getQuality() {
 		if (getNormRedundancy() > 0.40) {
 			return QualityLevel.LOW;
 		}
@@ -171,12 +188,62 @@ public class EntropyMetric implements Metric {
 	}
 
 	@Override
-	public CodeRange getCodeRange() {
-		return halstead.getCodeRange();
-	}
-
-	@Override
 	public String getName() {
 		return NAME;
 	}
+
+	@Override
+	public String getDescription(ReportingFormat format)
+			throws UnsupportedFormatException {
+		return DESCRIPTION;
+	}
+
+	@Override
+	public String getReport(ReportingFormat format)
+			throws UnsupportedFormatException {
+		if (format == ReportingFormat.TEXT) {
+			return getTextReport();
+		} else if (format == ReportingFormat.HTML) {
+			return getHTMLReport();
+		}
+		throw new UnsupportedFormatException(format);
+	}
+
+	public String getTextReport() {
+		String report = "n\t" + Math.round(get_n() * 100.0) / 100.0 + "\t"
+				+ translator.i18n("Vocabulary size") + "\n";
+		report += "N\t" + Math.round(get_N() * 100.0) / 100.0 + "\t"
+				+ translator.i18n("Program length") + "\n";
+		report += "Entropy\t" + Math.round(getEntropy() * 100.0) / 100.0 + "\t"
+				+ translator.i18n("entropy") + "\n";
+		report += "maxEntropy\t" + Math.round(getMaxEntropy() * 100.0) / 100.0
+				+ "\t" + translator.i18n("maximized entropy") + "\n";
+		report += "normEntropy\t" + Math.round(getNormEntropy() * 100.0)
+				/ 100.0 + "\t" + translator.i18n("normalized entropy") + "\n";
+		report += "Entropy Redundance\t"
+				+ Math.round(getEntropyRedundancy() * 100.0) / 100.0 + "\t"
+				+ translator.i18n("redundance in entropy") + "\n";
+		report += "Redundance\t" + Math.round(getRedundancy() * 100.0) / 100.0
+				+ "\t" + translator.i18n("number of redundand vokables") + "\n";
+		report += "normRedundancy\t" + Math.round(getNormRedundancy() * 100.0)
+				/ 100.0 + "\t" + translator.i18n("ratio of redundand vocables")
+				+ "\n";
+		return report;
+	}
+
+	public String getHTMLReport() {
+		String report = Anchor.generate(getName(),
+				"<h3>" + translator.i18n("Entropy from Information Theory")
+						+ "</h3>");
+		report += HTMLConverter.convertQualityLevelToHTML(getQuality());
+		report += "<br/>";
+		report += HTMLStandards.convertTSVToTable(getTextReport());
+		return report;
+	}
+
+	@Override
+	public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
+		return EVALUATED_QUALITY_CHARACTERISTICS;
+	}
+
 }

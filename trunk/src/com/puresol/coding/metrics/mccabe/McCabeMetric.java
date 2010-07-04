@@ -11,6 +11,7 @@
 package com.puresol.coding.metrics.mccabe;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.i18n4j.Translator;
 
@@ -18,12 +19,18 @@ import org.apache.log4j.Logger;
 
 import com.puresol.coding.analysis.CodeRange;
 import com.puresol.coding.analysis.CodeRangeType;
-import com.puresol.coding.evaluator.QualityLevel;
+import com.puresol.coding.evaluator.AbstractCodeRangeEvaluator;
+import com.puresol.coding.quality.QualityCharacteristic;
+import com.puresol.coding.quality.QualityLevel;
+import com.puresol.coding.reporting.HTMLConverter;
 import com.puresol.coding.tokentypes.SourceTokenDefinition;
 import com.puresol.parser.Token;
 import com.puresol.parser.TokenException;
 import com.puresol.parser.TokenPublicity;
 import com.puresol.parser.TokenStream;
+import com.puresol.reporting.ReportingFormat;
+import com.puresol.reporting.UnsupportedFormatException;
+import com.puresol.reporting.html.Anchor;
 import com.puresol.utils.Property;
 
 /**
@@ -32,7 +39,7 @@ import com.puresol.utils.Property;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class McCabeMetric extends AbstractMetric {
+public class McCabeMetric extends AbstractCodeRangeEvaluator {
 
 	private static final long serialVersionUID = 4402746003873908301L;
 
@@ -41,21 +48,30 @@ public class McCabeMetric extends AbstractMetric {
 			.getTranslator(McCabeMetric.class);
 
 	public static final String NAME = translator.i18n("McCabe Metric");
+	public static final String DESCRIPTION = translator
+			.i18n("McCabe Metric calculation.");
 	public static final ArrayList<Property> SUPPORTED_PROPERTIES = new ArrayList<Property>();
 	static {
 		SUPPORTED_PROPERTIES.add(new Property(McCabeMetric.class, "enabled",
 				"Switches calculation of McCabe Metric on and off.",
 				Boolean.class, "true"));
 	}
+	public static final List<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new ArrayList<QualityCharacteristic>();
+	static {
+		EVALUATED_QUALITY_CHARACTERISTICS
+				.add(QualityCharacteristic.ANALYSABILITY);
+		EVALUATED_QUALITY_CHARACTERISTICS
+				.add(QualityCharacteristic.TESTABILITY);
+	}
 
 	private int cyclomaticNumber = 1;
 
 	public McCabeMetric(CodeRange codeRange) {
 		super(codeRange);
-		calculate();
 	}
 
-	private void calculate() {
+	@Override
+	public void run() {
 		try {
 			CodeRange codeRange = getCodeRange();
 			TokenStream tokenStream = codeRange.getTokenStream();
@@ -96,7 +112,7 @@ public class McCabeMetric extends AbstractMetric {
 	}
 
 	@Override
-	public QualityLevel getQualityLevel() {
+	public QualityLevel getQuality() {
 		CodeRange range = getCodeRange();
 		if ((range.getCodeRangeType() == CodeRangeType.FILE)
 				|| (range.getCodeRangeType() == CodeRangeType.CLASS)
@@ -127,4 +143,36 @@ public class McCabeMetric extends AbstractMetric {
 	public String getName() {
 		return NAME;
 	}
+
+	@Override
+	public String getDescription(ReportingFormat format)
+			throws UnsupportedFormatException {
+		return DESCRIPTION;
+	}
+
+	@Override
+	public String getReport(ReportingFormat format)
+			throws UnsupportedFormatException {
+		if (format == ReportingFormat.HTML) {
+			return getHTMLReport();
+		} else {
+			throw new UnsupportedFormatException(format);
+		}
+	}
+
+	public String getHTMLReport() {
+		String report = Anchor.generate(getName(),
+				"<h3>" + translator.i18n("McCabe Cyclomatic Number") + "</h3>");
+		report += HTMLConverter.convertQualityLevelToHTML(getQuality());
+		report += "<br/>";
+		report += translator.i18n("Cyclomatic number v(G)") + "="
+				+ getCyclomaticNumber();
+		return report;
+	}
+
+	@Override
+	public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
+		return EVALUATED_QUALITY_CHARACTERISTICS;
+	}
+
 }

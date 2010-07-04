@@ -2,39 +2,26 @@ package com.puresol.coding.metrics.cocomo;
 
 import java.util.List;
 
-import com.puresol.coding.analysis.Analyser;
-import com.puresol.coding.analysis.CodeRange;
-import com.puresol.coding.analysis.ProjectAnalyser;
-import com.puresol.coding.evaluator.Evaluator;
-import com.puresol.coding.evaluator.EvaluatorFactory;
-import com.puresol.coding.evaluator.NotSupportedException;
+import com.puresol.coding.analysis.ProjectAnalyzer;
+import com.puresol.coding.evaluator.ProjectEvaluator;
+import com.puresol.coding.evaluator.ProjectEvaluatorFactory;
+import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.utils.Property;
 
-public class CoCoMoFactory implements EvaluatorFactory {
+public class CoCoMoFactory implements ProjectEvaluatorFactory {
 
 	@Override
-	public Evaluator create(CodeRange codeRange) throws NotSupportedException {
-		throw new NotSupportedException();
-	}
-
-	@Override
-	public Evaluator create(Analyser analyser) throws NotSupportedException {
-		throw new NotSupportedException();
-	}
-
-	@Override
-	public Evaluator create(ProjectAnalyser projectAnalyser)
-			throws NotSupportedException {
+	public ProjectEvaluator create(ProjectAnalyzer projectAnalyser) {
 		return new CoCoMo(projectAnalyser);
 	}
 
 	@Override
-	public String getEvaluatorDescription() {
+	public String getDescription() {
 		return CoCoMo.DESCRIPTION;
 	}
 
 	@Override
-	public String getEvaluatorName() {
+	public String getName() {
 		return CoCoMo.NAME;
 	}
 
@@ -44,18 +31,9 @@ public class CoCoMoFactory implements EvaluatorFactory {
 	}
 
 	@Override
-	public boolean isCodeRangeEvaluator() {
-		return false;
-	}
-
-	@Override
-	public boolean isFileEvaluator() {
-		return false;
-	}
-
-	@Override
-	public boolean isProjectEvaluator() {
-		return true;
+	public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

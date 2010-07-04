@@ -12,6 +12,7 @@ package com.puresol.coding.metrics.halstead;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 
 import javax.i18n4j.Translator;
 
@@ -19,16 +20,23 @@ import org.apache.log4j.Logger;
 
 import com.puresol.coding.analysis.CodeRange;
 import com.puresol.coding.analysis.CodeRangeType;
-import com.puresol.coding.evaluator.QualityLevel;
+import com.puresol.coding.evaluator.AbstractCodeRangeEvaluator;
+import com.puresol.coding.quality.QualityCharacteristic;
+import com.puresol.coding.quality.QualityLevel;
+import com.puresol.coding.reporting.HTMLConverter;
 import com.puresol.coding.tokentypes.SourceTokenDefinition;
 import com.puresol.coding.tokentypes.SymbolType;
 import com.puresol.parser.Token;
 import com.puresol.parser.TokenException;
 import com.puresol.parser.TokenPublicity;
 import com.puresol.parser.TokenStream;
+import com.puresol.reporting.ReportingFormat;
+import com.puresol.reporting.UnsupportedFormatException;
+import com.puresol.reporting.html.Anchor;
+import com.puresol.reporting.html.HTMLStandards;
 import com.puresol.utils.Property;
 
-public class HalsteadMetric extends AbstractMetric {
+public class HalsteadMetric extends AbstractCodeRangeEvaluator {
 
 	private static final long serialVersionUID = -7823038852668468658L;
 
@@ -37,11 +45,18 @@ public class HalsteadMetric extends AbstractMetric {
 			.getTranslator(HalsteadMetric.class);
 
 	public static final String NAME = translator.i18n("Halstead Metric");
+	public static final String DESCRIPTION = translator
+			.i18n("Halstead Metric calculation.");
 	public static final ArrayList<Property> SUPPORTED_PROPERTIES = new ArrayList<Property>();
 	static {
 		SUPPORTED_PROPERTIES.add(new Property(HalsteadMetric.class, "enabled",
 				"Switches calculation of Halstead Metric on and off.",
 				Boolean.class, "true"));
+	}
+	public static final List<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new ArrayList<QualityCharacteristic>();
+	static {
+		EVALUATED_QUALITY_CHARACTERISTICS
+				.add(QualityCharacteristic.ANALYSABILITY);
 	}
 
 	private final Hashtable<String, Integer> operators = new Hashtable<String, Integer>();
@@ -102,10 +117,10 @@ public class HalsteadMetric extends AbstractMetric {
 
 	public HalsteadMetric(CodeRange codeRange) {
 		super(codeRange);
-		calculate();
 	}
 
-	private void calculate() {
+	@Override
+	public void run() {
 		try {
 			createHashtables();
 			calculateValues();
@@ -273,7 +288,7 @@ public class HalsteadMetric extends AbstractMetric {
 	}
 
 	@Override
-	public QualityLevel getQualityLevel() {
+	public QualityLevel getQuality() {
 		CodeRange range = getCodeRange();
 		if ((range.getCodeRangeType() == CodeRangeType.FILE)
 				|| (range.getCodeRangeType() == CodeRangeType.CLASS)
@@ -310,4 +325,97 @@ public class HalsteadMetric extends AbstractMetric {
 	public String getName() {
 		return NAME;
 	}
+
+	@Override
+	public String getDescription(ReportingFormat format)
+			throws UnsupportedFormatException {
+		return DESCRIPTION;
+	}
+
+	@Override
+	public String getReport(ReportingFormat format)
+			throws UnsupportedFormatException {
+		if (format == ReportingFormat.HTML) {
+			return getHTMLReport();
+		} else {
+			throw new UnsupportedFormatException(format);
+		}
+	}
+
+	public String getNumberReport() {
+		String report = "n1\t" + get_n1() + "\t"
+				+ translator.i18n("Number of different operators") + "\n";
+		report += "N1\t" + get_N1() + "\t"
+				+ translator.i18n("Total number operators") + "\n";
+		report += "n2\t" + get_n2() + "\t"
+				+ translator.i18n("Number of different operands") + "\n";
+		report += "N2\t" + get_N2() + "\t"
+				+ translator.i18n("Total number of operands") + "\n";
+		report += "n\t" + Math.round(get_n() * 100.0) / 100.0 + "\t"
+				+ translator.i18n("Vocabulary size") + "\n";
+		report += "N\t" + Math.round(get_N() * 100.0) / 100.0 + "\t"
+				+ translator.i18n("Program length") + "\n";
+		report += "HL\t" + Math.round(get_HL() * 100.0) / 100.0 + "\t"
+				+ translator.i18n("Halstead length") + "\n";
+		report += "HV\t" + Math.round(get_HV() * 100.0) / 100.0 + "\t"
+				+ translator.i18n("Halstead volume") + "\n";
+		report += "D\t" + Math.round(get_D() * 100.0) / 100.0 + "\t"
+				+ translator.i18n("Difficulty level") + "\n";
+		report += "L\t" + Math.round(get_L() * 100.0) / 100.0 + "\t"
+				+ translator.i18n("Program level") + "\n";
+		report += "E\t" + Math.round(get_E() * 100.0) / 100.0 + "\t"
+				+ translator.i18n("Effort to implement") + "\n";
+		report += "T\t" + Math.round(get_T() * 100.0) / 100.0 + "\t"
+				+ translator.i18n("Implementatiom time [s]") + "\n";
+		report += "B\t" + Math.round(get_B() * 100.0) / 100.0 + "\t"
+				+ translator.i18n("Number of delivered bugs") + "\n";
+		return report;
+	}
+
+	public String getOperatorReport() {
+		String report = "";
+		for (String operator : getOperators().keySet()) {
+			int number = getOperators().get(operator);
+			report += operator + "\t" + number + "\n";
+		}
+		return report;
+	}
+
+	public String getHTMLOperatorReport() {
+		return HTMLStandards.convertTSVToTable(getOperatorReport());
+	}
+
+	public String getOperantReport() {
+		String report = "";
+		for (String operant : getOperants().keySet()) {
+			int number = getOperants().get(operant);
+			report += operant + "\t" + number + "\n";
+		}
+		return report;
+	}
+
+	public String getHTMLOperantReport() {
+		return HTMLStandards.convertTSVToTable(getOperantReport());
+	}
+
+	public String getHTMLReport() {
+		String report = Anchor.generate(getName(),
+				"<h3>" + translator.i18n("Halstead Metric") + "</h3>");
+		report += HTMLConverter.convertQualityLevelToHTML(getQuality());
+		report += "<br/>";
+		report += HTMLStandards.convertTSVToTable(getNumberReport());
+
+		report += "<b>" + translator.i18n("Operators") + "</b>";
+		report += getHTMLOperatorReport();
+
+		report += "<b>" + translator.i18n("Operands") + "</b>";
+		report += getHTMLOperantReport();
+		return report;
+	}
+
+	@Override
+	public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
+		return EVALUATED_QUALITY_CHARACTERISTICS;
+	}
+
 }

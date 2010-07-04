@@ -1,6 +1,5 @@
 package com.puresol.coding.metrics.codedepth;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,20 +7,21 @@ import javax.i18n4j.Translator;
 
 import org.apache.log4j.Logger;
 
-import com.puresol.coding.analysis.Analyser;
 import com.puresol.coding.analysis.CodeRange;
-import com.puresol.coding.analysis.ProjectAnalyser;
-import com.puresol.coding.evaluator.AbstractEvaluator;
-import com.puresol.coding.evaluator.QualityLevel;
-import com.puresol.coding.evaluator.UnsupportedReportingFormatException;
+import com.puresol.coding.evaluator.AbstractCodeRangeEvaluator;
+import com.puresol.coding.quality.QualityCharacteristic;
+import com.puresol.coding.quality.QualityLevel;
+import com.puresol.coding.reporting.HTMLConverter;
 import com.puresol.coding.tokentypes.SourceTokenDefinition;
 import com.puresol.parser.Token;
 import com.puresol.parser.TokenException;
 import com.puresol.parser.TokenStream;
 import com.puresol.reporting.ReportingFormat;
+import com.puresol.reporting.UnsupportedFormatException;
+import com.puresol.reporting.html.Anchor;
 import com.puresol.utils.Property;
 
-public class CodeDepth extends AbstractEvaluator {
+public class CodeDepth extends AbstractCodeRangeEvaluator {
 
 	private static final long serialVersionUID = -2151200082569811564L;
 
@@ -38,51 +38,28 @@ public class CodeDepth extends AbstractEvaluator {
 				"Switches calculation of CodeDepth on and off.", Boolean.class,
 				"true"));
 	}
+	public static final List<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new ArrayList<QualityCharacteristic>();
+	static {
+		EVALUATED_QUALITY_CHARACTERISTICS
+				.add(QualityCharacteristic.ANALYSABILITY);
+	}
 
 	private int maxLayer = 0;
 
-	public CodeDepth(ProjectAnalyser range) {
+	public CodeDepth(CodeRange range) {
 		super(range);
 	}
 
 	@Override
 	public void run() {
-		ProjectAnalyser projectAnalyser = getProjectAnalyser();
-		List<File> files = projectAnalyser.getFiles();
-		if (getMonitor() != null) {
-			getMonitor().setRange(0, files.size());
-			getMonitor().setDescription(NAME);
-		}
-		int count = 0;
-		for (File file : files) {
-			if (Thread.interrupted()) {
-				return;
-			}
-			if (getMonitor() != null) {
-				count++;
-				getMonitor().setStatus(count);
-			}
-			analyseFile(file);
-		}
-		if (getMonitor() != null) {
-			getMonitor().finish();
-		}
-	}
-
-	private void analyseFile(File file) {
-		Analyser analyser = getProjectAnalyser().getAnalyser(file);
-		analyser.getNamedCodeRanges();
-	}
-	
-	private void calculate() {
 		try {
-			CodeRange range = getCodeRange();
-			TokenStream stream = range.getTokenStream();
+			TokenStream stream = getCodeRange().getTokenStream();
 			int layer = 0;
-			for (int index = range.getStartId(); index <= range.getStopId(); index++) {
+			for (int index = getCodeRange().getStartId(); index <= getCodeRange()
+					.getStopId(); index++) {
 				Token token = stream.get(index);
-				SourceTokenDefinition def;
-				def = (SourceTokenDefinition) token.getDefinitionInstance();
+				SourceTokenDefinition def = (SourceTokenDefinition) token
+						.getDefinitionInstance();
 				if (def.changeBlockLayer() != 0) {
 					layer += def.changeBlockLayer();
 				}
@@ -104,7 +81,48 @@ public class CodeDepth extends AbstractEvaluator {
 	}
 
 	@Override
-	public QualityLevel getQualityLevel() {
+	public String getName() {
+		return NAME;
+	}
+
+	@Override
+	public String getDescription(ReportingFormat format)
+			throws UnsupportedFormatException {
+		return DESCRIPTION;
+	}
+
+	@Override
+	public String getReport(ReportingFormat format)
+			throws UnsupportedFormatException {
+		if (format == ReportingFormat.TEXT) {
+			return getTextReport();
+		} else if (format == ReportingFormat.HTML) {
+			return getHTMLReport();
+		}
+		throw new UnsupportedFormatException(format);
+	}
+
+	private String getTextReport() {
+		String report = translator.i18n("CodeDepth") + "\n\n";
+		report += translator.i18n("Quality: ") + getQuality().getIdentifier();
+		report += "\n";
+		report += translator.i18n("Maximum code depth: ");
+		report += getMaxLayer();
+		return report;
+	}
+
+	private String getHTMLReport() {
+		String report = Anchor.generate(getName(),
+				"<h3>" + translator.i18n("CodeDepth") + "</h3>");
+		report += HTMLConverter.convertQualityLevelToHTML(getQuality());
+		report += "<br/>";
+		report += "<p>" + translator.i18n("Maximum code depth: ") + "</p>";
+		report += getMaxLayer();
+		return report;
+	}
+
+	@Override
+	public QualityLevel getQuality() {
 		int maxLayer = getMaxLayer();
 		if (maxLayer > 6) {
 			return QualityLevel.LOW;
@@ -115,40 +133,7 @@ public class CodeDepth extends AbstractEvaluator {
 	}
 
 	@Override
-	public String getName() {
-		return NAME;
-	}
-
-	@Override
-	public String getCodeRangeComment(CodeRange codeRange,
-			ReportingFormat format) throws UnsupportedReportingFormatException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getDescription(ReportingFormat format)
-			throws UnsupportedReportingFormatException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getProjectComment(ReportingFormat format)
-			throws UnsupportedReportingFormatException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public QualityLevel getProjectQuality() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public QualityLevel getQuality(CodeRange codeRange) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
+		return EVALUATED_QUALITY_CHARACTERISTICS;
 	}
 }

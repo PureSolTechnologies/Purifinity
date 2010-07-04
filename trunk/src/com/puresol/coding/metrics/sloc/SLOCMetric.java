@@ -17,10 +17,17 @@ import javax.i18n4j.Translator;
 
 import com.puresol.coding.analysis.CodeRange;
 import com.puresol.coding.analysis.CodeRangeType;
-import com.puresol.coding.evaluator.QualityLevel;
+import com.puresol.coding.evaluator.AbstractCodeRangeEvaluator;
+import com.puresol.coding.quality.QualityCharacteristic;
+import com.puresol.coding.quality.QualityLevel;
+import com.puresol.coding.reporting.HTMLConverter;
 import com.puresol.parser.Token;
 import com.puresol.parser.TokenPublicity;
 import com.puresol.parser.TokenStream;
+import com.puresol.reporting.ReportingFormat;
+import com.puresol.reporting.UnsupportedFormatException;
+import com.puresol.reporting.html.Anchor;
+import com.puresol.reporting.html.HTMLStandards;
 import com.puresol.statistics.Statistics;
 import com.puresol.utils.Property;
 
@@ -32,7 +39,7 @@ import com.puresol.utils.Property;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class SLOCMetric extends AbstractMetric {
+public class SLOCMetric extends AbstractCodeRangeEvaluator {
 
 	private static final long serialVersionUID = -4313208925226028154L;
 
@@ -40,11 +47,20 @@ public class SLOCMetric extends AbstractMetric {
 			.getTranslator(SLOCMetric.class);
 
 	public static final String NAME = translator.i18n("SLOC Metric");
+	public static final String DESCRIPTION = translator
+			.i18n("SLOC Metric calculation.");
 	public static final ArrayList<Property> SUPPORTED_PROPERTIES = new ArrayList<Property>();
 	static {
 		SUPPORTED_PROPERTIES.add(new Property(SLOCMetric.class, "enabled",
 				"Switches calculation of SLOC Metric on and off.",
 				Boolean.class, "true"));
+	}
+	public static final List<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new ArrayList<QualityCharacteristic>();
+	static {
+		EVALUATED_QUALITY_CHARACTERISTICS
+				.add(QualityCharacteristic.ANALYSABILITY);
+		EVALUATED_QUALITY_CHARACTERISTICS
+				.add(QualityCharacteristic.TESTABILITY);
 	}
 
 	private final TokenStream stream;
@@ -64,10 +80,10 @@ public class SLOCMetric extends AbstractMetric {
 	public SLOCMetric(CodeRange codeRange) {
 		super(codeRange);
 		this.stream = codeRange.getTokenStream();
-		calculate();
 	}
 
-	private void calculate() {
+	@Override
+	public void run() {
 		countLines();
 		collectLineLengths();
 	}
@@ -263,7 +279,7 @@ public class SLOCMetric extends AbstractMetric {
 	}
 
 	@Override
-	public QualityLevel getQualityLevel() {
+	public QualityLevel getQuality() {
 		QualityLevel levelLineCount = getQualityLevelLineCount();
 		return levelLineCount;
 		// QualityLevel levelLineLength = getQualityLevelLineLength();
@@ -315,4 +331,90 @@ public class SLOCMetric extends AbstractMetric {
 	public String getName() {
 		return NAME;
 	}
+
+	@Override
+	public String getDescription(ReportingFormat format)
+			throws UnsupportedFormatException {
+		return DESCRIPTION;
+	}
+
+	@Override
+	public String getReport(ReportingFormat format)
+			throws UnsupportedFormatException {
+		if (format == ReportingFormat.HTML) {
+			return getHTMLReport();
+		} else {
+			throw new UnsupportedFormatException(format);
+		}
+	}
+
+	public String getLineCountReport() {
+		String report = "phyLoc\t" + getPhyLOC() + "\t"
+				+ translator.i18n("physical lines of code") + "\n";
+		report += "proLoc\t" + getProLOC() + "\t"
+				+ translator.i18n("productive lines of code") + "\n";
+		report += "comLoc\t" + getComLOC() + "\t"
+				+ translator.i18n("commented lines of code") + "\n";
+		report += "blLoc\t" + getBlLOC() + "\t"
+				+ translator.i18n("blank lines") + "\n";
+		return report;
+	}
+
+	public String getHTMLLineCountReport() {
+		return HTMLStandards.convertTSVToTable(getLineCountReport());
+	}
+
+	public String getLineLengthReport() {
+		Statistics normal = getLineStatistics();
+		Statistics trimmed = getTrimmedLineStatistics();
+		Statistics prod = getProductiveLineStatistics();
+		Statistics prodTrimmed = getTrimmedProductiveLineStatistics();
+		String report = "\tnormal\ttrimmed\tproductive"
+				+ "\tproductive trimmed\n";
+		report += "avg\t" + Math.round(normal.getAvg() * 100.0) / 100.0 + "\t"
+				+ Math.round(trimmed.getAvg() * 100.0) / 100.0 + "\t"
+				+ Math.round(prod.getAvg() * 100.0) / 100.0 + "\t"
+				+ Math.round(prodTrimmed.getAvg() * 100.0) / 100.0 + "\n";
+		report += "median\t" + Math.round(normal.getMedian()) + "\t"
+				+ Math.round(trimmed.getMedian()) + "\t"
+				+ Math.round(prod.getMedian()) + "\t"
+				+ Math.round(prodTrimmed.getMedian()) + "\n";
+		report += "standard deviation\t"
+				+ Math.round(normal.getStdDev() * 100.0) / 100.0 + "\t"
+				+ Math.round(trimmed.getStdDev() * 100.0) / 100.0 + "\t"
+				+ Math.round(prod.getStdDev() * 100.0) / 100.0 + "\t"
+				+ Math.round(prodTrimmed.getStdDev() * 100.0) / 100.0 + "\n";
+		report += "min\t" + Math.round(normal.getMin()) + "\t"
+				+ Math.round(trimmed.getMin()) + "\t"
+				+ Math.round(prod.getMin()) + "\t"
+				+ Math.round(prodTrimmed.getMin()) + "\n";
+		report += "max\t" + Math.round(normal.getMax()) + "\t"
+				+ Math.round(trimmed.getMax()) + "\t"
+				+ Math.round(prod.getMax()) + "\t"
+				+ Math.round(prodTrimmed.getMax()) + "\n";
+		return report;
+	}
+
+	public String getHTMLLineLengthReport() {
+		return HTMLStandards.convertTSVToTable(getLineLengthReport());
+	}
+
+	public String getHTMLReport() {
+		String report = Anchor.generate(getName(),
+				"<h3>" + translator.i18n("SLOC Metrics") + "</h3>");
+		report += HTMLConverter.convertQualityLevelToHTML(getQuality());
+		report += "<br/>";
+		report += "<b>Line Counts</b>";
+		report += getHTMLLineCountReport();
+		report += "<b>Line Lengths</b>";
+		report += getHTMLLineLengthReport();
+		return report;
+
+	}
+
+	@Override
+	public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
+		return EVALUATED_QUALITY_CHARACTERISTICS;
+	}
+
 }
