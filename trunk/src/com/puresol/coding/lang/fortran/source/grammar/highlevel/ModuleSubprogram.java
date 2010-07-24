@@ -7,14 +7,15 @@ import com.puresol.parser.PartDoesNotMatchException;
 
 /**
  * <pre>
- * R208 execution-part is executable-construct
- * [ execution-part-construct ] ...
+ * R1108 module-subprogram is function-subprogram
+ * or subroutine-subprogram
+ * or separate-module-subprogram
  * </pre>
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class ExecutionPart extends AbstractFortranParser {
+public class ModuleSubprogram extends AbstractFortranParser {
 
 	private static final long serialVersionUID = 2177336093526924891L;
 
@@ -25,8 +26,11 @@ public class ExecutionPart extends AbstractFortranParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		expectPart(ExecutableConstruct.class);
-		while (acceptPart(ExecutionPartConstruct.class) != null) {
+		if (acceptPart(FunctionSubprogram.class) != null) {
+		} else if (acceptPart(SubroutineSubprogram.class) != null) {
+		} else if (acceptPart(SeparateModuleSubprogram.class) != null) {
+		} else {
+			abort();
 		}
 		finish();
 	}

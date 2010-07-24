@@ -1,20 +1,27 @@
 package com.puresol.coding.lang.fortran.source.grammar.highlevel;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
+import com.puresol.parser.Parser;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
 /**
  * <pre>
- * R208 execution-part is executable-construct
- * [ execution-part-construct ] ...
+ * R1237 separate-module-subprogram is mp-subprogram-stmt
+ * [ specification-part ]
+ * [ execution-part ]
+ * [ internal-subprogram-part ]
+ * end-mp-subprogram-stmt
  * </pre>
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class ExecutionPart extends AbstractFortranParser {
+public class SeparateModuleSubprogram extends AbstractFortranParser {
 
 	private static final long serialVersionUID = 2177336093526924891L;
 
@@ -25,9 +32,11 @@ public class ExecutionPart extends AbstractFortranParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		expectPart(ExecutableConstruct.class);
-		while (acceptPart(ExecutionPartConstruct.class) != null) {
-		}
+		expectPart(MpSubprogramStmt.class);
+		acceptPart(SpecificationPart.class);
+		acceptPart(ExecutionPart.class);
+		acceptPart(InternalSubprogramPart.class);
+		expectPart(EndMpSubprogramStmt.class);
 		finish();
 	}
 
