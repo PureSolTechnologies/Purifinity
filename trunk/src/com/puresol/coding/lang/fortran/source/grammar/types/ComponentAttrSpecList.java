@@ -2,9 +2,6 @@ package com.puresol.coding.lang.fortran.source.grammar.types;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
-import com.puresol.coding.lang.fortran.source.keywords.KindKeyword;
-import com.puresol.coding.lang.fortran.source.keywords.LenKeyword;
-import com.puresol.coding.lang.fortran.source.symbols.Colon;
 import com.puresol.coding.lang.fortran.source.symbols.Comma;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
@@ -29,7 +26,7 @@ public class ComponentAttrSpecList extends AbstractFortranParser {
 	public void scan() throws PartDoesNotMatchException, ParserException {
 		expectPart(ComponentAttrSpec.class);
 		while (acceptToken(Comma.class) != null) {
-			expectToken(ComponentAttrSpec.class);
+			expectPart(ComponentAttrSpec.class);
 		}
 		finish();
 	}

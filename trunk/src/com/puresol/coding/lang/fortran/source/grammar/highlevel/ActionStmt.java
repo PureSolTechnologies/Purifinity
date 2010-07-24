@@ -8,6 +8,8 @@ import com.puresol.coding.lang.fortran.AbstractFortranParser;
 import com.puresol.coding.lang.fortran.source.grammar.dataobjects.AllocateStmt;
 import com.puresol.coding.lang.fortran.source.grammar.dataobjects.DeallocateStmt;
 import com.puresol.coding.lang.fortran.source.grammar.dataobjects.NullifyStmt;
+import com.puresol.coding.lang.fortran.source.grammar.expressions.PointerAssignmentStmt;
+import com.puresol.coding.lang.fortran.source.grammar.expressions.WhereStmt;
 import com.puresol.parser.Parser;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
@@ -91,7 +93,7 @@ public class ActionStmt extends AbstractFortranParser {
 		} else if (acceptPart(LockStmt.class) != null) {
 		} else if (acceptPart(NullifyStmt.class) != null) {
 		} else if (acceptPart(OpenStmt.class) != null) {
-		} else if (acceptPart(PointerAssignment - stmt.class) != null) {
+		} else if (acceptPart(PointerAssignmentStmt.class) != null) {
 		} else if (acceptPart(PrintStmt.class) != null) {
 		} else if (acceptPart(ReadStmt.class) != null) {
 		} else if (acceptPart(ReturnStmt.class) != null) {

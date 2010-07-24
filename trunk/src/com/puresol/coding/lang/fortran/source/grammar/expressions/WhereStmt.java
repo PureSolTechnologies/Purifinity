@@ -1,10 +1,9 @@
-package com.puresol.coding.lang.fortran.source.grammar.types;
+package com.puresol.coding.lang.fortran.source.grammar.expressions;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
-import com.puresol.coding.lang.fortran.source.grammar.expressions.Expr;
-import com.puresol.coding.lang.fortran.source.literals.NameLiteral;
-import com.puresol.coding.lang.fortran.source.symbols.Equals;
+import com.puresol.coding.lang.fortran.source.keywords.WhereKeyword;
+import com.puresol.coding.lang.fortran.source.symbols.Colon;
 import com.puresol.coding.lang.fortran.source.symbols.LParen;
 import com.puresol.coding.lang.fortran.source.symbols.RParen;
 import com.puresol.parser.ParserException;
@@ -12,15 +11,13 @@ import com.puresol.parser.PartDoesNotMatchException;
 
 /**
  * <pre>
- * R457 component-data-source is expr
- * or data-target
- * or proc-target
+ * R741 where-stmt is WHERE ( mask-expr ) where-assignment-stmt
  * </pre>
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class ComponentDataSource extends AbstractFortranParser {
+public class WhereStmt extends AbstractFortranParser {
 
 	private static final long serialVersionUID = 2177336093526924891L;
 
@@ -31,13 +28,11 @@ public class ComponentDataSource extends AbstractFortranParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		if (acceptPart(Expr.class) != null) {
-		} else if (acceptPart(DataTarget.class) != null) {
-		} else if (acceptPart(ProcTarget.class) != null) {
-		} else {
-			abort();
-		}
+		expectToken(WhereKeyword.class);
+		expectToken(LParen.class);
+		expectPart(MaskExpr.class);
+		expectToken(RParen.class);
+		expectPart(WhereAssignmentStmt.class);
 		finish();
 	}
-
 }

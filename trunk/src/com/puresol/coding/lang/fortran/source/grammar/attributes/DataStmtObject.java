@@ -2,11 +2,7 @@ package com.puresol.coding.lang.fortran.source.grammar.attributes;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
-import com.puresol.coding.lang.fortran.source.keywords.ContiguousKeyword;
-import com.puresol.coding.lang.fortran.source.keywords.DataKeyword;
-import com.puresol.coding.lang.fortran.source.symbols.Colon;
-import com.puresol.coding.lang.fortran.source.symbols.Comma;
-import com.puresol.coding.lang.fortran.source.symbols.Slash;
+import com.puresol.coding.lang.fortran.source.grammar.dataobjects.Variable;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 

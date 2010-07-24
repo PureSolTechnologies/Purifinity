@@ -2,10 +2,7 @@ package com.puresol.coding.lang.fortran.source.grammar.dataobjects;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
-import com.puresol.coding.lang.fortran.source.keywords.CommonKeyword;
-import com.puresol.coding.lang.fortran.source.literals.NameLiteral;
-import com.puresol.coding.lang.fortran.source.symbols.Comma;
-import com.puresol.coding.lang.fortran.source.symbols.Slash;
+import com.puresol.coding.lang.fortran.source.grammar.expressions.Expr;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
@@ -29,7 +26,7 @@ public class Variable extends AbstractFortranParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		if (acceptPart(Variable.class) != null) {
+		if (acceptPart(Designator.class) != null) {
 		} else if (acceptPart(Expr.class) != null) {
 		} else {
 			abort();

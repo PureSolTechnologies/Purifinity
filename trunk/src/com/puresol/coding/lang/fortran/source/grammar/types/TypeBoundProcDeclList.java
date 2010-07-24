@@ -2,7 +2,6 @@ package com.puresol.coding.lang.fortran.source.grammar.types;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
-import com.puresol.coding.lang.fortran.source.literals.NameLiteral;
 import com.puresol.coding.lang.fortran.source.symbols.Comma;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
@@ -25,9 +24,9 @@ public class TypeBoundProcDeclList extends AbstractFortranParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		expectToken(TypeBoundProcDecl.class);
+		expectPart(TypeBoundProcDecl.class);
 		while (acceptToken(Comma.class) != null) {
-			expectToken(TypeBoundProcDecl.class);
+			expectPart(TypeBoundProcDecl.class);
 		}
 		finish();
 	}
