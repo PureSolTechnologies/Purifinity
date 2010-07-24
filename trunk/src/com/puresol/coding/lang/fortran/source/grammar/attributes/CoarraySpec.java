@@ -2,8 +2,6 @@ package com.puresol.coding.lang.fortran.source.grammar.attributes;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
-import com.puresol.coding.lang.fortran.source.keywords.PrivateKeyword;
-import com.puresol.coding.lang.fortran.source.keywords.PublicKeyword;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
@@ -28,7 +26,7 @@ public class CoarraySpec extends AbstractFortranParser {
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
 		if (acceptPart(DeferredCoshapeSpecList.class) != null) {
-		} else if (acceptToken(ExplicitCoshapeSpec.class) != null) {
+		} else if (acceptPart(ExplicitCoshapeSpec.class) != null) {
 		} else {
 			abort();
 		}

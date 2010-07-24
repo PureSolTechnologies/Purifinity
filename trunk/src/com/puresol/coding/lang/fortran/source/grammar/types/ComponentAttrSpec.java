@@ -10,9 +10,9 @@ import com.puresol.coding.lang.fortran.source.keywords.ContiguousKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.DimensionKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.PointerKeyword;
 import com.puresol.coding.lang.fortran.source.symbols.LParen;
-import com.puresol.coding.lang.fortran.source.symbols.LSquareBracket;
+import com.puresol.coding.lang.fortran.source.symbols.LBracket;
 import com.puresol.coding.lang.fortran.source.symbols.RParen;
-import com.puresol.coding.lang.fortran.source.symbols.RSquareBracket;
+import com.puresol.coding.lang.fortran.source.symbols.RBracket;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
@@ -43,9 +43,9 @@ public class ComponentAttrSpec extends AbstractFortranParser {
 		if (acceptPart(AccessSpec.class) != null) {
 		} else if (acceptToken(AllocatableKeyword.class) != null) {
 		} else if (acceptToken(CodimensionKeyword.class) != null) {
-			acceptToken(LSquareBracket.class);
+			acceptToken(LBracket.class);
 			acceptPart(CoarraySpec.class);
-			acceptToken(RSquareBracket.class);
+			acceptToken(RBracket.class);
 		} else if (acceptToken(ContiguousKeyword.class) != null) {
 		} else if (acceptToken(DimensionKeyword.class) != null) {
 			acceptToken(LParen.class);

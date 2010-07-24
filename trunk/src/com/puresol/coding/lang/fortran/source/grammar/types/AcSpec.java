@@ -8,7 +8,7 @@ import com.puresol.coding.lang.fortran.source.symbols.Comma;
 import com.puresol.coding.lang.fortran.source.symbols.Equals;
 import com.puresol.coding.lang.fortran.source.symbols.LParen;
 import com.puresol.coding.lang.fortran.source.symbols.RParen;
-import com.puresol.coding.lang.fortran.source.symbols.RSquareBracket;
+import com.puresol.coding.lang.fortran.source.symbols.RBracket;
 import com.puresol.coding.lang.fortran.source.symbols.Slash;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;

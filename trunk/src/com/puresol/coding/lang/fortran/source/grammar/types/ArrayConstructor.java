@@ -4,7 +4,7 @@ import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
 import com.puresol.coding.lang.fortran.source.symbols.LParen;
 import com.puresol.coding.lang.fortran.source.symbols.RParen;
-import com.puresol.coding.lang.fortran.source.symbols.RSquareBracket;
+import com.puresol.coding.lang.fortran.source.symbols.RBracket;
 import com.puresol.coding.lang.fortran.source.symbols.Slash;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
@@ -34,9 +34,9 @@ public class ArrayConstructor extends AbstractFortranParser {
 			expectPart(AcSpec.class);
 			expectToken(Slash.class);
 			expectToken(RParen.class);
-		} else if (acceptToken(RSquareBracket.class) != null) {
+		} else if (acceptToken(RBracket.class) != null) {
 			expectPart(AcSpec.class);
-			expectToken(RSquareBracket.class);
+			expectToken(RBracket.class);
 		} else {
 			abort();
 		}

@@ -3,6 +3,7 @@ package com.puresol.coding.lang.fortran.source.grammar.attributes;
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
 import com.puresol.coding.lang.fortran.source.grammar.types.CharLength;
+import com.puresol.coding.lang.fortran.source.grammar.types.InitialDataTarget;
 import com.puresol.coding.lang.fortran.source.keywords.AllocatableKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.AsynchronousKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.CodimensionKeyword;
@@ -23,9 +24,9 @@ import com.puresol.coding.lang.fortran.source.literals.NameLiteral;
 import com.puresol.coding.lang.fortran.source.symbols.Equals;
 import com.puresol.coding.lang.fortran.source.symbols.GreaterThan;
 import com.puresol.coding.lang.fortran.source.symbols.LParen;
-import com.puresol.coding.lang.fortran.source.symbols.LSquareBracket;
+import com.puresol.coding.lang.fortran.source.symbols.LBracket;
 import com.puresol.coding.lang.fortran.source.symbols.RParen;
-import com.puresol.coding.lang.fortran.source.symbols.RSquareBracket;
+import com.puresol.coding.lang.fortran.source.symbols.RBracket;
 import com.puresol.coding.lang.fortran.source.symbols.Star;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
@@ -57,7 +58,7 @@ public class Initialization extends AbstractFortranParser {
 			expectToken(GreaterThan.class);
 			if (acceptPart(NullInit.class) != null) {
 			} else {
-				expectPart(InitalDataTarget.class);
+				expectPart(InitialDataTarget.class);
 			}
 		}
 		finish();

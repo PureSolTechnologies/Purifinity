@@ -3,8 +3,8 @@ package com.puresol.coding.lang.fortran.source.grammar.attributes;
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
 import com.puresol.coding.lang.fortran.source.literals.NameLiteral;
-import com.puresol.coding.lang.fortran.source.symbols.LSquareBracket;
-import com.puresol.coding.lang.fortran.source.symbols.RSquareBracket;
+import com.puresol.coding.lang.fortran.source.symbols.LBracket;
+import com.puresol.coding.lang.fortran.source.symbols.RBracket;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
@@ -28,9 +28,9 @@ public class CodimensionDecl extends AbstractFortranParser {
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
 		expectToken(NameLiteral.class);
-		expectToken(LSquareBracket.class);
+		expectToken(LBracket.class);
 		expectPart(CoarraySpec.class);
-		expectToken(RSquareBracket.class);
+		expectToken(RBracket.class);
 		finish();
 	}
 

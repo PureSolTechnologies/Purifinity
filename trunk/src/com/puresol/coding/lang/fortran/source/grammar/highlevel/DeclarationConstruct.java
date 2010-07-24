@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
+import com.puresol.coding.lang.fortran.source.grammar.attributes.ParameterStmt;
 import com.puresol.coding.lang.fortran.source.grammar.attributes.TypeDeclarationStmt;
 import com.puresol.coding.lang.fortran.source.grammar.types.DerivedTypeDef;
 import com.puresol.coding.lang.fortran.source.grammar.types.derivedtypes.EnumDef;

@@ -4,9 +4,9 @@ import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
 import com.puresol.coding.lang.fortran.source.literals.NameLiteral;
 import com.puresol.coding.lang.fortran.source.symbols.LParen;
-import com.puresol.coding.lang.fortran.source.symbols.LSquareBracket;
+import com.puresol.coding.lang.fortran.source.symbols.LBracket;
 import com.puresol.coding.lang.fortran.source.symbols.RParen;
-import com.puresol.coding.lang.fortran.source.symbols.RSquareBracket;
+import com.puresol.coding.lang.fortran.source.symbols.RBracket;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
@@ -35,9 +35,9 @@ public class AllocatableDecl extends AbstractFortranParser {
 			expectPart(ArraySpec.class);
 			expectToken(RParen.class);
 		}
-		if (acceptToken(LSquareBracket.class) != null) {
+		if (acceptToken(LBracket.class) != null) {
 			expectPart(CoarraySpec.class);
-			expectToken(RSquareBracket.class);
+			expectToken(RBracket.class);
 		}
 		finish();
 	}

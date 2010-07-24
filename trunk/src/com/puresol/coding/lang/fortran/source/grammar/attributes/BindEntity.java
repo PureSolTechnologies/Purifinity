@@ -3,7 +3,6 @@ package com.puresol.coding.lang.fortran.source.grammar.attributes;
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
 import com.puresol.coding.lang.fortran.source.literals.NameLiteral;
-import com.puresol.coding.lang.fortran.source.symbols.Comma;
 import com.puresol.coding.lang.fortran.source.symbols.Slash;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
@@ -30,7 +29,7 @@ public class BindEntity extends AbstractFortranParser {
 	public void scan() throws PartDoesNotMatchException, ParserException {
 		if (acceptToken(NameLiteral.class) != null) {
 		} else if (acceptToken(Slash.class) != null) {
-			expectPart(CommonBlockName.class);
+			expectToken(NameLiteral.class);
 			expectToken(Slash.class);
 		} else {
 			abort();

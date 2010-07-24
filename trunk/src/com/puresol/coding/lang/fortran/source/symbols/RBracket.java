@@ -3,7 +3,7 @@ package com.puresol.coding.lang.fortran.source.symbols;
 import com.puresol.coding.lang.fortran.LexicalStructure;
 import com.puresol.coding.tokentypes.Operator;
 
-public class RSquareBracket extends Operator {
+public class RBracket extends Operator {
 
     @Override
     protected void initialize() {

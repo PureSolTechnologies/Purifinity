@@ -19,9 +19,9 @@ import com.puresol.coding.lang.fortran.source.keywords.TargetKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.ValueKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.VolatileKeyword;
 import com.puresol.coding.lang.fortran.source.symbols.LParen;
-import com.puresol.coding.lang.fortran.source.symbols.LSquareBracket;
+import com.puresol.coding.lang.fortran.source.symbols.LBracket;
 import com.puresol.coding.lang.fortran.source.symbols.RParen;
-import com.puresol.coding.lang.fortran.source.symbols.RSquareBracket;
+import com.puresol.coding.lang.fortran.source.symbols.RBracket;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
@@ -65,9 +65,9 @@ public class AttrSpec extends AbstractFortranParser {
 		} else if (acceptToken(AllocatableKeyword.class) != null) {
 		} else if (acceptToken(AsynchronousKeyword.class) != null) {
 		} else if (acceptToken(CodimensionKeyword.class) != null) {
-			expectToken(LSquareBracket.class);
+			expectToken(LBracket.class);
 			expectPart(CoarraySpec.class);
-			expectToken(RSquareBracket.class);
+			expectToken(RBracket.class);
 		} else if (acceptToken(ContiguousKeyword.class) != null) {
 		} else if (acceptToken(DimensionKeyword.class) != null) {
 			expectToken(LParen.class);
