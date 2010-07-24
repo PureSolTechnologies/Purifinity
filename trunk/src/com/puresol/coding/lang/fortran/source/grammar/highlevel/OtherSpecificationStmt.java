@@ -1,4 +1,4 @@
-package com.puresol.coding.lang.fortran.source.grammar.clause2;
+package com.puresol.coding.lang.fortran.source.grammar.highlevel;
 
 import java.util.ArrayList;
 import java.util.List;

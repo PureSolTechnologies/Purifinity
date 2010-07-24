@@ -1,4 +1,4 @@
-package com.puresol.coding.lang.fortran.source.grammar.clause2;
+package com.puresol.coding.lang.fortran.source.grammar.highlevel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,16 +11,14 @@ import com.puresol.parser.PartDoesNotMatchException;
 
 /**
  * <pre>
- * R204 specification-part is [ use-stmt ] ...
- * [ import-stmt ] ...
- * [ implicit-part ]
- * [ declaration-construct ] ...
+ * R208 execution-part is executable-construct
+ * [ execution-part-construct ] ...
  * </pre>
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class SpecificationPart extends AbstractFortranParser {
+public class ExecutionPart extends AbstractFortranParser {
 
 	private static final long serialVersionUID = 2177336093526924891L;
 
@@ -31,15 +29,10 @@ public class SpecificationPart extends AbstractFortranParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		while (true) {
-			if (acceptPart(UseStmt.class) != null) {
-			} else if (acceptPart(ImportStmt.class) != null) {
-			} else if (acceptPart(ImplicitPart.class) != null) {
-			} else if (acceptPart(DeclarationConstruct.class) != null) {
-			} else {
-				finish();
-			}
+		expectPart(ExecutableConstruct.class);
+		while (acceptPart(ExecutaionPartConstruct.class) != null) {
 		}
+		finish();
 	}
 
 }
