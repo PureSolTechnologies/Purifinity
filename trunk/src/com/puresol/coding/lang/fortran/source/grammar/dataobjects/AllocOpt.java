@@ -6,6 +6,7 @@ import com.puresol.coding.lang.fortran.source.keywords.ErrMsgKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.MoldKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.SourceKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.StatKeyword;
+import com.puresol.coding.lang.fortran.source.symbols.Equals;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
@@ -32,9 +33,17 @@ public class AllocOpt extends AbstractFortranParser {
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
 		if (acceptToken(ErrMsgKeyword.class) != null) {
+			expectToken(Equals.class);
+			expectPart(ErrmsgVariable.class);
 		} else if (acceptToken(MoldKeyword.class) != null) {
+			expectToken(Equals.class);
+			expectPart(SourceExpr.class);
 		} else if (acceptToken(SourceKeyword.class) != null) {
+			expectToken(Equals.class);
+			expectPart(SourceExpr.class);
 		} else if (acceptToken(StatKeyword.class) != null) {
+			expectToken(Equals.class);
+			expectPart(StatVariable.class);
 		} else {
 			abort();
 		}

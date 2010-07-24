@@ -2,21 +2,22 @@ package com.puresol.coding.lang.fortran.source.grammar.dataobjects;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
-import com.puresol.coding.lang.fortran.source.literals.NameLiteral;
-import com.puresol.coding.lang.fortran.source.symbols.LParen;
-import com.puresol.coding.lang.fortran.source.symbols.RParen;
+import com.puresol.coding.lang.fortran.source.keywords.ErrMsgKeyword;
+import com.puresol.coding.lang.fortran.source.keywords.StatKeyword;
+import com.puresol.coding.lang.fortran.source.symbols.Equals;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
 /**
  * <pre>
- * R612 part-ref is part-name [ ( section-subscript-list ) ] [ image-selector ]
+ * R641 dealloc-opt is STAT = stat-variable
+ * or ERRMSG = errmsg-variable
  * </pre>
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class PartRef extends AbstractFortranParser {
+public class DeallocOpt extends AbstractFortranParser {
 
 	private static final long serialVersionUID = 2177336093526924891L;
 
@@ -27,12 +28,15 @@ public class PartRef extends AbstractFortranParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		expectToken(NameLiteral.class);
-		if (acceptToken(LParen.class) != null) {
-			expectPart(SectionSubscriptionList.class);
-			expectToken(RParen.class);
+		if (acceptToken(ErrMsgKeyword.class) != null) {
+			expectToken(Equals.class);
+			expectPart(ErrmsgVariable.class);
+		} else if (acceptToken(StatKeyword.class) != null) {
+			expectToken(Equals.class);
+			expectPart(StatVariable.class);
+		} else {
+			abort();
 		}
-		acceptPart(ImageSelector.class);
 		finish();
 	}
 }

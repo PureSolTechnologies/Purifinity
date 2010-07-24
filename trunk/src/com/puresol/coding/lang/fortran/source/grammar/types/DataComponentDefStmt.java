@@ -2,8 +2,6 @@ package com.puresol.coding.lang.fortran.source.grammar.types;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
-import com.puresol.coding.lang.fortran.source.keywords.KindKeyword;
-import com.puresol.coding.lang.fortran.source.keywords.LenKeyword;
 import com.puresol.coding.lang.fortran.source.symbols.Colon;
 import com.puresol.coding.lang.fortran.source.symbols.Comma;
 import com.puresol.parser.ParserException;
@@ -31,7 +29,7 @@ public class DataComponentDefStmt extends AbstractFortranParser {
 	public void scan() throws PartDoesNotMatchException, ParserException {
 		expectPart(DeclarationTypeSpec.class);
 		if (acceptToken(Comma.class) != null) {
-			expectToken(ComponentAttrSpecList.class);
+			expectPart(ComponentAttrSpecList.class);
 			expectToken(Colon.class);
 			expectToken(Colon.class);
 		} else if (acceptToken(Colon.class) != null) {
