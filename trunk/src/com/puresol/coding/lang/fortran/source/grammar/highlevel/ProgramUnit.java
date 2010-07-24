@@ -1,12 +1,9 @@
-package com.puresol.coding.lang.fortran.source.grammar.clause2;
-
-import java.util.ArrayList;
-import java.util.List;
+package com.puresol.coding.lang.fortran.source.grammar.highlevel;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
-import com.puresol.coding.lang.fortran.source.grammar.highlevel.ExternalSubprogram;
-import com.puresol.parser.Parser;
+import com.puresol.coding.lang.fortran.source.keywords.PrivateKeyword;
+import com.puresol.coding.lang.fortran.source.keywords.PublicKeyword;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
@@ -28,7 +25,7 @@ public class ProgramUnit extends AbstractFortranParser {
 
 	@Override
 	public CodeRangeType getCodeRangeType() {
-		return CodeRangeType.FRAGMENT;
+		return CodeRangeType.PROGRAM;
 	}
 
 	@Override
@@ -43,5 +40,4 @@ public class ProgramUnit extends AbstractFortranParser {
 		}
 		finish();
 	}
-
 }

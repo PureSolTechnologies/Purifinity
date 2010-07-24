@@ -1,40 +1,35 @@
-package com.puresol.coding.lang.fortran.source.grammar.clause2;
-
-import java.util.ArrayList;
-import java.util.List;
+package com.puresol.coding.lang.fortran.source.grammar.highlevel;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
-import com.puresol.parser.Parser;
+import com.puresol.coding.lang.fortran.source.keywords.PrivateKeyword;
+import com.puresol.coding.lang.fortran.source.keywords.PublicKeyword;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
 /**
  * <pre>
- * R203 external-subprogram is function-subprogram
- * or subroutine-subprogram
+ * R201 program is program-unit
+ * [ program-unit ] ...
  * </pre>
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class ExternalSubprogram extends AbstractFortranParser {
+public class Program extends AbstractFortranParser {
 
 	private static final long serialVersionUID = 2177336093526924891L;
 
 	@Override
 	public CodeRangeType getCodeRangeType() {
-		return CodeRangeType.FRAGMENT;
+		return CodeRangeType.PROGRAM;
 	}
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		if (acceptPart(FunctionSubprogram.class) != null) {
-		} else if (acceptPart(SubroutineSubprogram.class) != null) {
-		} else {
-			abort();
-		}
+		expectPart(ProgramUnit.class);
+		while (acceptPart(ProgramUnit.class) != null)
+			;
 		finish();
 	}
-
 }
