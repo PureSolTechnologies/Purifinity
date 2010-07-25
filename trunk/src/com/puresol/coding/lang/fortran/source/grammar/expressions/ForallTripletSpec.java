@@ -2,21 +2,20 @@ package com.puresol.coding.lang.fortran.source.grammar.expressions;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
-import com.puresol.coding.lang.fortran.source.keywords.WhereKeyword;
-import com.puresol.coding.lang.fortran.source.symbols.LParen;
-import com.puresol.coding.lang.fortran.source.symbols.RParen;
+import com.puresol.coding.lang.fortran.source.symbols.Colon;
+import com.puresol.coding.lang.fortran.source.symbols.Equals;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
 /**
  * <pre>
- * R741 where-stmt is WHERE ( mask-expr ) where-assignment-stmt
+ * R753 forall-triplet-spec is index-name = forall-limit : forall-limit [ : forall-step]
  * </pre>
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class WhereStmt extends AbstractFortranParser {
+public class ForallTripletSpec extends AbstractFortranParser {
 
 	private static final long serialVersionUID = 2177336093526924891L;
 
@@ -27,11 +26,14 @@ public class WhereStmt extends AbstractFortranParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		expectToken(WhereKeyword.class);
-		expectToken(LParen.class);
-		expectPart(MaskExpr.class);
-		expectToken(RParen.class);
-		expectPart(WhereAssignmentStmt.class);
+		expectPart(IndexName.class);
+		expectToken(Equals.class);
+		expectPart(ForallLimit.class);
+		expectToken(Colon.class);
+		expectPart(ForallLimit.class);
+		if (acceptToken(Colon.class) != null) {
+			expectPart(ForallStep.class);
+		}
 		finish();
 	}
 }

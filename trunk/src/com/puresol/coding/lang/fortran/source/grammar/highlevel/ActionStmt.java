@@ -8,6 +8,7 @@ import com.puresol.coding.lang.fortran.AbstractFortranParser;
 import com.puresol.coding.lang.fortran.source.grammar.dataobjects.AllocateStmt;
 import com.puresol.coding.lang.fortran.source.grammar.dataobjects.DeallocateStmt;
 import com.puresol.coding.lang.fortran.source.grammar.dataobjects.NullifyStmt;
+import com.puresol.coding.lang.fortran.source.grammar.expressions.ForallStmt;
 import com.puresol.coding.lang.fortran.source.grammar.expressions.PointerAssignmentStmt;
 import com.puresol.coding.lang.fortran.source.grammar.expressions.WhereStmt;
 import com.puresol.parser.Parser;

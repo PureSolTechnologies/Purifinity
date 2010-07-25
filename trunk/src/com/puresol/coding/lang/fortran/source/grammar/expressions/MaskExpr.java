@@ -1,36 +1,30 @@
-package com.puresol.coding.lang.fortran;
+package com.puresol.coding.lang.fortran.source.grammar.expressions;
 
 import com.puresol.coding.analysis.CodeRangeType;
-import com.puresol.coding.lang.fortran.source.grammar.clause2.ProgramUnit;
+import com.puresol.coding.lang.fortran.AbstractFortranParser;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
 /**
  * <pre>
- * R201 program is program-unit
- * 	[ program-unit ] ...
+ * R746 mask-expr is logical-expr
  * </pre>
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class Program extends AbstractFortranParser {
+public class MaskExpr extends AbstractFortranParser {
 
 	private static final long serialVersionUID = 2177336093526924891L;
 
 	@Override
 	public CodeRangeType getCodeRangeType() {
-		return CodeRangeType.FILE;
+		return CodeRangeType.FRAGMENT;
 	}
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		moveToNextProcessibleToken(0);
-		expectPart(ProgramUnit.class);
-		while (acceptPart(ProgramUnit.class) != null) {
-		}
+		expectPart(LogicalExpr.class);
 		finish();
-		finish(getFile().getName());
 	}
-
 }
