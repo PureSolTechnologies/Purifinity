@@ -2,7 +2,10 @@ package com.puresol.coding.lang.fortran.source.grammar.attributes;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
+import com.puresol.coding.lang.fortran.source.grammar.lexical.ScalarConstant;
 import com.puresol.coding.lang.fortran.source.grammar.types.InitialDataTarget;
+import com.puresol.coding.lang.fortran.source.grammar.types.SignedIntLiteralConstant;
+import com.puresol.coding.lang.fortran.source.grammar.types.SignedRealLiteralConstant;
 import com.puresol.coding.lang.fortran.source.grammar.types.StructureConstructor;
 import com.puresol.coding.lang.fortran.source.keywords.ContiguousKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.DataKeyword;
@@ -40,8 +43,8 @@ public class DataIStmtConstant extends AbstractFortranParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		if (acceptPart(Constant.class) != null) {
-		} else if (acceptPart(ConstantSubobject.class) != null) {
+		if (acceptPart(ScalarConstant.class) != null) {
+		} else if (acceptPart(ScalarConstantSubobject.class) != null) {
 		} else if (acceptPart(SignedIntLiteralConstant.class) != null) {
 		} else if (acceptPart(SignedRealLiteralConstant.class) != null) {
 		} else if (acceptPart(NullInit.class) != null) {

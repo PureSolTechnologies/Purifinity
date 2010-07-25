@@ -27,7 +27,7 @@ public class AccessId extends AbstractFortranParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		if (acceptToken(NameLiteral.class) != null) {
+		if (acceptPart(UseName.class) != null) {
 		} else if (acceptPart(GenericSpec.class) != null) {
 		} else {
 			abort();

@@ -18,6 +18,7 @@ import com.puresol.coding.lang.fortran.source.grammar.executioncontrol.GotoStmt;
 import com.puresol.coding.lang.fortran.source.grammar.executioncontrol.IfStmt;
 import com.puresol.coding.lang.fortran.source.grammar.executioncontrol.LockStmt;
 import com.puresol.coding.lang.fortran.source.grammar.executioncontrol.StopStmt;
+import com.puresol.coding.lang.fortran.source.grammar.executioncontrol.SyncAllStmt;
 import com.puresol.coding.lang.fortran.source.grammar.executioncontrol.SyncImagesStmt;
 import com.puresol.coding.lang.fortran.source.grammar.executioncontrol.SyncMemoryStmt;
 import com.puresol.coding.lang.fortran.source.grammar.executioncontrol.UnlockStmt;

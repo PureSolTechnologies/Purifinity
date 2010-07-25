@@ -2,6 +2,7 @@ package com.puresol.coding.lang.fortran.source.grammar.expressions;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
+import com.puresol.coding.lang.fortran.source.grammar.dataobjects.ScalarVariable;
 import com.puresol.coding.lang.fortran.source.grammar.dataobjects.VariableName;
 import com.puresol.coding.lang.fortran.source.literals.NameLiteral;
 import com.puresol.coding.lang.fortran.source.symbols.Equals;

@@ -167,13 +167,23 @@ public class LexicalStructure {
 	/*
 	 * 4.4.4 Logical Type
 	 */
-	public static final String LogicalLiteralConstant = "(\\.TRUE\\.|\\.FALSE\\.)(_"
+	public static final String LOGICAL_LITERAL_CONSTANT = "(\\.TRUE\\.|\\.FALSE\\.)(_"
 			+ KIND_PARAM + ")?";
 
 	/* *****************************************
 	 * 
-	 * 4.7
+	 * 4.7 Binary, octal, and hexadecimal literal constants
 	 * 
 	 * *****************************************
 	 */
+
+	public static final String HEX_DIGIT = "[0-9A-F]";
+	public static final String HEX_CONSTANT = "(Z'" + HEX_DIGIT + "+'|Z\""
+			+ HEX_DIGIT + "+\")";
+	public static final String OCTAL_CONSTANT = "(O'" + DIGIT + "+'|O\""
+			+ DIGIT + "+\")";
+	public static final String BINARY_CONSTANT = "(B'" + DIGIT + "+'|B\""
+			+ DIGIT + "+\")";
+	public static final String BOZ_LITERAL_CONSTANT = "(" + BINARY_CONSTANT
+			+ "|" + OCTAL_CONSTANT + "|" + HEX_CONSTANT + ")";
 }

@@ -10,6 +10,7 @@ import com.puresol.coding.lang.fortran.source.grammar.dataobjects.DeallocateStmt
 import com.puresol.coding.lang.fortran.source.grammar.dataobjects.Designator;
 import com.puresol.coding.lang.fortran.source.grammar.dataobjects.NullifyStmt;
 import com.puresol.coding.lang.fortran.source.grammar.dataobjects.TypeParamInquiry;
+import com.puresol.coding.lang.fortran.source.grammar.lexical.Constant;
 import com.puresol.coding.lang.fortran.source.grammar.types.ArrayConstructor;
 import com.puresol.coding.lang.fortran.source.grammar.types.StructureConstructor;
 import com.puresol.coding.lang.fortran.source.symbols.LParen;

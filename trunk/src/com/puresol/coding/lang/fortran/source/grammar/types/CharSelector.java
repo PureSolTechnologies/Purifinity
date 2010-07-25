@@ -2,6 +2,7 @@ package com.puresol.coding.lang.fortran.source.grammar.types;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
+import com.puresol.coding.lang.fortran.source.grammar.expressions.IntConstantExpr;
 import com.puresol.coding.lang.fortran.source.keywords.CharacterKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.ComplexKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.DoublePrecisionKeyword;
@@ -53,10 +54,10 @@ public class CharSelector extends AbstractFortranParser {
 				expectToken(Comma.class);
 				expectToken(KindKeyword.class);
 				expectToken(Equals.class);
-				expectPart(IntConstantExpression.class);
+				expectPart(IntConstantExpr.class);
 			} else if (acceptToken(KindKeyword.class) != null) {
 				expectToken(Equals.class);
-				expectPart(IntConstantExpression.class);
+				expectPart(IntConstantExpr.class);
 				if (acceptToken(Comma.class) != null) {
 					expectToken(Equals.class);
 					expectPart(TypeParamValue.class);
@@ -67,7 +68,7 @@ public class CharSelector extends AbstractFortranParser {
 				if (acceptToken(KindKeyword.class) != null) {
 					expectToken(Equals.class);
 				}
-				expectPart(IntConstantExpression.class);
+				expectPart(IntConstantExpr.class);
 			}
 			expectToken(RParen.class);
 		}

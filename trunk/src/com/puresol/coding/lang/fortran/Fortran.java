@@ -68,7 +68,6 @@ import com.puresol.coding.lang.fortran.source.keywords.ThenKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.WhereKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.WhileKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.WriteKeyword;
-import com.puresol.coding.lang.fortran.source.literals.FloatingPointDoublePrecessionLiteral;
 import com.puresol.coding.lang.fortran.source.literals.RealLiteral;
 import com.puresol.coding.lang.fortran.source.literals.NameLiteral;
 import com.puresol.coding.lang.fortran.source.literals.IntegerLiteral;
@@ -188,7 +187,7 @@ public class Fortran extends AbstractProgrammingLanguage {
 	private static final List<Class<? extends TokenDefinition>> LITERALS = new ArrayList<Class<? extends TokenDefinition>>();
 	static {
 		LITERALS.add(CharLiteral.class);
-		LITERALS.add(FloatingPointDoublePrecessionLiteral.class);
+		LITERALS.add(RealLiteral.class);
 		LITERALS.add(RealLiteral.class);
 		LITERALS.add(IntegerLiteral.class);
 		LITERALS.add(NameLiteral.class); // is subset of FormatLiteral!

@@ -2,8 +2,8 @@ package com.puresol.coding.lang.fortran.source.grammar.types;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
+import com.puresol.coding.lang.fortran.source.grammar.expressions.IntConstantExpr;
 import com.puresol.coding.lang.fortran.source.literals.NameLiteral;
-import com.puresol.coding.lang.fortran.source.symbols.Comma;
 import com.puresol.coding.lang.fortran.source.symbols.Equals;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
@@ -29,7 +29,7 @@ public class Enumerator extends AbstractFortranParser {
 	public void scan() throws PartDoesNotMatchException, ParserException {
 		expectToken(NameLiteral.class);
 		if (acceptToken(Equals.class) != null) {
-			expectPart(IntConstantExpression.class);
+			expectPart(IntConstantExpr.class);
 		}
 		finish();
 	}
