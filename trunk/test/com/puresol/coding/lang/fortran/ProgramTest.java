@@ -13,6 +13,7 @@ import org.junit.Test;
 
 import com.puresol.coding.analysis.CodeRange;
 import com.puresol.coding.analysis.SourceCodeLexer;
+import com.puresol.coding.lang.fortran.source.grammar.highlevel.Program;
 import com.puresol.parser.LexerException;
 import com.puresol.parser.NoMatchingTokenDefinitionFound;
 import com.puresol.parser.ParserException;

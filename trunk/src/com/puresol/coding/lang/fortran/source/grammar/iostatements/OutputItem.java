@@ -2,21 +2,20 @@ package com.puresol.coding.lang.fortran.source.grammar.iostatements;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
-import com.puresol.coding.lang.fortran.source.keywords.OpenKeyword;
-import com.puresol.coding.lang.fortran.source.symbols.LParen;
-import com.puresol.coding.lang.fortran.source.symbols.RParen;
+import com.puresol.coding.lang.fortran.source.grammar.expressions.Expr;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
 /**
  * <pre>
- * R904 open-stmt is OPEN ( connect-spec-list )
+ * R917 output-item is expr
+ * or io-implied-do
  * </pre>
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class OpenStmt extends AbstractFortranParser {
+public class OutputItem extends AbstractFortranParser {
 
 	private static final long serialVersionUID = 2177336093526924891L;
 
@@ -27,10 +26,11 @@ public class OpenStmt extends AbstractFortranParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		expectToken(OpenKeyword.class);
-		expectToken(LParen.class);
-		expectPart(ConnectSpecList.class);
-		expectToken(RParen.class);
+		if (acceptPart(Expr.class) != null) {
+		} else if (acceptPart(IoImpliedDo.class) != null) {
+		} else {
+			abort();
+		}
 		finish();
 	}
 

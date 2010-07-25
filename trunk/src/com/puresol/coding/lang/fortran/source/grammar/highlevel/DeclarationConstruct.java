@@ -8,6 +8,7 @@ import com.puresol.coding.lang.fortran.AbstractFortranParser;
 import com.puresol.coding.lang.fortran.source.grammar.attributes.ParameterStmt;
 import com.puresol.coding.lang.fortran.source.grammar.attributes.TypeDeclarationStmt;
 import com.puresol.coding.lang.fortran.source.grammar.types.DerivedTypeDef;
+import com.puresol.coding.lang.fortran.source.grammar.types.EnumDef;
 import com.puresol.parser.Parser;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
