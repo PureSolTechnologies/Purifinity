@@ -8,6 +8,15 @@ import com.puresol.coding.lang.fortran.AbstractFortranParser;
 import com.puresol.coding.lang.fortran.source.grammar.dataobjects.AllocateStmt;
 import com.puresol.coding.lang.fortran.source.grammar.dataobjects.DeallocateStmt;
 import com.puresol.coding.lang.fortran.source.grammar.dataobjects.NullifyStmt;
+import com.puresol.coding.lang.fortran.source.grammar.executioncontrol.ArithmeticIfStmt;
+import com.puresol.coding.lang.fortran.source.grammar.executioncontrol.ComputedGotoStmt;
+import com.puresol.coding.lang.fortran.source.grammar.executioncontrol.ContinueStmt;
+import com.puresol.coding.lang.fortran.source.grammar.executioncontrol.CycleStmt;
+import com.puresol.coding.lang.fortran.source.grammar.executioncontrol.ErrorStopStmt;
+import com.puresol.coding.lang.fortran.source.grammar.executioncontrol.ExitStmt;
+import com.puresol.coding.lang.fortran.source.grammar.executioncontrol.GotoStmt;
+import com.puresol.coding.lang.fortran.source.grammar.executioncontrol.IfStmt;
+import com.puresol.coding.lang.fortran.source.grammar.executioncontrol.StopStmt;
 import com.puresol.coding.lang.fortran.source.grammar.expressions.ForallStmt;
 import com.puresol.coding.lang.fortran.source.grammar.expressions.PointerAssignmentStmt;
 import com.puresol.coding.lang.fortran.source.grammar.expressions.WhereStmt;
@@ -80,11 +89,11 @@ public class ActionStmt extends AbstractFortranParser {
 		} else if (acceptPart(CycleStmt.class) != null) {
 		} else if (acceptPart(DeallocateStmt.class) != null) {
 		} else if (acceptPart(EndFunctionStmt.class) != null) {
-		} else if (acceptPart(EndMpSubprogram - stmt.class) != null) {
-		} else if (acceptPart(EndProgram - stmt.class) != null) {
-		} else if (acceptPart(EndSubroutine - stmt.class) != null) {
+		} else if (acceptPart(EndMpSubprogramStmt.class) != null) {
+		} else if (acceptPart(EndProgramStmt.class) != null) {
+		} else if (acceptPart(EndSubroutineStmt.class) != null) {
 		} else if (acceptPart(EndfileStmt.class) != null) {
-		} else if (acceptPart(ErrorStop - stmt.class) != null) {
+		} else if (acceptPart(ErrorStopStmt.class) != null) {
 		} else if (acceptPart(ExitStmt.class) != null) {
 		} else if (acceptPart(FlushStmt.class) != null) {
 		} else if (acceptPart(ForallStmt.class) != null) {

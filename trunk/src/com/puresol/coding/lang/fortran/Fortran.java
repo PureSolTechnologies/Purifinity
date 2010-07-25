@@ -9,16 +9,17 @@ import java.util.List;
 
 import com.puresol.coding.AbstractProgrammingLanguage;
 import com.puresol.coding.analysis.Analyzer;
+import com.puresol.coding.lang.fortran.source.keywords.AssociateKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.CallKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.CaseDefaultKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.CaseKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.CharacterKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.ComplexKeyword;
+import com.puresol.coding.lang.fortran.source.keywords.ConcurrentKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.ContinueKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.CycleKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.DimensionKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.DoKeyword;
-import com.puresol.coding.lang.fortran.source.keywords.DoWhileKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.DotANDDot;
 import com.puresol.coding.lang.fortran.source.keywords.DotEQDot;
 import com.puresol.coding.lang.fortran.source.keywords.DotFALSEDot;
@@ -65,6 +66,7 @@ import com.puresol.coding.lang.fortran.source.keywords.SubroutineKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.SwitchCaseKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.ThenKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.WhereKeyword;
+import com.puresol.coding.lang.fortran.source.keywords.WhileKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.WriteKeyword;
 import com.puresol.coding.lang.fortran.source.literals.FloatingPointDoublePrecessionLiteral;
 import com.puresol.coding.lang.fortran.source.literals.RealLiteral;
@@ -123,8 +125,9 @@ public class Fortran extends AbstractProgrammingLanguage {
 
 		KEYWORDS.add(ForAllKeyword.class);
 		KEYWORDS.add(ContinueKeyword.class);
-		KEYWORDS.add(DoWhileKeyword.class);
 		KEYWORDS.add(DoKeyword.class);
+		KEYWORDS.add(WhileKeyword.class);
+		KEYWORDS.add(ConcurrentKeyword.class);
 		KEYWORDS.add(IfKeyword.class);
 		KEYWORDS.add(ThenKeyword.class);
 		KEYWORDS.add(EndDoKeyword.class);
@@ -140,6 +143,8 @@ public class Fortran extends AbstractProgrammingLanguage {
 
 		KEYWORDS.add(CallKeyword.class);
 		KEYWORDS.add(ReturnKeyword.class);
+
+		KEYWORDS.add(AssociateKeyword.class);
 
 		KEYWORDS.add(ReadKeyword.class);
 		KEYWORDS.add(WriteKeyword.class);

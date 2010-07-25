@@ -1,20 +1,23 @@
-package com.puresol.coding.lang.fortran.source.grammar.types;
+package com.puresol.coding.lang.fortran.source.grammar.executioncontrol;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
-import com.puresol.coding.lang.fortran.source.grammar.executioncontrol.DoVariable;
+import com.puresol.coding.lang.fortran.source.grammar.highlevel.SpecificationPart;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
 /**
  * <pre>
- * R475 ac-do-variable is do-variable
+ * R807 block-construct is block-stmt
+ * [ specification-part ]
+ * block
+ * end-block-stmt
  * </pre>
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class AcDoVariable extends AbstractFortranParser {
+public class BlockConstruct extends AbstractFortranParser {
 
 	private static final long serialVersionUID = 2177336093526924891L;
 
@@ -25,8 +28,10 @@ public class AcDoVariable extends AbstractFortranParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		expectPart(DoVariable.class);
+		expectPart(BlockStmt.class);
+		acceptPart(SpecificationPart.class);
+		expectPart(Block.class);
+		expectPart(EndBlockStmt.class);
 		finish();
 	}
-
 }

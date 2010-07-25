@@ -1,20 +1,21 @@
-package com.puresol.coding.lang.fortran.source.grammar.types;
+package com.puresol.coding.lang.fortran.source.grammar.executioncontrol;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
-import com.puresol.coding.lang.fortran.source.grammar.executioncontrol.DoVariable;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
 /**
  * <pre>
- * R475 ac-do-variable is do-variable
+ * R829 inner-shared-do-construct is label-do-stmt
+ * do-body
+ * do-term-shared-stmt
  * </pre>
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class AcDoVariable extends AbstractFortranParser {
+public class InnerSharedDoConstruct extends AbstractFortranParser {
 
 	private static final long serialVersionUID = 2177336093526924891L;
 
@@ -25,8 +26,9 @@ public class AcDoVariable extends AbstractFortranParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		expectPart(DoVariable.class);
+		expectPart(LabelDoStmt.class);
+		expectPart(DoBody.class);
+		expectPart(DoTermSharedStmt.class);
 		finish();
 	}
-
 }
