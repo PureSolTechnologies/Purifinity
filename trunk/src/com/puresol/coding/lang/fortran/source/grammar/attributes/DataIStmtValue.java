@@ -32,7 +32,7 @@ public class DataIStmtValue extends AbstractFortranParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		if (acceptPart(DataStmtRepeat) != null) {
+		if (acceptPart(DataStmtRepeat.class) != null) {
 			expectToken(Star.class);
 		}
 		expectPart(DataStmtConstant.class);

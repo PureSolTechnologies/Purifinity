@@ -40,8 +40,8 @@ public class DataIStmtConstant extends AbstractFortranParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		if (acceptPart(ScalarConstant.class) != null) {
-		} else if (acceptPart(ScalarConstantSubobject.class) != null) {
+		if (acceptPart(Constant.class) != null) {
+		} else if (acceptPart(ConstantSubobject.class) != null) {
 		} else if (acceptPart(SignedIntLiteralConstant.class) != null) {
 		} else if (acceptPart(SignedRealLiteralConstant.class) != null) {
 		} else if (acceptPart(NullInit.class) != null) {

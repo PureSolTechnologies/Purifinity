@@ -4,10 +4,9 @@ import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
 import com.puresol.coding.lang.fortran.source.grammar.types.DerivedTypeSpec;
 import com.puresol.coding.lang.fortran.source.grammar.types.TypeSpec;
-import com.puresol.coding.lang.fortran.source.keywords.ClassKeyword;
-import com.puresol.coding.lang.fortran.source.keywords.DefaultKeyword;
-import com.puresol.coding.lang.fortran.source.keywords.IsKeyword;
-import com.puresol.coding.lang.fortran.source.keywords.PartKeyword;
+import com.puresol.coding.lang.fortran.source.keywords.ClassDefaultKeyword;
+import com.puresol.coding.lang.fortran.source.keywords.ClassIsKeyword;
+import com.puresol.coding.lang.fortran.source.keywords.PartIsKeyword;
 import com.puresol.coding.lang.fortran.source.symbols.LParen;
 import com.puresol.coding.lang.fortran.source.symbols.RParen;
 import com.puresol.parser.ParserException;
@@ -34,20 +33,17 @@ public class TypeGuardStmt extends AbstractFortranParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		if (acceptToken(PartKeyword.class) != null) {
-			expectToken(IsKeyword.class);
+		if (acceptToken(PartIsKeyword.class) != null) {
 			expectToken(LParen.class);
 			expectPart(TypeSpec.class);
 			expectToken(RParen.class);
-		} else if (acceptToken(ClassKeyword.class) != null) {
-			if (acceptToken(IsKeyword.class) != null) {
-				expectToken(LParen.class);
-				expectPart(DerivedTypeSpec.class);
-				expectToken(RParen.class);
-			} else if (acceptToken(DefaultKeyword.class) != null) {
-			} else {
-				abort();
-			}
+		} else if (acceptToken(ClassIsKeyword.class) != null) {
+			expectToken(LParen.class);
+			expectPart(DerivedTypeSpec.class);
+			expectToken(RParen.class);
+		} else if (acceptToken(ClassDefaultKeyword.class) != null) {
+		} else {
+			abort();
 		}
 		acceptPart(SelectConstructName.class);
 		finish();

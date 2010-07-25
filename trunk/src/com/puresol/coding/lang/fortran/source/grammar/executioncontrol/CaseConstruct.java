@@ -2,11 +2,6 @@ package com.puresol.coding.lang.fortran.source.grammar.executioncontrol;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
-import com.puresol.coding.lang.fortran.source.grammar.expressions.LogicalExpr;
-import com.puresol.coding.lang.fortran.source.grammar.highlevel.ActionStmt;
-import com.puresol.coding.lang.fortran.source.keywords.IfKeyword;
-import com.puresol.coding.lang.fortran.source.symbols.LParen;
-import com.puresol.coding.lang.fortran.source.symbols.RParen;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
@@ -21,7 +16,7 @@ import com.puresol.parser.PartDoesNotMatchException;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class IfStmt extends AbstractFortranParser {
+public class CaseConstruct extends AbstractFortranParser {
 
 	private static final long serialVersionUID = 2177336093526924891L;
 

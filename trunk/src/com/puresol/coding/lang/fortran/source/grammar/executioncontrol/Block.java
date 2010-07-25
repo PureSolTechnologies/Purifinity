@@ -2,8 +2,7 @@ package com.puresol.coding.lang.fortran.source.grammar.executioncontrol;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
-import com.puresol.coding.lang.fortran.source.symbols.Minus;
-import com.puresol.coding.lang.fortran.source.symbols.Plus;
+import com.puresol.coding.lang.fortran.source.grammar.highlevel.ExecutionPartConstruct;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 

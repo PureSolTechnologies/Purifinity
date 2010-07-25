@@ -53,10 +53,10 @@ public class CharSelector extends AbstractFortranParser {
 				expectToken(Comma.class);
 				expectToken(KindKeyword.class);
 				expectToken(Equals.class);
-				expectPart(ScalarIntConstantExpression.class);
+				expectPart(IntConstantExpression.class);
 			} else if (acceptToken(KindKeyword.class) != null) {
 				expectToken(Equals.class);
-				expectPart(ScalarIntConstantExpression.class);
+				expectPart(IntConstantExpression.class);
 				if (acceptToken(Comma.class) != null) {
 					expectToken(Equals.class);
 					expectPart(TypeParamValue.class);
@@ -67,7 +67,7 @@ public class CharSelector extends AbstractFortranParser {
 				if (acceptToken(KindKeyword.class) != null) {
 					expectToken(Equals.class);
 				}
-				expectPart(ScalarIntConstantExpression.class);
+				expectPart(IntConstantExpression.class);
 			}
 			expectToken(RParen.class);
 		}

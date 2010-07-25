@@ -2,7 +2,6 @@ package com.puresol.coding.lang.fortran.source.grammar.executioncontrol;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
-import com.puresol.coding.lang.fortran.source.keywords.SelectCaseKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.SelectTypeKeyword;
 import com.puresol.coding.lang.fortran.source.symbols.Colon;
 import com.puresol.coding.lang.fortran.source.symbols.Equals;
@@ -40,7 +39,7 @@ public class SelectTypeStmt extends AbstractFortranParser {
 			expectToken(Equals.class);
 			expectToken(GreaterThan.class);
 		}
-		expetPart(Selector.class);
+		expectPart(Selector.class);
 		expectToken(RParen.class);
 		finish();
 	}

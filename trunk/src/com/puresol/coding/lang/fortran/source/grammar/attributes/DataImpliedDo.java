@@ -2,14 +2,11 @@ package com.puresol.coding.lang.fortran.source.grammar.attributes;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
-import com.puresol.coding.lang.fortran.source.keywords.ContiguousKeyword;
-import com.puresol.coding.lang.fortran.source.keywords.DataKeyword;
-import com.puresol.coding.lang.fortran.source.symbols.Colon;
+import com.puresol.coding.lang.fortran.source.grammar.expressions.IntConstantExpr;
 import com.puresol.coding.lang.fortran.source.symbols.Comma;
 import com.puresol.coding.lang.fortran.source.symbols.Equals;
 import com.puresol.coding.lang.fortran.source.symbols.LParen;
 import com.puresol.coding.lang.fortran.source.symbols.RParen;
-import com.puresol.coding.lang.fortran.source.symbols.Slash;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
@@ -37,11 +34,11 @@ public class DataImpliedDo extends AbstractFortranParser {
 		expectToken(Comma.class);
 		expectPart(DataIDoVariable.class);
 		expectToken(Equals.class);
-		expectPart(ScalarIntConstantExpr)
+		expectPart(IntConstantExpr.class);
 		expectToken(Comma.class);
-		expectPart(ScalarIntConstantExpr)
+		expectPart(IntConstantExpr.class);
 		while (acceptToken(Comma.class) != null) {
-			expectPart(ScalarIntConstantExpr)
+			expectPart(IntConstantExpr.class);
 		}
 		expectToken(RParen.class);
 		finish();

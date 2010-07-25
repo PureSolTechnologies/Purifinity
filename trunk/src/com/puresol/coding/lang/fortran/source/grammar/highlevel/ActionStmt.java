@@ -16,7 +16,11 @@ import com.puresol.coding.lang.fortran.source.grammar.executioncontrol.ErrorStop
 import com.puresol.coding.lang.fortran.source.grammar.executioncontrol.ExitStmt;
 import com.puresol.coding.lang.fortran.source.grammar.executioncontrol.GotoStmt;
 import com.puresol.coding.lang.fortran.source.grammar.executioncontrol.IfStmt;
+import com.puresol.coding.lang.fortran.source.grammar.executioncontrol.LockStmt;
 import com.puresol.coding.lang.fortran.source.grammar.executioncontrol.StopStmt;
+import com.puresol.coding.lang.fortran.source.grammar.executioncontrol.SyncImagesStmt;
+import com.puresol.coding.lang.fortran.source.grammar.executioncontrol.SyncMemoryStmt;
+import com.puresol.coding.lang.fortran.source.grammar.executioncontrol.UnlockStmt;
 import com.puresol.coding.lang.fortran.source.grammar.expressions.ForallStmt;
 import com.puresol.coding.lang.fortran.source.grammar.expressions.PointerAssignmentStmt;
 import com.puresol.coding.lang.fortran.source.grammar.expressions.WhereStmt;
@@ -110,8 +114,8 @@ public class ActionStmt extends AbstractFortranParser {
 		} else if (acceptPart(RewindStmt.class) != null) {
 		} else if (acceptPart(StopStmt.class) != null) {
 		} else if (acceptPart(SyncAllStmt.class) != null) {
-		} else if (acceptPart(SyncImages - stmt.class) != null) {
-		} else if (acceptPart(SyncMemory - stmt.class) != null) {
+		} else if (acceptPart(SyncImagesStmt.class) != null) {
+		} else if (acceptPart(SyncMemoryStmt.class) != null) {
 		} else if (acceptPart(UnlockStmt.class) != null) {
 		} else if (acceptPart(WaitStmt.class) != null) {
 		} else if (acceptPart(WhereStmt.class) != null) {

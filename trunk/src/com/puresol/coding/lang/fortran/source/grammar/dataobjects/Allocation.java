@@ -2,10 +2,6 @@ package com.puresol.coding.lang.fortran.source.grammar.dataobjects;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
-import com.puresol.coding.lang.fortran.source.keywords.ErrMsgKeyword;
-import com.puresol.coding.lang.fortran.source.keywords.MoldKeyword;
-import com.puresol.coding.lang.fortran.source.keywords.SourceKeyword;
-import com.puresol.coding.lang.fortran.source.keywords.StatKeyword;
 import com.puresol.coding.lang.fortran.source.symbols.LBracket;
 import com.puresol.coding.lang.fortran.source.symbols.LParen;
 import com.puresol.coding.lang.fortran.source.symbols.RBracket;

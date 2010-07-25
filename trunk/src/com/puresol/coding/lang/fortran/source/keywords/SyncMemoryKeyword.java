@@ -2,12 +2,13 @@ package com.puresol.coding.lang.fortran.source.keywords;
 
 import com.puresol.coding.tokentypes.KeywordOperator;
 
-public class IsKeyword extends KeywordOperator {
+public class SyncMemoryKeyword extends KeywordOperator {
 
 	@Override
 	protected void initialize() {
 		super.initialize();
 		setCaseInsensitive();
-		setPatternString("IS");
+		setPatternString("SYNC\\s+MEMORY");
 	}
+
 }

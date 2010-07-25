@@ -2,6 +2,7 @@ package com.puresol.coding.lang.fortran.source.grammar.attributes;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
+import com.puresol.coding.lang.fortran.source.grammar.expressions.SpecificationExpr;
 import com.puresol.coding.lang.fortran.source.symbols.Colon;
 import com.puresol.coding.lang.fortran.source.symbols.Comma;
 import com.puresol.coding.lang.fortran.source.symbols.Star;

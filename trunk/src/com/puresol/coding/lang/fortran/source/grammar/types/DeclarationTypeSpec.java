@@ -2,7 +2,7 @@ package com.puresol.coding.lang.fortran.source.grammar.types;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
-import com.puresol.coding.lang.fortran.source.keywords.ClassKeyword;
+import com.puresol.coding.lang.fortran.source.keywords.ClassIsKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.TypeKeyword;
 import com.puresol.coding.lang.fortran.source.symbols.LParen;
 import com.puresol.coding.lang.fortran.source.symbols.RParen;
@@ -42,7 +42,7 @@ public class DeclarationTypeSpec extends AbstractFortranParser {
 				abort();
 			}
 			expectToken(RParen.class);
-		} else if (acceptToken(ClassKeyword.class) != null) {
+		} else if (acceptToken(ClassIsKeyword.class) != null) {
 			expectToken(LParen.class);
 			if (acceptToken(Star.class) != null) {
 			} else if (acceptPart(DerivedTypeSpec.class) != null) {

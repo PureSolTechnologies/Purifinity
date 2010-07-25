@@ -1,23 +1,22 @@
-package com.puresol.coding.lang.fortran.source.grammar.types;
+package com.puresol.coding.lang.fortran.source.grammar.executioncontrol;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
-import com.puresol.coding.lang.fortran.source.keywords.EndEnumKeyword;
+import com.puresol.coding.lang.fortran.source.grammar.expressions.IntExpr;
+import com.puresol.coding.lang.fortran.source.symbols.Star;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
 /**
  * <pre>
- * R458 enum-def is enum-def-stmt
- * enumerator-def-stmt
- * [ enumerator-def-stmt ] ...
- * end-enum-stmt
+ * R861 image-set is int-expr
+ * or *
  * </pre>
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class EnumDef extends AbstractFortranParser {
+public class ImageSet extends AbstractFortranParser {
 
 	private static final long serialVersionUID = 2177336093526924891L;
 
@@ -28,12 +27,11 @@ public class EnumDef extends AbstractFortranParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		expectPart(EnumDefStmt.class);
-		expectPart(EnumeratorDefStmt.class);
-		while (acceptPart(EnumeratorDefStmt.class) != null)
-			;
-		expectToken(EndEnumKeyword.class);
+		if (acceptToken(Star.class) != null) {
+		} else if (acceptPart(IntExpr.class) != null) {
+		} else {
+			abort();
+		}
 		finish();
 	}
-
 }

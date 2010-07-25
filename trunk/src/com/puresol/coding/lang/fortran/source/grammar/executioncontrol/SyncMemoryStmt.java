@@ -2,22 +2,21 @@ package com.puresol.coding.lang.fortran.source.grammar.executioncontrol;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
-import com.puresol.coding.lang.fortran.source.symbols.Colon;
+import com.puresol.coding.lang.fortran.source.keywords.SyncMemoryKeyword;
+import com.puresol.coding.lang.fortran.source.symbols.LParen;
+import com.puresol.coding.lang.fortran.source.symbols.RParen;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
 /**
  * <pre>
- * R844 case-value-range is case-value
- * or case-value :
- * or : case-value
- * or case-value : case-value
+ * R862 sync-memory-stmt is SYNC MEMORY [ ( [ sync-stat-list ] ) ]
  * </pre>
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class CaseValueRange extends AbstractFortranParser {
+public class SyncMemoryStmt extends AbstractFortranParser {
 
 	private static final long serialVersionUID = 2177336093526924891L;
 
@@ -28,13 +27,10 @@ public class CaseValueRange extends AbstractFortranParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		if (acceptToken(Colon.class) != null) {
-			expectPart(CaseValue.class);
-		} else {
-			expectPart(CaseValue.class);
-			if (acceptToken(Colon.class) != null) {
-				acceptPart(CaseValue.class);
-			}
+		expectToken(SyncMemoryKeyword.class);
+		if (acceptToken(LParen.class) != null) {
+			acceptPart(SyncStatList.class);
+			expectToken(RParen.class);
 		}
 		finish();
 	}

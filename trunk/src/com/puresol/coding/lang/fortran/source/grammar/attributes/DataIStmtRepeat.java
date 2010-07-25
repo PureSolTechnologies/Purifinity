@@ -33,8 +33,8 @@ public class DataIStmtRepeat extends AbstractFortranParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		if (acceptPart(ScalarIntConstant) != null) {
-		} else if (acceptPart(ScalarIntConstantSubobject) != null) {
+		if (acceptPart(IntConstant.class) != null) {
+		} else if (acceptPart(IntConstantSubobject.class) != null) {
 		} else {
 			abort();
 		}

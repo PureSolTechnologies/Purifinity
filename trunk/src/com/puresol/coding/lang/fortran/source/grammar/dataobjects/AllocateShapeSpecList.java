@@ -1,23 +1,19 @@
-package com.puresol.coding.lang.fortran.source.grammar.types;
+package com.puresol.coding.lang.fortran.source.grammar.dataobjects;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
-import com.puresol.coding.lang.fortran.source.keywords.EndEnumKeyword;
+import com.puresol.coding.lang.fortran.source.symbols.Comma;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
 /**
  * <pre>
- * R458 enum-def is enum-def-stmt
- * enumerator-def-stmt
- * [ enumerator-def-stmt ] ...
- * end-enum-stmt
  * </pre>
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class EnumDef extends AbstractFortranParser {
+public class AllocateShapeSpecList extends AbstractFortranParser {
 
 	private static final long serialVersionUID = 2177336093526924891L;
 
@@ -28,12 +24,10 @@ public class EnumDef extends AbstractFortranParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		expectPart(EnumDefStmt.class);
-		expectPart(EnumeratorDefStmt.class);
-		while (acceptPart(EnumeratorDefStmt.class) != null)
-			;
-		expectToken(EndEnumKeyword.class);
+		expectPart(AllocateShapeSpec.class);
+		while (acceptToken(Comma.class) != null) {
+			expectPart(AllocateShapeSpec.class);
+		}
 		finish();
 	}
-
 }

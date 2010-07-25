@@ -2,10 +2,6 @@ package com.puresol.coding.lang.fortran.source.grammar.executioncontrol;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
-import com.puresol.coding.lang.fortran.source.keywords.SelectCaseKeyword;
-import com.puresol.coding.lang.fortran.source.symbols.Colon;
-import com.puresol.coding.lang.fortran.source.symbols.LParen;
-import com.puresol.coding.lang.fortran.source.symbols.RParen;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 

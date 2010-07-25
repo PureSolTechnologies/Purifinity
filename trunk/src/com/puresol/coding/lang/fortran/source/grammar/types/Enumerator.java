@@ -29,7 +29,7 @@ public class Enumerator extends AbstractFortranParser {
 	public void scan() throws PartDoesNotMatchException, ParserException {
 		expectToken(NameLiteral.class);
 		if (acceptToken(Equals.class) != null) {
-			expectPart(ScalarIntConstantExpression.class);
+			expectPart(IntConstantExpression.class);
 		}
 		finish();
 	}
