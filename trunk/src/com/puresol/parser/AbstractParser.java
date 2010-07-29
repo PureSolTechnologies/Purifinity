@@ -329,7 +329,7 @@ public abstract class AbstractParser implements Parser {
 		endPosition = currentPosition;
 	}
 
-	protected final void moveToNextProcessibleToken(int steps) {
+	protected final void moveToNextVisibleToken(int steps) {
 		if (this.isFinish()) {
 			throw new IllegalStateException("Parser was finished!");
 		}
@@ -392,7 +392,7 @@ public abstract class AbstractParser implements Parser {
 				definitionInstance = getCurrentToken().getDefinitionInstance();
 			}
 			if (moveForward) {
-				moveToNextProcessibleToken(1);
+				moveToNextVisibleToken(1);
 			}
 		} catch (TokenException e) {
 			logger.error(e.getMessage());
@@ -439,7 +439,7 @@ public abstract class AbstractParser implements Parser {
 				token = getCurrentToken();
 			}
 			if (getCurrentToken().getText().equals(text)) {
-				moveToNextProcessibleToken(1);
+				moveToNextVisibleToken(1);
 			} else {
 				throw new PartDoesNotMatchException(this);
 			}
@@ -523,7 +523,7 @@ public abstract class AbstractParser implements Parser {
 					return;
 				}
 			}
-			moveToNextProcessibleToken(1);
+			moveToNextVisibleToken(1);
 		}
 	}
 
@@ -559,7 +559,7 @@ public abstract class AbstractParser implements Parser {
 			throw new ParserException("Part " + partInstance.getClass()
 					+ " was not correctly finished!");
 		}
-		moveToNextProcessibleToken(partInstance.getEndPosition()
+		moveToNextVisibleToken(partInstance.getEndPosition()
 				- getCurrentPosition() + 1);
 		return partInstance;
 	}
@@ -691,7 +691,7 @@ public abstract class AbstractParser implements Parser {
 			} else if (acceptToken(left) != null) {
 				count++;
 			} else {
-				moveToNextProcessibleToken(1);
+				moveToNextVisibleToken(1);
 			}
 		} while (count > 0);
 	}
