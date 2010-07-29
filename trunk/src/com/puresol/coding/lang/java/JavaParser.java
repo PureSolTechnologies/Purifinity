@@ -20,7 +20,7 @@ public class JavaParser extends CompilationUnit {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		moveToNextProcessibleToken(0);
+		moveToNextVisibleToken(0);
 		super.scan();
 		checkForFileEnd();
 	}
