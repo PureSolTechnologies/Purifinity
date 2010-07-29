@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-Name: MetricsBasePack
-Bundle-SymbolicName: com.puresol.coding.lang.java
+Bundle-SymbolicName: com.puresol.coding.metrics
 Bundle-Description: Contains some language independent metrics and base\
  classes for metrics implemented in special language packs
 Bundle-Vendor: Puresol Technologies
