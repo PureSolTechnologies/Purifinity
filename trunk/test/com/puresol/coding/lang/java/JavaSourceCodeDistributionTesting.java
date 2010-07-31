@@ -7,7 +7,7 @@ import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.i18n4j.FileSearch;
+import javax.i18n4java.utils.FileSearch;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -64,8 +64,7 @@ public class JavaSourceCodeDistributionTesting {
 			for (File file : files) {
 				counter++;
 				System.out.print(ConsoleUtils.createPercentageBar(22,
-						(double) counter / (double) files.size(), true)
-						+ "\t");
+						(double) counter / (double) files.size(), true) + "\t");
 				System.out.println(file);
 				if (successes.contains(file.toString())) {
 					continue;

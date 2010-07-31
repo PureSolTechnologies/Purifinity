@@ -25,8 +25,8 @@ import java.text.MessageFormat;
 import java.util.Hashtable;
 import java.util.Locale;
 
-import javax.i18n4j.SingleLanguageTranslations;
-import javax.i18n4j.TRFile;
+import javax.i18n4java.data.SingleLanguageTranslations;
+import javax.i18n4java.data.TRFile;
 
 import org.apache.log4j.Logger;
 
@@ -278,8 +278,9 @@ public class Translator implements Serializable {
 				} else {
 					translation.append(" ");
 				}
-				translation.append("(").append(
-						translate(text, locale.getLanguage())).append(")");
+				translation.append("(")
+						.append(translate(text, locale.getLanguage()))
+						.append(")");
 			}
 		}
 		return translation.toString();
@@ -292,9 +293,9 @@ public class Translator implements Serializable {
 		if (translations == null) {
 			readContextTranslation();
 		}
-		StringBuffer translation = new StringBuffer(new MessageFormat(
-				translate(text, getDefaultLanguage()), getDefault())
-				.format(params));
+		StringBuffer translation = new StringBuffer(
+				new MessageFormat(translate(text, getDefaultLanguage()),
+						getDefault()).format(params));
 		boolean useLineBreak = false;
 		if (translation.toString().contains("\n")) {
 			useLineBreak = true;
@@ -306,10 +307,11 @@ public class Translator implements Serializable {
 				} else {
 					translation.append(" ");
 				}
-				translation.append("(").append(
-						new MessageFormat(
-								translate(text, locale.getLanguage()), locale)
-								.format(params)).append(")");
+				translation
+						.append("(")
+						.append(new MessageFormat(translate(text,
+								locale.getLanguage()), locale).format(params))
+						.append(")");
 			}
 		}
 		return translation.toString();

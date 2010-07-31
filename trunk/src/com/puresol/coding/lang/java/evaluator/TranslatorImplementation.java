@@ -5,7 +5,7 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
-import javax.i18n4j.Translator;
+import javax.i18n4java.Translator;
 
 import com.puresol.coding.analysis.Analyzer;
 import com.puresol.coding.analysis.CodeRange;

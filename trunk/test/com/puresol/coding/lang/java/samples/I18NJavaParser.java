@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.regex.Pattern;
 
-import javax.i18n4j.MultiLanguageTranslations;
+import javax.i18n4java.data.MultiLanguageTranslations;
 
 import org.apache.log4j.Logger;
 
@@ -160,9 +160,9 @@ public class I18NJavaParser {
 		for (int index = 1; index < i18ns.length; index++) {
 			String source = extractStringFromStartToEnd("\"" + i18ns[index]);
 			if (source != null) {
-				translations.add(MultiLanguageTranslations.from(source
-						.replaceAll("\\\\n", "\n"), packageName + "."
-						+ file.getName(), startLine));
+				translations.add(MultiLanguageTranslations.from(
+						source.replaceAll("\\\\n", "\n"), packageName + "."
+								+ file.getName(), startLine));
 			}
 		}
 		return translations;
