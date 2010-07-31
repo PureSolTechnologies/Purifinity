@@ -13,7 +13,7 @@ package com.puresol.gui.entities;
 import java.awt.BorderLayout;
 import java.util.List;
 
-import javax.i18n4j.Translator;
+import javax.i18n4java.Translator;
 import javax.swing.JOptionPane;
 import javax.swingx.Application;
 import javax.swingx.Button;
@@ -79,11 +79,10 @@ public class EntityTableEditor extends Panel {
 	private Object getSelectedEntity() {
 		int index = table.getSelectedRow();
 		if (index < 0) {
-			JOptionPane
-					.showConfirmDialog(Application.getInstance(), translator
-							.i18n("Please select an entity first."),
-							"No Selection", JOptionPane.DEFAULT_OPTION,
-							JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showConfirmDialog(Application.getInstance(),
+					translator.i18n("Please select an entity first."),
+					"No Selection", JOptionPane.DEFAULT_OPTION,
+					JOptionPane.INFORMATION_MESSAGE);
 			return null;
 		}
 		return entities.get(index);

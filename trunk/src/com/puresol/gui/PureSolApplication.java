@@ -25,7 +25,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-import javax.i18n4j.Translator;
+import javax.i18n4java.Translator;
 import javax.swing.Box;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -71,8 +71,9 @@ public class PureSolApplication extends Application {
 		 * During initialization of static elements (it's one of the first
 		 * things done during start time)the splash screen is opened.
 		 */
-		splash = new SplashWindow(PureSolApplication.class
-				.getResource("/config/splash.jpeg"), 640, 300);
+		splash = new SplashWindow(
+				PureSolApplication.class.getResource("/config/splash.jpeg"),
+				640, 300);
 		splash.setClosable(true);
 		splash.setTimer(10);
 		splash.run();
@@ -145,8 +146,8 @@ public class PureSolApplication extends Application {
 	private Menu getDefaultHelpMenu() {
 		Menu helpMenu = new Menu(translator.i18n("Help"));
 
-		MenuItem webItem = new MenuItem(translator
-				.i18n("PureSol-Technologies Website..."));
+		MenuItem webItem = new MenuItem(
+				translator.i18n("PureSol-Technologies Website..."));
 		webItem.connect("start", this, "openPureSolTechnologiesWebsite");
 
 		MenuItem logItem = new MenuItem(translator.i18n("Set log level..."));
@@ -203,15 +204,16 @@ public class PureSolApplication extends Application {
 			desktop.browse(new URI("http://www.puresol-technologies.com"));
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
-			JOptionPane.showConfirmDialog(this, translator
-					.i18n("IO error during opening the URI."), translator
-					.i18n("IO error"), JOptionPane.OK_OPTION,
+			JOptionPane.showConfirmDialog(this,
+					translator.i18n("IO error during opening the URI."),
+					translator.i18n("IO error"), JOptionPane.OK_OPTION,
 					JOptionPane.ERROR_MESSAGE);
 		} catch (URISyntaxException e) {
 			logger.error(e.getMessage(), e);
-			JOptionPane.showConfirmDialog(this, translator
-					.i18n("URI is invalid."), translator.i18n("URI error"),
-					JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showConfirmDialog(this,
+					translator.i18n("URI is invalid."),
+					translator.i18n("URI error"), JOptionPane.OK_OPTION,
+					JOptionPane.ERROR_MESSAGE);
 		}
 	}
 

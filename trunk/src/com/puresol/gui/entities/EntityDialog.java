@@ -13,7 +13,7 @@ package com.puresol.gui.entities;
 import java.awt.BorderLayout;
 import java.lang.reflect.InvocationTargetException;
 
-import javax.i18n4j.Translator;
+import javax.i18n4java.Translator;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.swingx.Dialog;
@@ -99,16 +99,16 @@ public class EntityDialog extends Dialog {
 		TemplateInformation information = TemplateInformation.from(entity);
 		switch (type) {
 		case SHOW:
-			setTitle(translator.i18n("Show: {0}", translator.i18n(information
-					.getName())));
+			setTitle(translator.i18n("Show: {0}",
+					translator.i18n(information.getName())));
 			break;
 		case CREATE:
-			setTitle(translator.i18n("Create: {0}", translator.i18n(information
-					.getName())));
+			setTitle(translator.i18n("Create: {0}",
+					translator.i18n(information.getName())));
 			break;
 		case CHANGE:
-			setTitle(translator.i18n("Change: {0}", translator.i18n(information
-					.getName())));
+			setTitle(translator.i18n("Change: {0}",
+					translator.i18n(information.getName())));
 			break;
 		default:
 			setTitle("");

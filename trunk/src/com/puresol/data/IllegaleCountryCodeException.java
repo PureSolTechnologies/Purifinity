@@ -1,6 +1,6 @@
 package com.puresol.data;
 
-import javax.i18n4j.Translator;
+import javax.i18n4java.Translator;
 
 /**
  * This exception is thrown in case of the usage of a illegal ISO country code.

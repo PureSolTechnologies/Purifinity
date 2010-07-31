@@ -1,6 +1,6 @@
 package com.puresol.reporting;
 
-import javax.i18n4j.Translator;
+import javax.i18n4java.Translator;
 
 import com.puresol.data.Identifiable;
 

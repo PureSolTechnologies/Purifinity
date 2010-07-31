@@ -1,6 +1,6 @@
 package com.puresol.hpmath;
 
-import javax.i18n4j.Translator;
+import javax.i18n4java.Translator;
 
 import com.puresol.exceptions.StrangeSituationException;
 import com.puresol.utils.MethodInvokationException;

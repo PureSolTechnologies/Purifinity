@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import javax.i18n4j.FileSearch;
+import javax.i18n4java.utils.FileSearch;
 import javax.swingx.progress.ProgressObservable;
 import javax.swingx.progress.ProgressObserver;
 

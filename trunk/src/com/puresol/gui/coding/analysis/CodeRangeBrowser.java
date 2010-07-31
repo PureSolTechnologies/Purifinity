@@ -16,7 +16,7 @@ import java.util.Collections;
 import java.util.Hashtable;
 import java.util.Vector;
 
-import javax.i18n4j.Translator;
+import javax.i18n4java.Translator;
 import javax.swing.BoxLayout;
 import javax.swing.border.TitledBorder;
 import javax.swingx.FreeList;

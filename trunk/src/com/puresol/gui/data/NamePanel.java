@@ -3,7 +3,7 @@ package com.puresol.gui.data;
 import java.awt.BorderLayout;
 import java.util.ArrayList;
 
-import javax.i18n4j.Translator;
+import javax.i18n4java.Translator;
 import javax.swing.BoxLayout;
 import javax.swingx.Button;
 import javax.swingx.Dialog;

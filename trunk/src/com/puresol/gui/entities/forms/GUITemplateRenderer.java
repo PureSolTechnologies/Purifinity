@@ -20,7 +20,7 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
-import javax.i18n4j.Translator;
+import javax.i18n4java.Translator;
 import javax.persistence.Entity;
 import javax.swing.BoxLayout;
 import javax.swingx.CheckBox;
@@ -117,8 +117,7 @@ public class GUITemplateRenderer extends Panel {
 				element.print();
 			} else if (Collection.class.isAssignableFrom(element.getType())) {
 				element.getSetter()
-						.invoke(
-								element.getEntity(),
+						.invoke(element.getEntity(),
 								((EntityAssignmentBox) component)
 										.getSelectedEntities());
 			} else {
@@ -157,8 +156,8 @@ public class GUITemplateRenderer extends Panel {
 
 	private void renderStatic() {
 		setLayout(new BorderLayout());
-		add(new Label(translator.i18n("{0} template", translator.i18n(template
-				.getName()))), BorderLayout.NORTH);
+		add(new Label(translator.i18n("{0} template",
+				translator.i18n(template.getName()))), BorderLayout.NORTH);
 		Panel inputPanel = new Panel();
 		BoxLayout boxLayout = new BoxLayout(inputPanel, BoxLayout.Y_AXIS);
 		inputPanel.setLayout(boxLayout);
@@ -174,8 +173,8 @@ public class GUITemplateRenderer extends Panel {
 
 	private void renderWithLayout() {
 		renderStatic();
-		Label label = new Label(translator
-				.i18n("Layout rendering is not implemented yet!"));
+		Label label = new Label(
+				translator.i18n("Layout rendering is not implemented yet!"));
 		label.setForeground(new Color(255, 0, 0));
 		add(label, BorderLayout.SOUTH);
 	}

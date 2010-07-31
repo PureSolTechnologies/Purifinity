@@ -10,7 +10,7 @@
 
 package apps;
 
-import javax.i18n4j.Translator;
+import javax.i18n4java.Translator;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swingx.Application;

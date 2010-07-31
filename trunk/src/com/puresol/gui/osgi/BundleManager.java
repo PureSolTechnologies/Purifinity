@@ -5,7 +5,7 @@ import java.awt.GridLayout;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.i18n4j.Translator;
+import javax.i18n4java.Translator;
 import javax.swing.JFileChooser;
 import javax.swingx.Application;
 import javax.swingx.Button;

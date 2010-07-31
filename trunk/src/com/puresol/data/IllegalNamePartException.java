@@ -1,6 +1,6 @@
 package com.puresol.data;
 
-import javax.i18n4j.Translator;
+import javax.i18n4java.Translator;
 
 public class IllegalNamePartException extends Exception {
 
@@ -10,8 +10,8 @@ public class IllegalNamePartException extends Exception {
 			.getTranslator(IllegalNamePartException.class);
 
 	public IllegalNamePartException(PersonNamePart namePart) {
-		super(translator.i18n("Name part \"{0}\" is invalid!", namePart
-				.toString()));
+		super(translator.i18n("Name part \"{0}\" is invalid!",
+				namePart.toString()));
 	}
 
 }

@@ -1,6 +1,6 @@
 package com.puresol.gui.coding.analysis;
 
-import javax.i18n4j.Translator;
+import javax.i18n4java.Translator;
 import javax.swing.BoxLayout;
 import javax.swingx.BorderLayoutWidget;
 import javax.swingx.HTMLTextPane;

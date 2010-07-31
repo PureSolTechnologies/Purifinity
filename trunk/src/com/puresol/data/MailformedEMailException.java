@@ -1,6 +1,6 @@
 package com.puresol.data;
 
-import javax.i18n4j.Translator;
+import javax.i18n4java.Translator;
 
 public class MailformedEMailException extends Exception {
 
@@ -15,8 +15,8 @@ public class MailformedEMailException extends Exception {
 	}
 
 	public MailformedEMailException(EMailAddress eMailAddress) {
-		super(translator.i18n("eMail address \"{0}\" is invalid!", eMailAddress
-				.toString()));
+		super(translator.i18n("eMail address \"{0}\" is invalid!",
+				eMailAddress.toString()));
 	}
 
 }

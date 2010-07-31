@@ -12,7 +12,7 @@ package com.puresol.gui.coding.analysis;
 
 import java.awt.BorderLayout;
 
-import javax.i18n4j.Translator;
+import javax.i18n4java.Translator;
 import javax.swingx.Label;
 import javax.swingx.Panel;
 import javax.swingx.TabbedPane;

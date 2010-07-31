@@ -3,7 +3,7 @@ package com.puresol.gui.coding.analysis;
 import java.awt.BorderLayout;
 import java.io.File;
 
-import javax.i18n4j.Translator;
+import javax.i18n4java.Translator;
 import javax.swing.BoxLayout;
 import javax.swing.JFileChooser;
 import javax.swingx.Button;

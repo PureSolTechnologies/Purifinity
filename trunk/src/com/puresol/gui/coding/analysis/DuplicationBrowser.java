@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
 
-import javax.i18n4j.Translator;
+import javax.i18n4java.Translator;
 import javax.swing.border.TitledBorder;
 import javax.swingx.BorderLayoutWidget;
 import javax.swingx.FreeList;

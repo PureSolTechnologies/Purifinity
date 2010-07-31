@@ -1,6 +1,6 @@
 package com.puresol.data;
 
-import javax.i18n4j.Translator;
+import javax.i18n4java.Translator;
 
 public enum PublicityType implements Identifiable {
 

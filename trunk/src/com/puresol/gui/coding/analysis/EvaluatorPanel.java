@@ -4,7 +4,7 @@ import java.awt.BorderLayout;
 import java.util.Hashtable;
 import java.util.List;
 
-import javax.i18n4j.Translator;
+import javax.i18n4java.Translator;
 import javax.swing.JSplitPane;
 import javax.swingx.Button;
 import javax.swingx.FreeList;

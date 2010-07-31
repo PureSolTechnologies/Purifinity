@@ -3,7 +3,7 @@ package com.puresol.testing;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
-import javax.i18n4j.Translator;
+import javax.i18n4java.Translator;
 
 import org.apache.log4j.Logger;
 

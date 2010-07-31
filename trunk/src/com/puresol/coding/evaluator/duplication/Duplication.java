@@ -2,7 +2,7 @@ package com.puresol.coding.evaluator.duplication;
 
 import java.io.Serializable;
 
-import javax.i18n4j.Translator;
+import javax.i18n4java.Translator;
 
 import com.puresol.coding.analysis.CodeRange;
 import com.puresol.parser.Token;

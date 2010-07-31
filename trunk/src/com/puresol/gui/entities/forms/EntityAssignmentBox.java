@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Vector;
 
-import javax.i18n4j.Translator;
+import javax.i18n4java.Translator;
 import javax.persistence.EntityManager;
 import javax.swingx.AssignmentBox;
 import javax.swingx.Button;
