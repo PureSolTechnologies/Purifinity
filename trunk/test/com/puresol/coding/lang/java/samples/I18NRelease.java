@@ -19,7 +19,7 @@
 package com.puresol.coding.lang.java.samples;
 
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.Vector;
@@ -101,7 +101,7 @@ public class I18NRelease {
 				release(mlTranslations, language, new File(file.getPath()
 						.replaceAll("\\.i18n", "." + language + ".tr")));
 			}
-		} catch (FileNotFoundException e) {
+		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
 		}
 	}
