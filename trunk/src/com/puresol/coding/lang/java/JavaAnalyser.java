@@ -66,4 +66,5 @@ public class JavaAnalyser extends AbstractAnalyser {
 	public ProgrammingLanguage getLanguage() {
 		return Java.getInstance();
 	}
+
 }
