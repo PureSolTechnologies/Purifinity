@@ -11,6 +11,13 @@ import java.util.List;
  */
 public interface Parser extends Serializable {
 
+	/**
+	 * This method is called to scan the token stream. The actual parsing is
+	 * done here.
+	 * 
+	 * @throws PartDoesNotMatchException
+	 * @throws ParserException
+	 */
 	public void scan() throws PartDoesNotMatchException, ParserException;
 
 	public String getName();
