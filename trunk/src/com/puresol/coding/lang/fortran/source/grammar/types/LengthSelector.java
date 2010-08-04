@@ -2,14 +2,7 @@ package com.puresol.coding.lang.fortran.source.grammar.types;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
-import com.puresol.coding.lang.fortran.source.keywords.CharacterKeyword;
-import com.puresol.coding.lang.fortran.source.keywords.ComplexKeyword;
-import com.puresol.coding.lang.fortran.source.keywords.DoublePrecisionKeyword;
-import com.puresol.coding.lang.fortran.source.keywords.IntegerKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.LenKeyword;
-import com.puresol.coding.lang.fortran.source.keywords.LogicalKeyword;
-import com.puresol.coding.lang.fortran.source.keywords.RealKeyword;
-import com.puresol.coding.lang.fortran.source.literals.IntegerLiteral;
 import com.puresol.coding.lang.fortran.source.symbols.Comma;
 import com.puresol.coding.lang.fortran.source.symbols.Equals;
 import com.puresol.coding.lang.fortran.source.symbols.LParen;

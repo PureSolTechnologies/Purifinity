@@ -1,6 +1,6 @@
 package com.puresol.coding.lang.fortran.evaluator;
 
-import javax.i18n4j.Translator;
+import javax.i18n4java.Translator;
 
 import com.puresol.coding.analysis.CodeRange;
 import com.puresol.parser.Token;

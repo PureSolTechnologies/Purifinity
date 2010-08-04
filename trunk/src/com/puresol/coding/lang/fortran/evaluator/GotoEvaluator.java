@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.Collections;
 import java.util.List;
 
-import javax.i18n4j.Translator;
+import javax.i18n4java.Translator;
 
 import org.apache.log4j.Logger;
 
@@ -59,8 +59,8 @@ public class GotoEvaluator extends AbstractGotoEvaluator {
 					try {
 						Token next = tokenStream.findNextToken(pos);
 						if ((!next.getText().toUpperCase().equals("FORMAT"))
-								&& (!next.getText().toUpperCase().equals(
-										"CONTINUE"))) {
+								&& (!next.getText().toUpperCase()
+										.equals("CONTINUE"))) {
 							FoundLabel foundLabel = new FoundLabel(codeRange,
 									pos, label);
 							addLabel(codeRange, foundLabel);

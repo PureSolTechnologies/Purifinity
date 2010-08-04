@@ -1,21 +1,22 @@
-package com.puresol.coding.lang.fortran.source.grammar.highlevel;
+package com.puresol.coding.lang.fortran.source.grammar.ioediting;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
+import com.puresol.coding.lang.fortran.source.symbols.LParen;
+import com.puresol.coding.lang.fortran.source.symbols.RParen;
+import com.puresol.coding.lang.fortran.source.symbols.Star;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
 /**
  * <pre>
- * R1108 module-subprogram is function-subprogram
- * or subroutine-subprogram
- * or separate-module-subprogram
+ * R1005 unlimited-format-item is * ( format-items )
  * </pre>
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class ModuleSubprogram extends AbstractFortranParser {
+public class UnlimitedFormatItem extends AbstractFortranParser {
 
 	private static final long serialVersionUID = 2177336093526924891L;
 
@@ -26,13 +27,10 @@ public class ModuleSubprogram extends AbstractFortranParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		if (acceptPart(FunctionSubprogram.class) != null) {
-		} else if (acceptPart(SubroutineSubprogram.class) != null) {
-		} else if (acceptPart(SeparateModuleSubprogram.class) != null) {
-		} else {
-			abort();
-		}
+		expectToken(Star.class);
+		expectToken(LParen.class);
+		expectPart(FormatItems.class);
+		expectToken(RParen.class);
 		finish();
 	}
-
 }

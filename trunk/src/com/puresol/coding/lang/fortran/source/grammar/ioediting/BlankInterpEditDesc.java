@@ -1,24 +1,22 @@
-package com.puresol.coding.lang.fortran.source.grammar.highlevel;
-
-import java.util.ArrayList;
-import java.util.List;
+package com.puresol.coding.lang.fortran.source.grammar.ioediting;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
-import com.puresol.parser.Parser;
+import com.puresol.coding.lang.fortran.source.keywords.BNKeyword;
+import com.puresol.coding.lang.fortran.source.keywords.BZKeyword;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
 /**
  * <pre>
- * R1107 module-subprogram-part is contains-stmt
- * [ module-subprogram ] ...
+ * R1018 blank-interp-edit-desc is BN
+ * or BZ
  * </pre>
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class ModuleSubprogramPart extends AbstractFortranParser {
+public class BlankInterpEditDesc extends AbstractFortranParser {
 
 	private static final long serialVersionUID = 2177336093526924891L;
 
@@ -29,9 +27,11 @@ public class ModuleSubprogramPart extends AbstractFortranParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		expectPart(ContainsStmt.class);
-		while (acceptPart(ModulesSubprogram.class) != null)
-			;
+		if (acceptToken(BNKeyword.class) != null) {
+		} else if (acceptToken(BZKeyword.class) != null) {
+		} else {
+			abort();
+		}
 		finish();
 	}
 

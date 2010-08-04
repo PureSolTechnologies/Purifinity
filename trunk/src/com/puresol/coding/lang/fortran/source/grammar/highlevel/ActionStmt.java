@@ -30,12 +30,14 @@ import com.puresol.coding.lang.fortran.source.grammar.iostatements.BackspaceStmt
 import com.puresol.coding.lang.fortran.source.grammar.iostatements.CloseStmt;
 import com.puresol.coding.lang.fortran.source.grammar.iostatements.EndfileStmt;
 import com.puresol.coding.lang.fortran.source.grammar.iostatements.FlushStmt;
+import com.puresol.coding.lang.fortran.source.grammar.iostatements.InquireStmt;
 import com.puresol.coding.lang.fortran.source.grammar.iostatements.OpenStmt;
 import com.puresol.coding.lang.fortran.source.grammar.iostatements.PrintStmt;
 import com.puresol.coding.lang.fortran.source.grammar.iostatements.ReadStmt;
 import com.puresol.coding.lang.fortran.source.grammar.iostatements.RewindStmt;
 import com.puresol.coding.lang.fortran.source.grammar.iostatements.WaitStmt;
 import com.puresol.coding.lang.fortran.source.grammar.iostatements.WriteStmt;
+import com.puresol.coding.lang.fortran.source.grammar.programmunits.EndProgramStmt;
 import com.puresol.parser.Parser;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;

@@ -1,26 +1,21 @@
-package com.puresol.coding.lang.fortran.source.grammar.highlevel;
-
-import java.util.ArrayList;
-import java.util.List;
+package com.puresol.coding.lang.fortran.source.grammar.programmunits;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
-import com.puresol.parser.Parser;
+import com.puresol.coding.lang.fortran.source.keywords.ProgramKeyword;
+import com.puresol.coding.lang.fortran.source.literals.NameLiteral;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
 /**
  * <pre>
- * R1116 submodule is submodule-stmt
- * [ specification-part ]
- * [ module-subprogram-part ]
- * end-submodule-stmt
+ * R1102 program-stmt is PROGRAM program-name
  * </pre>
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class Submodule extends AbstractFortranParser {
+public class ProgramStmt extends AbstractFortranParser {
 
 	private static final long serialVersionUID = 2177336093526924891L;
 
@@ -31,10 +26,8 @@ public class Submodule extends AbstractFortranParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		expectPart(SubmoduleStmt.class);
-		acceptPart(SpecificationPart.class);
-		acceptPart(ModuleSubprogramPart.class);
-		expectPart(EndSubmoduleStmt.class);
+		expectToken(ProgramKeyword.class);
+		expectToken(NameLiteral.class);
 		finish();
 	}
 

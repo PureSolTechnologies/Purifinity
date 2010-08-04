@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
 
-import javax.i18n4j.Translator;
+import javax.i18n4java.Translator;
 import javax.swingx.progress.ProgressObserver;
 
 import com.puresol.coding.analysis.CodeRange;
@@ -159,8 +159,7 @@ public class FixedFormEvaluator extends AbstractEvaluator {
 	private String getHTMLProjectComment() {
 		String text = "<p>"
 				+ translator
-						.i18n(
-								"The overall project quality is: {0}",
+						.i18n("The overall project quality is: {0}",
 								HTMLConverter
 										.convertQualityLevelToHTML(getProjectQuality()))
 				+ "</p>\n";

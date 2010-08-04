@@ -2,6 +2,8 @@ package com.puresol.coding.lang.fortran.source.grammar.highlevel;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
+import com.puresol.coding.lang.fortran.source.grammar.procedures.FunctionSubprogram;
+import com.puresol.coding.lang.fortran.source.grammar.procedures.SubroutineSubprogram;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 

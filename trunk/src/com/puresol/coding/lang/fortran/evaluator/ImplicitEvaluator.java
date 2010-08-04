@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
 
-import javax.i18n4j.Translator;
+import javax.i18n4java.Translator;
 import javax.swingx.progress.ProgressObserver;
 
 import com.puresol.coding.analysis.CodeRange;
@@ -101,8 +101,9 @@ public class ImplicitEvaluator extends AbstractEvaluator {
 				currentToken = tokenStream.get(pos);
 				text += currentToken.getText();
 			} while (!currentToken.getText().contains("\n"));
-			addImplicit(codeRange, new FoundImplicit(codeRange, token
-					.getTokenID(), text, isImplicitNone));
+			addImplicit(codeRange,
+					new FoundImplicit(codeRange, token.getTokenID(), text,
+							isImplicitNone));
 		}
 	}
 

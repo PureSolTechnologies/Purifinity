@@ -3,7 +3,6 @@ package com.puresol.coding.lang.fortran.source.grammar.types;
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
 import com.puresol.coding.lang.fortran.source.keywords.IntegerKeyword;
-import com.puresol.coding.lang.fortran.source.literals.NameLiteral;
 import com.puresol.coding.lang.fortran.source.symbols.Colon;
 import com.puresol.coding.lang.fortran.source.symbols.Comma;
 import com.puresol.parser.ParserException;
@@ -35,7 +34,7 @@ public class TypeParamDefStmt extends AbstractFortranParser {
 		expectPart(TypeParamAttrSpec.class);
 		expectToken(Colon.class);
 		expectToken(Colon.class);
-		expectPart(TypeParamDeclList);
+		expectPart(TypeParamDeclList.class);
 		finish();
 	}
 

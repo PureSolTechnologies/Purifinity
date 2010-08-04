@@ -1,27 +1,30 @@
-package com.puresol.coding.lang.fortran.source.grammar.highlevel;
+package com.puresol.coding.lang.fortran.source.grammar.procedures;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
+import com.puresol.coding.lang.fortran.source.grammar.highlevel.ExecutionPart;
+import com.puresol.coding.lang.fortran.source.grammar.highlevel.InternalSubprogramPart;
+import com.puresol.coding.lang.fortran.source.grammar.highlevel.SpecificationPart;
 import com.puresol.parser.Parser;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
 /**
  * <pre>
- * R1237 separate-module-subprogram is mp-subprogram-stmt
+ * R1227 function-subprogram is function-stmt
  * [ specification-part ]
  * [ execution-part ]
  * [ internal-subprogram-part ]
- * end-mp-subprogram-stmt
+ * end-function-stmt
  * </pre>
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class SeparateModuleSubprogram extends AbstractFortranParser {
+public class FunctionSubprogram extends AbstractFortranParser {
 
 	private static final long serialVersionUID = 2177336093526924891L;
 
@@ -32,11 +35,11 @@ public class SeparateModuleSubprogram extends AbstractFortranParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		expectPart(MpSubprogramStmt.class);
+		expectPart(FunctionStmt.class);
 		acceptPart(SpecificationPart.class);
 		acceptPart(ExecutionPart.class);
 		acceptPart(InternalSubprogramPart.class);
-		expectPart(EndMpSubprogramStmt.class);
+		expectPart(EndFunctionStmt.class);
 		finish();
 	}
 

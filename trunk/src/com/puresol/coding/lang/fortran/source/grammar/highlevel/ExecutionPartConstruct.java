@@ -5,6 +5,8 @@ import java.util.List;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
+import com.puresol.coding.lang.fortran.source.grammar.attributes.DataStmt;
+import com.puresol.coding.lang.fortran.source.grammar.ioediting.FormatStmt;
 import com.puresol.parser.Parser;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
