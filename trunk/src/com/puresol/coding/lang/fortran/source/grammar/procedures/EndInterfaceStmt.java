@@ -1,21 +1,20 @@
-package com.puresol.coding.lang.fortran.source.grammar.expressions;
+package com.puresol.coding.lang.fortran.source.grammar.procedures;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
-import com.puresol.coding.lang.fortran.source.grammar.attributes.ProcPointerName;
+import com.puresol.coding.lang.fortran.source.keywords.EndInterfaceKeyword;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
 /**
  * <pre>
- * R738 proc-pointer-object is proc-pointer-name
- * or proc-component-ref
+ * R1204 end-interface-stmt is END INTERFACE [ generic-spec ]
  * </pre>
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class ProcPointerObject extends AbstractFortranParser {
+public class EndInterfaceStmt extends AbstractFortranParser {
 
 	private static final long serialVersionUID = 2177336093526924891L;
 
@@ -26,11 +25,9 @@ public class ProcPointerObject extends AbstractFortranParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		if (acceptPart(ProcPointerName.class) != null) {
-		} else if (acceptPart(ProcComponentRef.class) != null) {
-		} else {
-			abort();
-		}
+		expectToken(EndInterfaceKeyword.class);
+		acceptPart(GenericSpec.class);
 		finish();
 	}
+
 }

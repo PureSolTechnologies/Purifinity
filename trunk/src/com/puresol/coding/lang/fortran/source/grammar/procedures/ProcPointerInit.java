@@ -1,21 +1,22 @@
-package com.puresol.coding.lang.fortran.source.grammar.expressions;
+package com.puresol.coding.lang.fortran.source.grammar.procedures;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
-import com.puresol.coding.lang.fortran.source.grammar.attributes.ProcPointerName;
+import com.puresol.coding.lang.fortran.source.grammar.attributes.NullInit;
+import com.puresol.coding.lang.fortran.source.literals.NameLiteral;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
 /**
  * <pre>
- * R738 proc-pointer-object is proc-pointer-name
- * or proc-component-ref
+ * R1216 proc-pointer-init is null-init
+ * or initial-proc-target
  * </pre>
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class ProcPointerObject extends AbstractFortranParser {
+public class ProcPointerInit extends AbstractFortranParser {
 
 	private static final long serialVersionUID = 2177336093526924891L;
 
@@ -26,8 +27,8 @@ public class ProcPointerObject extends AbstractFortranParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		if (acceptPart(ProcPointerName.class) != null) {
-		} else if (acceptPart(ProcComponentRef.class) != null) {
+		if (acceptPart(NullInit.class) != null) {
+		} else (acceptPart(InitialProcTarget.class) != null) {
 		} else {
 			abort();
 		}
