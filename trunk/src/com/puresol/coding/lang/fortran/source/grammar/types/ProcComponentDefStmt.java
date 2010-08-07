@@ -2,6 +2,7 @@ package com.puresol.coding.lang.fortran.source.grammar.types;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
+import com.puresol.coding.lang.fortran.source.grammar.procedures.ProcDecl;
 import com.puresol.coding.lang.fortran.source.grammar.procedures.ProcInterface;
 import com.puresol.coding.lang.fortran.source.keywords.ProcedureKeyword;
 import com.puresol.coding.lang.fortran.source.symbols.Colon;
@@ -20,7 +21,7 @@ import com.puresol.parser.PartDoesNotMatchException;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class ProcedureComponentDefStmt extends AbstractFortranParser {
+public class ProcComponentDefStmt extends AbstractFortranParser {
 
 	private static final long serialVersionUID = 2177336093526924891L;
 
@@ -39,7 +40,7 @@ public class ProcedureComponentDefStmt extends AbstractFortranParser {
 		expectPart(ProcComponentAttrSpecList.class);
 		expectToken(Colon.class);
 		expectToken(Colon.class);
-		expectPart(ProcDeclList.class);
+		expectPart(ProcDecl.class);
 		finish();
 	}
 }

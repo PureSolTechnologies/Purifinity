@@ -1,24 +1,20 @@
-package com.puresol.coding.lang.fortran.source.grammar.dataobjects;
+package com.puresol.coding.lang.fortran.source.grammar.expressions;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
 import com.puresol.coding.lang.fortran.source.literals.NameLiteral;
-import com.puresol.coding.lang.fortran.source.symbols.Colon;
-import com.puresol.coding.lang.fortran.source.symbols.Comma;
-import com.puresol.coding.lang.fortran.source.symbols.LParen;
-import com.puresol.coding.lang.fortran.source.symbols.Percent;
-import com.puresol.coding.lang.fortran.source.symbols.RParen;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
 /**
  * <pre>
+ * R739 proc-component-ref is scalar-variable % procedure-component-name
  * </pre>
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class SectionSubscriptionList extends AbstractFortranParser {
+public class ProcedureComponentName extends AbstractFortranParser {
 
 	private static final long serialVersionUID = 2177336093526924891L;
 
@@ -29,10 +25,7 @@ public class SectionSubscriptionList extends AbstractFortranParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		expectPart(SectionSubscription.class);
-		while (acceptToken(Comma.class) != null) {
-			expectPart(SectionSubscription.class);
-		}
+		expectToken(NameLiteral.class);
 		finish();
 	}
 }

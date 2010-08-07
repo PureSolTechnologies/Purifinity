@@ -2,7 +2,6 @@ package com.puresol.coding.lang.fortran.source.grammar.procedures;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
-import com.puresol.coding.lang.fortran.source.keywords.ModuleKeyword;
 import com.puresol.coding.lang.fortran.source.keywords.ProcedureKeyword;
 import com.puresol.coding.lang.fortran.source.symbols.Colon;
 import com.puresol.coding.lang.fortran.source.symbols.Comma;

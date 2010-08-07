@@ -3,9 +3,6 @@ package com.puresol.coding.lang.fortran.source.grammar.dataobjects;
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
 import com.puresol.coding.lang.fortran.source.grammar.lexical.ScalarConstant;
-import com.puresol.coding.lang.fortran.source.symbols.Colon;
-import com.puresol.coding.lang.fortran.source.symbols.LParen;
-import com.puresol.coding.lang.fortran.source.symbols.RParen;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
@@ -35,7 +32,7 @@ public class ParentString extends AbstractFortranParser {
 		if (acceptPart(ScalarVariableName.class) != null) {
 		} else if (acceptPart(ArrayElement.class) != null) {
 		} else if (acceptPart(CoindexedNamedObject.class) != null) {
-		} else if (acceptPart(ScalarStrutureComponent.class) != null) {
+		} else if (acceptPart(ScalarStructureComponent.class) != null) {
 		} else if (acceptPart(ScalarConstant.class) != null) {
 		} else {
 			abort();

@@ -29,7 +29,7 @@ public class PartRef extends AbstractFortranParser {
 	public void scan() throws PartDoesNotMatchException, ParserException {
 		expectToken(NameLiteral.class);
 		if (acceptToken(LParen.class) != null) {
-			expectPart(SectionSubscriptionList.class);
+			expectPart(SectionSubscriptList.class);
 			expectToken(RParen.class);
 		}
 		acceptPart(ImageSelector.class);

@@ -1,21 +1,21 @@
-package com.puresol.coding.lang.fortran.source.grammar.programmunits;
+package com.puresol.coding.lang.fortran.source.grammar.procedures;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
-import com.puresol.coding.lang.fortran.source.grammar.procedures.ContainsStmt;
+import com.puresol.coding.lang.fortran.source.keywords.EndFunctionKeyword;
+import com.puresol.coding.lang.fortran.source.keywords.EndKeyword;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
 /**
  * <pre>
- * R1107 module-subprogram-part is contains-stmt
- * [ module-subprogram ] ...
+ * R1232 end-function-stmt is END [ FUNCTION [ function-name ] ]
  * </pre>
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class ModuleSubprogramPart extends AbstractFortranParser {
+public class EndFunctionStmt extends AbstractFortranParser {
 
 	private static final long serialVersionUID = 2177336093526924891L;
 
@@ -26,9 +26,11 @@ public class ModuleSubprogramPart extends AbstractFortranParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		expectPart(ContainsStmt.class);
-		while (acceptPart(ModuleSubprogram.class) != null)
-			;
+		if (acceptToken(EndFunctionKeyword.class) != null) {
+			acceptPart(FunctionName.class);
+		} else {
+			expectToken(EndKeyword.class);
+		}
 		finish();
 	}
 

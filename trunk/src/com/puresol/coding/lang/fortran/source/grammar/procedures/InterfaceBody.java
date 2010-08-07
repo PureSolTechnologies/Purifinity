@@ -3,9 +3,6 @@ package com.puresol.coding.lang.fortran.source.grammar.procedures;
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
 import com.puresol.coding.lang.fortran.source.grammar.highlevel.SpecificationPart;
-import com.puresol.coding.lang.fortran.source.keywords.EndInterfaceKeyword;
-import com.puresol.coding.lang.fortran.source.keywords.ModuleKeyword;
-import com.puresol.coding.lang.fortran.source.literals.NameLiteral;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
@@ -38,7 +35,7 @@ public class InterfaceBody extends AbstractFortranParser {
 			expectPart(EndFunctionStmt.class);
 		} else if (acceptPart(SubroutineStmt.class) != null) {
 			acceptPart(SpecificationPart.class);
-			expectPart(EndSunroutineStmt.class);
+			expectPart(EndSubroutineStmt.class);
 		} else {
 			abort();
 		}

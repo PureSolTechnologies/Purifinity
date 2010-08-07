@@ -1,21 +1,20 @@
-package com.puresol.coding.lang.fortran.source.grammar.programmunits;
+package com.puresol.coding.lang.fortran.source.grammar.procedures;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
-import com.puresol.coding.lang.fortran.source.grammar.procedures.ContainsStmt;
+import com.puresol.coding.lang.fortran.source.grammar.attributes.LanguageBindingSpec;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
 /**
  * <pre>
- * R1107 module-subprogram-part is contains-stmt
- * [ module-subprogram ] ...
+ * R1229 proc-language-binding-spec is language-binding-spec
  * </pre>
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class ModuleSubprogramPart extends AbstractFortranParser {
+public class ProcLanguageBindingSpec extends AbstractFortranParser {
 
 	private static final long serialVersionUID = 2177336093526924891L;
 
@@ -26,9 +25,7 @@ public class ModuleSubprogramPart extends AbstractFortranParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		expectPart(ContainsStmt.class);
-		while (acceptPart(ModuleSubprogram.class) != null)
-			;
+		expectPart(LanguageBindingSpec.class);
 		finish();
 	}
 

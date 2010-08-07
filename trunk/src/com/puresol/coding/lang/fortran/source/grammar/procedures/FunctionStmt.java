@@ -1,9 +1,8 @@
-package com.puresol.coding.lang.fortran.source.grammar.programmunits;
+package com.puresol.coding.lang.fortran.source.grammar.procedures;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
-import com.puresol.coding.lang.fortran.source.keywords.SubmoduleKeyword;
-import com.puresol.coding.lang.fortran.source.literals.NameLiteral;
+import com.puresol.coding.lang.fortran.source.keywords.FunctionKeyword;
 import com.puresol.coding.lang.fortran.source.symbols.LParen;
 import com.puresol.coding.lang.fortran.source.symbols.RParen;
 import com.puresol.parser.ParserException;
@@ -11,13 +10,13 @@ import com.puresol.parser.PartDoesNotMatchException;
 
 /**
  * <pre>
- * R1117 submodule-stmt is SUBMODULE ( parent-identier ) submodule-name
+ * R1228 function-stmt is [ prefix ] FUNCTION function-name ( [ dummy-arg-name-list ] ) [ sufix ]
  * </pre>
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class SubmoduleStmt extends AbstractFortranParser {
+public class FunctionStmt extends AbstractFortranParser {
 
 	private static final long serialVersionUID = 2177336093526924891L;
 
@@ -28,11 +27,14 @@ public class SubmoduleStmt extends AbstractFortranParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		expectToken(SubmoduleKeyword.class);
+		acceptPart(Prefix.class);
+		expectToken(FunctionKeyword.class);
+		expectPart(FunctionName.class);
 		expectToken(LParen.class);
-		expectPart(ParentIdentifier.class);
+		acceptPart(DummyArgNameList.class);
 		expectToken(RParen.class);
-		expectToken(NameLiteral.class);
+		acceptPart(Suffix.class);
 		finish();
 	}
+
 }

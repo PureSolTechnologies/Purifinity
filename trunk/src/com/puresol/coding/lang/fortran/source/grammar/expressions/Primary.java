@@ -1,21 +1,16 @@
 package com.puresol.coding.lang.fortran.source.grammar.expressions;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
-import com.puresol.coding.lang.fortran.source.grammar.dataobjects.AllocateStmt;
-import com.puresol.coding.lang.fortran.source.grammar.dataobjects.DeallocateStmt;
 import com.puresol.coding.lang.fortran.source.grammar.dataobjects.Designator;
-import com.puresol.coding.lang.fortran.source.grammar.dataobjects.NullifyStmt;
 import com.puresol.coding.lang.fortran.source.grammar.dataobjects.TypeParamInquiry;
 import com.puresol.coding.lang.fortran.source.grammar.lexical.Constant;
+import com.puresol.coding.lang.fortran.source.grammar.procedures.FunctionReference;
 import com.puresol.coding.lang.fortran.source.grammar.types.ArrayConstructor;
 import com.puresol.coding.lang.fortran.source.grammar.types.StructureConstructor;
+import com.puresol.coding.lang.fortran.source.grammar.types.TypeParamName;
 import com.puresol.coding.lang.fortran.source.symbols.LParen;
 import com.puresol.coding.lang.fortran.source.symbols.RParen;
-import com.puresol.parser.Parser;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
