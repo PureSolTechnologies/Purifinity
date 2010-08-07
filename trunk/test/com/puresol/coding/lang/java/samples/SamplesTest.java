@@ -6,8 +6,6 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
-import apps.CodeAnalysis;
-
 import com.puresol.coding.analysis.AnalyserException;
 import com.puresol.coding.lang.java.JavaAnalyser;
 import com.puresol.utils.FileUtilities;
@@ -16,20 +14,6 @@ import junit.framework.Assert;
 import junit.framework.TestCase;
 
 public class SamplesTest extends TestCase {
-
-	@Test
-	public void testRandomNumbers() {
-		try {
-			JavaAnalyser analyser = new JavaAnalyser(new File(new File("src"),
-					FileUtilities
-							.classToRelativePackagePath(CodeAnalysis.class)
-							.toString()));
-			analyser.parse();
-		} catch (AnalyserException e) {
-			e.printStackTrace();
-			Assert.fail("No exception was expected!");
-		}
-	}
 
 	@Test
 	public void testTranslators() {
