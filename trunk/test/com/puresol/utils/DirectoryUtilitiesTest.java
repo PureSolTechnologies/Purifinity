@@ -21,13 +21,18 @@ public class DirectoryUtilitiesTest extends TestCase {
 		assertTrue(installationDirectory.isDirectory());
 		System.out.println(installationDirectory);
 		assertTrue(installationDirectory.toString().endsWith(
-				"/bin/com/puresol/utils"));
+				"/bin/"
+						+ DirectoryUtilitiesTest.class.getPackage().getName()
+								.replaceAll("\\.", "/")));
 
 		installationDirectory = DirectoryUtilities.getInstallationDirectory(
 				DirectoryUtilitiesTest.class, true);
 		assertTrue(installationDirectory.isDirectory());
 		System.out.println(installationDirectory);
-		assertTrue(installationDirectory.toString().endsWith("/bin"));
+		assertTrue(installationDirectory.toString().endsWith(
+				"/bin/"
+						+ DirectoryUtilitiesTest.class.getPackage().getName()
+								.replaceAll("\\.", "/")));
 	}
 
 }

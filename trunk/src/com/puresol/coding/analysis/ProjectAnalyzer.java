@@ -70,6 +70,12 @@ public class ProjectAnalyzer implements Serializable, ProgressObservable {
 	/**
 	 * This method creates a new project analyser with a new workspace
 	 * associated.
+	 * 
+	 * @param projectDirectory
+	 *            is the directory which is to scan for files and to be
+	 *            analysed.
+	 * @param workspaceDirectory
+	 *            is the directory to put the persisted results to.
 	 */
 	public static ProjectAnalyzer create(File projectDirectory,
 			File workspaceDirectory) {
@@ -86,6 +92,7 @@ public class ProjectAnalyzer implements Serializable, ProgressObservable {
 	 * directory.
 	 * 
 	 * @param workspaceDirectory
+	 *            is the directory where the persisted results can be found.
 	 * @return
 	 */
 	public static ProjectAnalyzer open(File workspaceDirectory) {
@@ -217,7 +224,7 @@ public class ProjectAnalyzer implements Serializable, ProgressObservable {
 	}
 
 	private void analyzeFiles() {
-		List<File> files = FileSearch.find(projectDirectory, "**/*");
+		List<File> files = FileSearch.find(projectDirectory, "*");
 		if (progressMonitor != null) {
 			progressMonitor.setRange(0, files.size());
 			progressMonitor.setStatus(0);
