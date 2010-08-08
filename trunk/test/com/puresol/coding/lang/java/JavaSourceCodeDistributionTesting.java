@@ -34,11 +34,9 @@ public class JavaSourceCodeDistributionTesting {
 	public void test() {
 		// Logger.getRootLogger().setLevel(Level.DEBUG);
 		try {
-			Analyzer analyser = Java
-					.getInstance()
-					.createAnalyser(
-							new File(new File(INSTALL_DIRECTORY),
-									"j2se/src/share/classes/sun/rmi/server/Activation.java"));
+			Analyzer analyser = Java.getInstance().createAnalyser(
+					new File(new File(INSTALL_DIRECTORY),
+							"deploy/make/macosx/javaws/Globals.java"));
 			analyser.parse();
 		} catch (ClassInstantiationException e) {
 			e.printStackTrace();
