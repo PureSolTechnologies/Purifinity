@@ -14,9 +14,7 @@ import com.puresol.parser.tokens.TokenPublicity;
 import com.puresol.parser.tokens.TokenStream;
 import com.puresol.parser.tokens.TokenStreamIterator;
 import com.puresol.utils.ClassInstantiationException;
-import com.puresol.utils.di.DIClassBuilder;
-import com.puresol.utils.di.Inject;
-import com.puresol.utils.di.Injection;
+import com.puresol.utils.Instances;
 
 /**
  * This class is the abstract base implementation for a parser based on
@@ -31,17 +29,13 @@ public abstract class AbstractParser implements Parser {
 
 	private static final Logger logger = Logger.getLogger(AbstractParser.class);
 
-	@Inject("TokenStreamIterator")
-	private final TokenStreamIterator tokenStreamIterator = null;
+	private TokenStreamIterator tokenStreamIterator = null;
 
-	@Inject("StartPosition")
 	private Integer startPosition = 0;
 
-	@Inject("EndPosition")
 	private Integer endPosition = 0;
 
-	@Inject("ParentParser")
-	private final Parser parentParser = null;
+	private Parser parentParser = null;
 
 	/**
 	 * This variable is the name of the parser. Per default it's just the class
@@ -192,8 +186,21 @@ public abstract class AbstractParser implements Parser {
 		return tokenStreamIterator.getTokenStream();
 	}
 
+	public final void setTokenStreamIterator(
+			TokenStreamIterator tokenStreamIterator) {
+		if (this.tokenStreamIterator != null) {
+			throw new IllegalStateException(
+					"TokenStreamIterator was already assigned!");
+		}
+		this.tokenStreamIterator = tokenStreamIterator;
+	}
+
 	protected final TokenStreamIterator getTokenStreamIterator() {
 		return tokenStreamIterator;
+	}
+
+	protected final void setParentParser(Parser parentParser) {
+		this.parentParser = parentParser;
 	}
 
 	/**
@@ -262,19 +269,14 @@ public abstract class AbstractParser implements Parser {
 	protected Parser createParserInstance(Class<? extends Parser> clazz)
 			throws ParserException {
 		try {
-			return DIClassBuilder
-					.forInjections(
-							Injection
-									.named("StartPosition", Integer
-											.valueOf(tokenStreamIterator
-													.getPosition())),
-							Injection.named("EndPosition", Integer
-									.valueOf(tokenStreamIterator.getPosition())),
-							Injection.named("TokenStreamIterator",
-									new TokenStreamIterator(getTokenStream(),
-											tokenStreamIterator.getPosition())),
-							Injection.named("ParentParser", this))
+			AbstractParser parser = (AbstractParser) Instances
 					.createInstance(clazz);
+			parser.setParentParser(this);
+			parser.setTokenStreamIterator(new TokenStreamIterator(
+					getTokenStream(), tokenStreamIterator.getPosition()));
+			parser.setStartPosition(tokenStreamIterator.getPosition());
+			parser.setEndPosition(tokenStreamIterator.getPosition());
+			return parser;
 		} catch (ClassInstantiationException e) {
 			logger.error(e.getMessage(), e);
 			throw new ParserException(e.getMessage());

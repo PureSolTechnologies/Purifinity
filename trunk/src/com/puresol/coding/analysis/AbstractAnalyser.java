@@ -17,15 +17,15 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import com.puresol.parser.AbstractParser;
 import com.puresol.parser.Parser;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.tokens.TokenStream;
 import com.puresol.parser.tokens.TokenStreamIterator;
 import com.puresol.utils.ClassInstantiationException;
+import com.puresol.utils.Instances;
 import com.puresol.utils.Persistence;
 import com.puresol.utils.PersistenceException;
-import com.puresol.utils.di.DIClassBuilder;
-import com.puresol.utils.di.Injection;
 
 abstract public class AbstractAnalyser implements Analyzer {
 
@@ -37,12 +37,9 @@ abstract public class AbstractAnalyser implements Analyzer {
 	public static Parser createParserInstance(Class<? extends Parser> clazz,
 			TokenStream tokenStream) throws ParserException {
 		try {
-			return DIClassBuilder.forInjections(
-					Injection.named("StartPosition", Integer.valueOf(0)),
-					Injection.named("EndPosition", Integer.valueOf(0)),
-					Injection.named("TokenStreamIterator",
-							new TokenStreamIterator(tokenStream, 0)))
-					.createInstance(clazz);
+			AbstractParser parser = (AbstractParser)Instances.createInstance(clazz);
+			parser.setTokenStreamIterator(new TokenStreamIterator(tokenStream, 0));
+			return parser;
 		} catch (ClassInstantiationException e) {
 			logger.error(e.getMessage(), e);
 			throw new ParserException(e.getMessage());
