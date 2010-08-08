@@ -16,9 +16,9 @@ import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.evaluator.AbstractProjectEvaluator;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.QualityLevel;
-import com.puresol.parser.Token;
-import com.puresol.parser.TokenException;
-import com.puresol.parser.TokenStream;
+import com.puresol.parser.tokens.Token;
+import com.puresol.parser.tokens.TokenCreationException;
+import com.puresol.parser.tokens.TokenStream;
 import com.puresol.reporting.ReportingFormat;
 import com.puresol.reporting.UnsupportedFormatException;
 import com.puresol.reporting.html.HTMLStandards;
@@ -76,7 +76,7 @@ public class CopyAndPasteScanner extends AbstractProjectEvaluator {
 			clearDuplications();
 			getAllCodeRanges();
 			checkForDuplications();
-		} catch (TokenException e) {
+		} catch (TokenCreationException e) {
 			logger.error(e);
 		}
 	}
@@ -86,7 +86,7 @@ public class CopyAndPasteScanner extends AbstractProjectEvaluator {
 		filewiseDuplications.clear();
 	}
 
-	private void getAllCodeRanges() throws TokenException {
+	private void getAllCodeRanges() throws TokenCreationException {
 
 		for (File file : getProjectAnalyser().getFiles()) {
 			for (CodeRange codeRange : getProjectAnalyser().getAnalyzer(file)
@@ -103,7 +103,7 @@ public class CopyAndPasteScanner extends AbstractProjectEvaluator {
 		}
 	}
 
-	private void checkForDuplications() throws TokenException {
+	private void checkForDuplications() throws TokenCreationException {
 		CodeRange[] ranges = codeRanges.keySet().toArray(new CodeRange[0]);
 		ProgressObserver observer = getMonitor();
 		if (observer != null) {
@@ -158,7 +158,7 @@ public class CopyAndPasteScanner extends AbstractProjectEvaluator {
 		return false;
 	}
 
-	private void check(CodeRange left, CodeRange right) throws TokenException {
+	private void check(CodeRange left, CodeRange right) throws TokenCreationException {
 		for (int index = 0; (left.getStartId() + index <= left.getStopId())
 				&& (right.getStartId() + index <= right.getStopId()); index++) {
 			Duplication duplication = checkDetails(left, left.getStartId()
@@ -171,7 +171,7 @@ public class CopyAndPasteScanner extends AbstractProjectEvaluator {
 	}
 
 	private Duplication checkDetails(CodeRange left, int leftIndex,
-			CodeRange right, int rightIndex) throws TokenException {
+			CodeRange right, int rightIndex) throws TokenCreationException {
 		int counter = 0;
 		TokenStream leftTokens = left.getTokenStream();
 		TokenStream rightTokens = right.getTokenStream();

@@ -6,8 +6,8 @@ import java.util.List;
 
 import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.parser.Parser;
-import com.puresol.parser.Token;
-import com.puresol.parser.TokenStream;
+import com.puresol.parser.tokens.Token;
+import com.puresol.parser.tokens.TokenStream;
 import com.puresol.reporting.ReportingFormat;
 import com.puresol.reporting.UnsupportedFormatException;
 

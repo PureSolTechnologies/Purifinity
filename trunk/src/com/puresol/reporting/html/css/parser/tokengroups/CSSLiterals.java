@@ -3,7 +3,7 @@ package com.puresol.reporting.html.css.parser.tokengroups;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.puresol.parser.TokenDefinition;
+import com.puresol.parser.tokens.TokenDefinition;
 
 public class CSSLiterals {
 

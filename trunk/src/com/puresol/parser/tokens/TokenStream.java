@@ -1,9 +1,11 @@
-package com.puresol.parser;
+package com.puresol.parser.tokens;
 
 import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.puresol.exceptions.StrangeSituationException;
 
 /**
  * TokenStream is a special kind of stream for processing of text inputs. The
@@ -37,17 +39,17 @@ public final class TokenStream implements Serializable {
 		return locked;
 	}
 
-	public final void lock() throws TokenException {
-		if (tokens.size() > 0) {
-			Token lastToken = tokens.get(tokens.size() - 1);
-			addToken(Token.createByDefinition(EndOfTokenStream.class, lastToken
-					.getTokenID() + 1, lastToken.getStartPos()
-					+ lastToken.getLength(), lastToken.getStopLine(), ""));
-		} else {
-			addToken(Token.createByDefinition(EndOfTokenStream.class, 0, 0, 0,
-					""));
+	public final void lock() {
+		try {
+			addToken(Token.createByDefinition(EndOfTokenStreamToken.class,
+					getSize(),
+					get(getSize() - 1).getPosition()
+							+ get(getSize() - 1).getLength(),
+					get(getSize() - 1).getStopLine(), ""));
+			locked = true;
+		} catch (TokenCreationException e) {
+			throw new StrangeSituationException(e);
 		}
-		locked = true;
 	}
 
 	public final void addToken(Token token) {
@@ -64,65 +66,12 @@ public final class TokenStream implements Serializable {
 		return tokens.get(index);
 	}
 
-	public TokenStreamReader getReader() {
-		return new TokenStreamReader(this);
-	}
-
-	public int getFirstVisbleTokenID() throws NoMatchingTokenException {
-		for (int index = 0; index < tokens.size(); index++) {
-			if (get(index).getPublicity() != TokenPublicity.HIDDEN) {
-				return index;
-			}
-		}
-		throw new NoMatchingTokenException();
+	public TokenStreamIterator createNewIterator() {
+		return new TokenStreamIterator(this);
 	}
 
 	public int getSize() {
 		return tokens.size();
-	}
-
-	public Token findPreviousToken(int tokenID) throws NoMatchingTokenException {
-		if (tokenID <= 0) {
-			throw new NoMatchingTokenException();
-		}
-		int position = tokenID - 1;
-		while (get(position).getPublicity() == TokenPublicity.HIDDEN) {
-			if (position == 0) {
-				throw new NoMatchingTokenException();
-			}
-			position--;
-		}
-		return get(position);
-	}
-
-	public Token findNextToken(int tokenID) throws NoMatchingTokenException {
-		if (tokenID >= getSize() - 1) {
-			throw new NoMatchingTokenException();
-		}
-		int position = tokenID + 1;
-		while (get(position).getPublicity() == TokenPublicity.HIDDEN) {
-			if (position >= getSize() - 1) {
-				throw new NoMatchingTokenException();
-			}
-			position++;
-		}
-		return get(position);
-	}
-
-	public TokenStream getLineStream(int line) {
-		TokenStream tokenStream = new TokenStream(getFile());
-		int tokenID = 0;
-		for (Token token : tokens) {
-			if ((token.getStartLine() <= line) && (token.getStopLine() >= line)) {
-				if ((token.getStopLine() != line)
-						|| (!token.getText().endsWith("\n"))) {
-					Token lineToken = Token.createWithNewID(token, tokenID);
-					tokenStream.addToken(lineToken);
-					tokenID++;
-				}
-			}
-		}
-		return tokenStream;
 	}
 
 	/*

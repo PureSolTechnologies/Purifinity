@@ -1,9 +1,12 @@
-package com.puresol.parser;
+package com.puresol.parser.preconditioner;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+
+import com.puresol.parser.tokens.Token;
+import com.puresol.parser.tokens.TokenStream;
 
 /**
  * PreConditioner is for reading an InputStream and creating a basic token

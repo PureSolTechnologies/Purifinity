@@ -5,7 +5,7 @@ import java.io.Serializable;
 import javax.i18n4java.Translator;
 
 import com.puresol.coding.analysis.CodeRange;
-import com.puresol.parser.Token;
+import com.puresol.parser.tokens.Token;
 import com.puresol.reporting.ReportingFormat;
 import com.puresol.reporting.UnsupportedFormatException;
 
@@ -189,16 +189,17 @@ public class Duplication implements Comparable<Duplication>, Serializable {
 		String output = range.getTitleString(ReportingFormat.HTML);
 		output += "<tt>\n";
 		boolean marked = false;
-		for (Token token : range.getTokens()) {
+		for (int index = range.getStartId(); index <= range.getStopId(); index++) {
+			Token token = range.getTokenStream().get(index);
 			if (!marked) {
-				if ((token.getTokenID() >= duplicationRange.getStartId())
-						&& (token.getTokenID() <= duplicationRange.getStopId())) {
+				if ((index >= duplicationRange.getStartId())
+						&& (index <= duplicationRange.getStopId())) {
 					marked = true;
 					output += "<font class=\"highlighted\">\n";
 				}
 			} else {
-				if ((token.getTokenID() < duplicationRange.getStartId())
-						|| (token.getTokenID() > duplicationRange.getStopId())) {
+				if ((index < duplicationRange.getStartId())
+						|| (index > duplicationRange.getStopId())) {
 					marked = false;
 					output += "</font>\n";
 				}

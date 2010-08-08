@@ -1,8 +1,10 @@
-package com.puresol.parser;
+package com.puresol.parser.preconditioner;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+
+import com.puresol.parser.tokens.Token;
 
 public class DefaultPreConditioner extends AbstractPreConditioner {
 
@@ -17,7 +19,7 @@ public class DefaultPreConditioner extends AbstractPreConditioner {
 
 	@Override
 	protected void generateTokenStream() throws IOException {
-		addToken(Token.createPrimitiveFromString(0, 0, 0, readStream()));
+		addToken(Token.createPrimitiveFromString(0, 0, 1, readStream()));
 	}
 
 	private String readStream() throws IOException {

@@ -1,6 +1,6 @@
 package com.puresol.reporting.html.css.parser.symbols;
 
-import com.puresol.parser.AbstractTokenDefinition;
+import com.puresol.parser.tokens.AbstractTokenDefinition;
 
 public class LCurlyBracket extends AbstractTokenDefinition {
 

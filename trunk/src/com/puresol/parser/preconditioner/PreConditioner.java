@@ -1,4 +1,4 @@
-package com.puresol.parser;
+package com.puresol.parser.preconditioner;
 
 import java.io.File;
 import java.io.FileInputStream;

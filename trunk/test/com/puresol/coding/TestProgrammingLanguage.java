@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.puresol.coding.analysis.Analyzer;
-import com.puresol.parser.TokenDefinition;
+import com.puresol.parser.tokens.TokenDefinition;
 import com.puresol.utils.PersistenceException;
 
 public class TestProgrammingLanguage extends AbstractProgrammingLanguage {

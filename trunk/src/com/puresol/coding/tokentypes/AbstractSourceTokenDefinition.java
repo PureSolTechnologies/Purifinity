@@ -1,8 +1,8 @@
 package com.puresol.coding.tokentypes;
 
-import com.puresol.parser.AbstractTokenDefinition;
-import com.puresol.parser.Token;
-import com.puresol.parser.TokenStream;
+import com.puresol.parser.tokens.AbstractTokenDefinition;
+import com.puresol.parser.tokens.Token;
+import com.puresol.parser.tokens.TokenStream;
 
 public abstract class AbstractSourceTokenDefinition extends
 		AbstractTokenDefinition implements SourceTokenDefinition {

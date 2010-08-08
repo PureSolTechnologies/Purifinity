@@ -1,4 +1,4 @@
-package com.puresol.parser;
+package com.puresol.parser.lexer;
 
 public class LexerException extends Exception {
 

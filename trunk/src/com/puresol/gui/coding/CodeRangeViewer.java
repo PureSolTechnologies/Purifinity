@@ -7,7 +7,6 @@ import javax.swingx.Label;
 import javax.swingx.ScrollPane;
 
 import com.puresol.coding.analysis.CodeRange;
-import com.puresol.parser.TokenStream;
 
 public class CodeRangeViewer extends BorderLayoutWidget {
 
@@ -49,13 +48,10 @@ public class CodeRangeViewer extends BorderLayoutWidget {
 
 	public void refresh() {
 		if (codeRange != null) {
-			TokenStream tokenStream = codeRange.getTokenStream();
-			int startLine = tokenStream.get(codeRange.getStartId())
-					.getStartLine();
-			int stopLine = tokenStream.get(codeRange.getStopId()).getStopLine();
-			information.setText("<html><body>"
-					+ tokenStream.getFile().getName() + ":" + startLine + "-"
-					+ stopLine + "<br/>"
+			int startLine = codeRange.getStartLine();
+			int stopLine = codeRange.getStopLine();
+			information.setText("<html><body>" + codeRange.getFile().getName()
+					+ ":" + startLine + "-" + stopLine + "<br/>"
 					+ codeRange.getCodeRangeType().getIdentifier() + " "
 					+ codeRange.getName() + "</body></html>");
 			code.setText(codeRange.getText());

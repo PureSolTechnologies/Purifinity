@@ -7,14 +7,13 @@ import java.util.List;
 import com.puresol.exceptions.StrangeSituationException;
 import com.puresol.parser.AbstractParser;
 import com.puresol.parser.Parser;
-import com.puresol.parser.ParserException;
-import com.puresol.parser.Token;
-import com.puresol.parser.TokenStream;
+import com.puresol.parser.tokens.EndOfTokenStreamException;
+import com.puresol.parser.tokens.Token;
+import com.puresol.parser.tokens.TokenStream;
 import com.puresol.reporting.ReportingFormat;
 import com.puresol.reporting.UnsupportedFormatException;
 import com.puresol.reporting.html.HTMLStandards;
 import com.puresol.utils.di.DependencyInjection;
-import com.puresol.utils.di.Inject;
 import com.puresol.utils.di.Injection;
 
 /**
@@ -29,23 +28,8 @@ public abstract class AbstractSourceCodeParser extends AbstractParser implements
 
 	private static final long serialVersionUID = -5646508377634922308L;
 
-	@Inject("SymbolTable")
-	private SymbolTable symbols = null;
-
 	protected AbstractSourceCodeParser() {
 		super();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected Parser createParserInstance(Class<? extends Parser> clazz)
-			throws ParserException {
-		Parser parser = super.createParserInstance(clazz);
-		DependencyInjection.inject(parser,
-				Injection.named("SymbolTable", symbols));
-		return parser;
 	}
 
 	/**
@@ -88,10 +72,6 @@ public abstract class AbstractSourceCodeParser extends AbstractParser implements
 	@Override
 	public final CodeRange getParentCodeRange() {
 		return (CodeRange) getParentParser();
-	}
-
-	public final SymbolTable getSymbolTable() {
-		return symbols;
 	}
 
 	/**
@@ -168,7 +148,11 @@ public abstract class AbstractSourceCodeParser extends AbstractParser implements
 	 */
 	@Override
 	public final int getStartLine() {
-		return getTokenStream().get(getStartId()).getStartLine();
+		try {
+			return getTokenStreamIterator().getStartLine(getStartId());
+		} catch (EndOfTokenStreamException e) {
+			throw new StrangeSituationException(e);
+		}
 	}
 
 	/**
@@ -176,7 +160,11 @@ public abstract class AbstractSourceCodeParser extends AbstractParser implements
 	 */
 	@Override
 	public final int getStopLine() {
-		return getTokenStream().get(getStopId()).getStopLine();
+		try {
+			return getTokenStreamIterator().getStartLine(getStopId());
+		} catch (EndOfTokenStreamException e) {
+			throw new StrangeSituationException(e);
+		}
 	}
 
 	/**
@@ -246,7 +234,6 @@ public abstract class AbstractSourceCodeParser extends AbstractParser implements
 		try {
 			AbstractSourceCodeParser cloned = (AbstractSourceCodeParser) super
 					.clone();
-			cloned.symbols = (SymbolTable) this.symbols.clone();
 			return cloned;
 		} catch (CloneNotSupportedException e) {
 			throw new StrangeSituationException(e);
@@ -293,38 +280,4 @@ public abstract class AbstractSourceCodeParser extends AbstractParser implements
 		return string;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + ((symbols == null) ? 0 : symbols.hashCode());
-		return result;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		AbstractSourceCodeParser other = (AbstractSourceCodeParser) obj;
-		if (symbols == null) {
-			if (other.symbols != null)
-				return false;
-		} else if (!symbols.equals(other.symbols))
-			return false;
-		return true;
-	}
 }

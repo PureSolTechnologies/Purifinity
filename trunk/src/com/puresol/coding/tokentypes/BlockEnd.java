@@ -1,6 +1,6 @@
 package com.puresol.coding.tokentypes;
 
-import com.puresol.parser.TokenPublicity;
+import com.puresol.parser.tokens.TokenPublicity;
 
 public class BlockEnd extends AbstractSourceTokenDefinition {
 

@@ -5,9 +5,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import com.puresol.coding.ProgrammingLanguage;
-import com.puresol.parser.Lexer;
-import com.puresol.parser.LexerException;
-import com.puresol.parser.TokenStream;
+import com.puresol.parser.lexer.Lexer;
+import com.puresol.parser.lexer.LexerException;
+import com.puresol.parser.tokens.TokenStream;
 
 public class SourceCodeLexer extends Lexer {
 

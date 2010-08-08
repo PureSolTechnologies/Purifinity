@@ -1,4 +1,4 @@
-package com.puresol.parser;
+package com.puresol.parser.tokens;
 
 /**
  * This enum is for marking tokens for special channels for later

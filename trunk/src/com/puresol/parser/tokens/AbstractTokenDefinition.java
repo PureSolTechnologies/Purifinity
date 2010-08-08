@@ -1,7 +1,8 @@
-package com.puresol.parser;
+package com.puresol.parser.tokens;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 
 /**
  * This is a class for an abstract keyword implementation.

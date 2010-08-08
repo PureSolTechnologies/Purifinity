@@ -1,4 +1,4 @@
-package com.puresol.parser;
+package com.puresol.parser.lexer;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -8,7 +8,10 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import com.puresol.exceptions.StrangeSituationException;
+import com.puresol.parser.preconditioner.DefaultPreConditioner;
+import com.puresol.parser.tokens.Token;
+import com.puresol.parser.tokens.TokenDefinition;
+import com.puresol.parser.tokens.TokenStream;
 import com.puresol.utils.ClassInstantiationException;
 import com.puresol.utils.Instances;
 
@@ -38,7 +41,7 @@ public class Lexer {
 
 	public Lexer(String fileName, String text) {
 		inputStream = new TokenStream(new File(fileName));
-		inputStream.addToken(Token.createPrimitiveFromString(0, 0, 0, text));
+		inputStream.addToken(Token.createPrimitiveFromString(0, 0, 1, text));
 	}
 
 	public final void addDefinition(Class<? extends TokenDefinition> definition)
@@ -74,14 +77,9 @@ public class Lexer {
 
 	private final synchronized void createOutputStream()
 			throws NoMatchingTokenDefinitionFound {
-		try {
-			if (outputStream == null) {
-				outputStream = LexerEngine.process(inputStream,
-						tokenDefinitions);
-				outputStream.lock();
-			}
-		} catch (TokenException e) {
-			throw new StrangeSituationException("Could not lock token stream!");
+		if (outputStream == null) {
+			outputStream = LexerEngine.process(inputStream, tokenDefinitions);
+			outputStream.lock();
 		}
 	}
 }

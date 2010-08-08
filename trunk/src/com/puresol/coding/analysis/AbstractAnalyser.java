@@ -19,7 +19,8 @@ import org.apache.log4j.Logger;
 
 import com.puresol.parser.Parser;
 import com.puresol.parser.ParserException;
-import com.puresol.parser.TokenStream;
+import com.puresol.parser.tokens.TokenStream;
+import com.puresol.parser.tokens.TokenStreamIterator;
 import com.puresol.utils.ClassInstantiationException;
 import com.puresol.utils.Persistence;
 import com.puresol.utils.PersistenceException;
@@ -32,6 +33,21 @@ abstract public class AbstractAnalyser implements Analyzer {
 
 	private static final Logger logger = Logger
 			.getLogger(AbstractAnalyser.class);
+
+	public static Parser createParserInstance(Class<? extends Parser> clazz,
+			TokenStream tokenStream) throws ParserException {
+		try {
+			return DIClassBuilder.forInjections(
+					Injection.named("StartPosition", Integer.valueOf(0)),
+					Injection.named("EndPosition", Integer.valueOf(0)),
+					Injection.named("TokenStreamIterator",
+							new TokenStreamIterator(tokenStream, 0)))
+					.createInstance(clazz);
+		} catch (ClassInstantiationException e) {
+			logger.error(e.getMessage(), e);
+			throw new ParserException(e.getMessage());
+		}
+	}
 
 	private final File file;
 
@@ -70,20 +86,6 @@ abstract public class AbstractAnalyser implements Analyzer {
 	@Override
 	public SymbolTable getSymbols() {
 		return symbols;
-	}
-
-	protected Parser createParserInstance(Class<? extends Parser> clazz,
-			TokenStream tokenStream) throws ParserException {
-		try {
-			return DIClassBuilder.forInjections(
-					Injection.named("StartPosition", Integer.valueOf(0)),
-					Injection.named("TokenStream", tokenStream),
-					Injection.named("SymbolTable", symbols)).createInstance(
-					clazz);
-		} catch (ClassInstantiationException e) {
-			logger.error(e.getMessage(), e);
-			throw new ParserException(e.getMessage());
-		}
 	}
 
 	@Override

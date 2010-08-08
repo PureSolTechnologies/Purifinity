@@ -19,11 +19,12 @@ import com.puresol.coding.quality.QualityLevel;
 import com.puresol.coding.tokentypes.AbstractSourceTokenDefinition;
 import com.puresol.coding.tokentypes.SourceTokenDefinition;
 import com.puresol.coding.tokentypes.SymbolType;
-import com.puresol.parser.NoMatchingTokenException;
-import com.puresol.parser.Token;
-import com.puresol.parser.TokenException;
-import com.puresol.parser.TokenPublicity;
-import com.puresol.parser.TokenStream;
+import com.puresol.parser.tokens.EndOfTokenStreamException;
+import com.puresol.parser.tokens.Token;
+import com.puresol.parser.tokens.TokenCreationException;
+import com.puresol.parser.tokens.TokenPublicity;
+import com.puresol.parser.tokens.TokenStream;
+import com.puresol.parser.tokens.TokenStreamIterator;
 import com.puresol.reporting.ReportingFormat;
 import com.puresol.reporting.UnsupportedFormatException;
 import com.puresol.reporting.html.HTMLStandards;
@@ -74,7 +75,7 @@ public class DuplicationScanner extends AbstractProjectEvaluator {
 			clearDuplications();
 			getAllCodeRanges();
 			checkForDuplications();
-		} catch (TokenException e) {
+		} catch (TokenCreationException e) {
 			logger.error(e);
 		}
 	}
@@ -84,7 +85,7 @@ public class DuplicationScanner extends AbstractProjectEvaluator {
 		fileDuplications.clear();
 	}
 
-	private void getAllCodeRanges() throws TokenException {
+	private void getAllCodeRanges() throws TokenCreationException {
 		for (File file : getProjectAnalyser().getFiles()) {
 			for (CodeRange codeRange : getProjectAnalyser().getAnalyzer(file)
 					.getNonFragmentCodeRangesRecursively()) {
@@ -105,7 +106,7 @@ public class DuplicationScanner extends AbstractProjectEvaluator {
 		}
 	}
 
-	private void checkForDuplications() throws TokenException {
+	private void checkForDuplications() throws TokenCreationException {
 		CodeRange[] ranges = codeRanges.keySet().toArray(new CodeRange[0]);
 		ProgressObserver observer = getMonitor();
 		if (observer != null) {
@@ -162,7 +163,8 @@ public class DuplicationScanner extends AbstractProjectEvaluator {
 		return false;
 	}
 
-	private void check(CodeRange left, CodeRange right) throws TokenException {
+	private void check(CodeRange left, CodeRange right)
+			throws TokenCreationException {
 		TokenStream leftStream = left.getTokenStream();
 		TokenStream rightStream = right.getTokenStream();
 		for (int leftIndex = left.getStartId(); leftIndex <= left.getStopId(); leftIndex++) {
@@ -203,18 +205,32 @@ public class DuplicationScanner extends AbstractProjectEvaluator {
 	}
 
 	private Duplication checkDetails(CodeRange left, int leftIndex,
-			CodeRange right, int rightIndex) throws TokenException {
+			CodeRange right, int rightIndex) throws TokenCreationException {
 		int operatorCounter = 0;
 		int operantCounter = 0;
-		TokenStream leftStream = left.getTokenStream();
-		TokenStream rightStream = right.getTokenStream();
-		Token leftToken = leftStream.get(leftIndex);
-		Token rightToken = rightStream.get(rightIndex);
+		TokenStreamIterator leftIterator = left.getTokenStream()
+				.createNewIterator();
+		TokenStreamIterator rightIterator = right.getTokenStream()
+				.createNewIterator();
 		try {
-			while ((leftToken.getTokenID() < left.getStopId())
-					&& (rightToken.getTokenID() < right.getStopId())) {
-				leftToken = leftStream.findNextToken(leftToken.getTokenID());
-				rightToken = rightStream.findNextToken(rightToken.getTokenID());
+			while ((leftIterator.getPosition() < left.getStopId())
+					&& (rightIterator.getPosition() < right.getStopId())) {
+				leftIterator.move(1);
+				while ((leftIterator.getPosition() < left.getStopId())
+						&& (leftIterator.getToken().getPublicity() == TokenPublicity.HIDDEN)) {
+					leftIterator.move(1);
+				}
+				rightIterator.move(1);
+				while ((rightIterator.getPosition() < right.getStopId())
+						&& (rightIterator.getToken().getPublicity() == TokenPublicity.HIDDEN)) {
+					rightIterator.move(1);
+				}
+				if ((leftIterator.getPosition() >= left.getStopId())
+						&& (rightIterator.getPosition() >= right.getStopId())) {
+					break;
+				}
+				Token leftToken = leftIterator.getToken();
+				Token rightToken = rightIterator.getToken();
 				SourceTokenDefinition leftDefinition = (SourceTokenDefinition) leftToken
 						.getDefinitionInstance();
 				SourceTokenDefinition rightDefinition = (SourceTokenDefinition) rightToken
@@ -235,16 +251,16 @@ public class DuplicationScanner extends AbstractProjectEvaluator {
 				}
 				break;
 			}
-		} catch (NoMatchingTokenException e) {
+		} catch (EndOfTokenStreamException e) {
 			// moving failure due to end maybe
 			// it's not to be tracked here...
 		}
 		Duplication duplication = null;
 		if ((operatorCounter + operantCounter) > OPERATOR_THRESHOLD) {
 			CodeRange leftDuplication = left.createPartialCodeRange(leftIndex,
-					leftToken.getTokenID());
+					leftIndex);
 			CodeRange rightDuplication = right.createPartialCodeRange(
-					rightIndex, rightToken.getTokenID());
+					rightIndex, rightIndex);
 			duplication = new Duplication(left, right, leftDuplication,
 					rightDuplication);
 			addDuplication(duplication);

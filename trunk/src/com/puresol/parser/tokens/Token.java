@@ -1,4 +1,4 @@
-package com.puresol.parser;
+package com.puresol.parser.tokens;
 
 import java.io.Serializable;
 
@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 
 import com.puresol.utils.ClassInstantiationException;
 import com.puresol.utils.Instances;
+import com.puresol.utils.TextUtils;
 
 /**
  * Token is a class for representation of a single string part of a input
@@ -22,14 +23,15 @@ public final class Token implements Serializable {
 
 	public static Token createByDefinition(
 			Class<? extends TokenDefinition> definition, int tokenID,
-			int startPos, int startLine, String text) throws TokenException {
+			int startPos, int startLine, String text)
+			throws TokenCreationException {
 		try {
-			return Token.createByDefinition(Instances
-					.createInstance(definition), tokenID, startPos, startLine,
-					text);
+			return Token.createByDefinition(
+					Instances.createInstance(definition), tokenID, startPos,
+					startLine, text);
 		} catch (ClassInstantiationException e) {
 			logger.error(e.getMessage(), e);
-			throw new TokenException(e.getMessage());
+			throw new TokenCreationException(e.getMessage());
 		}
 	}
 
@@ -40,7 +42,7 @@ public final class Token implements Serializable {
 	}
 
 	public static Token createWithNewID(Token token, int tokenID) {
-		return new Token(tokenID, token.getPublicity(), token.getStartPos(),
+		return new Token(tokenID, token.getPublicity(), token.getPosition(),
 				token.getStartLine(), token.getText(), token.getDefinition());
 	}
 
@@ -57,46 +59,37 @@ public final class Token implements Serializable {
 	}
 
 	private final int tokenID;
-	private final int startPos;
+	private final int position;
 	private final TokenPublicity publicity;
 	private final String text;
+	private final int length;
 	private final int startLine;
 	private final int stopLine;
 	private final Class<? extends TokenDefinition> definition;
 
-	private Token(int tokenID, TokenPublicity publicity, int startPos,
+	private Token(int tokenID, TokenPublicity publicity, int position,
 			int startLine, String text,
 			Class<? extends TokenDefinition> definition) {
 		this.tokenID = tokenID;
 		this.publicity = publicity;
-		this.startPos = startPos;
+		this.position = position;
 		this.text = text;
+		this.length = text.length();
 		this.startLine = startLine;
-		this.stopLine = startLine + getLineBreakCount(text);
+		this.stopLine = startLine + TextUtils.countLineBreaks(text);
 		this.definition = definition;
-	}
-
-	private int getLineBreakCount(String text) {
-		char[] chars = text.toCharArray();
-		int count = 0;
-		for (int index = 0; index < text.length(); index++) {
-			if (chars[index] == '\n') {
-				count++;
-			}
-		}
-		return count;
 	}
 
 	public int getTokenID() {
 		return tokenID;
 	}
 
-	public int getStartPos() {
-		return startPos;
+	public int getPosition() {
+		return position;
 	}
 
 	public int getLength() {
-		return text.length();
+		return length;
 	}
 
 	public TokenPublicity getPublicity() {
@@ -119,32 +112,43 @@ public final class Token implements Serializable {
 		return definition;
 	}
 
-	public TokenDefinition getDefinitionInstance() throws TokenException {
+	public TokenDefinition getDefinitionInstance()
+			throws TokenCreationException {
 		try {
 			return Instances.createInstance(definition);
 		} catch (ClassInstantiationException e) {
-			throw new TokenException(e.getMessage());
+			throw new TokenCreationException(e.getMessage());
 		}
 	}
 
 	public String toString() {
-		String output = "id: " + String.valueOf(tokenID) + "; line(s): ";
+		StringBuffer output = new StringBuffer();
+		output.append("id ");
+		output.append(tokenID);
+		output.append(" / line(s) ");
 		if (stopLine != startLine) {
-			output += startLine + "-" + stopLine;
+			output.append(startLine);
+			output.append("-");
+			output.append(stopLine);
 		} else {
-			output += String.valueOf(startLine);
+			output.append(startLine);
 		}
-		output += " (pos: " + startPos + "/" + text.length() + "): '" + text
-				+ "'";
+		output.append(" (");
+		output.append(position);
+		output.append("/");
+		output.append(text.length());
+		output.append("): '");
+		output.append(text);
+		output.append("'");
 		if (definition != null) {
-			output += " (" + definition.getSimpleName() + ")";
+			output.append(" (");
+			output.append(definition.getSimpleName());
+			output.append(")");
 		}
-		if (publicity == TokenPublicity.HIDDEN) {
-			output += " (hidden!)";
-		} else if (publicity == TokenPublicity.ADDED) {
-			output += " (added!)";
-		}
-		return output;
+		output.append(" (");
+		output.append(publicity.name());
+		output.append(")");
+		return output.toString();
 	}
 
 	@Override
@@ -156,7 +160,7 @@ public final class Token implements Serializable {
 		result = prime * result
 				+ ((publicity == null) ? 0 : publicity.hashCode());
 		result = prime * result + startLine;
-		result = prime * result + startPos;
+		result = prime * result + position;
 		result = prime * result + stopLine;
 		result = prime * result + ((text == null) ? 0 : text.hashCode());
 		result = prime * result + tokenID;
@@ -184,7 +188,7 @@ public final class Token implements Serializable {
 			return false;
 		if (startLine != other.startLine)
 			return false;
-		if (startPos != other.startPos)
+		if (position != other.position)
 			return false;
 		if (stopLine != other.stopLine)
 			return false;

@@ -1,4 +1,4 @@
-package com.puresol.parser;
+package com.puresol.parser.tokens;
 
 import java.util.regex.Pattern;
 
