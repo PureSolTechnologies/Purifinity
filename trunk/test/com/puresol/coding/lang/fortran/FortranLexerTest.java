@@ -9,10 +9,10 @@ import junit.framework.Assert;
 import org.junit.Test;
 
 import com.puresol.coding.analysis.SourceCodeLexer;
-import com.puresol.parser.LexerException;
-import com.puresol.parser.NoMatchingTokenDefinitionFound;
-import com.puresol.parser.Token;
-import com.puresol.parser.TokenStream;
+import com.puresol.parser.lexer.LexerException;
+import com.puresol.parser.lexer.NoMatchingTokenDefinitionFound;
+import com.puresol.parser.tokens.Token;
+import com.puresol.parser.tokens.TokenStream;
 
 public class FortranLexerTest {
 

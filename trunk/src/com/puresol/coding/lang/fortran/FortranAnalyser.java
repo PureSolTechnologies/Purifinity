@@ -20,12 +20,10 @@ import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.analysis.AbstractAnalyser;
 import com.puresol.coding.analysis.AnalyserException;
 import com.puresol.coding.analysis.SourceCodeLexer;
-import com.puresol.coding.lang.fortran.source.grammar.highlevel.Program;
-import com.puresol.parser.LexerException;
-import com.puresol.parser.NoMatchingTokenDefinitionFound;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
-import com.puresol.parser.TokenStream;
+import com.puresol.parser.lexer.LexerException;
+import com.puresol.parser.lexer.NoMatchingTokenDefinitionFound;
 
 public class FortranAnalyser extends AbstractAnalyser {
 
@@ -43,9 +41,8 @@ public class FortranAnalyser extends AbstractAnalyser {
 		try {
 			SourceCodeLexer lexer = new SourceCodeLexer(Fortran.getInstance(),
 					new FortranPreConditioner(getFile()).getTokenStream());
-			TokenStream tokenStream = lexer.getTokenStream();
-			Program parser = (Program) createParserInstance(Program.class,
-					tokenStream);
+			FortranParser parser = (FortranParser) createParserInstance(
+					FortranParser.class, lexer.getTokenStream());
 			parser.scan();
 			setRootCodeRange(parser);
 			return;

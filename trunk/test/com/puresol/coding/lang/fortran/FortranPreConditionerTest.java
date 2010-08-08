@@ -9,8 +9,8 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import com.puresol.parser.Token;
-import com.puresol.parser.TokenStream;
+import com.puresol.parser.tokens.Token;
+import com.puresol.parser.tokens.TokenStream;
 
 public class FortranPreConditionerTest {
 

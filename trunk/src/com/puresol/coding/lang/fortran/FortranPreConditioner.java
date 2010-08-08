@@ -4,33 +4,39 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
-import com.puresol.coding.lang.fortran.source.VirtualStatementEnd;
 import com.puresol.coding.lang.fortran.source.symbols.LineLead;
 import com.puresol.coding.tokentypes.Comment;
-import com.puresol.parser.DefaultPreConditioner;
-import com.puresol.parser.Token;
-import com.puresol.parser.TokenException;
+import com.puresol.parser.preconditioner.AbstractPreConditioner;
+import com.puresol.parser.tokens.Token;
+import com.puresol.parser.tokens.TokenCreationException;
 
-public class FortranPreConditioner extends DefaultPreConditioner {
+/**
+ * This is the preconditioner for Fortran. The file input is conditioned here
+ * for later lexing. The main purpose is to break the line formatting into a
+ * text stream by creating some first hidden tokens.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
+public class FortranPreConditioner extends AbstractPreConditioner {
 
 	private static final Logger logger = Logger
 			.getLogger(FortranPreConditioner.class);
 
-	private static final Pattern lineLeadPattern = Pattern
-			.compile("^([^\\t\\r\\n])([^\\t\\r\\n]{4})([^\\t\\r\\n])");
-
 	public static Pattern getLineLeadPattern() {
-		return lineLeadPattern;
+		return Pattern
+				.compile("^([^\\t\\r\\n])([^\\t\\r\\n]{4})([^\\t\\r\\n])");
 	}
 
-	int counter = 0;
-	int pos = 0;
-	int lineNum = 0;
+	private int currentPosition = 0;
+	private int currentIndex = 0;
+	private int currentLine = 1;
 
 	public FortranPreConditioner(File file) throws IOException {
 		super(file);
@@ -38,12 +44,12 @@ public class FortranPreConditioner extends DefaultPreConditioner {
 
 	@Override
 	protected void generateTokenStream() throws IOException {
-		ArrayList<String> buffer = readToBuffer();
+		List<String> buffer = readToBuffer();
 		preconditioner(buffer);
 	}
 
-	private ArrayList<String> readToBuffer() {
-		ArrayList<String> buffer = new ArrayList<String>();
+	private List<String> readToBuffer() {
+		List<String> buffer = new ArrayList<String>();
 		String line;
 		while ((line = readLine()) != null) {
 			buffer.add(line);
@@ -51,57 +57,59 @@ public class FortranPreConditioner extends DefaultPreConditioner {
 		return buffer;
 	}
 
-	private void preconditioner(ArrayList<String> buffer) {
+	private void preconditioner(List<String> buffer) {
 		try {
+			Pattern lineLeadPattern = getLineLeadPattern();
 			for (String line : buffer) {
-				Matcher matcher = getLineLeadPattern().matcher(line);
+				Matcher matcher = lineLeadPattern.matcher(line);
 				if (matcher.find()) {
 					String lineLead = matcher.group();
-					boolean comment = matcher.group(0).getBytes()[0] != ' ';
-					// String label = matcher.group(1);
-					boolean lineContinuation = !matcher.group(2).equals(" ");
-					if (!lineContinuation) {
-						addLineBreak();
+					boolean isComment = matcher.group(0).getBytes()[0] != ' ';
+					String label = matcher.group(1);
+					boolean isLabel = !label.isEmpty();
+					boolean lineContinuation = (!matcher.group(2).equals(" "))
+							&& (!matcher.group(2).equals("0"));
+					if (isLabel) {
+						// TODO
 					}
-					if (comment) {
+					if (!lineContinuation) {
+						// TODO
+					}
+					if (isComment) {
 						addCommentLine(line);
 					} else {
 						addLineLead(lineLead);
 						addLine(line.substring(6));
 					}
 				} else {
-					if (Pattern.compile("^\\S").matcher(line).find()) {
-						addLineBreak();
-						addCommentLine(line);
-					} else {
-						addLineBreak();
-						addLine(line);
-					}
+					addLine(line);
 				}
-				lineNum++;
+				currentLine++;
 			}
-		} catch (TokenException e) {
+		} catch (TokenCreationException e) {
 			logger.error(e.getMessage(), e);
 		}
 	}
 
-	private void addLineBreak() throws TokenException {
-		addToken(Token.createByDefinition(VirtualStatementEnd.class, counter,
-				pos, lineNum, ""));
-	}
-
-	private void addLineLead(String line) throws TokenException {
-		addToken(Token.createByDefinition(LineLead.class, counter, pos,
-				lineNum, line));
+	private void addLineLead(String line) throws TokenCreationException {
+		addToken(Token.createByDefinition(LineLead.class, currentIndex,
+				currentPosition, currentLine, line));
+		currentIndex++;
+		currentPosition += line.length();
 	}
 
 	private void addLine(String line) {
-		addToken(Token.createPrimitiveFromString(counter, pos, lineNum, line));
+		addToken(Token.createPrimitiveFromString(currentIndex, currentPosition,
+				currentLine, line));
+		currentIndex++;
+		currentPosition += line.length();
 	}
 
-	private void addCommentLine(String line) throws TokenException {
-		addToken(Token.createByDefinition(Comment.class, counter, pos, lineNum,
-				line));
+	private void addCommentLine(String line) throws TokenCreationException {
+		addToken(Token.createByDefinition(Comment.class, currentIndex,
+				currentPosition, currentLine, line));
+		currentIndex++;
+		currentPosition += line.length();
 	}
 
 	private String readLine() {

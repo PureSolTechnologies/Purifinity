@@ -5,6 +5,8 @@ package com.puresol.coding.lang.fortran;
 
 import java.io.File;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.junit.Test;
 
 import com.puresol.coding.analysis.AnalyserException;
@@ -23,6 +25,7 @@ public class FortranAnalyserTest extends TestCase {
 
 	@Test
 	public void test() {
+		Logger.getRootLogger().setLevel(Level.DEBUG);
 		try {
 			FortranAnalyser analyser = new FortranAnalyser(new File(
 					"test/com/puresol/coding/lang/fortran/samples/zgerc.f"));

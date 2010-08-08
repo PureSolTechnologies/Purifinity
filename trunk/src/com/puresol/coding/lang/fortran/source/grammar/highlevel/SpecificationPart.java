@@ -35,9 +35,10 @@ public class SpecificationPart extends AbstractFortranParser {
 			} else if (acceptPart(ImplicitPart.class) != null) {
 			} else if (acceptPart(DeclarationConstruct.class) != null) {
 			} else {
-				finish();
+				break;
 			}
 		}
+		finish();
 	}
 
 }

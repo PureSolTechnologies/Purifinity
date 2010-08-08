@@ -1,8 +1,8 @@
 package com.puresol.coding.lang.fortran.source.symbols;
 
 import com.puresol.coding.tokentypes.Operant;
-import com.puresol.parser.Token;
-import com.puresol.parser.TokenStream;
+import com.puresol.parser.tokens.Token;
+import com.puresol.parser.tokens.TokenStream;
 
 /**
  * The line lead is the part of six characters at the beginning of each line in
