@@ -11,19 +11,17 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
+import com.puresol.coding.analysis.AbstractAnalyser;
 import com.puresol.coding.analysis.SourceCodeLexer;
 import com.puresol.coding.lang.java.JavaParser;
 import com.puresol.coding.lang.java.samples.ProgrammingLanguage;
-import com.puresol.parser.DefaultPreConditioner;
-import com.puresol.parser.LexerException;
-import com.puresol.parser.NoMatchingTokenDefinitionFound;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
-import com.puresol.parser.TokenStream;
-import com.puresol.utils.ClassInstantiationException;
+import com.puresol.parser.lexer.LexerException;
+import com.puresol.parser.lexer.NoMatchingTokenDefinitionFound;
+import com.puresol.parser.preconditioner.DefaultPreConditioner;
+import com.puresol.parser.tokens.TokenStream;
 import com.puresol.utils.FileUtilities;
-import com.puresol.utils.di.DIClassBuilder;
-import com.puresol.utils.di.Injection;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
@@ -45,9 +43,8 @@ public class JavaParserTest extends TestCase {
 			SourceCodeLexer lexer = new SourceCodeLexer(Java.getInstance(),
 					tokenStream);
 			TokenStream tokenStream2 = lexer.getTokenStream();
-			parser = DIClassBuilder.forInjections(
-					Injection.named("TokenStream", tokenStream2))
-					.createInstance(JavaParser.class);
+			parser = (JavaParser) AbstractAnalyser.createParserInstance(
+					JavaParser.class, tokenStream2);
 			parser.scan();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -65,9 +62,6 @@ public class JavaParserTest extends TestCase {
 			e.printStackTrace();
 			Assert.fail("No exception was expected!");
 		} catch (LexerException e) {
-			e.printStackTrace();
-			Assert.fail("No exception was expected!");
-		} catch (ClassInstantiationException e) {
 			e.printStackTrace();
 			Assert.fail("No exception was expected!");
 		}

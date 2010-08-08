@@ -11,7 +11,7 @@ import com.puresol.coding.lang.java.source.keywords.FloatKeyword;
 import com.puresol.coding.lang.java.source.keywords.IntKeyword;
 import com.puresol.coding.lang.java.source.keywords.LongKeyword;
 import com.puresol.coding.lang.java.source.keywords.ShortKeyword;
-import com.puresol.parser.TokenDefinition;
+import com.puresol.parser.tokens.TokenDefinition;
 
 public class Primitives {
 

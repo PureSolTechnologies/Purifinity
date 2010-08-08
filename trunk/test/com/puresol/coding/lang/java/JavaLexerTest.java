@@ -10,11 +10,11 @@ import org.junit.Test;
 
 import com.puresol.coding.analysis.SourceCodeLexer;
 import com.puresol.coding.lang.java.samples.Translator;
-import com.puresol.parser.DefaultPreConditioner;
-import com.puresol.parser.LexerException;
-import com.puresol.parser.NoMatchingTokenDefinitionFound;
-import com.puresol.parser.Token;
-import com.puresol.parser.TokenStream;
+import com.puresol.parser.lexer.LexerException;
+import com.puresol.parser.lexer.NoMatchingTokenDefinitionFound;
+import com.puresol.parser.preconditioner.DefaultPreConditioner;
+import com.puresol.parser.tokens.Token;
+import com.puresol.parser.tokens.TokenStream;
 import com.puresol.utils.FileUtilities;
 
 public class JavaLexerTest {

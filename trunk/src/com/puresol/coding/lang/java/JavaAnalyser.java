@@ -19,10 +19,10 @@ import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.analysis.AbstractAnalyser;
 import com.puresol.coding.analysis.AnalyserException;
 import com.puresol.coding.analysis.SourceCodeLexer;
-import com.puresol.parser.LexerException;
-import com.puresol.parser.NoMatchingTokenDefinitionFound;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
+import com.puresol.parser.lexer.LexerException;
+import com.puresol.parser.lexer.NoMatchingTokenDefinitionFound;
 
 /**
  * 

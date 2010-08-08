@@ -117,7 +117,7 @@ import com.puresol.coding.lang.java.source.symbols.Tilde;
 import com.puresol.coding.lang.java.source.symbols.TraditionalComment;
 import com.puresol.coding.lang.java.source.symbols.Unequal;
 import com.puresol.coding.lang.java.source.symbols.WhiteSpace;
-import com.puresol.parser.TokenDefinition;
+import com.puresol.parser.tokens.TokenDefinition;
 import com.puresol.utils.PersistenceException;
 
 /**

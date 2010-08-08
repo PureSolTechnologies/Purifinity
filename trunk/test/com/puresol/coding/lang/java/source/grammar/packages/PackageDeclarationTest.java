@@ -1,5 +1,7 @@
 package com.puresol.coding.lang.java.source.grammar.packages;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.junit.Test;
 
 import com.puresol.coding.lang.java.source.grammar.JavaGrammarTester;
@@ -11,6 +13,7 @@ public class PackageDeclarationTest extends TestCase {
 
 	@Test
 	public void testValidPackageDeclarations() {
+		Logger.getRootLogger().setLevel(Level.DEBUG);
 		Assert.assertTrue(JavaGrammarTester.valid("package a;",
 				PackageDeclaration.class));
 		Assert.assertTrue(JavaGrammarTester.valid("package a.b;",

@@ -12,7 +12,7 @@ import com.puresol.coding.lang.java.source.keywords.PublicKeyword;
 import com.puresol.coding.lang.java.source.keywords.StaticKeyword;
 import com.puresol.coding.lang.java.source.keywords.StrictfpKeyword;
 import com.puresol.coding.lang.java.source.keywords.SynchronizedKeyword;
-import com.puresol.parser.TokenDefinition;
+import com.puresol.parser.tokens.TokenDefinition;
 
 public class MethodModifiers {
 

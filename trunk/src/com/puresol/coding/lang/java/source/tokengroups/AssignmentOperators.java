@@ -15,7 +15,7 @@ import com.puresol.coding.lang.java.source.symbols.PlusAssign;
 import com.puresol.coding.lang.java.source.symbols.PercentAssign;
 import com.puresol.coding.lang.java.source.symbols.SlashAssign;
 import com.puresol.coding.lang.java.source.symbols.StarAssign;
-import com.puresol.parser.TokenDefinition;
+import com.puresol.parser.tokens.TokenDefinition;
 
 /**
  * <pre>

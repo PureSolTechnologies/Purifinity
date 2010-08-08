@@ -13,7 +13,7 @@ import org.junit.Test;
 import com.puresol.coding.lang.java.Java;
 import com.puresol.coding.tokentypes.AbstractSourceTokenDefinition;
 import com.puresol.coding.tokentypes.SourceTokenDefinition;
-import com.puresol.parser.TokenDefinition;
+import com.puresol.parser.tokens.TokenDefinition;
 import com.puresol.utils.ClassInstantiationException;
 import com.puresol.utils.Instances;
 

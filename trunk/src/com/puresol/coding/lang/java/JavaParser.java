@@ -2,10 +2,11 @@ package com.puresol.coding.lang.java;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.java.source.grammar.CompilationUnit;
-import com.puresol.parser.EndOfTokenStream;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
-import com.puresol.parser.TokenPublicity;
+import com.puresol.parser.tokens.EndOfTokenStreamToken;
+import com.puresol.parser.tokens.EndOfTokenStreamException;
+import com.puresol.parser.tokens.TokenPublicity;
 
 /**
  * This class is the root parser for each file. In the Specifications this is
@@ -20,9 +21,13 @@ public class JavaParser extends CompilationUnit {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		moveToNextVisibleToken(0);
-		super.scan();
-		checkForFileEnd();
+		try {
+			moveToNextVisibleToken(0);
+			super.scan();
+			checkForFileEnd();
+		} catch (EndOfTokenStreamException e) {
+			throw new PartDoesNotMatchException(this);
+		}
 	}
 
 	private void checkForFileEnd() throws PartDoesNotMatchException {
@@ -30,7 +35,7 @@ public class JavaParser extends CompilationUnit {
 				.getSize(); pos++) {
 			if (getToken(pos).getPublicity() == TokenPublicity.VISIBLE) {
 				if (!getToken(pos).getDefinition().equals(
-						EndOfTokenStream.class)) {
+						EndOfTokenStreamToken.class)) {
 					throw new PartDoesNotMatchException(this);
 				}
 			}

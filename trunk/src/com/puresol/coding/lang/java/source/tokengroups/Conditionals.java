@@ -11,7 +11,7 @@ import com.puresol.coding.lang.java.source.symbols.LessThan;
 import com.puresol.coding.lang.java.source.symbols.LogicalAnd;
 import com.puresol.coding.lang.java.source.symbols.LogicalOr;
 import com.puresol.coding.lang.java.source.symbols.Unequal;
-import com.puresol.parser.TokenDefinition;
+import com.puresol.parser.tokens.TokenDefinition;
 
 public class Conditionals {
 

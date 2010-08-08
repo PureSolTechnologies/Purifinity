@@ -5,9 +5,9 @@ import com.puresol.coding.lang.java.AbstractJavaParser;
 import com.puresol.coding.lang.java.source.grammar.classes.TypeParameters;
 import com.puresol.coding.lang.java.source.keywords.InterfaceKeyword;
 import com.puresol.coding.lang.java.source.literals.Identifier;
-import com.puresol.parser.EndOfTokenStreamException;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
+import com.puresol.parser.tokens.EndOfTokenStreamException;
 
 /**
  * normalInterfaceDeclaration : modifiers 'interface' IDENTIFIER (typeParameters

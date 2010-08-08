@@ -3,9 +3,9 @@ package com.puresol.coding.lang.java.source.grammar.classes;
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.java.AbstractJavaParser;
 import com.puresol.coding.lang.java.source.literals.Identifier;
-import com.puresol.parser.EndOfTokenStreamException;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
+import com.puresol.parser.tokens.EndOfTokenStreamException;
 
 public class SimpleTypeName extends AbstractJavaParser {
 

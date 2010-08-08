@@ -6,7 +6,7 @@ import java.util.List;
 import com.puresol.coding.lang.java.source.keywords.PrivateKeyword;
 import com.puresol.coding.lang.java.source.keywords.ProtectedKeyword;
 import com.puresol.coding.lang.java.source.keywords.PublicKeyword;
-import com.puresol.parser.TokenDefinition;
+import com.puresol.parser.tokens.TokenDefinition;
 
 public class ConstructorModifiers {
 

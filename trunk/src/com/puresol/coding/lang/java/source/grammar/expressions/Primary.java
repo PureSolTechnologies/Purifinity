@@ -9,11 +9,10 @@ import com.puresol.coding.lang.java.source.keywords.ThisKeyword;
 import com.puresol.coding.lang.java.source.keywords.VoidKeyword;
 import com.puresol.coding.lang.java.source.literals.Identifier;
 import com.puresol.coding.lang.java.source.symbols.Dot;
-import com.puresol.parser.NoMatchingTokenException;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
-import com.puresol.parser.Token;
-import com.puresol.parser.TokenStream;
+import com.puresol.parser.tokens.EndOfTokenStreamException;
+import com.puresol.parser.tokens.Token;
 
 /**
  * <pre>
@@ -56,15 +55,14 @@ public class Primary extends AbstractJavaParser {
 		} else if (acceptToken(ThisKeyword.class) != null) {
 			while (isToken(Dot.class)) {
 				try {
-					TokenStream stream = getTokenStream();
-					Token token = stream.findNextToken(getCurrentPosition());
+					Token token = lookAhead(1);
 					if (token.equals(Identifier.class)) {
 						expectToken(Dot.class);
 						expectToken(Identifier.class);
 					} else {
 						break;
 					}
-				} catch (NoMatchingTokenException e) {
+				} catch (EndOfTokenStreamException e) {
 					break;
 				}
 			}

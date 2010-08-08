@@ -9,6 +9,8 @@ import java.util.List;
 
 import javax.i18n4java.utils.FileSearch;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.junit.Test;
 
 import com.puresol.coding.analysis.Analyzer;
@@ -30,6 +32,7 @@ public class JavaSourceCodeDistributionTesting {
 
 	@Test
 	public void test() {
+		// Logger.getRootLogger().setLevel(Level.DEBUG);
 		try {
 			Analyzer analyser = Java
 					.getInstance()
@@ -46,8 +49,9 @@ public class JavaSourceCodeDistributionTesting {
 
 	public static void main(String args[]) {
 		try {
+			// Logger.getRootLogger().setLevel(Level.DEBUG);
 			List<File> files = FileSearch.find(new File(INSTALL_DIRECTORY),
-					"/**/*.java");
+					"*.java");
 			List<String> successes = new ArrayList<String>();
 			RandomAccessFile raFile = new RandomAccessFile("succeeded.txt",
 					"rw");

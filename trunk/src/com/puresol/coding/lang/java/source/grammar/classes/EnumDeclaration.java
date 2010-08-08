@@ -4,9 +4,9 @@ import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.java.AbstractJavaParser;
 import com.puresol.coding.lang.java.source.keywords.EnumKeyword;
 import com.puresol.coding.lang.java.source.literals.Identifier;
-import com.puresol.parser.EndOfTokenStreamException;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
+import com.puresol.parser.tokens.EndOfTokenStreamException;
 
 /**
  * enumDeclaration : modifiers ('enum' ) IDENTIFIER ('implements' typeList )?

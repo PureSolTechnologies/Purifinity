@@ -4,11 +4,10 @@ import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.java.AbstractJavaParser;
 import com.puresol.coding.lang.java.source.literals.Identifier;
 import com.puresol.coding.lang.java.source.symbols.Dot;
-import com.puresol.parser.EndOfTokenStreamException;
-import com.puresol.parser.NoMatchingTokenException;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
-import com.puresol.parser.Token;
+import com.puresol.parser.tokens.EndOfTokenStreamException;
+import com.puresol.parser.tokens.Token;
 
 /**
  * qualifiedImportName : IDENTIFIER ('.' IDENTIFIER )* ;
@@ -27,8 +26,7 @@ public class QualifiedName extends AbstractJavaParser {
 			Token currentToken = getCurrentToken();
 			if (currentToken != null) {
 				while (currentToken.getDefinition().equals(Dot.class)) {
-					Token nextToken = getTokenStream().findNextToken(
-							getCurrentPosition());
+					Token nextToken = lookAhead(1);
 					if (nextToken.getDefinition().equals(Identifier.class)) {
 						expectToken(Dot.class);
 						expectToken(Identifier.class);
@@ -43,8 +41,6 @@ public class QualifiedName extends AbstractJavaParser {
 			}
 			finish();
 		} catch (EndOfTokenStreamException e) {
-			throw new PartDoesNotMatchException(this);
-		} catch (NoMatchingTokenException e) {
 			throw new PartDoesNotMatchException(this);
 		}
 	}

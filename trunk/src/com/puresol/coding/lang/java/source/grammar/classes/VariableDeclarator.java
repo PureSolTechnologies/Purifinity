@@ -8,9 +8,9 @@ import com.puresol.coding.lang.java.source.grammar.expressions.Dims;
 import com.puresol.coding.lang.java.source.grammar.types_values_variables.Type;
 import com.puresol.coding.lang.java.source.literals.Identifier;
 import com.puresol.coding.lang.java.source.symbols.Assign;
-import com.puresol.parser.EndOfTokenStreamException;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
+import com.puresol.parser.tokens.EndOfTokenStreamException;
 
 /**
  * variableDeclarator : IDENTIFIER ('[' ']' )* ('=' variableInitializer )? ;

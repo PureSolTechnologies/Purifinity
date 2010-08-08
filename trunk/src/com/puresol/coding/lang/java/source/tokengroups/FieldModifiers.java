@@ -10,7 +10,7 @@ import com.puresol.coding.lang.java.source.keywords.PublicKeyword;
 import com.puresol.coding.lang.java.source.keywords.StaticKeyword;
 import com.puresol.coding.lang.java.source.keywords.TransientKeyword;
 import com.puresol.coding.lang.java.source.keywords.VolatileKeyword;
-import com.puresol.parser.TokenDefinition;
+import com.puresol.parser.tokens.TokenDefinition;
 
 public class FieldModifiers {
 
