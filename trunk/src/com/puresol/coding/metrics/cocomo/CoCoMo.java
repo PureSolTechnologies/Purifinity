@@ -23,12 +23,13 @@ import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.evaluator.AbstractProjectEvaluator;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.QualityLevel;
-import com.puresol.parser.Token;
-import com.puresol.parser.TokenPublicity;
+import com.puresol.parser.tokens.Token;
+import com.puresol.parser.tokens.TokenPublicity;
 import com.puresol.reporting.ReportingFormat;
 import com.puresol.reporting.UnsupportedFormatException;
 import com.puresol.reporting.html.HTMLStandards;
 import com.puresol.utils.Property;
+import com.puresol.utils.TextUtils;
 
 /**
  * This class calculates the CoCoMo for a set number of sloc and a given average
@@ -101,14 +102,16 @@ public class CoCoMo extends AbstractProjectEvaluator {
 
 	private int getSLOC(CodeRange codeRange) {
 		int sloc = 0;
+		int line = 1;
 		int oldLine = -1;
 		for (Token token : codeRange.getTokens()) {
 			if (token.getPublicity() == TokenPublicity.VISIBLE) {
-				if (token.getStartLine() != oldLine) {
-					oldLine = token.getStartLine();
+				if (line != oldLine) {
+					oldLine = line;
 					sloc++;
 				}
 			}
+			line += TextUtils.countLineBreaks(token.getText());
 		}
 		return sloc;
 	}

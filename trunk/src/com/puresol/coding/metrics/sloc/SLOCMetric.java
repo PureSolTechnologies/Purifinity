@@ -21,9 +21,10 @@ import com.puresol.coding.evaluator.AbstractCodeRangeEvaluator;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.QualityLevel;
 import com.puresol.coding.reporting.HTMLConverter;
-import com.puresol.parser.Token;
-import com.puresol.parser.TokenPublicity;
-import com.puresol.parser.TokenStream;
+import com.puresol.parser.tokens.Token;
+import com.puresol.parser.tokens.TokenPublicity;
+import com.puresol.parser.tokens.TokenStream;
+import com.puresol.parser.tokens.TokenStreamIterator;
 import com.puresol.reporting.ReportingFormat;
 import com.puresol.reporting.UnsupportedFormatException;
 import com.puresol.reporting.html.Anchor;
@@ -63,7 +64,8 @@ public class SLOCMetric extends AbstractCodeRangeEvaluator {
 				.add(QualityCharacteristic.TESTABILITY);
 	}
 
-	private final TokenStream stream;
+	private final TokenStream tokenStream;
+	private final TokenStreamIterator tokenStreamIterator;
 	private int phyLOC;
 	private int proLOC;
 	private int comLOC;
@@ -79,7 +81,8 @@ public class SLOCMetric extends AbstractCodeRangeEvaluator {
 
 	public SLOCMetric(CodeRange codeRange) {
 		super(codeRange);
-		this.stream = codeRange.getTokenStream();
+		tokenStream = codeRange.getTokenStream();
+		tokenStreamIterator = tokenStream.createNewIterator();
 	}
 
 	@Override
@@ -95,7 +98,7 @@ public class SLOCMetric extends AbstractCodeRangeEvaluator {
 		blLOC = 0;
 		for (int line = getCodeRange().getStartLine(); line <= getCodeRange()
 				.getStopLine(); line++) {
-			TokenStream lineStream = stream.getLineStream(line);
+			TokenStream lineStream = tokenStreamIterator.getLineStream(line);
 			phyLOC += 1;
 			if (isComment(lineStream)) {
 				comLOC += 1;
@@ -149,7 +152,7 @@ public class SLOCMetric extends AbstractCodeRangeEvaluator {
 		lineLengthsTrimmedProductive = new ArrayList<Integer>();
 		for (int index = getCodeRange().getStartId(); index <= getCodeRange()
 				.getStopId(); index++) {
-			Token token = stream.get(index);
+			Token token = tokenStream.get(index);
 			completeLines.append(token.getText());
 			if (token.getPublicity() != TokenPublicity.HIDDEN) {
 				productiveLines.append(token.getText());

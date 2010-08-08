@@ -13,9 +13,9 @@ import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.QualityLevel;
 import com.puresol.coding.reporting.HTMLConverter;
 import com.puresol.coding.tokentypes.SourceTokenDefinition;
-import com.puresol.parser.Token;
-import com.puresol.parser.TokenException;
-import com.puresol.parser.TokenStream;
+import com.puresol.parser.tokens.Token;
+import com.puresol.parser.tokens.TokenCreationException;
+import com.puresol.parser.tokens.TokenStream;
 import com.puresol.reporting.ReportingFormat;
 import com.puresol.reporting.UnsupportedFormatException;
 import com.puresol.reporting.html.Anchor;
@@ -67,7 +67,7 @@ public class CodeDepth extends AbstractCodeRangeEvaluator {
 					maxLayer = layer;
 				}
 			}
-		} catch (TokenException e) {
+		} catch (TokenCreationException e) {
 			logger.error(e);
 		}
 	}
