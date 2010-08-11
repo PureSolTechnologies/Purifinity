@@ -1,21 +1,22 @@
-package com.puresol.coding.lang.fortran.source.grammar.programmunits;
+package com.puresol.coding.lang.fortran.source.grammar.programunits;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
-import com.puresol.coding.lang.fortran.source.keywords.BlockDataKeyword;
-import com.puresol.coding.lang.fortran.source.literals.NameLiteral;
+import com.puresol.coding.lang.fortran.source.grammar.procedures.GenericSpec;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
 /**
  * <pre>
- * R1121 block-data-stmt is BLOCK DATA [ block-data-name ]
+ * R1112 only is generic-spec
+ * or only-use-name
+ * or rename
  * </pre>
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class BlockDataStmt extends AbstractFortranParser {
+public class Only extends AbstractFortranParser {
 
 	private static final long serialVersionUID = 2177336093526924891L;
 
@@ -26,9 +27,12 @@ public class BlockDataStmt extends AbstractFortranParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		expectToken(BlockDataKeyword.class);
-		acceptToken(NameLiteral.class);
+		if (acceptPart(GenericSpec.class) != null) {
+		} else if (acceptPart(OnlyUseName.class) != null) {
+		} else if (acceptPart(Rename.class) != null) {
+		} else {
+			abort();
+		}
 		finish();
 	}
-
 }

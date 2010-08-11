@@ -3,7 +3,7 @@ package com.puresol.coding.lang.fortran.source.grammar.highlevel;
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
 import com.puresol.coding.lang.fortran.source.grammar.procedures.ImportStmt;
-import com.puresol.coding.lang.fortran.source.grammar.programmunits.UseStmt;
+import com.puresol.coding.lang.fortran.source.grammar.programunits.UseStmt;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 

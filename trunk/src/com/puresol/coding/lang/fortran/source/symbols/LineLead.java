@@ -2,6 +2,7 @@ package com.puresol.coding.lang.fortran.source.symbols;
 
 import com.puresol.coding.tokentypes.Operant;
 import com.puresol.parser.tokens.Token;
+import com.puresol.parser.tokens.TokenPublicity;
 import com.puresol.parser.tokens.TokenStream;
 
 /**
@@ -15,16 +16,17 @@ import com.puresol.parser.tokens.TokenStream;
  */
 public class LineLead extends Operant {
 
-    @Override
-    protected void initialize() {
-	super.initialize();
-	setCaseInsensitive();
-	setPatternString("([C*!].....| [ \\d!]{4}[ \\d!;])");
-    }
+	@Override
+	protected void initialize() {
+		super.initialize();
+		setPublicity(TokenPublicity.HIDDEN);
+		setCaseInsensitive();
+		setPatternString("([C*!].....| [ \\d!]{4}[ \\d!;])");
+	}
 
-    @Override
-    public boolean countForHalstead(Token token, TokenStream tokenStream) {
-	return false;
-    }
+	@Override
+	public boolean countForHalstead(Token token, TokenStream tokenStream) {
+		return false;
+	}
 
 }

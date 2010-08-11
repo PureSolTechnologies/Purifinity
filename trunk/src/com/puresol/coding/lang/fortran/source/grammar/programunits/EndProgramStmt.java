@@ -1,22 +1,22 @@
-package com.puresol.coding.lang.fortran.source.grammar.programmunits;
+package com.puresol.coding.lang.fortran.source.grammar.programunits;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
-import com.puresol.coding.lang.fortran.source.grammar.expressions.DefinedBinaryOp;
-import com.puresol.coding.lang.fortran.source.grammar.expressions.DefinedUnaryOp;
+import com.puresol.coding.lang.fortran.source.keywords.EndKeyword;
+import com.puresol.coding.lang.fortran.source.keywords.ProgramKeyword;
+import com.puresol.coding.lang.fortran.source.literals.NameLiteral;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
 /**
  * <pre>
- * R1115 use-defined-operator is defined-unary-op
- * or defined-binary-op
+ * R1103 end-program-stmt is END [ PROGRAM [ program-name ] ]
  * </pre>
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class UseDefinedOperator extends AbstractFortranParser {
+public class EndProgramStmt extends AbstractFortranParser {
 
 	private static final long serialVersionUID = 2177336093526924891L;
 
@@ -27,11 +27,11 @@ public class UseDefinedOperator extends AbstractFortranParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		if (acceptPart(DefinedUnaryOp.class) != null) {
-		} else if (acceptPart(DefinedBinaryOp.class) != null) {
-		} else {
-			abort();
+		expectToken(EndKeyword.class);
+		if (acceptToken(ProgramKeyword.class) != null) {
+			acceptToken(NameLiteral.class);
 		}
 		finish();
 	}
+
 }

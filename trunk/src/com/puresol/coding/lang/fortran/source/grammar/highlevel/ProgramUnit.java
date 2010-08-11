@@ -2,10 +2,10 @@ package com.puresol.coding.lang.fortran.source.grammar.highlevel;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
-import com.puresol.coding.lang.fortran.source.grammar.programmunits.BlockData;
-import com.puresol.coding.lang.fortran.source.grammar.programmunits.MainProgram;
-import com.puresol.coding.lang.fortran.source.grammar.programmunits.Module;
-import com.puresol.coding.lang.fortran.source.grammar.programmunits.Submodule;
+import com.puresol.coding.lang.fortran.source.grammar.programunits.BlockData;
+import com.puresol.coding.lang.fortran.source.grammar.programunits.MainProgram;
+import com.puresol.coding.lang.fortran.source.grammar.programunits.Module;
+import com.puresol.coding.lang.fortran.source.grammar.programunits.Submodule;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 

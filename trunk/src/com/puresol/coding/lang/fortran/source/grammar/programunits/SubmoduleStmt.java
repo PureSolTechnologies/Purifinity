@@ -1,7 +1,9 @@
-package com.puresol.coding.lang.fortran.source.grammar.dataobjects;
+package com.puresol.coding.lang.fortran.source.grammar.programunits;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
+import com.puresol.coding.lang.fortran.source.keywords.SubmoduleKeyword;
+import com.puresol.coding.lang.fortran.source.literals.NameLiteral;
 import com.puresol.coding.lang.fortran.source.symbols.LParen;
 import com.puresol.coding.lang.fortran.source.symbols.RParen;
 import com.puresol.parser.ParserException;
@@ -9,14 +11,13 @@ import com.puresol.parser.PartDoesNotMatchException;
 
 /**
  * <pre>
- * R618 array-section is data-ref [ ( substring-range ) ]
- * or complex-part-designator
+ * R1117 submodule-stmt is SUBMODULE ( parent-identier ) submodule-name
  * </pre>
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class ArraySection extends AbstractFortranParser {
+public class SubmoduleStmt extends AbstractFortranParser {
 
 	private static final long serialVersionUID = 2177336093526924891L;
 
@@ -27,16 +28,11 @@ public class ArraySection extends AbstractFortranParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		if (acceptPart(DataRef.class) != null) {
-			if (acceptToken(LParen.class) != null) {
-				expectPart(SubstringRange.class);
-				expectToken(RParen.class);
-			}
-		} else if (acceptPart(ComplexPartDesignator.class) != null) {
-		} else {
-			abort();
-		}
+		expectToken(SubmoduleKeyword.class);
+		expectToken(LParen.class);
+		expectPart(ParentIdentifier.class);
+		expectToken(RParen.class);
+		expectToken(NameLiteral.class);
 		finish();
-
 	}
 }

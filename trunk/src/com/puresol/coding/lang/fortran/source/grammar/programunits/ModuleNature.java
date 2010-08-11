@@ -1,22 +1,22 @@
-package com.puresol.coding.lang.fortran.source.grammar.programmunits;
+package com.puresol.coding.lang.fortran.source.grammar.programunits;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
-import com.puresol.coding.lang.fortran.source.grammar.procedures.GenericSpec;
+import com.puresol.coding.lang.fortran.source.keywords.IntrinsicKeyword;
+import com.puresol.coding.lang.fortran.source.keywords.NonKeyword;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
 /**
  * <pre>
- * R1112 only is generic-spec
- * or only-use-name
- * or rename
+ * R1110 module-nature is INTRINSIC
+ * or NON INTRINSIC
  * </pre>
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class Only extends AbstractFortranParser {
+public class ModuleNature extends AbstractFortranParser {
 
 	private static final long serialVersionUID = 2177336093526924891L;
 
@@ -27,9 +27,9 @@ public class Only extends AbstractFortranParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		if (acceptPart(GenericSpec.class) != null) {
-		} else if (acceptPart(OnlyUseName.class) != null) {
-		} else if (acceptPart(Rename.class) != null) {
+		if (acceptToken(NonKeyword.class) != null) {
+			expectToken(IntrinsicKeyword.class);
+		} else if (acceptToken(IntrinsicKeyword.class) != null) {
 		} else {
 			abort();
 		}

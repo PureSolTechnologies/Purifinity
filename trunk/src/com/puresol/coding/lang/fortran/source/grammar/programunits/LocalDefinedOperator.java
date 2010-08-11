@@ -1,23 +1,22 @@
-package com.puresol.coding.lang.fortran.source.grammar.programmunits;
+package com.puresol.coding.lang.fortran.source.grammar.programunits;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
-import com.puresol.coding.lang.fortran.source.grammar.highlevel.SpecificationPart;
+import com.puresol.coding.lang.fortran.source.grammar.expressions.DefinedBinaryOp;
+import com.puresol.coding.lang.fortran.source.grammar.expressions.DefinedUnaryOp;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
 /**
  * <pre>
- * R1116 submodule is submodule-stmt
- * [ specification-part ]
- * [ module-subprogram-part ]
- * end-submodule-stmt
+ * R1114 local-defined-operator is defined-unary-op
+ * or defined-binary-op
  * </pre>
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class Submodule extends AbstractFortranParser {
+public class LocalDefinedOperator extends AbstractFortranParser {
 
 	private static final long serialVersionUID = 2177336093526924891L;
 
@@ -28,11 +27,11 @@ public class Submodule extends AbstractFortranParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		expectPart(SubmoduleStmt.class);
-		acceptPart(SpecificationPart.class);
-		acceptPart(ModuleSubprogramPart.class);
-		expectPart(EndSubmoduleStmt.class);
+		if (acceptPart(DefinedUnaryOp.class) != null) {
+		} else if (acceptPart(DefinedBinaryOp.class) != null) {
+		} else {
+			abort();
+		}
 		finish();
 	}
-
 }

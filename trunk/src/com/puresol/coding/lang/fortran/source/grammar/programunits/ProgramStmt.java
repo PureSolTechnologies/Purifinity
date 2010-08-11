@@ -1,21 +1,21 @@
-package com.puresol.coding.lang.fortran.source.grammar.programmunits;
+package com.puresol.coding.lang.fortran.source.grammar.programunits;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
-import com.puresol.coding.lang.fortran.source.grammar.procedures.ContainsStmt;
+import com.puresol.coding.lang.fortran.source.keywords.ProgramKeyword;
+import com.puresol.coding.lang.fortran.source.literals.NameLiteral;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
 /**
  * <pre>
- * R1107 module-subprogram-part is contains-stmt
- * [ module-subprogram ] ...
+ * R1102 program-stmt is PROGRAM program-name
  * </pre>
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class ModuleSubprogramPart extends AbstractFortranParser {
+public class ProgramStmt extends AbstractFortranParser {
 
 	private static final long serialVersionUID = 2177336093526924891L;
 
@@ -26,9 +26,8 @@ public class ModuleSubprogramPart extends AbstractFortranParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		expectPart(ContainsStmt.class);
-		while (acceptPart(ModuleSubprogram.class) != null)
-			;
+		expectToken(ProgramKeyword.class);
+		expectToken(NameLiteral.class);
 		finish();
 	}
 

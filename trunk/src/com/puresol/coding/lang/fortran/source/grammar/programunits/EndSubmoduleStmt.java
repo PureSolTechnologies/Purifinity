@@ -1,21 +1,22 @@
-package com.puresol.coding.lang.fortran.source.grammar.programmunits;
+package com.puresol.coding.lang.fortran.source.grammar.programunits;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
+import com.puresol.coding.lang.fortran.source.keywords.EndKeyword;
+import com.puresol.coding.lang.fortran.source.keywords.SubmoduleKeyword;
 import com.puresol.coding.lang.fortran.source.literals.NameLiteral;
-import com.puresol.coding.lang.fortran.source.symbols.Colon;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
 /**
  * <pre>
- * R1118 parent-identifier is ancestor-module-name [ : parent-submodule-name ]
+ * R1119 end-submodule-stmt is END [ SUBMODULE [ submodule-name ] ]
  * </pre>
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class ParentIdentifier extends AbstractFortranParser {
+public class EndSubmoduleStmt extends AbstractFortranParser {
 
 	private static final long serialVersionUID = 2177336093526924891L;
 
@@ -26,10 +27,11 @@ public class ParentIdentifier extends AbstractFortranParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		expectToken(NameLiteral.class);
-		if (acceptToken(Colon.class) != null) {
-			expectToken(NameLiteral.class);
+		expectToken(EndKeyword.class);
+		if (acceptToken(SubmoduleKeyword.class) != null) {
+			acceptToken(NameLiteral.class);
 		}
 		finish();
 	}
+
 }

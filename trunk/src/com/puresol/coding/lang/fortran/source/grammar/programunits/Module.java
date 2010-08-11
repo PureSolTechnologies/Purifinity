@@ -1,22 +1,23 @@
-package com.puresol.coding.lang.fortran.source.grammar.programmunits;
+package com.puresol.coding.lang.fortran.source.grammar.programunits;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
-import com.puresol.coding.lang.fortran.source.keywords.EndKeyword;
-import com.puresol.coding.lang.fortran.source.keywords.SubmoduleKeyword;
-import com.puresol.coding.lang.fortran.source.literals.NameLiteral;
+import com.puresol.coding.lang.fortran.source.grammar.highlevel.SpecificationPart;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
 /**
  * <pre>
- * R1119 end-submodule-stmt is END [ SUBMODULE [ submodule-name ] ]
+ * R1104 module is module-stmt
+ * [ specification-part ]
+ * [ module-subprogram-part ]
+ * end-module-stmt
  * </pre>
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class EndSubmoduleStmt extends AbstractFortranParser {
+public class Module extends AbstractFortranParser {
 
 	private static final long serialVersionUID = 2177336093526924891L;
 
@@ -27,10 +28,10 @@ public class EndSubmoduleStmt extends AbstractFortranParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		expectToken(EndKeyword.class);
-		if (acceptToken(SubmoduleKeyword.class) != null) {
-			acceptToken(NameLiteral.class);
-		}
+		acceptPart(ModuleStmt.class);
+		acceptPart(SpecificationPart.class);
+		acceptPart(ModuleSubprogramPart.class);
+		expectPart(EndModuleStmt.class);
 		finish();
 	}
 

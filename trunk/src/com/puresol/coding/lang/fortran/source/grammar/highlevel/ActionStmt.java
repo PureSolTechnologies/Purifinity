@@ -39,7 +39,7 @@ import com.puresol.coding.lang.fortran.source.grammar.procedures.EndFunctionStmt
 import com.puresol.coding.lang.fortran.source.grammar.procedures.EndMpSubprogramStmt;
 import com.puresol.coding.lang.fortran.source.grammar.procedures.EndSubroutineStmt;
 import com.puresol.coding.lang.fortran.source.grammar.procedures.ReturnStmt;
-import com.puresol.coding.lang.fortran.source.grammar.programmunits.EndProgramStmt;
+import com.puresol.coding.lang.fortran.source.grammar.programunits.EndProgramStmt;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 

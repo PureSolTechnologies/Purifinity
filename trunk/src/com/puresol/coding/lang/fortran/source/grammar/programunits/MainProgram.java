@@ -1,22 +1,26 @@
-package com.puresol.coding.lang.fortran.source.grammar.programmunits;
+package com.puresol.coding.lang.fortran.source.grammar.programunits;
 
 import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.lang.fortran.AbstractFortranParser;
+import com.puresol.coding.lang.fortran.source.grammar.highlevel.ExecutionPart;
+import com.puresol.coding.lang.fortran.source.grammar.highlevel.InternalSubprogramPart;
 import com.puresol.coding.lang.fortran.source.grammar.highlevel.SpecificationPart;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 
 /**
  * <pre>
- * R1120 block-data is block-data-stmt
+ * R1101 main-program is [ program-stmt ]
  * [ specification-part ]
- * end-block-data-stmt
+ * [ execution-part ]
+ * [ internal-subprogram-part ]
+ * end-program-stmt
  * </pre>
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class BlockData extends AbstractFortranParser {
+public class MainProgram extends AbstractFortranParser {
 
 	private static final long serialVersionUID = 2177336093526924891L;
 
@@ -27,9 +31,11 @@ public class BlockData extends AbstractFortranParser {
 
 	@Override
 	public void scan() throws PartDoesNotMatchException, ParserException {
-		expectPart(BlockDataStmt.class);
+		acceptPart(ProgramStmt.class);
 		acceptPart(SpecificationPart.class);
-		expectPart(EndBlockDataStmt.class);
+		acceptPart(ExecutionPart.class);
+		acceptPart(InternalSubprogramPart.class);
+		expectPart(EndProgramStmt.class);
 		finish();
 	}
 
