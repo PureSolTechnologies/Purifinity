@@ -9,8 +9,6 @@ import java.util.List;
 
 import javax.i18n4java.utils.FileSearch;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
 import org.junit.Test;
 
 import com.puresol.coding.analysis.Analyzer;
