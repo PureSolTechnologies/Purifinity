@@ -1,0 +1,39 @@
+package com.puresol.uhura.parser.ll1;
+
+import java.util.Properties;
+
+import com.puresol.uhura.ast.SyntaxTree;
+import com.puresol.uhura.lexer.TokenStream;
+import com.puresol.uhura.parser.Parser;
+import com.puresol.uhura.parser.ParserException;
+import com.puresol.uhura.parser.ParserRuleSet;
+
+public class RecursiveDescentParser implements Parser {
+
+	@SuppressWarnings("unused")
+	private final Properties options;
+	@SuppressWarnings("unused")
+	private TokenStream tokenStream;
+	@SuppressWarnings("unused")
+	private ParserRuleSet ruleSet = null;
+
+	public RecursiveDescentParser(Properties options) {
+		this.options = options;
+	}
+
+	@Override
+	public void setTokenStream(TokenStream tokenStream) {
+		this.tokenStream = tokenStream;
+	}
+
+	@Override
+	public void setRules(ParserRuleSet ruleSet) {
+		this.ruleSet = ruleSet;
+	}
+
+	@Override
+	public SyntaxTree call() throws ParserException {
+		return null;
+	}
+
+}
