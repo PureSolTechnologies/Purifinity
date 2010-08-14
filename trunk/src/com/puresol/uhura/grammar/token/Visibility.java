@@ -1,4 +1,4 @@
-package com.puresol.uhura.lexer;
+package com.puresol.uhura.grammar.token;
 
 public enum Visibility {
 	VISIBLE, HIDDEN;

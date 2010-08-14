@@ -7,6 +7,10 @@ import java.util.regex.Matcher;
 
 import org.apache.log4j.Logger;
 
+import com.puresol.uhura.grammar.token.TokenDefinition;
+import com.puresol.uhura.grammar.token.TokenDefinitionSet;
+import com.puresol.uhura.grammar.token.Visibility;
+
 /**
  * This is a basic Lexer based on Java's regular expression engine.
  * 
@@ -18,7 +22,7 @@ public class RegExpLexer implements Lexer {
 	private static final Logger logger = Logger.getLogger(RegExpLexer.class);
 
 	private final Properties options;
-	private TokenDefinitionSet ruleSet = null;
+	private TokenDefinitionSet definitionSet = null;
 	private TokenMetaInformation tokenMetaDatas = null;
 	private TokenStream tokenStream = null;
 	private String text = null;
@@ -31,7 +35,7 @@ public class RegExpLexer implements Lexer {
 	 * @return the rules
 	 */
 	public TokenDefinitionSet getRuleSet() {
-		return ruleSet;
+		return definitionSet;
 	}
 
 	/**
@@ -49,7 +53,7 @@ public class RegExpLexer implements Lexer {
 	@Override
 	public void scan(Reader reader, TokenDefinitionSet rules)
 			throws LexerException {
-		this.ruleSet = rules;
+		this.definitionSet = rules;
 		readToString(reader);
 		scan();
 	}
@@ -105,9 +109,9 @@ public class RegExpLexer implements Lexer {
 	}
 
 	private Token findNextToken(String text) {
-		Token result = null;
-		for (TokenDefinition rule : ruleSet.getRules()) {
-			Matcher matcher = rule.getPattern().matcher(text);
+		Token nextToken = null;
+		for (TokenDefinition definition : definitionSet.getRules()) {
+			Matcher matcher = definition.getPattern().matcher(text);
 			if (!matcher.find()) {
 				continue;
 			}
@@ -115,12 +119,13 @@ public class RegExpLexer implements Lexer {
 				continue;
 			}
 			String group = matcher.group(0);
-			if ((result == null)
-					|| (group.length() > result.getText().length())) {
-				result = new Token(rule.getName(), group, rule.getVisibility());
+			if ((nextToken == null)
+					|| (group.length() > nextToken.getText().length())) {
+				nextToken = new Token(definition.getTypeId(), group,
+						definition.getVisibility());
 			}
 		}
-		return result;
+		return nextToken;
 	}
 
 	/**

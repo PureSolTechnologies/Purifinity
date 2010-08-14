@@ -1,6 +1,7 @@
-package com.puresol.uhura.lexer;
+package com.puresol.uhura.grammar.token;
 
 import java.util.regex.Pattern;
+
 
 /**
  * This class represents a single token definition for a lexer.
@@ -10,26 +11,26 @@ import java.util.regex.Pattern;
  */
 public class TokenDefinition {
 
-	private final String name;
+	private final int typeId;
 	private final Pattern pattern;
 	private final Visibility visibility;
 
-	public TokenDefinition(String name, String regex) {
-		this(name, Pattern.compile(regex));
+	public TokenDefinition(int typeId, String regex) {
+		this(typeId, Pattern.compile(regex));
 	}
 
-	public TokenDefinition(String name, String regex, Visibility visibility) {
-		this(name, Pattern.compile(regex), visibility);
+	public TokenDefinition(int typeId, String regex, Visibility visibility) {
+		this(typeId, Pattern.compile(regex), visibility);
 	}
 
-	public TokenDefinition(String name, Pattern pattern, Visibility visibility) {
-		this.name = name;
+	public TokenDefinition(int typeId, Pattern pattern, Visibility visibility) {
+		this.typeId = typeId;
 		this.pattern = pattern;
 		this.visibility = visibility;
 	}
 
-	public TokenDefinition(String name, Pattern pattern) {
-		this.name = name;
+	public TokenDefinition(int typeId, Pattern pattern) {
+		this.typeId = typeId;
 		this.pattern = pattern;
 		this.visibility = Visibility.VISIBLE;
 	}
@@ -37,8 +38,8 @@ public class TokenDefinition {
 	/**
 	 * @return the name
 	 */
-	public String getName() {
-		return name;
+	public int getTypeId() {
+		return typeId;
 	}
 
 	/**

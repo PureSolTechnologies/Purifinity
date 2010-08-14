@@ -1,5 +1,7 @@
 package com.puresol.uhura.lexer;
 
+import com.puresol.uhura.grammar.token.Visibility;
+
 /**
  * This class represents a single token which was identified by a lexer.
  * 
@@ -9,45 +11,34 @@ package com.puresol.uhura.lexer;
 public class Token {
 
 	/**
-	 * This is the name of the token. It comes from the token definition.
+	 * This is the type id of the token. The true name is stored within the
+	 * token name reference table. Integers are better to handle and names
+	 * should be unique, too.
 	 */
-	private final String name;
+	private final int typeId;
 	/**
 	 * This is the text which was found in the source input which matched the
 	 * token definition with the name defined in name.
 	 */
 	private final String text;
 	private final Visibility visibility;
-	/**
-	 * This is an optional id which is used for reference in symbol tables. This
-	 * id is given optional. All id entries smaller than zero are not set and
-	 * should be neglected.
-	 */
-	private final int id;
 
-	public Token(String name, String text, Visibility visibility) {
+	public Token(int typeId, String text, Visibility visibility) {
 		super();
-		this.name = name;
+		this.typeId = typeId;
 		this.text = text;
 		this.visibility = visibility;
-		this.id = -1;
-	}
-
-	public Token(String name, String text, Visibility visibility, int id) {
-		super();
-		this.name = name;
-		this.text = text;
-		this.visibility = visibility;
-		this.id = id;
 	}
 
 	/**
-	 * This is the name of the token. It comes from the token definition.
+	 * This is the type id of the token. The true name is stored within the
+	 * token name reference table. Integers are better to handle and names
+	 * should be unique, too.
 	 * 
 	 * @return the name
 	 */
-	public String getName() {
-		return name;
+	public int getTypeId() {
+		return typeId;
 	}
 
 	/**
@@ -67,19 +58,8 @@ public class Token {
 		return visibility;
 	}
 
-	/**
-	 * This is an optional id which is used for reference in symbol tables. This
-	 * id is given optional. All id entries smaller than zero are not set and
-	 * should be neglected.
-	 * 
-	 * @return the id
-	 */
-	public int getId() {
-		return id;
-	}
-
 	@Override
 	public String toString() {
-		return "\"" + text + "\" (" + name + " / " + id + ")";
+		return "\"" + text + "\" (" + typeId + ")";
 	}
 }

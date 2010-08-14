@@ -2,6 +2,8 @@ package com.puresol.uhura.lexer;
 
 import java.io.Reader;
 
+import com.puresol.uhura.grammar.token.TokenDefinitionSet;
+
 /**
  * This is the primary lexer interace. The lexer read
  * 

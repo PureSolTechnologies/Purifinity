@@ -3,10 +3,10 @@ package com.puresol.uhura.parser.ll1;
 import java.util.Properties;
 
 import com.puresol.uhura.ast.SyntaxTree;
+import com.puresol.uhura.grammar.production.ProductionSet;
 import com.puresol.uhura.lexer.TokenStream;
 import com.puresol.uhura.parser.Parser;
 import com.puresol.uhura.parser.ParserException;
-import com.puresol.uhura.parser.ParserRuleSet;
 
 public class RecursiveDescentParser implements Parser {
 
@@ -15,7 +15,7 @@ public class RecursiveDescentParser implements Parser {
 	@SuppressWarnings("unused")
 	private TokenStream tokenStream;
 	@SuppressWarnings("unused")
-	private ParserRuleSet ruleSet = null;
+	private ProductionSet ruleSet = null;
 
 	public RecursiveDescentParser(Properties options) {
 		this.options = options;
@@ -27,7 +27,7 @@ public class RecursiveDescentParser implements Parser {
 	}
 
 	@Override
-	public void setRules(ParserRuleSet ruleSet) {
+	public void setProductions(ProductionSet ruleSet) {
 		this.ruleSet = ruleSet;
 	}
 

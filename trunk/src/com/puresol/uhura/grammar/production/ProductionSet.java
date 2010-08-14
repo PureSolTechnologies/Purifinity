@@ -1,4 +1,4 @@
-package com.puresol.uhura.parser;
+package com.puresol.uhura.grammar.production;
 
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -9,15 +9,15 @@ import java.util.concurrent.CopyOnWriteArraySet;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class ParserRuleSet {
+public class ProductionSet {
 
-	private final Set<ParserRule> rules = new CopyOnWriteArraySet<ParserRule>();
+	private final Set<Production> rules = new CopyOnWriteArraySet<Production>();
 
-	public void addRule(ParserRule rule) {
+	public void addRule(Production rule) {
 		rules.add(rule);
 	}
 
-	public Set<ParserRule> getRuleSet() {
+	public Set<Production> getRuleSet() {
 		return rules;
 	}
 }

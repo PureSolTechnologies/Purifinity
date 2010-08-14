@@ -7,28 +7,28 @@ import com.puresol.uhura.lexer.Token;
 
 public class SyntaxTree {
 
-	private final String name;
+	private final int typeId;
 	private final Token token;
 	private SyntaxTree parent;
 	private final List<SyntaxTree> children = new ArrayList<SyntaxTree>();
 
-	public SyntaxTree(String name, Token token) {
-		this.name = name;
+	public SyntaxTree(int typeId, Token token) {
+		this.typeId = typeId;
 		this.token = token;
 		this.parent = null;
 	}
 
-	public SyntaxTree(String name, Token token, SyntaxTree parent) {
-		this.name = name;
+	public SyntaxTree(int typeId, Token token, SyntaxTree parent) {
+		this.typeId = typeId;
 		this.token = token;
 		this.parent = parent;
 	}
 
 	/**
-	 * @return the name
+	 * @return the typeId
 	 */
-	public String getName() {
-		return name;
+	public int getTypeId() {
+		return typeId;
 	}
 
 	/**
@@ -66,6 +66,6 @@ public class SyntaxTree {
 
 	@Override
 	public String toString() {
-		return name + " " + token;
+		return typeId + " " + token;
 	}
 }

@@ -1,17 +1,14 @@
-package com.puresol.uhura.grammar;
-
-import com.puresol.uhura.lexer.TokenDefinition;
-import com.puresol.uhura.lexer.TokenDefinitionSet;
-import com.puresol.uhura.lexer.Visibility;
+package com.puresol.uhura.grammar.uhura;
 
 /**
- * This class is a static representation for all tokens used in Nyota Uhura
- * grammar files.
+ * This class is a collection of public final strings which specified regular
+ * expressions for Uhura grammar files. These definitions are taken out of Java
+ * Language specification due to its clean representation.
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class GrammarTokenDefinitionSet extends TokenDefinitionSet {
+public class UhuraTokenRegExps {
 
 	/********************************
 	 * 3.3 Unicode Escapes
@@ -177,28 +174,4 @@ public class GrammarTokenDefinitionSet extends TokenDefinitionSet {
 	public static final String STRING_LITERAL = "\"(" + STRING_CHARACTERS
 			+ ")?\"";
 
-	public GrammarTokenDefinitionSet() {
-		super();
-		addRules();
-	}
-
-	private void addRules() {
-		addRule(new TokenDefinition("WHITE_SPACE", WHITE_SPACE,
-				Visibility.HIDDEN));
-		addRule(new TokenDefinition("LINE_COMMENT", END_OF_LINE_COMMENT,
-				Visibility.HIDDEN));
-
-		addRule(new TokenDefinition("EQUALS", "="));
-		addRule(new TokenDefinition("SEMICOLON", ";"));
-		addRule(new TokenDefinition("COLON", ":"));
-		addRule(new TokenDefinition("DOT", "."));
-
-		addRule(new TokenDefinition("OPTIONS", "OPTIONS"));
-		addRule(new TokenDefinition("HELPER", "HELPER"));
-		addRule(new TokenDefinition("TOKENS", "TOKENS"));
-		addRule(new TokenDefinition("PRODUCTIONS", "PRODUCTIONS"));
-
-		addRule(new TokenDefinition("STRING_LITERAL", STRING_LITERAL));
-		addRule(new TokenDefinition("IDENTIFIER", IDENTIFIER));
-	}
 }

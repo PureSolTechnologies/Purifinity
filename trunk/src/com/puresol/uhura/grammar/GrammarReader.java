@@ -6,26 +6,26 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.Callable;
 
 import com.puresol.uhura.ast.SyntaxTree;
+import com.puresol.uhura.grammar.production.ProductionSet;
+import com.puresol.uhura.grammar.token.TokenDefinitionSet;
+import com.puresol.uhura.grammar.uhura.UhuraGrammar;
 import com.puresol.uhura.lexer.Lexer;
 import com.puresol.uhura.lexer.LexerException;
 import com.puresol.uhura.lexer.RegExpLexer;
-import com.puresol.uhura.lexer.TokenDefinition;
 import com.puresol.uhura.lexer.TokenStream;
 import com.puresol.uhura.parser.Parser;
 import com.puresol.uhura.parser.ParserException;
-import com.puresol.uhura.parser.ParserRule;
 import com.puresol.uhura.parser.lr1.LR1Parser;
 
 public class GrammarReader implements Callable<Boolean> {
 
-	private final List<TokenDefinition> lexerRules = new ArrayList<TokenDefinition>();
-	private final List<ParserRule> parserRules = new ArrayList<ParserRule>();
+	private final TokenDefinitionSet tokenDefinitions = new TokenDefinitionSet();
+	private final ProductionSet productions = new ProductionSet();
+	private final UhuraGrammar grammar;
 	private final Properties options = new Properties();
 	private final Reader reader;
 
@@ -39,6 +39,12 @@ public class GrammarReader implements Callable<Boolean> {
 
 	public GrammarReader(Reader reader) {
 		this.reader = reader;
+		try {
+			grammar = new UhuraGrammar();
+		} catch (GrammarException e) {
+			throw new RuntimeException(
+					"Uhura grammar file grammar is not working!");
+		}
 	}
 
 	@Override
@@ -49,7 +55,7 @@ public class GrammarReader implements Callable<Boolean> {
 
 	private void read() throws ParserException, LexerException {
 		Lexer lexer = new RegExpLexer(new Properties());
-		lexer.scan(reader, new GrammarTokenDefinitionSet());
+		lexer.scan(reader, grammar.getTokenDefinitions());
 		TokenStream tokenStream = lexer.getTokenStream();
 		parse(tokenStream);
 	}
@@ -57,7 +63,7 @@ public class GrammarReader implements Callable<Boolean> {
 	private SyntaxTree parse(TokenStream tokenStream) throws ParserException {
 		Parser parser = new LR1Parser(new Properties());
 		parser.setTokenStream(tokenStream);
-		parser.setRules(new GrammarParserRuleSet());
+		parser.setProductions(grammar.getProductions());
 		try {
 			return parser.call();
 		} catch (Exception e) {
@@ -66,12 +72,12 @@ public class GrammarReader implements Callable<Boolean> {
 		}
 	}
 
-	public List<TokenDefinition> getLexerRules() {
-		return lexerRules;
+	public TokenDefinitionSet getLexerRules() {
+		return tokenDefinitions;
 	}
 
-	public List<ParserRule> getParserRules() {
-		return parserRules;
+	public ProductionSet getParserRules() {
+		return productions;
 	}
 
 	public Properties getOptions() {
