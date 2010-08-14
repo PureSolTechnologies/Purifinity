@@ -28,6 +28,7 @@ public class GrammarReader implements Callable<Boolean> {
 	private final UhuraGrammar grammar;
 	private final Properties options = new Properties();
 	private final Reader reader;
+	private SyntaxTree syntaxTree;
 
 	public GrammarReader(File file) throws IOException {
 		this(new FileInputStream(file));
@@ -57,7 +58,7 @@ public class GrammarReader implements Callable<Boolean> {
 		Lexer lexer = new RegExpLexer(new Properties());
 		lexer.scan(reader, grammar.getTokenDefinitions());
 		TokenStream tokenStream = lexer.getTokenStream();
-		parse(tokenStream);
+		syntaxTree = parse(tokenStream);
 	}
 
 	private SyntaxTree parse(TokenStream tokenStream) throws ParserException {
@@ -72,6 +73,10 @@ public class GrammarReader implements Callable<Boolean> {
 		}
 	}
 
+	public Grammar getGrammar() {
+		return grammar;
+	}
+
 	public TokenDefinitionSet getLexerRules() {
 		return tokenDefinitions;
 	}
@@ -82,5 +87,9 @@ public class GrammarReader implements Callable<Boolean> {
 
 	public Properties getOptions() {
 		return options;
+	}
+
+	public SyntaxTree getSyntaxTree() {
+		return syntaxTree;
 	}
 }

@@ -29,13 +29,16 @@ public class NameReferenceTable {
 	public int defineTokenAndGetId(String name) throws GrammarException {
 		if (name2Integer.containsKey(name)) {
 			int id = name2Integer.get(name);
-			if (defined.get(id)) {
-				throw new GrammarException("Element name '" + name
-						+ "' was double defined!");
+			if (!defined.get(id)) {
+				defined.put(id, true);
+				token.put(id, true);
+				return id;
+			} else if (token.get(id)) {
+				// alternative was defined...
+				return id;
 			}
-			defined.put(id, true);
-			token.put(id, true);
-			return id;
+			throw new GrammarException("Element name '" + name
+					+ "' was double defined!");
 		} else {
 			int id = addNameAndGetId(name);
 			defined.put(id, true);
@@ -47,13 +50,16 @@ public class NameReferenceTable {
 	public int defineProductionAndGetId(String name) throws GrammarException {
 		if (name2Integer.containsKey(name)) {
 			int id = name2Integer.get(name);
-			if (defined.get(id)) {
-				throw new GrammarException("Element name '" + name
-						+ "' was double defined!");
+			if (!defined.get(id)) {
+				defined.put(id, true);
+				token.put(id, false);
+				return id;
+			} else if (!token.get(id)) {
+				// alternative was defined...
+				return id;
 			}
-			defined.put(id, true);
-			token.put(id, false);
-			return id;
+			throw new GrammarException("Element name '" + name
+					+ "' was double defined!");
 		} else {
 			int id = addNameAndGetId(name);
 			defined.put(id, true);
@@ -116,5 +122,9 @@ public class NameReferenceTable {
 			}
 			return id;
 		}
+	}
+
+	public String getName(int id) {
+		return integer2Name.get(id);
 	}
 }
