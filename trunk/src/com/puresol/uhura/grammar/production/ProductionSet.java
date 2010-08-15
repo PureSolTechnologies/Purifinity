@@ -1,5 +1,7 @@
 package com.puresol.uhura.grammar.production;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
@@ -11,13 +13,23 @@ import java.util.concurrent.CopyOnWriteArraySet;
  */
 public class ProductionSet {
 
-	private final Set<Production> rules = new CopyOnWriteArraySet<Production>();
+	private final Set<Production> productions = new CopyOnWriteArraySet<Production>();
 
-	public void addRule(Production rule) {
-		rules.add(rule);
+	public void addRule(Production production) {
+		productions.add(production);
 	}
 
-	public Set<Production> getRuleSet() {
-		return rules;
+	public Set<Production> getProductions() {
+		return productions;
+	}
+
+	public List<Production> get(String productionName) {
+		List<Production> namedProductions = new ArrayList<Production>();
+		for (Production production : productions) {
+			if (production.getName().equals(productionName)) {
+				namedProductions.add(production);
+			}
+		}
+		return namedProductions;
 	}
 }

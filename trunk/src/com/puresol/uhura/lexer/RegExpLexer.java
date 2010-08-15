@@ -121,7 +121,7 @@ public class RegExpLexer implements Lexer {
 			String group = matcher.group(0);
 			if ((nextToken == null)
 					|| (group.length() > nextToken.getText().length())) {
-				nextToken = new Token(definition.getTypeId(), group,
+				nextToken = new Token(definition.getName(), group,
 						definition.getVisibility());
 			}
 		}

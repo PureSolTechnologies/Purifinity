@@ -15,7 +15,7 @@ public class Token {
 	 * token name reference table. Integers are better to handle and names
 	 * should be unique, too.
 	 */
-	private final int typeId;
+	private final String name;
 	/**
 	 * This is the text which was found in the source input which matched the
 	 * token definition with the name defined in name.
@@ -23,22 +23,18 @@ public class Token {
 	private final String text;
 	private final Visibility visibility;
 
-	public Token(int typeId, String text, Visibility visibility) {
+	public Token(String name, String text, Visibility visibility) {
 		super();
-		this.typeId = typeId;
+		this.name = name;
 		this.text = text;
 		this.visibility = visibility;
 	}
 
 	/**
-	 * This is the type id of the token. The true name is stored within the
-	 * token name reference table. Integers are better to handle and names
-	 * should be unique, too.
-	 * 
 	 * @return the name
 	 */
-	public int getTypeId() {
-		return typeId;
+	public String getName() {
+		return name;
 	}
 
 	/**
@@ -60,6 +56,6 @@ public class Token {
 
 	@Override
 	public String toString() {
-		return "\"" + text + "\" (" + typeId + ")";
+		return "\"" + text + "\" (" + name + ")";
 	}
 }

@@ -17,8 +17,10 @@ public interface ProductionElement {
 	 */
 	public Quantity getQuantity();
 
-	public int getTypeId();
+	public String getName();
 
 	public String toString();
+
+	public String toShortString();
 
 }

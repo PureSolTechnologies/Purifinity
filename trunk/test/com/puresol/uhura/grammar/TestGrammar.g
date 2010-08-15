@@ -1,7 +1,7 @@
 OPTIONS
-//	lexer=com.puresol.uhura.lexer.RegExpLexer;
+	lexer="com.puresol.uhura.lexer.RegExpLexer";
 //	lexer.case_sensitive=true;
-//	parser=com.puresol.uhura.parser.LR1Parser;
+	parser="com.puresol.uhura.parser.LR1Parser";
 
 HELPER 
 

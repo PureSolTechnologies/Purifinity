@@ -5,7 +5,10 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Stack;
 
+import org.apache.log4j.Logger;
+
 import com.puresol.uhura.ast.SyntaxTree;
+import com.puresol.uhura.grammar.production.Item;
 import com.puresol.uhura.grammar.production.Production;
 import com.puresol.uhura.grammar.production.ProductionElement;
 import com.puresol.uhura.grammar.production.ProductionElementType;
@@ -18,13 +21,20 @@ import com.puresol.uhura.parser.ParserException;
 
 public class LR1Parser implements Parser {
 
+	private static final Logger logger = Logger.getLogger(LR1Parser.class);
+
 	@SuppressWarnings("unused")
 	private final Properties options;
+	private final List<Item> items = new ArrayList<Item>();
+
 	private TokenStream tokenStream = null;
 	private ProductionSet productions = null;
 
 	private int currentPosition;
 	private Stack<SyntaxTree> parserStack = new Stack<SyntaxTree>();
+	private SyntaxTree topStackElement = null;
+	@SuppressWarnings("unused")
+	private Token lookAhead = null;
 
 	public LR1Parser(Properties options) {
 		this.options = options;
@@ -42,7 +52,7 @@ public class LR1Parser implements Parser {
 
 	@Override
 	public SyntaxTree call() throws ParserException {
-		currentPosition = 0;
+		currentPosition = -1;
 		parserStack.clear();
 		parse();
 		return parserStack.pop();
@@ -50,13 +60,21 @@ public class LR1Parser implements Parser {
 
 	private void parse() throws ParserException {
 		do {
+			printTracingInformation();
 			shift();
 			while (reduce())
 				;
 		} while (!stop());
+		printTracingInformation();
 	}
 
 	private void shift() throws ParserException {
+		shiftElement();
+		setLookAhead();
+	}
+
+	private void shiftElement() throws ParserException {
+		currentPosition++;
 		if (currentPosition >= tokenStream.size()) {
 			error();
 		}
@@ -64,13 +82,21 @@ public class LR1Parser implements Parser {
 			throw new ParserException("Stack is too large!");
 		}
 		Token token = tokenStream.get(currentPosition);
-		parserStack.push(new SyntaxTree(token.getTypeId(), token));
-		currentPosition++;
+		topStackElement = new SyntaxTree(token);
+		parserStack.push(topStackElement);
+	}
+
+	private void setLookAhead() {
+		if (currentPosition + 1 < tokenStream.size()) {
+			lookAhead = tokenStream.get(currentPosition + 1);
+		} else {
+			lookAhead = null;
+		}
 	}
 
 	private boolean reduce() throws ParserException {
 		List<Production> possibilities = new ArrayList<Production>();
-		for (Production rule : productions.getRuleSet()) {
+		for (Production rule : productions.getProductions()) {
 			if (canReduce(rule)) {
 				possibilities.add(rule);
 			}
@@ -95,13 +121,13 @@ public class LR1Parser implements Parser {
 			int counter = 0;
 			while (true) {
 				SyntaxTree stackElement = parserStack.get(parserStack.size()
-						- index - 1);
+						- index - counter - 1);
 				if (ruleElement.getType() == ProductionElementType.TOKEN) {
 					Token token = stackElement.getToken();
 					if (token == null) {
 						break;
 					}
-					if (token.getTypeId() != ruleElement.getTypeId()) {
+					if (!token.getName().equals(ruleElement.getName())) {
 						break;
 					}
 				} else if (ruleElement.getType() == ProductionElementType.TEXT) {
@@ -117,9 +143,11 @@ public class LR1Parser implements Parser {
 					if (token != null) {
 						break;
 					}
-					if (stackElement.getTypeId() != ruleElement.getTypeId()) {
+					if (!stackElement.getName().equals(ruleElement.getName())) {
 						break;
 					}
+				} else {
+					break;
 				}
 				counter++;
 				if ((quantity.getMax() != null)
@@ -140,7 +168,7 @@ public class LR1Parser implements Parser {
 	}
 
 	public void reduce(Production parserRule) throws ParserException {
-		SyntaxTree tree = new SyntaxTree(parserRule.getTypeId(), null);
+		SyntaxTree tree = new SyntaxTree(parserRule.getName());
 		List<ProductionElement> elements = parserRule.getElements();
 		int index = 0;
 		do {
@@ -156,7 +184,7 @@ public class LR1Parser implements Parser {
 					if (token == null) {
 						break;
 					}
-					if (token.getTypeId() != ruleElement.getTypeId()) {
+					if (!token.getName().equals(ruleElement.getName())) {
 						break;
 					}
 				} else if (ruleElement.getType() == ProductionElementType.TEXT) {
@@ -172,9 +200,11 @@ public class LR1Parser implements Parser {
 					if (token != null) {
 						break;
 					}
-					if (stackElement.getTypeId() != ruleElement.getTypeId()) {
+					if (!stackElement.getName().equals(ruleElement.getName())) {
 						break;
 					}
+				} else {
+					break;
 				}
 				counter++;
 				tree.getChildren().add(0, parserStack.pop());
@@ -194,7 +224,7 @@ public class LR1Parser implements Parser {
 
 	private boolean stop() {
 		if ((parserStack.size() == 1)
-				&& (currentPosition == tokenStream.size())) {
+				&& (currentPosition >= tokenStream.size() - 1)) {
 			return true;
 		}
 		return false;
@@ -202,6 +232,23 @@ public class LR1Parser implements Parser {
 
 	private void error() throws ParserException {
 		throw new ParserException();
+	}
+
+	private void printTracingInformation() {
+		if (!logger.isTraceEnabled()) {
+			return;
+		}
+		logger.trace("================================");
+		logger.trace("LR1Parser Tracing Information...");
+		logger.trace("================================");
+		logger.trace("Stack:");
+		for (SyntaxTree syntaxTree : parserStack) {
+			logger.trace(syntaxTree);
+		}
+		logger.trace("Items:");
+		for (Item item : items) {
+			logger.trace(item.toString());
+		}
 	}
 
 }
