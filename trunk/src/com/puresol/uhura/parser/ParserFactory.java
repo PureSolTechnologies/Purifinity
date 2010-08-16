@@ -4,7 +4,6 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
-import com.puresol.uhura.parser.lr.LR1Parser;
 import com.puresol.uhura.parser.lr.TEBTLRParser;
 
 public class ParserFactory {
