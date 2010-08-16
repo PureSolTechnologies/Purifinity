@@ -1,4 +1,4 @@
-package com.puresol.uhura.parser.lr1;
+package com.puresol.uhura.parser.lr;
 
 import java.util.Properties;
 
@@ -14,7 +14,7 @@ import com.puresol.uhura.grammar.token.Visibility;
 import com.puresol.uhura.lexer.Token;
 import com.puresol.uhura.lexer.TokenStream;
 import com.puresol.uhura.parser.ParserException;
-import com.puresol.uhura.parser.lr1.LR1Parser;
+import com.puresol.uhura.parser.lr.LR1Parser;
 
 public class LR1ParserTest extends TestCase {
 

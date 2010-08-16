@@ -80,19 +80,19 @@ public class UhuraGrammar extends Grammar {
 	}
 
 	private void addHelpersSection() throws GrammarException {
-		Production helper = new Production("helper");
+		Production helper = new Production("Helper");
 		helper.addElement(new TextProductionElement("HELPER"));
 		getProductions().addRule(helper);
 	}
 
 	private void addTokensSection() throws GrammarException {
-		Production tokens = new Production("tokens");
+		Production tokens = new Production("Tokens");
 		tokens.addElement(new TextProductionElement("TOKENS"));
 		getProductions().addRule(tokens);
 	}
 
 	private void addProductionsSection() throws GrammarException {
-		Production productions = new Production("productions");
+		Production productions = new Production("Productions");
 		productions.addElement(new TextProductionElement("PRODUCTIONS"));
 		getProductions().addRule(productions);
 	}

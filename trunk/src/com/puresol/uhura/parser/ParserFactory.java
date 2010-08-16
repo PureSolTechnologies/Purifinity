@@ -4,7 +4,8 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
-import com.puresol.uhura.parser.lr1.LR1Parser;
+import com.puresol.uhura.parser.lr.LR1Parser;
+import com.puresol.uhura.parser.lr.TEBTLRParser;
 
 public class ParserFactory {
 
@@ -17,7 +18,7 @@ public class ParserFactory {
 				return (Parser) Class.forName(options.getProperty("parser"))
 						.getConstructor(Properties.class).newInstance(options);
 			} else {
-				return new LR1Parser(options);
+				return new TEBTLRParser(options);
 			}
 		} catch (Throwable e) {
 			logger.error(e.getMessage(), e);

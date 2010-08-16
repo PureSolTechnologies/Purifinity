@@ -1,4 +1,4 @@
-package com.puresol.uhura.parser.ll1;
+package com.puresol.uhura.parser.ll;
 
 import java.util.Properties;
 

@@ -1,4 +1,4 @@
-package com.puresol.uhura.parser.lr1;
+package com.puresol.uhura.parser.lr;
 
 import java.util.ArrayList;
 import java.util.List;
