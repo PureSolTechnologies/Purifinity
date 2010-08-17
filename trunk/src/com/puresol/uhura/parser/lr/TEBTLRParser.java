@@ -9,8 +9,8 @@ import org.apache.log4j.Logger;
 
 import com.puresol.uhura.ast.SyntaxTree;
 import com.puresol.uhura.grammar.production.Production;
-import com.puresol.uhura.grammar.production.ProductionElement;
-import com.puresol.uhura.grammar.production.ProductionElementType;
+import com.puresol.uhura.grammar.production.Construction;
+import com.puresol.uhura.grammar.production.ConstructionType;
 import com.puresol.uhura.grammar.production.ProductionSet;
 import com.puresol.uhura.grammar.production.Quantity;
 import com.puresol.uhura.lexer.Token;
@@ -136,18 +136,18 @@ public class TEBTLRParser implements Parser {
 	}
 
 	public boolean canReduce(Production production) throws ParserException {
-		List<ProductionElement> elements = production.getElements();
+		List<Construction> elements = production.getConstructions();
 		int elementPosition = 0;
 		int stackCounter = 0;
 		do {
-			ProductionElement ruleElement = elements.get(elements.size()
+			Construction ruleElement = elements.get(elements.size()
 					- elementPosition - 1);
 			Quantity quantity = ruleElement.getQuantity();
 			int occuranceCounter = 0;
 			while (true) {
 				SyntaxTree stackElement = parserStack.get(parserStack.size()
 						- stackCounter - 1);
-				if (ruleElement.getType() == ProductionElementType.TOKEN) {
+				if (ruleElement.getType() == ConstructionType.TOKEN) {
 					Token token = stackElement.getToken();
 					if (token == null) {
 						break;
@@ -155,7 +155,7 @@ public class TEBTLRParser implements Parser {
 					if (!token.getName().equals(ruleElement.getName())) {
 						break;
 					}
-				} else if (ruleElement.getType() == ProductionElementType.TEXT) {
+				} else if (ruleElement.getType() == ConstructionType.TEXT) {
 					Token token = stackElement.getToken();
 					if (token == null) {
 						break;
@@ -163,7 +163,7 @@ public class TEBTLRParser implements Parser {
 					if (!token.getText().equals(ruleElement.getText())) {
 						break;
 					}
-				} else if (ruleElement.getType() == ProductionElementType.PRODUCTION) {
+				} else if (ruleElement.getType() == ConstructionType.PRODUCTION) {
 					Token token = stackElement.getToken();
 					if (token != null) {
 						break;
@@ -207,16 +207,16 @@ public class TEBTLRParser implements Parser {
 			backtrackStack.push(new BacktrackPosition(currentPosition - 1, 1));
 		}
 		SyntaxTree tree = new SyntaxTree(production.getName());
-		List<ProductionElement> elements = production.getElements();
+		List<Construction> elements = production.getConstructions();
 		int elementPosition = 0;
 		do {
-			ProductionElement ruleElement = elements.get(elements.size()
+			Construction ruleElement = elements.get(elements.size()
 					- elementPosition - 1);
 			Quantity quantity = ruleElement.getQuantity();
 			int occuranceCounter = 0;
 			while (true) {
 				SyntaxTree stackElement = parserStack.peek();
-				if (ruleElement.getType() == ProductionElementType.TOKEN) {
+				if (ruleElement.getType() == ConstructionType.TOKEN) {
 					Token token = stackElement.getToken();
 					if (token == null) {
 						break;
@@ -224,7 +224,7 @@ public class TEBTLRParser implements Parser {
 					if (!token.getName().equals(ruleElement.getName())) {
 						break;
 					}
-				} else if (ruleElement.getType() == ProductionElementType.TEXT) {
+				} else if (ruleElement.getType() == ConstructionType.TEXT) {
 					Token token = stackElement.getToken();
 					if (token == null) {
 						break;
@@ -232,7 +232,7 @@ public class TEBTLRParser implements Parser {
 					if (!token.getText().equals(ruleElement.getText())) {
 						break;
 					}
-				} else if (ruleElement.getType() == ProductionElementType.PRODUCTION) {
+				} else if (ruleElement.getType() == ConstructionType.PRODUCTION) {
 					Token token = stackElement.getToken();
 					if (token != null) {
 						break;

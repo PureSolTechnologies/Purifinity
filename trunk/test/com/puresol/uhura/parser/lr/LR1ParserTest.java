@@ -9,7 +9,7 @@ import org.junit.Test;
 import com.puresol.uhura.ast.SyntaxTree;
 import com.puresol.uhura.grammar.production.Production;
 import com.puresol.uhura.grammar.production.ProductionSet;
-import com.puresol.uhura.grammar.production.TokenProductionElement;
+import com.puresol.uhura.grammar.production.TokenConstruction;
 import com.puresol.uhura.grammar.token.Visibility;
 import com.puresol.uhura.lexer.Token;
 import com.puresol.uhura.lexer.TokenStream;
@@ -28,9 +28,9 @@ public class LR1ParserTest extends TestCase {
 
 			ProductionSet ruleSet = new ProductionSet();
 			Production rule = new Production("EXPRESSION");
-			rule.addElement(new TokenProductionElement("INTEGER"));
-			rule.addElement(new TokenProductionElement("PLUS"));
-			rule.addElement(new TokenProductionElement("INTEGER"));
+			rule.addElement(new TokenConstruction("INTEGER"));
+			rule.addElement(new TokenConstruction("PLUS"));
+			rule.addElement(new TokenConstruction("INTEGER"));
 			ruleSet.addRule(rule);
 
 			LR1Parser parser = new LR1Parser(new Properties());

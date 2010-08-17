@@ -3,10 +3,10 @@ package com.puresol.uhura.grammar.uhura;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.production.Production;
-import com.puresol.uhura.grammar.production.ProductionProductionElement;
+import com.puresol.uhura.grammar.production.ProductionConstruction;
 import com.puresol.uhura.grammar.production.Quantity;
-import com.puresol.uhura.grammar.production.TextProductionElement;
-import com.puresol.uhura.grammar.production.TokenProductionElement;
+import com.puresol.uhura.grammar.production.TextConstruction;
+import com.puresol.uhura.grammar.production.TokenConstruction;
 import com.puresol.uhura.grammar.token.TokenDefinition;
 import com.puresol.uhura.grammar.token.TokenDefinitionSet;
 import com.puresol.uhura.grammar.token.Visibility;
@@ -22,25 +22,25 @@ public class UhuraGrammar extends Grammar {
 	private void addTokenDefinitions() throws GrammarException {
 		TokenDefinitionSet tokenDefinitions = getTokenDefinitions();
 
-		tokenDefinitions.addRule(new TokenDefinition("WHITE_SPACE",
+		tokenDefinitions.addDefinition(new TokenDefinition("WHITE_SPACE",
 				UhuraTokenRegExps.WHITE_SPACE, Visibility.HIDDEN));
-		tokenDefinitions.addRule(new TokenDefinition("LINE_COMMENT",
+		tokenDefinitions.addDefinition(new TokenDefinition("LINE_COMMENT",
 				UhuraTokenRegExps.END_OF_LINE_COMMENT, Visibility.HIDDEN));
 
-		tokenDefinitions.addRule(new TokenDefinition("EQUALS", "="));
-		tokenDefinitions.addRule(new TokenDefinition("SEMICOLON", ";"));
-		tokenDefinitions.addRule(new TokenDefinition("COLON", ":"));
-		tokenDefinitions.addRule(new TokenDefinition("DOT", "."));
+		tokenDefinitions.addDefinition(new TokenDefinition("EQUALS", "="));
+		tokenDefinitions.addDefinition(new TokenDefinition("SEMICOLON", ";"));
+		tokenDefinitions.addDefinition(new TokenDefinition("COLON", ":"));
+		tokenDefinitions.addDefinition(new TokenDefinition("DOT", "."));
 
-		tokenDefinitions.addRule(new TokenDefinition("OPTIONS", "OPTIONS"));
-		tokenDefinitions.addRule(new TokenDefinition("HELPER", "HELPER"));
-		tokenDefinitions.addRule(new TokenDefinition("TOKENS", "TOKENS"));
-		tokenDefinitions.addRule(new TokenDefinition("PRODUCTIONS",
+		tokenDefinitions.addDefinition(new TokenDefinition("OPTIONS", "OPTIONS"));
+		tokenDefinitions.addDefinition(new TokenDefinition("HELPER", "HELPER"));
+		tokenDefinitions.addDefinition(new TokenDefinition("TOKENS", "TOKENS"));
+		tokenDefinitions.addDefinition(new TokenDefinition("PRODUCTIONS",
 				"PRODUCTIONS"));
 
-		tokenDefinitions.addRule(new TokenDefinition("STRING_LITERAL",
+		tokenDefinitions.addDefinition(new TokenDefinition("STRING_LITERAL",
 				UhuraTokenRegExps.STRING_LITERAL));
-		tokenDefinitions.addRule(new TokenDefinition("IDENTIFIER",
+		tokenDefinitions.addDefinition(new TokenDefinition("IDENTIFIER",
 				UhuraTokenRegExps.IDENTIFIER));
 	}
 
@@ -55,45 +55,45 @@ public class UhuraGrammar extends Grammar {
 
 	private void addGrammarFile() throws GrammarException {
 		Production grammar = new Production("GrammarFile");
-		grammar.addElement(new ProductionProductionElement("GrammarOptions"));
-		grammar.addElement(new ProductionProductionElement("Helper"));
-		grammar.addElement(new ProductionProductionElement("Tokens"));
-		grammar.addElement(new ProductionProductionElement("Productions"));
+		grammar.addElement(new ProductionConstruction("GrammarOptions"));
+		grammar.addElement(new ProductionConstruction("Helper"));
+		grammar.addElement(new ProductionConstruction("Tokens"));
+		grammar.addElement(new ProductionConstruction("Productions"));
 		getProductions().addRule(grammar);
 	}
 
 	private void addGrammarOptionsSection() throws GrammarException {
 		Production grammarOptions = new Production("GrammarOptions");
-		grammarOptions.addElement(new TextProductionElement("OPTIONS"));
-		grammarOptions.addElement(new ProductionProductionElement(
+		grammarOptions.addElement(new TextConstruction("OPTIONS"));
+		grammarOptions.addElement(new ProductionConstruction(
 				"GrammarOption", Quantity.EXPECT_MANY));
 		getProductions().addRule(grammarOptions);
 	}
 
 	private void addGrammarOption() throws GrammarException {
 		Production grammarOptions = new Production("GrammarOption");
-		grammarOptions.addElement(new TokenProductionElement("IDENTIFIER"));
-		grammarOptions.addElement(new TokenProductionElement("EQUALS"));
-		grammarOptions.addElement(new TokenProductionElement("STRING_LITERAL"));
-		grammarOptions.addElement(new TokenProductionElement("SEMICOLON"));
+		grammarOptions.addElement(new TokenConstruction("IDENTIFIER"));
+		grammarOptions.addElement(new TokenConstruction("EQUALS"));
+		grammarOptions.addElement(new TokenConstruction("STRING_LITERAL"));
+		grammarOptions.addElement(new TokenConstruction("SEMICOLON"));
 		getProductions().addRule(grammarOptions);
 	}
 
 	private void addHelpersSection() throws GrammarException {
 		Production helper = new Production("Helper");
-		helper.addElement(new TextProductionElement("HELPER"));
+		helper.addElement(new TextConstruction("HELPER"));
 		getProductions().addRule(helper);
 	}
 
 	private void addTokensSection() throws GrammarException {
 		Production tokens = new Production("Tokens");
-		tokens.addElement(new TextProductionElement("TOKENS"));
+		tokens.addElement(new TextConstruction("TOKENS"));
 		getProductions().addRule(tokens);
 	}
 
 	private void addProductionsSection() throws GrammarException {
 		Production productions = new Production("Productions");
-		productions.addElement(new TextProductionElement("PRODUCTIONS"));
+		productions.addElement(new TextConstruction("PRODUCTIONS"));
 		getProductions().addRule(productions);
 	}
 

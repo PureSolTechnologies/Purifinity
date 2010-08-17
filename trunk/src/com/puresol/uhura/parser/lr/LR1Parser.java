@@ -10,8 +10,8 @@ import org.apache.log4j.Logger;
 import com.puresol.uhura.ast.SyntaxTree;
 import com.puresol.uhura.grammar.production.Item;
 import com.puresol.uhura.grammar.production.Production;
-import com.puresol.uhura.grammar.production.ProductionElement;
-import com.puresol.uhura.grammar.production.ProductionElementType;
+import com.puresol.uhura.grammar.production.Construction;
+import com.puresol.uhura.grammar.production.ConstructionType;
 import com.puresol.uhura.grammar.production.ProductionSet;
 import com.puresol.uhura.grammar.production.Quantity;
 import com.puresol.uhura.lexer.Token;
@@ -112,17 +112,17 @@ public class LR1Parser implements Parser {
 	}
 
 	public boolean canReduce(Production parserRule) throws ParserException {
-		List<ProductionElement> elements = parserRule.getElements();
+		List<Construction> elements = parserRule.getConstructions();
 		int index = 0;
 		do {
-			ProductionElement ruleElement = elements.get(elements.size()
+			Construction ruleElement = elements.get(elements.size()
 					- index - 1);
 			Quantity quantity = ruleElement.getQuantity();
 			int counter = 0;
 			while (true) {
 				SyntaxTree stackElement = parserStack.get(parserStack.size()
 						- index - counter - 1);
-				if (ruleElement.getType() == ProductionElementType.TOKEN) {
+				if (ruleElement.getType() == ConstructionType.TOKEN) {
 					Token token = stackElement.getToken();
 					if (token == null) {
 						break;
@@ -130,7 +130,7 @@ public class LR1Parser implements Parser {
 					if (!token.getName().equals(ruleElement.getName())) {
 						break;
 					}
-				} else if (ruleElement.getType() == ProductionElementType.TEXT) {
+				} else if (ruleElement.getType() == ConstructionType.TEXT) {
 					Token token = stackElement.getToken();
 					if (token == null) {
 						break;
@@ -138,7 +138,7 @@ public class LR1Parser implements Parser {
 					if (!token.getText().equals(ruleElement.getText())) {
 						break;
 					}
-				} else if (ruleElement.getType() == ProductionElementType.PRODUCTION) {
+				} else if (ruleElement.getType() == ConstructionType.PRODUCTION) {
 					Token token = stackElement.getToken();
 					if (token != null) {
 						break;
@@ -169,17 +169,17 @@ public class LR1Parser implements Parser {
 
 	public void reduce(Production parserRule) throws ParserException {
 		SyntaxTree tree = new SyntaxTree(parserRule.getName());
-		List<ProductionElement> elements = parserRule.getElements();
+		List<Construction> elements = parserRule.getConstructions();
 		int index = 0;
 		do {
-			ProductionElement ruleElement = elements.get(elements.size()
+			Construction ruleElement = elements.get(elements.size()
 					- index - 1);
 			Quantity quantity = ruleElement.getQuantity();
 			int counter = 0;
 			while (true) {
 				SyntaxTree stackElement = parserStack
 						.get(parserStack.size() - 1);
-				if (ruleElement.getType() == ProductionElementType.TOKEN) {
+				if (ruleElement.getType() == ConstructionType.TOKEN) {
 					Token token = stackElement.getToken();
 					if (token == null) {
 						break;
@@ -187,7 +187,7 @@ public class LR1Parser implements Parser {
 					if (!token.getName().equals(ruleElement.getName())) {
 						break;
 					}
-				} else if (ruleElement.getType() == ProductionElementType.TEXT) {
+				} else if (ruleElement.getType() == ConstructionType.TEXT) {
 					Token token = stackElement.getToken();
 					if (token == null) {
 						break;
@@ -195,7 +195,7 @@ public class LR1Parser implements Parser {
 					if (!token.getText().equals(ruleElement.getText())) {
 						break;
 					}
-				} else if (ruleElement.getType() == ProductionElementType.PRODUCTION) {
+				} else if (ruleElement.getType() == ConstructionType.PRODUCTION) {
 					Token token = stackElement.getToken();
 					if (token != null) {
 						break;

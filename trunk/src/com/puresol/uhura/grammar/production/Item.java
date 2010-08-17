@@ -39,6 +39,13 @@ public class Item {
 		return position;
 	}
 
+	public Construction getNext() {
+		if (position >= production.getConstructions().size()) {
+			return null;
+		}
+		return production.getConstructions().get(position);
+	}
+
 	@Override
 	public String toString() {
 		return production.toShortString(position);

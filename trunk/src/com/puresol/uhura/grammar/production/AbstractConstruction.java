@@ -1,14 +1,14 @@
 package com.puresol.uhura.grammar.production;
 
-public abstract class AbstractProductionElement implements ProductionElement {
+public abstract class AbstractConstruction implements Construction {
 
 	private final String name;
 	private final String text;
-	private final ProductionElementType type;
+	private final ConstructionType type;
 	private final Quantity quantity;
 
-	public AbstractProductionElement(String name, String text,
-			ProductionElementType type) {
+	public AbstractConstruction(String name, String text,
+			ConstructionType type) {
 		super();
 		this.name = name;
 		this.text = text;
@@ -16,8 +16,8 @@ public abstract class AbstractProductionElement implements ProductionElement {
 		this.quantity = Quantity.EXPECT;
 	}
 
-	public AbstractProductionElement(String name, String text,
-			ProductionElementType type, Quantity quantity) {
+	public AbstractConstruction(String name, String text,
+			ConstructionType type, Quantity quantity) {
 		super();
 		this.name = name;
 		this.text = text;
@@ -48,7 +48,7 @@ public abstract class AbstractProductionElement implements ProductionElement {
 	 * @see com.puresol.uhura.parser.ParserRuleElementInterface#getType()
 	 */
 	@Override
-	public ProductionElementType getType() {
+	public ConstructionType getType() {
 		return type;
 	}
 
@@ -60,6 +60,16 @@ public abstract class AbstractProductionElement implements ProductionElement {
 	@Override
 	public Quantity getQuantity() {
 		return quantity;
+	}
+
+	@Override
+	public boolean isTerminal() {
+		return (type != ConstructionType.PRODUCTION);
+	}
+
+	@Override
+	public boolean isNonTerminal() {
+		return (type == ConstructionType.PRODUCTION);
 	}
 
 	/*
@@ -110,7 +120,7 @@ public abstract class AbstractProductionElement implements ProductionElement {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		AbstractProductionElement other = (AbstractProductionElement) obj;
+		AbstractConstruction other = (AbstractConstruction) obj;
 		if (name == null) {
 			if (other.name != null)
 				return false;

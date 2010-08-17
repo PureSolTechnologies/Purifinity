@@ -1,6 +1,6 @@
 package com.puresol.uhura.grammar.production;
 
-public enum ProductionElementType {
+public enum ConstructionType {
 
 	PRODUCTION, TOKEN, TEXT;
 

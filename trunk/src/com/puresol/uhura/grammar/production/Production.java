@@ -6,7 +6,7 @@ import java.util.List;
 public class Production {
 
 	private final String name;
-	private final List<ProductionElement> elements = new ArrayList<ProductionElement>();
+	private final List<Construction> elements = new ArrayList<Construction>();
 
 	public Production(String name) {
 		super();
@@ -20,14 +20,14 @@ public class Production {
 		return name;
 	}
 
-	public void addElement(ProductionElement element) {
+	public void addElement(Construction element) {
 		elements.add(element);
 	}
 
 	/**
 	 * @return the elements
 	 */
-	public List<ProductionElement> getElements() {
+	public List<Construction> getConstructions() {
 		return elements;
 	}
 
@@ -40,7 +40,7 @@ public class Production {
 		StringBuffer result = new StringBuffer(name);
 		result.append(" --> ");
 		int position = 0;
-		for (ProductionElement element : elements) {
+		for (Construction element : elements) {
 			if (position == itemPosition) {
 				result.append(" . ");
 			}
@@ -55,13 +55,16 @@ public class Production {
 		StringBuffer result = new StringBuffer(name);
 		result.append(" --> ");
 		int position = 0;
-		for (ProductionElement element : elements) {
+		for (Construction element : elements) {
 			if (position == itemPosition) {
 				result.append(" . ");
 			}
 			position++;
 			result.append(" ");
 			result.append(element.toShortString());
+		}
+		if (itemPosition == elements.size()) {
+			result.append(" . ");
 		}
 		return result.toString();
 	}

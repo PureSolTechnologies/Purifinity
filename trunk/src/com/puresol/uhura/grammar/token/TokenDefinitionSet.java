@@ -9,7 +9,7 @@ public class TokenDefinitionSet {
 
 	private final Set<TokenDefinition> rules = new CopyOnWriteArraySet<TokenDefinition>();
 
-	public void addRule(TokenDefinition rule) {
+	public void addDefinition(TokenDefinition rule) {
 		rules.add(rule);
 	}
 

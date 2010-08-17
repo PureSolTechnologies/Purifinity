@@ -16,8 +16,8 @@ public class RegExpLexerTest extends TestCase {
 	public void test() {
 		try {
 			TokenDefinitionSet rules = new TokenDefinitionSet();
-			rules.addRule(new TokenDefinition("NUMBER", "[0-9]+"));
-			rules.addRule(new TokenDefinition("WHITESPACE", "[ \\t]+"));
+			rules.addDefinition(new TokenDefinition("NUMBER", "[0-9]+"));
+			rules.addDefinition(new TokenDefinition("WHITESPACE", "[ \\t]+"));
 			Lexer lexer = new RegExpLexer(new Properties());
 			lexer.scan(new StringReader(
 					"0 1\t2 \t3 \t4 \t5\t 6 7 8 9 10 11 12 13 14 15"), rules);
@@ -45,8 +45,8 @@ public class RegExpLexerTest extends TestCase {
 	public static void main(String args[]) {
 		try {
 			TokenDefinitionSet rules = new TokenDefinitionSet();
-			rules.addRule(new TokenDefinition("NUMBER", "[0-9]+"));
-			rules.addRule(new TokenDefinition("WHITESPACE", "[ \\t]+"));
+			rules.addDefinition(new TokenDefinition("NUMBER", "[0-9]+"));
+			rules.addDefinition(new TokenDefinition("WHITESPACE", "[ \\t]+"));
 			Lexer lexer = new RegExpLexer(new Properties());
 			lexer.scan(new StringReader(
 					"0 1\t2 \t3 \t4 \t5\t 6 7 8 9 10 11 12 13 14 15"), rules);

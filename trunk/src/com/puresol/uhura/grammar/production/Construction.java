@@ -1,6 +1,6 @@
 package com.puresol.uhura.grammar.production;
 
-public interface ProductionElement {
+public interface Construction {
 
 	/**
 	 * @return the text
@@ -10,7 +10,7 @@ public interface ProductionElement {
 	/**
 	 * @return the type
 	 */
-	public ProductionElementType getType();
+	public ConstructionType getType();
 
 	/**
 	 * @return the quantity
@@ -19,6 +19,9 @@ public interface ProductionElement {
 
 	public String getName();
 
+	public boolean isTerminal();
+	public boolean isNonTerminal();
+	
 	public String toString();
 
 	public String toShortString();
