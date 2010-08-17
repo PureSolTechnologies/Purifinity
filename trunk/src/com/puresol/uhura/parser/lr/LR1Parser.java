@@ -8,7 +8,6 @@ import java.util.Stack;
 import org.apache.log4j.Logger;
 
 import com.puresol.uhura.ast.SyntaxTree;
-import com.puresol.uhura.grammar.production.Item;
 import com.puresol.uhura.grammar.production.Production;
 import com.puresol.uhura.grammar.production.Construction;
 import com.puresol.uhura.grammar.production.ConstructionType;
@@ -18,6 +17,7 @@ import com.puresol.uhura.lexer.Token;
 import com.puresol.uhura.lexer.TokenStream;
 import com.puresol.uhura.parser.Parser;
 import com.puresol.uhura.parser.ParserException;
+import com.puresol.uhura.parser.statetable.Item;
 
 public class LR1Parser implements Parser {
 

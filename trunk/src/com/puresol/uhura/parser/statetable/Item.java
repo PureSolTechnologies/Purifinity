@@ -1,4 +1,7 @@
-package com.puresol.uhura.grammar.production;
+package com.puresol.uhura.parser.statetable;
+
+import com.puresol.uhura.grammar.production.Construction;
+import com.puresol.uhura.grammar.production.Production;
 
 /**
  * This class represents a single item defined in the Dragon Book for keeping
@@ -44,6 +47,10 @@ public class Item {
 			return null;
 		}
 		return production.getConstructions().get(position);
+	}
+
+	public boolean hasNext() {
+		return (position < production.getConstructions().size());
 	}
 
 	@Override

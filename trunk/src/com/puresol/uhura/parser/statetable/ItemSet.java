@@ -1,9 +1,11 @@
-package com.puresol.uhura.grammar.production;
+package com.puresol.uhura.parser.statetable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
+
+import com.puresol.uhura.grammar.production.Construction;
 
 public class ItemSet {
 
