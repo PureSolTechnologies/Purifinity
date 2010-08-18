@@ -1,4 +1,4 @@
-package com.puresol.uhura.parser.statetable;
+package com.puresol.uhura.parser.parsingtable;
 
 import com.puresol.uhura.grammar.production.Construction;
 import com.puresol.uhura.grammar.production.Production;

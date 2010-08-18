@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
-import com.puresol.uhura.parser.statetable.ParsingTable;
+import com.puresol.uhura.parser.parsingtable.ParsingTable;
 
 import junit.framework.TestCase;
 

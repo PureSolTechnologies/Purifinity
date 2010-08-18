@@ -1,4 +1,4 @@
-package com.puresol.uhura.parser.statetable;
+package com.puresol.uhura.parser.parsingtable;
 
 import java.util.HashSet;
 import java.util.List;
@@ -31,7 +31,7 @@ public class ParsingTable {
 
 	private final Set<Construction> availableTerminals = new HashSet<Construction>();
 	private final Set<Construction> availableNonTerminals = new HashSet<Construction>();
-	private final ConcurrentHashMap<Integer, ConcurrentMap<Construction, TableActionEntry>> table = new ConcurrentHashMap<Integer, ConcurrentMap<Construction, TableActionEntry>>();
+	private final ConcurrentHashMap<Integer, ConcurrentMap<Construction, ParserAction>> table = new ConcurrentHashMap<Integer, ConcurrentMap<Construction, ParserAction>>();
 
 	public ParsingTable(Grammar grammar) throws GrammarException {
 		super();
@@ -60,23 +60,23 @@ public class ParsingTable {
 		}
 		itemSets.put(itemSetCounter, itemSet);
 		table.put(itemSetCounter,
-				new ConcurrentHashMap<Construction, TableActionEntry>());
+				new ConcurrentHashMap<Construction, ParserAction>());
 		itemSetCounter++;
 		return result;
 	}
 
 	private void registerActionAndBackwardTransition(int initialState,
-			Construction construction, Action action, int targetState)
+			Construction construction, ActionType action, int targetState)
 			throws GrammarException {
-		TableActionEntry tableActionEntry = new TableActionEntry(action,
+		ParserAction tableActionEntry = new ParserAction(action,
 				targetState);
 		registerAction(initialState, construction, tableActionEntry);
 		registerBackwardTransition(initialState, construction, targetState);
 	}
 
 	private void registerAction(int initialState, Construction construction,
-			TableActionEntry action) throws GrammarException {
-		ConcurrentMap<Construction, TableActionEntry> row = table
+			ParserAction action) throws GrammarException {
+		ConcurrentMap<Construction, ParserAction> row = table
 				.get(initialState);
 		if (row.containsKey(construction)) {
 			if (!row.get(construction).equals(action)) {
@@ -103,11 +103,11 @@ public class ParsingTable {
 		backwardTransitions.put(targetState, initialState);
 	}
 
-	private TableActionEntry getAction(int initialState,
+	private ParserAction getAction(int initialState,
 			Construction construction) {
-		TableActionEntry action = table.get(initialState).get(construction);
+		ParserAction action = table.get(initialState).get(construction);
 		if (action == null) {
-			return new TableActionEntry(Action.ERROR, -1);
+			return new ParserAction(ActionType.ERROR, -1);
 		}
 		return action;
 	}
@@ -152,10 +152,10 @@ public class ParsingTable {
 					initialStateId);
 			if (construction.isTerminal()) {
 				registerActionAndBackwardTransition(initialStateId,
-						construction, Action.SHIFT, targetStateId);
+						construction, ActionType.SHIFT, targetStateId);
 			} else if (construction.isNonTerminal()) {
 				registerActionAndBackwardTransition(initialStateId,
-						construction, Action.GOTO, targetStateId);
+						construction, ActionType.GOTO, targetStateId);
 			}
 		}
 		return initialStateId;
@@ -220,14 +220,14 @@ public class ParsingTable {
 			ItemSet itemSet = itemSets.get(state);
 			if (itemSet.containsItem(accItem)) {
 				registerAction(state, new TextConstruction("$"),
-						new TableActionEntry(Action.ACCEPT, -1));
+						new ParserAction(ActionType.ACCEPT, -1));
 			}
 			boolean reduced = false;
 			for (Item item : itemSet.getPrimaryItems()) {
 				if ((!item.hasNext()) && (!item.equals(accItem))) {
 					for (Construction construction : availableTerminals) {
 						registerAction(state, construction,
-								new TableActionEntry(Action.REDUCE,
+								new ParserAction(ActionType.REDUCE,
 										(int) backwardTransitions.get(state)));
 					}
 					reduced = true;

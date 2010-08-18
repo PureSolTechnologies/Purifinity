@@ -1,4 +1,4 @@
-package com.puresol.uhura.parser.statetable;
+package com.puresol.uhura.parser.parsingtable;
 
 /**
  * This enumeration contains all possible parser actions.
@@ -6,13 +6,13 @@ package com.puresol.uhura.parser.statetable;
  * @author Rick-Rainer Ludwig
  * 
  */
-public enum Action {
+public enum ActionType {
 
 	SHIFT("s"), REDUCE("r"), ACCEPT("acc"), ERROR("err"), GOTO("");
 
 	private final String text;
 
-	private Action(String text) {
+	private ActionType(String text) {
 		this.text = text;
 	}
 
