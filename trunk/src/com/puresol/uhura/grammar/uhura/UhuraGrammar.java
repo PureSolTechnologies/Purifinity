@@ -46,6 +46,7 @@ public class UhuraGrammar extends Grammar {
 	}
 
 	private void addProductions() throws GrammarException {
+		addStart();
 		addGrammarFile();
 		addGrammarOptionsSection();
 		addGrammarOption();
@@ -55,6 +56,12 @@ public class UhuraGrammar extends Grammar {
 		addTokenDefinition();
 		addProductionsSection();
 		addTokenConstruction();
+	}
+
+	private void addStart() throws GrammarException {
+		Production production = new Production("S");
+		production.addElement(new ProductionConstruction("GrammarFile"));
+		getProductions().addRule(production);
 	}
 
 	private void addGrammarFile() throws GrammarException {

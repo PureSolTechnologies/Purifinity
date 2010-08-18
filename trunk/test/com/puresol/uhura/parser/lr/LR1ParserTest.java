@@ -14,7 +14,7 @@ import com.puresol.uhura.grammar.token.Visibility;
 import com.puresol.uhura.lexer.Token;
 import com.puresol.uhura.lexer.TokenStream;
 import com.puresol.uhura.parser.ParserException;
-import com.puresol.uhura.parser.lr.LR1Parser;
+import com.puresol.uhura.parser.lr.LR0Parser;
 
 public class LR1ParserTest extends TestCase {
 
@@ -33,7 +33,7 @@ public class LR1ParserTest extends TestCase {
 			rule.addElement(new TokenConstruction("INTEGER"));
 			ruleSet.addRule(rule);
 
-			LR1Parser parser = new LR1Parser(new Properties());
+			LR0Parser parser = new LR0Parser(new Properties());
 			parser.setTokenStream(tokens);
 			parser.setProductions(ruleSet);
 

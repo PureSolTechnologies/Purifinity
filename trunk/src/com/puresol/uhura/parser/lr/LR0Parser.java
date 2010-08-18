@@ -19,9 +19,9 @@ import com.puresol.uhura.parser.Parser;
 import com.puresol.uhura.parser.ParserException;
 import com.puresol.uhura.parser.statetable.Item;
 
-public class LR1Parser implements Parser {
+public class LR0Parser implements Parser {
 
-	private static final Logger logger = Logger.getLogger(LR1Parser.class);
+	private static final Logger logger = Logger.getLogger(LR0Parser.class);
 
 	@SuppressWarnings("unused")
 	private final Properties options;
@@ -36,7 +36,7 @@ public class LR1Parser implements Parser {
 	@SuppressWarnings("unused")
 	private Token lookAhead = null;
 
-	public LR1Parser(Properties options) {
+	public LR0Parser(Properties options) {
 		this.options = options;
 	}
 
