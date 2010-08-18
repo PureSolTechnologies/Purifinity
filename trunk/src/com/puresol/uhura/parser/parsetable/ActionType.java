@@ -1,4 +1,4 @@
-package com.puresol.uhura.parser.parsingtable;
+package com.puresol.uhura.parser.parsetable;
 
 /**
  * This enumeration contains all possible parser actions.

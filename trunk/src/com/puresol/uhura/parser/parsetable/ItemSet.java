@@ -1,4 +1,4 @@
-package com.puresol.uhura.parser.parsingtable;
+package com.puresol.uhura.parser.parsetable;
 
 import java.util.ArrayList;
 import java.util.List;

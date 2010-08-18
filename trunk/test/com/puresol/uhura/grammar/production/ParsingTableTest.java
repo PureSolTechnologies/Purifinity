@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
-import com.puresol.uhura.parser.parsingtable.ParsingTable;
+import com.puresol.uhura.parser.parsetable.ParseTable;
 
 import junit.framework.TestCase;
 
@@ -45,7 +45,7 @@ public class ParsingTableTest extends TestCase {
 			productions.addRule(prodB1);
 			productions.addRule(prodB2);
 			grammar.setProductions(productions);
-			ParsingTable table = new ParsingTable(grammar);
+			ParseTable table = new ParseTable(grammar);
 			System.out.println(table.toString());
 		} catch (GrammarException e) {
 			e.printStackTrace();

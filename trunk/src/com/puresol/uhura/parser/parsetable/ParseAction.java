@@ -1,4 +1,4 @@
-package com.puresol.uhura.parser.parsingtable;
+package com.puresol.uhura.parser.parsetable;
 
 /**
  * This is a single state table entry for storing actions.
@@ -6,7 +6,7 @@ package com.puresol.uhura.parser.parsingtable;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class ParserAction {
+public class ParseAction {
 
 	private final ActionType action;
 	private final int targetState;
@@ -20,7 +20,7 @@ public class ParserAction {
 	 *            is the target state after the process. States small than 0
 	 *            show no target states for Accept and Error.
 	 */
-	public ParserAction(ActionType action, int targetState) {
+	public ParseAction(ActionType action, int targetState) {
 		super();
 		this.action = action;
 		this.targetState = targetState;
@@ -76,7 +76,7 @@ public class ParserAction {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ParserAction other = (ParserAction) obj;
+		ParseAction other = (ParseAction) obj;
 		if (action != other.action)
 			return false;
 		if (targetState != other.targetState)

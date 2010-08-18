@@ -17,7 +17,7 @@ import com.puresol.uhura.lexer.Token;
 import com.puresol.uhura.lexer.TokenStream;
 import com.puresol.uhura.parser.Parser;
 import com.puresol.uhura.parser.ParserException;
-import com.puresol.uhura.parser.parsingtable.Item;
+import com.puresol.uhura.parser.parsetable.Item;
 
 public class LR0Parser implements Parser {
 
