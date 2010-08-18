@@ -27,6 +27,8 @@ public class ParsingTable {
 	private int itemSetCounter = 0;
 	private final ConcurrentMap<Integer, ItemSet> itemSets = new ConcurrentHashMap<Integer, ItemSet>();
 
+	private final ConcurrentMap<Integer, Integer> backwardTransitions = new ConcurrentHashMap<Integer, Integer>();
+
 	private final Set<Construction> availableTerminals = new HashSet<Construction>();
 	private final Set<Construction> availableNonTerminals = new HashSet<Construction>();
 	private final ConcurrentHashMap<Integer, ConcurrentMap<Construction, TableActionEntry>> table = new ConcurrentHashMap<Integer, ConcurrentMap<Construction, TableActionEntry>>();
@@ -63,11 +65,13 @@ public class ParsingTable {
 		return result;
 	}
 
-	private void registerAction(int initialState, Construction construction,
-			Action action, int targetState) throws GrammarException {
+	private void registerActionAndBackwardTransition(int initialState,
+			Construction construction, Action action, int targetState)
+			throws GrammarException {
 		TableActionEntry tableActionEntry = new TableActionEntry(action,
 				targetState);
 		registerAction(initialState, construction, tableActionEntry);
+		registerBackwardTransition(initialState, construction, targetState);
 	}
 
 	private void registerAction(int initialState, Construction construction,
@@ -92,6 +96,11 @@ public class ParsingTable {
 				availableTerminals.add(construction);
 			}
 		}
+	}
+
+	private void registerBackwardTransition(int initialState,
+			Construction construction, int targetState) {
+		backwardTransitions.put(targetState, initialState);
 	}
 
 	private TableActionEntry getAction(int initialState,
@@ -132,7 +141,6 @@ public class ParsingTable {
 		ItemSet initialItemSet = closure(items);
 		int initialStateId = registerItemSet(initialItemSet);
 
-		System.out.println(initialItemSet.toString());
 		for (Construction construction : initialItemSet.getFollowing()) {
 			Set<Item> rightMovedItems = new HashSet<Item>();
 			for (Item item : initialItemSet.getFollowingItems(construction)) {
@@ -143,11 +151,11 @@ public class ParsingTable {
 			int targetStateId = calculateItemSet(rightMovedItems,
 					initialStateId);
 			if (construction.isTerminal()) {
-				registerAction(initialStateId, construction, Action.SHIFT,
-						targetStateId);
+				registerActionAndBackwardTransition(initialStateId,
+						construction, Action.SHIFT, targetStateId);
 			} else if (construction.isNonTerminal()) {
-				registerAction(initialStateId, construction, Action.GOTO,
-						targetStateId);
+				registerActionAndBackwardTransition(initialStateId,
+						construction, Action.GOTO, targetStateId);
 			}
 		}
 		return initialStateId;
@@ -211,16 +219,16 @@ public class ParsingTable {
 		for (Integer state : itemSets.keySet()) {
 			ItemSet itemSet = itemSets.get(state);
 			if (itemSet.containsItem(accItem)) {
-				registerAction(state, new TextConstruction("$"), Action.ACCEPT,
-						-1);
+				registerAction(state, new TextConstruction("$"),
+						new TableActionEntry(Action.ACCEPT, -1));
 			}
 			boolean reduced = false;
 			for (Item item : itemSet.getPrimaryItems()) {
 				if ((!item.hasNext()) && (!item.equals(accItem))) {
 					for (Construction construction : availableTerminals) {
-						// registerAction(state, construction, Action.REDUCE,
-						// item)
-						// TODO register reduce here!!!
+						registerAction(state, construction,
+								new TableActionEntry(Action.REDUCE,
+										(int) backwardTransitions.get(state)));
 					}
 					reduced = true;
 				}
@@ -253,7 +261,28 @@ public class ParsingTable {
 		buffer.append("Parsing Table\n");
 		buffer.append("=============\n");
 		buffer.append("\n");
-		buffer.append(toColumn("State"));
+		buffer.append(toColumn("STATE: |"));
+		boolean first = true;
+		for (int i = 0; i < availableTerminals.size(); i++) {
+			if (first) {
+				buffer.append(toColumn("ACTION:"));
+				first = false;
+			} else {
+				buffer.append(toColumn(" "));
+			}
+		}
+		buffer.append(toColumn("|"));
+		first = true;
+		for (int i = 0; i < availableNonTerminals.size(); i++) {
+			if (first) {
+				buffer.append(toColumn("GOTO:"));
+				first = false;
+			} else {
+				buffer.append(toColumn(" "));
+			}
+		}
+		buffer.append("\n");
+		buffer.append(toColumn("|"));
 		for (Construction construction : availableTerminals) {
 			buffer.append(toColumn(construction.getText()));
 		}
@@ -262,8 +291,17 @@ public class ParsingTable {
 			buffer.append(toColumn(construction.getName()));
 		}
 		buffer.append("\n");
+		buffer.append(toColumn("-------|"));
+		for (int i = 0; i < availableTerminals.size(); i++) {
+			buffer.append(toColumn("--------"));
+		}
+		buffer.append(toColumn("-------|"));
+		for (int i = 0; i < availableNonTerminals.size(); i++) {
+			buffer.append(toColumn("--------"));
+		}
+		buffer.append("\n");
 		for (Integer state : table.keySet()) {
-			buffer.append(toColumn(String.valueOf(state)));
+			buffer.append(toColumn(String.valueOf(state) + " |"));
 			for (Construction construction : availableTerminals) {
 				buffer.append(toColumn(getAction(state, construction)
 						.toString()));

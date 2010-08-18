@@ -6,7 +6,7 @@ OPTIONS
 HELPER 
 
 TOKENS
-//	NEWLINE = "(\r\n|\n|\r" : hidden;
-//	WHITESPACE = "[ \t]" : hidden;
+NEWLINE = "(\r\n|\n|\r";
+//WHITESPACE = "[ \t]";
 
 PRODUCTIONS

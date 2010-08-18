@@ -32,7 +32,8 @@ public class UhuraGrammar extends Grammar {
 		tokenDefinitions.addDefinition(new TokenDefinition("COLON", ":"));
 		tokenDefinitions.addDefinition(new TokenDefinition("DOT", "."));
 
-		tokenDefinitions.addDefinition(new TokenDefinition("OPTIONS", "OPTIONS"));
+		tokenDefinitions
+				.addDefinition(new TokenDefinition("OPTIONS", "OPTIONS"));
 		tokenDefinitions.addDefinition(new TokenDefinition("HELPER", "HELPER"));
 		tokenDefinitions.addDefinition(new TokenDefinition("TOKENS", "TOKENS"));
 		tokenDefinitions.addDefinition(new TokenDefinition("PRODUCTIONS",
@@ -49,76 +50,89 @@ public class UhuraGrammar extends Grammar {
 		addGrammarOptionsSection();
 		addGrammarOption();
 		addHelpersSection();
+		addHelperDefinition();
 		addTokensSection();
+		addTokenDefinition();
 		addProductionsSection();
+		addTokenConstruction();
 	}
 
 	private void addGrammarFile() throws GrammarException {
-		Production grammar = new Production("GrammarFile");
-		grammar.addElement(new ProductionConstruction("GrammarOptions"));
-		grammar.addElement(new ProductionConstruction("Helper"));
-		grammar.addElement(new ProductionConstruction("Tokens"));
-		grammar.addElement(new ProductionConstruction("Productions"));
-		getProductions().addRule(grammar);
+		Production production = new Production("GrammarFile");
+		production.addElement(new ProductionConstruction("GrammarOptions"));
+		production.addElement(new ProductionConstruction("Helper"));
+		production.addElement(new ProductionConstruction("Tokens"));
+		production.addElement(new ProductionConstruction("Productions"));
+		getProductions().addRule(production);
 	}
 
 	private void addGrammarOptionsSection() throws GrammarException {
-		Production grammarOptions = new Production("GrammarOptions");
-		grammarOptions.addElement(new TextConstruction("OPTIONS"));
-		grammarOptions.addElement(new ProductionConstruction(
-				"GrammarOption", Quantity.EXPECT_MANY));
-		getProductions().addRule(grammarOptions);
+		Production production = new Production("GrammarOptions");
+		production.addElement(new TextConstruction("OPTIONS"));
+		production.addElement(new ProductionConstruction("GrammarOption",
+				Quantity.EXPECT_MANY));
+		getProductions().addRule(production);
 	}
 
 	private void addGrammarOption() throws GrammarException {
-		Production grammarOptions = new Production("GrammarOption");
-		grammarOptions.addElement(new TokenConstruction("IDENTIFIER"));
-		grammarOptions.addElement(new TokenConstruction("EQUALS"));
-		grammarOptions.addElement(new TokenConstruction("STRING_LITERAL"));
-		grammarOptions.addElement(new TokenConstruction("SEMICOLON"));
-		getProductions().addRule(grammarOptions);
+		Production production = new Production("GrammarOption");
+		production.addElement(new TokenConstruction("IDENTIFIER"));
+		production.addElement(new TokenConstruction("EQUALS"));
+		production.addElement(new TokenConstruction("STRING_LITERAL"));
+		production.addElement(new TokenConstruction("SEMICOLON"));
+		getProductions().addRule(production);
 	}
 
 	private void addHelpersSection() throws GrammarException {
-		Production helper = new Production("Helper");
-		helper.addElement(new TextConstruction("HELPER"));
-		getProductions().addRule(helper);
+		Production production = new Production("Helper");
+		production.addElement(new TextConstruction("HELPER"));
+		production.addElement(new TokenConstruction("HelperDefinition",
+				Quantity.ACCEPT_MANY));
+		getProductions().addRule(production);
+	}
+
+	private void addHelperDefinition() throws GrammarException {
+		Production production = new Production("HelperDefinition");
+		production.addElement(new TokenConstruction("IDENTIFIER"));
+		production.addElement(new TokenConstruction("EQUALS"));
+		production.addElement(new TokenConstruction("TokenConstruction",
+				Quantity.EXPECT_MANY));
+		production.addElement(new TokenConstruction("SEMICOLON"));
+		getProductions().addRule(production);
 	}
 
 	private void addTokensSection() throws GrammarException {
-		Production tokens = new Production("Tokens");
-		tokens.addElement(new TextConstruction("TOKENS"));
-		getProductions().addRule(tokens);
+		Production production = new Production("Tokens");
+		production.addElement(new TextConstruction("TOKENS"));
+		production.addElement(new TokenConstruction("TokenDefinition",
+				Quantity.EXPECT_MANY));
+		getProductions().addRule(production);
+	}
+
+	private void addTokenDefinition() throws GrammarException {
+		Production production = new Production("TokenDefinition");
+		production.addElement(new TokenConstruction("IDENTIFIER"));
+		production.addElement(new TokenConstruction("EQUALS"));
+		production.addElement(new TokenConstruction("TokenConstruction",
+				Quantity.EXPECT_MANY));
+		production.addElement(new TokenConstruction("SEMICOLON"));
+		getProductions().addRule(production);
 	}
 
 	private void addProductionsSection() throws GrammarException {
-		Production productions = new Production("Productions");
-		productions.addElement(new TextConstruction("PRODUCTIONS"));
-		getProductions().addRule(productions);
+		Production production = new Production("Productions");
+		production.addElement(new TextConstruction("PRODUCTIONS"));
+		getProductions().addRule(production);
 	}
 
-	// private void addTokenDefinition() {
-	// Production tokenDefinition = new Production("TOKEN_DEFINITION");
-	// tokenDefinition.addElement(new TextProductionElement("IDENTIFIER",
-	// ProductionElementType.TOKEN));
-	// tokenDefinition.addElement(new TextProductionElement("EQUALS",
-	// ProductionElementType.TOKEN));
-	// tokenDefinition.addElement(new TextProductionElement("STRING_LITERAL",
-	// ProductionElementType.TOKEN));
-	// tokenDefinition.addElement(new TextProductionElement("options",
-	// ProductionElementType.PART, Quantity.ACCEPT));
-	// tokenDefinition.addElement(new TextProductionElement("SEMICOLON",
-	// ProductionElementType.TOKEN));
-	// addRule(tokenDefinition);
-	// }
-	//
-	// private void addOptions() {
-	// Production options = new Production("options");
-	// options.addElement(new TextProductionElement("COLON",
-	// ProductionElementType.TOKEN));
-	// options.addElement(new TextProductionElement("IDENTIFIER",
-	// ProductionElementType.TOKEN));
-	// addRule(options);
-	// }
+	private void addTokenConstruction() throws GrammarException {
+		Production production = new Production("TokenConstruction");
+		production.addElement(new TokenConstruction("IDENTIFIER"));
+		getProductions().addRule(production);
 
+		production = new Production("TokenConstruction");
+		production.addElement(new TokenConstruction("STRING_LITERAL"));
+		getProductions().addRule(production);
+
+	}
 }

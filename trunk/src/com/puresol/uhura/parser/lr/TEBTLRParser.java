@@ -140,35 +140,35 @@ public class TEBTLRParser implements Parser {
 		int elementPosition = 0;
 		int stackCounter = 0;
 		do {
-			Construction ruleElement = elements.get(elements.size()
+			Construction construction = elements.get(elements.size()
 					- elementPosition - 1);
-			Quantity quantity = ruleElement.getQuantity();
+			Quantity quantity = construction.getQuantity();
 			int occuranceCounter = 0;
 			while (true) {
 				SyntaxTree stackElement = parserStack.get(parserStack.size()
 						- stackCounter - 1);
-				if (ruleElement.getType() == ConstructionType.TOKEN) {
+				if (construction.getType() == ConstructionType.TOKEN) {
 					Token token = stackElement.getToken();
 					if (token == null) {
 						break;
 					}
-					if (!token.getName().equals(ruleElement.getName())) {
+					if (!token.getName().equals(construction.getName())) {
 						break;
 					}
-				} else if (ruleElement.getType() == ConstructionType.TEXT) {
+				} else if (construction.getType() == ConstructionType.TEXT) {
 					Token token = stackElement.getToken();
 					if (token == null) {
 						break;
 					}
-					if (!token.getText().equals(ruleElement.getText())) {
+					if (!token.getText().equals(construction.getText())) {
 						break;
 					}
-				} else if (ruleElement.getType() == ConstructionType.PRODUCTION) {
+				} else if (construction.getType() == ConstructionType.PRODUCTION) {
 					Token token = stackElement.getToken();
 					if (token != null) {
 						break;
 					}
-					if (!stackElement.getName().equals(ruleElement.getName())) {
+					if (!stackElement.getName().equals(construction.getName())) {
 						break;
 					}
 				} else {
@@ -181,7 +181,8 @@ public class TEBTLRParser implements Parser {
 					break;
 				}
 			}
-			if ((quantity.getMin() != null) && (occuranceCounter < quantity.getMin())) {
+			if ((quantity.getMin() != null)
+					&& (occuranceCounter < quantity.getMin())) {
 				return false;
 			}
 			elementPosition++;
@@ -190,7 +191,7 @@ public class TEBTLRParser implements Parser {
 		if (elementPosition < elements.size()) {
 			return false;
 		}
-		return true;
+		return (stackCounter > 0);
 	}
 
 	public void reduce(Production production) throws ParserException {
@@ -250,12 +251,14 @@ public class TEBTLRParser implements Parser {
 					break;
 				}
 			}
-			if ((quantity.getMin() != null) && (occuranceCounter < quantity.getMin())) {
+			if ((quantity.getMin() != null)
+					&& (occuranceCounter < quantity.getMin())) {
 				throw new ParserException("Rule '" + production
 						+ "'was not appliable! Was it not checked first?");
 			}
 			elementPosition++;
-		} while ((parserStack.size() > 0) && (elementPosition < elements.size()));
+		} while ((parserStack.size() > 0)
+				&& (elementPosition < elements.size()));
 		parserStack.push(tree);
 	}
 

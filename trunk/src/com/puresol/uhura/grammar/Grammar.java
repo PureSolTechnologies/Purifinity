@@ -59,7 +59,7 @@ public class Grammar {
 
 	public void printProductions() {
 		for (Production production : productions.getProductions()) {
-			System.out.println(production);
+			System.out.println(production.toShortString(-1));
 		}
 	}
 }
