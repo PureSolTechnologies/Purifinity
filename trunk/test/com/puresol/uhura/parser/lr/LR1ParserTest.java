@@ -7,6 +7,7 @@ import junit.framework.TestCase;
 import org.junit.Test;
 
 import com.puresol.uhura.ast.SyntaxTree;
+import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.production.Production;
 import com.puresol.uhura.grammar.production.ProductionSet;
 import com.puresol.uhura.grammar.production.TokenConstruction;
@@ -49,6 +50,9 @@ public class LR1ParserTest extends TestCase {
 			assertEquals(0, tree.getChildren().get(2).getChildren().size());
 			assertEquals("INTEGER", tree.getChildren().get(2).getName());
 		} catch (ParserException e) {
+			e.printStackTrace();
+			fail("No exception was expected!");
+		} catch (GrammarException e) {
 			e.printStackTrace();
 			fail("No exception was expected!");
 		}

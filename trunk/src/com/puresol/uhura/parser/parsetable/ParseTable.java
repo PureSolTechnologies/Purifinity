@@ -121,7 +121,7 @@ public class ParseTable {
 	}
 
 	private void calculateTransitions() throws GrammarException {
-		Set<Production> startProductions = productions.get("S");
+		List<Production> startProductions = productions.get("S");
 		if (startProductions.size() == 0) {
 			throw new GrammarException("No start production \"S\" was defined!");
 		} else if (startProductions.size() > 1) {
@@ -129,7 +129,7 @@ public class ParseTable {
 					"More than one production \"S\" was defined!");
 		}
 		Set<Item> items = new HashSet<Item>();
-		items.add(new Item((Production) startProductions.iterator().next(), 0));
+		items.add(new Item((Production) startProductions.get(0), 0));
 		calculateItemSet(items, 0);
 	}
 

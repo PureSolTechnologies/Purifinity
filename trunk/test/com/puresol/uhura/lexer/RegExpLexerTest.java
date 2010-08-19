@@ -5,6 +5,7 @@ import java.util.Properties;
 
 import org.junit.Test;
 
+import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.token.TokenDefinition;
 import com.puresol.uhura.grammar.token.TokenDefinitionSet;
 
@@ -39,6 +40,9 @@ public class RegExpLexerTest extends TestCase {
 		} catch (LexerException e) {
 			e.printStackTrace();
 			fail("No exception was expected!");
+		} catch (GrammarException e) {
+			e.printStackTrace();
+			fail("No exception was expected!");
 		}
 	}
 
@@ -52,6 +56,9 @@ public class RegExpLexerTest extends TestCase {
 					"0 1\t2 \t3 \t4 \t5\t 6 7 8 9 10 11 12 13 14 15"), rules);
 			lexer.getMetaInformation().println();
 		} catch (LexerException e) {
+			e.printStackTrace();
+			fail("No exception was expected!");
+		} catch (GrammarException e) {
 			e.printStackTrace();
 			fail("No exception was expected!");
 		}

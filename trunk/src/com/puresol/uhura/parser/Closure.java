@@ -1,9 +1,6 @@
 package com.puresol.uhura.parser;
 
-import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 import com.puresol.uhura.grammar.Grammar;
@@ -15,14 +12,15 @@ import com.puresol.uhura.parser.parsetable.ItemSet;
 
 public class Closure {
 
-	private int itemSetCounter = 0;
-	private final ConcurrentMap<Integer, ItemSet> itemSets = new ConcurrentHashMap<Integer, ItemSet>();
+	// private int itemSetCounter = 0;
+	// private final ConcurrentMap<Integer, ItemSet> itemSets = new
+	// ConcurrentHashMap<Integer, ItemSet>();
 
 	private final ProductionSet productions;
 
 	public Closure(Grammar grammar) {
 		this.productions = grammar.getProductions();
-		calculateClosures();
+		// calculateClosures();
 	}
 
 	/**
@@ -33,30 +31,30 @@ public class Closure {
 	 * @param itemSet
 	 * @return
 	 */
-	private void registerItemSet(ItemSet itemSet) {
-		System.out.println(itemSet.toString());
-		if (itemSets.values().contains(itemSet)) {
-			for (int i = 0; i < itemSets.size(); i++) {
-				ItemSet includedItemSet = itemSets.get(i);
-				if (includedItemSet.equals(itemSet)) {
-					return;
-				}
-			}
-			return;
-		}
-		itemSets.put(itemSetCounter, itemSet);
-		itemSetCounter++;
-	}
+	// private void registerItemSet(ItemSet itemSet) {
+	// System.out.println(itemSet.toString());
+	// if (itemSets.values().contains(itemSet)) {
+	// for (int i = 0; i < itemSets.size(); i++) {
+	// ItemSet includedItemSet = itemSets.get(i);
+	// if (includedItemSet.equals(itemSet)) {
+	// return;
+	// }
+	// }
+	// return;
+	// }
+	// itemSets.put(itemSetCounter, itemSet);
+	// itemSetCounter++;
+	// }
 
-	private void calculateClosures() {
-		Set<Item> items = new CopyOnWriteArraySet<Item>();
-		items.add(new Item(productions.getProductions().iterator().next(), 0));
-		calculateClosureRecursively(items);
-	}
+	// private void calculateClosures() {
+	// Set<Item> items = new CopyOnWriteArraySet<Item>();
+	// items.add(new Item(productions.getProductions().iterator().next(), 0));
+	// calculateClosureRecursively(items);
+	// }
 
-	private void calculateClosureRecursively(Set<Item> items) {
+	public void calculateClosureRecursively(Set<Item> items) {
 		ItemSet initialItemSet = closure(items);
-		registerItemSet(initialItemSet);
+		// registerItemSet(initialItemSet);
 
 		for (Construction construction : initialItemSet.getNextConstructions()) {
 			Set<Item> rightMovedItems = new CopyOnWriteArraySet<Item>();
@@ -122,11 +120,11 @@ public class Closure {
 		}
 	}
 
-	public ItemSet getState(int state) {
-		return itemSets.get(state);
-	}
+	// public ItemSet getState(int state) {
+	// return itemSets.get(state);
+	// }
 
-	public ConcurrentMap<Integer, ItemSet> getAllStates() {
-		return itemSets;
-	}
+	// public ConcurrentMap<Integer, ItemSet> getAllStates() {
+	// return itemSets;
+	// }
 }
