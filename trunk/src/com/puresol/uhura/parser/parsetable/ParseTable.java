@@ -68,16 +68,14 @@ public class ParseTable {
 	private void registerActionAndBackwardTransition(int initialState,
 			Construction construction, ActionType action, int targetState)
 			throws GrammarException {
-		ParseAction tableActionEntry = new ParseAction(action,
-				targetState);
+		ParseAction tableActionEntry = new ParseAction(action, targetState);
 		registerAction(initialState, construction, tableActionEntry);
 		registerBackwardTransition(initialState, construction, targetState);
 	}
 
 	private void registerAction(int initialState, Construction construction,
 			ParseAction action) throws GrammarException {
-		ConcurrentMap<Construction, ParseAction> row = table
-				.get(initialState);
+		ConcurrentMap<Construction, ParseAction> row = table.get(initialState);
 		if (row.containsKey(construction)) {
 			if (!row.get(construction).equals(action)) {
 				throw new GrammarException("Ambiguous condition in state '"
@@ -103,8 +101,7 @@ public class ParseTable {
 		backwardTransitions.put(targetState, initialState);
 	}
 
-	private ParseAction getAction(int initialState,
-			Construction construction) {
+	private ParseAction getAction(int initialState, Construction construction) {
 		ParseAction action = table.get(initialState).get(construction);
 		if (action == null) {
 			return new ParseAction(ActionType.ERROR, -1);
@@ -124,7 +121,7 @@ public class ParseTable {
 	}
 
 	private void calculateTransitions() throws GrammarException {
-		List<Production> startProductions = productions.get("S");
+		Set<Production> startProductions = productions.get("S");
 		if (startProductions.size() == 0) {
 			throw new GrammarException("No start production \"S\" was defined!");
 		} else if (startProductions.size() > 1) {
@@ -132,7 +129,7 @@ public class ParseTable {
 					"More than one production \"S\" was defined!");
 		}
 		Set<Item> items = new HashSet<Item>();
-		items.add(new Item(startProductions.get(0), 0));
+		items.add(new Item((Production) startProductions.iterator().next(), 0));
 		calculateItemSet(items, 0);
 	}
 
@@ -141,9 +138,9 @@ public class ParseTable {
 		ItemSet initialItemSet = closure(items);
 		int initialStateId = registerItemSet(initialItemSet);
 
-		for (Construction construction : initialItemSet.getFollowing()) {
+		for (Construction construction : initialItemSet.getNextConstructions()) {
 			Set<Item> rightMovedItems = new HashSet<Item>();
-			for (Item item : initialItemSet.getFollowingItems(construction)) {
+			for (Item item : initialItemSet.getNextItems(construction)) {
 				Item rightMovedItem = new Item(item.getProduction(),
 						item.getPosition() + 1);
 				rightMovedItems.add(rightMovedItem);
@@ -214,7 +211,8 @@ public class ParseTable {
 
 	private void calculateReductionsAndAcceptance() throws GrammarException {
 		availableTerminals.add(new TextConstruction("$"));
-		Production startProduction = productions.get("S").get(0);
+		Production startProduction = (Production) productions.get("S")
+				.iterator().next();
 		Item accItem = new Item(startProduction, 1);
 		for (Integer state : itemSets.keySet()) {
 			ItemSet itemSet = itemSets.get(state);

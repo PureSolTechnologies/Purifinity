@@ -6,7 +6,7 @@ import java.util.List;
 public class Production {
 
 	private final String name;
-	private final List<Construction> elements = new ArrayList<Construction>();
+	private final List<Construction> constructions = new ArrayList<Construction>();
 
 	public Production(String name) {
 		super();
@@ -21,14 +21,18 @@ public class Production {
 	}
 
 	public void addElement(Construction element) {
-		elements.add(element);
+		constructions.add(element);
 	}
 
 	/**
 	 * @return the elements
 	 */
 	public List<Construction> getConstructions() {
-		return elements;
+		return constructions;
+	}
+
+	public boolean isEmpty() {
+		return (constructions.size() == 0);
 	}
 
 	@Override
@@ -40,7 +44,7 @@ public class Production {
 		StringBuffer result = new StringBuffer(name);
 		result.append(" --> ");
 		int position = 0;
-		for (Construction element : elements) {
+		for (Construction element : constructions) {
 			if (position == itemPosition) {
 				result.append(" . ");
 			}
@@ -55,7 +59,7 @@ public class Production {
 		StringBuffer result = new StringBuffer(name);
 		result.append(" --> ");
 		int position = 0;
-		for (Construction element : elements) {
+		for (Construction element : constructions) {
 			if (position == itemPosition) {
 				result.append(" . ");
 			}
@@ -63,7 +67,7 @@ public class Production {
 			result.append(" ");
 			result.append(element.toShortString());
 		}
-		if (itemPosition == elements.size()) {
+		if (itemPosition == constructions.size()) {
 			result.append(" . ");
 		}
 		return result.toString();
@@ -79,7 +83,7 @@ public class Production {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result
-				+ ((elements == null) ? 0 : elements.hashCode());
+				+ ((constructions == null) ? 0 : constructions.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
 	}
@@ -98,10 +102,10 @@ public class Production {
 		if (getClass() != obj.getClass())
 			return false;
 		Production other = (Production) obj;
-		if (elements == null) {
-			if (other.elements != null)
+		if (constructions == null) {
+			if (other.constructions != null)
 				return false;
-		} else if (!elements.equals(other.elements))
+		} else if (!constructions.equals(other.constructions))
 			return false;
 		if (name == null) {
 			if (other.name != null)

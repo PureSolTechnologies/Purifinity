@@ -46,23 +46,7 @@ public class ItemSet {
 		return addedItems;
 	}
 
-	@Override
-	public String toString() {
-		StringBuffer buffer = new StringBuffer();
-		for (Item item : primaryItems) {
-			buffer.append("  ");
-			buffer.append(item);
-			buffer.append("\n");
-		}
-		for (Item item : addedItems) {
-			buffer.append("+ ");
-			buffer.append(item);
-			buffer.append("\n");
-		}
-		return buffer.toString();
-	}
-
-	public List<Construction> getFollowing() {
+	public List<Construction> getNextConstructions() {
 		List<Construction> terminals = new ArrayList<Construction>();
 		for (Item item : primaryItems) {
 			Construction element = item.getNext();
@@ -79,7 +63,7 @@ public class ItemSet {
 		return terminals;
 	}
 
-	public List<Item> getFollowingItems(Construction construction) {
+	public List<Item> getNextItems(Construction construction) {
 		List<Item> items = new ArrayList<Item>();
 		for (Item item : primaryItems) {
 			Construction element = item.getNext();
@@ -100,6 +84,22 @@ public class ItemSet {
 			}
 		}
 		return items;
+	}
+
+	@Override
+	public String toString() {
+		StringBuffer buffer = new StringBuffer();
+		for (Item item : primaryItems) {
+			buffer.append("  ");
+			buffer.append(item);
+			buffer.append("\n");
+		}
+		for (Item item : addedItems) {
+			buffer.append("+ ");
+			buffer.append(item);
+			buffer.append("\n");
+		}
+		return buffer.toString();
 	}
 
 	/*
