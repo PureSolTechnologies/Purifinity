@@ -9,15 +9,23 @@ import com.puresol.uhura.grammar.production.Construction;
 
 public class ItemSet {
 
+	private final Set<Item> allItems = new CopyOnWriteArraySet<Item>();
 	private final Set<Item> primaryItems = new CopyOnWriteArraySet<Item>();
 	private final Set<Item> addedItems = new CopyOnWriteArraySet<Item>();
 
 	public ItemSet(Item primaryItem) {
 		this.primaryItems.add(primaryItem);
+		this.allItems.add(primaryItem);
 	}
 
 	public ItemSet(Set<Item> primaryItems) {
 		this.primaryItems.addAll(primaryItems);
+		this.allItems.addAll(primaryItems);
+	}
+
+	public ItemSet(ItemSet itemSet) {
+		this.primaryItems.addAll(itemSet.getAllItems());
+		this.allItems.addAll(itemSet.getAllItems());
 	}
 
 	public boolean containsItem(Item item) {
@@ -32,10 +40,16 @@ public class ItemSet {
 
 	public void addAddedItems(Set<Item> items) {
 		addedItems.addAll(items);
+		allItems.addAll(items);
 	}
 
 	public void addItem(Item item) {
 		addedItems.add(item);
+		allItems.add(item);
+	}
+
+	public Set<Item> getAllItems() {
+		return allItems;
 	}
 
 	public Set<Item> getPrimaryItems() {
@@ -53,20 +67,20 @@ public class ItemSet {
 	 * @return
 	 */
 	public List<Construction> getNextConstructions() {
-		List<Construction> terminals = new ArrayList<Construction>();
+		List<Construction> constructions = new ArrayList<Construction>();
 		for (Item item : primaryItems) {
 			Construction element = item.getNext();
 			if (element != null) {
-				terminals.add(element);
+				constructions.add(element);
 			}
 		}
 		for (Item item : addedItems) {
 			Construction element = item.getNext();
 			if (element != null) {
-				terminals.add(element);
+				constructions.add(element);
 			}
 		}
-		return terminals;
+		return constructions;
 	}
 
 	/**
@@ -125,9 +139,7 @@ public class ItemSet {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result
-				+ ((addedItems == null) ? 0 : addedItems.hashCode());
-		result = prime * result
-				+ ((primaryItems == null) ? 0 : primaryItems.hashCode());
+				+ ((allItems == null) ? 0 : allItems.hashCode());
 		return result;
 	}
 
@@ -138,30 +150,18 @@ public class ItemSet {
 	 */
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj) {
+		if (this == obj)
 			return true;
-		}
-		if (obj == null) {
+		if (obj == null)
 			return false;
-		}
-		if (getClass() != obj.getClass()) {
+		if (getClass() != obj.getClass())
 			return false;
-		}
 		ItemSet other = (ItemSet) obj;
-		if (addedItems == null) {
-			if (other.addedItems != null) {
+		if (allItems == null) {
+			if (other.allItems != null)
 				return false;
-			}
-		} else if (!addedItems.equals(other.addedItems)) {
+		} else if (!allItems.equals(other.allItems))
 			return false;
-		}
-		if (primaryItems == null) {
-			if (other.primaryItems != null) {
-				return false;
-			}
-		} else if (!primaryItems.equals(other.primaryItems)) {
-			return false;
-		}
 		return true;
 	}
 

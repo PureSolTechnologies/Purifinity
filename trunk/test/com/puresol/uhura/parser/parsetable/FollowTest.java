@@ -1,4 +1,4 @@
-package com.puresol.uhura.parser;
+package com.puresol.uhura.parser.parsetable;
 
 import org.junit.Test;
 
@@ -8,6 +8,8 @@ import com.puresol.uhura.grammar.production.Construction;
 import com.puresol.uhura.grammar.production.FinishConstruction;
 import com.puresol.uhura.grammar.production.ProductionConstruction;
 import com.puresol.uhura.grammar.production.TokenConstruction;
+import com.puresol.uhura.parser.parsetable.First;
+import com.puresol.uhura.parser.parsetable.Follow;
 
 import junit.framework.TestCase;
 

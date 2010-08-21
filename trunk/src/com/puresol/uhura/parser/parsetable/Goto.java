@@ -1,12 +1,10 @@
-package com.puresol.uhura.parser;
+package com.puresol.uhura.parser.parsetable;
 
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 import com.puresol.uhura.grammar.production.Construction;
 import com.puresol.uhura.grammar.production.ProductionSet;
-import com.puresol.uhura.parser.parsetable.Item;
-import com.puresol.uhura.parser.parsetable.ItemSet;
 
 public class Goto {
 
@@ -30,6 +28,6 @@ public class Goto {
 		for (Item item : itemSet.getNextItems(x)) {
 			items.add(new Item(item.getProduction(), item.getPosition() + 1));
 		}
-		return closure.closure(items);
+		return closure.closure(new ItemSet(items));
 	}
 }

@@ -1,13 +1,8 @@
-package com.puresol.uhura.parser;
-
-import java.util.Set;
-import java.util.concurrent.CopyOnWriteArraySet;
+package com.puresol.uhura.parser.parsetable;
 
 import com.puresol.uhura.grammar.production.Construction;
 import com.puresol.uhura.grammar.production.Production;
 import com.puresol.uhura.grammar.production.ProductionSet;
-import com.puresol.uhura.parser.parsetable.Item;
-import com.puresol.uhura.parser.parsetable.ItemSet;
 
 public class Closure {
 
@@ -18,22 +13,20 @@ public class Closure {
 	}
 
 	public ItemSet closure(Item item) {
-		Set<Item> set = new CopyOnWriteArraySet<Item>();
-		set.add(item);
-		return closure(set);
+		return closure(new ItemSet(item));
 	}
 
 	/**
 	 * This is the closure method for a set of items. This method is descibed in
 	 * the Dragon Book 4.6.2.
 	 * 
-	 * @param items
+	 * @param initialItemSet
 	 * @return A complete set of items is returned containing the parameter
 	 *         items and all calculated extensions.
 	 */
-	public ItemSet closure(Set<Item> items) {
-		ItemSet itemSet = new ItemSet(items);
-		for (Item item : items) {
+	public ItemSet closure(ItemSet initialItemSet) {
+		ItemSet itemSet = new ItemSet(initialItemSet);
+		for (Item item : itemSet.getPrimaryItems()) {
 			if (!item.hasNext()) {
 				continue;
 			}

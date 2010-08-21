@@ -1,4 +1,4 @@
-package com.puresol.uhura.parser;
+package com.puresol.uhura.parser.parsetable;
 
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;

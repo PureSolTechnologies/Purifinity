@@ -1,10 +1,12 @@
-package com.puresol.uhura.parser;
+package com.puresol.uhura.parser.parsetable;
 
 import org.junit.Test;
 
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.TestGrammars;
 import com.puresol.uhura.grammar.production.TokenConstruction;
+import com.puresol.uhura.parser.parsetable.Closure;
+import com.puresol.uhura.parser.parsetable.Goto;
 import com.puresol.uhura.parser.parsetable.Item;
 import com.puresol.uhura.parser.parsetable.ItemSet;
 
