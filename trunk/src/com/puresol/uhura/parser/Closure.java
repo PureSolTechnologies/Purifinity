@@ -3,7 +3,6 @@ package com.puresol.uhura.parser;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
-import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.production.Construction;
 import com.puresol.uhura.grammar.production.Production;
 import com.puresol.uhura.grammar.production.ProductionSet;
@@ -14,8 +13,8 @@ public class Closure {
 
 	private final ProductionSet productions;
 
-	public Closure(Grammar grammar) {
-		this.productions = grammar.getProductions();
+	public Closure(ProductionSet productions) {
+		this.productions = productions;
 	}
 
 	public ItemSet closure(Item item) {

@@ -46,6 +46,12 @@ public class ItemSet {
 		return addedItems;
 	}
 
+	/**
+	 * This method returns all constructions which are next to be expected to be
+	 * found.
+	 * 
+	 * @return
+	 */
 	public List<Construction> getNextConstructions() {
 		List<Construction> terminals = new ArrayList<Construction>();
 		for (Item item : primaryItems) {
@@ -63,6 +69,13 @@ public class ItemSet {
 		return terminals;
 	}
 
+	/**
+	 * This method returns all items which have the given construction as next
+	 * construction.
+	 * 
+	 * @param construction
+	 * @return
+	 */
 	public List<Item> getNextItems(Construction construction) {
 		List<Item> items = new ArrayList<Item>();
 		for (Item item : primaryItems) {
