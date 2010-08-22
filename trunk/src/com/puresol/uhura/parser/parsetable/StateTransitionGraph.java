@@ -27,7 +27,7 @@ public class StateTransitionGraph {
 		calculate();
 	}
 
-	protected void calculate() {
+	private void calculate() {
 		Item startItem = new Item(grammar.getProductions().getProductions()
 				.get(0), 0);
 		ItemSet initialSet = closureCalculator.closure(new ItemSet(startItem));
@@ -35,7 +35,7 @@ public class StateTransitionGraph {
 		calculateRecursively(initialSet);
 	}
 
-	protected void calculateRecursively(ItemSet initialSet) {
+	private void calculateRecursively(ItemSet initialSet) {
 		int initialStateId = itemSet2Integer.get(initialSet);
 		for (Construction construction : initialSet.getNextConstructions()) {
 			ItemSet gotoSet = gotoCalculator.goto0(initialSet, construction);
@@ -50,7 +50,7 @@ public class StateTransitionGraph {
 		}
 	}
 
-	protected int addState(ItemSet itemSet) {
+	private int addState(ItemSet itemSet) {
 		if (itemSet2Integer.containsKey(itemSet)) {
 			return itemSet2Integer.get(itemSet);
 		}
@@ -60,7 +60,7 @@ public class StateTransitionGraph {
 		return stateId;
 	}
 
-	protected void addTransition(int initialState, Construction construction,
+	private void addTransition(int initialState, Construction construction,
 			int finalState) {
 		if (!transitions.containsKey(initialState)) {
 			transitions.put(initialState,
@@ -77,6 +77,19 @@ public class StateTransitionGraph {
 		return itemSets.get(stateId);
 	}
 
+	public int getStateNumber() {
+		return itemSets.size();
+	}
+
+	public ConcurrentMap<Construction, Integer> getTransitions(int initialState) {
+		ConcurrentMap<Construction, Integer> result = transitions
+				.get(initialState);
+		if (result == null) {
+			result = new ConcurrentHashMap<Construction, Integer>();
+		}
+		return result;
+	}
+
 	public int getTransition(int initialState, Construction construction) {
 		return transitions.get(initialState).get(construction);
 	}
@@ -85,27 +98,33 @@ public class StateTransitionGraph {
 		return grammar;
 	}
 
-	public void println() {
+	@Override
+	public String toString() {
+		StringBuffer buffer = new StringBuffer();
 		List<Integer> stateIds = new ArrayList<Integer>(itemSets.keySet());
 		Collections.sort(stateIds);
 		for (int stateId : stateIds) {
-			System.out.println("===========");
-			System.out.println("State " + stateId + ":");
-			System.out.println("===========");
+			buffer.append("===========\n");
+			buffer.append("State " + stateId + ":\n");
+			buffer.append("===========\n");
 			ItemSet itemSet = itemSets.get(stateId);
-			System.out.println(itemSet.toString());
+			buffer.append(itemSet.toString());
 
 			ConcurrentMap<Construction, Integer> stateTransitions = transitions
 					.get(stateId);
 			if (stateTransitions != null) {
-				System.out.println("Transitions:");
+				buffer.append("Transitions:\n");
 				for (Construction construction : stateTransitions.keySet()) {
 					int finalStateId = stateTransitions.get(construction);
-					System.out.println(construction.toShortString() + " --> "
-							+ finalStateId);
+					buffer.append("  ");
+					buffer.append(construction.toShortString());
+					buffer.append(" --> ");
+					buffer.append(finalStateId);
+					buffer.append("\n");
 				}
 			}
-			System.out.println();
+			buffer.append("\n");
 		}
+		return buffer.toString();
 	}
 }

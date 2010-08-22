@@ -12,16 +12,12 @@ public interface Construction {
 	 */
 	public ConstructionType getType();
 
-	/**
-	 * @return the quantity
-	 */
-	public Quantity getQuantity();
-
 	public String getName();
 
 	public boolean isTerminal();
+
 	public boolean isNonTerminal();
-	
+
 	public String toString();
 
 	public String toShortString();

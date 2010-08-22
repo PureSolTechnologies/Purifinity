@@ -5,15 +5,12 @@ public abstract class AbstractConstruction implements Construction {
 	private final String name;
 	private final String text;
 	private final ConstructionType type;
-	private final Quantity quantity;
 
-	public AbstractConstruction(String name, String text,
-			ConstructionType type) {
+	public AbstractConstruction(String name, String text, ConstructionType type) {
 		super();
 		this.name = name;
 		this.text = text;
 		this.type = type;
-		this.quantity = Quantity.EXPECT;
 	}
 
 	public AbstractConstruction(String name, String text,
@@ -22,7 +19,6 @@ public abstract class AbstractConstruction implements Construction {
 		this.name = name;
 		this.text = text;
 		this.type = type;
-		this.quantity = quantity;
 	}
 
 	/**
@@ -52,16 +48,6 @@ public abstract class AbstractConstruction implements Construction {
 		return type;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.puresol.uhura.parser.ParserRuleElementInterface#getQuantity()
-	 */
-	@Override
-	public Quantity getQuantity() {
-		return quantity;
-	}
-
 	@Override
 	public boolean isTerminal() {
 		return (type != ConstructionType.PRODUCTION);
@@ -79,14 +65,14 @@ public abstract class AbstractConstruction implements Construction {
 	 */
 	@Override
 	public String toString() {
-		return name + ": '" + text + "'" + quantity + "(" + type + ")";
+		return name + ": '" + text + "' (" + type + ")";
 	}
 
 	public String toShortString() {
 		if (name.isEmpty()) {
-			return "'" + text + "'" + quantity;
+			return "'" + text + "'";
 		} else {
-			return name + quantity;
+			return name;
 		}
 	}
 
@@ -100,8 +86,6 @@ public abstract class AbstractConstruction implements Construction {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result
-				+ ((quantity == null) ? 0 : quantity.hashCode());
 		result = prime * result + ((text == null) ? 0 : text.hashCode());
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		return result;
@@ -125,8 +109,6 @@ public abstract class AbstractConstruction implements Construction {
 			if (other.name != null)
 				return false;
 		} else if (!name.equals(other.name))
-			return false;
-		if (quantity != other.quantity)
 			return false;
 		if (text == null) {
 			if (other.text != null)

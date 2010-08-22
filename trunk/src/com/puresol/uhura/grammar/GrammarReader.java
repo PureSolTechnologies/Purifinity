@@ -19,7 +19,7 @@ import com.puresol.uhura.lexer.RegExpLexer;
 import com.puresol.uhura.lexer.TokenStream;
 import com.puresol.uhura.parser.Parser;
 import com.puresol.uhura.parser.ParserException;
-import com.puresol.uhura.parser.lr.TEBTLRParser;
+import com.puresol.uhura.parser.lr.SLR1Parser;
 
 public class GrammarReader implements Callable<Boolean> {
 
@@ -62,9 +62,8 @@ public class GrammarReader implements Callable<Boolean> {
 	}
 
 	private SyntaxTree parse(TokenStream tokenStream) throws ParserException {
-		Parser parser = new TEBTLRParser(new Properties());
+		Parser parser = new SLR1Parser(new Properties(), grammar);
 		parser.setTokenStream(tokenStream);
-		parser.setProductions(grammar.getProductions());
 		try {
 			return parser.call();
 		} catch (Exception e) {

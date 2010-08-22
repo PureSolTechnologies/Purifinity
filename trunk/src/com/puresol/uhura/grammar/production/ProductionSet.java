@@ -38,7 +38,21 @@ public class ProductionSet {
 		return productions;
 	}
 
+	public Production get(int id) {
+		return productions.get(id);
+	}
+
 	public List<Production> get(String productionName) {
 		return name2Production.get(productionName);
+	}
+
+	public int getId(Production production) throws GrammarException {
+		for (int i = 0; i < productions.size(); i++) {
+			if (productions.get(i).equals(production)) {
+				return i;
+			}
+		}
+		throw new GrammarException("Could not find production '" + production
+				+ "'!");
 	}
 }

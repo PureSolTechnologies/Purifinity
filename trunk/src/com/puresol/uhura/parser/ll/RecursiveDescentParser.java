@@ -3,36 +3,19 @@ package com.puresol.uhura.parser.ll;
 import java.util.Properties;
 
 import com.puresol.uhura.ast.SyntaxTree;
-import com.puresol.uhura.grammar.production.ProductionSet;
-import com.puresol.uhura.lexer.TokenStream;
-import com.puresol.uhura.parser.Parser;
+import com.puresol.uhura.grammar.Grammar;
+import com.puresol.uhura.parser.AbstractParser;
 import com.puresol.uhura.parser.ParserException;
 
-public class RecursiveDescentParser implements Parser {
+public class RecursiveDescentParser extends AbstractParser {
 
-	@SuppressWarnings("unused")
-	private final Properties options;
-	@SuppressWarnings("unused")
-	private TokenStream tokenStream;
-	@SuppressWarnings("unused")
-	private ProductionSet ruleSet = null;
-
-	public RecursiveDescentParser(Properties options) {
-		this.options = options;
-	}
-
-	@Override
-	public void setTokenStream(TokenStream tokenStream) {
-		this.tokenStream = tokenStream;
-	}
-
-	@Override
-	public void setProductions(ProductionSet ruleSet) {
-		this.ruleSet = ruleSet;
+	public RecursiveDescentParser(Properties options, Grammar grammar) {
+		super(options, grammar);
 	}
 
 	@Override
 	public SyntaxTree call() throws ParserException {
+		// TODO Auto-generated method stub
 		return null;
 	}
 

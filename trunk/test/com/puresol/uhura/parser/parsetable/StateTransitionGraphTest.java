@@ -10,13 +10,25 @@ import junit.framework.TestCase;
 public class StateTransitionGraphTest extends TestCase {
 
 	@Test
-	public void test() {
+	public void testLRPamphletGrammar() {
+		System.out.println("====================");
+		System.out.println("LR Pamphlet Grammar:");
+		System.out.println("====================");
 		Grammar grammar = TestGrammars.getTestGrammarFromLR1Pamphlet();
-		System.out.println("Productions:");
-		grammar.printProductions();
 
 		StateTransitionGraph transitionGraph = new StateTransitionGraph(grammar);
-		transitionGraph.println();
+		System.out.println(transitionGraph);
+	}
+
+	@Test
+	public void testDragonBookGrammar() {
+		System.out.println("====================");
+		System.out.println("Dragon Book Grammar:");
+		System.out.println("====================");
+		Grammar grammar = TestGrammars.getTestGrammarFromDragonBook();
+
+		StateTransitionGraph transitionGraph = new StateTransitionGraph(grammar);
+		System.out.println(transitionGraph);
 	}
 
 }

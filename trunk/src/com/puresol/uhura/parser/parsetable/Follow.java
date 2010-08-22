@@ -23,6 +23,13 @@ public class Follow {
 
 	private final ConcurrentMap<String, Set<Construction>> follow = new ConcurrentHashMap<String, Set<Construction>>();
 
+	public Follow(Grammar grammar) {
+		super();
+		this.grammar = grammar;
+		this.first = new First(grammar);
+		calculate();
+	}
+
 	public Follow(Grammar grammar, First first) {
 		super();
 		this.grammar = grammar;
@@ -62,12 +69,13 @@ public class Follow {
 				if (construction.isTerminal()) {
 					continue;
 				}
-				if (i + 1 < constructions.size()) {
-					for (Construction follower : first.get(constructions
-							.get(i + 1))) {
-						if (!follower.equals(EmptyConstruction.getInstance())) {
-							follow.get(construction.getName()).add(follower);
-						}
+				if (i + 1 >= constructions.size()) {
+					continue;
+				}
+				for (Construction follower : first
+						.get(constructions.get(i + 1))) {
+					if (!follower.equals(EmptyConstruction.getInstance())) {
+						follow.get(construction.getName()).add(follower);
 					}
 				}
 			}
@@ -94,9 +102,11 @@ public class Follow {
 								FinishConstruction.getInstance());
 						continue;
 					}
-					for (Construction follows : follow.get(constructions
-							.get(i - 1))) {
-						follow.get(construction.getName()).add(follows);
+					if (follow.get(constructions.get(i - 1)) != null) {
+						for (Construction follows : follow.get(constructions
+								.get(i - 1))) {
+							follow.get(construction.getName()).add(follows);
+						}
 					}
 				} else if (i + 2 == constructions.size()) {
 					Construction beta = constructions.get(i + 1);

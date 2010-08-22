@@ -83,9 +83,15 @@ public class RegExpLexer implements Lexer {
 		while (text.length() > 0) {
 			Token token = findNextToken(text);
 			if (token == null) {
-				throw new LexerException("No token found for '"
-						+ text.substring(0, 12) + "...' in line " + line
-						+ " at position " + pos + ".");
+				String exceptionText;
+				if (text.length() <= 12) {
+					exceptionText = text;
+				} else {
+					exceptionText = text.substring(0, 12) + "...";
+
+				}
+				throw new LexerException("No token found for '" + exceptionText
+						+ "' in line " + line + " at position " + pos + ".");
 			}
 			if (token.getVisibility() != Visibility.HIDDEN) {
 				tokenStream.add(token);
