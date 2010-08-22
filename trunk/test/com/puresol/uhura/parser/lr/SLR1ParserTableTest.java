@@ -7,13 +7,13 @@ import org.apache.log4j.Logger;
 import org.junit.Test;
 
 import com.puresol.uhura.grammar.Grammar;
+import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.TestGrammars;
 import com.puresol.uhura.grammar.production.Construction;
 import com.puresol.uhura.grammar.production.FinishConstruction;
 import com.puresol.uhura.grammar.production.ProductionConstruction;
 import com.puresol.uhura.grammar.production.TextConstruction;
 import com.puresol.uhura.grammar.production.TokenConstruction;
-import com.puresol.uhura.parser.ParserException;
 import com.puresol.uhura.parser.parsetable.ActionType;
 import com.puresol.uhura.parser.parsetable.ParserAction;
 import com.puresol.uhura.parser.parsetable.ParserTable;
@@ -127,7 +127,7 @@ public class SLR1ParserTableTest extends TestCase {
 			assertEquals(error, table.getAction(9, pS));
 			assertEquals(error, table.getAction(9, pA));
 
-		} catch (ParserException e) {
+		} catch (GrammarException e) {
 			fail("No Exception was expected!");
 		}
 	}
@@ -295,7 +295,7 @@ public class SLR1ParserTableTest extends TestCase {
 			assertEquals(error, table.getAction(11, pE));
 			assertEquals(error, table.getAction(11, pT));
 			assertEquals(error, table.getAction(11, pF));
-		} catch (ParserException e) {
+		} catch (GrammarException e) {
 			e.printStackTrace();
 			fail("No exception was expected!");
 		}

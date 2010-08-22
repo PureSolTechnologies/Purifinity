@@ -13,19 +13,19 @@ public class GrammarTest extends TestCase {
 
 	@Test
 	public void testSettersAndGetters() {
-		Grammar grammar = new Grammar();
+		try {
+			Properties options = new Properties();
+			TokenDefinitionSet tokenDefinitions = new TokenDefinitionSet();
+			ProductionSet productions = new ProductionSet();
 
-		Properties options = new Properties();
-		grammar.setOptions(options);
-		assertSame(options, grammar.getOptions());
-
-		TokenDefinitionSet tokenDefinitions = new TokenDefinitionSet();
-		grammar.setTokenDefinitions(tokenDefinitions);
-		assertSame(tokenDefinitions, grammar.getTokenDefinitions());
-
-		ProductionSet productions = new ProductionSet();
-		grammar.setProductions(productions);
-		assertSame(productions, grammar.getProductions());
-
+			Grammar grammar = new Grammar(options, tokenDefinitions,
+					productions);
+			assertSame(options, grammar.getOptions());
+			assertSame(tokenDefinitions, grammar.getTokenDefinitions());
+			assertSame(productions, grammar.getProductions());
+		} catch (GrammarException e) {
+			e.printStackTrace();
+			fail("No exception was expected!");
+		}
 	}
 }

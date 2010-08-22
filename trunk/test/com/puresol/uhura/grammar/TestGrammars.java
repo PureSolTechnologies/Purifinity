@@ -1,5 +1,7 @@
 package com.puresol.uhura.grammar;
 
+import java.util.Properties;
+
 import junit.framework.Assert;
 
 import com.puresol.uhura.grammar.production.Production;
@@ -17,18 +19,12 @@ public class TestGrammars {
 		try {
 			TokenDefinitionSet tokenDefinitions = new TokenDefinitionSet();
 
-			// tokenDefinitions.addDefinition(new TokenDefinition("id",
-			// "[0-9.]", Visibility.VISIBLE));
-			// tokenDefinitions.addDefinition(new TokenDefinition("PLUS", "+",
-			// Visibility.VISIBLE));
-			// tokenDefinitions.addDefinition(new TokenDefinition("STAR", "*",
-			// Visibility.VISIBLE));
-			// tokenDefinitions.addDefinition(new TokenDefinition("LPAREN", "(",
-			// Visibility.VISIBLE));
-			// tokenDefinitions.addDefinition(new TokenDefinition("RPAREN", ")",
-			// Visibility.VISIBLE));
-			// tokenDefinitions.addDefinition(new TokenDefinition("WHITESPACE",
-			// ")", Visibility.VISIBLE));
+			tokenDefinitions.addDefinition(new TokenDefinition("a", "a",
+					Visibility.VISIBLE));
+			tokenDefinitions.addDefinition(new TokenDefinition("b", "b",
+					Visibility.VISIBLE));
+			tokenDefinitions.addDefinition(new TokenDefinition("c", "c",
+					Visibility.VISIBLE));
 
 			ProductionSet productions = new ProductionSet();
 
@@ -63,11 +59,9 @@ public class TestGrammars {
 			production.addElement(new TokenConstruction("b"));
 			productions.addRule(production);
 
-			Grammar grammar = new Grammar();
-			grammar.setTokenDefinitions(tokenDefinitions);
-			grammar.setProductions(productions);
-			return grammar;
+			return new Grammar(new Properties(), tokenDefinitions, productions);
 		} catch (GrammarException e) {
+			e.printStackTrace();
 			Assert.fail("No exception was expected!");
 			return null;
 		}
@@ -139,11 +133,9 @@ public class TestGrammars {
 			production.addElement(new TokenConstruction("id"));
 			productions.addRule(production);
 
-			Grammar grammar = new Grammar();
-			grammar.setTokenDefinitions(tokenDefinitions);
-			grammar.setProductions(productions);
-			return grammar;
+			return new Grammar(new Properties(), tokenDefinitions, productions);
 		} catch (GrammarException e) {
+			e.printStackTrace();
 			Assert.fail("No exception was expected!");
 			return null;
 		}
@@ -211,11 +203,9 @@ public class TestGrammars {
 			production.addElement(new TokenConstruction("id"));
 			productions.addRule(production);
 
-			Grammar grammar = new Grammar();
-			grammar.setTokenDefinitions(tokenDefinitions);
-			grammar.setProductions(productions);
-			return grammar;
+			return new Grammar(new Properties(), tokenDefinitions, productions);
 		} catch (GrammarException e) {
+			e.printStackTrace();
 			Assert.fail("No exception was expected!");
 			return null;
 		}

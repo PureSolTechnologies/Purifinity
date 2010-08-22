@@ -9,6 +9,8 @@ import java.io.Reader;
 import java.util.Properties;
 import java.util.concurrent.Callable;
 
+import org.apache.log4j.Logger;
+
 import com.puresol.uhura.ast.SyntaxTree;
 import com.puresol.uhura.grammar.production.ProductionSet;
 import com.puresol.uhura.grammar.token.TokenDefinitionSet;
@@ -23,9 +25,11 @@ import com.puresol.uhura.parser.lr.SLR1Parser;
 
 public class GrammarReader implements Callable<Boolean> {
 
+	private static final Logger logger = Logger.getLogger(GrammarReader.class);
+
 	private final TokenDefinitionSet tokenDefinitions = new TokenDefinitionSet();
 	private final ProductionSet productions = new ProductionSet();
-	private final UhuraGrammar grammar;
+	private final Grammar grammar;
 	private final Properties options = new Properties();
 	private final Reader reader;
 	private SyntaxTree syntaxTree;
@@ -40,35 +44,42 @@ public class GrammarReader implements Callable<Boolean> {
 
 	public GrammarReader(Reader reader) {
 		this.reader = reader;
-		try {
-			grammar = new UhuraGrammar();
-		} catch (GrammarException e) {
-			throw new RuntimeException(
-					"Uhura grammar file grammar is not working!");
-		}
+		grammar = UhuraGrammar.getGrammar();
 	}
 
 	@Override
-	public Boolean call() throws LexerException, ParserException {
+	public Boolean call() throws IOException {
 		read();
 		return true;
 	}
 
-	private void read() throws ParserException, LexerException {
-		Lexer lexer = new RegExpLexer(new Properties());
-		lexer.scan(reader, grammar.getTokenDefinitions());
-		TokenStream tokenStream = lexer.getTokenStream();
-		syntaxTree = parse(tokenStream);
+	private void read() throws IOException {
+		Lexer lexer = null;
+		try {
+			lexer = new RegExpLexer(new Properties());
+			lexer.scan(reader, grammar.getTokenDefinitions());
+			TokenStream tokenStream = lexer.getTokenStream();
+			syntaxTree = parse(tokenStream);
+		} catch (LexerException e) {
+			logger.error(e.getMessage(), e);
+			throw new IOException(e.getMessage());
+		} catch (ParserException e) {
+			logger.error(e.getMessage(), e);
+			logger.error("Error while reading grammar file at: "
+					+ lexer.getMetaInformation().getMetaData(e.getToken()));
+			throw new IOException("Error while reading grammar file at: "
+					+ lexer.getMetaInformation().getMetaData(e.getToken()));
+		}
 	}
 
 	private SyntaxTree parse(TokenStream tokenStream) throws ParserException {
-		Parser parser = new SLR1Parser(new Properties(), grammar);
-		parser.setTokenStream(tokenStream);
 		try {
+			Parser parser = new SLR1Parser(new Properties(), grammar);
+			parser.setTokenStream(tokenStream);
 			return parser.call();
-		} catch (Exception e) {
+		} catch (GrammarException e) {
 			e.printStackTrace();
-			throw new ParserException(e.getMessage());
+			throw new RuntimeException();
 		}
 	}
 

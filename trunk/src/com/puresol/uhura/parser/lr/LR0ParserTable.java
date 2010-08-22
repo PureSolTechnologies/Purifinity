@@ -6,7 +6,6 @@ import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.production.Construction;
 import com.puresol.uhura.grammar.production.FinishConstruction;
-import com.puresol.uhura.parser.ParserException;
 import com.puresol.uhura.parser.parsetable.AbstractParserTable;
 import com.puresol.uhura.parser.parsetable.ActionType;
 import com.puresol.uhura.parser.parsetable.Item;
@@ -18,17 +17,18 @@ public class LR0ParserTable extends AbstractParserTable {
 
 	private StateTransitionGraph transitionGraph;
 
-	public LR0ParserTable(Grammar grammar) throws ParserException {
+	public LR0ParserTable(Grammar grammar) throws GrammarException {
 		super(grammar);
 	}
 
-	protected void calculate() throws ParserException {
+	@Override
+	protected void calculate() throws GrammarException {
 		transitionGraph = new StateTransitionGraph(getGrammar());
 		addShiftAndGotos();
 		addReduceAndAccept();
 	}
 
-	private void addShiftAndGotos() throws ParserException {
+	private void addShiftAndGotos() throws GrammarException {
 		for (int stateId = 0; stateId < transitionGraph.getStateNumber(); stateId++) {
 			ConcurrentMap<Construction, Integer> transitions = transitionGraph
 					.getTransitions(stateId);
@@ -50,31 +50,27 @@ public class LR0ParserTable extends AbstractParserTable {
 		}
 	}
 
-	private void addReduceAndAccept() throws ParserException {
-		try {
-			Grammar grammar = getGrammar();
-			for (int stateId = 0; stateId < transitionGraph.getStateNumber(); stateId++) {
-				ItemSet itemSet = transitionGraph.getItemSet(stateId);
-				for (Item item : itemSet.getAllItems()) {
-					if (item.getNext() != null) {
-						continue;
-					}
-					if (item.getProduction().equals(
-							grammar.getProductions().getProductions().get(0))) {
-						addActionTerminal(FinishConstruction.getInstance());
-						addAction(stateId, FinishConstruction.getInstance(),
-								new ParserAction(ActionType.ACCEPT, -1));
-					} else {
-						for (Construction construction : getActionTerminals()) {
-							addAction(stateId, construction, new ParserAction(
-									ActionType.REDUCE, grammar.getProductions()
-											.getId(item.getProduction())));
-						}
+	private void addReduceAndAccept() throws GrammarException {
+		Grammar grammar = getGrammar();
+		for (int stateId = 0; stateId < transitionGraph.getStateNumber(); stateId++) {
+			ItemSet itemSet = transitionGraph.getItemSet(stateId);
+			for (Item item : itemSet.getAllItems()) {
+				if (item.getNext() != null) {
+					continue;
+				}
+				if (item.getProduction().equals(
+						grammar.getProductions().getProductions().get(0))) {
+					addActionTerminal(FinishConstruction.getInstance());
+					addAction(stateId, FinishConstruction.getInstance(),
+							new ParserAction(ActionType.ACCEPT, -1));
+				} else {
+					for (Construction construction : getActionTerminals()) {
+						addAction(stateId, construction, new ParserAction(
+								ActionType.REDUCE, grammar.getProductions()
+										.getId(item.getProduction())));
 					}
 				}
 			}
-		} catch (GrammarException e) {
-			throw new ParserException(e.getMessage());
 		}
 	}
 

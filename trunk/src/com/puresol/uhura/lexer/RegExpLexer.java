@@ -93,6 +93,7 @@ public class RegExpLexer implements Lexer {
 				throw new LexerException("No token found for '" + exceptionText
 						+ "' in line " + line + " at position " + pos + ".");
 			}
+			logger.trace("Found token: " + token);
 			if (token.getVisibility() != Visibility.HIDDEN) {
 				tokenStream.add(token);
 				// meta information...
@@ -116,7 +117,7 @@ public class RegExpLexer implements Lexer {
 
 	private Token findNextToken(String text) {
 		Token nextToken = null;
-		for (TokenDefinition definition : definitionSet.getRules()) {
+		for (TokenDefinition definition : definitionSet.getDefinitions()) {
 			Matcher matcher = definition.getPattern().matcher(text);
 			if (!matcher.find()) {
 				continue;

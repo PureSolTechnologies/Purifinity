@@ -13,14 +13,6 @@ public abstract class AbstractConstruction implements Construction {
 		this.type = type;
 	}
 
-	public AbstractConstruction(String name, String text,
-			ConstructionType type, Quantity quantity) {
-		super();
-		this.name = name;
-		this.text = text;
-		this.type = type;
-	}
-
 	/**
 	 * @return the typeId
 	 */

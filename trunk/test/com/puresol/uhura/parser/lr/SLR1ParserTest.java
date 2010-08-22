@@ -12,6 +12,7 @@ import org.junit.Test;
 import com.puresol.uhura.ast.ASTPrinter;
 import com.puresol.uhura.ast.SyntaxTree;
 import com.puresol.uhura.grammar.Grammar;
+import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.TestGrammars;
 import com.puresol.uhura.lexer.Lexer;
 import com.puresol.uhura.lexer.LexerException;
@@ -32,6 +33,9 @@ public class SLR1ParserTest extends TestCase {
 			parser.setTokenStream(lexer.getTokenStream());
 			SyntaxTree syntaxTree = parser.call();
 			new ASTPrinter(System.out).println(syntaxTree);
+		} catch (GrammarException e) {
+			e.printStackTrace();
+			fail("No exception was expected!");
 		} catch (ParserException e) {
 			e.printStackTrace();
 			fail("No exception was expected!");

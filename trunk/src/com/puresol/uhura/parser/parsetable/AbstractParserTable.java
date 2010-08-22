@@ -6,10 +6,10 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.puresol.uhura.grammar.Grammar;
+import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.production.Construction;
 import com.puresol.uhura.grammar.production.ConstructionType;
 import com.puresol.uhura.lexer.Token;
-import com.puresol.uhura.parser.ParserException;
 
 public abstract class AbstractParserTable implements ParserTable {
 
@@ -19,13 +19,13 @@ public abstract class AbstractParserTable implements ParserTable {
 
 	private final Grammar grammar;
 
-	public AbstractParserTable(Grammar grammar) throws ParserException {
+	public AbstractParserTable(Grammar grammar) throws GrammarException {
 		super();
 		this.grammar = grammar;
 		calculate();
 	}
 
-	protected abstract void calculate() throws ParserException;
+	protected abstract void calculate() throws GrammarException;
 
 	protected void addActionTerminal(Construction construction) {
 		actionTerminals.add(construction);
@@ -52,7 +52,7 @@ public abstract class AbstractParserTable implements ParserTable {
 	}
 
 	protected final void addAction(int stateId, Construction construction,
-			ParserAction action) throws ParserException {
+			ParserAction action) throws GrammarException {
 		while (table.size() <= stateId) {
 			table.add(new ConcurrentHashMap<Construction, ParserAction>());
 		}
@@ -64,7 +64,7 @@ public abstract class AbstractParserTable implements ParserTable {
 				text += "construction:     " + construction + "\n";
 				text += "in stack:         " + already.toString() + "\n";
 				text += "to be introduced: " + action.toString();
-				throw new ParserException(text);
+				throw new GrammarException(text);
 			}
 		}
 		table.get(stateId).put(construction, action);
@@ -93,9 +93,17 @@ public abstract class AbstractParserTable implements ParserTable {
 	@Override
 	public final ParserAction getAction(int currentState,
 			Construction construction) {
-		ParserAction action = table.get(currentState).get(construction);
+		if (construction == null) {
+			return new ParserAction(ActionType.ERROR, -1);
+		}
+		ConcurrentMap<Construction, ParserAction> actions = table
+				.get(currentState);
+		if (actions == null) {
+			return new ParserAction(ActionType.ERROR, -1);
+		}
+		ParserAction action = actions.get(construction);
 		if (action == null) {
-			action = new ParserAction(ActionType.ERROR, -1);
+			return new ParserAction(ActionType.ERROR, -1);
 		}
 		return action;
 	}

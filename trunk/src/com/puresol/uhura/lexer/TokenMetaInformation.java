@@ -19,6 +19,9 @@ public class TokenMetaInformation {
 	}
 
 	public TokenMetaData getMetaData(Token token) {
+		if (token == null) {
+			return null;
+		}
 		return metaInformation.get(token);
 	}
 

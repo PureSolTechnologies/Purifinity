@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 
 import com.puresol.uhura.ast.SyntaxTree;
 import com.puresol.uhura.grammar.Grammar;
+import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.production.Construction;
 import com.puresol.uhura.grammar.production.FinishConstruction;
 import com.puresol.uhura.grammar.production.Production;
@@ -29,12 +30,12 @@ public abstract class AbstractTableParser extends AbstractParser {
 	private int stepCounter = 0;
 
 	public AbstractTableParser(Properties options, Grammar grammar)
-			throws ParserException {
+			throws GrammarException {
 		super(options, grammar);
 		calculateParserTable();
 	}
 
-	protected abstract void calculateParserTable() throws ParserException;
+	protected abstract void calculateParserTable() throws GrammarException;
 
 	/**
 	 * @param parserTable
@@ -90,7 +91,7 @@ public abstract class AbstractTableParser extends AbstractParser {
 			} else if (action.getAction() == ActionType.ACCEPT) {
 				break;
 			} else {
-				throw new ParserException("Error during parsing!");
+				throw new ParserException("Error during parsing!", token);
 			}
 		}
 		/*
@@ -104,22 +105,22 @@ public abstract class AbstractTableParser extends AbstractParser {
 		StringBuffer buffer = new StringBuffer();
 		buffer.append("(");
 		buffer.append(stepCounter);
-		buffer.append(")\t|\t");
+		buffer.append(")\t| ");
 		for (Integer stateId : stateStack) {
 			buffer.append(" ");
 			buffer.append(stateId);
 		}
-		buffer.append("\t|\t");
+		buffer.append("\t| ");
 		for (SyntaxTree syntaxTree : treeStack) {
 			buffer.append(" ");
 			buffer.append(syntaxTree.getName());
 		}
-		buffer.append("\t|\t");
+		buffer.append("\t| ");
 		TokenStream tokenStream = getTokenStream();
 		for (int i = streamPosition; i < tokenStream.size(); i++) {
 			buffer.append(" ");
 			buffer.append(tokenStream.get(i));
-			if (streamPosition >= 5) {
+			if (i > streamPosition + 5) {
 				buffer.append("[...]");
 				break;
 			}
