@@ -148,4 +148,76 @@ public class TestGrammars {
 			return null;
 		}
 	}
+
+	public static Grammar getTestLLGrammarFromDragonBook() {
+		try {
+			TokenDefinitionSet tokenDefinitions = new TokenDefinitionSet();
+
+			tokenDefinitions.addDefinition(new TokenDefinition("id", "[0-9.]+",
+					Visibility.VISIBLE));
+			tokenDefinitions.addDefinition(new TokenDefinition("PLUS", "\\+",
+					Visibility.VISIBLE));
+			tokenDefinitions.addDefinition(new TokenDefinition("STAR", "\\*",
+					Visibility.VISIBLE));
+			tokenDefinitions.addDefinition(new TokenDefinition("LPAREN", "\\(",
+					Visibility.VISIBLE));
+			tokenDefinitions.addDefinition(new TokenDefinition("RPAREN", "\\)",
+					Visibility.VISIBLE));
+			tokenDefinitions.addDefinition(new TokenDefinition("WHITESPACE",
+					"[\\s]+", Visibility.VISIBLE));
+
+			ProductionSet productions = new ProductionSet();
+
+			/*
+			 * Here is not production 'Z' included! In LL grammars an explicit
+			 * start element is not needed.
+			 */
+
+			Production production = new Production("E");
+			production.addElement(new ProductionConstruction("T"));
+			production.addElement(new ProductionConstruction("E'"));
+			productions.addRule(production);
+
+			production = new Production("E'");
+			production.addElement(new TextConstruction("+"));
+			production.addElement(new ProductionConstruction("T"));
+			production.addElement(new ProductionConstruction("E'"));
+			productions.addRule(production);
+
+			production = new Production("E'");
+			productions.addRule(production);
+
+			production = new Production("T");
+			production.addElement(new ProductionConstruction("F"));
+			production.addElement(new ProductionConstruction("T'"));
+			productions.addRule(production);
+
+			production = new Production("T'");
+			production.addElement(new TextConstruction("*"));
+			production.addElement(new ProductionConstruction("F"));
+			production.addElement(new ProductionConstruction("T'"));
+			productions.addRule(production);
+
+			production = new Production("T'");
+			productions.addRule(production);
+
+			production = new Production("F");
+			production.addElement(new TextConstruction("("));
+			production.addElement(new ProductionConstruction("E"));
+			production.addElement(new TextConstruction(")"));
+			productions.addRule(production);
+
+			production = new Production("F");
+			production.addElement(new TokenConstruction("id"));
+			productions.addRule(production);
+
+			Grammar grammar = new Grammar();
+			grammar.setTokenDefinitions(tokenDefinitions);
+			grammar.setProductions(productions);
+			return grammar;
+		} catch (GrammarException e) {
+			Assert.fail("No exception was expected!");
+			return null;
+		}
+	}
 }

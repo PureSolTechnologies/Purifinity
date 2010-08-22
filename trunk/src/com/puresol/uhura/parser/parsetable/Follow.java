@@ -50,9 +50,8 @@ public class Follow {
 	 * </pre>
 	 */
 	private void addFinishToStart() {
-		follow.get(
-				grammar.getProductions().getProductions().iterator().next()
-						.getName()).add(FinishConstruction.getInstance());
+		follow.get(grammar.getProductions().getProductions().get(0).getName())
+				.add(FinishConstruction.getInstance());
 	}
 
 	/**
@@ -63,20 +62,22 @@ public class Follow {
 	 */
 	private void addFirsts() {
 		for (Production production : grammar.getProductions().getProductions()) {
-			List<Construction> constructions = production.getConstructions();
-			for (int i = 0; i < constructions.size(); i++) {
-				Construction construction = constructions.get(i);
-				if (construction.isTerminal()) {
-					continue;
-				}
-				if (i + 1 >= constructions.size()) {
-					continue;
-				}
-				for (Construction follower : first
-						.get(constructions.get(i + 1))) {
-					if (!follower.equals(EmptyConstruction.getInstance())) {
-						follow.get(construction.getName()).add(follower);
-					}
+			addFirsts(production);
+		}
+	}
+
+	private void addFirsts(Production production) {
+		List<Construction> constructions = production.getConstructions();
+		for (int i = 0; i < constructions.size() - 1; i++) {
+			Construction construction = constructions.get(i);
+			if (construction.isTerminal()) {
+				continue;
+			}
+			String constructionName = construction.getName();
+			Construction nextConstruction = constructions.get(i + 1);
+			for (Construction follower : first.get(nextConstruction)) {
+				if (!follower.equals(EmptyConstruction.getInstance())) {
+					follow.get(constructionName).add(follower);
 				}
 			}
 		}
@@ -90,46 +91,29 @@ public class Follow {
 	 */
 	private void addFollows() {
 		for (Production production : grammar.getProductions().getProductions()) {
-			List<Construction> constructions = production.getConstructions();
-			for (int i = 0; i < constructions.size(); i++) {
-				Construction construction = constructions.get(i);
-				if (construction.isTerminal()) {
-					continue;
-				}
-				if (i + 1 == constructions.size()) {
-					if (i - 1 <= 0) {
-						follow.get(construction.getName()).add(
-								FinishConstruction.getInstance());
-						continue;
-					}
-					if (follow.get(constructions.get(i - 1)) != null) {
-						for (Construction follows : follow.get(constructions
-								.get(i - 1))) {
-							follow.get(construction.getName()).add(follows);
-						}
-					}
-				} else if (i + 2 == constructions.size()) {
-					Construction beta = constructions.get(i + 1);
-					if (beta.isTerminal()) {
-						continue;
-					}
-					boolean followerIsEmpty = false;
-					for (Production follower : grammar.getProductions().get(
-							beta.getName())) {
-						if (follower.isEmpty()) {
-							followerIsEmpty = true;
-							break;
-						}
-					}
-					if (!followerIsEmpty) {
-						continue;
-					}
-					if (i - 1 > 0) {
-						for (Construction follows : follow.get(constructions
-								.get(i - 1))) {
-							follow.get(construction.getName()).add(follows);
-						}
-					}
+			addFollows(production);
+		}
+	}
+
+	private void addFollows(Production production) {
+		List<Construction> constructions = production.getConstructions();
+		for (int i = 0; i < constructions.size(); i++) {
+			Construction construction = constructions.get(i);
+			if (construction.isTerminal()) {
+				continue;
+			}
+			Set<Construction> productionFollow = follow.get(production
+					.getName());
+			if (productionFollow == null) {
+				continue;
+			}
+			if (i + 1 == constructions.size()) {
+				follow.get(construction.getName()).addAll(productionFollow);
+			} else if (i + 2 == constructions.size()) {
+				Construction nextConstruction = constructions.get(i + 1);
+				if (first.get(nextConstruction).contains(
+						EmptyConstruction.getInstance())) {
+					follow.get(construction.getName()).addAll(productionFollow);
 				}
 			}
 		}

@@ -17,7 +17,6 @@ import com.puresol.uhura.parser.ParserException;
 import com.puresol.uhura.parser.parsetable.ActionType;
 import com.puresol.uhura.parser.parsetable.ParserAction;
 import com.puresol.uhura.parser.parsetable.ParserTable;
-import com.puresol.uhura.parser.parsetable.StateTransitionGraph;
 
 public class SLR1ParserTableTest extends TestCase {
 
@@ -229,9 +228,9 @@ public class SLR1ParserTableTest extends TestCase {
 
 			assertEquals(error, table.getAction(5, lParen));
 			assertEquals(error, table.getAction(5, id));
-			assertEquals(error, table.getAction(5, plus));
+			assertEquals(r3, table.getAction(5, plus));
 			assertEquals(r3, table.getAction(5, star));
-			assertEquals(error, table.getAction(5, rParen));
+			assertEquals(r3, table.getAction(5, rParen));
 			assertEquals(r3, table.getAction(5, finish));
 			assertEquals(error, table.getAction(5, pE));
 			assertEquals(error, table.getAction(5, pT));
@@ -259,9 +258,9 @@ public class SLR1ParserTableTest extends TestCase {
 
 			assertEquals(error, table.getAction(8, lParen));
 			assertEquals(error, table.getAction(8, id));
-			assertEquals(error, table.getAction(8, plus));
-			assertEquals(error, table.getAction(8, star));
-			assertEquals(error, table.getAction(8, rParen));
+			assertEquals(r5, table.getAction(8, plus));
+			assertEquals(r5, table.getAction(8, star));
+			assertEquals(r5, table.getAction(8, rParen));
 			assertEquals(r5, table.getAction(8, finish));
 			assertEquals(error, table.getAction(8, pE));
 			assertEquals(error, table.getAction(8, pT));
@@ -279,9 +278,9 @@ public class SLR1ParserTableTest extends TestCase {
 
 			assertEquals(error, table.getAction(10, lParen));
 			assertEquals(error, table.getAction(10, id));
-			assertEquals(error, table.getAction(10, plus));
+			assertEquals(r4, table.getAction(10, plus));
 			assertEquals(r4, table.getAction(10, star));
-			assertEquals(error, table.getAction(10, rParen));
+			assertEquals(r4, table.getAction(10, rParen));
 			assertEquals(r4, table.getAction(10, finish));
 			assertEquals(error, table.getAction(10, pE));
 			assertEquals(error, table.getAction(10, pT));
@@ -289,9 +288,9 @@ public class SLR1ParserTableTest extends TestCase {
 
 			assertEquals(error, table.getAction(11, lParen));
 			assertEquals(error, table.getAction(11, id));
-			assertEquals(error, table.getAction(11, plus));
-			assertEquals(error, table.getAction(11, star));
-			assertEquals(error, table.getAction(11, rParen));
+			assertEquals(r6, table.getAction(11, plus));
+			assertEquals(r6, table.getAction(11, star));
+			assertEquals(r6, table.getAction(11, rParen));
 			assertEquals(r6, table.getAction(11, finish));
 			assertEquals(error, table.getAction(11, pE));
 			assertEquals(error, table.getAction(11, pT));

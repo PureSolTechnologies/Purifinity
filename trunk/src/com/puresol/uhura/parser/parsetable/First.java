@@ -41,7 +41,7 @@ public class First {
 		while (iterate())
 			;
 	}
-	
+
 	/**
 	 * Initializes the first map for data input.
 	 */
@@ -138,6 +138,12 @@ public class First {
 		return grammar;
 	}
 
+	/**
+	 * This method returns the first set for a specified construction.
+	 * 
+	 * @param x
+	 * @return
+	 */
 	public Set<Construction> get(Construction x) {
 		if (x.isTerminal()) {
 			Set<Construction> result = new CopyOnWriteArraySet<Construction>();
