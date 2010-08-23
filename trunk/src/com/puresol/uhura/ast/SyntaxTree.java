@@ -3,9 +3,13 @@ package com.puresol.uhura.ast;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import com.puresol.trees.Tree;
+import com.puresol.trees.TreeWalker;
+import com.puresol.trees.TreeVisitor;
+import com.puresol.trees.WalkingAction;
 import com.puresol.uhura.lexer.Token;
 
-public class SyntaxTree {
+public class SyntaxTree implements Tree<SyntaxTree> {
 
 	private final String name;
 	private final Token token;
@@ -54,6 +58,7 @@ public class SyntaxTree {
 	/**
 	 * @return the parent
 	 */
+	@Override
 	public SyntaxTree getParent() {
 		return parent;
 	}
@@ -61,6 +66,7 @@ public class SyntaxTree {
 	/**
 	 * @return the children
 	 */
+	@Override
 	public List<SyntaxTree> getChildren() {
 		return children;
 	}
@@ -77,14 +83,14 @@ public class SyntaxTree {
 
 	/**
 	 * @return the children
-	 * @throws TreeException
+	 * @throws ASTException
 	 */
-	public SyntaxTree getChild(String name) throws TreeException {
+	public SyntaxTree getChild(String name) throws ASTException {
 		SyntaxTree result = null;
 		for (SyntaxTree child : children) {
 			if (child.getName().equals(name)) {
 				if (result != null) {
-					throw new TreeException("Child '" + name
+					throw new ASTException("Child '" + name
 							+ "'is multiply defined!");
 				}
 				result = child;
@@ -109,12 +115,12 @@ public class SyntaxTree {
 		}
 	}
 
-	private class TextWalkerClient implements TreeWalkerClient {
+	private class TextWalkerClient implements TreeVisitor<SyntaxTree> {
 
 		private final StringBuffer text = new StringBuffer();
 
 		@Override
-		public WalkingAction trigger(SyntaxTree syntaxTree) {
+		public WalkingAction visit(SyntaxTree syntaxTree) {
 			Token token = syntaxTree.getToken();
 			if (token != null) {
 				text.append(token.getText());
@@ -129,7 +135,7 @@ public class SyntaxTree {
 	}
 
 	public String getText() {
-		TreeWalker treeWalker = new TreeWalker(this);
+		TreeWalker<SyntaxTree> treeWalker = new TreeWalker<SyntaxTree>(this);
 		TextWalkerClient textClient = new TextWalkerClient();
 		treeWalker.walk(textClient);
 		return textClient.getText();

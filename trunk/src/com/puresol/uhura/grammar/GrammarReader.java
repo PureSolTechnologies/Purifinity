@@ -15,7 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.apache.log4j.Logger;
 
 import com.puresol.uhura.ast.SyntaxTree;
-import com.puresol.uhura.ast.TreeException;
+import com.puresol.uhura.ast.ASTException;
 import com.puresol.uhura.grammar.production.ProductionSet;
 import com.puresol.uhura.grammar.token.TokenDefinition;
 import com.puresol.uhura.grammar.token.TokenDefinitionSet;
@@ -111,7 +111,7 @@ public class GrammarReader implements Callable<Boolean> {
 				options.put(name, value);
 			}
 			return options;
-		} catch (TreeException e) {
+		} catch (ASTException e) {
 			logger.fatal(e.getMessage(), e);
 			throw new RuntimeException();
 		}
@@ -140,7 +140,7 @@ public class GrammarReader implements Callable<Boolean> {
 				helpers.put(identifier, tokenParts);
 			}
 			return helpers;
-		} catch (TreeException e) {
+		} catch (ASTException e) {
 			logger.fatal(e.getMessage(), e);
 			throw new RuntimeException();
 		}
@@ -160,7 +160,7 @@ public class GrammarReader implements Callable<Boolean> {
 				helpers.put(identifier, tokenParts);
 			}
 			return helpers;
-		} catch (TreeException e) {
+		} catch (ASTException e) {
 			logger.fatal(e.getMessage(), e);
 			throw new RuntimeException();
 		}

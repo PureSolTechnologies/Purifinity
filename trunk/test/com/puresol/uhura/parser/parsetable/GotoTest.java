@@ -5,8 +5,8 @@ import org.junit.Test;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.TestGrammars;
 import com.puresol.uhura.grammar.production.TokenConstruction;
-import com.puresol.uhura.parser.parsetable.Closure;
-import com.puresol.uhura.parser.parsetable.Goto;
+import com.puresol.uhura.parser.parsetable.Closure0;
+import com.puresol.uhura.parser.parsetable.Goto0;
 import com.puresol.uhura.parser.parsetable.Item;
 import com.puresol.uhura.parser.parsetable.ItemSet;
 
@@ -20,13 +20,13 @@ public class GotoTest extends TestCase {
 		System.out.println("Productions:");
 		grammar.printProductions();
 
-		Closure closure = new Closure(grammar.getProductions());
+		Closure0 closure = new Closure0(grammar.getProductions());
 		System.out.println("Closure0:");
 		Item primItem = new Item(grammar.getProductions().get("Z").get(0), 0);
 		ItemSet itemSet = closure.closure(primItem);
 		System.out.println(itemSet.toString());
 
-		Goto gotoCalc = new Goto(grammar.getProductions());
+		Goto0 gotoCalc = new Goto0(grammar.getProductions());
 		System.out.println("Goto0:");
 
 		itemSet = gotoCalc.goto0(itemSet, new TokenConstruction("b"));

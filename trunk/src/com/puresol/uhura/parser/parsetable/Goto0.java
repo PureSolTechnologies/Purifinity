@@ -6,11 +6,11 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import com.puresol.uhura.grammar.production.Construction;
 import com.puresol.uhura.grammar.production.ProductionSet;
 
-public class Goto {
+public class Goto0 {
 
 	private final ProductionSet productions;
 
-	public Goto(ProductionSet productions) {
+	public Goto0(ProductionSet productions) {
 		this.productions = productions;
 	}
 
@@ -23,7 +23,7 @@ public class Goto {
 	 *         items and all calculated extensions.
 	 */
 	public ItemSet goto0(ItemSet itemSet, Construction x) {
-		Closure closure = new Closure(productions);
+		Closure0 closure = new Closure0(productions);
 		Set<Item> items = new CopyOnWriteArraySet<Item>();
 		for (Item item : itemSet.getNextItems(x)) {
 			items.add(new Item(item.getProduction(), item.getPosition() + 1));

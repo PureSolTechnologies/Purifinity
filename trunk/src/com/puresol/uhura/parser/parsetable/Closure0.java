@@ -4,11 +4,11 @@ import com.puresol.uhura.grammar.production.Construction;
 import com.puresol.uhura.grammar.production.Production;
 import com.puresol.uhura.grammar.production.ProductionSet;
 
-public class Closure {
+public class Closure0 {
 
 	private final ProductionSet productions;
 
-	public Closure(ProductionSet productions) {
+	public Closure0(ProductionSet productions) {
 		this.productions = productions;
 	}
 

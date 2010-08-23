@@ -16,14 +16,14 @@ public class StateTransitionGraph {
 	private final ConcurrentMap<Integer, ConcurrentMap<Construction, Integer>> transitions = new ConcurrentHashMap<Integer, ConcurrentMap<Construction, Integer>>();
 
 	private final Grammar grammar;
-	private final Closure closureCalculator;
-	private final Goto gotoCalculator;
+	private final Closure0 closureCalculator;
+	private final Goto0 gotoCalculator;
 
 	public StateTransitionGraph(Grammar grammar) {
 		super();
 		this.grammar = grammar;
-		closureCalculator = new Closure(grammar.getProductions());
-		gotoCalculator = new Goto(grammar.getProductions());
+		closureCalculator = new Closure0(grammar.getProductions());
+		gotoCalculator = new Goto0(grammar.getProductions());
 		calculate();
 	}
 
