@@ -7,7 +7,7 @@ import com.puresol.uhura.grammar.TestGrammars;
 
 import junit.framework.TestCase;
 
-public class StateTransitionGraphTest extends TestCase {
+public class LR1StateTransitionGraphTest extends TestCase {
 
 	@Test
 	public void testLRPamphletGrammar() {
@@ -16,7 +16,8 @@ public class StateTransitionGraphTest extends TestCase {
 		System.out.println("====================");
 		Grammar grammar = TestGrammars.getTestGrammarFromLR1Pamphlet();
 
-		StateTransitionGraph transitionGraph = new StateTransitionGraph(grammar);
+		LR1StateTransitionGraph transitionGraph = new LR1StateTransitionGraph(
+				grammar);
 		System.out.println(transitionGraph);
 	}
 
@@ -27,7 +28,8 @@ public class StateTransitionGraphTest extends TestCase {
 		System.out.println("====================");
 		Grammar grammar = TestGrammars.getTestGrammarFromDragonBook();
 
-		StateTransitionGraph transitionGraph = new StateTransitionGraph(grammar);
+		LR1StateTransitionGraph transitionGraph = new LR1StateTransitionGraph(
+				grammar);
 		System.out.println(transitionGraph);
 	}
 

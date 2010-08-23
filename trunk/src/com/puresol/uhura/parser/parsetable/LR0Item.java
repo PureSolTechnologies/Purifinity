@@ -10,7 +10,7 @@ import com.puresol.uhura.grammar.production.Production;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class Item {
+public class LR0Item {
 
 	/**
 	 * This is the reference id for the production observed.
@@ -22,7 +22,7 @@ public class Item {
 	 */
 	private int position;
 
-	public Item(Production production, int position) {
+	public LR0Item(Production production, int position) {
 		this.production = production;
 		this.position = position;
 	}
@@ -86,7 +86,7 @@ public class Item {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Item other = (Item) obj;
+		LR0Item other = (LR0Item) obj;
 		if (position != other.position)
 			return false;
 		if (production == null) {

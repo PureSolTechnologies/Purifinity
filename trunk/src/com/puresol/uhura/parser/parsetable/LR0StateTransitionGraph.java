@@ -9,36 +9,37 @@ import java.util.concurrent.ConcurrentMap;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.production.Construction;
 
-public class StateTransitionGraph {
+public class LR0StateTransitionGraph {
 
-	private final ConcurrentMap<ItemSet, Integer> itemSet2Integer = new ConcurrentHashMap<ItemSet, Integer>();
-	private final ConcurrentMap<Integer, ItemSet> itemSets = new ConcurrentHashMap<Integer, ItemSet>();
+	private final ConcurrentMap<LR0ItemSet, Integer> itemSet2Integer = new ConcurrentHashMap<LR0ItemSet, Integer>();
+	private final ConcurrentMap<Integer, LR0ItemSet> itemSets = new ConcurrentHashMap<Integer, LR0ItemSet>();
 	private final ConcurrentMap<Integer, ConcurrentMap<Construction, Integer>> transitions = new ConcurrentHashMap<Integer, ConcurrentMap<Construction, Integer>>();
 
 	private final Grammar grammar;
 	private final Closure0 closureCalculator;
 	private final Goto0 gotoCalculator;
 
-	public StateTransitionGraph(Grammar grammar) {
+	public LR0StateTransitionGraph(Grammar grammar) {
 		super();
 		this.grammar = grammar;
-		closureCalculator = new Closure0(grammar.getProductions());
-		gotoCalculator = new Goto0(grammar.getProductions());
+		closureCalculator = new Closure0(grammar);
+		gotoCalculator = new Goto0(grammar);
 		calculate();
 	}
 
 	private void calculate() {
-		Item startItem = new Item(grammar.getProductions().getProductions()
-				.get(0), 0);
-		ItemSet initialSet = closureCalculator.closure(new ItemSet(startItem));
+		LR0Item startItem = new LR0Item(grammar.getProductions()
+				.getProductions().get(0), 0);
+		LR0ItemSet initialSet = closureCalculator
+				.calc(new LR0ItemSet(startItem));
 		addState(initialSet);
 		calculateRecursively(initialSet);
 	}
 
-	private void calculateRecursively(ItemSet initialSet) {
+	private void calculateRecursively(LR0ItemSet initialSet) {
 		int initialStateId = itemSet2Integer.get(initialSet);
 		for (Construction construction : initialSet.getNextConstructions()) {
-			ItemSet gotoSet = gotoCalculator.goto0(initialSet, construction);
+			LR0ItemSet gotoSet = gotoCalculator.calc(initialSet, construction);
 			if (!itemSets.containsValue(gotoSet)) {
 				int finalStateId = addState(gotoSet);
 				addTransition(initialStateId, construction, finalStateId);
@@ -50,7 +51,7 @@ public class StateTransitionGraph {
 		}
 	}
 
-	private int addState(ItemSet itemSet) {
+	private int addState(LR0ItemSet itemSet) {
 		if (itemSet2Integer.containsKey(itemSet)) {
 			return itemSet2Integer.get(itemSet);
 		}
@@ -69,11 +70,11 @@ public class StateTransitionGraph {
 		transitions.get(initialState).put(construction, finalState);
 	}
 
-	public ItemSet getStartItemSet() {
+	public LR0ItemSet getStartItemSet() {
 		return itemSets.get(0);
 	}
 
-	public ItemSet getItemSet(int stateId) {
+	public LR0ItemSet getItemSet(int stateId) {
 		return itemSets.get(stateId);
 	}
 
@@ -107,7 +108,7 @@ public class StateTransitionGraph {
 			buffer.append("===========\n");
 			buffer.append("State " + stateId + ":\n");
 			buffer.append("===========\n");
-			ItemSet itemSet = itemSets.get(stateId);
+			LR0ItemSet itemSet = itemSets.get(stateId);
 			buffer.append(itemSet.toString());
 
 			ConcurrentMap<Construction, Integer> stateTransitions = transitions

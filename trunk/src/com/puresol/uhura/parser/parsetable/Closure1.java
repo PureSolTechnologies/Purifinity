@@ -3,18 +3,21 @@ package com.puresol.uhura.parser.parsetable;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.production.Construction;
 import com.puresol.uhura.grammar.production.Production;
+import com.puresol.uhura.grammar.production.ProductionConstruction;
 import com.puresol.uhura.grammar.production.ProductionSet;
 
-public class Closure0 {
+public class Closure1 {
 
 	private final ProductionSet productions;
+	private final First first;
 
-	public Closure0(Grammar grammar) {
+	public Closure1(Grammar grammar) {
 		this.productions = grammar.getProductions();
+		this.first = new First(grammar);
 	}
 
-	public LR0ItemSet calc(LR0Item item) {
-		return calc(new LR0ItemSet(item));
+	public LR1ItemSet calc(LR1Item item) {
+		return calc(new LR1ItemSet(item));
 	}
 
 	/**
@@ -25,9 +28,9 @@ public class Closure0 {
 	 * @return A complete set of items is returned containing the parameter
 	 *         items and all calculated extensions.
 	 */
-	public LR0ItemSet calc(LR0ItemSet initialItemSet) {
-		LR0ItemSet itemSet = new LR0ItemSet(initialItemSet);
-		for (LR0Item item : itemSet.getPrimaryItems()) {
+	public LR1ItemSet calc(LR1ItemSet initialItemSet) {
+		LR1ItemSet itemSet = new LR1ItemSet(initialItemSet);
+		for (LR1Item item : itemSet.getPrimaryItems()) {
 			if (!item.hasNext()) {
 				continue;
 			}
@@ -37,8 +40,18 @@ public class Closure0 {
 			}
 			for (Production subProduction : productions.get(nextConstruction
 					.getName())) {
-				subClosure(itemSet, new LR0Item(subProduction, 0));
+				LR1Item newItem = new LR1Item(subProduction, 0);
+				if (item.getPosition() + 1 >= item.getProduction()
+						.getConstructions().size()) {
+					newItem.addAllLookahead(item.getLookahead());
+				} else if (item.getNext().isTerminal()) {
+					newItem.addLookahead(item.getNext());
+				} else {
+					newItem.addAllLookahead(first.get(item.getNext()));
+				}
+				subClosure(itemSet, newItem);
 			}
+
 		}
 		return itemSet;
 	}
@@ -49,7 +62,7 @@ public class Closure0 {
 	 * @param items
 	 * @param item
 	 */
-	private void subClosure(LR0ItemSet items, LR0Item item) {
+	private void subClosure(LR1ItemSet items, LR1Item item) {
 		if (items.containsItem(item)) {
 			return;
 		}
@@ -66,7 +79,16 @@ public class Closure0 {
 		}
 		for (Production subProduction : productions.get(nextConstruction
 				.getName())) {
-			subClosure(items, new LR0Item(subProduction, 0));
+			LR1Item newItem = new LR1Item(subProduction, 0);
+			if (item.getPosition() + 1 >= item.getProduction()
+					.getConstructions().size()) {
+				newItem.addAllLookahead(item.getLookahead());
+			} else if (item.getNext().isTerminal()) {
+				newItem.addLookahead(item.getNext());
+			} else {
+				newItem.addAllLookahead(first.get(item.getNext()));
+			}
+			subClosure(items, newItem);
 		}
 	}
 }

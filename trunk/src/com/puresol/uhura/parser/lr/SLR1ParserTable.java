@@ -12,10 +12,10 @@ import com.puresol.uhura.grammar.production.ProductionConstruction;
 import com.puresol.uhura.parser.parsetable.AbstractParserTable;
 import com.puresol.uhura.parser.parsetable.ActionType;
 import com.puresol.uhura.parser.parsetable.Follow;
-import com.puresol.uhura.parser.parsetable.Item;
-import com.puresol.uhura.parser.parsetable.ItemSet;
+import com.puresol.uhura.parser.parsetable.LR0Item;
+import com.puresol.uhura.parser.parsetable.LR0ItemSet;
 import com.puresol.uhura.parser.parsetable.ParserAction;
-import com.puresol.uhura.parser.parsetable.StateTransitionGraph;
+import com.puresol.uhura.parser.parsetable.LR0StateTransitionGraph;
 
 public class SLR1ParserTable extends AbstractParserTable {
 
@@ -23,7 +23,7 @@ public class SLR1ParserTable extends AbstractParserTable {
 			.getLogger(SLR1ParserTable.class);
 
 	private Follow follow;
-	private StateTransitionGraph transitionGraph;
+	private LR0StateTransitionGraph transitionGraph;
 
 	public SLR1ParserTable(Grammar grammar) throws GrammarException {
 		super(grammar);
@@ -31,7 +31,7 @@ public class SLR1ParserTable extends AbstractParserTable {
 
 	protected void calculate() throws GrammarException {
 		follow = new Follow(getGrammar());
-		transitionGraph = new StateTransitionGraph(getGrammar());
+		transitionGraph = new LR0StateTransitionGraph(getGrammar());
 		if (logger.isTraceEnabled()) {
 			logger.trace(follow.toString());
 			logger.trace(transitionGraph.toString());
@@ -66,12 +66,12 @@ public class SLR1ParserTable extends AbstractParserTable {
 		logger.trace("Add reduce and accept states to table...");
 		Grammar grammar = getGrammar();
 		for (int stateId = 0; stateId < transitionGraph.getStateNumber(); stateId++) {
-			ItemSet itemSet = transitionGraph.getItemSet(stateId);
+			LR0ItemSet itemSet = transitionGraph.getItemSet(stateId);
 			if (logger.isTraceEnabled()) {
 				logger.debug("Process state " + stateId);
 				logger.trace(itemSet);
 			}
-			for (Item item : itemSet.getAllItems()) {
+			for (LR0Item item : itemSet.getAllItems()) {
 				if (item.hasNext()) {
 					continue;
 				}

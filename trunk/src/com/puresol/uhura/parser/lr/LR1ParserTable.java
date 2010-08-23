@@ -2,28 +2,39 @@ package com.puresol.uhura.parser.lr;
 
 import java.util.concurrent.ConcurrentMap;
 
+import org.apache.log4j.Logger;
+
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.production.Construction;
 import com.puresol.uhura.grammar.production.FinishConstruction;
+import com.puresol.uhura.grammar.production.ProductionConstruction;
 import com.puresol.uhura.parser.parsetable.AbstractParserTable;
 import com.puresol.uhura.parser.parsetable.ActionType;
-import com.puresol.uhura.parser.parsetable.LR0Item;
-import com.puresol.uhura.parser.parsetable.LR0ItemSet;
+import com.puresol.uhura.parser.parsetable.Follow;
+import com.puresol.uhura.parser.parsetable.LR1Item;
+import com.puresol.uhura.parser.parsetable.LR1ItemSet;
+import com.puresol.uhura.parser.parsetable.LR1StateTransitionGraph;
 import com.puresol.uhura.parser.parsetable.ParserAction;
-import com.puresol.uhura.parser.parsetable.LR0StateTransitionGraph;
 
-public class LR0ParserTable extends AbstractParserTable {
+public class LR1ParserTable extends AbstractParserTable {
 
-	private LR0StateTransitionGraph transitionGraph;
+	private static final Logger logger = Logger.getLogger(LR1ParserTable.class);
 
-	public LR0ParserTable(Grammar grammar) throws GrammarException {
+	private Follow follow;
+	private LR1StateTransitionGraph transitionGraph;
+
+	public LR1ParserTable(Grammar grammar) throws GrammarException {
 		super(grammar);
 	}
 
-	@Override
 	protected void calculate() throws GrammarException {
-		transitionGraph = new LR0StateTransitionGraph(getGrammar());
+		follow = new Follow(getGrammar());
+		transitionGraph = new LR1StateTransitionGraph(getGrammar());
+		if (logger.isTraceEnabled()) {
+			logger.trace(follow.toString());
+			logger.trace(transitionGraph.toString());
+		}
 		addShiftAndGotos();
 		addReduceAndAccept();
 	}
@@ -51,20 +62,32 @@ public class LR0ParserTable extends AbstractParserTable {
 	}
 
 	private void addReduceAndAccept() throws GrammarException {
+		logger.trace("Add reduce and accept states to table...");
 		Grammar grammar = getGrammar();
 		for (int stateId = 0; stateId < transitionGraph.getStateNumber(); stateId++) {
-			LR0ItemSet itemSet = transitionGraph.getItemSet(stateId);
-			for (LR0Item item : itemSet.getAllItems()) {
-				if (item.getNext() != null) {
+			LR1ItemSet itemSet = transitionGraph.getItemSet(stateId);
+			if (logger.isTraceEnabled()) {
+				logger.debug("Process state " + stateId);
+				logger.trace(itemSet);
+			}
+			for (LR1Item item : itemSet.getAllItems()) {
+				if (item.hasNext()) {
 					continue;
+				}
+				if (logger.isTraceEnabled()) {
+					logger.trace(item);
 				}
 				if (item.getProduction().equals(
 						grammar.getProductions().getProductions().get(0))) {
+					logger.trace("Found state 'accept' action.");
 					addActionTerminal(FinishConstruction.getInstance());
 					addAction(stateId, FinishConstruction.getInstance(),
 							new ParserAction(ActionType.ACCEPT, -1));
-				} else {
-					for (Construction construction : getActionTerminals()) {
+				} else if (!item.getProduction().getName()
+						.equals(grammar.getProductions().get(0).getName())) {
+					for (Construction construction : follow
+							.get(new ProductionConstruction(item
+									.getProduction().getName()))) {
 						addAction(stateId, construction, new ParserAction(
 								ActionType.REDUCE, grammar.getProductions()
 										.getId(item.getProduction())));

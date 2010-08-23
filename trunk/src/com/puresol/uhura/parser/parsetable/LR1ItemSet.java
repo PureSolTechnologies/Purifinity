@@ -7,28 +7,28 @@ import java.util.concurrent.CopyOnWriteArraySet;
 
 import com.puresol.uhura.grammar.production.Construction;
 
-public class ItemSet {
+public class LR1ItemSet {
 
-	private final Set<Item> allItems = new CopyOnWriteArraySet<Item>();
-	private final Set<Item> primaryItems = new CopyOnWriteArraySet<Item>();
-	private final Set<Item> addedItems = new CopyOnWriteArraySet<Item>();
+	private final Set<LR1Item> allItems = new CopyOnWriteArraySet<LR1Item>();
+	private final Set<LR1Item> primaryItems = new CopyOnWriteArraySet<LR1Item>();
+	private final Set<LR1Item> addedItems = new CopyOnWriteArraySet<LR1Item>();
 
-	public ItemSet(Item primaryItem) {
+	public LR1ItemSet(LR1Item primaryItem) {
 		this.primaryItems.add(primaryItem);
 		this.allItems.add(primaryItem);
 	}
 
-	public ItemSet(Set<Item> primaryItems) {
+	public LR1ItemSet(Set<LR1Item> primaryItems) {
 		this.primaryItems.addAll(primaryItems);
 		this.allItems.addAll(primaryItems);
 	}
 
-	public ItemSet(ItemSet itemSet) {
+	public LR1ItemSet(LR1ItemSet itemSet) {
 		this.primaryItems.addAll(itemSet.getAllItems());
 		this.allItems.addAll(itemSet.getAllItems());
 	}
 
-	public boolean containsItem(Item item) {
+	public boolean containsItem(LR1Item item) {
 		if (primaryItems.contains(item)) {
 			return true;
 		}
@@ -38,25 +38,25 @@ public class ItemSet {
 		return false;
 	}
 
-	public void addAddedItems(Set<Item> items) {
+	public void addAddedItems(Set<LR1Item> items) {
 		addedItems.addAll(items);
 		allItems.addAll(items);
 	}
 
-	public void addItem(Item item) {
+	public void addItem(LR1Item item) {
 		addedItems.add(item);
 		allItems.add(item);
 	}
 
-	public Set<Item> getAllItems() {
+	public Set<LR1Item> getAllItems() {
 		return allItems;
 	}
 
-	public Set<Item> getPrimaryItems() {
+	public Set<LR1Item> getPrimaryItems() {
 		return primaryItems;
 	}
 
-	public Set<Item> getAddedItems() {
+	public Set<LR1Item> getAddedItems() {
 		return addedItems;
 	}
 
@@ -68,13 +68,13 @@ public class ItemSet {
 	 */
 	public List<Construction> getNextConstructions() {
 		List<Construction> constructions = new ArrayList<Construction>();
-		for (Item item : primaryItems) {
+		for (LR1Item item : primaryItems) {
 			Construction element = item.getNext();
 			if (element != null) {
 				constructions.add(element);
 			}
 		}
-		for (Item item : addedItems) {
+		for (LR1Item item : addedItems) {
 			Construction element = item.getNext();
 			if (element != null) {
 				constructions.add(element);
@@ -90,9 +90,9 @@ public class ItemSet {
 	 * @param construction
 	 * @return
 	 */
-	public List<Item> getNextItems(Construction construction) {
-		List<Item> items = new ArrayList<Item>();
-		for (Item item : primaryItems) {
+	public List<LR1Item> getNextItems(Construction construction) {
+		List<LR1Item> items = new ArrayList<LR1Item>();
+		for (LR1Item item : primaryItems) {
 			Construction element = item.getNext();
 			if (element == null) {
 				continue;
@@ -101,7 +101,7 @@ public class ItemSet {
 				items.add(item);
 			}
 		}
-		for (Item item : addedItems) {
+		for (LR1Item item : addedItems) {
 			Construction element = item.getNext();
 			if (element == null) {
 				continue;
@@ -116,12 +116,12 @@ public class ItemSet {
 	@Override
 	public String toString() {
 		StringBuffer buffer = new StringBuffer();
-		for (Item item : primaryItems) {
+		for (LR1Item item : primaryItems) {
 			buffer.append("  ");
 			buffer.append(item);
 			buffer.append("\n");
 		}
-		for (Item item : addedItems) {
+		for (LR1Item item : addedItems) {
 			buffer.append("+ ");
 			buffer.append(item);
 			buffer.append("\n");
@@ -139,7 +139,11 @@ public class ItemSet {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result
+				+ ((addedItems == null) ? 0 : addedItems.hashCode());
+		result = prime * result
 				+ ((allItems == null) ? 0 : allItems.hashCode());
+		result = prime * result
+				+ ((primaryItems == null) ? 0 : primaryItems.hashCode());
 		return result;
 	}
 
@@ -156,13 +160,22 @@ public class ItemSet {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ItemSet other = (ItemSet) obj;
+		LR1ItemSet other = (LR1ItemSet) obj;
+		if (addedItems == null) {
+			if (other.addedItems != null)
+				return false;
+		} else if (!addedItems.equals(other.addedItems))
+			return false;
 		if (allItems == null) {
 			if (other.allItems != null)
 				return false;
 		} else if (!allItems.equals(other.allItems))
 			return false;
+		if (primaryItems == null) {
+			if (other.primaryItems != null)
+				return false;
+		} else if (!primaryItems.equals(other.primaryItems))
+			return false;
 		return true;
 	}
-
 }
