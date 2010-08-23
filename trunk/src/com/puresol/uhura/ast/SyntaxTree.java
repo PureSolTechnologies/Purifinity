@@ -38,6 +38,11 @@ public class SyntaxTree {
 		return token;
 	}
 
+	@Override
+	public String toString() {
+		return name + " " + token;
+	}
+
 	/**
 	 * @param parent
 	 *            the parent to set
@@ -70,8 +75,63 @@ public class SyntaxTree {
 		child.setParent(this);
 	}
 
-	@Override
-	public String toString() {
-		return name + " " + token;
+	/**
+	 * @return the children
+	 * @throws TreeException
+	 */
+	public SyntaxTree getChild(String name) throws TreeException {
+		SyntaxTree result = null;
+		for (SyntaxTree child : children) {
+			if (child.getName().equals(name)) {
+				if (result != null) {
+					throw new TreeException("Child '" + name
+							+ "'is multiply defined!");
+				}
+				result = child;
+			}
+		}
+		return result;
+	}
+
+	public List<SyntaxTree> getSubTrees(String name) {
+		List<SyntaxTree> subTrees = new CopyOnWriteArrayList<SyntaxTree>();
+		getSubTrees(this, subTrees, name);
+		return subTrees;
+	}
+
+	private void getSubTrees(SyntaxTree branch, List<SyntaxTree> subTrees,
+			String name) {
+		if (branch.getName().equals(name)) {
+			subTrees.add(branch);
+		}
+		for (SyntaxTree subBranch : branch.getChildren()) {
+			getSubTrees(subBranch, subTrees, name);
+		}
+	}
+
+	private class TextWalkerClient implements TreeWalkerClient {
+
+		private final StringBuffer text = new StringBuffer();
+
+		@Override
+		public WalkingAction trigger(SyntaxTree syntaxTree) {
+			Token token = syntaxTree.getToken();
+			if (token != null) {
+				text.append(token.getText());
+			}
+			return null;
+		}
+
+		public String getText() {
+			return text.toString();
+		}
+
+	}
+
+	public String getText() {
+		TreeWalker treeWalker = new TreeWalker(this);
+		TextWalkerClient textClient = new TextWalkerClient();
+		treeWalker.walk(textClient);
+		return textClient.getText();
 	}
 }

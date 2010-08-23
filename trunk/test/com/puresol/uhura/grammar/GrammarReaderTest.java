@@ -24,7 +24,13 @@ public class GrammarReaderTest extends TestCase {
 			SyntaxTree ast = reader.getSyntaxTree();
 			ASTPrinter printer = new ASTPrinter(System.out);
 			printer.println(ast);
+			Grammar grammar = reader.getGrammar();
+			grammar.printTokenDefinitions();
+			grammar.printProductions();
 		} catch (IOException e) {
+			e.printStackTrace();
+			fail("No exception was expected!");
+		} catch (GrammarException e) {
 			e.printStackTrace();
 			fail("No exception was expected!");
 		}

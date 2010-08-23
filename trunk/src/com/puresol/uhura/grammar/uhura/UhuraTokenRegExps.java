@@ -170,8 +170,12 @@ public class UhuraTokenRegExps {
 	 */
 	public static final String STRING_CHARACTER = "([^\"\\\\]|"
 			+ ESCAPE_SEQUENCE + ")";
+	public static final String STRING_CHARACTER_SINGLE_QUOTED = "([^'\\\\]|"
+			+ ESCAPE_SEQUENCE + ")";
 	public static final String STRING_CHARACTERS = STRING_CHARACTER + "+";
-	public static final String STRING_LITERAL = "\"(" + STRING_CHARACTERS
-			+ ")?\"";
+	public static final String STRING_CHARACTERS_SINGLE_QUOTED = STRING_CHARACTER_SINGLE_QUOTED
+			+ "+";
+	public static final String STRING_LITERAL = "(\"(" + STRING_CHARACTERS
+			+ ")?\"|'(" + STRING_CHARACTERS_SINGLE_QUOTED + ")?')";
 
 }

@@ -55,4 +55,8 @@ public class TokenDefinition {
 		return visibility;
 	}
 
+	@Override
+	public String toString() {
+		return getName() + ": '" + getPattern() + "' (" + visibility + ")";
+	}
 }
