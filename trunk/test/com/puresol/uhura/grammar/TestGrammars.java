@@ -141,6 +141,42 @@ public class TestGrammars {
 		}
 	}
 
+	public static Grammar getLR1TestGrammarFromDragonBook() {
+		try {
+			TokenDefinitionSet tokenDefinitions = new TokenDefinitionSet();
+
+			tokenDefinitions.addDefinition(new TokenDefinition("c", "c",
+					Visibility.VISIBLE));
+			tokenDefinitions.addDefinition(new TokenDefinition("d", "d",
+					Visibility.VISIBLE));
+
+			ProductionSet productions = new ProductionSet();
+
+			Production production = new Production("Z");
+			production.addElement(new ProductionConstruction("S"));
+			productions.addRule(production);
+
+			production = new Production("S");
+			production.addElement(new ProductionConstruction("C"));
+			production.addElement(new ProductionConstruction("C"));
+			productions.addRule(production);
+
+			production = new Production("C");
+			production.addElement(new TokenConstruction("c"));
+			production.addElement(new ProductionConstruction("C"));
+			productions.addRule(production);
+
+			production = new Production("C");
+			production.addElement(new TokenConstruction("d"));
+			productions.addRule(production);
+			return new Grammar(new Properties(), tokenDefinitions, productions);
+		} catch (GrammarException e) {
+			e.printStackTrace();
+			Assert.fail("No exception was expected!");
+			return null;
+		}
+	}
+
 	public static Grammar getTestLLGrammarFromDragonBook() {
 		try {
 			TokenDefinitionSet tokenDefinitions = new TokenDefinitionSet();

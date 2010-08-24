@@ -10,7 +10,7 @@ import com.puresol.uhura.grammar.production.Production;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class LR0Item {
+public class LR0Item implements Item {
 
 	/**
 	 * This is the reference id for the production observed.
@@ -30,18 +30,22 @@ public class LR0Item {
 	/**
 	 * @return the productionId
 	 */
+	@Override
 	public Production getProduction() {
 		return production;
 	}
 
+	@Override
 	public void incPosition() {
 		position++;
 	}
 
+	@Override
 	public int getPosition() {
 		return position;
 	}
 
+	@Override
 	public Construction getNext() {
 		if (position >= production.getConstructions().size()) {
 			return null;
@@ -49,10 +53,12 @@ public class LR0Item {
 		return production.getConstructions().get(position);
 	}
 
+	@Override
 	public boolean hasNext() {
 		return (position < production.getConstructions().size());
 	}
 
+	@Override
 	public Construction get2ndNext() {
 		if (position + 1 >= production.getConstructions().size()) {
 			return null;
@@ -60,6 +66,7 @@ public class LR0Item {
 		return production.getConstructions().get(position + 1);
 	}
 
+	@Override
 	public boolean has2ndNext() {
 		return (position + 1 < production.getConstructions().size());
 	}

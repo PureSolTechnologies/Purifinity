@@ -26,7 +26,7 @@ public class LR1StateTransitionGraphTest extends TestCase {
 		System.out.println("====================");
 		System.out.println("Dragon Book Grammar:");
 		System.out.println("====================");
-		Grammar grammar = TestGrammars.getTestGrammarFromDragonBook();
+		Grammar grammar = TestGrammars.getLR1TestGrammarFromDragonBook();
 
 		LR1StateTransitionGraph transitionGraph = new LR1StateTransitionGraph(
 				grammar);

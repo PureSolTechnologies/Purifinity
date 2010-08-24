@@ -52,7 +52,8 @@ public class LR1ParserTest extends TestCase {
 			Grammar grammar = TestGrammars.getTestGrammarFromDragonBook();
 			Parser parser = new LR1Parser(new Properties(), grammar);
 			Lexer lexer = new RegExpLexer(new Properties());
-			lexer.scan(new StringReader("((1*(2+3)+4*5)+6)*7"), grammar.getTokenDefinitions());
+			lexer.scan(new StringReader("((1*(2+3)+4*5)+6)*7"),
+					grammar.getTokenDefinitions());
 			parser.setTokenStream(lexer.getTokenStream());
 			SyntaxTree syntaxTree = parser.call();
 			new ASTPrinter(System.out).println(syntaxTree);
@@ -67,5 +68,5 @@ public class LR1ParserTest extends TestCase {
 			fail("No exception was expected!");
 		}
 	}
-	
+
 }
