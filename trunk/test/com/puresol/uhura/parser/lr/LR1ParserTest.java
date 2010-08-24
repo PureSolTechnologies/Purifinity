@@ -20,14 +20,14 @@ import com.puresol.uhura.lexer.RegExpLexer;
 import com.puresol.uhura.parser.Parser;
 import com.puresol.uhura.parser.ParserException;
 
-public class SLR1ParserTest extends TestCase {
+public class LR1ParserTest extends TestCase {
 
 	@Test
 	public void testSimple() {
 		try {
 			Logger.getRootLogger().setLevel(Level.TRACE);
 			Grammar grammar = TestGrammars.getTestGrammarFromDragonBook();
-			Parser parser = new SLR1Parser(new Properties(), grammar);
+			Parser parser = new LR1Parser(new Properties(), grammar);
 			Lexer lexer = new RegExpLexer(new Properties());
 			lexer.scan(new StringReader("1*2+3"), grammar.getTokenDefinitions());
 			parser.setTokenStream(lexer.getTokenStream());
@@ -50,10 +50,9 @@ public class SLR1ParserTest extends TestCase {
 		try {
 			Logger.getRootLogger().setLevel(Level.TRACE);
 			Grammar grammar = TestGrammars.getTestGrammarFromDragonBook();
-			Parser parser = new SLR1Parser(new Properties(), grammar);
+			Parser parser = new LR1Parser(new Properties(), grammar);
 			Lexer lexer = new RegExpLexer(new Properties());
-			lexer.scan(new StringReader("((1*(2+3)+4*5)+6)*7"),
-					grammar.getTokenDefinitions());
+			lexer.scan(new StringReader("((1*(2+3)+4*5)+6)*7"), grammar.getTokenDefinitions());
 			parser.setTokenStream(lexer.getTokenStream());
 			SyntaxTree syntaxTree = parser.call();
 			new ASTPrinter(System.out).println(syntaxTree);
@@ -68,5 +67,5 @@ public class SLR1ParserTest extends TestCase {
 			fail("No exception was expected!");
 		}
 	}
-
+	
 }

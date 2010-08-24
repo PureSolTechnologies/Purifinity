@@ -3,7 +3,6 @@ package com.puresol.uhura.parser.parsetable;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.production.Construction;
 import com.puresol.uhura.grammar.production.Production;
-import com.puresol.uhura.grammar.production.ProductionConstruction;
 import com.puresol.uhura.grammar.production.ProductionSet;
 
 public class Closure1 {
@@ -38,16 +37,16 @@ public class Closure1 {
 			if (nextConstruction.isTerminal()) {
 				continue;
 			}
+			Construction secondNextConstruction = item.get2ndNext();
 			for (Production subProduction : productions.get(nextConstruction
 					.getName())) {
 				LR1Item newItem = new LR1Item(subProduction, 0);
-				if (item.getPosition() + 1 >= item.getProduction()
-						.getConstructions().size()) {
+				if (secondNextConstruction == null) {
 					newItem.addAllLookahead(item.getLookahead());
-				} else if (item.getNext().isTerminal()) {
-					newItem.addLookahead(item.getNext());
+				} else if (secondNextConstruction.isTerminal()) {
+					newItem.addLookahead(secondNextConstruction);
 				} else {
-					newItem.addAllLookahead(first.get(item.getNext()));
+					newItem.addAllLookahead(first.get(secondNextConstruction));
 				}
 				subClosure(itemSet, newItem);
 			}
@@ -71,22 +70,19 @@ public class Closure1 {
 			return;
 		}
 		Construction nextConstruction = item.getNext();
-		if (nextConstruction == null) {
-			throw new RuntimeException("This should not happen!");
-		}
 		if (nextConstruction.isTerminal()) {
 			return;
 		}
+		Construction secondNextConstruction = item.get2ndNext();
 		for (Production subProduction : productions.get(nextConstruction
 				.getName())) {
 			LR1Item newItem = new LR1Item(subProduction, 0);
-			if (item.getPosition() + 1 >= item.getProduction()
-					.getConstructions().size()) {
+			if (secondNextConstruction == null) {
 				newItem.addAllLookahead(item.getLookahead());
-			} else if (item.getNext().isTerminal()) {
-				newItem.addLookahead(item.getNext());
+			} else if (secondNextConstruction.isTerminal()) {
+				newItem.addLookahead(secondNextConstruction);
 			} else {
-				newItem.addAllLookahead(first.get(item.getNext()));
+				newItem.addAllLookahead(first.get(secondNextConstruction));
 			}
 			subClosure(items, newItem);
 		}

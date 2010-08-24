@@ -58,9 +58,6 @@ public class Closure0 {
 			return;
 		}
 		Construction nextConstruction = item.getNext();
-		if (nextConstruction == null) {
-			throw new RuntimeException("This should not happen!");
-		}
 		if (nextConstruction.isTerminal()) {
 			return;
 		}

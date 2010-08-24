@@ -55,4 +55,13 @@ public class ProductionSet {
 		throw new GrammarException("Could not find production '" + production
 				+ "'!");
 	}
+
+	public boolean hasEmptyDerivation(String name) {
+		for (Production production : get(name)) {
+			if (production.getConstructions().size() == 0) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

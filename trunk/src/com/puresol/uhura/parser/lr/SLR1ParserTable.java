@@ -84,8 +84,7 @@ public class SLR1ParserTable extends AbstractParserTable {
 					addActionTerminal(FinishConstruction.getInstance());
 					addAction(stateId, FinishConstruction.getInstance(),
 							new ParserAction(ActionType.ACCEPT, -1));
-				} else if (!item.getProduction().getName()
-						.equals(grammar.getProductions().get(0).getName())) {
+				} else {
 					for (Construction construction : follow
 							.get(new ProductionConstruction(item
 									.getProduction().getName()))) {

@@ -53,6 +53,17 @@ public class LR0Item {
 		return (position < production.getConstructions().size());
 	}
 
+	public Construction get2ndNext() {
+		if (position + 1 >= production.getConstructions().size()) {
+			return null;
+		}
+		return production.getConstructions().get(position + 1);
+	}
+
+	public boolean has2ndNext() {
+		return (position + 1 < production.getConstructions().size());
+	}
+
 	@Override
 	public String toString() {
 		return production.toShortString(position);

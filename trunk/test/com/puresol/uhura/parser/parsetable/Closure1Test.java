@@ -34,15 +34,37 @@ public class Closure1Test extends TestCase {
 
 		Set<LR1Item> addedItems = itemSet.getAddedItems();
 		assertNotNull(addedItems);
-		assertEquals(2, addedItems.size());
+		assertEquals(4, addedItems.size());
 		Iterator<LR1Item> iterator = addedItems.iterator();
+
 		LR1Item item1 = iterator.next();
 		assertEquals(0, item1.getPosition());
 		assertEquals(grammar.getProductions().getProductions().get(1),
 				item1.getProduction());
+		assertEquals(1, item1.getLookahead().size());
+		assertEquals(FinishConstruction.getInstance(), item1.getLookahead()
+				.iterator().next());
+
 		LR1Item item2 = iterator.next();
 		assertEquals(0, item2.getPosition());
-		assertEquals(grammar.getProductions().getProductions().get(2),
+		assertEquals(grammar.getProductions().getProductions().get(1),
 				item2.getProduction());
+		assertEquals(1, item2.getLookahead().size());
+		assertEquals("b", item2.getLookahead().iterator().next().getName());
+
+		LR1Item item3 = iterator.next();
+		assertEquals(0, item3.getPosition());
+		assertEquals(grammar.getProductions().getProductions().get(2),
+				item3.getProduction());
+		assertEquals(1, item3.getLookahead().size());
+		assertEquals("b", item3.getLookahead().iterator().next().getName());
+
+		LR1Item item4 = iterator.next();
+		assertEquals(0, item4.getPosition());
+		assertEquals(grammar.getProductions().getProductions().get(2),
+				item4.getProduction());
+		assertEquals(1, item4.getLookahead().size());
+		assertEquals(FinishConstruction.getInstance(), item4.getLookahead()
+				.iterator().next());
 	}
 }

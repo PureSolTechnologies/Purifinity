@@ -8,7 +8,6 @@ import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.production.Construction;
 import com.puresol.uhura.grammar.production.FinishConstruction;
-import com.puresol.uhura.grammar.production.ProductionConstruction;
 import com.puresol.uhura.parser.parsetable.AbstractParserTable;
 import com.puresol.uhura.parser.parsetable.ActionType;
 import com.puresol.uhura.parser.parsetable.Follow;
@@ -83,12 +82,9 @@ public class LR1ParserTable extends AbstractParserTable {
 					addActionTerminal(FinishConstruction.getInstance());
 					addAction(stateId, FinishConstruction.getInstance(),
 							new ParserAction(ActionType.ACCEPT, -1));
-				} else if (!item.getProduction().getName()
-						.equals(grammar.getProductions().get(0).getName())) {
-					for (Construction construction : follow
-							.get(new ProductionConstruction(item
-									.getProduction().getName()))) {
-						addAction(stateId, construction, new ParserAction(
+				} else {
+					for (Construction lookahead : item.getLookahead()) {
+						addAction(stateId, lookahead, new ParserAction(
 								ActionType.REDUCE, grammar.getProductions()
 										.getId(item.getProduction())));
 					}

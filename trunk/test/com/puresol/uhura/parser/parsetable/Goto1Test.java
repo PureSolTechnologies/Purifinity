@@ -31,7 +31,7 @@ public class Goto1Test extends TestCase {
 		itemSet = gotoCalc.calc(itemSet, new TokenConstruction("b"));
 		System.out.println(itemSet.toString());
 
-		assertEquals(1, itemSet.getPrimaryItems().size());
+		assertEquals(2, itemSet.getPrimaryItems().size());
 		assertEquals(3, itemSet.getAddedItems().size());
 	}
 }
