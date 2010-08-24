@@ -2,7 +2,7 @@ package com.puresol.uhura.parser;
 
 import java.util.concurrent.Callable;
 
-import com.puresol.uhura.ast.SyntaxTree;
+import com.puresol.uhura.ast.AST;
 import com.puresol.uhura.lexer.TokenStream;
 
 /**
@@ -12,11 +12,11 @@ import com.puresol.uhura.lexer.TokenStream;
  * @author Rick-Rainer Ludwig
  * 
  */
-public interface Parser extends Callable<SyntaxTree> {
+public interface Parser extends Callable<AST> {
 
 	public void setTokenStream(TokenStream tokenStream);
 
 	@Override
-	public SyntaxTree call() throws ParserException;
+	public AST call() throws ParserException;
 
 }

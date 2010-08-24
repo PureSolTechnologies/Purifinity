@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.log4j.Logger;
 
-import com.puresol.uhura.ast.SyntaxTree;
+import com.puresol.uhura.ast.AST;
 import com.puresol.uhura.ast.ASTException;
 import com.puresol.uhura.grammar.production.ProductionSet;
 import com.puresol.uhura.grammar.token.TokenDefinition;
@@ -35,7 +35,7 @@ public class GrammarReader implements Callable<Boolean> {
 	private final Grammar uhuraGrammar;
 	private Grammar readGrammar = null;
 	private final Reader reader;
-	private SyntaxTree syntaxTree = null;
+	private AST syntaxTree = null;
 
 	public GrammarReader(File file) throws IOException {
 		this(new FileInputStream(file));
@@ -76,7 +76,7 @@ public class GrammarReader implements Callable<Boolean> {
 		}
 	}
 
-	private SyntaxTree parse(TokenStream tokenStream) throws ParserException {
+	private AST parse(TokenStream tokenStream) throws ParserException {
 		try {
 			Parser parser = new SLR1Parser(new Properties(), uhuraGrammar);
 			parser.setTokenStream(tokenStream);
@@ -96,11 +96,11 @@ public class GrammarReader implements Callable<Boolean> {
 
 	private Properties convertToOptions() {
 		try {
-			SyntaxTree optionsTree = syntaxTree.getChild("Options");
-			List<SyntaxTree> grammarOptions = optionsTree
+			AST optionsTree = syntaxTree.getChild("Options");
+			List<AST> grammarOptions = optionsTree
 					.getSubTrees("GrammarOption");
 			Properties options = new Properties();
-			for (SyntaxTree grammarOption : grammarOptions) {
+			for (AST grammarOption : grammarOptions) {
 				String name = grammarOption.getSubTrees("PropertiesIdentifier")
 						.get(0).getText();
 				String value = grammarOption.getSubTrees("Literal").get(0)
@@ -119,23 +119,23 @@ public class GrammarReader implements Callable<Boolean> {
 
 	private TokenDefinitionSet convertToTokenDefinitionSet()
 			throws GrammarException {
-		Map<String, List<SyntaxTree>> helpers = getHelpers();
-		Map<String, List<SyntaxTree>> tokens = getTokens();
+		Map<String, List<AST>> helpers = getHelpers();
+		Map<String, List<AST>> tokens = getTokens();
 		TokenDefinitionSet tokenDefinitions = convertToTokenDefinitionSet(
 				helpers, tokens);
 		return tokenDefinitions;
 	}
 
-	private Map<String, List<SyntaxTree>> getHelpers() {
+	private Map<String, List<AST>> getHelpers() {
 		try {
-			Map<String, List<SyntaxTree>> helpers = new ConcurrentHashMap<String, List<SyntaxTree>>();
-			SyntaxTree helperTree = syntaxTree.getChild("Helper");
-			List<SyntaxTree> helperDefinitions = helperTree
+			Map<String, List<AST>> helpers = new ConcurrentHashMap<String, List<AST>>();
+			AST helperTree = syntaxTree.getChild("Helper");
+			List<AST> helperDefinitions = helperTree
 					.getSubTrees("HelperDefinition");
-			for (SyntaxTree helperDefinition : helperDefinitions) {
+			for (AST helperDefinition : helperDefinitions) {
 				String identifier = helperDefinition.getSubTrees("IDENTIFIER")
 						.get(0).getText();
-				List<SyntaxTree> tokenParts = helperDefinition
+				List<AST> tokenParts = helperDefinition
 						.getSubTrees("TokenPart");
 				helpers.put(identifier, tokenParts);
 			}
@@ -146,16 +146,16 @@ public class GrammarReader implements Callable<Boolean> {
 		}
 	}
 
-	private Map<String, List<SyntaxTree>> getTokens() {
+	private Map<String, List<AST>> getTokens() {
 		try {
-			Map<String, List<SyntaxTree>> helpers = new ConcurrentHashMap<String, List<SyntaxTree>>();
-			SyntaxTree helperTree = syntaxTree.getChild("Tokens");
-			List<SyntaxTree> helperDefinitions = helperTree
+			Map<String, List<AST>> helpers = new ConcurrentHashMap<String, List<AST>>();
+			AST helperTree = syntaxTree.getChild("Tokens");
+			List<AST> helperDefinitions = helperTree
 					.getSubTrees("TokenDefinition");
-			for (SyntaxTree helperDefinition : helperDefinitions) {
+			for (AST helperDefinition : helperDefinitions) {
 				String identifier = helperDefinition.getSubTrees("IDENTIFIER")
 						.get(0).getText();
-				List<SyntaxTree> tokenParts = helperDefinition
+				List<AST> tokenParts = helperDefinition
 						.getSubTrees("TokenPart");
 				helpers.put(identifier, tokenParts);
 			}
@@ -167,8 +167,8 @@ public class GrammarReader implements Callable<Boolean> {
 	}
 
 	private TokenDefinitionSet convertToTokenDefinitionSet(
-			Map<String, List<SyntaxTree>> helpers,
-			Map<String, List<SyntaxTree>> tokens) throws GrammarException {
+			Map<String, List<AST>> helpers,
+			Map<String, List<AST>> tokens) throws GrammarException {
 		TokenDefinitionSet tokenDefinitions = new TokenDefinitionSet();
 		for (String tokenName : tokens.keySet()) {
 			TokenDefinition tokenDefinition = getTokenDefinition(tokenName,
@@ -179,14 +179,14 @@ public class GrammarReader implements Callable<Boolean> {
 	}
 
 	private TokenDefinition getTokenDefinition(String tokenName,
-			Map<String, List<SyntaxTree>> helpers,
-			Map<String, List<SyntaxTree>> tokens) {
+			Map<String, List<AST>> helpers,
+			Map<String, List<AST>> tokens) {
 		StringBuffer pattern = new StringBuffer();
-		List<SyntaxTree> trees = tokens.get(tokenName);
+		List<AST> trees = tokens.get(tokenName);
 		if (trees == null) {
 			trees = helpers.get(tokenName);
 		}
-		for (SyntaxTree tree : trees) {
+		for (AST tree : trees) {
 			String text = tree.getText();
 			if (text.startsWith("\"") || text.startsWith("'")) {
 				pattern.append(text.substring(1, text.length() - 1));
@@ -207,7 +207,7 @@ public class GrammarReader implements Callable<Boolean> {
 		return readGrammar;
 	}
 
-	public SyntaxTree getSyntaxTree() {
+	public AST getSyntaxTree() {
 		return syntaxTree;
 	}
 }

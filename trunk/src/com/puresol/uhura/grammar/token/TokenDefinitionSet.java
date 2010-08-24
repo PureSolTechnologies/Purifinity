@@ -7,6 +7,13 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.puresol.uhura.grammar.GrammarException;
 
+/**
+ * A token definitions set is meant to be the total collection of all token
+ * definitions defined within a single grammar.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class TokenDefinitionSet {
 
 	private final ConcurrentMap<String, TokenDefinition> name2Definition = new ConcurrentHashMap<String, TokenDefinition>();

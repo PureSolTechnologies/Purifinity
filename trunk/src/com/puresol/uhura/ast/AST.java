@@ -9,20 +9,28 @@ import com.puresol.trees.TreeVisitor;
 import com.puresol.trees.WalkingAction;
 import com.puresol.uhura.lexer.Token;
 
-public class SyntaxTree implements Tree<SyntaxTree> {
+/**
+ * This tree is an (A)bstract (S)yntax (T)ree. This class implements the Tree<T>
+ * interface is therefore suitable for the TreeWalker class for easy tree
+ * processing.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
+public class AST implements Tree<AST> {
 
 	private final String name;
 	private final Token token;
-	private SyntaxTree parent;
-	private final List<SyntaxTree> children = new CopyOnWriteArrayList<SyntaxTree>();
+	private AST parent;
+	private final List<AST> children = new CopyOnWriteArrayList<AST>();
 
-	public SyntaxTree(Token token) {
+	public AST(Token token) {
 		this.name = token.getName();
 		this.token = token;
 		this.parent = null;
 	}
 
-	public SyntaxTree(String name) {
+	public AST(String name) {
 		this.name = name;
 		this.token = null;
 		this.parent = null;
@@ -51,7 +59,7 @@ public class SyntaxTree implements Tree<SyntaxTree> {
 	 * @param parent
 	 *            the parent to set
 	 */
-	public void setParent(SyntaxTree parent) {
+	public void setParent(AST parent) {
 		this.parent = parent;
 	}
 
@@ -59,7 +67,7 @@ public class SyntaxTree implements Tree<SyntaxTree> {
 	 * @return the parent
 	 */
 	@Override
-	public SyntaxTree getParent() {
+	public AST getParent() {
 		return parent;
 	}
 
@@ -67,16 +75,16 @@ public class SyntaxTree implements Tree<SyntaxTree> {
 	 * @return the children
 	 */
 	@Override
-	public List<SyntaxTree> getChildren() {
+	public List<AST> getChildren() {
 		return children;
 	}
 
-	public void addChild(SyntaxTree child) {
+	public void addChild(AST child) {
 		children.add(child);
 		child.setParent(this);
 	}
 
-	public void addChildInFront(SyntaxTree child) {
+	public void addChildInFront(AST child) {
 		children.add(0, child);
 		child.setParent(this);
 	}
@@ -85,9 +93,9 @@ public class SyntaxTree implements Tree<SyntaxTree> {
 	 * @return the children
 	 * @throws ASTException
 	 */
-	public SyntaxTree getChild(String name) throws ASTException {
-		SyntaxTree result = null;
-		for (SyntaxTree child : children) {
+	public AST getChild(String name) throws ASTException {
+		AST result = null;
+		for (AST child : children) {
 			if (child.getName().equals(name)) {
 				if (result != null) {
 					throw new ASTException("Child '" + name
@@ -99,28 +107,27 @@ public class SyntaxTree implements Tree<SyntaxTree> {
 		return result;
 	}
 
-	public List<SyntaxTree> getSubTrees(String name) {
-		List<SyntaxTree> subTrees = new CopyOnWriteArrayList<SyntaxTree>();
+	public List<AST> getSubTrees(String name) {
+		List<AST> subTrees = new CopyOnWriteArrayList<AST>();
 		getSubTrees(this, subTrees, name);
 		return subTrees;
 	}
 
-	private void getSubTrees(SyntaxTree branch, List<SyntaxTree> subTrees,
-			String name) {
+	private void getSubTrees(AST branch, List<AST> subTrees, String name) {
 		if (branch.getName().equals(name)) {
 			subTrees.add(branch);
 		}
-		for (SyntaxTree subBranch : branch.getChildren()) {
+		for (AST subBranch : branch.getChildren()) {
 			getSubTrees(subBranch, subTrees, name);
 		}
 	}
 
-	private class TextWalkerClient implements TreeVisitor<SyntaxTree> {
+	private class TextWalkerClient implements TreeVisitor<AST> {
 
 		private final StringBuffer text = new StringBuffer();
 
 		@Override
-		public WalkingAction visit(SyntaxTree syntaxTree) {
+		public WalkingAction visit(AST syntaxTree) {
 			Token token = syntaxTree.getToken();
 			if (token != null) {
 				text.append(token.getText());
@@ -135,7 +142,7 @@ public class SyntaxTree implements Tree<SyntaxTree> {
 	}
 
 	public String getText() {
-		TreeWalker<SyntaxTree> treeWalker = new TreeWalker<SyntaxTree>(this);
+		TreeWalker<AST> treeWalker = new TreeWalker<AST>(this);
 		TextWalkerClient textClient = new TextWalkerClient();
 		treeWalker.walk(textClient);
 		return textClient.getText();

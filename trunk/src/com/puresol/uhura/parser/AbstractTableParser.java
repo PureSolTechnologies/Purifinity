@@ -5,7 +5,7 @@ import java.util.Stack;
 
 import org.apache.log4j.Logger;
 
-import com.puresol.uhura.ast.SyntaxTree;
+import com.puresol.uhura.ast.AST;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.production.Construction;
@@ -25,7 +25,7 @@ public abstract class AbstractTableParser extends AbstractParser {
 
 	private ParserTable parserTable;
 	private final Stack<Integer> stateStack = new Stack<Integer>();
-	private final Stack<SyntaxTree> treeStack = new Stack<SyntaxTree>();
+	private final Stack<AST> treeStack = new Stack<AST>();
 	private int streamPosition = 0;
 	private int stepCounter = 0;
 
@@ -49,7 +49,7 @@ public abstract class AbstractTableParser extends AbstractParser {
 	}
 
 	@Override
-	public SyntaxTree call() throws ParserException {
+	public AST call() throws ParserException {
 		treeStack.clear();
 		stateStack.clear();
 		streamPosition = 0;
@@ -72,13 +72,13 @@ public abstract class AbstractTableParser extends AbstractParser {
 			ParserAction action = parserTable.getAction(stateStack.peek(),
 					construction);
 			if (action.getAction() == ActionType.SHIFT) {
-				treeStack.push(new SyntaxTree(token));
+				treeStack.push(new AST(token));
 				stateStack.push(action.getTargetState());
 				streamPosition++;
 			} else if (action.getAction() == ActionType.REDUCE) {
 				Production production = getGrammar().getProductions().get(
 						action.getTargetState());
-				SyntaxTree tree = new SyntaxTree(production.getName());
+				AST tree = new AST(production.getName());
 				for (int i = 0; i < production.getConstructions().size(); i++) {
 					tree.addChildInFront(treeStack.pop());
 					stateStack.pop();
@@ -111,7 +111,7 @@ public abstract class AbstractTableParser extends AbstractParser {
 			buffer.append(stateId);
 		}
 		buffer.append("\t| ");
-		for (SyntaxTree syntaxTree : treeStack) {
+		for (AST syntaxTree : treeStack) {
 			buffer.append(" ");
 			buffer.append(syntaxTree.getName());
 		}

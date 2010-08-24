@@ -7,8 +7,8 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
-import com.puresol.uhura.ast.ASTPrinter;
-import com.puresol.uhura.ast.SyntaxTree;
+import com.puresol.trees.TreePrinter;
+import com.puresol.uhura.ast.AST;
 
 import junit.framework.TestCase;
 
@@ -21,8 +21,8 @@ public class GrammarReaderTest extends TestCase {
 			GrammarReader reader = new GrammarReader(new File(
 					"test/com/puresol/uhura/grammar/TestGrammar.g"));
 			assertTrue(reader.call());
-			SyntaxTree ast = reader.getSyntaxTree();
-			ASTPrinter printer = new ASTPrinter(System.out);
+			AST ast = reader.getSyntaxTree();
+			TreePrinter printer = new TreePrinter(System.out);
 			printer.println(ast);
 			Grammar grammar = reader.getGrammar();
 			grammar.printTokenDefinitions();

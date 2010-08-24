@@ -13,6 +13,13 @@ import com.puresol.uhura.grammar.token.TokenDefinition;
 import com.puresol.uhura.grammar.token.TokenDefinitionSet;
 import com.puresol.uhura.grammar.token.Visibility;
 
+/**
+ * This class contains the grammar for Nyota Uhura's grammar files. This grammar
+ * is programmed due to the inability to read grammar files without a grammar.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class UhuraGrammar {
 
 	public static Grammar getGrammar() {
@@ -210,11 +217,12 @@ public class UhuraGrammar {
 		production = new Production("TokenConstruction");
 		production.addElement(new ProductionConstruction("TokenConstruction"));
 		production.addElement(new ProductionConstruction("TokenPart"));
-		production.addElement(new ProductionConstruction("Quantifier"));
+		production.addElement(new ProductionConstruction("OptionalQuantifier"));
 		productions.addRule(production);
 
 		production = new Production("TokenConstruction");
 		production.addElement(new ProductionConstruction("TokenPart"));
+		production.addElement(new ProductionConstruction("OptionalQuantifier"));
 		productions.addRule(production);
 
 		production = new Production("TokenPart");
@@ -281,7 +289,7 @@ public class UhuraGrammar {
 		production.addElement(new ProductionConstruction(
 				"ProductionConstruction"));
 		production.addElement(new ProductionConstruction("ProductionPart"));
-		production.addElement(new ProductionConstruction("Quantifier"));
+		production.addElement(new ProductionConstruction("OptionalQuantifier"));
 		productions.addRule(production);
 
 		production = new Production("ProductionConstruction");
@@ -306,19 +314,19 @@ public class UhuraGrammar {
 
 	private static void addQuantifiers(ProductionSet productions)
 			throws GrammarException {
-		Production production = new Production("Quantifier");
+		Production production = new Production("OptionalQuantifier");
 		production.addElement(new TextConstruction("+"));
 		productions.addRule(production);
 
-		production = new Production("Quantifier");
+		production = new Production("OptionalQuantifier");
 		production.addElement(new TextConstruction("*"));
 		productions.addRule(production);
 
-		production = new Production("Quantifier");
+		production = new Production("OptionalQuantifier");
 		production.addElement(new TextConstruction("?"));
 		productions.addRule(production);
 
-		production = new Production("Quantifier");
+		production = new Production("OptionalQuantifier");
 		productions.addRule(production);
 
 	}

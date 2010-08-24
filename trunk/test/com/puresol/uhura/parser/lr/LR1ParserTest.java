@@ -9,8 +9,8 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
-import com.puresol.uhura.ast.ASTPrinter;
-import com.puresol.uhura.ast.SyntaxTree;
+import com.puresol.trees.TreePrinter;
+import com.puresol.uhura.ast.AST;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.TestGrammars;
@@ -31,8 +31,8 @@ public class LR1ParserTest extends TestCase {
 			Lexer lexer = new RegExpLexer(new Properties());
 			lexer.scan(new StringReader("1*2+3"), grammar.getTokenDefinitions());
 			parser.setTokenStream(lexer.getTokenStream());
-			SyntaxTree syntaxTree = parser.call();
-			new ASTPrinter(System.out).println(syntaxTree);
+			AST syntaxTree = parser.call();
+			new TreePrinter(System.out).println(syntaxTree);
 		} catch (GrammarException e) {
 			e.printStackTrace();
 			fail("No exception was expected!");
@@ -55,8 +55,8 @@ public class LR1ParserTest extends TestCase {
 			lexer.scan(new StringReader("((1*(2+3)+4*5)+6)*7"),
 					grammar.getTokenDefinitions());
 			parser.setTokenStream(lexer.getTokenStream());
-			SyntaxTree syntaxTree = parser.call();
-			new ASTPrinter(System.out).println(syntaxTree);
+			AST syntaxTree = parser.call();
+			new TreePrinter(System.out).println(syntaxTree);
 		} catch (GrammarException e) {
 			e.printStackTrace();
 			fail("No exception was expected!");
