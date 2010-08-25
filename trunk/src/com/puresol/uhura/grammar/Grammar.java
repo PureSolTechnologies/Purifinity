@@ -1,5 +1,6 @@
 package com.puresol.uhura.grammar;
 
+import java.util.List;
 import java.util.Properties;
 
 import com.puresol.uhura.grammar.production.Construction;
@@ -71,6 +72,31 @@ public class Grammar {
 		return productions;
 	}
 
+	public void println() {
+		System.out.println("=========");
+		System.out.println(" Grammar");
+		System.out.println("=========");
+		System.out.println();
+		System.out.println("Options:");
+		System.out.println("--------");
+		printOptions();
+		System.out.println();
+		System.out.println("Tokens:");
+		System.out.println("-------");
+		printTokenDefinitions();
+		System.out.println();
+		System.out.println("Productions:");
+		System.out.println("------------");
+		printProductions();
+		System.out.println();
+	}
+
+	public void printOptions() {
+		for (Object key : options.keySet()) {
+			System.out.println(key + " = " + options.getProperty((String) key));
+		}
+	}
+
 	public void printTokenDefinitions() {
 		for (TokenDefinition definition : tokenDefinitions.getDefinitions()) {
 			System.out.println(definition);
@@ -78,7 +104,12 @@ public class Grammar {
 	}
 
 	public void printProductions() {
-		for (Production production : productions.getProductions()) {
+		List<Production> productionsList = productions.getProductions();
+		for (int i = 0; i < productionsList.size(); i++) {
+			System.out.print("(");
+			System.out.print(i);
+			System.out.print(")\t");
+			Production production = productionsList.get(i);
 			System.out.println(production.toShortString(-1));
 		}
 	}

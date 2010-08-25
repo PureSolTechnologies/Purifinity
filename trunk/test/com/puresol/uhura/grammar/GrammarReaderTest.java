@@ -16,8 +16,8 @@ public class GrammarReaderTest extends TestCase {
 
 	@Test
 	public void testRead() {
-		Logger.getRootLogger().setLevel(Level.TRACE);
 		try {
+			Logger.getRootLogger().setLevel(Level.TRACE);
 			GrammarReader reader = new GrammarReader(new File(
 					"test/com/puresol/uhura/grammar/TestGrammar.g"));
 			assertTrue(reader.call());
@@ -25,8 +25,7 @@ public class GrammarReaderTest extends TestCase {
 			TreePrinter printer = new TreePrinter(System.out);
 			printer.println(ast);
 			Grammar grammar = reader.getGrammar();
-			grammar.printTokenDefinitions();
-			grammar.printProductions();
+			grammar.println();
 		} catch (IOException e) {
 			e.printStackTrace();
 			fail("No exception was expected!");

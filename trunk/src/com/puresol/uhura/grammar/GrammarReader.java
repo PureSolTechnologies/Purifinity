@@ -35,7 +35,7 @@ public class GrammarReader implements Callable<Boolean> {
 	private final Grammar uhuraGrammar;
 	private Grammar readGrammar = null;
 	private final Reader reader;
-	private AST syntaxTree = null;
+	private AST ast = null;
 
 	public GrammarReader(File file) throws IOException {
 		this(new FileInputStream(file));
@@ -62,7 +62,7 @@ public class GrammarReader implements Callable<Boolean> {
 			lexer = new RegExpLexer(new Properties());
 			lexer.scan(reader, uhuraGrammar.getTokenDefinitions());
 			TokenStream tokenStream = lexer.getTokenStream();
-			syntaxTree = parse(tokenStream);
+			ast = parse(tokenStream);
 			convertToGrammer();
 		} catch (LexerException e) {
 			logger.error(e.getMessage(), e);
@@ -96,9 +96,8 @@ public class GrammarReader implements Callable<Boolean> {
 
 	private Properties convertToOptions() {
 		try {
-			AST optionsTree = syntaxTree.getChild("Options");
-			List<AST> grammarOptions = optionsTree
-					.getSubTrees("GrammarOption");
+			AST optionsTree = ast.getChild("Options");
+			List<AST> grammarOptions = optionsTree.getSubTrees("GrammarOption");
 			Properties options = new Properties();
 			for (AST grammarOption : grammarOptions) {
 				String name = grammarOption.getSubTrees("PropertiesIdentifier")
@@ -129,12 +128,12 @@ public class GrammarReader implements Callable<Boolean> {
 	private Map<String, List<AST>> getHelpers() {
 		try {
 			Map<String, List<AST>> helpers = new ConcurrentHashMap<String, List<AST>>();
-			AST helperTree = syntaxTree.getChild("Helper");
+			AST helperTree = ast.getChild("Helper");
 			List<AST> helperDefinitions = helperTree
 					.getSubTrees("HelperDefinition");
 			for (AST helperDefinition : helperDefinitions) {
-				String identifier = helperDefinition.getSubTrees("IDENTIFIER")
-						.get(0).getText();
+				String identifier = helperDefinition.getChild("IDENTIFIER")
+						.getText();
 				List<AST> tokenParts = helperDefinition
 						.getSubTrees("TokenPart");
 				helpers.put(identifier, tokenParts);
@@ -148,18 +147,18 @@ public class GrammarReader implements Callable<Boolean> {
 
 	private Map<String, List<AST>> getTokens() {
 		try {
-			Map<String, List<AST>> helpers = new ConcurrentHashMap<String, List<AST>>();
-			AST helperTree = syntaxTree.getChild("Tokens");
-			List<AST> helperDefinitions = helperTree
+			Map<String, List<AST>> tokens = new ConcurrentHashMap<String, List<AST>>();
+			AST helperTree = ast.getChild("Tokens");
+			List<AST> tokenDefinitions = helperTree
 					.getSubTrees("TokenDefinition");
-			for (AST helperDefinition : helperDefinitions) {
-				String identifier = helperDefinition.getSubTrees("IDENTIFIER")
-						.get(0).getText();
+			for (AST helperDefinition : tokenDefinitions) {
+				String identifier = helperDefinition.getChild("IDENTIFIER")
+						.getText();
 				List<AST> tokenParts = helperDefinition
 						.getSubTrees("TokenPart");
-				helpers.put(identifier, tokenParts);
+				tokens.put(identifier, tokenParts);
 			}
-			return helpers;
+			return tokens;
 		} catch (ASTException e) {
 			logger.fatal(e.getMessage(), e);
 			throw new RuntimeException();
@@ -167,8 +166,8 @@ public class GrammarReader implements Callable<Boolean> {
 	}
 
 	private TokenDefinitionSet convertToTokenDefinitionSet(
-			Map<String, List<AST>> helpers,
-			Map<String, List<AST>> tokens) throws GrammarException {
+			Map<String, List<AST>> helpers, Map<String, List<AST>> tokens)
+			throws GrammarException {
 		TokenDefinitionSet tokenDefinitions = new TokenDefinitionSet();
 		for (String tokenName : tokens.keySet()) {
 			TokenDefinition tokenDefinition = getTokenDefinition(tokenName,
@@ -179,24 +178,37 @@ public class GrammarReader implements Callable<Boolean> {
 	}
 
 	private TokenDefinition getTokenDefinition(String tokenName,
-			Map<String, List<AST>> helpers,
-			Map<String, List<AST>> tokens) {
-		StringBuffer pattern = new StringBuffer();
-		List<AST> trees = tokens.get(tokenName);
-		if (trees == null) {
-			trees = helpers.get(tokenName);
-		}
-		for (AST tree : trees) {
-			String text = tree.getText();
-			if (text.startsWith("\"") || text.startsWith("'")) {
-				pattern.append(text.substring(1, text.length() - 1));
-			} else {
-				text = getTokenDefinition(text, helpers, tokens).getPattern()
-						.toString();
-				pattern.append(text);
+			Map<String, List<AST>> helpers, Map<String, List<AST>> tokens)
+			throws GrammarException {
+		try {
+			StringBuffer pattern = new StringBuffer();
+			List<AST> trees = tokens.get(tokenName);
+			if (trees == null) {
+				trees = helpers.get(tokenName);
 			}
+			if (trees == null) {
+				throw new GrammarException("Unknown token '" + tokenName + "'.");
+			}
+			for (AST tree : trees) {
+				if (tree.hasChild("STRING_LITERAL")) {
+					String text = tree.getChild("STRING_LITERAL").getText();
+					pattern.append(text.substring(1, text.length() - 1));
+				} else {
+					String text = tree.getChild("IDENTIFIER").getText();
+					text = getTokenDefinition(text, helpers, tokens)
+							.getPattern().toString();
+					pattern.append(text);
+				}
+				if (tree.hasChild("OptionalQuantifier")) {
+					pattern.append(tree.getChild("OptionalQuantifier")
+							.getText());
+				}
+			}
+			return new TokenDefinition(tokenName, pattern.toString());
+		} catch (ASTException e) {
+			logger.fatal(e.getMessage(), e);
+			throw new RuntimeException();
 		}
-		return new TokenDefinition(tokenName, pattern.toString());
 	}
 
 	private ProductionSet convertToProductionsSet() {
@@ -208,6 +220,6 @@ public class GrammarReader implements Callable<Boolean> {
 	}
 
 	public AST getSyntaxTree() {
-		return syntaxTree;
+		return ast;
 	}
 }

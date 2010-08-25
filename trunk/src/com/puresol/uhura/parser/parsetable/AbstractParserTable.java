@@ -59,8 +59,14 @@ public abstract class AbstractParserTable implements ParserTable {
 		ParserAction already = table.get(stateId).get(construction);
 		if (already != null) {
 			if (!action.equals(already)) {
-				String text = "Invalid grammar! Conflict in state id: "
-						+ stateId + "\n";
+				String text = "Invalid grammar!";
+				if (already.getAction() != action.getAction()) {
+					text += " Shift/reduce conflict in state id: " + stateId
+							+ "!\n";
+				} else {
+					text += " Reduce/reduce conflict in state id: " + stateId
+							+ "!\n";
+				}
 				text += "construction:     " + construction + "\n";
 				text += "in stack:         " + already.toString() + "\n";
 				text += "to be introduced: " + action.toString();

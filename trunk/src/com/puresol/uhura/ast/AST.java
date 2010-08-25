@@ -107,6 +107,18 @@ public class AST implements Tree<AST> {
 		return result;
 	}
 
+	/**
+	 * @return
+	 */
+	public boolean hasChild(String name) {
+		for (AST child : children) {
+			if (child.getName().equals(name)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public List<AST> getSubTrees(String name) {
 		List<AST> subTrees = new CopyOnWriteArrayList<AST>();
 		getSubTrees(this, subTrees, name);

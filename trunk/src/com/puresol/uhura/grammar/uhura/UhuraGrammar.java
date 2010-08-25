@@ -191,6 +191,10 @@ public class UhuraGrammar {
 		production.addElement(new ProductionConstruction("TokenDefinition"));
 		productions.addRule(production);
 
+		production = new Production("TokenDefinitions");
+		production.addElement(new ProductionConstruction("TokenDefinition"));
+		productions.addRule(production);
+
 		production = new Production("TokenDefinition");
 		production.addElement(new TokenConstruction("IDENTIFIER"));
 		production.addElement(new TokenConstruction("COLON"));
@@ -198,8 +202,6 @@ public class UhuraGrammar {
 		production.addElement(new TokenConstruction("SEMICOLON"));
 		productions.addRule(production);
 
-		production = new Production("TokenDefinitions");
-		productions.addRule(production);
 	}
 
 	private static void addTokenConstruction(ProductionSet productions)
@@ -217,26 +219,27 @@ public class UhuraGrammar {
 		production = new Production("TokenConstruction");
 		production.addElement(new ProductionConstruction("TokenConstruction"));
 		production.addElement(new ProductionConstruction("TokenPart"));
-		production.addElement(new ProductionConstruction("OptionalQuantifier"));
 		productions.addRule(production);
 
 		production = new Production("TokenConstruction");
 		production.addElement(new ProductionConstruction("TokenPart"));
-		production.addElement(new ProductionConstruction("OptionalQuantifier"));
 		productions.addRule(production);
 
 		production = new Production("TokenPart");
 		production.addElement(new TextConstruction("("));
 		production.addElement(new ProductionConstruction("TokenConstruction"));
 		production.addElement(new TextConstruction(")"));
+		production.addElement(new ProductionConstruction("OptionalQuantifier"));
 		productions.addRule(production);
 
 		production = new Production("TokenPart");
 		production.addElement(new TokenConstruction("IDENTIFIER"));
+		production.addElement(new ProductionConstruction("OptionalQuantifier"));
 		productions.addRule(production);
 
 		production = new Production("TokenPart");
 		production.addElement(new TokenConstruction("STRING_LITERAL"));
+		production.addElement(new ProductionConstruction("OptionalQuantifier"));
 		productions.addRule(production);
 	}
 
@@ -289,7 +292,6 @@ public class UhuraGrammar {
 		production.addElement(new ProductionConstruction(
 				"ProductionConstruction"));
 		production.addElement(new ProductionConstruction("ProductionPart"));
-		production.addElement(new ProductionConstruction("OptionalQuantifier"));
 		productions.addRule(production);
 
 		production = new Production("ProductionConstruction");
@@ -301,14 +303,17 @@ public class UhuraGrammar {
 		production.addElement(new ProductionConstruction(
 				"ProductionConstruction"));
 		production.addElement(new TextConstruction(")"));
+		production.addElement(new ProductionConstruction("OptionalQuantifier"));
 		productions.addRule(production);
 
 		production = new Production("ProductionPart");
 		production.addElement(new TokenConstruction("IDENTIFIER"));
+		production.addElement(new ProductionConstruction("OptionalQuantifier"));
 		productions.addRule(production);
 
 		production = new Production("ProductionPart");
 		production.addElement(new TokenConstruction("STRING_LITERAL"));
+		production.addElement(new ProductionConstruction("OptionalQuantifier"));
 		productions.addRule(production);
 	}
 
@@ -328,7 +333,6 @@ public class UhuraGrammar {
 
 		production = new Production("OptionalQuantifier");
 		productions.addRule(production);
-
 	}
 
 	private static void addLiterals(ProductionSet productions)
