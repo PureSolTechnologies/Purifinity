@@ -51,11 +51,10 @@ public class UhuraTokenRegExps {
 
 	public static final String NOT_STAR = "[^*]";
 
-	public static final String COMMENT_TAIL = "(" + NOT_STAR
-			+ "+|\\*+(?!/))*\\*/";
+	public static final String COMMENT_TAIL = "([^\\*]+|\\*+(?!/))*\\*/";
 
-	public static final String END_OF_LINE_COMMENT = "//(" + CHARACTERS_IN_LINE
-			+ ")?" + LINE_TERMINATOR;
+	public static final String END_OF_LINE_COMMENT = "//" + INPUT_CHARACTER
+			+ "*" + LINE_TERMINATOR;
 	public static final String TRADITIONAL_COMMENT = "/\\*" + COMMENT_TAIL;
 	public static final String COMMENT = "(" + TRADITIONAL_COMMENT + "|"
 			+ END_OF_LINE_COMMENT + ")";

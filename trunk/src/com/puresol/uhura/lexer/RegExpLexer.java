@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.Properties;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
@@ -21,11 +22,13 @@ public class RegExpLexer implements Lexer {
 
 	private static final Logger logger = Logger.getLogger(RegExpLexer.class);
 
+	private static final String LINE_TERMINATOR = "(\\r\\n|\\n|\\r)";
+
 	private final Properties options;
 	private TokenDefinitionSet definitionSet = null;
 	private TokenMetaInformation tokenMetaDatas = null;
 	private TokenStream tokenStream = null;
-	private String text = null;
+	private StringBuilder text = null;
 
 	public RegExpLexer(Properties options) {
 		this.options = options;
@@ -51,23 +54,22 @@ public class RegExpLexer implements Lexer {
 	 * @throws LexerException
 	 */
 	@Override
-	public void scan(Reader reader, TokenDefinitionSet rules)
+	public void scan(Reader reader, TokenDefinitionSet definitionSet)
 			throws LexerException {
-		this.definitionSet = rules;
+		this.definitionSet = definitionSet;
 		readToString(reader);
 		scan();
 	}
 
 	private void readToString(Reader reader) throws LexerException {
 		try {
-			StringBuffer buffer = new StringBuffer();
+			text = new StringBuilder();
 			char chars[] = new char[4096];
 			int len = 0;
 			do {
 				len = reader.read(chars);
-				buffer.append(chars, 0, len);
-			} while (len == 256);
-			text = buffer.toString();
+				text.append(chars, 0, len);
+			} while (len == chars.length);
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
 			throw new LexerException(e.getMessage());
@@ -82,10 +84,10 @@ public class RegExpLexer implements Lexer {
 		int line = 1;
 		while (text.length() > 0) {
 			Token token = findNextToken(text);
-			if (token == null) {
+			if ((token == null) || (token.getText().length() == 0)) {
 				String exceptionText;
 				if (text.length() <= 12) {
-					exceptionText = text;
+					exceptionText = text.toString();
 				} else {
 					exceptionText = text.substring(0, 12) + "...";
 
@@ -93,7 +95,8 @@ public class RegExpLexer implements Lexer {
 				throw new LexerException("No token found for '" + exceptionText
 						+ "' in line " + line + " at position " + pos + ".");
 			}
-			logger.trace("Found token: " + token);
+			logger.trace("Found token: '" + token + "' in line " + line
+					+ " at position " + pos + ".");
 			if (token.getVisibility() != Visibility.HIDDEN) {
 				tokenStream.add(token);
 				// meta information...
@@ -102,20 +105,24 @@ public class RegExpLexer implements Lexer {
 			}
 			id++;
 			pos += token.getText().length();
-			if (token.getText().contains("\n")
-					|| token.getText().contains("\r")) {
-				line += token.getText().split("(\\r\\n|\\n|\\r)").length - 1;
-				if (token.getText().endsWith("\n")) {
-					line += 2;
+			Pattern pattern = Pattern.compile(LINE_TERMINATOR);
+			Matcher matcher = pattern.matcher(token.getText());
+			if (matcher.matches()) {
+				line++;
+			} else if (matcher.find()) {
+				int position = 0;
+				while (matcher.find(position)) {
+					line++;
+					position = matcher.end();
 				}
 			}
 			// forward...
-			text = text.substring(token.getText().length());
+			text = text.delete(0, token.getText().length());
 		}
 		return tokenStream;
 	}
 
-	private Token findNextToken(String text) {
+	private Token findNextToken(StringBuilder text) {
 		Token nextToken = null;
 		for (TokenDefinition definition : definitionSet.getDefinitions()) {
 			Matcher matcher = definition.getPattern().matcher(text);

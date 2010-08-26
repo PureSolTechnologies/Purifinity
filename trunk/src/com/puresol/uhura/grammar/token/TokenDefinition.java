@@ -19,7 +19,7 @@ public class TokenDefinition {
 	}
 
 	public TokenDefinition(String name, String regex, Visibility visibility) {
-		this(name, Pattern.compile(regex), visibility);
+		this(name, Pattern.compile("^" + regex), visibility);
 	}
 
 	public TokenDefinition(String name, Pattern pattern, Visibility visibility) {
