@@ -10,5 +10,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/swingx"/>
 	<classpathentry kind="lib" path="lib/felix/felix.jar"/>
 	<classpathentry kind="lib" path="lib/junit/junit-4.6.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/NyotaUhura"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
