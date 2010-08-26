@@ -16,4 +16,13 @@ public enum Visibility {
 	 * never see this token.
 	 */
 	HIDDEN;
+
+	public static Visibility fromName(String name) {
+		for (Visibility visibility : Visibility.class.getEnumConstants()) {
+			if (visibility.name().equalsIgnoreCase(name)) {
+				return visibility;
+			}
+		}
+		return null;
+	}
 }

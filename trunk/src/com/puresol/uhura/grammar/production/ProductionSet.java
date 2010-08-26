@@ -18,7 +18,7 @@ public class ProductionSet {
 	private final ConcurrentMap<String, List<Production>> name2Production = new ConcurrentHashMap<String, List<Production>>();
 	private final List<Production> productions = new CopyOnWriteArrayList<Production>();
 
-	public void addRule(Production production) throws GrammarException {
+	public void add(Production production) throws GrammarException {
 		if (production == null) {
 			return;
 		}
@@ -32,6 +32,12 @@ public class ProductionSet {
 					new CopyOnWriteArrayList<Production>());
 		}
 		name2Production.get(production.getName()).add(production);
+	}
+
+	public void add(List<Production> productions) throws GrammarException {
+		for (Production production : productions) {
+			add(production);
+		}
 	}
 
 	public List<Production> getProductions() {

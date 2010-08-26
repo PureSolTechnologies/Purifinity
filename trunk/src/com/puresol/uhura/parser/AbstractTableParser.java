@@ -78,7 +78,7 @@ public abstract class AbstractTableParser extends AbstractParser {
 			} else if (action.getAction() == ActionType.REDUCE) {
 				Production production = getGrammar().getProductions().get(
 						action.getTargetState());
-				AST tree = new AST(production.getName());
+				AST tree = new AST(production.getAlternativeName());
 				for (int i = 0; i < production.getConstructions().size(); i++) {
 					tree.addChildInFront(treeStack.pop());
 					stateStack.pop();

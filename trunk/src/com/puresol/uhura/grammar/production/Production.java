@@ -6,11 +6,19 @@ import java.util.List;
 public class Production {
 
 	private final String name;
+	private final String alternativeName;
 	private final List<Construction> constructions = new ArrayList<Construction>();
 
 	public Production(String name) {
 		super();
 		this.name = name;
+		this.alternativeName = name;
+	}
+
+	public Production(String name, String alternativeName) {
+		super();
+		this.name = name;
+		this.alternativeName = alternativeName;
 	}
 
 	/**
@@ -18,6 +26,13 @@ public class Production {
 	 */
 	public String getName() {
 		return name;
+	}
+
+	/**
+	 * @return the alternativeName
+	 */
+	public String getAlternativeName() {
+		return alternativeName;
 	}
 
 	public void addElement(Construction element) {

@@ -39,6 +39,7 @@ public class AST implements Tree<AST> {
 	/**
 	 * @return the name
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -102,6 +103,20 @@ public class AST implements Tree<AST> {
 							+ "'is multiply defined!");
 				}
 				result = child;
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * @return the children
+	 * @throws ASTException
+	 */
+	public List<AST> getChildren(String name) throws ASTException {
+		List<AST> result = new CopyOnWriteArrayList<AST>();
+		for (AST child : children) {
+			if (child.getName().equals(name)) {
+				result.add(child);
 			}
 		}
 		return result;

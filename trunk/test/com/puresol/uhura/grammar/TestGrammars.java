@@ -30,34 +30,34 @@ public class TestGrammars {
 
 			Production production = new Production("Z");
 			production.addElement(new ProductionConstruction("S"));
-			productions.addRule(production);
+			productions.add(production);
 
 			production = new Production("S");
 			production.addElement(new ProductionConstruction("S"));
 			production.addElement(new TokenConstruction("b"));
-			productions.addRule(production);
+			productions.add(production);
 
 			production = new Production("S");
 			production.addElement(new TokenConstruction("b"));
 			production.addElement(new ProductionConstruction("A"));
 			production.addElement(new TokenConstruction("a"));
-			productions.addRule(production);
+			productions.add(production);
 
 			production = new Production("A");
 			production.addElement(new TokenConstruction("a"));
 			production.addElement(new ProductionConstruction("S"));
 			production.addElement(new TokenConstruction("c"));
-			productions.addRule(production);
+			productions.add(production);
 
 			production = new Production("A");
 			production.addElement(new TokenConstruction("a"));
-			productions.addRule(production);
+			productions.add(production);
 
 			production = new Production("A");
 			production.addElement(new TokenConstruction("a"));
 			production.addElement(new ProductionConstruction("S"));
 			production.addElement(new TokenConstruction("b"));
-			productions.addRule(production);
+			productions.add(production);
 
 			return new Grammar(new Properties(), tokenDefinitions, productions);
 		} catch (GrammarException e) {
@@ -89,13 +89,13 @@ public class TestGrammars {
 			// TODO!!!
 			Production production = new Production("Z");
 			production.addElement(new ProductionConstruction("E"));
-			productions.addRule(production);
+			productions.add(production);
 
 			production = new Production("E");
 			production.addElement(new ProductionConstruction("E"));
 			production.addElement(new TextConstruction("+"));
 			production.addElement(new ProductionConstruction("T"));
-			productions.addRule(production);
+			productions.add(production);
 
 			// production = new Production("E");
 			// production.addElement(new ProductionConstruction("E"));
@@ -105,13 +105,13 @@ public class TestGrammars {
 
 			production = new Production("E");
 			production.addElement(new ProductionConstruction("T"));
-			productions.addRule(production);
+			productions.add(production);
 
 			production = new Production("T");
 			production.addElement(new ProductionConstruction("T"));
 			production.addElement(new TextConstruction("*"));
 			production.addElement(new ProductionConstruction("F"));
-			productions.addRule(production);
+			productions.add(production);
 
 			// production = new Production("T");
 			// production.addElement(new ProductionConstruction("T"));
@@ -121,17 +121,17 @@ public class TestGrammars {
 
 			production = new Production("T");
 			production.addElement(new ProductionConstruction("F"));
-			productions.addRule(production);
+			productions.add(production);
 
 			production = new Production("F");
 			production.addElement(new TextConstruction("("));
 			production.addElement(new ProductionConstruction("E"));
 			production.addElement(new TextConstruction(")"));
-			productions.addRule(production);
+			productions.add(production);
 
 			production = new Production("F");
 			production.addElement(new TokenConstruction("id"));
-			productions.addRule(production);
+			productions.add(production);
 
 			return new Grammar(new Properties(), tokenDefinitions, productions);
 		} catch (GrammarException e) {
@@ -154,21 +154,21 @@ public class TestGrammars {
 
 			Production production = new Production("Z");
 			production.addElement(new ProductionConstruction("S"));
-			productions.addRule(production);
+			productions.add(production);
 
 			production = new Production("S");
 			production.addElement(new ProductionConstruction("C"));
 			production.addElement(new ProductionConstruction("C"));
-			productions.addRule(production);
+			productions.add(production);
 
 			production = new Production("C");
 			production.addElement(new TokenConstruction("c"));
 			production.addElement(new ProductionConstruction("C"));
-			productions.addRule(production);
+			productions.add(production);
 
 			production = new Production("C");
 			production.addElement(new TokenConstruction("d"));
-			productions.addRule(production);
+			productions.add(production);
 			return new Grammar(new Properties(), tokenDefinitions, productions);
 		} catch (GrammarException e) {
 			e.printStackTrace();
@@ -204,40 +204,40 @@ public class TestGrammars {
 			Production production = new Production("E");
 			production.addElement(new ProductionConstruction("T"));
 			production.addElement(new ProductionConstruction("E'"));
-			productions.addRule(production);
+			productions.add(production);
 
 			production = new Production("E'");
 			production.addElement(new TextConstruction("+"));
 			production.addElement(new ProductionConstruction("T"));
 			production.addElement(new ProductionConstruction("E'"));
-			productions.addRule(production);
+			productions.add(production);
 
 			production = new Production("E'");
-			productions.addRule(production);
+			productions.add(production);
 
 			production = new Production("T");
 			production.addElement(new ProductionConstruction("F"));
 			production.addElement(new ProductionConstruction("T'"));
-			productions.addRule(production);
+			productions.add(production);
 
 			production = new Production("T'");
 			production.addElement(new TextConstruction("*"));
 			production.addElement(new ProductionConstruction("F"));
 			production.addElement(new ProductionConstruction("T'"));
-			productions.addRule(production);
+			productions.add(production);
 
 			production = new Production("T'");
-			productions.addRule(production);
+			productions.add(production);
 
 			production = new Production("F");
 			production.addElement(new TextConstruction("("));
 			production.addElement(new ProductionConstruction("E"));
 			production.addElement(new TextConstruction(")"));
-			productions.addRule(production);
+			productions.add(production);
 
 			production = new Production("F");
 			production.addElement(new TokenConstruction("id"));
-			productions.addRule(production);
+			productions.add(production);
 
 			return new Grammar(new Properties(), tokenDefinitions, productions);
 		} catch (GrammarException e) {

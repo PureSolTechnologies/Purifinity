@@ -11,14 +11,21 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.apache.log4j.Logger;
 
 import com.puresol.uhura.ast.AST;
 import com.puresol.uhura.ast.ASTException;
+import com.puresol.uhura.grammar.production.Production;
+import com.puresol.uhura.grammar.production.ProductionConstruction;
 import com.puresol.uhura.grammar.production.ProductionSet;
+import com.puresol.uhura.grammar.production.TextConstruction;
+import com.puresol.uhura.grammar.production.TokenConstruction;
 import com.puresol.uhura.grammar.token.TokenDefinition;
 import com.puresol.uhura.grammar.token.TokenDefinitionSet;
+import com.puresol.uhura.grammar.token.Visibility;
 import com.puresol.uhura.grammar.uhura.UhuraGrammar;
 import com.puresol.uhura.lexer.Lexer;
 import com.puresol.uhura.lexer.LexerException;
@@ -36,6 +43,8 @@ public class GrammarReader implements Callable<Boolean> {
 	private Grammar readGrammar = null;
 	private final Reader reader;
 	private AST ast = null;
+
+	private ConcurrentMap<String, Visibility> tokenVisibility = new ConcurrentHashMap<String, Visibility>();
 
 	public GrammarReader(File file) throws IOException {
 		this(new FileInputStream(file));
@@ -90,7 +99,7 @@ public class GrammarReader implements Callable<Boolean> {
 	private void convertToGrammer() throws GrammarException {
 		Properties options = convertToOptions();
 		TokenDefinitionSet tokenDefinitions = convertToTokenDefinitionSet();
-		ProductionSet productions = convertToProductionsSet();
+		ProductionSet productions = convertToProductionsSet(tokenDefinitions);
 		readGrammar = new Grammar(options, tokenDefinitions, productions);
 	}
 
@@ -145,18 +154,32 @@ public class GrammarReader implements Callable<Boolean> {
 		}
 	}
 
-	private Map<String, List<AST>> getTokens() {
+	private Map<String, List<AST>> getTokens() throws GrammarException {
 		try {
 			Map<String, List<AST>> tokens = new ConcurrentHashMap<String, List<AST>>();
 			AST helperTree = ast.getChild("Tokens");
 			List<AST> tokenDefinitions = helperTree
 					.getSubTrees("TokenDefinition");
-			for (AST helperDefinition : tokenDefinitions) {
-				String identifier = helperDefinition.getChild("IDENTIFIER")
+			for (AST tokenDefinition : tokenDefinitions) {
+				// identifier...
+				String identifier = tokenDefinition.getChild("IDENTIFIER")
 						.getText();
-				List<AST> tokenParts = helperDefinition
-						.getSubTrees("TokenPart");
+				// token parts...
+				List<AST> tokenParts = tokenDefinition.getSubTrees("TokenPart");
 				tokens.put(identifier, tokenParts);
+				// visibility...
+				AST visibilityAST = tokenDefinition.getChild(
+						"OptionalVisibility").getChild("IDENTIFIER");
+				if (visibilityAST != null) {
+					Visibility visibility = Visibility.fromName(visibilityAST
+							.getText());
+					if (visibility == null) {
+						throw new GrammarException(
+								"Invalid visibility attribute for '"
+										+ tokenDefinition.toString() + "'!");
+					}
+					tokenVisibility.put(identifier, visibility);
+				}
 			}
 			return tokens;
 		} catch (ASTException e) {
@@ -192,6 +215,9 @@ public class GrammarReader implements Callable<Boolean> {
 			for (AST tree : trees) {
 				if (tree.hasChild("STRING_LITERAL")) {
 					String text = tree.getChild("STRING_LITERAL").getText();
+					// text = text.replaceAll("\\\\n", "\\n");
+					// text = text.replaceAll("\\\\r", "\\r");
+					text = text.replaceAll("\\\\\\\\", "\\\\");
 					pattern.append(text.substring(1, text.length() - 1));
 				} else {
 					String text = tree.getChild("IDENTIFIER").getText();
@@ -204,6 +230,10 @@ public class GrammarReader implements Callable<Boolean> {
 							.getText());
 				}
 			}
+			if (tokenVisibility.get(tokenName) != null) {
+				return new TokenDefinition(tokenName, pattern.toString(),
+						tokenVisibility.get(tokenName));
+			}
 			return new TokenDefinition(tokenName, pattern.toString());
 		} catch (ASTException e) {
 			logger.fatal(e.getMessage(), e);
@@ -211,8 +241,75 @@ public class GrammarReader implements Callable<Boolean> {
 		}
 	}
 
-	private ProductionSet convertToProductionsSet() {
-		return new ProductionSet();
+	private ProductionSet convertToProductionsSet(
+			TokenDefinitionSet tokenDefinitions) {
+		try {
+			ProductionSet productions = new ProductionSet();
+			AST productionsTree;
+			productionsTree = ast.getChild("Productions");
+			for (AST productionDefinition : productionsTree
+					.getSubTrees("ProductionDefinition")) {
+				productions.add(getProduction(productionDefinition,
+						tokenDefinitions));
+			}
+			return productions;
+		} catch (ASTException e) {
+			logger.fatal(e.getMessage(), e);
+			throw new RuntimeException();
+		} catch (GrammarException e) {
+			logger.fatal(e.getMessage(), e);
+			throw new RuntimeException();
+		}
+	}
+
+	private List<Production> getProduction(AST productionDefinition,
+			TokenDefinitionSet tokenDefinitions) {
+		try {
+			List<Production> productions = new CopyOnWriteArrayList<Production>();
+			String productionName = productionDefinition.getChild("IDENTIFIER")
+					.getText();
+			for (AST productionConstruction : productionDefinition
+					.getSubTrees("ProductionConstruction")) {
+				if (!productionConstruction.getParent().getName()
+						.equals("ProductionConstructions")) {
+					// only top constructions are used for sub trees...
+					continue;
+				}
+				AST alternativeIdentifier = productionConstruction.getChild(
+						"AlternativeIdentifier").getChild("IDENTIFIER");
+				Production production;
+				if (alternativeIdentifier == null) {
+					production = new Production(productionName);
+				} else {
+					production = new Production(productionName,
+							alternativeIdentifier.getText());
+				}
+				for (AST productionPart : productionConstruction
+						.getSubTrees("ProductionPart")) {
+					if (productionPart.hasChild("IDENTIFIER")) {
+						String identifier = productionPart.getChild(
+								"IDENTIFIER").getText();
+						if (tokenDefinitions.getDefinition(identifier) != null) {
+							production.addElement(new TokenConstruction(
+									identifier));
+						} else {
+							production.addElement(new ProductionConstruction(
+									identifier));
+						}
+					} else {
+						String text = productionPart.getChild("STRING_LITERAL")
+								.getText();
+						text = text.substring(1, text.length() - 1);
+						production.addElement(new TextConstruction(text));
+					}
+				}
+				productions.add(production);
+			}
+			return productions;
+		} catch (ASTException e) {
+			logger.fatal(e.getMessage(), e);
+			throw new RuntimeException();
+		}
 	}
 
 	public Grammar getGrammar() {
