@@ -7,6 +7,7 @@ import com.puresol.trees.Tree;
 import com.puresol.trees.TreeWalker;
 import com.puresol.trees.TreeVisitor;
 import com.puresol.trees.WalkingAction;
+import com.puresol.uhura.grammar.production.Production;
 import com.puresol.uhura.lexer.Token;
 
 /**
@@ -23,10 +24,18 @@ public class AST implements Tree<AST> {
 	private final Token token;
 	private AST parent;
 	private final List<AST> children = new CopyOnWriteArrayList<AST>();
+	private boolean node = true;
 
 	public AST(Token token) {
 		this.name = token.getName();
 		this.token = token;
+		this.parent = null;
+	}
+
+	public AST(Production production) {
+		this.name = production.getAlternativeName();
+		node = production.isNode();
+		this.token = null;
 		this.parent = null;
 	}
 
@@ -85,9 +94,17 @@ public class AST implements Tree<AST> {
 		child.setParent(this);
 	}
 
+	public void addChildren(List<AST> children) {
+		this.children.addAll(children);
+	}
+
 	public void addChildInFront(AST child) {
 		children.add(0, child);
 		child.setParent(this);
+	}
+
+	public void addChildrenInFront(List<AST> children) {
+		this.children.addAll(0, children);
 	}
 
 	/**
@@ -132,6 +149,21 @@ public class AST implements Tree<AST> {
 			}
 		}
 		return false;
+	}
+
+	/**
+	 * @return the node
+	 */
+	public boolean isNode() {
+		return node;
+	}
+
+	/**
+	 * @param node
+	 *            the node to set
+	 */
+	public void setNode(boolean node) {
+		this.node = node;
 	}
 
 	public List<AST> getSubTrees(String name) {

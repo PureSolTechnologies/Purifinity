@@ -8,6 +8,7 @@ public class Production {
 	private final String name;
 	private final String alternativeName;
 	private final List<Construction> constructions = new ArrayList<Construction>();
+	private boolean node = true;
 
 	public Production(String name) {
 		super();
@@ -35,8 +36,12 @@ public class Production {
 		return alternativeName;
 	}
 
-	public void addElement(Construction element) {
-		constructions.add(element);
+	public void addConstruction(Construction construction) {
+		constructions.add(construction);
+	}
+
+	public void addAllConstructions(List<Construction> constructions) {
+		this.constructions.addAll(constructions);
 	}
 
 	/**
@@ -50,6 +55,21 @@ public class Production {
 		return (constructions.size() == 0);
 	}
 
+	/**
+	 * @return the node
+	 */
+	public boolean isNode() {
+		return node;
+	}
+
+	/**
+	 * @param node
+	 *            the node to set
+	 */
+	public void setNode(boolean node) {
+		this.node = node;
+	}
+
 	@Override
 	public String toString() {
 		return toString(-1);
@@ -57,7 +77,12 @@ public class Production {
 
 	public String toString(int itemPosition) {
 		StringBuffer result = new StringBuffer(name);
-		result.append(" --> ");
+		if (alternativeName.equals(name)) {
+			result.append(" {");
+			result.append(alternativeName);
+			result.append("}");
+		}
+		result.append(" : ");
 		int position = 0;
 		for (Construction element : constructions) {
 			if (position == itemPosition) {
@@ -72,7 +97,12 @@ public class Production {
 
 	public String toShortString(int itemPosition) {
 		StringBuffer result = new StringBuffer(name);
-		result.append(" --> ");
+		if (!alternativeName.equals(name)) {
+			result.append(" {");
+			result.append(alternativeName);
+			result.append("}");
+		}
+		result.append(" : ");
 		int position = 0;
 		for (Construction element : constructions) {
 			if (position == itemPosition) {
@@ -98,8 +128,11 @@ public class Production {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result
+				+ ((alternativeName == null) ? 0 : alternativeName.hashCode());
+		result = prime * result
 				+ ((constructions == null) ? 0 : constructions.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + (node ? 1231 : 1237);
 		return result;
 	}
 
@@ -117,6 +150,11 @@ public class Production {
 		if (getClass() != obj.getClass())
 			return false;
 		Production other = (Production) obj;
+		if (alternativeName == null) {
+			if (other.alternativeName != null)
+				return false;
+		} else if (!alternativeName.equals(other.alternativeName))
+			return false;
 		if (constructions == null) {
 			if (other.constructions != null)
 				return false;
@@ -126,6 +164,8 @@ public class Production {
 			if (other.name != null)
 				return false;
 		} else if (!name.equals(other.name))
+			return false;
+		if (node != other.node)
 			return false;
 		return true;
 	}

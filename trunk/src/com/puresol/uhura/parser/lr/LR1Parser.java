@@ -4,9 +4,8 @@ import java.util.Properties;
 
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
-import com.puresol.uhura.parser.AbstractTableParser;
 
-public class LR1Parser extends AbstractTableParser {
+public class LR1Parser extends AbstractLRTableParser {
 
 	public LR1Parser(Properties options, Grammar grammar)
 			throws GrammarException {

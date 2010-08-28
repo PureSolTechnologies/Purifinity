@@ -1,4 +1,4 @@
-package com.puresol.uhura.parser;
+package com.puresol.uhura.parser.lr;
 
 import java.util.Properties;
 import java.util.Stack;
@@ -14,14 +14,16 @@ import com.puresol.uhura.grammar.production.Production;
 import com.puresol.uhura.grammar.production.ProductionConstruction;
 import com.puresol.uhura.lexer.Token;
 import com.puresol.uhura.lexer.TokenStream;
+import com.puresol.uhura.parser.AbstractParser;
+import com.puresol.uhura.parser.ParserException;
 import com.puresol.uhura.parser.parsetable.ActionType;
 import com.puresol.uhura.parser.parsetable.ParserAction;
 import com.puresol.uhura.parser.parsetable.ParserTable;
 
-public abstract class AbstractTableParser extends AbstractParser {
+public abstract class AbstractLRTableParser extends AbstractParser {
 
 	private final static Logger logger = Logger
-			.getLogger(AbstractTableParser.class);
+			.getLogger(AbstractLRTableParser.class);
 
 	private ParserTable parserTable;
 	private final Stack<Integer> stateStack = new Stack<Integer>();
@@ -29,7 +31,7 @@ public abstract class AbstractTableParser extends AbstractParser {
 	private int streamPosition = 0;
 	private int stepCounter = 0;
 
-	public AbstractTableParser(Properties options, Grammar grammar)
+	public AbstractLRTableParser(Properties options, Grammar grammar)
 			throws GrammarException {
 		super(options, grammar);
 		calculateParserTable();
@@ -59,7 +61,6 @@ public abstract class AbstractTableParser extends AbstractParser {
 			if (logger.isTraceEnabled()) {
 				logger.trace(toString());
 			}
-			stepCounter++;
 			Token token;
 			Construction construction;
 			if (streamPosition < getTokenStream().size()) {
@@ -69,6 +70,7 @@ public abstract class AbstractTableParser extends AbstractParser {
 				token = null;
 				construction = FinishConstruction.getInstance();
 			}
+			stepCounter++;
 			ParserAction action = parserTable.getAction(stateStack.peek(),
 					construction);
 			if (action.getAction() == ActionType.SHIFT) {
@@ -78,9 +80,14 @@ public abstract class AbstractTableParser extends AbstractParser {
 			} else if (action.getAction() == ActionType.REDUCE) {
 				Production production = getGrammar().getProductions().get(
 						action.getTargetState());
-				AST tree = new AST(production.getAlternativeName());
+				AST tree = new AST(production);
 				for (int i = 0; i < production.getConstructions().size(); i++) {
-					tree.addChildInFront(treeStack.pop());
+					AST poppedAST = treeStack.pop();
+					if (poppedAST.isNode()) {
+						tree.addChildInFront(poppedAST);
+					} else {
+						tree.addChildrenInFront(poppedAST.getChildren());
+					}
 					stateStack.pop();
 				}
 				int targetState = parserTable.getAction(stateStack.peek(),

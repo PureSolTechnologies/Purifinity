@@ -5,8 +5,10 @@ import org.junit.Test;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.parser.lr.LR1ParserTable;
+import com.puresol.uhura.parser.lr.SLR1ParserTable;
 import com.puresol.uhura.parser.parsetable.First;
 import com.puresol.uhura.parser.parsetable.Follow;
+import com.puresol.uhura.parser.parsetable.LR0StateTransitionGraph;
 import com.puresol.uhura.parser.parsetable.LR1StateTransitionGraph;
 
 import junit.framework.TestCase;
@@ -40,30 +42,30 @@ public class UhuraGrammarTest extends TestCase {
 		System.out.println(follow.toString());
 	}
 
-	// @Test
-	// public void testLR0TransitionTable() {
-	// System.out.println("=============================");
-	// System.out.println("LR(0) State Transition Graph:");
-	// System.out.println("=============================");
-	// Grammar grammar = UhuraGrammar.getGrammar();
-	// LR0StateTransitionGraph first = new LR0StateTransitionGraph(grammar);
-	// System.out.println(first.toString());
-	// }
-	//
-	// @Test
-	// public void testSLR1ParseTable() {
-	// try {
-	// System.out.println("===================");
-	// System.out.println("SLR(1) Parse Table:");
-	// System.out.println("===================");
-	// Grammar grammar = UhuraGrammar.getGrammar();
-	// SLR1ParserTable lr0ParserTable = new SLR1ParserTable(grammar);
-	// System.out.println(lr0ParserTable.toString());
-	// } catch (GrammarException e) {
-	// e.printStackTrace();
-	// fail("No exception was expected!");
-	// }
-	// }
+	@Test
+	public void testLR0TransitionTable() {
+		System.out.println("=============================");
+		System.out.println("LR(0) State Transition Graph:");
+		System.out.println("=============================");
+		Grammar grammar = UhuraGrammar.getGrammar();
+		LR0StateTransitionGraph first = new LR0StateTransitionGraph(grammar);
+		System.out.println(first.toString());
+	}
+
+	@Test
+	public void testSLR1ParseTable() {
+		try {
+			System.out.println("===================");
+			System.out.println("SLR(1) Parse Table:");
+			System.out.println("===================");
+			Grammar grammar = UhuraGrammar.getGrammar();
+			SLR1ParserTable lr0ParserTable = new SLR1ParserTable(grammar);
+			System.out.println(lr0ParserTable.toString());
+		} catch (GrammarException e) {
+			e.printStackTrace();
+			fail("No exception was expected!");
+		}
+	}
 
 	@Test
 	public void testLR1TransitionTable() {

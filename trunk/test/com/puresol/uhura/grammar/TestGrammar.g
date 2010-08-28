@@ -36,6 +36,7 @@ TOKENS
 	MINUS:				"\\-";
 	STAR:				"\\*";
 	SLASH:				"/";
+	COMMA:				",";
 	ID:					"[-A-Za-z0-9_]";
 
 /*
@@ -49,13 +50,22 @@ PRODUCTIONS
 
 	Expression:
 		{add}				Expression '+' Term
-		|					Term
+		|					Term [node=false]
 	;
 	Term:
 		{mult}				Term '*' Factor
-		|					Factor
+		|					Factor [node=false]
 	;
 	Factor:
 		{paren}				'(' Expression ')'
-		|					INTEGER_LITERAL
+		|					INTEGER_LITERAL [node=false]
+	;
+	List1:
+		ListItem +
+	;
+//	List2:
+//		ListItem ( ',' ListItem ) *
+//	;
+	ListItem:
+		INTEGER_LITERAL
 	;

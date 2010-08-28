@@ -50,18 +50,25 @@ public enum Quantity {
 		return String.valueOf(symbol);
 	}
 
-	public static Quantity fromSymbol(Character symbol) {
+	public static Quantity fromSymbol(char symbol) {
 		for (Quantity quantity : Quantity.class.getEnumConstants()) {
 			if (quantity.getSymbol() == null) {
-				if (symbol == null) {
-					return quantity;
-				}
-			} else {
-				if (quantity.getSymbol().equals(symbol)) {
-					return quantity;
-				}
+				continue;
+			}
+			if (quantity.getSymbol().equals(symbol)) {
+				return quantity;
 			}
 		}
 		return null;
+	}
+
+	public static Quantity fromSymbol(String symbol) {
+		if ((symbol == null) || (symbol.isEmpty())) {
+			return EXPECT;
+		}
+		if (symbol.length() != 1) {
+			return null;
+		}
+		return fromSymbol(symbol.charAt(0));
 	}
 }

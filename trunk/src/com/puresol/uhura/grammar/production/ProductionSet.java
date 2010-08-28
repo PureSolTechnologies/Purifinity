@@ -52,6 +52,10 @@ public class ProductionSet {
 		return name2Production.get(productionName);
 	}
 
+	public boolean has(String productionName) {
+		return (name2Production.get(productionName) != null);
+	}
+
 	public int getId(Production production) throws GrammarException {
 		for (int i = 0; i < productions.size(); i++) {
 			if (productions.get(i).equals(production)) {
