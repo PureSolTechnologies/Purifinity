@@ -22,7 +22,9 @@ public class Grammar {
 		this.options = options;
 		this.tokenDefinitions = tokenDefinitions;
 		this.productions = productions;
-		checkConsistency();
+		if (Boolean.valueOf((String) options.get("grammar.checks"))) {
+			checkConsistency();
+		}
 	}
 
 	private void checkConsistency() throws GrammarException {
@@ -83,12 +85,12 @@ public class Grammar {
 		buffer.append("--------\n");
 		buffer.append(toOptionsString());
 		buffer.append("\n");
-		System.out.println("Tokens:\n");
-		System.out.println("-------\n");
+		buffer.append("Tokens:\n");
+		buffer.append("-------\n");
 		buffer.append(toTokenDefinitionsString());
 		buffer.append("\n");
 		buffer.append("Productions:\n");
-		System.out.println("------------\n");
+		buffer.append("------------\n");
 		buffer.append(toProductionsString());
 		buffer.append("\n");
 		return buffer.toString();

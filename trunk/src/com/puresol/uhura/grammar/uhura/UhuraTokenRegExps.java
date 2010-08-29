@@ -62,7 +62,7 @@ public class UhuraTokenRegExps {
 	/********************************
 	 * 3.8 Identifiers
 	 ********************************/
-	public static final String JAVA_LETTER_OR_DIGIT = "[a-zA-Z_$0-9]";
+	public static final String JAVA_LETTER_OR_DIGIT = "[-a-zA-Z_$0-9]";
 	public static final String JAVA_LETTER = "[a-zA-Z_$]";
 	public static final String IDENTIFIER_CHARS = JAVA_LETTER
 			+ JAVA_LETTER_OR_DIGIT + "*";

@@ -90,11 +90,16 @@ public class GrammarReader implements Callable<Boolean> {
 	private void read() throws IOException, GrammarException {
 		Lexer lexer = null;
 		try {
+			logger.debug("Read grammar file:");
+			logger.debug("Starting lexer...");
 			lexer = new RegExpLexer(new Properties());
 			lexer.scan(reader, uhuraGrammar.getTokenDefinitions());
 			TokenStream tokenStream = lexer.getTokenStream();
+			logger.debug("Starting parser...");
 			parse(tokenStream);
+			logger.debug("Convert AST into grammar...");
 			convertToGrammer();
+			logger.debug("done.");
 		} catch (LexerException e) {
 			logger.error(e.getMessage(), e);
 			throw new IOException(e.getMessage());
