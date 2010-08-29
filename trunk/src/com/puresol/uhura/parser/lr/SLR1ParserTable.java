@@ -68,7 +68,7 @@ public class SLR1ParserTable extends AbstractParserTable {
 		for (int stateId = 0; stateId < transitionGraph.getStateNumber(); stateId++) {
 			LR0ItemSet itemSet = transitionGraph.getItemSet(stateId);
 			if (logger.isTraceEnabled()) {
-				logger.debug("Process state " + stateId);
+				logger.trace("Process state " + stateId);
 				logger.trace(itemSet);
 			}
 			for (LR0Item item : itemSet.getAllItems()) {
@@ -78,8 +78,8 @@ public class SLR1ParserTable extends AbstractParserTable {
 				if (logger.isTraceEnabled()) {
 					logger.trace(item);
 				}
-				if (item.getProduction().equals(
-						grammar.getProductions().getProductions().get(0))) {
+				if (item.getProduction()
+						.equals(grammar.getProductions().get(0))) {
 					logger.trace("Found state 'accept' action.");
 					addActionTerminal(FinishConstruction.getInstance());
 					addAction(stateId, FinishConstruction.getInstance(),

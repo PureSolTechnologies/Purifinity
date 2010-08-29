@@ -196,11 +196,6 @@ public class TestGrammars {
 
 			ProductionSet productions = new ProductionSet();
 
-			/*
-			 * Here is not production 'Z' included! In LL grammars an explicit
-			 * start element is not needed.
-			 */
-
 			Production production = new Production("E");
 			production.addConstruction(new ProductionConstruction("T"));
 			production.addConstruction(new ProductionConstruction("E'"));

@@ -16,7 +16,8 @@ public class LR0StateTransitionGraphTest extends TestCase {
 		System.out.println("====================");
 		Grammar grammar = TestGrammars.getTestGrammarFromLR1Pamphlet();
 
-		LR0StateTransitionGraph transitionGraph = new LR0StateTransitionGraph(grammar);
+		LR0StateTransitionGraph transitionGraph = new LR0StateTransitionGraph(
+				grammar);
 		System.out.println(transitionGraph);
 	}
 
@@ -27,7 +28,8 @@ public class LR0StateTransitionGraphTest extends TestCase {
 		System.out.println("====================");
 		Grammar grammar = TestGrammars.getTestGrammarFromDragonBook();
 
-		LR0StateTransitionGraph transitionGraph = new LR0StateTransitionGraph(grammar);
+		LR0StateTransitionGraph transitionGraph = new LR0StateTransitionGraph(
+				grammar);
 		System.out.println(transitionGraph);
 	}
 

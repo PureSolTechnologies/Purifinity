@@ -58,8 +58,8 @@ public class LR0ParserTable extends AbstractParserTable {
 				if (item.getNext() != null) {
 					continue;
 				}
-				if (item.getProduction().equals(
-						grammar.getProductions().getProductions().get(0))) {
+				if (item.getProduction()
+						.equals(grammar.getProductions().get(0))) {
 					addActionTerminal(FinishConstruction.getInstance());
 					addAction(stateId, FinishConstruction.getInstance(),
 							new ParserAction(ActionType.ACCEPT, -1));

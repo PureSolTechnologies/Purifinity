@@ -29,8 +29,7 @@ public class LR1StateTransitionGraph {
 	}
 
 	protected void calculate() {
-		LR1Item startItem = new LR1Item(grammar.getProductions()
-				.getProductions().get(0), 0);
+		LR1Item startItem = new LR1Item(grammar.getProductions().get(0), 0);
 		startItem.addLookahead(FinishConstruction.getInstance());
 		LR1ItemSet initialSet = closureCalculator
 				.calc(new LR1ItemSet(startItem));

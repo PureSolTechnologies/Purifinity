@@ -25,7 +25,7 @@ public class LR1ParserTableTest extends TestCase {
 			System.out.println("=====================");
 			Grammar grammar = TestGrammars.getTestGrammarFromLR1Pamphlet();
 			System.out.println("Productions:");
-			grammar.printProductions();
+			System.out.println(grammar.toProductionsString());
 			ParserTable table = new LR1ParserTable(grammar);
 			System.out.println(table.toString());
 
@@ -161,7 +161,7 @@ public class LR1ParserTableTest extends TestCase {
 			System.out.println("====================");
 			Grammar grammar = TestGrammars.getLR1TestGrammarFromDragonBook();
 			System.out.println("Productions:");
-			grammar.printProductions();
+			System.out.println(grammar.toProductionsString());
 			ParserTable table = new LR1ParserTable(grammar);
 			System.out.println(table.toString());
 

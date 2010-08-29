@@ -22,27 +22,26 @@ public class AST implements Tree<AST> {
 
 	private final String name;
 	private final Token token;
-	private AST parent;
+	private AST parent = null;
 	private final List<AST> children = new CopyOnWriteArrayList<AST>();
 	private boolean node = true;
+	private boolean stackingAllowed = true;
 
 	public AST(Token token) {
 		this.name = token.getName();
 		this.token = token;
-		this.parent = null;
 	}
 
 	public AST(Production production) {
 		this.name = production.getAlternativeName();
-		node = production.isNode();
 		this.token = null;
-		this.parent = null;
+		node = production.isNode();
+		stackingAllowed = production.isStackingAllowed();
 	}
 
 	public AST(String name) {
 		this.name = name;
 		this.token = null;
-		this.parent = null;
 	}
 
 	/**
@@ -164,6 +163,21 @@ public class AST implements Tree<AST> {
 	 */
 	public void setNode(boolean node) {
 		this.node = node;
+	}
+
+	/**
+	 * @return the stackingAllowed
+	 */
+	public boolean isStackingAllowed() {
+		return stackingAllowed;
+	}
+
+	/**
+	 * @param stackingAllowed
+	 *            the stackingAllowed to set
+	 */
+	public void setStackingAllowed(boolean stackingAllowed) {
+		this.stackingAllowed = stackingAllowed;
 	}
 
 	public List<AST> getSubTrees(String name) {

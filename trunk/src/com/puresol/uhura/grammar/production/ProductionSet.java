@@ -40,7 +40,7 @@ public class ProductionSet {
 		}
 	}
 
-	public List<Production> getProductions() {
+	public List<Production> getList() {
 		return productions;
 	}
 

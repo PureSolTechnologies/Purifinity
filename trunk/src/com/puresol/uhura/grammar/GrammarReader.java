@@ -124,7 +124,7 @@ public class GrammarReader implements Callable<Boolean> {
 	private void convertToGrammer() throws GrammarException {
 		convertToOptions();
 		convertToTokenDefinitionSet();
-		convertToProductionsSet(tokenDefinitions);
+		convertToProductionsSet();
 		readGrammar = new Grammar(options, tokenDefinitions, productions);
 	}
 
@@ -159,9 +159,9 @@ public class GrammarReader implements Callable<Boolean> {
 		try {
 			Map<String, List<AST>> helpers = new ConcurrentHashMap<String, List<AST>>();
 			AST helperTree = ast.getChild("Helper");
-			List<AST> helperDefinitions = helperTree
-					.getSubTrees("HelperDefinition");
-			for (AST helperDefinition : helperDefinitions) {
+			AST helperDefinitions = helperTree.getChild("HelperDefinitions");
+			for (AST helperDefinition : helperDefinitions
+					.getChildren("HelperDefinition")) {
 				String identifier = helperDefinition.getChild("IDENTIFIER")
 						.getText();
 				List<AST> tokenParts = helperDefinition
@@ -178,10 +178,10 @@ public class GrammarReader implements Callable<Boolean> {
 	private Map<String, List<AST>> getTokens() throws GrammarException {
 		try {
 			Map<String, List<AST>> tokens = new ConcurrentHashMap<String, List<AST>>();
-			AST helperTree = ast.getChild("Tokens");
-			List<AST> tokenDefinitions = helperTree
-					.getSubTrees("TokenDefinition");
-			for (AST tokenDefinition : tokenDefinitions) {
+			AST tokensTree = ast.getChild("Tokens");
+			AST tokenDefinitions = tokensTree.getChild("TokenDefinitions");
+			for (AST tokenDefinition : tokenDefinitions
+					.getChildren("TokenDefinition")) {
 				// identifier...
 				String identifier = tokenDefinition.getChild("IDENTIFIER")
 						.getText();
@@ -255,13 +255,15 @@ public class GrammarReader implements Callable<Boolean> {
 		}
 	}
 
-	private void convertToProductionsSet(TokenDefinitionSet tokenDefinitions) {
+	private void convertToProductionsSet() {
 		try {
 			productions = new ProductionSet();
 			AST productionsTree = ast.getChild("Productions");
-			for (AST productionDefinition : productionsTree
-					.getSubTrees("ProductionDefinition")) {
-				convertProduction(productionDefinition, tokenDefinitions);
+			AST productionDefinitions = productionsTree
+					.getChild("ProductionDefinitions");
+			for (AST productionDefinition : productionDefinitions
+					.getChildren("ProductionDefinition")) {
+				convertProduction(productionDefinition);
 			}
 		} catch (ASTException e) {
 			logger.fatal(e.getMessage(), e);
@@ -272,25 +274,32 @@ public class GrammarReader implements Callable<Boolean> {
 		}
 	}
 
-	private void convertProduction(AST productionDefinition,
-			TokenDefinitionSet tokenDefinitions) throws GrammarException {
+	private void convertProduction(AST productionDefinition)
+			throws GrammarException {
 		try {
 			String productionName = productionDefinition.getChild("IDENTIFIER")
 					.getText();
-			for (AST productionConstruction : productionDefinition
-					.getSubTrees("ProductionConstruction")) {
-				convertProduction(productionName, productionConstruction,
-						tokenDefinitions);
-			}
+			AST productionConstructions = productionDefinition
+					.getChild("ProductionConstructions");
+			convertProductionConstructions(productionName,
+					productionConstructions);
 		} catch (ASTException e) {
 			logger.fatal(e.getMessage(), e);
 			throw new RuntimeException();
 		}
 	}
 
-	private void convertProduction(String productionName,
-			AST productionConstruction, TokenDefinitionSet tokenDefinitions)
-			throws ASTException, GrammarException {
+	private void convertProductionConstructions(String productionName,
+			AST productionConstructions) throws ASTException, GrammarException {
+		for (AST productionConstruction : productionConstructions
+				.getChildren("ProductionConstruction")) {
+			convertProductionConstruction(productionName,
+					productionConstruction);
+		}
+	}
+
+	private void convertProductionConstruction(String productionName,
+			AST productionConstruction) throws ASTException, GrammarException {
 		AST alternativeIdentifier = productionConstruction.getChild(
 				"AlternativeIdentifier").getChild("IDENTIFIER");
 		Production production;
@@ -300,17 +309,18 @@ public class GrammarReader implements Callable<Boolean> {
 			production = new Production(productionName,
 					alternativeIdentifier.getText());
 		}
-		production.addAllConstructions(getConstructions(productionConstruction,
-				tokenDefinitions));
+		production
+				.addAllConstructions(getConstructions(productionConstruction));
 		addOptions(production, productionConstruction);
 		productions.add(production);
 	}
 
-	private List<Construction> getConstructions(AST productionConstruction,
-			TokenDefinitionSet tokenDefinitions) throws ASTException {
+	private List<Construction> getConstructions(AST productionConstruction)
+			throws ASTException, GrammarException {
 		List<Construction> constructions = new CopyOnWriteArrayList<Construction>();
-		for (AST productionPart : productionConstruction
-				.getSubTrees("ProductionPart")) {
+		AST productionParts = productionConstruction
+				.getChild("ProductionParts");
+		for (AST productionPart : productionParts.getChildren("ProductionPart")) {
 			constructions
 					.add(getConstruction(productionPart, tokenDefinitions));
 		}
@@ -318,7 +328,8 @@ public class GrammarReader implements Callable<Boolean> {
 	}
 
 	private Construction getConstruction(AST productionPart,
-			TokenDefinitionSet tokenDefinitions) throws ASTException {
+			TokenDefinitionSet tokenDefinitions) throws ASTException,
+			GrammarException {
 		Quantity quantity = Quantity.fromSymbol(productionPart.getChild(
 				"OptionalQuantifier").getText());
 		if (quantity == Quantity.EXPECT) {
@@ -329,7 +340,7 @@ public class GrammarReader implements Callable<Boolean> {
 	}
 
 	private Construction createConstruction(AST productionPart)
-			throws ASTException {
+			throws ASTException, GrammarException {
 		if (productionPart.hasChild("IDENTIFIER")) {
 			String identifier = productionPart.getChild("IDENTIFIER").getText();
 			if (tokenDefinitions.getDefinition(identifier) != null) {
@@ -337,13 +348,20 @@ public class GrammarReader implements Callable<Boolean> {
 			} else {
 				return new ProductionConstruction(identifier);
 			}
-		} else {
+		} else if (productionPart.hasChild("STRING_LITERAL")) {
 			AST stringLiteral = productionPart.getChild("STRING_LITERAL");
-			if (stringLiteral == null) {
-				throw new ASTException("Invalid node '" + productionPart + "'!");
-			}
 			String text = stringLiteral.getText();
 			return new TextConstruction(text.substring(1, text.length() - 1));
+		} else if (productionPart.hasChild("ProductionConstructions")) {
+			AST productionConstructions = productionPart
+					.getChild("ProductionConstructions");
+			String newIdentifier = createNewIdentifier(productionPart,
+					"_group_autogen");
+			convertProductionConstructions(newIdentifier,
+					productionConstructions);
+			return new ProductionConstruction(newIdentifier);
+		} else {
+			throw new ASTException("Invalid node '" + productionPart + "'!");
 		}
 	}
 
@@ -362,11 +380,8 @@ public class GrammarReader implements Callable<Boolean> {
 
 	private Construction generateOptionalProduction(AST productionPart)
 			throws ASTException {
-		String newIdentifier = "";
-		if (productionPart.hasChild("IDENTIFIER")) {
-			newIdentifier = productionPart.getChild("IDENTIFIER").getText();
-		}
-		newIdentifier += "_opt_autogen";
+		String newIdentifier = createNewIdentifier(productionPart,
+				"_opt_autogen");
 		try {
 			Construction construction = createConstruction(productionPart);
 			if (!productions.has(newIdentifier)) {
@@ -384,13 +399,25 @@ public class GrammarReader implements Callable<Boolean> {
 		}
 	}
 
-	private Construction generateOptionalList(AST productionPart)
+	private String createNewIdentifier(AST productionPart, String suffix)
 			throws ASTException {
 		String newIdentifier = "";
 		if (productionPart.hasChild("IDENTIFIER")) {
 			newIdentifier = productionPart.getChild("IDENTIFIER").getText();
+		} else if (productionPart.hasChild("STRING_LITERAL")) {
+			newIdentifier = productionPart.getChild("STRING_LITERAL").getText();
 		}
-		newIdentifier += "_optlist_autogen";
+		int id = 1;
+		while (productions.has(newIdentifier + id + suffix)) {
+			id++;
+		}
+		return newIdentifier + id + suffix;
+	}
+
+	private Construction generateOptionalList(AST productionPart)
+			throws ASTException {
+		String newIdentifier = createNewIdentifier(productionPart,
+				"_optlist_autogen");
 		try {
 			Construction construction = createConstruction(productionPart);
 			if (!productions.has(newIdentifier)) {
@@ -411,11 +438,8 @@ public class GrammarReader implements Callable<Boolean> {
 	}
 
 	private Construction generateList(AST productionPart) throws ASTException {
-		String newIdentifier = "";
-		if (productionPart.hasChild("IDENTIFIER")) {
-			newIdentifier = productionPart.getChild("IDENTIFIER").getText();
-		}
-		newIdentifier += "_list_autogen";
+		String newIdentifier = createNewIdentifier(productionPart,
+				"_list_autogen");
 		try {
 			Construction construction = createConstruction(productionPart);
 			if (!productions.has(newIdentifier)) {
@@ -447,5 +471,4 @@ public class GrammarReader implements Callable<Boolean> {
 			}
 		}
 	}
-
 }

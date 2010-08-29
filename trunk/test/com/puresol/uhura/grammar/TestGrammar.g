@@ -45,8 +45,7 @@ TOKENS
  */
 PRODUCTIONS
 
-	// this element is the LR start element
-	_START_: 				Expression;
+	_START_ : Expression ;
 
 	Expression:
 		{add}				Expression '+' Term
@@ -63,9 +62,9 @@ PRODUCTIONS
 	List1:
 		ListItem +
 	;
-//	List2:
-//		ListItem ( ',' ListItem ) *
-//	;
+	List2:
+		ListItem ( ',' ListItem ) *
+	;
 	ListItem:
 		INTEGER_LITERAL
 	;

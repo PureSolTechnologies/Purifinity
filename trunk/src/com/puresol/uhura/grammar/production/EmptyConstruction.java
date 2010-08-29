@@ -2,6 +2,8 @@ package com.puresol.uhura.grammar.production;
 
 public class EmptyConstruction {
 
+	public static final String EMPTY_CONSTRUCTION_NAME = "_EMTPTY_";
+
 	private static Construction instance = null;
 
 	public static Construction getInstance() {
@@ -13,7 +15,7 @@ public class EmptyConstruction {
 
 	private static synchronized void createInstance() {
 		if (instance == null) {
-			instance = new TokenConstruction("_EMPTY_");
+			instance = new TokenConstruction(EMPTY_CONSTRUCTION_NAME);
 		}
 	}
 

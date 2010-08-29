@@ -45,13 +45,17 @@ public class Follow {
 	}
 
 	/**
+	 * This method ass the finish construction to the start symbol. If a start
+	 * symbol is defined by StartProduction this construction is used. If the
+	 * there is no such production, the fist production is used.
+	 * 
 	 * <pre>
 	 * 1. nimm $ zu FOLLOW(S) hinzu (S sei das Startsymbol)
 	 * </pre>
 	 */
 	private void addFinishToStart() {
-		follow.get(grammar.getProductions().getProductions().get(0).getName())
-				.add(FinishConstruction.getInstance());
+		follow.get(grammar.getProductions().get(0).getName()).add(
+				FinishConstruction.getInstance());
 	}
 
 	/**
@@ -61,7 +65,7 @@ public class Follow {
 	 * </pre>
 	 */
 	private void addFirsts() {
-		for (Production production : grammar.getProductions().getProductions()) {
+		for (Production production : grammar.getProductions().getList()) {
 			addFirsts(production);
 		}
 	}
@@ -90,7 +94,7 @@ public class Follow {
 	 * </pre>
 	 */
 	private void addFollows() {
-		for (Production production : grammar.getProductions().getProductions()) {
+		for (Production production : grammar.getProductions().getList()) {
 			addFollows(production);
 		}
 	}
@@ -120,7 +124,7 @@ public class Follow {
 	}
 
 	private void initFollowMap() {
-		for (Production production : grammar.getProductions().getProductions()) {
+		for (Production production : grammar.getProductions().getList()) {
 			String productionName = production.getName();
 			Set<Construction> set = follow.get(productionName);
 			if (set == null) {

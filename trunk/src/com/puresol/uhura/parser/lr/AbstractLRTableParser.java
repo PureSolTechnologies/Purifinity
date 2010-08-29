@@ -16,7 +16,6 @@ import com.puresol.uhura.lexer.Token;
 import com.puresol.uhura.lexer.TokenStream;
 import com.puresol.uhura.parser.AbstractParser;
 import com.puresol.uhura.parser.ParserException;
-import com.puresol.uhura.parser.parsetable.ActionType;
 import com.puresol.uhura.parser.parsetable.ParserAction;
 import com.puresol.uhura.parser.parsetable.ParserTable;
 
@@ -51,13 +50,16 @@ public abstract class AbstractLRTableParser extends AbstractParser {
 	}
 
 	@Override
+	public ParserTable getParserTable() {
+		return parserTable;
+	}
+
+	@Override
 	public AST call() throws ParserException {
-		treeStack.clear();
-		stateStack.clear();
-		streamPosition = 0;
-		stepCounter = 0;
-		stateStack.push(0);
-		while (true) {
+		reset();
+		boolean accepted = false;
+		do {
+			stepCounter++;
 			if (logger.isTraceEnabled()) {
 				logger.trace(toString());
 			}
@@ -70,41 +72,107 @@ public abstract class AbstractLRTableParser extends AbstractParser {
 				token = null;
 				construction = FinishConstruction.getInstance();
 			}
-			stepCounter++;
 			ParserAction action = parserTable.getAction(stateStack.peek(),
 					construction);
-			if (action.getAction() == ActionType.SHIFT) {
-				treeStack.push(new AST(token));
-				stateStack.push(action.getTargetState());
-				streamPosition++;
-			} else if (action.getAction() == ActionType.REDUCE) {
-				Production production = getGrammar().getProductions().get(
-						action.getTargetState());
-				AST tree = new AST(production);
-				for (int i = 0; i < production.getConstructions().size(); i++) {
-					AST poppedAST = treeStack.pop();
-					if (poppedAST.isNode()) {
-						tree.addChildInFront(poppedAST);
-					} else {
-						tree.addChildrenInFront(poppedAST.getChildren());
-					}
-					stateStack.pop();
-				}
-				int targetState = parserTable.getAction(stateStack.peek(),
-						new ProductionConstruction(production.getName()))
-						.getTargetState();
-				treeStack.push(tree);
-				stateStack.push(targetState);
-			} else if (action.getAction() == ActionType.ACCEPT) {
+			switch (action.getAction()) {
+			case SHIFT:
+				shift(action, token);
 				break;
-			} else {
-				throw new ParserException("Error during parsing!", token);
+			case REDUCE:
+				reduce(action);
+				break;
+			case ACCEPT:
+				accepted = accept();
+				break;
+			case ERROR:
+				error(token);
+				break;
+			default:
+				throw new ParserException("Invalid action '" + action
+						+ "'for parser!", token);
 			}
-		}
+		} while (!accepted);
 		/*
 		 * We are finished. The last element in the stack is the result...
 		 */
 		return treeStack.pop();
+	}
+
+	/**
+	 * This method is called just before running the parser to reset all
+	 * internal values and to clean all stacks.
+	 */
+	private void reset() {
+		treeStack.clear();
+		stateStack.clear();
+		streamPosition = 0;
+		stepCounter = 0;
+		stateStack.push(0);
+	}
+
+	/**
+	 * This method is called for shift actions.
+	 * 
+	 * @param action
+	 *            is the action to be performed.
+	 * @param token
+	 *            is the current token in token stream.
+	 */
+	private void shift(ParserAction action, Token token) {
+		treeStack.push(new AST(token));
+		stateStack.push(action.getTargetState());
+		streamPosition++;
+	}
+
+	private void reduce(ParserAction action) {
+		Production production = getGrammar().getProductions().get(
+				action.getTargetState());
+		AST tree = new AST(production);
+		for (int i = 0; i < production.getConstructions().size(); i++) {
+			AST poppedAST = treeStack.pop();
+			if (poppedAST.isNode()) {
+				if (poppedAST.isStackingAllowed()) {
+					tree.addChildInFront(poppedAST);
+				} else {
+					if (tree.getName().equals(poppedAST.getName())) {
+						tree.addChildrenInFront(poppedAST.getChildren());
+					} else {
+						tree.addChildInFront(poppedAST);
+					}
+				}
+			} else {
+				tree.addChildrenInFront(poppedAST.getChildren());
+			}
+			stateStack.pop();
+		}
+		int targetState = parserTable.getAction(stateStack.peek(),
+				new ProductionConstruction(production.getName()))
+				.getTargetState();
+		treeStack.push(tree);
+		stateStack.push(targetState);
+	}
+
+	/**
+	 * This method is called for accept action and checks for the acceptance
+	 * state for the parser to finish the parsing process.
+	 * 
+	 * The containing check in this method is a check to be secure. Accept is
+	 * only true if the tree stack only contains one more element (the result
+	 * tree) and the state stack only contains the current state and the zero
+	 * state for the start element.
+	 * 
+	 * @return True is returned if all conditions are met for finishing the
+	 *         parser.
+	 */
+	private boolean accept() {
+		if ((treeStack.size() == 1) && (stateStack.size() == 2)) {
+			return true;
+		}
+		return false;
+	}
+
+	private void error(Token token) throws ParserException {
+		throw new ParserException("Error during parsing!", token);
 	}
 
 	@Override

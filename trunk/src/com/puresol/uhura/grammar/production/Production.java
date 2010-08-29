@@ -9,6 +9,7 @@ public class Production {
 	private final String alternativeName;
 	private final List<Construction> constructions = new ArrayList<Construction>();
 	private boolean node = true;
+	private boolean stackingAllowed = true;
 
 	public Production(String name) {
 		super();
@@ -68,6 +69,21 @@ public class Production {
 	 */
 	public void setNode(boolean node) {
 		this.node = node;
+	}
+
+	/**
+	 * @return the stackingAllowed
+	 */
+	public boolean isStackingAllowed() {
+		return stackingAllowed;
+	}
+
+	/**
+	 * @param stackingAllowed
+	 *            the stackingAllowed to set
+	 */
+	public void setStackingAllowed(boolean stackingAllowed) {
+		this.stackingAllowed = stackingAllowed;
 	}
 
 	@Override

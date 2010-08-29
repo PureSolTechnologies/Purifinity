@@ -26,7 +26,7 @@ public class Grammar {
 	}
 
 	private void checkConsistency() throws GrammarException {
-		for (Production production : productions.getProductions()) {
+		for (Production production : productions.getList()) {
 			for (Construction construction : production.getConstructions()) {
 				if (construction.isTerminal()) {
 					if (!construction.getClass()
@@ -72,45 +72,55 @@ public class Grammar {
 		return productions;
 	}
 
-	public void println() {
-		System.out.println("=========");
-		System.out.println(" Grammar");
-		System.out.println("=========");
-		System.out.println();
-		System.out.println("Options:");
-		System.out.println("--------");
-		printOptions();
-		System.out.println();
-		System.out.println("Tokens:");
-		System.out.println("-------");
-		printTokenDefinitions();
-		System.out.println();
-		System.out.println("Productions:");
-		System.out.println("------------");
-		printProductions();
-		System.out.println();
+	@Override
+	public String toString() {
+		StringBuilder buffer = new StringBuilder();
+		buffer.append("=========\n");
+		buffer.append(" Grammar\n");
+		buffer.append("=========\n");
+		buffer.append("\n");
+		buffer.append("Options:\n");
+		buffer.append("--------\n");
+		buffer.append(toOptionsString());
+		buffer.append("\n");
+		System.out.println("Tokens:\n");
+		System.out.println("-------\n");
+		buffer.append(toTokenDefinitionsString());
+		buffer.append("\n");
+		buffer.append("Productions:\n");
+		System.out.println("------------\n");
+		buffer.append(toProductionsString());
+		buffer.append("\n");
+		return buffer.toString();
 	}
 
-	public void printOptions() {
+	public StringBuilder toOptionsString() {
+		StringBuilder buffer = new StringBuilder();
 		for (Object key : options.keySet()) {
-			System.out.println(key + " = " + options.getProperty((String) key));
+			buffer.append(key + " : " + options.getProperty((String) key)
+					+ "\n");
 		}
+		return buffer;
 	}
 
-	public void printTokenDefinitions() {
+	public StringBuilder toTokenDefinitionsString() {
+		StringBuilder buffer = new StringBuilder();
 		for (TokenDefinition definition : tokenDefinitions.getDefinitions()) {
-			System.out.println(definition);
+			buffer.append(definition + "\n");
 		}
+		return buffer;
 	}
 
-	public void printProductions() {
-		List<Production> productionsList = productions.getProductions();
+	public StringBuilder toProductionsString() {
+		StringBuilder buffer = new StringBuilder();
+		List<Production> productionsList = productions.getList();
 		for (int i = 0; i < productionsList.size(); i++) {
-			System.out.print("(");
-			System.out.print(i);
-			System.out.print(")\t");
+			buffer.append("(");
+			buffer.append(i);
+			buffer.append(")\t");
 			Production production = productionsList.get(i);
-			System.out.println(production.toShortString(-1));
+			buffer.append(production.toShortString(-1) + "\n");
 		}
+		return buffer;
 	}
 }

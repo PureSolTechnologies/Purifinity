@@ -17,6 +17,7 @@ import com.puresol.uhura.lexer.RegExpLexer;
 import com.puresol.uhura.parser.Parser;
 import com.puresol.uhura.parser.ParserException;
 import com.puresol.uhura.parser.lr.SLR1Parser;
+import com.puresol.uhura.parser.parsetable.LR0StateTransitionGraph;
 
 import junit.framework.TestCase;
 
@@ -33,11 +34,14 @@ public class GrammarReaderTest extends TestCase {
 			TreePrinter printer = new TreePrinter(System.out);
 			printer.println(ast);
 			Grammar grammar = reader.getGrammar();
-			grammar.println();
+			System.out.println(grammar);
 			Lexer lexer = new RegExpLexer(new Properties());
 			lexer.scan(new StringReader("1 * 2\n + 3"),
 					grammar.getTokenDefinitions());
 			Parser parser = new SLR1Parser(new Properties(), grammar);
+			System.out.println(parser.getParserTable());
+			LR0StateTransitionGraph tg = new LR0StateTransitionGraph(grammar);
+			System.out.println(tg);
 			parser.setTokenStream(lexer.getTokenStream());
 			AST syntaxTree = parser.call();
 			new TreePrinter(System.out).println(syntaxTree);

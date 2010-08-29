@@ -76,8 +76,8 @@ public class LR1ParserTable extends AbstractParserTable {
 				if (logger.isTraceEnabled()) {
 					logger.trace(item);
 				}
-				if (item.getProduction().equals(
-						grammar.getProductions().getProductions().get(0))) {
+				if (item.getProduction()
+						.equals(grammar.getProductions().get(0))) {
 					logger.trace("Found state 'accept' action.");
 					addActionTerminal(FinishConstruction.getInstance());
 					addAction(stateId, FinishConstruction.getInstance(),

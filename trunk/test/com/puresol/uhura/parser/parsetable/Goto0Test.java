@@ -18,12 +18,11 @@ public class Goto0Test extends TestCase {
 	public void test() {
 		Grammar grammar = TestGrammars.getTestGrammarFromLR1Pamphlet();
 		System.out.println("Productions:");
-		grammar.printProductions();
+		System.out.println(grammar.toProductionsString());
 
 		Closure0 closure = new Closure0(grammar);
 		System.out.println("Closure0:");
-		LR0Item primItem = new LR0Item(
-				grammar.getProductions().get("Z").get(0), 0);
+		LR0Item primItem = new LR0Item(grammar.getProductions().get(0), 0);
 		LR0ItemSet itemSet = closure.calc(primItem);
 		System.out.println(itemSet.toString());
 

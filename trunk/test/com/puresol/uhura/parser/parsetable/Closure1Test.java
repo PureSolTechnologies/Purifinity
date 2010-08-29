@@ -19,12 +19,11 @@ public class Closure1Test extends TestCase {
 	public void test() {
 		Grammar grammar = TestGrammars.getTestGrammarFromLR1Pamphlet();
 		System.out.println("Productions:");
-		grammar.printProductions();
+		System.out.println(grammar.toProductionsString());
 
 		Closure1 closure = new Closure1(grammar);
 		System.out.println("Closure1:");
-		LR1Item primItem = new LR1Item(
-				grammar.getProductions().get("Z").get(0), 0);
+		LR1Item primItem = new LR1Item(grammar.getProductions().get(0), 0);
 		primItem.addLookahead(FinishConstruction.getInstance());
 		LR1ItemSet itemSet = closure.calc(primItem);
 		System.out.println(itemSet.toString());
@@ -39,7 +38,7 @@ public class Closure1Test extends TestCase {
 
 		LR1Item item1 = iterator.next();
 		assertEquals(0, item1.getPosition());
-		assertEquals(grammar.getProductions().getProductions().get(1),
+		assertEquals(grammar.getProductions().getList().get(1),
 				item1.getProduction());
 		assertEquals(1, item1.getLookahead().size());
 		assertEquals(FinishConstruction.getInstance(), item1.getLookahead()
@@ -47,21 +46,21 @@ public class Closure1Test extends TestCase {
 
 		LR1Item item2 = iterator.next();
 		assertEquals(0, item2.getPosition());
-		assertEquals(grammar.getProductions().getProductions().get(1),
+		assertEquals(grammar.getProductions().getList().get(1),
 				item2.getProduction());
 		assertEquals(1, item2.getLookahead().size());
 		assertEquals("b", item2.getLookahead().iterator().next().getName());
 
 		LR1Item item3 = iterator.next();
 		assertEquals(0, item3.getPosition());
-		assertEquals(grammar.getProductions().getProductions().get(2),
+		assertEquals(grammar.getProductions().getList().get(2),
 				item3.getProduction());
 		assertEquals(1, item3.getLookahead().size());
 		assertEquals("b", item3.getLookahead().iterator().next().getName());
 
 		LR1Item item4 = iterator.next();
 		assertEquals(0, item4.getPosition());
-		assertEquals(grammar.getProductions().getProductions().get(2),
+		assertEquals(grammar.getProductions().getList().get(2),
 				item4.getProduction());
 		assertEquals(1, item4.getLookahead().size());
 		assertEquals(FinishConstruction.getInstance(), item4.getLookahead()

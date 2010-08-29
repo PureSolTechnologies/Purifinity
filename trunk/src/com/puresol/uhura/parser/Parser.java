@@ -4,6 +4,7 @@ import java.util.concurrent.Callable;
 
 import com.puresol.uhura.ast.AST;
 import com.puresol.uhura.lexer.TokenStream;
+import com.puresol.uhura.parser.parsetable.ParserTable;
 
 /**
  * This is the general interface for a parser. The parser is initialized via its
@@ -18,5 +19,7 @@ public interface Parser extends Callable<AST> {
 
 	@Override
 	public AST call() throws ParserException;
+
+	ParserTable getParserTable();
 
 }

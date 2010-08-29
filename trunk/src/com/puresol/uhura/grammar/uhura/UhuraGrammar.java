@@ -83,6 +83,7 @@ public class UhuraGrammar {
 				"PRODUCTIONS"));
 		tokenDefinitions.addDefinition(new TokenDefinition("HIDDEN", "hidden"));
 		tokenDefinitions.addDefinition(new TokenDefinition("NODE", "node"));
+		tokenDefinitions.addDefinition(new TokenDefinition("STACK", "stack"));
 	}
 
 	private static void addLiteralsAndIdentifier(
@@ -151,11 +152,13 @@ public class UhuraGrammar {
 		production
 				.addConstruction(new ProductionConstruction("GrammarOptions"));
 		production.addConstruction(new ProductionConstruction("GrammarOption"));
-		production.setNode(false);
+		production.setNode(true);
+		production.setStackingAllowed(false);
 		productions.add(production);
 
 		production = new Production("GrammarOptions");
-		production.setNode(false);
+		production.setNode(true);
+		production.setStackingAllowed(false);
 		productions.add(production);
 
 		production = new Production("GrammarOption");
@@ -194,9 +197,13 @@ public class UhuraGrammar {
 				"HelperDefinitions"));
 		production.addConstruction(new ProductionConstruction(
 				"HelperDefinition"));
+		production.setNode(true);
+		production.setStackingAllowed(false);
 		productions.add(production);
 
 		production = new Production("HelperDefinitions");
+		production.setNode(true);
+		production.setStackingAllowed(false);
 		productions.add(production);
 
 		production = new Production("HelperDefinition");
@@ -224,13 +231,15 @@ public class UhuraGrammar {
 				"TokenDefinitions"));
 		production
 				.addConstruction(new ProductionConstruction("TokenDefinition"));
-		production.setNode(false);
+		production.setNode(true);
+		production.setStackingAllowed(false);
 		productions.add(production);
 
 		production = new Production("TokenDefinitions");
 		production
 				.addConstruction(new ProductionConstruction("TokenDefinition"));
-		production.setNode(false);
+		production.setNode(true);
+		production.setStackingAllowed(false);
 		productions.add(production);
 
 		production = new Production("TokenDefinition");
@@ -253,11 +262,15 @@ public class UhuraGrammar {
 		production.addConstruction(new TextConstruction("|"));
 		production.addConstruction(new ProductionConstruction(
 				"TokenConstruction"));
+		production.setNode(true);
+		production.setStackingAllowed(false);
 		productions.add(production);
 
 		production = new Production("TokenConstructions");
 		production.addConstruction(new ProductionConstruction(
 				"TokenConstruction"));
+		production.setNode(true);
+		production.setStackingAllowed(false);
 		productions.add(production);
 
 		production = new Production("TokenConstruction");
@@ -317,11 +330,13 @@ public class UhuraGrammar {
 				"ProductionDefinitions"));
 		production.addConstruction(new ProductionConstruction(
 				"ProductionDefinition"));
-		production.setNode(false);
+		production.setNode(true);
+		production.setStackingAllowed(false);
 		productions.add(production);
 
 		production = new Production("ProductionDefinitions");
-		production.setNode(false);
+		production.setNode(true);
+		production.setStackingAllowed(false);
 		productions.add(production);
 
 		production = new Production("ProductionDefinition");
@@ -342,13 +357,15 @@ public class UhuraGrammar {
 		production.addConstruction(new TextConstruction("|"));
 		production.addConstruction(new ProductionConstruction(
 				"ProductionConstruction"));
-		production.setNode(false);
+		production.setNode(true);
+		production.setStackingAllowed(false);
 		productions.add(production);
 
 		production = new Production("ProductionConstructions");
 		production.addConstruction(new ProductionConstruction(
 				"ProductionConstruction"));
-		production.setNode(false);
+		production.setNode(true);
+		production.setStackingAllowed(false);
 		productions.add(production);
 
 		production = new Production("ProductionConstruction");
@@ -365,19 +382,21 @@ public class UhuraGrammar {
 				.addConstruction(new ProductionConstruction("ProductionParts"));
 		production
 				.addConstruction(new ProductionConstruction("ProductionPart"));
-		production.setNode(false);
+		production.setNode(true);
+		production.setStackingAllowed(false);
 		productions.add(production);
 
 		production = new Production("ProductionParts");
 		production
 				.addConstruction(new ProductionConstruction("ProductionPart"));
-		production.setNode(false);
+		production.setNode(true);
+		production.setStackingAllowed(false);
 		productions.add(production);
 
 		production = new Production("ProductionPart");
 		production.addConstruction(new TextConstruction("("));
 		production.addConstruction(new ProductionConstruction(
-				"ProductionConstruction"));
+				"ProductionConstructions"));
 		production.addConstruction(new TextConstruction(")"));
 		production.addConstruction(new ProductionConstruction(
 				"OptionalQuantifier"));
@@ -421,17 +440,25 @@ public class UhuraGrammar {
 		production.addConstruction(new TokenConstruction("COMMA"));
 		production
 				.addConstruction(new ProductionConstruction("OptionalOption"));
-		production.setNode(false);
+		production.setNode(true);
+		production.setStackingAllowed(false);
 		productions.add(production);
 
 		production = new Production("OptionalOptionList");
 		production
 				.addConstruction(new ProductionConstruction("OptionalOption"));
-		production.setNode(false);
+		production.setNode(true);
+		production.setStackingAllowed(false);
 		productions.add(production);
 
 		production = new Production("OptionalOption");
 		production.addConstruction(new TextConstruction("node"));
+		production.addConstruction(new TextConstruction("="));
+		production.addConstruction(new TokenConstruction("BOOLEAN_LITERAL"));
+		productions.add(production);
+
+		production = new Production("OptionalOption");
+		production.addConstruction(new TextConstruction("stack"));
 		production.addConstruction(new TextConstruction("="));
 		production.addConstruction(new TokenConstruction("BOOLEAN_LITERAL"));
 		productions.add(production);

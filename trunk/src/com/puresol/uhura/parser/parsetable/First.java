@@ -46,7 +46,7 @@ public class First {
 	 * Initializes the first map for data input.
 	 */
 	private void initFirstMap() {
-		for (Production production : grammar.getProductions().getProductions()) {
+		for (Production production : grammar.getProductions().getList()) {
 			first.put(production.getName(),
 					new CopyOnWriteArraySet<Construction>());
 		}
@@ -57,7 +57,7 @@ public class First {
 	 * construction to the first set.
 	 */
 	private void addEmpty() {
-		for (Production production : grammar.getProductions().getProductions()) {
+		for (Production production : grammar.getProductions().getList()) {
 			if (production.isEmpty()) {
 				add(production.getName(), EmptyConstruction.getInstance());
 			}
@@ -66,7 +66,7 @@ public class First {
 
 	private boolean iterate() {
 		boolean changed = false;
-		for (Production production : grammar.getProductions().getProductions()) {
+		for (Production production : grammar.getProductions().getList()) {
 			if (iterate(production)) {
 				changed = true;
 			}
@@ -108,7 +108,7 @@ public class First {
 	}
 
 	private void checkForEmptyConstructions() {
-		for (Production production : grammar.getProductions().getProductions()) {
+		for (Production production : grammar.getProductions().getList()) {
 			boolean allEmpty = true;
 			for (Construction construction : production.getConstructions()) {
 				if (construction.isTerminal()) {

@@ -28,8 +28,7 @@ public class LR0StateTransitionGraph {
 	}
 
 	private void calculate() {
-		LR0Item startItem = new LR0Item(grammar.getProductions()
-				.getProductions().get(0), 0);
+		LR0Item startItem = new LR0Item(grammar.getProductions().get(0), 0);
 		LR0ItemSet initialSet = closureCalculator
 				.calc(new LR0ItemSet(startItem));
 		addState(initialSet);
@@ -68,10 +67,6 @@ public class LR0StateTransitionGraph {
 					new ConcurrentHashMap<Construction, Integer>());
 		}
 		transitions.get(initialState).put(construction, finalState);
-	}
-
-	public LR0ItemSet getStartItemSet() {
-		return itemSets.get(0);
 	}
 
 	public LR0ItemSet getItemSet(int stateId) {

@@ -19,7 +19,7 @@ public class UhuraGrammarTest extends TestCase {
 	public void test() {
 		Grammar grammar = UhuraGrammar.getGrammar();
 		assertNotNull(grammar);
-		grammar.println();
+		System.out.println(grammar);
 	}
 
 	@Test

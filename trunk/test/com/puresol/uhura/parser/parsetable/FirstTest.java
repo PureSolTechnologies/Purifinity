@@ -24,7 +24,7 @@ public class FirstTest extends TestCase {
 		System.out.println("=====================");
 		Grammar grammar = TestGrammars.getTestGrammarFromLR1Pamphlet();
 		System.out.println("Productions:");
-		grammar.printProductions();
+		System.out.println(grammar.toProductionsString());
 
 		First first = new First(grammar);
 		System.out.println("First:");
@@ -63,7 +63,7 @@ public class FirstTest extends TestCase {
 		System.out.println("====================");
 		Grammar grammar = TestGrammars.getTestGrammarFromDragonBook();
 		System.out.println("Productions:");
-		grammar.printProductions();
+		System.out.println(grammar.toProductionsString());
 
 		First first = new First(grammar);
 		System.out.println("First:");
@@ -105,7 +105,7 @@ public class FirstTest extends TestCase {
 		System.out.println("=======================");
 		Grammar grammar = TestGrammars.getTestLLGrammarFromDragonBook();
 		System.out.println("Productions:");
-		grammar.printProductions();
+		System.out.println(grammar.toProductionsString());
 
 		First first = new First(grammar);
 		System.out.println("First:");

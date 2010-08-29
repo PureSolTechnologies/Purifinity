@@ -24,7 +24,7 @@ public class FollowTest extends TestCase {
 		System.out.println("=====================");
 		Grammar grammar = TestGrammars.getTestGrammarFromLR1Pamphlet();
 		System.out.println("Productions:");
-		grammar.printProductions();
+		System.out.println(grammar.toProductionsString());
 
 		Follow follow = new Follow(grammar);
 		System.out.println("Follow:");
@@ -60,7 +60,7 @@ public class FollowTest extends TestCase {
 		System.out.println("====================");
 		Grammar grammar = TestGrammars.getTestGrammarFromDragonBook();
 		System.out.println("Productions:");
-		grammar.printProductions();
+		System.out.println(grammar.toProductionsString());
 
 		Follow follow = new Follow(grammar);
 		System.out.println("Follow:");
@@ -108,7 +108,7 @@ public class FollowTest extends TestCase {
 		System.out.println("=======================");
 		Grammar grammar = TestGrammars.getTestLLGrammarFromDragonBook();
 		System.out.println("Productions:");
-		grammar.printProductions();
+		System.out.println(grammar.toProductionsString());
 
 		Follow follow = new Follow(grammar);
 		System.out.println("Follow:");
