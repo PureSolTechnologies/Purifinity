@@ -12,7 +12,7 @@ public class FortranGrammarTest extends TestCase {
 
 	@Test
 	public void testSingleton() {
-		Logger.getRootLogger().setLevel(Level.TRACE);
+		Logger.getRootLogger().setLevel(Level.DEBUG);
 		Grammar grammar = FortranGrammar.get();
 		assertNotNull(grammar);
 		assertSame(grammar, FortranGrammar.get());
@@ -21,6 +21,6 @@ public class FortranGrammarTest extends TestCase {
 	@Test
 	public void testPrint() {
 		Grammar grammar = FortranGrammar.get();
-		grammar.println();
+		System.out.println(grammar);
 	}
 }
