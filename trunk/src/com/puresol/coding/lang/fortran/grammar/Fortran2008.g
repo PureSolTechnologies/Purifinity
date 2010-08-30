@@ -190,31 +190,68 @@
 	 * Keywords
 	 */ 
 	ABSTRACT : 'ABSTRACT' ;
+	ACCESS : 'ACCESS' ;
+	ACTION : 'ACTION' ;
 	ALLOCATABLE : 'ALLOCATABLE' ;
 	ALLOCATE : 'ALLOCATE' ;
+	ACQUIRED_LOCK : 'ACQUIRED\\s+LOCK' ;
+	ASSOCIATE : 'ASSOCIATE' ;
 	ASYNCHRONOUS : 'ASYNCHRONOUS' ;
 	BIND : 'BIND' ;
+	BLANK : 'BLANK' ;
+	BLOCK : 'BLOCK' ;
+	CASE : 'CASE' ;
 	CHARACTER : 'CHARACTER' ;
-	CLASS : 'CLASS' ; 
+	CLASS : 'CLASS' ;
+	CLASS_DEFAULT : 'CLASS\\s+DEFAULT' ;
+	CLASS_IS : 'CLASS\\s+IS' ;
+	CLOSE : 'CLOSE' ;
+	CONTINUE : 'CONTINUE' ;
+	CYCLE : 'CYCLE' ;
 	CODIMENSION : 'CODIMENSION' ;
 	COMMON : 'COMMON' ;
 	COMPLEX : 'COMPLEX' ;
+	CONCURRENT : 'CONCURRENT' ;
 	CONTIGUOUS : 'CONTIGUOUS' ;
+	CRITICAL : 'CRITICAL' ;
 	DATA : 'DATA' ;
 	DEALLOCATE : 'DEALLOCATE' ;
+	DECIMAL : 'DECIMAL' ;
+	DEFAULT : 'DEFAULT' ;
 	DEFERRED : 'DEFERRED' ;
+	DELIM : 'DELIM' ;
 	DIMENSION : 'DIMENSION' ;
+	DO : 'DO' ;
 	DOUBLE_PRECISION : 'DOUBLE\\s+PRECISION' ;
+	ELSEWHERE : 'ELSEWHERE' ;
+	END_ASSOCIATE : 'END\\s+ASSOCIATE' ;
+	END_BLOCK : 'END\\s+BLOCK' ;
+	END_CRITICAL : 'END\\s+CRITICAL' ;
+	END_FORALL : 'END\\s+FORALL' ;
 	END_ENUM : 'END\\s+ENUM' ;
+	END_IF : 'END\\s+IF' ;
+	END_SELECT : 'END\\s+SELECT' ;
 	END_TYPE : 'END\\s+TYPE' ;
+	END_WHERE : 'END\\s+WHERE';
+	ELSE : 'ELSE' ;
+	ELSE_IF : 'ELSE\\s+IF' ;
+	ENCODING : 'ENCODING' ;
 	ENUM : 'ENUM' ;
 	ENUMERATOR : 'ENUMERATOR' ;
 	EQUIVALENCE : 'EQUIVALENCE' ;
+	ERR : 'ERR' ;
 	ERRMSG : 'ERRMSG' ;
+	ERROR_STOP : 'ERROR\\s+STOP';
+	EXIT : 'EXIT' ;
 	EXTENDS : 'EXTENDS' ;
 	EXTERNAL : 'DIMENSION' ;
+	FILE : 'FILE' ; 
 	FINAL : 'FINAL' ;
+	FORALL : 'FORALL' ;
+	FORM : 'FORM' ;
 	GENERIC : 'GENERIC' ;
+	GO_TO : 'GO\\s*TO' ;
+	IF : 'IF' ;
 	IM : 'IM' ;
 	IMPLICIT : 'IMPLICIT' ;
 	IMPLICIT_NONE : 'IMPLICIT\\s+NONE' ;
@@ -223,34 +260,58 @@
 	INTEGER : 'INTEGER' ;
 	INTENT : 'INTENT'  ;
 	INTRINSIC : 'INTRINSIC' ;
+	IOMSG : 'IOMSG' ;
+	IOSTAT : 'IOSTAT' ;
 	KIND : 'KIND' ;
 	LEN : 'LEN' ;
+	LOCK : 'LOCK' ;
 	LOGICAL : 'LOGICAL' ;
 	MOLD : 'MOLD' ;
 	NAME : 'NAME' ;
 	NAMELIST : 'NAMELIST' ;
+	NEWUNIT : 'NEWUNIT' ;
 	NON_OVERRIDABLE : 'NON\\s+OVERRIDABLE' ;
 	NOPASS : 'NOPASS' ;
 	NULLIFY : 'NULLIFY' ;
 	OPTIONAL : 'OPTIONAL' ;
 	OUT : 'OUT' ;
+	PAD : 'PAD' ;
 	PASS : 'PASS' ;
 	PARAMETER : 'PARAMETER' ;
 	POINTER : 'POINTER' ;
+	POSITION : 'POSITION' ;
+	PRINT : 'PRINT' ;
 	PRIVATE : 'PRIVATE' ;
 	PROCEDURE : 'PROCEDURE' ; 
 	PROTECTED : 'PROTECTED' ;
 	PUBLIC : 'PUBLIC' ;
 	RE : 'RE' ;
+	RECL : 'RECL' ;
+	READ : 'READ' ;
 	REAL : 'REAL' ;
+	ROUND : 'ROUND' ;
 	SAVE : 'SAVE' ;
+	SELECT_CASE : 'SELECT\\s+CASE' ;
 	SEQUENCE : 'SEQUENCE' ;
+	SIGN : 'SIGN' ;
 	SOURCE : 'SOURCE' ;
 	STAT : 'STAT' ;
+	STATUS : 'STATUS' ;
+	STOP : 'STOP' ;
+	SYNC_ALL : 'SYNC\\s+ALL' ;
+	SYNC_IMAGES : 'SYNC\\s+IMAGES' ;
+	SYNC_MEMORY : 'SYNC\\s+MEMORY' ;
 	TARGET : 'TARGET' ;
+	THEN : 'THEN' ;
 	TYPE : 'TYPE' ;
+	TYPE_IS : 'TYPE\\s+IS' ;
+	UNIT : 'UNIT' ;
+	UNLOCK : 'UNLOCK' ;
 	VALUE : 'SAVE' ;
 	VOLATILE : 'VOLATILE' ;
+	WHERE : 'WHERE' ;
+	WHILE : 'WHILE' ;
+	WRITE : 'WRITE' ;
 
 
 	NAME : LETTER ALPHANUMERIC_CHARACTER
@@ -2318,3 +2379,1937 @@ R215 keyword is name
 /***************
 	Clause 7:	
  ***************/
+
+/*
+	R701 primary is constant
+	or designator
+	or array-constructor
+	or structure-constructor
+	or function-reference
+	or type-param-inquiry
+	or type-param-name
+	or ( expr )
+*/
+	primary :
+		constant
+	|	designator
+	|	array-constructor
+	|	structure-constructor
+	|	function-reference
+	|	type-param-inquiry
+	|	type-param-name
+	|	'(' expr ')'
+	;
+
+/*
+	R702 level-1-expr is [ defined-unary-op ] primary
+*/
+	level-1-expr :
+		defined-unary-op ? primary
+	;
+
+/*
+	R703 defined-unary-op is . letter [ letter ] ... .
+*/
+	defined-unary-op :
+		'.' LETTER + '.'
+	;
+
+/*
+	R704 mult-operand is level-1-expr [ power-op mult-operand ]
+*/
+	mult-operand :
+		level-1-expr ( power-op mult-operand ) ?
+	;
+
+/*
+	R705 add-operand is [ add-operand mult-op ] mult-operand
+*/
+	add-operand :
+		( add-operand mult-op ) ? mult-operand
+	;
+
+/*
+	R706 level-2-expr is [ [ level-2-expr ] add-op ] add-operand
+*/
+	level-2-expr :
+		( level-2-expr ? add-op ) ? add-operand
+	;
+
+/*
+	R707 power-op is **
+*/
+	power-op :
+		'*' '*'
+	;
+
+/*
+	R708 mult-op is *
+	or /
+*/
+	mult-op :
+		'*'
+	|	'/'
+	;
+
+/*
+	R709 add-op is +
+	or -
+*/
+	add-op :
+		'+'
+	|	'-'
+	;
+
+/*
+	R710 level-3-expr is [ level-3-expr concat-op ] level-2-expr
+*/
+	level-3-expr :
+		( level-3-expr concat-op ) ? level-2-expr
+	;
+
+/*
+	R711 concat-op is //
+*/
+	concat-op :
+		'/'	'/'
+	;
+
+/*
+	R712 level-4-expr is [ level-3-expr rel-op ] level-3-expr
+*/
+	level-4-expr :
+		( level-3-expr rel-op ) ? level-3-expr
+	;
+
+/*
+	R713 rel-op is .EQ.
+	or .NE.
+	or .LT.
+	or .LE.
+	or .GT.
+	or .GE.
+	or ==
+	or /=
+	or <
+	or <=
+	or >
+	or >=
+*/
+	rel-op :
+		'.' 'EQ' '.'
+	|	'.' 'NE' '.'
+	|	'.' 'LT' '.'
+	|	'.' 'LE' '.'
+	|	'.' 'GT' '.'
+	|	'.' 'GE' '.'
+	|	'=' '='
+	|	'/' '='
+	|	'<'
+	|	'<' '='
+	|	'>'
+	|	'>' '='
+	;
+
+/*
+	R714 and-operand is [ not-op ] level-4-expr
+*/
+	and-operand :
+		not-op ? level-4-expr
+	;
+
+/*
+	R715 or-operand is [ or-operand and-op ] and-operand
+*/
+	or-operand :
+		( or-operand and-op ) ? and-operand
+	;
+
+/*
+	R716 equiv-operand is [ equiv-operand or-op ] or-operand
+*/
+	equiv-operand :
+		( equiv-operand or-op ) ? or-operand
+	;
+
+/*
+	R717 level-5-expr is [ level-5-expr equiv-op ] equiv-operand
+*/
+	level-5-expr :
+		( level-5-expr equiv-op ) ? equiv-operand
+	;
+
+/*
+	R718 not-op is .NOT.
+*/
+	not-op :
+		'.' 'NOT' '.'
+	;
+
+/*
+	R719 and-op is .AND.
+*/
+	and-op :
+		'.' 'AND' '.'
+	;
+
+/*
+	R720 or-op is .OR.
+*/
+	or-op :
+		'.' 'OR' '.'
+	;
+
+/*
+	R721 equiv-op is .EQV.
+	or .NEQV.
+*/
+	equiv-op :
+		'.' 'EQV' '.'
+	|	'.' 'NEQV' '.'
+	;
+
+/*
+	R722 expr is [ expr defined-binary-op ] level-5-expr
+*/
+	expr :
+		( expr defined-binary-op ) ? level-5-expr
+	;
+
+/*
+	R723 defined-binary-op is . letter [ letter ] ... .
+*/
+	defined-binary-op :
+		'.' LETTER + '.'
+	;
+
+/*
+	R724 logical-expr is expr
+*/
+	logical-expr :
+		expr
+	;
+
+/*
+	R725 default-char-expr is expr
+*/
+	default-char-expr :
+		expr
+	;
+
+/*
+	R726 int-expr is expr
+*/
+	int-expr :
+		expr
+	;
+
+/*
+	R727 numeric-expr is expr
+*/
+	numeric-expr :
+		expr
+	;
+
+/*
+	R728 specification-expr is scalar-int-expr
+*/
+	specification-expr :
+		scalar-int-expr
+	;
+
+/*
+	R729 constant-expr is expr
+*/
+	constant-expr :
+		expr
+	;
+
+/*
+	R730 default-char-constant-expr is default-char-expr
+*/
+	default-char-constant-expr :
+		default-char-expr
+	;
+
+/*
+	R731 int-constant-expr is int-expr
+*/
+	int-constant-expr :
+		int-expr
+	;
+
+/*
+	R732 assignment-stmt is variable = expr
+*/
+	assignment-stmt :
+		variable '=' expr
+	;
+
+/*
+	R733 pointer-assignment-stmt is data-pointer-object [ (bounds-spec-list) ] => data-target
+	or data-pointer-object (bounds-remapping-list ) => data-target
+	or proc-pointer-object => proc-target
+*/
+	pointer-assignment-stmt :
+		data-pointer-object ( '(' bounds-spec-list ')' ) ? '=' '>' data-target
+	|	data-pointer-object '(' bounds-remapping-list ')' '=' '>' data-target
+	|	proc-pointer-object '=' '>' proc-target
+	;
+
+/*
+	R734 data-pointer-object is variable-name
+	or scalar-variable % data-pointer-component-name
+*/
+	data-pointer-object :
+		variable-name
+	|	scalar-variable '%' data-pointer-component-name
+	;
+
+/*
+	R735 bounds-spec is lower-bound-expr :
+*/
+	bounds-spec :
+		lower-bound-expr ':'
+	;
+
+/*
+	R736 bounds-remapping is lower-bound-expr : upper-bound-expr
+*/
+
+/*
+	R737 data-target is variable
+*/
+	data-target :
+		variable
+	;
+
+/*
+	R738 proc-pointer-object is proc-pointer-name
+	or proc-component-ref
+*/
+	proc-pointer-object :
+		proc-pointer-name
+	|	proc-component-ref
+	;
+
+/*
+	R739 proc-component-ref is scalar-variable % procedure-component-name
+*/
+	proc-component-ref :
+		scalar-variable '%' procedure-component-name
+	;
+
+/*
+	R740 proc-target is expr
+	or procedure-name
+	or proc-component-ref
+*/
+	proc-target :
+		expr
+	|	procedure-name
+	|	proc-component-ref
+	;
+
+/*
+	R741 where-stmt is WHERE ( mask-expr ) where-assignment-stmt
+*/
+	where-stmt :
+		WHERE '(' mask-expr ')' where-assignment-stmt
+	;
+
+/*
+	R742 where-construct is where-construct-stmt
+	[ where-body-construct ] ...
+	[ masked-elsewhere-stmt
+	[ where-body-construct ] ... ] ...
+	[ elsewhere-stmt
+	[ where-body-construct ] ... ]
+	end-where-stmt
+*/
+	where-construct :
+		where-construct-stmt
+		where-body-construct *
+		( masked-elsewhere-stmt	where-body-construct * ) *
+		( elsewhere-stmt where-body-construct * ) ?
+		end-where-stmt
+	;
+
+/*
+	R743 where-construct-stmt is [where-construct-name:] WHERE ( mask-expr )
+*/
+	where-construct-stmt :
+		( where-construct-name ':' ) ? WHERE '(' mask-expr ')'
+	;
+
+/*
+	R744 where-body-construct is where-assignment-stmt
+	or where-stmt
+	or where-construct
+*/
+	where-body-construct :
+		where-assignment-stmt
+	|	where-stmt
+	|	where-construct
+	;
+
+/*
+	R745 where-assignment-stmt is assignment-stmt
+*/
+	where-assignment-stmt :
+		assignment-stmt
+	;
+
+/*
+	R746 mask-expr is logical-expr
+*/
+	mask-expr :
+		logical-expr
+	;
+
+/*
+	R747 masked-elsewhere-stmt is ELSEWHERE (mask-expr) [where-construct-name]
+*/
+	masked-elsewhere-stmt :
+		ELSEWHERE '(' mask-expr ')' where-construct-name ?
+	;
+
+/*
+	R748 elsewhere-stmt is ELSEWHERE [where-construct-name]
+*/
+	elsewhere-stmt :
+		ELSEWHERE where-construct-name ?
+	;
+
+/*
+	R749 end-where-stmt is END WHERE [where-construct-name]
+*/
+	end-where-stmt :
+		END_WHERE where-construct-name ?
+	;
+
+/*
+	R750 forall-construct is forall-construct-stmt
+	[forall-body-construct ] ...
+	end-forall-stmt
+*/
+	forall-construct :	
+		forall-construct-stmt
+		forall-body-construct *
+		end-forall-stmt
+	;
+
+/*
+	R751 forall-construct-stmt is [forall-construct-name :] FORALL forall-header
+*/
+	forall-construct-stmt :
+		( forall-construct-name ':' ) ? FORALL forall-header
+	;
+
+/*
+	R752 forall-header is ( [ type-spec :: ] forall-triplet-spec-list [, scalar-mask-expr] )
+*/
+	forall-header :
+		'(' ( type-spec ':' ':' ) ? forall-triplet-spec-list ( ',' scalar-mask-expr ) ? ')'
+	;
+
+/*
+	R753 forall-triplet-spec is index-name = forall-limit : forall-limit [ : forall-step]
+*/
+	forall-triplet-spec :
+		index-name '=' forall-limit ':' forall-limit ( ':' forall-step ) ?
+	;
+
+/*
+	R754 forall-limit is scalar-int-expr
+*/
+	forall-limit :
+		scalar-int-expr
+	;
+
+/*
+	R755 forall-step is scalar-int-expr
+*/
+	forall-step :
+		scalar-int-expr
+	;
+
+/*
+	R756 forall-body-construct is forall-assignment-stmt
+	or where-stmt
+	or where-construct
+	or forall-construct
+	or forall-stmt
+*/
+	forall-body-construct :
+		forall-assignment-stmt
+	|	where-stmt
+	|	where-construct
+	|	forall-construct
+	|	forall-stmt
+	;
+
+/*
+	R757 forall-assignment-stmt is assignment-stmt
+	or pointer-assignment-stmt
+*/
+	forall-assignment-stmt :
+		assignment-stmt
+	|	pointer-assignment-stmt
+	;
+
+/*
+	R758 end-forall-stmt is END FORALL [forall-construct-name ]
+*/
+	end-forall-stmt :
+		END_FORALL forall-construct-name ?
+	;
+
+/*
+	R759 forall-stmt is FORALL forall-header forall-assignment-stmt
+*/
+
+/***************
+	Clause 8:	
+ ***************/
+
+/*
+	R801 block is [ execution-part-construct ] ...
+*/
+	block :
+		execution-part-construct *
+	;
+
+/*
+	R802 associate-construct is associate-stmt
+	block
+	end-associate-stmt
+*/
+	associate-construct :
+		associate-stmt
+		block
+		end-associate-stmt
+	;
+
+/*
+	R803 associate-stmt is [ associate-construct-name : ] ASSOCIATE
+	(association-list )
+*/
+	associate-stmt :
+		( associate-construct-name ':' ) ? ASSOCIATE
+		'(' association-list ')'
+	;
+
+/*
+	R804 association is associate-name => selector
+*/
+	association :
+		associate-name '=' '>' selector
+	;
+
+/*
+	R805 selector is expr
+	or variable
+*/
+	selector :
+		expr
+	|	variable
+	;
+
+/*
+	R806 end-associate-stmt is END ASSOCIATE [ associate-construct-name ]
+*/
+	end-associate-stmt :
+		END_ASSOCIATE associate-construct-name ?
+	;
+
+/*
+	R807 block-construct is block-stmt
+	[ specification-part ]
+	block
+	end-block-stmt
+*/
+	block-construct :
+		block-stmt
+		specification-part ?
+		block
+		end-block-stmt
+	;
+
+/*
+	R808 block-stmt is [ block-construct-name : ] BLOCK
+*/
+	block-stmt :
+		( block-construct-name ':' ) ? BLOCK
+	;
+
+/*
+	R809 end-block-stmt is END BLOCK [ block-construct-name ]
+*/
+	end-block-stmt :
+		END_BLOCK block-construct-name ?
+	;
+
+/*
+	R810 critical-construct is critical-stmt
+	block
+	end-critical-stmt
+*/
+	critical-construct :
+		critical-stmt
+		block
+		end-critical-stmt
+	;
+
+/*
+	R811 critical-stmt is [ critical-construct-name : ] CRITICAL
+*/
+	critical-stmt :
+		( critical-construct-name ':' ) ? CRITICAL
+	;
+
+/*
+	R812 end-critical-stmt is END CRITICAL [ critical-construct-name ]
+*/
+	end-critical-stmt :
+		END_CRITICAL critical-construct-name ?
+	;
+
+/*
+	R813 do-construct is block-do-construct
+	or nonblock-do-construct
+*/
+	do-construct :
+		block-do-construct
+	|	nonblock-do-construct
+	;
+	
+/*
+	R814 block-do-construct is do-stmt
+	do-block
+	end-do
+*/
+	block-do-construct :
+		do-stmt
+		do-block
+		end-do
+	;
+
+/*
+	R815 do-stmt is label-do-stmt
+	or nonlabel-do-stmt
+*/
+	do-stmt :
+		label-do-stmt
+	|	nonlabel-do-stmt
+	;
+
+/*
+	R816 label-do-stmt is [ do-construct-name : ] DO label [ loop-control ]
+*/
+	label-do-stmt :
+		( do-construct-name ':' ) ? DO label loop-control ?
+	;
+
+/*
+	R817 nonlabel-do-stmt is [ do-construct-name : ] DO [ loop-control ]
+*/
+	nonlabel-do-stmt :
+		( do-construct-name ':' ) ? DO loop-control ?
+	;
+
+/*
+	R818 loop-control is [ , ] do-variable = scalar-int-expr , scalar-int-expr
+	[ , scalar-int-expr ]
+	or [ , ] WHILE ( scalar-logical-expr )
+	or [ , ] CONCURRENT forall-header
+*/
+	loop-control :
+		',' ? do-variable '=' scalar-int-expr ',' scalar-int-expr ( ',' scalar-int-expr ) ?
+	|	',' ? WHILE '(' scalar-logical-expr ')'
+	|	',' ? CONCURRENT forall-header
+	;
+
+/*
+	R819 do-variable is scalar-int-variable-name
+*/
+	do-variable :
+		scalar-int-variable-name
+	;
+
+/*
+	R820 do-block is block
+*/
+	do-block :
+		block
+	;
+
+/*
+	R821 end-do is end-do-stmt
+	or continue-stmt
+*/
+	end-do :
+		end-do-stmt
+	|	continue-stmt
+	;
+
+/*
+R822 end-do-stmt is END DO [ do-construct-name ]
+*/
+	end-do-stmt :
+		END_DO do-construct-name ?
+	;
+
+/*
+	R823 nonblock-do-construct is action-term-do-construct
+	or outer-shared-do-construct
+*/
+	nonblock-do-construct :
+		action-term-do-construct
+	|	outer-shared-do-construct
+	;
+
+/*
+	R824 action-term-do-construct is label-do-stmt
+	do-body
+	do-term-action-stmt
+*/
+	action-term-do-construct :
+		label-do-stmt
+		do-body
+		do-term-action-stmt
+	;
+
+/*
+	R825 do-body is [ execution-part-construct ] ...
+*/
+	do-body :
+		execution-part-construct *
+	;
+
+/*
+	R826 do-term-action-stmt is action-stmt
+*/
+	do-term-action-stmt :
+		action-stmt
+	;
+
+/*
+	R827 outer-shared-do-construct is label-do-stmt
+	do-body
+	shared-term-do-construct
+*/
+	outer-shared-do-construct :
+		label-do-stmt
+		do-body
+		shared-term-do-construct
+	;
+
+/*
+	R828 shared-term-do-construct is outer-shared-do-construct
+	or inner-shared-do-construct
+*/
+	shared-term-do-construct :
+		outer-shared-do-construct
+	|	inner-shared-do-construct
+	;
+
+/*
+	R829 inner-shared-do-construct is label-do-stmt
+	do-body
+	do-term-shared-stmt
+*/
+	inner-shared-do-construct :
+		label-do-stmt
+		do-body
+		do-term-shared-stmt
+	;
+
+/*
+	R830 do-term-shared-stmt is action-stmt
+*/
+	do-term-shared-stmt :
+		action-stmt
+	;
+
+/*
+R831 cycle-stmt is CYCLE [ do-construct-name ]
+*/
+	cycle-stmt :
+		CYCLE do-construct-name ?
+	;
+
+/*
+	R832 if-construct is if-then-stmt
+	block
+	[ else-if-stmt
+	block ] ...
+	[ else-stmt
+	block ]
+	end-if-stmt
+*/
+	if-construct :
+		if-then-stmt
+		block
+		( else-if-stmt block ) *
+		( else-stmt block ) ?
+		end-if-stmt
+	;
+
+/*
+	R833 if-then-stmt is [ if-construct-name : ] IF ( scalar-logical-expr ) THEN
+*/
+	if-then-stmt :
+		( if-construct-name ':' ) ? IF '(' scalar-logical-expr ')' THEN
+	;
+
+/*
+	R834 else-if-stmt is ELSE IF ( scalar-logical-expr ) THEN [ if-construct-name ]
+*/
+	else-if-stmt :
+		ELSE_IF '(' scalar-logical-expr ')' THEN if-construct-name ?
+	;
+
+/*
+	R835 else-stmt is ELSE [ if-construct-name ]
+*/
+	else-stmt :
+		ELSE if-construct-name ?
+	;
+
+/*
+	R836 end-if-stmt is END IF [ if-construct-name ]
+*/
+	end-if-stmt :
+		END_IF if-construct-name ?
+	;
+
+/*
+	R837 if-stmt is IF ( scalar-logical-expr ) action-stmt
+*/
+	if-stmt :
+		IF '(' scalar-logical-expr ')' action-stmt
+	;
+
+/*
+	R838 case-construct is select-case-stmt
+	[ case-stmt
+	block ] ...
+	end-select-stmt
+*/
+	case-construct :
+		select-case-stmt
+		( case-stmt block ) *
+		end-select-stmt
+	;
+
+/*
+	R839 select-case-stmt is [ case-construct-name : ] SELECT CASE ( case-expr )
+*/
+	select-case-stmt :
+		( case-construct-name ':' ) ? SELECT_CASE '(' case-expr ')'
+	;
+
+/*
+	R840 case-stmt is CASE case-selector [case-construct-name]
+*/
+	case-stmt :
+		CASE case-selector case-construct-name ?
+	;
+
+/*
+	R841 end-select-stmt is END SELECT [ case-construct-name ]
+*/
+	end-select-stmt :
+		END_SELECT case-construct-name ?
+	;
+
+/*
+	R842 case-expr is scalar-expr
+*/
+	case-expr :
+		scalar-expr
+	;
+
+/*
+	R843 case-selector is ( case-value-range-list )
+	or DEFAULT
+*/
+	case-selector :
+		'(' case-value-range-list ')'
+	|	DEFAULT
+	;
+
+/*
+	R844 case-value-range is case-value
+	or case-value :
+	or : case-value
+	or case-value : case-value
+*/
+	case-value-range :
+		case-value
+	|	case-value ':'
+	|	':' case-value
+	|	case-value ':' case-value
+	;
+
+/*
+	R845 case-value is scalar-constant-expr
+*/
+	case-value :
+		scalar-constant-expr
+	;
+
+/*
+	R846 select-type-construct is select-type-stmt
+	[ type-guard-stmt
+	block ] ...
+	end-select-type-stmt
+*/
+	select-type-construct :
+		select-type-stmt
+		( type-guard-stmt block ) *
+		end-select-type-stmt
+	;
+
+/*
+	R847 select-type-stmt is [ select-construct-name : ] SELECT TYPE
+	( [ associate-name => ] selector )
+*/
+	select-type-stmt :
+		( select-construct-name ':' ) ? SELECT TYPE
+		'(' ( associate-name '=' '>' ) ? selector ')'
+	;
+
+/*
+	R848 type-guard-stmt is TYPE IS ( type-spec ) [ select-construct-name ]
+	or CLASS IS ( derived-type-spec ) [ select-construct-name ]
+	or CLASS DEFAULT [ select-construct-name ]
+*/
+	type-guard-stmt :
+		TYPE_IS '(' type-spec ')' select-construct-name ?
+	|	CLASS_IS '(' derived-type-spec ')' select-construct-name ?
+	|	CLASS_DEFAULT select-construct-name ?
+	;
+
+/*
+	R849 end-select-type-stmt is END SELECT [ select-construct-name ]
+*/
+	end-select-type-stmt :
+		END_SELECT select-construct-name ?
+	;
+
+/*
+	R850 exit-stmt is EXIT [ construct-name ]
+*/
+	exit-stmt :
+		EXIT construct-name ?
+	;
+
+/*
+	R851 goto-stmt is GO TO label
+*/
+	goto-stmt :
+		GO_TO label
+	;
+
+/*
+	R852 computed-goto-stmt is GO TO ( label -list ) [ , ] scalar-int-expr
+*/
+	computed-goto-stmt :
+		GO_TO '(' label-list ')' ',' ? scalar-int-expr
+	;
+
+/*
+R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
+*/
+	arithmetic-if-stmt :
+		IF '(' scalar-numeric-expr ')' label ',' label ',' label
+	;
+
+/*
+	R854 continue-stmt is CONTINUE
+*/
+	continue-stmt :
+		CONTINUE
+	;
+
+/*
+	R855 stop-stmt is STOP [ stop-code ]
+*/
+	stop-stmt :
+		STOP stop-code ?
+	;
+
+/*
+	R856 error-stop-stmt is ERROR STOP [ stop-code ]
+*/
+	error-stop-stmt :
+		ERROR_STOP stop-code ?
+	;
+
+/*
+	R857 stop-code is scalar-default-char-constant-expr
+	or scalar-int-constant-expr
+*/
+	stop-code :
+		scalar-default-char-constant-expr
+	|	scalar-int-constant-expr
+	;
+
+/*
+	R858 sync-all-stmt is SYNC ALL [ ( [ sync-stat-list ] ) ]
+*/
+	sync-all-stmt :
+		SYNC_ALL ( '(' sync-stat-list ? ')' ) ?
+	;
+
+/*
+	R859 sync-stat is STAT = stat-variable
+	or ERRMSG = errmsg-variable
+*/
+	sync-stat :
+		STAT '=' stat-variable
+	|	ERRMSG '=' errmsg-variable
+	;
+
+/*
+	R860 sync-images-stmt is SYNC IMAGES ( image-set [ , sync-stat-list ] )
+*/
+	sync-images-stmt :
+		SYNC_IMAGES '(' image-set ( ',' sync-stat-list ) ? ')'
+	;
+
+/*
+	R861 image-set is int-expr
+	or *
+*/
+	image-set :
+		int-expr
+	|	'*'
+	;
+
+/*
+	R862 sync-memory-stmt is SYNC MEMORY [ ( [ sync-stat-list ] ) ]
+*/
+	sync-memory-stmt :
+		SYNC_MEMORY ( '(' sync-stat-list ? ')' ) ?
+	;
+
+/*
+	R863 lock-stmt is LOCK ( lock-variable [ , lock-stat-list ] )
+*/
+	lock-stmt :
+		LOCK '(' lock-variable ( ',' lock-stat-list ) ? ')'
+	;
+
+/*
+	R864 lock-stat is ACQUIRED LOCK = scalar-logical-variable
+	or sync-stat
+*/
+	lock-stat :
+		ACQUIRED_LOCK '=' scalar-logical-variable
+	|	sync-stat
+	;
+
+/*
+	R865 unlock-stmt is UNLOCK ( lock-variable [ , sync-stat-list ] )
+*/
+	unlock-stmt :
+		UNLOCK '(' lock-variable ( ',' sync-stat-list ) ? ')'
+	;
+
+/*
+	R866 lock-variable is scalar-variable
+*/
+	lock-variable :
+		scalar-variable
+	;
+
+/***************
+	Clause 9:	
+ ***************/
+
+/*
+	R901 io-unit is file-unit-number
+	or *
+	or internal-file-variable
+*/
+	io-unit :
+		file-unit-number
+	|	'*'
+	|	internal-file-variable
+	;
+
+/*
+	R902 file-unit-number is scalar-int-expr
+*/
+	file-unit-number :
+		scalar-int-expr
+	;
+
+/*
+	R903 internal-file-variable is char-variable
+*/
+	internal-file-variable :
+		char-variable
+	;
+
+/*
+	R904 open-stmt is OPEN ( connect-spec-list )
+*/
+	open-stmt :
+		OPEN '(' connect-spec-list ')'
+	;
+
+/*
+	R905 connect-spec is [ UNIT = ] file-unit-number
+	or ACCESS = scalar-default-char-expr
+	or ACTION = scalar-default-char-expr
+	or ASYNCHRONOUS = scalar-default-char-expr
+	or BLANK = scalar-default-char-expr
+	or DECIMAL = scalar-default-char-expr
+	or DELIM = scalar-default-char-expr
+	or ENCODING = scalar-default-char-expr
+	or ERR = label
+	or FILE = file-name-expr
+	or FORM = scalar-default-char-expr
+	or IOMSG = iomsg-variable
+	or IOSTAT = scalar-int-variable
+	or NEWUNIT = scalar-int-variable
+	or PAD = scalar-default-char-expr
+	or POSITION = scalar-default-char-expr
+	or RECL = scalar-int-expr
+	or ROUND = scalar-default-char-expr
+	or SIGN = scalar-default-char-expr
+	or STATUS = scalar-default-char-expr
+*/
+	connect-spec :
+		( UNIT '=' ) ? file-unit-number
+	|	ACCESS '=' scalar-default-char-expr
+	|	ACTION '=' scalar-default-char-expr
+	|	ASYNCHRONOUS '=' scalar-default-char-expr
+	|	BLANK '=' scalar-default-char-expr
+	|	DECIMAL '=' scalar-default-char-expr
+	|	DELIM '=' scalar-default-char-expr
+	|	ENCODING '=' scalar-default-char-expr
+	|	ERR '=' label
+	|	FILE '=' file-name-expr
+	|	FORM '=' scalar-default-char-expr
+	|	IOMSG '=' iomsg-variable
+	|	IOSTAT '=' scalar-int-variable
+	|	NEWUNIT '=' scalar-int-variable
+	|	PAD '=' scalar-default-char-expr
+	|	POSITION '=' scalar-default-char-expr
+	|	RECL '=' scalar-int-expr
+	|	ROUND '=' scalar-default-char-expr
+	|	SIGN '=' scalar-default-char-expr
+	|	STATUS '=' scalar-default-char-expr
+	;
+
+/*
+	R906 file-name-expr is scalar-default-char-expr
+*/
+	file-name-expr :
+		scalar-default-char-expr
+	;
+
+/*
+	R907 iomsg-variable is scalar-default-char-variable
+*/
+	iomsg-variable :
+		scalar-default-char-variable
+	;
+
+/*
+	R908 close-stmt is CLOSE ( close-spec-list )
+*/
+	close-stmt :
+		CLOSE '(' close-spec-list ')'
+	;
+
+/*
+	R909 close-spec is [ UNIT = ] file-unit-number
+	or IOSTAT = scalar-int-variable
+	or IOMSG = iomsg-variable
+	or ERR = label
+	or STATUS = scalar-default-char-expr
+*/
+	close-spec :
+		( UNIT '=' ) ? file-unit-number
+	|	IOSTAT '=' scalar-int-variable
+	|	IOMSG '=' iomsg-variable
+	|	ERR '=' label
+	|	STATUS '=' scalar-default-char-expr
+	;
+
+/*
+	R910 read-stmt is READ ( io-control-spec-list ) [ input-item-list ]
+	or READ format [ , input-item-list ]
+*/
+	read-stmt :
+		READ '(' io-control-spec-list ')' input-item-list ?
+	|	READ format ( ',' input-item-list ) ?
+	;
+
+/*
+	R911 write-stmt is WRITE ( io-control-spec-list ) [ output-item-list ]
+*/
+	write-stmt :
+		WRITE '(' io-control-spec-list ')' output-item-list ?
+	;
+
+/*
+	R912 print-stmt is PRINT format [ , output-item-list ]
+*/
+	print-stmt :
+		PRINT format ( ',' output-item-list ) ?
+	;
+
+/*
+	R913 io-control-spec is [ UNIT = ] io-unit
+	or [ FMT = ] format
+	or [ NML = ] namelist-group-name
+	or ADVANCE = scalar-default-char-expr
+	or ASYNCHRONOUS = scalar-default-char-constant-expr
+	or BLANK = scalar-default-char-expr
+	or DECIMAL = scalar-default-char-expr
+	or DELIM = scalar-default-char-expr
+	or END = label
+	or EOR = label
+	or ERR = label
+	or ID = id-variable
+	or IOMSG = iomsg-variable
+	or IOSTAT = scalar-int-variable
+	or PAD = scalar-default-char-expr
+	or POS = scalar-int-expr
+	or REC = scalar-int-expr
+	or ROUND = scalar-default-char-expr
+	or SIGN = scalar-default-char-expr
+	or SIZE = scalar-int-variable
+*/
+	io-control-spec :
+		( UNIT '=' ) ? io-unit
+	|	( FMT '=' ) ? format
+	|	( NML '=' ) ? namelist-group-name
+	|	ADVANCE '=' scalar-default-char-expr
+	|	ASYNCHRONOUS '=' scalar-default-char-constant-expr
+	|	BLANK '=' scalar-default-char-expr
+	|	DECIMAL '=' scalar-default-char-expr
+	|	DELIM '=' scalar-default-char-expr
+	|	END '=' label
+	|	EOR '=' label
+	|	ERR '=' label
+	|	ID '=' id-variable
+	|	IOMSG '=' iomsg-variable
+	|	IOSTAT '=' scalar-int-variable
+	|	PAD '=' scalar-default-char-expr
+	|	POS '=' scalar-int-expr
+	|	REC '=' scalar-int-expr
+	|	ROUND '=' scalar-default-char-expr
+	|	SIGN '=' scalar-default-char-expr
+	|	SIZE '=' scalar-int-variable
+	;
+
+/*
+	R914 id-variable is scalar-int-variable
+*/
+	id-variable :
+		scalar-int-variable
+	;
+
+/*
+	R915 format is default-char-expr
+	or label
+	or *
+*/
+	format :
+		default-char-expr
+	|	label
+	|	'*'
+	;
+
+/*
+	R916 input-item is variable
+	or io-implied-do
+*/
+	input-item :
+		variable
+	|	io-implied-do
+	;
+
+/*
+	R917 output-item is expr
+	or io-implied-do
+*/
+	output-item :
+		expr
+	|	io-implied-do
+	;
+
+/*
+	R918 io-implied-do is ( io-implied-do-object-list , io-implied-do-control )
+*/
+	io-implied-do :
+		'(' io-implied-do-object-list ',' io-implied-do-control ')'
+	;
+
+/*
+	R919 io-implied-do-object is input-item
+	or output-item
+*/
+	io-implied-do-object :
+		input-item
+	|	output-item
+	;
+
+/*
+	R920 io-implied-do-control is do-variable = scalar-int-expr ,
+	scalar-int-expr [ , scalar-int-expr ]
+*/
+	io-implied-do-control :
+		do-variable '=' scalar-int-expr ','
+		scalar-int-expr ( ',' scalar-int-expr ) ?
+	;
+
+/*
+	R921 dtv-type-spec is TYPE( derived-type-spec )
+	or CLASS( derived-type-spec )
+*/
+	dtv-type-spec :
+		TYPE '(' derived-type-spec ')'
+	|	CLASS '(' derived-type-spec ')'
+	;
+
+/*
+	R922 wait-stmt is WAIT (wait-spec-list)
+*/
+	wait-stmt :
+		WAIT '(' wait-spec-list ')'
+	;
+
+/*
+	R923 wait-spec is [ UNIT = ] file-unit-number
+	or END = label
+	or EOR = label
+	or ERR = label
+	or ID = scalar-int-expr
+	or IOMSG = iomsg-variable
+	or IOSTAT = scalar-int-variable
+*/
+	wait-spec : 
+		( UNIT '=' ) ? file-unit-number
+	|	END '=' label
+	|	EOR '=' label
+	|	ERR '=' label
+	|	ID '=' scalar-int-expr
+	|	IOMSG '=' iomsg-variable
+	|	IOSTAT '=' scalar-int-variable
+	;
+
+/*
+	R924 backspace-stmt is BACKSPACE file-unit-number
+	or BACKSPACE ( position-spec-list )
+*/
+	backspace-stmt :
+		BACKSPACE file-unit-number
+	|	BACKSPACE '(' position-spec-list ')'
+	;
+
+/*
+	R925 endfile-stmt is ENDFILE file-unit-number
+	or ENDFILE ( position-spec-list )
+*/
+	endfile-stmt :
+		ENDFILE file-unit-number
+	|	ENDFILE '(' position-spec-list ')'
+	;
+
+/*
+	R926 rewind-stmt is REWIND file-unit-number
+	or REWIND ( position-spec-list )
+*/
+	rewind-stmt :
+		REWIND file-unit-number
+	|	REWIND '(' position-spec-list ')'
+	;
+
+/*
+	R927 position-spec is [ UNIT = ] file-unit-number
+	or IOMSG = iomsg-variable
+	or IOSTAT = scalar-int-variable
+	or ERR = label
+*/
+	position-spec :
+		( UNIT '=' ) ? file-unit-number
+	|	IOMSG '=' iomsg-variable
+	|	IOSTAT '=' scalar-int-variable
+	|	ERR '=' label
+	;
+
+/*
+	R928 flush-stmt is FLUSH file-unit-number
+	or FLUSH ( 
+	flush-spec-list )
+*/
+	flush-stmt :
+		FLUSH file-unit-number
+	|	FLUSH '(' flush-spec-list ')'
+	;
+
+/*
+	R929 flush-spec is [UNIT =] file-unit-number
+	or IOSTAT = scalar-int-variable
+	or IOMSG = iomsg-variable
+	or ERR = label
+*/
+	flush-spec : 
+		( UNIT '=' ) ? file-unit-number
+	|	IOSTAT '=' scalar-int-variable
+	|	IOMSG '=' iomsg-variable
+	|	ERR '=' label
+	;
+
+/*
+	R930 inquire-stmt is INQUIRE ( inquire-spec-list )
+	or INQUIRE ( IOLENGTH = scalar-int-variable )
+	output-item-list
+*/
+	inquire-stmt :
+		INQUIRE '(' inquire-spec-list ')'
+	|	INQUIRE '(' IOLENGTH '=' scalar-int-variable ')' output-item-list
+	;
+
+/*
+	R931 inquire-spec is [ UNIT = ] file-unit-number
+	or FILE = file-name-expr
+	or ACCESS = scalar-default-char-variable
+	or ACTION = scalar-default-char-variable
+	or ASYNCHRONOUS = scalar-default-char-variable
+	or BLANK = scalar-default-char-variable
+	or DECIMAL = scalar-default-char-variable
+	or DELIM = scalar-default-char-variable
+	or DIRECT = scalar-default-char-variable
+	or ENCODING = scalar-default-char-variable
+	or ERR = label
+	or EXIST = scalar-logical-variable
+	or FORM = scalar-default-char-variable
+	or FORMATTED = scalar-default-char-variable
+	or ID = scalar-int-expr
+	or IOMSG = iomsg-variable
+	or IOSTAT = scalar-int-variable
+	or NAME = scalar-default-char-variable
+	or NAMED = scalar-logical-variable
+	or NEXTREC = scalar-int-variable
+	or NUMBER = scalar-int-variable
+	or OPENED = scalar-logical-variable
+	or PAD = scalar-default-char-variable
+	or PENDING = scalar-logical-variable
+	or POS = scalar-int-variable
+	or POSITION = scalar-default-char-variable
+	or READ = scalar-default-char-variable
+	or READWRITE = scalar-default-char-variable
+	or RECL = scalar-int-variable
+	or ROUND = scalar-default-char-variable
+	or SEQUENTIAL = scalar-default-char-variable
+	or SIGN = scalar-default-char-variable
+	or SIZE = scalar-int-variable
+	or STREAM = scalar-default-char-variable
+	or UNFORMATTED = scalar-default-char-variable
+	or WRITE = scalar-default-char-variable
+*/
+	inquire-spec :
+		( UNIT '=' ) ? file-unit-number
+	|	FILE '=' file-name-expr
+	|	ACCESS '=' scalar-default-char-variable
+	|	ACTION '=' scalar-default-char-variable
+	|	ASYNCHRONOUS '=' scalar-default-char-variable
+	|	BLANK '=' scalar-default-char-variable
+	|	DECIMAL '=' scalar-default-char-variable
+	|	DELIM '=' scalar-default-char-variable
+	|	DIRECT '=' scalar-default-char-variable
+	|	ENCODING '=' scalar-default-char-variable
+	|	ERR '=' label
+	|	EXIST '=' scalar-logical-variable
+	|	FORM '=' scalar-default-char-variable
+	|	FORMATTED '=' scalar-default-char-variable
+	|	ID '=' scalar-int-expr
+	|	IOMSG '=' iomsg-variable
+	|	IOSTAT '=' scalar-int-variable
+	|	NAME '=' scalar-default-char-variable
+	|	NAMED '=' scalar-logical-variable
+	|	NEXTREC '=' scalar-int-variable
+	|	NUMBER '=' scalar-int-variable
+	|	OPENED '=' scalar-logical-variable
+	|	PAD '=' scalar-default-char-variable
+	|	PENDING '=' scalar-logical-variable
+	|	POS '=' scalar-int-variable
+	|	POSITION '=' scalar-default-char-variable
+	|	READ '=' scalar-default-char-variable
+	|	READWRITE '=' scalar-default-char-variable
+	|	RECL '=' scalar-int-variable
+	|	ROUND '=' scalar-default-char-variable
+	|	SEQUENTIAL '=' scalar-default-char-variable
+	|	SIGN '=' scalar-default-char-variable
+	|	SIZE '=' scalar-int-variable
+	|	STREAM '=' scalar-default-char-variable
+	|	UNFORMATTED '=' scalar-default-char-variable
+	|	WRITE '=' scalar-default-char-variable
+	;
+
+/***************
+	Clause 10:	
+ ***************/
+
+/*
+	R1001 format-stmt is FORMAT format-specification
+*/
+
+/*
+	R1002 format-specification is ( [ format-items ] )
+	or ( [ format-items, ] unlimited-format-item )
+*/
+
+/*
+	R1003 format-items is format-item [ [ , ] format-item ] ...
+*/
+
+/*
+	R1004 format-item is [ r ] data-edit-desc
+	or control-edit-desc
+	or char-string-edit-desc
+	or [ r ] ( format-items )
+*/
+
+/*
+	R1005 unlimited-format-item is * ( format-items )
+*/
+
+/*
+	R1006 r is int-literal-constant
+*/
+
+/*
+	R1007 data-edit-desc is I w [ . m ]
+	or B w [ . m ]
+	or O w [ . m ]
+	or Z w [ . m ]
+	or F w . d
+	or E w . d [ E e ]
+	or EN w . d [ E e ]
+	or ES w . d [ E e ]
+	or G w [ . d [ E e ] ]
+	or L w
+	or A [ w ]
+	or D w . d
+	or DT [ char-literal-constant ] [ ( v-list ) ]
+*/
+
+/*
+	R1008 w is int-literal-constant
+	R1009 m is int-literal-constant
+	R1010 d is int-literal-constant
+	R1011 e is int-literal-constant
+	R1012 v is signed-int-literal-constant
+*/
+
+/*
+	R1013 control-edit-desc is position-edit-desc
+	or [ r ] /
+	or :
+	or sign-edit-desc
+	or k P
+	or blank-interp-edit-desc
+	or round-edit-desc
+	or decimal-edit-desc
+*/
+
+/*
+	R1014 k is signed-int-literal-constant
+*/
+
+/*
+	R1015 position-edit-desc is T n
+	or TL n
+	or TR n
+	or n X
+*/
+
+/*
+	R1016 n is int-literal-constant
+*/
+
+/*
+	R1017 sign-edit-desc is SS
+	or SP
+	or S
+*/
+
+/*
+	R1018 blank-interp-edit-desc is BN
+	or BZ
+*/
+
+/*
+	R1019 round-edit-desc is RU
+	or RD
+	or RZ
+	or RN
+	or RC
+	or RP
+*/
+
+/*
+	R1020 decimal-edit-desc is DC
+	or DP
+*/
+
+/*
+	R1021 char-string-edit-desc is char-literal-constant
+*/
+
+/*
+	R1022 hex-digit-string is hex-digit [ hex-digit ] ...
+*/
+
+/***************
+	Clause 11:	
+ ***************/
+
+/*
+	R1101 main-program is [ program-stmt ]
+	[ specification-part ]
+	[ execution-part ]
+	[ internal-subprogram-part ]
+	end-program-stmt
+*/
+
+/*
+	R1102 program-stmt is PROGRAM program-name
+*/
+
+/*
+	R1103 end-program-stmt is END [ PROGRAM [ program-name ] ]
+*/
+
+/*
+	R1104 module is module-stmt
+	[ specification-part ]
+	[ module-subprogram-part ]
+	end-module-stmt
+*/
+
+/*
+	R1105 module-stmt is MODULE module-name
+*/
+
+/*
+	R1106 end-module-stmt is END [ MODULE [ module-name ] ]
+*/
+
+/*
+	R1107 module-subprogram-part is contains-stmt
+	[ module-subprogram ] ...
+*/
+
+/*
+	R1108 module-subprogram is function-subprogram
+	or subroutine-subprogram
+	or separate-module-subprogram
+*/
+
+/*
+	R1109 use-stmt is USE [ [ , module-nature ] :: ] module-name [ , rename-list ]
+	or USE [ [ , module-nature ] :: ] module-name ,
+	ONLY : [ only-list ]
+*/
+
+/*
+	R1110 module-nature is INTRINSIC
+	or NON INTRINSIC
+*/
+
+/*
+	R1111 rename is local-name => use-name
+	or OPERATOR (local-defined-operator) =>
+	OPERATOR (use-defined-operator)
+*/
+
+/*
+	R1112 only is generic-spec
+	or only-use-name
+	or rename
+*/
+
+/*
+	R1113 only-use-name is use-name
+*/
+
+/*
+	R1114 local-defined-operator is defined-unary-op
+	or defined-binary-op
+*/
+
+/*
+	R1115 use-defined-operator is defined-unary-op
+	or defined-binary-op
+*/
+
+/*
+	R1116 submodule is submodule-stmt
+	[ specification-part ]
+	[ module-subprogram-part ]
+	end-submodule-stmt
+*/
+
+/*
+	R1117 submodule-stmt is SUBMODULE ( parent-identifier ) submodule-name
+*/
+
+/*
+	R1118 parent-identifier is ancestor-module-name [ : parent-submodule-name ]
+*/
+
+/*
+	R1119 end-submodule-stmt is END [ SUBMODULE [ submodule-name ] ]
+*/
+
+/*
+	R1120 block-data is block-data-stmt
+	[ specification-part ]
+	end-block-data-stmt
+*/
+
+/*
+	R1121 block-data-stmt is BLOCK DATA [ block-data-name ]
+*/
+
+/*
+	R1122 end-block-data-stmt is END [ BLOCK DATA [ block-data-name ] ]
+*/
+
+/***************
+	Clause 11:	
+ ***************/
+
+/*
+	R1201 interface-block is interface-stmt
+	[ interface-specification ] ...
+	end-interface-stmt
+*/
+
+/*
+	R1202 interface-specification is interface-body
+	or procedure-stmt
+*/
+
+/*
+	R1203 interface-stmt is INTERFACE [ generic-spec ]
+	or ABSTRACT INTERFACE
+*/
+
+/*
+	R1204 end-interface-stmt is END INTERFACE [ generic-spec ]
+*/
+
+/*
+	R1205 interface-body is function-stmt
+	[ specification-part ]
+	end-function-stmt
+	or subroutine-stmt
+	[ specification-part ]
+	end-subroutine-stmt
+*/
+
+/*
+	R1206 procedure-stmt is [ MODULE ] PROCEDURE [ :: ] procedure-name-list
+*/
+
+/*
+	R1207 generic-spec is generic-name
+	or OPERATOR ( defined-operator )
+	or ASSIGNMENT ( = )
+	or defined-io-generic-spec
+*/
+
+/*
+	R1208 defined-io-generic-spec is READ (FORMATTED)
+	or READ (UNFORMATTED)
+	or WRITE (FORMATTED)
+	or WRITE (UNFORMATTED)
+*/
+
+/*
+	R1209 import-stmt is IMPORT [[ :: ] import-name-list
+*/
+
+/*
+	R1210 external-stmt is EXTERNAL [ :: ] external-name-list
+*/
+
+/*
+	R1211 procedure-declaration-stmt is PROCEDURE ( [ proc-interface ] )
+	[ [ , proc-attr-spec ] ... :: ] proc-decl -list
+*/
+
+/*
+	R1212 proc-interface is interface-name
+	or declaration-type-spec
+*/
+
+/*
+	R1213 proc-attr-spec is access-spec
+	or proc-language-binding-spec
+	or INTENT ( intent-spec )
+	or OPTIONAL
+	or POINTER
+	or SAVE
+*/
+
+/*
+	R1214 proc-decl is procedure-entity-name [ => proc-pointer-init ]
+*/
+
+/*
+	R1215 interface-name is name
+*/
+
+/*
+	R1216 proc-pointer-init is null-init
+	or initial-proc-target
+*/
+
+/*
+	R1217 initial-proc-target is procedure-name
+*/
+
+/*
+	R1218 intrinsic-stmt is INTRINSIC [ :: ] intrinsic-procedure-name-list
+*/
+
+/*
+	R1219 function-reference is procedure-designator ( [ actual-arg-spec-list ] )
+*/
+
+/*
+	R1220 call-stmt is CALL procedure-designator [ ( [ actual-arg-spec-list ] ) ]
+*/
+
+/*
+	R1221 procedure-designator is procedure-name
+	or proc-component-ref
+	or data-ref % binding-name
+*/
+
+/*
+	R1222 actual-arg-spec is [ keyword = ] actual-arg
+*/
+
+/*
+	R1223 actual-arg is expr
+	or variable
+	or procedure-name
+	or proc-component-ref
+	or alt-return-spec
+*/
+
+/*
+	R1224 alt-return-spec is * label
+*/
+
+/*
+	R1225 prefix is prefix-spec [ prefix-spec ] ...
+*/
+
+/*
+	R1226 prefix-spec is declaration-type-spec
+	or ELEMENTAL
+	or IMPURE
+	or MODULE
+	or PURE
+	or RECURSIVE
+*/
+
+/*
+	R1227 function-subprogram is function-stmt
+	[ specification-part ]
+	[ execution-part ]
+	[ internal-subprogram-part ]
+	end-function-stmt
+*/
+
+/*
+	R1228 function-stmt is [ prefix ] FUNCTION function-name
+	( [ dummy-arg-name-list ] ) [ sufix ]
+*/
+
+/*
+	R1229 proc-language-binding-spec is language-binding-spec
+*/
+
+/*
+	R1230 dummy-arg-name is name
+*/
+
+/*
+	R1231 sufix is proc-language-binding-spec [ RESULT ( result-name ) ]
+	or RESULT ( result-name ) [ proc-language-binding-spec ]
+*/
+
+/*
+	R1232 end-function-stmt is END [ FUNCTION [ function-name ] ]
+*/
+
+/*
+	R1233 subroutine-subprogram is subroutine-stmt
+	[ specification-part ]
+	[ execution-part ]
+	[ internal-subprogram-part ]
+	end-subroutine-stmt
+*/
+
+/*
+	R1234 subroutine-stmt is [ prefix ] SUBROUTINE subroutine-name
+	[ ( [ dummy-arg-list ] ) [ proc-language-binding-spec ] ]
+*/
+
+/*
+	R1235 dummy-arg is dummy-arg-name
+	or *
+*/
+
+/*
+	R1236 end-subroutine-stmt is END [ SUBROUTINE [ subroutine-name ] ]
+*/
+
+/*
+	R1237 separate-module-subprogram is mp-subprogram-stmt
+	[ specification-part ]
+	[ execution-part ]
+	[ internal-subprogram-part ]
+	end-mp-subprogram-stmt
+*/
+
+/*
+	R1238 mp-subprogram-stmt is MODULE PROCEDURE procedure-name
+*/
+
+/*
+	R1239 end-mp-subprogram-stmt is END [PROCEDURE [procedure-name]]
+*/
+
+/*
+	R1240 entry-stmt is ENTRY entry-name [ ( [ dummy-arg-list ] ) [ sufix ] ]
+*/
+
+/*
+	R1241 return-stmt is RETURN [ scalar-int-expr ]
+*/
+
+/*
+	R1242 contains-stmt is CONTAINS
+*/
+
+/*
+	R1243 stmt-function-stmt is function-name ( [ dummy-arg-name-list ] ) = scalar-expr
+*/
