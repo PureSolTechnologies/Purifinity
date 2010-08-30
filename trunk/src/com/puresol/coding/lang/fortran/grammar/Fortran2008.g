@@ -150,29 +150,6 @@
  ****************************************************************************/ 
  TOKENS
 
-	NAME : LETTER ALPHANUMERIC_CHARACTER
-			"{0,62}";
-	INT_LITERAL_CONSTANT : DIGIT_STRING "(_"
-			KIND_PARAM ")?";
-
-	REAL_LITERAL_CONSTANT : "(" SIGNIFICANT "("
-			EXPONENT_LETTER EXPONENT ")?(_" KIND_PARAM ")?|"
-			DIGIT_STRING EXPONENT_LETTER EXPONENT "(_" KIND_PARAM
-			")?)";
-
-	COMPLEX_LITERAL_CONSTANT : "\\(" REAL_PART
-			"\\s*,\\s*" IMAG_PART "\\)";
-
-	CHAR_LITERAL_CONSTANT : "(" KIND_PARAM
-			"_)?(\"" REP_CHAR_DOUBLE_QUOTE "*\"|'"
-			REP_CHAR_SINGLE_QUOTE "*')";
-
-	LOGICAL_LITERAL_CONSTANT : "(\\.TRUE\\.|\\.FALSE\\.)(_"
-			KIND_PARAM ")?";
-
-	BOZ_LITERAL_CONSTANT : "(" BINARY_CONSTANT
-			"|" OCTAL_CONSTANT "|" HEX_CONSTANT ")";
-
 	/*
 	 * 3.1.5 Special characters
 	 */
@@ -208,6 +185,91 @@
 	NUMBER_SIGN : "#";
 	COLON : ":";
 	COMMERCIAL_AT : "@";
+
+	/*
+	 * Keywords
+	 */ 
+	ABSTRACT : 'ABSTRACT' ;
+	ALLOCATABLE : 'ALLOCATABLE' ;
+	ALLOCATE : 'ALLOCATE' ;
+	ASYNCHRONOUS : 'ASYNCHRONOUS' ;
+	BIND : 'BIND' ;
+	CHARACTER : 'CHARACTER' ;
+	CLASS : 'CLASS' ; 
+	CODIMENSION : 'CODIMENSION' ;
+	COMMON : 'COMMON' ;
+	COMPLEX : 'COMPLEX' ;
+	CONTIGUOUS : 'CONTIGUOUS' ;
+	DATA : 'DATA' ;
+	DEALLOCATE : 'DEALLOCATE' ;
+	DEFERRED : 'DEFERRED' ;
+	DIMENSION : 'DIMENSION' ;
+	DOUBLE_PRECISION : 'DOUBLE\\s+PRECISION' ;
+	END_ENUM : 'END\\s+ENUM' ;
+	END_TYPE : 'END\\s+TYPE' ;
+	ENUM : 'ENUM' ;
+	ENUMERATOR : 'ENUMERATOR' ;
+	EQUIVALENCE : 'EQUIVALENCE' ;
+	ERRMSG : 'ERRMSG' ;
+	EXTENDS : 'EXTENDS' ;
+	EXTERNAL : 'DIMENSION' ;
+	FINAL : 'FINAL' ;
+	GENERIC : 'GENERIC' ;
+	IM : 'IM' ;
+	IMPLICIT : 'IMPLICIT' ;
+	IMPLICIT_NONE : 'IMPLICIT\\s+NONE' ;
+	IN : 'IN' ;
+	INOUT : 'INOUT' ;
+	INTEGER : 'INTEGER' ;
+	INTENT : 'INTENT'  ;
+	INTRINSIC : 'INTRINSIC' ;
+	KIND : 'KIND' ;
+	LEN : 'LEN' ;
+	LOGICAL : 'LOGICAL' ;
+	MOLD : 'MOLD' ;
+	NAME : 'NAME' ;
+	NAMELIST : 'NAMELIST' ;
+	NON_OVERRIDABLE : 'NON\\s+OVERRIDABLE' ;
+	NOPASS : 'NOPASS' ;
+	NULLIFY : 'NULLIFY' ;
+	OPTIONAL : 'OPTIONAL' ;
+	OUT : 'OUT' ;
+	PASS : 'PASS' ;
+	PARAMETER : 'PARAMETER' ;
+	POINTER : 'POINTER' ;
+	PRIVATE : 'PRIVATE' ;
+	PROCEDURE : 'PROCEDURE' ; 
+	PROTECTED : 'PROTECTED' ;
+	PUBLIC : 'PUBLIC' ;
+	RE : 'RE' ;
+	REAL : 'REAL' ;
+	SAVE : 'SAVE' ;
+	SEQUENCE : 'SEQUENCE' ;
+	SOURCE : 'SOURCE' ;
+	STAT : 'STAT' ;
+	TARGET : 'TARGET' ;
+	TYPE : 'TYPE' ;
+	VALUE : 'SAVE' ;
+	VOLATILE : 'VOLATILE' ;
+
+
+	NAME : LETTER ALPHANUMERIC_CHARACTER
+			"{0,62}";
+	INT_LITERAL_CONSTANT : DIGIT_STRING "(_"
+			KIND_PARAM ")?";
+	REAL_LITERAL_CONSTANT : "(" SIGNIFICANT "("
+			EXPONENT_LETTER EXPONENT ")?(_" KIND_PARAM ")?|"
+			DIGIT_STRING EXPONENT_LETTER EXPONENT "(_" KIND_PARAM
+			")?)";
+	COMPLEX_LITERAL_CONSTANT : "\\(" REAL_PART
+			"\\s*,\\s*" IMAG_PART "\\)";
+	CHAR_LITERAL_CONSTANT : "(" KIND_PARAM
+			"_)?(\"" REP_CHAR_DOUBLE_QUOTE "*\"|'"
+			REP_CHAR_SINGLE_QUOTE "*')";
+	LOGICAL_LITERAL_CONSTANT : "(\\.TRUE\\.|\\.FALSE\\.)(_"
+			KIND_PARAM ")?";
+	BOZ_LITERAL_CONSTANT : "(" BINARY_CONSTANT
+			"|" OCTAL_CONSTANT "|" HEX_CONSTANT ")";
 
 /****************************************************************************
  * P R O D U C T I O N S
@@ -694,12 +756,12 @@ R215 keyword is name
 	or LOGICAL [ kind-selector ]
 */
 	intrinsic-type-spec :
-		'INTEGER' kind-selector ?
-	|	'REAL' kind-selector ?
-	|	'DOUBLE PRECISION'
-	|	'COMPLEX' kind-selector ?
-	|	'CHARACTER' char-selector ?
-	|	'LOGICAL' kind-selector ?
+		INTEGER kind-selector ?
+	|	REAL kind-selector ?
+	|	DOUBLE_PRECISION
+	|	COMPLEX kind-selector ?
+	|	CHARACTER char-selector ?
+	|	LOGICAL kind-selector ?
 	;
 
 /*
@@ -817,9 +879,9 @@ R215 keyword is name
 */
 	char-selector :
 		length-selector
-	|	'(' 'LEN' '=' type-param-value ',' 'KIND' '=' scalar-int-constant-expr ')'
+	|	'(' 'LEN' '=' type-param-value ',' KIND '=' scalar-int-constant-expr ')'
 	|	'(' type-param-value ',' ( KIND '=' ) ? scalar-int-constant-expr ')'
-	|	'(' 'KIND' '=' scalar-int-constant-expr	( ',' 'LEN' '=' type-param-value ) ? ')'
+	|	'(' 'KIND' '=' scalar-int-constant-expr	( ',' LEN '=' type-param-value ) ? ')'
 	;
 
 /*
@@ -889,10 +951,10 @@ R215 keyword is name
 	or EXTENDS ( parent-type-name )
 */
 	type-attr-spec :
-		'ABSTRACT'
-	| access-spec
-	| 'BIND' '(' 'C' ')'
-	| 'EXTENDS' '(' parent-type-name ')'
+		ABSTRACT
+	|	access-spec
+	|	BIND '(' 'C' ')'
+	|	EXTENDS '(' parent-type-name ')'
 	;
 
 /*
@@ -908,14 +970,14 @@ R215 keyword is name
 	R429 end-type-stmt is END TYPE [ type-name ]
 */
 	end-type-stmt :
-		'END' 'TYPE' type-name ?
+		END_TYPE type-name ?
 	;
 
 /*
 	R430 sequence-stmt is SEQUENCE
 */
 	sequence-stmt :
-		'SEQUENCE'
+		SEQUENCE
 	;
 
 /*
@@ -923,7 +985,7 @@ R215 keyword is name
 	type-param-decl -list
 */
 	type-param-def-stmt :
-		'INTEGER' kind-selector ? ',' type-param-attr-spec ':' ':' type-param-decl-list
+		INTEGER kind-selector ? ',' type-param-attr-spec ':' ':' type-param-decl-list
 	;
 
 /*
@@ -942,8 +1004,8 @@ R215 keyword is name
 	or LEN
 */
 	type-param-attr-spec :
-		'KIND'
-	|	'LEN'
+		KIND
+	|	LEN
 	;
 
 /*
@@ -980,11 +1042,11 @@ R215 keyword is name
 */
 	component-attr-spec :
 		access-spec
-	|	'ALLOCATABLE'
-	|	'CODIMENSION' '[' coarray-spec ']'
-	|	'CONTIGUOUS'
-	|	'DIMENSION' '(' component-array-spec ')'
-	|	'POINTER'
+	|	ALLOCATABLE
+	|	CODIMENSION '[' coarray-spec ']'
+	|	CONTIGUOUS
+	|	DIMENSION '(' component-array-spec ')'
+	|	POINTER
 	;
 
 /*
@@ -993,7 +1055,7 @@ R215 keyword is name
 	[ * char-length ] [ component-initialization ]
 */
 	component-decl :
-		component-name ( '(' component-array-spec ')' ) ? ( lbracket coarray-spec rbracket ) ? ( '*' char-length ) ? component-initialization ?
+		component-name ( '(' component-array-spec ')' ) ? ( '[' coarray-spec ']' ) ? ( '*' char-length ) ? component-initialization ?
 	;
 	
 	component-decl-list :
@@ -1014,7 +1076,7 @@ R215 keyword is name
 	proc-component-attr-spec-list :: proc-decl -list
 */
 	proc-component-def-stmt :
-		'PROCEDURE' '(' proc-interface ? ')' ',' proc-component-attr-spec-list ':' ':' proc-decl-list
+		PROCEDURE '(' proc-interface ? ')' ',' proc-component-attr-spec-list ':' ':' proc-decl-list
 	;
 
 /*
@@ -1024,9 +1086,9 @@ R215 keyword is name
 	or access-spec
 */
 	proc-component-attr-spec :
-		'POINTER'
-	|	'PASS' ( '(' arg-name ')' ) ?
-	|	'NOPASS'
+		POINTER
+	|	PASS ( '(' arg-name ')' ) ?
+	|	NOPASS
 	|	access-spec
 	;
 
@@ -1052,7 +1114,7 @@ R215 keyword is name
 	R444 private-components-stmt is PRIVATE
 */
 	private-components-stmt :
-		'PRIVATE'
+		PRIVATE
 	;
 
 /*
@@ -1070,7 +1132,7 @@ R215 keyword is name
 	R446 binding-private-stmt is PRIVATE
 */
 	binding-private-stmt :
-		'PRIVATE'
+		PRIVATE
 	;
 
 /*
@@ -1089,8 +1151,8 @@ R215 keyword is name
 	or PROCEDURE (interface-name), binding-attr -list :: binding-name-list
 */
 	type-bound-procedure-stmt :
-		'PROCEDURE' ( ( ',' binding-attr-list ) ? ':' ':' ) ? type-bound-proc-decl-list
-	|	'PROCEDURE' '(' interface-name ')' ',' binding-attr-list ':' ':' binding-name-list
+		PROCEDURE ( ( ',' binding-attr-list ) ? ':' ':' ) ? type-bound-proc-decl-list
+	|	PROCEDURE '(' interface-name ')' ',' binding-attr-list ':' ':' binding-name-list
 	;
 
 /*
@@ -1104,7 +1166,7 @@ R215 keyword is name
 	R450 type-bound-generic-stmt is GENERIC [ , access-spec ] :: generic-spec => binding-name-list
 */
 	type-bound-generic-stmt :
-		'GENERIC' ( ',' access-spec ) ? ':' ':' generic-spec '=' '>' binding-name-list
+		GENERIC ( ',' access-spec ) ? ':' ':' generic-spec '=' '>' binding-name-list
 	;
 
 /*
@@ -1115,10 +1177,10 @@ R215 keyword is name
 	or access-spec
 */
 	binding-attr :
-		'PASS' ( '(' arg-name ')' ) ?
-	|	'NOPASS'
-	|	'NON OVERRIDABLE'
-	|	'DEFERRED'
+		PASS ( '(' arg-name ')' ) ?
+	|	NOPASS
+	|	NON_OVERRIDABLE
+	|	DEFERRED
 	|	access-spec
 	;
 
@@ -1126,7 +1188,7 @@ R215 keyword is name
 	R452 final-procedure-stmt is FINAL [ :: ] final-subroutine-name-list
 */
 	final-procedure-stmt :
-		'FINAL' ( ':' ':' ) ? final-subroutine-name-list
+		FINAL ( ':' ':' ) ? final-subroutine-name-list
 	;
 
 /*
@@ -1184,14 +1246,14 @@ R215 keyword is name
 	R459 enum-def-stmt is ENUM, BIND(C)
 */
 	enum-def-stmt :
-		'ENUM' ',' 'BIND' '(' 'C' ')'
+		ENUM ',' BIND '(' 'C' ')'
 	;
 
 /*
 	R460 enumerator-def-stmt is ENUMERATOR [ :: ] enumerator-list
 */
 	enumerator-def-stmt :
-		'ENUMERATOR' ( ':' ':' ) ? enumerator-list
+		ENUMERATOR ( ':' ':' ) ? enumerator-list
 	;
 
 /*
@@ -1205,7 +1267,7 @@ R215 keyword is name
 	R462 end-enum-stmt is END ENUM
 */
 	end-enum-stmt :
-		'END' 'ENUM'
+		END_ENUM
 	;
 
 /*
@@ -1318,6 +1380,9 @@ R215 keyword is name
 /*	
 	R501 type-declaration-stmt is declaration-type-spec [ [ , attr-spec ] ... :: ] entity-decl -list
 */
+	type-declaration-stmt :
+		declaration-type-spec ( ( ',' attr-spec ) * ':' ':' ) entity-decl-list
+	;
 
 /*
 	R502 attr-spec is access-spec
@@ -1339,62 +1404,123 @@ R215 keyword is name
 	or VALUE
 	or VOLATILE
 */
-
+	attr-spec :
+		access-spec
+	|	ALLOCATABLE
+	|	ASYNCHRONOUS
+	|	CODIMENSION '[' coarray-spec ']'
+	|	CONTIGUOUS
+	|	DIMENSION '(' array-spec ')'
+	|	EXTERNAL
+	|	INTENT '(' intent-spec ')'
+	|	INTRINSIC
+	|	language-binding-spec
+	|	OPTIONAL
+	|	PARAMETER
+	|	POINTER
+	|	PROTECTED
+	|	SAVE
+	|	TARGET
+	|	VALUE
+	|	VOLATILE
+	;
+	
 /*
 	R503 entity-decl is object-name [( array-spec )]
 	[ lbracket coarray-spec rbracket ]
 	[ * char-length ] [ initialization ]
 	or function-name [ * char-length ]
 */
+	entity-decl :
+		object-name ( '(' array-spec ')' ) ? ( '[' coarray-spec ']' ) ?	( '*' char-length ) ? initialization ?
+	|	function-name ( '*' char-length ) ?
+	;
 
 /*
 	R504 object-name is name
 */
+	object-name :
+		name
+	;
 
 /*
 	R505 initialization is = constant-expr
 	or => null-init
 	or => initial-data-target
 */
+	initialization :
+		'=' constant-expr
+	|	'=' '>' null-init
+	|	'=' '>' initial-data-target
+	;
 
 /*
 	R506 null-init is function-reference
 */
+	null-init :
+		function-reference
+	;
 
 /*
 	R507 access-spec is PUBLIC
 	or PRIVATE
 */
+	access-spec :
+		PUBLIC
+	|	PRIVATE
+	;
 
 /*
 	R508 language-binding-spec is BIND (C [, NAME = scalar-default-char-constant-expr ])
 */
+	language-binding-spec :
+		BIND '(' 'C' ( ',' NAME '=' scalar-default-char-constant-expr ) ? ')'
+	;
 
 /*
 	R509 coarray-spec is deferred-coshape-spec-list
 	or explicit-coshape-spec
 */
+	coarray-spec :
+		deferred-coshape-spec-list
+	|	explicit-coshape-spec
+	;
 
 /*
 	R510 deferred-coshape-spec is :
 */
+	deferred-coshape-spec :
+		':'
+	;
 
 /*
 	R511 explicit-coshape-spec is [ [ lower-cobound : ] upper-cobound, ]...
 	[ lower-cobound : ] *
 */
+	explicit-coshape-spec :
+		( ( lower-cobound ':' ) ? upper-cobound ',' ) *	( lower-cobound ':' ) ? '*'
+	;
 
 /*
 	R512 lower-cobound is specification-expr
 */
+	lower-cobound :
+		specification-expr
+	;
 
 /*
 	R513 upper-cobound is specification-expr
 */
+	upper-cobound :
+		specification-expr
+	;
 
 /*
 	R514 dimension-spec is DIMENSION ( array-spec )
 */
+	dimension-spec :
+		DIMENSION '(' array-spec ')'
+	;
 
 /*
 	R515 array-spec is explicit-shape-spec-list
@@ -1403,96 +1529,172 @@ R215 keyword is name
 	or assumed-size-spec
 	or implied-shape-spec-list
 */
+	array-spec :
+		explicit-shape-spec-list
+	|	assumed-shape-spec-list
+	|	deferred-shape-spec-list
+	|	assumed-size-spec
+	|	implied-shape-spec-list
+	;
 
 /*
 	R516 explicit-shape-spec is [ lower-bound : ] upper-bound
 */
+	explicit-shape-spec :
+		( lower-bound ':' ) ? upper-bound
+	;
 
 /*
-	R517 lower-bound is specication-expr
+	R517 lower-bound is specification-expr
 */
+	lower-bound :
+		specification-expr
+	;
 
 /*
-	R518 upper-bound is specication-expr
+	R518 upper-bound is specification-expr
 */
+	upper-bound :
+		specification-expr
+	;
 
 /*
 	R519 assumed-shape-spec is [ lower-bound ] :
 */
+	assumed-shape-spec :
+		lower-bound ? ':'
+	;
 
 /*
 	R520 deferred-shape-spec is :
 */
+	deferred-shape-spec :
+		':'
+	;
 
 /*
 	R521 assumed-size-spec is [ explicit-shape-spec , ]... [ lower-bound : ] *
 */
-
+	assumed-size-spec :
+		( explicit-shape-spec ',' ) * ( lower-bound ':' ) ? '*'
+	;
+	
 /*
 	R522 implied-shape-spec is [ lower-bound : ] *
 */
-
+	implied-shape-spec :
+		( lower-bound ':' ) ? '*'
+	;
+	
 /*
 	R523 intent-spec is IN
 	or OUT
 	or INOUT
 */
+	intent-spec :
+		IN
+	|	OUT
+	|	INOUT
+	;
 
 /*
 	R524 access-stmt is access-spec [ [ :: ] access-id -list ]
 */
+	access-stmt :
+		access-spec ( ( ':' ':' ) ? access-id-list ) ?
+	;
 
 /*
 	R525 access-id is use-name
 	or generic-spec
 */
+	access-id :
+		use-name
+	|	generic-spec
+	;
 
 /*
 	R526 allocatable-stmt is ALLOCATABLE [ :: ] allocatable-decl -list
 */
+	allocatable-stmt :
+		ALLOCATABLE ( ':' ':' ) allocatable-decl-list
+	;
 
 /*
 	R527 allocatable-decl is object-name [ ( array-spec ) ]
 	[ lbracket coarray-spec rbracket ]
 */
+	allocatable-decl :
+		object-name ( '(' array-spec ')' ) ?
+		( '[' coarray-spec ']' ) ?
+	;
 
 /*
 	R528 asynchronous-stmt is ASYNCHRONOUS [ :: ] object-name-list
 */
+	asynchronous-stmt :
+		ASYNCHRONOUS ( ':' ':' ) ? object-name-list
+	;
 
 /*
 	R529 bind-stmt is language-binding-spec [ :: ] bind-entity-list
 */
+	bind-stmt :
+		language-binding-spec ( ':' ':' ) ? bind-entity-list
+	;
 
 /*
 	R530 bind-entity is entity-name
 	or / common-block-name /
 */
+	bind-entity :
+		entity-name
+	|	'/' common-block-name '/'
+	;
 
 /*
 	R531 codimension-stmt is CODIMENSION [ :: ] codimension-decl -list
 */
+	codimension-stmt :
+		CODIMENSION ( ':' ':' ) ? codimension-decl-list
+	;
 
 /*
 	R532 codimension-decl is coarray-name lbracket coarray-spec rbracket
 */
+	codimension-decl :
+		coarray-name '[' coarray-spec ']'
+	;
 
 /*
 	R533 contiguous-stmt is CONTIGUOUS [ :: ] object-name-list
 */
+	contiguous-stmt :
+		CONTIGUOUS ( ':' ':' ) ? object-name-list
+	;
 
 /*
 	R534 data-stmt is DATA data-stmt-set [ [ , ] data-stmt-set ] ...
 */
+	data-stmt :
+		DATA data-stmt-set ( ',' ? data-stmt-set ) *
+	;
 
 /*
 	R535 data-stmt-set is data-stmt-object-list / data-stmt-value-list /
 */
+	data-stmt-set :
+		data-stmt-object-list '/' data-stmt-value-list '/'
+	;
 
 /*
 	R536 data-stmt-object is variable
 	or data-implied-do
 */
+	data-stmt-object :
+		variable
+	|	data-implied-do
+	;
 
 /*
 	R537 data-implied-do is ( data-i-do-object-list , data-i-do-variable =
@@ -1500,25 +1702,45 @@ R215 keyword is name
 	scalar-int-constant-expr
 	[ , scalar-int-constant-expr ] )
 */
-
+	data-implied-do :
+		'(' data-i-do-object-list ',' data-i-do-variable '='
+		scalar-int-constant-expr ','
+		scalar-int-constant-expr
+		( ',' scalar-int-constant-expr ) ? ')'
+	;
 /*
 	R538 data-i-do-object is array-element
 	or scalar-structure-component
 	or data-implied-do
 */
+	data-i-do-object :
+		array-element
+	|	scalar-structure-component
+	|	data-implied-do
+	;
 
 /*
 	R539 data-i-do-variable is do-variable
 */
+	data-i-do-variable :
+		do-variable
+	;
 
 /*
 	R540 data-stmt-value is [ data-stmt-repeat * ] data-stmt-constant
 */
+	data-stmt-value :
+		( data-stmt-repeat '*' ) ? data-stmt-constant
+	;
 
 /*
 	R541 data-stmt-repeat is scalar-int-constant
 	or scalar-int-constant-subobject
 */
+	data-stmt-repeat :
+		scalar-int-constant
+	|	scalar-int-constant-subobject
+	;
 
 /*
 	R542 data-stmt-constant is scalar-constant
@@ -1529,92 +1751,167 @@ R215 keyword is name
 	or initial-data-target
 	or structure-constructor
 */
+	data-stmt-constant :
+		scalar-constant
+	|	scalar-constant-subobject
+	|	signed-int-literal-constant
+	|	signed-real-literal-constant
+	|	null-init
+	|	initial-data-target
+	|	structure-constructor
+	;
 
 /*
 	R543 int-constant-subobject is constant-subobject
 */
+	int-constant-subobject :
+		constant-subobject
+	;
 
 /*
 	R544 constant-subobject is designator
 */
+	constant-subobject :
+		designator
+	;
 
 /*
 	R545 dimension-stmt is DIMENSION [ :: ] array-name ( array-spec )
 	[ , array-name ( array-spec ) ] ...
 */
-
+	dimension-stmt :
+		DIMENSION ( ':' ':' ) ? array-name '(' array-spec ')'
+		( ',' array-name '(' array-spec ')' ) *
+	;
+	
 /*
 	R546 intent-stmt is INTENT ( intent-spec ) [ :: ] dummy-arg-name-list
 */
+	intent-stmt :
+		INTENT '(' intent-spec ')' ( ':' ':' ) ? dummy-arg-name-list
+	;
 
 /*
 	R547 optional-stmt is OPTIONAL [ :: ] dummy-arg-name-list
 */
+	optional-stmt :
+		OPTIONAL ( ':' ':' ) ? dummy-arg-name-list
+	;
 
 /*
 	R548 parameter-stmt is PARAMETER ( named-constant-def -list )
 */
-
+	parameter-stmt :
+		PARAMETER '(' named-constant-def-list ')'
+	;
+	
 /*
 	R549 named-constant-def is named-constant = constant-expr
 */
+	named-constant-def :
+		named-constant '=' constant-expr
+	;
 
 /*
 	R550 pointer-stmt is POINTER [ :: ] pointer-decl -list
 */
+	pointer-stmt : 
+		POINTER ( ':' ':' ) pointer-decl-list
+	;
 
 /*
 	R551 pointer-decl is object-name [ ( deferred-shape-spec-list ) ]
 	or proc-entity-name
 */
+	pointer-decl :
+		object-name ( '(' deferred-shape-spec-list ')' ) ?
+	|	proc-entity-name
+	;
 
 /*
 	R552 protected-stmt is PROTECTED [ :: ] entity-name-list
 */
+	protected-stmt :
+		PROTECTED ( ':' ':' ) ? entity-name-list
+	;
 
 /*
 	R553 save-stmt is SAVE [ [ :: ] saved-entity-list ]
 */
+	save-stmt :
+		SAVE ( ( ':' ':' ) ? saved-entity-list ) ?
+	;
 
 /*
 	R554 saved-entity is object-name
 	or proc-pointer-name
 	or / common-block-name /
 */
+	saved-entity :
+		object-name
+	|	proc-pointer-name
+	|	'/' common-block-name '/'
+	;
 
 /*
 	R555 proc-pointer-name is name
 */
+	proc-pointer-name :
+		name
+	;
 
 /*
 	R556 target-stmt is TARGET [ :: ] target-decl -list
 */
+	target-stmt :
+		TARGET ( ':' ':' ) ? target-decl-list
+	;
 
 /*
 	R557 target-decl is object-name [ ( array-spec ) ]
 	[ lbracket coarray-spec rbracket ]
 */
+	target-decl :
+		object-name ( '(' array-spec ')' ) ?
+		( '[' coarray-spec ']' ) ?
+	;
 
 /*
 	R558 value-stmt is VALUE [ :: ] dummy-arg-name-list
 */
+	value-stmt :
+		VALUE ( ':' ':' ) ? dummy-arg-name-list
+	;
 
 /*
 	R559 volatile-stmt is VOLATILE [ :: ] object-name-list
 */
+	volatile-stmt :
+		VOLATILE ( ':' ':' ) ? object-name-list
+	;
 
 /*
 	R560 implicit-stmt is IMPLICIT implicit-spec-list
 	or IMPLICIT NONE
 */
+	implicit-stmt :
+		IMPLICIT implicit-spec-list
+	|	IMPLICIT_NONE
+	;
 
 /*
 	R561 implicit-spec is declaration-type-spec ( letter-spec-list )
 */
-
+	implicit-spec :
+		declaration-type-spec '(' letter-spec-list ')'
+	;
+	
 /*
-	R562 letter-spec is letter [ { letter ]
+	R562 letter-spec is letter [ - letter ]
 */
+	letter-spec :
+		letter ( '-' letter ) ?
+	;
 
 /*
 	R563 namelist-stmt is NAMELIST
@@ -1622,24 +1919,43 @@ R215 keyword is name
 	[ [ , ] / namelist-group-name /
 	namelist-group-object-list ] . . .
 */
-
+	namelist-stmt :
+		NAMELIST
+		'/' namelist-group-name '/' namelist-group-object-list
+		(  ',' ? '/' namelist-group-name '/' namelist-group-object-list ) *
+	;
+	
 /*
 	R564 namelist-group-object is variable-name
 */
+	namelist-group-object :
+		variable-name
+	;
 
 /*
 	R565 equivalence-stmt is EQUIVALENCE equivalence-set-list
 */
+	equivalence-stmt :
+		EQUIVALENCE equivalence-set-list
+	;
 
 /*
 	R566 equivalence-set is ( equivalence-object , equivalence-object-list )
 */
+	equivalence-set :
+		'(' equivalence-object ',' equivalence-object-list ')'
+	;
 
 /*
 	R567 equivalence-object is variable-name
 	or array-element
 	or substring
 */
+	equivalence-object :
+		variable-name
+	|	array-element
+	|	substring
+	;
 
 /*
 	R568 common-stmt is COMMON
@@ -1647,10 +1963,18 @@ R215 keyword is name
 	[ [ , ] / [ common-block-name ] /
 	common-block-object-list ] ...
 */
+	common-stmt :
+		COMMON
+		( '/' common-block-name ? '/' ) ? common-block-object-list
+		(  ',' ? '/' common-block-name ? '/' common-block-object-list ) *
+	;
 
 /*
 	R569 common-block-object is variable-name [ ( array-spec ) ]
 */
+	common-block-object :
+		variable-name ( '(' array-spec ')' ) ?
+	;
 
 /***************
 	Clause 6:	
@@ -1665,35 +1989,66 @@ R215 keyword is name
 	or structure-component
 	or substring
 */
+	designator :
+		object-name
+	|	array-element
+	|	array-section
+	|	coindexed-named-object
+	|	complex-part-designator
+	|	structure-component
+	|	substring
+	;
 
 /*
 	R602 variable is designator
 	or expr
 */
+	variable :
+		designator
+	|	expr
+	;
 
 /*
 	R603 variable-name is name
 */
+	variable-name :
+		name
+	;
 
 /*
 	R604 logical-variable is variable
 */
+	logical-variable :
+		variable
+	;
 
 /*
 	R605 char-variable is variable
 */
+	char-variable :
+		variable
+	;
 
 /*
 	R606 default-char-variable is variable
 */
+	default-char-variable :
+		variable
+	;
 
 /*
 	R607 int-variable is variable
 */
+	int-variable :
+		variable
+	;
 
 /*
 	R608 substring is parent-string ( substring-range )
 */
+	substring :
+		parent-string '(' substring-range ')'
+	;
 
 /*
 	R609 parent-string is scalar-variable-name
@@ -1702,79 +2057,142 @@ R215 keyword is name
 	or scalar-structure-component
 	or scalar-constant
 */
-
+	parent-string :
+		scalar-variable-name
+	|	array-element
+	|	coindexed-named-object
+	|	scalar-structure-component
+	|	scalar-constant
+	;
+	
 /*
 	R610 substring-range is [ scalar-int-expr ] : [ scalar-int-expr ]
 */
+	substring-range :
+		scalar-int-expr ? ':' scalar-int-expr ?
+	;
 
 /*
 	R611 data-ref is part-ref [ % part-ref ] ...
 */
+	data-ref :
+		part-ref ( '%' part-ref ) ?
+	;
 
 /*
 	R612 part-ref is part-name [ ( section-subscript-list ) ] [ image-selector ]
 */
+	part-ref :
+		part-name ( '(' section-subscript-list ')' ) ? image-selector ?
+	;
 
 /*
 	R613 structure-component is data-ref
 */
+	structure-component :
+		data-ref
+	;
 
 /*
 	R614 coindexed-named-object is data-ref
 */
+	coindexed-named-object :
+		data-ref
+	;
 
 /*
 	R615 complex-part-designator is designator % RE
 	or designator % IM
 */
+	complex-part-designator :
+		designator '%' RE
+	|	designator '%' IM
+	;
 
 /*
 	R616 type-param-inquiry is designator % type-param-name
 */
+	type-param-inquiry :
+		designator '%' type-param-name
+	;
 
 /*
 	R617 array-element is data-ref
 */
+	array-element :
+		data-ref
+	;
 
 /*
 	R618 array-section is data-ref [ ( substring-range ) ]
 	or complex-part-designator
 */
+	array-section :
+		data-ref ( '(' substring-range ')' ) ?
+	|	complex-part-designator
+	;
 
 /*
 	R619 subscript is scalar-int-expr
 */
+	subscript :
+		scalar-int-expr
+	;
 
 /*
 	R620 section-subscript is subscript
 	or subscript-triplet
 	or vector-subscript
 */
+	section-subscript :
+		subscript
+	|	subscript-triplet
+	|	vector-subscript
+	;
 
 /*
 	R621 subscript-triplet is [ subscript ] : [ subscript ] [ : stride ]
 */
+	subscript-triplet :
+		subscript ? ':' subscript ? ( ':' stride ) ?
+	;
 
 /*
 	R622 stride is scalar-int-expr
 */
-
+	stride :
+		scalar-int-expr
+	;
+	
 /*
 	R623 vector-subscript is int-expr
 */
+	vector-subscript :
+		int-expr
+	;
 
 /*
 	R624 image-selector is lbracket cosubscript-list rbracket
 */
-
+	image-selector :
+		'[' cosubscript-list ']'
+	;
+	
 /*
 	R625 cosubscript is scalar-int-expr
 */
+	cosubscript :
+		scalar-int-expr
+	;
 
 /*
 	R626 allocate-stmt is ALLOCATE ( [ type-spec :: ] allocation-list
 	[, alloc-opt-list ] )
 */
+	allocate-stmt :
+		ALLOCATE '(' ( type-spec ':' ':' ) ? allocation-list
+		( ',' alloc-opt-list ) ? ')'
+	;
 
 /*
 	R627 alloc-opt is ERRMSG = errmsg-variable
@@ -1782,67 +2200,120 @@ R215 keyword is name
 	or SOURCE = source-expr
 	or STAT = stat-variable
 */
-
+	alloc-opt :
+		ERRMSG '=' errmsg-variable
+	|	MOLD '=' source-expr
+	|	SOURCE '=' source-expr
+	|	STAT '=' stat-variable
+	;
+	
 /*
 	R628 stat-variable is scalar-int-variable
 */
+	stat-variable :
+		scalar-int-variable
+	;
 
 /*
 	R629 errmsg-variable is scalar-default-char-variable
 */
+	errmsg-variable :
+		scalar-default-char-variable
+	;
 
 /*
 	R630 source-expr is expr
 */
+	source-expr :
+		expr
+	;
 
 /*
 	R631 allocation is allocate-object [ ( allocate-shape-spec-list ) ]
 	[ lbracket allocate-coarray-spec rbracket ]
 */
+	allocation :
+		allocate-object ( '(' allocate-shape-spec-list ')' ) ?
+		( '[' allocate-coarray-spec ']' ) ?
+	;
 
 /*
 	R632 allocate-object is variable-name
 	or structure-component
 */
+	allocate-object :
+		variable-name
+	|	structure-component
+	;
 
 /*
 	R633 allocate-shape-spec is [ lower-bound-expr : ] upper-bound-expr
 */
+	allocate-shape-spec :
+		( lower-bound-expr ':' ) ? upper-bound-expr
+	;
 
 /*
 	R634 lower-bound-expr is scalar-int-expr
 */
+	lower-bound-expr :
+		scalar-int-expr
+	;
 
 /*
 	R635 upper-bound-expr is scalar-int-expr
 */
+	upper-bound-expr :
+		scalar-int-expr
+	;
 
 /*
 	R636 allocate-coarray-spec is [ allocate-coshape-spec-list , ] [ lower-bound-expr : ] *
 */
+	allocate-coarray-spec :
+		( allocate-coshape-spec-list ',' ) ? ( lower-bound-expr ':' ) ? '*'
+	;
 
 /*
 	R637 allocate-coshape-spec is [ lower-bound-expr : ] upper-bound-expr
 */
+	allocate-coshape-spec :
+		( lower-bound-expr ':' ) ? upper-bound-expr
+	;
 
 /*
 	R638 nullify-stmt is NULLIFY ( pointer-object-list )
 */
+	nullify-stmt :
+		NULLIFY '(' pointer-object-list ')'
+	;
 
 /*
 	R639 pointer-object is variable-name
 	or structure-component
 	or proc-pointer-name
 */
+	pointer-object :
+		variable-name
+	|	structure-component
+	|	proc-pointer-name
+	;
 
 /*
 	R640 deallocate-stmt is DEALLOCATE ( allocate-object-list [ , dealloc-opt-list ] )
 */
+	deallocate-stmt :
+		DEALLOCATE '(' allocate-object-list ( ',' dealloc-opt-list ) ? ')'
+	;
 
 /*
 	R641 dealloc-opt is STAT = stat-variable
 	or ERRMSG = errmsg-variable
 */
+	dealloc-opt :
+		STAT '=' stat-variable
+	|	ERRMSG '=' errmsg-variable
+	;
 
 /***************
 	Clause 7:	
