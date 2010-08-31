@@ -15,7 +15,7 @@ public class TokenDefinition {
 	private final Visibility visibility;
 
 	public TokenDefinition(String name, String regex) {
-		this(name, Pattern.compile(regex));
+		this(name, Pattern.compile("^" + regex));
 	}
 
 	public TokenDefinition(String name, String regex, Visibility visibility) {

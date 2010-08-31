@@ -26,7 +26,7 @@ public class GrammarReaderTest extends TestCase {
 	@Test
 	public void testRead() {
 		try {
-			Logger.getRootLogger().setLevel(Level.TRACE);
+			Logger.getRootLogger().setLevel(Level.DEBUG);
 			GrammarReader reader = new GrammarReader(new File(
 					"test/com/puresol/uhura/grammar/TestGrammar.g"));
 			assertTrue(reader.call());
