@@ -110,7 +110,6 @@
 	 * *****************************************
 	 */
 
-	HEX_DIGIT : "[0-9A-F]";
 	HEX_CONSTANT : "(Z'" HEX_DIGIT "+'|Z\""
 			HEX_DIGIT "+\")";
 	OCTAL_CONSTANT : "(O'" DIGIT "+'|O\""
@@ -122,6 +121,8 @@
  * T O K E N S
  ****************************************************************************/ 
  TOKENS
+
+	WHITESPACE : '[ \\t\\n\\r]';
 
 	/*
 	 * 3.1.5 Special characters
@@ -163,6 +164,7 @@
 	 * Keywords
 	 */ 
 	ABSTRACT : 'ABSTRACT' ;
+	ABSTRACT_INTERFACE : 'ABSTRACT\\s+INTERFACE' ;
 	ACCESS : 'ACCESS' ;
 	ACTION : 'ACTION' ;
 	ALLOCATABLE : 'ALLOCATABLE' ;
@@ -170,12 +172,15 @@
 	AND : 'AND' ;
 	ACQUIRED_LOCK : 'ACQUIRED\\s+LOCK' ;
 	ADVANCE : 'ADVANCE' ;
+	ASSIGNMENT : 'ASSIGNMENT' ;
 	ASSOCIATE : 'ASSOCIATE' ;
 	ASYNCHRONOUS : 'ASYNCHRONOUS' ;
 	BACKSPACE : 'BACKSPACE' ;
 	BIND : 'BIND' ;
 	BLANK : 'BLANK' ;
 	BLOCK : 'BLOCK' ;
+	BLOCK_DATA : 'BLOCK\\s+DATA' ;
+	CALL : 'CALL' ;
 	CASE : 'CASE' ;
 	CHARACTER : 'CHARACTER' ;
 	CLASS : 'CLASS' ;
@@ -188,6 +193,7 @@
 	COMMON : 'COMMON' ;
 	COMPLEX : 'COMPLEX' ;
 	CONCURRENT : 'CONCURRENT' ;
+	CONTAINS : 'CONTAINS' ;
 	CONTIGUOUS : 'CONTIGUOUS' ;
 	CRITICAL : 'CRITICAL' ;
 	DATA : 'DATA' ;
@@ -200,6 +206,7 @@
 	DIRECT : 'DIRECT' ;
 	DO : 'DO' ;
 	DOUBLE_PRECISION : 'DOUBLE\\s+PRECISION' ;
+	ELEMENTAL : 'ELEMENTAL' ;
 	ELSEWHERE : 'ELSEWHERE' ;
 	ENCODING : 'ENCODING' ;
 	END : 'END' ;
@@ -210,6 +217,7 @@
 	END_FORALL : 'END\\s+FORALL' ;
 	END_ENUM : 'END\\s+ENUM' ;
 	END_IF : 'END\\s+IF' ;
+	END_INTERFACE : 'END\\s+INTERFACE' ;
 	END_SELECT : 'END\\s+SELECT' ;
 	END_TYPE : 'END\\s+TYPE' ;
 	END_WHERE : 'END\\s+WHERE';
@@ -217,6 +225,7 @@
 	ELSE : 'ELSE' ;
 	ELSE_IF : 'ELSE\\s+IF' ;
 	ENCODING : 'ENCODING' ;
+	ENTRY : 'ENTRY' ;
 	ENUM : 'ENUM' ;
 	ENUMERATOR : 'ENUMERATOR' ;
 	EOR : 'EOR' ;
@@ -236,6 +245,7 @@
 	FORM : 'FORM' ;
 	FORMAT : 'FORMAT' ;
 	FORMATTED : 'FORMATTED' ;
+	FUNCTION : 'FUNCTION' ;
 	GENERIC : 'GENERIC' ;
 	GO_TO : 'GO\\s*TO' ;
 	ID : 'ID' ;
@@ -243,10 +253,13 @@
 	IM : 'IM' ;
 	IMPLICIT : 'IMPLICIT' ;
 	IMPLICIT_NONE : 'IMPLICIT\\s+NONE' ;
+	IMPORT : 'IMPORT' ;
+	IMPURE : 'IMPURE' ;
 	IN : 'IN' ;
 	INOUT : 'INOUT' ;
 	INTEGER : 'INTEGER' ;
-	INTENT : 'INTENT'  ;
+	INTENT : 'INTENT' ;
+	INTERFACE : 'INTERFACE' ;
 	INTRINSIC : 'INTRINSIC' ;
 	INQUIRE : 'INQUIRE' ;
 	IOLENGTH : 'IOLENGTH' ;
@@ -256,6 +269,8 @@
 	LEN : 'LEN' ;
 	LOCK : 'LOCK' ;
 	LOGICAL : 'LOGICAL' ;
+	MODULE : 'MODULE' ;
+	MODULE_PROCEDURE : 'MODULE\\s+PROCEDURE' ;
 	MOLD : 'MOLD' ;
 	NAME_KEYWORD : 'NAME' ;
 	NAMED : 'NAMED' ;
@@ -263,12 +278,15 @@
 	NEWUNIT : 'NEWUNIT' ;
 	NEXTREC : 'NEXTREC' ;
 	NML : 'NML' ;
+	NON_INTRINSIC : 'NON\\s+INTRINSIC';
 	NON_OVERRIDABLE : 'NON\\s+OVERRIDABLE' ;
 	NOPASS : 'NOPASS' ;
 	NULLIFY : 'NULLIFY' ;
 	NUMBER : 'NUMBER' ;
+	ONLY : 'ONLY' ;
 	OPEN : 'OPEN' ;
 	OPENED : 'OPENED' ;
+	OPERATOR : 'OPERATOR' ;
 	OPTIONAL : 'OPTIONAL' ;
 	OR : 'OR' ;
 	OUT : 'OUT' ;
@@ -282,14 +300,19 @@
 	POSITION : 'POSITION' ;
 	PRINT : 'PRINT' ;
 	PRIVATE : 'PRIVATE' ;
-	PROCEDURE : 'PROCEDURE' ; 
+	PROCEDURE : 'PROCEDURE' ;
+	PROGRAM : 'PROGRAM' ; 
 	PROTECTED : 'PROTECTED' ;
 	PUBLIC : 'PUBLIC' ;
+	PURE : 'PURE' ;
 	RE : 'RE' ;
 	REC : 'REC' ;
 	RECL : 'RECL' ;
 	READ : 'READ' ;
 	REAL : 'REAL' ;
+	RECURSIVE : 'RECURSIVE' ;
+	RESULT : 'RESULT' ;
+	RETURN : 'RETURN' ;
 	REWIND : 'REWIND' ;
 	ROUND : 'ROUND' ;
 	SAVE : 'SAVE' ;
@@ -304,6 +327,8 @@
 	STATUS : 'STATUS' ;
 	STOP : 'STOP' ;
 	STREAM : 'STREAM' ;
+	SUBMODULE : 'SUBMODULE' ;
+	SUBROUTINE : 'SUBROUTINE' ;
 	SYNC_ALL : 'SYNC\\s+ALL' ;
 	SYNC_IMAGES : 'SYNC\\s+IMAGES' ;
 	SYNC_MEMORY : 'SYNC\\s+MEMORY' ;
@@ -314,6 +339,7 @@
 	UNFORMATTED : 'UNFORMATTED' ;
 	UNIT : 'UNIT' ;
 	UNLOCK : 'UNLOCK' ;
+	USE : 'USE' ;
 	VALUE : 'SAVE' ;
 	VOLATILE : 'VOLATILE' ;
 	WAIT : 'WAIT' ;
@@ -348,6 +374,7 @@
 	LABEL : 
 			DIGIT "{1,5}"
 	;
+	HEX_DIGIT : "[0-9A-F]";
 
 /****************************************************************************
  * P R O D U C T I O N S
@@ -4380,14 +4407,14 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	R1102 program-stmt is PROGRAM program-name
 */
 	program-stmt :
-		PROGRAM program-name
+		PROGRAM NAME_LITERAL
 	;
 
 /*
 	R1103 end-program-stmt is END [ PROGRAM [ program-name ] ]
 */
 	end-program-stmt :
-		END ( PROGRAM program-name ? ) ?
+		END ( PROGRAM NAME_LITERAL ? ) ?
 	;
 
 /*
@@ -4407,14 +4434,14 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	R1105 module-stmt is MODULE module-name
 */
 	module-stmt :
-		MODULE module-name
+		MODULE NAME_LITERAL
 	;
 
 /*
 	R1106 end-module-stmt is END [ MODULE [ module-name ] ]
 */
 	end-module-stmt :
-		END ( MODULE module-name ? ) ?
+		END ( MODULE NAME_LITERAL ? ) ?
 	;
 
 /*
@@ -4443,8 +4470,8 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	ONLY : [ only-list ]
 */
 	use-stmt :
-		USE ( ( ',' module-nature ) ? ':' ':' ) ? module-name ( ',' rename-list ) ?
-	|	USE ( ( ',' module-nature ) ? ':' ':' ) ? module-name ',' ONLY ':' only-list ?
+		USE ( ( ',' module-nature ) ? ':' ':' ) ? NAME_LITERAL ( ',' rename-list ) ?
+	|	USE ( ( ',' module-nature ) ? ':' ':' ) ? NAME_LITERAL ',' ONLY ':' only-list ?
 	;
 
 /*
@@ -4462,8 +4489,11 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	OPERATOR (use-defined-operator)
 */
 	rename :
-		local-name '=' '>' NAME_LITERAL
+		NAME_LITERAL '=' '>' NAME_LITERAL
 	|	OPERATOR '(' local-defined-operator ')' '=' '>'	OPERATOR '(' use-defined-operator ')'
+	;
+	rename-list :
+		rename ( ',' rename ) *
 	;
 
 /*
@@ -4475,6 +4505,9 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 		generic-spec
 	|	only-use-name
 	|	rename
+	;
+	only-list :
+		only ( ',' only ) *
 	;
 
 /*
@@ -4519,21 +4552,21 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	R1117 submodule-stmt is SUBMODULE ( parent-identifier ) submodule-name
 */
 	submodule-stmt :
-		SUBMODULE '(' parent-identifier ')' submodule-name
+		SUBMODULE '(' parent-identifier ')' NAME_LITERAL
 	;
 
 /*
 	R1118 parent-identifier is ancestor-module-name [ : parent-submodule-name ]
 */
 	parent-identifier :
-		ancestor-module-name ( ':' parent-submodule-name ) ?
+		NAME_LITERAL ( ':' NAME_LITERAL ) ?
 	;
 
 /*
 	R1119 end-submodule-stmt is END [ SUBMODULE [ submodule-name ] ]
 */
 	end-submodule-stmt :
-		END ( SUBMODULE submodule-name ? ) ?
+		END ( SUBMODULE NAME_LITERAL ? ) ?
 	;
 
 /*
@@ -4551,14 +4584,14 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	R1121 block-data-stmt is BLOCK DATA [ block-data-name ]
 */
 	block-data-stmt :
-		BLOCK_DATA block-data-name ?
+		BLOCK_DATA NAME_LITERAL ?
 	;
 
 /*
 	R1122 end-block-data-stmt is END [ BLOCK DATA [ block-data-name ] ]
 */
 	end-block-data-stmt :
-		END ( BLOCK_DATA block-data-name ? ) ?
+		END ( BLOCK_DATA NAME_LITERAL ? ) ?
 	;
 
 /***************
@@ -4628,7 +4661,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	or defined-io-generic-spec
 */
 	generic-spec :
-		generic-name
+		NAME_LITERAL
 	|	OPERATOR '(' defined-operator ')'
 	|	ASSIGNMENT '(' '=' ')'
 	|	defined-io-generic-spec
@@ -4640,19 +4673,25 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	or WRITE (FORMATTED)
 	or WRITE (UNFORMATTED)
 */
+	defined-io-generic-spec :
+		READ '(' FORMATTED ')'
+	|	READ '(' UNFORMATTED ')'
+	|	WRITE '(' FORMATTED ')'
+	|	WRITE '(' UNFORMATTED ')'
+	;
 
 /*
 	R1209 import-stmt is IMPORT [[ :: ] import-name-list
 */
 	import-stmt :
-		IMPORT ( ':' ':' ) ? import-name-list
+		IMPORT ( ':' ':' ) ? name-list
 	;
 
 /*
 	R1210 external-stmt is EXTERNAL [ :: ] external-name-list
 */
 	external-stmt :
-		EXTERNAL ( ':' ':' ) external-name-list
+		EXTERNAL ( ':' ':' ) name-list
 	;
 
 /*
@@ -4728,7 +4767,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	R1218 intrinsic-stmt is INTRINSIC [ :: ] intrinsic-procedure-name-list
 */
 	intrinsic-stmt :
-		INTRINSIC ( ':' ':' ) ? intrinsic-procedure-name-list
+		INTRINSIC ( ':' ':' ) ? name-list
 	;
 
 /*
@@ -4761,6 +4800,9 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 */
 	actual-arg-spec :
 		( keyword '=' ) ? actual-arg
+	;
+	actual-arg-spec-list :
+		actual-arg-spec ( ',' actual-arg-spec ) *
 	;
 
 /*
@@ -4854,8 +4896,8 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	or RESULT ( result-name ) [ proc-language-binding-spec ]
 */
 	sufix :
-		proc-language-binding-spec ( RESULT '(' result-name ')' ) ?
-	|	RESULT '(' result-name ')' proc-language-binding-spec ?
+		proc-language-binding-spec ( RESULT '(' NAME_LITERAL ')' ) ?
+	|	RESULT '(' NAME_LITERAL ')' proc-language-binding-spec ?
 	;
 
 /*
@@ -4885,7 +4927,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	[ ( [ dummy-arg-list ] ) [ proc-language-binding-spec ] ]
 */
 	subroutine-stmt :
-		prefix ? SUBROUTINE subroutine-name
+		prefix ? SUBROUTINE NAME_LITERAL
 		( '(' dummy-arg-list ? ')' proc-language-binding-spec ? ) ?
 	;
 
@@ -4897,12 +4939,15 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 		dummy-arg-name
 	|	'*'
 	;
+	dummy-arg-list :
+		dummy-arg ( ',' dummy-arg ) *
+	;
 
 /*
 	R1236 end-subroutine-stmt is END [ SUBROUTINE [ subroutine-name ] ]
 */
 	end-subroutine-stmt :
-		END ( SUBROUTINE subroutine-name ? ) ?
+		END ( SUBROUTINE NAME_LITERAL ? ) ?
 	;
 
 /*
@@ -4938,7 +4983,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	R1240 entry-stmt is ENTRY entry-name [ ( [ dummy-arg-list ] ) [ sufix ] ]
 */
 	entry-stmt :
-		ENTRY entry-name ( '(' dummy-arg-list ? ')' sufix ? ) ?
+		ENTRY NAME_LITERAL ( '(' dummy-arg-list ? ')' sufix ? ) ?
 	;
 
 /*
