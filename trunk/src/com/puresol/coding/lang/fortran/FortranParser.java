@@ -1,7 +1,6 @@
 package com.puresol.coding.lang.fortran;
 
 import com.puresol.coding.analysis.CodeRangeType;
-import com.puresol.coding.lang.fortran.source.grammar.highlevel.Program;
 import com.puresol.parser.ParserException;
 import com.puresol.parser.PartDoesNotMatchException;
 import com.puresol.parser.tokens.EndOfTokenStreamToken;
