@@ -38,7 +38,7 @@ public class GrammarReaderTest extends TestCase {
 			Lexer lexer = new RegExpLexer(new Properties());
 			lexer.scan(new StringReader("1 * 2\n + 3"),
 					grammar.getTokenDefinitions());
-			Parser parser = new SLR1Parser(new Properties(), grammar);
+			Parser parser = new SLR1Parser(grammar);
 			System.out.println(parser.getParserTable());
 			LR0StateTransitionGraph tg = new LR0StateTransitionGraph(grammar);
 			System.out.println(tg);

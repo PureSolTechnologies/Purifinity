@@ -27,7 +27,7 @@ public class LR1ParserTest extends TestCase {
 		try {
 			Logger.getRootLogger().setLevel(Level.TRACE);
 			Grammar grammar = TestGrammars.getTestGrammarFromDragonBook();
-			Parser parser = new LR1Parser(new Properties(), grammar);
+			Parser parser = new LR1Parser(grammar);
 			Lexer lexer = new RegExpLexer(new Properties());
 			lexer.scan(new StringReader("1*2+3"), grammar.getTokenDefinitions());
 			parser.setTokenStream(lexer.getTokenStream());
@@ -50,7 +50,7 @@ public class LR1ParserTest extends TestCase {
 		try {
 			Logger.getRootLogger().setLevel(Level.TRACE);
 			Grammar grammar = TestGrammars.getTestGrammarFromDragonBook();
-			Parser parser = new LR1Parser(new Properties(), grammar);
+			Parser parser = new LR1Parser(grammar);
 			Lexer lexer = new RegExpLexer(new Properties());
 			lexer.scan(new StringReader("((1*(2+3)+4*5)+6)*7"),
 					grammar.getTokenDefinitions());

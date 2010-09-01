@@ -1,6 +1,5 @@
 package com.puresol.uhura.parser.lr;
 
-import java.util.Properties;
 import java.util.Stack;
 
 import org.apache.log4j.Logger;
@@ -30,9 +29,8 @@ public abstract class AbstractLRTableParser extends AbstractParser {
 	private int streamPosition = 0;
 	private int stepCounter = 0;
 
-	public AbstractLRTableParser(Properties options, Grammar grammar)
-			throws GrammarException {
-		super(options, grammar);
+	public AbstractLRTableParser(Grammar grammar) throws GrammarException {
+		super(grammar);
 		calculateParserTable();
 	}
 

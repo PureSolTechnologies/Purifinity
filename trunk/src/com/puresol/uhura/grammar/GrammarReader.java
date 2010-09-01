@@ -114,7 +114,7 @@ public class GrammarReader implements Callable<Boolean> {
 
 	private void parse(TokenStream tokenStream) throws ParserException {
 		try {
-			Parser parser = new SLR1Parser(new Properties(), uhuraGrammar);
+			Parser parser = new SLR1Parser(uhuraGrammar);
 			parser.setTokenStream(tokenStream);
 			ast = parser.call();
 			if (logger.isTraceEnabled()) {

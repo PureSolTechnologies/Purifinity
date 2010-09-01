@@ -1,15 +1,12 @@
 package com.puresol.uhura.parser.lr;
 
-import java.util.Properties;
-
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
 
 public class LR1Parser extends AbstractLRTableParser {
 
-	public LR1Parser(Properties options, Grammar grammar)
-			throws GrammarException {
-		super(options, grammar);
+	public LR1Parser(Grammar grammar) throws GrammarException {
+		super(grammar);
 	}
 
 	@Override

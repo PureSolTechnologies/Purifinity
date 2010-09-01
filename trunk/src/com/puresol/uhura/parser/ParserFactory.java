@@ -11,15 +11,15 @@ public class ParserFactory {
 
 	private static final Logger logger = Logger.getLogger(ParserFactory.class);
 
-	public static Parser create(Properties options, Grammar grammar)
-			throws ParserFactoryException {
+	public static Parser create(Grammar grammar) throws ParserFactoryException {
 		try {
+			Properties options = grammar.getOptions();
 			if (options.containsKey("parser")) {
 				return (Parser) Class.forName(options.getProperty("parser"))
-						.getConstructor(Properties.class, Grammar.class)
+						.getConstructor(Grammar.class)
 						.newInstance(options, grammar);
 			} else {
-				return new SLR1Parser(options, grammar);
+				return new SLR1Parser(grammar);
 			}
 		} catch (Throwable e) {
 			logger.error(e.getMessage(), e);
