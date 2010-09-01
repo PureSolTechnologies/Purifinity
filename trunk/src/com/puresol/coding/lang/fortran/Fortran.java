@@ -5,10 +5,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 
-import com.puresol.coding.AbstractProgrammingLanguage;
-import com.puresol.coding.analysis.Analyzer;
-import com.puresol.utils.PersistenceException;
-
 public class Fortran extends AbstractProgrammingLanguage {
 
 	private static final String[] FILE_SUFFIXES = { ".f", ".f77", ".f90",

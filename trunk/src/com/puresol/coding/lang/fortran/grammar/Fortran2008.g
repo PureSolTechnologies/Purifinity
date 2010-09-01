@@ -123,9 +123,9 @@
  ****************************************************************************/ 
  TOKENS
 
-	WHITESPACE : '[ \\t]';
+	WHITESPACE : '[ \\t]+';
 	LINE_TERMINATOR : '(\\n|\\r\n|\\r)' ;
-	LINE_COMMENT : '![^\\n\\\r]*' LINE_TERMINATOR ;
+	LINE_COMMENT : '(![^\\n\\\r]*' LINE_TERMINATOR '|' LINE_TERMINATOR '[C$*][^\\r\\n]*(?=' LINE_TERMINATOR '))' ;
 
 	/*
 	 * 3.1.5 Special characters

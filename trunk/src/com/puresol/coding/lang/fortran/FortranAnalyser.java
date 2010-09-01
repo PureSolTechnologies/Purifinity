@@ -12,58 +12,59 @@ package com.puresol.coding.lang.fortran;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 
 import org.apache.log4j.Logger;
 
-import com.puresol.coding.ProgrammingLanguage;
-import com.puresol.coding.analysis.AbstractAnalyser;
-import com.puresol.coding.analysis.AnalyserException;
-import com.puresol.coding.analysis.SourceCodeLexer;
-import com.puresol.parser.ParserException;
-import com.puresol.parser.PartDoesNotMatchException;
-import com.puresol.parser.lexer.LexerException;
-import com.puresol.parser.lexer.NoMatchingTokenDefinitionFound;
+import com.puresol.coding.lang.fortran.grammar.FortranGrammar;
+import com.puresol.uhura.ast.AST;
+import com.puresol.uhura.grammar.Grammar;
+import com.puresol.uhura.grammar.GrammarException;
+import com.puresol.uhura.lexer.LexerException;
+import com.puresol.uhura.lexer.RegExpLexer;
+import com.puresol.uhura.lexer.TokenStream;
+import com.puresol.uhura.parser.Parser;
+import com.puresol.uhura.parser.ParserException;
+import com.puresol.uhura.parser.lr.LR1Parser;
 
-public class FortranAnalyser extends AbstractAnalyser {
+public class FortranAnalyser {
 
 	private static final long serialVersionUID = 2265150343844799735L;
 
 	private static final Logger logger = Logger
 			.getLogger(FortranAnalyser.class);
 
+	private final File file;
+
 	public FortranAnalyser(File file) {
-		super(file);
+		this.file = file;
 	}
 
-	@Override
-	public void parse() throws AnalyserException {
+	public void parse() {
 		try {
-			SourceCodeLexer lexer = new SourceCodeLexer(Fortran.getInstance(),
-					new FortranPreConditioner(getFile()).getTokenStream());
-			FortranParser parser = (FortranParser) createParserInstance(
-					FortranParser.class, lexer.getTokenStream());
-			parser.scan();
-			setRootCodeRange(parser);
-			return;
-		} catch (FileNotFoundException e) {
-			logger.error(e.getMessage(), e);
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-		} catch (NoMatchingTokenDefinitionFound e) {
-			logger.error(e.getMessage(), e);
-		} catch (PartDoesNotMatchException e) {
-			logger.error(e.getMessage(), e);
-		} catch (LexerException e) {
-			logger.error(e.getMessage(), e);
+			Grammar grammar = FortranGrammar.get();
+			RegExpLexer lexer = new RegExpLexer(grammar);
+			TokenStream tokenStream = lexer.lex(new FileReader(file));
+			Parser parser = new LR1Parser(grammar);
+			AST ast = parser.parse(tokenStream);
 		} catch (ParserException e) {
-			logger.error(e.getMessage(), e);
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (GrammarException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (LexerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		throw new AnalyserException(this);
+		return;
 	}
 
-	@Override
-	public ProgrammingLanguage getLanguage() {
+	public Fortran getLanguage() {
 		return Fortran.getInstance();
 	}
 }

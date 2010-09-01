@@ -9,8 +9,8 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import com.puresol.parser.tokens.Token;
-import com.puresol.parser.tokens.TokenStream;
+import com.puresol.uhura.lexer.Token;
+import com.puresol.uhura.lexer.TokenStream;
 
 public class FortranPreConditionerTest {
 
@@ -33,7 +33,7 @@ public class FortranPreConditionerTest {
 					new File(
 							"test/com/puresol/coding/lang/fortran/samples/zgerc.f"));
 			TokenStream tokenStream = conditioner.getTokenStream();
-			for (Token token : tokenStream.getTokens()) {
+			for (Token token : tokenStream) {
 				System.out.println(token.toString());
 			}
 		} catch (FileNotFoundException e) {
