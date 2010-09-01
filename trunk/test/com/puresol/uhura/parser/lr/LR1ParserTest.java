@@ -1,7 +1,6 @@
 package com.puresol.uhura.parser.lr;
 
 import java.io.StringReader;
-import java.util.Properties;
 
 import junit.framework.TestCase;
 
@@ -28,10 +27,8 @@ public class LR1ParserTest extends TestCase {
 			Logger.getRootLogger().setLevel(Level.TRACE);
 			Grammar grammar = TestGrammars.getTestGrammarFromDragonBook();
 			Parser parser = new LR1Parser(grammar);
-			Lexer lexer = new RegExpLexer(new Properties());
-			lexer.scan(new StringReader("1*2+3"), grammar.getTokenDefinitions());
-			parser.setTokenStream(lexer.getTokenStream());
-			AST syntaxTree = parser.call();
+			Lexer lexer = new RegExpLexer(grammar);
+			AST syntaxTree = parser.parse(lexer.lex(new StringReader("1*2+3")));
 			new TreePrinter(System.out).println(syntaxTree);
 		} catch (GrammarException e) {
 			e.printStackTrace();
@@ -51,11 +48,9 @@ public class LR1ParserTest extends TestCase {
 			Logger.getRootLogger().setLevel(Level.TRACE);
 			Grammar grammar = TestGrammars.getTestGrammarFromDragonBook();
 			Parser parser = new LR1Parser(grammar);
-			Lexer lexer = new RegExpLexer(new Properties());
-			lexer.scan(new StringReader("((1*(2+3)+4*5)+6)*7"),
-					grammar.getTokenDefinitions());
-			parser.setTokenStream(lexer.getTokenStream());
-			AST syntaxTree = parser.call();
+			Lexer lexer = new RegExpLexer(grammar);
+			AST syntaxTree = parser.parse(lexer.lex(new StringReader(
+					"((1*(2+3)+4*5)+6)*7")));
 			new TreePrinter(System.out).println(syntaxTree);
 		} catch (GrammarException e) {
 			e.printStackTrace();

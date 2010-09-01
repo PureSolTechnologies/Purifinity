@@ -13,11 +13,6 @@ public abstract class AbstractParser implements Parser {
 		this.grammar = grammar;
 	}
 
-	@Override
-	public final void setTokenStream(TokenStream tokenStream) {
-		this.tokenStream = tokenStream;
-	}
-
 	/**
 	 * @return the grammar
 	 */
@@ -32,4 +27,10 @@ public abstract class AbstractParser implements Parser {
 		return tokenStream;
 	}
 
+	/**
+	 * @return the tokenStream
+	 */
+	protected final void setTokenStream(TokenStream tokenStream) {
+		this.tokenStream = tokenStream;
+	}
 }

@@ -92,9 +92,8 @@ public class GrammarReader implements Callable<Boolean> {
 		try {
 			logger.debug("Read grammar file:");
 			logger.debug("Starting lexer...");
-			lexer = new RegExpLexer(new Properties());
-			lexer.scan(reader, uhuraGrammar.getTokenDefinitions());
-			TokenStream tokenStream = lexer.getTokenStream();
+			lexer = new RegExpLexer(uhuraGrammar);
+			TokenStream tokenStream = lexer.lex(reader);
 			logger.debug("Starting parser...");
 			parse(tokenStream);
 			logger.debug("Convert AST into grammar...");
@@ -115,8 +114,7 @@ public class GrammarReader implements Callable<Boolean> {
 	private void parse(TokenStream tokenStream) throws ParserException {
 		try {
 			Parser parser = new SLR1Parser(uhuraGrammar);
-			parser.setTokenStream(tokenStream);
-			ast = parser.call();
+			ast = parser.parse(tokenStream);
 			if (logger.isTraceEnabled()) {
 				new TreePrinter(System.out).println(ast);
 			}
@@ -240,7 +238,7 @@ public class GrammarReader implements Callable<Boolean> {
 				} else {
 					String text = tree.getChild("IDENTIFIER").getText();
 					text = getTokenDefinition(text, helpers, tokens)
-							.getPattern().toString();
+							.getText();
 					pattern.append(text);
 				}
 				if (tree.hasChild("OptionalQuantifier")) {

@@ -37,7 +37,7 @@ TOKENS
 	STAR:				"\\*";
 	SLASH:				"/";
 	COMMA:				",";
-	ID:					"[-A-Za-z0-9_]";
+	ID:					"[A-Za-z0-9_]";
 
 /*
  The next section is the PRODUCTIONS section where all grammar productions are

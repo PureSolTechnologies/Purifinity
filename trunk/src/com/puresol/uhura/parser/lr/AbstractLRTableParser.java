@@ -53,7 +53,8 @@ public abstract class AbstractLRTableParser extends AbstractParser {
 	}
 
 	@Override
-	public AST call() throws ParserException {
+	public AST parse(TokenStream tokenStream) throws ParserException {
+		setTokenStream(tokenStream);
 		reset();
 		boolean accepted = false;
 		do {

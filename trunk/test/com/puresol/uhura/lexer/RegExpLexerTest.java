@@ -5,7 +5,9 @@ import java.util.Properties;
 
 import org.junit.Test;
 
+import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
+import com.puresol.uhura.grammar.production.ProductionSet;
 import com.puresol.uhura.grammar.token.TokenDefinition;
 import com.puresol.uhura.grammar.token.TokenDefinitionSet;
 
@@ -19,10 +21,11 @@ public class RegExpLexerTest extends TestCase {
 			TokenDefinitionSet rules = new TokenDefinitionSet();
 			rules.addDefinition(new TokenDefinition("NUMBER", "[0-9]+"));
 			rules.addDefinition(new TokenDefinition("WHITESPACE", "[ \\t]+"));
-			Lexer lexer = new RegExpLexer(new Properties());
-			lexer.scan(new StringReader(
-					"0 1\t2 \t3 \t4 \t5\t 6 7 8 9 10 11 12 13 14 15"), rules);
-			TokenStream tokenStream = lexer.getTokenStream();
+			Grammar grammar = new Grammar(new Properties(), rules,
+					new ProductionSet());
+			Lexer lexer = new RegExpLexer(grammar);
+			TokenStream tokenStream = lexer.lex(new StringReader(
+					"0 1\t2 \t3 \t4 \t5\t 6 7 8 9 10 11 12 13 14 15"));
 			assertNotNull(tokenStream);
 			assertEquals(31, tokenStream.size());
 			assertEquals("NUMBER", tokenStream.get(0).getName());
@@ -51,9 +54,11 @@ public class RegExpLexerTest extends TestCase {
 			TokenDefinitionSet rules = new TokenDefinitionSet();
 			rules.addDefinition(new TokenDefinition("NUMBER", "[0-9]+"));
 			rules.addDefinition(new TokenDefinition("WHITESPACE", "[ \\t]+"));
-			Lexer lexer = new RegExpLexer(new Properties());
-			lexer.scan(new StringReader(
-					"0 1\t2 \t3 \t4 \t5\t 6 7 8 9 10 11 12 13 14 15"), rules);
+			Grammar grammar = new Grammar(new Properties(), rules,
+					new ProductionSet());
+			Lexer lexer = new RegExpLexer(grammar);
+			lexer.lex(new StringReader(
+					"0 1\t2 \t3 \t4 \t5\t 6 7 8 9 10 11 12 13 14 15"));
 			lexer.getMetaInformation().println();
 		} catch (LexerException e) {
 			e.printStackTrace();

@@ -2,14 +2,13 @@ package com.puresol.uhura.lexer;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
+import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.token.TokenDefinition;
-import com.puresol.uhura.grammar.token.TokenDefinitionSet;
 import com.puresol.uhura.grammar.token.Visibility;
 
 /**
@@ -24,28 +23,21 @@ public class RegExpLexer implements Lexer {
 
 	private static final String LINE_TERMINATOR = "(\\r\\n|\\n|\\r)";
 
-	private final Properties options;
-	private TokenDefinitionSet definitionSet = null;
+	private final Grammar grammar;
+
 	private TokenMetaInformation tokenMetaDatas = null;
 	private TokenStream tokenStream = null;
 	private StringBuilder text = null;
 
-	public RegExpLexer(Properties options) {
-		this.options = options;
+	public RegExpLexer(Grammar grammar) {
+		this.grammar = grammar;
 	}
 
 	/**
-	 * @return the rules
+	 * @return the grammar
 	 */
-	public TokenDefinitionSet getRuleSet() {
-		return definitionSet;
-	}
-
-	/**
-	 * @return the options
-	 */
-	public Properties getOptions() {
-		return options;
+	public Grammar getGrammar() {
+		return grammar;
 	}
 
 	/**
@@ -53,12 +45,12 @@ public class RegExpLexer implements Lexer {
 	 * 
 	 * @throws LexerException
 	 */
+
 	@Override
-	public void scan(Reader reader, TokenDefinitionSet definitionSet)
-			throws LexerException {
-		this.definitionSet = definitionSet;
+	public TokenStream lex(Reader reader) throws LexerException {
 		readToString(reader);
 		scan();
+		return tokenStream;
 	}
 
 	private void readToString(Reader reader) throws LexerException {
@@ -122,7 +114,8 @@ public class RegExpLexer implements Lexer {
 
 	private Token findNextToken(StringBuilder text) {
 		Token nextToken = null;
-		for (TokenDefinition definition : definitionSet.getDefinitions()) {
+		for (TokenDefinition definition : grammar.getTokenDefinitions()
+				.getDefinitions()) {
 			Matcher matcher = definition.getPattern().matcher(text);
 			if (!matcher.find()) {
 				continue;
@@ -144,16 +137,7 @@ public class RegExpLexer implements Lexer {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public TokenStream getTokenStream() {
-		return tokenStream;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	public TokenMetaInformation getMetaInformation() {
 		return tokenMetaDatas;
 	}
-
 }

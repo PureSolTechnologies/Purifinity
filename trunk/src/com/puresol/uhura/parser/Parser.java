@@ -1,7 +1,5 @@
 package com.puresol.uhura.parser;
 
-import java.util.concurrent.Callable;
-
 import com.puresol.uhura.ast.AST;
 import com.puresol.uhura.lexer.TokenStream;
 import com.puresol.uhura.parser.parsetable.ParserTable;
@@ -13,13 +11,10 @@ import com.puresol.uhura.parser.parsetable.ParserTable;
  * @author Rick-Rainer Ludwig
  * 
  */
-public interface Parser extends Callable<AST> {
+public interface Parser {
 
-	public void setTokenStream(TokenStream tokenStream);
+	public AST parse(TokenStream tokenStream) throws ParserException;
 
-	@Override
-	public AST call() throws ParserException;
-
-	ParserTable getParserTable();
+	public ParserTable getParserTable();
 
 }

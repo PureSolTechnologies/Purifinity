@@ -12,26 +12,21 @@ public class TokenDefinition {
 
 	private final String name;
 	private final Pattern pattern;
+	private final String text;
 	private final Visibility visibility;
 
 	public TokenDefinition(String name, String regex) {
-		this(name, Pattern.compile("^" + regex));
+		this.name = name;
+		this.pattern = Pattern.compile("^" + regex);
+		this.visibility = Visibility.VISIBLE;
+		this.text = regex;
 	}
 
 	public TokenDefinition(String name, String regex, Visibility visibility) {
-		this(name, Pattern.compile("^" + regex), visibility);
-	}
-
-	public TokenDefinition(String name, Pattern pattern, Visibility visibility) {
 		this.name = name;
-		this.pattern = pattern;
+		this.pattern = Pattern.compile("^" + regex);
 		this.visibility = visibility;
-	}
-
-	public TokenDefinition(String name, Pattern pattern) {
-		this.name = name;
-		this.pattern = pattern;
-		this.visibility = Visibility.VISIBLE;
+		this.text = regex;
 	}
 
 	/**
@@ -46,6 +41,13 @@ public class TokenDefinition {
 	 */
 	public Pattern getPattern() {
 		return pattern;
+	}
+
+	/**
+	 * @return the text
+	 */
+	public String getText() {
+		return text;
 	}
 
 	/**
