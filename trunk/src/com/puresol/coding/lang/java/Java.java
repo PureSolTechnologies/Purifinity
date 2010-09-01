@@ -316,7 +316,6 @@ public class Java extends AbstractProgrammingLanguage {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public List<Class<? extends TokenDefinition>> getKeywords() {
 		return KEYWORDS;
 	}
@@ -324,7 +323,6 @@ public class Java extends AbstractProgrammingLanguage {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public List<Class<? extends TokenDefinition>> getLiterals() {
 		return LITERALS;
 	}
@@ -332,7 +330,6 @@ public class Java extends AbstractProgrammingLanguage {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	public List<Class<? extends TokenDefinition>> getSymbols() {
 		return SYMBOLS;
 	}
