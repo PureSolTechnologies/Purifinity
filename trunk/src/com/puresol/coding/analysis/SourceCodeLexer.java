@@ -11,32 +11,18 @@ import com.puresol.parser.tokens.TokenStream;
 
 public class SourceCodeLexer extends Lexer {
 
-	private final ProgrammingLanguage language;
-
 	public SourceCodeLexer(ProgrammingLanguage language, TokenStream stream)
 			throws LexerException {
 		super(stream);
-		this.language = language;
-		init();
 	}
 
 	public SourceCodeLexer(ProgrammingLanguage language, File file)
 			throws LexerException, FileNotFoundException, IOException {
 		super(file);
-		this.language = language;
-		init();
 	}
 
 	public SourceCodeLexer(ProgrammingLanguage language, String fileName,
 			String text) throws LexerException {
 		super(fileName, text);
-		this.language = language;
-		init();
-	}
-
-	private void init() throws LexerException {
-		addDefinitions(language.getKeywords());
-		addDefinitions(language.getLiterals());
-		addDefinitions(language.getSymbols());
 	}
 }

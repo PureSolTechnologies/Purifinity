@@ -52,31 +52,5 @@ public interface ProgrammingLanguage {
 	public Analyzer createAnalyser(File file)
 			throws ClassInstantiationException;
 
-	/**
-	 * This method returns the programming language's keywords as a list of
-	 * token definitions.
-	 * 
-	 * @return
-	 */
-	public List<Class<? extends TokenDefinition>> getKeywords();
-
-	/**
-	 * This method returns the programming language's literals as a list of
-	 * token definitions. The Identifier token definition is appended at the end
-	 * of this literals, even if it's not really a literal, but for lexical
-	 * scanning, it's the best place to be.
-	 * 
-	 * @return
-	 */
-	public List<Class<? extends TokenDefinition>> getLiterals();
-
-	/**
-	 * This method returns the programming language's symbols as a list of token
-	 * definitions.
-	 * 
-	 * @return
-	 */
-	public List<Class<? extends TokenDefinition>> getSymbols();
-
 	public Analyzer restoreAnalyzer(File file) throws PersistenceException;
 }

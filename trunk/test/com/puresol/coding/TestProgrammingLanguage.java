@@ -1,11 +1,8 @@
 package com.puresol.coding;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 import com.puresol.coding.analysis.Analyzer;
-import com.puresol.parser.tokens.TokenDefinition;
 import com.puresol.utils.PersistenceException;
 
 public class TestProgrammingLanguage extends AbstractProgrammingLanguage {
@@ -44,21 +41,6 @@ public class TestProgrammingLanguage extends AbstractProgrammingLanguage {
 	@Override
 	protected String[] getValidFileSuffixes() {
 		return FILE_SUFFIXES;
-	}
-
-	@Override
-	public List<Class<? extends TokenDefinition>> getKeywords() {
-		return new ArrayList<Class<? extends TokenDefinition>>();
-	}
-
-	@Override
-	public List<Class<? extends TokenDefinition>> getLiterals() {
-		return new ArrayList<Class<? extends TokenDefinition>>();
-	}
-
-	@Override
-	public List<Class<? extends TokenDefinition>> getSymbols() {
-		return new ArrayList<Class<? extends TokenDefinition>>();
 	}
 
 	@Override
