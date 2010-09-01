@@ -116,13 +116,16 @@
 			DIGIT "+\")";
 	BINARY_CONSTANT : "(B'" DIGIT "+'|B\""
 			DIGIT "+\")";
+	LINE_LEAD : '([C*!].....| [ \\d!]{4}[ \\d!;])';
  
 /****************************************************************************
  * T O K E N S
  ****************************************************************************/ 
  TOKENS
 
-	WHITESPACE : '[ \\t\\n\\r]';
+	WHITESPACE : '[ \\t]';
+	LINE_TERMINATOR : '(\\n|\\r\n|\\r)' ;
+	LINE_COMMENT : '![^\\n\\\r]*' LINE_TERMINATOR ;
 
 	/*
 	 * 3.1.5 Special characters
