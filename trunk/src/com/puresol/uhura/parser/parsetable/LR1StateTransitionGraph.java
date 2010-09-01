@@ -6,11 +6,16 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import org.apache.log4j.Logger;
+
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.production.Construction;
 import com.puresol.uhura.grammar.production.FinishConstruction;
 
 public class LR1StateTransitionGraph {
+
+	private final static Logger logger = Logger
+			.getLogger(LR1StateTransitionGraph.class);
 
 	private final ConcurrentMap<LR1ItemSet, Integer> itemSet2Integer = new ConcurrentHashMap<LR1ItemSet, Integer>();
 	private final ConcurrentMap<Integer, LR1ItemSet> itemSets = new ConcurrentHashMap<Integer, LR1ItemSet>();
@@ -41,12 +46,17 @@ public class LR1StateTransitionGraph {
 		int initialStateId = itemSet2Integer.get(initialSet);
 		for (Construction construction : initialSet.getNextConstructions()) {
 			LR1ItemSet gotoSet = gotoCalculator.calc(initialSet, construction);
+			int finalStateId;
 			if (!itemSets.containsValue(gotoSet)) {
-				int finalStateId = addState(gotoSet);
+				finalStateId = addState(gotoSet);
 				addTransition(initialStateId, construction, finalStateId);
+				if (logger.isTraceEnabled()) {
+					logger.trace(String.valueOf(initialStateId) + " of "
+							+ itemSets.size());
+				}
 				calculateRecursively(gotoSet);
 			} else {
-				int finalStateId = itemSet2Integer.get(gotoSet);
+				finalStateId = itemSet2Integer.get(gotoSet);
 				addTransition(initialStateId, construction, finalStateId);
 			}
 		}

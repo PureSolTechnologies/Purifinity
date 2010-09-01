@@ -28,13 +28,17 @@ public class LR1ParserTable extends AbstractParserTable {
 	}
 
 	protected void calculate() throws GrammarException {
+		logger.debug("Calculate follow table...");
 		follow = new Follow(getGrammar());
+		logger.debug("Calculate transition graph...");
 		transitionGraph = new LR1StateTransitionGraph(getGrammar());
 		if (logger.isTraceEnabled()) {
 			logger.trace(follow.toString());
 			logger.trace(transitionGraph.toString());
 		}
+		logger.debug("Adding shifts and gotos...");
 		addShiftAndGotos();
+		logger.debug("Reduces and accept...");
 		addReduceAndAccept();
 	}
 

@@ -5,6 +5,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.apache.log4j.Logger;
+
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.production.Construction;
@@ -12,6 +14,9 @@ import com.puresol.uhura.grammar.production.ConstructionType;
 import com.puresol.uhura.lexer.Token;
 
 public abstract class AbstractParserTable implements ParserTable {
+
+	private static final Logger logger = Logger
+			.getLogger(AbstractParserTable.class);
 
 	private final List<ConcurrentMap<Construction, ParserAction>> table = new CopyOnWriteArrayList<ConcurrentMap<Construction, ParserAction>>();
 	private final List<Construction> actionTerminals = new CopyOnWriteArrayList<Construction>();
@@ -22,7 +27,9 @@ public abstract class AbstractParserTable implements ParserTable {
 	public AbstractParserTable(Grammar grammar) throws GrammarException {
 		super();
 		this.grammar = grammar;
+		logger.trace("Calculate parser table...");
 		calculate();
+		logger.trace("done.");
 	}
 
 	protected abstract void calculate() throws GrammarException;
@@ -59,17 +66,35 @@ public abstract class AbstractParserTable implements ParserTable {
 		ParserAction already = table.get(stateId).get(construction);
 		if (already != null) {
 			if (!action.equals(already)) {
-				String text = "Invalid grammar!";
+				String text = "Invalid grammar!\n";
 				if (already.getAction() != action.getAction()) {
 					text += " Shift/reduce conflict in state id: " + stateId
 							+ "!\n";
+					text += "construction:     " + construction + "\n";
+					text += "in stack:         " + already.toString() + "\n";
+					text += "to be introduced: " + action.toString();
+					if (already.getAction() == ActionType.REDUCE) {
+						text += "reduction rule:\n"
+								+ grammar.getProductions().get(
+										already.getTargetState());
+					} else {
+						text += "reduction rule:\n"
+								+ grammar.getProductions().get(
+										action.getTargetState());
+					}
 				} else {
 					text += " Reduce/reduce conflict in state id: " + stateId
 							+ "!\n";
+					text += "construction:     " + construction + "\n";
+					text += "in stack:         " + already.toString() + "\n";
+					text += "to be introduced: " + action.toString();
+					text += "reduction rule 1:\n"
+							+ grammar.getProductions().get(
+									already.getTargetState());
+					text += "reduction rule 2:\n"
+							+ grammar.getProductions().get(
+									action.getTargetState());
 				}
-				text += "construction:     " + construction + "\n";
-				text += "in stack:         " + already.toString() + "\n";
-				text += "to be introduced: " + action.toString();
 				throw new GrammarException(text);
 			}
 		}

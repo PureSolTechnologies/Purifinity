@@ -74,4 +74,16 @@ public class ProductionSet {
 		}
 		return false;
 	}
+
+	public void setNewStart(String productionName) {
+		Production startProduction = new Production("_START");
+		startProduction.addConstruction(new ProductionConstruction(
+				productionName));
+		name2Production.remove(productions.get(0).getName());
+		productions.remove(0);
+		productions.add(0, startProduction);
+		name2Production.put(startProduction.getName(),
+				new CopyOnWriteArrayList<Production>());
+		name2Production.get(startProduction.getName()).add(startProduction);
+	}
 }

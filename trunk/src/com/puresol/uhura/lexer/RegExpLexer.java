@@ -120,9 +120,6 @@ public class RegExpLexer implements Lexer {
 			if (!matcher.find()) {
 				continue;
 			}
-			if (matcher.start() != 0) {
-				continue;
-			}
 			String group = matcher.group(0);
 			if ((nextToken == null)
 					|| (group.length() > nextToken.getText().length())) {
