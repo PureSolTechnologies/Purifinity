@@ -1,8 +1,6 @@
 package com.puresol.coding.reporting;
 
-import com.puresol.coding.analysis.CodeRange;
 import com.puresol.coding.quality.QualityLevel;
-import com.puresol.reporting.html.HTMLStandards;
 
 public class HTMLConverter {
 
@@ -17,15 +15,6 @@ public class HTMLConverter {
 		}
 		return "<font color=\"#c00000\">" + qualityLevel.getIdentifier()
 				+ "</font>";
-	}
-
-	public static String convertCodeRangeToHTML(CodeRange codeRange) {
-		String output = codeRange.getCodeRangeType().getIdentifier() + " \""
-				+ codeRange.getName() + "\"<br/>\n";
-		output += "(" + codeRange.getFile() + ":" + codeRange.getStartId() + "-"
-				+ codeRange.getStopId();
-		output += HTMLStandards.convertSourceCodeToHTML(codeRange.getText());
-		return output;
 	}
 
 }

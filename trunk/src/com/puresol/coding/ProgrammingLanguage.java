@@ -1,10 +1,8 @@
 package com.puresol.coding;
 
 import java.io.File;
-import java.util.List;
 
 import com.puresol.coding.analysis.Analyzer;
-import com.puresol.parser.tokens.TokenDefinition;
 import com.puresol.utils.ClassInstantiationException;
 import com.puresol.utils.PersistenceException;
 

@@ -48,17 +48,6 @@ public interface Analyzer extends Serializable {
 	 */
 	public File getFile();
 
-	/**
-	 * This method returns all code ranges analysed within the analysed file.
-	 * 
-	 * @return
-	 */
-	public CodeRange getRootCodeRange();
-
-	public SymbolTable getSymbols();
-
-	public List<CodeRange> getNonFragmentCodeRangesRecursively();
-
 	public void parse() throws AnalyserException;
 
 	/**
