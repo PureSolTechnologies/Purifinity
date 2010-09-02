@@ -15,8 +15,26 @@ import com.puresol.uhura.grammar.production.Production;
  * only first elements for non-terminals. Terminals are returned by this class
  * directly.
  * 
- * @author Rick-Rainer Ludwig
  * 
+ * 
+ * From german edition of dragon book:
+ * 
+ * 1) Wenn X ein Terminal ist, ist FIRST(X) = (X).
+ * 
+ * 2) Wenn X ein Nichtterminal und X --> Y1 Y2 ... Yk eine Produktion fuer ein
+ * beliebiges k>=1 ist, gehen Sie dagegen wie folgt vor: Platzieren Sie a in
+ * FIRST(X), wenn fuer irgendein i gilt, dass a in FIRST(Yi) und epsilon in
+ * allen FIRST(Y1),...,FIRST(Yi-1) ist, d.h. wenn Y1...Yi-1 --> epsilon. Wenn
+ * epsilon fuer alle j=1,2,...,k in FIRST(Y1) ist, fuegen Sie epsilon zu
+ * FIRST(X) hinzu. Zum Beispiel ist alles, was sich in FIRST(Y1) befindet, mit
+ * Sicherheit auch in FIRST(X). Wird Y1 nicht nach epsilon abgeleitet, fuegen
+ * wir FIRST(X) nichts mehr hinzu. Gilt dagegen Y1 --> epsilon, fuegen wir
+ * FIRST(Y2) hinzu usw.
+ * 
+ * 3) Ist X --> epsilon eine Produktion, fuegen wir epsilon zu FIRST(X) hinzu.
+ * 
+ * 
+ * @author Rick-Rainer Ludwig
  */
 public class First {
 
@@ -32,14 +50,9 @@ public class First {
 
 	private void calculate() {
 		initFirstMap();
-		addEmpty();
 		calculateFirstTerminals();
 		checkForEmptyConstructions();
-	}
-
-	private void calculateFirstTerminals() {
-		while (iterate())
-			;
+		addEmpty();
 	}
 
 	/**
@@ -52,16 +65,9 @@ public class First {
 		}
 	}
 
-	/**
-	 * This method looks for all empty constructions and adds the empty
-	 * construction to the first set.
-	 */
-	private void addEmpty() {
-		for (Production production : grammar.getProductions().getList()) {
-			if (production.isEmpty()) {
-				add(production.getName(), EmptyConstruction.getInstance());
-			}
-		}
+	private void calculateFirstTerminals() {
+		while (iterate())
+			;
 	}
 
 	private boolean iterate() {
@@ -74,6 +80,22 @@ public class First {
 		return changed;
 	}
 
+	/**
+	 * This is rule 2 from Dragon Book:
+	 * 
+	 * 2) Wenn X ein Nichtterminal und X --> Y1 Y2 ... Yk eine Produktion fuer
+	 * ein beliebiges k>=1 ist, gehen Sie dagegen wie folgt vor: Platzieren Sie
+	 * a in FIRST(X), wenn fuer irgendein i gilt, dass a in FIRST(Yi) und
+	 * epsilon in allen FIRST(Y1),...,FIRST(Yi-1) ist, d.h. wenn Y1...Yi-1 -->
+	 * epsilon. Wenn epsilon fuer alle j=1,2,...,k in FIRST(Y1) ist, fuegen Sie
+	 * epsilon zu FIRST(X) hinzu. Zum Beispiel ist alles, was sich in FIRST(Y1)
+	 * befindet, mit Sicherheit auch in FIRST(X). Wird Y1 nicht nach epsilon
+	 * abgeleitet, fuegen wir FIRST(X) nichts mehr hinzu. Gilt dagegen Y1 -->
+	 * epsilon, fuegen wir FIRST(Y2) hinzu usw.
+	 * 
+	 * @param production
+	 * @return
+	 */
 	private boolean iterate(Production production) {
 		boolean changed = false;
 		for (Construction construction : production.getConstructions()) {
@@ -107,6 +129,19 @@ public class First {
 		return changed;
 	}
 
+	/**
+	 * This is rule 2 from Dragon Book, too:
+	 * 
+	 * 2) Wenn X ein Nichtterminal und X --> Y1 Y2 ... Yk eine Produktion fuer
+	 * ein beliebiges k>=1 ist, gehen Sie dagegen wie folgt vor: Platzieren Sie
+	 * a in FIRST(X), wenn fuer irgendein i gilt, dass a in FIRST(Yi) und
+	 * epsilon in allen FIRST(Y1),...,FIRST(Yi-1) ist, d.h. wenn Y1...Yi-1 -->
+	 * epsilon. Wenn epsilon fuer alle j=1,2,...,k in FIRST(Y1) ist, fuegen Sie
+	 * epsilon zu FIRST(X) hinzu. Zum Beispiel ist alles, was sich in FIRST(Y1)
+	 * befindet, mit Sicherheit auch in FIRST(X). Wird Y1 nicht nach epsilon
+	 * abgeleitet, fuegen wir FIRST(X) nichts mehr hinzu. Gilt dagegen Y1 -->
+	 * epsilon, fuegen wir FIRST(Y2) hinzu usw.
+	 */
 	private void checkForEmptyConstructions() {
 		for (Production production : grammar.getProductions().getList()) {
 			boolean allEmpty = true;
@@ -127,6 +162,23 @@ public class First {
 		}
 	}
 
+	/**
+	 * This method looks for all empty constructions and adds the empty
+	 * construction to the first set.
+	 * 
+	 * This is rule 3 from Dragon Book:
+	 * 
+	 * 3) Ist X --> epsilon eine Produktion, fuegen wir epsilon zu FIRST(X)
+	 * hinzu.
+	 */
+	private void addEmpty() {
+		for (Production production : grammar.getProductions().getList()) {
+			if (production.isEmpty()) {
+				add(production.getName(), EmptyConstruction.getInstance());
+			}
+		}
+	}
+
 	private void add(String productionName, Construction construction) {
 		first.get(productionName).add(construction);
 	}
@@ -140,6 +192,10 @@ public class First {
 
 	/**
 	 * This method returns the first set for a specified construction.
+	 * 
+	 * This method contains rule 1 from Dragon Book:
+	 * 
+	 * 1) Wenn X ein Terminal ist, ist FIRST(X) = (X).
 	 * 
 	 * @param x
 	 * @return

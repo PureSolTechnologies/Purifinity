@@ -13,6 +13,18 @@ import com.puresol.uhura.grammar.production.FinishConstruction;
 import com.puresol.uhura.grammar.production.Production;
 
 /**
+ * The rules from Dragon Book are:
+ * 
+ * 1) Platzieren Sie $ in FOLLOW(S), wobei S das Startsymbol und $ die rechte
+ * Endmarkierung fuer die Eingabe sind.
+ * 
+ * 2) Gibt es eine Produktion A --> alpha A beta, ist der gesamte Inhalt von
+ * FIRST(beta) ausser epsilon in FOLLOW(B) enthalten.
+ * 
+ * 3) Gibt es eine Produktion A --> alpha B oder A --> alpha B beta, wobei
+ * FIRST(beta) epsilon enthaelt, ist der gesamt Inhalt von FOLLOW(A) auch in
+ * FOLLOW(B) enthalten.
+ * 
  * @author Rick-Rainer Ludwig
  * 
  */
@@ -49,27 +61,28 @@ public class Follow {
 	 * symbol is defined by StartProduction this construction is used. If the
 	 * there is no such production, the fist production is used.
 	 * 
-	 * <pre>
-	 * 1. nimm $ zu FOLLOW(S) hinzu (S sei das Startsymbol)
-	 * </pre>
+	 * This is rule 1 from Dragon book:
+	 * 
+	 * 1) Platzieren Sie $ in FOLLOW(S), wobei S das Startsymbol und $ die
+	 * rechte Endmarkierung fuer die Eingabe sind.
 	 */
 	private void addFinishToStart() {
 		follow.get(grammar.getProductions().get(0).getName()).add(
 				FinishConstruction.getInstance());
 	}
 
-	/**
-	 * <pre>
-	 * 2. gibt es eine Produktion (A ! B), so nimm FIRST() \ {"} zu FOLLOW(B)
-	 * hinzu
-	 * </pre>
-	 */
 	private void addFirsts() {
 		for (Production production : grammar.getProductions().getList()) {
 			addFirsts(production);
 		}
 	}
 
+	/**
+	 * This is rule 2 from Dragon Book:
+	 * 
+	 * 2) Gibt es eine Produktion A --> alpha A beta, ist der gesamte Inhalt von
+	 * FIRST(beta) ausser epsilon in FOLLOW(B) enthalten.
+	 */
 	private void addFirsts(Production production) {
 		List<Construction> constructions = production.getConstructions();
 		for (int i = 0; i < constructions.size() - 1; i++) {
@@ -87,18 +100,21 @@ public class Follow {
 		}
 	}
 
-	/**
-	 * <pre>
-	 * 3. gibt es eine Produktion (A ! B) oder (A ! B) mit  ) ", so f¨uge
-	 * FOLLOW(A) zu FOLLOW(B) hinzu
-	 * </pre>
-	 */
 	private void addFollows() {
 		for (Production production : grammar.getProductions().getList()) {
 			addFollows(production);
 		}
 	}
 
+	/**
+	 * This is rule 3 from Dragon Book:
+	 * 
+	 * 3) Gibt es eine Produktion A --> alpha B oder A --> alpha B beta, wobei
+	 * FIRST(beta) epsilon enthaelt, ist der gesamt Inhalt von FOLLOW(A) auch in
+	 * FOLLOW(B) enthalten.
+	 * 
+	 * @param production
+	 */
 	private void addFollows(Production production) {
 		List<Construction> constructions = production.getConstructions();
 		for (int i = 0; i < constructions.size(); i++) {

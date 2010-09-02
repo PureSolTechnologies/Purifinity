@@ -139,13 +139,13 @@ public class FirstTest extends TestCase {
 
 		assertEquals(2, first.get(productionES).size());
 		iterator = first.get(productionES).iterator();
-		assertEquals(empty, iterator.next());
 		assertEquals(terminalPlus, iterator.next());
+		assertEquals(empty, iterator.next());
 
 		assertEquals(2, first.get(productionTS).size());
 		iterator = first.get(productionTS).iterator();
-		assertEquals(empty, iterator.next());
 		assertEquals(terminalStar, iterator.next());
+		assertEquals(empty, iterator.next());
 
 	}
 }
