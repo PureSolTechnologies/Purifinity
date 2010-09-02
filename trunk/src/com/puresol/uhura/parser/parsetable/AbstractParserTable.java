@@ -18,7 +18,7 @@ public abstract class AbstractParserTable implements ParserTable {
 	private static final Logger logger = Logger
 			.getLogger(AbstractParserTable.class);
 
-	private final List<ConcurrentMap<Construction, ParserAction>> table = new CopyOnWriteArrayList<ConcurrentMap<Construction, ParserAction>>();
+	private final List<ConcurrentMap<Construction, ParserActionSet>> table = new CopyOnWriteArrayList<ConcurrentMap<Construction, ParserActionSet>>();
 	private final List<Construction> actionTerminals = new CopyOnWriteArrayList<Construction>();
 	private final List<Construction> gotoNonTerminals = new CopyOnWriteArrayList<Construction>();
 
@@ -59,46 +59,16 @@ public abstract class AbstractParserTable implements ParserTable {
 	}
 
 	protected final void addAction(int stateId, Construction construction,
-			ParserAction action) throws GrammarException {
+			ParserAction action) {
 		while (table.size() <= stateId) {
-			table.add(new ConcurrentHashMap<Construction, ParserAction>());
+			table.add(new ConcurrentHashMap<Construction, ParserActionSet>());
 		}
-		ParserAction already = table.get(stateId).get(construction);
-		if (already != null) {
-			if (!action.equals(already)) {
-				String text = "Invalid grammar!\n";
-				if (already.getAction() != action.getAction()) {
-					text += " Shift/reduce conflict in state id: " + stateId
-							+ "!\n";
-					text += "construction:     " + construction + "\n";
-					text += "in stack:         " + already.toString() + "\n";
-					text += "to be introduced: " + action.toString();
-					if (already.getAction() == ActionType.REDUCE) {
-						text += "reduction rule:\n"
-								+ grammar.getProductions().get(
-										already.getTargetState());
-					} else {
-						text += "reduction rule:\n"
-								+ grammar.getProductions().get(
-										action.getTargetState());
-					}
-				} else {
-					text += " Reduce/reduce conflict in state id: " + stateId
-							+ "!\n";
-					text += "construction:     " + construction + "\n";
-					text += "in stack:         " + already.toString() + "\n";
-					text += "to be introduced: " + action.toString();
-					text += "reduction rule 1:\n"
-							+ grammar.getProductions().get(
-									already.getTargetState());
-					text += "reduction rule 2:\n"
-							+ grammar.getProductions().get(
-									action.getTargetState());
-				}
-				throw new GrammarException(text);
-			}
+		ParserActionSet actionSet = table.get(stateId).get(construction);
+		if (actionSet == null) {
+			actionSet = new ParserActionSet();
+			table.get(stateId).put(construction, actionSet);
 		}
-		table.get(stateId).put(construction, action);
+		actionSet.addAction(action);
 	}
 
 	public Grammar getGrammar() {
@@ -123,20 +93,20 @@ public abstract class AbstractParserTable implements ParserTable {
 
 	@Override
 	public final ParserAction getAction(int currentState,
-			Construction construction) {
+			Construction construction) throws GrammarException {
 		if (construction == null) {
 			return new ParserAction(ActionType.ERROR, -1);
 		}
-		ConcurrentMap<Construction, ParserAction> actions = table
+		ConcurrentMap<Construction, ParserActionSet> actions = table
 				.get(currentState);
 		if (actions == null) {
 			return new ParserAction(ActionType.ERROR, -1);
 		}
-		ParserAction action = actions.get(construction);
+		ParserActionSet action = actions.get(construction);
 		if (action == null) {
 			return new ParserAction(ActionType.ERROR, -1);
 		}
-		return action;
+		return action.getAction();
 	}
 
 	@Override
@@ -192,12 +162,12 @@ public abstract class AbstractParserTable implements ParserTable {
 		for (int state = 0; state < table.size(); state++) {
 			buffer.append(toColumn(String.valueOf(state) + " |"));
 			for (Construction construction : actionTerminals) {
-				buffer.append(toColumn(getAction(state, construction)
+				buffer.append(toColumn(table.get(state).get(construction)
 						.toString()));
 			}
 			buffer.append(toColumn("|"));
 			for (Construction construction : gotoNonTerminals) {
-				buffer.append(toColumn(getAction(state, construction)
+				buffer.append(toColumn(table.get(state).get(construction)
 						.toString()));
 			}
 			buffer.append("\n");

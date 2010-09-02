@@ -9,21 +9,30 @@ package com.puresol.uhura.parser.parsetable;
 public class ParserAction {
 
 	private final ActionType action;
-	private final int targetState;
+	private final int parameter;
+	private final boolean preferred;
 
 	/**
 	 * Constructor
 	 * 
 	 * @param action
 	 *            to take when parsing.
-	 * @param targetState
+	 * @param parameter
 	 *            is the target state after the process. States small than 0
 	 *            show no target states for Accept and Error.
 	 */
-	public ParserAction(ActionType action, int targetState) {
+	public ParserAction(ActionType action, int parameter) {
 		super();
 		this.action = action;
-		this.targetState = targetState;
+		this.parameter = parameter;
+		this.preferred = false;
+	}
+
+	public ParserAction(ActionType action, int parameter, boolean preferred) {
+		super();
+		this.action = action;
+		this.parameter = parameter;
+		this.preferred = preferred;
 	}
 
 	/**
@@ -36,15 +45,22 @@ public class ParserAction {
 	/**
 	 * @return the targetState
 	 */
-	public int getTargetState() {
-		return targetState;
+	public int getParameter() {
+		return parameter;
+	}
+
+	public boolean isPreferred() {
+		return preferred;
 	}
 
 	@Override
 	public String toString() {
 		String result = action.toString();
-		if (targetState >= 0) {
-			result += targetState;
+		if (parameter >= 0) {
+			result += parameter;
+		}
+		if (preferred) {
+			result += "*";
 		}
 		return result;
 	}
@@ -59,7 +75,7 @@ public class ParserAction {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((action == null) ? 0 : action.hashCode());
-		result = prime * result + targetState;
+		result = prime * result + parameter;
 		return result;
 	}
 
@@ -79,7 +95,7 @@ public class ParserAction {
 		ParserAction other = (ParserAction) obj;
 		if (action != other.action)
 			return false;
-		if (targetState != other.targetState)
+		if (parameter != other.parameter)
 			return false;
 		return true;
 	}

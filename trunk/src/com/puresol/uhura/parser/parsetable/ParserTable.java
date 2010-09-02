@@ -2,6 +2,7 @@ package com.puresol.uhura.parser.parsetable;
 
 import java.util.List;
 
+import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.production.Construction;
 import com.puresol.uhura.lexer.Token;
 
@@ -20,8 +21,10 @@ public interface ParserTable {
 	 * @param currentStateId
 	 * @param construction
 	 * @return
+	 * @throws GrammarException
 	 */
-	public ParserAction getAction(int currentStateId, Construction construction);
+	public ParserAction getAction(int currentStateId, Construction construction)
+			throws GrammarException;
 
 	public List<Construction> getActionTerminals();
 

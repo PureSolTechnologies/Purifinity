@@ -54,47 +54,52 @@ public abstract class AbstractLRTableParser extends AbstractParser {
 
 	@Override
 	public AST parse(TokenStream tokenStream) throws ParserException {
-		setTokenStream(tokenStream);
-		reset();
-		boolean accepted = false;
-		do {
-			stepCounter++;
-			if (logger.isTraceEnabled()) {
-				logger.trace(toString());
-			}
-			Token token;
-			Construction construction;
-			if (streamPosition < getTokenStream().size()) {
-				token = getTokenStream().get(streamPosition);
-				construction = parserTable.getConstructionForToken(token);
-			} else {
-				token = null;
-				construction = FinishConstruction.getInstance();
-			}
-			ParserAction action = parserTable.getAction(stateStack.peek(),
-					construction);
-			switch (action.getAction()) {
-			case SHIFT:
-				shift(action, token);
-				break;
-			case REDUCE:
-				reduce(action);
-				break;
-			case ACCEPT:
-				accepted = accept();
-				break;
-			case ERROR:
-				error(token);
-				break;
-			default:
-				throw new ParserException("Invalid action '" + action
-						+ "'for parser!", token);
-			}
-		} while (!accepted);
-		/*
-		 * We are finished. The last element in the stack is the result...
-		 */
-		return treeStack.pop();
+		Token token = null;
+		try {
+			setTokenStream(tokenStream);
+			reset();
+			boolean accepted = false;
+			do {
+				stepCounter++;
+				if (logger.isTraceEnabled()) {
+					logger.trace(toString());
+				}
+				Construction construction;
+				if (streamPosition < getTokenStream().size()) {
+					token = getTokenStream().get(streamPosition);
+					construction = parserTable.getConstructionForToken(token);
+				} else {
+					token = null;
+					construction = FinishConstruction.getInstance();
+				}
+				ParserAction action = parserTable.getAction(stateStack.peek(),
+						construction);
+				switch (action.getAction()) {
+				case SHIFT:
+					shift(action, token);
+					break;
+				case REDUCE:
+					reduce(action);
+					break;
+				case ACCEPT:
+					accepted = accept();
+					break;
+				case ERROR:
+					error(token);
+					break;
+				default:
+					throw new ParserException("Invalid action '" + action
+							+ "'for parser!", token);
+				}
+			} while (!accepted);
+			/*
+			 * We are finished. The last element in the stack is the result...
+			 */
+			return treeStack.pop();
+		} catch (GrammarException e) {
+			logger.error(e.getMessage(), e);
+			throw new ParserException(e.getMessage(), token);
+		}
 	}
 
 	/**
@@ -119,36 +124,42 @@ public abstract class AbstractLRTableParser extends AbstractParser {
 	 */
 	private void shift(ParserAction action, Token token) {
 		treeStack.push(new AST(token));
-		stateStack.push(action.getTargetState());
+		stateStack.push(action.getParameter());
 		streamPosition++;
 	}
 
-	private void reduce(ParserAction action) {
-		Production production = getGrammar().getProductions().get(
-				action.getTargetState());
-		AST tree = new AST(production);
-		for (int i = 0; i < production.getConstructions().size(); i++) {
-			AST poppedAST = treeStack.pop();
-			if (poppedAST.isNode()) {
-				if (poppedAST.isStackingAllowed()) {
-					tree.addChildInFront(poppedAST);
-				} else {
-					if (tree.getName().equals(poppedAST.getName())) {
-						tree.addChildrenInFront(poppedAST.getChildren());
-					} else {
+	private void reduce(ParserAction action) throws ParserException {
+		try {
+			Production production = getGrammar().getProductions().get(
+					action.getParameter());
+			AST tree = new AST(production);
+			for (int i = 0; i < production.getConstructions().size(); i++) {
+				AST poppedAST = treeStack.pop();
+				if (poppedAST.isNode()) {
+					if (poppedAST.isStackingAllowed()) {
 						tree.addChildInFront(poppedAST);
+					} else {
+						if (tree.getName().equals(poppedAST.getName())) {
+							tree.addChildrenInFront(poppedAST.getChildren());
+						} else {
+							tree.addChildInFront(poppedAST);
+						}
 					}
+				} else {
+					tree.addChildrenInFront(poppedAST.getChildren());
 				}
-			} else {
-				tree.addChildrenInFront(poppedAST.getChildren());
+				stateStack.pop();
 			}
-			stateStack.pop();
+			int targetState;
+			targetState = parserTable.getAction(stateStack.peek(),
+					new ProductionConstruction(production.getName()))
+					.getParameter();
+			treeStack.push(tree);
+			stateStack.push(targetState);
+		} catch (GrammarException e) {
+			logger.error(e.getMessage(), e);
+			throw new ParserException(e.getMessage(), null);
 		}
-		int targetState = parserTable.getAction(stateStack.peek(),
-				new ProductionConstruction(production.getName()))
-				.getTargetState();
-		treeStack.push(tree);
-		stateStack.push(targetState);
 	}
 
 	/**
