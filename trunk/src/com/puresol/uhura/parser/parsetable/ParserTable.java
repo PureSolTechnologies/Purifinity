@@ -1,6 +1,7 @@
 package com.puresol.uhura.parser.parsetable;
 
 import java.util.List;
+import java.util.concurrent.ConcurrentMap;
 
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.production.Construction;
@@ -14,6 +15,9 @@ import com.puresol.uhura.lexer.Token;
  */
 public interface ParserTable {
 
+	public ConcurrentMap<Construction, ParserActionSet> getPossibleActions(
+			int currentState) throws GrammarException;
+
 	/**
 	 * This method returns the parse action for the current state id and the
 	 * construction next in stream.
@@ -25,6 +29,9 @@ public interface ParserTable {
 	 */
 	public ParserAction getAction(int currentStateId, Construction construction)
 			throws GrammarException;
+
+	public ParserActionSet getActionSet(int currentState,
+			Construction construction);
 
 	public List<Construction> getActionTerminals();
 

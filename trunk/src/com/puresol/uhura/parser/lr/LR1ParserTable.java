@@ -97,4 +97,8 @@ public class LR1ParserTable extends AbstractParserTable {
 		}
 	}
 
+	public LR1StateTransitionGraph getTransitionGraph() {
+		return transitionGraph;
+	}
+
 }

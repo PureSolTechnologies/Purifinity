@@ -92,6 +92,12 @@ public abstract class AbstractParserTable implements ParserTable {
 	}
 
 	@Override
+	public final ConcurrentMap<Construction, ParserActionSet> getPossibleActions(int currentState)
+			throws GrammarException {
+		return table.get(currentState);
+	}
+
+	@Override
 	public final ParserAction getAction(int currentState,
 			Construction construction) throws GrammarException {
 		if (construction == null) {
@@ -109,6 +115,7 @@ public abstract class AbstractParserTable implements ParserTable {
 		return action.getAction();
 	}
 
+	@Override
 	public final ParserActionSet getActionSet(int currentState,
 			Construction construction) {
 		if (construction == null) {

@@ -33,6 +33,14 @@ public class ParserActionSet {
 				+ "'!");
 	}
 
+	public ParserAction getAction(int id) {
+		return actions.get(id);
+	}
+
+	public int getActionNumber() {
+		return actions.size();
+	}
+
 	@Override
 	public String toString() {
 		StringBuffer buffer = new StringBuffer();
