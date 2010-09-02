@@ -5,6 +5,7 @@ import java.util.Stack;
 import org.apache.log4j.Logger;
 
 import com.puresol.uhura.ast.AST;
+import com.puresol.uhura.ast.ASTException;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.production.Construction;
@@ -157,6 +158,9 @@ public abstract class AbstractLRTableParser extends AbstractParser {
 			treeStack.push(tree);
 			stateStack.push(targetState);
 		} catch (GrammarException e) {
+			logger.error(e.getMessage(), e);
+			throw new ParserException(e.getMessage(), null);
+		} catch (ASTException e) {
 			logger.error(e.getMessage(), e);
 			throw new ParserException(e.getMessage(), null);
 		}

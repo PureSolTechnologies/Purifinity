@@ -68,8 +68,12 @@ public class AST implements Tree<AST> {
 	 * @param parent
 	 *            the parent to set
 	 */
-	public void setParent(AST parent) {
-		this.parent = parent;
+	public void setParent(AST parent) throws ASTException {
+		if (this.parent == null) {
+			this.parent = parent;
+		} else {
+			throw new ASTException("Parent was already set!");
+		}
 	}
 
 	/**
@@ -88,7 +92,7 @@ public class AST implements Tree<AST> {
 		return children;
 	}
 
-	public void addChild(AST child) {
+	public void addChild(AST child) throws ASTException {
 		children.add(child);
 		child.setParent(this);
 	}
@@ -97,7 +101,7 @@ public class AST implements Tree<AST> {
 		this.children.addAll(children);
 	}
 
-	public void addChildInFront(AST child) {
+	public void addChildInFront(AST child) throws ASTException {
 		children.add(0, child);
 		child.setParent(this);
 	}
