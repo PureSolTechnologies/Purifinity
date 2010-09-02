@@ -7,6 +7,8 @@ import org.junit.Test;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.TestGrammars;
+import com.puresol.uhura.grammar.production.TextConstruction;
+import com.puresol.uhura.grammar.production.TokenConstruction;
 
 /**
  * This test should the the LR(0) capability of the LR0ParserTable, but there
@@ -22,7 +24,9 @@ public class LR0ParserTableTest extends TestCase {
 	public void test() {
 		try {
 			Grammar grammar = TestGrammars.getTestGrammarFromLR1Pamphlet();
-			new LR0ParserTable(grammar);
+			LR0ParserTable table = new LR0ParserTable(grammar);
+			System.out.println(table.toString());
+			System.out.println(table.getAction(6, new TokenConstruction("b")).toString());
 			fail("An GrammarException was expected due to the fact that this grammar is not LR(0)!");
 		} catch (GrammarException e) {
 		}
@@ -32,7 +36,9 @@ public class LR0ParserTableTest extends TestCase {
 	public void test2() {
 		try {
 			Grammar grammar = TestGrammars.getTestGrammarFromDragonBook();
-			new LR0ParserTable(grammar);
+			LR0ParserTable table = new LR0ParserTable(grammar);
+			System.out.println(table.toString());
+			System.out.println(table.getAction(3, new TextConstruction("*")).toString());
 			fail("An GrammarException was expected due to the fact that this grammar is not LR(0)!");
 		} catch (GrammarException e) {
 		}

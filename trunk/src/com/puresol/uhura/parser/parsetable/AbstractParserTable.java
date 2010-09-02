@@ -109,6 +109,23 @@ public abstract class AbstractParserTable implements ParserTable {
 		return action.getAction();
 	}
 
+	public final ParserActionSet getActionSet(int currentState,
+			Construction construction) {
+		if (construction == null) {
+			return ParserActionSet.getErrorSet();
+		}
+		ConcurrentMap<Construction, ParserActionSet> actions = table
+				.get(currentState);
+		if (actions == null) {
+			return ParserActionSet.getErrorSet();
+		}
+		ParserActionSet set = actions.get(construction);
+		if (set == null) {
+			return ParserActionSet.getErrorSet();
+		}
+		return set;
+	}
+
 	@Override
 	public final String toString() {
 		StringBuffer buffer = new StringBuffer();
@@ -116,7 +133,7 @@ public abstract class AbstractParserTable implements ParserTable {
 		buffer.append("Parsing Table\n");
 		buffer.append("=============\n");
 		buffer.append("\n");
-		buffer.append(toColumn("STATE: |"));
+		buffer.append(toColumn("STATE:|"));
 		boolean first = true;
 		for (int i = 0; i < actionTerminals.size(); i++) {
 			if (first) {
@@ -150,24 +167,24 @@ public abstract class AbstractParserTable implements ParserTable {
 			buffer.append(toColumn(construction.getName()));
 		}
 		buffer.append("\n");
-		buffer.append(toColumn("-------|"));
+		buffer.append(toColumn("------|"));
 		for (int i = 0; i < actionTerminals.size(); i++) {
-			buffer.append(toColumn("--------"));
+			buffer.append(toColumn("-------"));
 		}
-		buffer.append(toColumn("-------|"));
+		buffer.append(toColumn("------|"));
 		for (int i = 0; i < gotoNonTerminals.size(); i++) {
-			buffer.append(toColumn("--------"));
+			buffer.append(toColumn("-------"));
 		}
 		buffer.append("\n");
 		for (int state = 0; state < table.size(); state++) {
 			buffer.append(toColumn(String.valueOf(state) + " |"));
 			for (Construction construction : actionTerminals) {
-				buffer.append(toColumn(table.get(state).get(construction)
+				buffer.append(toColumn(getActionSet(state, construction)
 						.toString()));
 			}
 			buffer.append(toColumn("|"));
 			for (Construction construction : gotoNonTerminals) {
-				buffer.append(toColumn(table.get(state).get(construction)
+				buffer.append(toColumn(getActionSet(state, construction)
 						.toString()));
 			}
 			buffer.append("\n");
@@ -177,9 +194,10 @@ public abstract class AbstractParserTable implements ParserTable {
 
 	private String toColumn(String s) {
 		StringBuffer result = new StringBuffer();
-		while (result.length() + s.length() < 8) {
+		while (result.length() + s.length() < 7) {
 			result.append(' ');
 		}
+		result.append(' ');
 		result.append(s);
 		return result.toString();
 	}

@@ -10,7 +10,6 @@ public class ParserAction {
 
 	private final ActionType action;
 	private final int parameter;
-	private final boolean preferred;
 
 	/**
 	 * Constructor
@@ -25,14 +24,6 @@ public class ParserAction {
 		super();
 		this.action = action;
 		this.parameter = parameter;
-		this.preferred = false;
-	}
-
-	public ParserAction(ActionType action, int parameter, boolean preferred) {
-		super();
-		this.action = action;
-		this.parameter = parameter;
-		this.preferred = preferred;
 	}
 
 	/**
@@ -49,18 +40,11 @@ public class ParserAction {
 		return parameter;
 	}
 
-	public boolean isPreferred() {
-		return preferred;
-	}
-
 	@Override
 	public String toString() {
 		String result = action.toString();
 		if (parameter >= 0) {
 			result += parameter;
-		}
-		if (preferred) {
-			result += "*";
 		}
 		return result;
 	}

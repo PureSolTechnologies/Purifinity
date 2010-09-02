@@ -1,17 +1,25 @@
 package com.puresol.uhura.parser.parsetable;
 
 import java.util.Iterator;
-import java.util.Set;
-import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.puresol.uhura.grammar.GrammarException;
 
 public class ParserActionSet {
 
-	private static final Set<ParserAction> actions = new CopyOnWriteArraySet<ParserAction>();
+	public static ParserActionSet getErrorSet() {
+		ParserActionSet set = new ParserActionSet();
+		set.addAction(new ParserAction(ActionType.ERROR, -1));
+		return set;
+	}
+
+	private final List<ParserAction> actions = new CopyOnWriteArrayList<ParserAction>();
 
 	public void addAction(ParserAction action) {
-		actions.add(action);
+		if (!actions.contains(action)) {
+			actions.add(action);
+		}
 	}
 
 	public ParserAction getAction() throws GrammarException {
@@ -21,26 +29,15 @@ public class ParserActionSet {
 		if (actions.size() == 1) {
 			return actions.iterator().next();
 		}
-		ParserAction result = null;
-		Iterator<ParserAction> iter = actions.iterator();
-		while (iter.hasNext()) {
-			ParserAction action = iter.next();
-			if (action.isPreferred()) {
-				if (action == null) {
-					result = action;
-				} else {
-					throw new GrammarException("Ambiguous grammar!");
-				}
-			}
-		}
-		return result;
+		throw new GrammarException("Can not choose for one of '" + toString()
+				+ "'!");
 	}
 
 	@Override
 	public String toString() {
 		StringBuffer buffer = new StringBuffer();
 		Iterator<ParserAction> iter = actions.iterator();
-		boolean first = false;
+		boolean first = true;
 		while (iter.hasNext()) {
 			ParserAction action = iter.next();
 			if (first) {
