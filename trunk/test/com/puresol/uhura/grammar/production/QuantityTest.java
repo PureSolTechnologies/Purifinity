@@ -2,6 +2,8 @@ package com.puresol.uhura.grammar.production;
 
 import org.junit.Test;
 
+import com.puresol.uhura.grammar.Quantity;
+
 import junit.framework.TestCase;
 
 public class QuantityTest extends TestCase {

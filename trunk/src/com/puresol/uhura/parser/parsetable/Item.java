@@ -1,9 +1,11 @@
 package com.puresol.uhura.parser.parsetable;
 
+import java.io.Serializable;
+
 import com.puresol.uhura.grammar.production.Construction;
 import com.puresol.uhura.grammar.production.Production;
 
-public interface Item {
+public interface Item extends Serializable {
 
 	public Production getProduction();
 

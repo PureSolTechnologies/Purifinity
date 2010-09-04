@@ -1,5 +1,6 @@
 package com.puresol.uhura.grammar.token;
 
+import java.io.Serializable;
 import java.util.regex.Pattern;
 
 /**
@@ -8,7 +9,9 @@ import java.util.regex.Pattern;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class TokenDefinition {
+public class TokenDefinition implements Serializable {
+
+	private static final long serialVersionUID = 7060085634055524815L;
 
 	private final String name;
 	private final Pattern pattern;
@@ -25,6 +28,31 @@ public class TokenDefinition {
 	public TokenDefinition(String name, String regex, Visibility visibility) {
 		this.name = name;
 		this.pattern = Pattern.compile("^" + regex);
+		this.visibility = visibility;
+		this.text = regex;
+	}
+
+	public TokenDefinition(String name, String regex, boolean caseSensitive) {
+		this.name = name;
+		if (caseSensitive) {
+			this.pattern = Pattern.compile("^" + regex);
+		} else {
+			this.pattern = Pattern.compile("^" + regex,
+					Pattern.CASE_INSENSITIVE);
+		}
+		this.visibility = Visibility.VISIBLE;
+		this.text = regex;
+	}
+
+	public TokenDefinition(String name, String regex, Visibility visibility,
+			boolean caseSensitive) {
+		this.name = name;
+		if (caseSensitive) {
+			this.pattern = Pattern.compile("^" + regex);
+		} else {
+			this.pattern = Pattern.compile("^" + regex,
+					Pattern.CASE_INSENSITIVE);
+		}
 		this.visibility = visibility;
 		this.text = regex;
 	}

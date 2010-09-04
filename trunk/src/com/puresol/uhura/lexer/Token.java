@@ -1,5 +1,7 @@
 package com.puresol.uhura.lexer;
 
+import java.io.Serializable;
+
 import com.puresol.uhura.grammar.token.Visibility;
 
 /**
@@ -8,7 +10,9 @@ import com.puresol.uhura.grammar.token.Visibility;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class Token {
+public class Token implements Serializable {
+
+	private static final long serialVersionUID = -9005444686111333074L;
 
 	/**
 	 * This is the type id of the token. The true name is stored within the

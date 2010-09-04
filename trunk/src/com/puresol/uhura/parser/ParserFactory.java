@@ -16,8 +16,7 @@ public class ParserFactory {
 			Properties options = grammar.getOptions();
 			if (options.containsKey("parser")) {
 				return (Parser) Class.forName(options.getProperty("parser"))
-						.getConstructor(Grammar.class)
-						.newInstance(options, grammar);
+						.getConstructor(Grammar.class).newInstance(grammar);
 			} else {
 				return new SLR1Parser(grammar);
 			}

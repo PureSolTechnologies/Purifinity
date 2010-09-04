@@ -1,5 +1,6 @@
 package com.puresol.uhura.grammar;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Properties;
 
@@ -10,7 +11,9 @@ import com.puresol.uhura.grammar.production.TokenConstruction;
 import com.puresol.uhura.grammar.token.TokenDefinition;
 import com.puresol.uhura.grammar.token.TokenDefinitionSet;
 
-public class Grammar {
+public class Grammar implements Serializable {
+
+	private static final long serialVersionUID = 8296461694750760942L;
 
 	private final Properties options;
 	private final TokenDefinitionSet tokenDefinitions;
@@ -116,13 +119,15 @@ public class Grammar {
 	public StringBuilder toProductionsString() {
 		StringBuilder buffer = new StringBuilder();
 		List<Production> productionsList = productions.getList();
-		for (int i = 0; i < productionsList.size(); i++) {
-			buffer.append("(");
-			buffer.append(i);
-			buffer.append(")\t");
-			Production production = productionsList.get(i);
+		for (Production production : productionsList) {
 			buffer.append(production.toShortString(-1) + "\n");
 		}
 		return buffer;
+	}
+
+	public Grammar createWithNewStartProduction(String string)
+			throws GrammarException {
+		return new Grammar(getOptions(), getTokenDefinitions(),
+				getProductions().setNewStartProduction(string));
 	}
 }

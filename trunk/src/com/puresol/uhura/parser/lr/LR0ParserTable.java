@@ -15,6 +15,8 @@ import com.puresol.uhura.parser.parsetable.LR0StateTransitionGraph;
 
 public class LR0ParserTable extends AbstractParserTable {
 
+	private static final long serialVersionUID = 4063891308079169101L;
+
 	private LR0StateTransitionGraph transitionGraph;
 
 	public LR0ParserTable(Grammar grammar) throws GrammarException {

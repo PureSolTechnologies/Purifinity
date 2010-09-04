@@ -18,6 +18,8 @@ import com.puresol.uhura.parser.parsetable.ParserAction;
 
 public class LR1ParserTable extends AbstractParserTable {
 
+	private static final long serialVersionUID = 4897692245650199202L;
+
 	private static final Logger logger = Logger.getLogger(LR1ParserTable.class);
 
 	private Follow follow;

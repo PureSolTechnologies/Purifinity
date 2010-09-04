@@ -1,12 +1,14 @@
 package com.puresol.uhura.grammar.token;
 
+import java.io.Serializable;
+
 /**
  * This enum is used to define the visibility of a token.
  * 
  * @author ludwig
  * 
  */
-public enum Visibility {
+public enum Visibility implements Serializable {
 	/**
 	 * This means the token is visible and given to the later parsing process.
 	 */

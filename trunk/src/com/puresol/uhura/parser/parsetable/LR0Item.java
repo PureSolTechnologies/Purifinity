@@ -12,6 +12,8 @@ import com.puresol.uhura.grammar.production.Production;
  */
 public class LR0Item implements Item {
 
+	private static final long serialVersionUID = 8522602012550565562L;
+
 	/**
 	 * This is the reference id for the production observed.
 	 */

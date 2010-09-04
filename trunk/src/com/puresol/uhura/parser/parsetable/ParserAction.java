@@ -1,13 +1,17 @@
 package com.puresol.uhura.parser.parsetable;
 
+import java.io.Serializable;
+
 /**
  * This is a single state table entry for storing actions.
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class ParserAction {
+public class ParserAction implements Serializable {
 
+	private static final long serialVersionUID = -3440478384808031825L;
+	
 	private final ActionType action;
 	private final int parameter;
 

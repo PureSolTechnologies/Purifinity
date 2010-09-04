@@ -1,5 +1,6 @@
 package com.puresol.uhura.ast;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -18,8 +19,10 @@ import com.puresol.uhura.lexer.Token;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class AST implements Tree<AST> {
+public class AST implements Tree<AST>, Serializable {
 
+	private static final long serialVersionUID = -651453440127029204L;
+	
 	private final String name;
 	private final Token token;
 	private AST parent = null;

@@ -15,6 +15,8 @@ import com.puresol.uhura.lexer.Token;
 
 public abstract class AbstractParserTable implements ParserTable {
 
+	private static final long serialVersionUID = 4097931723838051724L;
+
 	private static final Logger logger = Logger
 			.getLogger(AbstractParserTable.class);
 
@@ -92,8 +94,8 @@ public abstract class AbstractParserTable implements ParserTable {
 	}
 
 	@Override
-	public final ConcurrentMap<Construction, ParserActionSet> getPossibleActions(int currentState)
-			throws GrammarException {
+	public final ConcurrentMap<Construction, ParserActionSet> getPossibleActions(
+			int currentState) throws GrammarException {
 		return table.get(currentState);
 	}
 

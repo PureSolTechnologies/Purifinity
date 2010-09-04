@@ -1,12 +1,14 @@
 package com.puresol.uhura.parser.parsetable;
 
+import java.io.Serializable;
+
 /**
  * This enumeration contains all possible parser actions.
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public enum ActionType {
+public enum ActionType implements Serializable {
 
 	SHIFT("s"), REDUCE("r"), ACCEPT("acc"), ERROR("err"), GOTO("");
 

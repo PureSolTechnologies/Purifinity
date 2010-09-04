@@ -1,5 +1,6 @@
 package com.puresol.uhura.parser.parsetable;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -28,7 +29,9 @@ import com.puresol.uhura.grammar.production.Production;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class Follow {
+public class Follow implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	private final Grammar grammar;
 	private final First first;

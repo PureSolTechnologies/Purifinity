@@ -9,6 +9,8 @@ import com.puresol.uhura.parser.parsetable.ParserTable;
 
 public class RecursiveDescentParser extends AbstractParser {
 
+	private static final long serialVersionUID = 4214235112865305140L;
+
 	public RecursiveDescentParser(Grammar grammar) {
 		super(grammar);
 	}

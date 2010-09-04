@@ -19,10 +19,12 @@ import com.puresol.uhura.parser.ParserException;
 import com.puresol.uhura.parser.parsetable.ParserAction;
 import com.puresol.uhura.parser.parsetable.ParserTable;
 
-public abstract class AbstractLRTableParser extends AbstractParser {
+public abstract class AbstractLRParser extends AbstractParser {
+
+	private static final long serialVersionUID = 9173136242276185400L;
 
 	private final static Logger logger = Logger
-			.getLogger(AbstractLRTableParser.class);
+			.getLogger(AbstractLRParser.class);
 
 	private ParserTable parserTable;
 	private final Stack<Integer> stateStack = new Stack<Integer>();
@@ -30,7 +32,7 @@ public abstract class AbstractLRTableParser extends AbstractParser {
 	private int streamPosition = 0;
 	private int stepCounter = 0;
 
-	public AbstractLRTableParser(Grammar grammar) throws GrammarException {
+	public AbstractLRParser(Grammar grammar) throws GrammarException {
 		super(grammar);
 		calculateParserTable();
 	}

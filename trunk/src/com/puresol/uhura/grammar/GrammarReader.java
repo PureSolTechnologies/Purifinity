@@ -23,7 +23,6 @@ import com.puresol.uhura.grammar.production.Construction;
 import com.puresol.uhura.grammar.production.Production;
 import com.puresol.uhura.grammar.production.ProductionConstruction;
 import com.puresol.uhura.grammar.production.ProductionSet;
-import com.puresol.uhura.grammar.production.Quantity;
 import com.puresol.uhura.grammar.production.TextConstruction;
 import com.puresol.uhura.grammar.production.TokenConstruction;
 import com.puresol.uhura.grammar.token.TokenDefinition;
@@ -209,10 +208,18 @@ public class GrammarReader implements Callable<Boolean> {
 
 	private void convertToTokenDefinitionSet(Map<String, List<AST>> helpers,
 			Map<String, List<AST>> tokens) throws GrammarException {
-		tokenDefinitions = new TokenDefinitionSet();
-		for (String tokenName : tokens.keySet()) {
-			tokenDefinitions.addDefinition(getTokenDefinition(tokenName,
-					helpers, tokens));
+		try {
+			tokenDefinitions = new TokenDefinitionSet();
+			for (AST tokenDefinitionAST : ast.getChild("Tokens")
+					.getChild("TokenDefinitions")
+					.getChildren("TokenDefinition")) {
+				tokenDefinitions.addDefinition(getTokenDefinition(
+						tokenDefinitionAST.getChild("IDENTIFIER").getText(),
+						helpers, tokens));
+			}
+		} catch (ASTException e) {
+			logger.error(e.getMessage(), e);
+			throw new GrammarException(e.getMessage());
 		}
 	}
 
@@ -237,8 +244,7 @@ public class GrammarReader implements Callable<Boolean> {
 					pattern.append(text.substring(1, text.length() - 1));
 				} else {
 					String text = tree.getChild("IDENTIFIER").getText();
-					text = getTokenDefinition(text, helpers, tokens)
-							.getText();
+					text = getTokenDefinition(text, helpers, tokens).getText();
 					pattern.append(text);
 				}
 				if (tree.hasChild("OptionalQuantifier")) {
@@ -246,11 +252,14 @@ public class GrammarReader implements Callable<Boolean> {
 							.getText());
 				}
 			}
+			boolean caseSensitive = Boolean.valueOf((String) options
+					.get("lexer.case_sensitive"));
 			if (tokenVisibility.get(tokenName) != null) {
 				return new TokenDefinition(tokenName, pattern.toString(),
-						tokenVisibility.get(tokenName));
+						tokenVisibility.get(tokenName), caseSensitive);
 			} else {
-				return new TokenDefinition(tokenName, pattern.toString());
+				return new TokenDefinition(tokenName, pattern.toString(),
+						caseSensitive);
 			}
 		} catch (ASTException e) {
 			logger.fatal(e.getMessage(), e);

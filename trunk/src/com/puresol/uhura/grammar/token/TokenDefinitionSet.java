@@ -1,5 +1,6 @@
 package com.puresol.uhura.grammar.token;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -14,7 +15,9 @@ import com.puresol.uhura.grammar.GrammarException;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class TokenDefinitionSet {
+public class TokenDefinitionSet implements Serializable {
+
+	private static final long serialVersionUID = 8379268661591883917L;
 
 	private final ConcurrentMap<String, TokenDefinition> name2Definition = new ConcurrentHashMap<String, TokenDefinition>();
 	private final List<TokenDefinition> tokenDefinitions = new CopyOnWriteArrayList<TokenDefinition>();

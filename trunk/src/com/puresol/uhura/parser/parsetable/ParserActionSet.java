@@ -1,12 +1,15 @@
 package com.puresol.uhura.parser.parsetable;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.puresol.uhura.grammar.GrammarException;
 
-public class ParserActionSet {
+public class ParserActionSet implements Serializable {
+
+	private static final long serialVersionUID = -724846770893802355L;
 
 	public static ParserActionSet getErrorSet() {
 		ParserActionSet set = new ParserActionSet();

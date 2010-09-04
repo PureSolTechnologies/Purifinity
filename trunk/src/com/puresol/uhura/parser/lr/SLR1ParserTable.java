@@ -19,6 +19,8 @@ import com.puresol.uhura.parser.parsetable.LR0StateTransitionGraph;
 
 public class SLR1ParserTable extends AbstractParserTable {
 
+	private static final long serialVersionUID = 519035758380605579L;
+
 	private static final Logger logger = Logger
 			.getLogger(SLR1ParserTable.class);
 

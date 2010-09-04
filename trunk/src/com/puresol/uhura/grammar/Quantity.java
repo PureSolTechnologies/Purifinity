@@ -1,4 +1,4 @@
-package com.puresol.uhura.grammar.production;
+package com.puresol.uhura.grammar;
 
 /**
  * This

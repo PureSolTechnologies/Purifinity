@@ -1,5 +1,6 @@
 package com.puresol.uhura.parser.parsetable;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.concurrent.ConcurrentMap;
 
@@ -13,7 +14,7 @@ import com.puresol.uhura.lexer.Token;
  * @author Rick-Rainer Ludwig
  * 
  */
-public interface ParserTable {
+public interface ParserTable extends Serializable {
 
 	public ConcurrentMap<Construction, ParserActionSet> getPossibleActions(
 			int currentState) throws GrammarException;

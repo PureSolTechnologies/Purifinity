@@ -1,6 +1,8 @@
 package com.puresol.uhura.grammar.production;
 
-public interface Construction {
+import java.io.Serializable;
+
+public interface Construction extends Serializable {
 
 	/**
 	 * @return the text

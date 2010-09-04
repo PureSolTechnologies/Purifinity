@@ -1,5 +1,7 @@
 package com.puresol.uhura.parser;
 
+import java.io.Serializable;
+
 import com.puresol.uhura.ast.AST;
 import com.puresol.uhura.lexer.TokenStream;
 import com.puresol.uhura.parser.parsetable.ParserTable;
@@ -11,7 +13,7 @@ import com.puresol.uhura.parser.parsetable.ParserTable;
  * @author Rick-Rainer Ludwig
  * 
  */
-public interface Parser {
+public interface Parser extends Serializable {
 
 	public AST parse(TokenStream tokenStream) throws ParserException;
 

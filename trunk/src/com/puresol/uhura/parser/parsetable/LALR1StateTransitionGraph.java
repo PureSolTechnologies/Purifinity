@@ -4,6 +4,8 @@ import com.puresol.uhura.grammar.Grammar;
 
 public class LALR1StateTransitionGraph extends LR1StateTransitionGraph {
 
+	private static final long serialVersionUID = 6813332818983681476L;
+
 	public LALR1StateTransitionGraph(Grammar grammar) {
 		super(grammar);
 	}

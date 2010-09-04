@@ -1,5 +1,7 @@
 package com.puresol.uhura.parser.parsetable;
 
+import java.io.Serializable;
+
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.production.Construction;
 import com.puresol.uhura.grammar.production.Production;
@@ -20,7 +22,9 @@ import com.puresol.uhura.grammar.production.ProductionSet;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class Closure0 {
+public class Closure0 implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	private final ProductionSet productions;
 

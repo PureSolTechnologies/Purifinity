@@ -1,5 +1,6 @@
 package com.puresol.uhura.parser.parsetable;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -7,7 +8,9 @@ import java.util.concurrent.CopyOnWriteArraySet;
 
 import com.puresol.uhura.grammar.production.Construction;
 
-public class AbstractItemSet<T extends Item> {
+public class AbstractItemSet<T extends Item> implements Serializable {
+
+	private static final long serialVersionUID = 4299654494281633726L;
 
 	private final Set<T> allItems = new CopyOnWriteArraySet<T>();
 	private final Set<T> primaryItems = new CopyOnWriteArraySet<T>();

@@ -8,6 +8,8 @@ import com.puresol.uhura.grammar.production.Production;
 
 public class LR1Item extends LR0Item {
 
+	private static final long serialVersionUID = -1434126363541910894L;
+
 	private final Set<Construction> lookahead = new CopyOnWriteArraySet<Construction>();
 
 	public LR1Item(Production production, int position) {

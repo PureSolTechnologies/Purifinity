@@ -1,12 +1,15 @@
 package com.puresol.uhura.parser.parsetable;
 
+import java.io.Serializable;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.production.Construction;
 
-public class Goto0 {
+public class Goto0 implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	private final Grammar grammar;
 

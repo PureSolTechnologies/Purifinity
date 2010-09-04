@@ -5,6 +5,8 @@ import com.puresol.uhura.lexer.TokenStream;
 
 public abstract class AbstractParser implements Parser {
 
+	private static final long serialVersionUID = 6779683403706893973L;
+
 	private final Grammar grammar;
 	private TokenStream tokenStream = null;
 

@@ -1,10 +1,17 @@
 package com.puresol.uhura.grammar.production;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Production {
+import com.puresol.di.Inject;
 
+public class Production implements Serializable {
+
+	private static final long serialVersionUID = -3776357938906717512L;
+
+	@Inject("id")
+	private Integer id = 0;
 	private final String name;
 	private final String alternativeName;
 	private final List<Construction> constructions = new ArrayList<Construction>();
@@ -21,6 +28,13 @@ public class Production {
 		super();
 		this.name = name;
 		this.alternativeName = alternativeName;
+	}
+
+	/**
+	 * @return the id
+	 */
+	public int getId() {
+		return id;
 	}
 
 	/**
@@ -93,6 +107,10 @@ public class Production {
 
 	public String toString(int itemPosition) {
 		StringBuffer result = new StringBuffer(name);
+		result.append("(");
+		result.append(id);
+		result.append(") ");
+		result.append(name);
 		if (alternativeName.equals(name)) {
 			result.append(" {");
 			result.append(alternativeName);
@@ -112,7 +130,11 @@ public class Production {
 	}
 
 	public String toShortString(int itemPosition) {
-		StringBuffer result = new StringBuffer(name);
+		StringBuffer result = new StringBuffer();
+		result.append("(");
+		result.append(id);
+		result.append(") ");
+		result.append(name);
 		if (!alternativeName.equals(name)) {
 			result.append(" {");
 			result.append(alternativeName);
@@ -148,7 +170,6 @@ public class Production {
 		result = prime * result
 				+ ((constructions == null) ? 0 : constructions.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + (node ? 1231 : 1237);
 		return result;
 	}
 
@@ -180,8 +201,6 @@ public class Production {
 			if (other.name != null)
 				return false;
 		} else if (!name.equals(other.name))
-			return false;
-		if (node != other.node)
 			return false;
 		return true;
 	}

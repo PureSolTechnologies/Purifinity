@@ -1,10 +1,13 @@
 package com.puresol.uhura.grammar.production;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import com.puresol.di.DependencyInjection;
+import com.puresol.di.Injection;
 import com.puresol.uhura.grammar.GrammarException;
 
 /**
@@ -13,7 +16,9 @@ import com.puresol.uhura.grammar.GrammarException;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class ProductionSet {
+public class ProductionSet implements Serializable {
+
+	private static final long serialVersionUID = 1122545599969259364L;
 
 	private final ConcurrentMap<String, List<Production>> name2Production = new ConcurrentHashMap<String, List<Production>>();
 	private final List<Production> productions = new CopyOnWriteArrayList<Production>();
@@ -26,6 +31,8 @@ public class ProductionSet {
 			throw new GrammarException("Double defined production '"
 					+ production + "'!");
 		}
+		DependencyInjection.inject(production,
+				Injection.named("id", productions.size()));
 		productions.add(production);
 		if (!name2Production.containsKey(production.getName())) {
 			name2Production.put(production.getName(),
@@ -75,15 +82,18 @@ public class ProductionSet {
 		return false;
 	}
 
-	public void setNewStart(String productionName) {
-		Production startProduction = new Production("_START");
+	public ProductionSet setNewStartProduction(String productionName)
+			throws GrammarException {
+		ProductionSet productionSet = new ProductionSet();
+		Production startProduction = new Production("_START_");
 		startProduction.addConstruction(new ProductionConstruction(
 				productionName));
-		name2Production.remove(productions.get(0).getName());
-		productions.remove(0);
-		productions.add(0, startProduction);
-		name2Production.put(startProduction.getName(),
-				new CopyOnWriteArrayList<Production>());
-		name2Production.get(startProduction.getName()).add(startProduction);
+		productionSet.add(startProduction);
+		if (productions.size() > 1) {
+			for (int i = 1; i < productions.size(); i++) {
+				productionSet.add(productions.get(i));
+			}
+		}
+		return productionSet;
 	}
 }

@@ -1,5 +1,6 @@
 package com.puresol.uhura.parser.parsetable;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -12,7 +13,9 @@ import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.production.Construction;
 import com.puresol.uhura.grammar.production.FinishConstruction;
 
-public class LR1StateTransitionGraph {
+public class LR1StateTransitionGraph implements Serializable {
+
+	private static final long serialVersionUID = -1330346621768260912L;
 
 	private final static Logger logger = Logger
 			.getLogger(LR1StateTransitionGraph.class);

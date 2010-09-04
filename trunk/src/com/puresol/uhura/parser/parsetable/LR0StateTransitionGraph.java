@@ -1,5 +1,6 @@
 package com.puresol.uhura.parser.parsetable;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -9,7 +10,9 @@ import java.util.concurrent.ConcurrentMap;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.production.Construction;
 
-public class LR0StateTransitionGraph {
+public class LR0StateTransitionGraph implements Serializable {
+
+	private static final long serialVersionUID = -5320832167468349031L;
 
 	private final ConcurrentMap<LR0ItemSet, Integer> itemSet2Integer = new ConcurrentHashMap<LR0ItemSet, Integer>();
 	private final ConcurrentMap<Integer, LR0ItemSet> itemSets = new ConcurrentHashMap<Integer, LR0ItemSet>();

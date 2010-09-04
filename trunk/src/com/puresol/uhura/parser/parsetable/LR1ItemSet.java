@@ -5,6 +5,8 @@ import java.util.concurrent.CopyOnWriteArraySet;
 
 public class LR1ItemSet extends AbstractItemSet<LR1Item> {
 
+	private static final long serialVersionUID = -4166037691502608458L;
+
 	public LR1ItemSet(AbstractItemSet<LR1Item> itemSet) {
 		super(itemSet);
 	}

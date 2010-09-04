@@ -2,6 +2,8 @@ package com.puresol.uhura.grammar.production;
 
 public abstract class AbstractConstruction implements Construction {
 
+	private static final long serialVersionUID = -8190479779174841005L;
+
 	private final String name;
 	private final String text;
 	private final ConstructionType type;
