@@ -4,10 +4,9 @@ import java.io.Serializable;
 
 import javax.i18n4java.Translator;
 
-import com.puresol.coding.analysis.CodeRange;
-import com.puresol.parser.tokens.Token;
 import com.puresol.reporting.ReportingFormat;
 import com.puresol.reporting.UnsupportedFormatException;
+import com.puresol.uhura.lexer.Token;
 
 /**
  * This class keeps the information of a single duplication found by a scanner.

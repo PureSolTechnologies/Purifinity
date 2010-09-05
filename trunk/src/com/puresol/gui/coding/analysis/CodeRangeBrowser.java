@@ -25,7 +25,6 @@ import javax.swingx.Panel;
 import javax.swingx.ScrollPane;
 import javax.swingx.connect.Slot;
 
-import com.puresol.coding.analysis.CodeRange;
 import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.gui.coding.CodeRangeViewer;
 

@@ -1,7 +1,5 @@
 package com.puresol.coding.evaluator;
 
-import com.puresol.coding.analysis.CodeRange;
-
 public abstract class AbstractCodeRangeEvaluator extends AbstractEvaluator
 		implements CodeRangeEvaluator {
 

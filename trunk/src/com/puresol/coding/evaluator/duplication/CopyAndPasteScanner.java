@@ -11,17 +11,15 @@ import javax.swingx.progress.ProgressObserver;
 
 import org.apache.log4j.Logger;
 
-import com.puresol.coding.analysis.CodeRange;
 import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.evaluator.AbstractProjectEvaluator;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.QualityLevel;
-import com.puresol.parser.tokens.Token;
-import com.puresol.parser.tokens.TokenCreationException;
-import com.puresol.parser.tokens.TokenStream;
 import com.puresol.reporting.ReportingFormat;
 import com.puresol.reporting.UnsupportedFormatException;
 import com.puresol.reporting.html.HTMLStandards;
+import com.puresol.uhura.lexer.Token;
+import com.puresol.uhura.lexer.TokenStream;
 import com.puresol.utils.Property;
 
 /**
@@ -158,7 +156,8 @@ public class CopyAndPasteScanner extends AbstractProjectEvaluator {
 		return false;
 	}
 
-	private void check(CodeRange left, CodeRange right) throws TokenCreationException {
+	private void check(CodeRange left, CodeRange right)
+			throws TokenCreationException {
 		for (int index = 0; (left.getStartId() + index <= left.getStopId())
 				&& (right.getStartId() + index <= right.getStopId()); index++) {
 			Duplication duplication = checkDetails(left, left.getStartId()

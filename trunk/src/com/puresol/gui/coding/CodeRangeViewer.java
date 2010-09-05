@@ -6,8 +6,6 @@ import javax.swingx.BorderLayoutWidget;
 import javax.swingx.Label;
 import javax.swingx.ScrollPane;
 
-import com.puresol.coding.analysis.CodeRange;
-
 public class CodeRangeViewer extends BorderLayoutWidget {
 
 	private static final long serialVersionUID = 3032479272552076138L;
