@@ -11,7 +11,7 @@
 	grammar.checks=true;
 	lexer="com.puresol.uhura.lexer.RegExpLexer";
 	lexer.case_sensitive=false;
-	parser="com.puresol.uhura.parser.LR1Parser";
+	parser="com.puresol.uhura.parser.lr.LR1Parser";
  
 /****************************************************************************
  * H E L P E R
@@ -25,7 +25,17 @@
 	 * *********************************
 	 */
 
+	LETTER : "[A-Z]";
+	ALPHANUMERIC_CHARACTER :
+		 "(" LETTER "|" DIGIT "|" UNDERSCORE ")"
+	;
 	DIGIT : "[0-9]";
+
+	DIGIT_STRING : "\\d+";
+	LABEL : 
+			DIGIT "{1,5}"
+	;
+	HEX_DIGIT : "[0-9A-F]";
 
 	/*
 	 * 3.1.4 Underscore
@@ -123,14 +133,14 @@
  ****************************************************************************/ 
  TOKENS
 
-	WHITESPACE : '[ \\t]+';
-	LINE_TERMINATOR : '(\\n|\\r\n|\\r)' ;
-	LINE_COMMENT : '(![^\\n\\\r]*' LINE_TERMINATOR '|' LINE_TERMINATOR '[C$*][^\\r\\n]*(?=' LINE_TERMINATOR '))' ;
+	WHITESPACE : '[ \\t]+' [hidden] ;
+	LINE_TERMINATOR : '(\\n|\\r\n|\\r)' [hidden] ;
+	LINE_COMMENT : '(![^\\n\\\r]*' LINE_TERMINATOR '|' LINE_TERMINATOR '[C$*][^\\r\\n]*(?=' LINE_TERMINATOR '))' [hidden] ;
 
 	/*
 	 * 3.1.5 Special characters
 	 */
-	BLANK : " ";
+	// BLANK : " ";
 	SEMICOLON : ";";
 	EQUALS : "=";
 	EXCLAMATION_POINT : "!";
@@ -172,7 +182,6 @@
 	ACTION : 'ACTION' ;
 	ALLOCATABLE : 'ALLOCATABLE' ;
 	ALLOCATE : 'ALLOCATE' ;
-	AND : 'AND' ;
 	ACQUIRED_LOCK : 'ACQUIRED\\s+LOCK' ;
 	ADVANCE : 'ADVANCE' ;
 	ASSIGNMENT : 'ASSIGNMENT' ;
@@ -291,7 +300,6 @@
 	OPENED : 'OPENED' ;
 	OPERATOR : 'OPERATOR' ;
 	OPTIONAL : 'OPTIONAL' ;
-	OR : 'OR' ;
 	OUT : 'OUT' ;
 	PAD : 'PAD' ;
 	PASS : 'PASS' ;
@@ -350,9 +358,18 @@
 	WHILE : 'WHILE' ;
 	WRITE : 'WRITE' ;
 
+	AND : '\\.AND\\.' ;
+	EQ : '\\.EQ\\.' ;
+	EQV : '.EQV.' ;
+	GE : '\\.GE\\.' ;
+	GT : '\\.GT\\.' ;
+	LE : '\\.LE\\.' ;
+	LT : '\\.LT\\.' ;
+	NE : '\\.NE\\.' ;
+	NEQV : '\\.NEQV\\.' ;
+	NOT : '\\.NOT\\.' ;
+	OR : '\\.OR\\.' ;
 
-	NAME_LITERAL : LETTER ALPHANUMERIC_CHARACTER
-			"{0,62}";
 	INT_LITERAL_CONSTANT : DIGIT_STRING "(_"
 			KIND_PARAM ")?";
 	REAL_LITERAL_CONSTANT : "(" SIGNIFICANT "("
@@ -368,16 +385,10 @@
 			KIND_PARAM ")?";
 	BOZ_LITERAL_CONSTANT : "(" BINARY_CONSTANT
 			"|" OCTAL_CONSTANT "|" HEX_CONSTANT ")";
+//	LETTER_LITERAL : LETTER "(?!" LETTER ")"; removed due to collision with NAME_LITERAL
+	NAME_LITERAL : LETTER ALPHANUMERIC_CHARACTER
+			"{0,62}";
 
-	LETTER : "[A-Z]";
-	DIGIT_STRING : "\\d+";
-	ALPHANUMERIC_CHARACTER :
-		 "(" LETTER "|" DIGIT "|" UNDERSCORE ")"
-	;
-	LABEL : 
-			DIGIT "{1,5}"
-	;
-	HEX_DIGIT : "[0-9A-F]";
 
 /****************************************************************************
  * P R O D U C T I O N S
@@ -689,11 +700,10 @@
 	;
 	
 /*
-R215 keyword is name
+	R215 keyword is name
+	
+	not needed...
 */
-	keyword :
-		name
-	;
 
 /***************
 	Clause 3:	
@@ -702,24 +712,21 @@ R215 keyword is name
 	R301 alphanumeric-character is letter
 	or digit
 	or underscore
+	
+	not needed...
 */
-	alphanumeric-character :
-		ALPHANUMERIC_CHARACTER	
-	;
 
 /*
 	R302 underscore is _
+	
+	not needed...
 */
-	underscore :
-		'_'
-	;
 
 /*
 	R303 name is letter [ alphanumeric-character ] ...
+	
+	not needed...
 */
-	name :
-		NAME_LITERAL
-	;
 
 /*
 	R304 constant is literal-constant
@@ -727,10 +734,7 @@ R215 keyword is name
 */
 	constant :
 		literal-constant
-	|	named-constant
-	;
-	scalar-constant :
-		constant
+	|	NAME_LITERAL
 	;
 
 /*
@@ -752,27 +756,21 @@ R215 keyword is name
 
 /*
 	R306 named-constant is name
+	
+	not needed...
 */
-	named-constant :
-		name
-	;
 
 /*
 	R307 int-constant is constant
+	
+	not needed...
 */
-	int-constant :
-		constant
-	;
-	scalar-int-constant :
-		int-constant
-	;
 
 /*
 	R308 char-constant is constant
+	
+	not needed...
 */
-	char-constant :
-		constant
-	;
 
 /*
 	R309 intrinsic-operator is power-op
@@ -803,26 +801,23 @@ R215 keyword is name
 	or extended-intrinsic-op
 */
 	defined-operator :
-		defined-unary-op
-	|	defined-binary-op
-	|	extended-intrinsic-op
+		defined-op
+	|	intrinsic-operator
 	;
 
 /*
 	R311 extended-intrinsic-op is intrinsic-operator
+	
+	not needed...
 */
-	extended-intrinsic-op :
-		intrinsic-operator
-	;
 
 /*
 	R312 label is digit [ digit [ digit [ digit [ digit ] ] ] ]
+	
+	not needed...
 */
-	label :
-		LABEL
-	;
 	label-list :
-		label ( ',' label ) *
+		INT_LITERAL_CONSTANT ( ',' INT_LITERAL_CONSTANT ) *
 	;
 
 /***************
@@ -835,7 +830,7 @@ R215 keyword is name
 	or :
 */
 	type-param-value :
-		scalar-int-expr
+		expr
 	|	'*'
 	|	':'
 	;
@@ -885,7 +880,7 @@ R215 keyword is name
 	R405 kind-selector is ( [ KIND = ] scalar-int-constant-expr )
 */
 	kind-selector :
-		'(' ( KIND '=' ) ? scalar-int-constant-expr ')'
+		'(' ( KIND '=' ) ? expr ')'
 	;
 
 /*
@@ -904,21 +899,21 @@ R215 keyword is name
 /*
 	R408 kind-param is digit-string
 	or scalar-int-constant-name
+	
+	not needed...
 */
 
 /*
 	R409 signed-digit-string is [ sign ] digit-string
+	
+	not needed...
 */
-	signed-digit-string : 
-		sign ? digit-string
-	;
 
 /*
 	R410 digit-string is digit [ digit ] ...
+	
+	not needed...
 */
-	digit-string : 
-		DIGIT_STRING
-	;
 
 /*
 	R411 sign is +
@@ -996,9 +991,9 @@ R215 keyword is name
 */
 	char-selector :
 		length-selector
-	|	'(' 'LEN' '=' type-param-value ',' KIND '=' scalar-int-constant-expr ')'
-	|	'(' type-param-value ',' ( KIND '=' ) ? scalar-int-constant-expr ')'
-	|	'(' 'KIND' '=' scalar-int-constant-expr	( ',' LEN '=' type-param-value ) ? ')'
+	|	'(' 'LEN' '=' type-param-value ',' KIND '=' expr ')'
+	|	'(' type-param-value ',' ( KIND '=' ) ? expr ')'
+	|	'(' 'KIND' '=' expr	( ',' LEN '=' type-param-value ) ? ')'
 	;
 
 /*
@@ -1117,7 +1112,7 @@ R215 keyword is name
 	R432 type-param-decl is type-param-name [ = scalar-int-constant-expr ]
 */
 	type-param-decl :
-		NAME_LITERAL ( '=' scalar-int-constant-expr ) ?
+		NAME_LITERAL ( '=' expr ) ?
 	;
 
 	type-param-decl-list :
@@ -1230,7 +1225,7 @@ R215 keyword is name
 	or => initial-data-target
 */
 	component-initialization :
-		'=' constant-expr
+		'=' expr
 	|	'=' '>' null-init
 	|	'=' '>' initial-data-target
 	;
@@ -1284,7 +1279,7 @@ R215 keyword is name
 */
 	type-bound-procedure-stmt :
 		PROCEDURE ( ( ',' binding-attr-list ) ? ':' ':' ) ? type-bound-proc-decl-list
-	|	PROCEDURE '(' interface-name ')' ',' binding-attr-list ':' ':' name-list
+	|	PROCEDURE '(' NAME_LITERAL ')' ',' binding-attr-list ':' ':' name-list
 	;
 
 /*
@@ -1340,7 +1335,7 @@ R215 keyword is name
 	R454 type-param-spec is [ keyword = ] type-param-value
 */
 	type-param-spec :
-		( keyword '=' ) ? type-param-value
+		( NAME_LITERAL '=' ) ? type-param-value
 	;
 	type-param-spec-list :
 		type-param-spec ( ',' type-param-spec ) *
@@ -1357,7 +1352,7 @@ R215 keyword is name
 	R456 component-spec is [ keyword = ] component-data-source
 */
 	component-spec : 
-		( keyword '=' ) ? component-data-source
+		( NAME_LITERAL '=' ) ? component-data-source
 	;
 	component-spec-list :
 		component-spec ( ',' component-spec ) *
@@ -1405,7 +1400,7 @@ R215 keyword is name
 	R461 enumerator is named-constant [ = scalar-int-constant-expr ]
 */
 	enumerator :
-		named-constant ( '=' scalar-int-constant-expr ) ?
+		NAME_LITERAL ( '=' expr ) ?
 	;
 	enumerator-list :
 		enumerator ( ',' enumerator ) *
@@ -1514,15 +1509,14 @@ R215 keyword is name
 	[ , scalar-int-expr ]
 */
 	ac-implied-do-control :
-		ac-do-variable '=' scalar-int-expr ',' scalar-int-expr ( ',' scalar-int-expr ) ?
+		NAME_LITERAL '=' expr ',' expr ( ',' expr ) ?
 	;
 
 /*
 	R475 ac-do-variable is do-variable
+	
+	not needed...
 */
-	ac-do-variable :
-		do-variable
-	;
 
 /***************
 	Clause 5:	
@@ -1583,7 +1577,7 @@ R215 keyword is name
 	or function-name [ * char-length ]
 */
 	entity-decl :
-		object-name ( '(' array-spec ')' ) ? ( '[' coarray-spec ']' ) ?	( '*' char-length ) ? initialization ?
+		NAME_LITERAL ( '(' array-spec ')' ) ? ( '[' coarray-spec ']' ) ?	( '*' char-length ) ? initialization ?
 	|	NAME_LITERAL ( '*' char-length ) ?
 	;
 	entity-decl-list :
@@ -1592,13 +1586,9 @@ R215 keyword is name
 
 /*
 	R504 object-name is name
+	
+	not needed...
 */
-	object-name :
-		name
-	;
-	object-name-list :
-		object-name ( ',' object-name ) *
-	;
 
 /*
 	R505 initialization is = constant-expr
@@ -1606,7 +1596,7 @@ R215 keyword is name
 	or => initial-data-target
 */
 	initialization :
-		'=' constant-expr
+		'=' expr
 	|	'=' '>' null-init
 	|	'=' '>' initial-data-target
 	;
@@ -1631,7 +1621,7 @@ R215 keyword is name
 	R508 language-binding-spec is BIND (C [, NAME = scalar-default-char-constant-expr ])
 */
 	language-binding-spec :
-		BIND '(' 'C' ( ',' NAME_KEYWORD '=' scalar-default-char-constant-expr ) ? ')'
+		BIND '(' 'C' ( ',' NAME_KEYWORD '=' expr ) ? ')'
 	;
 
 /*
@@ -1665,14 +1655,14 @@ R215 keyword is name
 	R512 lower-cobound is specification-expr
 */
 	lower-cobound :
-		specification-expr
+		expr
 	;
 
 /*
 	R513 upper-cobound is specification-expr
 */
 	upper-cobound :
-		specification-expr
+		expr
 	;
 
 /*
@@ -1711,14 +1701,14 @@ R215 keyword is name
 	R517 lower-bound is specification-expr
 */
 	lower-bound :
-		specification-expr
+		expr
 	;
 
 /*
 	R518 upper-bound is specification-expr
 */
 	upper-bound :
-		specification-expr
+		expr
 	;
 
 /*
@@ -1803,7 +1793,7 @@ R215 keyword is name
 	[ lbracket coarray-spec rbracket ]
 */
 	allocatable-decl :
-		object-name ( '(' array-spec ')' ) ?
+		NAME_LITERAL ( '(' array-spec ')' ) ?
 		( '[' coarray-spec ']' ) ?
 	;
 	allocatable-decl-list :
@@ -1814,7 +1804,7 @@ R215 keyword is name
 	R528 asynchronous-stmt is ASYNCHRONOUS [ :: ] object-name-list
 */
 	asynchronous-stmt :
-		ASYNCHRONOUS ( ':' ':' ) ? object-name-list
+		ASYNCHRONOUS ( ':' ':' ) ? name-list
 	;
 
 /*
@@ -1857,7 +1847,7 @@ R215 keyword is name
 	R533 contiguous-stmt is CONTIGUOUS [ :: ] object-name-list
 */
 	contiguous-stmt :
-		CONTIGUOUS ( ':' ':' ) ? object-name-list
+		CONTIGUOUS ( ':' ':' ) ? name-list
 	;
 
 /*
@@ -1893,11 +1883,9 @@ R215 keyword is name
 	[ , scalar-int-constant-expr ] )
 */
 	data-implied-do :
-		'(' data-i-do-object-list ',' data-i-do-variable '='
-		scalar-int-constant-expr ','
-		scalar-int-constant-expr
-		( ',' scalar-int-constant-expr ) ? ')'
+		'(' data-i-do-object-list ',' NAME_LITERAL '=' expr ',' expr ( ',' expr ) ? ')'
 	;
+
 /*
 	R538 data-i-do-object is array-element
 	or scalar-structure-component
@@ -1914,10 +1902,9 @@ R215 keyword is name
 
 /*
 	R539 data-i-do-variable is do-variable
+	
+	not needed...
 */
-	data-i-do-variable :
-		do-variable
-	;
 
 /*
 	R540 data-stmt-value is [ data-stmt-repeat * ] data-stmt-constant
@@ -1934,8 +1921,8 @@ R215 keyword is name
 	or scalar-int-constant-subobject
 */
 	data-stmt-repeat :
-		scalar-int-constant
-	|	scalar-int-constant-subobject
+		constant
+	|	constant-subobject
 	;
 
 /*
@@ -1948,8 +1935,8 @@ R215 keyword is name
 	or structure-constructor
 */
 	data-stmt-constant :
-		scalar-constant
-	|	scalar-constant-subobject
+		constant
+	|	constant-subobject
 	|	signed-int-literal-constant
 	|	signed-real-literal-constant
 	|	null-init
@@ -1959,22 +1946,15 @@ R215 keyword is name
 
 /*
 	R543 int-constant-subobject is constant-subobject
+	
+	// not needed...
 */
-	int-constant-subobject :
-		constant-subobject
-	;
-	scalar-int-constant-subobject:
-		int-constant-subobject
-	;
 
 /*
 	R544 constant-subobject is designator
 */
 	constant-subobject :
 		designator
-	;
-	scalar-constant-subobject :
-		constant-subobject
 	;
 
 /*
@@ -1990,14 +1970,14 @@ R215 keyword is name
 	R546 intent-stmt is INTENT ( intent-spec ) [ :: ] dummy-arg-name-list
 */
 	intent-stmt :
-		INTENT '(' intent-spec ')' ( ':' ':' ) ? dummy-arg-name-list
+		INTENT '(' intent-spec ')' ( ':' ':' ) ? name-list
 	;
 
 /*
 	R547 optional-stmt is OPTIONAL [ :: ] dummy-arg-name-list
 */
 	optional-stmt :
-		OPTIONAL ( ':' ':' ) ? dummy-arg-name-list
+		OPTIONAL ( ':' ':' ) ? name-list
 	;
 
 /*
@@ -2011,7 +1991,7 @@ R215 keyword is name
 	R549 named-constant-def is named-constant = constant-expr
 */
 	named-constant-def :
-		named-constant '=' constant-expr
+		NAME_LITERAL '=' expr
 	;
 	named-constant-def-list :
 		named-constant-def ( ',' named-constant-def ) *
@@ -2029,7 +2009,7 @@ R215 keyword is name
 	or proc-entity-name
 */
 	pointer-decl :
-		object-name ( '(' deferred-shape-spec-list ')' ) ?
+		NAME_LITERAL ( '(' deferred-shape-spec-list ')' ) ?
 	|	NAME_LITERAL
 	;
 	pointer-decl-list :
@@ -2056,8 +2036,7 @@ R215 keyword is name
 	or / common-block-name /
 */
 	saved-entity :
-		object-name
-	|	proc-pointer-name
+		NAME_LITERAL
 	|	'/' NAME_LITERAL '/'
 	;
 	saved-entity-list :
@@ -2066,10 +2045,9 @@ R215 keyword is name
 
 /*
 	R555 proc-pointer-name is name
+	
+	not needed...
 */
-	proc-pointer-name :
-		name
-	;
 
 /*
 	R556 target-stmt is TARGET [ :: ] target-decl-list
@@ -2083,7 +2061,7 @@ R215 keyword is name
 	[ lbracket coarray-spec rbracket ]
 */
 	target-decl :
-		object-name ( '(' array-spec ')' ) ?
+		NAME_LITERAL ( '(' array-spec ')' ) ?
 		( '[' coarray-spec ']' ) ?
 	;
 	target-decl-list :
@@ -2094,14 +2072,14 @@ R215 keyword is name
 	R558 value-stmt is VALUE [ :: ] dummy-arg-name-list
 */
 	value-stmt :
-		VALUE ( ':' ':' ) ? dummy-arg-name-list
+		VALUE ( ':' ':' ) ? name-list
 	;
 
 /*
 	R559 volatile-stmt is VOLATILE [ :: ] object-name-list
 */
 	volatile-stmt :
-		VOLATILE ( ':' ':' ) ? object-name-list
+		VOLATILE ( ':' ':' ) ? name-list
 	;
 
 /*
@@ -2127,7 +2105,7 @@ R215 keyword is name
 	R562 letter-spec is letter [ - letter ]
 */
 	letter-spec :
-		LETTER ( '-' LETTER ) ?
+		NAME_LITERAL ( '-' NAME_LITERAL ) ? // the NAME_LITERAL is used to amiguousy with LETTER_LITERAL
 	;
 	letter-spec-list :
 		letter-spec ( ',' letter-spec ) *
@@ -2141,19 +2119,15 @@ R215 keyword is name
 */
 	namelist-stmt :
 		NAMELIST
-		'/' NAME_LITERAL '/' namelist-group-object-list
-		(  ',' ? '/' NAME_LITERAL '/' namelist-group-object-list ) *
+		'/' NAME_LITERAL '/' name-list
+		(  ',' ? '/' NAME_LITERAL '/' name-list ) *
 	;
 	
 /*
 	R564 namelist-group-object is variable-name
+	
+	not needed...
 */
-	namelist-group-object :
-		variable-name
-	;
-	namelist-group-object-list :
-		namelist-group-object ( ',' namelist-group-object ) *
-	;
 
 /*
 	R565 equivalence-stmt is EQUIVALENCE equivalence-set-list
@@ -2178,7 +2152,7 @@ R215 keyword is name
 	or substring
 */
 	equivalence-object :
-		variable-name
+		NAME_LITERAL
 	|	array-element
 	|	substring
 	;
@@ -2202,7 +2176,7 @@ R215 keyword is name
 	R569 common-block-object is variable-name [ ( array-spec ) ]
 */
 	common-block-object :
-		variable-name ( '(' array-spec ')' ) ?
+		NAME_LITERAL ( '(' array-spec ')' ) ?
 	;
 	common-block-object-list :
 		common-block-object ( ',' common-block-object ) *
@@ -2222,7 +2196,7 @@ R215 keyword is name
 	or substring
 */
 	designator :
-		object-name
+		NAME_LITERAL
 	|	array-element
 	|	array-section
 	|	coindexed-named-object
@@ -2239,53 +2213,36 @@ R215 keyword is name
 		designator
 	|	expr
 	;
-	scalar-variable :
-		variable
-	;
 
 /*
 	R603 variable-name is name
+	
+	not needed...
 */
-	variable-name :
-		name
-	;
 
 /*
 	R604 logical-variable is variable
+	
+	not needed...
 */
-	logical-variable :
-		variable
-	;
-	scalar-logical-variable :
-		logical-variable
-	;
 
 /*
 	R605 char-variable is variable
+	
+	not needed...
 */
-	char-variable :
-		variable
-	;
 
 /*
 	R606 default-char-variable is variable
+	
+	not needed...
 */
-	default-char-variable :
-		variable
-	;
-	scalar-default-char-variable :
-		default-char-variable
-	;
 
 /*
 	R607 int-variable is variable
+	
+	not needed...
 */
-	int-variable :
-		variable
-	;
-	scalar-int-variable :
-		int-variable
-	;
 
 /*
 	R608 substring is parent-string ( substring-range )
@@ -2302,18 +2259,18 @@ R215 keyword is name
 	or scalar-constant
 */
 	parent-string :
-		variable-name
+		NAME_LITERAL
 	|	array-element
 	|	coindexed-named-object
 	|	scalar-structure-component
-	|	scalar-constant
+	|	constant
 	;
 	
 /*
 	R610 substring-range is [ scalar-int-expr ] : [ scalar-int-expr ]
 */
 	substring-range :
-		scalar-int-expr ? ':' scalar-int-expr ?
+		expr ? ':' expr ?
 	;
 
 /*
@@ -2383,7 +2340,7 @@ R215 keyword is name
 	R619 subscript is scalar-int-expr
 */
 	subscript :
-		scalar-int-expr
+		expr
 	;
 
 /*
@@ -2411,14 +2368,14 @@ R215 keyword is name
 	R622 stride is scalar-int-expr
 */
 	stride :
-		scalar-int-expr
+		expr
 	;
 	
 /*
 	R623 vector-subscript is int-expr
 */
 	vector-subscript :
-		int-expr
+		expr
 	;
 
 /*
@@ -2432,7 +2389,7 @@ R215 keyword is name
 	R625 cosubscript is scalar-int-expr
 */
 	cosubscript :
-		scalar-int-expr
+		expr
 	;
 	cosubscript-list :
 		cosubscript ( ',' cosubscript ) *
@@ -2454,10 +2411,10 @@ R215 keyword is name
 	or STAT = stat-variable
 */
 	alloc-opt :
-		ERRMSG '=' errmsg-variable
-	|	MOLD '=' source-expr
-	|	SOURCE '=' source-expr
-	|	STAT '=' stat-variable
+		ERRMSG '=' variable
+	|	MOLD '=' expr
+	|	SOURCE '=' expr
+	|	STAT '=' variable
 	;
 	alloc-opt-list :
 		alloc-opt ( ',' alloc-opt ) *
@@ -2465,24 +2422,21 @@ R215 keyword is name
 	
 /*
 	R628 stat-variable is scalar-int-variable
+	
+	not needed...
 */
-	stat-variable :
-		scalar-int-variable
-	;
 
 /*
 	R629 errmsg-variable is scalar-default-char-variable
+	
+	not needed...
 */
-	errmsg-variable :
-		scalar-default-char-variable
-	;
 
 /*
 	R630 source-expr is expr
+	
+	not needed...
 */
-	source-expr :
-		expr
-	;
 
 /*
 	R631 allocation is allocate-object [ ( allocate-shape-spec-list ) ]
@@ -2501,7 +2455,7 @@ R215 keyword is name
 	or structure-component
 */
 	allocate-object :
-		variable-name
+		NAME_LITERAL
 	|	structure-component
 	;
 	allocate-object-list : 
@@ -2512,7 +2466,7 @@ R215 keyword is name
 	R633 allocate-shape-spec is [ lower-bound-expr : ] upper-bound-expr
 */
 	allocate-shape-spec :
-		( lower-bound-expr ':' ) ? upper-bound-expr
+		( expr ':' ) ? expr
 	;
 	allocate-shape-spec-list :
 		allocate-shape-spec ( ',' allocate-shape-spec ) *
@@ -2520,30 +2474,28 @@ R215 keyword is name
 
 /*
 	R634 lower-bound-expr is scalar-int-expr
+	
+	not needed...
 */
-	lower-bound-expr :
-		scalar-int-expr
-	;
 
 /*
 	R635 upper-bound-expr is scalar-int-expr
+	
+	not needed...
 */
-	upper-bound-expr :
-		scalar-int-expr
-	;
 
 /*
 	R636 allocate-coarray-spec is [ allocate-coshape-spec-list , ] [ lower-bound-expr : ] *
 */
 	allocate-coarray-spec :
-		( allocate-coshape-spec-list ',' ) ? ( lower-bound-expr ':' ) ? '*'
+		( allocate-coshape-spec-list ',' ) ? ( expr ':' ) ? '*'
 	;
 
 /*
 	R637 allocate-coshape-spec is [ lower-bound-expr : ] upper-bound-expr
 */
 	allocate-coshape-spec :
-		( lower-bound-expr ':' ) ? upper-bound-expr
+		( expr ':' ) ? expr
 	;
 	allocate-coshape-spec-list :
 		allocate-coshape-spec ( ',' allocate-coshape-spec ) *
@@ -2562,9 +2514,8 @@ R215 keyword is name
 	or proc-pointer-name
 */
 	pointer-object :
-		variable-name
+		NAME_LITERAL
 	|	structure-component
-	|	proc-pointer-name
 	;
 	pointer-object-list :
 		pointer-object ( ',' pointer-object ) *
@@ -2582,8 +2533,8 @@ R215 keyword is name
 	or ERRMSG = errmsg-variable
 */
 	dealloc-opt :
-		STAT '=' stat-variable
-	|	ERRMSG '=' errmsg-variable
+		STAT '=' variable
+	|	ERRMSG '=' variable
 	;
 	dealloc-opt-list :
 		dealloc-opt ( ',' dealloc-opt ) *
@@ -2610,7 +2561,7 @@ R215 keyword is name
 	|	structure-constructor
 	|	function-reference
 	|	type-param-inquiry
-	|	NAME_LITERAL
+	//	|	NAME_LITERAL	removed due to double definition with designator
 	|	'(' expr ')'
 	;
 
@@ -2618,14 +2569,18 @@ R215 keyword is name
 	R702 level-1-expr is [ defined-unary-op ] primary
 */
 	level-1-expr :
-		defined-unary-op ? primary
+		defined-op ? primary
 	;
 
 /*
 	R703 defined-unary-op is . letter [ letter ] ... .
+	
+	not needed...
 */
-	defined-unary-op :
-		'.' LETTER + '.'
+
+// defined as replacement:
+	defined-op :
+		'.' NAME_LITERAL '.'
 	;
 
 /*
@@ -2710,12 +2665,12 @@ R215 keyword is name
 	or >=
 */
 	rel-op :
-		'.' 'EQ' '.'
-	|	'.' 'NE' '.'
-	|	'.' 'LT' '.'
-	|	'.' 'LE' '.'
-	|	'.' 'GT' '.'
-	|	'.' 'GE' '.'
+		EQ
+	|	NE
+	|	LT
+	|	LE
+	|	GT
+	|	GE
 	|	'=' '='
 	|	'/' '='
 	|	'<'
@@ -2756,21 +2711,21 @@ R215 keyword is name
 	R718 not-op is .NOT.
 */
 	not-op :
-		'.' 'NOT' '.'
+		NOT
 	;
 
 /*
 	R719 and-op is .AND.
 */
 	and-op :
-		'.' 'AND' '.'
+		AND
 	;
 
 /*
 	R720 or-op is .OR.
 */
 	or-op :
-		'.' 'OR' '.'
+		OR
 	;
 
 /*
@@ -2778,106 +2733,70 @@ R215 keyword is name
 	or .NEQV.
 */
 	equiv-op :
-		'.' 'EQV' '.'
-	|	'.' 'NEQV' '.'
+		EQV
+	|	NEQV
 	;
 
 /*
 	R722 expr is [ expr defined-binary-op ] level-5-expr
 */
 	expr :
-		( expr defined-binary-op ) ? level-5-expr
-	;
-	scalar-expr :
-		expr
+		( expr defined-op ) ? level-5-expr
 	;
 
 /*
 	R723 defined-binary-op is . letter [ letter ] ... .
+	
+	not needed...
 */
-	defined-binary-op :
-		'.' LETTER + '.'
-	;
 
 /*
 	R724 logical-expr is expr
+	
+	not needed...
 */
-	logical-expr :
-		expr
-	;
-	scalar-logical-expr :
-		logical-expr
-	;
 
 /*
 	R725 default-char-expr is expr
+	
+	not needed...
 */
-	default-char-expr :
-		expr
-	;
-	scalar-default-char-expr :
-		default-char-expr
-	;
 
 /*
 	R726 int-expr is expr
+	
+	not needed...
 */
-	int-expr :
-		expr
-	;
-	// added...
-	scalar-int-expr :
-		int-expr
-	;
 
 /*
 	R727 numeric-expr is expr
+	
+	not needed...
 */
-	numeric-expr :
-		expr
-	;
-	scalar-numeric-expr :
-		numeric-expr
-	;
 
 /*
 	R728 specification-expr is scalar-int-expr
+	
+	not needed...
 */
-	specification-expr :
-		scalar-int-expr
-	;
 
 /*
 	R729 constant-expr is expr
+	
+	not needed...
 */
-	constant-expr :
-		expr
-	;
-	scalar-constant-expr :
-		constant-expr
-	;
 
 /*
 	R730 default-char-constant-expr is default-char-expr
+	
+	not needed...
 */
-	default-char-constant-expr :
-		default-char-expr
-	;
-	// added...
-	scalar-default-char-constant-expr :
-		default-char-constant-expr
-	;
 
 /*
 	R731 int-constant-expr is int-expr
+	
+	not needed...
 */
-	int-constant-expr :
-		int-expr
-	;
-	// added...
-	scalar-int-constant-expr :
-		int-constant-expr
-	;
 	
 
 /*
@@ -2903,15 +2822,15 @@ R215 keyword is name
 	or scalar-variable % data-pointer-component-name
 */
 	data-pointer-object :
-		variable-name
-	|	scalar-variable '%' NAME_LITERAL
+		NAME_LITERAL
+	|	variable '%' NAME_LITERAL
 	;
 
 /*
 	R735 bounds-spec is lower-bound-expr :
 */
 	bounds-spec :
-		lower-bound-expr ':'
+		expr ':'
 	;
 	bounds-spec-list :
 		bounds-spec ( ',' bounds-spec ) *
@@ -2921,7 +2840,7 @@ R215 keyword is name
 	R736 bounds-remapping is lower-bound-expr : upper-bound-expr
 */
 	bounds-remapping :
-		lower-bound-expr ':' upper-bound-expr
+		expr ':' expr
 	;
 	bounds-remapping-list :
 		bounds-remapping ( ',' bounds-remapping ) *
@@ -2939,7 +2858,7 @@ R215 keyword is name
 	or proc-component-ref
 */
 	proc-pointer-object :
-		proc-pointer-name
+		NAME_LITERAL
 	|	proc-component-ref
 	;
 
@@ -2947,7 +2866,7 @@ R215 keyword is name
 	R739 proc-component-ref is scalar-variable % procedure-component-name
 */
 	proc-component-ref :
-		scalar-variable '%' NAME_LITERAL
+		variable '%' NAME_LITERAL
 	;
 
 /*
@@ -2965,7 +2884,7 @@ R215 keyword is name
 	R741 where-stmt is WHERE ( mask-expr ) where-assignment-stmt
 */
 	where-stmt :
-		WHERE '(' mask-expr ')' where-assignment-stmt
+		WHERE '(' expr ')' where-assignment-stmt
 	;
 
 /*
@@ -2989,7 +2908,7 @@ R215 keyword is name
 	R743 where-construct-stmt is [where-construct-name:] WHERE ( mask-expr )
 */
 	where-construct-stmt :
-		( NAME_LITERAL ':' ) ? WHERE '(' mask-expr ')'
+		( NAME_LITERAL ':' ) ? WHERE '(' expr ')'
 	;
 
 /*
@@ -3012,19 +2931,15 @@ R215 keyword is name
 
 /*
 	R746 mask-expr is logical-expr
+	
+	not needed...
 */
-	mask-expr :
-		logical-expr
-	;
-	scalar-mask-expr :
-		mask-expr
-	;
 
 /*
 	R747 masked-elsewhere-stmt is ELSEWHERE (mask-expr) [where-construct-name]
 */
 	masked-elsewhere-stmt :
-		ELSEWHERE '(' mask-expr ')' NAME_LITERAL ?
+		ELSEWHERE '(' expr ')' NAME_LITERAL ?
 	;
 
 /*
@@ -3063,7 +2978,7 @@ R215 keyword is name
 	R752 forall-header is ( [ type-spec :: ] forall-triplet-spec-list [, scalar-mask-expr] )
 */
 	forall-header :
-		'(' ( type-spec ':' ':' ) ? forall-triplet-spec-list ( ',' scalar-mask-expr ) ? ')'
+		'(' ( type-spec ':' ':' ) ? forall-triplet-spec-list ( ',' expr ) ? ')'
 	;
 
 /*
@@ -3080,14 +2995,14 @@ R215 keyword is name
 	R754 forall-limit is scalar-int-expr
 */
 	forall-limit :
-		scalar-int-expr
+		expr
 	;
 
 /*
 	R755 forall-step is scalar-int-expr
 */
 	forall-step :
-		scalar-int-expr
+		expr
 	;
 
 /*
@@ -3252,7 +3167,7 @@ R215 keyword is name
 */
 	block-do-construct :
 		do-stmt
-		do-block
+		block
 		end-do
 	;
 
@@ -3269,7 +3184,7 @@ R215 keyword is name
 	R816 label-do-stmt is [ do-construct-name : ] DO label [ loop-control ]
 */
 	label-do-stmt :
-		( NAME_LITERAL ':' ) ? DO label loop-control ?
+		( NAME_LITERAL ':' ) ? DO INT_LITERAL_CONSTANT loop-control ?
 	;
 
 /*
@@ -3286,24 +3201,22 @@ R215 keyword is name
 	or [ , ] CONCURRENT forall-header
 */
 	loop-control :
-		',' ? do-variable '=' scalar-int-expr ',' scalar-int-expr ( ',' scalar-int-expr ) ?
-	|	',' ? WHILE '(' scalar-logical-expr ')'
+		',' ? NAME_LITERAL '=' expr ',' expr ( ',' expr ) ?
+	|	',' ? WHILE '(' expr ')'
 	|	',' ? CONCURRENT forall-header
 	;
 
 /*
 	R819 do-variable is scalar-int-variable-name
+	
+	not needed...
 */
-	do-variable :
-		NAME_LITERAL
-	;
 
 /*
 	R820 do-block is block
+	
+	not needed...
 */
-	do-block :
-		block
-	;
 
 /*
 	R821 end-do is end-do-stmt
@@ -3338,7 +3251,7 @@ R822 end-do-stmt is END DO [ do-construct-name ]
 	action-term-do-construct :
 		label-do-stmt
 		do-body
-		do-term-action-stmt
+		action-stmt
 	;
 
 /*
@@ -3350,10 +3263,9 @@ R822 end-do-stmt is END DO [ do-construct-name ]
 
 /*
 	R826 do-term-action-stmt is action-stmt
+	
+	not needed...
 */
-	do-term-action-stmt :
-		action-stmt
-	;
 
 /*
 	R827 outer-shared-do-construct is label-do-stmt
@@ -3394,7 +3306,7 @@ R822 end-do-stmt is END DO [ do-construct-name ]
 	;
 
 /*
-R831 cycle-stmt is CYCLE [ do-construct-name ]
+	R831 cycle-stmt is CYCLE [ do-construct-name ]
 */
 	cycle-stmt :
 		CYCLE NAME_LITERAL ?
@@ -3421,14 +3333,14 @@ R831 cycle-stmt is CYCLE [ do-construct-name ]
 	R833 if-then-stmt is [ if-construct-name : ] IF ( scalar-logical-expr ) THEN
 */
 	if-then-stmt :
-		( NAME_LITERAL ':' ) ? IF '(' scalar-logical-expr ')' THEN
+		( NAME_LITERAL ':' ) ? IF '(' expr ')' THEN
 	;
 
 /*
 	R834 else-if-stmt is ELSE IF ( scalar-logical-expr ) THEN [ if-construct-name ]
 */
 	else-if-stmt :
-		ELSE_IF '(' scalar-logical-expr ')' THEN NAME_LITERAL ?
+		ELSE_IF '(' expr ')' THEN NAME_LITERAL ?
 	;
 
 /*
@@ -3449,7 +3361,7 @@ R831 cycle-stmt is CYCLE [ do-construct-name ]
 	R837 if-stmt is IF ( scalar-logical-expr ) action-stmt
 */
 	if-stmt :
-		IF '(' scalar-logical-expr ')' action-stmt
+		IF '(' expr ')' action-stmt
 	;
 
 /*
@@ -3468,7 +3380,7 @@ R831 cycle-stmt is CYCLE [ do-construct-name ]
 	R839 select-case-stmt is [ case-construct-name : ] SELECT CASE ( case-expr )
 */
 	select-case-stmt :
-		( NAME_LITERAL ':' ) ? SELECT_CASE '(' case-expr ')'
+		( NAME_LITERAL ':' ) ? SELECT_CASE '(' expr ')'
 	;
 
 /*
@@ -3487,10 +3399,9 @@ R831 cycle-stmt is CYCLE [ do-construct-name ]
 
 /*
 	R842 case-expr is scalar-expr
+	
+	not needed...
 */
-	case-expr :
-		scalar-expr
-	;
 
 /*
 	R843 case-selector is ( case-value-range-list )
@@ -3521,7 +3432,7 @@ R831 cycle-stmt is CYCLE [ do-construct-name ]
 	R845 case-value is scalar-constant-expr
 */
 	case-value :
-		scalar-constant-expr
+		expr
 	;
 
 /*
@@ -3573,21 +3484,21 @@ R831 cycle-stmt is CYCLE [ do-construct-name ]
 	R851 goto-stmt is GO TO label
 */
 	goto-stmt :
-		GO_TO label
+		GO_TO INT_LITERAL_CONSTANT
 	;
 
 /*
 	R852 computed-goto-stmt is GO TO ( label -list ) [ , ] scalar-int-expr
 */
 	computed-goto-stmt :
-		GO_TO '(' label-list ')' ',' ? scalar-int-expr
+		GO_TO '(' label-list ')' ',' ? expr
 	;
 
 /*
 R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 */
 	arithmetic-if-stmt :
-		IF '(' scalar-numeric-expr ')' label ',' label ',' label
+		IF '(' expr ')' INT_LITERAL_CONSTANT ',' INT_LITERAL_CONSTANT ',' INT_LITERAL_CONSTANT
 	;
 
 /*
@@ -3616,8 +3527,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	or scalar-int-constant-expr
 */
 	stop-code :
-		scalar-default-char-constant-expr
-	|	scalar-int-constant-expr
+		expr
 	;
 
 /*
@@ -3632,8 +3542,8 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	or ERRMSG = errmsg-variable
 */
 	sync-stat :
-		STAT '=' stat-variable
-	|	ERRMSG '=' errmsg-variable
+		STAT '=' variable
+	|	ERRMSG '=' variable
 	;
 	sync-stat-list :
 		sync-stat ( ',' sync-stat ) *
@@ -3651,7 +3561,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	or *
 */
 	image-set :
-		int-expr
+		expr
 	|	'*'
 	;
 
@@ -3666,7 +3576,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	R863 lock-stmt is LOCK ( lock-variable [ , lock-stat-list ] )
 */
 	lock-stmt :
-		LOCK '(' lock-variable ( ',' lock-stat-list ) ? ')'
+		LOCK '(' variable ( ',' lock-stat-list ) ? ')'
 	;
 
 /*
@@ -3674,7 +3584,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	or sync-stat
 */
 	lock-stat :
-		ACQUIRED_LOCK '=' scalar-logical-variable
+		ACQUIRED_LOCK '=' variable
 	|	sync-stat
 	;
 	lock-stat-list :
@@ -3685,15 +3595,14 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	R865 unlock-stmt is UNLOCK ( lock-variable [ , sync-stat-list ] )
 */
 	unlock-stmt :
-		UNLOCK '(' lock-variable ( ',' sync-stat-list ) ? ')'
+		UNLOCK '(' variable ( ',' sync-stat-list ) ? ')'
 	;
 
 /*
 	R866 lock-variable is scalar-variable
+	
+	not needed...
 */
-	lock-variable :
-		scalar-variable
-	;
 
 /***************
 	Clause 9:	
@@ -3707,22 +3616,21 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	io-unit :
 		file-unit-number
 	|	'*'
-	|	internal-file-variable
+	|	variable
 	;
 
 /*
 	R902 file-unit-number is scalar-int-expr
 */
 	file-unit-number :
-		scalar-int-expr
+		expr
 	;
 
 /*
 	R903 internal-file-variable is char-variable
+	
+	not needed...
 */
-	internal-file-variable :
-		char-variable
-	;
 
 /*
 	R904 open-stmt is OPEN ( connect-spec-list )
@@ -3755,25 +3663,25 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 */
 	connect-spec :
 		( UNIT '=' ) ? file-unit-number
-	|	ACCESS '=' scalar-default-char-expr
-	|	ACTION '=' scalar-default-char-expr
-	|	ASYNCHRONOUS '=' scalar-default-char-expr
-	|	BLANK '=' scalar-default-char-expr
-	|	DECIMAL '=' scalar-default-char-expr
-	|	DELIM '=' scalar-default-char-expr
-	|	ENCODING '=' scalar-default-char-expr
-	|	ERR '=' label
-	|	FILE '=' file-name-expr
-	|	FORM '=' scalar-default-char-expr
+	|	ACCESS '=' expr
+	|	ACTION '=' expr
+	|	ASYNCHRONOUS '=' expr
+	|	BLANK '=' expr
+	|	DECIMAL '=' expr
+	|	DELIM '=' expr
+	|	ENCODING '=' expr
+	|	ERR '=' INT_LITERAL_CONSTANT
+	|	FILE '=' expr
+	|	FORM '=' expr
 	|	IOMSG '=' iomsg-variable
-	|	IOSTAT '=' scalar-int-variable
-	|	NEWUNIT '=' scalar-int-variable
-	|	PAD '=' scalar-default-char-expr
-	|	POSITION '=' scalar-default-char-expr
-	|	RECL '=' scalar-int-expr
-	|	ROUND '=' scalar-default-char-expr
-	|	SIGN '=' scalar-default-char-expr
-	|	STATUS '=' scalar-default-char-expr
+	|	IOSTAT '=' variable
+	|	NEWUNIT '=' variable
+	|	PAD '=' expr
+	|	POSITION '=' expr
+	|	RECL '=' expr
+	|	ROUND '=' expr
+	|	SIGN '=' expr
+	|	STATUS '=' expr
 	;
 	connect-spec-list :
 		connect-spec ( ',' connect-spec ) *
@@ -3781,16 +3689,15 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 
 /*
 	R906 file-name-expr is scalar-default-char-expr
+	
+	not needed...
 */
-	file-name-expr :
-		scalar-default-char-expr
-	;
 
 /*
 	R907 iomsg-variable is scalar-default-char-variable
 */
 	iomsg-variable :
-		scalar-default-char-variable
+		variable
 	;
 
 /*
@@ -3809,10 +3716,10 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 */
 	close-spec :
 		( UNIT '=' ) ? file-unit-number
-	|	IOSTAT '=' scalar-int-variable
+	|	IOSTAT '=' variable
 	|	IOMSG '=' iomsg-variable
-	|	ERR '=' label
-	|	STATUS '=' scalar-default-char-expr
+	|	ERR '=' INT_LITERAL_CONSTANT
+	|	STATUS '=' expr
 	;
 	close-spec-list :
 		close-spec ( ',' close-spec ) *
@@ -3844,46 +3751,46 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 /*
 	R913 io-control-spec is [ UNIT = ] io-unit
 	or [ FMT = ] format
-	or [ NML = ] namelist-group-name
-	or ADVANCE = scalar-default-char-expr
-	or ASYNCHRONOUS = scalar-default-char-constant-expr
-	or BLANK = scalar-default-char-expr
-	or DECIMAL = scalar-default-char-expr
-	or DELIM = scalar-default-char-expr
+	or [ NML = ] NAME_LITERAL
+	or ADVANCE = expr
+	or ASYNCHRONOUS = expr
+	or BLANK = expr
+	or DECIMAL = expr
+	or DELIM = expr
 	or END = label
 	or EOR = label
 	or ERR = label
 	or ID = id-variable
 	or IOMSG = iomsg-variable
-	or IOSTAT = scalar-int-variable
-	or PAD = scalar-default-char-expr
-	or POS = scalar-int-expr
-	or REC = scalar-int-expr
-	or ROUND = scalar-default-char-expr
-	or SIGN = scalar-default-char-expr
-	or SIZE = scalar-int-variable
+	or IOSTAT = variable
+	or PAD = expr
+	or POS = expr
+	or REC = expr
+	or ROUND = expr
+	or SIGN = expr
+	or SIZE = variable
 */
 	io-control-spec :
 		( UNIT '=' ) ? io-unit
 	|	( FMT '=' ) ? format
 	|	( NML '=' ) ? NAME_LITERAL
-	|	ADVANCE '=' scalar-default-char-expr
-	|	ASYNCHRONOUS '=' scalar-default-char-constant-expr
-	|	BLANK '=' scalar-default-char-expr
-	|	DECIMAL '=' scalar-default-char-expr
-	|	DELIM '=' scalar-default-char-expr
-	|	END '=' label
-	|	EOR '=' label
-	|	ERR '=' label
-	|	ID '=' id-variable
+	|	ADVANCE '=' expr
+	|	ASYNCHRONOUS '=' expr
+	|	BLANK '=' expr
+	|	DECIMAL '=' expr
+	|	DELIM '=' expr
+	|	END '=' INT_LITERAL_CONSTANT
+	|	EOR '=' INT_LITERAL_CONSTANT
+	|	ERR '=' INT_LITERAL_CONSTANT
+	|	ID '=' variable
 	|	IOMSG '=' iomsg-variable
-	|	IOSTAT '=' scalar-int-variable
-	|	PAD '=' scalar-default-char-expr
-	|	POS '=' scalar-int-expr
-	|	REC '=' scalar-int-expr
-	|	ROUND '=' scalar-default-char-expr
-	|	SIGN '=' scalar-default-char-expr
-	|	SIZE '=' scalar-int-variable
+	|	IOSTAT '=' variable
+	|	PAD '=' expr
+	|	POS '=' expr
+	|	REC '=' expr
+	|	ROUND '=' expr
+	|	SIGN '=' expr
+	|	SIZE '=' variable
 	;
 	io-control-spec-list :
 		io-control-spec ( ',' io-control-spec ) *
@@ -3891,10 +3798,9 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 
 /*
 	R914 id-variable is scalar-int-variable
+	
+	not needed...
 */
-	id-variable :
-		scalar-int-variable
-	;
 
 /*
 	R915 format is default-char-expr
@@ -3902,8 +3808,8 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	or *
 */
 	format :
-		default-char-expr
-	|	label
+		expr
+	|	INT_LITERAL_CONSTANT
 	|	'*'
 	;
 
@@ -3955,8 +3861,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	scalar-int-expr [ , scalar-int-expr ]
 */
 	io-implied-do-control :
-		do-variable '=' scalar-int-expr ','
-		scalar-int-expr ( ',' scalar-int-expr ) ?
+		NAME_LITERAL '=' expr ',' expr ( ',' expr ) ?
 	;
 
 /*
@@ -3986,12 +3891,12 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 */
 	wait-spec : 
 		( UNIT '=' ) ? file-unit-number
-	|	END '=' label
-	|	EOR '=' label
-	|	ERR '=' label
-	|	ID '=' scalar-int-expr
+	|	END '=' INT_LITERAL_CONSTANT
+	|	EOR '=' INT_LITERAL_CONSTANT
+	|	ERR '=' INT_LITERAL_CONSTANT
+	|	ID '=' expr
 	|	IOMSG '=' iomsg-variable
-	|	IOSTAT '=' scalar-int-variable
+	|	IOSTAT '=' variable
 	;
 	wait-spec-list :
 		wait-spec ( ',' wait-spec ) *
@@ -4033,8 +3938,8 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	position-spec :
 		( UNIT '=' ) ? file-unit-number
 	|	IOMSG '=' iomsg-variable
-	|	IOSTAT '=' scalar-int-variable
-	|	ERR '=' label
+	|	IOSTAT '=' variable
+	|	ERR '=' INT_LITERAL_CONSTANT
 	;
 	position-spec-list :
 		position-spec ( ',' position-spec ) *
@@ -4058,9 +3963,9 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 */
 	flush-spec : 
 		( UNIT '=' ) ? file-unit-number
-	|	IOSTAT '=' scalar-int-variable
+	|	IOSTAT '=' variable
 	|	IOMSG '=' iomsg-variable
-	|	ERR '=' label
+	|	ERR '=' INT_LITERAL_CONSTANT
 	;
 	flush-spec-list :
 		flush-spec ( ',' flush-spec ) *
@@ -4073,7 +3978,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 */
 	inquire-stmt :
 		INQUIRE '(' inquire-spec-list ')'
-	|	INQUIRE '(' IOLENGTH '=' scalar-int-variable ')' output-item-list
+	|	INQUIRE '(' IOLENGTH '=' variable ')' output-item-list
 	;
 
 /*
@@ -4116,41 +4021,41 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 */
 	inquire-spec :
 		( UNIT '=' ) ? file-unit-number
-	|	FILE '=' file-name-expr
-	|	ACCESS '=' scalar-default-char-variable
-	|	ACTION '=' scalar-default-char-variable
-	|	ASYNCHRONOUS '=' scalar-default-char-variable
-	|	BLANK '=' scalar-default-char-variable
-	|	DECIMAL '=' scalar-default-char-variable
-	|	DELIM '=' scalar-default-char-variable
-	|	DIRECT '=' scalar-default-char-variable
-	|	ENCODING '=' scalar-default-char-variable
-	|	ERR '=' label
-	|	EXIST '=' scalar-logical-variable
-	|	FORM '=' scalar-default-char-variable
-	|	FORMATTED '=' scalar-default-char-variable
-	|	ID '=' scalar-int-expr
+	|	FILE '=' expr
+	|	ACCESS '=' variable
+	|	ACTION '=' variable
+	|	ASYNCHRONOUS '=' variable
+	|	BLANK '=' variable
+	|	DECIMAL '=' variable
+	|	DELIM '=' variable
+	|	DIRECT '=' variable
+	|	ENCODING '=' variable
+	|	ERR '=' INT_LITERAL_CONSTANT
+	|	EXIST '=' variable
+	|	FORM '=' variable
+	|	FORMATTED '=' variable
+	|	ID '=' expr
 	|	IOMSG '=' iomsg-variable
-	|	IOSTAT '=' scalar-int-variable
-	|	NAME_KEYWORD '=' scalar-default-char-variable
-	|	NAMED '=' scalar-logical-variable
-	|	NEXTREC '=' scalar-int-variable
-	|	NUMBER '=' scalar-int-variable
-	|	OPENED '=' scalar-logical-variable
-	|	PAD '=' scalar-default-char-variable
-	|	PENDING '=' scalar-logical-variable
-	|	POS '=' scalar-int-variable
-	|	POSITION '=' scalar-default-char-variable
-	|	READ '=' scalar-default-char-variable
-	|	READWRITE '=' scalar-default-char-variable
-	|	RECL '=' scalar-int-variable
-	|	ROUND '=' scalar-default-char-variable
-	|	SEQUENTIAL '=' scalar-default-char-variable
-	|	SIGN '=' scalar-default-char-variable
-	|	SIZE '=' scalar-int-variable
-	|	STREAM '=' scalar-default-char-variable
-	|	UNFORMATTED '=' scalar-default-char-variable
-	|	WRITE '=' scalar-default-char-variable
+	|	IOSTAT '=' variable
+	|	NAME_KEYWORD '=' variable
+	|	NAMED '=' variable
+	|	NEXTREC '=' variable
+	|	NUMBER '=' variable
+	|	OPENED '=' variable
+	|	PAD '=' variable
+	|	PENDING '=' variable
+	|	POS '=' variable
+	|	POSITION '=' variable
+	|	READ '=' variable
+	|	READWRITE '=' variable
+	|	RECL '=' variable
+	|	ROUND '=' variable
+	|	SEQUENTIAL '=' variable
+	|	SIGN '=' variable
+	|	SIZE '=' variable
+	|	STREAM '=' variable
+	|	UNFORMATTED '=' variable
+	|	WRITE '=' variable
 	;
 	inquire-spec-list :
 		inquire-spec ( ',' inquire-spec ) *
@@ -4382,10 +4287,9 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 
 /*
 	R1022 hex-digit-string is hex-digit [ hex-digit ] ...
+	
+	not needed...
 */
-	hex-digit-string :
-		HEX_DIGIT +
-	;
 
 /***************
 	Clause 11:	
@@ -4493,7 +4397,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 */
 	rename :
 		NAME_LITERAL '=' '>' NAME_LITERAL
-	|	OPERATOR '(' local-defined-operator ')' '=' '>'	OPERATOR '(' use-defined-operator ')'
+	|	OPERATOR '(' defined-operator ')' '=' '>'	OPERATOR '(' defined-operator ')'
 	;
 	rename-list :
 		rename ( ',' rename ) *
@@ -4523,20 +4427,16 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 /*
 	R1114 local-defined-operator is defined-unary-op
 	or defined-binary-op
+	
+	not needed...
 */
-	local-defined-operator :
-		defined-unary-op
-	|	defined-binary-op
-	;
 
 /*
 	R1115 use-defined-operator is defined-unary-op
 	or defined-binary-op
+	
+	not needed...
 */
-	use-defined-operator :
-		defined-unary-op
-	|	defined-binary-op
-	;
 
 /*
 	R1116 submodule is submodule-stmt
@@ -4712,7 +4612,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	or declaration-type-spec
 */
 	proc-interface :
-		interface-name
+		NAME_LITERAL
 	|	declaration-type-spec
 	;
 
@@ -4745,10 +4645,9 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 
 /*
 	R1215 interface-name is name
+	
+	not needed...
 */
-	interface-name :
-		name
-	;
 
 /*
 	R1216 proc-pointer-init is null-init
@@ -4802,7 +4701,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	R1222 actual-arg-spec is [ keyword = ] actual-arg
 */
 	actual-arg-spec :
-		( keyword '=' ) ? actual-arg
+		( NAME_LITERAL '=' ) ? actual-arg
 	;
 	actual-arg-spec-list :
 		actual-arg-spec ( ',' actual-arg-spec ) *
@@ -4827,7 +4726,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	R1224 alt-return-spec is * label
 */
 	alt-return-spec :
-		'*' label
+		'*' INT_LITERAL_CONSTANT
 	;
 
 /*
@@ -4874,7 +4773,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	( [ dummy-arg-name-list ] ) [ sufix ]
 */
 	function-stmt : 
-		prefix ? FUNCTION NAME_LITERAL '(' dummy-arg-name-list ? ')' sufix ?
+		prefix ? FUNCTION NAME_LITERAL '(' name-list ? ')' sufix ?
 	;
 
 /*
@@ -4886,13 +4785,9 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 
 /*
 	R1230 dummy-arg-name is name
+	
+	not needed...
 */
-	dummy-arg-name :
-		name
-	;
-	dummy-arg-name-list :
-		dummy-arg-name ( ',' dummy-arg-name ) *
-	;
 
 /*
 	R1231 sufix is proc-language-binding-spec [ RESULT ( result-name ) ]
@@ -4939,7 +4834,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	or *
 */
 	dummy-arg :
-		dummy-arg-name
+		NAME_LITERAL
 	|	'*'
 	;
 	dummy-arg-list :
@@ -4993,7 +4888,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	R1241 return-stmt is RETURN [ scalar-int-expr ]
 */
 	return-stmt :
-		RETURN scalar-int-expr ?
+		RETURN expr ?
 	;
 
 /*
@@ -5007,5 +4902,5 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	R1243 stmt-function-stmt is function-name ( [ dummy-arg-name-list ] ) = scalar-expr
 */
 	stmt-function-stmt :
-		NAME_LITERAL '(' dummy-arg-name-list ')' '=' scalar-expr
+		NAME_LITERAL '(' name-list ')' '=' expr
 	;
