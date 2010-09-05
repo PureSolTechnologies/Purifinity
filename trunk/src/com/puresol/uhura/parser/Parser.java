@@ -19,4 +19,8 @@ public interface Parser extends Serializable {
 
 	public ParserTable getParserTable();
 
+	void setBacktrackEnabled(boolean backtrackEnabled);
+
+	boolean isBacktrackEnabled();
+
 }

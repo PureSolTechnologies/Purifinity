@@ -16,7 +16,9 @@ import com.puresol.uhura.lexer.Token;
 import com.puresol.uhura.lexer.TokenStream;
 import com.puresol.uhura.parser.AbstractParser;
 import com.puresol.uhura.parser.ParserException;
+import com.puresol.uhura.parser.parsetable.ActionType;
 import com.puresol.uhura.parser.parsetable.ParserAction;
+import com.puresol.uhura.parser.parsetable.ParserActionSet;
 import com.puresol.uhura.parser.parsetable.ParserTable;
 
 public abstract class AbstractLRParser extends AbstractParser {
@@ -26,7 +28,9 @@ public abstract class AbstractLRParser extends AbstractParser {
 	private final static Logger logger = Logger
 			.getLogger(AbstractLRParser.class);
 
+	private boolean backtrackEnabled = false;
 	private ParserTable parserTable;
+	private final Stack<BacktrackLocation> backtrackStack = new Stack<BacktrackLocation>();
 	private final Stack<Integer> stateStack = new Stack<Integer>();
 	private final Stack<AST> treeStack = new Stack<AST>();
 	private int streamPosition = 0;
@@ -40,6 +44,23 @@ public abstract class AbstractLRParser extends AbstractParser {
 	protected abstract void calculateParserTable() throws GrammarException;
 
 	/**
+	 * @return the backtrackEnabled
+	 */
+	@Override
+	public boolean isBacktrackEnabled() {
+		return backtrackEnabled;
+	}
+
+	/**
+	 * @param backtrackEnabled
+	 *            the backtrackEnabled to set
+	 */
+	@Override
+	public void setBacktrackEnabled(boolean backtrackEnabled) {
+		this.backtrackEnabled = backtrackEnabled;
+	}
+
+	/**
 	 * @param parserTable
 	 *            the parserTable to set
 	 */
@@ -50,6 +71,50 @@ public abstract class AbstractLRParser extends AbstractParser {
 		}
 	}
 
+	/**
+	 * @return the streamPosition
+	 */
+	protected int getStreamPosition() {
+		return streamPosition;
+	}
+
+	/**
+	 * @param streamPosition
+	 *            the streamPosition to set
+	 */
+	protected void setStreamPosition(int streamPosition) {
+		this.streamPosition = streamPosition;
+	}
+
+	/**
+	 * @return the stateStack
+	 */
+	protected Stack<Integer> getStateStack() {
+		return stateStack;
+	}
+
+	/**
+	 * @return the treeStack
+	 */
+	protected Stack<AST> getTreeStack() {
+		return treeStack;
+	}
+
+	/**
+	 * @return the stepCounter
+	 */
+	protected int getStepCounter() {
+		return stepCounter;
+	}
+
+	/**
+	 * @param stepCounter
+	 *            the stepCounter to set
+	 */
+	protected void setStepCounter(int stepCounter) {
+		this.stepCounter = stepCounter;
+	}
+
 	@Override
 	public ParserTable getParserTable() {
 		return parserTable;
@@ -57,10 +122,14 @@ public abstract class AbstractLRParser extends AbstractParser {
 
 	@Override
 	public AST parse(TokenStream tokenStream) throws ParserException {
+		setTokenStream(tokenStream);
+		reset();
+		return parse();
+	}
+
+	protected AST parse() throws ParserException {
 		Token token = null;
 		try {
-			setTokenStream(tokenStream);
-			reset();
 			boolean accepted = false;
 			do {
 				stepCounter++;
@@ -75,8 +144,9 @@ public abstract class AbstractLRParser extends AbstractParser {
 					token = null;
 					construction = FinishConstruction.getInstance();
 				}
-				ParserAction action = parserTable.getAction(stateStack.peek(),
-						construction);
+				ParserActionSet actionSet = parserTable.getActionSet(
+						stateStack.peek(), construction);
+				ParserAction action = getAction(actionSet);
 				switch (action.getAction()) {
 				case SHIFT:
 					shift(action, token);
@@ -109,12 +179,49 @@ public abstract class AbstractLRParser extends AbstractParser {
 	 * This method is called just before running the parser to reset all
 	 * internal values and to clean all stacks.
 	 */
-	private void reset() {
+	protected void reset() {
 		treeStack.clear();
 		stateStack.clear();
 		streamPosition = 0;
 		stepCounter = 0;
 		stateStack.push(0);
+	}
+
+	protected ParserAction getAction(ParserActionSet actionSet)
+			throws GrammarException {
+		if (actionSet.getActionNumber() == 1) {
+			return actionSet.getAction();
+		}
+		if (!isBacktrackEnabled()) {
+			logger.trace("Action set '" + actionSet
+					+ "' is ambiguous and back tracking is disabled!");
+			throw new GrammarException("Grammar is ambiguous!");
+		}
+		if ((!backtrackStack.isEmpty())
+				&& (backtrackStack.peek().getStep() == stepCounter)) {
+			if (logger.isTraceEnabled()) {
+				logger.trace("Action set '"
+						+ actionSet
+						+ "' is ambiguous and back tracking was performed already. Trying new alternative...");
+			}
+			BacktrackLocation location = backtrackStack.pop();
+			if (location.getLastAlternative() + 1 >= actionSet
+					.getActionNumber()) {
+				logger.trace("No alternative left. Abort.");
+				return new ParserAction(ActionType.ERROR, -1);
+			}
+			backtrackStack.push(new BacktrackLocation(stepCounter, stateStack
+					.peek(), location.getLastAlternative() + 1));
+			return actionSet.getAction(location.getLastAlternative() + 1);
+		}
+		if (logger.isTraceEnabled()) {
+			logger.trace("Action set '"
+					+ actionSet
+					+ "' is ambiguous. Installing back tracking location in stack...");
+		}
+		backtrackStack.push(new BacktrackLocation(stepCounter, stateStack
+				.peek(), 0));
+		return actionSet.getAction(0);
 	}
 
 	/**
@@ -125,13 +232,13 @@ public abstract class AbstractLRParser extends AbstractParser {
 	 * @param token
 	 *            is the current token in token stream.
 	 */
-	private void shift(ParserAction action, Token token) {
+	protected void shift(ParserAction action, Token token) {
 		treeStack.push(new AST(token));
 		stateStack.push(action.getParameter());
 		streamPosition++;
 	}
 
-	private void reduce(ParserAction action) throws ParserException {
+	protected void reduce(ParserAction action) throws ParserException {
 		try {
 			Production production = getGrammar().getProductions().get(
 					action.getParameter());
@@ -180,15 +287,44 @@ public abstract class AbstractLRParser extends AbstractParser {
 	 * @return True is returned if all conditions are met for finishing the
 	 *         parser.
 	 */
-	private boolean accept() {
+	protected boolean accept() {
 		if ((treeStack.size() == 1) && (stateStack.size() == 2)) {
 			return true;
 		}
 		return false;
 	}
 
-	private void error(Token token) throws ParserException {
-		throw new ParserException("Error during parsing!", token);
+	protected void error(Token token) throws ParserException {
+		if ((!backtrackEnabled) || (backtrackStack.isEmpty())) {
+			if (!backtrackEnabled) {
+				logger.trace("No valid action available and back tracking is disabled. Aborting...");
+			} else {
+				logger.trace("No valid action available and back tracking stack is empty. Aborting...");
+			}
+			throw new ParserException(
+					"Error! Could not parse the token stream!", token);
+		}
+		logger.trace("No valid action available. Perform back tracking...");
+		rewindTreeStack(backtrackStack.peek().getStep());
+		while (treeStack.size() < stateStack.size()) {
+			stateStack.pop();
+		}
+		stateStack.push(backtrackStack.peek().getStateId());
+	}
+
+	protected void rewindTreeStack(int targetStep) {
+		while (stepCounter > targetStep) {
+			stepBackTreeStack();
+		}
+	}
+
+	protected void stepBackTreeStack() {
+		AST ast = treeStack.pop();
+		if (ast.getChildren().size() > 0) {
+			for (AST child : ast.getChildren()) {
+				treeStack.push(child);
+			}
+		}
 	}
 
 	@Override

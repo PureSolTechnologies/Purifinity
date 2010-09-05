@@ -27,4 +27,16 @@ public class RecursiveDescentParser extends AbstractParser {
 		return null;
 	}
 
+	@Override
+	public void setBacktrackEnabled(boolean backtrackEnabled) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean isBacktrackEnabled() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }
