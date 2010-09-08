@@ -31,6 +31,7 @@ public abstract class AbstractLRParser extends AbstractParser {
 	private boolean backtrackEnabled = false;
 	private ParserTable parserTable;
 	private final Stack<BacktrackLocation> backtrackStack = new Stack<BacktrackLocation>();
+
 	private final Stack<Integer> stateStack = new Stack<Integer>();
 	private final Stack<AST> treeStack = new Stack<AST>();
 	private int streamPosition = 0;
@@ -38,6 +39,8 @@ public abstract class AbstractLRParser extends AbstractParser {
 
 	public AbstractLRParser(Grammar grammar) throws GrammarException {
 		super(grammar);
+		setBacktrackEnabled(Boolean.valueOf((String) grammar.getOptions().get(
+				"parser.backtracking")));
 		calculateParserTable();
 	}
 
@@ -198,7 +201,7 @@ public abstract class AbstractLRParser extends AbstractParser {
 			throw new GrammarException("Grammar is ambiguous!");
 		}
 		if ((!backtrackStack.isEmpty())
-				&& (backtrackStack.peek().getStep() == stepCounter)) {
+				&& (backtrackStack.peek().getStepCounter() == stepCounter)) {
 			if (logger.isTraceEnabled()) {
 				logger.trace("Action set '"
 						+ actionSet
@@ -210,8 +213,7 @@ public abstract class AbstractLRParser extends AbstractParser {
 				logger.trace("No alternative left. Abort.");
 				return new ParserAction(ActionType.ERROR, -1);
 			}
-			backtrackStack.push(new BacktrackLocation(stepCounter, stateStack
-					.peek(), location.getLastAlternative() + 1));
+			addBacktrackLocation(location.getLastAlternative() + 1);
 			return actionSet.getAction(location.getLastAlternative() + 1);
 		}
 		if (logger.isTraceEnabled()) {
@@ -219,9 +221,21 @@ public abstract class AbstractLRParser extends AbstractParser {
 					+ actionSet
 					+ "' is ambiguous. Installing back tracking location in stack...");
 		}
-		backtrackStack.push(new BacktrackLocation(stepCounter, stateStack
-				.peek(), 0));
+		addBacktrackLocation(0);
 		return actionSet.getAction(0);
+	}
+
+	private void addBacktrackLocation(int usedAlternative) {
+		Stack<Integer> backtrackStates = new Stack<Integer>();
+		for (Integer state : stateStack) {
+			backtrackStates.push(new Integer(state));
+		}
+		Stack<AST> backtrackTrees = new Stack<AST>();
+		for (AST tree : treeStack) {
+			backtrackTrees.push(tree.clone());
+		}
+		backtrackStack.push(new BacktrackLocation(backtrackStates,
+				backtrackTrees, streamPosition, stepCounter, usedAlternative));
 	}
 
 	/**
@@ -305,29 +319,13 @@ public abstract class AbstractLRParser extends AbstractParser {
 					"Error! Could not parse the token stream!", token);
 		}
 		logger.trace("No valid action available. Perform back tracking...");
-		rewindTreeStack(backtrackStack.peek().getStep());
-		while (treeStack.size() < stateStack.size()) {
-			stateStack.pop();
-		}
-		stateStack.push(backtrackStack.peek().getStateId());
-	}
-
-	protected void rewindTreeStack(int targetStep) {
-		while (stepCounter > targetStep) {
-			stepBackTreeStack();
-		}
-		stepCounter--;
-	}
-
-	protected void stepBackTreeStack() {
-		AST ast = treeStack.pop();
-		if (ast.getChildren().size() > 0) {
-			for (AST child : ast.getChildren()) {
-				treeStack.push(child);
-			}
-		} else {
-			streamPosition--;
-		}
+		BacktrackLocation backtrackLocation = backtrackStack.peek();
+		streamPosition = backtrackLocation.getStreamPosition();
+		stepCounter = backtrackLocation.getStepCounter();
+		treeStack.clear();
+		treeStack.addAll(backtrackLocation.getTreeStack());
+		stateStack.clear();
+		stateStack.addAll(backtrackLocation.getStateStack());
 		stepCounter--;
 	}
 

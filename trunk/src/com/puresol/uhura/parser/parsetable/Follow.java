@@ -19,7 +19,7 @@ import com.puresol.uhura.grammar.production.Production;
  * 1) Platzieren Sie $ in FOLLOW(S), wobei S das Startsymbol und $ die rechte
  * Endmarkierung fuer die Eingabe sind.
  * 
- * 2) Gibt es eine Produktion A --> alpha A beta, ist der gesamte Inhalt von
+ * 2) Gibt es eine Produktion A --> alpha B beta, ist der gesamte Inhalt von
  * FIRST(beta) ausser epsilon in FOLLOW(B) enthalten.
  * 
  * 3) Gibt es eine Produktion A --> alpha B oder A --> alpha B beta, wobei
@@ -55,8 +55,16 @@ public class Follow implements Serializable {
 	private void calculate() {
 		initFollowMap();
 		addFinishToStart();
-		addFirsts();
-		addFollows();
+		iterate();
+	}
+
+	private void initFollowMap() {
+		for (Production production : grammar.getProductions().getList()) {
+			if (follow.get(production.getName()) == null) {
+				follow.put(production.getName(),
+						new CopyOnWriteArraySet<Construction>());
+			}
+		}
 	}
 
 	/**
@@ -74,83 +82,66 @@ public class Follow implements Serializable {
 				FinishConstruction.getInstance());
 	}
 
-	private void addFirsts() {
-		for (Production production : grammar.getProductions().getList()) {
-			addFirsts(production);
-		}
+	private void iterate() {
+		boolean changed;
+		do {
+			changed = false;
+			for (Production production : grammar.getProductions().getList()) {
+				if (iterate(production)) {
+					changed = true;
+				}
+			}
+		} while (changed);
 	}
 
 	/**
 	 * This is rule 2 from Dragon Book:
 	 * 
-	 * 2) Gibt es eine Produktion A --> alpha A beta, ist der gesamte Inhalt von
+	 * 2) Gibt es eine Produktion A --> alpha B beta, ist der gesamte Inhalt von
 	 * FIRST(beta) ausser epsilon in FOLLOW(B) enthalten.
 	 */
-	private void addFirsts(Production production) {
+	private boolean iterate(Production production) {
 		List<Construction> constructions = production.getConstructions();
-		for (int i = 0; i < constructions.size() - 1; i++) {
-			Construction construction = constructions.get(i);
-			if (construction.isTerminal()) {
-				continue;
-			}
-			String constructionName = construction.getName();
-			Construction nextConstruction = constructions.get(i + 1);
-			for (Construction follower : first.get(nextConstruction)) {
-				if (!follower.equals(EmptyConstruction.getInstance())) {
-					follow.get(constructionName).add(follower);
-				}
-			}
-		}
-	}
-
-	private void addFollows() {
-		for (Production production : grammar.getProductions().getList()) {
-			addFollows(production);
-		}
-	}
-
-	/**
-	 * This is rule 3 from Dragon Book:
-	 * 
-	 * 3) Gibt es eine Produktion A --> alpha B oder A --> alpha B beta, wobei
-	 * FIRST(beta) epsilon enthaelt, ist der gesamt Inhalt von FOLLOW(A) auch in
-	 * FOLLOW(B) enthalten.
-	 * 
-	 * @param production
-	 */
-	private void addFollows(Production production) {
-		List<Construction> constructions = production.getConstructions();
+		boolean changed = false;
+		/*
+		 * Search production for non-terminals...
+		 */
 		for (int i = 0; i < constructions.size(); i++) {
 			Construction construction = constructions.get(i);
 			if (construction.isTerminal()) {
 				continue;
 			}
-			Set<Construction> productionFollow = follow.get(production
-					.getName());
-			if (productionFollow == null) {
-				continue;
-			}
-			if (i + 1 == constructions.size()) {
-				follow.get(construction.getName()).addAll(productionFollow);
-			} else if (i + 2 == constructions.size()) {
-				Construction nextConstruction = constructions.get(i + 1);
-				if (first.get(nextConstruction).contains(
-						EmptyConstruction.getInstance())) {
-					follow.get(construction.getName()).addAll(productionFollow);
+			Set<Construction> followSet = follow.get(construction.getName());
+			int startSize = followSet.size();
+			/*
+			 * For the found non-terminal find the following constructions by
+			 * first sets.
+			 */
+			if (i < constructions.size() - 1) {
+				for (int j = i + 1; j < constructions.size(); j++) {
+					Construction followingConstruction = constructions.get(j);
+					Set<Construction> firstSet = first
+							.get(followingConstruction);
+					for (Construction follower : firstSet) {
+						if (!follower.equals(EmptyConstruction.getInstance())) {
+							followSet.add(follower);
+						}
+					}
+					if (!firstSet.contains(EmptyConstruction.getInstance())) {
+						break;
+					}
+					if (j == constructions.size() - 1) {
+						followSet.addAll(follow.get(production.getName()));
+					}
 				}
+			} else {
+				followSet.addAll(follow.get(production.getName()));
+			}
+			if (startSize < followSet.size()) {
+				changed = true;
 			}
 		}
-	}
-
-	private void initFollowMap() {
-		for (Production production : grammar.getProductions().getList()) {
-			String productionName = production.getName();
-			Set<Construction> set = follow.get(productionName);
-			if (set == null) {
-				follow.put(productionName,
-						new CopyOnWriteArraySet<Construction>());
-			}
-		}
+		return changed;
 	}
 
 	/**

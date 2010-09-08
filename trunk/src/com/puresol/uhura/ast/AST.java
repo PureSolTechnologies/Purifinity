@@ -1,6 +1,7 @@
 package com.puresol.uhura.ast;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -19,7 +20,7 @@ import com.puresol.uhura.lexer.Token;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class AST implements Tree<AST>, Serializable {
+public class AST implements Tree<AST>, Serializable, Cloneable {
 
 	private static final long serialVersionUID = -651453440127029204L;
 
@@ -222,5 +223,42 @@ public class AST implements Tree<AST>, Serializable {
 		TextWalkerClient textClient = new TextWalkerClient();
 		treeWalker.walk(textClient);
 		return textClient.getText();
+	}
+
+	@Override
+	public AST clone() {
+		try {
+			AST cloned = (AST) super.clone();
+
+			Field name = cloned.getClass().getDeclaredField("name");
+			name.setAccessible(true);
+			name.set(cloned, this.name);
+
+			Field token = cloned.getClass().getDeclaredField("token");
+			token.setAccessible(true);
+			token.set(cloned, this.token);
+
+			Field children = cloned.getClass().getDeclaredField("children");
+			children.setAccessible(true);
+			children.set(cloned, new CopyOnWriteArrayList<AST>());
+
+			for (AST child : this.children) {
+				cloned.children.add(child);
+			}
+
+			cloned.node = this.node;
+			cloned.stackingAllowed = this.stackingAllowed;
+			return cloned;
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException(e.getMessage());
+		} catch (SecurityException e) {
+			throw new RuntimeException(e.getMessage());
+		} catch (NoSuchFieldException e) {
+			throw new RuntimeException(e.getMessage());
+		} catch (IllegalArgumentException e) {
+			throw new RuntimeException(e.getMessage());
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException(e.getMessage());
+		}
 	}
 }

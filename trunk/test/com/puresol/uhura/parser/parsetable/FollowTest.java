@@ -48,9 +48,9 @@ public class FollowTest extends TestCase {
 
 		assertEquals(3, follow.get(productionS).size());
 		iterator = follow.get(productionS).iterator();
+		assertEquals(finish, iterator.next());
 		assertEquals(b, iterator.next());
 		assertEquals(c, iterator.next());
-		assertEquals(finish, iterator.next());
 	}
 
 	@Test
@@ -77,23 +77,23 @@ public class FollowTest extends TestCase {
 
 		assertEquals(3, follow.get(productionE).size());
 		Iterator<Construction> iterator = follow.get(productionE).iterator();
+		assertEquals(finish, iterator.next());
 		assertEquals(plus, iterator.next());
 		assertEquals(rParen, iterator.next());
-		assertEquals(finish, iterator.next());
 
 		assertEquals(4, follow.get(productionT).size());
 		iterator = follow.get(productionT).iterator();
-		assertEquals(star, iterator.next());
-		assertEquals(plus, iterator.next());
-		assertEquals(rParen, iterator.next());
 		assertEquals(finish, iterator.next());
+		assertEquals(plus, iterator.next());
+		assertEquals(star, iterator.next());
+		assertEquals(rParen, iterator.next());
 
 		assertEquals(4, follow.get(productionF).size());
 		iterator = follow.get(productionF).iterator();
-		assertEquals(star, iterator.next());
-		assertEquals(plus, iterator.next());
-		assertEquals(rParen, iterator.next());
 		assertEquals(finish, iterator.next());
+		assertEquals(plus, iterator.next());
+		assertEquals(star, iterator.next());
+		assertEquals(rParen, iterator.next());
 
 		assertEquals(1, follow.get(productionZ).size());
 		iterator = follow.get(productionZ).iterator();

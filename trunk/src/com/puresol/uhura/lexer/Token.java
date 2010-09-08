@@ -1,6 +1,7 @@
 package com.puresol.uhura.lexer;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
 
 import com.puresol.uhura.grammar.token.Visibility;
 
@@ -10,7 +11,7 @@ import com.puresol.uhura.grammar.token.Visibility;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class Token implements Serializable {
+public class Token implements Serializable, Cloneable {
 
 	private static final long serialVersionUID = -9005444686111333074L;
 
@@ -62,4 +63,36 @@ public class Token implements Serializable {
 	public String toString() {
 		return "\"" + text + "\" (" + name + ")";
 	}
+
+	@Override
+	public Token clone() {
+		try {
+			Token cloned = (Token) super.clone();
+
+			Field name = cloned.getClass().getDeclaredField("name");
+			name.setAccessible(true);
+			name.set(cloned, this.name);
+
+			Field text = cloned.getClass().getDeclaredField("text");
+			text.setAccessible(true);
+			text.set(cloned, this.text);
+
+			Field visibility = cloned.getClass().getDeclaredField("visibility");
+			visibility.setAccessible(true);
+			visibility.set(cloned, this.visibility);
+
+			return cloned;
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException(e.getMessage());
+		} catch (SecurityException e) {
+			throw new RuntimeException(e.getMessage());
+		} catch (NoSuchFieldException e) {
+			throw new RuntimeException(e.getMessage());
+		} catch (IllegalArgumentException e) {
+			throw new RuntimeException(e.getMessage());
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException(e.getMessage());
+		}
+	}
+
 }

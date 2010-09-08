@@ -22,7 +22,7 @@ public class LexerFactory {
 			Properties options = grammar.getOptions();
 			if (options.containsKey("lexer")) {
 				return (Lexer) Class.forName(options.getProperty("lexer"))
-						.getConstructor(Grammar.class).newInstance(options);
+						.getConstructor(Grammar.class).newInstance(grammar);
 			} else {
 				return new RegExpLexer(grammar);
 			}
