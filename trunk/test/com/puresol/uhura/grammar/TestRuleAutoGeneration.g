@@ -11,7 +11,7 @@ OPTIONS
 	lexer.case_sensitive=true;
 	
 	// parser is the class to be used for parsing
-	parser="com.puresol.uhura.parser.LR1Parser";
+	parser="com.puresol.uhura.parser.lr.LR1Parser";
 
 /*
  The next section is the HELPER section where all tokens are to be defined
@@ -45,17 +45,17 @@ TOKENS
  */
 PRODUCTIONS
 
-	_START_ : Expression ;
+	_START_ : Lists ;
 
-	Expression:
-		{add}				Expression '+' Term
-		|					Term [node=false]
+	OptionalList:
+		INTEGER_LITERAL *
 	;
-	Term:
-		{mult}				Term '*' Factor
-		|					Factor [node=false]
+
+	List:
+		INTEGER_LITERAL +
 	;
-	Factor:
-		{paren}				'(' Expression ')'
-		|					INTEGER_LITERAL [node=false]
+
+	OptionalPart:
+		INTEGER_LITERAL ?
 	;
+	

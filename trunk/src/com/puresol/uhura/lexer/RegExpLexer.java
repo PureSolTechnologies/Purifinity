@@ -60,7 +60,9 @@ public class RegExpLexer implements Lexer {
 			int len = 0;
 			do {
 				len = reader.read(chars);
-				text.append(chars, 0, len);
+				if (len > 0) {
+					text.append(chars, 0, len);
+				}
 			} while (len == chars.length);
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);

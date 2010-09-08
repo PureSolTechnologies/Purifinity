@@ -22,7 +22,7 @@ import com.puresol.uhura.lexer.Token;
 public class AST implements Tree<AST>, Serializable {
 
 	private static final long serialVersionUID = -651453440127029204L;
-	
+
 	private final String name;
 	private final Token token;
 	private AST parent = null;
@@ -72,11 +72,7 @@ public class AST implements Tree<AST>, Serializable {
 	 *            the parent to set
 	 */
 	public void setParent(AST parent) throws ASTException {
-		if (this.parent == null) {
-			this.parent = parent;
-		} else {
-			throw new ASTException("Parent was already set!");
-		}
+		this.parent = parent;
 	}
 
 	/**

@@ -54,8 +54,6 @@ public class First implements Serializable {
 	private void calculate() {
 		initFirstMap();
 		calculateFirstTerminals();
-		checkForEmptyConstructions();
-		addEmpty();
 	}
 
 	/**
@@ -63,8 +61,10 @@ public class First implements Serializable {
 	 */
 	private void initFirstMap() {
 		for (Production production : grammar.getProductions().getList()) {
-			first.put(production.getName(),
-					new CopyOnWriteArraySet<Construction>());
+			if (!first.containsKey(production.getName())) {
+				first.put(production.getName(),
+						new CopyOnWriteArraySet<Construction>());
+			}
 		}
 	}
 
@@ -86,104 +86,38 @@ public class First implements Serializable {
 	/**
 	 * This is rule 2 from Dragon Book:
 	 * 
-	 * 2) Wenn X ein Nichtterminal und X --> Y1 Y2 ... Yk eine Produktion fuer
-	 * ein beliebiges k>=1 ist, gehen Sie dagegen wie folgt vor: Platzieren Sie
-	 * a in FIRST(X), wenn fuer irgendein i gilt, dass a in FIRST(Yi) und
-	 * epsilon in allen FIRST(Y1),...,FIRST(Yi-1) ist, d.h. wenn Y1...Yi-1 -->
-	 * epsilon. Wenn epsilon fuer alle j=1,2,...,k in FIRST(Y1) ist, fuegen Sie
-	 * epsilon zu FIRST(X) hinzu. Zum Beispiel ist alles, was sich in FIRST(Y1)
-	 * befindet, mit Sicherheit auch in FIRST(X). Wird Y1 nicht nach epsilon
-	 * abgeleitet, fuegen wir FIRST(X) nichts mehr hinzu. Gilt dagegen Y1 -->
-	 * epsilon, fuegen wir FIRST(Y2) hinzu usw.
-	 * 
 	 * @param production
 	 * @return
 	 */
 	private boolean iterate(Production production) {
-		boolean changed = false;
-		for (Construction construction : production.getConstructions()) {
-			if (construction.isTerminal()) {
-				if (!first.get(production.getName()).contains(construction)) {
-					add(production.getName(), construction);
-					changed = true;
-				}
-				// terminal is found and there is nothing to proceed...
-				break;
-			}
-			if (construction.getName().equals(production.getName())) {
-				// don't do endless looping...
-				break;
-			}
-			boolean containsEmpty = false;
-			for (Construction current : first.get(construction.getName())) {
-				if (!current.equals(EmptyConstruction.getInstance())) {
-					if (!first.get(production.getName()).contains(current)) {
-						add(production.getName(), current);
-						changed = true;
-					}
-				} else {
-					containsEmpty = true;
-				}
-			}
-			if (!containsEmpty) {
-				break;
-			}
-		}
-		return changed;
-	}
-
-	/**
-	 * This is rule 2 from Dragon Book, too:
-	 * 
-	 * 2) Wenn X ein Nichtterminal und X --> Y1 Y2 ... Yk eine Produktion fuer
-	 * ein beliebiges k>=1 ist, gehen Sie dagegen wie folgt vor: Platzieren Sie
-	 * a in FIRST(X), wenn fuer irgendein i gilt, dass a in FIRST(Yi) und
-	 * epsilon in allen FIRST(Y1),...,FIRST(Yi-1) ist, d.h. wenn Y1...Yi-1 -->
-	 * epsilon. Wenn epsilon fuer alle j=1,2,...,k in FIRST(Y1) ist, fuegen Sie
-	 * epsilon zu FIRST(X) hinzu. Zum Beispiel ist alles, was sich in FIRST(Y1)
-	 * befindet, mit Sicherheit auch in FIRST(X). Wird Y1 nicht nach epsilon
-	 * abgeleitet, fuegen wir FIRST(X) nichts mehr hinzu. Gilt dagegen Y1 -->
-	 * epsilon, fuegen wir FIRST(Y2) hinzu usw.
-	 */
-	private void checkForEmptyConstructions() {
-		for (Production production : grammar.getProductions().getList()) {
-			boolean allEmpty = true;
+		Set<Construction> firstSet = first.get(production.getName());
+		int startLength = firstSet.size();
+		if (production.isEmpty()) {
+			/* rule 3 */
+			firstSet.add(EmptyConstruction.getInstance());
+		} else {
+			/* rule 2 */
 			for (Construction construction : production.getConstructions()) {
 				if (construction.isTerminal()) {
-					allEmpty = false;
+					firstSet.add(construction);
+					// terminal is found and there is nothing to proceed...
 					break;
 				}
-				if (!first.get(production.getName()).contains(
+				if (construction.getName().equals(production.getName())) {
+					// don't do endless looping...
+					break;
+				}
+				for (Construction firstConstruction : first.get(construction
+						.getName())) {
+					firstSet.add(firstConstruction);
+				}
+				if (!first.get(construction.getName()).contains(
 						EmptyConstruction.getInstance())) {
-					allEmpty = false;
 					break;
 				}
 			}
-			if (allEmpty) {
-				add(production.getName(), EmptyConstruction.getInstance());
-			}
 		}
-	}
-
-	/**
-	 * This method looks for all empty constructions and adds the empty
-	 * construction to the first set.
-	 * 
-	 * This is rule 3 from Dragon Book:
-	 * 
-	 * 3) Ist X --> epsilon eine Produktion, fuegen wir epsilon zu FIRST(X)
-	 * hinzu.
-	 */
-	private void addEmpty() {
-		for (Production production : grammar.getProductions().getList()) {
-			if (production.isEmpty()) {
-				add(production.getName(), EmptyConstruction.getInstance());
-			}
-		}
-	}
-
-	private void add(String productionName, Construction construction) {
-		first.get(productionName).add(construction);
+		return (startLength != firstSet.size());
 	}
 
 	/**

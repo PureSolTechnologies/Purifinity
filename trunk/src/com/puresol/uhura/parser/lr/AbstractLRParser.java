@@ -316,6 +316,7 @@ public abstract class AbstractLRParser extends AbstractParser {
 		while (stepCounter > targetStep) {
 			stepBackTreeStack();
 		}
+		stepCounter--;
 	}
 
 	protected void stepBackTreeStack() {
@@ -324,7 +325,10 @@ public abstract class AbstractLRParser extends AbstractParser {
 			for (AST child : ast.getChildren()) {
 				treeStack.push(child);
 			}
+		} else {
+			streamPosition--;
 		}
+		stepCounter--;
 	}
 
 	@Override

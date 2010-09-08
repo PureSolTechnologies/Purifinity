@@ -58,4 +58,64 @@ public class GrammarReaderTest extends TestCase {
 			fail("No exception was expected!");
 		}
 	}
+
+	@Test
+	public void testAutoConstructionOptionalList() {
+		try {
+			GrammarReader reader = new GrammarReader(new File(
+					"test/com/puresol/uhura/grammar/TestRuleAutoGeneration.g"));
+			assertTrue(reader.call());
+			Grammar grammar = reader.getGrammar();
+			assertTrue(GrammarPartTester.test(grammar, "OptionalList", ""));
+			assertTrue(GrammarPartTester.test(grammar, "OptionalList", "1"));
+			assertTrue(GrammarPartTester.test(grammar, "OptionalList", "1 2"));
+			assertTrue(GrammarPartTester.test(grammar, "OptionalList", "1 3"));
+		} catch (IOException e) {
+			e.printStackTrace();
+			fail("No exception was expected!");
+		} catch (GrammarException e) {
+			e.printStackTrace();
+			fail("No exception was expected!");
+		}
+	}
+
+	@Test
+	public void testAutoConstructionList() {
+		try {
+			GrammarReader reader = new GrammarReader(new File(
+					"test/com/puresol/uhura/grammar/TestRuleAutoGeneration.g"));
+			assertTrue(reader.call());
+			Grammar grammar = reader.getGrammar();
+			assertFalse(GrammarPartTester.test(grammar, "List", ""));
+			assertTrue(GrammarPartTester.test(grammar, "List", "1"));
+			assertTrue(GrammarPartTester.test(grammar, "List", "1 2"));
+			assertTrue(GrammarPartTester.test(grammar, "List", "1 3"));
+		} catch (IOException e) {
+			e.printStackTrace();
+			fail("No exception was expected!");
+		} catch (GrammarException e) {
+			e.printStackTrace();
+			fail("No exception was expected!");
+		}
+	}
+
+	@Test
+	public void testAutoConstructionOptionalPart() {
+		try {
+			GrammarReader reader = new GrammarReader(new File(
+					"test/com/puresol/uhura/grammar/TestRuleAutoGeneration.g"));
+			assertTrue(reader.call());
+			Grammar grammar = reader.getGrammar();
+			assertTrue(GrammarPartTester.test(grammar, "OptionalPart", ""));
+			assertTrue(GrammarPartTester.test(grammar, "OptionalPart", "1"));
+			assertFalse(GrammarPartTester.test(grammar, "OptionalPart", "1 2"));
+		} catch (IOException e) {
+			e.printStackTrace();
+			fail("No exception was expected!");
+		} catch (GrammarException e) {
+			e.printStackTrace();
+			fail("No exception was expected!");
+		}
+	}
+
 }
