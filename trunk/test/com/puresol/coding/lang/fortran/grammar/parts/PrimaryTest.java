@@ -14,6 +14,7 @@ public class PrimaryTest extends TestCase {
 	public void test() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
 		assertTrue(GrammarPartTester.test("primary", "VARIABLE"));
+		assertTrue(GrammarPartTester.test("primary", "(x)"));
 		assertTrue(GrammarPartTester.test("primary", "x"));
 
 		assertTrue(GrammarPartTester.test("primary", "1.0")); // constant
@@ -22,8 +23,8 @@ public class PrimaryTest extends TestCase {
 		assertTrue(GrammarPartTester.test("primary", "[ 1.0, 2.0 ]")); // array-constructor
 		assertTrue(GrammarPartTester.test("primary", "PERSON (12, 'Jones')")); // structure-constructor
 		assertTrue(GrammarPartTester.test("primary", "F (X, Y)")); // function-reference
-		assertTrue(GrammarPartTester.test("primary", "X%KIND")); // type-param-inquiry
-		assertTrue(GrammarPartTester.test("primary", "KIND")); // type-param-name
+		assertTrue(GrammarPartTester.test("primary", "X%TypeParamName")); // type-param-inquiry
+		assertTrue(GrammarPartTester.test("primary", "TypeParamName")); // type-param-name
 		assertTrue(GrammarPartTester.test("primary", "(S + T)")); // (expr)
 	}
 }

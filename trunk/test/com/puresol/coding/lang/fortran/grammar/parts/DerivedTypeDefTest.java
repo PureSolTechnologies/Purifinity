@@ -8,13 +8,14 @@ import junit.framework.TestCase;
 
 import com.puresol.coding.lang.fortran.grammar.GrammarPartTester;
 
-public class ExprTest extends TestCase {
+public class DerivedTypeDefTest extends TestCase {
 
 	@Test
 	public void test() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester.test("expr", "A"));
-		assertTrue(GrammarPartTester.test("expr", "A + B == C * D"));
+		assertTrue(GrammarPartTester.test("derived-type-def", "TYPE PERSON\n"
+				+ "INTEGER AGE\n" + "CHARACTER (LEN = 50) NAME\n"
+				+ "END TYPE PERSON"));
 	}
 
 }

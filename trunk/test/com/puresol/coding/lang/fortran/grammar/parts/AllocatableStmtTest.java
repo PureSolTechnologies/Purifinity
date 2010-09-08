@@ -8,13 +8,13 @@ import junit.framework.TestCase;
 
 import com.puresol.coding.lang.fortran.grammar.GrammarPartTester;
 
-public class ExprTest extends TestCase {
+public class AllocatableStmtTest extends TestCase {
 
 	@Test
 	public void test() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester.test("expr", "A"));
-		assertTrue(GrammarPartTester.test("expr", "A + B == C * D"));
+		assertTrue(GrammarPartTester.test("allocatable-stmt",
+				"ALLOCATABLE :: A (:, :), B, SCALAR"));
 	}
 
 }

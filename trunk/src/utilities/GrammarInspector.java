@@ -6,6 +6,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
 import com.puresol.coding.lang.fortran.grammar.FortranGrammar;
 import com.puresol.trees.TreePrinter;
 import com.puresol.uhura.grammar.Grammar;
@@ -22,6 +25,7 @@ public class GrammarInspector {
 
 	public static void main(String args[]) {
 		try {
+			Logger.getRootLogger().setLevel(Level.TRACE);
 			GrammarReader grammarReader = new GrammarReader(
 					new File(
 							"src/com/puresol/coding/lang/fortran/grammar/Fortran2008.g"));
@@ -32,6 +36,7 @@ public class GrammarInspector {
 			printer.close();
 
 			Grammar grammar = FortranGrammar.get();
+			grammar = grammar.createWithNewStartProduction("designator");
 			FileWriter writer = new FileWriter(new File(
 					"grammar_inspection/grammar.txt"));
 			writer.write(grammar.toString());
@@ -47,7 +52,6 @@ public class GrammarInspector {
 			writer.write(follow.toString());
 			writer.close();
 
-			grammar = grammar.createWithNewStartProduction("expr");
 			LR1ParserTable parserTable = new LR1ParserTable(grammar);
 			LR1StateTransitionGraph transitions = parserTable
 					.getTransitionGraph();
@@ -60,6 +64,9 @@ public class GrammarInspector {
 			for (int state = 0; state < transitions.getStateNumber(); state++) {
 				writer.write("-----------------------------------------------------------------------------\n");
 				writer.write("\n");
+				writer.write("================\n");
+				writer.write("State " + state + ":\n");
+				writer.write("================\n");
 				writer.write(transitions.getItemSet(state).toString());
 				writer.write("\n");
 				for (Construction construction : parserTable

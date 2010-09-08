@@ -21,11 +21,16 @@ import com.puresol.coding.lang.fortran.grammar.FortranGrammar;
 import com.puresol.uhura.ast.AST;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
+import com.puresol.uhura.lexer.Lexer;
 import com.puresol.uhura.lexer.LexerException;
+import com.puresol.uhura.lexer.LexerFactory;
+import com.puresol.uhura.lexer.LexerFactoryException;
 import com.puresol.uhura.lexer.RegExpLexer;
 import com.puresol.uhura.lexer.TokenStream;
 import com.puresol.uhura.parser.Parser;
 import com.puresol.uhura.parser.ParserException;
+import com.puresol.uhura.parser.ParserFactory;
+import com.puresol.uhura.parser.ParserFactoryException;
 import com.puresol.uhura.parser.lr.LR1Parser;
 
 public class FortranAnalyser {
@@ -44,9 +49,10 @@ public class FortranAnalyser {
 	public void parse() {
 		try {
 			Grammar grammar = FortranGrammar.get();
-			RegExpLexer lexer = new RegExpLexer(grammar);
+
+			Lexer lexer = LexerFactory.create(grammar);
 			TokenStream tokenStream = lexer.lex(new FileReader(file));
-			Parser parser = new LR1Parser(grammar);
+			Parser parser = ParserFactory.create(grammar);
 			AST ast = parser.parse(tokenStream);
 		} catch (ParserException e) {
 			// TODO Auto-generated catch block
@@ -54,10 +60,13 @@ public class FortranAnalyser {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (GrammarException e) {
+		} catch (LexerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (LexerException e) {
+		} catch (LexerFactoryException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParserFactoryException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

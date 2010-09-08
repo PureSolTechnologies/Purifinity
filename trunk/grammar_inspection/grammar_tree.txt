@@ -34,7 +34,7 @@
   |    |    |    |    |    |__id: IDENTIFIER "parser" (IDENTIFIER)
   |    |    |    |    |__id: EQUALS "=" (EQUALS)
   |    |    |    |    |__id: Literal null
-  |    |    |    |    |    |__id: STRING_LITERAL ""com.puresol.uhura.parser.lr.LR1Parser"" (STRING_LITERAL)
+  |    |    |    |    |    |__id: STRING_LITERAL ""com.puresol.uhura.parser.lr.SLR1Parser"" (STRING_LITERAL)
   |    |    |    |    |__id: SEMICOLON ";" (SEMICOLON)
   |    |__id: Helper null
   |    |    |__id: HELPER "HELPER" (HELPER)
@@ -57,28 +57,20 @@
   |    |    |    |    |    |    |    |__id: TokenConstruction null
   |    |    |    |    |    |    |    |    |__id: TokenConstruction null
   |    |    |    |    |    |    |    |    |    |__id: TokenConstruction null
-  |    |    |    |    |    |    |    |    |    |    |__id: TokenConstruction null
-  |    |    |    |    |    |    |    |    |    |    |    |__id: TokenConstruction null
-  |    |    |    |    |    |    |    |    |    |    |    |    |__id: TokenPart null
-  |    |    |    |    |    |    |    |    |    |    |    |    |    |__id: STRING_LITERAL ""("" (STRING_LITERAL)
-  |    |    |    |    |    |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
-  |    |    |    |    |    |    |    |    |    |    |    |__id: TokenPart null
-  |    |    |    |    |    |    |    |    |    |    |    |    |__id: IDENTIFIER "LETTER" (IDENTIFIER)
-  |    |    |    |    |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
   |    |    |    |    |    |    |    |    |    |    |__id: TokenPart null
-  |    |    |    |    |    |    |    |    |    |    |    |__id: STRING_LITERAL ""|"" (STRING_LITERAL)
+  |    |    |    |    |    |    |    |    |    |    |    |__id: STRING_LITERAL ""("" (STRING_LITERAL)
   |    |    |    |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
   |    |    |    |    |    |    |    |    |    |__id: TokenPart null
-  |    |    |    |    |    |    |    |    |    |    |__id: IDENTIFIER "DIGIT" (IDENTIFIER)
+  |    |    |    |    |    |    |    |    |    |    |__id: IDENTIFIER "LETTER" (IDENTIFIER)
   |    |    |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
   |    |    |    |    |    |    |    |    |__id: TokenPart null
   |    |    |    |    |    |    |    |    |    |__id: STRING_LITERAL ""|"" (STRING_LITERAL)
   |    |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
   |    |    |    |    |    |    |    |__id: TokenPart null
-  |    |    |    |    |    |    |    |    |__id: IDENTIFIER "UNDERSCORE" (IDENTIFIER)
+  |    |    |    |    |    |    |    |    |__id: IDENTIFIER "DIGIT" (IDENTIFIER)
   |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
   |    |    |    |    |    |    |__id: TokenPart null
-  |    |    |    |    |    |    |    |__id: STRING_LITERAL "")"" (STRING_LITERAL)
+  |    |    |    |    |    |    |    |__id: STRING_LITERAL ""|_)"" (STRING_LITERAL)
   |    |    |    |    |    |    |    |__id: OptionalQuantifier null
   |    |    |    |    |__id: SEMICOLON ";" (SEMICOLON)
   |    |    |    |__id: HelperDefinition null
@@ -100,107 +92,12 @@
   |    |    |    |    |    |    |    |__id: OptionalQuantifier null
   |    |    |    |    |__id: SEMICOLON ";" (SEMICOLON)
   |    |    |    |__id: HelperDefinition null
-  |    |    |    |    |__id: IDENTIFIER "LABEL" (IDENTIFIER)
-  |    |    |    |    |__id: COLON ":" (COLON)
-  |    |    |    |    |__id: TokenConstructions null
-  |    |    |    |    |    |__id: TokenConstruction null
-  |    |    |    |    |    |    |__id: TokenConstruction null
-  |    |    |    |    |    |    |    |__id: TokenPart null
-  |    |    |    |    |    |    |    |    |__id: IDENTIFIER "DIGIT" (IDENTIFIER)
-  |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
-  |    |    |    |    |    |    |__id: TokenPart null
-  |    |    |    |    |    |    |    |__id: STRING_LITERAL ""{1,5}"" (STRING_LITERAL)
-  |    |    |    |    |    |    |    |__id: OptionalQuantifier null
-  |    |    |    |    |__id: SEMICOLON ";" (SEMICOLON)
-  |    |    |    |__id: HelperDefinition null
   |    |    |    |    |__id: IDENTIFIER "HEX_DIGIT" (IDENTIFIER)
   |    |    |    |    |__id: COLON ":" (COLON)
   |    |    |    |    |__id: TokenConstructions null
   |    |    |    |    |    |__id: TokenConstruction null
   |    |    |    |    |    |    |__id: TokenPart null
   |    |    |    |    |    |    |    |__id: STRING_LITERAL ""[0-9A-F]"" (STRING_LITERAL)
-  |    |    |    |    |    |    |    |__id: OptionalQuantifier null
-  |    |    |    |    |__id: SEMICOLON ";" (SEMICOLON)
-  |    |    |    |__id: HelperDefinition null
-  |    |    |    |    |__id: IDENTIFIER "UNDERSCORE" (IDENTIFIER)
-  |    |    |    |    |__id: COLON ":" (COLON)
-  |    |    |    |    |__id: TokenConstructions null
-  |    |    |    |    |    |__id: TokenConstruction null
-  |    |    |    |    |    |    |__id: TokenPart null
-  |    |    |    |    |    |    |    |__id: STRING_LITERAL ""_"" (STRING_LITERAL)
-  |    |    |    |    |    |    |    |__id: OptionalQuantifier null
-  |    |    |    |    |__id: SEMICOLON ";" (SEMICOLON)
-  |    |    |    |__id: HelperDefinition null
-  |    |    |    |    |__id: IDENTIFIER "DELIMETERS" (IDENTIFIER)
-  |    |    |    |    |__id: COLON ":" (COLON)
-  |    |    |    |    |__id: TokenConstructions null
-  |    |    |    |    |    |__id: TokenConstruction null
-  |    |    |    |    |    |    |__id: TokenConstruction null
-  |    |    |    |    |    |    |    |__id: TokenConstruction null
-  |    |    |    |    |    |    |    |    |__id: TokenConstruction null
-  |    |    |    |    |    |    |    |    |    |__id: TokenConstruction null
-  |    |    |    |    |    |    |    |    |    |    |__id: TokenConstruction null
-  |    |    |    |    |    |    |    |    |    |    |    |__id: TokenConstruction null
-  |    |    |    |    |    |    |    |    |    |    |    |    |__id: TokenConstruction null
-  |    |    |    |    |    |    |    |    |    |    |    |    |    |__id: TokenConstruction null
-  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |__id: TokenConstruction null
-  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |__id: TokenConstruction null
-  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |__id: TokenConstruction null
-  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |__id: TokenConstruction null
-  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |__id: TokenConstruction null
-  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |__id: TokenConstruction null
-  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |__id: TokenConstruction null
-  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |__id: TokenConstruction null
-  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |__id: TokenPart null
-  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |__id: STRING_LITERAL ""("" (STRING_LITERAL)
-  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
-  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |__id: TokenPart null
-  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |__id: IDENTIFIER "LEFT_PARENTHESIS" (IDENTIFIER)
-  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
-  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |__id: TokenPart null
-  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |__id: STRING_LITERAL ""|"" (STRING_LITERAL)
-  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
-  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |__id: TokenPart null
-  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |__id: IDENTIFIER "RIGHT_PARENTHESIS" (IDENTIFIER)
-  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
-  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |__id: TokenPart null
-  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |__id: STRING_LITERAL ""|"" (STRING_LITERAL)
-  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
-  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |__id: TokenPart null
-  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |__id: IDENTIFIER "SLASH" (IDENTIFIER)
-  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
-  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |__id: TokenPart null
-  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |__id: STRING_LITERAL ""|"" (STRING_LITERAL)
-  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
-  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |__id: TokenPart null
-  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |__id: IDENTIFIER "LEFT_SQUARE_BRACKET" (IDENTIFIER)
-  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
-  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |__id: TokenPart null
-  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |__id: STRING_LITERAL ""|"" (STRING_LITERAL)
-  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
-  |    |    |    |    |    |    |    |    |    |    |    |    |    |__id: TokenPart null
-  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |__id: IDENTIFIER "RIGHT_SQUARE_BRACKET" (IDENTIFIER)
-  |    |    |    |    |    |    |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
-  |    |    |    |    |    |    |    |    |    |    |    |    |__id: TokenPart null
-  |    |    |    |    |    |    |    |    |    |    |    |    |    |__id: STRING_LITERAL ""|"" (STRING_LITERAL)
-  |    |    |    |    |    |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
-  |    |    |    |    |    |    |    |    |    |    |    |__id: TokenPart null
-  |    |    |    |    |    |    |    |    |    |    |    |    |__id: IDENTIFIER "LEFT_PARENTHESIS" (IDENTIFIER)
-  |    |    |    |    |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
-  |    |    |    |    |    |    |    |    |    |    |__id: TokenPart null
-  |    |    |    |    |    |    |    |    |    |    |    |__id: IDENTIFIER "SLASH" (IDENTIFIER)
-  |    |    |    |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
-  |    |    |    |    |    |    |    |    |    |__id: TokenPart null
-  |    |    |    |    |    |    |    |    |    |    |__id: STRING_LITERAL ""|"" (STRING_LITERAL)
-  |    |    |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
-  |    |    |    |    |    |    |    |    |__id: TokenPart null
-  |    |    |    |    |    |    |    |    |    |__id: IDENTIFIER "SLASH" (IDENTIFIER)
-  |    |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
-  |    |    |    |    |    |    |    |__id: TokenPart null
-  |    |    |    |    |    |    |    |    |__id: IDENTIFIER "RIGHT_PARENTHESIS" (IDENTIFIER)
-  |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
-  |    |    |    |    |    |    |__id: TokenPart null
-  |    |    |    |    |    |    |    |__id: STRING_LITERAL "")"" (STRING_LITERAL)
   |    |    |    |    |    |    |    |__id: OptionalQuantifier null
   |    |    |    |    |__id: SEMICOLON ";" (SEMICOLON)
   |    |    |    |__id: HelperDefinition null
@@ -337,81 +234,6 @@
   |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
   |    |    |    |    |    |    |__id: TokenPart null
   |    |    |    |    |    |    |    |__id: IDENTIFIER "REAL_LITERAL_CONSTANT" (IDENTIFIER)
-  |    |    |    |    |    |    |    |__id: OptionalQuantifier null
-  |    |    |    |    |__id: SEMICOLON ";" (SEMICOLON)
-  |    |    |    |__id: HelperDefinition null
-  |    |    |    |    |__id: IDENTIFIER "NAMED_CONSTANT" (IDENTIFIER)
-  |    |    |    |    |__id: COLON ":" (COLON)
-  |    |    |    |    |__id: TokenConstructions null
-  |    |    |    |    |    |__id: TokenConstruction null
-  |    |    |    |    |    |    |__id: TokenPart null
-  |    |    |    |    |    |    |    |__id: IDENTIFIER "NAME_LITERAL" (IDENTIFIER)
-  |    |    |    |    |    |    |    |__id: OptionalQuantifier null
-  |    |    |    |    |__id: SEMICOLON ";" (SEMICOLON)
-  |    |    |    |__id: HelperDefinition null
-  |    |    |    |    |__id: IDENTIFIER "IMAG_PART" (IDENTIFIER)
-  |    |    |    |    |__id: COLON ":" (COLON)
-  |    |    |    |    |__id: TokenConstructions null
-  |    |    |    |    |    |__id: TokenConstruction null
-  |    |    |    |    |    |    |__id: TokenConstruction null
-  |    |    |    |    |    |    |    |__id: TokenConstruction null
-  |    |    |    |    |    |    |    |    |__id: TokenConstruction null
-  |    |    |    |    |    |    |    |    |    |__id: TokenConstruction null
-  |    |    |    |    |    |    |    |    |    |    |__id: TokenConstruction null
-  |    |    |    |    |    |    |    |    |    |    |    |__id: TokenConstruction null
-  |    |    |    |    |    |    |    |    |    |    |    |    |__id: TokenPart null
-  |    |    |    |    |    |    |    |    |    |    |    |    |    |__id: STRING_LITERAL ""("" (STRING_LITERAL)
-  |    |    |    |    |    |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
-  |    |    |    |    |    |    |    |    |    |    |    |__id: TokenPart null
-  |    |    |    |    |    |    |    |    |    |    |    |    |__id: IDENTIFIER "SIGNED_INT_LITERAL_CONSTANT" (IDENTIFIER)
-  |    |    |    |    |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
-  |    |    |    |    |    |    |    |    |    |    |__id: TokenPart null
-  |    |    |    |    |    |    |    |    |    |    |    |__id: STRING_LITERAL ""|"" (STRING_LITERAL)
-  |    |    |    |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
-  |    |    |    |    |    |    |    |    |    |__id: TokenPart null
-  |    |    |    |    |    |    |    |    |    |    |__id: IDENTIFIER "SIGNED_REAL_LITERAL_CONSTANT" (IDENTIFIER)
-  |    |    |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
-  |    |    |    |    |    |    |    |    |__id: TokenPart null
-  |    |    |    |    |    |    |    |    |    |__id: STRING_LITERAL ""|"" (STRING_LITERAL)
-  |    |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
-  |    |    |    |    |    |    |    |__id: TokenPart null
-  |    |    |    |    |    |    |    |    |__id: IDENTIFIER "NAMED_CONSTANT" (IDENTIFIER)
-  |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
-  |    |    |    |    |    |    |__id: TokenPart null
-  |    |    |    |    |    |    |    |__id: STRING_LITERAL "")"" (STRING_LITERAL)
-  |    |    |    |    |    |    |    |__id: OptionalQuantifier null
-  |    |    |    |    |__id: SEMICOLON ";" (SEMICOLON)
-  |    |    |    |__id: HelperDefinition null
-  |    |    |    |    |__id: IDENTIFIER "REAL_PART" (IDENTIFIER)
-  |    |    |    |    |__id: COLON ":" (COLON)
-  |    |    |    |    |__id: TokenConstructions null
-  |    |    |    |    |    |__id: TokenConstruction null
-  |    |    |    |    |    |    |__id: TokenConstruction null
-  |    |    |    |    |    |    |    |__id: TokenConstruction null
-  |    |    |    |    |    |    |    |    |__id: TokenConstruction null
-  |    |    |    |    |    |    |    |    |    |__id: TokenConstruction null
-  |    |    |    |    |    |    |    |    |    |    |__id: TokenConstruction null
-  |    |    |    |    |    |    |    |    |    |    |    |__id: TokenConstruction null
-  |    |    |    |    |    |    |    |    |    |    |    |    |__id: TokenPart null
-  |    |    |    |    |    |    |    |    |    |    |    |    |    |__id: STRING_LITERAL ""("" (STRING_LITERAL)
-  |    |    |    |    |    |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
-  |    |    |    |    |    |    |    |    |    |    |    |__id: TokenPart null
-  |    |    |    |    |    |    |    |    |    |    |    |    |__id: IDENTIFIER "SIGNED_INT_LITERAL_CONSTANT" (IDENTIFIER)
-  |    |    |    |    |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
-  |    |    |    |    |    |    |    |    |    |    |__id: TokenPart null
-  |    |    |    |    |    |    |    |    |    |    |    |__id: STRING_LITERAL ""|"" (STRING_LITERAL)
-  |    |    |    |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
-  |    |    |    |    |    |    |    |    |    |__id: TokenPart null
-  |    |    |    |    |    |    |    |    |    |    |__id: IDENTIFIER "SIGNED_REAL_LITERAL_CONSTANT" (IDENTIFIER)
-  |    |    |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
-  |    |    |    |    |    |    |    |    |__id: TokenPart null
-  |    |    |    |    |    |    |    |    |    |__id: STRING_LITERAL ""|"" (STRING_LITERAL)
-  |    |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
-  |    |    |    |    |    |    |    |__id: TokenPart null
-  |    |    |    |    |    |    |    |    |__id: IDENTIFIER "NAMED_CONSTANT" (IDENTIFIER)
-  |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
-  |    |    |    |    |    |    |__id: TokenPart null
-  |    |    |    |    |    |    |    |__id: STRING_LITERAL "")"" (STRING_LITERAL)
   |    |    |    |    |    |    |    |__id: OptionalQuantifier null
   |    |    |    |    |__id: SEMICOLON ";" (SEMICOLON)
   |    |    |    |__id: HelperDefinition null
@@ -2897,32 +2719,6 @@
   |    |    |    |    |__id: OptionalVisibility null
   |    |    |    |    |__id: SEMICOLON ";" (SEMICOLON)
   |    |    |    |__id: TokenDefinition null
-  |    |    |    |    |__id: IDENTIFIER "COMPLEX_LITERAL_CONSTANT" (IDENTIFIER)
-  |    |    |    |    |__id: COLON ":" (COLON)
-  |    |    |    |    |__id: TokenConstructions null
-  |    |    |    |    |    |__id: TokenConstruction null
-  |    |    |    |    |    |    |__id: TokenConstruction null
-  |    |    |    |    |    |    |    |__id: TokenConstruction null
-  |    |    |    |    |    |    |    |    |__id: TokenConstruction null
-  |    |    |    |    |    |    |    |    |    |__id: TokenConstruction null
-  |    |    |    |    |    |    |    |    |    |    |__id: TokenPart null
-  |    |    |    |    |    |    |    |    |    |    |    |__id: STRING_LITERAL ""\\("" (STRING_LITERAL)
-  |    |    |    |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
-  |    |    |    |    |    |    |    |    |    |__id: TokenPart null
-  |    |    |    |    |    |    |    |    |    |    |__id: IDENTIFIER "REAL_PART" (IDENTIFIER)
-  |    |    |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
-  |    |    |    |    |    |    |    |    |__id: TokenPart null
-  |    |    |    |    |    |    |    |    |    |__id: STRING_LITERAL ""\\s*,\\s*"" (STRING_LITERAL)
-  |    |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
-  |    |    |    |    |    |    |    |__id: TokenPart null
-  |    |    |    |    |    |    |    |    |__id: IDENTIFIER "IMAG_PART" (IDENTIFIER)
-  |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
-  |    |    |    |    |    |    |__id: TokenPart null
-  |    |    |    |    |    |    |    |__id: STRING_LITERAL ""\\)"" (STRING_LITERAL)
-  |    |    |    |    |    |    |    |__id: OptionalQuantifier null
-  |    |    |    |    |__id: OptionalVisibility null
-  |    |    |    |    |__id: SEMICOLON ";" (SEMICOLON)
-  |    |    |    |__id: TokenDefinition null
   |    |    |    |    |__id: IDENTIFIER "CHAR_LITERAL_CONSTANT" (IDENTIFIER)
   |    |    |    |    |__id: COLON ":" (COLON)
   |    |    |    |    |__id: TokenConstructions null
@@ -3967,7 +3763,7 @@
   |    |    |    |    |    |    |__id: AlternativeIdentifier null
   |    |    |    |    |    |    |__id: ProductionParts null
   |    |    |    |    |    |    |    |__id: ProductionPart null
-  |    |    |    |    |    |    |    |    |__id: IDENTIFIER "COMPLEX_LITERAL_CONSTANT" (IDENTIFIER)
+  |    |    |    |    |    |    |    |    |__id: IDENTIFIER "complex-literal-constant" (IDENTIFIER)
   |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
   |    |    |    |    |    |    |__id: OptionalOptions null
   |    |    |    |    |    |__id: VERTICAL_BAR "|" (VERTICAL_BAR)
@@ -4406,6 +4202,86 @@
   |    |    |    |    |    |    |__id: OptionalOptions null
   |    |    |    |    |__id: SEMICOLON ";" (SEMICOLON)
   |    |    |    |__id: ProductionDefinition null
+  |    |    |    |    |__id: IDENTIFIER "complex-literal-constant" (IDENTIFIER)
+  |    |    |    |    |__id: COLON ":" (COLON)
+  |    |    |    |    |__id: ProductionConstructions null
+  |    |    |    |    |    |__id: ProductionConstruction null
+  |    |    |    |    |    |    |__id: AlternativeIdentifier null
+  |    |    |    |    |    |    |__id: ProductionParts null
+  |    |    |    |    |    |    |    |__id: ProductionPart null
+  |    |    |    |    |    |    |    |    |__id: STRING_LITERAL "'('" (STRING_LITERAL)
+  |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
+  |    |    |    |    |    |    |    |__id: ProductionPart null
+  |    |    |    |    |    |    |    |    |__id: IDENTIFIER "real-part" (IDENTIFIER)
+  |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
+  |    |    |    |    |    |    |    |__id: ProductionPart null
+  |    |    |    |    |    |    |    |    |__id: STRING_LITERAL "','" (STRING_LITERAL)
+  |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
+  |    |    |    |    |    |    |    |__id: ProductionPart null
+  |    |    |    |    |    |    |    |    |__id: IDENTIFIER "imag-part" (IDENTIFIER)
+  |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
+  |    |    |    |    |    |    |    |__id: ProductionPart null
+  |    |    |    |    |    |    |    |    |__id: STRING_LITERAL "')'" (STRING_LITERAL)
+  |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
+  |    |    |    |    |    |    |__id: OptionalOptions null
+  |    |    |    |    |__id: SEMICOLON ";" (SEMICOLON)
+  |    |    |    |__id: ProductionDefinition null
+  |    |    |    |    |__id: IDENTIFIER "real-part" (IDENTIFIER)
+  |    |    |    |    |__id: COLON ":" (COLON)
+  |    |    |    |    |__id: ProductionConstructions null
+  |    |    |    |    |    |__id: ProductionConstruction null
+  |    |    |    |    |    |    |__id: AlternativeIdentifier null
+  |    |    |    |    |    |    |__id: ProductionParts null
+  |    |    |    |    |    |    |    |__id: ProductionPart null
+  |    |    |    |    |    |    |    |    |__id: IDENTIFIER "signed-int-literal-constant" (IDENTIFIER)
+  |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
+  |    |    |    |    |    |    |__id: OptionalOptions null
+  |    |    |    |    |    |__id: VERTICAL_BAR "|" (VERTICAL_BAR)
+  |    |    |    |    |    |__id: ProductionConstruction null
+  |    |    |    |    |    |    |__id: AlternativeIdentifier null
+  |    |    |    |    |    |    |__id: ProductionParts null
+  |    |    |    |    |    |    |    |__id: ProductionPart null
+  |    |    |    |    |    |    |    |    |__id: IDENTIFIER "signed-real-literal-constant" (IDENTIFIER)
+  |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
+  |    |    |    |    |    |    |__id: OptionalOptions null
+  |    |    |    |    |    |__id: VERTICAL_BAR "|" (VERTICAL_BAR)
+  |    |    |    |    |    |__id: ProductionConstruction null
+  |    |    |    |    |    |    |__id: AlternativeIdentifier null
+  |    |    |    |    |    |    |__id: ProductionParts null
+  |    |    |    |    |    |    |    |__id: ProductionPart null
+  |    |    |    |    |    |    |    |    |__id: IDENTIFIER "NAME_LITERAL" (IDENTIFIER)
+  |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
+  |    |    |    |    |    |    |__id: OptionalOptions null
+  |    |    |    |    |__id: SEMICOLON ";" (SEMICOLON)
+  |    |    |    |__id: ProductionDefinition null
+  |    |    |    |    |__id: IDENTIFIER "imag-part" (IDENTIFIER)
+  |    |    |    |    |__id: COLON ":" (COLON)
+  |    |    |    |    |__id: ProductionConstructions null
+  |    |    |    |    |    |__id: ProductionConstruction null
+  |    |    |    |    |    |    |__id: AlternativeIdentifier null
+  |    |    |    |    |    |    |__id: ProductionParts null
+  |    |    |    |    |    |    |    |__id: ProductionPart null
+  |    |    |    |    |    |    |    |    |__id: IDENTIFIER "signed-int-literal-constant" (IDENTIFIER)
+  |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
+  |    |    |    |    |    |    |__id: OptionalOptions null
+  |    |    |    |    |    |__id: VERTICAL_BAR "|" (VERTICAL_BAR)
+  |    |    |    |    |    |__id: ProductionConstruction null
+  |    |    |    |    |    |    |__id: AlternativeIdentifier null
+  |    |    |    |    |    |    |__id: ProductionParts null
+  |    |    |    |    |    |    |    |__id: ProductionPart null
+  |    |    |    |    |    |    |    |    |__id: IDENTIFIER "signed-real-literal-constant" (IDENTIFIER)
+  |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
+  |    |    |    |    |    |    |__id: OptionalOptions null
+  |    |    |    |    |    |__id: VERTICAL_BAR "|" (VERTICAL_BAR)
+  |    |    |    |    |    |__id: ProductionConstruction null
+  |    |    |    |    |    |    |__id: AlternativeIdentifier null
+  |    |    |    |    |    |    |__id: ProductionParts null
+  |    |    |    |    |    |    |    |__id: ProductionPart null
+  |    |    |    |    |    |    |    |    |__id: IDENTIFIER "NAME_LITERAL" (IDENTIFIER)
+  |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
+  |    |    |    |    |    |    |__id: OptionalOptions null
+  |    |    |    |    |__id: SEMICOLON ";" (SEMICOLON)
+  |    |    |    |__id: ProductionDefinition null
   |    |    |    |    |__id: IDENTIFIER "char-selector" (IDENTIFIER)
   |    |    |    |    |__id: COLON ":" (COLON)
   |    |    |    |    |__id: ProductionConstructions null
@@ -4599,30 +4475,6 @@
   |    |    |    |    |    |    |__id: ProductionParts null
   |    |    |    |    |    |    |    |__id: ProductionPart null
   |    |    |    |    |    |    |    |    |__id: IDENTIFIER "INT_LITERAL_CONSTANT" (IDENTIFIER)
-  |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
-  |    |    |    |    |    |    |__id: OptionalOptions null
-  |    |    |    |    |__id: SEMICOLON ";" (SEMICOLON)
-  |    |    |    |__id: ProductionDefinition null
-  |    |    |    |    |__id: IDENTIFIER "char-literal-constant" (IDENTIFIER)
-  |    |    |    |    |__id: COLON ":" (COLON)
-  |    |    |    |    |__id: ProductionConstructions null
-  |    |    |    |    |    |__id: ProductionConstruction null
-  |    |    |    |    |    |    |__id: AlternativeIdentifier null
-  |    |    |    |    |    |    |__id: ProductionParts null
-  |    |    |    |    |    |    |    |__id: ProductionPart null
-  |    |    |    |    |    |    |    |    |__id: IDENTIFIER "CHAR_LITERAL_CONSTANT" (IDENTIFIER)
-  |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
-  |    |    |    |    |    |    |__id: OptionalOptions null
-  |    |    |    |    |__id: SEMICOLON ";" (SEMICOLON)
-  |    |    |    |__id: ProductionDefinition null
-  |    |    |    |    |__id: IDENTIFIER "logical-literal-constant" (IDENTIFIER)
-  |    |    |    |    |__id: COLON ":" (COLON)
-  |    |    |    |    |__id: ProductionConstructions null
-  |    |    |    |    |    |__id: ProductionConstruction null
-  |    |    |    |    |    |    |__id: AlternativeIdentifier null
-  |    |    |    |    |    |    |__id: ProductionParts null
-  |    |    |    |    |    |    |    |__id: ProductionPart null
-  |    |    |    |    |    |    |    |    |__id: IDENTIFIER "LOGICAL_LITERAL_CONSTANT" (IDENTIFIER)
   |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
   |    |    |    |    |    |    |__id: OptionalOptions null
   |    |    |    |    |__id: SEMICOLON ";" (SEMICOLON)
@@ -6426,6 +6278,7 @@
   |    |    |    |    |    |    |    |    |    |    |__id: OptionalOptions null
   |    |    |    |    |    |    |    |    |__id: RPAREN ")" (RPAREN)
   |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
+  |    |    |    |    |    |    |    |    |    |__id: QUESTION_MARK "?" (QUESTION_MARK)
   |    |    |    |    |    |    |    |__id: ProductionPart null
   |    |    |    |    |    |    |    |    |__id: IDENTIFIER "entity-decl-list" (IDENTIFIER)
   |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
@@ -7489,6 +7342,7 @@
   |    |    |    |    |    |    |    |    |    |    |__id: OptionalOptions null
   |    |    |    |    |    |    |    |    |__id: RPAREN ")" (RPAREN)
   |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
+  |    |    |    |    |    |    |    |    |    |__id: QUESTION_MARK "?" (QUESTION_MARK)
   |    |    |    |    |    |    |    |__id: ProductionPart null
   |    |    |    |    |    |    |    |    |__id: IDENTIFIER "allocatable-decl-list" (IDENTIFIER)
   |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
@@ -10326,6 +10180,14 @@
   |    |    |    |    |    |    |__id: AlternativeIdentifier null
   |    |    |    |    |    |    |__id: ProductionParts null
   |    |    |    |    |    |    |    |__id: ProductionPart null
+  |    |    |    |    |    |    |    |    |__id: IDENTIFIER "constant" (IDENTIFIER)
+  |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
+  |    |    |    |    |    |    |__id: OptionalOptions null
+  |    |    |    |    |    |__id: VERTICAL_BAR "|" (VERTICAL_BAR)
+  |    |    |    |    |    |__id: ProductionConstruction null
+  |    |    |    |    |    |    |__id: AlternativeIdentifier null
+  |    |    |    |    |    |    |__id: ProductionParts null
+  |    |    |    |    |    |    |    |__id: ProductionPart null
   |    |    |    |    |    |    |    |    |__id: IDENTIFIER "designator" (IDENTIFIER)
   |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
   |    |    |    |    |    |    |__id: OptionalOptions null
@@ -10359,6 +10221,14 @@
   |    |    |    |    |    |    |__id: ProductionParts null
   |    |    |    |    |    |    |    |__id: ProductionPart null
   |    |    |    |    |    |    |    |    |__id: IDENTIFIER "type-param-inquiry" (IDENTIFIER)
+  |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
+  |    |    |    |    |    |    |__id: OptionalOptions null
+  |    |    |    |    |    |__id: VERTICAL_BAR "|" (VERTICAL_BAR)
+  |    |    |    |    |    |__id: ProductionConstruction null
+  |    |    |    |    |    |    |__id: AlternativeIdentifier null
+  |    |    |    |    |    |    |__id: ProductionParts null
+  |    |    |    |    |    |    |    |__id: ProductionPart null
+  |    |    |    |    |    |    |    |    |__id: IDENTIFIER "NAME_LITERAL" (IDENTIFIER)
   |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
   |    |    |    |    |    |    |__id: OptionalOptions null
   |    |    |    |    |    |__id: VERTICAL_BAR "|" (VERTICAL_BAR)
@@ -15838,7 +15708,7 @@
   |    |    |    |    |    |    |__id: AlternativeIdentifier null
   |    |    |    |    |    |    |__id: ProductionParts null
   |    |    |    |    |    |    |    |__id: ProductionPart null
-  |    |    |    |    |    |    |    |    |__id: IDENTIFIER "char-string-edit-desc" (IDENTIFIER)
+  |    |    |    |    |    |    |    |    |__id: IDENTIFIER "CHAR_LITERAL_CONSTANT" (IDENTIFIER)
   |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
   |    |    |    |    |    |    |__id: OptionalOptions null
   |    |    |    |    |    |__id: VERTICAL_BAR "|" (VERTICAL_BAR)
@@ -16211,7 +16081,7 @@
   |    |    |    |    |    |    |    |    |__id: STRING_LITERAL "'DT'" (STRING_LITERAL)
   |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
   |    |    |    |    |    |    |    |__id: ProductionPart null
-  |    |    |    |    |    |    |    |    |__id: IDENTIFIER "char-literal-constant" (IDENTIFIER)
+  |    |    |    |    |    |    |    |    |__id: IDENTIFIER "CHAR_LITERAL_CONSTANT" (IDENTIFIER)
   |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
   |    |    |    |    |    |    |    |    |    |__id: QUESTION_MARK "?" (QUESTION_MARK)
   |    |    |    |    |    |    |    |__id: ProductionPart null
@@ -16587,18 +16457,6 @@
   |    |    |    |    |    |    |__id: ProductionParts null
   |    |    |    |    |    |    |    |__id: ProductionPart null
   |    |    |    |    |    |    |    |    |__id: STRING_LITERAL "'DP'" (STRING_LITERAL)
-  |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
-  |    |    |    |    |    |    |__id: OptionalOptions null
-  |    |    |    |    |__id: SEMICOLON ";" (SEMICOLON)
-  |    |    |    |__id: ProductionDefinition null
-  |    |    |    |    |__id: IDENTIFIER "char-string-edit-desc" (IDENTIFIER)
-  |    |    |    |    |__id: COLON ":" (COLON)
-  |    |    |    |    |__id: ProductionConstructions null
-  |    |    |    |    |    |__id: ProductionConstruction null
-  |    |    |    |    |    |    |__id: AlternativeIdentifier null
-  |    |    |    |    |    |    |__id: ProductionParts null
-  |    |    |    |    |    |    |    |__id: ProductionPart null
-  |    |    |    |    |    |    |    |    |__id: IDENTIFIER "char-literal-constant" (IDENTIFIER)
   |    |    |    |    |    |    |    |    |__id: OptionalQuantifier null
   |    |    |    |    |    |    |__id: OptionalOptions null
   |    |    |    |    |__id: SEMICOLON ";" (SEMICOLON)

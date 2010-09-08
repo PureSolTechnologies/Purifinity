@@ -6,7 +6,7 @@ Options:
 --------
 lexer.case_sensitive : false
 lexer : com.puresol.uhura.lexer.RegExpLexer
-parser : com.puresol.uhura.parser.lr.LR1Parser
+parser : com.puresol.uhura.parser.lr.SLR1Parser
 grammar.checks : true
 
 Tokens:
@@ -239,7 +239,6 @@ NOT: '^\.NOT\.' (VISIBLE)
 OR: '^\.OR\.' (VISIBLE)
 INT_LITERAL_CONSTANT: '^\d+(_(\d+|[A-Z]([A-Z]|[0-9]|_){0,62}))?' (VISIBLE)
 REAL_LITERAL_CONSTANT: '^((\d+\.(\d+)?|\.\d+)([ED]SIGN?\d+)?(_(\d+|[A-Z]([A-Z]|[0-9]|_){0,62}))?|\d+[ED]SIGN?\d+(_(\d+|[A-Z]([A-Z]|[0-9]|_){0,62}))?)' (VISIBLE)
-COMPLEX_LITERAL_CONSTANT: '^\((SIGN?\d+(_(\d+|[A-Z]([A-Z]|[0-9]|_){0,62}))?|SIGN?((\d+\.(\d+)?|\.\d+)([ED]SIGN?\d+)?(_(\d+|[A-Z]([A-Z]|[0-9]|_){0,62}))?|\d+[ED]SIGN?\d+(_(\d+|[A-Z]([A-Z]|[0-9]|_){0,62}))?)|[A-Z]([A-Z]|[0-9]|_){0,62})\s*,\s*(SIGN?\d+(_(\d+|[A-Z]([A-Z]|[0-9]|_){0,62}))?|SIGN?((\d+\.(\d+)?|\.\d+)([ED]SIGN?\d+)?(_(\d+|[A-Z]([A-Z]|[0-9]|_){0,62}))?|\d+[ED]SIGN?\d+(_(\d+|[A-Z]([A-Z]|[0-9]|_){0,62}))?)|[A-Z]([A-Z]|[0-9]|_){0,62})\)' (VISIBLE)
 CHAR_LITERAL_CONSTANT: '^((\d+|[A-Z]([A-Z]|[0-9]|_){0,62})_)?(\"([^\"]+|\"\")*\"|'([^']+|'')*')' (VISIBLE)
 LOGICAL_LITERAL_CONSTANT: '^(\.TRUE\.|\.FALSE\.)(_(\d+|[A-Z]([A-Z]|[0-9]|_){0,62}))?' (VISIBLE)
 BOZ_LITERAL_CONSTANT: '^((B'[0-9]+'|B\"[0-9]+\")|(O'[0-9]+'|O\"[0-9]+\")|(Z'[0-9A-F]+'|Z\"[0-9A-F]+\"))' (VISIBLE)
@@ -247,1866 +246,1876 @@ NAME_LITERAL: '^[A-Z]([A-Z]|[0-9]|_){0,62}' (VISIBLE)
 
 Productions:
 ------------
-(0)	_START_ :  program
-(1)	program-unit1_list_autogen :  program-unit1_list_autogen program-unit
-(2)	program-unit1_list_autogen :  program-unit
-(3)	program :  program-unit1_list_autogen
-(4)	program-unit :  main-program
-(5)	program-unit :  external-subprogram
-(6)	program-unit :  module
-(7)	program-unit :  submodule
-(8)	program-unit :  block-data
-(9)	external-subprogram :  function-subprogram
-(10)	external-subprogram :  subroutine-subprogram
-(11)	use-stmt1_optlist_autogen :  use-stmt1_optlist_autogen use-stmt
-(12)	use-stmt1_optlist_autogen : 
-(13)	import-stmt1_optlist_autogen :  import-stmt1_optlist_autogen import-stmt
-(14)	import-stmt1_optlist_autogen : 
-(15)	implicit-part1_opt_autogen :  implicit-part
-(16)	implicit-part1_opt_autogen : 
-(17)	declaration-construct1_optlist_autogen :  declaration-construct1_optlist_autogen declaration-construct
-(18)	declaration-construct1_optlist_autogen : 
-(19)	specification-part :  use-stmt1_optlist_autogen import-stmt1_optlist_autogen implicit-part1_opt_autogen declaration-construct1_optlist_autogen
-(20)	implicit-part-stmt1_optlist_autogen :  implicit-part-stmt1_optlist_autogen implicit-part-stmt
-(21)	implicit-part-stmt1_optlist_autogen : 
-(22)	implicit-part :  implicit-part-stmt1_optlist_autogen implicit-stmt
-(23)	implicit-part-stmt :  implicit-stmt
-(24)	implicit-part-stmt :  parameter-stmt
-(25)	implicit-part-stmt :  format-stmt
-(26)	implicit-part-stmt :  entry-stmt
-(27)	declaration-construct :  derived-type-def
-(28)	declaration-construct :  entry-stmt
-(29)	declaration-construct :  enum-def
-(30)	declaration-construct :  format-stmt
-(31)	declaration-construct :  interface-block
-(32)	declaration-construct :  parameter-stmt
-(33)	declaration-construct :  procedure-declaration-stmt
-(34)	declaration-construct :  other-specification-stmt
-(35)	declaration-construct :  type-declaration-stmt
-(36)	declaration-construct :  stmt-function-stmt
-(37)	execution-part-construct1_optlist_autogen :  execution-part-construct1_optlist_autogen execution-part-construct
-(38)	execution-part-construct1_optlist_autogen : 
-(39)	execution-part :  executable-construct execution-part-construct1_optlist_autogen
-(40)	execution-part-construct :  executable-construct
-(41)	execution-part-construct :  format-stmt
-(42)	execution-part-construct :  entry-stmt
-(43)	execution-part-construct :  data-stmt
-(44)	internal-subprogram1_optlist_autogen :  internal-subprogram1_optlist_autogen internal-subprogram
-(45)	internal-subprogram1_optlist_autogen : 
-(46)	internal-subprogram-part :  contains-stmt internal-subprogram1_optlist_autogen
-(47)	internal-subprogram :  function-subprogram
-(48)	internal-subprogram :  subroutine-subprogram
-(49)	other-specification-stmt :  access-stmt
-(50)	other-specification-stmt :  allocatable-stmt
-(51)	other-specification-stmt :  asynchronous-stmt
-(52)	other-specification-stmt :  bind-stmt
-(53)	other-specification-stmt :  codimension-stmt
-(54)	other-specification-stmt :  common-stmt
-(55)	other-specification-stmt :  data-stmt
-(56)	other-specification-stmt :  dimension-stmt
-(57)	other-specification-stmt :  equivalence-stmt
-(58)	other-specification-stmt :  external-stmt
-(59)	other-specification-stmt :  intent-stmt
-(60)	other-specification-stmt :  intrinsic-stmt
-(61)	other-specification-stmt :  namelist-stmt
-(62)	other-specification-stmt :  optional-stmt
-(63)	other-specification-stmt :  pointer-stmt
-(64)	other-specification-stmt :  protected-stmt
-(65)	other-specification-stmt :  save-stmt
-(66)	other-specification-stmt :  target-stmt
-(67)	other-specification-stmt :  volatile-stmt
-(68)	other-specification-stmt :  value-stmt
-(69)	executable-construct :  action-stmt
-(70)	executable-construct :  associate-construct
-(71)	executable-construct :  block-construct
-(72)	executable-construct :  case-construct
-(73)	executable-construct :  critical-construct
-(74)	executable-construct :  do-construct
-(75)	executable-construct :  forall-construct
-(76)	executable-construct :  if-construct
-(77)	executable-construct :  select-type-construct
-(78)	executable-construct :  where-construct
-(79)	action-stmt :  allocate-stmt
-(80)	action-stmt :  assignment-stmt
-(81)	action-stmt :  backspace-stmt
-(82)	action-stmt :  call-stmt
-(83)	action-stmt :  close-stmt
-(84)	action-stmt :  continue-stmt
-(85)	action-stmt :  cycle-stmt
-(86)	action-stmt :  deallocate-stmt
-(87)	action-stmt :  end-function-stmt
-(88)	action-stmt :  end-mp-subprogram-stmt
-(89)	action-stmt :  end-program-stmt
-(90)	action-stmt :  end-subroutine-stmt
-(91)	action-stmt :  endfile-stmt
-(92)	action-stmt :  error-stop-stmt
-(93)	action-stmt :  exit-stmt
-(94)	action-stmt :  flush-stmt
-(95)	action-stmt :  forall-stmt
-(96)	action-stmt :  goto-stmt
-(97)	action-stmt :  if-stmt
-(98)	action-stmt :  inquire-stmt
-(99)	action-stmt :  lock-stmt
-(100)	action-stmt :  nullify-stmt
-(101)	action-stmt :  open-stmt
-(102)	action-stmt :  pointer-assignment-stmt
-(103)	action-stmt :  print-stmt
-(104)	action-stmt :  read-stmt
-(105)	action-stmt :  return-stmt
-(106)	action-stmt :  rewind-stmt
-(107)	action-stmt :  stop-stmt
-(108)	action-stmt :  sync-all-stmt
-(109)	action-stmt :  sync-images-stmt
-(110)	action-stmt :  sync-memory-stmt
-(111)	action-stmt :  unlock-stmt
-(112)	action-stmt :  wait-stmt
-(113)	action-stmt :  where-stmt
-(114)	action-stmt :  write-stmt
-(115)	action-stmt :  arithmetic-if-stmt
-(116)	action-stmt :  computed-goto-stmt
-(117)	constant :  literal-constant
-(118)	constant :  NAME_LITERAL
-(119)	literal-constant :  INT_LITERAL_CONSTANT
-(120)	literal-constant :  REAL_LITERAL_CONSTANT
-(121)	literal-constant :  COMPLEX_LITERAL_CONSTANT
-(122)	literal-constant :  LOGICAL_LITERAL_CONSTANT
-(123)	literal-constant :  CHAR_LITERAL_CONSTANT
-(124)	literal-constant :  BOZ_LITERAL_CONSTANT
-(125)	intrinsic-operator :  power-op
-(126)	intrinsic-operator :  mult-op
-(127)	intrinsic-operator :  add-op
-(128)	intrinsic-operator :  concat-op
-(129)	intrinsic-operator :  rel-op
-(130)	intrinsic-operator :  not-op
-(131)	intrinsic-operator :  and-op
-(132)	intrinsic-operator :  or-op
-(133)	intrinsic-operator :  equiv-op
-(134)	defined-operator :  defined-op
-(135)	defined-operator :  intrinsic-operator
-(136)	1_group_autogen :  ',' INT_LITERAL_CONSTANT
-(137)	1_optlist_autogen :  1_optlist_autogen 1_group_autogen
-(138)	1_optlist_autogen : 
-(139)	label-list :  INT_LITERAL_CONSTANT 1_optlist_autogen
-(140)	type-param-value :  expr
-(141)	type-param-value :  '*'
-(142)	type-param-value :  ':'
-(143)	type-spec :  intrinsic-type-spec
-(144)	type-spec :  derived-type-spec
-(145)	declaration-type-spec :  intrinsic-type-spec
-(146)	declaration-type-spec :  'TYPE' '(' intrinsic-type-spec ')'
-(147)	declaration-type-spec :  'TYPE' '(' derived-type-spec ')'
-(148)	declaration-type-spec :  'CLASS' '(' derived-type-spec ')'
-(149)	declaration-type-spec :  'CLASS' '(' '*' ')'
-(150)	kind-selector1_opt_autogen :  kind-selector
-(151)	kind-selector1_opt_autogen : 
-(152)	intrinsic-type-spec :  INTEGER kind-selector1_opt_autogen
-(153)	kind-selector2_opt_autogen :  kind-selector
-(154)	kind-selector2_opt_autogen : 
-(155)	intrinsic-type-spec :  REAL kind-selector2_opt_autogen
-(156)	intrinsic-type-spec :  DOUBLE_PRECISION
-(157)	kind-selector3_opt_autogen :  kind-selector
-(158)	kind-selector3_opt_autogen : 
-(159)	intrinsic-type-spec :  COMPLEX kind-selector3_opt_autogen
-(160)	char-selector1_opt_autogen :  char-selector
-(161)	char-selector1_opt_autogen : 
-(162)	intrinsic-type-spec :  CHARACTER char-selector1_opt_autogen
-(163)	kind-selector4_opt_autogen :  kind-selector
-(164)	kind-selector4_opt_autogen : 
-(165)	intrinsic-type-spec :  LOGICAL kind-selector4_opt_autogen
-(166)	2_group_autogen :  KIND '='
-(167)	1_opt_autogen :  2_group_autogen
-(168)	1_opt_autogen : 
-(169)	kind-selector :  '(' 1_opt_autogen expr ')'
-(170)	sign1_opt_autogen :  sign
-(171)	sign1_opt_autogen : 
-(172)	signed-int-literal-constant :  sign1_opt_autogen INT_LITERAL_CONSTANT
-(173)	sign :  '+'
-(174)	sign :  '-'
-(175)	sign2_opt_autogen :  sign
-(176)	sign2_opt_autogen : 
-(177)	signed-real-literal-constant :  sign2_opt_autogen REAL_LITERAL_CONSTANT
-(178)	char-selector :  length-selector
-(179)	char-selector :  '(' 'LEN' '=' type-param-value ',' KIND '=' expr ')'
-(180)	3_group_autogen :  KIND '='
-(181)	2_opt_autogen :  3_group_autogen
-(182)	2_opt_autogen : 
-(183)	char-selector :  '(' type-param-value ',' 2_opt_autogen expr ')'
-(184)	4_group_autogen :  ',' LEN '=' type-param-value
-(185)	3_opt_autogen :  4_group_autogen
-(186)	3_opt_autogen : 
-(187)	char-selector :  '(' 'KIND' '=' expr 3_opt_autogen ')'
-(188)	5_group_autogen :  LEN '='
-(189)	4_opt_autogen :  5_group_autogen
-(190)	4_opt_autogen : 
-(191)	length-selector :  '(' 4_opt_autogen type-param-value ')'
-(192)	','1_opt_autogen :  ','
-(193)	','1_opt_autogen : 
-(194)	length-selector :  '*' char-length ','1_opt_autogen
-(195)	char-length :  '(' type-param-value ')'
-(196)	char-length :  INT_LITERAL_CONSTANT
-(197)	char-literal-constant :  CHAR_LITERAL_CONSTANT
-(198)	logical-literal-constant :  LOGICAL_LITERAL_CONSTANT
-(199)	type-param-def-stmt1_optlist_autogen :  type-param-def-stmt1_optlist_autogen type-param-def-stmt
-(200)	type-param-def-stmt1_optlist_autogen : 
-(201)	private-or-sequence1_optlist_autogen :  private-or-sequence1_optlist_autogen private-or-sequence
-(202)	private-or-sequence1_optlist_autogen : 
-(203)	component-part1_opt_autogen :  component-part
-(204)	component-part1_opt_autogen : 
-(205)	type-bound-procedure-part1_opt_autogen :  type-bound-procedure-part
-(206)	type-bound-procedure-part1_opt_autogen : 
-(207)	derived-type-def :  derived-type-stmt type-param-def-stmt1_optlist_autogen private-or-sequence1_optlist_autogen component-part1_opt_autogen type-bound-procedure-part1_opt_autogen end-type-stmt
-(208)	6_group_autogen :  ',' type-attr-spec-list
-(209)	5_opt_autogen :  6_group_autogen
-(210)	5_opt_autogen : 
-(211)	6_group_autogen :  5_opt_autogen ':' ':'
-(212)	7_group_autogen :  '(' name-list ')'
-(213)	6_opt_autogen :  7_group_autogen
-(214)	6_opt_autogen : 
-(215)	derived-type-stmt :  'TYPE' 5_opt_autogen NAME_LITERAL 6_opt_autogen
-(216)	8_group_autogen :  ',' NAME_LITERAL
-(217)	2_optlist_autogen :  2_optlist_autogen 8_group_autogen
-(218)	2_optlist_autogen : 
-(219)	name-list :  NAME_LITERAL 2_optlist_autogen
-(220)	type-attr-spec :  ABSTRACT
-(221)	type-attr-spec :  access-spec
-(222)	type-attr-spec :  BIND '(' 'C' ')'
-(223)	type-attr-spec :  EXTENDS '(' NAME_LITERAL ')'
-(224)	9_group_autogen :  ',' type-attr-spec
-(225)	3_optlist_autogen :  3_optlist_autogen 9_group_autogen
-(226)	3_optlist_autogen : 
-(227)	type-attr-spec-list :  type-attr-spec 3_optlist_autogen
-(228)	private-or-sequence :  private-components-stmt
-(229)	private-or-sequence :  sequence-stmt
-(230)	NAME_LITERAL1_opt_autogen :  NAME_LITERAL
-(231)	NAME_LITERAL1_opt_autogen : 
-(232)	end-type-stmt :  END_TYPE NAME_LITERAL1_opt_autogen
-(233)	sequence-stmt :  SEQUENCE
-(234)	kind-selector5_opt_autogen :  kind-selector
-(235)	kind-selector5_opt_autogen : 
-(236)	type-param-def-stmt :  INTEGER kind-selector5_opt_autogen ',' type-param-attr-spec ':' ':' type-param-decl-list
-(237)	10_group_autogen :  '=' expr
-(238)	7_opt_autogen :  10_group_autogen
-(239)	7_opt_autogen : 
-(240)	type-param-decl :  NAME_LITERAL 7_opt_autogen
-(241)	11_group_autogen :  ',' type-param-decl
-(242)	4_optlist_autogen :  4_optlist_autogen 11_group_autogen
-(243)	4_optlist_autogen : 
-(244)	type-param-decl-list :  type-param-decl 4_optlist_autogen
-(245)	type-param-attr-spec :  KIND
-(246)	type-param-attr-spec :  LEN
-(247)	component-def-stmt1_optlist_autogen :  component-def-stmt1_optlist_autogen component-def-stmt
-(248)	component-def-stmt1_optlist_autogen : 
-(249)	component-part :  component-def-stmt1_optlist_autogen
-(250)	component-def-stmt :  data-component-def-stmt
-(251)	component-def-stmt :  proc-component-def-stmt
-(252)	12_group_autogen :  ',' component-attr-spec-list
-(253)	8_opt_autogen :  12_group_autogen
-(254)	8_opt_autogen : 
-(255)	12_group_autogen :  8_opt_autogen ':' ':'
-(256)	data-component-def-stmt :  declaration-type-spec 8_opt_autogen component-decl-list
-(257)	component-attr-spec :  access-spec
-(258)	component-attr-spec :  ALLOCATABLE
-(259)	component-attr-spec :  CODIMENSION '[' coarray-spec ']'
-(260)	component-attr-spec :  CONTIGUOUS
-(261)	component-attr-spec :  DIMENSION '(' component-array-spec ')'
-(262)	component-attr-spec :  POINTER
-(263)	13_group_autogen :  ',' component-attr-spec
-(264)	5_optlist_autogen :  5_optlist_autogen 13_group_autogen
-(265)	5_optlist_autogen : 
-(266)	component-attr-spec-list :  component-attr-spec 5_optlist_autogen
-(267)	14_group_autogen :  '(' component-array-spec ')'
-(268)	9_opt_autogen :  14_group_autogen
-(269)	9_opt_autogen : 
-(270)	15_group_autogen :  '[' coarray-spec ']'
-(271)	10_opt_autogen :  15_group_autogen
-(272)	10_opt_autogen : 
-(273)	16_group_autogen :  '*' char-length
-(274)	11_opt_autogen :  16_group_autogen
-(275)	11_opt_autogen : 
-(276)	component-initialization1_opt_autogen :  component-initialization
-(277)	component-initialization1_opt_autogen : 
-(278)	component-decl :  NAME_LITERAL 9_opt_autogen 10_opt_autogen 11_opt_autogen component-initialization1_opt_autogen
-(279)	17_group_autogen :  ',' component-decl
-(280)	6_optlist_autogen :  6_optlist_autogen 17_group_autogen
-(281)	6_optlist_autogen : 
-(282)	component-decl-list :  component-decl 6_optlist_autogen
-(283)	component-array-spec :  explicit-shape-spec-list
-(284)	component-array-spec :  deferred-shape-spec-list
-(285)	proc-interface1_opt_autogen :  proc-interface
-(286)	proc-interface1_opt_autogen : 
-(287)	proc-component-def-stmt :  PROCEDURE '(' proc-interface1_opt_autogen ')' ',' proc-component-attr-spec-list ':' ':' proc-decl-list
-(288)	proc-component-attr-spec :  POINTER
-(289)	18_group_autogen :  '(' NAME_LITERAL ')'
-(290)	12_opt_autogen :  18_group_autogen
-(291)	12_opt_autogen : 
-(292)	proc-component-attr-spec :  PASS 12_opt_autogen
-(293)	proc-component-attr-spec :  NOPASS
-(294)	proc-component-attr-spec :  access-spec
-(295)	19_group_autogen :  ',' proc-component-attr-spec
-(296)	7_optlist_autogen :  7_optlist_autogen 19_group_autogen
-(297)	7_optlist_autogen : 
-(298)	proc-component-attr-spec-list :  proc-component-attr-spec 7_optlist_autogen
-(299)	component-initialization :  '=' expr
-(300)	component-initialization :  '=' '>' null-init
-(301)	component-initialization :  '=' '>' initial-data-target
-(302)	initial-data-target :  designator
-(303)	private-components-stmt :  PRIVATE
-(304)	binding-private-stmt1_opt_autogen :  binding-private-stmt
-(305)	binding-private-stmt1_opt_autogen : 
-(306)	type-bound-proc-binding1_optlist_autogen :  type-bound-proc-binding1_optlist_autogen type-bound-proc-binding
-(307)	type-bound-proc-binding1_optlist_autogen : 
-(308)	type-bound-procedure-part :  contains-stmt binding-private-stmt1_opt_autogen type-bound-proc-binding1_optlist_autogen
-(309)	binding-private-stmt :  PRIVATE
-(310)	type-bound-proc-binding :  type-bound-procedure-stmt
-(311)	type-bound-proc-binding :  type-bound-generic-stmt
-(312)	type-bound-proc-binding :  final-procedure-stmt
-(313)	20_group_autogen :  ',' binding-attr-list
-(314)	13_opt_autogen :  20_group_autogen
-(315)	13_opt_autogen : 
-(316)	20_group_autogen :  13_opt_autogen ':' ':'
-(317)	type-bound-procedure-stmt :  PROCEDURE 13_opt_autogen type-bound-proc-decl-list
-(318)	type-bound-procedure-stmt :  PROCEDURE '(' NAME_LITERAL ')' ',' binding-attr-list ':' ':' name-list
-(319)	21_group_autogen :  '=' '>' NAME_LITERAL
-(320)	14_opt_autogen :  21_group_autogen
-(321)	14_opt_autogen : 
-(322)	type-bound-proc-decl :  NAME_LITERAL 14_opt_autogen
-(323)	22_group_autogen :  ',' type-bound-proc-decl
-(324)	8_optlist_autogen :  8_optlist_autogen 22_group_autogen
-(325)	8_optlist_autogen : 
-(326)	type-bound-proc-decl-list :  type-bound-proc-decl 8_optlist_autogen
-(327)	23_group_autogen :  ',' access-spec
-(328)	15_opt_autogen :  23_group_autogen
-(329)	15_opt_autogen : 
-(330)	type-bound-generic-stmt :  GENERIC 15_opt_autogen ':' ':' generic-spec '=' '>' name-list
-(331)	24_group_autogen :  '(' NAME_LITERAL ')'
-(332)	16_opt_autogen :  24_group_autogen
-(333)	16_opt_autogen : 
-(334)	binding-attr :  PASS 16_opt_autogen
-(335)	binding-attr :  NOPASS
-(336)	binding-attr :  NON_OVERRIDABLE
-(337)	binding-attr :  DEFERRED
-(338)	binding-attr :  access-spec
-(339)	25_group_autogen :  ',' binding-attr
-(340)	9_optlist_autogen :  9_optlist_autogen 25_group_autogen
-(341)	9_optlist_autogen : 
-(342)	binding-attr-list :  binding-attr 9_optlist_autogen
-(343)	26_group_autogen :  ':' ':'
-(344)	17_opt_autogen :  26_group_autogen
-(345)	17_opt_autogen : 
-(346)	final-procedure-stmt :  FINAL 17_opt_autogen name-list
-(347)	27_group_autogen :  '(' type-param-spec-list ')'
-(348)	18_opt_autogen :  27_group_autogen
-(349)	18_opt_autogen : 
-(350)	derived-type-spec :  NAME_LITERAL 18_opt_autogen
-(351)	28_group_autogen :  NAME_LITERAL '='
-(352)	19_opt_autogen :  28_group_autogen
-(353)	19_opt_autogen : 
-(354)	type-param-spec :  19_opt_autogen type-param-value
-(355)	29_group_autogen :  ',' type-param-spec
-(356)	10_optlist_autogen :  10_optlist_autogen 29_group_autogen
-(357)	10_optlist_autogen : 
-(358)	type-param-spec-list :  type-param-spec 10_optlist_autogen
-(359)	component-spec-list1_opt_autogen :  component-spec-list
-(360)	component-spec-list1_opt_autogen : 
-(361)	structure-constructor :  derived-type-spec '(' component-spec-list1_opt_autogen ')'
-(362)	30_group_autogen :  NAME_LITERAL '='
-(363)	20_opt_autogen :  30_group_autogen
-(364)	20_opt_autogen : 
-(365)	component-spec :  20_opt_autogen component-data-source
-(366)	31_group_autogen :  ',' component-spec
-(367)	11_optlist_autogen :  11_optlist_autogen 31_group_autogen
-(368)	11_optlist_autogen : 
-(369)	component-spec-list :  component-spec 11_optlist_autogen
-(370)	component-data-source :  expr
-(371)	component-data-source :  data-target
-(372)	component-data-source :  proc-target
-(373)	enumerator-def-stmt1_optlist_autogen :  enumerator-def-stmt1_optlist_autogen enumerator-def-stmt
-(374)	enumerator-def-stmt1_optlist_autogen : 
-(375)	enum-def :  enum-def-stmt enumerator-def-stmt enumerator-def-stmt1_optlist_autogen end-enum-stmt
-(376)	enum-def-stmt :  ENUM ',' BIND '(' 'C' ')'
-(377)	32_group_autogen :  ':' ':'
-(378)	21_opt_autogen :  32_group_autogen
-(379)	21_opt_autogen : 
-(380)	enumerator-def-stmt :  ENUMERATOR 21_opt_autogen enumerator-list
-(381)	33_group_autogen :  '=' expr
-(382)	22_opt_autogen :  33_group_autogen
-(383)	22_opt_autogen : 
-(384)	enumerator :  NAME_LITERAL 22_opt_autogen
-(385)	34_group_autogen :  ',' enumerator
-(386)	12_optlist_autogen :  12_optlist_autogen 34_group_autogen
-(387)	12_optlist_autogen : 
-(388)	enumerator-list :  enumerator 12_optlist_autogen
-(389)	end-enum-stmt :  END_ENUM
-(390)	boz-literal-constant :  BOZ_LITERAL_CONSTANT
-(391)	array-constructor :  '(' '/' ac-spec '/' ')'
-(392)	array-constructor :  '[' ac-spec ']'
-(393)	ac-spec :  type-spec ':' ':'
-(394)	35_group_autogen :  type-spec ':' ':'
-(395)	23_opt_autogen :  35_group_autogen
-(396)	23_opt_autogen : 
-(397)	ac-spec :  23_opt_autogen ac-value-list
-(398)	ac-value :  expr
-(399)	ac-value :  ac-implied-do
-(400)	36_group_autogen :  ',' ac-value
-(401)	13_optlist_autogen :  13_optlist_autogen 36_group_autogen
-(402)	13_optlist_autogen : 
-(403)	ac-value-list :  ac-value 13_optlist_autogen
-(404)	ac-implied-do :  '(' ac-value-list ',' ac-implied-do-control ')'
-(405)	37_group_autogen :  ',' expr
-(406)	24_opt_autogen :  37_group_autogen
-(407)	24_opt_autogen : 
-(408)	ac-implied-do-control :  NAME_LITERAL '=' expr ',' expr 24_opt_autogen
-(409)	38_group_autogen :  ',' attr-spec
-(410)	14_optlist_autogen :  14_optlist_autogen 38_group_autogen
-(411)	14_optlist_autogen : 
-(412)	38_group_autogen :  14_optlist_autogen ':' ':'
-(413)	type-declaration-stmt :  declaration-type-spec 38_group_autogen entity-decl-list
-(414)	attr-spec :  access-spec
-(415)	attr-spec :  ALLOCATABLE
-(416)	attr-spec :  ASYNCHRONOUS
-(417)	attr-spec :  CODIMENSION '[' coarray-spec ']'
-(418)	attr-spec :  CONTIGUOUS
-(419)	attr-spec :  DIMENSION '(' array-spec ')'
-(420)	attr-spec :  EXTERNAL
-(421)	attr-spec :  INTENT '(' intent-spec ')'
-(422)	attr-spec :  INTRINSIC
-(423)	attr-spec :  language-binding-spec
-(424)	attr-spec :  OPTIONAL
-(425)	attr-spec :  PARAMETER
-(426)	attr-spec :  POINTER
-(427)	attr-spec :  PROTECTED
-(428)	attr-spec :  SAVE
-(429)	attr-spec :  TARGET
-(430)	attr-spec :  VALUE
-(431)	attr-spec :  VOLATILE
-(432)	39_group_autogen :  '(' array-spec ')'
-(433)	25_opt_autogen :  39_group_autogen
-(434)	25_opt_autogen : 
-(435)	40_group_autogen :  '[' coarray-spec ']'
-(436)	26_opt_autogen :  40_group_autogen
-(437)	26_opt_autogen : 
-(438)	41_group_autogen :  '*' char-length
-(439)	27_opt_autogen :  41_group_autogen
-(440)	27_opt_autogen : 
-(441)	initialization1_opt_autogen :  initialization
-(442)	initialization1_opt_autogen : 
-(443)	entity-decl :  NAME_LITERAL 25_opt_autogen 26_opt_autogen 27_opt_autogen initialization1_opt_autogen
-(444)	42_group_autogen :  '*' char-length
-(445)	28_opt_autogen :  42_group_autogen
-(446)	28_opt_autogen : 
-(447)	entity-decl :  NAME_LITERAL 28_opt_autogen
-(448)	43_group_autogen :  ',' entity-decl
-(449)	15_optlist_autogen :  15_optlist_autogen 43_group_autogen
-(450)	15_optlist_autogen : 
-(451)	entity-decl-list :  entity-decl 15_optlist_autogen
-(452)	initialization :  '=' expr
-(453)	initialization :  '=' '>' null-init
-(454)	initialization :  '=' '>' initial-data-target
-(455)	null-init :  function-reference
-(456)	access-spec :  PUBLIC
-(457)	access-spec :  PRIVATE
-(458)	44_group_autogen :  ',' NAME_KEYWORD '=' expr
-(459)	29_opt_autogen :  44_group_autogen
-(460)	29_opt_autogen : 
-(461)	language-binding-spec :  BIND '(' 'C' 29_opt_autogen ')'
-(462)	coarray-spec :  deferred-coshape-spec-list
-(463)	coarray-spec :  explicit-coshape-spec
-(464)	deferred-coshape-spec :  ':'
-(465)	45_group_autogen :  ',' deferred-coshape-spec
-(466)	16_optlist_autogen :  16_optlist_autogen 45_group_autogen
-(467)	16_optlist_autogen : 
-(468)	deferred-coshape-spec-list :  deferred-coshape-spec 16_optlist_autogen
-(469)	46_group_autogen :  lower-cobound ':'
-(470)	30_opt_autogen :  46_group_autogen
-(471)	30_opt_autogen : 
-(472)	46_group_autogen :  30_opt_autogen upper-cobound ','
-(473)	17_optlist_autogen :  17_optlist_autogen 46_group_autogen
-(474)	17_optlist_autogen : 
-(475)	47_group_autogen :  lower-cobound ':'
-(476)	31_opt_autogen :  47_group_autogen
-(477)	31_opt_autogen : 
-(478)	explicit-coshape-spec :  17_optlist_autogen 31_opt_autogen '*'
-(479)	lower-cobound :  expr
-(480)	upper-cobound :  expr
-(481)	dimension-spec :  DIMENSION '(' array-spec ')'
-(482)	array-spec :  explicit-shape-spec-list
-(483)	array-spec :  assumed-shape-spec-list
-(484)	array-spec :  deferred-shape-spec-list
-(485)	array-spec :  assumed-size-spec
-(486)	array-spec :  implied-shape-spec-list
-(487)	48_group_autogen :  lower-bound ':'
-(488)	32_opt_autogen :  48_group_autogen
-(489)	32_opt_autogen : 
-(490)	explicit-shape-spec :  32_opt_autogen upper-bound
-(491)	49_group_autogen :  ',' explicit-shape-spec
-(492)	18_optlist_autogen :  18_optlist_autogen 49_group_autogen
-(493)	18_optlist_autogen : 
-(494)	explicit-shape-spec-list :  explicit-shape-spec 18_optlist_autogen
-(495)	lower-bound :  expr
-(496)	upper-bound :  expr
-(497)	lower-bound1_opt_autogen :  lower-bound
-(498)	lower-bound1_opt_autogen : 
-(499)	assumed-shape-spec :  lower-bound1_opt_autogen ':'
-(500)	50_group_autogen :  ',' assumed-shape-spec
-(501)	19_optlist_autogen :  19_optlist_autogen 50_group_autogen
-(502)	19_optlist_autogen : 
-(503)	assumed-shape-spec-list :  assumed-shape-spec 19_optlist_autogen
-(504)	deferred-shape-spec :  ':'
-(505)	51_group_autogen :  ',' deferred-shape-spec
-(506)	20_optlist_autogen :  20_optlist_autogen 51_group_autogen
-(507)	20_optlist_autogen : 
-(508)	deferred-shape-spec-list :  deferred-shape-spec 20_optlist_autogen
-(509)	52_group_autogen :  explicit-shape-spec ','
-(510)	21_optlist_autogen :  21_optlist_autogen 52_group_autogen
-(511)	21_optlist_autogen : 
-(512)	53_group_autogen :  lower-bound ':'
-(513)	33_opt_autogen :  53_group_autogen
-(514)	33_opt_autogen : 
-(515)	assumed-size-spec :  21_optlist_autogen 33_opt_autogen '*'
-(516)	54_group_autogen :  ',' assumed-size-spec
-(517)	22_optlist_autogen :  22_optlist_autogen 54_group_autogen
-(518)	22_optlist_autogen : 
-(519)	assumed-size-spec-list :  assumed-size-spec 22_optlist_autogen
-(520)	55_group_autogen :  lower-bound ':'
-(521)	34_opt_autogen :  55_group_autogen
-(522)	34_opt_autogen : 
-(523)	implied-shape-spec :  34_opt_autogen '*'
-(524)	56_group_autogen :  ',' implied-shape-spec
-(525)	23_optlist_autogen :  23_optlist_autogen 56_group_autogen
-(526)	23_optlist_autogen : 
-(527)	implied-shape-spec-list :  implied-shape-spec 23_optlist_autogen
-(528)	intent-spec :  IN
-(529)	intent-spec :  OUT
-(530)	intent-spec :  INOUT
-(531)	57_group_autogen :  ':' ':'
-(532)	35_opt_autogen :  57_group_autogen
-(533)	35_opt_autogen : 
-(534)	57_group_autogen :  35_opt_autogen access-id-list
-(535)	access-stmt :  access-spec 35_opt_autogen
-(536)	access-id :  NAME_LITERAL
-(537)	access-id :  generic-spec
-(538)	58_group_autogen :  ',' access-id
-(539)	36_opt_autogen :  58_group_autogen
-(540)	36_opt_autogen : 
-(541)	access-id-list :  access-id 36_opt_autogen
-(542)	59_group_autogen :  ':' ':'
-(543)	allocatable-stmt :  ALLOCATABLE 59_group_autogen allocatable-decl-list
-(544)	60_group_autogen :  '(' array-spec ')'
-(545)	37_opt_autogen :  60_group_autogen
-(546)	37_opt_autogen : 
-(547)	61_group_autogen :  '[' coarray-spec ']'
-(548)	38_opt_autogen :  61_group_autogen
-(549)	38_opt_autogen : 
-(550)	allocatable-decl :  NAME_LITERAL 37_opt_autogen 38_opt_autogen
-(551)	62_group_autogen :  ',' allocatable-decl
-(552)	24_optlist_autogen :  24_optlist_autogen 62_group_autogen
-(553)	24_optlist_autogen : 
-(554)	allocatable-decl-list :  allocatable-decl 24_optlist_autogen
-(555)	63_group_autogen :  ':' ':'
-(556)	39_opt_autogen :  63_group_autogen
-(557)	39_opt_autogen : 
-(558)	asynchronous-stmt :  ASYNCHRONOUS 39_opt_autogen name-list
-(559)	64_group_autogen :  ':' ':'
-(560)	40_opt_autogen :  64_group_autogen
-(561)	40_opt_autogen : 
-(562)	bind-stmt :  language-binding-spec 40_opt_autogen bind-entity-list
-(563)	bind-entity :  NAME_LITERAL
-(564)	bind-entity :  '/' NAME_LITERAL '/'
-(565)	65_group_autogen :  ',' bind-entity
-(566)	25_optlist_autogen :  25_optlist_autogen 65_group_autogen
-(567)	25_optlist_autogen : 
-(568)	bind-entity-list :  bind-entity 25_optlist_autogen
-(569)	66_group_autogen :  ':' ':'
-(570)	41_opt_autogen :  66_group_autogen
-(571)	41_opt_autogen : 
-(572)	codimension-stmt :  CODIMENSION 41_opt_autogen codimension-decl-list
-(573)	codimension-decl :  NAME_LITERAL '[' coarray-spec ']'
-(574)	67_group_autogen :  ',' codimension-decl
-(575)	26_optlist_autogen :  26_optlist_autogen 67_group_autogen
-(576)	26_optlist_autogen : 
-(577)	codimension-decl-list :  codimension-decl 26_optlist_autogen
-(578)	68_group_autogen :  ':' ':'
-(579)	42_opt_autogen :  68_group_autogen
-(580)	42_opt_autogen : 
-(581)	contiguous-stmt :  CONTIGUOUS 42_opt_autogen name-list
-(582)	','2_opt_autogen :  ','
-(583)	','2_opt_autogen : 
-(584)	69_group_autogen :  ','2_opt_autogen data-stmt-set
-(585)	27_optlist_autogen :  27_optlist_autogen 69_group_autogen
-(586)	27_optlist_autogen : 
-(587)	data-stmt :  DATA data-stmt-set 27_optlist_autogen
-(588)	data-stmt-set :  data-stmt-object-list '/' data-stmt-value-list '/'
-(589)	data-stmt-object :  variable
-(590)	data-stmt-object :  data-implied-do
-(591)	70_group_autogen :  ',' data-stmt-object
-(592)	28_optlist_autogen :  28_optlist_autogen 70_group_autogen
-(593)	28_optlist_autogen : 
-(594)	data-stmt-object-list :  data-stmt-object 28_optlist_autogen
-(595)	71_group_autogen :  ',' expr
-(596)	43_opt_autogen :  71_group_autogen
-(597)	43_opt_autogen : 
-(598)	data-implied-do :  '(' data-i-do-object-list ',' NAME_LITERAL '=' expr ',' expr 43_opt_autogen ')'
-(599)	data-i-do-object :  array-element
-(600)	data-i-do-object :  scalar-structure-component
-(601)	data-i-do-object :  data-implied-do
-(602)	72_group_autogen :  ',' data-i-do-object
-(603)	29_optlist_autogen :  29_optlist_autogen 72_group_autogen
-(604)	29_optlist_autogen : 
-(605)	data-i-do-object-list :  data-i-do-object 29_optlist_autogen
-(606)	73_group_autogen :  data-stmt-repeat '*'
-(607)	44_opt_autogen :  73_group_autogen
-(608)	44_opt_autogen : 
-(609)	data-stmt-value :  44_opt_autogen data-stmt-constant
-(610)	74_group_autogen :  ',' data-stmt-value
-(611)	30_optlist_autogen :  30_optlist_autogen 74_group_autogen
-(612)	30_optlist_autogen : 
-(613)	data-stmt-value-list :  data-stmt-value 30_optlist_autogen
-(614)	data-stmt-repeat :  constant
-(615)	data-stmt-repeat :  constant-subobject
-(616)	data-stmt-constant :  constant
-(617)	data-stmt-constant :  constant-subobject
-(618)	data-stmt-constant :  signed-int-literal-constant
-(619)	data-stmt-constant :  signed-real-literal-constant
-(620)	data-stmt-constant :  null-init
-(621)	data-stmt-constant :  initial-data-target
-(622)	data-stmt-constant :  structure-constructor
-(623)	constant-subobject :  designator
-(624)	75_group_autogen :  ':' ':'
-(625)	45_opt_autogen :  75_group_autogen
-(626)	45_opt_autogen : 
-(627)	76_group_autogen :  ',' NAME_LITERAL '(' array-spec ')'
-(628)	31_optlist_autogen :  31_optlist_autogen 76_group_autogen
-(629)	31_optlist_autogen : 
-(630)	dimension-stmt :  DIMENSION 45_opt_autogen NAME_LITERAL '(' array-spec ')' 31_optlist_autogen
-(631)	77_group_autogen :  ':' ':'
-(632)	46_opt_autogen :  77_group_autogen
-(633)	46_opt_autogen : 
-(634)	intent-stmt :  INTENT '(' intent-spec ')' 46_opt_autogen name-list
-(635)	78_group_autogen :  ':' ':'
-(636)	47_opt_autogen :  78_group_autogen
-(637)	47_opt_autogen : 
-(638)	optional-stmt :  OPTIONAL 47_opt_autogen name-list
-(639)	parameter-stmt :  PARAMETER '(' named-constant-def-list ')'
-(640)	named-constant-def :  NAME_LITERAL '=' expr
-(641)	79_group_autogen :  ',' named-constant-def
-(642)	32_optlist_autogen :  32_optlist_autogen 79_group_autogen
-(643)	32_optlist_autogen : 
-(644)	named-constant-def-list :  named-constant-def 32_optlist_autogen
-(645)	80_group_autogen :  ':' ':'
-(646)	pointer-stmt :  POINTER 80_group_autogen pointer-decl-list
-(647)	81_group_autogen :  '(' deferred-shape-spec-list ')'
-(648)	48_opt_autogen :  81_group_autogen
-(649)	48_opt_autogen : 
-(650)	pointer-decl :  NAME_LITERAL 48_opt_autogen
-(651)	pointer-decl :  NAME_LITERAL
-(652)	82_group_autogen :  ',' pointer-decl
-(653)	33_optlist_autogen :  33_optlist_autogen 82_group_autogen
-(654)	33_optlist_autogen : 
-(655)	pointer-decl-list :  pointer-decl 33_optlist_autogen
-(656)	83_group_autogen :  ':' ':'
-(657)	49_opt_autogen :  83_group_autogen
-(658)	49_opt_autogen : 
-(659)	protected-stmt :  PROTECTED 49_opt_autogen name-list
-(660)	84_group_autogen :  ':' ':'
-(661)	50_opt_autogen :  84_group_autogen
-(662)	50_opt_autogen : 
-(663)	84_group_autogen :  50_opt_autogen saved-entity-list
-(664)	save-stmt :  SAVE 50_opt_autogen
-(665)	saved-entity :  NAME_LITERAL
-(666)	saved-entity :  '/' NAME_LITERAL '/'
-(667)	85_group_autogen :  ',' saved-entity
-(668)	34_optlist_autogen :  34_optlist_autogen 85_group_autogen
-(669)	34_optlist_autogen : 
-(670)	saved-entity-list :  saved-entity 34_optlist_autogen
-(671)	86_group_autogen :  ':' ':'
-(672)	51_opt_autogen :  86_group_autogen
-(673)	51_opt_autogen : 
-(674)	target-stmt :  TARGET 51_opt_autogen target-decl-list
-(675)	87_group_autogen :  '(' array-spec ')'
-(676)	52_opt_autogen :  87_group_autogen
-(677)	52_opt_autogen : 
-(678)	88_group_autogen :  '[' coarray-spec ']'
-(679)	53_opt_autogen :  88_group_autogen
-(680)	53_opt_autogen : 
-(681)	target-decl :  NAME_LITERAL 52_opt_autogen 53_opt_autogen
-(682)	89_group_autogen :  ',' target-decl
-(683)	35_optlist_autogen :  35_optlist_autogen 89_group_autogen
-(684)	35_optlist_autogen : 
-(685)	target-decl-list :  target-decl 35_optlist_autogen
-(686)	90_group_autogen :  ':' ':'
-(687)	54_opt_autogen :  90_group_autogen
-(688)	54_opt_autogen : 
-(689)	value-stmt :  VALUE 54_opt_autogen name-list
-(690)	91_group_autogen :  ':' ':'
-(691)	55_opt_autogen :  91_group_autogen
-(692)	55_opt_autogen : 
-(693)	volatile-stmt :  VOLATILE 55_opt_autogen name-list
-(694)	implicit-stmt :  IMPLICIT implicit-spec-list
-(695)	implicit-stmt :  IMPLICIT_NONE
-(696)	implicit-spec :  declaration-type-spec '(' letter-spec-list ')'
-(697)	92_group_autogen :  ',' implicit-spec
-(698)	36_optlist_autogen :  36_optlist_autogen 92_group_autogen
-(699)	36_optlist_autogen : 
-(700)	implicit-spec-list :  implicit-spec 36_optlist_autogen
-(701)	93_group_autogen :  '-' NAME_LITERAL
-(702)	56_opt_autogen :  93_group_autogen
-(703)	56_opt_autogen : 
-(704)	letter-spec :  NAME_LITERAL 56_opt_autogen
-(705)	94_group_autogen :  ',' letter-spec
-(706)	37_optlist_autogen :  37_optlist_autogen 94_group_autogen
-(707)	37_optlist_autogen : 
-(708)	letter-spec-list :  letter-spec 37_optlist_autogen
-(709)	','3_opt_autogen :  ','
-(710)	','3_opt_autogen : 
-(711)	95_group_autogen :  ','3_opt_autogen '/' NAME_LITERAL '/' name-list
-(712)	38_optlist_autogen :  38_optlist_autogen 95_group_autogen
-(713)	38_optlist_autogen : 
-(714)	namelist-stmt :  NAMELIST '/' NAME_LITERAL '/' name-list 38_optlist_autogen
-(715)	equivalence-stmt :  EQUIVALENCE equivalence-set-list
-(716)	equivalence-set :  '(' equivalence-object ',' equivalence-object-list ')'
-(717)	96_group_autogen :  ',' equivalence-set
-(718)	39_optlist_autogen :  39_optlist_autogen 96_group_autogen
-(719)	39_optlist_autogen : 
-(720)	equivalence-set-list :  equivalence-set 39_optlist_autogen
-(721)	equivalence-object :  NAME_LITERAL
-(722)	equivalence-object :  array-element
-(723)	equivalence-object :  substring
-(724)	97_group_autogen :  ',' equivalence-object
-(725)	40_optlist_autogen :  40_optlist_autogen 97_group_autogen
-(726)	40_optlist_autogen : 
-(727)	equivalence-object-list :  equivalence-object 40_optlist_autogen
-(728)	NAME_LITERAL2_opt_autogen :  NAME_LITERAL
-(729)	NAME_LITERAL2_opt_autogen : 
-(730)	98_group_autogen :  '/' NAME_LITERAL2_opt_autogen '/'
-(731)	57_opt_autogen :  98_group_autogen
-(732)	57_opt_autogen : 
-(733)	','4_opt_autogen :  ','
-(734)	','4_opt_autogen : 
-(735)	NAME_LITERAL3_opt_autogen :  NAME_LITERAL
-(736)	NAME_LITERAL3_opt_autogen : 
-(737)	99_group_autogen :  ','4_opt_autogen '/' NAME_LITERAL3_opt_autogen '/' common-block-object-list
-(738)	41_optlist_autogen :  41_optlist_autogen 99_group_autogen
-(739)	41_optlist_autogen : 
-(740)	common-stmt :  COMMON 57_opt_autogen common-block-object-list 41_optlist_autogen
-(741)	100_group_autogen :  '(' array-spec ')'
-(742)	58_opt_autogen :  100_group_autogen
-(743)	58_opt_autogen : 
-(744)	common-block-object :  NAME_LITERAL 58_opt_autogen
-(745)	101_group_autogen :  ',' common-block-object
-(746)	42_optlist_autogen :  42_optlist_autogen 101_group_autogen
-(747)	42_optlist_autogen : 
-(748)	common-block-object-list :  common-block-object 42_optlist_autogen
-(749)	designator :  NAME_LITERAL
-(750)	designator :  array-element
-(751)	designator :  array-section
-(752)	designator :  coindexed-named-object
-(753)	designator :  complex-part-designator
-(754)	designator :  structure-component
-(755)	designator :  substring
-(756)	variable :  designator
-(757)	variable :  expr
-(758)	substring :  parent-string '(' substring-range ')'
-(759)	parent-string :  NAME_LITERAL
-(760)	parent-string :  array-element
-(761)	parent-string :  coindexed-named-object
-(762)	parent-string :  scalar-structure-component
-(763)	parent-string :  constant
-(764)	expr1_opt_autogen :  expr
-(765)	expr1_opt_autogen : 
-(766)	expr2_opt_autogen :  expr
-(767)	expr2_opt_autogen : 
-(768)	substring-range :  expr1_opt_autogen ':' expr2_opt_autogen
-(769)	102_group_autogen :  '%' part-ref
-(770)	59_opt_autogen :  102_group_autogen
-(771)	59_opt_autogen : 
-(772)	data-ref :  part-ref 59_opt_autogen
-(773)	103_group_autogen :  '(' section-subscript-list ')'
-(774)	60_opt_autogen :  103_group_autogen
-(775)	60_opt_autogen : 
-(776)	image-selector1_opt_autogen :  image-selector
-(777)	image-selector1_opt_autogen : 
-(778)	part-ref :  NAME_LITERAL 60_opt_autogen image-selector1_opt_autogen
-(779)	structure-component :  data-ref
-(780)	scalar-structure-component :  structure-component
-(781)	coindexed-named-object :  data-ref
-(782)	complex-part-designator :  designator '%' RE
-(783)	complex-part-designator :  designator '%' IM
-(784)	type-param-inquiry :  designator '%' NAME_LITERAL
-(785)	array-element :  data-ref
-(786)	104_group_autogen :  '(' substring-range ')'
-(787)	61_opt_autogen :  104_group_autogen
-(788)	61_opt_autogen : 
-(789)	array-section :  data-ref 61_opt_autogen
-(790)	array-section :  complex-part-designator
-(791)	subscript :  expr
-(792)	section-subscript :  subscript
-(793)	section-subscript :  subscript-triplet
-(794)	section-subscript :  vector-subscript
-(795)	105_group_autogen :  ',' section-subscript
-(796)	43_optlist_autogen :  43_optlist_autogen 105_group_autogen
-(797)	43_optlist_autogen : 
-(798)	section-subscript-list :  section-subscript 43_optlist_autogen
-(799)	subscript1_opt_autogen :  subscript
-(800)	subscript1_opt_autogen : 
-(801)	subscript2_opt_autogen :  subscript
-(802)	subscript2_opt_autogen : 
-(803)	106_group_autogen :  ':' stride
-(804)	62_opt_autogen :  106_group_autogen
-(805)	62_opt_autogen : 
-(806)	subscript-triplet :  subscript1_opt_autogen ':' subscript2_opt_autogen 62_opt_autogen
-(807)	stride :  expr
-(808)	vector-subscript :  expr
-(809)	image-selector :  '[' cosubscript-list ']'
-(810)	cosubscript :  expr
-(811)	107_group_autogen :  ',' cosubscript
-(812)	44_optlist_autogen :  44_optlist_autogen 107_group_autogen
-(813)	44_optlist_autogen : 
-(814)	cosubscript-list :  cosubscript 44_optlist_autogen
-(815)	108_group_autogen :  type-spec ':' ':'
-(816)	63_opt_autogen :  108_group_autogen
-(817)	63_opt_autogen : 
-(818)	109_group_autogen :  ',' alloc-opt-list
-(819)	64_opt_autogen :  109_group_autogen
-(820)	64_opt_autogen : 
-(821)	allocate-stmt :  ALLOCATE '(' 63_opt_autogen allocation-list 64_opt_autogen ')'
-(822)	alloc-opt :  ERRMSG '=' variable
-(823)	alloc-opt :  MOLD '=' expr
-(824)	alloc-opt :  SOURCE '=' expr
-(825)	alloc-opt :  STAT '=' variable
-(826)	110_group_autogen :  ',' alloc-opt
-(827)	45_optlist_autogen :  45_optlist_autogen 110_group_autogen
-(828)	45_optlist_autogen : 
-(829)	alloc-opt-list :  alloc-opt 45_optlist_autogen
-(830)	111_group_autogen :  '(' allocate-shape-spec-list ')'
-(831)	65_opt_autogen :  111_group_autogen
-(832)	65_opt_autogen : 
-(833)	112_group_autogen :  '[' allocate-coarray-spec ']'
-(834)	66_opt_autogen :  112_group_autogen
-(835)	66_opt_autogen : 
-(836)	allocation :  allocate-object 65_opt_autogen 66_opt_autogen
-(837)	113_group_autogen :  ',' allocation
-(838)	46_optlist_autogen :  46_optlist_autogen 113_group_autogen
-(839)	46_optlist_autogen : 
-(840)	allocation-list :  allocation 46_optlist_autogen
-(841)	allocate-object :  NAME_LITERAL
-(842)	allocate-object :  structure-component
-(843)	114_group_autogen :  ',' allocate-object
-(844)	47_optlist_autogen :  47_optlist_autogen 114_group_autogen
-(845)	47_optlist_autogen : 
-(846)	allocate-object-list :  allocate-object 47_optlist_autogen
-(847)	115_group_autogen :  expr ':'
-(848)	67_opt_autogen :  115_group_autogen
-(849)	67_opt_autogen : 
-(850)	allocate-shape-spec :  67_opt_autogen expr
-(851)	116_group_autogen :  ',' allocate-shape-spec
-(852)	48_optlist_autogen :  48_optlist_autogen 116_group_autogen
-(853)	48_optlist_autogen : 
-(854)	allocate-shape-spec-list :  allocate-shape-spec 48_optlist_autogen
-(855)	117_group_autogen :  allocate-coshape-spec-list ','
-(856)	68_opt_autogen :  117_group_autogen
-(857)	68_opt_autogen : 
-(858)	118_group_autogen :  expr ':'
-(859)	69_opt_autogen :  118_group_autogen
-(860)	69_opt_autogen : 
-(861)	allocate-coarray-spec :  68_opt_autogen 69_opt_autogen '*'
-(862)	119_group_autogen :  expr ':'
-(863)	70_opt_autogen :  119_group_autogen
-(864)	70_opt_autogen : 
-(865)	allocate-coshape-spec :  70_opt_autogen expr
-(866)	120_group_autogen :  ',' allocate-coshape-spec
-(867)	49_optlist_autogen :  49_optlist_autogen 120_group_autogen
-(868)	49_optlist_autogen : 
-(869)	allocate-coshape-spec-list :  allocate-coshape-spec 49_optlist_autogen
-(870)	nullify-stmt :  NULLIFY '(' pointer-object-list ')'
-(871)	pointer-object :  NAME_LITERAL
-(872)	pointer-object :  structure-component
-(873)	121_group_autogen :  ',' pointer-object
-(874)	50_optlist_autogen :  50_optlist_autogen 121_group_autogen
-(875)	50_optlist_autogen : 
-(876)	pointer-object-list :  pointer-object 50_optlist_autogen
-(877)	122_group_autogen :  ',' dealloc-opt-list
-(878)	71_opt_autogen :  122_group_autogen
-(879)	71_opt_autogen : 
-(880)	deallocate-stmt :  DEALLOCATE '(' allocate-object-list 71_opt_autogen ')'
-(881)	dealloc-opt :  STAT '=' variable
-(882)	dealloc-opt :  ERRMSG '=' variable
-(883)	123_group_autogen :  ',' dealloc-opt
-(884)	51_optlist_autogen :  51_optlist_autogen 123_group_autogen
-(885)	51_optlist_autogen : 
-(886)	dealloc-opt-list :  dealloc-opt 51_optlist_autogen
-(887)	primary :  designator
-(888)	primary :  array-constructor
-(889)	primary :  structure-constructor
-(890)	primary :  function-reference
-(891)	primary :  type-param-inquiry
-(892)	primary :  '(' expr ')'
-(893)	defined-op1_opt_autogen :  defined-op
-(894)	defined-op1_opt_autogen : 
-(895)	level-1-expr :  defined-op1_opt_autogen primary
-(896)	defined-op :  '.' NAME_LITERAL '.'
-(897)	124_group_autogen :  power-op mult-operand
-(898)	72_opt_autogen :  124_group_autogen
-(899)	72_opt_autogen : 
-(900)	mult-operand :  level-1-expr 72_opt_autogen
-(901)	125_group_autogen :  add-operand mult-op
-(902)	73_opt_autogen :  125_group_autogen
-(903)	73_opt_autogen : 
-(904)	add-operand :  73_opt_autogen mult-operand
-(905)	level-2-expr1_opt_autogen :  level-2-expr
-(906)	level-2-expr1_opt_autogen : 
-(907)	126_group_autogen :  level-2-expr1_opt_autogen add-op
-(908)	74_opt_autogen :  126_group_autogen
-(909)	74_opt_autogen : 
-(910)	level-2-expr :  74_opt_autogen add-operand
-(911)	power-op :  '*' '*'
-(912)	mult-op :  '*'
-(913)	mult-op :  '/'
-(914)	add-op :  '+'
-(915)	add-op :  '-'
-(916)	127_group_autogen :  level-3-expr concat-op
-(917)	75_opt_autogen :  127_group_autogen
-(918)	75_opt_autogen : 
-(919)	level-3-expr :  75_opt_autogen level-2-expr
-(920)	concat-op :  '/' '/'
-(921)	128_group_autogen :  level-3-expr rel-op
-(922)	76_opt_autogen :  128_group_autogen
-(923)	76_opt_autogen : 
-(924)	level-4-expr :  76_opt_autogen level-3-expr
-(925)	rel-op :  EQ
-(926)	rel-op :  NE
-(927)	rel-op :  LT
-(928)	rel-op :  LE
-(929)	rel-op :  GT
-(930)	rel-op :  GE
-(931)	rel-op :  '=' '='
-(932)	rel-op :  '/' '='
-(933)	rel-op :  '<'
-(934)	rel-op :  '<' '='
-(935)	rel-op :  '>'
-(936)	rel-op :  '>' '='
-(937)	not-op1_opt_autogen :  not-op
-(938)	not-op1_opt_autogen : 
-(939)	and-operand :  not-op1_opt_autogen level-4-expr
-(940)	129_group_autogen :  or-operand and-op
-(941)	77_opt_autogen :  129_group_autogen
-(942)	77_opt_autogen : 
-(943)	or-operand :  77_opt_autogen and-operand
-(944)	130_group_autogen :  equiv-operand or-op
-(945)	78_opt_autogen :  130_group_autogen
-(946)	78_opt_autogen : 
-(947)	equiv-operand :  78_opt_autogen or-operand
-(948)	131_group_autogen :  level-5-expr equiv-op
-(949)	79_opt_autogen :  131_group_autogen
-(950)	79_opt_autogen : 
-(951)	level-5-expr :  79_opt_autogen equiv-operand
-(952)	not-op :  NOT
-(953)	and-op :  AND
-(954)	or-op :  OR
-(955)	equiv-op :  EQV
-(956)	equiv-op :  NEQV
-(957)	132_group_autogen :  expr defined-op
-(958)	80_opt_autogen :  132_group_autogen
-(959)	80_opt_autogen : 
-(960)	expr :  80_opt_autogen level-5-expr
-(961)	assignment-stmt :  variable '=' expr
-(962)	133_group_autogen :  '(' bounds-spec-list ')'
-(963)	81_opt_autogen :  133_group_autogen
-(964)	81_opt_autogen : 
-(965)	pointer-assignment-stmt :  data-pointer-object 81_opt_autogen '=' '>' data-target
-(966)	pointer-assignment-stmt :  data-pointer-object '(' bounds-remapping-list ')' '=' '>' data-target
-(967)	pointer-assignment-stmt :  proc-pointer-object '=' '>' proc-target
-(968)	data-pointer-object :  NAME_LITERAL
-(969)	data-pointer-object :  variable '%' NAME_LITERAL
-(970)	bounds-spec :  expr ':'
-(971)	134_group_autogen :  ',' bounds-spec
-(972)	52_optlist_autogen :  52_optlist_autogen 134_group_autogen
-(973)	52_optlist_autogen : 
-(974)	bounds-spec-list :  bounds-spec 52_optlist_autogen
-(975)	bounds-remapping :  expr ':' expr
-(976)	135_group_autogen :  ',' bounds-remapping
-(977)	53_optlist_autogen :  53_optlist_autogen 135_group_autogen
-(978)	53_optlist_autogen : 
-(979)	bounds-remapping-list :  bounds-remapping 53_optlist_autogen
-(980)	data-target :  variable
-(981)	proc-pointer-object :  NAME_LITERAL
-(982)	proc-pointer-object :  proc-component-ref
-(983)	proc-component-ref :  variable '%' NAME_LITERAL
-(984)	proc-target :  expr
-(985)	proc-target :  NAME_LITERAL
-(986)	proc-target :  proc-component-ref
-(987)	where-stmt :  WHERE '(' expr ')' where-assignment-stmt
-(988)	where-body-construct1_optlist_autogen :  where-body-construct1_optlist_autogen where-body-construct
-(989)	where-body-construct1_optlist_autogen : 
-(990)	where-body-construct2_optlist_autogen :  where-body-construct2_optlist_autogen where-body-construct
-(991)	where-body-construct2_optlist_autogen : 
-(992)	136_group_autogen :  masked-elsewhere-stmt where-body-construct2_optlist_autogen
-(993)	54_optlist_autogen :  54_optlist_autogen 136_group_autogen
-(994)	54_optlist_autogen : 
-(995)	where-body-construct3_optlist_autogen :  where-body-construct3_optlist_autogen where-body-construct
-(996)	where-body-construct3_optlist_autogen : 
-(997)	137_group_autogen :  elsewhere-stmt where-body-construct3_optlist_autogen
-(998)	82_opt_autogen :  137_group_autogen
-(999)	82_opt_autogen : 
-(1000)	where-construct :  where-construct-stmt where-body-construct1_optlist_autogen 54_optlist_autogen 82_opt_autogen end-where-stmt
-(1001)	138_group_autogen :  NAME_LITERAL ':'
-(1002)	83_opt_autogen :  138_group_autogen
-(1003)	83_opt_autogen : 
-(1004)	where-construct-stmt :  83_opt_autogen WHERE '(' expr ')'
-(1005)	where-body-construct :  where-assignment-stmt
-(1006)	where-body-construct :  where-stmt
-(1007)	where-body-construct :  where-construct
-(1008)	where-assignment-stmt :  assignment-stmt
-(1009)	NAME_LITERAL4_opt_autogen :  NAME_LITERAL
-(1010)	NAME_LITERAL4_opt_autogen : 
-(1011)	masked-elsewhere-stmt :  ELSEWHERE '(' expr ')' NAME_LITERAL4_opt_autogen
-(1012)	NAME_LITERAL5_opt_autogen :  NAME_LITERAL
-(1013)	NAME_LITERAL5_opt_autogen : 
-(1014)	elsewhere-stmt :  ELSEWHERE NAME_LITERAL5_opt_autogen
-(1015)	NAME_LITERAL6_opt_autogen :  NAME_LITERAL
-(1016)	NAME_LITERAL6_opt_autogen : 
-(1017)	end-where-stmt :  END_WHERE NAME_LITERAL6_opt_autogen
-(1018)	forall-body-construct1_optlist_autogen :  forall-body-construct1_optlist_autogen forall-body-construct
-(1019)	forall-body-construct1_optlist_autogen : 
-(1020)	forall-construct :  forall-construct-stmt forall-body-construct1_optlist_autogen end-forall-stmt
-(1021)	139_group_autogen :  NAME_LITERAL ':'
-(1022)	84_opt_autogen :  139_group_autogen
-(1023)	84_opt_autogen : 
-(1024)	forall-construct-stmt :  84_opt_autogen FORALL forall-header
-(1025)	140_group_autogen :  type-spec ':' ':'
-(1026)	85_opt_autogen :  140_group_autogen
-(1027)	85_opt_autogen : 
-(1028)	141_group_autogen :  ',' expr
-(1029)	86_opt_autogen :  141_group_autogen
-(1030)	86_opt_autogen : 
-(1031)	forall-header :  '(' 85_opt_autogen forall-triplet-spec-list 86_opt_autogen ')'
-(1032)	142_group_autogen :  ':' forall-step
-(1033)	87_opt_autogen :  142_group_autogen
-(1034)	87_opt_autogen : 
-(1035)	forall-triplet-spec :  NAME_LITERAL '=' forall-limit ':' forall-limit 87_opt_autogen
-(1036)	143_group_autogen :  ',' forall-triplet-spec
-(1037)	55_optlist_autogen :  55_optlist_autogen 143_group_autogen
-(1038)	55_optlist_autogen : 
-(1039)	forall-triplet-spec-list :  forall-triplet-spec 55_optlist_autogen
-(1040)	forall-limit :  expr
-(1041)	forall-step :  expr
-(1042)	forall-body-construct :  forall-assignment-stmt
-(1043)	forall-body-construct :  where-stmt
-(1044)	forall-body-construct :  where-construct
-(1045)	forall-body-construct :  forall-construct
-(1046)	forall-body-construct :  forall-stmt
-(1047)	forall-assignment-stmt :  assignment-stmt
-(1048)	forall-assignment-stmt :  pointer-assignment-stmt
-(1049)	NAME_LITERAL7_opt_autogen :  NAME_LITERAL
-(1050)	NAME_LITERAL7_opt_autogen : 
-(1051)	end-forall-stmt :  END_FORALL NAME_LITERAL7_opt_autogen
-(1052)	forall-stmt :  FORALL forall-header forall-assignment-stmt
-(1053)	execution-part-construct2_optlist_autogen :  execution-part-construct2_optlist_autogen execution-part-construct
-(1054)	execution-part-construct2_optlist_autogen : 
-(1055)	block :  execution-part-construct2_optlist_autogen
-(1056)	associate-construct :  associate-stmt block end-associate-stmt
-(1057)	144_group_autogen :  NAME_LITERAL ':'
-(1058)	88_opt_autogen :  144_group_autogen
-(1059)	88_opt_autogen : 
-(1060)	associate-stmt :  88_opt_autogen ASSOCIATE '(' association-list ')'
-(1061)	association :  NAME_LITERAL '=' '>' selector
-(1062)	145_group_autogen :  ',' association
-(1063)	56_optlist_autogen :  56_optlist_autogen 145_group_autogen
-(1064)	56_optlist_autogen : 
-(1065)	association-list :  association 56_optlist_autogen
-(1066)	selector :  expr
-(1067)	selector :  variable
-(1068)	NAME_LITERAL8_opt_autogen :  NAME_LITERAL
-(1069)	NAME_LITERAL8_opt_autogen : 
-(1070)	end-associate-stmt :  END_ASSOCIATE NAME_LITERAL8_opt_autogen
-(1071)	specification-part1_opt_autogen :  specification-part
-(1072)	specification-part1_opt_autogen : 
-(1073)	block-construct :  block-stmt specification-part1_opt_autogen block end-block-stmt
-(1074)	146_group_autogen :  NAME_LITERAL ':'
-(1075)	89_opt_autogen :  146_group_autogen
-(1076)	89_opt_autogen : 
-(1077)	block-stmt :  89_opt_autogen BLOCK
-(1078)	NAME_LITERAL9_opt_autogen :  NAME_LITERAL
-(1079)	NAME_LITERAL9_opt_autogen : 
-(1080)	end-block-stmt :  END_BLOCK NAME_LITERAL9_opt_autogen
-(1081)	critical-construct :  critical-stmt block end-critical-stmt
-(1082)	147_group_autogen :  NAME_LITERAL ':'
-(1083)	90_opt_autogen :  147_group_autogen
-(1084)	90_opt_autogen : 
-(1085)	critical-stmt :  90_opt_autogen CRITICAL
-(1086)	NAME_LITERAL10_opt_autogen :  NAME_LITERAL
-(1087)	NAME_LITERAL10_opt_autogen : 
-(1088)	end-critical-stmt :  END_CRITICAL NAME_LITERAL10_opt_autogen
-(1089)	do-construct :  block-do-construct
-(1090)	do-construct :  nonblock-do-construct
-(1091)	block-do-construct :  do-stmt block end-do
-(1092)	do-stmt :  label-do-stmt
-(1093)	do-stmt :  nonlabel-do-stmt
-(1094)	148_group_autogen :  NAME_LITERAL ':'
-(1095)	91_opt_autogen :  148_group_autogen
-(1096)	91_opt_autogen : 
-(1097)	loop-control1_opt_autogen :  loop-control
-(1098)	loop-control1_opt_autogen : 
-(1099)	label-do-stmt :  91_opt_autogen DO INT_LITERAL_CONSTANT loop-control1_opt_autogen
-(1100)	149_group_autogen :  NAME_LITERAL ':'
-(1101)	92_opt_autogen :  149_group_autogen
-(1102)	92_opt_autogen : 
-(1103)	loop-control2_opt_autogen :  loop-control
-(1104)	loop-control2_opt_autogen : 
-(1105)	nonlabel-do-stmt :  92_opt_autogen DO loop-control2_opt_autogen
-(1106)	','5_opt_autogen :  ','
-(1107)	','5_opt_autogen : 
-(1108)	150_group_autogen :  ',' expr
-(1109)	93_opt_autogen :  150_group_autogen
-(1110)	93_opt_autogen : 
-(1111)	loop-control :  ','5_opt_autogen NAME_LITERAL '=' expr ',' expr 93_opt_autogen
-(1112)	','6_opt_autogen :  ','
-(1113)	','6_opt_autogen : 
-(1114)	loop-control :  ','6_opt_autogen WHILE '(' expr ')'
-(1115)	','7_opt_autogen :  ','
-(1116)	','7_opt_autogen : 
-(1117)	loop-control :  ','7_opt_autogen CONCURRENT forall-header
-(1118)	end-do :  end-do-stmt
-(1119)	end-do :  continue-stmt
-(1120)	NAME_LITERAL11_opt_autogen :  NAME_LITERAL
-(1121)	NAME_LITERAL11_opt_autogen : 
-(1122)	end-do-stmt :  END_DO NAME_LITERAL11_opt_autogen
-(1123)	nonblock-do-construct :  action-term-do-construct
-(1124)	nonblock-do-construct :  outer-shared-do-construct
-(1125)	action-term-do-construct :  label-do-stmt do-body action-stmt
-(1126)	execution-part-construct3_optlist_autogen :  execution-part-construct3_optlist_autogen execution-part-construct
-(1127)	execution-part-construct3_optlist_autogen : 
-(1128)	do-body :  execution-part-construct3_optlist_autogen
-(1129)	outer-shared-do-construct :  label-do-stmt do-body shared-term-do-construct
-(1130)	shared-term-do-construct :  outer-shared-do-construct
-(1131)	shared-term-do-construct :  inner-shared-do-construct
-(1132)	inner-shared-do-construct :  label-do-stmt do-body do-term-shared-stmt
-(1133)	do-term-shared-stmt :  action-stmt
-(1134)	NAME_LITERAL12_opt_autogen :  NAME_LITERAL
-(1135)	NAME_LITERAL12_opt_autogen : 
-(1136)	cycle-stmt :  CYCLE NAME_LITERAL12_opt_autogen
-(1137)	151_group_autogen :  else-if-stmt block
-(1138)	57_optlist_autogen :  57_optlist_autogen 151_group_autogen
-(1139)	57_optlist_autogen : 
-(1140)	152_group_autogen :  else-stmt block
-(1141)	94_opt_autogen :  152_group_autogen
-(1142)	94_opt_autogen : 
-(1143)	if-construct :  if-then-stmt block 57_optlist_autogen 94_opt_autogen end-if-stmt
-(1144)	153_group_autogen :  NAME_LITERAL ':'
-(1145)	95_opt_autogen :  153_group_autogen
-(1146)	95_opt_autogen : 
-(1147)	if-then-stmt :  95_opt_autogen IF '(' expr ')' THEN
-(1148)	NAME_LITERAL13_opt_autogen :  NAME_LITERAL
-(1149)	NAME_LITERAL13_opt_autogen : 
-(1150)	else-if-stmt :  ELSE_IF '(' expr ')' THEN NAME_LITERAL13_opt_autogen
-(1151)	NAME_LITERAL14_opt_autogen :  NAME_LITERAL
-(1152)	NAME_LITERAL14_opt_autogen : 
-(1153)	else-stmt :  ELSE NAME_LITERAL14_opt_autogen
-(1154)	NAME_LITERAL15_opt_autogen :  NAME_LITERAL
-(1155)	NAME_LITERAL15_opt_autogen : 
-(1156)	end-if-stmt :  END_IF NAME_LITERAL15_opt_autogen
-(1157)	if-stmt :  IF '(' expr ')' action-stmt
-(1158)	154_group_autogen :  case-stmt block
-(1159)	58_optlist_autogen :  58_optlist_autogen 154_group_autogen
-(1160)	58_optlist_autogen : 
-(1161)	case-construct :  select-case-stmt 58_optlist_autogen end-select-stmt
-(1162)	155_group_autogen :  NAME_LITERAL ':'
-(1163)	96_opt_autogen :  155_group_autogen
-(1164)	96_opt_autogen : 
-(1165)	select-case-stmt :  96_opt_autogen SELECT_CASE '(' expr ')'
-(1166)	NAME_LITERAL16_opt_autogen :  NAME_LITERAL
-(1167)	NAME_LITERAL16_opt_autogen : 
-(1168)	case-stmt :  CASE case-selector NAME_LITERAL16_opt_autogen
-(1169)	NAME_LITERAL17_opt_autogen :  NAME_LITERAL
-(1170)	NAME_LITERAL17_opt_autogen : 
-(1171)	end-select-stmt :  END_SELECT NAME_LITERAL17_opt_autogen
-(1172)	case-selector :  '(' case-value-range-list ')'
-(1173)	case-selector :  DEFAULT
-(1174)	case-value-range :  case-value
-(1175)	case-value-range :  case-value ':'
-(1176)	case-value-range :  ':' case-value
-(1177)	case-value-range :  case-value ':' case-value
-(1178)	156_group_autogen :  ',' case-value-range
-(1179)	59_optlist_autogen :  59_optlist_autogen 156_group_autogen
-(1180)	59_optlist_autogen : 
-(1181)	case-value-range-list :  case-value-range 59_optlist_autogen
-(1182)	case-value :  expr
-(1183)	157_group_autogen :  type-guard-stmt block
-(1184)	60_optlist_autogen :  60_optlist_autogen 157_group_autogen
-(1185)	60_optlist_autogen : 
-(1186)	select-type-construct :  select-type-stmt 60_optlist_autogen end-select-type-stmt
-(1187)	158_group_autogen :  NAME_LITERAL ':'
-(1188)	97_opt_autogen :  158_group_autogen
-(1189)	97_opt_autogen : 
-(1190)	159_group_autogen :  NAME_LITERAL '=' '>'
-(1191)	98_opt_autogen :  159_group_autogen
-(1192)	98_opt_autogen : 
-(1193)	select-type-stmt :  97_opt_autogen SELECT TYPE '(' 98_opt_autogen selector ')'
-(1194)	NAME_LITERAL18_opt_autogen :  NAME_LITERAL
-(1195)	NAME_LITERAL18_opt_autogen : 
-(1196)	type-guard-stmt :  TYPE_IS '(' type-spec ')' NAME_LITERAL18_opt_autogen
-(1197)	NAME_LITERAL19_opt_autogen :  NAME_LITERAL
-(1198)	NAME_LITERAL19_opt_autogen : 
-(1199)	type-guard-stmt :  CLASS_IS '(' derived-type-spec ')' NAME_LITERAL19_opt_autogen
-(1200)	NAME_LITERAL20_opt_autogen :  NAME_LITERAL
-(1201)	NAME_LITERAL20_opt_autogen : 
-(1202)	type-guard-stmt :  CLASS_DEFAULT NAME_LITERAL20_opt_autogen
-(1203)	NAME_LITERAL21_opt_autogen :  NAME_LITERAL
-(1204)	NAME_LITERAL21_opt_autogen : 
-(1205)	end-select-type-stmt :  END_SELECT NAME_LITERAL21_opt_autogen
-(1206)	NAME_LITERAL22_opt_autogen :  NAME_LITERAL
-(1207)	NAME_LITERAL22_opt_autogen : 
-(1208)	exit-stmt :  EXIT NAME_LITERAL22_opt_autogen
-(1209)	goto-stmt :  GO_TO INT_LITERAL_CONSTANT
-(1210)	','8_opt_autogen :  ','
-(1211)	','8_opt_autogen : 
-(1212)	computed-goto-stmt :  GO_TO '(' label-list ')' ','8_opt_autogen expr
-(1213)	arithmetic-if-stmt :  IF '(' expr ')' INT_LITERAL_CONSTANT ',' INT_LITERAL_CONSTANT ',' INT_LITERAL_CONSTANT
-(1214)	continue-stmt :  CONTINUE
-(1215)	stop-code1_opt_autogen :  stop-code
-(1216)	stop-code1_opt_autogen : 
-(1217)	stop-stmt :  STOP stop-code1_opt_autogen
-(1218)	stop-code2_opt_autogen :  stop-code
-(1219)	stop-code2_opt_autogen : 
-(1220)	error-stop-stmt :  ERROR_STOP stop-code2_opt_autogen
-(1221)	stop-code :  expr
-(1222)	sync-stat-list1_opt_autogen :  sync-stat-list
-(1223)	sync-stat-list1_opt_autogen : 
-(1224)	160_group_autogen :  '(' sync-stat-list1_opt_autogen ')'
-(1225)	99_opt_autogen :  160_group_autogen
-(1226)	99_opt_autogen : 
-(1227)	sync-all-stmt :  SYNC_ALL 99_opt_autogen
-(1228)	sync-stat :  STAT '=' variable
-(1229)	sync-stat :  ERRMSG '=' variable
-(1230)	161_group_autogen :  ',' sync-stat
-(1231)	61_optlist_autogen :  61_optlist_autogen 161_group_autogen
-(1232)	61_optlist_autogen : 
-(1233)	sync-stat-list :  sync-stat 61_optlist_autogen
-(1234)	162_group_autogen :  ',' sync-stat-list
-(1235)	100_opt_autogen :  162_group_autogen
-(1236)	100_opt_autogen : 
-(1237)	sync-images-stmt :  SYNC_IMAGES '(' image-set 100_opt_autogen ')'
-(1238)	image-set :  expr
-(1239)	image-set :  '*'
-(1240)	sync-stat-list2_opt_autogen :  sync-stat-list
-(1241)	sync-stat-list2_opt_autogen : 
-(1242)	163_group_autogen :  '(' sync-stat-list2_opt_autogen ')'
-(1243)	101_opt_autogen :  163_group_autogen
-(1244)	101_opt_autogen : 
-(1245)	sync-memory-stmt :  SYNC_MEMORY 101_opt_autogen
-(1246)	164_group_autogen :  ',' lock-stat-list
-(1247)	102_opt_autogen :  164_group_autogen
-(1248)	102_opt_autogen : 
-(1249)	lock-stmt :  LOCK '(' variable 102_opt_autogen ')'
-(1250)	lock-stat :  ACQUIRED_LOCK '=' variable
-(1251)	lock-stat :  sync-stat
-(1252)	165_group_autogen :  ',' lock-stat
-(1253)	62_optlist_autogen :  62_optlist_autogen 165_group_autogen
-(1254)	62_optlist_autogen : 
-(1255)	lock-stat-list :  lock-stat 62_optlist_autogen
-(1256)	166_group_autogen :  ',' sync-stat-list
-(1257)	103_opt_autogen :  166_group_autogen
-(1258)	103_opt_autogen : 
-(1259)	unlock-stmt :  UNLOCK '(' variable 103_opt_autogen ')'
-(1260)	io-unit :  file-unit-number
-(1261)	io-unit :  '*'
-(1262)	io-unit :  variable
-(1263)	file-unit-number :  expr
-(1264)	open-stmt :  OPEN '(' connect-spec-list ')'
-(1265)	167_group_autogen :  UNIT '='
-(1266)	104_opt_autogen :  167_group_autogen
-(1267)	104_opt_autogen : 
-(1268)	connect-spec :  104_opt_autogen file-unit-number
-(1269)	connect-spec :  ACCESS '=' expr
-(1270)	connect-spec :  ACTION '=' expr
-(1271)	connect-spec :  ASYNCHRONOUS '=' expr
-(1272)	connect-spec :  BLANK '=' expr
-(1273)	connect-spec :  DECIMAL '=' expr
-(1274)	connect-spec :  DELIM '=' expr
-(1275)	connect-spec :  ENCODING '=' expr
-(1276)	connect-spec :  ERR '=' INT_LITERAL_CONSTANT
-(1277)	connect-spec :  FILE '=' expr
-(1278)	connect-spec :  FORM '=' expr
-(1279)	connect-spec :  IOMSG '=' iomsg-variable
-(1280)	connect-spec :  IOSTAT '=' variable
-(1281)	connect-spec :  NEWUNIT '=' variable
-(1282)	connect-spec :  PAD '=' expr
-(1283)	connect-spec :  POSITION '=' expr
-(1284)	connect-spec :  RECL '=' expr
-(1285)	connect-spec :  ROUND '=' expr
-(1286)	connect-spec :  SIGN '=' expr
-(1287)	connect-spec :  STATUS '=' expr
-(1288)	168_group_autogen :  ',' connect-spec
-(1289)	63_optlist_autogen :  63_optlist_autogen 168_group_autogen
-(1290)	63_optlist_autogen : 
-(1291)	connect-spec-list :  connect-spec 63_optlist_autogen
-(1292)	iomsg-variable :  variable
-(1293)	close-stmt :  CLOSE '(' close-spec-list ')'
-(1294)	169_group_autogen :  UNIT '='
-(1295)	105_opt_autogen :  169_group_autogen
-(1296)	105_opt_autogen : 
-(1297)	close-spec :  105_opt_autogen file-unit-number
-(1298)	close-spec :  IOSTAT '=' variable
-(1299)	close-spec :  IOMSG '=' iomsg-variable
-(1300)	close-spec :  ERR '=' INT_LITERAL_CONSTANT
-(1301)	close-spec :  STATUS '=' expr
-(1302)	170_group_autogen :  ',' close-spec
-(1303)	64_optlist_autogen :  64_optlist_autogen 170_group_autogen
-(1304)	64_optlist_autogen : 
-(1305)	close-spec-list :  close-spec 64_optlist_autogen
-(1306)	input-item-list1_opt_autogen :  input-item-list
-(1307)	input-item-list1_opt_autogen : 
-(1308)	read-stmt :  READ '(' io-control-spec-list ')' input-item-list1_opt_autogen
-(1309)	171_group_autogen :  ',' input-item-list
-(1310)	106_opt_autogen :  171_group_autogen
-(1311)	106_opt_autogen : 
-(1312)	read-stmt :  READ format 106_opt_autogen
-(1313)	output-item-list1_opt_autogen :  output-item-list
-(1314)	output-item-list1_opt_autogen : 
-(1315)	write-stmt :  WRITE '(' io-control-spec-list ')' output-item-list1_opt_autogen
-(1316)	172_group_autogen :  ',' output-item-list
-(1317)	107_opt_autogen :  172_group_autogen
-(1318)	107_opt_autogen : 
-(1319)	print-stmt :  PRINT format 107_opt_autogen
-(1320)	173_group_autogen :  UNIT '='
-(1321)	108_opt_autogen :  173_group_autogen
-(1322)	108_opt_autogen : 
-(1323)	io-control-spec :  108_opt_autogen io-unit
-(1324)	174_group_autogen :  FMT '='
-(1325)	109_opt_autogen :  174_group_autogen
-(1326)	109_opt_autogen : 
-(1327)	io-control-spec :  109_opt_autogen format
-(1328)	175_group_autogen :  NML '='
-(1329)	110_opt_autogen :  175_group_autogen
-(1330)	110_opt_autogen : 
-(1331)	io-control-spec :  110_opt_autogen NAME_LITERAL
-(1332)	io-control-spec :  ADVANCE '=' expr
-(1333)	io-control-spec :  ASYNCHRONOUS '=' expr
-(1334)	io-control-spec :  BLANK '=' expr
-(1335)	io-control-spec :  DECIMAL '=' expr
-(1336)	io-control-spec :  DELIM '=' expr
-(1337)	io-control-spec :  END '=' INT_LITERAL_CONSTANT
-(1338)	io-control-spec :  EOR '=' INT_LITERAL_CONSTANT
-(1339)	io-control-spec :  ERR '=' INT_LITERAL_CONSTANT
-(1340)	io-control-spec :  ID '=' variable
-(1341)	io-control-spec :  IOMSG '=' iomsg-variable
-(1342)	io-control-spec :  IOSTAT '=' variable
-(1343)	io-control-spec :  PAD '=' expr
-(1344)	io-control-spec :  POS '=' expr
-(1345)	io-control-spec :  REC '=' expr
-(1346)	io-control-spec :  ROUND '=' expr
-(1347)	io-control-spec :  SIGN '=' expr
-(1348)	io-control-spec :  SIZE '=' variable
-(1349)	176_group_autogen :  ',' io-control-spec
-(1350)	65_optlist_autogen :  65_optlist_autogen 176_group_autogen
-(1351)	65_optlist_autogen : 
-(1352)	io-control-spec-list :  io-control-spec 65_optlist_autogen
-(1353)	format :  expr
-(1354)	format :  INT_LITERAL_CONSTANT
-(1355)	format :  '*'
-(1356)	input-item :  variable
-(1357)	input-item :  io-implied-do
-(1358)	177_group_autogen :  ',' input-item
-(1359)	66_optlist_autogen :  66_optlist_autogen 177_group_autogen
-(1360)	66_optlist_autogen : 
-(1361)	input-item-list :  input-item 66_optlist_autogen
-(1362)	output-item :  expr
-(1363)	output-item :  io-implied-do
-(1364)	178_group_autogen :  ',' output-item
-(1365)	67_optlist_autogen :  67_optlist_autogen 178_group_autogen
-(1366)	67_optlist_autogen : 
-(1367)	output-item-list :  output-item 67_optlist_autogen
-(1368)	io-implied-do :  '(' io-implied-do-object-list ',' io-implied-do-control ')'
-(1369)	io-implied-do-object :  input-item
-(1370)	io-implied-do-object :  output-item
-(1371)	179_group_autogen :  ',' io-implied-do-object
-(1372)	68_optlist_autogen :  68_optlist_autogen 179_group_autogen
-(1373)	68_optlist_autogen : 
-(1374)	io-implied-do-object-list :  io-implied-do-object 68_optlist_autogen
-(1375)	180_group_autogen :  ',' expr
-(1376)	111_opt_autogen :  180_group_autogen
-(1377)	111_opt_autogen : 
-(1378)	io-implied-do-control :  NAME_LITERAL '=' expr ',' expr 111_opt_autogen
-(1379)	dtv-type-spec :  TYPE '(' derived-type-spec ')'
-(1380)	dtv-type-spec :  CLASS '(' derived-type-spec ')'
-(1381)	wait-stmt :  WAIT '(' wait-spec-list ')'
-(1382)	181_group_autogen :  UNIT '='
-(1383)	112_opt_autogen :  181_group_autogen
-(1384)	112_opt_autogen : 
-(1385)	wait-spec :  112_opt_autogen file-unit-number
-(1386)	wait-spec :  END '=' INT_LITERAL_CONSTANT
-(1387)	wait-spec :  EOR '=' INT_LITERAL_CONSTANT
-(1388)	wait-spec :  ERR '=' INT_LITERAL_CONSTANT
-(1389)	wait-spec :  ID '=' expr
-(1390)	wait-spec :  IOMSG '=' iomsg-variable
-(1391)	wait-spec :  IOSTAT '=' variable
-(1392)	182_group_autogen :  ',' wait-spec
-(1393)	69_optlist_autogen :  69_optlist_autogen 182_group_autogen
-(1394)	69_optlist_autogen : 
-(1395)	wait-spec-list :  wait-spec 69_optlist_autogen
-(1396)	backspace-stmt :  BACKSPACE file-unit-number
-(1397)	backspace-stmt :  BACKSPACE '(' position-spec-list ')'
-(1398)	endfile-stmt :  ENDFILE file-unit-number
-(1399)	endfile-stmt :  ENDFILE '(' position-spec-list ')'
-(1400)	rewind-stmt :  REWIND file-unit-number
-(1401)	rewind-stmt :  REWIND '(' position-spec-list ')'
-(1402)	183_group_autogen :  UNIT '='
-(1403)	113_opt_autogen :  183_group_autogen
-(1404)	113_opt_autogen : 
-(1405)	position-spec :  113_opt_autogen file-unit-number
-(1406)	position-spec :  IOMSG '=' iomsg-variable
-(1407)	position-spec :  IOSTAT '=' variable
-(1408)	position-spec :  ERR '=' INT_LITERAL_CONSTANT
-(1409)	184_group_autogen :  ',' position-spec
-(1410)	70_optlist_autogen :  70_optlist_autogen 184_group_autogen
-(1411)	70_optlist_autogen : 
-(1412)	position-spec-list :  position-spec 70_optlist_autogen
-(1413)	flush-stmt :  FLUSH file-unit-number
-(1414)	flush-stmt :  FLUSH '(' flush-spec-list ')'
-(1415)	185_group_autogen :  UNIT '='
-(1416)	114_opt_autogen :  185_group_autogen
-(1417)	114_opt_autogen : 
-(1418)	flush-spec :  114_opt_autogen file-unit-number
-(1419)	flush-spec :  IOSTAT '=' variable
-(1420)	flush-spec :  IOMSG '=' iomsg-variable
-(1421)	flush-spec :  ERR '=' INT_LITERAL_CONSTANT
-(1422)	186_group_autogen :  ',' flush-spec
-(1423)	71_optlist_autogen :  71_optlist_autogen 186_group_autogen
-(1424)	71_optlist_autogen : 
-(1425)	flush-spec-list :  flush-spec 71_optlist_autogen
-(1426)	inquire-stmt :  INQUIRE '(' inquire-spec-list ')'
-(1427)	inquire-stmt :  INQUIRE '(' IOLENGTH '=' variable ')' output-item-list
-(1428)	187_group_autogen :  UNIT '='
-(1429)	115_opt_autogen :  187_group_autogen
-(1430)	115_opt_autogen : 
-(1431)	inquire-spec :  115_opt_autogen file-unit-number
-(1432)	inquire-spec :  FILE '=' expr
-(1433)	inquire-spec :  ACCESS '=' variable
-(1434)	inquire-spec :  ACTION '=' variable
-(1435)	inquire-spec :  ASYNCHRONOUS '=' variable
-(1436)	inquire-spec :  BLANK '=' variable
-(1437)	inquire-spec :  DECIMAL '=' variable
-(1438)	inquire-spec :  DELIM '=' variable
-(1439)	inquire-spec :  DIRECT '=' variable
-(1440)	inquire-spec :  ENCODING '=' variable
-(1441)	inquire-spec :  ERR '=' INT_LITERAL_CONSTANT
-(1442)	inquire-spec :  EXIST '=' variable
-(1443)	inquire-spec :  FORM '=' variable
-(1444)	inquire-spec :  FORMATTED '=' variable
-(1445)	inquire-spec :  ID '=' expr
-(1446)	inquire-spec :  IOMSG '=' iomsg-variable
-(1447)	inquire-spec :  IOSTAT '=' variable
-(1448)	inquire-spec :  NAME_KEYWORD '=' variable
-(1449)	inquire-spec :  NAMED '=' variable
-(1450)	inquire-spec :  NEXTREC '=' variable
-(1451)	inquire-spec :  NUMBER '=' variable
-(1452)	inquire-spec :  OPENED '=' variable
-(1453)	inquire-spec :  PAD '=' variable
-(1454)	inquire-spec :  PENDING '=' variable
-(1455)	inquire-spec :  POS '=' variable
-(1456)	inquire-spec :  POSITION '=' variable
-(1457)	inquire-spec :  READ '=' variable
-(1458)	inquire-spec :  READWRITE '=' variable
-(1459)	inquire-spec :  RECL '=' variable
-(1460)	inquire-spec :  ROUND '=' variable
-(1461)	inquire-spec :  SEQUENTIAL '=' variable
-(1462)	inquire-spec :  SIGN '=' variable
-(1463)	inquire-spec :  SIZE '=' variable
-(1464)	inquire-spec :  STREAM '=' variable
-(1465)	inquire-spec :  UNFORMATTED '=' variable
-(1466)	inquire-spec :  WRITE '=' variable
-(1467)	188_group_autogen :  ',' inquire-spec
-(1468)	72_optlist_autogen :  72_optlist_autogen 188_group_autogen
-(1469)	72_optlist_autogen : 
-(1470)	inquire-spec-list :  inquire-spec 72_optlist_autogen
-(1471)	format-stmt :  FORMAT format-specification
-(1472)	format-items1_opt_autogen :  format-items
-(1473)	format-items1_opt_autogen : 
-(1474)	format-specification :  '(' format-items1_opt_autogen ')'
-(1475)	189_group_autogen :  format-items ','
-(1476)	116_opt_autogen :  189_group_autogen
-(1477)	116_opt_autogen : 
-(1478)	format-specification :  '(' 116_opt_autogen unlimited-format-item ')'
-(1479)	','9_opt_autogen :  ','
-(1480)	','9_opt_autogen : 
-(1481)	190_group_autogen :  ','9_opt_autogen format-item
-(1482)	73_optlist_autogen :  73_optlist_autogen 190_group_autogen
-(1483)	73_optlist_autogen : 
-(1484)	format-items :  format-item 73_optlist_autogen
-(1485)	r1_opt_autogen :  r
-(1486)	r1_opt_autogen : 
-(1487)	format-item :  r1_opt_autogen data-edit-desc
-(1488)	format-item :  control-edit-desc
-(1489)	format-item :  char-string-edit-desc
-(1490)	r2_opt_autogen :  r
-(1491)	r2_opt_autogen : 
-(1492)	format-item :  r2_opt_autogen '(' format-items ')'
-(1493)	unlimited-format-item :  '*' '(' format-items ')'
-(1494)	r :  INT_LITERAL_CONSTANT
-(1495)	191_group_autogen :  '.' m
-(1496)	117_opt_autogen :  191_group_autogen
-(1497)	117_opt_autogen : 
-(1498)	data-edit-desc :  'I' w 117_opt_autogen
-(1499)	192_group_autogen :  '.' m
-(1500)	118_opt_autogen :  192_group_autogen
-(1501)	118_opt_autogen : 
-(1502)	data-edit-desc :  'B' w 118_opt_autogen
-(1503)	193_group_autogen :  '.' m
-(1504)	119_opt_autogen :  193_group_autogen
-(1505)	119_opt_autogen : 
-(1506)	data-edit-desc :  'O' w 119_opt_autogen
-(1507)	194_group_autogen :  '.' m
-(1508)	120_opt_autogen :  194_group_autogen
-(1509)	120_opt_autogen : 
-(1510)	data-edit-desc :  'Z' w 120_opt_autogen
-(1511)	data-edit-desc :  'F' w '.' d
-(1512)	195_group_autogen :  'E' e
-(1513)	121_opt_autogen :  195_group_autogen
-(1514)	121_opt_autogen : 
-(1515)	data-edit-desc :  'E' w '.' d 121_opt_autogen
-(1516)	196_group_autogen :  'E' e
-(1517)	122_opt_autogen :  196_group_autogen
-(1518)	122_opt_autogen : 
-(1519)	data-edit-desc :  'EN' w '.' d 122_opt_autogen
-(1520)	197_group_autogen :  'E' e
-(1521)	123_opt_autogen :  197_group_autogen
-(1522)	123_opt_autogen : 
-(1523)	data-edit-desc :  'ES' w '.' d 123_opt_autogen
-(1524)	198_group_autogen :  'E' e
-(1525)	124_opt_autogen :  198_group_autogen
-(1526)	124_opt_autogen : 
-(1527)	198_group_autogen :  '.' d 124_opt_autogen
-(1528)	data-edit-desc :  'G' w 124_opt_autogen
-(1529)	data-edit-desc :  'L' w
-(1530)	w1_opt_autogen :  w
-(1531)	w1_opt_autogen : 
-(1532)	data-edit-desc :  'A' w1_opt_autogen
-(1533)	data-edit-desc :  'D' w '.' d
-(1534)	char-literal-constant1_opt_autogen :  char-literal-constant
-(1535)	char-literal-constant1_opt_autogen : 
-(1536)	199_group_autogen :  '(' v-list ')'
-(1537)	125_opt_autogen :  199_group_autogen
-(1538)	125_opt_autogen : 
-(1539)	data-edit-desc :  'DT' char-literal-constant1_opt_autogen 125_opt_autogen
-(1540)	w :  INT_LITERAL_CONSTANT
-(1541)	m :  INT_LITERAL_CONSTANT
-(1542)	d :  INT_LITERAL_CONSTANT
-(1543)	e :  INT_LITERAL_CONSTANT
-(1544)	v :  signed-int-literal-constant
-(1545)	200_group_autogen :  ',' v
-(1546)	74_optlist_autogen :  74_optlist_autogen 200_group_autogen
-(1547)	74_optlist_autogen : 
-(1548)	v-list :  v 74_optlist_autogen
-(1549)	control-edit-desc :  position-edit-desc
-(1550)	r3_opt_autogen :  r
-(1551)	r3_opt_autogen : 
-(1552)	control-edit-desc :  r3_opt_autogen '/'
-(1553)	control-edit-desc :  ':'
-(1554)	control-edit-desc :  sign-edit-desc
-(1555)	control-edit-desc :  k 'P'
-(1556)	control-edit-desc :  blank-interp-edit-desc
-(1557)	control-edit-desc :  round-edit-desc
-(1558)	control-edit-desc :  decimal-edit-desc
-(1559)	k :  signed-int-literal-constant
-(1560)	position-edit-desc :  'T' n
-(1561)	position-edit-desc :  'TL' n
-(1562)	position-edit-desc :  'TR' n
-(1563)	position-edit-desc :  n 'X'
-(1564)	n :  INT_LITERAL_CONSTANT
-(1565)	sign-edit-desc :  'SS'
-(1566)	sign-edit-desc :  'SP'
-(1567)	sign-edit-desc :  'S'
-(1568)	blank-interp-edit-desc :  'BN'
-(1569)	blank-interp-edit-desc :  'BZ'
-(1570)	round-edit-desc :  'RU'
-(1571)	round-edit-desc :  'RD'
-(1572)	round-edit-desc :  'RZ'
-(1573)	round-edit-desc :  'RN'
-(1574)	round-edit-desc :  'RC'
-(1575)	round-edit-desc :  'RP'
-(1576)	decimal-edit-desc :  'DC'
-(1577)	decimal-edit-desc :  'DP'
-(1578)	char-string-edit-desc :  char-literal-constant
-(1579)	program-stmt1_opt_autogen :  program-stmt
-(1580)	program-stmt1_opt_autogen : 
-(1581)	specification-part2_opt_autogen :  specification-part
-(1582)	specification-part2_opt_autogen : 
-(1583)	execution-part1_opt_autogen :  execution-part
-(1584)	execution-part1_opt_autogen : 
-(1585)	internal-subprogram-part1_opt_autogen :  internal-subprogram-part
-(1586)	internal-subprogram-part1_opt_autogen : 
-(1587)	main-program :  program-stmt1_opt_autogen specification-part2_opt_autogen execution-part1_opt_autogen internal-subprogram-part1_opt_autogen end-program-stmt
-(1588)	program-stmt :  PROGRAM NAME_LITERAL
-(1589)	NAME_LITERAL23_opt_autogen :  NAME_LITERAL
-(1590)	NAME_LITERAL23_opt_autogen : 
-(1591)	201_group_autogen :  PROGRAM NAME_LITERAL23_opt_autogen
-(1592)	126_opt_autogen :  201_group_autogen
-(1593)	126_opt_autogen : 
-(1594)	end-program-stmt :  END 126_opt_autogen
-(1595)	specification-part3_opt_autogen :  specification-part
-(1596)	specification-part3_opt_autogen : 
-(1597)	module-subprogram-part1_opt_autogen :  module-subprogram-part
-(1598)	module-subprogram-part1_opt_autogen : 
-(1599)	module :  module-stmt specification-part3_opt_autogen module-subprogram-part1_opt_autogen end-module-stmt
-(1600)	module-stmt :  MODULE NAME_LITERAL
-(1601)	NAME_LITERAL24_opt_autogen :  NAME_LITERAL
-(1602)	NAME_LITERAL24_opt_autogen : 
-(1603)	202_group_autogen :  MODULE NAME_LITERAL24_opt_autogen
-(1604)	127_opt_autogen :  202_group_autogen
-(1605)	127_opt_autogen : 
-(1606)	end-module-stmt :  END 127_opt_autogen
-(1607)	module-subprogram1_optlist_autogen :  module-subprogram1_optlist_autogen module-subprogram
-(1608)	module-subprogram1_optlist_autogen : 
-(1609)	module-subprogram-part :  contains-stmt module-subprogram1_optlist_autogen
-(1610)	module-subprogram :  function-subprogram
-(1611)	module-subprogram :  subroutine-subprogram
-(1612)	module-subprogram :  separate-module-subprogram
-(1613)	203_group_autogen :  ',' module-nature
-(1614)	128_opt_autogen :  203_group_autogen
-(1615)	128_opt_autogen : 
-(1616)	203_group_autogen :  128_opt_autogen ':' ':'
-(1617)	204_group_autogen :  ',' rename-list
-(1618)	129_opt_autogen :  204_group_autogen
-(1619)	129_opt_autogen : 
-(1620)	use-stmt :  USE 128_opt_autogen NAME_LITERAL 129_opt_autogen
-(1621)	205_group_autogen :  ',' module-nature
-(1622)	130_opt_autogen :  205_group_autogen
-(1623)	130_opt_autogen : 
-(1624)	205_group_autogen :  130_opt_autogen ':' ':'
-(1625)	only-list1_opt_autogen :  only-list
-(1626)	only-list1_opt_autogen : 
-(1627)	use-stmt :  USE 130_opt_autogen NAME_LITERAL ',' ONLY ':' only-list1_opt_autogen
-(1628)	module-nature :  INTRINSIC
-(1629)	module-nature :  NON_INTRINSIC
-(1630)	rename :  NAME_LITERAL '=' '>' NAME_LITERAL
-(1631)	rename :  OPERATOR '(' defined-operator ')' '=' '>' OPERATOR '(' defined-operator ')'
-(1632)	206_group_autogen :  ',' rename
-(1633)	75_optlist_autogen :  75_optlist_autogen 206_group_autogen
-(1634)	75_optlist_autogen : 
-(1635)	rename-list :  rename 75_optlist_autogen
-(1636)	only :  generic-spec
-(1637)	only :  only-use-name
-(1638)	only :  rename
-(1639)	207_group_autogen :  ',' only
-(1640)	76_optlist_autogen :  76_optlist_autogen 207_group_autogen
-(1641)	76_optlist_autogen : 
-(1642)	only-list :  only 76_optlist_autogen
-(1643)	only-use-name :  NAME_LITERAL
-(1644)	specification-part4_opt_autogen :  specification-part
-(1645)	specification-part4_opt_autogen : 
-(1646)	module-subprogram-part2_opt_autogen :  module-subprogram-part
-(1647)	module-subprogram-part2_opt_autogen : 
-(1648)	submodule :  submodule-stmt specification-part4_opt_autogen module-subprogram-part2_opt_autogen end-submodule-stmt
-(1649)	submodule-stmt :  SUBMODULE '(' parent-identifier ')' NAME_LITERAL
-(1650)	208_group_autogen :  ':' NAME_LITERAL
-(1651)	131_opt_autogen :  208_group_autogen
-(1652)	131_opt_autogen : 
-(1653)	parent-identifier :  NAME_LITERAL 131_opt_autogen
-(1654)	NAME_LITERAL25_opt_autogen :  NAME_LITERAL
-(1655)	NAME_LITERAL25_opt_autogen : 
-(1656)	209_group_autogen :  SUBMODULE NAME_LITERAL25_opt_autogen
-(1657)	132_opt_autogen :  209_group_autogen
-(1658)	132_opt_autogen : 
-(1659)	end-submodule-stmt :  END 132_opt_autogen
-(1660)	specification-part5_opt_autogen :  specification-part
-(1661)	specification-part5_opt_autogen : 
-(1662)	block-data :  block-data-stmt specification-part5_opt_autogen end-block-data-stmt
-(1663)	NAME_LITERAL26_opt_autogen :  NAME_LITERAL
-(1664)	NAME_LITERAL26_opt_autogen : 
-(1665)	block-data-stmt :  BLOCK_DATA NAME_LITERAL26_opt_autogen
-(1666)	NAME_LITERAL27_opt_autogen :  NAME_LITERAL
-(1667)	NAME_LITERAL27_opt_autogen : 
-(1668)	210_group_autogen :  BLOCK_DATA NAME_LITERAL27_opt_autogen
-(1669)	133_opt_autogen :  210_group_autogen
-(1670)	133_opt_autogen : 
-(1671)	end-block-data-stmt :  END 133_opt_autogen
-(1672)	interface-specification1_optlist_autogen :  interface-specification1_optlist_autogen interface-specification
-(1673)	interface-specification1_optlist_autogen : 
-(1674)	interface-block :  interface-stmt interface-specification1_optlist_autogen end-interface-stmt
-(1675)	interface-specification :  interface-body
-(1676)	interface-specification :  procedure-stmt
-(1677)	generic-spec1_opt_autogen :  generic-spec
-(1678)	generic-spec1_opt_autogen : 
-(1679)	interface-stmt :  INTERFACE generic-spec1_opt_autogen
-(1680)	interface-stmt :  ABSTRACT_INTERFACE
-(1681)	generic-spec2_opt_autogen :  generic-spec
-(1682)	generic-spec2_opt_autogen : 
-(1683)	end-interface-stmt :  END_INTERFACE generic-spec2_opt_autogen
-(1684)	specification-part6_opt_autogen :  specification-part
-(1685)	specification-part6_opt_autogen : 
-(1686)	interface-body :  function-stmt specification-part6_opt_autogen end-function-stmt
-(1687)	specification-part7_opt_autogen :  specification-part
-(1688)	specification-part7_opt_autogen : 
-(1689)	interface-body :  subroutine-stmt specification-part7_opt_autogen end-subroutine-stmt
-(1690)	MODULE1_opt_autogen :  MODULE
-(1691)	MODULE1_opt_autogen : 
-(1692)	211_group_autogen :  ':' ':'
-(1693)	134_opt_autogen :  211_group_autogen
-(1694)	134_opt_autogen : 
-(1695)	procedure-stmt :  MODULE1_opt_autogen PROCEDURE 134_opt_autogen name-list
-(1696)	generic-spec :  NAME_LITERAL
-(1697)	generic-spec :  OPERATOR '(' defined-operator ')'
-(1698)	generic-spec :  ASSIGNMENT '(' '=' ')'
-(1699)	generic-spec :  defined-io-generic-spec
-(1700)	defined-io-generic-spec :  READ '(' FORMATTED ')'
-(1701)	defined-io-generic-spec :  READ '(' UNFORMATTED ')'
-(1702)	defined-io-generic-spec :  WRITE '(' FORMATTED ')'
-(1703)	defined-io-generic-spec :  WRITE '(' UNFORMATTED ')'
-(1704)	212_group_autogen :  ':' ':'
-(1705)	135_opt_autogen :  212_group_autogen
-(1706)	135_opt_autogen : 
-(1707)	import-stmt :  IMPORT 135_opt_autogen name-list
-(1708)	213_group_autogen :  ':' ':'
-(1709)	external-stmt :  EXTERNAL 213_group_autogen name-list
-(1710)	proc-interface2_opt_autogen :  proc-interface
-(1711)	proc-interface2_opt_autogen : 
-(1712)	214_group_autogen :  ',' proc-attr-spec
-(1713)	77_optlist_autogen :  77_optlist_autogen 214_group_autogen
-(1714)	77_optlist_autogen : 
-(1715)	214_group_autogen :  77_optlist_autogen ':' ':'
-(1716)	136_opt_autogen :  214_group_autogen
-(1717)	136_opt_autogen : 
-(1718)	procedure-declaration-stmt :  PROCEDURE '(' proc-interface2_opt_autogen ')' 136_opt_autogen proc-decl-list
-(1719)	proc-interface :  NAME_LITERAL
-(1720)	proc-interface :  declaration-type-spec
-(1721)	proc-attr-spec :  access-spec
-(1722)	proc-attr-spec :  proc-language-binding-spec
-(1723)	215_group_autogen :  intent-spec
-(1724)	proc-attr-spec :  INTENT 215_group_autogen
-(1725)	proc-attr-spec :  OPTIONAL
-(1726)	proc-attr-spec :  POINTER
-(1727)	proc-attr-spec :  SAVE
-(1728)	216_group_autogen :  '=' '>' proc-pointer-init
-(1729)	137_opt_autogen :  216_group_autogen
-(1730)	137_opt_autogen : 
-(1731)	proc-decl :  NAME_LITERAL 137_opt_autogen
-(1732)	217_group_autogen :  ',' proc-decl
-(1733)	78_optlist_autogen :  78_optlist_autogen 217_group_autogen
-(1734)	78_optlist_autogen : 
-(1735)	proc-decl-list :  proc-decl 78_optlist_autogen
-(1736)	proc-pointer-init :  null-init
-(1737)	proc-pointer-init :  initial-proc-target
-(1738)	initial-proc-target :  NAME_LITERAL
-(1739)	218_group_autogen :  ':' ':'
-(1740)	138_opt_autogen :  218_group_autogen
-(1741)	138_opt_autogen : 
-(1742)	intrinsic-stmt :  INTRINSIC 138_opt_autogen name-list
-(1743)	actual-arg-spec-list1_opt_autogen :  actual-arg-spec-list
-(1744)	actual-arg-spec-list1_opt_autogen : 
-(1745)	function-reference :  procedure-designator '(' actual-arg-spec-list1_opt_autogen ')'
-(1746)	actual-arg-spec-list2_opt_autogen :  actual-arg-spec-list
-(1747)	actual-arg-spec-list2_opt_autogen : 
-(1748)	219_group_autogen :  '(' actual-arg-spec-list2_opt_autogen ')'
-(1749)	139_opt_autogen :  219_group_autogen
-(1750)	139_opt_autogen : 
-(1751)	call-stmt :  CALL procedure-designator 139_opt_autogen
-(1752)	procedure-designator :  NAME_LITERAL
-(1753)	procedure-designator :  proc-component-ref
-(1754)	procedure-designator :  data-ref '%' NAME_LITERAL
-(1755)	220_group_autogen :  NAME_LITERAL '='
-(1756)	140_opt_autogen :  220_group_autogen
-(1757)	140_opt_autogen : 
-(1758)	actual-arg-spec :  140_opt_autogen actual-arg
-(1759)	221_group_autogen :  ',' actual-arg-spec
-(1760)	79_optlist_autogen :  79_optlist_autogen 221_group_autogen
-(1761)	79_optlist_autogen : 
-(1762)	actual-arg-spec-list :  actual-arg-spec 79_optlist_autogen
-(1763)	actual-arg :  expr
-(1764)	actual-arg :  variable
-(1765)	actual-arg :  NAME_LITERAL
-(1766)	actual-arg :  proc-component-ref
-(1767)	actual-arg :  alt-return-spec
-(1768)	alt-return-spec :  '*' INT_LITERAL_CONSTANT
-(1769)	prefix-spec1_list_autogen :  prefix-spec1_list_autogen prefix-spec
-(1770)	prefix-spec1_list_autogen :  prefix-spec
-(1771)	prefix :  prefix-spec1_list_autogen
-(1772)	prefix-spec :  declaration-type-spec
-(1773)	prefix-spec :  ELEMENTAL
-(1774)	prefix-spec :  IMPURE
-(1775)	prefix-spec :  MODULE
-(1776)	prefix-spec :  PURE
-(1777)	prefix-spec :  RECURSIVE
-(1778)	specification-part8_opt_autogen :  specification-part
-(1779)	specification-part8_opt_autogen : 
-(1780)	execution-part2_opt_autogen :  execution-part
-(1781)	execution-part2_opt_autogen : 
-(1782)	internal-subprogram-part2_opt_autogen :  internal-subprogram-part
-(1783)	internal-subprogram-part2_opt_autogen : 
-(1784)	function-subprogram :  function-stmt specification-part8_opt_autogen execution-part2_opt_autogen internal-subprogram-part2_opt_autogen end-function-stmt
-(1785)	prefix1_opt_autogen :  prefix
-(1786)	prefix1_opt_autogen : 
-(1787)	name-list1_opt_autogen :  name-list
-(1788)	name-list1_opt_autogen : 
-(1789)	sufix1_opt_autogen :  sufix
-(1790)	sufix1_opt_autogen : 
-(1791)	function-stmt :  prefix1_opt_autogen FUNCTION NAME_LITERAL '(' name-list1_opt_autogen ')' sufix1_opt_autogen
-(1792)	proc-language-binding-spec :  language-binding-spec
-(1793)	222_group_autogen :  RESULT '(' NAME_LITERAL ')'
-(1794)	141_opt_autogen :  222_group_autogen
-(1795)	141_opt_autogen : 
-(1796)	sufix :  proc-language-binding-spec 141_opt_autogen
-(1797)	proc-language-binding-spec1_opt_autogen :  proc-language-binding-spec
-(1798)	proc-language-binding-spec1_opt_autogen : 
-(1799)	sufix :  RESULT '(' NAME_LITERAL ')' proc-language-binding-spec1_opt_autogen
-(1800)	NAME_LITERAL28_opt_autogen :  NAME_LITERAL
-(1801)	NAME_LITERAL28_opt_autogen : 
-(1802)	223_group_autogen :  FUNCTION NAME_LITERAL28_opt_autogen
-(1803)	142_opt_autogen :  223_group_autogen
-(1804)	142_opt_autogen : 
-(1805)	end-function-stmt :  END 142_opt_autogen
-(1806)	specification-part9_opt_autogen :  specification-part
-(1807)	specification-part9_opt_autogen : 
-(1808)	execution-part3_opt_autogen :  execution-part
-(1809)	execution-part3_opt_autogen : 
-(1810)	internal-subprogram-part3_opt_autogen :  internal-subprogram-part
-(1811)	internal-subprogram-part3_opt_autogen : 
-(1812)	subroutine-subprogram :  subroutine-stmt specification-part9_opt_autogen execution-part3_opt_autogen internal-subprogram-part3_opt_autogen end-subroutine-stmt
-(1813)	prefix2_opt_autogen :  prefix
-(1814)	prefix2_opt_autogen : 
-(1815)	dummy-arg-list1_opt_autogen :  dummy-arg-list
-(1816)	dummy-arg-list1_opt_autogen : 
-(1817)	proc-language-binding-spec2_opt_autogen :  proc-language-binding-spec
-(1818)	proc-language-binding-spec2_opt_autogen : 
-(1819)	224_group_autogen :  '(' dummy-arg-list1_opt_autogen ')' proc-language-binding-spec2_opt_autogen
-(1820)	143_opt_autogen :  224_group_autogen
-(1821)	143_opt_autogen : 
-(1822)	subroutine-stmt :  prefix2_opt_autogen SUBROUTINE NAME_LITERAL 143_opt_autogen
-(1823)	dummy-arg :  NAME_LITERAL
-(1824)	dummy-arg :  '*'
-(1825)	225_group_autogen :  ',' dummy-arg
-(1826)	80_optlist_autogen :  80_optlist_autogen 225_group_autogen
-(1827)	80_optlist_autogen : 
-(1828)	dummy-arg-list :  dummy-arg 80_optlist_autogen
-(1829)	NAME_LITERAL29_opt_autogen :  NAME_LITERAL
-(1830)	NAME_LITERAL29_opt_autogen : 
-(1831)	226_group_autogen :  SUBROUTINE NAME_LITERAL29_opt_autogen
-(1832)	144_opt_autogen :  226_group_autogen
-(1833)	144_opt_autogen : 
-(1834)	end-subroutine-stmt :  END 144_opt_autogen
-(1835)	specification-part10_opt_autogen :  specification-part
-(1836)	specification-part10_opt_autogen : 
-(1837)	execution-part4_opt_autogen :  execution-part
-(1838)	execution-part4_opt_autogen : 
-(1839)	internal-subprogram-part4_opt_autogen :  internal-subprogram-part
-(1840)	internal-subprogram-part4_opt_autogen : 
-(1841)	separate-module-subprogram :  mp-subprogram-stmt specification-part10_opt_autogen execution-part4_opt_autogen internal-subprogram-part4_opt_autogen end-mp-subprogram-stmt
-(1842)	mp-subprogram-stmt :  MODULE_PROCEDURE NAME_LITERAL
-(1843)	NAME_LITERAL30_opt_autogen :  NAME_LITERAL
-(1844)	NAME_LITERAL30_opt_autogen : 
-(1845)	227_group_autogen :  PROCEDURE NAME_LITERAL30_opt_autogen
-(1846)	145_opt_autogen :  227_group_autogen
-(1847)	145_opt_autogen : 
-(1848)	end-mp-subprogram-stmt :  END 145_opt_autogen
-(1849)	dummy-arg-list2_opt_autogen :  dummy-arg-list
-(1850)	dummy-arg-list2_opt_autogen : 
-(1851)	sufix2_opt_autogen :  sufix
-(1852)	sufix2_opt_autogen : 
-(1853)	228_group_autogen :  '(' dummy-arg-list2_opt_autogen ')' sufix2_opt_autogen
-(1854)	146_opt_autogen :  228_group_autogen
-(1855)	146_opt_autogen : 
-(1856)	entry-stmt :  ENTRY NAME_LITERAL 146_opt_autogen
-(1857)	expr3_opt_autogen :  expr
-(1858)	expr3_opt_autogen : 
-(1859)	return-stmt :  RETURN expr3_opt_autogen
-(1860)	contains-stmt :  CONTAINS
-(1861)	stmt-function-stmt :  NAME_LITERAL '(' name-list ')' '=' expr
+(0) _START_ :  designator
+(1) program-unit1_list_autogen :  program-unit1_list_autogen program-unit
+(2) program-unit1_list_autogen :  program-unit
+(3) program :  program-unit1_list_autogen
+(4) program-unit :  main-program
+(5) program-unit :  external-subprogram
+(6) program-unit :  module
+(7) program-unit :  submodule
+(8) program-unit :  block-data
+(9) external-subprogram :  function-subprogram
+(10) external-subprogram :  subroutine-subprogram
+(11) use-stmt1_optlist_autogen :  use-stmt1_optlist_autogen use-stmt
+(12) use-stmt1_optlist_autogen : 
+(13) import-stmt1_optlist_autogen :  import-stmt1_optlist_autogen import-stmt
+(14) import-stmt1_optlist_autogen : 
+(15) implicit-part1_opt_autogen :  implicit-part
+(16) implicit-part1_opt_autogen : 
+(17) declaration-construct1_optlist_autogen :  declaration-construct1_optlist_autogen declaration-construct
+(18) declaration-construct1_optlist_autogen : 
+(19) specification-part :  use-stmt1_optlist_autogen import-stmt1_optlist_autogen implicit-part1_opt_autogen declaration-construct1_optlist_autogen
+(20) implicit-part-stmt1_optlist_autogen :  implicit-part-stmt1_optlist_autogen implicit-part-stmt
+(21) implicit-part-stmt1_optlist_autogen : 
+(22) implicit-part :  implicit-part-stmt1_optlist_autogen implicit-stmt
+(23) implicit-part-stmt :  implicit-stmt
+(24) implicit-part-stmt :  parameter-stmt
+(25) implicit-part-stmt :  format-stmt
+(26) implicit-part-stmt :  entry-stmt
+(27) declaration-construct :  derived-type-def
+(28) declaration-construct :  entry-stmt
+(29) declaration-construct :  enum-def
+(30) declaration-construct :  format-stmt
+(31) declaration-construct :  interface-block
+(32) declaration-construct :  parameter-stmt
+(33) declaration-construct :  procedure-declaration-stmt
+(34) declaration-construct :  other-specification-stmt
+(35) declaration-construct :  type-declaration-stmt
+(36) declaration-construct :  stmt-function-stmt
+(37) execution-part-construct1_optlist_autogen :  execution-part-construct1_optlist_autogen execution-part-construct
+(38) execution-part-construct1_optlist_autogen : 
+(39) execution-part :  executable-construct execution-part-construct1_optlist_autogen
+(40) execution-part-construct :  executable-construct
+(41) execution-part-construct :  format-stmt
+(42) execution-part-construct :  entry-stmt
+(43) execution-part-construct :  data-stmt
+(44) internal-subprogram1_optlist_autogen :  internal-subprogram1_optlist_autogen internal-subprogram
+(45) internal-subprogram1_optlist_autogen : 
+(46) internal-subprogram-part :  contains-stmt internal-subprogram1_optlist_autogen
+(47) internal-subprogram :  function-subprogram
+(48) internal-subprogram :  subroutine-subprogram
+(49) other-specification-stmt :  access-stmt
+(50) other-specification-stmt :  allocatable-stmt
+(51) other-specification-stmt :  asynchronous-stmt
+(52) other-specification-stmt :  bind-stmt
+(53) other-specification-stmt :  codimension-stmt
+(54) other-specification-stmt :  common-stmt
+(55) other-specification-stmt :  data-stmt
+(56) other-specification-stmt :  dimension-stmt
+(57) other-specification-stmt :  equivalence-stmt
+(58) other-specification-stmt :  external-stmt
+(59) other-specification-stmt :  intent-stmt
+(60) other-specification-stmt :  intrinsic-stmt
+(61) other-specification-stmt :  namelist-stmt
+(62) other-specification-stmt :  optional-stmt
+(63) other-specification-stmt :  pointer-stmt
+(64) other-specification-stmt :  protected-stmt
+(65) other-specification-stmt :  save-stmt
+(66) other-specification-stmt :  target-stmt
+(67) other-specification-stmt :  volatile-stmt
+(68) other-specification-stmt :  value-stmt
+(69) executable-construct :  action-stmt
+(70) executable-construct :  associate-construct
+(71) executable-construct :  block-construct
+(72) executable-construct :  case-construct
+(73) executable-construct :  critical-construct
+(74) executable-construct :  do-construct
+(75) executable-construct :  forall-construct
+(76) executable-construct :  if-construct
+(77) executable-construct :  select-type-construct
+(78) executable-construct :  where-construct
+(79) action-stmt :  allocate-stmt
+(80) action-stmt :  assignment-stmt
+(81) action-stmt :  backspace-stmt
+(82) action-stmt :  call-stmt
+(83) action-stmt :  close-stmt
+(84) action-stmt :  continue-stmt
+(85) action-stmt :  cycle-stmt
+(86) action-stmt :  deallocate-stmt
+(87) action-stmt :  end-function-stmt
+(88) action-stmt :  end-mp-subprogram-stmt
+(89) action-stmt :  end-program-stmt
+(90) action-stmt :  end-subroutine-stmt
+(91) action-stmt :  endfile-stmt
+(92) action-stmt :  error-stop-stmt
+(93) action-stmt :  exit-stmt
+(94) action-stmt :  flush-stmt
+(95) action-stmt :  forall-stmt
+(96) action-stmt :  goto-stmt
+(97) action-stmt :  if-stmt
+(98) action-stmt :  inquire-stmt
+(99) action-stmt :  lock-stmt
+(100) action-stmt :  nullify-stmt
+(101) action-stmt :  open-stmt
+(102) action-stmt :  pointer-assignment-stmt
+(103) action-stmt :  print-stmt
+(104) action-stmt :  read-stmt
+(105) action-stmt :  return-stmt
+(106) action-stmt :  rewind-stmt
+(107) action-stmt :  stop-stmt
+(108) action-stmt :  sync-all-stmt
+(109) action-stmt :  sync-images-stmt
+(110) action-stmt :  sync-memory-stmt
+(111) action-stmt :  unlock-stmt
+(112) action-stmt :  wait-stmt
+(113) action-stmt :  where-stmt
+(114) action-stmt :  write-stmt
+(115) action-stmt :  arithmetic-if-stmt
+(116) action-stmt :  computed-goto-stmt
+(117) constant :  literal-constant
+(118) constant :  NAME_LITERAL
+(119) literal-constant :  INT_LITERAL_CONSTANT
+(120) literal-constant :  REAL_LITERAL_CONSTANT
+(121) literal-constant :  complex-literal-constant
+(122) literal-constant :  LOGICAL_LITERAL_CONSTANT
+(123) literal-constant :  CHAR_LITERAL_CONSTANT
+(124) literal-constant :  BOZ_LITERAL_CONSTANT
+(125) intrinsic-operator :  power-op
+(126) intrinsic-operator :  mult-op
+(127) intrinsic-operator :  add-op
+(128) intrinsic-operator :  concat-op
+(129) intrinsic-operator :  rel-op
+(130) intrinsic-operator :  not-op
+(131) intrinsic-operator :  and-op
+(132) intrinsic-operator :  or-op
+(133) intrinsic-operator :  equiv-op
+(134) defined-operator :  defined-op
+(135) defined-operator :  intrinsic-operator
+(136) 1_group_autogen :  ',' INT_LITERAL_CONSTANT
+(137) 1_optlist_autogen :  1_optlist_autogen 1_group_autogen
+(138) 1_optlist_autogen : 
+(139) label-list :  INT_LITERAL_CONSTANT 1_optlist_autogen
+(140) type-param-value :  expr
+(141) type-param-value :  '*'
+(142) type-param-value :  ':'
+(143) type-spec :  intrinsic-type-spec
+(144) type-spec :  derived-type-spec
+(145) declaration-type-spec :  intrinsic-type-spec
+(146) declaration-type-spec :  'TYPE' '(' intrinsic-type-spec ')'
+(147) declaration-type-spec :  'TYPE' '(' derived-type-spec ')'
+(148) declaration-type-spec :  'CLASS' '(' derived-type-spec ')'
+(149) declaration-type-spec :  'CLASS' '(' '*' ')'
+(150) kind-selector1_opt_autogen :  kind-selector
+(151) kind-selector1_opt_autogen : 
+(152) intrinsic-type-spec :  INTEGER kind-selector1_opt_autogen
+(153) kind-selector2_opt_autogen :  kind-selector
+(154) kind-selector2_opt_autogen : 
+(155) intrinsic-type-spec :  REAL kind-selector2_opt_autogen
+(156) intrinsic-type-spec :  DOUBLE_PRECISION
+(157) kind-selector3_opt_autogen :  kind-selector
+(158) kind-selector3_opt_autogen : 
+(159) intrinsic-type-spec :  COMPLEX kind-selector3_opt_autogen
+(160) char-selector1_opt_autogen :  char-selector
+(161) char-selector1_opt_autogen : 
+(162) intrinsic-type-spec :  CHARACTER char-selector1_opt_autogen
+(163) kind-selector4_opt_autogen :  kind-selector
+(164) kind-selector4_opt_autogen : 
+(165) intrinsic-type-spec :  LOGICAL kind-selector4_opt_autogen
+(166) 2_group_autogen :  KIND '='
+(167) 1_opt_autogen :  2_group_autogen
+(168) 1_opt_autogen : 
+(169) kind-selector :  '(' 1_opt_autogen expr ')'
+(170) sign1_opt_autogen :  sign
+(171) sign1_opt_autogen : 
+(172) signed-int-literal-constant :  sign1_opt_autogen INT_LITERAL_CONSTANT
+(173) sign :  '+'
+(174) sign :  '-'
+(175) sign2_opt_autogen :  sign
+(176) sign2_opt_autogen : 
+(177) signed-real-literal-constant :  sign2_opt_autogen REAL_LITERAL_CONSTANT
+(178) complex-literal-constant :  '(' real-part ',' imag-part ')'
+(179) real-part :  signed-int-literal-constant
+(180) real-part :  signed-real-literal-constant
+(181) real-part :  NAME_LITERAL
+(182) imag-part :  signed-int-literal-constant
+(183) imag-part :  signed-real-literal-constant
+(184) imag-part :  NAME_LITERAL
+(185) char-selector :  length-selector
+(186) char-selector :  '(' 'LEN' '=' type-param-value ',' KIND '=' expr ')'
+(187) 3_group_autogen :  KIND '='
+(188) 2_opt_autogen :  3_group_autogen
+(189) 2_opt_autogen : 
+(190) char-selector :  '(' type-param-value ',' 2_opt_autogen expr ')'
+(191) 4_group_autogen :  ',' LEN '=' type-param-value
+(192) 3_opt_autogen :  4_group_autogen
+(193) 3_opt_autogen : 
+(194) char-selector :  '(' 'KIND' '=' expr 3_opt_autogen ')'
+(195) 5_group_autogen :  LEN '='
+(196) 4_opt_autogen :  5_group_autogen
+(197) 4_opt_autogen : 
+(198) length-selector :  '(' 4_opt_autogen type-param-value ')'
+(199) ','1_opt_autogen :  ','
+(200) ','1_opt_autogen : 
+(201) length-selector :  '*' char-length ','1_opt_autogen
+(202) char-length :  '(' type-param-value ')'
+(203) char-length :  INT_LITERAL_CONSTANT
+(204) type-param-def-stmt1_optlist_autogen :  type-param-def-stmt1_optlist_autogen type-param-def-stmt
+(205) type-param-def-stmt1_optlist_autogen : 
+(206) private-or-sequence1_optlist_autogen :  private-or-sequence1_optlist_autogen private-or-sequence
+(207) private-or-sequence1_optlist_autogen : 
+(208) component-part1_opt_autogen :  component-part
+(209) component-part1_opt_autogen : 
+(210) type-bound-procedure-part1_opt_autogen :  type-bound-procedure-part
+(211) type-bound-procedure-part1_opt_autogen : 
+(212) derived-type-def :  derived-type-stmt type-param-def-stmt1_optlist_autogen private-or-sequence1_optlist_autogen component-part1_opt_autogen type-bound-procedure-part1_opt_autogen end-type-stmt
+(213) 6_group_autogen :  ',' type-attr-spec-list
+(214) 5_opt_autogen :  6_group_autogen
+(215) 5_opt_autogen : 
+(216) 6_group_autogen :  5_opt_autogen ':' ':'
+(217) 7_group_autogen :  '(' name-list ')'
+(218) 6_opt_autogen :  7_group_autogen
+(219) 6_opt_autogen : 
+(220) derived-type-stmt :  'TYPE' 5_opt_autogen NAME_LITERAL 6_opt_autogen
+(221) 8_group_autogen :  ',' NAME_LITERAL
+(222) 2_optlist_autogen :  2_optlist_autogen 8_group_autogen
+(223) 2_optlist_autogen : 
+(224) name-list :  NAME_LITERAL 2_optlist_autogen
+(225) type-attr-spec :  ABSTRACT
+(226) type-attr-spec :  access-spec
+(227) type-attr-spec :  BIND '(' 'C' ')'
+(228) type-attr-spec :  EXTENDS '(' NAME_LITERAL ')'
+(229) 9_group_autogen :  ',' type-attr-spec
+(230) 3_optlist_autogen :  3_optlist_autogen 9_group_autogen
+(231) 3_optlist_autogen : 
+(232) type-attr-spec-list :  type-attr-spec 3_optlist_autogen
+(233) private-or-sequence :  private-components-stmt
+(234) private-or-sequence :  sequence-stmt
+(235) NAME_LITERAL1_opt_autogen :  NAME_LITERAL
+(236) NAME_LITERAL1_opt_autogen : 
+(237) end-type-stmt :  END_TYPE NAME_LITERAL1_opt_autogen
+(238) sequence-stmt :  SEQUENCE
+(239) kind-selector5_opt_autogen :  kind-selector
+(240) kind-selector5_opt_autogen : 
+(241) type-param-def-stmt :  INTEGER kind-selector5_opt_autogen ',' type-param-attr-spec ':' ':' type-param-decl-list
+(242) 10_group_autogen :  '=' expr
+(243) 7_opt_autogen :  10_group_autogen
+(244) 7_opt_autogen : 
+(245) type-param-decl :  NAME_LITERAL 7_opt_autogen
+(246) 11_group_autogen :  ',' type-param-decl
+(247) 4_optlist_autogen :  4_optlist_autogen 11_group_autogen
+(248) 4_optlist_autogen : 
+(249) type-param-decl-list :  type-param-decl 4_optlist_autogen
+(250) type-param-attr-spec :  KIND
+(251) type-param-attr-spec :  LEN
+(252) component-def-stmt1_optlist_autogen :  component-def-stmt1_optlist_autogen component-def-stmt
+(253) component-def-stmt1_optlist_autogen : 
+(254) component-part :  component-def-stmt1_optlist_autogen
+(255) component-def-stmt :  data-component-def-stmt
+(256) component-def-stmt :  proc-component-def-stmt
+(257) 12_group_autogen :  ',' component-attr-spec-list
+(258) 8_opt_autogen :  12_group_autogen
+(259) 8_opt_autogen : 
+(260) 12_group_autogen :  8_opt_autogen ':' ':'
+(261) data-component-def-stmt :  declaration-type-spec 8_opt_autogen component-decl-list
+(262) component-attr-spec :  access-spec
+(263) component-attr-spec :  ALLOCATABLE
+(264) component-attr-spec :  CODIMENSION '[' coarray-spec ']'
+(265) component-attr-spec :  CONTIGUOUS
+(266) component-attr-spec :  DIMENSION '(' component-array-spec ')'
+(267) component-attr-spec :  POINTER
+(268) 13_group_autogen :  ',' component-attr-spec
+(269) 5_optlist_autogen :  5_optlist_autogen 13_group_autogen
+(270) 5_optlist_autogen : 
+(271) component-attr-spec-list :  component-attr-spec 5_optlist_autogen
+(272) 14_group_autogen :  '(' component-array-spec ')'
+(273) 9_opt_autogen :  14_group_autogen
+(274) 9_opt_autogen : 
+(275) 15_group_autogen :  '[' coarray-spec ']'
+(276) 10_opt_autogen :  15_group_autogen
+(277) 10_opt_autogen : 
+(278) 16_group_autogen :  '*' char-length
+(279) 11_opt_autogen :  16_group_autogen
+(280) 11_opt_autogen : 
+(281) component-initialization1_opt_autogen :  component-initialization
+(282) component-initialization1_opt_autogen : 
+(283) component-decl :  NAME_LITERAL 9_opt_autogen 10_opt_autogen 11_opt_autogen component-initialization1_opt_autogen
+(284) 17_group_autogen :  ',' component-decl
+(285) 6_optlist_autogen :  6_optlist_autogen 17_group_autogen
+(286) 6_optlist_autogen : 
+(287) component-decl-list :  component-decl 6_optlist_autogen
+(288) component-array-spec :  explicit-shape-spec-list
+(289) component-array-spec :  deferred-shape-spec-list
+(290) proc-interface1_opt_autogen :  proc-interface
+(291) proc-interface1_opt_autogen : 
+(292) proc-component-def-stmt :  PROCEDURE '(' proc-interface1_opt_autogen ')' ',' proc-component-attr-spec-list ':' ':' proc-decl-list
+(293) proc-component-attr-spec :  POINTER
+(294) 18_group_autogen :  '(' NAME_LITERAL ')'
+(295) 12_opt_autogen :  18_group_autogen
+(296) 12_opt_autogen : 
+(297) proc-component-attr-spec :  PASS 12_opt_autogen
+(298) proc-component-attr-spec :  NOPASS
+(299) proc-component-attr-spec :  access-spec
+(300) 19_group_autogen :  ',' proc-component-attr-spec
+(301) 7_optlist_autogen :  7_optlist_autogen 19_group_autogen
+(302) 7_optlist_autogen : 
+(303) proc-component-attr-spec-list :  proc-component-attr-spec 7_optlist_autogen
+(304) component-initialization :  '=' expr
+(305) component-initialization :  '=' '>' null-init
+(306) component-initialization :  '=' '>' initial-data-target
+(307) initial-data-target :  designator
+(308) private-components-stmt :  PRIVATE
+(309) binding-private-stmt1_opt_autogen :  binding-private-stmt
+(310) binding-private-stmt1_opt_autogen : 
+(311) type-bound-proc-binding1_optlist_autogen :  type-bound-proc-binding1_optlist_autogen type-bound-proc-binding
+(312) type-bound-proc-binding1_optlist_autogen : 
+(313) type-bound-procedure-part :  contains-stmt binding-private-stmt1_opt_autogen type-bound-proc-binding1_optlist_autogen
+(314) binding-private-stmt :  PRIVATE
+(315) type-bound-proc-binding :  type-bound-procedure-stmt
+(316) type-bound-proc-binding :  type-bound-generic-stmt
+(317) type-bound-proc-binding :  final-procedure-stmt
+(318) 20_group_autogen :  ',' binding-attr-list
+(319) 13_opt_autogen :  20_group_autogen
+(320) 13_opt_autogen : 
+(321) 20_group_autogen :  13_opt_autogen ':' ':'
+(322) type-bound-procedure-stmt :  PROCEDURE 13_opt_autogen type-bound-proc-decl-list
+(323) type-bound-procedure-stmt :  PROCEDURE '(' NAME_LITERAL ')' ',' binding-attr-list ':' ':' name-list
+(324) 21_group_autogen :  '=' '>' NAME_LITERAL
+(325) 14_opt_autogen :  21_group_autogen
+(326) 14_opt_autogen : 
+(327) type-bound-proc-decl :  NAME_LITERAL 14_opt_autogen
+(328) 22_group_autogen :  ',' type-bound-proc-decl
+(329) 8_optlist_autogen :  8_optlist_autogen 22_group_autogen
+(330) 8_optlist_autogen : 
+(331) type-bound-proc-decl-list :  type-bound-proc-decl 8_optlist_autogen
+(332) 23_group_autogen :  ',' access-spec
+(333) 15_opt_autogen :  23_group_autogen
+(334) 15_opt_autogen : 
+(335) type-bound-generic-stmt :  GENERIC 15_opt_autogen ':' ':' generic-spec '=' '>' name-list
+(336) 24_group_autogen :  '(' NAME_LITERAL ')'
+(337) 16_opt_autogen :  24_group_autogen
+(338) 16_opt_autogen : 
+(339) binding-attr :  PASS 16_opt_autogen
+(340) binding-attr :  NOPASS
+(341) binding-attr :  NON_OVERRIDABLE
+(342) binding-attr :  DEFERRED
+(343) binding-attr :  access-spec
+(344) 25_group_autogen :  ',' binding-attr
+(345) 9_optlist_autogen :  9_optlist_autogen 25_group_autogen
+(346) 9_optlist_autogen : 
+(347) binding-attr-list :  binding-attr 9_optlist_autogen
+(348) 26_group_autogen :  ':' ':'
+(349) 17_opt_autogen :  26_group_autogen
+(350) 17_opt_autogen : 
+(351) final-procedure-stmt :  FINAL 17_opt_autogen name-list
+(352) 27_group_autogen :  '(' type-param-spec-list ')'
+(353) 18_opt_autogen :  27_group_autogen
+(354) 18_opt_autogen : 
+(355) derived-type-spec :  NAME_LITERAL 18_opt_autogen
+(356) 28_group_autogen :  NAME_LITERAL '='
+(357) 19_opt_autogen :  28_group_autogen
+(358) 19_opt_autogen : 
+(359) type-param-spec :  19_opt_autogen type-param-value
+(360) 29_group_autogen :  ',' type-param-spec
+(361) 10_optlist_autogen :  10_optlist_autogen 29_group_autogen
+(362) 10_optlist_autogen : 
+(363) type-param-spec-list :  type-param-spec 10_optlist_autogen
+(364) component-spec-list1_opt_autogen :  component-spec-list
+(365) component-spec-list1_opt_autogen : 
+(366) structure-constructor :  derived-type-spec '(' component-spec-list1_opt_autogen ')'
+(367) 30_group_autogen :  NAME_LITERAL '='
+(368) 20_opt_autogen :  30_group_autogen
+(369) 20_opt_autogen : 
+(370) component-spec :  20_opt_autogen component-data-source
+(371) 31_group_autogen :  ',' component-spec
+(372) 11_optlist_autogen :  11_optlist_autogen 31_group_autogen
+(373) 11_optlist_autogen : 
+(374) component-spec-list :  component-spec 11_optlist_autogen
+(375) component-data-source :  expr
+(376) component-data-source :  data-target
+(377) component-data-source :  proc-target
+(378) enumerator-def-stmt1_optlist_autogen :  enumerator-def-stmt1_optlist_autogen enumerator-def-stmt
+(379) enumerator-def-stmt1_optlist_autogen : 
+(380) enum-def :  enum-def-stmt enumerator-def-stmt enumerator-def-stmt1_optlist_autogen end-enum-stmt
+(381) enum-def-stmt :  ENUM ',' BIND '(' 'C' ')'
+(382) 32_group_autogen :  ':' ':'
+(383) 21_opt_autogen :  32_group_autogen
+(384) 21_opt_autogen : 
+(385) enumerator-def-stmt :  ENUMERATOR 21_opt_autogen enumerator-list
+(386) 33_group_autogen :  '=' expr
+(387) 22_opt_autogen :  33_group_autogen
+(388) 22_opt_autogen : 
+(389) enumerator :  NAME_LITERAL 22_opt_autogen
+(390) 34_group_autogen :  ',' enumerator
+(391) 12_optlist_autogen :  12_optlist_autogen 34_group_autogen
+(392) 12_optlist_autogen : 
+(393) enumerator-list :  enumerator 12_optlist_autogen
+(394) end-enum-stmt :  END_ENUM
+(395) boz-literal-constant :  BOZ_LITERAL_CONSTANT
+(396) array-constructor :  '(' '/' ac-spec '/' ')'
+(397) array-constructor :  '[' ac-spec ']'
+(398) ac-spec :  type-spec ':' ':'
+(399) 35_group_autogen :  type-spec ':' ':'
+(400) 23_opt_autogen :  35_group_autogen
+(401) 23_opt_autogen : 
+(402) ac-spec :  23_opt_autogen ac-value-list
+(403) ac-value :  expr
+(404) ac-value :  ac-implied-do
+(405) 36_group_autogen :  ',' ac-value
+(406) 13_optlist_autogen :  13_optlist_autogen 36_group_autogen
+(407) 13_optlist_autogen : 
+(408) ac-value-list :  ac-value 13_optlist_autogen
+(409) ac-implied-do :  '(' ac-value-list ',' ac-implied-do-control ')'
+(410) 37_group_autogen :  ',' expr
+(411) 24_opt_autogen :  37_group_autogen
+(412) 24_opt_autogen : 
+(413) ac-implied-do-control :  NAME_LITERAL '=' expr ',' expr 24_opt_autogen
+(414) 38_group_autogen :  ',' attr-spec
+(415) 14_optlist_autogen :  14_optlist_autogen 38_group_autogen
+(416) 14_optlist_autogen : 
+(417) 38_group_autogen :  14_optlist_autogen ':' ':'
+(418) 25_opt_autogen :  38_group_autogen
+(419) 25_opt_autogen : 
+(420) type-declaration-stmt :  declaration-type-spec 25_opt_autogen entity-decl-list
+(421) attr-spec :  access-spec
+(422) attr-spec :  ALLOCATABLE
+(423) attr-spec :  ASYNCHRONOUS
+(424) attr-spec :  CODIMENSION '[' coarray-spec ']'
+(425) attr-spec :  CONTIGUOUS
+(426) attr-spec :  DIMENSION '(' array-spec ')'
+(427) attr-spec :  EXTERNAL
+(428) attr-spec :  INTENT '(' intent-spec ')'
+(429) attr-spec :  INTRINSIC
+(430) attr-spec :  language-binding-spec
+(431) attr-spec :  OPTIONAL
+(432) attr-spec :  PARAMETER
+(433) attr-spec :  POINTER
+(434) attr-spec :  PROTECTED
+(435) attr-spec :  SAVE
+(436) attr-spec :  TARGET
+(437) attr-spec :  VALUE
+(438) attr-spec :  VOLATILE
+(439) 39_group_autogen :  '(' array-spec ')'
+(440) 26_opt_autogen :  39_group_autogen
+(441) 26_opt_autogen : 
+(442) 40_group_autogen :  '[' coarray-spec ']'
+(443) 27_opt_autogen :  40_group_autogen
+(444) 27_opt_autogen : 
+(445) 41_group_autogen :  '*' char-length
+(446) 28_opt_autogen :  41_group_autogen
+(447) 28_opt_autogen : 
+(448) initialization1_opt_autogen :  initialization
+(449) initialization1_opt_autogen : 
+(450) entity-decl :  NAME_LITERAL 26_opt_autogen 27_opt_autogen 28_opt_autogen initialization1_opt_autogen
+(451) 42_group_autogen :  '*' char-length
+(452) 29_opt_autogen :  42_group_autogen
+(453) 29_opt_autogen : 
+(454) entity-decl :  NAME_LITERAL 29_opt_autogen
+(455) 43_group_autogen :  ',' entity-decl
+(456) 15_optlist_autogen :  15_optlist_autogen 43_group_autogen
+(457) 15_optlist_autogen : 
+(458) entity-decl-list :  entity-decl 15_optlist_autogen
+(459) initialization :  '=' expr
+(460) initialization :  '=' '>' null-init
+(461) initialization :  '=' '>' initial-data-target
+(462) null-init :  function-reference
+(463) access-spec :  PUBLIC
+(464) access-spec :  PRIVATE
+(465) 44_group_autogen :  ',' NAME_KEYWORD '=' expr
+(466) 30_opt_autogen :  44_group_autogen
+(467) 30_opt_autogen : 
+(468) language-binding-spec :  BIND '(' 'C' 30_opt_autogen ')'
+(469) coarray-spec :  deferred-coshape-spec-list
+(470) coarray-spec :  explicit-coshape-spec
+(471) deferred-coshape-spec :  ':'
+(472) 45_group_autogen :  ',' deferred-coshape-spec
+(473) 16_optlist_autogen :  16_optlist_autogen 45_group_autogen
+(474) 16_optlist_autogen : 
+(475) deferred-coshape-spec-list :  deferred-coshape-spec 16_optlist_autogen
+(476) 46_group_autogen :  lower-cobound ':'
+(477) 31_opt_autogen :  46_group_autogen
+(478) 31_opt_autogen : 
+(479) 46_group_autogen :  31_opt_autogen upper-cobound ','
+(480) 17_optlist_autogen :  17_optlist_autogen 46_group_autogen
+(481) 17_optlist_autogen : 
+(482) 47_group_autogen :  lower-cobound ':'
+(483) 32_opt_autogen :  47_group_autogen
+(484) 32_opt_autogen : 
+(485) explicit-coshape-spec :  17_optlist_autogen 32_opt_autogen '*'
+(486) lower-cobound :  expr
+(487) upper-cobound :  expr
+(488) dimension-spec :  DIMENSION '(' array-spec ')'
+(489) array-spec :  explicit-shape-spec-list
+(490) array-spec :  assumed-shape-spec-list
+(491) array-spec :  deferred-shape-spec-list
+(492) array-spec :  assumed-size-spec
+(493) array-spec :  implied-shape-spec-list
+(494) 48_group_autogen :  lower-bound ':'
+(495) 33_opt_autogen :  48_group_autogen
+(496) 33_opt_autogen : 
+(497) explicit-shape-spec :  33_opt_autogen upper-bound
+(498) 49_group_autogen :  ',' explicit-shape-spec
+(499) 18_optlist_autogen :  18_optlist_autogen 49_group_autogen
+(500) 18_optlist_autogen : 
+(501) explicit-shape-spec-list :  explicit-shape-spec 18_optlist_autogen
+(502) lower-bound :  expr
+(503) upper-bound :  expr
+(504) lower-bound1_opt_autogen :  lower-bound
+(505) lower-bound1_opt_autogen : 
+(506) assumed-shape-spec :  lower-bound1_opt_autogen ':'
+(507) 50_group_autogen :  ',' assumed-shape-spec
+(508) 19_optlist_autogen :  19_optlist_autogen 50_group_autogen
+(509) 19_optlist_autogen : 
+(510) assumed-shape-spec-list :  assumed-shape-spec 19_optlist_autogen
+(511) deferred-shape-spec :  ':'
+(512) 51_group_autogen :  ',' deferred-shape-spec
+(513) 20_optlist_autogen :  20_optlist_autogen 51_group_autogen
+(514) 20_optlist_autogen : 
+(515) deferred-shape-spec-list :  deferred-shape-spec 20_optlist_autogen
+(516) 52_group_autogen :  explicit-shape-spec ','
+(517) 21_optlist_autogen :  21_optlist_autogen 52_group_autogen
+(518) 21_optlist_autogen : 
+(519) 53_group_autogen :  lower-bound ':'
+(520) 34_opt_autogen :  53_group_autogen
+(521) 34_opt_autogen : 
+(522) assumed-size-spec :  21_optlist_autogen 34_opt_autogen '*'
+(523) 54_group_autogen :  ',' assumed-size-spec
+(524) 22_optlist_autogen :  22_optlist_autogen 54_group_autogen
+(525) 22_optlist_autogen : 
+(526) assumed-size-spec-list :  assumed-size-spec 22_optlist_autogen
+(527) 55_group_autogen :  lower-bound ':'
+(528) 35_opt_autogen :  55_group_autogen
+(529) 35_opt_autogen : 
+(530) implied-shape-spec :  35_opt_autogen '*'
+(531) 56_group_autogen :  ',' implied-shape-spec
+(532) 23_optlist_autogen :  23_optlist_autogen 56_group_autogen
+(533) 23_optlist_autogen : 
+(534) implied-shape-spec-list :  implied-shape-spec 23_optlist_autogen
+(535) intent-spec :  IN
+(536) intent-spec :  OUT
+(537) intent-spec :  INOUT
+(538) 57_group_autogen :  ':' ':'
+(539) 36_opt_autogen :  57_group_autogen
+(540) 36_opt_autogen : 
+(541) 57_group_autogen :  36_opt_autogen access-id-list
+(542) access-stmt :  access-spec 36_opt_autogen
+(543) access-id :  NAME_LITERAL
+(544) access-id :  generic-spec
+(545) 58_group_autogen :  ',' access-id
+(546) 37_opt_autogen :  58_group_autogen
+(547) 37_opt_autogen : 
+(548) access-id-list :  access-id 37_opt_autogen
+(549) 59_group_autogen :  ':' ':'
+(550) 38_opt_autogen :  59_group_autogen
+(551) 38_opt_autogen : 
+(552) allocatable-stmt :  ALLOCATABLE 38_opt_autogen allocatable-decl-list
+(553) 60_group_autogen :  '(' array-spec ')'
+(554) 39_opt_autogen :  60_group_autogen
+(555) 39_opt_autogen : 
+(556) 61_group_autogen :  '[' coarray-spec ']'
+(557) 40_opt_autogen :  61_group_autogen
+(558) 40_opt_autogen : 
+(559) allocatable-decl :  NAME_LITERAL 39_opt_autogen 40_opt_autogen
+(560) 62_group_autogen :  ',' allocatable-decl
+(561) 24_optlist_autogen :  24_optlist_autogen 62_group_autogen
+(562) 24_optlist_autogen : 
+(563) allocatable-decl-list :  allocatable-decl 24_optlist_autogen
+(564) 63_group_autogen :  ':' ':'
+(565) 41_opt_autogen :  63_group_autogen
+(566) 41_opt_autogen : 
+(567) asynchronous-stmt :  ASYNCHRONOUS 41_opt_autogen name-list
+(568) 64_group_autogen :  ':' ':'
+(569) 42_opt_autogen :  64_group_autogen
+(570) 42_opt_autogen : 
+(571) bind-stmt :  language-binding-spec 42_opt_autogen bind-entity-list
+(572) bind-entity :  NAME_LITERAL
+(573) bind-entity :  '/' NAME_LITERAL '/'
+(574) 65_group_autogen :  ',' bind-entity
+(575) 25_optlist_autogen :  25_optlist_autogen 65_group_autogen
+(576) 25_optlist_autogen : 
+(577) bind-entity-list :  bind-entity 25_optlist_autogen
+(578) 66_group_autogen :  ':' ':'
+(579) 43_opt_autogen :  66_group_autogen
+(580) 43_opt_autogen : 
+(581) codimension-stmt :  CODIMENSION 43_opt_autogen codimension-decl-list
+(582) codimension-decl :  NAME_LITERAL '[' coarray-spec ']'
+(583) 67_group_autogen :  ',' codimension-decl
+(584) 26_optlist_autogen :  26_optlist_autogen 67_group_autogen
+(585) 26_optlist_autogen : 
+(586) codimension-decl-list :  codimension-decl 26_optlist_autogen
+(587) 68_group_autogen :  ':' ':'
+(588) 44_opt_autogen :  68_group_autogen
+(589) 44_opt_autogen : 
+(590) contiguous-stmt :  CONTIGUOUS 44_opt_autogen name-list
+(591) ','2_opt_autogen :  ','
+(592) ','2_opt_autogen : 
+(593) 69_group_autogen :  ','2_opt_autogen data-stmt-set
+(594) 27_optlist_autogen :  27_optlist_autogen 69_group_autogen
+(595) 27_optlist_autogen : 
+(596) data-stmt :  DATA data-stmt-set 27_optlist_autogen
+(597) data-stmt-set :  data-stmt-object-list '/' data-stmt-value-list '/'
+(598) data-stmt-object :  variable
+(599) data-stmt-object :  data-implied-do
+(600) 70_group_autogen :  ',' data-stmt-object
+(601) 28_optlist_autogen :  28_optlist_autogen 70_group_autogen
+(602) 28_optlist_autogen : 
+(603) data-stmt-object-list :  data-stmt-object 28_optlist_autogen
+(604) 71_group_autogen :  ',' expr
+(605) 45_opt_autogen :  71_group_autogen
+(606) 45_opt_autogen : 
+(607) data-implied-do :  '(' data-i-do-object-list ',' NAME_LITERAL '=' expr ',' expr 45_opt_autogen ')'
+(608) data-i-do-object :  array-element
+(609) data-i-do-object :  scalar-structure-component
+(610) data-i-do-object :  data-implied-do
+(611) 72_group_autogen :  ',' data-i-do-object
+(612) 29_optlist_autogen :  29_optlist_autogen 72_group_autogen
+(613) 29_optlist_autogen : 
+(614) data-i-do-object-list :  data-i-do-object 29_optlist_autogen
+(615) 73_group_autogen :  data-stmt-repeat '*'
+(616) 46_opt_autogen :  73_group_autogen
+(617) 46_opt_autogen : 
+(618) data-stmt-value :  46_opt_autogen data-stmt-constant
+(619) 74_group_autogen :  ',' data-stmt-value
+(620) 30_optlist_autogen :  30_optlist_autogen 74_group_autogen
+(621) 30_optlist_autogen : 
+(622) data-stmt-value-list :  data-stmt-value 30_optlist_autogen
+(623) data-stmt-repeat :  constant
+(624) data-stmt-repeat :  constant-subobject
+(625) data-stmt-constant :  constant
+(626) data-stmt-constant :  constant-subobject
+(627) data-stmt-constant :  signed-int-literal-constant
+(628) data-stmt-constant :  signed-real-literal-constant
+(629) data-stmt-constant :  null-init
+(630) data-stmt-constant :  initial-data-target
+(631) data-stmt-constant :  structure-constructor
+(632) constant-subobject :  designator
+(633) 75_group_autogen :  ':' ':'
+(634) 47_opt_autogen :  75_group_autogen
+(635) 47_opt_autogen : 
+(636) 76_group_autogen :  ',' NAME_LITERAL '(' array-spec ')'
+(637) 31_optlist_autogen :  31_optlist_autogen 76_group_autogen
+(638) 31_optlist_autogen : 
+(639) dimension-stmt :  DIMENSION 47_opt_autogen NAME_LITERAL '(' array-spec ')' 31_optlist_autogen
+(640) 77_group_autogen :  ':' ':'
+(641) 48_opt_autogen :  77_group_autogen
+(642) 48_opt_autogen : 
+(643) intent-stmt :  INTENT '(' intent-spec ')' 48_opt_autogen name-list
+(644) 78_group_autogen :  ':' ':'
+(645) 49_opt_autogen :  78_group_autogen
+(646) 49_opt_autogen : 
+(647) optional-stmt :  OPTIONAL 49_opt_autogen name-list
+(648) parameter-stmt :  PARAMETER '(' named-constant-def-list ')'
+(649) named-constant-def :  NAME_LITERAL '=' expr
+(650) 79_group_autogen :  ',' named-constant-def
+(651) 32_optlist_autogen :  32_optlist_autogen 79_group_autogen
+(652) 32_optlist_autogen : 
+(653) named-constant-def-list :  named-constant-def 32_optlist_autogen
+(654) 80_group_autogen :  ':' ':'
+(655) pointer-stmt :  POINTER 80_group_autogen pointer-decl-list
+(656) 81_group_autogen :  '(' deferred-shape-spec-list ')'
+(657) 50_opt_autogen :  81_group_autogen
+(658) 50_opt_autogen : 
+(659) pointer-decl :  NAME_LITERAL 50_opt_autogen
+(660) pointer-decl :  NAME_LITERAL
+(661) 82_group_autogen :  ',' pointer-decl
+(662) 33_optlist_autogen :  33_optlist_autogen 82_group_autogen
+(663) 33_optlist_autogen : 
+(664) pointer-decl-list :  pointer-decl 33_optlist_autogen
+(665) 83_group_autogen :  ':' ':'
+(666) 51_opt_autogen :  83_group_autogen
+(667) 51_opt_autogen : 
+(668) protected-stmt :  PROTECTED 51_opt_autogen name-list
+(669) 84_group_autogen :  ':' ':'
+(670) 52_opt_autogen :  84_group_autogen
+(671) 52_opt_autogen : 
+(672) 84_group_autogen :  52_opt_autogen saved-entity-list
+(673) save-stmt :  SAVE 52_opt_autogen
+(674) saved-entity :  NAME_LITERAL
+(675) saved-entity :  '/' NAME_LITERAL '/'
+(676) 85_group_autogen :  ',' saved-entity
+(677) 34_optlist_autogen :  34_optlist_autogen 85_group_autogen
+(678) 34_optlist_autogen : 
+(679) saved-entity-list :  saved-entity 34_optlist_autogen
+(680) 86_group_autogen :  ':' ':'
+(681) 53_opt_autogen :  86_group_autogen
+(682) 53_opt_autogen : 
+(683) target-stmt :  TARGET 53_opt_autogen target-decl-list
+(684) 87_group_autogen :  '(' array-spec ')'
+(685) 54_opt_autogen :  87_group_autogen
+(686) 54_opt_autogen : 
+(687) 88_group_autogen :  '[' coarray-spec ']'
+(688) 55_opt_autogen :  88_group_autogen
+(689) 55_opt_autogen : 
+(690) target-decl :  NAME_LITERAL 54_opt_autogen 55_opt_autogen
+(691) 89_group_autogen :  ',' target-decl
+(692) 35_optlist_autogen :  35_optlist_autogen 89_group_autogen
+(693) 35_optlist_autogen : 
+(694) target-decl-list :  target-decl 35_optlist_autogen
+(695) 90_group_autogen :  ':' ':'
+(696) 56_opt_autogen :  90_group_autogen
+(697) 56_opt_autogen : 
+(698) value-stmt :  VALUE 56_opt_autogen name-list
+(699) 91_group_autogen :  ':' ':'
+(700) 57_opt_autogen :  91_group_autogen
+(701) 57_opt_autogen : 
+(702) volatile-stmt :  VOLATILE 57_opt_autogen name-list
+(703) implicit-stmt :  IMPLICIT implicit-spec-list
+(704) implicit-stmt :  IMPLICIT_NONE
+(705) implicit-spec :  declaration-type-spec '(' letter-spec-list ')'
+(706) 92_group_autogen :  ',' implicit-spec
+(707) 36_optlist_autogen :  36_optlist_autogen 92_group_autogen
+(708) 36_optlist_autogen : 
+(709) implicit-spec-list :  implicit-spec 36_optlist_autogen
+(710) 93_group_autogen :  '-' NAME_LITERAL
+(711) 58_opt_autogen :  93_group_autogen
+(712) 58_opt_autogen : 
+(713) letter-spec :  NAME_LITERAL 58_opt_autogen
+(714) 94_group_autogen :  ',' letter-spec
+(715) 37_optlist_autogen :  37_optlist_autogen 94_group_autogen
+(716) 37_optlist_autogen : 
+(717) letter-spec-list :  letter-spec 37_optlist_autogen
+(718) ','3_opt_autogen :  ','
+(719) ','3_opt_autogen : 
+(720) 95_group_autogen :  ','3_opt_autogen '/' NAME_LITERAL '/' name-list
+(721) 38_optlist_autogen :  38_optlist_autogen 95_group_autogen
+(722) 38_optlist_autogen : 
+(723) namelist-stmt :  NAMELIST '/' NAME_LITERAL '/' name-list 38_optlist_autogen
+(724) equivalence-stmt :  EQUIVALENCE equivalence-set-list
+(725) equivalence-set :  '(' equivalence-object ',' equivalence-object-list ')'
+(726) 96_group_autogen :  ',' equivalence-set
+(727) 39_optlist_autogen :  39_optlist_autogen 96_group_autogen
+(728) 39_optlist_autogen : 
+(729) equivalence-set-list :  equivalence-set 39_optlist_autogen
+(730) equivalence-object :  NAME_LITERAL
+(731) equivalence-object :  array-element
+(732) equivalence-object :  substring
+(733) 97_group_autogen :  ',' equivalence-object
+(734) 40_optlist_autogen :  40_optlist_autogen 97_group_autogen
+(735) 40_optlist_autogen : 
+(736) equivalence-object-list :  equivalence-object 40_optlist_autogen
+(737) NAME_LITERAL2_opt_autogen :  NAME_LITERAL
+(738) NAME_LITERAL2_opt_autogen : 
+(739) 98_group_autogen :  '/' NAME_LITERAL2_opt_autogen '/'
+(740) 59_opt_autogen :  98_group_autogen
+(741) 59_opt_autogen : 
+(742) ','4_opt_autogen :  ','
+(743) ','4_opt_autogen : 
+(744) NAME_LITERAL3_opt_autogen :  NAME_LITERAL
+(745) NAME_LITERAL3_opt_autogen : 
+(746) 99_group_autogen :  ','4_opt_autogen '/' NAME_LITERAL3_opt_autogen '/' common-block-object-list
+(747) 41_optlist_autogen :  41_optlist_autogen 99_group_autogen
+(748) 41_optlist_autogen : 
+(749) common-stmt :  COMMON 59_opt_autogen common-block-object-list 41_optlist_autogen
+(750) 100_group_autogen :  '(' array-spec ')'
+(751) 60_opt_autogen :  100_group_autogen
+(752) 60_opt_autogen : 
+(753) common-block-object :  NAME_LITERAL 60_opt_autogen
+(754) 101_group_autogen :  ',' common-block-object
+(755) 42_optlist_autogen :  42_optlist_autogen 101_group_autogen
+(756) 42_optlist_autogen : 
+(757) common-block-object-list :  common-block-object 42_optlist_autogen
+(758) designator :  NAME_LITERAL
+(759) designator :  array-element
+(760) designator :  array-section
+(761) designator :  coindexed-named-object
+(762) designator :  complex-part-designator
+(763) designator :  structure-component
+(764) designator :  substring
+(765) variable :  designator
+(766) variable :  expr
+(767) substring :  parent-string '(' substring-range ')'
+(768) parent-string :  NAME_LITERAL
+(769) parent-string :  array-element
+(770) parent-string :  coindexed-named-object
+(771) parent-string :  scalar-structure-component
+(772) parent-string :  constant
+(773) expr1_opt_autogen :  expr
+(774) expr1_opt_autogen : 
+(775) expr2_opt_autogen :  expr
+(776) expr2_opt_autogen : 
+(777) substring-range :  expr1_opt_autogen ':' expr2_opt_autogen
+(778) 102_group_autogen :  '%' part-ref
+(779) 61_opt_autogen :  102_group_autogen
+(780) 61_opt_autogen : 
+(781) data-ref :  part-ref 61_opt_autogen
+(782) 103_group_autogen :  '(' section-subscript-list ')'
+(783) 62_opt_autogen :  103_group_autogen
+(784) 62_opt_autogen : 
+(785) image-selector1_opt_autogen :  image-selector
+(786) image-selector1_opt_autogen : 
+(787) part-ref :  NAME_LITERAL 62_opt_autogen image-selector1_opt_autogen
+(788) structure-component :  data-ref
+(789) scalar-structure-component :  structure-component
+(790) coindexed-named-object :  data-ref
+(791) complex-part-designator :  designator '%' RE
+(792) complex-part-designator :  designator '%' IM
+(793) type-param-inquiry :  designator '%' NAME_LITERAL
+(794) array-element :  data-ref
+(795) 104_group_autogen :  '(' substring-range ')'
+(796) 63_opt_autogen :  104_group_autogen
+(797) 63_opt_autogen : 
+(798) array-section :  data-ref 63_opt_autogen
+(799) array-section :  complex-part-designator
+(800) subscript :  expr
+(801) section-subscript :  subscript
+(802) section-subscript :  subscript-triplet
+(803) section-subscript :  vector-subscript
+(804) 105_group_autogen :  ',' section-subscript
+(805) 43_optlist_autogen :  43_optlist_autogen 105_group_autogen
+(806) 43_optlist_autogen : 
+(807) section-subscript-list :  section-subscript 43_optlist_autogen
+(808) subscript1_opt_autogen :  subscript
+(809) subscript1_opt_autogen : 
+(810) subscript2_opt_autogen :  subscript
+(811) subscript2_opt_autogen : 
+(812) 106_group_autogen :  ':' stride
+(813) 64_opt_autogen :  106_group_autogen
+(814) 64_opt_autogen : 
+(815) subscript-triplet :  subscript1_opt_autogen ':' subscript2_opt_autogen 64_opt_autogen
+(816) stride :  expr
+(817) vector-subscript :  expr
+(818) image-selector :  '[' cosubscript-list ']'
+(819) cosubscript :  expr
+(820) 107_group_autogen :  ',' cosubscript
+(821) 44_optlist_autogen :  44_optlist_autogen 107_group_autogen
+(822) 44_optlist_autogen : 
+(823) cosubscript-list :  cosubscript 44_optlist_autogen
+(824) 108_group_autogen :  type-spec ':' ':'
+(825) 65_opt_autogen :  108_group_autogen
+(826) 65_opt_autogen : 
+(827) 109_group_autogen :  ',' alloc-opt-list
+(828) 66_opt_autogen :  109_group_autogen
+(829) 66_opt_autogen : 
+(830) allocate-stmt :  ALLOCATE '(' 65_opt_autogen allocation-list 66_opt_autogen ')'
+(831) alloc-opt :  ERRMSG '=' variable
+(832) alloc-opt :  MOLD '=' expr
+(833) alloc-opt :  SOURCE '=' expr
+(834) alloc-opt :  STAT '=' variable
+(835) 110_group_autogen :  ',' alloc-opt
+(836) 45_optlist_autogen :  45_optlist_autogen 110_group_autogen
+(837) 45_optlist_autogen : 
+(838) alloc-opt-list :  alloc-opt 45_optlist_autogen
+(839) 111_group_autogen :  '(' allocate-shape-spec-list ')'
+(840) 67_opt_autogen :  111_group_autogen
+(841) 67_opt_autogen : 
+(842) 112_group_autogen :  '[' allocate-coarray-spec ']'
+(843) 68_opt_autogen :  112_group_autogen
+(844) 68_opt_autogen : 
+(845) allocation :  allocate-object 67_opt_autogen 68_opt_autogen
+(846) 113_group_autogen :  ',' allocation
+(847) 46_optlist_autogen :  46_optlist_autogen 113_group_autogen
+(848) 46_optlist_autogen : 
+(849) allocation-list :  allocation 46_optlist_autogen
+(850) allocate-object :  NAME_LITERAL
+(851) allocate-object :  structure-component
+(852) 114_group_autogen :  ',' allocate-object
+(853) 47_optlist_autogen :  47_optlist_autogen 114_group_autogen
+(854) 47_optlist_autogen : 
+(855) allocate-object-list :  allocate-object 47_optlist_autogen
+(856) 115_group_autogen :  expr ':'
+(857) 69_opt_autogen :  115_group_autogen
+(858) 69_opt_autogen : 
+(859) allocate-shape-spec :  69_opt_autogen expr
+(860) 116_group_autogen :  ',' allocate-shape-spec
+(861) 48_optlist_autogen :  48_optlist_autogen 116_group_autogen
+(862) 48_optlist_autogen : 
+(863) allocate-shape-spec-list :  allocate-shape-spec 48_optlist_autogen
+(864) 117_group_autogen :  allocate-coshape-spec-list ','
+(865) 70_opt_autogen :  117_group_autogen
+(866) 70_opt_autogen : 
+(867) 118_group_autogen :  expr ':'
+(868) 71_opt_autogen :  118_group_autogen
+(869) 71_opt_autogen : 
+(870) allocate-coarray-spec :  70_opt_autogen 71_opt_autogen '*'
+(871) 119_group_autogen :  expr ':'
+(872) 72_opt_autogen :  119_group_autogen
+(873) 72_opt_autogen : 
+(874) allocate-coshape-spec :  72_opt_autogen expr
+(875) 120_group_autogen :  ',' allocate-coshape-spec
+(876) 49_optlist_autogen :  49_optlist_autogen 120_group_autogen
+(877) 49_optlist_autogen : 
+(878) allocate-coshape-spec-list :  allocate-coshape-spec 49_optlist_autogen
+(879) nullify-stmt :  NULLIFY '(' pointer-object-list ')'
+(880) pointer-object :  NAME_LITERAL
+(881) pointer-object :  structure-component
+(882) 121_group_autogen :  ',' pointer-object
+(883) 50_optlist_autogen :  50_optlist_autogen 121_group_autogen
+(884) 50_optlist_autogen : 
+(885) pointer-object-list :  pointer-object 50_optlist_autogen
+(886) 122_group_autogen :  ',' dealloc-opt-list
+(887) 73_opt_autogen :  122_group_autogen
+(888) 73_opt_autogen : 
+(889) deallocate-stmt :  DEALLOCATE '(' allocate-object-list 73_opt_autogen ')'
+(890) dealloc-opt :  STAT '=' variable
+(891) dealloc-opt :  ERRMSG '=' variable
+(892) 123_group_autogen :  ',' dealloc-opt
+(893) 51_optlist_autogen :  51_optlist_autogen 123_group_autogen
+(894) 51_optlist_autogen : 
+(895) dealloc-opt-list :  dealloc-opt 51_optlist_autogen
+(896) primary :  constant
+(897) primary :  designator
+(898) primary :  array-constructor
+(899) primary :  structure-constructor
+(900) primary :  function-reference
+(901) primary :  type-param-inquiry
+(902) primary :  NAME_LITERAL
+(903) primary :  '(' expr ')'
+(904) defined-op1_opt_autogen :  defined-op
+(905) defined-op1_opt_autogen : 
+(906) level-1-expr :  defined-op1_opt_autogen primary
+(907) defined-op :  '.' NAME_LITERAL '.'
+(908) 124_group_autogen :  power-op mult-operand
+(909) 74_opt_autogen :  124_group_autogen
+(910) 74_opt_autogen : 
+(911) mult-operand :  level-1-expr 74_opt_autogen
+(912) 125_group_autogen :  add-operand mult-op
+(913) 75_opt_autogen :  125_group_autogen
+(914) 75_opt_autogen : 
+(915) add-operand :  75_opt_autogen mult-operand
+(916) level-2-expr1_opt_autogen :  level-2-expr
+(917) level-2-expr1_opt_autogen : 
+(918) 126_group_autogen :  level-2-expr1_opt_autogen add-op
+(919) 76_opt_autogen :  126_group_autogen
+(920) 76_opt_autogen : 
+(921) level-2-expr :  76_opt_autogen add-operand
+(922) power-op :  '*' '*'
+(923) mult-op :  '*'
+(924) mult-op :  '/'
+(925) add-op :  '+'
+(926) add-op :  '-'
+(927) 127_group_autogen :  level-3-expr concat-op
+(928) 77_opt_autogen :  127_group_autogen
+(929) 77_opt_autogen : 
+(930) level-3-expr :  77_opt_autogen level-2-expr
+(931) concat-op :  '/' '/'
+(932) 128_group_autogen :  level-3-expr rel-op
+(933) 78_opt_autogen :  128_group_autogen
+(934) 78_opt_autogen : 
+(935) level-4-expr :  78_opt_autogen level-3-expr
+(936) rel-op :  EQ
+(937) rel-op :  NE
+(938) rel-op :  LT
+(939) rel-op :  LE
+(940) rel-op :  GT
+(941) rel-op :  GE
+(942) rel-op :  '=' '='
+(943) rel-op :  '/' '='
+(944) rel-op :  '<'
+(945) rel-op :  '<' '='
+(946) rel-op :  '>'
+(947) rel-op :  '>' '='
+(948) not-op1_opt_autogen :  not-op
+(949) not-op1_opt_autogen : 
+(950) and-operand :  not-op1_opt_autogen level-4-expr
+(951) 129_group_autogen :  or-operand and-op
+(952) 79_opt_autogen :  129_group_autogen
+(953) 79_opt_autogen : 
+(954) or-operand :  79_opt_autogen and-operand
+(955) 130_group_autogen :  equiv-operand or-op
+(956) 80_opt_autogen :  130_group_autogen
+(957) 80_opt_autogen : 
+(958) equiv-operand :  80_opt_autogen or-operand
+(959) 131_group_autogen :  level-5-expr equiv-op
+(960) 81_opt_autogen :  131_group_autogen
+(961) 81_opt_autogen : 
+(962) level-5-expr :  81_opt_autogen equiv-operand
+(963) not-op :  NOT
+(964) and-op :  AND
+(965) or-op :  OR
+(966) equiv-op :  EQV
+(967) equiv-op :  NEQV
+(968) 132_group_autogen :  expr defined-op
+(969) 82_opt_autogen :  132_group_autogen
+(970) 82_opt_autogen : 
+(971) expr :  82_opt_autogen level-5-expr
+(972) assignment-stmt :  variable '=' expr
+(973) 133_group_autogen :  '(' bounds-spec-list ')'
+(974) 83_opt_autogen :  133_group_autogen
+(975) 83_opt_autogen : 
+(976) pointer-assignment-stmt :  data-pointer-object 83_opt_autogen '=' '>' data-target
+(977) pointer-assignment-stmt :  data-pointer-object '(' bounds-remapping-list ')' '=' '>' data-target
+(978) pointer-assignment-stmt :  proc-pointer-object '=' '>' proc-target
+(979) data-pointer-object :  NAME_LITERAL
+(980) data-pointer-object :  variable '%' NAME_LITERAL
+(981) bounds-spec :  expr ':'
+(982) 134_group_autogen :  ',' bounds-spec
+(983) 52_optlist_autogen :  52_optlist_autogen 134_group_autogen
+(984) 52_optlist_autogen : 
+(985) bounds-spec-list :  bounds-spec 52_optlist_autogen
+(986) bounds-remapping :  expr ':' expr
+(987) 135_group_autogen :  ',' bounds-remapping
+(988) 53_optlist_autogen :  53_optlist_autogen 135_group_autogen
+(989) 53_optlist_autogen : 
+(990) bounds-remapping-list :  bounds-remapping 53_optlist_autogen
+(991) data-target :  variable
+(992) proc-pointer-object :  NAME_LITERAL
+(993) proc-pointer-object :  proc-component-ref
+(994) proc-component-ref :  variable '%' NAME_LITERAL
+(995) proc-target :  expr
+(996) proc-target :  NAME_LITERAL
+(997) proc-target :  proc-component-ref
+(998) where-stmt :  WHERE '(' expr ')' where-assignment-stmt
+(999) where-body-construct1_optlist_autogen :  where-body-construct1_optlist_autogen where-body-construct
+(1000) where-body-construct1_optlist_autogen : 
+(1001) where-body-construct2_optlist_autogen :  where-body-construct2_optlist_autogen where-body-construct
+(1002) where-body-construct2_optlist_autogen : 
+(1003) 136_group_autogen :  masked-elsewhere-stmt where-body-construct2_optlist_autogen
+(1004) 54_optlist_autogen :  54_optlist_autogen 136_group_autogen
+(1005) 54_optlist_autogen : 
+(1006) where-body-construct3_optlist_autogen :  where-body-construct3_optlist_autogen where-body-construct
+(1007) where-body-construct3_optlist_autogen : 
+(1008) 137_group_autogen :  elsewhere-stmt where-body-construct3_optlist_autogen
+(1009) 84_opt_autogen :  137_group_autogen
+(1010) 84_opt_autogen : 
+(1011) where-construct :  where-construct-stmt where-body-construct1_optlist_autogen 54_optlist_autogen 84_opt_autogen end-where-stmt
+(1012) 138_group_autogen :  NAME_LITERAL ':'
+(1013) 85_opt_autogen :  138_group_autogen
+(1014) 85_opt_autogen : 
+(1015) where-construct-stmt :  85_opt_autogen WHERE '(' expr ')'
+(1016) where-body-construct :  where-assignment-stmt
+(1017) where-body-construct :  where-stmt
+(1018) where-body-construct :  where-construct
+(1019) where-assignment-stmt :  assignment-stmt
+(1020) NAME_LITERAL4_opt_autogen :  NAME_LITERAL
+(1021) NAME_LITERAL4_opt_autogen : 
+(1022) masked-elsewhere-stmt :  ELSEWHERE '(' expr ')' NAME_LITERAL4_opt_autogen
+(1023) NAME_LITERAL5_opt_autogen :  NAME_LITERAL
+(1024) NAME_LITERAL5_opt_autogen : 
+(1025) elsewhere-stmt :  ELSEWHERE NAME_LITERAL5_opt_autogen
+(1026) NAME_LITERAL6_opt_autogen :  NAME_LITERAL
+(1027) NAME_LITERAL6_opt_autogen : 
+(1028) end-where-stmt :  END_WHERE NAME_LITERAL6_opt_autogen
+(1029) forall-body-construct1_optlist_autogen :  forall-body-construct1_optlist_autogen forall-body-construct
+(1030) forall-body-construct1_optlist_autogen : 
+(1031) forall-construct :  forall-construct-stmt forall-body-construct1_optlist_autogen end-forall-stmt
+(1032) 139_group_autogen :  NAME_LITERAL ':'
+(1033) 86_opt_autogen :  139_group_autogen
+(1034) 86_opt_autogen : 
+(1035) forall-construct-stmt :  86_opt_autogen FORALL forall-header
+(1036) 140_group_autogen :  type-spec ':' ':'
+(1037) 87_opt_autogen :  140_group_autogen
+(1038) 87_opt_autogen : 
+(1039) 141_group_autogen :  ',' expr
+(1040) 88_opt_autogen :  141_group_autogen
+(1041) 88_opt_autogen : 
+(1042) forall-header :  '(' 87_opt_autogen forall-triplet-spec-list 88_opt_autogen ')'
+(1043) 142_group_autogen :  ':' forall-step
+(1044) 89_opt_autogen :  142_group_autogen
+(1045) 89_opt_autogen : 
+(1046) forall-triplet-spec :  NAME_LITERAL '=' forall-limit ':' forall-limit 89_opt_autogen
+(1047) 143_group_autogen :  ',' forall-triplet-spec
+(1048) 55_optlist_autogen :  55_optlist_autogen 143_group_autogen
+(1049) 55_optlist_autogen : 
+(1050) forall-triplet-spec-list :  forall-triplet-spec 55_optlist_autogen
+(1051) forall-limit :  expr
+(1052) forall-step :  expr
+(1053) forall-body-construct :  forall-assignment-stmt
+(1054) forall-body-construct :  where-stmt
+(1055) forall-body-construct :  where-construct
+(1056) forall-body-construct :  forall-construct
+(1057) forall-body-construct :  forall-stmt
+(1058) forall-assignment-stmt :  assignment-stmt
+(1059) forall-assignment-stmt :  pointer-assignment-stmt
+(1060) NAME_LITERAL7_opt_autogen :  NAME_LITERAL
+(1061) NAME_LITERAL7_opt_autogen : 
+(1062) end-forall-stmt :  END_FORALL NAME_LITERAL7_opt_autogen
+(1063) forall-stmt :  FORALL forall-header forall-assignment-stmt
+(1064) execution-part-construct2_optlist_autogen :  execution-part-construct2_optlist_autogen execution-part-construct
+(1065) execution-part-construct2_optlist_autogen : 
+(1066) block :  execution-part-construct2_optlist_autogen
+(1067) associate-construct :  associate-stmt block end-associate-stmt
+(1068) 144_group_autogen :  NAME_LITERAL ':'
+(1069) 90_opt_autogen :  144_group_autogen
+(1070) 90_opt_autogen : 
+(1071) associate-stmt :  90_opt_autogen ASSOCIATE '(' association-list ')'
+(1072) association :  NAME_LITERAL '=' '>' selector
+(1073) 145_group_autogen :  ',' association
+(1074) 56_optlist_autogen :  56_optlist_autogen 145_group_autogen
+(1075) 56_optlist_autogen : 
+(1076) association-list :  association 56_optlist_autogen
+(1077) selector :  expr
+(1078) selector :  variable
+(1079) NAME_LITERAL8_opt_autogen :  NAME_LITERAL
+(1080) NAME_LITERAL8_opt_autogen : 
+(1081) end-associate-stmt :  END_ASSOCIATE NAME_LITERAL8_opt_autogen
+(1082) specification-part1_opt_autogen :  specification-part
+(1083) specification-part1_opt_autogen : 
+(1084) block-construct :  block-stmt specification-part1_opt_autogen block end-block-stmt
+(1085) 146_group_autogen :  NAME_LITERAL ':'
+(1086) 91_opt_autogen :  146_group_autogen
+(1087) 91_opt_autogen : 
+(1088) block-stmt :  91_opt_autogen BLOCK
+(1089) NAME_LITERAL9_opt_autogen :  NAME_LITERAL
+(1090) NAME_LITERAL9_opt_autogen : 
+(1091) end-block-stmt :  END_BLOCK NAME_LITERAL9_opt_autogen
+(1092) critical-construct :  critical-stmt block end-critical-stmt
+(1093) 147_group_autogen :  NAME_LITERAL ':'
+(1094) 92_opt_autogen :  147_group_autogen
+(1095) 92_opt_autogen : 
+(1096) critical-stmt :  92_opt_autogen CRITICAL
+(1097) NAME_LITERAL10_opt_autogen :  NAME_LITERAL
+(1098) NAME_LITERAL10_opt_autogen : 
+(1099) end-critical-stmt :  END_CRITICAL NAME_LITERAL10_opt_autogen
+(1100) do-construct :  block-do-construct
+(1101) do-construct :  nonblock-do-construct
+(1102) block-do-construct :  do-stmt block end-do
+(1103) do-stmt :  label-do-stmt
+(1104) do-stmt :  nonlabel-do-stmt
+(1105) 148_group_autogen :  NAME_LITERAL ':'
+(1106) 93_opt_autogen :  148_group_autogen
+(1107) 93_opt_autogen : 
+(1108) loop-control1_opt_autogen :  loop-control
+(1109) loop-control1_opt_autogen : 
+(1110) label-do-stmt :  93_opt_autogen DO INT_LITERAL_CONSTANT loop-control1_opt_autogen
+(1111) 149_group_autogen :  NAME_LITERAL ':'
+(1112) 94_opt_autogen :  149_group_autogen
+(1113) 94_opt_autogen : 
+(1114) loop-control2_opt_autogen :  loop-control
+(1115) loop-control2_opt_autogen : 
+(1116) nonlabel-do-stmt :  94_opt_autogen DO loop-control2_opt_autogen
+(1117) ','5_opt_autogen :  ','
+(1118) ','5_opt_autogen : 
+(1119) 150_group_autogen :  ',' expr
+(1120) 95_opt_autogen :  150_group_autogen
+(1121) 95_opt_autogen : 
+(1122) loop-control :  ','5_opt_autogen NAME_LITERAL '=' expr ',' expr 95_opt_autogen
+(1123) ','6_opt_autogen :  ','
+(1124) ','6_opt_autogen : 
+(1125) loop-control :  ','6_opt_autogen WHILE '(' expr ')'
+(1126) ','7_opt_autogen :  ','
+(1127) ','7_opt_autogen : 
+(1128) loop-control :  ','7_opt_autogen CONCURRENT forall-header
+(1129) end-do :  end-do-stmt
+(1130) end-do :  continue-stmt
+(1131) NAME_LITERAL11_opt_autogen :  NAME_LITERAL
+(1132) NAME_LITERAL11_opt_autogen : 
+(1133) end-do-stmt :  END_DO NAME_LITERAL11_opt_autogen
+(1134) nonblock-do-construct :  action-term-do-construct
+(1135) nonblock-do-construct :  outer-shared-do-construct
+(1136) action-term-do-construct :  label-do-stmt do-body action-stmt
+(1137) execution-part-construct3_optlist_autogen :  execution-part-construct3_optlist_autogen execution-part-construct
+(1138) execution-part-construct3_optlist_autogen : 
+(1139) do-body :  execution-part-construct3_optlist_autogen
+(1140) outer-shared-do-construct :  label-do-stmt do-body shared-term-do-construct
+(1141) shared-term-do-construct :  outer-shared-do-construct
+(1142) shared-term-do-construct :  inner-shared-do-construct
+(1143) inner-shared-do-construct :  label-do-stmt do-body do-term-shared-stmt
+(1144) do-term-shared-stmt :  action-stmt
+(1145) NAME_LITERAL12_opt_autogen :  NAME_LITERAL
+(1146) NAME_LITERAL12_opt_autogen : 
+(1147) cycle-stmt :  CYCLE NAME_LITERAL12_opt_autogen
+(1148) 151_group_autogen :  else-if-stmt block
+(1149) 57_optlist_autogen :  57_optlist_autogen 151_group_autogen
+(1150) 57_optlist_autogen : 
+(1151) 152_group_autogen :  else-stmt block
+(1152) 96_opt_autogen :  152_group_autogen
+(1153) 96_opt_autogen : 
+(1154) if-construct :  if-then-stmt block 57_optlist_autogen 96_opt_autogen end-if-stmt
+(1155) 153_group_autogen :  NAME_LITERAL ':'
+(1156) 97_opt_autogen :  153_group_autogen
+(1157) 97_opt_autogen : 
+(1158) if-then-stmt :  97_opt_autogen IF '(' expr ')' THEN
+(1159) NAME_LITERAL13_opt_autogen :  NAME_LITERAL
+(1160) NAME_LITERAL13_opt_autogen : 
+(1161) else-if-stmt :  ELSE_IF '(' expr ')' THEN NAME_LITERAL13_opt_autogen
+(1162) NAME_LITERAL14_opt_autogen :  NAME_LITERAL
+(1163) NAME_LITERAL14_opt_autogen : 
+(1164) else-stmt :  ELSE NAME_LITERAL14_opt_autogen
+(1165) NAME_LITERAL15_opt_autogen :  NAME_LITERAL
+(1166) NAME_LITERAL15_opt_autogen : 
+(1167) end-if-stmt :  END_IF NAME_LITERAL15_opt_autogen
+(1168) if-stmt :  IF '(' expr ')' action-stmt
+(1169) 154_group_autogen :  case-stmt block
+(1170) 58_optlist_autogen :  58_optlist_autogen 154_group_autogen
+(1171) 58_optlist_autogen : 
+(1172) case-construct :  select-case-stmt 58_optlist_autogen end-select-stmt
+(1173) 155_group_autogen :  NAME_LITERAL ':'
+(1174) 98_opt_autogen :  155_group_autogen
+(1175) 98_opt_autogen : 
+(1176) select-case-stmt :  98_opt_autogen SELECT_CASE '(' expr ')'
+(1177) NAME_LITERAL16_opt_autogen :  NAME_LITERAL
+(1178) NAME_LITERAL16_opt_autogen : 
+(1179) case-stmt :  CASE case-selector NAME_LITERAL16_opt_autogen
+(1180) NAME_LITERAL17_opt_autogen :  NAME_LITERAL
+(1181) NAME_LITERAL17_opt_autogen : 
+(1182) end-select-stmt :  END_SELECT NAME_LITERAL17_opt_autogen
+(1183) case-selector :  '(' case-value-range-list ')'
+(1184) case-selector :  DEFAULT
+(1185) case-value-range :  case-value
+(1186) case-value-range :  case-value ':'
+(1187) case-value-range :  ':' case-value
+(1188) case-value-range :  case-value ':' case-value
+(1189) 156_group_autogen :  ',' case-value-range
+(1190) 59_optlist_autogen :  59_optlist_autogen 156_group_autogen
+(1191) 59_optlist_autogen : 
+(1192) case-value-range-list :  case-value-range 59_optlist_autogen
+(1193) case-value :  expr
+(1194) 157_group_autogen :  type-guard-stmt block
+(1195) 60_optlist_autogen :  60_optlist_autogen 157_group_autogen
+(1196) 60_optlist_autogen : 
+(1197) select-type-construct :  select-type-stmt 60_optlist_autogen end-select-type-stmt
+(1198) 158_group_autogen :  NAME_LITERAL ':'
+(1199) 99_opt_autogen :  158_group_autogen
+(1200) 99_opt_autogen : 
+(1201) 159_group_autogen :  NAME_LITERAL '=' '>'
+(1202) 100_opt_autogen :  159_group_autogen
+(1203) 100_opt_autogen : 
+(1204) select-type-stmt :  99_opt_autogen SELECT TYPE '(' 100_opt_autogen selector ')'
+(1205) NAME_LITERAL18_opt_autogen :  NAME_LITERAL
+(1206) NAME_LITERAL18_opt_autogen : 
+(1207) type-guard-stmt :  TYPE_IS '(' type-spec ')' NAME_LITERAL18_opt_autogen
+(1208) NAME_LITERAL19_opt_autogen :  NAME_LITERAL
+(1209) NAME_LITERAL19_opt_autogen : 
+(1210) type-guard-stmt :  CLASS_IS '(' derived-type-spec ')' NAME_LITERAL19_opt_autogen
+(1211) NAME_LITERAL20_opt_autogen :  NAME_LITERAL
+(1212) NAME_LITERAL20_opt_autogen : 
+(1213) type-guard-stmt :  CLASS_DEFAULT NAME_LITERAL20_opt_autogen
+(1214) NAME_LITERAL21_opt_autogen :  NAME_LITERAL
+(1215) NAME_LITERAL21_opt_autogen : 
+(1216) end-select-type-stmt :  END_SELECT NAME_LITERAL21_opt_autogen
+(1217) NAME_LITERAL22_opt_autogen :  NAME_LITERAL
+(1218) NAME_LITERAL22_opt_autogen : 
+(1219) exit-stmt :  EXIT NAME_LITERAL22_opt_autogen
+(1220) goto-stmt :  GO_TO INT_LITERAL_CONSTANT
+(1221) ','8_opt_autogen :  ','
+(1222) ','8_opt_autogen : 
+(1223) computed-goto-stmt :  GO_TO '(' label-list ')' ','8_opt_autogen expr
+(1224) arithmetic-if-stmt :  IF '(' expr ')' INT_LITERAL_CONSTANT ',' INT_LITERAL_CONSTANT ',' INT_LITERAL_CONSTANT
+(1225) continue-stmt :  CONTINUE
+(1226) stop-code1_opt_autogen :  stop-code
+(1227) stop-code1_opt_autogen : 
+(1228) stop-stmt :  STOP stop-code1_opt_autogen
+(1229) stop-code2_opt_autogen :  stop-code
+(1230) stop-code2_opt_autogen : 
+(1231) error-stop-stmt :  ERROR_STOP stop-code2_opt_autogen
+(1232) stop-code :  expr
+(1233) sync-stat-list1_opt_autogen :  sync-stat-list
+(1234) sync-stat-list1_opt_autogen : 
+(1235) 160_group_autogen :  '(' sync-stat-list1_opt_autogen ')'
+(1236) 101_opt_autogen :  160_group_autogen
+(1237) 101_opt_autogen : 
+(1238) sync-all-stmt :  SYNC_ALL 101_opt_autogen
+(1239) sync-stat :  STAT '=' variable
+(1240) sync-stat :  ERRMSG '=' variable
+(1241) 161_group_autogen :  ',' sync-stat
+(1242) 61_optlist_autogen :  61_optlist_autogen 161_group_autogen
+(1243) 61_optlist_autogen : 
+(1244) sync-stat-list :  sync-stat 61_optlist_autogen
+(1245) 162_group_autogen :  ',' sync-stat-list
+(1246) 102_opt_autogen :  162_group_autogen
+(1247) 102_opt_autogen : 
+(1248) sync-images-stmt :  SYNC_IMAGES '(' image-set 102_opt_autogen ')'
+(1249) image-set :  expr
+(1250) image-set :  '*'
+(1251) sync-stat-list2_opt_autogen :  sync-stat-list
+(1252) sync-stat-list2_opt_autogen : 
+(1253) 163_group_autogen :  '(' sync-stat-list2_opt_autogen ')'
+(1254) 103_opt_autogen :  163_group_autogen
+(1255) 103_opt_autogen : 
+(1256) sync-memory-stmt :  SYNC_MEMORY 103_opt_autogen
+(1257) 164_group_autogen :  ',' lock-stat-list
+(1258) 104_opt_autogen :  164_group_autogen
+(1259) 104_opt_autogen : 
+(1260) lock-stmt :  LOCK '(' variable 104_opt_autogen ')'
+(1261) lock-stat :  ACQUIRED_LOCK '=' variable
+(1262) lock-stat :  sync-stat
+(1263) 165_group_autogen :  ',' lock-stat
+(1264) 62_optlist_autogen :  62_optlist_autogen 165_group_autogen
+(1265) 62_optlist_autogen : 
+(1266) lock-stat-list :  lock-stat 62_optlist_autogen
+(1267) 166_group_autogen :  ',' sync-stat-list
+(1268) 105_opt_autogen :  166_group_autogen
+(1269) 105_opt_autogen : 
+(1270) unlock-stmt :  UNLOCK '(' variable 105_opt_autogen ')'
+(1271) io-unit :  file-unit-number
+(1272) io-unit :  '*'
+(1273) io-unit :  variable
+(1274) file-unit-number :  expr
+(1275) open-stmt :  OPEN '(' connect-spec-list ')'
+(1276) 167_group_autogen :  UNIT '='
+(1277) 106_opt_autogen :  167_group_autogen
+(1278) 106_opt_autogen : 
+(1279) connect-spec :  106_opt_autogen file-unit-number
+(1280) connect-spec :  ACCESS '=' expr
+(1281) connect-spec :  ACTION '=' expr
+(1282) connect-spec :  ASYNCHRONOUS '=' expr
+(1283) connect-spec :  BLANK '=' expr
+(1284) connect-spec :  DECIMAL '=' expr
+(1285) connect-spec :  DELIM '=' expr
+(1286) connect-spec :  ENCODING '=' expr
+(1287) connect-spec :  ERR '=' INT_LITERAL_CONSTANT
+(1288) connect-spec :  FILE '=' expr
+(1289) connect-spec :  FORM '=' expr
+(1290) connect-spec :  IOMSG '=' iomsg-variable
+(1291) connect-spec :  IOSTAT '=' variable
+(1292) connect-spec :  NEWUNIT '=' variable
+(1293) connect-spec :  PAD '=' expr
+(1294) connect-spec :  POSITION '=' expr
+(1295) connect-spec :  RECL '=' expr
+(1296) connect-spec :  ROUND '=' expr
+(1297) connect-spec :  SIGN '=' expr
+(1298) connect-spec :  STATUS '=' expr
+(1299) 168_group_autogen :  ',' connect-spec
+(1300) 63_optlist_autogen :  63_optlist_autogen 168_group_autogen
+(1301) 63_optlist_autogen : 
+(1302) connect-spec-list :  connect-spec 63_optlist_autogen
+(1303) iomsg-variable :  variable
+(1304) close-stmt :  CLOSE '(' close-spec-list ')'
+(1305) 169_group_autogen :  UNIT '='
+(1306) 107_opt_autogen :  169_group_autogen
+(1307) 107_opt_autogen : 
+(1308) close-spec :  107_opt_autogen file-unit-number
+(1309) close-spec :  IOSTAT '=' variable
+(1310) close-spec :  IOMSG '=' iomsg-variable
+(1311) close-spec :  ERR '=' INT_LITERAL_CONSTANT
+(1312) close-spec :  STATUS '=' expr
+(1313) 170_group_autogen :  ',' close-spec
+(1314) 64_optlist_autogen :  64_optlist_autogen 170_group_autogen
+(1315) 64_optlist_autogen : 
+(1316) close-spec-list :  close-spec 64_optlist_autogen
+(1317) input-item-list1_opt_autogen :  input-item-list
+(1318) input-item-list1_opt_autogen : 
+(1319) read-stmt :  READ '(' io-control-spec-list ')' input-item-list1_opt_autogen
+(1320) 171_group_autogen :  ',' input-item-list
+(1321) 108_opt_autogen :  171_group_autogen
+(1322) 108_opt_autogen : 
+(1323) read-stmt :  READ format 108_opt_autogen
+(1324) output-item-list1_opt_autogen :  output-item-list
+(1325) output-item-list1_opt_autogen : 
+(1326) write-stmt :  WRITE '(' io-control-spec-list ')' output-item-list1_opt_autogen
+(1327) 172_group_autogen :  ',' output-item-list
+(1328) 109_opt_autogen :  172_group_autogen
+(1329) 109_opt_autogen : 
+(1330) print-stmt :  PRINT format 109_opt_autogen
+(1331) 173_group_autogen :  UNIT '='
+(1332) 110_opt_autogen :  173_group_autogen
+(1333) 110_opt_autogen : 
+(1334) io-control-spec :  110_opt_autogen io-unit
+(1335) 174_group_autogen :  FMT '='
+(1336) 111_opt_autogen :  174_group_autogen
+(1337) 111_opt_autogen : 
+(1338) io-control-spec :  111_opt_autogen format
+(1339) 175_group_autogen :  NML '='
+(1340) 112_opt_autogen :  175_group_autogen
+(1341) 112_opt_autogen : 
+(1342) io-control-spec :  112_opt_autogen NAME_LITERAL
+(1343) io-control-spec :  ADVANCE '=' expr
+(1344) io-control-spec :  ASYNCHRONOUS '=' expr
+(1345) io-control-spec :  BLANK '=' expr
+(1346) io-control-spec :  DECIMAL '=' expr
+(1347) io-control-spec :  DELIM '=' expr
+(1348) io-control-spec :  END '=' INT_LITERAL_CONSTANT
+(1349) io-control-spec :  EOR '=' INT_LITERAL_CONSTANT
+(1350) io-control-spec :  ERR '=' INT_LITERAL_CONSTANT
+(1351) io-control-spec :  ID '=' variable
+(1352) io-control-spec :  IOMSG '=' iomsg-variable
+(1353) io-control-spec :  IOSTAT '=' variable
+(1354) io-control-spec :  PAD '=' expr
+(1355) io-control-spec :  POS '=' expr
+(1356) io-control-spec :  REC '=' expr
+(1357) io-control-spec :  ROUND '=' expr
+(1358) io-control-spec :  SIGN '=' expr
+(1359) io-control-spec :  SIZE '=' variable
+(1360) 176_group_autogen :  ',' io-control-spec
+(1361) 65_optlist_autogen :  65_optlist_autogen 176_group_autogen
+(1362) 65_optlist_autogen : 
+(1363) io-control-spec-list :  io-control-spec 65_optlist_autogen
+(1364) format :  expr
+(1365) format :  INT_LITERAL_CONSTANT
+(1366) format :  '*'
+(1367) input-item :  variable
+(1368) input-item :  io-implied-do
+(1369) 177_group_autogen :  ',' input-item
+(1370) 66_optlist_autogen :  66_optlist_autogen 177_group_autogen
+(1371) 66_optlist_autogen : 
+(1372) input-item-list :  input-item 66_optlist_autogen
+(1373) output-item :  expr
+(1374) output-item :  io-implied-do
+(1375) 178_group_autogen :  ',' output-item
+(1376) 67_optlist_autogen :  67_optlist_autogen 178_group_autogen
+(1377) 67_optlist_autogen : 
+(1378) output-item-list :  output-item 67_optlist_autogen
+(1379) io-implied-do :  '(' io-implied-do-object-list ',' io-implied-do-control ')'
+(1380) io-implied-do-object :  input-item
+(1381) io-implied-do-object :  output-item
+(1382) 179_group_autogen :  ',' io-implied-do-object
+(1383) 68_optlist_autogen :  68_optlist_autogen 179_group_autogen
+(1384) 68_optlist_autogen : 
+(1385) io-implied-do-object-list :  io-implied-do-object 68_optlist_autogen
+(1386) 180_group_autogen :  ',' expr
+(1387) 113_opt_autogen :  180_group_autogen
+(1388) 113_opt_autogen : 
+(1389) io-implied-do-control :  NAME_LITERAL '=' expr ',' expr 113_opt_autogen
+(1390) dtv-type-spec :  TYPE '(' derived-type-spec ')'
+(1391) dtv-type-spec :  CLASS '(' derived-type-spec ')'
+(1392) wait-stmt :  WAIT '(' wait-spec-list ')'
+(1393) 181_group_autogen :  UNIT '='
+(1394) 114_opt_autogen :  181_group_autogen
+(1395) 114_opt_autogen : 
+(1396) wait-spec :  114_opt_autogen file-unit-number
+(1397) wait-spec :  END '=' INT_LITERAL_CONSTANT
+(1398) wait-spec :  EOR '=' INT_LITERAL_CONSTANT
+(1399) wait-spec :  ERR '=' INT_LITERAL_CONSTANT
+(1400) wait-spec :  ID '=' expr
+(1401) wait-spec :  IOMSG '=' iomsg-variable
+(1402) wait-spec :  IOSTAT '=' variable
+(1403) 182_group_autogen :  ',' wait-spec
+(1404) 69_optlist_autogen :  69_optlist_autogen 182_group_autogen
+(1405) 69_optlist_autogen : 
+(1406) wait-spec-list :  wait-spec 69_optlist_autogen
+(1407) backspace-stmt :  BACKSPACE file-unit-number
+(1408) backspace-stmt :  BACKSPACE '(' position-spec-list ')'
+(1409) endfile-stmt :  ENDFILE file-unit-number
+(1410) endfile-stmt :  ENDFILE '(' position-spec-list ')'
+(1411) rewind-stmt :  REWIND file-unit-number
+(1412) rewind-stmt :  REWIND '(' position-spec-list ')'
+(1413) 183_group_autogen :  UNIT '='
+(1414) 115_opt_autogen :  183_group_autogen
+(1415) 115_opt_autogen : 
+(1416) position-spec :  115_opt_autogen file-unit-number
+(1417) position-spec :  IOMSG '=' iomsg-variable
+(1418) position-spec :  IOSTAT '=' variable
+(1419) position-spec :  ERR '=' INT_LITERAL_CONSTANT
+(1420) 184_group_autogen :  ',' position-spec
+(1421) 70_optlist_autogen :  70_optlist_autogen 184_group_autogen
+(1422) 70_optlist_autogen : 
+(1423) position-spec-list :  position-spec 70_optlist_autogen
+(1424) flush-stmt :  FLUSH file-unit-number
+(1425) flush-stmt :  FLUSH '(' flush-spec-list ')'
+(1426) 185_group_autogen :  UNIT '='
+(1427) 116_opt_autogen :  185_group_autogen
+(1428) 116_opt_autogen : 
+(1429) flush-spec :  116_opt_autogen file-unit-number
+(1430) flush-spec :  IOSTAT '=' variable
+(1431) flush-spec :  IOMSG '=' iomsg-variable
+(1432) flush-spec :  ERR '=' INT_LITERAL_CONSTANT
+(1433) 186_group_autogen :  ',' flush-spec
+(1434) 71_optlist_autogen :  71_optlist_autogen 186_group_autogen
+(1435) 71_optlist_autogen : 
+(1436) flush-spec-list :  flush-spec 71_optlist_autogen
+(1437) inquire-stmt :  INQUIRE '(' inquire-spec-list ')'
+(1438) inquire-stmt :  INQUIRE '(' IOLENGTH '=' variable ')' output-item-list
+(1439) 187_group_autogen :  UNIT '='
+(1440) 117_opt_autogen :  187_group_autogen
+(1441) 117_opt_autogen : 
+(1442) inquire-spec :  117_opt_autogen file-unit-number
+(1443) inquire-spec :  FILE '=' expr
+(1444) inquire-spec :  ACCESS '=' variable
+(1445) inquire-spec :  ACTION '=' variable
+(1446) inquire-spec :  ASYNCHRONOUS '=' variable
+(1447) inquire-spec :  BLANK '=' variable
+(1448) inquire-spec :  DECIMAL '=' variable
+(1449) inquire-spec :  DELIM '=' variable
+(1450) inquire-spec :  DIRECT '=' variable
+(1451) inquire-spec :  ENCODING '=' variable
+(1452) inquire-spec :  ERR '=' INT_LITERAL_CONSTANT
+(1453) inquire-spec :  EXIST '=' variable
+(1454) inquire-spec :  FORM '=' variable
+(1455) inquire-spec :  FORMATTED '=' variable
+(1456) inquire-spec :  ID '=' expr
+(1457) inquire-spec :  IOMSG '=' iomsg-variable
+(1458) inquire-spec :  IOSTAT '=' variable
+(1459) inquire-spec :  NAME_KEYWORD '=' variable
+(1460) inquire-spec :  NAMED '=' variable
+(1461) inquire-spec :  NEXTREC '=' variable
+(1462) inquire-spec :  NUMBER '=' variable
+(1463) inquire-spec :  OPENED '=' variable
+(1464) inquire-spec :  PAD '=' variable
+(1465) inquire-spec :  PENDING '=' variable
+(1466) inquire-spec :  POS '=' variable
+(1467) inquire-spec :  POSITION '=' variable
+(1468) inquire-spec :  READ '=' variable
+(1469) inquire-spec :  READWRITE '=' variable
+(1470) inquire-spec :  RECL '=' variable
+(1471) inquire-spec :  ROUND '=' variable
+(1472) inquire-spec :  SEQUENTIAL '=' variable
+(1473) inquire-spec :  SIGN '=' variable
+(1474) inquire-spec :  SIZE '=' variable
+(1475) inquire-spec :  STREAM '=' variable
+(1476) inquire-spec :  UNFORMATTED '=' variable
+(1477) inquire-spec :  WRITE '=' variable
+(1478) 188_group_autogen :  ',' inquire-spec
+(1479) 72_optlist_autogen :  72_optlist_autogen 188_group_autogen
+(1480) 72_optlist_autogen : 
+(1481) inquire-spec-list :  inquire-spec 72_optlist_autogen
+(1482) format-stmt :  FORMAT format-specification
+(1483) format-items1_opt_autogen :  format-items
+(1484) format-items1_opt_autogen : 
+(1485) format-specification :  '(' format-items1_opt_autogen ')'
+(1486) 189_group_autogen :  format-items ','
+(1487) 118_opt_autogen :  189_group_autogen
+(1488) 118_opt_autogen : 
+(1489) format-specification :  '(' 118_opt_autogen unlimited-format-item ')'
+(1490) ','9_opt_autogen :  ','
+(1491) ','9_opt_autogen : 
+(1492) 190_group_autogen :  ','9_opt_autogen format-item
+(1493) 73_optlist_autogen :  73_optlist_autogen 190_group_autogen
+(1494) 73_optlist_autogen : 
+(1495) format-items :  format-item 73_optlist_autogen
+(1496) r1_opt_autogen :  r
+(1497) r1_opt_autogen : 
+(1498) format-item :  r1_opt_autogen data-edit-desc
+(1499) format-item :  control-edit-desc
+(1500) format-item :  CHAR_LITERAL_CONSTANT
+(1501) r2_opt_autogen :  r
+(1502) r2_opt_autogen : 
+(1503) format-item :  r2_opt_autogen '(' format-items ')'
+(1504) unlimited-format-item :  '*' '(' format-items ')'
+(1505) r :  INT_LITERAL_CONSTANT
+(1506) 191_group_autogen :  '.' m
+(1507) 119_opt_autogen :  191_group_autogen
+(1508) 119_opt_autogen : 
+(1509) data-edit-desc :  'I' w 119_opt_autogen
+(1510) 192_group_autogen :  '.' m
+(1511) 120_opt_autogen :  192_group_autogen
+(1512) 120_opt_autogen : 
+(1513) data-edit-desc :  'B' w 120_opt_autogen
+(1514) 193_group_autogen :  '.' m
+(1515) 121_opt_autogen :  193_group_autogen
+(1516) 121_opt_autogen : 
+(1517) data-edit-desc :  'O' w 121_opt_autogen
+(1518) 194_group_autogen :  '.' m
+(1519) 122_opt_autogen :  194_group_autogen
+(1520) 122_opt_autogen : 
+(1521) data-edit-desc :  'Z' w 122_opt_autogen
+(1522) data-edit-desc :  'F' w '.' d
+(1523) 195_group_autogen :  'E' e
+(1524) 123_opt_autogen :  195_group_autogen
+(1525) 123_opt_autogen : 
+(1526) data-edit-desc :  'E' w '.' d 123_opt_autogen
+(1527) 196_group_autogen :  'E' e
+(1528) 124_opt_autogen :  196_group_autogen
+(1529) 124_opt_autogen : 
+(1530) data-edit-desc :  'EN' w '.' d 124_opt_autogen
+(1531) 197_group_autogen :  'E' e
+(1532) 125_opt_autogen :  197_group_autogen
+(1533) 125_opt_autogen : 
+(1534) data-edit-desc :  'ES' w '.' d 125_opt_autogen
+(1535) 198_group_autogen :  'E' e
+(1536) 126_opt_autogen :  198_group_autogen
+(1537) 126_opt_autogen : 
+(1538) 198_group_autogen :  '.' d 126_opt_autogen
+(1539) data-edit-desc :  'G' w 126_opt_autogen
+(1540) data-edit-desc :  'L' w
+(1541) w1_opt_autogen :  w
+(1542) w1_opt_autogen : 
+(1543) data-edit-desc :  'A' w1_opt_autogen
+(1544) data-edit-desc :  'D' w '.' d
+(1545) CHAR_LITERAL_CONSTANT1_opt_autogen :  CHAR_LITERAL_CONSTANT
+(1546) CHAR_LITERAL_CONSTANT1_opt_autogen : 
+(1547) 199_group_autogen :  '(' v-list ')'
+(1548) 127_opt_autogen :  199_group_autogen
+(1549) 127_opt_autogen : 
+(1550) data-edit-desc :  'DT' CHAR_LITERAL_CONSTANT1_opt_autogen 127_opt_autogen
+(1551) w :  INT_LITERAL_CONSTANT
+(1552) m :  INT_LITERAL_CONSTANT
+(1553) d :  INT_LITERAL_CONSTANT
+(1554) e :  INT_LITERAL_CONSTANT
+(1555) v :  signed-int-literal-constant
+(1556) 200_group_autogen :  ',' v
+(1557) 74_optlist_autogen :  74_optlist_autogen 200_group_autogen
+(1558) 74_optlist_autogen : 
+(1559) v-list :  v 74_optlist_autogen
+(1560) control-edit-desc :  position-edit-desc
+(1561) r3_opt_autogen :  r
+(1562) r3_opt_autogen : 
+(1563) control-edit-desc :  r3_opt_autogen '/'
+(1564) control-edit-desc :  ':'
+(1565) control-edit-desc :  sign-edit-desc
+(1566) control-edit-desc :  k 'P'
+(1567) control-edit-desc :  blank-interp-edit-desc
+(1568) control-edit-desc :  round-edit-desc
+(1569) control-edit-desc :  decimal-edit-desc
+(1570) k :  signed-int-literal-constant
+(1571) position-edit-desc :  'T' n
+(1572) position-edit-desc :  'TL' n
+(1573) position-edit-desc :  'TR' n
+(1574) position-edit-desc :  n 'X'
+(1575) n :  INT_LITERAL_CONSTANT
+(1576) sign-edit-desc :  'SS'
+(1577) sign-edit-desc :  'SP'
+(1578) sign-edit-desc :  'S'
+(1579) blank-interp-edit-desc :  'BN'
+(1580) blank-interp-edit-desc :  'BZ'
+(1581) round-edit-desc :  'RU'
+(1582) round-edit-desc :  'RD'
+(1583) round-edit-desc :  'RZ'
+(1584) round-edit-desc :  'RN'
+(1585) round-edit-desc :  'RC'
+(1586) round-edit-desc :  'RP'
+(1587) decimal-edit-desc :  'DC'
+(1588) decimal-edit-desc :  'DP'
+(1589) program-stmt1_opt_autogen :  program-stmt
+(1590) program-stmt1_opt_autogen : 
+(1591) specification-part2_opt_autogen :  specification-part
+(1592) specification-part2_opt_autogen : 
+(1593) execution-part1_opt_autogen :  execution-part
+(1594) execution-part1_opt_autogen : 
+(1595) internal-subprogram-part1_opt_autogen :  internal-subprogram-part
+(1596) internal-subprogram-part1_opt_autogen : 
+(1597) main-program :  program-stmt1_opt_autogen specification-part2_opt_autogen execution-part1_opt_autogen internal-subprogram-part1_opt_autogen end-program-stmt
+(1598) program-stmt :  PROGRAM NAME_LITERAL
+(1599) NAME_LITERAL23_opt_autogen :  NAME_LITERAL
+(1600) NAME_LITERAL23_opt_autogen : 
+(1601) 201_group_autogen :  PROGRAM NAME_LITERAL23_opt_autogen
+(1602) 128_opt_autogen :  201_group_autogen
+(1603) 128_opt_autogen : 
+(1604) end-program-stmt :  END 128_opt_autogen
+(1605) specification-part3_opt_autogen :  specification-part
+(1606) specification-part3_opt_autogen : 
+(1607) module-subprogram-part1_opt_autogen :  module-subprogram-part
+(1608) module-subprogram-part1_opt_autogen : 
+(1609) module :  module-stmt specification-part3_opt_autogen module-subprogram-part1_opt_autogen end-module-stmt
+(1610) module-stmt :  MODULE NAME_LITERAL
+(1611) NAME_LITERAL24_opt_autogen :  NAME_LITERAL
+(1612) NAME_LITERAL24_opt_autogen : 
+(1613) 202_group_autogen :  MODULE NAME_LITERAL24_opt_autogen
+(1614) 129_opt_autogen :  202_group_autogen
+(1615) 129_opt_autogen : 
+(1616) end-module-stmt :  END 129_opt_autogen
+(1617) module-subprogram1_optlist_autogen :  module-subprogram1_optlist_autogen module-subprogram
+(1618) module-subprogram1_optlist_autogen : 
+(1619) module-subprogram-part :  contains-stmt module-subprogram1_optlist_autogen
+(1620) module-subprogram :  function-subprogram
+(1621) module-subprogram :  subroutine-subprogram
+(1622) module-subprogram :  separate-module-subprogram
+(1623) 203_group_autogen :  ',' module-nature
+(1624) 130_opt_autogen :  203_group_autogen
+(1625) 130_opt_autogen : 
+(1626) 203_group_autogen :  130_opt_autogen ':' ':'
+(1627) 204_group_autogen :  ',' rename-list
+(1628) 131_opt_autogen :  204_group_autogen
+(1629) 131_opt_autogen : 
+(1630) use-stmt :  USE 130_opt_autogen NAME_LITERAL 131_opt_autogen
+(1631) 205_group_autogen :  ',' module-nature
+(1632) 132_opt_autogen :  205_group_autogen
+(1633) 132_opt_autogen : 
+(1634) 205_group_autogen :  132_opt_autogen ':' ':'
+(1635) only-list1_opt_autogen :  only-list
+(1636) only-list1_opt_autogen : 
+(1637) use-stmt :  USE 132_opt_autogen NAME_LITERAL ',' ONLY ':' only-list1_opt_autogen
+(1638) module-nature :  INTRINSIC
+(1639) module-nature :  NON_INTRINSIC
+(1640) rename :  NAME_LITERAL '=' '>' NAME_LITERAL
+(1641) rename :  OPERATOR '(' defined-operator ')' '=' '>' OPERATOR '(' defined-operator ')'
+(1642) 206_group_autogen :  ',' rename
+(1643) 75_optlist_autogen :  75_optlist_autogen 206_group_autogen
+(1644) 75_optlist_autogen : 
+(1645) rename-list :  rename 75_optlist_autogen
+(1646) only :  generic-spec
+(1647) only :  only-use-name
+(1648) only :  rename
+(1649) 207_group_autogen :  ',' only
+(1650) 76_optlist_autogen :  76_optlist_autogen 207_group_autogen
+(1651) 76_optlist_autogen : 
+(1652) only-list :  only 76_optlist_autogen
+(1653) only-use-name :  NAME_LITERAL
+(1654) specification-part4_opt_autogen :  specification-part
+(1655) specification-part4_opt_autogen : 
+(1656) module-subprogram-part2_opt_autogen :  module-subprogram-part
+(1657) module-subprogram-part2_opt_autogen : 
+(1658) submodule :  submodule-stmt specification-part4_opt_autogen module-subprogram-part2_opt_autogen end-submodule-stmt
+(1659) submodule-stmt :  SUBMODULE '(' parent-identifier ')' NAME_LITERAL
+(1660) 208_group_autogen :  ':' NAME_LITERAL
+(1661) 133_opt_autogen :  208_group_autogen
+(1662) 133_opt_autogen : 
+(1663) parent-identifier :  NAME_LITERAL 133_opt_autogen
+(1664) NAME_LITERAL25_opt_autogen :  NAME_LITERAL
+(1665) NAME_LITERAL25_opt_autogen : 
+(1666) 209_group_autogen :  SUBMODULE NAME_LITERAL25_opt_autogen
+(1667) 134_opt_autogen :  209_group_autogen
+(1668) 134_opt_autogen : 
+(1669) end-submodule-stmt :  END 134_opt_autogen
+(1670) specification-part5_opt_autogen :  specification-part
+(1671) specification-part5_opt_autogen : 
+(1672) block-data :  block-data-stmt specification-part5_opt_autogen end-block-data-stmt
+(1673) NAME_LITERAL26_opt_autogen :  NAME_LITERAL
+(1674) NAME_LITERAL26_opt_autogen : 
+(1675) block-data-stmt :  BLOCK_DATA NAME_LITERAL26_opt_autogen
+(1676) NAME_LITERAL27_opt_autogen :  NAME_LITERAL
+(1677) NAME_LITERAL27_opt_autogen : 
+(1678) 210_group_autogen :  BLOCK_DATA NAME_LITERAL27_opt_autogen
+(1679) 135_opt_autogen :  210_group_autogen
+(1680) 135_opt_autogen : 
+(1681) end-block-data-stmt :  END 135_opt_autogen
+(1682) interface-specification1_optlist_autogen :  interface-specification1_optlist_autogen interface-specification
+(1683) interface-specification1_optlist_autogen : 
+(1684) interface-block :  interface-stmt interface-specification1_optlist_autogen end-interface-stmt
+(1685) interface-specification :  interface-body
+(1686) interface-specification :  procedure-stmt
+(1687) generic-spec1_opt_autogen :  generic-spec
+(1688) generic-spec1_opt_autogen : 
+(1689) interface-stmt :  INTERFACE generic-spec1_opt_autogen
+(1690) interface-stmt :  ABSTRACT_INTERFACE
+(1691) generic-spec2_opt_autogen :  generic-spec
+(1692) generic-spec2_opt_autogen : 
+(1693) end-interface-stmt :  END_INTERFACE generic-spec2_opt_autogen
+(1694) specification-part6_opt_autogen :  specification-part
+(1695) specification-part6_opt_autogen : 
+(1696) interface-body :  function-stmt specification-part6_opt_autogen end-function-stmt
+(1697) specification-part7_opt_autogen :  specification-part
+(1698) specification-part7_opt_autogen : 
+(1699) interface-body :  subroutine-stmt specification-part7_opt_autogen end-subroutine-stmt
+(1700) MODULE1_opt_autogen :  MODULE
+(1701) MODULE1_opt_autogen : 
+(1702) 211_group_autogen :  ':' ':'
+(1703) 136_opt_autogen :  211_group_autogen
+(1704) 136_opt_autogen : 
+(1705) procedure-stmt :  MODULE1_opt_autogen PROCEDURE 136_opt_autogen name-list
+(1706) generic-spec :  NAME_LITERAL
+(1707) generic-spec :  OPERATOR '(' defined-operator ')'
+(1708) generic-spec :  ASSIGNMENT '(' '=' ')'
+(1709) generic-spec :  defined-io-generic-spec
+(1710) defined-io-generic-spec :  READ '(' FORMATTED ')'
+(1711) defined-io-generic-spec :  READ '(' UNFORMATTED ')'
+(1712) defined-io-generic-spec :  WRITE '(' FORMATTED ')'
+(1713) defined-io-generic-spec :  WRITE '(' UNFORMATTED ')'
+(1714) 212_group_autogen :  ':' ':'
+(1715) 137_opt_autogen :  212_group_autogen
+(1716) 137_opt_autogen : 
+(1717) import-stmt :  IMPORT 137_opt_autogen name-list
+(1718) 213_group_autogen :  ':' ':'
+(1719) external-stmt :  EXTERNAL 213_group_autogen name-list
+(1720) proc-interface2_opt_autogen :  proc-interface
+(1721) proc-interface2_opt_autogen : 
+(1722) 214_group_autogen :  ',' proc-attr-spec
+(1723) 77_optlist_autogen :  77_optlist_autogen 214_group_autogen
+(1724) 77_optlist_autogen : 
+(1725) 214_group_autogen :  77_optlist_autogen ':' ':'
+(1726) 138_opt_autogen :  214_group_autogen
+(1727) 138_opt_autogen : 
+(1728) procedure-declaration-stmt :  PROCEDURE '(' proc-interface2_opt_autogen ')' 138_opt_autogen proc-decl-list
+(1729) proc-interface :  NAME_LITERAL
+(1730) proc-interface :  declaration-type-spec
+(1731) proc-attr-spec :  access-spec
+(1732) proc-attr-spec :  proc-language-binding-spec
+(1733) 215_group_autogen :  intent-spec
+(1734) proc-attr-spec :  INTENT 215_group_autogen
+(1735) proc-attr-spec :  OPTIONAL
+(1736) proc-attr-spec :  POINTER
+(1737) proc-attr-spec :  SAVE
+(1738) 216_group_autogen :  '=' '>' proc-pointer-init
+(1739) 139_opt_autogen :  216_group_autogen
+(1740) 139_opt_autogen : 
+(1741) proc-decl :  NAME_LITERAL 139_opt_autogen
+(1742) 217_group_autogen :  ',' proc-decl
+(1743) 78_optlist_autogen :  78_optlist_autogen 217_group_autogen
+(1744) 78_optlist_autogen : 
+(1745) proc-decl-list :  proc-decl 78_optlist_autogen
+(1746) proc-pointer-init :  null-init
+(1747) proc-pointer-init :  initial-proc-target
+(1748) initial-proc-target :  NAME_LITERAL
+(1749) 218_group_autogen :  ':' ':'
+(1750) 140_opt_autogen :  218_group_autogen
+(1751) 140_opt_autogen : 
+(1752) intrinsic-stmt :  INTRINSIC 140_opt_autogen name-list
+(1753) actual-arg-spec-list1_opt_autogen :  actual-arg-spec-list
+(1754) actual-arg-spec-list1_opt_autogen : 
+(1755) function-reference :  procedure-designator '(' actual-arg-spec-list1_opt_autogen ')'
+(1756) actual-arg-spec-list2_opt_autogen :  actual-arg-spec-list
+(1757) actual-arg-spec-list2_opt_autogen : 
+(1758) 219_group_autogen :  '(' actual-arg-spec-list2_opt_autogen ')'
+(1759) 141_opt_autogen :  219_group_autogen
+(1760) 141_opt_autogen : 
+(1761) call-stmt :  CALL procedure-designator 141_opt_autogen
+(1762) procedure-designator :  NAME_LITERAL
+(1763) procedure-designator :  proc-component-ref
+(1764) procedure-designator :  data-ref '%' NAME_LITERAL
+(1765) 220_group_autogen :  NAME_LITERAL '='
+(1766) 142_opt_autogen :  220_group_autogen
+(1767) 142_opt_autogen : 
+(1768) actual-arg-spec :  142_opt_autogen actual-arg
+(1769) 221_group_autogen :  ',' actual-arg-spec
+(1770) 79_optlist_autogen :  79_optlist_autogen 221_group_autogen
+(1771) 79_optlist_autogen : 
+(1772) actual-arg-spec-list :  actual-arg-spec 79_optlist_autogen
+(1773) actual-arg :  expr
+(1774) actual-arg :  variable
+(1775) actual-arg :  NAME_LITERAL
+(1776) actual-arg :  proc-component-ref
+(1777) actual-arg :  alt-return-spec
+(1778) alt-return-spec :  '*' INT_LITERAL_CONSTANT
+(1779) prefix-spec1_list_autogen :  prefix-spec1_list_autogen prefix-spec
+(1780) prefix-spec1_list_autogen :  prefix-spec
+(1781) prefix :  prefix-spec1_list_autogen
+(1782) prefix-spec :  declaration-type-spec
+(1783) prefix-spec :  ELEMENTAL
+(1784) prefix-spec :  IMPURE
+(1785) prefix-spec :  MODULE
+(1786) prefix-spec :  PURE
+(1787) prefix-spec :  RECURSIVE
+(1788) specification-part8_opt_autogen :  specification-part
+(1789) specification-part8_opt_autogen : 
+(1790) execution-part2_opt_autogen :  execution-part
+(1791) execution-part2_opt_autogen : 
+(1792) internal-subprogram-part2_opt_autogen :  internal-subprogram-part
+(1793) internal-subprogram-part2_opt_autogen : 
+(1794) function-subprogram :  function-stmt specification-part8_opt_autogen execution-part2_opt_autogen internal-subprogram-part2_opt_autogen end-function-stmt
+(1795) prefix1_opt_autogen :  prefix
+(1796) prefix1_opt_autogen : 
+(1797) name-list1_opt_autogen :  name-list
+(1798) name-list1_opt_autogen : 
+(1799) sufix1_opt_autogen :  sufix
+(1800) sufix1_opt_autogen : 
+(1801) function-stmt :  prefix1_opt_autogen FUNCTION NAME_LITERAL '(' name-list1_opt_autogen ')' sufix1_opt_autogen
+(1802) proc-language-binding-spec :  language-binding-spec
+(1803) 222_group_autogen :  RESULT '(' NAME_LITERAL ')'
+(1804) 143_opt_autogen :  222_group_autogen
+(1805) 143_opt_autogen : 
+(1806) sufix :  proc-language-binding-spec 143_opt_autogen
+(1807) proc-language-binding-spec1_opt_autogen :  proc-language-binding-spec
+(1808) proc-language-binding-spec1_opt_autogen : 
+(1809) sufix :  RESULT '(' NAME_LITERAL ')' proc-language-binding-spec1_opt_autogen
+(1810) NAME_LITERAL28_opt_autogen :  NAME_LITERAL
+(1811) NAME_LITERAL28_opt_autogen : 
+(1812) 223_group_autogen :  FUNCTION NAME_LITERAL28_opt_autogen
+(1813) 144_opt_autogen :  223_group_autogen
+(1814) 144_opt_autogen : 
+(1815) end-function-stmt :  END 144_opt_autogen
+(1816) specification-part9_opt_autogen :  specification-part
+(1817) specification-part9_opt_autogen : 
+(1818) execution-part3_opt_autogen :  execution-part
+(1819) execution-part3_opt_autogen : 
+(1820) internal-subprogram-part3_opt_autogen :  internal-subprogram-part
+(1821) internal-subprogram-part3_opt_autogen : 
+(1822) subroutine-subprogram :  subroutine-stmt specification-part9_opt_autogen execution-part3_opt_autogen internal-subprogram-part3_opt_autogen end-subroutine-stmt
+(1823) prefix2_opt_autogen :  prefix
+(1824) prefix2_opt_autogen : 
+(1825) dummy-arg-list1_opt_autogen :  dummy-arg-list
+(1826) dummy-arg-list1_opt_autogen : 
+(1827) proc-language-binding-spec2_opt_autogen :  proc-language-binding-spec
+(1828) proc-language-binding-spec2_opt_autogen : 
+(1829) 224_group_autogen :  '(' dummy-arg-list1_opt_autogen ')' proc-language-binding-spec2_opt_autogen
+(1830) 145_opt_autogen :  224_group_autogen
+(1831) 145_opt_autogen : 
+(1832) subroutine-stmt :  prefix2_opt_autogen SUBROUTINE NAME_LITERAL 145_opt_autogen
+(1833) dummy-arg :  NAME_LITERAL
+(1834) dummy-arg :  '*'
+(1835) 225_group_autogen :  ',' dummy-arg
+(1836) 80_optlist_autogen :  80_optlist_autogen 225_group_autogen
+(1837) 80_optlist_autogen : 
+(1838) dummy-arg-list :  dummy-arg 80_optlist_autogen
+(1839) NAME_LITERAL29_opt_autogen :  NAME_LITERAL
+(1840) NAME_LITERAL29_opt_autogen : 
+(1841) 226_group_autogen :  SUBROUTINE NAME_LITERAL29_opt_autogen
+(1842) 146_opt_autogen :  226_group_autogen
+(1843) 146_opt_autogen : 
+(1844) end-subroutine-stmt :  END 146_opt_autogen
+(1845) specification-part10_opt_autogen :  specification-part
+(1846) specification-part10_opt_autogen : 
+(1847) execution-part4_opt_autogen :  execution-part
+(1848) execution-part4_opt_autogen : 
+(1849) internal-subprogram-part4_opt_autogen :  internal-subprogram-part
+(1850) internal-subprogram-part4_opt_autogen : 
+(1851) separate-module-subprogram :  mp-subprogram-stmt specification-part10_opt_autogen execution-part4_opt_autogen internal-subprogram-part4_opt_autogen end-mp-subprogram-stmt
+(1852) mp-subprogram-stmt :  MODULE_PROCEDURE NAME_LITERAL
+(1853) NAME_LITERAL30_opt_autogen :  NAME_LITERAL
+(1854) NAME_LITERAL30_opt_autogen : 
+(1855) 227_group_autogen :  PROCEDURE NAME_LITERAL30_opt_autogen
+(1856) 147_opt_autogen :  227_group_autogen
+(1857) 147_opt_autogen : 
+(1858) end-mp-subprogram-stmt :  END 147_opt_autogen
+(1859) dummy-arg-list2_opt_autogen :  dummy-arg-list
+(1860) dummy-arg-list2_opt_autogen : 
+(1861) sufix2_opt_autogen :  sufix
+(1862) sufix2_opt_autogen : 
+(1863) 228_group_autogen :  '(' dummy-arg-list2_opt_autogen ')' sufix2_opt_autogen
+(1864) 148_opt_autogen :  228_group_autogen
+(1865) 148_opt_autogen : 
+(1866) entry-stmt :  ENTRY NAME_LITERAL 148_opt_autogen
+(1867) expr3_opt_autogen :  expr
+(1868) expr3_opt_autogen : 
+(1869) return-stmt :  RETURN expr3_opt_autogen
+(1870) contains-stmt :  CONTAINS
+(1871) stmt-function-stmt :  NAME_LITERAL '(' name-list ')' '=' expr
 

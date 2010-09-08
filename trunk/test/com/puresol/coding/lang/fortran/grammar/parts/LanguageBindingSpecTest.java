@@ -8,13 +8,13 @@ import junit.framework.TestCase;
 
 import com.puresol.coding.lang.fortran.grammar.GrammarPartTester;
 
-public class ExprTest extends TestCase {
+public class LanguageBindingSpecTest extends TestCase {
 
 	@Test
 	public void test() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester.test("expr", "A"));
-		assertTrue(GrammarPartTester.test("expr", "A + B == C * D"));
+		assertTrue(GrammarPartTester.test("language-binding-spec", "BIND(C)"));
+		assertTrue(GrammarPartTester.test("language-binding-spec", "BIND(C,name=value)"));
 	}
 
 }
