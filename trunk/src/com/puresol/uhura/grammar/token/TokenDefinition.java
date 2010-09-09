@@ -32,26 +32,26 @@ public class TokenDefinition implements Serializable {
 		this.text = regex;
 	}
 
-	public TokenDefinition(String name, String regex, boolean caseSensitive) {
+	public TokenDefinition(String name, String regex, boolean ignoreCase) {
 		this.name = name;
-		if (caseSensitive) {
-			this.pattern = Pattern.compile("^" + regex);
-		} else {
+		if (ignoreCase) {
 			this.pattern = Pattern.compile("^" + regex,
 					Pattern.CASE_INSENSITIVE);
+		} else {
+			this.pattern = Pattern.compile("^" + regex);
 		}
 		this.visibility = Visibility.VISIBLE;
 		this.text = regex;
 	}
 
 	public TokenDefinition(String name, String regex, Visibility visibility,
-			boolean caseSensitive) {
+			boolean ignoreCase) {
 		this.name = name;
-		if (caseSensitive) {
-			this.pattern = Pattern.compile("^" + regex);
-		} else {
+		if (ignoreCase) {
 			this.pattern = Pattern.compile("^" + regex,
 					Pattern.CASE_INSENSITIVE);
+		} else {
+			this.pattern = Pattern.compile("^" + regex);
 		}
 		this.visibility = visibility;
 		this.text = regex;

@@ -25,10 +25,12 @@ public abstract class AbstractParserTable implements ParserTable {
 	private final List<Construction> gotoNonTerminals = new CopyOnWriteArrayList<Construction>();
 
 	private final Grammar grammar;
+	private final boolean ignoreCase;
 
 	public AbstractParserTable(Grammar grammar) throws GrammarException {
 		super();
 		this.grammar = grammar;
+		ignoreCase = grammar.isIgnoreCase();
 		logger.trace("Calculate parser table...");
 		calculate();
 		logger.trace("done.");
@@ -85,8 +87,15 @@ public abstract class AbstractParserTable implements ParserTable {
 					return construction;
 				}
 			} else if (construction.getType() == ConstructionType.TEXT) {
-				if (token.getText().equals(construction.getText())) {
-					return construction;
+				if (ignoreCase) {
+					if (token.getText()
+							.equalsIgnoreCase(construction.getText())) {
+						return construction;
+					}
+				} else {
+					if (token.getText().equals(construction.getText())) {
+						return construction;
+					}
 				}
 			}
 		}

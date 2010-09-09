@@ -252,14 +252,14 @@ public class GrammarReader implements Callable<Boolean> {
 							.getText());
 				}
 			}
-			boolean caseSensitive = Boolean.valueOf((String) options
-					.get("lexer.case_sensitive"));
+			boolean ignoreCase = Boolean.valueOf((String) options
+					.get("grammar.ignore-case"));
 			if (tokenVisibility.get(tokenName) != null) {
 				return new TokenDefinition(tokenName, pattern.toString(),
-						tokenVisibility.get(tokenName), caseSensitive);
+						tokenVisibility.get(tokenName), ignoreCase);
 			} else {
 				return new TokenDefinition(tokenName, pattern.toString(),
-						caseSensitive);
+						ignoreCase);
 			}
 		} catch (ASTException e) {
 			logger.fatal(e.getMessage(), e);

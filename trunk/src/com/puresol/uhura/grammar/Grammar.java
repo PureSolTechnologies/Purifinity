@@ -18,6 +18,7 @@ public class Grammar implements Serializable {
 	private final Properties options;
 	private final TokenDefinitionSet tokenDefinitions;
 	private final ProductionSet productions;
+	private final boolean ignoreCase;
 
 	public Grammar(Properties options, TokenDefinitionSet tokenDefinitions,
 			ProductionSet productions) throws GrammarException {
@@ -25,6 +26,8 @@ public class Grammar implements Serializable {
 		this.options = options;
 		this.tokenDefinitions = tokenDefinitions;
 		this.productions = productions;
+		this.ignoreCase = Boolean.valueOf((String) options
+				.get("grammar.ignore-case"));
 		if (Boolean.valueOf((String) options.get("grammar.checks"))) {
 			checkConsistency();
 		}
@@ -75,6 +78,10 @@ public class Grammar implements Serializable {
 	 */
 	public ProductionSet getProductions() {
 		return productions;
+	}
+
+	public boolean isIgnoreCase() {
+		return ignoreCase;
 	}
 
 	@Override
@@ -130,4 +137,5 @@ public class Grammar implements Serializable {
 		return new Grammar(getOptions(), getTokenDefinitions(),
 				getProductions().setNewStartProduction(string));
 	}
+
 }
