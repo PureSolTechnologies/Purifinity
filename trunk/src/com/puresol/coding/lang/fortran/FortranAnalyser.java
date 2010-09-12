@@ -46,29 +46,15 @@ public class FortranAnalyser {
 		this.file = file;
 	}
 
-	public void parse() {
+	public void parse() throws FortranException {
 		try {
-			Grammar grammar = FortranGrammar.get();
-
-			Lexer lexer = LexerFactory.create(grammar);
+			Lexer lexer = FortranGrammar.createLexer();
 			TokenStream tokenStream = lexer.lex(new FileReader(file));
-			Parser parser = ParserFactory.create(grammar);
+			Parser parser = FortranGrammar.createParser();
 			AST ast = parser.parse(tokenStream);
-		} catch (ParserException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (LexerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (LexerFactoryException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ParserFactoryException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (Throwable e) {
+			logger.error(e.getMessage(), e);
+			throw new FortranException(e.getMessage(), e);
 		}
 		return;
 	}

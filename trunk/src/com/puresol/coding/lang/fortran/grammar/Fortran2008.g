@@ -21,7 +21,7 @@
  
  	/* **********************************
 	 * 
-	 * 3.1 Prozessor character set
+	 * 3.1 Processor character set
 	 * 
 	 * *********************************
 	 */
@@ -643,6 +643,7 @@
 	|	'DOUBLEPRECISION'
 	|	'DOUBLE' 'PRECISION'
 	|	'COMPLEX' kind-selector
+	|	'DOUBLE' 'COMPLEX' /* DOUBLE COMPLEX is not part of the official standard, but is an extension in some Fortrans. */ 
 	|	'COMPLEX' 
 	|	'CHARACTER' char-selector
 	|	'CHARACTER' 
@@ -2768,7 +2769,7 @@
 	R741 where-stmt is WHERE ( mask-expr ) where-assignment-stmt
 */
 	where-stmt :
-		'WHERE' '(' expr ')' where-assignment-stmt
+		'WHERE' '(' expr ')' assignment-stmt
 	;
 
 /*
@@ -2782,10 +2783,27 @@
 */
 	where-construct :
 		where-construct-stmt
-		where-body-construct *
-		( masked-elsewhere-stmt	where-body-construct * ) *
-		( elsewhere-stmt where-body-construct * ) ?
+		where-construct-body
 		end-where-stmt
+	;
+	where-construct-body :
+		where-body-construct-list
+		masked-elsewhere-stmt-list
+		elsewhere-stmt-list
+	|	where-body-construct-list
+		masked-elsewhere-stmt-list
+	;
+	where-body-construct-list :
+		where-body-construct-list where-body-construct
+	|	
+	;
+	masked-elsewhere-stmt-list :
+		masked-elsewhere-stmt-list masked-elsewhere-stmt where-body-construct-list 
+	|
+	;
+	elsewhere-stmt-list :
+		elsewhere-stmt-list elsewhere-stmt where-body-construct-list
+	|
 	;
 
 /*
@@ -2802,17 +2820,16 @@
 	or where-construct
 */
 	where-body-construct :
-		where-assignment-stmt
+		assignment-stmt
 	|	where-stmt
 	|	where-construct
 	;
 
 /*
 	R745 where-assignment-stmt is assignment-stmt
+	
+	not needed...
 */
-	where-assignment-stmt :
-		assignment-stmt
-	;
 
 /*
 	R746 mask-expr is logical-expr
@@ -2857,14 +2874,12 @@
 */
 	forall-construct :	
 		forall-construct-stmt
-		end-forall-stmt
-	|	forall-construct-stmt
 		forall-body-constructs
 		end-forall-stmt
 	;
 	forall-body-constructs :
 		forall-body-constructs forall-body-construct
-	|	forall-body-construct 
+	| 
 	;
 
 /*
@@ -2959,7 +2974,7 @@
 	R801 block is [ execution-part-construct ] ...
 */
 	block :
-		execution-part-construct *
+		execution-part-construct * [node=true,stack=false]
 	;
 
 /*
@@ -2989,7 +3004,8 @@
 		NAME_LITERAL '=' '>' selector
 	;
 	association-list :
-		association ( ',' association ) *
+		association-list ',' association
+	|	association
 	;
 
 /*
@@ -3019,7 +3035,7 @@
 */
 	block-construct :
 		block-stmt
-		specification-part ?
+		specification-part
 		block
 		end-block-stmt
 	;
@@ -3066,7 +3082,7 @@
 */
 	end-critical-stmt :
 		'END' 'CRITICAL' NAME_LITERAL
-		'END' 'CRITICAL' 
+	|	'END' 'CRITICAL' 
 	|	'ENDCRITICAL' NAME_LITERAL
 	|	'ENDCRITICAL' 
 	;
@@ -4307,7 +4323,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 */
 	main-program :
 		program-stmt ?
-		specification-part ?
+		specification-part
 		execution-part ?
 		internal-subprogram-part ?
 		end-program-stmt
@@ -4339,7 +4355,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 */
 	module :
 		module-stmt
-		specification-part ?
+		specification-part
 		module-subprogram-part ?
 		end-module-stmt
 	;
@@ -4458,7 +4474,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 */
 	submodule :
 		submodule-stmt
-		specification-part ?
+		specification-part
 		module-subprogram-part ?
 		end-submodule-stmt
 	;
@@ -4495,7 +4511,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 */
 	block-data :
 		block-data-stmt
-		specification-part ?
+		specification-part
 		end-block-data-stmt
 	;
 
@@ -4804,7 +4820,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 */
 	function-subprogram :
 		function-stmt
-		specification-part ?
+		specification-part
 		execution-part ?
 		internal-subprogram-part ?
 		end-function-stmt
@@ -4862,10 +4878,13 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 */
 	subroutine-subprogram :
 		subroutine-stmt
-		specification-part ?
+		subroutine-body
+		end-subroutine-stmt
+	;
+	subroutine-body :
+		specification-part
 		execution-part ?
 		internal-subprogram-part ?
-		end-subroutine-stmt
 	;
 
 /*
@@ -4918,7 +4937,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 */
 	separate-module-subprogram :
 		mp-subprogram-stmt
-		specification-part ?
+		specification-part
 		execution-part ?
 		internal-subprogram-part ?
 		end-mp-subprogram-stmt

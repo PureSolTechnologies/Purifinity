@@ -21,10 +21,16 @@ public class FortranAnalyserTest extends TestCase {
 
 	@Test
 	public void test() {
-		Logger.getRootLogger().setLevel(Level.TRACE);
-		FortranAnalyser analyser = new FortranAnalyser(new File(
-				"test/com/puresol/coding/lang/fortran/samples/zgerc.f"));
-		analyser.parse();
+		try {
+			fail();
+			Logger.getRootLogger().setLevel(Level.TRACE);
+			FortranAnalyser analyser = new FortranAnalyser(new File(
+					"test/com/puresol/coding/lang/fortran/samples/zgerc.f"));
+			analyser.parse();
+		} catch (FortranException e) {
+			e.printStackTrace();
+			fail("No exception was expected!");
+		}
 	}
 
 	// @Test

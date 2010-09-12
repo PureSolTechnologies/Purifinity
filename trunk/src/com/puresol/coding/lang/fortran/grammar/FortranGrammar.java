@@ -1,46 +1,45 @@
 package com.puresol.coding.lang.fortran.grammar;
 
+import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 
-import org.apache.log4j.Logger;
-
-import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
-import com.puresol.uhura.grammar.GrammarReader;
+import com.puresol.uhura.grammar.GrammarManager;
+import com.puresol.uhura.lexer.Lexer;
+import com.puresol.uhura.lexer.LexerFactoryException;
+import com.puresol.uhura.parser.Parser;
+import com.puresol.uhura.parser.ParserFactoryException;
 
-public class FortranGrammar {
+public class FortranGrammar extends GrammarManager {
 
-	private static final String RESOURCE = "/com/puresol/coding/lang/fortran/grammar/Fortran2008.g";
+	private static final String RESOURCE = "src/com/puresol/coding/lang/fortran/grammar/Fortran2008.g";
 
-	private static final Logger logger = Logger.getLogger(FortranGrammar.class);
+	private static FortranGrammar instance = null;
 
-	private static Grammar grammar = null;
-
-	public static Grammar get() throws IOException {
-		if (grammar == null) {
-			readGrammar();
+	public static FortranGrammar getInstance() {
+		if (instance == null) {
+			createInstance();
 		}
-		return grammar;
+		return instance;
 	}
 
-	private static synchronized void readGrammar() throws IOException {
-		try {
-			if (grammar == null) {
-				InputStream inStream = FortranGrammar.class
-						.getResourceAsStream(RESOURCE);
-				if (inStream == null) {
-					logger.fatal("Could not read resource '" + RESOURCE + "'!");
-					throw new IOException("Could not read resource '"
-							+ RESOURCE + "'!");
-				}
-				GrammarReader reader = new GrammarReader(inStream);
-				reader.call();
-				grammar = reader.getGrammar();
-			}
-		} catch (GrammarException e) {
-			logger.error(e.getMessage(), e);
-			throw new IOException(e.getMessage());
+	private static synchronized void createInstance() {
+		if (instance == null) {
+			instance = new FortranGrammar();
 		}
+	}
+
+	public static Lexer createLexer() throws IOException, GrammarException,
+			LexerFactoryException {
+		return getInstance().getLexer();
+	}
+
+	public static Parser createParser() throws IOException, GrammarException,
+			ParserFactoryException {
+		return getInstance().getParser();
+	}
+
+	private FortranGrammar() {
+		super(new File(RESOURCE));
 	}
 }

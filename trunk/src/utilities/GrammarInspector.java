@@ -15,10 +15,10 @@ import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.GrammarReader;
 import com.puresol.uhura.grammar.production.Construction;
-import com.puresol.uhura.parser.lr.LR1ParserTable;
+import com.puresol.uhura.parser.lr.SLR1ParserTable;
 import com.puresol.uhura.parser.parsetable.First;
 import com.puresol.uhura.parser.parsetable.Follow;
-import com.puresol.uhura.parser.parsetable.LR1StateTransitionGraph;
+import com.puresol.uhura.parser.parsetable.LR0StateTransitionGraph;
 import com.puresol.uhura.parser.parsetable.ParserActionSet;
 
 public class GrammarInspector {
@@ -35,8 +35,9 @@ public class GrammarInspector {
 			new TreePrinter(printer).println(grammarReader.getSyntaxTree());
 			printer.close();
 
-			Grammar grammar = FortranGrammar.get();
-			grammar = grammar.createWithNewStartProduction("designator");
+			Grammar grammar = FortranGrammar.getInstance().getGrammar();
+			grammar = grammar
+					.createWithNewStartProduction("language-binding-spec");
 			FileWriter writer = new FileWriter(new File(
 					"grammar_inspection/grammar.txt"));
 			writer.write(grammar.toString());
@@ -52,8 +53,8 @@ public class GrammarInspector {
 			writer.write(follow.toString());
 			writer.close();
 
-			LR1ParserTable parserTable = new LR1ParserTable(grammar);
-			LR1StateTransitionGraph transitions = parserTable
+			SLR1ParserTable parserTable = new SLR1ParserTable(grammar);
+			LR0StateTransitionGraph transitions = parserTable
 					.getTransitionGraph();
 			writer = new FileWriter(new File("grammar_inspection/states.txt"));
 			writer.write(transitions.toString());

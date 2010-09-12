@@ -22,7 +22,7 @@ public class GrammarPartTester {
 			final String PARSER_NAME = production + "-parser";
 			System.out.println("Testing production '" + production
 					+ "' with text '" + text + "' ...");
-			Grammar grammar = FortranGrammar.get();
+			Grammar grammar = FortranGrammar.getInstance().getGrammar();
 			grammar = grammar.createWithNewStartProduction(production);
 			Lexer lexer = new RegExpLexer(grammar);
 			TokenStream tokenStream = lexer.lex(new StringReader(text));
