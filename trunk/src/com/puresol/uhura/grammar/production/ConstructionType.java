@@ -17,7 +17,7 @@ package com.puresol.uhura.grammar.production;
  */
 public enum ConstructionType {
 
-	PRODUCTION, TOKEN, TEXT;
+	NON_TERMINAL, TERMINAL;
 
 	@Override
 	public String toString() {

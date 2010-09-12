@@ -7,10 +7,9 @@ import org.junit.Test;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.TestGrammars;
 import com.puresol.uhura.grammar.production.Construction;
-import com.puresol.uhura.grammar.production.FinishConstruction;
-import com.puresol.uhura.grammar.production.ProductionConstruction;
-import com.puresol.uhura.grammar.production.TextConstruction;
-import com.puresol.uhura.grammar.production.TokenConstruction;
+import com.puresol.uhura.grammar.production.FinishTerminal;
+import com.puresol.uhura.grammar.production.NonTerminal;
+import com.puresol.uhura.grammar.production.Terminal;
 import com.puresol.uhura.parser.parsetable.Follow;
 
 import junit.framework.TestCase;
@@ -30,13 +29,13 @@ public class FollowTest extends TestCase {
 		System.out.println("Follow:");
 		System.out.println(follow.toString());
 
-		Construction productionZ = new ProductionConstruction("Z");
-		Construction productionS = new ProductionConstruction("S");
-		Construction productionA = new ProductionConstruction("A");
-		Construction finish = FinishConstruction.getInstance();
-		Construction a = new TokenConstruction("a");
-		Construction b = new TokenConstruction("b");
-		Construction c = new TokenConstruction("c");
+		Construction productionZ = new NonTerminal("Z");
+		Construction productionS = new NonTerminal("S");
+		Construction productionA = new NonTerminal("A");
+		Construction finish = FinishTerminal.getInstance();
+		Construction a = new Terminal("a");
+		Construction b = new Terminal("b");
+		Construction c = new Terminal("c");
 
 		assertEquals(1, follow.get(productionZ).size());
 		Iterator<Construction> iterator = follow.get(productionZ).iterator();
@@ -66,14 +65,14 @@ public class FollowTest extends TestCase {
 		System.out.println("Follow:");
 		System.out.println(follow.toString());
 
-		Construction productionZ = new ProductionConstruction("Z");
-		Construction productionE = new ProductionConstruction("E");
-		Construction productionT = new ProductionConstruction("T");
-		Construction productionF = new ProductionConstruction("F");
-		Construction finish = FinishConstruction.getInstance();
-		Construction plus = new TextConstruction("+");
-		Construction star = new TextConstruction("*");
-		Construction rParen = new TextConstruction(")");
+		Construction productionZ = new NonTerminal("Z");
+		Construction productionE = new NonTerminal("E");
+		Construction productionT = new NonTerminal("T");
+		Construction productionF = new NonTerminal("F");
+		Construction finish = FinishTerminal.getInstance();
+		Construction plus = new Terminal("PLUS");
+		Construction star = new Terminal("STAR");
+		Construction rParen = new Terminal("RPAREN");
 
 		assertEquals(3, follow.get(productionE).size());
 		Iterator<Construction> iterator = follow.get(productionE).iterator();
@@ -114,15 +113,15 @@ public class FollowTest extends TestCase {
 		System.out.println("Follow:");
 		System.out.println(follow.toString());
 
-		Construction productionE = new ProductionConstruction("E");
-		Construction productionES = new ProductionConstruction("E'");
-		Construction productionT = new ProductionConstruction("T");
-		Construction productionTS = new ProductionConstruction("T'");
-		Construction productionF = new ProductionConstruction("F");
-		Construction finish = FinishConstruction.getInstance();
-		Construction plus = new TextConstruction("+");
-		Construction star = new TextConstruction("*");
-		Construction rParen = new TextConstruction(")");
+		Construction productionE = new NonTerminal("E");
+		Construction productionES = new NonTerminal("E'");
+		Construction productionT = new NonTerminal("T");
+		Construction productionTS = new NonTerminal("T'");
+		Construction productionF = new NonTerminal("F");
+		Construction finish = FinishTerminal.getInstance();
+		Construction plus = new Terminal("PLUS");
+		Construction star = new Terminal("STAR");
+		Construction rParen = new Terminal("RPAREN");
 
 		assertEquals(2, follow.get(productionE).size());
 		Iterator<Construction> iterator = follow.get(productionE).iterator();

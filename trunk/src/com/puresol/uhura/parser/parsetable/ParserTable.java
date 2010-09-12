@@ -34,10 +34,14 @@ public interface ParserTable extends Serializable {
 	public ParserActionSet getActionSet(int currentState,
 			Construction construction);
 
+	public ParserActionSet getActionSet(int currentState,
+			List<Construction> constructions);
+
 	public List<Construction> getActionTerminals();
 
 	public List<Construction> getGotoNonTerminals();
 
-	public Construction getConstructionForToken(Token token);
+	public List<Construction> getConstructionForToken(Token token)
+			throws GrammarException;
 
 }

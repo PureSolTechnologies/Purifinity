@@ -25,6 +25,12 @@ public class ParserActionSet implements Serializable {
 		}
 	}
 
+	public void addActions(ParserActionSet actionSet) {
+		for (int id = 0; id < actionSet.getActionNumber(); id++) {
+			addAction(actionSet.getAction(id));
+		}
+	}
+
 	public ParserAction getAction() throws GrammarException {
 		if (actions.size() == 0) {
 			return new ParserAction(ActionType.ERROR, -1);

@@ -7,8 +7,8 @@ import org.apache.log4j.Logger;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.production.Construction;
-import com.puresol.uhura.grammar.production.FinishConstruction;
-import com.puresol.uhura.grammar.production.ProductionConstruction;
+import com.puresol.uhura.grammar.production.FinishTerminal;
+import com.puresol.uhura.grammar.production.NonTerminal;
 import com.puresol.uhura.parser.parsetable.AbstractParserTable;
 import com.puresol.uhura.parser.parsetable.ActionType;
 import com.puresol.uhura.parser.parsetable.Follow;
@@ -83,13 +83,12 @@ public class SLR1ParserTable extends AbstractParserTable {
 				if (item.getProduction()
 						.equals(grammar.getProductions().get(0))) {
 					logger.trace("Found state 'accept' action.");
-					addActionTerminal(FinishConstruction.getInstance());
-					addAction(stateId, FinishConstruction.getInstance(),
+					addActionTerminal(FinishTerminal.getInstance());
+					addAction(stateId, FinishTerminal.getInstance(),
 							new ParserAction(ActionType.ACCEPT, -1));
 				} else {
 					for (Construction construction : follow
-							.get(new ProductionConstruction(item
-									.getProduction().getName()))) {
+							.get(new NonTerminal(item.getProduction().getName()))) {
 						addAction(stateId, construction, new ParserAction(
 								ActionType.REDUCE, grammar.getProductions()
 										.getId(item.getProduction())));
@@ -99,4 +98,7 @@ public class SLR1ParserTable extends AbstractParserTable {
 		}
 	}
 
+	public LR0StateTransitionGraph getTransitionGraph() {
+		return this.transitionGraph;
+	}
 }

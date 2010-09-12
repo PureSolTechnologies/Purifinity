@@ -1,5 +1,7 @@
 package com.puresol.uhura.parser.lr;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 import org.apache.log4j.Logger;
@@ -9,9 +11,9 @@ import com.puresol.uhura.ast.ASTException;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.production.Construction;
-import com.puresol.uhura.grammar.production.FinishConstruction;
+import com.puresol.uhura.grammar.production.FinishTerminal;
 import com.puresol.uhura.grammar.production.Production;
-import com.puresol.uhura.grammar.production.ProductionConstruction;
+import com.puresol.uhura.grammar.production.NonTerminal;
 import com.puresol.uhura.lexer.Token;
 import com.puresol.uhura.lexer.TokenStream;
 import com.puresol.uhura.parser.AbstractParser;
@@ -69,9 +71,6 @@ public abstract class AbstractLRParser extends AbstractParser {
 	 */
 	protected final void setParserTable(ParserTable parserTable) {
 		this.parserTable = parserTable;
-		if (logger.isTraceEnabled()) {
-			logger.trace(parserTable.toString());
-		}
 	}
 
 	/**
@@ -139,16 +138,20 @@ public abstract class AbstractLRParser extends AbstractParser {
 				if (logger.isTraceEnabled()) {
 					logger.trace(toString());
 				}
-				Construction construction;
+				List<Construction> constructions;
 				if (streamPosition < getTokenStream().size()) {
 					token = getTokenStream().get(streamPosition);
-					construction = parserTable.getConstructionForToken(token);
+					constructions = parserTable.getConstructionForToken(token);
 				} else {
 					token = null;
-					construction = FinishConstruction.getInstance();
+					constructions = new ArrayList<Construction>();
+					constructions.add(FinishTerminal.getInstance());
 				}
 				ParserActionSet actionSet = parserTable.getActionSet(
-						stateStack.peek(), construction);
+						stateStack.peek(), constructions);
+				if (logger.isTraceEnabled()) {
+					logger.trace(actionSet);
+				}
 				ParserAction action = getAction(actionSet);
 				switch (action.getAction()) {
 				case SHIFT:
@@ -276,8 +279,7 @@ public abstract class AbstractLRParser extends AbstractParser {
 			}
 			int targetState;
 			targetState = parserTable.getAction(stateStack.peek(),
-					new ProductionConstruction(production.getName()))
-					.getParameter();
+					new NonTerminal(production.getName())).getParameter();
 			treeStack.push(tree);
 			stateStack.push(targetState);
 		} catch (GrammarException e) {

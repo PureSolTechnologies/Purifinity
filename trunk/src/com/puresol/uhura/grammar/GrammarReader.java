@@ -21,10 +21,9 @@ import com.puresol.uhura.ast.AST;
 import com.puresol.uhura.ast.ASTException;
 import com.puresol.uhura.grammar.production.Construction;
 import com.puresol.uhura.grammar.production.Production;
-import com.puresol.uhura.grammar.production.ProductionConstruction;
+import com.puresol.uhura.grammar.production.NonTerminal;
 import com.puresol.uhura.grammar.production.ProductionSet;
-import com.puresol.uhura.grammar.production.TextConstruction;
-import com.puresol.uhura.grammar.production.TokenConstruction;
+import com.puresol.uhura.grammar.production.Terminal;
 import com.puresol.uhura.grammar.token.TokenDefinition;
 import com.puresol.uhura.grammar.token.TokenDefinitionSet;
 import com.puresol.uhura.grammar.token.Visibility;
@@ -49,7 +48,7 @@ public class GrammarReader implements Callable<Boolean> {
 
 	private static final Logger logger = Logger.getLogger(GrammarReader.class);
 
-	private final Grammar uhuraGrammar;
+	private final Grammar uhuraGrammar = UhuraGrammar.getGrammar();;
 	private final Reader reader;
 
 	private Properties options = null;
@@ -69,7 +68,6 @@ public class GrammarReader implements Callable<Boolean> {
 
 	public GrammarReader(Reader reader) {
 		this.reader = reader;
-		uhuraGrammar = UhuraGrammar.getGrammar();
 	}
 
 	public Grammar getGrammar() {
@@ -312,14 +310,20 @@ public class GrammarReader implements Callable<Boolean> {
 
 	private void convertProductionConstruction(String productionName,
 			AST productionConstruction) throws ASTException, GrammarException {
-		AST alternativeIdentifier = productionConstruction.getChild(
-				"AlternativeIdentifier").getChild("IDENTIFIER");
+		AST alternativeIdentifier = productionConstruction
+				.getChild("AlternativeIdentifier");
 		Production production;
 		if (alternativeIdentifier == null) {
 			production = new Production(productionName);
 		} else {
-			production = new Production(productionName,
-					alternativeIdentifier.getText());
+			AST alternativeIdentifierName = alternativeIdentifier
+					.getChild("IDENTIFIER");
+			if (alternativeIdentifierName == null) {
+				production = new Production(productionName);
+			} else {
+				production = new Production(productionName,
+						alternativeIdentifierName.getText());
+			}
 		}
 		production
 				.addAllConstructions(getConstructions(productionConstruction));
@@ -332,9 +336,12 @@ public class GrammarReader implements Callable<Boolean> {
 		List<Construction> constructions = new CopyOnWriteArrayList<Construction>();
 		AST productionParts = productionConstruction
 				.getChild("ProductionParts");
-		for (AST productionPart : productionParts.getChildren("ProductionPart")) {
-			constructions
-					.add(getConstruction(productionPart, tokenDefinitions));
+		if (productionParts != null) {
+			for (AST productionPart : productionParts
+					.getChildren("ProductionPart")) {
+				constructions.add(getConstruction(productionPart,
+						tokenDefinitions));
+			}
 		}
 		return constructions;
 	}
@@ -356,14 +363,32 @@ public class GrammarReader implements Callable<Boolean> {
 		if (productionPart.hasChild("IDENTIFIER")) {
 			String identifier = productionPart.getChild("IDENTIFIER").getText();
 			if (tokenDefinitions.getDefinition(identifier) != null) {
-				return new TokenConstruction(identifier);
+				return new Terminal(identifier);
 			} else {
-				return new ProductionConstruction(identifier);
+				return new NonTerminal(identifier);
 			}
 		} else if (productionPart.hasChild("STRING_LITERAL")) {
 			AST stringLiteral = productionPart.getChild("STRING_LITERAL");
 			String text = stringLiteral.getText();
-			return new TextConstruction(text.substring(1, text.length() - 1));
+			text = text.substring(1, text.length() - 1);
+			Terminal terminal = null;
+			for (TokenDefinition tokenDefinition : tokenDefinitions
+					.getDefinitions()) {
+				if (tokenDefinition.getPattern().matcher(text).matches()) {
+					if (terminal != null) {
+						throw new GrammarException(
+								"Token text '"
+										+ text
+										+ "' satisfies several token definitions and is therfore ambiguous!");
+					}
+					terminal = new Terminal(tokenDefinition.getName(), text);
+				}
+			}
+			if (terminal == null) {
+				throw new GrammarException("Token text '" + text
+						+ "' does not satisfy any token definition!");
+			}
+			return terminal;
 		} else if (productionPart.hasChild("ProductionConstructions")) {
 			AST productionConstructions = productionPart
 					.getChild("ProductionConstructions");
@@ -371,7 +396,7 @@ public class GrammarReader implements Callable<Boolean> {
 					"_group_autogen");
 			convertProductionConstructions(newIdentifier,
 					productionConstructions);
-			return new ProductionConstruction(newIdentifier);
+			return new NonTerminal(newIdentifier);
 		} else {
 			throw new ASTException("Invalid node '" + productionPart + "'!");
 		}
@@ -404,7 +429,7 @@ public class GrammarReader implements Callable<Boolean> {
 				production = new Production(newIdentifier);
 				productions.add(production);
 			}
-			return new ProductionConstruction(newIdentifier);
+			return new NonTerminal(newIdentifier);
 		} catch (GrammarException e) {
 			throw new ASTException("Could not generate extra rules '"
 					+ newIdentifier + "'!");
@@ -434,15 +459,14 @@ public class GrammarReader implements Callable<Boolean> {
 			Construction construction = createConstruction(productionPart);
 			if (!productions.has(newIdentifier)) {
 				Production production = new Production(newIdentifier);
-				production.addConstruction(new ProductionConstruction(
-						newIdentifier));
+				production.addConstruction(new NonTerminal(newIdentifier));
 				production.addConstruction(construction);
 				productions.add(production);
 
 				production = new Production(newIdentifier);
 				productions.add(production);
 			}
-			return new ProductionConstruction(newIdentifier);
+			return new NonTerminal(newIdentifier);
 		} catch (GrammarException e) {
 			throw new ASTException("Could not generate extra rules '"
 					+ newIdentifier + "'!");
@@ -456,8 +480,7 @@ public class GrammarReader implements Callable<Boolean> {
 			Construction construction = createConstruction(productionPart);
 			if (!productions.has(newIdentifier)) {
 				Production production = new Production(newIdentifier);
-				production.addConstruction(new ProductionConstruction(
-						newIdentifier));
+				production.addConstruction(new NonTerminal(newIdentifier));
 				production.addConstruction(construction);
 				productions.add(production);
 
@@ -465,7 +488,7 @@ public class GrammarReader implements Callable<Boolean> {
 				production.addConstruction(construction);
 				productions.add(production);
 			}
-			return new ProductionConstruction(newIdentifier);
+			return new NonTerminal(newIdentifier);
 		} catch (GrammarException e) {
 			throw new ASTException("Could not generate extra rules '"
 					+ newIdentifier + "'!");
@@ -476,10 +499,12 @@ public class GrammarReader implements Callable<Boolean> {
 			throws ASTException {
 		AST optionalOptions = productionConstruction
 				.getChild("OptionalOptions");
-		for (AST option : optionalOptions.getSubTrees("OptionalOption")) {
-			if (option.hasChild("NODE")) {
-				production.setNode(Boolean.valueOf(option.getChild(
-						"BOOLEAN_LITERAL").getText()));
+		if (optionalOptions != null) {
+			for (AST option : optionalOptions.getSubTrees("OptionalOption")) {
+				if (option.hasChild("NODE")) {
+					production.setNode(Boolean.valueOf(option.getChild(
+							"BOOLEAN_LITERAL").getText()));
+				}
 			}
 		}
 	}

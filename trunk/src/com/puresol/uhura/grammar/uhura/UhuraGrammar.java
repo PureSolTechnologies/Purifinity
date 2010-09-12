@@ -5,10 +5,9 @@ import java.util.Properties;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.production.Production;
-import com.puresol.uhura.grammar.production.ProductionConstruction;
+import com.puresol.uhura.grammar.production.NonTerminal;
 import com.puresol.uhura.grammar.production.ProductionSet;
-import com.puresol.uhura.grammar.production.TextConstruction;
-import com.puresol.uhura.grammar.production.TokenConstruction;
+import com.puresol.uhura.grammar.production.Terminal;
 import com.puresol.uhura.grammar.token.TokenDefinition;
 import com.puresol.uhura.grammar.token.TokenDefinitionSet;
 import com.puresol.uhura.grammar.token.Visibility;
@@ -123,35 +122,33 @@ public class UhuraGrammar {
 	private static void addStart(ProductionSet productions)
 			throws GrammarException {
 		Production production = new Production("_START_");
-		production.addConstruction(new ProductionConstruction("GrammarFile"));
+		production.addConstruction(new NonTerminal("GrammarFile"));
 		productions.add(production);
 	}
 
 	private static void addGrammarFile(ProductionSet productions)
 			throws GrammarException {
 		Production production = new Production("GrammarFile");
-		production.addConstruction(new ProductionConstruction("Options"));
-		production.addConstruction(new ProductionConstruction("Helper"));
-		production.addConstruction(new ProductionConstruction("Tokens"));
-		production.addConstruction(new ProductionConstruction("Productions"));
+		production.addConstruction(new NonTerminal("Options"));
+		production.addConstruction(new NonTerminal("Helper"));
+		production.addConstruction(new NonTerminal("Tokens"));
+		production.addConstruction(new NonTerminal("Productions"));
 		productions.add(production);
 	}
 
 	private static void addGrammarOptionsSection(ProductionSet productions)
 			throws GrammarException {
 		Production production = new Production("Options");
-		production.addConstruction(new TextConstruction("OPTIONS"));
-		production
-				.addConstruction(new ProductionConstruction("GrammarOptions"));
+		production.addConstruction(new Terminal("OPTIONS", "OPTIONS"));
+		production.addConstruction(new NonTerminal("GrammarOptions"));
 		productions.add(production);
 	}
 
 	private static void addGrammarOption(ProductionSet productions)
 			throws GrammarException {
 		Production production = new Production("GrammarOptions");
-		production
-				.addConstruction(new ProductionConstruction("GrammarOptions"));
-		production.addConstruction(new ProductionConstruction("GrammarOption"));
+		production.addConstruction(new NonTerminal("GrammarOptions"));
+		production.addConstruction(new NonTerminal("GrammarOption"));
 		production.setNode(true);
 		production.setStackingAllowed(false);
 		productions.add(production);
@@ -162,41 +159,36 @@ public class UhuraGrammar {
 		productions.add(production);
 
 		production = new Production("GrammarOption");
-		production.addConstruction(new ProductionConstruction(
-				"PropertiesIdentifier"));
-		production.addConstruction(new TextConstruction("="));
-		production.addConstruction(new ProductionConstruction("Literal"));
-		production.addConstruction(new TextConstruction(";"));
+		production.addConstruction(new NonTerminal("PropertiesIdentifier"));
+		production.addConstruction(new Terminal("EQUALS"));
+		production.addConstruction(new NonTerminal("Literal"));
+		production.addConstruction(new Terminal("SEMICOLON"));
 		productions.add(production);
 
 		production = new Production("PropertiesIdentifier");
-		production.addConstruction(new TokenConstruction("IDENTIFIER"));
+		production.addConstruction(new Terminal("IDENTIFIER"));
 		productions.add(production);
 
 		production = new Production("PropertiesIdentifier");
-		production.addConstruction(new ProductionConstruction(
-				"PropertiesIdentifier"));
-		production.addConstruction(new TextConstruction("."));
-		production.addConstruction(new TokenConstruction("IDENTIFIER"));
+		production.addConstruction(new NonTerminal("PropertiesIdentifier"));
+		production.addConstruction(new Terminal("DOT"));
+		production.addConstruction(new Terminal("IDENTIFIER"));
 		productions.add(production);
 	}
 
 	private static void addHelpersSection(ProductionSet productions)
 			throws GrammarException {
 		Production production = new Production("Helper");
-		production.addConstruction(new TextConstruction("HELPER"));
-		production.addConstruction(new ProductionConstruction(
-				"HelperDefinitions"));
+		production.addConstruction(new Terminal("HELPER", "HELPER"));
+		production.addConstruction(new NonTerminal("HelperDefinitions"));
 		productions.add(production);
 	}
 
 	private static void addHelperDefinition(ProductionSet productions)
 			throws GrammarException {
 		Production production = new Production("HelperDefinitions");
-		production.addConstruction(new ProductionConstruction(
-				"HelperDefinitions"));
-		production.addConstruction(new ProductionConstruction(
-				"HelperDefinition"));
+		production.addConstruction(new NonTerminal("HelperDefinitions"));
+		production.addConstruction(new NonTerminal("HelperDefinition"));
 		production.setNode(true);
 		production.setStackingAllowed(false);
 		productions.add(production);
@@ -207,49 +199,42 @@ public class UhuraGrammar {
 		productions.add(production);
 
 		production = new Production("HelperDefinition");
-		production.addConstruction(new TokenConstruction("IDENTIFIER"));
-		production.addConstruction(new TokenConstruction("COLON"));
-		production.addConstruction(new ProductionConstruction(
-				"TokenConstructions"));
-		production.addConstruction(new TextConstruction(";"));
+		production.addConstruction(new Terminal("IDENTIFIER"));
+		production.addConstruction(new Terminal("COLON"));
+		production.addConstruction(new NonTerminal("TokenConstructions"));
+		production.addConstruction(new Terminal("SEMICOLON"));
 		productions.add(production);
 	}
 
 	private static void addTokensSection(ProductionSet productions)
 			throws GrammarException {
 		Production production = new Production("Tokens");
-		production.addConstruction(new TextConstruction("TOKENS"));
-		production.addConstruction(new ProductionConstruction(
-				"TokenDefinitions"));
+		production.addConstruction(new Terminal("TOKENS", "TOKENS"));
+		production.addConstruction(new NonTerminal("TokenDefinitions"));
 		productions.add(production);
 	}
 
 	private static void addTokenDefinition(ProductionSet productions)
 			throws GrammarException {
 		Production production = new Production("TokenDefinitions");
-		production.addConstruction(new ProductionConstruction(
-				"TokenDefinitions"));
-		production
-				.addConstruction(new ProductionConstruction("TokenDefinition"));
+		production.addConstruction(new NonTerminal("TokenDefinitions"));
+		production.addConstruction(new NonTerminal("TokenDefinition"));
 		production.setNode(true);
 		production.setStackingAllowed(false);
 		productions.add(production);
 
 		production = new Production("TokenDefinitions");
-		production
-				.addConstruction(new ProductionConstruction("TokenDefinition"));
+		production.addConstruction(new NonTerminal("TokenDefinition"));
 		production.setNode(true);
 		production.setStackingAllowed(false);
 		productions.add(production);
 
 		production = new Production("TokenDefinition");
-		production.addConstruction(new TokenConstruction("IDENTIFIER"));
-		production.addConstruction(new TokenConstruction("COLON"));
-		production.addConstruction(new ProductionConstruction(
-				"TokenConstructions"));
-		production.addConstruction(new ProductionConstruction(
-				"OptionalVisibility"));
-		production.addConstruction(new TextConstruction(";"));
+		production.addConstruction(new Terminal("IDENTIFIER"));
+		production.addConstruction(new Terminal("COLON"));
+		production.addConstruction(new NonTerminal("TokenConstructions"));
+		production.addConstruction(new NonTerminal("OptionalVisibility"));
+		production.addConstruction(new Terminal("SEMICOLON"));
 		productions.add(production);
 
 	}
@@ -257,57 +242,49 @@ public class UhuraGrammar {
 	private static void addTokenConstruction(ProductionSet productions)
 			throws GrammarException {
 		Production production = new Production("TokenConstructions");
-		production.addConstruction(new ProductionConstruction(
-				"TokenConstructions"));
-		production.addConstruction(new TextConstruction("|"));
-		production.addConstruction(new ProductionConstruction(
-				"TokenConstruction"));
+		production.addConstruction(new NonTerminal("TokenConstructions"));
+		production.addConstruction(new Terminal("VERTICAL_BAR"));
+		production.addConstruction(new NonTerminal("TokenConstruction"));
 		production.setNode(true);
 		production.setStackingAllowed(false);
 		productions.add(production);
 
 		production = new Production("TokenConstructions");
-		production.addConstruction(new ProductionConstruction(
-				"TokenConstruction"));
+		production.addConstruction(new NonTerminal("TokenConstruction"));
 		production.setNode(true);
 		production.setStackingAllowed(false);
 		productions.add(production);
 
 		production = new Production("TokenConstruction");
-		production.addConstruction(new ProductionConstruction(
-				"TokenConstruction"));
-		production.addConstruction(new ProductionConstruction("TokenPart"));
+		production.addConstruction(new NonTerminal("TokenConstruction"));
+		production.addConstruction(new NonTerminal("TokenPart"));
 		productions.add(production);
 
 		production = new Production("TokenConstruction");
-		production.addConstruction(new ProductionConstruction("TokenPart"));
+		production.addConstruction(new NonTerminal("TokenPart"));
 		productions.add(production);
 
 		production = new Production("TokenPart");
-		production.addConstruction(new TextConstruction("("));
-		production.addConstruction(new ProductionConstruction(
-				"TokenConstruction"));
-		production.addConstruction(new TextConstruction(")"));
-		production.addConstruction(new ProductionConstruction(
-				"OptionalQuantifier"));
+		production.addConstruction(new Terminal("LPAREN"));
+		production.addConstruction(new NonTerminal("TokenConstruction"));
+		production.addConstruction(new Terminal("RPAREN"));
+		production.addConstruction(new NonTerminal("OptionalQuantifier"));
 		productions.add(production);
 
 		production = new Production("TokenPart");
-		production.addConstruction(new TokenConstruction("IDENTIFIER"));
-		production.addConstruction(new ProductionConstruction(
-				"OptionalQuantifier"));
+		production.addConstruction(new Terminal("IDENTIFIER"));
+		production.addConstruction(new NonTerminal("OptionalQuantifier"));
 		productions.add(production);
 
 		production = new Production("TokenPart");
-		production.addConstruction(new TokenConstruction("STRING_LITERAL"));
-		production.addConstruction(new ProductionConstruction(
-				"OptionalQuantifier"));
+		production.addConstruction(new Terminal("STRING_LITERAL"));
+		production.addConstruction(new NonTerminal("OptionalQuantifier"));
 		productions.add(production);
 
 		production = new Production("OptionalVisibility");
-		production.addConstruction(new TokenConstruction("LEFT_BRACKET"));
-		production.addConstruction(new TextConstruction("hidden"));
-		production.addConstruction(new TokenConstruction("RIGHT_BRACKET"));
+		production.addConstruction(new Terminal("LEFT_BRACKET"));
+		production.addConstruction(new Terminal("HIDDEN", "hidden"));
+		production.addConstruction(new Terminal("RIGHT_BRACKET"));
 		productions.add(production);
 
 		production = new Production("OptionalVisibility");
@@ -317,19 +294,16 @@ public class UhuraGrammar {
 	private static void addProductionsSection(ProductionSet productions)
 			throws GrammarException {
 		Production production = new Production("Productions");
-		production.addConstruction(new TextConstruction("PRODUCTIONS"));
-		production.addConstruction(new ProductionConstruction(
-				"ProductionDefinitions"));
+		production.addConstruction(new Terminal("PRODUCTIONS", "PRODUCTIONS"));
+		production.addConstruction(new NonTerminal("ProductionDefinitions"));
 		productions.add(production);
 	}
 
 	private static void addProductionsDefinition(ProductionSet productions)
 			throws GrammarException {
 		Production production = new Production("ProductionDefinitions");
-		production.addConstruction(new ProductionConstruction(
-				"ProductionDefinitions"));
-		production.addConstruction(new ProductionConstruction(
-				"ProductionDefinition"));
+		production.addConstruction(new NonTerminal("ProductionDefinitions"));
+		production.addConstruction(new NonTerminal("ProductionDefinition"));
 		production.setNode(true);
 		production.setStackingAllowed(false);
 		productions.add(production);
@@ -340,11 +314,10 @@ public class UhuraGrammar {
 		productions.add(production);
 
 		production = new Production("ProductionDefinition");
-		production.addConstruction(new TokenConstruction("IDENTIFIER"));
-		production.addConstruction(new TokenConstruction("COLON"));
-		production.addConstruction(new ProductionConstruction(
-				"ProductionConstructions"));
-		production.addConstruction(new TextConstruction(";"));
+		production.addConstruction(new Terminal("IDENTIFIER"));
+		production.addConstruction(new Terminal("COLON"));
+		production.addConstruction(new NonTerminal("ProductionConstructions"));
+		production.addConstruction(new Terminal("SEMICOLON"));
 		productions.add(production);
 
 	}
@@ -352,130 +325,116 @@ public class UhuraGrammar {
 	private static void addProductionConstruction(ProductionSet productions)
 			throws GrammarException {
 		Production production = new Production("ProductionConstructions");
-		production.addConstruction(new ProductionConstruction(
-				"ProductionConstructions"));
-		production.addConstruction(new TextConstruction("|"));
-		production.addConstruction(new ProductionConstruction(
-				"ProductionConstruction"));
+		production.addConstruction(new NonTerminal("ProductionConstructions"));
+		production.addConstruction(new Terminal("VERTICAL_BAR"));
+		production.addConstruction(new NonTerminal("ProductionConstruction"));
 		production.setNode(true);
 		production.setStackingAllowed(false);
 		productions.add(production);
 
 		production = new Production("ProductionConstructions");
-		production.addConstruction(new ProductionConstruction(
-				"ProductionConstruction"));
+		production.addConstruction(new NonTerminal("ProductionConstruction"));
 		production.setNode(true);
 		production.setStackingAllowed(false);
 		productions.add(production);
 
 		production = new Production("ProductionConstruction");
-		production.addConstruction(new ProductionConstruction(
-				"AlternativeIdentifier"));
-		production
-				.addConstruction(new ProductionConstruction("ProductionParts"));
-		production
-				.addConstruction(new ProductionConstruction("OptionalOptions"));
+		production.addConstruction(new NonTerminal("AlternativeIdentifier"));
+		production.addConstruction(new NonTerminal("ProductionParts"));
+		production.addConstruction(new NonTerminal("OptionalOptions"));
 		productions.add(production);
 
 		production = new Production("ProductionParts");
-		production
-				.addConstruction(new ProductionConstruction("ProductionParts"));
-		production
-				.addConstruction(new ProductionConstruction("ProductionPart"));
+		production.addConstruction(new NonTerminal("ProductionParts"));
+		production.addConstruction(new NonTerminal("ProductionPart"));
 		production.setNode(true);
 		production.setStackingAllowed(false);
 		productions.add(production);
 
+		// empty productions are also allowed...
+		production = new Production("ProductionConstruction");
+		productions.add(production);
+
 		production = new Production("ProductionParts");
-		production
-				.addConstruction(new ProductionConstruction("ProductionPart"));
+		production.addConstruction(new NonTerminal("ProductionPart"));
 		production.setNode(true);
 		production.setStackingAllowed(false);
 		productions.add(production);
 
 		production = new Production("ProductionPart");
-		production.addConstruction(new TextConstruction("("));
-		production.addConstruction(new ProductionConstruction(
-				"ProductionConstructions"));
-		production.addConstruction(new TextConstruction(")"));
-		production.addConstruction(new ProductionConstruction(
-				"OptionalQuantifier"));
+		production.addConstruction(new Terminal("LPAREN"));
+		production.addConstruction(new NonTerminal("ProductionConstructions"));
+		production.addConstruction(new Terminal("RPAREN"));
+		production.addConstruction(new NonTerminal("OptionalQuantifier"));
 		productions.add(production);
 
 		production = new Production("ProductionPart");
-		production.addConstruction(new TokenConstruction("IDENTIFIER"));
-		production.addConstruction(new ProductionConstruction(
-				"OptionalQuantifier"));
+		production.addConstruction(new Terminal("IDENTIFIER"));
+		production.addConstruction(new NonTerminal("OptionalQuantifier"));
 		productions.add(production);
 
 		production = new Production("ProductionPart");
-		production.addConstruction(new TokenConstruction("STRING_LITERAL"));
-		production.addConstruction(new ProductionConstruction(
-				"OptionalQuantifier"));
+		production.addConstruction(new Terminal("STRING_LITERAL"));
+		production.addConstruction(new NonTerminal("OptionalQuantifier"));
 		productions.add(production);
 
 		production = new Production("AlternativeIdentifier");
-		production.addConstruction(new TokenConstruction("LEFT_CURLY_BRACKET"));
-		production.addConstruction(new TokenConstruction("IDENTIFIER"));
-		production
-				.addConstruction(new TokenConstruction("RIGHT_CURLY_BRACKET"));
+		production.addConstruction(new Terminal("LEFT_CURLY_BRACKET"));
+		production.addConstruction(new Terminal("IDENTIFIER"));
+		production.addConstruction(new Terminal("RIGHT_CURLY_BRACKET"));
 		productions.add(production);
 
 		production = new Production("AlternativeIdentifier");
 		productions.add(production);
 
 		production = new Production("OptionalOptions");
-		production.addConstruction(new TokenConstruction("LEFT_BRACKET"));
-		production.addConstruction(new ProductionConstruction(
-				"OptionalOptionList"));
-		production.addConstruction(new TokenConstruction("RIGHT_BRACKET"));
+		production.addConstruction(new Terminal("LEFT_BRACKET"));
+		production.addConstruction(new NonTerminal("OptionalOptionList"));
+		production.addConstruction(new Terminal("RIGHT_BRACKET"));
 		productions.add(production);
 
 		production = new Production("OptionalOptions");
 		productions.add(production);
 
 		production = new Production("OptionalOptionList");
-		production.addConstruction(new ProductionConstruction(
-				"OptionalOptionList"));
-		production.addConstruction(new TokenConstruction("COMMA"));
-		production
-				.addConstruction(new ProductionConstruction("OptionalOption"));
+		production.addConstruction(new NonTerminal("OptionalOptionList"));
+		production.addConstruction(new Terminal("COMMA"));
+		production.addConstruction(new NonTerminal("OptionalOption"));
 		production.setNode(true);
 		production.setStackingAllowed(false);
 		productions.add(production);
 
 		production = new Production("OptionalOptionList");
-		production
-				.addConstruction(new ProductionConstruction("OptionalOption"));
+		production.addConstruction(new NonTerminal("OptionalOption"));
 		production.setNode(true);
 		production.setStackingAllowed(false);
 		productions.add(production);
 
 		production = new Production("OptionalOption");
-		production.addConstruction(new TextConstruction("node"));
-		production.addConstruction(new TextConstruction("="));
-		production.addConstruction(new TokenConstruction("BOOLEAN_LITERAL"));
+		production.addConstruction(new Terminal("NODE", "node"));
+		production.addConstruction(new Terminal("EQUALS"));
+		production.addConstruction(new Terminal("BOOLEAN_LITERAL"));
 		productions.add(production);
 
 		production = new Production("OptionalOption");
-		production.addConstruction(new TextConstruction("stack"));
-		production.addConstruction(new TextConstruction("="));
-		production.addConstruction(new TokenConstruction("BOOLEAN_LITERAL"));
+		production.addConstruction(new Terminal("STACK", "stack"));
+		production.addConstruction(new Terminal("EQUALS"));
+		production.addConstruction(new Terminal("BOOLEAN_LITERAL"));
 		productions.add(production);
 	}
 
 	private static void addQuantifiers(ProductionSet productions)
 			throws GrammarException {
 		Production production = new Production("OptionalQuantifier");
-		production.addConstruction(new TextConstruction("+"));
+		production.addConstruction(new Terminal("PLUS"));
 		productions.add(production);
 
 		production = new Production("OptionalQuantifier");
-		production.addConstruction(new TextConstruction("*"));
+		production.addConstruction(new Terminal("STAR"));
 		productions.add(production);
 
 		production = new Production("OptionalQuantifier");
-		production.addConstruction(new TextConstruction("?"));
+		production.addConstruction(new Terminal("QUESTION_MARK"));
 		productions.add(production);
 
 		production = new Production("OptionalQuantifier");
@@ -485,20 +444,19 @@ public class UhuraGrammar {
 	private static void addLiterals(ProductionSet productions)
 			throws GrammarException {
 		Production production = new Production("Literal");
-		production.addConstruction(new TokenConstruction("STRING_LITERAL"));
+		production.addConstruction(new Terminal("STRING_LITERAL"));
 		productions.add(production);
 
 		production = new Production("Literal");
-		production.addConstruction(new TokenConstruction("INTEGER_LITERAL"));
+		production.addConstruction(new Terminal("INTEGER_LITERAL"));
 		productions.add(production);
 
 		production = new Production("Literal");
-		production.addConstruction(new TokenConstruction(
-				"FLOATING_POINT_LITERAL"));
+		production.addConstruction(new Terminal("FLOATING_POINT_LITERAL"));
 		productions.add(production);
 
 		production = new Production("Literal");
-		production.addConstruction(new TokenConstruction("BOOLEAN_LITERAL"));
+		production.addConstruction(new Terminal("BOOLEAN_LITERAL"));
 		productions.add(production);
 	}
 }

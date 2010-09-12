@@ -1,8 +1,8 @@
 package com.puresol.uhura.grammar.production;
 
-public class FinishConstruction {
+public class EmptyTerminal {
 
-	public static final String FINISH_CONSTRUCTION_NAME = "_FINISH_";
+	public static final String EMPTY_CONSTRUCTION_NAME = "_EMTPTY_";
 
 	private static Construction instance = null;
 
@@ -15,7 +15,7 @@ public class FinishConstruction {
 
 	private static synchronized void createInstance() {
 		if (instance == null) {
-			instance = new TokenConstruction(FINISH_CONSTRUCTION_NAME);
+			instance = new Terminal(EMPTY_CONSTRUCTION_NAME);
 		}
 	}
 

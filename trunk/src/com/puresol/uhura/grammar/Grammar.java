@@ -7,7 +7,7 @@ import java.util.Properties;
 import com.puresol.uhura.grammar.production.Construction;
 import com.puresol.uhura.grammar.production.Production;
 import com.puresol.uhura.grammar.production.ProductionSet;
-import com.puresol.uhura.grammar.production.TokenConstruction;
+import com.puresol.uhura.grammar.production.Terminal;
 import com.puresol.uhura.grammar.token.TokenDefinition;
 import com.puresol.uhura.grammar.token.TokenDefinitionSet;
 
@@ -38,7 +38,7 @@ public class Grammar implements Serializable {
 			for (Construction construction : production.getConstructions()) {
 				if (construction.isTerminal()) {
 					if (!construction.getClass()
-							.equals(TokenConstruction.class)) {
+							.equals(Terminal.class)) {
 						continue;
 					}
 					if (tokenDefinitions.getDefinition(construction.getName()) == null) {

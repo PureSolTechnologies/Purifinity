@@ -86,7 +86,7 @@ public class ProductionSet implements Serializable {
 			throws GrammarException {
 		ProductionSet productionSet = new ProductionSet();
 		Production startProduction = new Production("_START_");
-		startProduction.addConstruction(new ProductionConstruction(
+		startProduction.addConstruction(new NonTerminal(
 				productionName));
 		productionSet.add(startProduction);
 		if (productions.size() > 1) {

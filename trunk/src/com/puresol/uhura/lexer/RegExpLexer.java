@@ -19,6 +19,8 @@ import com.puresol.uhura.grammar.token.Visibility;
  */
 public class RegExpLexer implements Lexer {
 
+	private static final long serialVersionUID = -6858518460147748314L;
+
 	private static final Logger logger = Logger.getLogger(RegExpLexer.class);
 
 	private static final String LINE_TERMINATOR = "(\\r\\n|\\n|\\r)";

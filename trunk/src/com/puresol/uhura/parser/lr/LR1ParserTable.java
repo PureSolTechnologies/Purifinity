@@ -7,7 +7,7 @@ import org.apache.log4j.Logger;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.production.Construction;
-import com.puresol.uhura.grammar.production.FinishConstruction;
+import com.puresol.uhura.grammar.production.FinishTerminal;
 import com.puresol.uhura.parser.parsetable.AbstractParserTable;
 import com.puresol.uhura.parser.parsetable.ActionType;
 import com.puresol.uhura.parser.parsetable.Follow;
@@ -85,8 +85,8 @@ public class LR1ParserTable extends AbstractParserTable {
 				if (item.getProduction()
 						.equals(grammar.getProductions().get(0))) {
 					logger.trace("Found state 'accept' action.");
-					addActionTerminal(FinishConstruction.getInstance());
-					addAction(stateId, FinishConstruction.getInstance(),
+					addActionTerminal(FinishTerminal.getInstance());
+					addAction(stateId, FinishTerminal.getInstance(),
 							new ParserAction(ActionType.ACCEPT, -1));
 				} else {
 					for (Construction lookahead : item.getLookahead()) {

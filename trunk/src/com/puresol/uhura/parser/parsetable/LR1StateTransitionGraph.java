@@ -11,7 +11,7 @@ import org.apache.log4j.Logger;
 
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.production.Construction;
-import com.puresol.uhura.grammar.production.FinishConstruction;
+import com.puresol.uhura.grammar.production.FinishTerminal;
 
 public class LR1StateTransitionGraph implements Serializable {
 
@@ -38,7 +38,7 @@ public class LR1StateTransitionGraph implements Serializable {
 
 	protected void calculate() {
 		LR1Item startItem = new LR1Item(grammar.getProductions().get(0), 0);
-		startItem.addLookahead(FinishConstruction.getInstance());
+		startItem.addLookahead(FinishTerminal.getInstance());
 		LR1ItemSet initialSet = closureCalculator
 				.calc(new LR1ItemSet(startItem));
 		addState(initialSet);

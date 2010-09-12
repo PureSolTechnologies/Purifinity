@@ -1,5 +1,7 @@
 package com.puresol.uhura.lexer;
 
+import java.io.Serializable;
+
 /**
  * This class is used to store additional data for the tokens found like the
  * original position within the source input.
@@ -13,7 +15,9 @@ package com.puresol.uhura.lexer;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class TokenMetaData {
+public class TokenMetaData implements Serializable {
+
+	private static final long serialVersionUID = 6478412339837934971L;
 
 	private final Token token;
 	private final int id;

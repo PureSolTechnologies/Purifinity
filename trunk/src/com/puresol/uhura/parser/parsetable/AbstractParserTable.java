@@ -1,9 +1,9 @@
 package com.puresol.uhura.parser.parsetable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.apache.log4j.Logger;
 
@@ -20,9 +20,9 @@ public abstract class AbstractParserTable implements ParserTable {
 	private static final Logger logger = Logger
 			.getLogger(AbstractParserTable.class);
 
-	private final List<ConcurrentMap<Construction, ParserActionSet>> table = new CopyOnWriteArrayList<ConcurrentMap<Construction, ParserActionSet>>();
-	private final List<Construction> actionTerminals = new CopyOnWriteArrayList<Construction>();
-	private final List<Construction> gotoNonTerminals = new CopyOnWriteArrayList<Construction>();
+	private final List<ConcurrentMap<Construction, ParserActionSet>> table = new ArrayList<ConcurrentMap<Construction, ParserActionSet>>();
+	private final List<Construction> actionTerminals = new ArrayList<Construction>();
+	private final List<Construction> gotoNonTerminals = new ArrayList<Construction>();
 
 	private final Grammar grammar;
 	private final boolean ignoreCase;
@@ -80,26 +80,24 @@ public abstract class AbstractParserTable implements ParserTable {
 	}
 
 	@Override
-	public Construction getConstructionForToken(Token token) {
+	public List<Construction> getConstructionForToken(Token token)
+			throws GrammarException {
+		List<Construction> constructions = new ArrayList<Construction>();
 		for (Construction construction : actionTerminals) {
-			if (construction.getType() == ConstructionType.TOKEN) {
-				if (token.getName().equals(construction.getName())) {
-					return construction;
-				}
-			} else if (construction.getType() == ConstructionType.TEXT) {
+			if (construction.getName().equals(token.getName())) {
+				String constructionText = construction.getText();
+				String tokenText = token.getText();
 				if (ignoreCase) {
-					if (token.getText()
-							.equalsIgnoreCase(construction.getText())) {
-						return construction;
-					}
-				} else {
-					if (token.getText().equals(construction.getText())) {
-						return construction;
-					}
+					constructionText = constructionText.toUpperCase();
+					tokenText = tokenText.toUpperCase();
+				}
+				if (constructionText.isEmpty()
+						|| (constructionText.equals(tokenText))) {
+					constructions.add(construction);
 				}
 			}
 		}
-		return null;
+		return constructions;
 	}
 
 	@Override
@@ -145,6 +143,19 @@ public abstract class AbstractParserTable implements ParserTable {
 	}
 
 	@Override
+	public ParserActionSet getActionSet(int currentState,
+			List<Construction> constructions) {
+		if ((constructions == null) || (constructions.size() == 0)) {
+			return ParserActionSet.getErrorSet();
+		}
+		ParserActionSet actionSet = new ParserActionSet();
+		for (Construction construction : constructions) {
+			actionSet.addActions(getActionSet(currentState, construction));
+		}
+		return actionSet;
+	}
+
+	@Override
 	public final String toString() {
 		StringBuffer buffer = new StringBuffer();
 		buffer.append("=============\n");
@@ -174,7 +185,7 @@ public abstract class AbstractParserTable implements ParserTable {
 		buffer.append("\n");
 		buffer.append(toColumn("|"));
 		for (Construction construction : actionTerminals) {
-			if (construction.getType() == ConstructionType.TOKEN) {
+			if (construction.getType() == ConstructionType.TERMINAL) {
 				buffer.append(toColumn(construction.getName()));
 			} else {
 				buffer.append(toColumn(construction.getText()));

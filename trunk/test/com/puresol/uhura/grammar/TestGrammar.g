@@ -38,6 +38,8 @@ TOKENS
 	SLASH:				"/";
 	COMMA:				",";
 	ID:					"[A-Za-z0-9_]";
+	LPAREN:				"\\(";
+	RPAREN:				"\\)";
 
 /*
  The next section is the PRODUCTIONS section where all grammar productions are
@@ -45,7 +47,12 @@ TOKENS
  */
 PRODUCTIONS
 
-	_START_ : Expression ;
+	_START_ : Expressions ;
+
+	Expressions:
+			Expressions Expression [node=true,stack=false]
+		| 	Expression
+	;
 
 	Expression:
 		{add}				Expression '+' Term

@@ -1,5 +1,6 @@
 package com.puresol.uhura.lexer;
 
+import java.io.Serializable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -9,9 +10,10 @@ import java.util.concurrent.ConcurrentMap;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class TokenMetaInformation {
+public class TokenMetaInformation implements Serializable {
 
 	private static final long serialVersionUID = 4992743487086731635L;
+
 	private static final ConcurrentMap<Token, TokenMetaData> metaInformation = new ConcurrentHashMap<Token, TokenMetaData>();
 
 	public void add(Token token, TokenMetaData metaData) {

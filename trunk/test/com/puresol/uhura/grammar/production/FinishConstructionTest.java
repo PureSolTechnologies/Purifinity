@@ -8,9 +8,9 @@ public class FinishConstructionTest extends TestCase {
 
 	@Test
 	public void testSingleton() {
-		Construction finish = FinishConstruction.getInstance();
+		Construction finish = FinishTerminal.getInstance();
 		assertNotNull(finish);
-		assertSame(finish, FinishConstruction.getInstance());
+		assertSame(finish, FinishTerminal.getInstance());
 	}
 
 }

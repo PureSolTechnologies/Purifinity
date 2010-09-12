@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.TestGrammars;
-import com.puresol.uhura.grammar.production.TokenConstruction;
+import com.puresol.uhura.grammar.production.Terminal;
 import com.puresol.uhura.parser.parsetable.Closure0;
 import com.puresol.uhura.parser.parsetable.Goto0;
 import com.puresol.uhura.parser.parsetable.LR0Item;
@@ -29,7 +29,7 @@ public class Goto0Test extends TestCase {
 		Goto0 gotoCalc = new Goto0(grammar);
 		System.out.println("Goto0:");
 
-		itemSet = gotoCalc.calc(itemSet, new TokenConstruction("b"));
+		itemSet = gotoCalc.calc(itemSet, new Terminal("b"));
 		System.out.println(itemSet.toString());
 
 		assertEquals(1, itemSet.getPrimaryItems().size());

@@ -44,12 +44,12 @@ public abstract class AbstractConstruction implements Construction {
 
 	@Override
 	public boolean isTerminal() {
-		return (type != ConstructionType.PRODUCTION);
+		return (type != ConstructionType.NON_TERMINAL);
 	}
 
 	@Override
 	public boolean isNonTerminal() {
-		return (type == ConstructionType.PRODUCTION);
+		return (type == ConstructionType.NON_TERMINAL);
 	}
 
 	/*
@@ -64,9 +64,9 @@ public abstract class AbstractConstruction implements Construction {
 
 	public String toShortString() {
 		if (name.isEmpty()) {
-			return "'" + text + "'";
+			return "'" + text + "'" + " (" + type + ")";
 		} else {
-			return name;
+			return name + " (" + type + ")";
 		}
 	}
 
@@ -114,4 +114,19 @@ public abstract class AbstractConstruction implements Construction {
 		return true;
 	}
 
+	@Override
+	public int compareTo(Construction other) {
+		if (other == null) {
+			return 1;
+		}
+		int result = this.getName().compareTo(other.getName());
+		if (result != 0) {
+			return result;
+		}
+		result = this.getType().compareTo(other.getType());
+		if (result != 0) {
+			return result;
+		}
+		return this.getText().compareTo(other.getText());
+	}
 }

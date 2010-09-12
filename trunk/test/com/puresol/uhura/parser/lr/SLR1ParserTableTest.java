@@ -10,10 +10,9 @@ import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.TestGrammars;
 import com.puresol.uhura.grammar.production.Construction;
-import com.puresol.uhura.grammar.production.FinishConstruction;
-import com.puresol.uhura.grammar.production.ProductionConstruction;
-import com.puresol.uhura.grammar.production.TextConstruction;
-import com.puresol.uhura.grammar.production.TokenConstruction;
+import com.puresol.uhura.grammar.production.FinishTerminal;
+import com.puresol.uhura.grammar.production.NonTerminal;
+import com.puresol.uhura.grammar.production.Terminal;
 import com.puresol.uhura.parser.parsetable.ActionType;
 import com.puresol.uhura.parser.parsetable.ParserAction;
 import com.puresol.uhura.parser.parsetable.ParserTable;
@@ -49,12 +48,12 @@ public class SLR1ParserTableTest extends TestCase {
 			ParserAction g7 = new ParserAction(ActionType.GOTO, 7);
 			ParserAction accept = new ParserAction(ActionType.ACCEPT, -1);
 			ParserAction error = new ParserAction(ActionType.ERROR, -1);
-			Construction a = new TokenConstruction("a");
-			Construction b = new TokenConstruction("b");
-			Construction c = new TokenConstruction("c");
-			Construction pS = new ProductionConstruction("S");
-			Construction pA = new ProductionConstruction("A");
-			Construction finish = FinishConstruction.getInstance();
+			Construction a = new Terminal("a");
+			Construction b = new Terminal("b");
+			Construction c = new Terminal("c");
+			Construction pS = new NonTerminal("S");
+			Construction pA = new NonTerminal("A");
+			Construction finish = FinishTerminal.getInstance();
 
 			// checks...
 			assertEquals(s3, table.getAction(0, b));
@@ -165,15 +164,15 @@ public class SLR1ParserTableTest extends TestCase {
 			ParserAction g10 = new ParserAction(ActionType.GOTO, 10);
 			ParserAction accept = new ParserAction(ActionType.ACCEPT, -1);
 			ParserAction error = new ParserAction(ActionType.ERROR, -1);
-			Construction lParen = new TextConstruction("(");
-			Construction id = new TokenConstruction("id");
-			Construction plus = new TextConstruction("+");
-			Construction star = new TextConstruction("*");
-			Construction rParen = new TextConstruction(")");
-			Construction finish = FinishConstruction.getInstance();
-			Construction pE = new ProductionConstruction("E");
-			Construction pT = new ProductionConstruction("T");
-			Construction pF = new ProductionConstruction("F");
+			Construction lParen = new Terminal("LPAREN");
+			Construction id = new Terminal("id");
+			Construction plus = new Terminal("PLUS");
+			Construction star = new Terminal("STAR");
+			Construction rParen = new Terminal("RPAREN");
+			Construction finish = FinishTerminal.getInstance();
+			Construction pE = new NonTerminal("E");
+			Construction pT = new NonTerminal("T");
+			Construction pF = new NonTerminal("F");
 
 			// checks...
 			assertEquals(s6, table.getAction(0, lParen));

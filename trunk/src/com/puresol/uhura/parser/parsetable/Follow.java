@@ -9,8 +9,8 @@ import java.util.concurrent.CopyOnWriteArraySet;
 
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.production.Construction;
-import com.puresol.uhura.grammar.production.EmptyConstruction;
-import com.puresol.uhura.grammar.production.FinishConstruction;
+import com.puresol.uhura.grammar.production.EmptyTerminal;
+import com.puresol.uhura.grammar.production.FinishTerminal;
 import com.puresol.uhura.grammar.production.Production;
 
 /**
@@ -79,7 +79,7 @@ public class Follow implements Serializable {
 	 */
 	private void addFinishToStart() {
 		follow.get(grammar.getProductions().get(0).getName()).add(
-				FinishConstruction.getInstance());
+				FinishTerminal.getInstance());
 	}
 
 	private void iterate() {
@@ -123,11 +123,11 @@ public class Follow implements Serializable {
 					Set<Construction> firstSet = first
 							.get(followingConstruction);
 					for (Construction follower : firstSet) {
-						if (!follower.equals(EmptyConstruction.getInstance())) {
+						if (!follower.equals(EmptyTerminal.getInstance())) {
 							followSet.add(follower);
 						}
 					}
-					if (!firstSet.contains(EmptyConstruction.getInstance())) {
+					if (!firstSet.contains(EmptyTerminal.getInstance())) {
 						break;
 					}
 					if (j == constructions.size() - 1) {
@@ -162,9 +162,14 @@ public class Follow implements Serializable {
 			buffer.append(productionName);
 			buffer.append("\t");
 			buffer.append("{");
+			boolean firstRun = true;
 			for (Construction construction : follow.get(productionName)) {
-				buffer.append(" ");
-				buffer.append(construction.toShortString());
+				if (firstRun) {
+					firstRun = false;
+				} else {
+					buffer.append(", ");
+				}
+				buffer.append(construction.toString());
 			}
 			buffer.append(" }\n");
 		}

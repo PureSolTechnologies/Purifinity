@@ -4,8 +4,8 @@ import org.junit.Test;
 
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.TestGrammars;
-import com.puresol.uhura.grammar.production.FinishConstruction;
-import com.puresol.uhura.grammar.production.TokenConstruction;
+import com.puresol.uhura.grammar.production.FinishTerminal;
+import com.puresol.uhura.grammar.production.Terminal;
 
 import junit.framework.TestCase;
 
@@ -20,14 +20,14 @@ public class Goto1Test extends TestCase {
 		Closure1 closure = new Closure1(grammar);
 		System.out.println("Closure1:");
 		LR1Item primItem = new LR1Item(grammar.getProductions().get(0), 0);
-		primItem.addLookahead(FinishConstruction.getInstance());
+		primItem.addLookahead(FinishTerminal.getInstance());
 		LR1ItemSet itemSet = closure.calc(primItem);
 		System.out.println(itemSet.toString());
 
 		Goto1 gotoCalc = new Goto1(grammar);
 		System.out.println("Goto1:");
 
-		itemSet = gotoCalc.calc(itemSet, new TokenConstruction("b"));
+		itemSet = gotoCalc.calc(itemSet, new Terminal("b"));
 		System.out.println(itemSet.toString());
 
 		assertEquals(2, itemSet.getPrimaryItems().size());

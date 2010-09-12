@@ -8,7 +8,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.production.Construction;
-import com.puresol.uhura.grammar.production.EmptyConstruction;
+import com.puresol.uhura.grammar.production.EmptyTerminal;
 import com.puresol.uhura.grammar.production.Production;
 
 /**
@@ -94,7 +94,7 @@ public class First implements Serializable {
 		int startLength = firstSet.size();
 		if (production.isEmpty()) {
 			/* rule 3 */
-			firstSet.add(EmptyConstruction.getInstance());
+			firstSet.add(EmptyTerminal.getInstance());
 		} else {
 			/* rule 2 */
 			for (Construction construction : production.getConstructions()) {
@@ -103,16 +103,12 @@ public class First implements Serializable {
 					// terminal is found and there is nothing to proceed...
 					break;
 				}
-				if (construction.getName().equals(production.getName())) {
-					// don't do endless looping...
-					break;
-				}
 				for (Construction firstConstruction : first.get(construction
 						.getName())) {
 					firstSet.add(firstConstruction);
 				}
 				if (!first.get(construction.getName()).contains(
-						EmptyConstruction.getInstance())) {
+						EmptyTerminal.getInstance())) {
 					break;
 				}
 			}
@@ -153,9 +149,14 @@ public class First implements Serializable {
 			buffer.append(productionName);
 			buffer.append("\t");
 			buffer.append("{");
+			boolean firstRun = true;
 			for (Construction construction : first.get(productionName)) {
-				buffer.append(" ");
-				buffer.append(construction.toShortString());
+				if (firstRun) {
+					firstRun = false;
+				} else {
+					buffer.append(", ");
+				}
+				buffer.append(construction.toString());
 			}
 			buffer.append(" }\n");
 		}

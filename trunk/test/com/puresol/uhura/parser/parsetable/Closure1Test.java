@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.TestGrammars;
-import com.puresol.uhura.grammar.production.FinishConstruction;
+import com.puresol.uhura.grammar.production.FinishTerminal;
 import com.puresol.uhura.parser.parsetable.LR1Item;
 import com.puresol.uhura.parser.parsetable.LR1ItemSet;
 
@@ -24,7 +24,7 @@ public class Closure1Test extends TestCase {
 		Closure1 closure = new Closure1(grammar);
 		System.out.println("Closure1:");
 		LR1Item primItem = new LR1Item(grammar.getProductions().get(0), 0);
-		primItem.addLookahead(FinishConstruction.getInstance());
+		primItem.addLookahead(FinishTerminal.getInstance());
 		LR1ItemSet itemSet = closure.calc(primItem);
 		System.out.println(itemSet.toString());
 
@@ -41,7 +41,7 @@ public class Closure1Test extends TestCase {
 		assertEquals(grammar.getProductions().getList().get(1),
 				item1.getProduction());
 		assertEquals(1, item1.getLookahead().size());
-		assertEquals(FinishConstruction.getInstance(), item1.getLookahead()
+		assertEquals(FinishTerminal.getInstance(), item1.getLookahead()
 				.iterator().next());
 
 		LR1Item item2 = iterator.next();
@@ -63,7 +63,7 @@ public class Closure1Test extends TestCase {
 		assertEquals(grammar.getProductions().getList().get(2),
 				item4.getProduction());
 		assertEquals(1, item4.getLookahead().size());
-		assertEquals(FinishConstruction.getInstance(), item4.getLookahead()
+		assertEquals(FinishTerminal.getInstance(), item4.getLookahead()
 				.iterator().next());
 	}
 }

@@ -2,7 +2,7 @@ package com.puresol.uhura.grammar.production;
 
 import java.io.Serializable;
 
-public interface Construction extends Serializable {
+public interface Construction extends Serializable, Comparable<Construction> {
 
 	/**
 	 * @return the text
