@@ -60,6 +60,43 @@ public class GrammarReaderTest extends TestCase {
 	}
 
 	@Test
+	public void testReadAutoGeneration() {
+		try {
+			Logger.getRootLogger().setLevel(Level.TRACE);
+			GrammarReader reader = new GrammarReader(
+					new File(
+							"test/com/puresol/uhura/grammar/TestGrammarForAutoGeneration.g"));
+			assertTrue(reader.call());
+			AST ast = reader.getSyntaxTree();
+			TreePrinter printer = new TreePrinter(System.out);
+			printer.println(ast);
+			Grammar grammar = reader.getGrammar();
+			System.out.println(grammar);
+			Lexer lexer = new RegExpLexer(grammar);
+			TokenStream tokenStream = lexer
+					.lex(new StringReader("1 * 2\n + 3"));
+			Parser parser = new SLR1Parser(grammar);
+			System.out.println(parser.getParserTable());
+			LR0StateTransitionGraph tg = new LR0StateTransitionGraph(grammar);
+			System.out.println(tg);
+			AST syntaxTree = parser.parse(tokenStream);
+			new TreePrinter(System.out).println(syntaxTree);
+		} catch (IOException e) {
+			e.printStackTrace();
+			fail("No exception was expected!");
+		} catch (GrammarException e) {
+			e.printStackTrace();
+			fail("No exception was expected!");
+		} catch (LexerException e) {
+			e.printStackTrace();
+			fail("No exception was expected!");
+		} catch (ParserException e) {
+			e.printStackTrace();
+			fail("No exception was expected!");
+		}
+	}
+
+	@Test
 	public void testAutoConstructionOptionalList() {
 		try {
 			GrammarReader reader = new GrammarReader(new File(

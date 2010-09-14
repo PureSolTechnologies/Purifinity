@@ -16,7 +16,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.apache.log4j.Logger;
 
-import com.puresol.trees.TreePrinter;
 import com.puresol.uhura.ast.AST;
 import com.puresol.uhura.ast.ASTException;
 import com.puresol.uhura.grammar.production.Construction;
@@ -58,32 +57,70 @@ public class GrammarReader implements Callable<Boolean> {
 	private AST ast = null;
 	private ConcurrentMap<String, Visibility> tokenVisibility = new ConcurrentHashMap<String, Visibility>();
 
+	/**
+	 * Constructor for file reading.
+	 * 
+	 * @param file
+	 * @throws IOException
+	 */
 	public GrammarReader(File file) throws IOException {
 		this(new FileInputStream(file));
 	}
 
+	/**
+	 * Constructor for InputStream reading.
+	 * 
+	 * @param inputStream
+	 */
 	public GrammarReader(InputStream inputStream) {
 		this(new InputStreamReader(inputStream));
 	}
 
+	/**
+	 * Constructor taking a reader for reading the grammar.
+	 * 
+	 * @param reader
+	 */
 	public GrammarReader(Reader reader) {
 		this.reader = reader;
 	}
 
+	/**
+	 * This method returns the read grammar.
+	 * 
+	 * @return
+	 */
 	public Grammar getGrammar() {
 		return readGrammar;
 	}
 
+	/**
+	 * This method returns the syntax tree from the read grammar file to
+	 * retrieve additional information if needed.
+	 * 
+	 * @return
+	 */
 	public AST getSyntaxTree() {
 		return ast;
 	}
 
+	/**
+	 * This is the central starting point for the reading process itself. It's
+	 * used as a callable.
+	 */
 	@Override
 	public Boolean call() throws IOException, GrammarException {
 		read();
 		return true;
 	}
 
+	/**
+	 * This is the central reading routine which starts all sub routines like
+	 * lexer, parser and converter.
+	 * 
+	 * @throws IOException
+	 * @throws GrammarException
+	 */
 	private void read() throws IOException, GrammarException {
 		Lexer lexer = null;
 		try {
@@ -94,7 +131,7 @@ public class GrammarReader implements Callable<Boolean> {
 			logger.debug("Starting parser...");
 			parse(tokenStream);
 			logger.debug("Convert AST into grammar...");
-			convertToGrammer();
+			convert();
 			logger.debug("done.");
 		} catch (LexerException e) {
 			logger.error(e.getMessage(), e);
@@ -108,27 +145,39 @@ public class GrammarReader implements Callable<Boolean> {
 		}
 	}
 
+	/**
+	 * This method does the parsing and reacts appropriately to any exceptions.
+	 * 
+	 * @param tokenStream
+	 * @throws ParserException
+	 */
 	private void parse(TokenStream tokenStream) throws ParserException {
 		try {
 			Parser parser = new SLR1Parser(uhuraGrammar);
 			ast = parser.parse(tokenStream);
-			if (logger.isTraceEnabled()) {
-				new TreePrinter(System.out).println(ast);
-			}
 		} catch (GrammarException e) {
 			logger.fatal(e.getMessage(), e);
 			throw new RuntimeException();
 		}
 	}
 
-	private void convertToGrammer() throws GrammarException {
-		convertToOptions();
-		convertToTokenDefinitionSet();
-		convertToProductionsSet();
+	/**
+	 * This method converts the read AST from grammar file into a final grammar
+	 * ready to be used.
+	 * 
+	 * @throws GrammarException
+	 */
+	private void convert() throws GrammarException {
+		convertOptions();
+		convertTokenDefinitionSet();
+		convertProductionsSet();
 		readGrammar = new Grammar(options, tokenDefinitions, productions);
 	}
 
-	private void convertToOptions() {
+	/**
+	 * This method converts the options part of the AST.
+	 */
+	private void convertOptions() {
 		try {
 			options = new Properties();
 			AST optionsTree = ast.getChild("Options");
@@ -148,13 +197,24 @@ public class GrammarReader implements Callable<Boolean> {
 		}
 	}
 
-	private void convertToTokenDefinitionSet() throws GrammarException {
+	/**
+	 * This method converts the token definitions to the token definition set.
+	 * 
+	 * @throws GrammarException
+	 */
+	private void convertTokenDefinitionSet() throws GrammarException {
 		tokenVisibility.clear();
 		Map<String, List<AST>> helpers = getHelpers();
 		Map<String, List<AST>> tokens = getTokens();
-		convertToTokenDefinitionSet(helpers, tokens);
+		convertTokenDefinitionSet(helpers, tokens);
 	}
 
+	/**
+	 * This method reads all helpers from AST and returns a map with all of
+	 * them.
+	 * 
+	 * @return
+	 */
 	private Map<String, List<AST>> getHelpers() {
 		try {
 			Map<String, List<AST>> helpers = new ConcurrentHashMap<String, List<AST>>();
@@ -175,6 +235,11 @@ public class GrammarReader implements Callable<Boolean> {
 		}
 	}
 
+	/**
+	 * This method reads all tokens from AST and returns a map with all of them.
+	 * 
+	 * @return
+	 */
 	private Map<String, List<AST>> getTokens() throws GrammarException {
 		try {
 			Map<String, List<AST>> tokens = new ConcurrentHashMap<String, List<AST>>();
@@ -204,7 +269,15 @@ public class GrammarReader implements Callable<Boolean> {
 		}
 	}
 
-	private void convertToTokenDefinitionSet(Map<String, List<AST>> helpers,
+	/**
+	 * This method starts and controls the process for final conversion of all
+	 * tokens from the token and helper skeletons.
+	 * 
+	 * @param helpers
+	 * @param tokens
+	 * @throws GrammarException
+	 */
+	private void convertTokenDefinitionSet(Map<String, List<AST>> helpers,
 			Map<String, List<AST>> tokens) throws GrammarException {
 		try {
 			tokenDefinitions = new TokenDefinitionSet();
@@ -221,6 +294,15 @@ public class GrammarReader implements Callable<Boolean> {
 		}
 	}
 
+	/**
+	 * This is the method which merges all tokens with their helpers.
+	 * 
+	 * @param tokenName
+	 * @param helpers
+	 * @param tokens
+	 * @return
+	 * @throws GrammarException
+	 */
 	private TokenDefinition getTokenDefinition(String tokenName,
 			Map<String, List<AST>> helpers, Map<String, List<AST>> tokens)
 			throws GrammarException {
@@ -236,8 +318,6 @@ public class GrammarReader implements Callable<Boolean> {
 			for (AST tree : trees) {
 				if (tree.hasChild("STRING_LITERAL")) {
 					String text = tree.getChild("STRING_LITERAL").getText();
-					// text = text.replaceAll("\\\\n", "\\n");
-					// text = text.replaceAll("\\\\r", "\\r");
 					text = text.replaceAll("\\\\\\\\", "\\\\");
 					pattern.append(text.substring(1, text.length() - 1));
 				} else {
@@ -265,7 +345,10 @@ public class GrammarReader implements Callable<Boolean> {
 		}
 	}
 
-	private void convertToProductionsSet() {
+	/**
+	 * This method converts all productions from the AST into a ProductionSet.
+	 */
+	private void convertProductionsSet() {
 		try {
 			productions = new ProductionSet();
 			AST productionsTree = ast.getChild("Productions");
@@ -273,7 +356,7 @@ public class GrammarReader implements Callable<Boolean> {
 					.getChild("ProductionDefinitions");
 			for (AST productionDefinition : productionDefinitions
 					.getChildren("ProductionDefinition")) {
-				convertProduction(productionDefinition);
+				convertProductionGroup(productionDefinition);
 			}
 		} catch (ASTException e) {
 			logger.fatal(e.getMessage(), e);
@@ -284,31 +367,58 @@ public class GrammarReader implements Callable<Boolean> {
 		}
 	}
 
-	private void convertProduction(AST productionDefinition)
+	/**
+	 * This method converts a production group (bind together by the vertical
+	 * bar '|') into a set of productions.
+	 * 
+	 * @param productionDefinition
+	 * @throws GrammarException
+	 */
+	private void convertProductionGroup(AST productionDefinition)
 			throws GrammarException {
 		try {
 			String productionName = productionDefinition.getChild("IDENTIFIER")
 					.getText();
 			AST productionConstructions = productionDefinition
 					.getChild("ProductionConstructions");
-			convertProductionConstructions(productionName,
-					productionConstructions);
+			convertSingleProductions(productionName, productionConstructions);
 		} catch (ASTException e) {
 			logger.fatal(e.getMessage(), e);
 			throw new RuntimeException();
 		}
 	}
 
-	private void convertProductionConstructions(String productionName,
+	/**
+	 * This method converts the list of productions from a group with a given
+	 * name into a set of productions.
+	 * 
+	 * @param productionName
+	 * @param productionConstructions
+	 * @throws ASTException
+	 * @throws GrammarException
+	 */
+	private void convertSingleProductions(String productionName,
 			AST productionConstructions) throws ASTException, GrammarException {
 		for (AST productionConstruction : productionConstructions
 				.getChildren("ProductionConstruction")) {
-			convertProductionConstruction(productionName,
-					productionConstruction);
+			convertSingleProduction(productionName, productionConstruction);
 		}
 	}
 
-	private void convertProductionConstruction(String productionName,
+	/**
+	 * This method converts a single production from a list of productions
+	 * within a production group into a single production. Some additional
+	 * productions might be created during the way due to construction grouping
+	 * and quantifiers.
+	 * 
+	 * The alternative name for a production is processed here, too.
+	 * 
+	 * @param productionName
+	 * @param productionConstruction
+	 * @throws ASTException
+	 * @throws GrammarException
+	 */
+	private void convertSingleProduction(String productionName,
 			AST productionConstruction) throws ASTException, GrammarException {
 		AST alternativeIdentifier = productionConstruction
 				.getChild("AlternativeIdentifier");
@@ -354,7 +464,7 @@ public class GrammarReader implements Callable<Boolean> {
 		if (quantity == Quantity.EXPECT) {
 			return createConstruction(productionPart);
 		} else {
-			return generateExtraRules(productionPart, quantity);
+			return generateExtraQuantifierRules(productionPart, quantity);
 		}
 	}
 
@@ -394,15 +504,14 @@ public class GrammarReader implements Callable<Boolean> {
 					.getChild("ProductionConstructions");
 			String newIdentifier = createNewIdentifier(productionPart,
 					"_group_autogen");
-			convertProductionConstructions(newIdentifier,
-					productionConstructions);
+			convertSingleProductions(newIdentifier, productionConstructions);
 			return new NonTerminal(newIdentifier);
 		} else {
 			throw new ASTException("Invalid node '" + productionPart + "'!");
 		}
 	}
 
-	private Construction generateExtraRules(AST productionPart,
+	private Construction generateExtraQuantifierRules(AST productionPart,
 			Quantity quantity) throws ASTException {
 		if (quantity == Quantity.ACCEPT) {
 			return generateOptionalProduction(productionPart);
