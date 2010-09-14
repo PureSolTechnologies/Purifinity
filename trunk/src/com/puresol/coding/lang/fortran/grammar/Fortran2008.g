@@ -3275,9 +3275,20 @@ R822 end-do-stmt is END DO [ do-construct-name ]
 	if-construct :
 		if-then-stmt
 		block
-		( else-if-stmt block ) *
-		( else-stmt block ) ?
+		else-if-constructs
+		else-construct
 		end-if-stmt
+	;
+	else-if-constructs :
+		else-if-constructs else-if-construct
+	|
+	;
+	else-if-construct :
+		else-if-stmt block
+	;
+	else-construct:
+		else-stmt block
+	|
 	;
 
 /*
@@ -4882,9 +4893,10 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 		end-subroutine-stmt
 	;
 	subroutine-body :
-		specification-part
-		execution-part ?
-		internal-subprogram-part ?
+		specification-part execution-part internal-subprogram-part
+	|	specification-part execution-part
+	|	specification-part internal-subprogram-part
+	|	specification-part
 	;
 
 /*

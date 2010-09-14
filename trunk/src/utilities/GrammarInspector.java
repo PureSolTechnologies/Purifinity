@@ -37,7 +37,7 @@ public class GrammarInspector {
 
 			Grammar grammar = FortranGrammar.getInstance().getGrammar();
 			grammar = grammar
-					.createWithNewStartProduction("language-binding-spec");
+					.createWithNewStartProduction("subroutine-subprogram");
 			FileWriter writer = new FileWriter(new File(
 					"grammar_inspection/grammar.txt"));
 			writer.write(grammar.toString());
