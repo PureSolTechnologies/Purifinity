@@ -57,82 +57,82 @@ public class LR1ParserTableTest extends TestCase {
 			Construction finish = FinishTerminal.getInstance();
 
 			// checks...
-			assertEquals(s3, table.getAction(0, b));
+			assertEquals(s2, table.getAction(0, b));
 			assertEquals(error, table.getAction(0, a));
 			assertEquals(error, table.getAction(0, c));
 			assertEquals(error, table.getAction(0, finish));
 			assertEquals(g1, table.getAction(0, pS));
 			assertEquals(error, table.getAction(0, pA));
 
-			assertEquals(s2, table.getAction(1, b));
+			assertEquals(s3, table.getAction(1, b));
 			assertEquals(error, table.getAction(1, a));
 			assertEquals(error, table.getAction(1, c));
 			assertEquals(accept, table.getAction(1, finish));
 			assertEquals(error, table.getAction(1, pS));
 			assertEquals(error, table.getAction(1, pA));
 
-			assertEquals(r1, table.getAction(2, b));
-			assertEquals(error, table.getAction(2, a));
+			assertEquals(error, table.getAction(2, b));
+			assertEquals(s5, table.getAction(2, a));
 			assertEquals(error, table.getAction(2, c));
-			assertEquals(r1, table.getAction(2, finish));
+			assertEquals(error, table.getAction(2, finish));
 			assertEquals(error, table.getAction(2, pS));
-			assertEquals(error, table.getAction(2, pA));
+			assertEquals(g4, table.getAction(2, pA));
 
-			assertEquals(error, table.getAction(3, b));
-			assertEquals(s6, table.getAction(3, a));
+			assertEquals(r1, table.getAction(3, b));
+			assertEquals(error, table.getAction(3, a));
 			assertEquals(error, table.getAction(3, c));
-			assertEquals(error, table.getAction(3, finish));
+			assertEquals(r1, table.getAction(3, finish));
 			assertEquals(error, table.getAction(3, pS));
-			assertEquals(g4, table.getAction(3, pA));
+			assertEquals(error, table.getAction(3, pA));
 
 			assertEquals(error, table.getAction(4, b));
-			assertEquals(s5, table.getAction(4, a));
+			assertEquals(s6, table.getAction(4, a));
 			assertEquals(error, table.getAction(4, c));
 			assertEquals(error, table.getAction(4, finish));
 			assertEquals(error, table.getAction(4, pS));
 			assertEquals(error, table.getAction(4, pA));
 
-			assertEquals(r2, table.getAction(5, b));
-			assertEquals(error, table.getAction(5, a));
+			assertEquals(s8, table.getAction(5, b));
+			assertEquals(r4, table.getAction(5, a));
 			assertEquals(error, table.getAction(5, c));
-			assertEquals(r2, table.getAction(5, finish));
-			assertEquals(error, table.getAction(5, pS));
+			assertEquals(error, table.getAction(5, finish));
+			assertEquals(g7, table.getAction(5, pS));
 			assertEquals(error, table.getAction(5, pA));
 
-			assertEquals(s10, table.getAction(6, b));
-			assertEquals(r4, table.getAction(6, a));
+			assertEquals(r2, table.getAction(6, b));
+			assertEquals(error, table.getAction(6, a));
 			assertEquals(error, table.getAction(6, c));
-			assertEquals(error, table.getAction(6, finish));
-			assertEquals(g7, table.getAction(6, pS));
+			assertEquals(r2, table.getAction(6, finish));
+			assertEquals(error, table.getAction(6, pS));
 			assertEquals(error, table.getAction(6, pA));
 
-			assertEquals(s9, table.getAction(7, b));
+			assertEquals(s10, table.getAction(7, b));
 			assertEquals(error, table.getAction(7, a));
-			assertEquals(s8, table.getAction(7, c));
+			assertEquals(s9, table.getAction(7, c));
 			assertEquals(error, table.getAction(7, finish));
 			assertEquals(error, table.getAction(7, pS));
 			assertEquals(error, table.getAction(7, pA));
 
 			assertEquals(error, table.getAction(8, b));
-			assertEquals(r3, table.getAction(8, a));
+			assertEquals(s5, table.getAction(8, a));
 			assertEquals(error, table.getAction(8, c));
 			assertEquals(error, table.getAction(8, finish));
 			assertEquals(error, table.getAction(8, pS));
-			assertEquals(error, table.getAction(8, pA));
+			assertEquals(g11, table.getAction(8, pA));
 
-			assertEquals(r1, table.getAction(9, b));
-			assertEquals(r5, table.getAction(9, a));
-			assertEquals(r1, table.getAction(9, c));
+			assertEquals(error, table.getAction(9, b));
+			assertEquals(r3, table.getAction(9, a));
+			assertEquals(error, table.getAction(9, c));
 			assertEquals(error, table.getAction(9, finish));
 			assertEquals(error, table.getAction(9, pS));
 			assertEquals(error, table.getAction(9, pA));
 
-			assertEquals(error, table.getAction(10, b));
-			assertEquals(s6, table.getAction(10, a));
-			assertEquals(error, table.getAction(10, c));
+			assertEquals(r1, table.getAction(10, b));
+			assertEquals(r5, table.getAction(10, a));
+			assertEquals(r1, table.getAction(10, c));
 			assertEquals(error, table.getAction(10, finish));
 			assertEquals(error, table.getAction(10, pS));
-			assertEquals(g11, table.getAction(10, pA));
+			assertEquals(error, table.getAction(10, pA));
 
 			assertEquals(error, table.getAction(11, b));
 			assertEquals(s12, table.getAction(11, a));
@@ -153,6 +153,10 @@ public class LR1ParserTableTest extends TestCase {
 		}
 	}
 
+	/**
+	 * The solution can be found at page 319 of 2. German edition of Dragon
+	 * Book.
+	 */
 	@Test
 	public void testDragonBookGrammar() {
 		try {
@@ -169,15 +173,15 @@ public class LR1ParserTableTest extends TestCase {
 			ParserAction r1 = new ParserAction(ActionType.REDUCE, 1);
 			ParserAction r2 = new ParserAction(ActionType.REDUCE, 2);
 			ParserAction r3 = new ParserAction(ActionType.REDUCE, 3);
+			ParserAction s3 = new ParserAction(ActionType.SHIFT, 3);
 			ParserAction s4 = new ParserAction(ActionType.SHIFT, 4);
 			ParserAction s6 = new ParserAction(ActionType.SHIFT, 6);
 			ParserAction s7 = new ParserAction(ActionType.SHIFT, 7);
-			ParserAction s9 = new ParserAction(ActionType.SHIFT, 9);
 			ParserAction g1 = new ParserAction(ActionType.GOTO, 1);
 			ParserAction g2 = new ParserAction(ActionType.GOTO, 2);
-			ParserAction g3 = new ParserAction(ActionType.GOTO, 3);
 			ParserAction g5 = new ParserAction(ActionType.GOTO, 5);
 			ParserAction g8 = new ParserAction(ActionType.GOTO, 8);
+			ParserAction g9 = new ParserAction(ActionType.GOTO, 9);
 			ParserAction accept = new ParserAction(ActionType.ACCEPT, -1);
 			ParserAction error = new ParserAction(ActionType.ERROR, -1);
 			Construction c = new Terminal("c");
@@ -187,8 +191,8 @@ public class LR1ParserTableTest extends TestCase {
 			Construction pC = new NonTerminal("C");
 
 			// checks...
-			assertEquals(s7, table.getAction(0, c));
-			assertEquals(s9, table.getAction(0, d));
+			assertEquals(s3, table.getAction(0, c));
+			assertEquals(s4, table.getAction(0, d));
 			assertEquals(error, table.getAction(0, finish));
 			assertEquals(g1, table.getAction(0, pS));
 			assertEquals(g2, table.getAction(0, pC));
@@ -199,41 +203,41 @@ public class LR1ParserTableTest extends TestCase {
 			assertEquals(error, table.getAction(1, pS));
 			assertEquals(error, table.getAction(1, pC));
 
-			assertEquals(s4, table.getAction(2, c));
-			assertEquals(s6, table.getAction(2, d));
+			assertEquals(s6, table.getAction(2, c));
+			assertEquals(s7, table.getAction(2, d));
 			assertEquals(error, table.getAction(2, finish));
 			assertEquals(error, table.getAction(2, pS));
-			assertEquals(g3, table.getAction(2, pC));
+			assertEquals(g5, table.getAction(2, pC));
 
-			assertEquals(error, table.getAction(3, c));
-			assertEquals(error, table.getAction(3, d));
-			assertEquals(r1, table.getAction(3, finish));
+			assertEquals(s3, table.getAction(3, c));
+			assertEquals(s4, table.getAction(3, d));
+			assertEquals(error, table.getAction(3, finish));
 			assertEquals(error, table.getAction(3, pS));
-			assertEquals(error, table.getAction(3, pC));
+			assertEquals(g8, table.getAction(3, pC));
 
-			assertEquals(s4, table.getAction(4, c));
-			assertEquals(s6, table.getAction(4, d));
+			assertEquals(r3, table.getAction(4, c));
+			assertEquals(r3, table.getAction(4, d));
 			assertEquals(error, table.getAction(4, finish));
 			assertEquals(error, table.getAction(4, pS));
-			assertEquals(g5, table.getAction(4, pC));
+			assertEquals(error, table.getAction(4, pC));
 
 			assertEquals(error, table.getAction(5, c));
 			assertEquals(error, table.getAction(5, d));
-			assertEquals(r2, table.getAction(5, finish));
+			assertEquals(r1, table.getAction(5, finish));
 			assertEquals(error, table.getAction(5, pS));
 			assertEquals(error, table.getAction(5, pC));
 
-			assertEquals(error, table.getAction(6, c));
-			assertEquals(error, table.getAction(6, d));
-			assertEquals(r3, table.getAction(6, finish));
+			assertEquals(s6, table.getAction(6, c));
+			assertEquals(s7, table.getAction(6, d));
+			assertEquals(error, table.getAction(6, finish));
 			assertEquals(error, table.getAction(6, pS));
-			assertEquals(error, table.getAction(6, pC));
+			assertEquals(g9, table.getAction(6, pC));
 
-			assertEquals(s7, table.getAction(7, c));
-			assertEquals(s9, table.getAction(7, d));
-			assertEquals(error, table.getAction(7, finish));
+			assertEquals(error, table.getAction(7, c));
+			assertEquals(error, table.getAction(7, d));
+			assertEquals(r3, table.getAction(7, finish));
 			assertEquals(error, table.getAction(7, pS));
-			assertEquals(g8, table.getAction(7, pC));
+			assertEquals(error, table.getAction(7, pC));
 
 			assertEquals(r2, table.getAction(8, c));
 			assertEquals(r2, table.getAction(8, d));
@@ -241,9 +245,9 @@ public class LR1ParserTableTest extends TestCase {
 			assertEquals(error, table.getAction(8, pS));
 			assertEquals(error, table.getAction(8, pC));
 
-			assertEquals(r3, table.getAction(9, c));
-			assertEquals(r3, table.getAction(9, d));
-			assertEquals(error, table.getAction(9, finish));
+			assertEquals(error, table.getAction(9, c));
+			assertEquals(error, table.getAction(9, d));
+			assertEquals(r2, table.getAction(9, finish));
 			assertEquals(error, table.getAction(9, pS));
 			assertEquals(error, table.getAction(9, pC));
 
