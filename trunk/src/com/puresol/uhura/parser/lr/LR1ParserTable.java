@@ -89,11 +89,12 @@ public class LR1ParserTable extends AbstractParserTable {
 					addAction(stateId, FinishTerminal.getInstance(),
 							new ParserAction(ActionType.ACCEPT, -1));
 				} else {
-					for (Construction lookahead : item.getLookahead()) {
-						addAction(stateId, lookahead, new ParserAction(
-								ActionType.REDUCE, grammar.getProductions()
-										.getId(item.getProduction())));
-					}
+					addAction(
+							stateId,
+							item.getLookahead(),
+							new ParserAction(ActionType.REDUCE, grammar
+									.getProductions().getId(
+											item.getProduction())));
 				}
 			}
 		}

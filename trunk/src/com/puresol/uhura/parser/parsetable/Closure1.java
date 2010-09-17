@@ -27,68 +27,61 @@ public class Closure1 implements Serializable {
 	 * This is the closure method for a set of items. This method is descibed in
 	 * the Dragon Book 4.6.2.
 	 * 
+	 * <pre>
+	 * 	SetOfItems CLOSURE(I) {
+	 * 		repeat
+	 * 			for (jedes Item [ A --> alpha . B beta, a] in I)
+	 * 				for (jede Produktion B --> gamma in G')
+	 * 					for ( jedes Terminal b in FIRST(beta a) )
+	 * 						fuege [ B --> . gamma, b ] zur Menge I hinzu;
+	 * 		until es werden keine weiteren Items mehr zu I hinzugefuegt;
+	 * 	}
+	 * </pre>
+	 * 
 	 * @param initialItemSet
 	 * @return A complete set of items is returned containing the parameter
 	 *         items and all calculated extensions.
 	 */
 	public LR1ItemSet calc(LR1ItemSet initialItemSet) {
 		LR1ItemSet itemSet = new LR1ItemSet(initialItemSet);
-		for (LR1Item item : itemSet.getPrimaryItems()) {
-			if (!item.hasNext()) {
-				continue;
-			}
-			Construction nextConstruction = item.getNext();
-			if (nextConstruction.isTerminal()) {
-				continue;
-			}
-			Construction secondNextConstruction = item.get2ndNext();
-			for (Production subProduction : productions.get(nextConstruction
-					.getName())) {
-				LR1Item newItem = new LR1Item(subProduction, 0);
-				if (secondNextConstruction == null) {
-					newItem.addAllLookahead(item.getLookahead());
-				} else if (secondNextConstruction.isTerminal()) {
-					newItem.addLookahead(secondNextConstruction);
-				} else {
-					newItem.addAllLookahead(first.get(secondNextConstruction));
+		boolean changed;
+		do {
+			changed = false;
+			for (LR1Item item : itemSet.getAllItems()) {
+				if (!item.hasNext()) {
+					continue;
 				}
-				subClosure(itemSet, newItem);
+				Construction nextConstruction = item.getNext();
+				if (nextConstruction.isTerminal()) {
+					continue;
+				}
+				for (Production subProduction : productions
+						.get(nextConstruction.getName())) {
+					Production helperProduction = getRemainingProduction(item,
+							item.getLookahead());
+					for (Construction terminal : first.get(helperProduction)) {
+						LR1Item newItem = new LR1Item(subProduction, 0,
+								terminal);
+						if (!itemSet.containsItem(newItem)) {
+							itemSet.addItem(newItem);
+							changed = true;
+						}
+					}
+				}
 			}
-
-		}
+		} while (changed);
 		return itemSet;
 	}
 
-	/**
-	 * Helper method for closure.
-	 * 
-	 * @param items
-	 * @param item
-	 */
-	private void subClosure(LR1ItemSet items, LR1Item item) {
-		if (items.containsItem(item)) {
-			return;
+	private Production getRemainingProduction(LR1Item item,
+			Construction lookAhead) {
+		Production production = new Production(item.getProduction().getName());
+		for (int id = item.getPosition() + 1; id < item.getProduction()
+				.getConstructions().size(); id++) {
+			production.addConstruction(item.getProduction().getConstructions()
+					.get(id));
 		}
-		items.addItem(item);
-		if (!item.hasNext()) {
-			return;
-		}
-		Construction nextConstruction = item.getNext();
-		if (nextConstruction.isTerminal()) {
-			return;
-		}
-		Construction secondNextConstruction = item.get2ndNext();
-		for (Production subProduction : productions.get(nextConstruction
-				.getName())) {
-			LR1Item newItem = new LR1Item(subProduction, 0);
-			if (secondNextConstruction == null) {
-				newItem.addAllLookahead(item.getLookahead());
-			} else if (secondNextConstruction.isTerminal()) {
-				newItem.addLookahead(secondNextConstruction);
-			} else {
-				newItem.addAllLookahead(first.get(secondNextConstruction));
-			}
-			subClosure(items, newItem);
-		}
+		production.addConstruction(lookAhead);
+		return production;
 	}
 }

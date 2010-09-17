@@ -57,9 +57,8 @@ public class LR1StateTransitionGraph implements Serializable {
 	 * @throws GrammarException
 	 */
 	protected void calculate() {
-		LR1Item startItem = new LR1Item(grammar.getProductions().get(0), 0);
-		startItem.addLookahead(FinishTerminal.getInstance());
-		addState(closure1.calc(startItem));
+		addState(closure1.calc(new LR1Item(grammar.getProductions().get(0), 0,
+				FinishTerminal.getInstance())));
 		boolean changed;
 		do {
 			changed = false;

@@ -23,8 +23,8 @@ public class Closure1Test extends TestCase {
 
 		Closure1 closure = new Closure1(grammar);
 		System.out.println("Closure1:");
-		LR1Item primItem = new LR1Item(grammar.getProductions().get(0), 0);
-		primItem.addLookahead(FinishTerminal.getInstance());
+		LR1Item primItem = new LR1Item(grammar.getProductions().get(0), 0,
+				FinishTerminal.getInstance());
 		LR1ItemSet itemSet = closure.calc(primItem);
 		System.out.println(itemSet.toString());
 
@@ -40,30 +40,24 @@ public class Closure1Test extends TestCase {
 		assertEquals(0, item1.getPosition());
 		assertEquals(grammar.getProductions().getList().get(1),
 				item1.getProduction());
-		assertEquals(1, item1.getLookahead().size());
-		assertEquals(FinishTerminal.getInstance(), item1.getLookahead()
-				.iterator().next());
+		assertEquals(FinishTerminal.getInstance(), item1.getLookahead());
 
 		LR1Item item2 = iterator.next();
 		assertEquals(0, item2.getPosition());
-		assertEquals(grammar.getProductions().getList().get(1),
+		assertEquals(grammar.getProductions().getList().get(2),
 				item2.getProduction());
-		assertEquals(1, item2.getLookahead().size());
-		assertEquals("b", item2.getLookahead().iterator().next().getName());
+		assertEquals(FinishTerminal.getInstance(), item2.getLookahead());
 
 		LR1Item item3 = iterator.next();
 		assertEquals(0, item3.getPosition());
-		assertEquals(grammar.getProductions().getList().get(2),
+		assertEquals(grammar.getProductions().getList().get(1),
 				item3.getProduction());
-		assertEquals(1, item3.getLookahead().size());
-		assertEquals("b", item3.getLookahead().iterator().next().getName());
+		assertEquals("b", item3.getLookahead().getName());
 
 		LR1Item item4 = iterator.next();
 		assertEquals(0, item4.getPosition());
 		assertEquals(grammar.getProductions().getList().get(2),
 				item4.getProduction());
-		assertEquals(1, item4.getLookahead().size());
-		assertEquals(FinishTerminal.getInstance(), item4.getLookahead()
-				.iterator().next());
+		assertEquals("b", item4.getLookahead().getName());
 	}
 }

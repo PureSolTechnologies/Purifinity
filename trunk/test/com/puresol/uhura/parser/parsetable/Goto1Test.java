@@ -19,8 +19,8 @@ public class Goto1Test extends TestCase {
 
 		Closure1 closure = new Closure1(grammar);
 		System.out.println("Closure1:");
-		LR1Item primItem = new LR1Item(grammar.getProductions().get(0), 0);
-		primItem.addLookahead(FinishTerminal.getInstance());
+		LR1Item primItem = new LR1Item(grammar.getProductions().get(0), 0,
+				FinishTerminal.getInstance());
 		LR1ItemSet itemSet = closure.calc(primItem);
 		System.out.println(itemSet.toString());
 

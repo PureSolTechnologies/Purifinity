@@ -142,6 +142,25 @@ public class First implements Serializable {
 		return first.get(x.getName());
 	}
 
+	public Set<Construction> get(Production production) {
+		Set<Construction> result = new CopyOnWriteArraySet<Construction>();
+		boolean hasEmptyDerivation = true;
+		for (Construction construction : production.getConstructions()) {
+			Set<Construction> first = get(construction);
+			result.addAll(first);
+			if (first.contains(EmptyTerminal.getInstance())) {
+				result.remove(EmptyTerminal.getInstance());
+			} else {
+				hasEmptyDerivation = false;
+				break;
+			}
+		}
+		if (hasEmptyDerivation) {
+			result.add(EmptyTerminal.getInstance());
+		}
+		return result;
+	}
+
 	@Override
 	public String toString() {
 		StringBuffer buffer = new StringBuffer();

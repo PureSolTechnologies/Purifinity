@@ -1,8 +1,5 @@
 package com.puresol.uhura.parser.parsetable;
 
-import java.util.Set;
-import java.util.concurrent.CopyOnWriteArraySet;
-
 import com.puresol.uhura.grammar.production.Construction;
 import com.puresol.uhura.grammar.production.Production;
 
@@ -10,40 +7,25 @@ public class LR1Item extends LR0Item {
 
 	private static final long serialVersionUID = -1434126363541910894L;
 
-	private final Set<Construction> lookahead = new CopyOnWriteArraySet<Construction>();
+	private final Construction lookahead;
 
-	public LR1Item(Production production, int position) {
+	public LR1Item(Production production, int position, Construction lookahead) {
 		super(production, position);
-	}
-
-	public void addLookahead(Construction construction) {
-		lookahead.add(construction);
-	}
-
-	public void addAllLookahead(Set<Construction> constructions) {
-		lookahead.addAll(constructions);
+		this.lookahead = lookahead;
 	}
 
 	/**
 	 * @return the lookahead
 	 */
-	public Set<Construction> getLookahead() {
+	public Construction getLookahead() {
 		return lookahead;
 	}
 
 	@Override
 	public String toString() {
 		StringBuffer buffer = new StringBuffer(super.toString());
-		boolean first = true;
 		buffer.append(", {");
-		for (Construction construction : lookahead) {
-			if (first) {
-				first = false;
-			} else {
-				buffer.append(", ");
-			}
-			buffer.append(construction.toShortString());
-		}
+		buffer.append(lookahead.toShortString());
 		buffer.append("}");
 		return buffer.toString();
 	}
@@ -83,5 +65,4 @@ public class LR1Item extends LR0Item {
 			return false;
 		return true;
 	}
-
 }

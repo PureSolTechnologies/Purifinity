@@ -18,22 +18,30 @@ public class Goto1 implements Serializable {
 	}
 
 	/**
-	 * This is the closure method for a set of items. This method is descibed in
-	 * the Dragon Book 4.6.2.
+	 * This is the closure method for a set of items. This method is described
+	 * in the Dragon Book 4.6.2.
+	 * 
+	 * <pre>
+	 * SetOfItems GOTO(I, X) {
+	 * 		initialisiere J als die leere Menge;
+	 * 		for ( jedes Item [ A --> alpha . X beta, a ] in I )
+	 * 			fuege Item [A --> alpha X . beta, a] zur Menge J hinzu'
+	 * 		return closure(J);
+	 * }
+	 * </pre>
 	 * 
 	 * @param items
 	 * @return A complete set of items is returned containing the parameter
 	 *         items and all calculated extensions.
 	 */
 	public LR1ItemSet calc(LR1ItemSet itemSet, Construction x) {
-		Closure1 closure = new Closure1(grammar);
 		Set<LR1Item> items = new CopyOnWriteArraySet<LR1Item>();
 		for (LR1Item item : itemSet.getNextItems(x)) {
 			LR1Item newItem = new LR1Item(item.getProduction(),
-					item.getPosition() + 1);
-			newItem.addAllLookahead(item.getLookahead());
+					item.getPosition() + 1, item.getLookahead());
 			items.add(newItem);
 		}
+		Closure1 closure = new Closure1(grammar);
 		return closure.calc(new LR1ItemSet(items));
 	}
 }

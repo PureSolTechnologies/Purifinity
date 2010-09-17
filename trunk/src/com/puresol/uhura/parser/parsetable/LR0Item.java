@@ -92,6 +92,7 @@ public class LR0Item implements Item {
 		return production;
 	}
 
+
 	@Override
 	public String toString() {
 		return production.toShortString(position);
