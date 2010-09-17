@@ -12,6 +12,7 @@ OPTIONS
 	
 	// parser is the class to be used for parsing
 	parser="com.puresol.uhura.parser.LR1Parser";
+	parser.backtracking=true;
 
 /*
  The next section is the HELPER section where all tokens are to be defined

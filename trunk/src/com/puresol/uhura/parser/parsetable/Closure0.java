@@ -46,43 +46,28 @@ public class Closure0 implements Serializable {
 	 */
 	public LR0ItemSet calc(LR0ItemSet initialItemSet) {
 		LR0ItemSet itemSet = new LR0ItemSet(initialItemSet);
-		for (LR0Item item : itemSet.getPrimaryItems()) {
-			if (!item.hasNext()) {
-				continue;
+		boolean changed;
+		do {
+			changed = false;
+			for (LR0Item item : itemSet.getAllItems()) {
+				if (!item.hasNext()) {
+					continue;
+				}
+				Construction nextConstruction = item.getNext();
+				if (nextConstruction.isTerminal()) {
+					continue;
+				}
+				for (Production subProduction : productions
+						.get(nextConstruction.getName())) {
+					LR0Item newItem = new LR0Item(subProduction, 0);
+					if (!itemSet.containsItem(newItem)) {
+						itemSet.addItem(newItem);
+						changed = true;
+					}
+				}
 			}
-			Construction nextConstruction = item.getNext();
-			if (nextConstruction.isTerminal()) {
-				continue;
-			}
-			for (Production subProduction : productions.get(nextConstruction
-					.getName())) {
-				subClosure(itemSet, new LR0Item(subProduction, 0));
-			}
-		}
+		} while (changed);
 		return itemSet;
 	}
 
-	/**
-	 * Helper method for closure.
-	 * 
-	 * @param items
-	 * @param item
-	 */
-	private void subClosure(LR0ItemSet items, LR0Item item) {
-		if (items.containsItem(item)) {
-			return;
-		}
-		items.addItem(item);
-		if (!item.hasNext()) {
-			return;
-		}
-		Construction nextConstruction = item.getNext();
-		if (nextConstruction.isTerminal()) {
-			return;
-		}
-		for (Production subProduction : productions.get(nextConstruction
-				.getName())) {
-			subClosure(items, new LR0Item(subProduction, 0));
-		}
-	}
 }

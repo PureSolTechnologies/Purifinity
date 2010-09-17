@@ -44,12 +44,17 @@ public class UhuraGrammarTest extends TestCase {
 
 	@Test
 	public void testLR0TransitionTable() {
-		System.out.println("=============================");
-		System.out.println("LR(0) State Transition Graph:");
-		System.out.println("=============================");
-		Grammar grammar = UhuraGrammar.getGrammar();
-		LR0StateTransitionGraph first = new LR0StateTransitionGraph(grammar);
-		System.out.println(first.toString());
+		try {
+			System.out.println("=============================");
+			System.out.println("LR(0) State Transition Graph:");
+			System.out.println("=============================");
+			Grammar grammar = UhuraGrammar.getGrammar();
+			LR0StateTransitionGraph first = new LR0StateTransitionGraph(grammar);
+			System.out.println(first.toString());
+		} catch (GrammarException e) {
+			e.printStackTrace();
+			fail("No exception was expected!");
+		}
 	}
 
 	@Test

@@ -2,12 +2,12 @@ package com.puresol.uhura.parser.parsetable;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import com.puresol.uhura.grammar.Grammar;
+import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.production.Construction;
 
 public class LR0StateTransitionGraph implements Serializable {
@@ -15,69 +15,102 @@ public class LR0StateTransitionGraph implements Serializable {
 	private static final long serialVersionUID = -5320832167468349031L;
 
 	private final ConcurrentMap<LR0ItemSet, Integer> itemSet2Integer = new ConcurrentHashMap<LR0ItemSet, Integer>();
-	private final ConcurrentMap<Integer, LR0ItemSet> itemSets = new ConcurrentHashMap<Integer, LR0ItemSet>();
+	private final List<LR0ItemSet> itemSetCollection = new ArrayList<LR0ItemSet>();
 	private final ConcurrentMap<Integer, ConcurrentMap<Construction, Integer>> transitions = new ConcurrentHashMap<Integer, ConcurrentMap<Construction, Integer>>();
 
 	private final Grammar grammar;
-	private final Closure0 closureCalculator;
-	private final Goto0 gotoCalculator;
+	private final Closure0 closure0;
+	private final Goto0 goto0;
 
-	public LR0StateTransitionGraph(Grammar grammar) {
+	public LR0StateTransitionGraph(Grammar grammar) throws GrammarException {
 		super();
 		this.grammar = grammar;
-		closureCalculator = new Closure0(grammar);
-		gotoCalculator = new Goto0(grammar);
+		closure0 = new Closure0(grammar);
+		goto0 = new Goto0(grammar);
 		calculate();
 	}
 
-	private void calculate() {
-		LR0Item startItem = new LR0Item(grammar.getProductions().get(0), 0);
-		LR0ItemSet initialSet = closureCalculator
-				.calc(new LR0ItemSet(startItem));
-		addState(initialSet);
-		calculateRecursively(initialSet);
-	}
-
-	private void calculateRecursively(LR0ItemSet initialSet) {
-		int initialStateId = itemSet2Integer.get(initialSet);
-		for (Construction construction : initialSet.getNextConstructions()) {
-			LR0ItemSet gotoSet = gotoCalculator.calc(initialSet, construction);
-			if (!itemSets.containsValue(gotoSet)) {
-				int finalStateId = addState(gotoSet);
-				addTransition(initialStateId, construction, finalStateId);
-				calculateRecursively(gotoSet);
-			} else {
-				int finalStateId = itemSet2Integer.get(gotoSet);
-				addTransition(initialStateId, construction, finalStateId);
+	/**
+	 * From Dragon Book:
+	 * 
+	 * <pre>
+	 *   void items(G') {
+	 *   	C = {CLOSURE({[S0 --> .S]})};
+	 *   	repeat
+	 *   		for ( jede Item-Menge I in C )
+	 *  			for ( jedes Grammatiksymbol X )
+	 *  				if ( GOTO( I, X) ist nicht leer und nicht in C )
+	 *  					fuege GOTO(I, X) zu C hinzu;
+	 *   	until es werden keine neuen Item-Mengen mehr in einer Runde zu C hinzugefuegt.
+	 *   }
+	 * </pre>
+	 * 
+	 * This method was extended to save also all transitions found and to handle
+	 * ambiguous grammars.
+	 * 
+	 * @throws GrammarException
+	 */
+	private void calculate() throws GrammarException {
+		addState(closure0.calc(new LR0Item(grammar.getProductions().get(0), 0)));
+		boolean changed;
+		do {
+			changed = false;
+			int currentItemSetCount = itemSetCollection.size();
+			for (int stateId = 0; stateId < currentItemSetCount; stateId++) {
+				LR0ItemSet itemSet = itemSetCollection.get(stateId);
+				int initialState = itemSet2Integer.get(itemSet);
+				for (Construction grammarSymbol : itemSet
+						.getAllGrammarSymbols()) {
+					LR0ItemSet gotoSet = goto0.calc(itemSet, grammarSymbol);
+					if (gotoSet.getSize() > 0) {
+						if (!itemSetCollection.contains(gotoSet)) {
+							int newState = addState(gotoSet);
+							addTransition(initialState, grammarSymbol, newState);
+							changed = true;
+						} else {
+							int newState = itemSet2Integer.get(gotoSet);
+							addTransition(initialState, grammarSymbol, newState);
+						}
+					}
+				}
 			}
-		}
+		} while (changed);
 	}
 
 	private int addState(LR0ItemSet itemSet) {
-		if (itemSet2Integer.containsKey(itemSet)) {
+		if (itemSetCollection.contains(itemSet)) {
 			return itemSet2Integer.get(itemSet);
 		}
-		int stateId = itemSets.size();
-		itemSets.put(stateId, itemSet);
+		int stateId = itemSetCollection.size();
+		itemSetCollection.add(itemSet);
 		itemSet2Integer.put(itemSet, stateId);
 		return stateId;
 	}
 
 	private void addTransition(int initialState, Construction construction,
-			int finalState) {
+			int finalState) throws GrammarException {
 		if (!transitions.containsKey(initialState)) {
 			transitions.put(initialState,
 					new ConcurrentHashMap<Construction, Integer>());
 		}
-		transitions.get(initialState).put(construction, finalState);
+		ConcurrentMap<Construction, Integer> transitionMap = transitions
+				.get(initialState);
+		if (transitionMap.containsKey(construction)) {
+			if (!transitions.get(initialState).get(construction)
+					.equals(finalState)) {
+				throw new GrammarException("Ambiguous transitions found!");
+			}
+		} else {
+			transitions.get(initialState).put(construction, finalState);
+		}
 	}
 
 	public LR0ItemSet getItemSet(int stateId) {
-		return itemSets.get(stateId);
+		return (LR0ItemSet) itemSetCollection.toArray()[stateId];
 	}
 
 	public int getStateNumber() {
-		return itemSets.size();
+		return itemSetCollection.size();
 	}
 
 	public ConcurrentMap<Construction, Integer> getTransitions(int initialState) {
@@ -100,13 +133,11 @@ public class LR0StateTransitionGraph implements Serializable {
 	@Override
 	public String toString() {
 		StringBuffer buffer = new StringBuffer();
-		List<Integer> stateIds = new ArrayList<Integer>(itemSets.keySet());
-		Collections.sort(stateIds);
-		for (int stateId : stateIds) {
+		for (int stateId = 0; stateId < itemSetCollection.size(); stateId++) {
 			buffer.append("===========\n");
 			buffer.append("State " + stateId + ":\n");
 			buffer.append("===========\n");
-			LR0ItemSet itemSet = itemSets.get(stateId);
+			LR0ItemSet itemSet = (LR0ItemSet) itemSetCollection.toArray()[stateId];
 			buffer.append(itemSet.toString());
 
 			ConcurrentMap<Construction, Integer> stateTransitions = transitions

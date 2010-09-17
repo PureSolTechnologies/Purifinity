@@ -2,6 +2,7 @@ package com.puresol.uhura.parser.parsetable;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -29,6 +30,10 @@ public class AbstractItemSet<T extends Item> implements Serializable {
 	public AbstractItemSet(AbstractItemSet<T> itemSet) {
 		this.primaryItems.addAll(itemSet.getAllItems());
 		this.allItems.addAll(itemSet.getAllItems());
+	}
+
+	public int getSize() {
+		return allItems.size();
 	}
 
 	public boolean containsItem(T item) {
@@ -114,6 +119,23 @@ public class AbstractItemSet<T extends Item> implements Serializable {
 			}
 		}
 		return items;
+	}
+
+	public Set<Construction> getAllGrammarSymbols() {
+		Set<Construction> grammarSymbols = new LinkedHashSet<Construction>();
+		for (Item item : getPrimaryItems()) {
+			for (Construction construction : item.getProduction()
+					.getConstructions()) {
+				grammarSymbols.add(construction);
+			}
+		}
+		for (Item item : getAddedItems()) {
+			for (Construction construction : item.getProduction()
+					.getConstructions()) {
+				grammarSymbols.add(construction);
+			}
+		}
+		return grammarSymbols;
 	}
 
 	@Override

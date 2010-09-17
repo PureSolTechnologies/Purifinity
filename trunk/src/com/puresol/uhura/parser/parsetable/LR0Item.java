@@ -73,6 +73,25 @@ public class LR0Item implements Item {
 		return (position + 1 < production.getConstructions().size());
 	}
 
+	/**
+	 * This method returns the part beta from definition:
+	 * 
+	 * <pre>
+	 * &quot;A --&gt; alpha . B beta&quot;
+	 * </pre>
+	 * 
+	 * @return
+	 */
+	public Production getBeta() {
+		Production production = new Production("beta");
+		for (int pos = getPosition() + 1; pos < getProduction()
+				.getConstructions().size(); pos++) {
+			production.addConstruction(getProduction().getConstructions().get(
+					pos));
+		}
+		return production;
+	}
+
 	@Override
 	public String toString() {
 		return production.toShortString(position);

@@ -26,7 +26,7 @@ public class LR0ParserTableTest extends TestCase {
 			LR0ParserTable table = new LR0ParserTable(grammar);
 			System.out.println(table.toString());
 			System.out
-					.println(table.getAction(6, new Terminal("b")).toString());
+					.println(table.getAction(5, new Terminal("b")).toString());
 			fail("An GrammarException was expected due to the fact that this grammar is not LR(0)!");
 		} catch (GrammarException e) {
 		}
@@ -38,7 +38,7 @@ public class LR0ParserTableTest extends TestCase {
 			Grammar grammar = TestGrammars.getTestGrammarFromDragonBook();
 			LR0ParserTable table = new LR0ParserTable(grammar);
 			System.out.println(table.toString());
-			System.out.println(table.getAction(3, new Terminal("STAR"))
+			System.out.println(table.getAction(2, new Terminal("STAR"))
 					.toString());
 			fail("An GrammarException was expected due to the fact that this grammar is not LR(0)!");
 		} catch (GrammarException e) {
