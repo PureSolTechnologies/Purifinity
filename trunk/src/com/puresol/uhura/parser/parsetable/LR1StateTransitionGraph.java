@@ -25,14 +25,16 @@ public class LR1StateTransitionGraph implements Serializable {
 	private final ConcurrentMap<Integer, ConcurrentMap<Construction, Integer>> transitions = new ConcurrentHashMap<Integer, ConcurrentMap<Construction, Integer>>();
 
 	private final Grammar grammar;
+	private final First first;
 	private final Closure1 closure1;
 	private final Goto1 goto1;
 
-	public LR1StateTransitionGraph(Grammar grammar) {
+	public LR1StateTransitionGraph(Grammar grammar) throws GrammarException {
 		super();
 		this.grammar = grammar;
-		closure1 = new Closure1(grammar);
-		goto1 = new Goto1(grammar);
+		first = new First(grammar);
+		closure1 = new Closure1(grammar, first);
+		goto1 = new Goto1(closure1);
 		calculate();
 	}
 
@@ -56,14 +58,13 @@ public class LR1StateTransitionGraph implements Serializable {
 	 * 
 	 * @throws GrammarException
 	 */
-	protected void calculate() {
+	private void calculate() throws GrammarException {
 		addState(closure1.calc(new LR1Item(grammar.getProductions().get(0), 0,
 				FinishTerminal.getInstance())));
 		boolean changed;
 		do {
 			changed = false;
 			int currentItemSetCount = itemSetCollection.size();
-			logger.trace("State counter: " + currentItemSetCount);
 			for (int stateId = 0; stateId < currentItemSetCount; stateId++) {
 				LR1ItemSet itemSet = itemSetCollection.get(stateId);
 				int initialState = itemSet2Integer.get(itemSet);
@@ -73,6 +74,8 @@ public class LR1StateTransitionGraph implements Serializable {
 					if (gotoSet.getSize() > 0) {
 						if (!itemSetCollection.contains(gotoSet)) {
 							int newState = addState(gotoSet);
+							logger.trace("State counter: "
+									+ itemSetCollection.size());
 							addTransition(initialState, grammarSymbol, newState);
 							changed = true;
 						} else {
@@ -96,12 +99,19 @@ public class LR1StateTransitionGraph implements Serializable {
 	}
 
 	private void addTransition(int initialState, Construction construction,
-			int finalState) {
+			int finalState) throws GrammarException {
 		if (!transitions.containsKey(initialState)) {
 			transitions.put(initialState,
 					new ConcurrentHashMap<Construction, Integer>());
 		}
-		transitions.get(initialState).put(construction, finalState);
+		if (transitions.containsKey(construction)) {
+			if (!transitions.get(initialState).get(construction)
+					.equals(finalState)) {
+				throw new GrammarException("Ambiguous transitions found!");
+			}
+		} else {
+			transitions.get(initialState).put(construction, finalState);
+		}
 	}
 
 	public LR1ItemSet getItemSet(int stateId) {

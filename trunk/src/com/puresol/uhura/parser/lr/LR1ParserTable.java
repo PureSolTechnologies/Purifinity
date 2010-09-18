@@ -10,7 +10,6 @@ import com.puresol.uhura.grammar.production.Construction;
 import com.puresol.uhura.grammar.production.FinishTerminal;
 import com.puresol.uhura.parser.parsetable.AbstractParserTable;
 import com.puresol.uhura.parser.parsetable.ActionType;
-import com.puresol.uhura.parser.parsetable.Follow;
 import com.puresol.uhura.parser.parsetable.LR1Item;
 import com.puresol.uhura.parser.parsetable.LR1ItemSet;
 import com.puresol.uhura.parser.parsetable.LR1StateTransitionGraph;
@@ -22,7 +21,6 @@ public class LR1ParserTable extends AbstractParserTable {
 
 	private static final Logger logger = Logger.getLogger(LR1ParserTable.class);
 
-	private Follow follow;
 	private LR1StateTransitionGraph transitionGraph;
 
 	public LR1ParserTable(Grammar grammar) throws GrammarException {
@@ -30,12 +28,9 @@ public class LR1ParserTable extends AbstractParserTable {
 	}
 
 	protected void calculate() throws GrammarException {
-		logger.debug("Calculate follow table...");
-		follow = new Follow(getGrammar());
 		logger.debug("Calculate transition graph...");
 		transitionGraph = new LR1StateTransitionGraph(getGrammar());
 		if (logger.isTraceEnabled()) {
-			logger.trace(follow.toString());
 			logger.trace(transitionGraph.toString());
 		}
 		logger.debug("Adding shifts and gotos...");

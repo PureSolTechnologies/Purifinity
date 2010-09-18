@@ -28,10 +28,10 @@ public class Closure1Test extends TestCase {
 		LR1ItemSet itemSet = closure.calc(primItem);
 		System.out.println(itemSet.toString());
 
-		assertEquals(1, itemSet.getPrimaryItems().size());
-		assertEquals(primItem, itemSet.getPrimaryItems().iterator().next());
+		assertEquals(1, itemSet.getKernelItems().size());
+		assertEquals(primItem, itemSet.getKernelItems().iterator().next());
 
-		Set<LR1Item> addedItems = itemSet.getAddedItems();
+		Set<LR1Item> addedItems = itemSet.getNonKernelItems();
 		assertNotNull(addedItems);
 		assertEquals(4, addedItems.size());
 		Iterator<LR1Item> iterator = addedItems.iterator();

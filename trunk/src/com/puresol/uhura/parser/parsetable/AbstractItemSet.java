@@ -5,31 +5,63 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 import com.puresol.uhura.grammar.production.Construction;
 
+/**
+ * This class is the base implementation of an item set. This abstract class can
+ * take different items of interface Item in dependence to the parser used.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ * @param <T>
+ *            is the item type of interface Item to be used.
+ */
 public class AbstractItemSet<T extends Item> implements Serializable {
 
 	private static final long serialVersionUID = 4299654494281633726L;
 
-	private final Set<T> allItems = new CopyOnWriteArraySet<T>();
-	private final Set<T> primaryItems = new CopyOnWriteArraySet<T>();
-	private final Set<T> addedItems = new CopyOnWriteArraySet<T>();
+	/*
+	 * The following fields have concurrent versions of lists and sets for
+	 * iterating and manipulating values in different item calculations.
+	 */
+	private final List<T> allItems = new CopyOnWriteArrayList<T>();
+	private final Set<T> kernelItems = new CopyOnWriteArraySet<T>();
+	private final Set<T> nonKernelItems = new CopyOnWriteArraySet<T>();
 
-	public AbstractItemSet(T primaryItem) {
-		this.primaryItems.add(primaryItem);
-		this.allItems.add(primaryItem);
+	/**
+	 * This constructor takes a single kernel item.
+	 * 
+	 * @param kernelItem
+	 */
+	public AbstractItemSet(T kernelItem) {
+		this.kernelItems.add(kernelItem);
+		this.allItems.add(kernelItem);
 	}
 
-	public AbstractItemSet(Set<T> primaryItems) {
-		this.primaryItems.addAll(primaryItems);
-		this.allItems.addAll(primaryItems);
+	/**
+	 * This constructor takes a list of kernel items.
+	 * 
+	 * @param kernelItem
+	 */
+	public AbstractItemSet(Set<T> kernelItems) {
+		this.kernelItems.addAll(kernelItems);
+		this.allItems.addAll(kernelItems);
 	}
 
+	/**
+	 * This constructor takes an abstract item set and creates a new item set
+	 * with base of the given item set.
+	 * 
+	 * @param itemSet
+	 */
 	public AbstractItemSet(AbstractItemSet<T> itemSet) {
-		this.primaryItems.addAll(itemSet.getAllItems());
-		this.allItems.addAll(itemSet.getAllItems());
+		this.kernelItems.addAll(itemSet.getKernelItems());
+		this.nonKernelItems.addAll(itemSet.getNonKernelItems());
+		this.allItems.addAll(itemSet.getKernelItems());
+		this.allItems.addAll(itemSet.getNonKernelItems());
 	}
 
 	public int getSize() {
@@ -37,35 +69,36 @@ public class AbstractItemSet<T extends Item> implements Serializable {
 	}
 
 	public boolean containsItem(T item) {
-		if (primaryItems.contains(item)) {
+		if (kernelItems.contains(item)) {
 			return true;
 		}
-		if (addedItems.contains(item)) {
+		if (nonKernelItems.contains(item)) {
 			return true;
 		}
 		return false;
 	}
 
-	public void addAddedItems(Set<T> items) {
-		addedItems.addAll(items);
+	public void addNonKernelItems(Set<T> items) {
+		nonKernelItems.addAll(items);
 		allItems.addAll(items);
 	}
 
-	public void addItem(T item) {
-		addedItems.add(item);
-		allItems.add(item);
+	public void addNonKernelItem(T item) {
+		if (nonKernelItems.add(item)) {
+			allItems.add(item);
+		}
 	}
 
-	public Set<T> getAllItems() {
+	public List<T> getAllItems() {
 		return allItems;
 	}
 
-	public Set<T> getPrimaryItems() {
-		return primaryItems;
+	public Set<T> getKernelItems() {
+		return kernelItems;
 	}
 
-	public Set<T> getAddedItems() {
-		return addedItems;
+	public Set<T> getNonKernelItems() {
+		return nonKernelItems;
 	}
 
 	/**
@@ -76,13 +109,13 @@ public class AbstractItemSet<T extends Item> implements Serializable {
 	 */
 	public List<Construction> getNextConstructions() {
 		List<Construction> constructions = new ArrayList<Construction>();
-		for (T item : primaryItems) {
+		for (T item : kernelItems) {
 			Construction element = item.getNext();
 			if (element != null) {
 				constructions.add(element);
 			}
 		}
-		for (T item : addedItems) {
+		for (T item : nonKernelItems) {
 			Construction element = item.getNext();
 			if (element != null) {
 				constructions.add(element);
@@ -100,7 +133,7 @@ public class AbstractItemSet<T extends Item> implements Serializable {
 	 */
 	public List<T> getNextItems(Construction construction) {
 		List<T> items = new ArrayList<T>();
-		for (T item : primaryItems) {
+		for (T item : kernelItems) {
 			Construction element = item.getNext();
 			if (element == null) {
 				continue;
@@ -109,7 +142,7 @@ public class AbstractItemSet<T extends Item> implements Serializable {
 				items.add(item);
 			}
 		}
-		for (T item : addedItems) {
+		for (T item : nonKernelItems) {
 			Construction element = item.getNext();
 			if (element == null) {
 				continue;
@@ -123,13 +156,13 @@ public class AbstractItemSet<T extends Item> implements Serializable {
 
 	public Set<Construction> getAllGrammarSymbols() {
 		Set<Construction> grammarSymbols = new LinkedHashSet<Construction>();
-		for (Item item : getPrimaryItems()) {
+		for (Item item : getKernelItems()) {
 			for (Construction construction : item.getProduction()
 					.getConstructions()) {
 				grammarSymbols.add(construction);
 			}
 		}
-		for (Item item : getAddedItems()) {
+		for (Item item : getNonKernelItems()) {
 			for (Construction construction : item.getProduction()
 					.getConstructions()) {
 				grammarSymbols.add(construction);
@@ -141,12 +174,12 @@ public class AbstractItemSet<T extends Item> implements Serializable {
 	@Override
 	public String toString() {
 		StringBuffer buffer = new StringBuffer();
-		for (T item : primaryItems) {
+		for (T item : kernelItems) {
 			buffer.append("  ");
 			buffer.append(item);
 			buffer.append("\n");
 		}
-		for (T item : addedItems) {
+		for (T item : nonKernelItems) {
 			buffer.append("+ ");
 			buffer.append(item);
 			buffer.append("\n");
@@ -164,11 +197,11 @@ public class AbstractItemSet<T extends Item> implements Serializable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result
-				+ ((addedItems == null) ? 0 : addedItems.hashCode());
+				+ ((nonKernelItems == null) ? 0 : nonKernelItems.hashCode());
 		result = prime * result
 				+ ((allItems == null) ? 0 : allItems.hashCode());
 		result = prime * result
-				+ ((primaryItems == null) ? 0 : primaryItems.hashCode());
+				+ ((kernelItems == null) ? 0 : kernelItems.hashCode());
 		return result;
 	}
 
@@ -187,20 +220,20 @@ public class AbstractItemSet<T extends Item> implements Serializable {
 			return false;
 		@SuppressWarnings("rawtypes")
 		AbstractItemSet other = (AbstractItemSet) obj;
-		if (addedItems == null) {
-			if (other.addedItems != null)
+		if (nonKernelItems == null) {
+			if (other.nonKernelItems != null)
 				return false;
-		} else if (!addedItems.equals(other.addedItems))
+		} else if (!nonKernelItems.equals(other.nonKernelItems))
 			return false;
 		if (allItems == null) {
 			if (other.allItems != null)
 				return false;
 		} else if (!allItems.equals(other.allItems))
 			return false;
-		if (primaryItems == null) {
-			if (other.primaryItems != null)
+		if (kernelItems == null) {
+			if (other.kernelItems != null)
 				return false;
-		} else if (!primaryItems.equals(other.primaryItems))
+		} else if (!kernelItems.equals(other.kernelItems))
 			return false;
 		return true;
 	}

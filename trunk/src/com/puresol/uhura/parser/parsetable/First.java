@@ -1,10 +1,10 @@
 package com.puresol.uhura.parser.parsetable;
 
 import java.io.Serializable;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.CopyOnWriteArraySet;
 
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.production.Construction;
@@ -63,7 +63,7 @@ public class First implements Serializable {
 		for (Production production : grammar.getProductions().getList()) {
 			if (!first.containsKey(production.getName())) {
 				first.put(production.getName(),
-						new CopyOnWriteArraySet<Construction>());
+						new LinkedHashSet<Construction>());
 			}
 		}
 	}
@@ -135,7 +135,7 @@ public class First implements Serializable {
 	 */
 	public Set<Construction> get(Construction x) {
 		if (x.isTerminal()) {
-			Set<Construction> result = new CopyOnWriteArraySet<Construction>();
+			Set<Construction> result = new LinkedHashSet<Construction>();
 			result.add(x);
 			return result;
 		}
@@ -143,7 +143,7 @@ public class First implements Serializable {
 	}
 
 	public Set<Construction> get(Production production) {
-		Set<Construction> result = new CopyOnWriteArraySet<Construction>();
+		Set<Construction> result = new LinkedHashSet<Construction>();
 		boolean hasEmptyDerivation = true;
 		for (Construction construction : production.getConstructions()) {
 			Set<Construction> first = get(construction);

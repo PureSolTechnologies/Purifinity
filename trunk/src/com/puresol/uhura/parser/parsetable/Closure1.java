@@ -1,6 +1,7 @@
 package com.puresol.uhura.parser.parsetable;
 
 import java.io.Serializable;
+import java.util.Set;
 
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.production.Construction;
@@ -17,6 +18,11 @@ public class Closure1 implements Serializable {
 	public Closure1(Grammar grammar) {
 		this.productions = grammar.getProductions();
 		this.first = new First(grammar);
+	}
+
+	public Closure1(Grammar grammar, First first) {
+		this.productions = grammar.getProductions();
+		this.first = first;
 	}
 
 	public LR1ItemSet calc(LR1Item item) {
@@ -44,10 +50,14 @@ public class Closure1 implements Serializable {
 	 */
 	public LR1ItemSet calc(LR1ItemSet initialItemSet) {
 		LR1ItemSet itemSet = new LR1ItemSet(initialItemSet);
-		boolean changed;
+		int currentPosition = 0;
+		int newPosition = 0;
+		int currentSize = 1;
 		do {
-			changed = false;
-			for (LR1Item item : itemSet.getAllItems()) {
+			newPosition = itemSet.getSize();
+			currentSize = itemSet.getSize();
+			for (int position = currentPosition; position < currentSize; position++) {
+				LR1Item item = itemSet.getAllItems().get(position);
 				if (!item.hasNext()) {
 					continue;
 				}
@@ -55,21 +65,20 @@ public class Closure1 implements Serializable {
 				if (nextConstruction.isTerminal()) {
 					continue;
 				}
-				for (Production subProduction : productions
+				Production helperProduction = getRemainingProduction(item,
+						item.getLookahead());
+				for (Production grammarProduction : productions
 						.get(nextConstruction.getName())) {
-					Production helperProduction = getRemainingProduction(item,
-							item.getLookahead());
-					for (Construction terminal : first.get(helperProduction)) {
-						LR1Item newItem = new LR1Item(subProduction, 0,
+					Set<Construction> firstResult = first.get(helperProduction);
+					for (Construction terminal : firstResult) {
+						LR1Item newItem = new LR1Item(grammarProduction, 0,
 								terminal);
-						if (!itemSet.containsItem(newItem)) {
-							itemSet.addItem(newItem);
-							changed = true;
-						}
+						itemSet.addNonKernelItem(newItem);
 					}
 				}
 			}
-		} while (changed);
+			currentPosition = newPosition;
+		} while (currentSize != itemSet.getSize());
 		return itemSet;
 	}
 

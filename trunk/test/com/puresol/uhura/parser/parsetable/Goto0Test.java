@@ -32,7 +32,7 @@ public class Goto0Test extends TestCase {
 		itemSet = gotoCalc.calc(itemSet, new Terminal("b"));
 		System.out.println(itemSet.toString());
 
-		assertEquals(1, itemSet.getPrimaryItems().size());
-		assertEquals(3, itemSet.getAddedItems().size());
+		assertEquals(1, itemSet.getKernelItems().size());
+		assertEquals(3, itemSet.getNonKernelItems().size());
 	}
 }

@@ -17,5 +17,4 @@ public class LR0ItemSet extends AbstractItemSet<LR0Item> {
 	public LR0ItemSet(Set<LR0Item> primaryItems) {
 		super(primaryItems);
 	}
-
 }

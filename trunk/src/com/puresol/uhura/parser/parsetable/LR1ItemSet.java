@@ -7,10 +7,6 @@ public class LR1ItemSet extends AbstractItemSet<LR1Item> {
 
 	private static final long serialVersionUID = -4166037691502608458L;
 
-	public LR1ItemSet(AbstractItemSet<LR1Item> itemSet) {
-		super(itemSet);
-	}
-
 	public LR1ItemSet(LR1Item primaryItem) {
 		super(primaryItem);
 	}
@@ -19,14 +15,18 @@ public class LR1ItemSet extends AbstractItemSet<LR1Item> {
 		super(primaryItems);
 	}
 
+	public LR1ItemSet(LR1ItemSet initialItemSet) {
+		super(initialItemSet);
+	}
+
 	public boolean equalsCore(LR1ItemSet other) {
 		Set<LR1Item> thisSet = new CopyOnWriteArraySet<LR1Item>();
-		thisSet.addAll(this.getPrimaryItems());
-		thisSet.addAll(this.getAddedItems());
+		thisSet.addAll(this.getKernelItems());
+		thisSet.addAll(this.getNonKernelItems());
 
 		Set<LR1Item> otherSet = new CopyOnWriteArraySet<LR1Item>();
-		otherSet.addAll(other.getPrimaryItems());
-		otherSet.addAll(other.getAddedItems());
+		otherSet.addAll(other.getKernelItems());
+		otherSet.addAll(other.getNonKernelItems());
 
 		if (thisSet.size() != otherSet.size()) {
 			return false;

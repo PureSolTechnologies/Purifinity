@@ -66,7 +66,7 @@ public class TestGrammars {
 		}
 	}
 
-	public static Grammar getTestGrammarFromDragonBook() {
+	public static Grammar getSLR1TestGrammarFromDragonBook() {
 		try {
 			TokenDefinitionSet tokenDefinitions = new TokenDefinitionSet();
 
@@ -167,6 +167,53 @@ public class TestGrammars {
 
 			production = new Production("C");
 			production.addConstruction(new Terminal("d"));
+			productions.add(production);
+			return new Grammar(new Properties(), tokenDefinitions, productions);
+		} catch (GrammarException e) {
+			e.printStackTrace();
+			Assert.fail("No exception was expected!");
+			return null;
+		}
+	}
+
+	public static Grammar getLALR1TestGrammarFromDragonBook() {
+		try {
+			TokenDefinitionSet tokenDefinitions = new TokenDefinitionSet();
+
+			tokenDefinitions.addDefinition(new TokenDefinition("id", "id",
+					Visibility.VISIBLE));
+			tokenDefinitions.addDefinition(new TokenDefinition("EQUALS", "=",
+					Visibility.VISIBLE));
+			tokenDefinitions.addDefinition(new TokenDefinition("STAR", "*",
+					Visibility.VISIBLE));
+
+			ProductionSet productions = new ProductionSet();
+
+			Production production = new Production("Z");
+			production.addConstruction(new NonTerminal("S"));
+			productions.add(production);
+
+			production = new Production("S");
+			production.addConstruction(new NonTerminal("L"));
+			production.addConstruction(new Terminal("EQUALS", "="));
+			production.addConstruction(new NonTerminal("R"));
+			productions.add(production);
+
+			production = new Production("S");
+			production.addConstruction(new NonTerminal("R"));
+			productions.add(production);
+
+			production = new Production("L");
+			production.addConstruction(new Terminal("STAR", "*"));
+			production.addConstruction(new NonTerminal("R"));
+			productions.add(production);
+
+			production = new Production("L");
+			production.addConstruction(new Terminal("id", "id"));
+			productions.add(production);
+
+			production = new Production("R");
+			production.addConstruction(new NonTerminal("L"));
 			productions.add(production);
 			return new Grammar(new Properties(), tokenDefinitions, productions);
 		} catch (GrammarException e) {

@@ -75,7 +75,7 @@ public abstract class AbstractParserTable implements ParserTable {
 		actionSet.addAction(action);
 	}
 
-	public Grammar getGrammar() {
+	public final Grammar getGrammar() {
 		return grammar;
 	}
 
@@ -143,7 +143,7 @@ public abstract class AbstractParserTable implements ParserTable {
 	}
 
 	@Override
-	public ParserActionSet getActionSet(int currentState,
+	public final ParserActionSet getActionSet(int currentState,
 			List<Construction> constructions) {
 		if ((constructions == null) || (constructions.size() == 0)) {
 			return ParserActionSet.getErrorSet();

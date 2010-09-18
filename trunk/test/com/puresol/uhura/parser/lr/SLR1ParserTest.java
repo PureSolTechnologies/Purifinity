@@ -25,7 +25,7 @@ public class SLR1ParserTest extends TestCase {
 	public void testSimple() {
 		try {
 			Logger.getRootLogger().setLevel(Level.TRACE);
-			Grammar grammar = TestGrammars.getTestGrammarFromDragonBook();
+			Grammar grammar = TestGrammars.getSLR1TestGrammarFromDragonBook();
 			Parser parser = new SLR1Parser(grammar);
 			Lexer lexer = new RegExpLexer(grammar);
 			AST syntaxTree = parser.parse(lexer.lex(new StringReader("1*2+3")));
@@ -46,7 +46,7 @@ public class SLR1ParserTest extends TestCase {
 	public void testComplex() {
 		try {
 			Logger.getRootLogger().setLevel(Level.TRACE);
-			Grammar grammar = TestGrammars.getTestGrammarFromDragonBook();
+			Grammar grammar = TestGrammars.getSLR1TestGrammarFromDragonBook();
 			Parser parser = new SLR1Parser(grammar);
 			Lexer lexer = new RegExpLexer(grammar);
 			AST syntaxTree = parser.parse(lexer.lex(new StringReader(

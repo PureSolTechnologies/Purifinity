@@ -27,10 +27,10 @@ public class Closure0Test extends TestCase {
 		LR0ItemSet itemSet = closure.calc(primItem);
 		System.out.println(itemSet.toString());
 
-		assertEquals(1, itemSet.getPrimaryItems().size());
-		assertEquals(primItem, itemSet.getPrimaryItems().iterator().next());
+		assertEquals(1, itemSet.getKernelItems().size());
+		assertEquals(primItem, itemSet.getKernelItems().iterator().next());
 
-		Set<LR0Item> addedItems = itemSet.getAddedItems();
+		Set<LR0Item> addedItems = itemSet.getNonKernelItems();
 		assertNotNull(addedItems);
 		assertEquals(2, addedItems.size());
 		Iterator<LR0Item> iterator = addedItems.iterator();
@@ -46,7 +46,7 @@ public class Closure0Test extends TestCase {
 
 	@Test
 	public void testFromDragonBook() {
-		Grammar grammar = TestGrammars.getTestGrammarFromDragonBook();
+		Grammar grammar = TestGrammars.getSLR1TestGrammarFromDragonBook();
 		System.out.println("Productions:");
 		System.out.println(grammar.toProductionsString());
 
@@ -56,10 +56,10 @@ public class Closure0Test extends TestCase {
 		LR0ItemSet itemSet = closure.calc(primItem);
 		System.out.println(itemSet.toString());
 
-		assertEquals(1, itemSet.getPrimaryItems().size());
-		assertEquals(primItem, itemSet.getPrimaryItems().iterator().next());
+		assertEquals(1, itemSet.getKernelItems().size());
+		assertEquals(primItem, itemSet.getKernelItems().iterator().next());
 
-		Set<LR0Item> addedItems = itemSet.getAddedItems();
+		Set<LR0Item> addedItems = itemSet.getNonKernelItems();
 		assertNotNull(addedItems);
 		assertEquals(6, addedItems.size());
 		Iterator<LR0Item> iterator = addedItems.iterator();

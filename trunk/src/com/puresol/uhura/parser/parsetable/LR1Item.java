@@ -65,4 +65,5 @@ public class LR1Item extends LR0Item {
 			return false;
 		return true;
 	}
+
 }

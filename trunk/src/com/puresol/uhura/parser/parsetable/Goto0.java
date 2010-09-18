@@ -1,8 +1,8 @@
 package com.puresol.uhura.parser.parsetable;
 
 import java.io.Serializable;
+import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.concurrent.CopyOnWriteArraySet;
 
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.production.Construction;
@@ -27,7 +27,7 @@ public class Goto0 implements Serializable {
 	 */
 	public LR0ItemSet calc(LR0ItemSet itemSet, Construction x) {
 		Closure0 closure = new Closure0(grammar);
-		Set<LR0Item> items = new CopyOnWriteArraySet<LR0Item>();
+		Set<LR0Item> items = new LinkedHashSet<LR0Item>();
 		for (LR0Item item : itemSet.getNextItems(x)) {
 			items.add(new LR0Item(item.getProduction(), item.getPosition() + 1));
 		}

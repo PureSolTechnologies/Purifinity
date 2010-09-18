@@ -140,7 +140,7 @@ public class Production implements Serializable {
 			result.append(alternativeName);
 			result.append("}");
 		}
-		result.append(" : ");
+		result.append(" -> ");
 		int position = 0;
 		for (Construction element : constructions) {
 			if (position == itemPosition) {
@@ -169,7 +169,10 @@ public class Production implements Serializable {
 				+ ((alternativeName == null) ? 0 : alternativeName.hashCode());
 		result = prime * result
 				+ ((constructions == null) ? 0 : constructions.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + (node ? 1231 : 1237);
+		result = prime * result + (stackingAllowed ? 1231 : 1237);
 		return result;
 	}
 
@@ -197,10 +200,19 @@ public class Production implements Serializable {
 				return false;
 		} else if (!constructions.equals(other.constructions))
 			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
 		if (name == null) {
 			if (other.name != null)
 				return false;
 		} else if (!name.equals(other.name))
+			return false;
+		if (node != other.node)
+			return false;
+		if (stackingAllowed != other.stackingAllowed)
 			return false;
 		return true;
 	}

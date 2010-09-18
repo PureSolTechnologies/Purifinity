@@ -64,9 +64,9 @@ public abstract class AbstractConstruction implements Construction {
 
 	public String toShortString() {
 		if (name.isEmpty()) {
-			return "'" + text + "'" + " (" + type + ")";
+			return "'" + text + "'";
 		} else {
-			return name + " (" + type + ")";
+			return name;
 		}
 	}
 

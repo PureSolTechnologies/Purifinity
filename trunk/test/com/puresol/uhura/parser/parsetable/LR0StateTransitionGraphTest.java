@@ -33,7 +33,7 @@ public class LR0StateTransitionGraphTest extends TestCase {
 			System.out.println("====================");
 			System.out.println("Dragon Book Grammar:");
 			System.out.println("====================");
-			Grammar grammar = TestGrammars.getTestGrammarFromDragonBook();
+			Grammar grammar = TestGrammars.getSLR1TestGrammarFromDragonBook();
 
 			LR0StateTransitionGraph transitionGraph = new LR0StateTransitionGraph(
 					grammar);

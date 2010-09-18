@@ -35,7 +35,7 @@ public class LR0ParserTableTest extends TestCase {
 	@Test
 	public void test2() {
 		try {
-			Grammar grammar = TestGrammars.getTestGrammarFromDragonBook();
+			Grammar grammar = TestGrammars.getSLR1TestGrammarFromDragonBook();
 			LR0ParserTable table = new LR0ParserTable(grammar);
 			System.out.println(table.toString());
 			System.out.println(table.getAction(2, new Terminal("STAR"))

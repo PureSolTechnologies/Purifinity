@@ -1,11 +1,11 @@
 package com.puresol.uhura.parser.parsetable;
 
 import java.io.Serializable;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.CopyOnWriteArraySet;
 
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.production.Construction;
@@ -62,7 +62,7 @@ public class Follow implements Serializable {
 		for (Production production : grammar.getProductions().getList()) {
 			if (follow.get(production.getName()) == null) {
 				follow.put(production.getName(),
-						new CopyOnWriteArraySet<Construction>());
+						new LinkedHashSet<Construction>());
 			}
 		}
 	}

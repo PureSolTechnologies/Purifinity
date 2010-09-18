@@ -60,7 +60,7 @@ public class FirstTest extends TestCase {
 		System.out.println("====================");
 		System.out.println("Dragon Book Grammar:");
 		System.out.println("====================");
-		Grammar grammar = TestGrammars.getTestGrammarFromDragonBook();
+		Grammar grammar = TestGrammars.getSLR1TestGrammarFromDragonBook();
 		System.out.println("Productions:");
 		System.out.println(grammar.toProductionsString());
 

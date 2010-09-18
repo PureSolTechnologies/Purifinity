@@ -1,8 +1,8 @@
 package com.puresol.uhura.parser.parsetable;
 
 import java.io.Serializable;
+import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.concurrent.CopyOnWriteArraySet;
 
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.production.Construction;
@@ -11,10 +11,14 @@ public class Goto1 implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private final Grammar grammar;
+	private final Closure1 closure;
 
 	public Goto1(Grammar grammar) {
-		this.grammar = grammar;
+		this.closure = new Closure1(grammar);
+	}
+
+	public Goto1(Closure1 closure) {
+		this.closure = closure;
 	}
 
 	/**
@@ -35,13 +39,12 @@ public class Goto1 implements Serializable {
 	 *         items and all calculated extensions.
 	 */
 	public LR1ItemSet calc(LR1ItemSet itemSet, Construction x) {
-		Set<LR1Item> items = new CopyOnWriteArraySet<LR1Item>();
+		Set<LR1Item> items = new LinkedHashSet<LR1Item>();
 		for (LR1Item item : itemSet.getNextItems(x)) {
 			LR1Item newItem = new LR1Item(item.getProduction(),
 					item.getPosition() + 1, item.getLookahead());
 			items.add(newItem);
 		}
-		Closure1 closure = new Closure1(grammar);
 		return closure.calc(new LR1ItemSet(items));
 	}
 }
