@@ -28,28 +28,30 @@ public class LALR1StateTransitionGraph implements Serializable {
 	private final ConcurrentMap<Integer, ConcurrentMap<Construction, Integer>> transitions = new ConcurrentHashMap<Integer, ConcurrentMap<Construction, Integer>>();
 
 	private final Grammar grammar;
-	private final First first;
 	private final Closure1 closure1;
-	private final Goto1 goto1;
-	private final LR0StateTransitionGraph lr0StateTransitionGraph;
+	private LR0StateTransitionGraph lr0StateTransitionGraph;
 
 	public LALR1StateTransitionGraph(Grammar grammar) throws GrammarException {
 		super();
 		this.grammar = grammar;
-		first = new First(grammar);
-		closure1 = new Closure1(grammar, first);
-		goto1 = new Goto1(closure1);
-		lr0StateTransitionGraph = new LR0StateTransitionGraph(grammar);
+		closure1 = new Closure1(grammar);
 		calculate();
 	}
 
-	private void calculate() {
+	private void calculate() throws GrammarException {
+		logger.trace("Calculate LR0 state transition graph...");
+		lr0StateTransitionGraph = new LR0StateTransitionGraph(grammar);
+		logger.trace("Calculate LR0 kernel items...");
 		calculateLR0KernelItemSets();
-		calculateSpontaneousLookahead();
+		logger.trace("Calculate look aheads...");
+		calculateLookahead();
+		logger.trace("Print look ahead table...");
 		printLookaheadTable();
+		logger.trace("Add transitions...");
+		addTransitions();
 	}
 
-	private void calculateSpontaneousLookahead() {
+	private void calculateLookahead() {
 		boolean changed;
 		do {
 			changed = false;
@@ -60,7 +62,6 @@ public class LALR1StateTransitionGraph implements Serializable {
 				for (LR1Item lr1Item : lr1ItemSet.getKernelItems()) {
 					LR1ItemSet closure = closure1.calc(lr1Item);
 					for (LR1Item closureItem : closure.getAllItems()) {
-						System.out.println(closureItem);
 						if (!closureItem.getLookahead().equals(
 								DummyTerminal.getInstance())) {
 							// Spontaneously generated...
@@ -148,6 +149,18 @@ public class LALR1StateTransitionGraph implements Serializable {
 		itemSetCollection.add(itemSet);
 		itemSet2Integer.put(itemSet, stateId);
 		return stateId;
+	}
+
+	private void addTransitions() throws GrammarException {
+		for (int stateId = 0; stateId < lr0StateTransitionGraph
+				.getStateNumber(); stateId++) {
+			for (Construction construction : lr0StateTransitionGraph
+					.getTransitions(stateId).keySet()) {
+				int targetId = lr0StateTransitionGraph.getTransition(stateId,
+						construction);
+				addTransition(stateId, construction, targetId);
+			}
+		}
 	}
 
 	private void addTransition(int initialState, Construction construction,

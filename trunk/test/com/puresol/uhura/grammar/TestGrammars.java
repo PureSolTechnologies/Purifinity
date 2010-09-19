@@ -184,7 +184,7 @@ public class TestGrammars {
 					Visibility.VISIBLE));
 			tokenDefinitions.addDefinition(new TokenDefinition("EQUALS", "=",
 					Visibility.VISIBLE));
-			tokenDefinitions.addDefinition(new TokenDefinition("STAR", "*",
+			tokenDefinitions.addDefinition(new TokenDefinition("STAR", "\\*",
 					Visibility.VISIBLE));
 
 			ProductionSet productions = new ProductionSet();
