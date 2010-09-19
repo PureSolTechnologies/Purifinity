@@ -13,8 +13,9 @@ public class R508_LanguageBindingSpecTest extends TestCase {
 	@Test
 	public void test() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		//assertTrue(GrammarPartTester.test("language-binding-spec", "BIND(C)"));
-		assertTrue(GrammarPartTester.test("language-binding-spec", "BIND(C,name=value)"));
+		assertTrue(GrammarPartTester.test("language-binding-spec", "BIND(C)"));
+		assertTrue(GrammarPartTester.test("language-binding-spec",
+				"BIND(C,name=value)"));
 	}
 
 }

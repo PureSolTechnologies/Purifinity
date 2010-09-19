@@ -13,9 +13,11 @@ public class R425_DerivedTypeDefTest extends TestCase {
 	@Test
 	public void test() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester.test("derived-type-def", "TYPE PERSON\n"
-				+ "INTEGER AGE\n" + "CHARACTER (LEN = 50) NAME\n"
-				+ "END TYPE PERSON"));
+		assertTrue(GrammarPartTester.test("derived-type-def",
+				"      TYPE PERSON                            \n"
+						+ "          INTEGER AGE              \n"
+						+ "          CHARACTER (LEN = 50) NAME\n"
+						+ "      END TYPE PERSON              \n"));
 	}
 
 }

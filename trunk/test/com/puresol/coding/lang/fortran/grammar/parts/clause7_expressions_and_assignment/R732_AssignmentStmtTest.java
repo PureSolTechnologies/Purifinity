@@ -13,15 +13,17 @@ public class R732_AssignmentStmtTest extends TestCase {
 	@Test
 	public void test() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester.test("assignment-stmt", "A = 3.5 + X * Y"));
-		assertTrue(GrammarPartTester.test("assignment-stmt", "I = INT (A)"));
 		assertTrue(GrammarPartTester.test("assignment-stmt",
-				"NAME = 'Dr. '//FIRST_NAME//' '//SURNAME"));
+				"      A = 3.5 + X * Y\n"));
 		assertTrue(GrammarPartTester.test("assignment-stmt",
-				"NAME(:) = 'Dr. '//FIRST_NAME//' '//SURNAME"));
+				"      I = INT (A)\n"));
 		assertTrue(GrammarPartTester.test("assignment-stmt",
-				"A(I, J) = REAL (I + J - 2)"));
+				"      NAME = 'Dr. '//FIRST_NAME//' '//SURNAME\n"));
 		assertTrue(GrammarPartTester.test("assignment-stmt",
-				"B(I, J) = A(I, J) + B(I, J) * REAL (I * J)"));
+				"      NAME(:) = 'Dr. '//FIRST_NAME//' '//SURNAME\n"));
+		assertTrue(GrammarPartTester.test("assignment-stmt",
+				"      A(I, J) = REAL (I + J - 2)\n"));
+		assertTrue(GrammarPartTester.test("assignment-stmt",
+				"      B(I, J) = A(I, J) + B(I, J) * REAL (I * J)\n"));
 	}
 }

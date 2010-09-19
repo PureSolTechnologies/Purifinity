@@ -1,0 +1,19 @@
+package com.puresol.coding.lang.fortran.grammar.parts.clause8_execution_control;
+
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.junit.Test;
+
+import junit.framework.TestCase;
+
+import com.puresol.coding.lang.fortran.grammar.GrammarPartTester;
+
+public class R837_IfStmtTest extends TestCase {
+
+	@Test
+	public void test() {
+		Logger.getRootLogger().setLevel(Level.TRACE);
+		assertTrue(GrammarPartTester.test("if-stmt",
+				"      IF (A > 0.0) A = LOG (A)\n"));
+	}
+}

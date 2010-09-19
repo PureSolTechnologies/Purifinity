@@ -14,7 +14,7 @@ public class R741_WhereStmtTest extends TestCase {
 	public void test() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
 		assertTrue(GrammarPartTester.test("where-stmt",
-				"WHERE (TEMP > 100.0) TEMP = TEMP - REDUCE_TEMP"));
+				"      WHERE (TEMP > 100.0) TEMP = TEMP - REDUCE_TEMP\n"));
 	}
 
 }

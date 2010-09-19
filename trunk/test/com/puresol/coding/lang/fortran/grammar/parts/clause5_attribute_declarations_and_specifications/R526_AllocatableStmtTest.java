@@ -14,7 +14,7 @@ public class R526_AllocatableStmtTest extends TestCase {
 	public void test() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
 		assertTrue(GrammarPartTester.test("allocatable-stmt",
-				"ALLOCATABLE :: A (:, :), B, SCALAR"));
+				"      ALLOCATABLE :: A (:, :), B, SCALAR\n"));
 	}
 
 }

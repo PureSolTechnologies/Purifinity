@@ -14,14 +14,19 @@ public class R742_WhereConstructTest extends TestCase {
 	public void test() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
 		assertTrue(GrammarPartTester.test("where-construct",
-				"WHERE (PRESSURE <= 1.0)\n" + "END WHERE"));
+				"      WHERE (PRESSURE <= 1.0)        \n"
+						+ "      END WHERE            \n"));
 		assertTrue(GrammarPartTester.test("where-construct",
-				"WHERE (PRESSURE <= 1.0)\n" + "A=1\n" + "END WHERE"));
+				"      WHERE (PRESSURE <= 1.0)        \n"
+						+ "      A=1                  \n"
+						+ "      END WHERE            \n"));
 		assertTrue(GrammarPartTester.test("where-construct",
-				"WHERE (PRESSURE <= 1.0)\n"
-						+ "PRESSURE = PRESSURE + INC_PRESSURE\n"
-						+ "TEMP = TEMP - 5.0\n" + "ELSEWHERE\n"
-						+ "RAINING = .TRUE.\n" + "END WHERE"));
+				"      WHERE (PRESSURE <= 1.0)                     \n"
+						+ "      PRESSURE = PRESSURE + INC_PRESSURE\n"
+						+ "      TEMP = TEMP - 5.0                 \n"
+						+ "      ELSEWHERE                         \n"
+						+ "      RAINING = .TRUE.                  \n"
+						+ "      END WHERE                         \n"));
 	}
 
 }

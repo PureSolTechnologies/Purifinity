@@ -13,11 +13,13 @@ public class R810_CriticalConstructTest extends TestCase {
 	@Test
 	public void testSubroutine() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester.test("critical-construct", "CRITICAL\n"
-				+ "END CRITICAL"));
-		assertTrue(GrammarPartTester.test("critical-construct", "CRITICAL\n"
-				+ "GLOBAL_COUNTER[1] = GLOBAL_COUNTER[1] + 1\n"
-				+ "END CRITICAL"));
+		assertTrue(GrammarPartTester.test("critical-construct",
+				"      CRITICAL                  \n"
+						+ "      END CRITICAL    \n"));
+		assertTrue(GrammarPartTester.test("critical-construct",
+				"      CRITICAL                                           \n"
+						+ "      GLOBAL_COUNTER[1] = GLOBAL_COUNTER[1] + 1\n"
+						+ "      END CRITICAL                             \n"));
 	}
 
 }

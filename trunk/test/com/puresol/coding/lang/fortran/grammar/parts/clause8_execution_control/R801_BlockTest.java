@@ -10,10 +10,10 @@ public class R801_BlockTest extends TestCase {
 
 	@Test
 	public void test() {
-		assertTrue(GrammarPartTester.test("block", "A=1\nB=2"));
-		assertTrue(GrammarPartTester.test("block",
-				"B = SQRT (A) \n"
-						+ "C = LOG (A) \n"));
+		assertTrue(GrammarPartTester.test("block", "      A=1\n"
+				+ "      B=2\n"));
+		assertTrue(GrammarPartTester.test("block", "     B = SQRT (A) \n"
+				+ "     C = LOG (A) \n"));
 	}
 
 }

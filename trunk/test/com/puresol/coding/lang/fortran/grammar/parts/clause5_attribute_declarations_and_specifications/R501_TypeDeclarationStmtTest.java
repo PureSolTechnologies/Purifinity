@@ -14,7 +14,7 @@ public class R501_TypeDeclarationStmtTest extends TestCase {
 	public void testSubroutine() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
 		assertTrue(GrammarPartTester.test("type-declaration-stmt",
-				"DOUBLE COMPLEX DC\n"));
+				"      DOUBLE COMPLEX DC\n"));
 	}
 
 }

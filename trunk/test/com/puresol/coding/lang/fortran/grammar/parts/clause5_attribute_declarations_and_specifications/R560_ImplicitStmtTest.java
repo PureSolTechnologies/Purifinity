@@ -10,8 +10,10 @@ public class R560_ImplicitStmtTest extends TestCase {
 
 	@Test
 	public void test() {
-		assertTrue(GrammarPartTester.test("implicit-stmt", "implicit none"));
-		assertTrue(GrammarPartTester.test("implicit-stmt", "implicit REAL(A-Z)"));
+		assertTrue(GrammarPartTester.test("implicit-stmt",
+				"      implicit none\n"));
+		assertTrue(GrammarPartTester.test("implicit-stmt",
+				"      implicit REAL(A-Z)\n"));
 	}
 
 }

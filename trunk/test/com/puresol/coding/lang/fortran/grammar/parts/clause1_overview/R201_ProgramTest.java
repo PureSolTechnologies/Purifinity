@@ -15,10 +15,10 @@ public class R201_ProgramTest extends TestCase {
 		Logger.getRootLogger().setLevel(Level.TRACE);
 		assertTrue(GrammarPartTester.test("program",
 				"SUBROUTINE ZGERC(M,N,ALPHA,X,INCX,Y,INCY,A,LDA)\n"
-						+ "END SUBROUTINE"));
+						+ "END SUBROUTINE\n"));
 		assertTrue(GrammarPartTester.test("program",
 				"SUBROUTINE ZGERC(M,N,ALPHA,X,INCX,Y,INCY,A,LDA)\n"
-						+ "DOUBLE COMPLEX DC\n" + "END SUBROUTINE"));
+						+ "DOUBLE COMPLEX DC\n" + "END SUBROUTINE\n"));
 	}
 
 }

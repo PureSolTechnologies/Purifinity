@@ -11,7 +11,7 @@
 	grammar.checks=true;
 	grammar.ignore-case=true;
 	lexer="com.puresol.uhura.lexer.RegExpLexer";
-	parser="com.puresol.uhura.parser.lr.SLR1Parser";
+	parser="com.puresol.uhura.parser.lr.LALR1Parser";
 	parser.backtracking=true;
  
 /****************************************************************************
@@ -85,8 +85,9 @@
  TOKENS
 
 	WHITESPACE : '[ \\t]+' [hidden] ;
-	LINE_TERMINATOR : '(\\n|\\r\n|\\r)' [hidden] ;
-	LINE_COMMENT : '(![^\\n\\\r]*' LINE_TERMINATOR '|' LINE_TERMINATOR '[C$*][^\\r\\n]*(?=' LINE_TERMINATOR '))' [hidden] ;
+	LINE_TERMINATOR : '(\\n|\\r\n|\\r)' ; // removed [hidden]
+	LINE_COMMENT : '(![^\\n\\\r]*' LINE_TERMINATOR '|' LINE_TERMINATOR '[C$*][^\\r\\n]*(?=' LINE_TERMINATOR '))' ; // removed [hidden]
+	LINE_CONCATATION : LINE_TERMINATOR '     [^ 0]' [hidden];
 
 	/*
 	 * 3.1.5 Special characters
@@ -178,6 +179,11 @@
 	R103 scalar-xyz is xyz
 	C101 (R103) scalar-xyz shall be scalar.
  */
+
+	stmt-end :
+		LINE_TERMINATOR
+	| 	LINE_COMMENT
+	;
  
 /***************
 	Clause 2:	
@@ -839,12 +845,12 @@
 	[ ( type-param-name-list ) ]
 */
 	derived-type-stmt :
-		'TYPE' ',' type-attr-spec-list ':' ':' NAME_LITERAL	'(' name-list ')'
-	|	'TYPE' ':' ':' NAME_LITERAL	'(' name-list ')'
-	|	'TYPE' NAME_LITERAL	'(' name-list ')'
-	|	'TYPE' ',' type-attr-spec-list ':' ':' NAME_LITERAL
-	|	'TYPE' ':' ':' NAME_LITERAL
-	|	'TYPE' NAME_LITERAL
+		'TYPE' ',' type-attr-spec-list ':' ':' NAME_LITERAL	'(' name-list ')' stmt-end
+	|	'TYPE' ':' ':' NAME_LITERAL	'(' name-list ')' stmt-end
+	|	'TYPE' NAME_LITERAL	'(' name-list ')' stmt-end
+	|	'TYPE' ',' type-attr-spec-list ':' ':' NAME_LITERAL stmt-end
+	|	'TYPE' ':' ':' NAME_LITERAL stmt-end
+	|	'TYPE' NAME_LITERAL stmt-end
 	;
 	// added...
 	name-list :
@@ -883,17 +889,17 @@
 	R429 end-type-stmt is END TYPE [ type-name ]
 */
 	end-type-stmt :
-		'END' 'TYPE' NAME_LITERAL
-	|	'ENDTYPE' NAME_LITERAL
-	|	'END' 'TYPE' 
-	|	'ENDTYPE' 
+		'END' 'TYPE' NAME_LITERAL stmt-end
+	|	'ENDTYPE' NAME_LITERAL stmt-end
+	|	'END' 'TYPE' stmt-end 
+	|	'ENDTYPE' stmt-end 
 	;
 
 /*
 	R430 sequence-stmt is SEQUENCE
 */
 	sequence-stmt :
-		'SEQUENCE'
+		'SEQUENCE'  stmt-end
 	;
 
 /*
@@ -901,8 +907,8 @@
 	type-param-decl -list
 */
 	type-param-def-stmt :
-		'INTEGER' kind-selector ',' type-param-attr-spec ':' ':' type-param-decl-list
-	|	'INTEGER'  ',' type-param-attr-spec ':' ':' type-param-decl-list
+		'INTEGER' kind-selector ',' type-param-attr-spec ':' ':' type-param-decl-list  stmt-end
+	|	'INTEGER'  ',' type-param-attr-spec ':' ':' type-param-decl-list stmt-end
 	;
 
 /*
@@ -949,9 +955,9 @@
 	component-decl-list
 */
 	data-component-def-stmt :
-		declaration-type-spec ',' component-attr-spec-list ':' ':' component-decl-list
-	|	declaration-type-spec  ':' ':' component-decl-list
-	|	declaration-type-spec component-decl-list
+		declaration-type-spec ',' component-attr-spec-list ':' ':' component-decl-list stmt-end
+	|	declaration-type-spec  ':' ':' component-decl-list stmt-end
+	|	declaration-type-spec component-decl-list stmt-end
 	;
 
 /*
@@ -1004,8 +1010,8 @@
 	proc-component-attr-spec-list :: proc-decl -list
 */
 	proc-component-def-stmt :
-		'PROCEDURE' '(' proc-interface ')' ',' proc-component-attr-spec-list ':' ':' proc-decl-list
-	|	'PROCEDURE' '(' ')' ',' proc-component-attr-spec-list ':' ':' proc-decl-list
+		'PROCEDURE' '(' proc-interface ')' ',' proc-component-attr-spec-list ':' ':' proc-decl-list stmt-end
+	|	'PROCEDURE' '(' ')' ',' proc-component-attr-spec-list ':' ':' proc-decl-list stmt-end
 	;
 
 /*
@@ -1048,7 +1054,7 @@
 	R444 private-components-stmt is PRIVATE
 */
 	private-components-stmt :
-		'PRIVATE'
+		'PRIVATE' stmt-end
 	;
 
 /*
@@ -1066,7 +1072,7 @@
 	R446 binding-private-stmt is PRIVATE
 */
 	binding-private-stmt :
-		'PRIVATE'
+		'PRIVATE' stmt-end
 	;
 
 /*
@@ -1085,10 +1091,10 @@
 	or PROCEDURE (interface-name), binding-attr -list :: binding-name-list
 */
 	type-bound-procedure-stmt :
-		'PROCEDURE' ',' binding-attr-list ':' ':' type-bound-proc-decl-list
-	|	'PROCEDURE' ':' ':' type-bound-proc-decl-list
-	|	'PROCEDURE' type-bound-proc-decl-list
-	|	'PROCEDURE' '(' NAME_LITERAL ')' ',' binding-attr-list ':' ':' name-list
+		'PROCEDURE' ',' binding-attr-list ':' ':' type-bound-proc-decl-list stmt-end
+	|	'PROCEDURE' ':' ':' type-bound-proc-decl-list stmt-end
+	|	'PROCEDURE' type-bound-proc-decl-list stmt-end
+	|	'PROCEDURE' '(' NAME_LITERAL ')' ',' binding-attr-list ':' ':' name-list stmt-end
 	;
 
 /*
@@ -1107,8 +1113,8 @@
 	R450 type-bound-generic-stmt is GENERIC [ , access-spec ] :: generic-spec => binding-name-list
 */
 	type-bound-generic-stmt :
-		'GENERIC' ',' access-spec ':' ':' generic-spec '=' '>' name-list
-	|	'GENERIC' ':' ':' generic-spec '=' '>' name-list
+		'GENERIC' ',' access-spec ':' ':' generic-spec '=' '>' name-list stmt-end
+	|	'GENERIC' ':' ':' generic-spec '=' '>' name-list stmt-end
 	;
 
 /*
@@ -1135,8 +1141,8 @@
 	R452 final-procedure-stmt is FINAL [ :: ] final-subroutine-name-list
 */
 	final-procedure-stmt :
-		'FINAL' ':' ':' name-list
-	|	'FINAL' name-list
+		'FINAL' ':' ':' name-list stmt-end
+	|	'FINAL' name-list stmt-end
 	;
 
 /*
@@ -1206,15 +1212,15 @@
 	R459 enum-def-stmt is ENUM, BIND(C)
 */
 	enum-def-stmt :
-		'ENUM' ',' 'BIND' '(' 'C' ')'
+		'ENUM' ',' 'BIND' '(' 'C' ')' stmt-end
 	;
 
 /*
 	R460 enumerator-def-stmt is ENUMERATOR [ :: ] enumerator-list
 */
 	enumerator-def-stmt :
-		'ENUMERATOR' ':' ':' enumerator-list
-	|	'ENUMERATOR' enumerator-list
+		'ENUMERATOR' ':' ':' enumerator-list stmt-end
+	|	'ENUMERATOR' enumerator-list stmt-end
 	;
 
 /*
@@ -1233,8 +1239,8 @@
 	R462 end-enum-stmt is END ENUM
 */
 	end-enum-stmt :
-		'END' 'ENUM'
-	|	'ENDENUM'
+		'END' 'ENUM' stmt-end
+	|	'ENDENUM' stmt-end
 	;
 
 /*
@@ -1352,7 +1358,7 @@
 	R501 type-declaration-stmt is declaration-type-spec [ [ , attr-spec ] ... :: ] entity-decl-list
 */
 	type-declaration-stmt :
-		declaration-type-spec ( ( ',' attr-spec ) * ':' ':' ) ? entity-decl-list
+		declaration-type-spec ( ( ',' attr-spec ) * ':' ':' ) ? entity-decl-list stmt-end
 	;
 
 /*
@@ -1606,7 +1612,7 @@
 	R524 access-stmt is access-spec [ [ :: ] access-id-list ]
 */
 	access-stmt :
-		access-spec ( ( ':' ':' ) ? access-id-list ) ?
+		access-spec ( ( ':' ':' ) ? access-id-list ) ? stmt-end
 	;
 
 /*
@@ -1626,8 +1632,8 @@
 	R526 allocatable-stmt is ALLOCATABLE [ :: ] allocatable-decl-list
 */
 	allocatable-stmt :
-		'ALLOCATABLE' ':' ':' allocatable-decl-list
-	|	'ALLOCATABLE' allocatable-decl-list
+		'ALLOCATABLE' ':' ':' allocatable-decl-list stmt-end
+	|	'ALLOCATABLE' allocatable-decl-list stmt-end
 	;
 
 /*
@@ -1647,16 +1653,16 @@
 	R528 asynchronous-stmt is ASYNCHRONOUS [ :: ] object-name-list
 */
 	asynchronous-stmt :
-		'ASYNCHRONOUS' ':' ':' name-list
-	|	'ASYNCHRONOUS' name-list
+		'ASYNCHRONOUS' ':' ':' name-list stmt-end
+	|	'ASYNCHRONOUS' name-list stmt-end
 	;
 
 /*
 	R529 bind-stmt is language-binding-spec [ :: ] bind-entity-list
 */
 	bind-stmt :
-		language-binding-spec ':' ':' bind-entity-list
-	|	language-binding-spec bind-entity-list
+		language-binding-spec ':' ':' bind-entity-list stmt-end
+	|	language-binding-spec bind-entity-list stmt-end
 	;
 
 /*
@@ -1676,8 +1682,8 @@
 	R531 codimension-stmt is CODIMENSION [ :: ] codimension-decl -list
 */
 	codimension-stmt :
-		'CODIMENSION' ':' ':' codimension-decl-list
-	|	'CODIMENSION' codimension-decl-list
+		'CODIMENSION' ':' ':' codimension-decl-list stmt-end
+	|	'CODIMENSION' codimension-decl-list stmt-end
 	;
 
 /*
@@ -1695,16 +1701,16 @@
 	R533 contiguous-stmt is CONTIGUOUS [ :: ] object-name-list
 */
 	contiguous-stmt :
-		'CONTIGUOUS' ':' ':' name-list
-	|	'CONTIGUOUS' name-list
+		'CONTIGUOUS' ':' ':' name-list stmt-end
+	|	'CONTIGUOUS' name-list stmt-end
 	;
 
 /*
 	R534 data-stmt is DATA data-stmt-set [ [ , ] data-stmt-set ] ...
 */
 	data-stmt :
-		'DATA' data-stmt-set ( ',' data-stmt-set ) *
-	|	'DATA' data-stmt-set ( data-stmt-set ) *
+		'DATA' data-stmt-set ( ',' data-stmt-set ) * stmt-end
+	|	'DATA' data-stmt-set ( data-stmt-set ) * stmt-end
 	;
 
 /*
@@ -1817,31 +1823,31 @@
 	[ , array-name ( array-spec ) ] ...
 */
 	dimension-stmt :
-		'DIMENSION' ':' ':' NAME_LITERAL '(' array-spec ')' ( ',' NAME_LITERAL '(' array-spec ')' ) *
-	|	'DIMENSION' NAME_LITERAL '(' array-spec ')' ( ',' NAME_LITERAL '(' array-spec ')' ) *
+		'DIMENSION' ':' ':' NAME_LITERAL '(' array-spec ')' ( ',' NAME_LITERAL '(' array-spec ')' ) * stmt-end
+	|	'DIMENSION' NAME_LITERAL '(' array-spec ')' ( ',' NAME_LITERAL '(' array-spec ')' ) * stmt-end
 	;
 	
 /*
 	R546 intent-stmt is INTENT ( intent-spec ) [ :: ] dummy-arg-name-list
 */
 	intent-stmt :
-		'INTENT' '(' intent-spec ')' ':' ':' name-list
-	|	'INTENT' '(' intent-spec ')' name-list
+		'INTENT' '(' intent-spec ')' ':' ':' name-list stmt-end
+	|	'INTENT' '(' intent-spec ')' name-list stmt-end
 	;
 
 /*
 	R547 optional-stmt is OPTIONAL [ :: ] dummy-arg-name-list
 */
 	optional-stmt :
-		'OPTIONAL' ':' ':' name-list
-	|	'OPTIONAL' name-list
+		'OPTIONAL' ':' ':' name-list stmt-end
+	|	'OPTIONAL' name-list stmt-end
 	;
 
 /*
 	R548 parameter-stmt is PARAMETER ( named-constant-def-list )
 */
 	parameter-stmt :
-		'PARAMETER' '(' named-constant-def-list ')'
+		'PARAMETER' '(' named-constant-def-list ')' stmt-end
 	;
 	
 /*
@@ -1858,8 +1864,8 @@
 	R550 pointer-stmt is POINTER [ :: ] pointer-decl-list
 */
 	pointer-stmt : 
-		'POINTER' ':' ':' pointer-decl-list
-	|	'POINTER' pointer-decl-list
+		'POINTER' ':' ':' pointer-decl-list stmt-end
+	|	'POINTER' pointer-decl-list stmt-end
 	;
 
 /*
@@ -1879,17 +1885,17 @@
 	R552 protected-stmt is PROTECTED [ :: ] entity-name-list
 */
 	protected-stmt :
-		'PROTECTED' ':' ':' name-list
-	|	'PROTECTED' name-list
+		'PROTECTED' ':' ':' name-list stmt-end
+	|	'PROTECTED' name-list stmt-end
 	;
 
 /*
 	R553 save-stmt is SAVE [ [ :: ] saved-entity-list ]
 */
 	save-stmt :
-		'SAVE' ':' ':' saved-entity-list
-	|	'SAVE' saved-entity-list
-	|	'SAVE'
+		'SAVE' ':' ':' saved-entity-list stmt-end
+	|	'SAVE' saved-entity-list stmt-end
+	|	'SAVE' stmt-end
 	;
 
 /*
@@ -1915,8 +1921,8 @@
 	R556 target-stmt is TARGET [ :: ] target-decl-list
 */
 	target-stmt :
-		'TARGET' ':' ':' target-decl-list
-	|	'TARGET' target-decl-list
+		'TARGET' ':' ':' target-decl-list stmt-end
+	|	'TARGET' target-decl-list stmt-end
 	;
 
 /*
@@ -1935,8 +1941,8 @@
 	R558 value-stmt is VALUE [ :: ] dummy-arg-name-list
 */
 	value-stmt :
-		'VALUE' ':' ':' name-list
-	|	'VALUE' name-list
+		'VALUE' ':' ':' name-list stmt-end
+	|	'VALUE' name-list stmt-end
 	;
 
 /*
@@ -1952,8 +1958,8 @@
 	or IMPLICIT NONE
 */
 	implicit-stmt :
-		'IMPLICIT' implicit-spec-list
-	|	'IMPLICIT' 'NONE'
+		'IMPLICIT' implicit-spec-list stmt-end
+	|	'IMPLICIT' 'NONE' stmt-end
 	;
 
 /*
@@ -1987,7 +1993,7 @@
 	namelist-stmt :
 		'NAMELIST'
 		'/' NAME_LITERAL '/' name-list
-		(  ',' ? '/' NAME_LITERAL '/' name-list ) *
+		(  ',' ? '/' NAME_LITERAL '/' name-list ) * stmt-end
 	;
 	
 /*
@@ -2000,7 +2006,7 @@
 	R565 equivalence-stmt is EQUIVALENCE equivalence-set-list
 */
 	equivalence-stmt :
-		'EQUIVALENCE' equivalence-set-list
+		'EQUIVALENCE' equivalence-set-list stmt-end
 	;
 
 /*
@@ -2036,7 +2042,7 @@
 	common-stmt :
 		'COMMON'
 		( '/' NAME_LITERAL ? '/' ) ? common-block-object-list
-		(  ',' ? '/' NAME_LITERAL ? '/' common-block-object-list ) *
+		(  ',' ? '/' NAME_LITERAL ? '/' common-block-object-list ) * stmt-end
 	;
 
 /*
@@ -2146,7 +2152,7 @@
 	R611 data-ref is part-ref [ % part-ref ] ...
 */
 	data-ref :
-		part-ref ( '%' part-ref ) ?
+		part-ref ( '%' part-ref ) *
 	;
 
 /*
@@ -2270,7 +2276,7 @@
 */
 	allocate-stmt :
 		'ALLOCATE' '(' ( type-spec ':' ':' ) ? allocation-list
-		( ',' alloc-opt-list ) ? ')'
+		( ',' alloc-opt-list ) ? ')' stmt-end
 	;
 
 /*
@@ -2376,7 +2382,7 @@
 	R638 nullify-stmt is NULLIFY ( pointer-object-list )
 */
 	nullify-stmt :
-		'NULLIFY' '(' pointer-object-list ')'
+		'NULLIFY' '(' pointer-object-list ')' stmt-end
 	;
 
 /*
@@ -2396,8 +2402,8 @@
 	R640 deallocate-stmt is DEALLOCATE ( allocate-object-list [ , dealloc-opt-list ] )
 */
 	deallocate-stmt :
-		'DEALLOCATE' '(' allocate-object-list ',' dealloc-opt-list ')'
-	|	'DEALLOCATE' '(' allocate-object-list ')'
+		'DEALLOCATE' '(' allocate-object-list ',' dealloc-opt-list ')' stmt-end
+	|	'DEALLOCATE' '(' allocate-object-list ')' stmt-end
 	;
 
 /*
@@ -2688,7 +2694,7 @@
 	R732 assignment-stmt is variable = expr
 */
 	assignment-stmt :
-		variable '=' expr
+		variable '=' expr stmt-end
 	;
 
 /*
@@ -2697,9 +2703,9 @@
 	or proc-pointer-object => proc-target
 */
 	pointer-assignment-stmt :
-		data-pointer-object ( '(' bounds-spec-list ')' ) ? '=' '>' data-target
-	|	data-pointer-object '(' bounds-remapping-list ')' '=' '>' data-target
-	|	proc-pointer-object '=' '>' proc-target
+		data-pointer-object ( '(' bounds-spec-list ')' ) ? '=' '>' data-target stmt-end
+	|	data-pointer-object '(' bounds-remapping-list ')' '=' '>' data-target stmt-end
+	|	proc-pointer-object '=' '>' proc-target stmt-end
 	;
 
 /*
@@ -2810,8 +2816,8 @@
 	R743 where-construct-stmt is [where-construct-name:] WHERE ( mask-expr )
 */
 	where-construct-stmt :
-		NAME_LITERAL ':' 'WHERE' '(' expr ')'
-	|	'WHERE' '(' expr ')'
+		NAME_LITERAL ':' 'WHERE' '(' expr ')' stmt-end
+	|	'WHERE' '(' expr ')' stmt-end
 	;
 
 /*
@@ -2841,30 +2847,30 @@
 	R747 masked-elsewhere-stmt is ELSEWHERE (mask-expr) [where-construct-name]
 */
 	masked-elsewhere-stmt :
-		'ELSE' 'WHERE' '(' expr ')' NAME_LITERAL
-	|	'ELSE' 'WHERE' '(' expr ')'
-	|	'ELSEWHERE' '(' expr ')' NAME_LITERAL
-	|	'ELSEWHERE' '(' expr ')'
+		'ELSE' 'WHERE' '(' expr ')' NAME_LITERAL stmt-end
+	|	'ELSE' 'WHERE' '(' expr ')' stmt-end
+	|	'ELSEWHERE' '(' expr ')' NAME_LITERAL stmt-end
+	|	'ELSEWHERE' '(' expr ')' stmt-end
 	;
 
 /*
 	R748 elsewhere-stmt is ELSEWHERE [where-construct-name]
 */
 	elsewhere-stmt :
-		'ELSE' 'WHERE' NAME_LITERAL
-	|	'ELSE' 'WHERE' 
-	|	'ELSEWHERE' NAME_LITERAL
-	|	'ELSEWHERE' 
+		'ELSE' 'WHERE' NAME_LITERAL stmt-end
+	|	'ELSE' 'WHERE' stmt-end 
+	|	'ELSEWHERE' NAME_LITERAL stmt-end
+	|	'ELSEWHERE' stmt-end 
 	;
 
 /*
 	R749 end-where-stmt is END WHERE [where-construct-name]
 */
 	end-where-stmt :
-		'END' 'WHERE' NAME_LITERAL
-	|	'END' 'WHERE'
-	|	'ENDWHERE' NAME_LITERAL
-	|	'ENDWHERE'
+		'END' 'WHERE' NAME_LITERAL stmt-end
+	|	'END' 'WHERE' stmt-end
+	|	'ENDWHERE' NAME_LITERAL stmt-end
+	|	'ENDWHERE' stmt-end
 	;
 
 /*
@@ -2886,8 +2892,8 @@
 	R751 forall-construct-stmt is [forall-construct-name :] FORALL forall-header
 */
 	forall-construct-stmt :
-		NAME_LITERAL ':' 'FORALL' forall-header
-	|	'FORALL' forall-header
+		NAME_LITERAL ':' 'FORALL' forall-header stmt-end 
+	|	'FORALL' forall-header stmt-end 
 	;
 
 /*
@@ -2953,10 +2959,10 @@
 	R758 end-forall-stmt is END FORALL [forall-construct-name ]
 */
 	end-forall-stmt :
-		'END' 'FORALL' NAME_LITERAL
-	|	'END' 'FORALL' 
-	|	'ENDFORALL' NAME_LITERAL
-	|	'ENDFORALL' 
+		'END' 'FORALL' NAME_LITERAL stmt-end
+	|	'END' 'FORALL' stmt-end 
+	|	'ENDFORALL' NAME_LITERAL stmt-end
+	|	'ENDFORALL' stmt-end 
 	;
 
 /*
@@ -2993,8 +2999,8 @@
 	(association-list )
 */
 	associate-stmt :
-		NAME_LITERAL ':' 'ASSOCIATE' '(' association-list ')'
-	|	'ASSOCIATE' '(' association-list ')'
+		NAME_LITERAL ':' 'ASSOCIATE' '(' association-list ')' stmt-end
+	|	'ASSOCIATE' '(' association-list ')' stmt-end
 	;
 
 /*
@@ -3021,10 +3027,10 @@
 	R806 end-associate-stmt is END ASSOCIATE [ associate-construct-name ]
 */
 	end-associate-stmt :
-		'END' 'ASSOCIATE' NAME_LITERAL
-	|	'END' 'ASSOCIATE' 
-	|	'ENDASSOCIATE' NAME_LITERAL
-	|	'ENDASSOCIATE' 
+		'END' 'ASSOCIATE' NAME_LITERAL stmt-end
+	|	'END' 'ASSOCIATE' stmt-end 
+	|	'ENDASSOCIATE' NAME_LITERAL stmt-end
+	|	'ENDASSOCIATE' stmt-end 
 	;
 
 /*
@@ -3044,18 +3050,18 @@
 	R808 block-stmt is [ block-construct-name : ] BLOCK
 */
 	block-stmt :
-		NAME_LITERAL ':' 'BLOCK'
-	|	'BLOCK'
+		NAME_LITERAL ':' 'BLOCK' stmt-end
+	|	'BLOCK' stmt-end
 	;
 
 /*
 	R809 end-block-stmt is END BLOCK [ block-construct-name ]
 */
 	end-block-stmt :
-		'END' 'BLOCK' NAME_LITERAL
-	|	'END' 'BLOCK'
-	|	'ENDBLOCK' NAME_LITERAL
-	|	'ENDBLOCK' 
+		'END' 'BLOCK' NAME_LITERAL stmt-end
+	|	'END' 'BLOCK' stmt-end
+	|	'ENDBLOCK' NAME_LITERAL stmt-end
+	|	'ENDBLOCK' stmt-end 
 	;
 
 /*
@@ -3073,18 +3079,18 @@
 	R811 critical-stmt is [ critical-construct-name : ] CRITICAL
 */
 	critical-stmt :
-		NAME_LITERAL ':' 'CRITICAL'
-	|	'CRITICAL'
+		NAME_LITERAL ':' 'CRITICAL' stmt-end
+	|	'CRITICAL' stmt-end
 	;
 
 /*
 	R812 end-critical-stmt is END CRITICAL [ critical-construct-name ]
 */
 	end-critical-stmt :
-		'END' 'CRITICAL' NAME_LITERAL
-	|	'END' 'CRITICAL' 
-	|	'ENDCRITICAL' NAME_LITERAL
-	|	'ENDCRITICAL' 
+		'END' 'CRITICAL' NAME_LITERAL stmt-end
+	|	'END' 'CRITICAL' stmt-end 
+	|	'ENDCRITICAL' NAME_LITERAL stmt-end
+	|	'ENDCRITICAL' stmt-end 
 	;
 
 /*
@@ -3120,20 +3126,20 @@
 	R816 label-do-stmt is [ do-construct-name : ] DO label [ loop-control ]
 */
 	label-do-stmt :
-		NAME_LITERAL ':' 'DO' INT_LITERAL_CONSTANT loop-control
-	|	NAME_LITERAL ':' 'DO' INT_LITERAL_CONSTANT 
-	|	'DO' INT_LITERAL_CONSTANT loop-control
-	|	'DO' INT_LITERAL_CONSTANT 
+		NAME_LITERAL ':' 'DO' INT_LITERAL_CONSTANT loop-control stmt-end
+	|	NAME_LITERAL ':' 'DO' INT_LITERAL_CONSTANT stmt-end 
+	|	'DO' INT_LITERAL_CONSTANT loop-control stmt-end
+	|	'DO' INT_LITERAL_CONSTANT stmt-end 
 	;
 
 /*
 	R817 nonlabel-do-stmt is [ do-construct-name : ] DO [ loop-control ]
 */
 	nonlabel-do-stmt :
-		NAME_LITERAL ':' 'DO' loop-control
-	|	NAME_LITERAL ':' 'DO' 
-	|	'DO' loop-control
-	|	'DO'
+		NAME_LITERAL ':' 'DO' loop-control stmt-end
+	|	NAME_LITERAL ':' 'DO' stmt-end 
+	|	'DO' loop-control stmt-end
+	|	'DO' stmt-end
 	;
 
 /*
@@ -3178,10 +3184,10 @@
 R822 end-do-stmt is END DO [ do-construct-name ]
 */
 	end-do-stmt :
-		'END' 'DO' NAME_LITERAL
-	|	'END' 'DO'
-	|	'ENDDO' NAME_LITERAL
-	|	'ENDDO'
+		'END' 'DO' NAME_LITERAL stmt-end
+	|	'END' 'DO' stmt-end
+	|	'ENDDO' NAME_LITERAL stmt-end
+	|	'ENDDO' stmt-end
 	;
 
 /*
@@ -3259,8 +3265,8 @@ R822 end-do-stmt is END DO [ do-construct-name ]
 	R831 cycle-stmt is CYCLE [ do-construct-name ]
 */
 	cycle-stmt :
-		'CYCLE' NAME_LITERAL
-	|	'CYCLE'
+		'CYCLE' NAME_LITERAL stmt-end
+	|	'CYCLE' stmt-end
 	;
 
 /*
@@ -3295,43 +3301,43 @@ R822 end-do-stmt is END DO [ do-construct-name ]
 	R833 if-then-stmt is [ if-construct-name : ] IF ( scalar-logical-expr ) THEN
 */
 	if-then-stmt :
-		NAME_LITERAL ':' 'IF' '(' expr ')' 'THEN'
-	|	'IF' '(' expr ')' 'THEN'
+		NAME_LITERAL ':' 'IF' '(' expr ')' 'THEN' stmt-end
+	|	'IF' '(' expr ')' 'THEN' stmt-end
 	;
 
 /*
 	R834 else-if-stmt is ELSE IF ( scalar-logical-expr ) THEN [ if-construct-name ]
 */
 	else-if-stmt :
-		'ELSE' 'IF' '(' expr ')' 'THEN' NAME_LITERAL
-	|	'ELSE' 'IF' '(' expr ')' 'THEN'
-	|	'ELSEIF' '(' expr ')' 'THEN' NAME_LITERAL
-	|	'ELSEIF' '(' expr ')' 'THEN'
+		'ELSE' 'IF' '(' expr ')' 'THEN' NAME_LITERAL stmt-end
+	|	'ELSE' 'IF' '(' expr ')' 'THEN' stmt-end
+	|	'ELSEIF' '(' expr ')' 'THEN' NAME_LITERAL stmt-end
+	|	'ELSEIF' '(' expr ')' 'THEN' stmt-end
 	;
 
 /*
 	R835 else-stmt is ELSE [ if-construct-name ]
 */
 	else-stmt :
-		'ELSE' NAME_LITERAL
-	|	'ELSE'
+		'ELSE' NAME_LITERAL stmt-end
+	|	'ELSE' stmt-end
 	;
 
 /*
 	R836 end-if-stmt is END IF [ if-construct-name ]
 */
 	end-if-stmt :
-		'END' 'IF' NAME_LITERAL
-	|	'END' 'IF'
-	|	'ENDIF' NAME_LITERAL
-	|	'ENDIF'
+		'END' 'IF' NAME_LITERAL stmt-end
+	|	'END' 'IF' stmt-end
+	|	'ENDIF' NAME_LITERAL stmt-end
+	|	'ENDIF' stmt-end
 	;
 
 /*
 	R837 if-stmt is IF ( scalar-logical-expr ) action-stmt
 */
 	if-stmt :
-		'IF' '(' expr ')' action-stmt
+		'IF' '(' expr ')' action-stmt 
 	;
 
 /*
@@ -3350,28 +3356,28 @@ R822 end-do-stmt is END DO [ do-construct-name ]
 	R839 select-case-stmt is [ case-construct-name : ] SELECT CASE ( case-expr )
 */
 	select-case-stmt :
-		NAME_LITERAL ':' 'SELECT' 'CASE' '(' expr ')'
-	|	'SELECT' 'CASE' '(' expr ')'
-	|	NAME_LITERAL ':' 'SELECTCASE' '(' expr ')'
-	|	'SELECTCASE' '(' expr ')'
+		NAME_LITERAL ':' 'SELECT' 'CASE' '(' expr ')' stmt-end
+	|	'SELECT' 'CASE' '(' expr ')' stmt-end
+	|	NAME_LITERAL ':' 'SELECTCASE' '(' expr ')' stmt-end
+	|	'SELECTCASE' '(' expr ')' stmt-end
 	;
 
 /*
 	R840 case-stmt is CASE case-selector [case-construct-name]
 */
 	case-stmt :
-		'CASE' case-selector NAME_LITERAL
-	|	'CASE' case-selector
+		'CASE' case-selector NAME_LITERAL stmt-end
+	|	'CASE' case-selector stmt-end
 	;
 
 /*
 	R841 end-select-stmt is END SELECT [ case-construct-name ]
 */
 	end-select-stmt :
-		'END' 'SELECT' NAME_LITERAL
-	|	'END' 'SELECT'
-	|	'ENDSELECT' NAME_LITERAL
-	|	'ENDSELECT'
+		'END' 'SELECT' NAME_LITERAL stmt-end
+	|	'END' 'SELECT' stmt-end
+	|	'ENDSELECT' NAME_LITERAL stmt-end
+	|	'ENDSELECT' stmt-end
 	;
 
 /*
@@ -3429,14 +3435,14 @@ R822 end-do-stmt is END DO [ do-construct-name ]
 	( [ associate-name => ] selector )
 */
 	select-type-stmt :
-		NAME_LITERAL ':' 'SELECT' 'TYPE'	'(' NAME_LITERAL '=' '>' selector ')'
-	|	NAME_LITERAL ':' 'SELECT' 'TYPE'	'(' selector ')'
-	|	'SELECT' 'TYPE'	'(' NAME_LITERAL '=' '>' selector ')'
-	|	'SELECT' 'TYPE'	'(' selector ')'
-	|	NAME_LITERAL ':' 'SELECTTYPE'	'(' NAME_LITERAL '=' '>' selector ')'
-	|	NAME_LITERAL ':' 'SELECTTYPE'	'(' selector ')'
-	|	'SELECTTYPE' '(' NAME_LITERAL '=' '>' selector ')'
-	|	'SELECTTYPE' '(' selector ')'
+		NAME_LITERAL ':' 'SELECT' 'TYPE'	'(' NAME_LITERAL '=' '>' selector ')' stmt-end
+	|	NAME_LITERAL ':' 'SELECT' 'TYPE'	'(' selector ')' stmt-end
+	|	'SELECT' 'TYPE'	'(' NAME_LITERAL '=' '>' selector ')' stmt-end
+	|	'SELECT' 'TYPE'	'(' selector ')' stmt-end
+	|	NAME_LITERAL ':' 'SELECTTYPE'	'(' NAME_LITERAL '=' '>' selector ')' stmt-end
+	|	NAME_LITERAL ':' 'SELECTTYPE'	'(' selector ')' stmt-end
+	|	'SELECTTYPE' '(' NAME_LITERAL '=' '>' selector ')' stmt-end
+	|	'SELECTTYPE' '(' selector ')' stmt-end
 	;
 
 /*
@@ -3445,78 +3451,78 @@ R822 end-do-stmt is END DO [ do-construct-name ]
 	or CLASS DEFAULT [ select-construct-name ]
 */
 	type-guard-stmt :
-		'TYPE' 'IS' '(' type-spec ')' NAME_LITERAL
-	|	'TYPE' 'IS' '(' type-spec ')'
-	|	'CLASS' 'IS' '(' derived-type-spec ')' NAME_LITERAL
-	|	'CLASS' 'IS' '(' derived-type-spec ')'
-	|	'CLASS' 'DEFAULT' NAME_LITERAL
-	|	'CLASS' 'DEFAULT'
+		'TYPE' 'IS' '(' type-spec ')' NAME_LITERAL stmt-end
+	|	'TYPE' 'IS' '(' type-spec ')' stmt-end
+	|	'CLASS' 'IS' '(' derived-type-spec ')' NAME_LITERAL stmt-end
+	|	'CLASS' 'IS' '(' derived-type-spec ')' stmt-end
+	|	'CLASS' 'DEFAULT' NAME_LITERAL stmt-end
+	|	'CLASS' 'DEFAULT' stmt-end
 	;
 
 /*
 	R849 end-select-type-stmt is END SELECT [ select-construct-name ]
 */
 	end-select-type-stmt :
-		'END' 'SELECT' NAME_LITERAL
-	|	'END' 'SELECT'
-	|	'ENDSELECT' NAME_LITERAL
-	|	'ENDSELECT'
+		'END' 'SELECT' NAME_LITERAL stmt-end
+	|	'END' 'SELECT' stmt-end
+	|	'ENDSELECT' NAME_LITERAL stmt-end
+	|	'ENDSELECT' stmt-end
 	;
 
 /*
 	R850 exit-stmt is EXIT [ construct-name ]
 */
 	exit-stmt :
-		'EXIT' NAME_LITERAL
-	|	'EXIT'
+		'EXIT' NAME_LITERAL stmt-end
+	|	'EXIT' stmt-end
 	;
 
 /*
 	R851 goto-stmt is GO TO label
 */
 	goto-stmt :
-		'GO' 'TO' INT_LITERAL_CONSTANT
-	|	'GOTO' INT_LITERAL_CONSTANT
+		'GO' 'TO' INT_LITERAL_CONSTANT stmt-end
+	|	'GOTO' INT_LITERAL_CONSTANT stmt-end
 	;
 
 /*
 	R852 computed-goto-stmt is GO TO ( label -list ) [ , ] scalar-int-expr
 */
 	computed-goto-stmt :
-		'GO' 'TO' '(' label-list ')' ',' expr
-	|	'GO' 'TO' '(' label-list ')' expr
-	|	'GOTO' '(' label-list ')' ',' expr
-	|	'GOTO' '(' label-list ')' expr
+		'GO' 'TO' '(' label-list ')' ',' expr stmt-end
+	|	'GO' 'TO' '(' label-list ')' expr stmt-end
+	|	'GOTO' '(' label-list ')' ',' expr stmt-end
+	|	'GOTO' '(' label-list ')' expr stmt-end
 	;
 
 /*
 R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 */
 	arithmetic-if-stmt :
-		'IF' '(' expr ')' INT_LITERAL_CONSTANT ',' INT_LITERAL_CONSTANT ',' INT_LITERAL_CONSTANT
+		'IF' '(' expr ')' INT_LITERAL_CONSTANT ',' INT_LITERAL_CONSTANT ',' INT_LITERAL_CONSTANT stmt-end
 	;
 
 /*
 	R854 continue-stmt is CONTINUE
 */
 	continue-stmt :
-		'CONTINUE'
+		'CONTINUE' stmt-end
 	;
 
 /*
 	R855 stop-stmt is STOP [ stop-code ]
 */
 	stop-stmt :
-		'STOP' stop-code
-	|	'STOP'
+		'STOP' stop-code stmt-end
+	|	'STOP' stmt-end
 	;
 
 /*
 	R856 error-stop-stmt is ERROR STOP [ stop-code ]
 */
 	error-stop-stmt :
-		'ERROR' 'STOP' stop-code
-	|	'ERROR' 'STOP'
+		'ERROR' 'STOP' stop-code stmt-end
+	|	'ERROR' 'STOP' stmt-end
 	;
 
 /*
@@ -3531,9 +3537,9 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	R858 sync-all-stmt is SYNC ALL [ ( [ sync-stat-list ] ) ]
 */
 	sync-all-stmt :
-		'SYNC' 'ALL' '(' sync-stat-list ')'
-	|	'SYNC' 'ALL' '(' ')'
-	|	'SYNC' 'ALL'
+		'SYNC' 'ALL' '(' sync-stat-list ')' stmt-end
+	|	'SYNC' 'ALL' '(' ')' stmt-end
+	|	'SYNC' 'ALL' stmt-end
 	;
 
 /*
@@ -3552,8 +3558,8 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	R860 sync-images-stmt is SYNC IMAGES ( image-set [ , sync-stat-list ] )
 */
 	sync-images-stmt :
-		'SYNC' 'IMAGES' '(' image-set ',' sync-stat-list ')'
-	|	'SYNC' 'IMAGES' '(' image-set ')'
+		'SYNC' 'IMAGES' '(' image-set ',' sync-stat-list ')' stmt-end
+	|	'SYNC' 'IMAGES' '(' image-set ')' stmt-end
 	;
 
 /*
@@ -3569,8 +3575,8 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	R862 sync-memory-stmt is SYNC MEMORY [ ( [ sync-stat-list ] ) ]
 */
 	sync-memory-stmt :
-		'SYNC' 'MEMORY' '(' sync-stat-list ')'
-	|	'SYNC' 'MEMORY' '(' ')'
+		'SYNC' 'MEMORY' '(' sync-stat-list ')' stmt-end
+	|	'SYNC' 'MEMORY' '(' ')' stmt-end
 	|	'SYNC' 'MEMORY'
 	;
 
@@ -3578,8 +3584,8 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	R863 lock-stmt is LOCK ( lock-variable [ , lock-stat-list ] )
 */
 	lock-stmt :
-		'LOCK' '(' variable ( ',' lock-stat-list ) ? ')'
-	|	'LOCK' '(' variable ')'
+		'LOCK' '(' variable ( ',' lock-stat-list ) ? ')' stmt-end
+	|	'LOCK' '(' variable ')' stmt-end
 	;
 
 /*
@@ -3598,8 +3604,8 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	R865 unlock-stmt is UNLOCK ( lock-variable [ , sync-stat-list ] )
 */
 	unlock-stmt :
-		'UNLOCK' '(' variable ',' sync-stat-list ')'
-	|	'UNLOCK' '(' variable ')'
+		'UNLOCK' '(' variable ',' sync-stat-list ')' stmt-end
+	|	'UNLOCK' '(' variable ')' stmt-end
 	;
 
 /*
@@ -3640,7 +3646,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	R904 open-stmt is OPEN ( connect-spec-list )
 */
 	open-stmt :
-		'OPEN' '(' connect-spec-list ')'
+		'OPEN' '(' connect-spec-list ')' stmt-end
 	;
 
 /*
@@ -3709,7 +3715,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	R908 close-stmt is CLOSE ( close-spec-list )
 */
 	close-stmt :
-		'CLOSE' '(' close-spec-list ')'
+		'CLOSE' '(' close-spec-list ')' stmt-end
 	;
 
 /*
@@ -3736,26 +3742,26 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	or READ format [ , input-item-list ]
 */
 	read-stmt :
-		'READ' '(' io-control-spec-list ')' input-item-list
-	|	'READ' '(' io-control-spec-list ')'
-	|	'READ' format ',' input-item-list
-	|	'READ' format
+		'READ' '(' io-control-spec-list ')' input-item-list stmt-end
+	|	'READ' '(' io-control-spec-list ')' stmt-end
+	|	'READ' format ',' input-item-list stmt-end
+	|	'READ' format stmt-end
 	;
 
 /*
 	R911 write-stmt is WRITE ( io-control-spec-list ) [ output-item-list ]
 */
 	write-stmt :
-		'WRITE' '(' io-control-spec-list ')' output-item-list
-	|	'WRITE' '(' io-control-spec-list ')'
+		'WRITE' '(' io-control-spec-list ')' output-item-list stmt-end
+	|	'WRITE' '(' io-control-spec-list ')' stmt-end
 	;
 
 /*
 	R912 print-stmt is PRINT format [ , output-item-list ]
 */
 	print-stmt :
-		'PRINT' format ',' output-item-list
-	|	'PRINT' format
+		'PRINT' format ',' output-item-list stmt-end
+	|	'PRINT' format stmt-end
 	;
 
 /*
@@ -3890,7 +3896,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	R922 wait-stmt is WAIT (wait-spec-list)
 */
 	wait-stmt :
-		'WAIT' '(' wait-spec-list ')'
+		'WAIT' '(' wait-spec-list ')' stmt-end
 	;
 
 /*
@@ -3921,8 +3927,8 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	or BACKSPACE ( position-spec-list )
 */
 	backspace-stmt :
-		'BACKSPACE' file-unit-number
-	|	'BACKSPACE' '(' position-spec-list ')'
+		'BACKSPACE' file-unit-number stmt-end
+	|	'BACKSPACE' '(' position-spec-list ')' stmt-end
 	;
 
 /*
@@ -3930,10 +3936,10 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	or ENDFILE ( position-spec-list )
 */
 	endfile-stmt :
-		'END' 'FILE' file-unit-number
-	|	'END' 'FILE' '(' position-spec-list ')'
-	|	'ENDFILE' file-unit-number
-	|	'ENDFILE' '(' position-spec-list ')'
+		'END' 'FILE' file-unit-number stmt-end
+	|	'END' 'FILE' '(' position-spec-list ')' stmt-end
+	|	'ENDFILE' file-unit-number stmt-end
+	|	'ENDFILE' '(' position-spec-list ')' stmt-end
 	;
 
 /*
@@ -3941,8 +3947,8 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	or REWIND ( position-spec-list )
 */
 	rewind-stmt :
-		'REWIND' file-unit-number
-	|	'REWIND' '(' position-spec-list ')'
+		'REWIND' file-unit-number stmt-end
+	|	'REWIND' '(' position-spec-list ')' stmt-end
 	;
 
 /*
@@ -3968,8 +3974,8 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	flush-spec-list )
 */
 	flush-stmt :
-		'FLUSH' file-unit-number
-	|	'FLUSH' '(' flush-spec-list ')'
+		'FLUSH' file-unit-number stmt-end
+	|	'FLUSH' '(' flush-spec-list ')' stmt-end
 	;
 
 /*
@@ -3995,8 +4001,8 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	output-item-list
 */
 	inquire-stmt :
-		'INQUIRE' '(' inquire-spec-list ')'
-	|	'INQUIRE' '(' 'IOLENGTH' '=' variable ')' output-item-list
+		'INQUIRE' '(' inquire-spec-list ')' stmt-end
+	|	'INQUIRE' '(' 'IOLENGTH' '=' variable ')' output-item-list stmt-end
 	;
 
 /*
@@ -4088,7 +4094,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	R1001 format-stmt is FORMAT format-specification
 */
 	format-stmt :
-		'FORMAT' format-specification
+		'FORMAT' format-specification stmt-end
 	;
 
 /*
@@ -4344,18 +4350,18 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	R1102 program-stmt is PROGRAM program-name
 */
 	program-stmt :
-		'PROGRAM' NAME_LITERAL
+		'PROGRAM' NAME_LITERAL stmt-end
 	;
 
 /*
 	R1103 end-program-stmt is END [ PROGRAM [ program-name ] ]
 */
 	end-program-stmt :
-		'END' 'PROGRAM' NAME_LITERAL
-	|	'ENDPROGRAM' NAME_LITERAL
-	|	'END' 'PROGRAM' 
-	|	'ENDPROGRAM' 
-	|	'END'
+		'END' 'PROGRAM' NAME_LITERAL stmt-end
+	|	'ENDPROGRAM' NAME_LITERAL stmt-end
+	|	'END' 'PROGRAM' stmt-end 
+	|	'ENDPROGRAM' stmt-end 
+	|	'END' stmt-end
 	;
 
 /*
@@ -4375,18 +4381,18 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	R1105 module-stmt is MODULE module-name
 */
 	module-stmt :
-		'MODULE' NAME_LITERAL
+		'MODULE' NAME_LITERAL stmt-end
 	;
 
 /*
 	R1106 end-module-stmt is END [ MODULE [ module-name ] ]
 */
 	end-module-stmt :
-		'END' 'MODULE' NAME_LITERAL
-	|	'ENDMODULE' NAME_LITERAL
-	|	'END' 'MODULE'
-	|	'ENDMODULE'
-	|	'END'
+		'END' 'MODULE' NAME_LITERAL stmt-end
+	|	'ENDMODULE' NAME_LITERAL stmt-end
+	|	'END' 'MODULE' stmt-end
+	|	'ENDMODULE' stmt-end
+	|	'END' stmt-end
 	;
 
 /*
@@ -4415,8 +4421,8 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	ONLY : [ only-list ]
 */
 	use-stmt :
-		'USE' ( ( ',' module-nature ) ? ':' ':' ) ? NAME_LITERAL ( ',' rename-list ) ?
-	|	'USE' ( ( ',' module-nature ) ? ':' ':' ) ? NAME_LITERAL ',' 'ONLY' ':' only-list ?
+		'USE' ( ( ',' module-nature ) ? ':' ':' ) ? NAME_LITERAL ( ',' rename-list ) ? stmt-end
+	|	'USE' ( ( ',' module-nature ) ? ':' ':' ) ? NAME_LITERAL ',' 'ONLY' ':' only-list ? stmt-end
 	;
 
 /*
@@ -4494,7 +4500,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	R1117 submodule-stmt is SUBMODULE ( parent-identifier ) submodule-name
 */
 	submodule-stmt :
-		'SUBMODULE' '(' parent-identifier ')' NAME_LITERAL
+		'SUBMODULE' '(' parent-identifier ')' NAME_LITERAL stmt-end
 	;
 
 /*
@@ -4508,11 +4514,11 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	R1119 end-submodule-stmt is END [ SUBMODULE [ submodule-name ] ]
 */
 	end-submodule-stmt :
-		'END' 'SUBMODULE' NAME_LITERAL
-	|	'ENDSUBMODULE' NAME_LITERAL
-	|	'END' 'SUBMODULE'
-	|	'ENDSUBMODULE'
-	|	'END'
+		'END' 'SUBMODULE' NAME_LITERAL stmt-end
+	|	'ENDSUBMODULE' NAME_LITERAL stmt-end
+	|	'END' 'SUBMODULE' stmt-end
+	|	'ENDSUBMODULE' stmt-end
+	|	'END' stmt-end
 	;
 
 /*
@@ -4530,24 +4536,24 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	R1121 block-data-stmt is BLOCK DATA [ block-data-name ]
 */
 	block-data-stmt :
-		'BLOCK' 'DATA' NAME_LITERAL
-	|	'BLOCK' 'DATA'
-	|	'BLOCKDATA' NAME_LITERAL
-	|	'BLOCKDATA'
+		'BLOCK' 'DATA' NAME_LITERAL stmt-end
+	|	'BLOCK' 'DATA' stmt-end
+	|	'BLOCKDATA' NAME_LITERAL stmt-end
+	|	'BLOCKDATA' stmt-end
 	;
 
 /*
 	R1122 end-block-data-stmt is END [ BLOCK DATA [ block-data-name ] ]
 */
 	end-block-data-stmt :
-		'END' 'BLOCK' 'DATA' NAME_LITERAL
-	|	'ENDBLOCK' 'DATA' NAME_LITERAL
-	|	'END' 'BLOCKDATA' NAME_LITERAL
-	|	'ENDBLOCKDATA' NAME_LITERAL
-	|	'END' 'BLOCK' 'DATA'
-	|	'ENDBLOCK' 'DATA'
-	|	'END' 'BLOCKDATA'
-	|	'ENDBLOCKDATA'
+		'END' 'BLOCK' 'DATA' NAME_LITERAL stmt-end
+	|	'ENDBLOCK' 'DATA' NAME_LITERAL stmt-end
+	|	'END' 'BLOCKDATA' NAME_LITERAL stmt-end
+	|	'ENDBLOCKDATA' NAME_LITERAL stmt-end
+	|	'END' 'BLOCK' 'DATA' stmt-end
+	|	'ENDBLOCK' 'DATA' stmt-end
+	|	'END' 'BLOCKDATA' stmt-end
+	|	'ENDBLOCKDATA' stmt-end
 	;
 
 /***************
@@ -4579,19 +4585,19 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	or ABSTRACT INTERFACE
 */
 	interface-stmt :
-		'INTERFACE' generic-spec
-	|	'INTERFACE'
-	|	'ABSTRACT' 'INTERFACE'
+		'INTERFACE' generic-spec stmt-end
+	|	'INTERFACE' stmt-end
+	|	'ABSTRACT' 'INTERFACE' stmt-end
 	;
 
 /*
 	R1204 end-interface-stmt is END INTERFACE [ generic-spec ]
 */
 	end-interface-stmt :
-		'END' 'INTERFACE' generic-spec
-	|	'END' 'INTERFACE'
-	|	'ENDINTERFACE' generic-spec
-	|	'ENDINTERFACE'
+		'END' 'INTERFACE' generic-spec stmt-end
+	|	'END' 'INTERFACE' stmt-end
+	|	'ENDINTERFACE' generic-spec stmt-end
+	|	'ENDINTERFACE' stmt-end
 	;
 
 /*
@@ -4613,10 +4619,10 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	R1206 procedure-stmt is [ MODULE ] PROCEDURE [ :: ] procedure-name-list
 */
 	procedure-stmt :
-		'MODULE' 'PROCEDURE' ':' ':' name-list
-	|	'MODULE' 'PROCEDURE' name-list
-	|	'PROCEDURE' ':' ':' name-list
-	|	'PROCEDURE' name-list
+		'MODULE' 'PROCEDURE' ':' ':' name-list stmt-end
+	|	'MODULE' 'PROCEDURE' name-list stmt-end
+	|	'PROCEDURE' ':' ':' name-list stmt-end
+	|	'PROCEDURE' name-list stmt-end
 	;
 
 /*
@@ -4649,16 +4655,16 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	R1209 import-stmt is IMPORT [[ :: ] import-name-list
 */
 	import-stmt :
-		'IMPORT' ':' ':' name-list
-	|	'IMPORT' name-list
+		'IMPORT' ':' ':' name-list stmt-end
+	|	'IMPORT' name-list stmt-end
 	;
 
 /*
 	R1210 external-stmt is EXTERNAL [ :: ] external-name-list
 */
 	external-stmt :
-		'EXTERNAL' ':' ':' name-list
-	|	'EXTERNAL' name-list
+		'EXTERNAL' ':' ':' name-list stmt-end
+	|	'EXTERNAL' name-list stmt-end
 	;
 
 /*
@@ -4666,9 +4672,9 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	[ [ , proc-attr-spec ] ... :: ] proc-decl-list
 */
 	procedure-declaration-stmt :
-		'PROCEDURE' '(' proc-interface ? ')'
-		( ( ',' proc-attr-spec ) * ':' ':' ) ?
-		proc-decl-list
+		'PROCEDURE' '(' proc-interface ? ')' 
+		( ( ',' proc-attr-spec ) * ':' ':' ) ? 
+		proc-decl-list stmt-end
 	;
 
 /*
@@ -4733,8 +4739,8 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	R1218 intrinsic-stmt is INTRINSIC [ :: ] intrinsic-procedure-name-list
 */
 	intrinsic-stmt :
-		'INTRINSIC' ':' ':' name-list
-	|	'INTRINSIC' name-list
+		'INTRINSIC' ':' ':' name-list stmt-end
+	|	'INTRINSIC' name-list stmt-end
 	;
 
 /*
@@ -4748,9 +4754,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	R1220 call-stmt is CALL procedure-designator [ ( [ actual-arg-spec-list ] ) ]
 */
 	call-stmt :
-		'CALL' procedure-designator '(' actual-arg-spec-list ')'
-	|	'CALL' procedure-designator '(' ')'
-	|	'CALL' procedure-designator
+		'CALL' procedure-designator ( '(' actual-arg-spec-list ?  ')' ) ? stmt-end
 	;
 
 /*
@@ -4760,16 +4764,15 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 */
 	procedure-designator :
 		NAME_LITERAL
-	|	proc-component-ref
 	|	data-ref '%' NAME_LITERAL
+	|	proc-component-ref
 	;
 
 /*
 	R1222 actual-arg-spec is [ keyword = ] actual-arg
 */
 	actual-arg-spec :
-		NAME_LITERAL '=' actual-arg
-	|	actual-arg
+		( NAME_LITERAL '=' ) ? actual-arg
 	;
 	actual-arg-spec-list :
 		actual-arg-spec-list ',' actual-arg-spec
@@ -4784,11 +4787,11 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	or alt-return-spec
 */
 	actual-arg :
-		expr
-	|	variable
-	|	NAME_LITERAL
-	|	proc-component-ref
+		NAME_LITERAL
+//	|	proc-component-ref
 	|	alt-return-spec
+//	|	expr
+	|	variable ( '%' NAME_LITERAL ) ?
 	;
 
 /*
@@ -4842,7 +4845,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	( [ dummy-arg-name-list ] ) [ sufix ]
 */
 	function-stmt : 
-		prefix ? 'FUNCTION' NAME_LITERAL '(' name-list ? ')' sufix ?
+		prefix ? 'FUNCTION' NAME_LITERAL '(' name-list ? ')' sufix ? stmt-end
 	;
 
 /*
@@ -4873,11 +4876,11 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	R1232 end-function-stmt is END [ FUNCTION [ function-name ] ]
 */
 	end-function-stmt :
-		'END' 'FUNCTION' NAME_LITERAL
-	|	'ENDFUNCTION' NAME_LITERAL
-	|	'END' 'FUNCTION'
-	|	'ENDFUNCTION'
-	|	'END'
+		'END' 'FUNCTION' NAME_LITERAL stmt-end
+	|	'ENDFUNCTION' NAME_LITERAL stmt-end
+	|	'END' 'FUNCTION' stmt-end
+	|	'ENDFUNCTION' stmt-end
+	|	'END' stmt-end
 	;
 
 /*
@@ -4904,16 +4907,16 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	[ ( [ dummy-arg-list ] ) [ proc-language-binding-spec ] ]
 */
 	subroutine-stmt :
-		prefix 'SUBROUTINE' NAME_LITERAL '(' dummy-arg-list ')' proc-language-binding-spec
-	|	prefix 'SUBROUTINE' NAME_LITERAL '(' ')' proc-language-binding-spec
-	|	prefix 'SUBROUTINE' NAME_LITERAL '(' dummy-arg-list ')' 
-	|	prefix 'SUBROUTINE' NAME_LITERAL '(' ')' 
-	|	prefix 'SUBROUTINE' NAME_LITERAL
-	|	'SUBROUTINE' NAME_LITERAL '(' dummy-arg-list ')' proc-language-binding-spec
-	|	'SUBROUTINE' NAME_LITERAL '(' ')' proc-language-binding-spec
-	|	'SUBROUTINE' NAME_LITERAL '(' dummy-arg-list ')' 
-	|	'SUBROUTINE' NAME_LITERAL '(' ')' 
-	|	'SUBROUTINE' NAME_LITERAL
+		prefix 'SUBROUTINE' NAME_LITERAL '(' dummy-arg-list ')' proc-language-binding-spec stmt-end
+	|	prefix 'SUBROUTINE' NAME_LITERAL '(' ')' proc-language-binding-spec stmt-end
+	|	prefix 'SUBROUTINE' NAME_LITERAL '(' dummy-arg-list ')' stmt-end 
+	|	prefix 'SUBROUTINE' NAME_LITERAL '(' ')' stmt-end 
+	|	prefix 'SUBROUTINE' NAME_LITERAL stmt-end
+	|	'SUBROUTINE' NAME_LITERAL '(' dummy-arg-list ')' proc-language-binding-spec stmt-end
+	|	'SUBROUTINE' NAME_LITERAL '(' ')' proc-language-binding-spec stmt-end
+	|	'SUBROUTINE' NAME_LITERAL '(' dummy-arg-list ')' stmt-end 
+	|	'SUBROUTINE' NAME_LITERAL '(' ')' stmt-end 
+	|	'SUBROUTINE' NAME_LITERAL stmt-end
 	;
 
 /*
@@ -4933,11 +4936,11 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	R1236 end-subroutine-stmt is END [ SUBROUTINE [ subroutine-name ] ]
 */
 	end-subroutine-stmt :
-		'END' 'SUBROUTINE' NAME_LITERAL
-	|	'ENDSUBROUTINE' NAME_LITERAL
-	|	'END' 'SUBROUTINE'
-	|	'ENDSUBROUTINE'
-	|	'END'
+		'END' 'SUBROUTINE' NAME_LITERAL stmt-end
+	|	'ENDSUBROUTINE' NAME_LITERAL stmt-end
+	|	'END' 'SUBROUTINE' stmt-end
+	|	'ENDSUBROUTINE' stmt-end
+	|	'END' stmt-end
 	;
 
 /*
@@ -4959,48 +4962,48 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	R1238 mp-subprogram-stmt is MODULE PROCEDURE procedure-name
 */
 	mp-subprogram-stmt :
-		'MODULE' 'PROCEDURE' NAME_LITERAL
+		'MODULE' 'PROCEDURE' NAME_LITERAL stmt-end
 	;
 
 /*
 	R1239 end-mp-subprogram-stmt is END [PROCEDURE [procedure-name]]
 */
 	end-mp-subprogram-stmt :
-		'END' 'PROCEDURE' NAME_LITERAL
-	|	'ENDPROCEDURE' NAME_LITERAL
-	|	'END' 'PROCEDURE'
-	|	'ENDPROCEDURE'
-	|	'END'
+		'END' 'PROCEDURE' NAME_LITERAL stmt-end
+	|	'ENDPROCEDURE' NAME_LITERAL stmt-end
+	|	'END' 'PROCEDURE' stmt-end
+	|	'ENDPROCEDURE' stmt-end
+	|	'END' stmt-end
 	;
 
 /*
 	R1240 entry-stmt is ENTRY entry-name [ ( [ dummy-arg-list ] ) [ sufix ] ]
 */
 	entry-stmt :
-		'ENTRY' NAME_LITERAL '(' dummy-arg-list ')' sufix
-		'ENTRY' NAME_LITERAL '(' ')' sufix
-		'ENTRY' NAME_LITERAL '(' dummy-arg-list ')'
-	|	'ENTRY' NAME_LITERAL
+		'ENTRY' NAME_LITERAL '(' dummy-arg-list ')' sufix stmt-end
+		'ENTRY' NAME_LITERAL '(' ')' sufix stmt-end
+		'ENTRY' NAME_LITERAL '(' dummy-arg-list ')' stmt-end
+	|	'ENTRY' NAME_LITERAL stmt-end
 	;
 
 /*
 	R1241 return-stmt is RETURN [ scalar-int-expr ]
 */
 	return-stmt :
-		'RETURN' expr
-	|	'RETURN' 
+		'RETURN' expr stmt-end
+	|	'RETURN' stmt-end 
 	;
 
 /*
 	R1242 contains-stmt is CONTAINS
 */
 	contains-stmt :
-		'CONTAINS'
+		'CONTAINS' stmt-end
 	;
 
 /*
 	R1243 stmt-function-stmt is function-name ( [ dummy-arg-name-list ] ) = scalar-expr
 */
 	stmt-function-stmt :
-		NAME_LITERAL '(' name-list ')' '=' expr
+		NAME_LITERAL '(' name-list ')' '=' expr stmt-end
 	;
