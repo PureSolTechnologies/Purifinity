@@ -6,8 +6,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import com.puresol.di.DependencyInjection;
-import com.puresol.di.Injection;
 import com.puresol.uhura.grammar.GrammarException;
 
 /**
@@ -31,8 +29,7 @@ public class ProductionSet implements Serializable {
 			throw new GrammarException("Double defined production '"
 					+ production + "'!");
 		}
-		DependencyInjection.inject(production,
-				Injection.named("id", productions.size()));
+		production.setId(productions.size());
 		productions.add(production);
 		if (!name2Production.containsKey(production.getName())) {
 			name2Production.put(production.getName(),
@@ -86,8 +83,7 @@ public class ProductionSet implements Serializable {
 			throws GrammarException {
 		ProductionSet productionSet = new ProductionSet();
 		Production startProduction = new Production("_START_");
-		startProduction.addConstruction(new NonTerminal(
-				productionName));
+		startProduction.addConstruction(new NonTerminal(productionName));
 		productionSet.add(startProduction);
 		if (productions.size() > 1) {
 			for (int i = 1; i < productions.size(); i++) {

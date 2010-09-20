@@ -4,14 +4,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.puresol.di.Inject;
-
 public class Production implements Serializable {
 
 	private static final long serialVersionUID = -3776357938906717512L;
 
-	@Inject("id")
-	private Integer id = 0;
+	private int id = -1;
 	private final String name;
 	private final String alternativeName;
 	private final List<Construction> constructions = new ArrayList<Construction>();
@@ -28,6 +25,12 @@ public class Production implements Serializable {
 		super();
 		this.name = name;
 		this.alternativeName = alternativeName;
+	}
+
+	public void setId(int id) {
+		if (this.id < 0) {
+			this.id = id;
+		}
 	}
 
 	/**
@@ -156,11 +159,6 @@ public class Production implements Serializable {
 		return result.toString();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -169,18 +167,13 @@ public class Production implements Serializable {
 				+ ((alternativeName == null) ? 0 : alternativeName.hashCode());
 		result = prime * result
 				+ ((constructions == null) ? 0 : constructions.hashCode());
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + id;
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + (node ? 1231 : 1237);
 		result = prime * result + (stackingAllowed ? 1231 : 1237);
 		return result;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -200,10 +193,7 @@ public class Production implements Serializable {
 				return false;
 		} else if (!constructions.equals(other.constructions))
 			return false;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
+		if (id != other.id)
 			return false;
 		if (name == null) {
 			if (other.name != null)

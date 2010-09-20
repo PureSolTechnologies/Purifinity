@@ -54,11 +54,20 @@ public class LALR1StateTransitionGraph implements Serializable {
 
 	private void calculateLookahead() {
 		boolean changed;
+		boolean first = true;
+		int run = 0;
 		do {
 			changed = false;
-			ConcurrentMap<Integer, List<LR1Item>> newItems = new ConcurrentHashMap<Integer, List<LR1Item>>();
+			run++;
+			if (first) {
+				addNewLookahead(0, new LR1Item(grammar.getProductions().get(0),
+						0, FinishTerminal.getInstance()));
+				changed = true;
+				first = false;
+			}
 			for (int stateId = 0; stateId < itemSetCollection.size(); stateId++) {
 				LR1ItemSet lr1ItemSet = itemSetCollection.get(stateId);
+				int dummys = getDummyCount();
 				for (LR1Item lr1Item : lr1ItemSet.getKernelItems()) {
 					LR1ItemSet closure = closure1.calc(lr1Item);
 					for (LR1Item closureItem : closure.getAllItems()) {
@@ -69,25 +78,12 @@ public class LALR1StateTransitionGraph implements Serializable {
 									closureItem.getProduction(),
 									closureItem.getPosition() + 1,
 									closureItem.getLookahead());
-							List<LR1Item> itemList = newItems.get(stateId);
-							if (itemList == null) {
-								itemList = new ArrayList<LR1Item>();
-								newItems.put(stateId, itemList);
+							if (addNewLookahead(stateId, newItem)) {
+								changed = true;
+								logger.trace("state: " + stateId + " run: "
+										+ run + " (" + dummys + ")");
 							}
-							itemList.add(newItem);
 						}
-					}
-				}
-			}
-			int size = newItems.size();
-			int dummys = getDummyCount();
-			int count = 0;
-			for (Integer stateId : newItems.keySet()) {
-				count++;
-				logger.trace(count + " / " + size + " (" + dummys + ")");
-				for (LR1Item item : newItems.get(stateId)) {
-					if (addNewLookahead(stateId, item)) {
-						changed = true;
 					}
 				}
 			}
