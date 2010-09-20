@@ -43,7 +43,8 @@ public class LALR1StateTransitionGraph implements Serializable {
 		lr0StateTransitionGraph = new LR0StateTransitionGraph(grammar);
 		logger.trace("Calculate LR0 kernel items...");
 		calculateLR0KernelItemSets();
-		logger.trace("Calculate look aheads...");
+		logger.trace("Calculate look aheads for " + itemSetCollection.size()
+				+ " items...");
 		calculateLookahead();
 		logger.trace("Print look ahead table...");
 		printLookaheadTable();
@@ -58,7 +59,6 @@ public class LALR1StateTransitionGraph implements Serializable {
 			ConcurrentMap<Integer, List<LR1Item>> newItems = new ConcurrentHashMap<Integer, List<LR1Item>>();
 			for (int stateId = 0; stateId < itemSetCollection.size(); stateId++) {
 				LR1ItemSet lr1ItemSet = itemSetCollection.get(stateId);
-				newItems.put(stateId, new ArrayList<LR1Item>());
 				for (LR1Item lr1Item : lr1ItemSet.getKernelItems()) {
 					LR1ItemSet closure = closure1.calc(lr1Item);
 					for (LR1Item closureItem : closure.getAllItems()) {
@@ -69,12 +69,22 @@ public class LALR1StateTransitionGraph implements Serializable {
 									closureItem.getProduction(),
 									closureItem.getPosition() + 1,
 									closureItem.getLookahead());
-							newItems.get(stateId).add(newItem);
+							List<LR1Item> itemList = newItems.get(stateId);
+							if (itemList == null) {
+								itemList = new ArrayList<LR1Item>();
+								newItems.put(stateId, itemList);
+							}
+							itemList.add(newItem);
 						}
 					}
 				}
 			}
+			int size = newItems.size();
+			int dummys = getDummyCount();
+			int count = 0;
 			for (Integer stateId : newItems.keySet()) {
+				count++;
+				logger.trace(count + " / " + size + " (" + dummys + ")");
 				for (LR1Item item : newItems.get(stateId)) {
 					if (addNewLookahead(stateId, item)) {
 						changed = true;
@@ -202,6 +212,18 @@ public class LALR1StateTransitionGraph implements Serializable {
 
 	public Grammar getGrammar() {
 		return grammar;
+	}
+
+	private int getDummyCount() {
+		int count = 0;
+		for (LR1ItemSet itemSet : itemSetCollection) {
+			for (LR1Item item : itemSet.getAllItems()) {
+				if (item.getLookahead().equals(DummyTerminal.getInstance())) {
+					count++;
+				}
+			}
+		}
+		return count;
 	}
 
 	@Override

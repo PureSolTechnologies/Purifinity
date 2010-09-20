@@ -37,8 +37,8 @@ public class AbstractItemSet<T extends Item> implements Serializable {
 	 * @param kernelItem
 	 */
 	public AbstractItemSet(T kernelItem) {
-		this.kernelItems.add(kernelItem);
-		this.allItems.add(kernelItem);
+		kernelItems.add(kernelItem);
+		allItems.add(kernelItem);
 	}
 
 	/**
@@ -79,8 +79,9 @@ public class AbstractItemSet<T extends Item> implements Serializable {
 	}
 
 	public void addNonKernelItems(Set<T> items) {
-		nonKernelItems.addAll(items);
-		allItems.addAll(items);
+		for (T item : items) {
+			addNonKernelItem(item);
+		}
 	}
 
 	public void addNonKernelItem(T item) {
