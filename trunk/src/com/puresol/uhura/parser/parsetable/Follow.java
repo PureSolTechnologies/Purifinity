@@ -38,13 +38,6 @@ public class Follow implements Serializable {
 
 	private final ConcurrentMap<String, Set<Construction>> follow = new ConcurrentHashMap<String, Set<Construction>>();
 
-	public Follow(Grammar grammar) {
-		super();
-		this.grammar = grammar;
-		this.first = new First(grammar);
-		calculate();
-	}
-
 	public Follow(Grammar grammar, First first) {
 		super();
 		this.grammar = grammar;

@@ -38,7 +38,7 @@ public class UhuraGrammarTest extends TestCase {
 		System.out.println("Follow:");
 		System.out.println("=======");
 		Grammar grammar = UhuraGrammar.getGrammar();
-		Follow follow = new Follow(grammar);
+		Follow follow = new Follow(grammar, new First(grammar));
 		System.out.println(follow.toString());
 	}
 

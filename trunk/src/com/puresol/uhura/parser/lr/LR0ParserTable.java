@@ -17,20 +17,20 @@ public class LR0ParserTable extends AbstractParserTable {
 
 	private static final long serialVersionUID = 4063891308079169101L;
 
-	private LR0StateTransitionGraph transitionGraph;
-
 	public LR0ParserTable(Grammar grammar) throws GrammarException {
 		super(grammar);
 	}
 
 	@Override
 	protected void calculate() throws GrammarException {
-		transitionGraph = new LR0StateTransitionGraph(getGrammar());
-		addShiftAndGotos();
-		addReduceAndAccept();
+		LR0StateTransitionGraph transitionGraph = new LR0StateTransitionGraph(
+				getGrammar());
+		addShiftAndGotos(transitionGraph);
+		addReduceAndAccept(transitionGraph);
 	}
 
-	private void addShiftAndGotos() throws GrammarException {
+	private void addShiftAndGotos(LR0StateTransitionGraph transitionGraph)
+			throws GrammarException {
 		for (int stateId = 0; stateId < transitionGraph.getStateNumber(); stateId++) {
 			ConcurrentMap<Construction, Integer> transitions = transitionGraph
 					.getTransitions(stateId);
@@ -52,7 +52,8 @@ public class LR0ParserTable extends AbstractParserTable {
 		}
 	}
 
-	private void addReduceAndAccept() throws GrammarException {
+	private void addReduceAndAccept(LR0StateTransitionGraph transitionGraph)
+			throws GrammarException {
 		Grammar grammar = getGrammar();
 		for (int stateId = 0; stateId < transitionGraph.getStateNumber(); stateId++) {
 			LR0ItemSet itemSet = transitionGraph.getItemSet(stateId);

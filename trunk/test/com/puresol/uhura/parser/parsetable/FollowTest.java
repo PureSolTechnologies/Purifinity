@@ -25,7 +25,7 @@ public class FollowTest extends TestCase {
 		System.out.println("Productions:");
 		System.out.println(grammar.toProductionsString());
 
-		Follow follow = new Follow(grammar);
+		Follow follow = new Follow(grammar, new First(grammar));
 		System.out.println("Follow:");
 		System.out.println(follow.toString());
 
@@ -61,7 +61,7 @@ public class FollowTest extends TestCase {
 		System.out.println("Productions:");
 		System.out.println(grammar.toProductionsString());
 
-		Follow follow = new Follow(grammar);
+		Follow follow = new Follow(grammar, new First(grammar));
 		System.out.println("Follow:");
 		System.out.println(follow.toString());
 
@@ -109,7 +109,7 @@ public class FollowTest extends TestCase {
 		System.out.println("Productions:");
 		System.out.println(grammar.toProductionsString());
 
-		Follow follow = new Follow(grammar);
+		Follow follow = new Follow(grammar, new First(grammar));
 		System.out.println("Follow:");
 		System.out.println(follow.toString());
 

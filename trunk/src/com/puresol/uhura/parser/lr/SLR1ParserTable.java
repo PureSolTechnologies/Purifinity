@@ -11,6 +11,7 @@ import com.puresol.uhura.grammar.production.FinishTerminal;
 import com.puresol.uhura.grammar.production.NonTerminal;
 import com.puresol.uhura.parser.parsetable.AbstractParserTable;
 import com.puresol.uhura.parser.parsetable.ActionType;
+import com.puresol.uhura.parser.parsetable.First;
 import com.puresol.uhura.parser.parsetable.Follow;
 import com.puresol.uhura.parser.parsetable.LR0Item;
 import com.puresol.uhura.parser.parsetable.LR0ItemSet;
@@ -24,25 +25,19 @@ public class SLR1ParserTable extends AbstractParserTable {
 	private static final Logger logger = Logger
 			.getLogger(SLR1ParserTable.class);
 
-	private Follow follow;
-	private LR0StateTransitionGraph transitionGraph;
-
 	public SLR1ParserTable(Grammar grammar) throws GrammarException {
 		super(grammar);
 	}
 
 	protected void calculate() throws GrammarException {
-		follow = new Follow(getGrammar());
-		transitionGraph = new LR0StateTransitionGraph(getGrammar());
-		if (logger.isTraceEnabled()) {
-			logger.trace(follow.toString());
-			logger.trace(transitionGraph.toString());
-		}
-		addShiftAndGotos();
-		addReduceAndAccept();
+		LR0StateTransitionGraph transitionGraph = new LR0StateTransitionGraph(
+				getGrammar());
+		addShiftAndGotos(transitionGraph);
+		addReduceAndAccept(transitionGraph);
 	}
 
-	private void addShiftAndGotos() throws GrammarException {
+	private void addShiftAndGotos(LR0StateTransitionGraph transitionGraph)
+			throws GrammarException {
 		for (int stateId = 0; stateId < transitionGraph.getStateNumber(); stateId++) {
 			ConcurrentMap<Construction, Integer> transitions = transitionGraph
 					.getTransitions(stateId);
@@ -64,9 +59,11 @@ public class SLR1ParserTable extends AbstractParserTable {
 		}
 	}
 
-	private void addReduceAndAccept() throws GrammarException {
+	private void addReduceAndAccept(LR0StateTransitionGraph transitionGraph)
+			throws GrammarException {
 		logger.trace("Add reduce and accept states to table...");
 		Grammar grammar = getGrammar();
+		Follow follow = new Follow(grammar, new First(grammar));
 		for (int stateId = 0; stateId < transitionGraph.getStateNumber(); stateId++) {
 			LR0ItemSet itemSet = transitionGraph.getItemSet(stateId);
 			if (logger.isTraceEnabled()) {
@@ -96,9 +93,5 @@ public class SLR1ParserTable extends AbstractParserTable {
 				}
 			}
 		}
-	}
-
-	public LR0StateTransitionGraph getTransitionGraph() {
-		return this.transitionGraph;
 	}
 }

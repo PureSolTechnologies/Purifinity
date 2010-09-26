@@ -22,25 +22,25 @@ public class LALR1ParserTable extends AbstractParserTable {
 	private static final Logger logger = Logger
 			.getLogger(LALR1ParserTable.class);
 
-	private LALR1StateTransitionGraph transitionGraph;
-
 	public LALR1ParserTable(Grammar grammar) throws GrammarException {
 		super(grammar);
 	}
 
 	protected void calculate() throws GrammarException {
 		logger.debug("Calculate transition graph...");
-		transitionGraph = new LALR1StateTransitionGraph(getGrammar());
+		LALR1StateTransitionGraph transitionGraph = new LALR1StateTransitionGraph(
+				getGrammar());
 		if (logger.isTraceEnabled()) {
 			logger.trace(transitionGraph.toString());
 		}
 		logger.debug("Adding shifts and gotos...");
-		addShiftAndGotos();
+		addShiftAndGotos(transitionGraph);
 		logger.debug("Reduces and accept...");
-		addReduceAndAccept();
+		addReduceAndAccept(transitionGraph);
 	}
 
-	private void addShiftAndGotos() throws GrammarException {
+	private void addShiftAndGotos(LALR1StateTransitionGraph transitionGraph)
+			throws GrammarException {
 		for (int stateId = 0; stateId < transitionGraph.getStateNumber(); stateId++) {
 			ConcurrentMap<Construction, Integer> transitions = transitionGraph
 					.getTransitions(stateId);
@@ -62,7 +62,8 @@ public class LALR1ParserTable extends AbstractParserTable {
 		}
 	}
 
-	private void addReduceAndAccept() throws GrammarException {
+	private void addReduceAndAccept(LALR1StateTransitionGraph transitionGraph)
+			throws GrammarException {
 		logger.trace("Add reduce and accept states to table...");
 		Grammar grammar = getGrammar();
 		for (int stateId = 0; stateId < transitionGraph.getStateNumber(); stateId++) {
@@ -95,9 +96,4 @@ public class LALR1ParserTable extends AbstractParserTable {
 			}
 		}
 	}
-
-	public LALR1StateTransitionGraph getTransitionGraph() {
-		return transitionGraph;
-	}
-
 }

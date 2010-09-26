@@ -188,21 +188,12 @@ public class Production implements Serializable {
 				return false;
 		} else if (!alternativeName.equals(other.alternativeName))
 			return false;
-		if (constructions == null) {
-			if (other.constructions != null)
-				return false;
-		} else if (!constructions.equals(other.constructions))
-			return false;
 		if (id != other.id)
 			return false;
 		if (name == null) {
 			if (other.name != null)
 				return false;
 		} else if (!name.equals(other.name))
-			return false;
-		if (node != other.node)
-			return false;
-		if (stackingAllowed != other.stackingAllowed)
 			return false;
 		return true;
 	}

@@ -81,7 +81,6 @@ public abstract class AbstractConstruction implements Construction {
 		int result = 1;
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((text == null) ? 0 : text.hashCode());
-		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		return result;
 	}
 

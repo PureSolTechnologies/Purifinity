@@ -3,19 +3,18 @@ package com.puresol.uhura.parser.parsetable;
 import java.io.Serializable;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
-import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.production.Construction;
 
 public class Goto1 implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private final Closure1 closure;
+	private final ConcurrentMap<LR1ItemSet, ConcurrentMap<Construction, LR1ItemSet>> gotos = new ConcurrentHashMap<LR1ItemSet, ConcurrentMap<Construction, LR1ItemSet>>();
 
-	public Goto1(Grammar grammar) {
-		this.closure = new Closure1(grammar);
-	}
+	private final Closure1 closure;
 
 	public Goto1(Closure1 closure) {
 		this.closure = closure;
@@ -39,12 +38,24 @@ public class Goto1 implements Serializable {
 	 *         items and all calculated extensions.
 	 */
 	public LR1ItemSet calc(LR1ItemSet itemSet, Construction x) {
+		if ((!gotos.containsKey(itemSet))
+				|| (!gotos.get(itemSet).containsKey(x))) {
+			calculate(itemSet, x);
+		}
+		return gotos.get(itemSet).get(x);
+	}
+
+	private void calculate(LR1ItemSet itemSet, Construction x) {
 		Set<LR1Item> items = new LinkedHashSet<LR1Item>();
 		for (LR1Item item : itemSet.getNextItems(x)) {
 			LR1Item newItem = new LR1Item(item.getProduction(),
 					item.getPosition() + 1, item.getLookahead());
 			items.add(newItem);
 		}
-		return closure.calc(new LR1ItemSet(items));
+		if (!gotos.containsKey(itemSet)) {
+			gotos.put(itemSet,
+					new ConcurrentHashMap<Construction, LR1ItemSet>());
+		}
+		gotos.get(itemSet).put(x, closure.calc(new LR1ItemSet(items)));
 	}
 }

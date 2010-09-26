@@ -1,6 +1,8 @@
 package com.puresol.uhura.parser.parsetable;
 
 import java.io.Serializable;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.production.Construction;
@@ -26,6 +28,11 @@ public class Closure0 implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * This field contains all calculated closures to avoid double calculations.
+	 */
+	private final ConcurrentMap<LR0ItemSet, LR0ItemSet> closures = new ConcurrentHashMap<LR0ItemSet, LR0ItemSet>();
+
 	private final ProductionSet productions;
 
 	public Closure0(Grammar grammar) {
@@ -45,6 +52,13 @@ public class Closure0 implements Serializable {
 	 *         items and all calculated extensions.
 	 */
 	public LR0ItemSet calc(LR0ItemSet initialItemSet) {
+		if (!closures.containsKey(initialItemSet)) {
+			calculate(initialItemSet);
+		}
+		return closures.get(initialItemSet);
+	}
+
+	private void calculate(LR0ItemSet initialItemSet) {
 		LR0ItemSet itemSet = new LR0ItemSet(initialItemSet);
 		boolean changed;
 		do {
@@ -67,7 +81,7 @@ public class Closure0 implements Serializable {
 				}
 			}
 		} while (changed);
-		return itemSet;
+		closures.put(initialItemSet, itemSet);
 	}
 
 }

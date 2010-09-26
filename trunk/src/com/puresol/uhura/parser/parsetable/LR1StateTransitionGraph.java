@@ -1,6 +1,5 @@
 package com.puresol.uhura.parser.parsetable;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -13,7 +12,7 @@ import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.production.Construction;
 import com.puresol.uhura.grammar.production.FinishTerminal;
 
-public class LR1StateTransitionGraph implements Serializable {
+public class LR1StateTransitionGraph extends GeneralStateTransitionGraph {
 
 	private static final long serialVersionUID = -1330346621768260912L;
 
@@ -22,18 +21,15 @@ public class LR1StateTransitionGraph implements Serializable {
 
 	private final ConcurrentMap<LR1ItemSet, Integer> itemSet2Integer = new ConcurrentHashMap<LR1ItemSet, Integer>();
 	private final List<LR1ItemSet> itemSetCollection = new ArrayList<LR1ItemSet>();
-	private final ConcurrentMap<Integer, ConcurrentMap<Construction, Integer>> transitions = new ConcurrentHashMap<Integer, ConcurrentMap<Construction, Integer>>();
 
 	private final Grammar grammar;
-	private final First first;
 	private final Closure1 closure1;
 	private final Goto1 goto1;
 
 	public LR1StateTransitionGraph(Grammar grammar) throws GrammarException {
 		super();
 		this.grammar = grammar;
-		first = new First(grammar);
-		closure1 = new Closure1(grammar, first);
+		closure1 = new Closure1(grammar, new First(grammar));
 		goto1 = new Goto1(closure1);
 		calculate();
 	}
@@ -61,57 +57,38 @@ public class LR1StateTransitionGraph implements Serializable {
 	private void calculate() throws GrammarException {
 		addState(closure1.calc(new LR1Item(grammar.getProductions().get(0), 0,
 				FinishTerminal.getInstance())));
-		boolean changed;
+		int run = 0;
+		int nextStartPosition = 0;
+		int currentStartPosition = 0;
 		do {
-			changed = false;
+			run++;
+			currentStartPosition = nextStartPosition;
+			nextStartPosition = itemSetCollection.size();
 			int currentItemSetCount = itemSetCollection.size();
-			for (int stateId = 0; stateId < currentItemSetCount; stateId++) {
+			for (int stateId = currentStartPosition; stateId < currentItemSetCount; stateId++) {
+				logger.trace("state: " + stateId + "/"
+						+ itemSetCollection.size() + " run: " + run);
 				LR1ItemSet itemSet = itemSetCollection.get(stateId);
-				int initialState = itemSet2Integer.get(itemSet);
 				for (Construction grammarSymbol : itemSet
 						.getAllGrammarSymbols()) {
 					LR1ItemSet gotoSet = goto1.calc(itemSet, grammarSymbol);
 					if (gotoSet.getSize() > 0) {
-						if (!itemSetCollection.contains(gotoSet)) {
-							int newState = addState(gotoSet);
-							logger.trace("State counter: "
-									+ itemSetCollection.size());
-							addTransition(initialState, grammarSymbol, newState);
-							changed = true;
-						} else {
-							int newState = itemSet2Integer.get(gotoSet);
-							addTransition(initialState, grammarSymbol, newState);
-						}
+						int newState = addState(gotoSet);
+						addTransition(stateId, grammarSymbol, newState);
 					}
 				}
 			}
-		} while (changed);
+		} while (nextStartPosition < itemSetCollection.size());
 	}
 
 	private int addState(LR1ItemSet itemSet) {
-		if (itemSet2Integer.containsKey(itemSet)) {
-			return itemSet2Integer.get(itemSet);
+		Integer stateId = itemSet2Integer.get(itemSet);
+		if (stateId == null) {
+			stateId = itemSetCollection.size();
+			itemSetCollection.add(itemSet);
+			itemSet2Integer.put(itemSet, stateId);
 		}
-		int stateId = itemSetCollection.size();
-		itemSetCollection.add(itemSet);
-		itemSet2Integer.put(itemSet, stateId);
 		return stateId;
-	}
-
-	private void addTransition(int initialState, Construction construction,
-			int finalState) throws GrammarException {
-		if (!transitions.containsKey(initialState)) {
-			transitions.put(initialState,
-					new ConcurrentHashMap<Construction, Integer>());
-		}
-		if (transitions.containsKey(construction)) {
-			if (!transitions.get(initialState).get(construction)
-					.equals(finalState)) {
-				throw new GrammarException("Ambiguous transitions found!");
-			}
-		} else {
-			transitions.get(initialState).put(construction, finalState);
-		}
 	}
 
 	public LR1ItemSet getItemSet(int stateId) {
@@ -120,19 +97,6 @@ public class LR1StateTransitionGraph implements Serializable {
 
 	public int getStateNumber() {
 		return itemSetCollection.size();
-	}
-
-	public ConcurrentMap<Construction, Integer> getTransitions(int initialState) {
-		ConcurrentMap<Construction, Integer> result = transitions
-				.get(initialState);
-		if (result == null) {
-			result = new ConcurrentHashMap<Construction, Integer>();
-		}
-		return result;
-	}
-
-	public int getTransition(int initialState, Construction construction) {
-		return transitions.get(initialState).get(construction);
 	}
 
 	public Grammar getGrammar() {
@@ -149,8 +113,7 @@ public class LR1StateTransitionGraph implements Serializable {
 			LR1ItemSet itemSet = itemSetCollection.get(stateId);
 			buffer.append(itemSet.toString());
 
-			ConcurrentMap<Construction, Integer> stateTransitions = transitions
-					.get(stateId);
+			ConcurrentMap<Construction, Integer> stateTransitions = getTransitions(stateId);
 			if (stateTransitions != null) {
 				buffer.append("Transitions:\n");
 				for (Construction construction : stateTransitions.keySet()) {

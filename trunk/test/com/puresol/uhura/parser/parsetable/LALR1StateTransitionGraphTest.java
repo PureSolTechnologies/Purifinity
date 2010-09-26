@@ -1,5 +1,7 @@
 package com.puresol.uhura.parser.parsetable;
 
+import static org.junit.Assert.*;
+
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.Test;
@@ -8,9 +10,7 @@ import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.TestGrammars;
 
-import junit.framework.TestCase;
-
-public class LALR1StateTransitionGraphTest extends TestCase {
+public class LALR1StateTransitionGraphTest {
 
 	@Test
 	public void testDragonBookGrammar() {

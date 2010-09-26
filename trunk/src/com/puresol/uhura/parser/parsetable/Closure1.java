@@ -2,6 +2,8 @@ package com.puresol.uhura.parser.parsetable;
 
 import java.io.Serializable;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.production.Construction;
@@ -12,13 +14,13 @@ public class Closure1 implements Serializable {
 
 	private static final long serialVersionUID = 5779840433746397739L;
 
+	/**
+	 * This field contains all calculated closures to avoid double calculations.
+	 */
+	private final ConcurrentMap<LR1ItemSet, LR1ItemSet> closures = new ConcurrentHashMap<LR1ItemSet, LR1ItemSet>();
+
 	private final ProductionSet productions;
 	private final First first;
-
-	public Closure1(Grammar grammar) {
-		this.productions = grammar.getProductions();
-		this.first = new First(grammar);
-	}
 
 	public Closure1(Grammar grammar, First first) {
 		this.productions = grammar.getProductions();
@@ -49,6 +51,13 @@ public class Closure1 implements Serializable {
 	 *         items and all calculated extensions.
 	 */
 	public LR1ItemSet calc(LR1ItemSet initialItemSet) {
+		if (!closures.containsKey(initialItemSet)) {
+			calculate(initialItemSet);
+		}
+		return closures.get(initialItemSet);
+	}
+
+	private void calculate(LR1ItemSet initialItemSet) {
 		LR1ItemSet itemSet = new LR1ItemSet(initialItemSet);
 		int currentPosition = 0;
 		int newPosition = 0;
@@ -79,7 +88,7 @@ public class Closure1 implements Serializable {
 			}
 			currentPosition = newPosition;
 		} while (currentSize != itemSet.getSize());
-		return itemSet;
+		closures.put(initialItemSet, itemSet);
 	}
 
 	private Production getRemainingProduction(LR1Item item,

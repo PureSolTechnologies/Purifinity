@@ -1,8 +1,6 @@
 package com.puresol.uhura.parser.parsetable;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -17,7 +15,7 @@ import com.puresol.uhura.grammar.production.Construction;
 import com.puresol.uhura.grammar.production.DummyTerminal;
 import com.puresol.uhura.grammar.production.FinishTerminal;
 
-public class LALR1StateTransitionGraph implements Serializable {
+public class LALR1StateTransitionGraph extends GeneralStateTransitionGraph {
 
 	private static final long serialVersionUID = 6813332818983681476L;
 	private static final Logger logger = Logger
@@ -25,7 +23,6 @@ public class LALR1StateTransitionGraph implements Serializable {
 
 	private final ConcurrentMap<LR1ItemSet, Integer> itemSet2Integer = new ConcurrentHashMap<LR1ItemSet, Integer>();
 	private final List<LR1ItemSet> itemSetCollection = new ArrayList<LR1ItemSet>();
-	private final ConcurrentMap<Integer, ConcurrentMap<Construction, Integer>> transitions = new ConcurrentHashMap<Integer, ConcurrentMap<Construction, Integer>>();
 
 	private final Grammar grammar;
 	private final Closure1 closure1;
@@ -34,7 +31,7 @@ public class LALR1StateTransitionGraph implements Serializable {
 	public LALR1StateTransitionGraph(Grammar grammar) throws GrammarException {
 		super();
 		this.grammar = grammar;
-		closure1 = new Closure1(grammar);
+		closure1 = new Closure1(grammar, new First(grammar));
 		calculate();
 	}
 
@@ -53,24 +50,32 @@ public class LALR1StateTransitionGraph implements Serializable {
 	}
 
 	private void calculateLookahead() {
+		addNewLookahead(0, new LR1Item(grammar.getProductions().get(0), 0,
+				FinishTerminal.getInstance()));
 		boolean changed;
-		boolean first = true;
 		int run = 0;
 		do {
 			changed = false;
 			run++;
-			if (first) {
-				addNewLookahead(0, new LR1Item(grammar.getProductions().get(0),
-						0, FinishTerminal.getInstance()));
-				changed = true;
-				first = false;
-			}
 			for (int stateId = 0; stateId < itemSetCollection.size(); stateId++) {
 				LR1ItemSet lr1ItemSet = itemSetCollection.get(stateId);
 				int dummys = getDummyCount();
-				for (LR1Item lr1Item : lr1ItemSet.getKernelItems()) {
+				List<LR1Item> kernelItems = new ArrayList<LR1Item>(
+						lr1ItemSet.getKernelItems());
+				for (int kernelItemId = 0; kernelItemId < kernelItems.size(); kernelItemId++) {
+					LR1Item lr1Item = kernelItems.get(kernelItemId);
 					LR1ItemSet closure = closure1.calc(lr1Item);
-					for (LR1Item closureItem : closure.getAllItems()) {
+					List<LR1Item> closureItems = closure.getAllItems();
+					for (int closureItemId = 0; closureItemId < closureItems
+							.size(); closureItemId++) {
+						// logger.trace("state: " + stateId + "/"
+						// + itemSetCollection.size()
+						// + " kernelitem: " + kernelItemId + "/"
+						// + kernelItems.size()
+						// + " closurelitem: " + closureItemId
+						// + "/" + closureItems.size() + " run: "
+						// + run + " (" + dummys + ")");
+						LR1Item closureItem = closureItems.get(closureItemId);
 						if (!closureItem.getLookahead().equals(
 								DummyTerminal.getInstance())) {
 							// Spontaneously generated...
@@ -80,7 +85,12 @@ public class LALR1StateTransitionGraph implements Serializable {
 									closureItem.getLookahead());
 							if (addNewLookahead(stateId, newItem)) {
 								changed = true;
-								logger.trace("state: " + stateId + " run: "
+								logger.trace("state: " + stateId + "/"
+										+ itemSetCollection.size()
+										+ " kernelitem: " + kernelItemId + "/"
+										+ kernelItems.size()
+										+ " closurelitem: " + closureItemId
+										+ "/" + closureItems.size() + " run: "
 										+ run + " (" + dummys + ")");
 							}
 						}
@@ -148,12 +158,12 @@ public class LALR1StateTransitionGraph implements Serializable {
 	}
 
 	private int addState(LR1ItemSet itemSet) {
-		if (itemSet2Integer.containsKey(itemSet)) {
-			return itemSet2Integer.get(itemSet);
+		Integer stateId = itemSet2Integer.get(itemSet);
+		if (stateId == null) {
+			stateId = itemSetCollection.size();
+			itemSetCollection.add(itemSet);
+			itemSet2Integer.put(itemSet, stateId);
 		}
-		int stateId = itemSetCollection.size();
-		itemSetCollection.add(itemSet);
-		itemSet2Integer.put(itemSet, stateId);
 		return stateId;
 	}
 
@@ -169,41 +179,12 @@ public class LALR1StateTransitionGraph implements Serializable {
 		}
 	}
 
-	private void addTransition(int initialState, Construction construction,
-			int finalState) throws GrammarException {
-		if (!transitions.containsKey(initialState)) {
-			transitions.put(initialState,
-					new ConcurrentHashMap<Construction, Integer>());
-		}
-		if (transitions.containsKey(construction)) {
-			if (!transitions.get(initialState).get(construction)
-					.equals(finalState)) {
-				throw new GrammarException("Ambiguous transitions found!");
-			}
-		} else {
-			transitions.get(initialState).put(construction, finalState);
-		}
-	}
-
 	public LR1ItemSet getItemSet(int stateId) {
 		return itemSetCollection.get(stateId);
 	}
 
 	public int getStateNumber() {
 		return itemSetCollection.size();
-	}
-
-	public ConcurrentMap<Construction, Integer> getTransitions(int initialState) {
-		ConcurrentMap<Construction, Integer> result = transitions
-				.get(initialState);
-		if (result == null) {
-			result = new ConcurrentHashMap<Construction, Integer>();
-		}
-		return result;
-	}
-
-	public int getTransition(int initialState, Construction construction) {
-		return transitions.get(initialState).get(construction);
 	}
 
 	public Grammar getGrammar() {
@@ -232,8 +213,7 @@ public class LALR1StateTransitionGraph implements Serializable {
 			LR1ItemSet itemSet = itemSetCollection.get(stateId);
 			buffer.append(itemSet.toString());
 
-			ConcurrentMap<Construction, Integer> stateTransitions = transitions
-					.get(stateId);
+			ConcurrentMap<Construction, Integer> stateTransitions = getTransitions(stateId);
 			if (stateTransitions != null) {
 				buffer.append("Transitions:\n");
 				for (Construction construction : stateTransitions.keySet()) {

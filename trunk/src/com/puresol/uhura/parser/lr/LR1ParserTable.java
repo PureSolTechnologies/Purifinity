@@ -19,27 +19,19 @@ public class LR1ParserTable extends AbstractParserTable {
 
 	private static final long serialVersionUID = 4897692245650199202L;
 
-	private static final Logger logger = Logger.getLogger(LR1ParserTable.class);
-
-	private LR1StateTransitionGraph transitionGraph;
-
 	public LR1ParserTable(Grammar grammar) throws GrammarException {
 		super(grammar);
 	}
 
 	protected void calculate() throws GrammarException {
-		logger.debug("Calculate transition graph...");
-		transitionGraph = new LR1StateTransitionGraph(getGrammar());
-		if (logger.isTraceEnabled()) {
-			logger.trace(transitionGraph.toString());
-		}
-		logger.debug("Adding shifts and gotos...");
-		addShiftAndGotos();
-		logger.debug("Reduces and accept...");
-		addReduceAndAccept();
+		LR1StateTransitionGraph transitionGraph = new LR1StateTransitionGraph(
+				getGrammar());
+		addShiftAndGotos(transitionGraph);
+		addReduceAndAccept(transitionGraph);
 	}
 
-	private void addShiftAndGotos() throws GrammarException {
+	private void addShiftAndGotos(LR1StateTransitionGraph transitionGraph)
+			throws GrammarException {
 		for (int stateId = 0; stateId < transitionGraph.getStateNumber(); stateId++) {
 			ConcurrentMap<Construction, Integer> transitions = transitionGraph
 					.getTransitions(stateId);
@@ -61,25 +53,17 @@ public class LR1ParserTable extends AbstractParserTable {
 		}
 	}
 
-	private void addReduceAndAccept() throws GrammarException {
-		logger.trace("Add reduce and accept states to table...");
+	private void addReduceAndAccept(LR1StateTransitionGraph transitionGraph)
+			throws GrammarException {
 		Grammar grammar = getGrammar();
 		for (int stateId = 0; stateId < transitionGraph.getStateNumber(); stateId++) {
 			LR1ItemSet itemSet = transitionGraph.getItemSet(stateId);
-			if (logger.isTraceEnabled()) {
-				logger.debug("Process state " + stateId);
-				logger.trace(itemSet);
-			}
 			for (LR1Item item : itemSet.getAllItems()) {
 				if (item.hasNext()) {
 					continue;
 				}
-				if (logger.isTraceEnabled()) {
-					logger.trace(item);
-				}
 				if (item.getProduction()
 						.equals(grammar.getProductions().get(0))) {
-					logger.trace("Found state 'accept' action.");
 					addActionTerminal(FinishTerminal.getInstance());
 					addAction(stateId, FinishTerminal.getInstance(),
 							new ParserAction(ActionType.ACCEPT, -1));
@@ -94,9 +78,4 @@ public class LR1ParserTable extends AbstractParserTable {
 			}
 		}
 	}
-
-	public LR1StateTransitionGraph getTransitionGraph() {
-		return transitionGraph;
-	}
-
 }

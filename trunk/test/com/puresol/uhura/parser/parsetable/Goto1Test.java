@@ -17,14 +17,14 @@ public class Goto1Test extends TestCase {
 		System.out.println("Productions:");
 		System.out.println(grammar.toProductionsString());
 
-		Closure1 closure = new Closure1(grammar);
+		Closure1 closure = new Closure1(grammar, new First(grammar));
 		System.out.println("Closure1:");
 		LR1Item primItem = new LR1Item(grammar.getProductions().get(0), 0,
 				FinishTerminal.getInstance());
 		LR1ItemSet itemSet = closure.calc(primItem);
 		System.out.println(itemSet.toString());
 
-		Goto1 gotoCalc = new Goto1(grammar);
+		Goto1 gotoCalc = new Goto1(new Closure1(grammar, new First(grammar)));
 		System.out.println("Goto1:");
 
 		itemSet = gotoCalc.calc(itemSet, new Terminal("b"));

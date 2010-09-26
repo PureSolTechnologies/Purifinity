@@ -43,40 +43,49 @@ public class First implements Serializable {
 
 	private final Grammar grammar;
 
-	private final ConcurrentMap<String, Set<Construction>> first = new ConcurrentHashMap<String, Set<Construction>>();
+	/**
+	 * This field contains the first sets for all productions contained within
+	 * the grammar.
+	 */
+	private final ConcurrentMap<String, Set<Construction>> firstGrammar = new ConcurrentHashMap<String, Set<Construction>>();
+	/**
+	 * The field contains first sets for helper productions to avoid double
+	 * calculation.
+	 */
+	private final ConcurrentMap<Production, Set<Construction>> firstNonGrammar = new ConcurrentHashMap<Production, Set<Construction>>();
 
 	public First(Grammar grammar) {
 		super();
 		this.grammar = grammar;
-		calculate();
+		calculateForGrammarProductions();
 	}
 
-	private void calculate() {
-		initFirstMap();
-		calculateFirstTerminals();
+	private void calculateForGrammarProductions() {
+		initFirstMapForGrammarProductions();
+		calculateFirstForGrammarProductions();
 	}
 
 	/**
 	 * Initializes the first map for data input.
 	 */
-	private void initFirstMap() {
+	private void initFirstMapForGrammarProductions() {
 		for (Production production : grammar.getProductions().getList()) {
-			if (!first.containsKey(production.getName())) {
-				first.put(production.getName(),
+			if (!firstGrammar.containsKey(production.getName())) {
+				firstGrammar.put(production.getName(),
 						new LinkedHashSet<Construction>());
 			}
 		}
 	}
 
-	private void calculateFirstTerminals() {
-		while (iterate())
+	private void calculateFirstForGrammarProductions() {
+		while (iteratationForGrammarProductions())
 			;
 	}
 
-	private boolean iterate() {
+	private boolean iteratationForGrammarProductions() {
 		boolean changed = false;
 		for (Production production : grammar.getProductions().getList()) {
-			if (iterate(production)) {
+			if (iterateForGrammarProductions(production)) {
 				changed = true;
 			}
 		}
@@ -89,8 +98,8 @@ public class First implements Serializable {
 	 * @param production
 	 * @return
 	 */
-	private boolean iterate(Production production) {
-		Set<Construction> firstSet = first.get(production.getName());
+	private boolean iterateForGrammarProductions(Production production) {
+		Set<Construction> firstSet = firstGrammar.get(production.getName());
 		int startLength = firstSet.size();
 		if (production.isEmpty()) {
 			/* rule 3 */
@@ -103,11 +112,11 @@ public class First implements Serializable {
 					// terminal is found and there is nothing to proceed...
 					break;
 				}
-				for (Construction firstConstruction : first.get(construction
-						.getName())) {
+				for (Construction firstConstruction : firstGrammar
+						.get(construction.getName())) {
 					firstSet.add(firstConstruction);
 				}
-				if (!first.get(construction.getName()).contains(
+				if (!firstGrammar.get(construction.getName()).contains(
 						EmptyTerminal.getInstance())) {
 					break;
 				}
@@ -139,10 +148,17 @@ public class First implements Serializable {
 			result.add(x);
 			return result;
 		}
-		return first.get(x.getName());
+		return firstGrammar.get(x.getName());
 	}
 
 	public Set<Construction> get(Production production) {
+		if (!firstNonGrammar.containsKey(production)) {
+			calculate(production);
+		}
+		return firstNonGrammar.get(production);
+	}
+
+	private void calculate(Production production) {
 		Set<Construction> result = new LinkedHashSet<Construction>();
 		boolean hasEmptyDerivation = true;
 		for (Construction construction : production.getConstructions()) {
@@ -158,18 +174,18 @@ public class First implements Serializable {
 		if (hasEmptyDerivation) {
 			result.add(EmptyTerminal.getInstance());
 		}
-		return result;
+		firstNonGrammar.put(production, result);
 	}
 
 	@Override
 	public String toString() {
 		StringBuffer buffer = new StringBuffer();
-		for (String productionName : first.keySet()) {
+		for (String productionName : firstGrammar.keySet()) {
 			buffer.append(productionName);
 			buffer.append("\t");
 			buffer.append("{");
 			boolean firstRun = true;
-			for (Construction construction : first.get(productionName)) {
+			for (Construction construction : firstGrammar.get(productionName)) {
 				if (firstRun) {
 					firstRun = false;
 				} else {

@@ -26,7 +26,7 @@ public class Goto0Test extends TestCase {
 		LR0ItemSet itemSet = closure.calc(primItem);
 		System.out.println(itemSet.toString());
 
-		Goto0 gotoCalc = new Goto0(grammar);
+		Goto0 gotoCalc = new Goto0(new Closure0(grammar));
 		System.out.println("Goto0:");
 
 		itemSet = gotoCalc.calc(itemSet, new Terminal("b"));

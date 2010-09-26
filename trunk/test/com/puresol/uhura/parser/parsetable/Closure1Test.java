@@ -21,7 +21,7 @@ public class Closure1Test extends TestCase {
 		System.out.println("Productions:");
 		System.out.println(grammar.toProductionsString());
 
-		Closure1 closure = new Closure1(grammar);
+		Closure1 closure = new Closure1(grammar, new First(grammar));
 		System.out.println("Closure1:");
 		LR1Item primItem = new LR1Item(grammar.getProductions().get(0), 0,
 				FinishTerminal.getInstance());
