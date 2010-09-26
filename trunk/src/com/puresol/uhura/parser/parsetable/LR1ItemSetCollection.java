@@ -12,12 +12,12 @@ import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.production.Construction;
 import com.puresol.uhura.grammar.production.FinishTerminal;
 
-public class LR1StateTransitionGraph extends GeneralStateTransitionGraph {
+public class LR1ItemSetCollection extends GeneralStateTransitionGraph {
 
 	private static final long serialVersionUID = -1330346621768260912L;
 
 	private final static Logger logger = Logger
-			.getLogger(LR1StateTransitionGraph.class);
+			.getLogger(LR1ItemSetCollection.class);
 
 	private final ConcurrentMap<LR1ItemSet, Integer> itemSet2Integer = new ConcurrentHashMap<LR1ItemSet, Integer>();
 	private final List<LR1ItemSet> itemSetCollection = new ArrayList<LR1ItemSet>();
@@ -26,7 +26,7 @@ public class LR1StateTransitionGraph extends GeneralStateTransitionGraph {
 	private final Closure1 closure1;
 	private final Goto1 goto1;
 
-	public LR1StateTransitionGraph(Grammar grammar) throws GrammarException {
+	public LR1ItemSetCollection(Grammar grammar) throws GrammarException {
 		super();
 		this.grammar = grammar;
 		closure1 = new Closure1(grammar, new First(grammar));

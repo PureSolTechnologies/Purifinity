@@ -16,7 +16,7 @@ import com.puresol.uhura.parser.parsetable.Follow;
 import com.puresol.uhura.parser.parsetable.LR0Item;
 import com.puresol.uhura.parser.parsetable.LR0ItemSet;
 import com.puresol.uhura.parser.parsetable.ParserAction;
-import com.puresol.uhura.parser.parsetable.LR0StateTransitionGraph;
+import com.puresol.uhura.parser.parsetable.LR0ItemSetCollection;
 
 public class SLR1ParserTable extends AbstractParserTable {
 
@@ -30,13 +30,13 @@ public class SLR1ParserTable extends AbstractParserTable {
 	}
 
 	protected void calculate() throws GrammarException {
-		LR0StateTransitionGraph transitionGraph = new LR0StateTransitionGraph(
+		LR0ItemSetCollection transitionGraph = new LR0ItemSetCollection(
 				getGrammar());
 		addShiftAndGotos(transitionGraph);
 		addReduceAndAccept(transitionGraph);
 	}
 
-	private void addShiftAndGotos(LR0StateTransitionGraph transitionGraph)
+	private void addShiftAndGotos(LR0ItemSetCollection transitionGraph)
 			throws GrammarException {
 		for (int stateId = 0; stateId < transitionGraph.getStateNumber(); stateId++) {
 			ConcurrentMap<Construction, Integer> transitions = transitionGraph
@@ -59,7 +59,7 @@ public class SLR1ParserTable extends AbstractParserTable {
 		}
 	}
 
-	private void addReduceAndAccept(LR0StateTransitionGraph transitionGraph)
+	private void addReduceAndAccept(LR0ItemSetCollection transitionGraph)
 			throws GrammarException {
 		logger.trace("Add reduce and accept states to table...");
 		Grammar grammar = getGrammar();

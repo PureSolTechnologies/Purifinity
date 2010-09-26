@@ -15,20 +15,20 @@ import com.puresol.uhura.grammar.production.Construction;
 import com.puresol.uhura.grammar.production.DummyTerminal;
 import com.puresol.uhura.grammar.production.FinishTerminal;
 
-public class LALR1StateTransitionGraph extends GeneralStateTransitionGraph {
+public class LALR1ItemSetCollection extends GeneralStateTransitionGraph {
 
 	private static final long serialVersionUID = 6813332818983681476L;
 	private static final Logger logger = Logger
-			.getLogger(LALR1StateTransitionGraph.class);
+			.getLogger(LALR1ItemSetCollection.class);
 
 	private final ConcurrentMap<LR1ItemSet, Integer> itemSet2Integer = new ConcurrentHashMap<LR1ItemSet, Integer>();
 	private final List<LR1ItemSet> itemSetCollection = new ArrayList<LR1ItemSet>();
 
 	private final Grammar grammar;
 	private final Closure1 closure1;
-	private LR0StateTransitionGraph lr0StateTransitionGraph;
+	private LR0ItemSetCollection lr0StateTransitionGraph;
 
-	public LALR1StateTransitionGraph(Grammar grammar) throws GrammarException {
+	public LALR1ItemSetCollection(Grammar grammar) throws GrammarException {
 		super();
 		this.grammar = grammar;
 		closure1 = new Closure1(grammar, new First(grammar));
@@ -37,7 +37,7 @@ public class LALR1StateTransitionGraph extends GeneralStateTransitionGraph {
 
 	private void calculate() throws GrammarException {
 		logger.trace("Calculate LR0 state transition graph...");
-		lr0StateTransitionGraph = new LR0StateTransitionGraph(grammar);
+		lr0StateTransitionGraph = new LR0ItemSetCollection(grammar);
 		logger.trace("Calculate LR0 kernel items...");
 		calculateLR0KernelItemSets();
 		logger.trace("Calculate look aheads for " + itemSetCollection.size()

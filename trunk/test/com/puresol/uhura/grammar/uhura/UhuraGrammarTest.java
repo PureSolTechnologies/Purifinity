@@ -8,8 +8,8 @@ import com.puresol.uhura.parser.lr.LR1ParserTable;
 import com.puresol.uhura.parser.lr.SLR1ParserTable;
 import com.puresol.uhura.parser.parsetable.First;
 import com.puresol.uhura.parser.parsetable.Follow;
-import com.puresol.uhura.parser.parsetable.LR0StateTransitionGraph;
-import com.puresol.uhura.parser.parsetable.LR1StateTransitionGraph;
+import com.puresol.uhura.parser.parsetable.LR0ItemSetCollection;
+import com.puresol.uhura.parser.parsetable.LR1ItemSetCollection;
 
 import junit.framework.TestCase;
 
@@ -49,7 +49,7 @@ public class UhuraGrammarTest extends TestCase {
 			System.out.println("LR(0) State Transition Graph:");
 			System.out.println("=============================");
 			Grammar grammar = UhuraGrammar.getGrammar();
-			LR0StateTransitionGraph first = new LR0StateTransitionGraph(grammar);
+			LR0ItemSetCollection first = new LR0ItemSetCollection(grammar);
 			System.out.println(first.toString());
 		} catch (GrammarException e) {
 			e.printStackTrace();
@@ -79,7 +79,7 @@ public class UhuraGrammarTest extends TestCase {
 			System.out.println("LR(1) State Transition Graph:");
 			System.out.println("=============================");
 			Grammar grammar = UhuraGrammar.getGrammar();
-			LR1StateTransitionGraph first = new LR1StateTransitionGraph(grammar);
+			LR1ItemSetCollection first = new LR1ItemSetCollection(grammar);
 			System.out.println(first.toString());
 		} catch (GrammarException e) {
 			e.printStackTrace();

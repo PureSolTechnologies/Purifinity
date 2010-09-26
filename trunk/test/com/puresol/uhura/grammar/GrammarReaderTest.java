@@ -17,7 +17,7 @@ import com.puresol.uhura.lexer.TokenStream;
 import com.puresol.uhura.parser.Parser;
 import com.puresol.uhura.parser.ParserException;
 import com.puresol.uhura.parser.lr.SLR1Parser;
-import com.puresol.uhura.parser.parsetable.LR0StateTransitionGraph;
+import com.puresol.uhura.parser.parsetable.LR0ItemSetCollection;
 
 import junit.framework.TestCase;
 
@@ -40,7 +40,7 @@ public class GrammarReaderTest extends TestCase {
 					.lex(new StringReader("1 * 2\n + 3"));
 			Parser parser = new SLR1Parser(grammar);
 			System.out.println(parser.getParserTable());
-			LR0StateTransitionGraph tg = new LR0StateTransitionGraph(grammar);
+			LR0ItemSetCollection tg = new LR0ItemSetCollection(grammar);
 			System.out.println(tg);
 			AST syntaxTree = parser.parse(tokenStream);
 			new TreePrinter(System.out).println(syntaxTree);
@@ -77,7 +77,7 @@ public class GrammarReaderTest extends TestCase {
 					.lex(new StringReader("1 * 2\n + 3"));
 			Parser parser = new SLR1Parser(grammar);
 			System.out.println(parser.getParserTable());
-			LR0StateTransitionGraph tg = new LR0StateTransitionGraph(grammar);
+			LR0ItemSetCollection tg = new LR0ItemSetCollection(grammar);
 			System.out.println(tg);
 			AST syntaxTree = parser.parse(tokenStream);
 			new TreePrinter(System.out).println(syntaxTree);

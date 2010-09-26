@@ -9,7 +9,7 @@ import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.production.Construction;
 
-public class LR0StateTransitionGraph extends GeneralStateTransitionGraph {
+public class LR0ItemSetCollection extends GeneralStateTransitionGraph {
 
 	private static final long serialVersionUID = -5320832167468349031L;
 
@@ -20,7 +20,7 @@ public class LR0StateTransitionGraph extends GeneralStateTransitionGraph {
 	private final Closure0 closure0;
 	private final Goto0 goto0;
 
-	public LR0StateTransitionGraph(Grammar grammar) throws GrammarException {
+	public LR0ItemSetCollection(Grammar grammar) throws GrammarException {
 		super();
 		this.grammar = grammar;
 		closure0 = new Closure0(grammar);

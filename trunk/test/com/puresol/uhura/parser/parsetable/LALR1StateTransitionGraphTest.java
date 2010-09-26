@@ -23,7 +23,7 @@ public class LALR1StateTransitionGraphTest {
 			System.out.println(grammar);
 
 			/* LALR1StateTransitionGraph transitionGraph = */
-			new LALR1StateTransitionGraph(grammar);
+			new LALR1ItemSetCollection(grammar);
 			// System.out.println(transitionGraph);
 		} catch (GrammarException e) {
 			e.printStackTrace();

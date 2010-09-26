@@ -2,8 +2,6 @@ package com.puresol.uhura.parser.lr;
 
 import java.util.concurrent.ConcurrentMap;
 
-import org.apache.log4j.Logger;
-
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.production.Construction;
@@ -12,7 +10,7 @@ import com.puresol.uhura.parser.parsetable.AbstractParserTable;
 import com.puresol.uhura.parser.parsetable.ActionType;
 import com.puresol.uhura.parser.parsetable.LR1Item;
 import com.puresol.uhura.parser.parsetable.LR1ItemSet;
-import com.puresol.uhura.parser.parsetable.LR1StateTransitionGraph;
+import com.puresol.uhura.parser.parsetable.LR1ItemSetCollection;
 import com.puresol.uhura.parser.parsetable.ParserAction;
 
 public class LR1ParserTable extends AbstractParserTable {
@@ -24,13 +22,13 @@ public class LR1ParserTable extends AbstractParserTable {
 	}
 
 	protected void calculate() throws GrammarException {
-		LR1StateTransitionGraph transitionGraph = new LR1StateTransitionGraph(
+		LR1ItemSetCollection transitionGraph = new LR1ItemSetCollection(
 				getGrammar());
 		addShiftAndGotos(transitionGraph);
 		addReduceAndAccept(transitionGraph);
 	}
 
-	private void addShiftAndGotos(LR1StateTransitionGraph transitionGraph)
+	private void addShiftAndGotos(LR1ItemSetCollection transitionGraph)
 			throws GrammarException {
 		for (int stateId = 0; stateId < transitionGraph.getStateNumber(); stateId++) {
 			ConcurrentMap<Construction, Integer> transitions = transitionGraph
@@ -53,7 +51,7 @@ public class LR1ParserTable extends AbstractParserTable {
 		}
 	}
 
-	private void addReduceAndAccept(LR1StateTransitionGraph transitionGraph)
+	private void addReduceAndAccept(LR1ItemSetCollection transitionGraph)
 			throws GrammarException {
 		Grammar grammar = getGrammar();
 		for (int stateId = 0; stateId < transitionGraph.getStateNumber(); stateId++) {

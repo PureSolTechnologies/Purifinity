@@ -10,7 +10,7 @@ import com.puresol.uhura.grammar.production.Construction;
 import com.puresol.uhura.grammar.production.FinishTerminal;
 import com.puresol.uhura.parser.parsetable.AbstractParserTable;
 import com.puresol.uhura.parser.parsetable.ActionType;
-import com.puresol.uhura.parser.parsetable.LALR1StateTransitionGraph;
+import com.puresol.uhura.parser.parsetable.LALR1ItemSetCollection;
 import com.puresol.uhura.parser.parsetable.LR1Item;
 import com.puresol.uhura.parser.parsetable.LR1ItemSet;
 import com.puresol.uhura.parser.parsetable.ParserAction;
@@ -28,7 +28,7 @@ public class LALR1ParserTable extends AbstractParserTable {
 
 	protected void calculate() throws GrammarException {
 		logger.debug("Calculate transition graph...");
-		LALR1StateTransitionGraph transitionGraph = new LALR1StateTransitionGraph(
+		LALR1ItemSetCollection transitionGraph = new LALR1ItemSetCollection(
 				getGrammar());
 		if (logger.isTraceEnabled()) {
 			logger.trace(transitionGraph.toString());
@@ -39,7 +39,7 @@ public class LALR1ParserTable extends AbstractParserTable {
 		addReduceAndAccept(transitionGraph);
 	}
 
-	private void addShiftAndGotos(LALR1StateTransitionGraph transitionGraph)
+	private void addShiftAndGotos(LALR1ItemSetCollection transitionGraph)
 			throws GrammarException {
 		for (int stateId = 0; stateId < transitionGraph.getStateNumber(); stateId++) {
 			ConcurrentMap<Construction, Integer> transitions = transitionGraph
@@ -62,7 +62,7 @@ public class LALR1ParserTable extends AbstractParserTable {
 		}
 	}
 
-	private void addReduceAndAccept(LALR1StateTransitionGraph transitionGraph)
+	private void addReduceAndAccept(LALR1ItemSetCollection transitionGraph)
 			throws GrammarException {
 		logger.trace("Add reduce and accept states to table...");
 		Grammar grammar = getGrammar();

@@ -18,7 +18,7 @@ public class LR1StateTransitionGraphTest {
 			System.out.println("====================");
 			Grammar grammar = TestGrammars.getTestGrammarFromLR1Pamphlet();
 
-			LR1StateTransitionGraph transitionGraph = new LR1StateTransitionGraph(
+			LR1ItemSetCollection transitionGraph = new LR1ItemSetCollection(
 					grammar);
 			System.out.println(transitionGraph);
 		} catch (GrammarException e) {
@@ -35,7 +35,7 @@ public class LR1StateTransitionGraphTest {
 			System.out.println("====================");
 			Grammar grammar = TestGrammars.getLR1TestGrammarFromDragonBook();
 
-			LR1StateTransitionGraph transitionGraph = new LR1StateTransitionGraph(
+			LR1ItemSetCollection transitionGraph = new LR1ItemSetCollection(
 					grammar);
 			System.out.println(transitionGraph);
 		} catch (GrammarException e) {
