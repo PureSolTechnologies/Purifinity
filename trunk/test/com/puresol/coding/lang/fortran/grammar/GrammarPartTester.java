@@ -14,7 +14,7 @@ import com.puresol.uhura.parser.ParserManager;
 
 public class GrammarPartTester {
 
-	private static final File PARSER_DIRECTORY = new File(
+	public static final File PARSER_DIRECTORY = new File(
 			"test/com/puresol/coding/lang/fortran/parsers");
 
 	public static boolean test(String production, String text) {
@@ -29,7 +29,6 @@ public class GrammarPartTester {
 
 			Parser parser = ParserManager.getManagerParser(PARSER_DIRECTORY,
 					PARSER_NAME, grammar);
-			parser.setBacktrackEnabled(true);
 			AST ast = parser.parse(tokenStream);
 			new TreePrinter(System.out).println(ast);
 			System.out.println("passed.");
