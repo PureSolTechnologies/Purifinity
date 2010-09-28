@@ -1,5 +1,7 @@
 package com.puresol.uhura.grammar;
 
+import static org.junit.Assert.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
@@ -17,11 +19,11 @@ import com.puresol.uhura.lexer.TokenStream;
 import com.puresol.uhura.parser.Parser;
 import com.puresol.uhura.parser.ParserException;
 import com.puresol.uhura.parser.lr.SLR1Parser;
+import com.puresol.uhura.parser.parsetable.Closure0;
+import com.puresol.uhura.parser.parsetable.Goto0;
 import com.puresol.uhura.parser.parsetable.LR0ItemSetCollection;
 
-import junit.framework.TestCase;
-
-public class GrammarReaderTest extends TestCase {
+public class GrammarReaderTest {
 
 	@Test
 	public void testRead() {
@@ -40,7 +42,10 @@ public class GrammarReaderTest extends TestCase {
 					.lex(new StringReader("1 * 2\n + 3"));
 			Parser parser = new SLR1Parser(grammar);
 			System.out.println(parser.getParserTable());
-			LR0ItemSetCollection tg = new LR0ItemSetCollection(grammar);
+			Closure0 closure0 = new Closure0(grammar);
+			Goto0 goto0 = new Goto0(closure0);
+			LR0ItemSetCollection tg = new LR0ItemSetCollection(grammar,
+					closure0, goto0);
 			System.out.println(tg);
 			AST syntaxTree = parser.parse(tokenStream);
 			new TreePrinter(System.out).println(syntaxTree);
@@ -77,7 +82,10 @@ public class GrammarReaderTest extends TestCase {
 					.lex(new StringReader("1 * 2\n + 3"));
 			Parser parser = new SLR1Parser(grammar);
 			System.out.println(parser.getParserTable());
-			LR0ItemSetCollection tg = new LR0ItemSetCollection(grammar);
+			Closure0 closure0 = new Closure0(grammar);
+			Goto0 goto0 = new Goto0(closure0);
+			LR0ItemSetCollection tg = new LR0ItemSetCollection(grammar,
+					closure0, goto0);
 			System.out.println(tg);
 			AST syntaxTree = parser.parse(tokenStream);
 			new TreePrinter(System.out).println(syntaxTree);

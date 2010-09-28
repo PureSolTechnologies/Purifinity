@@ -85,7 +85,6 @@ public class TestGrammars {
 
 			ProductionSet productions = new ProductionSet();
 
-			// TODO!!!
 			Production production = new Production("Z");
 			production.addConstruction(new NonTerminal("E"));
 			productions.add(production);
@@ -96,12 +95,6 @@ public class TestGrammars {
 			production.addConstruction(new NonTerminal("T"));
 			productions.add(production);
 
-			// production = new Production("E");
-			// production.addElement(new ProductionConstruction("E"));
-			// production.addElement(new TextConstruction("-"));
-			// production.addElement(new ProductionConstruction("T"));
-			// productions.addRule(production);
-
 			production = new Production("E");
 			production.addConstruction(new NonTerminal("T"));
 			productions.add(production);
@@ -111,12 +104,6 @@ public class TestGrammars {
 			production.addConstruction(new Terminal("STAR"));
 			production.addConstruction(new NonTerminal("F"));
 			productions.add(production);
-
-			// production = new Production("T");
-			// production.addElement(new ProductionConstruction("T"));
-			// production.addElement(new TextConstruction("/"));
-			// production.addElement(new ProductionConstruction("F"));
-			// productions.addRule(production);
 
 			production = new Production("T");
 			production.addConstruction(new NonTerminal("F"));
@@ -176,6 +163,12 @@ public class TestGrammars {
 		}
 	}
 
+	/**
+	 * This grammar is from page 325 out of the German edition of the Dragon
+	 * Book.
+	 * 
+	 * @return
+	 */
 	public static Grammar getLALR1TestGrammarFromDragonBook() {
 		try {
 			TokenDefinitionSet tokenDefinitions = new TokenDefinitionSet();

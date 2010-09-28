@@ -2,8 +2,6 @@ package com.puresol.uhura.parser.parsetable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 import org.apache.log4j.Logger;
 
@@ -12,25 +10,25 @@ import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.production.Construction;
 import com.puresol.uhura.grammar.production.FinishTerminal;
 
-public class LR1ItemSetCollection extends GeneralStateTransitionGraph {
+public class LR1ItemSetCollection {
 
 	private static final long serialVersionUID = -1330346621768260912L;
 
 	private final static Logger logger = Logger
 			.getLogger(LR1ItemSetCollection.class);
 
-	private final ConcurrentMap<LR1ItemSet, Integer> itemSet2Integer = new ConcurrentHashMap<LR1ItemSet, Integer>();
 	private final List<LR1ItemSet> itemSetCollection = new ArrayList<LR1ItemSet>();
 
 	private final Grammar grammar;
 	private final Closure1 closure1;
 	private final Goto1 goto1;
 
-	public LR1ItemSetCollection(Grammar grammar) throws GrammarException {
+	public LR1ItemSetCollection(Grammar grammar, Closure1 closure1, Goto1 goto1)
+			throws GrammarException {
 		super();
 		this.grammar = grammar;
-		closure1 = new Closure1(grammar, new First(grammar));
-		goto1 = new Goto1(closure1);
+		this.closure1 = closure1;
+		this.goto1 = goto1;
 		calculate();
 	}
 
@@ -73,26 +71,46 @@ public class LR1ItemSetCollection extends GeneralStateTransitionGraph {
 						.getAllGrammarSymbols()) {
 					LR1ItemSet gotoSet = goto1.calc(itemSet, grammarSymbol);
 					if (gotoSet.getSize() > 0) {
-						int newState = addState(gotoSet);
-						addTransition(stateId, grammarSymbol, newState);
+						addState(gotoSet);
 					}
 				}
 			}
 		} while (nextStartPosition < itemSetCollection.size());
 	}
 
-	private int addState(LR1ItemSet itemSet) {
-		Integer stateId = itemSet2Integer.get(itemSet);
-		if (stateId == null) {
-			stateId = itemSetCollection.size();
+	private void addState(LR1ItemSet itemSet) {
+		if (!itemSetCollection.contains(itemSet)) {
 			itemSetCollection.add(itemSet);
-			itemSet2Integer.put(itemSet, stateId);
 		}
-		return stateId;
 	}
 
 	public LR1ItemSet getItemSet(int stateId) {
 		return itemSetCollection.get(stateId);
+	}
+
+	/**
+	 * This method looks for the state id for a given item set.
+	 * 
+	 * @param targetSet
+	 * @return
+	 * @throws GrammarException
+	 */
+	public int getStateId(LR1ItemSet targetSet) throws GrammarException {
+		for (int stateId = 0; stateId < itemSetCollection.size(); stateId++) {
+			LR1ItemSet lr1ItemSet = itemSetCollection.get(stateId);
+			boolean all = true;
+			for (LR1Item lr1Item : targetSet.getAllItems()) {
+				if (!lr1ItemSet.containsItem(lr1Item)) {
+					all = false;
+					break;
+				}
+			}
+			if (all) {
+				return stateId;
+			}
+		}
+		throw new GrammarException("Target set '" + targetSet
+				+ "' was not found!");
 	}
 
 	public int getStateNumber() {
@@ -112,19 +130,6 @@ public class LR1ItemSetCollection extends GeneralStateTransitionGraph {
 			buffer.append("===========\n");
 			LR1ItemSet itemSet = itemSetCollection.get(stateId);
 			buffer.append(itemSet.toString());
-
-			ConcurrentMap<Construction, Integer> stateTransitions = getTransitions(stateId);
-			if (stateTransitions != null) {
-				buffer.append("Transitions:\n");
-				for (Construction construction : stateTransitions.keySet()) {
-					int finalStateId = stateTransitions.get(construction);
-					buffer.append("  ");
-					buffer.append(construction.toShortString());
-					buffer.append(" --> ");
-					buffer.append(finalStateId);
-					buffer.append("\n");
-				}
-			}
 			buffer.append("\n");
 		}
 		return buffer.toString();

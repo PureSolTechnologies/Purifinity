@@ -1,12 +1,12 @@
 package com.puresol.uhura.grammar.production;
 
+import static org.junit.Assert.*;
+
 import org.junit.Test;
 
 import com.puresol.uhura.grammar.Quantity;
 
-import junit.framework.TestCase;
-
-public class QuantityTest extends TestCase {
+public class QuantityTest {
 
 	@Test
 	public void testExpect() {

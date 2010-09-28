@@ -1,8 +1,8 @@
 package com.puresol.uhura.parser.lr;
 
-import java.io.StringReader;
+import static org.junit.Assert.*;
 
-import junit.framework.TestCase;
+import java.io.StringReader;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -19,7 +19,7 @@ import com.puresol.uhura.lexer.RegExpLexer;
 import com.puresol.uhura.parser.Parser;
 import com.puresol.uhura.parser.ParserException;
 
-public class LALR1ParserTest extends TestCase {
+public class LALR1ParserTest {
 
 	@Test
 	public void testSimple() {
@@ -27,8 +27,10 @@ public class LALR1ParserTest extends TestCase {
 			Logger.getRootLogger().setLevel(Level.TRACE);
 			Grammar grammar = TestGrammars.getLALR1TestGrammarFromDragonBook();
 			Parser parser = new LALR1Parser(grammar);
+			System.out.println(parser.getParserTable().toString());
 			Lexer lexer = new RegExpLexer(grammar);
-			AST syntaxTree = parser.parse(lexer.lex(new StringReader("id=*id")));
+			AST syntaxTree = parser
+					.parse(lexer.lex(new StringReader("id=*id")));
 			new TreePrinter(System.out).println(syntaxTree);
 		} catch (GrammarException e) {
 			e.printStackTrace();

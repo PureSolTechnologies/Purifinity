@@ -1,7 +1,5 @@
 package com.puresol.uhura.parser.lr;
 
-import java.util.concurrent.ConcurrentMap;
-
 import org.apache.log4j.Logger;
 
 import com.puresol.uhura.grammar.Grammar;
@@ -11,8 +9,10 @@ import com.puresol.uhura.grammar.production.FinishTerminal;
 import com.puresol.uhura.grammar.production.NonTerminal;
 import com.puresol.uhura.parser.parsetable.AbstractParserTable;
 import com.puresol.uhura.parser.parsetable.ActionType;
+import com.puresol.uhura.parser.parsetable.Closure0;
 import com.puresol.uhura.parser.parsetable.First;
 import com.puresol.uhura.parser.parsetable.Follow;
+import com.puresol.uhura.parser.parsetable.Goto0;
 import com.puresol.uhura.parser.parsetable.LR0Item;
 import com.puresol.uhura.parser.parsetable.LR0ItemSet;
 import com.puresol.uhura.parser.parsetable.ParserAction;
@@ -30,68 +30,50 @@ public class SLR1ParserTable extends AbstractParserTable {
 	}
 
 	protected void calculate() throws GrammarException {
-		LR0ItemSetCollection transitionGraph = new LR0ItemSetCollection(
-				getGrammar());
-		addShiftAndGotos(transitionGraph);
-		addReduceAndAccept(transitionGraph);
-	}
-
-	private void addShiftAndGotos(LR0ItemSetCollection transitionGraph)
-			throws GrammarException {
-		for (int stateId = 0; stateId < transitionGraph.getStateNumber(); stateId++) {
-			ConcurrentMap<Construction, Integer> transitions = transitionGraph
-					.getTransitions(stateId);
-			for (Construction construction : transitions.keySet()) {
-				if (construction.isTerminal()) {
-					addAction(stateId, construction, new ParserAction(
-							ActionType.SHIFT, transitions.get(construction)));
-					if (!getActionTerminals().contains(construction)) {
-						addActionTerminal(construction);
-					}
-				} else {
-					addAction(stateId, construction, new ParserAction(
-							ActionType.GOTO, transitions.get(construction)));
-					if (!getGotoNonTerminals().contains(construction)) {
-						addGotoNonTerminal(construction);
-					}
-				}
-			}
-		}
-	}
-
-	private void addReduceAndAccept(LR0ItemSetCollection transitionGraph)
-			throws GrammarException {
-		logger.trace("Add reduce and accept states to table...");
-		Grammar grammar = getGrammar();
-		Follow follow = new Follow(grammar, new First(grammar));
-		for (int stateId = 0; stateId < transitionGraph.getStateNumber(); stateId++) {
-			LR0ItemSet itemSet = transitionGraph.getItemSet(stateId);
+		logger.debug("Calculate item set collection...");
+		First first = new First(getGrammar());
+		Follow follow = new Follow(getGrammar(), first);
+		Closure0 closure0 = new Closure0(getGrammar());
+		Goto0 goto0 = new Goto0(closure0);
+		LR0ItemSetCollection itemSetCollection = new LR0ItemSetCollection(
+				getGrammar(), closure0, goto0);
+		logger.debug("Create parser table...");
+		for (int state = 0; state < itemSetCollection.getStateNumber(); state++) {
 			if (logger.isTraceEnabled()) {
-				logger.trace("Process state " + stateId);
-				logger.trace(itemSet);
+				logger.trace("state: " + state + "/"
+						+ itemSetCollection.getStateNumber());
 			}
-			for (LR0Item item : itemSet.getAllItems()) {
-				if (item.hasNext()) {
-					continue;
-				}
-				if (logger.isTraceEnabled()) {
-					logger.trace(item);
-				}
-				if (item.getProduction()
-						.equals(grammar.getProductions().get(0))) {
-					logger.trace("Found state 'accept' action.");
-					addActionTerminal(FinishTerminal.getInstance());
-					addAction(stateId, FinishTerminal.getInstance(),
+			LR0ItemSet lr0ItemSet = itemSetCollection.getItemSet(state);
+			for (LR0Item lr0Item : lr0ItemSet.getAllItems()) {
+				if (lr0Item.hasNext()) {
+					Construction next = lr0Item.getNext();
+					LR0ItemSet targetSet = goto0.calc(lr0ItemSet, next);
+					int targetState = itemSetCollection.getStateId(targetSet);
+					if (next.isTerminal()) {
+						addAction(state, next, new ParserAction(
+								ActionType.SHIFT, targetState));
+						addActionTerminal(next);
+					} else {
+						addAction(state, next, new ParserAction(
+								ActionType.GOTO, targetState));
+						addGotoNonTerminal(next);
+					}
+				} else if (lr0Item.getProduction().equals(
+						getGrammar().getProductions().get(0))) {
+					// has not next and is not start production
+					addAction(state, FinishTerminal.getInstance(),
 							new ParserAction(ActionType.ACCEPT, -1));
-				} else {
-					for (Construction construction : follow
-							.get(new NonTerminal(item.getProduction().getName()))) {
-						addAction(stateId, construction, new ParserAction(
-								ActionType.REDUCE, grammar.getProductions()
-										.getId(item.getProduction())));
+					addActionTerminal(FinishTerminal.getInstance());
+				} else { // has not next and is not start production
+					for (Construction lookahead : follow.get(new NonTerminal(
+							lr0Item.getProduction().getName()))) {
+						addAction(state, lookahead, new ParserAction(
+								ActionType.REDUCE, lr0Item.getProduction()
+										.getId()));
 					}
 				}
 			}
 		}
+		logger.debug("done.");
 	}
 }

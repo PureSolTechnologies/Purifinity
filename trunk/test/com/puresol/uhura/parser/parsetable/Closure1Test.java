@@ -1,5 +1,7 @@
 package com.puresol.uhura.parser.parsetable;
 
+import static org.junit.Assert.*;
+
 import java.util.Iterator;
 import java.util.Set;
 
@@ -11,9 +13,7 @@ import com.puresol.uhura.grammar.production.FinishTerminal;
 import com.puresol.uhura.parser.parsetable.LR1Item;
 import com.puresol.uhura.parser.parsetable.LR1ItemSet;
 
-import junit.framework.TestCase;
-
-public class Closure1Test extends TestCase {
+public class Closure1Test {
 
 	@Test
 	public void test() {

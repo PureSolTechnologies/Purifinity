@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 import com.puresol.uhura.grammar.production.Construction;
@@ -27,7 +26,7 @@ public class AbstractItemSet<T extends Item> implements Serializable {
 	 * The following fields have concurrent versions of lists and sets for
 	 * iterating and manipulating values in different item calculations.
 	 */
-	private final List<T> allItems = new CopyOnWriteArrayList<T>();
+	private final Set<T> allItems = new CopyOnWriteArraySet<T>();
 	private final Set<T> kernelItems = new CopyOnWriteArraySet<T>();
 	private final Set<T> nonKernelItems = new CopyOnWriteArraySet<T>();
 
@@ -78,19 +77,26 @@ public class AbstractItemSet<T extends Item> implements Serializable {
 		return false;
 	}
 
-	public void addNonKernelItems(Set<T> items) {
+	public boolean addNonKernelItems(Set<T> items) {
+		boolean result = false;
 		for (T item : items) {
-			addNonKernelItem(item);
+			if (addNonKernelItem(item)) {
+				result = true;
+			}
 		}
+		return result;
 	}
 
-	public void addNonKernelItem(T item) {
-		if (nonKernelItems.add(item)) {
-			allItems.add(item);
+	public boolean addNonKernelItem(T item) {
+		boolean result = false;
+		if (allItems.add(item)) {
+			nonKernelItems.add(item);
+			result = true;
 		}
+		return result;
 	}
 
-	public List<T> getAllItems() {
+	public Set<T> getAllItems() {
 		return allItems;
 	}
 

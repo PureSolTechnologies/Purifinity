@@ -2,6 +2,7 @@ package com.puresol.uhura.parser.parsetable;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 
 import com.puresol.uhura.grammar.GrammarException;
@@ -37,10 +38,18 @@ public interface ParserTable extends Serializable {
 	public ParserActionSet getActionSet(int currentState,
 			List<Construction> constructions);
 
-	public List<Construction> getActionTerminals();
+	public Set<Construction> getActionTerminals();
 
-	public List<Construction> getGotoNonTerminals();
+	public Set<Construction> getGotoNonTerminals();
 
+	/**
+	 * This method returns all possible constructions in parser table which fit
+	 * the token parameter.
+	 * 
+	 * @param token
+	 * @return
+	 * @throws GrammarException
+	 */
 	public List<Construction> getConstructionForToken(Token token)
 			throws GrammarException;
 

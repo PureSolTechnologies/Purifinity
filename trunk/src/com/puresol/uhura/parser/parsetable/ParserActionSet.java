@@ -19,7 +19,17 @@ public class ParserActionSet implements Serializable {
 
 	private final List<ParserAction> actions = new CopyOnWriteArrayList<ParserAction>();
 
+	public ParserActionSet() {
+		actions.add(new ParserAction(ActionType.ERROR, -1));
+	}
+
 	public void addAction(ParserAction action) {
+		if (action.getAction() == ActionType.ERROR) {
+			return;
+		}
+		if (actions.get(0).getAction() == ActionType.ERROR) {
+			actions.clear();
+		}
 		if (!actions.contains(action)) {
 			actions.add(action);
 		}

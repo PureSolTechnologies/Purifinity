@@ -8,7 +8,7 @@ import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.TestGrammars;
 
-public class LR0StateTransitionGraphTest {
+public class LR0ItemSetCollectionTest {
 
 	@Test
 	public void testLRPamphletGrammar() {
@@ -18,8 +18,10 @@ public class LR0StateTransitionGraphTest {
 			System.out.println("====================");
 			Grammar grammar = TestGrammars.getTestGrammarFromLR1Pamphlet();
 
-			LR0ItemSetCollection transitionGraph;
-			transitionGraph = new LR0ItemSetCollection(grammar);
+			Closure0 closure0 = new Closure0(grammar);
+			Goto0 goto0 = new Goto0(closure0);
+			LR0ItemSetCollection transitionGraph = new LR0ItemSetCollection(
+					grammar, closure0, goto0);
 			System.out.println(transitionGraph);
 		} catch (GrammarException e) {
 			e.printStackTrace();
@@ -35,8 +37,10 @@ public class LR0StateTransitionGraphTest {
 			System.out.println("====================");
 			Grammar grammar = TestGrammars.getSLR1TestGrammarFromDragonBook();
 
+			Closure0 closure0 = new Closure0(grammar);
+			Goto0 goto0 = new Goto0(closure0);
 			LR0ItemSetCollection transitionGraph = new LR0ItemSetCollection(
-					grammar);
+					grammar, closure0, goto0);
 			System.out.println(transitionGraph);
 		} catch (GrammarException e) {
 			e.printStackTrace();

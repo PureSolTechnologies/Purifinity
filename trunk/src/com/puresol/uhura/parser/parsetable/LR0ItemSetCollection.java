@@ -2,29 +2,27 @@ package com.puresol.uhura.parser.parsetable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.production.Construction;
 
-public class LR0ItemSetCollection extends GeneralStateTransitionGraph {
+public class LR0ItemSetCollection {
 
 	private static final long serialVersionUID = -5320832167468349031L;
 
-	private final ConcurrentMap<LR0ItemSet, Integer> itemSet2Integer = new ConcurrentHashMap<LR0ItemSet, Integer>();
 	private final List<LR0ItemSet> itemSetCollection = new ArrayList<LR0ItemSet>();
 
 	private final Grammar grammar;
 	private final Closure0 closure0;
 	private final Goto0 goto0;
 
-	public LR0ItemSetCollection(Grammar grammar) throws GrammarException {
+	public LR0ItemSetCollection(Grammar grammar, Closure0 closure0, Goto0 goto0)
+			throws GrammarException {
 		super();
 		this.grammar = grammar;
-		closure0 = new Closure0(grammar);
-		goto0 = new Goto0(closure0);
+		this.closure0 = closure0;
+		this.goto0 = goto0;
 		calculate();
 	}
 
@@ -50,43 +48,56 @@ public class LR0ItemSetCollection extends GeneralStateTransitionGraph {
 	 */
 	private void calculate() throws GrammarException {
 		addState(closure0.calc(new LR0Item(grammar.getProductions().get(0), 0)));
-		boolean changed;
+		int currentSize;
 		do {
-			changed = false;
+			currentSize = itemSetCollection.size();
 			int currentItemSetCount = itemSetCollection.size();
 			for (int stateId = 0; stateId < currentItemSetCount; stateId++) {
 				LR0ItemSet itemSet = itemSetCollection.get(stateId);
-				int initialState = itemSet2Integer.get(itemSet);
 				for (Construction grammarSymbol : itemSet
 						.getAllGrammarSymbols()) {
 					LR0ItemSet gotoSet = goto0.calc(itemSet, grammarSymbol);
 					if (gotoSet.getSize() > 0) {
-						if (!itemSetCollection.contains(gotoSet)) {
-							int newState = addState(gotoSet);
-							addTransition(initialState, grammarSymbol, newState);
-							changed = true;
-						} else {
-							int newState = itemSet2Integer.get(gotoSet);
-							addTransition(initialState, grammarSymbol, newState);
-						}
+						addState(gotoSet);
 					}
 				}
 			}
-		} while (changed);
+		} while (currentSize < itemSetCollection.size());
 	}
 
-	private int addState(LR0ItemSet itemSet) {
-		Integer stateId = itemSet2Integer.get(itemSet);
-		if (stateId == null) {
-			stateId = itemSetCollection.size();
+	private void addState(LR0ItemSet itemSet) {
+		if (!itemSetCollection.contains(itemSet)) {
 			itemSetCollection.add(itemSet);
-			itemSet2Integer.put(itemSet, stateId);
 		}
-		return stateId;
 	}
 
 	public LR0ItemSet getItemSet(int stateId) {
 		return (LR0ItemSet) itemSetCollection.toArray()[stateId];
+	}
+
+	/**
+	 * This method looks for the state id for a given item set.
+	 * 
+	 * @param targetSet
+	 * @return
+	 * @throws GrammarException
+	 */
+	public int getStateId(LR0ItemSet targetSet) throws GrammarException {
+		for (int stateId = 0; stateId < itemSetCollection.size(); stateId++) {
+			LR0ItemSet lr0ItemSet = itemSetCollection.get(stateId);
+			boolean all = true;
+			for (LR0Item lr0Item : targetSet.getAllItems()) {
+				if (!lr0ItemSet.containsItem(lr0Item)) {
+					all = false;
+					break;
+				}
+			}
+			if (all) {
+				return stateId;
+			}
+		}
+		throw new GrammarException("Target set '" + targetSet
+				+ "' was not found!");
 	}
 
 	public int getStateNumber() {
@@ -106,19 +117,6 @@ public class LR0ItemSetCollection extends GeneralStateTransitionGraph {
 			buffer.append("===========\n");
 			LR0ItemSet itemSet = (LR0ItemSet) itemSetCollection.toArray()[stateId];
 			buffer.append(itemSet.toString());
-
-			ConcurrentMap<Construction, Integer> stateTransitions = getTransitions(stateId);
-			if (stateTransitions != null) {
-				buffer.append("Transitions:\n");
-				for (Construction construction : stateTransitions.keySet()) {
-					int finalStateId = stateTransitions.get(construction);
-					buffer.append("  ");
-					buffer.append(construction.toShortString());
-					buffer.append(" --> ");
-					buffer.append(finalStateId);
-					buffer.append("\n");
-				}
-			}
 			buffer.append("\n");
 		}
 		return buffer.toString();

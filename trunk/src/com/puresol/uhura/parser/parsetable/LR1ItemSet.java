@@ -1,7 +1,8 @@
 package com.puresol.uhura.parser.parsetable;
 
 import java.util.Set;
-import java.util.concurrent.CopyOnWriteArraySet;
+
+import com.puresol.uhura.grammar.production.DummyTerminal;
 
 public class LR1ItemSet extends AbstractItemSet<LR1Item> {
 
@@ -19,34 +20,14 @@ public class LR1ItemSet extends AbstractItemSet<LR1Item> {
 		super(initialItemSet);
 	}
 
-	public boolean equalsCore(LR1ItemSet other) {
-		Set<LR1Item> thisSet = new CopyOnWriteArraySet<LR1Item>();
-		thisSet.addAll(this.getKernelItems());
-		thisSet.addAll(this.getNonKernelItems());
-
-		Set<LR1Item> otherSet = new CopyOnWriteArraySet<LR1Item>();
-		otherSet.addAll(other.getKernelItems());
-		otherSet.addAll(other.getNonKernelItems());
-
-		if (thisSet.size() != otherSet.size()) {
-			return false;
-		}
-
-		for (LR1Item thisItem : thisSet) {
-			boolean found = false;
-			for (LR1Item otherItem : thisSet) {
-				if ((thisItem.getPosition() == otherItem.getPosition())
-						&& (thisItem.getProduction().equals(otherItem
-								.getProduction()))) {
-					found = true;
-					break;
-				}
-			}
-			if (!found) {
-				return false;
+	public void removeDummies() {
+		for (LR1Item lr1Item : getAllItems()) {
+			if (lr1Item.getLookahead().equals(DummyTerminal.getInstance())) {
+				getAllItems().remove(lr1Item);
+				getKernelItems().remove(lr1Item);
+				getNonKernelItems().remove(lr1Item);
 			}
 		}
-		return true;
 	}
 
 }

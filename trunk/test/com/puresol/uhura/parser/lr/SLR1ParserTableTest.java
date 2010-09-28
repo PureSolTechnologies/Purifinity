@@ -1,6 +1,6 @@
 package com.puresol.uhura.parser.lr;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.*;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -17,7 +17,7 @@ import com.puresol.uhura.parser.parsetable.ActionType;
 import com.puresol.uhura.parser.parsetable.ParserAction;
 import com.puresol.uhura.parser.parsetable.ParserTable;
 
-public class SLR1ParserTableTest extends TestCase {
+public class SLR1ParserTableTest {
 
 	@Test
 	public void testLRPamphletGrammar() {

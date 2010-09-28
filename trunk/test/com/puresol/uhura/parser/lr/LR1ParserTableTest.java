@@ -1,6 +1,6 @@
 package com.puresol.uhura.parser.lr;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
 
@@ -15,7 +15,7 @@ import com.puresol.uhura.parser.parsetable.ActionType;
 import com.puresol.uhura.parser.parsetable.ParserAction;
 import com.puresol.uhura.parser.parsetable.ParserTable;
 
-public class LR1ParserTableTest extends TestCase {
+public class LR1ParserTableTest {
 
 	@Test
 	public void testLRPamphletGrammar() {

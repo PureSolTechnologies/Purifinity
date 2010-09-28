@@ -1,6 +1,6 @@
 package com.puresol.uhura.parser.lr;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
 
@@ -17,7 +17,7 @@ import com.puresol.uhura.grammar.production.Terminal;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class LR0ParserTableTest extends TestCase {
+public class LR0ParserTableTest {
 
 	@Test
 	public void test() {

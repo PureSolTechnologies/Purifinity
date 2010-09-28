@@ -1,10 +1,10 @@
 package com.puresol.uhura.grammar.production;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-public class FinishConstructionTest extends TestCase {
+public class FinishConstructionTest {
 
 	@Test
 	public void testSingleton() {

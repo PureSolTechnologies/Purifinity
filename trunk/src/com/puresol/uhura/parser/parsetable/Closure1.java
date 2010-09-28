@@ -1,6 +1,8 @@
 package com.puresol.uhura.parser.parsetable;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -65,8 +67,10 @@ public class Closure1 implements Serializable {
 		do {
 			newPosition = itemSet.getSize();
 			currentSize = itemSet.getSize();
+			List<LR1Item> lr1Items = new ArrayList<LR1Item>(
+					itemSet.getAllItems());
 			for (int position = currentPosition; position < currentSize; position++) {
-				LR1Item item = itemSet.getAllItems().get(position);
+				LR1Item item = lr1Items.get(position);
 				if (!item.hasNext()) {
 					continue;
 				}

@@ -1,5 +1,7 @@
 package com.puresol.uhura.grammar;
 
+import static org.junit.Assert.*;
+
 import java.io.File;
 import java.util.Properties;
 
@@ -10,9 +12,7 @@ import com.puresol.uhura.grammar.token.TokenDefinitionSet;
 import com.puresol.utils.FileUtilities;
 import com.puresol.utils.Persistence;
 
-import junit.framework.TestCase;
-
-public class GrammarTest extends TestCase {
+public class GrammarTest {
 
 	@Test
 	public void testSettersAndGetters() {

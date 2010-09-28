@@ -1,19 +1,23 @@
 package com.puresol.uhura.grammar.uhura;
 
+import static org.junit.Assert.*;
+
 import org.junit.Test;
 
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.parser.lr.LR1ParserTable;
 import com.puresol.uhura.parser.lr.SLR1ParserTable;
+import com.puresol.uhura.parser.parsetable.Closure0;
+import com.puresol.uhura.parser.parsetable.Closure1;
 import com.puresol.uhura.parser.parsetable.First;
 import com.puresol.uhura.parser.parsetable.Follow;
+import com.puresol.uhura.parser.parsetable.Goto0;
+import com.puresol.uhura.parser.parsetable.Goto1;
 import com.puresol.uhura.parser.parsetable.LR0ItemSetCollection;
 import com.puresol.uhura.parser.parsetable.LR1ItemSetCollection;
 
-import junit.framework.TestCase;
-
-public class UhuraGrammarTest extends TestCase {
+public class UhuraGrammarTest {
 
 	@Test
 	public void test() {
@@ -49,7 +53,10 @@ public class UhuraGrammarTest extends TestCase {
 			System.out.println("LR(0) State Transition Graph:");
 			System.out.println("=============================");
 			Grammar grammar = UhuraGrammar.getGrammar();
-			LR0ItemSetCollection first = new LR0ItemSetCollection(grammar);
+			Closure0 closure0 = new Closure0(grammar);
+			Goto0 goto0 = new Goto0(closure0);
+			LR0ItemSetCollection first = new LR0ItemSetCollection(grammar,
+					closure0, goto0);
 			System.out.println(first.toString());
 		} catch (GrammarException e) {
 			e.printStackTrace();
@@ -79,8 +86,12 @@ public class UhuraGrammarTest extends TestCase {
 			System.out.println("LR(1) State Transition Graph:");
 			System.out.println("=============================");
 			Grammar grammar = UhuraGrammar.getGrammar();
-			LR1ItemSetCollection first = new LR1ItemSetCollection(grammar);
-			System.out.println(first.toString());
+			First first = new First(grammar);
+			Closure1 closure1 = new Closure1(grammar, first);
+			Goto1 goto1 = new Goto1(closure1);
+			LR1ItemSetCollection itemSetCollection = new LR1ItemSetCollection(
+					grammar, closure1, goto1);
+			System.out.println(itemSetCollection.toString());
 		} catch (GrammarException e) {
 			e.printStackTrace();
 			fail("No exception was expected!");

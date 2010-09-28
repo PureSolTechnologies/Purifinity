@@ -1,8 +1,8 @@
 package com.puresol.uhura.parser.lr;
 
-import java.io.StringReader;
+import static org.junit.Assert.*;
 
-import junit.framework.TestCase;
+import java.io.StringReader;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -19,7 +19,7 @@ import com.puresol.uhura.lexer.RegExpLexer;
 import com.puresol.uhura.parser.Parser;
 import com.puresol.uhura.parser.ParserException;
 
-public class LR1ParserTest extends TestCase {
+public class LR1ParserTest {
 
 	@Test
 	public void testSimple() {

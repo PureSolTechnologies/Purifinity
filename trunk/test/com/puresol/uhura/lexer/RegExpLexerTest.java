@@ -1,5 +1,7 @@
 package com.puresol.uhura.lexer;
 
+import static org.junit.Assert.*;
+
 import java.io.StringReader;
 import java.util.Properties;
 
@@ -11,9 +13,7 @@ import com.puresol.uhura.grammar.production.ProductionSet;
 import com.puresol.uhura.grammar.token.TokenDefinition;
 import com.puresol.uhura.grammar.token.TokenDefinitionSet;
 
-import junit.framework.TestCase;
-
-public class RegExpLexerTest extends TestCase {
+public class RegExpLexerTest {
 
 	@Test
 	public void test() {

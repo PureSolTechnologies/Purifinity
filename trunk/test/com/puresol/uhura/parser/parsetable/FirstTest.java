@@ -1,5 +1,7 @@
 package com.puresol.uhura.parser.parsetable;
 
+import static org.junit.Assert.*;
+
 import java.util.Iterator;
 
 import org.junit.Test;
@@ -12,9 +14,7 @@ import com.puresol.uhura.grammar.production.NonTerminal;
 import com.puresol.uhura.grammar.production.Terminal;
 import com.puresol.uhura.parser.parsetable.First;
 
-import junit.framework.TestCase;
-
-public class FirstTest extends TestCase {
+public class FirstTest {
 
 	@Test
 	public void testLRPamphletGrammar() {

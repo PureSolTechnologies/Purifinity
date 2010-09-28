@@ -1,5 +1,7 @@
 package com.puresol.uhura.parser.parsetable;
 
+import static org.junit.Assert.*;
+
 import org.junit.Test;
 
 import com.puresol.uhura.grammar.Grammar;
@@ -10,9 +12,7 @@ import com.puresol.uhura.parser.parsetable.Goto0;
 import com.puresol.uhura.parser.parsetable.LR0Item;
 import com.puresol.uhura.parser.parsetable.LR0ItemSet;
 
-import junit.framework.TestCase;
-
-public class Goto0Test extends TestCase {
+public class Goto0Test {
 
 	@Test
 	public void test() {

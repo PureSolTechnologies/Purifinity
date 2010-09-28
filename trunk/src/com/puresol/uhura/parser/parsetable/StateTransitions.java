@@ -7,7 +7,7 @@ import java.util.concurrent.ConcurrentMap;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.production.Construction;
 
-public class GeneralStateTransitionGraph implements Serializable {
+public class StateTransitions implements Serializable {
 
 	private static final long serialVersionUID = 3448400511750197925L;
 
@@ -63,7 +63,7 @@ public class GeneralStateTransitionGraph implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		GeneralStateTransitionGraph other = (GeneralStateTransitionGraph) obj;
+		StateTransitions other = (StateTransitions) obj;
 		if (transitions == null) {
 			if (other.transitions != null)
 				return false;

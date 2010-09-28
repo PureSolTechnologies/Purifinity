@@ -8,8 +8,11 @@ import com.puresol.uhura.grammar.production.Construction;
 import com.puresol.uhura.grammar.production.FinishTerminal;
 import com.puresol.uhura.parser.parsetable.AbstractParserTable;
 import com.puresol.uhura.parser.parsetable.ActionType;
+import com.puresol.uhura.parser.parsetable.Closure0;
+import com.puresol.uhura.parser.parsetable.Goto0;
 import com.puresol.uhura.parser.parsetable.LR0Item;
 import com.puresol.uhura.parser.parsetable.LR0ItemSet;
+import com.puresol.uhura.parser.parsetable.LR0StateTransitions;
 import com.puresol.uhura.parser.parsetable.ParserAction;
 import com.puresol.uhura.parser.parsetable.LR0ItemSetCollection;
 
@@ -23,16 +26,20 @@ public class LR0ParserTable extends AbstractParserTable {
 
 	@Override
 	protected void calculate() throws GrammarException {
+		Closure0 closure0 = new Closure0(getGrammar());
+		Goto0 goto0 = new Goto0(closure0);
 		LR0ItemSetCollection transitionGraph = new LR0ItemSetCollection(
-				getGrammar());
-		addShiftAndGotos(transitionGraph);
+				getGrammar(), closure0, goto0);
+		LR0StateTransitions stateTransitions = new LR0StateTransitions(
+				transitionGraph, goto0);
+		addShiftAndGotos(transitionGraph, stateTransitions);
 		addReduceAndAccept(transitionGraph);
 	}
 
-	private void addShiftAndGotos(LR0ItemSetCollection transitionGraph)
-			throws GrammarException {
-		for (int stateId = 0; stateId < transitionGraph.getStateNumber(); stateId++) {
-			ConcurrentMap<Construction, Integer> transitions = transitionGraph
+	private void addShiftAndGotos(LR0ItemSetCollection itemSetCollection,
+			LR0StateTransitions stateTransitions) throws GrammarException {
+		for (int stateId = 0; stateId < itemSetCollection.getStateNumber(); stateId++) {
+			ConcurrentMap<Construction, Integer> transitions = stateTransitions
 					.getTransitions(stateId);
 			for (Construction construction : transitions.keySet()) {
 				if (construction.isTerminal()) {

@@ -1,7 +1,9 @@
 package com.puresol.uhura.parser.parsetable;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -21,8 +23,8 @@ public abstract class AbstractParserTable implements ParserTable {
 			.getLogger(AbstractParserTable.class);
 
 	private final List<ConcurrentMap<Construction, ParserActionSet>> table = new ArrayList<ConcurrentMap<Construction, ParserActionSet>>();
-	private final List<Construction> actionTerminals = new ArrayList<Construction>();
-	private final List<Construction> gotoNonTerminals = new ArrayList<Construction>();
+	private final Set<Construction> actionTerminals = new LinkedHashSet<Construction>();
+	private final Set<Construction> gotoNonTerminals = new LinkedHashSet<Construction>();
 
 	private final Grammar grammar;
 	private final boolean ignoreCase;
@@ -50,7 +52,7 @@ public abstract class AbstractParserTable implements ParserTable {
 	 * @return the actionTerminals
 	 */
 	@Override
-	public final List<Construction> getActionTerminals() {
+	public final Set<Construction> getActionTerminals() {
 		return actionTerminals;
 	}
 
@@ -58,7 +60,7 @@ public abstract class AbstractParserTable implements ParserTable {
 	 * @return the gotoNonTerminals
 	 */
 	@Override
-	public final List<Construction> getGotoNonTerminals() {
+	public final Set<Construction> getGotoNonTerminals() {
 		return gotoNonTerminals;
 	}
 

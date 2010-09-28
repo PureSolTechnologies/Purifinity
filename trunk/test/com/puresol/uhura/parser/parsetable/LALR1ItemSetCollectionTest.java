@@ -10,7 +10,7 @@ import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.TestGrammars;
 
-public class LALR1StateTransitionGraphTest {
+public class LALR1ItemSetCollectionTest {
 
 	@Test
 	public void testDragonBookGrammar() {
@@ -22,8 +22,17 @@ public class LALR1StateTransitionGraphTest {
 			Grammar grammar = TestGrammars.getLALR1TestGrammarFromDragonBook();
 			System.out.println(grammar);
 
+			First first = new First(grammar);
+			Closure0 closure0 = new Closure0(grammar);
+			Goto0 goto0 = new Goto0(closure0);
+			Closure1 closure1 = new Closure1(grammar, first);
+			LR0ItemSetCollection lr0ItemSetCollection = new LR0ItemSetCollection(
+					grammar, closure0, goto0);
+			LR0StateTransitions lr0Transitions = new LR0StateTransitions(
+					lr0ItemSetCollection, goto0);
 			/* LALR1StateTransitionGraph transitionGraph = */
-			new LALR1ItemSetCollection(grammar);
+			new LALR1ItemSetCollection(grammar, lr0ItemSetCollection,
+					lr0Transitions, closure1);
 			// System.out.println(transitionGraph);
 		} catch (GrammarException e) {
 			e.printStackTrace();

@@ -1,6 +1,6 @@
 package com.puresol.uhura.parser.lr;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
 
@@ -15,7 +15,7 @@ import com.puresol.uhura.parser.parsetable.ActionType;
 import com.puresol.uhura.parser.parsetable.ParserAction;
 import com.puresol.uhura.parser.parsetable.ParserTable;
 
-public class LALR1ParserTableTest extends TestCase {
+public class LALR1ParserTableTest {
 
 	/**
 	 * The solution can be found at page 319 of 2. German edition of Dragon
@@ -27,7 +27,7 @@ public class LALR1ParserTableTest extends TestCase {
 			System.out.println("====================");
 			System.out.println("Dragon Book Grammar:");
 			System.out.println("====================");
-			Grammar grammar = TestGrammars.getLALR1TestGrammarFromDragonBook();
+			Grammar grammar = TestGrammars.getLR1TestGrammarFromDragonBook();
 			System.out.println("Productions:");
 			System.out.println(grammar.toProductionsString());
 			ParserTable table = new LALR1ParserTable(grammar);
@@ -39,13 +39,10 @@ public class LALR1ParserTableTest extends TestCase {
 			ParserAction r3 = new ParserAction(ActionType.REDUCE, 3);
 			ParserAction s3 = new ParserAction(ActionType.SHIFT, 3);
 			ParserAction s4 = new ParserAction(ActionType.SHIFT, 4);
-			ParserAction s6 = new ParserAction(ActionType.SHIFT, 6);
-			ParserAction s7 = new ParserAction(ActionType.SHIFT, 7);
 			ParserAction g1 = new ParserAction(ActionType.GOTO, 1);
 			ParserAction g2 = new ParserAction(ActionType.GOTO, 2);
 			ParserAction g5 = new ParserAction(ActionType.GOTO, 5);
-			ParserAction g8 = new ParserAction(ActionType.GOTO, 8);
-			ParserAction g9 = new ParserAction(ActionType.GOTO, 9);
+			ParserAction g6 = new ParserAction(ActionType.GOTO, 6);
 			ParserAction accept = new ParserAction(ActionType.ACCEPT, -1);
 			ParserAction error = new ParserAction(ActionType.ERROR, -1);
 			Construction c = new Terminal("c");
@@ -67,8 +64,8 @@ public class LALR1ParserTableTest extends TestCase {
 			assertEquals(error, table.getAction(1, pS));
 			assertEquals(error, table.getAction(1, pC));
 
-			assertEquals(s6, table.getAction(2, c));
-			assertEquals(s7, table.getAction(2, d));
+			assertEquals(s3, table.getAction(2, c));
+			assertEquals(s4, table.getAction(2, d));
 			assertEquals(error, table.getAction(2, finish));
 			assertEquals(error, table.getAction(2, pS));
 			assertEquals(g5, table.getAction(2, pC));
@@ -77,11 +74,11 @@ public class LALR1ParserTableTest extends TestCase {
 			assertEquals(s4, table.getAction(3, d));
 			assertEquals(error, table.getAction(3, finish));
 			assertEquals(error, table.getAction(3, pS));
-			assertEquals(g8, table.getAction(3, pC));
+			assertEquals(g6, table.getAction(3, pC));
 
 			assertEquals(r3, table.getAction(4, c));
 			assertEquals(r3, table.getAction(4, d));
-			assertEquals(error, table.getAction(4, finish));
+			assertEquals(r3, table.getAction(4, finish));
 			assertEquals(error, table.getAction(4, pS));
 			assertEquals(error, table.getAction(4, pC));
 
@@ -91,29 +88,11 @@ public class LALR1ParserTableTest extends TestCase {
 			assertEquals(error, table.getAction(5, pS));
 			assertEquals(error, table.getAction(5, pC));
 
-			assertEquals(s6, table.getAction(6, c));
-			assertEquals(s7, table.getAction(6, d));
-			assertEquals(error, table.getAction(6, finish));
+			assertEquals(r2, table.getAction(6, c));
+			assertEquals(r2, table.getAction(6, d));
+			assertEquals(r2, table.getAction(6, finish));
 			assertEquals(error, table.getAction(6, pS));
-			assertEquals(g9, table.getAction(6, pC));
-
-			assertEquals(error, table.getAction(7, c));
-			assertEquals(error, table.getAction(7, d));
-			assertEquals(r3, table.getAction(7, finish));
-			assertEquals(error, table.getAction(7, pS));
-			assertEquals(error, table.getAction(7, pC));
-
-			assertEquals(r2, table.getAction(8, c));
-			assertEquals(r2, table.getAction(8, d));
-			assertEquals(error, table.getAction(8, finish));
-			assertEquals(error, table.getAction(8, pS));
-			assertEquals(error, table.getAction(8, pC));
-
-			assertEquals(error, table.getAction(9, c));
-			assertEquals(error, table.getAction(9, d));
-			assertEquals(r2, table.getAction(9, finish));
-			assertEquals(error, table.getAction(9, pS));
-			assertEquals(error, table.getAction(9, pC));
+			assertEquals(error, table.getAction(6, pC));
 
 		} catch (GrammarException e) {
 			e.printStackTrace();
