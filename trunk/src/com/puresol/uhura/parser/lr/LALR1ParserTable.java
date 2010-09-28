@@ -55,7 +55,8 @@ public class LALR1ParserTable extends AbstractParserTable {
 				if (lr1Item.hasNext()) {
 					Construction next = lr1Item.getNext();
 					LR1ItemSet targetSet = goto1.calc(lr1ItemSet, next);
-					int targetState = itemSetCollection.getStateId(targetSet);
+					int targetState = itemSetCollection
+							.getStateIdForPartialItem(targetSet);
 					if (next.isTerminal()) {
 						addAction(state, next, new ParserAction(
 								ActionType.SHIFT, targetState));

@@ -17,7 +17,7 @@ public class LR1StateTransitionsTest {
 	 * page 317.
 	 */
 	@Test
-	public void test() {
+	public void testLR1Grammar() {
 		try {
 			Grammar grammar = TestGrammars.getLR1TestGrammarFromDragonBook();
 			First first = new First(grammar);

@@ -98,14 +98,7 @@ public class LR1ItemSetCollection {
 	public int getStateId(LR1ItemSet targetSet) throws GrammarException {
 		for (int stateId = 0; stateId < itemSetCollection.size(); stateId++) {
 			LR1ItemSet lr1ItemSet = itemSetCollection.get(stateId);
-			boolean all = true;
-			for (LR1Item lr1Item : targetSet.getAllItems()) {
-				if (!lr1ItemSet.containsItem(lr1Item)) {
-					all = false;
-					break;
-				}
-			}
-			if (all) {
+			if (lr1ItemSet.equals(targetSet)) {
 				return stateId;
 			}
 		}

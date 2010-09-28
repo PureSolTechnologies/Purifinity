@@ -1,5 +1,6 @@
 package com.puresol.uhura.parser;
 
+import com.puresol.uhura.grammar.token.Visibility;
 import com.puresol.uhura.lexer.Token;
 
 public class ParserException extends Exception {
@@ -11,6 +12,11 @@ public class ParserException extends Exception {
 	public ParserException(String message, Token token) {
 		super(message);
 		this.token = token;
+	}
+
+	public ParserException(String message) {
+		super(message);
+		this.token = new Token("", "", Visibility.HIDDEN);
 	}
 
 	/**

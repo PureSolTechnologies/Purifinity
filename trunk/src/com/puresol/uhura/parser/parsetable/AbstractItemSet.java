@@ -77,6 +77,34 @@ public class AbstractItemSet<T extends Item> implements Serializable {
 		return false;
 	}
 
+	public boolean addKernelItems(Set<T> items) {
+		boolean result = false;
+		for (T item : items) {
+			if (addKernelItem(item)) {
+				result = true;
+			}
+		}
+		return result;
+	}
+
+	public boolean addKernelItem(T item) {
+		boolean result = false;
+		if (allItems.add(item)) {
+			kernelItems.add(item);
+			result = true;
+		}
+		return result;
+	}
+
+	public boolean removeItem(T item) {
+		if (!allItems.remove(item)) {
+			return false;
+		}
+		kernelItems.remove(item);
+		nonKernelItems.remove(item);
+		return true;
+	}
+
 	public boolean addNonKernelItems(Set<T> items) {
 		boolean result = false;
 		for (T item : items) {

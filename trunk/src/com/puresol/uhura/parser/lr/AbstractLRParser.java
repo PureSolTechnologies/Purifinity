@@ -14,6 +14,7 @@ import com.puresol.uhura.grammar.production.Construction;
 import com.puresol.uhura.grammar.production.FinishTerminal;
 import com.puresol.uhura.grammar.production.Production;
 import com.puresol.uhura.grammar.production.NonTerminal;
+import com.puresol.uhura.grammar.token.Visibility;
 import com.puresol.uhura.lexer.Token;
 import com.puresol.uhura.lexer.TokenStream;
 import com.puresol.uhura.parser.AbstractParser;
@@ -147,6 +148,10 @@ public abstract class AbstractLRParser extends AbstractParser {
 					constructions = new ArrayList<Construction>();
 					constructions.add(FinishTerminal.getInstance());
 				}
+				if (stateStack.peek() < 0) {
+					throw new IllegalStateException("Peek to stack was: "
+							+ stateStack.peek() + "!");
+				}
 				ParserActionSet actionSet = parserTable.getActionSet(
 						stateStack.peek(), constructions);
 				if (logger.isTraceEnabled()) {
@@ -155,10 +160,10 @@ public abstract class AbstractLRParser extends AbstractParser {
 				ParserAction action = getAction(actionSet);
 				switch (action.getAction()) {
 				case SHIFT:
-					shift(action, token);
+					shift(action.getParameter(), token);
 					break;
 				case REDUCE:
-					reduce(action);
+					reduce(action.getParameter());
 					break;
 				case ACCEPT:
 					accepted = accept();
@@ -249,16 +254,24 @@ public abstract class AbstractLRParser extends AbstractParser {
 	 * @param token
 	 *            is the current token in token stream.
 	 */
-	protected void shift(ParserAction action, Token token) {
+	protected void shift(int newState, Token token) {
+		if (newState < 0) {
+			throw new IllegalArgumentException("New state in shift is :"
+					+ newState + "!");
+		}
 		treeStack.push(new AST(token));
-		stateStack.push(action.getParameter());
+		stateStack.push(newState);
 		streamPosition++;
 	}
 
-	protected void reduce(ParserAction action) throws ParserException {
+	protected void reduce(int grammarRuleId) throws ParserException {
 		try {
+			if (grammarRuleId < 0) {
+				throw new IllegalArgumentException(
+						"Grammar rule for reduce is :" + grammarRuleId + "!");
+			}
 			Production production = getGrammar().getProductions().get(
-					action.getParameter());
+					grammarRuleId);
 			AST tree = new AST(production);
 			for (int i = 0; i < production.getConstructions().size(); i++) {
 				AST poppedAST = treeStack.pop();
@@ -277,11 +290,14 @@ public abstract class AbstractLRParser extends AbstractParser {
 				}
 				stateStack.pop();
 			}
-			int targetState;
-			targetState = parserTable.getAction(stateStack.peek(),
-					new NonTerminal(production.getName())).getParameter();
 			treeStack.push(tree);
-			stateStack.push(targetState);
+			ParserAction action = parserTable.getAction(stateStack.peek(),
+					new NonTerminal(production.getName()));
+			if (action.getAction() == ActionType.ERROR) {
+				error(new Token("", "", Visibility.HIDDEN));
+				return;
+			}
+			stateStack.push(action.getParameter());
 		} catch (GrammarException e) {
 			logger.error(e.getMessage(), e);
 			throw new ParserException(e.getMessage(), null);
