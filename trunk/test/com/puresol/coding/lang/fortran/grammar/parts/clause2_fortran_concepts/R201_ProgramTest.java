@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 
 import org.apache.log4j.Level;
@@ -15,10 +16,13 @@ import com.puresol.coding.lang.fortran.grammar.GrammarPartTester;
 import com.puresol.trees.TreePrinter;
 import com.puresol.uhura.ast.AST;
 import com.puresol.uhura.grammar.Grammar;
+import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.lexer.Lexer;
+import com.puresol.uhura.lexer.LexerException;
 import com.puresol.uhura.lexer.RegExpLexer;
 import com.puresol.uhura.lexer.TokenStream;
 import com.puresol.uhura.parser.Parser;
+import com.puresol.uhura.parser.ParserException;
 import com.puresol.uhura.parser.ParserManager;
 
 public class R201_ProgramTest {
@@ -39,7 +43,17 @@ public class R201_ProgramTest {
 					grammar);
 			AST ast = parser.parse(tokenStream);
 			new TreePrinter(System.out).println(ast);
-		} catch (Throwable e) {
+		} catch (GrammarException e) {
+			e.printStackTrace();
+			fail("No exception was expected!");
+		} catch (IOException e) {
+			e.printStackTrace();
+			fail("No exception was expected!");
+		} catch (LexerException e) {
+			e.printStackTrace();
+			fail("No exception was expected!");
+		} catch (ParserException e) {
+			e.printStackTrace();
 			fail("No exception was expected!");
 		}
 	}

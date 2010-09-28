@@ -12,6 +12,7 @@ public class R1220_CallStmtTest extends TestCase {
 
 	@Test
 	public void test() {
+		Logger.getRootLogger().setLevel(Level.TRACE);
 		assertTrue(GrammarPartTester.test("call-stmt",
 				"      CALL ATL_F77WRAP_SCOPY\n"));
 	}

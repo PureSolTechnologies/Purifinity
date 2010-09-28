@@ -18,8 +18,8 @@ import com.puresol.uhura.grammar.production.Construction;
 import com.puresol.uhura.parser.lr.LR1ParserTable;
 import com.puresol.uhura.parser.parsetable.First;
 import com.puresol.uhura.parser.parsetable.Follow;
-import com.puresol.uhura.parser.parsetable.LALR1StateTransitionGraph;
-import com.puresol.uhura.parser.parsetable.LR1StateTransitionGraph;
+import com.puresol.uhura.parser.parsetable.LALR1ItemSetCollection;
+import com.puresol.uhura.parser.parsetable.LR1ItemSetCollection;
 import com.puresol.uhura.parser.parsetable.ParserActionSet;
 
 public class GrammarInspector {
@@ -27,7 +27,7 @@ public class GrammarInspector {
 	public static void main(String args[]) {
 		try {
 			Logger.getRootLogger().setLevel(Level.TRACE);
-			new LALR1StateTransitionGraph(FortranGrammar.getInstance()
+			new LALR1ItemSetCollection(FortranGrammar.getInstance()
 					.getGrammar());
 			// Grammar grammar = FortranGrammar.getInstance().getGrammar();
 			// // grammar =
