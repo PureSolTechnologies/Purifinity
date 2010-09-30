@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.CopyOnWriteArraySet;
 
 import com.puresol.uhura.grammar.production.Construction;
 
@@ -26,9 +25,9 @@ public class AbstractItemSet<T extends Item> implements Serializable {
 	 * The following fields have concurrent versions of lists and sets for
 	 * iterating and manipulating values in different item calculations.
 	 */
-	private final Set<T> allItems = new CopyOnWriteArraySet<T>();
-	private final Set<T> kernelItems = new CopyOnWriteArraySet<T>();
-	private final Set<T> nonKernelItems = new CopyOnWriteArraySet<T>();
+	private final Set<T> allItems = new LinkedHashSet<T>();
+	private final Set<T> kernelItems = new LinkedHashSet<T>();
+	private final Set<T> nonKernelItems = new LinkedHashSet<T>();
 
 	/**
 	 * This constructor takes a single kernel item.

@@ -1,10 +1,10 @@
 package com.puresol.uhura.parser.parsetable;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.production.Construction;
@@ -47,12 +47,12 @@ public class First implements Serializable {
 	 * This field contains the first sets for all productions contained within
 	 * the grammar.
 	 */
-	private final ConcurrentMap<String, Set<Construction>> firstGrammar = new ConcurrentHashMap<String, Set<Construction>>();
+	private final Map<String, Set<Construction>> firstGrammar = new HashMap<String, Set<Construction>>();
 	/**
 	 * The field contains first sets for helper productions to avoid double
 	 * calculation.
 	 */
-	private final ConcurrentMap<Production, Set<Construction>> firstNonGrammar = new ConcurrentHashMap<Production, Set<Construction>>();
+	private final Map<Production, Set<Construction>> firstNonGrammar = new HashMap<Production, Set<Construction>>();
 
 	public First(Grammar grammar) {
 		super();

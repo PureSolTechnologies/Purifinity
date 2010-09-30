@@ -1,10 +1,10 @@
 package com.puresol.uhura.parser.parsetable;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 import com.puresol.uhura.grammar.production.Construction;
 
@@ -12,7 +12,7 @@ public class Goto1 implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private final ConcurrentMap<LR1ItemSet, ConcurrentMap<Construction, LR1ItemSet>> gotos = new ConcurrentHashMap<LR1ItemSet, ConcurrentMap<Construction, LR1ItemSet>>();
+	private final Map<LR1ItemSet, Map<Construction, LR1ItemSet>> gotos = new HashMap<LR1ItemSet, Map<Construction, LR1ItemSet>>();
 
 	private final Closure1 closure;
 
@@ -53,8 +53,7 @@ public class Goto1 implements Serializable {
 			items.add(newItem);
 		}
 		if (!gotos.containsKey(itemSet)) {
-			gotos.put(itemSet,
-					new ConcurrentHashMap<Construction, LR1ItemSet>());
+			gotos.put(itemSet, new HashMap<Construction, LR1ItemSet>());
 		}
 		gotos.get(itemSet).put(x, closure.calc(new LR1ItemSet(items)));
 	}

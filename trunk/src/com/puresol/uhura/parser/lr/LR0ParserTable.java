@@ -1,6 +1,6 @@
 package com.puresol.uhura.parser.lr;
 
-import java.util.concurrent.ConcurrentMap;
+import java.util.Map;
 
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
@@ -39,7 +39,7 @@ public class LR0ParserTable extends AbstractParserTable {
 	private void addShiftAndGotos(LR0ItemSetCollection itemSetCollection,
 			LR0StateTransitions stateTransitions) throws GrammarException {
 		for (int stateId = 0; stateId < itemSetCollection.getStateNumber(); stateId++) {
-			ConcurrentMap<Construction, Integer> transitions = stateTransitions
+			Map<Construction, Integer> transitions = stateTransitions
 					.getTransitions(stateId);
 			for (Construction construction : transitions.keySet()) {
 				if (construction.isTerminal()) {

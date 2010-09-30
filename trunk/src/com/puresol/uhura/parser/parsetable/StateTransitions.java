@@ -1,8 +1,8 @@
 package com.puresol.uhura.parser.parsetable;
 
 import java.io.Serializable;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.production.Construction;
@@ -11,14 +11,14 @@ public class StateTransitions implements Serializable {
 
 	private static final long serialVersionUID = 3448400511750197925L;
 
-	private final ConcurrentMap<Integer, ConcurrentMap<Construction, Integer>> transitions = new ConcurrentHashMap<Integer, ConcurrentMap<Construction, Integer>>();
+	private final Map<Integer, Map<Construction, Integer>> transitions = new HashMap<Integer, Map<Construction, Integer>>();
 
 	protected final void addTransition(int initialState,
 			Construction construction, int targetState) throws GrammarException {
-		ConcurrentMap<Construction, Integer> transitionMap = transitions
+		Map<Construction, Integer> transitionMap = transitions
 				.get(initialState);
 		if (transitionMap == null) {
-			transitionMap = new ConcurrentHashMap<Construction, Integer>();
+			transitionMap = new HashMap<Construction, Integer>();
 			transitions.put(initialState, transitionMap);
 		}
 		Integer savedTargetState = transitions.get(initialState).get(
@@ -32,12 +32,10 @@ public class StateTransitions implements Serializable {
 		}
 	}
 
-	public final ConcurrentMap<Construction, Integer> getTransitions(
-			int initialState) {
-		ConcurrentMap<Construction, Integer> result = transitions
-				.get(initialState);
+	public final Map<Construction, Integer> getTransitions(int initialState) {
+		Map<Construction, Integer> result = transitions.get(initialState);
 		if (result == null) {
-			result = new ConcurrentHashMap<Construction, Integer>();
+			result = new HashMap<Construction, Integer>();
 		}
 		return result;
 	}

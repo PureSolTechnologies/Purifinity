@@ -2,8 +2,8 @@ package com.puresol.uhura.ast;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.puresol.trees.Tree;
 import com.puresol.trees.TreeWalker;
@@ -27,7 +27,7 @@ public class AST implements Tree<AST>, Serializable, Cloneable {
 	private final String name;
 	private final Token token;
 	private AST parent = null;
-	private final List<AST> children = new CopyOnWriteArrayList<AST>();
+	private final List<AST> children = new ArrayList<AST>();
 	private boolean node = true;
 	private boolean stackingAllowed = true;
 
@@ -133,7 +133,7 @@ public class AST implements Tree<AST>, Serializable, Cloneable {
 	 * @throws ASTException
 	 */
 	public List<AST> getChildren(String name) throws ASTException {
-		List<AST> result = new CopyOnWriteArrayList<AST>();
+		List<AST> result = new ArrayList<AST>();
 		for (AST child : children) {
 			if (child.getName().equals(name)) {
 				result.add(child);
@@ -185,7 +185,7 @@ public class AST implements Tree<AST>, Serializable, Cloneable {
 	}
 
 	public List<AST> getSubTrees(String name) {
-		List<AST> subTrees = new CopyOnWriteArrayList<AST>();
+		List<AST> subTrees = new ArrayList<AST>();
 		getSubTrees(this, subTrees, name);
 		return subTrees;
 	}
@@ -240,7 +240,7 @@ public class AST implements Tree<AST>, Serializable, Cloneable {
 
 			Field children = cloned.getClass().getDeclaredField("children");
 			children.setAccessible(true);
-			children.set(cloned, new CopyOnWriteArrayList<AST>());
+			children.set(cloned, new ArrayList<AST>());
 
 			for (AST child : this.children) {
 				cloned.children.add(child);

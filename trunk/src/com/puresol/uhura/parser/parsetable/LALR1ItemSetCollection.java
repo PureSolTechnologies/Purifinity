@@ -108,39 +108,37 @@ public class LALR1ItemSetCollection {
 	}
 
 	private boolean addNewLookahead(int stateId, LR1Item newItem) {
-		/*
-		 * Look for possible transitions and add stateId to support handling of
-		 * finish terminal
-		 */
-		Set<Integer> possibleTargetStates = new LinkedHashSet<Integer>();
-		possibleTargetStates.add(stateId);
-		possibleTargetStates.addAll(lr0Transitions.getTransitions(stateId)
-				.values());
 		boolean added = false;
-		for (int setId : possibleTargetStates) {
-			LR1ItemSet lr1ItemSet = itemSetCollection.get(setId);
-			for (LR1Item lr1Item : lr1ItemSet.getKernelItems()) {
-				if ((lr1Item.getPosition() == newItem.getPosition())
-						&& lr1Item.getProduction().equals(
-								newItem.getProduction())) {
-					if (lr1ItemSet.addKernelItem(newItem)) {
-						lr1ItemSet.removeItem(new LR1Item(lr1Item
-								.getProduction(), lr1Item.getPosition(),
-								DUMMY_TERMINAL));
-						added = true;
-					}
+		if (addNewLookahead(stateId, newItem, stateId)) {
+			added = true;
+		}
+		for (int setId : lr0Transitions.getTransitions(stateId).values()) {
+			addNewLookahead(stateId, newItem, setId);
+		}
+		return added;
+	}
+
+	private boolean addNewLookahead(int stateId, LR1Item newItem, int targetId) {
+		boolean added = false;
+		LR1ItemSet lr1ItemSet = itemSetCollection.get(targetId);
+		for (LR1Item lr1Item : lr1ItemSet.getKernelItems().toArray(
+				new LR1Item[0])) {
+			if ((lr1Item.getPosition() == newItem.getPosition())
+					&& lr1Item.getProduction().equals(newItem.getProduction())) {
+				if (lr1ItemSet.addKernelItem(newItem)) {
+					lr1ItemSet.removeItem(new LR1Item(lr1Item.getProduction(),
+							lr1Item.getPosition(), DUMMY_TERMINAL));
+					added = true;
 				}
 			}
-			for (LR1Item lr1Item : lr1ItemSet.getNonKernelItems()) {
-				if ((lr1Item.getPosition() == newItem.getPosition())
-						&& lr1Item.getProduction().equals(
-								newItem.getProduction())) {
-					if (lr1ItemSet.addNonKernelItem(newItem)) {
-						lr1ItemSet.removeItem(new LR1Item(lr1Item
-								.getProduction(), lr1Item.getPosition(),
-								DUMMY_TERMINAL));
-						added = true;
-					}
+		}
+		for (LR1Item lr1Item : lr1ItemSet.getNonKernelItems()) {
+			if ((lr1Item.getPosition() == newItem.getPosition())
+					&& lr1Item.getProduction().equals(newItem.getProduction())) {
+				if (lr1ItemSet.addNonKernelItem(newItem)) {
+					lr1ItemSet.removeItem(new LR1Item(lr1Item.getProduction(),
+							lr1Item.getPosition(), DUMMY_TERMINAL));
+					added = true;
 				}
 			}
 		}

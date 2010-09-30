@@ -1,10 +1,10 @@
 package com.puresol.uhura.grammar.production;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.Map;
 
 import com.puresol.uhura.grammar.GrammarException;
 
@@ -18,8 +18,8 @@ public class ProductionSet implements Serializable {
 
 	private static final long serialVersionUID = 1122545599969259364L;
 
-	private final ConcurrentMap<String, List<Production>> name2Production = new ConcurrentHashMap<String, List<Production>>();
-	private final List<Production> productions = new CopyOnWriteArrayList<Production>();
+	private final Map<String, List<Production>> name2Production = new HashMap<String, List<Production>>();
+	private final List<Production> productions = new ArrayList<Production>();
 
 	public void add(Production production) throws GrammarException {
 		if (production == null) {
@@ -33,7 +33,7 @@ public class ProductionSet implements Serializable {
 		productions.add(production);
 		if (!name2Production.containsKey(production.getName())) {
 			name2Production.put(production.getName(),
-					new CopyOnWriteArrayList<Production>());
+					new ArrayList<Production>());
 		}
 		name2Production.get(production.getName()).add(production);
 	}

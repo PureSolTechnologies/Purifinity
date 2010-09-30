@@ -1,11 +1,11 @@
 package com.puresol.uhura.parser.parsetable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 import org.apache.log4j.Logger;
 
@@ -22,7 +22,7 @@ public abstract class AbstractParserTable implements ParserTable {
 	private static final Logger logger = Logger
 			.getLogger(AbstractParserTable.class);
 
-	private final List<ConcurrentMap<Construction, ParserActionSet>> table = new ArrayList<ConcurrentMap<Construction, ParserActionSet>>();
+	private final List<Map<Construction, ParserActionSet>> table = new ArrayList<Map<Construction, ParserActionSet>>();
 	private final Set<Construction> actionTerminals = new LinkedHashSet<Construction>();
 	private final Set<Construction> gotoNonTerminals = new LinkedHashSet<Construction>();
 
@@ -67,7 +67,7 @@ public abstract class AbstractParserTable implements ParserTable {
 	protected final void addAction(int stateId, Construction construction,
 			ParserAction action) {
 		while (table.size() <= stateId) {
-			table.add(new ConcurrentHashMap<Construction, ParserActionSet>());
+			table.add(new HashMap<Construction, ParserActionSet>());
 		}
 		ParserActionSet actionSet = table.get(stateId).get(construction);
 		if (actionSet == null) {
@@ -103,7 +103,7 @@ public abstract class AbstractParserTable implements ParserTable {
 	}
 
 	@Override
-	public final ConcurrentMap<Construction, ParserActionSet> getPossibleActions(
+	public final Map<Construction, ParserActionSet> getPossibleActions(
 			int currentState) throws GrammarException {
 		return table.get(currentState);
 	}
@@ -114,8 +114,7 @@ public abstract class AbstractParserTable implements ParserTable {
 		if (construction == null) {
 			return new ParserAction(ActionType.ERROR, -1);
 		}
-		ConcurrentMap<Construction, ParserActionSet> actions = table
-				.get(currentState);
+		Map<Construction, ParserActionSet> actions = table.get(currentState);
 		if (actions == null) {
 			return new ParserAction(ActionType.ERROR, -1);
 		}
@@ -132,8 +131,7 @@ public abstract class AbstractParserTable implements ParserTable {
 		if (construction == null) {
 			return ParserActionSet.getErrorSet();
 		}
-		ConcurrentMap<Construction, ParserActionSet> actions = table
-				.get(currentState);
+		Map<Construction, ParserActionSet> actions = table.get(currentState);
 		if (actions == null) {
 			return ParserActionSet.getErrorSet();
 		}

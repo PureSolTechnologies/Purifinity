@@ -1,11 +1,11 @@
 package com.puresol.uhura.parser.parsetable;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.production.Construction;
@@ -36,7 +36,7 @@ public class Follow implements Serializable {
 	private final Grammar grammar;
 	private final First first;
 
-	private final ConcurrentMap<String, Set<Construction>> follow = new ConcurrentHashMap<String, Set<Construction>>();
+	private final Map<String, Set<Construction>> follow = new HashMap<String, Set<Construction>>();
 
 	public Follow(Grammar grammar, First first) {
 		super();

@@ -1,9 +1,9 @@
 package com.puresol.uhura.parser.parsetable;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.puresol.uhura.grammar.GrammarException;
 
@@ -17,7 +17,7 @@ public class ParserActionSet implements Serializable {
 		return set;
 	}
 
-	private final List<ParserAction> actions = new CopyOnWriteArrayList<ParserAction>();
+	private final List<ParserAction> actions = new ArrayList<ParserAction>();
 
 	public ParserActionSet() {
 		actions.add(new ParserAction(ActionType.ERROR, -1));

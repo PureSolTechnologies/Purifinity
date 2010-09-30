@@ -6,13 +6,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.apache.log4j.Logger;
 
@@ -55,7 +54,7 @@ public class GrammarReader implements Callable<Boolean> {
 	private ProductionSet productions = null;
 	private Grammar readGrammar = null;
 	private AST ast = null;
-	private ConcurrentMap<String, Visibility> tokenVisibility = new ConcurrentHashMap<String, Visibility>();
+	private Map<String, Visibility> tokenVisibility = new HashMap<String, Visibility>();
 
 	/**
 	 * Constructor for file reading.
@@ -217,7 +216,7 @@ public class GrammarReader implements Callable<Boolean> {
 	 */
 	private Map<String, List<AST>> getHelpers() {
 		try {
-			Map<String, List<AST>> helpers = new ConcurrentHashMap<String, List<AST>>();
+			Map<String, List<AST>> helpers = new HashMap<String, List<AST>>();
 			AST helperTree = ast.getChild("Helper");
 			AST helperDefinitions = helperTree.getChild("HelperDefinitions");
 			for (AST helperDefinition : helperDefinitions
@@ -242,7 +241,7 @@ public class GrammarReader implements Callable<Boolean> {
 	 */
 	private Map<String, List<AST>> getTokens() throws GrammarException {
 		try {
-			Map<String, List<AST>> tokens = new ConcurrentHashMap<String, List<AST>>();
+			Map<String, List<AST>> tokens = new HashMap<String, List<AST>>();
 			AST tokensTree = ast.getChild("Tokens");
 			AST tokenDefinitions = tokensTree.getChild("TokenDefinitions");
 			for (AST tokenDefinition : tokenDefinitions
@@ -443,7 +442,7 @@ public class GrammarReader implements Callable<Boolean> {
 
 	private List<Construction> getConstructions(AST productionConstruction)
 			throws ASTException, GrammarException {
-		List<Construction> constructions = new CopyOnWriteArrayList<Construction>();
+		List<Construction> constructions = new ArrayList<Construction>();
 		AST productionParts = productionConstruction
 				.getChild("ProductionParts");
 		if (productionParts != null) {
