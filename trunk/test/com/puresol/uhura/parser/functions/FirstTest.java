@@ -1,4 +1,4 @@
-package com.puresol.uhura.parser.parsetable;
+package com.puresol.uhura.parser.functions;
 
 import static org.junit.Assert.*;
 
@@ -12,7 +12,7 @@ import com.puresol.uhura.grammar.production.Construction;
 import com.puresol.uhura.grammar.production.EmptyTerminal;
 import com.puresol.uhura.grammar.production.NonTerminal;
 import com.puresol.uhura.grammar.production.Terminal;
-import com.puresol.uhura.parser.parsetable.First;
+import com.puresol.uhura.parser.functions.First;
 
 public class FirstTest {
 

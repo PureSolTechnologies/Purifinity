@@ -1,4 +1,4 @@
-package com.puresol.uhura.parser.parsetable;
+package com.puresol.uhura.parser.functions;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -8,6 +8,8 @@ import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.production.Construction;
 import com.puresol.uhura.grammar.production.Production;
 import com.puresol.uhura.grammar.production.ProductionSet;
+import com.puresol.uhura.parser.items.LR0Item;
+import com.puresol.uhura.parser.items.LR0ItemSet;
 
 /**
  * The rules from Dragon Book are:

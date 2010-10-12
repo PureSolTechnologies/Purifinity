@@ -1,6 +1,7 @@
-package com.puresol.uhura.parser.parsetable;
+package com.puresol.uhura.parser.items;
 
 import java.util.Set;
+
 
 public class LR0ItemSet extends AbstractItemSet<LR0Item> {
 

@@ -6,15 +6,13 @@ import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.production.Construction;
 import com.puresol.uhura.grammar.production.FinishTerminal;
+import com.puresol.uhura.parser.functions.Closure0;
+import com.puresol.uhura.parser.functions.Goto0;
+import com.puresol.uhura.parser.items.LR0Item;
+import com.puresol.uhura.parser.items.LR0ItemSet;
 import com.puresol.uhura.parser.parsetable.AbstractParserTable;
 import com.puresol.uhura.parser.parsetable.ActionType;
-import com.puresol.uhura.parser.parsetable.Closure0;
-import com.puresol.uhura.parser.parsetable.Goto0;
-import com.puresol.uhura.parser.parsetable.LR0Item;
-import com.puresol.uhura.parser.parsetable.LR0ItemSet;
-import com.puresol.uhura.parser.parsetable.LR0StateTransitions;
 import com.puresol.uhura.parser.parsetable.ParserAction;
-import com.puresol.uhura.parser.parsetable.LR0ItemSetCollection;
 
 public class LR0ParserTable extends AbstractParserTable {
 

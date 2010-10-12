@@ -1,4 +1,4 @@
-package com.puresol.uhura.parser.parsetable;
+package com.puresol.uhura.parser.lr;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -12,6 +12,11 @@ import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.production.Construction;
 import com.puresol.uhura.grammar.production.DummyTerminal;
 import com.puresol.uhura.grammar.production.FinishTerminal;
+import com.puresol.uhura.parser.functions.Closure1;
+import com.puresol.uhura.parser.items.LR0Item;
+import com.puresol.uhura.parser.items.LR0ItemSet;
+import com.puresol.uhura.parser.items.LR1Item;
+import com.puresol.uhura.parser.items.LR1ItemSet;
 
 public class LALR1ItemSetCollection {
 

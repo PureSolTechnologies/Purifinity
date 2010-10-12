@@ -1,4 +1,4 @@
-package com.puresol.uhura.parser.parsetable;
+package com.puresol.uhura.parser.items;
 
 import java.io.Serializable;
 import java.util.ArrayList;

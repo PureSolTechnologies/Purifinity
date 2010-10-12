@@ -1,28 +1,38 @@
-package com.puresol.uhura.parser.parsetable;
+package com.puresol.uhura.parser.lr;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.production.Construction;
+import com.puresol.uhura.grammar.production.FinishTerminal;
+import com.puresol.uhura.parser.functions.Closure1;
+import com.puresol.uhura.parser.functions.Goto1;
+import com.puresol.uhura.parser.items.LR1Item;
+import com.puresol.uhura.parser.items.LR1ItemSet;
 
-public class LR0ItemSetCollection {
+public class LR1ItemSetCollection {
 
-	private static final long serialVersionUID = -5320832167468349031L;
+	private static final long serialVersionUID = -1330346621768260912L;
 
-	private final List<LR0ItemSet> itemSetCollection = new ArrayList<LR0ItemSet>();
+	private final static Logger logger = Logger
+			.getLogger(LR1ItemSetCollection.class);
+
+	private final List<LR1ItemSet> itemSetCollection = new ArrayList<LR1ItemSet>();
 
 	private final Grammar grammar;
-	private final Closure0 closure0;
-	private final Goto0 goto0;
+	private final Closure1 closure1;
+	private final Goto1 goto1;
 
-	public LR0ItemSetCollection(Grammar grammar, Closure0 closure0, Goto0 goto0)
+	public LR1ItemSetCollection(Grammar grammar, Closure1 closure1, Goto1 goto1)
 			throws GrammarException {
 		super();
 		this.grammar = grammar;
-		this.closure0 = closure0;
-		this.goto0 = goto0;
+		this.closure1 = closure1;
+		this.goto1 = goto1;
 		calculate();
 	}
 
@@ -31,7 +41,7 @@ public class LR0ItemSetCollection {
 	 * 
 	 * <pre>
 	 *   void items(G') {
-	 *   	C = {CLOSURE({[S0 --> .S]})};
+	 *   	C = {CLOSURE({[S' --> .S, $]})};
 	 *   	repeat
 	 *   		for ( jede Item-Menge I in C )
 	 *  			for ( jedes Grammatiksymbol X )
@@ -47,32 +57,39 @@ public class LR0ItemSetCollection {
 	 * @throws GrammarException
 	 */
 	private void calculate() throws GrammarException {
-		addState(closure0.calc(new LR0Item(grammar.getProductions().get(0), 0)));
-		int currentSize;
+		addState(closure1.calc(new LR1Item(grammar.getProductions().get(0), 0,
+				FinishTerminal.getInstance())));
+		int run = 0;
+		int nextStartPosition = 0;
+		int currentStartPosition = 0;
 		do {
-			currentSize = itemSetCollection.size();
+			run++;
+			currentStartPosition = nextStartPosition;
+			nextStartPosition = itemSetCollection.size();
 			int currentItemSetCount = itemSetCollection.size();
-			for (int stateId = 0; stateId < currentItemSetCount; stateId++) {
-				LR0ItemSet itemSet = itemSetCollection.get(stateId);
+			for (int stateId = currentStartPosition; stateId < currentItemSetCount; stateId++) {
+				logger.trace("state: " + stateId + "/"
+						+ itemSetCollection.size() + " run: " + run);
+				LR1ItemSet itemSet = itemSetCollection.get(stateId);
 				for (Construction grammarSymbol : itemSet
 						.getAllGrammarSymbols()) {
-					LR0ItemSet gotoSet = goto0.calc(itemSet, grammarSymbol);
+					LR1ItemSet gotoSet = goto1.calc(itemSet, grammarSymbol);
 					if (gotoSet.getSize() > 0) {
 						addState(gotoSet);
 					}
 				}
 			}
-		} while (currentSize < itemSetCollection.size());
+		} while (nextStartPosition < itemSetCollection.size());
 	}
 
-	private void addState(LR0ItemSet itemSet) {
+	private void addState(LR1ItemSet itemSet) {
 		if (!itemSetCollection.contains(itemSet)) {
 			itemSetCollection.add(itemSet);
 		}
 	}
 
-	public LR0ItemSet getItemSet(int stateId) {
-		return (LR0ItemSet) itemSetCollection.toArray()[stateId];
+	public LR1ItemSet getItemSet(int stateId) {
+		return itemSetCollection.get(stateId);
 	}
 
 	/**
@@ -82,10 +99,10 @@ public class LR0ItemSetCollection {
 	 * @return
 	 * @throws GrammarException
 	 */
-	public int getStateId(LR0ItemSet targetSet) throws GrammarException {
+	public int getStateId(LR1ItemSet targetSet) throws GrammarException {
 		for (int stateId = 0; stateId < itemSetCollection.size(); stateId++) {
-			LR0ItemSet lr0ItemSet = itemSetCollection.get(stateId);
-			if (lr0ItemSet.equals(targetSet)) {
+			LR1ItemSet lr1ItemSet = itemSetCollection.get(stateId);
+			if (lr1ItemSet.equals(targetSet)) {
 				return stateId;
 			}
 		}
@@ -108,7 +125,7 @@ public class LR0ItemSetCollection {
 			buffer.append("===========\n");
 			buffer.append("State " + stateId + ":\n");
 			buffer.append("===========\n");
-			LR0ItemSet itemSet = (LR0ItemSet) itemSetCollection.toArray()[stateId];
+			LR1ItemSet itemSet = itemSetCollection.get(stateId);
 			buffer.append(itemSet.toString());
 			buffer.append("\n");
 		}

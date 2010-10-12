@@ -1,4 +1,4 @@
-package com.puresol.uhura.parser.parsetable;
+package com.puresol.uhura.parser.lr;
 
 import static org.junit.Assert.*;
 
@@ -9,6 +9,11 @@ import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.TestGrammars;
 import com.puresol.uhura.grammar.production.NonTerminal;
 import com.puresol.uhura.grammar.production.Terminal;
+import com.puresol.uhura.parser.functions.Closure1;
+import com.puresol.uhura.parser.functions.First;
+import com.puresol.uhura.parser.functions.Goto1;
+import com.puresol.uhura.parser.lr.LR1ItemSetCollection;
+import com.puresol.uhura.parser.lr.LR1StateTransitions;
 
 public class LR1StateTransitionsTest {
 

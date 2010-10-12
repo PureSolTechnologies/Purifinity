@@ -1,4 +1,4 @@
-package com.puresol.uhura.parser.parsetable;
+package com.puresol.uhura.parser.functions;
 
 import static org.junit.Assert.*;
 
@@ -9,9 +9,9 @@ import org.junit.Test;
 
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.TestGrammars;
-import com.puresol.uhura.parser.parsetable.Closure0;
-import com.puresol.uhura.parser.parsetable.LR0Item;
-import com.puresol.uhura.parser.parsetable.LR0ItemSet;
+import com.puresol.uhura.parser.functions.Closure0;
+import com.puresol.uhura.parser.items.LR0Item;
+import com.puresol.uhura.parser.items.LR0ItemSet;
 
 public class Closure0Test {
 
