@@ -22,11 +22,18 @@ public class LR0Item implements Item {
 	 * This is the current position. Zero is the left most position which is at
 	 * the beginning of the parsing process.
 	 */
-	private int position;
+	private final int position;
+	private final int hashCode;
 
 	public LR0Item(Production production, int position) {
 		this.production = production;
 		this.position = position;
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + position;
+		result = prime * result
+				+ ((production == null) ? 0 : production.hashCode());
+		hashCode = result;
 	}
 
 	/**
@@ -35,11 +42,6 @@ public class LR0Item implements Item {
 	@Override
 	public Production getProduction() {
 		return production;
-	}
-
-	@Override
-	public void incPosition() {
-		position++;
 	}
 
 	@Override
@@ -104,12 +106,7 @@ public class LR0Item implements Item {
 	 */
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + position;
-		result = prime * result
-				+ ((production == null) ? 0 : production.hashCode());
-		return result;
+		return hashCode;
 	}
 
 	/*
@@ -126,6 +123,9 @@ public class LR0Item implements Item {
 		if (getClass() != obj.getClass())
 			return false;
 		LR0Item other = (LR0Item) obj;
+		if (this.hashCode != other.hashCode) {
+			return false;
+		}
 		if (position != other.position)
 			return false;
 		if (production == null) {
@@ -135,5 +135,5 @@ public class LR0Item implements Item {
 			return false;
 		return true;
 	}
-
+	
 }

@@ -1,15 +1,21 @@
 package com.puresol.uhura.grammar.production;
 
+/**
+ * This class represents a single terminal.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class Terminal extends AbstractConstruction {
 
 	private static final long serialVersionUID = 9050440704073872898L;
 
 	public Terminal(String name) {
-		super(name, "", ConstructionType.TERMINAL);
+		super(name, "", true);
 	}
 
 	public Terminal(String name, String text) {
-		super(name, text, ConstructionType.TERMINAL);
+		super(name, text, true);
 	}
 
 }

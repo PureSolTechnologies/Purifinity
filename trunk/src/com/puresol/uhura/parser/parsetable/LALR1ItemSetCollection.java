@@ -83,9 +83,9 @@ public class LALR1ItemSetCollection {
 				List<LR1Item> kernelItems = new ArrayList<LR1Item>(
 						lr1ItemSet.getAllItems());
 				for (int kernelItemId = 0; kernelItemId < kernelItems.size(); kernelItemId++) {
-					logger.trace("state: " + stateId + " / "
-							+ itemSetCollection.size() + "; kernel: "
-							+ kernelItemId + " / " + kernelItems.size());
+//					logger.trace("state: " + stateId + " / "
+//							+ itemSetCollection.size() + "; kernel: "
+//							+ kernelItemId + " / " + kernelItems.size());
 
 					LR1Item lr1Item = kernelItems.get(kernelItemId);
 					LR1ItemSet closure = closure1.calc(lr1Item);

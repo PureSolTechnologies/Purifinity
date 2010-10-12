@@ -1,18 +1,31 @@
 package com.puresol.uhura.grammar.production;
 
+/**
+ * THIS CLASS IS NOT THREAD SAFE!!!
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public abstract class AbstractConstruction implements Construction {
 
 	private static final long serialVersionUID = -8190479779174841005L;
 
 	private final String name;
 	private final String text;
-	private final ConstructionType type;
+	private final boolean isTerminal;
+	private final int hashCode;
 
-	public AbstractConstruction(String name, String text, ConstructionType type) {
+	public AbstractConstruction(String name, String text, boolean isTerminal) {
 		super();
 		this.name = name;
 		this.text = text;
-		this.type = type;
+		this.isTerminal = isTerminal;
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((text == null) ? 0 : text.hashCode());
+		result = prime * result + (isTerminal ? 1 : 0);
+		hashCode = result;
 	}
 
 	/**
@@ -32,24 +45,14 @@ public abstract class AbstractConstruction implements Construction {
 		return text;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.puresol.uhura.parser.ParserRuleElementInterface#getType()
-	 */
-	@Override
-	public ConstructionType getType() {
-		return type;
-	}
-
 	@Override
 	public boolean isTerminal() {
-		return (type != ConstructionType.NON_TERMINAL);
+		return isTerminal;
 	}
 
 	@Override
 	public boolean isNonTerminal() {
-		return (type == ConstructionType.NON_TERMINAL);
+		return !isTerminal;
 	}
 
 	/*
@@ -59,7 +62,11 @@ public abstract class AbstractConstruction implements Construction {
 	 */
 	@Override
 	public String toString() {
-		return name + ": '" + text + "' (" + type + ")";
+		if (isTerminal) {
+			return name + ": '" + text + "' (TERMINAL)";
+		} else {
+			return name + ": '" + text + "' (NON-TERMINAL)";
+		}
 	}
 
 	public String toShortString() {
@@ -70,25 +77,11 @@ public abstract class AbstractConstruction implements Construction {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((text == null) ? 0 : text.hashCode());
-		return result;
+		return hashCode;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -98,6 +91,11 @@ public abstract class AbstractConstruction implements Construction {
 		if (getClass() != obj.getClass())
 			return false;
 		AbstractConstruction other = (AbstractConstruction) obj;
+		if (this.hashCode != other.hashCode) {
+			return false;
+		}
+		if (isTerminal != other.isTerminal)
+			return false;
 		if (name == null) {
 			if (other.name != null)
 				return false;
@@ -107,8 +105,6 @@ public abstract class AbstractConstruction implements Construction {
 			if (other.text != null)
 				return false;
 		} else if (!text.equals(other.text))
-			return false;
-		if (type != other.type)
 			return false;
 		return true;
 	}
@@ -122,7 +118,8 @@ public abstract class AbstractConstruction implements Construction {
 		if (result != 0) {
 			return result;
 		}
-		result = this.getType().compareTo(other.getType());
+		result = Boolean.valueOf(isTerminal()).compareTo(
+				Boolean.valueOf(other.isTerminal()));
 		if (result != 0) {
 			return result;
 		}

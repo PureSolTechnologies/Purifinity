@@ -2,17 +2,19 @@ package com.puresol.uhura.grammar.production;
 
 import java.io.Serializable;
 
+/**
+ * This interface represents a single construction. It's weigher a terminal or
+ * non-terminal.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public interface Construction extends Serializable, Comparable<Construction> {
 
 	/**
 	 * @return the text
 	 */
 	public String getText();
-
-	/**
-	 * @return the type
-	 */
-	public ConstructionType getType();
 
 	public String getName();
 

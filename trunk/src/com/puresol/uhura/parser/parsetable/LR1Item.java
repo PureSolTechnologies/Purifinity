@@ -9,9 +9,16 @@ public class LR1Item extends LR0Item {
 
 	private final Construction lookahead;
 
+	private final int hashCode;
+
 	public LR1Item(Production production, int position, Construction lookahead) {
 		super(production, position);
 		this.lookahead = lookahead;
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result
+				+ ((lookahead == null) ? 0 : lookahead.hashCode());
+		hashCode = result;
 	}
 
 	/**
@@ -37,11 +44,7 @@ public class LR1Item extends LR0Item {
 	 */
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result
-				+ ((lookahead == null) ? 0 : lookahead.hashCode());
-		return result;
+		return hashCode;
 	}
 
 	/*
@@ -58,6 +61,9 @@ public class LR1Item extends LR0Item {
 		if (getClass() != obj.getClass())
 			return false;
 		LR1Item other = (LR1Item) obj;
+		if (this.hashCode() != other.hashCode()) {
+			return false;
+		}
 		if (lookahead == null) {
 			if (other.lookahead != null)
 				return false;

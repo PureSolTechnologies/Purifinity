@@ -70,7 +70,7 @@ public class SpeedTest {
 		System.out.println(sec3);
 
 		assertTrue(sec1 > sec2 * 10);
-		assertTrue(sec2 > sec3);
+		assertTrue(sec1 > sec3 * 10);
 	}
 
 	@Test

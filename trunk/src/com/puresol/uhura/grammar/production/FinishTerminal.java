@@ -1,5 +1,12 @@
 package com.puresol.uhura.grammar.production;
 
+/**
+ * This singleton class represents the finishing terminal at the end of the
+ * parsing process.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class FinishTerminal {
 
 	public static final String FINISH_CONSTRUCTION_NAME = "_FINISH_";

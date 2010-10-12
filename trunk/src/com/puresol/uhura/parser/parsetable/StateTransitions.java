@@ -13,8 +13,20 @@ public class StateTransitions implements Serializable {
 
 	private final Map<Integer, Map<Construction, Integer>> transitions = new HashMap<Integer, Map<Construction, Integer>>();
 
+	private boolean changed = true;
+	private int hashCode = 0;
+
+	public StateTransitions() {
+		super();
+	}
+
+	public int size() {
+		return transitions.size();
+	}
+
 	protected final void addTransition(int initialState,
 			Construction construction, int targetState) throws GrammarException {
+		changed = true;
 		Map<Construction, Integer> transitionMap = transitions
 				.get(initialState);
 		if (transitionMap == null) {
@@ -46,11 +58,15 @@ public class StateTransitions implements Serializable {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result
-				+ ((transitions == null) ? 0 : transitions.hashCode());
-		return result;
+		if (changed) {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result
+					+ ((transitions == null) ? 0 : transitions.hashCode());
+			hashCode = result;
+			changed = false;
+		}
+		return hashCode;
 	}
 
 	@Override
@@ -62,6 +78,9 @@ public class StateTransitions implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		StateTransitions other = (StateTransitions) obj;
+		if (this.hashCode() != other.hashCode()) {
+			return false;
+		}
 		if (transitions == null) {
 			if (other.transitions != null)
 				return false;

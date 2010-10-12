@@ -12,12 +12,14 @@ import com.puresol.uhura.grammar.production.Construction;
  * This class is the base implementation of an item set. This abstract class can
  * take different items of interface Item in dependence to the parser used.
  * 
+ * THIS CLASS IS NOT THREAD SAFE!!!
+ * 
  * @author Rick-Rainer Ludwig
  * 
  * @param <T>
  *            is the item type of interface Item to be used.
  */
-public class AbstractItemSet<T extends Item> implements Serializable {
+public abstract class AbstractItemSet<T extends Item> implements Serializable {
 
 	private static final long serialVersionUID = 4299654494281633726L;
 
@@ -28,6 +30,9 @@ public class AbstractItemSet<T extends Item> implements Serializable {
 	private final Set<T> allItems = new LinkedHashSet<T>();
 	private final Set<T> kernelItems = new LinkedHashSet<T>();
 	private final Set<T> nonKernelItems = new LinkedHashSet<T>();
+
+	private boolean changed = true;
+	private int hashCode = 0;
 
 	/**
 	 * This constructor takes a single kernel item.
@@ -83,6 +88,9 @@ public class AbstractItemSet<T extends Item> implements Serializable {
 				result = true;
 			}
 		}
+		if (result) {
+			changed = true;
+		}
 		return result;
 	}
 
@@ -91,6 +99,9 @@ public class AbstractItemSet<T extends Item> implements Serializable {
 		if (allItems.add(item)) {
 			kernelItems.add(item);
 			result = true;
+		}
+		if (result) {
+			changed = true;
 		}
 		return result;
 	}
@@ -101,6 +112,7 @@ public class AbstractItemSet<T extends Item> implements Serializable {
 		}
 		kernelItems.remove(item);
 		nonKernelItems.remove(item);
+		changed = true;
 		return true;
 	}
 
@@ -110,6 +122,9 @@ public class AbstractItemSet<T extends Item> implements Serializable {
 			if (addNonKernelItem(item)) {
 				result = true;
 			}
+		}
+		if (result) {
+			changed = true;
 		}
 		return result;
 	}
@@ -221,29 +236,24 @@ public class AbstractItemSet<T extends Item> implements Serializable {
 		return buffer.toString();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result
-				+ ((nonKernelItems == null) ? 0 : nonKernelItems.hashCode());
-		result = prime * result
-				+ ((allItems == null) ? 0 : allItems.hashCode());
-		result = prime * result
-				+ ((kernelItems == null) ? 0 : kernelItems.hashCode());
-		return result;
+		if (changed) {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result
+					+ ((allItems == null) ? 0 : allItems.hashCode());
+			result = prime * result
+					+ ((kernelItems == null) ? 0 : kernelItems.hashCode());
+			result = prime
+					* result
+					+ ((nonKernelItems == null) ? 0 : nonKernelItems.hashCode());
+			hashCode = result;
+			changed = false;
+		}
+		return hashCode;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -252,13 +262,10 @@ public class AbstractItemSet<T extends Item> implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		@SuppressWarnings("rawtypes")
-		AbstractItemSet other = (AbstractItemSet) obj;
-		if (nonKernelItems == null) {
-			if (other.nonKernelItems != null)
-				return false;
-		} else if (!nonKernelItems.equals(other.nonKernelItems))
+		AbstractItemSet<?> other = (AbstractItemSet<?>) obj;
+		if (this.hashCode() != other.hashCode()) {
 			return false;
+		}
 		if (allItems == null) {
 			if (other.allItems != null)
 				return false;
@@ -268,6 +275,11 @@ public class AbstractItemSet<T extends Item> implements Serializable {
 			if (other.kernelItems != null)
 				return false;
 		} else if (!kernelItems.equals(other.kernelItems))
+			return false;
+		if (nonKernelItems == null) {
+			if (other.nonKernelItems != null)
+				return false;
+		} else if (!nonKernelItems.equals(other.nonKernelItems))
 			return false;
 		return true;
 	}

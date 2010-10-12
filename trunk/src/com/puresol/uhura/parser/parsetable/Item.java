@@ -9,8 +9,6 @@ public interface Item extends Serializable {
 
 	public Production getProduction();
 
-	public void incPosition();
-
 	public int getPosition();
 
 	public Construction getNext();

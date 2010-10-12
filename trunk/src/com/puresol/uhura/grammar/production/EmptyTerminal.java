@@ -1,10 +1,16 @@
 package com.puresol.uhura.grammar.production;
 
+/**
+ * This singleton class represents an empty terminal.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class EmptyTerminal {
 
 	public static final String EMPTY_CONSTRUCTION_NAME = "_EMTPTY_";
 
-	private static Construction instance = null;
+	private static volatile Construction instance = null;
 
 	public static Construction getInstance() {
 		if (instance == null) {

@@ -4,6 +4,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class represents a single productions.
+ * 
+ * THIS CLASS IS NOT THREAD SAFE!!!
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class Production implements Serializable {
 
 	private static final long serialVersionUID = -3776357938906717512L;
@@ -14,6 +22,9 @@ public class Production implements Serializable {
 	private final List<Construction> constructions = new ArrayList<Construction>();
 	private boolean node = true;
 	private boolean stackingAllowed = true;
+
+	private boolean changed = true;
+	private int hashCode = 0;
 
 	public Production(String name) {
 		super();
@@ -30,6 +41,7 @@ public class Production implements Serializable {
 	public void setId(int id) {
 		if (this.id < 0) {
 			this.id = id;
+			changed = true;
 		}
 	}
 
@@ -56,10 +68,12 @@ public class Production implements Serializable {
 
 	public void addConstruction(Construction construction) {
 		constructions.add(construction);
+		changed = true;
 	}
 
 	public void addAllConstructions(List<Construction> constructions) {
 		this.constructions.addAll(constructions);
+		changed = true;
 	}
 
 	/**
@@ -86,6 +100,7 @@ public class Production implements Serializable {
 	 */
 	public void setNode(boolean node) {
 		this.node = node;
+		changed = true;
 	}
 
 	/**
@@ -101,6 +116,7 @@ public class Production implements Serializable {
 	 */
 	public void setStackingAllowed(boolean stackingAllowed) {
 		this.stackingAllowed = stackingAllowed;
+		changed = true;
 	}
 
 	@Override
@@ -161,17 +177,21 @@ public class Production implements Serializable {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result
-				+ ((alternativeName == null) ? 0 : alternativeName.hashCode());
-		result = prime * result
-				+ ((constructions == null) ? 0 : constructions.hashCode());
-		result = prime * result + id;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + (node ? 1231 : 1237);
-		result = prime * result + (stackingAllowed ? 1231 : 1237);
-		return result;
+		if (changed) {
+			final int prime = 31;
+			int result = 1;
+			result = prime
+					* result
+					+ ((alternativeName == null) ? 0 : alternativeName
+							.hashCode());
+			result = prime * result
+					+ ((constructions == null) ? 0 : constructions.hashCode());
+			result = prime * result + id;
+			result = prime * result + ((name == null) ? 0 : name.hashCode());
+			hashCode = result;
+			changed = false;
+		}
+		return hashCode;
 	}
 
 	@Override
@@ -183,17 +203,25 @@ public class Production implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Production other = (Production) obj;
-		if (alternativeName == null) {
-			if (other.alternativeName != null)
-				return false;
-		} else if (!alternativeName.equals(other.alternativeName))
+		if (this.hashCode() != other.hashCode()) {
 			return false;
+		}
 		if (id != other.id)
 			return false;
 		if (name == null) {
 			if (other.name != null)
 				return false;
 		} else if (!name.equals(other.name))
+			return false;
+		if (alternativeName == null) {
+			if (other.alternativeName != null)
+				return false;
+		} else if (!alternativeName.equals(other.alternativeName))
+			return false;
+		if (constructions == null) {
+			if (other.constructions != null)
+				return false;
+		} else if (!constructions.equals(other.constructions))
 			return false;
 		return true;
 	}

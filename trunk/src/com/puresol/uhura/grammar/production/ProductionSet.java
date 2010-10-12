@@ -31,11 +31,12 @@ public class ProductionSet implements Serializable {
 		}
 		production.setId(productions.size());
 		productions.add(production);
-		if (!name2Production.containsKey(production.getName())) {
-			name2Production.put(production.getName(),
-					new ArrayList<Production>());
+		List<Production> values = name2Production.get(production.getName());
+		if (values == null) {
+			values = new ArrayList<Production>();
+			name2Production.put(production.getName(), values);
 		}
-		name2Production.get(production.getName()).add(production);
+		values.add(production);
 	}
 
 	public void add(List<Production> productions) throws GrammarException {

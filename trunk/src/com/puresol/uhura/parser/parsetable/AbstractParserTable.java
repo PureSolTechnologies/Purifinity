@@ -12,7 +12,6 @@ import org.apache.log4j.Logger;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.production.Construction;
-import com.puresol.uhura.grammar.production.ConstructionType;
 import com.puresol.uhura.lexer.Token;
 
 public abstract class AbstractParserTable implements ParserTable {
@@ -185,7 +184,7 @@ public abstract class AbstractParserTable implements ParserTable {
 		buffer.append("\n");
 		buffer.append(toColumn("|"));
 		for (Construction construction : actionTerminals) {
-			if (construction.getType() == ConstructionType.TERMINAL) {
+			if (construction.isTerminal()) {
 				buffer.append(toColumn(construction.getName()));
 			} else {
 				buffer.append(toColumn(construction.getText()));

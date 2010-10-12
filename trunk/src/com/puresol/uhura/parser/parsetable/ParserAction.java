@@ -11,9 +11,10 @@ import java.io.Serializable;
 public class ParserAction implements Serializable {
 
 	private static final long serialVersionUID = -3440478384808031825L;
-	
+
 	private final ActionType action;
 	private final int parameter;
+	private final int hashCode;
 
 	/**
 	 * Constructor
@@ -28,6 +29,11 @@ public class ParserAction implements Serializable {
 		super();
 		this.action = action;
 		this.parameter = parameter;
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((action == null) ? 0 : action.hashCode());
+		result = prime * result + parameter;
+		hashCode = result;
 	}
 
 	/**
@@ -60,11 +66,7 @@ public class ParserAction implements Serializable {
 	 */
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((action == null) ? 0 : action.hashCode());
-		result = prime * result + parameter;
-		return result;
+		return hashCode;
 	}
 
 	/*
@@ -81,6 +83,9 @@ public class ParserAction implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		ParserAction other = (ParserAction) obj;
+		if (this.hashCode != other.hashCode) {
+			return false;
+		}
 		if (action != other.action)
 			return false;
 		if (parameter != other.parameter)
