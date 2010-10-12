@@ -11,6 +11,7 @@ import com.puresol.uhura.grammar.production.ProductionSet;
 import com.puresol.uhura.grammar.token.TokenDefinitionSet;
 import com.puresol.utils.FileUtilities;
 import com.puresol.utils.Persistence;
+import com.puresol.utils.PersistenceException;
 
 public class GrammarTest {
 
@@ -47,7 +48,13 @@ public class GrammarTest {
 					productions);
 
 			Persistence.persist(grammar, file);
-		} catch (Throwable e) {
+			Grammar restoredGrammar = (Grammar) Persistence.restore(file);
+
+			assertEquals(grammar, restoredGrammar);
+		} catch (GrammarException e) {
+			e.printStackTrace();
+			fail("No exception was expected!");
+		} catch (PersistenceException e) {
 			e.printStackTrace();
 			fail("No exception was expected!");
 		}

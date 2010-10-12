@@ -8,7 +8,7 @@ package com.puresol.uhura.grammar.production;
  */
 public class EmptyTerminal {
 
-	public static final String EMPTY_CONSTRUCTION_NAME = "_EMTPTY_";
+	public static final String EMPTY_CONSTRUCTION_NAME = "_EMPTY_";
 
 	private static volatile Construction instance = null;
 

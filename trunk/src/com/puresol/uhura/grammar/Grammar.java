@@ -37,8 +37,7 @@ public class Grammar implements Serializable {
 		for (Production production : productions.getList()) {
 			for (Construction construction : production.getConstructions()) {
 				if (construction.isTerminal()) {
-					if (!construction.getClass()
-							.equals(Terminal.class)) {
+					if (!construction.getClass().equals(Terminal.class)) {
 						continue;
 					}
 					if (tokenDefinitions.getDefinition(construction.getName()) == null) {
@@ -136,6 +135,49 @@ public class Grammar implements Serializable {
 			throws GrammarException {
 		return new Grammar(getOptions(), getTokenDefinitions(),
 				getProductions().setNewStartProduction(string));
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (ignoreCase ? 1231 : 1237);
+		result = prime * result + ((options == null) ? 0 : options.hashCode());
+		result = prime * result
+				+ ((productions == null) ? 0 : productions.hashCode());
+		result = prime
+				* result
+				+ ((tokenDefinitions == null) ? 0 : tokenDefinitions.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Grammar other = (Grammar) obj;
+		if (ignoreCase != other.ignoreCase)
+			return false;
+		if (options == null) {
+			if (other.options != null)
+				return false;
+		} else if (!options.equals(other.options))
+			return false;
+		if (productions == null) {
+			if (other.productions != null)
+				return false;
+		} else if (!productions.equals(other.productions))
+			return false;
+		if (tokenDefinitions == null) {
+			if (other.tokenDefinitions != null)
+				return false;
+		} else if (!tokenDefinitions.equals(other.tokenDefinitions))
+			return false;
+		return true;
 	}
 
 }

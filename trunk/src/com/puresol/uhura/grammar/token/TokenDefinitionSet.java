@@ -46,4 +46,32 @@ public class TokenDefinitionSet implements Serializable {
 	public TokenDefinition getDefinition(String name) {
 		return name2Definition.get(name);
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime
+				* result
+				+ ((tokenDefinitions == null) ? 0 : tokenDefinitions.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		TokenDefinitionSet other = (TokenDefinitionSet) obj;
+		if (tokenDefinitions == null) {
+			if (other.tokenDefinitions != null)
+				return false;
+		} else if (!tokenDefinitions.equals(other.tokenDefinitions))
+			return false;
+		return true;
+	}
+
 }

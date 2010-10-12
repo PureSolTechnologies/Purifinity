@@ -93,4 +93,31 @@ public class ProductionSet implements Serializable {
 		}
 		return productionSet;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((productions == null) ? 0 : productions.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ProductionSet other = (ProductionSet) obj;
+		if (productions == null) {
+			if (other.productions != null)
+				return false;
+		} else if (!productions.equals(other.productions))
+			return false;
+		return true;
+	}
+
 }

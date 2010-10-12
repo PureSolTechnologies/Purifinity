@@ -12,6 +12,12 @@ import com.puresol.uhura.grammar.token.TokenDefinition;
 import com.puresol.uhura.grammar.token.TokenDefinitionSet;
 import com.puresol.uhura.grammar.token.Visibility;
 
+/**
+ * This class contains several grammars from DragonBook or the LR1 Pamphlet.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class TestGrammars {
 
 	public static Grammar getTestGrammarFromLR1Pamphlet() {
