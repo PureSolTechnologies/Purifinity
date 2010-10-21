@@ -9,9 +9,9 @@ import org.apache.log4j.Logger;
 
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
-import com.puresol.uhura.grammar.production.Construction;
 import com.puresol.uhura.grammar.production.DummyTerminal;
 import com.puresol.uhura.grammar.production.FinishTerminal;
+import com.puresol.uhura.grammar.production.Terminal;
 import com.puresol.uhura.parser.functions.Closure1;
 import com.puresol.uhura.parser.items.LR0Item;
 import com.puresol.uhura.parser.items.LR0ItemSet;
@@ -24,7 +24,7 @@ public class LALR1ItemSetCollection {
 	private static final Logger logger = Logger
 			.getLogger(LALR1ItemSetCollection.class);
 
-	private final Construction DUMMY_TERMINAL = DummyTerminal.getInstance();
+	private final Terminal DUMMY_TERMINAL = DummyTerminal.getInstance();
 
 	private final List<LR1ItemSet> itemSetCollection = new ArrayList<LR1ItemSet>();
 
@@ -77,77 +77,79 @@ public class LALR1ItemSetCollection {
 	private void calculateLookahead() {
 		boolean changed;
 		int run = 0;
-		addNewLookahead(0, new LR1Item(grammar.getProductions().get(0), 0,
-				FinishTerminal.getInstance()));
 		do {
-			changed = false;
 			run++;
-			int currentItemSetCount = itemSetCollection.size();
-			for (int stateId = 0; stateId < currentItemSetCount; stateId++) {
-				LR1ItemSet lr1ItemSet = itemSetCollection.get(stateId);
-				List<LR1Item> kernelItems = new ArrayList<LR1Item>(
-						lr1ItemSet.getAllItems());
-				for (int kernelItemId = 0; kernelItemId < kernelItems.size(); kernelItemId++) {
-//					logger.trace("state: " + stateId + " / "
-//							+ itemSetCollection.size() + "; kernel: "
-//							+ kernelItemId + " / " + kernelItems.size());
+			changed = iterateLookaheadCalculation(run);
+		} while (changed);
+	}
 
-					LR1Item lr1Item = kernelItems.get(kernelItemId);
-					LR1ItemSet closure = closure1.calc(lr1Item);
-					for (LR1Item closureItem : closure.getAllItems()) {
-						if (closureItem.getLookahead().equals(DUMMY_TERMINAL)) {
-							continue;
-						}
-						// Spontaneously generated...
-						LR1Item newItem = new LR1Item(
-								closureItem.getProduction(),
-								closureItem.getPosition() + 1,
-								closureItem.getLookahead());
-						if (addNewLookahead(stateId, newItem)) {
-							changed = true;
-						}
+	private boolean iterateLookaheadCalculation(int run) {
+		boolean changed = false;
+		int currentItemSetCount = itemSetCollection.size();
+		for (int stateId = 0; stateId < currentItemSetCount; stateId++) {
+			LR1ItemSet lr1ItemSet = itemSetCollection.get(stateId);
+			int kernelItemId = 0;
+			for (LR1Item lr1Item : lr1ItemSet.getKernelItems()) {
+				logger.trace("state: " + stateId + " / "
+						+ itemSetCollection.size() + "; kernel: "
+						+ kernelItemId + " / "
+						+ lr1ItemSet.getKernelItems().size());
+
+				kernelItemId++;
+				LR1ItemSet closure = closure1.calc(lr1Item);
+				for (LR1Item closureItem : closure.getAllItems()) {
+					if (closureItem.getLookahead().equals(DUMMY_TERMINAL)) {
+						continue;
+					}
+					// Spontaneously generated...
+					LR1Item newItem = new LR1Item(closureItem.getProduction(),
+							closureItem.getPosition() + 1,
+							closureItem.getLookahead());
+					if (addNewLookahead(stateId, newItem)) {
+						changed = true;
 					}
 				}
+
 			}
-		} while (changed);
+		}
+		if (run == 1) {
+			addNewLookahead(0, new LR1Item(grammar.getProductions().get(0), 0,
+					FinishTerminal.getInstance()));
+		}
+		return changed;
 	}
 
 	private boolean addNewLookahead(int stateId, LR1Item newItem) {
 		boolean added = false;
-		if (addNewLookahead(stateId, newItem, stateId)) {
+		if (addNewLookahead(newItem, stateId)) {
 			added = true;
 		}
 		for (int setId : lr0Transitions.getTransitions(stateId).values()) {
-			addNewLookahead(stateId, newItem, setId);
+			if (addNewLookahead(newItem, setId)) {
+				added = true;
+			}
 		}
 		return added;
 	}
 
-	private boolean addNewLookahead(int stateId, LR1Item newItem, int targetId) {
-		boolean added = false;
+	private boolean addNewLookahead(LR1Item newItem, int targetId) {
 		LR1ItemSet lr1ItemSet = itemSetCollection.get(targetId);
-		for (LR1Item lr1Item : lr1ItemSet.getKernelItems().toArray(
-				new LR1Item[0])) {
+		boolean found = false;
+		for (LR1Item lr1Item : lr1ItemSet.getKernelItems()) {
 			if ((lr1Item.getPosition() == newItem.getPosition())
 					&& lr1Item.getProduction().equals(newItem.getProduction())) {
-				if (lr1ItemSet.addKernelItem(newItem)) {
-					lr1ItemSet.removeItem(new LR1Item(lr1Item.getProduction(),
-							lr1Item.getPosition(), DUMMY_TERMINAL));
-					added = true;
-				}
+				found = true;
+				break;
 			}
 		}
-		for (LR1Item lr1Item : lr1ItemSet.getNonKernelItems()) {
-			if ((lr1Item.getPosition() == newItem.getPosition())
-					&& lr1Item.getProduction().equals(newItem.getProduction())) {
-				if (lr1ItemSet.addNonKernelItem(newItem)) {
-					lr1ItemSet.removeItem(new LR1Item(lr1Item.getProduction(),
-							lr1Item.getPosition(), DUMMY_TERMINAL));
-					added = true;
-				}
+		if (found) {
+			if (lr1ItemSet.addKernelItem(newItem)) {
+				lr1ItemSet.removeItem(new LR1Item(newItem.getProduction(),
+						newItem.getPosition(), DUMMY_TERMINAL));
+				return true;
 			}
 		}
-		return added;
+		return false;
 	}
 
 	private void addClosure() {

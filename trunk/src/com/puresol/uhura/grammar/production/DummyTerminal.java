@@ -11,9 +11,9 @@ public class DummyTerminal {
 
 	public static final String EMPTY_CONSTRUCTION_NAME = "_DUMMY_";
 
-	private static volatile Construction instance = null;
+	private static volatile Terminal instance = null;
 
-	public static Construction getInstance() {
+	public static Terminal getInstance() {
 		if (instance == null) {
 			createInstance();
 		}

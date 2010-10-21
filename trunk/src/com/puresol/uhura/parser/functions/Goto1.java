@@ -40,14 +40,18 @@ public class Goto1 implements Serializable {
 	 *         items and all calculated extensions.
 	 */
 	public LR1ItemSet calc(LR1ItemSet itemSet, Construction x) {
-		if ((!gotos.containsKey(itemSet))
-				|| (!gotos.get(itemSet).containsKey(x))) {
-			calculate(itemSet, x);
+		Map<Construction, LR1ItemSet> map = gotos.get(itemSet);
+		if (map == null) {
+			return calculate(itemSet, x);
 		}
-		return gotos.get(itemSet).get(x);
+		LR1ItemSet result = map.get(x);
+		if (result == null) {
+			return calculate(itemSet, x);
+		}
+		return result;
 	}
 
-	private void calculate(LR1ItemSet itemSet, Construction x) {
+	private LR1ItemSet calculate(LR1ItemSet itemSet, Construction x) {
 		Set<LR1Item> items = new LinkedHashSet<LR1Item>();
 		for (LR1Item item : itemSet.getNextItems(x)) {
 			LR1Item newItem = new LR1Item(item.getProduction(),
@@ -57,6 +61,8 @@ public class Goto1 implements Serializable {
 		if (!gotos.containsKey(itemSet)) {
 			gotos.put(itemSet, new HashMap<Construction, LR1ItemSet>());
 		}
-		gotos.get(itemSet).put(x, closure.calc(new LR1ItemSet(items)));
+		LR1ItemSet result = closure.calc(new LR1ItemSet(items));
+		gotos.get(itemSet).put(x, result);
+		return result;
 	}
 }

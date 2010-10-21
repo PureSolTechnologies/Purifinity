@@ -3,14 +3,15 @@ package com.puresol.uhura.parser.parsetable;
 import java.io.Serializable;
 
 /**
- * This enumeration contains all possible parser actions.
+ * This enumeration contains all possible parser actions and their string
+ * representations.
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
 public enum ActionType implements Serializable {
 
-	SHIFT("s"), REDUCE("r"), ACCEPT("acc"), ERROR("err"), GOTO("");
+	ACCEPT("acc"), SHIFT("s"), REDUCE("r"), ERROR("err"), GOTO("");
 
 	private final String text;
 

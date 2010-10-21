@@ -54,13 +54,14 @@ public class Closure0 implements Serializable {
 	 *         items and all calculated extensions.
 	 */
 	public LR0ItemSet calc(LR0ItemSet initialItemSet) {
-		if (!closures.containsKey(initialItemSet)) {
-			calculate(initialItemSet);
+		LR0ItemSet result = closures.get(initialItemSet);
+		if (result == null) {
+			return calculate(initialItemSet);
 		}
-		return closures.get(initialItemSet);
+		return result;
 	}
 
-	private void calculate(LR0ItemSet initialItemSet) {
+	private LR0ItemSet calculate(LR0ItemSet initialItemSet) {
 		LR0ItemSet itemSet = new LR0ItemSet(initialItemSet);
 		boolean changed;
 		do {
@@ -84,6 +85,7 @@ public class Closure0 implements Serializable {
 			}
 		} while (changed);
 		closures.put(initialItemSet, itemSet);
+		return itemSet;
 	}
 
 }

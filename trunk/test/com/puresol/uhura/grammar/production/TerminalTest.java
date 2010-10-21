@@ -13,7 +13,7 @@ public class TerminalTest {
 	}
 
 	@Test
-	public void testDefaultValues() {
+	public void testInitialValues() {
 		Construction terminal = new Terminal("NAME");
 		assertEquals("NAME", terminal.getName());
 		assertEquals("", terminal.getText());
@@ -24,7 +24,7 @@ public class TerminalTest {
 	}
 
 	@Test
-	public void testDefaultValues2() {
+	public void testInitialValues2() {
 		Construction terminal = new Terminal("NAME", "TEXT");
 		assertEquals("NAME", terminal.getName());
 		assertEquals("TEXT", terminal.getText());

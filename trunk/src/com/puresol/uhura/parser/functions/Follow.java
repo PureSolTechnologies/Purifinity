@@ -12,6 +12,7 @@ import com.puresol.uhura.grammar.production.Construction;
 import com.puresol.uhura.grammar.production.EmptyTerminal;
 import com.puresol.uhura.grammar.production.FinishTerminal;
 import com.puresol.uhura.grammar.production.Production;
+import com.puresol.uhura.grammar.production.Terminal;
 
 /**
  * The rules from Dragon Book are:
@@ -36,7 +37,7 @@ public class Follow implements Serializable {
 	private final Grammar grammar;
 	private final First first;
 
-	private final Map<String, Set<Construction>> follow = new HashMap<String, Set<Construction>>();
+	private final Map<String, Set<Terminal>> follow = new HashMap<String, Set<Terminal>>();
 
 	public Follow(Grammar grammar, First first) {
 		super();
@@ -54,8 +55,7 @@ public class Follow implements Serializable {
 	private void initFollowMap() {
 		for (Production production : grammar.getProductions().getList()) {
 			if (follow.get(production.getName()) == null) {
-				follow.put(production.getName(),
-						new LinkedHashSet<Construction>());
+				follow.put(production.getName(), new LinkedHashSet<Terminal>());
 			}
 		}
 	}
@@ -104,7 +104,7 @@ public class Follow implements Serializable {
 			if (construction.isTerminal()) {
 				continue;
 			}
-			Set<Construction> followSet = follow.get(construction.getName());
+			Set<Terminal> followSet = follow.get(construction.getName());
 			int startSize = followSet.size();
 			/*
 			 * For the found non-terminal find the following constructions by
@@ -113,9 +113,8 @@ public class Follow implements Serializable {
 			if (i < constructions.size() - 1) {
 				for (int j = i + 1; j < constructions.size(); j++) {
 					Construction followingConstruction = constructions.get(j);
-					Set<Construction> firstSet = first
-							.get(followingConstruction);
-					for (Construction follower : firstSet) {
+					Set<Terminal> firstSet = first.get(followingConstruction);
+					for (Terminal follower : firstSet) {
 						if (!follower.equals(EmptyTerminal.getInstance())) {
 							followSet.add(follower);
 						}
@@ -144,7 +143,7 @@ public class Follow implements Serializable {
 		return grammar;
 	}
 
-	public Set<Construction> get(Construction x) {
+	public Set<Terminal> get(Construction x) {
 		return follow.get(x.getName());
 	}
 

@@ -11,6 +11,7 @@ import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.production.Construction;
 import com.puresol.uhura.grammar.production.Production;
 import com.puresol.uhura.grammar.production.ProductionSet;
+import com.puresol.uhura.grammar.production.Terminal;
 import com.puresol.uhura.parser.items.LR1Item;
 import com.puresol.uhura.parser.items.LR1ItemSet;
 
@@ -55,13 +56,14 @@ public class Closure1 implements Serializable {
 	 *         items and all calculated extensions.
 	 */
 	public LR1ItemSet calc(LR1ItemSet initialItemSet) {
-		if (!closures.containsKey(initialItemSet)) {
-			calculate(initialItemSet);
+		LR1ItemSet result = closures.get(initialItemSet);
+		if (result == null) {
+			return calculate(initialItemSet);
 		}
-		return closures.get(initialItemSet);
+		return result;
 	}
 
-	private void calculate(LR1ItemSet initialItemSet) {
+	private LR1ItemSet calculate(LR1ItemSet initialItemSet) {
 		LR1ItemSet itemSet = new LR1ItemSet(initialItemSet);
 		int currentPosition = 0;
 		int newPosition = 0;
@@ -84,8 +86,8 @@ public class Closure1 implements Serializable {
 						item.getLookahead());
 				for (Production grammarProduction : productions
 						.get(nextConstruction.getName())) {
-					Set<Construction> firstResult = first.get(helperProduction);
-					for (Construction terminal : firstResult) {
+					Set<Terminal> firstResult = first.get(helperProduction);
+					for (Terminal terminal : firstResult) {
 						LR1Item newItem = new LR1Item(grammarProduction, 0,
 								terminal);
 						itemSet.addNonKernelItem(newItem);
@@ -95,6 +97,7 @@ public class Closure1 implements Serializable {
 			currentPosition = newPosition;
 		} while (currentSize != itemSet.getSize());
 		closures.put(initialItemSet, itemSet);
+		return itemSet;
 	}
 
 	private Production getRemainingProduction(LR1Item item,

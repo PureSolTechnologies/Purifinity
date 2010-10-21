@@ -2,7 +2,6 @@ package com.puresol.uhura.parser.items;
 
 import java.util.Set;
 
-
 public class LR1ItemSet extends AbstractItemSet<LR1Item> {
 
 	private static final long serialVersionUID = -4166037691502608458L;
@@ -18,4 +17,5 @@ public class LR1ItemSet extends AbstractItemSet<LR1Item> {
 	public LR1ItemSet(LR1ItemSet initialItemSet) {
 		super(initialItemSet);
 	}
+
 }

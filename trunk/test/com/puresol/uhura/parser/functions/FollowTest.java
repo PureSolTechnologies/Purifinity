@@ -39,7 +39,7 @@ public class FollowTest {
 		Construction c = new Terminal("c");
 
 		assertEquals(1, follow.get(productionZ).size());
-		Iterator<Construction> iterator = follow.get(productionZ).iterator();
+		Iterator<Terminal> iterator = follow.get(productionZ).iterator();
 		assertEquals(finish, iterator.next());
 
 		assertEquals(1, follow.get(productionA).size());
@@ -76,7 +76,7 @@ public class FollowTest {
 		Construction rParen = new Terminal("RPAREN");
 
 		assertEquals(3, follow.get(productionE).size());
-		Iterator<Construction> iterator = follow.get(productionE).iterator();
+		Iterator<Terminal> iterator = follow.get(productionE).iterator();
 		assertEquals(finish, iterator.next());
 		assertEquals(plus, iterator.next());
 		assertEquals(rParen, iterator.next());
@@ -125,7 +125,7 @@ public class FollowTest {
 		Construction rParen = new Terminal("RPAREN");
 
 		assertEquals(2, follow.get(productionE).size());
-		Iterator<Construction> iterator = follow.get(productionE).iterator();
+		Iterator<Terminal> iterator = follow.get(productionE).iterator();
 		assertEquals(finish, iterator.next());
 		assertEquals(rParen, iterator.next());
 

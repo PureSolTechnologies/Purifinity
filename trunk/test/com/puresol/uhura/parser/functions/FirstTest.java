@@ -3,6 +3,7 @@ package com.puresol.uhura.parser.functions;
 import static org.junit.Assert.*;
 
 import java.util.Iterator;
+import java.util.Set;
 
 import org.junit.Test;
 
@@ -76,7 +77,7 @@ public class FirstTest {
 		Construction terminalLParen = new Terminal("LPAREN");
 
 		assertEquals(2, first.get(productionZ).size());
-		Iterator<Construction> iterator = first.get(productionZ).iterator();
+		Iterator<Terminal> iterator = first.get(productionZ).iterator();
 		assertEquals(terminalLParen, iterator.next());
 		assertEquals(terminalId, iterator.next());
 
@@ -122,7 +123,7 @@ public class FirstTest {
 		Construction empty = EmptyTerminal.getInstance();
 
 		assertEquals(2, first.get(productionE).size());
-		Iterator<Construction> iterator = first.get(productionF).iterator();
+		Iterator<Terminal> iterator = first.get(productionF).iterator();
 		assertEquals(terminalLParen, iterator.next());
 		assertEquals(terminalId, iterator.next());
 
@@ -147,4 +148,22 @@ public class FirstTest {
 		assertEquals(empty, iterator.next());
 
 	}
+
+	/**
+	 * This test is a part of the results on page 327-328 in Dragon book.
+	 */
+	@Test
+	public void testFirstForLALR1GrammarStartItem() {
+
+		Grammar grammar = TestGrammars.getLALR1TestGrammarFromDragonBook();
+
+		First first = new First(grammar);
+		Set<Terminal> constructions = first
+				.get(grammar.getProductions().get(0));
+		assertEquals(2, constructions.size());
+		assertTrue(constructions.contains(new Terminal("id", "id")));
+		assertTrue(constructions.contains(new Terminal("STAR", "*")));
+
+	}
+
 }

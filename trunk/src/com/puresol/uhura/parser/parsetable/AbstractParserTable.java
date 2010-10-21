@@ -14,6 +14,13 @@ import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.production.Construction;
 import com.puresol.uhura.lexer.Token;
 
+/**
+ * This class is the abstract implementation of a parser table. The table based
+ * parsers use this tables for parsing texts very efficiently.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public abstract class AbstractParserTable implements ParserTable {
 
 	private static final long serialVersionUID = 4097931723838051724L;

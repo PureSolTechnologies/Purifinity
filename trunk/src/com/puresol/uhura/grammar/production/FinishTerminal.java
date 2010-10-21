@@ -11,9 +11,9 @@ public class FinishTerminal {
 
 	public static final String FINISH_CONSTRUCTION_NAME = "_FINISH_";
 
-	private static Construction instance = null;
+	private static Terminal instance = null;
 
-	public static Construction getInstance() {
+	public static Terminal getInstance() {
 		if (instance == null) {
 			createInstance();
 		}

@@ -12,7 +12,7 @@ public class NonTerminalTest {
 	}
 
 	@Test
-	public void testDefaultValues() {
+	public void testInitialValues() {
 		Construction nonTerminal = new NonTerminal("NAME");
 		assertEquals("NAME", nonTerminal.getName());
 		assertEquals("", nonTerminal.getText());

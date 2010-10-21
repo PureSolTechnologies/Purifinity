@@ -1,17 +1,17 @@
 package com.puresol.uhura.parser.items;
 
-import com.puresol.uhura.grammar.production.Construction;
 import com.puresol.uhura.grammar.production.Production;
+import com.puresol.uhura.grammar.production.Terminal;
 
 public class LR1Item extends LR0Item {
 
 	private static final long serialVersionUID = -1434126363541910894L;
 
-	private final Construction lookahead;
+	private final Terminal lookahead;
 
 	private final int hashCode;
 
-	public LR1Item(Production production, int position, Construction lookahead) {
+	public LR1Item(Production production, int position, Terminal lookahead) {
 		super(production, position);
 		this.lookahead = lookahead;
 		final int prime = 31;
@@ -24,7 +24,7 @@ public class LR1Item extends LR0Item {
 	/**
 	 * @return the lookahead
 	 */
-	public Construction getLookahead() {
+	public Terminal getLookahead() {
 		return lookahead;
 	}
 

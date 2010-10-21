@@ -3,12 +3,14 @@ package com.puresol.uhura.parser.parsetable;
 import java.io.Serializable;
 
 /**
- * This is a single state table entry for storing actions.
+ * This is a single state table entry for a stored action. The action consists
+ * of a parser action and an additional integer value containing the next state
+ * or the grammar production to be used for reduction.
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class ParserAction implements Serializable {
+public class ParserAction implements Serializable, Comparable<ParserAction> {
 
 	private static final long serialVersionUID = -3440478384808031825L;
 
@@ -93,4 +95,12 @@ public class ParserAction implements Serializable {
 		return true;
 	}
 
+	@Override
+	public int compareTo(ParserAction other) {
+		int result = this.action.compareTo(other.action);
+		if (result != 0) {
+			return result;
+		}
+		return this.parameter - other.parameter;
+	}
 }

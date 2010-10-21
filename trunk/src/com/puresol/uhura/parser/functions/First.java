@@ -10,6 +10,7 @@ import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.production.Construction;
 import com.puresol.uhura.grammar.production.EmptyTerminal;
 import com.puresol.uhura.grammar.production.Production;
+import com.puresol.uhura.grammar.production.Terminal;
 
 /**
  * This class calculates the FIRST sets for a given grammar. Pre-calcualted are
@@ -47,12 +48,12 @@ public class First implements Serializable {
 	 * This field contains the first sets for all productions contained within
 	 * the grammar.
 	 */
-	private final Map<String, Set<Construction>> firstGrammar = new HashMap<String, Set<Construction>>();
+	private final Map<String, Set<Terminal>> firstGrammar = new HashMap<String, Set<Terminal>>();
 	/**
 	 * The field contains first sets for helper productions to avoid double
 	 * calculation.
 	 */
-	private final Map<Production, Set<Construction>> firstNonGrammar = new HashMap<Production, Set<Construction>>();
+	private final Map<Production, Set<Terminal>> firstNonGrammar = new HashMap<Production, Set<Terminal>>();
 
 	public First(Grammar grammar) {
 		super();
@@ -72,7 +73,7 @@ public class First implements Serializable {
 		for (Production production : grammar.getProductions().getList()) {
 			if (!firstGrammar.containsKey(production.getName())) {
 				firstGrammar.put(production.getName(),
-						new LinkedHashSet<Construction>());
+						new LinkedHashSet<Terminal>());
 			}
 		}
 	}
@@ -99,7 +100,7 @@ public class First implements Serializable {
 	 * @return
 	 */
 	private boolean iterateForGrammarProductions(Production production) {
-		Set<Construction> firstSet = firstGrammar.get(production.getName());
+		Set<Terminal> firstSet = firstGrammar.get(production.getName());
 		int startLength = firstSet.size();
 		if (production.isEmpty()) {
 			/* rule 3 */
@@ -108,14 +109,11 @@ public class First implements Serializable {
 			/* rule 2 */
 			for (Construction construction : production.getConstructions()) {
 				if (construction.isTerminal()) {
-					firstSet.add(construction);
+					firstSet.add((Terminal) construction);
 					// terminal is found and there is nothing to proceed...
 					break;
 				}
-				for (Construction firstConstruction : firstGrammar
-						.get(construction.getName())) {
-					firstSet.add(firstConstruction);
-				}
+				firstSet.addAll(firstGrammar.get(construction.getName()));
 				if (!firstGrammar.get(construction.getName()).contains(
 						EmptyTerminal.getInstance())) {
 					break;
@@ -142,27 +140,28 @@ public class First implements Serializable {
 	 * @param x
 	 * @return
 	 */
-	public Set<Construction> get(Construction x) {
+	public Set<Terminal> get(Construction x) {
 		if (x.isTerminal()) {
-			Set<Construction> result = new LinkedHashSet<Construction>();
-			result.add(x);
+			Set<Terminal> result = new LinkedHashSet<Terminal>();
+			result.add((Terminal) x);
 			return result;
 		}
 		return firstGrammar.get(x.getName());
 	}
 
-	public Set<Construction> get(Production production) {
-		if (!firstNonGrammar.containsKey(production)) {
-			calculate(production);
+	public Set<Terminal> get(Production production) {
+		Set<Terminal> result = firstNonGrammar.get(production);
+		if (result == null) {
+			return calculate(production);
 		}
-		return firstNonGrammar.get(production);
+		return result;
 	}
 
-	private void calculate(Production production) {
-		Set<Construction> result = new LinkedHashSet<Construction>();
+	private Set<Terminal> calculate(Production production) {
+		Set<Terminal> result = new LinkedHashSet<Terminal>();
 		boolean hasEmptyDerivation = true;
 		for (Construction construction : production.getConstructions()) {
-			Set<Construction> first = get(construction);
+			Set<Terminal> first = get(construction);
 			result.addAll(first);
 			if (first.contains(EmptyTerminal.getInstance())) {
 				result.remove(EmptyTerminal.getInstance());
@@ -175,6 +174,7 @@ public class First implements Serializable {
 			result.add(EmptyTerminal.getInstance());
 		}
 		firstNonGrammar.put(production, result);
+		return result;
 	}
 
 	@Override

@@ -10,9 +10,9 @@ public class EmptyTerminal {
 
 	public static final String EMPTY_CONSTRUCTION_NAME = "_EMPTY_";
 
-	private static volatile Construction instance = null;
+	private static volatile Terminal instance = null;
 
-	public static Construction getInstance() {
+	public static Terminal getInstance() {
 		if (instance == null) {
 			createInstance();
 		}

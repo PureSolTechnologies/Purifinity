@@ -7,6 +7,12 @@ import java.util.Map;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.production.Construction;
 
+/**
+ * This class is used to collect all state transitions for a grammar.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class StateTransitions implements Serializable {
 
 	private static final long serialVersionUID = 3448400511750197925L;
