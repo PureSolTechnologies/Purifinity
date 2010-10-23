@@ -18,6 +18,12 @@ import com.puresol.uhura.parser.functions.First;
 import com.puresol.uhura.parser.items.LR1Item;
 import com.puresol.uhura.parser.items.LR1ItemSet;
 
+/**
+ * This test suite checks the Closure1 class.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class Closure1Test {
 
 	@Test
