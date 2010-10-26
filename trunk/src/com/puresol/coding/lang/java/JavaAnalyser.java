@@ -11,56 +11,47 @@
 package com.puresol.coding.lang.java;
 
 import java.io.File;
-import java.io.IOException;
+import java.io.FileReader;
 
 import org.apache.log4j.Logger;
 
 import com.puresol.coding.ProgrammingLanguage;
-import com.puresol.coding.analysis.AbstractAnalyser;
-import com.puresol.coding.analysis.AnalyserException;
-import com.puresol.coding.analysis.SourceCodeLexer;
-import com.puresol.parser.ParserException;
-import com.puresol.parser.PartDoesNotMatchException;
-import com.puresol.parser.lexer.LexerException;
-import com.puresol.parser.lexer.NoMatchingTokenDefinitionFound;
+import com.puresol.coding.lang.java.grammar.JavaGrammar;
+import com.puresol.uhura.ast.AST;
+import com.puresol.uhura.lexer.Lexer;
+import com.puresol.uhura.lexer.TokenStream;
+import com.puresol.uhura.parser.Parser;
 
 /**
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class JavaAnalyser extends AbstractAnalyser {
+public class JavaAnalyser {
 
 	private static final long serialVersionUID = -3601131473616977648L;
 
 	private static final Logger logger = Logger.getLogger(JavaAnalyser.class);
 
+	private final File file;
+
 	public JavaAnalyser(File file) {
-		super(file);
+		super();
+		this.file = file;
 	}
 
-	@Override
-	public void parse() throws AnalyserException {
+	public void parse() throws JavaException {
 		try {
-			SourceCodeLexer lexer = new SourceCodeLexer(Java.getInstance(),
-					getFile());
-			JavaParser parser = (JavaParser) createParserInstance(
-					JavaParser.class, lexer.getTokenStream());
-			parser.scan();
-			setRootCodeRange(parser);
-			return;
-		} catch (IOException e) {
+			Lexer lexer = JavaGrammar.createLexer();
+			TokenStream tokenStream = lexer.lex(new FileReader(file));
+			Parser parser = JavaGrammar.createParser();
+			AST ast = parser.parse(tokenStream);
+			ast.getChildren();
+		} catch (Throwable e) {
 			logger.error(e.getMessage(), e);
-		} catch (NoMatchingTokenDefinitionFound e) {
-			logger.error(e.getMessage(), e);
-		} catch (PartDoesNotMatchException e) {
-			logger.error(e.getMessage(), e);
-		} catch (ParserException e) {
-			logger.error(e.getMessage(), e);
-		} catch (LexerException e) {
-			logger.error(e.getMessage(), e);
+			throw new JavaException(e.getMessage(), e);
 		}
-		throw new AnalyserException(this);
+		return;
 	}
 
 	public ProgrammingLanguage getLanguage() {
