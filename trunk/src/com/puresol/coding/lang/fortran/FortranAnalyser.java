@@ -11,27 +11,15 @@
 package com.puresol.coding.lang.fortran;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
 
 import org.apache.log4j.Logger;
 
 import com.puresol.coding.lang.fortran.grammar.FortranGrammar;
 import com.puresol.uhura.ast.AST;
-import com.puresol.uhura.grammar.Grammar;
-import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.lexer.Lexer;
-import com.puresol.uhura.lexer.LexerException;
-import com.puresol.uhura.lexer.LexerFactory;
-import com.puresol.uhura.lexer.LexerFactoryException;
-import com.puresol.uhura.lexer.RegExpLexer;
 import com.puresol.uhura.lexer.TokenStream;
 import com.puresol.uhura.parser.Parser;
-import com.puresol.uhura.parser.ParserException;
-import com.puresol.uhura.parser.ParserFactory;
-import com.puresol.uhura.parser.ParserFactoryException;
-import com.puresol.uhura.parser.lr.LR1Parser;
 
 public class FortranAnalyser {
 
@@ -43,6 +31,7 @@ public class FortranAnalyser {
 	private final File file;
 
 	public FortranAnalyser(File file) {
+		super();
 		this.file = file;
 	}
 
@@ -52,6 +41,7 @@ public class FortranAnalyser {
 			TokenStream tokenStream = lexer.lex(new FileReader(file));
 			Parser parser = FortranGrammar.createParser();
 			AST ast = parser.parse(tokenStream);
+			ast.getChildren();
 		} catch (Throwable e) {
 			logger.error(e.getMessage(), e);
 			throw new FortranException(e.getMessage(), e);

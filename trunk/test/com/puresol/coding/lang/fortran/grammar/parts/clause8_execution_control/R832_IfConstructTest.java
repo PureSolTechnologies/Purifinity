@@ -58,4 +58,5 @@ public class R832_IfConstructTest extends TestCase {
 						+ "          INFO = 10                 \n"
 						+ "      END IF                        \n"));
 	}
+	
 }

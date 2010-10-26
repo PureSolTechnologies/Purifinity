@@ -1,4 +1,4 @@
-package com.puresol.coding.lang.fortran.grammar.parts.clause2_fortran_concepts;
+package com.puresol.coding.lang.fortran.grammar.parts.clause11_program_units;
 
 import static org.junit.Assert.*;
 
@@ -8,41 +8,25 @@ import org.junit.Test;
 
 import com.puresol.coding.lang.fortran.grammar.GrammarPartTester;
 
-public class R201_ProgramTest {
+public class R1101_MainProgramTest {
 
 	@Test
-	public void testProgram() {
+	public void testEmptyMainProgram() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester.test("program", "END PROGRAM\n"));
+		assertTrue(GrammarPartTester.test("main-program", "PROGRAM TEST\n"
+				+ "      END PROGRAM\n"));
 	}
 
 	@Test
-	public void testProgram2() {
-		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester.test("program", "PROGRAM TEST\n"
-				+ "*      COMMENT\n" + "END PROGRAM\n"));
-	}
-
-	@Test
-	public void testProgram3() {
-		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester.test("program", "PROGRAM TEST\n"
-				+ "*      COMMENT\n" + "      IMPLICIT NONE\n"
-				+ "END PROGRAM\n"));
-	}
-
-	@Test
-	public void testProgram4() {
-		Logger.getRootLogger().setLevel(Level.TRACE);
+	public void testMainProgram() {
+		Logger.getRootLogger().setLevel(Level.DEBUG);
 		assertTrue(GrammarPartTester
-				.test("program",
-						""
-						// +"PROGRAM TEST\n"
+				.test("main-program",
+						"PROGRAM TEST\n"
 						// + "*     COMMENT\n"
 						// + "      IMPLICIT NONE\n"
 						// + "      DOUBLE COMPLEX ALPHA\n"
 						// + "      INTEGER INCX,INCY,LDA,M,N\n"
-						//
 						// + "      DOUBLE COMPLEX A(LDA,*),X(*),Y(*)\n"
 						// + "      DOUBLE COMPLEX ZERO\n"
 						// + "      PARAMETER (ZERO= (0.0D+0,0.0D+0))\n"
@@ -103,21 +87,6 @@ public class R201_ProgramTest {
 								// + "      END IF\n"
 								// + "      RETURN\n" + "      END\n"
 								+ "      END PROGRAM\n"));
-	}
-
-	@Test
-	public void testSubroutine() {
-		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester.test("program",
-				"SUBROUTINE ZGERC(M,N,ALPHA,X,INCX,Y,INCY,A,LDA)\n"
-						+ "END SUBROUTINE\n"));
-	}
-
-	@Test
-	public void testSubroutine2() {
-		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester.test("program",
-				"SUBROUTINE ZGERC(M,N,ALPHA,X,INCX,Y,INCY,A,LDA)\n"
-						+ "DOUBLE COMPLEX DC\n" + "END SUBROUTINE\n"));
+		Logger.getRootLogger().info("done.");
 	}
 }

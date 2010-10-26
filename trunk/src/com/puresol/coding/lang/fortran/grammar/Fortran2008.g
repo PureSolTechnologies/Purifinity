@@ -11,7 +11,7 @@
 	grammar.checks=true;
 	grammar.ignore-case=true;
 	lexer="com.puresol.uhura.lexer.RegExpLexer";
-	parser="com.puresol.uhura.parser.lr.LALR1Parser";
+	parser="com.puresol.uhura.parser.lr.LR1Parser";
 	parser.backtracking=true;
  
 /****************************************************************************
@@ -149,10 +149,10 @@
 	LOGICAL_LITERAL_CONSTANT : "(\\.TRUE\\.|\\.FALSE\\.)(_"
 			KIND_PARAM ")?";
 	BOZ_LITERAL_CONSTANT : 
-	"("	BINARY_CONSTANT
-	"|"	OCTAL_CONSTANT
-	"|"	HEX_CONSTANT
-	")"	;
+		"("	BINARY_CONSTANT
+		"|"	OCTAL_CONSTANT
+		"|"	HEX_CONSTANT
+		")"	;
 	NAME_LITERAL : 
 		LETTER ALPHANUMERIC_CHARACTER "{0,62}"
 	;
@@ -181,8 +181,7 @@
  */
 
 	stmt-end :
-		LINE_TERMINATOR
-	| 	LINE_COMMENT
+		( LINE_TERMINATOR | LINE_COMMENT ) +
 	;
  
 /***************

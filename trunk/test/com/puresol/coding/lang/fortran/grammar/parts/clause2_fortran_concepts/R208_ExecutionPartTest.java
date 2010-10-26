@@ -13,13 +13,12 @@ public class R208_ExecutionPartTest extends TestCase {
 	@Test
 	public void testSubroutineSubprogram() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester
-				.test("execution-part",
-						"      IF( N.GT.0 ) THEN                           \n"
-								+ "      CALL ATL_F77WRAP_SCOPY( N )       \n"
-								+ "      END IF                            \n"
-								+ "      RETURN                            \n"
-								+ "      write (*,*) 'This isn''t a Test!' \n"));
+		assertTrue(GrammarPartTester.test("execution-part",
+				"      IF( N.GT.0 ) THEN                           \n"
+						+ "      CALL ATL_F77WRAP_SCOPY( N )       \n"
+						+ "      END IF                            \n"
+						+ "      RETURN                            \n"
+						+ "      write (*,*) 'This isn''t a Test!' \n"));
 	}
 
 	@Test
@@ -96,5 +95,25 @@ public class R208_ExecutionPartTest extends TestCase {
 								+ "          CONTINUE\n"
 								+ "      END IF      \n"
 								+ "      RETURN      \n"));
+	}
+
+	@Test
+	public void testSubroutineSubprogram4() {
+		Logger.getRootLogger().setLevel(Level.TRACE);
+		assertTrue(GrammarPartTester
+				.test("execution-part",
+						"        IF ((M .EQ. 0) .OR. (N .EQ. 0) .OR. (ALPHA .EQ. ZERO)) RETURN\n"));
+	}
+
+	@Test
+	public void testSubroutineSubprogram5() {
+		Logger.getRootLogger().setLevel(Level.TRACE);
+		assertTrue(GrammarPartTester
+				.test("execution-part",
+						"      IF (INFO.NE.0) THEN\n"
+								+ "          CALL XERBLA('ZGERC ',INFO)\n"
+								+ "          RETURN\n"
+								+ "      END IF\n"
+								+ "        IF ((M .EQ. 0) .OR. (N .EQ. 0) .OR. (ALPHA .EQ. ZERO)) RETURN\n"));
 	}
 }
