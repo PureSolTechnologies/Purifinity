@@ -113,9 +113,13 @@ public class First implements Serializable {
 					// terminal is found and there is nothing to proceed...
 					break;
 				}
-				firstSet.addAll(firstGrammar.get(construction.getName()));
-				if (!firstGrammar.get(construction.getName()).contains(
-						EmptyTerminal.getInstance())) {
+				Set<Terminal> terminals = firstGrammar.get(construction
+						.getName());
+				if (terminals == null) {
+					continue;
+				}
+				firstSet.addAll(terminals);
+				if (!terminals.contains(EmptyTerminal.getInstance())) {
 					break;
 				}
 			}

@@ -105,6 +105,9 @@ public class Follow implements Serializable {
 				continue;
 			}
 			Set<Terminal> followSet = follow.get(construction.getName());
+			if (followSet == null) {
+				continue;
+			}
 			int startSize = followSet.size();
 			/*
 			 * For the found non-terminal find the following constructions by
@@ -114,6 +117,9 @@ public class Follow implements Serializable {
 				for (int j = i + 1; j < constructions.size(); j++) {
 					Construction followingConstruction = constructions.get(j);
 					Set<Terminal> firstSet = first.get(followingConstruction);
+					if (firstSet == null) {
+						continue;
+					}
 					for (Terminal follower : firstSet) {
 						if (!follower.equals(EmptyTerminal.getInstance())) {
 							followSet.add(follower);

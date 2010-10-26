@@ -1,8 +1,10 @@
 package com.puresol.uhura.parser.lr;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -79,23 +81,17 @@ public class LALR1ItemSetCollection {
 		int run = 0;
 		do {
 			run++;
-			changed = iterateLookaheadCalculation(run);
+			logger.trace("Calculate lookahead. Run: " + run);
+			changed = lookaheadCalculationIteration(run);
 		} while (changed);
 	}
 
-	private boolean iterateLookaheadCalculation(int run) {
-		boolean changed = false;
-		int currentItemSetCount = itemSetCollection.size();
-		for (int stateId = 0; stateId < currentItemSetCount; stateId++) {
+	private boolean lookaheadCalculationIteration(int run) {
+		Map<Integer, List<LR1Item>> newItems = new HashMap<Integer, List<LR1Item>>();
+		for (int stateId = 0; stateId < itemSetCollection.size(); stateId++) {
+			newItems.put(stateId, new ArrayList<LR1Item>());
 			LR1ItemSet lr1ItemSet = itemSetCollection.get(stateId);
-			int kernelItemId = 0;
 			for (LR1Item lr1Item : lr1ItemSet.getKernelItems()) {
-				logger.trace("state: " + stateId + " / "
-						+ itemSetCollection.size() + "; kernel: "
-						+ kernelItemId + " / "
-						+ lr1ItemSet.getKernelItems().size());
-
-				kernelItemId++;
 				LR1ItemSet closure = closure1.calc(lr1Item);
 				for (LR1Item closureItem : closure.getAllItems()) {
 					if (closureItem.getLookahead().equals(DUMMY_TERMINAL)) {
@@ -105,16 +101,36 @@ public class LALR1ItemSetCollection {
 					LR1Item newItem = new LR1Item(closureItem.getProduction(),
 							closureItem.getPosition() + 1,
 							closureItem.getLookahead());
-					if (addNewLookahead(stateId, newItem)) {
-						changed = true;
-					}
+					newItems.get(stateId).add(newItem);
 				}
-
 			}
 		}
 		if (run == 1) {
-			addNewLookahead(0, new LR1Item(grammar.getProductions().get(0), 0,
-					FinishTerminal.getInstance()));
+			newItems.get(0).add(
+					new LR1Item(grammar.getProductions().get(0), 0,
+							FinishTerminal.getInstance()));
+		}
+		return addNewItems(newItems);
+	}
+
+	private boolean addNewItems(Map<Integer, List<LR1Item>> newItems) {
+		boolean changed = false;
+		for (Integer stateId : newItems.keySet()) {
+			Runtime runtime = Runtime.getRuntime();
+			long free = runtime.freeMemory() / 1024 / 1024;
+			long total = runtime.totalMemory() / 1024 / 1024;
+			long max = runtime.maxMemory() / 1024 / 1024;
+			if (logger.isTraceEnabled()) {
+				logger.trace("state: " + stateId + " / "
+						+ itemSetCollection.size() + " (free mem: " + free
+						+ "MB; total mem: " + total + "MB; max mem: " + max
+						+ "MB)");
+			}
+			for (LR1Item newItem : newItems.get(stateId)) {
+				if (addNewLookahead(stateId, newItem)) {
+					changed = true;
+				}
+			}
 		}
 		return changed;
 	}
