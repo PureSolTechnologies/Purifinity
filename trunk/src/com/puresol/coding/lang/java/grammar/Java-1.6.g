@@ -438,6 +438,7 @@ HELPER
 	STAR: "\\*" ;
 	SLASH: "\\*" ;
 	AMPERSAND: "&" ;
+	AT: "@" ;
 	
 /****************************************************************************
  * P R O D U C T I O N S
@@ -940,3 +941,245 @@ HELPER
  9 Interfaces
  ************/
  
+ /* 9.1 Interface Declarations */
+
+	InterfaceDeclaration:
+		NormalInterfaceDeclaration
+	|	AnnotationTypeDeclaration
+	;
+		
+	NormalInterfaceDeclaration:
+		InterfaceModifiers ? INTERFACE Identifier TypeParameters ? ExtendsInterfaces ? InterfaceBody
+  	;
+  	
+  	InterfaceModifiers:
+		InterfaceModifier
+	|	InterfaceModifiers InterfaceModifier
+	;
+	
+	InterfaceModifier:
+		Annotation
+	|	PUBLIC
+	|	PROTECTED
+	|	PRIVATE
+	|	ABSTRACT
+	|	STATIC
+	|	STRICTFP
+	;
+	
+	ExtendsInterfaces:
+		EXTENDS InterfaceType
+	|	ExtendsInterfaces COMMA InterfaceType
+	;
+	
+	InterfaceBody:
+		LCURLY InterfaceMemberDeclarations ? RCURLY
+	;
+	
+	InterfaceMemberDeclarations:
+		InterfaceMemberDeclaration
+	|	InterfaceMemberDeclarations InterfaceMemberDeclaration
+	;
+		
+	InterfaceMemberDeclaration:
+		ConstantDeclaration
+	|	AbstractMethodDeclaration
+	|	ClassDeclaration
+	|	InterfaceDeclaration
+	|	SEMICOLON
+	;
+	
+/* 9.3 Field (Constant) Declarations */
+
+	ConstantDeclaration:
+		ConstantModifiers ? Type VariableDeclarators SEMICOLON
+	;
+	
+	ConstantModifiers:
+		ConstantModifier
+	|	ConstantModifers ConstantModifier
+	;
+	 
+	ConstantModifier:
+		Annotation
+	|	PUBLIC
+	|	STATIC
+	|	FINAL
+	;
+	
+/* 9.4 Abstract Method Declarations */
+
+	AbstractMethodDeclaration:
+		AbstractMethodModifiers ? TypeParameters ? ResultType MethodDeclarator Throws ? SEMICOLON
+	;
+	
+	AbstractMethodModifiers:
+		AbstractMethodModifier
+	|	AbstractMethodModifiers AbstractMethodModifier
+	;
+	
+	AbstractMethodModifier:
+		Annotation
+	|	PUBLIC
+	|	ABSTRACT
+	;
+	
+/* 9.6 Annotation Types */
+
+	AnnotationTypeDeclaration:
+		InterfaceModifiers ? AT INTERFACE Identifier AnnotationTypeBody
+	;
+	
+	AnnotationTypeBody:
+		LCURLY AnnotationTypeElementDeclarations ? RCURLY
+	;
+	
+	AnnotationTypeElementDeclarations:
+		AnnotationTypeElementDeclaration
+	|	AnnotationTypeElementDeclarations AnnotationTypeElementDeclaration
+	;
+	
+	AnnotationTypeElementDeclaration:
+		AbstractMethodModifiers ? Type Identifier LPAREN RPAREN DefaultValue ? SEMICOLON
+	|	ConstantDeclaration
+	|	ClassDeclaration
+	|	InterfaceDeclaration
+	|	EnumDeclaration
+	|	AnnotationTypeDeclaration
+	|	SEMICOLON
+	;
+	
+	DefaultValue:
+		DEFAULT ElementValue
+	;
+	
+/* 9.7 Annotations */
+
+	Annotations:
+		Annotation
+	|	Annotations Annotation
+	;
+	
+	Annotation:
+		NormalAnnotation
+	|	MarkerAnnotation
+	|	SingleElementAnnotation
+	;
+	
+	NormalAnnotation:
+		AT TypeName LPAREN ElementValuePairs ? RPAREN
+	;
+
+	ElementValuePairs:
+		ElementValuePair
+	|	ElementValuePairs COMMA ElementValuePair
+	;
+	
+	ElementValuePair:
+		Identifier EQUALS ElementValue
+	;
+	
+	ElementValue:
+		ConditionalExpression
+	|	Annotation
+	|	ElementValueArrayInitializer
+	;
+	
+	ElementValueArrayInitializer:
+		LCURLY ElementValues ? COMMA ? RCURLY
+	;
+	
+	ElementValues:
+		ElementValue
+	|	ElementValues COMMA ElementValue
+	;
+	
+	MarkerAnnotation:
+		AT TypeName
+	;
+	
+	SingleElementAnnotation:
+		AT TypeName LPAREN ElementValue RPAREN
+	;
+
+/*********
+ 10 Arrays
+ *********/
+ 
+ /* 10.6 Array Initializers */
+ 
+ 	ArrayInitializer:
+		LCURLY VariableInitializers ? COMMA ? RCURLY
+	;
+	
+	VariableInitializers:
+		VariableInitializer
+	|	VariableInitializers COMMA VariableInitializer
+	;
+
+/************************	
+ 14 Blocks and Statements
+ ************************/
+ 
+/* 14.2 Blocks */
+
+	Block:
+		LCURLY BlockStatements ? RCURLY
+	;
+	
+	BlockStatements:
+		BlockStatement
+	|	BlockStatements BlockStatement
+	;
+	
+	BlockStatement:
+		LocalVariableDeclarationStatement
+	|	ClassDeclaration
+	|	Statement
+	;
+	
+/* 14.4 Local Variable Declaration Statements */
+
+	LocalVariableDeclarationStatement:
+		LocalVariableDeclaration SEMICOLON
+	;
+	
+	LocalVariableDeclaration:
+		VariableModifiers Type VariableDeclarators
+	;
+
+/* 14.5 Statements */
+
+	Statement:
+		StatementWithoutTrailingSubstatement
+	|	LabeledStatement
+	|	IfThenStatement
+	|	IfThenElseStatement
+	|	WhileStatement
+	|	ForStatement
+	;
+	
+	StatementWithoutTrailingSubstatement:
+		Block
+	|	EmptyStatement
+	|	ExpressionStatement
+	|	AssertStatement
+	|	SwitchStatement
+	|	DoStatement
+	|	BreakStatement
+	|	ContinueStatement
+	|	ReturnStatement
+	|	SynchronizedStatement
+	|	ThrowStatement
+	|	TryStatement
+	;
+	
+	StatementNoShortIf:
+		StatementWithoutTrailingSubstatement
+	|	LabeledStatementNoShortIf
+	|	IfThenElseStatementNoShortIf
+	|	WhileStatementNoShortIf
+	|	ForStatementNoShortIf
+	;
+	
+/* 14.6 The Empty Statement */
