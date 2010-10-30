@@ -6,7 +6,6 @@ import org.osgi.framework.BundleContext;
 
 import com.puresol.coding.ProgrammingLanguages;
 import com.puresol.coding.evaluator.Evaluators;
-import com.puresol.coding.lang.java.evaluator.TranslatorImplementationFactory;
 
 /**
  * This class is used as OSGi bundle activator. This class only registers and

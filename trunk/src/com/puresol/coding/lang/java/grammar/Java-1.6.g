@@ -8,10 +8,10 @@
  * O P T I O N S
  ****************************************************************************/ 
 OPTIONS
-	grammar.checks=false; // TODO
+	grammar.checks=true;
 	grammar.ignore-case=false;
 	lexer="com.puresol.uhura.lexer.RegExpLexer";
-	parser="com.puresol.uhura.parser.lr.SLR1Parser";
+	parser="com.puresol.uhura.parser.lr.LR1Parser";
 	parser.backtracking=true;
  
 /****************************************************************************
@@ -51,76 +51,30 @@ HELPER
 		"(\\n|\\r|\\r\\n)"
 	;
 		
-	InputCharacter:
-		"[^\\r\\n]"
-	;
-	
-	/*****************************	
-	 3.5 Input Elements and Tokens
-	 *****************************/
-		
-	/* This token is not used, but from the lexer it self through the TOKEN definitions...	
-	Input:
-		InputElements Sub "?"
-	;
-	*/
-		
-	/* This token is not used, but from the lexer it self through the TOKEN definitions...	
-	InputElements:
-		InputElement "*"
-	;
-	*/
-		
-	/* This token is not used, but from the lexer it self through the TOKEN definitions...	
-	InputElement:
-		WhiteSpace
-	|	Comment
-	|	Token
-	;
-	*/
-	
-	/* This token is not used, but from the lexer it self through the TOKEN definitions...	
-	Token:
-		Identifier
-	|	Keyword
-	|	Literal
-	|	Separator
-	|	Operator
-	;
-	*/
-		
-	
 	/************	
 	 3.7 Comments
 	 ************/
 		
 	TraditionalComment:
-		"/\\*(\\*[^/]|[^*]+)\\*/"
+		"/\\*" CommentTail
 	;
 		
 	EndOfLineComment:
-		"//[^\\n\\r]*" LineTerminator  
+		"//" CharactersInLine LineTerminator  
 	;
 		
 	CommentTail:
-		"(\\*|" CommentTailStar	"|" NotStar CommentTail ")"
-	;
-		
-	CommentTailStar:
-		"(/|\\*" CommentTailStar "|" NotStarNotSlash CommentTail ")"
+		"(" NotStar "+|\\*+(?!/))*\\*/"
 	;
 		
 	NotStar:
-		"([^*]|" LineTerminator ")"
-	;
-		
-	NotStarNotSlash:
-		"([^*/]|" LineTerminator ")"
+		"[^*]"
 	;
 		
 	CharactersInLine:
 		InputCharacter "*"
 	;
+	InputCharacter: "[^\\n\\r]" ;
 
 	/***************		
 	 3.8 Identifiers
@@ -132,7 +86,7 @@ HELPER
 	;
 		
 	JavaLetter:
-		"[a-zA-Z]"
+		"[_a-zA-Z]"
 	;
 		
 	JavaLetterOrDigit:
@@ -144,9 +98,6 @@ HELPER
 	 *************/
 
 	/* 3.10.1 Integer Literals */
-	IntegerLiteral:
-		"(" DecimalIntegerLiteral "|" HexIntegerLiteral "|" OctalIntegerLiteral ")"
-	;
 	
 	DecimalIntegerLiteral:
 		DecimalNumeral IntegerTypeSuffix "?"
@@ -207,15 +158,11 @@ HELPER
 		
 	/* 3.10.2 Floating-Point Literals */
 
-	FloatingPointLiteral:
-		"(" DecimalFloatingPointLiteral "|" HexadecimalFloatingPointLiteral ")"
-	;
-	
 	DecimalFloatingPointLiteral:
-	"("	Digits "\\." Digits ? ExponentPart ? FloatTypeSuffix ?
-	"|"	"\\." Digits ExponentPart ? FloatTypeSuffix ?
-	"|"	Digits ExponentPart FloatTypeSuffix ?
-	"|"	Digits ExponentPart ? FloatTypeSuffix
+	"("	Digits "\\.(" Digits ")?(" ExponentPart ")?(" FloatTypeSuffix ")?"
+	"|"	"\\." Digits "(" ExponentPart ")?(" FloatTypeSuffix ")?"
+	"|"	Digits ExponentPart "(" FloatTypeSuffix ")?"
+	"|"	Digits "(" ExponentPart ")?" FloatTypeSuffix
 	")"
 	;
 	
@@ -259,23 +206,14 @@ HELPER
 	;
 
 	/* 3.10.3 Boolean Literals */
-	BooleanLiteral:
-		"(true|false)"
-	;
 
 	/* 3.10.4 Character Literals */
-	CharacterLiteral:
-		"(\\'" SingleCharacter "\\'|\\'" EscapeSequence "\\')"
-	;
 	
 	SingleCharacter:
 		"[^\\'\\\\]"
 	;
 
 	/* 3.10.5 String Literals */
-	StringLiteral:		
-		"\"" StringCharacters "?\""
-	;
 	
 	StringCharacters:
 		StringCharacter "*"
@@ -315,9 +253,6 @@ HELPER
 	;
 		
 	/* 3.10.7 The Null Literal */
-	NullLiteral:
-		"null"
-	;
 
 	/*************** 
 	 3.11 Separators
@@ -348,73 +283,94 @@ HELPER
 		"( |\\t|\\f|" LineTerminator ")" [hidden]
 	;
 	
-	/**************
-	  3.9 Keywords
-	***************/
-
-	ABSTRACT : "abstract" ;
-	ASSERT : "assert" ;
-	BOOLEAN : "boolean" ;
-	BREAK : "break" ;
-	BYTE : "byte" ;
-	CASE : "case" ;
-	CLASS : "class" ;
-	CONTINUE : "continue" ;
-	CATCH : "catch" ;
-	CHAR : "char" ;
-	CONST : "const" ;
-	DEFAULT : "default" ;
-	DO : "do" ;
-	DOUBLE : "double" ;
-	ELSE : "else" ;
-	ENUM : "enum" ;
-	EXTENDS : "extends" ;
-	FINAL : "final" ;
-	FINALLY : "finally" ;
-	FLOAT : "float" ;
-	FOR : "for" ;
-	GOTO : "goto" ;
-	IF : "if" ;
-	IMPLEMENTS : "implements" ;
-	IMPORT : "import" ;
-	INSTANCE : "instanceof" ;
-	INT : "int" ;
-	INTERFACE : "interface" ;
-	LONG : "long" ;
-	NATIVE : "native" ;
-	NEW : "new" ;
-	PACKAGE : "package" ;
-	PRIVATE : "private" ;
-	PUBLIC : "public" ;
-	RETURN : "return" ;
-	SHORT : "short" ;
-	STATIC : "static" ;
-	STRICTFP : "strictfp" ;
-	SUPER : "super" ;
-	SWITCH : "switch" ;
-	SYNCHRONIZED : "synchronized" ;
-	THIS : "this" ;
-	THROW : "throw" ;
-	THROWS : "throws" ;
-	TRANSIENT : "transient" ;
-	TRY : "try" ;
-	VOID : "void" ;
-	VOLATILE : "volatile" ;
-	WHILE : "while" ;
-
 	/************	
 	 3.7 Comments
 	 ************/
 	Comment:
-		"(" TraditionalComment "|" EndOfLineComment ")"
+		"(" TraditionalComment "|" EndOfLineComment ")" [hidden]
 	;
 
-	/***************		
-	 3.8 Identifiers
-	 ***************/
+	/**************
+	  3.9 Keywords
+	***************/
+
+	ABSTRACT : "abstract(?!\\w)" ;
+	ASSERT : "assert(?!\\w)" ;
+	BOOLEAN : "boolean(?!\\w)" ;
+	BREAK : "break(?!\\w)" ;
+	BYTE : "byte(?!\\w)" ;
+	CASE : "case(?!\\w)" ;
+	CLASS : "class(?!\\w)" ;
+	CONTINUE : "continue(?!\\w)" ;
+	CATCH : "catch(?!\\w)" ;
+	CHAR : "char(?!\\w)" ;
+	CONST : "const(?!\\w)" ;
+	DEFAULT : "default(?!\\w)" ;
+	DO : "do(?!\\w)" ;
+	DOUBLE : "double(?!\\w)" ;
+	ELSE : "else(?!\\w)" ;
+	ENUM : "enum(?!\\w)" ;
+	EXTENDS : "extends(?!\\w)" ;
+	FINAL : "final(?!\\w)" ;
+	FINALLY : "finally(?!\\w)" ;
+	FLOAT : "float(?!\\w)" ;
+	FOR : "for(?!\\w)" ;
+	GOTO : "goto(?!\\w)" ;
+	IF : "if(?!\\w)" ;
+	IMPLEMENTS : "implements(?!\\w)" ;
+	IMPORT : "import(?!\\w)" ;
+	INSTANCEOF : "instanceof(?!\\w)" ;
+	INT : "int(?!\\w)" ;
+	INTERFACE : "interface(?!\\w)" ;
+	LONG : "long(?!\\w)" ;
+	NATIVE : "native(?!\\w)" ;
+	NEW : "new(?!\\w)" ;
+	PACKAGE : "package(?!\\w)" ;
+	PRIVATE : "private(?!\\w)" ;
+	PROTECTED : "protected(?!\\w)" ;
+	PUBLIC : "public(?!\\w)" ;
+	RETURN : "return(?!\\w)" ;
+	SHORT : "short(?!\\w)" ;
+	STATIC : "static(?!\\w)" ;
+	STRICTFP : "strictfp(?!\\w)" ;
+	SUPER : "super(?!\\w)" ;
+	SWITCH : "switch(?!\\w)" ;
+	SYNCHRONIZED : "synchronized(?!\\w)" ;
+	THIS : "this(?!\\w)" ;
+	THROW : "throw(?!\\w)" ;
+	THROWS : "throws(?!\\w)" ;
+	TRANSIENT : "transient(?!\\w)" ;
+	TRY : "try(?!\\w)" ;
+	VOID : "void(?!\\w)" ;
+	VOLATILE : "volatile(?!\\w)" ;
+	WHILE : "while(?!\\w)" ;
+
+
+	/*************
+	 3.10 Literals
+	 *************/
+	IntegerLiteral:
+		"(" DecimalIntegerLiteral "|" HexIntegerLiteral "|" OctalIntegerLiteral ")(?!\\w)"
+	;
+
+	FloatingPointLiteral:
+		"(" DecimalFloatingPointLiteral "|" HexadecimalFloatingPointLiteral ")(?!\\w)"
+	;
 	
-	Identifier:
-		IdentifierChars
+	BooleanLiteral:
+		"(true|false)(?!\\w)"
+	;
+
+	CharacterLiteral:
+		"(\\'" SingleCharacter "\\'|\\'" EscapeSequence "\\')"
+	;
+	
+	StringLiteral:		
+		"\"" StringCharacters "?\""
+	;
+	
+	NullLiteral:
+		"null(?!\\w)"
 	;
 
 	/**************
@@ -428,7 +384,7 @@ HELPER
 	LCURLY: "\\{" ;
 	RCURLY: "\\}" ;
 	LRECTANGULAR: "\\[" ;
-	LRECTANGULAR: "\\]" ;
+	RRECTANGULAR: "\\]" ;
 	DOT: "\\." ;
 	COMMA: "," ;
 	COLON: ":" ;
@@ -436,10 +392,28 @@ HELPER
 	DOLLAR: "\\$" ;
 	CARET: "\\^" ;
 	STAR: "\\*" ;
-	SLASH: "\\*" ;
+	SLASH: "/" ;
+	PERCENT: "%";
+	PLUS: "\\+" ;
+	MINUS: "-";
 	AMPERSAND: "&" ;
 	AT: "@" ;
+	EXCLAMATION_MARK: "!" ;
+	QUESTION_MARK : "\\?" ;
+	TILDE : "~" ;
+	VERTICAL_BAR : "\\|" ;
 	
+	/***************		
+	 3.8 Identifiers
+	 ***************/
+
+	/*
+	 * The identifier needs to be first, otherwise keywords are caught by this definition...
+	 */	
+	Identifier:
+		IdentifierChars
+	;
+
 /****************************************************************************
  * P R O D U C T I O N S
  ****************************************************************************/ 
@@ -679,10 +653,10 @@ HELPER
 	
 	ClassModifiers:
 		ClassModifier
-		ClassModifiers ClassModifier
+	|	ClassModifiers ClassModifier
 	;
 	
-	ClassModifier: one of
+	ClassModifier:
 		Annotation
 	|	PUBLIC
 	|	PROTECTED
@@ -693,6 +667,15 @@ HELPER
 	|	STRICTFP
 	;
 	
+	TypeParameters :
+		LESS_THAN TypeParameterList GREATER_THAN
+	;
+	
+	TypeParameterList :
+		TypeParameterList COMMA TypeParameter
+	|	TypeParameter
+	;
+
 	Super:
 		EXTENDS ClassType
 	;
@@ -788,7 +771,7 @@ HELPER
 	;
 	
 	MethodDeclarator:
-		Identifier LPAREN FormalParameterListopt RPAREN
+		Identifier LPAREN FormalParameterList ? RPAREN
 	|	MethodDeclarator LRECTANGULAR RRECTANGULAR	// is obsolete, but can be found...
 	;
 	
@@ -845,7 +828,7 @@ HELPER
 	
 	ExceptionTypeList:
 		ExceptionType
-		ExceptionTypeList COMMA ExceptionType
+	|	ExceptionTypeList COMMA ExceptionType
 	;
 	
 	ExceptionType:
@@ -876,7 +859,7 @@ HELPER
 	;
 	
 	ConstructorDeclarator:
-		TypeParameters ? SimpleTypeName LPAREN FormalParameterList ? RPAREN
+		TypeParameters ? TypeName LPAREN FormalParameterList ? RPAREN
 	;
 	
 	ConstructorModifiers:
@@ -896,8 +879,8 @@ HELPER
 	;
 	
 	ExplicitConstructorInvocation:
-		NonWildTypeArguments ? THIS LPAREN ArgumentListopt RPAREN SEMICOLON
-	|	NonWildTypeArguments ? SUPER LPAREN ArgumentListopt RPAREN SEMICOLON
+		NonWildTypeArguments ? THIS LPAREN ArgumentList ? RPAREN SEMICOLON
+	|	NonWildTypeArguments ? SUPER LPAREN ArgumentList ? RPAREN SEMICOLON
 	|	Primary DOT NonWildTypeArguments ? SUPER LPAREN ArgumentList ? RPAREN SEMICOLON
 	;
 	
@@ -997,7 +980,7 @@ HELPER
 	
 	ConstantModifiers:
 		ConstantModifier
-	|	ConstantModifers ConstantModifier
+	|	ConstantModifiers ConstantModifier
 	;
 	 
 	ConstantModifier:
@@ -1231,8 +1214,8 @@ HELPER
 /* 14.10 The assert Statement */
 
 	AssertStatement:
-		ASSERT Expression1 SEMICOLON
-	|	ASSERT Expression1 COLON Expression2 SEMICOLON
+		ASSERT Expression SEMICOLON
+	|	ASSERT Expression COLON Expression SEMICOLON
 	;
 	
 /* 14.11 The switch Statement */
@@ -1242,7 +1225,7 @@ HELPER
 	;
 	
 	SwitchBlock:
-		LCURLY SwitchBlockStatementGroups ? SwitchLabelsopt RCURLY
+		LCURLY SwitchBlockStatementGroups ? SwitchLabels ? RCURLY
 	;
 	
 	SwitchBlockStatementGroups:
@@ -1297,7 +1280,7 @@ HELPER
 	;
 	
 	ForStatementNoShortIf:
-		FOR LPAREN ForInitopt SEMICOLON Expression ? SEMICOLON ForUpdate ? RPAREN
+		FOR LPAREN ForInit ? SEMICOLON Expression ? SEMICOLON ForUpdate ? RPAREN
 	|	StatementNoShortIf
 	;
 	
@@ -1372,3 +1355,272 @@ HELPER
 /**************
  15 Expressions
  **************/
+ 
+/* 15.8 Primary Expressions */
+
+	Primary:
+		PrimaryNoNewArray
+	|	ArrayCreationExpression
+	;
+	
+	PrimaryNoNewArray:
+		Literal
+	|	Type DOT CLASS
+	|	VOID DOT CLASS
+	|	THIS
+	|	ClassName DOT THIS
+	|	LPAREN Expression RPAREN
+	|	ClassInstanceCreationExpression
+	|	FieldAccess
+	|	MethodInvocation
+	|	ArrayAccess
+	;	
+	
+	ClassName:
+		Identifier
+	;
+	
+	Literal:
+		IntegerLiteral
+	|	FloatingPointLiteral
+	|	BooleanLiteral
+	|	CharacterLiteral
+	|	StringLiteral
+	|	NullLiteral
+	;
+
+/* 15.9 Class Instance Creation Expressions */
+
+	ClassInstanceCreationExpression:
+		NEW TypeArguments ? ClassOrInterfaceType LPAREN ArgumentList ? RPAREN ClassBody ?
+	|	Primary DOT NEW TypeArguments ? Identifier TypeArguments? LPAREN ArgumentList ? RPAREN ClassBody ?
+	;
+	
+	ArgumentList:
+		Expression
+	|	ArgumentList COMMA Expression
+	;
+	
+/* 15.10 Array Creation Expressions */
+
+	ArrayCreationExpression:
+		NEW PrimitiveType DimExprs Dims ?
+	|	NEW ClassOrInterfaceType DimExprs Dims ?
+	|	NEW PrimitiveType Dims ArrayInitializer
+	|	NEW ClassOrInterfaceType Dims ArrayInitializer
+	;
+		
+	DimExprs:
+		DimExpr
+	|	DimExprs DimExpr
+	;
+	
+	DimExpr:
+		LRECTANGULAR Expression RRECTANGULAR
+	;
+	
+	Dims:
+		LRECTANGULAR RRECTANGULAR
+	|	Dims LRECTANGULAR RRECTANGULAR
+	;
+
+/* 15.11 Field Access Expressions */
+
+	FieldAccess:
+		Primary DOT Identifier
+	|	SUPER DOT Identifier
+	|	ClassName DOT SUPER DOT Identifier
+	;
+	
+/* 15.12 Method Invocation Expressions */
+
+	MethodInvocation:
+		MethodName LPAREN ArgumentList ? RPAREN
+	|	Primary DOT NonWildTypeArguments ? Identifier LPAREN ArgumentList ? RPAREN
+	|	SUPER DOT NonWildTypeArguments Identifier LPAREN ArgumentList ? RPAREN
+	|	ClassName DOT SUPER DOT NonWildTypeArguments ? Identifier LPAREN ArgumentList ? RPAREN
+	|	TypeName DOT NonWildTypeArguments Identifier LPAREN ArgumentList ? RPAREN
+	;
+
+/* 15.13 Array Access Expressions */
+
+	ArrayAccess:
+		ExpressionName LRECTANGULAR Expression RRECTANGULAR
+	|	PrimaryNoNewArray LRECTANGULAR Expression RRECTANGULAR
+	;
+	
+/* 15.14 Postfix Expressions */
+
+	PostfixExpression:
+		Primary
+	|	ExpressionName
+	|	PostIncrementExpression
+	|	PostDecrementExpression
+	;
+	
+	PostIncrementExpression:
+		PostfixExpression PLUS PLUS
+	;
+	
+	PostDecrementExpression:
+		PostfixExpression MINUS MINUS
+	;
+	
+/* 15.15 Unary Operators */
+
+	UnaryExpression:
+		PreIncrementExpression
+	|	PreDecrementExpression
+	|	PLUS UnaryExpression
+	|	MINUS UnaryExpression
+	|	UnaryExpressionNotPlusMinus
+	;
+	
+	PreIncrementExpression:
+		PLUS PLUS UnaryExpression
+	;
+	
+	PreDecrementExpression:
+		MINUS MINUS UnaryExpression
+	;
+	
+	UnaryExpressionNotPlusMinus:
+		PostfixExpression
+	|	TILDE UnaryExpression
+	|	EXCLAMATION_MARK UnaryExpression
+	|	CastExpression
+	;
+	
+/* 15.16 Cast Expressions */
+
+	CastExpression:
+		LPAREN PrimitiveType Dims ? RPAREN UnaryExpression
+	|	LPAREN ReferenceType RPAREN UnaryExpressionNotPlusMinus
+	;
+	
+/* 15.17 Multiplicative Operators */
+
+	MultiplicativeExpression:
+		UnaryExpression
+	|	MultiplicativeExpression STAR UnaryExpression
+	|	MultiplicativeExpression SLASH UnaryExpression
+	|	MultiplicativeExpression PERCENT UnaryExpression
+	;
+
+/* 15.18 Additive Operators */
+
+	AdditiveExpression:
+		MultiplicativeExpression
+	|	AdditiveExpression PLUS MultiplicativeExpression
+	|	AdditiveExpression MINUS MultiplicativeExpression
+	;
+
+/* 15.19 Shift Operators */
+
+	ShiftExpression:
+		AdditiveExpression
+	|	ShiftExpression LESS_THAN LESS_THAN AdditiveExpression
+	|	ShiftExpression GREATER_THAN GREATER_THAN AdditiveExpression
+	|	ShiftExpression GREATER_THAN GREATER_THAN GREATER_THAN AdditiveExpression
+	;
+
+/* 15.20 Relational Operators */
+
+	RelationalExpression:
+		ShiftExpression
+	|	RelationalExpression LESS_THAN ShiftExpression
+	|	RelationalExpression GREATER_THAN ShiftExpression
+	|	RelationalExpression LESS_THAN EQUALS ShiftExpression
+	|	RelationalExpression GREATER_THAN EQUALS ShiftExpression
+	|	RelationalExpression INSTANCEOF ReferenceType
+	;
+
+/* 15.21 Equality Operators */
+
+	EqualityExpression:
+		RelationalExpression
+	|	EqualityExpression EQUALS EQUALS RelationalExpression
+	|	EqualityExpression EXCLAMATION_MARK EQUALS RelationalExpression
+	;
+
+/* 15.22 Bitwise and Logical Operators */
+
+	AndExpression:
+		EqualityExpression
+	|	AndExpression AMPERSAND EqualityExpression
+	;
+	
+	ExclusiveOrExpression:
+		AndExpression
+	|	ExclusiveOrExpression CARET AndExpression
+	;
+	
+	InclusiveOrExpression:
+		ExclusiveOrExpression
+	|	InclusiveOrExpression VERTICAL_BAR ExclusiveOrExpression
+	;
+
+/* 15.23 Conditional-And Operator && */
+
+	ConditionalAndExpression:
+		InclusiveOrExpression
+	|	ConditionalAndExpression AMPERSAND AMPERSAND InclusiveOrExpression
+	;
+
+/* 15.24 Conditional-Or Operator || */
+
+	ConditionalOrExpression:
+		ConditionalAndExpression
+	|	ConditionalOrExpression VERTICAL_BAR VERTICAL_BAR ConditionalAndExpression
+	;
+
+/* 15.25 Conditional Operator ? : */
+
+	ConditionalExpression:
+		ConditionalOrExpression
+	|	ConditionalOrExpression QUESTION_MARK Expression COLON ConditionalExpression
+	;
+
+/* 15.26 Assignment Operators */
+
+	AssignmentExpression:
+		ConditionalExpression
+	|	Assignment
+	;
+	
+	Assignment:
+		LeftHandSide AssignmentOperator AssignmentExpression
+	;
+	
+	LeftHandSide:
+		ExpressionName
+	|	FieldAccess
+	|	ArrayAccess
+	;
+	
+	AssignmentOperator:
+		EQUALS
+	|	STAR EQUALS
+	|	SLASH EQUALS
+	|	PERCENT EQUALS
+	|	PLUS EQUALS
+	|	MINUS EQUALS
+	|	LESS_THAN LESS_THAN EQUALS
+	|	GREATER_THAN GREATER_THAN EQUALS
+	|	GREATER_THAN GREATER_THAN GREATER_THAN EQUALS
+	|	AMPERSAND EQUALS
+	|	CARET EQUALS
+	|	VERTICAL_BAR EQUALS
+	;
+
+/* 15.27 Expression */
+
+	Expression:
+		AssignmentExpression
+	;
+
+/* 15.28 Constant Expression */
+
+	ConstantExpression:
+		Expression
+	;

@@ -4,11 +4,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 import com.puresol.coding.AbstractProgrammingLanguage;
 import com.puresol.coding.analysis.Analyzer;
+import com.puresol.utils.PersistenceException;
 
 /**
  * This is the base class for Java Programming Language. The lexical and
@@ -63,27 +62,6 @@ public class Java extends AbstractProgrammingLanguage {
 	@Override
 	protected String[] getValidFileSuffixes() {
 		return FILE_SUFFIXES;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public List<Class<? extends TokenDefinition>> getKeywords() {
-		return KEYWORDS;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public List<Class<? extends TokenDefinition>> getLiterals() {
-		return LITERALS;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public List<Class<? extends TokenDefinition>> getSymbols() {
-		return SYMBOLS;
 	}
 
 	@Override

@@ -1,1 +1,2 @@
 /deploy/make/macosx/deploy/SecurityBaseline.java
+/deploy/src/common/macosx/classes/com/sun/deploy/config/ConfigFactory.java
