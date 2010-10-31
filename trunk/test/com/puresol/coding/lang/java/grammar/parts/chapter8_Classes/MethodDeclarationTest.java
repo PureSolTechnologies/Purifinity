@@ -32,11 +32,18 @@ public class MethodDeclarationTest {
 								+ "InputStream s = Globals.class.getResourceAsStream(\"/build.id\");\n"
 								+ "if (s != null) {\n"
 								+ "BufferedReader br = new BufferedReader(new InputStreamReader(s));\n"
-								//+ "try {\n"
+								// + "try {\n"
 								+ "build = br.readLine();\n"
-								//+ "} catch(IOException e) { /* ignore */ }\n"
+								// + "} catch(IOException e) { /* ignore */ }\n"
 								+ "}\n"
 								+ "return (build == null || build.length() == 0) ? \"<internal>\" : build;\n"
 								+ "}"));
 	}
+
+	@Test
+	public void test4() {
+		assertTrue(GrammarPartTester.test("MethodDeclaration",
+				"public void setStops(GradientStop... stops) {\n" + "}"));
+	}
+
 }

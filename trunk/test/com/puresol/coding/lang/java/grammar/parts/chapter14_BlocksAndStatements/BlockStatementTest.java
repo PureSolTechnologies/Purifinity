@@ -38,6 +38,8 @@ public class BlockStatementTest {
 		Logger.getRootLogger().setLevel(Level.TRACE);
 		assertTrue(GrammarPartTester.test("BlockStatement",
 				"String build = null;"));
+		assertTrue(GrammarPartTester.test("BlockStatement",
+				"String name = super.getName();"));
 	}
 
 }

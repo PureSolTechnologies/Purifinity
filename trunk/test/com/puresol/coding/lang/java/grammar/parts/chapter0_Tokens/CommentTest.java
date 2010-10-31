@@ -23,8 +23,11 @@ public class CommentTest {
 
 			TokenStream tokenStream = lexer.lex(new StringReader(
 					"/* This is a traditional comment... */"));
-			assertEquals(1, tokenStream.size());
-			assertEquals("Comment", tokenStream.get(0).getName());
+			assertEquals(0, tokenStream.size());
+
+			tokenStream = lexer.lex(new StringReader(
+					"/* to select the \"client\" VM */"));
+			assertEquals(0, tokenStream.size());
 
 			tokenStream = lexer
 					.lex(new StringReader(
@@ -34,9 +37,7 @@ public class CommentTest {
 									+ "* Copyright (c) 2006, Oracle and/or its affiliates. All rights reserved.\n"
 									+ "* ORACLE PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.\n"
 									+ "*/"));
-			assertEquals(1, tokenStream.size());
-			assertEquals("Comment", tokenStream.get(0).getName());
-
+			assertEquals(0, tokenStream.size());
 		} catch (IOException e) {
 			e.printStackTrace();
 			fail("No exception was expected!");

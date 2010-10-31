@@ -36,16 +36,13 @@ public class JavaSourceCodeDistributionTest {
 	@Test
 	public void test() {
 		try {
-			Logger.getRootLogger().setLevel(Level.DEBUG);
+			Logger.getRootLogger().setLevel(Level.TRACE);
 			File file = new File("test/com/puresol/coding/lang/java/samples",
-					"CachedJarFile.java");
+					"AbstractGradient.java");
 			assertTrue(file.exists());
 			Java java = Java.getInstance();
 			Analyzer analyser = java.createAnalyser(file);
 			analyser.parse();
-		} catch (ClassInstantiationException e) {
-			e.printStackTrace();
-			fail("No exception was expected!");
 		} catch (AnalyzerException e) {
 			e.printStackTrace();
 			fail("No exception was expected!");
@@ -68,9 +65,20 @@ public class JavaSourceCodeDistributionTest {
 			Java java = Java.getInstance();
 			List<File> errors = new ArrayList<File>();
 			for (File file : files) {
+				if (file.getName().contains("-")) {
+					raFile.writeBytes(file.toString() + "\n");
+					successes.add(file.toString());
+					continue;
+				}
 				counter++;
 				System.out.print(ConsoleUtils.createPercentageBar(22,
 						(double) counter / (double) files.size(), true) + "\t");
+				System.out.print(successes.size()
+						/ (successes.size() + errors.size()) * 100.0);
+				System.out.print("%\t");
+				System.out
+						.print(Runtime.getRuntime().freeMemory() / 1024 / 1024);
+				System.out.print("MB\t");
 				System.out.println(file);
 				if (successes.contains(file.toString())) {
 					continue;
@@ -80,10 +88,7 @@ public class JavaSourceCodeDistributionTest {
 							INSTALL_DIRECTORY, file.toString()));
 					analyser.parse();
 					raFile.writeBytes(file.toString() + "\n");
-				} catch (ClassInstantiationException e) {
-					e.printStackTrace();
-					raFile.close();
-					return;
+					successes.add(file.toString());
 				} catch (AnalyzerException e) {
 					e.printStackTrace();
 					errors.add(file);

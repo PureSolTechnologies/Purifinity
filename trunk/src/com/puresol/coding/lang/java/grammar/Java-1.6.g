@@ -32,7 +32,7 @@ HELPER
 	;
 		
 	UnicodeMarker:
-		"(u|" UnicodeMarker "u)"
+		"(u+)"
 	;
 		
 	RawInputCharacter:
@@ -74,23 +74,23 @@ HELPER
 	CharactersInLine:
 		InputCharacter "*"
 	;
-	InputCharacter: "[^\\n\\r]" ;
+	
+	InputCharacter: "([^\\n\\r]|" UnicodeEscape ")" ;
 
 	/***************		
 	 3.8 Identifiers
 	 ***************/
-	
 	
 	IdentifierChars:
 		JavaLetter JavaLetterOrDigit "*"
 	;
 		
 	JavaLetter:
-		"[_a-zA-Z]"
+		"[a-zA-Z_$]"
 	;
 		
 	JavaLetterOrDigit:
-		"\\w"
+		"[a-zA-Z0-9_$]"
 	;
 
 	/*************
@@ -216,11 +216,11 @@ HELPER
 	/* 3.10.5 String Literals */
 	
 	StringCharacters:
-		StringCharacter "*"
+		StringCharacter "+"
 	;
 	
 	StringCharacter:
-		"([^\"\\\\]|" EscapeSequence ")"
+		'([^\\n\\r\\\"]|' UnicodeEscape "|" EscapeSequence ")"
 	;
 
 	/* 3.10.6 Escape Sequences for Character and String Literals */
@@ -362,11 +362,11 @@ HELPER
 	;
 
 	CharacterLiteral:
-		"(\\'" SingleCharacter "\\'|\\'" EscapeSequence "\\')"
+		"\\'(" SingleCharacter "|" EscapeSequence "|" UnicodeEscape ")\\'"
 	;
 	
 	StringLiteral:		
-		"\"" StringCharacters "?\""
+		"\"(" StringCharacters ")?\""
 	;
 	
 	NullLiteral:
@@ -585,7 +585,7 @@ HELPER
 /* 7.3 Compilation Units */
 
 	CompilationUnit:
-		PackageDeclaration ? ImportDeclarations ? TypeDeclarations ?
+		PackageDeclaration ? ImportDeclarations ? TypeDeclarations ? Sub ?
 	;
 
 	ImportDeclarations:
@@ -800,7 +800,7 @@ HELPER
 	;
 	
 	LastFormalParameter:
-		VariableModifiers Type DOT DOT DOT VariableDeclaratorId
+		VariableModifiers ? Type DOT DOT DOT VariableDeclaratorId
 	|	FormalParameter
 	;
 	
@@ -909,7 +909,7 @@ HELPER
 	;
 	
 	EnumConstant:
-		Annotations Identifier Arguments ? ClassBody ?
+		Annotations ? Identifier Arguments ? ClassBody ?
 	;
 	
 	Arguments:
@@ -1394,6 +1394,12 @@ HELPER
 	ClassInstanceCreationExpression:
 		NEW TypeArguments ? ClassOrInterfaceType LPAREN ArgumentList ? RPAREN ClassBody ?
 	|	Primary DOT NEW TypeArguments ? Identifier TypeArguments? LPAREN ArgumentList ? RPAREN ClassBody ?
+	/*
+		this was added due to: 
+		hotspot/src/share/tools/IdealGraphVisualizer/HierarchicalLayout/src/com/sun/hotspot/igv/hierarchicallayout/OldHierarchicalLayoutManager.java 
+		"[...]graph.new[...]"
+	*/
+	|	Identifier DOT NEW TypeArguments ? Identifier TypeArguments? LPAREN ArgumentList ? RPAREN ClassBody ? 
 	;
 	
 	ArgumentList:
@@ -1437,7 +1443,7 @@ HELPER
 	MethodInvocation:
 		MethodName LPAREN ArgumentList ? RPAREN
 	|	Primary DOT NonWildTypeArguments ? Identifier LPAREN ArgumentList ? RPAREN
-	|	SUPER DOT NonWildTypeArguments Identifier LPAREN ArgumentList ? RPAREN
+	|	SUPER DOT NonWildTypeArguments ? Identifier LPAREN ArgumentList ? RPAREN
 	|	ClassName DOT SUPER DOT NonWildTypeArguments ? Identifier LPAREN ArgumentList ? RPAREN
 	|	TypeName DOT NonWildTypeArguments Identifier LPAREN ArgumentList ? RPAREN
 	;

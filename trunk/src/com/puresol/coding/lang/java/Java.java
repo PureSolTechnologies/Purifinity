@@ -7,6 +7,7 @@ import java.io.ObjectInputStream;
 
 import com.puresol.coding.AbstractProgrammingLanguage;
 import com.puresol.coding.analysis.Analyzer;
+import com.puresol.utils.ClassInstantiationException;
 import com.puresol.utils.PersistenceException;
 
 /**
@@ -52,14 +53,6 @@ public class Java extends AbstractProgrammingLanguage {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected Class<? extends Analyzer> getAnalyserClass() {
-		return JavaAnalyser.class;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	protected String[] getValidFileSuffixes() {
 		return FILE_SUFFIXES;
 	}
@@ -81,6 +74,11 @@ public class Java extends AbstractProgrammingLanguage {
 			}
 			throw new PersistenceException(e);
 		}
+	}
+
+	@Override
+	public Analyzer createAnalyser(File file) {
+		return new JavaAnalyser(file);
 	}
 
 }
