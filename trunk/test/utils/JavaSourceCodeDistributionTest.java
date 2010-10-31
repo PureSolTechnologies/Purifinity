@@ -35,22 +35,26 @@ public class JavaSourceCodeDistributionTest {
 
 	@Test
 	public void test() {
-		Logger.getRootLogger().setLevel(Level.TRACE);
-		File file = new File("test/com/puresol/coding/lang/java/samples", "Test.java");
-		assertTrue(file.exists());
 		try {
+			Logger.getRootLogger().setLevel(Level.DEBUG);
+			File file = new File("test/com/puresol/coding/lang/java/samples",
+					"CachedJarFile.java");
+			assertTrue(file.exists());
 			Java java = Java.getInstance();
 			Analyzer analyser = java.createAnalyser(file);
 			analyser.parse();
 		} catch (ClassInstantiationException e) {
 			e.printStackTrace();
+			fail("No exception was expected!");
 		} catch (AnalyzerException e) {
 			e.printStackTrace();
+			fail("No exception was expected!");
 		}
 	}
 
 	public static void main(String args[]) {
 		try {
+			Logger.getRootLogger().setLevel(Level.DEBUG);
 			List<File> files = FileSearch.find(new File(INSTALL_DIRECTORY),
 					"*.java");
 			List<String> successes = new ArrayList<String>();

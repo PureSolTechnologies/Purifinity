@@ -15,4 +15,18 @@ public class ExpressionTest {
 		Logger.getRootLogger().setLevel(Level.TRACE);
 		assertTrue(GrammarPartTester.test("Expression", "1"));
 	}
+
+	@Test
+	public void testAssignment() {
+		Logger.getRootLogger().setLevel(Level.TRACE);
+		assertTrue(GrammarPartTester.test("Expression", "a = b"));
+	}
+
+	@Test
+	public void testMethodInvocationExpression() {
+		Logger.getRootLogger().setLevel(Level.TRACE);
+		assertTrue(GrammarPartTester.test("Expression",
+				"Globals.class.getResourceAsStream(\"/build.id\")"));
+	}
+
 }

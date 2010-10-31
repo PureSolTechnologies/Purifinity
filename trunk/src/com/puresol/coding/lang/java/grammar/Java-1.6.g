@@ -116,11 +116,11 @@ HELPER
 	;
 	
 	DecimalNumeral:
-		"(0|" NonZeroDigit Digits ")"
+		"(0|" NonZeroDigit "(" Digits ")?)"
 	;
 	
 	Digits:
-		Digit "*"
+		Digit "+"
 	;
 	
 	Digit:
@@ -232,7 +232,7 @@ HELPER
 	"|"	"\\\\r" /* \u000d: carriage return CR */
 	"|"	"\\\\\"" /* \u0022: double quote " */
 	"|"	"\\\\'" /* \u0027: single quote ' */
-	"|"	"\\\\ \\\\" /* \u005c: backslash \ */
+	"|"	"\\\\\\\\" /* \u005c: backslash \ */
 	"|"	OctalEscape /* \u0000 to \u00ff: from octal value */
 	")"
 	;
@@ -786,7 +786,7 @@ HELPER
 	;
 	
 	FormalParameter:
-		VariableModifiers Type VariableDeclaratorId
+		VariableModifiers ? Type VariableDeclaratorId
 	;
 	
 	VariableModifiers:
@@ -1128,7 +1128,7 @@ HELPER
 	;
 	
 	LocalVariableDeclaration:
-		VariableModifiers Type VariableDeclarators
+		VariableModifiers ? Type VariableDeclarators
 	;
 
 /* 14.5 Statements */
