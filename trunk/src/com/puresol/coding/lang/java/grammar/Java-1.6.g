@@ -462,14 +462,18 @@ HELPER
 /* 4.3 Reference Types and Values */
 
 	ReferenceType:
-		ClassOrInterfaceType
-	|	TypeVariable
+		TypeVariable
 	|	ArrayType
+	|	ClassOrInterfaceType
 	;
 	
 	ClassOrInterfaceType:
+		TypeDeclSpecifier TypeArguments ?
+	/*
+	removed due to ambiguous productions...
 		ClassType
 	|	InterfaceType
+	*/
 	;
 	
 	ClassType:
@@ -482,7 +486,7 @@ HELPER
 	
 	TypeDeclSpecifier:
 		TypeName
-	|	ClassOrInterfaceType DOT Identifier
+	|	TypeDeclSpecifier TypeArguments ? DOT Identifier
 	;
 	
 	TypeName:
@@ -555,28 +559,31 @@ HELPER
 	
 	TypeName:
 		Identifier
-	|	PackageOrTypeName DOT Identifier
+	|	TypeName DOT Identifier // change for performance...
 	;
 	
 	ExpressionName:
 		Identifier
-	|	AmbiguousName DOT Identifier
+	|	ExpressionName DOT Identifier
 	;
 	
 	MethodName:
 		Identifier
-	|	AmbiguousName DOT Identifier
+	|	MethodName DOT Identifier  // change for performance...
 	;
 	
 	PackageOrTypeName:
 		Identifier
-	|	PackageOrTypeName DOT Identifier
+	|	PackageOrTypeName DOT Identifier  // change for performance...
 	;
 	
+/*
+	removed, because it's not needed anymore...
 	AmbiguousName:
 		Identifier
 	|	AmbiguousName DOT Identifier
 	;
+*/
 
 /**********
  7 Packages
@@ -1208,7 +1215,7 @@ HELPER
 	;
 	
 	IfThenElseStatementNoShortIf:
-		IF LPAREN Expression LPAREN StatementNoShortIf ELSE StatementNoShortIf
+		IF LPAREN Expression RPAREN StatementNoShortIf ELSE StatementNoShortIf
 	;
 		
 /* 14.10 The assert Statement */
@@ -1280,8 +1287,7 @@ HELPER
 	;
 	
 	ForStatementNoShortIf:
-		FOR LPAREN ForInit ? SEMICOLON Expression ? SEMICOLON ForUpdate ? RPAREN
-	|	StatementNoShortIf
+		FOR LPAREN ForInit ? SEMICOLON Expression ? SEMICOLON ForUpdate ? RPAREN StatementNoShortIf
 	;
 	
 	ForInit:

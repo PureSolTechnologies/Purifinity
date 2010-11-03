@@ -15,10 +15,10 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
+import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.analysis.Analyzer;
 import com.puresol.coding.analysis.AnalyzerException;
 import com.puresol.coding.lang.java.Java;
-import com.puresol.utils.ClassInstantiationException;
 import com.puresol.utils.ConsoleUtils;
 
 /**
@@ -35,10 +35,11 @@ public class JavaSourceCodeDistributionTest {
 
 	@Test
 	public void test() {
+		fail();
 		try {
 			Logger.getRootLogger().setLevel(Level.TRACE);
 			File file = new File("test/com/puresol/coding/lang/java/samples",
-					"AbstractGradient.java");
+					"SCAnnotations.java");
 			assertTrue(file.exists());
 			Java java = Java.getInstance();
 			Analyzer analyser = java.createAnalyser(file);
@@ -49,11 +50,9 @@ public class JavaSourceCodeDistributionTest {
 		}
 	}
 
-	public static void main(String args[]) {
+	private static void parseAllFiles(List<File> files) {
 		try {
-			Logger.getRootLogger().setLevel(Level.DEBUG);
-			List<File> files = FileSearch.find(new File(INSTALL_DIRECTORY),
-					"*.java");
+			List<File> errors = new ArrayList<File>();
 			List<String> successes = new ArrayList<String>();
 			RandomAccessFile raFile = new RandomAccessFile("succeeded.txt",
 					"rw");
@@ -62,8 +61,6 @@ public class JavaSourceCodeDistributionTest {
 				successes.add(line);
 			}
 			int counter = 0;
-			Java java = Java.getInstance();
-			List<File> errors = new ArrayList<File>();
 			for (File file : files) {
 				if (file.getName().contains("-")) {
 					raFile.writeBytes(file.toString() + "\n");
@@ -83,14 +80,10 @@ public class JavaSourceCodeDistributionTest {
 				if (successes.contains(file.toString())) {
 					continue;
 				}
-				try {
-					Analyzer analyser = java.createAnalyser(new File(
-							INSTALL_DIRECTORY, file.toString()));
-					analyser.parse();
+				if (parseFile(new File(INSTALL_DIRECTORY, file.toString()))) {
 					raFile.writeBytes(file.toString() + "\n");
 					successes.add(file.toString());
-				} catch (AnalyzerException e) {
-					e.printStackTrace();
+				} else {
 					errors.add(file);
 				}
 			}
@@ -104,6 +97,26 @@ public class JavaSourceCodeDistributionTest {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	private static boolean parseFile(File file) {
+		try {
+			Java java = Java.getInstance();
+			Analyzer analyser = java.createAnalyser(file);
+			analyser.parse();
+			analyser = null;
+			return true;
+		} catch (AnalyzerException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	public static void main(String args[]) {
+		Logger.getRootLogger().setLevel(Level.DEBUG);
+		List<File> files = FileSearch.find(new File(INSTALL_DIRECTORY),
+				"*.java");
+		parseAllFiles(files);
 	}
 
 }

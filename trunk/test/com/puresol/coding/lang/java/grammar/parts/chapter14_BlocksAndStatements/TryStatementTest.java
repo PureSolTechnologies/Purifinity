@@ -15,9 +15,14 @@ public class TryStatementTest {
 		Logger.getRootLogger().setLevel(Level.TRACE);
 		assertTrue(GrammarPartTester.test("TryStatement", "try {\n"
 				+ "} catch(Exception e) {\n" + "}\n"));
-		// assertTrue(GrammarPartTester.test("TryStatement", "try {\n"
-		// + "build = br.readLine();\n" + "} catch(IOException e) {\n"
-		// + " /* ignore */\n" + "}\n"));
+	}
+
+	@Test
+	public void test2() {
+		Logger.getRootLogger().setLevel(Level.TRACE);
+		assertTrue(GrammarPartTester.test("TryStatement", "try {\n"
+				+ "test();\n" + "} catch (Exception e) {\n" + "test();\n"
+				+ "}\n"));
 	}
 
 }
