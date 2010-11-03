@@ -24,6 +24,14 @@ import com.puresol.uhura.parser.parsetable.ParserAction;
 import com.puresol.uhura.parser.parsetable.ParserActionSet;
 import com.puresol.uhura.parser.parsetable.ParserTable;
 
+/**
+ * This class is a complete implementation of a LR parser. Only the parser table
+ * is missing. The implementation of this needs to be done in the inherited
+ * class in the abstract method.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public abstract class AbstractLRParser extends AbstractParser {
 
 	private static final long serialVersionUID = 9173136242276185400L;
@@ -32,7 +40,7 @@ public abstract class AbstractLRParser extends AbstractParser {
 			.getLogger(AbstractLRParser.class);
 
 	private boolean backtrackEnabled = false;
-	private ParserTable parserTable;
+	private final ParserTable parserTable;
 	private final Stack<BacktrackLocation> backtrackStack = new Stack<BacktrackLocation>();
 
 	private final Stack<Integer> stateStack = new Stack<Integer>();
@@ -42,18 +50,19 @@ public abstract class AbstractLRParser extends AbstractParser {
 
 	public AbstractLRParser(Grammar grammar) throws GrammarException {
 		super(grammar);
+		parserTable = calculateParserTable();
 		setBacktrackEnabled(Boolean.valueOf((String) grammar.getOptions().get(
 				"parser.backtracking")));
-		calculateParserTable();
 	}
 
-	protected abstract void calculateParserTable() throws GrammarException;
+	protected abstract ParserTable calculateParserTable()
+			throws GrammarException;
 
 	/**
 	 * @return the backtrackEnabled
 	 */
 	@Override
-	public boolean isBacktrackEnabled() {
+	final public boolean isBacktrackEnabled() {
 		return backtrackEnabled;
 	}
 
@@ -62,22 +71,14 @@ public abstract class AbstractLRParser extends AbstractParser {
 	 *            the backtrackEnabled to set
 	 */
 	@Override
-	public void setBacktrackEnabled(boolean backtrackEnabled) {
+	final public void setBacktrackEnabled(boolean backtrackEnabled) {
 		this.backtrackEnabled = backtrackEnabled;
-	}
-
-	/**
-	 * @param parserTable
-	 *            the parserTable to set
-	 */
-	protected final void setParserTable(ParserTable parserTable) {
-		this.parserTable = parserTable;
 	}
 
 	/**
 	 * @return the streamPosition
 	 */
-	protected int getStreamPosition() {
+	final protected int getStreamPosition() {
 		return streamPosition;
 	}
 
@@ -85,28 +86,28 @@ public abstract class AbstractLRParser extends AbstractParser {
 	 * @param streamPosition
 	 *            the streamPosition to set
 	 */
-	protected void setStreamPosition(int streamPosition) {
+	final protected void setStreamPosition(int streamPosition) {
 		this.streamPosition = streamPosition;
 	}
 
 	/**
 	 * @return the stateStack
 	 */
-	protected Stack<Integer> getStateStack() {
+	final protected Stack<Integer> getStateStack() {
 		return stateStack;
 	}
 
 	/**
 	 * @return the treeStack
 	 */
-	protected Stack<AST> getTreeStack() {
+	final protected Stack<AST> getTreeStack() {
 		return treeStack;
 	}
 
 	/**
 	 * @return the stepCounter
 	 */
-	protected int getStepCounter() {
+	final protected int getStepCounter() {
 		return stepCounter;
 	}
 
@@ -114,23 +115,23 @@ public abstract class AbstractLRParser extends AbstractParser {
 	 * @param stepCounter
 	 *            the stepCounter to set
 	 */
-	protected void setStepCounter(int stepCounter) {
+	final protected void setStepCounter(int stepCounter) {
 		this.stepCounter = stepCounter;
 	}
 
 	@Override
-	public ParserTable getParserTable() {
+	final public ParserTable getParserTable() {
 		return parserTable;
 	}
 
 	@Override
-	public AST parse(TokenStream tokenStream) throws ParserException {
+	final public AST parse(TokenStream tokenStream) throws ParserException {
 		setTokenStream(tokenStream);
 		reset();
 		return parse();
 	}
 
-	protected AST parse() throws ParserException {
+	final protected AST parse() throws ParserException {
 		Token token = null;
 		try {
 			boolean accepted = false;
@@ -190,7 +191,7 @@ public abstract class AbstractLRParser extends AbstractParser {
 	 * This method is called just before running the parser to reset all
 	 * internal values and to clean all stacks.
 	 */
-	protected void reset() {
+	final protected void reset() {
 		treeStack.clear();
 		stateStack.clear();
 		streamPosition = 0;
@@ -198,7 +199,7 @@ public abstract class AbstractLRParser extends AbstractParser {
 		stateStack.push(0);
 	}
 
-	protected ParserAction getAction(ParserActionSet actionSet)
+	final protected ParserAction getAction(ParserActionSet actionSet)
 			throws GrammarException {
 		if (actionSet.getActionNumber() == 1) {
 			return actionSet.getAction();
@@ -233,7 +234,7 @@ public abstract class AbstractLRParser extends AbstractParser {
 		return actionSet.getAction(0);
 	}
 
-	private void addBacktrackLocation(int usedAlternative) {
+	final private void addBacktrackLocation(int usedAlternative) {
 		Stack<Integer> backtrackStates = new Stack<Integer>();
 		for (Integer state : stateStack) {
 			backtrackStates.push(new Integer(state));
@@ -254,7 +255,7 @@ public abstract class AbstractLRParser extends AbstractParser {
 	 * @param token
 	 *            is the current token in token stream.
 	 */
-	protected void shift(int newState, Token token) {
+	final protected void shift(int newState, Token token) {
 		if (newState < 0) {
 			throw new IllegalArgumentException("New state in shift is :"
 					+ newState + "!");
@@ -264,7 +265,7 @@ public abstract class AbstractLRParser extends AbstractParser {
 		streamPosition++;
 	}
 
-	protected void reduce(int grammarRuleId) throws ParserException {
+	final protected void reduce(int grammarRuleId) throws ParserException {
 		try {
 			if (grammarRuleId < 0) {
 				throw new IllegalArgumentException(
@@ -319,14 +320,14 @@ public abstract class AbstractLRParser extends AbstractParser {
 	 * @return True is returned if all conditions are met for finishing the
 	 *         parser.
 	 */
-	protected boolean accept() {
+	final protected boolean accept() {
 		if ((treeStack.size() == 1) && (stateStack.size() == 2)) {
 			return true;
 		}
 		return false;
 	}
 
-	protected void error(Token token) throws ParserException {
+	final protected void error(Token token) throws ParserException {
 		if ((!backtrackEnabled) || (backtrackStack.isEmpty())) {
 			if (!backtrackEnabled) {
 				logger.trace("No valid action available and back tracking is disabled. Aborting...");

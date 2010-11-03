@@ -2,6 +2,7 @@ package com.puresol.uhura.parser.lr;
 
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
+import com.puresol.uhura.parser.parsetable.ParserTable;
 
 public class LR1Parser extends AbstractLRParser {
 
@@ -12,8 +13,8 @@ public class LR1Parser extends AbstractLRParser {
 	}
 
 	@Override
-	protected void calculateParserTable() throws GrammarException {
-		setParserTable(new LR1ParserTable(getGrammar()));
+	protected ParserTable calculateParserTable() throws GrammarException {
+		return new LR1ParserTable(getGrammar());
 	}
 
 }
