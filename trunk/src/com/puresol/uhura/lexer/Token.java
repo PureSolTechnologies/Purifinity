@@ -3,6 +3,7 @@ package com.puresol.uhura.lexer;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 
+import com.puresol.uhura.grammar.production.Terminal;
 import com.puresol.uhura.grammar.token.Visibility;
 
 /**
@@ -57,6 +58,10 @@ public class Token implements Serializable, Cloneable {
 	 */
 	public Visibility getVisibility() {
 		return visibility;
+	}
+
+	public Terminal getTerminal() {
+		return new Terminal(name);
 	}
 
 	@Override

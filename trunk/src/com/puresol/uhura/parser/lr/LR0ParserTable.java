@@ -6,6 +6,8 @@ import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.production.Construction;
 import com.puresol.uhura.grammar.production.FinishTerminal;
+import com.puresol.uhura.grammar.production.NonTerminal;
+import com.puresol.uhura.grammar.production.Terminal;
 import com.puresol.uhura.parser.functions.Closure0;
 import com.puresol.uhura.parser.functions.Goto0;
 import com.puresol.uhura.parser.items.LR0Item;
@@ -44,13 +46,13 @@ public class LR0ParserTable extends AbstractParserTable {
 					addAction(stateId, construction, new ParserAction(
 							ActionType.SHIFT, transitions.get(construction)));
 					if (!getActionTerminals().contains(construction)) {
-						addActionTerminal(construction);
+						addActionTerminal((Terminal) construction);
 					}
 				} else {
 					addAction(stateId, construction, new ParserAction(
 							ActionType.GOTO, transitions.get(construction)));
 					if (!getGotoNonTerminals().contains(construction)) {
-						addGotoNonTerminal(construction);
+						addGotoNonTerminal((NonTerminal) construction);
 					}
 				}
 			}

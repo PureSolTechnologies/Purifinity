@@ -106,10 +106,10 @@ public class Closure1Test {
 						.getInstance())));
 		assertTrue(lr1ItemSet.getNonKernelItems().contains(
 				new LR1Item(grammar.getProductions().get(3), 0, new Terminal(
-						"EQUALS", "="))));
+						"EQUALS"))));
 		assertTrue(lr1ItemSet.getNonKernelItems().contains(
 				new LR1Item(grammar.getProductions().get(4), 0, new Terminal(
-						"EQUALS", "="))));
+						"EQUALS"))));
 		assertTrue(lr1ItemSet.getNonKernelItems().contains(
 				new LR1Item(grammar.getProductions().get(5), 0, DummyTerminal
 						.getInstance())));

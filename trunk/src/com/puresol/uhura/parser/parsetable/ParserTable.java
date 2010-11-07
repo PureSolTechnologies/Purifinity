@@ -1,13 +1,13 @@
 package com.puresol.uhura.parser.parsetable;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.production.Construction;
-import com.puresol.uhura.lexer.Token;
+import com.puresol.uhura.grammar.production.NonTerminal;
+import com.puresol.uhura.grammar.production.Terminal;
 
 /**
  * This is the general interface for parser tables.
@@ -35,22 +35,8 @@ public interface ParserTable extends Serializable {
 	public ParserActionSet getActionSet(int currentState,
 			Construction construction);
 
-	public ParserActionSet getActionSet(int currentState,
-			List<Construction> constructions);
+	public Set<Terminal> getActionTerminals();
 
-	public Set<Construction> getActionTerminals();
-
-	public Set<Construction> getGotoNonTerminals();
-
-	/**
-	 * This method returns all possible constructions in parser table which fit
-	 * the token parameter.
-	 * 
-	 * @param token
-	 * @return
-	 * @throws GrammarException
-	 */
-	public List<Construction> getConstructionForToken(Token token)
-			throws GrammarException;
+	public Set<NonTerminal> getGotoNonTerminals();
 
 }

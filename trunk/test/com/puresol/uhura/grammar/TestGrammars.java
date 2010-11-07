@@ -194,7 +194,7 @@ public class TestGrammars {
 
 			production = new Production("S");
 			production.addConstruction(new NonTerminal("L"));
-			production.addConstruction(new Terminal("EQUALS", "="));
+			production.addConstruction(new Terminal("EQUALS"));
 			production.addConstruction(new NonTerminal("R"));
 			productions.add(production);
 
@@ -203,12 +203,12 @@ public class TestGrammars {
 			productions.add(production);
 
 			production = new Production("L");
-			production.addConstruction(new Terminal("STAR", "*"));
+			production.addConstruction(new Terminal("STAR"));
 			production.addConstruction(new NonTerminal("R"));
 			productions.add(production);
 
 			production = new Production("L");
-			production.addConstruction(new Terminal("id", "id"));
+			production.addConstruction(new Terminal("id"));
 			productions.add(production);
 
 			production = new Production("R");

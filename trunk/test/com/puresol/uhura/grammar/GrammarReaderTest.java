@@ -41,7 +41,6 @@ public class GrammarReaderTest {
 			TokenStream tokenStream = lexer
 					.lex(new StringReader("1 * 2\n + 3"));
 			Parser parser = new SLR1Parser(grammar);
-			System.out.println(parser.getParserTable());
 			Closure0 closure0 = new Closure0(grammar);
 			Goto0 goto0 = new Goto0(closure0);
 			LR0ItemSetCollection tg = new LR0ItemSetCollection(grammar,
@@ -81,7 +80,6 @@ public class GrammarReaderTest {
 			TokenStream tokenStream = lexer
 					.lex(new StringReader("1 * 2\n + 3"));
 			Parser parser = new SLR1Parser(grammar);
-			System.out.println(parser.getParserTable());
 			Closure0 closure0 = new Closure0(grammar);
 			Goto0 goto0 = new Goto0(closure0);
 			LR0ItemSetCollection tg = new LR0ItemSetCollection(grammar,

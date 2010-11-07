@@ -7,6 +7,7 @@ import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.production.Construction;
 import com.puresol.uhura.grammar.production.FinishTerminal;
 import com.puresol.uhura.grammar.production.NonTerminal;
+import com.puresol.uhura.grammar.production.Terminal;
 import com.puresol.uhura.parser.functions.Closure0;
 import com.puresol.uhura.parser.functions.First;
 import com.puresol.uhura.parser.functions.Follow;
@@ -51,11 +52,11 @@ public class SLR1ParserTable extends AbstractParserTable {
 					if (next.isTerminal()) {
 						addAction(state, next, new ParserAction(
 								ActionType.SHIFT, targetState));
-						addActionTerminal(next);
+						addActionTerminal((Terminal) next);
 					} else {
 						addAction(state, next, new ParserAction(
 								ActionType.GOTO, targetState));
-						addGotoNonTerminal(next);
+						addGotoNonTerminal((NonTerminal) next);
 					}
 				} else if (lr0Item.getProduction().equals(
 						getGrammar().getProductions().get(0))) {

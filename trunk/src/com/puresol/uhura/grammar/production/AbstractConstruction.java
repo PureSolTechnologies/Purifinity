@@ -11,19 +11,16 @@ public abstract class AbstractConstruction implements Construction {
 	private static final long serialVersionUID = -8190479779174841005L;
 
 	private final String name;
-	private final String text;
 	private final boolean isTerminal;
 	private final int hashCode;
 
-	public AbstractConstruction(String name, String text, boolean isTerminal) {
+	public AbstractConstruction(String name, boolean isTerminal) {
 		super();
 		this.name = name;
-		this.text = text;
 		this.isTerminal = isTerminal;
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((text == null) ? 0 : text.hashCode());
 		result = prime * result + (isTerminal ? 1 : 0);
 		hashCode = result;
 	}
@@ -33,16 +30,6 @@ public abstract class AbstractConstruction implements Construction {
 	 */
 	public String getName() {
 		return name;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.puresol.uhura.parser.ParserRuleElementInterface#getText()
-	 */
-	@Override
-	public String getText() {
-		return text;
 	}
 
 	@Override
@@ -63,18 +50,14 @@ public abstract class AbstractConstruction implements Construction {
 	@Override
 	public String toString() {
 		if (isTerminal) {
-			return name + ": '" + text + "' (TERMINAL)";
+			return name + ": (TERMINAL)";
 		} else {
-			return name + ": '" + text + "' (NON-TERMINAL)";
+			return name + ": (NON-TERMINAL)";
 		}
 	}
 
 	public String toShortString() {
-		if (name.isEmpty()) {
-			return "'" + text + "'";
-		} else {
-			return name;
-		}
+		return name;
 	}
 
 	@Override
@@ -101,11 +84,6 @@ public abstract class AbstractConstruction implements Construction {
 				return false;
 		} else if (!name.equals(other.name))
 			return false;
-		if (text == null) {
-			if (other.text != null)
-				return false;
-		} else if (!text.equals(other.text))
-			return false;
 		return true;
 	}
 
@@ -118,11 +96,7 @@ public abstract class AbstractConstruction implements Construction {
 		if (result != 0) {
 			return result;
 		}
-		result = Boolean.valueOf(isTerminal()).compareTo(
+		return Boolean.valueOf(isTerminal()).compareTo(
 				Boolean.valueOf(other.isTerminal()));
-		if (result != 0) {
-			return result;
-		}
-		return this.getText().compareTo(other.getText());
 	}
 }

@@ -27,7 +27,6 @@ public class LALR1ParserTest {
 			Logger.getRootLogger().setLevel(Level.TRACE);
 			Grammar grammar = TestGrammars.getLALR1TestGrammarFromDragonBook();
 			Parser parser = new LALR1Parser(grammar);
-			System.out.println(parser.getParserTable().toString());
 			Lexer lexer = new RegExpLexer(grammar);
 			AST syntaxTree = parser
 					.parse(lexer.lex(new StringReader("id=*id")));

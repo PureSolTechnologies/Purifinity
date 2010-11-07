@@ -20,7 +20,22 @@ public class Production implements Serializable {
 	private final String name;
 	private final String alternativeName;
 	private final List<Construction> constructions = new ArrayList<Construction>();
+
+	/**
+	 * This flag is set to true if the current production is having an own node
+	 * within the AST. Set false if the constructions of this productions are to
+	 * be moved a node upward.
+	 */
 	private boolean node = true;
+	
+	/**
+	 * This flag is used to set the permission of stacking the current
+	 * production. Stacking means that in recursions for each iteration a node
+	 * for this production is created. If this behavior is wanted the flag
+	 * should be set to true. Otherwise false is set.
+	 * 
+	 * The default behavior is true.
+	 */
 	private boolean stackingAllowed = true;
 
 	private boolean changed = true;

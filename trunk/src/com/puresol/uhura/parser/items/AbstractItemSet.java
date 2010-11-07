@@ -98,10 +98,8 @@ public abstract class AbstractItemSet<T extends Item> implements Serializable {
 		boolean result = false;
 		if (allItems.add(item)) {
 			kernelItems.add(item);
-			result = true;
-		}
-		if (result) {
 			changed = true;
+			result = true;
 		}
 		return result;
 	}
@@ -134,6 +132,7 @@ public abstract class AbstractItemSet<T extends Item> implements Serializable {
 		if (allItems.add(item)) {
 			nonKernelItems.add(item);
 			result = true;
+			changed = true;
 		}
 		return result;
 	}
@@ -254,6 +253,11 @@ public abstract class AbstractItemSet<T extends Item> implements Serializable {
 		return hashCode;
 	}
 
+	/**
+	 * In this equals method the set allItems is used for check of equality.
+	 * Kernel and NonKernel items should be always equal in normal circumstances
+	 * and therefore is the reduced equality check suitable...
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -270,16 +274,6 @@ public abstract class AbstractItemSet<T extends Item> implements Serializable {
 			if (other.allItems != null)
 				return false;
 		} else if (!allItems.equals(other.allItems))
-			return false;
-		if (kernelItems == null) {
-			if (other.kernelItems != null)
-				return false;
-		} else if (!kernelItems.equals(other.kernelItems))
-			return false;
-		if (nonKernelItems == null) {
-			if (other.nonKernelItems != null)
-				return false;
-		} else if (!nonKernelItems.equals(other.nonKernelItems))
 			return false;
 		return true;
 	}

@@ -46,8 +46,8 @@ public class ParserActionSetTest {
 		set.addAction(new ParserAction(ActionType.REDUCE, 12));
 
 		assertEquals(2, set.getActionNumber());
-		assertEquals(new ParserAction(ActionType.SHIFT, 2), set.getAction(0));
-		assertEquals(new ParserAction(ActionType.REDUCE, 12), set.getAction(1));
+		assertEquals(new ParserAction(ActionType.REDUCE, 12), set.getAction(0));
+		assertEquals(new ParserAction(ActionType.SHIFT, 2), set.getAction(1));
 		try {
 			assertEquals(new ParserAction(ActionType.SHIFT, 2), set.getAction());
 			fail("A grammar exception was expected!");

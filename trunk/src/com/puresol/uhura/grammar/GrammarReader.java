@@ -39,6 +39,11 @@ import com.puresol.uhura.parser.lr.SLR1Parser;
  * and interpreted. The resulting grammar can be used for processing with Nyota
  * Uhura afterwards.
  * 
+ * This reader reads the grammar files and generates a Properties field with all
+ * grammar properties, a TokenDefinitionSet with all token definitions found and
+ * a ProductionSet with all BNF productions converted from the EBNF in the
+ * grammar file.
+ * 
  * @author Rick-Rainer Ludwig
  * 
  */
@@ -490,7 +495,7 @@ public class GrammarReader implements Callable<Boolean> {
 										+ text
 										+ "' satisfies several token definitions and is therfore ambiguous!");
 					}
-					terminal = new Terminal(tokenDefinition.getName(), text);
+					terminal = new Terminal(tokenDefinition.getName());
 				}
 			}
 			if (terminal == null) {
@@ -523,20 +528,32 @@ public class GrammarReader implements Callable<Boolean> {
 				+ productionPart + "' with quantity '" + quantity + "'!");
 	}
 
+	/**
+	 * This method creates a new BNF for a construction which is marked with '?'
+	 * to be use zero or one time.
+	 * 
+	 * @param productionPart
+	 * @return
+	 * @throws ASTException
+	 */
 	private Construction generateOptionalProduction(AST productionPart)
 			throws ASTException {
 		String newIdentifier = createNewIdentifier(productionPart,
 				"_opt_autogen");
 		try {
 			Construction construction = createConstruction(productionPart);
-			if (!productions.has(newIdentifier)) {
-				Production production = new Production(newIdentifier);
-				production.addConstruction(construction);
-				productions.add(production);
 
-				production = new Production(newIdentifier);
-				productions.add(production);
-			}
+			Production production = new Production(newIdentifier);
+			production.addConstruction(construction);
+			production.setNode(false);
+			production.setStackingAllowed(false);
+			productions.add(production);
+
+			production = new Production(newIdentifier);
+			production.setNode(false);
+			production.setStackingAllowed(false);
+			productions.add(production);
+
 			return new NonTerminal(newIdentifier);
 		} catch (GrammarException e) {
 			throw new ASTException("Could not generate extra rules '"
@@ -544,6 +561,15 @@ public class GrammarReader implements Callable<Boolean> {
 		}
 	}
 
+	/**
+	 * This method generates a new construction identifier for an automatically
+	 * generated BNF production for optionals, optional lists and lists.
+	 * 
+	 * @param productionPart
+	 * @param suffix
+	 * @return
+	 * @throws ASTException
+	 */
 	private String createNewIdentifier(AST productionPart, String suffix)
 			throws ASTException {
 		String newIdentifier = "";
@@ -556,24 +582,36 @@ public class GrammarReader implements Callable<Boolean> {
 		while (productions.has(newIdentifier + id + suffix)) {
 			id++;
 		}
-		return newIdentifier + id + suffix;
+		return newIdentifier + suffix + id;
 	}
 
+	/**
+	 * This method creates a new BNF for a construction which is marked with '*'
+	 * to be use zero or more times.
+	 * 
+	 * @param productionPart
+	 * @return
+	 * @throws ASTException
+	 */
 	private Construction generateOptionalList(AST productionPart)
 			throws ASTException {
 		String newIdentifier = createNewIdentifier(productionPart,
 				"_optlist_autogen");
 		try {
 			Construction construction = createConstruction(productionPart);
-			if (!productions.has(newIdentifier)) {
-				Production production = new Production(newIdentifier);
-				production.addConstruction(new NonTerminal(newIdentifier));
-				production.addConstruction(construction);
-				productions.add(production);
 
-				production = new Production(newIdentifier);
-				productions.add(production);
-			}
+			Production production = new Production(newIdentifier);
+			production.addConstruction(new NonTerminal(newIdentifier));
+			production.addConstruction(construction);
+			production.setNode(false);
+			production.setStackingAllowed(false);
+			productions.add(production);
+
+			production = new Production(newIdentifier);
+			production.setNode(false);
+			production.setStackingAllowed(false);
+			productions.add(production);
+
 			return new NonTerminal(newIdentifier);
 		} catch (GrammarException e) {
 			throw new ASTException("Could not generate extra rules '"
@@ -581,21 +619,33 @@ public class GrammarReader implements Callable<Boolean> {
 		}
 	}
 
+	/**
+	 * This method creates a new BNF for a construction which is marked with '+'
+	 * to be use one or more times.
+	 * 
+	 * @param productionPart
+	 * @return
+	 * @throws ASTException
+	 */
 	private Construction generateList(AST productionPart) throws ASTException {
 		String newIdentifier = createNewIdentifier(productionPart,
 				"_list_autogen");
 		try {
 			Construction construction = createConstruction(productionPart);
-			if (!productions.has(newIdentifier)) {
-				Production production = new Production(newIdentifier);
-				production.addConstruction(new NonTerminal(newIdentifier));
-				production.addConstruction(construction);
-				productions.add(production);
 
-				production = new Production(newIdentifier);
-				production.addConstruction(construction);
-				productions.add(production);
-			}
+			Production production = new Production(newIdentifier);
+			production.addConstruction(new NonTerminal(newIdentifier));
+			production.addConstruction(construction);
+			production.setNode(false);
+			production.setStackingAllowed(false);
+			productions.add(production);
+
+			production = new Production(newIdentifier);
+			production.addConstruction(construction);
+			production.setNode(false);
+			production.setStackingAllowed(false);
+			productions.add(production);
+
 			return new NonTerminal(newIdentifier);
 		} catch (GrammarException e) {
 			throw new ASTException("Could not generate extra rules '"

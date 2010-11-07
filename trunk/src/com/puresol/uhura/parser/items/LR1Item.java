@@ -3,6 +3,12 @@ package com.puresol.uhura.parser.items;
 import com.puresol.uhura.grammar.production.Production;
 import com.puresol.uhura.grammar.production.Terminal;
 
+/**
+ * This class represents a single LR1 item for parser table generation.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class LR1Item extends LR0Item {
 
 	private static final long serialVersionUID = -1434126363541910894L;

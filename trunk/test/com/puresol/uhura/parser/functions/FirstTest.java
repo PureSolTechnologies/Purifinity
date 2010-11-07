@@ -161,8 +161,8 @@ public class FirstTest {
 		Set<Terminal> constructions = first
 				.get(grammar.getProductions().get(0));
 		assertEquals(2, constructions.size());
-		assertTrue(constructions.contains(new Terminal("id", "id")));
-		assertTrue(constructions.contains(new Terminal("STAR", "*")));
+		assertTrue(constructions.contains(new Terminal("id")));
+		assertTrue(constructions.contains(new Terminal("STAR")));
 
 	}
 

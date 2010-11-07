@@ -12,7 +12,8 @@ import org.apache.log4j.Logger;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.production.Construction;
-import com.puresol.uhura.lexer.Token;
+import com.puresol.uhura.grammar.production.NonTerminal;
+import com.puresol.uhura.grammar.production.Terminal;
 
 /**
  * This class is the abstract implementation of a parser table. The table based
@@ -29,16 +30,14 @@ public abstract class AbstractParserTable implements ParserTable {
 			.getLogger(AbstractParserTable.class);
 
 	private final List<Map<Construction, ParserActionSet>> table = new ArrayList<Map<Construction, ParserActionSet>>();
-	private final Set<Construction> actionTerminals = new LinkedHashSet<Construction>();
-	private final Set<Construction> gotoNonTerminals = new LinkedHashSet<Construction>();
+	private final Set<Terminal> actionTerminals = new LinkedHashSet<Terminal>();
+	private final Set<NonTerminal> gotoNonTerminals = new LinkedHashSet<NonTerminal>();
 
 	private final Grammar grammar;
-	private final boolean ignoreCase;
 
 	public AbstractParserTable(Grammar grammar) throws GrammarException {
 		super();
 		this.grammar = grammar;
-		ignoreCase = grammar.isIgnoreCase();
 		logger.trace("Calculate parser table...");
 		calculate();
 		logger.trace("done.");
@@ -46,11 +45,11 @@ public abstract class AbstractParserTable implements ParserTable {
 
 	protected abstract void calculate() throws GrammarException;
 
-	protected void addActionTerminal(Construction construction) {
+	protected void addActionTerminal(Terminal construction) {
 		actionTerminals.add(construction);
 	}
 
-	protected void addGotoNonTerminal(Construction construction) {
+	protected void addGotoNonTerminal(NonTerminal construction) {
 		gotoNonTerminals.add(construction);
 	}
 
@@ -58,7 +57,7 @@ public abstract class AbstractParserTable implements ParserTable {
 	 * @return the actionTerminals
 	 */
 	@Override
-	public final Set<Construction> getActionTerminals() {
+	public final Set<Terminal> getActionTerminals() {
 		return actionTerminals;
 	}
 
@@ -66,7 +65,7 @@ public abstract class AbstractParserTable implements ParserTable {
 	 * @return the gotoNonTerminals
 	 */
 	@Override
-	public final Set<Construction> getGotoNonTerminals() {
+	public final Set<NonTerminal> getGotoNonTerminals() {
 		return gotoNonTerminals;
 	}
 
@@ -85,27 +84,6 @@ public abstract class AbstractParserTable implements ParserTable {
 
 	public final Grammar getGrammar() {
 		return grammar;
-	}
-
-	@Override
-	public List<Construction> getConstructionForToken(Token token)
-			throws GrammarException {
-		List<Construction> constructions = new ArrayList<Construction>();
-		for (Construction construction : actionTerminals) {
-			if (construction.getName().equals(token.getName())) {
-				String constructionText = construction.getText();
-				String tokenText = token.getText();
-				if (ignoreCase) {
-					constructionText = constructionText.toUpperCase();
-					tokenText = tokenText.toUpperCase();
-				}
-				if (constructionText.isEmpty()
-						|| (constructionText.equals(tokenText))) {
-					constructions.add(construction);
-				}
-			}
-		}
-		return constructions;
 	}
 
 	@Override
@@ -149,19 +127,6 @@ public abstract class AbstractParserTable implements ParserTable {
 	}
 
 	@Override
-	public final ParserActionSet getActionSet(int currentState,
-			List<Construction> constructions) {
-		if ((constructions == null) || (constructions.size() == 0)) {
-			return ParserActionSet.getErrorSet();
-		}
-		ParserActionSet actionSet = new ParserActionSet();
-		for (Construction construction : constructions) {
-			actionSet.addActions(getActionSet(currentState, construction));
-		}
-		return actionSet;
-	}
-
-	@Override
 	public final String toString() {
 		StringBuffer buffer = new StringBuffer();
 		buffer.append("=============\n");
@@ -191,11 +156,7 @@ public abstract class AbstractParserTable implements ParserTable {
 		buffer.append("\n");
 		buffer.append(toColumn("|"));
 		for (Construction construction : actionTerminals) {
-			if (construction.isTerminal()) {
-				buffer.append(toColumn(construction.getName()));
-			} else {
-				buffer.append(toColumn(construction.getText()));
-			}
+			buffer.append(toColumn(construction.getName()));
 		}
 		buffer.append(toColumn("|"));
 		for (Construction construction : gotoNonTerminals) {

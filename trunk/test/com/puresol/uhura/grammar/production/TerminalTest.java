@@ -9,28 +9,15 @@ public class TerminalTest {
 	@Test
 	public void testInstance() {
 		assertNotNull(new Terminal("NAME"));
-		assertNotNull(new Terminal("NAME", "TEXT"));
 	}
 
 	@Test
 	public void testInitialValues() {
 		Construction terminal = new Terminal("NAME");
 		assertEquals("NAME", terminal.getName());
-		assertEquals("", terminal.getText());
 		assertFalse(terminal.isNonTerminal());
 		assertTrue(terminal.isTerminal());
-		assertEquals("NAME: '' (TERMINAL)", terminal.toString());
-		assertEquals("NAME", terminal.toShortString());
-	}
-
-	@Test
-	public void testInitialValues2() {
-		Construction terminal = new Terminal("NAME", "TEXT");
-		assertEquals("NAME", terminal.getName());
-		assertEquals("TEXT", terminal.getText());
-		assertFalse(terminal.isNonTerminal());
-		assertTrue(terminal.isTerminal());
-		assertEquals("NAME: 'TEXT' (TERMINAL)", terminal.toString());
+		assertEquals("NAME: (TERMINAL)", terminal.toString());
 		assertEquals("NAME", terminal.toShortString());
 	}
 

@@ -11,11 +11,6 @@ import java.io.Serializable;
  */
 public interface Construction extends Serializable, Comparable<Construction> {
 
-	/**
-	 * @return the text
-	 */
-	public String getText();
-
 	public String getName();
 
 	public boolean isTerminal();

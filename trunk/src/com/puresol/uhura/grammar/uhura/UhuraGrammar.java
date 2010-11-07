@@ -139,7 +139,7 @@ public class UhuraGrammar {
 	private static void addGrammarOptionsSection(ProductionSet productions)
 			throws GrammarException {
 		Production production = new Production("Options");
-		production.addConstruction(new Terminal("OPTIONS", "OPTIONS"));
+		production.addConstruction(new Terminal("OPTIONS"));
 		production.addConstruction(new NonTerminal("GrammarOptions"));
 		productions.add(production);
 	}
@@ -179,7 +179,7 @@ public class UhuraGrammar {
 	private static void addHelpersSection(ProductionSet productions)
 			throws GrammarException {
 		Production production = new Production("Helper");
-		production.addConstruction(new Terminal("HELPER", "HELPER"));
+		production.addConstruction(new Terminal("HELPER"));
 		production.addConstruction(new NonTerminal("HelperDefinitions"));
 		productions.add(production);
 	}
@@ -209,7 +209,7 @@ public class UhuraGrammar {
 	private static void addTokensSection(ProductionSet productions)
 			throws GrammarException {
 		Production production = new Production("Tokens");
-		production.addConstruction(new Terminal("TOKENS", "TOKENS"));
+		production.addConstruction(new Terminal("TOKENS"));
 		production.addConstruction(new NonTerminal("TokenDefinitions"));
 		productions.add(production);
 	}
@@ -283,7 +283,7 @@ public class UhuraGrammar {
 
 		production = new Production("OptionalVisibility");
 		production.addConstruction(new Terminal("LEFT_BRACKET"));
-		production.addConstruction(new Terminal("HIDDEN", "hidden"));
+		production.addConstruction(new Terminal("HIDDEN"));
 		production.addConstruction(new Terminal("RIGHT_BRACKET"));
 		productions.add(production);
 
@@ -294,7 +294,7 @@ public class UhuraGrammar {
 	private static void addProductionsSection(ProductionSet productions)
 			throws GrammarException {
 		Production production = new Production("Productions");
-		production.addConstruction(new Terminal("PRODUCTIONS", "PRODUCTIONS"));
+		production.addConstruction(new Terminal("PRODUCTIONS"));
 		production.addConstruction(new NonTerminal("ProductionDefinitions"));
 		productions.add(production);
 	}
@@ -411,13 +411,13 @@ public class UhuraGrammar {
 		productions.add(production);
 
 		production = new Production("OptionalOption");
-		production.addConstruction(new Terminal("NODE", "node"));
+		production.addConstruction(new Terminal("NODE"));
 		production.addConstruction(new Terminal("EQUALS"));
 		production.addConstruction(new Terminal("BOOLEAN_LITERAL"));
 		productions.add(production);
 
 		production = new Production("OptionalOption");
-		production.addConstruction(new Terminal("STACK", "stack"));
+		production.addConstruction(new Terminal("STACK"));
 		production.addConstruction(new Terminal("EQUALS"));
 		production.addConstruction(new Terminal("BOOLEAN_LITERAL"));
 		productions.add(production);

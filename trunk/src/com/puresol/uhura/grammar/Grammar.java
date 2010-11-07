@@ -11,10 +11,18 @@ import com.puresol.uhura.grammar.production.Terminal;
 import com.puresol.uhura.grammar.token.TokenDefinition;
 import com.puresol.uhura.grammar.token.TokenDefinitionSet;
 
+/**
+ * This class keeps the complete information about a single grammar including
+ * all options, token definitions and productions.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class Grammar implements Serializable {
 
 	private static final long serialVersionUID = 8296461694750760942L;
 
+	private final String name;
 	private final Properties options;
 	private final TokenDefinitionSet tokenDefinitions;
 	private final ProductionSet productions;
@@ -23,12 +31,13 @@ public class Grammar implements Serializable {
 	public Grammar(Properties options, TokenDefinitionSet tokenDefinitions,
 			ProductionSet productions) throws GrammarException {
 		super();
+		this.name = options.getProperty("grammar.name");
 		this.options = options;
 		this.tokenDefinitions = tokenDefinitions;
 		this.productions = productions;
-		this.ignoreCase = Boolean.valueOf((String) options
-				.get("grammar.ignore-case"));
-		if (Boolean.valueOf((String) options.get("grammar.checks"))) {
+		this.ignoreCase = Boolean.valueOf(options
+				.getProperty("grammar.ignore-case"));
+		if (Boolean.valueOf(options.getProperty("grammar.checks"))) {
 			checkConsistency();
 		}
 	}
@@ -58,6 +67,10 @@ public class Grammar implements Serializable {
 		}
 	}
 
+	public String getName() {
+		return name;
+	}
+
 	/**
 	 * @return the options
 	 */
@@ -77,6 +90,10 @@ public class Grammar implements Serializable {
 	 */
 	public ProductionSet getProductions() {
 		return productions;
+	}
+
+	public Production getProduction(int productionId) {
+		return productions.get(productionId);
 	}
 
 	public boolean isIgnoreCase() {

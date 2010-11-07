@@ -15,10 +15,9 @@ public class NonTerminalTest {
 	public void testInitialValues() {
 		Construction nonTerminal = new NonTerminal("NAME");
 		assertEquals("NAME", nonTerminal.getName());
-		assertEquals("", nonTerminal.getText());
 		assertTrue(nonTerminal.isNonTerminal());
 		assertFalse(nonTerminal.isTerminal());
-		assertEquals("NAME: '' (NON-TERMINAL)", nonTerminal.toString());
+		assertEquals("NAME: (NON-TERMINAL)", nonTerminal.toString());
 		assertEquals("NAME", nonTerminal.toShortString());
 	}
 
