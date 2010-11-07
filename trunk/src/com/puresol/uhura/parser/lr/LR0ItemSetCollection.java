@@ -87,11 +87,9 @@ public class LR0ItemSetCollection {
 	 * @throws GrammarException
 	 */
 	public int getStateId(LR0ItemSet targetSet) throws GrammarException {
-		for (int stateId = 0; stateId < itemSetCollection.size(); stateId++) {
-			LR0ItemSet lr0ItemSet = itemSetCollection.get(stateId);
-			if (lr0ItemSet.equals(targetSet)) {
-				return stateId;
-			}
+		int id = itemSetCollection.indexOf(targetSet);
+		if (id >= 0) {
+			return id;
 		}
 		throw new GrammarException("Target set '" + targetSet
 				+ "' was not found!");

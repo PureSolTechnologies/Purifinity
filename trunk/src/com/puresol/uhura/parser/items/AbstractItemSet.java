@@ -181,21 +181,8 @@ public abstract class AbstractItemSet<T extends Item> implements Serializable {
 	 */
 	public List<T> getNextItems(Construction construction) {
 		List<T> items = new ArrayList<T>();
-		for (T item : kernelItems) {
-			Construction element = item.getNext();
-			if (element == null) {
-				continue;
-			}
-			if (element.equals(construction)) {
-				items.add(item);
-			}
-		}
-		for (T item : nonKernelItems) {
-			Construction element = item.getNext();
-			if (element == null) {
-				continue;
-			}
-			if (element.equals(construction)) {
+		for (T item : allItems) {
+			if (construction.equals(item.getNext())) {
 				items.add(item);
 			}
 		}
@@ -204,13 +191,7 @@ public abstract class AbstractItemSet<T extends Item> implements Serializable {
 
 	public Set<Construction> getAllGrammarSymbols() {
 		Set<Construction> grammarSymbols = new LinkedHashSet<Construction>();
-		for (Item item : getKernelItems()) {
-			for (Construction construction : item.getProduction()
-					.getConstructions()) {
-				grammarSymbols.add(construction);
-			}
-		}
-		for (Item item : getNonKernelItems()) {
+		for (Item item : allItems) {
 			for (Construction construction : item.getProduction()
 					.getConstructions()) {
 				grammarSymbols.add(construction);

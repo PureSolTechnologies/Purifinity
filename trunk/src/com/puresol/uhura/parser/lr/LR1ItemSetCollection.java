@@ -104,14 +104,6 @@ public class LR1ItemSetCollection {
 		if (id >= 0) {
 			return id;
 		}
-		// TODO check for removal!!!
-		// for (int stateId = 0; stateId < itemSetCollection.size(); stateId++)
-		// {
-		// LR1ItemSet lr1ItemSet = itemSetCollection.get(stateId);
-		// if (lr1ItemSet.equals(targetSet)) {
-		// return stateId;
-		// }
-		// }
 		throw new GrammarException("Target set '" + targetSet
 				+ "' was not found!");
 	}
