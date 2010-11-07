@@ -10,7 +10,7 @@ import com.puresol.uhura.grammar.TestGrammars;
 import com.puresol.uhura.parser.functions.Closure1;
 import com.puresol.uhura.parser.functions.First;
 import com.puresol.uhura.parser.functions.Goto1;
-import com.puresol.uhura.parser.lr.LR1ItemSetCollection;
+import com.puresol.uhura.parser.items.LR1ItemSetCollection;
 
 public class LR1ItemSetCollectionTest {
 

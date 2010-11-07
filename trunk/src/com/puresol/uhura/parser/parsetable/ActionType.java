@@ -11,7 +11,7 @@ import java.io.Serializable;
  */
 public enum ActionType implements Serializable {
 
-	ACCEPT("acc"), REDUCE("r"), SHIFT("s"), ERROR("err"), GOTO("");
+	ACCEPT("acc"), SHIFT("s"), REDUCE("r"), ERROR("err"), GOTO("");
 
 	private final String text;
 

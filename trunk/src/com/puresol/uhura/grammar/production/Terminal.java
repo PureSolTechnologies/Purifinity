@@ -6,7 +6,7 @@ package com.puresol.uhura.grammar.production;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class Terminal extends AbstractConstruction {
+public final class Terminal extends AbstractConstruction {
 
 	private static final long serialVersionUID = 9050440704073872898L;
 

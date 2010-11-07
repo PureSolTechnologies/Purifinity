@@ -4,6 +4,7 @@ import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.production.Construction;
 import com.puresol.uhura.parser.functions.Goto0;
 import com.puresol.uhura.parser.items.LR0ItemSet;
+import com.puresol.uhura.parser.items.LR0ItemSetCollection;
 import com.puresol.uhura.parser.parsetable.StateTransitions;
 
 public class LR0StateTransitions extends StateTransitions {

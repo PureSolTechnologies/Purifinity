@@ -27,7 +27,7 @@ public class Production implements Serializable {
 	 * be moved a node upward.
 	 */
 	private boolean node = true;
-	
+
 	/**
 	 * This flag is used to set the permission of stacking the current
 	 * production. Stacking means that in recursions for each iteration a node
@@ -40,6 +40,7 @@ public class Production implements Serializable {
 
 	private boolean changed = true;
 	private int hashCode = 0;
+	private boolean shiftPrefered = true;
 
 	public Production(String name) {
 		super();
@@ -79,6 +80,14 @@ public class Production implements Serializable {
 	 */
 	public String getAlternativeName() {
 		return alternativeName;
+	}
+
+	public boolean isShiftPrefered() {
+		return shiftPrefered;
+	}
+
+	public void setShiftPrefered(boolean shiftPrefered) {
+		this.shiftPrefered = shiftPrefered;
 	}
 
 	public void addConstruction(Construction construction) {

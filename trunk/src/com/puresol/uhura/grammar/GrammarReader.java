@@ -658,10 +658,19 @@ public class GrammarReader implements Callable<Boolean> {
 		AST optionalOptions = productionConstruction
 				.getChild("OptionalOptions");
 		if (optionalOptions != null) {
-			for (AST option : optionalOptions.getSubTrees("OptionalOption")) {
+			for (AST option : optionalOptions.getSubTrees("Option")) {
 				if (option.hasChild("NODE")) {
 					production.setNode(Boolean.valueOf(option.getChild(
 							"BOOLEAN_LITERAL").getText()));
+				}
+				if (option.hasChild("STACK")) {
+					production.setStackingAllowed(Boolean.valueOf(option
+							.getChild("BOOLEAN_LITERAL").getText()));
+				}
+				if (option.hasChild("PREFER_SHIFT")) {
+					production.setShiftPrefered(true);
+				} else if (option.hasChild("PREFER_REDUCE")) {
+					production.setShiftPrefered(false);
 				}
 			}
 		}

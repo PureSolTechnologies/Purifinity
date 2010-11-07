@@ -1,4 +1,4 @@
-package com.puresol.uhura.parser.lr;
+package com.puresol.uhura.parser.items;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,8 +8,6 @@ import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.production.Construction;
 import com.puresol.uhura.parser.functions.Closure0;
 import com.puresol.uhura.parser.functions.Goto0;
-import com.puresol.uhura.parser.items.LR0Item;
-import com.puresol.uhura.parser.items.LR0ItemSet;
 
 public class LR0ItemSetCollection {
 

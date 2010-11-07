@@ -1,7 +1,9 @@
-package com.puresol.uhura.parser.lr;
+package com.puresol.uhura.parser.items;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
@@ -19,6 +21,7 @@ public class LR1ItemSetCollection {
 	private final static Logger logger = Logger
 			.getLogger(LR1ItemSetCollection.class);
 
+	private final Map<LR1ItemSet, Integer> set2int = new HashMap<LR1ItemSet, Integer>();
 	private final List<LR1ItemSet> itemSetCollection = new ArrayList<LR1ItemSet>();
 
 	private final Grammar grammar;
@@ -82,6 +85,7 @@ public class LR1ItemSetCollection {
 
 	private void addState(LR1ItemSet itemSet) {
 		if (!itemSetCollection.contains(itemSet)) {
+			set2int.put(itemSet, itemSetCollection.size());
 			itemSetCollection.add(itemSet);
 		}
 	}
@@ -98,12 +102,12 @@ public class LR1ItemSetCollection {
 	 * @throws GrammarException
 	 */
 	public int getStateId(LR1ItemSet targetSet) throws GrammarException {
-		int id = itemSetCollection.indexOf(targetSet);
-		if (id >= 0) {
-			return id;
+		Integer id = set2int.get(targetSet);
+		if (id == null) {
+			throw new GrammarException("Target set '" + targetSet
+					+ "' was not found!");
 		}
-		throw new GrammarException("Target set '" + targetSet
-				+ "' was not found!");
+		return id;
 	}
 
 	public int getStateNumber() {

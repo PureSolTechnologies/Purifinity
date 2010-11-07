@@ -11,7 +11,7 @@ import com.puresol.uhura.grammar.production.NonTerminal;
 import com.puresol.uhura.grammar.production.Terminal;
 import com.puresol.uhura.parser.functions.Closure0;
 import com.puresol.uhura.parser.functions.Goto0;
-import com.puresol.uhura.parser.lr.LR0ItemSetCollection;
+import com.puresol.uhura.parser.items.LR0ItemSetCollection;
 import com.puresol.uhura.parser.lr.LR0StateTransitions;
 
 public class LR0StateTransitionsTest {

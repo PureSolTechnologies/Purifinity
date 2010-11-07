@@ -19,8 +19,7 @@ public abstract class AbstractConstruction implements Construction {
 		this.name = name;
 		this.isTerminal = isTerminal;
 		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		int result = prime + name.hashCode();
 		result = prime * result + (isTerminal ? 1 : 0);
 		hashCode = result;
 	}
@@ -28,17 +27,18 @@ public abstract class AbstractConstruction implements Construction {
 	/**
 	 * @return the typeId
 	 */
-	public String getName() {
+	@Override
+	public final String getName() {
 		return name;
 	}
 
 	@Override
-	public boolean isTerminal() {
+	public final boolean isTerminal() {
 		return isTerminal;
 	}
 
 	@Override
-	public boolean isNonTerminal() {
+	public final boolean isNonTerminal() {
 		return !isTerminal;
 	}
 
@@ -48,7 +48,7 @@ public abstract class AbstractConstruction implements Construction {
 	 * @see com.puresol.uhura.parser.ParserRuleElementInterface#toString()
 	 */
 	@Override
-	public String toString() {
+	public final String toString() {
 		if (isTerminal) {
 			return name + ": (TERMINAL)";
 		} else {
@@ -56,7 +56,7 @@ public abstract class AbstractConstruction implements Construction {
 		}
 	}
 
-	public String toShortString() {
+	public final String toShortString() {
 		return name;
 	}
 

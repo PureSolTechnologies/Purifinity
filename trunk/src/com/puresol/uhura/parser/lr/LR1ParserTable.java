@@ -13,6 +13,7 @@ import com.puresol.uhura.parser.functions.First;
 import com.puresol.uhura.parser.functions.Goto1;
 import com.puresol.uhura.parser.items.LR1Item;
 import com.puresol.uhura.parser.items.LR1ItemSet;
+import com.puresol.uhura.parser.items.LR1ItemSetCollection;
 import com.puresol.uhura.parser.parsetable.AbstractParserTable;
 import com.puresol.uhura.parser.parsetable.ActionType;
 import com.puresol.uhura.parser.parsetable.ParserAction;
@@ -64,6 +65,25 @@ public class LR1ParserTable extends AbstractParserTable {
 				} else { // has not next and is not start production
 					addAction(state, lr1Item.getLookahead(), new ParserAction(
 							ActionType.REDUCE, lr1Item.getProduction().getId()));
+				}
+			}
+		}
+		logger.debug("done.");
+		logger.debug("Reorder actions in table...");
+		for (int state = 0; state < itemSetCollection.getStateNumber(); state++) {
+			if (logger.isTraceEnabled()) {
+				logger.trace("state: " + state + "/"
+						+ itemSetCollection.getStateNumber());
+			}
+			LR1ItemSet lr1ItemSet = itemSetCollection.getItemSet(state);
+			for (LR1Item lr1Item : lr1ItemSet.getAllItems()) {
+				boolean shift = lr1Item.getProduction().isShiftPrefered();
+				if (shift) {
+					getActionSet(state, lr1Item.getNext()).preferShift();
+				} else {
+					logger.trace(lr1Item.getProduction().toString()
+							+ " reduce!!!");
+					getActionSet(state, lr1Item.getNext()).preferReduce();
 				}
 			}
 		}
