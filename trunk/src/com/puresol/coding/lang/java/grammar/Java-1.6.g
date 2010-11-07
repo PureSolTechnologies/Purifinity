@@ -8,6 +8,7 @@
  * O P T I O N S
  ****************************************************************************/ 
 OPTIONS
+	grammar.name="Java-1.6";
 	grammar.checks=true;
 	grammar.ignore-case=false;
 	lexer="com.puresol.uhura.lexer.RegExpLexer";
@@ -1251,13 +1252,16 @@ HELPER
 	
 	SwitchLabel:
 		CASE ConstantExpression COLON
-	|	CASE EnumConstantName COLON
+	// |	CASE Identifier COLON ; removed for speed...
 	|	DEFAULT COLON
 	;
 		
+	/*
+	not needed...
 	EnumConstantName:
 		Identifier
 	;
+	*/
 	
 /* 14.12 The while Statement */
 
@@ -1383,7 +1387,7 @@ HELPER
 	;	
 	
 	ClassName:
-		Identifier
+		TypeName
 	;
 	
 	Literal:

@@ -15,7 +15,6 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
-import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.analysis.Analyzer;
 import com.puresol.coding.analysis.AnalyzerException;
 import com.puresol.coding.lang.java.Java;
@@ -35,11 +34,10 @@ public class JavaSourceCodeDistributionTest {
 
 	@Test
 	public void test() {
-		fail();
 		try {
 			Logger.getRootLogger().setLevel(Level.TRACE);
 			File file = new File("test/com/puresol/coding/lang/java/samples",
-					"SCAnnotations.java");
+					"XKeysym.java");
 			assertTrue(file.exists());
 			Java java = Java.getInstance();
 			Analyzer analyser = java.createAnalyser(file);

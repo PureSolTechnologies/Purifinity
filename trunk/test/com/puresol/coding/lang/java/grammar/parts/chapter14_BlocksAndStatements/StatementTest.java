@@ -16,4 +16,10 @@ public class StatementTest {
 		assertTrue(GrammarPartTester.test("Statement", "a = b;"));
 	}
 
+	@Test
+	public void test2() {
+		Logger.getRootLogger().setLevel(Level.TRACE);
+		assertTrue(GrammarPartTester.test("Statement",
+				"function(LayoutPathImpl.SegmentPath.this);"));
+	}
 }

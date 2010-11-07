@@ -7,7 +7,6 @@ import java.io.ObjectInputStream;
 
 import com.puresol.coding.AbstractProgrammingLanguage;
 import com.puresol.coding.analysis.Analyzer;
-import com.puresol.utils.ClassInstantiationException;
 import com.puresol.utils.PersistenceException;
 
 /**
