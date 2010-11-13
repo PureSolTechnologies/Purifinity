@@ -18,7 +18,7 @@ public class LR0ItemSetCollectionTest {
 			System.out.println("====================");
 			System.out.println("LR Pamphlet Grammar:");
 			System.out.println("====================");
-			Grammar grammar = TestGrammars.getTestGrammarFromLR1Pamphlet();
+			Grammar grammar = TestGrammars.getGrammarFromLRkPamphlet();
 
 			Closure0 closure0 = new Closure0(grammar);
 			Goto0 goto0 = new Goto0(closure0);

@@ -14,6 +14,10 @@ public enum Visibility implements Serializable {
 	 */
 	VISIBLE,
 	/**
+	 * This means the token is visible and given to the later parsing process.
+	 */
+	IGNORED,
+	/**
 	 * This means the token is dropped direcly after lexing. The parser will
 	 * never see this token.
 	 */

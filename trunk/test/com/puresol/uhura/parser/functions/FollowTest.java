@@ -22,7 +22,7 @@ public class FollowTest {
 		System.out.println("=====================");
 		System.out.println("LR Pampghlet Grammar:");
 		System.out.println("=====================");
-		Grammar grammar = TestGrammars.getTestGrammarFromLR1Pamphlet();
+		Grammar grammar = TestGrammars.getGrammarFromLRkPamphlet();
 		System.out.println("Productions:");
 		System.out.println(grammar.toProductionsString());
 
@@ -106,7 +106,7 @@ public class FollowTest {
 		System.out.println("=======================");
 		System.out.println("Dragon Book LL Grammar:");
 		System.out.println("=======================");
-		Grammar grammar = TestGrammars.getTestLLGrammarFromDragonBook();
+		Grammar grammar = TestGrammars.getLLGrammarFromDragonBook();
 		System.out.println("Productions:");
 		System.out.println(grammar.toProductionsString());
 

@@ -17,7 +17,7 @@ public class Closure0Test {
 
 	@Test
 	public void testFromLR1Pamphlet() {
-		Grammar grammar = TestGrammars.getTestGrammarFromLR1Pamphlet();
+		Grammar grammar = TestGrammars.getGrammarFromLRkPamphlet();
 		System.out.println("Productions:");
 		System.out.println(grammar.toProductionsString());
 

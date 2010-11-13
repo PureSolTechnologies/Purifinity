@@ -21,6 +21,15 @@ import com.puresol.uhura.grammar.token.Visibility;
  */
 public class UhuraGrammar {
 
+	public static final String UHURA_GRAMMAR_KEYWORD_OPTIONS = "OPTIONS";
+	public static final String UHURA_GRAMMAR_KEYWORD_HELPER = "HELPER";
+	public static final String UHURA_GRAMMAR_KEYWORD_TOKENS = "TOKENS";
+	public static final String UHURA_GRAMMAR_KEYWORD_PRODUCTIONS = "PRODUCTIONS";
+	public static final String UHURA_GRAMMAR_KEYWORD_HIDE = "hide";
+	public static final String UHURA_GRAMMAR_KEYWORD_IGNORE = "ignore";
+	public static final String UHURA_GRAMMAR_KEYWORD_NODE = "node";
+	public static final String UHURA_GRAMMAR_KEYWORD_STACK = "stack";
+
 	public static Grammar getGrammar() {
 		try {
 			return new Grammar(new Properties(), getTokenDefinitions(),
@@ -74,15 +83,22 @@ public class UhuraGrammar {
 
 	private static void addKeywords(TokenDefinitionSet tokenDefinitions)
 			throws GrammarException {
-		tokenDefinitions
-				.addDefinition(new TokenDefinition("OPTIONS", "OPTIONS"));
-		tokenDefinitions.addDefinition(new TokenDefinition("HELPER", "HELPER"));
-		tokenDefinitions.addDefinition(new TokenDefinition("TOKENS", "TOKENS"));
+		tokenDefinitions.addDefinition(new TokenDefinition("OPTIONS",
+				UHURA_GRAMMAR_KEYWORD_OPTIONS));
+		tokenDefinitions.addDefinition(new TokenDefinition("HELPER",
+				UHURA_GRAMMAR_KEYWORD_HELPER));
+		tokenDefinitions.addDefinition(new TokenDefinition("TOKENS",
+				UHURA_GRAMMAR_KEYWORD_TOKENS));
 		tokenDefinitions.addDefinition(new TokenDefinition("PRODUCTIONS",
-				"PRODUCTIONS"));
-		tokenDefinitions.addDefinition(new TokenDefinition("HIDDEN", "hidden"));
-		tokenDefinitions.addDefinition(new TokenDefinition("NODE", "node"));
-		tokenDefinitions.addDefinition(new TokenDefinition("STACK", "stack"));
+				UHURA_GRAMMAR_KEYWORD_PRODUCTIONS));
+		tokenDefinitions.addDefinition(new TokenDefinition("HIDE",
+				UHURA_GRAMMAR_KEYWORD_HIDE));
+		tokenDefinitions.addDefinition(new TokenDefinition("IGNORE",
+				UHURA_GRAMMAR_KEYWORD_IGNORE));
+		tokenDefinitions.addDefinition(new TokenDefinition("NODE",
+				UHURA_GRAMMAR_KEYWORD_NODE));
+		tokenDefinitions.addDefinition(new TokenDefinition("STACK",
+				UHURA_GRAMMAR_KEYWORD_STACK));
 	}
 
 	private static void addLiteralsAndIdentifier(
@@ -283,7 +299,13 @@ public class UhuraGrammar {
 
 		production = new Production("OptionalVisibility");
 		production.addConstruction(new Terminal("LEFT_BRACKET"));
-		production.addConstruction(new Terminal("HIDDEN"));
+		production.addConstruction(new Terminal("HIDE"));
+		production.addConstruction(new Terminal("RIGHT_BRACKET"));
+		productions.add(production);
+
+		production = new Production("OptionalVisibility");
+		production.addConstruction(new Terminal("LEFT_BRACKET"));
+		production.addConstruction(new Terminal("IGNORE"));
 		production.addConstruction(new Terminal("RIGHT_BRACKET"));
 		productions.add(production);
 

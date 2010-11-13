@@ -19,7 +19,7 @@ public class LR1ItemSetCollectionTest {
 			System.out.println("====================");
 			System.out.println("LR Pamphlet Grammar:");
 			System.out.println("====================");
-			Grammar grammar = TestGrammars.getTestGrammarFromLR1Pamphlet();
+			Grammar grammar = TestGrammars.getGrammarFromLRkPamphlet();
 
 			First first = new First(grammar);
 			Closure1 closure1 = new Closure1(grammar, first);

@@ -29,8 +29,8 @@ HELPER
  */
 TOKENS
 
-	NEWLINE:			"(\r\n|\n|\r)" [hidden];
-	WHITESPACE:			"[ \t]" [hidden];
+	NEWLINE:			"(\r\n|\n|\r)" [ignore];
+	WHITESPACE:			"[ \t]" [hide];
 	INTEGER_LITERAL:	"(\\+|\\-)?" DIGITS_NONZERO + DIGITS *;
 	PLUS:				"\\+";
 	MINUS:				"\\-";

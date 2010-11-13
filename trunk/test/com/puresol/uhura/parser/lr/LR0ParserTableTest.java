@@ -19,30 +19,27 @@ import com.puresol.uhura.grammar.production.Terminal;
  */
 public class LR0ParserTableTest {
 
-	@Test
-	public void test() {
-		try {
-			Grammar grammar = TestGrammars.getTestGrammarFromLR1Pamphlet();
-			LR0ParserTable table = new LR0ParserTable(grammar);
-			System.out.println(table.toString());
-			System.out
-					.println(table.getAction(5, new Terminal("b")).toString());
-			fail("An GrammarException was expected due to the fact that this grammar is not LR(0)!");
-		} catch (GrammarException e) {
-		}
+	/**
+	 * This test checks the LR1 grammar from the LRk pamphlet for LR0 parser
+	 * table generation. Due to the ambiguity of the grammar for LR0 an
+	 * exception is expected.
+	 * 
+	 * @throws GrammarException
+	 */
+	@Test(expected = GrammarException.class)
+	public void test() throws GrammarException {
+		Grammar grammar = TestGrammars.getGrammarFromLRkPamphlet();
+		LR0ParserTable table = new LR0ParserTable(grammar);
+		table.getAction(5, new Terminal("b"));
+		fail("An GrammarException was expected due to the fact that this grammar is not LR(0)!");
 	}
 
-	@Test
-	public void test2() {
-		try {
-			Grammar grammar = TestGrammars.getSLR1TestGrammarFromDragonBook();
-			LR0ParserTable table = new LR0ParserTable(grammar);
-			System.out.println(table.toString());
-			System.out.println(table.getAction(2, new Terminal("STAR"))
-					.toString());
-			fail("An GrammarException was expected due to the fact that this grammar is not LR(0)!");
-		} catch (GrammarException e) {
-		}
+	@Test(expected = GrammarException.class)
+	public void test2() throws GrammarException {
+		Grammar grammar = TestGrammars.getSLR1TestGrammarFromDragonBook();
+		LR0ParserTable table = new LR0ParserTable(grammar);
+		table.getAction(2, new Terminal("STAR"));
+		fail("An GrammarException was expected due to the fact that this grammar is not LR(0)!");
 	}
 
 }

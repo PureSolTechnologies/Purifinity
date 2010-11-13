@@ -20,7 +20,15 @@ import com.puresol.uhura.grammar.token.Visibility;
  */
 public class TestGrammars {
 
-	public static Grammar getTestGrammarFromLR1Pamphlet() {
+	/**
+	 * This grammar is from the LR(k)-Analyse fuer Pragmatiker page 10. The
+	 * document is located in the man directory.
+	 * 
+	 * The grammar is specially designed to support LR1 parsing.
+	 * 
+	 * @return
+	 */
+	public static Grammar getGrammarFromLRkPamphlet() {
 		try {
 			TokenDefinitionSet tokenDefinitions = new TokenDefinitionSet();
 
@@ -72,6 +80,18 @@ public class TestGrammars {
 		}
 	}
 
+	/**
+	 * This grammar is from the German edition of the Dragon book from page 295.
+	 * 
+	 * <pre>
+	 * 	E' -> E
+	 * 	E -> E + T | T
+	 * 	T -> T * F | F
+	 * 	F -> (E) | id
+	 * </pre>
+	 * 
+	 * @return
+	 */
 	public static Grammar getSLR1TestGrammarFromDragonBook() {
 		try {
 			TokenDefinitionSet tokenDefinitions = new TokenDefinitionSet();
@@ -222,7 +242,7 @@ public class TestGrammars {
 		}
 	}
 
-	public static Grammar getTestLLGrammarFromDragonBook() {
+	public static Grammar getLLGrammarFromDragonBook() {
 		try {
 			TokenDefinitionSet tokenDefinitions = new TokenDefinitionSet();
 

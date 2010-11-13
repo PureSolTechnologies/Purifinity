@@ -25,7 +25,7 @@ public class SLR1ParserTableTest {
 			System.out.println("=====================");
 			System.out.println("LR Pampghlet Grammar:");
 			System.out.println("=====================");
-			Grammar grammar = TestGrammars.getTestGrammarFromLR1Pamphlet();
+			Grammar grammar = TestGrammars.getGrammarFromLRkPamphlet();
 			System.out.println("Productions:");
 			System.out.println(grammar.toProductionsString());
 			ParserTable table = new SLR1ParserTable(grammar);

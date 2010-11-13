@@ -18,7 +18,7 @@ public class Goto1Test {
 
 	@Test
 	public void test() {
-		Grammar grammar = TestGrammars.getTestGrammarFromLR1Pamphlet();
+		Grammar grammar = TestGrammars.getGrammarFromLRkPamphlet();
 		System.out.println("Productions:");
 		System.out.println(grammar.toProductionsString());
 

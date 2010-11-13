@@ -16,6 +16,17 @@ import com.puresol.utils.PersistenceException;
 public class GrammarTest {
 
 	@Test
+	public void testInstance() {
+		try {
+			assertNotNull(new Grammar(new Properties(),
+					new TokenDefinitionSet(), new ProductionSet()));
+		} catch (GrammarException e) {
+			e.printStackTrace();
+			fail("No exception was expected!");
+		}
+	}
+
+	@Test
 	public void testSettersAndGetters() {
 		try {
 			Properties options = new Properties();
@@ -27,7 +38,7 @@ public class GrammarTest {
 			assertSame(options, grammar.getOptions());
 			assertSame(tokenDefinitions, grammar.getTokenDefinitions());
 			assertSame(productions, grammar.getProductions());
-		} catch (Throwable e) {
+		} catch (GrammarException e) {
 			e.printStackTrace();
 			fail("No exception was expected!");
 		}
@@ -50,7 +61,9 @@ public class GrammarTest {
 			Persistence.persist(grammar, file);
 			Grammar restoredGrammar = (Grammar) Persistence.restore(file);
 
+			assertNotSame(grammar, restoredGrammar);
 			assertEquals(grammar, restoredGrammar);
+			assertTrue(file.delete());
 		} catch (GrammarException e) {
 			e.printStackTrace();
 			fail("No exception was expected!");

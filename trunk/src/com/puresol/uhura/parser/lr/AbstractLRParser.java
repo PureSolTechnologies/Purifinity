@@ -13,6 +13,7 @@ import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.production.FinishTerminal;
 import com.puresol.uhura.grammar.production.Production;
 import com.puresol.uhura.grammar.production.NonTerminal;
+import com.puresol.uhura.grammar.token.Visibility;
 import com.puresol.uhura.lexer.Token;
 import com.puresol.uhura.lexer.TokenStream;
 import com.puresol.uhura.parser.AbstractParser;
@@ -148,7 +149,7 @@ public abstract class AbstractLRParser extends AbstractParser {
 				ParserAction action = getAction(actionSet);
 				switch (action.getAction()) {
 				case SHIFT:
-					shift(action.getParameter(), token);
+					shift(action.getParameter());
 					break;
 				case REDUCE:
 					reduce(action.getParameter());
@@ -157,7 +158,7 @@ public abstract class AbstractLRParser extends AbstractParser {
 					accepted = accept();
 					break;
 				case ERROR:
-					error(token);
+					error();
 					break;
 				default:
 					throw new ParserException("Invalid action '" + action
@@ -253,11 +254,23 @@ public abstract class AbstractLRParser extends AbstractParser {
 	 *            is the new state id after shift.
 	 * @param token
 	 *            is the current token in token stream.
+	 * @throws ParserException
 	 */
-	private final void shift(int newState, Token token) {
-		treeStack.push(new AST(token));
+	private final void shift(int newState) {
+		Token token = getTokenStream().get(streamPosition);
+		do {
+			AST ast = new AST(token);
+			treeStack.push(ast);
+			streamPosition++;
+			if (streamPosition == getTokenStream().size()) {
+				break;
+			}
+			token = getTokenStream().get(streamPosition);
+			/*
+			 * This loop pushes all non visible tokens to treeStack.
+			 */
+		} while (token.getVisibility() != Visibility.VISIBLE);
 		stateStack.push(newState);
-		streamPosition++;
 	}
 
 	/**
@@ -273,27 +286,58 @@ public abstract class AbstractLRParser extends AbstractParser {
 			Production production = getGrammar().getProduction(grammarRuleId);
 			AST tree = new AST(production);
 			for (int i = 0; i < production.getConstructions().size(); i++) {
-				AST poppedAST = treeStack.pop();
-				if (poppedAST.isNode()) {
-					if (poppedAST.isStackingAllowed()) {
-						tree.addChildInFront(poppedAST);
-					} else {
-						if (tree.getName().equals(poppedAST.getName())) {
-							tree.addChildrenInFront(poppedAST.getChildren());
-						} else {
-							tree.addChildInFront(poppedAST);
-						}
-					}
-				} else {
-					tree.addChildrenInFront(poppedAST.getChildren());
-				}
+				/*
+				 * The for loop is run as many times as the production contains
+				 * constructions which are added up for an AST node.
+				 */
 				stateStack.pop();
+				AST poppedAST;
+				do {
+					poppedAST = treeStack.pop();
+					if (poppedAST.isNode()) {
+						/*
+						 * The popped AST is an own node.
+						 */
+						if (poppedAST.isStackingAllowed()) {
+							/*
+							 * The AST is allowed to be stacked, so do not do
+							 * anything just add it to children list at the
+							 * front position.
+							 */
+							tree.addChildInFront(poppedAST);
+						} else {
+							/*
+							 * The AST is not allowed to be stacked. So the
+							 * presence for a node with the same type is checked
+							 * and the result is added to that or the node is
+							 * created.
+							 */
+							if (tree.getName().equals(poppedAST.getName())) {
+								tree.addChildrenInFront(poppedAST.getChildren());
+							} else {
+								tree.addChildInFront(poppedAST);
+							}
+						}
+					} else {
+						/*
+						 * The currently popped AST is not allowed to be an own
+						 * node, so all children are added to the tree in front
+						 * at the children list.
+						 */
+						tree.addChildrenInFront(poppedAST.getChildren());
+					}
+					/*
+					 * The while loop is as long as there are ASTs popped which
+					 * are non visible tokens...
+					 */
+				} while ((poppedAST.getToken() != null)
+						&& (poppedAST.getToken().getVisibility() != Visibility.VISIBLE));
 			}
 			treeStack.push(tree);
 			ParserAction action = parserTable.getAction(stateStack.peek(),
 					new NonTerminal(production.getName()));
 			if (action.getAction() == ActionType.ERROR) {
-				error(getTokenStream().get(streamPosition));
+				error();
 				return;
 			}
 			stateStack.push(action.getParameter());
@@ -331,7 +375,8 @@ public abstract class AbstractLRParser extends AbstractParser {
 	 * @param token
 	 * @throws ParserException
 	 */
-	private final void error(Token token) throws ParserException {
+	private final void error() throws ParserException {
+		Token token = getTokenStream().get(streamPosition);
 		Integer currentState = stateStack.peek();
 		if (currentState != null) {
 			if (errorStates.containsKey(currentState)) {

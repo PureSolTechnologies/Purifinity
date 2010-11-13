@@ -4,11 +4,8 @@ import static org.junit.Assert.*;
 
 import java.io.StringReader;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
 import org.junit.Test;
 
-import com.puresol.trees.TreePrinter;
 import com.puresol.uhura.ast.AST;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
@@ -24,12 +21,14 @@ public class LR1ParserTest {
 	@Test
 	public void testSimple() {
 		try {
-			Logger.getRootLogger().setLevel(Level.TRACE);
+			// Logger.getRootLogger().setLevel(Level.TRACE);
 			Grammar grammar = TestGrammars.getSLR1TestGrammarFromDragonBook();
+			assertNotNull(grammar);
 			Parser parser = new LR1Parser(grammar);
 			Lexer lexer = new RegExpLexer(grammar);
 			AST syntaxTree = parser.parse(lexer.lex(new StringReader("1*2+3")));
-			new TreePrinter(System.out).println(syntaxTree);
+			assertNotNull(syntaxTree);
+			// new TreePrinter(System.out).println(syntaxTree);
 		} catch (GrammarException e) {
 			e.printStackTrace();
 			fail("No exception was expected!");
@@ -45,13 +44,14 @@ public class LR1ParserTest {
 	@Test
 	public void testComplex() {
 		try {
-			Logger.getRootLogger().setLevel(Level.TRACE);
+			// Logger.getRootLogger().setLevel(Level.TRACE);
 			Grammar grammar = TestGrammars.getSLR1TestGrammarFromDragonBook();
-			Parser parser = new LR1Parser(grammar);
 			Lexer lexer = new RegExpLexer(grammar);
+			Parser parser = new LR1Parser(grammar);
 			AST syntaxTree = parser.parse(lexer.lex(new StringReader(
 					"((1*(2+3)+4*5)+6)*7")));
-			new TreePrinter(System.out).println(syntaxTree);
+			assertNotNull(syntaxTree);
+			// new TreePrinter(System.out).println(syntaxTree);
 		} catch (GrammarException e) {
 			e.printStackTrace();
 			fail("No exception was expected!");

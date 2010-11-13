@@ -260,8 +260,10 @@ public class GrammarReader implements Callable<Boolean> {
 				// visibility...
 				AST visibilityAST = tokenDefinition
 						.getChild("OptionalVisibility");
-				if (visibilityAST.hasChild("HIDDEN")) {
+				if (visibilityAST.hasChild("HIDE")) {
 					tokenVisibility.put(identifier, Visibility.HIDDEN);
+				} else if (visibilityAST.hasChild("IGNORE")) {
+						tokenVisibility.put(identifier, Visibility.IGNORED);
 				} else {
 					tokenVisibility.put(identifier, Visibility.VISIBLE);
 				}
