@@ -6,6 +6,7 @@ import java.util.Stack;
 
 import org.apache.log4j.Logger;
 
+import com.puresol.trees.TreeWalker;
 import com.puresol.uhura.ast.AST;
 import com.puresol.uhura.ast.ASTException;
 import com.puresol.uhura.grammar.Grammar;
@@ -102,7 +103,8 @@ public abstract class AbstractLRParser extends AbstractParser {
 	public final AST parse(TokenStream tokenStream) throws ParserException {
 		setTokenStream(tokenStream);
 		reset();
-		return parse();
+		AST ast = parse();
+		return finishAST(ast);
 	}
 
 	/**
@@ -442,5 +444,11 @@ public abstract class AbstractLRParser extends AbstractParser {
 		}
 		buffer.append("$");
 		return buffer.toString();
+	}
+	
+	private AST finishAST(AST ast) {
+		TreeWalker<AST> walker = new TreeWalker<AST>(ast);
+		// TODO put the calculation and handling of ASTMetaData in here...
+		return ast;
 	}
 }

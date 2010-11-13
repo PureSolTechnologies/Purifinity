@@ -31,6 +31,7 @@ public class AST implements Tree<AST>, Serializable {
 	private final boolean stackingAllowed;
 
 	public AST(Token token) {
+		super();
 		this.name = token.getName();
 		this.token = token;
 		this.node = true;
@@ -92,6 +93,11 @@ public class AST implements Tree<AST>, Serializable {
 	@Override
 	public AST getParent() {
 		return parent;
+	}
+
+	@Override
+	public boolean hasChildren() {
+		return !children.isEmpty();
 	}
 
 	/**

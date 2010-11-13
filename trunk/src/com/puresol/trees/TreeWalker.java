@@ -10,48 +10,72 @@ package com.puresol.trees;
  */
 public class TreeWalker<T extends Tree<T>> {
 
-	private final T syntaxTree;
+	private final T tree;
 
-	public TreeWalker(T syntaxTree) {
+	public TreeWalker(T tree) {
 		super();
-		this.syntaxTree = syntaxTree;
+		this.tree = tree;
 	}
 
 	/**
-	 * @return the syntaxTree
+	 * @return the tree
 	 */
-	public T getSyntaxTree() {
-		return syntaxTree;
+	public T getTree() {
+		return tree;
 	}
 
 	/**
-	 * This class is used to start the walking process. The vistor is specified
-	 * which is called everytime a new node is reached.
+	 * This method is used to start the walking process. The visitor is
+	 * specified which is called every time a new node is reached.
 	 * 
 	 * @param treeVisitor
 	 */
 	public void walk(TreeVisitor<T> treeVisitor) {
-		walk(syntaxTree, treeVisitor);
+		walk(tree, treeVisitor);
 	}
 
 	/**
 	 * This is the recursive part of the walk method.
 	 * 
-	 * @param syntaxTree
+	 * @param tree
 	 * @param walkerClient
 	 * @return
 	 */
-	private WalkingAction walk(T syntaxTree, TreeVisitor<T> walkerClient) {
-		WalkingAction action = walkerClient.visit((T) syntaxTree);
+	private WalkingAction walk(T tree, TreeVisitor<T> walkerClient) {
+		WalkingAction action = walkerClient.visit((T) tree);
 		if (action == WalkingAction.ABORT) {
 			return WalkingAction.ABORT;
 		} else if (action == WalkingAction.LEAVE_BRANCH) {
 			return WalkingAction.PROCEED;
 		}
-		for (T child : syntaxTree.getChildren()) {
-			walk(child, walkerClient);
+		for (T child : tree.getChildren()) {
+			if (walk(child, walkerClient) == WalkingAction.ABORT) {
+				return WalkingAction.ABORT;
+			}
 		}
 		return WalkingAction.PROCEED;
 	}
 
+	/**
+	 * This method is used to start the walking process in an reverse order. The
+	 * visitor is specified which is called every time a new node is reached.
+	 * 
+	 * @param treeVisitor
+	 */
+	public void walkBackward(TreeVisitor<T> treeVisitor) {
+		walkBackward(tree, treeVisitor);
+	}
+
+	private WalkingAction walkBackward(T tree, TreeVisitor<T> walkerClient) {
+		for (int id = tree.getChildren().size() - 1; id >= 0; id--) {
+			T child = tree.getChildren().get(id);
+			WalkingAction action = walkBackward(child, walkerClient);
+			if (action == WalkingAction.ABORT) {
+				return WalkingAction.ABORT;
+			} else if (action == WalkingAction.LEAVE_BRANCH) {
+				return WalkingAction.PROCEED;
+			}
+		}
+		return walkerClient.visit((T) tree);
+	}
 }
