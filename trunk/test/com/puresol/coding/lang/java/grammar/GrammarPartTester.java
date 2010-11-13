@@ -18,10 +18,16 @@ public class GrammarPartTester {
 			"test/com/puresol/coding/lang/java/parsers");
 
 	public static boolean test(String production, String text) {
+		return test(production, text, true);
+	}
+
+	public static boolean test(String production, String text, boolean output) {
 		try {
 			final String PARSER_NAME = production + "-parser";
-			System.out.println("Testing production '" + production
-					+ "' with text '" + text + "' ...");
+			if (output) {
+				System.out.println("Testing production '" + production
+						+ "' with text '" + text + "' ...");
+			}
 			Grammar grammar = JavaGrammar.getInstance().getGrammar();
 			grammar = grammar.createWithNewStartProduction(production);
 			Lexer lexer = new RegExpLexer(grammar);
@@ -30,8 +36,10 @@ public class GrammarPartTester {
 			Parser parser = ParserManager.getManagerParser(PARSER_DIRECTORY,
 					PARSER_NAME, grammar);
 			AST ast = parser.parse(tokenStream);
-			new TreePrinter(System.out).println(ast);
-			System.out.println("passed.");
+			if (output) {
+				new TreePrinter(System.out).println(ast);
+				System.out.println("passed.");
+			}
 			return true;
 		} catch (Throwable e) {
 			e.printStackTrace();

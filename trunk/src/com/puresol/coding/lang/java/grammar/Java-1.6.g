@@ -14,7 +14,7 @@ OPTIONS
 	lexer="com.puresol.uhura.lexer.RegExpLexer";
 	parser="com.puresol.uhura.parser.lr.LR1Parser";
 	parser.backtracking=true;
- 
+
 /****************************************************************************
  * H E L P E R
  ****************************************************************************/ 
@@ -469,7 +469,8 @@ HELPER
 	;
 	
 	ClassOrInterfaceType:
-		TypeDeclSpecifier TypeArguments ?
+		Identifier TypeArguments ?
+	|	ClassOrInterfaceType DOT Identifier TypeArguments ?
 	/*
 	removed due to ambiguous productions...
 		ClassType
@@ -478,21 +479,29 @@ HELPER
 	;
 	
 	ClassType:
-		TypeDeclSpecifier TypeArguments ?
+		Identifier TypeArguments ?
+	|	ClassType DOT Identifier TypeArguments ?
 	;
 	
 	InterfaceType:
-		TypeDeclSpecifier TypeArguments ?
+		Identifier TypeArguments ?
+	|	InterfaceType DOT Identifier TypeArguments ?
 	;
 	
 	TypeDeclSpecifier:
-		TypeName
+	//	TypeName speed improvement...
+		Identifier
 	|	TypeDeclSpecifier TypeArguments ? DOT Identifier
 	;
 	
 	TypeName:
 		Identifier
 	|	TypeName DOT Identifier
+	;
+	
+	ClassName:
+		Identifier
+	|	ClassName DOT Identifier
 	;
 	
 	TypeVariable:
@@ -514,8 +523,8 @@ HELPER
 	;
 	
 	AdditionalBoundList:
-		AdditionalBoundList AdditionalBound
-	|	AdditionalBound
+		AdditionalBound
+	|	AdditionalBoundList AdditionalBound
 	;
 	
 	AdditionalBound:
@@ -554,37 +563,37 @@ HELPER
 /* 6.5 Determining the Meaning of a Name */
 
 	PackageName:
-		Identifier
-	|	PackageName DOT Identifier
+		Identifier					[stack=false]
+	|	PackageName DOT Identifier	[stack=false]
 	;
 	
 	TypeName:
-		Identifier
-	|	TypeName DOT Identifier // change for performance...
+		Identifier				[stack=false]
+	// |	PackageOrTypeName DOT Identifier for speed...
+	|	TypeName DOT Identifier	[stack=false]
 	;
 	
 	ExpressionName:
-		Identifier
-	|	ExpressionName DOT Identifier
+		Identifier						[stack=false]
+	// |	AmbiguousName DOT Identifier
+	|	ExpressionName DOT Identifier	[stack=false]
 	;
 	
 	MethodName:
-		Identifier
-	|	MethodName DOT Identifier  // change for performance...
+		Identifier					[stack=false]
+	// |	AmbiguousName DOT Identifier for speed...
+	|	MethodName DOT Identifier	[stack=false]
 	;
 	
 	PackageOrTypeName:
-		Identifier
-	|	PackageOrTypeName DOT Identifier  // change for performance...
+		Identifier							[stack=false]
+	|	PackageOrTypeName DOT Identifier	[stack=false]
 	;
 	
-/*
-	removed, because it's not needed anymore...
 	AmbiguousName:
-		Identifier
-	|	AmbiguousName DOT Identifier
+		Identifier						[stack=false]
+	|	AmbiguousName DOT Identifier	[stack=false]
 	;
-*/
 
 /**********
  7 Packages
@@ -680,8 +689,8 @@ HELPER
 	;
 	
 	TypeParameterList :
-		TypeParameterList COMMA TypeParameter
-	|	TypeParameter
+		TypeParameter
+	|	TypeParameterList COMMA TypeParameter
 	;
 
 	Super:
@@ -785,7 +794,7 @@ HELPER
 	
 	FormalParameterList:
 		LastFormalParameter
-	|	FormalParameters COMMA LastFormalParameter
+	|	FormalParameters ( COMMA LastFormalParameter ) ?
 	;
 	
 	FormalParameters:
@@ -809,7 +818,7 @@ HELPER
 	
 	LastFormalParameter:
 		VariableModifiers ? Type DOT DOT DOT VariableDeclaratorId
-	|	FormalParameter
+	// |	FormalParameter changed for performance...
 	;
 	
 	MethodModifiers:
@@ -841,7 +850,7 @@ HELPER
 	
 	ExceptionType:
 		ClassType
-	|	TypeVariable
+	// |	TypeVariable ClassType also contains a single Identifier 
 	;
 	
 	MethodBody:
@@ -887,9 +896,9 @@ HELPER
 	;
 	
 	ExplicitConstructorInvocation:
-		NonWildTypeArguments ? THIS LPAREN ArgumentList ? RPAREN SEMICOLON
-	|	NonWildTypeArguments ? SUPER LPAREN ArgumentList ? RPAREN SEMICOLON
-	|	Primary DOT NonWildTypeArguments ? SUPER LPAREN ArgumentList ? RPAREN SEMICOLON
+		NonWildTypeArguments ? THIS Arguments SEMICOLON
+	|	NonWildTypeArguments ? SUPER Arguments SEMICOLON
+	|	Primary DOT NonWildTypeArguments ? SUPER Arguments SEMICOLON
 	;
 	
 	NonWildTypeArguments:
@@ -1386,10 +1395,6 @@ HELPER
 	|	ArrayAccess
 	;	
 	
-	ClassName:
-		TypeName
-	;
-	
 	Literal:
 		IntegerLiteral
 	|	FloatingPointLiteral
@@ -1402,14 +1407,14 @@ HELPER
 /* 15.9 Class Instance Creation Expressions */
 
 	ClassInstanceCreationExpression:
-		NEW TypeArguments ? ClassOrInterfaceType LPAREN ArgumentList ? RPAREN ClassBody ?
-	|	Primary DOT NEW TypeArguments ? Identifier TypeArguments? LPAREN ArgumentList ? RPAREN ClassBody ?
+		NEW TypeArguments ? ClassOrInterfaceType Arguments ClassBody ?
+	|	Primary DOT NEW TypeArguments ? Identifier TypeArguments? Arguments ClassBody ?
 	/*
 		this was added due to: 
 		hotspot/src/share/tools/IdealGraphVisualizer/HierarchicalLayout/src/com/sun/hotspot/igv/hierarchicallayout/OldHierarchicalLayoutManager.java 
 		"[...]graph.new[...]"
 	*/
-	|	Identifier DOT NEW TypeArguments ? Identifier TypeArguments? LPAREN ArgumentList ? RPAREN ClassBody ? 
+	|	Identifier DOT NEW TypeArguments ? Identifier TypeArguments? Arguments ClassBody ? 
 	;
 	
 	ArgumentList:
@@ -1451,11 +1456,11 @@ HELPER
 /* 15.12 Method Invocation Expressions */
 
 	MethodInvocation:
-		MethodName LPAREN ArgumentList ? RPAREN
-	|	Primary DOT NonWildTypeArguments ? Identifier LPAREN ArgumentList ? RPAREN
-	|	SUPER DOT NonWildTypeArguments ? Identifier LPAREN ArgumentList ? RPAREN
-	|	ClassName DOT SUPER DOT NonWildTypeArguments ? Identifier LPAREN ArgumentList ? RPAREN
-	|	TypeName DOT NonWildTypeArguments Identifier LPAREN ArgumentList ? RPAREN
+		MethodName Arguments
+	|	Primary DOT NonWildTypeArguments ? Identifier Arguments
+	|	SUPER DOT NonWildTypeArguments ? Identifier Arguments
+	|	ClassName DOT SUPER DOT NonWildTypeArguments ? Identifier Arguments
+	|	TypeName DOT NonWildTypeArguments Identifier Arguments
 	;
 
 /* 15.13 Array Access Expressions */
@@ -1517,84 +1522,84 @@ HELPER
 /* 15.17 Multiplicative Operators */
 
 	MultiplicativeExpression:
-		UnaryExpression
-	|	MultiplicativeExpression STAR UnaryExpression
+		MultiplicativeExpression STAR UnaryExpression
 	|	MultiplicativeExpression SLASH UnaryExpression
 	|	MultiplicativeExpression PERCENT UnaryExpression
+	|	UnaryExpression
 	;
 
 /* 15.18 Additive Operators */
 
 	AdditiveExpression:
-		MultiplicativeExpression
-	|	AdditiveExpression PLUS MultiplicativeExpression
+		AdditiveExpression PLUS MultiplicativeExpression
 	|	AdditiveExpression MINUS MultiplicativeExpression
+	|	MultiplicativeExpression
 	;
 
 /* 15.19 Shift Operators */
 
 	ShiftExpression:
-		AdditiveExpression
-	|	ShiftExpression LESS_THAN LESS_THAN AdditiveExpression
+		ShiftExpression LESS_THAN LESS_THAN AdditiveExpression
 	|	ShiftExpression GREATER_THAN GREATER_THAN AdditiveExpression
 	|	ShiftExpression GREATER_THAN GREATER_THAN GREATER_THAN AdditiveExpression
+	|	AdditiveExpression
 	;
 
 /* 15.20 Relational Operators */
 
 	RelationalExpression:
-		ShiftExpression
-	|	RelationalExpression LESS_THAN ShiftExpression
+		RelationalExpression LESS_THAN ShiftExpression
 	|	RelationalExpression GREATER_THAN ShiftExpression
 	|	RelationalExpression LESS_THAN EQUALS ShiftExpression
 	|	RelationalExpression GREATER_THAN EQUALS ShiftExpression
 	|	RelationalExpression INSTANCEOF ReferenceType
+	|	ShiftExpression
 	;
 
 /* 15.21 Equality Operators */
 
 	EqualityExpression:
-		RelationalExpression
-	|	EqualityExpression EQUALS EQUALS RelationalExpression
+		EqualityExpression EQUALS EQUALS RelationalExpression
 	|	EqualityExpression EXCLAMATION_MARK EQUALS RelationalExpression
+	|	RelationalExpression
 	;
 
 /* 15.22 Bitwise and Logical Operators */
 
 	AndExpression:
-		EqualityExpression
-	|	AndExpression AMPERSAND EqualityExpression
+		AndExpression AMPERSAND EqualityExpression
+	|	EqualityExpression
 	;
 	
 	ExclusiveOrExpression:
-		AndExpression
-	|	ExclusiveOrExpression CARET AndExpression
+		ExclusiveOrExpression CARET AndExpression
+	|	AndExpression
 	;
 	
 	InclusiveOrExpression:
-		ExclusiveOrExpression
-	|	InclusiveOrExpression VERTICAL_BAR ExclusiveOrExpression
+		InclusiveOrExpression VERTICAL_BAR ExclusiveOrExpression
+	|	ExclusiveOrExpression
 	;
 
 /* 15.23 Conditional-And Operator && */
 
 	ConditionalAndExpression:
-		InclusiveOrExpression
-	|	ConditionalAndExpression AMPERSAND AMPERSAND InclusiveOrExpression
+		ConditionalAndExpression AMPERSAND AMPERSAND InclusiveOrExpression
+	|	InclusiveOrExpression
 	;
 
 /* 15.24 Conditional-Or Operator || */
 
 	ConditionalOrExpression:
-		ConditionalAndExpression
-	|	ConditionalOrExpression VERTICAL_BAR VERTICAL_BAR ConditionalAndExpression
+		ConditionalOrExpression VERTICAL_BAR VERTICAL_BAR ConditionalAndExpression
+	|	ConditionalAndExpression
 	;
 
 /* 15.25 Conditional Operator ? : */
 
 	ConditionalExpression:
-		ConditionalOrExpression
-	|	ConditionalOrExpression QUESTION_MARK Expression COLON ConditionalExpression
+		ConditionalOrExpression QUESTION_MARK Expression COLON ConditionalExpression
+	|	ConditionalOrExpression
 	;
 
 /* 15.26 Assignment Operators */

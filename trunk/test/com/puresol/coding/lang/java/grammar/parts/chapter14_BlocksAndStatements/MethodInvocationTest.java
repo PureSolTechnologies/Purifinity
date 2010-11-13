@@ -17,4 +17,30 @@ public class MethodInvocationTest {
 				"System.err.println(\"\")"));
 	}
 
+	@Test
+	public void test2() {
+		Logger.getRootLogger().setLevel(Level.TRACE);
+		Logger.getRootLogger().info("Start");
+		assertTrue(GrammarPartTester.test("MethodInvocation",
+				"com.sun.deploy.services.ServiceManager.setService()"));
+		Logger.getRootLogger().info("Stop");
+	}
+
+	@Test
+	public void test3() {
+		Logger.getRootLogger().setLevel(Level.TRACE);
+		Logger.getRootLogger().info("Start");
+		assertTrue(GrammarPartTester.test("MethodInvocation",
+				"com.sun.deploy.services.ServiceManager.setService(integer)"));
+		Logger.getRootLogger().info("Stop");
+	}
+
+	@Test
+	public void test4() {
+		Logger.getRootLogger().setLevel(Level.TRACE);
+		assertTrue(GrammarPartTester
+				.test("MethodInvocation",
+						"com.sun.deploy.services.ServiceManager.setService(com.sun.deploy.services.PlatformType.STANDALONE_TIGER_WIN32)"));
+	}
+
 }
