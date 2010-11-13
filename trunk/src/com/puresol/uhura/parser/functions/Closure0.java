@@ -77,8 +77,7 @@ public class Closure0 implements Serializable {
 				for (Production subProduction : productions
 						.get(nextConstruction.getName())) {
 					LR0Item newItem = new LR0Item(subProduction, 0);
-					if (!itemSet.containsItem(newItem)) {
-						itemSet.addNonKernelItem(newItem);
+					if (itemSet.addNonKernelItem(newItem)) {
 						changed = true;
 					}
 				}

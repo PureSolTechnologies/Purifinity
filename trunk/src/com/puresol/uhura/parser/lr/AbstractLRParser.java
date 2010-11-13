@@ -1,5 +1,7 @@
 package com.puresol.uhura.parser.lr;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Stack;
 
 import org.apache.log4j.Logger;
@@ -11,7 +13,6 @@ import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.production.FinishTerminal;
 import com.puresol.uhura.grammar.production.Production;
 import com.puresol.uhura.grammar.production.NonTerminal;
-import com.puresol.uhura.grammar.token.Visibility;
 import com.puresol.uhura.lexer.Token;
 import com.puresol.uhura.lexer.TokenStream;
 import com.puresol.uhura.parser.AbstractParser;
@@ -63,6 +64,7 @@ public abstract class AbstractLRParser extends AbstractParser {
 	 * states in stateStack.
 	 */
 	private final Stack<AST> treeStack = new Stack<AST>();
+	private final Map<Integer, Integer> errorStates = new HashMap<Integer, Integer>();
 
 	/**
 	 * This is the current position in the stream.
@@ -291,7 +293,7 @@ public abstract class AbstractLRParser extends AbstractParser {
 			ParserAction action = parserTable.getAction(stateStack.peek(),
 					new NonTerminal(production.getName()));
 			if (action.getAction() == ActionType.ERROR) {
-				error(new Token("", "", Visibility.HIDDEN));
+				error(getTokenStream().get(streamPosition));
 				return;
 			}
 			stateStack.push(action.getParameter());
@@ -330,6 +332,15 @@ public abstract class AbstractLRParser extends AbstractParser {
 	 * @throws ParserException
 	 */
 	private final void error(Token token) throws ParserException {
+		Integer currentState = stateStack.peek();
+		if (currentState != null) {
+			if (errorStates.containsKey(currentState)) {
+				errorStates
+						.put(currentState, errorStates.get(currentState) + 1);
+			} else {
+				errorStates.put(currentState, 1);
+			}
+		}
 		if (backtrackEnabled && !backtrackStack.isEmpty()) {
 			trackBack();
 			return;

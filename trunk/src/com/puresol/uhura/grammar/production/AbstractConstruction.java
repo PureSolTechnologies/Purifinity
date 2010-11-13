@@ -92,7 +92,7 @@ public abstract class AbstractConstruction implements Construction {
 		if (other == null) {
 			return 1;
 		}
-		int result = this.getName().compareTo(other.getName());
+		int result = name.compareTo(((AbstractConstruction) other).name);
 		if (result != 0) {
 			return result;
 		}

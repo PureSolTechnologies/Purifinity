@@ -39,4 +39,5 @@ public interface ParserTable extends Serializable {
 
 	public Set<NonTerminal> getGotoNonTerminals();
 
+	public int getStateCount();
 }

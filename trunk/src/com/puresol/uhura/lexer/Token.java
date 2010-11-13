@@ -28,12 +28,25 @@ public class Token implements Serializable, Cloneable {
 	 */
 	private final String text;
 	private final Visibility visibility;
+	private final TokenMetaData metaData;
+	private int hashcode;
 
-	public Token(String name, String text, Visibility visibility) {
+	public Token(String name, String text, Visibility visibility,
+			TokenMetaData metaData) {
 		super();
 		this.name = name;
 		this.text = text;
 		this.visibility = visibility;
+		this.metaData = metaData;
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((text == null) ? 0 : text.hashCode());
+		result = prime * result
+				+ ((visibility == null) ? 0 : visibility.hashCode());
+		result = prime * result
+				+ ((metaData == null) ? 0 : metaData.hashCode());
+		hashcode = result;
 	}
 
 	/**
@@ -60,6 +73,10 @@ public class Token implements Serializable, Cloneable {
 		return visibility;
 	}
 
+	public TokenMetaData getMetaData() {
+		return metaData;
+	}
+
 	public Terminal getTerminal() {
 		return new Terminal(name);
 	}
@@ -67,6 +84,42 @@ public class Token implements Serializable, Cloneable {
 	@Override
 	public String toString() {
 		return "\"" + text + "\" (" + name + ")";
+	}
+
+	@Override
+	public int hashCode() {
+		return hashcode;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Token other = (Token) obj;
+		if (hashCode() != other.hashCode())
+			return false;
+		if (metaData == null) {
+			if (other.metaData != null)
+				return false;
+		} else if (!metaData.equals(other.metaData))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (text == null) {
+			if (other.text != null)
+				return false;
+		} else if (!text.equals(other.text))
+			return false;
+		if (visibility != other.visibility)
+			return false;
+		return true;
 	}
 
 	@Override
@@ -86,6 +139,10 @@ public class Token implements Serializable, Cloneable {
 			visibility.setAccessible(true);
 			visibility.set(cloned, this.visibility);
 
+			Field metaData = cloned.getClass().getDeclaredField("metaData");
+			metaData.setAccessible(true);
+			metaData.set(cloned, this.metaData.clone());
+
 			return cloned;
 		} catch (CloneNotSupportedException e) {
 			throw new RuntimeException(e.getMessage());
@@ -99,5 +156,4 @@ public class Token implements Serializable, Cloneable {
 			throw new RuntimeException(e.getMessage());
 		}
 	}
-
 }

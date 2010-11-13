@@ -17,7 +17,6 @@ import com.puresol.uhura.grammar.production.Terminal;
 import com.puresol.uhura.parser.functions.Closure1;
 import com.puresol.uhura.parser.items.LR0Item;
 import com.puresol.uhura.parser.items.LR0ItemSet;
-import com.puresol.uhura.parser.items.LR0ItemSetCollection;
 import com.puresol.uhura.parser.items.LR1Item;
 import com.puresol.uhura.parser.items.LR1ItemSet;
 

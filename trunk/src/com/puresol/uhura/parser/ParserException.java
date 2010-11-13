@@ -2,6 +2,7 @@ package com.puresol.uhura.parser;
 
 import com.puresol.uhura.grammar.token.Visibility;
 import com.puresol.uhura.lexer.Token;
+import com.puresol.uhura.lexer.TokenMetaData;
 
 public class ParserException extends Exception {
 
@@ -14,9 +15,11 @@ public class ParserException extends Exception {
 		this.token = token;
 	}
 
+	// TODO remove this if possible
 	public ParserException(String message) {
 		super(message);
-		this.token = new Token("", "", Visibility.HIDDEN);
+		this.token = new Token("", "", Visibility.HIDDEN, new TokenMetaData(0,
+				0, 0, 0));
 	}
 
 	/**

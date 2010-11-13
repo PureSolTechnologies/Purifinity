@@ -56,4 +56,20 @@ public class ParserActionSetTest {
 		}
 	}
 
+	@Test
+	public void testActionSorting() {
+		ParserAction r1 = new ParserAction(ActionType.REDUCE, 1);
+		ParserAction s3 = new ParserAction(ActionType.SHIFT, 3);
+		ParserAction r2 = new ParserAction(ActionType.REDUCE, 2);
+
+		ParserActionSet set = new ParserActionSet();
+
+		set.addAction(r1);
+		set.addAction(s3);
+		set.addAction(r2);
+
+		assertEquals(s3, set.getAction(0));
+		assertEquals(r2, set.getAction(1));
+		assertEquals(r1, set.getAction(2));
+	}
 }

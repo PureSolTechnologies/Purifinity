@@ -142,10 +142,10 @@ public class GrammarReader implements Callable<Boolean> {
 			throw new IOException(e.getMessage());
 		} catch (ParserException e) {
 			logger.error(e.getMessage(), e);
-			logger.error("Error while reading grammar file at: "
-					+ lexer.getMetaInformation().getMetaData(e.getToken()));
-			throw new IOException("Error while reading grammar file at: "
-					+ lexer.getMetaInformation().getMetaData(e.getToken()));
+			String errorMsg = "Error while reading grammar file at: "
+					+ e.getToken().getMetaData() + ": " + e.getToken();
+			logger.error(errorMsg);
+			throw new IOException(errorMsg);
 		}
 	}
 
@@ -506,8 +506,7 @@ public class GrammarReader implements Callable<Boolean> {
 		} else if (productionPart.hasChild("ProductionConstructions")) {
 			AST productionConstructions = productionPart
 					.getChild("ProductionConstructions");
-			String newIdentifier = createNewIdentifier(productionPart,
-					"_group_autogen");
+			String newIdentifier = createNewIdentifier(productionPart, "group");
 			convertSingleProductions(newIdentifier, productionConstructions);
 			return new NonTerminal(newIdentifier);
 		} else {
@@ -538,8 +537,7 @@ public class GrammarReader implements Callable<Boolean> {
 	 */
 	private Construction generateOptionalProduction(AST productionPart)
 			throws ASTException {
-		String newIdentifier = createNewIdentifier(productionPart,
-				"_opt_autogen");
+		String newIdentifier = createNewIdentifier(productionPart, "opt");
 		try {
 			Construction construction = createConstruction(productionPart);
 
@@ -572,17 +570,23 @@ public class GrammarReader implements Callable<Boolean> {
 	 */
 	private String createNewIdentifier(AST productionPart, String suffix)
 			throws ASTException {
-		String newIdentifier = "";
+		String identifier = "";
 		if (productionPart.hasChild("IDENTIFIER")) {
-			newIdentifier = productionPart.getChild("IDENTIFIER").getText();
+			identifier = productionPart.getChild("IDENTIFIER").getText();
 		} else if (productionPart.hasChild("STRING_LITERAL")) {
-			newIdentifier = productionPart.getChild("STRING_LITERAL").getText();
+			identifier = productionPart.getChild("STRING_LITERAL").getText();
 		}
 		int id = 1;
-		while (productions.has(newIdentifier + id + suffix)) {
+		String newIdentifier = createIdentifierName(identifier, suffix, id);
+		while (productions.has(newIdentifier)) {
 			id++;
+			newIdentifier = createIdentifierName(identifier, suffix, id);
 		}
-		return newIdentifier + suffix + id;
+		return newIdentifier;
+	}
+
+	private String createIdentifierName(String identifier, String suffix, int id) {
+		return identifier + "_" + suffix + "_autogen_" + id;
 	}
 
 	/**
@@ -595,8 +599,7 @@ public class GrammarReader implements Callable<Boolean> {
 	 */
 	private Construction generateOptionalList(AST productionPart)
 			throws ASTException {
-		String newIdentifier = createNewIdentifier(productionPart,
-				"_optlist_autogen");
+		String newIdentifier = createNewIdentifier(productionPart, "optlist");
 		try {
 			Construction construction = createConstruction(productionPart);
 
@@ -628,8 +631,7 @@ public class GrammarReader implements Callable<Boolean> {
 	 * @throws ASTException
 	 */
 	private Construction generateList(AST productionPart) throws ASTException {
-		String newIdentifier = createNewIdentifier(productionPart,
-				"_list_autogen");
+		String newIdentifier = createNewIdentifier(productionPart, "list");
 		try {
 			Construction construction = createConstruction(productionPart);
 
@@ -666,11 +668,6 @@ public class GrammarReader implements Callable<Boolean> {
 				if (option.hasChild("STACK")) {
 					production.setStackingAllowed(Boolean.valueOf(option
 							.getChild("BOOLEAN_LITERAL").getText()));
-				}
-				if (option.hasChild("PREFER_SHIFT")) {
-					production.setShiftPrefered(true);
-				} else if (option.hasChild("PREFER_REDUCE")) {
-					production.setShiftPrefered(false);
 				}
 			}
 		}

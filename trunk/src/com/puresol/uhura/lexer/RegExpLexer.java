@@ -27,7 +27,6 @@ public class RegExpLexer implements Lexer {
 
 	private final Grammar grammar;
 
-	private TokenMetaInformation tokenMetaDatas = null;
 	private TokenStream tokenStream = null;
 	private StringBuilder text = null;
 
@@ -74,12 +73,11 @@ public class RegExpLexer implements Lexer {
 
 	private TokenStream scan() throws LexerException {
 		tokenStream = new TokenStream();
-		tokenMetaDatas = new TokenMetaInformation();
 		int pos = 0;
 		int id = 0;
 		int line = 1;
 		while (text.length() > 0) {
-			Token token = findNextToken(text);
+			Token token = findNextToken(text, id, pos, line);
 			if ((token == null) || (token.getText().length() == 0)) {
 				String exceptionText;
 				if (text.length() <= 12) {
@@ -93,9 +91,6 @@ public class RegExpLexer implements Lexer {
 			}
 			if (token.getVisibility() != Visibility.HIDDEN) {
 				tokenStream.add(token);
-				// meta information...
-				tokenMetaDatas.add(token, new TokenMetaData(token, id, pos,
-						line));
 			}
 			id++;
 			pos += token.getText().length();
@@ -116,7 +111,7 @@ public class RegExpLexer implements Lexer {
 		return tokenStream;
 	}
 
-	private Token findNextToken(StringBuilder text) {
+	private Token findNextToken(StringBuilder text, int id, int pos, int line) {
 		Token nextToken = null;
 		for (TokenDefinition definition : grammar.getTokenDefinitions()
 				.getDefinitions()) {
@@ -124,21 +119,19 @@ public class RegExpLexer implements Lexer {
 			if (!matcher.find()) {
 				continue;
 			}
-			String group = matcher.group(0);
+			String tokenText = matcher.group(0);
 			if ((nextToken == null)
-					|| (group.length() > nextToken.getText().length())) {
-				nextToken = new Token(definition.getName(), group,
-						definition.getVisibility());
+					|| (tokenText.length() > nextToken.getText().length())) {
+				int lineCounter = 1;
+				if (tokenText.contains("\r") || tokenText.contains("\n")) {
+					lineCounter += tokenText.split("(\\r\\n|\\n|\\r)").length - 1;
+				}
+				TokenMetaData metaData = new TokenMetaData(id, pos, line,
+						lineCounter);
+				nextToken = new Token(definition.getName(), tokenText,
+						definition.getVisibility(), metaData);
 			}
 		}
 		return nextToken;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public TokenMetaInformation getMetaInformation() {
-		return tokenMetaDatas;
 	}
 }

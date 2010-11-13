@@ -13,6 +13,4 @@ public interface Lexer extends Serializable {
 
 	public TokenStream lex(Reader reader) throws LexerException;
 
-	public TokenMetaInformation getMetaInformation();
-
 }

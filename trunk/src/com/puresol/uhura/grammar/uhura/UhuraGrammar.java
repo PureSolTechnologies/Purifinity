@@ -83,10 +83,6 @@ public class UhuraGrammar {
 		tokenDefinitions.addDefinition(new TokenDefinition("HIDDEN", "hidden"));
 		tokenDefinitions.addDefinition(new TokenDefinition("NODE", "node"));
 		tokenDefinitions.addDefinition(new TokenDefinition("STACK", "stack"));
-		tokenDefinitions.addDefinition(new TokenDefinition("PREFER_SHIFT",
-				"shift"));
-		tokenDefinitions.addDefinition(new TokenDefinition("PREFER_REDUCE",
-				"reduce"));
 	}
 
 	private static void addLiteralsAndIdentifier(
@@ -424,14 +420,6 @@ public class UhuraGrammar {
 		production.addConstruction(new Terminal("STACK"));
 		production.addConstruction(new Terminal("EQUALS"));
 		production.addConstruction(new Terminal("BOOLEAN_LITERAL"));
-		productions.add(production);
-
-		production = new Production("Option");
-		production.addConstruction(new Terminal("PREFER_SHIFT"));
-		productions.add(production);
-
-		production = new Production("Option");
-		production.addConstruction(new Terminal("PREFER_REDUCE"));
 		productions.add(production);
 	}
 

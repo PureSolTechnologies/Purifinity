@@ -48,24 +48,4 @@ public class RegExpLexerTest {
 			fail("No exception was expected!");
 		}
 	}
-
-	public static void main(String args[]) {
-		try {
-			TokenDefinitionSet rules = new TokenDefinitionSet();
-			rules.addDefinition(new TokenDefinition("NUMBER", "[0-9]+"));
-			rules.addDefinition(new TokenDefinition("WHITESPACE", "[ \\t]+"));
-			Grammar grammar = new Grammar(new Properties(), rules,
-					new ProductionSet());
-			Lexer lexer = new RegExpLexer(grammar);
-			lexer.lex(new StringReader(
-					"0 1\t2 \t3 \t4 \t5\t 6 7 8 9 10 11 12 13 14 15"));
-			lexer.getMetaInformation().println();
-		} catch (LexerException e) {
-			e.printStackTrace();
-			fail("No exception was expected!");
-		} catch (GrammarException e) {
-			e.printStackTrace();
-			fail("No exception was expected!");
-		}
-	}
 }

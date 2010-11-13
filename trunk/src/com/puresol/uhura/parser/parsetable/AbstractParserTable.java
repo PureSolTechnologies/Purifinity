@@ -127,6 +127,11 @@ public abstract class AbstractParserTable implements ParserTable {
 	}
 
 	@Override
+	public final int getStateCount() {
+		return table.size();
+	}
+
+	@Override
 	public final String toString() {
 		StringBuffer buffer = new StringBuffer();
 		buffer.append("=============\n");

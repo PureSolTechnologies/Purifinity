@@ -113,14 +113,4 @@ public class ParserActionSet implements Serializable {
 			return false;
 		return true;
 	}
-
-	public void preferShift() {
-		Collections.sort(actions);
-	}
-
-	public void preferReduce() {
-		Collections.sort(actions);
-		Collections.reverse(actions);
-	}
-
 }

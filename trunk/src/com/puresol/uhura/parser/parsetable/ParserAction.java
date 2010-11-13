@@ -61,21 +61,11 @@ public class ParserAction implements Serializable, Comparable<ParserAction> {
 		return result;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
 	@Override
 	public int hashCode() {
 		return hashCode;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -85,9 +75,6 @@ public class ParserAction implements Serializable, Comparable<ParserAction> {
 		if (getClass() != obj.getClass())
 			return false;
 		ParserAction other = (ParserAction) obj;
-		if (this.hashCode != other.hashCode) {
-			return false;
-		}
 		if (action != other.action)
 			return false;
 		if (parameter != other.parameter)
@@ -95,12 +82,21 @@ public class ParserAction implements Serializable, Comparable<ParserAction> {
 		return true;
 	}
 
+	/**
+	 * This comparison is used to sort parser action lists for ambiguous
+	 * grammars to get the order of fastest progress.
+	 * 
+	 * The experience tells that the fastest progress is to shift first and try
+	 * to reduce later. And the sorting of the productions within the grammar
+	 * file should be from rough to fine definition and the reduction is tried
+	 * from the latest production to the first. Means, from fine to rough.
+	 */
 	@Override
 	public int compareTo(ParserAction other) {
 		int result = this.action.compareTo(other.action);
 		if (result != 0) {
 			return result;
 		}
-		return this.parameter - other.parameter;
+		return other.parameter - this.parameter;
 	}
 }

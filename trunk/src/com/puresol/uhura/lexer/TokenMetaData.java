@@ -15,34 +15,29 @@ import java.io.Serializable;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class TokenMetaData implements Serializable {
+public class TokenMetaData implements Serializable, Cloneable {
 
 	private static final long serialVersionUID = 6478412339837934971L;
 
-	private final Token token;
 	private final int id;
 	private final int pos;
 	private final int line;
 	private final int lineNum;
+	private final int hashcode;
 
-	public TokenMetaData(Token token, int id, int pos, int line) {
+	public TokenMetaData(int id, int pos, int line, int lineNum) {
 		super();
-		this.token = token;
 		this.id = id;
 		this.pos = pos;
 		this.line = line;
-		int lineCounter = 1;
-		if (token.getText().contains("\r") || token.getText().contains("\n")) {
-			lineCounter += token.getText().split("(\\r\\n|\\n|\\r)").length - 1;
-		}
-		lineNum = lineCounter;
-	}
-
-	/**
-	 * @return the token
-	 */
-	public Token getToken() {
-		return token;
+		this.lineNum = lineNum;
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + id;
+		result = prime * result + line;
+		result = prime * result + lineNum;
+		result = prime * result + pos;
+		hashcode = result;
 	}
 
 	/**
@@ -76,13 +71,42 @@ public class TokenMetaData implements Serializable {
 	@Override
 	public String toString() {
 		String result = "id: " + id + ", ";
-		result += "pos: " + pos + " (" + token.getText().length() + "), ";
+		result += "pos: " + pos + ", ";
 		if (lineNum == 1) {
-			result += "line: " + line + ": ";
+			result += "line: " + line;
 		} else {
-			result += "lines: " + line + " - " + (line + lineNum - 1) + ": ";
+			result += "lines: " + line + " - " + (line + lineNum - 1);
 		}
-		result += token.toString();
 		return result;
+	}
+
+	@Override
+	public int hashCode() {
+		return hashcode;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		TokenMetaData other = (TokenMetaData) obj;
+		if (id != other.id)
+			return false;
+		if (line != other.line)
+			return false;
+		if (lineNum != other.lineNum)
+			return false;
+		if (pos != other.pos)
+			return false;
+		return true;
+	}
+
+	@Override
+	public TokenMetaData clone() {
+		return new TokenMetaData(id, pos, line, lineNum);
 	}
 }

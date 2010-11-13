@@ -9,7 +9,6 @@ import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.TestGrammars;
 import com.puresol.uhura.parser.functions.Closure0;
 import com.puresol.uhura.parser.functions.Goto0;
-import com.puresol.uhura.parser.items.LR0ItemSetCollection;
 
 public class LR0ItemSetCollectionTest {
 

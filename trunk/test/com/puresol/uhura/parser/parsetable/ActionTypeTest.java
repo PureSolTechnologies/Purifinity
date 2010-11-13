@@ -47,8 +47,8 @@ public class ActionTypeTest {
 	public void testCompareTo() {
 		assertTrue(ActionType.SHIFT.compareTo(ActionType.ACCEPT) > 0);
 		assertTrue(ActionType.REDUCE.compareTo(ActionType.SHIFT) > 0);
-		assertTrue(ActionType.ERROR.compareTo(ActionType.REDUCE) > 0);
-		assertTrue(ActionType.GOTO.compareTo(ActionType.ERROR) > 0);
+		assertTrue(ActionType.GOTO.compareTo(ActionType.REDUCE) > 0);
+		assertTrue(ActionType.ERROR.compareTo(ActionType.GOTO) > 0);
 	}
 
 	@Test
@@ -63,7 +63,7 @@ public class ActionTypeTest {
 		assertEquals(ActionType.ACCEPT, actions.get(0));
 		assertEquals(ActionType.SHIFT, actions.get(1));
 		assertEquals(ActionType.REDUCE, actions.get(2));
-		assertEquals(ActionType.ERROR, actions.get(3));
-		assertEquals(ActionType.GOTO, actions.get(4));
+		assertEquals(ActionType.GOTO, actions.get(3));
+		assertEquals(ActionType.ERROR, actions.get(4));
 	}
 }
