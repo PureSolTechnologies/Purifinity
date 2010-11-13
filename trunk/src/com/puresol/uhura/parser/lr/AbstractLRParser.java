@@ -118,6 +118,22 @@ public abstract class AbstractLRParser extends AbstractParser {
 		streamPosition = 0;
 		stepCounter = 0;
 		stateStack.push(0);
+		shiftIgnoredTokens();
+	}
+
+	private final void shiftIgnoredTokens() {
+		if (streamPosition == getTokenStream().size()) {
+			return;
+		}
+		Token token = getTokenStream().get(streamPosition);
+		while (token.getVisibility() == Visibility.IGNORED) {
+			treeStack.push(new AST(token));
+			streamPosition++;
+			if (streamPosition == getTokenStream().size()) {
+				break;
+			}
+			token = getTokenStream().get(streamPosition);
+		}
 	}
 
 	/**
@@ -259,20 +275,12 @@ public abstract class AbstractLRParser extends AbstractParser {
 	 * @throws ParserException
 	 */
 	private final void shift(int newState) {
-		Token token = getTokenStream().get(streamPosition);
-		do {
-			AST ast = new AST(token);
-			treeStack.push(ast);
-			streamPosition++;
-			if (streamPosition == getTokenStream().size()) {
-				break;
-			}
-			token = getTokenStream().get(streamPosition);
-			/*
-			 * This loop pushes all non visible tokens to treeStack.
-			 */
-		} while (token.getVisibility() != Visibility.VISIBLE);
 		stateStack.push(newState);
+		Token token = getTokenStream().get(streamPosition);
+		AST ast = new AST(token);
+		treeStack.push(ast);
+		streamPosition++;
+		shiftIgnoredTokens();
 	}
 
 	/**
@@ -363,10 +371,22 @@ public abstract class AbstractLRParser extends AbstractParser {
 	 * 
 	 * @return True is returned if all conditions are met for finishing the
 	 *         parser.
+	 * @throws ParserException
 	 */
-	private final boolean accept() {
-		if ((treeStack.size() == 1) && (stateStack.size() == 2)) {
-			return true;
+	private final boolean accept() throws ParserException {
+		try {
+			if ((treeStack.size() >= 1) && (stateStack.size() == 2)) {
+				AST ast = treeStack.pop();
+				while (treeStack.size() > 0) {
+					ast.addChildInFront(treeStack.pop());
+				}
+				treeStack.push(ast);
+				return true;
+			}
+			error();
+		} catch (ASTException e) {
+			logger.error(e.getMessage(), e);
+			error();
 		}
 		return false;
 	}
@@ -445,7 +465,7 @@ public abstract class AbstractLRParser extends AbstractParser {
 		buffer.append("$");
 		return buffer.toString();
 	}
-	
+
 	private AST finishAST(AST ast) {
 		TreeWalker<AST> walker = new TreeWalker<AST>(ast);
 		// TODO put the calculation and handling of ASTMetaData in here...
