@@ -4,13 +4,13 @@ import junit.framework.TestCase;
 
 import org.junit.Test;
 
-import com.puresol.coding.lang.fortran.grammar.GrammarPartTester;
+import com.puresol.coding.lang.fortran.grammar.FortranGrammarPartTester;
 
 public class R7xx_DefinedOpTest extends TestCase {
 
 	@Test
 	public void test() {
-		assertTrue(GrammarPartTester.test("defined-op", ".INVERSE."));
-		assertTrue(GrammarPartTester.test("defined-op", ".DEFINED."));
+		assertTrue(FortranGrammarPartTester.test("defined-op", ".INVERSE."));
+		assertTrue(FortranGrammarPartTester.test("defined-op", ".DEFINED."));
 	}
 }

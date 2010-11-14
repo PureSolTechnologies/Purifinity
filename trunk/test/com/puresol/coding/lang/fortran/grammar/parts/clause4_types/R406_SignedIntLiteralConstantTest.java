@@ -6,16 +6,16 @@ import org.junit.Test;
 
 import junit.framework.TestCase;
 
-import com.puresol.coding.lang.fortran.grammar.GrammarPartTester;
+import com.puresol.coding.lang.fortran.grammar.FortranGrammarPartTester;
 
 public class R406_SignedIntLiteralConstantTest extends TestCase {
 
 	@Test
 	public void test() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester.test("signed-int-literal-constant", "+1"));
-		assertTrue(GrammarPartTester.test("signed-int-literal-constant", "0"));
-		assertTrue(GrammarPartTester.test("signed-int-literal-constant", "-1"));
+		assertTrue(FortranGrammarPartTester.test("signed-int-literal-constant", "+1"));
+		assertTrue(FortranGrammarPartTester.test("signed-int-literal-constant", "0"));
+		assertTrue(FortranGrammarPartTester.test("signed-int-literal-constant", "-1"));
 	}
 
 }

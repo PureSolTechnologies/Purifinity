@@ -6,15 +6,15 @@ import org.junit.Test;
 
 import junit.framework.TestCase;
 
-import com.puresol.coding.lang.fortran.grammar.GrammarPartTester;
+import com.puresol.coding.lang.fortran.grammar.FortranGrammarPartTester;
 
 public class R717_Level5ExprTest extends TestCase {
 
 	@Test
 	public void test() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester.test("level-5-expr", "A.EQV.B"));
-		assertTrue(GrammarPartTester.test("level-5-expr", "A.NEQV.B"));
+		assertTrue(FortranGrammarPartTester.test("level-5-expr", "A.EQV.B"));
+		assertTrue(FortranGrammarPartTester.test("level-5-expr", "A.NEQV.B"));
 	}
 
 }

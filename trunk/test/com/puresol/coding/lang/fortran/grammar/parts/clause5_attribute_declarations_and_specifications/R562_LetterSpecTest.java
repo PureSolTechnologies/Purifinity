@@ -4,13 +4,13 @@ import org.junit.Test;
 
 import junit.framework.TestCase;
 
-import com.puresol.coding.lang.fortran.grammar.GrammarPartTester;
+import com.puresol.coding.lang.fortran.grammar.FortranGrammarPartTester;
 
 public class R562_LetterSpecTest extends TestCase {
 
 	@Test
 	public void test() {
-		assertTrue(GrammarPartTester.test("letter-spec", "A-Z"));
+		assertTrue(FortranGrammarPartTester.test("letter-spec", "A-Z"));
 	}
 
 }

@@ -6,14 +6,14 @@ import org.junit.Test;
 
 import junit.framework.TestCase;
 
-import com.puresol.coding.lang.fortran.grammar.GrammarPartTester;
+import com.puresol.coding.lang.fortran.grammar.FortranGrammarPartTester;
 
 public class R526_AllocatableStmtTest extends TestCase {
 
 	@Test
 	public void test() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester.test("allocatable-stmt",
+		assertTrue(FortranGrammarPartTester.test("allocatable-stmt",
 				"      ALLOCATABLE :: A (:, :), B, SCALAR\n"));
 	}
 

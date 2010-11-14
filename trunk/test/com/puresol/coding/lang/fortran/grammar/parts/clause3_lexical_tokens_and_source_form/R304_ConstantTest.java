@@ -6,21 +6,21 @@ import org.junit.Test;
 
 import junit.framework.TestCase;
 
-import com.puresol.coding.lang.fortran.grammar.GrammarPartTester;
+import com.puresol.coding.lang.fortran.grammar.FortranGrammarPartTester;
 
 public class R304_ConstantTest extends TestCase {
 
 	@Test
 	public void test() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester.test("constant", "1.0"));
-		assertTrue(GrammarPartTester.test("constant", "0"));
-		assertTrue(GrammarPartTester.test("constant", "1.23"));
-		assertTrue(GrammarPartTester.test("constant", "(A,B)"));
-		assertTrue(GrammarPartTester.test("constant", "( 1.2 , 3.4 )"));
-		assertTrue(GrammarPartTester.test("constant", "'HALLO'"));
-		assertTrue(GrammarPartTester.test("constant", ".TRUE."));
-		assertTrue(GrammarPartTester.test("constant", ".FALSE."));
+		assertTrue(FortranGrammarPartTester.test("constant", "1.0"));
+		assertTrue(FortranGrammarPartTester.test("constant", "0"));
+		assertTrue(FortranGrammarPartTester.test("constant", "1.23"));
+		assertTrue(FortranGrammarPartTester.test("constant", "(A,B)"));
+		assertTrue(FortranGrammarPartTester.test("constant", "( 1.2 , 3.4 )"));
+		assertTrue(FortranGrammarPartTester.test("constant", "'HALLO'"));
+		assertTrue(FortranGrammarPartTester.test("constant", ".TRUE."));
+		assertTrue(FortranGrammarPartTester.test("constant", ".FALSE."));
 	}
 
 }

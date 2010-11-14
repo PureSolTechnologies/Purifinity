@@ -4,15 +4,15 @@ import org.junit.Test;
 
 import junit.framework.TestCase;
 
-import com.puresol.coding.lang.fortran.grammar.GrammarPartTester;
+import com.puresol.coding.lang.fortran.grammar.FortranGrammarPartTester;
 
 public class R560_ImplicitStmtTest extends TestCase {
 
 	@Test
 	public void test() {
-		assertTrue(GrammarPartTester.test("implicit-stmt",
+		assertTrue(FortranGrammarPartTester.test("implicit-stmt",
 				"      implicit none\n"));
-		assertTrue(GrammarPartTester.test("implicit-stmt",
+		assertTrue(FortranGrammarPartTester.test("implicit-stmt",
 				"      implicit REAL(A-Z)\n"));
 	}
 

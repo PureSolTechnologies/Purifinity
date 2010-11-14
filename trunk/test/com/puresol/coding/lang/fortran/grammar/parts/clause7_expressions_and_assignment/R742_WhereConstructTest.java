@@ -6,21 +6,21 @@ import org.junit.Test;
 
 import junit.framework.TestCase;
 
-import com.puresol.coding.lang.fortran.grammar.GrammarPartTester;
+import com.puresol.coding.lang.fortran.grammar.FortranGrammarPartTester;
 
 public class R742_WhereConstructTest extends TestCase {
 
 	@Test
 	public void test() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester.test("where-construct",
+		assertTrue(FortranGrammarPartTester.test("where-construct",
 				"      WHERE (PRESSURE <= 1.0)        \n"
 						+ "      END WHERE            \n"));
-		assertTrue(GrammarPartTester.test("where-construct",
+		assertTrue(FortranGrammarPartTester.test("where-construct",
 				"      WHERE (PRESSURE <= 1.0)        \n"
 						+ "      A=1                  \n"
 						+ "      END WHERE            \n"));
-		assertTrue(GrammarPartTester.test("where-construct",
+		assertTrue(FortranGrammarPartTester.test("where-construct",
 				"      WHERE (PRESSURE <= 1.0)                     \n"
 						+ "      PRESSURE = PRESSURE + INC_PRESSURE\n"
 						+ "      TEMP = TEMP - 5.0                 \n"

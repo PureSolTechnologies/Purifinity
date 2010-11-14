@@ -6,14 +6,14 @@ import org.junit.Test;
 
 import junit.framework.TestCase;
 
-import com.puresol.coding.lang.fortran.grammar.GrammarPartTester;
+import com.puresol.coding.lang.fortran.grammar.FortranGrammarPartTester;
 
 public class R425_DerivedTypeDefTest extends TestCase {
 
 	@Test
 	public void test() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester.test("derived-type-def",
+		assertTrue(FortranGrammarPartTester.test("derived-type-def",
 				"      TYPE PERSON                            \n"
 						+ "          INTEGER AGE              \n"
 						+ "          CHARACTER (LEN = 50) NAME\n"

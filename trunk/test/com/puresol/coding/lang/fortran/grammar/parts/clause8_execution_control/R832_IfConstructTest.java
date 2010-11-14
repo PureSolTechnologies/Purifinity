@@ -6,14 +6,14 @@ import org.junit.Test;
 
 import junit.framework.TestCase;
 
-import com.puresol.coding.lang.fortran.grammar.GrammarPartTester;
+import com.puresol.coding.lang.fortran.grammar.FortranGrammarPartTester;
 
 public class R832_IfConstructTest extends TestCase {
 
 	@Test
 	public void test() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester.test("if-construct",
+		assertTrue(FortranGrammarPartTester.test("if-construct",
 				"      IF (A > 0.0) THEN          \n"
 						+ "          B = SQRT (A) \n"
 						+ "          C = LOG (A)  \n"
@@ -23,7 +23,7 @@ public class R832_IfConstructTest extends TestCase {
 	@Test
 	public void test2() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester.test("if-construct",
+		assertTrue(FortranGrammarPartTester.test("if-construct",
 				"      IF (M.LT.0) THEN             \n"
 						+ "          INFO = 9       \n"
 						+ "      END IF             \n"));
@@ -32,7 +32,7 @@ public class R832_IfConstructTest extends TestCase {
 	@Test
 	public void test3() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester.test("if-construct",
+		assertTrue(FortranGrammarPartTester.test("if-construct",
 				"      IF (M.LT.0) THEN                \n"
 						+ "          INFO = 1          \n"
 						+ "      ELSE IF (N.LT.0) THEN \n"
@@ -43,7 +43,7 @@ public class R832_IfConstructTest extends TestCase {
 	@Test
 	public void test4() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester.test("if-construct",
+		assertTrue(FortranGrammarPartTester.test("if-construct",
 				"      IF (M.LT.0) THEN                        \n"
 						+ "          INFO = 1                  \n"
 						+ "      ELSE IF (N.LT.0) THEN         \n"

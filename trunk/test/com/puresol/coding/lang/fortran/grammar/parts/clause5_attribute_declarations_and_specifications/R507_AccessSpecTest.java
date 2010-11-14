@@ -4,14 +4,14 @@ import org.junit.Test;
 
 import junit.framework.TestCase;
 
-import com.puresol.coding.lang.fortran.grammar.GrammarPartTester;
+import com.puresol.coding.lang.fortran.grammar.FortranGrammarPartTester;
 
 public class R507_AccessSpecTest extends TestCase {
 
 	@Test
 	public void test() {
-		assertTrue(GrammarPartTester.test("access-spec", "PUBLIC"));
-		assertTrue(GrammarPartTester.test("access-spec", "PRIVATE"));
+		assertTrue(FortranGrammarPartTester.test("access-spec", "PUBLIC"));
+		assertTrue(FortranGrammarPartTester.test("access-spec", "PRIVATE"));
 	}
 
 }

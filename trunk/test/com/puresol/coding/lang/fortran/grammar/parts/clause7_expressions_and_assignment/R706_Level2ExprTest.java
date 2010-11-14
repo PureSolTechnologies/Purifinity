@@ -6,18 +6,18 @@ import org.junit.Test;
 
 import junit.framework.TestCase;
 
-import com.puresol.coding.lang.fortran.grammar.GrammarPartTester;
+import com.puresol.coding.lang.fortran.grammar.FortranGrammarPartTester;
 
 public class R706_Level2ExprTest extends TestCase {
 
 	@Test
 	public void test() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester.test("level-2-expr", "A"));
-		assertTrue(GrammarPartTester.test("level-2-expr", "B ** C"));
-		assertTrue(GrammarPartTester.test("level-2-expr", "D * E"));
-		assertTrue(GrammarPartTester.test("level-2-expr", "+1"));
-		assertTrue(GrammarPartTester.test("level-2-expr", "F - I"));
+		assertTrue(FortranGrammarPartTester.test("level-2-expr", "A"));
+		assertTrue(FortranGrammarPartTester.test("level-2-expr", "B ** C"));
+		assertTrue(FortranGrammarPartTester.test("level-2-expr", "D * E"));
+		assertTrue(FortranGrammarPartTester.test("level-2-expr", "+1"));
+		assertTrue(FortranGrammarPartTester.test("level-2-expr", "F - I"));
 	}
 
 }

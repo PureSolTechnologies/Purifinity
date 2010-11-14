@@ -6,21 +6,21 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
-import com.puresol.coding.lang.fortran.grammar.GrammarPartTester;
+import com.puresol.coding.lang.fortran.grammar.FortranGrammarPartTester;
 
 public class R1101_MainProgramTest {
 
 	@Test
 	public void testEmptyMainProgram() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester.test("main-program", "PROGRAM TEST\n"
+		assertTrue(FortranGrammarPartTester.test("main-program", "PROGRAM TEST\n"
 				+ "      END PROGRAM\n"));
 	}
 
 	@Test
 	public void testMainProgram() {
 		Logger.getRootLogger().setLevel(Level.DEBUG);
-		assertTrue(GrammarPartTester
+		assertTrue(FortranGrammarPartTester
 				.test("main-program",
 						"PROGRAM TEST\n"
 						// + "*     COMMENT\n"

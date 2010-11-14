@@ -4,13 +4,13 @@ import junit.framework.TestCase;
 
 import org.junit.Test;
 
-import com.puresol.coding.lang.fortran.grammar.GrammarPartTester;
+import com.puresol.coding.lang.fortran.grammar.FortranGrammarPartTester;
 
 public class R704_MultOperandTest extends TestCase {
 
 	@Test
 	public void test() {
-		assertTrue(GrammarPartTester.test("mult-operand", "1**2"));
-		assertTrue(GrammarPartTester.test("mult-operand", "(1+2)**(2+3)"));
+		assertTrue(FortranGrammarPartTester.test("mult-operand", "1**2"));
+		assertTrue(FortranGrammarPartTester.test("mult-operand", "(1+2)**(2+3)"));
 	}
 }

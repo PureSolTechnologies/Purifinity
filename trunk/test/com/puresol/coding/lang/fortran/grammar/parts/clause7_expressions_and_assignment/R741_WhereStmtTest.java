@@ -6,14 +6,14 @@ import org.junit.Test;
 
 import junit.framework.TestCase;
 
-import com.puresol.coding.lang.fortran.grammar.GrammarPartTester;
+import com.puresol.coding.lang.fortran.grammar.FortranGrammarPartTester;
 
 public class R741_WhereStmtTest extends TestCase {
 
 	@Test
 	public void test() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester.test("where-stmt",
+		assertTrue(FortranGrammarPartTester.test("where-stmt",
 				"      WHERE (TEMP > 100.0) TEMP = TEMP - REDUCE_TEMP\n"));
 	}
 

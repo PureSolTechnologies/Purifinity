@@ -6,32 +6,32 @@ import org.junit.Test;
 
 import junit.framework.TestCase;
 
-import com.puresol.coding.lang.fortran.grammar.GrammarPartTester;
+import com.puresol.coding.lang.fortran.grammar.FortranGrammarPartTester;
 
 public class R1222_ActualArgSpecListTest extends TestCase {
 
 	@Test
 	public void test3() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester.test("actual-arg-spec-list", "A"));
+		assertTrue(FortranGrammarPartTester.test("actual-arg-spec-list", "A"));
 	}
 
 	@Test
 	public void test4() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester.test("actual-arg-spec-list", "A, B"));
+		assertTrue(FortranGrammarPartTester.test("actual-arg-spec-list", "A, B"));
 	}
 
 	@Test
 	public void test5() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester.test("actual-arg-spec-list", "A, B, C"));
+		assertTrue(FortranGrammarPartTester.test("actual-arg-spec-list", "A, B, C"));
 	}
 
 	@Test
 	public void test6() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester.test("actual-arg-spec-list",
+		assertTrue(FortranGrammarPartTester.test("actual-arg-spec-list",
 				"N, X, INCX, Y, INCY"));
 	}
 }

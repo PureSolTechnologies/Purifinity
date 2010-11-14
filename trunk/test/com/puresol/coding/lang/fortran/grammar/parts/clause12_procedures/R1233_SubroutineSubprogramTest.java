@@ -6,14 +6,14 @@ import org.junit.Test;
 
 import junit.framework.TestCase;
 
-import com.puresol.coding.lang.fortran.grammar.GrammarPartTester;
+import com.puresol.coding.lang.fortran.grammar.FortranGrammarPartTester;
 
 public class R1233_SubroutineSubprogramTest extends TestCase {
 
 	@Test
 	public void testSubroutineSubprogram() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester
+		assertTrue(FortranGrammarPartTester
 				.test("subroutine-subprogram",
 						"      SUBROUTINE SCOPY( N, X, INCX, Y, INCY )\n"
 								+ "            INTEGER            INCX, INCY, N\n"
@@ -30,7 +30,7 @@ public class R1233_SubroutineSubprogramTest extends TestCase {
 	@Test
 	public void testSubroutineSubprogram2() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester.test("subroutine-subprogram",
+		assertTrue(FortranGrammarPartTester.test("subroutine-subprogram",
 				"      SUBROUTINE ZGERC(M,N,ALPHA,X,INCX,Y,INCY,A,LDA)\n"
 						+ "            RETURN                         \n"
 						+ "      END                                  \n"));
@@ -39,7 +39,7 @@ public class R1233_SubroutineSubprogramTest extends TestCase {
 	@Test
 	public void testSubroutineSubprogram3() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester.test("subroutine-subprogram",
+		assertTrue(FortranGrammarPartTester.test("subroutine-subprogram",
 				"      SUBROUTINE ZGERC(M,N,ALPHA,X,INCX,Y,INCY,A,LDA)    \n"
 						+ "            DOUBLE COMPLEX ALPHA               \n"
 						+ "            INTEGER INCX,INCY,LDA,M,N          \n"
@@ -57,7 +57,7 @@ public class R1233_SubroutineSubprogramTest extends TestCase {
 	@Test
 	public void testSubroutineSubprogram4() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester
+		assertTrue(FortranGrammarPartTester
 				.test("subroutine-subprogram",
 						"      SUBROUTINE ZGERC(M,N,ALPHA,X,INCX,Y,INCY,A,LDA)\n"
 								+ "            INFO = 0\n"

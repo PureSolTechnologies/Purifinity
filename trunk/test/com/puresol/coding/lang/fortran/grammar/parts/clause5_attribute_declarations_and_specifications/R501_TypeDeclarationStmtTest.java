@@ -6,14 +6,14 @@ import org.junit.Test;
 
 import junit.framework.TestCase;
 
-import com.puresol.coding.lang.fortran.grammar.GrammarPartTester;
+import com.puresol.coding.lang.fortran.grammar.FortranGrammarPartTester;
 
 public class R501_TypeDeclarationStmtTest extends TestCase {
 
 	@Test
 	public void testSubroutine() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester.test("type-declaration-stmt",
+		assertTrue(FortranGrammarPartTester.test("type-declaration-stmt",
 				"      DOUBLE COMPLEX DC\n"));
 	}
 

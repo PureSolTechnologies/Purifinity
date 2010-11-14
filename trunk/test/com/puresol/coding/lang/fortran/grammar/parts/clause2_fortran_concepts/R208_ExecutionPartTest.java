@@ -6,14 +6,14 @@ import org.junit.Test;
 
 import junit.framework.TestCase;
 
-import com.puresol.coding.lang.fortran.grammar.GrammarPartTester;
+import com.puresol.coding.lang.fortran.grammar.FortranGrammarPartTester;
 
 public class R208_ExecutionPartTest extends TestCase {
 
 	@Test
 	public void testSubroutineSubprogram() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester.test("execution-part",
+		assertTrue(FortranGrammarPartTester.test("execution-part",
 				"      IF( N.GT.0 ) THEN                           \n"
 						+ "      CALL ATL_F77WRAP_SCOPY( N )       \n"
 						+ "      END IF                            \n"
@@ -24,7 +24,7 @@ public class R208_ExecutionPartTest extends TestCase {
 	@Test
 	public void testSubroutineSubprogram2() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester.test("execution-part",
+		assertTrue(FortranGrammarPartTester.test("execution-part",
 				"      INFO = 0                                \n"
 						+ "      IF (M.LT.0) THEN              \n"
 						+ "          INFO = 1                  \n"
@@ -42,7 +42,7 @@ public class R208_ExecutionPartTest extends TestCase {
 	@Test
 	public void testSubroutineSubprogram3() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester
+		assertTrue(FortranGrammarPartTester
 				.test("execution-part",
 						"      INFO = 0\n"
 								+ "      IF (M.LT.0) THEN\n"
@@ -100,7 +100,7 @@ public class R208_ExecutionPartTest extends TestCase {
 	@Test
 	public void testSubroutineSubprogram4() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester
+		assertTrue(FortranGrammarPartTester
 				.test("execution-part",
 						"        IF ((M .EQ. 0) .OR. (N .EQ. 0) .OR. (ALPHA .EQ. ZERO)) RETURN\n"));
 	}
@@ -108,7 +108,7 @@ public class R208_ExecutionPartTest extends TestCase {
 	@Test
 	public void testSubroutineSubprogram5() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester
+		assertTrue(FortranGrammarPartTester
 				.test("execution-part",
 						"      IF (INFO.NE.0) THEN\n"
 								+ "          CALL XERBLA('ZGERC ',INFO)\n"

@@ -6,16 +6,16 @@ import org.junit.Test;
 
 import junit.framework.TestCase;
 
-import com.puresol.coding.lang.fortran.grammar.GrammarPartTester;
+import com.puresol.coding.lang.fortran.grammar.FortranGrammarPartTester;
 
 public class R702_Level1ExprTest extends TestCase {
 
 	@Test
 	public void test() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester.test("level-1-expr", "A"));
-		assertTrue(GrammarPartTester.test("level-1-expr", ".INVERSE. B"));
-		assertTrue(GrammarPartTester.test("level-1-expr", ".INVERSE. (A + B)"));
+		assertTrue(FortranGrammarPartTester.test("level-1-expr", "A"));
+		assertTrue(FortranGrammarPartTester.test("level-1-expr", ".INVERSE. B"));
+		assertTrue(FortranGrammarPartTester.test("level-1-expr", ".INVERSE. (A + B)"));
 	}
 
 }

@@ -603,9 +603,9 @@
 	or :
 */
 	type-param-value :
-		expr
-	|	'*'
+		'*'
 	|	':'
+	|	expr
 	;
 
 /*
@@ -625,11 +625,11 @@
 	or CLASS ( * )
 */
 	declaration-type-spec :
-		intrinsic-type-spec
-	|	'TYPE' '(' intrinsic-type-spec ')'
+		'TYPE' '(' intrinsic-type-spec ')'
 	|	'TYPE' '(' derived-type-spec ')'
 	|	'CLASS' '(' derived-type-spec ')'
 	|	'CLASS' '(' '*' ')'
+	|	intrinsic-type-spec
 	;
 
 /*
@@ -754,9 +754,9 @@
 	or named-constant
 */
 	real-part :
-		signed-int-literal-constant
+		NAME_LITERAL
+	|	signed-int-literal-constant
 	|	signed-real-literal-constant
-	|	NAME_LITERAL
 	;
 
 /*
@@ -765,9 +765,9 @@
 	or named-constant
 */
 	imag-part :
-		signed-int-literal-constant
+		NAME_LITERAL
+	|	signed-int-literal-constant
 	|	signed-real-literal-constant
-	|	NAME_LITERAL
 	;
 
 /*
@@ -794,7 +794,7 @@
 */
 	length-selector :
 		'(' 'LEN' '=' type-param-value ')'
-	|	type-param-value ')'
+	|	'(' type-param-value ')'
 	|	'*' char-length ','
 	|	'*' char-length
 	; 
@@ -936,8 +936,8 @@
 	R434 component-part is [ component-def-stmt ] ...
 */
 	component-part : 
-		component-part component-def-stmt
-	|	component-def-stmt
+		component-def-stmt
+	|	component-part component-def-stmt
 	;
 
 /*

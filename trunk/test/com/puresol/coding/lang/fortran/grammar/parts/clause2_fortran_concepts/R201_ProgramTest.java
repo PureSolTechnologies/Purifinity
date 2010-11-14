@@ -6,27 +6,27 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
-import com.puresol.coding.lang.fortran.grammar.GrammarPartTester;
+import com.puresol.coding.lang.fortran.grammar.FortranGrammarPartTester;
 
 public class R201_ProgramTest {
 
 	@Test
 	public void testProgram() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester.test("program", "END PROGRAM\n"));
+		assertTrue(FortranGrammarPartTester.test("program", "END PROGRAM\n"));
 	}
 
 	@Test
 	public void testProgram2() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester.test("program", "PROGRAM TEST\n"
+		assertTrue(FortranGrammarPartTester.test("program", "PROGRAM TEST\n"
 				+ "*      COMMENT\n" + "END PROGRAM\n"));
 	}
 
 	@Test
 	public void testProgram3() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester.test("program", "PROGRAM TEST\n"
+		assertTrue(FortranGrammarPartTester.test("program", "PROGRAM TEST\n"
 				+ "*      COMMENT\n" + "      IMPLICIT NONE\n"
 				+ "END PROGRAM\n"));
 	}
@@ -34,7 +34,7 @@ public class R201_ProgramTest {
 	@Test
 	public void testProgram4() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester
+		assertTrue(FortranGrammarPartTester
 				.test("program",
 						""
 						// +"PROGRAM TEST\n"
@@ -108,7 +108,7 @@ public class R201_ProgramTest {
 	@Test
 	public void testSubroutine() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester.test("program",
+		assertTrue(FortranGrammarPartTester.test("program",
 				"SUBROUTINE ZGERC(M,N,ALPHA,X,INCX,Y,INCY,A,LDA)\n"
 						+ "END SUBROUTINE\n"));
 	}
@@ -116,7 +116,7 @@ public class R201_ProgramTest {
 	@Test
 	public void testSubroutine2() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester.test("program",
+		assertTrue(FortranGrammarPartTester.test("program",
 				"SUBROUTINE ZGERC(M,N,ALPHA,X,INCX,Y,INCY,A,LDA)\n"
 						+ "DOUBLE COMPLEX DC\n" + "END SUBROUTINE\n"));
 	}
