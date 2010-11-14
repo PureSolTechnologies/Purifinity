@@ -1,7 +1,5 @@
 package com.puresol.uhura.parser.lr;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Stack;
 
 import org.apache.log4j.Logger;
@@ -66,7 +64,7 @@ public abstract class AbstractLRParser extends AbstractParser {
 	 * states in stateStack.
 	 */
 	private final Stack<AST> treeStack = new Stack<AST>();
-	private final Map<Integer, Integer> errorStates = new HashMap<Integer, Integer>();
+	private final ParserErrors parserErrors = new ParserErrors();
 
 	/**
 	 * This is the current position in the stream.
@@ -115,6 +113,7 @@ public abstract class AbstractLRParser extends AbstractParser {
 		backtrackStack.clear();
 		treeStack.clear();
 		stateStack.clear();
+		parserErrors.clear();
 		streamPosition = 0;
 		stepCounter = 0;
 		stateStack.push(0);
@@ -400,14 +399,7 @@ public abstract class AbstractLRParser extends AbstractParser {
 	private final void error() throws ParserException {
 		Token token = getTokenStream().get(streamPosition);
 		Integer currentState = stateStack.peek();
-		if (currentState != null) {
-			if (errorStates.containsKey(currentState)) {
-				errorStates
-						.put(currentState, errorStates.get(currentState) + 1);
-			} else {
-				errorStates.put(currentState, 1);
-			}
-		}
+		parserErrors.addError(currentState);
 		if (backtrackEnabled && !backtrackStack.isEmpty()) {
 			trackBack();
 			return;
