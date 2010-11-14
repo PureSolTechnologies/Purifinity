@@ -4,31 +4,31 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.puresol.coding.lang.java.grammar.GrammarPartTester;
+import com.puresol.coding.lang.java.grammar.JavaGrammarPartTester;
 
 public class ImportDeclarationTest {
 
 	@Test
 	public void testSingleTypeImportDeclaration() {
-		assertTrue(GrammarPartTester.test("ImportDeclaration",
+		assertTrue(JavaGrammarPartTester.test("ImportDeclaration",
 				"import TypeName ;"));
 	}
 
 	@Test
 	public void testTypeImportOnDemandDeclaration() {
-		assertTrue(GrammarPartTester.test("ImportDeclaration",
+		assertTrue(JavaGrammarPartTester.test("ImportDeclaration",
 				"import java.util.*;"));
 	}
 
 	@Test
 	public void testSingleStaticImportDeclaration() {
-		assertTrue(GrammarPartTester.test("ImportDeclaration",
+		assertTrue(JavaGrammarPartTester.test("ImportDeclaration",
 				"import static TypeName . Identifier;"));
 	}
 
 	@Test
 	public void testStaticImportOnDemandDeclaration() {
-		assertTrue(GrammarPartTester.test("ImportDeclaration",
+		assertTrue(JavaGrammarPartTester.test("ImportDeclaration",
 				"import static TypeName . * ;"));
 	}
 

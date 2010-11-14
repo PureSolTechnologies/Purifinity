@@ -4,18 +4,18 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import com.puresol.coding.lang.java.grammar.GrammarPartTester;
+import com.puresol.coding.lang.java.grammar.JavaGrammarPartTester;
 
 public class FloatingPointTypeTest {
 
 	@Test
 	public void testFloat() {
-		assertTrue(GrammarPartTester.test("FloatingPointType", "float"));
+		assertTrue(JavaGrammarPartTester.test("FloatingPointType", "float"));
 	}
 
 	@Test
 	public void testDouble() {
-		assertTrue(GrammarPartTester.test("FloatingPointType", "double"));
+		assertTrue(JavaGrammarPartTester.test("FloatingPointType", "double"));
 	}
 
 }

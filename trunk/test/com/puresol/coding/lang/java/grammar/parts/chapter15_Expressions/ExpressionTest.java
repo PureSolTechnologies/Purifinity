@@ -6,26 +6,26 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
-import com.puresol.coding.lang.java.grammar.GrammarPartTester;
+import com.puresol.coding.lang.java.grammar.JavaGrammarPartTester;
 
 public class ExpressionTest {
 
 	@Test
 	public void testConstants() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester.test("Expression", "1"));
+		assertTrue(JavaGrammarPartTester.test("Expression", "1"));
 	}
 
 	@Test
 	public void testAssignment() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester.test("Expression", "a = b"));
+		assertTrue(JavaGrammarPartTester.test("Expression", "a = b"));
 	}
 
 	@Test
 	public void testMethodInvocationExpression() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester.test("Expression",
+		assertTrue(JavaGrammarPartTester.test("Expression",
 				"Globals.class.getResourceAsStream(\"/build.id\")"));
 	}
 

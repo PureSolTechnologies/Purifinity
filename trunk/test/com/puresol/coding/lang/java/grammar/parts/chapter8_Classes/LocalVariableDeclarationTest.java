@@ -4,12 +4,12 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.puresol.coding.lang.java.grammar.GrammarPartTester;
+import com.puresol.coding.lang.java.grammar.JavaGrammarPartTester;
 
 public class LocalVariableDeclarationTest {
 
 	@Test
 	public void test() {
-		assertTrue(GrammarPartTester.test("LocalVariableDeclaration", "int a = 1"));
+		assertTrue(JavaGrammarPartTester.test("LocalVariableDeclaration", "int a = 1"));
 	}
 }

@@ -4,13 +4,13 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.puresol.coding.lang.java.grammar.GrammarPartTester;
+import com.puresol.coding.lang.java.grammar.JavaGrammarPartTester;
 
 public class PackageNameTest {
 
 	@Test
 	public void testEmptyCompilationUnit() {
-		assertTrue(GrammarPartTester.test("PackageName",
+		assertTrue(JavaGrammarPartTester.test("PackageName",
 				"packageName.packageName.packageName.packageName."
 						+ "packageName.packageName.packageName."
 						+ "packageName.packageName.packageName."

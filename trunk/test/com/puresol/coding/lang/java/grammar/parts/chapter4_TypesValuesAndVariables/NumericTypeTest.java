@@ -4,42 +4,42 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.puresol.coding.lang.java.grammar.GrammarPartTester;
+import com.puresol.coding.lang.java.grammar.JavaGrammarPartTester;
 
 public class NumericTypeTest {
 
 	@Test
 	public void testByte() {
-		assertTrue(GrammarPartTester.test("NumericType", "byte"));
+		assertTrue(JavaGrammarPartTester.test("NumericType", "byte"));
 	}
 
 	@Test
 	public void testShort() {
-		assertTrue(GrammarPartTester.test("NumericType", "short"));
+		assertTrue(JavaGrammarPartTester.test("NumericType", "short"));
 	}
 
 	@Test
 	public void testInt() {
-		assertTrue(GrammarPartTester.test("NumericType", "int"));
+		assertTrue(JavaGrammarPartTester.test("NumericType", "int"));
 	}
 
 	@Test
 	public void testLong() {
-		assertTrue(GrammarPartTester.test("NumericType", "long"));
+		assertTrue(JavaGrammarPartTester.test("NumericType", "long"));
 	}
 
 	@Test
 	public void testChar() {
-		assertTrue(GrammarPartTester.test("NumericType", "char"));
+		assertTrue(JavaGrammarPartTester.test("NumericType", "char"));
 	}
 
 	@Test
 	public void testFloat() {
-		assertTrue(GrammarPartTester.test("NumericType", "float"));
+		assertTrue(JavaGrammarPartTester.test("NumericType", "float"));
 	}
 
 	@Test
 	public void testDouble() {
-		assertTrue(GrammarPartTester.test("NumericType", "double"));
+		assertTrue(JavaGrammarPartTester.test("NumericType", "double"));
 	}
 }

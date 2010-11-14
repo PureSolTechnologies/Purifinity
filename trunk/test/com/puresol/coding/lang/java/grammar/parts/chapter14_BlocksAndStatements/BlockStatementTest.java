@@ -6,29 +6,29 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
-import com.puresol.coding.lang.java.grammar.GrammarPartTester;
+import com.puresol.coding.lang.java.grammar.JavaGrammarPartTester;
 
 public class BlockStatementTest {
 
 	@Test
 	public void test1() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester.test("BlockStatement", "a = b;"));
+		assertTrue(JavaGrammarPartTester.test("BlockStatement", "a = b;"));
 	}
 
 	@Test
 	public void test2() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester.test("BlockStatement", "int a;"));
-		assertTrue(GrammarPartTester.test("BlockStatement", "int a = 0;"));
-		assertTrue(GrammarPartTester.test("BlockStatement",
+		assertTrue(JavaGrammarPartTester.test("BlockStatement", "int a;"));
+		assertTrue(JavaGrammarPartTester.test("BlockStatement", "int a = 0;"));
+		assertTrue(JavaGrammarPartTester.test("BlockStatement",
 				"String build = null;"));
 	}
 
 	@Test
 	public void test3() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester
+		assertTrue(JavaGrammarPartTester
 				.test("BlockStatement",
 						"InputStream s = Globals.class.getResourceAsStream(\"/build.id\");"));
 	}
@@ -36,9 +36,9 @@ public class BlockStatementTest {
 	@Test
 	public void test4() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester.test("BlockStatement",
+		assertTrue(JavaGrammarPartTester.test("BlockStatement",
 				"String build = null;"));
-		assertTrue(GrammarPartTester.test("BlockStatement",
+		assertTrue(JavaGrammarPartTester.test("BlockStatement",
 				"String name = super.getName();"));
 	}
 

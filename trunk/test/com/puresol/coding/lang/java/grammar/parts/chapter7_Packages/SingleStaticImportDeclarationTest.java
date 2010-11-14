@@ -4,13 +4,13 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.puresol.coding.lang.java.grammar.GrammarPartTester;
+import com.puresol.coding.lang.java.grammar.JavaGrammarPartTester;
 
 public class SingleStaticImportDeclarationTest {
 
 	@Test
 	public void test() {
-		assertTrue(GrammarPartTester.test("SingleStaticImportDeclaration",
+		assertTrue(JavaGrammarPartTester.test("SingleStaticImportDeclaration",
 				"import static TypeName . Identifier;"));
 	}
 }

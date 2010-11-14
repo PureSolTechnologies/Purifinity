@@ -4,13 +4,13 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.puresol.coding.lang.java.grammar.GrammarPartTester;
+import com.puresol.coding.lang.java.grammar.JavaGrammarPartTester;
 
 public class SuperTest {
 
 	@Test
 	public void test() {
-		assertTrue(GrammarPartTester.test("Super",
+		assertTrue(JavaGrammarPartTester.test("Super",
 				"extends ClassName"));
 	}
 }

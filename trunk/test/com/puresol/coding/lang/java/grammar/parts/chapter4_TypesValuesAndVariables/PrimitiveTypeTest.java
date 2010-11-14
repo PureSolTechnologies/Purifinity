@@ -4,47 +4,47 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.puresol.coding.lang.java.grammar.GrammarPartTester;
+import com.puresol.coding.lang.java.grammar.JavaGrammarPartTester;
 
 public class PrimitiveTypeTest {
 
 	@Test
 	public void testByte() {
-		assertTrue(GrammarPartTester.test("PrimitiveType", "byte"));
+		assertTrue(JavaGrammarPartTester.test("PrimitiveType", "byte"));
 	}
 
 	@Test
 	public void testShort() {
-		assertTrue(GrammarPartTester.test("PrimitiveType", "short"));
+		assertTrue(JavaGrammarPartTester.test("PrimitiveType", "short"));
 	}
 
 	@Test
 	public void testInt() {
-		assertTrue(GrammarPartTester.test("PrimitiveType", "int"));
+		assertTrue(JavaGrammarPartTester.test("PrimitiveType", "int"));
 	}
 
 	@Test
 	public void testLong() {
-		assertTrue(GrammarPartTester.test("PrimitiveType", "long"));
+		assertTrue(JavaGrammarPartTester.test("PrimitiveType", "long"));
 	}
 
 	@Test
 	public void testChar() {
-		assertTrue(GrammarPartTester.test("PrimitiveType", "char"));
+		assertTrue(JavaGrammarPartTester.test("PrimitiveType", "char"));
 	}
 
 	@Test
 	public void testFloat() {
-		assertTrue(GrammarPartTester.test("PrimitiveType", "float"));
+		assertTrue(JavaGrammarPartTester.test("PrimitiveType", "float"));
 	}
 
 	@Test
 	public void testDouble() {
-		assertTrue(GrammarPartTester.test("PrimitiveType", "double"));
+		assertTrue(JavaGrammarPartTester.test("PrimitiveType", "double"));
 	}
 
 	@Test
 	public void testBoolean() {
-		assertTrue(GrammarPartTester.test("PrimitiveType", "boolean"));
+		assertTrue(JavaGrammarPartTester.test("PrimitiveType", "boolean"));
 	}
 }

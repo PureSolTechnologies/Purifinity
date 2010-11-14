@@ -6,31 +6,31 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
-import com.puresol.coding.lang.java.grammar.GrammarPartTester;
+import com.puresol.coding.lang.java.grammar.JavaGrammarPartTester;
 
 public class BlockTest {
 
 	@Test
 	public void testEmptyBlock() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester.test("Block", "{}"));
+		assertTrue(JavaGrammarPartTester.test("Block", "{}"));
 	}
 
 	@Test
 	public void testAssignmentBlock() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester.test("Block", "{ a = b; }"));
+		assertTrue(JavaGrammarPartTester.test("Block", "{ a = b; }"));
 	}
 
 	@Test
 	public void testVariableDeclarationBlock() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester.test("Block", "{ String str = null; }"));
+		assertTrue(JavaGrammarPartTester.test("Block", "{ String str = null; }"));
 	}
 
 	@Test
 	public void testComplexBlock() {
-		assertTrue(GrammarPartTester
+		assertTrue(JavaGrammarPartTester
 				.test("Block",
 						"{\n"
 								+ "	String build = null;\n"

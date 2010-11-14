@@ -1,3 +1,6 @@
+/*
+ * This is a copyright message... 
+ */
 package com.puresol.coding.lang.java;
 
 import static org.junit.Assert.*;

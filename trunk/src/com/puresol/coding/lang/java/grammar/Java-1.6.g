@@ -44,14 +44,6 @@ HELPER
 		"[0-9a-fA-F]"
 	;
 	
-	/********************	
-	 3.4 Line Terminators
-	 ********************/
-		
-	LineTerminator:
-		"(\\n|\\r|\\r\\n)"
-	;
-		
 	/************	
 	 3.7 Comments
 	 ************/
@@ -268,6 +260,13 @@ HELPER
  ****************************************************************************/ 
  TOKENS
 
+	/********************	
+	 3.4 Line Terminators
+	 ********************/
+		
+	LineTerminator:
+		"(\\n|\\r|\\r\\n)" [ignore]
+	;
 	/*****************************	
 	 3.5 Input Elements and Tokens
 	 *****************************/
@@ -281,14 +280,14 @@ HELPER
 	 ***************/
 		
 	WhiteSpace:
-		"( |\\t|\\f|" LineTerminator ")" [hidden]
+		"( |\\t|\\f)" [hide]
 	;
 	
 	/************	
 	 3.7 Comments
 	 ************/
 	Comment:
-		"(" TraditionalComment "|" EndOfLineComment ")" [hidden]
+		"(" TraditionalComment "|" EndOfLineComment ")" [ignore]
 	;
 
 	/**************
@@ -463,8 +462,10 @@ HELPER
 /* 4.3 Reference Types and Values */
 
 	ReferenceType:
+/*
 		TypeVariable
-	|	ArrayType
+	|*/	
+		ArrayType
 	|	ClassOrInterfaceType
 	;
 	
@@ -492,16 +493,6 @@ HELPER
 	//	TypeName speed improvement...
 		Identifier
 	|	TypeDeclSpecifier TypeArguments ? DOT Identifier
-	;
-	
-	TypeName:
-		Identifier
-	|	TypeName DOT Identifier
-	;
-	
-	ClassName:
-		Identifier
-	|	ClassName DOT Identifier
 	;
 	
 	TypeVariable:
@@ -562,37 +553,10 @@ HELPER
 
 /* 6.5 Determining the Meaning of a Name */
 
-	PackageName:
+	// This Name is used for all names which can appear to reduce ambiguity.
+	Name:
 		Identifier					[stack=false]
-	|	PackageName DOT Identifier	[stack=false]
-	;
-	
-	TypeName:
-		Identifier				[stack=false]
-	// |	PackageOrTypeName DOT Identifier for speed...
-	|	TypeName DOT Identifier	[stack=false]
-	;
-	
-	ExpressionName:
-		Identifier						[stack=false]
-	// |	AmbiguousName DOT Identifier
-	|	ExpressionName DOT Identifier	[stack=false]
-	;
-	
-	MethodName:
-		Identifier					[stack=false]
-	// |	AmbiguousName DOT Identifier for speed...
-	|	MethodName DOT Identifier	[stack=false]
-	;
-	
-	PackageOrTypeName:
-		Identifier							[stack=false]
-	|	PackageOrTypeName DOT Identifier	[stack=false]
-	;
-	
-	AmbiguousName:
-		Identifier						[stack=false]
-	|	AmbiguousName DOT Identifier	[stack=false]
+	|	Name DOT Identifier	[stack=false]
 	;
 
 /**********
@@ -618,7 +582,7 @@ HELPER
 /* 7.4 Package Declarations */
 	
 	PackageDeclaration:
-		Annotations ? PACKAGE PackageName SEMICOLON
+		Annotations ? PACKAGE Name SEMICOLON
 	;
 	
 /* 7.5 Import Declarations */
@@ -631,19 +595,19 @@ HELPER
 	;
 	
 	SingleTypeImportDeclaration:
-		IMPORT TypeName SEMICOLON
+		IMPORT Name SEMICOLON
 	;
 	
 	TypeImportOnDemandDeclaration:
-		IMPORT PackageOrTypeName DOT STAR SEMICOLON
+		IMPORT Name DOT STAR SEMICOLON
 	;
 	
 	SingleStaticImportDeclaration:
-		IMPORT STATIC TypeName DOT Identifier SEMICOLON
+		IMPORT STATIC Name DOT Identifier SEMICOLON
 	;
 	
 	StaticImportOnDemandDeclaration:
-		IMPORT STATIC TypeName DOT STAR SEMICOLON
+		IMPORT STATIC Name DOT STAR SEMICOLON
 	;
 	
 /* 7.6 Top Level Type Declarations */
@@ -876,7 +840,7 @@ HELPER
 	;
 	
 	ConstructorDeclarator:
-		TypeParameters ? TypeName LPAREN FormalParameterList ? RPAREN
+		TypeParameters ? Name LPAREN FormalParameterList ? RPAREN
 	;
 	
 	ConstructorModifiers:
@@ -1067,7 +1031,7 @@ HELPER
 	;
 	
 	NormalAnnotation:
-		AT TypeName LPAREN ElementValuePairs ? RPAREN
+		AT Name LPAREN ElementValuePairs ? RPAREN
 	;
 
 	ElementValuePairs:
@@ -1095,11 +1059,11 @@ HELPER
 	;
 	
 	MarkerAnnotation:
-		AT TypeName
+		AT Name
 	;
 	
 	SingleElementAnnotation:
-		AT TypeName LPAREN ElementValue RPAREN
+		AT Name LPAREN ElementValue RPAREN
 	;
 
 /*********
@@ -1265,13 +1229,6 @@ HELPER
 	|	DEFAULT COLON
 	;
 		
-	/*
-	not needed...
-	EnumConstantName:
-		Identifier
-	;
-	*/
-	
 /* 14.12 The while Statement */
 
 	WhileStatement:
@@ -1378,17 +1335,17 @@ HELPER
 /* 15.8 Primary Expressions */
 
 	Primary:
-		PrimaryNoNewArray
-	|	ArrayCreationExpression
+		ArrayCreationExpression
+	|	PrimaryNoNewArray
 	;
 	
 	PrimaryNoNewArray:
 		Literal
-	|	Type DOT CLASS
 	|	VOID DOT CLASS
 	|	THIS
-	|	ClassName DOT THIS
 	|	LPAREN Expression RPAREN
+	|	Type DOT CLASS
+	|	Name DOT THIS
 	|	ClassInstanceCreationExpression
 	|	FieldAccess
 	|	MethodInvocation
@@ -1450,23 +1407,23 @@ HELPER
 	FieldAccess:
 		Primary DOT Identifier
 	|	SUPER DOT Identifier
-	|	ClassName DOT SUPER DOT Identifier
+	|	Name DOT SUPER DOT Identifier
 	;
 	
 /* 15.12 Method Invocation Expressions */
 
 	MethodInvocation:
-		MethodName Arguments
+		Name Arguments
 	|	Primary DOT NonWildTypeArguments ? Identifier Arguments
 	|	SUPER DOT NonWildTypeArguments ? Identifier Arguments
-	|	ClassName DOT SUPER DOT NonWildTypeArguments ? Identifier Arguments
-	|	TypeName DOT NonWildTypeArguments Identifier Arguments
+	|	Name DOT SUPER DOT NonWildTypeArguments ? Identifier Arguments
+	|	Name DOT NonWildTypeArguments Identifier Arguments
 	;
 
 /* 15.13 Array Access Expressions */
 
 	ArrayAccess:
-		ExpressionName LRECTANGULAR Expression RRECTANGULAR
+		Name LRECTANGULAR Expression RRECTANGULAR
 	|	PrimaryNoNewArray LRECTANGULAR Expression RRECTANGULAR
 	;
 	
@@ -1474,7 +1431,7 @@ HELPER
 
 	PostfixExpression:
 		Primary
-	|	ExpressionName
+	|	Name
 	|	PostIncrementExpression
 	|	PostDecrementExpression
 	;
@@ -1614,7 +1571,7 @@ HELPER
 	;
 	
 	LeftHandSide:
-		ExpressionName
+		Name
 	|	FieldAccess
 	|	ArrayAccess
 	;

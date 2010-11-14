@@ -4,33 +4,33 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.puresol.coding.lang.java.grammar.GrammarPartTester;
+import com.puresol.coding.lang.java.grammar.JavaGrammarPartTester;
 
 public class IntegralTypeTest {
 
 	@Test
 	public void testByte() {
-		assertTrue(GrammarPartTester.test("IntegralType", "byte"));
+		assertTrue(JavaGrammarPartTester.test("IntegralType", "byte"));
 	}
 
 	@Test
 	public void testShort() {
-		assertTrue(GrammarPartTester.test("IntegralType", "short"));
+		assertTrue(JavaGrammarPartTester.test("IntegralType", "short"));
 	}
 
 	@Test
 	public void testInt() {
-		assertTrue(GrammarPartTester.test("IntegralType", "int"));
+		assertTrue(JavaGrammarPartTester.test("IntegralType", "int"));
 	}
 
 	@Test
 	public void testLong() {
-		assertTrue(GrammarPartTester.test("IntegralType", "long"));
+		assertTrue(JavaGrammarPartTester.test("IntegralType", "long"));
 	}
 
 	@Test
 	public void testChar() {
-		assertTrue(GrammarPartTester.test("IntegralType", "char"));
+		assertTrue(JavaGrammarPartTester.test("IntegralType", "char"));
 	}
 
 }

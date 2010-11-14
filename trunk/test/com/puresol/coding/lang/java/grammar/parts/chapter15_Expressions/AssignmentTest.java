@@ -6,33 +6,33 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
-import com.puresol.coding.lang.java.grammar.GrammarPartTester;
+import com.puresol.coding.lang.java.grammar.JavaGrammarPartTester;
 
 public class AssignmentTest {
 
 	@Test
 	public void testConstants() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester.test("Assignment", "a = b"));
+		assertTrue(JavaGrammarPartTester.test("Assignment", "a = b"));
 	}
 
 	@Test
 	public void testNullAssignment() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester.test("Assignment", "a = null"));
+		assertTrue(JavaGrammarPartTester.test("Assignment", "a = null"));
 	}
 
 	@Test
 	public void testMethodResultAssignment() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester.test("Assignment",
+		assertTrue(JavaGrammarPartTester.test("Assignment",
 				"s = Globals.class.getResourceAsStream(\"/build.id\")"));
 	}
 
 	@Test
 	public void testPrimaryNewAssignment() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(GrammarPartTester.test("Assignment",
+		assertTrue(JavaGrammarPartTester.test("Assignment",
 				"traverser = graph.new BFSTraversalVisitor()"));
 	}
 }

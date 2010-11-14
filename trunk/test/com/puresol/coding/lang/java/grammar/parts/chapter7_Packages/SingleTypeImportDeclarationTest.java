@@ -4,12 +4,12 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.puresol.coding.lang.java.grammar.GrammarPartTester;
+import com.puresol.coding.lang.java.grammar.JavaGrammarPartTester;
 
 public class SingleTypeImportDeclarationTest {
 
 	@Test
 	public void test() {
-		assertTrue(GrammarPartTester.test("SingleTypeImportDeclaration", "import TypeName ;"));
+		assertTrue(JavaGrammarPartTester.test("SingleTypeImportDeclaration", "import TypeName ;"));
 	}
 }

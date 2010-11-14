@@ -4,12 +4,12 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.puresol.coding.lang.java.grammar.GrammarPartTester;
+import com.puresol.coding.lang.java.grammar.JavaGrammarPartTester;
 
 public class MarkerAnnotationTest {
 
 	@Test
 	public void test() {
-		assertTrue(GrammarPartTester.test("MarkerAnnotation", "@TypeName"));
+		assertTrue(JavaGrammarPartTester.test("MarkerAnnotation", "@TypeName"));
 	}
 }

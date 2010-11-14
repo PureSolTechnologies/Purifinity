@@ -5,7 +5,6 @@ import java.io.Serializable;
 
 public class Test implements Serializable {
 
-	/** indicate compatibility with JDK 1.2 version of class */
 	private static final long serialVersionUID = 2921265612698155191L;
 
 	private final int a;
@@ -24,4 +23,11 @@ public class Test implements Serializable {
 		c = c * 2;
 	}
 
+	public int getA() {
+		return a;
+	}
+
+	public double getC() {
+		return c;
+	}
 }

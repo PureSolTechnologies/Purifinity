@@ -4,18 +4,18 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.puresol.coding.lang.java.grammar.GrammarPartTester;
+import com.puresol.coding.lang.java.grammar.JavaGrammarPartTester;
 
 public class TypeNameTest {
 
 	@Test
 	public void testWithoutDot() {
-		assertTrue(GrammarPartTester.test("TypeName", "Identifier"));
+		assertTrue(JavaGrammarPartTester.test("TypeName", "Identifier"));
 	}
 
 	@Test
 	public void testWithDots() {
-		assertTrue(GrammarPartTester.test("TypeName",
+		assertTrue(JavaGrammarPartTester.test("TypeName",
 				"Identifier.Identifiert2.Identifier3"));
 	}
 }

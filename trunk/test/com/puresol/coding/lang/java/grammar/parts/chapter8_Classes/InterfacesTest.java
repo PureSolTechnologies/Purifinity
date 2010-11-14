@@ -4,18 +4,18 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.puresol.coding.lang.java.grammar.GrammarPartTester;
+import com.puresol.coding.lang.java.grammar.JavaGrammarPartTester;
 
 public class InterfacesTest {
 
 	@Test
 	public void testSingleInterface() {
-		assertTrue(GrammarPartTester.test("Interfaces", "implements Interface"));
+		assertTrue(JavaGrammarPartTester.test("Interfaces", "implements Interface"));
 	}
 
 	@Test
 	public void testMultipleInterfaces() {
-		assertTrue(GrammarPartTester.test("Interfaces",
+		assertTrue(JavaGrammarPartTester.test("Interfaces",
 				"implements Interface1, Interface2, Interface3"));
 	}
 }

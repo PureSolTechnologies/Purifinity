@@ -4,19 +4,19 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.puresol.coding.lang.java.grammar.GrammarPartTester;
+import com.puresol.coding.lang.java.grammar.JavaGrammarPartTester;
 
 public class MethodDeclarationTest {
 
 	@Test
 	public void test() {
-		assertTrue(GrammarPartTester.test("MethodDeclaration",
+		assertTrue(JavaGrammarPartTester.test("MethodDeclaration",
 				"static public String getUserAgent() {\n" + "}\n"));
 	}
 
 	@Test
 	public void test2() {
-		assertTrue(GrammarPartTester
+		assertTrue(JavaGrammarPartTester
 				.test("MethodDeclaration",
 						"static public String getUserAgent() {\n"
 								+ "return \"JNLP/\" + JNLP_VERSION + \" javaws/\" + JAVAWS_VERSION + \" (\" + getBuildID() + \")\" + \" Java/\" + System.getProperty(\"java.version\");\n"
@@ -25,7 +25,7 @@ public class MethodDeclarationTest {
 
 	@Test
 	public void test3() {
-		assertTrue(GrammarPartTester
+		assertTrue(JavaGrammarPartTester
 				.test("MethodDeclaration",
 						"static public String getBuildID() {\n"
 								+ "	String build = null;\n"
@@ -42,7 +42,7 @@ public class MethodDeclarationTest {
 
 	@Test
 	public void test4() {
-		assertTrue(GrammarPartTester.test("MethodDeclaration",
+		assertTrue(JavaGrammarPartTester.test("MethodDeclaration",
 				"public void setStops(GradientStop... stops) {\n" + "}"));
 	}
 

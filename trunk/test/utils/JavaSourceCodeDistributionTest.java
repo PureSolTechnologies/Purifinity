@@ -18,6 +18,8 @@ import org.junit.Test;
 import com.puresol.coding.analysis.Analyzer;
 import com.puresol.coding.analysis.AnalyzerException;
 import com.puresol.coding.lang.java.Java;
+import com.puresol.trees.TreePrinter;
+import com.puresol.uhura.ast.AST;
 import com.puresol.utils.ConsoleUtils;
 import com.puresol.utils.StopWatch;
 
@@ -38,7 +40,7 @@ public class JavaSourceCodeDistributionTest {
 		try {
 			Logger.getRootLogger().setLevel(Level.DEBUG);
 			File file = new File("test/com/puresol/coding/lang/java/samples",
-					"TargetAddress.java");
+					"SunGraphicsEnvironment.java");
 			assertTrue(file.exists());
 			Java java = Java.getInstance();
 			StopWatch watch = new StopWatch();
@@ -46,6 +48,8 @@ public class JavaSourceCodeDistributionTest {
 			Analyzer analyser = java.createAnalyser(file);
 			analyser.parse();
 			watch.stop();
+			AST ast = analyser.getAST();
+			new TreePrinter(System.out).println(ast);
 			System.out.print(watch.getSeconds());
 			System.out.println("s");
 		} catch (AnalyzerException e) {
@@ -55,6 +59,8 @@ public class JavaSourceCodeDistributionTest {
 	}
 
 	private static void parseAllFiles(List<File> files) {
+		StopWatch totalWatch = new StopWatch();
+		totalWatch.start();
 		try {
 			List<File> errors = new ArrayList<File>();
 			List<String> successes = new ArrayList<String>();
@@ -65,7 +71,10 @@ public class JavaSourceCodeDistributionTest {
 				successes.add(line);
 			}
 			int counter = 0;
+			StopWatch watch = new StopWatch();
 			for (File file : files) {
+				assertTrue(new File(INSTALL_DIRECTORY, file.toString())
+						.exists());
 				if (file.getName().contains("-")) {
 					raFile.writeBytes(file.toString() + "\n");
 					successes.add(file.toString());
@@ -75,23 +84,28 @@ public class JavaSourceCodeDistributionTest {
 				System.out.print(ConsoleUtils.createPercentageBar(22,
 						(double) counter / (double) files.size(), true) + "\t");
 				if (successes.size() > 0) {
-					System.out.print(successes.size()
-							/ (successes.size() + errors.size()) * 100.0);
+					System.out.print((double) successes.size()
+							/ (double) (successes.size() + errors.size())
+							* 100.0);
 					System.out.print("%\t");
 				}
 				System.out
 						.print(Runtime.getRuntime().freeMemory() / 1024 / 1024);
 				System.out.print("MB\t");
-				System.out.println(file);
+				System.out.print(file + "\t");
 				if (successes.contains(file.toString())) {
+					System.out.println();
 					continue;
 				}
+				watch.start();
 				if (parseFile(new File(INSTALL_DIRECTORY, file.toString()))) {
 					raFile.writeBytes(file.toString() + "\n");
 					successes.add(file.toString());
 				} else {
 					errors.add(file);
 				}
+				watch.stop();
+				System.out.println(watch.toString() + "s");
 			}
 			raFile.close();
 			System.out.println("\n\nERRORS FOR FILES:\n\n");
@@ -103,6 +117,8 @@ public class JavaSourceCodeDistributionTest {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		totalWatch.stop();
+		System.out.println("\n\nTotal time:\t" + totalWatch.toString());
 	}
 
 	private static boolean parseFile(File file) {

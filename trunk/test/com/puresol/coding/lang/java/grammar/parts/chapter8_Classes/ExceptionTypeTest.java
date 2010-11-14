@@ -4,13 +4,13 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.puresol.coding.lang.java.grammar.GrammarPartTester;
+import com.puresol.coding.lang.java.grammar.JavaGrammarPartTester;
 
 public class ExceptionTypeTest {
 
 	@Test
 	public void testSingleException() {
-		assertTrue(GrammarPartTester.test("ExceptionType", "Exception"));
+		assertTrue(JavaGrammarPartTester.test("ExceptionType", "Exception"));
 	}
 
 }
