@@ -103,7 +103,6 @@ public class NamePanel extends Panel {
 		try {
 			System.out.println(name.getPersonName().toString());
 		} catch (IllegalPersonNameException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

@@ -275,7 +275,7 @@ public class ProjectAnalyzer implements Serializable, ProgressObservable {
 		} catch (FileNotFoundException e) {
 			logger.warn("File '" + file.getPath() + "' is not existing!");
 			failedFiles.add(file);
-		} catch (AnalyserException e) {
+		} catch (AnalyzerException e) {
 			logger.warn("File '" + file.getPath() + "' is not parsable!");
 			failedFiles.add(file);
 		}

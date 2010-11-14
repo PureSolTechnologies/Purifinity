@@ -13,9 +13,9 @@ package com.puresol.coding.analysis;
 import java.io.File;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 import com.puresol.coding.ProgrammingLanguage;
+import com.puresol.uhura.ast.AST;
 
 /**
  * This is a interface to a analyser. It's used to implement a language
@@ -48,7 +48,7 @@ public interface Analyzer extends Serializable {
 	 */
 	public File getFile();
 
-	public void parse() throws AnalyserException;
+	public void parse() throws AnalyzerException;
 
 	/**
 	 * This method persists the analyzer into a file specified.
@@ -57,4 +57,6 @@ public interface Analyzer extends Serializable {
 	 * @return
 	 */
 	boolean persist(File file);
+	
+	public AST getAST();
 }

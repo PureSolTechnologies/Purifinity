@@ -3,7 +3,6 @@ package com.puresol.coding;
 import java.io.File;
 
 import com.puresol.coding.analysis.Analyzer;
-import com.puresol.utils.ClassInstantiationException;
 import com.puresol.utils.PersistenceException;
 
 /**
@@ -45,10 +44,8 @@ public interface ProgrammingLanguage {
 	 * @param directory
 	 * @param file
 	 * @return
-	 * @throws ClassInstantiationException
 	 */
-	public Analyzer createAnalyser(File file)
-			throws ClassInstantiationException;
+	public Analyzer createAnalyser(File file);
 
 	public Analyzer restoreAnalyzer(File file) throws PersistenceException;
 }
