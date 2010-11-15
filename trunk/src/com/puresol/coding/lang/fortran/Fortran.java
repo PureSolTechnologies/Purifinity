@@ -5,6 +5,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 
+import com.puresol.coding.AbstractProgrammingLanguage;
+import com.puresol.coding.analysis.Analyzer;
+import com.puresol.utils.PersistenceException;
+
 public class Fortran extends AbstractProgrammingLanguage {
 
 	private static final String[] FILE_SUFFIXES = { ".f", ".f77", ".f90",
@@ -35,11 +39,6 @@ public class Fortran extends AbstractProgrammingLanguage {
 	}
 
 	@Override
-	protected Class<? extends Analyzer> getAnalyserClass() {
-		return FortranAnalyser.class;
-	}
-
-	@Override
 	protected String[] getValidFileSuffixes() {
 		return FILE_SUFFIXES;
 	}
@@ -61,5 +60,10 @@ public class Fortran extends AbstractProgrammingLanguage {
 			}
 			throw new PersistenceException(e);
 		}
+	}
+
+	@Override
+	public Analyzer createAnalyser(File file) {
+		return new FortranAnalyser(file);
 	}
 }

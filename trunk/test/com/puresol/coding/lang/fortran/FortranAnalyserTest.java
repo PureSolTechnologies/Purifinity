@@ -9,6 +9,8 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
+import com.puresol.coding.analysis.AnalyzerException;
+
 import junit.framework.TestCase;
 
 /**
@@ -19,19 +21,19 @@ import junit.framework.TestCase;
  */
 public class FortranAnalyserTest extends TestCase {
 
-	// @Test
-	// public void test() {
-	// try {
-	// // Logger.getRootLogger().setLevel(Level.TRACE);
-	// FortranAnalyser analyser = new FortranAnalyser(new File(
-	// "test/com/puresol/coding/lang/fortran/samples/zgerc.f"));
-	// analyser.parse();
-	// Logger.getRootLogger().debug("done.");
-	// } catch (FortranException e) {
-	// e.printStackTrace();
-	// fail("No exception was expected!");
-	// }
-	// }
+	@Test
+	public void test() {
+		try {
+			// Logger.getRootLogger().setLevel(Level.TRACE);
+			FortranAnalyser analyser = new FortranAnalyser(new File(
+					"test/com/puresol/coding/lang/fortran/samples/zgerc.f"));
+			analyser.parse();
+			Logger.getRootLogger().debug("done.");
+		} catch (AnalyzerException e) {
+			e.printStackTrace();
+			fail("No exception was expected!");
+		}
+	}
 
 	@Test
 	public void test2() {
@@ -41,7 +43,7 @@ public class FortranAnalyserTest extends TestCase {
 					new File(
 							"test/com/puresol/coding/lang/fortran/samples/FortranTest.f"));
 			analyser.parse();
-		} catch (FortranException e) {
+		} catch (AnalyzerException e) {
 			e.printStackTrace();
 			fail("No exception was expected!");
 		}
