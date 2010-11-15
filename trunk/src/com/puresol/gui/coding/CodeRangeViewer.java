@@ -6,6 +6,8 @@ import javax.swingx.BorderLayoutWidget;
 import javax.swingx.Label;
 import javax.swingx.ScrollPane;
 
+import com.puresol.uhura.ast.AST;
+
 public class CodeRangeViewer extends BorderLayoutWidget {
 
 	private static final long serialVersionUID = 3032479272552076138L;
@@ -13,7 +15,7 @@ public class CodeRangeViewer extends BorderLayoutWidget {
 	private static final Translator translator = Translator
 			.getTranslator(CodeRangeViewer.class);
 
-	private CodeRange codeRange;
+	private AST ast;
 	private Label information;
 	private CodeViewer code;
 
@@ -22,10 +24,10 @@ public class CodeRangeViewer extends BorderLayoutWidget {
 		initUI();
 	}
 
-	public CodeRangeViewer(CodeRange codeRange) {
+	public CodeRangeViewer(AST ast) {
 		super();
 		initUI();
-		setCodeRange(codeRange);
+		setAST(ast);
 	}
 
 	private void initUI() {
@@ -39,20 +41,14 @@ public class CodeRangeViewer extends BorderLayoutWidget {
 		setCenter(new ScrollPane(code));
 	}
 
-	public void setCodeRange(CodeRange codeRange) {
-		this.codeRange = codeRange;
+	public void setAST(AST codeRange) {
+		this.ast = codeRange;
 		refresh();
 	}
 
 	public void refresh() {
-		if (codeRange != null) {
-			int startLine = codeRange.getStartLine();
-			int stopLine = codeRange.getStopLine();
-			information.setText("<html><body>" + codeRange.getFile().getName()
-					+ ":" + startLine + "-" + stopLine + "<br/>"
-					+ codeRange.getCodeRangeType().getIdentifier() + " "
-					+ codeRange.getName() + "</body></html>");
-			code.setText(codeRange.getText());
+		if (ast != null) {
+			code.setText("No meta information available yet!");
 		} else {
 			information.setText("");
 			code.setText("");

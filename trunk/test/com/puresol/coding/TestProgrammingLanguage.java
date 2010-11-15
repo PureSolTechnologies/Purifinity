@@ -34,11 +34,6 @@ public class TestProgrammingLanguage extends AbstractProgrammingLanguage {
 	}
 
 	@Override
-	protected Class<? extends Analyzer> getAnalyserClass() {
-		return null;
-	}
-
-	@Override
 	protected String[] getValidFileSuffixes() {
 		return FILE_SUFFIXES;
 	}
@@ -47,5 +42,10 @@ public class TestProgrammingLanguage extends AbstractProgrammingLanguage {
 	public Analyzer restoreAnalyzer(File file) throws PersistenceException {
 		throw new PersistenceException(
 				"Persistence not implemented in TestProgrammingLanguage!");
+	}
+
+	@Override
+	public Analyzer createAnalyser(File file) {
+		return null;
 	}
 }

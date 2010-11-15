@@ -17,8 +17,6 @@ import org.apache.log4j.Logger;
 
 import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.ProgrammingLanguages;
-import com.puresol.exceptions.StrangeSituationException;
-import com.puresol.utils.ClassInstantiationException;
 import com.puresol.utils.PersistenceException;
 
 /**
@@ -82,14 +80,10 @@ public class AnalyzerFactory {
 	}
 
 	private Analyzer checkAndCreate(ProgrammingLanguage clazz, File file) {
-		try {
-			if (!clazz.isSuitable(file)) {
-				return null;
-			}
-			return clazz.createAnalyser(file);
-		} catch (ClassInstantiationException e) {
-			throw new StrangeSituationException(e);
+		if (!clazz.isSuitable(file)) {
+			return null;
 		}
+		return clazz.createAnalyser(file);
 	}
 
 	public Analyzer restore(File persistFile) {
