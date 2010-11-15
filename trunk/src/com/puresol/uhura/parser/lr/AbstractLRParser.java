@@ -217,9 +217,10 @@ public abstract class AbstractLRParser extends AbstractParser {
 			 * so we just returned from a backtrack. Trying next alternative...
 			 */
 			if (logger.isTraceEnabled()) {
-				logger.trace("Action set '"
-						+ actionSet
-						+ "' is ambiguous and back tracking was performed already. Trying new alternative...");
+				logger
+						.trace("Action set '"
+								+ actionSet
+								+ "' is ambiguous and back tracking was performed already. Trying new alternative...");
 			}
 			BacktrackLocation location = backtrackStack.pop();
 			if (location.getLastAlternative() + 1 >= actionSet
@@ -235,9 +236,10 @@ public abstract class AbstractLRParser extends AbstractParser {
 		 * try first alternative...
 		 */
 		if (logger.isTraceEnabled()) {
-			logger.trace("Action set '"
-					+ actionSet
-					+ "' is ambiguous. Installing back tracking location in stack...");
+			logger
+					.trace("Action set '"
+							+ actionSet
+							+ "' is ambiguous. Installing back tracking location in stack...");
 		}
 		addBacktrackLocation(0);
 		return actionSet.getAction(0);
@@ -322,7 +324,9 @@ public abstract class AbstractLRParser extends AbstractParser {
 							 * created.
 							 */
 							if (tree.getName().equals(poppedAST.getName())) {
-								tree.addChildrenInFront(poppedAST.getChildren());
+								tree
+										.addChildrenInFront(poppedAST
+												.getChildren());
 							} else {
 								tree.addChildInFront(poppedAST);
 							}
@@ -405,9 +409,11 @@ public abstract class AbstractLRParser extends AbstractParser {
 			return;
 		}
 		if (!backtrackEnabled) {
-			logger.trace("No valid action available and back tracking is disabled. Aborting...");
+			logger
+					.trace("No valid action available and back tracking is disabled. Aborting...");
 		} else {
-			logger.trace("No valid action available and back tracking stack is empty. Aborting...");
+			logger
+					.trace("No valid action available and back tracking stack is empty. Aborting...");
 		}
 		throw new ParserException("Error! Could not parse the token stream!",
 				token);
@@ -460,7 +466,7 @@ public abstract class AbstractLRParser extends AbstractParser {
 
 	private AST finishAST(AST ast) {
 		TreeWalker<AST> walker = new TreeWalker<AST>(ast);
-		// TODO put the calculation and handling of ASTMetaData in here...
+		walker.walkBackward(new MetaDataGeneratorVisitor());
 		return ast;
 	}
 }

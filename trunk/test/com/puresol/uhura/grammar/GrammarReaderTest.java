@@ -28,7 +28,7 @@ public class GrammarReaderTest {
 			GrammarReader grammar = new GrammarReader(new File(
 					"test/com/puresol/uhura/grammar/TestGrammar.g"));
 			assertEquals(null, grammar.getGrammar());
-			assertEquals(null, grammar.getSyntaxTree());
+			assertEquals(null, grammar.getAST());
 		} catch (IOException e) {
 			e.printStackTrace();
 			fail("No exception was expected!");
@@ -42,7 +42,7 @@ public class GrammarReaderTest {
 			GrammarReader reader = new GrammarReader(new File(
 					"test/com/puresol/uhura/grammar/TestGrammar.g"));
 			assertTrue(reader.call());
-			assertNotNull(reader.getSyntaxTree());
+			assertNotNull(reader.getAST());
 			Grammar grammar = reader.getGrammar();
 			assertNotNull(grammar);
 			assertEquals(Visibility.IGNORED, grammar.getTokenDefinitions()
@@ -66,7 +66,7 @@ public class GrammarReaderTest {
 					new File(
 							"test/com/puresol/uhura/grammar/TestGrammarForAutoGeneration.g"));
 			assertTrue(reader.call());
-			assertNotNull(reader.getSyntaxTree());
+			assertNotNull(reader.getAST());
 			Grammar grammar = reader.getGrammar();
 			assertNotNull(grammar);
 		} catch (IOException e) {

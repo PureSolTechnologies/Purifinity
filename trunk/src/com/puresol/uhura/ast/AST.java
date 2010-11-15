@@ -29,6 +29,7 @@ public class AST implements Tree<AST>, Serializable {
 	private final List<AST> children = new ArrayList<AST>();
 	private final boolean node;
 	private final boolean stackingAllowed;
+	private ASTMetaData metaData = null;
 
 	public AST(Token token) {
 		super();
@@ -76,7 +77,7 @@ public class AST implements Tree<AST>, Serializable {
 
 	@Override
 	public String toString() {
-		return name + " " + token;
+		return name + " " + token + " (" + metaData + ")";
 	}
 
 	/**
@@ -223,6 +224,14 @@ public class AST implements Tree<AST>, Serializable {
 		TextWalkerClient textClient = new TextWalkerClient();
 		treeWalker.walk(textClient);
 		return textClient.getText();
+	}
+
+	public ASTMetaData getMetaData() {
+		return metaData;
+	}
+
+	public void setMetaData(ASTMetaData metaData) {
+		this.metaData = metaData;
 	}
 
 }

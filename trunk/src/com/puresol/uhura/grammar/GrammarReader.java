@@ -104,7 +104,7 @@ public class GrammarReader implements Callable<Boolean> {
 	 * 
 	 * @return
 	 */
-	public AST getSyntaxTree() {
+	public AST getAST() {
 		return ast;
 	}
 
