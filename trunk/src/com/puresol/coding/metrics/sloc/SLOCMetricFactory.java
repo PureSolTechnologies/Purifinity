@@ -2,7 +2,6 @@ package com.puresol.coding.metrics.sloc;
 
 import java.util.List;
 
-import com.puresol.coding.analysis.CodeRange;
 import com.puresol.coding.evaluator.CodeRangeEvaluator;
 import com.puresol.coding.evaluator.CodeRangeEvaluatorFactory;
 import com.puresol.coding.quality.QualityCharacteristic;
@@ -11,7 +10,7 @@ import com.puresol.utils.Property;
 public class SLOCMetricFactory implements CodeRangeEvaluatorFactory {
 
 	@Override
-	public CodeRangeEvaluator create(CodeRange codeRange) {
+	public CodeRangeEvaluator create(AST codeRange) {
 		return new SLOCMetric(codeRange);
 	}
 
