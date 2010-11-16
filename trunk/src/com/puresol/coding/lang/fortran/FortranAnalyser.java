@@ -51,7 +51,8 @@ public class FortranAnalyser implements Analyzer {
 	public void parse() throws AnalyzerException {
 		try {
 			Lexer lexer = FortranGrammar.createLexer();
-			TokenStream tokenStream = lexer.lex(new FileReader(file));
+			TokenStream tokenStream = lexer.lex(new FileReader(file),
+					file.toString());
 			Parser parser = FortranGrammar.createParser();
 			AST ast = parser.parse(tokenStream);
 			ast.getChildren();
