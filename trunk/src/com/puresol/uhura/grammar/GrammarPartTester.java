@@ -35,7 +35,8 @@ public class GrammarPartTester {
 					+ "' with text '" + text + "' ...");
 			grammar = grammar.createWithNewStartProduction(production);
 			Lexer lexer = new RegExpLexer(grammar);
-			TokenStream tokenStream = lexer.lex(new StringReader(text));
+			TokenStream tokenStream = lexer.lex(new StringReader(text),
+					"SampleString");
 
 			Parser parser = ParserFactory.create(grammar);
 			AST ast = parser.parse(tokenStream);
@@ -63,7 +64,8 @@ public class GrammarPartTester {
 			}
 			grammar = grammar.createWithNewStartProduction(production);
 			Lexer lexer = new RegExpLexer(grammar);
-			TokenStream tokenStream = lexer.lex(new StringReader(text));
+			TokenStream tokenStream = lexer.lex(new StringReader(text),
+					"SampleString");
 
 			Parser parser = ParserManager.getManagerParser(parserDirectory,
 					parserName, grammar);

@@ -11,12 +11,12 @@ public class TokenTest {
 	@Test
 	public void testInstance() {
 		assertNotNull(new Token("Name", "Text", Visibility.VISIBLE,
-				new TokenMetaData(1, 2, 3, 4)));
+				new TokenMetaData("test.java", 1, 2, 3, 4)));
 	}
 
 	@Test
 	public void testInitialValues() {
-		TokenMetaData metaData = new TokenMetaData(1, 2, 3, 4);
+		TokenMetaData metaData = new TokenMetaData("test.java", 1, 2, 3, 4);
 		Token token = new Token("Name", "Text", Visibility.VISIBLE, metaData);
 		assertEquals("Name", token.getName());
 		assertEquals("Text", token.getText());
@@ -27,7 +27,7 @@ public class TokenTest {
 	@Test
 	public void testClone() {
 		Token token = new Token("Name", "Text", Visibility.VISIBLE,
-				new TokenMetaData(1, 2, 3, 4));
+				new TokenMetaData("test.java", 1, 2, 3, 4));
 		Token cloned = token.clone();
 		assertNotSame(token, cloned);
 		assertEquals(token, cloned);

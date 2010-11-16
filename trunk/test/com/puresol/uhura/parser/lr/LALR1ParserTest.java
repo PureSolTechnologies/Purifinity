@@ -28,8 +28,8 @@ public class LALR1ParserTest {
 			Grammar grammar = TestGrammars.getLALR1TestGrammarFromDragonBook();
 			Parser parser = new LALR1Parser(grammar);
 			Lexer lexer = new RegExpLexer(grammar);
-			AST syntaxTree = parser
-					.parse(lexer.lex(new StringReader("id=*id")));
+			AST syntaxTree = parser.parse(lexer.lex(new StringReader("id=*id"),
+					"SampleString"));
 			new TreePrinter(System.out).println(syntaxTree);
 		} catch (GrammarException e) {
 			e.printStackTrace();

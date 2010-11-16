@@ -18,8 +18,8 @@ public class ParserException extends Exception {
 	// TODO remove this if possible
 	public ParserException(String message) {
 		super(message);
-		this.token = new Token("", "", Visibility.HIDDEN, new TokenMetaData(0,
-				0, 0, 0));
+		this.token = new Token("", "", Visibility.HIDDEN, new TokenMetaData("",
+				0, 0, 0, 0));
 	}
 
 	/**

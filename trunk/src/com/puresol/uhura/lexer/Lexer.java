@@ -11,6 +11,6 @@ import java.io.Serializable;
  */
 public interface Lexer extends Serializable {
 
-	public TokenStream lex(Reader reader) throws LexerException;
+	public TokenStream lex(Reader reader, String name) throws LexerException;
 
 }

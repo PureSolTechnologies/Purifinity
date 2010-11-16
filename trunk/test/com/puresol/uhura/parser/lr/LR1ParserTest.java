@@ -26,7 +26,8 @@ public class LR1ParserTest {
 			assertNotNull(grammar);
 			Parser parser = new LR1Parser(grammar);
 			Lexer lexer = new RegExpLexer(grammar);
-			AST syntaxTree = parser.parse(lexer.lex(new StringReader("1*2+3")));
+			AST syntaxTree = parser.parse(lexer.lex(new StringReader("1*2+3"),
+					"SampleString"));
 			assertNotNull(syntaxTree);
 			// new TreePrinter(System.out).println(syntaxTree);
 		} catch (GrammarException e) {
@@ -49,7 +50,8 @@ public class LR1ParserTest {
 			Lexer lexer = new RegExpLexer(grammar);
 			Parser parser = new LR1Parser(grammar);
 			AST syntaxTree = parser.parse(lexer.lex(new StringReader(
-					"((1*(2+3)+4*5)+6)*7")));
+					"((1*(2+3)+4*5)+6)*7"),
+					"SampleString"));
 			assertNotNull(syntaxTree);
 			// new TreePrinter(System.out).println(syntaxTree);
 		} catch (GrammarException e) {
@@ -63,5 +65,4 @@ public class LR1ParserTest {
 			fail("No exception was expected!");
 		}
 	}
-
 }

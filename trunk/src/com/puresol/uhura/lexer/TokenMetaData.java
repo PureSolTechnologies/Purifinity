@@ -19,14 +19,17 @@ public class TokenMetaData implements Serializable, Cloneable {
 
 	private static final long serialVersionUID = 6478412339837934971L;
 
+	private final String sourceName;
 	private final int id;
 	private final int pos;
 	private final int line;
 	private final int lineNum;
 	private final int hashcode;
 
-	public TokenMetaData(int id, int pos, int line, int lineNum) {
+	public TokenMetaData(String sourceName, int id, int pos, int line,
+			int lineNum) {
 		super();
+		this.sourceName = sourceName;
 		this.id = id;
 		this.pos = pos;
 		this.line = line;
@@ -37,7 +40,13 @@ public class TokenMetaData implements Serializable, Cloneable {
 		result = prime * result + line;
 		result = prime * result + lineNum;
 		result = prime * result + pos;
+		result = prime * result
+				+ ((sourceName == null) ? 0 : sourceName.hashCode());
 		hashcode = result;
+	}
+
+	public String getSourceName() {
+		return sourceName;
 	}
 
 	/**
@@ -94,6 +103,8 @@ public class TokenMetaData implements Serializable, Cloneable {
 		if (getClass() != obj.getClass())
 			return false;
 		TokenMetaData other = (TokenMetaData) obj;
+		if (hashcode != other.hashcode)
+			return false;
 		if (id != other.id)
 			return false;
 		if (line != other.line)
@@ -102,11 +113,16 @@ public class TokenMetaData implements Serializable, Cloneable {
 			return false;
 		if (pos != other.pos)
 			return false;
+		if (sourceName == null) {
+			if (other.sourceName != null)
+				return false;
+		} else if (!sourceName.equals(other.sourceName))
+			return false;
 		return true;
 	}
 
 	@Override
 	public TokenMetaData clone() {
-		return new TokenMetaData(id, pos, line, lineNum);
+		return new TokenMetaData(sourceName, id, pos, line, lineNum);
 	}
 }

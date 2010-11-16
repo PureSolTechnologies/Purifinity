@@ -28,7 +28,8 @@ public class SLR1ParserTest {
 			Grammar grammar = TestGrammars.getSLR1TestGrammarFromDragonBook();
 			Parser parser = new SLR1Parser(grammar);
 			Lexer lexer = new RegExpLexer(grammar);
-			AST syntaxTree = parser.parse(lexer.lex(new StringReader("1*2+3")));
+			AST syntaxTree = parser.parse(lexer.lex(new StringReader("1*2+3"),
+					"SampleString"));
 			new TreePrinter(System.out).println(syntaxTree);
 		} catch (GrammarException e) {
 			e.printStackTrace();
@@ -50,7 +51,7 @@ public class SLR1ParserTest {
 			Parser parser = new SLR1Parser(grammar);
 			Lexer lexer = new RegExpLexer(grammar);
 			AST syntaxTree = parser.parse(lexer.lex(new StringReader(
-					"((1*(2+3)+4*5)+6)*7")));
+					"((1*(2+3)+4*5)+6)*7"), "SampleString"));
 			new TreePrinter(System.out).println(syntaxTree);
 		} catch (GrammarException e) {
 			e.printStackTrace();

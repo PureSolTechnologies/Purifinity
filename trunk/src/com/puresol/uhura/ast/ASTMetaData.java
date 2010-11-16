@@ -1,7 +1,5 @@
 package com.puresol.uhura.ast;
 
-import java.io.File;
-
 /**
  * This class is used to store meta information for each node in an AST.
  * 
@@ -10,27 +8,28 @@ import java.io.File;
  */
 public class ASTMetaData {
 
-	private final File file;
+	private final String sourceName;
 	private final int line;
 	private final int lineNum;
 	private final int hashcode;
 
-	public ASTMetaData(File file, int line, int lineNum) {
+	public ASTMetaData(String sourceName, int line, int lineNum) {
 		super();
-		this.file = file;
+		this.sourceName = sourceName;
 		this.line = line;
 		this.lineNum = lineNum;
 
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((file == null) ? 0 : file.hashCode());
+		result = prime * result
+				+ ((sourceName == null) ? 0 : sourceName.hashCode());
 		result = prime * result + line;
 		result = prime * result + lineNum;
 		hashcode = result;
 	}
 
-	public File getFile() {
-		return file;
+	public String getSourceName() {
+		return sourceName;
 	}
 
 	public int getLine() {
@@ -55,10 +54,10 @@ public class ASTMetaData {
 		if (getClass() != obj.getClass())
 			return false;
 		ASTMetaData other = (ASTMetaData) obj;
-		if (file == null) {
-			if (other.file != null)
+		if (sourceName == null) {
+			if (other.sourceName != null)
 				return false;
-		} else if (!file.equals(other.file))
+		} else if (!sourceName.equals(other.sourceName))
 			return false;
 		if (line != other.line)
 			return false;
@@ -69,7 +68,7 @@ public class ASTMetaData {
 
 	@Override
 	public String toString() {
-		String string = file.toString() + ": " + line;
+		String string = sourceName.toString() + ": " + line;
 		if (lineNum > 1) {
 			string += " - " + (line + lineNum - 1);
 		}

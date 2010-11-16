@@ -1,7 +1,5 @@
 package com.puresol.uhura.parser.lr;
 
-import java.io.File;
-
 import com.puresol.trees.TreeIterator;
 import com.puresol.trees.TreeVisitor;
 import com.puresol.trees.WalkingAction;
@@ -22,24 +20,16 @@ public class MetaDataGeneratorVisitor implements TreeVisitor<AST> {
 			int lineNum = lastChild.getMetaData().getLine()
 					+ lastChild.getMetaData().getLineNum()
 					- firstChild.getMetaData().getLine();
-			metaData = new ASTMetaData(firstChild.getMetaData().getFile(),
-					line, lineNum);
+			metaData = new ASTMetaData(
+					firstChild.getMetaData().getSourceName(), line, lineNum);
 		} else {
 			Token token = tree.getToken();
 			if (token != null) {
-				metaData = new ASTMetaData(new File("unknown"), token
-						.getMetaData().getLine(), token.getMetaData()
-						.getLineNum());
+				metaData = new ASTMetaData(token.getMetaData().getSourceName(),
+						token.getMetaData().getLine(), token.getMetaData()
+								.getLineNum());
 			} else {
-				TreeIterator<AST> iterator = new TreeIterator<AST>(tree);
-				if (iterator.goForward()) {
-					ASTMetaData meta = iterator.getCurrentNode().getMetaData();
-					metaData = new ASTMetaData(meta.getFile(), meta.getLine(),
-							1);
-				} else {
-					throw new RuntimeException(
-							"There is no starting point for meta information calculation. There is a token missing!");
-				}
+				metaData = new ASTMetaData("", 0, 0);
 			}
 		}
 		tree.setMetaData(metaData);

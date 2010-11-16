@@ -131,7 +131,7 @@ public class GrammarReader implements Callable<Boolean> {
 			logger.debug("Read grammar file:");
 			logger.debug("Starting lexer...");
 			lexer = new RegExpLexer(uhuraGrammar);
-			TokenStream tokenStream = lexer.lex(reader);
+			TokenStream tokenStream = lexer.lex(reader, "UhuraGrammar");
 			logger.debug("Starting parser...");
 			parse(tokenStream);
 			logger.debug("Convert AST into grammar...");
@@ -263,7 +263,7 @@ public class GrammarReader implements Callable<Boolean> {
 				if (visibilityAST.hasChild("HIDE")) {
 					tokenVisibility.put(identifier, Visibility.HIDDEN);
 				} else if (visibilityAST.hasChild("IGNORE")) {
-						tokenVisibility.put(identifier, Visibility.IGNORED);
+					tokenVisibility.put(identifier, Visibility.IGNORED);
 				} else {
 					tokenVisibility.put(identifier, Visibility.VISIBLE);
 				}

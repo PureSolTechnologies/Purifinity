@@ -48,9 +48,9 @@ public class RegExpLexer implements Lexer {
 	 */
 
 	@Override
-	public TokenStream lex(Reader reader) throws LexerException {
+	public TokenStream lex(Reader reader, String name) throws LexerException {
 		readToString(reader);
-		scan();
+		scan(name);
 		return tokenStream;
 	}
 
@@ -71,8 +71,8 @@ public class RegExpLexer implements Lexer {
 		}
 	}
 
-	private TokenStream scan() throws LexerException {
-		tokenStream = new TokenStream();
+	private TokenStream scan(String name) throws LexerException {
+		tokenStream = new TokenStream(name);
 		int pos = 0;
 		int id = 0;
 		int line = 1;
@@ -126,8 +126,8 @@ public class RegExpLexer implements Lexer {
 				if (tokenText.contains("\r") || tokenText.contains("\n")) {
 					lineCounter += tokenText.split("(\\r\\n|\\n|\\r)").length - 1;
 				}
-				TokenMetaData metaData = new TokenMetaData(id, pos, line,
-						lineCounter);
+				TokenMetaData metaData = new TokenMetaData(
+						tokenStream.getName(), id, pos, line, lineCounter);
 				nextToken = new Token(definition.getName(), tokenText,
 						definition.getVisibility(), metaData);
 			}
