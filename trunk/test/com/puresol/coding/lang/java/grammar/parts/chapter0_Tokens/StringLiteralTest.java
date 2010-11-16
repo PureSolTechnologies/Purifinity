@@ -20,17 +20,19 @@ public class StringLiteralTest {
 	public void test() {
 		try {
 			Lexer lexer = JavaGrammar.createLexer();
-			TokenStream tokenStream = lexer.lex(new StringReader("\"String\""));
+			TokenStream tokenStream = lexer.lex(new StringReader("\"String\""),
+					"SampleString");
 			assertEquals(1, tokenStream.size());
 			assertEquals("StringLiteral", tokenStream.get(0).getName());
 
 			tokenStream = lexer.lex(new StringReader(
-					"\"Test \\\"String\\\" Test\""));
+					"\"Test \\\"String\\\" Test\""), "SampleString");
 			assertEquals(1, tokenStream.size());
 			assertEquals("StringLiteral", tokenStream.get(0).getName());
 
 			tokenStream = lexer.lex(new StringReader(
-					"\"Test \\\"String\\\" Test\" \"2. String\""));
+					"\"Test \\\"String\\\" Test\" \"2. String\""),
+					"SampleString");
 			assertEquals(2, tokenStream.size());
 			assertEquals("StringLiteral", tokenStream.get(0).getName());
 			assertEquals("StringLiteral", tokenStream.get(1).getName());

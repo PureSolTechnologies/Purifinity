@@ -22,11 +22,11 @@ public class CommentTest {
 			Lexer lexer = JavaGrammar.createLexer();
 
 			TokenStream tokenStream = lexer.lex(new StringReader(
-					"/* This is a traditional comment... */"));
+					"/* This is a traditional comment... */"), "SampleString");
 			assertEquals(0, tokenStream.size());
 
 			tokenStream = lexer.lex(new StringReader(
-					"/* to select the \"client\" VM */"));
+					"/* to select the \"client\" VM */"), "SampleString");
 			assertEquals(0, tokenStream.size());
 
 			tokenStream = lexer
@@ -36,7 +36,7 @@ public class CommentTest {
 									+ "*\n"
 									+ "* Copyright (c) 2006, Oracle and/or its affiliates. All rights reserved.\n"
 									+ "* ORACLE PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.\n"
-									+ "*/"));
+									+ "*/"), "SampleString");
 			assertEquals(0, tokenStream.size());
 		} catch (IOException e) {
 			e.printStackTrace();

@@ -58,7 +58,8 @@ public class JavaAnalyser implements Analyzer {
 		try {
 			date = new Date();
 			Lexer lexer = JavaGrammar.createLexer();
-			TokenStream tokenStream = lexer.lex(new FileReader(file));
+			TokenStream tokenStream = lexer.lex(new FileReader(file),
+					file.toString());
 			Parser parser = JavaGrammar.createParser();
 			ast = parser.parse(tokenStream);
 		} catch (ParserException e) {

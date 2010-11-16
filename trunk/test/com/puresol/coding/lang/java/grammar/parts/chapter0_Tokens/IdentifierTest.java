@@ -20,7 +20,8 @@ public class IdentifierTest {
 	public void testIdentifier() {
 		try {
 			Lexer lexer = JavaGrammar.createLexer();
-			TokenStream tokenStream = lexer.lex(new StringReader("identifier"));
+			TokenStream tokenStream = lexer.lex(new StringReader("identifier"),
+					"SampleString");
 			assertEquals(1, tokenStream.size());
 			assertEquals("Identifier", tokenStream.get(0).getName());
 		} catch (IOException e) {

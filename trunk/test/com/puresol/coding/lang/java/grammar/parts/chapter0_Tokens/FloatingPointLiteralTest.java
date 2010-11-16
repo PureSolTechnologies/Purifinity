@@ -20,7 +20,8 @@ public class FloatingPointLiteralTest {
 	public void test() {
 		try {
 			Lexer lexer = JavaGrammar.createLexer();
-			TokenStream tokenStream = lexer.lex(new StringReader("0.1234"));
+			TokenStream tokenStream = lexer.lex(new StringReader("0.1234"),
+					"SampleString");
 			assertEquals(1, tokenStream.size());
 			assertEquals("FloatingPointLiteral", tokenStream.get(0).getName());
 		} catch (IOException e) {
