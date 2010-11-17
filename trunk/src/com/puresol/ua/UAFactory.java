@@ -11,8 +11,16 @@ import javax.swingx.config.ClassRegistry;
  */
 public class UAFactory {
 
-	public static UA create() {
-		return (UA) ClassRegistry.create(UA.class);
+	/**
+	 * This method creates a new UA.
+	 * 
+	 * @param clazz
+	 *            is used to determine the correct resource file for
+	 *            information.
+	 * @return
+	 */
+	public static UA create(Class<?> clazz) {
+		return (UA) ClassRegistry.create(clazz, UA.class);
 	}
 
 }

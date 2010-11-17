@@ -1,5 +1,6 @@
 package com.puresol.ua;
 
+import javax.swingx.PasswordDialog;
 import javax.swingx.config.ClassRegistry;
 import javax.swingx.config.ClassRegistryElement;
 import javax.swingx.config.ClassRegistryElementType;
@@ -23,7 +24,7 @@ public class UAFactoryTest extends TestCase {
 	public void testCreate() {
 		ClassRegistry.register(UA.class, new ClassRegistryElement(
 				ClassRegistryElementType.FACTORY, "com.puresol.ua.TestJAAS"));
-		UA ua = UAFactory.create();
+		UA ua = UAFactory.create(getClass());
 		Assert.assertNotNull(ua);
 		Assert.assertEquals("com.puresol.ua.TestJAAS", ua.getClass().getName());
 	}
@@ -32,7 +33,7 @@ public class UAFactoryTest extends TestCase {
 	public void testLogin() {
 		ClassRegistry.register(UA.class, new ClassRegistryElement(
 				ClassRegistryElementType.FACTORY, "com.puresol.ua.TestJAAS"));
-		UA ua = UAFactory.create();
+		UA ua = UAFactory.create(getClass());
 		Assert.assertTrue(ua.login("PureSolTechnologies"));
 	}
 
@@ -43,11 +44,15 @@ public class UAFactoryTest extends TestCase {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		UA ua = UAFactory.create();
-		if (ua.login("PureSolTechnologies", "ludwig", "26Elke03")) {
-			System.out.println("Success!!!");
+		UA ua = UAFactory.create(UAFactoryTest.class);
+		PasswordDialog passwordDialog = new PasswordDialog();
+		if (passwordDialog.run()) {
+			if (ua.login("PureSolTechnologies", passwordDialog.getUsername(),
+					passwordDialog.getPassword())) {
+				System.out.println("Success!!!");
+			}
+			ua.getInformation().print();
+			new SubjectInformationDialog(ua.getInformation()).run();
 		}
-		ua.getInformation().print();
-		new SubjectInformationDialog(ua.getInformation()).run();
 	}
 }

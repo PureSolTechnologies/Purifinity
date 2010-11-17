@@ -123,14 +123,14 @@ public class StandardReport {
 	}
 
 	private String generateFinalText(File file, String title, String bodyText) {
-		String output = HTMLStandards.getStandardHeader(title,
+		String output = HTMLStandards.getStandardHeader(getClass(), title,
 				FileUtilities.getRelativePath(file, cssFile), false,
 				FileUtilities.getRelativePath(file, favIconFile));
 		output += createLogoIMGTag(file, 400, 0, false);
 		output += "<h1>" + title + "</h1>";
 		output += bodyText;
 		if (copyrightFooter) {
-			output += HTMLStandards.getStandardCopyrightFooter();
+			output += HTMLStandards.getStandardCopyrightFooter(getClass());
 		} else {
 			output += HTMLStandards.getStandardFooter();
 		}
@@ -175,11 +175,11 @@ public class StandardReport {
 
 	public boolean createStartHTML(String name) {
 		File outputFile = new File("start.html");
-		String html = HTMLStandards.getStandardHeader(name, cssFile, false,
-				favIconFile);
+		String html = HTMLStandards.getStandardHeader(getClass(), name,
+				cssFile, false, favIconFile);
 		html += createLogoIMGTag(outputFile, 400, 0, false) + " <h1>" + name
 				+ "</h1>";
-		html += "<p>" + HTMLStandards.getCopyright() + "</p>";
+		html += "<p>" + HTMLStandards.getCopyright(getClass()) + "</p>";
 		html += "<p>" + translator.i18n("For more information have a look to:")
 				+ " " + Link.getPureSolTechnolgiesHomePage().toHTML() + "</p>";
 		html += HTMLStandards.getStandardFooter();
@@ -189,11 +189,11 @@ public class StandardReport {
 	public boolean createCopyrightHTML() {
 		String name = translator.i18n("Copyright Information");
 		File outputFile = new File("copyright.html");
-		String html = HTMLStandards.getStandardHeader(name, cssFile, false,
-				favIconFile);
+		String html = HTMLStandards.getStandardHeader(getClass(), name,
+				cssFile, false, favIconFile);
 		html += createLogoIMGTag(outputFile, 400, 0, false) + "<h1>" + name
 				+ "</h1>";
-		html += "<p>" + HTMLStandards.getCopyright() + "</p>";
+		html += "<p>" + HTMLStandards.getCopyright(getClass()) + "</p>";
 		html += "<p>\n";
 		html += "Permission to use, copy, modify and distribute<br/>\n";
 		html += "this Software its accompanying documentation<br/>\n";
