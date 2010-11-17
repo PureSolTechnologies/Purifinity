@@ -30,6 +30,8 @@ public class ProjectAnalysisBrowser extends Panel {
 
 	private final Label directory = new Label();
 	private final TabbedPane tabbedPane = new TabbedPane();
+	// TODO
+	// private final CodeRangeBrowser codeRangeBrowser = new CodeRangeBrowser();
 	private final EvaluatorPanel evaluatorPanel = new EvaluatorPanel();
 
 	public ProjectAnalysisBrowser() {
@@ -48,6 +50,8 @@ public class ProjectAnalysisBrowser extends Panel {
 		add(directory, BorderLayout.NORTH);
 		add(tabbedPane, BorderLayout.CENTER);
 
+		// TODO
+		// tabbedPane.addTab(translator.i18n("Code Ranges"), codeRangeBrowser);
 		tabbedPane.addTab(translator.i18n("Code Evaluators"), evaluatorPanel);
 	}
 
@@ -58,6 +62,8 @@ public class ProjectAnalysisBrowser extends Panel {
 		} else {
 			directory.setText("");
 		}
+		// TODO
+		// codeRangeBrowser.setProjectAnalyser(project);
 		evaluatorPanel.setProjectAnalyser(project);
 	}
 
@@ -66,6 +72,8 @@ public class ProjectAnalysisBrowser extends Panel {
 	}
 
 	public void refresh() {
+		// TODO
+		// codeRangeBrowser.refresh();
 	}
 
 }
