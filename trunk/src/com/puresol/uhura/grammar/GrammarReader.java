@@ -57,7 +57,7 @@ public class GrammarReader implements Callable<Boolean> {
 	private Properties options = null;
 	private TokenDefinitionSet tokenDefinitions = null;
 	private ProductionSet productions = null;
-	private Grammar readGrammar = null;
+	private Grammar grammar = null;
 	private AST ast = null;
 	private Map<String, Visibility> tokenVisibility = new HashMap<String, Visibility>();
 
@@ -95,7 +95,7 @@ public class GrammarReader implements Callable<Boolean> {
 	 * @return
 	 */
 	public Grammar getGrammar() {
-		return readGrammar;
+		return grammar;
 	}
 
 	/**
@@ -126,11 +126,10 @@ public class GrammarReader implements Callable<Boolean> {
 	 * @throws GrammarException
 	 */
 	private void read() throws IOException, GrammarException {
-		Lexer lexer = null;
 		try {
 			logger.debug("Read grammar file:");
 			logger.debug("Starting lexer...");
-			lexer = new RegExpLexer(uhuraGrammar);
+			Lexer lexer = new RegExpLexer(uhuraGrammar);
 			TokenStream tokenStream = lexer.lex(reader, "UhuraGrammar");
 			logger.debug("Starting parser...");
 			parse(tokenStream);
@@ -146,6 +145,9 @@ public class GrammarReader implements Callable<Boolean> {
 					+ e.getToken().getMetaData() + ": " + e.getToken();
 			logger.error(errorMsg);
 			throw new IOException(errorMsg);
+		} catch (ASTException e) {
+			logger.error(e.getMessage(), e);
+			throw new RuntimeException(e.getMessage(), e);
 		}
 	}
 
@@ -170,34 +172,31 @@ public class GrammarReader implements Callable<Boolean> {
 	 * ready to be used.
 	 * 
 	 * @throws GrammarException
+	 * @throws ASTException
 	 */
-	private void convert() throws GrammarException {
+	private void convert() throws GrammarException, ASTException {
 		convertOptions();
-		convertTokenDefinitionSet();
-		convertProductionsSet();
-		readGrammar = new Grammar(options, tokenDefinitions, productions);
+		convertTokenDefinitions();
+		convertProductions();
+		grammar = new Grammar(options, tokenDefinitions, productions);
 	}
 
 	/**
 	 * This method converts the options part of the AST.
+	 * 
+	 * @throws ASTException
 	 */
-	private void convertOptions() {
-		try {
-			options = new Properties();
-			AST optionsTree = ast.getChild("Options");
-			for (AST grammarOption : optionsTree.getSubTrees("GrammarOption")) {
-				String name = grammarOption.getSubTrees("PropertiesIdentifier")
-						.get(0).getText();
-				String value = grammarOption.getSubTrees("Literal").get(0)
-						.getText();
-				if (value.startsWith("'") || value.startsWith("\"")) {
-					value = value.substring(1, value.length() - 1);
-				}
-				options.put(name, value);
+	private void convertOptions() throws ASTException {
+		options = new Properties();
+		AST optionList = ast.getChild("GrammarOptions").getChild(
+				"GrammarOptionList");
+		for (AST option : optionList.getChildren("GrammarOption")) {
+			String name = option.getChild("PropertyIdentifier").getText();
+			String value = option.getChild("Literal").getText();
+			if (value.startsWith("'") || value.startsWith("\"")) {
+				value = value.substring(1, value.length() - 1);
 			}
-		} catch (ASTException e) {
-			logger.fatal(e.getMessage(), e);
-			throw new RuntimeException();
+			options.put(name, value);
 		}
 	}
 
@@ -205,12 +204,14 @@ public class GrammarReader implements Callable<Boolean> {
 	 * This method converts the token definitions to the token definition set.
 	 * 
 	 * @throws GrammarException
+	 * @throws ASTException
 	 */
-	private void convertTokenDefinitionSet() throws GrammarException {
+	private void convertTokenDefinitions() throws GrammarException,
+			ASTException {
 		tokenVisibility.clear();
-		Map<String, List<AST>> helpers = getHelpers();
-		Map<String, List<AST>> tokens = getTokens();
-		convertTokenDefinitionSet(helpers, tokens);
+		Map<String, AST> helpers = getHelperTokens();
+		Map<String, AST> tokens = getTokens();
+		convertTokenDefinitions(helpers, tokens);
 	}
 
 	/**
@@ -218,61 +219,49 @@ public class GrammarReader implements Callable<Boolean> {
 	 * them.
 	 * 
 	 * @return
+	 * @throws ASTException
 	 */
-	private Map<String, List<AST>> getHelpers() {
-		try {
-			Map<String, List<AST>> helpers = new HashMap<String, List<AST>>();
-			AST helperTree = ast.getChild("Helper");
-			AST helperDefinitions = helperTree.getChild("HelperDefinitions");
-			for (AST helperDefinition : helperDefinitions
-					.getChildren("HelperDefinition")) {
-				String identifier = helperDefinition.getChild("IDENTIFIER")
-						.getText();
-				List<AST> tokenParts = helperDefinition
-						.getSubTrees("TokenPart");
-				helpers.put(identifier, tokenParts);
-			}
-			return helpers;
-		} catch (ASTException e) {
-			logger.fatal(e.getMessage(), e);
-			throw new RuntimeException();
+	private Map<String, AST> getHelperTokens() throws ASTException {
+		Map<String, AST> helpers = new HashMap<String, AST>();
+		AST helperTree = ast.getChild("Helper");
+		AST helperDefinitions = helperTree.getChild("HelperDefinitions");
+		for (AST helperDefinition : helperDefinitions
+				.getChildren("HelperDefinition")) {
+			String identifier = helperDefinition.getChild("IDENTIFIER")
+					.getText();
+			helpers.put(identifier, helperDefinition);
 		}
+		return helpers;
 	}
 
 	/**
 	 * This method reads all tokens from AST and returns a map with all of them.
 	 * 
 	 * @return
+	 * @throws ASTException
 	 */
-	private Map<String, List<AST>> getTokens() throws GrammarException {
-		try {
-			Map<String, List<AST>> tokens = new HashMap<String, List<AST>>();
-			AST tokensTree = ast.getChild("Tokens");
-			AST tokenDefinitions = tokensTree.getChild("TokenDefinitions");
-			for (AST tokenDefinition : tokenDefinitions
-					.getChildren("TokenDefinition")) {
-				// identifier...
-				String identifier = tokenDefinition.getChild("IDENTIFIER")
-						.getText();
-				// token parts...
-				List<AST> tokenParts = tokenDefinition.getSubTrees("TokenPart");
-				tokens.put(identifier, tokenParts);
-				// visibility...
-				AST visibilityAST = tokenDefinition
-						.getChild("OptionalVisibility");
-				if (visibilityAST.hasChild("HIDE")) {
-					tokenVisibility.put(identifier, Visibility.HIDDEN);
-				} else if (visibilityAST.hasChild("IGNORE")) {
-					tokenVisibility.put(identifier, Visibility.IGNORED);
-				} else {
-					tokenVisibility.put(identifier, Visibility.VISIBLE);
-				}
+	private Map<String, AST> getTokens() throws GrammarException, ASTException {
+		Map<String, AST> tokens = new HashMap<String, AST>();
+		AST tokensTree = ast.getChild("Tokens");
+		AST tokenDefinitions = tokensTree.getChild("TokenDefinitions");
+		for (AST tokenDefinition : tokenDefinitions
+				.getChildren("TokenDefinition")) {
+			// identifier...
+			String identifier = tokenDefinition.getChild("IDENTIFIER")
+					.getText();
+			// token parts...
+			tokens.put(identifier, tokenDefinition);
+			// visibility...
+			AST visibilityAST = tokenDefinition.getChild("Visibility");
+			if (visibilityAST.hasChild("HIDE")) {
+				tokenVisibility.put(identifier, Visibility.HIDDEN);
+			} else if (visibilityAST.hasChild("IGNORE")) {
+				tokenVisibility.put(identifier, Visibility.IGNORED);
+			} else {
+				tokenVisibility.put(identifier, Visibility.VISIBLE);
 			}
-			return tokens;
-		} catch (ASTException e) {
-			logger.fatal(e.getMessage(), e);
-			throw new RuntimeException();
 		}
+		return tokens;
 	}
 
 	/**
@@ -282,21 +271,15 @@ public class GrammarReader implements Callable<Boolean> {
 	 * @param helpers
 	 * @param tokens
 	 * @throws GrammarException
+	 * @throws ASTException
 	 */
-	private void convertTokenDefinitionSet(Map<String, List<AST>> helpers,
-			Map<String, List<AST>> tokens) throws GrammarException {
-		try {
-			tokenDefinitions = new TokenDefinitionSet();
-			for (AST tokenDefinitionAST : ast.getChild("Tokens")
-					.getChild("TokenDefinitions")
-					.getChildren("TokenDefinition")) {
-				tokenDefinitions.addDefinition(getTokenDefinition(
-						tokenDefinitionAST.getChild("IDENTIFIER").getText(),
-						helpers, tokens));
-			}
-		} catch (ASTException e) {
-			logger.error(e.getMessage(), e);
-			throw new GrammarException(e.getMessage());
+	private void convertTokenDefinitions(Map<String, AST> helpers,
+			Map<String, AST> tokens) throws GrammarException, ASTException {
+		tokenDefinitions = new TokenDefinitionSet();
+		for (AST tokenDefinition : ast.getChild("Tokens")
+				.getChild("TokenDefinitions").getChildren("TokenDefinition")) {
+			tokenDefinitions.addDefinition(getTokenDefinition(tokenDefinition,
+					helpers, tokens));
 		}
 	}
 
@@ -308,53 +291,72 @@ public class GrammarReader implements Callable<Boolean> {
 	 * @param tokens
 	 * @return
 	 * @throws GrammarException
+	 * @throws ASTException
 	 */
-	private TokenDefinition getTokenDefinition(String tokenName,
-			Map<String, List<AST>> helpers, Map<String, List<AST>> tokens)
-			throws GrammarException {
-		try {
-			StringBuffer pattern = new StringBuffer();
-			List<AST> trees = tokens.get(tokenName);
-			if (trees == null) {
-				trees = helpers.get(tokenName);
-			}
-			if (trees == null) {
-				throw new GrammarException("Unknown token '" + tokenName + "'.");
-			}
-			for (AST tree : trees) {
-				if (tree.hasChild("STRING_LITERAL")) {
-					String text = tree.getChild("STRING_LITERAL").getText();
-					text = text.replaceAll("\\\\\\\\", "\\\\");
-					pattern.append(text.substring(1, text.length() - 1));
-				} else {
-					String text = tree.getChild("IDENTIFIER").getText();
-					text = getTokenDefinition(text, helpers, tokens).getText();
-					pattern.append(text);
-				}
-				if (tree.hasChild("OptionalQuantifier")) {
-					pattern.append(tree.getChild("OptionalQuantifier")
-							.getText());
-				}
-			}
-			boolean ignoreCase = Boolean.valueOf((String) options
-					.get("grammar.ignore-case"));
-			if (tokenVisibility.get(tokenName) != null) {
-				return new TokenDefinition(tokenName, pattern.toString(),
-						tokenVisibility.get(tokenName), ignoreCase);
+	private TokenDefinition getTokenDefinition(AST tokenDefinition,
+			Map<String, AST> helpers, Map<String, AST> tokens)
+			throws GrammarException, ASTException {
+		String tokenName = tokenDefinition.getChild("IDENTIFIER").getText();
+		StringBuffer pattern = new StringBuffer();
+		boolean firstConstruction = true;
+		for (AST tokenConstruction : tokenDefinition.getChild(
+				"TokenConstructions").getChildren("TokenConstruction")) {
+			if (firstConstruction) {
+				firstConstruction = false;
 			} else {
-				return new TokenDefinition(tokenName, pattern.toString(),
-						ignoreCase);
+				pattern.append("|");
 			}
-		} catch (ASTException e) {
-			logger.fatal(e.getMessage(), e);
-			throw new RuntimeException();
+			pattern.append(getTokenDefinitionPattern(tokenConstruction,
+					helpers, tokens));
 		}
+		boolean ignoreCase = Boolean.valueOf((String) options
+				.get("grammar.ignore-case"));
+		if (tokenVisibility.get(tokenName) != null) {
+			return new TokenDefinition(tokenName, pattern.toString(),
+					tokenVisibility.get(tokenName), ignoreCase);
+		} else {
+			return new TokenDefinition(tokenName, pattern.toString(),
+					ignoreCase);
+		}
+	}
+
+	private StringBuffer getTokenDefinitionPattern(AST tokenConstruction,
+			Map<String, AST> helpers, Map<String, AST> tokens)
+			throws GrammarException, ASTException {
+		StringBuffer pattern = new StringBuffer();
+		for (AST tree : tokenConstruction.getChildren("TokenPart")) {
+			if (tree.hasChild("STRING_LITERAL")) {
+				String text = tree.getChild("STRING_LITERAL").getText();
+				text = text.replaceAll("\\\\\\\\", "\\\\");
+				pattern.append(text.substring(1, text.length() - 1));
+			} else {
+				String text = tree.getChild("IDENTIFIER").getText();
+				if (helpers.containsKey(text)) {
+					text = getTokenDefinition(helpers.get(text), helpers,
+							tokens).getText();
+				} else if (tokens.containsKey(text)) {
+					text = getTokenDefinition(tokens.get(text), helpers, tokens)
+							.getText();
+				} else {
+					throw new GrammarException(
+							"Could not find definition for token '" + text
+									+ "'!");
+				}
+				pattern.append(text);
+			}
+			if (tree.hasChild("Quantifier")) {
+				pattern.append(tree.getChild("Quantifier").getText());
+			}
+		}
+		return pattern;
 	}
 
 	/**
 	 * This method converts all productions from the AST into a ProductionSet.
+	 * 
+	 * @throws ASTException
 	 */
-	private void convertProductionsSet() {
+	private void convertProductions() throws ASTException {
 		try {
 			productions = new ProductionSet();
 			AST productionsTree = ast.getChild("Productions");
@@ -364,9 +366,6 @@ public class GrammarReader implements Callable<Boolean> {
 					.getChildren("ProductionDefinition")) {
 				convertProductionGroup(productionDefinition);
 			}
-		} catch (ASTException e) {
-			logger.fatal(e.getMessage(), e);
-			throw new RuntimeException();
 		} catch (GrammarException e) {
 			logger.fatal(e.getMessage(), e);
 			throw new RuntimeException();
@@ -379,19 +378,15 @@ public class GrammarReader implements Callable<Boolean> {
 	 * 
 	 * @param productionDefinition
 	 * @throws GrammarException
+	 * @throws ASTException
 	 */
 	private void convertProductionGroup(AST productionDefinition)
-			throws GrammarException {
-		try {
-			String productionName = productionDefinition.getChild("IDENTIFIER")
-					.getText();
-			AST productionConstructions = productionDefinition
-					.getChild("ProductionConstructions");
-			convertSingleProductions(productionName, productionConstructions);
-		} catch (ASTException e) {
-			logger.fatal(e.getMessage(), e);
-			throw new RuntimeException();
-		}
+			throws GrammarException, ASTException {
+		String productionName = productionDefinition.getChild("IDENTIFIER")
+				.getText();
+		AST productionConstructions = productionDefinition
+				.getChild("ProductionConstructions");
+		convertSingleProductions(productionName, productionConstructions);
 	}
 
 	/**
@@ -453,8 +448,7 @@ public class GrammarReader implements Callable<Boolean> {
 		AST productionParts = productionConstruction
 				.getChild("ProductionParts");
 		if (productionParts != null) {
-			for (AST productionPart : productionParts
-					.getChildren("ProductionPart")) {
+			for (AST productionPart : productionParts.getChildren()) {
 				constructions.add(getConstruction(productionPart,
 						tokenDefinitions));
 			}
@@ -466,7 +460,7 @@ public class GrammarReader implements Callable<Boolean> {
 			TokenDefinitionSet tokenDefinitions) throws ASTException,
 			GrammarException {
 		Quantity quantity = Quantity.fromSymbol(productionPart.getChild(
-				"OptionalQuantifier").getText());
+				"Quantifier").getText());
 		if (quantity == Quantity.EXPECT) {
 			return createConstruction(productionPart);
 		} else {
@@ -476,14 +470,14 @@ public class GrammarReader implements Callable<Boolean> {
 
 	private Construction createConstruction(AST productionPart)
 			throws ASTException, GrammarException {
-		if (productionPart.hasChild("IDENTIFIER")) {
+		if ("ConstructionIdentifier".equals(productionPart.getName())) {
 			String identifier = productionPart.getChild("IDENTIFIER").getText();
 			if (tokenDefinitions.getDefinition(identifier) != null) {
 				return new Terminal(identifier);
 			} else {
 				return new NonTerminal(identifier);
 			}
-		} else if (productionPart.hasChild("STRING_LITERAL")) {
+		} else if ("ConstructionLiteral".equals(productionPart.getName())) {
 			AST stringLiteral = productionPart.getChild("STRING_LITERAL");
 			String text = stringLiteral.getText();
 			text = text.substring(1, text.length() - 1);
@@ -505,7 +499,7 @@ public class GrammarReader implements Callable<Boolean> {
 						+ "' does not satisfy any token definition!");
 			}
 			return terminal;
-		} else if (productionPart.hasChild("ProductionConstructions")) {
+		} else if ("ConstructionGroup".equals(productionPart.getName())) {
 			AST productionConstructions = productionPart
 					.getChild("ProductionConstructions");
 			String newIdentifier = createNewIdentifier(productionPart, "group");
@@ -659,10 +653,9 @@ public class GrammarReader implements Callable<Boolean> {
 
 	private void addOptions(Production production, AST productionConstruction)
 			throws ASTException {
-		AST optionalOptions = productionConstruction
-				.getChild("OptionalOptions");
-		if (optionalOptions != null) {
-			for (AST option : optionalOptions.getSubTrees("Option")) {
+		AST options = productionConstruction.getChild("ProductionOptions");
+		if (options != null) {
+			for (AST option : options.getChildren("ProductionOptionList")) {
 				if (option.hasChild("NODE")) {
 					production.setNode(Boolean.valueOf(option.getChild(
 							"BOOLEAN_LITERAL").getText()));

@@ -7,6 +7,7 @@ import java.io.IOException;
 
 import org.junit.Test;
 
+import com.puresol.trees.TreePrinter;
 import com.puresol.uhura.grammar.token.Visibility;
 
 public class GrammarReaderTest {
@@ -140,4 +141,16 @@ public class GrammarReaderTest {
 		}
 	}
 
+	public static void main(String args[]) {
+		try {
+			GrammarReader reader = new GrammarReader(new File(
+					"test/com/puresol/uhura/grammar/TestRuleAutoGeneration.g"));
+			reader.call();
+			new TreePrinter(System.out).println(reader.getAST());
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (GrammarException e) {
+			e.printStackTrace();
+		}
+	}
 }

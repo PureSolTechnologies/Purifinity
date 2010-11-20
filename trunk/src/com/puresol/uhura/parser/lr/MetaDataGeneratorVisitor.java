@@ -1,6 +1,5 @@
 package com.puresol.uhura.parser.lr;
 
-import com.puresol.trees.TreeIterator;
 import com.puresol.trees.TreeVisitor;
 import com.puresol.trees.WalkingAction;
 import com.puresol.uhura.ast.AST;

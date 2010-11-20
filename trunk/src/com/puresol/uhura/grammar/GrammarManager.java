@@ -2,6 +2,8 @@ package com.puresol.uhura.grammar;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 
 import org.apache.log4j.Logger;
 
@@ -26,7 +28,7 @@ public class GrammarManager {
 
 	private static final Logger logger = Logger.getLogger(GrammarManager.class);
 
-	private final File grammarFile;
+	private final URL grammarURL;
 	private final File grammarPersistenceFile;
 	private final File lexerPersistenceFile;
 	private final File parserPersistenceFile;
@@ -35,22 +37,22 @@ public class GrammarManager {
 	private Lexer lexer = null;
 	private Parser parser = null;
 
-	public GrammarManager(File grammarFile) {
+	public GrammarManager(URL grammarURL) {
 		super();
-		this.grammarFile = grammarFile;
-		this.grammarPersistenceFile = new File(grammarFile.getParentFile(),
-				grammarFile.getName() + ".persist");
-		this.lexerPersistenceFile = new File(grammarFile.getParentFile(),
-				grammarFile.getName() + ".lexer.persist");
-		this.parserPersistenceFile = new File(grammarFile.getParentFile(),
-				grammarFile.getName() + ".parser.persist");
+		this.grammarURL = grammarURL;
+		this.grammarPersistenceFile = new File(".", grammarURL.getFile()
+				+ ".persist");
+		this.lexerPersistenceFile = new File(".", grammarURL.getFile()
+				+ ".lexer.persist");
+		this.parserPersistenceFile = new File(".", grammarURL.getFile()
+				+ ".parser.persist");
 	}
 
 	/**
 	 * @return the grammarFile
 	 */
-	public File getGrammarFile() {
-		return grammarFile;
+	public URL getGrammarURL() {
+		return grammarURL;
 	}
 
 	/**
@@ -76,8 +78,7 @@ public class GrammarManager {
 
 	public Grammar getGrammar() throws IOException, GrammarException {
 		if ((!grammarPersistenceFile.exists())
-				|| (grammarFile.lastModified() > grammarPersistenceFile
-						.lastModified())) {
+				|| (grammarModified() > grammarPersistenceFile.lastModified())) {
 			updateGrammarPersistenceFile();
 		} else if (grammar == null) {
 			readGrammarPersistenceFile();
@@ -87,11 +88,13 @@ public class GrammarManager {
 
 	private void updateGrammarPersistenceFile() throws IOException,
 			GrammarException {
+		InputStream inputStream = null;
 		try {
 			if ((!grammarPersistenceFile.exists())
-					|| (grammarFile.lastModified() > grammarPersistenceFile
+					|| (grammarModified() > grammarPersistenceFile
 							.lastModified())) {
-				GrammarReader reader = new GrammarReader(grammarFile);
+				inputStream = grammarURL.openStream();
+				GrammarReader reader = new GrammarReader(inputStream);
 				reader.call();
 				grammar = reader.getGrammar();
 				Persistence.persist(grammar, grammarPersistenceFile);
@@ -99,6 +102,10 @@ public class GrammarManager {
 		} catch (PersistenceException e) {
 			logger.error(e.getMessage());
 			throw new IOException(e.getMessage());
+		} finally {
+			if (inputStream != null) {
+				inputStream.close();
+			}
 		}
 	}
 
@@ -114,8 +121,7 @@ public class GrammarManager {
 	public Lexer getLexer() throws IOException, GrammarException,
 			LexerFactoryException {
 		if ((!lexerPersistenceFile.exists())
-				|| (grammarFile.lastModified() > lexerPersistenceFile
-						.lastModified())) {
+				|| (grammarModified() > lexerPersistenceFile.lastModified())) {
 			updateGrammarPersistenceFile();
 			updateLexerPersistenceFile();
 		} else if (lexer == null) {
@@ -150,8 +156,7 @@ public class GrammarManager {
 	public Parser getParser() throws IOException, GrammarException,
 			ParserFactoryException {
 		if ((!parserPersistenceFile.exists())
-				|| (grammarFile.lastModified() > parserPersistenceFile
-						.lastModified())) {
+				|| (grammarModified() > parserPersistenceFile.lastModified())) {
 			updateGrammarPersistenceFile();
 			updateParserPersistenceFile();
 		} else if (parser == null) {
@@ -181,5 +186,12 @@ public class GrammarManager {
 		} catch (PersistenceException e) {
 			updateParserPersistenceFile();
 		}
+	}
+
+	private long grammarModified() {
+		if ("file".equals(grammarURL.getProtocol())) {
+			return new File(grammarURL.getFile()).lastModified();
+		}
+		return System.currentTimeMillis();
 	}
 }
