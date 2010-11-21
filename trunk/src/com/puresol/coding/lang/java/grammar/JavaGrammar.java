@@ -1,7 +1,7 @@
 package com.puresol.coding.lang.java.grammar;
 
-import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.GrammarManager;
@@ -10,9 +10,16 @@ import com.puresol.uhura.lexer.LexerFactoryException;
 import com.puresol.uhura.parser.Parser;
 import com.puresol.uhura.parser.ParserFactoryException;
 
+/**
+ * This class represents the Java programming language.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class JavaGrammar extends GrammarManager {
 
-	private static final String RESOURCE = "src/com/puresol/coding/lang/java/grammar/Java-1.6.g";
+	static final String RESOURCE = "/com/puresol/coding/lang/java/grammar/Java-1.6.g";
+	static final URL RESOURCE_URL = JavaGrammar.class.getResource(RESOURCE);
 
 	private static JavaGrammar instance = null;
 
@@ -40,6 +47,7 @@ public class JavaGrammar extends GrammarManager {
 	}
 
 	private JavaGrammar() {
-		super(new File(RESOURCE));
+		super(RESOURCE_URL);
 	}
+
 }
