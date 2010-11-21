@@ -274,10 +274,14 @@ public class UhuraGrammar {
 		production = new Production("TokenConstruction");
 		production.addConstruction(new NonTerminal("TokenConstruction"));
 		production.addConstruction(new NonTerminal("TokenPart"));
+		production.setNode(true);
+		production.setStackingAllowed(false);
 		productions.add(production);
 
 		production = new Production("TokenConstruction");
 		production.addConstruction(new NonTerminal("TokenPart"));
+		production.setNode(true);
+		production.setStackingAllowed(false);
 		productions.add(production);
 
 		production = new Production("TokenPart");

@@ -2,6 +2,9 @@ package com.puresol.uhura.grammar.token;
 
 import java.io.Serializable;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
+
+import com.puresol.uhura.grammar.GrammarException;
 
 /**
  * This class represents a single token definition for a lexer.
@@ -49,17 +52,23 @@ public class TokenDefinition implements Serializable {
 	}
 
 	public TokenDefinition(String name, String regex, Visibility visibility,
-			boolean ignoreCase) {
-		this.name = name;
-		if (ignoreCase) {
-			this.pattern = Pattern.compile("^" + regex,
-					Pattern.CASE_INSENSITIVE);
-		} else {
-			this.pattern = Pattern.compile("^" + regex);
+			boolean ignoreCase) throws GrammarException {
+		try {
+			this.name = name;
+			if (ignoreCase) {
+				this.pattern = Pattern.compile("^" + regex,
+						Pattern.CASE_INSENSITIVE);
+			} else {
+				this.pattern = Pattern.compile("^" + regex);
+			}
+			this.visibility = visibility;
+			this.text = regex;
+			hashCode = calculateHashCode();
+		} catch (PatternSyntaxException e) {
+			throw new GrammarException("Grammar failure in '" + name
+					+ "'!\nPattern: '" + regex + "'\nRegExp-Message: "
+					+ e.getMessage());
 		}
-		this.visibility = visibility;
-		this.text = regex;
-		hashCode = calculateHashCode();
 	}
 
 	private int calculateHashCode() {

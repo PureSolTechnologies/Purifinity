@@ -2,12 +2,10 @@ package com.puresol.uhura.grammar;
 
 import static org.junit.Assert.*;
 
-import java.io.File;
 import java.io.IOException;
 
 import org.junit.Test;
 
-import com.puresol.trees.TreePrinter;
 import com.puresol.uhura.grammar.token.Visibility;
 
 public class GrammarReaderTest {
@@ -15,9 +13,12 @@ public class GrammarReaderTest {
 	@Test
 	public void testInstance() {
 		try {
-			assertNotNull(new GrammarReader(new File(
-					"test/com/puresol/uhura/grammar/TestGrammar.g")));
+			assertNotNull(new GrammarReader(getClass().getResourceAsStream(
+					"/com/puresol/uhura/grammar/TestGrammar.g")));
 		} catch (IOException e) {
+			e.printStackTrace();
+			fail("No exception was expected!");
+		} catch (GrammarException e) {
 			e.printStackTrace();
 			fail("No exception was expected!");
 		}
@@ -26,11 +27,15 @@ public class GrammarReaderTest {
 	@Test
 	public void testInitValues() {
 		try {
-			GrammarReader grammar = new GrammarReader(new File(
-					"test/com/puresol/uhura/grammar/TestGrammar.g"));
-			assertEquals(null, grammar.getGrammar());
-			assertEquals(null, grammar.getAST());
+			GrammarReader grammar = new GrammarReader(getClass()
+					.getResourceAsStream(
+							"/com/puresol/uhura/grammar/TestGrammar.g"));
+			assertNotNull(grammar.getGrammar());
+			assertNotNull(grammar.getAST());
 		} catch (IOException e) {
+			e.printStackTrace();
+			fail("No exception was expected!");
+		} catch (GrammarException e) {
 			e.printStackTrace();
 			fail("No exception was expected!");
 		}
@@ -40,9 +45,9 @@ public class GrammarReaderTest {
 	public void testReadTestGrammar() {
 		try {
 			// Logger.getRootLogger().setLevel(Level.TRACE);
-			GrammarReader reader = new GrammarReader(new File(
-					"test/com/puresol/uhura/grammar/TestGrammar.g"));
-			assertTrue(reader.call());
+			GrammarReader reader = new GrammarReader(getClass()
+					.getResourceAsStream(
+							"/com/puresol/uhura/grammar/TestGrammar.g"));
 			assertNotNull(reader.getAST());
 			Grammar grammar = reader.getGrammar();
 			assertNotNull(grammar);
@@ -64,9 +69,9 @@ public class GrammarReaderTest {
 		try {
 			// Logger.getRootLogger().setLevel(Level.TRACE);
 			GrammarReader reader = new GrammarReader(
-					new File(
-							"test/com/puresol/uhura/grammar/TestGrammarForAutoGeneration.g"));
-			assertTrue(reader.call());
+					getClass()
+							.getResourceAsStream(
+									"/com/puresol/uhura/grammar/TestGrammarForAutoGeneration.g"));
 			assertNotNull(reader.getAST());
 			Grammar grammar = reader.getGrammar();
 			assertNotNull(grammar);
@@ -82,9 +87,10 @@ public class GrammarReaderTest {
 	@Test
 	public void testAutoConstructionOptionalList() {
 		try {
-			GrammarReader reader = new GrammarReader(new File(
-					"test/com/puresol/uhura/grammar/TestRuleAutoGeneration.g"));
-			assertTrue(reader.call());
+			GrammarReader reader = new GrammarReader(
+					getClass()
+							.getResourceAsStream(
+									"/com/puresol/uhura/grammar/TestRuleAutoGeneration.g"));
 			Grammar grammar = reader.getGrammar();
 			assertNotNull(grammar);
 			assertTrue(GrammarPartTester.test(grammar, "OptionalList", ""));
@@ -103,9 +109,10 @@ public class GrammarReaderTest {
 	@Test
 	public void testAutoConstructionList() {
 		try {
-			GrammarReader reader = new GrammarReader(new File(
-					"test/com/puresol/uhura/grammar/TestRuleAutoGeneration.g"));
-			assertTrue(reader.call());
+			GrammarReader reader = new GrammarReader(
+					getClass()
+							.getResourceAsStream(
+									"/com/puresol/uhura/grammar/TestRuleAutoGeneration.g"));
 			Grammar grammar = reader.getGrammar();
 			assertNotNull(grammar);
 			assertFalse(GrammarPartTester.test(grammar, "List", ""));
@@ -124,9 +131,10 @@ public class GrammarReaderTest {
 	@Test
 	public void testAutoConstructionOptionalPart() {
 		try {
-			GrammarReader reader = new GrammarReader(new File(
-					"test/com/puresol/uhura/grammar/TestRuleAutoGeneration.g"));
-			assertTrue(reader.call());
+			GrammarReader reader = new GrammarReader(
+					getClass()
+							.getResourceAsStream(
+									"/com/puresol/uhura/grammar/TestRuleAutoGeneration.g"));
 			Grammar grammar = reader.getGrammar();
 			assertNotNull(grammar);
 			assertTrue(GrammarPartTester.test(grammar, "OptionalPart", ""));
@@ -138,19 +146,6 @@ public class GrammarReaderTest {
 		} catch (GrammarException e) {
 			e.printStackTrace();
 			fail("No exception was expected!");
-		}
-	}
-
-	public static void main(String args[]) {
-		try {
-			GrammarReader reader = new GrammarReader(new File(
-					"test/com/puresol/uhura/grammar/TestRuleAutoGeneration.g"));
-			reader.call();
-			new TreePrinter(System.out).println(reader.getAST());
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (GrammarException e) {
-			e.printStackTrace();
 		}
 	}
 }

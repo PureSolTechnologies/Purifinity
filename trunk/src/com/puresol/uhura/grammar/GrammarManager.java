@@ -40,11 +40,11 @@ public class GrammarManager {
 	public GrammarManager(URL grammarURL) {
 		super();
 		this.grammarURL = grammarURL;
-		this.grammarPersistenceFile = new File(".", grammarURL.getFile()
+		this.grammarPersistenceFile = new File(grammarURL.getFile()
 				+ ".persist");
-		this.lexerPersistenceFile = new File(".", grammarURL.getFile()
+		this.lexerPersistenceFile = new File(grammarURL.getFile()
 				+ ".lexer.persist");
-		this.parserPersistenceFile = new File(".", grammarURL.getFile()
+		this.parserPersistenceFile = new File(grammarURL.getFile()
 				+ ".parser.persist");
 	}
 
@@ -95,7 +95,6 @@ public class GrammarManager {
 							.lastModified())) {
 				inputStream = grammarURL.openStream();
 				GrammarReader reader = new GrammarReader(inputStream);
-				reader.call();
 				grammar = reader.getGrammar();
 				Persistence.persist(grammar, grammarPersistenceFile);
 			}
