@@ -84,10 +84,10 @@
  ****************************************************************************/ 
  TOKENS
 
-	WHITESPACE : '[ \\t]+' [hidden] ;
-	LINE_TERMINATOR : '(\\n|\\r\n|\\r)' ; // removed [hidden]
-	LINE_COMMENT : '(![^\\n\\\r]*' LINE_TERMINATOR '|' LINE_TERMINATOR '[C$*][^\\r\\n]*(?=' LINE_TERMINATOR '))' ; // removed [hidden]
-	LINE_CONCATATION : LINE_TERMINATOR '     [^ 0]' [hidden];
+	WHITESPACE : '[ \\t]+' [hide] ;
+	LINE_TERMINATOR : '(\\n|\\r\n|\\r)' ; // removed [hide]
+	LINE_COMMENT : '(![^\\n\\\r]*' LINE_TERMINATOR '|' LINE_TERMINATOR '[C$*][^\\r\\n]*(?=' LINE_TERMINATOR '))' ; // removed [hide]
+	LINE_CONCATATION : LINE_TERMINATOR '     [^ 0]' [hide];
 
 	/*
 	 * 3.1.5 Special characters
