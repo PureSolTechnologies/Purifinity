@@ -6,9 +6,7 @@ import java.util.Stack;
 
 import org.apache.log4j.Logger;
 
-import com.puresol.trees.TreeWalker;
 import com.puresol.uhura.ast.AST;
-import com.puresol.uhura.ast.ASTException;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.production.FinishTerminal;
@@ -73,6 +71,10 @@ public abstract class AbstractFastLRParser extends AbstractParser {
 
 		public int getCurrentState() {
 			return states.peek();
+		}
+
+		public List<ParserAction> getActions() {
+			return new ArrayList<ParserAction>(actions);
 		}
 
 		public boolean isFinished() {
@@ -152,16 +154,7 @@ public abstract class AbstractFastLRParser extends AbstractParser {
 	@Override
 	public final AST parse(TokenStream tokenStream) throws ParserException {
 		setTokenStream(tokenStream);
-		reset();
 		return parse();
-	}
-
-	/**
-	 * This method is called just before running the parser to reset all
-	 * internal values and to clean all stacks.
-	 */
-	private final void reset() {
-		threads.clear();
 	}
 
 	/**
@@ -171,106 +164,189 @@ public abstract class AbstractFastLRParser extends AbstractParser {
 	 * @throws ParserException
 	 */
 	private final AST parse() throws ParserException {
-		ParserThread startThread = new ParserThread();
-		threads.add(startThread);
-		TokenStream tokenStream = getTokenStream();
-		Token token = null;
+		threads.clear();
+		threads.add(new ParserThread()); // adding start thread
 		int stepCounter = 0;
-		boolean changed = true;
-		try {
-			while (changed) {
-				changed = false;
-				if (threads.size() == 0) {
-					throw new ParserException(
-							"No more active threads and parsing is not finished!",
-							token);
+		boolean changed;
+		do {
+			stepCounter++;
+			logger.debug("Step: " + stepCounter + "\tThreads: "
+					+ threads.size());
+			changed = stepForward();
+		} while (changed && (threads.size() > 0));
+		if (threads.size() == 0) {
+			throw new ParserException(
+					"No more active threads and parsing is not finished!");
+		} else if (threads.size() > 1) {
+			throw new ParserException(
+					"Ambiguous grammar for current token stream!");
+		}
+		return createAST(threads.get(0).getActions());
+	}
+
+	/**
+	 * This method performs a parsing step forward for all active threads.
+	 * 
+	 * @param stepCounter
+	 * @return
+	 * @throws ParserException
+	 */
+	private boolean stepForward() throws ParserException {
+		boolean changed = false;
+		List<Integer> errorThreads = new ArrayList<Integer>();
+		for (int threadId = 0; threadId < threads.size(); threadId++) {
+			ParserThread thread = threads.get(threadId);
+			if (thread.isFinished()) {
+				continue;
+			}
+			changed = true;
+			final ParserActionSet actions = getActions(
+					thread.getCurrentState(), thread.getCurrentPosition());
+			if (actions == null) {
+				/*
+				 * The current token is inactive for parsing (ignored). Just a
+				 * step forward is to be performed.
+				 */
+				thread.nextPosition();
+				continue;
+			}
+			for (int actionId = actions.getActionNumber() - 1; actionId >= 0; actionId--) {
+				if (actionId == 0) {
+					thread = threads.get(threadId);
+				} else {
+					thread = threads.get(threadId).clone();
+					threads.add(thread);
 				}
-				stepCounter++;
-				List<Integer> errorThreads = new ArrayList<Integer>();
-				final int threadNum = threads.size();
-				logger.debug("Step: " + stepCounter + "\tThreads: " + threadNum);
-				for (int threadId = 0; threadId < threadNum; threadId++) {
-					ParserThread thread = threads.get(threadId);
-					if (thread.isFinished()) {
-						continue;
-					}
-					changed = true;
-					int tokenId = thread.getCurrentPosition();
-					if (tokenId < getTokenStream().size()) {
-						token = getTokenStream().get(tokenId);
-						if (token.getVisibility() != Visibility.VISIBLE) {
-							thread.nextPosition();
-							continue;
-						}
-					} else {
-						token = null;
-					}
-					// logger.debug("Thread " + threadId + "\t"
-					// + threads.get(threadId).toString());
-					final ParserActionSet actionSet;
-					if (token != null) {
-						actionSet = parserTable.getActionSet(
-								threads.get(threadId).getCurrentState(),
-								token.getTerminal());
-					} else {
-						actionSet = parserTable.getActionSet(
-								threads.get(threadId).getCurrentState(),
-								FinishTerminal.getInstance());
-					}
-					logger.debug("Token: " + token + "; ActionSet: "
-							+ actionSet);
-					for (int actionId = actionSet.getActionNumber() - 1; actionId >= 0; actionId--) {
-						thread = threads.get(threadId);
-						if (actionId > 0) {
-							thread = thread.clone();
-							threads.add(thread);
-							logger.debug("Creating new thread...");
-						}
-						ParserAction parserAction = actionSet
-								.getAction(actionId);
-						ActionType actionType = parserAction.getAction();
-						switch (actionType) {
-						case SHIFT:
-							thread.addStep(parserAction,
-									parserAction.getParameter());
-							thread.nextPosition();
-							break;
-						case REDUCE:
-							Production production = getGrammar().getProduction(
-									parserAction.getParameter());
-							thread.removeStates(production.getConstructions()
-									.size());
-							int currentState = thread.getCurrentState();
-							NonTerminal nonTerminal = new NonTerminal(
-									production.getName());
-							int newState = parserTable.getAction(currentState,
-									nonTerminal).getParameter();
-							thread.addStep(parserAction, newState);
-							break;
-						case ACCEPT:
-							thread.addStep(parserAction,
-									thread.getCurrentState());
-							break;
-						case ERROR:
-							errorThreads.add(threadId);
-							break;
-						default:
-							throw new ParserException("Invalid action '"
-									+ actionType + "'for parser!", token);
-						}
-					}
-				}
-				for (int threadId = errorThreads.size() - 1; threadId >= 0; threadId--) {
-					threads.remove((int) errorThreads.get(threadId));
+				if (!process(thread, actions.getAction(actionId))) {
+					errorThreads.add(threadId);
 				}
 			}
-			/*
-			 * We are finished. The last element in the stack is the result...
-			 */
+		}
+		killThreadsInErrorState(errorThreads);
+		return changed;
+	}
+
+	private ParserActionSet getActions(int currentState, int currentPosition)
+			throws ParserException {
+		Token token = getToken(currentPosition);
+		if ((token != null) && (token.getVisibility() != Visibility.VISIBLE)) {
 			return null;
+		}
+		final ParserActionSet actionSet;
+		if (token != null) {
+			actionSet = parserTable.getActionSet(currentState,
+					token.getTerminal());
+		} else {
+			/*
+			 * The finish token was found. So look for an action for finish.
+			 */
+			actionSet = parserTable.getActionSet(currentState,
+					FinishTerminal.getInstance());
+		}
+		logger.debug("Token: " + token + "; ActionSet: " + actionSet);
+		return actionSet;
+	}
+
+	/**
+	 * This method returns the current token at the given stream position.
+	 * Additionally the element at position .size() is returned as null to mark
+	 * the end of the finish token.
+	 * 
+	 * @param currentPosition
+	 * @return
+	 * @throws ParserException
+	 */
+	private Token getToken(int currentPosition) throws ParserException {
+		int tokenId = currentPosition;
+		TokenStream tokenStream = getTokenStream();
+		if (tokenId < tokenStream.size()) {
+			return tokenStream.get(tokenId);
+		} else if (tokenId == tokenStream.size()) {
+			return null;
+		}
+		throw new ParserException("Token after oken stream end was requested!");
+	}
+
+	private boolean process(ParserThread thread, ParserAction parserAction)
+			throws ParserException {
+		try {
+			ActionType actionType = parserAction.getAction();
+			switch (actionType) {
+			case SHIFT:
+				shift(thread, parserAction);
+				return true;
+			case REDUCE:
+				reduce(thread, parserAction);
+				return true;
+			case ACCEPT:
+				accept(thread, parserAction);
+				return true;
+			case ERROR:
+				return false;
+			default:
+				throw new ParserException("Invalid action '" + actionType
+						+ "'for parser!");
+			}
 		} catch (GrammarException e) {
 			logger.error(e.getMessage(), e);
-			throw new ParserException(e.getMessage(), token);
+			throw new ParserException(e.getMessage());
 		}
 	}
+
+	/**
+	 * Shifts a thread.
+	 * 
+	 * @param thread
+	 * @param parserAction
+	 */
+	private void shift(ParserThread thread, ParserAction parserAction) {
+		thread.addStep(parserAction, parserAction.getParameter());
+		thread.nextPosition();
+	}
+
+	/**
+	 * Reduces a thread.
+	 * 
+	 * @param thread
+	 * @param parserAction
+	 */
+	private void reduce(ParserThread thread, ParserAction parserAction)
+			throws GrammarException {
+		Production production = getGrammar().getProduction(
+				parserAction.getParameter());
+		thread.removeStates(production.getConstructions().size());
+		int currentState = thread.getCurrentState();
+		NonTerminal nonTerminal = new NonTerminal(production.getName());
+		int newState = parserTable.getAction(currentState, nonTerminal)
+				.getParameter();
+		thread.addStep(parserAction, newState);
+	}
+
+	/**
+	 * Sets a thread to accept.
+	 * 
+	 * @param thread
+	 * @param parserAction
+	 */
+	private void accept(ParserThread thread, ParserAction parserAction) {
+		thread.addStep(parserAction, thread.getCurrentState());
+	}
+
+	/**
+	 * This method removes all threads from the threads list which are in an
+	 * error state.
+	 * 
+	 * @param errorThreads
+	 */
+	private void killThreadsInErrorState(List<Integer> errorThreads) {
+		for (int threadId = errorThreads.size() - 1; threadId >= 0; threadId--) {
+			threads.remove((int) errorThreads.get(threadId));
+		}
+	}
+
+	private AST createAST(List<ParserAction> actions) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
