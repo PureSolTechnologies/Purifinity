@@ -12,7 +12,7 @@ OPTIONS
 	grammar.checks=true;
 	grammar.ignore-case=false;
 	lexer="com.puresol.uhura.lexer.RegExpLexer";
-	parser="com.puresol.uhura.parser.lr.LR1Parser";
+	parser="com.puresol.uhura.parser.lr.FastLR1Parser";
 	parser.backtracking=true;
 
 /****************************************************************************
