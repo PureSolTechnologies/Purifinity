@@ -7,7 +7,6 @@ import java.util.Stack;
 import org.apache.log4j.Logger;
 
 import com.puresol.uhura.ast.AST;
-import com.puresol.uhura.ast.ASTException;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.production.FinishTerminal;
@@ -356,52 +355,7 @@ public abstract class AbstractFastLRParser extends AbstractParser {
 	}
 
 	private AST createAST(List<ParserAction> actions) throws ParserException {
-		try {
-			TokenStream tokenStream = getTokenStream();
-			int position = 0;
-			Stack<AST> treeStack = new Stack<AST>();
-			for (ParserAction action : actions) {
-				if (logger.isTraceEnabled()) {
-					logger.trace("Action: " + action + "; stack size: "
-							+ treeStack.size());
-					logger.trace(treeStack.toString());
-				}
-				switch (action.getAction()) {
-				case SHIFT:
-					while (tokenStream.get(position).getVisibility() != Visibility.VISIBLE) {
-						treeStack.push(new AST(tokenStream.get(position)));
-						position++;
-					}
-					treeStack.push(new AST(tokenStream.get(position)));
-					position++;
-					break;
-				case REDUCE:
-					Production production = getGrammar().getProduction(
-							action.getParameter());
-					logger.trace(production.toString());
-					AST newAST = new AST(production);
-					for (int i = 0; i < production.getConstructions().size(); i++) {
-						if (treeStack.size() > 0) {
-							while ((treeStack.peek().getToken() != null)
-									&& (treeStack.peek().getToken()
-											.getVisibility() != Visibility.VISIBLE)) {
-								newAST.addChildInFront(treeStack.pop());
-							}
-						}
-						newAST.addChildInFront(treeStack.pop());
-					}
-					treeStack.push(newAST);
-					break;
-				}
-			}
-			while (position < tokenStream.size()) {
-				treeStack.peek().addChild(new AST(tokenStream.get(position)));
-				position++;
-			}
-			return treeStack.peek();
-		} catch (ASTException e) {
-			logger.error(e.getMessage(), e);
-			throw new ParserException(e.getMessage());
-		}
+		return LRTokenStreamConverter.convert(getTokenStream(), getGrammar(),
+				actions);
 	}
 }
