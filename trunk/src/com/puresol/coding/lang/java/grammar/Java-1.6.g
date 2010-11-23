@@ -1365,13 +1365,13 @@ HELPER
 
 	ClassInstanceCreationExpression:
 		NEW TypeArguments ? ClassOrInterfaceType Arguments ClassBody ?
-	|	Primary DOT NEW TypeArguments ? Identifier TypeArguments? Arguments ClassBody ?
+	|	Primary DOT NEW TypeArguments ? Identifier TypeArguments ? Arguments ClassBody ?
 	/*
 		this was added due to: 
 		hotspot/src/share/tools/IdealGraphVisualizer/HierarchicalLayout/src/com/sun/hotspot/igv/hierarchicallayout/OldHierarchicalLayoutManager.java 
 		"[...]graph.new[...]"
 	*/
-	|	Identifier DOT NEW TypeArguments ? Identifier TypeArguments? Arguments ClassBody ? 
+	|	Identifier DOT NEW TypeArguments ? Identifier TypeArguments ? Arguments ClassBody ? 
 	;
 	
 	ArgumentList:

@@ -21,7 +21,6 @@ import com.puresol.coding.lang.java.Java;
 import com.puresol.trees.TreePrinter;
 import com.puresol.uhura.ast.AST;
 import com.puresol.utils.ConsoleUtils;
-import com.puresol.utils.FileUtilities;
 import com.puresol.utils.StopWatch;
 
 /**
@@ -34,16 +33,18 @@ import com.puresol.utils.StopWatch;
  */
 public class JavaSourceCodeDistributionTest {
 
-	private static final String INSTALL_DIRECTORY = "/home/ludwig/JavaSource";
+	// private static final String INSTALL_DIRECTORY =
+	// "/home/ludwig/JavaSource";
+	private static final String INSTALL_DIRECTORY = "/data/workspace";
+
+	// private static final String INSTALL_DIRECTORY = "/data/workspace2";
 
 	@Test
 	public void test() {
 		try {
-			Logger.getRootLogger().setLevel(Level.DEBUG);
-			File file = new File(
-					"test/"
-							+ FileUtilities
-									.classToRelativePackagePath(JavaSourceCodeDistributionTest.class));
+			Logger.getRootLogger().setLevel(Level.TRACE);
+			File file = new File(INSTALL_DIRECTORY,
+					"/PureSolTechnologies_API/src/com/puresol/ua/ldap/LdapLoginModule.java");
 			assertTrue(file.exists());
 			Java java = Java.getInstance();
 			StopWatch watch = new StopWatch();
@@ -52,6 +53,7 @@ public class JavaSourceCodeDistributionTest {
 			analyser.parse();
 			watch.stop();
 			AST ast = analyser.getAST();
+			assertNotNull(ast);
 			new TreePrinter(System.out).println(ast);
 			System.out.print(watch.getSeconds());
 			System.out.println("s");
@@ -85,8 +87,7 @@ public class JavaSourceCodeDistributionTest {
 				}
 				counter++;
 				System.out.print(ConsoleUtils.createPercentageBar(22,
-						(double) counter / (double) files.size(), true)
-						+ "\t");
+						(double) counter / (double) files.size(), true) + "\t");
 				if (successes.size() > 0) {
 					System.out.print((double) successes.size()
 							/ (double) (successes.size() + errors.size())
