@@ -7,6 +7,7 @@ import java.util.Stack;
 import org.apache.log4j.Logger;
 
 import com.puresol.uhura.ast.AST;
+import com.puresol.uhura.ast.ASTException;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.production.FinishTerminal;
@@ -45,6 +46,7 @@ public abstract class AbstractFastLRParser extends AbstractParser {
 		private Stack<Integer> states = new Stack<Integer>();
 		private Stack<ParserAction> actions = new Stack<ParserAction>();
 		private int streamPosition = 0;
+		private int clonedAt = 0;
 
 		public ParserThread() {
 			states.push(0);
@@ -91,14 +93,17 @@ public abstract class AbstractFastLRParser extends AbstractParser {
 			cloned.states.addAll(this.states);
 			cloned.actions.addAll(this.actions);
 			cloned.streamPosition = this.streamPosition;
+			cloned.clonedAt = actions.size();
 			return cloned;
 		}
 
 		@Override
 		public String toString() {
 			StringBuffer buffer = new StringBuffer();
-			buffer.append("(");
+			buffer.append("(streampos: ");
 			buffer.append(streamPosition);
+			buffer.append(", cloned: ");
+			buffer.append(clonedAt);
 			buffer.append(") ");
 			boolean first = true;
 			for (Integer state : states) {
@@ -170,16 +175,20 @@ public abstract class AbstractFastLRParser extends AbstractParser {
 		boolean changed;
 		do {
 			stepCounter++;
-			logger.debug("Step: " + stepCounter + "\tThreads: "
-					+ threads.size());
+			if (logger.isTraceEnabled()) {
+				logger.trace("Step: " + stepCounter + "\tThreads: "
+						+ threads.size());
+			}
 			changed = stepForward();
 		} while (changed && (threads.size() > 0));
 		if (threads.size() == 0) {
 			throw new ParserException(
 					"No more active threads and parsing is not finished!");
 		} else if (threads.size() > 1) {
-			throw new ParserException(
-					"Ambiguous grammar for current token stream!");
+			logger.warn("Ambiguous grammar for current token stream!");
+			// TODO Think about a solution here!!!
+			// throw new ParserException(
+			// "Ambiguous grammar for current token stream!");
 		}
 		return createAST(threads.get(0).getActions());
 	}
@@ -243,7 +252,9 @@ public abstract class AbstractFastLRParser extends AbstractParser {
 			actionSet = parserTable.getActionSet(currentState,
 					FinishTerminal.getInstance());
 		}
-		logger.debug("Token: " + token + "; ActionSet: " + actionSet);
+		if (logger.isTraceEnabled()) {
+			logger.trace("Token: " + token + "; ActionSet: " + actionSet);
+		}
 		return actionSet;
 	}
 
@@ -344,9 +355,53 @@ public abstract class AbstractFastLRParser extends AbstractParser {
 		}
 	}
 
-	private AST createAST(List<ParserAction> actions) {
-		// TODO Auto-generated method stub
-		return null;
+	private AST createAST(List<ParserAction> actions) throws ParserException {
+		try {
+			TokenStream tokenStream = getTokenStream();
+			int position = 0;
+			Stack<AST> treeStack = new Stack<AST>();
+			for (ParserAction action : actions) {
+				if (logger.isTraceEnabled()) {
+					logger.trace("Action: " + action + "; stack size: "
+							+ treeStack.size());
+					logger.trace(treeStack.toString());
+				}
+				switch (action.getAction()) {
+				case SHIFT:
+					while (tokenStream.get(position).getVisibility() != Visibility.VISIBLE) {
+						treeStack.push(new AST(tokenStream.get(position)));
+						position++;
+					}
+					treeStack.push(new AST(tokenStream.get(position)));
+					position++;
+					break;
+				case REDUCE:
+					Production production = getGrammar().getProduction(
+							action.getParameter());
+					logger.trace(production.toString());
+					AST newAST = new AST(production);
+					for (int i = 0; i < production.getConstructions().size(); i++) {
+						if (treeStack.size() > 0) {
+							while ((treeStack.peek().getToken() != null)
+									&& (treeStack.peek().getToken()
+											.getVisibility() != Visibility.VISIBLE)) {
+								newAST.addChildInFront(treeStack.pop());
+							}
+						}
+						newAST.addChildInFront(treeStack.pop());
+					}
+					treeStack.push(newAST);
+					break;
+				}
+			}
+			while (position < tokenStream.size()) {
+				treeStack.peek().addChild(new AST(tokenStream.get(position)));
+				position++;
+			}
+			return treeStack.peek();
+		} catch (ASTException e) {
+			logger.error(e.getMessage(), e);
+			throw new ParserException(e.getMessage());
+		}
 	}
-
 }
