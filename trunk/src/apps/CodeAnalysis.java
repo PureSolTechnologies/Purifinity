@@ -123,7 +123,7 @@ public class CodeAnalysis extends PureSolApplication {
 		if (!dialog.run()) {
 			return;
 		}
-		setApplicationSubtitle(dialog.getWorkspaceDirectory().toString());
+		setSubtitle(dialog.getWorkspaceDirectory().toString());
 		analyser = ProjectAnalyzer.create(dialog.getSourceDirectory(),
 				dialog.getWorkspaceDirectory());
 		if (analyser != null) {
