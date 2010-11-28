@@ -1,5 +1,6 @@
 package com.puresol.uhura.parser.lr;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +12,7 @@ import com.puresol.uhura.parser.functions.Goto0;
 import com.puresol.uhura.parser.items.LR0Item;
 import com.puresol.uhura.parser.items.LR0ItemSet;
 
-public class LR0ItemSetCollection {
+public class LR0ItemSetCollection implements Serializable {
 
 	private static final long serialVersionUID = -5320832167468349031L;
 

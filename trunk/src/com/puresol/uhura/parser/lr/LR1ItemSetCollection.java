@@ -1,5 +1,6 @@
 package com.puresol.uhura.parser.lr;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,7 +17,7 @@ import com.puresol.uhura.parser.functions.Goto1;
 import com.puresol.uhura.parser.items.LR1Item;
 import com.puresol.uhura.parser.items.LR1ItemSet;
 
-public class LR1ItemSetCollection {
+public class LR1ItemSetCollection implements Serializable {
 
 	private static final long serialVersionUID = -1330346621768260912L;
 
@@ -123,14 +124,15 @@ public class LR1ItemSetCollection {
 	@Override
 	public String toString() {
 		StringBuffer buffer = new StringBuffer();
-		for (int stateId = 0; stateId < itemSetCollection.size(); stateId++) {
-			buffer.append("===========\n");
-			buffer.append("State " + stateId + ":\n");
-			buffer.append("===========\n");
-			LR1ItemSet itemSet = itemSetCollection.get(stateId);
-			buffer.append(itemSet.toString());
-			buffer.append("\n");
-		}
+		// for (int stateId = 0; stateId < itemSetCollection.size(); stateId++)
+		// {
+		// buffer.append("===========\n");
+		// buffer.append("State " + stateId + ":\n");
+		// buffer.append("===========\n");
+		// LR1ItemSet itemSet = itemSetCollection.get(stateId);
+		// buffer.append(itemSet.toString());
+		// buffer.append("\n");
+		// }
 		return buffer.toString();
 	}
 }

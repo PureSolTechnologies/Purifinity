@@ -2,6 +2,8 @@ package com.puresol.uhura.parser.lr;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
+
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.Test;
@@ -19,6 +21,8 @@ import com.puresol.uhura.parser.items.LR1Item;
 import com.puresol.uhura.parser.items.LR1ItemSet;
 import com.puresol.uhura.parser.lr.LALR1ItemSetCollection;
 import com.puresol.uhura.parser.lr.LR0StateTransitions;
+import com.puresol.utils.FileUtilities;
+import com.puresol.utils.PersistenceTester;
 
 /**
  * This test suite checks the LALR1ItemSetCollection class for right results.
@@ -27,6 +31,31 @@ import com.puresol.uhura.parser.lr.LR0StateTransitions;
  * 
  */
 public class LALR1ItemSetCollectionTest {
+
+	@Test
+	public void testPersistence() {
+		try {
+			Grammar grammar = TestGrammars.getLALR1TestGrammarFromDragonBook();
+			First first = new First(grammar);
+			Closure0 closure0 = new Closure0(grammar);
+			Goto0 goto0 = new Goto0(closure0);
+			Closure1 closure1 = new Closure1(grammar, first);
+			LR0ItemSetCollection lr0ItemSetCollection = new LR0ItemSetCollection(
+					grammar, closure0, goto0);
+			LR0StateTransitions lr0Transitions = new LR0StateTransitions(
+					lr0ItemSetCollection, goto0);
+			LALR1ItemSetCollection collection = new LALR1ItemSetCollection(
+					grammar, lr0ItemSetCollection, lr0Transitions, closure1);
+			File file = new File("test", FileUtilities
+					.classToRelativePackagePath(LALR1ItemSetCollection.class)
+					.toString()
+					+ ".persist");
+			PersistenceTester.test(collection, file);
+		} catch (GrammarException e) {
+			e.printStackTrace();
+			fail("No exception was expected!");
+		}
+	}
 
 	/**
 	 * This test checks the result found on page 329 in Dragon book.

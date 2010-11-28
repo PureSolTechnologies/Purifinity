@@ -1,5 +1,9 @@
 package com.puresol.uhura.parser.lr;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import org.apache.log4j.Logger;
 
 import com.puresol.uhura.grammar.Grammar;
@@ -16,6 +20,8 @@ import com.puresol.uhura.parser.items.LR1ItemSet;
 import com.puresol.uhura.parser.parsetable.AbstractParserTable;
 import com.puresol.uhura.parser.parsetable.ActionType;
 import com.puresol.uhura.parser.parsetable.ParserAction;
+import com.puresol.uhura.parser.parsetable.ParserActionSet;
+import com.puresol.utils.FileUtilities;
 
 public class LR1ParserTable extends AbstractParserTable {
 
@@ -69,4 +75,71 @@ public class LR1ParserTable extends AbstractParserTable {
 		}
 		logger.debug("done.");
 	}
+
+	@Override
+	public void generateInspectionInformation(File directory)
+			throws IOException, GrammarException {
+		String name = getGrammar().getName();
+		directory = new File(directory, name);
+		if (!directory.exists()) {
+			if (!directory.mkdirs()) {
+				throw new IOException("Could not create ouput directory!");
+			}
+		}
+		First first = new First(getGrammar());
+		Closure1 closure1 = new Closure1(getGrammar(), first);
+		Goto1 goto1 = new Goto1(closure1);
+		LR1ItemSetCollection itemSetCollection = new LR1ItemSetCollection(
+				getGrammar(), closure1, goto1);
+		FileUtilities.writeFile(directory, new File("Grammar"), getGrammar()
+				.toString());
+		FileUtilities.writeFile(directory, new File("First"), first.toString());
+		FileUtilities.writeFile(directory, new File("Closure1"),
+				closure1.toString());
+		FileUtilities.writeFile(directory, new File("Goto1"), goto1.toString());
+		FileUtilities.writeFile(directory, new File("ItemSetCollection"),
+				itemSetCollection.toString());
+		writeTable(directory, itemSetCollection);
+	}
+
+	private void writeTable(File directory,
+			LR1ItemSetCollection itemSetCollection) throws IOException,
+			GrammarException {
+		FileWriter writer = new FileWriter(new File(directory,
+				"parser_actions.txt"));
+		for (int state = 0; state < getStateCount(); state++) {
+			writer.write("-----------------------------------------------------------------------------\n");
+			writer.write("\n");
+			writer.write("================\n");
+			writer.write("State " + state + ":\n");
+			writer.write("================\n");
+			writer.write(itemSetCollection.getItemSet(state).toString());
+			writer.write("\n");
+			for (Terminal terminal : getActionTerminals()) {
+				ParserActionSet actions = getActionSet(state, terminal);
+				if ((actions.getActionNumber() == 1)
+						&& (actions.getAction().getAction() == ActionType.ERROR)) {
+					continue;
+				}
+				writer.write(terminal.toString());
+				writer.write(":\n");
+				if (actions.getActionNumber() > 1) {
+					writer.write("\tCONFLICT!!!\n");
+				}
+				for (int i = 0; i < actions.getActionNumber(); i++) {
+					ParserAction action = actions.getAction(i);
+					writer.write("\t");
+					writer.write(action.toString());
+					if (action.getAction() == ActionType.REDUCE) {
+						writer.write("\t");
+						writer.write(getGrammar().getProduction(
+								action.getParameter()).toString());
+					}
+					writer.write("\n");
+				}
+			}
+		}
+		writer.close();
+	}
+
 }

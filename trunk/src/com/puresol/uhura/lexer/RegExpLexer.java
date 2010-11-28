@@ -3,7 +3,6 @@ package com.puresol.uhura.lexer;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
@@ -22,8 +21,6 @@ public class RegExpLexer implements Lexer {
 	private static final long serialVersionUID = -6858518460147748314L;
 
 	private static final Logger logger = Logger.getLogger(RegExpLexer.class);
-
-	private static final String LINE_TERMINATOR = "(\\r\\n|\\n|\\r)";
 
 	private final Grammar grammar;
 
@@ -76,6 +73,7 @@ public class RegExpLexer implements Lexer {
 		int pos = 0;
 		int id = 0;
 		int line = 1;
+		// Pattern lineTerminatorPattern = Pattern.compile(LINE_TERMINATOR);
 		while (text.length() > 0) {
 			Token token = findNextToken(text, id, pos, line);
 			if ((token == null) || (token.getText().length() == 0)) {
@@ -94,18 +92,7 @@ public class RegExpLexer implements Lexer {
 			}
 			id++;
 			pos += token.getText().length();
-			Pattern pattern = Pattern.compile(LINE_TERMINATOR);
-			Matcher matcher = pattern.matcher(token.getText());
-			if (matcher.matches()) {
-				line++;
-			} else if (matcher.find()) {
-				int position = 0;
-				while (matcher.find(position)) {
-					line++;
-					position = matcher.end();
-				}
-			}
-			// forward...
+			line += token.getMetaData().getLineNum() - 1;
 			text = text.delete(0, token.getText().length());
 		}
 		return tokenStream;

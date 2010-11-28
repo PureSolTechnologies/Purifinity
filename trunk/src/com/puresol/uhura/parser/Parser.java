@@ -1,8 +1,11 @@
 package com.puresol.uhura.parser;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 
 import com.puresol.uhura.ast.AST;
+import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.lexer.TokenStream;
 
 /**
@@ -24,5 +27,20 @@ public interface Parser extends Serializable {
 	 * @throws ParserException
 	 */
 	public AST parse(TokenStream tokenStream) throws ParserException;
+
+	/**
+	 * This method is used to generated maximum detail information about the
+	 * parser and it's internal information.
+	 * 
+	 * @param directory
+	 *            is the directory to put the information into.
+	 * @throws IOException
+	 *             is thrown in cases of unexpected environment conditions like
+	 *             missing permissions for writing.
+	 * @throws GrammarException
+	 *             is thrown in cases of invalid grammars.
+	 */
+	public void generateInspectionInformation(File directory)
+			throws IOException, GrammarException;
 
 }

@@ -1,5 +1,6 @@
 package com.puresol.uhura.parser.lr;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -20,9 +21,10 @@ import com.puresol.uhura.parser.items.LR0ItemSet;
 import com.puresol.uhura.parser.items.LR1Item;
 import com.puresol.uhura.parser.items.LR1ItemSet;
 
-public class LALR1ItemSetCollection {
+public class LALR1ItemSetCollection implements Serializable {
 
 	private static final long serialVersionUID = 6813332818983681476L;
+
 	private static final Logger logger = Logger
 			.getLogger(LALR1ItemSetCollection.class);
 

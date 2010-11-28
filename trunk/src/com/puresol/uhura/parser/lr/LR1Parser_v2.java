@@ -7,17 +7,17 @@ import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.parser.parsetable.ParserTable;
 
-public class LALR1Parser extends AbstractLRParser {
+public class LR1Parser_v2 extends AbstractLRParser_v2 {
 
-	private static final long serialVersionUID = -7605778449939543483L;
+	private static final long serialVersionUID = 5550603885756798553L;
 
-	public LALR1Parser(Grammar grammar) throws GrammarException {
+	public LR1Parser_v2(Grammar grammar) throws GrammarException {
 		super(grammar);
 	}
 
 	@Override
 	protected ParserTable calculateParserTable() throws GrammarException {
-		return new LALR1ParserTable(getGrammar());
+		return new LR1ParserTable(getGrammar());
 	}
 
 	@Override

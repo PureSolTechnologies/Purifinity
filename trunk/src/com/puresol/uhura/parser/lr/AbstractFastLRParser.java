@@ -152,6 +152,10 @@ public abstract class AbstractFastLRParser extends AbstractParser {
 	protected abstract ParserTable calculateParserTable()
 			throws GrammarException;
 
+	protected ParserTable getParserTable() {
+		return parserTable;
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -184,7 +188,8 @@ public abstract class AbstractFastLRParser extends AbstractParser {
 			throw new ParserException(
 					"No more active threads and parsing is not finished!");
 		} else if (threads.size() > 1) {
-			logger.warn("Ambiguous grammar for current token stream!");
+			logger.warn("Ambiguous grammar for current token stream! ("
+					+ threads.size() + " variants!)");
 			// TODO Think about a solution here!!!
 			// throw new ParserException(
 			// "Ambiguous grammar for current token stream!");
@@ -207,7 +212,6 @@ public abstract class AbstractFastLRParser extends AbstractParser {
 			if (thread.isFinished()) {
 				continue;
 			}
-			changed = true;
 			final ParserActionSet actions = getActions(
 					thread.getCurrentState(), thread.getCurrentPosition());
 			if (actions == null) {
@@ -216,8 +220,13 @@ public abstract class AbstractFastLRParser extends AbstractParser {
 				 * step forward is to be performed.
 				 */
 				thread.nextPosition();
+				changed = true;
 				continue;
 			}
+			if ((actions.getActionNumber() > 1) && (threads.size() > 1000)) {
+				continue;
+			}
+			changed = true;
 			for (int actionId = actions.getActionNumber() - 1; actionId >= 0; actionId--) {
 				if (actionId == 0) {
 					thread = threads.get(threadId);

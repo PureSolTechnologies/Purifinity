@@ -1,5 +1,7 @@
 package com.puresol.uhura.parser.parsetable;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Map;
 import java.util.Set;
@@ -40,4 +42,20 @@ public interface ParserTable extends Serializable {
 	public Set<NonTerminal> getGotoNonTerminals();
 
 	public int getStateCount();
+
+	/**
+	 * This method is used to generated maximum detail information about the
+	 * parser table and it's internal information and the information about the
+	 * creation.
+	 * 
+	 * @param directory
+	 *            is the directory to put the information into.
+	 * @throws IOException
+	 *             is thrown in cases of unexpected environment conditions like
+	 *             missing permissions for writing.
+	 * @throws GrammarException
+	 *             is thrown in cases of invalid grammars.
+	 */
+	public void generateInspectionInformation(File directory)
+			throws IOException, GrammarException;
 }

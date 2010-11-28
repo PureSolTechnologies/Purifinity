@@ -2,12 +2,25 @@ package com.puresol.uhura.parser.items;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
+
 import org.junit.Test;
 
 import com.puresol.uhura.grammar.production.Production;
 import com.puresol.uhura.grammar.production.Terminal;
+import com.puresol.utils.FileUtilities;
+import com.puresol.utils.PersistenceTester;
 
 public class LR1ItemTest {
+
+	@Test
+	public void testPersistence() {
+		File file = new File("test", FileUtilities.classToRelativePackagePath(
+				LR1Item.class).toString()
+				+ ".persist");
+		PersistenceTester.test(new LR1Item(new Production("Production"), 1,
+				new Terminal(".")), file);
+	}
 
 	@Test
 	public void testInstance() {

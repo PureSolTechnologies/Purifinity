@@ -2,6 +2,7 @@ package com.puresol.uhura.parser.functions;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -12,8 +13,20 @@ import com.puresol.uhura.grammar.TestGrammars;
 import com.puresol.uhura.parser.functions.Closure0;
 import com.puresol.uhura.parser.items.LR0Item;
 import com.puresol.uhura.parser.items.LR0ItemSet;
+import com.puresol.utils.FileUtilities;
+import com.puresol.utils.PersistenceTester;
 
 public class Closure0Test {
+
+	@Test
+	public void testPersistence() {
+		Grammar grammar = TestGrammars.getLR1TestGrammarFromDragonBook();
+		Closure0 closure0 = new Closure0(grammar);
+		File file = new File("test", FileUtilities.classToRelativePackagePath(
+				Closure0.class).toString()
+				+ ".persist");
+		PersistenceTester.test(closure0, file);
+	}
 
 	@Test
 	public void testFromLR1Pamphlet() {
