@@ -21,6 +21,7 @@ import com.puresol.coding.lang.java.Java;
 import com.puresol.trees.TreePrinter;
 import com.puresol.uhura.ast.AST;
 import com.puresol.utils.ConsoleUtils;
+import com.puresol.utils.FileUtilities;
 import com.puresol.utils.StopWatch;
 
 /**
@@ -33,18 +34,17 @@ import com.puresol.utils.StopWatch;
  */
 public class JavaSourceCodeDistributionTest {
 
-	// private static final String INSTALL_DIRECTORY =
-	// "/home/ludwig/JavaSource";
-	private static final String INSTALL_DIRECTORY = "/data/workspace";
+	private static final String INSTALL_DIRECTORY = "/home/ludwig/JavaSource";
 
+	// private static final String INSTALL_DIRECTORY = "/data/workspace";
 	// private static final String INSTALL_DIRECTORY = "/data/workspace2";
 
 	@Test
 	public void test() {
 		try {
-			Logger.getRootLogger().setLevel(Level.TRACE);
+			Logger.getRootLogger().setLevel(Level.DEBUG);
 			File file = new File(INSTALL_DIRECTORY,
-					"/PureSolTechnologies_API/src/com/puresol/ua/ldap/LdapLoginModule.java");
+					"/j2se/src/share/classes/sun/nio/cs/ext/EUC_KR.java");
 			assertTrue(file.exists());
 			Java java = Java.getInstance();
 			StopWatch watch = new StopWatch();
@@ -54,9 +54,8 @@ public class JavaSourceCodeDistributionTest {
 			watch.stop();
 			AST ast = analyser.getAST();
 			assertNotNull(ast);
-			new TreePrinter(System.out).println(ast);
+			// new TreePrinter(System.out).println(ast);
 			System.out.print(watch.getSeconds());
-			System.out.println("s");
 		} catch (AnalyzerException e) {
 			e.printStackTrace();
 			fail("No exception was expected!");
