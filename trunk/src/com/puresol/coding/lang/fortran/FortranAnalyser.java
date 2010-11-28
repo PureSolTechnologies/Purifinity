@@ -31,6 +31,7 @@ import com.puresol.uhura.parser.ParserException;
 import com.puresol.uhura.parser.ParserFactoryException;
 import com.puresol.utils.Persistence;
 import com.puresol.utils.PersistenceException;
+import com.puresol.utils.StopWatch;
 
 public class FortranAnalyser implements Analyzer {
 
@@ -50,11 +51,20 @@ public class FortranAnalyser implements Analyzer {
 
 	public void parse() throws AnalyzerException {
 		try {
+			StopWatch watch = new StopWatch();
+			logger.debug("Start lexical scanner...");
+			watch.start();
 			Lexer lexer = FortranGrammar.createLexer();
 			TokenStream tokenStream = lexer.lex(new FileReader(file),
 					file.toString());
+			watch.stop();
+			logger.debug("done. (time: " + watch + ")");
 			Parser parser = FortranGrammar.createParser();
+			logger.debug("Starting parser...");
+			watch.start();
 			AST ast = parser.parse(tokenStream);
+			watch.stop();
+			logger.debug("done. (time: " + watch + ")");
 			ast.getChildren();
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);

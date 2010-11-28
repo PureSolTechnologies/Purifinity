@@ -13,7 +13,7 @@ public class R201_ProgramTest {
 	@Test
 	public void testProgram() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		assertTrue(FortranGrammarPartTester.test("program", "END PROGRAM\n"));
+		assertTrue(FortranGrammarPartTester.test("program", "end program\n"));
 	}
 
 	@Test

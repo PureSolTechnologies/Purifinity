@@ -12,7 +12,7 @@ public class R1101_MainProgramTest {
 
 	@Test
 	public void testEmptyMainProgram() {
-		Logger.getRootLogger().setLevel(Level.TRACE);
+		Logger.getRootLogger().setLevel(Level.DEBUG);
 		assertTrue(FortranGrammarPartTester.test("main-program", "PROGRAM TEST\n"
 				+ "      END PROGRAM\n"));
 	}

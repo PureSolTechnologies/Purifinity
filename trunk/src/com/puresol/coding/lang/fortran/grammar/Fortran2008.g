@@ -8,10 +8,11 @@
  * O P T I O N S
  ****************************************************************************/ 
  OPTIONS
+ 	grammar.name="Fortran-2008";
 	grammar.checks=true;
 	grammar.ignore-case=true;
 	lexer="com.puresol.uhura.lexer.RegExpLexer";
-	parser="com.puresol.uhura.parser.lr.LR1Parser";
+	parser="com.puresol.uhura.parser.lr.LR1Parser_v2";
 	parser.backtracking=true;
  
 /****************************************************************************
@@ -153,6 +154,164 @@
 		"|"	OCTAL_CONSTANT
 		"|"	HEX_CONSTANT
 		")"	;
+
+	/*
+	 * Keywords...
+	 * (from http://fortranwiki.org/fortran/show/Keywords)
+	 */
+
+	INTEGER : "integer";
+	REAL : "real";
+	DOUBLE_PRECISION : "double\\s*precision";
+	COMPLEX : "complex";
+	DOUBLE_COMPLEX : "double\\s*complex";
+	CHARACTER : "character";
+	LOGICAL : "logical";
+	 
+	// Fortran 77
+	 
+	ASSIGN : "assign";
+	BACKSPACE : "backspace";
+	BLOCK_DATA : "block\\s*data";
+	CALL : "call";
+	CLOSE : "close";
+	COMMON : "common";
+	CONTINUE : "continue";
+	DATA : "data";
+	DIMENSION : "dimension";
+	DO : "do";
+	ELSE : "else";
+	ELSE_IF : "else\\s*if";
+	END : "end";
+	END_BLOCK_DATA : "end\\s*block\\s*data";
+	END_DO : "end\\s*do";
+	END_FILE : "end\\s*file";
+	END_FUNCTION : "end\\s*function";
+	END_IF : "end\\s*if";
+	END_PROGRAM : "end\\s*program";
+	END_SUBROUTINE : "end\\s*subroutine";
+	ENTRY : "entry";
+	EQUIVALENCE : "equivalence";
+	EXTERNAL : "external";
+	FORMAT : "format";
+	FUNCTION : "function";
+	GOTO : "go\\s*to";
+	IF : "if";
+	IMPLICIT : "implicit";
+	INQUIRE : "inquire";
+	INTRINSIC : "intrinsic";
+	NON_INTRINSIC : "non\\s+intrinsic";
+	OPEN : "open";
+	PARAMETER : "parameter";
+	PAUSE : "pause";
+	PRINT : "print";
+	PROGRAM : "program";
+	READ : "read";
+	RETURN : "return";
+	REWIND : "rewind";
+	REWRITE : "rewrite";
+	SAVE : "save";
+	STOP : "stop";
+	SUBROUTINE : "subroutine";
+	THEN : "then";
+	WRITE : "write";
+	 
+	// Fortran 90
+	 
+	ALLOCATE : "allocate";
+	ALLOCATABLE : "allocatable";
+	CASE: "case";
+	CONTAINS : "contains";
+	CYCLE : "cycle";
+	DEALLOCATE : "deallocate";
+	ELSE_WHERE : "elsewhere";
+	END_INTERFACE : "end\\s*interface";
+	END_MODULE : "end\\s*module";
+	END_PROCEDURE : "end\\s*procedure";
+	END_SELECT : "end\\s*select";
+	END_WHERE : "end\\s*where";
+	EXIT : "exit";
+	INCLUDE : "include";
+	INTERFACE : "interface";
+	INTENT : "intent";
+	MODULE : "module";
+	NAMELIST : "namelist";
+	NULLIFY : "nullify";
+	ONLY : "only";
+	OPERATOR : "operator";
+	OPTIONAL : "optional";
+	POINTER : "pointer";
+	PRIVATE : "private";
+	PROCEDURE : "procedure";
+	PUBLIC : "public";
+	RESULT : "result";
+	RECURSIVE : "recursive";
+	SELECT_CASE : "select\\s*case";
+	SELECT_TYPE : "select\\s*type";
+	SEQUENCE : "sequence";
+	TARGET : "target";
+	USE : "use";
+	WHILE : "while";
+	WHERE : "where";
+	 
+	// Fortran 95
+	 
+	ELEMENTAL : "elemental";
+	END_FORALL : "end\\s*forall";
+	FORALL : "forall";
+	IMPURE : "impure";
+	PURE : "pure";
+	
+	// Fortran 2003
+	
+	ABSTRACT : "abstract";
+	ASSOCIATE : "associate";
+	ASYNCHRONOUS : "asynchronous";
+	BIND : "bind";
+	CLASS : "class";
+	CLASS_DEFAULT : "class\\s+default";
+	CLASS_IS : "class\\s+is";
+	DEFERRED : "deferred";
+	END_ASSOCIATE : "end\\s*associate";
+	END_ENUM : "end\\s*enum";
+	END_TYPE : "end\\s*type";
+	ENUM : "enum";
+	ENUMERATOR : "enumerator";
+	EXTENDS : "extends";
+	FINAL : "final";
+	FLUSH : "flush";
+	GENERIC : "generic";
+	IMPORT : "import";
+	NON_OVERRIDABLE : "non\\s+overridable";
+	NOPASS : "nopass";
+	PASS : "pass";
+	PROTECTED : "protected";
+	TYPE : "type";
+	TYPE_IS : "type\\s+is";
+	VALUE : "value";
+	VOLATILE : "volatile";
+	WAIT : "wait";
+	
+	// Fortran 2008
+	
+	ACQUIRED_LOCK : "acquired\\s+lock";
+	BLOCK : "block";
+	CODIMENSION : "codimension";
+	DO_CONCURENT : "do\\s+concurrent";
+	CONTIGUOUS : "contiguous";
+	CRITICAL : "critical";
+	DO_CONCURENT : "do\\s+concurrent";
+	END_BLOCK : "end\\s*block";
+	END_CRITICAL : "end\\s*critical";
+	END_SUBMODULE : "end\\s*submodule";
+	ERROR_STOP : "error stop";
+	SUBMODULE : "submodule";
+	SYNC_ALL : "sync\\s+all";
+	SYNC_IMAGES : "sync\\s+images";
+	SYNC_MEMORY : "sync\\s+memory";
+	LOCK : "lock";
+	UNLOCK : "unlock";
+
 	NAME_LITERAL : 
 		LETTER ALPHANUMERIC_CHARACTER "{0,62}"
 	;
@@ -589,8 +748,7 @@
 	not needed...
 */
 	label-list :
-		label-list ',' INT_LITERAL_CONSTANT
-	|	INT_LITERAL_CONSTANT
+		INT_LITERAL_CONSTANT ( COMMA INT_LITERAL_CONSTANT ) *
 	;
 
 /***************
@@ -603,8 +761,8 @@
 	or :
 */
 	type-param-value :
-		'*'
-	|	':'
+		ASTERIK
+	|	COLON
 	|	expr
 	;
 
@@ -625,10 +783,10 @@
 	or CLASS ( * )
 */
 	declaration-type-spec :
-		'TYPE' '(' intrinsic-type-spec ')'
-	|	'TYPE' '(' derived-type-spec ')'
-	|	'CLASS' '(' derived-type-spec ')'
-	|	'CLASS' '(' '*' ')'
+		TYPE LEFT_PARENTHESIS intrinsic-type-spec RIGHT_PARENTHESIS
+	|	TYPE LEFT_PARENTHESIS derived-type-spec RIGHT_PARENTHESIS
+	|	CLASS LEFT_PARENTHESIS derived-type-spec RIGHT_PARENTHESIS
+	|	CLASS LEFT_PARENTHESIS ASTERIK RIGHT_PARENTHESIS
 	|	intrinsic-type-spec
 	;
 
@@ -641,27 +799,20 @@
 	or LOGICAL [ kind-selector ]
 */
 	intrinsic-type-spec :
-		'INTEGER' kind-selector
-	|	'INTEGER' 
-	|	'REAL' kind-selector
-	|	'REAL'
-	|	'DOUBLEPRECISION'
-	|	'DOUBLE' 'PRECISION'
-	|	'COMPLEX' kind-selector
-	|	'DOUBLE' 'COMPLEX' /* DOUBLE COMPLEX is not part of the official standard, but is an extension in some Fortrans. */ 
-	|	'COMPLEX' 
-	|	'CHARACTER' char-selector
-	|	'CHARACTER' 
-	|	'LOGICAL' kind-selector
-	|	'LOGICAL' 
+		INTEGER kind-selector ?
+	|	REAL kind-selector ?
+	|	DOUBLE_PRECISION
+	|	COMPLEX kind-selector ?
+	|	DOUBLE_COMPLEX kind-selector ? /* DOUBLE COMPLEX is not part of the official standard, but is an extension in some Fortrans. */ 
+	|	CHARACTER char-selector ?
+	|	LOGICAL kind-selector ?
 	;
 
 /*
 	R405 kind-selector is ( [ KIND = ] scalar-int-constant-expr )
 */
 	kind-selector :
-		'(' 'KIND' '=' expr ')'
-	|	'(' expr ')'
+		LEFT_PARENTHESIS ( 'KIND' EQUALS ) ? expr RIGHT_PARENTHESIS
 	;
 
 /*
@@ -702,8 +853,8 @@
 	or -
 */
 	sign :
-		'+'
-	|	'-'
+		PLUS
+	|	MINUS
 	;
 
 /*
@@ -745,7 +896,7 @@
 	R417 complex-literal-constant is ( real-part , imag-part )
 */
 	complex-literal-constant :
-		'(' real-part ',' imag-part ')'
+		LEFT_PARENTHESIS real-part COMMA imag-part RIGHT_PARENTHESIS
 	;
 
 /*
@@ -781,11 +932,11 @@
 */
 	char-selector :
 		length-selector
-	|	'(' 'LEN' '=' type-param-value ',' 'KIND' '=' expr ')'
-	|	'(' type-param-value ',' 'KIND' '=' expr ')'
-	|	'(' type-param-value ',' expr ')'
-	|	'(' 'KIND' '=' expr	',' 'LEN' '=' type-param-value ')'
-	|	'(' 'KIND' '=' expr	')'
+	|	LEFT_PARENTHESIS 'LEN' EQUALS type-param-value COMMA 'KIND' EQUALS expr RIGHT_PARENTHESIS
+	|	LEFT_PARENTHESIS type-param-value COMMA 'KIND' EQUALS expr RIGHT_PARENTHESIS
+	|	LEFT_PARENTHESIS type-param-value COMMA expr RIGHT_PARENTHESIS
+	|	LEFT_PARENTHESIS 'KIND' EQUALS expr	COMMA 'LEN' EQUALS type-param-value RIGHT_PARENTHESIS
+	|	LEFT_PARENTHESIS 'KIND' EQUALS expr	RIGHT_PARENTHESIS
 	;
 
 /*
@@ -793,10 +944,8 @@
 	or * char-length [ , ]
 */
 	length-selector :
-		'(' 'LEN' '=' type-param-value ')'
-	|	'(' type-param-value ')'
-	|	'*' char-length ','
-	|	'*' char-length
+		LEFT_PARENTHESIS ( 'LEN' EQUALS ) ? type-param-value RIGHT_PARENTHESIS
+	|	ASTERIK char-length COMMA ?
 	; 
 
 /*
@@ -804,7 +953,7 @@
 	or int-literal-constant
 */
 	char-length :
-		'(' type-param-value ')'
+		LEFT_PARENTHESIS type-param-value RIGHT_PARENTHESIS
 	|	INT_LITERAL_CONSTANT
 	;
 
@@ -844,17 +993,11 @@
 	[ ( type-param-name-list ) ]
 */
 	derived-type-stmt :
-		'TYPE' ',' type-attr-spec-list ':' ':' NAME_LITERAL	'(' name-list ')' stmt-end
-	|	'TYPE' ':' ':' NAME_LITERAL	'(' name-list ')' stmt-end
-	|	'TYPE' NAME_LITERAL	'(' name-list ')' stmt-end
-	|	'TYPE' ',' type-attr-spec-list ':' ':' NAME_LITERAL stmt-end
-	|	'TYPE' ':' ':' NAME_LITERAL stmt-end
-	|	'TYPE' NAME_LITERAL stmt-end
+		TYPE ( ( COMMA type-attr-spec-list ) ? COLON COLON ) ? NAME_LITERAL ( LEFT_PARENTHESIS name-list RIGHT_PARENTHESIS ) ? stmt-end
 	;
 	// added...
 	name-list :
-		name-list ',' NAME_LITERAL
-	|	NAME_LITERAL
+		NAME_LITERAL ( COMMA NAME_LITERAL ) *
 	;
 	
 
@@ -865,14 +1008,13 @@
 	or EXTENDS ( parent-type-name )
 */
 	type-attr-spec :
-		'ABSTRACT'
+		ABSTRACT
 	|	access-spec
-	|	'BIND' '(' 'C' ')'
-	|	'EXTENDS' '(' NAME_LITERAL ')'
+	|	BIND LEFT_PARENTHESIS 'C' RIGHT_PARENTHESIS
+	|	EXTENDS LEFT_PARENTHESIS NAME_LITERAL RIGHT_PARENTHESIS
 	;
 	type-attr-spec-list :
-		type-attr-spec-list ',' type-attr-spec
-	|	type-attr-spec
+		type-attr-spec ( COMMA type-attr-spec ) *
 	;
 
 /*
@@ -888,17 +1030,14 @@
 	R429 end-type-stmt is END TYPE [ type-name ]
 */
 	end-type-stmt :
-		'END' 'TYPE' NAME_LITERAL stmt-end
-	|	'ENDTYPE' NAME_LITERAL stmt-end
-	|	'END' 'TYPE' stmt-end 
-	|	'ENDTYPE' stmt-end 
+		END_TYPE NAME_LITERAL ? stmt-end
 	;
 
 /*
 	R430 sequence-stmt is SEQUENCE
 */
 	sequence-stmt :
-		'SEQUENCE'  stmt-end
+		SEQUENCE  stmt-end
 	;
 
 /*
@@ -906,21 +1045,18 @@
 	type-param-decl -list
 */
 	type-param-def-stmt :
-		'INTEGER' kind-selector ',' type-param-attr-spec ':' ':' type-param-decl-list  stmt-end
-	|	'INTEGER'  ',' type-param-attr-spec ':' ':' type-param-decl-list stmt-end
+		INTEGER kind-selector ? COMMA type-param-attr-spec COLON COLON type-param-decl-list  stmt-end
 	;
 
 /*
 	R432 type-param-decl is type-param-name [ = scalar-int-constant-expr ]
 */
 	type-param-decl :
-		NAME_LITERAL '=' expr
-	|	NAME_LITERAL
+		NAME_LITERAL ( EQUALS expr ) ?
 	;
 
 	type-param-decl-list :
-		type-param-decl-list ',' type-param-decl
-	|	type-param-decl
+		type-param-decl ( COMMA type-param-decl ) *
 	;
 
 /*
@@ -954,9 +1090,7 @@
 	component-decl-list
 */
 	data-component-def-stmt :
-		declaration-type-spec ',' component-attr-spec-list ':' ':' component-decl-list stmt-end
-	|	declaration-type-spec  ':' ':' component-decl-list stmt-end
-	|	declaration-type-spec component-decl-list stmt-end
+		declaration-type-spec ( ( COMMA component-attr-spec-list ) ? COLON COLON ) ? component-decl-list stmt-end
 	;
 
 /*
@@ -969,16 +1103,15 @@
 */
 	component-attr-spec :
 		access-spec
-	|	'ALLOCATABLE'
-	|	'CODIMENSION' '[' coarray-spec ']'
-	|	'CONTIGUOUS'
-	|	'DIMENSION' '(' component-array-spec ')'
-	|	'POINTER'
+	|	ALLOCATABLE
+	|	CODIMENSION LEFT_SQUARE_BRACKET coarray-spec RIGHT_SQUARE_BRACKET
+	|	CONTIGUOUS
+	|	DIMENSION LEFT_PARENTHESIS component-array-spec RIGHT_PARENTHESIS
+	|	POINTER
 	;
 	// added...
 	component-attr-spec-list :
-		component-attr-spec-list ',' component-attr-spec
-	|	component-attr-spec
+		component-attr-spec ( COMMA component-attr-spec ) *
 	;
 
 /*
@@ -987,12 +1120,11 @@
 	[ * char-length ] [ component-initialization ]
 */
 	component-decl :
-		NAME_LITERAL ( '(' component-array-spec ')' ) ? ( '[' coarray-spec ']' ) ? ( '*' char-length ) ? component-initialization ?
+		NAME_LITERAL ( LEFT_PARENTHESIS component-array-spec RIGHT_PARENTHESIS ) ? ( LEFT_SQUARE_BRACKET coarray-spec RIGHT_SQUARE_BRACKET ) ? ( ASTERIK char-length ) ? component-initialization ?
 	;
 	
 	component-decl-list :
-		component-decl-list ',' component-decl
-	|	component-decl
+		component-decl ( COMMA component-decl ) *
 	;
 
 /*
@@ -1009,8 +1141,7 @@
 	proc-component-attr-spec-list :: proc-decl -list
 */
 	proc-component-def-stmt :
-		'PROCEDURE' '(' proc-interface ')' ',' proc-component-attr-spec-list ':' ':' proc-decl-list stmt-end
-	|	'PROCEDURE' '(' ')' ',' proc-component-attr-spec-list ':' ':' proc-decl-list stmt-end
+		PROCEDURE LEFT_PARENTHESIS proc-interface ? RIGHT_PARENTHESIS COMMA proc-component-attr-spec-list COLON COLON proc-decl-list stmt-end
 	;
 
 /*
@@ -1020,15 +1151,13 @@
 	or access-spec
 */
 	proc-component-attr-spec :
-		'POINTER'
-	|	'PASS' '(' NAME_LITERAL ')'
-	|	'PASS'
-	|	'NOPASS'
+		POINTER
+	|	PASS ( LEFT_PARENTHESIS NAME_LITERAL RIGHT_PARENTHESIS ) ?
+	|	NOPASS
 	|	access-spec
 	;
 	proc-component-attr-spec-list :
-		proc-component-attr-spec-list ',' proc-component-attr-spec
-	|	proc-component-attr-spec
+		proc-component-attr-spec ( COMMA proc-component-attr-spec ) *
 	;
 
 /*
@@ -1037,9 +1166,12 @@
 	or => initial-data-target
 */
 	component-initialization :
-		'=' expr
-	|	'=' '>' null-init
-	|	'=' '>' initial-data-target
+		EQUALS 
+		( 
+			expr 
+		|	GREATER_THAN null-init
+		|	GREATER_THAN initial-data-target 
+		)
 	;
 
 /*
@@ -1053,7 +1185,7 @@
 	R444 private-components-stmt is PRIVATE
 */
 	private-components-stmt :
-		'PRIVATE' stmt-end
+		PRIVATE stmt-end
 	;
 
 /*
@@ -1071,7 +1203,7 @@
 	R446 binding-private-stmt is PRIVATE
 */
 	binding-private-stmt :
-		'PRIVATE' stmt-end
+		PRIVATE stmt-end
 	;
 
 /*
@@ -1090,30 +1222,24 @@
 	or PROCEDURE (interface-name), binding-attr -list :: binding-name-list
 */
 	type-bound-procedure-stmt :
-		'PROCEDURE' ',' binding-attr-list ':' ':' type-bound-proc-decl-list stmt-end
-	|	'PROCEDURE' ':' ':' type-bound-proc-decl-list stmt-end
-	|	'PROCEDURE' type-bound-proc-decl-list stmt-end
-	|	'PROCEDURE' '(' NAME_LITERAL ')' ',' binding-attr-list ':' ':' name-list stmt-end
+		PROCEDURE ( ( COMMA binding-attr-list ) ? COLON COLON ) ? type-bound-proc-decl-list stmt-end
 	;
 
 /*
 	R449 type-bound-proc-decl is binding-name [ => procedure-name ]
 */
 	type-bound-proc-decl :
-		NAME_LITERAL '=' '>' NAME_LITERAL
-	|	NAME_LITERAL
+		NAME_LITERAL ( EQUALS GREATER_THAN NAME_LITERAL ) ?
 	;
 	type-bound-proc-decl-list :
-		type-bound-proc-decl-list ',' type-bound-proc-decl
-	|	type-bound-proc-decl
+		type-bound-proc-decl ( COMMA type-bound-proc-decl ) *
 	;
 
 /*
 	R450 type-bound-generic-stmt is GENERIC [ , access-spec ] :: generic-spec => binding-name-list
 */
 	type-bound-generic-stmt :
-		'GENERIC' ',' access-spec ':' ':' generic-spec '=' '>' name-list stmt-end
-	|	'GENERIC' ':' ':' generic-spec '=' '>' name-list stmt-end
+		GENERIC ( COMMA access-spec ) ? COLON COLON generic-spec EQUALS GREATER_THAN name-list stmt-end
 	;
 
 /*
@@ -1124,64 +1250,55 @@
 	or access-spec
 */
 	binding-attr :
-		'PASS' '(' NAME_LITERAL ')'
-	|	'PASS'
-	|	'NOPASS'
-	|	'NON' 'OVERRIDABLE'
-	|	'DEFERRED'
+		PASS ( LEFT_PARENTHESIS NAME_LITERAL RIGHT_PARENTHESIS ) ?
+	|	NOPASS
+	|	NON_OVERRIDABLE
+	|	DEFERRED
 	|	access-spec
 	;
 	binding-attr-list :
-		binding-attr-list ',' binding-attr
-	|	binding-attr
+		binding-attr ( COMMA binding-attr ) *
 	;
 
 /*
 	R452 final-procedure-stmt is FINAL [ :: ] final-subroutine-name-list
 */
 	final-procedure-stmt :
-		'FINAL' ':' ':' name-list stmt-end
-	|	'FINAL' name-list stmt-end
+		FINAL ( COLON COLON ) ? name-list stmt-end
 	;
 
 /*
 	R453 derived-type-spec is type-name [ ( type-param-spec-list ) ]
 */
 	derived-type-spec :
-		NAME_LITERAL '(' type-param-spec-list ')'
-	|	NAME_LITERAL
+		NAME_LITERAL ( LEFT_PARENTHESIS type-param-spec-list RIGHT_PARENTHESIS ) ?
 	;
 
 /*
 	R454 type-param-spec is [ keyword = ] type-param-value
 */
 	type-param-spec :
-		NAME_LITERAL '=' type-param-value
-	|	type-param-value
+		( NAME_LITERAL EQUALS ) ? type-param-value
 	;
 	type-param-spec-list :
-		type-param-spec-list ',' type-param-spec
-	|	type-param-spec
+		type-param-spec ( COMMA type-param-spec ) *
 	;
 
 /*
 	R455 structure-constructor is derived-type-spec ( [ component-spec-list ] )
 */
 	structure-constructor :
-		derived-type-spec '(' component-spec-list ')'
-	|	derived-type-spec '(' ')'
+		derived-type-spec LEFT_PARENTHESIS component-spec-list ? RIGHT_PARENTHESIS
 	;
 
 /*
 	R456 component-spec is [ keyword = ] component-data-source
 */
 	component-spec : 
-		NAME_LITERAL '=' component-data-source
-	|	component-data-source
+		( NAME_LITERAL EQUALS ) ? component-data-source
 	;
 	component-spec-list :
-		component-spec-list ',' component-spec
-	|	component-spec
+		component-spec ( COMMA component-spec ) *
 	;
 	
 /*
@@ -1211,35 +1328,31 @@
 	R459 enum-def-stmt is ENUM, BIND(C)
 */
 	enum-def-stmt :
-		'ENUM' ',' 'BIND' '(' 'C' ')' stmt-end
+		ENUM COMMA BIND LEFT_PARENTHESIS 'C' RIGHT_PARENTHESIS stmt-end
 	;
 
 /*
 	R460 enumerator-def-stmt is ENUMERATOR [ :: ] enumerator-list
 */
 	enumerator-def-stmt :
-		'ENUMERATOR' ':' ':' enumerator-list stmt-end
-	|	'ENUMERATOR' enumerator-list stmt-end
+		ENUMERATOR ( COLON COLON ) ? enumerator-list stmt-end
 	;
 
 /*
 	R461 enumerator is named-constant [ = scalar-int-constant-expr ]
 */
 	enumerator :
-		NAME_LITERAL '=' expr
-	|	NAME_LITERAL
+		NAME_LITERAL ( EQUALS expr ) ?
 	;
 	enumerator-list :
-		enumerator-list ',' enumerator
-	|	enumerator
+		enumerator ( COMMA enumerator ) *
 	;
 
 /*
 	R462 end-enum-stmt is END ENUM
 */
 	end-enum-stmt :
-		'END' 'ENUM' stmt-end
-	|	'ENDENUM' stmt-end
+		END_ENUM stmt-end
 	;
 
 /*
@@ -1288,8 +1401,8 @@
 	or lbracket ac-spec rbracket
 */
 	array-constructor :
-		'(' '/' ac-spec '/' ')'
-	|	'[' ac-spec ']'
+		LEFT_PARENTHESIS SLASH ac-spec SLASH RIGHT_PARENTHESIS
+	|	LEFT_SQUARE_BRACKET ac-spec RIGHT_SQUARE_BRACKET
 	;
 
 /*
@@ -1297,9 +1410,8 @@
 	or [type-spec ::] ac-value-list
 */
 	ac-spec :
-		type-spec ':' ':'
-	| type-spec ':' ':' ac-value-list
-	| ac-value-list
+		type-spec COLON COLON
+	|	( type-spec COLON COLON ) ? ac-value-list
 	;
 
 /*
@@ -1323,15 +1435,14 @@
 	|	ac-implied-do
 	;
 	ac-value-list :
-		ac-value-list ',' ac-value
-	|	ac-value
+		ac-value ( COMMA ac-value ) *
 	;
 
 /*
 	R473 ac-implied-do is ( ac-value-list , ac-implied-do-control )
 */
 	ac-implied-do :
-		'(' ac-value-list ',' ac-implied-do-control ')'
+		LEFT_PARENTHESIS ac-value-list COMMA ac-implied-do-control RIGHT_PARENTHESIS
 	;
 
 /*
@@ -1339,8 +1450,7 @@
 	[ , scalar-int-expr ]
 */
 	ac-implied-do-control :
-		NAME_LITERAL '=' expr ',' expr ',' expr
-	|	NAME_LITERAL '=' expr ',' expr 
+		NAME_LITERAL EQUALS expr COMMA expr ( COMMA expr ) ?
 	;
 
 /*
@@ -1357,7 +1467,7 @@
 	R501 type-declaration-stmt is declaration-type-spec [ [ , attr-spec ] ... :: ] entity-decl-list
 */
 	type-declaration-stmt :
-		declaration-type-spec ( ( ',' attr-spec ) * ':' ':' ) ? entity-decl-list stmt-end
+		declaration-type-spec ( ( COMMA attr-spec ) * COLON COLON ) ? entity-decl-list stmt-end
 	;
 
 /*
@@ -1382,23 +1492,23 @@
 */
 	attr-spec :
 		access-spec
-	|	'ALLOCATABLE'
-	|	'ASYNCHRONOUS'
-	|	'CODIMENSION' '[' coarray-spec ']'
-	|	'CONTIGUOUS'
-	|	'DIMENSION' '(' array-spec ')'
-	|	'EXTERNAL'
-	|	'INTENT' '(' intent-spec ')'
-	|	'INTRINSIC'
+	|	ALLOCATABLE
+	|	ASYNCHRONOUS
+	|	CODIMENSION LEFT_SQUARE_BRACKET coarray-spec RIGHT_SQUARE_BRACKET
+	|	CONTIGUOUS
+	|	DIMENSION LEFT_PARENTHESIS array-spec RIGHT_PARENTHESIS
+	|	EXTERNAL
+	|	INTENT LEFT_PARENTHESIS intent-spec RIGHT_PARENTHESIS
+	|	INTRINSIC
 	|	language-binding-spec
-	|	'OPTIONAL'
-	|	'PARAMETER'
-	|	'POINTER'
-	|	'PROTECTED'
-	|	'SAVE'
-	|	'TARGET'
-	|	'VALUE'
-	|	'VOLATILE'
+	|	OPTIONAL
+	|	PARAMETER
+	|	POINTER
+	|	PROTECTED
+	|	SAVE
+	|	TARGET
+	|	VALUE
+	|	VOLATILE
 	;
 	
 /*
@@ -1408,13 +1518,13 @@
 	or function-name [ * char-length ]
 */
 	entity-decl :
-		NAME_LITERAL ( '(' array-spec ')' ) ? ( '[' coarray-spec ']' ) ?	( '*' char-length ) ? initialization ?
-	|	NAME_LITERAL '*' char-length
-	|	NAME_LITERAL
+		NAME_LITERAL ( LEFT_PARENTHESIS array-spec RIGHT_PARENTHESIS ) ? 
+		( LEFT_SQUARE_BRACKET coarray-spec RIGHT_SQUARE_BRACKET ) ? 
+		( ASTERIK char-length ) ? initialization ?
+	|	NAME_LITERAL ( ASTERIK char-length ) ?
 	;
 	entity-decl-list :
-		entity-decl-list ',' entity-decl
-	|	entity-decl
+		entity-decl ( COMMA entity-decl ) *
 	;
 
 /*
@@ -1429,9 +1539,9 @@
 	or => initial-data-target
 */
 	initialization :
-		'=' expr
-	|	'=' '>' null-init
-	|	'=' '>' initial-data-target
+		EQUALS expr
+	|	EQUALS GREATER_THAN null-init
+	|	EQUALS GREATER_THAN initial-data-target
 	;
 
 /*
@@ -1446,16 +1556,16 @@
 	or PRIVATE
 */
 	access-spec :
-		'PUBLIC'
-	|	'PRIVATE'
+		PUBLIC
+	|	PRIVATE
 	;
 
 /*
 	R508 language-binding-spec is BIND (C [, NAME = scalar-default-char-constant-expr ])
 */
 	language-binding-spec :
-		'BIND' '(' 'C' ',' 'NAME' '=' expr ')'
-	|	'BIND' '(' 'C' ')'
+		BIND LEFT_PARENTHESIS 'C' COMMA 'NAME' EQUALS expr RIGHT_PARENTHESIS
+	|	BIND LEFT_PARENTHESIS 'C' RIGHT_PARENTHESIS
 	;
 
 /*
@@ -1471,11 +1581,10 @@
 	R510 deferred-coshape-spec is :
 */
 	deferred-coshape-spec :
-		':'
+		COLON
 	;
 	deferred-coshape-spec-list :
-		deferred-coshape-spec-list ',' deferred-coshape-spec
-	|	deferred-coshape-spec
+		deferred-coshape-spec ( COMMA deferred-coshape-spec ) *
 	;
 
 /*
@@ -1483,7 +1592,7 @@
 	[ lower-cobound : ] *
 */
 	explicit-coshape-spec :
-		( ( lower-cobound ':' ) ? upper-cobound ',' ) *	( lower-cobound ':' ) ? '*'
+		( ( lower-cobound COLON ) ? upper-cobound COMMA ) *	( lower-cobound COLON ) ? ASTERIK
 	;
 
 /*
@@ -1504,7 +1613,7 @@
 	R514 dimension-spec is DIMENSION ( array-spec )
 */
 	dimension-spec :
-		'DIMENSION' '(' array-spec ')'
+		DIMENSION LEFT_PARENTHESIS array-spec RIGHT_PARENTHESIS
 	;
 
 /*
@@ -1526,12 +1635,10 @@
 	R516 explicit-shape-spec is [ lower-bound : ] upper-bound
 */
 	explicit-shape-spec :
-		lower-bound ':' upper-bound
-	|	upper-bound
+		( lower-bound COLON ) ? upper-bound
 	;
 	explicit-shape-spec-list :
-		explicit-shape-spec-list ',' explicit-shape-spec
-	|	explicit-shape-spec
+		explicit-shape-spec ( COMMA explicit-shape-spec ) *
 	;
 
 /*
@@ -1552,47 +1659,40 @@
 	R519 assumed-shape-spec is [ lower-bound ] :
 */
 	assumed-shape-spec :
-		lower-bound ':'
-	|	':'
+		lower-bound ? COLON
 	;
 	assumed-shape-spec-list :
-		assumed-shape-spec-list ',' assumed-shape-spec
-	|	assumed-shape-spec
+		assumed-shape-spec ( COMMA assumed-shape-spec ) *
 	;
 
 /*
 	R520 deferred-shape-spec is :
 */
 	deferred-shape-spec :
-		':'
+		COLON
 	;
 	deferred-shape-spec-list :
-		deferred-shape-spec-list ',' deferred-shape-spec
-	|	deferred-shape-spec
+		deferred-shape-spec ( COMMA deferred-shape-spec ) *
 	;
 
 /*
 	R521 assumed-size-spec is [ explicit-shape-spec , ]... [ lower-bound : ] *
 */
 	assumed-size-spec :
-		( explicit-shape-spec ',' ) * lower-bound ':' '*'
-	|	( explicit-shape-spec ',' ) * '*'
+		( explicit-shape-spec COMMA ) * ( lower-bound COLON ) ? ASTERIK
 	;
 	assumed-size-spec-list :
-		assumed-size-spec-list ',' assumed-size-spec
-	|	assumed-size-spec
+		assumed-size-spec ( COMMA assumed-size-spec ) *
 	;
 	
 /*
 	R522 implied-shape-spec is [ lower-bound : ] *
 */
 	implied-shape-spec :
-		lower-bound ':' '*'
-	|	'*'
+		( lower-bound COLON ) ? ASTERIK
 	;
 	implied-shape-spec-list :
-		implied-shape-spec-list ',' implied-shape-spec
-	|	implied-shape-spec
+		implied-shape-spec ( COMMA implied-shape-spec ) *
 	;
 	
 /*
@@ -1611,7 +1711,7 @@
 	R524 access-stmt is access-spec [ [ :: ] access-id-list ]
 */
 	access-stmt :
-		access-spec ( ( ':' ':' ) ? access-id-list ) ? stmt-end
+		access-spec ( ( COLON COLON ) ? access-id-list ) ? stmt-end
 	;
 
 /*
@@ -1623,16 +1723,14 @@
 	|	generic-spec
 	;
 	access-id-list :
-		access-id-list ',' access-id
-	|	access-id
+		access-id ( COMMA access-id ) *
 	;
 
 /*
 	R526 allocatable-stmt is ALLOCATABLE [ :: ] allocatable-decl-list
 */
 	allocatable-stmt :
-		'ALLOCATABLE' ':' ':' allocatable-decl-list stmt-end
-	|	'ALLOCATABLE' allocatable-decl-list stmt-end
+		ALLOCATABLE ( COLON COLON ) ? allocatable-decl-list stmt-end
 	;
 
 /*
@@ -1640,28 +1738,24 @@
 	[ lbracket coarray-spec rbracket ]
 */
 	allocatable-decl :
-		NAME_LITERAL ( '(' array-spec ')' ) ?
-		( '[' coarray-spec ']' ) ?
+		NAME_LITERAL ( LEFT_PARENTHESIS array-spec RIGHT_PARENTHESIS ) ? ( LEFT_SQUARE_BRACKET coarray-spec RIGHT_SQUARE_BRACKET ) ?
 	;
 	allocatable-decl-list :
-		allocatable-decl-list ',' allocatable-decl
-	|	allocatable-decl
+		allocatable-decl ( COMMA allocatable-decl ) *
 	;
 
 /*
 	R528 asynchronous-stmt is ASYNCHRONOUS [ :: ] object-name-list
 */
 	asynchronous-stmt :
-		'ASYNCHRONOUS' ':' ':' name-list stmt-end
-	|	'ASYNCHRONOUS' name-list stmt-end
+		ASYNCHRONOUS ( COLON COLON ) ? name-list stmt-end
 	;
 
 /*
 	R529 bind-stmt is language-binding-spec [ :: ] bind-entity-list
 */
 	bind-stmt :
-		language-binding-spec ':' ':' bind-entity-list stmt-end
-	|	language-binding-spec bind-entity-list stmt-end
+		language-binding-spec ( COLON COLON ) ? bind-entity-list stmt-end
 	;
 
 /*
@@ -1670,53 +1764,48 @@
 */
 	bind-entity :
 		NAME_LITERAL
-	|	'/' NAME_LITERAL '/'
+	|	SLASH NAME_LITERAL SLASH
 	;
 	bind-entity-list :
-		bind-entity-list ',' bind-entity
-	|	bind-entity
+		bind-entity ( COMMA bind-entity ) *
 	;
 
 /*
 	R531 codimension-stmt is CODIMENSION [ :: ] codimension-decl -list
 */
 	codimension-stmt :
-		'CODIMENSION' ':' ':' codimension-decl-list stmt-end
-	|	'CODIMENSION' codimension-decl-list stmt-end
+		CODIMENSION ( COLON COLON ) ? codimension-decl-list stmt-end
 	;
 
 /*
 	R532 codimension-decl is coarray-name lbracket coarray-spec rbracket
 */
 	codimension-decl :
-		NAME_LITERAL '[' coarray-spec ']'
+		NAME_LITERAL LEFT_SQUARE_BRACKET coarray-spec RIGHT_SQUARE_BRACKET
 	;
 	codimension-decl-list :
-		codimension-decl-list ',' codimension-decl
-	|	codimension-decl
+		codimension-decl ( COMMA codimension-decl ) *
 	;
 	
 /*
 	R533 contiguous-stmt is CONTIGUOUS [ :: ] object-name-list
 */
 	contiguous-stmt :
-		'CONTIGUOUS' ':' ':' name-list stmt-end
-	|	'CONTIGUOUS' name-list stmt-end
+		CONTIGUOUS ( COLON COLON ) ? name-list stmt-end
 	;
 
 /*
 	R534 data-stmt is DATA data-stmt-set [ [ , ] data-stmt-set ] ...
 */
 	data-stmt :
-		'DATA' data-stmt-set ( ',' data-stmt-set ) * stmt-end
-	|	'DATA' data-stmt-set ( data-stmt-set ) * stmt-end
+		DATA data-stmt-set ( COMMA ? data-stmt-set ) * stmt-end
 	;
 
 /*
 	R535 data-stmt-set is data-stmt-object-list / data-stmt-value-list /
 */
 	data-stmt-set :
-		data-stmt-object-list '/' data-stmt-value-list '/'
+		data-stmt-object-list SLASH data-stmt-value-list SLASH
 	;
 
 /*
@@ -1728,8 +1817,7 @@
 	|	data-implied-do
 	;
 	data-stmt-object-list :
-		data-stmt-object-list ',' data-stmt-object
-	|	data-stmt-object
+		data-stmt-object ( COMMA data-stmt-object ) *
 	;
 
 /*
@@ -1739,8 +1827,7 @@
 	[ , scalar-int-constant-expr ] )
 */
 	data-implied-do :
-		'(' data-i-do-object-list ',' NAME_LITERAL '=' expr ',' expr ',' expr ')'
-	|	'(' data-i-do-object-list ',' NAME_LITERAL '=' expr ',' expr  ')'
+		LEFT_PARENTHESIS data-i-do-object-list COMMA NAME_LITERAL EQUALS expr COMMA expr ( COMMA expr ) ? RIGHT_PARENTHESIS
 	;
 
 /*
@@ -1754,8 +1841,7 @@
 	|	data-implied-do
 	;
 	data-i-do-object-list :
-		data-i-do-object-list ',' data-i-do-object
-	|	data-i-do-object
+		data-i-do-object ( COMMA data-i-do-object ) *
 	;
 
 /*
@@ -1768,12 +1854,10 @@
 	R540 data-stmt-value is [ data-stmt-repeat * ] data-stmt-constant
 */
 	data-stmt-value :
-		data-stmt-repeat '*' data-stmt-constant
-	|	data-stmt-constant
+		( data-stmt-repeat ASTERIK ) ? data-stmt-constant
 	;
 	data-stmt-value-list :
-		data-stmt-value-list ',' data-stmt-value
-	|	data-stmt-value
+		data-stmt-value ( COMMA data-stmt-value ) *
 	;
 
 /*
@@ -1822,49 +1906,46 @@
 	[ , array-name ( array-spec ) ] ...
 */
 	dimension-stmt :
-		'DIMENSION' ':' ':' NAME_LITERAL '(' array-spec ')' ( ',' NAME_LITERAL '(' array-spec ')' ) * stmt-end
-	|	'DIMENSION' NAME_LITERAL '(' array-spec ')' ( ',' NAME_LITERAL '(' array-spec ')' ) * stmt-end
+		DIMENSION ( COLON COLON ) ? NAME_LITERAL LEFT_PARENTHESIS array-spec RIGHT_PARENTHESIS
+		( COMMA NAME_LITERAL LEFT_PARENTHESIS array-spec RIGHT_PARENTHESIS ) * stmt-end
 	;
 	
 /*
 	R546 intent-stmt is INTENT ( intent-spec ) [ :: ] dummy-arg-name-list
 */
 	intent-stmt :
-		'INTENT' '(' intent-spec ')' ':' ':' name-list stmt-end
-	|	'INTENT' '(' intent-spec ')' name-list stmt-end
+		INTENT LEFT_PARENTHESIS intent-spec RIGHT_PARENTHESIS ( COLON COLON ) ? name-list stmt-end
 	;
 
 /*
 	R547 optional-stmt is OPTIONAL [ :: ] dummy-arg-name-list
 */
 	optional-stmt :
-		'OPTIONAL' ':' ':' name-list stmt-end
-	|	'OPTIONAL' name-list stmt-end
+		OPTIONAL ( COLON COLON ) ? name-list stmt-end
 	;
 
 /*
 	R548 parameter-stmt is PARAMETER ( named-constant-def-list )
 */
 	parameter-stmt :
-		'PARAMETER' '(' named-constant-def-list ')' stmt-end
+		PARAMETER LEFT_PARENTHESIS named-constant-def-list RIGHT_PARENTHESIS stmt-end
 	;
 	
 /*
 	R549 named-constant-def is named-constant = constant-expr
 */
 	named-constant-def :
-		NAME_LITERAL '=' expr
+		NAME_LITERAL EQUALS expr
 	;
 	named-constant-def-list :
-		named-constant-def ( ',' named-constant-def ) *
+		named-constant-def ( COMMA named-constant-def ) *
 	;
 
 /*
 	R550 pointer-stmt is POINTER [ :: ] pointer-decl-list
 */
 	pointer-stmt : 
-		'POINTER' ':' ':' pointer-decl-list stmt-end
-	|	'POINTER' pointer-decl-list stmt-end
+		POINTER ( COLON COLON ) ? pointer-decl-list stmt-end
 	;
 
 /*
@@ -1872,29 +1953,24 @@
 	or proc-entity-name
 */
 	pointer-decl :
-		NAME_LITERAL '(' deferred-shape-spec-list ')'
-	|	NAME_LITERAL
+		NAME_LITERAL ( LEFT_PARENTHESIS deferred-shape-spec-list RIGHT_PARENTHESIS ) ?
 	;
 	pointer-decl-list :
-		pointer-decl-list ',' pointer-decl
-	|	pointer-decl
+		pointer-decl ( COMMA pointer-decl ) *
 	;
 
 /*
 	R552 protected-stmt is PROTECTED [ :: ] entity-name-list
 */
 	protected-stmt :
-		'PROTECTED' ':' ':' name-list stmt-end
-	|	'PROTECTED' name-list stmt-end
+		PROTECTED ( COLON COLON ) ? name-list stmt-end
 	;
 
 /*
 	R553 save-stmt is SAVE [ [ :: ] saved-entity-list ]
 */
 	save-stmt :
-		'SAVE' ':' ':' saved-entity-list stmt-end
-	|	'SAVE' saved-entity-list stmt-end
-	|	'SAVE' stmt-end
+		SAVE ( ( COLON COLON ) ? saved-entity-list ) ? stmt-end
 	;
 
 /*
@@ -1904,10 +1980,10 @@
 */
 	saved-entity :
 		NAME_LITERAL
-	|	'/' NAME_LITERAL '/'
+	|	SLASH NAME_LITERAL SLASH
 	;
 	saved-entity-list :
-		saved-entity ( ',' saved-entity ) *
+		saved-entity ( COMMA saved-entity ) *
 	;
 
 /*
@@ -1920,8 +1996,7 @@
 	R556 target-stmt is TARGET [ :: ] target-decl-list
 */
 	target-stmt :
-		'TARGET' ':' ':' target-decl-list stmt-end
-	|	'TARGET' target-decl-list stmt-end
+		TARGET ( COLON COLON ) ? target-decl-list stmt-end
 	;
 
 /*
@@ -1929,27 +2004,25 @@
 	[ lbracket coarray-spec rbracket ]
 */
 	target-decl :
-		NAME_LITERAL ( '(' array-spec ')' ) ?
-		( '[' coarray-spec ']' ) ?
+		NAME_LITERAL ( LEFT_PARENTHESIS array-spec RIGHT_PARENTHESIS ) ?
+		( LEFT_SQUARE_BRACKET coarray-spec RIGHT_SQUARE_BRACKET ) ?
 	;
 	target-decl-list :
-		target-decl ( ',' target-decl ) *
+		target-decl ( COMMA target-decl ) *
 	;
 
 /*
 	R558 value-stmt is VALUE [ :: ] dummy-arg-name-list
 */
 	value-stmt :
-		'VALUE' ':' ':' name-list stmt-end
-	|	'VALUE' name-list stmt-end
+		VALUE ( COLON COLON ) ? name-list stmt-end
 	;
 
 /*
 	R559 volatile-stmt is VOLATILE [ :: ] object-name-list
 */
 	volatile-stmt :
-		'VOLATILE' ':' ':' name-list
-	|	'VOLATILE' name-list
+		VOLATILE ( COLON COLON ) ? name-list
 	;
 
 /*
@@ -1957,30 +2030,28 @@
 	or IMPLICIT NONE
 */
 	implicit-stmt :
-		'IMPLICIT' implicit-spec-list stmt-end
-	|	'IMPLICIT' 'NONE' stmt-end
+		IMPLICIT implicit-spec-list stmt-end
+	|	IMPLICIT 'NONE' stmt-end
 	;
 
 /*
 	R561 implicit-spec is declaration-type-spec ( letter-spec-list )
 */
 	implicit-spec :
-		declaration-type-spec '(' letter-spec-list ')'
+		declaration-type-spec LEFT_PARENTHESIS letter-spec-list RIGHT_PARENTHESIS
 	;
 	implicit-spec-list :
-		implicit-spec ( ',' implicit-spec ) *
+		implicit-spec ( COMMA implicit-spec ) *
 	;
 	
 /*
 	R562 letter-spec is letter [ - letter ]
 */
 	letter-spec :
-		NAME_LITERAL '-' NAME_LITERAL // the NAME_LITERAL is used to amiguousy with LETTER_LITERAL
-	|	NAME_LITERAL
+		NAME_LITERAL ( MINUS NAME_LITERAL ) ? // the NAME_LITERAL is used to amiguousy with LETTER_LITERAL
 	;
 	letter-spec-list :
-		letter-spec-list ',' letter-spec
-	|	letter-spec
+		letter-spec ( COMMA letter-spec ) *
 	;
 
 /*
@@ -1990,9 +2061,9 @@
 	namelist-group-object-list ] . . .
 */
 	namelist-stmt :
-		'NAMELIST'
-		'/' NAME_LITERAL '/' name-list
-		(  ',' ? '/' NAME_LITERAL '/' name-list ) * stmt-end
+		NAMELIST
+		SLASH NAME_LITERAL SLASH name-list
+		(  COMMA ? SLASH NAME_LITERAL SLASH name-list ) * stmt-end
 	;
 	
 /*
@@ -2005,17 +2076,17 @@
 	R565 equivalence-stmt is EQUIVALENCE equivalence-set-list
 */
 	equivalence-stmt :
-		'EQUIVALENCE' equivalence-set-list stmt-end
+		EQUIVALENCE equivalence-set-list stmt-end
 	;
 
 /*
 	R566 equivalence-set is ( equivalence-object , equivalence-object-list )
 */
 	equivalence-set :
-		'(' equivalence-object ',' equivalence-object-list ')'
+		LEFT_PARENTHESIS equivalence-object COMMA equivalence-object-list RIGHT_PARENTHESIS
 	;
 	equivalence-set-list :
-		equivalence-set ( ',' equivalence-set ) *
+		equivalence-set ( COMMA equivalence-set ) *
 	;
 
 /*
@@ -2029,7 +2100,7 @@
 	|	substring
 	;
 	equivalence-object-list :
-		equivalence-object ( ',' equivalence-object ) *
+		equivalence-object ( COMMA equivalence-object ) *
 	;
 
 /*
@@ -2039,21 +2110,19 @@
 	common-block-object-list ] ...
 */
 	common-stmt :
-		'COMMON'
-		( '/' NAME_LITERAL ? '/' ) ? common-block-object-list
-		(  ',' ? '/' NAME_LITERAL ? '/' common-block-object-list ) * stmt-end
+		COMMON
+		( SLASH NAME_LITERAL ? SLASH ) ? common-block-object-list
+		(  COMMA ? SLASH NAME_LITERAL ? SLASH common-block-object-list ) * stmt-end
 	;
 
 /*
 	R569 common-block-object is variable-name [ ( array-spec ) ]
 */
 	common-block-object :
-		NAME_LITERAL '(' array-spec ')'
-	|	NAME_LITERAL
+		NAME_LITERAL ( LEFT_PARENTHESIS array-spec RIGHT_PARENTHESIS ) ?
 	;
 	common-block-object-list :
-		common-block-object-list ',' common-block-object
-	|	common-block-object
+		common-block-object ( COMMA common-block-object ) *
 	;
 
 /***************
@@ -2122,7 +2191,7 @@
 	R608 substring is parent-string ( substring-range )
 */
 	substring :
-		parent-string '(' substring-range ')'
+		parent-string LEFT_PARENTHESIS substring-range RIGHT_PARENTHESIS
 	;
 
 /*
@@ -2144,21 +2213,21 @@
 	R610 substring-range is [ scalar-int-expr ] : [ scalar-int-expr ]
 */
 	substring-range :
-		expr ? ':' expr ?
+		expr ? COLON expr ?
 	;
 
 /*
 	R611 data-ref is part-ref [ % part-ref ] ...
 */
 	data-ref :
-		part-ref ( '%' part-ref ) *
+		part-ref ( PERCENT part-ref ) *
 	;
 
 /*
 	R612 part-ref is part-name [ ( section-subscript-list ) ] [ image-selector ]
 */
 	part-ref :
-		NAME_LITERAL ( '(' section-subscript-list ')' ) ? image-selector ?
+		NAME_LITERAL ( LEFT_PARENTHESIS section-subscript-list RIGHT_PARENTHESIS ) ? image-selector ?
 	;
 
 /*
@@ -2183,15 +2252,14 @@
 	or designator % IM
 */
 	complex-part-designator :
-		designator '%' 'RE'
-	|	designator '%' 'IM'
+		designator PERCENT ( 'RE' | 'IM' )
 	;
 
 /*
 	R616 type-param-inquiry is designator % type-param-name
 */
 	type-param-inquiry :
-		designator '%' NAME_LITERAL
+		designator PERCENT NAME_LITERAL
 	;
 
 /*
@@ -2206,7 +2274,7 @@
 	or complex-part-designator
 */
 	array-section :
-		data-ref ( '(' substring-range ')' ) ?
+		data-ref ( LEFT_PARENTHESIS substring-range RIGHT_PARENTHESIS ) ?
 	|	complex-part-designator
 	;
 
@@ -2228,14 +2296,14 @@
 	|	vector-subscript
 	;
 	section-subscript-list :
-		section-subscript ( ',' section-subscript ) *
+		section-subscript ( COMMA section-subscript ) *
 	;
 
 /*
 	R621 subscript-triplet is [ subscript ] : [ subscript ] [ : stride ]
 */
 	subscript-triplet :
-		subscript ? ':' subscript ? ( ':' stride ) ?
+		subscript ? COLON subscript ? ( COLON stride ) ?
 	;
 
 /*
@@ -2256,7 +2324,7 @@
 	R624 image-selector is lbracket cosubscript-list rbracket
 */
 	image-selector :
-		'[' cosubscript-list ']'
+		LEFT_SQUARE_BRACKET cosubscript-list RIGHT_SQUARE_BRACKET
 	;
 	
 /*
@@ -2266,7 +2334,7 @@
 		expr
 	;
 	cosubscript-list :
-		cosubscript ( ',' cosubscript ) *
+		cosubscript ( COMMA cosubscript ) *
 	;
 
 /*
@@ -2274,8 +2342,7 @@
 	[, alloc-opt-list ] )
 */
 	allocate-stmt :
-		'ALLOCATE' '(' ( type-spec ':' ':' ) ? allocation-list
-		( ',' alloc-opt-list ) ? ')' stmt-end
+		ALLOCATE LEFT_PARENTHESIS ( type-spec COLON COLON ) ? allocation-list ( COMMA alloc-opt-list ) ? RIGHT_PARENTHESIS stmt-end
 	;
 
 /*
@@ -2285,13 +2352,13 @@
 	or STAT = stat-variable
 */
 	alloc-opt :
-		'ERRMSG' '=' variable
-	|	'MOLD' '=' expr
-	|	'SOURCE' '=' expr
-	|	'STAT' '=' variable
+		'ERRMSG' EQUALS variable
+	|	'MOLD' EQUALS expr
+	|	'SOURCE' EQUALS expr
+	|	'STAT' EQUALS variable
 	;
 	alloc-opt-list :
-		alloc-opt ( ',' alloc-opt ) *
+		alloc-opt ( COMMA alloc-opt ) *
 	;
 	
 /*
@@ -2317,11 +2384,11 @@
 	[ lbracket allocate-coarray-spec rbracket ]
 */
 	allocation :
-		allocate-object ( '(' allocate-shape-spec-list ')' ) ?
-		( '[' allocate-coarray-spec ']' ) ?
+		allocate-object ( LEFT_PARENTHESIS allocate-shape-spec-list RIGHT_PARENTHESIS ) ?
+		( LEFT_SQUARE_BRACKET allocate-coarray-spec RIGHT_SQUARE_BRACKET ) ?
 	;
 	allocation-list :
-		allocation ( ',' allocation ) *
+		allocation ( COMMA allocation ) *
 	;
 
 /*
@@ -2333,18 +2400,17 @@
 	|	structure-component
 	;
 	allocate-object-list : 
-		allocate-object ( ',' allocate-object ) *
+		allocate-object ( COMMA allocate-object ) *
 	;
 
 /*
 	R633 allocate-shape-spec is [ lower-bound-expr : ] upper-bound-expr
 */
 	allocate-shape-spec :
-		expr ':' expr
-	|	expr
+		( expr COLON ) ? expr
 	;
 	allocate-shape-spec-list :
-		allocate-shape-spec ( ',' allocate-shape-spec ) *
+		allocate-shape-spec ( COMMA allocate-shape-spec ) *
 	;
 
 /*
@@ -2363,25 +2429,24 @@
 	R636 allocate-coarray-spec is [ allocate-coshape-spec-list , ] [ lower-bound-expr : ] *
 */
 	allocate-coarray-spec :
-		( allocate-coshape-spec-list ',' ) ? ( expr ':' ) ? '*'
+		( allocate-coshape-spec-list COMMA ) ? ( expr COLON ) ? ASTERIK
 	;
 
 /*
 	R637 allocate-coshape-spec is [ lower-bound-expr : ] upper-bound-expr
 */
 	allocate-coshape-spec :
-		expr ':' expr
-	|	expr
+		( expr COLON ) ? expr
 	;
 	allocate-coshape-spec-list :
-		allocate-coshape-spec ( ',' allocate-coshape-spec ) *
+		allocate-coshape-spec ( COMMA allocate-coshape-spec ) *
 	;
 
 /*
 	R638 nullify-stmt is NULLIFY ( pointer-object-list )
 */
 	nullify-stmt :
-		'NULLIFY' '(' pointer-object-list ')' stmt-end
+		NULLIFY LEFT_PARENTHESIS pointer-object-list RIGHT_PARENTHESIS stmt-end
 	;
 
 /*
@@ -2394,15 +2459,14 @@
 	|	structure-component
 	;
 	pointer-object-list :
-		pointer-object ( ',' pointer-object ) *
+		pointer-object ( COMMA pointer-object ) *
 	;
 
 /*
 	R640 deallocate-stmt is DEALLOCATE ( allocate-object-list [ , dealloc-opt-list ] )
 */
 	deallocate-stmt :
-		'DEALLOCATE' '(' allocate-object-list ',' dealloc-opt-list ')' stmt-end
-	|	'DEALLOCATE' '(' allocate-object-list ')' stmt-end
+		DEALLOCATE LEFT_PARENTHESIS allocate-object-list ( COMMA dealloc-opt-list ) ? RIGHT_PARENTHESIS stmt-end
 	;
 
 /*
@@ -2410,12 +2474,11 @@
 	or ERRMSG = errmsg-variable
 */
 	dealloc-opt :
-		'STAT' '=' variable
-	|	'ERRMSG' '=' variable
+		'STAT' EQUALS variable
+	|	'ERRMSG' EQUALS variable
 	;
 	dealloc-opt-list :
-		dealloc-opt-list ',' dealloc-opt
-	|	dealloc-opt
+		dealloc-opt ( COMMA dealloc-opt ) *
 	;
 
 /***************
@@ -2440,7 +2503,7 @@
 	|	function-reference
 	|	type-param-inquiry
 	|	NAME_LITERAL
-	|	'(' expr ')'
+	|	LEFT_PARENTHESIS expr RIGHT_PARENTHESIS
 	;
 
 /*
@@ -2459,7 +2522,7 @@
 
 // defined as replacement:
 	defined-op :
-		'.' NAME_LITERAL '.'
+		DECIMALPOINT_OR_PERIOD NAME_LITERAL DECIMALPOINT_OR_PERIOD
 	;
 
 /*
@@ -2491,7 +2554,7 @@
 	R707 power-op is **
 */
 	power-op :
-		'*' '*'
+		ASTERIK ASTERIK
 	;
 
 /*
@@ -2499,8 +2562,8 @@
 	or /
 */
 	mult-op :
-		'*'
-	|	'/'
+		ASTERIK
+	|	SLASH
 	;
 
 /*
@@ -2508,8 +2571,8 @@
 	or -
 */
 	add-op :
-		'+'
-	|	'-'
+		PLUS
+	|	MINUS
 	;
 
 /*
@@ -2524,7 +2587,7 @@
 	R711 concat-op is //
 */
 	concat-op :
-		'/'	'/'
+		SLASH	SLASH
 	;
 
 /*
@@ -2556,12 +2619,12 @@
 	|	LE
 	|	GT
 	|	GE
-	|	'=' '='
-	|	'/' '='
-	|	'<'
-	|	'<' '='
-	|	'>'
-	|	'>' '='
+	|	EQUALS EQUALS
+	|	SLASH EQUALS
+	|	LESS_THAN
+	|	LESS_THAN EQUALS
+	|	GREATER_THAN
+	|	GREATER_THAN EQUALS
 	;
 
 /*
@@ -2693,7 +2756,7 @@
 	R732 assignment-stmt is variable = expr
 */
 	assignment-stmt :
-		variable '=' expr stmt-end
+		variable EQUALS expr stmt-end
 	;
 
 /*
@@ -2702,9 +2765,9 @@
 	or proc-pointer-object => proc-target
 */
 	pointer-assignment-stmt :
-		data-pointer-object ( '(' bounds-spec-list ')' ) ? '=' '>' data-target stmt-end
-	|	data-pointer-object '(' bounds-remapping-list ')' '=' '>' data-target stmt-end
-	|	proc-pointer-object '=' '>' proc-target stmt-end
+		data-pointer-object ( LEFT_PARENTHESIS bounds-spec-list RIGHT_PARENTHESIS ) ? EQUALS GREATER_THAN data-target stmt-end
+	|	data-pointer-object LEFT_PARENTHESIS bounds-remapping-list RIGHT_PARENTHESIS EQUALS GREATER_THAN data-target stmt-end
+	|	proc-pointer-object EQUALS GREATER_THAN proc-target stmt-end
 	;
 
 /*
@@ -2713,27 +2776,27 @@
 */
 	data-pointer-object :
 		NAME_LITERAL
-	|	variable '%' NAME_LITERAL
+	|	variable PERCENT NAME_LITERAL
 	;
 
 /*
 	R735 bounds-spec is lower-bound-expr :
 */
 	bounds-spec :
-		expr ':'
+		expr COLON
 	;
 	bounds-spec-list :
-		bounds-spec ( ',' bounds-spec ) *
+		bounds-spec ( COMMA bounds-spec ) *
 	;
 
 /*
 	R736 bounds-remapping is lower-bound-expr : upper-bound-expr
 */
 	bounds-remapping :
-		expr ':' expr
+		expr COLON expr
 	;
 	bounds-remapping-list :
-		bounds-remapping ( ',' bounds-remapping ) *
+		bounds-remapping ( COMMA bounds-remapping ) *
 	;
 
 /*
@@ -2756,7 +2819,7 @@
 	R739 proc-component-ref is scalar-variable % procedure-component-name
 */
 	proc-component-ref :
-		variable '%' NAME_LITERAL
+		variable PERCENT NAME_LITERAL
 	;
 
 /*
@@ -2774,7 +2837,7 @@
 	R741 where-stmt is WHERE ( mask-expr ) where-assignment-stmt
 */
 	where-stmt :
-		'WHERE' '(' expr ')' assignment-stmt
+		WHERE LEFT_PARENTHESIS expr RIGHT_PARENTHESIS assignment-stmt
 	;
 
 /*
@@ -2788,35 +2851,19 @@
 */
 	where-construct :
 		where-construct-stmt
-		where-construct-body
+		where-body-construct *
+		( masked-elsewhere-stmt
+		( where-body-construct ) * ) *
+		( elsewhere-stmt
+		( where-body-construct ) * ) *
 		end-where-stmt
-	;
-	where-construct-body :
-		where-body-construct-list
-		masked-elsewhere-stmt-list
-		elsewhere-stmt-list
-	|	where-body-construct-list
-		masked-elsewhere-stmt-list
-	;
-	where-body-construct-list :
-		where-body-construct-list where-body-construct
-	|	
-	;
-	masked-elsewhere-stmt-list :
-		masked-elsewhere-stmt-list masked-elsewhere-stmt where-body-construct-list 
-	|
-	;
-	elsewhere-stmt-list :
-		elsewhere-stmt-list elsewhere-stmt where-body-construct-list
-	|
 	;
 
 /*
 	R743 where-construct-stmt is [where-construct-name:] WHERE ( mask-expr )
 */
 	where-construct-stmt :
-		NAME_LITERAL ':' 'WHERE' '(' expr ')' stmt-end
-	|	'WHERE' '(' expr ')' stmt-end
+		( NAME_LITERAL COLON ) ? WHERE LEFT_PARENTHESIS expr RIGHT_PARENTHESIS stmt-end
 	;
 
 /*
@@ -2846,30 +2893,21 @@
 	R747 masked-elsewhere-stmt is ELSEWHERE (mask-expr) [where-construct-name]
 */
 	masked-elsewhere-stmt :
-		'ELSE' 'WHERE' '(' expr ')' NAME_LITERAL stmt-end
-	|	'ELSE' 'WHERE' '(' expr ')' stmt-end
-	|	'ELSEWHERE' '(' expr ')' NAME_LITERAL stmt-end
-	|	'ELSEWHERE' '(' expr ')' stmt-end
+		ELSE_WHERE LEFT_PARENTHESIS expr RIGHT_PARENTHESIS NAME_LITERAL ? stmt-end
 	;
 
 /*
 	R748 elsewhere-stmt is ELSEWHERE [where-construct-name]
 */
 	elsewhere-stmt :
-		'ELSE' 'WHERE' NAME_LITERAL stmt-end
-	|	'ELSE' 'WHERE' stmt-end 
-	|	'ELSEWHERE' NAME_LITERAL stmt-end
-	|	'ELSEWHERE' stmt-end 
+		ELSE_WHERE NAME_LITERAL ? stmt-end
 	;
 
 /*
 	R749 end-where-stmt is END WHERE [where-construct-name]
 */
 	end-where-stmt :
-		'END' 'WHERE' NAME_LITERAL stmt-end
-	|	'END' 'WHERE' stmt-end
-	|	'ENDWHERE' NAME_LITERAL stmt-end
-	|	'ENDWHERE' stmt-end
+		END_WHERE NAME_LITERAL ? stmt-end
 	;
 
 /*
@@ -2879,41 +2917,32 @@
 */
 	forall-construct :	
 		forall-construct-stmt
-		forall-body-constructs
+		forall-body-construct *
 		end-forall-stmt
-	;
-	forall-body-constructs :
-		forall-body-constructs forall-body-construct
-	| 
 	;
 
 /*
 	R751 forall-construct-stmt is [forall-construct-name :] FORALL forall-header
 */
 	forall-construct-stmt :
-		NAME_LITERAL ':' 'FORALL' forall-header stmt-end 
-	|	'FORALL' forall-header stmt-end 
+		( NAME_LITERAL COLON ) ? FORALL forall-header stmt-end 
 	;
 
 /*
 	R752 forall-header is ( [ type-spec :: ] forall-triplet-spec-list [, scalar-mask-expr] )
 */
 	forall-header :
-		'(' type-spec ':' ':' forall-triplet-spec-list ',' expr ')'
-	|	'(' type-spec ':' ':' forall-triplet-spec-list ')'
-	|	'(' forall-triplet-spec-list ',' expr ')'
-	|	'(' forall-triplet-spec-list ')'
+		LEFT_PARENTHESIS ( type-spec COLON COLON ) ? forall-triplet-spec-list ( COMMA expr ) ? RIGHT_PARENTHESIS
 	;
 
 /*
 	R753 forall-triplet-spec is index-name = forall-limit : forall-limit [ : forall-step]
 */
 	forall-triplet-spec :
-		NAME_LITERAL '=' forall-limit ':' forall-limit ':' forall-step
-	|	NAME_LITERAL '=' forall-limit ':' forall-limit
+		NAME_LITERAL EQUALS forall-limit COLON forall-limit ( COLON forall-step ) ?
 	;
 	forall-triplet-spec-list :
-		forall-triplet-spec ( ',' forall-triplet-spec ) *
+		forall-triplet-spec ( COMMA forall-triplet-spec ) *
 	;
 
 /*
@@ -2958,17 +2987,14 @@
 	R758 end-forall-stmt is END FORALL [forall-construct-name ]
 */
 	end-forall-stmt :
-		'END' 'FORALL' NAME_LITERAL stmt-end
-	|	'END' 'FORALL' stmt-end 
-	|	'ENDFORALL' NAME_LITERAL stmt-end
-	|	'ENDFORALL' stmt-end 
+		END_FORALL NAME_LITERAL ? stmt-end
 	;
 
 /*
 	R759 forall-stmt is FORALL forall-header forall-assignment-stmt
 */
 	forall-stmt :
-		'FORALL' forall-header forall-assignment-stmt
+		FORALL forall-header forall-assignment-stmt
 	;
 
 /***************
@@ -2998,19 +3024,17 @@
 	(association-list )
 */
 	associate-stmt :
-		NAME_LITERAL ':' 'ASSOCIATE' '(' association-list ')' stmt-end
-	|	'ASSOCIATE' '(' association-list ')' stmt-end
+		( NAME_LITERAL COLON ) ? ASSOCIATE LEFT_PARENTHESIS association-list RIGHT_PARENTHESIS stmt-end
 	;
 
 /*
 	R804 association is associate-name => selector
 */
 	association :
-		NAME_LITERAL '=' '>' selector
+		NAME_LITERAL EQUALS GREATER_THAN selector
 	;
 	association-list :
-		association-list ',' association
-	|	association
+		association ( COMMA association ) *
 	;
 
 /*
@@ -3026,10 +3050,7 @@
 	R806 end-associate-stmt is END ASSOCIATE [ associate-construct-name ]
 */
 	end-associate-stmt :
-		'END' 'ASSOCIATE' NAME_LITERAL stmt-end
-	|	'END' 'ASSOCIATE' stmt-end 
-	|	'ENDASSOCIATE' NAME_LITERAL stmt-end
-	|	'ENDASSOCIATE' stmt-end 
+		END_ASSOCIATE NAME_LITERAL ? stmt-end
 	;
 
 /*
@@ -3049,18 +3070,14 @@
 	R808 block-stmt is [ block-construct-name : ] BLOCK
 */
 	block-stmt :
-		NAME_LITERAL ':' 'BLOCK' stmt-end
-	|	'BLOCK' stmt-end
+		( NAME_LITERAL COLON ) ? BLOCK stmt-end
 	;
 
 /*
 	R809 end-block-stmt is END BLOCK [ block-construct-name ]
 */
 	end-block-stmt :
-		'END' 'BLOCK' NAME_LITERAL stmt-end
-	|	'END' 'BLOCK' stmt-end
-	|	'ENDBLOCK' NAME_LITERAL stmt-end
-	|	'ENDBLOCK' stmt-end 
+		END_BLOCK NAME_LITERAL ? stmt-end
 	;
 
 /*
@@ -3078,18 +3095,14 @@
 	R811 critical-stmt is [ critical-construct-name : ] CRITICAL
 */
 	critical-stmt :
-		NAME_LITERAL ':' 'CRITICAL' stmt-end
-	|	'CRITICAL' stmt-end
+		( NAME_LITERAL COLON ) ? CRITICAL stmt-end
 	;
 
 /*
 	R812 end-critical-stmt is END CRITICAL [ critical-construct-name ]
 */
 	end-critical-stmt :
-		'END' 'CRITICAL' NAME_LITERAL stmt-end
-	|	'END' 'CRITICAL' stmt-end 
-	|	'ENDCRITICAL' NAME_LITERAL stmt-end
-	|	'ENDCRITICAL' stmt-end 
+		END_CRITICAL NAME_LITERAL ? stmt-end
 	;
 
 /*
@@ -3125,20 +3138,14 @@
 	R816 label-do-stmt is [ do-construct-name : ] DO label [ loop-control ]
 */
 	label-do-stmt :
-		NAME_LITERAL ':' 'DO' INT_LITERAL_CONSTANT loop-control stmt-end
-	|	NAME_LITERAL ':' 'DO' INT_LITERAL_CONSTANT stmt-end 
-	|	'DO' INT_LITERAL_CONSTANT loop-control stmt-end
-	|	'DO' INT_LITERAL_CONSTANT stmt-end 
+		( NAME_LITERAL COLON ) ? DO INT_LITERAL_CONSTANT loop-control ? stmt-end
 	;
 
 /*
 	R817 nonlabel-do-stmt is [ do-construct-name : ] DO [ loop-control ]
 */
 	nonlabel-do-stmt :
-		NAME_LITERAL ':' 'DO' loop-control stmt-end
-	|	NAME_LITERAL ':' 'DO' stmt-end 
-	|	'DO' loop-control stmt-end
-	|	'DO' stmt-end
+		( NAME_LITERAL COLON ) ? DO loop-control ? stmt-end
 	;
 
 /*
@@ -3148,14 +3155,9 @@
 	or [ , ] CONCURRENT forall-header
 */
 	loop-control :
-		',' NAME_LITERAL '=' expr ',' expr ',' expr
-	|	',' NAME_LITERAL '=' expr ',' expr
-	|	NAME_LITERAL '=' expr ',' expr ',' expr
-	|	NAME_LITERAL '=' expr ',' expr
-	|	',' 'WHILE' '(' expr ')'
-	|	'WHILE' '(' expr ')'
-	|	',' 'CONCURRENT' forall-header
-	|	'CONCURRENT' forall-header
+		COMMA ? NAME_LITERAL EQUALS expr COMMA expr ( COMMA expr ) ?
+	|	COMMA ? WHILE LEFT_PARENTHESIS expr RIGHT_PARENTHESIS
+	|	COMMA ? 'CONCURRENT' forall-header
 	;
 
 /*
@@ -3183,10 +3185,7 @@
 R822 end-do-stmt is END DO [ do-construct-name ]
 */
 	end-do-stmt :
-		'END' 'DO' NAME_LITERAL stmt-end
-	|	'END' 'DO' stmt-end
-	|	'ENDDO' NAME_LITERAL stmt-end
-	|	'ENDDO' stmt-end
+		END_DO NAME_LITERAL ? stmt-end
 	;
 
 /*
@@ -3264,8 +3263,7 @@ R822 end-do-stmt is END DO [ do-construct-name ]
 	R831 cycle-stmt is CYCLE [ do-construct-name ]
 */
 	cycle-stmt :
-		'CYCLE' NAME_LITERAL stmt-end
-	|	'CYCLE' stmt-end
+		CYCLE NAME_LITERAL ? stmt-end
 	;
 
 /*
@@ -3280,63 +3278,46 @@ R822 end-do-stmt is END DO [ do-construct-name ]
 	if-construct :
 		if-then-stmt
 		block
-		else-if-constructs
-		else-construct
+		( else-if-stmt 
+		block ) *
+		( else-stmt
+		block ) *
 		end-if-stmt
-	;
-	else-if-constructs :
-		else-if-constructs else-if-construct
-	|
-	;
-	else-if-construct :
-		else-if-stmt block
-	;
-	else-construct:
-		else-stmt block
-	|
 	;
 
 /*
 	R833 if-then-stmt is [ if-construct-name : ] IF ( scalar-logical-expr ) THEN
 */
 	if-then-stmt :
-		NAME_LITERAL ':' 'IF' '(' expr ')' 'THEN' stmt-end
-	|	'IF' '(' expr ')' 'THEN' stmt-end
+		( NAME_LITERAL COLON ) ? IF LEFT_PARENTHESIS expr RIGHT_PARENTHESIS THEN stmt-end
 	;
 
 /*
 	R834 else-if-stmt is ELSE IF ( scalar-logical-expr ) THEN [ if-construct-name ]
 */
 	else-if-stmt :
-		'ELSE' 'IF' '(' expr ')' 'THEN' NAME_LITERAL stmt-end
-	|	'ELSE' 'IF' '(' expr ')' 'THEN' stmt-end
-	|	'ELSEIF' '(' expr ')' 'THEN' NAME_LITERAL stmt-end
-	|	'ELSEIF' '(' expr ')' 'THEN' stmt-end
+		ELSE_IF LEFT_PARENTHESIS expr RIGHT_PARENTHESIS THEN NAME_LITERAL ? stmt-end
 	;
 
 /*
 	R835 else-stmt is ELSE [ if-construct-name ]
 */
 	else-stmt :
-		'ELSE' NAME_LITERAL stmt-end
-	|	'ELSE' stmt-end
+		ELSE NAME_LITERAL ? stmt-end
 	;
 
 /*
 	R836 end-if-stmt is END IF [ if-construct-name ]
 */
 	end-if-stmt :
-		'END' 'IF' NAME_LITERAL stmt-end
-	|	'END' 'IF' stmt-end
-	|	'ENDIF' NAME_LITERAL stmt-end
-	|	'ENDIF' stmt-end
+		END_IF NAME_LITERAL ? stmt-end
 	;
 
 /*
 	R837 if-stmt is IF ( scalar-logical-expr ) action-stmt
 */
 	if-stmt :
-		'IF' '(' expr ')' action-stmt 
+		IF LEFT_PARENTHESIS expr RIGHT_PARENTHESIS action-stmt 
 	;
 
 /*
@@ -3347,7 +3328,8 @@ R822 end-do-stmt is END DO [ do-construct-name ]
 */
 	case-construct :
 		select-case-stmt
-		( case-stmt block ) *
+		( case-stmt 
+		block ) *
 		end-select-stmt
 	;
 
@@ -3355,28 +3337,21 @@ R822 end-do-stmt is END DO [ do-construct-name ]
 	R839 select-case-stmt is [ case-construct-name : ] SELECT CASE ( case-expr )
 */
 	select-case-stmt :
-		NAME_LITERAL ':' 'SELECT' 'CASE' '(' expr ')' stmt-end
-	|	'SELECT' 'CASE' '(' expr ')' stmt-end
-	|	NAME_LITERAL ':' 'SELECTCASE' '(' expr ')' stmt-end
-	|	'SELECTCASE' '(' expr ')' stmt-end
+		( NAME_LITERAL COLON ) ? SELECT_CASE LEFT_PARENTHESIS expr RIGHT_PARENTHESIS stmt-end
 	;
 
 /*
 	R840 case-stmt is CASE case-selector [case-construct-name]
 */
 	case-stmt :
-		'CASE' case-selector NAME_LITERAL stmt-end
-	|	'CASE' case-selector stmt-end
+		CASE case-selector NAME_LITERAL ? stmt-end
 	;
 
 /*
 	R841 end-select-stmt is END SELECT [ case-construct-name ]
 */
 	end-select-stmt :
-		'END' 'SELECT' NAME_LITERAL stmt-end
-	|	'END' 'SELECT' stmt-end
-	|	'ENDSELECT' NAME_LITERAL stmt-end
-	|	'ENDSELECT' stmt-end
+		END_SELECT NAME_LITERAL ? stmt-end
 	;
 
 /*
@@ -3390,7 +3365,7 @@ R822 end-do-stmt is END DO [ do-construct-name ]
 	or DEFAULT
 */
 	case-selector :
-		'(' case-value-range-list ')'
+		LEFT_PARENTHESIS case-value-range-list RIGHT_PARENTHESIS
 	|	'DEFAULT'
 	;
 
@@ -3402,12 +3377,12 @@ R822 end-do-stmt is END DO [ do-construct-name ]
 */
 	case-value-range :
 		case-value
-	|	case-value ':'
-	|	':' case-value
-	|	case-value ':' case-value
+	|	case-value COLON
+	|	COLON case-value
+	|	case-value COLON case-value
 	;
 	case-value-range-list :
-		case-value-range ( ',' case-value-range ) *
+		case-value-range ( COMMA case-value-range ) *
 	;
 
 /*
@@ -3434,14 +3409,7 @@ R822 end-do-stmt is END DO [ do-construct-name ]
 	( [ associate-name => ] selector )
 */
 	select-type-stmt :
-		NAME_LITERAL ':' 'SELECT' 'TYPE'	'(' NAME_LITERAL '=' '>' selector ')' stmt-end
-	|	NAME_LITERAL ':' 'SELECT' 'TYPE'	'(' selector ')' stmt-end
-	|	'SELECT' 'TYPE'	'(' NAME_LITERAL '=' '>' selector ')' stmt-end
-	|	'SELECT' 'TYPE'	'(' selector ')' stmt-end
-	|	NAME_LITERAL ':' 'SELECTTYPE'	'(' NAME_LITERAL '=' '>' selector ')' stmt-end
-	|	NAME_LITERAL ':' 'SELECTTYPE'	'(' selector ')' stmt-end
-	|	'SELECTTYPE' '(' NAME_LITERAL '=' '>' selector ')' stmt-end
-	|	'SELECTTYPE' '(' selector ')' stmt-end
+		( NAME_LITERAL COLON ) ? SELECT_TYPE LEFT_PARENTHESIS ( NAME_LITERAL EQUALS GREATER_THAN ) ? selector RIGHT_PARENTHESIS stmt-end
 	;
 
 /*
@@ -3450,78 +3418,65 @@ R822 end-do-stmt is END DO [ do-construct-name ]
 	or CLASS DEFAULT [ select-construct-name ]
 */
 	type-guard-stmt :
-		'TYPE' 'IS' '(' type-spec ')' NAME_LITERAL stmt-end
-	|	'TYPE' 'IS' '(' type-spec ')' stmt-end
-	|	'CLASS' 'IS' '(' derived-type-spec ')' NAME_LITERAL stmt-end
-	|	'CLASS' 'IS' '(' derived-type-spec ')' stmt-end
-	|	'CLASS' 'DEFAULT' NAME_LITERAL stmt-end
-	|	'CLASS' 'DEFAULT' stmt-end
+		TYPE_IS LEFT_PARENTHESIS type-spec RIGHT_PARENTHESIS NAME_LITERAL ? stmt-end
+	|	CLASS_IS LEFT_PARENTHESIS derived-type-spec RIGHT_PARENTHESIS NAME_LITERAL ? stmt-end
+	|	CLASS_DEFAULT NAME_LITERAL ? stmt-end
 	;
 
 /*
 	R849 end-select-type-stmt is END SELECT [ select-construct-name ]
 */
 	end-select-type-stmt :
-		'END' 'SELECT' NAME_LITERAL stmt-end
-	|	'END' 'SELECT' stmt-end
-	|	'ENDSELECT' NAME_LITERAL stmt-end
-	|	'ENDSELECT' stmt-end
+		END_SELECT NAME_LITERAL ? stmt-end
 	;
 
 /*
 	R850 exit-stmt is EXIT [ construct-name ]
 */
 	exit-stmt :
-		'EXIT' NAME_LITERAL stmt-end
-	|	'EXIT' stmt-end
+		EXIT NAME_LITERAL ? stmt-end
 	;
 
 /*
 	R851 goto-stmt is GO TO label
 */
 	goto-stmt :
-		'GO' 'TO' INT_LITERAL_CONSTANT stmt-end
-	|	'GOTO' INT_LITERAL_CONSTANT stmt-end
+		GOTO INT_LITERAL_CONSTANT stmt-end
 	;
 
 /*
 	R852 computed-goto-stmt is GO TO ( label -list ) [ , ] scalar-int-expr
 */
 	computed-goto-stmt :
-		'GO' 'TO' '(' label-list ')' ',' expr stmt-end
-	|	'GO' 'TO' '(' label-list ')' expr stmt-end
-	|	'GOTO' '(' label-list ')' ',' expr stmt-end
-	|	'GOTO' '(' label-list ')' expr stmt-end
+		GOTO LEFT_PARENTHESIS label-list RIGHT_PARENTHESIS COMMA ? expr stmt-end
 	;
 
 /*
 R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 */
 	arithmetic-if-stmt :
-		'IF' '(' expr ')' INT_LITERAL_CONSTANT ',' INT_LITERAL_CONSTANT ',' INT_LITERAL_CONSTANT stmt-end
+		IF LEFT_PARENTHESIS expr RIGHT_PARENTHESIS INT_LITERAL_CONSTANT COMMA INT_LITERAL_CONSTANT COMMA INT_LITERAL_CONSTANT stmt-end
 	;
 
 /*
 	R854 continue-stmt is CONTINUE
 */
 	continue-stmt :
-		'CONTINUE' stmt-end
+		CONTINUE stmt-end
 	;
 
 /*
 	R855 stop-stmt is STOP [ stop-code ]
 */
 	stop-stmt :
-		'STOP' stop-code stmt-end
-	|	'STOP' stmt-end
+		STOP stop-code ? stmt-end
 	;
 
 /*
 	R856 error-stop-stmt is ERROR STOP [ stop-code ]
 */
 	error-stop-stmt :
-		'ERROR' 'STOP' stop-code stmt-end
-	|	'ERROR' 'STOP' stmt-end
+		ERROR_STOP stop-code ? stmt-end
 	;
 
 /*
@@ -3536,9 +3491,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	R858 sync-all-stmt is SYNC ALL [ ( [ sync-stat-list ] ) ]
 */
 	sync-all-stmt :
-		'SYNC' 'ALL' '(' sync-stat-list ')' stmt-end
-	|	'SYNC' 'ALL' '(' ')' stmt-end
-	|	'SYNC' 'ALL' stmt-end
+		SYNC_ALL ( LEFT_PARENTHESIS sync-stat-list ? RIGHT_PARENTHESIS ) ? stmt-end
 	;
 
 /*
@@ -3546,19 +3499,18 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	or ERRMSG = errmsg-variable
 */
 	sync-stat :
-		'STAT' '=' variable
-	|	'ERRMSG' '=' variable
+		'STAT' EQUALS variable
+	|	'ERRMSG' EQUALS variable
 	;
 	sync-stat-list :
-		sync-stat ( ',' sync-stat ) *
+		sync-stat ( COMMA sync-stat ) *
 	;
 
 /*
 	R860 sync-images-stmt is SYNC IMAGES ( image-set [ , sync-stat-list ] )
 */
 	sync-images-stmt :
-		'SYNC' 'IMAGES' '(' image-set ',' sync-stat-list ')' stmt-end
-	|	'SYNC' 'IMAGES' '(' image-set ')' stmt-end
+		SYNC_IMAGES LEFT_PARENTHESIS image-set ( COMMA sync-stat-list ) ? RIGHT_PARENTHESIS stmt-end
 	;
 
 /*
@@ -3567,24 +3519,21 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 */
 	image-set :
 		expr
-	|	'*'
+	|	ASTERIK
 	;
 
 /*
 	R862 sync-memory-stmt is SYNC MEMORY [ ( [ sync-stat-list ] ) ]
 */
 	sync-memory-stmt :
-		'SYNC' 'MEMORY' '(' sync-stat-list ')' stmt-end
-	|	'SYNC' 'MEMORY' '(' ')' stmt-end
-	|	'SYNC' 'MEMORY'
+		SYNC_MEMORY ( LEFT_PARENTHESIS sync-stat-list ? RIGHT_PARENTHESIS ) ? stmt-end
 	;
 
 /*
 	R863 lock-stmt is LOCK ( lock-variable [ , lock-stat-list ] )
 */
 	lock-stmt :
-		'LOCK' '(' variable ( ',' lock-stat-list ) ? ')' stmt-end
-	|	'LOCK' '(' variable ')' stmt-end
+		LOCK LEFT_PARENTHESIS variable ( COMMA lock-stat-list ) ? RIGHT_PARENTHESIS stmt-end
 	;
 
 /*
@@ -3592,19 +3541,18 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	or sync-stat
 */
 	lock-stat :
-		'ACQUIRED' 'LOCK' '=' variable
+		ACQUIRED_LOCK EQUALS variable
 	|	sync-stat
 	;
 	lock-stat-list :
-		lock-stat ( ',' lock-stat ) *
+		lock-stat ( COMMA lock-stat ) *
 	;
 
 /*
 	R865 unlock-stmt is UNLOCK ( lock-variable [ , sync-stat-list ] )
 */
 	unlock-stmt :
-		'UNLOCK' '(' variable ',' sync-stat-list ')' stmt-end
-	|	'UNLOCK' '(' variable ')' stmt-end
+		UNLOCK LEFT_PARENTHESIS variable ( COMMA sync-stat-list ) ? RIGHT_PARENTHESIS stmt-end
 	;
 
 /*
@@ -3624,7 +3572,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 */
 	io-unit :
 		file-unit-number
-	|	'*'
+	|	ASTERIK
 	|	variable
 	;
 
@@ -3645,7 +3593,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	R904 open-stmt is OPEN ( connect-spec-list )
 */
 	open-stmt :
-		'OPEN' '(' connect-spec-list ')' stmt-end
+		OPEN LEFT_PARENTHESIS connect-spec-list RIGHT_PARENTHESIS stmt-end
 	;
 
 /*
@@ -3671,30 +3619,30 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	or STATUS = scalar-default-char-expr
 */
 	connect-spec :
-		'UNIT' '=' file-unit-number
+		'UNIT' EQUALS file-unit-number
 	|	file-unit-number
-	|	'ACCESS' '=' expr
-	|	'ACTION' '=' expr
-	|	'ASYNCHRONOUS' '=' expr
-	|	'BLANK' '=' expr
-	|	'DECIMAL' '=' expr
-	|	'DELIM' '=' expr
-	|	'ENCODING' '=' expr
-	|	'ERR' '=' INT_LITERAL_CONSTANT
-	|	'FILE' '=' expr
-	|	'FORM' '=' expr
-	|	'IOMSG' '=' iomsg-variable
-	|	'IOSTAT' '=' variable
-	|	'NEWUNIT' '=' variable
-	|	'PAD' '=' expr
-	|	'POSITION' '=' expr
-	|	'RECL' '=' expr
-	|	'ROUND' '=' expr
-	|	'SIGN' '=' expr
-	|	'STATUS' '=' expr
+	|	'ACCESS' EQUALS expr
+	|	'ACTION' EQUALS expr
+	|	ASYNCHRONOUS EQUALS expr
+	|	'BLANK' EQUALS expr
+	|	'DECIMAL' EQUALS expr
+	|	'DELIM' EQUALS expr
+	|	'ENCODING' EQUALS expr
+	|	'ERR' EQUALS INT_LITERAL_CONSTANT
+	|	'FILE' EQUALS expr
+	|	'FORM' EQUALS expr
+	|	'IOMSG' EQUALS iomsg-variable
+	|	'IOSTAT' EQUALS variable
+	|	'NEWUNIT' EQUALS variable
+	|	'PAD' EQUALS expr
+	|	'POSITION' EQUALS expr
+	|	'RECL' EQUALS expr
+	|	'ROUND' EQUALS expr
+	|	'SIGN' EQUALS expr
+	|	'STATUS' EQUALS expr
 	;
 	connect-spec-list :
-		connect-spec ( ',' connect-spec ) *
+		connect-spec ( COMMA connect-spec ) *
 	;
 
 /*
@@ -3714,7 +3662,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	R908 close-stmt is CLOSE ( close-spec-list )
 */
 	close-stmt :
-		'CLOSE' '(' close-spec-list ')' stmt-end
+		CLOSE LEFT_PARENTHESIS close-spec-list RIGHT_PARENTHESIS stmt-end
 	;
 
 /*
@@ -3725,15 +3673,15 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	or STATUS = scalar-default-char-expr
 */
 	close-spec :
-		'UNIT' '=' file-unit-number
+		'UNIT' EQUALS file-unit-number
 	|	file-unit-number
-	|	'IOSTAT' '=' variable
-	|	'IOMSG' '=' iomsg-variable
-	|	'ERR' '=' INT_LITERAL_CONSTANT
-	|	'STATUS' '=' expr
+	|	'IOSTAT' EQUALS variable
+	|	'IOMSG' EQUALS iomsg-variable
+	|	'ERR' EQUALS INT_LITERAL_CONSTANT
+	|	'STATUS' EQUALS expr
 	;
 	close-spec-list :
-		close-spec ( ',' close-spec ) *
+		close-spec ( COMMA close-spec ) *
 	;
 
 /*
@@ -3741,26 +3689,22 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	or READ format [ , input-item-list ]
 */
 	read-stmt :
-		'READ' '(' io-control-spec-list ')' input-item-list stmt-end
-	|	'READ' '(' io-control-spec-list ')' stmt-end
-	|	'READ' format ',' input-item-list stmt-end
-	|	'READ' format stmt-end
+		READ LEFT_PARENTHESIS io-control-spec-list RIGHT_PARENTHESIS input-item-list ? stmt-end
+	|	READ format ( COMMA input-item-list ) ? stmt-end
 	;
 
 /*
 	R911 write-stmt is WRITE ( io-control-spec-list ) [ output-item-list ]
 */
 	write-stmt :
-		'WRITE' '(' io-control-spec-list ')' output-item-list stmt-end
-	|	'WRITE' '(' io-control-spec-list ')' stmt-end
+		WRITE LEFT_PARENTHESIS io-control-spec-list RIGHT_PARENTHESIS output-item-list ? stmt-end
 	;
 
 /*
 	R912 print-stmt is PRINT format [ , output-item-list ]
 */
 	print-stmt :
-		'PRINT' format ',' output-item-list stmt-end
-	|	'PRINT' format stmt-end
+		PRINT format ( COMMA output-item-list ) ? stmt-end
 	;
 
 /*
@@ -3786,32 +3730,32 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	or SIZE = variable
 */
 	io-control-spec :
-		'UNIT' '=' io-unit
+		'UNIT' EQUALS io-unit
 	|	io-unit
-	|	'FMT' '=' format
+	|	'FMT' EQUALS format
 	|	format
-	|	'NML' '=' NAME_LITERAL
+	|	'NML' EQUALS NAME_LITERAL
 	|	NAME_LITERAL
-	|	'ADVANCE' '=' expr
-	|	'ASYNCHRONOUS' '=' expr
-	|	'BLANK' '=' expr
-	|	'DECIMAL' '=' expr
-	|	'DELIM' '=' expr
-	|	'END' '=' INT_LITERAL_CONSTANT
-	|	'EOR' '=' INT_LITERAL_CONSTANT
-	|	'ERR' '=' INT_LITERAL_CONSTANT
-	|	'ID' '=' variable
-	|	'IOMSG' '=' iomsg-variable
-	|	'IOSTAT' '=' variable
-	|	'PAD' '=' expr
-	|	'POS' '=' expr
-	|	'REC' '=' expr
-	|	'ROUND' '=' expr
-	|	'SIGN' '=' expr
-	|	'SIZE' '=' variable
+	|	'ADVANCE' EQUALS expr
+	|	ASYNCHRONOUS EQUALS expr
+	|	'BLANK' EQUALS expr
+	|	'DECIMAL' EQUALS expr
+	|	'DELIM' EQUALS expr
+	|	END EQUALS INT_LITERAL_CONSTANT
+	|	'EOR' EQUALS INT_LITERAL_CONSTANT
+	|	'ERR' EQUALS INT_LITERAL_CONSTANT
+	|	'ID' EQUALS variable
+	|	'IOMSG' EQUALS iomsg-variable
+	|	'IOSTAT' EQUALS variable
+	|	'PAD' EQUALS expr
+	|	'POS' EQUALS expr
+	|	'REC' EQUALS expr
+	|	'ROUND' EQUALS expr
+	|	'SIGN' EQUALS expr
+	|	'SIZE' EQUALS variable
 	;
 	io-control-spec-list :
-		io-control-spec ( ',' io-control-spec ) *
+		io-control-spec ( COMMA io-control-spec ) *
 	;
 
 /*
@@ -3828,7 +3772,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	format :
 		expr
 	|	INT_LITERAL_CONSTANT
-	|	'*'
+	|	ASTERIK
 	;
 
 /*
@@ -3840,7 +3784,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	|	io-implied-do
 	;
 	input-item-list :
-		input-item ( ',' input-item ) *
+		input-item ( COMMA input-item ) *
 	;
 
 /*
@@ -3852,14 +3796,14 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	|	io-implied-do
 	;
 	output-item-list :
-		output-item ( ',' output-item ) *
+		output-item ( COMMA output-item ) *
 	;
 
 /*
 	R918 io-implied-do is ( io-implied-do-object-list , io-implied-do-control )
 */
 	io-implied-do :
-		'(' io-implied-do-object-list ',' io-implied-do-control ')'
+		LEFT_PARENTHESIS io-implied-do-object-list COMMA io-implied-do-control RIGHT_PARENTHESIS
 	;
 
 /*
@@ -3871,7 +3815,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	|	output-item
 	;
 	io-implied-do-object-list :
-		io-implied-do-object ( ',' io-implied-do-object ) *
+		io-implied-do-object ( COMMA io-implied-do-object ) *
 	;
 
 /*
@@ -3879,7 +3823,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	scalar-int-expr [ , scalar-int-expr ]
 */
 	io-implied-do-control :
-		NAME_LITERAL '=' expr ',' expr ( ',' expr ) ?
+		NAME_LITERAL EQUALS expr COMMA expr ( COMMA expr ) ?
 	;
 
 /*
@@ -3887,15 +3831,15 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	or CLASS( derived-type-spec )
 */
 	dtv-type-spec :
-		'TYPE' '(' derived-type-spec ')'
-	|	'CLASS' '(' derived-type-spec ')'
+		TYPE LEFT_PARENTHESIS derived-type-spec RIGHT_PARENTHESIS
+	|	CLASS LEFT_PARENTHESIS derived-type-spec RIGHT_PARENTHESIS
 	;
 
 /*
 	R922 wait-stmt is WAIT (wait-spec-list)
 */
 	wait-stmt :
-		'WAIT' '(' wait-spec-list ')' stmt-end
+		WAIT LEFT_PARENTHESIS wait-spec-list RIGHT_PARENTHESIS stmt-end
 	;
 
 /*
@@ -3908,17 +3852,17 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	or IOSTAT = scalar-int-variable
 */
 	wait-spec : 
-		'UNIT' '=' file-unit-number
+		'UNIT' EQUALS file-unit-number
 	|	file-unit-number
-	|	'END' '=' INT_LITERAL_CONSTANT
-	|	'EOR' '=' INT_LITERAL_CONSTANT
-	|	'ERR' '=' INT_LITERAL_CONSTANT
-	|	'ID' '=' expr
-	|	'IOMSG' '=' iomsg-variable
-	|	'IOSTAT' '=' variable
+	|	END EQUALS INT_LITERAL_CONSTANT
+	|	'EOR' EQUALS INT_LITERAL_CONSTANT
+	|	'ERR' EQUALS INT_LITERAL_CONSTANT
+	|	'ID' EQUALS expr
+	|	'IOMSG' EQUALS iomsg-variable
+	|	'IOSTAT' EQUALS variable
 	;
 	wait-spec-list :
-		wait-spec ( ',' wait-spec ) *
+		wait-spec ( COMMA wait-spec ) *
 	;
 
 /*
@@ -3926,8 +3870,8 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	or BACKSPACE ( position-spec-list )
 */
 	backspace-stmt :
-		'BACKSPACE' file-unit-number stmt-end
-	|	'BACKSPACE' '(' position-spec-list ')' stmt-end
+		BACKSPACE file-unit-number stmt-end
+	|	BACKSPACE LEFT_PARENTHESIS position-spec-list RIGHT_PARENTHESIS stmt-end
 	;
 
 /*
@@ -3935,10 +3879,8 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	or ENDFILE ( position-spec-list )
 */
 	endfile-stmt :
-		'END' 'FILE' file-unit-number stmt-end
-	|	'END' 'FILE' '(' position-spec-list ')' stmt-end
-	|	'ENDFILE' file-unit-number stmt-end
-	|	'ENDFILE' '(' position-spec-list ')' stmt-end
+		END_FILE file-unit-number stmt-end
+	|	END_FILE LEFT_PARENTHESIS position-spec-list RIGHT_PARENTHESIS stmt-end
 	;
 
 /*
@@ -3946,8 +3888,8 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	or REWIND ( position-spec-list )
 */
 	rewind-stmt :
-		'REWIND' file-unit-number stmt-end
-	|	'REWIND' '(' position-spec-list ')' stmt-end
+		REWIND file-unit-number stmt-end
+	|	REWIND LEFT_PARENTHESIS position-spec-list RIGHT_PARENTHESIS stmt-end
 	;
 
 /*
@@ -3957,14 +3899,14 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	or ERR = label
 */
 	position-spec :
-		'UNIT' '=' file-unit-number
+		'UNIT' EQUALS file-unit-number
 	|	file-unit-number
-	|	'IOMSG' '=' iomsg-variable
-	|	'IOSTAT' '=' variable
-	|	'ERR' '=' INT_LITERAL_CONSTANT
+	|	'IOMSG' EQUALS iomsg-variable
+	|	'IOSTAT' EQUALS variable
+	|	'ERR' EQUALS INT_LITERAL_CONSTANT
 	;
 	position-spec-list :
-		position-spec ( ',' position-spec ) *
+		position-spec ( COMMA position-spec ) *
 	;
 
 /*
@@ -3973,8 +3915,8 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	flush-spec-list )
 */
 	flush-stmt :
-		'FLUSH' file-unit-number stmt-end
-	|	'FLUSH' '(' flush-spec-list ')' stmt-end
+		FLUSH file-unit-number stmt-end
+	|	FLUSH LEFT_PARENTHESIS flush-spec-list RIGHT_PARENTHESIS stmt-end
 	;
 
 /*
@@ -3984,14 +3926,14 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	or ERR = label
 */
 	flush-spec : 
-		'UNIT' '=' file-unit-number
+		'UNIT' EQUALS file-unit-number
 	|	file-unit-number
-	|	'IOSTAT' '=' variable
-	|	'IOMSG' '=' iomsg-variable
-	|	'ERR' '=' INT_LITERAL_CONSTANT
+	|	'IOSTAT' EQUALS variable
+	|	'IOMSG' EQUALS iomsg-variable
+	|	'ERR' EQUALS INT_LITERAL_CONSTANT
 	;
 	flush-spec-list :
-		flush-spec ( ',' flush-spec ) *
+		flush-spec ( COMMA flush-spec ) *
 	;
 
 /*
@@ -4000,8 +3942,8 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	output-item-list
 */
 	inquire-stmt :
-		'INQUIRE' '(' inquire-spec-list ')' stmt-end
-	|	'INQUIRE' '(' 'IOLENGTH' '=' variable ')' output-item-list stmt-end
+		INQUIRE LEFT_PARENTHESIS inquire-spec-list RIGHT_PARENTHESIS stmt-end
+	|	INQUIRE LEFT_PARENTHESIS 'IOLENGTH' EQUALS variable RIGHT_PARENTHESIS output-item-list stmt-end
 	;
 
 /*
@@ -4043,46 +3985,46 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	or WRITE = scalar-default-char-variable
 */
 	inquire-spec :
-		'UNIT' '=' file-unit-number
+		'UNIT' EQUALS file-unit-number
 	|	file-unit-number
-	|	'FILE' '=' expr
-	|	'ACCESS' '=' variable
-	|	'ACTION' '=' variable
-	|	'ASYNCHRONOUS' '=' variable
-	|	'BLANK' '=' variable
-	|	'DECIMAL' '=' variable
-	|	'DELIM' '=' variable
-	|	'DIRECT' '=' variable
-	|	'ENCODING' '=' variable
-	|	'ERR' '=' INT_LITERAL_CONSTANT
-	|	'EXIST' '=' variable
-	|	'FORM' '=' variable
-	|	'FORMATTED' '=' variable
-	|	'ID' '=' expr
-	|	'IOMSG' '=' iomsg-variable
-	|	'IOSTAT' '=' variable
-	|	'NAME' '=' variable
-	|	'NAMED' '=' variable
-	|	'NEXTREC' '=' variable
-	|	'NUMBER' '=' variable
-	|	'OPENED' '=' variable
-	|	'PAD' '=' variable
-	|	'PENDING' '=' variable
-	|	'POS' '=' variable
-	|	'POSITION' '=' variable
-	|	'READ' '=' variable
-	|	'READWRITE' '=' variable
-	|	'RECL' '=' variable
-	|	'ROUND' '=' variable
-	|	'SEQUENTIAL' '=' variable
-	|	'SIGN' '=' variable
-	|	'SIZE' '=' variable
-	|	'STREAM' '=' variable
-	|	'UNFORMATTED' '=' variable
-	|	'WRITE' '=' variable
+	|	'FILE' EQUALS expr
+	|	'ACCESS' EQUALS variable
+	|	'ACTION' EQUALS variable
+	|	ASYNCHRONOUS EQUALS variable
+	|	'BLANK' EQUALS variable
+	|	'DECIMAL' EQUALS variable
+	|	'DELIM' EQUALS variable
+	|	'DIRECT' EQUALS variable
+	|	'ENCODING' EQUALS variable
+	|	'ERR' EQUALS INT_LITERAL_CONSTANT
+	|	'EXIST' EQUALS variable
+	|	'FORM' EQUALS variable
+	|	'FORMATTED' EQUALS variable
+	|	'ID' EQUALS expr
+	|	'IOMSG' EQUALS iomsg-variable
+	|	'IOSTAT' EQUALS variable
+	|	'NAME' EQUALS variable
+	|	'NAMED' EQUALS variable
+	|	'NEXTREC' EQUALS variable
+	|	'NUMBER' EQUALS variable
+	|	'OPENED' EQUALS variable
+	|	'PAD' EQUALS variable
+	|	'PENDING' EQUALS variable
+	|	'POS' EQUALS variable
+	|	'POSITION' EQUALS variable
+	|	READ EQUALS variable
+	|	'READWRITE' EQUALS variable
+	|	'RECL' EQUALS variable
+	|	'ROUND' EQUALS variable
+	|	'SEQUENTIAL' EQUALS variable
+	|	'SIGN' EQUALS variable
+	|	'SIZE' EQUALS variable
+	|	'STREAM' EQUALS variable
+	|	'UNFORMATTED' EQUALS variable
+	|	WRITE EQUALS variable
 	;
 	inquire-spec-list :
-		inquire-spec ( ',' inquire-spec ) *
+		inquire-spec ( COMMA inquire-spec ) *
 	;
 
 /***************
@@ -4093,7 +4035,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	R1001 format-stmt is FORMAT format-specification
 */
 	format-stmt :
-		'FORMAT' format-specification stmt-end
+		FORMAT format-specification stmt-end
 	;
 
 /*
@@ -4101,15 +4043,15 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	or ( [ format-items, ] unlimited-format-item )
 */
 	format-specification :
-		'(' format-items ? ')'
-	|	'(' ( format-items ',' ) ? unlimited-format-item ')'
+		LEFT_PARENTHESIS format-items ? RIGHT_PARENTHESIS
+	|	LEFT_PARENTHESIS ( format-items COMMA ) ? unlimited-format-item RIGHT_PARENTHESIS
 	;
 
 /*
 	R1003 format-items is format-item [ [ , ] format-item ] ...
 */
 	format-items :
-		format-item ( ',' ? format-item ) *
+		format-item ( COMMA ? format-item ) *
 	;
 
 /*
@@ -4123,15 +4065,15 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	|	data-edit-desc
 	|	control-edit-desc
 	|	CHAR_LITERAL_CONSTANT
-	|	r '(' format-items ')'
-	|	'(' format-items ')'
+	|	r LEFT_PARENTHESIS format-items RIGHT_PARENTHESIS
+	|	LEFT_PARENTHESIS format-items RIGHT_PARENTHESIS
 	;
 
 /*
 	R1005 unlimited-format-item is * ( format-items )
 */
 	unlimited-format-item :
-		'*' '(' format-items ')'
+		ASTERIK LEFT_PARENTHESIS format-items RIGHT_PARENTHESIS
 	;
 
 /*
@@ -4157,27 +4099,27 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	or DT [ char-literal-constant ] [ ( v-list ) ]
 */
 	data-edit-desc :
-		'I' w ( '.' m ) ?
-	|	'B' w ( '.' m ) ?
-	|	'O' w ( '.' m ) ?
-	|	'Z' w ( '.' m ) ?
-	|	'F' w '.' d
-	|	'E' w '.' d 'E' e
-	|	'E' w '.' d
-	|	'EN' w '.' d 'E' e
-	|	'EN' w '.' d
-	|	'ES' w '.' d 'E' e
-	|	'ES' w '.' d
-	|	'G' w '.' d 'E' e
-	|	'G' w '.' d
+		'I' w ( DECIMALPOINT_OR_PERIOD m ) ?
+	|	'B' w ( DECIMALPOINT_OR_PERIOD m ) ?
+	|	'O' w ( DECIMALPOINT_OR_PERIOD m ) ?
+	|	'Z' w ( DECIMALPOINT_OR_PERIOD m ) ?
+	|	'F' w DECIMALPOINT_OR_PERIOD d
+	|	'E' w DECIMALPOINT_OR_PERIOD d 'E' e
+	|	'E' w DECIMALPOINT_OR_PERIOD d
+	|	'EN' w DECIMALPOINT_OR_PERIOD d 'E' e
+	|	'EN' w DECIMALPOINT_OR_PERIOD d
+	|	'ES' w DECIMALPOINT_OR_PERIOD d 'E' e
+	|	'ES' w DECIMALPOINT_OR_PERIOD d
+	|	'G' w DECIMALPOINT_OR_PERIOD d 'E' e
+	|	'G' w DECIMALPOINT_OR_PERIOD d
 	|	'G' w
 	|	'L' w
 	|	'A' w
 	|	'A'
-	|	'D' w '.' d
-	|	'DT' CHAR_LITERAL_CONSTANT '(' v-list ')'
+	|	'D' w DECIMALPOINT_OR_PERIOD d
+	|	'DT' CHAR_LITERAL_CONSTANT LEFT_PARENTHESIS v-list RIGHT_PARENTHESIS
 	|	'DT' CHAR_LITERAL_CONSTANT
-	|	'DT' '(' v-list ')'
+	|	'DT' LEFT_PARENTHESIS v-list RIGHT_PARENTHESIS
 	|	'DT'
 	;
 
@@ -4216,7 +4158,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 		signed-int-literal-constant
 	;
 	v-list :
-		v-list ',' v 
+		v-list COMMA v 
 	|	v
 	;
 
@@ -4232,8 +4174,8 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 */
 	control-edit-desc :
 		position-edit-desc
-	|	r ? '/'
-	|	':'
+	|	r ? SLASH
+	|	COLON
 	|	sign-edit-desc
 	|	k 'P'
 	|	blank-interp-edit-desc
@@ -4339,7 +4281,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 */
 	main-program :
 		program-stmt ?
-		specification-part
+		specification-part ?
 		execution-part ?
 		internal-subprogram-part ?
 		end-program-stmt
@@ -4349,18 +4291,15 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	R1102 program-stmt is PROGRAM program-name
 */
 	program-stmt :
-		'PROGRAM' NAME_LITERAL stmt-end
+		PROGRAM NAME_LITERAL stmt-end
 	;
 
 /*
 	R1103 end-program-stmt is END [ PROGRAM [ program-name ] ]
 */
 	end-program-stmt :
-		'END' 'PROGRAM' NAME_LITERAL stmt-end
-	|	'ENDPROGRAM' NAME_LITERAL stmt-end
-	|	'END' 'PROGRAM' stmt-end 
-	|	'ENDPROGRAM' stmt-end 
-	|	'END' stmt-end
+		END_PROGRAM NAME_LITERAL ? stmt-end
+	|	END stmt-end
 	;
 
 /*
@@ -4380,18 +4319,15 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	R1105 module-stmt is MODULE module-name
 */
 	module-stmt :
-		'MODULE' NAME_LITERAL stmt-end
+		MODULE NAME_LITERAL stmt-end
 	;
 
 /*
 	R1106 end-module-stmt is END [ MODULE [ module-name ] ]
 */
 	end-module-stmt :
-		'END' 'MODULE' NAME_LITERAL stmt-end
-	|	'ENDMODULE' NAME_LITERAL stmt-end
-	|	'END' 'MODULE' stmt-end
-	|	'ENDMODULE' stmt-end
-	|	'END' stmt-end
+		END_MODULE NAME_LITERAL ? stmt-end
+	|	END stmt-end
 	;
 
 /*
@@ -4420,8 +4356,8 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	ONLY : [ only-list ]
 */
 	use-stmt :
-		'USE' ( ( ',' module-nature ) ? ':' ':' ) ? NAME_LITERAL ( ',' rename-list ) ? stmt-end
-	|	'USE' ( ( ',' module-nature ) ? ':' ':' ) ? NAME_LITERAL ',' 'ONLY' ':' only-list ? stmt-end
+		USE ( ( COMMA module-nature ) ? COLON COLON ) ? NAME_LITERAL ( COMMA rename-list ) ? stmt-end
+	|	USE ( ( COMMA module-nature ) ? COLON COLON ) ? NAME_LITERAL COMMA ONLY COLON only-list ? stmt-end
 	;
 
 /*
@@ -4429,8 +4365,8 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	or NON INTRINSIC
 */
 	module-nature :
-		'INTRINSIC'
-	|	'NON' 'INTRINSIC'
+		INTRINSIC
+	|	NON_INTRINSIC
 	;
 
 /*
@@ -4439,12 +4375,11 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	OPERATOR (use-defined-operator)
 */
 	rename :
-		NAME_LITERAL '=' '>' NAME_LITERAL
-	|	'OPERATOR' '(' defined-operator ')' '=' '>'	'OPERATOR' '(' defined-operator ')'
+		NAME_LITERAL EQUALS GREATER_THAN NAME_LITERAL
+	|	OPERATOR LEFT_PARENTHESIS defined-operator RIGHT_PARENTHESIS EQUALS GREATER_THAN OPERATOR LEFT_PARENTHESIS defined-operator RIGHT_PARENTHESIS
 	;
 	rename-list :
-		rename-list ',' rename
-	|	rename
+		rename ( COMMA rename ) *
 	;
 
 /*
@@ -4458,7 +4393,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	|	rename
 	;
 	only-list :
-		only ( ',' only ) *
+		only ( COMMA only ) *
 	;
 
 /*
@@ -4490,7 +4425,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 */
 	submodule :
 		submodule-stmt
-		specification-part
+		specification-part ?
 		module-subprogram-part ?
 		end-submodule-stmt
 	;
@@ -4499,25 +4434,22 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	R1117 submodule-stmt is SUBMODULE ( parent-identifier ) submodule-name
 */
 	submodule-stmt :
-		'SUBMODULE' '(' parent-identifier ')' NAME_LITERAL stmt-end
+		SUBMODULE LEFT_PARENTHESIS parent-identifier RIGHT_PARENTHESIS NAME_LITERAL stmt-end
 	;
 
 /*
 	R1118 parent-identifier is ancestor-module-name [ : parent-submodule-name ]
 */
 	parent-identifier :
-		NAME_LITERAL ( ':' NAME_LITERAL ) ?
+		NAME_LITERAL ( COLON NAME_LITERAL ) ?
 	;
 
 /*
 	R1119 end-submodule-stmt is END [ SUBMODULE [ submodule-name ] ]
 */
 	end-submodule-stmt :
-		'END' 'SUBMODULE' NAME_LITERAL stmt-end
-	|	'ENDSUBMODULE' NAME_LITERAL stmt-end
-	|	'END' 'SUBMODULE' stmt-end
-	|	'ENDSUBMODULE' stmt-end
-	|	'END' stmt-end
+		END_SUBMODULE NAME_LITERAL ? stmt-end
+	|	END stmt-end
 	;
 
 /*
@@ -4527,7 +4459,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 */
 	block-data :
 		block-data-stmt
-		specification-part
+		specification-part ?
 		end-block-data-stmt
 	;
 
@@ -4535,24 +4467,15 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	R1121 block-data-stmt is BLOCK DATA [ block-data-name ]
 */
 	block-data-stmt :
-		'BLOCK' 'DATA' NAME_LITERAL stmt-end
-	|	'BLOCK' 'DATA' stmt-end
-	|	'BLOCKDATA' NAME_LITERAL stmt-end
-	|	'BLOCKDATA' stmt-end
+		BLOCK_DATA NAME_LITERAL ? stmt-end
 	;
 
 /*
 	R1122 end-block-data-stmt is END [ BLOCK DATA [ block-data-name ] ]
 */
 	end-block-data-stmt :
-		'END' 'BLOCK' 'DATA' NAME_LITERAL stmt-end
-	|	'ENDBLOCK' 'DATA' NAME_LITERAL stmt-end
-	|	'END' 'BLOCKDATA' NAME_LITERAL stmt-end
-	|	'ENDBLOCKDATA' NAME_LITERAL stmt-end
-	|	'END' 'BLOCK' 'DATA' stmt-end
-	|	'ENDBLOCK' 'DATA' stmt-end
-	|	'END' 'BLOCKDATA' stmt-end
-	|	'ENDBLOCKDATA' stmt-end
+		END_BLOCK_DATA NAME_LITERAL ? stmt-end
+	|	END stmt-end
 	;
 
 /***************
@@ -4584,19 +4507,15 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	or ABSTRACT INTERFACE
 */
 	interface-stmt :
-		'INTERFACE' generic-spec stmt-end
-	|	'INTERFACE' stmt-end
-	|	'ABSTRACT' 'INTERFACE' stmt-end
+		INTERFACE generic-spec ? stmt-end
+	|	ABSTRACT INTERFACE stmt-end
 	;
 
 /*
 	R1204 end-interface-stmt is END INTERFACE [ generic-spec ]
 */
 	end-interface-stmt :
-		'END' 'INTERFACE' generic-spec stmt-end
-	|	'END' 'INTERFACE' stmt-end
-	|	'ENDINTERFACE' generic-spec stmt-end
-	|	'ENDINTERFACE' stmt-end
+		END_INTERFACE generic-spec ? stmt-end
 	;
 
 /*
@@ -4608,20 +4527,15 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	end-subroutine-stmt
 */
 	interface-body :
-		function-stmt specification-part end-function-stmt
-	|	function-stmt end-function-stmt
-	|	subroutine-stmt specification-part end-subroutine-stmt
-	|	subroutine-stmt end-subroutine-stmt
+		function-stmt specification-part ? end-function-stmt
+	|	subroutine-stmt specification-part ? end-subroutine-stmt
 	;
 
 /*
 	R1206 procedure-stmt is [ MODULE ] PROCEDURE [ :: ] procedure-name-list
 */
 	procedure-stmt :
-		'MODULE' 'PROCEDURE' ':' ':' name-list stmt-end
-	|	'MODULE' 'PROCEDURE' name-list stmt-end
-	|	'PROCEDURE' ':' ':' name-list stmt-end
-	|	'PROCEDURE' name-list stmt-end
+		MODULE ? PROCEDURE ( COLON COLON ) ? name-list stmt-end
 	;
 
 /*
@@ -4632,8 +4546,8 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 */
 	generic-spec :
 		NAME_LITERAL
-	|	'OPERATOR' '(' defined-operator ')'
-	|	'ASSIGNMENT' '(' '=' ')'
+	|	OPERATOR LEFT_PARENTHESIS defined-operator RIGHT_PARENTHESIS
+	|	'ASSIGNMENT' LEFT_PARENTHESIS EQUALS RIGHT_PARENTHESIS
 	|	defined-io-generic-spec
 	;
 
@@ -4644,26 +4558,24 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	or WRITE (UNFORMATTED)
 */
 	defined-io-generic-spec :
-		'READ' '(' 'FORMATTED' ')'
-	|	'READ' '(' 'UNFORMATTED' ')'
-	|	'WRITE' '(' 'FORMATTED' ')'
-	|	'WRITE' '(' 'UNFORMATTED' ')'
+		READ LEFT_PARENTHESIS 'FORMATTED' RIGHT_PARENTHESIS
+	|	READ LEFT_PARENTHESIS 'UNFORMATTED' RIGHT_PARENTHESIS
+	|	WRITE LEFT_PARENTHESIS 'FORMATTED' RIGHT_PARENTHESIS
+	|	WRITE LEFT_PARENTHESIS 'UNFORMATTED' RIGHT_PARENTHESIS
 	;
 
 /*
 	R1209 import-stmt is IMPORT [[ :: ] import-name-list
 */
 	import-stmt :
-		'IMPORT' ':' ':' name-list stmt-end
-	|	'IMPORT' name-list stmt-end
+		IMPORT ( COLON COLON ) ? name-list stmt-end
 	;
 
 /*
 	R1210 external-stmt is EXTERNAL [ :: ] external-name-list
 */
 	external-stmt :
-		'EXTERNAL' ':' ':' name-list stmt-end
-	|	'EXTERNAL' name-list stmt-end
+		EXTERNAL ( COLON COLON ) ? name-list stmt-end
 	;
 
 /*
@@ -4671,8 +4583,8 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	[ [ , proc-attr-spec ] ... :: ] proc-decl-list
 */
 	procedure-declaration-stmt :
-		'PROCEDURE' '(' proc-interface ? ')' 
-		( ( ',' proc-attr-spec ) * ':' ':' ) ? 
+		PROCEDURE LEFT_PARENTHESIS proc-interface ? RIGHT_PARENTHESIS 
+		( ( COMMA proc-attr-spec ) * COLON COLON ) ? 
 		proc-decl-list stmt-end
 	;
 
@@ -4696,20 +4608,20 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	proc-attr-spec :
 		access-spec
 	|	proc-language-binding-spec
-	|	'INTENT' ( intent-spec )
-	|	'OPTIONAL'
-	|	'POINTER'
-	|	'SAVE'
+	|	INTENT LEFT_PARENTHESIS intent-spec RIGHT_PARENTHESIS
+	|	OPTIONAL
+	|	POINTER
+	|	SAVE
 	;
 
 /*
 	R1214 proc-decl is procedure-entity-name [ => proc-pointer-init ]
 */
 	proc-decl :
-		NAME_LITERAL ( '=' '>' proc-pointer-init ) ?
+		NAME_LITERAL ( EQUALS GREATER_THAN proc-pointer-init ) ?
 	;
 	proc-decl-list :
-		proc-decl ( ',' proc-decl ) *
+		proc-decl ( COMMA proc-decl ) *
 	;
 
 /*
@@ -4738,22 +4650,21 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	R1218 intrinsic-stmt is INTRINSIC [ :: ] intrinsic-procedure-name-list
 */
 	intrinsic-stmt :
-		'INTRINSIC' ':' ':' name-list stmt-end
-	|	'INTRINSIC' name-list stmt-end
+		INTRINSIC ( COLON COLON ) ? name-list stmt-end
 	;
 
 /*
 	R1219 function-reference is procedure-designator ( [ actual-arg-spec-list ] )
 */
 	function-reference :
-		procedure-designator '(' actual-arg-spec-list ? ')'
+		procedure-designator LEFT_PARENTHESIS actual-arg-spec-list ? RIGHT_PARENTHESIS
 	;
 
 /*
 	R1220 call-stmt is CALL procedure-designator [ ( [ actual-arg-spec-list ] ) ]
 */
 	call-stmt :
-		'CALL' procedure-designator ( '(' actual-arg-spec-list ?  ')' ) ? stmt-end
+		CALL procedure-designator ( LEFT_PARENTHESIS actual-arg-spec-list ?  RIGHT_PARENTHESIS ) ? stmt-end
 	;
 
 /*
@@ -4763,7 +4674,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 */
 	procedure-designator :
 		NAME_LITERAL
-	|	data-ref '%' NAME_LITERAL
+	|	data-ref PERCENT NAME_LITERAL
 	|	proc-component-ref
 	;
 
@@ -4771,11 +4682,10 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	R1222 actual-arg-spec is [ keyword = ] actual-arg
 */
 	actual-arg-spec :
-		( NAME_LITERAL '=' ) ? actual-arg
+		( NAME_LITERAL EQUALS ) ? actual-arg
 	;
 	actual-arg-spec-list :
-		actual-arg-spec-list ',' actual-arg-spec
-	|	actual-arg-spec
+		actual-arg-spec ( COMMA actual-arg-spec ) *
 	;
 
 /*
@@ -4786,18 +4696,18 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	or alt-return-spec
 */
 	actual-arg :
-		NAME_LITERAL
+//		NAME_LITERAL
 //	|	proc-component-ref
-	|	alt-return-spec
+		alt-return-spec
 //	|	expr
-	|	variable ( '%' NAME_LITERAL ) ?
+	|	variable ( PERCENT NAME_LITERAL ) ?
 	;
 
 /*
 	R1224 alt-return-spec is * label
 */
 	alt-return-spec :
-		'*' INT_LITERAL_CONSTANT
+		ASTERIK INT_LITERAL_CONSTANT
 	;
 
 /*
@@ -4817,11 +4727,11 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 */
 	prefix-spec :
 		declaration-type-spec
-	|	'ELEMENTAL'
-	|	'IMPURE'
-	|	'MODULE'
-	|	'PURE'
-	|	'RECURSIVE'
+	|	ELEMENTAL
+	|	IMPURE
+	|	MODULE
+	|	PURE
+	|	RECURSIVE
 	;
 
 /*
@@ -4844,7 +4754,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	( [ dummy-arg-name-list ] ) [ sufix ]
 */
 	function-stmt : 
-		prefix ? 'FUNCTION' NAME_LITERAL '(' name-list ? ')' sufix ? stmt-end
+		prefix ? FUNCTION NAME_LITERAL LEFT_PARENTHESIS name-list ? RIGHT_PARENTHESIS sufix ? stmt-end
 	;
 
 /*
@@ -4865,21 +4775,16 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	or RESULT ( result-name ) [ proc-language-binding-spec ]
 */
 	sufix :
-		proc-language-binding-spec 'RESULT' '(' NAME_LITERAL ')'
-	|	proc-language-binding-spec
-	|	'RESULT' '(' NAME_LITERAL ')' proc-language-binding-spec
-	|	'RESULT' '(' NAME_LITERAL ')'
+		proc-language-binding-spec ( RESULT LEFT_PARENTHESIS NAME_LITERAL RIGHT_PARENTHESIS ) ?
+	|	RESULT LEFT_PARENTHESIS NAME_LITERAL RIGHT_PARENTHESIS proc-language-binding-spec ?
 	;
 
 /*
 	R1232 end-function-stmt is END [ FUNCTION [ function-name ] ]
 */
 	end-function-stmt :
-		'END' 'FUNCTION' NAME_LITERAL stmt-end
-	|	'ENDFUNCTION' NAME_LITERAL stmt-end
-	|	'END' 'FUNCTION' stmt-end
-	|	'ENDFUNCTION' stmt-end
-	|	'END' stmt-end
+		END_FUNCTION NAME_LITERAL ? stmt-end
+	|	END stmt-end
 	;
 
 /*
@@ -4891,14 +4796,10 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 */
 	subroutine-subprogram :
 		subroutine-stmt
-		subroutine-body
+		specification-part ?
+		execution-part ?
+		internal-subprogram-part ?
 		end-subroutine-stmt
-	;
-	subroutine-body :
-		specification-part execution-part internal-subprogram-part
-	|	specification-part execution-part
-	|	specification-part internal-subprogram-part
-	|	specification-part
 	;
 
 /*
@@ -4906,16 +4807,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	[ ( [ dummy-arg-list ] ) [ proc-language-binding-spec ] ]
 */
 	subroutine-stmt :
-		prefix 'SUBROUTINE' NAME_LITERAL '(' dummy-arg-list ')' proc-language-binding-spec stmt-end
-	|	prefix 'SUBROUTINE' NAME_LITERAL '(' ')' proc-language-binding-spec stmt-end
-	|	prefix 'SUBROUTINE' NAME_LITERAL '(' dummy-arg-list ')' stmt-end 
-	|	prefix 'SUBROUTINE' NAME_LITERAL '(' ')' stmt-end 
-	|	prefix 'SUBROUTINE' NAME_LITERAL stmt-end
-	|	'SUBROUTINE' NAME_LITERAL '(' dummy-arg-list ')' proc-language-binding-spec stmt-end
-	|	'SUBROUTINE' NAME_LITERAL '(' ')' proc-language-binding-spec stmt-end
-	|	'SUBROUTINE' NAME_LITERAL '(' dummy-arg-list ')' stmt-end 
-	|	'SUBROUTINE' NAME_LITERAL '(' ')' stmt-end 
-	|	'SUBROUTINE' NAME_LITERAL stmt-end
+		prefix ? SUBROUTINE NAME_LITERAL ( LEFT_PARENTHESIS dummy-arg-list ? RIGHT_PARENTHESIS proc-language-binding-spec ? ) ? stmt-end
 	;
 
 /*
@@ -4924,22 +4816,18 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 */
 	dummy-arg :
 		NAME_LITERAL
-	|	'*'
+	|	ASTERIK
 	;
 	dummy-arg-list :
-		dummy-arg-list ',' dummy-arg 
-	|	dummy-arg
+		dummy-arg ( COMMA dummy-arg ) * 
 	;
 
 /*
 	R1236 end-subroutine-stmt is END [ SUBROUTINE [ subroutine-name ] ]
 */
 	end-subroutine-stmt :
-		'END' 'SUBROUTINE' NAME_LITERAL stmt-end
-	|	'ENDSUBROUTINE' NAME_LITERAL stmt-end
-	|	'END' 'SUBROUTINE' stmt-end
-	|	'ENDSUBROUTINE' stmt-end
-	|	'END' stmt-end
+		END_SUBROUTINE NAME_LITERAL ? stmt-end
+	|	END stmt-end
 	;
 
 /*
@@ -4951,7 +4839,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 */
 	separate-module-subprogram :
 		mp-subprogram-stmt
-		specification-part
+		specification-part ?
 		execution-part ?
 		internal-subprogram-part ?
 		end-mp-subprogram-stmt
@@ -4961,48 +4849,41 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	R1238 mp-subprogram-stmt is MODULE PROCEDURE procedure-name
 */
 	mp-subprogram-stmt :
-		'MODULE' 'PROCEDURE' NAME_LITERAL stmt-end
+		MODULE PROCEDURE NAME_LITERAL stmt-end
 	;
 
 /*
 	R1239 end-mp-subprogram-stmt is END [PROCEDURE [procedure-name]]
 */
 	end-mp-subprogram-stmt :
-		'END' 'PROCEDURE' NAME_LITERAL stmt-end
-	|	'ENDPROCEDURE' NAME_LITERAL stmt-end
-	|	'END' 'PROCEDURE' stmt-end
-	|	'ENDPROCEDURE' stmt-end
-	|	'END' stmt-end
+		END_PROCEDURE NAME_LITERAL ? stmt-end
+	|	END stmt-end
 	;
 
 /*
 	R1240 entry-stmt is ENTRY entry-name [ ( [ dummy-arg-list ] ) [ sufix ] ]
 */
 	entry-stmt :
-		'ENTRY' NAME_LITERAL '(' dummy-arg-list ')' sufix stmt-end
-		'ENTRY' NAME_LITERAL '(' ')' sufix stmt-end
-		'ENTRY' NAME_LITERAL '(' dummy-arg-list ')' stmt-end
-	|	'ENTRY' NAME_LITERAL stmt-end
+		ENTRY NAME_LITERAL ( LEFT_PARENTHESIS dummy-arg-list ? RIGHT_PARENTHESIS sufix ? ) ? stmt-end
 	;
 
 /*
 	R1241 return-stmt is RETURN [ scalar-int-expr ]
 */
 	return-stmt :
-		'RETURN' expr stmt-end
-	|	'RETURN' stmt-end 
+		RETURN expr ? stmt-end
 	;
 
 /*
 	R1242 contains-stmt is CONTAINS
 */
 	contains-stmt :
-		'CONTAINS' stmt-end
+		CONTAINS stmt-end
 	;
 
 /*
 	R1243 stmt-function-stmt is function-name ( [ dummy-arg-name-list ] ) = scalar-expr
 */
 	stmt-function-stmt :
-		NAME_LITERAL '(' name-list ')' '=' expr stmt-end
+		NAME_LITERAL LEFT_PARENTHESIS name-list RIGHT_PARENTHESIS EQUALS expr stmt-end
 	;

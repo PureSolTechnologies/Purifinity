@@ -11,7 +11,7 @@ import com.puresol.uhura.parser.ParserFactoryException;
 
 public class FortranGrammar extends GrammarManager {
 
-	private static final String RESOURCE = "com/puresol/coding/lang/fortran/grammar/Fortran2008.g";
+	private static final String RESOURCE = "/com/puresol/coding/lang/fortran/grammar/Fortran2008.g";
 
 	private static FortranGrammar instance = null;
 

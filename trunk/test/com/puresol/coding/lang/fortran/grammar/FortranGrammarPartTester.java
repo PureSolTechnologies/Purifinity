@@ -13,15 +13,11 @@ public class FortranGrammarPartTester extends GrammarPartTester {
 			"test/com/puresol/coding/lang/fortran/parsers");
 
 	public static boolean test(String production, String text) {
-		return test(production, text, true);
-	}
-
-	public static boolean test(String production, String text, boolean output) {
 		try {
 			Grammar grammar = FortranGrammar.getInstance().getGrammar();
 			final String PARSER_NAME = production + "-parser";
 			return test(PARSER_DIRECTORY, PARSER_NAME, grammar, production,
-					text, output);
+					text);
 		} catch (IOException e) {
 			e.printStackTrace();
 			return false;

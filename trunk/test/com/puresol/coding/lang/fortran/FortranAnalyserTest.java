@@ -3,6 +3,8 @@
  */
 package com.puresol.coding.lang.fortran;
 
+import static org.junit.Assert.*;
+
 import java.io.File;
 
 import org.apache.log4j.Level;
@@ -11,41 +13,55 @@ import org.junit.Test;
 
 import com.puresol.coding.analysis.AnalyzerException;
 
-import junit.framework.TestCase;
-
 /**
  * This test checks the JavaAnalyser.
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class FortranAnalyserTest extends TestCase {
+public class FortranAnalyserTest {
 
-	@Test
-	public void test() {
+	private void test(File file) {
 		try {
-			// Logger.getRootLogger().setLevel(Level.TRACE);
-			FortranAnalyser analyser = new FortranAnalyser(new File(
-					"test/com/puresol/coding/lang/fortran/samples/zgerc.f"));
-			analyser.parse();
-			Logger.getRootLogger().debug("done.");
-		} catch (AnalyzerException e) {
-			e.printStackTrace();
-			fail("No exception was expected!");
-		}
-	}
-
-	@Test
-	public void test2() {
-		try {
+			assertTrue(file.exists());
 			Logger.getRootLogger().setLevel(Level.DEBUG);
-			FortranAnalyser analyser = new FortranAnalyser(
-					new File(
-							"test/com/puresol/coding/lang/fortran/samples/FortranTest.f"));
+			FortranAnalyser analyser = new FortranAnalyser(file);
 			analyser.parse();
 		} catch (AnalyzerException e) {
 			e.printStackTrace();
 			fail("No exception was expected!");
 		}
 	}
+
+	// @Test
+	// public void testEmptyProgram() {
+	// test(new File(
+	// "test/com/puresol/coding/lang/fortran/samples/EmptyProgram.f"));
+	// }
+	//
+	
+	@Test
+	public void testEmptySubroutine() {
+		test(new File(
+				"test/com/puresol/coding/lang/fortran/samples/EmptySubroutine.f"));
+	}
+
+	@Test
+	public void testZGERC() {
+		test(new File("test/com/puresol/coding/lang/fortran/samples/zgerc.f"));
+	}
+
+	// @Test
+	// public void test2() {
+	// try {
+	// Logger.getRootLogger().setLevel(Level.TRACE);
+	// FortranAnalyser analyser = new FortranAnalyser(
+	// new File(
+	// "test/com/puresol/coding/lang/fortran/samples/FortranTest.f"));
+	// analyser.parse();
+	// } catch (AnalyzerException e) {
+	// e.printStackTrace();
+	// fail("No exception was expected!");
+	// }
+	// }
 }
