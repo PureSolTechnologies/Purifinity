@@ -2,7 +2,11 @@ package com.puresol.uhura.parser.lr;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.Stack;
 
 import org.apache.log4j.Logger;
@@ -107,6 +111,8 @@ public abstract class AbstractLRParser_v2 extends AbstractParser {
 	 */
 	private final Stack<BacktrackLocation_v2> backtrackStack = new Stack<BacktrackLocation_v2>();
 
+	private final Map<Integer, Set<ParserAction>> failedActions = new HashMap<Integer, Set<ParserAction>>();
+
 	/**
 	 * This field contains the parser table to be used.
 	 */
@@ -157,6 +163,23 @@ public abstract class AbstractLRParser_v2 extends AbstractParser {
 		return parserTable;
 	}
 
+	private void addFailedAction(int state, ParserAction action) {
+		Set<ParserAction> actions = failedActions.get(state);
+		if (actions == null) {
+			actions = new HashSet<ParserAction>();
+			failedActions.put(state, actions);
+		}
+		actions.add(action);
+	}
+
+	private boolean isFailedAction(int state, ParserAction action) {
+		Set<ParserAction> actions = failedActions.get(state);
+		if (actions == null) {
+			return false;
+		}
+		return actions.contains(action);
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -180,6 +203,7 @@ public abstract class AbstractLRParser_v2 extends AbstractParser {
 		streamPosition = 0;
 		stepCounter = 0;
 		stateStack.push(0);
+		failedActions.clear();
 		shiftIgnoredTokens();
 	}
 
@@ -285,15 +309,28 @@ public abstract class AbstractLRParser_v2 extends AbstractParser {
 						+ "' is ambiguous and back tracking was performed already. Trying new alternative...");
 			}
 			BacktrackLocation_v2 location = backtrackStack.pop();
-			if (location.getLastAlternative() + 1 >= actionSet
+			/*
+			 * mark last alternative as fail...
+			 */
+			addFailedAction(stateStack.peek(),
+					actionSet.getAction(location.getLastAlternative()));
+			int stepAhead = 1;
+			while ((location.getLastAlternative() + stepAhead < actionSet
+					.getActionNumber())
+					&& (isFailedAction(
+							stateStack.peek(),
+							actionSet.getAction(location.getLastAlternative()
+									+ stepAhead)))) {
+				stepAhead++;
+			}
+			if (location.getLastAlternative() + stepAhead >= actionSet
 					.getActionNumber()) {
 				logger.trace("No alternative left. Abort.");
 				return new ParserAction(ActionType.ERROR, -1);
 			}
-			if (location.getLastAlternative() + 1 < actionSet.getActionNumber()) {
-				addBacktrackLocation(location.getLastAlternative() + 1);
-			}
-			return actionSet.getAction(location.getLastAlternative() + 1);
+			addBacktrackLocation(location.getLastAlternative() + stepAhead);
+			return actionSet.getAction(location.getLastAlternative()
+					+ stepAhead);
 		}
 		/*
 		 * We have a new ambiguous state. We store backtracking information and
@@ -396,7 +433,6 @@ public abstract class AbstractLRParser_v2 extends AbstractParser {
 	 * @throws ParserException
 	 */
 	private final void error() throws ParserException {
-		Token token = getTokenStream().get(streamPosition);
 		Integer currentState = stateStack.peek();
 		parserErrors.addError(currentState);
 		if (backtrackEnabled && !backtrackStack.isEmpty()) {
@@ -408,8 +444,7 @@ public abstract class AbstractLRParser_v2 extends AbstractParser {
 		} else {
 			logger.trace("No valid action available and back tracking stack is empty. Aborting...");
 		}
-		throw new ParserException("Error! Could not parse the token stream!",
-				token);
+		throw new ParserException("Error! Could not parse the token stream!");
 	}
 
 	/**

@@ -48,7 +48,7 @@ public abstract class AbstractConstruction implements Construction {
 	 * @see com.puresol.uhura.parser.ParserRuleElementInterface#toString()
 	 */
 	@Override
-	public final String toString() {
+	public String toString() {
 		if (isTerminal) {
 			return name + ": (TERMINAL)";
 		} else {
@@ -56,7 +56,7 @@ public abstract class AbstractConstruction implements Construction {
 		}
 	}
 
-	public final String toShortString() {
+	public String toShortString() {
 		return name;
 	}
 

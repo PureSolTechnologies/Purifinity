@@ -371,7 +371,7 @@ public class GrammarConverter {
 		if ("ConstructionIdentifier".equals(productionPart.getName())) {
 			String identifier = productionPart.getChild("IDENTIFIER").getText();
 			if (tokenDefinitions.getDefinition(identifier) != null) {
-				return new Terminal(identifier);
+				return new Terminal(identifier, null);
 			} else {
 				return new NonTerminal(identifier);
 			}
@@ -380,8 +380,9 @@ public class GrammarConverter {
 			String text = stringLiteral.getText();
 			text = text.substring(1, text.length() - 1);
 			Terminal terminal = null;
-			for (TokenDefinition tokenDefinition : tokenDefinitions
-					.getDefinitions()) {
+			for (int i = 0; i < tokenDefinitions.getDefinitions().size(); i++) {
+				TokenDefinition tokenDefinition = tokenDefinitions
+						.getDefinition(i);
 				if (tokenDefinition.getPattern().matcher(text).matches()) {
 					if (terminal != null) {
 						throw new GrammarException(
@@ -389,7 +390,8 @@ public class GrammarConverter {
 										+ text
 										+ "' satisfies several token definitions and is therfore ambiguous!");
 					}
-					terminal = new Terminal(tokenDefinition.getName());
+					terminal = new Terminal(tokenDefinition.getName(), text);
+					// terminal = new Terminal(text);
 				}
 			}
 			if (terminal == null) {

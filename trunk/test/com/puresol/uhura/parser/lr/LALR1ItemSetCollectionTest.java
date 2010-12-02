@@ -118,7 +118,7 @@ public class LALR1ItemSetCollectionTest {
 							FinishTerminal.getInstance())));
 			assertTrue(itemSet4.getKernelItems().contains(
 					new LR1Item(grammar.getProductions().get(3), 1,
-							new Terminal("EQUALS"))));
+							new Terminal("EQUALS", "="))));
 
 			LR1ItemSet itemSet5 = itemSetCollection.getItemSet(5);
 			assertEquals(2, itemSet5.getKernelItems().size());
@@ -127,7 +127,7 @@ public class LALR1ItemSetCollectionTest {
 							FinishTerminal.getInstance())));
 			assertTrue(itemSet5.getKernelItems().contains(
 					new LR1Item(grammar.getProductions().get(4), 1,
-							new Terminal("EQUALS"))));
+							new Terminal("EQUALS", "="))));
 
 			LR1ItemSet itemSet6 = itemSetCollection.getItemSet(6);
 			assertEquals(1, itemSet6.getKernelItems().size());
@@ -142,7 +142,7 @@ public class LALR1ItemSetCollectionTest {
 							FinishTerminal.getInstance())));
 			assertTrue(itemSet7.getKernelItems().contains(
 					new LR1Item(grammar.getProductions().get(3), 2,
-							new Terminal("EQUALS"))));
+							new Terminal("EQUALS", "="))));
 
 			LR1ItemSet itemSet8 = itemSetCollection.getItemSet(8);
 			assertEquals(2, itemSet8.getKernelItems().size());
@@ -151,7 +151,7 @@ public class LALR1ItemSetCollectionTest {
 							FinishTerminal.getInstance())));
 			assertTrue(itemSet8.getKernelItems().contains(
 					new LR1Item(grammar.getProductions().get(5), 1,
-							new Terminal("EQUALS"))));
+							new Terminal("EQUALS", "="))));
 
 			LR1ItemSet itemSet9 = itemSetCollection.getItemSet(9);
 			assertEquals(1, itemSet9.getKernelItems().size());

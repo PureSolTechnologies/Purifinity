@@ -35,20 +35,20 @@ public class LR1StateTransitionsTest {
 			assertEquals(4, transitions.getTransitions(0).size());
 			assertTrue(transitions.getTransition(0, new NonTerminal("S")) == 1);
 			assertTrue(transitions.getTransition(0, new NonTerminal("C")) == 2);
-			assertTrue(transitions.getTransition(0, new Terminal("c")) == 3);
-			assertTrue(transitions.getTransition(0, new Terminal("d")) == 4);
+			assertTrue(transitions.getTransition(0, new Terminal("c", null)) == 3);
+			assertTrue(transitions.getTransition(0, new Terminal("d", null)) == 4);
 
 			assertEquals(0, transitions.getTransitions(1).size());
 
 			assertEquals(3, transitions.getTransitions(2).size());
 			assertTrue(transitions.getTransition(2, new NonTerminal("C")) == 5);
-			assertTrue(transitions.getTransition(2, new Terminal("c")) == 6);
-			assertTrue(transitions.getTransition(2, new Terminal("d")) == 7);
+			assertTrue(transitions.getTransition(2, new Terminal("c", null)) == 6);
+			assertTrue(transitions.getTransition(2, new Terminal("d", null)) == 7);
 
 			assertEquals(3, transitions.getTransitions(3).size());
 			assertTrue(transitions.getTransition(3, new NonTerminal("C")) == 8);
-			assertTrue(transitions.getTransition(3, new Terminal("c")) == 3);
-			assertTrue(transitions.getTransition(3, new Terminal("d")) == 4);
+			assertTrue(transitions.getTransition(3, new Terminal("c", null)) == 3);
+			assertTrue(transitions.getTransition(3, new Terminal("d", null)) == 4);
 
 			assertEquals(0, transitions.getTransitions(4).size());
 
@@ -56,8 +56,8 @@ public class LR1StateTransitionsTest {
 
 			assertEquals(3, transitions.getTransitions(6).size());
 			assertTrue(transitions.getTransition(6, new NonTerminal("C")) == 9);
-			assertTrue(transitions.getTransition(6, new Terminal("c")) == 6);
-			assertTrue(transitions.getTransition(6, new Terminal("d")) == 7);
+			assertTrue(transitions.getTransition(6, new Terminal("c", null)) == 6);
+			assertTrue(transitions.getTransition(6, new Terminal("d", null)) == 7);
 
 			assertEquals(0, transitions.getTransitions(7).size());
 

@@ -134,12 +134,21 @@ public class LR0ParserTable extends AbstractParserTable {
 				writer.write(terminal.toString());
 				writer.write(":\n");
 				if (actions.getActionNumber() > 1) {
-					writer.write("\tCONFLICT!!!\n");
+					writer.write("\tCONFLICT");
+					for (int i = 0; i < actions.getActionNumber(); i++) {
+						writer.write("!");
+					}
+					writer.write("\n");
 				}
 				for (int i = 0; i < actions.getActionNumber(); i++) {
 					ParserAction action = actions.getAction(i);
 					writer.write("\t");
 					writer.write(action.toString());
+					if (action.getAction() == ActionType.REDUCE) {
+						writer.write("\t");
+						writer.write(getGrammar().getProduction(
+								action.getParameter()).toString());
+					}
 					writer.write("\n");
 				}
 			}

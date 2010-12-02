@@ -35,7 +35,11 @@ public class Token implements Serializable, Cloneable {
 			TokenMetaData metaData) {
 		super();
 		this.name = name;
-		this.text = text;
+		if (text == null) {
+			this.text = "";
+		} else {
+			this.text = text;
+		}
 		this.visibility = visibility;
 		this.metaData = metaData;
 		final int prime = 31;
@@ -78,7 +82,7 @@ public class Token implements Serializable, Cloneable {
 	}
 
 	public Terminal getTerminal() {
-		return new Terminal(name);
+		return new Terminal(name, text);
 	}
 
 	@Override

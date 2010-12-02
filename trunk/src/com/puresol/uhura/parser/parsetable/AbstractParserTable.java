@@ -121,7 +121,16 @@ public abstract class AbstractParserTable implements ParserTable {
 		}
 		ParserActionSet set = actions.get(construction);
 		if (set == null) {
-			return ParserActionSet.getErrorSet();
+			if (construction.isTerminal()) {
+				/*
+				 * TODO This implementation of a double lookup is not nice. Is
+				 * there a chance to make this more beautiful?
+				 */
+				set = actions.get(new Terminal(construction.getName(), null));
+			}
+			if (set == null) {
+				return ParserActionSet.getErrorSet();
+			}
 		}
 		return set;
 	}
@@ -161,7 +170,7 @@ public abstract class AbstractParserTable implements ParserTable {
 		buffer.append("\n");
 		buffer.append(toColumn("|"));
 		for (Construction construction : actionTerminals) {
-			buffer.append(toColumn(construction.getName()));
+			buffer.append(toColumn(construction.toShortString()));
 		}
 		buffer.append(toColumn("|"));
 		for (Construction construction : gotoNonTerminals) {

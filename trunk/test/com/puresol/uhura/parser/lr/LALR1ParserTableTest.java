@@ -45,8 +45,8 @@ public class LALR1ParserTableTest {
 			ParserAction g6 = new ParserAction(ActionType.GOTO, 6);
 			ParserAction accept = new ParserAction(ActionType.ACCEPT, -1);
 			ParserAction error = new ParserAction(ActionType.ERROR, -1);
-			Construction c = new Terminal("c");
-			Construction d = new Terminal("d");
+			Construction c = new Terminal("c", null);
+			Construction d = new Terminal("d", null);
 			Construction finish = FinishTerminal.getInstance();
 			Construction pS = new NonTerminal("S");
 			Construction pC = new NonTerminal("C");

@@ -12,7 +12,7 @@ import com.puresol.uhura.grammar.production.EmptyTerminal;
 import com.puresol.uhura.grammar.production.Production;
 import com.puresol.uhura.grammar.production.Terminal;
 
-/**
+/**, null
  * This class calculates the FIRST sets for a given grammar. Pre-calcualted are
  * only first elements for non-terminals. Terminals are returned by this class
  * directly.

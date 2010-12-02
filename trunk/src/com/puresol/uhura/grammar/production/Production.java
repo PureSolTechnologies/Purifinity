@@ -158,7 +158,7 @@ public class Production implements Serializable {
 			}
 			position++;
 			result.append(" ");
-			result.append(element);
+			result.append(element.toShortString());
 		}
 		return result.toString();
 	}
