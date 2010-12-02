@@ -11,10 +11,17 @@ import com.puresol.coding.lang.fortran.grammar.FortranGrammarPartTester;
 public class R501_TypeDeclarationStmtTest extends TestCase {
 
 	@Test
-	public void testSubroutine() {
+	public void testDoubleComplex() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
 		assertTrue(FortranGrammarPartTester.test("type-declaration-stmt",
 				"      DOUBLE COMPLEX DC\n"));
+	}
+
+	@Test
+	public void testInteger() {
+		Logger.getRootLogger().setLevel(Level.TRACE);
+		assertTrue(FortranGrammarPartTester.test("type-declaration-stmt",
+				"      INTEGER(4) i j\n"));
 	}
 
 }

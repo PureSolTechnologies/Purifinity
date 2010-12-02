@@ -86,9 +86,10 @@
  TOKENS
 
 	WHITESPACE : '[ \\t]+' [hide] ;
+	LABEL : LINE_TERMINATOR ' [ \\d]{4} ' ; // removed [hide]
 	LINE_TERMINATOR : '(\\n|\\r\n|\\r)' ; // removed [hide]
 	LINE_COMMENT : '(![^\\n\\\r]*' LINE_TERMINATOR '|' LINE_TERMINATOR '[C$*][^\\r\\n]*(?=' LINE_TERMINATOR '))' ; // removed [hide]
-	LINE_CONCATATION : LINE_TERMINATOR '     [^ 0]' [hide];
+	LINE_CONCATATION : LINE_TERMINATOR '     [^ 0]' [ignore];
 
 	/*
 	 * 3.1.5 Special characters
@@ -181,7 +182,6 @@
 	DIMENSION : "dimension";
 	DO : "do";
 	ELSE : "else";
-	ELSE_IF : "else\\s*if";
 	END : "end";
 	END_BLOCK_DATA : "end\\s*block\\s*data";
 	END_DO : "end\\s*do";
@@ -340,7 +340,7 @@
  */
 
 	stmt-end :
-		( LINE_TERMINATOR | LINE_COMMENT ) +
+		( LINE_TERMINATOR | LINE_COMMENT | LABEL ) +
 	;
  
 /***************
@@ -662,10 +662,12 @@
 /*
 	R304 constant is literal-constant
 	or named-constant
+	
+	named-constant is removed to avoid ambiguous states
 */
 	constant :
 		literal-constant
-	|	NAME_LITERAL
+//	|	NAME_LITERAL
 	;
 
 /*
@@ -819,8 +821,7 @@
 	R406 signed-int-literal-constant is [ sign ] int-literal-constant
 */
 	signed-int-literal-constant :
-		sign INT_LITERAL_CONSTANT
-	|	INT_LITERAL_CONSTANT
+		sign ? INT_LITERAL_CONSTANT
 	;
 
 /*
@@ -861,8 +862,7 @@
 	R412 signed-real-literal-constant is [ sign ] real-literal-constant
 */
 	signed-real-literal-constant :
-		sign REAL_LITERAL_CONSTANT
-	|	REAL_LITERAL_CONSTANT
+		sign ? REAL_LITERAL_CONSTANT
 	;
 
 /*
@@ -1836,8 +1836,7 @@
 	or data-implied-do
 */
 	data-i-do-object :
-		array-element
-	|	scalar-structure-component
+		data-ref
 	|	data-implied-do
 	;
 	data-i-do-object-list :
@@ -1866,7 +1865,7 @@
 */
 	data-stmt-repeat :
 		constant
-	|	constant-subobject
+	|	designator
 	;
 
 /*
@@ -1880,7 +1879,7 @@
 */
 	data-stmt-constant :
 		constant
-	|	constant-subobject
+	|	designator
 	|	signed-int-literal-constant
 	|	signed-real-literal-constant
 	|	null-init
@@ -1896,10 +1895,11 @@
 
 /*
 	R544 constant-subobject is designator
+
+	not needed...
+	
+	replaced in other rules directly with designator...
 */
-	constant-subobject :
-		designator
-	;
 
 /*
 	R545 dimension-stmt is DIMENSION [ :: ] array-name ( array-spec )
@@ -2096,7 +2096,7 @@
 */
 	equivalence-object :
 		NAME_LITERAL
-	|	array-element
+	|	data-ref
 	|	substring
 	;
 	equivalence-object-list :
@@ -2140,11 +2140,9 @@
 */
 	designator :
 		NAME_LITERAL
-	|	array-element
+	|	data-ref
 	|	array-section
-	|	coindexed-named-object
 	|	complex-part-designator
-	|	structure-component
 	|	substring
 	;
 
@@ -2203,9 +2201,7 @@
 */
 	parent-string :
 		NAME_LITERAL
-	|	array-element
-	|	coindexed-named-object
-	|	scalar-structure-component
+	|	data-ref
 	|	constant
 	;
 	
@@ -2232,20 +2228,19 @@
 
 /*
 	R613 structure-component is data-ref
+	
+	not needed...
+	
+	in other rules this is directly replaced by data-ref
 */
-	structure-component :
-		data-ref
-	;
-	scalar-structure-component :
-		structure-component
-	;
 
 /*
 	R614 coindexed-named-object is data-ref
+
+	not needed...
+	
+	in other rules this is directly replaced by data-ref
 */
-	coindexed-named-object :
-		data-ref
-	;
 
 /*
 	R615 complex-part-designator is designator % RE
@@ -2264,10 +2259,11 @@
 
 /*
 	R617 array-element is data-ref
+	
+	not needed...
+	
+	in other rules array-element is directly replaced with data-ref
 */
-	array-element :
-		data-ref
-	;
 
 /*
 	R618 array-section is data-ref [ ( substring-range ) ]
@@ -2397,7 +2393,7 @@
 */
 	allocate-object :
 		NAME_LITERAL
-	|	structure-component
+	|	data-ref
 	;
 	allocate-object-list : 
 		allocate-object ( COMMA allocate-object ) *
@@ -2456,7 +2452,7 @@
 */
 	pointer-object :
 		NAME_LITERAL
-	|	structure-component
+	|	data-ref
 	;
 	pointer-object-list :
 		pointer-object ( COMMA pointer-object ) *
@@ -3296,7 +3292,7 @@ R822 end-do-stmt is END DO [ do-construct-name ]
 	R834 else-if-stmt is ELSE IF ( scalar-logical-expr ) THEN [ if-construct-name ]
 */
 	else-if-stmt :
-		ELSE_IF LEFT_PARENTHESIS expr RIGHT_PARENTHESIS THEN NAME_LITERAL ? stmt-end
+		ELSE IF LEFT_PARENTHESIS expr RIGHT_PARENTHESIS THEN NAME_LITERAL ? stmt-end
 	;
 
 /*
@@ -3942,8 +3938,11 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	output-item-list
 */
 	inquire-stmt :
-		INQUIRE LEFT_PARENTHESIS inquire-spec-list RIGHT_PARENTHESIS stmt-end
-	|	INQUIRE LEFT_PARENTHESIS 'IOLENGTH' EQUALS variable RIGHT_PARENTHESIS output-item-list stmt-end
+		INQUIRE LEFT_PARENTHESIS
+	(	inquire-spec-list RIGHT_PARENTHESIS
+	|	'IOLENGTH' EQUALS variable RIGHT_PARENTHESIS output-item-list
+	) 
+	stmt-end
 	;
 
 /*
@@ -4043,8 +4042,11 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	or ( [ format-items, ] unlimited-format-item )
 */
 	format-specification :
-		LEFT_PARENTHESIS format-items ? RIGHT_PARENTHESIS
-	|	LEFT_PARENTHESIS ( format-items COMMA ) ? unlimited-format-item RIGHT_PARENTHESIS
+		LEFT_PARENTHESIS 
+	(	format-items ? 
+	|	( format-items COMMA ) ? unlimited-format-item
+	) 
+		RIGHT_PARENTHESIS
 	;
 
 /*
@@ -4065,8 +4067,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	|	data-edit-desc
 	|	control-edit-desc
 	|	CHAR_LITERAL_CONSTANT
-	|	r LEFT_PARENTHESIS format-items RIGHT_PARENTHESIS
-	|	LEFT_PARENTHESIS format-items RIGHT_PARENTHESIS
+	|	r ? LEFT_PARENTHESIS format-items RIGHT_PARENTHESIS
 	;
 
 /*
@@ -4356,8 +4357,11 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	ONLY : [ only-list ]
 */
 	use-stmt :
-		USE ( ( COMMA module-nature ) ? COLON COLON ) ? NAME_LITERAL ( COMMA rename-list ) ? stmt-end
-	|	USE ( ( COMMA module-nature ) ? COLON COLON ) ? NAME_LITERAL COMMA ONLY COLON only-list ? stmt-end
+		USE ( ( COMMA module-nature ) ? COLON COLON ) ? NAME_LITERAL 
+	(	( COMMA rename-list ) ? 
+	|	COMMA ONLY COLON only-list ?
+	)
+	stmt-end
 	;
 
 /*

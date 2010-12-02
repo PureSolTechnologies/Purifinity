@@ -1,4 +1,4 @@
-package utilities;
+package utils;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,7 +19,7 @@ public class GrammarInspector {
 			Logger.getRootLogger().setLevel(Level.TRACE);
 
 			Grammar grammar = FortranGrammar.getInstance().getGrammar();
-			grammar = grammar.createWithNewStartProduction("call-stmt");
+//			grammar = grammar.createWithNewStartProduction("call-stmt");
 
 			ParserFactory.create(grammar).generateInspectionInformation(
 					new File("grammar_inspection"));

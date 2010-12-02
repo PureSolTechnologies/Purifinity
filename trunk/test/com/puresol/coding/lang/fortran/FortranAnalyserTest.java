@@ -39,29 +39,21 @@ public class FortranAnalyserTest {
 	// "test/com/puresol/coding/lang/fortran/samples/EmptyProgram.f"));
 	// }
 	//
-	
-	@Test
-	public void testEmptySubroutine() {
-		test(new File(
-				"test/com/puresol/coding/lang/fortran/samples/EmptySubroutine.f"));
-	}
-
-	@Test
-	public void testZGERC() {
-		test(new File("test/com/puresol/coding/lang/fortran/samples/zgerc.f"));
-	}
-
 	// @Test
-	// public void test2() {
-	// try {
+	// public void testEmptySubroutine() {
 	// Logger.getRootLogger().setLevel(Level.TRACE);
-	// FortranAnalyser analyser = new FortranAnalyser(
-	// new File(
-	// "test/com/puresol/coding/lang/fortran/samples/FortranTest.f"));
-	// analyser.parse();
-	// } catch (AnalyzerException e) {
-	// e.printStackTrace();
-	// fail("No exception was expected!");
+	// test(new File(
+	// "test/com/puresol/coding/lang/fortran/samples/EmptySubroutine.f"));
 	// }
+	//
+	// @Test
+	// public void testZGERC() {
+	// test(new File("test/com/puresol/coding/lang/fortran/samples/zgerc.f"));
 	// }
+
+	@Test
+	public void test2() {
+		test(new File(
+				"test/com/puresol/coding/lang/fortran/samples/FortranTest.f"));
+	}
 }
