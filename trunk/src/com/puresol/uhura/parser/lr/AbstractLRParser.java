@@ -1,12 +1,16 @@
 package com.puresol.uhura.parser.lr;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.Stack;
 
 import org.apache.log4j.Logger;
 
-import com.puresol.trees.TreeWalker;
 import com.puresol.uhura.ast.AST;
-import com.puresol.uhura.ast.ASTException;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.production.FinishTerminal;
@@ -42,11 +46,13 @@ public abstract class AbstractLRParser extends AbstractParser {
 	 * not. If it is set to true, back tracking is allowed.
 	 */
 	private final boolean backtrackEnabled;
-
+	private final boolean excludeFailsEnabled;
 	/**
 	 * This stack keeps the back tracking information for back tracking.
 	 */
 	private final Stack<BacktrackLocation> backtrackStack = new Stack<BacktrackLocation>();
+
+	private final Map<Integer, Map<Integer, Set<ParserAction>>> failedActions = new HashMap<Integer, Map<Integer, Set<ParserAction>>>();
 
 	/**
 	 * This field contains the parser table to be used.
@@ -57,13 +63,15 @@ public abstract class AbstractLRParser extends AbstractParser {
 	 * This stack is for storing the states of the parser for shift and
 	 * reduction.
 	 */
-	private final Stack<Integer> stateStack = new Stack<Integer>();
+	private Stack<Integer> stateStack = new Stack<Integer>();
+
+	private int maxPosition = 0;
 
 	/**
 	 * This stack stores the AST fragments during parsing in parallel to the
 	 * states in stateStack.
 	 */
-	private final Stack<AST> treeStack = new Stack<AST>();
+	private final List<ParserAction> actionStack = new ArrayList<ParserAction>();
 	private final ParserErrors parserErrors = new ParserErrors();
 
 	/**
@@ -82,6 +90,8 @@ public abstract class AbstractLRParser extends AbstractParser {
 		parserTable = calculateParserTable();
 		backtrackEnabled = Boolean.valueOf((String) grammar.getOptions().get(
 				"parser.backtracking"));
+		excludeFailsEnabled = Boolean.valueOf((String) grammar.getOptions()
+				.get("parser.exclude_fails"));
 	}
 
 	/**
@@ -98,6 +108,47 @@ public abstract class AbstractLRParser extends AbstractParser {
 		return parserTable;
 	}
 
+	private void addFailedAction(int streamPosition, int state,
+			ParserAction action) {
+		if (!excludeFailsEnabled) {
+			return;
+		}
+		Map<Integer, Set<ParserAction>> failedStates = failedActions
+				.get(streamPosition);
+		if (failedStates == null) {
+			failedStates = new HashMap<Integer, Set<ParserAction>>();
+			failedActions.put(streamPosition, failedStates);
+		}
+		Set<ParserAction> actions = failedStates.get(state);
+		if (actions == null) {
+			actions = new HashSet<ParserAction>();
+			failedStates.put(state, actions);
+		}
+		actions.add(action);
+	}
+
+	private boolean isFailedAction(int streamPosition, int state,
+			ParserAction action) {
+		if (!excludeFailsEnabled) {
+			return false;
+		}
+		Map<Integer, Set<ParserAction>> failedStates = failedActions
+				.get(streamPosition);
+		if (failedStates == null) {
+			return false;
+		}
+		Set<ParserAction> actions = failedStates.get(state);
+		if (actions == null) {
+			return false;
+		}
+		if (!actions.contains(action)) {
+			return false;
+		}
+		logger.trace("Position " + streamPosition + " / State: " + state
+				+ " / Action : " + action + " has already failed!");
+		return true;
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -105,8 +156,7 @@ public abstract class AbstractLRParser extends AbstractParser {
 	public final AST parse(TokenStream tokenStream) throws ParserException {
 		setTokenStream(tokenStream);
 		reset();
-		AST ast = parse();
-		return finishAST(ast);
+		return parse();
 	}
 
 	/**
@@ -115,12 +165,14 @@ public abstract class AbstractLRParser extends AbstractParser {
 	 */
 	private final void reset() {
 		backtrackStack.clear();
-		treeStack.clear();
+		actionStack.clear();
 		stateStack.clear();
 		parserErrors.clear();
 		streamPosition = 0;
 		stepCounter = 0;
 		stateStack.push(0);
+		failedActions.clear();
+		maxPosition = 0;
 		shiftIgnoredTokens();
 	}
 
@@ -130,7 +182,6 @@ public abstract class AbstractLRParser extends AbstractParser {
 		}
 		Token token = getTokenStream().get(streamPosition);
 		while (token.getVisibility() == Visibility.IGNORED) {
-			treeStack.push(new AST(token));
 			streamPosition++;
 			if (streamPosition == getTokenStream().size()) {
 				break;
@@ -146,7 +197,6 @@ public abstract class AbstractLRParser extends AbstractParser {
 	 * @throws ParserException
 	 */
 	private final AST parse() throws ParserException {
-		Token token = null;
 		try {
 			boolean accepted = false;
 			do {
@@ -154,7 +204,11 @@ public abstract class AbstractLRParser extends AbstractParser {
 				if (logger.isTraceEnabled()) {
 					logger.trace(toString());
 				}
+				if (streamPosition > maxPosition) {
+					maxPosition = streamPosition;
+				}
 				final ParserActionSet actionSet;
+				final Token token;
 				if (streamPosition < getTokenStream().size()) {
 					token = getTokenStream().get(streamPosition);
 					actionSet = parserTable.getActionSet(stateStack.peek(),
@@ -167,32 +221,35 @@ public abstract class AbstractLRParser extends AbstractParser {
 				if (logger.isTraceEnabled()) {
 					logger.trace(actionSet);
 				}
-				ParserAction action = getAction(actionSet);
+				final ParserAction action = getAction(actionSet);
 				switch (action.getAction()) {
 				case SHIFT:
-					shift(action.getParameter());
+					shift(action);
 					break;
 				case REDUCE:
-					reduce(action.getParameter());
+					reduce(action);
 					break;
 				case ACCEPT:
-					accepted = accept();
+					accepted = accept(action);
 					break;
 				case ERROR:
 					error();
 					break;
 				default:
 					throw new ParserException("Invalid action '" + action
-							+ "'for parser!", token);
+							+ "'for parser near '"
+							+ getTokenStream().getCodeSample(maxPosition)
+							+ "'!");
 				}
 			} while (!accepted);
 			/*
 			 * We are finished. The last element in the stack is the result...
 			 */
-			return treeStack.pop();
+			return LRTokenStreamConverter.convert(getTokenStream(),
+					getGrammar(), actionStack);
 		} catch (GrammarException e) {
 			logger.error(e.getMessage(), e);
-			throw new ParserException(e.getMessage(), token);
+			throw new ParserException(e.getMessage());
 		}
 	}
 
@@ -226,13 +283,29 @@ public abstract class AbstractLRParser extends AbstractParser {
 						+ "' is ambiguous and back tracking was performed already. Trying new alternative...");
 			}
 			BacktrackLocation location = backtrackStack.pop();
-			if (location.getLastAlternative() + 1 >= actionSet
+			/*
+			 * mark last alternative as fail...
+			 */
+			addFailedAction(streamPosition, stateStack.peek(),
+					actionSet.getAction(location.getLastAlternative()));
+			int stepAhead = 1;
+			while ((location.getLastAlternative() + stepAhead < actionSet
+					.getActionNumber())
+					&& (isFailedAction(
+							streamPosition,
+							stateStack.peek(),
+							actionSet.getAction(location.getLastAlternative()
+									+ stepAhead)))) {
+				stepAhead++;
+			}
+			if (location.getLastAlternative() + stepAhead >= actionSet
 					.getActionNumber()) {
 				logger.trace("No alternative left. Abort.");
 				return new ParserAction(ActionType.ERROR, -1);
 			}
-			addBacktrackLocation(location.getLastAlternative() + 1);
-			return actionSet.getAction(location.getLastAlternative() + 1);
+			addBacktrackLocation(location.getLastAlternative() + stepAhead);
+			return actionSet.getAction(location.getLastAlternative()
+					+ stepAhead);
 		}
 		/*
 		 * We have a new ambiguous state. We store backtracking information and
@@ -254,18 +327,11 @@ public abstract class AbstractLRParser extends AbstractParser {
 	 *            is the number of the alternative which is the next to be
 	 *            tried.
 	 */
+	@SuppressWarnings("unchecked")
 	private final void addBacktrackLocation(int usedAlternative) {
-		@SuppressWarnings("unchecked")
-		Stack<Integer> backtrackStates = (Stack<Integer>) stateStack.clone();
-		Stack<AST> backtrackTrees = new Stack<AST>();
-		for (AST ast : treeStack) {
-			AST newAST = new AST(ast.getName(), ast.getToken(), ast.isNode(),
-					ast.isStackingAllowed());
-			newAST.addChildren(ast.getChildren());
-			backtrackTrees.push(newAST);
-		}
-		backtrackStack.push(new BacktrackLocation(backtrackStates,
-				backtrackTrees, streamPosition, stepCounter, usedAlternative));
+		backtrackStack.push(new BacktrackLocation((Stack<Integer>) stateStack
+				.clone(), actionStack.size(), streamPosition, stepCounter,
+				usedAlternative));
 	}
 
 	/**
@@ -277,11 +343,9 @@ public abstract class AbstractLRParser extends AbstractParser {
 	 *            is the current token in token stream.
 	 * @throws ParserException
 	 */
-	private final void shift(int newState) {
-		stateStack.push(newState);
-		Token token = getTokenStream().get(streamPosition);
-		AST ast = new AST(token);
-		treeStack.push(ast);
+	private final void shift(ParserAction action) {
+		stateStack.push(action.getParameter());
+		actionStack.add(action);
 		streamPosition++;
 		shiftIgnoredTokens();
 	}
@@ -294,72 +358,28 @@ public abstract class AbstractLRParser extends AbstractParser {
 	 * @throws ParserException
 	 *             is thrown if the rule can not successfully be applied.
 	 */
-	private final void reduce(int grammarRuleId) throws ParserException {
+	private final void reduce(ParserAction action) throws ParserException {
 		try {
-			Production production = getGrammar().getProduction(grammarRuleId);
-			AST tree = new AST(production);
+			Production production = getGrammar().getProduction(
+					action.getParameter());
 			for (int i = 0; i < production.getConstructions().size(); i++) {
 				/*
 				 * The for loop is run as many times as the production contains
 				 * constructions which are added up for an AST node.
 				 */
 				stateStack.pop();
-				AST poppedAST;
-				do {
-					poppedAST = treeStack.pop();
-					if (poppedAST.isNode()) {
-						/*
-						 * The popped AST is an own node.
-						 */
-						if (poppedAST.isStackingAllowed()) {
-							/*
-							 * The AST is allowed to be stacked, so do not do
-							 * anything just add it to children list at the
-							 * front position.
-							 */
-							tree.addChildInFront(poppedAST);
-						} else {
-							/*
-							 * The AST is not allowed to be stacked. So the
-							 * presence for a node with the same type is checked
-							 * and the result is added to that or the node is
-							 * created.
-							 */
-							if (tree.getName().equals(poppedAST.getName())) {
-								tree.addChildrenInFront(poppedAST.getChildren());
-							} else {
-								tree.addChildInFront(poppedAST);
-							}
-						}
-					} else {
-						/*
-						 * The currently popped AST is not allowed to be an own
-						 * node, so all children are added to the tree in front
-						 * at the children list.
-						 */
-						tree.addChildrenInFront(poppedAST.getChildren());
-					}
-					/*
-					 * The while loop is as long as there are ASTs popped which
-					 * are non visible tokens...
-					 */
-				} while ((poppedAST.getToken() != null)
-						&& (poppedAST.getToken().getVisibility() != Visibility.VISIBLE));
 			}
-			treeStack.push(tree);
-			ParserAction action = parserTable.getAction(stateStack.peek(),
+			actionStack.add(action);
+			ParserAction gotoAction = parserTable.getAction(stateStack.peek(),
 					new NonTerminal(production.getName()));
-			if (action.getAction() == ActionType.ERROR) {
+			if (gotoAction.getAction() == ActionType.ERROR) {
 				error();
 				return;
 			}
-			stateStack.push(action.getParameter());
+			stateStack.push(gotoAction.getParameter());
 		} catch (GrammarException e) {
 			logger.error(e.getMessage(), e);
-			throw new ParserException(e.getMessage(), null);
-		} catch (ASTException e) {
-			logger.error(e.getMessage(), e);
-			throw new ParserException(e.getMessage(), null);
+			throw new ParserException(e.getMessage());
 		}
 	}
 
@@ -376,22 +396,9 @@ public abstract class AbstractLRParser extends AbstractParser {
 	 *         parser.
 	 * @throws ParserException
 	 */
-	private final boolean accept() throws ParserException {
-		try {
-			if ((treeStack.size() >= 1) && (stateStack.size() == 2)) {
-				AST ast = treeStack.pop();
-				while (treeStack.size() > 0) {
-					ast.addChildInFront(treeStack.pop());
-				}
-				treeStack.push(ast);
-				return true;
-			}
-			error();
-		} catch (ASTException e) {
-			logger.error(e.getMessage(), e);
-			error();
-		}
-		return false;
+	private final boolean accept(ParserAction action) throws ParserException {
+		actionStack.add(action);
+		return true;
 	}
 
 	/**
@@ -408,11 +415,15 @@ public abstract class AbstractLRParser extends AbstractParser {
 			return;
 		}
 		if (!backtrackEnabled) {
-			logger.trace("No valid action available and back tracking is disabled. Aborting...");
+			logger.trace("No valid action available and back tracking is disabled. Aborting near '"
+					+ getTokenStream().getCodeSample(maxPosition) + "'...");
 		} else {
-			logger.trace("No valid action available and back tracking stack is empty. Aborting...");
+			logger.trace("No valid action available and back tracking stack is empty. Aborting near '"
+					+ getTokenStream().getCodeSample(maxPosition) + "'...");
 		}
-		throw new ParserException("Error! Could not parse the token stream!");
+		throw new ParserException(
+				"Error! Could not parse the token stream near '"
+						+ getTokenStream().getCodeSample(maxPosition) + "'!");
 	}
 
 	/**
@@ -424,10 +435,10 @@ public abstract class AbstractLRParser extends AbstractParser {
 		BacktrackLocation backtrackLocation = backtrackStack.peek();
 		streamPosition = backtrackLocation.getStreamPosition();
 		stepCounter = backtrackLocation.getStepCounter();
-		treeStack.clear();
-		treeStack.addAll(backtrackLocation.getTreeStack());
-		stateStack.clear();
-		stateStack.addAll(backtrackLocation.getStateStack());
+		while (actionStack.size() > backtrackLocation.getActionStackSize()) {
+			actionStack.remove(actionStack.size() - 1);
+		}
+		stateStack = backtrackLocation.getStateStack();
 		stepCounter--;
 	}
 
@@ -442,27 +453,18 @@ public abstract class AbstractLRParser extends AbstractParser {
 			buffer.append(stateId);
 		}
 		buffer.append("\t| ");
-		for (AST syntaxTree : treeStack) {
-			buffer.append(" ");
-			buffer.append(syntaxTree.getName());
-		}
-		buffer.append("\t| ");
 		TokenStream tokenStream = getTokenStream();
-		for (int i = streamPosition; i < tokenStream.size(); i++) {
-			buffer.append(" ");
-			buffer.append(tokenStream.get(i));
-			if (i > streamPosition + 5) {
-				buffer.append("[...]");
-				break;
+		if (tokenStream != null) {
+			for (int i = streamPosition; i < tokenStream.size(); i++) {
+				buffer.append(" ");
+				buffer.append(tokenStream.get(i));
+				if (i > streamPosition + 5) {
+					buffer.append("[...]");
+					break;
+				}
 			}
+			buffer.append("$");
 		}
-		buffer.append("$");
 		return buffer.toString();
-	}
-
-	private AST finishAST(AST ast) {
-		TreeWalker<AST> walker = new TreeWalker<AST>(ast);
-		walker.walkBackward(new MetaDataGeneratorVisitor());
-		return ast;
 	}
 }

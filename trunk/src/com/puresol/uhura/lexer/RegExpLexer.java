@@ -110,8 +110,10 @@ public class RegExpLexer implements Lexer {
 			if ((nextToken == null)
 					|| (tokenText.length() > nextToken.getText().length())) {
 				int lineCounter = 1;
-				if (tokenText.contains("\r") || tokenText.contains("\n")) {
-					lineCounter += tokenText.split("(\\r\\n|\\n|\\r)").length - 1;
+				for (char c : tokenText.toCharArray()) {
+					if (c == '\n') {
+						lineCounter++;
+					}
 				}
 				TokenMetaData metaData = new TokenMetaData(
 						tokenStream.getName(), id, pos, line, lineCounter);

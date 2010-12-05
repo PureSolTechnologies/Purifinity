@@ -62,14 +62,55 @@ public class LRTokenStreamConverter {
 					logger.trace(production.toString());
 					AST newAST = new AST(production);
 					for (int i = 0; i < production.getConstructions().size(); i++) {
-						if (treeStack.size() > 0) {
-							while ((treeStack.peek().getToken() != null)
-									&& (treeStack.peek().getToken()
-											.getVisibility() != Visibility.VISIBLE)) {
-								newAST.addChildInFront(treeStack.pop());
+						/*
+						 * The for loop is run as many times as the production
+						 * contains constructions which are added up for an AST
+						 * node.
+						 */
+						AST poppedAST;
+						do {
+							poppedAST = treeStack.pop();
+							if (poppedAST.isNode()) {
+								/*
+								 * The popped AST is an own node.
+								 */
+								if (poppedAST.isStackingAllowed()) {
+									/*
+									 * The AST is allowed to be stacked, so do
+									 * not do anything just add it to children
+									 * list at the front position.
+									 */
+									newAST.addChildInFront(poppedAST);
+								} else {
+									/*
+									 * The AST is not allowed to be stacked. So
+									 * the presence for a node with the same
+									 * type is checked and the result is added
+									 * to that or the node is created.
+									 */
+									if (newAST.getName().equals(
+											poppedAST.getName())) {
+										newAST.addChildrenInFront(poppedAST
+												.getChildren());
+									} else {
+										newAST.addChildInFront(poppedAST);
+									}
+								}
+							} else {
+								/*
+								 * The currently popped AST is not allowed to be
+								 * an own node, so all children are added to the
+								 * tree in front at the children list.
+								 */
+								newAST.addChildrenInFront(poppedAST
+										.getChildren());
 							}
-						}
-						newAST.addChildInFront(treeStack.pop());
+							/*
+							 * The while loop is as long as there are ASTs
+							 * popped which are non visible tokens...
+							 */
+						} while ((poppedAST.getToken() != null)
+								&& (poppedAST.getToken().getVisibility() != Visibility.VISIBLE));
 					}
 					treeStack.push(newAST);
 					break;

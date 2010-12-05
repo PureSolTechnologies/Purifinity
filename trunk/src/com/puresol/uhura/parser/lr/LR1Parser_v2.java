@@ -7,7 +7,7 @@ import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.parser.parsetable.ParserTable;
 
-public class LR1Parser_v2 extends AbstractLRParser_v2 {
+public class LR1Parser_v2 extends AbstractLRParser {
 
 	private static final long serialVersionUID = 5550603885756798553L;
 

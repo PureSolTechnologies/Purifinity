@@ -87,10 +87,7 @@ public class GrammarFile {
 			throw new IOException(e.getMessage());
 		} catch (ParserException e) {
 			logger.error(e.getMessage(), e);
-			String errorMsg = "Error while reading grammar file at: "
-					+ e.getToken().getMetaData() + ": " + e.getToken();
-			logger.error(errorMsg);
-			throw new IOException(errorMsg);
+			throw new IOException(e.getMessage());
 		}
 	}
 

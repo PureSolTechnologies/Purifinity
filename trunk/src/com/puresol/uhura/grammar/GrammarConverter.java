@@ -36,6 +36,7 @@ public class GrammarConverter {
 	private ProductionSet productions = null;
 	private Grammar grammar = null;
 	private Map<String, Visibility> tokenVisibility = new HashMap<String, Visibility>();
+	private int autogenId;
 
 	/**
 	 * Constructor for file reading.
@@ -468,17 +469,12 @@ public class GrammarConverter {
 		} else if (productionPart.hasChild("STRING_LITERAL")) {
 			identifier = productionPart.getChild("STRING_LITERAL").getText();
 		}
-		int id = 1;
-		String newIdentifier = createIdentifierName(identifier, suffix, id);
-		while (productions.has(newIdentifier)) {
-			id++;
-			newIdentifier = createIdentifierName(identifier, suffix, id);
-		}
-		return newIdentifier;
+		return createIdentifierName(identifier, suffix);
 	}
 
-	private String createIdentifierName(String identifier, String suffix, int id) {
-		return identifier + "_" + suffix + "_autogen_" + id;
+	private String createIdentifierName(String identifier, String suffix) {
+		autogenId++;
+		return identifier + "_" + suffix + "_autogen_" + autogenId;
 	}
 
 	/**
