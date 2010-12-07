@@ -10,7 +10,6 @@ public class R823_NonblockDoConstructTest extends TestCase {
 
 	@Test
 	public void testSubroutine() {
-		fail();
 		assertTrue(FortranGrammarPartTester.test("nonblock-do-construct",
 				"      DO 30 I = 1,M                         \n"
 						+ "      A(I,J) = A(I,J) + X(IX)*TEMP\n"

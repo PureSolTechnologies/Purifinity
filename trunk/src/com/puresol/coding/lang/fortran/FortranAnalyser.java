@@ -21,14 +21,11 @@ import com.puresol.coding.analysis.Analyzer;
 import com.puresol.coding.analysis.AnalyzerException;
 import com.puresol.coding.lang.fortran.grammar.FortranGrammar;
 import com.puresol.uhura.ast.AST;
-import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.lexer.Lexer;
 import com.puresol.uhura.lexer.LexerException;
-import com.puresol.uhura.lexer.LexerFactoryException;
 import com.puresol.uhura.lexer.TokenStream;
 import com.puresol.uhura.parser.Parser;
 import com.puresol.uhura.parser.ParserException;
-import com.puresol.uhura.parser.ParserFactoryException;
 import com.puresol.utils.Persistence;
 import com.puresol.utils.PersistenceException;
 import com.puresol.utils.StopWatch;
@@ -41,51 +38,93 @@ public class FortranAnalyser implements Analyzer {
 			.getLogger(FortranAnalyser.class);
 
 	private final File file;
+	private final transient FortranGrammar grammar;
 	private Date date = new Date();
 	private AST ast = null;
 
 	public FortranAnalyser(File file) {
 		super();
 		this.file = file;
+		grammar = FortranGrammar.getInstance();
 	}
 
+	@Override
 	public void parse() throws AnalyzerException {
 		try {
+			TokenStream tokenStream;
+			FixedFormFile fixedFormFile = new FixedFormFile(file);
+			if (fixedFormFile.isValid()) {
+				logger.debug(fixedFormFile.toString());
+				tokenStream = scanFixedForm(fixedFormFile);
+			} else {
+				logger.error(fixedFormFile.toString());
+				tokenStream = scanFreeForm();
+				// TODO remove throwing AnalyzerException!
+				throw new AnalyzerException(this);
+			}
 			StopWatch watch = new StopWatch();
-			logger.debug("Start lexical scanner...");
-			watch.start();
-			Lexer lexer = FortranGrammar.createLexer();
-			TokenStream tokenStream = lexer.lex(new FileReader(file),
-					file.toString());
-			watch.stop();
-			logger.debug("done. (time: " + watch + ")");
-			Parser parser = FortranGrammar.createParser();
+			Parser parser = grammar.getParser();
 			logger.debug("Starting parser...");
 			watch.start();
-			AST ast = parser.parse(tokenStream);
+			ast = parser.parse(tokenStream);
 			watch.stop();
 			logger.debug("done. (time: " + watch + ")");
-			ast.getChildren();
 		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-			throw new AnalyzerException(this);
-		} catch (GrammarException e) {
-			logger.error(e.getMessage(), e);
-			throw new AnalyzerException(this);
-		} catch (LexerFactoryException e) {
-			logger.error(e.getMessage(), e);
-			throw new AnalyzerException(this);
-		} catch (LexerException e) {
-			logger.error(e.getMessage(), e);
-			throw new AnalyzerException(this);
-		} catch (ParserFactoryException e) {
 			logger.error(e.getMessage(), e);
 			throw new AnalyzerException(this);
 		} catch (ParserException e) {
 			logger.error(e.getMessage(), e);
 			throw new AnalyzerException(this);
+		} catch (PersistenceException e) {
+			logger.error(e.getMessage(), e);
+			throw new AnalyzerException(this);
 		}
-		return;
+	}
+
+	private TokenStream scanFixedForm(FixedFormFile fixedFormFile)
+			throws AnalyzerException {
+		try {
+			StopWatch watch = new StopWatch();
+			logger.debug("Start lexical scanner...");
+			watch.start();
+			Lexer lexer = grammar.getLexer();
+			TokenStream tokenStream = fixedFormFile.scan(lexer);
+			watch.stop();
+			logger.debug("done. (time: " + watch + ")");
+			return tokenStream;
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e);
+			throw new AnalyzerException(this);
+		} catch (LexerException e) {
+			logger.error(e.getMessage(), e);
+			throw new AnalyzerException(this);
+		} catch (PersistenceException e) {
+			logger.error(e.getMessage(), e);
+			throw new AnalyzerException(this);
+		}
+	}
+
+	private TokenStream scanFreeForm() throws AnalyzerException {
+		try {
+			StopWatch watch = new StopWatch();
+			logger.debug("Start lexical scanner...");
+			watch.start();
+			Lexer lexer = grammar.getLexer();
+			TokenStream tokenStream = lexer.lex(new FileReader(file),
+					file.toString());
+			watch.stop();
+			logger.debug("done. (time: " + watch + ")");
+			return tokenStream;
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e);
+			throw new AnalyzerException(this);
+		} catch (LexerException e) {
+			logger.error(e.getMessage(), e);
+			throw new AnalyzerException(this);
+		} catch (PersistenceException e) {
+			logger.error(e.getMessage(), e);
+			throw new AnalyzerException(this);
+		}
 	}
 
 	public Fortran getLanguage() {
@@ -112,7 +151,7 @@ public class FortranAnalyser implements Analyzer {
 		try {
 			Persistence.persist(this, file);
 			return true;
-		} catch (PersistenceException e) {
+		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
 			return false;
 		}

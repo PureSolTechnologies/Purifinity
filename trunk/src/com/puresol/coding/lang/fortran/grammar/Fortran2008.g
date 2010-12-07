@@ -12,8 +12,9 @@
 	grammar.checks=true;
 	grammar.ignore-case=true;
 	lexer="com.puresol.uhura.lexer.RegExpLexer";
-	parser="com.puresol.uhura.parser.lr.LR1Parser_v2";
+	parser="com.puresol.uhura.parser.lr.LR1Parser";
 	parser.backtracking=true;
+//	parser.exclude_fails=true;
  
 /****************************************************************************
  * H E L P E R
@@ -66,8 +67,8 @@
 	SIGNED_REAL_LITERAL_CONSTANT : SIGN "?"
 			REAL_LITERAL_CONSTANT;
 
-	REP_CHAR_SINGLE_QUOTE : "([^']+|'')";
-	REP_CHAR_DOUBLE_QUOTE : "([^\"]+|\"\")";
+	REP_CHAR_SINGLE_QUOTE : "([^']|'')";
+	REP_CHAR_DOUBLE_QUOTE : "([^\"]|\"\")";
 
 	HEX_CONSTANT : "(Z'" HEX_DIGIT "+'|Z\""
 			HEX_DIGIT "+\")";
@@ -85,11 +86,10 @@
  ****************************************************************************/ 
  TOKENS
 
-	WHITESPACE : '[ \\t]+' [hide] ;
-	LABEL : LINE_TERMINATOR ' [ \\d]{4} ' ; // removed [hide]
+	WHITESPACE : '[ \\t]+' [ignore] ;
 	LINE_TERMINATOR : '(\\n|\\r\n|\\r)' ; // removed [hide]
-	LINE_COMMENT : '(![^\\n\\\r]*' LINE_TERMINATOR '|' LINE_TERMINATOR '[C$*][^\\r\\n]*(?=' LINE_TERMINATOR '))' ; // removed [hide]
-	LINE_CONCATATION : LINE_TERMINATOR '     [^ 0]' [ignore];
+	LINE_COMMENT : 		'![^\\n\\r]*' LINE_TERMINATOR; // removed [hide]
+	LINE_CONCATATION : AMPERSAND '[ \\t]*' LINE_TERMINATOR [ignore];
 
 	/*
 	 * 3.1.5 Special characters
@@ -145,9 +145,14 @@
 			EXPONENT_LETTER EXPONENT ")?(_" KIND_PARAM ")?|"
 			DIGIT_STRING EXPONENT_LETTER EXPONENT "(_" KIND_PARAM
 			")?)";
-	CHAR_LITERAL_CONSTANT : "(" KIND_PARAM
-			"_)?(\"" REP_CHAR_DOUBLE_QUOTE "*\"|'"
-			REP_CHAR_SINGLE_QUOTE "*')";
+	CHAR_LITERAL_CONSTANT :
+				"(" KIND_PARAM "_)?"	 
+			"("	
+				"\"" REP_CHAR_DOUBLE_QUOTE "*\""
+			"|"	
+				"'"  REP_CHAR_SINGLE_QUOTE "*'"
+			")"
+	;
 	LOGICAL_LITERAL_CONSTANT : "(\\.TRUE\\.|\\.FALSE\\.)(_"
 			KIND_PARAM ")?";
 	BOZ_LITERAL_CONSTANT : 
@@ -165,7 +170,7 @@
 	REAL : "real";
 	DOUBLE_PRECISION : "double\\s*precision";
 	COMPLEX : "complex";
-	DOUBLE_COMPLEX : "double\\s*complex";
+	DOUBLE_COMPLEX : "double\\s*complex"; // TODO HP Fortan extension; think about removal!
 	CHARACTER : "character";
 	LOGICAL : "logical";
 	 
@@ -340,7 +345,7 @@
  */
 
 	stmt-end :
-		( LINE_TERMINATOR | LINE_COMMENT | LABEL ) +
+		( LINE_TERMINATOR | LINE_COMMENT ) +
 	;
  
 /***************
@@ -352,7 +357,13 @@
 	[ program-unit ] ...
 */
 	program : 
-			program-unit +
+			LINE_TERMINATOR * 
+			program-unit + 
+			LINE_TERMINATOR * /* since line terminators are used to finish 
+			                   * statements, we we need to handle them 
+			                   * explicitly here, because additional new lines
+			                   * are allowed in front and at the end of each
+			                   * source file */
 	;
 	
 /*	
@@ -384,22 +395,24 @@
 	[ import-stmt ] ...
 	[ implicit-part ]
 	[ declaration-construct ] ...
+	
+Node: implicit-part ? was refactored to implicit-part-stmt *. This is needed
+      due to ambiguity with part of declaration-construct and the issue of 
+      blocking failed backtracking alternatives.
 */
 	specification-part :
 		use-stmt *
 		import-stmt *
-		implicit-part ?
+		implicit-part-stmt *
 		declaration-construct *
 	;
 
 /*
 	R205 implicit-part is [ implicit-part-stmt ] ...
 	implicit-stmt
+	
+	not needed...
 */
-	implicit-part : 
-		implicit-part-stmt *
-		implicit-stmt
-	;
 
 /*
 	R206 implicit-part-stmt is implicit-stmt
@@ -663,12 +676,9 @@
 	R304 constant is literal-constant
 	or named-constant
 	
-	named-constant is removed to avoid ambiguous states
+	1) named-constant is removed to avoid ambiguous states
+	2) literal-constant was send to all constant locations
 */
-	constant :
-		literal-constant
-//	|	NAME_LITERAL
-	;
 
 /*
 	R305 literal-constant is int-literal-constant
@@ -805,7 +815,7 @@
 	|	REAL kind-selector ?
 	|	DOUBLE_PRECISION
 	|	COMPLEX kind-selector ?
-	|	DOUBLE_COMPLEX kind-selector ? /* DOUBLE COMPLEX is not part of the official standard, but is an extension in some Fortrans. */ 
+	|	DOUBLE_COMPLEX /* TODO DOUBLE COMPLEX is not part of the official standard, but is an extension in some Fortrans; think about removal! */ 
 	|	CHARACTER char-selector ?
 	|	LOGICAL kind-selector ?
 	;
@@ -815,13 +825,15 @@
 */
 	kind-selector :
 		LEFT_PARENTHESIS ( 'KIND' EQUALS ) ? expr RIGHT_PARENTHESIS
+	|	ASTERIK expr	// TODO for old Fortran 77, think about removal!
 	;
 
 /*
 	R406 signed-int-literal-constant is [ sign ] int-literal-constant
 */
 	signed-int-literal-constant :
-		sign ? INT_LITERAL_CONSTANT
+		INT_LITERAL_CONSTANT
+	|	sign  INT_LITERAL_CONSTANT
 	;
 
 /*
@@ -862,7 +874,8 @@
 	R412 signed-real-literal-constant is [ sign ] real-literal-constant
 */
 	signed-real-literal-constant :
-		sign ? REAL_LITERAL_CONSTANT
+		REAL_LITERAL_CONSTANT
+	|	sign REAL_LITERAL_CONSTANT
 	;
 
 /*
@@ -933,10 +946,8 @@
 	char-selector :
 		length-selector
 	|	LEFT_PARENTHESIS 'LEN' EQUALS type-param-value COMMA 'KIND' EQUALS expr RIGHT_PARENTHESIS
-	|	LEFT_PARENTHESIS type-param-value COMMA 'KIND' EQUALS expr RIGHT_PARENTHESIS
-	|	LEFT_PARENTHESIS type-param-value COMMA expr RIGHT_PARENTHESIS
-	|	LEFT_PARENTHESIS 'KIND' EQUALS expr	COMMA 'LEN' EQUALS type-param-value RIGHT_PARENTHESIS
-	|	LEFT_PARENTHESIS 'KIND' EQUALS expr	RIGHT_PARENTHESIS
+	|	LEFT_PARENTHESIS type-param-value COMMA ( 'KIND' EQUALS ) ? expr RIGHT_PARENTHESIS
+	|	LEFT_PARENTHESIS 'KIND' EQUALS expr	( COMMA 'LEN' EQUALS type-param-value ) ? RIGHT_PARENTHESIS
 	;
 
 /*
@@ -1410,8 +1421,8 @@
 	or [type-spec ::] ac-value-list
 */
 	ac-spec :
-		type-spec COLON COLON
-	|	( type-spec COLON COLON ) ? ac-value-list
+		type-spec COLON COLON ac-value-list ?
+	|	ac-value-list
 	;
 
 /*
@@ -1864,7 +1875,7 @@
 	or scalar-int-constant-subobject
 */
 	data-stmt-repeat :
-		constant
+		literal-constant
 	|	designator
 	;
 
@@ -1878,7 +1889,7 @@
 	or structure-constructor
 */
 	data-stmt-constant :
-		constant
+		literal-constant
 	|	designator
 	|	signed-int-literal-constant
 	|	signed-real-literal-constant
@@ -2095,8 +2106,8 @@
 	or substring
 */
 	equivalence-object :
-		NAME_LITERAL
-	|	data-ref
+		data-ref
+	//	|	NAME_LITERAL is also part of data-ref...
 	|	substring
 	;
 	equivalence-object-list :
@@ -2139,11 +2150,10 @@
 	or substring
 */
 	designator :
-		NAME_LITERAL
-	|	data-ref
-	|	array-section
-	|	complex-part-designator
-	|	substring
+		data-ref ( LEFT_PARENTHESIS substring-range RIGHT_PARENTHESIS | LEFT_PARENTHESIS substring-range RIGHT_PARENTHESIS ) ?
+	//	|	NAME_LITERAL is also part of data-ref...
+	|	designator PERCENT ( 'RE' | 'IM' )
+	|	literal-constant LEFT_PARENTHESIS substring-range RIGHT_PARENTHESIS
 	;
 
 /*
@@ -2200,9 +2210,9 @@
 	or scalar-constant
 */
 	parent-string :
-		NAME_LITERAL
-	|	data-ref
-	|	constant
+		data-ref
+	//	|	NAME_LITERAL is also part of data-ref
+	|	literal-constant
 	;
 	
 /*
@@ -2216,7 +2226,7 @@
 	R611 data-ref is part-ref [ % part-ref ] ...
 */
 	data-ref :
-		part-ref ( PERCENT part-ref ) *
+		part-ref ( PERCENT  part-ref ) *
 	;
 
 /*
@@ -2225,7 +2235,6 @@
 	part-ref :
 		NAME_LITERAL ( LEFT_PARENTHESIS section-subscript-list RIGHT_PARENTHESIS ) ? image-selector ?
 	;
-
 /*
 	R613 structure-component is data-ref
 	
@@ -2245,17 +2254,15 @@
 /*
 	R615 complex-part-designator is designator % RE
 	or designator % IM
+	
+	node: moved to designator
 */
-	complex-part-designator :
-		designator PERCENT ( 'RE' | 'IM' )
-	;
 
 /*
 	R616 type-param-inquiry is designator % type-param-name
+	
+	node: was moved to primary
 */
-	type-param-inquiry :
-		designator PERCENT NAME_LITERAL
-	;
 
 /*
 	R617 array-element is data-ref
@@ -2268,11 +2275,9 @@
 /*
 	R618 array-section is data-ref [ ( substring-range ) ]
 	or complex-part-designator
+	
+	node: moved to designator 
 */
-	array-section :
-		data-ref ( LEFT_PARENTHESIS substring-range RIGHT_PARENTHESIS ) ?
-	|	complex-part-designator
-	;
 
 /*
 	R619 subscript is scalar-int-expr
@@ -2288,8 +2293,8 @@
 */
 	section-subscript :
 		subscript
-	|	subscript-triplet
-	|	vector-subscript
+	|	subscript COLON subscript ? ( COLON stride ) ?
+	|	COLON subscript ? ( COLON stride ) ?
 	;
 	section-subscript-list :
 		section-subscript ( COMMA section-subscript ) *
@@ -2297,10 +2302,9 @@
 
 /*
 	R621 subscript-triplet is [ subscript ] : [ subscript ] [ : stride ]
+	
+	Node: was moved into section-subscript. 
 */
-	subscript-triplet :
-		subscript ? COLON subscript ? ( COLON stride ) ?
-	;
 
 /*
 	R622 stride is scalar-int-expr
@@ -2311,10 +2315,9 @@
 	
 /*
 	R623 vector-subscript is int-expr
+	
+	vector-subscript --> subscript
 */
-	vector-subscript :
-		expr
-	;
 
 /*
 	R624 image-selector is lbracket cosubscript-list rbracket
@@ -2392,8 +2395,8 @@
 	or structure-component
 */
 	allocate-object :
-		NAME_LITERAL
-	|	data-ref
+		data-ref
+	//	|	NAME_LITERAL is also included in data-ref
 	;
 	allocate-object-list : 
 		allocate-object ( COMMA allocate-object ) *
@@ -2451,8 +2454,8 @@
 	or proc-pointer-name
 */
 	pointer-object :
-		NAME_LITERAL
-	|	data-ref
+		data-ref
+	//	|	NAME_LITERAL is also included in data-ref
 	;
 	pointer-object-list :
 		pointer-object ( COMMA pointer-object ) *
@@ -2492,13 +2495,12 @@
 	or ( expr )
 */
 	primary :
-		constant
-	|	designator
+		literal-constant
+	|	designator ( PERCENT NAME_LITERAL ) ?
 	|	array-constructor
 	|	structure-constructor
 	|	function-reference
-	|	type-param-inquiry
-	|	NAME_LITERAL
+	//	|	NAME_LITERAL is also part of designator
 	|	LEFT_PARENTHESIS expr RIGHT_PARENTHESIS
 	;
 
@@ -2761,19 +2763,22 @@
 	or proc-pointer-object => proc-target
 */
 	pointer-assignment-stmt :
-		data-pointer-object ( LEFT_PARENTHESIS bounds-spec-list RIGHT_PARENTHESIS ) ? EQUALS GREATER_THAN data-target stmt-end
-	|	data-pointer-object LEFT_PARENTHESIS bounds-remapping-list RIGHT_PARENTHESIS EQUALS GREATER_THAN data-target stmt-end
+		pointer-assignment-part-impl
 	|	proc-pointer-object EQUALS GREATER_THAN proc-target stmt-end
+	;
+
+	pointer-assignment-part-impl :
+		variable PERCENT NAME_LITERAL
+		( LEFT_PARENTHESIS ( bounds-remapping-list | bounds-spec-list ) RIGHT_PARENTHESIS ) ?     
+		EQUALS GREATER_THAN data-target stmt-end
 	;
 
 /*
 	R734 data-pointer-object is variable-name
 	or scalar-variable % data-pointer-component-name
+	
+	node: moved to pointer-assignment-part-impl
 */
-	data-pointer-object :
-		NAME_LITERAL
-	|	variable PERCENT NAME_LITERAL
-	;
 
 /*
 	R735 bounds-spec is lower-bound-expr :
@@ -3693,7 +3698,12 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	R911 write-stmt is WRITE ( io-control-spec-list ) [ output-item-list ]
 */
 	write-stmt :
-		WRITE LEFT_PARENTHESIS io-control-spec-list RIGHT_PARENTHESIS output-item-list ? stmt-end
+		WRITE LEFT_PARENTHESIS io-control-spec-list RIGHT_PARENTHESIS COMMA ? output-item-list ? stmt-end
+		/* TODO 
+		 * COMMA ? was introduced, because it was found in some source code
+		 * which was compiled correctly. It's not part of the official 
+		 * specification.
+		 */
 	;
 
 /*
@@ -3727,11 +3737,8 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 */
 	io-control-spec :
 		'UNIT' EQUALS io-unit
-	|	io-unit
 	|	'FMT' EQUALS format
-	|	format
 	|	'NML' EQUALS NAME_LITERAL
-	|	NAME_LITERAL
 	|	'ADVANCE' EQUALS expr
 	|	ASYNCHRONOUS EQUALS expr
 	|	'BLANK' EQUALS expr
@@ -3749,6 +3756,9 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	|	'ROUND' EQUALS expr
 	|	'SIGN' EQUALS expr
 	|	'SIZE' EQUALS variable
+	|	variable
+	|	INT_LITERAL_CONSTANT
+	|	ASTERIK
 	;
 	io-control-spec-list :
 		io-control-spec ( COMMA io-control-spec ) *
@@ -4032,21 +4042,24 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 
 /*
 	R1001 format-stmt is FORMAT format-specification
+	
+	Node: This definition and format-specification were refactored to make 
+	      the processing more efficient. 
 */
 	format-stmt :
-		FORMAT format-specification stmt-end
+		FORMAT LEFT_PARENTHESIS format-specification ? RIGHT_PARENTHESIS stmt-end
 	;
 
 /*
 	R1002 format-specification is ( [ format-items ] )
 	or ( [ format-items, ] unlimited-format-item )
+
+	Node: This definition and format-specification were refactored to make 
+	      the processing more efficient. 
 */
 	format-specification :
-		LEFT_PARENTHESIS 
-	(	format-items ? 
-	|	( format-items COMMA ) ? unlimited-format-item
-	) 
-		RIGHT_PARENTHESIS
+		unlimited-format-item
+	|	format-items ( COMMA unlimited-format-item ) ? 
 	;
 
 /*
@@ -4063,11 +4076,10 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	or [ r ] ( format-items )
 */
 	format-item :	
-		r data-edit-desc
-	|	data-edit-desc
+		INT_LITERAL_CONSTANT ? data-edit-desc
 	|	control-edit-desc
 	|	CHAR_LITERAL_CONSTANT
-	|	r ? LEFT_PARENTHESIS format-items RIGHT_PARENTHESIS
+	|	INT_LITERAL_CONSTANT ? LEFT_PARENTHESIS format-items RIGHT_PARENTHESIS
 	;
 
 /*
@@ -4079,10 +4091,9 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 
 /*
 	R1006 r is int-literal-constant
+	
+	not needed...
 */
-	r :
-		INT_LITERAL_CONSTANT
-	;
 
 /*
 	R1007 data-edit-desc is I w [ . m ]
@@ -4100,67 +4111,42 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	or DT [ char-literal-constant ] [ ( v-list ) ]
 */
 	data-edit-desc :
-		'I' w ( DECIMALPOINT_OR_PERIOD m ) ?
-	|	'B' w ( DECIMALPOINT_OR_PERIOD m ) ?
-	|	'O' w ( DECIMALPOINT_OR_PERIOD m ) ?
-	|	'Z' w ( DECIMALPOINT_OR_PERIOD m ) ?
-	|	'F' w DECIMALPOINT_OR_PERIOD d
-	|	'E' w DECIMALPOINT_OR_PERIOD d 'E' e
-	|	'E' w DECIMALPOINT_OR_PERIOD d
-	|	'EN' w DECIMALPOINT_OR_PERIOD d 'E' e
-	|	'EN' w DECIMALPOINT_OR_PERIOD d
-	|	'ES' w DECIMALPOINT_OR_PERIOD d 'E' e
-	|	'ES' w DECIMALPOINT_OR_PERIOD d
-	|	'G' w DECIMALPOINT_OR_PERIOD d 'E' e
-	|	'G' w DECIMALPOINT_OR_PERIOD d
-	|	'G' w
-	|	'L' w
-	|	'A' w
-	|	'A'
-	|	'D' w DECIMALPOINT_OR_PERIOD d
-	|	'DT' CHAR_LITERAL_CONSTANT LEFT_PARENTHESIS v-list RIGHT_PARENTHESIS
-	|	'DT' CHAR_LITERAL_CONSTANT
-	|	'DT' LEFT_PARENTHESIS v-list RIGHT_PARENTHESIS
-	|	'DT'
+		NAME_LITERAL ( REAL_LITERAL_CONSTANT ) ?
+	|	NAME_LITERAL DECIMALPOINT_OR_PERIOD INT_LITERAL_CONSTANT 'E' INT_LITERAL_CONSTANT
+	|	NAME_LITERAL CHAR_LITERAL_CONSTANT ? ( LEFT_PARENTHESIS v-list RIGHT_PARENTHESIS ) ?
 	;
 
 /*
 	R1008 w is int-literal-constant
+
+	not needed...
 */
-	w :
-		INT_LITERAL_CONSTANT
-	;
 
 /*
 	R1009 m is int-literal-constant
+
+	not needed...
 */
-	m :
-		INT_LITERAL_CONSTANT
-	;
 
 /*
 	R1010 d is int-literal-constant
+
+	not needed...
 */
-	d :
-		INT_LITERAL_CONSTANT
-	;
 
 /*
 	R1011 e is int-literal-constant
+
+	not needed...
 */
-	e :
-		INT_LITERAL_CONSTANT
-	;
 
 /*
 	R1012 v is signed-int-literal-constant
+	
+	not needed...
 */
-	v :
-		signed-int-literal-constant
-	;
 	v-list :
-		v-list COMMA v 
-	|	v
+		( v-list COMMA ) ? signed-int-literal-constant
 	;
 
 /*
@@ -4174,62 +4160,48 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	or decimal-edit-desc
 */
 	control-edit-desc :
-		position-edit-desc
-	|	r ? SLASH
+		NAME_LITERAL
+	|	INT_LITERAL_CONSTANT NAME_LITERAL
+	|	INT_LITERAL_CONSTANT ? SLASH
 	|	COLON
-	|	sign-edit-desc
-	|	k 'P'
-	|	blank-interp-edit-desc
-	|	round-edit-desc
-	|	decimal-edit-desc
+	|	signed-int-literal-constant NAME_LITERAL
 	;
 
 /*
 	R1014 k is signed-int-literal-constant
+	
+	not needed...
 */
-	k :
-		signed-int-literal-constant
-	;
 
 /*
 	R1015 position-edit-desc is T n
 	or TL n
 	or TR n
 	or n X
+	
+	not needed...
 */
-	position-edit-desc :
-		'T' n
-	|	'TL' n
-	|	'TR' n
-	|	n 'X'
-	;
 
 /*
 	R1016 n is int-literal-constant
+
+	not needed...
 */
-	n :
-		INT_LITERAL_CONSTANT
-	;
 
 /*
 	R1017 sign-edit-desc is SS
 	or SP
 	or S
+	
+	not needed...
 */
-	sign-edit-desc :
-		'SS'
-	|	'SP'
-	|	'S'
-	;
 
 /*
 	R1018 blank-interp-edit-desc is BN
 	or BZ
+	
+	not needed...
 */
-	blank-interp-edit-desc :
-		'BN'
-	|	'BZ'
-	;
 
 /*
 	R1019 round-edit-desc is RU
@@ -4238,24 +4210,16 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	or RN
 	or RC
 	or RP
+	
+	not needed...
 */
-	round-edit-desc :
-		'RU'
-	|	'RD'
-	|	'RZ'
-	|	'RN'
-	|	'RC'
-	|	'RP'
-	;
 
 /*
 	R1020 decimal-edit-desc is DC
 	or DP
+
+	not needed...
 */
-	decimal-edit-desc :
-		'DC'
-	|	'DP'
-	;
 
 /*
 	R1021 char-string-edit-desc is char-literal-constant
@@ -4640,15 +4604,14 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 */
 	proc-pointer-init :
 		null-init
-	|	initial-proc-target
+	|	NAME_LITERAL
 	;
 
 /*
 	R1217 initial-proc-target is procedure-name
+	
+	node: moved to proc-pointer-init
 */
-	initial-proc-target :
-		NAME_LITERAL
-	;
 
 /*
 	R1218 intrinsic-stmt is INTRINSIC [ :: ] intrinsic-procedure-name-list
@@ -4677,8 +4640,8 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	or data-ref % binding-name
 */
 	procedure-designator :
-		NAME_LITERAL
-	|	data-ref PERCENT NAME_LITERAL
+		data-ref ( PERCENT NAME_LITERAL ) ?
+	//	|	NAME_LITERAL is also part of data-ref, PERCENT NAME_LITERAL was made optional...
 	|	proc-component-ref
 	;
 

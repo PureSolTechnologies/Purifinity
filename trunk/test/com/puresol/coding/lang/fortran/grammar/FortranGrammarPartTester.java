@@ -4,8 +4,8 @@ import java.io.File;
 import java.io.IOException;
 
 import com.puresol.uhura.grammar.Grammar;
-import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.GrammarPartTester;
+import com.puresol.utils.PersistenceException;
 
 public class FortranGrammarPartTester extends GrammarPartTester {
 
@@ -21,7 +21,7 @@ public class FortranGrammarPartTester extends GrammarPartTester {
 		} catch (IOException e) {
 			e.printStackTrace();
 			return false;
-		} catch (GrammarException e) {
+		} catch (PersistenceException e) {
 			e.printStackTrace();
 			return false;
 		}

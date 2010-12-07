@@ -21,7 +21,6 @@ import com.puresol.coding.lang.fortran.Fortran;
 import com.puresol.trees.TreePrinter;
 import com.puresol.uhura.ast.AST;
 import com.puresol.utils.ConsoleUtils;
-import com.puresol.utils.FileUtilities;
 import com.puresol.utils.StopWatch;
 
 /**
@@ -39,10 +38,10 @@ public class FortranSourceCodeDistributionTest {
 	@Test
 	public void test() {
 		try {
-			Logger.getRootLogger().setLevel(Level.DEBUG);
+			Logger.getRootLogger().setLevel(Level.TRACE);
 			File file = new File(
 					"test/com/puresol/coding/lang/fortran/samples",
-					"cnd_xs22.f");
+					"ndflrech.f");
 			assertTrue(file.exists());
 			Fortran fortran = Fortran.getInstance();
 			StopWatch watch = new StopWatch();
@@ -51,9 +50,11 @@ public class FortranSourceCodeDistributionTest {
 			analyser.parse();
 			watch.stop();
 			AST ast = analyser.getAST();
-			new TreePrinter(System.out).println(ast);
 			assertNotNull(ast);
 			System.out.print(watch.getSeconds());
+			if (Logger.getRootLogger().isTraceEnabled()) {
+				new TreePrinter(System.out).println(ast);
+			}
 		} catch (AnalyzerException e) {
 			e.printStackTrace();
 			fail("No exception was expected!");

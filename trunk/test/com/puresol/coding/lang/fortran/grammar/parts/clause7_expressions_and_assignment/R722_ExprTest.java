@@ -14,6 +14,7 @@ public class R722_ExprTest extends TestCase {
 	public void testExpression() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
 		assertTrue(FortranGrammarPartTester.test("expr", "A"));
+		assertTrue(FortranGrammarPartTester.test("expr", "2 * INOM"));
 		assertTrue(FortranGrammarPartTester.test("expr", "A + B == C * D"));
 	}
 

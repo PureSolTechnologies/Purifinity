@@ -21,7 +21,14 @@ public class R501_TypeDeclarationStmtTest extends TestCase {
 	public void testInteger() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
 		assertTrue(FortranGrammarPartTester.test("type-declaration-stmt",
-				"      INTEGER(4) i j\n"));
+				"      INTEGER(4) i, j\n"));
+	}
+
+	@Test
+	public void testInteger2() {
+		Logger.getRootLogger().setLevel(Level.TRACE);
+		assertTrue(FortranGrammarPartTester.test("type-declaration-stmt",
+				"INTEGER(4) :: NODOGR\n"));
 	}
 
 }
