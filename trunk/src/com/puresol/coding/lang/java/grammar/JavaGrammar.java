@@ -1,14 +1,13 @@
 package com.puresol.coding.lang.java.grammar;
 
 import java.io.IOException;
-import java.net.URL;
 
-import com.puresol.uhura.grammar.GrammarException;
+import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarManager;
 import com.puresol.uhura.lexer.Lexer;
-import com.puresol.uhura.lexer.LexerFactoryException;
 import com.puresol.uhura.parser.Parser;
-import com.puresol.uhura.parser.ParserFactoryException;
+import com.puresol.utils.Persistence;
+import com.puresol.utils.PersistenceException;
 
 /**
  * This class represents the Java programming language.
@@ -16,10 +15,15 @@ import com.puresol.uhura.parser.ParserFactoryException;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class JavaGrammar extends GrammarManager {
+public class JavaGrammar {
 
-	static final String RESOURCE = "/com/puresol/coding/lang/java/grammar/Java-1.6.g";
-	static final URL RESOURCE_URL = JavaGrammar.class.getResource(RESOURCE);
+	public static final String GRAMMAR_RESOURCE = "/com/puresol/coding/lang/java/grammar/Java-1.6.g";
+	public static final String PERSISTED_GRAMMAR_RESOURCE = GrammarManager
+			.getPersistedGrammarPath(GRAMMAR_RESOURCE);
+	public static final String PERSISTED_LEXER_RESOURCE = GrammarManager
+			.getPersistedLexerPath(GRAMMAR_RESOURCE);
+	public static final String PERSISTED_PARSER_RESOURCE = GrammarManager
+			.getPersistedParserPath(GRAMMAR_RESOURCE);
 
 	private static JavaGrammar instance = null;
 
@@ -36,18 +40,22 @@ public class JavaGrammar extends GrammarManager {
 		}
 	}
 
-	public static Lexer createLexer() throws IOException, GrammarException,
-			LexerFactoryException {
-		return getInstance().getLexer();
-	}
-
-	public static Parser createParser() throws IOException, GrammarException,
-			ParserFactoryException {
-		return getInstance().getParser();
-	}
-
 	private JavaGrammar() {
-		super(RESOURCE_URL);
+		super();
 	}
 
+	public Grammar getGrammar() throws IOException, PersistenceException {
+		return (Grammar) Persistence.restore(getClass().getResourceAsStream(
+				PERSISTED_GRAMMAR_RESOURCE));
+	}
+
+	public Lexer getLexer() throws IOException, PersistenceException {
+		return (Lexer) Persistence.restore(getClass().getResourceAsStream(
+				PERSISTED_LEXER_RESOURCE));
+	}
+
+	public Parser getParser() throws IOException, PersistenceException {
+		return (Parser) Persistence.restore(getClass().getResourceAsStream(
+				PERSISTED_PARSER_RESOURCE));
+	}
 }

@@ -17,7 +17,7 @@ public class JavaGrammarTest {
 
 	@Test
 	public void testGetGrammarStream() {
-		assertNotNull(JavaGrammar.class.getResource(JavaGrammar.RESOURCE));
+		assertNotNull(JavaGrammar.class.getResource(JavaGrammar.GRAMMAR_RESOURCE));
 	}
 
 	@Test
@@ -25,7 +25,7 @@ public class JavaGrammarTest {
 		InputStream inputStream = null;
 		try {
 			inputStream = JavaGrammar.class
-					.getResourceAsStream(JavaGrammar.RESOURCE);
+					.getResourceAsStream(JavaGrammar.GRAMMAR_RESOURCE);
 			new GrammarReader(inputStream);
 		} catch (IOException e) {
 			e.printStackTrace();

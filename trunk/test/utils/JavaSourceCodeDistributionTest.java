@@ -18,10 +18,8 @@ import org.junit.Test;
 import com.puresol.coding.analysis.Analyzer;
 import com.puresol.coding.analysis.AnalyzerException;
 import com.puresol.coding.lang.java.Java;
-import com.puresol.trees.TreePrinter;
 import com.puresol.uhura.ast.AST;
 import com.puresol.utils.ConsoleUtils;
-import com.puresol.utils.FileUtilities;
 import com.puresol.utils.StopWatch;
 
 /**

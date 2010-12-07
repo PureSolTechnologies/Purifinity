@@ -11,6 +11,7 @@ import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.parser.ParserFactory;
 import com.puresol.uhura.parser.ParserFactoryException;
+import com.puresol.utils.PersistenceException;
 
 public class GrammarInspector {
 
@@ -28,6 +29,8 @@ public class GrammarInspector {
 		} catch (GrammarException e) {
 			e.printStackTrace();
 		} catch (ParserFactoryException e) {
+			e.printStackTrace();
+		} catch (PersistenceException e) {
 			e.printStackTrace();
 		}
 	}

@@ -22,14 +22,11 @@ import com.puresol.coding.analysis.AnalyzerException;
 import com.puresol.coding.analysis.Analyzer;
 import com.puresol.coding.lang.java.grammar.JavaGrammar;
 import com.puresol.uhura.ast.AST;
-import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.lexer.Lexer;
 import com.puresol.uhura.lexer.LexerException;
-import com.puresol.uhura.lexer.LexerFactoryException;
 import com.puresol.uhura.lexer.TokenStream;
 import com.puresol.uhura.parser.Parser;
 import com.puresol.uhura.parser.ParserException;
-import com.puresol.uhura.parser.ParserFactoryException;
 import com.puresol.utils.Persistence;
 import com.puresol.utils.PersistenceException;
 
@@ -45,22 +42,24 @@ public class JavaAnalyser implements Analyzer {
 	private static final Logger logger = Logger.getLogger(JavaAnalyser.class);
 
 	private final File file;
+	private final transient JavaGrammar grammar;
 	private Date date = new Date();
 	private AST ast = null;
 
 	public JavaAnalyser(File file) {
 		super();
 		this.file = file;
+		grammar = JavaGrammar.getInstance();
 	}
 
 	@Override
 	public void parse() throws AnalyzerException {
 		try {
 			date = new Date();
-			Lexer lexer = JavaGrammar.createLexer();
+			Lexer lexer = grammar.getLexer();
 			TokenStream tokenStream = lexer.lex(new FileReader(file),
 					file.toString());
-			Parser parser = JavaGrammar.createParser();
+			Parser parser = grammar.getParser();
 			ast = parser.parse(tokenStream);
 		} catch (ParserException e) {
 			logger.error(e.getMessage(), e);
@@ -68,16 +67,10 @@ public class JavaAnalyser implements Analyzer {
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
 			throw new AnalyzerException(this);
-		} catch (GrammarException e) {
-			logger.error(e.getMessage(), e);
-			throw new AnalyzerException(this);
-		} catch (LexerFactoryException e) {
-			logger.error(e.getMessage(), e);
-			throw new AnalyzerException(this);
-		} catch (ParserFactoryException e) {
-			logger.error(e.getMessage(), e);
-			throw new AnalyzerException(this);
 		} catch (LexerException e) {
+			logger.error(e.getMessage(), e);
+			throw new AnalyzerException(this);
+		} catch (PersistenceException e) {
 			logger.error(e.getMessage(), e);
 			throw new AnalyzerException(this);
 		}
@@ -104,7 +97,7 @@ public class JavaAnalyser implements Analyzer {
 		try {
 			Persistence.persist(this, file);
 			return true;
-		} catch (PersistenceException e) {
+		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
 			return false;
 		}
