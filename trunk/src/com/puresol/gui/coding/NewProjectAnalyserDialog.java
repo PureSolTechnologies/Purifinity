@@ -1,4 +1,4 @@
-package com.puresol.gui.coding.analysis;
+package com.puresol.gui.coding;
 
 import java.awt.BorderLayout;
 import java.io.File;

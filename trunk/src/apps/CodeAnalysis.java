@@ -27,8 +27,8 @@ import org.osgi.framework.BundleException;
 
 import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.gui.PureSolApplication;
-import com.puresol.gui.coding.analysis.NewProjectAnalyserDialog;
-import com.puresol.gui.coding.analysis.ProjectAnalysisBrowser;
+import com.puresol.gui.coding.NewProjectAnalyserDialog;
+import com.puresol.gui.coding.ProjectAnalysisBrowser;
 import com.puresol.gui.osgi.BundleManager;
 import com.puresol.osgi.OSGi;
 import com.puresol.osgi.OSGiException;
@@ -136,6 +136,7 @@ public class CodeAnalysis extends PureSolApplication {
 							.i18n("Could not create new analyser workspace!"),
 							translator.i18n("Error"), JOptionPane.ERROR_MESSAGE);
 		}
+		refresh();
 	}
 
 	@Slot

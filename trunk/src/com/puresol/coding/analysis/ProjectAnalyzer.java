@@ -195,6 +195,9 @@ public class ProjectAnalyzer implements Serializable, ProgressObservable {
 		} catch (PersistenceException e) {
 			logger.error(e.getMessage(), e);
 			return false;
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e);
+			return false;
 		}
 	}
 
@@ -202,7 +205,7 @@ public class ProjectAnalyzer implements Serializable, ProgressObservable {
 		try {
 			Persistence.persist(analyzedFiles, ANALYZED_FILES_FILE);
 			Persistence.persist(failedFiles, FAILED_FILES_FILE);
-		} catch (PersistenceException e) {
+		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
 		}
 	}

@@ -11,12 +11,12 @@
 package com.puresol.coding.analysis;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Date;
 
 import org.apache.log4j.Logger;
 
 import com.puresol.utils.Persistence;
-import com.puresol.utils.PersistenceException;
 
 abstract public class AbstractAnalyser implements Analyzer {
 
@@ -55,7 +55,7 @@ abstract public class AbstractAnalyser implements Analyzer {
 			}
 			Persistence.persist(this, file);
 			return true;
-		} catch (PersistenceException e) {
+		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
 			return false;
 		}

@@ -1,4 +1,4 @@
-package com.puresol.gui.coding.analysis;
+package com.puresol.gui.coding;
 
 import javax.i18n4java.Translator;
 import javax.swing.BoxLayout;
