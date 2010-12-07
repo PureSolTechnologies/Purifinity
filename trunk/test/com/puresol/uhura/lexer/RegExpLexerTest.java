@@ -49,4 +49,23 @@ public class RegExpLexerTest {
 			fail("No exception was expected!");
 		}
 	}
+
+	@Test
+	public void testFindNextToken() {
+		try {
+			TokenDefinitionSet rules = new TokenDefinitionSet();
+			rules.addDefinition(new TokenDefinition("STRING", "\"[^\"]*\""));
+			Grammar grammar = new Grammar(new Properties(), rules,
+					new ProductionSet());
+			Lexer lexer = new RegExpLexer(grammar);
+			lexer.lex(new StringReader(
+					"\"String without trailing double quote!"), "SampleString");
+		} catch (GrammarException e) {
+			e.printStackTrace();
+			fail("No exception was expected!");
+		} catch (LexerException e) {
+			e.printStackTrace();
+			fail("No exception was expected!");
+		}
+	}
 }

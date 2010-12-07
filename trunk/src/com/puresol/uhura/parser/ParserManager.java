@@ -1,6 +1,7 @@
 package com.puresol.uhura.parser;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.apache.log4j.Logger;
 
@@ -14,12 +15,12 @@ public class ParserManager {
 	private static final Logger logger = Logger.getLogger(ParserManager.class);
 
 	public static void storeParser(File directory, String name, Parser parser)
-			throws PersistenceException {
+			throws IOException {
 		Persistence.persist(parser, new File(directory, name + ".persist"));
 	}
 
 	public static Parser loadParser(File directory, String name)
-			throws PersistenceException {
+			throws PersistenceException, IOException {
 		return (Parser) Persistence.restore(new File(directory, name
 				+ ".persist"));
 	}
@@ -34,6 +35,8 @@ public class ParserManager {
 			return parser;
 		} catch (PersistenceException e) {
 			logger.debug("Parser '" + name + "' not available, yet.");
+		} catch (IOException e) {
+			logger.debug("Parser '" + name + "' not available, yet.");
 		}
 		Parser parser = null;
 		try {
@@ -44,7 +47,7 @@ public class ParserManager {
 		}
 		try {
 			storeParser(directory, name, parser);
-		} catch (PersistenceException e) {
+		} catch (IOException e) {
 			logger.warn(
 					"Newly created managed parser '" + name
 							+ "' could not be stored in directory '"

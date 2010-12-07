@@ -73,9 +73,12 @@ public class RegExpLexer implements Lexer {
 		int pos = 0;
 		int id = 0;
 		int line = 1;
-		// Pattern lineTerminatorPattern = Pattern.compile(LINE_TERMINATOR);
 		while (text.length() > 0) {
 			Token token = findNextToken(text, id, pos, line);
+			if (logger.isTraceEnabled()) {
+				logger.trace("Found token: " + token + " / "
+						+ token.getMetaData());
+			}
 			if ((token == null) || (token.getText().length() == 0)) {
 				String exceptionText;
 				if (text.length() <= 12) {

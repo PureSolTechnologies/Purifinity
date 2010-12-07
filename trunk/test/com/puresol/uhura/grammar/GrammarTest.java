@@ -3,6 +3,7 @@ package com.puresol.uhura.grammar;
 import static org.junit.Assert.*;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Properties;
 
 import org.junit.Test;
@@ -68,6 +69,9 @@ public class GrammarTest {
 			e.printStackTrace();
 			fail("No exception was expected!");
 		} catch (PersistenceException e) {
+			e.printStackTrace();
+			fail("No exception was expected!");
+		} catch (IOException e) {
 			e.printStackTrace();
 			fail("No exception was expected!");
 		}
