@@ -1,12 +1,16 @@
 package com.puresol.uhura.ast;
 
+import java.io.Serializable;
+
 /**
  * This class is used to store meta information for each node in an AST.
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class ParserTreeMetaData {
+public class ParserTreeMetaData implements Serializable {
+
+	private static final long serialVersionUID = 7846977139079079374L;
 
 	private final String sourceName;
 	private final int line;

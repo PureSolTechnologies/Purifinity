@@ -30,12 +30,30 @@ public class TreeIteratorTest {
 	}
 
 	@Test
+	public void testGotoStartPart() {
+		TreeImpl tree = TreeImpl.getSampleTree().getChildren().get(1);
+		TreeIterator<TreeImpl> iterator = new TreeIterator<TreeImpl>(tree);
+		assertEquals("n2", iterator.getCurrentNode().getName());
+		iterator.gotoStart();
+		assertEquals("n2", iterator.getCurrentNode().getName());
+	}
+
+	@Test
 	public void testGotoEnd() {
 		TreeImpl tree = TreeImpl.getSampleTree();
 		TreeIterator<TreeImpl> iterator = new TreeIterator<TreeImpl>(tree);
 		assertEquals("root", iterator.getCurrentNode().getName());
 		iterator.gotoEnd();
 		assertEquals("n33", iterator.getCurrentNode().getName());
+	}
+
+	@Test
+	public void testGotoEndPart() {
+		TreeImpl tree = TreeImpl.getSampleTree().getChildren().get(1);
+		TreeIterator<TreeImpl> iterator = new TreeIterator<TreeImpl>(tree);
+		assertEquals("n2", iterator.getCurrentNode().getName());
+		iterator.gotoEnd();
+		assertEquals("n23", iterator.getCurrentNode().getName());
 	}
 
 	@Test
@@ -71,6 +89,20 @@ public class TreeIteratorTest {
 	}
 
 	@Test
+	public void testGoForwardPart() {
+		TreeImpl tree = TreeImpl.getSampleTree().getChildren().get(1);
+		TreeIterator<TreeImpl> iterator = new TreeIterator<TreeImpl>(tree);
+		assertEquals("n2", iterator.getCurrentNode().getName());
+		assertTrue(iterator.goForward());
+		assertEquals("n21", iterator.getCurrentNode().getName());
+		assertTrue(iterator.goForward());
+		assertEquals("n22", iterator.getCurrentNode().getName());
+		assertTrue(iterator.goForward());
+		assertEquals("n23", iterator.getCurrentNode().getName());
+		assertFalse(iterator.goForward());
+	}
+
+	@Test
 	public void testGoBackward() {
 		TreeImpl tree = TreeImpl.getSampleTree();
 		TreeIterator<TreeImpl> iterator = new TreeIterator<TreeImpl>(tree);
@@ -100,6 +132,21 @@ public class TreeIteratorTest {
 		assertEquals("n1", iterator.getCurrentNode().getName());
 		assertTrue(iterator.goBackward());
 		assertEquals("root", iterator.getCurrentNode().getName());
+		assertFalse(iterator.goBackward());
+	}
+
+	@Test
+	public void testGoBackwardPart() {
+		TreeImpl tree = TreeImpl.getSampleTree().getChildren().get(1);
+		TreeIterator<TreeImpl> iterator = new TreeIterator<TreeImpl>(tree);
+		iterator.gotoEnd();
+		assertEquals("n23", iterator.getCurrentNode().getName());
+		assertTrue(iterator.goBackward());
+		assertEquals("n22", iterator.getCurrentNode().getName());
+		assertTrue(iterator.goBackward());
+		assertEquals("n21", iterator.getCurrentNode().getName());
+		assertTrue(iterator.goBackward());
+		assertEquals("n2", iterator.getCurrentNode().getName());
 		assertFalse(iterator.goBackward());
 	}
 }

@@ -51,7 +51,7 @@ public class TreeIterator<T extends Tree<T>> {
 		}
 		while (true) {
 			T parent = currentNode.getParent();
-			if (parent == null) {
+			if ((parent == null) || (currentNode == tree)) {
 				return false;
 			}
 			int index = parent.getChildren().indexOf(currentNode);
@@ -66,7 +66,7 @@ public class TreeIterator<T extends Tree<T>> {
 
 	public boolean goBackward() {
 		T parent = currentNode.getParent();
-		if (parent == null) {
+		if ((parent == null) || (currentNode == tree)) {
 			return false;
 		}
 		int index = parent.getChildren().indexOf(currentNode);

@@ -10,9 +10,7 @@ import java.util.Stack;
 
 import org.apache.log4j.Logger;
 
-import com.puresol.trees.TreeIterator;
 import com.puresol.uhura.ast.ParserTree;
-import com.puresol.uhura.ast.ParserTreeMetaData;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.production.FinishTerminal;
@@ -159,8 +157,7 @@ public abstract class AbstractLRParser extends AbstractParser {
 			throws ParserException {
 		setTokenStream(tokenStream);
 		reset();
-		ParserTree tree = parse();
-		return addMetaData(tree);
+		return parse();
 	}
 
 	/**
@@ -472,46 +469,4 @@ public abstract class AbstractLRParser extends AbstractParser {
 		return buffer.toString();
 	}
 
-	private ParserTree addMetaData(ParserTree tree) {
-		TreeIterator<ParserTree> iterator = new TreeIterator<ParserTree>(tree);
-		int line = 1;
-		int tokenId = 0;
-		final String sourceName = getTokenStream().getName();
-		do {
-			final ParserTree currentNode = iterator.getCurrentNode();
-			final Token token = currentNode.getToken();
-			if (token != null) {
-				final int lineNum = token.getMetaData().getLineNum();
-				currentNode.setMetaData(new ParserTreeMetaData(sourceName,
-						line, lineNum));
-				line += lineNum - 1;
-				tokenId++;
-			}
-		} while (iterator.goForward());
-		iterator.gotoEnd();
-		do {
-			final ParserTree currentNode = iterator.getCurrentNode();
-			final Token token = currentNode.getToken();
-			if (token != null) {
-				line = currentNode.getMetaData().getLine();
-			} else {
-				List<ParserTree> children = currentNode.getChildren();
-				if (children.size() == 0) {
-					currentNode.setMetaData(new ParserTreeMetaData(sourceName,
-							line, 1));
-
-				} else {
-					final ParserTreeMetaData metaDataLeft = children.get(0)
-							.getMetaData();
-					final ParserTreeMetaData metaDataRight = children.get(
-							children.size() - 1).getMetaData();
-					currentNode.setMetaData(new ParserTreeMetaData(sourceName,
-							metaDataLeft.getLine(), metaDataRight.getLine()
-									- metaDataLeft.getLine()
-									+ metaDataRight.getLineNum()));
-				}
-			}
-		} while (iterator.goBackward());
-		return tree;
-	}
 }

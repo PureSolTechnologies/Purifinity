@@ -2,9 +2,22 @@ package com.puresol.uhura.ast;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
+
 import org.junit.Test;
 
-public class ASTMetaDataTest {
+import com.puresol.utils.FileUtilities;
+import com.puresol.utils.PersistenceTester;
+
+public class ParserTreeMetaDataTest {
+
+	@Test
+	public void testPersistence() {
+		File file = new File("test", FileUtilities.classToRelativePackagePath(
+				ParserTreeMetaData.class).toString()
+				+ ".persist");
+		PersistenceTester.test(new ParserTreeMetaData("Test", 1, 2), file);
+	}
 
 	@Test
 	public void testInstance() {
@@ -21,8 +34,8 @@ public class ASTMetaDataTest {
 
 	@Test
 	public void testEquals() {
-		assertEquals(new ParserTreeMetaData("test.java", 1, 1), new ParserTreeMetaData(
-				"test.java", 1, 1));
+		assertEquals(new ParserTreeMetaData("test.java", 1, 1),
+				new ParserTreeMetaData("test.java", 1, 1));
 	}
 
 	@Test
