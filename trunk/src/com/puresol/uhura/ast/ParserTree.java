@@ -117,11 +117,9 @@ public class ParserTree implements Tree<ParserTree>, Serializable {
 	}
 
 	public void addChildren(List<ParserTree> children) throws TreeException {
-		/*
-		 * This needs to be done to set the parents for all children correctly!
-		 */
+		this.children.addAll(children);
 		for (ParserTree child : children) {
-			addChild(child);
+			child.setParent(this);
 		}
 	}
 
@@ -132,11 +130,9 @@ public class ParserTree implements Tree<ParserTree>, Serializable {
 
 	public void addChildrenInFront(List<ParserTree> children)
 			throws TreeException {
-		/*
-		 * This needs to be done to set the parents for all children correctly!
-		 */
+		this.children.addAll(0, children);
 		for (ParserTree child : children) {
-			addChildInFront(child);
+			child.setParent(this);
 		}
 	}
 

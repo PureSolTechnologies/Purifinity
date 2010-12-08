@@ -473,46 +473,45 @@ public abstract class AbstractLRParser extends AbstractParser {
 	}
 
 	private ParserTree addMetaData(ParserTree tree) {
+		TreeIterator<ParserTree> iterator = new TreeIterator<ParserTree>(tree);
+		int line = 1;
+		int tokenId = 0;
+		final String sourceName = getTokenStream().getName();
+		do {
+			final ParserTree currentNode = iterator.getCurrentNode();
+			final Token token = currentNode.getToken();
+			if (token != null) {
+				final int lineNum = token.getMetaData().getLineNum();
+				currentNode.setMetaData(new ParserTreeMetaData(sourceName,
+						line, lineNum));
+				line += lineNum - 1;
+				tokenId++;
+			}
+		} while (iterator.goForward());
+		iterator.gotoEnd();
+		do {
+			final ParserTree currentNode = iterator.getCurrentNode();
+			final Token token = currentNode.getToken();
+			if (token != null) {
+				line = currentNode.getMetaData().getLine();
+			} else {
+				List<ParserTree> children = currentNode.getChildren();
+				if (children.size() == 0) {
+					currentNode.setMetaData(new ParserTreeMetaData(sourceName,
+							line, 1));
+
+				} else {
+					final ParserTreeMetaData metaDataLeft = children.get(0)
+							.getMetaData();
+					final ParserTreeMetaData metaDataRight = children.get(
+							children.size() - 1).getMetaData();
+					currentNode.setMetaData(new ParserTreeMetaData(sourceName,
+							metaDataLeft.getLine(), metaDataRight.getLine()
+									- metaDataLeft.getLine()
+									+ metaDataRight.getLineNum()));
+				}
+			}
+		} while (iterator.goBackward());
 		return tree;
-//		TreeIterator<ParserTree> iterator = new TreeIterator<ParserTree>(tree);
-//		int line = 1;
-//		int tokenId = 0;
-//		final String sourceName = getTokenStream().getName();
-//		do {
-//			final ParserTree currentNode = iterator.getCurrentNode();
-//			final Token token = currentNode.getToken();
-//			if (token != null) {
-//				final int lineNum = token.getMetaData().getLineNum();
-//				currentNode.setMetaData(new ParserTreeMetaData(sourceName,
-//						line, lineNum));
-//				line += lineNum - 1;
-//				tokenId++;
-//			}
-//		} while (iterator.goForward());
-//		iterator.gotoEnd();
-//		do {
-//			final ParserTree currentNode = iterator.getCurrentNode();
-//			final Token token = currentNode.getToken();
-//			if (token != null) {
-//				line = currentNode.getMetaData().getLine();
-//			} else {
-//				List<ParserTree> children = currentNode.getChildren();
-//				if (children.size() == 0) {
-//					currentNode.setMetaData(new ParserTreeMetaData(sourceName,
-//							line, 1));
-//
-//				} else {
-//					final ParserTreeMetaData metaDataLeft = children.get(0)
-//							.getMetaData();
-//					final ParserTreeMetaData metaDataRight = children.get(
-//							children.size() - 1).getMetaData();
-//					currentNode.setMetaData(new ParserTreeMetaData(sourceName,
-//							metaDataLeft.getLine(), metaDataRight.getLine()
-//									- metaDataLeft.getLine()
-//									+ metaDataRight.getLineNum()));
-//				}
-//			}
-//		} while (iterator.goBackward());
-//		return tree;
 	}
 }
