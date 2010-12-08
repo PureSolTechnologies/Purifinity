@@ -75,10 +75,6 @@ public class RegExpLexer implements Lexer {
 		int line = 1;
 		while (text.length() > 0) {
 			Token token = findNextToken(text, id, pos, line);
-			if (logger.isTraceEnabled()) {
-				logger.trace("Found token: " + token + " / "
-						+ token.getMetaData());
-			}
 			if ((token == null) || (token.getText().length() == 0)) {
 				String exceptionText;
 				if (text.length() <= 12) {
@@ -89,6 +85,10 @@ public class RegExpLexer implements Lexer {
 				}
 				throw new LexerException("No token found for '" + exceptionText
 						+ "' in line " + line + " at position " + pos + ".");
+			}
+			if (logger.isTraceEnabled()) {
+				logger.trace("Found token: " + token + " / "
+						+ token.getMetaData());
 			}
 			if (token.getVisibility() != Visibility.HIDDEN) {
 				tokenStream.add(token);

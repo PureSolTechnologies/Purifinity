@@ -8,12 +8,12 @@ public class ASTMetaDataTest {
 
 	@Test
 	public void testInstance() {
-		assertNotNull(new ASTMetaData("test.java", 1, 2));
+		assertNotNull(new ParserTreeMetaData("test.java", 1, 2));
 	}
 
 	@Test
 	public void testInitValues() {
-		ASTMetaData metaData = new ASTMetaData("test.java", 1, 2);
+		ParserTreeMetaData metaData = new ParserTreeMetaData("test.java", 1, 2);
 		assertEquals("test.java", metaData.getSourceName());
 		assertEquals(1, metaData.getLine());
 		assertEquals(2, metaData.getLineNum());
@@ -21,16 +21,16 @@ public class ASTMetaDataTest {
 
 	@Test
 	public void testEquals() {
-		assertEquals(new ASTMetaData("test.java", 1, 1), new ASTMetaData(
+		assertEquals(new ParserTreeMetaData("test.java", 1, 1), new ParserTreeMetaData(
 				"test.java", 1, 1));
 	}
 
 	@Test
 	public void testToString() {
-		ASTMetaData metaData = new ASTMetaData("test.java", 1, 1);
+		ParserTreeMetaData metaData = new ParserTreeMetaData("test.java", 1, 1);
 		assertEquals("test.java: 1", metaData.toString());
 
-		metaData = new ASTMetaData("test.java", 1, 2);
+		metaData = new ParserTreeMetaData("test.java", 1, 2);
 		assertEquals("test.java: 1 - 2", metaData.toString());
 	}
 }

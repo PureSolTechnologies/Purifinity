@@ -9,7 +9,7 @@ import org.apache.log4j.Logger;
 import org.junit.Test;
 
 import com.puresol.trees.TreePrinter;
-import com.puresol.uhura.ast.AST;
+import com.puresol.uhura.ast.ParserTree;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.TestGrammars;
@@ -28,7 +28,7 @@ public class SLR1ParserTest {
 			Grammar grammar = TestGrammars.getSLR1TestGrammarFromDragonBook();
 			Parser parser = new SLR1Parser(grammar);
 			Lexer lexer = new RegExpLexer(grammar);
-			AST syntaxTree = parser.parse(lexer.lex(new StringReader("1*2+3"),
+			ParserTree syntaxTree = parser.parse(lexer.lex(new StringReader("1*2+3"),
 					"SampleString"));
 			new TreePrinter(System.out).println(syntaxTree);
 		} catch (GrammarException e) {
@@ -50,7 +50,7 @@ public class SLR1ParserTest {
 			Grammar grammar = TestGrammars.getSLR1TestGrammarFromDragonBook();
 			Parser parser = new SLR1Parser(grammar);
 			Lexer lexer = new RegExpLexer(grammar);
-			AST syntaxTree = parser.parse(lexer.lex(new StringReader(
+			ParserTree syntaxTree = parser.parse(lexer.lex(new StringReader(
 					"((1*(2+3)+4*5)+6)*7"), "SampleString"));
 			new TreePrinter(System.out).println(syntaxTree);
 		} catch (GrammarException e) {

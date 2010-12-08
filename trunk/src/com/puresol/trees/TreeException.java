@@ -1,4 +1,4 @@
-package com.puresol.uhura.ast;
+package com.puresol.trees;
 
 /**
  * This exception is thrown if a AST function or action is not suitable or
@@ -7,11 +7,11 @@ package com.puresol.uhura.ast;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class ASTException extends Exception {
+public class TreeException extends Exception {
 
 	private static final long serialVersionUID = 5048301833347363159L;
 
-	public ASTException(String message) {
+	public TreeException(String message) {
 		super(message);
 	}
 

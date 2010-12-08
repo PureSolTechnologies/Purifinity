@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 
-import com.puresol.uhura.ast.AST;
+import com.puresol.uhura.ast.ParserTree;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.lexer.TokenStream;
 
@@ -26,7 +26,7 @@ public interface Parser extends Serializable {
 	 * @return A result AST is returned.
 	 * @throws ParserException
 	 */
-	public AST parse(TokenStream tokenStream) throws ParserException;
+	public ParserTree parse(TokenStream tokenStream) throws ParserException;
 
 	/**
 	 * This method is used to generated maximum detail information about the

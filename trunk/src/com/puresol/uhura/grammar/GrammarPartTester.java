@@ -8,10 +8,12 @@ import org.apache.log4j.Logger;
 
 import com.puresol.io.StringOutputStream;
 import com.puresol.trees.TreePrinter;
-import com.puresol.uhura.ast.AST;
+import com.puresol.uhura.ast.ParserTree;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.lexer.Lexer;
 import com.puresol.uhura.lexer.LexerException;
+import com.puresol.uhura.lexer.LexerFactory;
+import com.puresol.uhura.lexer.LexerFactoryException;
 import com.puresol.uhura.lexer.RegExpLexer;
 import com.puresol.uhura.lexer.TokenStream;
 import com.puresol.uhura.parser.Parser;
@@ -42,12 +44,12 @@ public class GrammarPartTester {
 						+ "' with text '" + text + "' ...");
 			}
 			grammar = grammar.createWithNewStartProduction(production);
-			Lexer lexer = new RegExpLexer(grammar);
+			Lexer lexer = LexerFactory.create(grammar);
 			TokenStream tokenStream = lexer.lex(new StringReader(text),
 					"SampleString");
 
 			Parser parser = ParserFactory.create(grammar);
-			AST ast = parser.parse(tokenStream);
+			ParserTree ast = parser.parse(tokenStream);
 			if (logger.isTraceEnabled()) {
 				StringOutputStream out = new StringOutputStream();
 				new TreePrinter(new PrintStream(out)).println(ast);
@@ -65,6 +67,9 @@ public class GrammarPartTester {
 			e.printStackTrace();
 			return false;
 		} catch (ParserException e) {
+			e.printStackTrace();
+			return false;
+		} catch (LexerFactoryException e) {
 			e.printStackTrace();
 			return false;
 		}
@@ -89,7 +94,7 @@ public class GrammarPartTester {
 			Parser parser = ParserManager.getManagerParser(parserDirectory,
 					parserName, grammar);
 			watch.start();
-			AST ast = parser.parse(tokenStream);
+			ParserTree ast = parser.parse(tokenStream);
 			watch.stop();
 			logger.debug("Parser time: " + watch);
 			if (logger.isTraceEnabled()) {

@@ -7,7 +7,7 @@ import java.io.Reader;
 
 import org.apache.log4j.Logger;
 
-import com.puresol.uhura.ast.AST;
+import com.puresol.uhura.ast.ParserTree;
 import com.puresol.uhura.grammar.uhura.UhuraGrammar;
 import com.puresol.uhura.lexer.Lexer;
 import com.puresol.uhura.lexer.LexerException;
@@ -31,7 +31,7 @@ public class GrammarFile {
 	private final Grammar uhuraGrammar = UhuraGrammar.getGrammar();;
 	private final Reader reader;
 
-	private AST ast = null;
+	private ParserTree ast = null;
 
 	/**
 	 * Constructor for InputStream reading.
@@ -59,7 +59,7 @@ public class GrammarFile {
 	 * @throws GrammarException
 	 * @throws IOException
 	 */
-	public AST getAST() throws IOException, GrammarException {
+	public ParserTree getAST() throws IOException, GrammarException {
 		if (ast == null) {
 			read();
 		}

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.puresol.trees.TreeException;
 import com.puresol.trees.Tree;
 import com.puresol.trees.TreeWalker;
 import com.puresol.trees.TreeVisitor;
@@ -19,19 +20,19 @@ import com.puresol.uhura.lexer.Token;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class AST implements Tree<AST>, Serializable {
+public class ParserTree implements Tree<ParserTree>, Serializable {
 
 	private static final long serialVersionUID = -651453440127029204L;
 
 	private final String name;
 	private final Token token;
-	private AST parent = null;
-	private final List<AST> children = new ArrayList<AST>();
+	private ParserTree parent = null;
+	private final List<ParserTree> children = new ArrayList<ParserTree>();
 	private final boolean node;
 	private final boolean stackingAllowed;
-	private ASTMetaData metaData = null;
+	private ParserTreeMetaData metaData = null;
 
-	public AST(Token token) {
+	public ParserTree(Token token) {
 		super();
 		this.name = token.getName();
 		this.token = token;
@@ -39,21 +40,22 @@ public class AST implements Tree<AST>, Serializable {
 		this.stackingAllowed = true;
 	}
 
-	public AST(Production production) {
+	public ParserTree(Production production) {
 		this.name = production.getAlternativeName();
 		this.token = null;
 		this.node = production.isNode();
 		this.stackingAllowed = production.isStackingAllowed();
 	}
 
-	public AST(String name) {
+	public ParserTree(String name) {
 		this.name = name;
 		this.token = null;
 		this.node = true;
 		this.stackingAllowed = true;
 	}
 
-	public AST(String name, Token token, boolean node, boolean stackingAllowed) {
+	public ParserTree(String name, Token token, boolean node,
+			boolean stackingAllowed) {
 		this.name = name;
 		this.token = token;
 		this.node = node;
@@ -84,7 +86,7 @@ public class AST implements Tree<AST>, Serializable {
 	 * @param parent
 	 *            the parent to set
 	 */
-	public void setParent(AST parent) throws ASTException {
+	public void setParent(ParserTree parent) throws TreeException {
 		this.parent = parent;
 	}
 
@@ -92,7 +94,7 @@ public class AST implements Tree<AST>, Serializable {
 	 * @return the parent
 	 */
 	@Override
-	public AST getParent() {
+	public ParserTree getParent() {
 		return parent;
 	}
 
@@ -105,38 +107,49 @@ public class AST implements Tree<AST>, Serializable {
 	 * @return the children
 	 */
 	@Override
-	public List<AST> getChildren() {
+	public List<ParserTree> getChildren() {
 		return children;
 	}
 
-	public void addChild(AST child) throws ASTException {
+	public void addChild(ParserTree child) throws TreeException {
 		children.add(child);
 		child.setParent(this);
 	}
 
-	public void addChildren(List<AST> children) {
-		this.children.addAll(children);
+	public void addChildren(List<ParserTree> children) throws TreeException {
+		/*
+		 * This needs to be done to set the parents for all children correctly!
+		 */
+		for (ParserTree child : children) {
+			addChild(child);
+		}
 	}
 
-	public void addChildInFront(AST child) throws ASTException {
+	public void addChildInFront(ParserTree child) throws TreeException {
 		children.add(0, child);
 		child.setParent(this);
 	}
 
-	public void addChildrenInFront(List<AST> children) {
-		this.children.addAll(0, children);
+	public void addChildrenInFront(List<ParserTree> children)
+			throws TreeException {
+		/*
+		 * This needs to be done to set the parents for all children correctly!
+		 */
+		for (ParserTree child : children) {
+			addChildInFront(child);
+		}
 	}
 
 	/**
 	 * @return the children
-	 * @throws ASTException
+	 * @throws TreeException
 	 */
-	public AST getChild(String name) throws ASTException {
-		AST result = null;
-		for (AST child : children) {
+	public ParserTree getChild(String name) throws TreeException {
+		ParserTree result = null;
+		for (ParserTree child : children) {
 			if (child.getName().equals(name)) {
 				if (result != null) {
-					throw new ASTException("Child '" + name
+					throw new TreeException("Child '" + name
 							+ "'is multiply defined!");
 				}
 				result = child;
@@ -147,11 +160,11 @@ public class AST implements Tree<AST>, Serializable {
 
 	/**
 	 * @return the children
-	 * @throws ASTException
+	 * @throws TreeException
 	 */
-	public List<AST> getChildren(String name) throws ASTException {
-		List<AST> result = new ArrayList<AST>();
-		for (AST child : children) {
+	public List<ParserTree> getChildren(String name) throws TreeException {
+		List<ParserTree> result = new ArrayList<ParserTree>();
+		for (ParserTree child : children) {
 			if (child.getName().equals(name)) {
 				result.add(child);
 			}
@@ -163,7 +176,7 @@ public class AST implements Tree<AST>, Serializable {
 	 * @return
 	 */
 	public boolean hasChild(String name) {
-		for (AST child : children) {
+		for (ParserTree child : children) {
 			if (child.getName().equals(name)) {
 				return true;
 			}
@@ -185,27 +198,28 @@ public class AST implements Tree<AST>, Serializable {
 		return stackingAllowed;
 	}
 
-	public List<AST> getSubTrees(String name) {
-		List<AST> subTrees = new ArrayList<AST>();
+	public List<ParserTree> getSubTrees(String name) {
+		List<ParserTree> subTrees = new ArrayList<ParserTree>();
 		getSubTrees(this, subTrees, name);
 		return subTrees;
 	}
 
-	private void getSubTrees(AST branch, List<AST> subTrees, String name) {
+	private void getSubTrees(ParserTree branch, List<ParserTree> subTrees,
+			String name) {
 		if (branch.getName().equals(name)) {
 			subTrees.add(branch);
 		}
-		for (AST subBranch : branch.getChildren()) {
+		for (ParserTree subBranch : branch.getChildren()) {
 			getSubTrees(subBranch, subTrees, name);
 		}
 	}
 
-	private class TextWalkerClient implements TreeVisitor<AST> {
+	private class TextWalkerClient implements TreeVisitor<ParserTree> {
 
 		private final StringBuffer text = new StringBuffer();
 
 		@Override
-		public WalkingAction visit(AST syntaxTree) {
+		public WalkingAction visit(ParserTree syntaxTree) {
 			Token token = syntaxTree.getToken();
 			if (token != null) {
 				text.append(token.getText());
@@ -220,17 +234,17 @@ public class AST implements Tree<AST>, Serializable {
 	}
 
 	public String getText() {
-		TreeWalker<AST> treeWalker = new TreeWalker<AST>(this);
+		TreeWalker<ParserTree> treeWalker = new TreeWalker<ParserTree>(this);
 		TextWalkerClient textClient = new TextWalkerClient();
 		treeWalker.walk(textClient);
 		return textClient.getText();
 	}
 
-	public ASTMetaData getMetaData() {
+	public ParserTreeMetaData getMetaData() {
 		return metaData;
 	}
 
-	public void setMetaData(ASTMetaData metaData) {
+	public void setMetaData(ParserTreeMetaData metaData) {
 		this.metaData = metaData;
 	}
 

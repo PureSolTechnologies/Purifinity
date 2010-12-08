@@ -6,7 +6,7 @@ import java.io.StringReader;
 
 import org.junit.Test;
 
-import com.puresol.uhura.ast.AST;
+import com.puresol.uhura.ast.ParserTree;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.TestGrammars;
@@ -26,7 +26,7 @@ public class LR1ParserTest {
 			assertNotNull(grammar);
 			Parser parser = new LR1Parser(grammar);
 			Lexer lexer = new RegExpLexer(grammar);
-			AST syntaxTree = parser.parse(lexer.lex(new StringReader("1*2+3"),
+			ParserTree syntaxTree = parser.parse(lexer.lex(new StringReader("1*2+3"),
 					"SampleString"));
 			assertNotNull(syntaxTree);
 			// new TreePrinter(System.out).println(syntaxTree);
@@ -49,7 +49,7 @@ public class LR1ParserTest {
 			Grammar grammar = TestGrammars.getSLR1TestGrammarFromDragonBook();
 			Lexer lexer = new RegExpLexer(grammar);
 			Parser parser = new LR1Parser(grammar);
-			AST syntaxTree = parser.parse(lexer.lex(new StringReader(
+			ParserTree syntaxTree = parser.parse(lexer.lex(new StringReader(
 					"((1*(2+3)+4*5)+6)*7"),
 					"SampleString"));
 			assertNotNull(syntaxTree);

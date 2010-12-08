@@ -5,8 +5,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 
-import com.puresol.uhura.ast.AST;
-import com.puresol.uhura.ast.ASTException;
+import com.puresol.trees.TreeException;
+import com.puresol.uhura.ast.ParserTree;
 
 /**
  * This class is for reading Nyota Uhura grammar files. The grammar file is read
@@ -28,7 +28,7 @@ import com.puresol.uhura.ast.ASTException;
  */
 public class GrammarReader {
 
-	private final AST ast;
+	private final ParserTree ast;
 	private final GrammarConverter converter;
 
 	/**
@@ -37,7 +37,7 @@ public class GrammarReader {
 	 * @param inputStream
 	 * @throws IOException
 	 * @throws GrammarException
-	 * @throws ASTException
+	 * @throws TreeException
 	 */
 	public GrammarReader(InputStream inputStream) throws GrammarException,
 			IOException {
@@ -49,19 +49,19 @@ public class GrammarReader {
 	 * 
 	 * @param reader
 	 * @throws GrammarException
-	 * @throws ASTException
+	 * @throws TreeException
 	 * @throws IOException
 	 */
 	public GrammarReader(Reader reader) throws GrammarException, IOException {
 		ast = new GrammarFile(reader).getAST();
 		try {
 			converter = new GrammarConverter(ast);
-		} catch (ASTException e) {
+		} catch (TreeException e) {
 			throw new IOException("Uhura grammar AST is broken!!!");
 		}
 	}
 
-	public AST getAST() {
+	public ParserTree getAST() {
 		return ast;
 	}
 

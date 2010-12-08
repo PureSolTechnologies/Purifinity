@@ -5,8 +5,8 @@ import java.util.Stack;
 
 import org.apache.log4j.Logger;
 
-import com.puresol.uhura.ast.AST;
-import com.puresol.uhura.ast.ASTException;
+import com.puresol.trees.TreeException;
+import com.puresol.uhura.ast.ParserTree;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.production.Production;
 import com.puresol.uhura.grammar.token.Visibility;
@@ -19,7 +19,7 @@ public class LRTokenStreamConverter {
 	private static final Logger logger = Logger
 			.getLogger(LRTokenStreamConverter.class);
 
-	public static AST convert(TokenStream tokenStream, Grammar grammar,
+	public static ParserTree convert(TokenStream tokenStream, Grammar grammar,
 			List<ParserAction> actions) throws ParserException {
 		return new LRTokenStreamConverter(tokenStream, grammar, actions)
 				.convert();
@@ -37,10 +37,10 @@ public class LRTokenStreamConverter {
 		this.actions = actions;
 	}
 
-	private AST convert() throws ParserException {
+	private ParserTree convert() throws ParserException {
 		try {
 			int position = 0;
-			Stack<AST> treeStack = new Stack<AST>();
+			Stack<ParserTree> treeStack = new Stack<ParserTree>();
 			for (ParserAction action : actions) {
 				if (logger.isTraceEnabled()) {
 					logger.trace("Action: " + action + "; stack size: "
@@ -50,24 +50,24 @@ public class LRTokenStreamConverter {
 				switch (action.getAction()) {
 				case SHIFT:
 					while (tokenStream.get(position).getVisibility() != Visibility.VISIBLE) {
-						treeStack.push(new AST(tokenStream.get(position)));
+						treeStack.push(new ParserTree(tokenStream.get(position)));
 						position++;
 					}
-					treeStack.push(new AST(tokenStream.get(position)));
+					treeStack.push(new ParserTree(tokenStream.get(position)));
 					position++;
 					break;
 				case REDUCE:
 					Production production = grammar.getProduction(action
 							.getParameter());
 					logger.trace(production.toString());
-					AST newAST = new AST(production);
+					ParserTree newAST = new ParserTree(production);
 					for (int i = 0; i < production.getConstructions().size(); i++) {
 						/*
 						 * The for loop is run as many times as the production
 						 * contains constructions which are added up for an AST
 						 * node.
 						 */
-						AST poppedAST;
+						ParserTree poppedAST;
 						do {
 							poppedAST = treeStack.pop();
 							if (poppedAST.isNode()) {
@@ -117,11 +117,11 @@ public class LRTokenStreamConverter {
 				}
 			}
 			while (position < tokenStream.size()) {
-				treeStack.peek().addChild(new AST(tokenStream.get(position)));
+				treeStack.peek().addChild(new ParserTree(tokenStream.get(position)));
 				position++;
 			}
 			return treeStack.peek();
-		} catch (ASTException e) {
+		} catch (TreeException e) {
 			logger.error(e.getMessage(), e);
 			throw new ParserException(e.getMessage());
 		}

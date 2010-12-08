@@ -6,7 +6,7 @@ import java.util.Stack;
 
 import org.apache.log4j.Logger;
 
-import com.puresol.uhura.ast.AST;
+import com.puresol.uhura.ast.ParserTree;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.production.FinishTerminal;
@@ -160,7 +160,7 @@ public abstract class AbstractFastLRParser extends AbstractParser {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final AST parse(TokenStream tokenStream) throws ParserException {
+	public final ParserTree parse(TokenStream tokenStream) throws ParserException {
 		setTokenStream(tokenStream);
 		return parse();
 	}
@@ -171,7 +171,7 @@ public abstract class AbstractFastLRParser extends AbstractParser {
 	 * @return The result AST is returned.
 	 * @throws ParserException
 	 */
-	private final AST parse() throws ParserException {
+	private final ParserTree parse() throws ParserException {
 		threads.clear();
 		threads.add(new ParserThread()); // adding start thread
 		int stepCounter = 0;
@@ -363,7 +363,7 @@ public abstract class AbstractFastLRParser extends AbstractParser {
 		}
 	}
 
-	private AST createAST(List<ParserAction> actions) throws ParserException {
+	private ParserTree createAST(List<ParserAction> actions) throws ParserException {
 		return LRTokenStreamConverter.convert(getTokenStream(), getGrammar(),
 				actions);
 	}

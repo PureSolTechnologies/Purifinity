@@ -6,14 +6,14 @@ package com.puresol.uhura.ast;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class ASTMetaData {
+public class ParserTreeMetaData {
 
 	private final String sourceName;
 	private final int line;
 	private final int lineNum;
 	private final int hashcode;
 
-	public ASTMetaData(String sourceName, int line, int lineNum) {
+	public ParserTreeMetaData(String sourceName, int line, int lineNum) {
 		super();
 		this.sourceName = sourceName;
 		this.line = line;
@@ -53,7 +53,7 @@ public class ASTMetaData {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ASTMetaData other = (ASTMetaData) obj;
+		ParserTreeMetaData other = (ParserTreeMetaData) obj;
 		if (sourceName == null) {
 			if (other.sourceName != null)
 				return false;

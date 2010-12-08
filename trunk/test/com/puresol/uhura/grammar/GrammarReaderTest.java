@@ -4,9 +4,12 @@ import static org.junit.Assert.*;
 
 import java.io.IOException;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.junit.Test;
 
 import com.puresol.uhura.grammar.token.Visibility;
+import com.puresol.uhura.parser.lr.LR1ParserTable;
 
 public class GrammarReaderTest {
 
@@ -115,6 +118,11 @@ public class GrammarReaderTest {
 									"/com/puresol/uhura/grammar/TestRuleAutoGeneration.g"));
 			Grammar grammar = reader.getGrammar();
 			assertNotNull(grammar);
+			System.out.println(grammar);
+			grammar = grammar.createWithNewStartProduction("List");
+			System.out.println(grammar);
+			LR1ParserTable table = new LR1ParserTable(grammar);
+			System.out.println(table);
 			assertFalse(GrammarPartTester.test(grammar, "List", ""));
 			assertTrue(GrammarPartTester.test(grammar, "List", "1"));
 			assertTrue(GrammarPartTester.test(grammar, "List", "1 2"));

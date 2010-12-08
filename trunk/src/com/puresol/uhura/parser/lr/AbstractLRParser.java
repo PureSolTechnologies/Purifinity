@@ -10,7 +10,9 @@ import java.util.Stack;
 
 import org.apache.log4j.Logger;
 
-import com.puresol.uhura.ast.AST;
+import com.puresol.trees.TreeIterator;
+import com.puresol.uhura.ast.ParserTree;
+import com.puresol.uhura.ast.ParserTreeMetaData;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.production.FinishTerminal;
@@ -153,10 +155,12 @@ public abstract class AbstractLRParser extends AbstractParser {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final AST parse(TokenStream tokenStream) throws ParserException {
+	public final ParserTree parse(TokenStream tokenStream)
+			throws ParserException {
 		setTokenStream(tokenStream);
 		reset();
-		return parse();
+		ParserTree tree = parse();
+		return addMetaData(tree);
 	}
 
 	/**
@@ -196,7 +200,7 @@ public abstract class AbstractLRParser extends AbstractParser {
 	 * @return The result AST is returned.
 	 * @throws ParserException
 	 */
-	private final AST parse() throws ParserException {
+	private final ParserTree parse() throws ParserException {
 		try {
 			boolean accepted = false;
 			do {
@@ -466,5 +470,49 @@ public abstract class AbstractLRParser extends AbstractParser {
 			buffer.append("$");
 		}
 		return buffer.toString();
+	}
+
+	private ParserTree addMetaData(ParserTree tree) {
+		return tree;
+//		TreeIterator<ParserTree> iterator = new TreeIterator<ParserTree>(tree);
+//		int line = 1;
+//		int tokenId = 0;
+//		final String sourceName = getTokenStream().getName();
+//		do {
+//			final ParserTree currentNode = iterator.getCurrentNode();
+//			final Token token = currentNode.getToken();
+//			if (token != null) {
+//				final int lineNum = token.getMetaData().getLineNum();
+//				currentNode.setMetaData(new ParserTreeMetaData(sourceName,
+//						line, lineNum));
+//				line += lineNum - 1;
+//				tokenId++;
+//			}
+//		} while (iterator.goForward());
+//		iterator.gotoEnd();
+//		do {
+//			final ParserTree currentNode = iterator.getCurrentNode();
+//			final Token token = currentNode.getToken();
+//			if (token != null) {
+//				line = currentNode.getMetaData().getLine();
+//			} else {
+//				List<ParserTree> children = currentNode.getChildren();
+//				if (children.size() == 0) {
+//					currentNode.setMetaData(new ParserTreeMetaData(sourceName,
+//							line, 1));
+//
+//				} else {
+//					final ParserTreeMetaData metaDataLeft = children.get(0)
+//							.getMetaData();
+//					final ParserTreeMetaData metaDataRight = children.get(
+//							children.size() - 1).getMetaData();
+//					currentNode.setMetaData(new ParserTreeMetaData(sourceName,
+//							metaDataLeft.getLine(), metaDataRight.getLine()
+//									- metaDataLeft.getLine()
+//									+ metaDataRight.getLineNum()));
+//				}
+//			}
+//		} while (iterator.goBackward());
+//		return tree;
 	}
 }

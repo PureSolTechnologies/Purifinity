@@ -9,7 +9,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.puresol.uhura.ast.AST;
+import com.puresol.uhura.ast.ParserTree;
 
 public class GrammarFileTest {
 
@@ -26,7 +26,7 @@ public class GrammarFileTest {
 	public void testRead() {
 		try {
 			GrammarFile file = new GrammarFile(inputStream);
-			AST ast = file.getAST();
+			ParserTree ast = file.getAST();
 			assertNotNull(ast);
 		} catch (IOException e) {
 			e.printStackTrace();

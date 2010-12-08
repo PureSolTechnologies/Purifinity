@@ -9,7 +9,7 @@ import org.apache.log4j.Logger;
 import org.junit.Test;
 
 import com.puresol.trees.TreePrinter;
-import com.puresol.uhura.ast.AST;
+import com.puresol.uhura.ast.ParserTree;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.TestGrammars;
@@ -28,7 +28,7 @@ public class LALR1ParserTest {
 			Grammar grammar = TestGrammars.getLALR1TestGrammarFromDragonBook();
 			Parser parser = new LALR1Parser(grammar);
 			Lexer lexer = new RegExpLexer(grammar);
-			AST syntaxTree = parser.parse(lexer.lex(new StringReader("id=*id"),
+			ParserTree syntaxTree = parser.parse(lexer.lex(new StringReader("id=*id"),
 					"SampleString"));
 			new TreePrinter(System.out).println(syntaxTree);
 		} catch (GrammarException e) {

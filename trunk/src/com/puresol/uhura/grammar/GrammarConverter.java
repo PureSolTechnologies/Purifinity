@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import com.puresol.uhura.ast.AST;
-import com.puresol.uhura.ast.ASTException;
+import com.puresol.trees.TreeException;
+import com.puresol.uhura.ast.ParserTree;
 import com.puresol.uhura.grammar.production.Construction;
 import com.puresol.uhura.grammar.production.Production;
 import com.puresol.uhura.grammar.production.NonTerminal;
@@ -29,7 +29,7 @@ import com.puresol.uhura.grammar.token.Visibility;
  */
 public class GrammarConverter {
 
-	private final AST ast;
+	private final ParserTree ast;
 
 	private Properties options = null;
 	private TokenDefinitionSet tokenDefinitions = null;
@@ -42,11 +42,11 @@ public class GrammarConverter {
 	 * Constructor for file reading.
 	 * 
 	 * @param file
-	 * @throws ASTException
+	 * @throws TreeException
 	 * @throws GrammarException
 	 * @throws IOException
 	 */
-	public GrammarConverter(AST ast) throws ASTException, GrammarException {
+	public GrammarConverter(ParserTree ast) throws TreeException, GrammarException {
 		this.ast = ast;
 		convert();
 	}
@@ -66,7 +66,7 @@ public class GrammarConverter {
 	 * 
 	 * @return
 	 */
-	public AST getAST() {
+	public ParserTree getAST() {
 		return ast;
 	}
 
@@ -75,9 +75,9 @@ public class GrammarConverter {
 	 * ready to be used.
 	 * 
 	 * @throws GrammarException
-	 * @throws ASTException
+	 * @throws TreeException
 	 */
-	private void convert() throws GrammarException, ASTException {
+	private void convert() throws GrammarException, TreeException {
 		convertOptions();
 		convertTokenDefinitions();
 		convertProductions();
@@ -87,13 +87,13 @@ public class GrammarConverter {
 	/**
 	 * This method converts the options part of the AST.
 	 * 
-	 * @throws ASTException
+	 * @throws TreeException
 	 */
-	private void convertOptions() throws ASTException {
+	private void convertOptions() throws TreeException {
 		options = new Properties();
-		AST optionList = ast.getChild("GrammarOptions").getChild(
+		ParserTree optionList = ast.getChild("GrammarOptions").getChild(
 				"GrammarOptionList");
-		for (AST option : optionList.getChildren("GrammarOption")) {
+		for (ParserTree option : optionList.getChildren("GrammarOption")) {
 			String name = option.getChild("PropertyIdentifier").getText();
 			String value = option.getChild("Literal").getText();
 			if (value.startsWith("'") || value.startsWith("\"")) {
@@ -107,13 +107,13 @@ public class GrammarConverter {
 	 * This method converts the token definitions to the token definition set.
 	 * 
 	 * @throws GrammarException
-	 * @throws ASTException
+	 * @throws TreeException
 	 */
 	private void convertTokenDefinitions() throws GrammarException,
-			ASTException {
+			TreeException {
 		tokenVisibility.clear();
-		Map<String, AST> helpers = getHelperTokens();
-		Map<String, AST> tokens = getTokens();
+		Map<String, ParserTree> helpers = getHelperTokens();
+		Map<String, ParserTree> tokens = getTokens();
 		convertTokenDefinitions(helpers, tokens);
 	}
 
@@ -122,13 +122,13 @@ public class GrammarConverter {
 	 * them.
 	 * 
 	 * @return
-	 * @throws ASTException
+	 * @throws TreeException
 	 */
-	private Map<String, AST> getHelperTokens() throws ASTException {
-		Map<String, AST> helpers = new HashMap<String, AST>();
-		AST helperTree = ast.getChild("Helper");
-		AST helperDefinitions = helperTree.getChild("HelperDefinitions");
-		for (AST helperDefinition : helperDefinitions
+	private Map<String, ParserTree> getHelperTokens() throws TreeException {
+		Map<String, ParserTree> helpers = new HashMap<String, ParserTree>();
+		ParserTree helperTree = ast.getChild("Helper");
+		ParserTree helperDefinitions = helperTree.getChild("HelperDefinitions");
+		for (ParserTree helperDefinition : helperDefinitions
 				.getChildren("HelperDefinition")) {
 			String identifier = helperDefinition.getChild("IDENTIFIER")
 					.getText();
@@ -141,13 +141,13 @@ public class GrammarConverter {
 	 * This method reads all tokens from AST and returns a map with all of them.
 	 * 
 	 * @return
-	 * @throws ASTException
+	 * @throws TreeException
 	 */
-	private Map<String, AST> getTokens() throws GrammarException, ASTException {
-		Map<String, AST> tokens = new HashMap<String, AST>();
-		AST tokensTree = ast.getChild("Tokens");
-		AST tokenDefinitions = tokensTree.getChild("TokenDefinitions");
-		for (AST tokenDefinition : tokenDefinitions
+	private Map<String, ParserTree> getTokens() throws GrammarException, TreeException {
+		Map<String, ParserTree> tokens = new HashMap<String, ParserTree>();
+		ParserTree tokensTree = ast.getChild("Tokens");
+		ParserTree tokenDefinitions = tokensTree.getChild("TokenDefinitions");
+		for (ParserTree tokenDefinition : tokenDefinitions
 				.getChildren("TokenDefinition")) {
 			// identifier...
 			String identifier = tokenDefinition.getChild("IDENTIFIER")
@@ -155,7 +155,7 @@ public class GrammarConverter {
 			// token parts...
 			tokens.put(identifier, tokenDefinition);
 			// visibility...
-			AST visibilityAST = tokenDefinition.getChild("Visibility");
+			ParserTree visibilityAST = tokenDefinition.getChild("Visibility");
 			if (visibilityAST.hasChild("HIDE")) {
 				tokenVisibility.put(identifier, Visibility.HIDDEN);
 			} else if (visibilityAST.hasChild("IGNORE")) {
@@ -174,12 +174,12 @@ public class GrammarConverter {
 	 * @param helpers
 	 * @param tokens
 	 * @throws GrammarException
-	 * @throws ASTException
+	 * @throws TreeException
 	 */
-	private void convertTokenDefinitions(Map<String, AST> helpers,
-			Map<String, AST> tokens) throws GrammarException, ASTException {
+	private void convertTokenDefinitions(Map<String, ParserTree> helpers,
+			Map<String, ParserTree> tokens) throws GrammarException, TreeException {
 		tokenDefinitions = new TokenDefinitionSet();
-		for (AST tokenDefinition : ast.getChild("Tokens")
+		for (ParserTree tokenDefinition : ast.getChild("Tokens")
 				.getChild("TokenDefinitions").getChildren("TokenDefinition")) {
 			tokenDefinitions.addDefinition(getTokenDefinition(tokenDefinition,
 					helpers, tokens));
@@ -194,15 +194,15 @@ public class GrammarConverter {
 	 * @param tokens
 	 * @return
 	 * @throws GrammarException
-	 * @throws ASTException
+	 * @throws TreeException
 	 */
-	private TokenDefinition getTokenDefinition(AST tokenDefinition,
-			Map<String, AST> helpers, Map<String, AST> tokens)
-			throws GrammarException, ASTException {
+	private TokenDefinition getTokenDefinition(ParserTree tokenDefinition,
+			Map<String, ParserTree> helpers, Map<String, ParserTree> tokens)
+			throws GrammarException, TreeException {
 		String tokenName = tokenDefinition.getChild("IDENTIFIER").getText();
 		StringBuffer pattern = new StringBuffer();
 		boolean firstConstruction = true;
-		for (AST tokenConstruction : tokenDefinition.getChild(
+		for (ParserTree tokenConstruction : tokenDefinition.getChild(
 				"TokenConstructions").getChildren("TokenConstruction")) {
 			if (firstConstruction) {
 				firstConstruction = false;
@@ -223,11 +223,11 @@ public class GrammarConverter {
 		}
 	}
 
-	private StringBuffer getTokenDefinitionPattern(AST tokenConstruction,
-			Map<String, AST> helpers, Map<String, AST> tokens)
-			throws GrammarException, ASTException {
+	private StringBuffer getTokenDefinitionPattern(ParserTree tokenConstruction,
+			Map<String, ParserTree> helpers, Map<String, ParserTree> tokens)
+			throws GrammarException, TreeException {
 		StringBuffer pattern = new StringBuffer();
-		for (AST tree : tokenConstruction.getChildren("TokenPart")) {
+		for (ParserTree tree : tokenConstruction.getChildren("TokenPart")) {
 			if (tree.hasChild("STRING_LITERAL")) {
 				String text = tree.getChild("STRING_LITERAL").getText();
 				text = text.replaceAll("\\\\\\\\", "\\\\");
@@ -257,15 +257,15 @@ public class GrammarConverter {
 	/**
 	 * This method converts all productions from the AST into a ProductionSet.
 	 * 
-	 * @throws ASTException
+	 * @throws TreeException
 	 * @throws GrammarException
 	 */
-	private void convertProductions() throws ASTException, GrammarException {
+	private void convertProductions() throws TreeException, GrammarException {
 		productions = new ProductionSet();
-		AST productionsTree = ast.getChild("Productions");
-		AST productionDefinitions = productionsTree
+		ParserTree productionsTree = ast.getChild("Productions");
+		ParserTree productionDefinitions = productionsTree
 				.getChild("ProductionDefinitions");
-		for (AST productionDefinition : productionDefinitions
+		for (ParserTree productionDefinition : productionDefinitions
 				.getChildren("ProductionDefinition")) {
 			convertProductionGroup(productionDefinition);
 		}
@@ -277,13 +277,13 @@ public class GrammarConverter {
 	 * 
 	 * @param productionDefinition
 	 * @throws GrammarException
-	 * @throws ASTException
+	 * @throws TreeException
 	 */
-	private void convertProductionGroup(AST productionDefinition)
-			throws GrammarException, ASTException {
+	private void convertProductionGroup(ParserTree productionDefinition)
+			throws GrammarException, TreeException {
 		String productionName = productionDefinition.getChild("IDENTIFIER")
 				.getText();
-		AST productionConstructions = productionDefinition
+		ParserTree productionConstructions = productionDefinition
 				.getChild("ProductionConstructions");
 		convertSingleProductions(productionName, productionConstructions);
 	}
@@ -294,12 +294,12 @@ public class GrammarConverter {
 	 * 
 	 * @param productionName
 	 * @param productionConstructions
-	 * @throws ASTException
+	 * @throws TreeException
 	 * @throws GrammarException
 	 */
 	private void convertSingleProductions(String productionName,
-			AST productionConstructions) throws ASTException, GrammarException {
-		for (AST productionConstruction : productionConstructions
+			ParserTree productionConstructions) throws TreeException, GrammarException {
+		for (ParserTree productionConstruction : productionConstructions
 				.getChildren("ProductionConstruction")) {
 			convertSingleProduction(productionName, productionConstruction);
 		}
@@ -315,18 +315,18 @@ public class GrammarConverter {
 	 * 
 	 * @param productionName
 	 * @param productionConstruction
-	 * @throws ASTException
+	 * @throws TreeException
 	 * @throws GrammarException
 	 */
 	private void convertSingleProduction(String productionName,
-			AST productionConstruction) throws ASTException, GrammarException {
-		AST alternativeIdentifier = productionConstruction
+			ParserTree productionConstruction) throws TreeException, GrammarException {
+		ParserTree alternativeIdentifier = productionConstruction
 				.getChild("AlternativeIdentifier");
 		Production production;
 		if (alternativeIdentifier == null) {
 			production = new Production(productionName);
 		} else {
-			AST alternativeIdentifierName = alternativeIdentifier
+			ParserTree alternativeIdentifierName = alternativeIdentifier
 					.getChild("IDENTIFIER");
 			if (alternativeIdentifierName == null) {
 				production = new Production(productionName);
@@ -341,13 +341,13 @@ public class GrammarConverter {
 		productions.add(production);
 	}
 
-	private List<Construction> getConstructions(AST productionConstruction)
-			throws ASTException, GrammarException {
+	private List<Construction> getConstructions(ParserTree productionConstruction)
+			throws TreeException, GrammarException {
 		List<Construction> constructions = new ArrayList<Construction>();
-		AST productionParts = productionConstruction
+		ParserTree productionParts = productionConstruction
 				.getChild("ProductionParts");
 		if (productionParts != null) {
-			for (AST productionPart : productionParts.getChildren()) {
+			for (ParserTree productionPart : productionParts.getChildren()) {
 				constructions.add(getConstruction(productionPart,
 						tokenDefinitions));
 			}
@@ -355,8 +355,8 @@ public class GrammarConverter {
 		return constructions;
 	}
 
-	private Construction getConstruction(AST productionPart,
-			TokenDefinitionSet tokenDefinitions) throws ASTException,
+	private Construction getConstruction(ParserTree productionPart,
+			TokenDefinitionSet tokenDefinitions) throws TreeException,
 			GrammarException {
 		Quantity quantity = Quantity.fromSymbol(productionPart.getChild(
 				"Quantifier").getText());
@@ -367,8 +367,8 @@ public class GrammarConverter {
 		}
 	}
 
-	private Construction createConstruction(AST productionPart)
-			throws ASTException, GrammarException {
+	private Construction createConstruction(ParserTree productionPart)
+			throws TreeException, GrammarException {
 		if ("ConstructionIdentifier".equals(productionPart.getName())) {
 			String identifier = productionPart.getChild("IDENTIFIER").getText();
 			if (tokenDefinitions.getDefinition(identifier) != null) {
@@ -377,7 +377,7 @@ public class GrammarConverter {
 				return new NonTerminal(identifier);
 			}
 		} else if ("ConstructionLiteral".equals(productionPart.getName())) {
-			AST stringLiteral = productionPart.getChild("STRING_LITERAL");
+			ParserTree stringLiteral = productionPart.getChild("STRING_LITERAL");
 			String text = stringLiteral.getText();
 			text = text.substring(1, text.length() - 1);
 			Terminal terminal = null;
@@ -401,18 +401,18 @@ public class GrammarConverter {
 			}
 			return terminal;
 		} else if ("ConstructionGroup".equals(productionPart.getName())) {
-			AST productionConstructions = productionPart
+			ParserTree productionConstructions = productionPart
 					.getChild("ProductionConstructions");
 			String newIdentifier = createNewIdentifier(productionPart, "group");
 			convertSingleProductions(newIdentifier, productionConstructions);
 			return new NonTerminal(newIdentifier);
 		} else {
-			throw new ASTException("Invalid node '" + productionPart + "'!");
+			throw new TreeException("Invalid node '" + productionPart + "'!");
 		}
 	}
 
-	private Construction generateExtraQuantifierRules(AST productionPart,
-			Quantity quantity) throws ASTException, GrammarException {
+	private Construction generateExtraQuantifierRules(ParserTree productionPart,
+			Quantity quantity) throws TreeException, GrammarException {
 		if (quantity == Quantity.ACCEPT) {
 			return generateOptionalProduction(productionPart);
 		} else if (quantity == Quantity.ACCEPT_MANY) {
@@ -430,11 +430,11 @@ public class GrammarConverter {
 	 * 
 	 * @param productionPart
 	 * @return
-	 * @throws ASTException
+	 * @throws TreeException
 	 * @throws GrammarException
 	 */
-	private Construction generateOptionalProduction(AST productionPart)
-			throws ASTException, GrammarException {
+	private Construction generateOptionalProduction(ParserTree productionPart)
+			throws TreeException, GrammarException {
 		String newIdentifier = createNewIdentifier(productionPart, "opt");
 		Construction construction = createConstruction(productionPart);
 
@@ -459,10 +459,10 @@ public class GrammarConverter {
 	 * @param productionPart
 	 * @param suffix
 	 * @return
-	 * @throws ASTException
+	 * @throws TreeException
 	 */
-	private String createNewIdentifier(AST productionPart, String suffix)
-			throws ASTException {
+	private String createNewIdentifier(ParserTree productionPart, String suffix)
+			throws TreeException {
 		String identifier = "";
 		if (productionPart.hasChild("IDENTIFIER")) {
 			identifier = productionPart.getChild("IDENTIFIER").getText();
@@ -483,11 +483,11 @@ public class GrammarConverter {
 	 * 
 	 * @param productionPart
 	 * @return
-	 * @throws ASTException
+	 * @throws TreeException
 	 * @throws GrammarException
 	 */
-	private Construction generateOptionalList(AST productionPart)
-			throws ASTException, GrammarException {
+	private Construction generateOptionalList(ParserTree productionPart)
+			throws TreeException, GrammarException {
 		String newIdentifier = createNewIdentifier(productionPart, "optlist");
 		Construction construction = createConstruction(productionPart);
 
@@ -512,10 +512,10 @@ public class GrammarConverter {
 	 * 
 	 * @param productionPart
 	 * @return
-	 * @throws ASTException
+	 * @throws TreeException
 	 * @throws GrammarException
 	 */
-	private Construction generateList(AST productionPart) throws ASTException,
+	private Construction generateList(ParserTree productionPart) throws TreeException,
 			GrammarException {
 		String newIdentifier = createNewIdentifier(productionPart, "list");
 		Construction construction = createConstruction(productionPart);
@@ -536,11 +536,11 @@ public class GrammarConverter {
 		return new NonTerminal(newIdentifier);
 	}
 
-	private void addOptions(Production production, AST productionConstruction)
-			throws ASTException {
-		AST options = productionConstruction.getChild("ProductionOptions");
+	private void addOptions(Production production, ParserTree productionConstruction)
+			throws TreeException {
+		ParserTree options = productionConstruction.getChild("ProductionOptions");
 		if (options != null) {
-			for (AST option : options.getChildren("ProductionOptionList")) {
+			for (ParserTree option : options.getChildren("ProductionOptionList")) {
 				if (option.hasChild("NODE")) {
 					production.setNode(Boolean.valueOf(option.getChild(
 							"BOOLEAN_LITERAL").getText()));
