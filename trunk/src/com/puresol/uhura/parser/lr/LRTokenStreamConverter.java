@@ -39,6 +39,9 @@ public class LRTokenStreamConverter {
 	private final TokenStream tokenStream;
 	private final Grammar grammar;
 	private final List<ParserAction> actions;
+	private final boolean ignoredTokensLeading;
+	private final Stack<ParserTree> treeStack = new Stack<ParserTree>();
+	int position;
 
 	private LRTokenStreamConverter(TokenStream tokenStream, Grammar grammar,
 			List<ParserAction> actions) {
@@ -46,6 +49,8 @@ public class LRTokenStreamConverter {
 		this.tokenStream = tokenStream;
 		this.grammar = grammar;
 		this.actions = actions;
+		ignoredTokensLeading = Boolean.valueOf(grammar.getOptions()
+				.getProperty("grammar.ignored-leading"));
 	}
 
 	private ParserTree getParserTree() throws ParserException {
@@ -54,96 +59,135 @@ public class LRTokenStreamConverter {
 		return tree;
 	}
 
+	private void reset() {
+		position = 0;
+		treeStack.clear();
+	}
+
 	private ParserTree convert() throws ParserException {
 		try {
-			int position = 0;
-			Stack<ParserTree> treeStack = new Stack<ParserTree>();
+			reset();
 			for (ParserAction action : actions) {
-				if (logger.isTraceEnabled()) {
-					logger.trace("Action: " + action + "; stack size: "
-							+ treeStack.size());
-					logger.trace(treeStack.toString());
-				}
-				switch (action.getAction()) {
-				case SHIFT:
-					while (tokenStream.get(position).getVisibility() != Visibility.VISIBLE) {
-						treeStack
-								.push(new ParserTree(tokenStream.get(position)));
-						position++;
-					}
-					treeStack.push(new ParserTree(tokenStream.get(position)));
-					position++;
-					break;
-				case REDUCE:
-					Production production = grammar.getProduction(action
-							.getParameter());
-					logger.trace(production.toString());
-					ParserTree newAST = new ParserTree(production);
-					for (int i = 0; i < production.getConstructions().size(); i++) {
-						/*
-						 * The for loop is run as many times as the production
-						 * contains constructions which are added up for an AST
-						 * node.
-						 */
-						ParserTree poppedAST;
-						do {
-							poppedAST = treeStack.pop();
-							if (poppedAST.isNode()) {
-								/*
-								 * The popped AST is an own node.
-								 */
-								if (poppedAST.isStackingAllowed()) {
-									/*
-									 * The AST is allowed to be stacked, so do
-									 * not do anything just add it to children
-									 * list at the front position.
-									 */
-									newAST.addChildInFront(poppedAST);
-								} else {
-									/*
-									 * The AST is not allowed to be stacked. So
-									 * the presence for a node with the same
-									 * type is checked and the result is added
-									 * to that or the node is created.
-									 */
-									if (newAST.getName().equals(
-											poppedAST.getName())) {
-										newAST.addChildrenInFront(poppedAST
-												.getChildren());
-									} else {
-										newAST.addChildInFront(poppedAST);
-									}
-								}
-							} else {
-								/*
-								 * The currently popped AST is not allowed to be
-								 * an own node, so all children are added to the
-								 * tree in front at the children list.
-								 */
-								newAST.addChildrenInFront(poppedAST
-										.getChildren());
-							}
-							/*
-							 * The while loop is as long as there are ASTs
-							 * popped which are non visible tokens...
-							 */
-						} while ((poppedAST.getToken() != null)
-								&& (poppedAST.getToken().getVisibility() != Visibility.VISIBLE));
-					}
-					treeStack.push(newAST);
-					break;
-				}
+				process(action);
 			}
-			while (position < tokenStream.size()) {
-				treeStack.peek().addChild(
-						new ParserTree(tokenStream.get(position)));
-				position++;
-			}
+			putRemainingIgnoredTokensTogether();
 			return treeStack.peek();
 		} catch (TreeException e) {
 			logger.error(e.getMessage(), e);
 			throw new ParserException(e.getMessage());
 		}
+	}
+
+	private void process(ParserAction action) throws ParserException,
+			TreeException {
+		if (logger.isTraceEnabled()) {
+			logger.trace("Action: " + action + "; stack size: "
+					+ treeStack.size());
+			logger.trace(treeStack.toString());
+		}
+		switch (action.getAction()) {
+		case SHIFT:
+			shift();
+			break;
+		case REDUCE:
+			reduce(action);
+			break;
+		case ACCEPT:
+			break;
+		default:
+			throw new ParserException(
+					"Invalid parser action within action list!");
+		}
+	}
+
+	private void putRemainingIgnoredTokensTogether() throws TreeException {
+		/*
+		 * Put remaining tokens from token stream at the end.
+		 */
+		while (position < tokenStream.size()) {
+			treeStack.peek()
+					.addChild(new ParserTree(tokenStream.get(position)));
+			position++;
+		}
+		/*
+		 * Put remaining tokens from tree stack at the beginning.
+		 */
+		if (treeStack.size() > 1) {
+			ParserTree treeElement = treeStack.pop();
+			while (treeStack.size() > 0) {
+				treeElement.addChildInFront(treeStack.pop());
+			}
+			treeStack.push(treeElement);
+		}
+	}
+
+	private void shift() {
+		while (tokenStream.get(position).getVisibility() != Visibility.VISIBLE) {
+			treeStack.push(new ParserTree(tokenStream.get(position)));
+			position++;
+		}
+		treeStack.push(new ParserTree(tokenStream.get(position)));
+		position++;
+	}
+
+	private void reduce(ParserAction action) throws TreeException {
+		Production production = grammar.getProduction(action.getParameter());
+		logger.trace(production.toString());
+		ParserTree newAST = new ParserTree(production);
+		for (int i = 0; i < production.getConstructions().size(); i++) {
+			/*
+			 * The for loop is run as many times as the production contains
+			 * constructions which are added up for an AST node.
+			 */
+			ParserTree poppedAST;
+			do {
+				poppedAST = treeStack.pop();
+				if (poppedAST.isNode()) {
+					/*
+					 * The popped AST is an own node.
+					 */
+					if (poppedAST.isStackingAllowed()) {
+						/*
+						 * The AST is allowed to be stacked, so do not do
+						 * anything just add it to children list at the front
+						 * position.
+						 */
+						newAST.addChildInFront(poppedAST);
+					} else {
+						/*
+						 * The AST is not allowed to be stacked. So the presence
+						 * for a node with the same type is checked and the
+						 * result is added to that or the node is created.
+						 */
+						if (newAST.getName().equals(poppedAST.getName())) {
+							newAST.addChildrenInFront(poppedAST.getChildren());
+						} else {
+							newAST.addChildInFront(poppedAST);
+						}
+					}
+				} else {
+					/*
+					 * The currently popped AST is not allowed to be an own
+					 * node, so all children are added to the tree in front at
+					 * the children list.
+					 */
+					newAST.addChildrenInFront(poppedAST.getChildren());
+				}
+				/*
+				 * The while loop is as long as there are ASTs popped which are
+				 * non visible tokens...
+				 */
+			} while ((poppedAST.getToken() != null)
+					&& (poppedAST.getToken().getVisibility() != Visibility.VISIBLE));
+		}
+		if (ignoredTokensLeading) {
+			while ((treeStack.size() > 0)
+					&& (treeStack.peek().getToken() != null)
+					&& (treeStack.peek().getToken().getVisibility() != Visibility.VISIBLE)) {
+				newAST.addChildInFront(treeStack.pop());
+			}
+		}
+		treeStack.push(newAST);
 	}
 
 	private ParserTree addMetaData(ParserTree tree) {
