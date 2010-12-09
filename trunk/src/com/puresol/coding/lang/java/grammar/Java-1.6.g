@@ -3,6 +3,10 @@
  * (c) by 2010 PureSol Technologies
  * Author: Rick-Rainer Ludwig
  ****************************************************************************/ 
+
+/*
+ * All naming is taken out from Java Language Specification.
+ */
  
 /****************************************************************************
  * O P T I O N S
@@ -12,7 +16,7 @@ OPTIONS
 	grammar.checks=true;
 	grammar.ignore-case=false;
 	lexer="com.puresol.uhura.lexer.RegExpLexer";
-	parser="com.puresol.uhura.parser.lr.FastLR1Parser";
+	parser="com.puresol.uhura.parser.lr.LR1Parser";
 	parser.backtracking=true;
 
 /****************************************************************************
@@ -280,7 +284,7 @@ HELPER
 	 ***************/
 		
 	WhiteSpace:
-		"( |\\t|\\f)" [hide]
+		"( |\\t|\\f)" [ignore]
 	;
 	
 	/************	

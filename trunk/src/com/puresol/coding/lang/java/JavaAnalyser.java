@@ -13,15 +13,18 @@ package com.puresol.coding.lang.java;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import com.puresol.coding.CodeRange;
 import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.analysis.AnalyzerException;
 import com.puresol.coding.analysis.Analyzer;
 import com.puresol.coding.lang.java.grammar.JavaGrammar;
-import com.puresol.uhura.ast.AST;
+import com.puresol.uhura.ast.ParserTree;
 import com.puresol.uhura.lexer.Lexer;
 import com.puresol.uhura.lexer.LexerException;
 import com.puresol.uhura.lexer.TokenStream;
@@ -44,7 +47,8 @@ public class JavaAnalyser implements Analyzer {
 	private final File file;
 	private final transient JavaGrammar grammar;
 	private Date date = new Date();
-	private AST ast = null;
+	private ParserTree parserTree = null;
+	private List<CodeRange> codeRanges = new ArrayList<CodeRange>();
 
 	public JavaAnalyser(File file) {
 		super();
@@ -60,7 +64,8 @@ public class JavaAnalyser implements Analyzer {
 			TokenStream tokenStream = lexer.lex(new FileReader(file),
 					file.toString());
 			Parser parser = grammar.getParser();
-			ast = parser.parse(tokenStream);
+			parserTree = parser.parse(tokenStream);
+			codeRanges = getLanguage().getAnalyzableCodeRanges(parserTree);
 		} catch (ParserException e) {
 			logger.error(e.getMessage(), e);
 			throw new AnalyzerException(this);
@@ -104,8 +109,13 @@ public class JavaAnalyser implements Analyzer {
 	}
 
 	@Override
-	public AST getAST() {
-		return ast;
+	public ParserTree getParserTree() {
+		return parserTree;
+	}
+
+	@Override
+	public List<CodeRange> getAnalyzableCodeRanges() {
+		return codeRanges;
 	}
 
 }

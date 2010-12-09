@@ -12,5 +12,6 @@
 	<classpathentry kind="lib" path="lib/felix/felix.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/NyotaUhura"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/PureSolTechnologies_Utilities"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/MetricsBasePack"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

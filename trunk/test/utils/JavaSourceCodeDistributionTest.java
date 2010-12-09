@@ -18,7 +18,7 @@ import org.junit.Test;
 import com.puresol.coding.analysis.Analyzer;
 import com.puresol.coding.analysis.AnalyzerException;
 import com.puresol.coding.lang.java.Java;
-import com.puresol.uhura.ast.AST;
+import com.puresol.uhura.ast.ParserTree;
 import com.puresol.utils.ConsoleUtils;
 import com.puresol.utils.StopWatch;
 
@@ -50,7 +50,7 @@ public class JavaSourceCodeDistributionTest {
 			Analyzer analyser = java.createAnalyser(file);
 			analyser.parse();
 			watch.stop();
-			AST ast = analyser.getAST();
+			ParserTree ast = analyser.getParserTree();
 			assertNotNull(ast);
 			// new TreePrinter(System.out).println(ast);
 			System.out.print(watch.getSeconds());

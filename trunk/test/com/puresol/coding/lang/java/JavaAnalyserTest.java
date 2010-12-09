@@ -7,6 +7,8 @@ import java.io.File;
 import org.junit.Test;
 
 import com.puresol.coding.analysis.AnalyzerException;
+import com.puresol.trees.TreePrinter;
+import com.puresol.uhura.ast.ParserTree;
 import com.puresol.utils.FileUtilities;
 
 public class JavaAnalyserTest {
@@ -21,10 +23,11 @@ public class JavaAnalyserTest {
 		try {
 			File file = new File("test", FileUtilities
 					.classToRelativePackagePath(this.getClass()).toString());
-			System.out.println(file.toString());
 			assertTrue(file.exists());
 			JavaAnalyser analyser = new JavaAnalyser(file);
 			analyser.parse();
+			ParserTree tree = analyser.getParserTree();
+			new TreePrinter(System.out).println(tree);
 		} catch (AnalyzerException e) {
 			e.printStackTrace();
 			fail("No exception was expected!");

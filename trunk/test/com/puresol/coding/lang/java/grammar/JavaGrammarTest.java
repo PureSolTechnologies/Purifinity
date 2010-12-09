@@ -12,12 +12,14 @@ import org.junit.Test;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.GrammarReader;
+import com.puresol.utils.PersistenceException;
 
 public class JavaGrammarTest {
 
 	@Test
 	public void testGetGrammarStream() {
-		assertNotNull(JavaGrammar.class.getResource(JavaGrammar.GRAMMAR_RESOURCE));
+		assertNotNull(JavaGrammar.class
+				.getResource(JavaGrammar.GRAMMAR_RESOURCE));
 	}
 
 	@Test
@@ -51,7 +53,10 @@ public class JavaGrammarTest {
 			Grammar grammar = JavaGrammar.getInstance().getGrammar();
 			assertNotNull(grammar);
 			assertSame(grammar, JavaGrammar.getInstance().getGrammar());
-		} catch (Throwable e) {
+		} catch (PersistenceException e) {
+			e.printStackTrace();
+			fail("No exception was expected!");
+		} catch (IOException e) {
 			e.printStackTrace();
 			fail("No exception was expected!");
 		}

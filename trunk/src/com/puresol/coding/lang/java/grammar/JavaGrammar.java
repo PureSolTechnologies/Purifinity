@@ -40,13 +40,18 @@ public class JavaGrammar {
 		}
 	}
 
+	private Grammar grammar = null;
+
 	private JavaGrammar() {
 		super();
 	}
 
 	public Grammar getGrammar() throws IOException, PersistenceException {
-		return (Grammar) Persistence.restore(getClass().getResourceAsStream(
-				PERSISTED_GRAMMAR_RESOURCE));
+		if (grammar == null) {
+			grammar = (Grammar) Persistence.restore(getClass()
+					.getResourceAsStream(PERSISTED_GRAMMAR_RESOURCE));
+		}
+		return grammar;
 	}
 
 	public Lexer getLexer() throws IOException, PersistenceException {
