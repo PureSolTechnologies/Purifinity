@@ -27,13 +27,13 @@
 	<classpathentry kind="lib" path="lib/findbugs/jFormatString.jar"/>
 	<classpathentry kind="lib" path="lib/findbugs/jsr305.jar"/>
 	<classpathentry kind="lib" path="lib/findbugs/mysql-connector-java-5.1.7-bin.jar"/>
-	<classpathentry kind="lib" path="lib/i18n4java.jar"/>
 	<classpathentry kind="lib" path="lib/junit/junit-4.6.jar"/>
 	<classpathentry kind="lib" path="lib/log4j.jar"/>
-	<classpathentry kind="lib" path="lib/swingx.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/i18n4java"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/PureSolTechnologies_API"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/swingx"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/NyotaUhura"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/PureSolTechnologies_Utilities"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

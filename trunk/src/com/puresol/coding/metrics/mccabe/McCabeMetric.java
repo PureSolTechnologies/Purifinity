@@ -13,24 +13,21 @@ package com.puresol.coding.metrics.mccabe;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.i18n4j.Translator;
+import javax.i18n4java.Translator;
 
 import org.apache.log4j.Logger;
+import org.w3c.dom.traversal.TreeWalker;
 
-import com.puresol.coding.analysis.CodeRange;
-import com.puresol.coding.analysis.CodeRangeType;
+import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.evaluator.AbstractCodeRangeEvaluator;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.QualityLevel;
 import com.puresol.coding.reporting.HTMLConverter;
-import com.puresol.coding.tokentypes.SourceTokenDefinition;
-import com.puresol.parser.tokens.Token;
-import com.puresol.parser.tokens.TokenCreationException;
-import com.puresol.parser.tokens.TokenPublicity;
-import com.puresol.parser.tokens.TokenStream;
 import com.puresol.reporting.ReportingFormat;
 import com.puresol.reporting.UnsupportedFormatException;
 import com.puresol.reporting.html.Anchor;
+import com.puresol.trees.TreeVisitor;
+import com.puresol.uhura.ast.ParserTree;
 import com.puresol.utils.Property;
 
 /**
@@ -39,7 +36,8 @@ import com.puresol.utils.Property;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class McCabeMetric extends AbstractCodeRangeEvaluator {
+public class McCabeMetric extends AbstractCodeRangeEvaluator implements
+		TreeVisitor<ParserTree> {
 
 	private static final long serialVersionUID = 4402746003873908301L;
 
@@ -66,8 +64,8 @@ public class McCabeMetric extends AbstractCodeRangeEvaluator {
 
 	private int cyclomaticNumber = 1;
 
-	public McCabeMetric(CodeRange codeRange) {
-		super(codeRange);
+	public McCabeMetric(ProgrammingLanguage language, ParserTree syntaxTree) {
+		super(syntaxTree);
 	}
 
 	@Override

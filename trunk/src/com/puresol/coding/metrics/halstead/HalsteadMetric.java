@@ -14,29 +14,29 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
-import javax.i18n4j.Translator;
+import javax.i18n4java.Translator;
 
 import org.apache.log4j.Logger;
+import org.w3c.dom.traversal.TreeWalker;
 
-import com.puresol.coding.analysis.CodeRange;
-import com.puresol.coding.analysis.CodeRangeType;
+import com.puresol.coding.CodeRange;
+import com.puresol.coding.ProgrammingLanguage;
+import com.puresol.coding.ProgrammingLanguages;
 import com.puresol.coding.evaluator.AbstractCodeRangeEvaluator;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.QualityLevel;
 import com.puresol.coding.reporting.HTMLConverter;
-import com.puresol.coding.tokentypes.SourceTokenDefinition;
-import com.puresol.coding.tokentypes.SymbolType;
-import com.puresol.parser.tokens.Token;
-import com.puresol.parser.tokens.TokenCreationException;
-import com.puresol.parser.tokens.TokenPublicity;
-import com.puresol.parser.tokens.TokenStream;
 import com.puresol.reporting.ReportingFormat;
 import com.puresol.reporting.UnsupportedFormatException;
 import com.puresol.reporting.html.Anchor;
 import com.puresol.reporting.html.HTMLStandards;
+import com.puresol.trees.TreeVisitor;
+import com.puresol.trees.WalkingAction;
+import com.puresol.uhura.ast.ParserTree;
 import com.puresol.utils.Property;
 
-public class HalsteadMetric extends AbstractCodeRangeEvaluator {
+public class HalsteadMetric extends AbstractCodeRangeEvaluator implements
+		TreeVisitor<ParserTree> {
 
 	private static final long serialVersionUID = -7823038852668468658L;
 
@@ -115,7 +115,7 @@ public class HalsteadMetric extends AbstractCodeRangeEvaluator {
 	 */
 	private double B;
 
-	public HalsteadMetric(CodeRange codeRange) {
+	public HalsteadMetric(ProgrammingLanguage language, CodeRange codeRange) {
 		super(codeRange);
 	}
 

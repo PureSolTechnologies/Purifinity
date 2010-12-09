@@ -13,23 +13,23 @@ package com.puresol.coding.metrics.sloc;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.i18n4j.Translator;
+import javax.i18n4java.Translator;
 
-import com.puresol.coding.analysis.CodeRange;
-import com.puresol.coding.analysis.CodeRangeType;
+import com.puresol.coding.CodeRange;
+import com.puresol.coding.CodeRangeType;
+import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.evaluator.AbstractCodeRangeEvaluator;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.QualityLevel;
 import com.puresol.coding.reporting.HTMLConverter;
-import com.puresol.parser.tokens.Token;
-import com.puresol.parser.tokens.TokenPublicity;
-import com.puresol.parser.tokens.TokenStream;
-import com.puresol.parser.tokens.TokenStreamIterator;
 import com.puresol.reporting.ReportingFormat;
 import com.puresol.reporting.UnsupportedFormatException;
 import com.puresol.reporting.html.Anchor;
 import com.puresol.reporting.html.HTMLStandards;
 import com.puresol.statistics.Statistics;
+import com.puresol.trees.TreeIterator;
+import com.puresol.uhura.ast.ParserTree;
+import com.puresol.uhura.lexer.Token;
 import com.puresol.utils.Property;
 
 /**
@@ -64,25 +64,25 @@ public class SLOCMetric extends AbstractCodeRangeEvaluator {
 				.add(QualityCharacteristic.TESTABILITY);
 	}
 
-	private final TokenStream tokenStream;
-	private final TokenStreamIterator tokenStreamIterator;
 	private int phyLOC;
 	private int proLOC;
 	private int comLOC;
 	private int blLOC;
-	private ArrayList<Integer> lineLengths;
-	private ArrayList<Integer> lineLengthsTrimmed;
-	private ArrayList<Integer> lineLengthsProductive;
-	private ArrayList<Integer> lineLengthsTrimmedProductive;
+	private List<Integer> lineLengths;
+	private List<Integer> lineLengthsTrimmed;
+	private List<Integer> lineLengthsProductive;
+	private List<Integer> lineLengthsTrimmedProductive;
 	private Statistics lineStatistics;
 	private Statistics trimmedLineStatistics;
 	private Statistics productiveLineStatistics;
 	private Statistics trimmedProductiveLineStatistics;
 
-	public SLOCMetric(CodeRange codeRange) {
+	private final LanguageDependedSLOCMetric langDepended;
+
+	public SLOCMetric(ProgrammingLanguage language, CodeRange codeRange) {
 		super(codeRange);
-		tokenStream = codeRange.getTokenStream();
-		tokenStreamIterator = tokenStream.createNewIterator();
+		langDepended = language
+				.getImplementation(LanguageDependedSLOCMetric.class);
 	}
 
 	@Override
@@ -96,97 +96,70 @@ public class SLOCMetric extends AbstractCodeRangeEvaluator {
 		proLOC = 0;
 		comLOC = 0;
 		blLOC = 0;
-		for (int line = getCodeRange().getStartLine(); line <= getCodeRange()
-				.getStopLine(); line++) {
-			TokenStream lineStream = tokenStreamIterator.getLineStream(line);
+		TreeIterator<ParserTree> iterator = new TreeIterator<ParserTree>(
+				getCodeRange().getParserTree());
+		do {
+			Token token = iterator.getCurrentNode().getToken();
 			phyLOC += 1;
-			if (isComment(lineStream)) {
+			SLOCType type = langDepended.getType(token);
+			if (type == SLOCType.COMMENT) {
 				comLOC += 1;
 			}
-			if (isBlank(lineStream)) {
+			if (type == SLOCType.BLANK) {
 				blLOC += 1;
 			}
-			if (isProductive(lineStream)) {
+			if (type == SLOCType.PRODUCTIVE) {
 				proLOC += 1;
 			}
-		}
-	}
-
-	private boolean isComment(TokenStream tokenStream) {
-		for (Token token : tokenStream.getTokens()) {
-			if (token.getPublicity() == TokenPublicity.HIDDEN) {
-				if (token.getText().trim().length() > 0) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-
-	private boolean isBlank(TokenStream tokenStream) {
-		for (Token token : tokenStream.getTokens()) {
-			if (token.getText().trim().length() > 0) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	private boolean isProductive(TokenStream tokenStream) {
-		for (Token token : tokenStream.getTokens()) {
-			if (token.getPublicity() != TokenPublicity.HIDDEN) {
-				if (token.getText().trim().length() > 0) {
-					return true;
-				}
-			}
-		}
-		return false;
+		} while (iterator.goForward());
 	}
 
 	private void collectLineLengths() {
-		StringBuffer completeLines = new StringBuffer();
-		StringBuffer productiveLines = new StringBuffer();
-		lineLengths = new ArrayList<Integer>();
-		lineLengthsTrimmed = new ArrayList<Integer>();
-		lineLengthsProductive = new ArrayList<Integer>();
-		lineLengthsTrimmedProductive = new ArrayList<Integer>();
-		for (int index = getCodeRange().getStartId(); index <= getCodeRange()
-				.getStopId(); index++) {
-			Token token = tokenStream.get(index);
-			completeLines.append(token.getText());
-			if (token.getPublicity() != TokenPublicity.HIDDEN) {
-				productiveLines.append(token.getText());
-			} else if (token.getText().trim().isEmpty()) {
-				productiveLines.append(token.getText());
-			} else if (token.getText().contains("\n")) {
-				productiveLines.append("\n");
-			}
-		}
-		String[] lines = completeLines.toString().split("\n");
-		for (String line : lines) {
-			String trimmed = line.trim();
-			if (trimmed.isEmpty()) {
-				continue;
-			}
-			lineLengths.add(line.length());
-			lineLengthsTrimmed.add(trimmed.length());
-		}
-
-		lines = productiveLines.toString().split("\n");
-		for (String line : lines) {
-			String trimmed = line.trim();
-			if (trimmed.isEmpty()) {
-				continue;
-			}
-			lineLengthsProductive.add(line.length());
-			lineLengthsTrimmedProductive.add(trimmed.length());
-		}
-		lineStatistics = new Statistics(toDouble(lineLengths));
-		trimmedLineStatistics = new Statistics(toDouble(lineLengthsTrimmed));
-		productiveLineStatistics = new Statistics(
-				toDouble(lineLengthsProductive));
-		trimmedProductiveLineStatistics = new Statistics(
-				toDouble(lineLengthsTrimmedProductive));
+		// TODO
+		// StringBuffer completeLines = new StringBuffer();
+		// StringBuffer productiveLines = new StringBuffer();
+		// lineLengths = new ArrayList<Integer>();
+		// lineLengthsTrimmed = new ArrayList<Integer>();
+		// lineLengthsProductive = new ArrayList<Integer>();
+		// lineLengthsTrimmedProductive = new ArrayList<Integer>();
+		// for (int index = getSyntaxTree().getStartId(); index <=
+		// getSyntaxTree()
+		// .getStopId(); index++) {
+		// Token token = tokenStream.get(index);
+		// completeLines.append(token.getText());
+		// if (token.getPublicity() != TokenPublicity.HIDDEN) {
+		// productiveLines.append(token.getText());
+		// } else if (token.getText().trim().isEmpty()) {
+		// productiveLines.append(token.getText());
+		// } else if (token.getText().contains("\n")) {
+		// productiveLines.append("\n");
+		// }
+		// }
+		// String[] lines = completeLines.toString().split("\n");
+		// for (String line : lines) {
+		// String trimmed = line.trim();
+		// if (trimmed.isEmpty()) {
+		// continue;
+		// }
+		// lineLengths.add(line.length());
+		// lineLengthsTrimmed.add(trimmed.length());
+		// }
+		//
+		// lines = productiveLines.toString().split("\n");
+		// for (String line : lines) {
+		// String trimmed = line.trim();
+		// if (trimmed.isEmpty()) {
+		// continue;
+		// }
+		// lineLengthsProductive.add(line.length());
+		// lineLengthsTrimmedProductive.add(trimmed.length());
+		// }
+		// lineStatistics = new Statistics(toDouble(lineLengths));
+		// trimmedLineStatistics = new Statistics(toDouble(lineLengthsTrimmed));
+		// productiveLineStatistics = new Statistics(
+		// toDouble(lineLengthsProductive));
+		// trimmedProductiveLineStatistics = new Statistics(
+		// toDouble(lineLengthsTrimmedProductive));
 	}
 
 	private List<Double> toDouble(List<Integer> ints) {
@@ -277,10 +250,6 @@ public class SLOCMetric extends AbstractCodeRangeEvaluator {
 		System.out.println("blank lines: " + blLOC);
 	}
 
-	public static boolean isSuitable(CodeRange codeRange) {
-		return true;
-	}
-
 	@Override
 	public QualityLevel getQuality() {
 		QualityLevel levelLineCount = getQualityLevelLineCount();
@@ -291,9 +260,8 @@ public class SLOCMetric extends AbstractCodeRangeEvaluator {
 
 	public QualityLevel getQualityLevelLineCount() {
 		CodeRange range = getCodeRange();
-		if ((range.getCodeRangeType() == CodeRangeType.FILE)
-				|| (range.getCodeRangeType() == CodeRangeType.CLASS)
-				|| (range.getCodeRangeType() == CodeRangeType.ENUMERATION)) {
+		if ((range.getType() == CodeRangeType.FILE)
+				|| (range.getType() == CodeRangeType.CLASS)) {
 			if (getPhyLOC() > 2500) {
 				return QualityLevel.LOW;
 			}
@@ -301,10 +269,7 @@ public class SLOCMetric extends AbstractCodeRangeEvaluator {
 				return QualityLevel.MEDIUM;
 			}
 			return QualityLevel.HIGH;
-		} else if ((range.getCodeRangeType() == CodeRangeType.CONSTRUCTOR)
-				|| (range.getCodeRangeType() == CodeRangeType.METHOD)
-				|| (range.getCodeRangeType() == CodeRangeType.FUNCTION)
-				|| (range.getCodeRangeType() == CodeRangeType.INTERFACE)) {
+		} else if (range.getType() == CodeRangeType.SUBROUTINE) {
 			if (getPhyLOC() > 40) {
 				return QualityLevel.LOW;
 			}

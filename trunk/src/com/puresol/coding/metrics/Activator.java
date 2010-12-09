@@ -37,20 +37,21 @@ public class Activator implements BundleActivator {
 		logger.info("Starting Metrics Base Package...");
 
 		cocomoFactory = new CoCoMoFactory();
-		codeDepthMetricFactory = new CodeDepthMetricFactory();
-		entropyMetricFactory = new EntropyMetricFactory();
-		halsteadMetricFactory = new HalsteadMetricFactory();
-		maintainabilityIndexFactory = new MaintainabilityIndexFactory();
-		mcCabeMetricFactory = new McCabeMetricFactory();
+		//System.out.println(cocomoFactory.getDescription());
+		// codeDepthMetricFactory = new CodeDepthMetricFactory();
+		// entropyMetricFactory = new EntropyMetricFactory();
+		// halsteadMetricFactory = new HalsteadMetricFactory();
+		// maintainabilityIndexFactory = new MaintainabilityIndexFactory();
+		// mcCabeMetricFactory = new McCabeMetricFactory();
 		slocMetricFactory = new SLOCMetricFactory();
 
 		Evaluators evaluators = Evaluators.getInstance();
 		evaluators.registerProjectEvaluator(cocomoFactory);
-		evaluators.registerCodeRangeEvaluator(codeDepthMetricFactory);
-		evaluators.registerCodeRangeEvaluator(entropyMetricFactory);
-		evaluators.registerCodeRangeEvaluator(halsteadMetricFactory);
-		evaluators.registerCodeRangeEvaluator(maintainabilityIndexFactory);
-		evaluators.registerCodeRangeEvaluator(mcCabeMetricFactory);
+		// evaluators.registerCodeRangeEvaluator(codeDepthMetricFactory);
+		// evaluators.registerCodeRangeEvaluator(entropyMetricFactory);
+		// evaluators.registerCodeRangeEvaluator(halsteadMetricFactory);
+		// evaluators.registerCodeRangeEvaluator(maintainabilityIndexFactory);
+		// evaluators.registerCodeRangeEvaluator(mcCabeMetricFactory);
 		evaluators.registerCodeRangeEvaluator(slocMetricFactory);
 
 		logger.info("Started.");
@@ -62,11 +63,11 @@ public class Activator implements BundleActivator {
 
 		Evaluators evaluators = Evaluators.getInstance();
 		evaluators.unregisterProjectEvaluator(cocomoFactory);
-		evaluators.unregisterCodeRangeEvaluator(codeDepthMetricFactory);
-		evaluators.unregisterCodeRangeEvaluator(entropyMetricFactory);
-		evaluators.unregisterCodeRangeEvaluator(halsteadMetricFactory);
-		evaluators.unregisterCodeRangeEvaluator(maintainabilityIndexFactory);
-		evaluators.unregisterCodeRangeEvaluator(mcCabeMetricFactory);
+		// evaluators.unregisterCodeRangeEvaluator(codeDepthMetricFactory);
+		// evaluators.unregisterCodeRangeEvaluator(entropyMetricFactory);
+		// evaluators.unregisterCodeRangeEvaluator(halsteadMetricFactory);
+		// evaluators.unregisterCodeRangeEvaluator(maintainabilityIndexFactory);
+		// evaluators.unregisterCodeRangeEvaluator(mcCabeMetricFactory);
 		evaluators.unregisterCodeRangeEvaluator(slocMetricFactory);
 
 		cocomoFactory = null;

@@ -15,21 +15,17 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
-import javax.i18n4j.Translator;
+import javax.i18n4java.Translator;
 
-import com.puresol.coding.analysis.CodeRange;
-import com.puresol.coding.analysis.CodeRangeType;
 import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.evaluator.AbstractProjectEvaluator;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.QualityLevel;
-import com.puresol.parser.tokens.Token;
-import com.puresol.parser.tokens.TokenPublicity;
 import com.puresol.reporting.ReportingFormat;
 import com.puresol.reporting.UnsupportedFormatException;
 import com.puresol.reporting.html.HTMLStandards;
+import com.puresol.uhura.ast.ParserTree;
 import com.puresol.utils.Property;
-import com.puresol.utils.TextUtils;
 
 /**
  * This class calculates the CoCoMo for a set number of sloc and a given average
@@ -46,14 +42,17 @@ public class CoCoMo extends AbstractProjectEvaluator {
 			.getTranslator(CoCoMo.class);
 
 	private final CoCoMoValueSet cocomoValues = new CoCoMoValueSet();
-	private final Hashtable<CodeRange, CoCoMoValueSet> fileCoCoMoValues = new Hashtable<CodeRange, CoCoMoValueSet>();
+	private final Hashtable<File, CoCoMoValueSet> fileCoCoMoValues = new Hashtable<File, CoCoMoValueSet>();
 
 	public static final String NAME = "COst COnstruction MOdel";
+
 	public static final String DESCRIPTION = translator
 			.i18n("The COst COnstruction MOdel is a simple way "
 					+ "to estimate the construction costs of a "
 					+ "software project by couting the physical lines of code.");
+
 	public static final List<Property> SUPPORTED_PROPERTIES = new ArrayList<Property>();
+
 	public static final List<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new ArrayList<QualityCharacteristic>();
 
 	public CoCoMo(ProjectAnalyzer analyser) {
@@ -88,47 +87,29 @@ public class CoCoMo extends AbstractProjectEvaluator {
 	}
 
 	private int getFileSLOC(File file) {
-		List<CodeRange> codeRanges = getProjectAnalyser().getAnalyzer(file)
-				.getNonFragmentCodeRangesRecursively();
-		for (CodeRange codeRange : codeRanges) {
-			if (codeRange.getCodeRangeType() == CodeRangeType.FILE) {
-				int sloc = getSLOC(codeRange);
-				addCodeRangeCoCoMo(codeRange, sloc);
-				return sloc;
-			}
-		}
-		return 0;
-	}
-
-	private int getSLOC(CodeRange codeRange) {
-		int sloc = 0;
-		int line = 1;
-		int oldLine = -1;
-		for (Token token : codeRange.getTokens()) {
-			if (token.getPublicity() == TokenPublicity.VISIBLE) {
-				if (line != oldLine) {
-					oldLine = line;
-					sloc++;
-				}
-			}
-			line += TextUtils.countLineBreaks(token.getText());
-		}
+		ParserTree parserTree = getProjectAnalyser().getAnalyzer(file).getParserTree();
+		int sloc = getSLOC(parserTree);
+		addCodeRangeCoCoMo(file, sloc);
 		return sloc;
 	}
 
-	private void addCodeRangeCoCoMo(CodeRange codeRange, int sloc) {
+	private int getSLOC(ParserTree parserTree) {
+		return parserTree.getMetaData().getLineNum();
+	}
+
+	private void addCodeRangeCoCoMo(File file, int sloc) {
 		CoCoMoValueSet valueSet = new CoCoMoValueSet();
 		valueSet.setSloc(sloc);
 		valueSet.setComplexity(cocomoValues.getComplexity());
 		valueSet.setAverageSalary(cocomoValues.getAverageSalary(),
 				cocomoValues.getCurrency());
-		fileCoCoMoValues.put(codeRange, valueSet);
+		fileCoCoMoValues.put(file, valueSet);
 	}
 
 	public void setComplexity(Complexity complexity) {
 		cocomoValues.setComplexity(complexity);
-		for (CodeRange codeRange : fileCoCoMoValues.keySet()) {
-			fileCoCoMoValues.get(codeRange).setComplexity(complexity);
+		for (File file : fileCoCoMoValues.keySet()) {
+			fileCoCoMoValues.get(file).setComplexity(complexity);
 		}
 	}
 

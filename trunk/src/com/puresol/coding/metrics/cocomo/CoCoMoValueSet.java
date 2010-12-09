@@ -2,7 +2,7 @@ package com.puresol.coding.metrics.cocomo;
 
 import java.io.Serializable;
 
-import javax.i18n4j.Translator;
+import javax.i18n4java.Translator;
 
 import com.puresol.reporting.ReportingFormat;
 import com.puresol.reporting.UnsupportedFormatException;
@@ -200,8 +200,7 @@ public class CoCoMoValueSet implements Serializable {
 				.i18n("Total Physical Source Lines of Code (SLOC)")
 				+ "                = " + sloc + "\n";
 		text += translator.i18n("Calculation for a {0} complexity project.",
-				complexity.getIdentifier())
-				+ "\n";
+				complexity.getIdentifier()) + "\n";
 		text += translator
 				.i18n("Development Effort Estimate, Person-Years (Person-Months)")
 				+ " = " + personYears + " (" + personMonth + ")\n";

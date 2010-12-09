@@ -3,25 +3,28 @@ package com.puresol.coding.metrics.codedepth;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.i18n4j.Translator;
+import javax.i18n4java.Translator;
 
 import org.apache.log4j.Logger;
+import org.w3c.dom.traversal.TreeWalker;
 
-import com.puresol.coding.analysis.CodeRange;
+import com.puresol.coding.ProgrammingLanguage;
+import com.puresol.coding.analysis.Analyzer;
+import com.puresol.coding.evaluator.AbstractFileEvaluator;
 import com.puresol.coding.evaluator.AbstractCodeRangeEvaluator;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.QualityLevel;
 import com.puresol.coding.reporting.HTMLConverter;
-import com.puresol.coding.tokentypes.SourceTokenDefinition;
-import com.puresol.parser.tokens.Token;
-import com.puresol.parser.tokens.TokenCreationException;
-import com.puresol.parser.tokens.TokenStream;
 import com.puresol.reporting.ReportingFormat;
 import com.puresol.reporting.UnsupportedFormatException;
 import com.puresol.reporting.html.Anchor;
+import com.puresol.trees.TreeVisitor;
+import com.puresol.trees.WalkingAction;
+import com.puresol.uhura.ast.ParserTree;
 import com.puresol.utils.Property;
 
-public class CodeDepth extends AbstractCodeRangeEvaluator {
+public class CodeDepth extends AbstractCodeRangeEvaluator implements
+		TreeVisitor<ParserTree> {
 
 	private static final long serialVersionUID = -2151200082569811564L;
 
@@ -32,7 +35,7 @@ public class CodeDepth extends AbstractCodeRangeEvaluator {
 	public static final String NAME = translator.i18n("Code Depth Metric");
 	public static final String DESCRIPTION = translator
 			.i18n("Analysis the stacked code blocks for a maximum depth.");
-	public static final ArrayList<Property> SUPPORTED_PROPERTIES = new ArrayList<Property>();
+	public static final List<Property> SUPPORTED_PROPERTIES = new ArrayList<Property>();
 	static {
 		SUPPORTED_PROPERTIES.add(new Property(CodeDepth.class, "enabled",
 				"Switches calculation of CodeDepth on and off.", Boolean.class,
@@ -46,8 +49,8 @@ public class CodeDepth extends AbstractCodeRangeEvaluator {
 
 	private int maxLayer = 0;
 
-	public CodeDepth(CodeRange range) {
-		super(range);
+	public CodeDepth(ProgrammingLanguage language, ParserTree syntaxTree) {
+		super(syntaxTree);
 	}
 
 	@Override
@@ -74,10 +77,6 @@ public class CodeDepth extends AbstractCodeRangeEvaluator {
 
 	public int getMaxLayer() {
 		return maxLayer;
-	}
-
-	public static boolean isSuitable(CodeRange codeRange) {
-		return true;
 	}
 
 	@Override
@@ -135,5 +134,11 @@ public class CodeDepth extends AbstractCodeRangeEvaluator {
 	@Override
 	public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
 		return EVALUATED_QUALITY_CHARACTERISTICS;
+	}
+
+	@Override
+	public WalkingAction visit(ParserTree tree) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

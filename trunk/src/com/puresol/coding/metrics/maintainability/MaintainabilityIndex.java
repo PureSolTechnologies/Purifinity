@@ -13,10 +13,9 @@ package com.puresol.coding.metrics.maintainability;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.i18n4j.Translator;
+import javax.i18n4java.Translator;
 
-import com.puresol.coding.analysis.CodeRange;
-import com.puresol.coding.analysis.CodeRangeType;
+import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.evaluator.AbstractCodeRangeEvaluator;
 import com.puresol.coding.metrics.halstead.HalsteadMetric;
 import com.puresol.coding.metrics.mccabe.McCabeMetric;
@@ -28,6 +27,7 @@ import com.puresol.reporting.ReportingFormat;
 import com.puresol.reporting.UnsupportedFormatException;
 import com.puresol.reporting.html.Anchor;
 import com.puresol.reporting.html.HTMLStandards;
+import com.puresol.uhura.ast.ParserTree;
 import com.puresol.utils.Property;
 
 public class MaintainabilityIndex extends AbstractCodeRangeEvaluator {
@@ -70,33 +70,37 @@ public class MaintainabilityIndex extends AbstractCodeRangeEvaluator {
 	 */
 	private double MI;
 
-	private final CodeRange codeRange;
+	private final ParserTree syntaxTree;
 	private SLOCMetric slocMetric;
 	private McCabeMetric mcCabeMetric;
 	private HalsteadMetric halsteadMetric;
+	private final ProgrammingLanguage language;
 
-	public MaintainabilityIndex(CodeRange codeRange) {
-		super(codeRange);
-		this.codeRange = codeRange;
+	public MaintainabilityIndex(ProgrammingLanguage language,
+			ParserTree syntaxTree) {
+		super(syntaxTree);
+		this.syntaxTree = syntaxTree;
+		this.language = language;
+
 	}
 
 	private void checkInput() {
-		if (codeRange != slocMetric.getCodeRange()) {
+		if (syntaxTree != slocMetric.getCodeRange()) {
 			throw new IllegalArgumentException("Code ranges must be same!!!");
 		}
-		if (codeRange != mcCabeMetric.getCodeRange()) {
+		if (syntaxTree != mcCabeMetric.getCodeRange()) {
 			throw new IllegalArgumentException("Code ranges must be same!!!");
 		}
-		if (codeRange != halsteadMetric.getCodeRange()) {
+		if (syntaxTree != halsteadMetric.getCodeRange()) {
 			throw new IllegalArgumentException("Code ranges must be same!!!");
 		}
 	}
 
 	@Override
 	public void run() {
-		this.slocMetric = new SLOCMetric(codeRange);
-		this.mcCabeMetric = new McCabeMetric(codeRange);
-		this.halsteadMetric = new HalsteadMetric(codeRange);
+		this.slocMetric = new SLOCMetric(language, syntaxTree);
+		this.mcCabeMetric = new McCabeMetric(language, syntaxTree);
+		this.halsteadMetric = new HalsteadMetric(language, syntaxTree);
 		checkInput();
 		MIwoc = 171.0 - 5.2 * Math.log(halsteadMetric.get_HV()) - 0.23
 				* mcCabeMetric.getCyclomaticNumber() - 16.2
@@ -139,13 +143,9 @@ public class MaintainabilityIndex extends AbstractCodeRangeEvaluator {
 		return MI;
 	}
 
-	public static boolean isSuitable(CodeRange codeRange) {
-		return true;
-	}
-
 	@Override
 	public QualityLevel getQuality() {
-		CodeRange range = getCodeRange();
+		ParserTree range = getCodeRange();
 		if ((range.getCodeRangeType() == CodeRangeType.FILE)
 				|| (range.getCodeRangeType() == CodeRangeType.CLASS)
 				|| (range.getCodeRangeType() == CodeRangeType.ENUMERATION)) {

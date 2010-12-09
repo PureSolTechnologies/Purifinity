@@ -14,9 +14,10 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
-import javax.i18n4j.Translator;
+import javax.i18n4java.Translator;
 
-import com.puresol.coding.analysis.CodeRange;
+import com.puresol.coding.CodeRange;
+import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.evaluator.AbstractCodeRangeEvaluator;
 import com.puresol.coding.metrics.halstead.HalsteadMetric;
 import com.puresol.coding.quality.QualityCharacteristic;
@@ -46,7 +47,7 @@ public class EntropyMetric extends AbstractCodeRangeEvaluator {
 	public static final String NAME = translator.i18n("Entropy Metric");
 	public static final String DESCRIPTION = translator
 			.i18n("Entropy Metric calculation.");
-	public static final ArrayList<Property> SUPPORTED_PROPERTIES = new ArrayList<Property>();
+	public static final List<Property> SUPPORTED_PROPERTIES = new ArrayList<Property>();
 	static {
 		SUPPORTED_PROPERTIES.add(new Property(EntropyMetric.class, "enabled",
 				"Switches calculation of EntropyMetric on and off.",
@@ -74,14 +75,16 @@ public class EntropyMetric extends AbstractCodeRangeEvaluator {
 	private double Redundancy;
 	private double normalizedRedundancy;
 	private HalsteadMetric halstead = null;
+	private final ProgrammingLanguage language;
 
-	public EntropyMetric(CodeRange codeRange) {
+	public EntropyMetric(ProgrammingLanguage language, CodeRange codeRange) {
 		super(codeRange);
+		this.language = language;
 	}
 
 	@Override
 	public void run() {
-		halstead = new HalsteadMetric(getCodeRange());
+		halstead = new HalsteadMetric(language, getCodeRange());
 		Hashtable<String, Integer> operants = halstead.getOperants();
 
 		maxEntropy = Math.log((double) halstead.get_n2()) / Math.log(2.0);
