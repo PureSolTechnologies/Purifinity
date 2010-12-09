@@ -39,7 +39,7 @@ public class Activator implements BundleActivator {
 		cocomoFactory = new CoCoMoFactory();
 		codeDepthMetricFactory = new CodeDepthMetricFactory();
 		entropyMetricFactory = new EntropyMetricFactory();
-		// halsteadMetricFactory = new HalsteadMetricFactory();
+		halsteadMetricFactory = new HalsteadMetricFactory();
 		maintainabilityIndexFactory = new MaintainabilityIndexFactory();
 		mcCabeMetricFactory = new McCabeMetricFactory();
 		slocMetricFactory = new SLOCMetricFactory();
@@ -48,7 +48,7 @@ public class Activator implements BundleActivator {
 		evaluators.registerProjectEvaluator(cocomoFactory);
 		evaluators.registerCodeRangeEvaluator(codeDepthMetricFactory);
 		evaluators.registerCodeRangeEvaluator(entropyMetricFactory);
-		// evaluators.registerCodeRangeEvaluator(halsteadMetricFactory);
+		evaluators.registerCodeRangeEvaluator(halsteadMetricFactory);
 		evaluators.registerCodeRangeEvaluator(maintainabilityIndexFactory);
 		evaluators.registerCodeRangeEvaluator(mcCabeMetricFactory);
 		evaluators.registerCodeRangeEvaluator(slocMetricFactory);
@@ -64,7 +64,7 @@ public class Activator implements BundleActivator {
 		evaluators.unregisterProjectEvaluator(cocomoFactory);
 		evaluators.unregisterCodeRangeEvaluator(codeDepthMetricFactory);
 		evaluators.unregisterCodeRangeEvaluator(entropyMetricFactory);
-		// evaluators.unregisterCodeRangeEvaluator(halsteadMetricFactory);
+		evaluators.unregisterCodeRangeEvaluator(halsteadMetricFactory);
 		evaluators.unregisterCodeRangeEvaluator(maintainabilityIndexFactory);
 		evaluators.unregisterCodeRangeEvaluator(mcCabeMetricFactory);
 		evaluators.unregisterCodeRangeEvaluator(slocMetricFactory);

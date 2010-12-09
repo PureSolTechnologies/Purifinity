@@ -16,13 +16,9 @@ import java.util.List;
 
 import javax.i18n4java.Translator;
 
-import org.apache.log4j.Logger;
-import org.w3c.dom.traversal.TreeWalker;
-
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.CodeRangeType;
 import com.puresol.coding.ProgrammingLanguage;
-import com.puresol.coding.ProgrammingLanguages;
 import com.puresol.coding.evaluator.AbstractCodeRangeEvaluator;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.QualityLevel;
@@ -31,8 +27,7 @@ import com.puresol.reporting.ReportingFormat;
 import com.puresol.reporting.UnsupportedFormatException;
 import com.puresol.reporting.html.Anchor;
 import com.puresol.reporting.html.HTMLStandards;
-import com.puresol.trees.TreeVisitor;
-import com.puresol.trees.WalkingAction;
+import com.puresol.trees.TreeIterator;
 import com.puresol.uhura.ast.ParserTree;
 import com.puresol.utils.Property;
 
@@ -40,7 +35,6 @@ public class HalsteadMetric extends AbstractCodeRangeEvaluator {
 
 	private static final long serialVersionUID = -7823038852668468658L;
 
-	private static final Logger logger = Logger.getLogger(HalsteadMetric.class);
 	private static final Translator translator = Translator
 			.getTranslator(HalsteadMetric.class);
 
@@ -115,38 +109,44 @@ public class HalsteadMetric extends AbstractCodeRangeEvaluator {
 	 */
 	private double B;
 
+	private final LanguageDependedHalsteadMetric langDepended;
+
 	public HalsteadMetric(ProgrammingLanguage language, CodeRange codeRange) {
 		super(codeRange);
+		langDepended = language
+				.getImplementation(LanguageDependedHalsteadMetric.class);
+		if (langDepended == null) {
+			throw new RuntimeException();
+		}
 	}
 
 	@Override
 	public void run() {
-		try {
-			createHashtables();
-			calculateValues();
-		} catch (TokenCreationException e) {
-			logger.error(e);
+		if (getMonitor() != null) {
+			getMonitor().setRange(0, 1);
+			getMonitor().setDescription(NAME);
+		}
+		createHashtables();
+		calculateValues();
+		if (getMonitor() != null) {
+			getMonitor().finish();
 		}
 	}
 
-	private void createHashtables() throws TokenCreationException {
-		CodeRange codeRange = getCodeRange();
-		TokenStream tokenStream = codeRange.getTokenStream();
-		for (int index = codeRange.getStartId(); index <= codeRange.getStopId(); index++) {
-			Token token = tokenStream.get(index);
-			if (token.getPublicity() != TokenPublicity.HIDDEN) {
-				SourceTokenDefinition def;
-				def = (SourceTokenDefinition) token.getDefinitionInstance();
-				if (def.countForHalstead(token, tokenStream)) {
-					if (def.getSymbolType() == SymbolType.OPERANT) {
-						addOperant(token.getText());
-					}
-					if (def.getSymbolType() == SymbolType.OPERATOR) {
-						addOperator(def.getHalsteadSymbol());
-					}
+	private void createHashtables() {
+		TreeIterator<ParserTree> iterator = new TreeIterator<ParserTree>(
+				getCodeRange().getParserTree());
+		do {
+			ParserTree node = iterator.getCurrentNode();
+			HalsteadResult result = langDepended.getHalsteadResult(node);
+			if (result.isCountable()) {
+				if (result.isOperator()) {
+					addOperator(result.getSymbol());
+				} else {
+					addOperant(result.getSymbol());
 				}
 			}
-		}
+		} while (iterator.goForward());
 	}
 
 	private void addOperator(String operator) {

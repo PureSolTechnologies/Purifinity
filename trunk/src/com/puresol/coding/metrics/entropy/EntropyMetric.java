@@ -87,6 +87,10 @@ public class EntropyMetric extends AbstractCodeRangeEvaluator {
 
 	@Override
 	public void run() {
+		if (getMonitor() != null) {
+			getMonitor().setRange(0, 1);
+			getMonitor().setDescription(NAME);
+		}
 		halstead = new HalsteadMetric(language, getCodeRange());
 		Hashtable<String, Integer> operants = halstead.getOperants();
 
@@ -103,6 +107,9 @@ public class EntropyMetric extends AbstractCodeRangeEvaluator {
 		EntropyRedundancy = maxEntropy - Entropy;
 		Redundancy = EntropyRedundancy * halstead.get_n2() / maxEntropy;
 		normalizedRedundancy = Redundancy / halstead.get_n2();
+		if (getMonitor() != null) {
+			getMonitor().finish();
+		}
 	}
 
 	public double get_n() {
