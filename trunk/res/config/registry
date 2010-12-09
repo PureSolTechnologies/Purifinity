@@ -1,0 +1,1 @@
+com.puresol.coding.metrics.sloc.LanguageDependedSLOCMetric=com.puresol.coding.lang.java.metrics.SLOCMetricImpl

@@ -7,6 +7,8 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import com.puresol.coding.metrics.sloc.LanguageDependedSLOCMetric;
+
 public class JavaTest {
 
 	@Test
@@ -16,4 +18,9 @@ public class JavaTest {
 		assertSame(java, Java.getInstance());
 	}
 
+	@Test
+	public void testGetImplementation() {
+		Java java = Java.getInstance();
+		assertNotNull(java.getImplementation(LanguageDependedSLOCMetric.class));
+	}
 }

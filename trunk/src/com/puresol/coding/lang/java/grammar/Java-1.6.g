@@ -15,6 +15,7 @@ OPTIONS
 	grammar.name="Java-1.6";
 	grammar.checks=true;
 	grammar.ignore-case=false;
+	grammar.ignored-leading=true;
 	lexer="com.puresol.uhura.lexer.RegExpLexer";
 	parser="com.puresol.uhura.parser.lr.LR1Parser";
 	parser.backtracking=true;

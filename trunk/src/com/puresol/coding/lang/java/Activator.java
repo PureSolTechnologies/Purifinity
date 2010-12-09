@@ -20,7 +20,9 @@ public class Activator implements BundleActivator {
 	@Override
 	public void start(BundleContext context) throws Exception {
 		logger.info("Starting Java Language Pack...");
-		ProgrammingLanguages.getInstance().registerLanguage(Java.getInstance());
+		Java java = Java.getInstance();
+		java.setBundleContext(context);
+		ProgrammingLanguages.getInstance().registerLanguage(java);
 		logger.info("Started.");
 	}
 
