@@ -15,9 +15,6 @@ import java.util.List;
 
 import javax.i18n4java.Translator;
 
-import org.apache.log4j.Logger;
-import org.w3c.dom.traversal.TreeWalker;
-
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.CodeRangeType;
 import com.puresol.coding.ProgrammingLanguage;
@@ -28,7 +25,7 @@ import com.puresol.coding.reporting.HTMLConverter;
 import com.puresol.reporting.ReportingFormat;
 import com.puresol.reporting.UnsupportedFormatException;
 import com.puresol.reporting.html.Anchor;
-import com.puresol.trees.TreeVisitor;
+import com.puresol.trees.TreeIterator;
 import com.puresol.uhura.ast.ParserTree;
 import com.puresol.utils.Property;
 
@@ -42,19 +39,21 @@ public class McCabeMetric extends AbstractCodeRangeEvaluator {
 
 	private static final long serialVersionUID = 4402746003873908301L;
 
-	private static final Logger logger = Logger.getLogger(McCabeMetric.class);
 	private static final Translator translator = Translator
 			.getTranslator(McCabeMetric.class);
 
 	public static final String NAME = translator.i18n("McCabe Metric");
+
 	public static final String DESCRIPTION = translator
 			.i18n("McCabe Metric calculation.");
+
 	public static final ArrayList<Property> SUPPORTED_PROPERTIES = new ArrayList<Property>();
 	static {
 		SUPPORTED_PROPERTIES.add(new Property(McCabeMetric.class, "enabled",
 				"Switches calculation of McCabe Metric on and off.",
 				Boolean.class, "true"));
 	}
+
 	public static final List<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new ArrayList<QualityCharacteristic>();
 	static {
 		EVALUATED_QUALITY_CHARACTERISTICS
@@ -64,33 +63,35 @@ public class McCabeMetric extends AbstractCodeRangeEvaluator {
 	}
 
 	private int cyclomaticNumber = 1;
+	private final LanguageDependedMcCabeMetric langDepended;
 
-	public McCabeMetric(ProgrammingLanguage language, ParserTree syntaxTree) {
-		super(syntaxTree);
+	public McCabeMetric(ProgrammingLanguage language, CodeRange codeRange) {
+		super(codeRange);
+		langDepended = language
+				.getImplementation(LanguageDependedMcCabeMetric.class);
+		if (langDepended == null) {
+			throw new RuntimeException();
+		}
 	}
 
 	@Override
 	public void run() {
-		try {
-			CodeRange codeRange = getCodeRange();
-			TokenStream tokenStream = codeRange.getTokenStream();
-			for (int index = codeRange.getStartId(); index <= codeRange
-					.getStopId(); index++) {
-				Token token = tokenStream.get(index);
-				if (token.getPublicity() != TokenPublicity.HIDDEN) {
-					SourceTokenDefinition def = (SourceTokenDefinition) token
-							.getDefinitionInstance();
-					addCyclomaticNumber(def.getCyclomaticNumber(token,
-							tokenStream));
-				}
-			}
-		} catch (TokenCreationException e) {
-			logger.error(e);
+		if (getMonitor() != null) {
+			getMonitor().setRange(0, 1);
+			getMonitor().setDescription(NAME);
 		}
-	}
-
-	private void addCyclomaticNumber(int cyclomaticNumber) {
-		this.cyclomaticNumber += cyclomaticNumber;
+		cyclomaticNumber = 1;
+		TreeIterator<ParserTree> iterator = new TreeIterator<ParserTree>(
+				getCodeRange().getParserTree());
+		do {
+			if (langDepended.increasesCyclomaticComplexity(iterator
+					.getCurrentNode())) {
+				cyclomaticNumber++;
+			}
+		} while (iterator.goForward());
+		if (getMonitor() != null) {
+			getMonitor().finish();
+		}
 	}
 
 	/*

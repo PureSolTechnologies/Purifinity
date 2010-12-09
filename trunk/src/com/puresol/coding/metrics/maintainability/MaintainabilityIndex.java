@@ -29,7 +29,6 @@ import com.puresol.reporting.ReportingFormat;
 import com.puresol.reporting.UnsupportedFormatException;
 import com.puresol.reporting.html.Anchor;
 import com.puresol.reporting.html.HTMLStandards;
-import com.puresol.uhura.ast.ParserTree;
 import com.puresol.utils.Property;
 
 public class MaintainabilityIndex extends AbstractCodeRangeEvaluator {
@@ -72,37 +71,35 @@ public class MaintainabilityIndex extends AbstractCodeRangeEvaluator {
 	 */
 	private double MI;
 
-	private final ParserTree syntaxTree;
 	private SLOCMetric slocMetric;
 	private McCabeMetric mcCabeMetric;
 	private HalsteadMetric halsteadMetric;
 	private final ProgrammingLanguage language;
 
 	public MaintainabilityIndex(ProgrammingLanguage language,
-			ParserTree syntaxTree) {
-		super(syntaxTree);
-		this.syntaxTree = syntaxTree;
+			CodeRange codeRange) {
+		super(codeRange);
 		this.language = language;
 
 	}
 
 	private void checkInput() {
-		if (syntaxTree != slocMetric.getCodeRange()) {
+		if (getCodeRange() != slocMetric.getCodeRange()) {
 			throw new IllegalArgumentException("Code ranges must be same!!!");
 		}
-		if (syntaxTree != mcCabeMetric.getCodeRange()) {
+		if (getCodeRange() != mcCabeMetric.getCodeRange()) {
 			throw new IllegalArgumentException("Code ranges must be same!!!");
 		}
-		if (syntaxTree != halsteadMetric.getCodeRange()) {
+		if (getCodeRange() != halsteadMetric.getCodeRange()) {
 			throw new IllegalArgumentException("Code ranges must be same!!!");
 		}
 	}
 
 	@Override
 	public void run() {
-		this.slocMetric = new SLOCMetric(language, syntaxTree);
-		this.mcCabeMetric = new McCabeMetric(language, syntaxTree);
-		this.halsteadMetric = new HalsteadMetric(language, syntaxTree);
+		this.slocMetric = new SLOCMetric(language, getCodeRange());
+		this.mcCabeMetric = new McCabeMetric(language, getCodeRange());
+		this.halsteadMetric = new HalsteadMetric(language, getCodeRange());
 		checkInput();
 		MIwoc = 171.0 - 5.2 * Math.log(halsteadMetric.get_HV()) - 0.23
 				* mcCabeMetric.getCyclomaticNumber() - 16.2

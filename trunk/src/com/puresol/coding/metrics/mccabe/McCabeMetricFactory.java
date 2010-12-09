@@ -2,19 +2,19 @@ package com.puresol.coding.metrics.mccabe;
 
 import java.util.List;
 
+import com.puresol.coding.CodeRange;
 import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.evaluator.CodeRangeEvaluator;
 import com.puresol.coding.evaluator.CodeRangeEvaluatorFactory;
 import com.puresol.coding.quality.QualityCharacteristic;
-import com.puresol.uhura.ast.ParserTree;
 import com.puresol.utils.Property;
 
 public class McCabeMetricFactory implements CodeRangeEvaluatorFactory {
 
 	@Override
 	public CodeRangeEvaluator create(ProgrammingLanguage language,
-			ParserTree syntaxTree) {
-		return new McCabeMetric(language, syntaxTree);
+			CodeRange codeRange) {
+		return new McCabeMetric(language, codeRange);
 	}
 
 	@Override
