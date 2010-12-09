@@ -1,1 +1,2 @@
 com.puresol.coding.metrics.sloc.LanguageDependedSLOCMetric=com.puresol.coding.lang.java.metrics.SLOCMetricImpl
+com.puresol.coding.metrics.codedepth.LanguageDependedCodeDepthMetric=com.puresol.coding.lang.java.metrics.CodeDepthMetricImpl

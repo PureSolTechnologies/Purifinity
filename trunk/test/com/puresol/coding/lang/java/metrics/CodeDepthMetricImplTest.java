@@ -11,11 +11,11 @@ import com.puresol.coding.CodeRange;
 import com.puresol.coding.analysis.Analyzer;
 import com.puresol.coding.analysis.AnalyzerException;
 import com.puresol.coding.lang.java.Java;
-import com.puresol.coding.metrics.sloc.SLOCMetric;
+import com.puresol.coding.metrics.codedepth.CodeDepthMetric;
 import com.puresol.uhura.ast.ParserTree;
 import com.puresol.utils.FileUtilities;
 
-public class SLOCMetricImplTest {
+public class CodeDepthMetricImplTest {
 
 	@Test
 	public void test() {
@@ -23,7 +23,8 @@ public class SLOCMetricImplTest {
 			Java java = Java.getInstance();
 			assertNotNull(java);
 			File file = new File("src", FileUtilities
-					.classToRelativePackagePath(SLOCMetricImpl.class).getPath());
+					.classToRelativePackagePath(CodeDepthMetricImpl.class)
+					.getPath());
 			assertTrue(file.exists());
 			Analyzer analyzer = java.createAnalyser(file);
 			assertNotNull(analyzer);
@@ -33,17 +34,9 @@ public class SLOCMetricImplTest {
 			List<CodeRange> codeRanges = java.getAnalyzableCodeRanges(tree);
 			assertNotNull(codeRanges);
 			assertTrue(codeRanges.size() > 0);
-			SLOCMetric metric = new SLOCMetric(java, codeRanges.get(2));
+			CodeDepthMetric metric = new CodeDepthMetric(java, codeRanges.get(0));
 			metric.run();
-			System.out.println("phyLOC: " + metric.getPhyLOC());
-			System.out.println("proLOC: " + metric.getProLOC());
-			System.out.println("comLOC: " + metric.getComLOC());
-			System.out.println("blLOC: " + metric.getBlLOC());
-			System.out.println("line length: " + metric.getLineStatistics());
-			assertEquals(15, metric.getPhyLOC());
-			assertEquals(13, metric.getProLOC());
-			assertEquals(0, metric.getComLOC());
-			assertEquals(2, metric.getBlLOC());
+			assertEquals(2, metric.getMaxDepth());
 		} catch (AnalyzerException e) {
 			e.printStackTrace();
 			fail("No exception was expected!");
