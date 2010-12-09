@@ -20,6 +20,7 @@ import org.apache.log4j.Logger;
 import org.w3c.dom.traversal.TreeWalker;
 
 import com.puresol.coding.CodeRange;
+import com.puresol.coding.CodeRangeType;
 import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.ProgrammingLanguages;
 import com.puresol.coding.evaluator.AbstractCodeRangeEvaluator;
@@ -290,9 +291,9 @@ public class HalsteadMetric extends AbstractCodeRangeEvaluator implements
 	@Override
 	public QualityLevel getQuality() {
 		CodeRange range = getCodeRange();
-		if ((range.getCodeRangeType() == CodeRangeType.FILE)
-				|| (range.getCodeRangeType() == CodeRangeType.CLASS)
-				|| (range.getCodeRangeType() == CodeRangeType.ENUMERATION)) {
+		if ((range.getType() == CodeRangeType.FILE)
+				|| (range.getType() == CodeRangeType.CLASS)
+				|| (range.getType() == CodeRangeType.ENUMERATION)) {
 			if (get_HV() < 80) {
 				return QualityLevel.MEDIUM;
 			}
@@ -303,10 +304,10 @@ public class HalsteadMetric extends AbstractCodeRangeEvaluator implements
 				return QualityLevel.MEDIUM;
 			}
 			return QualityLevel.HIGH;
-		} else if ((range.getCodeRangeType() == CodeRangeType.CONSTRUCTOR)
-				|| (range.getCodeRangeType() == CodeRangeType.METHOD)
-				|| (range.getCodeRangeType() == CodeRangeType.FUNCTION)
-				|| (range.getCodeRangeType() == CodeRangeType.INTERFACE)) {
+		} else if ((range.getType() == CodeRangeType.CONSTRUCTOR)
+				|| (range.getType() == CodeRangeType.METHOD)
+				|| (range.getType() == CodeRangeType.FUNCTION)
+				|| (range.getType() == CodeRangeType.INTERFACE)) {
 			if (get_HV() < 10) {
 				return QualityLevel.MEDIUM;
 			}

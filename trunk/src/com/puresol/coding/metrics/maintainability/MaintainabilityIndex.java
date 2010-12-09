@@ -15,6 +15,8 @@ import java.util.List;
 
 import javax.i18n4java.Translator;
 
+import com.puresol.coding.CodeRange;
+import com.puresol.coding.CodeRangeType;
 import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.evaluator.AbstractCodeRangeEvaluator;
 import com.puresol.coding.metrics.halstead.HalsteadMetric;
@@ -145,10 +147,10 @@ public class MaintainabilityIndex extends AbstractCodeRangeEvaluator {
 
 	@Override
 	public QualityLevel getQuality() {
-		ParserTree range = getCodeRange();
-		if ((range.getCodeRangeType() == CodeRangeType.FILE)
-				|| (range.getCodeRangeType() == CodeRangeType.CLASS)
-				|| (range.getCodeRangeType() == CodeRangeType.ENUMERATION)) {
+		CodeRange range = getCodeRange();
+		if ((range.getType() == CodeRangeType.FILE)
+				|| (range.getType() == CodeRangeType.CLASS)
+				|| (range.getType() == CodeRangeType.ENUMERATION)) {
 			if (getMI() > 86) {
 				return QualityLevel.HIGH;
 			}
@@ -156,10 +158,10 @@ public class MaintainabilityIndex extends AbstractCodeRangeEvaluator {
 				return QualityLevel.MEDIUM;
 			}
 			return QualityLevel.LOW;
-		} else if ((range.getCodeRangeType() == CodeRangeType.CONSTRUCTOR)
-				|| (range.getCodeRangeType() == CodeRangeType.METHOD)
-				|| (range.getCodeRangeType() == CodeRangeType.FUNCTION)
-				|| (range.getCodeRangeType() == CodeRangeType.INTERFACE)) {
+		} else if ((range.getType() == CodeRangeType.CONSTRUCTOR)
+				|| (range.getType() == CodeRangeType.METHOD)
+				|| (range.getType() == CodeRangeType.FUNCTION)
+				|| (range.getType() == CodeRangeType.INTERFACE)) {
 			if (getMI() > 85) {
 				return QualityLevel.HIGH;
 			}

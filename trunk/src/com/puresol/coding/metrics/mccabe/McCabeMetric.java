@@ -18,6 +18,8 @@ import javax.i18n4java.Translator;
 import org.apache.log4j.Logger;
 import org.w3c.dom.traversal.TreeWalker;
 
+import com.puresol.coding.CodeRange;
+import com.puresol.coding.CodeRangeType;
 import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.evaluator.AbstractCodeRangeEvaluator;
 import com.puresol.coding.quality.QualityCharacteristic;
@@ -112,9 +114,9 @@ public class McCabeMetric extends AbstractCodeRangeEvaluator implements
 	@Override
 	public QualityLevel getQuality() {
 		CodeRange range = getCodeRange();
-		if ((range.getCodeRangeType() == CodeRangeType.FILE)
-				|| (range.getCodeRangeType() == CodeRangeType.CLASS)
-				|| (range.getCodeRangeType() == CodeRangeType.ENUMERATION)) {
+		if ((range.getType() == CodeRangeType.FILE)
+				|| (range.getType() == CodeRangeType.CLASS)
+				|| (range.getType() == CodeRangeType.ENUMERATION)) {
 			if (getCyclomaticNumber() < 100) {
 				return QualityLevel.HIGH;
 			}
@@ -122,10 +124,10 @@ public class McCabeMetric extends AbstractCodeRangeEvaluator implements
 				return QualityLevel.MEDIUM;
 			}
 			return QualityLevel.LOW;
-		} else if ((range.getCodeRangeType() == CodeRangeType.CONSTRUCTOR)
-				|| (range.getCodeRangeType() == CodeRangeType.METHOD)
-				|| (range.getCodeRangeType() == CodeRangeType.FUNCTION)
-				|| (range.getCodeRangeType() == CodeRangeType.INTERFACE)) {
+		} else if ((range.getType() == CodeRangeType.CONSTRUCTOR)
+				|| (range.getType() == CodeRangeType.METHOD)
+				|| (range.getType() == CodeRangeType.FUNCTION)
+				|| (range.getType() == CodeRangeType.INTERFACE)) {
 			if (getCyclomaticNumber() < 15) {
 				return QualityLevel.HIGH;
 			}
