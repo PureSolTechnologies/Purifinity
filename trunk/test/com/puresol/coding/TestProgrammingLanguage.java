@@ -1,8 +1,10 @@
 package com.puresol.coding;
 
 import java.io.File;
+import java.util.List;
 
 import com.puresol.coding.analysis.Analyzer;
+import com.puresol.uhura.ast.ParserTree;
 import com.puresol.utils.PersistenceException;
 
 public class TestProgrammingLanguage extends AbstractProgrammingLanguage {
@@ -48,4 +50,15 @@ public class TestProgrammingLanguage extends AbstractProgrammingLanguage {
 	public Analyzer createAnalyser(File file) {
 		return null;
 	}
+
+	@Override
+	public List<CodeRange> getAnalyzableCodeRanges(ParserTree parserTree) {
+		return null;
+	}
+
+	@Override
+	public <T> T getImplementation(Class<T> clazz) {
+		return null;
+	}
+
 }

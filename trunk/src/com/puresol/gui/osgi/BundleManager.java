@@ -13,6 +13,7 @@ import javax.swingx.Dialog;
 import javax.swingx.FreeList;
 import javax.swingx.Panel;
 import javax.swingx.connect.Slot;
+import javax.swingx.filefilter.JARFilter;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -80,7 +81,11 @@ public class BundleManager extends Dialog {
 		bundles.removeAll();
 		Map<Object, Object> listData = new HashMap<Object, Object>();
 		for (Bundle bundle : bundleContext.getBundles()) {
-			listData.put(getText(bundle), bundle);
+			if (bundle.getBundleId() != 0) {
+				// add new bundle as long it is not the OSGi base bundle with id
+				// zero (Felix or Equinox itself)
+				listData.put(getText(bundle), bundle);
+			}
 		}
 		bundles.setListData(listData);
 	}
@@ -95,6 +100,7 @@ public class BundleManager extends Dialog {
 		try {
 			JFileChooser fileDialog = new JFileChooser();
 			fileDialog.setFileSelectionMode(JFileChooser.FILES_ONLY);
+			fileDialog.setFileFilter(new JARFilter());
 			if (fileDialog.showOpenDialog(Application.getInstance()) == JFileChooser.APPROVE_OPTION) {
 				bundleContext.installBundle("file:"
 						+ fileDialog.getSelectedFile().toString());

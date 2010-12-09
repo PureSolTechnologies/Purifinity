@@ -10,6 +10,7 @@
 
 package com.puresol.coding.analysis;
 
+import java.awt.BorderLayout;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -21,11 +22,16 @@ import java.util.List;
 import java.util.Properties;
 
 import javax.i18n4java.utils.FileSearch;
+import javax.swingx.HTMLTextPane;
+import javax.swingx.Panel;
+import javax.swingx.ScrollPane;
+import javax.swingx.TextArea;
 import javax.swingx.progress.ProgressObservable;
 import javax.swingx.progress.ProgressObserver;
 
 import org.apache.log4j.Logger;
 
+import com.puresol.reporting.html.HTMLStandards;
 import com.puresol.utils.DirectoryUtilities;
 import com.puresol.utils.FileUtilities;
 import com.puresol.utils.Persistence;
@@ -114,11 +120,13 @@ public class ProjectAnalyzer implements Serializable, ProgressObservable {
 	private final File ANALYZED_FILES_FILE;
 	private final File FAILED_FILES_FILE;
 	private final File workspaceDirectory;
-	private File projectDirectory;
-	private List<File> analyzedFiles = new ArrayList<File>();
-	private List<File> failedFiles = new ArrayList<File>();
+	private final List<File> analyzedFiles = new ArrayList<File>();
+	private final List<File> failedFiles = new ArrayList<File>();
 	private transient final AnalyzerFactory analyzerFactory = AnalyzerFactory
 			.createFactory();
+
+	private File projectDirectory;
+	private transient Panel panel = null;
 
 	private transient ProgressObserver progressMonitor = null;
 
@@ -173,7 +181,7 @@ public class ProjectAnalyzer implements Serializable, ProgressObservable {
 		try {
 			Properties properties = new Properties();
 			properties.load(new FileInputStream(SETTINGS_FILE));
-			this.projectDirectory = new File(
+			projectDirectory = new File(
 					properties.getProperty(PROJECT_DIRECTORY_KEY));
 			return true;
 		} catch (FileNotFoundException e) {
@@ -188,9 +196,10 @@ public class ProjectAnalyzer implements Serializable, ProgressObservable {
 	@SuppressWarnings("unchecked")
 	private boolean loadProjectInformation() {
 		try {
-			analyzedFiles = (List<File>) Persistence
-					.restore(ANALYZED_FILES_FILE);
-			failedFiles = (List<File>) Persistence.restore(FAILED_FILES_FILE);
+			analyzedFiles.addAll((List<File>) Persistence
+					.restore(ANALYZED_FILES_FILE));
+			failedFiles.addAll((List<File>) Persistence
+					.restore(FAILED_FILES_FILE));
 			return true;
 		} catch (PersistenceException e) {
 			logger.error(e.getMessage(), e);
@@ -282,6 +291,10 @@ public class ProjectAnalyzer implements Serializable, ProgressObservable {
 			logger.warn("File '" + file.getPath() + "' is not parsable!");
 			failedFiles.add(file);
 		}
+	}
+
+	public File getWorkspaceDirectory() {
+		return workspaceDirectory;
 	}
 
 	public File getProjectDirectory() {
@@ -394,4 +407,44 @@ public class ProjectAnalyzer implements Serializable, ProgressObservable {
 		return true;
 	}
 
+	public Panel getInformationPanel() {
+		if (panel == null) {
+			panel = createInformationPanel();
+		}
+		return panel;
+	}
+
+	private Panel createInformationPanel() {
+		HTMLTextPane text = new HTMLTextPane();
+		text.setText(getHTMLReport());
+
+		Panel panel = new Panel();
+		panel.setLayout(new BorderLayout());
+		panel.add(new ScrollPane(text), BorderLayout.CENTER);
+		return panel;
+	}
+
+	private String getHTMLReport() {
+		StringBuffer buffer = new StringBuffer();
+		buffer.append(HTMLStandards.getStandardHeader(getClass()));
+
+		buffer.append("<h1>Project Analyzer Report</h1>\n");
+		buffer.append("<h2>Analysed Files</h2>\n");
+		buffer.append("<p>" + analyzedFiles.size()
+				+ " files were analysed</p>\n");
+
+		if (failedFiles.size() > 0) {
+			buffer.append("<h2>Failed Files</h2>\n");
+			buffer.append("<p>" + failedFiles.size()
+					+ " files could not be analyzed</p>\n");
+			buffer.append("<ul>\n");
+			for (File file : failedFiles) {
+				buffer.append("<li>" + file + "</li>\n");
+			}
+			buffer.append("</ul>\n");
+		}
+		
+		buffer.append(HTMLStandards.getStandardFooter());
+		return buffer.toString();
+	}
 }

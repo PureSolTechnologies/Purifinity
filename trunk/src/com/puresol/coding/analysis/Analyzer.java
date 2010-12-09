@@ -13,9 +13,11 @@ package com.puresol.coding.analysis;
 import java.io.File;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
+import com.puresol.coding.CodeRange;
 import com.puresol.coding.ProgrammingLanguage;
-import com.puresol.uhura.ast.AST;
+import com.puresol.uhura.ast.ParserTree;
 
 /**
  * This is a interface to a analyser. It's used to implement a language
@@ -57,6 +59,8 @@ public interface Analyzer extends Serializable {
 	 * @return
 	 */
 	boolean persist(File file);
-	
-	public AST getAST();
+
+	public ParserTree getParserTree();
+
+	public List<CodeRange> getAnalyzableCodeRanges();
 }

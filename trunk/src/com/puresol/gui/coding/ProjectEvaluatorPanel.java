@@ -23,12 +23,12 @@ import com.puresol.coding.evaluator.EvaluatorFactory;
 import com.puresol.coding.evaluator.Evaluators;
 import com.puresol.coding.evaluator.ProjectEvaluatorFactory;
 
-public class EvaluatorPanel extends Panel {
+public class ProjectEvaluatorPanel extends Panel {
 
 	private static final long serialVersionUID = 7855693564694783199L;
 
 	private static final Translator translator = Translator
-			.getTranslator(EvaluatorPanel.class);
+			.getTranslator(ProjectEvaluatorPanel.class);
 
 	private ProjectAnalyzer projectAnalyser = null;
 
@@ -37,12 +37,12 @@ public class EvaluatorPanel extends Panel {
 	private final TextArea description = new TextArea();
 	private final Button run = new Button(translator.i18n("Run..."));
 
-	public EvaluatorPanel() {
+	public ProjectEvaluatorPanel() {
 		super();
 		initUI();
 	}
 
-	public EvaluatorPanel(ProjectAnalyzer projectAnalyser) {
+	public ProjectEvaluatorPanel(ProjectAnalyzer projectAnalyser) {
 		super();
 		this.projectAnalyser = projectAnalyser;
 		initUI();
@@ -65,17 +65,22 @@ public class EvaluatorPanel extends Panel {
 		add(splitPane, BorderLayout.CENTER);
 		add(description, BorderLayout.SOUTH);
 
+		Evaluators.getInstance().connect("changedProjectEvaluator", this,
+				"addEvaluators");
 		addEvaluators();
 	}
 
+	@Slot
 	private void addEvaluators() {
-		List<ProjectEvaluatorFactory> evaluatorFactories = Evaluators
-				.getInstance().getProjectEvaluators();
-		Hashtable<Object, Object> values = new Hashtable<Object, Object>();
-		for (EvaluatorFactory evaluatorFactory : evaluatorFactories) {
-			values.put(evaluatorFactory.getName(), evaluatorFactory);
+		synchronized (evaluators) {
+			List<ProjectEvaluatorFactory> evaluatorFactories = Evaluators
+					.getInstance().getProjectEvaluators();
+			Hashtable<Object, Object> values = new Hashtable<Object, Object>();
+			for (EvaluatorFactory evaluatorFactory : evaluatorFactories) {
+				values.put(evaluatorFactory.getName(), evaluatorFactory);
+			}
+			evaluators.setListData(values);
 		}
-		evaluators.setListData(values);
 	}
 
 	public ProjectAnalyzer getProjectAnlayser() {

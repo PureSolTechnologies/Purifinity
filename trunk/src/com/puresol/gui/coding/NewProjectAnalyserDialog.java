@@ -85,7 +85,7 @@ public class NewProjectAnalyserDialog extends Dialog {
 
 	private File chooseDirectory(String title) {
 		JFileChooser chooser = new JFileChooser();
-		chooser.setDialogTitle(translator.i18n("Workspace Directory"));
+		chooser.setDialogTitle(title);
 		chooser.setFileHidingEnabled(true);
 		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {

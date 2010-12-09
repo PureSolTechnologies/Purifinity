@@ -1,6 +1,6 @@
 package com.puresol.coding.evaluator;
 
-import com.puresol.uhura.ast.AST;
+import com.puresol.coding.CodeRange;
 
 /**
  * This interface is meant for evaluators which perform operations on ASTs or in
@@ -11,6 +11,6 @@ import com.puresol.uhura.ast.AST;
  */
 public interface CodeRangeEvaluator extends Evaluator {
 
-	public AST getCodeRange();
+	public CodeRange getCodeRange();
 
 }

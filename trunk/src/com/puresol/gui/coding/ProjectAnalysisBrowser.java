@@ -15,7 +15,9 @@ import java.awt.BorderLayout;
 import javax.i18n4java.Translator;
 import javax.swingx.Label;
 import javax.swingx.Panel;
+import javax.swingx.ScrollPane;
 import javax.swingx.TabbedPane;
+import javax.swingx.TextArea;
 
 import com.puresol.coding.analysis.ProjectAnalyzer;
 
@@ -28,10 +30,12 @@ public class ProjectAnalysisBrowser extends Panel {
 
 	private ProjectAnalyzer project = null;
 
-	private final Label directory = new Label();
 	private final TabbedPane tabbedPane = new TabbedPane();
 	private final CodeRangeBrowser codeRangeBrowser = new CodeRangeBrowser();
-	private final EvaluatorPanel evaluatorPanel = new EvaluatorPanel();
+	private final ProjectEvaluatorPanel projectEvaluatorPanel = new ProjectEvaluatorPanel();
+	private final FileEvaluatorPanel fileEvaluatorPanel = new FileEvaluatorPanel();
+	private final CodeRangeEvaluatorPanel codeRangeEvaluatorPanel = new CodeRangeEvaluatorPanel();
+	private Panel analysisReport;
 
 	public ProjectAnalysisBrowser() {
 		super();
@@ -46,22 +50,30 @@ public class ProjectAnalysisBrowser extends Panel {
 
 	private void initUI() {
 		setLayout(new BorderLayout());
-		add(directory, BorderLayout.NORTH);
 		add(tabbedPane, BorderLayout.CENTER);
 
+		analysisReport = new Panel();
+		analysisReport.add(new TextArea("No Analysis available yet."));
+		tabbedPane.addTab(translator.i18n("Analysis Report"), analysisReport);
 		tabbedPane.addTab(translator.i18n("Code Ranges"), codeRangeBrowser);
-		tabbedPane.addTab(translator.i18n("Code Evaluators"), evaluatorPanel);
+		tabbedPane.addTab(translator.i18n("Project Evaluators"),
+				projectEvaluatorPanel);
+		tabbedPane.addTab(translator.i18n("File Evaluators"),
+				fileEvaluatorPanel);
+		tabbedPane.addTab(translator.i18n("CodeRange Evaluators"),
+				codeRangeEvaluatorPanel);
 	}
 
 	public void setProjectAnalyser(ProjectAnalyzer project) {
 		this.project = project;
-		if (project != null) {
-			directory.setText(project.getProjectDirectory().getPath());
-		} else {
-			directory.setText("");
-		}
+		tabbedPane.removeTabAt(0);
+		tabbedPane.insertTab(translator.i18n("Analysis Report"), null,
+				project.getInformationPanel(), null, 0);
+		tabbedPane.setSelectedIndex(0);
 		codeRangeBrowser.setProjectAnalyser(project);
-		evaluatorPanel.setProjectAnalyser(project);
+		projectEvaluatorPanel.setProjectAnalyser(project);
+		fileEvaluatorPanel.setProjectAnalyser(project);
+		codeRangeEvaluatorPanel.setProjectAnalyser(project);
 	}
 
 	public ProjectAnalyzer getProjectAnalyser() {

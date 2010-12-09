@@ -1,8 +1,10 @@
 package com.puresol.coding;
 
 import java.io.File;
+import java.util.List;
 
 import com.puresol.coding.analysis.Analyzer;
+import com.puresol.uhura.ast.ParserTree;
 import com.puresol.utils.PersistenceException;
 
 /**
@@ -48,4 +50,8 @@ public interface ProgrammingLanguage {
 	public Analyzer createAnalyser(File file);
 
 	public Analyzer restoreAnalyzer(File file) throws PersistenceException;
+
+	public List<CodeRange> getAnalyzableCodeRanges(ParserTree parserTree);
+
+	public <T> T getImplementation(Class<T> clazz);
 }

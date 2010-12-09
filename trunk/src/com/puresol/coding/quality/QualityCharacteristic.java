@@ -8,12 +8,19 @@ import org.apache.log4j.Logger;
 
 import com.puresol.utils.ResourceUtilities;
 
+/**
+ * This enumeration contains a list of all quality characteristics which are
+ * evaluated within a special evaluator.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public enum QualityCharacteristic {
 
 	SUITABILITY {
 		@Override
 		public String getName() {
-			return translator.i18n("Suiability");
+			return translator.i18n("Suitability");
 		}
 
 		@Override
