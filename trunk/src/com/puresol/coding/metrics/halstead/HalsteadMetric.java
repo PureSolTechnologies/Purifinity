@@ -36,8 +36,7 @@ import com.puresol.trees.WalkingAction;
 import com.puresol.uhura.ast.ParserTree;
 import com.puresol.utils.Property;
 
-public class HalsteadMetric extends AbstractCodeRangeEvaluator implements
-		TreeVisitor<ParserTree> {
+public class HalsteadMetric extends AbstractCodeRangeEvaluator {
 
 	private static final long serialVersionUID = -7823038852668468658L;
 

@@ -38,8 +38,7 @@ import com.puresol.utils.Property;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class McCabeMetric extends AbstractCodeRangeEvaluator implements
-		TreeVisitor<ParserTree> {
+public class McCabeMetric extends AbstractCodeRangeEvaluator {
 
 	private static final long serialVersionUID = 4402746003873908301L;
 

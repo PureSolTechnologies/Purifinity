@@ -37,8 +37,7 @@ public class Activator implements BundleActivator {
 		logger.info("Starting Metrics Base Package...");
 
 		cocomoFactory = new CoCoMoFactory();
-		//System.out.println(cocomoFactory.getDescription());
-		// codeDepthMetricFactory = new CodeDepthMetricFactory();
+		codeDepthMetricFactory = new CodeDepthMetricFactory();
 		// entropyMetricFactory = new EntropyMetricFactory();
 		// halsteadMetricFactory = new HalsteadMetricFactory();
 		// maintainabilityIndexFactory = new MaintainabilityIndexFactory();
@@ -47,7 +46,7 @@ public class Activator implements BundleActivator {
 
 		Evaluators evaluators = Evaluators.getInstance();
 		evaluators.registerProjectEvaluator(cocomoFactory);
-		// evaluators.registerCodeRangeEvaluator(codeDepthMetricFactory);
+		evaluators.registerCodeRangeEvaluator(codeDepthMetricFactory);
 		// evaluators.registerCodeRangeEvaluator(entropyMetricFactory);
 		// evaluators.registerCodeRangeEvaluator(halsteadMetricFactory);
 		// evaluators.registerCodeRangeEvaluator(maintainabilityIndexFactory);
@@ -63,7 +62,7 @@ public class Activator implements BundleActivator {
 
 		Evaluators evaluators = Evaluators.getInstance();
 		evaluators.unregisterProjectEvaluator(cocomoFactory);
-		// evaluators.unregisterCodeRangeEvaluator(codeDepthMetricFactory);
+		evaluators.unregisterCodeRangeEvaluator(codeDepthMetricFactory);
 		// evaluators.unregisterCodeRangeEvaluator(entropyMetricFactory);
 		// evaluators.unregisterCodeRangeEvaluator(halsteadMetricFactory);
 		// evaluators.unregisterCodeRangeEvaluator(maintainabilityIndexFactory);
