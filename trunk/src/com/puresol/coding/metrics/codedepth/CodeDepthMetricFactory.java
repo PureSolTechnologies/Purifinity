@@ -14,27 +14,27 @@ public class CodeDepthMetricFactory implements CodeRangeEvaluatorFactory {
 	@Override
 	public CodeRangeEvaluator create(ProgrammingLanguage language,
 			CodeRange syntaxTree) {
-		return new CodeDepth(language, syntaxTree);
+		return new CodeDepthMetric(language, syntaxTree);
 	}
 
 	@Override
 	public String getDescription() {
-		return CodeDepth.DESCRIPTION;
+		return CodeDepthMetric.DESCRIPTION;
 	}
 
 	@Override
 	public String getName() {
-		return CodeDepth.NAME;
+		return CodeDepthMetric.NAME;
 	}
 
 	@Override
 	public List<Property> getEvaluatorProperties() {
-		return CodeDepth.SUPPORTED_PROPERTIES;
+		return CodeDepthMetric.SUPPORTED_PROPERTIES;
 	}
 
 	@Override
 	public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
-		return CodeDepth.EVALUATED_QUALITY_CHARACTERISTICS;
+		return CodeDepthMetric.EVALUATED_QUALITY_CHARACTERISTICS;
 	}
 
 }

@@ -28,13 +28,13 @@ import com.puresol.utils.Property;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class CodeDepth extends AbstractCodeRangeEvaluator implements
+public class CodeDepthMetric extends AbstractCodeRangeEvaluator implements
 		TreeVisitor<ParserTree> {
 
 	private static final long serialVersionUID = -2151200082569811564L;
 
 	private static final Translator translator = Translator
-			.getTranslator(CodeDepth.class);
+			.getTranslator(CodeDepthMetric.class);
 
 	public static final String NAME = translator.i18n("Code Depth Metric");
 
@@ -43,7 +43,7 @@ public class CodeDepth extends AbstractCodeRangeEvaluator implements
 
 	public static final List<Property> SUPPORTED_PROPERTIES = new ArrayList<Property>();
 	static {
-		SUPPORTED_PROPERTIES.add(new Property(CodeDepth.class, "enabled",
+		SUPPORTED_PROPERTIES.add(new Property(CodeDepthMetric.class, "enabled",
 				"Switches calculation of CodeDepth on and off.", Boolean.class,
 				"true"));
 	}
@@ -57,7 +57,7 @@ public class CodeDepth extends AbstractCodeRangeEvaluator implements
 	private final LanguageDependedCodeDepthMetric langDepended;
 	private int maxDepth = 0;
 
-	public CodeDepth(ProgrammingLanguage language, CodeRange codeRange) {
+	public CodeDepthMetric(ProgrammingLanguage language, CodeRange codeRange) {
 		super(codeRange);
 		langDepended = language
 				.getImplementation(LanguageDependedCodeDepthMetric.class);
