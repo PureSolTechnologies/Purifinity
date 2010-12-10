@@ -6,7 +6,7 @@ public class HalsteadResult {
 	private final boolean operator;
 	private final String symbol;
 
-	private HalsteadResult(boolean countable, boolean operator, String symbol) {
+	public HalsteadResult(boolean countable, boolean operator, String symbol) {
 		super();
 		this.countable = countable;
 		this.operator = operator;

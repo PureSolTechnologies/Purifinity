@@ -88,10 +88,15 @@ public class EntropyMetric extends AbstractCodeRangeEvaluator {
 	@Override
 	public void run() {
 		if (getMonitor() != null) {
-			getMonitor().setRange(0, 1);
+			getMonitor().setRange(0, 2);
 			getMonitor().setDescription(NAME);
 		}
 		halstead = new HalsteadMetric(language, getCodeRange());
+		halstead.run();
+		if (getMonitor() != null) {
+			getMonitor().setStatus(1);
+		}
+
 		Hashtable<String, Integer> operants = halstead.getOperants();
 
 		maxEntropy = Math.log((double) halstead.get_n2()) / Math.log(2.0);

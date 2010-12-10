@@ -98,13 +98,29 @@ public class MaintainabilityIndex extends AbstractCodeRangeEvaluator {
 	@Override
 	public void run() {
 		if (getMonitor() != null) {
-			getMonitor().setRange(0, 1);
+			getMonitor().setRange(0, 4);
 			getMonitor().setDescription(NAME);
 		}
-		this.slocMetric = new SLOCMetric(language, getCodeRange());
-		this.mcCabeMetric = new McCabeMetric(language, getCodeRange());
-		this.halsteadMetric = new HalsteadMetric(language, getCodeRange());
+
+		slocMetric = new SLOCMetric(language, getCodeRange());
+		mcCabeMetric = new McCabeMetric(language, getCodeRange());
+		halsteadMetric = new HalsteadMetric(language, getCodeRange());
+
 		checkInput();
+
+		slocMetric.run();
+		if (getMonitor() != null) {
+			getMonitor().setStatus(1);
+		}
+		mcCabeMetric.run();
+		if (getMonitor() != null) {
+			getMonitor().setStatus(2);
+		}
+		halsteadMetric.run();
+		if (getMonitor() != null) {
+			getMonitor().setStatus(3);
+		}
+
 		MIwoc = 171.0 - 5.2 * Math.log(halsteadMetric.get_HV()) - 0.23
 				* mcCabeMetric.getCyclomaticNumber() - 16.2
 				* Math.log(slocMetric.getPhyLOC() * 100.0 / 171.0);
