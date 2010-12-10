@@ -2,13 +2,12 @@ package com.puresol.gui.coding;
 
 import java.io.File;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Vector;
 
 import javax.i18n4java.Translator;
 import javax.swing.BoxLayout;
 import javax.swing.border.TitledBorder;
-import javax.swingx.FreeList;
+import javax.swingx.List;
 import javax.swingx.Panel;
 import javax.swingx.ScrollPane;
 import javax.swingx.connect.Signal;
@@ -39,7 +38,7 @@ public class CodeRangeChooser extends Panel {
 	private ProjectAnalyzer projectAnalyser = null;
 
 	private final AnalyzedFileChooser fileList = new AnalyzedFileChooser();
-	private final FreeList codeRangeList = new FreeList();
+	private final List codeRangeList = new List();
 
 	public CodeRangeChooser() {
 		super();
@@ -83,23 +82,19 @@ public class CodeRangeChooser extends Panel {
 	public File getFile() {
 		return fileList.getFile();
 	}
-	
+
 	public CodeRange getCodeRange() {
-		return (CodeRange)codeRangeList.getSelectedValue();
+		return (CodeRange) codeRangeList.getSelectedValue();
 	}
-	
+
 	@Slot
 	void fileSelected(File file) {
 		Analyzer analyzer = projectAnalyser.getAnalyzer(file);
 		if (analyzer != null) {
-			Map<Object, Object> listData = new HashMap<Object, Object>();
 			java.util.List<CodeRange> codeRanges = analyzer
 					.getAnalyzableCodeRanges();
 			Collections.sort(codeRanges);
-			for (CodeRange codeRange : codeRanges) {
-				listData.put(codeRange.toString(), codeRange);
-			}
-			codeRangeList.setListData(listData);
+			codeRangeList.setListData(new Vector<CodeRange>(codeRanges));
 			fileChanged(file);
 		}
 	}

@@ -24,7 +24,7 @@ import com.puresol.coding.CodeRange;
 import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.uhura.ast.ParserTree;
 import com.puresol.uhura.gui.CodeRangeViewer;
-import com.puresol.uhura.gui.CodeTreeViewer;
+import com.puresol.uhura.gui.ParserTreeViewer;
 
 /**
  * The code range browser show all analyzed files and their analyzable code
@@ -43,7 +43,7 @@ public class CodeRangeBrowser extends Panel {
 
 	private final CodeRangeChooser codeRangeChooser = new CodeRangeChooser();
 	private final CodeRangeViewer codeRangeViewer = new CodeRangeViewer();
-	private final CodeTreeViewer codeTreeViewer = new CodeTreeViewer();
+	private final ParserTreeViewer codeTreeViewer = new ParserTreeViewer();
 
 	private ProjectAnalyzer project = null;
 

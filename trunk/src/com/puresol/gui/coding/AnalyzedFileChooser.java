@@ -2,13 +2,12 @@ package com.puresol.gui.coding;
 
 import java.io.File;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Vector;
 
 import javax.i18n4java.Translator;
 import javax.swing.BoxLayout;
 import javax.swing.border.TitledBorder;
-import javax.swingx.FreeList;
+import javax.swingx.List;
 import javax.swingx.Panel;
 import javax.swingx.ScrollPane;
 import javax.swingx.connect.Signal;
@@ -32,7 +31,7 @@ public class AnalyzedFileChooser extends Panel {
 
 	private ProjectAnalyzer projectAnalyser = null;
 
-	private final FreeList fileList = new FreeList();
+	private final List fileList = new List();
 
 	public AnalyzedFileChooser() {
 		super();
@@ -68,11 +67,7 @@ public class AnalyzedFileChooser extends Panel {
 		if (projectAnalyser != null) {
 			java.util.List<File> files = projectAnalyser.getFiles();
 			Collections.sort(files);
-			Map<Object, Object> listData = new HashMap<Object, Object>();
-			for (File file : files) {
-				listData.put(file.toString(), file);
-			}
-			fileList.setListData(listData);
+			fileList.setListData(new Vector<File>(files));
 		} else {
 			fileList.removeAll();
 		}
