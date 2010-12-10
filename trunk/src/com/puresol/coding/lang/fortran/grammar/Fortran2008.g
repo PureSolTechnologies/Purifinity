@@ -3,6 +3,10 @@
  * (c) by 2010 PureSol Technologies
  * Author: Rick-Rainer Ludwig
  ****************************************************************************/ 
+
+/*
+ * All naming is taken from the Fortran Language Specification. 
+ */
  
 /****************************************************************************
  * O P T I O N S

@@ -13,14 +13,17 @@ package com.puresol.coding.lang.fortran;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import com.puresol.coding.CodeRange;
 import com.puresol.coding.analysis.Analyzer;
 import com.puresol.coding.analysis.AnalyzerException;
 import com.puresol.coding.lang.fortran.grammar.FortranGrammar;
-import com.puresol.uhura.ast.AST;
+import com.puresol.uhura.ast.ParserTree;
 import com.puresol.uhura.lexer.Lexer;
 import com.puresol.uhura.lexer.LexerException;
 import com.puresol.uhura.lexer.TokenStream;
@@ -40,7 +43,8 @@ public class FortranAnalyser implements Analyzer {
 	private final File file;
 	private final transient FortranGrammar grammar;
 	private Date date = new Date();
-	private AST ast = null;
+	private ParserTree parserTree = null;
+	private List<CodeRange> codeRanges = new ArrayList<CodeRange>();
 
 	public FortranAnalyser(File file) {
 		super();
@@ -66,9 +70,10 @@ public class FortranAnalyser implements Analyzer {
 			Parser parser = grammar.getParser();
 			logger.debug("Starting parser...");
 			watch.start();
-			ast = parser.parse(tokenStream);
+			parserTree = parser.parse(tokenStream);
 			watch.stop();
 			logger.debug("done. (time: " + watch + ")");
+			codeRanges = getLanguage().getAnalyzableCodeRanges(parserTree);
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
 			throw new AnalyzerException(this);
@@ -132,8 +137,8 @@ public class FortranAnalyser implements Analyzer {
 	}
 
 	@Override
-	public AST getAST() {
-		return ast;
+	public ParserTree getParserTree() {
+		return parserTree;
 	}
 
 	@Override
@@ -156,4 +161,10 @@ public class FortranAnalyser implements Analyzer {
 			return false;
 		}
 	}
+
+	@Override
+	public List<CodeRange> getAnalyzableCodeRanges() {
+		return codeRanges;
+	}
+
 }
