@@ -89,6 +89,9 @@ public class CodeAnalysis extends PureSolApplication {
 		MenuItem openWorkspace = new MenuItem("Open Workspace...");
 		openWorkspace.connect("start", this, "openWorkspace");
 
+		MenuItem updateWorkspace = new MenuItem("Update Workspace");
+		updateWorkspace.connect("start", this, "updateWorkspace");
+
 		MenuItem createEvaluatorHTML = new MenuItem("Create Evaluator HTML...");
 		createEvaluatorHTML.connect("start", this, "createEvaluatorHTML");
 
@@ -100,7 +103,9 @@ public class CodeAnalysis extends PureSolApplication {
 
 		menuBar.add(fileMenu);
 		fileMenu.add(newWorkspace);
+		fileMenu.addSeparator();
 		fileMenu.add(openWorkspace);
+		fileMenu.add(updateWorkspace);
 		fileMenu.addSeparator();
 		fileMenu.add(createEvaluatorHTML);
 		fileMenu.addSeparator();
@@ -159,7 +164,6 @@ public class CodeAnalysis extends PureSolApplication {
 							.i18n("Could not create new analyser workspace!"),
 							translator.i18n("Error"), JOptionPane.ERROR_MESSAGE);
 		}
-		refresh();
 	}
 
 	@Slot

@@ -91,4 +91,20 @@ public class Statistics implements Serializable {
 	public double getStdDev() {
 		return stdDev;
 	}
+
+	@Override
+	public String toString() {
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("avg=");
+		buffer.append(avg);
+		buffer.append(",stddev=");
+		buffer.append(stdDev);
+		buffer.append(",min=");
+		buffer.append(min);
+		buffer.append(",max=");
+		buffer.append(max);
+		buffer.append(",median=");
+		buffer.append(median);
+		return buffer.toString();
+	}
 }

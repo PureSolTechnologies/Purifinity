@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.i18n4java.Translator;
 import javax.swing.JSplitPane;
-import javax.swingx.Application;
 import javax.swingx.Button;
 import javax.swingx.FreeList;
 import javax.swingx.Panel;
@@ -23,7 +22,6 @@ import com.puresol.coding.evaluator.Evaluator;
 import com.puresol.coding.evaluator.EvaluatorFactory;
 import com.puresol.coding.evaluator.Evaluators;
 import com.puresol.coding.evaluator.FileEvaluatorFactory;
-import com.puresol.coding.evaluator.ProjectEvaluatorFactory;
 
 public class FileEvaluatorPanel extends Panel {
 
@@ -34,6 +32,7 @@ public class FileEvaluatorPanel extends Panel {
 
 	private ProjectAnalyzer projectAnalyser = null;
 
+	private final AnalyzedFileChooser fileChooser = new AnalyzedFileChooser();
 	private final FreeList evaluators = new FreeList();
 	private final TabbedPane tabbedPane = new TabbedPane();
 	private final TextArea description = new TextArea();
@@ -63,12 +62,13 @@ public class FileEvaluatorPanel extends Panel {
 				Object.class);
 		run.connect("start", this, "run");
 
+		add(fileChooser, BorderLayout.WEST);
 		add(tools, BorderLayout.NORTH);
 		add(splitPane, BorderLayout.CENTER);
 		add(description, BorderLayout.SOUTH);
 
 		Evaluators.getInstance().connect("changedFileEvaluator", this,
-		"addEvaluators");
+				"addEvaluators");
 		addEvaluators();
 	}
 
@@ -91,24 +91,25 @@ public class FileEvaluatorPanel extends Panel {
 
 	public void setProjectAnalyser(ProjectAnalyzer projectAnalyser) {
 		this.projectAnalyser = projectAnalyser;
+		refresh();
+	}
+
+	private void refresh() {
+		fileChooser.setProjectAnalyser(projectAnalyser);
 	}
 
 	@Slot
 	public void run() {
-		Application.showNotImplementedMessage();
-		return;
-		// FileEvaluatorFactory evaluatorFactory = (FileEvaluatorFactory)
-		// evaluators
-		// .getSelectedValue();
-		// if ((evaluatorFactory == null) || (projectAnalyser == null)) {
-		// return;
-		// }
-		// Evaluator evaluator =
-		// evaluatorFactory.create(projectAnalyser.getAnalyzer(file));
-		// ProgressWindow progress = new ProgressWindow(evaluator);
-		// progress.run();
-		// progress.connect("finished", this, "finished",
-		// ProgressObservable.class);
+		FileEvaluatorFactory evaluatorFactory = (FileEvaluatorFactory) evaluators
+				.getSelectedValue();
+		if ((evaluatorFactory == null) || (projectAnalyser == null)) {
+			return;
+		}
+		Evaluator evaluator = evaluatorFactory.create(projectAnalyser
+				.getAnalyzer(fileChooser.getFile()));
+		ProgressWindow progress = new ProgressWindow(evaluator);
+		progress.run();
+		progress.connect("finished", this, "finished", ProgressObservable.class);
 	}
 
 	@Slot

@@ -25,7 +25,6 @@ import javax.i18n4java.utils.FileSearch;
 import javax.swingx.HTMLTextPane;
 import javax.swingx.Panel;
 import javax.swingx.ScrollPane;
-import javax.swingx.TextArea;
 import javax.swingx.progress.ProgressObservable;
 import javax.swingx.progress.ProgressObserver;
 
@@ -443,7 +442,7 @@ public class ProjectAnalyzer implements Serializable, ProgressObservable {
 			}
 			buffer.append("</ul>\n");
 		}
-		
+
 		buffer.append(HTMLStandards.getStandardFooter());
 		return buffer.toString();
 	}

@@ -80,6 +80,14 @@ public class CodeRangeChooser extends Panel {
 		codeRangeList.removeAll();
 	}
 
+	public File getFile() {
+		return fileList.getFile();
+	}
+	
+	public CodeRange getCodeRange() {
+		return (CodeRange)codeRangeList.getSelectedValue();
+	}
+	
 	@Slot
 	void fileSelected(File file) {
 		Analyzer analyzer = projectAnalyser.getAnalyzer(file);

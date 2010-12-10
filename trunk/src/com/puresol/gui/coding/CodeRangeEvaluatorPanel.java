@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.i18n4java.Translator;
 import javax.swing.JSplitPane;
-import javax.swingx.Application;
 import javax.swingx.Button;
 import javax.swingx.FreeList;
 import javax.swingx.Panel;
@@ -16,7 +15,9 @@ import javax.swingx.TextArea;
 import javax.swingx.ToolBar;
 import javax.swingx.connect.Slot;
 import javax.swingx.progress.ProgressObservable;
+import javax.swingx.progress.ProgressWindow;
 
+import com.puresol.coding.analysis.Analyzer;
 import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.evaluator.CodeRangeEvaluatorFactory;
 import com.puresol.coding.evaluator.Evaluator;
@@ -32,6 +33,7 @@ public class CodeRangeEvaluatorPanel extends Panel {
 
 	private ProjectAnalyzer projectAnalyser = null;
 
+	private final CodeRangeChooser codeRange = new CodeRangeChooser();
 	private final FreeList evaluators = new FreeList();
 	private final TabbedPane tabbedPane = new TabbedPane();
 	private final TextArea description = new TextArea();
@@ -44,7 +46,7 @@ public class CodeRangeEvaluatorPanel extends Panel {
 
 	public CodeRangeEvaluatorPanel(ProjectAnalyzer projectAnalyser) {
 		super();
-		this.projectAnalyser = projectAnalyser;
+		setProjectAnalyser(projectAnalyser);
 		initUI();
 	}
 
@@ -61,6 +63,7 @@ public class CodeRangeEvaluatorPanel extends Panel {
 				Object.class);
 		run.connect("start", this, "run");
 
+		add(codeRange, BorderLayout.WEST);
 		add(tools, BorderLayout.NORTH);
 		add(splitPane, BorderLayout.CENTER);
 		add(description, BorderLayout.SOUTH);
@@ -89,25 +92,26 @@ public class CodeRangeEvaluatorPanel extends Panel {
 
 	public void setProjectAnalyser(ProjectAnalyzer projectAnalyser) {
 		this.projectAnalyser = projectAnalyser;
+		refresh();
+	}
+
+	private void refresh() {
+		codeRange.setProjectAnalyser(projectAnalyser);
 	}
 
 	@Slot
 	public void run() {
-		Application.showNotImplementedMessage();
-		return;
-		// TODO
-		// CodeRangeEvaluatorFactory evaluatorFactory =
-		// (CodeRangeEvaluatorFactory) evaluators
-		// .getSelectedValue();
-		// if ((evaluatorFactory == null) || (projectAnalyser == null)) {
-		// return;
-		// }
-		// Evaluator evaluator =
-		// evaluatorFactory.create(projectAnalyser.getAnalyzer(file));
-		// ProgressWindow progress = new ProgressWindow(evaluator);
-		// progress.run();
-		// progress.connect("finished", this, "finished",
-		// ProgressObservable.class);
+		CodeRangeEvaluatorFactory evaluatorFactory = (CodeRangeEvaluatorFactory) evaluators
+				.getSelectedValue();
+		if ((evaluatorFactory == null) || (projectAnalyser == null)) {
+			return;
+		}
+		Analyzer analyzer = projectAnalyser.getAnalyzer(codeRange.getFile());
+		Evaluator evaluator = evaluatorFactory.create(analyzer.getLanguage(),
+				codeRange.getCodeRange());
+		ProgressWindow progress = new ProgressWindow(evaluator);
+		progress.run();
+		progress.connect("finished", this, "finished", ProgressObservable.class);
 	}
 
 	@Slot

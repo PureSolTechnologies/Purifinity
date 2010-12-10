@@ -13,9 +13,7 @@ package com.puresol.gui.coding;
 import java.awt.BorderLayout;
 
 import javax.i18n4java.Translator;
-import javax.swingx.Label;
 import javax.swingx.Panel;
-import javax.swingx.ScrollPane;
 import javax.swingx.TabbedPane;
 import javax.swingx.TextArea;
 

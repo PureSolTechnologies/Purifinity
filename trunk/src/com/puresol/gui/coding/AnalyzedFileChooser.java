@@ -64,7 +64,7 @@ public class AnalyzedFileChooser extends Panel {
 		refresh();
 	}
 
-	public void refresh() {
+	private void refresh() {
 		if (projectAnalyser != null) {
 			java.util.List<File> files = projectAnalyser.getFiles();
 			Collections.sort(files);
@@ -76,6 +76,10 @@ public class AnalyzedFileChooser extends Panel {
 		} else {
 			fileList.removeAll();
 		}
+	}
+
+	public File getFile() {
+		return (File) fileList.getSelectedValue();
 	}
 
 	@Slot
