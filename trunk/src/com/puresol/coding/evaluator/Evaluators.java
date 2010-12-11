@@ -41,7 +41,6 @@ public class Evaluators implements ConnectionHandler {
 	}
 
 	private final List<ProjectEvaluatorFactory> projectEvaluators = new ArrayList<ProjectEvaluatorFactory>();
-	private final List<FileEvaluatorFactory> fileEvaluators = new ArrayList<FileEvaluatorFactory>();
 	private final List<CodeRangeEvaluatorFactory> codeRangeEvaluators = new ArrayList<CodeRangeEvaluatorFactory>();
 
 	private Evaluators() {
@@ -49,10 +48,6 @@ public class Evaluators implements ConnectionHandler {
 
 	public List<ProjectEvaluatorFactory> getProjectEvaluators() {
 		return projectEvaluators;
-	}
-
-	public List<FileEvaluatorFactory> getFileEvaluators() {
-		return fileEvaluators;
 	}
 
 	public List<CodeRangeEvaluatorFactory> getCodeRangeEvaluators() {
@@ -71,20 +66,6 @@ public class Evaluators implements ConnectionHandler {
 				+ "'...");
 		projectEvaluators.remove(evaluator);
 		changedProjectEvaluator(evaluator);
-	}
-
-	public void registerFileEvaluator(FileEvaluatorFactory evaluator) {
-		logger.info("Register evaluator '" + evaluator.getClass().getName()
-				+ "'...");
-		fileEvaluators.add(evaluator);
-		changedFileEvaluator(evaluator);
-	}
-
-	public void unregisterFileEvaluator(FileEvaluatorFactory evaluator) {
-		logger.info("Unregister evaluator '" + evaluator.getClass().getName()
-				+ "'...");
-		fileEvaluators.remove(evaluator);
-		changedFileEvaluator(evaluator);
 	}
 
 	public void registerCodeRangeEvaluator(CodeRangeEvaluatorFactory evaluator) {
@@ -112,13 +93,6 @@ public class Evaluators implements ConnectionHandler {
 	@Signal
 	public void changedProjectEvaluator() {
 		connectionManager.emitSignal("changedProjectEvaluator");
-	}
-
-	@Signal
-	public void changedFileEvaluator(FileEvaluatorFactory fileEvaluatorFactory) {
-		connectionManager.emitSignal("changedFileEvaluator",
-				fileEvaluatorFactory);
-		changedFileEvaluator();
 	}
 
 	@Signal

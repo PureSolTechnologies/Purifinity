@@ -22,18 +22,55 @@ import com.puresol.reporting.UnsupportedFormatException;
  */
 public interface Evaluator extends ProgressObservable, Runnable, Serializable {
 
+	/**
+	 * This method returns the name of the time stamp of the evaluation. This is
+	 * used to track the need for a re-evaluation.
+	 * 
+	 * @return
+	 */
 	public Date getTimeStamp();
 
+	/**
+	 * This method returns the name of the evaluator which might be displayed in
+	 * reports or within applications.
+	 * 
+	 * @return
+	 */
 	public String getName();
 
+	/**
+	 * This method returns the description of the evaluator which might be
+	 * displayed in reports or within applications.
+	 * 
+	 * @return
+	 */
 	public String getDescription(ReportingFormat format)
 			throws UnsupportedFormatException;
 
+	/**
+	 * This method returns the report of the evaluation in the given target
+	 * format.
+	 * 
+	 * @param format
+	 * @return
+	 * @throws UnsupportedFormatException
+	 */
 	public String getReport(ReportingFormat format)
 			throws UnsupportedFormatException;
 
+	/**
+	 * This method returns the quality level after an evalutation was performed.
+	 * 
+	 * @return
+	 */
 	public QualityLevel getQuality();
 
+	/**
+	 * This method returns a list with quality characteristics which might be
+	 * evaluated by the evaluator.
+	 * 
+	 * @return
+	 */
 	public List<QualityCharacteristic> getEvaluatedQualityCharacteristics();
 
 }
