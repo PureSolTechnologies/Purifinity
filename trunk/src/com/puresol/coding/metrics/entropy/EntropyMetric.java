@@ -18,7 +18,8 @@ import javax.i18n4java.Translator;
 
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.ProgrammingLanguage;
-import com.puresol.coding.evaluator.AbstractCodeRangeEvaluator;
+import com.puresol.coding.evaluator.AbstractEvaluator;
+import com.puresol.coding.evaluator.CodeRangeEvaluator;
 import com.puresol.coding.metrics.halstead.HalsteadMetric;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.QualityLevel;
@@ -37,7 +38,8 @@ import com.puresol.utils.Property;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class EntropyMetric extends AbstractCodeRangeEvaluator {
+public class EntropyMetric extends AbstractEvaluator implements
+		CodeRangeEvaluator {
 
 	private static final long serialVersionUID = 1300404171923622327L;
 
@@ -78,13 +80,26 @@ public class EntropyMetric extends AbstractCodeRangeEvaluator {
 	private double Redundancy;
 	private double normalizedRedundancy;
 	private HalsteadMetric halstead = null;
+	private final CodeRange codeRange;
 	private final ProgrammingLanguage language;
 
 	public EntropyMetric(ProgrammingLanguage language, CodeRange codeRange) {
-		super(codeRange);
+		super();
+		this.codeRange = codeRange;
 		this.language = language;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public CodeRange getCodeRange() {
+		return codeRange;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void run() {
 		if (getMonitor() != null) {
@@ -194,6 +209,9 @@ public class EntropyMetric extends AbstractCodeRangeEvaluator {
 		System.out.println(getResultsAsString());
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public QualityLevel getQuality() {
 		if (getNormRedundancy() > 0.40) {
@@ -205,17 +223,26 @@ public class EntropyMetric extends AbstractCodeRangeEvaluator {
 		return QualityLevel.HIGH;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String getName() {
 		return NAME;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String getDescription(ReportingFormat format)
 			throws UnsupportedFormatException {
 		return DESCRIPTION;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String getReport(ReportingFormat format)
 			throws UnsupportedFormatException {
@@ -259,6 +286,9 @@ public class EntropyMetric extends AbstractCodeRangeEvaluator {
 		return report;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
 		return EVALUATED_QUALITY_CHARACTERISTICS;

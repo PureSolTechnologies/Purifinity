@@ -7,7 +7,8 @@ import javax.i18n4java.Translator;
 
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.ProgrammingLanguage;
-import com.puresol.coding.evaluator.AbstractCodeRangeEvaluator;
+import com.puresol.coding.evaluator.AbstractEvaluator;
+import com.puresol.coding.evaluator.CodeRangeEvaluator;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.QualityLevel;
 import com.puresol.coding.reporting.HTMLConverter;
@@ -15,8 +16,6 @@ import com.puresol.reporting.ReportingFormat;
 import com.puresol.reporting.UnsupportedFormatException;
 import com.puresol.reporting.html.Anchor;
 import com.puresol.trees.TreeIterator;
-import com.puresol.trees.TreeVisitor;
-import com.puresol.trees.WalkingAction;
 import com.puresol.uhura.ast.ParserTree;
 import com.puresol.uhura.lexer.Token;
 import com.puresol.utils.Property;
@@ -28,8 +27,8 @@ import com.puresol.utils.Property;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class CodeDepthMetric extends AbstractCodeRangeEvaluator implements
-		TreeVisitor<ParserTree> {
+public class CodeDepthMetric extends AbstractEvaluator implements
+		CodeRangeEvaluator {
 
 	private static final long serialVersionUID = -2151200082569811564L;
 
@@ -54,11 +53,13 @@ public class CodeDepthMetric extends AbstractCodeRangeEvaluator implements
 				.add(QualityCharacteristic.ANALYSABILITY);
 	}
 
+	private final CodeRange codeRange;
 	private final LanguageDependedCodeDepthMetric langDepended;
 	private int maxDepth = 0;
 
 	public CodeDepthMetric(ProgrammingLanguage language, CodeRange codeRange) {
-		super(codeRange);
+		super();
+		this.codeRange = codeRange;
 		langDepended = language
 				.getImplementation(LanguageDependedCodeDepthMetric.class);
 		if (langDepended == null) {
@@ -66,6 +67,17 @@ public class CodeDepthMetric extends AbstractCodeRangeEvaluator implements
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public CodeRange getCodeRange() {
+		return codeRange;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void run() {
 		if (getMonitor() != null) {
@@ -102,17 +114,26 @@ public class CodeDepthMetric extends AbstractCodeRangeEvaluator implements
 		return maxDepth;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String getName() {
 		return NAME;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String getDescription(ReportingFormat format)
 			throws UnsupportedFormatException {
 		return DESCRIPTION;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String getReport(ReportingFormat format)
 			throws UnsupportedFormatException {
@@ -143,6 +164,9 @@ public class CodeDepthMetric extends AbstractCodeRangeEvaluator implements
 		return report;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public QualityLevel getQuality() {
 		int maxDepth = getMaxDepth();
@@ -154,14 +178,11 @@ public class CodeDepthMetric extends AbstractCodeRangeEvaluator implements
 		return QualityLevel.HIGH;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
 		return EVALUATED_QUALITY_CHARACTERISTICS;
-	}
-
-	@Override
-	public WalkingAction visit(ParserTree tree) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }

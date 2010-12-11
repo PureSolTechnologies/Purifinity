@@ -18,7 +18,8 @@ import java.util.List;
 import javax.i18n4java.Translator;
 
 import com.puresol.coding.analysis.ProjectAnalyzer;
-import com.puresol.coding.evaluator.AbstractProjectEvaluator;
+import com.puresol.coding.evaluator.AbstractEvaluator;
+import com.puresol.coding.evaluator.ProjectEvaluator;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.QualityLevel;
 import com.puresol.reporting.ReportingFormat;
@@ -34,15 +35,12 @@ import com.puresol.utils.Property;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class CoCoMo extends AbstractProjectEvaluator {
+public class CoCoMo extends AbstractEvaluator implements ProjectEvaluator {
 
 	private static final long serialVersionUID = 5098378023541671490L;
 
 	private static final Translator translator = Translator
 			.getTranslator(CoCoMo.class);
-
-	private final CoCoMoValueSet cocomoValues = new CoCoMoValueSet();
-	private final Hashtable<File, CoCoMoValueSet> fileCoCoMoValues = new Hashtable<File, CoCoMoValueSet>();
 
 	public static final String NAME = "COst COnstruction MOdel";
 
@@ -55,14 +53,29 @@ public class CoCoMo extends AbstractProjectEvaluator {
 
 	public static final List<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new ArrayList<QualityCharacteristic>();
 
-	public CoCoMo(ProjectAnalyzer analyser) {
-		super(analyser);
+	private final CoCoMoValueSet cocomoValues = new CoCoMoValueSet();
+	private final Hashtable<File, CoCoMoValueSet> fileCoCoMoValues = new Hashtable<File, CoCoMoValueSet>();
+	private final ProjectAnalyzer projectAnalyzer;
+
+	public CoCoMo(ProjectAnalyzer projectAnalyzer) {
+		super();
+		this.projectAnalyzer = projectAnalyzer;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public ProjectAnalyzer getProjectAnalyser() {
+		return projectAnalyzer;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void run() {
-		ProjectAnalyzer projectAnalyser = getProjectAnalyser();
-		List<File> files = projectAnalyser.getFiles();
+		List<File> files = projectAnalyzer.getFiles();
 		if (getMonitor() != null) {
 			getMonitor().setRange(0, files.size());
 			getMonitor().setDescription(NAME);
@@ -87,7 +100,8 @@ public class CoCoMo extends AbstractProjectEvaluator {
 	}
 
 	private int getFileSLOC(File file) {
-		ParserTree parserTree = getProjectAnalyser().getAnalyzer(file).getParserTree();
+		ParserTree parserTree = projectAnalyzer.getAnalyzer(file)
+				.getParserTree();
 		int sloc = getSLOC(parserTree);
 		addCodeRangeCoCoMo(file, sloc);
 		return sloc;
@@ -113,11 +127,17 @@ public class CoCoMo extends AbstractProjectEvaluator {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String getName() {
 		return NAME;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String getDescription(ReportingFormat format)
 			throws UnsupportedFormatException {
@@ -129,6 +149,9 @@ public class CoCoMo extends AbstractProjectEvaluator {
 		throw new UnsupportedFormatException(format);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String getReport(ReportingFormat format)
 			throws UnsupportedFormatException {
@@ -140,11 +163,17 @@ public class CoCoMo extends AbstractProjectEvaluator {
 		throw new UnsupportedFormatException(format);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public QualityLevel getQuality() {
 		return QualityLevel.UNSPECIFIED;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
 		return EVALUATED_QUALITY_CHARACTERISTICS;

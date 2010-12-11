@@ -18,7 +18,8 @@ import javax.i18n4java.Translator;
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.CodeRangeType;
 import com.puresol.coding.ProgrammingLanguage;
-import com.puresol.coding.evaluator.AbstractCodeRangeEvaluator;
+import com.puresol.coding.evaluator.AbstractEvaluator;
+import com.puresol.coding.evaluator.CodeRangeEvaluator;
 import com.puresol.coding.metrics.halstead.HalsteadMetric;
 import com.puresol.coding.metrics.mccabe.McCabeMetric;
 import com.puresol.coding.metrics.sloc.SLOCMetric;
@@ -31,7 +32,8 @@ import com.puresol.reporting.html.Anchor;
 import com.puresol.reporting.html.HTMLStandards;
 import com.puresol.utils.Property;
 
-public class MaintainabilityIndex extends AbstractCodeRangeEvaluator {
+public class MaintainabilityIndex extends AbstractEvaluator implements
+		CodeRangeEvaluator {
 
 	private static final long serialVersionUID = 2789695185933616684L;
 
@@ -75,12 +77,24 @@ public class MaintainabilityIndex extends AbstractCodeRangeEvaluator {
 	private McCabeMetric mcCabeMetric;
 	private HalsteadMetric halsteadMetric;
 	private final ProgrammingLanguage language;
+	private final CodeRange codeRange;
 
 	public MaintainabilityIndex(ProgrammingLanguage language,
 			CodeRange codeRange) {
-		super(codeRange);
+		super();
+		this.codeRange = codeRange;
 		this.language = language;
 
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @return
+	 */
+	@Override
+	public CodeRange getCodeRange() {
+		return codeRange;
 	}
 
 	private void checkInput() {
@@ -95,6 +109,11 @@ public class MaintainabilityIndex extends AbstractCodeRangeEvaluator {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @return
+	 */
 	@Override
 	public void run() {
 		if (getMonitor() != null) {
@@ -165,6 +184,11 @@ public class MaintainabilityIndex extends AbstractCodeRangeEvaluator {
 		return MI;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @return
+	 */
 	@Override
 	public QualityLevel getQuality() {
 		CodeRange range = getCodeRange();
@@ -193,17 +217,32 @@ public class MaintainabilityIndex extends AbstractCodeRangeEvaluator {
 		return QualityLevel.HIGH; // not evaluated...
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @return
+	 */
 	@Override
 	public String getName() {
 		return NAME;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @return
+	 */
 	@Override
 	public String getDescription(ReportingFormat format)
 			throws UnsupportedFormatException {
 		return DESCRIPTION;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @return
+	 */
 	@Override
 	public String getReport(ReportingFormat format)
 			throws UnsupportedFormatException {
@@ -238,6 +277,11 @@ public class MaintainabilityIndex extends AbstractCodeRangeEvaluator {
 		return report;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @return
+	 */
 	@Override
 	public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
 		return EVALUATED_QUALITY_CHARACTERISTICS;

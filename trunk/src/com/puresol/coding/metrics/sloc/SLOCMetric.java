@@ -18,7 +18,8 @@ import javax.i18n4java.Translator;
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.CodeRangeType;
 import com.puresol.coding.ProgrammingLanguage;
-import com.puresol.coding.evaluator.AbstractCodeRangeEvaluator;
+import com.puresol.coding.evaluator.AbstractEvaluator;
+import com.puresol.coding.evaluator.CodeRangeEvaluator;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.QualityLevel;
 import com.puresol.coding.reporting.HTMLConverter;
@@ -41,7 +42,7 @@ import com.puresol.utils.Property;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class SLOCMetric extends AbstractCodeRangeEvaluator {
+public class SLOCMetric extends AbstractEvaluator implements CodeRangeEvaluator {
 
 	private static final long serialVersionUID = -4313208925226028154L;
 
@@ -68,6 +69,7 @@ public class SLOCMetric extends AbstractCodeRangeEvaluator {
 				.add(QualityCharacteristic.TESTABILITY);
 	}
 
+	private final CodeRange codeRange;
 	private final List<LineResult> lineResults = new ArrayList<LineResult>();
 	private int phyLOC;
 	private int proLOC;
@@ -78,7 +80,8 @@ public class SLOCMetric extends AbstractCodeRangeEvaluator {
 	private final LanguageDependedSLOCMetric langDepended;
 
 	public SLOCMetric(ProgrammingLanguage language, CodeRange codeRange) {
-		super(codeRange);
+		super();
+		this.codeRange = codeRange;
 		langDepended = language
 				.getImplementation(LanguageDependedSLOCMetric.class);
 		if (langDepended == null) {
@@ -86,6 +89,17 @@ public class SLOCMetric extends AbstractCodeRangeEvaluator {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public CodeRange getCodeRange() {
+		return codeRange;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void run() {
 		if (getMonitor() != null) {
@@ -105,7 +119,7 @@ public class SLOCMetric extends AbstractCodeRangeEvaluator {
 		comLOC = 0;
 		blLOC = 0;
 		lineResults.clear();
-		for (int i = 0; i < getCodeRange().getParserTree().getMetaData()
+		for (int i = 0; i < codeRange.getParserTree().getMetaData()
 				.getLineNum(); i++) {
 			lineResults.add(new LineResult());
 		}
@@ -113,8 +127,8 @@ public class SLOCMetric extends AbstractCodeRangeEvaluator {
 
 	private void count() {
 		TreeIterator<ParserTree> iterator = new TreeIterator<ParserTree>(
-				getCodeRange().getParserTree());
-		int lineOffset = getCodeRange().getParserTree().getMetaData().getLine();
+				codeRange.getParserTree());
+		int lineOffset = codeRange.getParserTree().getMetaData().getLine();
 		do {
 			ParserTree node = iterator.getCurrentNode();
 			Token token = node.getToken();
@@ -206,6 +220,9 @@ public class SLOCMetric extends AbstractCodeRangeEvaluator {
 		System.out.println("blank lines: " + blLOC);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public QualityLevel getQuality() {
 		QualityLevel levelLineCount = getQualityLevelLineCount();
@@ -215,9 +232,8 @@ public class SLOCMetric extends AbstractCodeRangeEvaluator {
 	}
 
 	public QualityLevel getQualityLevelLineCount() {
-		CodeRange range = getCodeRange();
-		if ((range.getType() == CodeRangeType.FILE)
-				|| (range.getType() == CodeRangeType.CLASS)) {
+		if ((codeRange.getType() == CodeRangeType.FILE)
+				|| (codeRange.getType() == CodeRangeType.CLASS)) {
 			if (getPhyLOC() > 2500) {
 				return QualityLevel.LOW;
 			}
@@ -225,7 +241,7 @@ public class SLOCMetric extends AbstractCodeRangeEvaluator {
 				return QualityLevel.MEDIUM;
 			}
 			return QualityLevel.HIGH;
-		} else if (range.getType() == CodeRangeType.SUBROUTINE) {
+		} else if (codeRange.getType() == CodeRangeType.SUBROUTINE) {
 			if (getPhyLOC() > 40) {
 				return QualityLevel.LOW;
 			}
@@ -247,17 +263,26 @@ public class SLOCMetric extends AbstractCodeRangeEvaluator {
 		return QualityLevel.HIGH;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String getName() {
 		return NAME;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String getDescription(ReportingFormat format)
 			throws UnsupportedFormatException {
 		return DESCRIPTION;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String getReport(ReportingFormat format)
 			throws UnsupportedFormatException {
@@ -313,6 +338,9 @@ public class SLOCMetric extends AbstractCodeRangeEvaluator {
 
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
 		return EVALUATED_QUALITY_CHARACTERISTICS;

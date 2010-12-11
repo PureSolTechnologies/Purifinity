@@ -18,7 +18,8 @@ import javax.i18n4java.Translator;
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.CodeRangeType;
 import com.puresol.coding.ProgrammingLanguage;
-import com.puresol.coding.evaluator.AbstractCodeRangeEvaluator;
+import com.puresol.coding.evaluator.AbstractEvaluator;
+import com.puresol.coding.evaluator.CodeRangeEvaluator;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.QualityLevel;
 import com.puresol.coding.reporting.HTMLConverter;
@@ -35,7 +36,8 @@ import com.puresol.utils.Property;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class McCabeMetric extends AbstractCodeRangeEvaluator {
+public class McCabeMetric extends AbstractEvaluator implements
+		CodeRangeEvaluator {
 
 	private static final long serialVersionUID = 4402746003873908301L;
 
@@ -64,9 +66,11 @@ public class McCabeMetric extends AbstractCodeRangeEvaluator {
 
 	private int cyclomaticNumber = 1;
 	private final LanguageDependedMcCabeMetric langDepended;
+	private final CodeRange codeRange;
 
 	public McCabeMetric(ProgrammingLanguage language, CodeRange codeRange) {
-		super(codeRange);
+		super();
+		this.codeRange = codeRange;
 		langDepended = language
 				.getImplementation(LanguageDependedMcCabeMetric.class);
 		if (langDepended == null) {
@@ -74,6 +78,17 @@ public class McCabeMetric extends AbstractCodeRangeEvaluator {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public CodeRange getCodeRange() {
+		return codeRange;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void run() {
 		if (getMonitor() != null) {
@@ -82,7 +97,7 @@ public class McCabeMetric extends AbstractCodeRangeEvaluator {
 		}
 		cyclomaticNumber = 1;
 		TreeIterator<ParserTree> iterator = new TreeIterator<ParserTree>(
-				getCodeRange().getParserTree());
+				codeRange.getParserTree());
 		do {
 			if (langDepended.increasesCyclomaticComplexity(iterator
 					.getCurrentNode())) {
@@ -111,12 +126,14 @@ public class McCabeMetric extends AbstractCodeRangeEvaluator {
 		return true;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public QualityLevel getQuality() {
-		CodeRange range = getCodeRange();
-		if ((range.getType() == CodeRangeType.FILE)
-				|| (range.getType() == CodeRangeType.CLASS)
-				|| (range.getType() == CodeRangeType.ENUMERATION)) {
+		if ((codeRange.getType() == CodeRangeType.FILE)
+				|| (codeRange.getType() == CodeRangeType.CLASS)
+				|| (codeRange.getType() == CodeRangeType.ENUMERATION)) {
 			if (getCyclomaticNumber() < 100) {
 				return QualityLevel.HIGH;
 			}
@@ -124,10 +141,10 @@ public class McCabeMetric extends AbstractCodeRangeEvaluator {
 				return QualityLevel.MEDIUM;
 			}
 			return QualityLevel.LOW;
-		} else if ((range.getType() == CodeRangeType.CONSTRUCTOR)
-				|| (range.getType() == CodeRangeType.METHOD)
-				|| (range.getType() == CodeRangeType.FUNCTION)
-				|| (range.getType() == CodeRangeType.INTERFACE)) {
+		} else if ((codeRange.getType() == CodeRangeType.CONSTRUCTOR)
+				|| (codeRange.getType() == CodeRangeType.METHOD)
+				|| (codeRange.getType() == CodeRangeType.FUNCTION)
+				|| (codeRange.getType() == CodeRangeType.INTERFACE)) {
 			if (getCyclomaticNumber() < 15) {
 				return QualityLevel.HIGH;
 			}
@@ -139,17 +156,26 @@ public class McCabeMetric extends AbstractCodeRangeEvaluator {
 		return QualityLevel.HIGH; // not evaluated...
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String getName() {
 		return NAME;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String getDescription(ReportingFormat format)
 			throws UnsupportedFormatException {
 		return DESCRIPTION;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String getReport(ReportingFormat format)
 			throws UnsupportedFormatException {
@@ -170,6 +196,9 @@ public class McCabeMetric extends AbstractCodeRangeEvaluator {
 		return report;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
 		return EVALUATED_QUALITY_CHARACTERISTICS;
