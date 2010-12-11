@@ -1,10 +1,8 @@
 package com.puresol.gui.coding;
 
 import javax.i18n4java.Translator;
-import javax.swing.BoxLayout;
 import javax.swingx.BorderLayoutWidget;
 import javax.swingx.HTMLTextPane;
-import javax.swingx.Panel;
 import javax.swingx.ScrollPane;
 import javax.swingx.TabbedPane;
 import javax.swingx.TextField;
@@ -46,14 +44,8 @@ public class EvaluatorViewer extends BorderLayoutWidget {
 		TabbedPane tabbedPane = new TabbedPane();
 		setCenter(tabbedPane);
 		tabbedPane.add(new ScrollPane(description),
-				translator.i18n("Evaluator Description"));
-		tabbedPane.add(new ScrollPane(report),
-				translator.i18n("Project Summary"));
-		Panel codeRangePanel = new Panel();
-		codeRangePanel
-				.setLayout(new BoxLayout(codeRangePanel, BoxLayout.X_AXIS));
-		tabbedPane.add(codeRangePanel,
-				translator.i18n("Evaluators Code Range Summary"));
+				translator.i18n("Description"));
+		tabbedPane.add(new ScrollPane(report), translator.i18n("Results"));
 	}
 
 	/**

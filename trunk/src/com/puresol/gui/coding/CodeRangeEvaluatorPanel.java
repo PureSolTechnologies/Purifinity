@@ -23,6 +23,7 @@ import com.puresol.coding.evaluator.CodeRangeEvaluatorFactory;
 import com.puresol.coding.evaluator.Evaluator;
 import com.puresol.coding.evaluator.EvaluatorFactory;
 import com.puresol.coding.evaluator.Evaluators;
+import com.puresol.gui.TabButton;
 
 public class CodeRangeEvaluatorPanel extends Panel {
 
@@ -119,6 +120,8 @@ public class CodeRangeEvaluatorPanel extends Panel {
 		Evaluator evaluator = (Evaluator) observable;
 		EvaluatorViewer viewer = new EvaluatorViewer(evaluator);
 		tabbedPane.add(evaluator.getName(), viewer);
+		tabbedPane.setTabComponentAt(tabbedPane.getTabCount() - 1,
+				new TabButton(tabbedPane));
 	}
 
 	@Slot

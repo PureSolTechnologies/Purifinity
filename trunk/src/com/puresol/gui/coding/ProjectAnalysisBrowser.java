@@ -31,7 +31,6 @@ public class ProjectAnalysisBrowser extends Panel {
 	private final TabbedPane tabbedPane = new TabbedPane();
 	private final CodeRangeBrowser codeRangeBrowser = new CodeRangeBrowser();
 	private final ProjectEvaluatorPanel projectEvaluatorPanel = new ProjectEvaluatorPanel();
-	private final FileEvaluatorPanel fileEvaluatorPanel = new FileEvaluatorPanel();
 	private final CodeRangeEvaluatorPanel codeRangeEvaluatorPanel = new CodeRangeEvaluatorPanel();
 	private Panel analysisReport;
 
@@ -56,8 +55,6 @@ public class ProjectAnalysisBrowser extends Panel {
 		tabbedPane.addTab(translator.i18n("Code Ranges"), codeRangeBrowser);
 		tabbedPane.addTab(translator.i18n("Project Evaluators"),
 				projectEvaluatorPanel);
-		tabbedPane.addTab(translator.i18n("File Evaluators"),
-				fileEvaluatorPanel);
 		tabbedPane.addTab(translator.i18n("CodeRange Evaluators"),
 				codeRangeEvaluatorPanel);
 	}
@@ -70,7 +67,6 @@ public class ProjectAnalysisBrowser extends Panel {
 		tabbedPane.setSelectedIndex(0);
 		codeRangeBrowser.setProjectAnalyser(project);
 		projectEvaluatorPanel.setProjectAnalyser(project);
-		fileEvaluatorPanel.setProjectAnalyser(project);
 		codeRangeEvaluatorPanel.setProjectAnalyser(project);
 	}
 
