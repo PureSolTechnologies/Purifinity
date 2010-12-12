@@ -24,6 +24,13 @@ import com.puresol.coding.evaluator.Evaluators;
 import com.puresol.coding.evaluator.ProjectEvaluatorFactory;
 import com.puresol.gui.TabButton;
 
+/**
+ * This GUI element lists all available project analyzers and enables the user
+ * to run them and to explore the results.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class ProjectEvaluatorPanel extends Panel {
 
 	private static final long serialVersionUID = 7855693564694783199L;
