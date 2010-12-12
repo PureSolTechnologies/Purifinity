@@ -11,7 +11,7 @@ import com.puresol.coding.CodeRange;
 import com.puresol.coding.analysis.Analyzer;
 import com.puresol.coding.analysis.AnalyzerException;
 import com.puresol.coding.lang.java.Java;
-import com.puresol.coding.metrics.sloc.CodeRangeSLOCMetric;
+import com.puresol.coding.metrics.sloc.SLOCMetric;
 import com.puresol.coding.metrics.sloc.SLOCResult;
 import com.puresol.uhura.ast.ParserTree;
 import com.puresol.utils.FileUtilities;
@@ -34,7 +34,7 @@ public class SLOCMetricImplTest {
 			List<CodeRange> codeRanges = java.getAnalyzableCodeRanges(tree);
 			assertNotNull(codeRanges);
 			assertTrue(codeRanges.size() > 0);
-			CodeRangeSLOCMetric metric = new CodeRangeSLOCMetric(java,
+			SLOCMetric metric = new SLOCMetric(java,
 					codeRanges.get(2));
 			metric.run();
 			SLOCResult sloc = metric.getResult();
