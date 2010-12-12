@@ -138,12 +138,15 @@ public class FileUtilities {
 		return new File(normalizedFile);
 	}
 
-	public static String readFileToString(File directory, File fileName) {
+	public static String readFileToString(File directory, String fileName) {
+		return readFileToString(new File(directory, fileName));
+	}
+
+	public static String readFileToString(File file) {
 		RandomAccessFile ra = null;
 		try {
 			StringBuffer text = new StringBuffer();
-			File source = FileUtilities.addPaths(directory, fileName);
-			ra = new RandomAccessFile(source, "r");
+			ra = new RandomAccessFile(file, "r");
 			String line;
 			while ((line = ra.readLine()) != null) {
 				text.append(line);

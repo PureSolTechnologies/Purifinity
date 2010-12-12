@@ -31,8 +31,5 @@
 	<classpathentry kind="lib" path="lib/commons-net/commons-net-2.0.jar"/>
 	<classpathentry kind="lib" path="lib/commons-net/commons-net-ftp-2.0.jar"/>
 	<classpathentry kind="lib" path="lib/felix/felix.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/NyotaUhura"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/PureSolTechnologies_Utilities"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/NyotaUhuraGUI"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
