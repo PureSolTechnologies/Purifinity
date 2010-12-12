@@ -36,21 +36,28 @@ public class Activator implements BundleActivator {
 	public void start(BundleContext context) throws Exception {
 		logger.info("Starting Metrics Base Package...");
 
-		cocomoFactory = new CoCoMoFactory();
-		codeDepthMetricFactory = new CodeDepthMetricFactory();
-		entropyMetricFactory = new EntropyMetricFactory();
-		halsteadMetricFactory = new HalsteadMetricFactory();
-		maintainabilityIndexFactory = new MaintainabilityIndexFactory();
-		mcCabeMetricFactory = new McCabeMetricFactory();
-		slocMetricFactory = new SLOCMetricFactory();
-
 		Evaluators evaluators = Evaluators.getInstance();
+
+		cocomoFactory = new CoCoMoFactory();
 		evaluators.registerProjectEvaluator(cocomoFactory);
+
+		codeDepthMetricFactory = new CodeDepthMetricFactory();
 		evaluators.registerCodeRangeEvaluator(codeDepthMetricFactory);
+
+		entropyMetricFactory = new EntropyMetricFactory();
 		evaluators.registerCodeRangeEvaluator(entropyMetricFactory);
+
+		halsteadMetricFactory = new HalsteadMetricFactory();
 		evaluators.registerCodeRangeEvaluator(halsteadMetricFactory);
+
+		maintainabilityIndexFactory = new MaintainabilityIndexFactory();
 		evaluators.registerCodeRangeEvaluator(maintainabilityIndexFactory);
+
+		mcCabeMetricFactory = new McCabeMetricFactory();
 		evaluators.registerCodeRangeEvaluator(mcCabeMetricFactory);
+
+		slocMetricFactory = new SLOCMetricFactory();
+		evaluators.registerProjectEvaluator(slocMetricFactory);
 		evaluators.registerCodeRangeEvaluator(slocMetricFactory);
 
 		logger.info("Started.");
@@ -61,20 +68,27 @@ public class Activator implements BundleActivator {
 		logger.info("Stopping Metrics Base Package...");
 
 		Evaluators evaluators = Evaluators.getInstance();
-		evaluators.unregisterProjectEvaluator(cocomoFactory);
-		evaluators.unregisterCodeRangeEvaluator(codeDepthMetricFactory);
-		evaluators.unregisterCodeRangeEvaluator(entropyMetricFactory);
-		evaluators.unregisterCodeRangeEvaluator(halsteadMetricFactory);
-		evaluators.unregisterCodeRangeEvaluator(maintainabilityIndexFactory);
-		evaluators.unregisterCodeRangeEvaluator(mcCabeMetricFactory);
-		evaluators.unregisterCodeRangeEvaluator(slocMetricFactory);
 
+		evaluators.unregisterProjectEvaluator(cocomoFactory);
 		cocomoFactory = null;
+
+		evaluators.unregisterCodeRangeEvaluator(codeDepthMetricFactory);
 		codeDepthMetricFactory = null;
+
+		evaluators.unregisterCodeRangeEvaluator(entropyMetricFactory);
 		entropyMetricFactory = null;
+
+		evaluators.unregisterCodeRangeEvaluator(halsteadMetricFactory);
 		halsteadMetricFactory = null;
+
+		evaluators.unregisterCodeRangeEvaluator(maintainabilityIndexFactory);
 		maintainabilityIndexFactory = null;
+
+		evaluators.unregisterCodeRangeEvaluator(mcCabeMetricFactory);
 		mcCabeMetricFactory = null;
+
+		evaluators.unregisterProjectEvaluator(slocMetricFactory);
+		evaluators.unregisterCodeRangeEvaluator(slocMetricFactory);
 		slocMetricFactory = null;
 
 		logger.info("Stopped.");

@@ -42,12 +42,13 @@ import com.puresol.utils.Property;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class SLOCMetric extends AbstractEvaluator implements CodeRangeEvaluator {
+public class CodeRangeSLOCMetric extends AbstractEvaluator implements
+		CodeRangeEvaluator {
 
 	private static final long serialVersionUID = -4313208925226028154L;
 
 	private static final Translator translator = Translator
-			.getTranslator(SLOCMetric.class);
+			.getTranslator(CodeRangeSLOCMetric.class);
 
 	public static final String NAME = translator.i18n("SLOC Metric");
 
@@ -56,8 +57,8 @@ public class SLOCMetric extends AbstractEvaluator implements CodeRangeEvaluator 
 
 	public static final ArrayList<Property> SUPPORTED_PROPERTIES = new ArrayList<Property>();
 	static {
-		SUPPORTED_PROPERTIES.add(new Property(SLOCMetric.class, "enabled",
-				"Switches calculation of SLOC Metric on and off.",
+		SUPPORTED_PROPERTIES.add(new Property(CodeRangeSLOCMetric.class,
+				"enabled", "Switches calculation of SLOC Metric on and off.",
 				Boolean.class, "true"));
 	}
 
@@ -69,17 +70,13 @@ public class SLOCMetric extends AbstractEvaluator implements CodeRangeEvaluator 
 				.add(QualityCharacteristic.TESTABILITY);
 	}
 
-	private final CodeRange codeRange;
-	private final List<LineResult> lineResults = new ArrayList<LineResult>();
-	private int phyLOC;
-	private int proLOC;
-	private int comLOC;
-	private int blLOC;
-	private Statistics lineStatistics;
+	private final List<LineResults> lineResults = new ArrayList<LineResults>();
+	private SLOCResult sloc;
 
+	private final CodeRange codeRange;
 	private final LanguageDependedSLOCMetric langDepended;
 
-	public SLOCMetric(ProgrammingLanguage language, CodeRange codeRange) {
+	public CodeRangeSLOCMetric(ProgrammingLanguage language, CodeRange codeRange) {
 		super();
 		this.codeRange = codeRange;
 		langDepended = language
@@ -114,14 +111,11 @@ public class SLOCMetric extends AbstractEvaluator implements CodeRangeEvaluator 
 	}
 
 	private void setup() {
-		phyLOC = 0;
-		proLOC = 0;
-		comLOC = 0;
-		blLOC = 0;
+		sloc = null;
 		lineResults.clear();
 		for (int i = 0; i < codeRange.getParserTree().getMetaData()
 				.getLineNum(); i++) {
-			lineResults.add(new LineResult());
+			lineResults.add(new LineResults());
 		}
 	}
 
@@ -133,25 +127,30 @@ public class SLOCMetric extends AbstractEvaluator implements CodeRangeEvaluator 
 			ParserTree node = iterator.getCurrentNode();
 			Token token = node.getToken();
 			if (token != null) {
-				SLOCType type = langDepended.getType(token);
+				SourceLineType type = langDepended.getType(token);
 				TokenMetaData metaData = token.getMetaData();
 				int lineId = metaData.getLine() - lineOffset;
 				int lineNum = metaData.getLineNum();
 				for (int line = lineId; line < lineId + lineNum; line++) {
-					if (type == SLOCType.COMMENT) {
+					if (type == SourceLineType.COMMENT) {
 						lineResults.get(line).setComments(true);
-					} else if (type == SLOCType.PRODUCTIVE) {
+					} else if (type == SourceLineType.PRODUCTIVE) {
 						lineResults.get(line).setProductiveContent(true);
 					}
-					if (type != SLOCType.PHYSICAL) {
+					if (type != SourceLineType.PHYSICAL) {
 						lineResults.get(line).addLength(
 								token.getText().length());
 					}
 				}
 			}
 		} while (iterator.goForward());
+		int blLOC = 0;
+		int comLOC = 0;
+		int proLOC = 0;
+		int phyLOC = 0;
+
 		List<Double> lineLengths = new ArrayList<Double>();
-		for (LineResult lineResult : lineResults) {
+		for (LineResults lineResult : lineResults) {
 			if (lineResult.isBlank()) {
 				blLOC++;
 			} else {
@@ -165,7 +164,8 @@ public class SLOCMetric extends AbstractEvaluator implements CodeRangeEvaluator 
 			phyLOC++;
 			lineLengths.add((double) lineResult.getLength());
 		}
-		lineStatistics = new Statistics(lineLengths);
+		sloc = new SLOCResult(phyLOC, phyLOC, phyLOC, phyLOC, new Statistics(
+				lineLengths));
 	}
 
 	/*
@@ -173,51 +173,15 @@ public class SLOCMetric extends AbstractEvaluator implements CodeRangeEvaluator 
 	 * 
 	 * @see com.puresol.coding.analysis.SLOCMetric#getPhyLOC()
 	 */
-	public int getPhyLOC() {
-		return phyLOC;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.puresol.coding.analysis.SLOCMetric#getProLOC()
-	 */
-	public int getProLOC() {
-		return proLOC;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.puresol.coding.analysis.SLOCMetric#getComLOC()
-	 */
-	public int getComLOC() {
-		return comLOC;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.puresol.coding.analysis.SLOCMetric#getBlLOC()
-	 */
-	public int getBlLOC() {
-		return blLOC;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.puresol.coding.analysis.SLOCMetric#getLineStatistics()
-	 */
-	public Statistics getLineStatistics() {
-		return lineStatistics;
+	public SLOCResult getResult() {
+		return sloc;
 	}
 
 	public void print() {
-		System.out.println("physical lines: " + phyLOC);
-		System.out.println("productive lines: " + proLOC);
-		System.out.println("commented lines: " + comLOC);
-		System.out.println("blank lines: " + blLOC);
+		System.out.println("physical lines: " + sloc.getPhyLOC());
+		System.out.println("productive lines: " + sloc.getProLOC());
+		System.out.println("commented lines: " + sloc.getComLOC());
+		System.out.println("blank lines: " + sloc.getBlLOC());
 	}
 
 	/**
@@ -234,18 +198,18 @@ public class SLOCMetric extends AbstractEvaluator implements CodeRangeEvaluator 
 	public QualityLevel getQualityLevelLineCount() {
 		if ((codeRange.getType() == CodeRangeType.FILE)
 				|| (codeRange.getType() == CodeRangeType.CLASS)) {
-			if (getPhyLOC() > 2500) {
+			if (sloc.getPhyLOC() > 2500) {
 				return QualityLevel.LOW;
 			}
-			if (getPhyLOC() > 1000) {
+			if (sloc.getPhyLOC() > 1000) {
 				return QualityLevel.MEDIUM;
 			}
 			return QualityLevel.HIGH;
 		} else if (codeRange.getType() == CodeRangeType.SUBROUTINE) {
-			if (getPhyLOC() > 40) {
+			if (sloc.getPhyLOC() > 40) {
 				return QualityLevel.LOW;
 			}
-			if (getPhyLOC() > 25) {
+			if (sloc.getPhyLOC() > 25) {
 				return QualityLevel.MEDIUM;
 			}
 			return QualityLevel.HIGH;
@@ -254,10 +218,10 @@ public class SLOCMetric extends AbstractEvaluator implements CodeRangeEvaluator 
 	}
 
 	public QualityLevel getQualityLevelLineLength() {
-		if (getLineStatistics().getMax() > 80) {
+		if (sloc.getLineStatistics().getMax() > 80) {
 			return QualityLevel.LOW;
 		}
-		if (getLineStatistics().getAvg() > 50) {
+		if (sloc.getLineStatistics().getAvg() > 50) {
 			return QualityLevel.MEDIUM;
 		}
 		return QualityLevel.HIGH;
@@ -294,13 +258,13 @@ public class SLOCMetric extends AbstractEvaluator implements CodeRangeEvaluator 
 	}
 
 	public String getLineCountReport() {
-		String report = "phyLoc\t" + getPhyLOC() + "\t"
+		String report = "phyLoc\t" + sloc.getPhyLOC() + "\t"
 				+ translator.i18n("physical lines of code") + "\n";
-		report += "proLoc\t" + getProLOC() + "\t"
+		report += "proLoc\t" + sloc.getProLOC() + "\t"
 				+ translator.i18n("productive lines of code") + "\n";
-		report += "comLoc\t" + getComLOC() + "\t"
+		report += "comLoc\t" + sloc.getComLOC() + "\t"
 				+ translator.i18n("commented lines of code") + "\n";
-		report += "blLoc\t" + getBlLOC() + "\t"
+		report += "blLoc\t" + sloc.getBlLOC() + "\t"
 				+ translator.i18n("blank lines") + "\n";
 		return report;
 	}
@@ -310,7 +274,7 @@ public class SLOCMetric extends AbstractEvaluator implements CodeRangeEvaluator 
 	}
 
 	public String getLineLengthReport() {
-		Statistics normal = getLineStatistics();
+		Statistics normal = sloc.getLineStatistics();
 		String report = "\tnormal\n";
 		report += "avg\t" + Math.round(normal.getAvg() * 100.0) / 100.0 + "\n";
 		report += "median\t" + Math.round(normal.getMedian()) + "\n";

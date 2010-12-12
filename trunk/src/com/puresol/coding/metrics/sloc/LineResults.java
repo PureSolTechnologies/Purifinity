@@ -1,6 +1,6 @@
 package com.puresol.coding.metrics.sloc;
 
-public class LineResult {
+public class LineResults {
 
 	private int length = 0;
 	private boolean comments = false;

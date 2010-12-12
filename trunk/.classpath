@@ -31,9 +31,9 @@
 	<classpathentry kind="lib" path="lib/log4j.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/i18n4java"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/PureSolTechnologies_API"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/swingx"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/NyotaUhura"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/PureSolTechnologies_Utilities"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/CodeAnalysis"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/swingx"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/PureSolTechnologies_API"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

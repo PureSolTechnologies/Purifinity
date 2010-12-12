@@ -22,7 +22,8 @@ import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.evaluator.CodeRangeEvaluator;
 import com.puresol.coding.metrics.halstead.HalsteadMetric;
 import com.puresol.coding.metrics.mccabe.McCabeMetric;
-import com.puresol.coding.metrics.sloc.SLOCMetric;
+import com.puresol.coding.metrics.sloc.CodeRangeSLOCMetric;
+import com.puresol.coding.metrics.sloc.SLOCResult;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.QualityLevel;
 import com.puresol.coding.reporting.HTMLConverter;
@@ -73,7 +74,7 @@ public class MaintainabilityIndex extends AbstractEvaluator implements
 	 */
 	private double MI;
 
-	private SLOCMetric slocMetric;
+	private CodeRangeSLOCMetric slocMetric;
 	private McCabeMetric mcCabeMetric;
 	private HalsteadMetric halsteadMetric;
 	private final ProgrammingLanguage language;
@@ -121,7 +122,7 @@ public class MaintainabilityIndex extends AbstractEvaluator implements
 			getMonitor().setDescription(NAME);
 		}
 
-		slocMetric = new SLOCMetric(language, getCodeRange());
+		slocMetric = new CodeRangeSLOCMetric(language, getCodeRange());
 		mcCabeMetric = new McCabeMetric(language, getCodeRange());
 		halsteadMetric = new HalsteadMetric(language, getCodeRange());
 
@@ -140,11 +141,12 @@ public class MaintainabilityIndex extends AbstractEvaluator implements
 			getMonitor().setStatus(3);
 		}
 
+		SLOCResult sloc = slocMetric.getResult();
 		MIwoc = 171.0 - 5.2 * Math.log(halsteadMetric.get_HV()) - 0.23
 				* mcCabeMetric.getCyclomaticNumber() - 16.2
-				* Math.log(slocMetric.getPhyLOC() * 100.0 / 171.0);
-		MIcw = 50 * Math.sin(Math.sqrt(2.4 * (double) slocMetric.getComLOC()
-				/ (double) slocMetric.getPhyLOC()));
+				* Math.log(sloc.getPhyLOC() * 100.0 / 171.0);
+		MIcw = 50 * Math.sin(Math.sqrt(2.4 * (double) sloc.getComLOC()
+				/ (double) sloc.getPhyLOC()));
 		MI = MIwoc + MIcw;
 		if (getMonitor() != null) {
 			getMonitor().finish();
