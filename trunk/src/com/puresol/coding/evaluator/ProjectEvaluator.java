@@ -4,6 +4,6 @@ import com.puresol.coding.analysis.ProjectAnalyzer;
 
 public interface ProjectEvaluator extends Evaluator {
 
-	public ProjectAnalyzer getProjectAnalyser();
+	public ProjectAnalyzer getProjectAnalyzer();
 
 }

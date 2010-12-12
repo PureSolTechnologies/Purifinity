@@ -6,7 +6,7 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 
-import javax.swingx.rendering.AbstractRenderer;
+import com.puresol.rendering.AbstractRenderer;
 
 public class TextBoxRenderer extends AbstractRenderer {
 

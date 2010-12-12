@@ -4,9 +4,9 @@ import java.awt.Graphics;
 
 import javax.swingx.Dialog;
 import javax.swingx.Panel;
-import javax.swingx.rendering.RenderException;
-import javax.swingx.rendering.Renderer;
 
+import com.puresol.rendering.RenderException;
+import com.puresol.rendering.Renderer;
 import com.puresol.trees.TreeException;
 import com.puresol.uhura.ast.ParserTree;
 import com.puresol.uhura.gui.rendering.ConstructionIdentifierRenderer;
@@ -23,8 +23,8 @@ public class ConstructionIdentifierRendererTest {
 				super.paint(graphics);
 				try {
 					ParserTree ast = new ParserTree("ConstructionIdentifier");
-					ParserTree identifier = new ParserTree(new Token("IDENTIFIER", "TEST",
-							null, null));
+					ParserTree identifier = new ParserTree(new Token(
+							"IDENTIFIER", "TEST", null, null));
 					identifier.setParent(ast);
 					ast.addChild(identifier);
 					Renderer renderer = new ConstructionIdentifierRenderer(

@@ -6,12 +6,11 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swingx.rendering.AbstractRenderer;
-import javax.swingx.rendering.Arrow;
-import javax.swingx.rendering.RenderException;
-import javax.swingx.rendering.Renderer;
-import javax.swingx.rendering.Arrow.ArrowType;
-
+import com.puresol.rendering.AbstractRenderer;
+import com.puresol.rendering.Arrow;
+import com.puresol.rendering.Arrow.ArrowType;
+import com.puresol.rendering.RenderException;
+import com.puresol.rendering.Renderer;
 import com.puresol.trees.TreeException;
 import com.puresol.uhura.ast.ParserTree;
 

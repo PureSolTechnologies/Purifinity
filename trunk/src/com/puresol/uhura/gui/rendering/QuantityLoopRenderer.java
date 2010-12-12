@@ -4,11 +4,10 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 
-import javax.swingx.rendering.AbstractRenderer;
-import javax.swingx.rendering.Arrow;
-import javax.swingx.rendering.Renderer;
-import javax.swingx.rendering.Arrow.ArrowType;
-
+import com.puresol.rendering.AbstractRenderer;
+import com.puresol.rendering.Arrow;
+import com.puresol.rendering.Arrow.ArrowType;
+import com.puresol.rendering.Renderer;
 import com.puresol.uhura.grammar.Quantity;
 
 public class QuantityLoopRenderer extends AbstractRenderer {

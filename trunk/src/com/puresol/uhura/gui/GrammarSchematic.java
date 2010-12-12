@@ -12,11 +12,11 @@ import javax.imageio.ImageIO;
 import javax.swing.filechooser.FileFilter;
 import javax.swingx.Panel;
 import javax.swingx.Saveable;
-import javax.swingx.rendering.RenderException;
-import javax.swingx.rendering.Renderer;
 
 import org.apache.log4j.Logger;
 
+import com.puresol.rendering.RenderException;
+import com.puresol.rendering.Renderer;
 import com.puresol.trees.TreeException;
 import com.puresol.uhura.ast.ParserTree;
 import com.puresol.uhura.gui.rendering.GrammarRenderer;
@@ -101,8 +101,8 @@ public class GrammarSchematic extends Panel implements Saveable {
 				throw new IOException(
 						"A directory was awaited as storage destination!");
 			}
-			ParserTree productionDefinitionsAST = grammarAST.getChild("Productions")
-					.getChild("ProductionDefinitions");
+			ParserTree productionDefinitionsAST = grammarAST.getChild(
+					"Productions").getChild("ProductionDefinitions");
 			for (ParserTree productionDefinition : productionDefinitionsAST
 					.getChildren("ProductionDefinition")) {
 				String identifier = productionDefinition.getChild("IDENTIFIER")

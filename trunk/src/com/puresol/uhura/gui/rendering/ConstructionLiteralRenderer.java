@@ -5,10 +5,9 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 
-import javax.swingx.rendering.AbstractRenderer;
-import javax.swingx.rendering.RenderException;
-import javax.swingx.rendering.Renderer;
-
+import com.puresol.rendering.AbstractRenderer;
+import com.puresol.rendering.RenderException;
+import com.puresol.rendering.Renderer;
 import com.puresol.trees.TreeException;
 import com.puresol.uhura.ast.ParserTree;
 import com.puresol.uhura.grammar.Quantity;
@@ -16,8 +15,7 @@ import com.puresol.uhura.grammar.Quantity;
 public class ConstructionLiteralRenderer extends AbstractRenderer {
 
 	private final Font font = new Font(RenderProperties.getLiteralFontFamily(),
-			Font.TRUETYPE_FONT,
-			RenderProperties.getLiteralFontSize());
+			Font.TRUETYPE_FONT, RenderProperties.getLiteralFontSize());
 	private final Renderer quantityLoopRenderer;
 
 	public ConstructionLiteralRenderer(Graphics graphics,
@@ -32,7 +30,8 @@ public class ConstructionLiteralRenderer extends AbstractRenderer {
 		}
 		Quantity quantity = Quantity.EXPECT;
 		try {
-			ParserTree quantifierAST = constructionLiteral.getChild("Quantifier");
+			ParserTree quantifierAST = constructionLiteral
+					.getChild("Quantifier");
 			if (quantifierAST.hasChildren()) {
 				ParserTree quantifier = quantifierAST.getChildren().get(0);
 				if ("QUESTION_MARK".equals(quantifier.getName())) {

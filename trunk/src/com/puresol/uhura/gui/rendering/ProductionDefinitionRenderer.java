@@ -5,12 +5,11 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 
-import javax.swingx.rendering.AbstractRenderer;
-import javax.swingx.rendering.Arrow;
-import javax.swingx.rendering.RenderException;
-import javax.swingx.rendering.Renderer;
-import javax.swingx.rendering.Arrow.ArrowType;
-
+import com.puresol.rendering.AbstractRenderer;
+import com.puresol.rendering.Arrow;
+import com.puresol.rendering.Arrow.ArrowType;
+import com.puresol.rendering.RenderException;
+import com.puresol.rendering.Renderer;
 import com.puresol.trees.TreeException;
 import com.puresol.uhura.ast.ParserTree;
 
@@ -41,7 +40,8 @@ public class ProductionDefinitionRenderer extends AbstractRenderer {
 		this.graphics = graphics;
 		String identifier;
 		try {
-			ParserTree identifierAST = productionDefinition.getChild("IDENTIFIER");
+			ParserTree identifierAST = productionDefinition
+					.getChild("IDENTIFIER");
 			if (identifierAST != null) {
 				identifier = identifierAST.getText();
 			} else {

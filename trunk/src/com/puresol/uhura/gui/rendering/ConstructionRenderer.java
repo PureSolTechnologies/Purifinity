@@ -5,10 +5,10 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 
-import javax.swingx.rendering.AbstractRenderer;
-import javax.swingx.rendering.Arrow;
-import javax.swingx.rendering.Renderer;
-import javax.swingx.rendering.Arrow.ArrowType;
+import com.puresol.rendering.AbstractRenderer;
+import com.puresol.rendering.Arrow;
+import com.puresol.rendering.Arrow.ArrowType;
+import com.puresol.rendering.Renderer;
 
 public class ConstructionRenderer extends AbstractRenderer {
 
