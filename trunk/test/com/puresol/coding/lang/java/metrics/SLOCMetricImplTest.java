@@ -11,7 +11,8 @@ import com.puresol.coding.CodeRange;
 import com.puresol.coding.analysis.Analyzer;
 import com.puresol.coding.analysis.AnalyzerException;
 import com.puresol.coding.lang.java.Java;
-import com.puresol.coding.metrics.sloc.SLOCMetric;
+import com.puresol.coding.metrics.sloc.CodeRangeSLOCMetric;
+import com.puresol.coding.metrics.sloc.SLOCResult;
 import com.puresol.uhura.ast.ParserTree;
 import com.puresol.utils.FileUtilities;
 
@@ -33,17 +34,19 @@ public class SLOCMetricImplTest {
 			List<CodeRange> codeRanges = java.getAnalyzableCodeRanges(tree);
 			assertNotNull(codeRanges);
 			assertTrue(codeRanges.size() > 0);
-			SLOCMetric metric = new SLOCMetric(java, codeRanges.get(2));
+			CodeRangeSLOCMetric metric = new CodeRangeSLOCMetric(java,
+					codeRanges.get(2));
 			metric.run();
-			System.out.println("phyLOC: " + metric.getPhyLOC());
-			System.out.println("proLOC: " + metric.getProLOC());
-			System.out.println("comLOC: " + metric.getComLOC());
-			System.out.println("blLOC: " + metric.getBlLOC());
-			System.out.println("line length: " + metric.getLineStatistics());
-			assertEquals(15, metric.getPhyLOC());
-			assertEquals(13, metric.getProLOC());
-			assertEquals(0, metric.getComLOC());
-			assertEquals(2, metric.getBlLOC());
+			SLOCResult sloc = metric.getResult();
+			System.out.println("phyLOC: " + sloc.getPhyLOC());
+			System.out.println("proLOC: " + sloc.getProLOC());
+			System.out.println("comLOC: " + sloc.getComLOC());
+			System.out.println("blLOC: " + sloc.getBlLOC());
+			System.out.println("line length: " + sloc.getLineStatistics());
+			assertEquals(15, sloc.getPhyLOC());
+			assertEquals(13, sloc.getProLOC());
+			assertEquals(0, sloc.getComLOC());
+			assertEquals(2, sloc.getBlLOC());
 		} catch (AnalyzerException e) {
 			e.printStackTrace();
 			fail("No exception was expected!");
