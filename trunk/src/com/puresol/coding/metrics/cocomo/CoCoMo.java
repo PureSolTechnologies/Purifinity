@@ -66,7 +66,7 @@ public class CoCoMo extends AbstractEvaluator implements ProjectEvaluator {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public ProjectAnalyzer getProjectAnalyser() {
+	public ProjectAnalyzer getProjectAnalyzer() {
 		return projectAnalyzer;
 	}
 

@@ -22,7 +22,7 @@ import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.evaluator.CodeRangeEvaluator;
 import com.puresol.coding.metrics.halstead.HalsteadMetric;
 import com.puresol.coding.metrics.mccabe.McCabeMetric;
-import com.puresol.coding.metrics.sloc.CodeRangeSLOCMetric;
+import com.puresol.coding.metrics.sloc.SLOCMetric;
 import com.puresol.coding.metrics.sloc.SLOCResult;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.QualityLevel;
@@ -74,7 +74,7 @@ public class MaintainabilityIndex extends AbstractEvaluator implements
 	 */
 	private double MI;
 
-	private CodeRangeSLOCMetric slocMetric;
+	private SLOCMetric slocMetric;
 	private McCabeMetric mcCabeMetric;
 	private HalsteadMetric halsteadMetric;
 	private final ProgrammingLanguage language;
@@ -122,7 +122,7 @@ public class MaintainabilityIndex extends AbstractEvaluator implements
 			getMonitor().setDescription(NAME);
 		}
 
-		slocMetric = new CodeRangeSLOCMetric(language, getCodeRange());
+		slocMetric = new SLOCMetric(language, getCodeRange());
 		mcCabeMetric = new McCabeMetric(language, getCodeRange());
 		halsteadMetric = new HalsteadMetric(language, getCodeRange());
 

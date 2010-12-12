@@ -18,7 +18,7 @@ public class SLOCMetricFactory implements ProjectEvaluatorFactory,
 	@Override
 	public CodeRangeEvaluator create(ProgrammingLanguage language,
 			CodeRange codeRange) {
-		return new CodeRangeSLOCMetric(language, codeRange);
+		return new SLOCMetric(language, codeRange);
 	}
 
 	@Override
@@ -28,21 +28,21 @@ public class SLOCMetricFactory implements ProjectEvaluatorFactory,
 
 	@Override
 	public String getDescription() {
-		return CodeRangeSLOCMetric.DESCRIPTION;
+		return SLOCMetric.DESCRIPTION;
 	}
 
 	@Override
 	public String getName() {
-		return CodeRangeSLOCMetric.NAME;
+		return SLOCMetric.NAME;
 	}
 
 	@Override
 	public List<Property> getEvaluatorProperties() {
-		return CodeRangeSLOCMetric.SUPPORTED_PROPERTIES;
+		return SLOCMetric.SUPPORTED_PROPERTIES;
 	}
 
 	@Override
 	public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
-		return CodeRangeSLOCMetric.EVALUATED_QUALITY_CHARACTERISTICS;
+		return SLOCMetric.EVALUATED_QUALITY_CHARACTERISTICS;
 	}
 }

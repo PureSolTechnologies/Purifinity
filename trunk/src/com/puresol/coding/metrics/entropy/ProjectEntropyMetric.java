@@ -1,4 +1,4 @@
-package com.puresol.coding.metrics.sloc;
+package com.puresol.coding.metrics.entropy;
 
 import java.io.File;
 import java.util.List;
@@ -12,39 +12,38 @@ import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.reporting.ReportingFormat;
 import com.puresol.reporting.UnsupportedFormatException;
 
-public class ProjectSLOCMetric extends
-		AbstractProjectMetric<SLOCMetric> {
+public class ProjectEntropyMetric extends AbstractProjectMetric<EntropyMetric> {
 
 	private static final long serialVersionUID = -5093217611195212999L;
 
-	public ProjectSLOCMetric(ProjectAnalyzer projectAnalyzer) {
+	public ProjectEntropyMetric(ProjectAnalyzer projectAnalyzer) {
 		super(projectAnalyzer);
 	}
 
 	@Override
-	protected SLOCMetric processFile(File file) {
+	protected EntropyMetric processFile(File file) {
 		Analyzer analyzer = getProjectAnalyzer().getAnalyzer(file);
-		SLOCMetric metric = new SLOCMetric(
-				analyzer.getLanguage(), new CodeRange(file.getPath(),
-						CodeRangeType.FILE, analyzer.getParserTree()));
+		EntropyMetric metric = new EntropyMetric(analyzer.getLanguage(),
+				new CodeRange(file.getPath(), CodeRangeType.FILE,
+						analyzer.getParserTree()));
 		metric.run();
 		return metric;
 	}
 
 	@Override
 	public String getName() {
-		return SLOCMetric.NAME;
+		return EntropyMetric.NAME;
 	}
 
 	@Override
 	public String getDescription(ReportingFormat format)
 			throws UnsupportedFormatException {
-		return SLOCMetric.DESCRIPTION;
+		return EntropyMetric.DESCRIPTION;
 	}
 
 	@Override
 	public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
-		return SLOCMetric.EVALUATED_QUALITY_CHARACTERISTICS;
+		return EntropyMetric.EVALUATED_QUALITY_CHARACTERISTICS;
 	}
 
 }

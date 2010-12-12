@@ -1,4 +1,4 @@
-package com.puresol.coding.metrics.sloc;
+package com.puresol.coding.metrics.maintainability;
 
 import java.io.File;
 import java.util.List;
@@ -12,19 +12,19 @@ import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.reporting.ReportingFormat;
 import com.puresol.reporting.UnsupportedFormatException;
 
-public class ProjectSLOCMetric extends
-		AbstractProjectMetric<SLOCMetric> {
+public class ProjectMaintainabilityIndex extends
+		AbstractProjectMetric<MaintainabilityIndex> {
 
 	private static final long serialVersionUID = -5093217611195212999L;
 
-	public ProjectSLOCMetric(ProjectAnalyzer projectAnalyzer) {
+	public ProjectMaintainabilityIndex(ProjectAnalyzer projectAnalyzer) {
 		super(projectAnalyzer);
 	}
 
 	@Override
-	protected SLOCMetric processFile(File file) {
+	protected MaintainabilityIndex processFile(File file) {
 		Analyzer analyzer = getProjectAnalyzer().getAnalyzer(file);
-		SLOCMetric metric = new SLOCMetric(
+		MaintainabilityIndex metric = new MaintainabilityIndex(
 				analyzer.getLanguage(), new CodeRange(file.getPath(),
 						CodeRangeType.FILE, analyzer.getParserTree()));
 		metric.run();
@@ -33,18 +33,18 @@ public class ProjectSLOCMetric extends
 
 	@Override
 	public String getName() {
-		return SLOCMetric.NAME;
+		return MaintainabilityIndex.NAME;
 	}
 
 	@Override
 	public String getDescription(ReportingFormat format)
 			throws UnsupportedFormatException {
-		return SLOCMetric.DESCRIPTION;
+		return MaintainabilityIndex.DESCRIPTION;
 	}
 
 	@Override
 	public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
-		return SLOCMetric.EVALUATED_QUALITY_CHARACTERISTICS;
+		return MaintainabilityIndex.EVALUATED_QUALITY_CHARACTERISTICS;
 	}
 
 }

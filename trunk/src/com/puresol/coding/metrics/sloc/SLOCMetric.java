@@ -23,11 +23,11 @@ import com.puresol.coding.evaluator.CodeRangeEvaluator;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.QualityLevel;
 import com.puresol.coding.reporting.HTMLConverter;
+import com.puresol.math.statistics.Statistics;
 import com.puresol.reporting.ReportingFormat;
 import com.puresol.reporting.UnsupportedFormatException;
 import com.puresol.reporting.html.Anchor;
 import com.puresol.reporting.html.HTMLStandards;
-import com.puresol.statistics.Statistics;
 import com.puresol.trees.TreeIterator;
 import com.puresol.uhura.ast.ParserTree;
 import com.puresol.uhura.lexer.Token;
@@ -42,13 +42,13 @@ import com.puresol.utils.Property;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class CodeRangeSLOCMetric extends AbstractEvaluator implements
+public class SLOCMetric extends AbstractEvaluator implements
 		CodeRangeEvaluator {
 
 	private static final long serialVersionUID = -4313208925226028154L;
 
 	private static final Translator translator = Translator
-			.getTranslator(CodeRangeSLOCMetric.class);
+			.getTranslator(SLOCMetric.class);
 
 	public static final String NAME = translator.i18n("SLOC Metric");
 
@@ -57,7 +57,7 @@ public class CodeRangeSLOCMetric extends AbstractEvaluator implements
 
 	public static final ArrayList<Property> SUPPORTED_PROPERTIES = new ArrayList<Property>();
 	static {
-		SUPPORTED_PROPERTIES.add(new Property(CodeRangeSLOCMetric.class,
+		SUPPORTED_PROPERTIES.add(new Property(SLOCMetric.class,
 				"enabled", "Switches calculation of SLOC Metric on and off.",
 				Boolean.class, "true"));
 	}
@@ -76,7 +76,7 @@ public class CodeRangeSLOCMetric extends AbstractEvaluator implements
 	private final CodeRange codeRange;
 	private final LanguageDependedSLOCMetric langDepended;
 
-	public CodeRangeSLOCMetric(ProgrammingLanguage language, CodeRange codeRange) {
+	public SLOCMetric(ProgrammingLanguage language, CodeRange codeRange) {
 		super();
 		this.codeRange = codeRange;
 		langDepended = language

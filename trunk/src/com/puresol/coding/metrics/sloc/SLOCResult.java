@@ -1,6 +1,6 @@
 package com.puresol.coding.metrics.sloc;
 
-import com.puresol.statistics.Statistics;
+import com.puresol.math.statistics.Statistics;
 
 public class SLOCResult {
 

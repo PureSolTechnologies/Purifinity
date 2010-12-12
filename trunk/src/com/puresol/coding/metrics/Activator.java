@@ -42,18 +42,23 @@ public class Activator implements BundleActivator {
 		evaluators.registerProjectEvaluator(cocomoFactory);
 
 		codeDepthMetricFactory = new CodeDepthMetricFactory();
+		evaluators.registerProjectEvaluator(codeDepthMetricFactory);
 		evaluators.registerCodeRangeEvaluator(codeDepthMetricFactory);
 
 		entropyMetricFactory = new EntropyMetricFactory();
+		evaluators.registerProjectEvaluator(entropyMetricFactory);
 		evaluators.registerCodeRangeEvaluator(entropyMetricFactory);
 
 		halsteadMetricFactory = new HalsteadMetricFactory();
+		evaluators.registerProjectEvaluator(halsteadMetricFactory);
 		evaluators.registerCodeRangeEvaluator(halsteadMetricFactory);
 
 		maintainabilityIndexFactory = new MaintainabilityIndexFactory();
+		evaluators.registerProjectEvaluator(maintainabilityIndexFactory);
 		evaluators.registerCodeRangeEvaluator(maintainabilityIndexFactory);
 
 		mcCabeMetricFactory = new McCabeMetricFactory();
+		evaluators.registerProjectEvaluator(mcCabeMetricFactory);
 		evaluators.registerCodeRangeEvaluator(mcCabeMetricFactory);
 
 		slocMetricFactory = new SLOCMetricFactory();

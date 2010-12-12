@@ -1,4 +1,4 @@
-package com.puresol.coding.metrics.sloc;
+package com.puresol.coding.metrics.mccabe;
 
 import java.io.File;
 import java.util.List;
@@ -12,39 +12,38 @@ import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.reporting.ReportingFormat;
 import com.puresol.reporting.UnsupportedFormatException;
 
-public class ProjectSLOCMetric extends
-		AbstractProjectMetric<SLOCMetric> {
+public class ProjectMcCabeMetric extends AbstractProjectMetric<McCabeMetric> {
 
 	private static final long serialVersionUID = -5093217611195212999L;
 
-	public ProjectSLOCMetric(ProjectAnalyzer projectAnalyzer) {
+	public ProjectMcCabeMetric(ProjectAnalyzer projectAnalyzer) {
 		super(projectAnalyzer);
 	}
 
 	@Override
-	protected SLOCMetric processFile(File file) {
+	protected McCabeMetric processFile(File file) {
 		Analyzer analyzer = getProjectAnalyzer().getAnalyzer(file);
-		SLOCMetric metric = new SLOCMetric(
-				analyzer.getLanguage(), new CodeRange(file.getPath(),
-						CodeRangeType.FILE, analyzer.getParserTree()));
+		McCabeMetric metric = new McCabeMetric(analyzer.getLanguage(),
+				new CodeRange(file.getPath(), CodeRangeType.FILE,
+						analyzer.getParserTree()));
 		metric.run();
 		return metric;
 	}
 
 	@Override
 	public String getName() {
-		return SLOCMetric.NAME;
+		return McCabeMetric.NAME;
 	}
 
 	@Override
 	public String getDescription(ReportingFormat format)
 			throws UnsupportedFormatException {
-		return SLOCMetric.DESCRIPTION;
+		return McCabeMetric.DESCRIPTION;
 	}
 
 	@Override
 	public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
-		return SLOCMetric.EVALUATED_QUALITY_CHARACTERISTICS;
+		return McCabeMetric.EVALUATED_QUALITY_CHARACTERISTICS;
 	}
 
 }
