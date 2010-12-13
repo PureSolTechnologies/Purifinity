@@ -7,7 +7,7 @@ import java.util.List;
 import javax.swingx.progress.ProgressObservable;
 
 import com.puresol.coding.quality.QualityCharacteristic;
-import com.puresol.coding.quality.QualityLevel;
+import com.puresol.coding.quality.SourceCodeQuality;
 import com.puresol.reporting.ReportingFormat;
 import com.puresol.reporting.UnsupportedFormatException;
 
@@ -63,7 +63,7 @@ public interface Evaluator extends ProgressObservable, Runnable, Serializable {
 	 * 
 	 * @return
 	 */
-	public QualityLevel getQuality();
+	public SourceCodeQuality getQuality();
 
 	/**
 	 * This method returns a list with quality characteristics which might be

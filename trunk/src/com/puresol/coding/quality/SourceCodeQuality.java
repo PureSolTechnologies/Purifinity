@@ -21,7 +21,7 @@ import com.puresol.data.Identifiable;
  * @author Rick-Rainer Ludwig
  * 
  */
-public enum QualityLevel implements Identifiable, Comparable<QualityLevel> {
+public enum SourceCodeQuality implements Identifiable, Comparable<SourceCodeQuality> {
 	UNSPECIFIED {
 		@Override
 		public String getIdentifier() {
@@ -68,24 +68,24 @@ public enum QualityLevel implements Identifiable, Comparable<QualityLevel> {
 	};
 
 	private static final Translator translator = Translator
-			.getTranslator(QualityLevel.class);
+			.getTranslator(SourceCodeQuality.class);
 
 	public abstract int getLevel();
 
 	@Override
 	public abstract String getIdentifier();
 
-	public static QualityLevel fromLevel(int level) {
-		for (QualityLevel qualityLevel : QualityLevel.values()) {
+	public static SourceCodeQuality fromLevel(int level) {
+		for (SourceCodeQuality qualityLevel : SourceCodeQuality.values()) {
 			if (level == qualityLevel.getLevel()) {
 				return qualityLevel;
 			}
 		}
-		return QualityLevel.UNSPECIFIED;
+		return SourceCodeQuality.UNSPECIFIED;
 	}
 
-	public static QualityLevel getMinLevel(QualityLevel level1,
-			QualityLevel level2) {
+	public static SourceCodeQuality getMinLevel(SourceCodeQuality level1,
+			SourceCodeQuality level2) {
 		if ((level1 == null) && (level2 == null)) {
 			throw new NullPointerException("Both levels are null!");
 		}
