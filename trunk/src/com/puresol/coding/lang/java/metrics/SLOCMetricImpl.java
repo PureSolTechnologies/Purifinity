@@ -1,23 +1,23 @@
 package com.puresol.coding.lang.java.metrics;
 
 import com.puresol.coding.metrics.sloc.LanguageDependedSLOCMetric;
-import com.puresol.coding.metrics.sloc.SourceLineType;
+import com.puresol.coding.metrics.sloc.SLOCType;
 import com.puresol.uhura.lexer.Token;
 
 public class SLOCMetricImpl implements LanguageDependedSLOCMetric {
 
 	@Override
-	public SourceLineType getType(Token token) {
+	public SLOCType getType(Token token) {
 		if (token.getName().equals("Comment")) {
-			return SourceLineType.COMMENT;
+			return SLOCType.COMMENT;
 		}
 		if (token.getName().equals("WhiteSpace")) {
-			return SourceLineType.BLANK;
+			return SLOCType.BLANK;
 		}
 		if (!token.getName().equals("LineTerminator")) {
-			return SourceLineType.PRODUCTIVE;
+			return SLOCType.PRODUCTIVE;
 		}
-		return SourceLineType.PHYSICAL;
+		return SLOCType.PHYSICAL;
 	}
 
 }
