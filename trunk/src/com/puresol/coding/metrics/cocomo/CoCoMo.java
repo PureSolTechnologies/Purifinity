@@ -21,7 +21,7 @@ import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.evaluator.ProjectEvaluator;
 import com.puresol.coding.quality.QualityCharacteristic;
-import com.puresol.coding.quality.QualityLevel;
+import com.puresol.coding.quality.SourceCodeQuality;
 import com.puresol.reporting.ReportingFormat;
 import com.puresol.reporting.UnsupportedFormatException;
 import com.puresol.reporting.html.HTMLStandards;
@@ -167,8 +167,8 @@ public class CoCoMo extends AbstractEvaluator implements ProjectEvaluator {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public QualityLevel getQuality() {
-		return QualityLevel.UNSPECIFIED;
+	public SourceCodeQuality getQuality() {
+		return SourceCodeQuality.UNSPECIFIED;
 	}
 
 	/**

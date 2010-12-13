@@ -11,7 +11,7 @@ import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.evaluator.CodeRangeEvaluator;
 import com.puresol.coding.evaluator.ProjectEvaluator;
-import com.puresol.coding.quality.QualityLevel;
+import com.puresol.coding.quality.SourceCodeQuality;
 import com.puresol.coding.reporting.HTMLConverter;
 import com.puresol.reporting.ReportingFormat;
 import com.puresol.reporting.UnsupportedFormatException;
@@ -60,19 +60,19 @@ public abstract class AbstractProjectMetric<T extends CodeRangeEvaluator>
 	abstract protected T processFile(File file);
 
 	@Override
-	public QualityLevel getQuality() {
+	public SourceCodeQuality getQuality() {
 		int sum = 0;
 		int count = 0;
 		for (File file : fileResults.keySet()) {
 			T metric = fileResults.get(file);
-			QualityLevel level = metric.getQuality();
-			if (level != QualityLevel.UNSPECIFIED) {
+			SourceCodeQuality level = metric.getQuality();
+			if (level != SourceCodeQuality.UNSPECIFIED) {
 				sum += level.getLevel();
 				count++;
 			}
 		}
 		int result = (int) Math.round((double) sum / (double) count);
-		return QualityLevel.fromLevel(result);
+		return SourceCodeQuality.fromLevel(result);
 	}
 
 	@Override
@@ -87,7 +87,7 @@ public abstract class AbstractProjectMetric<T extends CodeRangeEvaluator>
 		List<File> files = new ArrayList<File>(fileResults.keySet());
 		Collections.sort(files);
 		for (File file : files) {
-			QualityLevel level = fileResults.get(file).getQuality();
+			SourceCodeQuality level = fileResults.get(file).getQuality();
 			buffer.append("<tr>");
 			buffer.append("<td>" + file.getPath() + "</td><td>"
 					+ HTMLConverter.convertQualityLevelToHTML(level) + "</td>");

@@ -22,7 +22,7 @@ import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.evaluator.CodeRangeEvaluator;
 import com.puresol.coding.metrics.halstead.HalsteadMetric;
 import com.puresol.coding.quality.QualityCharacteristic;
-import com.puresol.coding.quality.QualityLevel;
+import com.puresol.coding.quality.SourceCodeQuality;
 import com.puresol.coding.reporting.HTMLConverter;
 import com.puresol.reporting.ReportingFormat;
 import com.puresol.reporting.UnsupportedFormatException;
@@ -64,24 +64,9 @@ public class EntropyMetric extends AbstractEvaluator implements
 				.add(QualityCharacteristic.ANALYSABILITY);
 	}
 
-	/**
-	 * entropy
-	 */
-	private double Entropy;
-	/**
-	 * maximum entropy
-	 */
-	private double maxEntropy;
-	/**
-	 * normalized entropy
-	 */
-	private double normEntropy;
-	private double EntropyRedundancy;
-	private double Redundancy;
-	private double normalizedRedundancy;
-	private HalsteadMetric halstead = null;
 	private final CodeRange codeRange;
 	private final ProgrammingLanguage language;
+	private EntropyResult result;
 
 	public EntropyMetric(ProgrammingLanguage language, CodeRange codeRange) {
 		super();
@@ -106,38 +91,42 @@ public class EntropyMetric extends AbstractEvaluator implements
 			getMonitor().setRange(0, 2);
 			getMonitor().setDescription(NAME);
 		}
-		halstead = new HalsteadMetric(language, getCodeRange());
+		HalsteadMetric halstead = new HalsteadMetric(language, getCodeRange());
 		halstead.run();
 		if (getMonitor() != null) {
 			getMonitor().setStatus(1);
 		}
 
-		Hashtable<String, Integer> operants = halstead.getOperants();
+		Hashtable<String, Integer> operands = halstead.getOperands();
 
-		maxEntropy = Math.log((double) halstead.get_n2()) / Math.log(2.0);
-		Entropy = 0.0;
-		for (String operant : operants.keySet()) {
-			int count = operants.get(operant);
-			Entropy += (double) count / (double) halstead.get_N2()
-					* Math.log((double) count / (double) halstead.get_N2())
+		double maxEntropy = Math.log((double) halstead.getDifferendOperands())
+				/ Math.log(2.0);
+		double entropy = 0.0;
+		for (String operant : operands.keySet()) {
+			int count = operands.get(operant);
+			entropy += (double) count / (double) halstead.getTotalOperands()
+					* Math.log((double) count / (double) halstead.getTotalOperands())
 					/ Math.log(2.0);
 		}
-		Entropy *= -1.0;
-		normEntropy = Entropy / maxEntropy;
-		EntropyRedundancy = maxEntropy - Entropy;
-		Redundancy = EntropyRedundancy * halstead.get_n2() / maxEntropy;
-		normalizedRedundancy = Redundancy / halstead.get_n2();
+		entropy *= -1.0;
+		double normEntropy = entropy / maxEntropy;
+		double entropyRedundancy = maxEntropy - entropy;
+		double redundancy = entropyRedundancy * halstead.getDifferendOperands() / maxEntropy;
+		double normalizedRedundancy = redundancy / halstead.getDifferendOperands();
 		if (getMonitor() != null) {
 			getMonitor().finish();
 		}
+		this.result = new EntropyResult(halstead.getVocabularySize(), halstead.getProgramLength(),
+				entropy, maxEntropy, normEntropy, entropyRedundancy,
+				redundancy, normalizedRedundancy);
 	}
 
-	public double get_n() {
-		return halstead.get_n();
+	public double getNTotal() {
+		return result.getNTotal();
 	}
 
-	public double get_N() {
-		return halstead.get_N();
+	public double getNDiff() {
+		return result.getNDiff();
 	}
 
 	/*
@@ -146,7 +135,7 @@ public class EntropyMetric extends AbstractEvaluator implements
 	 * @see com.puresol.coding.analysis.EntropyMetric#getMaxEntropy()
 	 */
 	public double getMaxEntropy() {
-		return maxEntropy;
+		return result.getMaxEntropy();
 	}
 
 	/*
@@ -155,7 +144,7 @@ public class EntropyMetric extends AbstractEvaluator implements
 	 * @see com.puresol.coding.analysis.EntropyMetric#getEntropy()
 	 */
 	public double getEntropy() {
-		return Entropy;
+		return result.getEntropy();
 	}
 
 	/*
@@ -164,7 +153,7 @@ public class EntropyMetric extends AbstractEvaluator implements
 	 * @see com.puresol.coding.analysis.EntropyMetric#getNormEntropy()
 	 */
 	public double getNormEntropy() {
-		return normEntropy;
+		return result.getNormEntropy();
 	}
 
 	/*
@@ -173,7 +162,7 @@ public class EntropyMetric extends AbstractEvaluator implements
 	 * @see com.puresol.coding.analysis.EntropyMetric#getEntropyRedundancy()
 	 */
 	public double getEntropyRedundancy() {
-		return EntropyRedundancy;
+		return result.getEntropyRedundancy();
 	}
 
 	/*
@@ -182,7 +171,7 @@ public class EntropyMetric extends AbstractEvaluator implements
 	 * @see com.puresol.coding.analysis.EntropyMetric#getRedundancy()
 	 */
 	public double getRedundancy() {
-		return Redundancy;
+		return result.getRedundancy();
 	}
 
 	/*
@@ -190,18 +179,18 @@ public class EntropyMetric extends AbstractEvaluator implements
 	 * 
 	 * @see com.puresol.coding.analysis.EntropyMetric#getNormRedundancy()
 	 */
-	public double getNormRedundancy() {
-		return normalizedRedundancy;
+	public double getNormalizedRedundancy() {
+		return result.getNormalizedRedundancy();
 	}
 
 	public String getResultsAsString() {
-		String result = "number of symbols = " + halstead.get_n() + "\n";
-		result += "max entropy = " + maxEntropy + "\n";
-		result += "entropy = " + Entropy + "\n";
-		result += "normalized entropy = " + normEntropy + "\n";
-		result += "entropy redundance = " + EntropyRedundancy + "\n";
-		result += "redundancy = " + Redundancy + "\n";
-		result += "normalized redundancy = " + normalizedRedundancy + "\n";
+		String result = "number of symbols = " + getNTotal() + "\n";
+		result += "max entropy = " + getMaxEntropy() + "\n";
+		result += "entropy = " + getEntropy() + "\n";
+		result += "normalized entropy = " + getNormEntropy() + "\n";
+		result += "entropy redundance = " + getEntropyRedundancy() + "\n";
+		result += "redundancy = " + getRedundancy() + "\n";
+		result += "normalized redundancy = " + getNormalizedRedundancy() + "\n";
 		return result;
 	}
 
@@ -213,14 +202,14 @@ public class EntropyMetric extends AbstractEvaluator implements
 	 * {@inheritDoc}
 	 */
 	@Override
-	public QualityLevel getQuality() {
-		if (getNormRedundancy() > 0.40) {
-			return QualityLevel.LOW;
+	public SourceCodeQuality getQuality() {
+		if (getNormalizedRedundancy() > 0.40) {
+			return SourceCodeQuality.LOW;
 		}
-		if (getNormRedundancy() > 0.20) {
-			return QualityLevel.MEDIUM;
+		if (getNormalizedRedundancy() > 0.20) {
+			return SourceCodeQuality.MEDIUM;
 		}
-		return QualityLevel.HIGH;
+		return SourceCodeQuality.HIGH;
 	}
 
 	/**
@@ -255,9 +244,9 @@ public class EntropyMetric extends AbstractEvaluator implements
 	}
 
 	public String getTextReport() {
-		String report = "n\t" + Math.round(get_n() * 100.0) / 100.0 + "\t"
+		String report = "n\t" + Math.round(getNTotal() * 100.0) / 100.0 + "\t"
 				+ translator.i18n("Vocabulary size") + "\n";
-		report += "N\t" + Math.round(get_N() * 100.0) / 100.0 + "\t"
+		report += "N\t" + Math.round(getNDiff() * 100.0) / 100.0 + "\t"
 				+ translator.i18n("Program length") + "\n";
 		report += "Entropy\t" + Math.round(getEntropy() * 100.0) / 100.0 + "\t"
 				+ translator.i18n("entropy") + "\n";
@@ -270,16 +259,15 @@ public class EntropyMetric extends AbstractEvaluator implements
 				+ translator.i18n("redundance in entropy") + "\n";
 		report += "Redundance\t" + Math.round(getRedundancy() * 100.0) / 100.0
 				+ "\t" + translator.i18n("number of redundand vokables") + "\n";
-		report += "normRedundancy\t" + Math.round(getNormRedundancy() * 100.0)
-				/ 100.0 + "\t" + translator.i18n("ratio of redundand vocables")
-				+ "\n";
+		report += "normRedundancy\t"
+				+ Math.round(getNormalizedRedundancy() * 100.0) / 100.0 + "\t"
+				+ translator.i18n("ratio of redundand vocables") + "\n";
 		return report;
 	}
 
 	public String getHTMLReport() {
-		String report = Anchor.generate(getName(),
-				"<h3>" + translator.i18n("Entropy from Information Theory")
-						+ "</h3>");
+		String report = Anchor.generate(getName(), "<h3>"
+				+ translator.i18n("Entropy from Information Theory") + "</h3>");
 		report += HTMLConverter.convertQualityLevelToHTML(getQuality());
 		report += "<br/>";
 		report += HTMLStandards.convertTSVToTable(getTextReport());

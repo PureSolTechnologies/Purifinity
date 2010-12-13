@@ -21,7 +21,7 @@ import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.evaluator.CodeRangeEvaluator;
 import com.puresol.coding.quality.QualityCharacteristic;
-import com.puresol.coding.quality.QualityLevel;
+import com.puresol.coding.quality.SourceCodeQuality;
 import com.puresol.coding.reporting.HTMLConverter;
 import com.puresol.reporting.ReportingFormat;
 import com.puresol.reporting.UnsupportedFormatException;
@@ -130,30 +130,30 @@ public class McCabeMetric extends AbstractEvaluator implements
 	 * {@inheritDoc}
 	 */
 	@Override
-	public QualityLevel getQuality() {
+	public SourceCodeQuality getQuality() {
 		if ((codeRange.getType() == CodeRangeType.FILE)
 				|| (codeRange.getType() == CodeRangeType.CLASS)
 				|| (codeRange.getType() == CodeRangeType.ENUMERATION)) {
 			if (getCyclomaticNumber() < 100) {
-				return QualityLevel.HIGH;
+				return SourceCodeQuality.HIGH;
 			}
 			if (getCyclomaticNumber() < 125) {
-				return QualityLevel.MEDIUM;
+				return SourceCodeQuality.MEDIUM;
 			}
-			return QualityLevel.LOW;
+			return SourceCodeQuality.LOW;
 		} else if ((codeRange.getType() == CodeRangeType.CONSTRUCTOR)
 				|| (codeRange.getType() == CodeRangeType.METHOD)
 				|| (codeRange.getType() == CodeRangeType.FUNCTION)
 				|| (codeRange.getType() == CodeRangeType.INTERFACE)) {
 			if (getCyclomaticNumber() < 15) {
-				return QualityLevel.HIGH;
+				return SourceCodeQuality.HIGH;
 			}
 			if (getCyclomaticNumber() < 20) {
-				return QualityLevel.MEDIUM;
+				return SourceCodeQuality.MEDIUM;
 			}
-			return QualityLevel.LOW;
+			return SourceCodeQuality.LOW;
 		}
-		return QualityLevel.HIGH; // not evaluated...
+		return SourceCodeQuality.HIGH; // not evaluated...
 	}
 
 	/**

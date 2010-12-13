@@ -25,7 +25,7 @@ import com.puresol.coding.metrics.mccabe.McCabeMetric;
 import com.puresol.coding.metrics.sloc.SLOCMetric;
 import com.puresol.coding.metrics.sloc.SLOCResult;
 import com.puresol.coding.quality.QualityCharacteristic;
-import com.puresol.coding.quality.QualityLevel;
+import com.puresol.coding.quality.SourceCodeQuality;
 import com.puresol.coding.reporting.HTMLConverter;
 import com.puresol.reporting.ReportingFormat;
 import com.puresol.reporting.UnsupportedFormatException;
@@ -142,7 +142,7 @@ public class MaintainabilityIndex extends AbstractEvaluator implements
 		}
 
 		SLOCResult sloc = slocMetric.getResult();
-		MIwoc = 171.0 - 5.2 * Math.log(halsteadMetric.get_HV()) - 0.23
+		MIwoc = 171.0 - 5.2 * Math.log(halsteadMetric.getHalsteadVolume()) - 0.23
 				* mcCabeMetric.getCyclomaticNumber() - 16.2
 				* Math.log(sloc.getPhyLOC() * 100.0 / 171.0);
 		MIcw = 50 * Math.sin(Math.sqrt(2.4 * (double) sloc.getComLOC()
@@ -192,31 +192,31 @@ public class MaintainabilityIndex extends AbstractEvaluator implements
 	 * @return
 	 */
 	@Override
-	public QualityLevel getQuality() {
+	public SourceCodeQuality getQuality() {
 		CodeRange range = getCodeRange();
 		if ((range.getType() == CodeRangeType.FILE)
 				|| (range.getType() == CodeRangeType.CLASS)
 				|| (range.getType() == CodeRangeType.ENUMERATION)) {
 			if (getMI() > 86) {
-				return QualityLevel.HIGH;
+				return SourceCodeQuality.HIGH;
 			}
 			if (getMI() > 65) {
-				return QualityLevel.MEDIUM;
+				return SourceCodeQuality.MEDIUM;
 			}
-			return QualityLevel.LOW;
+			return SourceCodeQuality.LOW;
 		} else if ((range.getType() == CodeRangeType.CONSTRUCTOR)
 				|| (range.getType() == CodeRangeType.METHOD)
 				|| (range.getType() == CodeRangeType.FUNCTION)
 				|| (range.getType() == CodeRangeType.INTERFACE)) {
 			if (getMI() > 85) {
-				return QualityLevel.HIGH;
+				return SourceCodeQuality.HIGH;
 			}
 			if (getMI() > 65) {
-				return QualityLevel.MEDIUM;
+				return SourceCodeQuality.MEDIUM;
 			}
-			return QualityLevel.LOW;
+			return SourceCodeQuality.LOW;
 		}
-		return QualityLevel.HIGH; // not evaluated...
+		return SourceCodeQuality.HIGH; // not evaluated...
 	}
 
 	/**

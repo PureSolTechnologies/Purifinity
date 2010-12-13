@@ -16,12 +16,11 @@ import java.util.List;
 import javax.i18n4java.Translator;
 
 import com.puresol.coding.CodeRange;
-import com.puresol.coding.CodeRangeType;
 import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.evaluator.CodeRangeEvaluator;
 import com.puresol.coding.quality.QualityCharacteristic;
-import com.puresol.coding.quality.QualityLevel;
+import com.puresol.coding.quality.SourceCodeQuality;
 import com.puresol.coding.reporting.HTMLConverter;
 import com.puresol.math.statistics.Statistics;
 import com.puresol.reporting.ReportingFormat;
@@ -42,8 +41,7 @@ import com.puresol.utils.Property;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class SLOCMetric extends AbstractEvaluator implements
-		CodeRangeEvaluator {
+public class SLOCMetric extends AbstractEvaluator implements CodeRangeEvaluator {
 
 	private static final long serialVersionUID = -4313208925226028154L;
 
@@ -57,8 +55,8 @@ public class SLOCMetric extends AbstractEvaluator implements
 
 	public static final ArrayList<Property> SUPPORTED_PROPERTIES = new ArrayList<Property>();
 	static {
-		SUPPORTED_PROPERTIES.add(new Property(SLOCMetric.class,
-				"enabled", "Switches calculation of SLOC Metric on and off.",
+		SUPPORTED_PROPERTIES.add(new Property(SLOCMetric.class, "enabled",
+				"Switches calculation of SLOC Metric on and off.",
 				Boolean.class, "true"));
 	}
 
@@ -68,6 +66,41 @@ public class SLOCMetric extends AbstractEvaluator implements
 				.add(QualityCharacteristic.ANALYSABILITY);
 		EVALUATED_QUALITY_CHARACTERISTICS
 				.add(QualityCharacteristic.TESTABILITY);
+	}
+
+	private class LineResults {
+
+		private int length = 0;
+		private boolean comments = false;
+		private boolean productiveContent = false;
+
+		public int getLength() {
+			return length;
+		}
+
+		public void addLength(int length) {
+			this.length += length;
+		}
+
+		public boolean hasComments() {
+			return comments;
+		}
+
+		public void setComments(boolean comments) {
+			this.comments = comments;
+		}
+
+		public boolean hasProductiveContent() {
+			return productiveContent;
+		}
+
+		public void setProductiveContent(boolean productiveContent) {
+			this.productiveContent = productiveContent;
+		}
+
+		public boolean isBlank() {
+			return (!hasProductiveContent()) && (!hasComments());
+		}
 	}
 
 	private final List<LineResults> lineResults = new ArrayList<LineResults>();
@@ -127,17 +160,17 @@ public class SLOCMetric extends AbstractEvaluator implements
 			ParserTree node = iterator.getCurrentNode();
 			Token token = node.getToken();
 			if (token != null) {
-				SourceLineType type = langDepended.getType(token);
+				SLOCType type = langDepended.getType(token);
 				TokenMetaData metaData = token.getMetaData();
 				int lineId = metaData.getLine() - lineOffset;
 				int lineNum = metaData.getLineNum();
 				for (int line = lineId; line < lineId + lineNum; line++) {
-					if (type == SourceLineType.COMMENT) {
+					if (type == SLOCType.COMMENT) {
 						lineResults.get(line).setComments(true);
-					} else if (type == SourceLineType.PRODUCTIVE) {
+					} else if (type == SLOCType.PRODUCTIVE) {
 						lineResults.get(line).setProductiveContent(true);
 					}
-					if (type != SourceLineType.PHYSICAL) {
+					if (type != SLOCType.PHYSICAL) {
 						lineResults.get(line).addLength(
 								token.getText().length());
 					}
@@ -188,43 +221,8 @@ public class SLOCMetric extends AbstractEvaluator implements
 	 * {@inheritDoc}
 	 */
 	@Override
-	public QualityLevel getQuality() {
-		QualityLevel levelLineCount = getQualityLevelLineCount();
-		return levelLineCount;
-		// QualityLevel levelLineLength = getQualityLevelLineLength();
-		// return QualityLevel.getMinLevel(levelLineCount, levelLineLength);
-	}
-
-	public QualityLevel getQualityLevelLineCount() {
-		if ((codeRange.getType() == CodeRangeType.FILE)
-				|| (codeRange.getType() == CodeRangeType.CLASS)) {
-			if (sloc.getPhyLOC() > 2500) {
-				return QualityLevel.LOW;
-			}
-			if (sloc.getPhyLOC() > 1000) {
-				return QualityLevel.MEDIUM;
-			}
-			return QualityLevel.HIGH;
-		} else if (codeRange.getType() == CodeRangeType.SUBROUTINE) {
-			if (sloc.getPhyLOC() > 40) {
-				return QualityLevel.LOW;
-			}
-			if (sloc.getPhyLOC() > 25) {
-				return QualityLevel.MEDIUM;
-			}
-			return QualityLevel.HIGH;
-		}
-		return QualityLevel.HIGH; // not evaluated...
-	}
-
-	public QualityLevel getQualityLevelLineLength() {
-		if (sloc.getLineStatistics().getMax() > 80) {
-			return QualityLevel.LOW;
-		}
-		if (sloc.getLineStatistics().getAvg() > 50) {
-			return QualityLevel.MEDIUM;
-		}
-		return QualityLevel.HIGH;
+	public SourceCodeQuality getQuality() {
+		return SLOCQuality.get(codeRange.getType(), sloc);
 	}
 
 	/**
@@ -290,8 +288,8 @@ public class SLOCMetric extends AbstractEvaluator implements
 	}
 
 	public String getHTMLReport() {
-		String report = Anchor.generate(getName(),
-				"<h3>" + translator.i18n("SLOC Metrics") + "</h3>");
+		String report = Anchor.generate(getName(), "<h3>"
+				+ translator.i18n("SLOC Metrics") + "</h3>");
 		report += HTMLConverter.convertQualityLevelToHTML(getQuality());
 		report += "<br/>";
 		report += "<b>Line Counts</b>";

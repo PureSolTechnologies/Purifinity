@@ -10,7 +10,7 @@ import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.evaluator.CodeRangeEvaluator;
 import com.puresol.coding.quality.QualityCharacteristic;
-import com.puresol.coding.quality.QualityLevel;
+import com.puresol.coding.quality.SourceCodeQuality;
 import com.puresol.coding.reporting.HTMLConverter;
 import com.puresol.reporting.ReportingFormat;
 import com.puresol.reporting.UnsupportedFormatException;
@@ -155,8 +155,8 @@ public class CodeDepthMetric extends AbstractEvaluator implements
 	}
 
 	private String getHTMLReport() {
-		String report = Anchor.generate(getName(),
-				"<h3>" + translator.i18n("CodeDepth") + "</h3>");
+		String report = Anchor.generate(getName(), "<h3>"
+				+ translator.i18n("CodeDepth") + "</h3>");
 		report += HTMLConverter.convertQualityLevelToHTML(getQuality());
 		report += "<br/>";
 		report += "<p>" + translator.i18n("Maximum code depth: ") + "</p>";
@@ -168,14 +168,8 @@ public class CodeDepthMetric extends AbstractEvaluator implements
 	 * {@inheritDoc}
 	 */
 	@Override
-	public QualityLevel getQuality() {
-		int maxDepth = getMaxDepth();
-		if (maxDepth > 6) {
-			return QualityLevel.LOW;
-		} else if (maxDepth > 4) {
-			return QualityLevel.MEDIUM;
-		}
-		return QualityLevel.HIGH;
+	public SourceCodeQuality getQuality() {
+		return CodeDepthQuality.get(codeRange.getType(), maxDepth);
 	}
 
 	/**

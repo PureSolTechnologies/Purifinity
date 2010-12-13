@@ -22,7 +22,7 @@ import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.evaluator.CodeRangeEvaluator;
 import com.puresol.coding.quality.QualityCharacteristic;
-import com.puresol.coding.quality.QualityLevel;
+import com.puresol.coding.quality.SourceCodeQuality;
 import com.puresol.coding.reporting.HTMLConverter;
 import com.puresol.reporting.ReportingFormat;
 import com.puresol.reporting.UnsupportedFormatException;
@@ -61,55 +61,55 @@ public class HalsteadMetric extends AbstractEvaluator implements
 	/**
 	 * number of different operators
 	 */
-	private int n1;
+	private int differentOperators;
 	/**
 	 * number of different operands
 	 */
-	private int n2;
+	private int differentOperands;
 	/**
 	 * total number of operators
 	 */
-	private int N1;
+	private int totalOperators;
 	/**
 	 * total number of operands
 	 */
-	private int N2;
+	private int totalOperands;
 	/**
 	 * Vocabulary size
 	 */
-	private double n;
+	private double vocabularySize;
 	/**
 	 * Program length
 	 */
-	private double N;
+	private double programLength;
 	/**
 	 * Halstead Length
 	 */
-	private double HL;
+	private double halsteadLength;
 	/**
 	 * Halstead Volume
 	 */
-	private double HV;
+	private double halsteadVolume;
 	/**
 	 * Difficulty
 	 */
-	private double D;
+	private double difficulty;
 	/**
 	 * Program Level
 	 */
-	private double L;
+	private double programLevel;
 	/**
 	 * Implementation Effort.
 	 */
-	private double E;
+	private double implementationEffort;
 	/**
 	 * Implementation Time [s]
 	 */
-	private double T;
+	private double implementationTime;
 	/**
 	 * Estimated Bugs
 	 */
-	private double B;
+	private double estimatedBugs;
 
 	private final CodeRange codeRange;
 	private final LanguageDependedHalsteadMetric langDepended;
@@ -181,25 +181,28 @@ public class HalsteadMetric extends AbstractEvaluator implements
 	}
 
 	private void calculateValues() {
-		n1 = operators.keySet().size();
-		n2 = operants.keySet().size();
-		N1 = 0;
+		differentOperators = operators.keySet().size();
+		differentOperands = operants.keySet().size();
+		totalOperators = 0;
 		for (String key : operators.keySet()) {
-			N1 += operators.get(key);
+			totalOperators += operators.get(key);
 		}
-		N2 = 0;
+		totalOperands = 0;
 		for (String key : operants.keySet()) {
-			N2 += operants.get(key);
+			totalOperands += operants.get(key);
 		}
-		n = n1 + n2;
-		N = N1 + N2;
-		HL = n1 * Math.log(n1) / Math.log(2) + n2 * Math.log(n2) / Math.log(2);
-		HV = N * Math.log(n) / Math.log(2);
-		D = n1 / 2.0 * N2 / n2;
-		L = 1 / D;
-		E = HV * D;
-		T = E / 18.0;
-		B = Math.exp(2.0 / 3.0 * Math.log(E)) / 3000.0;
+		vocabularySize = differentOperators + differentOperands;
+		programLength = totalOperators + totalOperands;
+		halsteadLength = differentOperators * Math.log(differentOperators)
+				/ Math.log(2) + differentOperands * Math.log(differentOperands)
+				/ Math.log(2);
+		halsteadVolume = programLength * Math.log(vocabularySize) / Math.log(2);
+		difficulty = differentOperators / 2.0 * totalOperands
+				/ differentOperands;
+		programLevel = 1 / difficulty;
+		implementationEffort = halsteadVolume * difficulty;
+		implementationTime = implementationEffort / 18.0;
+		estimatedBugs = Math.exp(2.0 / 3.0 * Math.log(implementationEffort)) / 3000.0;
 	}
 
 	public void printOperators() {
@@ -226,76 +229,76 @@ public class HalsteadMetric extends AbstractEvaluator implements
 		return operators;
 	}
 
-	public Hashtable<String, Integer> getOperants() {
+	public Hashtable<String, Integer> getOperands() {
 		return operants;
 	}
 
-	public int get_n1() {
-		return n1;
+	public int getDifferentOperators() {
+		return differentOperators;
 	}
 
-	public int get_n2() {
-		return n2;
+	public int getDifferendOperands() {
+		return differentOperands;
 	}
 
-	public int get_N1() {
-		return N1;
+	public int getTotalOperators() {
+		return totalOperators;
 	}
 
-	public int get_N2() {
-		return N2;
+	public int getTotalOperands() {
+		return totalOperands;
 	}
 
-	public double get_n() {
-		return n;
+	public double getVocabularySize() {
+		return vocabularySize;
 	}
 
-	public double get_N() {
-		return N;
+	public double getProgramLength() {
+		return programLength;
 	}
 
-	public double get_HL() {
-		return HL;
+	public double getHalsteadLength() {
+		return halsteadLength;
 	}
 
-	public double get_HV() {
-		return HV;
+	public double getHalsteadVolume() {
+		return halsteadVolume;
 	}
 
-	public double get_D() {
-		return D;
+	public double getDifficulty() {
+		return difficulty;
 	}
 
-	public double get_L() {
-		return L;
+	public double getProgramLevel() {
+		return programLevel;
 	}
 
-	public double get_E() {
-		return E;
+	public double getImplementationEffort() {
+		return implementationEffort;
 	}
 
-	public double get_T() {
-		return T;
+	public double getImplementationTime() {
+		return implementationTime;
 	}
 
-	public double get_B() {
-		return B;
+	public double getEstimatedBugs() {
+		return estimatedBugs;
 	}
 
 	public void print() {
-		System.out.println("n1 = " + n1);
-		System.out.println("n2 = " + n2);
-		System.out.println("N1 = " + N1);
-		System.out.println("N2 = " + N2);
-		System.out.println("n = " + n);
-		System.out.println("N = " + N);
-		System.out.println("HL = " + HL);
-		System.out.println("HV = " + HV);
-		System.out.println("D = " + D);
-		System.out.println("L = " + L);
-		System.out.println("E = " + E);
-		System.out.println("T = " + T);
-		System.out.println("B = " + B);
+		System.out.println("n1 = " + differentOperators);
+		System.out.println("n2 = " + differentOperands);
+		System.out.println("N1 = " + totalOperators);
+		System.out.println("N2 = " + totalOperands);
+		System.out.println("n = " + vocabularySize);
+		System.out.println("N = " + programLength);
+		System.out.println("HL = " + halsteadLength);
+		System.out.println("HV = " + halsteadVolume);
+		System.out.println("D = " + difficulty);
+		System.out.println("L = " + programLevel);
+		System.out.println("E = " + implementationEffort);
+		System.out.println("T = " + implementationTime);
+		System.out.println("B = " + estimatedBugs);
 	}
 
 	public static boolean isSuitable(CodeRange codeRange) {
@@ -306,36 +309,36 @@ public class HalsteadMetric extends AbstractEvaluator implements
 	 * {@inheritDoc}
 	 */
 	@Override
-	public QualityLevel getQuality() {
+	public SourceCodeQuality getQuality() {
 		if ((codeRange.getType() == CodeRangeType.FILE)
 				|| (codeRange.getType() == CodeRangeType.CLASS)
 				|| (codeRange.getType() == CodeRangeType.ENUMERATION)) {
-			if (get_HV() < 80) {
-				return QualityLevel.MEDIUM;
+			if (getHalsteadVolume() < 80) {
+				return SourceCodeQuality.MEDIUM;
 			}
-			if (get_HV() > 10000) {
-				return QualityLevel.LOW;
+			if (getHalsteadVolume() > 10000) {
+				return SourceCodeQuality.LOW;
 			}
-			if (get_HV() > 8000) {
-				return QualityLevel.MEDIUM;
+			if (getHalsteadVolume() > 8000) {
+				return SourceCodeQuality.MEDIUM;
 			}
-			return QualityLevel.HIGH;
+			return SourceCodeQuality.HIGH;
 		} else if ((codeRange.getType() == CodeRangeType.CONSTRUCTOR)
 				|| (codeRange.getType() == CodeRangeType.METHOD)
 				|| (codeRange.getType() == CodeRangeType.FUNCTION)
 				|| (codeRange.getType() == CodeRangeType.INTERFACE)) {
-			if (get_HV() < 10) {
-				return QualityLevel.MEDIUM;
+			if (getHalsteadVolume() < 10) {
+				return SourceCodeQuality.MEDIUM;
 			}
-			if (get_HV() > 1250) {
-				return QualityLevel.LOW;
+			if (getHalsteadVolume() > 1250) {
+				return SourceCodeQuality.LOW;
 			}
-			if (get_HV() > 1000) {
-				return QualityLevel.MEDIUM;
+			if (getHalsteadVolume() > 1000) {
+				return SourceCodeQuality.MEDIUM;
 			}
-			return QualityLevel.HIGH;
+			return SourceCodeQuality.HIGH;
 		}
-		return QualityLevel.HIGH; // not evaluated...
+		return SourceCodeQuality.HIGH; // not evaluated...
 	}
 
 	/**
@@ -369,31 +372,31 @@ public class HalsteadMetric extends AbstractEvaluator implements
 	}
 
 	public String getNumberReport() {
-		String report = "n1\t" + get_n1() + "\t"
+		String report = "n1\t" + getDifferentOperators() + "\t"
 				+ translator.i18n("Number of different operators") + "\n";
-		report += "N1\t" + get_N1() + "\t"
+		report += "N1\t" + getTotalOperators() + "\t"
 				+ translator.i18n("Total number operators") + "\n";
-		report += "n2\t" + get_n2() + "\t"
+		report += "n2\t" + getDifferendOperands() + "\t"
 				+ translator.i18n("Number of different operands") + "\n";
-		report += "N2\t" + get_N2() + "\t"
+		report += "N2\t" + getTotalOperands() + "\t"
 				+ translator.i18n("Total number of operands") + "\n";
-		report += "n\t" + Math.round(get_n() * 100.0) / 100.0 + "\t"
-				+ translator.i18n("Vocabulary size") + "\n";
-		report += "N\t" + Math.round(get_N() * 100.0) / 100.0 + "\t"
+		report += "n\t" + Math.round(getVocabularySize() * 100.0) / 100.0
+				+ "\t" + translator.i18n("Vocabulary size") + "\n";
+		report += "N\t" + Math.round(getProgramLength() * 100.0) / 100.0 + "\t"
 				+ translator.i18n("Program length") + "\n";
-		report += "HL\t" + Math.round(get_HL() * 100.0) / 100.0 + "\t"
-				+ translator.i18n("Halstead length") + "\n";
-		report += "HV\t" + Math.round(get_HV() * 100.0) / 100.0 + "\t"
-				+ translator.i18n("Halstead volume") + "\n";
-		report += "D\t" + Math.round(get_D() * 100.0) / 100.0 + "\t"
+		report += "HL\t" + Math.round(getHalsteadLength() * 100.0) / 100.0
+				+ "\t" + translator.i18n("Halstead length") + "\n";
+		report += "HV\t" + Math.round(getHalsteadVolume() * 100.0) / 100.0
+				+ "\t" + translator.i18n("Halstead volume") + "\n";
+		report += "D\t" + Math.round(getDifficulty() * 100.0) / 100.0 + "\t"
 				+ translator.i18n("Difficulty level") + "\n";
-		report += "L\t" + Math.round(get_L() * 100.0) / 100.0 + "\t"
+		report += "L\t" + Math.round(getProgramLevel() * 100.0) / 100.0 + "\t"
 				+ translator.i18n("Program level") + "\n";
-		report += "E\t" + Math.round(get_E() * 100.0) / 100.0 + "\t"
-				+ translator.i18n("Effort to implement") + "\n";
-		report += "T\t" + Math.round(get_T() * 100.0) / 100.0 + "\t"
-				+ translator.i18n("Implementatiom time [s]") + "\n";
-		report += "B\t" + Math.round(get_B() * 100.0) / 100.0 + "\t"
+		report += "E\t" + Math.round(getImplementationEffort() * 100.0) / 100.0
+				+ "\t" + translator.i18n("Effort to implement") + "\n";
+		report += "T\t" + Math.round(getImplementationTime() * 100.0) / 100.0
+				+ "\t" + translator.i18n("Implementatiom time [s]") + "\n";
+		report += "B\t" + Math.round(getEstimatedBugs() * 100.0) / 100.0 + "\t"
 				+ translator.i18n("Number of delivered bugs") + "\n";
 		return report;
 	}
@@ -413,8 +416,8 @@ public class HalsteadMetric extends AbstractEvaluator implements
 
 	public String getOperantReport() {
 		String report = "";
-		for (String operant : getOperants().keySet()) {
-			int number = getOperants().get(operant);
+		for (String operant : getOperands().keySet()) {
+			int number = getOperands().get(operant);
 			report += operant + "\t" + number + "\n";
 		}
 		return report;
@@ -425,8 +428,8 @@ public class HalsteadMetric extends AbstractEvaluator implements
 	}
 
 	public String getHTMLReport() {
-		String report = Anchor.generate(getName(),
-				"<h3>" + translator.i18n("Halstead Metric") + "</h3>");
+		String report = Anchor.generate(getName(), "<h3>"
+				+ translator.i18n("Halstead Metric") + "</h3>");
 		report += HTMLConverter.convertQualityLevelToHTML(getQuality());
 		report += "<br/>";
 		report += HTMLStandards.convertTSVToTable(getNumberReport());

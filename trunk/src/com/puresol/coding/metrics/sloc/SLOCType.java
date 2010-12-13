@@ -7,13 +7,13 @@ package com.puresol.coding.metrics.sloc;
  * @author Rick-Rainer Ludwig
  * 
  */
-public enum SourceLineType {
+public enum SLOCType {
 
 	BLANK("bl"), COMMENT("com"), PRODUCTIVE("pro"), PHYSICAL("phy");
 
 	private final String sign;
 
-	private SourceLineType(String sign) {
+	private SLOCType(String sign) {
 		this.sign = sign;
 	}
 

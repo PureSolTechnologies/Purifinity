@@ -22,6 +22,6 @@ public interface LanguageDependedSLOCMetric {
 	 *         PRODUCTIVE (e.g. is a line terminator), PHYSICAL is returned.
 	 *         null must never be returned!!!!
 	 */
-	public SourceLineType getType(Token token);
+	public SLOCType getType(Token token);
 
 }
