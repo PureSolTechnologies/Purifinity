@@ -3,7 +3,7 @@ package com.puresol.coding.lang.java.metrics;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.puresol.coding.metrics.halstead.HalsteadResult;
+import com.puresol.coding.metrics.halstead.HalsteadSymbol;
 import com.puresol.coding.metrics.halstead.LanguageDependedHalsteadMetric;
 import com.puresol.uhura.ast.ParserTree;
 import com.puresol.uhura.grammar.token.Visibility;
@@ -115,13 +115,13 @@ public class HalsteadMetricImpl implements LanguageDependedHalsteadMetric {
 	}
 
 	@Override
-	public HalsteadResult getHalsteadResult(ParserTree node) {
+	public HalsteadSymbol getHalsteadResult(ParserTree node) {
 		Token token = node.getToken();
 		if ((token == null) || (token.getVisibility() != Visibility.VISIBLE)) {
-			return new HalsteadResult(false, false, "");
+			return new HalsteadSymbol(false, false, "");
 		}
 		if (!operators.contains(node.getName())) {
-			return new HalsteadResult(true, false, node.getText());
+			return new HalsteadSymbol(true, false, node.getText());
 		}
 		if ("RPAREN".equals(node.getName()) || "RCURLY".equals(node.getName())
 				|| "RRECTANGULAR".equals(node.getName())) {
@@ -129,21 +129,21 @@ public class HalsteadMetricImpl implements LanguageDependedHalsteadMetric {
 			 * these tokens are not counted due to pairwise appearance with the
 			 * left part; double couting is not needed
 			 */
-			return new HalsteadResult(false, true, node.getText());
+			return new HalsteadSymbol(false, true, node.getText());
 		}
 		if ("LCURLY".equals(node.getName())) {
 			/*
 			 * these tokens are not counted due to pairwise appearance with the
 			 * left part; double couting is not needed
 			 */
-			return new HalsteadResult(true, true, "{}");
+			return new HalsteadSymbol(true, true, "{}");
 		}
 		if ("LRECTANGULAR".equals(node.getName())) {
 			/*
 			 * these tokens are not counted due to pairwise appearance with the
 			 * left part; double couting is not needed
 			 */
-			return new HalsteadResult(true, true, "[]");
+			return new HalsteadSymbol(true, true, "[]");
 		}
 		if ("LPAREN".equals(node.getName())) {
 			if (lParenExceptions.contains(node.getParent().getName())) {
@@ -151,31 +151,31 @@ public class HalsteadMetricImpl implements LanguageDependedHalsteadMetric {
 				 * The left parenthesis is always connected to another operator
 				 * and therefore not counted again.
 				 */
-				return new HalsteadResult(false, true, node.getText());
+				return new HalsteadSymbol(false, true, node.getText());
 			}
-			return new HalsteadResult(true, true, "()");
+			return new HalsteadSymbol(true, true, "()");
 		}
 		if ("IF".equals(node.getName())) {
-			return new HalsteadResult(true, true, "if()");
+			return new HalsteadSymbol(true, true, "if()");
 		}
 		if ("SWITCH".equals(node.getName())) {
-			return new HalsteadResult(true, true, "switch()");
+			return new HalsteadSymbol(true, true, "switch()");
 		}
 		if ("WHILE".equals(node.getName())) {
-			return new HalsteadResult(true, true, "while()");
+			return new HalsteadSymbol(true, true, "while()");
 		}
 		if ("FOR".equals(node.getName())) {
 			if ("EnhancedForStatement".equals(node.getParent().getName())) {
-				return new HalsteadResult(true, true, "for(:)");
+				return new HalsteadSymbol(true, true, "for(:)");
 			}
-			return new HalsteadResult(true, true, "for(;;)");
+			return new HalsteadSymbol(true, true, "for(;;)");
 		}
 		if ("SYNCHRONIZED".equals(node.getName())) {
-			return new HalsteadResult(true, true, "synchronized()");
+			return new HalsteadSymbol(true, true, "synchronized()");
 		}
 		if ("CATCH".equals(node.getName())) {
-			return new HalsteadResult(true, true, "catch()");
+			return new HalsteadSymbol(true, true, "catch()");
 		}
-		return new HalsteadResult(true, true, node.getText());
+		return new HalsteadSymbol(true, true, node.getText());
 	}
 }
