@@ -197,7 +197,7 @@ public class SLOCMetric extends AbstractEvaluator implements CodeRangeEvaluator 
 			phyLOC++;
 			lineLengths.add((double) lineResult.getLength());
 		}
-		sloc = new SLOCResult(phyLOC, phyLOC, phyLOC, phyLOC, new Statistics(
+		sloc = new SLOCResult(phyLOC, proLOC, comLOC, blLOC, new Statistics(
 				lineLengths));
 	}
 
