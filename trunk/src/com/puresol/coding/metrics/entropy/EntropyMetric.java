@@ -117,12 +117,12 @@ public class EntropyMetric extends AbstractEvaluator implements
 				/ maxEntropy;
 		double normalizedRedundancy = redundancy
 				/ halstead.getDifferentOperands();
+		result = new EntropyResult(halstead.getVocabularySize(),
+				halstead.getProgramLength(), entropy, maxEntropy, normEntropy,
+				entropyRedundancy, redundancy, normalizedRedundancy);
 		if (getMonitor() != null) {
 			getMonitor().finish();
 		}
-		this.result = new EntropyResult(halstead.getVocabularySize(), halstead
-				.getProgramLength(), entropy, maxEntropy, normEntropy,
-				entropyRedundancy, redundancy, normalizedRedundancy);
 	}
 
 	public double getNTotal() {
@@ -270,8 +270,9 @@ public class EntropyMetric extends AbstractEvaluator implements
 	}
 
 	public String getHTMLReport() {
-		String report = Anchor.generate(getName(), "<h3>"
-				+ translator.i18n("Entropy from Information Theory") + "</h3>");
+		String report = Anchor.generate(getName(),
+				"<h3>" + translator.i18n("Entropy from Information Theory")
+						+ "</h3>");
 		report += HTMLConverter.convertQualityLevelToHTML(getQuality());
 		report += "<br/>";
 		report += HTMLStandards.convertTSVToTable(getTextReport());

@@ -16,7 +16,6 @@ import java.util.List;
 import javax.i18n4java.Translator;
 
 import com.puresol.coding.CodeRange;
-import com.puresol.coding.CodeRangeType;
 import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.evaluator.CodeRangeEvaluator;
@@ -131,29 +130,7 @@ public class McCabeMetric extends AbstractEvaluator implements
 	 */
 	@Override
 	public SourceCodeQuality getQuality() {
-		if ((codeRange.getType() == CodeRangeType.FILE)
-				|| (codeRange.getType() == CodeRangeType.CLASS)
-				|| (codeRange.getType() == CodeRangeType.ENUMERATION)) {
-			if (getCyclomaticNumber() < 100) {
-				return SourceCodeQuality.HIGH;
-			}
-			if (getCyclomaticNumber() < 125) {
-				return SourceCodeQuality.MEDIUM;
-			}
-			return SourceCodeQuality.LOW;
-		} else if ((codeRange.getType() == CodeRangeType.CONSTRUCTOR)
-				|| (codeRange.getType() == CodeRangeType.METHOD)
-				|| (codeRange.getType() == CodeRangeType.FUNCTION)
-				|| (codeRange.getType() == CodeRangeType.INTERFACE)) {
-			if (getCyclomaticNumber() < 15) {
-				return SourceCodeQuality.HIGH;
-			}
-			if (getCyclomaticNumber() < 20) {
-				return SourceCodeQuality.MEDIUM;
-			}
-			return SourceCodeQuality.LOW;
-		}
-		return SourceCodeQuality.HIGH; // not evaluated...
+		return McCabeQuality.get(getCodeRange().getType(), cyclomaticNumber);
 	}
 
 	/**
