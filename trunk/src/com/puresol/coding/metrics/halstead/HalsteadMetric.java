@@ -58,61 +58,10 @@ public class HalsteadMetric extends AbstractEvaluator implements
 	private final Hashtable<String, Integer> operators = new Hashtable<String, Integer>();
 	private final Hashtable<String, Integer> operants = new Hashtable<String, Integer>();
 
-	/**
-	 * number of different operators
-	 */
-	private int differentOperators;
-	/**
-	 * number of different operands
-	 */
-	private int differentOperands;
-	/**
-	 * total number of operators
-	 */
-	private int totalOperators;
-	/**
-	 * total number of operands
-	 */
-	private int totalOperands;
-	/**
-	 * Vocabulary size
-	 */
-	private double vocabularySize;
-	/**
-	 * Program length
-	 */
-	private double programLength;
-	/**
-	 * Halstead Length
-	 */
-	private double halsteadLength;
-	/**
-	 * Halstead Volume
-	 */
-	private double halsteadVolume;
-	/**
-	 * Difficulty
-	 */
-	private double difficulty;
-	/**
-	 * Program Level
-	 */
-	private double programLevel;
-	/**
-	 * Implementation Effort.
-	 */
-	private double implementationEffort;
-	/**
-	 * Implementation Time [s]
-	 */
-	private double implementationTime;
-	/**
-	 * Estimated Bugs
-	 */
-	private double estimatedBugs;
-
 	private final CodeRange codeRange;
 	private final LanguageDependedHalsteadMetric langDepended;
+
+	private HalsteadResult result;
 
 	public HalsteadMetric(ProgrammingLanguage language, CodeRange codeRange) {
 		super();
@@ -153,7 +102,7 @@ public class HalsteadMetric extends AbstractEvaluator implements
 				codeRange.getParserTree());
 		do {
 			ParserTree node = iterator.getCurrentNode();
-			HalsteadResult result = langDepended.getHalsteadResult(node);
+			HalsteadSymbol result = langDepended.getHalsteadResult(node);
 			if (result.isCountable()) {
 				if (result.isOperator()) {
 					addOperator(result.getSymbol());
@@ -181,28 +130,18 @@ public class HalsteadMetric extends AbstractEvaluator implements
 	}
 
 	private void calculateValues() {
-		differentOperators = operators.keySet().size();
-		differentOperands = operants.keySet().size();
-		totalOperators = 0;
+		int differentOperators = operators.keySet().size();
+		int differentOperands = operants.keySet().size();
+		int totalOperators = 0;
 		for (String key : operators.keySet()) {
 			totalOperators += operators.get(key);
 		}
-		totalOperands = 0;
+		int totalOperands = 0;
 		for (String key : operants.keySet()) {
 			totalOperands += operants.get(key);
 		}
-		vocabularySize = differentOperators + differentOperands;
-		programLength = totalOperators + totalOperands;
-		halsteadLength = differentOperators * Math.log(differentOperators)
-				/ Math.log(2) + differentOperands * Math.log(differentOperands)
-				/ Math.log(2);
-		halsteadVolume = programLength * Math.log(vocabularySize) / Math.log(2);
-		difficulty = differentOperators / 2.0 * totalOperands
-				/ differentOperands;
-		programLevel = 1 / difficulty;
-		implementationEffort = halsteadVolume * difficulty;
-		implementationTime = implementationEffort / 18.0;
-		estimatedBugs = Math.exp(2.0 / 3.0 * Math.log(implementationEffort)) / 3000.0;
+		result = new HalsteadResult(differentOperators, differentOperands,
+				totalOperators, totalOperands);
 	}
 
 	public void printOperators() {
@@ -233,72 +172,72 @@ public class HalsteadMetric extends AbstractEvaluator implements
 		return operants;
 	}
 
+	public int getDifferentOperands() {
+		return result.getDifferentOperands();
+	}
+
 	public int getDifferentOperators() {
-		return differentOperators;
-	}
-
-	public int getDifferendOperands() {
-		return differentOperands;
-	}
-
-	public int getTotalOperators() {
-		return totalOperators;
-	}
-
-	public int getTotalOperands() {
-		return totalOperands;
-	}
-
-	public double getVocabularySize() {
-		return vocabularySize;
-	}
-
-	public double getProgramLength() {
-		return programLength;
-	}
-
-	public double getHalsteadLength() {
-		return halsteadLength;
-	}
-
-	public double getHalsteadVolume() {
-		return halsteadVolume;
+		return result.getDifferentOperators();
 	}
 
 	public double getDifficulty() {
-		return difficulty;
-	}
-
-	public double getProgramLevel() {
-		return programLevel;
-	}
-
-	public double getImplementationEffort() {
-		return implementationEffort;
-	}
-
-	public double getImplementationTime() {
-		return implementationTime;
+		return result.getDifficulty();
 	}
 
 	public double getEstimatedBugs() {
-		return estimatedBugs;
+		return result.getEstimatedBugs();
+	}
+
+	public double getHalsteadLength() {
+		return result.getHalsteadLength();
+	}
+
+	public double getHalsteadVolume() {
+		return result.getHalsteadVolume();
+	}
+
+	public double getImplementationEffort() {
+		return result.getImplementationEffort();
+	}
+
+	public double getImplementationTime() {
+		return result.getImplementationTime();
+	}
+
+	public double getProgramLength() {
+		return result.getProgramLength();
+	}
+
+	public double getProgramLevel() {
+		return result.getProgramLevel();
+	}
+
+	public int getTotalOperands() {
+		return result.getTotalOperands();
+	}
+
+	public int getTotalOperators() {
+		return result.getTotalOperators();
+	}
+
+	public double getVocabularySize() {
+		return result.getVocabularySize();
 	}
 
 	public void print() {
-		System.out.println("n1 = " + differentOperators);
-		System.out.println("n2 = " + differentOperands);
-		System.out.println("N1 = " + totalOperators);
-		System.out.println("N2 = " + totalOperands);
-		System.out.println("n = " + vocabularySize);
-		System.out.println("N = " + programLength);
-		System.out.println("HL = " + halsteadLength);
-		System.out.println("HV = " + halsteadVolume);
-		System.out.println("D = " + difficulty);
-		System.out.println("L = " + programLevel);
-		System.out.println("E = " + implementationEffort);
-		System.out.println("T = " + implementationTime);
-		System.out.println("B = " + estimatedBugs);
+		System.out.println("n1 = " + result.getDifferentOperators());
+		System.out.println("n2 = " + result.getDifferentOperands());
+		System.out.println("N1 = " + result.getTotalOperators());
+		System.out.println("N2 = " + result.getTotalOperands());
+		System.out.println("n = " + result.getVocabularySize());
+		System.out.println("N = " + result.getProgramLength());
+		System.out.println("HL = " + result.getHalsteadLength());
+		System.out.println("HV = " + result.getHalsteadVolume());
+		System.out.println("D = " + result.getDifficulty());
+		System.out.println("L = " + result.getProgramLevel());
+		System.out.println("E = " + result.getImplementationEffort());
+		System.out.println("T = " + result.getImplementationTime());
+		System.out.println("B = " + result.getEstimatedBugs());
 	}
 
 	public static boolean isSuitable(CodeRange codeRange) {
@@ -376,7 +315,7 @@ public class HalsteadMetric extends AbstractEvaluator implements
 				+ translator.i18n("Number of different operators") + "\n";
 		report += "N1\t" + getTotalOperators() + "\t"
 				+ translator.i18n("Total number operators") + "\n";
-		report += "n2\t" + getDifferendOperands() + "\t"
+		report += "n2\t" + getDifferentOperands() + "\t"
 				+ translator.i18n("Number of different operands") + "\n";
 		report += "N2\t" + getTotalOperands() + "\t"
 				+ translator.i18n("Total number of operands") + "\n";

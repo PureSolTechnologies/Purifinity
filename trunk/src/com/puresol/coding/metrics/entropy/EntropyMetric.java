@@ -99,26 +99,30 @@ public class EntropyMetric extends AbstractEvaluator implements
 
 		Hashtable<String, Integer> operands = halstead.getOperands();
 
-		double maxEntropy = Math.log((double) halstead.getDifferendOperands())
+		double maxEntropy = Math.log((double) halstead.getDifferentOperands())
 				/ Math.log(2.0);
 		double entropy = 0.0;
 		for (String operant : operands.keySet()) {
 			int count = operands.get(operant);
-			entropy += (double) count / (double) halstead.getTotalOperands()
-					* Math.log((double) count / (double) halstead.getTotalOperands())
+			entropy += (double) count
+					/ (double) halstead.getTotalOperands()
+					* Math.log((double) count
+							/ (double) halstead.getTotalOperands())
 					/ Math.log(2.0);
 		}
 		entropy *= -1.0;
 		double normEntropy = entropy / maxEntropy;
 		double entropyRedundancy = maxEntropy - entropy;
-		double redundancy = entropyRedundancy * halstead.getDifferendOperands() / maxEntropy;
-		double normalizedRedundancy = redundancy / halstead.getDifferendOperands();
+		double redundancy = entropyRedundancy * halstead.getDifferentOperands()
+				/ maxEntropy;
+		double normalizedRedundancy = redundancy
+				/ halstead.getDifferentOperands();
 		if (getMonitor() != null) {
 			getMonitor().finish();
 		}
-		this.result = new EntropyResult(halstead.getVocabularySize(), halstead.getProgramLength(),
-				entropy, maxEntropy, normEntropy, entropyRedundancy,
-				redundancy, normalizedRedundancy);
+		this.result = new EntropyResult(halstead.getVocabularySize(), halstead
+				.getProgramLength(), entropy, maxEntropy, normEntropy,
+				entropyRedundancy, redundancy, normalizedRedundancy);
 	}
 
 	public double getNTotal() {

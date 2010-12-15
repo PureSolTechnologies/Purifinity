@@ -16,7 +16,6 @@ import java.util.List;
 import javax.i18n4java.Translator;
 
 import com.puresol.coding.CodeRange;
-import com.puresol.coding.CodeRangeType;
 import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.evaluator.CodeRangeEvaluator;
@@ -61,24 +60,12 @@ public class MaintainabilityIndex extends AbstractEvaluator implements
 				.add(QualityCharacteristic.TESTABILITY);
 	}
 
-	/**
-	 * MaintainabilityIndex without comment.
-	 */
-	private double MIwoc;
-	/**
-	 * MaintainabilityIndex comment weight
-	 */
-	private double MIcw;
-	/**
-	 * MaintainabilityIndex
-	 */
-	private double MI;
-
 	private SLOCMetric slocMetric;
 	private McCabeMetric mcCabeMetric;
 	private HalsteadMetric halsteadMetric;
 	private final ProgrammingLanguage language;
 	private final CodeRange codeRange;
+	private MaintainabilityIndexResult result;
 
 	public MaintainabilityIndex(ProgrammingLanguage language,
 			CodeRange codeRange) {
@@ -142,21 +129,22 @@ public class MaintainabilityIndex extends AbstractEvaluator implements
 		}
 
 		SLOCResult sloc = slocMetric.getResult();
-		MIwoc = 171.0 - 5.2 * Math.log(halsteadMetric.getHalsteadVolume()) - 0.23
+		double MIwoc = 171.0 - 5.2
+				* Math.log(halsteadMetric.getHalsteadVolume()) - 0.23
 				* mcCabeMetric.getCyclomaticNumber() - 16.2
 				* Math.log(sloc.getPhyLOC() * 100.0 / 171.0);
-		MIcw = 50 * Math.sin(Math.sqrt(2.4 * (double) sloc.getComLOC()
+		double MIcw = 50 * Math.sin(Math.sqrt(2.4 * (double) sloc.getComLOC()
 				/ (double) sloc.getPhyLOC()));
-		MI = MIwoc + MIcw;
+		result = new MaintainabilityIndexResult(MIwoc, MIcw);
 		if (getMonitor() != null) {
 			getMonitor().finish();
 		}
 	}
 
 	public void print() {
-		System.out.println("MIwoc = " + MIwoc);
-		System.out.println("MIcw = " + MIcw);
-		System.out.println("MI = " + MI);
+		System.out.println("MIwoc = " + result.getMIwoc());
+		System.out.println("MIcw = " + result.getMIcw());
+		System.out.println("MI = " + result.getMI());
 	}
 
 	/*
@@ -165,7 +153,7 @@ public class MaintainabilityIndex extends AbstractEvaluator implements
 	 * @see com.puresol.coding.analysis.MaintainabilityIndex#getMIWoc()
 	 */
 	public double getMIWoc() {
-		return MIwoc;
+		return result.getMIwoc();
 	}
 
 	/*
@@ -174,7 +162,7 @@ public class MaintainabilityIndex extends AbstractEvaluator implements
 	 * @see com.puresol.coding.analysis.MaintainabilityIndex#getMIcw()
 	 */
 	public double getMIcw() {
-		return MIcw;
+		return result.getMIcw();
 	}
 
 	/*
@@ -183,7 +171,7 @@ public class MaintainabilityIndex extends AbstractEvaluator implements
 	 * @see com.puresol.coding.analysis.MaintainabilityIndex#getMI()
 	 */
 	public double getMI() {
-		return MI;
+		return result.getMI();
 	}
 
 	/**
@@ -193,30 +181,7 @@ public class MaintainabilityIndex extends AbstractEvaluator implements
 	 */
 	@Override
 	public SourceCodeQuality getQuality() {
-		CodeRange range = getCodeRange();
-		if ((range.getType() == CodeRangeType.FILE)
-				|| (range.getType() == CodeRangeType.CLASS)
-				|| (range.getType() == CodeRangeType.ENUMERATION)) {
-			if (getMI() > 86) {
-				return SourceCodeQuality.HIGH;
-			}
-			if (getMI() > 65) {
-				return SourceCodeQuality.MEDIUM;
-			}
-			return SourceCodeQuality.LOW;
-		} else if ((range.getType() == CodeRangeType.CONSTRUCTOR)
-				|| (range.getType() == CodeRangeType.METHOD)
-				|| (range.getType() == CodeRangeType.FUNCTION)
-				|| (range.getType() == CodeRangeType.INTERFACE)) {
-			if (getMI() > 85) {
-				return SourceCodeQuality.HIGH;
-			}
-			if (getMI() > 65) {
-				return SourceCodeQuality.MEDIUM;
-			}
-			return SourceCodeQuality.LOW;
-		}
-		return SourceCodeQuality.HIGH; // not evaluated...
+		return MaintainabilityQuality.get(getCodeRange().getType(), result);
 	}
 
 	/**
@@ -271,8 +236,8 @@ public class MaintainabilityIndex extends AbstractEvaluator implements
 	}
 
 	public String getHTMLReport() {
-		String report = Anchor.generate(getName(),
-				"<h3>" + translator.i18n("Maintainability Index") + "</h3>");
+		String report = Anchor.generate(getName(), "<h3>"
+				+ translator.i18n("Maintainability Index") + "</h3>");
 		report += HTMLConverter.convertQualityLevelToHTML(getQuality());
 		report += "<br/>";
 		report += HTMLStandards.convertTSVToTable(getTextReport());

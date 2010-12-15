@@ -23,6 +23,6 @@ public interface LanguageDependedHalsteadMetric {
 	 * @return The HalsteadResult objects contains information about the current
 	 *         node and it's countability.
 	 */
-	public HalsteadResult getHalsteadResult(ParserTree node);
+	public HalsteadSymbol getHalsteadResult(ParserTree node);
 
 }
