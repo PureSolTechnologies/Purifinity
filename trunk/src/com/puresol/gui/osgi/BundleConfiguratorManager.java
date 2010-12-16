@@ -15,6 +15,27 @@ public class BundleConfiguratorManager extends
 
 	private final List<BundleConfigurator> languages = new ArrayList<BundleConfigurator>();
 
+	private static BundleConfiguratorManager instance = null;
+
+	public static BundleConfiguratorManager getInstance() {
+		if (instance == null) {
+			logger.info("No Evaluators instance initialized...");
+			createInstance();
+		}
+		return instance;
+	}
+
+	private static synchronized void createInstance() {
+		if (instance == null) {
+			logger.info("Create Evaluators instance...");
+			instance = new BundleConfiguratorManager();
+		}
+	}
+
+	private BundleConfiguratorManager() {
+		super();
+	}
+
 	@Override
 	public final List<BundleConfigurator> getAll() {
 		return languages;
