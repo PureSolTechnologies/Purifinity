@@ -6,6 +6,7 @@ import org.osgi.framework.BundleContext;
 
 import com.puresol.coding.evaluator.CodeRangeEvaluatorManager;
 import com.puresol.coding.evaluator.ProjectEvaluatorManager;
+import com.puresol.coding.metrics.cocomo.CoCoMoConfigurator;
 import com.puresol.coding.metrics.cocomo.CoCoMoFactory;
 import com.puresol.coding.metrics.codedepth.CodeDepthMetricFactory;
 import com.puresol.coding.metrics.entropy.EntropyMetricFactory;
@@ -13,6 +14,7 @@ import com.puresol.coding.metrics.halstead.HalsteadMetricFactory;
 import com.puresol.coding.metrics.maintainability.MaintainabilityIndexFactory;
 import com.puresol.coding.metrics.mccabe.McCabeMetricFactory;
 import com.puresol.coding.metrics.sloc.SLOCMetricFactory;
+import com.puresol.gui.osgi.BundleConfiguratorManager;
 
 /**
  * This class is used as OSGi bundle activator. This class only registers and
@@ -32,6 +34,7 @@ public class Activator implements BundleActivator {
 	private MaintainabilityIndexFactory maintainabilityIndexFactory = null;
 	private McCabeMetricFactory mcCabeMetricFactory = null;
 	private SLOCMetricFactory slocMetricFactory = null;
+	private CoCoMoConfigurator cocomoConfigurator = null;
 
 	@Override
 	public void start(BundleContext context) throws Exception {
@@ -41,9 +44,13 @@ public class Activator implements BundleActivator {
 				.getInstance();
 		CodeRangeEvaluatorManager codeRangeEvaluatorManager = CodeRangeEvaluatorManager
 				.getInstance();
+		BundleConfiguratorManager bundleConfiguratorManager = BundleConfiguratorManager
+				.getInstance();
 
 		cocomoFactory = new CoCoMoFactory();
 		projectEvaluatorManager.register(cocomoFactory);
+		cocomoConfigurator = new CoCoMoConfigurator();
+		bundleConfiguratorManager.register(cocomoConfigurator);
 
 		codeDepthMetricFactory = new CodeDepthMetricFactory();
 		projectEvaluatorManager.register(codeDepthMetricFactory);
@@ -80,9 +87,13 @@ public class Activator implements BundleActivator {
 				.getInstance();
 		CodeRangeEvaluatorManager codeRangeEvaluatorManager = CodeRangeEvaluatorManager
 				.getInstance();
+		BundleConfiguratorManager bundleConfiguratorManager = BundleConfiguratorManager
+				.getInstance();
 
 		projectEvaluatorManager.unregister(cocomoFactory);
 		cocomoFactory = null;
+		bundleConfiguratorManager.unregister(cocomoConfigurator);
+		cocomoConfigurator = null;
 
 		projectEvaluatorManager.unregister(codeDepthMetricFactory);
 		codeRangeEvaluatorManager.unregister(codeDepthMetricFactory);
