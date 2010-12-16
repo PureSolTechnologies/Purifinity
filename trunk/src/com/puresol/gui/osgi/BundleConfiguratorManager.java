@@ -43,14 +43,14 @@ public class BundleConfiguratorManager extends
 
 	@Override
 	public final void register(BundleConfigurator language) {
-		logger.info("Register programminglanguage '"
+		logger.info("Register bundle configurator '"
 				+ language.getClass().getName() + "'...");
 		languages.add(language);
 	}
 
 	@Override
 	public final void unregister(BundleConfigurator language) {
-		logger.info("Unregister programminglanguage '"
+		logger.info("Unregister bundle configurator '"
 				+ language.getClass().getName() + "'...");
 		languages.remove(language);
 	}
