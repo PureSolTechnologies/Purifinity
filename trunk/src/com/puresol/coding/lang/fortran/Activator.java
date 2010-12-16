@@ -4,7 +4,7 @@ import org.apache.log4j.Logger;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
-import com.puresol.coding.ProgrammingLanguages;
+import com.puresol.coding.ProgrammingLanguageManager;
 
 /**
  * This class is used as OSGi bundle activator. This class only registers and
@@ -20,7 +20,7 @@ public class Activator implements BundleActivator {
 	@Override
 	public void start(BundleContext context) throws Exception {
 		logger.info("Starting FortranLanguagePack...");
-		ProgrammingLanguages.getInstance().registerLanguage(
+		ProgrammingLanguageManager.getInstance().register(
 				Fortran.getInstance());
 		logger.info("Started.");
 	}
@@ -28,7 +28,7 @@ public class Activator implements BundleActivator {
 	@Override
 	public void stop(BundleContext context) throws Exception {
 		logger.info("Stopping FortranLanguagePack...");
-		ProgrammingLanguages.getInstance().unregisterLanguage(
+		ProgrammingLanguageManager.getInstance().unregister(
 				Fortran.getInstance());
 		logger.info("Stopped.");
 	}
