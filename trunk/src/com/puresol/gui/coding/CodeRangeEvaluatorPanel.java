@@ -20,9 +20,9 @@ import javax.swingx.progress.ProgressWindow;
 import com.puresol.coding.analysis.Analyzer;
 import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.evaluator.CodeRangeEvaluatorFactory;
+import com.puresol.coding.evaluator.CodeRangeEvaluatorManager;
 import com.puresol.coding.evaluator.Evaluator;
 import com.puresol.coding.evaluator.EvaluatorFactory;
-import com.puresol.coding.evaluator.Evaluators;
 import com.puresol.gui.TabButton;
 
 public class CodeRangeEvaluatorPanel extends Panel {
@@ -69,16 +69,17 @@ public class CodeRangeEvaluatorPanel extends Panel {
 		add(splitPane, BorderLayout.CENTER);
 		add(description, BorderLayout.SOUTH);
 
-		Evaluators.getInstance().connect("changedCodeRangeEvaluator", this,
-				"addEvaluators");
+		CodeRangeEvaluatorManager.getInstance().connect(
+				"changedCodeRangeEvaluator", this, "addEvaluators");
 		addEvaluators();
 	}
 
 	@Slot
 	private void addEvaluators() {
 		synchronized (evaluators) {
-			List<CodeRangeEvaluatorFactory> evaluatorFactories = Evaluators
-					.getInstance().getCodeRangeEvaluators();
+			evaluators.removeAll();
+			List<CodeRangeEvaluatorFactory> evaluatorFactories = CodeRangeEvaluatorManager
+					.getInstance().getAll();
 			Hashtable<Object, Object> values = new Hashtable<Object, Object>();
 			for (EvaluatorFactory evaluatorFactory : evaluatorFactories) {
 				values.put(evaluatorFactory.getName(), evaluatorFactory);

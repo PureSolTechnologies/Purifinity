@@ -9,16 +9,16 @@ public class ProgrammingLanguagesTest extends TestCase {
 
 	@Test
 	public void testGetInstance() {
-		ProgrammingLanguages pl1 = ProgrammingLanguages.getInstance();
+		ProgrammingLanguageManager pl1 = ProgrammingLanguageManager.getInstance();
 		Assert.assertNotNull(pl1);
-		ProgrammingLanguages pl2 = ProgrammingLanguages.getInstance();
+		ProgrammingLanguageManager pl2 = ProgrammingLanguageManager.getInstance();
 		Assert.assertNotNull(pl2);
 		Assert.assertSame(pl1, pl2);
 	}
 
 	@Test
 	public void testGetLanguages() {
-		ProgrammingLanguages pl = ProgrammingLanguages.getInstance();
+		ProgrammingLanguageManager pl = ProgrammingLanguageManager.getInstance();
 		assertNotNull(pl);
 	}
 

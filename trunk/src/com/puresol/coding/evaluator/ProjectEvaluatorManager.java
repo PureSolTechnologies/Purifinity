@@ -9,6 +9,8 @@ import javax.swingx.connect.Signal;
 
 import org.apache.log4j.Logger;
 
+import com.puresol.osgi.OSGIServiceManager;
+
 /**
  * This is the manager class for all evaluator factories which provide evaluator
  * functionality to the code analysis system.
@@ -16,16 +18,18 @@ import org.apache.log4j.Logger;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class Evaluators implements ConnectionHandler {
+public class ProjectEvaluatorManager implements
+		OSGIServiceManager<ProjectEvaluatorFactory>, ConnectionHandler {
 
-	private static final Logger logger = Logger.getLogger(Evaluators.class);
+	private static final Logger logger = Logger
+			.getLogger(ProjectEvaluatorManager.class);
 
 	private final ConnectionManager connectionManager = ConnectionManager
 			.createFor(this);
 
-	private static Evaluators instance = null;
+	private static ProjectEvaluatorManager instance = null;
 
-	public static Evaluators getInstance() {
+	public static ProjectEvaluatorManager getInstance() {
 		if (instance == null) {
 			logger.info("No Evaluators instance initialized...");
 			createInstance();
@@ -36,50 +40,34 @@ public class Evaluators implements ConnectionHandler {
 	private static synchronized void createInstance() {
 		if (instance == null) {
 			logger.info("Create Evaluators instance...");
-			instance = new Evaluators();
+			instance = new ProjectEvaluatorManager();
 		}
 	}
 
 	private final List<ProjectEvaluatorFactory> projectEvaluators = new ArrayList<ProjectEvaluatorFactory>();
-	private final List<CodeRangeEvaluatorFactory> codeRangeEvaluators = new ArrayList<CodeRangeEvaluatorFactory>();
 
-	private Evaluators() {
+	private ProjectEvaluatorManager() {
 	}
 
-	public List<ProjectEvaluatorFactory> getProjectEvaluators() {
+	@Override
+	public List<ProjectEvaluatorFactory> getAll() {
 		return projectEvaluators;
 	}
 
-	public List<CodeRangeEvaluatorFactory> getCodeRangeEvaluators() {
-		return codeRangeEvaluators;
-	}
-
-	public void registerProjectEvaluator(ProjectEvaluatorFactory evaluator) {
+	@Override
+	public void register(ProjectEvaluatorFactory evaluator) {
 		logger.info("Register evaluator '" + evaluator.getClass().getName()
 				+ "'...");
 		projectEvaluators.add(evaluator);
 		changedProjectEvaluator(evaluator);
 	}
 
-	public void unregisterProjectEvaluator(ProjectEvaluatorFactory evaluator) {
+	@Override
+	public void unregister(ProjectEvaluatorFactory evaluator) {
 		logger.info("Unregister evaluator '" + evaluator.getClass().getName()
 				+ "'...");
 		projectEvaluators.remove(evaluator);
 		changedProjectEvaluator(evaluator);
-	}
-
-	public void registerCodeRangeEvaluator(CodeRangeEvaluatorFactory evaluator) {
-		logger.info("Register evaluator '" + evaluator.getClass().getName()
-				+ "'...");
-		codeRangeEvaluators.add(evaluator);
-		changedCodeRangeEvaluator(evaluator);
-	}
-
-	public void unregisterCodeRangeEvaluator(CodeRangeEvaluatorFactory evaluator) {
-		logger.info("Unregister evaluator '" + evaluator.getClass().getName()
-				+ "'...");
-		codeRangeEvaluators.remove(evaluator);
-		changedCodeRangeEvaluator(evaluator);
 	}
 
 	@Signal
@@ -98,19 +86,6 @@ public class Evaluators implements ConnectionHandler {
 	@Signal
 	public void changedFileEvaluator() {
 		connectionManager.emitSignal("changedFileEvaluator");
-	}
-
-	@Signal
-	public void changedCodeRangeEvaluator(
-			CodeRangeEvaluatorFactory codeRangeEvaluatorFactory) {
-		connectionManager.emitSignal("changedCodeRangeEvaluator",
-				codeRangeEvaluatorFactory);
-		changedCodeRangeEvaluator();
-	}
-
-	@Signal
-	public void changedCodeRangeEvaluator() {
-		connectionManager.emitSignal("changedCodeRangeEvaluator");
 	}
 
 	@Override
