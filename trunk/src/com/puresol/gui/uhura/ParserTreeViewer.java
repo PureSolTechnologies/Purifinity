@@ -1,4 +1,4 @@
-package com.puresol.uhura.gui;
+package com.puresol.gui.uhura;
 
 import java.util.ArrayList;
 import java.util.List;

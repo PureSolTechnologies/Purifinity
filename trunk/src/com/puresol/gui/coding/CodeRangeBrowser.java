@@ -22,9 +22,9 @@ import javax.swingx.connect.Slot;
 
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.analysis.ProjectAnalyzer;
+import com.puresol.gui.uhura.CodeRangeViewer;
+import com.puresol.gui.uhura.ParserTreeViewer;
 import com.puresol.uhura.ast.ParserTree;
-import com.puresol.uhura.gui.CodeRangeViewer;
-import com.puresol.uhura.gui.ParserTreeViewer;
 
 /**
  * The code range browser show all analyzed files and their analyzable code

@@ -1,4 +1,4 @@
-package com.puresol.uhura.gui.rendering;
+package com.puresol.gui.uhura.rendering;
 
 import java.io.IOException;
 import java.util.Properties;

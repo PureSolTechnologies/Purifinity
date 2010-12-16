@@ -1,4 +1,4 @@
-package com.puresol.uhura.gui.rendering;
+package com.puresol.gui.uhura.rendering;
 
 import java.awt.Dimension;
 import java.awt.Graphics;

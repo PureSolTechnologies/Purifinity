@@ -23,14 +23,14 @@ import javax.swingx.TabbedPane;
 import javax.swingx.config.APIInformation;
 import javax.swingx.connect.Slot;
 
+import com.puresol.gui.uhura.ASCIITreeViewer;
+import com.puresol.gui.uhura.GrammarSchematic;
+import com.puresol.gui.uhura.ParserTreeViewer;
 import com.puresol.trees.TreeException;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarConverter;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.GrammarFile;
-import com.puresol.uhura.gui.ASCIITreeViewer;
-import com.puresol.uhura.gui.ParserTreeViewer;
-import com.puresol.uhura.gui.GrammarSchematic;
 import com.puresol.utils.FileUtilities;
 
 public class GrammarViewer extends Application {

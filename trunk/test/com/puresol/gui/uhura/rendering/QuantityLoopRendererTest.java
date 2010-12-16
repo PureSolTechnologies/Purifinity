@@ -1,4 +1,4 @@
-package com.puresol.uhura.gui.rendering;
+package com.puresol.gui.uhura.rendering;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -7,10 +7,10 @@ import java.awt.Graphics;
 import javax.swingx.Dialog;
 import javax.swingx.Panel;
 
+import com.puresol.gui.uhura.rendering.QuantityLoopRenderer;
+import com.puresol.gui.uhura.rendering.TextBoxRenderer;
 import com.puresol.rendering.Renderer;
 import com.puresol.uhura.grammar.Quantity;
-import com.puresol.uhura.gui.rendering.QuantityLoopRenderer;
-import com.puresol.uhura.gui.rendering.TextBoxRenderer;
 
 public class QuantityLoopRendererTest {
 

@@ -1,15 +1,15 @@
-package com.puresol.uhura.gui.rendering;
+package com.puresol.gui.uhura.rendering;
 
 import java.awt.Graphics;
 
 import javax.swingx.Dialog;
 import javax.swingx.Panel;
 
+import com.puresol.gui.uhura.rendering.ConstructionIdentifierRenderer;
 import com.puresol.rendering.RenderException;
 import com.puresol.rendering.Renderer;
 import com.puresol.trees.TreeException;
 import com.puresol.uhura.ast.ParserTree;
-import com.puresol.uhura.gui.rendering.ConstructionIdentifierRenderer;
 import com.puresol.uhura.lexer.Token;
 
 public class ConstructionIdentifierRendererTest {

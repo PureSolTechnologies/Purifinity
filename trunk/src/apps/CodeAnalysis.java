@@ -31,6 +31,7 @@ import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.gui.PureSolApplication;
 import com.puresol.gui.coding.NewProjectAnalyserDialog;
 import com.puresol.gui.coding.ProjectAnalysisBrowser;
+import com.puresol.gui.osgi.BundleConfigurationDialog;
 import com.puresol.gui.osgi.BundleManager;
 import com.puresol.osgi.OSGi;
 import com.puresol.osgi.OSGiException;
@@ -101,6 +102,9 @@ public class CodeAnalysis extends PureSolApplication {
 		MenuItem pluginManager = new MenuItem("Plugin Manager...");
 		pluginManager.connect("start", this, "pluginManager");
 
+		MenuItem pluginConfiguration = new MenuItem("Plugin Configuration...");
+		pluginConfiguration.connect("start", this, "pluginConfiguration");
+
 		menuBar.add(fileMenu);
 		fileMenu.add(newWorkspace);
 		fileMenu.addSeparator();
@@ -113,6 +117,8 @@ public class CodeAnalysis extends PureSolApplication {
 
 		menuBar.add(optionsMenu);
 		optionsMenu.add(pluginManager);
+		optionsMenu.addSeparator();
+		optionsMenu.add(pluginConfiguration);
 
 		setJMenuBar(menuBar);
 	}
@@ -232,6 +238,11 @@ public class CodeAnalysis extends PureSolApplication {
 							JOptionPane.DEFAULT_OPTION,
 							JOptionPane.INFORMATION_MESSAGE);
 		}
+	}
+
+	@Slot
+	void pluginConfiguration() {
+		new BundleConfigurationDialog().run();
 	}
 
 	@Slot

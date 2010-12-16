@@ -1,4 +1,4 @@
-package com.puresol.uhura.gui;
+package com.puresol.gui.uhura;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -15,12 +15,12 @@ import javax.swingx.Saveable;
 
 import org.apache.log4j.Logger;
 
+import com.puresol.gui.uhura.rendering.GrammarRenderer;
+import com.puresol.gui.uhura.rendering.ProductionDefinitionRenderer;
 import com.puresol.rendering.RenderException;
 import com.puresol.rendering.Renderer;
 import com.puresol.trees.TreeException;
 import com.puresol.uhura.ast.ParserTree;
-import com.puresol.uhura.gui.rendering.GrammarRenderer;
-import com.puresol.uhura.gui.rendering.ProductionDefinitionRenderer;
 
 /**
  * This panel draws a complete grammar with all its productions in a flow

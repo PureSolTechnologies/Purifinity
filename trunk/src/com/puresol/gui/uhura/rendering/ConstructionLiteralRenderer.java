@@ -1,4 +1,4 @@
-package com.puresol.uhura.gui.rendering;
+package com.puresol.gui.uhura.rendering;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -12,27 +12,25 @@ import com.puresol.trees.TreeException;
 import com.puresol.uhura.ast.ParserTree;
 import com.puresol.uhura.grammar.Quantity;
 
-public class ConstructionIdentifierRenderer extends AbstractRenderer {
+public class ConstructionLiteralRenderer extends AbstractRenderer {
 
-	private final Font font = new Font(
-			RenderProperties.getIdentifierFontFamily(), Font.TRUETYPE_FONT
-					| Font.BOLD | Font.ITALIC,
-			RenderProperties.getIdentifierFontSize());
+	private final Font font = new Font(RenderProperties.getLiteralFontFamily(),
+			Font.TRUETYPE_FONT, RenderProperties.getLiteralFontSize());
 	private final Renderer quantityLoopRenderer;
 
-	public ConstructionIdentifierRenderer(Graphics graphics,
-			ParserTree constructionIdentifier) throws RenderException {
+	public ConstructionLiteralRenderer(Graphics graphics,
+			ParserTree constructionLiteral) throws RenderException {
 		super();
-		String identifier;
+		String literal;
 		try {
-			identifier = constructionIdentifier.getChild("IDENTIFIER")
-					.getText();
+			literal = constructionLiteral.getChild("STRING_LITERAL").getText();
 		} catch (TreeException e) {
-			identifier = "ERROR!";
+			throw new RenderException(
+					"Literal construction found without string literal!");
 		}
 		Quantity quantity = Quantity.EXPECT;
 		try {
-			ParserTree quantifierAST = constructionIdentifier
+			ParserTree quantifierAST = constructionLiteral
 					.getChild("Quantifier");
 			if (quantifierAST.hasChildren()) {
 				ParserTree quantifier = quantifierAST.getChildren().get(0);
@@ -51,7 +49,7 @@ public class ConstructionIdentifierRenderer extends AbstractRenderer {
 			throw new RenderException(e.getMessage(), e);
 		}
 		Renderer constructionRenderer = new ConstructionRenderer(graphics,
-				font, Color.BLACK, identifier);
+				font, Color.BLACK, literal);
 		quantityLoopRenderer = new QuantityLoopRenderer(graphics,
 				constructionRenderer, quantity);
 	}

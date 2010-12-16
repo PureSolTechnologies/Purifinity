@@ -1,4 +1,4 @@
-package com.puresol.uhura.gui;
+package com.puresol.gui.uhura;
 
 import javax.i18n4java.Translator;
 import javax.swing.border.TitledBorder;

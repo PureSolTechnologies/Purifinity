@@ -1,4 +1,4 @@
-package com.puresol.uhura.gui.rendering;
+package com.puresol.gui.uhura.rendering;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -12,25 +12,27 @@ import com.puresol.trees.TreeException;
 import com.puresol.uhura.ast.ParserTree;
 import com.puresol.uhura.grammar.Quantity;
 
-public class ConstructionLiteralRenderer extends AbstractRenderer {
+public class ConstructionIdentifierRenderer extends AbstractRenderer {
 
-	private final Font font = new Font(RenderProperties.getLiteralFontFamily(),
-			Font.TRUETYPE_FONT, RenderProperties.getLiteralFontSize());
+	private final Font font = new Font(
+			RenderProperties.getIdentifierFontFamily(), Font.TRUETYPE_FONT
+					| Font.BOLD | Font.ITALIC,
+			RenderProperties.getIdentifierFontSize());
 	private final Renderer quantityLoopRenderer;
 
-	public ConstructionLiteralRenderer(Graphics graphics,
-			ParserTree constructionLiteral) throws RenderException {
+	public ConstructionIdentifierRenderer(Graphics graphics,
+			ParserTree constructionIdentifier) throws RenderException {
 		super();
-		String literal;
+		String identifier;
 		try {
-			literal = constructionLiteral.getChild("STRING_LITERAL").getText();
+			identifier = constructionIdentifier.getChild("IDENTIFIER")
+					.getText();
 		} catch (TreeException e) {
-			throw new RenderException(
-					"Literal construction found without string literal!");
+			identifier = "ERROR!";
 		}
 		Quantity quantity = Quantity.EXPECT;
 		try {
-			ParserTree quantifierAST = constructionLiteral
+			ParserTree quantifierAST = constructionIdentifier
 					.getChild("Quantifier");
 			if (quantifierAST.hasChildren()) {
 				ParserTree quantifier = quantifierAST.getChildren().get(0);
@@ -49,7 +51,7 @@ public class ConstructionLiteralRenderer extends AbstractRenderer {
 			throw new RenderException(e.getMessage(), e);
 		}
 		Renderer constructionRenderer = new ConstructionRenderer(graphics,
-				font, Color.BLACK, literal);
+				font, Color.BLACK, identifier);
 		quantityLoopRenderer = new QuantityLoopRenderer(graphics,
 				constructionRenderer, quantity);
 	}

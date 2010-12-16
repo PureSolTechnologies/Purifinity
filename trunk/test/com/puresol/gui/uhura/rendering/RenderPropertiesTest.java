@@ -1,10 +1,10 @@
-package com.puresol.uhura.gui.rendering;
+package com.puresol.gui.uhura.rendering;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.puresol.uhura.gui.rendering.RenderProperties;
+import com.puresol.gui.uhura.rendering.RenderProperties;
 
 public class RenderPropertiesTest {
 
