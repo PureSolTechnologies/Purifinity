@@ -4,7 +4,7 @@ import org.apache.log4j.Logger;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
-import com.puresol.coding.ProgrammingLanguages;
+import com.puresol.coding.ProgrammingLanguageManager;
 
 /**
  * This class is used as OSGi bundle activator. This class only registers and
@@ -22,14 +22,14 @@ public class Activator implements BundleActivator {
 		logger.info("Starting Java Language Pack...");
 		Java java = Java.getInstance();
 		java.setBundleContext(context);
-		ProgrammingLanguages.getInstance().registerLanguage(java);
+		ProgrammingLanguageManager.getInstance().register(java);
 		logger.info("Started.");
 	}
 
 	@Override
 	public void stop(BundleContext context) throws Exception {
 		logger.info("Stopping Java Language Pack...");
-		ProgrammingLanguages.getInstance().unregisterLanguage(
+		ProgrammingLanguageManager.getInstance().unregister(
 				Java.getInstance());
 		logger.info("Stopped.");
 	}
