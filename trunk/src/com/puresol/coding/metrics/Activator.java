@@ -4,7 +4,8 @@ import org.apache.log4j.Logger;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
-import com.puresol.coding.evaluator.Evaluators;
+import com.puresol.coding.evaluator.CodeRangeEvaluatorManager;
+import com.puresol.coding.evaluator.ProjectEvaluatorManager;
 import com.puresol.coding.metrics.cocomo.CoCoMoFactory;
 import com.puresol.coding.metrics.codedepth.CodeDepthMetricFactory;
 import com.puresol.coding.metrics.entropy.EntropyMetricFactory;
@@ -36,34 +37,37 @@ public class Activator implements BundleActivator {
 	public void start(BundleContext context) throws Exception {
 		logger.info("Starting Metrics Base Package...");
 
-		Evaluators evaluators = Evaluators.getInstance();
+		ProjectEvaluatorManager projectEvaluatorManager = ProjectEvaluatorManager
+				.getInstance();
+		CodeRangeEvaluatorManager codeRangeEvaluatorManager = CodeRangeEvaluatorManager
+				.getInstance();
 
 		cocomoFactory = new CoCoMoFactory();
-		evaluators.registerProjectEvaluator(cocomoFactory);
+		projectEvaluatorManager.register(cocomoFactory);
 
 		codeDepthMetricFactory = new CodeDepthMetricFactory();
-		evaluators.registerProjectEvaluator(codeDepthMetricFactory);
-		evaluators.registerCodeRangeEvaluator(codeDepthMetricFactory);
+		projectEvaluatorManager.register(codeDepthMetricFactory);
+		codeRangeEvaluatorManager.register(codeDepthMetricFactory);
 
 		entropyMetricFactory = new EntropyMetricFactory();
-		evaluators.registerProjectEvaluator(entropyMetricFactory);
-		evaluators.registerCodeRangeEvaluator(entropyMetricFactory);
+		projectEvaluatorManager.register(entropyMetricFactory);
+		codeRangeEvaluatorManager.register(entropyMetricFactory);
 
 		halsteadMetricFactory = new HalsteadMetricFactory();
-		evaluators.registerProjectEvaluator(halsteadMetricFactory);
-		evaluators.registerCodeRangeEvaluator(halsteadMetricFactory);
+		projectEvaluatorManager.register(halsteadMetricFactory);
+		codeRangeEvaluatorManager.register(halsteadMetricFactory);
 
 		maintainabilityIndexFactory = new MaintainabilityIndexFactory();
-		evaluators.registerProjectEvaluator(maintainabilityIndexFactory);
-		evaluators.registerCodeRangeEvaluator(maintainabilityIndexFactory);
+		projectEvaluatorManager.register(maintainabilityIndexFactory);
+		codeRangeEvaluatorManager.register(maintainabilityIndexFactory);
 
 		mcCabeMetricFactory = new McCabeMetricFactory();
-		evaluators.registerProjectEvaluator(mcCabeMetricFactory);
-		evaluators.registerCodeRangeEvaluator(mcCabeMetricFactory);
+		projectEvaluatorManager.register(mcCabeMetricFactory);
+		codeRangeEvaluatorManager.register(mcCabeMetricFactory);
 
 		slocMetricFactory = new SLOCMetricFactory();
-		evaluators.registerProjectEvaluator(slocMetricFactory);
-		evaluators.registerCodeRangeEvaluator(slocMetricFactory);
+		projectEvaluatorManager.register(slocMetricFactory);
+		codeRangeEvaluatorManager.register(slocMetricFactory);
 
 		logger.info("Started.");
 	}
@@ -72,28 +76,36 @@ public class Activator implements BundleActivator {
 	public void stop(BundleContext context) throws Exception {
 		logger.info("Stopping Metrics Base Package...");
 
-		Evaluators evaluators = Evaluators.getInstance();
+		ProjectEvaluatorManager projectEvaluatorManager = ProjectEvaluatorManager
+				.getInstance();
+		CodeRangeEvaluatorManager codeRangeEvaluatorManager = CodeRangeEvaluatorManager
+				.getInstance();
 
-		evaluators.unregisterProjectEvaluator(cocomoFactory);
+		projectEvaluatorManager.unregister(cocomoFactory);
 		cocomoFactory = null;
 
-		evaluators.unregisterCodeRangeEvaluator(codeDepthMetricFactory);
+		projectEvaluatorManager.unregister(codeDepthMetricFactory);
+		codeRangeEvaluatorManager.unregister(codeDepthMetricFactory);
 		codeDepthMetricFactory = null;
 
-		evaluators.unregisterCodeRangeEvaluator(entropyMetricFactory);
+		projectEvaluatorManager.unregister(entropyMetricFactory);
+		codeRangeEvaluatorManager.unregister(entropyMetricFactory);
 		entropyMetricFactory = null;
 
-		evaluators.unregisterCodeRangeEvaluator(halsteadMetricFactory);
+		projectEvaluatorManager.unregister(halsteadMetricFactory);
+		codeRangeEvaluatorManager.unregister(halsteadMetricFactory);
 		halsteadMetricFactory = null;
 
-		evaluators.unregisterCodeRangeEvaluator(maintainabilityIndexFactory);
+		projectEvaluatorManager.unregister(maintainabilityIndexFactory);
+		codeRangeEvaluatorManager.unregister(maintainabilityIndexFactory);
 		maintainabilityIndexFactory = null;
 
-		evaluators.unregisterCodeRangeEvaluator(mcCabeMetricFactory);
+		projectEvaluatorManager.unregister(mcCabeMetricFactory);
+		codeRangeEvaluatorManager.unregister(mcCabeMetricFactory);
 		mcCabeMetricFactory = null;
 
-		evaluators.unregisterProjectEvaluator(slocMetricFactory);
-		evaluators.unregisterCodeRangeEvaluator(slocMetricFactory);
+		projectEvaluatorManager.unregister(slocMetricFactory);
+		codeRangeEvaluatorManager.unregister(slocMetricFactory);
 		slocMetricFactory = null;
 
 		logger.info("Stopped.");
