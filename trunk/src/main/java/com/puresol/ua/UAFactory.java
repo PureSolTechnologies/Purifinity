@@ -20,7 +20,7 @@ public class UAFactory {
 	 * @return
 	 */
 	public static UA create(Class<?> clazz) {
-		return (UA) ClassRegistry.create(clazz, UA.class);
+		return (UA) ClassRegistry.create(UA.class);
 	}
 
 }

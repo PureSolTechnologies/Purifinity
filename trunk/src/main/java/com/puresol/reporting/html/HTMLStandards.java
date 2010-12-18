@@ -57,10 +57,10 @@ public class HTMLStandards {
 		header += getCSS(css, inlineCSS);
 		header += getFavIcon(favoriteIcon);
 		header += "<meta name=\"author\" content=\""
-				+ APIInformation.getPackageAuthor(clazz) + "\"/>\n";
+				+ APIInformation.getPackageAuthor() + "\"/>\n";
 		header += "<meta name=\"copyright\" content=\"(c) "
-				+ APIInformation.getPackageYears(clazz) + " by "
-				+ APIInformation.getPackageOwner(clazz) + "\"/>\n";
+				+ APIInformation.getPackageYears() + " by "
+				+ APIInformation.getPackageOwner() + "\"/>\n";
 		header += "<meta name=\"generator\" content=\""
 				+ Application.getInstance().getApplicationTitle() + " "
 				+ Application.getInstance().getApplicationVersion() + "\"/>\n";
@@ -71,7 +71,7 @@ public class HTMLStandards {
 
 	public static String getStandardCopyrightFooter(Class<?> clazz) {
 		String footer = "<hr/>\n";
-		footer += "<p>(c) " + APIInformation.getPackageYears(clazz) + " "
+		footer += "<p>(c) " + APIInformation.getPackageYears() + " "
 				+ Link.getPureSolTechnolgiesHomePage().toHTML()
 				+ "<br/>\n(page created: " + Time.getFullTimeString()
 				+ ")</p>\n";
@@ -261,10 +261,10 @@ public class HTMLStandards {
 		Application application = Application.getInstance();
 		String html = "<b>" + application.getApplicationTitle() + " "
 				+ application.getApplicationVersion() + "</b><br/>\n";
-		html += "<i>(c) " + APIInformation.getPackageYears(clazz) + " "
-				+ APIInformation.getPackageOwner(clazz) + "<br/>\n";
-		html += "author: " + APIInformation.getPackageAuthor(clazz) + "<br/>\n";
-		html += "bug reports: " + APIInformation.getPackageBugReport(clazz);
+		html += "<i>(c) " + APIInformation.getPackageYears() + " "
+				+ APIInformation.getPackageOwner() + "<br/>\n";
+		html += "author: " + APIInformation.getPackageAuthor() + "<br/>\n";
+		html += "bug reports: " + APIInformation.getPackageBugReport();
 		return html;
 	}
 
