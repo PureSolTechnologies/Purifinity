@@ -150,6 +150,7 @@ public class FileUtilities {
 			String line;
 			while ((line = ra.readLine()) != null) {
 				text.append(line);
+				text.append("\n");
 			}
 			ra.close();
 			return text.toString();
