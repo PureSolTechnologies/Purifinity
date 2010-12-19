@@ -29,7 +29,7 @@ public class OSGi {
 
 	private static final Logger logger = Logger.getLogger(OSGi.class);
 
-	public static final String OSGI_FRAMEWORK_FACTORY_PROPERTIES = "META-INF/services/org.osgi.framework.launch.FrameworkFactory";
+	public static final String OSGI_FRAMEWORK_FACTORY_PROPERTIES = "/META-INF/services/org.osgi.framework.launch.FrameworkFactory";
 	public static final String OSGI_PROPERTIES = "/META-INF/services/osgi.properties";
 	private static final String INSTALLDIR_KEY = "$installdir";
 	private static final String USERDIR_KEY = "$userdir";
@@ -124,8 +124,7 @@ public class OSGi {
 
 	private FrameworkFactory getFrameworkFactory() throws OSGiException {
 		try {
-			URL url = OSGi.class.getClassLoader().getResource(
-					OSGI_FRAMEWORK_FACTORY_PROPERTIES);
+			URL url = getClass().getResource(OSGI_FRAMEWORK_FACTORY_PROPERTIES);
 			if (url != null) {
 				BufferedReader br = new BufferedReader(new InputStreamReader(
 						url.openStream()));
@@ -143,8 +142,7 @@ public class OSGi {
 						}
 					}
 				} finally {
-					if (br != null)
-						br.close();
+					br.close();
 				}
 			}
 		} catch (InstantiationException e) {
@@ -156,7 +154,7 @@ public class OSGi {
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
 		}
-		throw new OSGiException("Could not find framework factory.");
+		throw new OSGiException("Could not load framework factory.");
 	}
 
 	public void stop() throws BundleException {

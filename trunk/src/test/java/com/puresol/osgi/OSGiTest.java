@@ -9,6 +9,13 @@ import org.osgi.framework.BundleException;
 public class OSGiTest extends TestCase {
 
 	@Test
+	public void testResources() {
+		assertNotNull(OSGi.class
+				.getResource(OSGi.OSGI_FRAMEWORK_FACTORY_PROPERTIES));
+		assertNotNull(OSGi.class.getResource(OSGi.OSGI_PROPERTIES));
+	}
+
+	@Test
 	public void testStartupAndSingleton() {
 		try {
 			OSGi osgi = new OSGi();
