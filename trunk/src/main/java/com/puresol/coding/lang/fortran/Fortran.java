@@ -132,6 +132,6 @@ public class Fortran extends AbstractProgrammingLanguage {
 
 	@Override
 	public <T> T getImplementation(Class<T> clazz) {
-		return ClassRegistry.create(getClass(), clazz);
+		return ClassRegistry.create(clazz);
 	}
 }
