@@ -11,6 +11,13 @@
 		<name>PureSol Technologies</name>
 		<url>http://puresol-technologies.com</url>
 	</organization>
+	<distributionManagement>
+		<repository>
+			<id>com.puresol</id>
+			<name>FortranLanguagePack</name>
+			<url>file:///home/ludwig/deployment</url>
+		</repository>
+	</distributionManagement>
 	<build>
 		<plugins>
 			<plugin>
