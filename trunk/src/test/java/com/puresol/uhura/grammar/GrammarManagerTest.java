@@ -17,16 +17,9 @@ public class GrammarManagerTest {
 		URL url = GrammarManagerTest.class
 				.getResource("/com/puresol/uhura/grammar/TestGrammar.g");
 		assertNotNull(url);
-		assertEquals(
-				"file:/media/secured/home/ludwig/workspace/NyotaUhura/bin/com/puresol/uhura/grammar/TestGrammar.g",
-				url.toString());
+		assertTrue(url.toString().endsWith(
+				"/com/puresol/uhura/grammar/TestGrammar.g"));
 		assertEquals("file", url.getProtocol());
-		assertEquals(
-				"/media/secured/home/ludwig/workspace/NyotaUhura/bin/com/puresol/uhura/grammar/TestGrammar.g",
-				url.getFile());
-		assertEquals(
-				"/media/secured/home/ludwig/workspace/NyotaUhura/bin/com/puresol/uhura/grammar/TestGrammar.g",
-				url.getPath());
 	}
 
 	@Test
