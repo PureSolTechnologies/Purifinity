@@ -1,39 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="res"/>
-	<classpathentry kind="src" path="test"/>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="lib/cobertura/asm-2.2.1.jar"/>
-	<classpathentry kind="lib" path="lib/cobertura/asm-tree-2.2.1.jar"/>
-	<classpathentry kind="lib" path="lib/cobertura/cobertura.jar"/>
-	<classpathentry kind="lib" path="lib/cobertura/jakarta-oro-2.0.8.jar"/>
-	<classpathentry kind="lib" path="lib/cobertura/log4j.jar"/>
-	<classpathentry kind="lib" path="lib/felix/felix.jar"/>
-	<classpathentry kind="lib" path="lib/findbugs/annotations.jar"/>
-	<classpathentry kind="lib" path="lib/findbugs/ant.jar"/>
-	<classpathentry kind="lib" path="lib/findbugs/asm-3.1.jar"/>
-	<classpathentry kind="lib" path="lib/findbugs/asm-analysis-3.1.jar"/>
-	<classpathentry kind="lib" path="lib/findbugs/asm-commons-3.1.jar"/>
-	<classpathentry kind="lib" path="lib/findbugs/asm-tree-3.1.jar"/>
-	<classpathentry kind="lib" path="lib/findbugs/asm-util-3.1.jar"/>
-	<classpathentry kind="lib" path="lib/findbugs/asm-xml-3.1.jar"/>
-	<classpathentry kind="lib" path="lib/findbugs/bcel.jar"/>
-	<classpathentry kind="lib" path="lib/findbugs/commons-lang-2.4.jar"/>
-	<classpathentry kind="lib" path="lib/findbugs/dom4j-1.6.1.jar"/>
-	<classpathentry kind="lib" path="lib/findbugs/findbugs-ant.jar"/>
-	<classpathentry kind="lib" path="lib/findbugs/findbugs.jar"/>
-	<classpathentry kind="lib" path="lib/findbugs/jaxen-1.1.1.jar"/>
-	<classpathentry kind="lib" path="lib/findbugs/jdepend-2.9.jar"/>
-	<classpathentry kind="lib" path="lib/findbugs/jFormatString.jar"/>
-	<classpathentry kind="lib" path="lib/findbugs/jsr305.jar"/>
-	<classpathentry kind="lib" path="lib/findbugs/mysql-connector-java-5.1.7-bin.jar"/>
-	<classpathentry kind="lib" path="lib/junit/junit-4.6.jar"/>
-	<classpathentry kind="lib" path="lib/log4j.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/i18n4java"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/NyotaUhura"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/CodeAnalysis"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/swingx"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/PureSolTechnologies_API"/>
-	<classpathentry kind="output" path="bin"/>
+	<classpathentry kind="src" output="target/classes" path="src/main/java"/>
+	<classpathentry excluding="**" kind="src" output="target/classes" path="src/main/resources"/>
+	<classpathentry kind="src" output="target/test-classes" path="src/test/java"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry kind="con" path="org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER"/>
+	<classpathentry kind="output" path="target/classes"/>
 </classpath>
