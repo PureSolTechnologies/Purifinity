@@ -1,6 +1,10 @@
 package com.puresol.uhura.grammar;
 
+import static org.junit.Assert.*;
+
 import java.util.Properties;
+
+import org.junit.Test;
 
 import junit.framework.Assert;
 
@@ -19,6 +23,15 @@ import com.puresol.uhura.grammar.token.Visibility;
  * 
  */
 public class TestGrammars {
+
+	/**
+	 * This is a dummy test to avoid a
+	 * "java.lang.Exception: No runnable methods" exception.
+	 */
+	@Test
+	public void test() {
+		assertNotNull(new TestGrammars());
+	}
 
 	/**
 	 * This grammar is from the LR(k)-Analyse fuer Pragmatiker page 10. The
