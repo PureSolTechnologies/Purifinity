@@ -17,14 +17,10 @@ public class FileUtilities {
 		return new File(clazz.getName().replaceAll("\\.", "/") + ".java");
 	}
 
-	public static File addPaths(File path1, File path2) {
-		return new File(path1, path2.toString());
-	}
-
 	public static boolean writeFile(File directory, File fileName, String text) {
 		RandomAccessFile ra = null;
 		try {
-			File destination = FileUtilities.addPaths(directory, fileName);
+			File destination = new File(directory, fileName.getPath());
 			File parent = destination.getParentFile();
 			if (!parent.exists()) {
 				if (!parent.mkdirs()) {
@@ -103,7 +99,7 @@ public class FileUtilities {
 			return to;
 		}
 		parent = parent.replaceAll("[^/]+", "..");
-		return FileUtilities.addPaths(new File(parent), to);
+		return new File(new File(parent), to.getPath());
 	}
 
 	/**

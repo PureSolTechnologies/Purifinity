@@ -20,19 +20,21 @@ public class DirectoryUtilitiesTest extends TestCase {
 				.getInstallationDirectory(DirectoryUtilitiesTest.class, false);
 		assertTrue(installationDirectory.isDirectory());
 		System.out.println(installationDirectory);
-		assertTrue(installationDirectory.toString().endsWith(
-				"/bin/"
-						+ DirectoryUtilitiesTest.class.getPackage().getName()
-								.replaceAll("\\.", "/")));
+		String expected = "/target/test-classes/"
+				+ DirectoryUtilitiesTest.class.getPackage().getName()
+						.replaceAll("\\.", "/");
+		System.out.println(expected);
+		assertTrue(installationDirectory.toString().endsWith(expected));
 
 		installationDirectory = DirectoryUtilities.getInstallationDirectory(
 				DirectoryUtilitiesTest.class, true);
 		assertTrue(installationDirectory.isDirectory());
 		System.out.println(installationDirectory);
-		assertTrue(installationDirectory.toString().endsWith(
-				"/bin/"
-						+ DirectoryUtilitiesTest.class.getPackage().getName()
-								.replaceAll("\\.", "/")));
+		expected = "/target/test-classes/"
+				+ DirectoryUtilitiesTest.class.getPackage().getName()
+						.replaceAll("\\.", "/");
+		System.out.println(expected);
+		assertTrue(installationDirectory.toString().endsWith(expected));
 	}
 
 }

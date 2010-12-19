@@ -1,13 +1,45 @@
 package com.puresol.rendering;
 
+import static org.junit.Assert.*;
+
 import java.awt.Graphics;
+import java.awt.GraphicsEnvironment;
+import java.awt.image.BufferedImage;
 
 import javax.swingx.Dialog;
 import javax.swingx.Panel;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import com.puresol.rendering.Arrow.ArrowType;
 
 public class ArrowTest {
+
+	private Graphics graphics;
+
+	@Before
+	public void prepareEnvironment() {
+		BufferedImage image = new BufferedImage(1024, 768,
+				BufferedImage.TYPE_INT_RGB);
+		graphics = GraphicsEnvironment.getLocalGraphicsEnvironment()
+				.createGraphics(image);
+		assertNotNull(graphics);
+	}
+
+	@Test
+	public void testInstance() {
+		assertNotNull(new Arrow(graphics));
+	}
+
+	@Test
+	public void testInitialValues() {
+		Arrow arrow = new Arrow(graphics);
+		assertEquals(45.0, arrow.getTipAngle(), 1e-6);
+		assertEquals(16, arrow.getTipLength(), 1e-6);
+		assertEquals(0.5, arrow.getTipShorting(), 1e-6);
+		assertEquals(ArrowType.SIMPLE, arrow.getType());
+	}
 
 	public static void main(String args[]) {
 		Dialog frame = new Dialog();

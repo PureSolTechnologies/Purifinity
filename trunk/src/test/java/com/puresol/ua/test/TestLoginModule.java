@@ -1,11 +1,15 @@
 package com.puresol.ua.test;
 
+import static org.junit.Assert.*;
+
 import java.util.Map;
 
 import javax.security.auth.Subject;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.login.LoginException;
 import javax.security.auth.spi.LoginModule;
+
+import org.junit.Test;
 
 /**
  * This is a LoginModule for testing purposes.
@@ -40,4 +44,8 @@ public class TestLoginModule implements LoginModule {
 		return true;
 	}
 
+	@Test
+	public void testInstance() {
+		assertNotNull(new TestLoginModule());
+	}
 }
