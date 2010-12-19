@@ -6,6 +6,18 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>JavaLanguagePack</name>
 	<description>Contains language specific parser and evaluators for programming language Java.</description>
+	<url>http://puresol-technologies.com</url>
+	<organization>
+		<name>PureSol Technologies</name>
+		<url>http://puresol-technologies.com</url>
+	</organization>
+	<distributionManagement>
+		<repository>
+			<id>com.puresol</id>
+			<name>JavaLanguagePack</name>
+			<url>file:///home/ludwig/deployment</url>
+		</repository>
+	</distributionManagement>
 	<build>
 		<plugins>
 			<plugin>
