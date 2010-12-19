@@ -2,7 +2,7 @@ package com.puresol.packages;
 
 public enum PackageDirectory {
 
-	SRC("src"), TEST("test"), RES("res");
+	SRC("src/main/java"), TEST("src/test/java"), RES("src/main/resources");
 
 	private final String directoryName;
 
