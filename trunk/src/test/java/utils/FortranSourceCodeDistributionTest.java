@@ -40,7 +40,7 @@ public class FortranSourceCodeDistributionTest {
 		try {
 			Logger.getRootLogger().setLevel(Level.TRACE);
 			File file = new File(
-					"test/com/puresol/coding/lang/fortran/samples",
+					"src/test/java/com/puresol/coding/lang/fortran/samples",
 					"ndflrech.f");
 			assertTrue(file.exists());
 			Fortran fortran = Fortran.getInstance();

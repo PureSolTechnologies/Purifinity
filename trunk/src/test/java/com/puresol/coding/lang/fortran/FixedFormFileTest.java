@@ -112,7 +112,7 @@ public class FixedFormFileTest {
 	public void testIsFixedForm() {
 		try {
 			File file = new File(
-					"test/com/puresol/coding/lang/fortran/samples/FixedFormSample.f");
+					"src/test/java/com/puresol/coding/lang/fortran/samples/FixedFormSample.f");
 			assertTrue(file.exists());
 			FixedFormFile fixedFormFile = new FixedFormFile(file);
 			assertTrue(fixedFormFile.isValid());
@@ -126,7 +126,7 @@ public class FixedFormFileTest {
 	public void testScan() {
 		try {
 			File file = new File(
-					"test/com/puresol/coding/lang/fortran/samples/FixedFormSample.f");
+					"src/test/java/com/puresol/coding/lang/fortran/samples/FixedFormSample.f");
 			assertTrue(file.exists());
 			FixedFormFile fixedFormFile = new FixedFormFile(file);
 			TokenStream tokenStream = fixedFormFile.scan(FortranGrammar
