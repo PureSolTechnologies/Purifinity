@@ -11,6 +11,13 @@
 		<name>PureSol Technologies</name>
 		<url>http://puresol-technologies.com</url>
 	</organization>
+	<distributionManagement>
+		<repository>
+			<id>com.puresol</id>
+			<name>MetricsBasePack</name>
+			<url>file:///home/ludwig/deployment</url>
+		</repository>
+	</distributionManagement>
 	<build>
 		<plugins>
 			<plugin>
@@ -30,6 +37,15 @@
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<version>2.1.0</version>
+				<extensions>true</extensions>
+				<configuration>
+					<manifestFile>resources/META-INF/MANIFEST.MF</manifestFile>
 				</configuration>
 			</plugin>
 		</plugins>
