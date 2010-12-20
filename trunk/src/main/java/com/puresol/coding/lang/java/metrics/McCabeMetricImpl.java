@@ -25,11 +25,28 @@ public class McCabeMetricImpl implements LanguageDependedMcCabeMetric {
 		blockNames.add("WhileStatement");
 		blockNames.add("WhileStatementNoShortIf");
 		blockNames.add("DoStatement");
+		blockNames.add("CatchClause");
+		blockNames.add("SwitchLabel");
+		blockNames.add("QUESTION_MARK");
 	}
 
 	@Override
 	public boolean increasesCyclomaticComplexity(ParserTree node) {
-		return blockNames.contains(node.getName());
+		if (!blockNames.contains(node.getName())) {
+			return false;
+		}
+		if ("SwitchLabel".equals(node.getName())) {
+			if (node.getParent().getChildren().indexOf(node) > 0) {
+				return false;
+			}
+		}
+		if ("QUESTION_MARK".equals(node.getName())) {
+			if ("ConditionalExpression".equals(node.getParent().getName())) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		return true;
 	}
-
 }
