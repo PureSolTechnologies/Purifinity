@@ -5,7 +5,7 @@
 	<artifactId>MetricsBasePack</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>MetricsBasePack</name>
-	<description>Contains basic clases for metrics evaluation</description>
+	<description>Contains basic classes for metrics evaluation</description>
 	<url>http://puresol-technologies.com</url>
 	<organization>
 		<name>PureSol Technologies</name>
@@ -40,12 +40,11 @@
 				</configuration>
 			</plugin>
 			<plugin>
-				<groupId>org.apache.felix</groupId>
-				<artifactId>maven-bundle-plugin</artifactId>
-				<version>2.1.0</version>
-				<extensions>true</extensions>
+				<artifactId>maven-jar-plugin</artifactId>
 				<configuration>
-					<manifestFile>resources/META-INF/MANIFEST.MF</manifestFile>
+					<archive>
+						<manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
+					</archive>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -66,6 +65,26 @@
 			<groupId>com.puresol</groupId>
 			<artifactId>CodeAnalysis</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.puresol</groupId>
+			<artifactId>PureSolTechnologiesAPI</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.puresol</groupId>
+			<artifactId>uhura</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>javax</groupId>
+			<artifactId>swingx</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>javax</groupId>
+			<artifactId>i18n4java</artifactId>
+			<version>1.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 </project>
