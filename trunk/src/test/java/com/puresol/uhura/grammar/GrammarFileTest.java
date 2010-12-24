@@ -15,7 +15,8 @@ public class GrammarFileTest {
 
 	private InputStream inputStream = null;
 
-	@Before@Test
+	@Before
+	@Test
 	public void testInputStreamAndSetup() {
 		inputStream = getClass().getResourceAsStream(
 				"/com/puresol/uhura/grammar/TestGrammar.g");
@@ -25,6 +26,7 @@ public class GrammarFileTest {
 	@Test
 	public void testRead() {
 		try {
+			assertNotNull(inputStream);
 			GrammarFile file = new GrammarFile(inputStream);
 			ParserTree ast = file.getAST();
 			assertNotNull(ast);
@@ -40,6 +42,7 @@ public class GrammarFileTest {
 	@After
 	public void teardown() {
 		try {
+			assertNotNull(inputStream);
 			inputStream.close();
 		} catch (IOException e) {
 			e.printStackTrace();
