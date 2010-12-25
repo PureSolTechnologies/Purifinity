@@ -5,9 +5,3 @@ Implementation-URL: http://www.puresol-technologies.com
 Implementation-Vendor-Id: http://www.puresol-technologies.com
 Specification-Title: NyotaUhura
 Specification-Vendor: PureSol Technologies (http://www.puresol-technologies.com)
-Bundle-Name: MANIFEST.MF
-Bundle-SymbolicName: com.puresol.uhura
-Bundle-Description: NyotaUhura universal parser package
-Bundle-Vendor: PureSol Technologies (http://www.puresol-technologies.com)
-Bundle-Version: 1.0.0
-Export-Package: com.puresol.uhura
