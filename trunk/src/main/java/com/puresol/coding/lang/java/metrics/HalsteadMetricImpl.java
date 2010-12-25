@@ -58,15 +58,15 @@ public class HalsteadMetricImpl implements LanguageDependedHalsteadMetric {
 		operators.add("SHORT");
 		operators.add("STATIC");
 		operators.add("STRICTFP");
-		operators.add("SUPER");
+		// operators.add("SUPER"); this is an operand!
 		operators.add("SWITCH");
 		operators.add("SYNCHRONIZED");
-		operators.add("THIS");
+		// operators.add("THIS"); this is an operand!
 		operators.add("THROW");
 		operators.add("THROWS");
 		operators.add("TRANSIENT");
 		operators.add("TRY");
-		operators.add("VOID");
+		// operators.add("VOID"); this is an operand!
 		operators.add("VOLATILE");
 		operators.add("WHILE");
 
