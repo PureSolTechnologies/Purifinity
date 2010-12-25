@@ -1,5 +1,7 @@
 package com.puresol.ua;
 
+import static org.junit.Assert.*;
+
 import javax.swingx.PasswordDialog;
 import javax.swingx.config.ClassRegistry;
 import javax.swingx.config.ClassRegistryElement;
@@ -9,24 +11,21 @@ import org.junit.Test;
 
 import com.puresol.gui.ua.SubjectInformationDialog;
 
-import junit.framework.Assert;
-import junit.framework.TestCase;
-
 /**
  * This test checks the basic functionality of UAFactory and UA.
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class UAFactoryTest extends TestCase {
+public class UAFactoryTest {
 
 	@Test
 	public void testCreate() {
 		ClassRegistry.register(UA.class, new ClassRegistryElement(
 				ClassRegistryElementType.FACTORY, "com.puresol.ua.TestJAAS"));
 		UA ua = UAFactory.create(getClass());
-		Assert.assertNotNull(ua);
-		Assert.assertEquals("com.puresol.ua.TestJAAS", ua.getClass().getName());
+		assertNotNull(ua);
+		assertEquals("com.puresol.ua.TestJAAS", ua.getClass().getName());
 	}
 
 	@Test
@@ -34,7 +33,7 @@ public class UAFactoryTest extends TestCase {
 		ClassRegistry.register(UA.class, new ClassRegistryElement(
 				ClassRegistryElementType.FACTORY, "com.puresol.ua.TestJAAS"));
 		UA ua = UAFactory.create(getClass());
-		Assert.assertTrue(ua.login("PureSolTechnologies"));
+		assertTrue(ua.login("PureSolTechnologies"));
 	}
 
 	/**

@@ -1,18 +1,17 @@
 package com.puresol.gui.data;
 
+import static org.junit.Assert.*;
+
 import org.junit.Test;
 
 import com.puresol.data.PublicityType;
 
-import junit.framework.Assert;
-import junit.framework.TestCase;
-
-public class EnumListTest extends TestCase {
+public class EnumListTest {
 
 	@Test
 	public void testDefaultValue() {
 		EnumList enumList = new EnumList(PublicityType.class);
-		Assert.assertEquals(-1, enumList.getSelectedIndex());
+		assertEquals(-1, enumList.getSelectedIndex());
 	}
 
 	@Test
@@ -23,7 +22,7 @@ public class EnumListTest extends TestCase {
 			enumList.setSelectedValue(constants[index], true);
 			System.out.println(constants[index]);
 			System.out.println(enumList.getSelectedValue());
-			Assert.assertEquals(constants[index], enumList.getSelectedValue());
+			assertEquals(constants[index], enumList.getSelectedValue());
 		}
 	}
 }

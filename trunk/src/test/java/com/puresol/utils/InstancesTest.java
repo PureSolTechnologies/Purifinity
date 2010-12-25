@@ -1,22 +1,21 @@
 package com.puresol.utils;
 
+import static org.junit.Assert.*;
+
 import org.junit.Test;
 
-import junit.framework.Assert;
-import junit.framework.TestCase;
-
-public class InstancesTest extends TestCase {
+public class InstancesTest {
 
 	@Test
 	public void testCreateDefault() {
 		try {
 			TestClass4Instance test = Instances
 					.createInstance(TestClass4Instance.class);
-			Assert.assertNotNull(test);
-			Assert.assertEquals("default", test.getText());
+			assertNotNull(test);
+			assertEquals("default", test.getText());
 		} catch (ClassInstantiationException e) {
 			e.printStackTrace();
-			Assert.fail("No exception was expected!");
+			fail("No exception was expected!");
 		}
 	}
 
@@ -24,7 +23,7 @@ public class InstancesTest extends TestCase {
 	public void testException() {
 		try {
 			Instances.createInstance(TestClass4Instance.class, "TEXT");
-			Assert.fail("A ClassInstantiationException was expected!");
+			fail("A ClassInstantiationException was expected!");
 		} catch (ClassInstantiationException e) {
 			// nothing to catch, this was expected!
 		}
@@ -35,10 +34,10 @@ public class InstancesTest extends TestCase {
 		try {
 			int i = Instances.runStaticMethod(TestClass4Instance.class,
 					"returnValuedMethod", Integer.class, 4);
-			Assert.assertEquals(16, i);
+			assertEquals(16, i);
 		} catch (MethodInvokationException e) {
 			e.printStackTrace();
-			Assert.fail("No exception was expected!");
+			fail("No exception was expected!");
 		}
 	}
 
@@ -49,7 +48,7 @@ public class InstancesTest extends TestCase {
 					void.class);
 		} catch (MethodInvokationException e) {
 			e.printStackTrace();
-			Assert.fail("No exception was expected!");
+			fail("No exception was expected!");
 		}
 	}
 
@@ -58,7 +57,7 @@ public class InstancesTest extends TestCase {
 		try {
 			Instances.runStaticMethod(TestClass4Instance.class, "voidMethod",
 					Integer.class);
-			Assert.fail("Exception was expected!");
+			fail("Exception was expected!");
 		} catch (MethodInvokationException e) {
 			// nothing to catch, this was expected!
 		}
@@ -69,7 +68,7 @@ public class InstancesTest extends TestCase {
 		try {
 			Instances.runStaticMethod(TestClass4Instance.class,
 					"returnValuedMethod", Integer.class, "Test");
-			Assert.fail("Exception was expected!");
+			fail("Exception was expected!");
 		} catch (MethodInvokationException e) {
 			// nothing to catch, this was expected!
 		}
@@ -80,7 +79,7 @@ public class InstancesTest extends TestCase {
 		try {
 			Instances.runStaticMethod(TestClass4Instance.class,
 					"invalidMethod", Integer.class, "Test");
-			Assert.fail("Exception was expected!");
+			fail("Exception was expected!");
 		} catch (MethodInvokationException e) {
 			// nothing to catch, this was expected!
 		}

@@ -1,18 +1,17 @@
 package com.puresol.gui.data;
 
+import static org.junit.Assert.*;
+
 import org.junit.Test;
 
 import com.puresol.data.PublicityType;
 
-import junit.framework.Assert;
-import junit.framework.TestCase;
-
-public class EnumComboBoxTest extends TestCase {
+public class EnumComboBoxTest {
 
 	@Test
 	public void testDefaultValue() {
 		EnumComboBox enumComboBox = new EnumComboBox(PublicityType.class);
-		Assert.assertEquals(0, enumComboBox.getSelectedIndex());
+		assertEquals(0, enumComboBox.getSelectedIndex());
 	}
 
 	@Test
@@ -23,8 +22,7 @@ public class EnumComboBoxTest extends TestCase {
 			enumComboBox.setSelectedItem(constants[index]);
 			System.out.println(constants[index]);
 			System.out.println(enumComboBox.getSelectedItem());
-			Assert.assertEquals(constants[index], enumComboBox
-					.getSelectedItem());
+			assertEquals(constants[index], enumComboBox.getSelectedItem());
 		}
 	}
 

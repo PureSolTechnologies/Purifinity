@@ -4,9 +4,7 @@ import org.junit.Test;
 
 import com.puresol.reporting.html.HTMLStandards;
 
-import junit.framework.TestCase;
-
-public class HTMLStandardsTest extends TestCase {
+public class HTMLStandardsTest {
 
 	@Test
 	public void test() {

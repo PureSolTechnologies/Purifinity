@@ -1,12 +1,12 @@
 package com.puresol.utils;
 
-import java.io.File;
+import static org.junit.Assert.*;
 
-import junit.framework.TestCase;
+import java.io.File;
 
 import org.junit.Test;
 
-public class DirectoryUtilitiesTest extends TestCase {
+public class DirectoryUtilitiesTest {
 
 	@Test
 	public void testExecutingDirectory() {

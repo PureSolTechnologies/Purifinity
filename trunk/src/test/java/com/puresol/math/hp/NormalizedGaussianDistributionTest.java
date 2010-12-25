@@ -1,19 +1,17 @@
 package com.puresol.math.hp;
 
+import static org.junit.Assert.*;
+
 import org.junit.Test;
 
 import com.puresol.math.hp.NormalizedGaussianDistribution;
 
-import junit.framework.Assert;
-import junit.framework.TestCase;
-
-public class NormalizedGaussianDistributionTest extends TestCase {
+public class NormalizedGaussianDistributionTest {
 
 	@Test
 	public void testFunction() {
 		NormalizedGaussianDistribution gd = new NormalizedGaussianDistribution();
-		Assert.assertEquals(1.0 / Math.sqrt(2.0 * Math.PI), gd.function(0.0),
-				1e-10);
+		assertEquals(1.0 / Math.sqrt(2.0 * Math.PI), gd.function(0.0), 1e-10);
 	}
 
 	@Test
@@ -36,39 +34,44 @@ public class NormalizedGaussianDistributionTest extends TestCase {
 
 	@Test
 	public void testConfidence() {
-		Assert.assertEquals(0.682689492137, NormalizedGaussianDistribution
-				.confidence(1.0), 1e-7);
-		Assert.assertEquals(0.954499736104, NormalizedGaussianDistribution
-				.confidence(2.0), 1e-7);
-		Assert.assertEquals(0.997300203937, NormalizedGaussianDistribution
-				.confidence(3.0), 1e-7);
-		Assert.assertEquals(0.999936657516, NormalizedGaussianDistribution
-				.confidence(4.0), 1e-7);
-		Assert.assertEquals(0.999999426697, NormalizedGaussianDistribution
-				.confidence(5.0), 1e-7);
-		Assert.assertEquals(0.999999998027, NormalizedGaussianDistribution
-				.confidence(6.0), 1e-7);
+		assertEquals(0.682689492137,
+				NormalizedGaussianDistribution.confidence(1.0), 1e-7);
+		assertEquals(0.954499736104,
+				NormalizedGaussianDistribution.confidence(2.0), 1e-7);
+		assertEquals(0.997300203937,
+				NormalizedGaussianDistribution.confidence(3.0), 1e-7);
+		assertEquals(0.999936657516,
+				NormalizedGaussianDistribution.confidence(4.0), 1e-7);
+		assertEquals(0.999999426697,
+				NormalizedGaussianDistribution.confidence(5.0), 1e-7);
+		assertEquals(0.999999998027,
+				NormalizedGaussianDistribution.confidence(6.0), 1e-7);
 	}
 
 	@Test
 	public void testSigmaLevel() {
-		Assert.assertEquals(1.0, NormalizedGaussianDistribution
-				.sigmaLevel(0.682689492137), 1e-7);
-		Assert.assertEquals(2.0, NormalizedGaussianDistribution
-				.sigmaLevel(0.954499736104), 1e-7);
-		Assert.assertEquals(3.0, NormalizedGaussianDistribution
-				.sigmaLevel(0.997300203937), 1e-7);
+		assertEquals(1.0,
+				NormalizedGaussianDistribution.sigmaLevel(0.682689492137), 1e-7);
+		assertEquals(2.0,
+				NormalizedGaussianDistribution.sigmaLevel(0.954499736104), 1e-7);
+		assertEquals(3.0,
+				NormalizedGaussianDistribution.sigmaLevel(0.997300203937), 1e-7);
 		/*
 		 * A higher level than 4.0 causes rounding effects... :-(
 		 */
-		Assert.assertEquals(4.0, NormalizedGaussianDistribution
-				.sigmaLevel(0.999936657516), 1e-6);
-		Assert.assertEquals(5.0, NormalizedGaussianDistribution
-				.sigmaLevel(0.999999426697), 1e-4);
-		Assert.assertEquals(6.0, NormalizedGaussianDistribution
-				.sigmaLevel(0.999999997027), 1e-1); /*
-													 * double precision
-													 * limitation!:-(
-													 */
+		assertEquals(4.0,
+				NormalizedGaussianDistribution.sigmaLevel(0.999936657516), 1e-6);
+		assertEquals(5.0,
+				NormalizedGaussianDistribution.sigmaLevel(0.999999426697), 1e-4);
+		assertEquals(6.0,
+				NormalizedGaussianDistribution.sigmaLevel(0.999999997027), 1e-1); /*
+																				 * double
+																				 * precision
+																				 * limitation
+																				 * !
+																				 * :
+																				 * -
+																				 * (
+																				 */
 	}
 }

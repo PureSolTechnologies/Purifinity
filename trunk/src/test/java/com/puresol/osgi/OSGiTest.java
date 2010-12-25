@@ -1,12 +1,12 @@
 package com.puresol.osgi;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 
-public class OSGiTest extends TestCase {
+public class OSGiTest {
 
 	@Test
 	public void testResources() {

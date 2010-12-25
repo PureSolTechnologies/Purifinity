@@ -10,18 +10,15 @@
 
 package com.puresol.testing;
 
+import static org.junit.Assert.*;
+
 import org.junit.Test;
 
-import junit.framework.Assert;
-import junit.framework.TestCase;
+public class TesterTest {
 
-public class TesterTest extends TestCase {
-
-	
 	@Test
 	public void testGetterAndSetterTester() {
-		Assert.assertTrue(Tester
-				.testGetterAndSetter(GetterAndSetter4Testing.class));
+		assertTrue(Tester.testGetterAndSetter(GetterAndSetter4Testing.class));
 	}
 
 	@Test
@@ -33,7 +30,7 @@ public class TesterTest extends TestCase {
 		object.setIntVar(42);
 		object.setShortVar((short) 21);
 		object.setStringVar("String");
-		Assert.assertTrue(Tester.testClone(object));
+		assertTrue(Tester.testClone(object));
 	}
 
 }

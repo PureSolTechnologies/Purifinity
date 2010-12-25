@@ -1,17 +1,16 @@
 package com.puresol.gui;
 
+import static org.junit.Assert.*;
+
 import org.junit.Test;
 
 import com.puresol.testing.Tester;
 
-import junit.framework.Assert;
-import junit.framework.TestCase;
-
-public class PureSolApplicationTest extends TestCase {
+public class PureSolApplicationTest {
 
 	@Test
 	public void testStandards() {
-		Assert.assertTrue(Tester.testStandards(PureSolApplication.class));
+		assertTrue(Tester.testStandards(PureSolApplication.class));
 	}
 
 }

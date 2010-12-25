@@ -1,21 +1,20 @@
 package com.puresol.data;
 
+import static org.junit.Assert.*;
+
 import org.junit.Test;
 
 import com.puresol.testing.Tester;
 
-import junit.framework.Assert;
-import junit.framework.TestCase;
-
-public class PersonNamePartTypeTest extends TestCase {
+public class PersonNamePartTypeTest {
 
 	@Test
 	public void testIdentifiable() {
-		Assert.assertTrue(Tester.testIdentifiable(PersonNamePartType.class));
+		assertTrue(Tester.testIdentifiable(PersonNamePartType.class));
 	}
 
 	@Test
 	public void testStandards() {
-		Assert.assertTrue(Tester.testStandards(PersonNamePartType.class));
+		assertTrue(Tester.testStandards(PersonNamePartType.class));
 	}
 }

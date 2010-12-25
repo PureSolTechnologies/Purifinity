@@ -1,18 +1,15 @@
 package com.puresol.exceptions;
 
-import junit.framework.Assert;
-import junit.framework.TestCase;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
 
 import com.puresol.testing.Tester;
 
-public class StrangeSituationExceptionTest extends TestCase {
+public class StrangeSituationExceptionTest {
 
 	@Test
 	public void testStandards() {
-		Assert
-				.assertTrue(Tester
-						.testStandards(StrangeSituationException.class));
+		assertTrue(Tester.testStandards(StrangeSituationException.class));
 	}
 }

@@ -10,6 +10,8 @@
 
 package com.puresol.entities.forms;
 
+import static org.junit.Assert.*;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -17,17 +19,14 @@ import java.lang.annotation.Target;
 
 import org.junit.Test;
 
-import junit.framework.Assert;
-import junit.framework.TestCase;
-
-public class PasswordTest extends TestCase {
+public class PasswordTest {
 
 	@Test
 	public void testAnnotations() {
 		Retention retention = Password.class.getAnnotation(Retention.class);
-		Assert.assertEquals(RetentionPolicy.RUNTIME, retention.value());
+		assertEquals(RetentionPolicy.RUNTIME, retention.value());
 		Target target = Password.class.getAnnotation(Target.class);
-		Assert.assertEquals(1, target.value().length);
-		Assert.assertEquals(ElementType.METHOD, target.value()[0]);
+		assertEquals(1, target.value().length);
+		assertEquals(ElementType.METHOD, target.value()[0]);
 	}
 }

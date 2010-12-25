@@ -1,8 +1,8 @@
 package com.puresol.combatcoding;
 
-import org.junit.Test;
+import static org.junit.Assert.*;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
 /**
  * This testcase checks the Combat Coding class CC for correction functionality.
@@ -10,7 +10,7 @@ import junit.framework.TestCase;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class CCTest extends TestCase {
+public class CCTest {
 
 	private static class PrimitiveTest implements Cloneable {
 		public int a;

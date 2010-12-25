@@ -1,12 +1,12 @@
 package com.puresol.utils;
 
+import static org.junit.Assert.*;
+
 import java.util.regex.Pattern;
 
 import org.junit.Test;
 
-import junit.framework.TestCase;
-
-public class RegExpUtilitiesTest extends TestCase {
+public class RegExpUtilitiesTest {
 
 	@Test
 	public void testString2RegExp() {
