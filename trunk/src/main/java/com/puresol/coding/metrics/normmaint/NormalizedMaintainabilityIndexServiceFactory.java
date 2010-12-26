@@ -12,7 +12,7 @@ import com.puresol.coding.evaluator.ProjectEvaluatorFactory;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.utils.Property;
 
-public class NormalizedMaintainabilityIndexFactory implements CodeRangeEvaluatorFactory,
+public class NormalizedMaintainabilityIndexServiceFactory implements CodeRangeEvaluatorFactory,
 		ProjectEvaluatorFactory {
 
 	@Override

@@ -7,14 +7,14 @@ import org.osgi.framework.BundleContext;
 import com.puresol.coding.evaluator.CodeRangeEvaluatorManager;
 import com.puresol.coding.evaluator.ProjectEvaluatorManager;
 import com.puresol.coding.metrics.cocomo.CoCoMoConfigurator;
-import com.puresol.coding.metrics.cocomo.CoCoMoFactory;
-import com.puresol.coding.metrics.codedepth.CodeDepthMetricFactory;
-import com.puresol.coding.metrics.entropy.EntropyMetricFactory;
-import com.puresol.coding.metrics.halstead.HalsteadMetricFactory;
-import com.puresol.coding.metrics.maintainability.MaintainabilityIndexFactory;
-import com.puresol.coding.metrics.mccabe.McCabeMetricFactory;
-import com.puresol.coding.metrics.normmaint.NormalizedMaintainabilityIndexFactory;
-import com.puresol.coding.metrics.sloc.SLOCMetricFactory;
+import com.puresol.coding.metrics.cocomo.CoCoMoServiceFactory;
+import com.puresol.coding.metrics.codedepth.CodeDepthMetricServiceFactory;
+import com.puresol.coding.metrics.entropy.EntropyMetricServiceFactory;
+import com.puresol.coding.metrics.halstead.HalsteadMetricServiceFactory;
+import com.puresol.coding.metrics.maintainability.MaintainabilityIndexServiceFactory;
+import com.puresol.coding.metrics.mccabe.McCabeMetricServiceFactory;
+import com.puresol.coding.metrics.normmaint.NormalizedMaintainabilityIndexServiceFactory;
+import com.puresol.coding.metrics.sloc.SLOCMetricServiceFactory;
 import com.puresol.gui.osgi.BundleConfiguratorManager;
 
 /**
@@ -28,14 +28,14 @@ public class Activator implements BundleActivator {
 
 	private static final Logger logger = Logger.getLogger(Activator.class);
 
-	private CoCoMoFactory cocomoFactory = null;
-	private CodeDepthMetricFactory codeDepthMetricFactory = null;
-	private EntropyMetricFactory entropyMetricFactory = null;
-	private HalsteadMetricFactory halsteadMetricFactory = null;
-	private MaintainabilityIndexFactory maintainabilityIndexFactory = null;
-	private NormalizedMaintainabilityIndexFactory normalizedMaintainabilityIndexFactory = null;
-	private McCabeMetricFactory mcCabeMetricFactory = null;
-	private SLOCMetricFactory slocMetricFactory = null;
+	private CoCoMoServiceFactory cocomoFactory = null;
+	private CodeDepthMetricServiceFactory codeDepthMetricFactory = null;
+	private EntropyMetricServiceFactory entropyMetricFactory = null;
+	private HalsteadMetricServiceFactory halsteadMetricFactory = null;
+	private MaintainabilityIndexServiceFactory maintainabilityIndexFactory = null;
+	private NormalizedMaintainabilityIndexServiceFactory normalizedMaintainabilityIndexFactory = null;
+	private McCabeMetricServiceFactory mcCabeMetricFactory = null;
+	private SLOCMetricServiceFactory slocMetricFactory = null;
 	private CoCoMoConfigurator cocomoConfigurator = null;
 
 	@Override
@@ -49,37 +49,37 @@ public class Activator implements BundleActivator {
 		BundleConfiguratorManager bundleConfiguratorManager = BundleConfiguratorManager
 				.getInstance();
 
-		cocomoFactory = new CoCoMoFactory();
+		cocomoFactory = new CoCoMoServiceFactory();
 		projectEvaluatorManager.register(cocomoFactory);
 		cocomoConfigurator = new CoCoMoConfigurator();
 		bundleConfiguratorManager.register(cocomoConfigurator);
 
-		codeDepthMetricFactory = new CodeDepthMetricFactory();
+		codeDepthMetricFactory = new CodeDepthMetricServiceFactory();
 		projectEvaluatorManager.register(codeDepthMetricFactory);
 		codeRangeEvaluatorManager.register(codeDepthMetricFactory);
 
-		entropyMetricFactory = new EntropyMetricFactory();
+		entropyMetricFactory = new EntropyMetricServiceFactory();
 		projectEvaluatorManager.register(entropyMetricFactory);
 		codeRangeEvaluatorManager.register(entropyMetricFactory);
 
-		halsteadMetricFactory = new HalsteadMetricFactory();
+		halsteadMetricFactory = new HalsteadMetricServiceFactory();
 		projectEvaluatorManager.register(halsteadMetricFactory);
 		codeRangeEvaluatorManager.register(halsteadMetricFactory);
 
-		maintainabilityIndexFactory = new MaintainabilityIndexFactory();
+		maintainabilityIndexFactory = new MaintainabilityIndexServiceFactory();
 		projectEvaluatorManager.register(maintainabilityIndexFactory);
 		codeRangeEvaluatorManager.register(maintainabilityIndexFactory);
 
-		normalizedMaintainabilityIndexFactory = new NormalizedMaintainabilityIndexFactory();
+		normalizedMaintainabilityIndexFactory = new NormalizedMaintainabilityIndexServiceFactory();
 		projectEvaluatorManager.register(normalizedMaintainabilityIndexFactory);
 		codeRangeEvaluatorManager
 				.register(normalizedMaintainabilityIndexFactory);
 
-		mcCabeMetricFactory = new McCabeMetricFactory();
+		mcCabeMetricFactory = new McCabeMetricServiceFactory();
 		projectEvaluatorManager.register(mcCabeMetricFactory);
 		codeRangeEvaluatorManager.register(mcCabeMetricFactory);
 
-		slocMetricFactory = new SLOCMetricFactory();
+		slocMetricFactory = new SLOCMetricServiceFactory();
 		projectEvaluatorManager.register(slocMetricFactory);
 		codeRangeEvaluatorManager.register(slocMetricFactory);
 

@@ -1,4 +1,4 @@
-package com.puresol.coding.metrics.codedepth;
+package com.puresol.coding.metrics.maintainability;
 
 import java.util.List;
 
@@ -12,38 +12,38 @@ import com.puresol.coding.evaluator.ProjectEvaluatorFactory;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.utils.Property;
 
-public class CodeDepthMetricFactory implements CodeRangeEvaluatorFactory,
+public class MaintainabilityIndexServiceFactory implements CodeRangeEvaluatorFactory,
 		ProjectEvaluatorFactory {
 
 	@Override
 	public CodeRangeEvaluator create(ProgrammingLanguage language,
-			CodeRange syntaxTree) {
-		return new CodeDepthMetric(language, syntaxTree);
+			CodeRange codeRange) {
+		return new MaintainabilityIndex(language, codeRange);
 	}
 
 	@Override
 	public ProjectEvaluator create(ProjectAnalyzer projectAnalyzer) {
-		return new ProjectCodeDepthMetric(projectAnalyzer);
+		return new ProjectMaintainabilityIndex(projectAnalyzer);
 	}
 
 	@Override
 	public String getDescription() {
-		return CodeDepthMetric.DESCRIPTION;
+		return MaintainabilityIndex.DESCRIPTION;
 	}
 
 	@Override
 	public String getName() {
-		return CodeDepthMetric.NAME;
+		return MaintainabilityIndex.NAME;
 	}
 
 	@Override
 	public List<Property> getEvaluatorProperties() {
-		return CodeDepthMetric.SUPPORTED_PROPERTIES;
+		return MaintainabilityIndex.SUPPORTED_PROPERTIES;
 	}
 
 	@Override
 	public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
-		return CodeDepthMetric.EVALUATED_QUALITY_CHARACTERISTICS;
+		return MaintainabilityIndex.EVALUATED_QUALITY_CHARACTERISTICS;
 	}
 
 }

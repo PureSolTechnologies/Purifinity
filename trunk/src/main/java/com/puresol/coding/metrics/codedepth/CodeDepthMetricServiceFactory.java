@@ -1,4 +1,4 @@
-package com.puresol.coding.metrics.mccabe;
+package com.puresol.coding.metrics.codedepth;
 
 import java.util.List;
 
@@ -12,38 +12,38 @@ import com.puresol.coding.evaluator.ProjectEvaluatorFactory;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.utils.Property;
 
-public class McCabeMetricFactory implements CodeRangeEvaluatorFactory,
+public class CodeDepthMetricServiceFactory implements CodeRangeEvaluatorFactory,
 		ProjectEvaluatorFactory {
 
 	@Override
 	public CodeRangeEvaluator create(ProgrammingLanguage language,
-			CodeRange codeRange) {
-		return new McCabeMetric(language, codeRange);
+			CodeRange syntaxTree) {
+		return new CodeDepthMetric(language, syntaxTree);
 	}
 
 	@Override
 	public ProjectEvaluator create(ProjectAnalyzer projectAnalyzer) {
-		return new ProjectMcCabeMetric(projectAnalyzer);
+		return new ProjectCodeDepthMetric(projectAnalyzer);
 	}
 
 	@Override
 	public String getDescription() {
-		return McCabeMetric.DESCRIPTION;
+		return CodeDepthMetric.DESCRIPTION;
 	}
 
 	@Override
 	public String getName() {
-		return McCabeMetric.NAME;
+		return CodeDepthMetric.NAME;
 	}
 
 	@Override
 	public List<Property> getEvaluatorProperties() {
-		return McCabeMetric.SUPPORTED_PROPERTIES;
+		return CodeDepthMetric.SUPPORTED_PROPERTIES;
 	}
 
 	@Override
 	public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
-		return McCabeMetric.EVALUATED_QUALITY_CHARACTERISTICS;
+		return CodeDepthMetric.EVALUATED_QUALITY_CHARACTERISTICS;
 	}
 
 }

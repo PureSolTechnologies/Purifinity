@@ -1,4 +1,4 @@
-package com.puresol.coding.metrics.halstead;
+package com.puresol.coding.metrics.sloc;
 
 import java.util.List;
 
@@ -12,38 +12,37 @@ import com.puresol.coding.evaluator.ProjectEvaluatorFactory;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.utils.Property;
 
-public class HalsteadMetricFactory implements CodeRangeEvaluatorFactory,
-		ProjectEvaluatorFactory {
+public class SLOCMetricServiceFactory implements ProjectEvaluatorFactory,
+		CodeRangeEvaluatorFactory {
 
 	@Override
 	public CodeRangeEvaluator create(ProgrammingLanguage language,
 			CodeRange codeRange) {
-		return new HalsteadMetric(language, codeRange);
+		return new SLOCMetric(language, codeRange);
 	}
 
 	@Override
 	public ProjectEvaluator create(ProjectAnalyzer projectAnalyzer) {
-		return new ProjectHalsteadMetric(projectAnalyzer);
+		return new ProjectSLOCMetric(projectAnalyzer);
 	}
 
 	@Override
 	public String getDescription() {
-		return HalsteadMetric.DESCRIPTION;
+		return SLOCMetric.DESCRIPTION;
 	}
 
 	@Override
 	public String getName() {
-		return HalsteadMetric.NAME;
+		return SLOCMetric.NAME;
 	}
 
 	@Override
 	public List<Property> getEvaluatorProperties() {
-		return HalsteadMetric.SUPPORTED_PROPERTIES;
+		return SLOCMetric.SUPPORTED_PROPERTIES;
 	}
 
 	@Override
 	public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
-		return HalsteadMetric.EVALUATED_QUALITY_CHARACTERISTICS;
+		return SLOCMetric.EVALUATED_QUALITY_CHARACTERISTICS;
 	}
-
 }

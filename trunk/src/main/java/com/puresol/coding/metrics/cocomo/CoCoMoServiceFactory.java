@@ -8,7 +8,7 @@ import com.puresol.coding.evaluator.ProjectEvaluatorFactory;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.utils.Property;
 
-public class CoCoMoFactory implements ProjectEvaluatorFactory {
+public class CoCoMoServiceFactory implements ProjectEvaluatorFactory {
 
 	@Override
 	public ProjectEvaluator create(ProjectAnalyzer projectAnalyser) {

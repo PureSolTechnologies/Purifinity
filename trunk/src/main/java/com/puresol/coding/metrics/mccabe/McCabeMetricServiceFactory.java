@@ -1,4 +1,4 @@
-package com.puresol.coding.metrics.sloc;
+package com.puresol.coding.metrics.mccabe;
 
 import java.util.List;
 
@@ -12,37 +12,38 @@ import com.puresol.coding.evaluator.ProjectEvaluatorFactory;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.utils.Property;
 
-public class SLOCMetricFactory implements ProjectEvaluatorFactory,
-		CodeRangeEvaluatorFactory {
+public class McCabeMetricServiceFactory implements CodeRangeEvaluatorFactory,
+		ProjectEvaluatorFactory {
 
 	@Override
 	public CodeRangeEvaluator create(ProgrammingLanguage language,
 			CodeRange codeRange) {
-		return new SLOCMetric(language, codeRange);
+		return new McCabeMetric(language, codeRange);
 	}
 
 	@Override
 	public ProjectEvaluator create(ProjectAnalyzer projectAnalyzer) {
-		return new ProjectSLOCMetric(projectAnalyzer);
+		return new ProjectMcCabeMetric(projectAnalyzer);
 	}
 
 	@Override
 	public String getDescription() {
-		return SLOCMetric.DESCRIPTION;
+		return McCabeMetric.DESCRIPTION;
 	}
 
 	@Override
 	public String getName() {
-		return SLOCMetric.NAME;
+		return McCabeMetric.NAME;
 	}
 
 	@Override
 	public List<Property> getEvaluatorProperties() {
-		return SLOCMetric.SUPPORTED_PROPERTIES;
+		return McCabeMetric.SUPPORTED_PROPERTIES;
 	}
 
 	@Override
 	public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
-		return SLOCMetric.EVALUATED_QUALITY_CHARACTERISTICS;
+		return McCabeMetric.EVALUATED_QUALITY_CHARACTERISTICS;
 	}
+
 }

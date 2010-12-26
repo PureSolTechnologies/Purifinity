@@ -12,7 +12,7 @@ import com.puresol.coding.evaluator.ProjectEvaluatorFactory;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.utils.Property;
 
-public class EntropyMetricFactory implements CodeRangeEvaluatorFactory,
+public class EntropyMetricServiceFactory implements CodeRangeEvaluatorFactory,
 		ProjectEvaluatorFactory {
 
 	@Override
