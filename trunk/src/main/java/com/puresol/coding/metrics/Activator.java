@@ -13,6 +13,7 @@ import com.puresol.coding.metrics.entropy.EntropyMetricFactory;
 import com.puresol.coding.metrics.halstead.HalsteadMetricFactory;
 import com.puresol.coding.metrics.maintainability.MaintainabilityIndexFactory;
 import com.puresol.coding.metrics.mccabe.McCabeMetricFactory;
+import com.puresol.coding.metrics.normmaint.NormalizedMaintainabilityIndexFactory;
 import com.puresol.coding.metrics.sloc.SLOCMetricFactory;
 import com.puresol.gui.osgi.BundleConfiguratorManager;
 
@@ -32,6 +33,7 @@ public class Activator implements BundleActivator {
 	private EntropyMetricFactory entropyMetricFactory = null;
 	private HalsteadMetricFactory halsteadMetricFactory = null;
 	private MaintainabilityIndexFactory maintainabilityIndexFactory = null;
+	private NormalizedMaintainabilityIndexFactory normalizedMaintainabilityIndexFactory = null;
 	private McCabeMetricFactory mcCabeMetricFactory = null;
 	private SLOCMetricFactory slocMetricFactory = null;
 	private CoCoMoConfigurator cocomoConfigurator = null;
@@ -67,6 +69,11 @@ public class Activator implements BundleActivator {
 		maintainabilityIndexFactory = new MaintainabilityIndexFactory();
 		projectEvaluatorManager.register(maintainabilityIndexFactory);
 		codeRangeEvaluatorManager.register(maintainabilityIndexFactory);
+
+		normalizedMaintainabilityIndexFactory = new NormalizedMaintainabilityIndexFactory();
+		projectEvaluatorManager.register(normalizedMaintainabilityIndexFactory);
+		codeRangeEvaluatorManager
+				.register(normalizedMaintainabilityIndexFactory);
 
 		mcCabeMetricFactory = new McCabeMetricFactory();
 		projectEvaluatorManager.register(mcCabeMetricFactory);
@@ -110,6 +117,12 @@ public class Activator implements BundleActivator {
 		projectEvaluatorManager.unregister(maintainabilityIndexFactory);
 		codeRangeEvaluatorManager.unregister(maintainabilityIndexFactory);
 		maintainabilityIndexFactory = null;
+
+		projectEvaluatorManager
+				.unregister(normalizedMaintainabilityIndexFactory);
+		codeRangeEvaluatorManager
+				.unregister(normalizedMaintainabilityIndexFactory);
+		normalizedMaintainabilityIndexFactory = null;
 
 		projectEvaluatorManager.unregister(mcCabeMetricFactory);
 		codeRangeEvaluatorManager.unregister(mcCabeMetricFactory);
