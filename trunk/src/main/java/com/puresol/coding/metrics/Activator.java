@@ -1,12 +1,19 @@
 package com.puresol.coding.metrics;
 
+import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.Hashtable;
+import java.util.List;
+
+import javax.swingx.config.APIInformation;
+
 import org.apache.log4j.Logger;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
 
-import com.puresol.coding.evaluator.CodeRangeEvaluatorManager;
-import com.puresol.coding.evaluator.ProjectEvaluatorManager;
-import com.puresol.coding.metrics.cocomo.CoCoMoConfigurator;
+import com.puresol.coding.evaluator.CodeRangeEvaluatorFactory;
+import com.puresol.coding.evaluator.ProjectEvaluatorFactory;
 import com.puresol.coding.metrics.cocomo.CoCoMoServiceFactory;
 import com.puresol.coding.metrics.codedepth.CodeDepthMetricServiceFactory;
 import com.puresol.coding.metrics.entropy.EntropyMetricServiceFactory;
@@ -15,7 +22,6 @@ import com.puresol.coding.metrics.maintainability.MaintainabilityIndexServiceFac
 import com.puresol.coding.metrics.mccabe.McCabeMetricServiceFactory;
 import com.puresol.coding.metrics.normmaint.NormalizedMaintainabilityIndexServiceFactory;
 import com.puresol.coding.metrics.sloc.SLOCMetricServiceFactory;
-import com.puresol.gui.osgi.BundleConfiguratorManager;
 
 /**
  * This class is used as OSGi bundle activator. This class only registers and
@@ -28,60 +34,163 @@ public class Activator implements BundleActivator {
 
 	private static final Logger logger = Logger.getLogger(Activator.class);
 
-	private CoCoMoServiceFactory cocomoFactory = null;
-	private CodeDepthMetricServiceFactory codeDepthMetricFactory = null;
-	private EntropyMetricServiceFactory entropyMetricFactory = null;
-	private HalsteadMetricServiceFactory halsteadMetricFactory = null;
-	private MaintainabilityIndexServiceFactory maintainabilityIndexFactory = null;
-	private NormalizedMaintainabilityIndexServiceFactory normalizedMaintainabilityIndexFactory = null;
-	private McCabeMetricServiceFactory mcCabeMetricFactory = null;
-	private SLOCMetricServiceFactory slocMetricFactory = null;
-	private CoCoMoConfigurator cocomoConfigurator = null;
+	private final List<ServiceRegistration> serviceRegistrations = new ArrayList<ServiceRegistration>();
+
+	private void registerCoCoMo(BundleContext context) {
+		CoCoMoServiceFactory cocomoFactory = new CoCoMoServiceFactory();
+
+		String interfaces[] = new String[] { ProjectEvaluatorFactory.class
+				.getName() };
+
+		Dictionary<Object, Object> properties = new Hashtable<Object, Object>();
+		properties.put("service.name", cocomoFactory.getName());
+		properties.put("service.description", cocomoFactory.getDescription());
+		properties.put("service.vendor", APIInformation.getPackageOwner());
+
+		ServiceRegistration registration = context.registerService(interfaces,
+				cocomoFactory, properties);
+		serviceRegistrations.add(registration);
+	}
+
+	private void registerCodeDepth(BundleContext context) {
+		CodeDepthMetricServiceFactory codeDepthMetricFactory = new CodeDepthMetricServiceFactory();
+
+		String interfaces[] = new String[] {
+				ProjectEvaluatorFactory.class.getName(),
+				CodeRangeEvaluatorFactory.class.getName() };
+
+		Dictionary<Object, Object> properties = new Hashtable<Object, Object>();
+		properties.put("service.name", codeDepthMetricFactory.getName());
+		properties.put("service.description",
+				codeDepthMetricFactory.getDescription());
+		properties.put("service.vendor", APIInformation.getPackageOwner());
+
+		ServiceRegistration registration = context.registerService(interfaces,
+				codeDepthMetricFactory, properties);
+		serviceRegistrations.add(registration);
+	}
+
+	private void registerEntropy(BundleContext context) {
+		EntropyMetricServiceFactory entropyMetricFactory = new EntropyMetricServiceFactory();
+
+		String interfaces[] = new String[] {
+				ProjectEvaluatorFactory.class.getName(),
+				CodeRangeEvaluatorFactory.class.getName() };
+
+		Dictionary<Object, Object> properties = new Hashtable<Object, Object>();
+		properties.put("service.name", entropyMetricFactory.getName());
+		properties.put("service.description",
+				entropyMetricFactory.getDescription());
+		properties.put("service.vendor", APIInformation.getPackageOwner());
+
+		ServiceRegistration registration = context.registerService(interfaces,
+				entropyMetricFactory, properties);
+		serviceRegistrations.add(registration);
+	}
+
+	private void registerHalstead(BundleContext context) {
+		HalsteadMetricServiceFactory halsteadMetricFactory = new HalsteadMetricServiceFactory();
+
+		String interfaces[] = new String[] {
+				ProjectEvaluatorFactory.class.getName(),
+				CodeRangeEvaluatorFactory.class.getName() };
+
+		Dictionary<Object, Object> properties = new Hashtable<Object, Object>();
+		properties.put("service.name", halsteadMetricFactory.getName());
+		properties.put("service.description",
+				halsteadMetricFactory.getDescription());
+		properties.put("service.vendor", APIInformation.getPackageOwner());
+
+		ServiceRegistration registration = context.registerService(interfaces,
+				halsteadMetricFactory, properties);
+		serviceRegistrations.add(registration);
+	}
+
+	private void registerMaintainability(BundleContext context) {
+		MaintainabilityIndexServiceFactory maintainabilityIndexFactory = new MaintainabilityIndexServiceFactory();
+
+		String interfaces[] = new String[] {
+				ProjectEvaluatorFactory.class.getName(),
+				CodeRangeEvaluatorFactory.class.getName() };
+
+		Dictionary<Object, Object> properties = new Hashtable<Object, Object>();
+		properties.put("service.name", maintainabilityIndexFactory.getName());
+		properties.put("service.description",
+				maintainabilityIndexFactory.getDescription());
+		properties.put("service.vendor", APIInformation.getPackageOwner());
+
+		ServiceRegistration registration = context.registerService(interfaces,
+				maintainabilityIndexFactory, properties);
+		serviceRegistrations.add(registration);
+	}
+
+	private void registerNormalizedMaintainability(BundleContext context) {
+		NormalizedMaintainabilityIndexServiceFactory normalizedMaintainabilityIndexFactory = new NormalizedMaintainabilityIndexServiceFactory();
+
+		String interfaces[] = new String[] {
+				ProjectEvaluatorFactory.class.getName(),
+				CodeRangeEvaluatorFactory.class.getName() };
+
+		Dictionary<Object, Object> properties = new Hashtable<Object, Object>();
+		properties.put("service.name",
+				normalizedMaintainabilityIndexFactory.getName());
+		properties.put("service.description",
+				normalizedMaintainabilityIndexFactory.getDescription());
+		properties.put("service.vendor", APIInformation.getPackageOwner());
+
+		ServiceRegistration registration = context.registerService(interfaces,
+				normalizedMaintainabilityIndexFactory, properties);
+		serviceRegistrations.add(registration);
+	}
+
+	private void registerMcCabe(BundleContext context) {
+		McCabeMetricServiceFactory mcCabeMetricFactory = new McCabeMetricServiceFactory();
+
+		String interfaces[] = new String[] {
+				ProjectEvaluatorFactory.class.getName(),
+				CodeRangeEvaluatorFactory.class.getName() };
+
+		Dictionary<Object, Object> properties = new Hashtable<Object, Object>();
+		properties.put("service.name", mcCabeMetricFactory.getName());
+		properties.put("service.description",
+				mcCabeMetricFactory.getDescription());
+		properties.put("service.vendor", APIInformation.getPackageOwner());
+
+		ServiceRegistration registration = context.registerService(interfaces,
+				mcCabeMetricFactory, properties);
+		serviceRegistrations.add(registration);
+	}
+
+	private void registerSLOC(BundleContext context) {
+		SLOCMetricServiceFactory slocMetricFactory = new SLOCMetricServiceFactory();
+
+		String interfaces[] = new String[] {
+				ProjectEvaluatorFactory.class.getName(),
+				CodeRangeEvaluatorFactory.class.getName() };
+
+		Dictionary<Object, Object> properties = new Hashtable<Object, Object>();
+		properties.put("service.name", slocMetricFactory.getName());
+		properties.put("service.description",
+				slocMetricFactory.getDescription());
+		properties.put("service.vendor", APIInformation.getPackageOwner());
+
+		ServiceRegistration registration = context.registerService(interfaces,
+				slocMetricFactory, properties);
+		serviceRegistrations.add(registration);
+	}
 
 	@Override
 	public void start(BundleContext context) throws Exception {
 		logger.info("Starting Metrics Base Package...");
 
-		ProjectEvaluatorManager projectEvaluatorManager = ProjectEvaluatorManager
-				.getInstance();
-		CodeRangeEvaluatorManager codeRangeEvaluatorManager = CodeRangeEvaluatorManager
-				.getInstance();
-		BundleConfiguratorManager bundleConfiguratorManager = BundleConfiguratorManager
-				.getInstance();
-
-		cocomoFactory = new CoCoMoServiceFactory();
-		projectEvaluatorManager.register(cocomoFactory);
-		cocomoConfigurator = new CoCoMoConfigurator();
-		bundleConfiguratorManager.register(cocomoConfigurator);
-
-		codeDepthMetricFactory = new CodeDepthMetricServiceFactory();
-		projectEvaluatorManager.register(codeDepthMetricFactory);
-		codeRangeEvaluatorManager.register(codeDepthMetricFactory);
-
-		entropyMetricFactory = new EntropyMetricServiceFactory();
-		projectEvaluatorManager.register(entropyMetricFactory);
-		codeRangeEvaluatorManager.register(entropyMetricFactory);
-
-		halsteadMetricFactory = new HalsteadMetricServiceFactory();
-		projectEvaluatorManager.register(halsteadMetricFactory);
-		codeRangeEvaluatorManager.register(halsteadMetricFactory);
-
-		maintainabilityIndexFactory = new MaintainabilityIndexServiceFactory();
-		projectEvaluatorManager.register(maintainabilityIndexFactory);
-		codeRangeEvaluatorManager.register(maintainabilityIndexFactory);
-
-		normalizedMaintainabilityIndexFactory = new NormalizedMaintainabilityIndexServiceFactory();
-		projectEvaluatorManager.register(normalizedMaintainabilityIndexFactory);
-		codeRangeEvaluatorManager
-				.register(normalizedMaintainabilityIndexFactory);
-
-		mcCabeMetricFactory = new McCabeMetricServiceFactory();
-		projectEvaluatorManager.register(mcCabeMetricFactory);
-		codeRangeEvaluatorManager.register(mcCabeMetricFactory);
-
-		slocMetricFactory = new SLOCMetricServiceFactory();
-		projectEvaluatorManager.register(slocMetricFactory);
-		codeRangeEvaluatorManager.register(slocMetricFactory);
+		registerCoCoMo(context);
+		registerCodeDepth(context);
+		registerEntropy(context);
+		registerHalstead(context);
+		registerMaintainability(context);
+		registerNormalizedMaintainability(context);
+		registerMcCabe(context);
+		registerSLOC(context);
 
 		logger.info("Started.");
 	}
@@ -90,47 +199,10 @@ public class Activator implements BundleActivator {
 	public void stop(BundleContext context) throws Exception {
 		logger.info("Stopping Metrics Base Package...");
 
-		ProjectEvaluatorManager projectEvaluatorManager = ProjectEvaluatorManager
-				.getInstance();
-		CodeRangeEvaluatorManager codeRangeEvaluatorManager = CodeRangeEvaluatorManager
-				.getInstance();
-		BundleConfiguratorManager bundleConfiguratorManager = BundleConfiguratorManager
-				.getInstance();
-
-		projectEvaluatorManager.unregister(cocomoFactory);
-		cocomoFactory = null;
-		bundleConfiguratorManager.unregister(cocomoConfigurator);
-		cocomoConfigurator = null;
-
-		projectEvaluatorManager.unregister(codeDepthMetricFactory);
-		codeRangeEvaluatorManager.unregister(codeDepthMetricFactory);
-		codeDepthMetricFactory = null;
-
-		projectEvaluatorManager.unregister(entropyMetricFactory);
-		codeRangeEvaluatorManager.unregister(entropyMetricFactory);
-		entropyMetricFactory = null;
-
-		projectEvaluatorManager.unregister(halsteadMetricFactory);
-		codeRangeEvaluatorManager.unregister(halsteadMetricFactory);
-		halsteadMetricFactory = null;
-
-		projectEvaluatorManager.unregister(maintainabilityIndexFactory);
-		codeRangeEvaluatorManager.unregister(maintainabilityIndexFactory);
-		maintainabilityIndexFactory = null;
-
-		projectEvaluatorManager
-				.unregister(normalizedMaintainabilityIndexFactory);
-		codeRangeEvaluatorManager
-				.unregister(normalizedMaintainabilityIndexFactory);
-		normalizedMaintainabilityIndexFactory = null;
-
-		projectEvaluatorManager.unregister(mcCabeMetricFactory);
-		codeRangeEvaluatorManager.unregister(mcCabeMetricFactory);
-		mcCabeMetricFactory = null;
-
-		projectEvaluatorManager.unregister(slocMetricFactory);
-		codeRangeEvaluatorManager.unregister(slocMetricFactory);
-		slocMetricFactory = null;
+		for (ServiceRegistration registration : serviceRegistrations) {
+			registration.unregister();
+		}
+		serviceRegistrations.clear();
 
 		logger.info("Stopped.");
 	}
