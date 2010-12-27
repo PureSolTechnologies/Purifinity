@@ -52,7 +52,7 @@ public class CodeAnalysis extends PureSolApplication {
 			.getTranslator(CodeAnalysis.class);
 
 	private OSGi osgi;
-	private final ProjectAnalysisBrowser browser = new ProjectAnalysisBrowser();
+	private ProjectAnalysisBrowser browser = null;
 
 	private ProjectAnalyzer analyser = null;
 
@@ -145,7 +145,7 @@ public class CodeAnalysis extends PureSolApplication {
 
 		widget.setNorth(toolbar);
 
-		widget.setCenter(browser);
+		widget.setCenter(browser = new ProjectAnalysisBrowser());
 		widget.setSouth(new MemoryMonitor());
 	}
 
