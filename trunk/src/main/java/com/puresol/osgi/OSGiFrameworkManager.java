@@ -37,11 +37,20 @@ public class OSGiFrameworkManager {
 	public static <T> List<T> getServices(String frameworkName,
 			String serviceName, String filter, Class<T> clazz)
 			throws InvalidSyntaxException {
+		List<T> services = new ArrayList<T>();
 		OSGi osgi = OSGiFrameworkManager.getInstance(frameworkName);
+		if (osgi == null) {
+			return services;
+		}
 		BundleContext bundleContext = osgi.getContext();
+		if (bundleContext == null) {
+			return services;
+		}
 		ServiceReference references[];
 		references = bundleContext.getServiceReferences(serviceName, filter);
-		List<T> services = new ArrayList<T>();
+		if (references == null) {
+			return services;
+		}
 		for (ServiceReference reference : references) {
 			@SuppressWarnings("unchecked")
 			T t = (T) bundleContext.getService(reference);
