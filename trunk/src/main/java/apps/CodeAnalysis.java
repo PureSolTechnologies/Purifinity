@@ -35,6 +35,7 @@ import com.puresol.gui.osgi.BundleConfigurationDialog;
 import com.puresol.gui.osgi.BundleManager;
 import com.puresol.osgi.OSGi;
 import com.puresol.osgi.OSGiException;
+import com.puresol.osgi.OSGiFrameworkManager;
 
 /**
  * This is PureSolTechnologies' code analysis tool for automated source code
@@ -50,7 +51,7 @@ public class CodeAnalysis extends PureSolApplication {
 	private static final Translator translator = Translator
 			.getTranslator(CodeAnalysis.class);
 
-	private final OSGi osgi = new OSGi();
+	private OSGi osgi;
 	private final ProjectAnalysisBrowser browser = new ProjectAnalysisBrowser();
 
 	private ProjectAnalyzer analyser = null;
@@ -64,6 +65,8 @@ public class CodeAnalysis extends PureSolApplication {
 
 	private void startOSGi() {
 		try {
+			osgi = OSGiFrameworkManager.createInstance(CodeAnalysis.class
+					.getName());
 			osgi.start();
 		} catch (OSGiException e) {
 			logger.error(e.getMessage(), e);
@@ -242,7 +245,7 @@ public class CodeAnalysis extends PureSolApplication {
 
 	@Slot
 	void pluginConfiguration() {
-		new BundleConfigurationDialog().run();
+		new BundleConfigurationDialog(CodeAnalysis.class.getName()).run();
 	}
 
 	@Slot
@@ -256,6 +259,8 @@ public class CodeAnalysis extends PureSolApplication {
 	public void quit() {
 		try {
 			osgi.stop();
+			osgi = null;
+			OSGiFrameworkManager.deleteInstance(CodeAnalysis.class.getName());
 		} catch (BundleException e) {
 			logger.error(e.getMessage(), e);
 		}

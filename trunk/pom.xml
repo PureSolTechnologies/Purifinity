@@ -61,12 +61,6 @@
 				</configuration>
 				<executions>
 					<execution>
-						<goals>
-							<goal>clean</goal>
-							<goal>check</goal>
-						</goals>
-					</execution>
-					<execution>
 						<id>coverage-tests</id>
 						<phase>verify</phase>
 						<goals>

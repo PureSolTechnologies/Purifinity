@@ -1,4 +1,4 @@
-package com.puresol.coding.evaluator;
+package com.puresol.coding;
 
 import java.util.List;
 
@@ -9,17 +9,18 @@ import apps.CodeAnalysis;
 
 import com.puresol.osgi.OSGiFrameworkManager;
 
-public class ProjectEvaluatorManager {
-	private static final Logger logger = Logger
-			.getLogger(ProjectEvaluatorManager.class);
+public class ProgrammingLanguages {
 
-	public static List<ProjectEvaluatorFactory> getAll() {
+	private static final Logger logger = Logger
+			.getLogger(ProgrammingLanguages.class);
+
+	public static List<ProgrammingLanguage> getAll() {
 		try {
 			return OSGiFrameworkManager.getServices(
 					CodeAnalysis.class.getName(),
-					ProjectEvaluatorFactory.class.getName(), "(objectClass="
-							+ ProjectEvaluatorFactory.class.getName() + ")",
-					ProjectEvaluatorFactory.class);
+					ProgrammingLanguage.class.getName(), "(objectClass="
+							+ ProgrammingLanguage.class.getName() + ")",
+					ProgrammingLanguage.class);
 		} catch (InvalidSyntaxException e) {
 			logger.error(e.getMessage(), e);
 			throw new RuntimeException(e.getMessage(), e);

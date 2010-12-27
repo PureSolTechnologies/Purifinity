@@ -16,7 +16,7 @@ import java.io.FileNotFoundException;
 import org.apache.log4j.Logger;
 
 import com.puresol.coding.ProgrammingLanguage;
-import com.puresol.coding.ProgrammingLanguageManager;
+import com.puresol.coding.ProgrammingLanguages;
 import com.puresol.utils.PersistenceException;
 
 /**
@@ -67,8 +67,7 @@ public class AnalyzerFactory {
 
 	private Analyzer createAnalyser(File file)
 			throws LanguageNotSupportedException {
-		for (ProgrammingLanguage language : ProgrammingLanguageManager.getInstance()
-				.getAll()) {
+		for (ProgrammingLanguage language : ProgrammingLanguages.getAll()) {
 			Analyzer analyser = checkAndCreate(language, file);
 			if (analyser != null) {
 				return analyser;
@@ -88,8 +87,7 @@ public class AnalyzerFactory {
 
 	public Analyzer restore(File persistFile) {
 		try {
-			for (ProgrammingLanguage language : ProgrammingLanguageManager
-					.getInstance().getAll()) {
+			for (ProgrammingLanguage language : ProgrammingLanguages.getAll()) {
 				Analyzer analyzer = language.restoreAnalyzer(persistFile);
 				if (analyzer != null) {
 					return analyzer;

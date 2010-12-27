@@ -17,6 +17,11 @@ import javax.swingx.connect.Slot;
 import javax.swingx.progress.ProgressObservable;
 import javax.swingx.progress.ProgressWindow;
 
+import org.osgi.framework.ServiceEvent;
+import org.osgi.framework.ServiceListener;
+
+import apps.CodeAnalysis;
+
 import com.puresol.coding.analysis.Analyzer;
 import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.evaluator.CodeRangeEvaluatorFactory;
@@ -24,6 +29,7 @@ import com.puresol.coding.evaluator.CodeRangeEvaluatorManager;
 import com.puresol.coding.evaluator.Evaluator;
 import com.puresol.coding.evaluator.EvaluatorFactory;
 import com.puresol.gui.TabButton;
+import com.puresol.osgi.OSGiFrameworkManager;
 
 public class CodeRangeEvaluatorPanel extends Panel {
 
@@ -69,17 +75,21 @@ public class CodeRangeEvaluatorPanel extends Panel {
 		add(splitPane, BorderLayout.CENTER);
 		add(description, BorderLayout.SOUTH);
 
-		CodeRangeEvaluatorManager.getInstance().connect(
-				"changedCodeRangeEvaluator", this, "addEvaluators");
+		OSGiFrameworkManager.getInstance(CodeAnalysis.class.getName())
+				.getContext().addServiceListener(new ServiceListener() {
+					@Override
+					public void serviceChanged(ServiceEvent event) {
+						addEvaluators();
+					}
+				});
 		addEvaluators();
 	}
 
-	@Slot
 	private void addEvaluators() {
 		synchronized (evaluators) {
 			evaluators.removeAll();
 			List<CodeRangeEvaluatorFactory> evaluatorFactories = CodeRangeEvaluatorManager
-					.getInstance().getAll();
+					.getAll();
 			Hashtable<Object, Object> values = new Hashtable<Object, Object>();
 			for (EvaluatorFactory evaluatorFactory : evaluatorFactories) {
 				values.put(evaluatorFactory.getName(), evaluatorFactory);
