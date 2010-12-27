@@ -7,11 +7,11 @@ import com.puresol.trees.Tree;
 
 public class BundleConfiguratorTree implements Tree<BundleConfiguratorTree> {
 
-	public static BundleConfiguratorTree create() {
+	public static BundleConfiguratorTree create(String frameworkName) {
 		BundleConfiguratorTree root = new BundleConfiguratorTree(null,
 				"Configurators", null);
 		for (BundleConfigurator configurator : BundleConfiguratorManager
-				.getInstance().getAll()) {
+				.getAll(frameworkName)) {
 			String path[] = configurator.getPathName().split("/");
 			BundleConfiguratorTree node = root;
 			for (int id = 0; id < path.length; id++) {

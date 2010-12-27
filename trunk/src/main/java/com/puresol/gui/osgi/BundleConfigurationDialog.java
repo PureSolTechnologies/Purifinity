@@ -15,10 +15,12 @@ public class BundleConfigurationDialog extends Dialog {
 	private static final Translator translator = Translator
 			.getTranslator(BundleConfigurationDialog.class);
 
+	private final String frameworkName;
 	private final BundleConfiguratorTreeViewer configuratorTreeView = new BundleConfiguratorTreeViewer();
 
-	public BundleConfigurationDialog() {
+	public BundleConfigurationDialog(String frameworkName) {
 		super(translator.i18n("Plugin Configurations"), true);
+		this.frameworkName = frameworkName;
 		initUI();
 	}
 
@@ -27,7 +29,7 @@ public class BundleConfigurationDialog extends Dialog {
 		setContentPane(panel);
 		panel.setLayout(new BorderLayout());
 		configuratorTreeView.setConfiguratorTree(BundleConfiguratorTree
-				.create());
+				.create(frameworkName));
 		configuratorTreeView.connect("valueChanged", this,
 				"changeConfigurator", TreePath.class);
 		panel.add(configuratorTreeView, BorderLayout.WEST);

@@ -10,17 +10,18 @@ public class OSGiUtils {
 			.getTranslator(OSGiUtils.class);
 
 	public static String getTextForState(int state) {
-		if (state == Bundle.UNINSTALLED) {
+		switch (state) {
+		case Bundle.UNINSTALLED:
 			return translator.i18n("uninstalled");
-		} else if (state == Bundle.INSTALLED) {
+		case Bundle.INSTALLED:
 			return translator.i18n("installed");
-		} else if (state == Bundle.RESOLVED) {
+		case Bundle.RESOLVED:
 			return translator.i18n("resolved");
-		} else if (state == Bundle.STARTING) {
+		case Bundle.STARTING:
 			return translator.i18n("starting");
-		} else if (state == Bundle.STOPPING) {
+		case Bundle.STOPPING:
 			return translator.i18n("stopping");
-		} else if (state == Bundle.ACTIVE) {
+		case Bundle.ACTIVE:
 			return translator.i18n("active");
 		}
 		return translator.i18n("unknown");

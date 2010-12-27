@@ -2,9 +2,18 @@ package com.puresol.osgi;
 
 import static org.junit.Assert.*;
 
+import java.util.Dictionary;
+import java.util.Hashtable;
+
 import org.junit.Test;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
+
+import com.puresol.gui.osgi.BundleConfigurator;
+import com.puresol.gui.osgi.BundleConfiguratorPanel;
 
 public class OSGiTest {
 
@@ -16,10 +25,14 @@ public class OSGiTest {
 	}
 
 	@Test
-	public void testStartupAndSingleton() {
+	public void testInstance() {
+		assertNotNull(new OSGi());
+	}
+
+	@Test
+	public void testStartup() {
 		try {
 			OSGi osgi = new OSGi();
-			assertNotNull(osgi);
 			assertFalse(osgi.isStarted());
 			osgi.start();
 			assertTrue(osgi.isStarted());
@@ -32,6 +45,59 @@ public class OSGiTest {
 			e.printStackTrace();
 			fail("No exception was expected!");
 		} catch (BundleException e) {
+			e.printStackTrace();
+			fail("No exception was expected!");
+		}
+	}
+
+	@Test
+	public void testRegisterService() {
+		try {
+			OSGi osgi = new OSGi();
+			osgi.start();
+			try {
+				BundleContext context = osgi.getContext();
+				assertNotNull(context);
+				Dictionary<Object, Object> properties = new Hashtable<Object, Object>();
+				properties.put("o", "A");
+				ServiceRegistration registration = context.registerService(
+						BundleConfigurator.class.getName(),
+						new BundleConfigurator() {
+
+							@Override
+							public String getName() {
+								return null;
+							}
+
+							@Override
+							public String getPathName() {
+								return null;
+							}
+
+							@Override
+							public BundleConfiguratorPanel createPanel() {
+								return null;
+							}
+						}, properties);
+				assertNotNull(registration);
+				ServiceReference reference[] = context.getAllServiceReferences(
+						BundleConfigurator.class.getName(), "(o=A)");
+				assertNotNull(reference);
+				assertEquals(1, reference.length);
+				registration.unregister();
+				reference = context.getAllServiceReferences(
+						BundleConfigurator.class.getName(), "(o=A)");
+				assertNull(reference);
+			} finally {
+				osgi.stop();
+			}
+		} catch (OSGiException e) {
+			e.printStackTrace();
+			fail("No exception was expected!");
+		} catch (BundleException e) {
+			e.printStackTrace();
+			fail("No exception was expected!");
+		} catch (InvalidSyntaxException e) {
 			e.printStackTrace();
 			fail("No exception was expected!");
 		}
