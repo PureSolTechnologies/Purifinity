@@ -46,6 +46,7 @@ public abstract class AbstractLRParser extends AbstractParser {
 	 * not. If it is set to true, back tracking is allowed.
 	 */
 	private final boolean backtrackEnabled;
+	private final int backtrackDepth;
 	private final boolean excludeFailsEnabled;
 	/**
 	 * This stack keeps the back tracking information for back tracking.
@@ -90,6 +91,13 @@ public abstract class AbstractLRParser extends AbstractParser {
 		parserTable = calculateParserTable();
 		backtrackEnabled = Boolean.valueOf((String) grammar.getOptions().get(
 				"parser.backtracking"));
+		int backtrackDepth = 0;
+		try {
+			backtrackDepth = Integer.valueOf((String) grammar.getOptions().get(
+					"parser.backtracking.depth"));
+		} catch (NumberFormatException e) {
+		}
+		this.backtrackDepth = backtrackDepth;
 		excludeFailsEnabled = Boolean.valueOf((String) grammar.getOptions()
 				.get("parser.exclude_fails"));
 	}
@@ -333,6 +341,11 @@ public abstract class AbstractLRParser extends AbstractParser {
 		backtrackStack.push(new BacktrackLocation((Stack<Integer>) stateStack
 				.clone(), actionStack.size(), streamPosition, stepCounter,
 				usedAlternative));
+		if (backtrackDepth > 0) {
+			while (backtrackStack.size() > backtrackDepth) {
+				backtrackStack.remove(0);
+			}
+		}
 	}
 
 	/**
