@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.regex.Pattern;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.junit.Test;
 
 import com.puresol.coding.lang.fortran.grammar.FortranGrammar;
@@ -19,7 +21,8 @@ public class FixedFormFileTest {
 
 	private Pattern getPattern(String name) {
 		try {
-			Field commentPattern = FixedFormFile.class.getDeclaredField(name);
+			Field commentPattern = FortranPreConditioner.class
+					.getDeclaredField(name);
 			commentPattern.setAccessible(true);
 			return (Pattern) commentPattern.get(0);
 		} catch (SecurityException e) {
@@ -40,7 +43,7 @@ public class FixedFormFileTest {
 
 	@Test
 	public void testCommentPattern() {
-		Pattern COMMENT_PATTERN = getPattern("COMMENT_PATTERN");
+		Pattern COMMENT_PATTERN = getPattern("FF_COMMENT_PATTERN");
 		assertTrue(COMMENT_PATTERN.matcher("C A comment!").find());
 		assertFalse(COMMENT_PATTERN.matcher(" C A comment!").find());
 
@@ -60,7 +63,7 @@ public class FixedFormFileTest {
 
 	@Test
 	public void testLabelPattern() {
-		Pattern LABEL_PATTERN = getPattern("LABEL_PATTERN");
+		Pattern LABEL_PATTERN = getPattern("FF_LABEL_PATTERN");
 
 		assertTrue(LABEL_PATTERN.matcher("1     ").find());
 		assertTrue(LABEL_PATTERN.matcher(" 2    ").find());
@@ -89,7 +92,7 @@ public class FixedFormFileTest {
 
 	@Test
 	public void testContinuationPattern() {
-		Pattern CONTINUATION_PATTERN = getPattern("CONTINUATION_PATTERN");
+		Pattern CONTINUATION_PATTERN = getPattern("FF_CONTINUATION_PATTERN");
 		assertTrue(CONTINUATION_PATTERN.matcher("     $").find());
 		assertTrue(CONTINUATION_PATTERN.matcher("     *").find());
 		assertFalse(CONTINUATION_PATTERN.matcher("     0").find());
@@ -97,25 +100,31 @@ public class FixedFormFileTest {
 
 	@Test
 	public void testEmptyPattern() {
-		Pattern EMPTY_PATTERN = getPattern("EMPTY_PATTERN");
+		Pattern EMPTY_PATTERN = getPattern("FF_EMPTY_PATTERN");
 		assertTrue(EMPTY_PATTERN.matcher("      ").find());
 	}
 
 	@Test
-	public void testBlankLinePattern() {
-		Pattern BLANK_LINE_PATTERN = getPattern("BLANK_LINE_PATTERN");
-		assertTrue(BLANK_LINE_PATTERN.matcher("      ").find());
-		assertTrue(BLANK_LINE_PATTERN.matcher(" \t\n").find());
+	public void testSingleQuoteLiteralEnd() {
+		Pattern SINGLE_QUOTE_LITERAL_END = getPattern("FF_SINGLE_QUOTE_LITERAL_END");
+		assertTrue(SINGLE_QUOTE_LITERAL_END.matcher("test'").find());
+	}
+
+	@Test
+	public void testDoubleQuoteLiteralEnd() {
+		Pattern DOUBLE_QUOTE_LITERAL_END = getPattern("FF_DOUBLE_QUOTE_LITERAL_END");
+		assertTrue(DOUBLE_QUOTE_LITERAL_END.matcher("test\"").find());
 	}
 
 	@Test
 	public void testIsFixedForm() {
 		try {
 			File file = new File(
-					"src/test/java/com/puresol/coding/lang/fortran/samples/FixedFormSample.f");
+					"src/test/resources/com/puresol/coding/lang/fortran/samples/FixedFormSample.f");
 			assertTrue(file.exists());
-			FixedFormFile fixedFormFile = new FixedFormFile(file);
-			assertTrue(fixedFormFile.isValid());
+			FortranPreConditioner fixedFormFile = new FortranPreConditioner(
+					file);
+			assertTrue(fixedFormFile.isValidFixedForm());
 		} catch (IOException e) {
 			e.printStackTrace();
 			fail("No exception was expected!");
@@ -125,10 +134,12 @@ public class FixedFormFileTest {
 	@Test
 	public void testScan() {
 		try {
+			Logger.getRootLogger().setLevel(Level.TRACE);
 			File file = new File(
-					"src/test/java/com/puresol/coding/lang/fortran/samples/FixedFormSample.f");
+					"src/test/resources/com/puresol/coding/lang/fortran/samples/FixedFormSample.f");
 			assertTrue(file.exists());
-			FixedFormFile fixedFormFile = new FixedFormFile(file);
+			FortranPreConditioner fixedFormFile = new FortranPreConditioner(
+					file);
 			TokenStream tokenStream = fixedFormFile.scan(FortranGrammar
 					.getInstance().getLexer());
 			for (Token token : tokenStream) {

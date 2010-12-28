@@ -54,6 +54,6 @@ public class FortranAnalyserTest {
 	@Test
 	public void test2() {
 		test(new File(
-				"src/test/java/com/puresol/coding/lang/fortran/samples/FortranTest.f"));
+				"src/test/resources/com/puresol/coding/lang/fortran/samples/FortranTest.f"));
 	}
 }

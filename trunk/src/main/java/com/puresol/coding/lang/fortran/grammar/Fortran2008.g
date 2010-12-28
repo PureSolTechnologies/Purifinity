@@ -18,6 +18,7 @@
 	lexer="com.puresol.uhura.lexer.RegExpLexer";
 	parser="com.puresol.uhura.parser.lr.LR1Parser";
 	parser.backtracking=true;
+	parser.backtracking.depth=20;
 //	parser.exclude_fails=true;
  
 /****************************************************************************
@@ -66,8 +67,15 @@
 	 */
 	EXPONENT : SIGNED_DIGIT_STRING;
 	EXPONENT_LETTER : "[ED]";
-	SIGNIFICANT : "(" DIGIT_STRING "\\.("
-			DIGIT_STRING ")?|\\." DIGIT_STRING ")";
+	SIGNIFICANT : 
+		"(" 
+			DIGIT_STRING "\\." DIGIT_STRING
+		"|"
+			DIGIT_STRING "\\.(?=(" EXPONENT_LETTER EXPONENT "|\\s|\\W))"
+		"|"
+			"\\." DIGIT_STRING 
+		")"
+	;
 	SIGNED_REAL_LITERAL_CONSTANT : SIGN "?"
 			REAL_LITERAL_CONSTANT;
 
@@ -145,10 +153,15 @@
 
 	INT_LITERAL_CONSTANT : DIGIT_STRING "(_"
 			KIND_PARAM ")?";
-	REAL_LITERAL_CONSTANT : "(" SIGNIFICANT "("
-			EXPONENT_LETTER EXPONENT ")?(_" KIND_PARAM ")?|"
-			DIGIT_STRING EXPONENT_LETTER EXPONENT "(_" KIND_PARAM
-			")?)";
+	REAL_LITERAL_CONSTANT : 
+		"(" 
+			SIGNIFICANT 
+			"("	EXPONENT_LETTER EXPONENT ")?"
+		"|"
+			DIGIT_STRING EXPONENT_LETTER EXPONENT 
+		")"
+		"(_" KIND_PARAM ")?"
+		;
 	CHAR_LITERAL_CONSTANT :
 				"(" KIND_PARAM "_)?"	 
 			"("	
@@ -156,6 +169,22 @@
 			"|"	
 				"'"  REP_CHAR_SINGLE_QUOTE "*'"
 			")"
+	;
+	
+	/*
+	 * The next two patterns are used to handle strings which are started in a line, but
+	 * which are broken over multiple lines by continuation. The middle section and the end
+	 * are handle within the pre-conditioner class.
+	 */
+	CHAR_LITERAL_CONSTANT_SINGLE_QUOTE_START :
+			"(" KIND_PARAM "_)?"	 
+			"'"  REP_CHAR_SINGLE_QUOTE "*"
+			"(?=" AMPERSAND "?" LINE_TERMINATOR ")"
+	;
+	CHAR_LITERAL_CONSTANT_DOUBLE_QUOTE_START :
+			"(" KIND_PARAM "_)?"	 
+			"\"" REP_CHAR_DOUBLE_QUOTE "*"
+			"(?=" AMPERSAND "?" LINE_TERMINATOR ")"
 	;
 	LOGICAL_LITERAL_CONSTANT : "(\\.TRUE\\.|\\.FALSE\\.)(_"
 			KIND_PARAM ")?";
@@ -349,7 +378,7 @@
  */
 
 	stmt-end :
-		( LINE_TERMINATOR | LINE_COMMENT ) +
+		( LINE_TERMINATOR | LINE_COMMENT | SEMICOLON ) +
 	;
  
 /***************
@@ -697,8 +726,14 @@ Node: implicit-part ? was refactored to implicit-part-stmt *. This is needed
 	|	REAL_LITERAL_CONSTANT
 	|	complex-literal-constant
 	|	LOGICAL_LITERAL_CONSTANT
-	|	CHAR_LITERAL_CONSTANT
+	|	character-literal
 	|	BOZ_LITERAL_CONSTANT
+	;
+
+	character-literal :
+		CHAR_LITERAL_CONSTANT
+	|	CHAR_LITERAL_CONSTANT_SINGLE_QUOTE_START CHAR_LITERAL_CONSTANT +
+	|	CHAR_LITERAL_CONSTANT_DOUBLE_QUOTE_START CHAR_LITERAL_CONSTANT +
 	;
 
 /*
@@ -2154,7 +2189,7 @@ Node: implicit-part ? was refactored to implicit-part-stmt *. This is needed
 	or substring
 */
 	designator :
-		data-ref ( LEFT_PARENTHESIS substring-range RIGHT_PARENTHESIS | LEFT_PARENTHESIS substring-range RIGHT_PARENTHESIS ) ?
+		data-ref ( LEFT_PARENTHESIS substring-range RIGHT_PARENTHESIS ) ?
 	//	|	NAME_LITERAL is also part of data-ref...
 	|	designator PERCENT ( 'RE' | 'IM' )
 	|	literal-constant LEFT_PARENTHESIS substring-range RIGHT_PARENTHESIS
@@ -4082,7 +4117,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	format-item :	
 		INT_LITERAL_CONSTANT ? data-edit-desc
 	|	control-edit-desc
-	|	CHAR_LITERAL_CONSTANT
+	|	character-literal
 	|	INT_LITERAL_CONSTANT ? LEFT_PARENTHESIS format-items RIGHT_PARENTHESIS
 	;
 
@@ -4117,7 +4152,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	data-edit-desc :
 		NAME_LITERAL ( REAL_LITERAL_CONSTANT ) ?
 	|	NAME_LITERAL DECIMALPOINT_OR_PERIOD INT_LITERAL_CONSTANT 'E' INT_LITERAL_CONSTANT
-	|	NAME_LITERAL CHAR_LITERAL_CONSTANT ? ( LEFT_PARENTHESIS v-list RIGHT_PARENTHESIS ) ?
+	|	NAME_LITERAL character-literal ? ( LEFT_PARENTHESIS v-list RIGHT_PARENTHESIS ) ?
 	;
 
 /*
