@@ -217,9 +217,11 @@
 	COMMON : "common";
 	CONTINUE : "continue";
 	DATA : "data";
+	DEFAULT : "default";
 	DIMENSION : "dimension";
 	DO : "do";
 	ELSE : "else";
+	ELSE_IF : "else\\s*if";
 	END : "end";
 	END_BLOCK_DATA : "end\\s*block\\s*data";
 	END_DO : "end\\s*do";
@@ -1642,22 +1644,20 @@ Node: implicit-part ? was refactored to implicit-part-stmt *. This is needed
 	[ lower-cobound : ] *
 */
 	explicit-coshape-spec :
-		( ( lower-cobound COLON ) ? upper-cobound COMMA ) *	( lower-cobound COLON ) ? ASTERIK
+		(  expr ( COLON expr ) ? COMMA ) * ( expr COLON ) ? ASTERIK
 	;
 
 /*
 	R512 lower-cobound is specification-expr
+	
+	not needed...
 */
-	lower-cobound :
-		expr
-	;
 
 /*
 	R513 upper-cobound is specification-expr
+	
+	not needed...
 */
-	upper-cobound :
-		expr
-	;
 
 /*
 	R514 dimension-spec is DIMENSION ( array-spec )
@@ -1685,7 +1685,7 @@ Node: implicit-part ? was refactored to implicit-part-stmt *. This is needed
 	R516 explicit-shape-spec is [ lower-bound : ] upper-bound
 */
 	explicit-shape-spec :
-		( lower-bound COLON ) ? upper-bound
+		expr ( COLON expr ) ?
 	;
 	explicit-shape-spec-list :
 		explicit-shape-spec ( COMMA explicit-shape-spec ) *
@@ -1693,23 +1693,21 @@ Node: implicit-part ? was refactored to implicit-part-stmt *. This is needed
 
 /*
 	R517 lower-bound is specification-expr
+	
+	not needed...
 */
-	lower-bound :
-		expr
-	;
 
 /*
 	R518 upper-bound is specification-expr
+	
+	not needed...
 */
-	upper-bound :
-		expr
-	;
 
 /*
 	R519 assumed-shape-spec is [ lower-bound ] :
 */
 	assumed-shape-spec :
-		lower-bound ? COLON
+		expr ? COLON
 	;
 	assumed-shape-spec-list :
 		assumed-shape-spec ( COMMA assumed-shape-spec ) *
@@ -1729,7 +1727,7 @@ Node: implicit-part ? was refactored to implicit-part-stmt *. This is needed
 	R521 assumed-size-spec is [ explicit-shape-spec , ]... [ lower-bound : ] *
 */
 	assumed-size-spec :
-		( explicit-shape-spec COMMA ) * ( lower-bound COLON ) ? ASTERIK
+		( explicit-shape-spec COMMA ) * ( expr COLON ) ? ASTERIK
 	;
 	assumed-size-spec-list :
 		assumed-size-spec ( COMMA assumed-size-spec ) *
@@ -1739,7 +1737,7 @@ Node: implicit-part ? was refactored to implicit-part-stmt *. This is needed
 	R522 implied-shape-spec is [ lower-bound : ] *
 */
 	implied-shape-spec :
-		( lower-bound COLON ) ? ASTERIK
+		( expr COLON ) ? ASTERIK
 	;
 	implied-shape-spec-list :
 		implied-shape-spec ( COMMA implied-shape-spec ) *
@@ -2320,10 +2318,9 @@ Node: implicit-part ? was refactored to implicit-part-stmt *. This is needed
 
 /*
 	R619 subscript is scalar-int-expr
+	
+	not needed...
 */
-	subscript :
-		expr
-	;
 
 /*
 	R620 section-subscript is subscript
@@ -2331,9 +2328,8 @@ Node: implicit-part ? was refactored to implicit-part-stmt *. This is needed
 	or vector-subscript
 */
 	section-subscript :
-		subscript
-	|	subscript COLON subscript ? ( COLON stride ) ?
-	|	COLON subscript ? ( COLON stride ) ?
+		expr ( COLON expr ? ( COLON expr ) ? ) ?
+	|	COLON expr ? ( COLON expr ) ?
 	;
 	section-subscript-list :
 		section-subscript ( COMMA section-subscript ) *
@@ -2347,10 +2343,9 @@ Node: implicit-part ? was refactored to implicit-part-stmt *. This is needed
 
 /*
 	R622 stride is scalar-int-expr
+	
+	not needed...
 */
-	stride :
-		expr
-	;
 	
 /*
 	R623 vector-subscript is int-expr
@@ -2368,11 +2363,8 @@ Node: implicit-part ? was refactored to implicit-part-stmt *. This is needed
 /*
 	R625 cosubscript is scalar-int-expr
 */
-	cosubscript :
-		expr
-	;
 	cosubscript-list :
-		cosubscript ( COMMA cosubscript ) *
+		expr ( COMMA expr ) *
 	;
 
 /*
@@ -3336,7 +3328,7 @@ R822 end-do-stmt is END DO [ do-construct-name ]
 	R834 else-if-stmt is ELSE IF ( scalar-logical-expr ) THEN [ if-construct-name ]
 */
 	else-if-stmt :
-		ELSE IF LEFT_PARENTHESIS expr RIGHT_PARENTHESIS THEN NAME_LITERAL ? stmt-end
+		ELSE_IF LEFT_PARENTHESIS expr RIGHT_PARENTHESIS THEN NAME_LITERAL ? stmt-end
 	;
 
 /*
@@ -3406,7 +3398,7 @@ R822 end-do-stmt is END DO [ do-construct-name ]
 */
 	case-selector :
 		LEFT_PARENTHESIS case-value-range-list RIGHT_PARENTHESIS
-	|	'DEFAULT'
+	|	DEFAULT
 	;
 
 /*
