@@ -46,7 +46,8 @@ public class GrammarConverter {
 	 * @throws GrammarException
 	 * @throws IOException
 	 */
-	public GrammarConverter(ParserTree ast) throws TreeException, GrammarException {
+	public GrammarConverter(ParserTree ast) throws TreeException,
+			GrammarException {
 		this.ast = ast;
 		convert();
 	}
@@ -143,7 +144,8 @@ public class GrammarConverter {
 	 * @return
 	 * @throws TreeException
 	 */
-	private Map<String, ParserTree> getTokens() throws GrammarException, TreeException {
+	private Map<String, ParserTree> getTokens() throws GrammarException,
+			TreeException {
 		Map<String, ParserTree> tokens = new HashMap<String, ParserTree>();
 		ParserTree tokensTree = ast.getChild("Tokens");
 		ParserTree tokenDefinitions = tokensTree.getChild("TokenDefinitions");
@@ -177,7 +179,8 @@ public class GrammarConverter {
 	 * @throws TreeException
 	 */
 	private void convertTokenDefinitions(Map<String, ParserTree> helpers,
-			Map<String, ParserTree> tokens) throws GrammarException, TreeException {
+			Map<String, ParserTree> tokens) throws GrammarException,
+			TreeException {
 		tokenDefinitions = new TokenDefinitionSet();
 		for (ParserTree tokenDefinition : ast.getChild("Tokens")
 				.getChild("TokenDefinitions").getChildren("TokenDefinition")) {
@@ -223,9 +226,10 @@ public class GrammarConverter {
 		}
 	}
 
-	private StringBuffer getTokenDefinitionPattern(ParserTree tokenConstruction,
-			Map<String, ParserTree> helpers, Map<String, ParserTree> tokens)
-			throws GrammarException, TreeException {
+	private StringBuffer getTokenDefinitionPattern(
+			ParserTree tokenConstruction, Map<String, ParserTree> helpers,
+			Map<String, ParserTree> tokens) throws GrammarException,
+			TreeException {
 		StringBuffer pattern = new StringBuffer();
 		for (ParserTree tree : tokenConstruction.getChildren("TokenPart")) {
 			if (tree.hasChild("STRING_LITERAL")) {
@@ -298,7 +302,8 @@ public class GrammarConverter {
 	 * @throws GrammarException
 	 */
 	private void convertSingleProductions(String productionName,
-			ParserTree productionConstructions) throws TreeException, GrammarException {
+			ParserTree productionConstructions) throws TreeException,
+			GrammarException {
 		for (ParserTree productionConstruction : productionConstructions
 				.getChildren("ProductionConstruction")) {
 			convertSingleProduction(productionName, productionConstruction);
@@ -319,7 +324,8 @@ public class GrammarConverter {
 	 * @throws GrammarException
 	 */
 	private void convertSingleProduction(String productionName,
-			ParserTree productionConstruction) throws TreeException, GrammarException {
+			ParserTree productionConstruction) throws TreeException,
+			GrammarException {
 		ParserTree alternativeIdentifier = productionConstruction
 				.getChild("AlternativeIdentifier");
 		Production production;
@@ -341,8 +347,9 @@ public class GrammarConverter {
 		productions.add(production);
 	}
 
-	private List<Construction> getConstructions(ParserTree productionConstruction)
-			throws TreeException, GrammarException {
+	private List<Construction> getConstructions(
+			ParserTree productionConstruction) throws TreeException,
+			GrammarException {
 		List<Construction> constructions = new ArrayList<Construction>();
 		ParserTree productionParts = productionConstruction
 				.getChild("ProductionParts");
@@ -377,7 +384,8 @@ public class GrammarConverter {
 				return new NonTerminal(identifier);
 			}
 		} else if ("ConstructionLiteral".equals(productionPart.getName())) {
-			ParserTree stringLiteral = productionPart.getChild("STRING_LITERAL");
+			ParserTree stringLiteral = productionPart
+					.getChild("STRING_LITERAL");
 			String text = stringLiteral.getText();
 			text = text.substring(1, text.length() - 1);
 			Terminal terminal = null;
@@ -389,10 +397,9 @@ public class GrammarConverter {
 						throw new GrammarException(
 								"Token text '"
 										+ text
-										+ "' satisfies several token definitions and is therfore ambiguous!");
+										+ "' satisfies several token definitions and is therefore ambiguous!");
 					}
 					terminal = new Terminal(tokenDefinition.getName(), text);
-					// terminal = new Terminal(text);
 				}
 			}
 			if (terminal == null) {
@@ -411,8 +418,9 @@ public class GrammarConverter {
 		}
 	}
 
-	private Construction generateExtraQuantifierRules(ParserTree productionPart,
-			Quantity quantity) throws TreeException, GrammarException {
+	private Construction generateExtraQuantifierRules(
+			ParserTree productionPart, Quantity quantity) throws TreeException,
+			GrammarException {
 		if (quantity == Quantity.ACCEPT) {
 			return generateOptionalProduction(productionPart);
 		} else if (quantity == Quantity.ACCEPT_MANY) {
@@ -515,8 +523,8 @@ public class GrammarConverter {
 	 * @throws TreeException
 	 * @throws GrammarException
 	 */
-	private Construction generateList(ParserTree productionPart) throws TreeException,
-			GrammarException {
+	private Construction generateList(ParserTree productionPart)
+			throws TreeException, GrammarException {
 		String newIdentifier = createNewIdentifier(productionPart, "list");
 		Construction construction = createConstruction(productionPart);
 
@@ -536,11 +544,13 @@ public class GrammarConverter {
 		return new NonTerminal(newIdentifier);
 	}
 
-	private void addOptions(Production production, ParserTree productionConstruction)
-			throws TreeException {
-		ParserTree options = productionConstruction.getChild("ProductionOptions");
+	private void addOptions(Production production,
+			ParserTree productionConstruction) throws TreeException {
+		ParserTree options = productionConstruction
+				.getChild("ProductionOptions");
 		if (options != null) {
-			for (ParserTree option : options.getChildren("ProductionOptionList")) {
+			for (ParserTree option : options
+					.getChildren("ProductionOptionList")) {
 				if (option.hasChild("NODE")) {
 					production.setNode(Boolean.valueOf(option.getChild(
 							"BOOLEAN_LITERAL").getText()));
