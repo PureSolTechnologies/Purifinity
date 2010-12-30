@@ -47,6 +47,8 @@ public abstract class AbstractLRParser extends AbstractParser {
 	 */
 	private final boolean backtrackEnabled;
 	private final int backtrackDepth;
+	private final int timeout;
+	private long startTime;
 	private final boolean excludeFailsEnabled;
 	/**
 	 * This stack keeps the back tracking information for back tracking.
@@ -98,6 +100,13 @@ public abstract class AbstractLRParser extends AbstractParser {
 		} catch (NumberFormatException e) {
 		}
 		this.backtrackDepth = backtrackDepth;
+		int timeout = 0;
+		try {
+			timeout = Integer.valueOf((String) grammar.getOptions().get(
+					"parser.timeout"));
+		} catch (NumberFormatException e) {
+		}
+		this.timeout = timeout;
 		excludeFailsEnabled = Boolean.valueOf((String) grammar.getOptions()
 				.get("parser.exclude_fails"));
 	}
@@ -163,6 +172,7 @@ public abstract class AbstractLRParser extends AbstractParser {
 	@Override
 	public final ParserTree parse(TokenStream tokenStream)
 			throws ParserException {
+		startTime = System.currentTimeMillis();
 		setTokenStream(tokenStream);
 		reset();
 		return parse();
@@ -209,6 +219,7 @@ public abstract class AbstractLRParser extends AbstractParser {
 		try {
 			boolean accepted = false;
 			do {
+				checkTimeout();
 				stepCounter++;
 				if (logger.isTraceEnabled()) {
 					logger.trace(toString());
@@ -259,6 +270,16 @@ public abstract class AbstractLRParser extends AbstractParser {
 		} catch (GrammarException e) {
 			logger.error(e.getMessage(), e);
 			throw new ParserException(e.getMessage());
+		}
+	}
+
+	private void checkTimeout() throws ParserException {
+		if (timeout > 0) {
+			if (System.currentTimeMillis() - startTime > timeout * 1000) {
+				throw new ParserException("Timeout after " + timeout
+						+ " seconds near '"
+						+ getTokenStream().getCodeSample(maxPosition) + "'!");
+			}
 		}
 	}
 
