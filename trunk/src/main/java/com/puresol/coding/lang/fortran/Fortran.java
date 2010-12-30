@@ -94,28 +94,27 @@ public class Fortran extends AbstractProgrammingLanguage {
 					if ("main-program".equals(tree.getName())) {
 						String name;
 						name = tree.getChild("program-stmt")
-								.getChild("NAME_LITERAL").getText();
+								.getChildren("NAME_LITERAL").get(1).getText();
 						result.add(new CodeRange(name,
 								CodeRangeType.SUBROUTINE, tree));
 					} else if ("function-subprogram".equals(tree.getName())) {
 						String name = tree.getChild("function-stmt")
-								.getChild("NAME_LITERAL").getText();
+								.getChildren("NAME_LITERAL").get(1).getText();
 						result.add(new CodeRange(name,
 								CodeRangeType.SUBROUTINE, tree));
 					} else if ("subroutine-subprogram".equals(tree.getName())) {
 						String name = tree.getChild("subroutine-stmt")
-								.getChild("NAME_LITERAL").getText();
+								.getChildren("NAME_LITERAL").get(1).getText();
 						result.add(new CodeRange(name,
 								CodeRangeType.SUBROUTINE, tree));
-
 					} else if ("module".equals(tree.getName())) {
 						String name = tree.getChild("module-stmt")
-								.getChild("NAME_LITERAL").getText();
+								.getChildren("NAME_LITERAL").get(1).getText();
 						result.add(new CodeRange(name,
 								CodeRangeType.SUBROUTINE, tree));
 					} else if ("submodule".equals(tree.getName())) {
 						String name = tree.getChild("submodule-stmt")
-								.getChild("NAME_LITERAL").getText();
+								.getChildren("NAME_LITERAL").get(1).getText();
 						result.add(new CodeRange(name,
 								CodeRangeType.SUBROUTINE, tree));
 					}
