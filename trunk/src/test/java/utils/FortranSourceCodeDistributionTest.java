@@ -41,7 +41,7 @@ public class FortranSourceCodeDistributionTest {
 			Logger.getRootLogger().setLevel(Level.DEBUG);
 			File file = new File(
 					"src/test/resources/com/puresol/coding/lang/fortran/samples",
-					"ndoalb_c.f");
+					"wmpx.f");
 			assertTrue(file.exists());
 			Fortran fortran = Fortran.getInstance();
 			StopWatch watch = new StopWatch();
