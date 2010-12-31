@@ -119,11 +119,42 @@ public abstract class AbstractParserTable implements ParserTable {
 		if (actions == null) {
 			return ParserActionSet.getErrorSet();
 		}
-		ParserActionSet set = actions.get(construction);
-		if (set == null) {
+		ParserActionSet set = new ParserActionSet();
+		for (Construction c : actions.keySet()) {
+			if (!c.getName().equals(construction.getName())) {
+				// if name is not equals, it does obviously not fit
+				continue;
+			}
+			if (c.isNonTerminal() != construction.isNonTerminal()) {
+				continue;
+			}
+			if (construction.isNonTerminal()) {
+				/*
+				 * if both are non-terminals, the names are the only criterion
+				 * for fitting
+				 */
+				set.addActions(actions.get(c));
+				continue;
+			}
+			Terminal terminal = (Terminal) construction;
+			if (terminal.getText() == null) {
+				continue;
+			}
+			Terminal t = (Terminal) c;
+			if (grammar.isIgnoreCase()) {
+				if (terminal.getText().equalsIgnoreCase(t.getText())) {
+					set.addActions(actions.get(c));
+				}
+			} else {
+				if (terminal.getText().equals(t.getText())) {
+					set.addActions(actions.get(c));
+				}
+			}
+		}
+		if ((set == null) || (set.getAction(0).getAction() == ActionType.ERROR)) {
 			set = actions.get(new Terminal(construction.getName(), null));
 		}
-		if ((set == null) || (set.getActionNumber() <= 0)) {
+		if ((set == null) || (set.getAction(0).getAction() == ActionType.ERROR)) {
 			return ParserActionSet.getErrorSet();
 		}
 		return set;
