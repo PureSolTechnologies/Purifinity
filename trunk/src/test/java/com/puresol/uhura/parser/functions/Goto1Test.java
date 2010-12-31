@@ -48,7 +48,7 @@ public class Goto1Test {
 		Goto1 gotoCalc = new Goto1(new Closure1(grammar, new First(grammar)));
 		System.out.println("Goto1:");
 
-		itemSet = gotoCalc.calc(itemSet, new Terminal("b", null));
+		itemSet = gotoCalc.calc(itemSet, new Terminal("b", null, false));
 		System.out.println(itemSet.toString());
 
 		assertEquals(2, itemSet.getKernelItems().size());

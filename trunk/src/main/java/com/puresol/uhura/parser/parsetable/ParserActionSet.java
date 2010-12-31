@@ -48,8 +48,10 @@ public class ParserActionSet implements Serializable {
 	}
 
 	public void addActions(ParserActionSet actionSet) {
-		for (int id = 0; id < actionSet.getActionNumber(); id++) {
-			addAction(actionSet.getAction(id));
+		if (actionSet != null) {
+			for (int id = 0; id < actionSet.getActionNumber(); id++) {
+				addAction(actionSet.getAction(id));
+			}
 		}
 	}
 

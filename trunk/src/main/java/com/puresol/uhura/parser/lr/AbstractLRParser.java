@@ -16,6 +16,7 @@ import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.production.FinishTerminal;
 import com.puresol.uhura.grammar.production.Production;
 import com.puresol.uhura.grammar.production.NonTerminal;
+import com.puresol.uhura.grammar.production.Terminal;
 import com.puresol.uhura.grammar.token.Visibility;
 import com.puresol.uhura.lexer.Token;
 import com.puresol.uhura.lexer.TokenStream;
@@ -232,7 +233,8 @@ public abstract class AbstractLRParser extends AbstractParser {
 				if (streamPosition < getTokenStream().size()) {
 					token = getTokenStream().get(streamPosition);
 					actionSet = parserTable.getActionSet(stateStack.peek(),
-							token.getTerminal());
+							new Terminal(token.getName(), token.getText(),
+									getGrammar().isIgnoreCase()));
 				} else {
 					token = null;
 					actionSet = parserTable.getActionSet(stateStack.peek(),

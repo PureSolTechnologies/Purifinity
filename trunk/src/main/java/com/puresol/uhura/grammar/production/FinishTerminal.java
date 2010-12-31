@@ -22,7 +22,7 @@ public class FinishTerminal {
 
 	private static synchronized void createInstance() {
 		if (instance == null) {
-			instance = new Terminal(FINISH_CONSTRUCTION_NAME, null);
+			instance = new Terminal(FINISH_CONSTRUCTION_NAME, null, false);
 		}
 	}
 

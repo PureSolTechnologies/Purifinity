@@ -21,12 +21,14 @@ public class TokenDefinition implements Serializable {
 	private final String text;
 	private final Visibility visibility;
 	private final int hashCode;
+	private final boolean ignoreCase;
 
 	public TokenDefinition(String name, String regex) {
 		this.name = name;
 		this.pattern = Pattern.compile("^" + regex);
 		this.visibility = Visibility.VISIBLE;
 		this.text = regex;
+		this.ignoreCase = false;
 		hashCode = calculateHashCode();
 	}
 
@@ -35,6 +37,7 @@ public class TokenDefinition implements Serializable {
 		this.pattern = Pattern.compile("^" + regex);
 		this.visibility = visibility;
 		this.text = regex;
+		this.ignoreCase = false;
 		hashCode = calculateHashCode();
 	}
 
@@ -48,6 +51,7 @@ public class TokenDefinition implements Serializable {
 		}
 		this.visibility = Visibility.VISIBLE;
 		this.text = regex;
+		this.ignoreCase = ignoreCase;
 		hashCode = calculateHashCode();
 	}
 
@@ -63,6 +67,7 @@ public class TokenDefinition implements Serializable {
 			}
 			this.visibility = visibility;
 			this.text = regex;
+			this.ignoreCase = ignoreCase;
 			hashCode = calculateHashCode();
 		} catch (PatternSyntaxException e) {
 			throw new GrammarException("Grammar failure in '" + name
@@ -108,6 +113,14 @@ public class TokenDefinition implements Serializable {
 	 */
 	public Visibility getVisibility() {
 		return visibility;
+	}
+
+	/**
+	 * 
+	 * @return the ignoreCase flag
+	 */
+	public boolean isIgnoreCase() {
+		return ignoreCase;
 	}
 
 	@Override

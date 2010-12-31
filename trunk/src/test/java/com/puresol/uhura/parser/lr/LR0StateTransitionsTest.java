@@ -33,24 +33,28 @@ public class LR0StateTransitionsTest {
 			assertEquals(5, transitions.getTransitions(0).size());
 			assertTrue(transitions.getTransition(0, new NonTerminal("E")) == 1);
 			assertTrue(transitions.getTransition(0, new NonTerminal("T")) == 2);
-			assertTrue(transitions.getTransition(0, new Terminal("id", null)) == 5);
-			assertTrue(transitions
-					.getTransition(0, new Terminal("LPAREN", "(")) == 4);
+			assertTrue(transitions.getTransition(0, new Terminal("id", null,
+					false)) == 5);
+			assertTrue(transitions.getTransition(0, new Terminal("LPAREN", "(",
+					false)) == 4);
 			assertTrue(transitions.getTransition(0, new NonTerminal("F")) == 3);
 
 			assertEquals(1, transitions.getTransitions(1).size());
-			assertTrue(transitions.getTransition(1, new Terminal("PLUS", "+")) == 6);
+			assertTrue(transitions.getTransition(1, new Terminal("PLUS", "+",
+					false)) == 6);
 
 			assertEquals(1, transitions.getTransitions(2).size());
-			assertTrue(transitions.getTransition(2, new Terminal("STAR", "*")) == 7);
+			assertTrue(transitions.getTransition(2, new Terminal("STAR", "*",
+					false)) == 7);
 
 			assertEquals(0, transitions.getTransitions(3).size());
 
 			assertEquals(5, transitions.getTransitions(4).size());
-			assertTrue(transitions.getTransition(4, new Terminal("id", null)) == 5);
+			assertTrue(transitions.getTransition(4, new Terminal("id", null,
+					false)) == 5);
 			assertTrue(transitions.getTransition(4, new NonTerminal("E")) == 8);
-			assertTrue(transitions
-					.getTransition(4, new Terminal("LPAREN", "(")) == 4);
+			assertTrue(transitions.getTransition(4, new Terminal("LPAREN", "(",
+					false)) == 4);
 			assertTrue(transitions.getTransition(4, new NonTerminal("T")) == 2);
 			assertTrue(transitions.getTransition(4, new NonTerminal("F")) == 3);
 
@@ -59,23 +63,27 @@ public class LR0StateTransitionsTest {
 			assertEquals(4, transitions.getTransitions(6).size());
 			assertTrue(transitions.getTransition(6, new NonTerminal("T")) == 9);
 			assertTrue(transitions.getTransition(6, new NonTerminal("F")) == 3);
-			assertTrue(transitions
-					.getTransition(6, new Terminal("LPAREN", "(")) == 4);
-			assertTrue(transitions.getTransition(6, new Terminal("id", null)) == 5);
+			assertTrue(transitions.getTransition(6, new Terminal("LPAREN", "(",
+					false)) == 4);
+			assertTrue(transitions.getTransition(6, new Terminal("id", null,
+					false)) == 5);
 
 			assertEquals(3, transitions.getTransitions(7).size());
 			assertTrue(transitions.getTransition(7, new NonTerminal("F")) == 10);
-			assertTrue(transitions
-					.getTransition(7, new Terminal("LPAREN", "(")) == 4);
-			assertTrue(transitions.getTransition(7, new Terminal("id", null)) == 5);
+			assertTrue(transitions.getTransition(7, new Terminal("LPAREN", "(",
+					false)) == 4);
+			assertTrue(transitions.getTransition(7, new Terminal("id", null,
+					false)) == 5);
 
 			assertEquals(2, transitions.getTransitions(8).size());
-			assertTrue(transitions.getTransition(8, new Terminal("PLUS", "+")) == 6);
-			assertTrue(transitions
-					.getTransition(8, new Terminal("RPAREN", ")")) == 11);
+			assertTrue(transitions.getTransition(8, new Terminal("PLUS", "+",
+					false)) == 6);
+			assertTrue(transitions.getTransition(8, new Terminal("RPAREN", ")",
+					false)) == 11);
 
 			assertEquals(1, transitions.getTransitions(9).size());
-			assertTrue(transitions.getTransition(9, new Terminal("STAR", "*")) == 7);
+			assertTrue(transitions.getTransition(9, new Terminal("STAR", "*",
+					false)) == 7);
 
 			assertEquals(0, transitions.getTransitions(10).size());
 

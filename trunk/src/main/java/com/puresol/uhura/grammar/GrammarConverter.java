@@ -378,8 +378,11 @@ public class GrammarConverter {
 			throws TreeException, GrammarException {
 		if ("ConstructionIdentifier".equals(productionPart.getName())) {
 			String identifier = productionPart.getChild("IDENTIFIER").getText();
-			if (tokenDefinitions.getDefinition(identifier) != null) {
-				return new Terminal(identifier, null);
+			TokenDefinition tokenDefinition = tokenDefinitions
+					.getDefinition(identifier);
+			if (tokenDefinition != null) {
+				return new Terminal(identifier, null,
+						tokenDefinition.isIgnoreCase());
 			} else {
 				return new NonTerminal(identifier);
 			}
@@ -399,7 +402,8 @@ public class GrammarConverter {
 										+ text
 										+ "' satisfies several token definitions and is therefore ambiguous!");
 					}
-					terminal = new Terminal(tokenDefinition.getName(), text);
+					terminal = new Terminal(tokenDefinition.getName(), text,
+							tokenDefinition.isIgnoreCase());
 				}
 			}
 			if (terminal == null) {

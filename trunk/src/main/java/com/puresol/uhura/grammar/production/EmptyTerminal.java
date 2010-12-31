@@ -21,7 +21,7 @@ public class EmptyTerminal {
 
 	private static synchronized void createInstance() {
 		if (instance == null) {
-			instance = new Terminal(EMPTY_CONSTRUCTION_NAME, null);
+			instance = new Terminal(EMPTY_CONSTRUCTION_NAME, null, false);
 		}
 	}
 

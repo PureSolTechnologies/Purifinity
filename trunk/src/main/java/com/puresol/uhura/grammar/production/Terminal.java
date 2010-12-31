@@ -14,10 +14,12 @@ public final class Terminal extends AbstractConstruction {
 
 	private final String text;
 	private final int hashcode;
+	private final boolean ignoreCase;
 
-	public Terminal(String name, String text) {
+	public Terminal(String name, String text, boolean ignoreCase) {
 		super(name, true);
 		this.text = text;
+		this.ignoreCase = ignoreCase;
 		final int prime = 31;
 		int result = super.hashCode();
 		result = prime * result + ((text == null) ? 0 : text.hashCode());
@@ -26,6 +28,10 @@ public final class Terminal extends AbstractConstruction {
 
 	public String getText() {
 		return text;
+	}
+
+	public boolean isIgnoreCase() {
+		return ignoreCase;
 	}
 
 	public boolean matches(Token token) {
@@ -42,6 +48,9 @@ public final class Terminal extends AbstractConstruction {
 		}
 		if ((this.text == null) || (this.text.isEmpty())) {
 			return true;
+		}
+		if (ignoreCase) {
+			return this.text.equalsIgnoreCase(text);
 		}
 		return this.text.equals(text);
 	}
@@ -79,11 +88,19 @@ public final class Terminal extends AbstractConstruction {
 		if (hashcode != other.hashcode) {
 			return false;
 		}
-		if (text == null) {
-			if (other.text != null)
+		if (ignoreCase) {
+			if (text == null) {
+				if (other.text != null)
+					return false;
+			} else if (!text.equalsIgnoreCase(other.text))
 				return false;
-		} else if (!text.equals(other.text))
-			return false;
+		} else {
+			if (text == null) {
+				if (other.text != null)
+					return false;
+			} else if (!text.equals(other.text))
+				return false;
+		}
 		return true;
 	}
 

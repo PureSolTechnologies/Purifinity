@@ -19,19 +19,19 @@ public class LR1ItemTest {
 				LR1Item.class).toString()
 				+ ".persist");
 		PersistenceTester.test(new LR1Item(new Production("Production"), 1,
-				new Terminal(".", null)), file);
+				new Terminal(".", null, false)), file);
 	}
 
 	@Test
 	public void testInstance() {
 		assertNotNull(new LR1Item(new Production("Production"), 1,
-				new Terminal(".", null)));
+				new Terminal(".", null, false)));
 	}
 
 	@Test
 	public void testInitialValues() {
 		Production production = new Production("Production");
-		Terminal construction = new Terminal(".", null);
+		Terminal construction = new Terminal(".", null, false);
 		LR1Item item = new LR1Item(production, 1, construction);
 		assertSame(production, item.getProduction());
 		assertEquals(1, item.getPosition());
@@ -41,7 +41,7 @@ public class LR1ItemTest {
 	@Test
 	public void testGetters() {
 		Production production = new Production("Production");
-		Terminal construction = new Terminal(".", null);
+		Terminal construction = new Terminal(".", null, false);
 		LR1Item item = new LR1Item(production, 1, construction);
 		assertSame(production, item.getProduction());
 		assertEquals(1, item.getPosition());

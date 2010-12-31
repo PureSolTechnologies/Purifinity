@@ -49,9 +49,9 @@ public class LR1ParserTableTest {
 			ParserAction g11 = new ParserAction(ActionType.GOTO, 11);
 			ParserAction accept = new ParserAction(ActionType.ACCEPT, -1);
 			ParserAction error = new ParserAction(ActionType.ERROR, -1);
-			Construction a = new Terminal("a", null);
-			Construction b = new Terminal("b", null);
-			Construction c = new Terminal("c", null);
+			Construction a = new Terminal("a", null, false);
+			Construction b = new Terminal("b", null, false);
+			Construction c = new Terminal("c", null, false);
 			Construction pS = new NonTerminal("S");
 			Construction pA = new NonTerminal("A");
 			Construction finish = FinishTerminal.getInstance();
@@ -184,8 +184,8 @@ public class LR1ParserTableTest {
 			ParserAction g9 = new ParserAction(ActionType.GOTO, 9);
 			ParserAction accept = new ParserAction(ActionType.ACCEPT, -1);
 			ParserAction error = new ParserAction(ActionType.ERROR, -1);
-			Construction c = new Terminal("c", null);
-			Construction d = new Terminal("d", null);
+			Construction c = new Terminal("c", null, false);
+			Construction d = new Terminal("d", null, false);
 			Construction finish = FinishTerminal.getInstance();
 			Construction pS = new NonTerminal("S");
 			Construction pC = new NonTerminal("C");

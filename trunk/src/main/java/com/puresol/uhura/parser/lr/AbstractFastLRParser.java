@@ -12,6 +12,7 @@ import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.production.FinishTerminal;
 import com.puresol.uhura.grammar.production.Production;
 import com.puresol.uhura.grammar.production.NonTerminal;
+import com.puresol.uhura.grammar.production.Terminal;
 import com.puresol.uhura.grammar.token.Visibility;
 import com.puresol.uhura.lexer.Token;
 import com.puresol.uhura.lexer.TokenStream;
@@ -160,7 +161,8 @@ public abstract class AbstractFastLRParser extends AbstractParser {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final ParserTree parse(TokenStream tokenStream) throws ParserException {
+	public final ParserTree parse(TokenStream tokenStream)
+			throws ParserException {
 		setTokenStream(tokenStream);
 		return parse();
 	}
@@ -251,8 +253,9 @@ public abstract class AbstractFastLRParser extends AbstractParser {
 		}
 		final ParserActionSet actionSet;
 		if (token != null) {
-			actionSet = parserTable.getActionSet(currentState,
-					token.getTerminal());
+			actionSet = parserTable.getActionSet(currentState, new Terminal(
+					token.getName(), token.getText(), getGrammar()
+							.isIgnoreCase()));
 		} else {
 			/*
 			 * The finish token was found. So look for an action for finish.
@@ -363,7 +366,8 @@ public abstract class AbstractFastLRParser extends AbstractParser {
 		}
 	}
 
-	private ParserTree createAST(List<ParserAction> actions) throws ParserException {
+	private ParserTree createAST(List<ParserAction> actions)
+			throws ParserException {
 		return LRTokenStreamConverter.convert(getTokenStream(), getGrammar(),
 				actions);
 	}
