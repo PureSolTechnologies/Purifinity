@@ -121,8 +121,7 @@ public abstract class AbstractParserTable implements ParserTable {
 		}
 		ParserActionSet set = actions.get(construction);
 		if (set == null) {
-			set = actions.get(new Terminal(construction.getName(), null,
-					grammar.isIgnoreCase()));
+			set = actions.get(new Terminal(construction.getName(), null));
 		}
 		if ((set == null) || (set.getActionNumber() <= 0)) {
 			return ParserActionSet.getErrorSet();

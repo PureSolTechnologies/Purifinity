@@ -233,8 +233,7 @@ public abstract class AbstractLRParser extends AbstractParser {
 				if (streamPosition < getTokenStream().size()) {
 					token = getTokenStream().get(streamPosition);
 					actionSet = parserTable.getActionSet(stateStack.peek(),
-							new Terminal(token.getName(), token.getText(),
-									getGrammar().isIgnoreCase()));
+							new Terminal(token.getName(), token.getText()));
 				} else {
 					token = null;
 					actionSet = parserTable.getActionSet(stateStack.peek(),

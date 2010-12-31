@@ -381,8 +381,7 @@ public class GrammarConverter {
 			TokenDefinition tokenDefinition = tokenDefinitions
 					.getDefinition(identifier);
 			if (tokenDefinition != null) {
-				return new Terminal(identifier, null,
-						tokenDefinition.isIgnoreCase());
+				return new Terminal(identifier, null);
 			} else {
 				return new NonTerminal(identifier);
 			}
@@ -402,8 +401,7 @@ public class GrammarConverter {
 										+ text
 										+ "' satisfies several token definitions and is therefore ambiguous!");
 					}
-					terminal = new Terminal(tokenDefinition.getName(), text,
-							tokenDefinition.isIgnoreCase());
+					terminal = new Terminal(tokenDefinition.getName(), text);
 				}
 			}
 			if (terminal == null) {

@@ -12,15 +12,14 @@ public class TerminalTest {
 
 	@Test
 	public void testInstance() {
-		assertNotNull(new Terminal("NAME", "name", false));
+		assertNotNull(new Terminal("NAME", "name"));
 	}
 
 	@Test
 	public void testInitialValues() {
-		Terminal terminal = new Terminal("NAME", "name", false);
+		Terminal terminal = new Terminal("NAME", "name");
 		assertEquals("NAME", terminal.getName());
 		assertEquals("name", terminal.getText());
-		assertEquals(false, terminal.isIgnoreCase());
 		assertFalse(terminal.isNonTerminal());
 		assertTrue(terminal.isTerminal());
 		assertEquals("NAME: (TERMINAL) 'name'", terminal.toString());
@@ -28,28 +27,27 @@ public class TerminalTest {
 	}
 
 	@Test
-	public void testMatches() {
-		Terminal terminal = new Terminal("TEST", null, false);
-		assertTrue(terminal
-				.matches(new Token("TEST", "anything", Visibility.VISIBLE,
-						new TokenMetaData("SourceName", 0, 0, 1, 1))));
-		terminal = new Terminal("TEST", "", false);
-		assertTrue(terminal
-				.matches(new Token("TEST", "anything", Visibility.VISIBLE,
-						new TokenMetaData("SourceName", 0, 0, 1, 1))));
-		terminal = new Terminal("TEST", "anything", false);
-		assertTrue(terminal
-				.matches(new Token("TEST", "anything", Visibility.VISIBLE,
-						new TokenMetaData("SourceName", 0, 0, 1, 1))));
+	public void testEquals() {
+		assertTrue(new Terminal("NAME", "TEXT").equals(new Terminal("NAME",
+				"TEXT")));
+		assertFalse(new Terminal("NAME", "TEXT").equals(new Terminal("NAME",
+				"text")));
 	}
+
 	@Test
-	public void testMatchesIgnoreCase() {
-		Terminal terminal = new Terminal("NAME", "text", true);
+	public void testMatches() {
+		Terminal terminal = new Terminal("TEST", null);
 		assertTrue(terminal
-				.matches(new Token("NAME", "text", Visibility.VISIBLE,
+				.matches(new Token("TEST", "anything", Visibility.VISIBLE,
 						new TokenMetaData("SourceName", 0, 0, 1, 1))));
+		terminal = new Terminal("TEST", "");
 		assertTrue(terminal
-				.matches(new Token("NAME", "TEXT", Visibility.VISIBLE,
+				.matches(new Token("TEST", "anything", Visibility.VISIBLE,
+						new TokenMetaData("SourceName", 0, 0, 1, 1))));
+		terminal = new Terminal("TEST", "anything");
+		assertTrue(terminal
+				.matches(new Token("TEST", "anything", Visibility.VISIBLE,
 						new TokenMetaData("SourceName", 0, 0, 1, 1))));
 	}
+
 }

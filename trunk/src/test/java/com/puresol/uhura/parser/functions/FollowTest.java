@@ -48,9 +48,9 @@ public class FollowTest {
 		Construction productionS = new NonTerminal("S");
 		Construction productionA = new NonTerminal("A");
 		Construction finish = FinishTerminal.getInstance();
-		Construction a = new Terminal("a", null, false);
-		Construction b = new Terminal("b", null, false);
-		Construction c = new Terminal("c", null, false);
+		Construction a = new Terminal("a", null);
+		Construction b = new Terminal("b", null);
+		Construction c = new Terminal("c", null);
 
 		assertEquals(1, follow.get(productionZ).size());
 		Iterator<Terminal> iterator = follow.get(productionZ).iterator();
@@ -85,9 +85,9 @@ public class FollowTest {
 		Construction productionT = new NonTerminal("T");
 		Construction productionF = new NonTerminal("F");
 		Construction finish = FinishTerminal.getInstance();
-		Construction plus = new Terminal("PLUS", "+", false);
-		Construction star = new Terminal("STAR", "*", false);
-		Construction rParen = new Terminal("RPAREN", ")", false);
+		Construction plus = new Terminal("PLUS", "+");
+		Construction star = new Terminal("STAR", "*");
+		Construction rParen = new Terminal("RPAREN", ")");
 
 		assertEquals(3, follow.get(productionE).size());
 		Iterator<Terminal> iterator = follow.get(productionE).iterator();
@@ -134,9 +134,9 @@ public class FollowTest {
 		Construction productionTS = new NonTerminal("T'");
 		Construction productionF = new NonTerminal("F");
 		Construction finish = FinishTerminal.getInstance();
-		Construction plus = new Terminal("PLUS", "+", false);
-		Construction star = new Terminal("STAR", "*", false);
-		Construction rParen = new Terminal("RPAREN", ")", false);
+		Construction plus = new Terminal("PLUS", "+");
+		Construction star = new Terminal("STAR", "*");
+		Construction rParen = new Terminal("RPAREN", ")");
 
 		assertEquals(2, follow.get(productionE).size());
 		Iterator<Terminal> iterator = follow.get(productionE).iterator();

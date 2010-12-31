@@ -46,9 +46,9 @@ public class FirstTest {
 		Construction productionZ = new NonTerminal("Z");
 		Construction productionS = new NonTerminal("S");
 		Construction productionA = new NonTerminal("A");
-		Construction terminalA = new Terminal("a", null, false);
-		Construction terminalB = new Terminal("b", null, false);
-		Construction terminalC = new Terminal("c", null, false);
+		Construction terminalA = new Terminal("a", null);
+		Construction terminalB = new Terminal("b", null);
+		Construction terminalC = new Terminal("c", null);
 
 		assertEquals(1, first.get(productionZ).size());
 		assertEquals(terminalB, first.get(productionZ).iterator().next());
@@ -86,8 +86,8 @@ public class FirstTest {
 		Construction productionE = new NonTerminal("E");
 		Construction productionT = new NonTerminal("T");
 		Construction productionF = new NonTerminal("F");
-		Construction terminalId = new Terminal("id", null, false);
-		Construction terminalLParen = new Terminal("LPAREN", "(", false);
+		Construction terminalId = new Terminal("id", null);
+		Construction terminalLParen = new Terminal("LPAREN", "(");
 
 		assertEquals(2, first.get(productionZ).size());
 		Iterator<Terminal> iterator = first.get(productionZ).iterator();
@@ -129,10 +129,10 @@ public class FirstTest {
 		Construction productionT = new NonTerminal("T");
 		Construction productionTS = new NonTerminal("T'");
 		Construction productionF = new NonTerminal("F");
-		Construction terminalId = new Terminal("id", null, false);
-		Construction terminalLParen = new Terminal("LPAREN", "(", false);
-		Construction terminalStar = new Terminal("STAR", "*", false);
-		Construction terminalPlus = new Terminal("PLUS", "+", false);
+		Construction terminalId = new Terminal("id", null);
+		Construction terminalLParen = new Terminal("LPAREN", "(");
+		Construction terminalStar = new Terminal("STAR", "*");
+		Construction terminalPlus = new Terminal("PLUS", "+");
 		Construction empty = EmptyTerminal.getInstance();
 
 		assertEquals(2, first.get(productionE).size());
@@ -174,8 +174,8 @@ public class FirstTest {
 		Set<Terminal> constructions = first
 				.get(grammar.getProductions().get(0));
 		assertEquals(2, constructions.size());
-		assertTrue(constructions.contains(new Terminal("id", null, false)));
-		assertTrue(constructions.contains(new Terminal("STAR", "*", false)));
+		assertTrue(constructions.contains(new Terminal("id", null)));
+		assertTrue(constructions.contains(new Terminal("STAR", "*")));
 
 	}
 

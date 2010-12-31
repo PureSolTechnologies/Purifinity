@@ -254,8 +254,7 @@ public abstract class AbstractFastLRParser extends AbstractParser {
 		final ParserActionSet actionSet;
 		if (token != null) {
 			actionSet = parserTable.getActionSet(currentState, new Terminal(
-					token.getName(), token.getText(), getGrammar()
-							.isIgnoreCase()));
+					token.getName(), token.getText()));
 		} else {
 			/*
 			 * The finish token was found. So look for an action for finish.

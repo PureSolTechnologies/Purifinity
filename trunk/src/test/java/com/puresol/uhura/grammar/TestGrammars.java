@@ -60,29 +60,29 @@ public class TestGrammars {
 
 			production = new Production("S");
 			production.addConstruction(new NonTerminal("S"));
-			production.addConstruction(new Terminal("b", null, false));
+			production.addConstruction(new Terminal("b", null));
 			productions.add(production);
 
 			production = new Production("S");
-			production.addConstruction(new Terminal("b", null, false));
+			production.addConstruction(new Terminal("b", null));
 			production.addConstruction(new NonTerminal("A"));
-			production.addConstruction(new Terminal("a", null, false));
+			production.addConstruction(new Terminal("a", null));
 			productions.add(production);
 
 			production = new Production("A");
-			production.addConstruction(new Terminal("a", null, false));
+			production.addConstruction(new Terminal("a", null));
 			production.addConstruction(new NonTerminal("S"));
-			production.addConstruction(new Terminal("c", null, false));
+			production.addConstruction(new Terminal("c", null));
 			productions.add(production);
 
 			production = new Production("A");
-			production.addConstruction(new Terminal("a", null, false));
+			production.addConstruction(new Terminal("a", null));
 			productions.add(production);
 
 			production = new Production("A");
-			production.addConstruction(new Terminal("a", null, false));
+			production.addConstruction(new Terminal("a", null));
 			production.addConstruction(new NonTerminal("S"));
-			production.addConstruction(new Terminal("b", null, false));
+			production.addConstruction(new Terminal("b", null));
 			productions.add(production);
 
 			return new Grammar(new Properties(), tokenDefinitions, productions);
@@ -130,7 +130,7 @@ public class TestGrammars {
 
 			production = new Production("E");
 			production.addConstruction(new NonTerminal("E"));
-			production.addConstruction(new Terminal("PLUS", "+", false));
+			production.addConstruction(new Terminal("PLUS", "+"));
 			production.addConstruction(new NonTerminal("T"));
 			productions.add(production);
 
@@ -140,7 +140,7 @@ public class TestGrammars {
 
 			production = new Production("T");
 			production.addConstruction(new NonTerminal("T"));
-			production.addConstruction(new Terminal("STAR", "*", false));
+			production.addConstruction(new Terminal("STAR", "*"));
 			production.addConstruction(new NonTerminal("F"));
 			productions.add(production);
 
@@ -149,13 +149,13 @@ public class TestGrammars {
 			productions.add(production);
 
 			production = new Production("F");
-			production.addConstruction(new Terminal("LPAREN", "(", false));
+			production.addConstruction(new Terminal("LPAREN", "("));
 			production.addConstruction(new NonTerminal("E"));
-			production.addConstruction(new Terminal("RPAREN", ")", false));
+			production.addConstruction(new Terminal("RPAREN", ")"));
 			productions.add(production);
 
 			production = new Production("F");
-			production.addConstruction(new Terminal("id", null, false));
+			production.addConstruction(new Terminal("id", null));
 			productions.add(production);
 
 			return new Grammar(new Properties(), tokenDefinitions, productions);
@@ -187,12 +187,12 @@ public class TestGrammars {
 			productions.add(production);
 
 			production = new Production("C");
-			production.addConstruction(new Terminal("c", null, false));
+			production.addConstruction(new Terminal("c", null));
 			production.addConstruction(new NonTerminal("C"));
 			productions.add(production);
 
 			production = new Production("C");
-			production.addConstruction(new Terminal("d", null, false));
+			production.addConstruction(new Terminal("d", null));
 			productions.add(production);
 			return new Grammar(new Properties(), tokenDefinitions, productions);
 		} catch (GrammarException e) {
@@ -227,7 +227,7 @@ public class TestGrammars {
 
 			production = new Production("S");
 			production.addConstruction(new NonTerminal("L"));
-			production.addConstruction(new Terminal("EQUALS", "=", false));
+			production.addConstruction(new Terminal("EQUALS", "="));
 			production.addConstruction(new NonTerminal("R"));
 			productions.add(production);
 
@@ -236,12 +236,12 @@ public class TestGrammars {
 			productions.add(production);
 
 			production = new Production("L");
-			production.addConstruction(new Terminal("STAR", "*", false));
+			production.addConstruction(new Terminal("STAR", "*"));
 			production.addConstruction(new NonTerminal("R"));
 			productions.add(production);
 
 			production = new Production("L");
-			production.addConstruction(new Terminal("id", null, false));
+			production.addConstruction(new Terminal("id", null));
 			productions.add(production);
 
 			production = new Production("R");
@@ -280,7 +280,7 @@ public class TestGrammars {
 			productions.add(production);
 
 			production = new Production("E'");
-			production.addConstruction(new Terminal("PLUS", "+", false));
+			production.addConstruction(new Terminal("PLUS", "+"));
 			production.addConstruction(new NonTerminal("T"));
 			production.addConstruction(new NonTerminal("E'"));
 			productions.add(production);
@@ -294,7 +294,7 @@ public class TestGrammars {
 			productions.add(production);
 
 			production = new Production("T'");
-			production.addConstruction(new Terminal("STAR", "*", false));
+			production.addConstruction(new Terminal("STAR", "*"));
 			production.addConstruction(new NonTerminal("F"));
 			production.addConstruction(new NonTerminal("T'"));
 			productions.add(production);
@@ -303,13 +303,13 @@ public class TestGrammars {
 			productions.add(production);
 
 			production = new Production("F");
-			production.addConstruction(new Terminal("LPAREN", "(", false));
+			production.addConstruction(new Terminal("LPAREN", "("));
 			production.addConstruction(new NonTerminal("E"));
-			production.addConstruction(new Terminal("RPAREN", ")", false));
+			production.addConstruction(new Terminal("RPAREN", ")"));
 			productions.add(production);
 
 			production = new Production("F");
-			production.addConstruction(new Terminal("id", null, false));
+			production.addConstruction(new Terminal("id", null));
 			productions.add(production);
 
 			return new Grammar(new Properties(), tokenDefinitions, productions);

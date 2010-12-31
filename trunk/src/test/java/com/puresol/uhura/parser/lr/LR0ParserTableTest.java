@@ -30,7 +30,7 @@ public class LR0ParserTableTest {
 	public void test() throws GrammarException {
 		Grammar grammar = TestGrammars.getGrammarFromLRkPamphlet();
 		LR0ParserTable table = new LR0ParserTable(grammar);
-		table.getAction(5, new Terminal("b", null, false));
+		table.getAction(5, new Terminal("b", null));
 		fail("An GrammarException was expected due to the fact that this grammar is not LR(0)!");
 	}
 
@@ -38,7 +38,7 @@ public class LR0ParserTableTest {
 	public void test2() throws GrammarException {
 		Grammar grammar = TestGrammars.getSLR1TestGrammarFromDragonBook();
 		LR0ParserTable table = new LR0ParserTable(grammar);
-		table.getAction(2, new Terminal("STAR", "*", false));
+		table.getAction(2, new Terminal("STAR", "*"));
 		fail("An GrammarException was expected due to the fact that this grammar is not LR(0)!");
 	}
 
