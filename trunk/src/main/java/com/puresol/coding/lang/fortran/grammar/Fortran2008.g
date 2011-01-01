@@ -575,6 +575,13 @@ Node: implicit-part ? was refactored to implicit-part-stmt *. This is needed
 	|	BOZ_LITERAL_CONSTANT
 	;
 
+/*
+	character-literal was created to handle broken character literals in 
+	source files. The handling of the strings is implemented in the
+	pre-conditioner, but the parser needs to handle them, too. Broken
+	character literals are idenfifiable by the start token 
+	CHAR_LITERAL_CONSTANT_xxxxxx_QUOTE_START.  
+*/
 	character-literal :
 		CHAR_LITERAL_CONSTANT
 	|	CHAR_LITERAL_CONSTANT_SINGLE_QUOTE_START CHAR_LITERAL_CONSTANT +
@@ -644,7 +651,8 @@ Node: implicit-part ? was refactored to implicit-part-stmt *. This is needed
 	not needed...
 */
 	label-list :
-		INT_LITERAL_CONSTANT ( COMMA INT_LITERAL_CONSTANT ) *
+		label-list COMMA INT_LITERAL_CONSTANT 
+	|	INT_LITERAL_CONSTANT
 	;
 
 /***************
@@ -894,7 +902,8 @@ Node: implicit-part ? was refactored to implicit-part-stmt *. This is needed
 	;
 	// added...
 	name-list :
-		NAME_LITERAL ( COMMA NAME_LITERAL ) *
+		name-list COMMA NAME_LITERAL
+	|	NAME_LITERAL
 	;
 	
 
@@ -911,7 +920,8 @@ Node: implicit-part ? was refactored to implicit-part-stmt *. This is needed
 	|	'EXTENDS' LEFT_PARENTHESIS NAME_LITERAL RIGHT_PARENTHESIS
 	;
 	type-attr-spec-list :
-		type-attr-spec ( COMMA type-attr-spec ) *
+		type-attr-spec-list COMMA type-attr-spec
+	|	type-attr-spec
 	;
 
 /*
@@ -942,7 +952,7 @@ Node: implicit-part ? was refactored to implicit-part-stmt *. This is needed
 	type-param-decl -list
 */
 	type-param-def-stmt :
-		'INTEGER' kind-selector ? COMMA type-param-attr-spec COLON COLON type-param-decl-list  stmt-end
+		'INTEGER' kind-selector ? COMMA type-param-attr-spec COLON COLON type-param-decl-list stmt-end
 	;
 
 /*
@@ -1017,7 +1027,7 @@ Node: implicit-part ? was refactored to implicit-part-stmt *. This is needed
 	[ * char-length ] [ component-initialization ]
 */
 	component-decl :
-		NAME_LITERAL ( LEFT_PARENTHESIS component-array-spec RIGHT_PARENTHESIS ) ? ( LEFT_SQUARE_BRACKET coarray-spec RIGHT_SQUARE_BRACKET ) ? ( ASTERIK char-length ) ? component-initialization ?
+		NAME_LITERAL ( LEFT_PARENTHESIS component-array-spec RIGHT_PARENTHESIS ) ? ( LEFT_SQUARE_BRACKET coarray-spec RIGHT_SQUARE_BRACKET ) ? ( ASTERIK char-length ) ? initialization ?
 	;
 	
 	component-decl-list :
@@ -1061,22 +1071,15 @@ Node: implicit-part ? was refactored to implicit-part-stmt *. This is needed
 	R442 component-initialization is = constant-expr
 	or => null-init
 	or => initial-data-target
+	
+	not needed...
 */
-	component-initialization :
-		EQUALS 
-		( 
-			expr 
-		|	GREATER_THAN null-init
-		|	GREATER_THAN initial-data-target 
-		)
-	;
 
 /*
 	R443 initial-data-target is designator
+	
+	not needed...
 */
-	initial-data-target :
-		designator
-	;
 
 /*
 	R444 private-components-stmt is PRIVATE
@@ -1154,7 +1157,8 @@ Node: implicit-part ? was refactored to implicit-part-stmt *. This is needed
 	|	access-spec
 	;
 	binding-attr-list :
-		binding-attr ( COMMA binding-attr ) *
+		binding-attr-list COMMA binding-attr
+	|	binding-attr
 	;
 
 /*
@@ -1178,7 +1182,8 @@ Node: implicit-part ? was refactored to implicit-part-stmt *. This is needed
 		( NAME_LITERAL EQUALS ) ? type-param-value
 	;
 	type-param-spec-list :
-		type-param-spec ( COMMA type-param-spec ) *
+		type-param-spec COMMA type-param-spec
+	|	type-param-spec
 	;
 
 /*
@@ -1332,7 +1337,8 @@ Node: implicit-part ? was refactored to implicit-part-stmt *. This is needed
 	|	ac-implied-do
 	;
 	ac-value-list :
-		ac-value ( COMMA ac-value ) *
+		ac-value-list COMMA ac-value
+	|	ac-value
 	;
 
 /*
@@ -1421,7 +1427,8 @@ Node: implicit-part ? was refactored to implicit-part-stmt *. This is needed
 	|	NAME_LITERAL ( ASTERIK char-length ) ?
 	;
 	entity-decl-list :
-		entity-decl ( COMMA entity-decl ) *
+		entity-decl-list COMMA entity-decl
+	|	entity-decl
 	;
 
 /*
@@ -1438,7 +1445,7 @@ Node: implicit-part ? was refactored to implicit-part-stmt *. This is needed
 	initialization :
 		EQUALS expr
 	|	EQUALS GREATER_THAN null-init
-	|	EQUALS GREATER_THAN initial-data-target
+	|	EQUALS GREATER_THAN designator
 	;
 
 /*
@@ -1552,7 +1559,8 @@ Node: implicit-part ? was refactored to implicit-part-stmt *. This is needed
 	R519 assumed-shape-spec is [ lower-bound ] :
 */
 	assumed-shape-spec :
-		expr ? COLON
+		expr COLON
+	|	COLON
 	;
 	assumed-shape-spec-list :
 		assumed-shape-spec ( COMMA assumed-shape-spec ) *
@@ -1582,10 +1590,12 @@ Node: implicit-part ? was refactored to implicit-part-stmt *. This is needed
 	R522 implied-shape-spec is [ lower-bound : ] *
 */
 	implied-shape-spec :
-		( expr COLON ) ? ASTERIK
+		expr COLON ASTERIK
+	|	ASTERIK
 	;
 	implied-shape-spec-list :
-		implied-shape-spec ( COMMA implied-shape-spec ) *
+		implied-shape-spec-list COMMA implied-shape-spec
+	|	implied-shape-spec
 	;
 	
 /*
@@ -1776,7 +1786,6 @@ Node: implicit-part ? was refactored to implicit-part-stmt *. This is needed
 	|	signed-int-literal-constant
 	|	signed-real-literal-constant
 	|	null-init
-	|	initial-data-target
 	|	structure-constructor
 	;
 
@@ -1876,7 +1885,8 @@ Node: implicit-part ? was refactored to implicit-part-stmt *. This is needed
 	|	SLASH NAME_LITERAL SLASH
 	;
 	saved-entity-list :
-		saved-entity ( COMMA saved-entity ) *
+		saved-entity-list COMMA saved-entity
+	|	saved-entity
 	;
 
 /*
@@ -1934,7 +1944,8 @@ Node: implicit-part ? was refactored to implicit-part-stmt *. This is needed
 		declaration-type-spec LEFT_PARENTHESIS letter-spec-list RIGHT_PARENTHESIS
 	;
 	implicit-spec-list :
-		implicit-spec ( COMMA implicit-spec ) *
+		implicit-spec-list COMMA implicit-spec
+	|	implicit-spec
 	;
 	
 /*
@@ -1944,7 +1955,8 @@ Node: implicit-part ? was refactored to implicit-part-stmt *. This is needed
 		NAME_LITERAL ( MINUS NAME_LITERAL ) ? // the NAME_LITERAL is used to amiguousy with LETTER_LITERAL
 	;
 	letter-spec-list :
-		letter-spec ( COMMA letter-spec ) *
+		letter-spec-list COMMA letter-spec
+	|	letter-spec
 	;
 
 /*
@@ -1979,7 +1991,8 @@ Node: implicit-part ? was refactored to implicit-part-stmt *. This is needed
 		LEFT_PARENTHESIS equivalence-object COMMA equivalence-object-list RIGHT_PARENTHESIS
 	;
 	equivalence-set-list :
-		equivalence-set ( COMMA equivalence-set ) *
+		equivalence-set COMMA equivalence-set
+	|	equivalence-set
 	;
 
 /*
@@ -2032,10 +2045,11 @@ Node: implicit-part ? was refactored to implicit-part-stmt *. This is needed
 	or substring
 */
 	designator :
-		data-ref ( LEFT_PARENTHESIS substring-range RIGHT_PARENTHESIS ) ?
-	//	|	NAME_LITERAL is also part of data-ref...
-	|	designator PERCENT ( 'RE' | 'IM' )
+		data-ref
+	|	data-ref LEFT_PARENTHESIS substring-range RIGHT_PARENTHESIS
+	|	data-ref PERCENT NAME_LITERAL
 	|	literal-constant LEFT_PARENTHESIS substring-range RIGHT_PARENTHESIS
+	|	variable PERCENT NAME_LITERAL
 	;
 
 /*
@@ -2090,6 +2104,8 @@ Node: implicit-part ? was refactored to implicit-part-stmt *. This is needed
 	or coindexed-named-object
 	or scalar-structure-component
 	or scalar-constant
+	
+	TODO Think about this implementation again.
 */
 	parent-string :
 		data-ref
@@ -2372,12 +2388,11 @@ Node: implicit-part ? was refactored to implicit-part-stmt *. This is needed
 */
 	primary :
 		literal-constant
-	|	designator ( PERCENT NAME_LITERAL ) ?
 	|	array-constructor
-	|	structure-constructor
-	|	function-reference
-	//	|	NAME_LITERAL is also part of designator
 	|	LEFT_PARENTHESIS expr RIGHT_PARENTHESIS
+	|	function-reference
+	|	designator
+//	|	structure-constructor TODO this is missing due to ambigiuous rules!
 	;
 
 /*
@@ -2410,17 +2425,15 @@ Node: implicit-part ? was refactored to implicit-part-stmt *. This is needed
 	R705 add-operand is [ add-operand mult-op ] mult-operand
 */
 	add-operand :
-		 mult-operand mult-op add-operand
-	|	 mult-operand
+		 mult-operand ( mult-op add-operand ) *
 	;
 
 /*
 	R706 level-2-expr is [ [ level-2-expr ] add-op ] add-operand
 */
 	level-2-expr :
-		add-operand add-op level-2-expr 
-	|	add-operand
-	|	add-op add-operand
+		add-operand ( add-op add-operand ) * 
+	|	add-op level-2-expr
 	;
 
 /*
@@ -3507,7 +3520,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	|	'ERR' EQUALS INT_LITERAL_CONSTANT
 	|	'FILE' EQUALS expr
 	|	'FORM' EQUALS expr
-	|	'IOMSG' EQUALS iomsg-variable
+	|	'IOMSG' EQUALS variable
 	|	'IOSTAT' EQUALS variable
 	|	'NEWUNIT' EQUALS variable
 	|	'PAD' EQUALS expr
@@ -3529,10 +3542,9 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 
 /*
 	R907 iomsg-variable is scalar-default-char-variable
+	
+	not needed...
 */
-	iomsg-variable :
-		variable
-	;
 
 /*
 	R908 close-stmt is CLOSE ( close-spec-list )
@@ -3552,7 +3564,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 		'UNIT' EQUALS file-unit-number
 	|	file-unit-number
 	|	'IOSTAT' EQUALS variable
-	|	'IOMSG' EQUALS iomsg-variable
+	|	'IOMSG' EQUALS variable
 	|	'ERR' EQUALS INT_LITERAL_CONSTANT
 	|	'STATUS' EQUALS expr
 	;
@@ -3623,7 +3635,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	|	'EOR' EQUALS INT_LITERAL_CONSTANT
 	|	'ERR' EQUALS INT_LITERAL_CONSTANT
 	|	'ID' EQUALS variable
-	|	'IOMSG' EQUALS iomsg-variable
+	|	'IOMSG' EQUALS variable
 	|	'IOSTAT' EQUALS variable
 	|	'PAD' EQUALS expr
 	|	'POS' EQUALS expr
@@ -3739,7 +3751,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	|	'EOR' EQUALS INT_LITERAL_CONSTANT
 	|	'ERR' EQUALS INT_LITERAL_CONSTANT
 	|	'ID' EQUALS expr
-	|	'IOMSG' EQUALS iomsg-variable
+	|	'IOMSG' EQUALS variable
 	|	'IOSTAT' EQUALS variable
 	;
 	wait-spec-list :
@@ -3782,7 +3794,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	position-spec :
 		'UNIT' EQUALS file-unit-number
 	|	file-unit-number
-	|	'IOMSG' EQUALS iomsg-variable
+	|	'IOMSG' EQUALS variable
 	|	'IOSTAT' EQUALS variable
 	|	'ERR' EQUALS INT_LITERAL_CONSTANT
 	;
@@ -3810,7 +3822,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 		'UNIT' EQUALS file-unit-number
 	|	file-unit-number
 	|	'IOSTAT' EQUALS variable
-	|	'IOMSG' EQUALS iomsg-variable
+	|	'IOMSG' EQUALS variable
 	|	'ERR' EQUALS INT_LITERAL_CONSTANT
 	;
 	flush-spec-list :
@@ -3885,7 +3897,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	|	'FORM' EQUALS variable
 	|	'FORMATTED' EQUALS variable
 	|	'ID' EQUALS expr
-	|	'IOMSG' EQUALS iomsg-variable
+	|	'IOMSG' EQUALS variable
 	|	'IOSTAT' EQUALS variable
 	|	'NAME' EQUALS variable
 	|	'NAMED' EQUALS variable
@@ -3950,11 +3962,17 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	or char-string-edit-desc
 	or [ r ] ( format-items )
 */
-	format-item :	
-		INT_LITERAL_CONSTANT ? data-edit-desc
-	|	control-edit-desc
+	format-item :
+		REAL_LITERAL_CONSTANT	
+	|	INT_LITERAL_CONSTANT
 	|	character-literal
-	|	INT_LITERAL_CONSTANT ? LEFT_PARENTHESIS format-items RIGHT_PARENTHESIS
+	|	NAME_LITERAL
+	|	sign
+	|	SLASH
+	|	COLON
+	|	DECIMALPOINT_OR_PERIOD
+	|	EQUALS
+	|	LEFT_PARENTHESIS format-items RIGHT_PARENTHESIS
 	;
 
 /*
@@ -3984,12 +4002,9 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	or A [ w ]
 	or D w . d
 	or DT [ char-literal-constant ] [ ( v-list ) ]
+	
+	not needed...
 */
-	data-edit-desc :
-		NAME_LITERAL ( REAL_LITERAL_CONSTANT ) ?
-	|	NAME_LITERAL DECIMALPOINT_OR_PERIOD INT_LITERAL_CONSTANT 'E' INT_LITERAL_CONSTANT
-	|	NAME_LITERAL character-literal ? ( LEFT_PARENTHESIS v-list RIGHT_PARENTHESIS ) ?
-	;
 
 /*
 	R1008 w is int-literal-constant
@@ -4020,9 +4035,6 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	
 	not needed...
 */
-	v-list :
-		( v-list COMMA ) ? signed-int-literal-constant
-	;
 
 /*
 	R1013 control-edit-desc is position-edit-desc
@@ -4033,14 +4045,9 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	or blank-interp-edit-desc
 	or round-edit-desc
 	or decimal-edit-desc
+	
+	not needed...
 */
-	control-edit-desc :
-		NAME_LITERAL
-	|	INT_LITERAL_CONSTANT NAME_LITERAL
-	|	INT_LITERAL_CONSTANT ? SLASH
-	|	COLON
-	|	signed-int-literal-constant NAME_LITERAL
-	;
 
 /*
 	R1014 k is signed-int-literal-constant
@@ -4500,26 +4507,23 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	R1219 function-reference is procedure-designator ( [ actual-arg-spec-list ] )
 */
 	function-reference :
-		procedure-designator LEFT_PARENTHESIS actual-arg-spec-list ? RIGHT_PARENTHESIS
+		designator LEFT_PARENTHESIS actual-arg-spec-list ? RIGHT_PARENTHESIS
 	;
 
 /*
 	R1220 call-stmt is CALL procedure-designator [ ( [ actual-arg-spec-list ] ) ]
 */
 	call-stmt :
-		'CALL' procedure-designator ( LEFT_PARENTHESIS actual-arg-spec-list ?  RIGHT_PARENTHESIS ) ? stmt-end
+		'CALL' designator ( LEFT_PARENTHESIS actual-arg-spec-list ?  RIGHT_PARENTHESIS ) ? stmt-end
 	;
 
 /*
 	R1221 procedure-designator is procedure-name
 	or proc-component-ref
 	or data-ref % binding-name
+	
+	Moved into designator...
 */
-	procedure-designator :
-		data-ref ( PERCENT NAME_LITERAL ) ?
-	//	|	NAME_LITERAL is also part of data-ref, PERCENT NAME_LITERAL was made optional...
-	|	proc-component-ref
-	;
 
 /*
 	R1222 actual-arg-spec is [ keyword = ] actual-arg
@@ -4541,17 +4545,16 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	actual-arg :
 //		NAME_LITERAL
 //	|	proc-component-ref
-		alt-return-spec
+		ASTERIK INT_LITERAL_CONSTANT
 //	|	expr
 	|	variable ( PERCENT NAME_LITERAL ) ?
 	;
 
 /*
 	R1224 alt-return-spec is * label
+	
+	not needed...
 */
-	alt-return-spec :
-		ASTERIK INT_LITERAL_CONSTANT
-	;
 
 /*
 	R1225 prefix is prefix-spec [ prefix-spec ] ...

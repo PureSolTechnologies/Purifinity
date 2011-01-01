@@ -38,10 +38,10 @@ public class FortranSourceCodeDistributionTest {
 	@Test
 	public void test() {
 		try {
-			Logger.getRootLogger().setLevel(Level.DEBUG);
+			Logger.getRootLogger().setLevel(Level.TRACE);
 			File file = new File(
 					"src/test/resources/com/puresol/coding/lang/fortran/samples",
-					"wmpx.f");
+					"ndreconr.f");
 			assertTrue(file.exists());
 			Fortran fortran = Fortran.getInstance();
 			StopWatch watch = new StopWatch();

@@ -67,7 +67,7 @@ public class FortranPreConditioner {
 	 * ignored.
 	 */
 	private static final Pattern FF_CONTINUATION_PATTERN = Pattern
-			.compile("^     [^ 0]");
+			.compile("^     [^ 0\\n\\r]");
 	private static final Pattern CONTINUATION_PATTERN = Pattern
 			.compile("^[ \\t]*&");
 
