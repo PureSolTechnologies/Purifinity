@@ -19,6 +19,9 @@ import com.puresol.uhura.grammar.production.Terminal;
  * This class is the abstract implementation of a parser table. The table based
  * parsers use this tables for parsing texts very efficiently.
  * 
+ * The abstract parser table implements several functions for universal parser
+ * usage.
+ * 
  * @author Rick-Rainer Ludwig
  * 
  */
@@ -32,9 +35,14 @@ public abstract class AbstractParserTable implements ParserTable {
 	private final List<Map<Construction, ParserActionSet>> table = new ArrayList<Map<Construction, ParserActionSet>>();
 	private final Set<Terminal> actionTerminals = new LinkedHashSet<Terminal>();
 	private final Set<NonTerminal> gotoNonTerminals = new LinkedHashSet<NonTerminal>();
-
 	private final Grammar grammar;
 
+	/**
+	 * This is the constructor for initializing the abstract parser table.
+	 * 
+	 * @param grammar
+	 * @throws GrammarException
+	 */
 	public AbstractParserTable(Grammar grammar) throws GrammarException {
 		super();
 		this.grammar = grammar;
@@ -43,18 +51,34 @@ public abstract class AbstractParserTable implements ParserTable {
 		logger.trace("done.");
 	}
 
+	/**
+	 * This method is overridden in inheriting classes to calculate the actual
+	 * table.
+	 * 
+	 * @throws GrammarException
+	 */
 	protected abstract void calculate() throws GrammarException;
 
+	/**
+	 * This method is used to add a new action terminal.
+	 * 
+	 * @param construction
+	 */
 	protected void addActionTerminal(Terminal construction) {
 		actionTerminals.add(construction);
 	}
 
+	/**
+	 * This method adds a new goto for a non-terminal.
+	 * 
+	 * @param construction
+	 */
 	protected void addGotoNonTerminal(NonTerminal construction) {
 		gotoNonTerminals.add(construction);
 	}
 
 	/**
-	 * @return the actionTerminals
+	 * {@inheritDoc}
 	 */
 	@Override
 	public final Set<Terminal> getActionTerminals() {
@@ -62,7 +86,7 @@ public abstract class AbstractParserTable implements ParserTable {
 	}
 
 	/**
-	 * @return the gotoNonTerminals
+	 * {@inheritDoc}
 	 */
 	@Override
 	public final Set<NonTerminal> getGotoNonTerminals() {
@@ -82,16 +106,22 @@ public abstract class AbstractParserTable implements ParserTable {
 		actionSet.addAction(action);
 	}
 
-	public final Grammar getGrammar() {
+	protected final Grammar getGrammar() {
 		return grammar;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public final Map<Construction, ParserActionSet> getPossibleActions(
 			int currentState) throws GrammarException {
 		return table.get(currentState);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public final ParserAction getAction(int currentState,
 			Construction construction) throws GrammarException {
@@ -109,6 +139,9 @@ public abstract class AbstractParserTable implements ParserTable {
 		return action.getAction();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public final ParserActionSet getActionSet(int currentState,
 			Construction construction) {
@@ -120,18 +153,39 @@ public abstract class AbstractParserTable implements ParserTable {
 			return ParserActionSet.getErrorSet();
 		}
 		ParserActionSet set = new ParserActionSet();
+		addExactActions(construction, set, actions);
+		addNonExcactActions(construction, set, actions);
+		return set;
+	}
+
+	/**
+	 * This method adds all actions which are concrete, what means that name and
+	 * content match exactly.
+	 * 
+	 * This method is needed for grammars which ignore the case of letters. A
+	 * simple Map.get() is not working due to the fact, that the equals method
+	 * can not be easily created for case-ignorance. It could easily violate the
+	 * contract for equals and hashCode.
+	 * 
+	 * @param construction
+	 * @param set
+	 * @param actions
+	 */
+	private void addExactActions(Construction construction,
+			ParserActionSet set, Map<Construction, ParserActionSet> actions) {
 		for (Construction c : actions.keySet()) {
 			if (!c.getName().equals(construction.getName())) {
-				// if name is not equals, it does obviously not fit
+				// if name is not equal, it does obviously not fit...
 				continue;
 			}
 			if (c.isNonTerminal() != construction.isNonTerminal()) {
+				// if the type is different, they do not fit either...
 				continue;
 			}
 			if (construction.isNonTerminal()) {
 				/*
 				 * if both are non-terminals, the names are the only criterion
-				 * for fitting
+				 * for an exact match
 				 */
 				set.addActions(actions.get(c));
 				continue;
@@ -151,20 +205,32 @@ public abstract class AbstractParserTable implements ParserTable {
 				}
 			}
 		}
-		if ((set == null) || (set.getAction(0).getAction() == ActionType.ERROR)) {
-			set = actions.get(new Terminal(construction.getName(), null));
-		}
-		if ((set == null) || (set.getAction(0).getAction() == ActionType.ERROR)) {
-			return ParserActionSet.getErrorSet();
-		}
-		return set;
 	}
 
+	/**
+	 * The method is needed for grammars where no keywords are available like
+	 * Fortran.
+	 * 
+	 * E.G.: If 'IF' is a keyword for the IF-construct and 'IF' also allowed to
+	 * be a variable name, we need to add the actions for terminal
+	 * NAME_LITERAL/'IF" and for NAME_LITERAL/*.
+	 */
+	private void addNonExcactActions(Construction construction,
+			ParserActionSet set, Map<Construction, ParserActionSet> actions) {
+		set.addActions(actions.get(new Terminal(construction.getName(), null)));
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public final int getStateCount() {
 		return table.size();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public final String toString() {
 		StringBuffer buffer = new StringBuffer();
