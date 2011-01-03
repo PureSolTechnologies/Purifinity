@@ -44,6 +44,8 @@ public class Fortran extends AbstractProgrammingLanguage {
 		}
 	}
 
+	private SourceForm sourceForm = SourceForm.FREE_FORM;
+
 	private Fortran() {
 		super("Fortran");
 	}
@@ -132,5 +134,13 @@ public class Fortran extends AbstractProgrammingLanguage {
 	@Override
 	public <T> T getImplementation(Class<T> clazz) {
 		return ClassRegistry.create(clazz);
+	}
+
+	public void setSourceForm(SourceForm sourceForm) {
+		this.sourceForm = sourceForm;
+	}
+
+	public SourceForm getSourceForm() {
+		return sourceForm;
 	}
 }

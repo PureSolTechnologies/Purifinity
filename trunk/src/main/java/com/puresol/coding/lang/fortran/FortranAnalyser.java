@@ -31,6 +31,13 @@ import com.puresol.utils.Persistence;
 import com.puresol.utils.PersistenceException;
 import com.puresol.utils.StopWatch;
 
+/**
+ * This is the Fortran analyzer to scan and parse source files in Fortran source
+ * code.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class FortranAnalyser implements Analyzer {
 
 	private static final long serialVersionUID = 2265150343844799735L;

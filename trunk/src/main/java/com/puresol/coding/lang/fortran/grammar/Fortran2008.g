@@ -93,6 +93,16 @@
 			DIGIT "+\")";
 
 	LINE_LEAD : '([C*!].....| [ \\d!]{4}[ \\d!;])';
+	
+	HOLLERITH1 : '1H.{1}';
+	HOLLERITH2 : '2H.{2}';
+	HOLLERITH3 : '3H.{3}';
+	HOLLERITH4 : '4H.{4}';
+	HOLLERITH5 : '5H.{5}';
+	HOLLERITH6 : '6H.{6}';
+	HOLLERITH7 : '7H.{7}';
+	HOLLERITH8 : '8H.{8}';
+	HOLLERITH9 : '9H.{9}';
  
 /****************************************************************************
  * T O K E N S
@@ -194,6 +204,20 @@
 		"|"	OCTAL_CONSTANT
 		"|"	HEX_CONSTANT
 		")"	;
+
+	HOLLERITH_CONSTANT :
+		'('
+			HOLLERITH1
+		'|'	HOLLERITH2
+		'|'	HOLLERITH3
+		'|'	HOLLERITH4
+		'|'	HOLLERITH5
+		'|'	HOLLERITH6
+		'|'	HOLLERITH7
+		'|'	HOLLERITH8
+		'|'	HOLLERITH9
+		')'
+	;
 
 	NAME_LITERAL : 
 		LETTER ALPHANUMERIC_CHARACTER "{0,62}"
@@ -1720,7 +1744,8 @@ Node: implicit-part ? was refactored to implicit-part-stmt *. This is needed
 	|	data-implied-do
 	;
 	data-stmt-object-list :
-		data-stmt-object ( COMMA data-stmt-object ) *
+		data-stmt-object-list COMMA data-stmt-object
+	|	data-stmt-object
 	;
 
 /*
@@ -1756,10 +1781,12 @@ Node: implicit-part ? was refactored to implicit-part-stmt *. This is needed
 	R540 data-stmt-value is [ data-stmt-repeat * ] data-stmt-constant
 */
 	data-stmt-value :
-		( data-stmt-repeat ASTERIK ) ? data-stmt-constant
+		data-stmt-repeat ASTERIK data-stmt-constant
+	|	data-stmt-constant
 	;
 	data-stmt-value-list :
-		data-stmt-value ( COMMA data-stmt-value ) *
+		data-stmt-value-list COMMA data-stmt-value
+	|	data-stmt-value
 	;
 
 /*
@@ -1787,6 +1814,7 @@ Node: implicit-part ? was refactored to implicit-part-stmt *. This is needed
 	|	signed-real-literal-constant
 	|	null-init
 	|	structure-constructor
+	|	HOLLERITH_CONSTANT								// TODO Fortran 66 artifact! Needs to be removed!
 	;
 
 /*
@@ -1991,7 +2019,7 @@ Node: implicit-part ? was refactored to implicit-part-stmt *. This is needed
 		LEFT_PARENTHESIS equivalence-object COMMA equivalence-object-list RIGHT_PARENTHESIS
 	;
 	equivalence-set-list :
-		equivalence-set COMMA equivalence-set
+		equivalence-set-list COMMA equivalence-set
 	|	equivalence-set
 	;
 
@@ -2049,7 +2077,7 @@ Node: implicit-part ? was refactored to implicit-part-stmt *. This is needed
 	|	data-ref LEFT_PARENTHESIS substring-range RIGHT_PARENTHESIS
 	|	data-ref PERCENT NAME_LITERAL
 	|	literal-constant LEFT_PARENTHESIS substring-range RIGHT_PARENTHESIS
-	|	variable PERCENT NAME_LITERAL
+//	|	variable PERCENT NAME_LITERAL TODO !!! THIS was removed for ambiguous rules!
 	;
 
 /*
@@ -2117,21 +2145,28 @@ Node: implicit-part ? was refactored to implicit-part-stmt *. This is needed
 	R610 substring-range is [ scalar-int-expr ] : [ scalar-int-expr ]
 */
 	substring-range :
-		expr ? COLON expr ?
+		expr COLON expr
+	|	expr COLON
+	|	COLON expr
+	|	COLON
 	;
 
 /*
 	R611 data-ref is part-ref [ % part-ref ] ...
 */
 	data-ref :
-		part-ref ( PERCENT  part-ref ) *
+		data-ref PERCENT part-ref
+	|	part-ref 
 	;
 
 /*
 	R612 part-ref is part-name [ ( section-subscript-list ) ] [ image-selector ]
 */
 	part-ref :
-		NAME_LITERAL ( LEFT_PARENTHESIS section-subscript-list RIGHT_PARENTHESIS ) ? image-selector ?
+		NAME_LITERAL LEFT_PARENTHESIS section-subscript-list RIGHT_PARENTHESIS image-selector
+	|	NAME_LITERAL LEFT_PARENTHESIS section-subscript-list RIGHT_PARENTHESIS 
+	|	NAME_LITERAL image-selector
+	|	NAME_LITERAL
 	;
 /*
 	R613 structure-component is data-ref
@@ -2225,7 +2260,8 @@ Node: implicit-part ? was refactored to implicit-part-stmt *. This is needed
 	R625 cosubscript is scalar-int-expr
 */
 	cosubscript-list :
-		expr ( COMMA expr ) *
+		cosubscript-list COMMA expr
+	|	expr
 	;
 
 /*
@@ -2392,7 +2428,7 @@ Node: implicit-part ? was refactored to implicit-part-stmt *. This is needed
 	|	LEFT_PARENTHESIS expr RIGHT_PARENTHESIS
 	|	function-reference
 	|	designator
-//	|	structure-constructor TODO this is missing due to ambigiuous rules!
+//	|	structure-constructor TODO this is missing due to ambigiuous rules! A better solution is needed!!!
 	;
 
 /*
@@ -3953,7 +3989,8 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	R1003 format-items is format-item [ [ , ] format-item ] ...
 */
 	format-items :
-		format-item ( COMMA ? format-item ) *
+		format-items COMMA ? format-item
+	|	format-item
 	;
 
 /*
@@ -3973,6 +4010,9 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 	|	DECIMALPOINT_OR_PERIOD
 	|	EQUALS
 	|	LEFT_PARENTHESIS format-items RIGHT_PARENTHESIS
+	|	HOLLERITH_CONSTANT									// TODO Fortran 66 artifact! Needs to be removed!
+	|	ASTERIK												// TODO added for Dyn3D, needs to be removed!?
+	|	CURRENCY_SYMBOL										// TODO was added due to Dyn3D source code, to be removed! There is no currency symbol used in the whole specification!
 	;
 
 /*
@@ -4548,6 +4588,7 @@ R853 arithmetic-if-stmt is IF ( scalar-numeric-expr ) label , label , label
 		ASTERIK INT_LITERAL_CONSTANT
 //	|	expr
 	|	variable ( PERCENT NAME_LITERAL ) ?
+	|	HOLLERITH_CONSTANT								// TODO Fortran 66 artifact! Needs to be removed!
 	;
 
 /*

@@ -32,7 +32,7 @@ public class FortranPreConditioner {
 	 * '*'. If a '!' is found within the first five characters, the line is also
 	 * a comment line.
 	 */
-	private static final Pattern FF_COMMENT_PATTERN = Pattern
+	private static final Pattern FIXED_FORM_COMMENT_PATTERN = Pattern
 			.compile("^([Cc*]|[ ]{0,4}!)");
 
 	/**
@@ -40,24 +40,27 @@ public class FortranPreConditioner {
 	 * start with a space ' '. Within the next four characters an integer needs
 	 * to be found. The sixth character is allowed to be zero.
 	 */
-	private static final Pattern FF_LABEL_PATTERN = Pattern.compile("^("
-	/*          */+ "\\d     " // one digit integer 1st position
-			+ "|" + " \\d    " // one digit integer 2nd position
-			+ "|" + "  \\d   " // one digit integer 3rd position
-			+ "|" + "   \\d  " // one digit integer 4th position
-			+ "|" + "    \\d[ 0]" // one digit integer 5th position
-			+ "|" + "\\d\\d    " // two digit integer 1st position
-			+ "|" + " \\d\\d   " // two digit integer 2nd position
-			+ "|" + "  \\d\\d  " // two digit integer 3rd position
-			+ "|" + "   \\d\\d[ 0]" // two digit integer 4th position
-			+ "|" + "\\d\\d\\d   " // three digit integer 1st position
-			+ "|" + " \\d\\d\\d  " // three digit integer 2nd position
-			+ "|" + "  \\d\\d\\d[ 0]" // three digit integer 3rd
-										// position
-			+ "|" + "\\d\\d\\d\\d  " // four digit integer 1st position
-			+ "|" + " \\d\\d\\d\\d[ 0]" // four digit integer 2nd position
-			+ "|" + "\\d\\d\\d\\d\\d[ 0]" // five digit integer 2nd position
-			+ ")"); // last character is a space or zero
+	private static final Pattern FIXED_FORM_LABEL_PATTERN = Pattern
+			.compile("^("
+			/*          */+ "\\d     " // one digit integer 1st position
+					+ "|" + " \\d    " // one digit integer 2nd position
+					+ "|" + "  \\d   " // one digit integer 3rd position
+					+ "|" + "   \\d  " // one digit integer 4th position
+					+ "|" + "    \\d[ 0]" // one digit integer 5th position
+					+ "|" + "\\d\\d    " // two digit integer 1st position
+					+ "|" + " \\d\\d   " // two digit integer 2nd position
+					+ "|" + "  \\d\\d  " // two digit integer 3rd position
+					+ "|" + "   \\d\\d[ 0]" // two digit integer 4th position
+					+ "|" + "\\d\\d\\d   " // three digit integer 1st position
+					+ "|" + " \\d\\d\\d  " // three digit integer 2nd position
+					+ "|" + "  \\d\\d\\d[ 0]" // three digit integer 3rd
+												// position
+					+ "|" + "\\d\\d\\d\\d  " // four digit integer 1st position
+					+ "|" + " \\d\\d\\d\\d[ 0]" // four digit integer 2nd
+												// position
+					+ "|" + "\\d\\d\\d\\d\\d[ 0]" // five digit integer 2nd
+													// position
+					+ ")"); // last character is a space or zero
 
 	/**
 	 * This pattern checks for a line continuation. If this is the case the
@@ -66,10 +69,12 @@ public class FortranPreConditioner {
 	 * continue. In this case the last LINE_TERMINATOR or LINE_COMMENT is set to
 	 * ignored.
 	 */
-	private static final Pattern FF_CONTINUATION_PATTERN = Pattern
-			.compile("^     [^ 0\\n\\r]");
-	private static final Pattern CONTINUATION_PATTERN = Pattern
+	private static final Pattern FIXED_FORM_CONTINUATION_PATTERN = Pattern
+			.compile("^     [^ 0\\n\\r\\t]");
+	private static final Pattern FREE_FORM_CONTINUATION_PATTERN = Pattern
 			.compile("^[ \\t]*&");
+	private static final Pattern FREE_FORM_LABEL_PATTERN = Pattern
+			.compile("^([ \\t]*)(\\d{1,5})([ \\t]+)");
 
 	/**
 	 * This pattern checks for six spaces at the line beginning. If this is the
@@ -138,8 +143,8 @@ public class FortranPreConditioner {
 					continue;
 				}
 				if (!(FF_EMPTY_PATTERN.matcher(line).find()
-						|| FF_COMMENT_PATTERN.matcher(line).find()
-						|| FF_LABEL_PATTERN.matcher(line).find() || FF_CONTINUATION_PATTERN
+						|| FIXED_FORM_COMMENT_PATTERN.matcher(line).find()
+						|| FIXED_FORM_LABEL_PATTERN.matcher(line).find() || FIXED_FORM_CONTINUATION_PATTERN
 						.matcher(line).find())) {
 					isFixedForm = false;
 					invalidLines.add(lineId);
@@ -192,13 +197,14 @@ public class FortranPreConditioner {
 				line += "\n";
 				TokenStream subTokenStream = new TokenStream(file.toString());
 				if (FF_EMPTY_PATTERN.matcher(line).find()
-						&& (!CONTINUATION_PATTERN.matcher(line).find())) {
+						&& (!FREE_FORM_CONTINUATION_PATTERN.matcher(line)
+								.find())) {
 					subTokenStream = processEmptyPattern(lexer, line);
-				} else if (FF_COMMENT_PATTERN.matcher(line).find()) {
+				} else if (FIXED_FORM_COMMENT_PATTERN.matcher(line).find()) {
 					processCommentPattern(line);
-				} else if (FF_LABEL_PATTERN.matcher(line).find()) {
+				} else if (FIXED_FORM_LABEL_PATTERN.matcher(line).find()) {
 					subTokenStream = processLabelPattern(lexer, line);
-				} else if (FF_CONTINUATION_PATTERN.matcher(line).find()) {
+				} else if (FIXED_FORM_CONTINUATION_PATTERN.matcher(line).find()) {
 					subTokenStream = processContinuationPattern(lexer, line);
 				} else {
 					subTokenStream = processFreeForm(lexer, line);
@@ -255,7 +261,7 @@ public class FortranPreConditioner {
 					"Character literal was not closed! Continuation awaited at line "
 							+ lineId + "!");
 		}
-		Matcher matcher = FF_LABEL_PATTERN.matcher(line);
+		Matcher matcher = FIXED_FORM_LABEL_PATTERN.matcher(line);
 		matcher.find();
 		tokenStream.add(new Token("LABEL", matcher.group(), Visibility.IGNORED,
 				new TokenMetaData(file.toString(), id, pos, lineId, 1)));
@@ -267,7 +273,7 @@ public class FortranPreConditioner {
 	private TokenStream processContinuationPattern(Lexer lexer, String line)
 			throws LexerException, IOException {
 		ignoreLastLineTerminator(tokenStream);
-		Matcher matcher = FF_CONTINUATION_PATTERN.matcher(line);
+		Matcher matcher = FIXED_FORM_CONTINUATION_PATTERN.matcher(line);
 		matcher.find();
 		tokenStream.add(new Token("LINE_CONCATATION", matcher.group(),
 				Visibility.IGNORED, new TokenMetaData(file.toString(), id, pos,
@@ -279,7 +285,7 @@ public class FortranPreConditioner {
 
 	private TokenStream processFreeForm(Lexer lexer, String line)
 			throws LexerException, IOException {
-		Matcher matcher = CONTINUATION_PATTERN.matcher(line);
+		Matcher matcher = FREE_FORM_CONTINUATION_PATTERN.matcher(line);
 		boolean continuation = false;
 		if (matcher.find()) {
 			continuation = true;
@@ -288,6 +294,21 @@ public class FortranPreConditioner {
 			id++;
 			pos += matcher.group().length();
 			line = line.substring(matcher.group().length());
+		}
+		matcher = FREE_FORM_LABEL_PATTERN.matcher(line);
+		if (matcher.find()) {
+			if (continuation) {
+				throw new LexerException(
+						"Found Label and Continuation in one line. This is not meaning full!");
+			}
+			tokenStream.add(new Token("WHITESPACE", matcher.group(1),
+					Visibility.IGNORED, getCurrentMetaData(1)));
+			tokenStream.add(new Token("LABEL", matcher.group(2),
+					Visibility.IGNORED, getCurrentMetaData(1)));
+			tokenStream.add(new Token("WHITESPACE", matcher.group(3),
+					Visibility.IGNORED, getCurrentMetaData(1)));
+			String string = matcher.group();
+			line = line.substring(string.length());
 		}
 		if (currentBrokenCharacterMode != BROKEN_CHARACTER_LITERAL_NONE) {
 			if (!continuation) {

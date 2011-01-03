@@ -13,20 +13,22 @@ public class R732_AssignmentStmtTest extends TestCase {
 	@Test
 	public void test() {
 		Logger.getRootLogger().setLevel(Level.TRACE);
-		// assertTrue(FortranGrammarPartTester.test("assignment-stmt",
-		// "      A = 3.5 + X * Y\n"));
-		// assertTrue(FortranGrammarPartTester.test("assignment-stmt",
-		// "      I = INT (A)\n"));
-		// assertTrue(FortranGrammarPartTester.test("assignment-stmt",
-		// "      NAME = 'Dr. '//FIRST_NAME//' '//SURNAME\n"));
-		// assertTrue(FortranGrammarPartTester.test("assignment-stmt",
-		// "      NAME(:) = 'Dr. '//FIRST_NAME//' '//SURNAME\n"));
-		// assertTrue(FortranGrammarPartTester.test("assignment-stmt",
-		// "      A(I, J) = REAL (I + J - 2)\n"));
-		// assertTrue(FortranGrammarPartTester.test("assignment-stmt",
-		// "      B(I, J) = A(I, J) + B(I, J) * REAL (I * J)\n"));
-		// assertTrue(FortranGrammarPartTester.test("assignment-stmt",
-		// "      XX=(2.-EVA12)/EVA12\n"));
+		assertTrue(FortranGrammarPartTester.test("assignment-stmt",
+		"      IF=1\n"));
+		assertTrue(FortranGrammarPartTester.test("assignment-stmt",
+				"      A = 3.5 + X * Y\n"));
+		assertTrue(FortranGrammarPartTester.test("assignment-stmt",
+				"      I = INT (A)\n"));
+		assertTrue(FortranGrammarPartTester.test("assignment-stmt",
+				"      NAME = 'Dr. '//FIRST_NAME//' '//SURNAME\n"));
+		assertTrue(FortranGrammarPartTester.test("assignment-stmt",
+				"      NAME(:) = 'Dr. '//FIRST_NAME//' '//SURNAME\n"));
+		assertTrue(FortranGrammarPartTester.test("assignment-stmt",
+				"      A(I, J) = REAL (I + J - 2)\n"));
+		assertTrue(FortranGrammarPartTester.test("assignment-stmt",
+				"      B(I, J) = A(I, J) + B(I, J) * REAL (I * J)\n"));
+		assertTrue(FortranGrammarPartTester.test("assignment-stmt",
+				"      XX=(2.-EVA12)/EVA12\n"));
 
 		assertTrue(FortranGrammarPartTester.test("assignment-stmt",
 		"      A = 1 * 2 + 3 * 4 + 5 * 6\n"));

@@ -67,4 +67,11 @@ public class R832_IfConstructTest extends TestCase {
 						+ "ICAS1 = ICAS2\n" + "GOTO 20\n" + "ENDIF\n"));
 	}
 
+	@Test
+	public void test6() {
+		Logger.getRootLogger().setLevel(Level.TRACE);
+		assertTrue(FortranGrammarPartTester.test("if-construct",
+				"if (a < b) THEN\n" + "a = b\n" + "ENDIF\n"));
+	}
+
 }

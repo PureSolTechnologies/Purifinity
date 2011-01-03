@@ -41,7 +41,7 @@ public class FortranSourceCodeDistributionTest {
 			Logger.getRootLogger().setLevel(Level.TRACE);
 			File file = new File(
 					"src/test/resources/com/puresol/coding/lang/fortran/samples",
-					"ndreconr.f");
+					"b_print.f");
 			assertTrue(file.exists());
 			Fortran fortran = Fortran.getInstance();
 			StopWatch watch = new StopWatch();
