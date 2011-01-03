@@ -17,7 +17,7 @@ import com.puresol.uhura.lexer.Token;
 import com.puresol.uhura.lexer.TokenStream;
 import com.puresol.utils.PersistenceException;
 
-public class FixedFormFileTest {
+public class FortranPreConditionerTest {
 
 	private Pattern getPattern(String name) {
 		try {
@@ -43,7 +43,7 @@ public class FixedFormFileTest {
 
 	@Test
 	public void testCommentPattern() {
-		Pattern COMMENT_PATTERN = getPattern("FF_COMMENT_PATTERN");
+		Pattern COMMENT_PATTERN = getPattern("FIXED_FORM_COMMENT_PATTERN");
 		assertTrue(COMMENT_PATTERN.matcher("C A comment!").find());
 		assertFalse(COMMENT_PATTERN.matcher(" C A comment!").find());
 
@@ -63,7 +63,7 @@ public class FixedFormFileTest {
 
 	@Test
 	public void testLabelPattern() {
-		Pattern LABEL_PATTERN = getPattern("FF_LABEL_PATTERN");
+		Pattern LABEL_PATTERN = getPattern("FIXED_FORM_LABEL_PATTERN");
 
 		assertTrue(LABEL_PATTERN.matcher("1     ").find());
 		assertTrue(LABEL_PATTERN.matcher(" 2    ").find());
@@ -92,7 +92,7 @@ public class FixedFormFileTest {
 
 	@Test
 	public void testContinuationPattern() {
-		Pattern CONTINUATION_PATTERN = getPattern("FF_CONTINUATION_PATTERN");
+		Pattern CONTINUATION_PATTERN = getPattern("FIXED_FORM_CONTINUATION_PATTERN");
 		assertTrue(CONTINUATION_PATTERN.matcher("     $").find());
 		assertTrue(CONTINUATION_PATTERN.matcher("     *").find());
 		assertFalse(CONTINUATION_PATTERN.matcher("     0").find());
@@ -100,19 +100,19 @@ public class FixedFormFileTest {
 
 	@Test
 	public void testEmptyPattern() {
-		Pattern EMPTY_PATTERN = getPattern("FF_EMPTY_PATTERN");
+		Pattern EMPTY_PATTERN = getPattern("FIXED_FORM_EMPTY_PATTERN");
 		assertTrue(EMPTY_PATTERN.matcher("      ").find());
 	}
 
 	@Test
 	public void testSingleQuoteLiteralEnd() {
-		Pattern SINGLE_QUOTE_LITERAL_END = getPattern("FF_SINGLE_QUOTE_LITERAL_END");
+		Pattern SINGLE_QUOTE_LITERAL_END = getPattern("FIXED_FORM_SINGLE_QUOTE_LITERAL_END");
 		assertTrue(SINGLE_QUOTE_LITERAL_END.matcher("test'").find());
 	}
 
 	@Test
 	public void testDoubleQuoteLiteralEnd() {
-		Pattern DOUBLE_QUOTE_LITERAL_END = getPattern("FF_DOUBLE_QUOTE_LITERAL_END");
+		Pattern DOUBLE_QUOTE_LITERAL_END = getPattern("FIXED_FORM_DOUBLE_QUOTE_LITERAL_END");
 		assertTrue(DOUBLE_QUOTE_LITERAL_END.matcher("test\"").find());
 	}
 

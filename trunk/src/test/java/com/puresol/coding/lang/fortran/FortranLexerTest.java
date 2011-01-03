@@ -23,7 +23,7 @@ public class FortranLexerTest {
 			Grammar grammar = FortranGrammar.getInstance().getGrammar();
 			assertNotNull(grammar);
 			Lexer lexer = new RegExpLexer(grammar);
-			TokenStream stream = lexer.lex(new StringReader("2. - 3."), "TEST");
+			TokenStream stream = lexer.lex(new StringReader("2.0 - 3.0"), "TEST");
 			assertEquals(5, stream.size());
 			assertEquals("REAL_LITERAL_CONSTANT", stream.get(0).getName());
 			assertEquals("WHITESPACE", stream.get(1).getName());

@@ -20,7 +20,7 @@ public class RealLiteralConstantTest {
 					.getTokenDefinitions()
 					.getDefinition("REAL_LITERAL_CONSTANT");
 			assertTrue(definition.getPattern().matcher("1.23").matches());
-			assertTrue(definition.getPattern().matcher("1.").matches());
+			assertTrue(definition.getPattern().matcher("1. ").find());
 			assertTrue(definition.getPattern().matcher("1.E2").matches());
 			assertTrue(definition.getPattern().matcher("1.23E45").matches());
 			assertTrue(definition.getPattern().matcher("1.23E+45").matches());

@@ -80,20 +80,20 @@ public class FortranPreConditioner {
 	 * This pattern checks for six spaces at the line beginning. If this is the
 	 * case, the six spaces are treaded as simple whitespace.
 	 */
-	private static final Pattern FF_EMPTY_PATTERN = Pattern.compile("^[ ]{6}");
+	private static final Pattern FIXED_FORM_EMPTY_PATTERN = Pattern.compile("^[ ]{6}");
 
 	/**
 	 * This is the fixed form pattern for single quote literal ends in cases of
 	 * broken literals.
 	 */
-	private static final Pattern FF_SINGLE_QUOTE_LITERAL_END = Pattern
+	private static final Pattern FIXED_FORM_SINGLE_QUOTE_LITERAL_END = Pattern
 			.compile("^([^']|'')*'");
 
 	/**
 	 * This is the fixed form pattern for double quote literal ends in cases of
 	 * broken literals.
 	 */
-	private static final Pattern FF_DOUBLE_QUOTE_LITERAL_END = Pattern
+	private static final Pattern FIXED_FORM_DOUBLE_QUOTE_LITERAL_END = Pattern
 			.compile("^([^\"]|\"\")*\"");
 
 	private static final byte BROKEN_CHARACTER_LITERAL_NONE = 0;
@@ -142,7 +142,7 @@ public class FortranPreConditioner {
 				if (line.isEmpty()) {
 					continue;
 				}
-				if (!(FF_EMPTY_PATTERN.matcher(line).find()
+				if (!(FIXED_FORM_EMPTY_PATTERN.matcher(line).find()
 						|| FIXED_FORM_COMMENT_PATTERN.matcher(line).find()
 						|| FIXED_FORM_LABEL_PATTERN.matcher(line).find() || FIXED_FORM_CONTINUATION_PATTERN
 						.matcher(line).find())) {
@@ -196,7 +196,7 @@ public class FortranPreConditioner {
 			while ((line = reader.readLine()) != null) {
 				line += "\n";
 				TokenStream subTokenStream = new TokenStream(file.toString());
-				if (FF_EMPTY_PATTERN.matcher(line).find()
+				if (FIXED_FORM_EMPTY_PATTERN.matcher(line).find()
 						&& (!FREE_FORM_CONTINUATION_PATTERN.matcher(line)
 								.find())) {
 					subTokenStream = processEmptyPattern(lexer, line);
@@ -236,7 +236,7 @@ public class FortranPreConditioner {
 					"Character literal was not closed! Continuation awaited at line "
 							+ lineId + "!");
 		}
-		Matcher matcher = FF_EMPTY_PATTERN.matcher(line);
+		Matcher matcher = FIXED_FORM_EMPTY_PATTERN.matcher(line);
 		matcher.find();
 		tokenStream.add(new Token("WHITESPACE", matcher.group(),
 				Visibility.IGNORED, new TokenMetaData(file.toString(), id, pos,
@@ -327,9 +327,9 @@ public class FortranPreConditioner {
 		}
 		final Matcher matcher;
 		if (currentBrokenCharacterMode == BROKEN_CHARACTER_LITERAL_SINGLE_QUOTE) {
-			matcher = FF_SINGLE_QUOTE_LITERAL_END.matcher(line);
+			matcher = FIXED_FORM_SINGLE_QUOTE_LITERAL_END.matcher(line);
 		} else if (currentBrokenCharacterMode == BROKEN_CHARACTER_LITERAL_DOUBLE_QUOTE) {
-			matcher = FF_DOUBLE_QUOTE_LITERAL_END.matcher(line);
+			matcher = FIXED_FORM_DOUBLE_QUOTE_LITERAL_END.matcher(line);
 		} else {
 			throw new RuntimeException("BrokenCharacterLiteralMode "
 					+ currentBrokenCharacterMode + " is unknown!!!");
