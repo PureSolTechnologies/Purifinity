@@ -1,0 +1,4 @@
+com.puresol.coding.metrics.sloc.LanguageDependedSLOCMetric=com.puresol.coding.fortran.java.metrics.SLOCMetricImpl
+com.puresol.coding.metrics.codedepth.LanguageDependedCodeDepthMetric=com.puresol.coding.fortran.java.metrics.CodeDepthMetricImpl
+com.puresol.coding.metrics.mccabe.LanguageDependedMcCabeMetric=com.puresol.coding.lang.fortran.metrics.McCabeMetricImpl
+com.puresol.coding.metrics.halstead.LanguageDependedHalsteadMetric=com.puresol.coding.lang.fortran.metrics.HalsteadMetricImpl
