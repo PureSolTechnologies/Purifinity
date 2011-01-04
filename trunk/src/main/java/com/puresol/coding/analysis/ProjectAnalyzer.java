@@ -55,9 +55,12 @@ public class ProjectAnalyzer implements Serializable, ProgressObservable {
 	 * Following are some constants which are general for workspace handling...
 	 * ****************************************************************
 	 */
-	private static final String SETTINGS_FILENAME = "settings.properties";
-	private static final String ANALYZED_FILES_FILENAME = "analzsed_files.persist";
-	private static final String FAILED_FILES_FILENAME = "failed_files.persist";
+	private static final File SETTINGS_FILENAME = new File(
+			"settings.properties");
+	private static final File ANALYZED_FILES_FILENAME = new File(
+			"analzsed_files.persist");
+	private static final File FAILED_FILES_FILENAME = new File(
+			"failed_files.persist");
 	private static final String PROJECT_DIRECTORY_KEY = ProjectAnalyzer.class
 			.getSimpleName() + ".projectDirectory";
 	private static final String SETTINGS_FILE_HEADER = "***********************************************************************\n"
@@ -72,12 +75,12 @@ public class ProjectAnalyzer implements Serializable, ProgressObservable {
 	 */
 
 	/**
-	 * This method creates a new project analyser with a new workspace
+	 * This method creates a new project analyzer with a new workspace
 	 * associated.
 	 * 
 	 * @param projectDirectory
 	 *            is the directory which is to scan for files and to be
-	 *            analysed.
+	 *            analyzed.
 	 * @param workspaceDirectory
 	 *            is the directory to put the persisted results to.
 	 */
@@ -92,7 +95,7 @@ public class ProjectAnalyzer implements Serializable, ProgressObservable {
 	}
 
 	/**
-	 * This method opens an existing project analyser via its workspace
+	 * This method opens an existing project analyzer via its workspace
 	 * directory.
 	 * 
 	 * @param workspaceDirectory
@@ -102,7 +105,7 @@ public class ProjectAnalyzer implements Serializable, ProgressObservable {
 	public static ProjectAnalyzer open(File workspaceDirectory) {
 		ProjectAnalyzer projectAnalyser = new ProjectAnalyzer(
 				workspaceDirectory);
-		if (!projectAnalyser.open()) {
+		if (!projectAnalyser.openAndReadSettings()) {
 			return null;
 		}
 		return projectAnalyser;
@@ -124,32 +127,49 @@ public class ProjectAnalyzer implements Serializable, ProgressObservable {
 			.createFactory();
 
 	private File projectDirectory;
+
 	private transient Panel panel = null;
 
 	private transient ProgressObserver progressMonitor = null;
 
+	/**
+	 * This constructor is private to force the project analyzer to be created
+	 * by static factory methods.
+	 * 
+	 * @param workspaceDirectory
+	 */
 	private ProjectAnalyzer(File workspaceDirectory) {
 		this.workspaceDirectory = workspaceDirectory;
-		SETTINGS_FILE = new File(workspaceDirectory, SETTINGS_FILENAME);
-		ANALYZED_FILES_FILE = new File(workspaceDirectory,
-				ANALYZED_FILES_FILENAME);
-		FAILED_FILES_FILE = new File(workspaceDirectory, FAILED_FILES_FILENAME);
+		SETTINGS_FILE = getWorkspaceFile(SETTINGS_FILENAME);
+		ANALYZED_FILES_FILE = getWorkspaceFile(ANALYZED_FILES_FILENAME);
+		FAILED_FILES_FILE = getWorkspaceFile(FAILED_FILES_FILENAME);
 	}
 
+	/**
+	 * This methods creates a new project directory.
+	 * 
+	 * @param projectDirectory
+	 * @return
+	 */
 	private boolean create(File projectDirectory) {
 		this.projectDirectory = projectDirectory;
 		DirectoryUtilities.checkAndCreateDirectory(workspaceDirectory);
-		if (!createSettingFiles()) {
+		if (!writeSettings()) {
 			return false;
 		}
 		return true;
 	}
 
-	private boolean open() {
+	/**
+	 * This method opens the project directory and loads all information files.
+	 * 
+	 * @return
+	 */
+	private boolean openAndReadSettings() {
 		if (!workspaceDirectory.exists()) {
 			return false;
 		}
-		if (!loadSettings()) {
+		if (!readSettings()) {
 			return false;
 		}
 		if (!loadProjectInformation()) {
@@ -158,7 +178,12 @@ public class ProjectAnalyzer implements Serializable, ProgressObservable {
 		return true;
 	}
 
-	private boolean createSettingFiles() {
+	/**
+	 * This method writes the project settings to the project directory.
+	 * 
+	 * @return
+	 */
+	private boolean writeSettings() {
 		try {
 			Properties properties = new Properties();
 			properties.put(getClass().getSimpleName() + ".projectDirectory",
@@ -168,14 +193,13 @@ public class ProjectAnalyzer implements Serializable, ProgressObservable {
 			return true;
 		} catch (FileNotFoundException e) {
 			logger.error(e.getMessage(), e);
-			return false;
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
-			return false;
 		}
+		return false;
 	}
 
-	private boolean loadSettings() {
+	private boolean readSettings() {
 		try {
 			Properties properties = new Properties();
 			properties.load(new FileInputStream(SETTINGS_FILE));
@@ -184,11 +208,10 @@ public class ProjectAnalyzer implements Serializable, ProgressObservable {
 			return true;
 		} catch (FileNotFoundException e) {
 			logger.error(e.getMessage(), e);
-			return false;
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
-			return false;
 		}
+		return false;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -201,11 +224,10 @@ public class ProjectAnalyzer implements Serializable, ProgressObservable {
 			return true;
 		} catch (PersistenceException e) {
 			logger.error(e.getMessage(), e);
-			return false;
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
-			return false;
 		}
+		return false;
 	}
 
 	private void storeProjectInformation() {
@@ -223,12 +245,15 @@ public class ProjectAnalyzer implements Serializable, ProgressObservable {
 	 */
 	@Override
 	public void run() {
-		clear();
+		reset();
 		analyzeFiles();
 		storeProjectInformation();
 	}
 
-	private void clear() {
+	/**
+	 * This method resets the values for a reanalysis.
+	 */
+	private void reset() {
 		analyzedFiles.clear();
 		failedFiles.clear();
 	}
@@ -256,39 +281,61 @@ public class ProjectAnalyzer implements Serializable, ProgressObservable {
 		}
 	}
 
+	/**
+	 * This method analyzes a single file. The file is added to faildFiles if
+	 * there was a analyzer found, but the analyzer had issues to analyze the
+	 * file, which might have two reasons:
+	 * 
+	 * 1) The file is not valid.
+	 * 
+	 * 2) The analyzer is buggy.
+	 * 
+	 * In either way, these files needs to be tracked and recorded.
+	 * 
+	 * @param file
+	 *            is the file to be analyzed.
+	 */
 	private void analyzeFile(File file) {
 		try {
-			if ((new File(projectDirectory, file.getPath()).isFile())
+			if ((getSourceFile(file).isFile())
 					&& (!file.getPath().contains("/."))) {
 				/*
 				 * only non hidden files are analyzed...
 				 */
-				Analyzer analyzer = analyzerFactory.create(new File(
-						projectDirectory, file.toString()));
+				Analyzer analyzer = analyzerFactory.create(getSourceFile(file));
 				if (analyzer == null) {
-					failedFiles.add(file);
+					return;
 				}
 				analyzer.parse();
-				File persistFile = new File(workspaceDirectory, file.toString()
-						+ ".persist");
+				File persistFile = getPersistenceFile(file);
 				if (analyzer.persist(persistFile)) {
 					analyzedFiles.add(file);
-				} else {
-					failedFiles.add(file);
 				}
 			}
 		} catch (LanguageNotSupportedException e) {
 			logger.warn("File '"
 					+ file.getPath()
 					+ "' could not be analyzed due to containing no supported language.");
-			failedFiles.add(file);
 		} catch (FileNotFoundException e) {
 			logger.warn("File '" + file.getPath() + "' is not existing!");
-			failedFiles.add(file);
 		} catch (AnalyzerException e) {
 			logger.warn("File '" + file.getPath() + "' is not parsable!");
 			failedFiles.add(file);
 		}
+	}
+
+	private File getPersistenceFile(File file) {
+		File persistenceFile = new File(workspaceDirectory, file.getPath());
+		persistenceFile = new File(persistenceFile, "analyzer.persist");
+		return persistenceFile;
+	}
+
+	private File getWorkspaceFile(File file) {
+		return new File(workspaceDirectory, file.getPath());
+	}
+
+	private File getSourceFile(File file) {
+		return new File(projectDirectory, file.getPath());
 	}
 
 	public File getWorkspaceDirectory() {
@@ -311,8 +358,7 @@ public class ProjectAnalyzer implements Serializable, ProgressObservable {
 		if (file == null) {
 			return null;
 		}
-		return analyzerFactory.restore(new File(workspaceDirectory, file
-				.toString() + ".persist"));
+		return analyzerFactory.restore(getPersistenceFile(file));
 	}
 
 	@Override
@@ -429,7 +475,7 @@ public class ProjectAnalyzer implements Serializable, ProgressObservable {
 		buffer.append("<h1>Project Analyzer Report</h1>\n");
 		buffer.append("<h2>Analysed Files</h2>\n");
 		buffer.append("<p>" + analyzedFiles.size()
-				+ " files were analysed</p>\n");
+				+ " files were analyzed</p>\n");
 
 		if (failedFiles.size() > 0) {
 			buffer.append("<h2>Failed Files</h2>\n");
