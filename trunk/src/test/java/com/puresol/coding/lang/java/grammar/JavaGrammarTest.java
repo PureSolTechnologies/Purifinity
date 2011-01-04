@@ -24,25 +24,20 @@ public class JavaGrammarTest {
 
 	@Test
 	public void testReadGrammar() {
-		InputStream inputStream = null;
 		try {
-			inputStream = JavaGrammar.class
+			InputStream inputStream = JavaGrammar.class
 					.getResourceAsStream(JavaGrammar.GRAMMAR_RESOURCE);
-			new GrammarReader(inputStream);
+			try {
+				new GrammarReader(inputStream);
+			} finally {
+				inputStream.close();
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 			fail("No exception was expected!");
 		} catch (GrammarException e) {
 			e.printStackTrace();
 			fail("No exception was expected!");
-		} finally {
-			if (inputStream != null) {
-				try {
-					inputStream.close();
-				} catch (IOException e) {
-					// nothing to catch here...
-				}
-			}
 		}
 	}
 

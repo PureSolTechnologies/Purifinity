@@ -2,6 +2,7 @@ package com.puresol.coding.lang.java;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.lang.reflect.Constructor;
@@ -92,19 +93,19 @@ public class Java extends AbstractProgrammingLanguage {
 
 	@Override
 	public Analyzer restoreAnalyzer(File file) throws PersistenceException {
-		ObjectInputStream ois = null;
 		try {
+			ObjectInputStream ois = null;
 			ois = new ObjectInputStream(new FileInputStream(file));
-			Analyzer analyzer = (Analyzer) ois.readObject();
-			ois.close();
-			return analyzer;
-		} catch (Throwable e) {
-			if (ois != null) {
-				try {
-					ois.close();
-				} catch (IOException e1) {
-				}
+			try {
+				return (Analyzer) ois.readObject();
+			} finally {
+				ois.close();
 			}
+		} catch (ClassNotFoundException e) {
+			return null;
+		} catch (FileNotFoundException e) {
+			throw new PersistenceException(e);
+		} catch (IOException e) {
 			throw new PersistenceException(e);
 		}
 	}
