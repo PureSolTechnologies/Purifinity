@@ -8,8 +8,6 @@ import javax.swingx.progress.ProgressObservable;
 
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.SourceCodeQuality;
-import com.puresol.reporting.ReportingFormat;
-import com.puresol.reporting.UnsupportedFormatException;
 
 /**
  * This interface is the main interface for all evaluators and the general
@@ -44,19 +42,16 @@ public interface Evaluator extends ProgressObservable, Runnable, Serializable {
 	 * 
 	 * @return
 	 */
-	public String getDescription(ReportingFormat format)
-			throws UnsupportedFormatException;
+	public String getDescription();
 
 	/**
-	 * This method returns the report of the evaluation in the given target
-	 * format.
+	 * This method returns a list of results from the evaluator. This values are
+	 * used for creating a report and for storing and tracking them over a
+	 * longer time (SPC).
 	 * 
-	 * @param format
 	 * @return
-	 * @throws UnsupportedFormatException
 	 */
-	public String getReport(ReportingFormat format)
-			throws UnsupportedFormatException;
+	public List<Result> getResults();
 
 	/**
 	 * This method returns the quality level after an evalutation was performed.
