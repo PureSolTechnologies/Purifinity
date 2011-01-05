@@ -29,7 +29,8 @@ public class Activator implements BundleActivator {
 	public void start(BundleContext context) throws Exception {
 		logger.info("Starting FortranLanguagePack...");
 
-		ProgrammingLanguage fortran = Fortran.getInstance();
+		Fortran fortran = Fortran.getInstance();
+		fortran.setBundleContext(context);
 
 		Dictionary<Object, Object> properties = new Hashtable<Object, Object>();
 		properties.put("service.name", fortran.getName());
