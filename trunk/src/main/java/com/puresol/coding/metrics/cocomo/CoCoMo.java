@@ -14,6 +14,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 
 import javax.i18n4java.Translator;
 
@@ -160,6 +161,14 @@ public class CoCoMo extends AbstractEvaluator implements ProjectEvaluator {
 	@Override
 	public List<Result> getResults() {
 		return cocomoValues.getResults();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Map<String, SourceCodeQuality> getPartQualities() {
+		return null;
 	}
 
 }

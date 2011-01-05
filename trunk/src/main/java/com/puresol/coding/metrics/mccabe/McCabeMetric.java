@@ -12,6 +12,7 @@ package com.puresol.coding.metrics.mccabe;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.i18n4java.Translator;
 
@@ -169,5 +170,13 @@ public class McCabeMetric extends AbstractEvaluator implements
 	@Override
 	public List<Result> getResults() {
 		return results;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Map<String, SourceCodeQuality> getPartQualities() {
+		return null;
 	}
 }

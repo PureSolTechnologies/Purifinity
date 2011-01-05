@@ -12,6 +12,7 @@ package com.puresol.coding.metrics.normmaint;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.i18n4java.Translator;
 
@@ -217,5 +218,13 @@ public class NormalizedMaintainabilityIndex extends AbstractEvaluator implements
 	@Override
 	public List<Result> getResults() {
 		return result.getResults();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Map<String, SourceCodeQuality> getPartQualities() {
+		return null;
 	}
 }

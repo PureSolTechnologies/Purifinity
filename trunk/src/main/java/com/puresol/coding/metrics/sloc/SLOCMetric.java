@@ -12,6 +12,7 @@ package com.puresol.coding.metrics.sloc;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.i18n4java.Translator;
 
@@ -248,5 +249,13 @@ public class SLOCMetric extends AbstractEvaluator implements CodeRangeEvaluator 
 	@Override
 	public List<Result> getResults() {
 		return sloc.getResults();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Map<String, SourceCodeQuality> getPartQualities() {
+		return null;
 	}
 }

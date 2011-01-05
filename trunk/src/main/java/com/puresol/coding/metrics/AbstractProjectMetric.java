@@ -1,7 +1,7 @@
 package com.puresol.coding.metrics;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,9 +18,9 @@ public abstract class AbstractProjectMetric<T extends CodeRangeEvaluator>
 
 	private static final long serialVersionUID = -5093217611195212999L;
 
-	private final List<Result> results = new ArrayList<Result>();
 	private final Map<File, T> fileResults = new HashMap<File, T>();
 	private final ProjectAnalyzer projectAnalyzer;
+	private final Map<String, SourceCodeQuality> qualities = new HashMap<String, SourceCodeQuality>();
 
 	public AbstractProjectMetric(ProjectAnalyzer projectAnalyzer) {
 		super();
@@ -34,12 +34,14 @@ public abstract class AbstractProjectMetric<T extends CodeRangeEvaluator>
 
 	@Override
 	public void run() {
+		qualities.clear();
 		List<File> files = projectAnalyzer.getFiles();
 		if (getMonitor() != null) {
 			getMonitor().setRange(0, files.size());
 			getMonitor().setDescription(getName());
 		}
 		int count = 0;
+		Collections.sort(files);
 		for (File file : files) {
 			if (Thread.interrupted()) {
 				return;
@@ -48,7 +50,9 @@ public abstract class AbstractProjectMetric<T extends CodeRangeEvaluator>
 				count++;
 				getMonitor().setStatus(count);
 			}
-			fileResults.put(file, processFile(file));
+			T t = processFile(file);
+			fileResults.put(file, t);
+			qualities.put(file.getPath(), t.getQuality());
 		}
 		if (getMonitor() != null) {
 			getMonitor().finish();
@@ -75,6 +79,11 @@ public abstract class AbstractProjectMetric<T extends CodeRangeEvaluator>
 
 	@Override
 	public List<Result> getResults() {
-		return results;
+		return null;
+	}
+
+	@Override
+	public Map<String, SourceCodeQuality> getPartQualities() {
+		return qualities;
 	}
 }
