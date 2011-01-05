@@ -1,6 +1,16 @@
 package com.puresol.coding.metrics.halstead;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.i18n4java.Translator;
+
+import com.puresol.coding.evaluator.Result;
+
 public class HalsteadResult {
+
+	private static final Translator translator = Translator
+			.getTranslator(HalsteadResult.class);
 
 	/**
 	 * number of different operators
@@ -54,6 +64,7 @@ public class HalsteadResult {
 	 * Estimated Bugs
 	 */
 	private final double estimatedBugs;
+	private final List<Result> results = new ArrayList<Result>();
 
 	public HalsteadResult(int differentOperators, int differentOperands,
 			int totalOperators, int totalOperands) {
@@ -74,6 +85,48 @@ public class HalsteadResult {
 		implementationEffort = halsteadVolume * difficulty;
 		implementationTime = implementationEffort / 18.0;
 		estimatedBugs = Math.exp(2.0 / 3.0 * Math.log(implementationEffort)) / 3000.0;
+		createResultsList();
+	}
+
+	private void createResultsList() {
+		results.add(new Result("N1", translator
+				.i18n("Total number of operators"), totalOperators, ""));
+
+		results.add(new Result("N2", translator
+				.i18n("Total number of operants"), totalOperands, ""));
+
+		results.add(new Result("n1", translator
+				.i18n("Number of unique operators"), differentOperators, ""));
+
+		results.add(new Result("n2", translator
+				.i18n("Number of unique operants"), differentOperands, ""));
+
+		results.add(new Result("N", translator.i18n("Program length"),
+				programLength, ""));
+
+		results.add(new Result("n", translator.i18n("Vocabulary Size"),
+				vocabularySize, ""));
+
+		results.add(new Result("V", translator.i18n("Halstead volume"),
+				halsteadVolume, ""));
+
+		results.add(new Result("Hl", translator.i18n("Halstead length"),
+				halsteadLength, ""));
+
+		results.add(new Result("D", translator.i18n("Difficulty"), difficulty,
+				""));
+
+		results.add(new Result("L", translator.i18n("Program level"),
+				programLevel, ""));
+
+		results.add(new Result("E", translator.i18n("Implementation effort"),
+				implementationEffort, ""));
+
+		results.add(new Result("T", translator.i18n("Implementation time"),
+				implementationTime, translator.i18n("Seconds")));
+
+		results.add(new Result("B",
+				translator.i18n("Number of delivered bugs"), estimatedBugs, ""));
 	}
 
 	public int getDifferentOperators() {
@@ -126,6 +179,10 @@ public class HalsteadResult {
 
 	public double getEstimatedBugs() {
 		return estimatedBugs;
+	}
+
+	public List<Result> getResults() {
+		return results;
 	}
 
 }

@@ -19,12 +19,9 @@ import com.puresol.coding.CodeRange;
 import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.evaluator.CodeRangeEvaluator;
+import com.puresol.coding.evaluator.Result;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.SourceCodeQuality;
-import com.puresol.coding.reporting.HTMLConverter;
-import com.puresol.reporting.ReportingFormat;
-import com.puresol.reporting.UnsupportedFormatException;
-import com.puresol.reporting.html.Anchor;
 import com.puresol.trees.TreeIterator;
 import com.puresol.uhura.ast.ParserTree;
 import com.puresol.utils.Property;
@@ -64,6 +61,7 @@ public class McCabeMetric extends AbstractEvaluator implements
 	}
 
 	private int cyclomaticNumber = 1;
+	private final List<Result> results = new ArrayList<Result>();
 	private final LanguageDependedMcCabeMetric langDepended;
 	private final CodeRange codeRange;
 
@@ -90,6 +88,14 @@ public class McCabeMetric extends AbstractEvaluator implements
 	 */
 	@Override
 	public void run() {
+		calculate();
+		createResultsList();
+		if (getMonitor() != null) {
+			getMonitor().finish();
+		}
+	}
+
+	private void calculate() {
 		if (getMonitor() != null) {
 			getMonitor().setRange(0, 1);
 			getMonitor().setDescription(NAME);
@@ -103,9 +109,12 @@ public class McCabeMetric extends AbstractEvaluator implements
 				cyclomaticNumber++;
 			}
 		} while (iterator.goForward());
-		if (getMonitor() != null) {
-			getMonitor().finish();
-		}
+	}
+
+	private void createResultsList() {
+		results.clear();
+		results.add(new Result("v(G)",
+				translator.i18n("Cyclomatic complexity"), cyclomaticNumber, ""));
 	}
 
 	/*
@@ -145,32 +154,8 @@ public class McCabeMetric extends AbstractEvaluator implements
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String getDescription(ReportingFormat format)
-			throws UnsupportedFormatException {
+	public String getDescription() {
 		return DESCRIPTION;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String getReport(ReportingFormat format)
-			throws UnsupportedFormatException {
-		if (format == ReportingFormat.HTML) {
-			return getHTMLReport();
-		} else {
-			throw new UnsupportedFormatException(format);
-		}
-	}
-
-	public String getHTMLReport() {
-		String report = Anchor.generate(getName(),
-				"<h3>" + translator.i18n("McCabe Cyclomatic Number") + "</h3>");
-		report += HTMLConverter.convertQualityLevelToHTML(getQuality());
-		report += "<br/>";
-		report += translator.i18n("Cyclomatic number v(G)") + "="
-				+ getCyclomaticNumber();
-		return report;
 	}
 
 	/**
@@ -181,4 +166,8 @@ public class McCabeMetric extends AbstractEvaluator implements
 		return EVALUATED_QUALITY_CHARACTERISTICS;
 	}
 
+	@Override
+	public List<Result> getResults() {
+		return results;
+	}
 }

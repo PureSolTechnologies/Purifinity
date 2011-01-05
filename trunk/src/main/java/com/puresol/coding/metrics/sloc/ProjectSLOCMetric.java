@@ -9,11 +9,8 @@ import com.puresol.coding.analysis.Analyzer;
 import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.metrics.AbstractProjectMetric;
 import com.puresol.coding.quality.QualityCharacteristic;
-import com.puresol.reporting.ReportingFormat;
-import com.puresol.reporting.UnsupportedFormatException;
 
-public class ProjectSLOCMetric extends
-		AbstractProjectMetric<SLOCMetric> {
+public class ProjectSLOCMetric extends AbstractProjectMetric<SLOCMetric> {
 
 	private static final long serialVersionUID = -5093217611195212999L;
 
@@ -24,9 +21,9 @@ public class ProjectSLOCMetric extends
 	@Override
 	protected SLOCMetric processFile(File file) {
 		Analyzer analyzer = getProjectAnalyzer().getAnalyzer(file);
-		SLOCMetric metric = new SLOCMetric(
-				analyzer.getLanguage(), new CodeRange(file.getPath(),
-						CodeRangeType.FILE, analyzer.getParserTree()));
+		SLOCMetric metric = new SLOCMetric(analyzer.getLanguage(),
+				new CodeRange(file.getPath(), CodeRangeType.FILE,
+						analyzer.getParserTree()));
 		metric.run();
 		return metric;
 	}
@@ -37,8 +34,7 @@ public class ProjectSLOCMetric extends
 	}
 
 	@Override
-	public String getDescription(ReportingFormat format)
-			throws UnsupportedFormatException {
+	public String getDescription() {
 		return SLOCMetric.DESCRIPTION;
 	}
 
@@ -46,5 +42,4 @@ public class ProjectSLOCMetric extends
 	public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
 		return SLOCMetric.EVALUATED_QUALITY_CHARACTERISTICS;
 	}
-
 }

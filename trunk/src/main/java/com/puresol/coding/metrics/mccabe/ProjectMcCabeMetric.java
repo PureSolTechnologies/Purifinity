@@ -9,8 +9,6 @@ import com.puresol.coding.analysis.Analyzer;
 import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.metrics.AbstractProjectMetric;
 import com.puresol.coding.quality.QualityCharacteristic;
-import com.puresol.reporting.ReportingFormat;
-import com.puresol.reporting.UnsupportedFormatException;
 
 public class ProjectMcCabeMetric extends AbstractProjectMetric<McCabeMetric> {
 
@@ -36,8 +34,7 @@ public class ProjectMcCabeMetric extends AbstractProjectMetric<McCabeMetric> {
 	}
 
 	@Override
-	public String getDescription(ReportingFormat format)
-			throws UnsupportedFormatException {
+	public String getDescription() {
 		return McCabeMetric.DESCRIPTION;
 	}
 
@@ -45,5 +42,4 @@ public class ProjectMcCabeMetric extends AbstractProjectMetric<McCabeMetric> {
 	public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
 		return McCabeMetric.EVALUATED_QUALITY_CHARACTERISTICS;
 	}
-
 }

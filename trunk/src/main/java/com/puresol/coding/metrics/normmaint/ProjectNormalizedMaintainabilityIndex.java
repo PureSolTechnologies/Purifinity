@@ -9,8 +9,6 @@ import com.puresol.coding.analysis.Analyzer;
 import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.metrics.AbstractProjectMetric;
 import com.puresol.coding.quality.QualityCharacteristic;
-import com.puresol.reporting.ReportingFormat;
-import com.puresol.reporting.UnsupportedFormatException;
 
 public class ProjectNormalizedMaintainabilityIndex extends
 		AbstractProjectMetric<NormalizedMaintainabilityIndex> {
@@ -37,8 +35,7 @@ public class ProjectNormalizedMaintainabilityIndex extends
 	}
 
 	@Override
-	public String getDescription(ReportingFormat format)
-			throws UnsupportedFormatException {
+	public String getDescription() {
 		return NormalizedMaintainabilityIndex.DESCRIPTION;
 	}
 
@@ -46,5 +43,4 @@ public class ProjectNormalizedMaintainabilityIndex extends
 	public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
 		return NormalizedMaintainabilityIndex.EVALUATED_QUALITY_CHARACTERISTICS;
 	}
-
 }

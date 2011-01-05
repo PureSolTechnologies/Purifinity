@@ -20,14 +20,10 @@ import com.puresol.coding.CodeRange;
 import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.evaluator.CodeRangeEvaluator;
+import com.puresol.coding.evaluator.Result;
 import com.puresol.coding.metrics.halstead.HalsteadMetric;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.SourceCodeQuality;
-import com.puresol.coding.reporting.HTMLConverter;
-import com.puresol.reporting.ReportingFormat;
-import com.puresol.reporting.UnsupportedFormatException;
-import com.puresol.reporting.html.Anchor;
-import com.puresol.reporting.html.HTMLStandards;
 import com.puresol.utils.Property;
 
 /**
@@ -87,6 +83,11 @@ public class EntropyMetric extends AbstractEvaluator implements
 	 */
 	@Override
 	public void run() {
+		calculate();
+		recreateResultsList();
+	}
+
+	private void calculate() {
 		if (getMonitor() != null) {
 			getMonitor().setRange(0, 2);
 			getMonitor().setDescription(NAME);
@@ -123,6 +124,10 @@ public class EntropyMetric extends AbstractEvaluator implements
 		if (getMonitor() != null) {
 			getMonitor().finish();
 		}
+	}
+
+	private void recreateResultsList() {
+
 	}
 
 	public double getNTotal() {
@@ -228,55 +233,8 @@ public class EntropyMetric extends AbstractEvaluator implements
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String getDescription(ReportingFormat format)
-			throws UnsupportedFormatException {
+	public String getDescription() {
 		return DESCRIPTION;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String getReport(ReportingFormat format)
-			throws UnsupportedFormatException {
-		if (format == ReportingFormat.TEXT) {
-			return getTextReport();
-		} else if (format == ReportingFormat.HTML) {
-			return getHTMLReport();
-		}
-		throw new UnsupportedFormatException(format);
-	}
-
-	public String getTextReport() {
-		String report = "n\t" + Math.round(getNTotal() * 100.0) / 100.0 + "\t"
-				+ translator.i18n("Vocabulary size") + "\n";
-		report += "N\t" + Math.round(getNDiff() * 100.0) / 100.0 + "\t"
-				+ translator.i18n("Program length") + "\n";
-		report += "Entropy\t" + Math.round(getEntropy() * 100.0) / 100.0 + "\t"
-				+ translator.i18n("entropy") + "\n";
-		report += "maxEntropy\t" + Math.round(getMaxEntropy() * 100.0) / 100.0
-				+ "\t" + translator.i18n("maximized entropy") + "\n";
-		report += "normEntropy\t" + Math.round(getNormEntropy() * 100.0)
-				/ 100.0 + "\t" + translator.i18n("normalized entropy") + "\n";
-		report += "Entropy Redundance\t"
-				+ Math.round(getEntropyRedundancy() * 100.0) / 100.0 + "\t"
-				+ translator.i18n("redundance in entropy") + "\n";
-		report += "Redundance\t" + Math.round(getRedundancy() * 100.0) / 100.0
-				+ "\t" + translator.i18n("number of redundand vokables") + "\n";
-		report += "normRedundancy\t"
-				+ Math.round(getNormalizedRedundancy() * 100.0) / 100.0 + "\t"
-				+ translator.i18n("ratio of redundand vocables") + "\n";
-		return report;
-	}
-
-	public String getHTMLReport() {
-		String report = Anchor.generate(getName(),
-				"<h3>" + translator.i18n("Entropy from Information Theory")
-						+ "</h3>");
-		report += HTMLConverter.convertQualityLevelToHTML(getQuality());
-		report += "<br/>";
-		report += HTMLStandards.convertTSVToTable(getTextReport());
-		return report;
 	}
 
 	/**
@@ -287,4 +245,8 @@ public class EntropyMetric extends AbstractEvaluator implements
 		return EVALUATED_QUALITY_CHARACTERISTICS;
 	}
 
+	@Override
+	public List<Result> getResults() {
+		return result.getResults();
+	}
 }

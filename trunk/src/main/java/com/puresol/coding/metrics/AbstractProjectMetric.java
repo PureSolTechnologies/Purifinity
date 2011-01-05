@@ -2,7 +2,6 @@ package com.puresol.coding.metrics;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,16 +10,15 @@ import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.evaluator.CodeRangeEvaluator;
 import com.puresol.coding.evaluator.ProjectEvaluator;
+import com.puresol.coding.evaluator.Result;
 import com.puresol.coding.quality.SourceCodeQuality;
-import com.puresol.coding.reporting.HTMLConverter;
-import com.puresol.reporting.ReportingFormat;
-import com.puresol.reporting.UnsupportedFormatException;
 
 public abstract class AbstractProjectMetric<T extends CodeRangeEvaluator>
 		extends AbstractEvaluator implements ProjectEvaluator {
 
 	private static final long serialVersionUID = -5093217611195212999L;
 
+	private final List<Result> results = new ArrayList<Result>();
 	private final Map<File, T> fileResults = new HashMap<File, T>();
 	private final ProjectAnalyzer projectAnalyzer;
 
@@ -76,25 +74,7 @@ public abstract class AbstractProjectMetric<T extends CodeRangeEvaluator>
 	}
 
 	@Override
-	public String getReport(ReportingFormat format)
-			throws UnsupportedFormatException {
-		StringBuffer buffer = new StringBuffer();
-		buffer.append("<html><body>");
-		buffer.append("<p>Overall Quality: "
-				+ HTMLConverter.convertQualityLevelToHTML(getQuality())
-				+ "</p>");
-		buffer.append("<table>");
-		List<File> files = new ArrayList<File>(fileResults.keySet());
-		Collections.sort(files);
-		for (File file : files) {
-			SourceCodeQuality level = fileResults.get(file).getQuality();
-			buffer.append("<tr>");
-			buffer.append("<td>" + file.getPath() + "</td><td>"
-					+ HTMLConverter.convertQualityLevelToHTML(level) + "</td>");
-			buffer.append("</tr>");
-		}
-		buffer.append("</table>");
-		buffer.append("</body></html>");
-		return buffer.toString();
+	public List<Result> getResults() {
+		return results;
 	}
 }

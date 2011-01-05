@@ -19,14 +19,10 @@ import com.puresol.coding.CodeRange;
 import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.evaluator.CodeRangeEvaluator;
+import com.puresol.coding.evaluator.Result;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.SourceCodeQuality;
-import com.puresol.coding.reporting.HTMLConverter;
 import com.puresol.math.statistics.Statistics;
-import com.puresol.reporting.ReportingFormat;
-import com.puresol.reporting.UnsupportedFormatException;
-import com.puresol.reporting.html.Anchor;
-import com.puresol.reporting.html.HTMLStandards;
 import com.puresol.trees.TreeIterator;
 import com.puresol.uhura.ast.ParserTree;
 import com.puresol.uhura.lexer.Token;
@@ -237,67 +233,8 @@ public class SLOCMetric extends AbstractEvaluator implements CodeRangeEvaluator 
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String getDescription(ReportingFormat format)
-			throws UnsupportedFormatException {
+	public String getDescription() {
 		return DESCRIPTION;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String getReport(ReportingFormat format)
-			throws UnsupportedFormatException {
-		if (format == ReportingFormat.HTML) {
-			return getHTMLReport();
-		} else {
-			throw new UnsupportedFormatException(format);
-		}
-	}
-
-	public String getLineCountReport() {
-		String report = "phyLoc\t" + sloc.getPhyLOC() + "\t"
-				+ translator.i18n("physical lines of code") + "\n";
-		report += "proLoc\t" + sloc.getProLOC() + "\t"
-				+ translator.i18n("productive lines of code") + "\n";
-		report += "comLoc\t" + sloc.getComLOC() + "\t"
-				+ translator.i18n("commented lines of code") + "\n";
-		report += "blLoc\t" + sloc.getBlLOC() + "\t"
-				+ translator.i18n("blank lines") + "\n";
-		return report;
-	}
-
-	public String getHTMLLineCountReport() {
-		return HTMLStandards.convertTSVToTable(getLineCountReport());
-	}
-
-	public String getLineLengthReport() {
-		Statistics normal = sloc.getLineStatistics();
-		String report = "\tnormal\n";
-		report += "avg\t" + Math.round(normal.getAvg() * 100.0) / 100.0 + "\n";
-		report += "median\t" + Math.round(normal.getMedian()) + "\n";
-		report += "standard deviation\t"
-				+ Math.round(normal.getStdDev() * 100.0) / 100.0 + "\n";
-		report += "min\t" + Math.round(normal.getMin()) + "\n";
-		report += "max\t" + Math.round(normal.getMax()) + "\n";
-		return report;
-	}
-
-	public String getHTMLLineLengthReport() {
-		return HTMLStandards.convertTSVToTable(getLineLengthReport());
-	}
-
-	public String getHTMLReport() {
-		String report = Anchor.generate(getName(), "<h3>"
-				+ translator.i18n("SLOC Metrics") + "</h3>");
-		report += HTMLConverter.convertQualityLevelToHTML(getQuality());
-		report += "<br/>";
-		report += "<b>Line Counts</b>";
-		report += getHTMLLineCountReport();
-		report += "<b>Line Lengths</b>";
-		report += getHTMLLineLengthReport();
-		return report;
-
 	}
 
 	/**
@@ -308,4 +245,8 @@ public class SLOCMetric extends AbstractEvaluator implements CodeRangeEvaluator 
 		return EVALUATED_QUALITY_CHARACTERISTICS;
 	}
 
+	@Override
+	public List<Result> getResults() {
+		return sloc.getResults();
+	}
 }

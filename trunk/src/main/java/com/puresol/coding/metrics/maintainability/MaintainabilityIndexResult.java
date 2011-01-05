@@ -1,37 +1,63 @@
 package com.puresol.coding.metrics.maintainability;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.i18n4java.Translator;
+
+import com.puresol.coding.evaluator.Result;
+
 public class MaintainabilityIndexResult {
+
+	private static final Translator translator = Translator
+			.getTranslator(MaintainabilityIndexResult.class);
+
+	private final List<Result> results = new ArrayList<Result>();
 
 	/**
 	 * MaintainabilityIndex without comment.
 	 */
-	private final double MIwoc;
+	private final double miwoc;
 	/**
 	 * MaintainabilityIndex comment weight
 	 */
-	private final double MIcw;
+	private final double micw;
 	/**
 	 * MaintainabilityIndex
 	 */
-	private final double MI;
+	private final double mi;
 
 	public MaintainabilityIndexResult(double mIwoc, double mIcw) {
 		super();
-		MIwoc = mIwoc;
-		MIcw = mIcw;
-		MI = MIwoc + MIcw;
+		miwoc = mIwoc;
+		micw = mIcw;
+		mi = miwoc + micw;
+		createResultsList();
+	}
+
+	private void createResultsList() {
+		results.add(new Result("MIwoc", translator
+				.i18n("Maintainability index without comments"), miwoc, ""));
+		results.add(new Result("MIcw", translator
+				.i18n("Maintainability index comment weight"), micw, ""));
+		results.add(new Result("MI", translator
+				.i18n("Maintainability index without comments"), mi, ""));
 	}
 
 	public double getMIwoc() {
-		return MIwoc;
+		return miwoc;
 	}
 
 	public double getMIcw() {
-		return MIcw;
+		return micw;
 	}
 
 	public double getMI() {
-		return MI;
+		return mi;
+	}
+
+	public List<Result> getResults() {
+		return results;
 	}
 
 }

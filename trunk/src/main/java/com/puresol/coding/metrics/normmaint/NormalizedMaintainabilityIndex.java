@@ -19,17 +19,13 @@ import com.puresol.coding.CodeRange;
 import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.evaluator.CodeRangeEvaluator;
+import com.puresol.coding.evaluator.Result;
 import com.puresol.coding.metrics.halstead.HalsteadMetric;
 import com.puresol.coding.metrics.mccabe.McCabeMetric;
 import com.puresol.coding.metrics.sloc.SLOCMetric;
 import com.puresol.coding.metrics.sloc.SLOCResult;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.SourceCodeQuality;
-import com.puresol.coding.reporting.HTMLConverter;
-import com.puresol.reporting.ReportingFormat;
-import com.puresol.reporting.UnsupportedFormatException;
-import com.puresol.reporting.html.Anchor;
-import com.puresol.reporting.html.HTMLStandards;
 import com.puresol.utils.Property;
 
 public class NormalizedMaintainabilityIndex extends AbstractEvaluator implements
@@ -204,47 +200,8 @@ public class NormalizedMaintainabilityIndex extends AbstractEvaluator implements
 	 * @return
 	 */
 	@Override
-	public String getDescription(ReportingFormat format)
-			throws UnsupportedFormatException {
+	public String getDescription() {
 		return DESCRIPTION;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @return
-	 */
-	@Override
-	public String getReport(ReportingFormat format)
-			throws UnsupportedFormatException {
-		if (format == ReportingFormat.TEXT) {
-			return getTextReport();
-		} else if (format == ReportingFormat.HTML) {
-			return getHTMLReport();
-		} else {
-			throw new UnsupportedFormatException(format);
-		}
-	}
-
-	public String getTextReport() {
-		String report = "NMIwoc\t" + Math.round(getMIWoc() * 100.0) + "%\t"
-				+ translator.i18n("Maintainability Index without comments")
-				+ "\n";
-		report += "NMIcw\t" + Math.round(getMIcw() * 100.0) + "%\t"
-				+ translator.i18n("Maintainability Index comment weight")
-				+ "\n";
-		report += "NMI\t" + Math.round(getMI() * 100.0) + "%\t"
-				+ translator.i18n("Maintainability index") + "\n";
-		return report;
-	}
-
-	public String getHTMLReport() {
-		String report = Anchor.generate(getName(),
-				"<h3>" + translator.i18n("Maintainability Index") + "</h3>");
-		report += HTMLConverter.convertQualityLevelToHTML(getQuality());
-		report += "<br/>";
-		report += HTMLStandards.convertTSVToTable(getTextReport());
-		return report;
 	}
 
 	/**
@@ -257,4 +214,8 @@ public class NormalizedMaintainabilityIndex extends AbstractEvaluator implements
 		return EVALUATED_QUALITY_CHARACTERISTICS;
 	}
 
+	@Override
+	public List<Result> getResults() {
+		return result.getResults();
+	}
 }

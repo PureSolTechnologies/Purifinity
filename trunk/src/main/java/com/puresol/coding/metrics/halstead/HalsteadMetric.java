@@ -21,13 +21,9 @@ import com.puresol.coding.CodeRangeType;
 import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.evaluator.CodeRangeEvaluator;
+import com.puresol.coding.evaluator.Result;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.SourceCodeQuality;
-import com.puresol.coding.reporting.HTMLConverter;
-import com.puresol.reporting.ReportingFormat;
-import com.puresol.reporting.UnsupportedFormatException;
-import com.puresol.reporting.html.Anchor;
-import com.puresol.reporting.html.HTMLStandards;
 import com.puresol.trees.TreeIterator;
 import com.puresol.uhura.ast.ParserTree;
 import com.puresol.utils.Property;
@@ -292,93 +288,8 @@ public class HalsteadMetric extends AbstractEvaluator implements
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String getDescription(ReportingFormat format)
-			throws UnsupportedFormatException {
+	public String getDescription() {
 		return DESCRIPTION;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String getReport(ReportingFormat format)
-			throws UnsupportedFormatException {
-		if (format == ReportingFormat.HTML) {
-			return getHTMLReport();
-		} else {
-			throw new UnsupportedFormatException(format);
-		}
-	}
-
-	public String getNumberReport() {
-		String report = "n1\t" + getDifferentOperators() + "\t"
-				+ translator.i18n("Number of different operators") + "\n";
-		report += "N1\t" + getTotalOperators() + "\t"
-				+ translator.i18n("Total number operators") + "\n";
-		report += "n2\t" + getDifferentOperands() + "\t"
-				+ translator.i18n("Number of different operands") + "\n";
-		report += "N2\t" + getTotalOperands() + "\t"
-				+ translator.i18n("Total number of operands") + "\n";
-		report += "n\t" + Math.round(getVocabularySize() * 100.0) / 100.0
-				+ "\t" + translator.i18n("Vocabulary size") + "\n";
-		report += "N\t" + Math.round(getProgramLength() * 100.0) / 100.0 + "\t"
-				+ translator.i18n("Program length") + "\n";
-		report += "HL\t" + Math.round(getHalsteadLength() * 100.0) / 100.0
-				+ "\t" + translator.i18n("Halstead length") + "\n";
-		report += "HV\t" + Math.round(getHalsteadVolume() * 100.0) / 100.0
-				+ "\t" + translator.i18n("Halstead volume") + "\n";
-		report += "D\t" + Math.round(getDifficulty() * 100.0) / 100.0 + "\t"
-				+ translator.i18n("Difficulty level") + "\n";
-		report += "L\t" + Math.round(getProgramLevel() * 100.0) / 100.0 + "\t"
-				+ translator.i18n("Program level") + "\n";
-		report += "E\t" + Math.round(getImplementationEffort() * 100.0) / 100.0
-				+ "\t" + translator.i18n("Effort to implement") + "\n";
-		report += "T\t" + Math.round(getImplementationTime() * 100.0) / 100.0
-				+ "\t" + translator.i18n("Implementatiom time [s]") + "\n";
-		report += "B\t" + Math.round(getEstimatedBugs() * 100.0) / 100.0 + "\t"
-				+ translator.i18n("Number of delivered bugs") + "\n";
-		return report;
-	}
-
-	public String getOperatorReport() {
-		String report = "";
-		for (String operator : getOperators().keySet()) {
-			int number = getOperators().get(operator);
-			report += operator + "\t" + number + "\n";
-		}
-		return report;
-	}
-
-	public String getHTMLOperatorReport() {
-		return HTMLStandards.convertTSVToTable(getOperatorReport());
-	}
-
-	public String getOperantReport() {
-		String report = "";
-		for (String operant : getOperands().keySet()) {
-			int number = getOperands().get(operant);
-			report += operant + "\t" + number + "\n";
-		}
-		return report;
-	}
-
-	public String getHTMLOperantReport() {
-		return HTMLStandards.convertTSVToTable(getOperantReport());
-	}
-
-	public String getHTMLReport() {
-		String report = Anchor.generate(getName(), "<h3>"
-				+ translator.i18n("Halstead Metric") + "</h3>");
-		report += HTMLConverter.convertQualityLevelToHTML(getQuality());
-		report += "<br/>";
-		report += HTMLStandards.convertTSVToTable(getNumberReport());
-
-		report += "<b>" + translator.i18n("Operators") + "</b>";
-		report += getHTMLOperatorReport();
-
-		report += "<b>" + translator.i18n("Operands") + "</b>";
-		report += getHTMLOperantReport();
-		return report;
 	}
 
 	/**
@@ -389,4 +300,8 @@ public class HalsteadMetric extends AbstractEvaluator implements
 		return EVALUATED_QUALITY_CHARACTERISTICS;
 	}
 
+	@Override
+	public List<Result> getResults() {
+		return result.getResults();
+	}
 }

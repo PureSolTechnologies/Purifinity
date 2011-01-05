@@ -20,11 +20,9 @@ import javax.i18n4java.Translator;
 import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.evaluator.ProjectEvaluator;
+import com.puresol.coding.evaluator.Result;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.SourceCodeQuality;
-import com.puresol.reporting.ReportingFormat;
-import com.puresol.reporting.UnsupportedFormatException;
-import com.puresol.reporting.html.HTMLStandards;
 import com.puresol.uhura.ast.ParserTree;
 import com.puresol.utils.Property;
 
@@ -139,28 +137,8 @@ public class CoCoMo extends AbstractEvaluator implements ProjectEvaluator {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String getDescription(ReportingFormat format)
-			throws UnsupportedFormatException {
-		if (format == ReportingFormat.HTML) {
-			return HTMLStandards.convertFlowTextToHTML(DESCRIPTION);
-		} else if (format == ReportingFormat.TEXT) {
-			return DESCRIPTION;
-		}
-		throw new UnsupportedFormatException(format);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String getReport(ReportingFormat format)
-			throws UnsupportedFormatException {
-		if (format == ReportingFormat.HTML) {
-			return cocomoValues.toString(format);
-		} else if (format == ReportingFormat.TEXT) {
-			return cocomoValues.toString(format);
-		}
-		throw new UnsupportedFormatException(format);
+	public String getDescription() {
+		return DESCRIPTION;
 	}
 
 	/**
@@ -177,6 +155,11 @@ public class CoCoMo extends AbstractEvaluator implements ProjectEvaluator {
 	@Override
 	public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
 		return EVALUATED_QUALITY_CHARACTERISTICS;
+	}
+
+	@Override
+	public List<Result> getResults() {
+		return cocomoValues.getResults();
 	}
 
 }

@@ -1,11 +1,12 @@
 package com.puresol.coding.metrics.cocomo;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.i18n4java.Translator;
 
-import com.puresol.reporting.ReportingFormat;
-import com.puresol.reporting.UnsupportedFormatException;
+import com.puresol.coding.evaluator.Result;
 
 public class CoCoMoValueSet implements Serializable {
 
@@ -28,6 +29,8 @@ public class CoCoMoValueSet implements Serializable {
 	private Complexity complexity;
 	private double averageSalary;
 	private String currency;
+
+	private final List<Result> results = new ArrayList<Result>();
 
 	public CoCoMoValueSet() {
 		setComplexity(Complexity.LOW);
@@ -174,6 +177,11 @@ public class CoCoMoValueSet implements Serializable {
 	}
 
 	private void refresh() {
+		calculate();
+		recreateResultsList();
+	}
+
+	private void calculate() {
 		ksloc = (double) sloc / 1000.0;
 		personMonth = Math.round(c1 * Math.exp(c2 * Math.log(ksloc)) * 100.0) / 100.0;
 		personYears = Math.round(personMonth / 12.0 * 100.0) / 100.0;
@@ -185,17 +193,38 @@ public class CoCoMoValueSet implements Serializable {
 				* 100.0) / 100.0;
 	}
 
-	public String toString(ReportingFormat format)
-			throws UnsupportedFormatException {
-		if (format == ReportingFormat.TEXT) {
-			return toTextString();
-		} else if (format == ReportingFormat.HTML) {
-			return toHTMLString();
-		}
-		throw new UnsupportedFormatException(format);
+	private void recreateResultsList() {
+		results.clear();
+		results.add(new Result(translator
+				.i18n("Total Physical Source Lines of Code"), translator
+				.i18n("kSLOC = SLOC / 1000"), ksloc, translator.i18n("kSLOC")));
+		results.add(new Result(
+				translator.i18n("Development Effort Estimate"),
+				translator
+						.i18n("Basic COCOMO model, Person-Months = 2.4 * (KSLOC**1.05)"),
+				personMonth, translator.i18n("Person-Months")));
+		results.add(new Result(translator.i18n("Development Effort Estimate"),
+				translator.i18n("Person-Years = Person-Month / 12"),
+				personYears, translator.i18n("Person-Years")));
+		results.add(new Result(
+				translator.i18n("Schedule Estimate"),
+				translator
+						.i18n("MBasic COCOMO model, Months = 2.5 * (person-months**0.38)"),
+				scheduledMonth, translator.i18n("Months")));
+		results.add(new Result(translator.i18n("Schedule Estimate"), translator
+				.i18n("Years = Months / 12"), scheduledYears, translator
+				.i18n("Years")));
+		results.add(new Result(translator
+				.i18n("Estimated Average Number of Developers"), translator
+				.i18n("Effort/Schedule"), teamSize, ""));
+		results.add(new Result(translator
+				.i18n("Total Estimated Cost to Develop"), translator.i18n(
+				"average salary = {1}{2}/year, overhead = 2.40", averageSalary,
+				currency), estimatedCosts, translator.i18n("k$")));
 	}
 
-	public String toTextString() {
+	@Override
+	public String toString() {
 		String text = translator
 				.i18n("Total Physical Source Lines of Code (SLOC)")
 				+ "                = " + sloc + "\n";
@@ -266,5 +295,9 @@ public class CoCoMoValueSet implements Serializable {
 				+ "</td><td></td><td></td></tr>\n";
 		text += "</table>";
 		return text;
+	}
+
+	public List<Result> getResults() {
+		return results;
 	}
 }
