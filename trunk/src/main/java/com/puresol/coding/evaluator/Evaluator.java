@@ -3,6 +3,7 @@ package com.puresol.coding.evaluator;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.swingx.progress.ProgressObservable;
 
@@ -52,6 +53,8 @@ public interface Evaluator extends ProgressObservable, Runnable, Serializable {
 	 * @return
 	 */
 	public List<Result> getResults();
+
+	public Map<String, SourceCodeQuality> getPartQualities();
 
 	/**
 	 * This method returns the quality level after an evalutation was performed.

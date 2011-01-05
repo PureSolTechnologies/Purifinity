@@ -127,7 +127,9 @@ public class ProjectEvaluatorPanel extends Panel {
 	public void finished(ProgressObservable observable) {
 		Evaluator evaluator = (Evaluator) observable;
 		ReportPane viewer = new ReportPane(evaluator);
-		tabbedPane.add(evaluator.getName(), viewer);
+		tabbedPane.add(evaluator.getName(), new ScrollPane(viewer,
+				ScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+				ScrollPane.HORIZONTAL_SCROLLBAR_NEVER));
 		tabbedPane.setTabComponentAt(tabbedPane.getTabCount() - 1,
 				new TabButton(tabbedPane));
 	}

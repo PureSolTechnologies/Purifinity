@@ -1,6 +1,10 @@
 package com.puresol.gui.coding;
 
 import java.awt.BorderLayout;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 import javax.i18n4java.Translator;
 import javax.swingx.HTMLTextPane;
@@ -8,6 +12,7 @@ import javax.swingx.Panel;
 
 import com.puresol.coding.evaluator.Evaluator;
 import com.puresol.coding.evaluator.Result;
+import com.puresol.coding.quality.SourceCodeQuality;
 
 /**
  * This class visualizes the results list from an evaluator.
@@ -50,23 +55,61 @@ public class ReportPane extends Panel {
 		buffer.append("<h1>" + evaluator.getName() + "</h1>");
 		buffer.append("<h2>" + translator.i18n("Description") + "</h2>");
 		buffer.append("<p>" + evaluator.getDescription() + "</p>");
-		buffer.append("<h2>" + translator.i18n("Results") + "</h2>");
-		buffer.append("<table border=\"1\">");
-		buffer.append("<tr>");
-		buffer.append("<th>" + translator.i18n("Symbol") + "</th>");
-		buffer.append("<th>" + translator.i18n("Value") + "</th>");
-		buffer.append("<th>" + translator.i18n("Unit") + "</th>");
-		buffer.append("<th>" + translator.i18n("Description") + "</th>");
-		buffer.append("</tr>");
-		for (Result result : evaluator.getResults()) {
+		if (evaluator.getResults() != null) {
+			buffer.append("<h2>" + translator.i18n("Results") + "</h2>");
+			buffer.append("<table border=\"1\">");
 			buffer.append("<tr>");
-			buffer.append("<td>" + result.getName() + "</td>");
-			buffer.append("<td>" + result.getValue() + "</td>");
-			buffer.append("<td>" + result.getUnit() + "</td>");
-			buffer.append("<td>" + result.getDescription() + "</td>");
+			buffer.append("<th>" + translator.i18n("Symbol") + "</th>");
+			buffer.append("<th>" + translator.i18n("Value") + "</th>");
+			buffer.append("<th>" + translator.i18n("Unit") + "</th>");
+			buffer.append("<th>" + translator.i18n("Description") + "</th>");
 			buffer.append("</tr>");
+			for (Result result : evaluator.getResults()) {
+				buffer.append("<tr>");
+				buffer.append("<td>" + result.getName() + "</td>");
+				buffer.append("<td>" + result.getValue() + "</td>");
+				buffer.append("<td>" + result.getUnit() + "</td>");
+				buffer.append("<td>" + result.getDescription() + "</td>");
+				buffer.append("</tr>");
+			}
+			buffer.append("</table>");
 		}
-		buffer.append("</table></body></html>");
+		if (evaluator.getPartQualities() != null) {
+			buffer.append("<h2>" + translator.i18n("Part Qualities") + "</h2>");
+			buffer.append("<table border=\"1\">");
+			buffer.append("<tr>");
+			buffer.append("<th>" + translator.i18n("Part Name") + "</th>");
+			buffer.append("<th>" + translator.i18n("Quality") + "</th>");
+			buffer.append("</tr>");
+			Map<String, SourceCodeQuality> qualities = evaluator
+					.getPartQualities();
+			List<String> names = new ArrayList<String>(qualities.keySet());
+			Collections.sort(names);
+			for (String name : names) {
+				SourceCodeQuality quality = qualities.get(name);
+				buffer.append("<tr>");
+				buffer.append("<td>" + name + "</td>");
+				switch (quality) {
+				case HIGH:
+					buffer.append("<td bgcolor=\"green\">"
+							+ quality.getIdentifier() + "</td>");
+					break;
+				case MEDIUM:
+					buffer.append("<td bgcolor=\"yellow\">"
+							+ quality.getIdentifier() + "</td>");
+					break;
+				case LOW:
+					buffer.append("<td bgcolor=\"red\">"
+							+ quality.getIdentifier() + "</td>");
+					break;
+				default:
+					buffer.append("<td>" + quality.getIdentifier() + "</td>");
+				}
+				buffer.append("</tr>");
+			}
+			buffer.append("</table>");
+		}
+		buffer.append("</body></html>");
 		html.setText(buffer.toString());
 	}
 
