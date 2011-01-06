@@ -6,6 +6,8 @@ import java.util.List;
 import com.puresol.coding.metrics.halstead.HalsteadSymbol;
 import com.puresol.coding.metrics.halstead.LanguageDependedHalsteadMetric;
 import com.puresol.uhura.ast.ParserTree;
+import com.puresol.uhura.grammar.token.Visibility;
+import com.puresol.uhura.lexer.Token;
 
 /**
  * This is the actual implementation of the McCabe metric for Java.
@@ -213,12 +215,16 @@ public class HalsteadMetricImpl implements LanguageDependedHalsteadMetric {
 
 	@Override
 	public HalsteadSymbol getHalsteadResult(ParserTree node) {
+		Token token = node.getToken();
+		if ((token == null) || (token.getVisibility() != Visibility.VISIBLE)) {
+			return new HalsteadSymbol(false, false, "");
+		}
 		if (operators.contains(node.getName())) {
 			return new HalsteadSymbol(true, true, node.getText());
 		}
 		if (operatorLiterals.contains(node.getText())) {
 			return new HalsteadSymbol(true, true, node.getText());
 		}
-		return new HalsteadSymbol(false, false, node.getText());
+		return new HalsteadSymbol(true, false, node.getText());
 	}
 }
