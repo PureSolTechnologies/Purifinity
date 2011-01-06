@@ -105,10 +105,8 @@ public class McCabeMetric extends AbstractEvaluator implements
 		TreeIterator<ParserTree> iterator = new TreeIterator<ParserTree>(
 				codeRange.getParserTree());
 		do {
-			if (langDepended.increasesCyclomaticComplexity(iterator
-					.getCurrentNode())) {
-				cyclomaticNumber++;
-			}
+			cyclomaticNumber += langDepended
+					.increasesCyclomaticComplexityBy(iterator.getCurrentNode());
 		} while (iterator.goForward());
 	}
 

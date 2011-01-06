@@ -22,6 +22,6 @@ public interface LanguageDependedMcCabeMetric {
 	 * @return True is returned in cases the node increases the cyclomatic
 	 *         complexity within source codes.
 	 */
-	public boolean increasesCyclomaticComplexity(ParserTree node);
+	public int increasesCyclomaticComplexityBy(ParserTree node);
 
 }
