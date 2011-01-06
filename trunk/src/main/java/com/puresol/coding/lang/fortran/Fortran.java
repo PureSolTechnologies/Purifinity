@@ -110,13 +110,13 @@ public class Fortran extends AbstractProgrammingLanguage {
 						String name;
 						name = tree.getChild("program-stmt")
 								.getChildren("NAME_LITERAL").get(1).getText();
-						result.add(new CodeRange(name,
-								CodeRangeType.SUBROUTINE, tree));
+						result.add(new CodeRange(name, CodeRangeType.PROGRAM,
+								tree));
 					} else if ("function-subprogram".equals(tree.getName())) {
 						String name = tree.getChild("function-stmt")
 								.getChildren("NAME_LITERAL").get(1).getText();
-						result.add(new CodeRange(name,
-								CodeRangeType.SUBROUTINE, tree));
+						result.add(new CodeRange(name, CodeRangeType.FUNCTION,
+								tree));
 					} else if ("subroutine-subprogram".equals(tree.getName())) {
 						String name = tree.getChild("subroutine-stmt")
 								.getChildren("NAME_LITERAL").get(1).getText();
@@ -125,13 +125,13 @@ public class Fortran extends AbstractProgrammingLanguage {
 					} else if ("module".equals(tree.getName())) {
 						String name = tree.getChild("module-stmt")
 								.getChildren("NAME_LITERAL").get(1).getText();
-						result.add(new CodeRange(name,
-								CodeRangeType.SUBROUTINE, tree));
+						result.add(new CodeRange(name, CodeRangeType.MODULE,
+								tree));
 					} else if ("submodule".equals(tree.getName())) {
 						String name = tree.getChild("submodule-stmt")
 								.getChildren("NAME_LITERAL").get(1).getText();
-						result.add(new CodeRange(name,
-								CodeRangeType.SUBROUTINE, tree));
+						result.add(new CodeRange(name, CodeRangeType.MODULE,
+								tree));
 					}
 					return WalkingAction.PROCEED;
 				} catch (TreeException e) {
