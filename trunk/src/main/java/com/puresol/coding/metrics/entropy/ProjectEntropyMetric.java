@@ -7,6 +7,7 @@ import com.puresol.coding.CodeRange;
 import com.puresol.coding.CodeRangeType;
 import com.puresol.coding.analysis.Analyzer;
 import com.puresol.coding.analysis.ProjectAnalyzer;
+import com.puresol.coding.evaluator.EvaluatorOutput;
 import com.puresol.coding.metrics.AbstractProjectMetric;
 import com.puresol.coding.quality.QualityCharacteristic;
 
@@ -41,5 +42,10 @@ public class ProjectEntropyMetric extends AbstractProjectMetric<EntropyMetric> {
 	@Override
 	public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
 		return EntropyMetric.EVALUATED_QUALITY_CHARACTERISTICS;
+	}
+
+	@Override
+	public List<EvaluatorOutput> getTextOutput() {
+		return null;
 	}
 }

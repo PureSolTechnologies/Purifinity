@@ -20,6 +20,7 @@ import javax.i18n4java.Translator;
 
 import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.evaluator.AbstractEvaluator;
+import com.puresol.coding.evaluator.EvaluatorOutput;
 import com.puresol.coding.evaluator.ProjectEvaluator;
 import com.puresol.coding.evaluator.Result;
 import com.puresol.coding.quality.QualityCharacteristic;
@@ -168,6 +169,11 @@ public class CoCoMo extends AbstractEvaluator implements ProjectEvaluator {
 	 */
 	@Override
 	public Map<String, SourceCodeQuality> getPartQualities() {
+		return null;
+	}
+
+	@Override
+	public List<EvaluatorOutput> getTextOutput() {
 		return null;
 	}
 

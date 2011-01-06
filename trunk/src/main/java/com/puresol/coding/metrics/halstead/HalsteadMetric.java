@@ -22,6 +22,7 @@ import com.puresol.coding.CodeRangeType;
 import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.evaluator.CodeRangeEvaluator;
+import com.puresol.coding.evaluator.EvaluatorOutput;
 import com.puresol.coding.evaluator.Result;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.SourceCodeQuality;
@@ -54,7 +55,7 @@ public class HalsteadMetric extends AbstractEvaluator implements
 
 	private final Hashtable<String, Integer> operators = new Hashtable<String, Integer>();
 	private final Hashtable<String, Integer> operants = new Hashtable<String, Integer>();
-
+	private final List<EvaluatorOutput> resultText = new ArrayList<EvaluatorOutput>();
 	private final CodeRange codeRange;
 	private final LanguageDependedHalsteadMetric langDepended;
 
@@ -89,6 +90,7 @@ public class HalsteadMetric extends AbstractEvaluator implements
 		}
 		createHashtables();
 		calculateValues();
+		createResultText();
 		if (getMonitor() != null) {
 			getMonitor().finish();
 		}
@@ -141,24 +143,28 @@ public class HalsteadMetric extends AbstractEvaluator implements
 				totalOperators, totalOperands);
 	}
 
-	public void printOperators() {
-		System.out.println("===============");
-		System.out.println("   OPERATORS   ");
-		System.out.println("===============");
-		for (String operator : operators.keySet()) {
-			System.out.println(operator + "\t"
-					+ operators.get(operator).toString());
-		}
+	private void createResultText() {
+		resultText.clear();
+		printOperators();
+		printOperants();
 	}
 
-	public void printOperands() {
-		System.out.println("==============");
-		System.out.println("   OPERANDS   ");
-		System.out.println("==============");
-		for (String operand : operants.keySet()) {
-			System.out.println(operand + "\t"
-					+ operants.get(operand).toString());
+	private void printOperators() {
+		StringBuffer buffer = new StringBuffer();
+		for (String operator : operators.keySet()) {
+			buffer.append(operators.get(operator).toString() + "x " + operator
+					+ "\n");
 		}
+		resultText.add(new EvaluatorOutput("Operators", buffer.toString()));
+	}
+
+	private void printOperants() {
+		StringBuffer buffer = new StringBuffer();
+		for (String operant : operants.keySet()) {
+			buffer.append(operants.get(operant).toString() + "x " + operant
+					+ "\n");
+		}
+		resultText.add(new EvaluatorOutput("Operants", buffer.toString()));
 	}
 
 	public Hashtable<String, Integer> getOperators() {
@@ -312,5 +318,10 @@ public class HalsteadMetric extends AbstractEvaluator implements
 	@Override
 	public Map<String, SourceCodeQuality> getPartQualities() {
 		return null;
+	}
+
+	@Override
+	public List<EvaluatorOutput> getTextOutput() {
+		return resultText;
 	}
 }

@@ -20,6 +20,7 @@ import com.puresol.coding.CodeRange;
 import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.evaluator.CodeRangeEvaluator;
+import com.puresol.coding.evaluator.EvaluatorOutput;
 import com.puresol.coding.evaluator.Result;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.SourceCodeQuality;
@@ -175,6 +176,11 @@ public class McCabeMetric extends AbstractEvaluator implements
 	 */
 	@Override
 	public Map<String, SourceCodeQuality> getPartQualities() {
+		return null;
+	}
+
+	@Override
+	public List<EvaluatorOutput> getTextOutput() {
 		return null;
 	}
 }
