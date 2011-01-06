@@ -31,22 +31,22 @@ public class McCabeMetricImpl implements LanguageDependedMcCabeMetric {
 	}
 
 	@Override
-	public boolean increasesCyclomaticComplexity(ParserTree node) {
+	public int increasesCyclomaticComplexityBy(ParserTree node) {
 		if (!blockNames.contains(node.getName())) {
-			return false;
+			return 0;
 		}
 		if ("SwitchLabel".equals(node.getName())) {
 			if (node.getParent().getChildren().indexOf(node) > 0) {
-				return false;
+				return 0;
 			}
 		}
 		if ("QUESTION_MARK".equals(node.getName())) {
 			if ("ConditionalExpression".equals(node.getParent().getName())) {
-				return true;
+				return 1;
 			} else {
-				return false;
+				return 0;
 			}
 		}
-		return true;
+		return 1;
 	}
 }
