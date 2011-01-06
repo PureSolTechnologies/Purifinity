@@ -129,7 +129,7 @@ public class CodeRangeEvaluatorPanel extends Panel {
 	@Slot
 	public void finished(ProgressObservable observable) {
 		Evaluator evaluator = (Evaluator) observable;
-		ReportPane viewer = new ReportPane(evaluator);
+		ReportPanel viewer = new ReportPanel(evaluator);
 		tabbedPane.add(evaluator.getName(), new ScrollPane(viewer,
 				ScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				ScrollPane.HORIZONTAL_SCROLLBAR_NEVER));

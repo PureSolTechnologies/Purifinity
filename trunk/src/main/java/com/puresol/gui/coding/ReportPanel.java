@@ -11,6 +11,7 @@ import javax.swingx.HTMLTextPane;
 import javax.swingx.Panel;
 
 import com.puresol.coding.evaluator.Evaluator;
+import com.puresol.coding.evaluator.EvaluatorOutput;
 import com.puresol.coding.evaluator.Result;
 import com.puresol.coding.quality.SourceCodeQuality;
 
@@ -20,23 +21,23 @@ import com.puresol.coding.quality.SourceCodeQuality;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class ReportPane extends Panel {
+public class ReportPanel extends Panel {
 
 	private static final long serialVersionUID = -8548150829784345153L;
 
 	private static final Translator translator = Translator
-			.getTranslator(ReportPane.class);
+			.getTranslator(ReportPanel.class);
 
 	private Evaluator evaluator = null;
 	private final QualityLabel quality = new QualityLabel();
 	private final HTMLTextPane html = new HTMLTextPane();
 
-	public ReportPane() {
+	public ReportPanel() {
 		super();
 		initUI();
 	}
 
-	public ReportPane(Evaluator evaluator) {
+	public ReportPanel(Evaluator evaluator) {
 		super();
 		initUI();
 		setEvaluator(evaluator);
@@ -108,6 +109,16 @@ public class ReportPane extends Panel {
 				buffer.append("</tr>");
 			}
 			buffer.append("</table>");
+		}
+		if (evaluator.getTextOutput() != null) {
+			buffer.append("<h2>" + translator.i18n("Evaluator Comments")
+					+ "</h2>");
+			for (EvaluatorOutput output : evaluator.getTextOutput()) {
+				buffer.append("<h3>" + output.getSectionName() + "</h3>");
+				buffer.append("<p>"
+						+ output.getText().replace("\n\n", "</p><p>")
+								.replaceAll("\n", "<br/>") + "</p>");
+			}
 		}
 		buffer.append("</body></html>");
 		html.setText(buffer.toString());

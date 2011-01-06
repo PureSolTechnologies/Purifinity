@@ -54,7 +54,26 @@ public interface Evaluator extends ProgressObservable, Runnable, Serializable {
 	 */
 	public List<Result> getResults();
 
+	/**
+	 * This method returns a map with qualities which were evaluated for
+	 * different parts. The key is the name of the part and the associated value
+	 * is the quality of the part.
+	 * 
+	 * The content of the map is for reporting purposes.
+	 * 
+	 * @return
+	 */
 	public Map<String, SourceCodeQuality> getPartQualities();
+
+	/**
+	 * This method returns a list of string. The strings represent different
+	 * paragraphs of a text whihch was generated during evaluation.
+	 * 
+	 * The content of this list is for reporting purposes.
+	 * 
+	 * @return
+	 */
+	public List<EvaluatorOutput> getTextOutput();
 
 	/**
 	 * This method returns the quality level after an evalutation was performed.
