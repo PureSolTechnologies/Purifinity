@@ -18,9 +18,9 @@ public abstract class AbstractProjectMetric<T extends CodeRangeEvaluator>
 
 	private static final long serialVersionUID = -5093217611195212999L;
 
-	private final Map<File, T> fileResults = new HashMap<File, T>();
 	private final ProjectAnalyzer projectAnalyzer;
 	private final Map<String, SourceCodeQuality> qualities = new HashMap<String, SourceCodeQuality>();
+	private SourceCodeQuality projectQuality = SourceCodeQuality.UNSPECIFIED;
 
 	public AbstractProjectMetric(ProjectAnalyzer projectAnalyzer) {
 		super();
@@ -40,7 +40,9 @@ public abstract class AbstractProjectMetric<T extends CodeRangeEvaluator>
 			getMonitor().setRange(0, files.size());
 			getMonitor().setDescription(getName());
 		}
+		int sum = 0;
 		int count = 0;
+		int qualCount = 0;
 		Collections.sort(files);
 		for (File file : files) {
 			if (Thread.interrupted()) {
@@ -51,9 +53,15 @@ public abstract class AbstractProjectMetric<T extends CodeRangeEvaluator>
 				getMonitor().setStatus(count);
 			}
 			T t = processFile(file);
-			fileResults.put(file, t);
-			qualities.put(file.getPath(), t.getQuality());
+			SourceCodeQuality level = t.getQuality();
+			if (level != SourceCodeQuality.UNSPECIFIED) {
+				sum += level.getLevel();
+				qualCount++;
+			}
+			qualities.put(file.getPath(), level);
 		}
+		int result = (int) Math.round((double) sum / (double) qualCount);
+		projectQuality = SourceCodeQuality.fromLevel(result);
 		if (getMonitor() != null) {
 			getMonitor().finish();
 		}
@@ -63,18 +71,7 @@ public abstract class AbstractProjectMetric<T extends CodeRangeEvaluator>
 
 	@Override
 	public SourceCodeQuality getQuality() {
-		int sum = 0;
-		int count = 0;
-		for (File file : fileResults.keySet()) {
-			T metric = fileResults.get(file);
-			SourceCodeQuality level = metric.getQuality();
-			if (level != SourceCodeQuality.UNSPECIFIED) {
-				sum += level.getLevel();
-				count++;
-			}
-		}
-		int result = (int) Math.round((double) sum / (double) count);
-		return SourceCodeQuality.fromLevel(result);
+		return projectQuality;
 	}
 
 	@Override
