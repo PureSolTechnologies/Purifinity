@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import javax.i18n4java.Translator;
+
 import org.apache.log4j.Logger;
 import org.osgi.framework.BundleContext;
 
@@ -29,6 +31,8 @@ import com.puresol.utils.PersistenceException;
 public class Fortran extends AbstractProgrammingLanguage {
 
 	private static final Logger logger = Logger.getLogger(Fortran.class);
+	private static final Translator translator = Translator
+			.getTranslator(Fortran.class);
 
 	private static final String[] FILE_SUFFIXES = { ".f", ".f77", ".f90",
 			".f95", ".for" };
@@ -76,14 +80,19 @@ public class Fortran extends AbstractProgrammingLanguage {
 	@Override
 	public Analyzer restoreAnalyzer(File file) throws PersistenceException {
 		try {
-			ObjectInputStream ois = null;
-			ois = new ObjectInputStream(new FileInputStream(file));
+			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(
+					file));
 			try {
 				return (Analyzer) ois.readObject();
 			} finally {
 				ois.close();
 			}
 		} catch (ClassNotFoundException e) {
+			/*
+			 * In this case the analyzer could not be restored due to missing
+			 * classes. This happens with files from another language. We need
+			 * to signal this by returning null.
+			 */
 			return null;
 		} catch (FileNotFoundException e) {
 			throw new PersistenceException(e);
@@ -106,7 +115,12 @@ public class Fortran extends AbstractProgrammingLanguage {
 			@Override
 			public WalkingAction visit(ParserTree tree) {
 				try {
-					if ("main-program".equals(tree.getName())) {
+					if ("program".equals(tree.getName())) {
+						String name;
+						name = translator.i18n("File");
+						result.add(new CodeRange(name, CodeRangeType.PROGRAM,
+								tree));
+					} else if ("main-program".equals(tree.getName())) {
 						String name;
 						name = tree.getChild("program-stmt")
 								.getChildren("NAME_LITERAL").get(1).getText();
