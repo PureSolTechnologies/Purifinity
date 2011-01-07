@@ -18,11 +18,15 @@ import java.util.Map;
 
 import javax.i18n4java.Translator;
 
+import com.puresol.coding.CodeRange;
+import com.puresol.coding.CodeRangeType;
+import com.puresol.coding.analysis.Analyzer;
 import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.evaluator.EvaluatorOutput;
 import com.puresol.coding.evaluator.ProjectEvaluator;
 import com.puresol.coding.evaluator.Result;
+import com.puresol.coding.metrics.sloc.SLOCMetric;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.SourceCodeQuality;
 import com.puresol.uhura.ast.ParserTree;
@@ -90,8 +94,7 @@ public class CoCoMo extends AbstractEvaluator implements ProjectEvaluator {
 				count++;
 				getMonitor().setStatus(count);
 			}
-			int fileSLOC = getFileSLOC(file);
-			sloc += fileSLOC;
+			sloc += getFileSLOC(file);
 		}
 		cocomoValues.setSloc(sloc);
 		if (getMonitor() != null) {
@@ -100,15 +103,14 @@ public class CoCoMo extends AbstractEvaluator implements ProjectEvaluator {
 	}
 
 	private int getFileSLOC(File file) {
-		ParserTree parserTree = projectAnalyzer.getAnalyzer(file)
-				.getParserTree();
-		int sloc = getSLOC(parserTree);
+		Analyzer analyzer = projectAnalyzer.getAnalyzer(file);
+		ParserTree parserTree = analyzer.getParserTree();
+		SLOCMetric metric = new SLOCMetric(analyzer.getLanguage(),
+				new CodeRange("", CodeRangeType.FILE, parserTree));
+		metric.run();
+		int sloc = metric.getResult().getProLOC();
 		addCodeRangeCoCoMo(file, sloc);
 		return sloc;
-	}
-
-	private int getSLOC(ParserTree parserTree) {
-		return parserTree.getMetaData().getLineNum();
 	}
 
 	private void addCodeRangeCoCoMo(File file, int sloc) {
