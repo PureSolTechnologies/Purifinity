@@ -15,7 +15,7 @@ import com.puresol.uhura.lexer.TokenStream;
  * @author Rick-Rainer Ludwig
  * 
  */
-public interface Parser extends Serializable {
+public interface Parser extends Serializable, Cloneable {
 
 	/**
 	 * This method starts the parsing process on the given token stream and
@@ -43,4 +43,5 @@ public interface Parser extends Serializable {
 	public void generateInspectionInformation(File directory)
 			throws IOException, GrammarException;
 
+	public Parser clone();
 }

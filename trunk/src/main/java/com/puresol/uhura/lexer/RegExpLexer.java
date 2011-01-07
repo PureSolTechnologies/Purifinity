@@ -25,7 +25,7 @@ public class RegExpLexer implements Lexer {
 	private final Grammar grammar;
 
 	private TokenStream tokenStream = null;
-	private StringBuilder text = null;
+	private StringBuffer text = null;
 
 	public RegExpLexer(Grammar grammar) {
 		this.grammar = grammar;
@@ -53,7 +53,7 @@ public class RegExpLexer implements Lexer {
 
 	private void readToString(Reader reader) throws LexerException {
 		try {
-			text = new StringBuilder();
+			text = new StringBuffer();
 			char chars[] = new char[4096];
 			int len = 0;
 			do {
@@ -101,7 +101,7 @@ public class RegExpLexer implements Lexer {
 		return tokenStream;
 	}
 
-	private Token findNextToken(StringBuilder text, int id, int pos, int line) {
+	private Token findNextToken(StringBuffer text, int id, int pos, int line) {
 		Token nextToken = null;
 		for (TokenDefinition definition : grammar.getTokenDefinitions()
 				.getDefinitions()) {
@@ -125,5 +125,13 @@ public class RegExpLexer implements Lexer {
 			}
 		}
 		return nextToken;
+	}
+
+	@Override
+	public Lexer clone() {
+		RegExpLexer cloned = new RegExpLexer(grammar);
+		cloned.tokenStream = this.tokenStream;
+		cloned.text = this.text;
+		return cloned;
 	}
 }

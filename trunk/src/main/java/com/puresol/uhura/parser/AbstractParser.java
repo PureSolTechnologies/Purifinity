@@ -1,5 +1,7 @@
 package com.puresol.uhura.parser;
 
+import java.lang.reflect.Field;
+
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.lexer.TokenStream;
 
@@ -34,5 +36,28 @@ public abstract class AbstractParser implements Parser {
 	 */
 	protected final void setTokenStream(TokenStream tokenStream) {
 		this.tokenStream = tokenStream;
+	}
+
+	@Override
+	public Parser clone() {
+		try {
+			AbstractParser cloned = (AbstractParser) super.clone();
+			Field grammar = AbstractParser.class.getField("grammar");
+			grammar.setAccessible(true);
+			grammar.set(cloned, this.grammar);
+			grammar.setAccessible(false);
+			cloned.tokenStream = null;
+			return cloned;
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException(e);
+		} catch (IllegalArgumentException e) {
+			throw new RuntimeException(e);
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException(e);
+		} catch (SecurityException e) {
+			throw new RuntimeException(e);
+		} catch (NoSuchFieldException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

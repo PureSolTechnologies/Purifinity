@@ -1,5 +1,6 @@
 package com.puresol.uhura.parser.lr;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -21,6 +22,7 @@ import com.puresol.uhura.grammar.token.Visibility;
 import com.puresol.uhura.lexer.Token;
 import com.puresol.uhura.lexer.TokenStream;
 import com.puresol.uhura.parser.AbstractParser;
+import com.puresol.uhura.parser.Parser;
 import com.puresol.uhura.parser.ParserException;
 import com.puresol.uhura.parser.parsetable.ActionType;
 import com.puresol.uhura.parser.parsetable.ParserAction;
@@ -504,4 +506,78 @@ public abstract class AbstractLRParser extends AbstractParser {
 		return buffer.toString();
 	}
 
+	@Override
+	public Parser clone() {
+		try {
+			AbstractLRParser cloned = (AbstractLRParser) super.clone();
+
+			Field backtrackEnabled = cloned.getClass().getField(
+					"backtrackEnabled");
+			backtrackEnabled.setAccessible(true);
+			backtrackEnabled.set(cloned, this.backtrackEnabled);
+			backtrackEnabled.setAccessible(false);
+
+			Field backtrackDepth = cloned.getClass().getField("backtrackDepth");
+			backtrackDepth.setAccessible(true);
+			backtrackDepth.set(cloned, this.backtrackDepth);
+			backtrackDepth.setAccessible(false);
+
+			Field timeout = cloned.getClass().getField("timeout");
+			timeout.setAccessible(true);
+			timeout.set(cloned, this.timeout);
+			timeout.setAccessible(false);
+
+			Field excludeFailsEnabled = cloned.getClass().getField(
+					"excludeFailsEnabled");
+			excludeFailsEnabled.setAccessible(true);
+			excludeFailsEnabled.set(cloned, this.excludeFailsEnabled);
+			excludeFailsEnabled.setAccessible(false);
+
+			Field parserTable = cloned.getClass().getField("parserTable");
+			parserTable.setAccessible(true);
+			parserTable.set(cloned, this.parserTable);
+			parserTable.setAccessible(false);
+
+			Field backtrackStack = cloned.getClass().getField("backtrackStack");
+			backtrackStack.setAccessible(true);
+			backtrackStack.set(cloned, new Stack<BacktrackLocation>());
+			backtrackStack.setAccessible(false);
+
+			Field failedActions = cloned.getClass().getField("failedActions");
+			failedActions.setAccessible(true);
+			failedActions.set(cloned,
+					new HashMap<Integer, Map<Integer, Set<ParserAction>>>());
+			failedActions.setAccessible(false);
+
+			Field stateStack = cloned.getClass().getField("stateStack");
+			stateStack.setAccessible(true);
+			stateStack.set(cloned, new Stack<Integer>());
+			stateStack.setAccessible(false);
+
+			Field actionStack = cloned.getClass().getField("actionStack");
+			actionStack.setAccessible(true);
+			actionStack.set(cloned, new ArrayList<ParserAction>());
+			actionStack.setAccessible(false);
+
+			Field parserErrors = cloned.getClass().getField("parserErrors");
+			parserErrors.setAccessible(true);
+			parserErrors.set(cloned, new ParserErrors());
+			parserErrors.setAccessible(false);
+
+			cloned.startTime = 0;
+			cloned.maxPosition = 0;
+			cloned.streamPosition = 0;
+			cloned.stepCounter = 0;
+
+			return cloned;
+		} catch (SecurityException e) {
+			throw new RuntimeException(e);
+		} catch (NoSuchFieldException e) {
+			throw new RuntimeException(e);
+		} catch (IllegalArgumentException e) {
+			throw new RuntimeException(e);
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException(e);
+		}
+	}
 }
