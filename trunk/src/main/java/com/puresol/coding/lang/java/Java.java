@@ -94,14 +94,19 @@ public class Java extends AbstractProgrammingLanguage {
 	@Override
 	public Analyzer restoreAnalyzer(File file) throws PersistenceException {
 		try {
-			ObjectInputStream ois = null;
-			ois = new ObjectInputStream(new FileInputStream(file));
+			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(
+					file));
 			try {
 				return (Analyzer) ois.readObject();
 			} finally {
 				ois.close();
 			}
 		} catch (ClassNotFoundException e) {
+			/*
+			 * In this case the analyzer could not be restored due to missing
+			 * classes. This happens with files from another language. We need
+			 * to signal this by returning null.
+			 */
 			return null;
 		} catch (FileNotFoundException e) {
 			throw new PersistenceException(e);

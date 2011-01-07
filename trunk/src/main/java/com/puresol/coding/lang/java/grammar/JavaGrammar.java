@@ -27,6 +27,9 @@ public class JavaGrammar {
 
 	private static JavaGrammar instance = null;
 
+	private static Lexer lexer = null;
+	private static Parser parser = null;
+
 	public static JavaGrammar getInstance() {
 		if (instance == null) {
 			createInstance();
@@ -55,12 +58,27 @@ public class JavaGrammar {
 	}
 
 	public Lexer getLexer() throws IOException, PersistenceException {
-		return (Lexer) Persistence.restore(getClass().getResourceAsStream(
-				PERSISTED_LEXER_RESOURCE));
+		if (lexer == null) {
+			synchronized (this) {
+				if (lexer == null) {
+					lexer = (Lexer) Persistence.restore(getClass()
+							.getResourceAsStream(PERSISTED_LEXER_RESOURCE));
+
+				}
+			}
+		}
+		return lexer.clone();
 	}
 
 	public Parser getParser() throws IOException, PersistenceException {
-		return (Parser) Persistence.restore(getClass().getResourceAsStream(
-				PERSISTED_PARSER_RESOURCE));
+		if (parser == null) {
+			synchronized (this) {
+				if (parser == null) {
+					parser = (Parser) Persistence.restore(getClass()
+							.getResourceAsStream(PERSISTED_PARSER_RESOURCE));
+				}
+			}
+		}
+		return parser.clone();
 	}
 }
