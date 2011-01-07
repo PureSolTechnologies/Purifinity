@@ -511,55 +511,62 @@ public abstract class AbstractLRParser extends AbstractParser {
 		try {
 			AbstractLRParser cloned = (AbstractLRParser) super.clone();
 
-			Field backtrackEnabled = cloned.getClass().getField(
-					"backtrackEnabled");
+			Field backtrackEnabled = AbstractLRParser.class
+					.getDeclaredField("backtrackEnabled");
 			backtrackEnabled.setAccessible(true);
 			backtrackEnabled.set(cloned, this.backtrackEnabled);
 			backtrackEnabled.setAccessible(false);
 
-			Field backtrackDepth = cloned.getClass().getField("backtrackDepth");
+			Field backtrackDepth = AbstractLRParser.class
+					.getDeclaredField("backtrackDepth");
 			backtrackDepth.setAccessible(true);
 			backtrackDepth.set(cloned, this.backtrackDepth);
 			backtrackDepth.setAccessible(false);
 
-			Field timeout = cloned.getClass().getField("timeout");
+			Field timeout = AbstractLRParser.class.getDeclaredField("timeout");
 			timeout.setAccessible(true);
 			timeout.set(cloned, this.timeout);
 			timeout.setAccessible(false);
 
-			Field excludeFailsEnabled = cloned.getClass().getField(
-					"excludeFailsEnabled");
+			Field excludeFailsEnabled = AbstractLRParser.class
+					.getDeclaredField("excludeFailsEnabled");
 			excludeFailsEnabled.setAccessible(true);
 			excludeFailsEnabled.set(cloned, this.excludeFailsEnabled);
 			excludeFailsEnabled.setAccessible(false);
 
-			Field parserTable = cloned.getClass().getField("parserTable");
+			Field parserTable = AbstractLRParser.class
+					.getDeclaredField("parserTable");
 			parserTable.setAccessible(true);
 			parserTable.set(cloned, this.parserTable);
 			parserTable.setAccessible(false);
 
-			Field backtrackStack = cloned.getClass().getField("backtrackStack");
+			Field backtrackStack = AbstractLRParser.class
+					.getDeclaredField("backtrackStack");
 			backtrackStack.setAccessible(true);
 			backtrackStack.set(cloned, new Stack<BacktrackLocation>());
 			backtrackStack.setAccessible(false);
 
-			Field failedActions = cloned.getClass().getField("failedActions");
+			Field failedActions = AbstractLRParser.class
+					.getDeclaredField("failedActions");
 			failedActions.setAccessible(true);
 			failedActions.set(cloned,
 					new HashMap<Integer, Map<Integer, Set<ParserAction>>>());
 			failedActions.setAccessible(false);
 
-			Field stateStack = cloned.getClass().getField("stateStack");
+			Field stateStack = AbstractLRParser.class
+					.getDeclaredField("stateStack");
 			stateStack.setAccessible(true);
 			stateStack.set(cloned, new Stack<Integer>());
 			stateStack.setAccessible(false);
 
-			Field actionStack = cloned.getClass().getField("actionStack");
+			Field actionStack = AbstractLRParser.class
+					.getDeclaredField("actionStack");
 			actionStack.setAccessible(true);
 			actionStack.set(cloned, new ArrayList<ParserAction>());
 			actionStack.setAccessible(false);
 
-			Field parserErrors = cloned.getClass().getField("parserErrors");
+			Field parserErrors = AbstractLRParser.class
+					.getDeclaredField("parserErrors");
 			parserErrors.setAccessible(true);
 			parserErrors.set(cloned, new ParserErrors());
 			parserErrors.setAccessible(false);

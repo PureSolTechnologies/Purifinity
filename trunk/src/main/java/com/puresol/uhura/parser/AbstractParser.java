@@ -42,7 +42,7 @@ public abstract class AbstractParser implements Parser {
 	public Parser clone() {
 		try {
 			AbstractParser cloned = (AbstractParser) super.clone();
-			Field grammar = AbstractParser.class.getField("grammar");
+			Field grammar = AbstractParser.class.getDeclaredField("grammar");
 			grammar.setAccessible(true);
 			grammar.set(cloned, this.grammar);
 			grammar.setAccessible(false);
