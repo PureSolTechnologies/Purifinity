@@ -12,8 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import javax.i18n4java.Translator;
-
 import org.apache.log4j.Logger;
 import org.osgi.framework.BundleContext;
 
@@ -31,8 +29,6 @@ import com.puresol.utils.PersistenceException;
 public class Fortran extends AbstractProgrammingLanguage {
 
 	private static final Logger logger = Logger.getLogger(Fortran.class);
-	private static final Translator translator = Translator
-			.getTranslator(Fortran.class);
 
 	private static final String[] FILE_SUFFIXES = { ".f", ".f77", ".f90",
 			".f95", ".for" };
@@ -108,21 +104,16 @@ public class Fortran extends AbstractProgrammingLanguage {
 
 	@Override
 	public List<CodeRange> getAnalyzableCodeRanges(ParserTree parserTree) {
-		TreeWalker<ParserTree> walker = new TreeWalker<ParserTree>(parserTree);
 		final List<CodeRange> result = new ArrayList<CodeRange>();
+		result.add(new CodeRange("", CodeRangeType.FILE, parserTree));
+		TreeWalker<ParserTree> walker = new TreeWalker<ParserTree>(parserTree);
 		walker.walk(new TreeVisitor<ParserTree>() {
 
 			@Override
 			public WalkingAction visit(ParserTree tree) {
 				try {
-					if ("program".equals(tree.getName())) {
-						String name;
-						name = translator.i18n("File");
-						result.add(new CodeRange(name, CodeRangeType.PROGRAM,
-								tree));
-					} else if ("main-program".equals(tree.getName())) {
-						String name;
-						name = tree.getChild("program-stmt")
+					if ("main-program".equals(tree.getName())) {
+						String name = tree.getChild("program-stmt")
 								.getChildren("NAME_LITERAL").get(1).getText();
 						result.add(new CodeRange(name, CodeRangeType.PROGRAM,
 								tree));

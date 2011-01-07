@@ -111,7 +111,7 @@
 
 	WHITESPACE : '[ \\t]+' [ignore] ;
 	LINE_TERMINATOR : '(\\n|\\r\n|\\r)' ; // removed [hide]
-	LINE_COMMENT : 		'![^\\n\\r]*' LINE_TERMINATOR; // removed [hide]
+	LINE_COMMENT : '![^\\n\\r]*' LINE_TERMINATOR; // removed [hide]
 	LINE_CONCATATION : AMPERSAND '[ \\t]*' LINE_TERMINATOR [ignore];
 
 	/*

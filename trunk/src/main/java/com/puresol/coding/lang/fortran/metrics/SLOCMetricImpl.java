@@ -8,17 +8,15 @@ public class SLOCMetricImpl implements LanguageDependedSLOCMetric {
 
 	@Override
 	public SLOCType getType(Token token) {
-		if (token.getName().equals("LINE_COMMENT")) {
+		if ("LINE_COMMENT".equals(token.getName())
+				|| "COMMENT_LINE".equals(token.getName())) {
 			return SLOCType.COMMENT;
 		}
-		if (token.getName().equals("WHITESPACE")
-				|| token.getName().equals("LINE_CONCATATION")) {
+		if ("WHITESPACE".equals(token.getName())
+				|| "LINE_CONCATATION".equals(token.getName())
+				|| "LINE_TERMINATOR".equals(token.getName())) {
 			return SLOCType.BLANK;
 		}
-		if (!token.getName().equals("LINE_TERMINATOR")) {
-			return SLOCType.PRODUCTIVE;
-		}
-		return SLOCType.PHYSICAL;
+		return SLOCType.PRODUCTIVE;
 	}
-
 }
