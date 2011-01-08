@@ -1,15 +1,19 @@
 package com.puresol.coding.metrics.codedepth;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.puresol.coding.CodeRange;
-import com.puresol.coding.CodeRangeType;
+import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.analysis.Analyzer;
 import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.evaluator.EvaluatorOutput;
 import com.puresol.coding.metrics.AbstractProjectMetric;
 import com.puresol.coding.quality.QualityCharacteristic;
+import com.puresol.coding.quality.SourceCodeQuality;
+import com.puresol.uhura.ast.ParserTree;
 
 public class ProjectCodeDepthMetric extends
 		AbstractProjectMetric<CodeDepthMetric> {
@@ -21,13 +25,20 @@ public class ProjectCodeDepthMetric extends
 	}
 
 	@Override
-	protected CodeDepthMetric processFile(File file) {
+	protected Map<String, SourceCodeQuality> processFile(File file) {
+		Map<String, SourceCodeQuality> results = new HashMap<String, SourceCodeQuality>();
+
 		Analyzer analyzer = getProjectAnalyzer().getAnalyzer(file);
-		CodeDepthMetric metric = new CodeDepthMetric(analyzer.getLanguage(),
-				new CodeRange(file.getPath(), CodeRangeType.FILE,
-						analyzer.getParserTree()));
-		metric.run();
-		return metric;
+		ProgrammingLanguage language = analyzer.getLanguage();
+		ParserTree parserTree = analyzer.getParserTree();
+
+		for (CodeRange codeRange : language.getAnalyzableCodeRanges(parserTree)) {
+			CodeDepthMetric metric = new CodeDepthMetric(language, codeRange);
+			metric.run();
+			results.put(file.toString() + ": " + codeRange.getType().getName()
+					+ " '" + codeRange.getName() + "'", metric.getQuality());
+		}
+		return results;
 	}
 
 	@Override

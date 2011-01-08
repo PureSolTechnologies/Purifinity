@@ -52,13 +52,14 @@ public abstract class AbstractProjectMetric<T extends CodeRangeEvaluator>
 				count++;
 				getMonitor().setStatus(count);
 			}
-			T t = processFile(file);
-			SourceCodeQuality level = t.getQuality();
-			if (level != SourceCodeQuality.UNSPECIFIED) {
-				sum += level.getLevel();
-				qualCount++;
+			Map<String, SourceCodeQuality> levels = processFile(file);
+			qualities.putAll(levels);
+			for (SourceCodeQuality level : levels.values()) {
+				if (level != SourceCodeQuality.UNSPECIFIED) {
+					sum += level.getLevel();
+					qualCount++;
+				}
 			}
-			qualities.put(file.getPath(), level);
 		}
 		int result = (int) Math.round((double) sum / (double) qualCount);
 		projectQuality = SourceCodeQuality.fromLevel(result);
@@ -67,7 +68,7 @@ public abstract class AbstractProjectMetric<T extends CodeRangeEvaluator>
 		}
 	}
 
-	abstract protected T processFile(File file);
+	abstract protected Map<String, SourceCodeQuality> processFile(File file);
 
 	@Override
 	public SourceCodeQuality getQuality() {

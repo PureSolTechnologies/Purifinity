@@ -1,15 +1,19 @@
 package com.puresol.coding.metrics.normmaint;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.puresol.coding.CodeRange;
-import com.puresol.coding.CodeRangeType;
+import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.analysis.Analyzer;
 import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.evaluator.EvaluatorOutput;
 import com.puresol.coding.metrics.AbstractProjectMetric;
 import com.puresol.coding.quality.QualityCharacteristic;
+import com.puresol.coding.quality.SourceCodeQuality;
+import com.puresol.uhura.ast.ParserTree;
 
 public class ProjectNormalizedMaintainabilityIndex extends
 		AbstractProjectMetric<NormalizedMaintainabilityIndex> {
@@ -21,13 +25,22 @@ public class ProjectNormalizedMaintainabilityIndex extends
 	}
 
 	@Override
-	protected NormalizedMaintainabilityIndex processFile(File file) {
+	protected Map<String, SourceCodeQuality> processFile(File file) {
+
+		Map<String, SourceCodeQuality> results = new HashMap<String, SourceCodeQuality>();
+
 		Analyzer analyzer = getProjectAnalyzer().getAnalyzer(file);
-		NormalizedMaintainabilityIndex metric = new NormalizedMaintainabilityIndex(
-				analyzer.getLanguage(), new CodeRange(file.getPath(),
-						CodeRangeType.FILE, analyzer.getParserTree()));
-		metric.run();
-		return metric;
+		ProgrammingLanguage language = analyzer.getLanguage();
+		ParserTree parserTree = analyzer.getParserTree();
+
+		for (CodeRange codeRange : language.getAnalyzableCodeRanges(parserTree)) {
+			NormalizedMaintainabilityIndex metric = new NormalizedMaintainabilityIndex(
+					language, codeRange);
+			metric.run();
+			results.put(file.toString() + ": " + codeRange.getType().getName()
+					+ " '" + codeRange.getName() + "'", metric.getQuality());
+		}
+		return results;
 	}
 
 	@Override
