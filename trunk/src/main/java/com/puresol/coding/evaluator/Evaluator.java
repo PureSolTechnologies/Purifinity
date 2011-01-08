@@ -3,12 +3,12 @@ package com.puresol.coding.evaluator;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import javax.swingx.progress.ProgressObservable;
 
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.SourceCodeQuality;
+import com.puresol.document.Document;
 
 /**
  * This interface is the main interface for all evaluators and the general
@@ -55,25 +55,13 @@ public interface Evaluator extends ProgressObservable, Runnable, Serializable {
 	public List<Result> getResults();
 
 	/**
-	 * This method returns a map with qualities which were evaluated for
-	 * different parts. The key is the name of the part and the associated value
-	 * is the quality of the part.
-	 * 
-	 * The content of the map is for reporting purposes.
+	 * This method returns an abstract document which contains a detailed report
+	 * about the evaluation. This report can be converted into different output
+	 * formats to meet the demands of the user.
 	 * 
 	 * @return
 	 */
-	public Map<String, SourceCodeQuality> getPartQualities();
-
-	/**
-	 * This method returns a list of string. The strings represent different
-	 * paragraphs of a text whihch was generated during evaluation.
-	 * 
-	 * The content of this list is for reporting purposes.
-	 * 
-	 * @return
-	 */
-	public List<EvaluatorOutput> getTextOutput();
+	public Document getReport();
 
 	/**
 	 * This method returns the quality level after an evalutation was performed.

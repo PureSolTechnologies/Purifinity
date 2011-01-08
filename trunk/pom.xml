@@ -94,6 +94,11 @@
 			<artifactId>uhura</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>com.puresol</groupId>
+			<artifactId>DocumentBuilder</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 	<reporting>
 		<plugins>
