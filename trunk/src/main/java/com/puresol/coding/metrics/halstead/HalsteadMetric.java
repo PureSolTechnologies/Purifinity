@@ -13,7 +13,6 @@ package com.puresol.coding.metrics.halstead;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
-import java.util.Map;
 
 import javax.i18n4java.Translator;
 
@@ -26,6 +25,11 @@ import com.puresol.coding.evaluator.EvaluatorOutput;
 import com.puresol.coding.evaluator.Result;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.SourceCodeQuality;
+import com.puresol.document.Chapter;
+import com.puresol.document.Document;
+import com.puresol.document.Paragraph;
+import com.puresol.document.Section;
+import com.puresol.document.Table;
 import com.puresol.trees.TreeIterator;
 import com.puresol.uhura.ast.ParserTree;
 import com.puresol.utils.Property;
@@ -316,12 +320,38 @@ public class HalsteadMetric extends AbstractEvaluator implements
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Map<String, SourceCodeQuality> getPartQualities() {
-		return null;
-	}
-
-	@Override
-	public List<EvaluatorOutput> getTextOutput() {
-		return resultText;
+	public Document getReport() {
+		Document document = new Document(getName());
+		Chapter descriptionChapter = new Chapter(document,
+				translator.i18n("Description"));
+		for (String paragraph : getDescription().split("\\n")) {
+			new Paragraph(descriptionChapter, paragraph);
+		}
+		Chapter resultsSummaryChapter = new Chapter(document,
+				translator.i18n("Results Summary"));
+		Table resultsTable = new Table(resultsSummaryChapter, "Results Table",
+				translator.i18n("Symbol"), translator.i18n("Value"),
+				translator.i18n("Unit"), translator.i18n("Description"));
+		for (Result result : getResults()) {
+			resultsTable.addRow(result.getName(), result.getValue(),
+					result.getUnit(), result.getDescription());
+		}
+		Chapter symbolChapter = new Chapter(document,
+				translator.i18n("Overview of Symbols"));
+		Section operatorSection = new Section(symbolChapter,
+				translator.i18n("Operators"));
+		Table symbolTable = new Table(operatorSection, "Table of Operators",
+				translator.i18n("Operator"), translator.i18n("Count"));
+		for (String operator : operators.keySet()) {
+			symbolTable.addRow(operator, operators.get(operator));
+		}
+		Section operantsSection = new Section(symbolChapter,
+				translator.i18n("Operants"));
+		Table operantsTable = new Table(operantsSection, "Table of Operants",
+				translator.i18n("Operator"), translator.i18n("Count"));
+		for (String operant : operants.keySet()) {
+			operantsTable.addRow(operant, operators.get(operant));
+		}
+		return document;
 	}
 }

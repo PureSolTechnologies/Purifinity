@@ -12,15 +12,12 @@ package com.puresol.coding.metrics.maintainability;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
 import javax.i18n4java.Translator;
 
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.evaluator.CodeRangeEvaluator;
-import com.puresol.coding.evaluator.EvaluatorOutput;
 import com.puresol.coding.evaluator.Result;
 import com.puresol.coding.metrics.halstead.HalsteadMetric;
 import com.puresol.coding.metrics.mccabe.McCabeMetric;
@@ -28,6 +25,10 @@ import com.puresol.coding.metrics.sloc.SLOCMetric;
 import com.puresol.coding.metrics.sloc.SLOCResult;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.SourceCodeQuality;
+import com.puresol.document.Chapter;
+import com.puresol.document.Document;
+import com.puresol.document.Paragraph;
+import com.puresol.document.Table;
 import com.puresol.utils.Property;
 
 public class MaintainabilityIndex extends AbstractEvaluator implements
@@ -221,12 +222,23 @@ public class MaintainabilityIndex extends AbstractEvaluator implements
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Map<String, SourceCodeQuality> getPartQualities() {
-		return null;
-	}
+	public Document getReport() {
+		Document document = new Document(getName());
+		Chapter descriptionChapter = new Chapter(document,
+				translator.i18n("Description"));
+		for (String paragraph : getDescription().split("\\n")) {
+			new Paragraph(descriptionChapter, paragraph);
+		}
+		Chapter resultsSummaryChapter = new Chapter(document,
+				translator.i18n("Results Summary"));
+		Table resultsTable = new Table(resultsSummaryChapter, "Results Table",
+				translator.i18n("Symbol"), translator.i18n("Value"),
+				translator.i18n("Unit"), translator.i18n("Description"));
 
-	@Override
-	public List<EvaluatorOutput> getTextOutput() {
-		return null;
+		for (Result result : getResults()) {
+			resultsTable.addRow(result.getName(), result.getValue(),
+					result.getUnit(), result.getDescription());
+		}
+		return document;
 	}
 }

@@ -6,17 +6,26 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.i18n4java.Translator;
+
 import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.evaluator.CodeRangeEvaluator;
 import com.puresol.coding.evaluator.ProjectEvaluator;
 import com.puresol.coding.evaluator.Result;
 import com.puresol.coding.quality.SourceCodeQuality;
+import com.puresol.document.Chapter;
+import com.puresol.document.Document;
+import com.puresol.document.Paragraph;
+import com.puresol.document.Table;
 
 public abstract class AbstractProjectMetric<T extends CodeRangeEvaluator>
 		extends AbstractEvaluator implements ProjectEvaluator {
 
 	private static final long serialVersionUID = -5093217611195212999L;
+
+	private static final Translator translator = Translator
+			.getTranslator(AbstractProjectMetric.class);
 
 	private final ProjectAnalyzer projectAnalyzer;
 	private final Map<String, SourceCodeQuality> qualities = new HashMap<String, SourceCodeQuality>();
@@ -81,7 +90,33 @@ public abstract class AbstractProjectMetric<T extends CodeRangeEvaluator>
 	}
 
 	@Override
-	public Map<String, SourceCodeQuality> getPartQualities() {
-		return qualities;
+	public Document getReport() {
+		Document document = new Document(getName());
+		Chapter descriptionChapter = new Chapter(document,
+				translator.i18n("Description"));
+		for (String paragraph : getDescription().split("\\n")) {
+			new Paragraph(descriptionChapter, paragraph);
+		}
+		if (getResults() != null) {
+			Chapter resultsSummaryChapter = new Chapter(document,
+					translator.i18n("Results Summary"));
+			Table resultsTable = new Table(resultsSummaryChapter,
+					"Results Table", translator.i18n("Symbol"),
+					translator.i18n("Value"), translator.i18n("Unit"),
+					translator.i18n("Description"));
+			for (Result result : getResults()) {
+				resultsTable.addRow(result.getName(), result.getValue(),
+						result.getUnit(), result.getDescription());
+			}
+		}
+		Chapter partQualityChapter = new Chapter(document,
+				translator.i18n("Quality of Parts"));
+		Table partQualityTable = new Table(partQualityChapter,
+				"Table of Part Qualities", translator.i18n("Operator"),
+				translator.i18n("Count"));
+		for (String partName : qualities.keySet()) {
+			partQualityTable.addRow(partName, qualities.get(partName));
+		}
+		return document;
 	}
 }

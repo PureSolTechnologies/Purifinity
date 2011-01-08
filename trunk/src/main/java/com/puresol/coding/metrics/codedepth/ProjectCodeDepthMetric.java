@@ -9,7 +9,6 @@ import com.puresol.coding.CodeRange;
 import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.analysis.Analyzer;
 import com.puresol.coding.analysis.ProjectAnalyzer;
-import com.puresol.coding.evaluator.EvaluatorOutput;
 import com.puresol.coding.metrics.AbstractProjectMetric;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.SourceCodeQuality;
@@ -56,8 +55,4 @@ public class ProjectCodeDepthMetric extends
 		return CodeDepthMetric.EVALUATED_QUALITY_CHARACTERISTICS;
 	}
 
-	@Override
-	public List<EvaluatorOutput> getTextOutput() {
-		return null;
-	}
 }
