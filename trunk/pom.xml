@@ -36,8 +36,8 @@
 					<check>
 						<branchRate>0</branchRate>
 						<lineRate>0</lineRate>
-						<totalBranchRate>10</totalBranchRate>
-						<totalLineRate>10</totalLineRate>
+						<totalBranchRate>20</totalBranchRate>
+						<totalLineRate>20</totalLineRate>
 					</check>
 				</configuration>
 				<executions>
