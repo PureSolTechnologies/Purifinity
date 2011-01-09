@@ -350,7 +350,7 @@ public class HalsteadMetric extends AbstractEvaluator implements
 		Table operantsTable = new Table(operantsSection, "Table of Operants",
 				translator.i18n("Operator"), translator.i18n("Count"));
 		for (String operant : operants.keySet()) {
-			operantsTable.addRow(operant, operators.get(operant));
+			operantsTable.addRow(operant, operants.get(operant));
 		}
 		return document;
 	}
