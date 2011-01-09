@@ -4,10 +4,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
+
+import com.puresol.trees.FileTree;
 
 public class FileUtilities {
 
@@ -178,5 +181,24 @@ public class FileUtilities {
 			}
 		}
 		file.delete();
+	}
+
+	public static FileTree convertFileListToTree(List<File> files) {
+		FileTree top = new FileTree(null, "/");
+		for (File file : files) {
+			String[] pathComponents = file.getPath().split(File.separator);
+			FileTree current = top;
+			for (String component : pathComponents) {
+				if (component.isEmpty()) {
+					continue;
+				}
+				FileTree child = current.getChild(component);
+				if (child == null) {
+					child = new FileTree(current, component);
+				}
+				current = child;
+			}
+		}
+		return top;
 	}
 }
