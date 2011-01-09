@@ -65,8 +65,7 @@ public class CodeAnalysis extends PureSolApplication {
 
 	private void startOSGi() {
 		try {
-			osgi = OSGiFrameworkManager.createInstance(CodeAnalysis.class
-					.getName());
+			osgi = OSGiFrameworkManager.getInstance();
 			osgi.start();
 		} catch (OSGiException e) {
 			logger.error(e.getMessage(), e);
@@ -96,8 +95,8 @@ public class CodeAnalysis extends PureSolApplication {
 		MenuItem updateWorkspace = new MenuItem("Update Workspace");
 		updateWorkspace.connect("start", this, "updateWorkspace");
 
-		MenuItem createEvaluatorHTML = new MenuItem("Create Evaluator HTML...");
-		createEvaluatorHTML.connect("start", this, "createEvaluatorHTML");
+		MenuItem createEvaluatorHTML = new MenuItem("Create HTML Project...");
+		createEvaluatorHTML.connect("start", this, "createHTMLProject");
 
 		MenuItem exit = new MenuItem("Exit");
 		exit.connect("start", this, "quit");
@@ -188,43 +187,14 @@ public class CodeAnalysis extends PureSolApplication {
 	}
 
 	@Slot
-	void createEvaluatorHTML() {
-		// TODO
+	void createHTMLProject() {
+		JFileChooser chooser = new JFileChooser();
+		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		int result = chooser.showSaveDialog(Application.getInstance());
+		if (result == JFileChooser.CANCEL_OPTION) {
+			return;
+		}
 		Application.showNotImplementedMessage();
-		// JFileChooser chooser = new JFileChooser();
-		// chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		// int result = chooser.showSaveDialog(Application.getInstance());
-		// if (result == JFileChooser.CANCEL_OPTION) {
-		// return;
-		// }
-		// CentralProjectEvaluator evaluator = browser.getCodeEvaluator();
-		// if (evaluator != null) {
-		// try {
-		// EvaluationReport.report(evaluator, chooser.getSelectedFile(),
-		// ReportingFormat.HTML);
-		// Desktop.getDesktop().browse(
-		// new URI("file://"
-		// + FileUtilities.addPaths(chooser
-		// .getSelectedFile(), new File(
-		// "index.html"))));
-		// } catch (UnsupportedReportingFormatException e) {
-		// JOptionPane.showMessageDialog(Application.getInstance(),
-		// translator.i18n("No report generation possible!")
-		// + "\n" + e.getMessage(),
-		// translator.i18n("Error"), JOptionPane.ERROR_MESSAGE);
-		// } catch (IOException e) {
-		// logger.error(e.getMessage(), e);
-		// } catch (URISyntaxException e) {
-		// logger.error(e.getMessage(), e);
-		// }
-		// } else {
-		// JOptionPane
-		// .showMessageDialog(
-		// Application.getInstance(),
-		// translator
-		// .i18n("No report generation possible!\nNo evaluation was performed."),
-		// translator.i18n("Error"), JOptionPane.ERROR_MESSAGE);
-		// }
 	}
 
 	@Slot
@@ -260,7 +230,6 @@ public class CodeAnalysis extends PureSolApplication {
 		try {
 			osgi.stop();
 			osgi = null;
-			OSGiFrameworkManager.deleteInstance(CodeAnalysis.class.getName());
 		} catch (BundleException e) {
 			logger.error(e.getMessage(), e);
 		}
