@@ -122,8 +122,8 @@ public class CodeRangeEvaluatorPanel extends Panel {
 		Evaluator evaluator = evaluatorFactory.create(analyzer.getLanguage(),
 				codeRange.getCodeRange());
 		ProgressWindow progress = new ProgressWindow(evaluator);
-		progress.run();
 		progress.connect("finished", this, "finished", ProgressObservable.class);
+		progress.run();
 	}
 
 	@Slot
