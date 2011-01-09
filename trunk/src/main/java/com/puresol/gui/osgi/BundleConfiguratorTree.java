@@ -11,7 +11,7 @@ public class BundleConfiguratorTree implements Tree<BundleConfiguratorTree> {
 		BundleConfiguratorTree root = new BundleConfiguratorTree(null,
 				"Configurators", null);
 		for (BundleConfigurator configurator : BundleConfiguratorManager
-				.getAll(frameworkName)) {
+				.getAll()) {
 			String path[] = configurator.getPathName().split("/");
 			BundleConfiguratorTree node = root;
 			for (int id = 0; id < path.length; id++) {

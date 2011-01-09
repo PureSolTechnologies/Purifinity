@@ -1,9 +1,7 @@
 package com.puresol.osgi;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
@@ -19,26 +17,24 @@ import org.osgi.framework.ServiceReference;
  */
 public class OSGiFrameworkManager {
 
-	private static final Map<String, OSGi> frameworks = new HashMap<String, OSGi>();
+	private static OSGi osgi = null;
 
-	public static OSGi getInstance(String name) {
-		return frameworks.get(name);
+	public static OSGi getInstance() {
+		if (osgi == null) {
+			createInstance();
+		}
+		return osgi;
 	}
 
-	public static OSGi createInstance(String name) {
-		frameworks.put(name, new OSGi());
-		return getInstance(name);
+	private static synchronized void createInstance() {
+		if (osgi == null) {
+			osgi = new OSGi();
+		}
 	}
 
-	public static void deleteInstance(String name) {
-		frameworks.get(name);
-	}
-
-	public static <T> List<T> getServices(String frameworkName,
-			String serviceName, String filter, Class<T> clazz)
+	public static <T> List<T> getServices(String serviceName, String filter)
 			throws InvalidSyntaxException {
 		List<T> services = new ArrayList<T>();
-		OSGi osgi = OSGiFrameworkManager.getInstance(frameworkName);
 		if (osgi == null) {
 			return services;
 		}
