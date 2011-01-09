@@ -81,7 +81,7 @@ public class FileUtilitiesTest {
 		files.add(new File("/test2/test21/File4.txt"));
 		files.add(new File("/test3/test31/File5.txt"));
 		assertEquals(5, files.size());
-		FileTree tree = FileUtilities.convertFileListToTree(files);
+		FileTree tree = FileUtilities.convertFileListToTree("/", files);
 
 		TreePrinter printer = new TreePrinter(System.out);
 		printer.println(tree);

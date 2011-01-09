@@ -49,6 +49,9 @@ public class TreeViewer<T extends com.puresol.trees.Tree<T>> extends Tree {
 
 	public T getSelection() {
 		TreePath path = getSelectionPath();
+		if (path == null) {
+			return null;
+		}
 		@SuppressWarnings("unchecked")
 		T t = (T) path.getLastPathComponent();
 		return t;
@@ -66,7 +69,7 @@ public class TreeViewer<T extends com.puresol.trees.Tree<T>> extends Tree {
 		valueChanged(t);
 	}
 
-	public void setDataTree(T dataTree) {
+	public void setTreeData(T dataTree) {
 		treeModel.setDataTree(dataTree);
 	}
 

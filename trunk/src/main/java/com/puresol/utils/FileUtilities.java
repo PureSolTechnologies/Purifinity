@@ -183,8 +183,9 @@ public class FileUtilities {
 		file.delete();
 	}
 
-	public static FileTree convertFileListToTree(List<File> files) {
-		FileTree top = new FileTree(null, "/");
+	public static FileTree convertFileListToTree(String rootName,
+			List<File> files) {
+		FileTree top = new FileTree(null, rootName);
 		for (File file : files) {
 			String[] pathComponents = file.getPath().split(File.separator);
 			FileTree current = top;

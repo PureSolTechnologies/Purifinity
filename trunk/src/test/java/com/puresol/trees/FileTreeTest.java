@@ -24,7 +24,7 @@ public class FileTreeTest {
 		files.add(new File("/test2/test21/File4.txt"));
 		files.add(new File("/test3/test31/File5.txt"));
 		assertEquals(5, files.size());
-		tree = FileUtilities.convertFileListToTree(files);
+		tree = FileUtilities.convertFileListToTree("/", files);
 	}
 
 	@Test
