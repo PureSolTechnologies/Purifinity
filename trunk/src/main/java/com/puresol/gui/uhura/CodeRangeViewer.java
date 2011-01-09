@@ -7,6 +7,7 @@ import javax.swingx.CodeViewer;
 import javax.swingx.Label;
 import javax.swingx.ScrollPane;
 
+import com.puresol.coding.CodeRange;
 import com.puresol.trees.TreeIterator;
 import com.puresol.uhura.ast.ParserTree;
 import com.puresol.uhura.ast.ParserTreeMetaData;
@@ -19,7 +20,7 @@ public class CodeRangeViewer extends BorderLayoutWidget {
 	private static final Translator translator = Translator
 			.getTranslator(CodeRangeViewer.class);
 
-	private ParserTree parserTree;
+	private CodeRange codeRange;
 	private Label information;
 	private CodeViewer code;
 
@@ -28,10 +29,10 @@ public class CodeRangeViewer extends BorderLayoutWidget {
 		initUI();
 	}
 
-	public CodeRangeViewer(ParserTree ast) {
+	public CodeRangeViewer(CodeRange codeRange) {
 		super();
 		initUI();
-		setParserTree(ast);
+		setCodeRange(codeRange);
 	}
 
 	private void initUI() {
@@ -45,15 +46,16 @@ public class CodeRangeViewer extends BorderLayoutWidget {
 		setCenter(new ScrollPane(code));
 	}
 
-	public void setParserTree(ParserTree parserTree) {
-		this.parserTree = parserTree;
+	public void setCodeRange(CodeRange codeRange) {
+		this.codeRange = codeRange;
 		refresh();
 	}
 
 	public void refresh() {
-		if (parserTree == null) {
+		if (codeRange == null) {
 			code.setText("No information available yet!");
 		} else {
+			ParserTree parserTree = codeRange.getParserTree();
 			ParserTreeMetaData metaData = parserTree.getMetaData();
 			if (metaData != null) {
 				information.setText(metaData.getSourceName());

@@ -250,7 +250,7 @@ public class CodeAnalysis extends PureSolApplication {
 
 	@Slot
 	void refresh() {
-		this.setSubtitle(analyser.getWorkspaceDirectory().getPath());
+		setSubtitle(analyser.getWorkspaceDirectory().getPath());
 		browser.setProjectAnalyser(analyser);
 	}
 

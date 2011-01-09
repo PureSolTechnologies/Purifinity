@@ -23,10 +23,11 @@ import javax.swingx.TabbedPane;
 import javax.swingx.config.APIInformation;
 import javax.swingx.connect.Slot;
 
+import com.puresol.gui.TreeViewer;
 import com.puresol.gui.uhura.ASCIITreeViewer;
 import com.puresol.gui.uhura.GrammarSchematic;
-import com.puresol.gui.uhura.ParserTreeViewer;
 import com.puresol.trees.TreeException;
+import com.puresol.uhura.ast.ParserTree;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarConverter;
 import com.puresol.uhura.grammar.GrammarException;
@@ -49,7 +50,7 @@ public class GrammarViewer extends Application {
 	private SaveableCodeViewer bnf;
 	private ASCIITreeViewer ast;
 	private GrammarSchematic schematic;
-	private ParserTreeViewer parserTreeViewer;
+	private TreeViewer<ParserTree> parserTreeViewer;
 
 	public GrammarViewer() {
 		super("Nyota Uhura Grammar Viewer", APIInformation.getPackageVersion());
@@ -108,7 +109,7 @@ public class GrammarViewer extends Application {
 		ast = new ASCIITreeViewer();
 		tabbedPane.add(new ScrollPane(ast), "ASCII Tree");
 
-		parserTreeViewer = new ParserTreeViewer();
+		parserTreeViewer = new TreeViewer<ParserTree>();
 		tabbedPane.add(new ScrollPane(parserTreeViewer), "Parser Tree Viewer");
 
 		schematic = new GrammarSchematic();
@@ -182,7 +183,7 @@ public class GrammarViewer extends Application {
 
 			ast.setGrammarAST(grammarFile.getAST());
 			schematic.setGrammarAST(grammarFile.getAST());
-			parserTreeViewer.setParserTree(grammarFile.getAST());
+			parserTreeViewer.setTreeData(grammarFile.getAST());
 
 			GrammarConverter converter = new GrammarConverter(
 					grammarFile.getAST());

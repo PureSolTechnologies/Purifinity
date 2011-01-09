@@ -6,6 +6,7 @@ import java.util.Vector;
 
 import javax.i18n4java.Translator;
 import javax.swing.BoxLayout;
+import javax.swing.JSplitPane;
 import javax.swing.border.TitledBorder;
 import javax.swingx.List;
 import javax.swingx.Panel;
@@ -37,7 +38,7 @@ public class CodeRangeChooser extends Panel {
 
 	private ProjectAnalyzer projectAnalyser = null;
 
-	private final AnalyzedFileChooser fileList = new AnalyzedFileChooser();
+	private final AnalyzedFileChooser fileChooser = new AnalyzedFileChooser();
 	private final List codeRangeList = new List();
 
 	public CodeRangeChooser() {
@@ -54,19 +55,20 @@ public class CodeRangeChooser extends Panel {
 	private void initUI() {
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
-		fileList.connect("fileChanged", this, "fileSelected", File.class);
-		// ScrollPane fileScroller = new ScrollPane(fileList);
-		// fileScroller.setBorder(new TitledBorder(translator
-		// .i18n("Analyzed Files")));
-		// add(fileScroller);
-		add(fileList);
+		fileChooser.setBorder(new TitledBorder(translator
+				.i18n("Analyzed Files")));
+		fileChooser.connect("fileChanged", this, "fileSelected", File.class);
 
 		codeRangeList.connect("valueChanged", this, "codeRangeSelected",
 				Object.class);
+
 		ScrollPane codeRangeScroller = new ScrollPane(codeRangeList);
 		codeRangeScroller.setBorder(new TitledBorder(translator
 				.i18n("Analyzable Code Ranges")));
-		add(codeRangeScroller);
+
+		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true,
+				fileChooser, codeRangeScroller);
+		add(splitPane);
 	}
 
 	public ProjectAnalyzer getProjectAnlayser() {
@@ -75,12 +77,12 @@ public class CodeRangeChooser extends Panel {
 
 	public void setProjectAnalyser(ProjectAnalyzer projectAnalyser) {
 		this.projectAnalyser = projectAnalyser;
-		fileList.setProjectAnalyser(projectAnalyser);
+		fileChooser.setProjectAnalyzer(projectAnalyser);
 		codeRangeList.removeAll();
 	}
 
 	public File getFile() {
-		return fileList.getFile();
+		return fileChooser.getFile();
 	}
 
 	public CodeRange getCodeRange() {
@@ -89,13 +91,16 @@ public class CodeRangeChooser extends Panel {
 
 	@Slot
 	void fileSelected(File file) {
-		Analyzer analyzer = projectAnalyser.getAnalyzer(file);
-		if (analyzer != null) {
-			java.util.List<CodeRange> codeRanges = analyzer
-					.getAnalyzableCodeRanges();
-			Collections.sort(codeRanges);
-			codeRangeList.setListData(new Vector<CodeRange>(codeRanges));
-			fileChanged(file);
+		if (new File(projectAnalyser.getProjectDirectory(), file.getPath())
+				.isFile()) {
+			Analyzer analyzer = projectAnalyser.getAnalyzer(file);
+			if (analyzer != null) {
+				java.util.List<CodeRange> codeRanges = analyzer
+						.getAnalyzableCodeRanges();
+				Collections.sort(codeRanges);
+				codeRangeList.setListData(new Vector<CodeRange>(codeRanges));
+				fileChanged(file);
+			}
 		}
 	}
 

@@ -21,9 +21,12 @@ import javax.swingx.TabbedPane;
 import javax.swingx.connect.Slot;
 
 import com.puresol.coding.CodeRange;
+import com.puresol.coding.CodeRangeType;
+import com.puresol.coding.ProgrammingLanguage;
+import com.puresol.coding.analysis.Analyzer;
 import com.puresol.coding.analysis.ProjectAnalyzer;
+import com.puresol.gui.TreeViewer;
 import com.puresol.gui.uhura.CodeRangeViewer;
-import com.puresol.gui.uhura.ParserTreeViewer;
 import com.puresol.uhura.ast.ParserTree;
 
 /**
@@ -43,7 +46,8 @@ public class CodeRangeBrowser extends Panel {
 
 	private final CodeRangeChooser codeRangeChooser = new CodeRangeChooser();
 	private final CodeRangeViewer codeRangeViewer = new CodeRangeViewer();
-	private final ParserTreeViewer codeTreeViewer = new ParserTreeViewer();
+	private final TreeViewer<ParserTree> parserTreeViewer = new TreeViewer<ParserTree>();
+	private final CodeRangeEvaluatorPanel codeRangeEvaluatorPanel = new CodeRangeEvaluatorPanel();
 
 	private ProjectAnalyzer project = null;
 
@@ -66,38 +70,45 @@ public class CodeRangeBrowser extends Panel {
 		TabbedPane tabbedViewer = new TabbedPane();
 		tabbedViewer.setBorder(new TitledBorder(translator
 				.i18n("Analysis Content")));
-		tabbedViewer.add("Source Code", codeRangeViewer);
-		tabbedViewer.add("Parser Tree", codeTreeViewer);
+		tabbedViewer.add(translator.i18n("Source Code"), codeRangeViewer);
+		tabbedViewer.add(translator.i18n("Parser Tree"), parserTreeViewer);
+		tabbedViewer.addTab(translator.i18n("CodeRange Evaluators"),
+				codeRangeEvaluatorPanel);
 
 		setLayout(new BorderLayout());
-		JSplitPane pane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-		add(pane, BorderLayout.CENTER);
 
-		pane.add(codeRangeChooser);
-		pane.add(tabbedViewer);
+		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
+				true, codeRangeChooser, tabbedViewer);
+		add(splitPane, BorderLayout.CENTER);
 	}
 
 	public void setProjectAnalyser(ProjectAnalyzer project) {
 		this.project = project;
-		refresh();
-	}
-
-	public void refresh() {
 		codeRangeChooser.setProjectAnalyser(project);
+		codeRangeViewer.setCodeRange(new CodeRange("", CodeRangeType.FILE,
+				new ParserTree("")));
+		parserTreeViewer.setTreeData(new ParserTree(""));
+		codeRangeEvaluatorPanel.setProjectAnalyser(project);
 	}
 
 	@Slot
 	public void showFile(File file) {
-		ParserTree parserTree = project.getAnalyzer(file).getParserTree();
-		codeRangeViewer.setParserTree(parserTree);
-		codeTreeViewer.setParserTree(parserTree);
+		Analyzer analyzer = project.getAnalyzer(file);
+		ParserTree parserTree = analyzer.getParserTree();
+		ProgrammingLanguage language = analyzer.getLanguage();
+
+		codeRangeViewer.setCodeRange(language.getAnalyzableCodeRanges(
+				parserTree).get(0));
+		parserTreeViewer.setTreeData(parserTree);
+		codeRangeEvaluatorPanel.setFile(file);
 	}
 
 	@Slot
 	public void showCodeRange(CodeRange codeRange) {
 		ParserTree parserTree = codeRange.getParserTree();
-		codeRangeViewer.setParserTree(parserTree);
-		codeTreeViewer.setParserTree(parserTree);
+		codeRangeViewer.setCodeRange(codeRange);
+		parserTreeViewer.setTreeData(parserTree);
+		codeRangeEvaluatorPanel.setCodeRange(codeRange);
 	}
 
 }

@@ -31,7 +31,6 @@ public class ProjectAnalysisBrowser extends Panel {
 	private final TabbedPane tabbedPane = new TabbedPane();
 	private final CodeRangeBrowser codeRangeBrowser = new CodeRangeBrowser();
 	private final ProjectEvaluatorPanel projectEvaluatorPanel = new ProjectEvaluatorPanel();
-	private final CodeRangeEvaluatorPanel codeRangeEvaluatorPanel = new CodeRangeEvaluatorPanel();
 	private Panel analysisReport;
 
 	public ProjectAnalysisBrowser() {
@@ -47,16 +46,15 @@ public class ProjectAnalysisBrowser extends Panel {
 
 	private void initUI() {
 		setLayout(new BorderLayout());
-		add(tabbedPane, BorderLayout.CENTER);
 
 		analysisReport = new Panel();
 		analysisReport.add(new TextArea("No Analysis available yet."));
 		tabbedPane.addTab(translator.i18n("Analysis Report"), analysisReport);
-		tabbedPane.addTab(translator.i18n("Code Ranges"), codeRangeBrowser);
 		tabbedPane.addTab(translator.i18n("Project Evaluators"),
 				projectEvaluatorPanel);
-		tabbedPane.addTab(translator.i18n("CodeRange Evaluators"),
-				codeRangeEvaluatorPanel);
+		tabbedPane.addTab(translator.i18n("Code Ranges"), codeRangeBrowser);
+
+		add(tabbedPane, BorderLayout.CENTER);
 	}
 
 	public void setProjectAnalyser(ProjectAnalyzer project) {
@@ -67,15 +65,10 @@ public class ProjectAnalysisBrowser extends Panel {
 		tabbedPane.setSelectedIndex(0);
 		codeRangeBrowser.setProjectAnalyser(project);
 		projectEvaluatorPanel.setProjectAnalyser(project);
-		codeRangeEvaluatorPanel.setProjectAnalyser(project);
 	}
 
 	public ProjectAnalyzer getProjectAnalyser() {
 		return project;
-	}
-
-	public void refresh() {
-		codeRangeBrowser.refresh();
 	}
 
 }

@@ -2,18 +2,17 @@ package com.puresol.gui.coding;
 
 import java.io.File;
 import java.util.Collections;
-import java.util.Vector;
 
-import javax.i18n4java.Translator;
 import javax.swing.BoxLayout;
-import javax.swing.border.TitledBorder;
-import javax.swingx.List;
 import javax.swingx.Panel;
 import javax.swingx.ScrollPane;
 import javax.swingx.connect.Signal;
 import javax.swingx.connect.Slot;
 
 import com.puresol.coding.analysis.ProjectAnalyzer;
+import com.puresol.gui.TreeViewer;
+import com.puresol.trees.FileTree;
+import com.puresol.utils.FileUtilities;
 
 /**
  * This GUI element is for selecting analyzed files from a project analyzer.
@@ -26,12 +25,9 @@ public class AnalyzedFileChooser extends Panel {
 
 	private static final long serialVersionUID = 7855693564694783199L;
 
-	private static final Translator translator = Translator
-			.getTranslator(AnalyzedFileChooser.class);
+	private ProjectAnalyzer projectAnalyzer = null;
 
-	private ProjectAnalyzer projectAnalyser = null;
-
-	private final List fileList = new List();
+	private final TreeViewer<FileTree> fileTree = new TreeViewer<FileTree>();
 
 	public AnalyzedFileChooser() {
 		super();
@@ -40,46 +36,44 @@ public class AnalyzedFileChooser extends Panel {
 
 	public AnalyzedFileChooser(ProjectAnalyzer projectAnalyser) {
 		super();
-		this.projectAnalyser = projectAnalyser;
+		this.projectAnalyzer = projectAnalyser;
 		initUI();
 	}
 
 	private void initUI() {
+		fileTree.connect("valueChanged", this, "fileSelected");
+
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-
-		fileList.connect("valueChanged", this, "fileSelected", Object.class);
-		ScrollPane fileScroller = new ScrollPane(fileList);
-		fileScroller.setBorder(new TitledBorder(translator
-				.i18n("Analyzed Files")));
-		add(fileScroller);
+		add(new ScrollPane(fileTree));
 	}
 
-	public ProjectAnalyzer getProjectAnlayser() {
-		return projectAnalyser;
+	public ProjectAnalyzer getProjectAnlayzer() {
+		return projectAnalyzer;
 	}
 
-	public void setProjectAnalyser(ProjectAnalyzer projectAnalyser) {
-		this.projectAnalyser = projectAnalyser;
+	public void setProjectAnalyzer(ProjectAnalyzer projectAnalyser) {
+		this.projectAnalyzer = projectAnalyser;
 		refresh();
 	}
 
 	private void refresh() {
-		if (projectAnalyser != null) {
-			java.util.List<File> files = projectAnalyser.getFiles();
+		if (projectAnalyzer != null) {
+			java.util.List<File> files = projectAnalyzer.getFiles();
 			Collections.sort(files);
-			fileList.setListData(new Vector<File>(files));
+			fileTree.setTreeData(FileUtilities.convertFileListToTree(
+					projectAnalyzer.getProjectDirectory().getPath(), files));
 		} else {
-			fileList.removeAll();
+			fileTree.removeAll();
 		}
 	}
 
 	public File getFile() {
-		return (File) fileList.getSelectedValue();
+		return fileTree.getSelection().getPathFile();
 	}
 
 	@Slot
-	void fileSelected(Object o) {
-		fileChanged((File) o);
+	void fileSelected() {
+		fileChanged(fileTree.getSelection().getPathFile());
 	}
 
 	@Signal
