@@ -12,16 +12,58 @@ import org.apache.log4j.Logger;
 
 import com.puresol.trees.FileTree;
 
+/**
+ * This class contains several static methods for easier access to standard
+ * functionality.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class FileUtilities {
 
 	private static final Logger logger = Logger.getLogger(FileUtilities.class);
 
+	/**
+	 * This method converts a Class into a File which contains the package path.
+	 * This is used to access Jar contents or the content of source directories
+	 * to find source or class files.
+	 * 
+	 * @param clazz
+	 * @return
+	 */
 	public static File classToRelativePackagePath(Class<?> clazz) {
 		return new File(clazz.getName().replaceAll("\\.", "/") + ".java");
 	}
 
+	/**
+	 * This method checks for the requirement for an update.
+	 * 
+	 * If a the target file exists and the modification time is greater than the
+	 * modification time of the source file, we do not need to analyze
+	 * something.
+	 * 
+	 * @param sourceFile
+	 * @param targetFile
+	 */
+	public static boolean isUpdateRequired(File sourceFile, File targetFile) {
+		if (targetFile.exists()) {
+			if (targetFile.lastModified() > sourceFile.lastModified()) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * This method writes the content of a String into a file specified by a
+	 * directory and its fileName.
+	 * 
+	 * @param directory
+	 * @param fileName
+	 * @param text
+	 * @return
+	 */
 	public static boolean writeFile(File directory, File fileName, String text) {
-		RandomAccessFile ra = null;
 		try {
 			File destination = new File(directory, fileName.getPath());
 			File parent = destination.getParentFile();
@@ -30,23 +72,21 @@ public class FileUtilities {
 					return false;
 				}
 			}
-			ra = new RandomAccessFile(destination, "rw");
-			ra.setLength(0);
-			ra.writeBytes(text);
-			ra.close();
+			RandomAccessFile ra = new RandomAccessFile(destination, "rw");
+			try {
+				ra.setLength(0);
+				ra.writeBytes(text);
+			} finally {
+				ra.close();
+			}
 			return true;
 		} catch (FileNotFoundException e) {
 			logger.error(e.getMessage(), e);
+			return false;
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
+			return false;
 		}
-		if (ra != null) {
-			try {
-				ra.close();
-			} catch (IOException e) {
-			}
-		}
-		return false;
 	}
 
 	/**
@@ -83,17 +123,17 @@ public class FileUtilities {
 				break;
 			}
 		}
-		String result = "";
+		StringBuffer result = new StringBuffer();
 		for (int i = matching; i < fromSplit.length - 1; i++) {
-			result += "../";
+			result.append("../");
 		}
 		for (int i = matching; i < toSplit.length; i++) {
-			result += toSplit[i];
+			result.append(toSplit[i]);
 			if (i < toSplit.length - 1) {
-				result += "/";
+				result.append("/");
 			}
 		}
-		return new File(result);
+		return new File(result.toString());
 	}
 
 	private static File getRelativePathForRelatives(File from, File to) {
@@ -142,29 +182,26 @@ public class FileUtilities {
 	}
 
 	public static String readFileToString(File file) {
-		RandomAccessFile ra = null;
 		try {
 			StringBuffer text = new StringBuffer();
-			ra = new RandomAccessFile(file, "r");
-			String line;
-			while ((line = ra.readLine()) != null) {
-				text.append(line);
-				text.append("\n");
+			RandomAccessFile ra = new RandomAccessFile(file, "r");
+			try {
+				String line;
+				while ((line = ra.readLine()) != null) {
+					text.append(line);
+					text.append("\n");
+				}
+			} finally {
+				ra.close();
 			}
-			ra.close();
 			return text.toString();
 		} catch (FileNotFoundException e) {
 			logger.error(e.getMessage(), e);
+			return "";
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
+			return "";
 		}
-		if (ra != null) {
-			try {
-				ra.close();
-			} catch (IOException e) {
-			}
-		}
-		return "";
 	}
 
 	/**
