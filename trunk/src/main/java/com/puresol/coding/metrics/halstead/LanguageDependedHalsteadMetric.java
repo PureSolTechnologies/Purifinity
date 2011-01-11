@@ -1,5 +1,7 @@
 package com.puresol.coding.metrics.halstead;
 
+import java.io.Serializable;
+
 import com.puresol.uhura.ast.ParserTree;
 
 /**
@@ -10,7 +12,7 @@ import com.puresol.uhura.ast.ParserTree;
  * @author Rick-Rainer Ludwig
  * 
  */
-public interface LanguageDependedHalsteadMetric {
+public interface LanguageDependedHalsteadMetric extends Serializable {
 
 	/**
 	 * This method is implemented in language packs for distinguishing the type

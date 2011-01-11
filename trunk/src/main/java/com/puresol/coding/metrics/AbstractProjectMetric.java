@@ -1,6 +1,7 @@
 package com.puresol.coding.metrics;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -86,7 +87,7 @@ public abstract class AbstractProjectMetric<T extends CodeRangeEvaluator>
 
 	@Override
 	public List<Result> getResults() {
-		return null;
+		return new ArrayList<Result>();
 	}
 
 	@Override

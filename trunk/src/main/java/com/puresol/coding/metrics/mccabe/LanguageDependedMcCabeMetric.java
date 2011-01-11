@@ -1,5 +1,7 @@
 package com.puresol.coding.metrics.mccabe;
 
+import java.io.Serializable;
+
 import com.puresol.uhura.ast.ParserTree;
 
 /**
@@ -11,7 +13,7 @@ import com.puresol.uhura.ast.ParserTree;
  * @author Rick-Rainer Ludwig
  * 
  */
-public interface LanguageDependedMcCabeMetric {
+public interface LanguageDependedMcCabeMetric extends Serializable {
 
 	/**
 	 * This method is implemented in language packs for distinguishing the type

@@ -1,5 +1,7 @@
 package com.puresol.coding.metrics.sloc;
 
+import java.io.Serializable;
+
 import com.puresol.uhura.lexer.Token;
 
 /**
@@ -10,7 +12,7 @@ import com.puresol.uhura.lexer.Token;
  * @author Rick-Rainer Ludwig
  * 
  */
-public interface LanguageDependedSLOCMetric {
+public interface LanguageDependedSLOCMetric extends Serializable {
 
 	/**
 	 * This method is implemented in language packs for distinguishing the type
