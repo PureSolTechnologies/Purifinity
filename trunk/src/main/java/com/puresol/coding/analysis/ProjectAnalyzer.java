@@ -343,11 +343,15 @@ public class ProjectAnalyzer implements Serializable, ProgressObservable {
 						analyzer.getLanguage(), codeRange);
 				evaluator.run();
 				File persistFile = new File(workspaceDirectory, file.getPath());
-				persistFile = new File(persistFile, evaluator.getName() + "-"
-						+ codeRange.getType().getName() + "_"
-						+ codeRange.getName() + ".persist");
+				File reportFile = new File(persistFile, evaluator.getName()
+						+ "-" + codeRange.getType().getName() + "_"
+						+ codeRange.getName() + ".report");
+				File resultsFile = new File(persistFile, evaluator.getName()
+						+ "-" + codeRange.getType().getName() + "_"
+						+ codeRange.getName() + ".results");
 				try {
-					Persistence.persist(evaluator, persistFile);
+					Persistence.persist(evaluator.getReport(), reportFile);
+					Persistence.persist(evaluator.getResults(), resultsFile);
 					// TODO
 				} catch (IOException e) {
 					e.printStackTrace();

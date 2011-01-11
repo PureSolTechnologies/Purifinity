@@ -1,7 +1,6 @@
 package com.puresol.coding;
 
 import java.io.File;
-import java.io.Serializable;
 import java.util.List;
 
 import com.puresol.coding.analysis.Analyzer;
@@ -12,10 +11,13 @@ import com.puresol.utils.PersistenceException;
  * This interface is the central interface for a programming language
  * specification.
  * 
+ * Attention! Programming languages are singletons and therefore, it can not be
+ * serialized!
+ * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public interface ProgrammingLanguage extends Serializable {
+public interface ProgrammingLanguage { // do not Serialize!
 
 	/**
 	 * This method returns the name of the programming language.
