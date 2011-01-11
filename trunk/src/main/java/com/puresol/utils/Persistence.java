@@ -29,7 +29,7 @@ public class Persistence {
 		ObjectOutputStream oos = null;
 		try {
 			File directory = file.getParentFile();
-			if (!directory.exists()) {
+			if ((directory != null) && (!directory.exists())) {
 				if (!directory.mkdirs()) {
 					throw new IOException(
 							"Could not create necessary directory '"
