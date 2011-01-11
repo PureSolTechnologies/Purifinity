@@ -1,0 +1,4 @@
+Ideas for Scanners:
+- Serializable and serializerID (both or nothing is set)
+- Translator usage
+- Logger usage
