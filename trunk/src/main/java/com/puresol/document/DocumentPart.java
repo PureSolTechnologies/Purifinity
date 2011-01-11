@@ -1,5 +1,7 @@
 package com.puresol.document;
 
+import java.io.Serializable;
+
 import com.puresol.trees.Tree;
 
 /**
@@ -8,6 +10,6 @@ import com.puresol.trees.Tree;
  * @author Rick-Rainer Ludwig
  * 
  */
-public interface DocumentPart extends Tree<DocumentPart> {
+public interface DocumentPart extends Tree<DocumentPart>, Serializable {
 
 }

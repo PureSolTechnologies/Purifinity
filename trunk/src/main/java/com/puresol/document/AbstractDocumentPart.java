@@ -13,6 +13,8 @@ import java.util.List;
  */
 public abstract class AbstractDocumentPart implements DocumentPart {
 
+	private static final long serialVersionUID = -6814206529315672476L;
+
 	private final DocumentPart parent;
 	private final String name;
 	private final List<DocumentPart> children = new ArrayList<DocumentPart>();

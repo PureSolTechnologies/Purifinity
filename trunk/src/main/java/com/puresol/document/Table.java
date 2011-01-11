@@ -13,6 +13,8 @@ import java.util.List;
  */
 public class Table extends AbstractDocumentPart {
 
+	private static final long serialVersionUID = -3314964484840281581L;
+
 	private final List<String> columns;
 
 	private final List<List<Object>> rows = new ArrayList<List<Object>>();

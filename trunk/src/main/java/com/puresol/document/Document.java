@@ -12,6 +12,8 @@ import java.util.Date;
  */
 public class Document extends AbstractDocumentPart {
 
+	private static final long serialVersionUID = -5340129628920736949L;
+
 	private String author = "";
 	private String version = "";
 	private Date creationDate = new Date();
