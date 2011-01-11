@@ -1,6 +1,7 @@
 package com.puresol.coding;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.List;
 
 import com.puresol.coding.analysis.Analyzer;
@@ -14,7 +15,7 @@ import com.puresol.utils.PersistenceException;
  * @author Rick-Rainer Ludwig
  * 
  */
-public interface ProgrammingLanguage {
+public interface ProgrammingLanguage extends Serializable {
 
 	/**
 	 * This method returns the name of the programming language.

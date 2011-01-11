@@ -5,6 +5,8 @@ import java.io.File;
 public abstract class AbstractProgrammingLanguage implements
 		ProgrammingLanguage {
 
+	private static final long serialVersionUID = -8029643842163952482L;
+
 	private final String name;
 
 	protected AbstractProgrammingLanguage(String name) {

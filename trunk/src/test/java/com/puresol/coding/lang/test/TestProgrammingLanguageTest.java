@@ -18,7 +18,7 @@ public class TestProgrammingLanguageTest {
 	@Test
 	public void testInitialValues() {
 		ProgrammingLanguage lang = new TestLanguage();
-		assertEquals("Language", lang.getName());
+		assertEquals("TestLanguage", lang.getName());
 	}
 
 	@Test

@@ -29,6 +29,8 @@ import com.puresol.utils.PersistenceException;
  */
 public class TestLanguage extends AbstractProgrammingLanguage {
 
+	private static final long serialVersionUID = -2803354704602830737L;
+
 	private static final Logger logger = Logger.getLogger(TestLanguage.class);
 
 	private static final String[] FILE_SUFFIXES = { ".d" };
