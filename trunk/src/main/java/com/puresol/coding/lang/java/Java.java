@@ -42,6 +42,8 @@ import com.puresol.utils.PersistenceException;
  */
 public class Java extends AbstractProgrammingLanguage {
 
+	private static final long serialVersionUID = 4685660978239089110L;
+
 	private static final Logger logger = Logger.getLogger(Java.class);
 
 	private static final String[] FILE_SUFFIXES = { ".java" };

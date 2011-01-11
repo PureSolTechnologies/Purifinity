@@ -6,6 +6,8 @@ import com.puresol.uhura.lexer.Token;
 
 public class SLOCMetricImpl implements LanguageDependedSLOCMetric {
 
+	private static final long serialVersionUID = 6579121706560697L;
+
 	@Override
 	public SLOCType getType(Token token) {
 		if (token.getName().equals("Comment")) {

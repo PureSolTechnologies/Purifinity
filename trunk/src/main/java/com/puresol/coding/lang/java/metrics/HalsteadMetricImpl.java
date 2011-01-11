@@ -17,6 +17,8 @@ import com.puresol.uhura.lexer.Token;
  */
 public class HalsteadMetricImpl implements LanguageDependedHalsteadMetric {
 
+	private static final long serialVersionUID = -8803388779974090457L;
+
 	private static final List<String> operators = new ArrayList<String>();
 	static {
 		operators.add("ABSTRACT");

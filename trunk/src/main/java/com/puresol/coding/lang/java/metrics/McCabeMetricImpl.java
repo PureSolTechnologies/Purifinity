@@ -14,6 +14,8 @@ import com.puresol.uhura.ast.ParserTree;
  */
 public class McCabeMetricImpl implements LanguageDependedMcCabeMetric {
 
+	private static final long serialVersionUID = 8745174421258035666L;
+
 	private static final List<String> blockNames = new ArrayList<String>();
 	static {
 		blockNames.add("IfThenStatement");
