@@ -28,8 +28,6 @@ import com.puresol.utils.PersistenceException;
 
 public class Fortran extends AbstractProgrammingLanguage {
 
-	private static final long serialVersionUID = -7141659801332746557L;
-
 	private static final Logger logger = Logger.getLogger(Fortran.class);
 
 	private static final String[] FILE_SUFFIXES = { ".f", ".f77", ".f90",
