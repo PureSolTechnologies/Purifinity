@@ -17,6 +17,8 @@ import com.puresol.uhura.lexer.Token;
  */
 public class HalsteadMetricImpl implements LanguageDependedHalsteadMetric {
 
+	private static final long serialVersionUID = -9034561557787377216L;
+
 	private static final List<String> operators = new ArrayList<String>();
 	static {
 		operators.add("SEMICOLON");

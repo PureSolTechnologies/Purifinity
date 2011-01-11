@@ -14,6 +14,8 @@ import com.puresol.uhura.ast.ParserTree;
  */
 public class CodeDepthMetricImpl implements LanguageDependedCodeDepthMetric {
 
+	private static final long serialVersionUID = 3346220276003100548L;
+
 	private static final List<String> blockNames = new ArrayList<String>();
 	static {
 		blockNames.add("main-program");
