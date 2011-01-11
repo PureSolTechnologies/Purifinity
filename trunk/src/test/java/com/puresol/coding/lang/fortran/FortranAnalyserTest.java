@@ -21,6 +21,21 @@ import com.puresol.coding.analysis.AnalyzerException;
  */
 public class FortranAnalyserTest {
 
+	@Test
+	public void testInstance() {
+		assertNotNull(new FortranAnalyser(new File("")));
+	}
+
+	@Test
+	public void testInitValues() {
+		File file = new File("src/test/TestFile.f");
+		FortranAnalyser analyser = new FortranAnalyser(file);
+		assertEquals(file, analyser.getFile());
+		assertNotNull(analyser.getTimeStamp());
+		assertSame(Fortran.getInstance(), analyser.getLanguage());
+		assertNull(analyser.getParserTree());
+	}
+
 	private void test(File file) {
 		try {
 			assertTrue(file.exists());
