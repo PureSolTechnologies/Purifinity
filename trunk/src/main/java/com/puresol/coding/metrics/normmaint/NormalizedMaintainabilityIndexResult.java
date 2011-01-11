@@ -1,5 +1,6 @@
 package com.puresol.coding.metrics.normmaint;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +8,9 @@ import javax.i18n4java.Translator;
 
 import com.puresol.coding.evaluator.Result;
 
-public class NormalizedMaintainabilityIndexResult {
+public class NormalizedMaintainabilityIndexResult implements Serializable {
+
+	private static final long serialVersionUID = -7298758864269099643L;
 
 	private static final Translator translator = Translator
 			.getTranslator(NormalizedMaintainabilityIndexResult.class);

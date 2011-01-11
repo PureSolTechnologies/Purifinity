@@ -10,6 +10,7 @@
 
 package com.puresol.coding.metrics.sloc;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,7 +69,9 @@ public class SLOCMetric extends AbstractEvaluator implements CodeRangeEvaluator 
 				.add(QualityCharacteristic.TESTABILITY);
 	}
 
-	private class LineResults {
+	private class LineResults implements Serializable {
+
+		private static final long serialVersionUID = -7222483379600215412L;
 
 		private int length = 0;
 		private boolean comments = false;

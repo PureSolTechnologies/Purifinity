@@ -1,5 +1,6 @@
 package com.puresol.coding.metrics.entropy;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +8,9 @@ import javax.i18n4java.Translator;
 
 import com.puresol.coding.evaluator.Result;
 
-public class EntropyResult {
+public class EntropyResult implements Serializable {
+
+	private static final long serialVersionUID = 5578265179129688892L;
 
 	private static final Translator translator = Translator
 			.getTranslator(EntropyResult.class);

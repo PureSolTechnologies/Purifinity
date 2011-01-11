@@ -59,19 +59,19 @@ public class MaintainabilityIndex extends AbstractEvaluator implements
 				.add(QualityCharacteristic.TESTABILITY);
 	}
 
-	private SLOCMetric slocMetric;
-	private McCabeMetric mcCabeMetric;
-	private HalsteadMetric halsteadMetric;
-	private final ProgrammingLanguage language;
 	private final CodeRange codeRange;
+	private final SLOCMetric slocMetric;
+	private final McCabeMetric mcCabeMetric;
+	private final HalsteadMetric halsteadMetric;
 	private MaintainabilityIndexResult result;
 
 	public MaintainabilityIndex(ProgrammingLanguage language,
 			CodeRange codeRange) {
 		super();
 		this.codeRange = codeRange;
-		this.language = language;
-
+		slocMetric = new SLOCMetric(language, getCodeRange());
+		mcCabeMetric = new McCabeMetric(language, getCodeRange());
+		halsteadMetric = new HalsteadMetric(language, getCodeRange());
 	}
 
 	/**
@@ -107,10 +107,6 @@ public class MaintainabilityIndex extends AbstractEvaluator implements
 			getMonitor().setRange(0, 4);
 			getMonitor().setDescription(NAME);
 		}
-
-		slocMetric = new SLOCMetric(language, getCodeRange());
-		mcCabeMetric = new McCabeMetric(language, getCodeRange());
-		halsteadMetric = new HalsteadMetric(language, getCodeRange());
 
 		checkInput();
 

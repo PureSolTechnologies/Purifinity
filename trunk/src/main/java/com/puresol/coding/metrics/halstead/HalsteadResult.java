@@ -1,5 +1,6 @@
 package com.puresol.coding.metrics.halstead;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +8,9 @@ import javax.i18n4java.Translator;
 
 import com.puresol.coding.evaluator.Result;
 
-public class HalsteadResult {
+public class HalsteadResult implements Serializable {
+
+	private static final long serialVersionUID = -2269802940509163015L;
 
 	private static final Translator translator = Translator
 			.getTranslator(HalsteadResult.class);

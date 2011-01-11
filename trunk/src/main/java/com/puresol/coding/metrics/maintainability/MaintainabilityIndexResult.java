@@ -1,5 +1,6 @@
 package com.puresol.coding.metrics.maintainability;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +8,9 @@ import javax.i18n4java.Translator;
 
 import com.puresol.coding.evaluator.Result;
 
-public class MaintainabilityIndexResult {
+public class MaintainabilityIndexResult implements Serializable {
+
+	private static final long serialVersionUID = 1924196234881066633L;
 
 	private static final Translator translator = Translator
 			.getTranslator(MaintainabilityIndexResult.class);

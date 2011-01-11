@@ -65,13 +65,13 @@ public class EntropyMetric extends AbstractEvaluator implements
 	}
 
 	private final CodeRange codeRange;
-	private final ProgrammingLanguage language;
+	private final HalsteadMetric halstead;
 	private EntropyResult result;
 
 	public EntropyMetric(ProgrammingLanguage language, CodeRange codeRange) {
 		super();
 		this.codeRange = codeRange;
-		this.language = language;
+		halstead = new HalsteadMetric(language, getCodeRange());
 	}
 
 	/**
@@ -96,7 +96,6 @@ public class EntropyMetric extends AbstractEvaluator implements
 			getMonitor().setRange(0, 2);
 			getMonitor().setDescription(NAME);
 		}
-		HalsteadMetric halstead = new HalsteadMetric(language, getCodeRange());
 		halstead.run();
 		if (getMonitor() != null) {
 			getMonitor().setStatus(1);

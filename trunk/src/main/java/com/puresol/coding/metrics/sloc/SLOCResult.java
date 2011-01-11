@@ -1,5 +1,6 @@
 package com.puresol.coding.metrics.sloc;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +9,9 @@ import javax.i18n4java.Translator;
 import com.puresol.coding.evaluator.Result;
 import com.puresol.math.statistics.Statistics;
 
-public class SLOCResult {
+public class SLOCResult implements Serializable {
+
+	private static final long serialVersionUID = 1143172056453964480L;
 
 	private static final Translator translator = Translator
 			.getTranslator(SLOCResult.class);
