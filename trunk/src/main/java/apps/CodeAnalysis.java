@@ -149,11 +149,6 @@ public class CodeAnalysis extends PureSolApplication {
 	}
 
 	@Slot
-	void updateWorkspace() {
-		Application.showNotImplementedMessage();
-	}
-
-	@Slot
 	void newWorkspace() {
 		NewProjectAnalyserDialog dialog = new NewProjectAnalyserDialog();
 		if (!dialog.run()) {
@@ -184,6 +179,19 @@ public class CodeAnalysis extends PureSolApplication {
 		}
 		analyser = ProjectAnalyzer.open(file.getSelectedFile());
 		refresh();
+	}
+
+	@Slot
+	void updateWorkspace() {
+		if (analyser != null) {
+			ProgressWindow progress = new ProgressWindow(analyser);
+			progress.connect("finished", this, "refresh");
+			progress.run();
+		} else {
+			JOptionPane.showMessageDialog(this,
+					translator.i18n("No workspace is open for update!!"),
+					translator.i18n("Error"), JOptionPane.ERROR_MESSAGE);
+		}
 	}
 
 	@Slot

@@ -13,11 +13,12 @@ package com.puresol.gui.coding;
 import java.awt.BorderLayout;
 
 import javax.i18n4java.Translator;
+import javax.swingx.HTMLTextPane;
 import javax.swingx.Panel;
 import javax.swingx.TabbedPane;
-import javax.swingx.TextArea;
 
 import com.puresol.coding.analysis.ProjectAnalyzer;
+import com.puresol.document.convert.html.HTMLConverter;
 
 public class ProjectAnalysisBrowser extends Panel {
 
@@ -29,9 +30,9 @@ public class ProjectAnalysisBrowser extends Panel {
 	private ProjectAnalyzer project = null;
 
 	private final TabbedPane tabbedPane = new TabbedPane();
-	private final CodeRangeBrowser codeRangeBrowser = new CodeRangeBrowser();
+	private HTMLTextPane projectReport = new HTMLTextPane();
 	private final ProjectEvaluatorPanel projectEvaluatorPanel = new ProjectEvaluatorPanel();
-	private Panel analysisReport;
+	private final CodeRangeBrowser codeRangeBrowser = new CodeRangeBrowser();
 
 	public ProjectAnalysisBrowser() {
 		super();
@@ -47,9 +48,7 @@ public class ProjectAnalysisBrowser extends Panel {
 	private void initUI() {
 		setLayout(new BorderLayout());
 
-		analysisReport = new Panel();
-		analysisReport.add(new TextArea("No Analysis available yet."));
-		tabbedPane.addTab(translator.i18n("Analysis Report"), analysisReport);
+		tabbedPane.addTab(translator.i18n("Report"), projectReport);
 		tabbedPane.addTab(translator.i18n("Project Evaluators"),
 				projectEvaluatorPanel);
 		tabbedPane.addTab(translator.i18n("Code Ranges"), codeRangeBrowser);
@@ -59,9 +58,8 @@ public class ProjectAnalysisBrowser extends Panel {
 
 	public void setProjectAnalyser(ProjectAnalyzer project) {
 		this.project = project;
-		tabbedPane.removeTabAt(0);
-		tabbedPane.insertTab(translator.i18n("Analysis Report"), null,
-				project.getInformationPanel(), null, 0);
+		projectReport
+				.setText(new HTMLConverter(project.getReport()).toString());
 		tabbedPane.setSelectedIndex(0);
 		codeRangeBrowser.setProjectAnalyser(project);
 		projectEvaluatorPanel.setProjectAnalyser(project);

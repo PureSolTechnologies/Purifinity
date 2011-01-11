@@ -15,7 +15,6 @@ import java.io.File;
 
 import javax.i18n4java.Translator;
 import javax.swing.JSplitPane;
-import javax.swing.border.TitledBorder;
 import javax.swingx.Panel;
 import javax.swingx.TabbedPane;
 import javax.swingx.connect.Slot;
@@ -68,8 +67,6 @@ public class CodeRangeBrowser extends Panel {
 				CodeRange.class);
 
 		TabbedPane tabbedViewer = new TabbedPane();
-		tabbedViewer.setBorder(new TitledBorder(translator
-				.i18n("Analysis Content")));
 		tabbedViewer.add(translator.i18n("Source Code"), codeRangeViewer);
 		tabbedViewer.add(translator.i18n("Parser Tree"), parserTreeViewer);
 		tabbedViewer.addTab(translator.i18n("CodeRange Evaluators"),

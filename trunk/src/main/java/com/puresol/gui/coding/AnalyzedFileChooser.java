@@ -73,7 +73,10 @@ public class AnalyzedFileChooser extends Panel {
 
 	@Slot
 	void fileSelected() {
-		fileChanged(fileTree.getSelection().getPathFile());
+		FileTree tree = fileTree.getSelection();
+		if (tree != null) {
+			fileChanged(tree.getPathFile());
+		}
 	}
 
 	@Signal

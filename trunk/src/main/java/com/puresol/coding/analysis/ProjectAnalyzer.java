@@ -10,7 +10,6 @@
 
 package com.puresol.coding.analysis;
 
-import java.awt.BorderLayout;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -22,16 +21,16 @@ import java.util.List;
 import java.util.Properties;
 
 import javax.i18n4java.utils.FileSearch;
-import javax.swingx.HTMLTextPane;
-import javax.swingx.Panel;
-import javax.swingx.ScrollPane;
 import javax.swingx.progress.ProgressObservable;
 import javax.swingx.progress.ProgressObserver;
 
 import org.apache.log4j.Logger;
 
-import com.puresol.reporting.html.HTMLStandards;
+import com.puresol.document.Chapter;
+import com.puresol.document.Document;
+import com.puresol.document.Paragraph;
 import com.puresol.utils.DirectoryUtilities;
+import com.puresol.utils.FileUtilities;
 import com.puresol.utils.Persistence;
 import com.puresol.utils.PersistenceException;
 
@@ -66,7 +65,7 @@ public class ProjectAnalyzer implements Serializable, ProgressObservable {
 	private static final String SETTINGS_FILE_HEADER = "***********************************************************************\n"
 			+ "* These are the settings of the analysis workspace.                   *\n"
 			+ "***********************************************************************\n"
-			+ "";
+			+ "\n";
 
 	/*
 	 * ****************************************************************
@@ -127,8 +126,6 @@ public class ProjectAnalyzer implements Serializable, ProgressObservable {
 			.createFactory();
 
 	private File projectDirectory;
-
-	private transient Panel panel = null;
 
 	private transient ProgressObserver progressMonitor = null;
 
@@ -295,32 +292,40 @@ public class ProjectAnalyzer implements Serializable, ProgressObservable {
 	 * @param file
 	 *            is the file to be analyzed.
 	 */
-	private void analyzeFile(File file) {
+	private boolean analyzeFile(File file) {
 		try {
-			if ((getSourceFile(file).isFile())
-					&& (!file.getPath().contains("/."))) {
-				/*
-				 * only non hidden files are analyzed...
-				 */
-				Analyzer analyzer = analyzerFactory.create(getSourceFile(file));
-				if (analyzer == null) {
-					return;
-				}
-				analyzer.parse();
-				File persistFile = getPersistenceFile(file);
-				if (analyzer.persist(persistFile)) {
-					analyzedFiles.add(file);
-				}
+			if (file.getPath().contains("/.")) {
+				return false;
 			}
+			File sourceFile = getSourceFile(file);
+			if (!sourceFile.isFile()) {
+				/*
+				 * hidden files are not analyzed...
+				 */
+				return false;
+			}
+			File persistFile = getPersistenceFile(file);
+			if (!FileUtilities.isUpdateRequired(sourceFile, persistFile)) {
+				analyzedFiles.add(file);
+				return false;
+			}
+			Analyzer analyzer = analyzerFactory.create(sourceFile);
+			analyzer.parse();
+			analyzer.persist(persistFile);
+			analyzedFiles.add(file);
+			return true;
 		} catch (LanguageNotSupportedException e) {
-			logger.warn("File '"
-					+ file.getPath()
-					+ "' could not be analyzed due to containing no supported language.");
+			logger.debug("File '" + file.getPath()
+					+ "' could not be analyzed due to contents in a "
+					+ "non-supported language.");
+			return false;
 		} catch (FileNotFoundException e) {
 			logger.warn("File '" + file.getPath() + "' is not existing!");
+			return false;
 		} catch (AnalyzerException e) {
-			logger.warn("File '" + file.getPath() + "' is not parsable!");
+			logger.error("File '" + file.getPath() + "' is not parsable!");
 			failedFiles.add(file);
+			return false;
 		}
 	}
 
@@ -451,44 +456,20 @@ public class ProjectAnalyzer implements Serializable, ProgressObservable {
 		return true;
 	}
 
-	public Panel getInformationPanel() {
-		if (panel == null) {
-			panel = createInformationPanel();
-		}
-		return panel;
-	}
-
-	private Panel createInformationPanel() {
-		HTMLTextPane text = new HTMLTextPane();
-		text.setText(getHTMLReport());
-
-		Panel panel = new Panel();
-		panel.setLayout(new BorderLayout());
-		panel.add(new ScrollPane(text), BorderLayout.CENTER);
-		return panel;
-	}
-
-	private String getHTMLReport() {
-		StringBuffer buffer = new StringBuffer();
-		buffer.append(HTMLStandards.getStandardHeader(getClass()));
-
-		buffer.append("<h1>Project Analyzer Report</h1>\n");
-		buffer.append("<h2>Analysed Files</h2>\n");
-		buffer.append("<p>" + analyzedFiles.size()
-				+ " files were analyzed</p>\n");
-
+	public Document getReport() {
+		Document document = new Document("Project Analysis Report");
+		Chapter analysedFilesChapter = new Chapter(document, "Analysed Files");
+		new Paragraph(analysedFilesChapter, analyzedFiles.size()
+				+ " files were analyzed");
+		Chapter failedFilesChapter = new Chapter(document, "Failed Files");
 		if (failedFiles.size() > 0) {
-			buffer.append("<h2>Failed Files</h2>\n");
-			buffer.append("<p>" + failedFiles.size()
-					+ " files could not be analyzed</p>\n");
-			buffer.append("<ul>\n");
+			new Paragraph(failedFilesChapter, failedFiles.size()
+					+ " files could not be analyzed</p>");
 			for (File file : failedFiles) {
-				buffer.append("<li>" + file + "</li>\n");
+				new Paragraph(failedFilesChapter, file.getPath());
 			}
-			buffer.append("</ul>\n");
 		}
-
-		buffer.append(HTMLStandards.getStandardFooter());
-		return buffer.toString();
+		return document;
 	}
+
 }
