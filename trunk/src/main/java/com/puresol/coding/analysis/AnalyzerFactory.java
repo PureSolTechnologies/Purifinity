@@ -52,7 +52,7 @@ public class AnalyzerFactory {
 
 	public Analyzer create(File file) throws LanguageNotSupportedException,
 			FileNotFoundException {
-		logger.info("Create analyser for file '" + file.getPath() + "'...");
+		logger.debug("Create analyser for file '" + file.getPath() + "'...");
 		checkFile(file);
 		return createAnalyser(file);
 	}
@@ -73,7 +73,7 @@ public class AnalyzerFactory {
 				return analyser;
 			}
 		}
-		logger.warn("No analyser for file '" + file.getPath() + "' found!");
+		logger.debug("No analyser for file '" + file.getPath() + "' found!");
 		throw new LanguageNotSupportedException(
 				"No coding language found for file " + file.getPath());
 	}

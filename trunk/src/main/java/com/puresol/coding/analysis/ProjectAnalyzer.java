@@ -26,6 +26,10 @@ import javax.swingx.progress.ProgressObserver;
 
 import org.apache.log4j.Logger;
 
+import com.puresol.coding.CodeRange;
+import com.puresol.coding.evaluator.CodeRangeEvaluator;
+import com.puresol.coding.evaluator.CodeRangeEvaluatorFactory;
+import com.puresol.coding.evaluator.CodeRangeEvaluatorManager;
 import com.puresol.document.Chapter;
 import com.puresol.document.Document;
 import com.puresol.document.Paragraph;
@@ -313,6 +317,7 @@ public class ProjectAnalyzer implements Serializable, ProgressObservable {
 			analyzer.parse();
 			analyzer.persist(persistFile);
 			analyzedFiles.add(file);
+			evaluateFile(file, analyzer);
 			return true;
 		} catch (LanguageNotSupportedException e) {
 			logger.debug("File '" + file.getPath()
@@ -326,6 +331,28 @@ public class ProjectAnalyzer implements Serializable, ProgressObservable {
 			logger.error("File '" + file.getPath() + "' is not parsable!");
 			failedFiles.add(file);
 			return false;
+		}
+	}
+
+	private void evaluateFile(File file, Analyzer analyzer) {
+		List<CodeRangeEvaluatorFactory> factories = CodeRangeEvaluatorManager
+				.getAll();
+		for (CodeRangeEvaluatorFactory factory : factories) {
+			for (CodeRange codeRange : analyzer.getAnalyzableCodeRanges()) {
+				CodeRangeEvaluator evaluator = factory.create(
+						analyzer.getLanguage(), codeRange);
+				evaluator.run();
+				File persistFile = new File(workspaceDirectory, file.getPath());
+				persistFile = new File(persistFile, evaluator.getName() + "-"
+						+ codeRange.getType().getName() + "_"
+						+ codeRange.getName() + ".persist");
+				try {
+					Persistence.persist(evaluator, persistFile);
+					// TODO
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 
