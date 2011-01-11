@@ -7,19 +7,30 @@ import java.io.File;
 import org.junit.Test;
 
 import com.puresol.coding.analysis.AnalyzerException;
-import com.puresol.trees.TreePrinter;
 import com.puresol.uhura.ast.ParserTree;
 import com.puresol.utils.FileUtilities;
 
 public class JavaAnalyserTest {
 
 	@Test
-	public void test() {
+	public void testInstance() {
 		assertNotNull(new JavaAnalyser(new File("")));
 	}
 
 	@Test
 	public void testInitValues() {
+		File file = new File("src/test/java", FileUtilities
+				.classToRelativePackagePath(this.getClass()).toString());
+		assertTrue(file.exists());
+		JavaAnalyser analyser = new JavaAnalyser(file);
+		assertEquals(file, analyser.getFile());
+		assertNotNull(analyser.getTimeStamp());
+		assertSame(Java.getInstance(), analyser.getLanguage());
+		assertNull(analyser.getParserTree());
+	}
+
+	@Test
+	public void testParse() {
 		try {
 			File file = new File("src/test/java", FileUtilities
 					.classToRelativePackagePath(this.getClass()).toString());
@@ -27,7 +38,8 @@ public class JavaAnalyserTest {
 			JavaAnalyser analyser = new JavaAnalyser(file);
 			analyser.parse();
 			ParserTree tree = analyser.getParserTree();
-			new TreePrinter(System.out).println(tree);
+			assertNotNull(tree);
+			// new TreePrinter(System.out).println(tree);
 		} catch (AnalyzerException e) {
 			e.printStackTrace();
 			fail("No exception was expected!");
