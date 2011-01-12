@@ -29,19 +29,17 @@ public class FileTree extends AbstractTreeImpl<FileTree> {
 	}
 
 	public String getPath() {
-		StringBuffer path = new StringBuffer();
-		FileTree current = this;
-		while (current.getParent() != null) {
-			if (current != this) {
-				path.insert(0, File.separator);
-			}
-			path.insert(0, current.getName());
-			current = current.getParent();
-		}
-		return path.toString();
+		return getPathFile().getPath();
 	}
 
 	public File getPathFile() {
-		return new File(getPath());
+		FileTree current = this;
+		File file = new File(current.getName());
+		current = current.getParent();
+		while (current != null) {
+			file = new File(current.getName(), file.getPath());
+			current = current.getParent();
+		}
+		return file;
 	}
 }
