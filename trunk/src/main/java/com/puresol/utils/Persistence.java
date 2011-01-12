@@ -26,26 +26,19 @@ public class Persistence {
 	 * @throws PersistenceException
 	 */
 	public static void persist(Object o, File file) throws IOException {
-		ObjectOutputStream oos = null;
+		File directory = file.getParentFile();
+		if ((directory != null) && (!directory.exists())) {
+			if (!directory.mkdirs()) {
+				throw new IOException("Could not create necessary directory '"
+						+ directory + "'!");
+			}
+		}
+		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(
+				file));
 		try {
-			File directory = file.getParentFile();
-			if ((directory != null) && (!directory.exists())) {
-				if (!directory.mkdirs()) {
-					throw new IOException(
-							"Could not create necessary directory '"
-									+ directory + "'!");
-				}
-			}
-			oos = new ObjectOutputStream(new FileOutputStream(file));
 			oos.writeObject(o);
-			oos.close();
 		} finally {
-			if (oos != null) {
-				try {
-					oos.close();
-				} catch (IOException e1) {
-				}
-			}
+			oos.close();
 		}
 	}
 
@@ -56,21 +49,17 @@ public class Persistence {
 
 	public static Object restore(InputStream inputStream) throws IOException,
 			PersistenceException {
-		ObjectInputStream ois = null;
 		try {
-			ois = new ObjectInputStream(inputStream);
-			Object o = ois.readObject();
-			ois.close();
+			ObjectInputStream ois = new ObjectInputStream(inputStream);
+			Object o;
+			try {
+				o = ois.readObject();
+			} finally {
+				ois.close();
+			}
 			return o;
 		} catch (ClassNotFoundException e) {
 			throw new PersistenceException(e);
-		} finally {
-			if (ois != null) {
-				try {
-					ois.close();
-				} catch (IOException e1) {
-				}
-			}
 		}
 	}
 
