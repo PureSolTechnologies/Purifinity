@@ -17,6 +17,8 @@ public class ErrorFunction {
 	private static final Translator translator = Translator
 			.getTranslator(ErrorFunction.class);
 
+	private static final double PRECISION = 1e-9;
+
 	public static double erf(double x) {
 		if (x <= -5.0) {
 			return -1.0;
@@ -33,10 +35,10 @@ public class ErrorFunction {
 
 	private static double sum(double x) {
 		double result = 0.0;
-		for (int n = 0; n <= 10000; n++) {
+		for (int n = 0; n <= 100000; n++) {
 			double summand = x / (2.0 * (double) n + 1.0) * product(x, n);
 			result += summand;
-			if (Math.abs(summand / result) < 1e-9) {
+			if (Math.abs(summand) < PRECISION) {
 				break;
 			}
 		}
@@ -60,7 +62,7 @@ public class ErrorFunction {
 			if ((y < 1.0) && (y > -1.0)) {
 				NewtonsMethod newton = new NewtonsMethod(new ErrorFunction(),
 						"erf");
-				return newton.find(y, -5.0, 5.0, 1e-9);
+				return newton.find(y, -5.0, 5.0, PRECISION);
 			}
 			return Math.signum(y) * 5.0;
 		} catch (MethodInvokationException e) {
