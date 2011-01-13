@@ -2,10 +2,10 @@ package com.puresol.threading;
 
 import java.util.List;
 
-import javax.swingx.progress.ProgressObservable;
+import javax.swingx.progress.RunnableProgressObservable;
 import javax.swingx.progress.ProgressObserver;
 
-public class Threading implements ProgressObservable {
+public class Threading implements RunnableProgressObservable {
 
 	public static int getAvailableProcessors() {
 		return Runtime.getRuntime().availableProcessors();
@@ -36,8 +36,8 @@ public class Threading implements ProgressObservable {
 		int running = 0;
 		for (Thread thread : threads) {
 			running++;
-			if (ProgressObservable.class.isAssignableFrom(thread.getClass())) {
-				progressObserver.startSubProgress(ProgressObservable.class
+			if (RunnableProgressObservable.class.isAssignableFrom(thread.getClass())) {
+				progressObserver.startSubProgress(RunnableProgressObservable.class
 						.cast(thread));
 			} else {
 				thread.run();
