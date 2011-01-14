@@ -49,7 +49,7 @@ public class ExcelFile {
 			HSSFSheet sheet = wb.createSheet(sheetName);
 			for (int rowID = 0; rowID < table.getRowCount(); rowID++) {
 				HSSFRow row = sheet.createRow(rowID);
-				for (short colID = 0; colID < table.getColumnCount(); colID++) {
+				for (int colID = 0; colID < table.getColumnCount(); colID++) {
 					HSSFCell cell = row.createCell(colID);
 					Object value = table.getValueAt(rowID, colID);
 					if (value.getClass().equals(Integer.class)
