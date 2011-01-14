@@ -1,6 +1,6 @@
 package com.puresol.coding.metrics;
 
-import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -8,7 +8,9 @@ import java.util.List;
 import java.util.Map;
 
 import javax.i18n4java.Translator;
+import javax.swing.JOptionPane;
 
+import com.puresol.coding.analysis.AnalyzedFile;
 import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.evaluator.CodeRangeEvaluator;
@@ -19,6 +21,7 @@ import com.puresol.document.Chapter;
 import com.puresol.document.Document;
 import com.puresol.document.Paragraph;
 import com.puresol.document.Table;
+import com.puresol.gui.Application;
 
 public abstract class AbstractProjectMetric<T extends CodeRangeEvaluator>
 		extends AbstractEvaluator implements ProjectEvaluator {
@@ -44,41 +47,51 @@ public abstract class AbstractProjectMetric<T extends CodeRangeEvaluator>
 
 	@Override
 	public void run() {
-		qualities.clear();
-		List<File> files = projectAnalyzer.getFiles();
-		if (getMonitor() != null) {
-			getMonitor().setRange(0, files.size());
-			getMonitor().setDescription(getName());
-		}
-		int sum = 0;
-		int count = 0;
-		int qualCount = 0;
-		Collections.sort(files);
-		for (File file : files) {
-			if (Thread.interrupted()) {
-				return;
-			}
+		try {
+			qualities.clear();
+			List<AnalyzedFile> files = projectAnalyzer.getAnalyzedFiles();
 			if (getMonitor() != null) {
-				count++;
-				getMonitor().setStatus(count);
+				getMonitor().setRange(0, files.size());
+				getMonitor().setDescription(getName());
 			}
-			Map<String, SourceCodeQuality> levels = processFile(file);
-			qualities.putAll(levels);
-			for (SourceCodeQuality level : levels.values()) {
-				if (level != SourceCodeQuality.UNSPECIFIED) {
-					sum += level.getLevel();
-					qualCount++;
+			int sum = 0;
+			int count = 0;
+			int qualCount = 0;
+			Collections.sort(files);
+			for (AnalyzedFile file : files) {
+				if (Thread.interrupted()) {
+					return;
 				}
+				if (getMonitor() != null) {
+					count++;
+					getMonitor().setStatus(count);
+				}
+				Map<String, SourceCodeQuality> levels;
+				levels = processFile(file);
+				qualities.putAll(levels);
+				for (SourceCodeQuality level : levels.values()) {
+					if (level != SourceCodeQuality.UNSPECIFIED) {
+						sum += level.getLevel();
+						qualCount++;
+					}
+				}
+
 			}
-		}
-		int result = (int) Math.round((double) sum / (double) qualCount);
-		projectQuality = SourceCodeQuality.fromLevel(result);
-		if (getMonitor() != null) {
-			getMonitor().finish();
+			int result = (int) Math.round((double) sum / (double) qualCount);
+			projectQuality = SourceCodeQuality.fromLevel(result);
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(Application.getInstance(),
+					translator.i18n("IOException was thrown!"),
+					translator.i18n("Error"), JOptionPane.ERROR_MESSAGE);
+		} finally {
+			if (getMonitor() != null) {
+				getMonitor().finish();
+			}
 		}
 	}
 
-	abstract protected Map<String, SourceCodeQuality> processFile(File file);
+	abstract protected Map<String, SourceCodeQuality> processFile(
+			AnalyzedFile file) throws IOException;
 
 	@Override
 	public SourceCodeQuality getQuality() {

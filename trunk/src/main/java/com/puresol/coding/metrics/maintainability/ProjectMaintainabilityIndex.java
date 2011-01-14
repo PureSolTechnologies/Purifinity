@@ -1,13 +1,14 @@
 package com.puresol.coding.metrics.maintainability;
 
-import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.ProgrammingLanguage;
-import com.puresol.coding.analysis.Analyzer;
+import com.puresol.coding.analysis.Analysis;
+import com.puresol.coding.analysis.AnalyzedFile;
 import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.metrics.AbstractProjectMetric;
 import com.puresol.coding.quality.QualityCharacteristic;
@@ -24,13 +25,12 @@ public class ProjectMaintainabilityIndex extends
 	}
 
 	@Override
-	protected Map<String, SourceCodeQuality> processFile(File file) {
-
+	protected Map<String, SourceCodeQuality> processFile(AnalyzedFile file)
+			throws IOException {
 		Map<String, SourceCodeQuality> results = new HashMap<String, SourceCodeQuality>();
-
-		Analyzer analyzer = getProjectAnalyzer().getAnalyzer(file);
-		ProgrammingLanguage language = analyzer.getLanguage();
-		ParserTree parserTree = analyzer.getParserTree();
+		Analysis analysis = getProjectAnalyzer().getAnalysis(file);
+		ProgrammingLanguage language = analysis.getLanguage();
+		ParserTree parserTree = analysis.getParserTree();
 
 		for (CodeRange codeRange : language.getAnalyzableCodeRanges(parserTree)) {
 			MaintainabilityIndex metric = new MaintainabilityIndex(language,

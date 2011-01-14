@@ -10,16 +10,19 @@
 
 package com.puresol.coding.metrics.cocomo;
 
-import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
 import javax.i18n4java.Translator;
 
+import org.apache.log4j.Logger;
+
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.CodeRangeType;
-import com.puresol.coding.analysis.Analyzer;
+import com.puresol.coding.analysis.Analysis;
+import com.puresol.coding.analysis.AnalyzedFile;
 import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.evaluator.ProjectEvaluator;
@@ -45,6 +48,7 @@ public class CoCoMo extends AbstractEvaluator implements ProjectEvaluator {
 
 	private static final long serialVersionUID = 5098378023541671490L;
 
+	private static final Logger logger = Logger.getLogger(CoCoMo.class);
 	private static final Translator translator = Translator
 			.getTranslator(CoCoMo.class);
 
@@ -60,7 +64,7 @@ public class CoCoMo extends AbstractEvaluator implements ProjectEvaluator {
 	public static final List<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new ArrayList<QualityCharacteristic>();
 
 	private final CoCoMoValueSet cocomoValues = new CoCoMoValueSet();
-	private final Hashtable<File, CoCoMoValueSet> fileCoCoMoValues = new Hashtable<File, CoCoMoValueSet>();
+	private final Hashtable<AnalyzedFile, CoCoMoValueSet> fileCoCoMoValues = new Hashtable<AnalyzedFile, CoCoMoValueSet>();
 	private final ProjectAnalyzer projectAnalyzer;
 
 	public CoCoMo(ProjectAnalyzer projectAnalyzer) {
@@ -81,14 +85,14 @@ public class CoCoMo extends AbstractEvaluator implements ProjectEvaluator {
 	 */
 	@Override
 	public void run() {
-		List<File> files = projectAnalyzer.getFiles();
+		List<AnalyzedFile> files = projectAnalyzer.getAnalyzedFiles();
 		if (getMonitor() != null) {
 			getMonitor().setRange(0, files.size());
 			getMonitor().setDescription(NAME);
 		}
 		int sloc = 0;
 		int count = 0;
-		for (File file : files) {
+		for (AnalyzedFile file : files) {
 			if (Thread.interrupted()) {
 				return;
 			}
@@ -96,7 +100,12 @@ public class CoCoMo extends AbstractEvaluator implements ProjectEvaluator {
 				count++;
 				getMonitor().setStatus(count);
 			}
-			sloc += getFileSLOC(file);
+			try {
+				sloc += getFileSLOC(file);
+			} catch (IOException e) {
+				logger.error(e.getMessage(), e);
+				logger.error("Process with next file...");
+			}
 		}
 		cocomoValues.setSloc(sloc);
 		if (getMonitor() != null) {
@@ -104,10 +113,10 @@ public class CoCoMo extends AbstractEvaluator implements ProjectEvaluator {
 		}
 	}
 
-	private int getFileSLOC(File file) {
-		Analyzer analyzer = projectAnalyzer.getAnalyzer(file);
-		ParserTree parserTree = analyzer.getParserTree();
-		SLOCMetric metric = new SLOCMetric(analyzer.getLanguage(),
+	private int getFileSLOC(AnalyzedFile file) throws IOException {
+		Analysis analysis = projectAnalyzer.getAnalysis(file);
+		ParserTree parserTree = analysis.getParserTree();
+		SLOCMetric metric = new SLOCMetric(analysis.getLanguage(),
 				new CodeRange("", CodeRangeType.FILE, parserTree));
 		metric.run();
 		int sloc = metric.getResult().getProLOC();
@@ -115,7 +124,7 @@ public class CoCoMo extends AbstractEvaluator implements ProjectEvaluator {
 		return sloc;
 	}
 
-	private void addCodeRangeCoCoMo(File file, int sloc) {
+	private void addCodeRangeCoCoMo(AnalyzedFile file, int sloc) {
 		CoCoMoValueSet valueSet = new CoCoMoValueSet();
 		valueSet.setSloc(sloc);
 		valueSet.setComplexity(cocomoValues.getComplexity());
@@ -126,7 +135,7 @@ public class CoCoMo extends AbstractEvaluator implements ProjectEvaluator {
 
 	public void setComplexity(Complexity complexity) {
 		cocomoValues.setComplexity(complexity);
-		for (File file : fileCoCoMoValues.keySet()) {
+		for (AnalyzedFile file : fileCoCoMoValues.keySet()) {
 			fileCoCoMoValues.get(file).setComplexity(complexity);
 		}
 	}
@@ -191,5 +200,4 @@ public class CoCoMo extends AbstractEvaluator implements ProjectEvaluator {
 		}
 		return document;
 	}
-
 }

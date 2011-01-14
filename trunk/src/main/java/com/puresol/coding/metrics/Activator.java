@@ -5,8 +5,6 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.List;
 
-import javax.swingx.config.APIInformation;
-
 import org.apache.log4j.Logger;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -22,6 +20,7 @@ import com.puresol.coding.metrics.maintainability.MaintainabilityIndexServiceFac
 import com.puresol.coding.metrics.mccabe.McCabeMetricServiceFactory;
 import com.puresol.coding.metrics.normmaint.NormalizedMaintainabilityIndexServiceFactory;
 import com.puresol.coding.metrics.sloc.SLOCMetricServiceFactory;
+import com.puresol.config.APIInformation;
 
 /**
  * This class is used as OSGi bundle activator. This class only registers and
