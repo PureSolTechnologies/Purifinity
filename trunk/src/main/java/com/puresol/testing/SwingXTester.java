@@ -3,9 +3,10 @@ package com.puresol.testing;
 import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.SwingUtilities;
-import javax.swingx.Application;
 
 import org.apache.log4j.Logger;
+
+import com.puresol.gui.Application;
 
 public class SwingXTester {
 

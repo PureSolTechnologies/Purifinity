@@ -11,30 +11,36 @@
 package com.puresol.gui.entities;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 
 import javax.i18n4java.Translator;
+import javax.swing.JButton;
 import javax.swing.JOptionPane;
-import javax.swingx.Application;
-import javax.swingx.Button;
-import javax.swingx.Panel;
-import javax.swingx.ScrollPane;
-import javax.swingx.connect.Signal;
-import javax.swingx.connect.Slot;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
-public class EntityTableEditor extends Panel {
+import com.puresol.gui.Application;
+
+public class EntityTableEditor extends JPanel implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 
 	private static final Translator translator = Translator
 			.getTranslator(EntityTableEditor.class);
 
+	private final JButton showButton = new JButton(translator.i18n("Show..."));
+	private final JButton addButton = new JButton(translator.i18n("Add..."));
+	private final JButton changeButton = new JButton(
+			translator.i18n("Change..."));
+	private final JButton deleteButton = new JButton(
+			translator.i18n("Delete..."));
+
 	private List<?> entities = null;
+	@SuppressWarnings("unused")
+	// TODO remove!
 	private Class<?> entityType = null;
-	private Button showButton = null;
-	private Button addButton = null;
-	private Button changeButton = null;
-	private Button deleteButton = null;
 	private EntityTable table = null;
 
 	public EntityTableEditor() {
@@ -50,20 +56,19 @@ public class EntityTableEditor extends Panel {
 
 	private void initDesktop() {
 		setLayout(new BorderLayout());
-		Panel buttonPanel = new Panel();
-		buttonPanel.add(showButton = new Button(translator.i18n("Show...")));
-		buttonPanel.add(addButton = new Button(translator.i18n("Add...")));
-		buttonPanel
-				.add(changeButton = new Button(translator.i18n("Change...")));
-		buttonPanel
-				.add(deleteButton = new Button(translator.i18n("Delete...")));
-		add(buttonPanel, BorderLayout.NORTH);
-		add(new ScrollPane(table = new EntityTable()), BorderLayout.CENTER);
+		JPanel buttonPanel = new JPanel();
 
-		showButton.connect("start", this, "show");
-		addButton.connect("start", this, "add");
-		changeButton.connect("start", this, "change");
-		deleteButton.connect("start", this, "delete");
+		showButton.addActionListener(this);
+		addButton.addActionListener(this);
+		changeButton.addActionListener(this);
+		deleteButton.addActionListener(this);
+
+		buttonPanel.add(showButton);
+		buttonPanel.add(addButton);
+		buttonPanel.add(changeButton);
+		buttonPanel.add(deleteButton);
+		add(buttonPanel, BorderLayout.NORTH);
+		add(new JScrollPane(table = new EntityTable()), BorderLayout.CENTER);
 	}
 
 	public void setEntities(Class<?> entityType, List<?> entities) {
@@ -76,7 +81,7 @@ public class EntityTableEditor extends Panel {
 		return entities;
 	}
 
-	private Object getSelectedEntity() {
+	public Object getSelectedEntity() {
 		int index = table.getSelectedRow();
 		if (index < 0) {
 			JOptionPane.showConfirmDialog(Application.getInstance(),
@@ -88,52 +93,9 @@ public class EntityTableEditor extends Panel {
 		return entities.get(index);
 	}
 
-	@Slot
-	public void show() {
-		Object entity = getSelectedEntity();
-		if (entity != null) {
-			show(entity);
-		}
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
 	}
 
-	@Slot
-	public void add() {
-		add(entityType);
-	}
-
-	@Slot
-	public void change() {
-		Object entity = getSelectedEntity();
-		if (entity != null) {
-			change(entity);
-		}
-	}
-
-	@Slot
-	public void delete() {
-		Object entity = getSelectedEntity();
-		if (entity != null) {
-			delete(entity);
-		}
-	}
-
-	@Signal
-	public void show(Object entity) {
-		connectionManager.emitSignal("show", entity);
-	}
-
-	@Signal
-	public void add(Class<?> type) {
-		connectionManager.emitSignal("add", type);
-	}
-
-	@Signal
-	public void change(Object entity) {
-		connectionManager.emitSignal("change", entity);
-	}
-
-	@Signal
-	public void delete(Object entity) {
-		connectionManager.emitSignal("delete", entity);
-	}
 }

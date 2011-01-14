@@ -2,19 +2,20 @@ package com.puresol.gui;
 
 import javax.i18n4java.Translator;
 import javax.swing.BoxLayout;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.JTree;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
-import javax.swingx.Panel;
-import javax.swingx.ScrollPane;
-import javax.swingx.Tree;
-import javax.swingx.connect.Slot;
 
 import com.puresol.utils.Property;
 import com.puresol.utils.PropertyHandler;
 
-public class PropertyEditor extends Panel {
+public class PropertyEditor extends JPanel implements TreeSelectionListener {
 
 	private static final long serialVersionUID = 7873839972939582017L;
 
@@ -23,7 +24,7 @@ public class PropertyEditor extends Panel {
 
 	private final PropertyHandler propertyHandler;
 
-	private Tree tree;
+	private JTree tree;
 	private InputField content;
 	private TreePath oldPath = null;
 
@@ -39,13 +40,13 @@ public class PropertyEditor extends Panel {
 		DefaultMutableTreeNode top = new DefaultMutableTreeNode(
 				translator.i18n("Properties"));
 		addTreeNodes(top);
-		tree = new Tree(top);
-		tree.connect("valueChanged", this, "selectionChanged");
+		tree = new JTree(top);
+		tree.addTreeSelectionListener(this);
 
 		content = new InputField();
 
-		add(new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true, new ScrollPane(
-				tree), new ScrollPane(content)));
+		add(new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true, new JScrollPane(
+				tree), new JScrollPane(content)));
 	}
 
 	private void addTreeNodes(DefaultMutableTreeNode top) {
@@ -78,10 +79,8 @@ public class PropertyEditor extends Panel {
 		return propertyHandler;
 	}
 
-	@Slot
-	public void selectionChanged() {
-		TreePath path = tree.getSelectionPath();
-		if (path == null) {
+	public void selectionChanged(TreePath treePath) {
+		if (treePath == null) {
 			content.setType(null);
 			return;
 		}
@@ -91,14 +90,14 @@ public class PropertyEditor extends Panel {
 					.setProperty(property, content.getValue().toString());
 			oldPath = null;
 		}
-		if (!((TreeNode) path.getLastPathComponent()).isLeaf()) {
+		if (!((TreeNode) treePath.getLastPathComponent()).isLeaf()) {
 			content.setType(null);
 			return;
 		}
-		String property = convertPathToPropertyName(path);
+		String property = convertPathToPropertyName(treePath);
 		content.setValue(propertyHandler.getPropertyDefinition(property)
 				.getType(), propertyHandler.getProperty(property));
-		oldPath = path;
+		oldPath = treePath;
 	}
 
 	private String convertPathToPropertyName(TreePath path) {
@@ -111,5 +110,12 @@ public class PropertyEditor extends Panel {
 		}
 		property = property.substring(property.indexOf(".") + 1);
 		return property;
+	}
+
+	@Override
+	public void valueChanged(TreeSelectionEvent o) {
+		if (o.getSource() == tree) {
+			selectionChanged(o.getPath());
+		}
 	}
 }

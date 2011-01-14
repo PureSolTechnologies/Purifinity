@@ -3,9 +3,9 @@ package com.puresol.gui.ua;
 import java.awt.BorderLayout;
 
 import javax.i18n4java.Translator;
-import javax.swingx.Dialog;
-import javax.swingx.ImageBox;
 
+import com.puresol.gui.Dialog;
+import com.puresol.gui.ImageBox;
 import com.puresol.ua.SubjectInformation;
 
 public class SubjectInformationDialog extends Dialog {

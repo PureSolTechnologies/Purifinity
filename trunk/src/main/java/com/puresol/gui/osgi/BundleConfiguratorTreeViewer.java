@@ -3,52 +3,39 @@ package com.puresol.gui.osgi;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.i18n4java.Translator;
-import javax.swing.border.TitledBorder;
+import javax.swing.JTree;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
-import javax.swingx.BorderLayoutWidget;
-import javax.swingx.ScrollPane;
-import javax.swingx.Tree;
-import javax.swingx.connect.Signal;
-import javax.swingx.connect.Slot;
 
-public class BundleConfiguratorTreeViewer extends BorderLayoutWidget implements
-		TreeModel {
+public class BundleConfiguratorTreeViewer extends JTree implements TreeModel {
 
 	private static final long serialVersionUID = -7273574448972584594L;
 
-	private static final Translator translator = Translator
-			.getTranslator(BundleConfiguratorTreeViewer.class);
-
 	private final List<TreeModelListener> treeModelListeners = new ArrayList<TreeModelListener>();
 	private BundleConfiguratorTree configuratorTree;
-	private Tree tree;
 
 	public BundleConfiguratorTreeViewer() {
 		super();
+		this.setModel(this);
 		initUI();
 	}
 
 	public BundleConfiguratorTreeViewer(BundleConfiguratorTree ast) {
 		super();
+		this.setModel(this);
 		initUI();
 		setConfiguratorTree(ast);
 	}
 
 	private void initUI() {
-		tree = new Tree(this);
-		tree.setEditable(false);
-		tree.setBorder(new TitledBorder(translator.i18n("Configurator Tree")));
-		tree.setEditable(true);
-		tree.getSelectionModel().setSelectionMode(
+		setEditable(false);
+		setEditable(true);
+		getSelectionModel().setSelectionMode(
 				TreeSelectionModel.SINGLE_TREE_SELECTION);
-		tree.setShowsRootHandles(true);
-		tree.connect("valueChanged", this, "valueChanged", TreePath.class);
-		setCenter(new ScrollPane(tree));
+		setShowsRootHandles(true);
 	}
 
 	public void setConfiguratorTree(BundleConfiguratorTree parserTree) {
@@ -103,11 +90,5 @@ public class BundleConfiguratorTreeViewer extends BorderLayoutWidget implements
 		for (TreeModelListener l : treeModelListeners) {
 			l.treeNodesChanged(new TreeModelEvent(this, path));
 		}
-	}
-
-	@Slot
-	@Signal
-	void valueChanged(TreePath treePath) {
-		connectionManager.emitSignal("valueChanged", treePath);
 	}
 }

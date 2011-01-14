@@ -1,6 +1,6 @@
 package com.puresol.ua;
 
-import javax.swingx.config.ClassRegistry;
+import com.puresol.config.ClassRegistry;
 
 /**
  * This class is a factory class for class registry registered user

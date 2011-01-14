@@ -14,10 +14,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Vector;
 
-import javax.swingx.AbstractExtendedTableModel;
-
 import com.puresol.entities.forms.TemplateElement;
 import com.puresol.entities.forms.TemplateInformation;
+import com.puresol.gui.AbstractExtendedTableModel;
 
 /**
  * This table model is designed to show ResultSet objects in a Table. The view

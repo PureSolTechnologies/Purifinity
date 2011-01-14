@@ -2,14 +2,15 @@ package com.puresol.rendering;
 
 import java.awt.Graphics;
 
-import javax.swingx.Dialog;
-import javax.swingx.Panel;
+import javax.swing.JPanel;
+
+import com.puresol.gui.Dialog;
 
 public class RendererTester extends Dialog {
 
 	private static final long serialVersionUID = -6972450146648013502L;
 
-	private class RendererPanel extends Panel {
+	private class RendererPanel extends JPanel {
 
 		private static final long serialVersionUID = 1L;
 

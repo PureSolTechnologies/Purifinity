@@ -2,22 +2,23 @@ package com.puresol.gui.osgi;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.i18n4java.Translator;
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
-import javax.swingx.Application;
-import javax.swingx.Button;
-import javax.swingx.Dialog;
-import javax.swingx.FreeList;
-import javax.swingx.Panel;
-import javax.swingx.connect.Slot;
-import javax.swingx.filefilter.JARFilter;
+import javax.swing.JPanel;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
+
+import com.puresol.filefilter.JARFilter;
+import com.puresol.gui.Application;
+import com.puresol.gui.Dialog;
+import com.puresol.gui.FreeList;
 
 /**
  * This class provides a simple BundleManager GUI for OSGi bundles.
@@ -32,14 +33,17 @@ public class BundleManager extends Dialog {
 	private static final Translator translator = Translator
 			.getTranslator(BundleManager.class);
 
+	private final JButton installBundle = new JButton(
+			translator.i18n("Install new plugin..."));
+	private final JButton uninstallBundle = new JButton(
+			translator.i18n("Uninstall plugin..."));
+	private final JButton updateBundle = new JButton(translator.i18n("Update"));
+	private final JButton startBundle = new JButton(translator.i18n("Start"));
+	private final JButton stopBundle = new JButton(translator.i18n("Stop"));
+	private final JButton updateList = new JButton(translator.i18n("Update"));
+
 	private final BundleContext bundleContext;
 	private FreeList bundles = null;
-	private Button installBundle = null;
-	private Button uninstallBundle = null;
-	private Button updateBundle = null;
-	private Button startBundle = null;
-	private Button stopBundle = null;
-	private Button updateList = null;
 
 	public BundleManager(BundleContext context) {
 		super(translator.i18n("Plugin Manager"), true);
@@ -52,32 +56,29 @@ public class BundleManager extends Dialog {
 	private void initUI() {
 		setLayout(new BorderLayout());
 
-		Panel actionPanel = new Panel();
+		JPanel actionPanel = new JPanel();
 		GridLayout layout = new GridLayout(6, 1);
 		actionPanel.setLayout(layout);
-		actionPanel.add(updateList = new Button(translator.i18n("Update")));
-		actionPanel.add(installBundle = new Button(translator
-				.i18n("Install new plugin...")));
-		actionPanel.add(uninstallBundle = new Button(translator
-				.i18n("Uninstall plugin...")));
-		actionPanel.add(updateBundle = new Button(translator.i18n("Update")));
-		actionPanel.add(startBundle = new Button(translator.i18n("Start")));
-		actionPanel.add(stopBundle = new Button(translator.i18n("Stop")));
+		actionPanel.add(updateList);
+		actionPanel.add(installBundle);
+		actionPanel.add(uninstallBundle);
+		actionPanel.add(updateBundle);
+		actionPanel.add(startBundle);
+		actionPanel.add(stopBundle);
 
-		updateList.connect("start", this, "update");
-		installBundle.connect("start", this, "installBundle");
-		uninstallBundle.connect("start", this, "uninstallBundle");
-		updateBundle.connect("start", this, "updateBundle");
-		startBundle.connect("start", this, "startBundle");
-		stopBundle.connect("start", this, "stopBundle");
+		updateList.addActionListener(this);
+		installBundle.addActionListener(this);
+		uninstallBundle.addActionListener(this);
+		updateBundle.addActionListener(this);
+		startBundle.addActionListener(this);
+		stopBundle.addActionListener(this);
 
 		add(actionPanel, BorderLayout.EAST);
 		add(bundles = new FreeList(), BorderLayout.CENTER);
 		add(getDefaultOKButton(), BorderLayout.SOUTH);
 	}
 
-	@Slot
-	public void update() {
+	private void update() {
 		bundles.removeAll();
 		Map<Object, Object> listData = new HashMap<Object, Object>();
 		for (Bundle bundle : bundleContext.getBundles()) {
@@ -95,8 +96,7 @@ public class BundleManager extends Dialog {
 				+ bundle.getSymbolicName() + "(" + bundle.getBundleId() + ")";
 	}
 
-	@Slot
-	public void installBundle() {
+	private void installBundle() {
 		try {
 			JFileChooser fileDialog = new JFileChooser();
 			fileDialog.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -112,8 +112,7 @@ public class BundleManager extends Dialog {
 		}
 	}
 
-	@Slot
-	public void uninstallBundle() {
+	private void uninstallBundle() {
 		try {
 			Bundle bundle = (Bundle) bundles.getSelectedValue();
 			if (bundle != null) {
@@ -126,8 +125,7 @@ public class BundleManager extends Dialog {
 		}
 	}
 
-	@Slot
-	public void updateBundle() {
+	private void updateBundle() {
 		try {
 			Bundle bundle = (Bundle) bundles.getSelectedValue();
 			if (bundle != null) {
@@ -140,8 +138,7 @@ public class BundleManager extends Dialog {
 		}
 	}
 
-	@Slot
-	public void startBundle() {
+	private void startBundle() {
 		try {
 			Bundle bundle = (Bundle) bundles.getSelectedValue();
 			if (bundle != null) {
@@ -154,8 +151,7 @@ public class BundleManager extends Dialog {
 		}
 	}
 
-	@Slot
-	public void stopBundle() {
+	private void stopBundle() {
 		try {
 			Bundle bundle = (Bundle) bundles.getSelectedValue();
 			if (bundle != null) {
@@ -167,4 +163,24 @@ public class BundleManager extends Dialog {
 					"Selected bundle could not be stopped.", e);
 		}
 	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == updateList) {
+			update();
+		} else if (e.getSource() == installBundle) {
+			installBundle();
+		} else if (e.getSource() == uninstallBundle) {
+			uninstallBundle();
+		} else if (e.getSource() == updateBundle) {
+			updateBundle();
+		} else if (e.getSource() == startBundle) {
+			startBundle();
+		} else if (e.getSource() == stopBundle) {
+			stopBundle();
+		} else {
+			super.actionPerformed(e);
+		}
+	}
+
 }

@@ -1,20 +1,21 @@
 package com.puresol.gui.data;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.i18n4java.Translator;
 import javax.swing.BoxLayout;
-import javax.swingx.Button;
-import javax.swingx.Dialog;
-import javax.swingx.Panel;
-import javax.swingx.connect.Slot;
+import javax.swing.JButton;
+import javax.swing.JPanel;
 
 import com.puresol.data.IllegalNamePartException;
 import com.puresol.data.IllegalPersonNameException;
 import com.puresol.data.PersonName;
 import com.puresol.data.PersonNamePart;
 import com.puresol.exceptions.StrangeSituationException;
+import com.puresol.gui.Dialog;
 
 /**
  * This class provides a GUI for input of extended names.
@@ -22,7 +23,7 @@ import com.puresol.exceptions.StrangeSituationException;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class NamePanel extends Panel {
+public class NamePanel extends JPanel implements ActionListener {
 
 	private static final long serialVersionUID = 7298257976109780145L;
 
@@ -31,9 +32,9 @@ public class NamePanel extends Panel {
 
 	private ArrayList<NamePartPanel> nameParts = new ArrayList<NamePartPanel>();
 
-	private Button reduce = null;
-	private Button extend = null;
-	private Panel partsPanel = null;
+	private final JButton reduce = new JButton(translator.i18n("reduce"));
+	private final JButton extend = new JButton(translator.i18n("extend"));
+	private final JPanel partsPanel = new JPanel();
 
 	public NamePanel() {
 		initValues();
@@ -46,12 +47,12 @@ public class NamePanel extends Panel {
 
 	private void initUI() {
 		setLayout(new BorderLayout());
-		add(reduce = new Button(translator.i18n("reduce")), BorderLayout.WEST);
-		add(partsPanel = new Panel(), BorderLayout.CENTER);
-		add(extend = new Button(translator.i18n("extend")), BorderLayout.EAST);
+		add(reduce, BorderLayout.WEST);
+		add(partsPanel, BorderLayout.CENTER);
+		add(extend, BorderLayout.EAST);
 
-		reduce.connect("start", this, "reduce");
-		extend.connect("start", this, "extend");
+		reduce.addActionListener(this);
+		extend.addActionListener(this);
 		partsPanel.setLayout(new BoxLayout(partsPanel, BoxLayout.X_AXIS));
 		updateNamePartsPanel();
 	}
@@ -65,14 +66,12 @@ public class NamePanel extends Panel {
 		partsPanel.revalidate();
 	}
 
-	@Slot
-	public void reduce() {
+	private void reduce() {
 		nameParts.remove(nameParts.size() - 1);
 		updateNamePartsPanel();
 	}
 
-	@Slot
-	public void extend() {
+	private void extend() {
 		nameParts.add(new NamePartPanel());
 		updateNamePartsPanel();
 	}
@@ -106,5 +105,14 @@ public class NamePanel extends Panel {
 			e.printStackTrace();
 		}
 
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == reduce) {
+			reduce();
+		} else if (e.getSource() == extend) {
+			extend();
+		}
 	}
 }

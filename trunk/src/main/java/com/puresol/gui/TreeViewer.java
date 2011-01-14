@@ -1,10 +1,8 @@
 package com.puresol.gui;
 
+import javax.swing.JTree;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
-import javax.swingx.Tree;
-import javax.swingx.connect.Signal;
-import javax.swingx.connect.Slot;
 
 /**
  * This is a special panel which implements a TreeModel and shows a Tree object
@@ -17,7 +15,7 @@ import javax.swingx.connect.Slot;
  * @param <T>
  *            needs to have the interface Tree<T> implemented.
  */
-public class TreeViewer<T extends com.puresol.trees.Tree<T>> extends Tree {
+public class TreeViewer<T extends com.puresol.trees.Tree<T>> extends JTree {
 
 	private static final long serialVersionUID = 3032479272552076138L;
 
@@ -43,8 +41,6 @@ public class TreeViewer<T extends com.puresol.trees.Tree<T>> extends Tree {
 		getSelectionModel().setSelectionMode(
 				TreeSelectionModel.SINGLE_TREE_SELECTION);
 		setShowsRootHandles(true);
-
-		connect("valueChanged", this, "sendSelectedValue", TreePath.class);
 	}
 
 	public T getSelection() {
@@ -55,18 +51,6 @@ public class TreeViewer<T extends com.puresol.trees.Tree<T>> extends Tree {
 		@SuppressWarnings("unchecked")
 		T t = (T) path.getLastPathComponent();
 		return t;
-	}
-
-	@Signal
-	public void valueChanged(T t) {
-		connectionManager.emitSignal("valueChanged", t);
-	}
-
-	@Slot
-	public void sendSelectedValue(TreePath treePath) {
-		@SuppressWarnings("unchecked")
-		T t = (T) treePath.getLastPathComponent();
-		valueChanged(t);
 	}
 
 	public void setTreeData(T dataTree) {

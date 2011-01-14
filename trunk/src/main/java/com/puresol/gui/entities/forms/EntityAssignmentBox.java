@@ -11,35 +11,37 @@
 package com.puresol.gui.entities.forms;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Vector;
 
 import javax.i18n4java.Translator;
 import javax.persistence.EntityManager;
-import javax.swingx.AssignmentBox;
-import javax.swingx.Button;
-import javax.swingx.Panel;
-import javax.swingx.connect.Slot;
+import javax.swing.JButton;
+import javax.swing.JPanel;
 
 import com.puresol.appserv.EntityManagerExtension;
 import com.puresol.appserv.EntityManagerFactories;
 import com.puresol.entities.forms.Template;
 import com.puresol.exceptions.StrangeSituationException;
+import com.puresol.gui.AssignmentBox;
 import com.puresol.gui.entities.EntityDialog;
 
-public class EntityAssignmentBox extends Panel {
+public class EntityAssignmentBox extends JPanel implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 
 	private static final Translator translator = Translator
 			.getTranslator(EntityAssignmentBox.class);
 
-	private AssignmentBox assignmentBox = null;
+	private final AssignmentBox assignmentBox = new AssignmentBox();
+	private JButton addButton = null;
+
 	private Class<?> type = null;
 	private Collection<?> entities = null;
 	private Collection<?> entityReservoir = null;
-	private Button addButton = null;
 
 	static public EntityAssignmentBox from(Class<?>[] type,
 			Collection<?> entities) {
@@ -60,17 +62,17 @@ public class EntityAssignmentBox extends Panel {
 
 	private void initializeUI() {
 		setLayout(new BorderLayout());
-		add(assignmentBox = new AssignmentBox(), BorderLayout.CENTER);
+		add(assignmentBox, BorderLayout.CENTER);
 		try {
 			Template template = (Template) type.getAnnotation(Template.class);
 			if (template != null) {
-				add(addButton = new Button(translator.i18n("Add new {0}",
+				add(addButton = new JButton(translator.i18n("Add new {0}",
 						template.name())), BorderLayout.SOUTH);
 			} else {
-				add(addButton = new Button(translator.i18n("Add new...")),
+				add(addButton = new JButton(translator.i18n("Add new...")),
 						BorderLayout.SOUTH);
 			}
-			addButton.connect("start", this, "add");
+			addButton.addActionListener(this);
 		} catch (IllegalArgumentException e) {
 			throw new StrangeSituationException(e);
 		} catch (SecurityException e) {
@@ -123,11 +125,17 @@ public class EntityAssignmentBox extends Panel {
 		return entities;
 	}
 
-	@Slot
-	public void add() {
+	private void add() {
 		EntityDialog dialog = EntityDialog.create(type);
 		if (dialog.run()) {
 			initializeReservoir();
+		}
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == addButton) {
+			add();
 		}
 	}
 }

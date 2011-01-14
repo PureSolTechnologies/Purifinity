@@ -5,9 +5,10 @@ import java.io.IOException;
 import java.net.URI;
 
 import javax.swing.JOptionPane;
-import javax.swingx.Application;
 
 import org.apache.log4j.Logger;
+
+import com.puresol.gui.Application;
 
 public class Browser {
 	private static final Logger logger = Logger.getLogger(Browser.class);

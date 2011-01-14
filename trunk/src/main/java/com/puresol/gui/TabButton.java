@@ -1,13 +1,14 @@
 package com.puresol.gui;
 
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
-import javax.swingx.Button;
-import javax.swingx.Label;
-import javax.swingx.Panel;
-import javax.swingx.TabbedPane;
-import javax.swingx.connect.Slot;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 
 /**
  * This is a special tab button for tabbed panes.
@@ -15,13 +16,15 @@ import javax.swingx.connect.Slot;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class TabButton extends Panel {
+public class TabButton extends JPanel implements ActionListener {
 
 	private static final long serialVersionUID = -1593531170676677125L;
 
-	private final TabbedPane pane;
+	private final JButton button = new JButton("x");
+	private final JTabbedPane pane;
 
-	public TabButton(TabbedPane pane) {
+	
+	public TabButton(JTabbedPane pane) {
 		super();
 		this.pane = pane;
 		initUI();
@@ -30,7 +33,7 @@ public class TabButton extends Panel {
 	private void initUI() {
 		setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
 		setOpaque(false);
-		Label label = new Label() {
+		JLabel label = new JLabel() {
 
 			private static final long serialVersionUID = -6980905788605760509L;
 
@@ -44,16 +47,22 @@ public class TabButton extends Panel {
 		};
 		label.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 5));
 		add(label);
-		Button button = new Button("x");
-		button.connect("start", this, "close");
+		button.addActionListener(this);
 		add(button);
 	}
 
-	@Slot
-	public void close() {
+	private void close() {
 		int i = pane.indexOfTabComponent(this);
 		if (i != -1) {
 			pane.removeTabAt(i);
 		}
 	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == button) {
+			close();
+		}
+	}
+
 }

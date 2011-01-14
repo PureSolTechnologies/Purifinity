@@ -16,13 +16,13 @@ import java.lang.reflect.InvocationTargetException;
 import javax.i18n4java.Translator;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.swingx.Dialog;
 
 import org.apache.log4j.Logger;
 
 import com.puresol.appserv.EntityManagerFactories;
 import com.puresol.entities.forms.TemplateInformation;
 import com.puresol.exceptions.StrangeSituationException;
+import com.puresol.gui.Dialog;
 import com.puresol.gui.entities.forms.GUITemplateRenderer;
 
 /**

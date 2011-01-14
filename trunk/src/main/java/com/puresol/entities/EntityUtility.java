@@ -14,13 +14,12 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Date;
 
-import javax.swingx.data.Time;
-
 import org.apache.log4j.Logger;
 
 import com.puresol.entities.forms.AutomaticContent;
 import com.puresol.entities.forms.AutomaticContentType;
 import com.puresol.entities.forms.IllegalEntityException;
+import com.puresol.gui.data.Time;
 
 public class EntityUtility {
 

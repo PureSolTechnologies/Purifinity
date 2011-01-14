@@ -1,6 +1,6 @@
 package com.puresol.gui.osgi;
 
-import javax.swingx.Panel;
+import javax.swing.JPanel;
 
 /**
  * This interface is implements for panels which are used within the bundle
@@ -15,6 +15,6 @@ public interface BundleConfiguratorPanel {
 
 	public boolean stop();
 
-	public Panel getPanel();
+	public JPanel getPanel();
 
 }

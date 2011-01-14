@@ -23,20 +23,21 @@ import java.util.Hashtable;
 import javax.i18n4java.Translator;
 import javax.persistence.Entity;
 import javax.swing.BoxLayout;
-import javax.swingx.CheckBox;
-import javax.swingx.Label;
-import javax.swingx.Panel;
-import javax.swingx.TextField;
-import javax.swingx.data.Encrypter;
-import javax.swingx.data.Time;
-import javax.swingx.validator.IntegerValidator;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import com.puresol.entities.forms.TemplateElement;
 import com.puresol.entities.forms.TemplateInformation;
 import com.puresol.exceptions.StrangeSituationException;
+import com.puresol.gui.TextField;
+import com.puresol.gui.data.Encrypter;
+import com.puresol.gui.data.Time;
 import com.puresol.gui.entities.EntityDialog;
+import com.puresol.gui.validator.IntegerValidator;
 
-public class GUITemplateRenderer extends Panel {
+public class GUITemplateRenderer extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
@@ -96,21 +97,21 @@ public class GUITemplateRenderer extends Panel {
 			Class<?> clazz = element.getType();
 			if (clazz.equals(Boolean.class)) {
 				element.getSetter().invoke(element.getEntity(),
-						((CheckBox) component).isSelected());
+						((JCheckBox) component).isSelected());
 			} else if (clazz.equals(String.class) && (!element.isPassword())) {
 				element.getSetter().invoke(element.getEntity(),
-						((TextField) component).getText());
+						((JTextField) component).getText());
 			} else if (clazz.equals(String.class) && (element.isPassword())) {
 				element.getSetter().invoke(
 						element.getEntity(),
-						Encrypter.encryptPassword(((TextField) component)
+						Encrypter.encryptPassword(((JTextField) component)
 								.getText()));
 			} else if (clazz.equals(Integer.class)) {
 				element.getSetter().invoke(element.getEntity(),
-						Integer.valueOf(((TextField) component).getText()));
+						Integer.valueOf(((JTextField) component).getText()));
 			} else if (clazz.equals(Date.class)) {
 				element.getSetter().invoke(element.getEntity(),
-						Time.string2Date(((TextField) component).getText()));
+						Time.string2Date(((JTextField) component).getText()));
 			} else if (clazz.getAnnotation(Entity.class) != null) {
 				element.getSetter().invoke(element.getEntity(),
 						((EntityComboBox) component).getSelectedEntity());
@@ -156,15 +157,15 @@ public class GUITemplateRenderer extends Panel {
 
 	private void renderStatic() {
 		setLayout(new BorderLayout());
-		add(new Label(translator.i18n("{0} template",
+		add(new JLabel(translator.i18n("{0} template",
 				translator.i18n(template.getName()))), BorderLayout.NORTH);
-		Panel inputPanel = new Panel();
+		JPanel inputPanel = new JPanel();
 		BoxLayout boxLayout = new BoxLayout(inputPanel, BoxLayout.Y_AXIS);
 		inputPanel.setLayout(boxLayout);
 		add(inputPanel, BorderLayout.CENTER);
 		for (int index = 0; index < template.getInputCount(); index++) {
 			TemplateElement element = template.get(index);
-			Panel panel = renderElement(element);
+			JPanel panel = renderElement(element);
 			if (!element.isHidden()) {
 				inputPanel.add(panel);
 			}
@@ -173,13 +174,13 @@ public class GUITemplateRenderer extends Panel {
 
 	private void renderWithLayout() {
 		renderStatic();
-		Label label = new Label(
+		JLabel label = new JLabel(
 				translator.i18n("Layout rendering is not implemented yet!"));
 		label.setForeground(new Color(255, 0, 0));
 		add(label, BorderLayout.SOUTH);
 	}
 
-	private Panel renderElement(TemplateElement element) {
+	private JPanel renderElement(TemplateElement element) {
 		Component component = createComponent(element);
 		elementHash.put(element.getIdString(), component);
 		if (element.isAutomatic()) {
@@ -187,7 +188,7 @@ public class GUITemplateRenderer extends Panel {
 		}
 		if (element.isHidden()) {
 			component.setVisible(false);
-			Panel panel = new Panel();
+			JPanel panel = new JPanel();
 			panel.add(component);
 			return panel;
 		}
@@ -198,13 +199,16 @@ public class GUITemplateRenderer extends Panel {
 		} else if (type == EntityDialog.SHOW) {
 			component.setEnabled(false);
 		}
+		JPanel panel = new JPanel();
+		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		if (element.isOptional()) {
-			return Label.addTo(component, translator.i18n(element.getName())
-					+ " " + translator.i18n("(opt)"), Label.TOP);
+			panel.add(new JLabel(translator.i18n(element.getName()) + " "
+					+ translator.i18n("(opt)")));
 		} else {
-			return Label.addTo(component, translator.i18n(element.getName()),
-					Label.TOP);
+			panel.add(new JLabel(translator.i18n(element.getName())));
 		}
+		panel.add(component);
+		return panel;
 	}
 
 	private Component createComponent(TemplateElement element) {
@@ -243,7 +247,7 @@ public class GUITemplateRenderer extends Panel {
 	private Component create4Boolean(TemplateElement element)
 			throws IllegalArgumentException, IllegalAccessException,
 			InvocationTargetException {
-		CheckBox checkBox = new CheckBox();
+		JCheckBox checkBox = new JCheckBox();
 		Boolean set = (Boolean) element.getGetter().invoke(element.getEntity());
 		if (set != null) {
 			checkBox.setSelected(set);
@@ -254,7 +258,7 @@ public class GUITemplateRenderer extends Panel {
 	private Component create4String(TemplateElement element)
 			throws IllegalArgumentException, IllegalAccessException,
 			InvocationTargetException {
-		TextField textField = new TextField();
+		JTextField textField = new JTextField();
 		textField.setText((String) element.getGetter().invoke(
 				element.getEntity()));
 		return textField;
@@ -278,7 +282,7 @@ public class GUITemplateRenderer extends Panel {
 	private Component create4Date(TemplateElement element)
 			throws IllegalArgumentException, IllegalAccessException,
 			InvocationTargetException {
-		TextField textField = new TextField();
+		JTextField textField = new JTextField();
 		textField.setText(Time.date2String((Date) element.getGetter().invoke(
 				element.getEntity())));
 		return textField;

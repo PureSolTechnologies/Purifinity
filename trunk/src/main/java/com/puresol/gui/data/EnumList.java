@@ -3,11 +3,11 @@ package com.puresol.gui.data;
 import java.util.Hashtable;
 
 import javax.swing.ListModel;
-import javax.swingx.AbstractExtendedList;
-import javax.swingx.Dialog;
 
 import com.puresol.data.Identifiable;
 import com.puresol.data.PublicityType;
+import com.puresol.gui.AbstractExtendedList;
+import com.puresol.gui.Dialog;
 
 public class EnumList extends AbstractExtendedList {
 

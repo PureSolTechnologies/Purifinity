@@ -12,7 +12,7 @@ package com.puresol.gui.entities;
 
 import java.util.List;
 
-import javax.swingx.Table;
+import javax.swing.JTable;
 
 import com.puresol.appserv.QSysBean;
 
@@ -23,7 +23,7 @@ import com.puresol.appserv.QSysBean;
  * 
  * @author Rick-Rainer Ludwig
  */
-public class EntityTable extends Table {
+public class EntityTable extends JTable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -66,7 +66,7 @@ public class EntityTable extends Table {
 		 */
 		setModel(entityTableModel = new EntityTableModel(entities));
 		setFillsViewportHeight(true);
-		setAutoResizeMode(Table.AUTO_RESIZE_ALL_COLUMNS);
+		setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 		updateUI();
 	}
 

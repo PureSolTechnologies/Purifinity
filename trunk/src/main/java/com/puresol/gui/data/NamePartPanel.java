@@ -3,13 +3,13 @@ package com.puresol.gui.data;
 import java.awt.BorderLayout;
 
 import javax.swing.BoxLayout;
-import javax.swingx.Dialog;
-import javax.swingx.Panel;
-import javax.swingx.TextField;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import com.puresol.data.IllegalNamePartException;
 import com.puresol.data.PersonNamePart;
 import com.puresol.data.PersonNamePartType;
+import com.puresol.gui.Dialog;
 
 /**
  * This class provides a part of NamePanel to specify a name part with the
@@ -18,11 +18,11 @@ import com.puresol.data.PersonNamePartType;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class NamePartPanel extends Panel {
+public class NamePartPanel extends JPanel {
 
 	private static final long serialVersionUID = -6012865138878226773L;
 
-	private TextField text;
+	private JTextField text;
 	private EnumComboBox type;
 
 	public NamePartPanel() {
@@ -38,7 +38,7 @@ public class NamePartPanel extends Panel {
 
 	private void initUI() {
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		add(text = new TextField());
+		add(text = new JTextField());
 		add(type = EnumComboBox.forEnum(PersonNamePartType.class));
 	}
 
@@ -48,8 +48,8 @@ public class NamePartPanel extends Panel {
 	}
 
 	public PersonNamePart get() throws IllegalNamePartException {
-		return new PersonNamePart(text.getText(), (PersonNamePartType) type
-				.getSelectedItem());
+		return new PersonNamePart(text.getText(),
+				(PersonNamePartType) type.getSelectedItem());
 	}
 
 	public static void main(String[] args) {

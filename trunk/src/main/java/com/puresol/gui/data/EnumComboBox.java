@@ -2,11 +2,11 @@ package com.puresol.gui.data;
 
 import java.util.Hashtable;
 
-import javax.swingx.AbstractExtendedComboBox;
-import javax.swingx.Dialog;
 
 import com.puresol.data.Identifiable;
 import com.puresol.data.PublicityType;
+import com.puresol.gui.AbstractExtendedComboBox;
+import com.puresol.gui.Dialog;
 
 public class EnumComboBox extends AbstractExtendedComboBox {
 

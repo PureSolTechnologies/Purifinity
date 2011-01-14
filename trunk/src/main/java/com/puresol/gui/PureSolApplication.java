@@ -19,6 +19,8 @@ import java.awt.MediaTracker;
 import java.awt.SystemTray;
 import java.awt.Toolkit;
 import java.awt.TrayIcon;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URI;
@@ -30,18 +32,17 @@ import javax.swing.Box;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import javax.swingx.Application;
-import javax.swingx.Menu;
-import javax.swingx.MenuItem;
-import javax.swingx.connect.Slot;
-import javax.swingx.log.LoggingDialog;
-import javax.swingx.progress.SplashWindow;
 
 import org.apache.log4j.Logger;
+
+import com.puresol.gui.log.LoggingDialog;
+import com.puresol.gui.progress.SplashWindow;
 
 /**
  * This class gives all application using it some special features which lead to
@@ -53,7 +54,7 @@ import org.apache.log4j.Logger;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class PureSolApplication extends Application {
+public class PureSolApplication extends Application implements ActionListener {
 
 	private static final long serialVersionUID = 8061458459180754032L;
 
@@ -78,6 +79,13 @@ public class PureSolApplication extends Application {
 		splash.setTimer(10);
 		splash.run();
 	}
+
+	private final JMenuItem webItem = new JMenuItem(
+			translator.i18n("PureSol-Technologies Website..."));
+	private final JMenuItem logItem = new JMenuItem(
+			translator.i18n("Set log level..."));
+	private final JMenuItem aboutItem = new JMenuItem(
+			translator.i18n("About..."));
 
 	public PureSolApplication(String title, String version) {
 		super(title, version);
@@ -143,21 +151,18 @@ public class PureSolApplication extends Application {
 	 * 
 	 * @return A help menu is returned.
 	 */
-	private Menu getDefaultHelpMenu() {
-		Menu helpMenu = new Menu(translator.i18n("Help"));
+	private JMenu getDefaultHelpMenu() {
+		JMenu helpMenu = new JMenu(translator.i18n("Help"));
 
-		MenuItem webItem = new MenuItem(
-				translator.i18n("PureSol-Technologies Website..."));
-		webItem.connect("start", this, "openPureSolTechnologiesWebsite");
+		webItem.addActionListener(this);
 
-		MenuItem logItem = new MenuItem(translator.i18n("Set log level..."));
-		logItem.connect("start", this, "setLogLevel");
+		logItem.addActionListener(this);
 
 		helpMenu.add(webItem);
 		helpMenu.addSeparator();
 		helpMenu.add(logItem);
 		helpMenu.addSeparator();
-		helpMenu.addDefaultAboutItem();
+		helpMenu.add(aboutItem);
 		return helpMenu;
 	}
 
@@ -197,8 +202,7 @@ public class PureSolApplication extends Application {
 		menubar.add(xFabMenu);
 	}
 
-	@Slot
-	public void openPureSolTechnologiesWebsite() {
+	private void openPureSolTechnologiesWebsite() {
 		try {
 			Desktop desktop = Desktop.getDesktop();
 			desktop.browse(new URI("http://www.puresol-technologies.com"));
@@ -217,8 +221,22 @@ public class PureSolApplication extends Application {
 		}
 	}
 
-	@Slot
-	public void setLogLevel() {
+	private void setLogLevel() {
 		new LoggingDialog().run();
+	}
+
+	private void about() {
+		AboutBox.about();
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == webItem) {
+			openPureSolTechnologiesWebsite();
+		} else if (e.getSource() == logItem) {
+			setLogLevel();
+		} else if (e.getSource() == aboutItem) {
+			about();
+		}
 	}
 }

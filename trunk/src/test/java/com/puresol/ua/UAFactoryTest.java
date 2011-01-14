@@ -2,13 +2,12 @@ package com.puresol.ua;
 
 import static org.junit.Assert.*;
 
-import javax.swingx.PasswordDialog;
-import javax.swingx.config.ClassRegistry;
-import javax.swingx.config.ClassRegistryElement;
-import javax.swingx.config.ClassRegistryElementType;
-
 import org.junit.Test;
 
+import com.puresol.config.ClassRegistry;
+import com.puresol.config.ClassRegistryElement;
+import com.puresol.config.ClassRegistryElementType;
+import com.puresol.gui.LoginDialog;
 import com.puresol.gui.ua.SubjectInformationDialog;
 
 /**
@@ -44,7 +43,7 @@ public class UAFactoryTest {
 	 */
 	public static void main(String[] args) {
 		UA ua = UAFactory.create(UAFactoryTest.class);
-		PasswordDialog passwordDialog = new PasswordDialog();
+		LoginDialog passwordDialog = new LoginDialog();
 		if (passwordDialog.run()) {
 			if (ua.login("PureSolTechnologies", passwordDialog.getUsername(),
 					passwordDialog.getPassword())) {

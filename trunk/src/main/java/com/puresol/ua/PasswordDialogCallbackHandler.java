@@ -8,7 +8,8 @@ import javax.security.auth.callback.NameCallback;
 import javax.security.auth.callback.PasswordCallback;
 import javax.security.auth.callback.TextOutputCallback;
 import javax.security.auth.callback.UnsupportedCallbackException;
-import javax.swingx.PasswordDialog;
+
+import com.puresol.gui.LoginDialog;
 
 /**
  * This is a special CallbackHandler for Login without username and password. In
@@ -23,7 +24,7 @@ public class PasswordDialogCallbackHandler implements CallbackHandler {
 	@Override
 	public void handle(Callback[] callbacks) throws IOException,
 			UnsupportedCallbackException {
-		PasswordDialog passwd = new PasswordDialog();
+		LoginDialog passwd = new LoginDialog();
 		for (Callback callback : callbacks) {
 			if (callback instanceof TextOutputCallback) {
 				TextOutputCallback toc = (TextOutputCallback) callback;

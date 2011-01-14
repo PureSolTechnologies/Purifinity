@@ -1,8 +1,8 @@
 package com.puresol.gui;
 
-import javax.swingx.ComboBox;
+import javax.swing.JComboBox;
 
-public class InputField extends ComboBox {
+public class InputField extends JComboBox {
 
 	private static final long serialVersionUID = -4084870157049694903L;
 

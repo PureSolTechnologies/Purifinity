@@ -16,13 +16,13 @@ import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
-import javax.swingx.ComboBox;
+import javax.swing.JComboBox;
 
 import com.puresol.appserv.EntityManagerExtension;
 import com.puresol.appserv.EntityManagerFactories;
 import com.puresol.exceptions.StrangeSituationException;
 
-public class EntityComboBox extends ComboBox {
+public class EntityComboBox extends JComboBox {
 
 	private static final long serialVersionUID = 1L;
 	private Object entity = null;

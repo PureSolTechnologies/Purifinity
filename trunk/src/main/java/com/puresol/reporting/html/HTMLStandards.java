@@ -16,11 +16,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import javax.swingx.Application;
-import javax.swingx.config.APIInformation;
-import javax.swingx.data.Time;
-
 import org.apache.log4j.Logger;
+
+import com.puresol.config.APIInformation;
+import com.puresol.gui.Application;
+import com.puresol.gui.data.Time;
 
 /**
  * This class does conversions and provide features for XHTML 1.1 standard.
