@@ -3,14 +3,13 @@ package com.puresol.coding.lang.fortran;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
-import javax.swingx.config.APIInformation;
-
 import org.apache.log4j.Logger;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
 import com.puresol.coding.ProgrammingLanguage;
+import com.puresol.config.APIInformation;
 
 /**
  * This class is used as OSGi bundle activator. This class only registers and

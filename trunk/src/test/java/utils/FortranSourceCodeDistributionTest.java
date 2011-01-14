@@ -58,6 +58,9 @@ public class FortranSourceCodeDistributionTest {
 		} catch (AnalyzerException e) {
 			e.printStackTrace();
 			fail("No exception was expected!");
+		} catch (IOException e) {
+			e.printStackTrace();
+			fail("No exception was expected!");
 		}
 	}
 
