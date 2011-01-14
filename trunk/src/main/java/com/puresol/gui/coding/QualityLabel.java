@@ -2,11 +2,11 @@ package com.puresol.gui.coding;
 
 import java.awt.Color;
 
-import javax.swingx.Label;
+import javax.swing.JLabel;
 
 import com.puresol.coding.quality.SourceCodeQuality;
 
-public class QualityLabel extends Label {
+public class QualityLabel extends JLabel {
 
 	private static final long serialVersionUID = 8000571179914572829L;
 

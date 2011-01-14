@@ -1,14 +1,11 @@
 package com.puresol.gui.coding;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
-import javax.swing.BoxLayout;
-import javax.swingx.Panel;
-import javax.swingx.ScrollPane;
-import javax.swingx.connect.Signal;
-import javax.swingx.connect.Slot;
-
+import com.puresol.coding.analysis.AnalyzedFile;
 import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.gui.TreeViewer;
 import com.puresol.trees.FileTree;
@@ -21,30 +18,19 @@ import com.puresol.utils.FileUtilities;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class AnalyzedFileChooser extends Panel {
+public class AnalyzedFileChooser extends TreeViewer<FileTree> {
 
 	private static final long serialVersionUID = 7855693564694783199L;
 
 	private ProjectAnalyzer projectAnalyzer = null;
 
-	private final TreeViewer<FileTree> fileTree = new TreeViewer<FileTree>();
-
 	public AnalyzedFileChooser() {
 		super();
-		initUI();
 	}
 
 	public AnalyzedFileChooser(ProjectAnalyzer projectAnalyser) {
 		super();
-		this.projectAnalyzer = projectAnalyser;
-		initUI();
-	}
-
-	private void initUI() {
-		fileTree.connect("valueChanged", this, "fileSelected");
-
-		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-		add(new ScrollPane(fileTree));
+		setProjectAnalyzer(projectAnalyser);
 	}
 
 	public ProjectAnalyzer getProjectAnlayzer() {
@@ -58,29 +44,22 @@ public class AnalyzedFileChooser extends Panel {
 
 	private void refresh() {
 		if (projectAnalyzer != null) {
-			java.util.List<File> files = projectAnalyzer.getFiles();
+			java.util.List<AnalyzedFile> analyzedFiles = projectAnalyzer
+					.getAnalyzedFiles();
+			List<File> files = new ArrayList<File>();
+			for (AnalyzedFile analyzedFile : analyzedFiles) {
+				files.add(analyzedFile.getFile());
+			}
 			Collections.sort(files);
-			fileTree.setTreeData(FileUtilities.convertFileListToTree(
-					projectAnalyzer.getProjectDirectory().getPath(), files));
+			setTreeData(FileUtilities.convertFileListToTree(projectAnalyzer
+					.getProjectDirectory().getPath(), files));
 		} else {
-			fileTree.removeAll();
+			removeAll();
 		}
 	}
 
-	public File getFile() {
-		return fileTree.getSelection().getPathFile();
-	}
-
-	@Slot
-	void fileSelected() {
-		FileTree tree = fileTree.getSelection();
-		if (tree != null) {
-			fileChanged(tree.getPathFile());
-		}
-	}
-
-	@Signal
-	public void fileChanged(File file) {
-		connectionManager.emitSignal("fileChanged", file);
+	public AnalyzedFile getAnalyzedFile() {
+		return projectAnalyzer.findAnalyzedFileBySourceFile(getSelection()
+				.getPathFile());
 	}
 }

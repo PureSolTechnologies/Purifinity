@@ -2,7 +2,7 @@ package com.puresol.coding.evaluator;
 
 import java.util.Date;
 
-import javax.swingx.progress.ProgressObserver;
+import com.puresol.gui.progress.ProgressObserver;
 
 /**
  * This abstract class is the base implementation for a single evaluator. The

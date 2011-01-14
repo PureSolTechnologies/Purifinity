@@ -6,12 +6,12 @@ import java.awt.Graphics;
 import java.awt.GraphicsEnvironment;
 import java.awt.image.BufferedImage;
 
-import javax.swingx.Dialog;
-import javax.swingx.Panel;
+import javax.swing.JPanel;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import com.puresol.gui.Dialog;
 import com.puresol.gui.uhura.rendering.ConstructionIdentifierRenderer;
 import com.puresol.rendering.RenderException;
 import com.puresol.rendering.Renderer;
@@ -58,7 +58,7 @@ public class ConstructionIdentifierRendererTest {
 
 	public static void main(String args[]) {
 		Dialog frame = new Dialog();
-		frame.add(new Panel() {
+		frame.add(new JPanel() {
 			private static final long serialVersionUID = 8456563011009861087L;
 
 			public void paint(Graphics graphics) {

@@ -4,11 +4,10 @@ import static org.junit.Assert.*;
 
 import java.awt.BorderLayout;
 
-import javax.swingx.Dialog;
-
 import org.junit.Test;
 
 import com.puresol.coding.quality.SourceCodeQuality;
+import com.puresol.gui.Dialog;
 
 public class QualityLabelTest {
 

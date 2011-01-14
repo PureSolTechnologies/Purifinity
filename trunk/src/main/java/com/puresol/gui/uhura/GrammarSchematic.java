@@ -9,12 +9,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.JPanel;
 import javax.swing.filechooser.FileFilter;
-import javax.swingx.Panel;
-import javax.swingx.Saveable;
 
 import org.apache.log4j.Logger;
 
+import com.puresol.gui.Saveable;
 import com.puresol.gui.uhura.rendering.GrammarRenderer;
 import com.puresol.gui.uhura.rendering.ProductionDefinitionRenderer;
 import com.puresol.rendering.RenderException;
@@ -31,7 +31,7 @@ import com.puresol.uhura.ast.ParserTree;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class GrammarSchematic extends Panel implements Saveable {
+public class GrammarSchematic extends JPanel implements Saveable {
 
 	private static final long serialVersionUID = 1804025428672500990L;
 

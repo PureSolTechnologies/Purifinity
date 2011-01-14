@@ -1,19 +1,21 @@
 package com.puresol.gui.uhura;
 
+import java.awt.BorderLayout;
+
 import javax.i18n4java.Translator;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.border.TitledBorder;
-import javax.swingx.BorderLayoutWidget;
-import javax.swingx.CodeViewer;
-import javax.swingx.Label;
-import javax.swingx.ScrollPane;
 
 import com.puresol.coding.CodeRange;
+import com.puresol.gui.CodeViewer;
 import com.puresol.trees.TreeIterator;
 import com.puresol.uhura.ast.ParserTree;
 import com.puresol.uhura.ast.ParserTreeMetaData;
 import com.puresol.uhura.lexer.Token;
 
-public class CodeRangeViewer extends BorderLayoutWidget {
+public class CodeRangeViewer extends JPanel {
 
 	private static final long serialVersionUID = 3032479272552076138L;
 
@@ -21,7 +23,7 @@ public class CodeRangeViewer extends BorderLayoutWidget {
 			.getTranslator(CodeRangeViewer.class);
 
 	private CodeRange codeRange;
-	private Label information;
+	private JLabel information = new JLabel();
 	private CodeViewer code;
 
 	public CodeRangeViewer() {
@@ -36,14 +38,14 @@ public class CodeRangeViewer extends BorderLayoutWidget {
 	}
 
 	private void initUI() {
-		information = new Label();
+		setLayout(new BorderLayout());
 		information.setBorder(new TitledBorder(translator.i18n("Information")));
 		code = new CodeViewer();
 		code.setEditable(false);
 		code.setBorder(new TitledBorder(translator.i18n("Code")));
 		code.setShowLineNumbers(true);
-		setNorth(information);
-		setCenter(new ScrollPane(code));
+		add(information, BorderLayout.NORTH);
+		add(new JScrollPane(code), BorderLayout.CENTER);
 	}
 
 	public void setCodeRange(CodeRange codeRange) {

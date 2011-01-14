@@ -1,17 +1,18 @@
 package com.puresol.gui.coding;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
 import java.io.File;
 
 import javax.i18n4java.Translator;
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
-import javax.swingx.Button;
-import javax.swingx.Dialog;
-import javax.swingx.Label;
-import javax.swingx.Panel;
-import javax.swingx.TextField;
-import javax.swingx.connect.Slot;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+import com.puresol.gui.Dialog;
 
 public class NewProjectAnalyserDialog extends Dialog {
 
@@ -20,10 +21,12 @@ public class NewProjectAnalyserDialog extends Dialog {
 	private static final Translator translator = Translator
 			.getTranslator(NewProjectAnalyserDialog.class);
 
-	private TextField sourceDirectory;
-	private Button sourceDirectoryButton;
-	private TextField workspaceDirectory;
-	private Button workspaceDirectoryButton;
+	private final JTextField sourceDirectory = new JTextField();
+	private final JButton sourceDirectoryButton = new JButton(
+			translator.i18n("Choose..."));
+	private final JTextField workspaceDirectory = new JTextField();
+	private final JButton workspaceDirectoryButton = new JButton(
+			translator.i18n("Choose..."));
 
 	public NewProjectAnalyserDialog() {
 		super(translator.i18n("New Project Analyser"), true);
@@ -33,30 +36,25 @@ public class NewProjectAnalyserDialog extends Dialog {
 	private void initUI() {
 		setLayout(new BorderLayout());
 
-		Panel directoriesPanel = new Panel();
+		JPanel directoriesPanel = new JPanel();
 		directoriesPanel.setLayout(new BoxLayout(directoriesPanel,
 				BoxLayout.Y_AXIS));
 
-		Panel sourceDirectoryPanel = new Panel();
+		JPanel sourceDirectoryPanel = new JPanel();
 		sourceDirectoryPanel.setLayout(new BoxLayout(sourceDirectoryPanel,
 				BoxLayout.X_AXIS));
-		sourceDirectoryPanel.add(new Label(translator
+		sourceDirectoryPanel.add(new JLabel(translator
 				.i18n("Source Directory: ")));
-		sourceDirectoryPanel.add(sourceDirectory = new TextField());
-		sourceDirectoryPanel.add(sourceDirectoryButton = new Button(translator
-				.i18n("Choose...")));
-		sourceDirectoryButton.connect("start", this, "chooseSourceDirectory");
+		sourceDirectoryPanel.add(sourceDirectory);
+		sourceDirectoryPanel.add(sourceDirectoryButton);
 
-		Panel workspaceDirectoryPanel = new Panel();
+		JPanel workspaceDirectoryPanel = new JPanel();
 		workspaceDirectoryPanel.setLayout(new BoxLayout(
 				workspaceDirectoryPanel, BoxLayout.X_AXIS));
-		workspaceDirectoryPanel.add(new Label(translator
+		workspaceDirectoryPanel.add(new JLabel(translator
 				.i18n("Workspace Directory: ")));
-		workspaceDirectoryPanel.add(workspaceDirectory = new TextField());
-		workspaceDirectoryPanel.add(workspaceDirectoryButton = new Button(
-				translator.i18n("Choose...")));
-		workspaceDirectoryButton.connect("start", this,
-				"chooseWorkspaceDirectory");
+		workspaceDirectoryPanel.add(workspaceDirectory);
+		workspaceDirectoryPanel.add(workspaceDirectoryButton);
 
 		directoriesPanel.add(sourceDirectoryPanel);
 		directoriesPanel.add(workspaceDirectoryPanel);
@@ -64,19 +62,20 @@ public class NewProjectAnalyserDialog extends Dialog {
 		add(directoriesPanel, BorderLayout.CENTER);
 		add(createDefaultOkCancelPanel(), BorderLayout.SOUTH);
 
+		sourceDirectoryButton.addActionListener(this);
+		workspaceDirectoryButton.addActionListener(this);
+
 		pack();
 	}
 
-	@Slot
-	void chooseSourceDirectory() {
+	private void chooseSourceDirectory() {
 		File directory = chooseDirectory(translator.i18n("Source Directory"));
 		if (directory != null) {
 			sourceDirectory.setText(directory.toString());
 		}
 	}
 
-	@Slot
-	void chooseWorkspaceDirectory() {
+	private void chooseWorkspaceDirectory() {
 		File directory = chooseDirectory(translator.i18n("Workspace Directory"));
 		if (directory != null) {
 			workspaceDirectory.setText(directory.toString());
@@ -100,5 +99,16 @@ public class NewProjectAnalyserDialog extends Dialog {
 
 	public File getWorkspaceDirectory() {
 		return new File(workspaceDirectory.getText());
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == sourceDirectoryButton) {
+			chooseSourceDirectory();
+		} else if (e.getSource() == workspaceDirectoryButton) {
+			chooseWorkspaceDirectory();
+		} else {
+			super.actionPerformed(e);
+		}
 	}
 }

@@ -11,19 +11,25 @@
 package com.puresol.gui.coding;
 
 import java.awt.BorderLayout;
-import java.io.File;
+import java.io.IOException;
 
 import javax.i18n4java.Translator;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JSplitPane;
-import javax.swingx.Panel;
-import javax.swingx.TabbedPane;
-import javax.swingx.connect.Slot;
+import javax.swing.JTabbedPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.CodeRangeType;
 import com.puresol.coding.ProgrammingLanguage;
-import com.puresol.coding.analysis.Analyzer;
+import com.puresol.coding.analysis.Analysis;
+import com.puresol.coding.analysis.AnalyzedFile;
 import com.puresol.coding.analysis.ProjectAnalyzer;
+import com.puresol.gui.Application;
 import com.puresol.gui.TreeViewer;
 import com.puresol.gui.uhura.CodeRangeViewer;
 import com.puresol.uhura.ast.ParserTree;
@@ -36,7 +42,8 @@ import com.puresol.uhura.ast.ParserTree;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class CodeRangeBrowser extends Panel {
+public class CodeRangeBrowser extends JPanel implements TreeSelectionListener,
+		ListSelectionListener {
 
 	private static final long serialVersionUID = 3469716304984536673L;
 
@@ -46,7 +53,7 @@ public class CodeRangeBrowser extends Panel {
 	private final CodeRangeChooser codeRangeChooser = new CodeRangeChooser();
 	private final CodeRangeViewer codeRangeViewer = new CodeRangeViewer();
 	private final TreeViewer<ParserTree> parserTreeViewer = new TreeViewer<ParserTree>();
-	private final CodeRangeEvaluatorPanel codeRangeEvaluatorPanel = new CodeRangeEvaluatorPanel();
+	private final CodeRangeEvaluationBrowser codeRangeEvaluatorBrowser = new CodeRangeEvaluationBrowser();
 
 	private ProjectAnalyzer project = null;
 
@@ -62,17 +69,15 @@ public class CodeRangeBrowser extends Panel {
 	}
 
 	private void initUI() {
-		codeRangeChooser.connect("fileChanged", this, "showFile", File.class);
-		codeRangeChooser.connect("codeRangeChanged", this, "showCodeRange",
-				CodeRange.class);
+		setLayout(new BorderLayout());
+		codeRangeChooser.addTreeListener(this);
+		codeRangeChooser.addListListener(this);
 
-		TabbedPane tabbedViewer = new TabbedPane();
+		JTabbedPane tabbedViewer = new JTabbedPane();
 		tabbedViewer.add(translator.i18n("Source Code"), codeRangeViewer);
 		tabbedViewer.add(translator.i18n("Parser Tree"), parserTreeViewer);
-		tabbedViewer.addTab(translator.i18n("CodeRange Evaluators"),
-				codeRangeEvaluatorPanel);
-
-		setLayout(new BorderLayout());
+		tabbedViewer.add(translator.i18n("CodeRange Evaluators"),
+				codeRangeEvaluatorBrowser);
 
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
 				true, codeRangeChooser, tabbedViewer);
@@ -85,27 +90,41 @@ public class CodeRangeBrowser extends Panel {
 		codeRangeViewer.setCodeRange(new CodeRange("", CodeRangeType.FILE,
 				new ParserTree("")));
 		parserTreeViewer.setTreeData(new ParserTree(""));
-		codeRangeEvaluatorPanel.setProjectAnalyser(project);
+		codeRangeEvaluatorBrowser.setProjectAnalyser(project);
 	}
 
-	@Slot
-	public void showFile(File file) {
-		Analyzer analyzer = project.getAnalyzer(file);
-		ParserTree parserTree = analyzer.getParserTree();
-		ProgrammingLanguage language = analyzer.getLanguage();
+	private void showFile(AnalyzedFile file) {
+		try {
+			Analysis analysis = project.getAnalysis(file);
+			ParserTree parserTree;
+			parserTree = analysis.getParserTree();
+			ProgrammingLanguage language = analysis.getLanguage();
 
-		codeRangeViewer.setCodeRange(language.getAnalyzableCodeRanges(
-				parserTree).get(0));
-		parserTreeViewer.setTreeData(parserTree);
-		codeRangeEvaluatorPanel.setFile(file);
+			codeRangeViewer.setCodeRange(language.getAnalyzableCodeRanges(
+					parserTree).get(0));
+			parserTreeViewer.setTreeData(parserTree);
+			codeRangeEvaluatorBrowser.setAnalyzedFile(file);
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(Application.getInstance(),
+					translator.i18n("IOException was thrown!"),
+					translator.i18n("Error"), JOptionPane.ERROR_MESSAGE);
+		}
 	}
 
-	@Slot
-	public void showCodeRange(CodeRange codeRange) {
+	private void showCodeRange(CodeRange codeRange) {
 		ParserTree parserTree = codeRange.getParserTree();
 		codeRangeViewer.setCodeRange(codeRange);
 		parserTreeViewer.setTreeData(parserTree);
-		codeRangeEvaluatorPanel.setCodeRange(codeRange);
+		codeRangeEvaluatorBrowser.setCodeRange(codeRange);
 	}
 
+	@Override
+	public void valueChanged(ListSelectionEvent e) {
+		showCodeRange(codeRangeChooser.getCodeRange());
+	}
+
+	@Override
+	public void valueChanged(TreeSelectionEvent e) {
+		showFile(codeRangeChooser.getAnalyzedFile());
+	}
 }

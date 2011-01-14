@@ -21,20 +21,16 @@ import java.util.List;
 import java.util.Properties;
 
 import javax.i18n4java.utils.FileSearch;
-import javax.swingx.progress.ProgressObservable;
-import javax.swingx.progress.ProgressObserver;
 
 import org.apache.log4j.Logger;
 
-import com.puresol.coding.CodeRange;
-import com.puresol.coding.evaluator.CodeRangeEvaluator;
-import com.puresol.coding.evaluator.CodeRangeEvaluatorFactory;
-import com.puresol.coding.evaluator.CodeRangeEvaluatorManager;
+import com.puresol.coding.evaluator.FileEvaluator;
 import com.puresol.document.Chapter;
 import com.puresol.document.Document;
 import com.puresol.document.Paragraph;
+import com.puresol.gui.progress.ProgressObservable;
+import com.puresol.gui.progress.ProgressObserver;
 import com.puresol.utils.DirectoryUtilities;
-import com.puresol.utils.FileUtilities;
 import com.puresol.utils.Persistence;
 import com.puresol.utils.PersistenceException;
 
@@ -46,7 +42,8 @@ import com.puresol.utils.PersistenceException;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class ProjectAnalyzer implements Serializable, ProgressObservable {
+public class ProjectAnalyzer implements Serializable, Runnable,
+		ProgressObservable {
 
 	private static final long serialVersionUID = -5080062306149072901L;
 
@@ -58,12 +55,9 @@ public class ProjectAnalyzer implements Serializable, ProgressObservable {
 	 * Following are some constants which are general for workspace handling...
 	 * ****************************************************************
 	 */
-	private static final File SETTINGS_FILENAME = new File(
-			"settings.properties");
-	private static final File ANALYZED_FILES_FILENAME = new File(
-			"analzsed_files.persist");
-	private static final File FAILED_FILES_FILENAME = new File(
-			"failed_files.persist");
+	private static final String SETTINGS_FILENAME = "settings.properties";
+	private static final String ANALYZED_FILES_FILENAME = "analzsed_files.persist";
+	private static final String FAILED_FILES_FILENAME = "failed_files.persist";
 	private static final String PROJECT_DIRECTORY_KEY = ProjectAnalyzer.class
 			.getSimpleName() + ".projectDirectory";
 	private static final String SETTINGS_FILE_HEADER = "***********************************************************************\n"
@@ -124,7 +118,7 @@ public class ProjectAnalyzer implements Serializable, ProgressObservable {
 	private final File ANALYZED_FILES_FILE;
 	private final File FAILED_FILES_FILE;
 	private final File workspaceDirectory;
-	private final List<File> analyzedFiles = new ArrayList<File>();
+	private final List<AnalyzedFile> analyzedFiles = new ArrayList<AnalyzedFile>();
 	private final List<File> failedFiles = new ArrayList<File>();
 	private transient final AnalyzerFactory analyzerFactory = AnalyzerFactory
 			.createFactory();
@@ -141,9 +135,10 @@ public class ProjectAnalyzer implements Serializable, ProgressObservable {
 	 */
 	private ProjectAnalyzer(File workspaceDirectory) {
 		this.workspaceDirectory = workspaceDirectory;
-		SETTINGS_FILE = getWorkspaceFile(SETTINGS_FILENAME);
-		ANALYZED_FILES_FILE = getWorkspaceFile(ANALYZED_FILES_FILENAME);
-		FAILED_FILES_FILE = getWorkspaceFile(FAILED_FILES_FILENAME);
+		SETTINGS_FILE = new File(workspaceDirectory, SETTINGS_FILENAME);
+		ANALYZED_FILES_FILE = new File(workspaceDirectory,
+				ANALYZED_FILES_FILENAME);
+		FAILED_FILES_FILE = new File(workspaceDirectory, FAILED_FILES_FILENAME);
 	}
 
 	/**
@@ -218,7 +213,7 @@ public class ProjectAnalyzer implements Serializable, ProgressObservable {
 	@SuppressWarnings("unchecked")
 	private boolean loadProjectInformation() {
 		try {
-			analyzedFiles.addAll((List<File>) Persistence
+			analyzedFiles.addAll((List<AnalyzedFile>) Persistence
 					.restore(ANALYZED_FILES_FILE));
 			failedFiles.addAll((List<File>) Persistence
 					.restore(FAILED_FILES_FILE));
@@ -296,82 +291,24 @@ public class ProjectAnalyzer implements Serializable, ProgressObservable {
 	 * @param file
 	 *            is the file to be analyzed.
 	 */
-	private boolean analyzeFile(File file) {
+	private void analyzeFile(File file) {
 		try {
-			if (file.getPath().contains("/.")) {
-				return false;
+			FileAnalyzer fileAnalyzer = new FileAnalyzer(projectDirectory,
+					workspaceDirectory, file);
+			fileAnalyzer.analyze();
+			AnalyzedFile analyzedFile = fileAnalyzer.getAnalyzedFile();
+			if (!fileAnalyzer.isAnalyzed()) {
+				return;
 			}
-			File sourceFile = getSourceFile(file);
-			if (!sourceFile.isFile()) {
-				/*
-				 * hidden files are not analyzed...
-				 */
-				return false;
+			analyzedFiles.add(analyzedFile);
+			if (fileAnalyzer.isUpdated()) {
+				FileEvaluator
+						.evaluate(analyzedFile, fileAnalyzer.getAnalyzer());
 			}
-			File persistFile = getPersistenceFile(file);
-			if (!FileUtilities.isUpdateRequired(sourceFile, persistFile)) {
-				analyzedFiles.add(file);
-				return false;
-			}
-			Analyzer analyzer = analyzerFactory.create(sourceFile);
-			analyzer.parse();
-			analyzer.persist(persistFile);
-			analyzedFiles.add(file);
-			evaluateFile(file, analyzer);
-			return true;
-		} catch (LanguageNotSupportedException e) {
-			logger.debug("File '" + file.getPath()
-					+ "' could not be analyzed due to contents in a "
-					+ "non-supported language.");
-			return false;
-		} catch (FileNotFoundException e) {
-			logger.warn("File '" + file.getPath() + "' is not existing!");
-			return false;
-		} catch (AnalyzerException e) {
-			logger.error("File '" + file.getPath() + "' is not parsable!");
+		} catch (Exception e) {
 			failedFiles.add(file);
-			return false;
+			logger.error(e.getMessage(), e);
 		}
-	}
-
-	private void evaluateFile(File file, Analyzer analyzer) {
-		List<CodeRangeEvaluatorFactory> factories = CodeRangeEvaluatorManager
-				.getAll();
-		for (CodeRangeEvaluatorFactory factory : factories) {
-			for (CodeRange codeRange : analyzer.getAnalyzableCodeRanges()) {
-				CodeRangeEvaluator evaluator = factory.create(
-						analyzer.getLanguage(), codeRange);
-				evaluator.run();
-				File persistFile = new File(workspaceDirectory, file.getPath());
-				File reportFile = new File(persistFile, evaluator.getName()
-						+ "-" + codeRange.getType().getName() + "_"
-						+ codeRange.getName() + ".report");
-				File resultsFile = new File(persistFile, evaluator.getName()
-						+ "-" + codeRange.getType().getName() + "_"
-						+ codeRange.getName() + ".results");
-				try {
-					Persistence.persist(evaluator.getReport(), reportFile);
-					Persistence.persist(evaluator.getResults(), resultsFile);
-					// TODO
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	}
-
-	private File getPersistenceFile(File file) {
-		File persistenceFile = new File(workspaceDirectory, file.getPath());
-		persistenceFile = new File(persistenceFile, "analyzer.persist");
-		return persistenceFile;
-	}
-
-	private File getWorkspaceFile(File file) {
-		return new File(workspaceDirectory, file.getPath());
-	}
-
-	private File getSourceFile(File file) {
-		return new File(projectDirectory, file.getPath());
 	}
 
 	public File getWorkspaceDirectory() {
@@ -382,7 +319,7 @@ public class ProjectAnalyzer implements Serializable, ProgressObservable {
 		return projectDirectory;
 	}
 
-	public List<File> getFiles() {
+	public List<AnalyzedFile> getAnalyzedFiles() {
 		return analyzedFiles;
 	}
 
@@ -390,11 +327,11 @@ public class ProjectAnalyzer implements Serializable, ProgressObservable {
 		return failedFiles;
 	}
 
-	public Analyzer getAnalyzer(File file) {
+	public Analysis getAnalysis(AnalyzedFile file) {
 		if (file == null) {
 			return null;
 		}
-		return analyzerFactory.restore(getPersistenceFile(file));
+		return analyzerFactory.restore(file.getAnalyzerFile());
 	}
 
 	@Override
@@ -501,6 +438,24 @@ public class ProjectAnalyzer implements Serializable, ProgressObservable {
 			}
 		}
 		return document;
+	}
+
+	public AnalyzedFile findAnalyzedFile(File file) {
+		for (AnalyzedFile analyzedFile : analyzedFiles) {
+			if (analyzedFile.getFile().equals(file)) {
+				return analyzedFile;
+			}
+		}
+		return null;
+	}
+
+	public AnalyzedFile findAnalyzedFileBySourceFile(File sourceFile) {
+		for (AnalyzedFile analyzedFile : analyzedFiles) {
+			if (analyzedFile.getSourceFile().equals(sourceFile)) {
+				return analyzedFile;
+			}
+		}
+		return null;
 	}
 
 }

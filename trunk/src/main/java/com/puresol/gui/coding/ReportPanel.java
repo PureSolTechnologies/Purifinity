@@ -2,11 +2,11 @@ package com.puresol.gui.coding;
 
 import java.awt.BorderLayout;
 
-import javax.swingx.HTMLTextPane;
-import javax.swingx.Panel;
+import javax.swing.JPanel;
 
 import com.puresol.coding.evaluator.Evaluator;
 import com.puresol.document.convert.html.HTMLConverter;
+import com.puresol.gui.HTMLTextPane;
 
 /**
  * This class visualizes the results list from an evaluator.
@@ -14,7 +14,7 @@ import com.puresol.document.convert.html.HTMLConverter;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class ReportPanel extends Panel {
+public class ReportPanel extends JPanel {
 
 	private static final long serialVersionUID = -8548150829784345153L;
 

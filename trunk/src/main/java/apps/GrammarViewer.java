@@ -2,6 +2,8 @@ package apps;
 
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
@@ -9,20 +11,18 @@ import java.io.StringReader;
 import javax.i18n4java.Translator;
 import javax.swing.Box;
 import javax.swing.JFileChooser;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.filechooser.FileFilter;
-import javax.swingx.AboutBox;
-import javax.swingx.Application;
-import javax.swingx.Menu;
-import javax.swingx.MenuBar;
-import javax.swingx.MenuItem;
-import javax.swingx.Saveable;
-import javax.swingx.SaveableCodeViewer;
-import javax.swingx.ScrollPane;
-import javax.swingx.TabbedPane;
-import javax.swingx.config.APIInformation;
-import javax.swingx.connect.Slot;
 
+import com.puresol.config.APIInformation;
+import com.puresol.gui.PureSolApplication;
+import com.puresol.gui.Saveable;
+import com.puresol.gui.SaveableCodeViewer;
 import com.puresol.gui.TreeViewer;
 import com.puresol.gui.uhura.ASCIITreeViewer;
 import com.puresol.gui.uhura.GrammarSchematic;
@@ -34,18 +34,22 @@ import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.GrammarFile;
 import com.puresol.utils.FileUtilities;
 
-public class GrammarViewer extends Application {
+public class GrammarViewer extends PureSolApplication implements ActionListener {
 
 	private static final long serialVersionUID = -5304464400142172055L;
 
 	private static final Translator translator = Translator
 			.getTranslator(GrammarViewer.class);
 
+	private final JTabbedPane tabbedPane = new JTabbedPane();
+	private final JMenuItem openGrammarItem = new JMenuItem("Open grammar...");
+	private final JMenuItem saveItem = new JMenuItem("Save...");
+	private final JMenuItem quitItem = new JMenuItem("Quit...");
+
 	private File lastOpenDirectory = new File(System.getProperty("user.dir"));
 	private File lastSaveLocation = new File(System.getProperty("user.dir"));
 	private File grammarFile = null;
 	private Grammar grammar = null;
-	private TabbedPane tabbedPane;
 	private SaveableCodeViewer source;
 	private SaveableCodeViewer bnf;
 	private ASCIITreeViewer ast;
@@ -63,62 +67,46 @@ public class GrammarViewer extends Application {
 	}
 
 	private void initUI() {
-		MenuBar menubar = new MenuBar();
+		JMenuBar menubar = new JMenuBar();
 
-		Menu fileMenu = new Menu("File");
+		JMenu fileMenu = new JMenu("File");
 		menubar.add(fileMenu);
 
-		MenuItem openGrammarItem = new MenuItem("Open grammar...");
-		openGrammarItem.connect("start", this, "openGrammar");
+		openGrammarItem.addActionListener(this);
+		saveItem.addActionListener(this);
+		quitItem.addActionListener(this);
+
 		fileMenu.add(openGrammarItem);
-
 		fileMenu.addSeparator();
-
-		MenuItem saveItem = new MenuItem("Save...");
-		saveItem.connect("start", this, "save");
 		fileMenu.add(saveItem);
-
 		fileMenu.addSeparator();
-
-		MenuItem quitItem = new MenuItem("Quit...");
-		quitItem.connect("start", this, "quit");
 		fileMenu.add(quitItem);
 
 		menubar.add(Box.createHorizontalGlue());
 
-		Menu helpMenu = new Menu("Help");
-		menubar.add(helpMenu);
-
-		MenuItem aboutItem = new MenuItem("About...");
-		aboutItem.connect("start", this, "about");
-		helpMenu.add(aboutItem);
-
 		setJMenuBar(menubar);
 
-		tabbedPane = new TabbedPane();
 		getContentPane().add(tabbedPane);
 
 		source = new SaveableCodeViewer();
 		source.setEditable(false);
-		tabbedPane.add(new ScrollPane(source), "Source");
+		tabbedPane.add(new JScrollPane(source), "Source");
 
 		bnf = new SaveableCodeViewer();
 		bnf.setEditable(false);
-		tabbedPane.add(new ScrollPane(bnf), "BNF (Backus Naur Form)");
+		tabbedPane.add(new JScrollPane(bnf), "BNF (Backus Naur Form)");
 
 		ast = new ASCIITreeViewer();
-		tabbedPane.add(new ScrollPane(ast), "ASCII Tree");
+		tabbedPane.add(new JScrollPane(ast), "ASCII Tree");
 
 		parserTreeViewer = new TreeViewer<ParserTree>();
-		tabbedPane.add(new ScrollPane(parserTreeViewer), "Parser Tree Viewer");
+		tabbedPane.add(new JScrollPane(parserTreeViewer), "Parser Tree Viewer");
 
 		schematic = new GrammarSchematic();
 		schematic.setPreferredSize(new Dimension(100, 100));
-		tabbedPane.add(new ScrollPane(schematic), "Schematic");
+		tabbedPane.add(new JScrollPane(schematic), "Schematic");
 	}
 
-	@Slot
-	@SuppressWarnings("unused")
 	private void openGrammar() {
 		JFileChooser fileChooser = new JFileChooser(lastOpenDirectory);
 		fileChooser.setDialogTitle("Open Grammar File");
@@ -134,18 +122,16 @@ public class GrammarViewer extends Application {
 		refreshGrammar();
 	}
 
-	@Slot
-	@SuppressWarnings("unused")
 	private void save() {
 		File file = null;
 		try {
 			Component component = tabbedPane.getSelectedComponent();
-			System.out.println(component.getClass().getName());
 			if (component == null) {
 				return;
 			}
-			if (ScrollPane.class.isAssignableFrom(component.getClass())) {
-				component = ((ScrollPane) component).getViewport().getView();
+			System.out.println(component.getClass().getName());
+			if (JScrollPane.class.isAssignableFrom(component.getClass())) {
+				component = ((JScrollPane) component).getViewport().getView();
 			}
 			if (!Saveable.class.isAssignableFrom(component.getClass())) {
 				return;
@@ -211,10 +197,17 @@ public class GrammarViewer extends Application {
 		}
 	}
 
-	@Slot
-	@SuppressWarnings("unused")
-	private void about() {
-		AboutBox.about();
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == openGrammarItem) {
+			openGrammar();
+		} else if (e.getSource() == saveItem) {
+			save();
+		} else if (e.getSource() == quitItem) {
+			quit();
+		} else {
+			super.actionPerformed(e);
+		}
 	}
 
 	public static void main(String[] args) {

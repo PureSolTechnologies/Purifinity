@@ -2,8 +2,7 @@ package com.puresol.gui.uhura;
 
 import java.io.PrintStream;
 
-import javax.swingx.SaveableTextArea;
-
+import com.puresol.gui.SaveableTextArea;
 import com.puresol.io.StringOutputStream;
 import com.puresol.trees.TreePrinter;
 import com.puresol.uhura.ast.ParserTree;

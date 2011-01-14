@@ -7,6 +7,12 @@ import org.osgi.framework.InvalidSyntaxException;
 
 import com.puresol.osgi.OSGiFrameworkManager;
 
+/**
+ * This class is used to manage the ProgrammingLanguage services.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class ProgrammingLanguages {
 
 	private static final Logger logger = Logger
@@ -23,4 +29,20 @@ public class ProgrammingLanguages {
 		}
 	}
 
+	/**
+	 * This method is used to find a programming language by its name.
+	 * 
+	 * @param name
+	 *            is the name of the programming language to be found.
+	 * @return The programming language is returned. If the language was not
+	 *         found null is returned.
+	 */
+	public static ProgrammingLanguage findByName(String name) {
+		for (ProgrammingLanguage language : getAll()) {
+			if (language.getName().equals(name)) {
+				return language;
+			}
+		}
+		return null;
+	}
 }

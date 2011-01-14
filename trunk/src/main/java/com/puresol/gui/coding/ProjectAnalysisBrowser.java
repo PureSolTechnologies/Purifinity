@@ -13,14 +13,14 @@ package com.puresol.gui.coding;
 import java.awt.BorderLayout;
 
 import javax.i18n4java.Translator;
-import javax.swingx.HTMLTextPane;
-import javax.swingx.Panel;
-import javax.swingx.TabbedPane;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 
 import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.document.convert.html.HTMLConverter;
+import com.puresol.gui.HTMLTextPane;
 
-public class ProjectAnalysisBrowser extends Panel {
+public class ProjectAnalysisBrowser extends JPanel {
 
 	private static final long serialVersionUID = 3469716304984536673L;
 
@@ -29,7 +29,7 @@ public class ProjectAnalysisBrowser extends Panel {
 
 	private ProjectAnalyzer project = null;
 
-	private final TabbedPane tabbedPane = new TabbedPane();
+	private final JTabbedPane tabbedPane = new JTabbedPane();
 	private HTMLTextPane projectReport = new HTMLTextPane();
 	private final ProjectEvaluatorPanel projectEvaluatorPanel = new ProjectEvaluatorPanel();
 	private final CodeRangeBrowser codeRangeBrowser = new CodeRangeBrowser();

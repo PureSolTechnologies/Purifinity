@@ -10,24 +10,25 @@
 
 package apps;
 
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+
 import javax.i18n4java.Translator;
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swingx.Application;
-import javax.swingx.BorderLayoutWidget;
-import javax.swingx.Button;
-import javax.swingx.MemoryMonitor;
-import javax.swingx.Menu;
-import javax.swingx.MenuBar;
-import javax.swingx.MenuItem;
-import javax.swingx.ToolBar;
-import javax.swingx.connect.Slot;
-import javax.swingx.progress.ProgressWindow;
+import javax.swing.JPanel;
+import javax.swing.JToolBar;
 
 import org.apache.log4j.Logger;
 import org.osgi.framework.BundleException;
 
 import com.puresol.coding.analysis.ProjectAnalyzer;
+import com.puresol.gui.Application;
+import com.puresol.gui.MemoryMonitor;
 import com.puresol.gui.PureSolApplication;
 import com.puresol.gui.coding.NewProjectAnalyserDialog;
 import com.puresol.gui.coding.ProjectAnalysisBrowser;
@@ -51,9 +52,26 @@ public class CodeAnalysis extends PureSolApplication {
 	private static final Translator translator = Translator
 			.getTranslator(CodeAnalysis.class);
 
-	private OSGi osgi;
-	private ProjectAnalysisBrowser browser = null;
+	private final JMenuItem newWorkspace = new JMenuItem("New Workspace...");
+	private final JMenuItem openWorkspace = new JMenuItem("Open Workspace...");
+	private final JMenuItem updateWorkspace = new JMenuItem("Update Workspace");
+	private final JMenuItem createEvaluatorHTML = new JMenuItem(
+			"Create HTML Project...");
+	private final JMenuItem exit = new JMenuItem("Exit");
+	private final JMenuItem pluginManager = new JMenuItem("Plugin Manager...");
+	private final JMenuItem pluginConfiguration = new JMenuItem(
+			"Plugin Configuration...");
 
+	private final JButton newWorkspaceButton = new JButton(
+			translator.i18n("New Workspace..."));
+	private final JButton openWorkspaceButton = new JButton(
+			translator.i18n("Open Workspace..."));
+	private final JButton updateWorkspaceButton = new JButton(
+			translator.i18n("Update Workspace"));
+
+	private final ProjectAnalysisBrowser browser = new ProjectAnalysisBrowser();
+
+	private OSGi osgi;
 	private ProjectAnalyzer analyser = null;
 
 	public CodeAnalysis() {
@@ -81,31 +99,18 @@ public class CodeAnalysis extends PureSolApplication {
 	}
 
 	private void initMenu() {
-		MenuBar menuBar = new MenuBar();
+		JMenuBar menuBar = new JMenuBar();
 
-		Menu fileMenu = new Menu(translator.i18n("File"));
-		Menu optionsMenu = new Menu(translator.i18n("Options"));
+		JMenu fileMenu = new JMenu(translator.i18n("File"));
+		JMenu optionsMenu = new JMenu(translator.i18n("Options"));
 
-		MenuItem newWorkspace = new MenuItem("New Workspace...");
-		newWorkspace.connect("start", this, "newWorkspace");
-
-		MenuItem openWorkspace = new MenuItem("Open Workspace...");
-		openWorkspace.connect("start", this, "openWorkspace");
-
-		MenuItem updateWorkspace = new MenuItem("Update Workspace");
-		updateWorkspace.connect("start", this, "updateWorkspace");
-
-		MenuItem createEvaluatorHTML = new MenuItem("Create HTML Project...");
-		createEvaluatorHTML.connect("start", this, "createHTMLProject");
-
-		MenuItem exit = new MenuItem("Exit");
-		exit.connect("start", this, "quit");
-
-		MenuItem pluginManager = new MenuItem("Plugin Manager...");
-		pluginManager.connect("start", this, "pluginManager");
-
-		MenuItem pluginConfiguration = new MenuItem("Plugin Configuration...");
-		pluginConfiguration.connect("start", this, "pluginConfiguration");
+		newWorkspace.addActionListener(this);
+		openWorkspace.addActionListener(this);
+		updateWorkspace.addActionListener(this);
+		createEvaluatorHTML.addActionListener(this);
+		exit.addActionListener(this);
+		pluginManager.addActionListener(this);
+		pluginConfiguration.addActionListener(this);
 
 		menuBar.add(fileMenu);
 		fileMenu.add(newWorkspace);
@@ -126,30 +131,25 @@ public class CodeAnalysis extends PureSolApplication {
 	}
 
 	private void initDesktop() {
-		BorderLayoutWidget widget = new BorderLayoutWidget();
+		JPanel widget = new JPanel();
+		widget.setLayout(new BorderLayout());
 		setContentPane(widget);
 
-		ToolBar toolbar = new ToolBar();
-		Button newWorkspace = new Button(translator.i18n("New Workspace..."));
-		newWorkspace.connect("start", this, "newWorkspace");
-		toolbar.add(newWorkspace);
+		JToolBar toolbar = new JToolBar();
+		toolbar.add(newWorkspaceButton);
+		toolbar.add(openWorkspaceButton);
+		toolbar.add(updateWorkspaceButton);
 
-		Button openWorkspace = new Button(translator.i18n("Open Workspace..."));
-		openWorkspace.connect("start", this, "openWorkspace");
-		toolbar.add(openWorkspace);
+		newWorkspaceButton.addActionListener(this);
+		openWorkspaceButton.addActionListener(this);
+		updateWorkspaceButton.addActionListener(this);
 
-		Button updateWorkspace = new Button(translator.i18n("Update Workspace"));
-		updateWorkspace.connect("start", this, "updateWorkspace");
-		toolbar.add(updateWorkspace);
-
-		widget.setNorth(toolbar);
-
-		widget.setCenter(browser = new ProjectAnalysisBrowser());
-		widget.setSouth(new MemoryMonitor());
+		widget.add(toolbar, BorderLayout.NORTH);
+		widget.add(browser, BorderLayout.CENTER);
+		widget.add(new MemoryMonitor(), BorderLayout.SOUTH);
 	}
 
-	@Slot
-	void newWorkspace() {
+	private void newWorkspace() {
 		NewProjectAnalyserDialog dialog = new NewProjectAnalyserDialog();
 		if (!dialog.run()) {
 			return;
@@ -158,9 +158,12 @@ public class CodeAnalysis extends PureSolApplication {
 		analyser = ProjectAnalyzer.create(dialog.getSourceDirectory(),
 				dialog.getWorkspaceDirectory());
 		if (analyser != null) {
-			ProgressWindow progress = new ProgressWindow(analyser);
-			progress.connect("finished", this, "refresh");
-			progress.run();
+			analyser.run();
+			refresh();
+			// TODO create ProgressWindow!!
+			// ProgressWindow progress = new ProgressWindow(analyser);
+			// progress.connect("finished", this, "refresh");
+			// progress.run();
 		} else {
 			JOptionPane
 					.showMessageDialog(this, translator
@@ -169,8 +172,7 @@ public class CodeAnalysis extends PureSolApplication {
 		}
 	}
 
-	@Slot
-	void openWorkspace() {
+	private void openWorkspace() {
 		JFileChooser file = new JFileChooser();
 		file.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		file.setName(translator.i18n("Open Analysis Workspace"));
@@ -181,12 +183,13 @@ public class CodeAnalysis extends PureSolApplication {
 		refresh();
 	}
 
-	@Slot
-	void updateWorkspace() {
+	private void updateWorkspace() {
 		if (analyser != null) {
-			ProgressWindow progress = new ProgressWindow(analyser);
-			progress.connect("finished", this, "refresh");
-			progress.run();
+			analyser.run();
+			// TODO create ProgressWindow!!!
+			// ProgressWindow progress = new ProgressWindow(analyser);
+			// progress.connect("finished", this, "refresh");
+			// progress.run();
 		} else {
 			JOptionPane.showMessageDialog(this,
 					translator.i18n("No workspace is open for update!!"),
@@ -194,8 +197,7 @@ public class CodeAnalysis extends PureSolApplication {
 		}
 	}
 
-	@Slot
-	void createHTMLProject() {
+	private void createHTMLProject() {
 		JFileChooser chooser = new JFileChooser();
 		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		int result = chooser.showSaveDialog(Application.getInstance());
@@ -205,8 +207,7 @@ public class CodeAnalysis extends PureSolApplication {
 		Application.showNotImplementedMessage();
 	}
 
-	@Slot
-	void pluginManager() {
+	private void pluginManager() {
 		if (osgi.isStarted()) {
 			new BundleManager(osgi.getContext()).run();
 		} else {
@@ -221,18 +222,16 @@ public class CodeAnalysis extends PureSolApplication {
 		}
 	}
 
-	@Slot
-	void pluginConfiguration() {
-		new BundleConfigurationDialog(CodeAnalysis.class.getName()).run();
+	private void pluginConfiguration() {
+		new BundleConfigurationDialog(CodeAnalysis.class.getName())
+				.setVisible(true);
 	}
 
-	@Slot
-	void refresh() {
+	private void refresh() {
 		setSubtitle(analyser.getWorkspaceDirectory().getPath());
 		browser.setProjectAnalyser(analyser);
 	}
 
-	@Slot
 	@Override
 	public void quit() {
 		try {
@@ -242,6 +241,28 @@ public class CodeAnalysis extends PureSolApplication {
 			logger.error(e.getMessage(), e);
 		}
 		super.quit();
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+
+		if (e.getSource() == newWorkspace) {
+			newWorkspace();
+		} else if (e.getSource() == openWorkspace) {
+			openWorkspace();
+		} else if (e.getSource() == updateWorkspace) {
+			updateWorkspace();
+		} else if (e.getSource() == createEvaluatorHTML) {
+			createHTMLProject();
+		} else if (e.getSource() == exit) {
+			quit();
+		} else if (e.getSource() == pluginManager) {
+			pluginManager();
+		} else if (e.getSource() == pluginConfiguration) {
+			pluginConfiguration();
+		} else {
+			super.actionPerformed(e);
+		}
 	}
 
 	public static void main(String[] args) {
