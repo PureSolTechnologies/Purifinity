@@ -81,5 +81,5 @@ public interface ProgressObserver {
 	 * meant to be observed. How (and weigher) the monitor implements such a
 	 * method is not cetain.
 	 */
-	public ProgressObserver startSubProgress(RunnableProgressObservable thread);
+	public ProgressObserver startSubProgress(ProgressObservable thread);
 }

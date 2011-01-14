@@ -18,22 +18,19 @@
 
 package com.puresol.gui.progress;
 
-import org.junit.Test;
+/**
+ * This interfaces is used for classes which are to be monitored.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
+public interface ProgressObservable {
 
-public class ProgressWindowTest {
-
-	@Test
-	public void test() {
-		/*
-		 * This method is just for surpressing the "no test found" warning.
-		 */
-	}
-
-	public static void main(String args[]) {
-		TestProgressObservable tp = new TestProgressObservable();
-		tp.setStartSubProcess(true);
-		ProgressWindow pw = new ProgressWindow(tp);
-		pw.run();
-	}
-
+	/**
+	 * The monitor (observer) is set here and the class itself has to take care
+	 * about the information which are set to the monitor.
+	 * 
+	 * @param observer
+	 */
+	public void setMonitor(ProgressObserver observer);
 }

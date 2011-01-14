@@ -200,7 +200,7 @@ public class SplashWindow extends JWindow implements Runnable, ProgressObserver 
 	 * This is not implemented in SplashScreen!
 	 */
 	@Override
-	public ProgressObserver startSubProgress(RunnableProgressObservable thread) {
+	public ProgressObserver startSubProgress(ProgressObservable thread) {
 		return null;
 	}
 
