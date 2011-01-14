@@ -3,6 +3,7 @@ package com.puresol.coding.lang.java.metrics;
 import static org.junit.Assert.*;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import org.junit.Test;
@@ -47,6 +48,9 @@ public class SLOCMetricImplTest {
 			assertEquals(0, sloc.getComLOC());
 			assertEquals(2, sloc.getBlLOC());
 		} catch (AnalyzerException e) {
+			e.printStackTrace();
+			fail("No exception was expected!");
+		} catch (IOException e) {
 			e.printStackTrace();
 			fail("No exception was expected!");
 		}

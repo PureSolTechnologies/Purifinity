@@ -57,6 +57,9 @@ public class JavaSourceCodeDistributionTest {
 		} catch (AnalyzerException e) {
 			e.printStackTrace();
 			fail("No exception was expected!");
+		} catch (IOException e) {
+			e.printStackTrace();
+			fail("No exception was expected!");
 		}
 	}
 

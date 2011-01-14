@@ -3,6 +3,7 @@ package com.puresol.coding.lang.java.metrics;
 import static org.junit.Assert.*;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import org.junit.Test;
@@ -34,10 +35,14 @@ public class CodeDepthMetricImplTest {
 			List<CodeRange> codeRanges = java.getAnalyzableCodeRanges(tree);
 			assertNotNull(codeRanges);
 			assertTrue(codeRanges.size() > 0);
-			CodeDepthMetric metric = new CodeDepthMetric(java, codeRanges.get(0));
+			CodeDepthMetric metric = new CodeDepthMetric(java,
+					codeRanges.get(0));
 			metric.run();
 			assertEquals(2, metric.getMaxDepth());
 		} catch (AnalyzerException e) {
+			e.printStackTrace();
+			fail("No exception was expected!");
+		} catch (IOException e) {
 			e.printStackTrace();
 			fail("No exception was expected!");
 		}
