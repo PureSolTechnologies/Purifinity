@@ -246,11 +246,14 @@ public class CodeAnalysis extends PureSolApplication {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		if (e.getSource() == newWorkspace) {
+		if ((e.getSource() == newWorkspace)
+				|| (e.getSource() == newWorkspaceButton)) {
 			newWorkspace();
-		} else if (e.getSource() == openWorkspace) {
+		} else if ((e.getSource() == openWorkspace)
+				|| (e.getSource() == openWorkspaceButton)) {
 			openWorkspace();
-		} else if (e.getSource() == updateWorkspace) {
+		} else if ((e.getSource() == updateWorkspace)
+				|| (e.getSource() == updateWorkspaceButton)) {
 			updateWorkspace();
 		} else if (e.getSource() == createEvaluatorHTML) {
 			createHTMLProject();

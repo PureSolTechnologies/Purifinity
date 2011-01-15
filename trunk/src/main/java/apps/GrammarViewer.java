@@ -62,7 +62,7 @@ public class GrammarViewer extends PureSolApplication implements ActionListener 
 
 		// TODO the following line(s) are to be removed!
 		open(new File(
-				"/home/ludwig/workspace/FortranLanguagePack/src/com/puresol/coding/lang/fortran/grammar/Fortran2008.g"));
+				"/home/ludwig/workspace/FortranLanguagePack/src/main/resources/com/puresol/coding/lang/fortran/grammar/Fortran2008.g"));
 
 	}
 
