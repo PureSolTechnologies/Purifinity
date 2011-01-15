@@ -182,5 +182,4 @@ public class BundleManager extends Dialog {
 			super.actionPerformed(e);
 		}
 	}
-
 }

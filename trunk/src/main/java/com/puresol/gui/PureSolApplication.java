@@ -155,8 +155,8 @@ public class PureSolApplication extends Application implements ActionListener {
 		JMenu helpMenu = new JMenu(translator.i18n("Help"));
 
 		webItem.addActionListener(this);
-
 		logItem.addActionListener(this);
+		aboutItem.addActionListener(this);
 
 		helpMenu.add(webItem);
 		helpMenu.addSeparator();

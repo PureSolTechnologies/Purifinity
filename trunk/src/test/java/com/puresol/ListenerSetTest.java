@@ -1,0 +1,105 @@
+package com.puresol;
+
+import static org.junit.Assert.*;
+
+import java.lang.ref.WeakReference;
+
+import org.junit.Test;
+
+public class ListenerSetTest {
+
+	private class TestClass {
+
+		private final int i;
+
+		public TestClass(int i) {
+			super();
+			this.i = i;
+		}
+
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + getOuterType().hashCode();
+			result = prime * result + i;
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			TestClass other = (TestClass) obj;
+			if (!getOuterType().equals(other.getOuterType()))
+				return false;
+			if (i != other.i)
+				return false;
+			return true;
+		}
+
+		private ListenerSetTest getOuterType() {
+			return ListenerSetTest.this;
+		}
+
+	}
+
+	@Test
+	public void testWeakReference() {
+		WeakReference<TestClass> ref1;
+		WeakReference<TestClass> ref2;
+		{
+			TestClass class1 = new TestClass(1);
+			ref1 = new WeakReference<TestClass>(class1);
+			ref2 = new WeakReference<TestClass>(class1);
+			assertNotSame(ref1, ref2);
+			assertSame(ref1.get(), ref2.get());
+			assertEquals(ref1.get(), ref2.get());
+			assertFalse(ref1.equals(ref2));
+			class1 = null;
+			System.gc();
+		}
+		assertNull(ref1.get());
+		assertNull(ref2.get());
+	}
+
+	@Test
+	public void testInstance() {
+		assertNotNull(new ListenerSet<String>());
+	}
+
+	@Test
+	public void testInitValues() {
+		ListenerSet<String> set = new ListenerSet<String>();
+		assertNotNull(set.getListeners());
+		assertEquals(0, set.getListeners().size());
+	}
+
+	@Test
+	public void testAddingAndRemoveing() {
+		Integer s1 = 1;
+		Integer s2 = 2;
+		ListenerSet<Integer> set = new ListenerSet<Integer>();
+		assertEquals(0, set.getListeners().size());
+		set.addListener(s1);
+		assertEquals(1, set.getListeners().size());
+		set.addListener(s1);
+		assertEquals(1, set.getListeners().size());
+		set.addListener(s2);
+		assertEquals(2, set.getListeners().size());
+		{
+			Integer s3 = new Integer(3);
+			set.addListener(s3);
+			assertEquals(3, set.getListeners().size());
+			set.removeListener(s2);
+			assertEquals(2, set.getListeners().size());
+			s3 = null;
+			System.gc();
+		}
+		assertEquals(1, set.getListeners().size());
+	}
+}
