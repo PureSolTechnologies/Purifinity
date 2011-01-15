@@ -28,8 +28,8 @@ import com.puresol.coding.evaluator.FileEvaluator;
 import com.puresol.document.Chapter;
 import com.puresol.document.Document;
 import com.puresol.document.Paragraph;
-import com.puresol.gui.progress.ProgressObservable;
 import com.puresol.gui.progress.ProgressObserver;
+import com.puresol.gui.progress.RunnableProgressObservable;
 import com.puresol.utils.DirectoryUtilities;
 import com.puresol.utils.Persistence;
 import com.puresol.utils.PersistenceException;
@@ -42,8 +42,8 @@ import com.puresol.utils.PersistenceException;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class ProjectAnalyzer implements Serializable, Runnable,
-		ProgressObservable {
+public class ProjectAnalyzer implements Serializable,
+		RunnableProgressObservable {
 
 	private static final long serialVersionUID = -5080062306149072901L;
 
@@ -85,7 +85,7 @@ public class ProjectAnalyzer implements Serializable, Runnable,
 			File workspaceDirectory) {
 		ProjectAnalyzer projectAnalyser = new ProjectAnalyzer(
 				workspaceDirectory);
-		if (!projectAnalyser.create(projectDirectory)) {
+		if (!projectAnalyser.createProjectDirectory(projectDirectory)) {
 			return null;
 		}
 		return projectAnalyser;
@@ -147,7 +147,7 @@ public class ProjectAnalyzer implements Serializable, Runnable,
 	 * @param projectDirectory
 	 * @return
 	 */
-	private boolean create(File projectDirectory) {
+	private boolean createProjectDirectory(File projectDirectory) {
 		this.projectDirectory = projectDirectory;
 		DirectoryUtilities.checkAndCreateDirectory(workspaceDirectory);
 		if (!writeSettings()) {
@@ -265,7 +265,7 @@ public class ProjectAnalyzer implements Serializable, Runnable,
 			File file = files.get(index);
 			if (progressMonitor != null) {
 				progressMonitor.setStatus(index);
-				progressMonitor.setText(file.getPath());
+				progressMonitor.setText(file.getName());
 			}
 			analyzeFile(file);
 			if (Thread.interrupted()) {

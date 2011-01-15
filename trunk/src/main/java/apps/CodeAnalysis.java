@@ -34,6 +34,8 @@ import com.puresol.gui.coding.NewProjectAnalyserDialog;
 import com.puresol.gui.coding.ProjectAnalysisBrowser;
 import com.puresol.gui.osgi.BundleConfigurationDialog;
 import com.puresol.gui.osgi.BundleManager;
+import com.puresol.gui.progress.FinishListener;
+import com.puresol.gui.progress.ProgressWindow;
 import com.puresol.osgi.OSGi;
 import com.puresol.osgi.OSGiException;
 import com.puresol.osgi.OSGiFrameworkManager;
@@ -44,7 +46,7 @@ import com.puresol.osgi.OSGiFrameworkManager;
  * 
  * @author Rick-Rainer Ludwig
  */
-public class CodeAnalysis extends PureSolApplication {
+public class CodeAnalysis extends PureSolApplication implements FinishListener {
 
 	private static final long serialVersionUID = -3002673096551916032L;
 
@@ -158,12 +160,9 @@ public class CodeAnalysis extends PureSolApplication {
 		analyser = ProjectAnalyzer.create(dialog.getSourceDirectory(),
 				dialog.getWorkspaceDirectory());
 		if (analyser != null) {
-			analyser.run();
-			refresh();
-			// TODO create ProgressWindow!!
-			// ProgressWindow progress = new ProgressWindow(analyser);
-			// progress.connect("finished", this, "refresh");
-			// progress.run();
+			ProgressWindow progress = new ProgressWindow(this);
+			progress.addFinishListener(this);
+			progress.run(analyser);
 		} else {
 			JOptionPane
 					.showMessageDialog(this, translator
@@ -185,11 +184,9 @@ public class CodeAnalysis extends PureSolApplication {
 
 	private void updateWorkspace() {
 		if (analyser != null) {
-			analyser.run();
-			// TODO create ProgressWindow!!!
-			// ProgressWindow progress = new ProgressWindow(analyser);
-			// progress.connect("finished", this, "refresh");
-			// progress.run();
+			ProgressWindow progress = new ProgressWindow(this);
+			progress.addFinishListener(this);
+			progress.run(analyser);
 		} else {
 			JOptionPane.showMessageDialog(this,
 					translator.i18n("No workspace is open for update!!"),
@@ -268,7 +265,13 @@ public class CodeAnalysis extends PureSolApplication {
 		}
 	}
 
+	@Override
+	public void finished(Object o) {
+		refresh();
+	}
+
 	public static void main(String[] args) {
 		new CodeAnalysis().run();
 	}
+
 }
