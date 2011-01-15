@@ -85,7 +85,7 @@ public class OSGi {
 	}
 
 	private void preStart() {
-		for (OSGiFrameworkListener listener : frameworkListeners.getListeners()) {
+		for (OSGiFrameworkListener listener : frameworkListeners) {
 			listener.preStart();
 		}
 	}
@@ -98,7 +98,7 @@ public class OSGi {
 	}
 
 	private void postStart() {
-		for (OSGiFrameworkListener listener : frameworkListeners.getListeners()) {
+		for (OSGiFrameworkListener listener : frameworkListeners) {
 			listener.postStart();
 		}
 	}
@@ -183,7 +183,7 @@ public class OSGi {
 	}
 
 	private void preStop() {
-		for (OSGiFrameworkListener listener : frameworkListeners.getListeners()) {
+		for (OSGiFrameworkListener listener : frameworkListeners) {
 			listener.preStop();
 		}
 	}
@@ -195,7 +195,7 @@ public class OSGi {
 	}
 
 	private void postStop() {
-		for (OSGiFrameworkListener listener : frameworkListeners.getListeners()) {
+		for (OSGiFrameworkListener listener : frameworkListeners) {
 			listener.postStop();
 		}
 	}
@@ -214,11 +214,11 @@ public class OSGi {
 	}
 
 	public void addOSGiFrameworkListener(OSGiFrameworkListener listener) {
-		frameworkListeners.addListener(listener);
+		frameworkListeners.add(listener);
 	}
 
 	public void removeOSGiFrameworkListener(OSGiFrameworkListener listener) {
-		frameworkListeners.removeListener(listener);
+		frameworkListeners.remove(listener);
 	}
 
 }

@@ -75,8 +75,7 @@ public class ListenerSetTest {
 	@Test
 	public void testInitValues() {
 		ListenerSet<String> set = new ListenerSet<String>();
-		assertNotNull(set.getListeners());
-		assertEquals(0, set.getListeners().size());
+		assertEquals(0, set.size());
 	}
 
 	@Test
@@ -84,22 +83,22 @@ public class ListenerSetTest {
 		Integer s1 = 1;
 		Integer s2 = 2;
 		ListenerSet<Integer> set = new ListenerSet<Integer>();
-		assertEquals(0, set.getListeners().size());
-		set.addListener(s1);
-		assertEquals(1, set.getListeners().size());
-		set.addListener(s1);
-		assertEquals(1, set.getListeners().size());
-		set.addListener(s2);
-		assertEquals(2, set.getListeners().size());
+		assertEquals(0, set.size());
+		set.add(s1);
+		assertEquals(1, set.size());
+		set.add(s1);
+		assertEquals(1, set.size());
+		set.add(s2);
+		assertEquals(2, set.size());
 		{
 			Integer s3 = new Integer(3);
-			set.addListener(s3);
-			assertEquals(3, set.getListeners().size());
-			set.removeListener(s2);
-			assertEquals(2, set.getListeners().size());
+			set.add(s3);
+			assertEquals(3, set.size());
+			set.remove(s2);
+			assertEquals(2, set.size());
 			s3 = null;
 			System.gc();
 		}
-		assertEquals(1, set.getListeners().size());
+		assertEquals(1, set.size());
 	}
 }
