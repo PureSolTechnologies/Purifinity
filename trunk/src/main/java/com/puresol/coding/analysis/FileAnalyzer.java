@@ -10,7 +10,6 @@ import java.util.Properties;
 import org.apache.log4j.Logger;
 
 import com.puresol.utils.FileUtilities;
-import com.puresol.utils.Persistence;
 
 public class FileAnalyzer {
 
@@ -78,13 +77,15 @@ public class FileAnalyzer {
 	}
 
 	private void writeParserTree() throws IOException {
-		Persistence.persist(analyzer.getParserTree(),
-				analyzedFile.getParserTreeFile());
+		// TODO think about requirement here. Is it needed?
+		// Persistence.persist(analyzer.getParserTree(),
+		// analyzedFile.getParserTreeFile());
 	}
 
 	private void writeProperties() throws IOException {
 		Properties props = new Properties();
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		SimpleDateFormat dateFormat = new SimpleDateFormat(
+				"yyyy-MM-dd HH:mm:ss");
 		props.put("timestamp", dateFormat.format(analyzer.getTimeStamp()));
 		props.put("language", analyzer.getLanguage().getName());
 		props.store(new FileWriter(analyzedFile.getPropertyFile()),

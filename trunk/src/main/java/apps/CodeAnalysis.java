@@ -22,11 +22,16 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
+import javax.swing.filechooser.FileFilter;
 
 import org.apache.log4j.Logger;
 import org.osgi.framework.BundleException;
 
 import com.puresol.coding.analysis.ProjectAnalyzer;
+import com.puresol.coding.evaluator.EvaluatorASCIIExport;
+import com.puresol.filefilter.CSVFilter;
+import com.puresol.filefilter.ExcelFilter;
+import com.puresol.filefilter.TSVFilter;
 import com.puresol.gui.Application;
 import com.puresol.gui.MemoryMonitor;
 import com.puresol.gui.PureSolApplication;
@@ -57,6 +62,7 @@ public class CodeAnalysis extends PureSolApplication implements FinishListener {
 	private final JMenuItem newWorkspace = new JMenuItem("New Workspace...");
 	private final JMenuItem openWorkspace = new JMenuItem("Open Workspace...");
 	private final JMenuItem updateWorkspace = new JMenuItem("Update Workspace");
+	private final JMenuItem exportValues = new JMenuItem("Export Values...");
 	private final JMenuItem createEvaluatorHTML = new JMenuItem(
 			"Create HTML Project...");
 	private final JMenuItem exit = new JMenuItem("Exit");
@@ -74,7 +80,7 @@ public class CodeAnalysis extends PureSolApplication implements FinishListener {
 	private final ProjectAnalysisBrowser browser = new ProjectAnalysisBrowser();
 
 	private OSGi osgi;
-	private ProjectAnalyzer analyser = null;
+	private ProjectAnalyzer analyzer = null;
 
 	public CodeAnalysis() {
 		super("Code Analysis", "v0.0.1");
@@ -109,6 +115,7 @@ public class CodeAnalysis extends PureSolApplication implements FinishListener {
 		newWorkspace.addActionListener(this);
 		openWorkspace.addActionListener(this);
 		updateWorkspace.addActionListener(this);
+		exportValues.addActionListener(this);
 		createEvaluatorHTML.addActionListener(this);
 		exit.addActionListener(this);
 		pluginManager.addActionListener(this);
@@ -120,6 +127,7 @@ public class CodeAnalysis extends PureSolApplication implements FinishListener {
 		fileMenu.add(openWorkspace);
 		fileMenu.add(updateWorkspace);
 		fileMenu.addSeparator();
+		fileMenu.add(exportValues);
 		fileMenu.add(createEvaluatorHTML);
 		fileMenu.addSeparator();
 		fileMenu.add(exit);
@@ -157,12 +165,12 @@ public class CodeAnalysis extends PureSolApplication implements FinishListener {
 			return;
 		}
 		setSubtitle(dialog.getWorkspaceDirectory().toString());
-		analyser = ProjectAnalyzer.create(dialog.getSourceDirectory(),
+		analyzer = ProjectAnalyzer.create(dialog.getSourceDirectory(),
 				dialog.getWorkspaceDirectory());
-		if (analyser != null) {
+		if (analyzer != null) {
 			ProgressWindow progress = new ProgressWindow(this);
 			progress.addFinishListener(this);
-			progress.run(analyser);
+			progress.run(analyzer);
 		} else {
 			JOptionPane
 					.showMessageDialog(this, translator
@@ -178,19 +186,50 @@ public class CodeAnalysis extends PureSolApplication implements FinishListener {
 		if (file.showOpenDialog(this) == JFileChooser.CANCEL_OPTION) {
 			return;
 		}
-		analyser = ProjectAnalyzer.open(file.getSelectedFile());
+		analyzer = ProjectAnalyzer.open(file.getSelectedFile());
 		refresh();
 	}
 
 	private void updateWorkspace() {
-		if (analyser != null) {
+		if (analyzer != null) {
 			ProgressWindow progress = new ProgressWindow(this);
 			progress.addFinishListener(this);
-			progress.run(analyser);
+			progress.run(analyzer);
 		} else {
 			JOptionPane.showMessageDialog(this,
 					translator.i18n("No workspace is open for update!!"),
 					translator.i18n("Error"), JOptionPane.ERROR_MESSAGE);
+		}
+	}
+
+	private void exportValues() {
+		JFileChooser chooser = new JFileChooser();
+		ExcelFilter excelFilter = new ExcelFilter();
+		CSVFilter csvFilter = new CSVFilter();
+		TSVFilter tsvFilter = new TSVFilter();
+		chooser.setFileFilter(excelFilter);
+		chooser.setFileFilter(csvFilter);
+		chooser.setFileFilter(tsvFilter);
+		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		int result = chooser.showOpenDialog(Application.getInstance());
+		if (result == JFileChooser.CANCEL_OPTION) {
+			return;
+		}
+		FileFilter filter = chooser.getFileFilter();
+		if (filter == tsvFilter) {
+			EvaluatorASCIIExport export = new EvaluatorASCIIExport(
+					chooser.getSelectedFile(), analyzer, "\t");
+			ProgressWindow progressWindow = new ProgressWindow();
+			progressWindow.addFinishListener(this);
+			progressWindow.run(export);
+		} else if (filter == csvFilter) {
+			EvaluatorASCIIExport export = new EvaluatorASCIIExport(
+					chooser.getSelectedFile(), analyzer, ",");
+			ProgressWindow progressWindow = new ProgressWindow();
+			progressWindow.addFinishListener(this);
+			progressWindow.run(export);
+		} else if (filter == excelFilter) {
+			Application.showNotImplementedMessage();
 		}
 	}
 
@@ -225,8 +264,8 @@ public class CodeAnalysis extends PureSolApplication implements FinishListener {
 	}
 
 	private void refresh() {
-		setSubtitle(analyser.getWorkspaceDirectory().getPath());
-		browser.setProjectAnalyser(analyser);
+		setSubtitle(analyzer.getWorkspaceDirectory().getPath());
+		browser.setProjectAnalyser(analyzer);
 	}
 
 	@Override
@@ -252,6 +291,8 @@ public class CodeAnalysis extends PureSolApplication implements FinishListener {
 		} else if ((e.getSource() == updateWorkspace)
 				|| (e.getSource() == updateWorkspaceButton)) {
 			updateWorkspace();
+		} else if (e.getSource() == exportValues) {
+			exportValues();
 		} else if (e.getSource() == createEvaluatorHTML) {
 			createHTMLProject();
 		} else if (e.getSource() == exit) {
