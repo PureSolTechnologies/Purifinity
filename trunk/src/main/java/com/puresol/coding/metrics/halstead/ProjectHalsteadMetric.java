@@ -35,8 +35,10 @@ public class ProjectHalsteadMetric extends
 		for (CodeRange codeRange : language.getAnalyzableCodeRanges(parserTree)) {
 			HalsteadMetric metric = new HalsteadMetric(language, codeRange);
 			metric.run();
-			results.put(file.toString() + ": " + codeRange.getType().getName()
-					+ " '" + codeRange.getName() + "'", metric.getQuality());
+			results.put(
+					file.getFile().getPath() + ": "
+							+ codeRange.getType().getName() + " '"
+							+ codeRange.getName() + "'", metric.getQuality());
 		}
 		return results;
 	}

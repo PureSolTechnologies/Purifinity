@@ -34,8 +34,10 @@ public class ProjectSLOCMetric extends AbstractProjectMetric<SLOCMetric> {
 		for (CodeRange codeRange : language.getAnalyzableCodeRanges(parserTree)) {
 			SLOCMetric metric = new SLOCMetric(language, codeRange);
 			metric.run();
-			results.put(file.toString() + ": " + codeRange.getType().getName()
-					+ " '" + codeRange.getName() + "'", metric.getQuality());
+			results.put(
+					file.getFile().getPath() + ": "
+							+ codeRange.getType().getName() + " '"
+							+ codeRange.getName() + "'", metric.getQuality());
 		}
 		return results;
 	}

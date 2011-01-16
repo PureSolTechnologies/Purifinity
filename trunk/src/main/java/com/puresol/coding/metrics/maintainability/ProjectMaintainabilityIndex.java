@@ -36,8 +36,10 @@ public class ProjectMaintainabilityIndex extends
 			MaintainabilityIndex metric = new MaintainabilityIndex(language,
 					codeRange);
 			metric.run();
-			results.put(file.toString() + ": " + codeRange.getType().getName()
-					+ " '" + codeRange.getName() + "'", metric.getQuality());
+			results.put(
+					file.getFile().getPath() + ": "
+							+ codeRange.getType().getName() + " '"
+							+ codeRange.getName() + "'", metric.getQuality());
 		}
 		return results;
 	}
