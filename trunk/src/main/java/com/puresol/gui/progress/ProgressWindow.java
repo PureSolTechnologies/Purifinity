@@ -93,7 +93,7 @@ public class ProgressWindow extends JFrame implements ProgressObserver,
 	@Override
 	public void finish() {
 		for (FinishListener listener : finishListeners) {
-			listener.finished(this);
+			listener.finished(progressPanel.getTask());
 		}
 		dispose();
 	}
@@ -117,8 +117,8 @@ public class ProgressWindow extends JFrame implements ProgressObserver,
 		finishListeners.remove(listener);
 	}
 
-	public void run(RunnableProgressObservable test) {
-		test.setMonitor(this);
-		progressPanel.run(test);
+	public void run(RunnableProgressObservable task) {
+		task.setMonitor(this);
+		progressPanel.run(task);
 	}
 }

@@ -73,13 +73,16 @@ public interface ProgressObserver {
 	/**
 	 * This method is called when the process is finished to finish the progress
 	 * bar and to trigger post-process activities of the observer.
+	 * 
+	 * @param task
+	 *            is the task object which was finished.
 	 */
 	public void finish();
 
 	/**
 	 * This class is used by an observable to start sub processes which are also
 	 * meant to be observed. How (and weigher) the monitor implements such a
-	 * method is not cetain.
+	 * method is not certain.
 	 */
 	public ProgressObserver startSubProgress(ProgressObservable thread);
 }

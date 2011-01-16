@@ -54,6 +54,8 @@ public class ProgressPanel extends JPanel implements ProgressObserver,
 	private final JLabel description = new JLabel();
 	private final JLabel text = new JLabel();
 	private final JButton cancel = new JButton(translator.i18n("Cancel"));
+
+	private Object task;
 	private Future<?> future = null;
 
 	public ProgressPanel() {
@@ -71,6 +73,10 @@ public class ProgressPanel extends JPanel implements ProgressObserver,
 		add(progressPanel);
 		add(cancel);
 		cancel.addActionListener(this);
+	}
+
+	public Object getTask() {
+		return task;
 	}
 
 	@Override
@@ -114,10 +120,11 @@ public class ProgressPanel extends JPanel implements ProgressObserver,
 			}
 			future = null;
 		}
-		setVisible(false);
 		for (FinishListener listener : finishListeners) {
-			listener.finished(this);
+			listener.finished(task);
 		}
+		task = null;
+		setVisible(false);
 	}
 
 	public void addFinishListener(FinishListener listener) {
@@ -141,8 +148,9 @@ public class ProgressPanel extends JPanel implements ProgressObserver,
 		}
 	}
 
-	public void run(Runnable test) {
+	public void run(Runnable task) {
+		this.task = task;
 		ExecutorService service = Executors.newSingleThreadExecutor();
-		future = service.submit(test);
+		future = service.submit(task);
 	}
 }
