@@ -37,6 +37,7 @@ abstract public class AbstractFileFilter extends FileFilter implements
 
 	private static final long serialVersionUID = 1L;
 
+	@Override
 	public boolean accept(File f) {
 		if (f.isDirectory()) {
 			return true;
@@ -67,5 +68,6 @@ abstract public class AbstractFileFilter extends FileFilter implements
 
 	abstract public String getSuffixes();
 
+	@Override
 	abstract public String getDescription();
 }

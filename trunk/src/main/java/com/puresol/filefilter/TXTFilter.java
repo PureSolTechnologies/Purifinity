@@ -29,8 +29,9 @@ public class TXTFilter extends AbstractFileFilter implements Serializable {
 	private static final Translator translator = Translator
 			.getTranslator(BMPFilter.class);
 
+	@Override
 	public String getDescription() {
-		return translator.i18n("ASCII text files");
+		return translator.i18n("ASCII text files (*.txt)");
 	}
 
 	public String getSuffixes() {

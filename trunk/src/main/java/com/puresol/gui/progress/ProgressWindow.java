@@ -121,4 +121,9 @@ public class ProgressWindow extends JFrame implements ProgressObserver,
 		task.setMonitor(this);
 		progressPanel.run(task);
 	}
+
+	public void run(CallableProgressObservable<?> task) {
+		task.setMonitor(this);
+		progressPanel.run(task);
+	}
 }

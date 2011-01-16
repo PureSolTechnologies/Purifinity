@@ -29,8 +29,9 @@ public class JARFilter extends AbstractFileFilter implements Serializable {
 	private static final Translator translator = Translator
 			.getTranslator(BMPFilter.class);
 
+	@Override
 	public String getDescription() {
-		return translator.i18n("Java archives");
+		return translator.i18n("Java archives (*.jar)");
 	}
 
 	public String getSuffixes() {

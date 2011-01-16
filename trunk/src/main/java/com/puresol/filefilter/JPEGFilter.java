@@ -28,8 +28,9 @@ public class JPEGFilter extends AbstractFileFilter implements Serializable {
 	private static final Translator translator = Translator
 			.getTranslator(JPEGFilter.class);
 
+	@Override
 	public String getDescription() {
-		return translator.i18n("JPEG images");
+		return translator.i18n("JPEG images (*.jpeg,*.jpg)");
 	}
 
 	@Override

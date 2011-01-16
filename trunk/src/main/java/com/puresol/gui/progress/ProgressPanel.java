@@ -20,6 +20,7 @@ package com.puresol.gui.progress;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -149,6 +150,12 @@ public class ProgressPanel extends JPanel implements ProgressObserver,
 	}
 
 	public void run(Runnable task) {
+		this.task = task;
+		ExecutorService service = Executors.newSingleThreadExecutor();
+		future = service.submit(task);
+	}
+
+	public void run(Callable<?> task) {
 		this.task = task;
 		ExecutorService service = Executors.newSingleThreadExecutor();
 		future = service.submit(task);

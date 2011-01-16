@@ -29,8 +29,9 @@ public class BMPFilter extends AbstractFileFilter implements Serializable {
 	private static final Translator translator = Translator
 			.getTranslator(BMPFilter.class);
 
+	@Override
 	public String getDescription() {
-		return translator.i18n("BMP images");
+		return translator.i18n("BMP images (*.bmp)");
 	}
 
 	public String getSuffixes() {
