@@ -41,4 +41,12 @@ public class Result implements Serializable {
 		return unit;
 	}
 
+	@Override
+	public String toString() {
+		String result = name + " - " + description;
+		if ((unit != null) && (!unit.isEmpty())) {
+			result += " [" + unit + "]";
+		}
+		return result;
+	}
 }

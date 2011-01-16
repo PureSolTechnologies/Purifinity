@@ -22,4 +22,8 @@ public class ProjectEvaluatorManager {
 		}
 	}
 
+	public static List<Result> getAvailableResults(Evaluator evaluator) {
+		return evaluator.getResults();
+	}
+
 }

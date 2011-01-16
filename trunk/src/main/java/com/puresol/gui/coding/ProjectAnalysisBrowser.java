@@ -65,6 +65,7 @@ public class ProjectAnalysisBrowser extends JPanel {
 		tabbedPane.setSelectedIndex(0);
 		codeRangeBrowser.setProjectAnalyser(project);
 		projectEvaluatorPanel.setProjectAnalyser(project);
+		projectGraphPanel.setProjectAnalyzer(project);
 	}
 
 	public ProjectAnalyzer getProjectAnalyser() {
