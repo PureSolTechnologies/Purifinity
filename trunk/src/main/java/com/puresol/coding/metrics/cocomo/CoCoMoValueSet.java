@@ -189,7 +189,7 @@ public class CoCoMoValueSet implements Serializable {
 				.round(2.5 * Math.exp(c3 * Math.log(personMonth)) * 100.0) / 100.0;
 		scheduledYears = Math.round(scheduledMonth / 12 * 100.0) / 100.0;
 		teamSize = Math.round(personMonth / scheduledMonth * 100.0) / 100.0;
-		estimatedCosts = Math.round(personYears * averageSalary * 2.4 / 1000
+		estimatedCosts = Math.round(personYears * averageSalary * 2.4 / 1000.0
 				* 100.0) / 100.0;
 	}
 
@@ -219,8 +219,8 @@ public class CoCoMoValueSet implements Serializable {
 				.i18n("Effort/Schedule"), teamSize, ""));
 		results.add(new Result(translator
 				.i18n("Total Estimated Cost to Develop"), translator.i18n(
-				"average salary = {1}{2}/year, overhead = 2.40", averageSalary,
-				currency), estimatedCosts, translator.i18n("k$")));
+				"average salary = {0}{1}/year, overhead = 2.40",
+				averageSalary, currency), estimatedCosts, translator.i18n("k$")));
 	}
 
 	@Override
