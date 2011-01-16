@@ -34,7 +34,7 @@ public class CodeRangeEvaluationBrowser extends JPanel implements
 
 	private ProjectAnalyzer projectAnalyser = null;
 
-	private final EvaluatorChooser evaluators = new EvaluatorChooser();
+	private final CodeRangeEvaluatorChooser evaluators = new CodeRangeEvaluatorChooser();
 	private final HTMLTextPane html = new HTMLTextPane();
 	private AnalyzedFile file;
 	private CodeRange codeRange;

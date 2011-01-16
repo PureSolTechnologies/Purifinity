@@ -15,7 +15,10 @@ import javax.swing.JToolBar;
 import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.evaluator.Evaluator;
 import com.puresol.coding.evaluator.ProjectEvaluatorFactory;
+import com.puresol.gui.Application;
 import com.puresol.gui.TabButton;
+import com.puresol.gui.progress.FinishListener;
+import com.puresol.gui.progress.ProgressWindow;
 
 /**
  * This GUI element lists all available project analyzers and enables the user
@@ -24,7 +27,8 @@ import com.puresol.gui.TabButton;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class ProjectEvaluatorPanel extends JPanel implements ActionListener {
+public class ProjectEvaluatorPanel extends JPanel implements ActionListener,
+		FinishListener {
 
 	private static final long serialVersionUID = 7855693564694783199L;
 
@@ -33,7 +37,7 @@ public class ProjectEvaluatorPanel extends JPanel implements ActionListener {
 
 	private ProjectAnalyzer projectAnalyser = null;
 
-	private final EvaluatorChooser evaluators = new EvaluatorChooser();
+	private final ProjectEvaluatorChooser evaluators = new ProjectEvaluatorChooser();
 	private final JTabbedPane tabbedPane = new JTabbedPane();
 	private final JButton run = new JButton(translator.i18n("Run..."));
 
@@ -78,16 +82,13 @@ public class ProjectEvaluatorPanel extends JPanel implements ActionListener {
 			return;
 		}
 		Evaluator evaluator = evaluatorFactory.create(projectAnalyser);
-		evaluator.run();
-		finished(evaluator);
-		// TODO new ProgrssWindow!!!
-		// ProgressWindow progress = new ProgressWindow(evaluator);
-		// progress.run();
-		// progress.connect("finished", this, "finished",
-		// RunnableProgressObservable.class);
+		ProgressWindow progress = new ProgressWindow(Application.getInstance());
+		progress.addFinishListener(this);
+		progress.run(evaluator);
 	}
 
-	private void finished(Runnable observable) {
+	@Override
+	public void finished(Object observable) {
 		Evaluator evaluator = (Evaluator) observable;
 		ReportPanel viewer = new ReportPanel(evaluator);
 		tabbedPane.add(evaluator.getName(), new JScrollPane(viewer,

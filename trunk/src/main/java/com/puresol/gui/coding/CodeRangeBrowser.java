@@ -96,8 +96,10 @@ public class CodeRangeBrowser extends JPanel implements TreeSelectionListener,
 	private void showFile(AnalyzedFile file) {
 		try {
 			Analysis analysis = project.getAnalysis(file);
-			ParserTree parserTree;
-			parserTree = analysis.getParserTree();
+			if (analysis == null) {
+				return;
+			}
+			ParserTree parserTree = analysis.getParserTree();
 			ProgrammingLanguage language = analysis.getLanguage();
 
 			codeRangeViewer.setCodeRange(language.getAnalyzableCodeRanges(

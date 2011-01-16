@@ -7,7 +7,7 @@ import java.util.List;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.SourceCodeQuality;
 import com.puresol.document.Document;
-import com.puresol.gui.progress.ProgressObservable;
+import com.puresol.gui.progress.RunnableProgressObservable;
 
 /**
  * This interface is the main interface for all evaluators and the general
@@ -18,7 +18,7 @@ import com.puresol.gui.progress.ProgressObservable;
  * @author Rick-Rainer Ludwig
  * 
  */
-public interface Evaluator extends Runnable, ProgressObservable, Serializable {
+public interface Evaluator extends RunnableProgressObservable, Serializable {
 
 	/**
 	 * This method returns the name of the time stamp of the evaluation. This is
