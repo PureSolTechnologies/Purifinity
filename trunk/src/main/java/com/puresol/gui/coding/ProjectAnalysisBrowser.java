@@ -32,6 +32,7 @@ public class ProjectAnalysisBrowser extends JPanel {
 	private final JTabbedPane tabbedPane = new JTabbedPane();
 	private HTMLTextPane projectReport = new HTMLTextPane();
 	private final ProjectEvaluatorPanel projectEvaluatorPanel = new ProjectEvaluatorPanel();
+	private final ProjectGraphPanel projectGraphPanel = new ProjectGraphPanel();
 	private final CodeRangeBrowser codeRangeBrowser = new CodeRangeBrowser();
 
 	public ProjectAnalysisBrowser() {
@@ -51,6 +52,7 @@ public class ProjectAnalysisBrowser extends JPanel {
 		tabbedPane.addTab(translator.i18n("Report"), projectReport);
 		tabbedPane.addTab(translator.i18n("Project Evaluators"),
 				projectEvaluatorPanel);
+		tabbedPane.addTab(translator.i18n("Project Graphs"), projectGraphPanel);
 		tabbedPane.addTab(translator.i18n("Code Ranges"), codeRangeBrowser);
 
 		add(tabbedPane, BorderLayout.CENTER);
