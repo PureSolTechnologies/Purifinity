@@ -15,9 +15,10 @@ public class Table extends AbstractDocumentPart {
 
 	private static final long serialVersionUID = -3314964484840281581L;
 
+	private final List<List<Object>> rows = new ArrayList<List<Object>>();
 	private final List<String> columns;
 
-	private final List<List<Object>> rows = new ArrayList<List<Object>>();
+	private String caption = "";
 
 	public Table(AbstractDocumentPart parent, String name, List<String> columns) {
 		super(parent, name);
@@ -65,4 +66,13 @@ public class Table extends AbstractDocumentPart {
 	public List<List<Object>> getRows() {
 		return rows;
 	}
+
+	public String getCaption() {
+		return caption;
+	}
+
+	public void setCaption(String caption) {
+		this.caption = caption;
+	}
+
 }

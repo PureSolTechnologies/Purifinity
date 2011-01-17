@@ -88,4 +88,11 @@ public class TableTest {
 		row.add("3");
 		table.addRow(row);
 	}
+
+	@Test
+	public void testSetCaption() {
+		Table part = new Table(null, "Test Table", "Col1", "Col2");
+		part.setCaption("TestCaption");
+		assertEquals("TestCaption", part.getCaption());
+	}
 }
