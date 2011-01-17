@@ -87,7 +87,7 @@ public class AboutBox extends Dialog {
 	private JPanel getCopyrightPanel() {
 		JPanel panel = new JPanel();
 		panel.setLayout(new FlowLayout(FlowLayout.LEFT));
-		HTMLTextPane html = new HTMLTextPane();
+		HTMLViewer html = new HTMLViewer();
 		html.setText(Application.getCopyrightMessage());
 		panel.add(html);
 		return panel;
@@ -101,7 +101,7 @@ public class AboutBox extends Dialog {
 	private JPanel getVendorPanel() {
 		JPanel panel = new JPanel();
 		panel.setLayout(new FlowLayout(FlowLayout.LEFT));
-		HTMLTextPane html = new HTMLTextPane();
+		HTMLViewer html = new HTMLViewer();
 		html.setText(Application.getVendorInformation());
 		panel.add(html);
 		return panel;
@@ -115,7 +115,7 @@ public class AboutBox extends Dialog {
 	private JPanel getCustomerPanel() {
 		JPanel panel = new JPanel();
 		panel.setLayout(new FlowLayout(FlowLayout.LEFT));
-		HTMLTextPane html = new HTMLTextPane();
+		HTMLViewer html = new HTMLViewer();
 		html.setText(CustomerInformation.getCustomerInformation());
 		panel.add(html);
 		return panel;
@@ -129,7 +129,7 @@ public class AboutBox extends Dialog {
 	private JPanel getContactPanel() {
 		JPanel panel = new JPanel();
 		panel.setLayout(new FlowLayout(FlowLayout.LEFT));
-		HTMLTextPane html = new HTMLTextPane();
+		HTMLViewer html = new HTMLViewer();
 		html.setText(Application.getContactInformation());
 		panel.add(html);
 		return panel;

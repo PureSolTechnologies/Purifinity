@@ -32,13 +32,13 @@ import javax.swing.text.html.HTMLEditorKit;
 
 import org.apache.log4j.Logger;
 
-public class HTMLTextPane extends JTextPane implements HyperlinkListener {
+public class HTMLViewer extends JTextPane implements HyperlinkListener {
 
 	private static final long serialVersionUID = 4941020106098403909L;
 
-	private static final Logger logger = Logger.getLogger(HTMLTextPane.class);
+	private static final Logger logger = Logger.getLogger(HTMLViewer.class);
 
-	public HTMLTextPane() {
+	public HTMLViewer() {
 		super();
 		init();
 	}
