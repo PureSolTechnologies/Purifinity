@@ -114,10 +114,12 @@ public class CodeRangeBrowser extends JPanel implements TreeSelectionListener,
 	}
 
 	private void showCodeRange(CodeRange codeRange) {
-		ParserTree parserTree = codeRange.getParserTree();
-		codeRangeViewer.setCodeRange(codeRange);
-		parserTreeViewer.setTreeData(parserTree);
-		codeRangeEvaluatorBrowser.setCodeRange(codeRange);
+		if (codeRange != null) {
+			ParserTree parserTree = codeRange.getParserTree();
+			codeRangeViewer.setCodeRange(codeRange);
+			parserTreeViewer.setTreeData(parserTree);
+			codeRangeEvaluatorBrowser.setCodeRange(codeRange);
+		}
 	}
 
 	@Override

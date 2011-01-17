@@ -18,7 +18,7 @@ import javax.swing.JTabbedPane;
 
 import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.document.convert.html.HTMLConverter;
-import com.puresol.gui.HTMLTextPane;
+import com.puresol.gui.HTMLViewer;
 
 public class ProjectAnalysisBrowser extends JPanel {
 
@@ -30,7 +30,7 @@ public class ProjectAnalysisBrowser extends JPanel {
 	private ProjectAnalyzer project = null;
 
 	private final JTabbedPane tabbedPane = new JTabbedPane();
-	private HTMLTextPane projectReport = new HTMLTextPane();
+	private HTMLViewer projectReport = new HTMLViewer();
 	private final ProjectEvaluatorPanel projectEvaluatorPanel = new ProjectEvaluatorPanel();
 	private final ProjectGraphPanel projectGraphPanel = new ProjectGraphPanel();
 	private final CodeRangeBrowser codeRangeBrowser = new CodeRangeBrowser();

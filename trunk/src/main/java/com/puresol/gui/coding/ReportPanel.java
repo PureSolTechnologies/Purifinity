@@ -6,7 +6,7 @@ import javax.swing.JPanel;
 
 import com.puresol.coding.evaluator.Evaluator;
 import com.puresol.document.convert.html.HTMLConverter;
-import com.puresol.gui.HTMLTextPane;
+import com.puresol.gui.HTMLViewer;
 
 /**
  * This class visualizes the results list from an evaluator.
@@ -20,7 +20,7 @@ public class ReportPanel extends JPanel {
 
 	private Evaluator evaluator = null;
 	private final QualityLabel quality = new QualityLabel();
-	private final HTMLTextPane html = new HTMLTextPane();
+	private final HTMLViewer html = new HTMLViewer();
 
 	public ReportPanel() {
 		super();

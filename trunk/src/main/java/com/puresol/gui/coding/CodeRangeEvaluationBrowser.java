@@ -19,8 +19,7 @@ import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.evaluator.CodeRangeEvaluatorFactory;
 import com.puresol.coding.evaluator.Evaluator;
 import com.puresol.document.Document;
-import com.puresol.document.convert.html.HTMLConverter;
-import com.puresol.gui.HTMLTextPane;
+import com.puresol.document.convert.gui.GUIConverter;
 import com.puresol.utils.Persistence;
 import com.puresol.utils.PersistenceException;
 
@@ -35,7 +34,6 @@ public class CodeRangeEvaluationBrowser extends JPanel implements
 	private ProjectAnalyzer projectAnalyser = null;
 
 	private final CodeRangeEvaluatorChooser evaluators = new CodeRangeEvaluatorChooser();
-	private final HTMLTextPane html = new HTMLTextPane();
 	private AnalyzedFile file;
 	private CodeRange codeRange;
 
@@ -55,9 +53,8 @@ public class CodeRangeEvaluationBrowser extends JPanel implements
 
 		evaluators.addListSelectionListener(this);
 
-		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-				true, new JScrollPane(evaluators), html);
-		add(splitPane, BorderLayout.CENTER);
+		add(new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true, new JScrollPane(
+				evaluators), new JPanel()), BorderLayout.CENTER);
 	}
 
 	public ProjectAnalyzer getProjectAnlayser() {
@@ -100,7 +97,11 @@ public class CodeRangeEvaluationBrowser extends JPanel implements
 					analysis.getLanguage(), codeRange);
 			File reportFile = file.getReportFile(evaluator, codeRange);
 			Document document = (Document) Persistence.restore(reportFile);
-			html.setText(new HTMLConverter(document).toString());
+			removeAll();
+			add(new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true,
+					new JScrollPane(evaluators), new JScrollPane(
+							new GUIConverter(document).toPanel())),
+					BorderLayout.CENTER);
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
 		} catch (PersistenceException e) {
