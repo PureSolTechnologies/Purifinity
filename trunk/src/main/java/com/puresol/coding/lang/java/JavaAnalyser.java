@@ -20,10 +20,21 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.puresol.coding.CodeRange;
+import com.puresol.coding.CodeRangeType;
 import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.analysis.AnalyzerException;
 import com.puresol.coding.analysis.Analyzer;
 import com.puresol.coding.lang.java.grammar.JavaGrammar;
+import com.puresol.coding.lang.java.grammar.parts.AnnotationTypeDeclaration;
+import com.puresol.coding.lang.java.grammar.parts.ConstructorDeclaration;
+import com.puresol.coding.lang.java.grammar.parts.EnumDeclaration;
+import com.puresol.coding.lang.java.grammar.parts.MethodDeclaration;
+import com.puresol.coding.lang.java.grammar.parts.NormalClassDeclaration;
+import com.puresol.coding.lang.java.grammar.parts.NormalInterfaceDeclaration;
+import com.puresol.trees.TreeException;
+import com.puresol.trees.TreeVisitor;
+import com.puresol.trees.TreeWalker;
+import com.puresol.trees.WalkingAction;
 import com.puresol.uhura.ast.ParserTree;
 import com.puresol.uhura.lexer.Lexer;
 import com.puresol.uhura.lexer.LexerException;
@@ -48,7 +59,6 @@ public class JavaAnalyser implements Analyzer {
 	private final transient JavaGrammar grammar;
 	private Date date = new Date();
 	private ParserTree parserTree = null;
-	private List<CodeRange> codeRanges = new ArrayList<CodeRange>();
 
 	public JavaAnalyser(File file) {
 		super();
@@ -65,7 +75,6 @@ public class JavaAnalyser implements Analyzer {
 					file.toString());
 			Parser parser = grammar.getParser();
 			parserTree = parser.parse(tokenStream);
-			codeRanges = getLanguage().getAnalyzableCodeRanges(parserTree);
 		} catch (ParserException e) {
 			logger.error(e.getMessage(), e);
 			throw new AnalyzerException(this);
@@ -115,7 +124,39 @@ public class JavaAnalyser implements Analyzer {
 
 	@Override
 	public List<CodeRange> getAnalyzableCodeRanges() {
-		return codeRanges;
+		final List<CodeRange> result = new ArrayList<CodeRange>();
+		result.add(new CodeRange("", CodeRangeType.FILE, parserTree));
+
+		TreeWalker<ParserTree> walker = new TreeWalker<ParserTree>(parserTree);
+		walker.walk(new TreeVisitor<ParserTree>() {
+			@Override
+			public WalkingAction visit(ParserTree tree) {
+				try {
+					if (NormalClassDeclaration.is(tree)) {
+						result.add(new NormalClassDeclaration(tree)
+								.getCodeRange());
+					} else if (EnumDeclaration.is(tree)) {
+						result.add(new EnumDeclaration(tree).getCodeRange());
+					} else if (NormalInterfaceDeclaration.is(tree)) {
+						result.add(new NormalInterfaceDeclaration(tree)
+								.getCodeRange());
+					} else if (AnnotationTypeDeclaration.is(tree)) {
+						result.add(new AnnotationTypeDeclaration(tree)
+								.getCodeRange());
+					} else if (ConstructorDeclaration.is(tree)) {
+						result.add(new ConstructorDeclaration(tree)
+								.getCodeRange());
+					} else if (MethodDeclaration.is(tree)) {
+						result.add(new MethodDeclaration(tree).getCodeRange());
+					}
+					return WalkingAction.PROCEED;
+				} catch (TreeException e) {
+					logger.error(e.getMessage(), e);
+					return WalkingAction.ABORT;
+				}
+			}
+		});
+		return result;
 	}
 
 }

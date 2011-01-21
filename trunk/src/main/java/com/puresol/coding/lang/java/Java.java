@@ -8,28 +8,13 @@ import java.io.ObjectInputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
 import org.osgi.framework.BundleContext;
 
 import com.puresol.coding.AbstractProgrammingLanguage;
-import com.puresol.coding.CodeRange;
-import com.puresol.coding.CodeRangeType;
 import com.puresol.coding.analysis.Analyzer;
-import com.puresol.coding.lang.java.grammar.parts.AnnotationTypeDeclaration;
-import com.puresol.coding.lang.java.grammar.parts.ConstructorDeclaration;
-import com.puresol.coding.lang.java.grammar.parts.EnumDeclaration;
-import com.puresol.coding.lang.java.grammar.parts.MethodDeclaration;
-import com.puresol.coding.lang.java.grammar.parts.NormalClassDeclaration;
-import com.puresol.coding.lang.java.grammar.parts.NormalInterfaceDeclaration;
-import com.puresol.trees.TreeException;
-import com.puresol.trees.TreeVisitor;
-import com.puresol.trees.TreeWalker;
-import com.puresol.trees.WalkingAction;
-import com.puresol.uhura.ast.ParserTree;
 import com.puresol.utils.PersistenceException;
 
 /**
@@ -79,14 +64,6 @@ public class Java extends AbstractProgrammingLanguage {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean isObjectOriented() {
-		return true;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	protected String[] getValidFileSuffixes() {
 		return FILE_SUFFIXES;
 	}
@@ -118,43 +95,6 @@ public class Java extends AbstractProgrammingLanguage {
 	@Override
 	public Analyzer createAnalyser(File file) {
 		return new JavaAnalyser(file);
-	}
-
-	@Override
-	public List<CodeRange> getAnalyzableCodeRanges(ParserTree parserTree) {
-		final List<CodeRange> result = new ArrayList<CodeRange>();
-		result.add(new CodeRange("", CodeRangeType.FILE, parserTree));
-
-		TreeWalker<ParserTree> walker = new TreeWalker<ParserTree>(parserTree);
-		walker.walk(new TreeVisitor<ParserTree>() {
-			@Override
-			public WalkingAction visit(ParserTree tree) {
-				try {
-					if (NormalClassDeclaration.is(tree)) {
-						result.add(new NormalClassDeclaration(tree)
-								.getCodeRange());
-					} else if (EnumDeclaration.is(tree)) {
-						result.add(new EnumDeclaration(tree).getCodeRange());
-					} else if (NormalInterfaceDeclaration.is(tree)) {
-						result.add(new NormalInterfaceDeclaration(tree)
-								.getCodeRange());
-					} else if (AnnotationTypeDeclaration.is(tree)) {
-						result.add(new AnnotationTypeDeclaration(tree)
-								.getCodeRange());
-					} else if (ConstructorDeclaration.is(tree)) {
-						result.add(new ConstructorDeclaration(tree)
-								.getCodeRange());
-					} else if (MethodDeclaration.is(tree)) {
-						result.add(new MethodDeclaration(tree).getCodeRange());
-					}
-					return WalkingAction.PROCEED;
-				} catch (TreeException e) {
-					logger.error(e.getMessage(), e);
-					return WalkingAction.ABORT;
-				}
-			}
-		});
-		return result;
 	}
 
 	@Override

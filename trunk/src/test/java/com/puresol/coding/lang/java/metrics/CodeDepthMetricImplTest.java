@@ -13,7 +13,6 @@ import com.puresol.coding.analysis.Analyzer;
 import com.puresol.coding.analysis.AnalyzerException;
 import com.puresol.coding.lang.java.Java;
 import com.puresol.coding.metrics.codedepth.CodeDepthMetric;
-import com.puresol.uhura.ast.ParserTree;
 import com.puresol.utils.FileUtilities;
 
 public class CodeDepthMetricImplTest {
@@ -30,9 +29,7 @@ public class CodeDepthMetricImplTest {
 			Analyzer analyzer = java.createAnalyser(file);
 			assertNotNull(analyzer);
 			analyzer.parse();
-			ParserTree tree = analyzer.getParserTree();
-			assertNotNull(tree);
-			List<CodeRange> codeRanges = java.getAnalyzableCodeRanges(tree);
+			List<CodeRange> codeRanges = analyzer.getAnalyzableCodeRanges();
 			assertNotNull(codeRanges);
 			assertTrue(codeRanges.size() > 0);
 			CodeDepthMetric metric = new CodeDepthMetric(java,
