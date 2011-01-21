@@ -13,7 +13,6 @@ import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.metrics.AbstractProjectMetric;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.SourceCodeQuality;
-import com.puresol.uhura.ast.ParserTree;
 
 public class ProjectHalsteadMetric extends
 		AbstractProjectMetric<HalsteadMetric> {
@@ -30,9 +29,8 @@ public class ProjectHalsteadMetric extends
 		Map<String, SourceCodeQuality> results = new HashMap<String, SourceCodeQuality>();
 		Analysis analysis = getProjectAnalyzer().getAnalysis(file);
 		ProgrammingLanguage language = analysis.getLanguage();
-		ParserTree parserTree = analysis.getParserTree();
 
-		for (CodeRange codeRange : language.getAnalyzableCodeRanges(parserTree)) {
+		for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
 			HalsteadMetric metric = new HalsteadMetric(language, codeRange);
 			metric.run();
 			results.put(
