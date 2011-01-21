@@ -8,22 +8,13 @@ import java.io.ObjectInputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
 import org.osgi.framework.BundleContext;
 
 import com.puresol.coding.AbstractProgrammingLanguage;
-import com.puresol.coding.CodeRange;
-import com.puresol.coding.CodeRangeType;
 import com.puresol.coding.analysis.Analyzer;
-import com.puresol.trees.TreeException;
-import com.puresol.trees.TreeVisitor;
-import com.puresol.trees.TreeWalker;
-import com.puresol.trees.WalkingAction;
-import com.puresol.uhura.ast.ParserTree;
 import com.puresol.utils.PersistenceException;
 
 public class Fortran extends AbstractProgrammingLanguage {
@@ -64,11 +55,6 @@ public class Fortran extends AbstractProgrammingLanguage {
 	}
 
 	@Override
-	public boolean isObjectOriented() {
-		return false;
-	}
-
-	@Override
 	protected String[] getValidFileSuffixes() {
 		return FILE_SUFFIXES;
 	}
@@ -100,53 +86,6 @@ public class Fortran extends AbstractProgrammingLanguage {
 	@Override
 	public Analyzer createAnalyser(File file) {
 		return new FortranAnalyser(file);
-	}
-
-	@Override
-	public List<CodeRange> getAnalyzableCodeRanges(ParserTree parserTree) {
-		final List<CodeRange> result = new ArrayList<CodeRange>();
-		result.add(new CodeRange("", CodeRangeType.FILE, parserTree));
-		TreeWalker<ParserTree> walker = new TreeWalker<ParserTree>(parserTree);
-		walker.walk(new TreeVisitor<ParserTree>() {
-
-			@Override
-			public WalkingAction visit(ParserTree tree) {
-				try {
-					if ("main-program".equals(tree.getName())) {
-						String name = tree.getChild("program-stmt")
-								.getChildren("NAME_LITERAL").get(1).getText();
-						result.add(new CodeRange(name, CodeRangeType.PROGRAM,
-								tree));
-					} else if ("function-subprogram".equals(tree.getName())) {
-						String name = tree.getChild("function-stmt")
-								.getChildren("NAME_LITERAL").get(1).getText();
-						result.add(new CodeRange(name, CodeRangeType.FUNCTION,
-								tree));
-					} else if ("subroutine-subprogram".equals(tree.getName())) {
-						String name = tree.getChild("subroutine-stmt")
-								.getChildren("NAME_LITERAL").get(1).getText();
-						result.add(new CodeRange(name,
-								CodeRangeType.SUBROUTINE, tree));
-					} else if ("module".equals(tree.getName())) {
-						String name = tree.getChild("module-stmt")
-								.getChildren("NAME_LITERAL").get(1).getText();
-						result.add(new CodeRange(name, CodeRangeType.MODULE,
-								tree));
-					} else if ("submodule".equals(tree.getName())) {
-						String name = tree.getChild("submodule-stmt")
-								.getChildren("NAME_LITERAL").get(1).getText();
-						result.add(new CodeRange(name, CodeRangeType.MODULE,
-								tree));
-					}
-					return WalkingAction.PROCEED;
-				} catch (TreeException e) {
-					logger.error(e.getMessage(), e);
-					return WalkingAction.ABORT;
-				}
-			}
-
-		});
-		return result;
 	}
 
 	@Override
