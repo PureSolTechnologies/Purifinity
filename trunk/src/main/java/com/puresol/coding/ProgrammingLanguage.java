@@ -1,10 +1,8 @@
 package com.puresol.coding;
 
 import java.io.File;
-import java.util.List;
 
 import com.puresol.coding.analysis.Analyzer;
-import com.puresol.uhura.ast.ParserTree;
 import com.puresol.utils.PersistenceException;
 
 /**
@@ -27,14 +25,6 @@ public interface ProgrammingLanguage { // do not Serialize!
 	public String getName();
 
 	/**
-	 * This method specifies whether the programming language is object oriented
-	 * or not.
-	 * 
-	 * @return
-	 */
-	public boolean isObjectOriented();
-
-	/**
 	 * This method specifies whether the programming language is suitable for a
 	 * specified file or not.
 	 * 
@@ -53,8 +43,6 @@ public interface ProgrammingLanguage { // do not Serialize!
 	public Analyzer createAnalyser(File file);
 
 	public Analyzer restoreAnalyzer(File file) throws PersistenceException;
-
-	public List<CodeRange> getAnalyzableCodeRanges(ParserTree parserTree);
 
 	public <T> T getImplementation(Class<T> clazz);
 }

@@ -64,8 +64,8 @@ public class EvaluatorASCIIExport implements
 					}
 					Analysis analysis = analyzer.getAnalysis(analyzedFile);
 					ProgrammingLanguage language = analysis.getLanguage();
-					for (CodeRange codeRange : language
-							.getAnalyzableCodeRanges(analysis.getParserTree())) {
+					for (CodeRange codeRange : analysis
+							.getAnalyzableCodeRanges()) {
 						if (first) {
 							first = false;
 							writer.write("File");

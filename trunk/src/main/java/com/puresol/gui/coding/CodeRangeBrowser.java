@@ -25,7 +25,6 @@ import javax.swing.event.TreeSelectionListener;
 
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.CodeRangeType;
-import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.analysis.Analysis;
 import com.puresol.coding.analysis.AnalyzedFile;
 import com.puresol.coding.analysis.ProjectAnalyzer;
@@ -99,12 +98,12 @@ public class CodeRangeBrowser extends JPanel implements TreeSelectionListener,
 			if (analysis == null) {
 				return;
 			}
-			ParserTree parserTree = analysis.getParserTree();
-			ProgrammingLanguage language = analysis.getLanguage();
+			codeRangeViewer.setCodeRange(analysis.getAnalyzableCodeRanges()
+					.get(0));
 
-			codeRangeViewer.setCodeRange(language.getAnalyzableCodeRanges(
-					parserTree).get(0));
+			ParserTree parserTree = analysis.getParserTree();
 			parserTreeViewer.setTreeData(parserTree);
+
 			codeRangeEvaluatorBrowser.setAnalyzedFile(file);
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(Application.getInstance(),

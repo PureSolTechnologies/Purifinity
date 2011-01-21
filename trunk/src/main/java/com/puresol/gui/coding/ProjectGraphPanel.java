@@ -24,7 +24,6 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 
 import com.puresol.coding.CodeRange;
-import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.analysis.Analysis;
 import com.puresol.coding.analysis.AnalyzedFile;
 import com.puresol.coding.analysis.ProjectAnalyzer;
@@ -100,9 +99,7 @@ public class ProjectGraphPanel extends JPanel implements ListSelectionListener,
 		Evaluator evaluator = evaluatorFactory.create(projectAnalyzer);
 		for (AnalyzedFile analyzedFile : projectAnalyzer.getAnalyzedFiles()) {
 			Analysis analysis = projectAnalyzer.getAnalysis(analyzedFile);
-			ProgrammingLanguage language = analysis.getLanguage();
-			for (CodeRange codeRange : language
-					.getAnalyzableCodeRanges(analysis.getParserTree())) {
+			for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
 				@SuppressWarnings("unchecked")
 				List<Result> results = (List<Result>) Persistence
 						.restore(analyzedFile.getResultsFile(evaluator,

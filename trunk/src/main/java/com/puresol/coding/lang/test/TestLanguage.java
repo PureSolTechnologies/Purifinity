@@ -5,17 +5,12 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
 import com.puresol.coding.AbstractProgrammingLanguage;
-import com.puresol.coding.CodeRange;
-import com.puresol.coding.CodeRangeType;
 import com.puresol.coding.analysis.Analyzer;
-import com.puresol.uhura.ast.ParserTree;
 import com.puresol.utils.PersistenceException;
 
 /**
@@ -53,11 +48,6 @@ public class TestLanguage extends AbstractProgrammingLanguage {
 	}
 
 	@Override
-	public boolean isObjectOriented() {
-		return false;
-	}
-
-	@Override
 	protected String[] getValidFileSuffixes() {
 		return FILE_SUFFIXES;
 	}
@@ -71,13 +61,6 @@ public class TestLanguage extends AbstractProgrammingLanguage {
 	@Override
 	public Analyzer createAnalyser(File file) {
 		return new TestLanguageAnalyser(file);
-	}
-
-	@Override
-	public List<CodeRange> getAnalyzableCodeRanges(ParserTree parserTree) {
-		List<CodeRange> result = new ArrayList<CodeRange>();
-		result.add(new CodeRange("", CodeRangeType.FILE, parserTree));
-		return result;
 	}
 
 	@Override

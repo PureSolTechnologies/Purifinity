@@ -20,6 +20,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.puresol.coding.CodeRange;
+import com.puresol.coding.CodeRangeType;
 import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.analysis.AnalyzerException;
 import com.puresol.coding.analysis.Analyzer;
@@ -49,7 +50,6 @@ public class TestLanguageAnalyser implements Analyzer {
 	private final transient TestLanguageGrammar grammar;
 	private Date date = new Date();
 	private ParserTree parserTree = null;
-	private List<CodeRange> codeRanges = new ArrayList<CodeRange>();
 
 	public TestLanguageAnalyser(File file) {
 		super();
@@ -66,7 +66,6 @@ public class TestLanguageAnalyser implements Analyzer {
 					file.toString());
 			Parser parser = grammar.getParser();
 			parserTree = parser.parse(tokenStream);
-			codeRanges = getLanguage().getAnalyzableCodeRanges(parserTree);
 		} catch (ParserException e) {
 			logger.error(e.getMessage(), e);
 			throw new AnalyzerException(this);
@@ -116,7 +115,8 @@ public class TestLanguageAnalyser implements Analyzer {
 
 	@Override
 	public List<CodeRange> getAnalyzableCodeRanges() {
-		return codeRanges;
+		List<CodeRange> result = new ArrayList<CodeRange>();
+		result.add(new CodeRange("", CodeRangeType.FILE, parserTree));
+		return result;
 	}
-
 }
