@@ -27,10 +27,10 @@
 				<version>2.4</version>
 				<configuration>
 					<check>
-						<branchRate>80</branchRate>
-						<lineRate>80</lineRate>
-						<totalBranchRate>80</totalBranchRate>
-						<totalLineRate>80</totalLineRate>
+						<branchRate>0</branchRate>
+						<lineRate>0</lineRate>
+						<totalBranchRate>50</totalBranchRate>
+						<totalLineRate>50</totalLineRate>
 					</check>
 				</configuration>
 				<executions>
