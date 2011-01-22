@@ -1,5 +1,6 @@
 package com.puresol.rendering;
 
+import java.awt.BorderLayout;
 import java.awt.Graphics;
 
 import javax.swing.JPanel;
@@ -22,14 +23,30 @@ public class RendererTester extends Dialog {
 
 		public void paint(Graphics graphics) {
 			super.paint(graphics);
-			renderer.setPosition(0, 0);
-			renderer.render();
+			if (renderer != null) {
+				renderer.render(graphics, 0, 0, getSize().width - 1,
+						getSize().height - 1);
+			}
+		}
+
+		public Renderer getRenderer() {
+			return renderer;
 		}
 
 	}
 
+	private final RendererPanel panel;
+
 	public RendererTester(Renderer renderer) {
 		super("Renderer Test", true);
-		add(new RendererPanel(renderer));
+
+		getContentPane().setLayout(new BorderLayout());
+		panel = new RendererPanel(renderer);
+		getContentPane().add(panel, BorderLayout.CENTER);
 	}
+
+	public Renderer getRenderer() {
+		return panel.getRenderer();
+	}
+
 }

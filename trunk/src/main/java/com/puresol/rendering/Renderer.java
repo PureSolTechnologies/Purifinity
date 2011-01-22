@@ -1,6 +1,7 @@
 package com.puresol.rendering;
 
 import java.awt.Dimension;
+import java.awt.Graphics;
 
 /**
  * This interface is used for all classes which provide a rendering service.
@@ -11,49 +12,25 @@ import java.awt.Dimension;
 public interface Renderer {
 
 	/**
-	 * This method sets the scale for the renderer. The image is scaled by this
-	 * factor.
-	 * 
-	 * @param scale
-	 */
-	public void setScale(double scale);
-
-	public double getScale();
-
-	/**
 	 * This method returns the preferred drawing size. This size is calculated
-	 * taking the scale into account.
+	 * taking no scale into account. It's a 100% drawing size assumption.
 	 * 
 	 * @return
 	 */
 	public Dimension getPreferredSize();
 
 	/**
-	 * This method renders the image at the given x,y position with the size w,h
-	 * given. The rendering is performed within this rectangle without taking
-	 * into account, that getPreferredSize might give other dimensions.
-	 * 
-	 * Taking care for enough space to render the image in is the responsibility
-	 * of the calling object.
+	 * This method renders the image at the given x1,y1 position until x2.y2
+	 * position. The rendering is performed within this rectangle without taking
+	 * into account, that getPreferredSize might give other dimensions. How the
+	 * renderer reacts to different size ratios and different sizes is up to
+	 * him.
 	 * 
 	 * @param graphics
-	 * @param x
-	 * @param y
-	 * @param w
-	 * @param h
+	 * @param x1
+	 * @param y1
+	 * @param x2
+	 * @param y2
 	 */
-	public void render();
-
-	/**
-	 * This method sets the position of the object to be rendered. This must not
-	 * be done every time the object is re-rendered. So complex renderings can
-	 * be done in advance and get just redrawn.
-	 * 
-	 * @param x
-	 * @param y
-	 * @param w
-	 * @param h
-	 */
-	public void setPosition(int x, int y);
-
+	public void render(Graphics graphics, int x1, int y1, int x2, int y2);
 }
