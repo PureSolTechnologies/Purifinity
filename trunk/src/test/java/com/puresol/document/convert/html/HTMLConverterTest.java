@@ -11,8 +11,8 @@ import com.puresol.document.Document;
 import com.puresol.document.Paragraph;
 import com.puresol.document.Part;
 import com.puresol.document.Section;
-import com.puresol.document.Subsection;
-import com.puresol.document.Subsubsection;
+import com.puresol.document.SubSection;
+import com.puresol.document.SubSubSection;
 import com.puresol.document.Table;
 
 public class HTMLConverterTest {
@@ -48,8 +48,8 @@ public class HTMLConverterTest {
 		Part part1 = new Part(document, "Part 1");
 		Chapter chapter1 = new Chapter(part1, "Chapter 1.1");
 		Section section1 = new Section(chapter1, "Section 1.1.1");
-		Subsection subsection1 = new Subsection(section1, "Subsection 1.1.1.1");
-		Subsubsection subsubsection1 = new Subsubsection(subsection1,
+		SubSection subsection1 = new SubSection(section1, "Subsection 1.1.1.1");
+		SubSubSection subsubsection1 = new SubSubSection(subsection1,
 				"Subsection 1.1.1.1");
 		new Paragraph(subsubsection1, "This is a sample paragraph...");
 		Table table = new Table(subsubsection1, "Table 1", "Column1", "Column2");

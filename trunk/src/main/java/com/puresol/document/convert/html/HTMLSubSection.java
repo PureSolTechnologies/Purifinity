@@ -1,10 +1,10 @@
 package com.puresol.document.convert.html;
 
-import com.puresol.document.Subsection;
+import com.puresol.document.SubSection;
 
-public class HTMLSubsection {
+public class HTMLSubSection {
 
-	public static StringBuffer convert(Subsection subsection) {
+	public static StringBuffer convert(SubSection subsection) {
 		StringBuffer buffer = new StringBuffer();
 		buffer.append("<h4>" + subsection.getName() + "</h4>\n");
 		HTMLConverter.convertChildren(buffer, subsection.getChildren());

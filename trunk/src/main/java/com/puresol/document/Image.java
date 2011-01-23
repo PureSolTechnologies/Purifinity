@@ -1,6 +1,6 @@
 package com.puresol.document;
 
-import com.puresol.rendering.ChartRenderer;
+import com.puresol.rendering.ImageRenderer;
 
 /**
  * This object keeps the information about a single table element within the
@@ -9,18 +9,18 @@ import com.puresol.rendering.ChartRenderer;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class Chart extends AbstractDocumentPart {
+public class Image extends AbstractDocumentPart {
 
 	private static final long serialVersionUID = -3314964484840281581L;
 
-	private final ChartRenderer chartRenderer;
+	private final ImageRenderer imageRenderer;
 
 	private String caption = "";
 
-	public Chart(AbstractDocumentPart parent, String name,
-			ChartRenderer chartRenderer) {
+	public Image(AbstractDocumentPart parent, String name,
+			ImageRenderer imageRenderer) {
 		super(parent, name);
-		this.chartRenderer = chartRenderer;
+		this.imageRenderer = imageRenderer;
 	}
 
 	public String getCaption() {
@@ -31,8 +31,8 @@ public class Chart extends AbstractDocumentPart {
 		this.caption = caption;
 	}
 
-	public ChartRenderer getChartRenderer() {
-		return chartRenderer;
+	public ImageRenderer getImageRenderer() {
+		return imageRenderer;
 	}
 
 }

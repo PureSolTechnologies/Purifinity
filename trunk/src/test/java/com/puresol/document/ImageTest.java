@@ -4,27 +4,27 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-public class ChartTest {
+public class ImageTest {
 
 	@Test
 	public void testInstance() {
-		assertNotNull(new Chart(null, "Test Chart", null));
+		assertNotNull(new Image(null, "Test Image", null));
 	}
 
 	@Test
 	public void testInitialValues() {
-		Chart chart = new Chart(null, "Test Chart", null);
-		assertEquals("Test Chart", chart.getName());
+		Image chart = new Image(null, "Test Image", null);
+		assertEquals("Test Image", chart.getName());
 		assertNull(chart.getParent());
 		assertFalse(chart.hasChildren());
 		assertEquals(0, chart.getChildren().size());
-		assertEquals(null, chart.getChartRenderer());
+		assertEquals(null, chart.getImageRenderer());
 	}
 
 	@Test
 	public void testAddToDocument() {
 		Document doc = new Document("Test Document");
-		Chart part = new Chart(doc, "Test Chart", null);
+		Image part = new Image(doc, "Test Image", null);
 		assertSame(doc, part.getParent());
 		assertFalse(part.hasChildren());
 		assertEquals(0, part.getChildren().size());
@@ -32,7 +32,7 @@ public class ChartTest {
 
 	@Test
 	public void testSetCaption() {
-		Chart part = new Chart(null, "Test Chart", null);
+		Image part = new Image(null, "Test Image", null);
 		part.setCaption("TestCaption");
 		assertEquals("TestCaption", part.getCaption());
 	}

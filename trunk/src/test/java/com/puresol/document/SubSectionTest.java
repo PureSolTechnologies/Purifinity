@@ -4,17 +4,17 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-public class SubsubsectionTest {
+public class SubSectionTest {
 
 	@Test
 	public void testInstance() {
-		assertNotNull(new Subsubsection(null, "Test Subsubsection"));
+		assertNotNull(new SubSection(null, "Test Subsection"));
 	}
 
 	@Test
 	public void testInitialValues() {
-		Subsubsection doc = new Subsubsection(null, "Test Subsubsection");
-		assertEquals("Test Subsubsection", doc.getName());
+		SubSection doc = new SubSection(null, "Test Subsection");
+		assertEquals("Test Subsection", doc.getName());
 		assertNull(doc.getParent());
 		assertFalse(doc.hasChildren());
 		assertEquals(0, doc.getChildren().size());

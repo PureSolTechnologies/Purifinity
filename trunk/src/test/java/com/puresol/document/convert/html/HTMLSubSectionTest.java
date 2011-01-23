@@ -4,13 +4,13 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.puresol.document.Subsection;
+import com.puresol.document.SubSection;
 
-public class HTMLSubsectionTest {
+public class HTMLSubSectionTest {
 
 	@Test
 	public void testToString() {
-		StringBuffer buffer = HTMLSubsection.convert(new Subsection(null,
+		StringBuffer buffer = HTMLSubSection.convert(new SubSection(null,
 				"Test Subsection"));
 		assertEquals("<h4>Test Subsection</h4>\n", buffer.toString());
 	}

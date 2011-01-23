@@ -5,11 +5,11 @@ import java.awt.BorderLayout;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
-import com.puresol.document.Subsubsection;
+import com.puresol.document.SubSubSection;
 
-public class GUISubsubsection {
+public class GUISubSubSection {
 
-	public static JPanel convert(Subsubsection subsubsection) {
+	public static JPanel convert(SubSubSection subsubsection) {
 		JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout());
 		panel.add(new SubSubSectionTitle(subsubsection.getName()),

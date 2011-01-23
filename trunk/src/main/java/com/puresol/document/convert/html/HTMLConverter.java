@@ -8,8 +8,8 @@ import com.puresol.document.DocumentPart;
 import com.puresol.document.Paragraph;
 import com.puresol.document.Part;
 import com.puresol.document.Section;
-import com.puresol.document.Subsection;
-import com.puresol.document.Subsubsection;
+import com.puresol.document.SubSection;
+import com.puresol.document.SubSubSection;
 import com.puresol.document.Table;
 
 public class HTMLConverter {
@@ -23,10 +23,10 @@ public class HTMLConverter {
 				buffer.append(HTMLChapter.convert((Chapter) child));
 			} else if (child instanceof Section) {
 				buffer.append(HTMLSection.convert((Section) child));
-			} else if (child instanceof Subsection) {
-				buffer.append(HTMLSubsection.convert((Subsection) child));
-			} else if (child instanceof Subsubsection) {
-				buffer.append(HTMLSubsubsection.convert((Subsubsection) child));
+			} else if (child instanceof SubSection) {
+				buffer.append(HTMLSubSection.convert((SubSection) child));
+			} else if (child instanceof SubSubSection) {
+				buffer.append(HTMLSubSubSection.convert((SubSubSection) child));
 			} else if (child instanceof Paragraph) {
 				buffer.append(HTMLParagraph.convert((Paragraph) child));
 			} else if (child instanceof Table) {

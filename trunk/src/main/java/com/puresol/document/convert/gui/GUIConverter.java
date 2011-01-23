@@ -9,11 +9,12 @@ import com.puresol.document.Chapter;
 import com.puresol.document.Chart;
 import com.puresol.document.Document;
 import com.puresol.document.DocumentPart;
+import com.puresol.document.Image;
 import com.puresol.document.Paragraph;
 import com.puresol.document.Part;
 import com.puresol.document.Section;
-import com.puresol.document.Subsection;
-import com.puresol.document.Subsubsection;
+import com.puresol.document.SubSection;
+import com.puresol.document.SubSubSection;
 import com.puresol.document.Table;
 
 public class GUIConverter {
@@ -27,16 +28,18 @@ public class GUIConverter {
 				panels.add(GUIChapter.convert((Chapter) child));
 			} else if (child instanceof Section) {
 				panels.add(GUISection.convert((Section) child));
-			} else if (child instanceof Subsection) {
-				panels.add(GUISubsection.convert((Subsection) child));
-			} else if (child instanceof Subsubsection) {
-				panels.add(GUISubsubsection.convert((Subsubsection) child));
+			} else if (child instanceof SubSection) {
+				panels.add(GUISubSection.convert((SubSection) child));
+			} else if (child instanceof SubSubSection) {
+				panels.add(GUISubSubSection.convert((SubSubSection) child));
 			} else if (child instanceof Paragraph) {
 				panels.add(GUIParagraph.convert((Paragraph) child));
 			} else if (child instanceof Table) {
 				panels.add(GUITable.convert((Table) child));
 			} else if (child instanceof Chart) {
 				panels.add(GUIChart.convert((Chart) child));
+			} else if (child instanceof Image) {
+				panels.add(GUIImage.convert((Image) child));
 			} else {
 				throw new RuntimeException("Document part of type "
 						+ child.getClass() + " is unknown in "
