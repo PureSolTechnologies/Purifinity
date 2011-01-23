@@ -15,6 +15,7 @@ import javax.swing.JToolBar;
 import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.evaluator.Evaluator;
 import com.puresol.coding.evaluator.ProjectEvaluatorFactory;
+import com.puresol.document.convert.gui.GUIConverter;
 import com.puresol.gui.Application;
 import com.puresol.gui.TabButton;
 import com.puresol.gui.progress.FinishListener;
@@ -90,7 +91,7 @@ public class ProjectEvaluatorPanel extends JPanel implements ActionListener,
 	@Override
 	public void finished(Object observable) {
 		Evaluator evaluator = (Evaluator) observable;
-		ReportPanel viewer = new ReportPanel(evaluator);
+		JPanel viewer = new GUIConverter(evaluator.getReport()).toPanel();
 		tabbedPane.add(evaluator.getName(), new JScrollPane(viewer,
 				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER));

@@ -14,4 +14,6 @@ public interface CodeRangeEvaluatorFactory extends EvaluatorFactory {
 	public CodeRangeEvaluator create(ProgrammingLanguage language,
 			CodeRange codeRange);
 
+	public Class<? extends CodeRangeEvaluator> getCodeRangeEvaluatorClass();
+
 }

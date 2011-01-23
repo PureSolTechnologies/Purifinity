@@ -13,11 +13,9 @@ import javax.swing.event.ListSelectionListener;
 import org.apache.log4j.Logger;
 
 import com.puresol.coding.CodeRange;
-import com.puresol.coding.analysis.Analysis;
 import com.puresol.coding.analysis.AnalyzedFile;
 import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.evaluator.CodeRangeEvaluatorFactory;
-import com.puresol.coding.evaluator.Evaluator;
 import com.puresol.document.Document;
 import com.puresol.document.convert.gui.GUIConverter;
 import com.puresol.utils.Persistence;
@@ -92,10 +90,8 @@ public class CodeRangeEvaluationBrowser extends JPanel implements
 			if (evaluatorFactory == null) {
 				return;
 			}
-			Analysis analysis = projectAnalyser.getAnalysis(file);
-			Evaluator evaluator = evaluatorFactory.create(
-					analysis.getLanguage(), codeRange);
-			File reportFile = file.getReportFile(evaluator, codeRange);
+			File reportFile = file.getReportFile(
+					evaluatorFactory.getCodeRangeEvaluatorClass(), codeRange);
 			Document document = (Document) Persistence.restore(reportFile);
 			removeAll();
 			add(new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true,

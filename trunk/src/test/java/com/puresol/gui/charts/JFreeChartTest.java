@@ -3,6 +3,7 @@ package com.puresol.gui.charts;
 import static org.junit.Assert.*;
 
 import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
@@ -28,9 +29,8 @@ public class JFreeChartTest {
 		chart.setAntiAlias(false);
 		assertEquals(false, chart.getAntiAlias());
 
-		ChartPanel panel = new ChartPanel(chart);
 		Dialog dialog = new Dialog("Test", true);
-		dialog.getContentPane().add(panel);
+		dialog.getContentPane().add(new ChartPanel(chart));
 		dialog.pack();
 		// dialog.setVisible(true);
 	}

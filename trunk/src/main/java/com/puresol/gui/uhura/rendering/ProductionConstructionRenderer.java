@@ -69,26 +69,24 @@ public class ProductionConstructionRenderer extends AbstractRenderer {
 
 	@Override
 	public void render(Graphics graphics, int x1, int y1, int x2, int y2) {
+		final int x = Math.min(x1, x2);
+		final int y = Math.min(y1, y2);
+		final int w = Math.abs(x2 - x1) + 1;
+		final int h = Math.abs(y2 - y1) + 1;
+		final float scaleX = (float) w / (float) preferredWidth;
+		final int arrowLength = (int) ((float) ARROW_LENGTH + scaleX);
+
 		graphics.setColor(Color.BLACK);
-		int x = Math.min(x1, x2);
-		int y = Math.min(y1, y2);
-		int w = Math.abs(x2 - x1) + 1;
-		int h = Math.abs(y2 - y1) + 1;
-		graphics.drawLine(x, y + h / 2, x + ARROW_LENGTH, y + h / 2);
+		graphics.drawLine(x, y + h / 2, x + arrowLength, y + h / 2);
 
-		float scaleX = (float) w / (float) preferredWidth;
-		float scaleY = (float) h / (float) preferredHeight;
-
-		x += ARROW_LENGTH;
-		for (Renderer renderer : renderers) {
+		int currentXPos = x + arrowLength + 1;
+		for (int index = 0; index < renderers.size(); index++) {
+			Renderer renderer = renderers.get(index);
 			Dimension size = renderer.getPreferredSize();
-			renderer.render(graphics, x, y + h / 2
-					- (int) ((float) size.height * scaleY / 2.0), x
-					+ (int) (size.getWidth() * scaleX),
-					y + h / 2 - (int) ((float) size.height * scaleY / 2.0)
-							+ (int) (size.getHeight() * scaleY));
-			x += (int) (renderer.getPreferredSize().getWidth() * scaleX);
+			renderer.render(graphics, currentXPos, y,
+					currentXPos + (int) (size.getWidth() * scaleX), y + h - 1);
+			currentXPos += (int) (size.getWidth() * scaleX);
 		}
-		graphics.drawLine(x, y + h / 2, x + ARROW_LENGTH, y + h / 2);
+		graphics.drawLine(currentXPos, y + h / 2, x + w - 1, y + h / 2);
 	}
 }

@@ -71,13 +71,15 @@ public class AnalyzedFile implements Comparable<AnalyzedFile>, Serializable {
 		return new File(getFileDirectory(), "analyzer.persist");
 	}
 
-	public File getReportFile(Evaluator evaluator, CodeRange codeRange) {
+	public File getReportFile(Class<? extends Evaluator> evaluator,
+			CodeRange codeRange) {
 		return new File(getFileDirectory(), evaluator.getName() + "-"
 				+ codeRange.getType().getName() + "_" + codeRange.getName()
 				+ ".report");
 	}
 
-	public File getResultsFile(Evaluator evaluator, CodeRange codeRange) {
+	public File getResultsFile(Class<? extends Evaluator> evaluator,
+			CodeRange codeRange) {
 		return new File(getFileDirectory(), evaluator.getName() + "-"
 				+ codeRange.getType().getName() + "_" + codeRange.getName()
 				+ ".results");

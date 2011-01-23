@@ -62,12 +62,13 @@ public class ProductionConstructionsRenderer extends AbstractRenderer {
 
 	@Override
 	public void render(Graphics graphics, int x1, int y1, int x2, int y2) {
-		int x = Math.min(x1, x2);
-		int y = Math.min(y1, y2);
-		int w = Math.abs(x2 - x1) + 1;
-		int h = Math.abs(y2 - y1) + 1;
-		float scaleX = (float) w / (float) preferredWidth;
-		float scaleY = (float) h / (float) preferredHeight;
+		final int x = Math.min(x1, x2);
+		final int y = Math.min(y1, y2);
+		final int w = Math.abs(x2 - x1) + 1;
+		final int h = Math.abs(y2 - y1) + 1;
+		final float scaleX = (float) w / (float) preferredWidth;
+		final int arrowLength = (int) ((float) ARROW_LENGTH * scaleX);
+		final int constructionHeight = h / renderers.size();
 
 		Arrow arrow = new Arrow(graphics);
 		arrow.setTipAngle(ARROW_TIP_ANGLE);
@@ -75,29 +76,23 @@ public class ProductionConstructionsRenderer extends AbstractRenderer {
 		arrow.setType(ArrowType.FANCY);
 		graphics.setColor(Color.BLACK);
 
-		final int arrowLength = (int) ((float) ARROW_LENGTH * scaleX);
+		graphics.drawLine(x, y + h / 2, x + arrowLength, y + h / 2);
 
-		graphics.drawLine(x, y + h / 2, x + ARROW_LENGTH, y + h / 2);
-		for (Renderer renderer : renderers) {
-			Dimension size = renderer.getPreferredSize();
-			renderer.render(graphics, x + arrowLength, y, x + arrowLength
-					+ (int) (size.getWidth() * scaleX),
-					y + (int) (size.getHeight() * scaleY));
-			graphics.drawLine(x + (int) (size.getWidth() * scaleX), y
-					+ (int) (size.getHeight() * scaleY / 2.0), x + w
-					- arrowLength, y + (int) (size.getHeight() * scaleY / 2.0));
-			y += renderer.getPreferredSize().height;
+		for (int i = 0; i < renderers.size(); i++) {
+			Renderer renderer = renderers.get(i);
+			renderer.render(graphics, x + arrowLength, y + i
+					* constructionHeight, x + w - 1 - arrowLength - 1, y
+					+ (i + 1) * constructionHeight);
 		}
-		y = Math.min(y1, y2);
-		graphics.drawLine(x + w - ARROW_LENGTH, y + h / 2, x + w - 1, y + h / 2);
-		
-		int verticalLineY1 = y + renderers.get(0).getPreferredSize().height / 2;
-		int verticalLineY2 = y + h
-				- renderers.get(renderers.size() - 1).getPreferredSize().height
-				/ 2;
-		graphics.drawLine(x + ARROW_LENGTH, verticalLineY1, x + ARROW_LENGTH,
+
+		graphics.drawLine(x + w - 1 - arrowLength, y + h / 2, x + w - 1, y + h
+				/ 2);
+
+		final int verticalLineY1 = y + constructionHeight / 2;
+		final int verticalLineY2 = y + h - 1 - constructionHeight / 2;
+		graphics.drawLine(x + arrowLength, verticalLineY1, x + arrowLength,
 				verticalLineY2);
-		graphics.drawLine(x + w - ARROW_LENGTH, verticalLineY1, x + w
-				- ARROW_LENGTH, verticalLineY2);
+		graphics.drawLine(x + w - 1 - arrowLength, verticalLineY1, x + w - 1
+				- arrowLength, verticalLineY2);
 	}
 }

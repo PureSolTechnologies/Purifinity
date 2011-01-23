@@ -8,7 +8,6 @@ import java.util.List;
 import javax.i18n4java.Translator;
 
 import com.puresol.coding.CodeRange;
-import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.analysis.Analysis;
 import com.puresol.coding.analysis.AnalyzedFile;
 import com.puresol.coding.analysis.ProjectAnalyzer;
@@ -63,7 +62,6 @@ public class EvaluatorASCIIExport implements
 						monitor.setStatus(id);
 					}
 					Analysis analysis = analyzer.getAnalysis(analyzedFile);
-					ProgrammingLanguage language = analysis.getLanguage();
 					for (CodeRange codeRange : analysis
 							.getAnalyzableCodeRanges()) {
 						if (first) {
@@ -75,7 +73,7 @@ public class EvaluatorASCIIExport implements
 							writer.write("Name");
 							for (CodeRangeEvaluatorFactory evaluator : evaluators) {
 								File resultsFile = analyzedFile.getResultsFile(
-										evaluator.create(language, codeRange),
+										evaluator.getCodeRangeEvaluatorClass(),
 										codeRange);
 								@SuppressWarnings("unchecked")
 								List<Result> results = (List<Result>) Persistence
@@ -94,7 +92,7 @@ public class EvaluatorASCIIExport implements
 						writer.write(codeRange.getName());
 						for (CodeRangeEvaluatorFactory evaluator : evaluators) {
 							File resultsFile = analyzedFile.getResultsFile(
-									evaluator.create(language, codeRange),
+									evaluator.getCodeRangeEvaluatorClass(),
 									codeRange);
 							@SuppressWarnings("unchecked")
 							List<Result> results = (List<Result>) Persistence

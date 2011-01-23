@@ -10,7 +10,8 @@ import com.puresol.utils.Persistence;
 
 public class FileEvaluator {
 
-	public static void evaluate(AnalyzedFile file, Analyzer analyzer) throws IOException {
+	public static void evaluate(AnalyzedFile file, Analyzer analyzer)
+			throws IOException {
 		List<CodeRangeEvaluatorFactory> factories = CodeRangeEvaluatorManager
 				.getAll();
 		for (CodeRangeEvaluatorFactory factory : factories) {
@@ -19,10 +20,14 @@ public class FileEvaluator {
 						analyzer.getLanguage(), codeRange);
 				evaluator.run();
 				try {
-					Persistence.persist(evaluator.getReport(),
-							file.getReportFile(evaluator, codeRange));
-					Persistence.persist(evaluator.getResults(),
-							file.getResultsFile(evaluator, codeRange));
+					Persistence.persist(evaluator.getReport(), file
+							.getReportFile(
+									factory.getCodeRangeEvaluatorClass(),
+									codeRange));
+					Persistence.persist(evaluator.getResults(), file
+							.getResultsFile(
+									factory.getCodeRangeEvaluatorClass(),
+									codeRange));
 					// TODO think about improvement
 				} catch (IOException e) {
 					e.printStackTrace();

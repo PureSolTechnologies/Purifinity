@@ -102,7 +102,8 @@ public class ProjectGraphPanel extends JPanel implements ListSelectionListener,
 			for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
 				@SuppressWarnings("unchecked")
 				List<Result> results = (List<Result>) Persistence
-						.restore(analyzedFile.getResultsFile(evaluator,
+						.restore(analyzedFile.getResultsFile(
+								evaluatorFactory.getProjectEvaluatorClass(),
 								codeRange));
 				for (Result result : results) {
 					DefaultCategoryDataset dataset = datasets.get(result
