@@ -29,6 +29,7 @@ import org.osgi.framework.BundleException;
 
 import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.evaluator.EvaluatorASCIIExport;
+import com.puresol.coding.reporting.ProjectAnalysisHTMLPages;
 import com.puresol.filefilter.CSVFilter;
 import com.puresol.filefilter.ExcelFilter;
 import com.puresol.filefilter.TSVFilter;
@@ -240,7 +241,10 @@ public class CodeAnalysis extends PureSolApplication implements FinishListener {
 		if (result == JFileChooser.CANCEL_OPTION) {
 			return;
 		}
-		Application.showNotImplementedMessage();
+		ProjectAnalysisHTMLPages creator = new ProjectAnalysisHTMLPages(
+				analyzer, chooser.getSelectedFile());
+		ProgressWindow progress = new ProgressWindow();
+		progress.run(creator);
 	}
 
 	private void pluginManager() {
