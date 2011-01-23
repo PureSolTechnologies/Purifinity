@@ -23,7 +23,7 @@ public class ProgressWindowTest {
 			for (int i = 0; i <= 100; i++) {
 				observer.setStatus(i);
 				try {
-					Thread.sleep(new Random().nextInt(100));
+					Thread.sleep(new Random().nextInt(10));
 				} catch (InterruptedException e) {
 					return;
 				}
@@ -39,7 +39,7 @@ public class ProgressWindowTest {
 		TestThread test = new TestThread();
 		observer.run(test);
 		try {
-			Thread.sleep(10000);
+			Thread.sleep(2000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
