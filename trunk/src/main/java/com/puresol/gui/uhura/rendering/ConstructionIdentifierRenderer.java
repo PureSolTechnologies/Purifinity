@@ -15,13 +15,13 @@ import com.puresol.uhura.grammar.Quantity;
 public class ConstructionIdentifierRenderer extends AbstractRenderer {
 
 	private final Font font = new Font(
-			RenderProperties.getIdentifierFontFamily(), Font.TRUETYPE_FONT
+			UhuraRenderProperties.getIdentifierFontFamily(), Font.TRUETYPE_FONT
 					| Font.BOLD | Font.ITALIC,
-			RenderProperties.getIdentifierFontSize());
+			UhuraRenderProperties.getIdentifierFontSize());
 	private final Renderer quantityLoopRenderer;
 
-	public ConstructionIdentifierRenderer(Graphics graphics,
-			ParserTree constructionIdentifier) throws RenderException {
+	public ConstructionIdentifierRenderer(ParserTree constructionIdentifier)
+			throws RenderException {
 		super();
 		String identifier;
 		try {
@@ -50,10 +50,10 @@ public class ConstructionIdentifierRenderer extends AbstractRenderer {
 		} catch (TreeException e) {
 			throw new RenderException(e.getMessage(), e);
 		}
-		Renderer constructionRenderer = new ConstructionRenderer(graphics,
-				font, Color.BLACK, identifier);
-		quantityLoopRenderer = new QuantityLoopRenderer(graphics,
-				constructionRenderer, quantity);
+		Renderer constructionRenderer = new ConstructionRenderer(font,
+				Color.BLACK, identifier);
+		quantityLoopRenderer = new QuantityLoopRenderer(constructionRenderer,
+				quantity);
 	}
 
 	@Override
@@ -62,8 +62,7 @@ public class ConstructionIdentifierRenderer extends AbstractRenderer {
 	}
 
 	@Override
-	public void render() {
-		quantityLoopRenderer.setPosition(getX(), getY());
-		quantityLoopRenderer.render();
+	public void render(Graphics graphics, int x1, int y1, int x2, int y2) {
+		quantityLoopRenderer.render(graphics, x1, y1, x2, y2);
 	}
 }

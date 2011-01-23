@@ -12,26 +12,23 @@ import com.puresol.uhura.grammar.Quantity;
 
 public class QuantityLoopRenderer extends AbstractRenderer {
 
-	private final static int ARROW_LENGTH = RenderProperties
+	private final static int ARROW_LENGTH = UhuraRenderProperties
 			.getBoxArrowLength();
-	private final static int ARROW_MARGIN = RenderProperties
+	private final static int ARROW_MARGIN = UhuraRenderProperties
 			.getBoxArrowMargin();
-	private final static int ARROW_TIP_LENGTH = RenderProperties
+	private final static int ARROW_TIP_LENGTH = UhuraRenderProperties
 			.getArrowTipLength();
-	private final static int ARROW_TIP_ANGLE = RenderProperties
+	private final static int ARROW_TIP_ANGLE = UhuraRenderProperties
 			.getArrowTipAngle();
 
-	private final Graphics graphics;
 	private final Renderer loopContentRenderer;
 	private final Quantity quantity;
 
 	private int preferredWidth = 0;
 	private int preferredHeight = 0;
 
-	public QuantityLoopRenderer(Graphics graphics,
-			Renderer loopContentRenderer, Quantity quantity) {
+	public QuantityLoopRenderer(Renderer loopContentRenderer, Quantity quantity) {
 		super();
-		this.graphics = graphics;
 		this.loopContentRenderer = loopContentRenderer;
 		this.quantity = quantity;
 		preferredWidth = loopContentRenderer.getPreferredSize().width + 2
@@ -46,36 +43,45 @@ public class QuantityLoopRenderer extends AbstractRenderer {
 	}
 
 	@Override
-	public void render() {
-		int x = getX();
-		int y = getY();
-		int w = preferredWidth;
-		int h = preferredHeight;
+	public void render(Graphics graphics, int x1, int y1, int x2, int y2) {
+		int x = Math.min(x1, x2);
+		int y = Math.min(y1, y2);
+		int w = Math.abs(x2 - x1) + 1;
+		int h = Math.abs(y2 - y1) + 1;
+		float scaleX = (float) w / (float) preferredWidth;
+		float scaleY = (float) h / (float) preferredHeight;
+
 		Arrow arrow = new Arrow(graphics);
 		arrow.setTipAngle(ARROW_TIP_ANGLE);
-		arrow.setTipLength(ARROW_TIP_LENGTH);
+		arrow.setTipLength((int) ((float) ARROW_TIP_LENGTH * scaleY));
 		arrow.setType(ArrowType.FANCY);
+
+		final int arrowLength = (int) ((float) ARROW_LENGTH * scaleX);
+		final int arrowMargin = (int) ((float) ARROW_MARGIN * scaleY);
+
 		graphics.setColor(Color.BLACK);
-		graphics.drawLine(x, y + h / 2, x + ARROW_LENGTH, y + h / 2);
-		loopContentRenderer.setPosition(x + ARROW_LENGTH, y + ARROW_MARGIN);
-		loopContentRenderer.render();
-		graphics.drawLine(x + w - ARROW_LENGTH, y + h / 2, x + w - 1, y + h / 2);
+		graphics.drawLine(x, y + h / 2, x + arrowLength, y + h / 2);
+		Dimension size = loopContentRenderer.getPreferredSize();
+		loopContentRenderer.render(graphics, x + arrowLength, y + arrowMargin,
+				x + arrowLength + (int) (size.getWidth() * scaleX), y
+						+ arrowMargin + (int) (size.getHeight() * scaleY));
+		graphics.drawLine(x + w - arrowLength, y + h / 2, x + w - 1, y + h / 2);
 		if ((quantity == Quantity.ACCEPT) || (quantity == Quantity.ACCEPT_MANY)) {
-			graphics.drawLine(x + ARROW_LENGTH / 3, y + h / 2, x + ARROW_LENGTH
-					/ 3, y + ARROW_MARGIN / 2);
-			graphics.drawLine(x + ARROW_LENGTH / 3, y + ARROW_MARGIN / 2, x + w
-					- ARROW_LENGTH / 3, y + ARROW_MARGIN / 2);
-			arrow.draw(x + w - ARROW_LENGTH / 3, y + ARROW_MARGIN / 2, x + w
-					- ARROW_LENGTH / 3, y + h / 2);
+			graphics.drawLine(x + arrowLength / 3, y + h / 2, x + arrowLength
+					/ 3, y + arrowMargin / 2);
+			graphics.drawLine(x + arrowLength / 3, y + arrowMargin / 2, x + w
+					- arrowLength / 3, y + arrowMargin / 2);
+			arrow.draw(x + w - arrowLength / 3, y + arrowMargin / 2, x + w
+					- arrowLength / 3, y + h / 2);
 		}
 		if ((quantity == Quantity.EXPECT_MANY)
 				|| (quantity == Quantity.ACCEPT_MANY)) {
-			arrow.draw(x + ARROW_LENGTH * 2 / 3, y + h - ARROW_MARGIN / 2, x
-					+ ARROW_LENGTH * 2 / 3, y + h / 2);
-			graphics.drawLine(x + ARROW_LENGTH * 2 / 3, y + h - ARROW_MARGIN
-					/ 2, x + w - ARROW_LENGTH * 2 / 3, y + h - ARROW_MARGIN / 2);
-			graphics.drawLine(x + w - ARROW_LENGTH * 2 / 3, y + h
-					- ARROW_MARGIN / 2, x + w - ARROW_LENGTH * 2 / 3, y + h / 2);
+			arrow.draw(x + arrowLength * 2 / 3, y + h - arrowMargin / 2, x
+					+ arrowLength * 2 / 3, y + h / 2);
+			graphics.drawLine(x + arrowLength * 2 / 3, y + h - arrowMargin / 2,
+					x + w - arrowLength * 2 / 3, y + h - arrowMargin / 2);
+			graphics.drawLine(x + w - arrowLength * 2 / 3, y + h - arrowMargin
+					/ 2, x + w - arrowLength * 2 / 3, y + h / 2);
 		}
 	}
 }

@@ -62,7 +62,7 @@ public class GrammarSchematic extends JPanel implements Saveable {
 		try {
 			long start = System.currentTimeMillis();
 			super.paintComponent(graphics);
-			Renderer renderer = new GrammarRenderer(graphics, grammarAST);
+			Renderer renderer = new GrammarRenderer(grammarAST);
 			Dimension preferredSize = renderer.getPreferredSize();
 			Dimension currentSize = getSize();
 			if ((currentSize.width < preferredSize.width)
@@ -73,8 +73,8 @@ public class GrammarSchematic extends JPanel implements Saveable {
 				setPreferredSize(preferredSize);
 				setSize(preferredSize.width, preferredSize.height);
 			}
-			renderer.setPosition(0, 0);
-			renderer.render();
+			renderer.render(graphics, 0, 0, renderer.getPreferredSize().width,
+					renderer.getPreferredSize().height);
 			long stop = System.currentTimeMillis();
 			System.out.println("Rendering time: "
 					+ ((double) (stop - start) / 1000.0) + "s");
@@ -114,17 +114,18 @@ public class GrammarSchematic extends JPanel implements Saveable {
 					BufferedImage image = new BufferedImage(1, 1,
 							BufferedImage.TYPE_INT_RGB);
 					Renderer renderer = new ProductionDefinitionRenderer(
-							image.getGraphics(), productionDefinition);
+							productionDefinition);
 					Dimension size = renderer.getPreferredSize();
 					image = new BufferedImage(size.width, size.height,
 							BufferedImage.TYPE_INT_RGB);
 					Graphics graphics = image.getGraphics();
 					graphics.setColor(Color.WHITE);
 					graphics.fillRect(0, 0, size.width, size.height);
-					renderer = new ProductionDefinitionRenderer(graphics,
+					renderer = new ProductionDefinitionRenderer(
 							productionDefinition);
-					renderer.setPosition(0, 0);
-					renderer.render();
+					renderer.render(graphics, 0, 0,
+							renderer.getPreferredSize().width,
+							renderer.getPreferredSize().height);
 					outputStream = new FileOutputStream(file);
 					ImageIO.write(image, "png", outputStream);
 					logger.info("done.");

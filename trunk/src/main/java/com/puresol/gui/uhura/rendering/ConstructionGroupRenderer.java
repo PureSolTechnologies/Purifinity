@@ -14,8 +14,8 @@ public class ConstructionGroupRenderer extends AbstractRenderer {
 
 	private final Renderer quantityLoopRenderer;
 
-	public ConstructionGroupRenderer(Graphics graphics,
-			ParserTree constructionLiteral) throws RenderException {
+	public ConstructionGroupRenderer(ParserTree constructionLiteral)
+			throws RenderException {
 		super();
 		Quantity quantity = Quantity.EXPECT;
 		try {
@@ -40,13 +40,12 @@ public class ConstructionGroupRenderer extends AbstractRenderer {
 		Renderer constructionRenderer;
 		try {
 			constructionRenderer = new ProductionConstructionsRenderer(
-					graphics,
 					constructionLiteral.getChild("ProductionConstructions"));
 		} catch (TreeException e) {
 			throw new RenderException(e.getMessage(), e);
 		}
-		quantityLoopRenderer = new QuantityLoopRenderer(graphics,
-				constructionRenderer, quantity);
+		quantityLoopRenderer = new QuantityLoopRenderer(constructionRenderer,
+				quantity);
 	}
 
 	@Override
@@ -55,8 +54,7 @@ public class ConstructionGroupRenderer extends AbstractRenderer {
 	}
 
 	@Override
-	public void render() {
-		quantityLoopRenderer.setPosition(getX(), getY());
-		quantityLoopRenderer.render();
+	public void render(Graphics graphics, int x1, int y1, int x2, int y2) {
+		quantityLoopRenderer.render(graphics, x1, y1, x2, y2);
 	}
 }

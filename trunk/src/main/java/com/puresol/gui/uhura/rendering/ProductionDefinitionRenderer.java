@@ -15,29 +15,27 @@ import com.puresol.uhura.ast.ParserTree;
 
 public class ProductionDefinitionRenderer extends AbstractRenderer {
 
-	private final static int ARROW_LENGTH = RenderProperties
+	private final static int ARROW_LENGTH = UhuraRenderProperties
 			.getBoxArrowLength();
-	private final static int ARROW_TIP_LENGTH = RenderProperties
+	private final static int ARROW_TIP_LENGTH = UhuraRenderProperties
 			.getArrowTipLength();
-	private final static int ARROW_TIP_ANGLE = RenderProperties
+	private final static int ARROW_TIP_ANGLE = UhuraRenderProperties
 			.getArrowTipAngle();
 
 	private final Font font = new Font(
-			RenderProperties.getIdentifierFontFamily(), Font.TRUETYPE_FONT
+			UhuraRenderProperties.getIdentifierFontFamily(), Font.TRUETYPE_FONT
 					| Font.BOLD | Font.ITALIC,
-			RenderProperties.getIdentifierFontSize());
+			UhuraRenderProperties.getIdentifierFontSize());
 
-	private final Graphics graphics;
 	private final String identifier;
 	private final Renderer productionConstructionsRenderer;
 
 	private int preferredWidth = 0;
 	private int preferredHeight = 0;
 
-	public ProductionDefinitionRenderer(Graphics graphics,
-			ParserTree productionDefinition) throws RenderException {
+	public ProductionDefinitionRenderer(ParserTree productionDefinition)
+			throws RenderException {
 		super();
-		this.graphics = graphics;
 		String identifier;
 		try {
 			ParserTree identifierAST = productionDefinition
@@ -54,7 +52,6 @@ public class ProductionDefinitionRenderer extends AbstractRenderer {
 		this.identifier = identifier;
 		try {
 			productionConstructionsRenderer = new ProductionConstructionsRenderer(
-					graphics,
 					productionDefinition.getChild("ProductionConstructions"));
 		} catch (TreeException e) {
 			throw new RenderException(e.getMessage(), e);
@@ -63,8 +60,9 @@ public class ProductionDefinitionRenderer extends AbstractRenderer {
 		preferredHeight = size.height;
 		preferredWidth = size.width;
 		preferredWidth += 2 * ARROW_LENGTH;
-		graphics.setFont(font);
-		preferredWidth += graphics.getFontMetrics().stringWidth(identifier);
+
+		preferredWidth += UhuraRenderProperties.getAssumedFontSize().width
+				* identifier.length();
 	}
 
 	@Override
@@ -73,31 +71,42 @@ public class ProductionDefinitionRenderer extends AbstractRenderer {
 	}
 
 	@Override
-	public void render() {
-		int x = getX();
-		int y = getY();
-		int w = preferredWidth;
-		int h = preferredHeight;
+	public void render(Graphics graphics, int x1, int y1, int x2, int y2) {
+		int x = Math.min(x1, x2);
+		int y = Math.min(y1, y2);
+		int w = Math.abs(x2 - x1) + 1;
+		int h = Math.abs(y2 - y1) + 1;
+		float scaleX = (float) w / (float) preferredWidth;
+		float scaleY = (float) h / (float) preferredHeight;
 
 		graphics.setColor(Color.BLACK);
 		graphics.setFont(font);
 		graphics.drawString(identifier, x, y + h / 2);
 		x += graphics.getFontMetrics().stringWidth(identifier);
+		graphics.drawLine(x, y + h / 2,
+				x + UhuraRenderProperties.getAssumedFontSize().width
+						* identifier.length()
+						- graphics.getFontMetrics().stringWidth(identifier), y
+						+ h / 2);
 
 		Arrow arrow = new Arrow(graphics);
 		arrow.setTipAngle(ARROW_TIP_ANGLE);
-		arrow.setTipLength(ARROW_TIP_LENGTH);
+		arrow.setTipLength((int) ((float) ARROW_TIP_LENGTH * scaleX));
 		arrow.setType(ArrowType.FANCY);
 
-		graphics.drawLine(x, y + h / 2, x + ARROW_LENGTH, y + h / 2);
+		final int arrowLength = (int) ((float) ARROW_LENGTH * scaleX);
 
-		productionConstructionsRenderer.setPosition(x + ARROW_LENGTH, y);
-		productionConstructionsRenderer.render();
+		graphics.drawLine(x, y + h / 2, x + arrowLength, y + h / 2);
 
-		x = getX();
-		arrow.draw(x + w - ARROW_LENGTH, y + h / 2, x + w - 1, y + h / 2);
+		Dimension size = productionConstructionsRenderer.getPreferredSize();
+		productionConstructionsRenderer.render(graphics, x + arrowLength, y, x
+				+ arrowLength + (int) (size.getWidth() * scaleX), y
+				+ (int) (size.getHeight() * scaleY));
 
-		graphics.drawLine(x + w - 1, y + h / 2 - ARROW_LENGTH / 2, x + w - 1, y
-				+ h / 2 + ARROW_LENGTH / 2);
+		x = Math.min(x1, x2);
+		arrow.draw(x + w - arrowLength, y + h / 2, x + w - 1, y + h / 2);
+
+		graphics.drawLine(x + w - 1, y + h / 2 - arrowLength / 2, x + w - 1, y
+				+ h / 2 + arrowLength / 2);
 	}
 }

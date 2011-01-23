@@ -1,5 +1,6 @@
 package com.puresol.gui.uhura.rendering;
 
+import java.awt.Dimension;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -12,16 +13,16 @@ import org.apache.log4j.Logger;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class RenderProperties {
+public class UhuraRenderProperties {
 
 	private static final Logger logger = Logger
-			.getLogger(RenderProperties.class);
+			.getLogger(UhuraRenderProperties.class);
 
 	private static final Properties properties = new Properties();
 	static {
 		try {
-			properties.load(RenderProperties.class
-					.getResourceAsStream("/config/UhuraRender.properties"));
+			properties.load(UhuraRenderProperties.class
+					.getResourceAsStream("/config/UhuraRenderer.properties"));
 		} catch (IOException e) {
 			logger.fatal(e.getMessage(), e);
 		}
@@ -65,6 +66,10 @@ public class RenderProperties {
 
 	public static int getLiteralFontSize() {
 		return Integer.valueOf(getProperty("literal.font.size"));
+	}
+
+	public static Dimension getAssumedFontSize() {
+		return new Dimension(8, 12);
 	}
 
 }

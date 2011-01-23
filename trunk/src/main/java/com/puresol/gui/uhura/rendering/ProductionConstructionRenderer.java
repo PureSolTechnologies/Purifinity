@@ -14,19 +14,17 @@ import com.puresol.uhura.ast.ParserTree;
 
 public class ProductionConstructionRenderer extends AbstractRenderer {
 
-	private final static int ARROW_LENGTH = RenderProperties
+	private final static int ARROW_LENGTH = UhuraRenderProperties
 			.getBoxArrowLength();
 
-	private final Graphics graphics;
 	private final ParserTree productionConstruction;
 	private List<Renderer> renderers = new ArrayList<Renderer>();
 	private int preferredWidth = 0;
 	private int preferredHeight = 0;
 
-	public ProductionConstructionRenderer(Graphics graphics,
-			ParserTree productionConstruction) throws RenderException {
+	public ProductionConstructionRenderer(ParserTree productionConstruction)
+			throws RenderException {
 		super();
-		this.graphics = graphics;
 		this.productionConstruction = productionConstruction;
 		createRenderer();
 	}
@@ -41,15 +39,13 @@ public class ProductionConstructionRenderer extends AbstractRenderer {
 			for (ParserTree productionPart : productionParts.getChildren()) {
 				Renderer renderer = null;
 				if ("ConstructionIdentifier".equals(productionPart.getName())) {
-					renderer = new ConstructionIdentifierRenderer(graphics,
+					renderer = new ConstructionIdentifierRenderer(
 							productionPart);
 				} else if ("ConstructionLiteral".equals(productionPart
 						.getName())) {
-					renderer = new ConstructionLiteralRenderer(graphics,
-							productionPart);
+					renderer = new ConstructionLiteralRenderer(productionPart);
 				} else if ("ConstructionGroup".equals(productionPart.getName())) {
-					renderer = new ConstructionGroupRenderer(graphics,
-							productionPart);
+					renderer = new ConstructionGroupRenderer(productionPart);
 				} else {
 					continue;
 				}
@@ -72,18 +68,26 @@ public class ProductionConstructionRenderer extends AbstractRenderer {
 	}
 
 	@Override
-	public void render() {
+	public void render(Graphics graphics, int x1, int y1, int x2, int y2) {
 		graphics.setColor(Color.BLACK);
-		int x = getX();
-		int y = getY();
-		int h = preferredHeight;
+		int x = Math.min(x1, x2);
+		int y = Math.min(y1, y2);
+		int w = Math.abs(x2 - x1) + 1;
+		int h = Math.abs(y2 - y1) + 1;
 		graphics.drawLine(x, y + h / 2, x + ARROW_LENGTH, y + h / 2);
+
+		float scaleX = (float) w / (float) preferredWidth;
+		float scaleY = (float) h / (float) preferredHeight;
+
 		x += ARROW_LENGTH;
 		for (Renderer renderer : renderers) {
 			Dimension size = renderer.getPreferredSize();
-			renderer.setPosition(x, y + h / 2 - size.height / 2);
-			renderer.render();
-			x += renderer.getPreferredSize().width;
+			renderer.render(graphics, x, y + h / 2
+					- (int) ((float) size.height * scaleY / 2.0), x
+					+ (int) (size.getWidth() * scaleX),
+					y + h / 2 - (int) ((float) size.height * scaleY / 2.0)
+							+ (int) (size.getHeight() * scaleY));
+			x += (int) (renderer.getPreferredSize().getWidth() * scaleX);
 		}
 		graphics.drawLine(x, y + h / 2, x + ARROW_LENGTH, y + h / 2);
 	}

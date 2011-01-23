@@ -12,27 +12,24 @@ import com.puresol.rendering.Renderer;
 
 public class ConstructionRenderer extends AbstractRenderer {
 
-	private final static int ARROW_LENGTH = RenderProperties
+	private final static int ARROW_LENGTH = UhuraRenderProperties
 			.getBoxArrowLength();
 
-	private final static int ARROW_TIP_LENGTH = RenderProperties
+	private final static int ARROW_TIP_LENGTH = UhuraRenderProperties
 			.getArrowTipLength();
-	private final static int ARROW_TIP_ANGLE = RenderProperties
+	private final static int ARROW_TIP_ANGLE = UhuraRenderProperties
 			.getArrowTipAngle();
 
-	private final Graphics graphics;
 	private final Color color;
 	private final Renderer textBoxRenderer;
 
 	private int preferredWidth = 0;
 	private int preferredHeight = 0;
 
-	public ConstructionRenderer(Graphics graphics, Font font, Color color,
-			String text) {
+	public ConstructionRenderer(Font font, Color color, String text) {
 		super();
-		this.graphics = graphics;
 		this.color = color;
-		textBoxRenderer = new TextBoxRenderer(graphics, font, Color.BLACK, text);
+		textBoxRenderer = new TextBoxRenderer(font, Color.BLACK, text);
 		preferredWidth = textBoxRenderer.getPreferredSize().width + 2
 				* ARROW_LENGTH;
 		preferredHeight = textBoxRenderer.getPreferredSize().height;
@@ -44,21 +41,24 @@ public class ConstructionRenderer extends AbstractRenderer {
 	}
 
 	@Override
-	public void render() {
-		int x = getX();
-		int y = getY();
-		int w = preferredWidth;
-		int h = preferredHeight;
+	public void render(Graphics graphics, int x1, int y1, int x2, int y2) {
+		int x = Math.min(x1, x2);
+		int y = Math.min(y1, y2);
+		int w = Math.abs(x2 - x1) + 1;
+		int h = Math.abs(y2 - y1) + 1;
+		float scaleX = (float) w / (float) preferredWidth;
 
 		Arrow arrow = new Arrow(graphics);
 		arrow.setTipAngle(ARROW_TIP_ANGLE);
-		arrow.setTipLength(ARROW_TIP_LENGTH);
+		arrow.setTipLength((int) ((float) ARROW_TIP_LENGTH * scaleX));
 		arrow.setType(ArrowType.FANCY);
 
+		final int arrowLength = (int) ((float) ARROW_LENGTH * scaleX);
+
 		graphics.setColor(color);
-		arrow.draw(x, y + h / 2, x + ARROW_LENGTH, y + h / 2);
-		textBoxRenderer.setPosition(x + ARROW_LENGTH, y);
-		textBoxRenderer.render();
-		graphics.drawLine(x + w - ARROW_LENGTH, y + h / 2, x + w, y + h / 2);
+		arrow.draw(x, y + h / 2, x + arrowLength, y + h / 2);
+		textBoxRenderer.render(graphics, x + arrowLength, y, x + w
+				- arrowLength - 1, y + h - 1);
+		graphics.drawLine(x + w - arrowLength, y + h / 2, x + w, y + h / 2);
 	}
 }
