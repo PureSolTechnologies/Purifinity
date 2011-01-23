@@ -27,6 +27,16 @@ public class SLOCMetricServiceFactory implements ProjectEvaluatorFactory,
 	}
 
 	@Override
+	public Class<? extends ProjectEvaluator> getProjectEvaluatorClass() {
+		return ProjectSLOCMetric.class;
+	}
+
+	@Override
+	public Class<? extends CodeRangeEvaluator> getCodeRangeEvaluatorClass() {
+		return SLOCMetric.class;
+	}
+
+	@Override
 	public String getDescription() {
 		return SLOCMetric.DESCRIPTION;
 	}

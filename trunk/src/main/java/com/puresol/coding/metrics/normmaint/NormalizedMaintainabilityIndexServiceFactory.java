@@ -12,8 +12,8 @@ import com.puresol.coding.evaluator.ProjectEvaluatorFactory;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.utils.Property;
 
-public class NormalizedMaintainabilityIndexServiceFactory implements CodeRangeEvaluatorFactory,
-		ProjectEvaluatorFactory {
+public class NormalizedMaintainabilityIndexServiceFactory implements
+		CodeRangeEvaluatorFactory, ProjectEvaluatorFactory {
 
 	@Override
 	public CodeRangeEvaluator create(ProgrammingLanguage language,
@@ -24,6 +24,16 @@ public class NormalizedMaintainabilityIndexServiceFactory implements CodeRangeEv
 	@Override
 	public ProjectEvaluator create(ProjectAnalyzer projectAnalyzer) {
 		return new ProjectNormalizedMaintainabilityIndex(projectAnalyzer);
+	}
+
+	@Override
+	public Class<? extends ProjectEvaluator> getProjectEvaluatorClass() {
+		return ProjectNormalizedMaintainabilityIndex.class;
+	}
+
+	@Override
+	public Class<? extends CodeRangeEvaluator> getCodeRangeEvaluatorClass() {
+		return NormalizedMaintainabilityIndex.class;
 	}
 
 	@Override
@@ -45,5 +55,4 @@ public class NormalizedMaintainabilityIndexServiceFactory implements CodeRangeEv
 	public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
 		return NormalizedMaintainabilityIndex.EVALUATED_QUALITY_CHARACTERISTICS;
 	}
-
 }

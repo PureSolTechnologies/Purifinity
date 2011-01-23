@@ -27,6 +27,16 @@ public class McCabeMetricServiceFactory implements CodeRangeEvaluatorFactory,
 	}
 
 	@Override
+	public Class<? extends ProjectEvaluator> getProjectEvaluatorClass() {
+		return ProjectMcCabeMetric.class;
+	}
+
+	@Override
+	public Class<? extends CodeRangeEvaluator> getCodeRangeEvaluatorClass() {
+		return McCabeMetric.class;
+	}
+
+	@Override
 	public String getDescription() {
 		return McCabeMetric.DESCRIPTION;
 	}

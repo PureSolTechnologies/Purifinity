@@ -27,6 +27,16 @@ public class EntropyMetricServiceFactory implements CodeRangeEvaluatorFactory,
 	}
 
 	@Override
+	public Class<? extends ProjectEvaluator> getProjectEvaluatorClass() {
+		return ProjectEntropyMetric.class;
+	}
+
+	@Override
+	public Class<? extends CodeRangeEvaluator> getCodeRangeEvaluatorClass() {
+		return EntropyMetric.class;
+	}
+
+	@Override
 	public String getDescription() {
 		return EntropyMetric.DESCRIPTION;
 	}

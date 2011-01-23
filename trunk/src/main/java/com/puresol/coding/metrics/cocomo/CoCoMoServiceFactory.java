@@ -1,5 +1,6 @@
 package com.puresol.coding.metrics.cocomo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.puresol.coding.analysis.ProjectAnalyzer;
@@ -13,6 +14,11 @@ public class CoCoMoServiceFactory implements ProjectEvaluatorFactory {
 	@Override
 	public ProjectEvaluator create(ProjectAnalyzer projectAnalyser) {
 		return new CoCoMo(projectAnalyser);
+	}
+
+	@Override
+	public Class<? extends ProjectEvaluator> getProjectEvaluatorClass() {
+		return CoCoMo.class;
 	}
 
 	@Override
@@ -30,10 +36,15 @@ public class CoCoMoServiceFactory implements ProjectEvaluatorFactory {
 		return CoCoMo.SUPPORTED_PROPERTIES;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * For CoCoMo there is no quality characteristics assigned. It's a pure
+	 * economic evaluation.
+	 */
 	@Override
 	public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
-		// TODO Auto-generated method stub
-		return null;
+		return new ArrayList<QualityCharacteristic>();
 	}
 
 }

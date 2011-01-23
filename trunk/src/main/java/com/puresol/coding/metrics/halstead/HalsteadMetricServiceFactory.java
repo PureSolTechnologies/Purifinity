@@ -27,6 +27,16 @@ public class HalsteadMetricServiceFactory implements CodeRangeEvaluatorFactory,
 	}
 
 	@Override
+	public Class<? extends ProjectEvaluator> getProjectEvaluatorClass() {
+		return ProjectHalsteadMetric.class;
+	}
+
+	@Override
+	public Class<? extends CodeRangeEvaluator> getCodeRangeEvaluatorClass() {
+		return HalsteadMetric.class;
+	}
+
+	@Override
 	public String getDescription() {
 		return HalsteadMetric.DESCRIPTION;
 	}
