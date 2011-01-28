@@ -13,8 +13,6 @@ import com.puresol.coding.analysis.AnalyzedFile;
 import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.gui.progress.CallableProgressObservable;
 import com.puresol.gui.progress.ProgressObserver;
-import com.puresol.utils.Persistence;
-import com.puresol.utils.PersistenceException;
 
 /**
  * This class is used to export evaluation results to different file formats.
@@ -43,78 +41,67 @@ public class EvaluatorASCIIExport implements
 
 	@Override
 	public Boolean call() throws IOException {
+		FileWriter writer = new FileWriter(outputFile);
 		try {
-			FileWriter writer = new FileWriter(outputFile);
-			try {
-				boolean first = true;
-				List<AnalyzedFile> analyzedFiles = analyzer.getAnalyzedFiles();
+			boolean first = true;
+			List<AnalyzedFile> analyzedFiles = analyzer.getAnalyzedFiles();
+			if (monitor != null) {
+				monitor.setRange(0, analyzedFiles.size() - 1);
+				monitor.setDescription(translator
+						.i18n("Exporting Values in TSV format..."));
+			}
+			List<CodeRangeEvaluatorFactory> evaluators = CodeRangeEvaluatorManager
+					.getAll();
+			for (int id = 0; id < analyzedFiles.size(); id++) {
+				AnalyzedFile analyzedFile = analyzedFiles.get(id);
 				if (monitor != null) {
-					monitor.setRange(0, analyzedFiles.size() - 1);
-					monitor.setDescription(translator
-							.i18n("Exporting Values in TSV format..."));
+					monitor.setText(analyzedFile.getFile().getPath());
+					monitor.setStatus(id);
 				}
-				List<CodeRangeEvaluatorFactory> evaluators = CodeRangeEvaluatorManager
-						.getAll();
-				for (int id = 0; id < analyzedFiles.size(); id++) {
-					AnalyzedFile analyzedFile = analyzedFiles.get(id);
-					if (monitor != null) {
-						monitor.setText(analyzedFile.getFile().getPath());
-						monitor.setStatus(id);
-					}
-					Analysis analysis = analyzer.getAnalysis(analyzedFile);
-					for (CodeRange codeRange : analysis
-							.getAnalyzableCodeRanges()) {
-						if (first) {
-							first = false;
-							writer.write("File");
-							writer.write(separator);
-							writer.write("CodeRangeType");
-							writer.write(separator);
-							writer.write("Name");
-							for (CodeRangeEvaluatorFactory evaluator : evaluators) {
-								File resultsFile = analyzedFile.getResultsFile(
-										evaluator.getCodeRangeEvaluatorClass(),
-										codeRange);
-								@SuppressWarnings("unchecked")
-								List<Result> results = (List<Result>) Persistence
-										.restore(resultsFile);
-								for (Result result : results) {
-									writer.write(separator);
-									writer.write(result.getName());
-								}
-							}
-							writer.write('\n');
-						}
-						writer.write(analyzedFile.getSourceFile().getPath());
+				Analysis analysis = analyzer.getAnalysis(analyzedFile);
+				for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
+					if (first) {
+						first = false;
+						writer.write("File");
 						writer.write(separator);
-						writer.write(codeRange.getType().getName());
+						writer.write("CodeRangeType");
 						writer.write(separator);
-						writer.write(codeRange.getName());
-						for (CodeRangeEvaluatorFactory evaluator : evaluators) {
-							File resultsFile = analyzedFile.getResultsFile(
-									evaluator.getCodeRangeEvaluatorClass(),
-									codeRange);
-							@SuppressWarnings("unchecked")
-							List<Result> results = (List<Result>) Persistence
-									.restore(resultsFile);
-							for (Result result : results) {
+						writer.write("Name");
+						for (CodeRangeEvaluatorFactory evaluatorFactory : evaluators) {
+							CodeRangeEvaluator evaluator = evaluatorFactory
+									.create(analysis.getLanguage(), codeRange);
+							evaluator.run();
+							for (Result result : evaluator.getResults()) {
 								writer.write(separator);
-								writer.write(String.valueOf(result.getValue()));
+								writer.write(result.getName());
 							}
 						}
 						writer.write('\n');
 					}
-				}
-			} finally {
-				writer.close();
-				if (monitor != null) {
-					monitor.finish();
+					writer.write(analyzedFile.getSourceFile().getPath());
+					writer.write(separator);
+					writer.write(codeRange.getType().getName());
+					writer.write(separator);
+					writer.write(codeRange.getName());
+					for (CodeRangeEvaluatorFactory evaluatorFactory : evaluators) {
+						CodeRangeEvaluator evaluator = evaluatorFactory.create(
+								analysis.getLanguage(), codeRange);
+						evaluator.run();
+						for (Result result : evaluator.getResults()) {
+							writer.write(separator);
+							writer.write(String.valueOf(result.getValue()));
+						}
+					}
+					writer.write('\n');
 				}
 			}
-			return true;
-		} catch (PersistenceException e) {
-			throw new IOException(e);
+		} finally {
+			writer.close();
+			if (monitor != null) {
+				monitor.finish();
+			}
 		}
+		return true;
 	}
 
 	@Override

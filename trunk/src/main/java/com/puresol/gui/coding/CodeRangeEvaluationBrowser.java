@@ -1,7 +1,6 @@
 package com.puresol.gui.coding;
 
 import java.awt.BorderLayout;
-import java.io.File;
 import java.io.IOException;
 
 import javax.swing.JPanel;
@@ -13,27 +12,31 @@ import javax.swing.event.ListSelectionListener;
 import org.apache.log4j.Logger;
 
 import com.puresol.coding.CodeRange;
+import com.puresol.coding.analysis.Analysis;
 import com.puresol.coding.analysis.AnalyzedFile;
 import com.puresol.coding.analysis.ProjectAnalyzer;
+import com.puresol.coding.evaluator.CodeRangeEvaluator;
 import com.puresol.coding.evaluator.CodeRangeEvaluatorFactory;
 import com.puresol.document.Document;
 import com.puresol.document.convert.gui.GUIConverter;
-import com.puresol.utils.Persistence;
-import com.puresol.utils.PersistenceException;
+import com.puresol.gui.progress.FinishListener;
+import com.puresol.gui.progress.ProgressWindow;
 
 public class CodeRangeEvaluationBrowser extends JPanel implements
-		ListSelectionListener {
+		ListSelectionListener, FinishListener {
 
 	private static final long serialVersionUID = 7855693564694783199L;
 
 	private static final Logger logger = Logger
 			.getLogger(CodeRangeEvaluationBrowser.class);
 
-	private ProjectAnalyzer projectAnalyser = null;
+	private ProjectAnalyzer projectAnalyzer = null;
 
 	private final CodeRangeEvaluatorChooser evaluators = new CodeRangeEvaluatorChooser();
 	private AnalyzedFile file;
 	private CodeRange codeRange;
+	private CodeRangeEvaluator evaluator = null;
+	private final JScrollPane documentScroller = new JScrollPane();
 
 	public CodeRangeEvaluationBrowser() {
 		super();
@@ -52,15 +55,15 @@ public class CodeRangeEvaluationBrowser extends JPanel implements
 		evaluators.addListSelectionListener(this);
 
 		add(new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true, new JScrollPane(
-				evaluators), new JPanel()), BorderLayout.CENTER);
+				evaluators), documentScroller), BorderLayout.CENTER);
 	}
 
 	public ProjectAnalyzer getProjectAnlayser() {
-		return projectAnalyser;
+		return projectAnalyzer;
 	}
 
 	public void setProjectAnalyser(ProjectAnalyzer projectAnalyser) {
-		this.projectAnalyser = projectAnalyser;
+		this.projectAnalyzer = projectAnalyser;
 	}
 
 	public AnalyzedFile getAnalyzedFile() {
@@ -82,7 +85,7 @@ public class CodeRangeEvaluationBrowser extends JPanel implements
 	private void showReport(Object o) {
 		try {
 			if ((file == null) || (codeRange == null)
-					|| (projectAnalyser == null)) {
+					|| (projectAnalyzer == null)) {
 				return;
 			}
 			CodeRangeEvaluatorFactory evaluatorFactory = (CodeRangeEvaluatorFactory) evaluators
@@ -90,23 +93,31 @@ public class CodeRangeEvaluationBrowser extends JPanel implements
 			if (evaluatorFactory == null) {
 				return;
 			}
-			File reportFile = file.getReportFile(
-					evaluatorFactory.getCodeRangeEvaluatorClass(), codeRange);
-			Document document = (Document) Persistence.restore(reportFile);
-			removeAll();
-			add(new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true,
-					new JScrollPane(evaluators), new JScrollPane(
-							new GUIConverter(document).toPanel())),
-					BorderLayout.CENTER);
+			Analysis analysis = projectAnalyzer.getAnalysis(file);
+			evaluator = evaluatorFactory.create(analysis.getLanguage(),
+					codeRange);
+			ProgressWindow progress = new ProgressWindow();
+			progress.addFinishListener(this);
+			progress.run(evaluator);
+
 		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-		} catch (PersistenceException e) {
 			logger.error(e.getMessage(), e);
 		}
 	}
 
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
-		showReport(evaluators.getSelectedValue());
+		if (e.getSource() == evaluators) {
+			showReport(evaluators.getSelectedValue());
+		}
+	}
+
+	@Override
+	public void finished(Object o) {
+		if (evaluator != null) {
+			Document document = evaluator.getReport();
+			documentScroller.setViewportView(new GUIConverter(document)
+					.toPanel());
+		}
 	}
 }

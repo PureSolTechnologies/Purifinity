@@ -3,9 +3,6 @@ package com.puresol.coding.analysis;
 import java.io.File;
 import java.io.Serializable;
 
-import com.puresol.coding.CodeRange;
-import com.puresol.coding.evaluator.Evaluator;
-
 /**
  * This class is for keeping a list of analyzed files within ProjectAnalyzer.
  * This class provides easy and standardized access to the workspace
@@ -69,20 +66,6 @@ public class AnalyzedFile implements Comparable<AnalyzedFile>, Serializable {
 
 	public File getAnalyzerFile() {
 		return new File(getFileDirectory(), "analyzer.persist");
-	}
-
-	public File getReportFile(Class<? extends Evaluator> evaluator,
-			CodeRange codeRange) {
-		return new File(getFileDirectory(), evaluator.getName() + "-"
-				+ codeRange.getType().getName() + "_" + codeRange.getName()
-				+ ".report");
-	}
-
-	public File getResultsFile(Class<? extends Evaluator> evaluator,
-			CodeRange codeRange) {
-		return new File(getFileDirectory(), evaluator.getName() + "-"
-				+ codeRange.getType().getName() + "_" + codeRange.getName()
-				+ ".results");
 	}
 
 	public File getParserTreeFile() {

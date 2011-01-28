@@ -11,6 +11,7 @@ import com.puresol.coding.CodeRange;
 import com.puresol.coding.analysis.Analysis;
 import com.puresol.coding.analysis.AnalyzedFile;
 import com.puresol.coding.analysis.ProjectAnalyzer;
+import com.puresol.coding.evaluator.CodeRangeEvaluator;
 import com.puresol.coding.evaluator.CodeRangeEvaluatorFactory;
 import com.puresol.coding.evaluator.CodeRangeEvaluatorManager;
 import com.puresol.document.Document;
@@ -19,7 +20,6 @@ import com.puresol.gui.Application;
 import com.puresol.gui.progress.ProgressObserver;
 import com.puresol.gui.progress.RunnableProgressObservable;
 import com.puresol.utils.FileUtilities;
-import com.puresol.utils.Persistence;
 import com.puresol.utils.PersistenceException;
 
 public class ProjectAnalysisHTMLPages implements RunnableProgressObservable {
@@ -87,11 +87,18 @@ public class ProjectAnalysisHTMLPages implements RunnableProgressObservable {
 		for (CodeRangeEvaluatorFactory evaluatorFactory : CodeRangeEvaluatorManager
 				.getAll()) {
 			for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
-				File file = analyzedFile.getReportFile(
-						evaluatorFactory.getCodeRangeEvaluatorClass(),
-						codeRange);
-				Document document = (Document) Persistence.restore(file);
-				FileUtilities.writeFile(directory, new File(file, ".html"),
+				CodeRangeEvaluator evaluator = evaluatorFactory.create(
+						analysis.getLanguage(), codeRange);
+				evaluator.run();
+				Document document = evaluator.getReport();
+				FileUtilities.writeFile(
+						directory,
+						new File(analyzedFile.getFileDirectory(), evaluator
+								.getName()
+								+ "-"
+								+ codeRange.getType().getName()
+								+ "-"
+								+ codeRange.getName() + ".html"),
 						new HTMLConverter(document).toString());
 			}
 		}

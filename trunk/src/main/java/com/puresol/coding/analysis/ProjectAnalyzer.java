@@ -24,7 +24,6 @@ import javax.i18n4java.utils.FileSearch;
 
 import org.apache.log4j.Logger;
 
-import com.puresol.coding.evaluator.FileEvaluator;
 import com.puresol.document.Chapter;
 import com.puresol.document.Document;
 import com.puresol.document.Paragraph;
@@ -301,10 +300,6 @@ public class ProjectAnalyzer implements Serializable,
 				return;
 			}
 			analyzedFiles.add(analyzedFile);
-			if (fileAnalyzer.isUpdated()) {
-				FileEvaluator
-						.evaluate(analyzedFile, fileAnalyzer.getAnalyzer());
-			}
 		} catch (Exception e) {
 			failedFiles.add(file);
 			logger.error(e.getMessage(), e);

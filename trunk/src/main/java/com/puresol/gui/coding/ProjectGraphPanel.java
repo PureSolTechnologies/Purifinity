@@ -5,7 +5,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.swing.JButton;
@@ -30,7 +29,6 @@ import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.evaluator.Evaluator;
 import com.puresol.coding.evaluator.ProjectEvaluatorFactory;
 import com.puresol.coding.evaluator.Result;
-import com.puresol.utils.Persistence;
 import com.puresol.utils.PersistenceException;
 
 /**
@@ -100,12 +98,8 @@ public class ProjectGraphPanel extends JPanel implements ListSelectionListener,
 		for (AnalyzedFile analyzedFile : projectAnalyzer.getAnalyzedFiles()) {
 			Analysis analysis = projectAnalyzer.getAnalysis(analyzedFile);
 			for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
-				@SuppressWarnings("unchecked")
-				List<Result> results = (List<Result>) Persistence
-						.restore(analyzedFile.getResultsFile(
-								evaluatorFactory.getProjectEvaluatorClass(),
-								codeRange));
-				for (Result result : results) {
+				evaluator.run();
+				for (Result result : evaluator.getResults()) {
 					DefaultCategoryDataset dataset = datasets.get(result
 							.getName());
 					if (dataset == null) {
