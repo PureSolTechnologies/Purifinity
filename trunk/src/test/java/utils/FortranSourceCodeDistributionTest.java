@@ -19,7 +19,7 @@ import com.puresol.coding.analysis.Analyzer;
 import com.puresol.coding.analysis.AnalyzerException;
 import com.puresol.coding.lang.fortran.Fortran;
 import com.puresol.trees.TreePrinter;
-import com.puresol.uhura.ast.ParserTree;
+import com.puresol.uhura.parser.ParserTree;
 import com.puresol.utils.ConsoleUtils;
 import com.puresol.utils.StopWatch;
 

@@ -5,9 +5,9 @@ import java.util.List;
 
 import com.puresol.coding.metrics.halstead.HalsteadSymbol;
 import com.puresol.coding.metrics.halstead.LanguageDependedHalsteadMetric;
-import com.puresol.uhura.ast.ParserTree;
 import com.puresol.uhura.grammar.token.Visibility;
 import com.puresol.uhura.lexer.Token;
+import com.puresol.uhura.parser.ParserTree;
 
 /**
  * This is the actual implementation of the McCabe metric for Java.

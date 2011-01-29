@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.puresol.coding.metrics.codedepth.LanguageDependedCodeDepthMetric;
-import com.puresol.uhura.ast.ParserTree;
+import com.puresol.uhura.parser.ParserTree;
 
 /**
  * This is the actual implementation of the code block test for Java.

@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.puresol.coding.metrics.mccabe.LanguageDependedMcCabeMetric;
 import com.puresol.trees.TreeException;
-import com.puresol.uhura.ast.ParserTree;
+import com.puresol.uhura.parser.ParserTree;
 
 /**
  * This is the actual implementation of the McCabe metric for Java.
