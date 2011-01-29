@@ -35,12 +35,12 @@ import com.puresol.trees.TreeException;
 import com.puresol.trees.TreeVisitor;
 import com.puresol.trees.TreeWalker;
 import com.puresol.trees.WalkingAction;
-import com.puresol.uhura.ast.ParserTree;
 import com.puresol.uhura.lexer.Lexer;
 import com.puresol.uhura.lexer.LexerException;
 import com.puresol.uhura.lexer.TokenStream;
 import com.puresol.uhura.parser.Parser;
 import com.puresol.uhura.parser.ParserException;
+import com.puresol.uhura.parser.ParserTree;
 import com.puresol.utils.Persistence;
 import com.puresol.utils.PersistenceException;
 

@@ -7,7 +7,7 @@ import java.io.File;
 import org.junit.Test;
 
 import com.puresol.coding.analysis.AnalyzerException;
-import com.puresol.uhura.ast.ParserTree;
+import com.puresol.uhura.parser.ParserTree;
 import com.puresol.utils.FileUtilities;
 
 public class JavaAnalyserTest {
