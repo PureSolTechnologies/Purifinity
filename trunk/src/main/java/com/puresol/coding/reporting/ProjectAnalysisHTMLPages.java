@@ -20,6 +20,7 @@ import com.puresol.gui.Application;
 import com.puresol.gui.progress.ProgressObserver;
 import com.puresol.gui.progress.RunnableProgressObservable;
 import com.puresol.utils.FileUtilities;
+import com.puresol.utils.JARUtilities;
 import com.puresol.utils.PersistenceException;
 
 public class ProjectAnalysisHTMLPages implements RunnableProgressObservable {
@@ -53,10 +54,26 @@ public class ProjectAnalysisHTMLPages implements RunnableProgressObservable {
 		try {
 			if (monitor != null) {
 				monitor.setDescription("Creating HTML project pages...");
-				monitor.setRange(0, projectAnalyzer.getAnalyzedFiles().size());
+				monitor.setRange(0,
+						projectAnalyzer.getAnalyzedFiles().size() + 2);
 				monitor.setStatus(0);
 			}
 			int count = 0;
+			createTopDirectories();
+			count++;
+			if (monitor != null) {
+				monitor.setStatus(count);
+			}
+			copyStandardFiles();
+			count++;
+			if (monitor != null) {
+				monitor.setStatus(count);
+			}
+			createTopIndexHTML();
+			count++;
+			if (monitor != null) {
+				monitor.setStatus(count);
+			}
 			for (AnalyzedFile file : projectAnalyzer.getAnalyzedFiles()) {
 				count++;
 				if (monitor != null) {
@@ -81,9 +98,81 @@ public class ProjectAnalysisHTMLPages implements RunnableProgressObservable {
 		}
 	}
 
+	private void createTopDirectories() throws IOException {
+		createTopDirectories(getCSSDirectory());
+		createTopDirectories(getGraphicsDirectory());
+		createTopDirectories(getProjectEvaluatorsDirectory());
+		createTopDirectories(getCodeRangeEvaluatorsDirectory());
+	}
+
+	private void createTopDirectories(File directory) throws IOException {
+		if (directory.exists() && directory.isDirectory()) {
+			return;
+		}
+		if (!directory.mkdirs()) {
+			throw new IOException("Count not create Directory '"
+					+ directory.getPath() + "'!");
+		}
+	}
+
+	private File getCSSDirectory() {
+		return new File(directory, "css");
+	}
+
+	private File getGraphicsDirectory() {
+		return new File(directory, "graphics");
+	}
+
+	private File getProjectEvaluatorsDirectory() {
+		return new File(directory, "project");
+	}
+
+	private File getCodeRangeEvaluatorsDirectory() {
+		return new File(directory, "files");
+	}
+
+	private void copyStandardFiles() throws IOException {
+		JARUtilities.copyResource(getClass().getResource("/graphics/logo.png"),
+				getLogoFile());
+		JARUtilities.copyResource(
+				getClass().getResource("/graphics/favicon.png"),
+				getFavIconFile());
+		JARUtilities.copyResource(
+				getClass().getResource("/css/analysis-report.css"),
+				getCSSFile());
+	}
+
+	private File getLogoFile() {
+		return new File(getGraphicsDirectory(), "puresol-technologies.png");
+	}
+
+	private File getFavIconFile() {
+		return new File(getGraphicsDirectory(), "favicon.png");
+	}
+
+	private File getCSSFile() {
+		return new File(getCSSDirectory(), "analysis-report.css");
+	}
+
+	private void createTopIndexHTML() throws IOException {
+		File file = new File(directory, "index.html");
+		HTMLAnalysisReport indexFile = new HTMLAnalysisReport(file,
+				getCSSFile(), getLogoFile(), getFavIconFile(),
+				translator.i18n("Project Analysis"));
+		try {
+			indexFile.setCopyrightFooter(true);
+			indexFile.write(MainMenu.getHTML(directory, file, MainMenu.START));
+			indexFile.write(new HTMLConverter(projectAnalyzer.getReport())
+					.toHTML(false));
+		} finally {
+			indexFile.close();
+		}
+	}
+
 	private void processFile(AnalyzedFile analyzedFile) throws IOException,
 			PersistenceException {
 		Analysis analysis = projectAnalyzer.getAnalysis(analyzedFile);
+		final File codeRangeEvaluatorsDirectory = getCodeRangeEvaluatorsDirectory();
 		for (CodeRangeEvaluatorFactory evaluatorFactory : CodeRangeEvaluatorManager
 				.getAll()) {
 			for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
@@ -91,15 +180,11 @@ public class ProjectAnalysisHTMLPages implements RunnableProgressObservable {
 						analysis.getLanguage(), codeRange);
 				evaluator.run();
 				Document document = evaluator.getReport();
-				FileUtilities.writeFile(
-						directory,
-						new File(analyzedFile.getFileDirectory(), evaluator
-								.getName()
-								+ "-"
-								+ codeRange.getType().getName()
-								+ "-"
+				FileUtilities.writeFile(codeRangeEvaluatorsDirectory, new File(
+						analyzedFile.getFile(), evaluator.getName() + "-"
+								+ codeRange.getType().getName() + "-"
 								+ codeRange.getName() + ".html"),
-						new HTMLConverter(document).toString());
+						new HTMLConverter(document).toHTML(true));
 			}
 		}
 	}

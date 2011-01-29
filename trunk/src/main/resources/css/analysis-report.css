@@ -1,0 +1,23 @@
+/****************************************************************************
+ * CSS-Stylesheet for Project Analysis Reports
+ * Author: Rick-Rainer Ludwig
+ * (c) 2009-2011 PureSol Technologies (http://puresol-technologies.com)
+ *****************************************************************************/
+
+/* 
+ * general frame settings
+ */
+html {
+    font-family:Verdana,Helvetica,Arial,sans-serif;
+    font-size:11pt; 
+    background-color:gray;
+    text-align:center;
+}
+body {
+    width:1000px;
+    color:black;
+    background-color:#fbfcfd;
+    border:2pt groove black;
+    text-align:left;
+    margin:1em auto;
+}

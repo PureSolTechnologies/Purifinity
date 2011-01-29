@@ -6,7 +6,7 @@ import javax.i18n4java.Translator;
 
 import org.apache.log4j.Logger;
 
-import com.puresol.utils.ResourceUtilities;
+import com.puresol.utils.JARUtilities;
 
 public enum QualityMainCharacteristic {
 
@@ -60,16 +60,16 @@ public enum QualityMainCharacteristic {
 		String file = name().toLowerCase() + "."
 				+ Translator.getDefaultLanguage() + ".txt";
 		try {
-			return ResourceUtilities.readResourceFileToString(directory + "/"
-					+ file);
+			return JARUtilities.readResourceFileToString(getClass()
+					.getResource(directory + "/" + file));
 		} catch (IOException e) {
 			logger.warn("No localized version of '" + file.toString()
 					+ "' is available!");
 		}
 		file = name().toLowerCase() + ".en.txt";
 		try {
-			return ResourceUtilities.readResourceFileToString(directory + "/"
-					+ file);
+			return JARUtilities.readResourceFileToString(getClass()
+					.getResource(directory + "/" + file));
 		} catch (IOException e) {
 			logger.warn("No file '" + file.toString() + "' is available!");
 		}

@@ -60,8 +60,8 @@ public class ProjectAnalysisBrowser extends JPanel {
 
 	public void setProjectAnalyser(ProjectAnalyzer project) {
 		this.project = project;
-		projectReport
-				.setText(new HTMLConverter(project.getReport()).toString());
+		projectReport.setText(new HTMLConverter(project.getReport())
+				.toHTML(true));
 		tabbedPane.setSelectedIndex(0);
 		codeRangeBrowser.setProjectAnalyser(project);
 		projectEvaluatorPanel.setProjectAnalyser(project);
