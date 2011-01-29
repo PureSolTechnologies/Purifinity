@@ -12,6 +12,7 @@ public class RendererPanel extends JPanel {
 
 	public RendererPanel(Renderer renderer) {
 		this.renderer = renderer;
+		setDoubleBuffered(true);
 	}
 
 	public void paint(Graphics graphics) {

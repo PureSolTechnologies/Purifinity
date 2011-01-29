@@ -43,6 +43,14 @@ public class FileUtilitiesTest {
 				"destination/to.txt",
 				FileUtilities.getRelativePath(new File("from.txt"),
 						new File("destination/to.txt")).getPath());
+		assertEquals(
+				"file.txt",
+				FileUtilities.getRelativePath(new File("/a/b/"),
+						new File("/a/b/file.txt")).getPath());
+		assertEquals(
+				"file.txt",
+				FileUtilities.getRelativePath(new File("/a/b"),
+						new File("/a/b/file.txt")).getPath());
 	}
 
 	@Test

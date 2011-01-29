@@ -16,6 +16,10 @@ public class ChartRenderer implements Renderer {
 		this.chart = chart;
 	}
 
+	public JFreeChart getChart() {
+		return chart;
+	}
+
 	@Override
 	public Dimension getPreferredSize() {
 		return new Dimension(1024, 768);
@@ -26,7 +30,6 @@ public class ChartRenderer implements Renderer {
 		Rectangle2D rectangle = new Rectangle2D.Float((float) x1, (float) y1,
 				(float) x2, (float) y2);
 		chart.draw((Graphics2D) graphics, rectangle);
-
 	}
 
 }

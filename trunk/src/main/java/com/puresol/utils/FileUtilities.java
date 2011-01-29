@@ -32,7 +32,8 @@ public class FileUtilities {
 	 * @return
 	 */
 	public static File classToRelativePackagePath(Class<?> clazz) {
-		return new File(clazz.getName().replaceAll("\\.", "/") + ".java");
+		return new File(clazz.getName().replaceAll("\\.", File.separator)
+				+ ".java");
 	}
 
 	/**
@@ -104,18 +105,19 @@ public class FileUtilities {
 	public static File getRelativePath(File from, File to) {
 		from = normalizePath(from);
 		to = normalizePath(to);
-		if ((from.getPath().startsWith("/")) && (to.getPath().startsWith("/"))) {
+		if ((from.getPath().startsWith(File.separator))
+				&& (to.getPath().startsWith(File.separator))) {
 			return getRelativePathForAbsolutes(from, to);
-		} else if ((!from.getPath().startsWith("/"))
-				&& (!to.getPath().startsWith("/"))) {
+		} else if ((!from.getPath().startsWith(File.separator))
+				&& (!to.getPath().startsWith(File.separator))) {
 			return getRelativePathForRelatives(from, to);
 		}
 		return null;
 	}
 
 	private static File getRelativePathForAbsolutes(File from, File to) {
-		String[] toSplit = to.getPath().split("/");
-		String[] fromSplit = from.getPath().split("/");
+		String[] toSplit = to.getPath().split(File.separator);
+		String[] fromSplit = from.getPath().split(File.separator);
 		int matching = 0;
 		while (toSplit[matching].equals(fromSplit[matching])) {
 			matching++;
@@ -125,12 +127,12 @@ public class FileUtilities {
 		}
 		StringBuffer result = new StringBuffer();
 		for (int i = matching; i < fromSplit.length - 1; i++) {
-			result.append("../");
+			result.append(".." + File.separator);
 		}
 		for (int i = matching; i < toSplit.length; i++) {
 			result.append(toSplit[i]);
 			if (i < toSplit.length - 1) {
-				result.append("/");
+				result.append(File.separator);
 			}
 		}
 		return new File(result.toString());
@@ -138,10 +140,10 @@ public class FileUtilities {
 
 	private static File getRelativePathForRelatives(File from, File to) {
 		String parent = from.getParent();
-		if (parent == null) {
+		if ((parent == null) || (parent.isEmpty())) {
 			return to;
 		}
-		parent = parent.replaceAll("[^/]+", "..");
+		parent = parent.replaceAll("[^" + File.separator + "]+", "..");
 		return new File(new File(parent), to.getPath());
 	}
 
@@ -158,19 +160,24 @@ public class FileUtilities {
 		String normalizedFile = file.getPath();
 		boolean isAbsolute = file.isAbsolute();
 		// remove all '//'...
-		while (normalizedFile.contains("//")) {
-			normalizedFile = normalizedFile.replaceAll("//", "/");
+		while (normalizedFile.contains(File.separator + File.separator)) {
+			normalizedFile = normalizedFile.replaceAll(File.separator
+					+ File.separator, File.separator);
 		}
 		// remove all redundant '..'
-		Pattern pattern = Pattern.compile("([^\\./]+/\\.\\.)");
+		Pattern pattern = Pattern.compile("([^\\." + File.separator + "]+"
+				+ File.separator + "\\.\\.)");
 		Matcher matcher = pattern.matcher(normalizedFile);
 		while (matcher.find()) {
-			normalizedFile = normalizedFile.replace(matcher.group(1), "")
-					.replaceAll("//", "/");
-			if ((!isAbsolute) && (normalizedFile.startsWith("/"))) {
-				normalizedFile = normalizedFile.replaceFirst("/", "");
-			} else if ((isAbsolute) && (!normalizedFile.startsWith("/"))) {
-				normalizedFile = "/" + normalizedFile;
+			normalizedFile = normalizedFile
+					.replace(matcher.group(1), "")
+					.replaceAll(File.separator + File.separator, File.separator);
+			if ((!isAbsolute) && (normalizedFile.startsWith(File.separator))) {
+				normalizedFile = normalizedFile
+						.replaceFirst(File.separator, "");
+			} else if ((isAbsolute)
+					&& (!normalizedFile.startsWith(File.separator))) {
+				normalizedFile = File.separator + normalizedFile;
 			}
 			matcher = pattern.matcher(normalizedFile);
 		}

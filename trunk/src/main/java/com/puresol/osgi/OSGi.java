@@ -15,7 +15,7 @@ import org.osgi.framework.launch.Framework;
 import org.osgi.framework.launch.FrameworkFactory;
 
 import com.puresol.ListenerSet;
-import com.puresol.utils.ResourceUtilities;
+import com.puresol.utils.JARUtilities;
 
 /**
  * This is a small wrapper and utility class for starting and using a OSGi
@@ -105,9 +105,8 @@ public class OSGi {
 
 	private void loadConfiguration() {
 		try {
-			Properties props = ResourceUtilities
-					.readResourcePropertyFile(getClass().getResource(
-							OSGi.OSGI_PROPERTIES));
+			Properties props = JARUtilities.readPropertyFile(getClass()
+					.getResource(OSGi.OSGI_PROPERTIES));
 			setConfiguration(props);
 		} catch (IOException e) {
 			logger.warn("No '"
