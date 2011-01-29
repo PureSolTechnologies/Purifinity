@@ -9,7 +9,7 @@ import org.junit.Test;
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.CodeRangeType;
 import com.puresol.coding.lang.test.TestLanguage;
-import com.puresol.uhura.ast.ParserTree;
+import com.puresol.uhura.parser.ParserTree;
 import com.puresol.utils.FileUtilities;
 import com.puresol.utils.PersistenceTester;
 

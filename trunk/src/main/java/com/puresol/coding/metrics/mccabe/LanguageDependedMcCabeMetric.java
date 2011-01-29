@@ -2,7 +2,7 @@ package com.puresol.coding.metrics.mccabe;
 
 import java.io.Serializable;
 
-import com.puresol.uhura.ast.ParserTree;
+import com.puresol.uhura.parser.ParserTree;
 
 /**
  * This interface is used to implement a part of the McCabe metric (cyclomatic

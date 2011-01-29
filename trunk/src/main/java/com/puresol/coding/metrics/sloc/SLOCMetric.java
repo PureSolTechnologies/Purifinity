@@ -29,9 +29,9 @@ import com.puresol.document.Paragraph;
 import com.puresol.document.Table;
 import com.puresol.math.statistics.Statistics;
 import com.puresol.trees.TreeIterator;
-import com.puresol.uhura.ast.ParserTree;
 import com.puresol.uhura.lexer.Token;
 import com.puresol.uhura.lexer.TokenMetaData;
+import com.puresol.uhura.parser.ParserTree;
 import com.puresol.utils.Property;
 
 /**

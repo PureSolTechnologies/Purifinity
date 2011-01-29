@@ -34,7 +34,7 @@ import com.puresol.document.Chapter;
 import com.puresol.document.Document;
 import com.puresol.document.Paragraph;
 import com.puresol.document.Table;
-import com.puresol.uhura.ast.ParserTree;
+import com.puresol.uhura.parser.ParserTree;
 import com.puresol.utils.Property;
 
 /**
