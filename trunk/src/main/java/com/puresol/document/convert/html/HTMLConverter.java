@@ -51,9 +51,8 @@ public class HTMLConverter {
 		return document;
 	}
 
-	@Override
-	public String toString() {
-		buffer.append(HTMLDocument.convert(document));
+	public String toHTML(boolean htmlFrame) {
+		buffer.append(HTMLDocument.convert(document, htmlFrame));
 		return buffer.toString();
 	}
 

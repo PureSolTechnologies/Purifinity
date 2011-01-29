@@ -4,10 +4,12 @@ import com.puresol.document.Document;
 
 public class HTMLDocument {
 
-	public static StringBuffer convert(Document document) {
+	public static StringBuffer convert(Document document, boolean htmlFrame) {
 		StringBuffer buffer = new StringBuffer();
-		buffer.append("<html>\n");
-		buffer.append("<body>\n");
+		if (htmlFrame) {
+			buffer.append("<html>\n");
+			buffer.append("<body>\n");
+		}
 		buffer.append("<h1>" + document.getName() + "</h1>\n");
 		if (!document.getAuthor().isEmpty()) {
 			buffer.append("<b>" + document.getAuthor() + "</b><br/>\n");
@@ -18,8 +20,10 @@ public class HTMLDocument {
 		HTMLConverter.convertChildren(buffer, document.getChildren());
 		buffer.append("<hr/>\n");
 		buffer.append("time of creation: " + document.getCreationDate() + "\n");
-		buffer.append("</body>\n");
-		buffer.append("</html>\n");
+		if (htmlFrame) {
+			buffer.append("</body>\n");
+			buffer.append("</html>\n");
+		}
 		return buffer;
 	}
 
