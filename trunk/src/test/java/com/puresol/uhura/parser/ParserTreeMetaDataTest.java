@@ -1,4 +1,4 @@
-package com.puresol.uhura.ast;
+package com.puresol.uhura.parser;
 
 import static org.junit.Assert.*;
 
@@ -6,6 +6,7 @@ import java.io.File;
 
 import org.junit.Test;
 
+import com.puresol.uhura.parser.ParserTreeMetaData;
 import com.puresol.utils.FileUtilities;
 import com.puresol.utils.PersistenceTester;
 

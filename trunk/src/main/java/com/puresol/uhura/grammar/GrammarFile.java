@@ -7,7 +7,6 @@ import java.io.Reader;
 
 import org.apache.log4j.Logger;
 
-import com.puresol.uhura.ast.ParserTree;
 import com.puresol.uhura.grammar.uhura.UhuraGrammar;
 import com.puresol.uhura.lexer.Lexer;
 import com.puresol.uhura.lexer.LexerException;
@@ -15,6 +14,7 @@ import com.puresol.uhura.lexer.RegExpLexer;
 import com.puresol.uhura.lexer.TokenStream;
 import com.puresol.uhura.parser.Parser;
 import com.puresol.uhura.parser.ParserException;
+import com.puresol.uhura.parser.ParserTree;
 import com.puresol.uhura.parser.lr.SLR1Parser;
 
 /**

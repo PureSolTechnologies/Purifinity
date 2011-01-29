@@ -1,4 +1,4 @@
-package com.puresol.uhura.ast;
+package com.puresol.uhura.parser;
 
 import java.io.Serializable;
 import java.util.ArrayList;

@@ -2,9 +2,9 @@ package com.puresol.uhura.parser.lr;
 
 import com.puresol.trees.TreeVisitor;
 import com.puresol.trees.WalkingAction;
-import com.puresol.uhura.ast.ParserTree;
-import com.puresol.uhura.ast.ParserTreeMetaData;
 import com.puresol.uhura.lexer.Token;
+import com.puresol.uhura.parser.ParserTree;
+import com.puresol.uhura.parser.ParserTreeMetaData;
 
 public class MetaDataGeneratorVisitor implements TreeVisitor<ParserTree> {
 

@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.Properties;
 
 import com.puresol.trees.TreeException;
-import com.puresol.uhura.ast.ParserTree;
 import com.puresol.uhura.grammar.production.Construction;
 import com.puresol.uhura.grammar.production.Production;
 import com.puresol.uhura.grammar.production.NonTerminal;
@@ -17,6 +16,7 @@ import com.puresol.uhura.grammar.production.Terminal;
 import com.puresol.uhura.grammar.token.TokenDefinition;
 import com.puresol.uhura.grammar.token.TokenDefinitionSet;
 import com.puresol.uhura.grammar.token.Visibility;
+import com.puresol.uhura.parser.ParserTree;
 
 /**
  * This converter converts an AST from a grammar file into a Grammar object. It

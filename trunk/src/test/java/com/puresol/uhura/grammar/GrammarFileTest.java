@@ -9,7 +9,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.puresol.uhura.ast.ParserTree;
+import com.puresol.uhura.parser.ParserTree;
 
 public class GrammarFileTest {
 

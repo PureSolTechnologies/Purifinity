@@ -11,7 +11,6 @@ import java.util.Stack;
 
 import org.apache.log4j.Logger;
 
-import com.puresol.uhura.ast.ParserTree;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.production.FinishTerminal;
@@ -24,6 +23,7 @@ import com.puresol.uhura.lexer.TokenStream;
 import com.puresol.uhura.parser.AbstractParser;
 import com.puresol.uhura.parser.Parser;
 import com.puresol.uhura.parser.ParserException;
+import com.puresol.uhura.parser.ParserTree;
 import com.puresol.uhura.parser.parsetable.ActionType;
 import com.puresol.uhura.parser.parsetable.ParserAction;
 import com.puresol.uhura.parser.parsetable.ParserActionSet;

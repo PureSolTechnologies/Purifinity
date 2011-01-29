@@ -7,14 +7,14 @@ import org.apache.log4j.Logger;
 
 import com.puresol.trees.TreeException;
 import com.puresol.trees.TreeIterator;
-import com.puresol.uhura.ast.ParserTree;
-import com.puresol.uhura.ast.ParserTreeMetaData;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.production.Production;
 import com.puresol.uhura.grammar.token.Visibility;
 import com.puresol.uhura.lexer.Token;
 import com.puresol.uhura.lexer.TokenStream;
 import com.puresol.uhura.parser.ParserException;
+import com.puresol.uhura.parser.ParserTree;
+import com.puresol.uhura.parser.ParserTreeMetaData;
 import com.puresol.uhura.parser.parsetable.ParserAction;
 
 /**

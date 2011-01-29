@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 
-import com.puresol.uhura.ast.ParserTree;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.lexer.TokenStream;
 

@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 
 import com.puresol.trees.TreeException;
-import com.puresol.uhura.ast.ParserTree;
+import com.puresol.uhura.parser.ParserTree;
 
 /**
  * This class is for reading Nyota Uhura grammar files. The grammar file is read
