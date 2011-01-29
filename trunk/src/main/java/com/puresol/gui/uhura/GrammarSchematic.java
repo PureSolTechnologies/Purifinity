@@ -20,7 +20,7 @@ import com.puresol.gui.uhura.rendering.ProductionDefinitionRenderer;
 import com.puresol.rendering.RenderException;
 import com.puresol.rendering.Renderer;
 import com.puresol.trees.TreeException;
-import com.puresol.uhura.ast.ParserTree;
+import com.puresol.uhura.parser.ParserTree;
 
 /**
  * This panel draws a complete grammar with all its productions in a flow

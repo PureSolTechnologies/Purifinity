@@ -25,12 +25,12 @@ import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.analysis.AnalyzerException;
 import com.puresol.coding.analysis.Analyzer;
 import com.puresol.coding.lang.test.grammar.TestLanguageGrammar;
-import com.puresol.uhura.ast.ParserTree;
 import com.puresol.uhura.lexer.Lexer;
 import com.puresol.uhura.lexer.LexerException;
 import com.puresol.uhura.lexer.TokenStream;
 import com.puresol.uhura.parser.Parser;
 import com.puresol.uhura.parser.ParserException;
+import com.puresol.uhura.parser.ParserTree;
 import com.puresol.utils.Persistence;
 import com.puresol.utils.PersistenceException;
 

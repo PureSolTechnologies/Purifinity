@@ -5,7 +5,7 @@ import java.io.PrintStream;
 import com.puresol.gui.SaveableTextArea;
 import com.puresol.io.StringOutputStream;
 import com.puresol.trees.TreePrinter;
-import com.puresol.uhura.ast.ParserTree;
+import com.puresol.uhura.parser.ParserTree;
 
 public class ASCIITreeViewer extends SaveableTextArea {
 

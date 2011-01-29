@@ -31,7 +31,7 @@ import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.gui.Application;
 import com.puresol.gui.TreeViewer;
 import com.puresol.gui.uhura.CodeRangeViewer;
-import com.puresol.uhura.ast.ParserTree;
+import com.puresol.uhura.parser.ParserTree;
 
 /**
  * The code range browser show all analyzed files and their analyzable code

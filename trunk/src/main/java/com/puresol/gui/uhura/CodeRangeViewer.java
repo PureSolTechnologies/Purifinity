@@ -11,9 +11,9 @@ import javax.swing.border.TitledBorder;
 import com.puresol.coding.CodeRange;
 import com.puresol.gui.CodeViewer;
 import com.puresol.trees.TreeIterator;
-import com.puresol.uhura.ast.ParserTree;
-import com.puresol.uhura.ast.ParserTreeMetaData;
 import com.puresol.uhura.lexer.Token;
+import com.puresol.uhura.parser.ParserTree;
+import com.puresol.uhura.parser.ParserTreeMetaData;
 
 public class CodeRangeViewer extends JPanel {
 

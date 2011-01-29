@@ -2,7 +2,7 @@ package com.puresol.coding;
 
 import java.io.Serializable;
 
-import com.puresol.uhura.ast.ParserTree;
+import com.puresol.uhura.parser.ParserTree;
 
 /**
  * This class is for keeping information about a subtree. This sub tree is

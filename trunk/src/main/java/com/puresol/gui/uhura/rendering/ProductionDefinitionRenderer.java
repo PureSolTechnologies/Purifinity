@@ -11,7 +11,7 @@ import com.puresol.rendering.Arrow.ArrowType;
 import com.puresol.rendering.RenderException;
 import com.puresol.rendering.Renderer;
 import com.puresol.trees.TreeException;
-import com.puresol.uhura.ast.ParserTree;
+import com.puresol.uhura.parser.ParserTree;
 
 public class ProductionDefinitionRenderer extends AbstractRenderer {
 

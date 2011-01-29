@@ -27,11 +27,11 @@ import com.puresol.gui.TreeViewer;
 import com.puresol.gui.uhura.ASCIITreeViewer;
 import com.puresol.gui.uhura.GrammarSchematic;
 import com.puresol.trees.TreeException;
-import com.puresol.uhura.ast.ParserTree;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarConverter;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.GrammarFile;
+import com.puresol.uhura.parser.ParserTree;
 import com.puresol.utils.FileUtilities;
 
 public class GrammarViewer extends PureSolApplication implements ActionListener {

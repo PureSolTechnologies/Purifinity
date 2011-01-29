@@ -18,7 +18,7 @@ import java.util.List;
 
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.ProgrammingLanguage;
-import com.puresol.uhura.ast.ParserTree;
+import com.puresol.uhura.parser.ParserTree;
 
 /**
  * This is a interface to a single analysis. It's used to implement a language

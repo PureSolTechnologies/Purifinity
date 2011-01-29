@@ -14,8 +14,8 @@ import com.puresol.rendering.RenderException;
 import com.puresol.rendering.Renderer;
 import com.puresol.rendering.RendererTester;
 import com.puresol.trees.TreeException;
-import com.puresol.uhura.ast.ParserTree;
 import com.puresol.uhura.lexer.Token;
+import com.puresol.uhura.parser.ParserTree;
 
 public class ConstructionIdentifierRendererTest {
 
