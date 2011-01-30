@@ -19,6 +19,7 @@ import com.puresol.document.convert.gui.GUIConverter;
 import com.puresol.gui.Application;
 import com.puresol.gui.TabButton;
 import com.puresol.gui.progress.FinishListener;
+import com.puresol.gui.progress.ProgressObservable;
 import com.puresol.gui.progress.ProgressWindow;
 
 /**
@@ -89,7 +90,7 @@ public class ProjectEvaluatorPanel extends JPanel implements ActionListener,
 	}
 
 	@Override
-	public void finished(Object observable) {
+	public void finished(ProgressObservable observable) {
 		Evaluator evaluator = (Evaluator) observable;
 		JPanel viewer = new GUIConverter(evaluator.getReport()).toPanel();
 		tabbedPane.add(evaluator.getName(), new JScrollPane(viewer,
@@ -97,6 +98,10 @@ public class ProjectEvaluatorPanel extends JPanel implements ActionListener,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER));
 		tabbedPane.setTabComponentAt(tabbedPane.getTabCount() - 1,
 				new TabButton(tabbedPane));
+	}
+
+	@Override
+	public void terminated(ProgressObservable observable) {
 	}
 
 	@Override

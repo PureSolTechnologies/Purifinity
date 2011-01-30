@@ -20,6 +20,7 @@ import com.puresol.coding.evaluator.CodeRangeEvaluatorFactory;
 import com.puresol.document.Document;
 import com.puresol.document.convert.gui.GUIConverter;
 import com.puresol.gui.progress.FinishListener;
+import com.puresol.gui.progress.ProgressObservable;
 import com.puresol.gui.progress.ProgressWindow;
 
 public class CodeRangeEvaluationBrowser extends JPanel implements
@@ -113,11 +114,15 @@ public class CodeRangeEvaluationBrowser extends JPanel implements
 	}
 
 	@Override
-	public void finished(Object o) {
+	public void finished(ProgressObservable o) {
 		if (evaluator != null) {
 			Document document = evaluator.getReport();
 			documentScroller.setViewportView(new GUIConverter(document)
 					.toPanel());
 		}
+	}
+
+	@Override
+	public void terminated(ProgressObservable o) {
 	}
 }

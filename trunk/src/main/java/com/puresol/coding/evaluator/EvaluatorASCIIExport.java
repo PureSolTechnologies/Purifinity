@@ -98,7 +98,7 @@ public class EvaluatorASCIIExport implements
 		} finally {
 			writer.close();
 			if (monitor != null) {
-				monitor.finish();
+				monitor.finished(this);
 			}
 		}
 		return true;
@@ -107,5 +107,10 @@ public class EvaluatorASCIIExport implements
 	@Override
 	public void setMonitor(ProgressObserver observer) {
 		monitor = observer;
+	}
+
+	@Override
+	public ProgressObserver getMonitor() {
+		return monitor;
 	}
 }

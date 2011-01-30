@@ -272,7 +272,7 @@ public class ProjectAnalyzer implements Serializable,
 			}
 		}
 		if (progressMonitor != null) {
-			progressMonitor.finish();
+			progressMonitor.finished(this);
 		}
 	}
 
@@ -332,6 +332,11 @@ public class ProjectAnalyzer implements Serializable,
 	@Override
 	public void setMonitor(ProgressObserver observer) {
 		progressMonitor = observer;
+	}
+
+	@Override
+	public ProgressObserver getMonitor() {
+		return progressMonitor;
 	}
 
 	/*

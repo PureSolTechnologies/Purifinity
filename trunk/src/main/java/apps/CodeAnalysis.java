@@ -41,6 +41,7 @@ import com.puresol.gui.coding.ProjectAnalysisBrowser;
 import com.puresol.gui.osgi.BundleConfigurationDialog;
 import com.puresol.gui.osgi.BundleManager;
 import com.puresol.gui.progress.FinishListener;
+import com.puresol.gui.progress.ProgressObservable;
 import com.puresol.gui.progress.ProgressWindow;
 import com.puresol.osgi.OSGi;
 import com.puresol.osgi.OSGiException;
@@ -311,7 +312,12 @@ public class CodeAnalysis extends PureSolApplication implements FinishListener {
 	}
 
 	@Override
-	public void finished(Object o) {
+	public void finished(ProgressObservable o) {
+		refresh();
+	}
+
+	@Override
+	public void terminated(ProgressObservable o) {
 		refresh();
 	}
 

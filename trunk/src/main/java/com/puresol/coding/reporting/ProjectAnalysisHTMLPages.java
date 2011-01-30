@@ -14,6 +14,8 @@ import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.evaluator.CodeRangeEvaluator;
 import com.puresol.coding.evaluator.CodeRangeEvaluatorFactory;
 import com.puresol.coding.evaluator.CodeRangeEvaluatorManager;
+import com.puresol.coding.evaluator.ProjectEvaluatorFactory;
+import com.puresol.coding.evaluator.ProjectEvaluatorManager;
 import com.puresol.document.Document;
 import com.puresol.document.convert.html.HTMLConverter;
 import com.puresol.gui.Application;
@@ -54,8 +56,8 @@ public class ProjectAnalysisHTMLPages implements RunnableProgressObservable {
 		try {
 			if (monitor != null) {
 				monitor.setDescription("Creating HTML project pages...");
-				monitor.setRange(0,
-						projectAnalyzer.getAnalyzedFiles().size() + 2);
+				monitor.setRange(0, projectAnalyzer.getAnalyzedFiles().size()
+						+ ProjectEvaluatorManager.getAll().size() + 3);
 				monitor.setStatus(0);
 			}
 			int count = 0;
@@ -71,6 +73,17 @@ public class ProjectAnalysisHTMLPages implements RunnableProgressObservable {
 			}
 			createTopIndexHTML();
 			count++;
+			for (ProjectEvaluatorFactory projectEvaluatorFactory : ProjectEvaluatorManager
+					.getAll()) {
+				count++;
+				if (monitor != null) {
+					monitor.setStatus(count);
+				}
+				processProjectEvaluator(projectEvaluatorFactory);
+				if (Thread.interrupted()) {
+					break;
+				}
+			}
 			if (monitor != null) {
 				monitor.setStatus(count);
 			}
@@ -85,7 +98,7 @@ public class ProjectAnalysisHTMLPages implements RunnableProgressObservable {
 				}
 			}
 			if (monitor != null) {
-				monitor.finish();
+				monitor.finished(this);
 			}
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
@@ -169,6 +182,12 @@ public class ProjectAnalysisHTMLPages implements RunnableProgressObservable {
 		}
 	}
 
+	private void processProjectEvaluator(
+			ProjectEvaluatorFactory projectEvaluatorFactory) {
+		// TODO Auto-generated method stub
+
+	}
+
 	private void processFile(AnalyzedFile analyzedFile) throws IOException,
 			PersistenceException {
 		Analysis analysis = projectAnalyzer.getAnalysis(analyzedFile);
@@ -192,6 +211,11 @@ public class ProjectAnalysisHTMLPages implements RunnableProgressObservable {
 	@Override
 	public void setMonitor(ProgressObserver observer) {
 		this.monitor = observer;
+	}
+
+	@Override
+	public ProgressObserver getMonitor() {
+		return monitor;
 	}
 
 }
