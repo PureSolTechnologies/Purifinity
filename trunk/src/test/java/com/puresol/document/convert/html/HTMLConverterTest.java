@@ -37,7 +37,7 @@ public class HTMLConverterTest {
 				+ "<h1>Test Document</h1>\\n" + "<hr/>\\n"
 				+ "time of creation: ... ... .. ..:..:.. ... ....\\n"
 				+ "</body>\\n" + "</html>\\n");
-		assertTrue(pattern.matcher(converter.toString()).find());
+		assertTrue(pattern.matcher(converter.toHTML(true)).find());
 	}
 
 	@Test
@@ -77,6 +77,6 @@ public class HTMLConverterTest {
 				+ "<h1>Part 2</h1>\\n" + "<hr/>\\n"
 				+ "time of creation: ... ... .. ..:..:.. ... ....\\n"
 				+ "</body>\\n" + "</html>\\n");
-		assertTrue(pattern.matcher(converter.toString()).find());
+		assertTrue(pattern.matcher(converter.toHTML(true)).find());
 	}
 }
