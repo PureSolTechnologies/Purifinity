@@ -85,7 +85,7 @@ public class CodeDepthMetric extends AbstractEvaluator implements
 		calculate();
 		recreateResultsList();
 		if (getMonitor() != null) {
-			getMonitor().finish();
+			getMonitor().finished(this);
 		}
 	}
 

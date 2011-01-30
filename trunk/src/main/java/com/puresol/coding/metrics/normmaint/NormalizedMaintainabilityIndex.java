@@ -136,7 +136,7 @@ public class NormalizedMaintainabilityIndex extends AbstractEvaluator implements
 				/ (double) sloc.getPhyLOC()));
 		result = new NormalizedMaintainabilityIndexResult(MIwoc, MIcw);
 		if (getMonitor() != null) {
-			getMonitor().finish();
+			getMonitor().finished(this);
 		}
 	}
 

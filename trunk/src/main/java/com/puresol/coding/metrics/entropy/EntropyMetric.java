@@ -125,7 +125,7 @@ public class EntropyMetric extends AbstractEvaluator implements
 				halstead.getProgramLength(), entropy, maxEntropy, normEntropy,
 				entropyRedundancy, redundancy, normalizedRedundancy);
 		if (getMonitor() != null) {
-			getMonitor().finish();
+			getMonitor().finished(this);
 		}
 	}
 

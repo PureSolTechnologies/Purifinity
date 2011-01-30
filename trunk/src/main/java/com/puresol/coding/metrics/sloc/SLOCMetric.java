@@ -142,7 +142,7 @@ public class SLOCMetric extends AbstractEvaluator implements CodeRangeEvaluator 
 		setup();
 		count();
 		if (getMonitor() != null) {
-			getMonitor().finish();
+			getMonitor().finished(this);
 		}
 	}
 

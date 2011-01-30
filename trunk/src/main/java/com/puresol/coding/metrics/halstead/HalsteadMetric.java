@@ -93,7 +93,7 @@ public class HalsteadMetric extends AbstractEvaluator implements
 		createHashtables();
 		calculateValues();
 		if (getMonitor() != null) {
-			getMonitor().finish();
+			getMonitor().finished(this);
 		}
 	}
 

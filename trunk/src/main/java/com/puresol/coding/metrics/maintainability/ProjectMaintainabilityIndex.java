@@ -87,7 +87,7 @@ public class ProjectMaintainabilityIndex extends AbstractEvaluator implements
 					translator.i18n("Error"), JOptionPane.ERROR_MESSAGE);
 		} finally {
 			if (getMonitor() != null) {
-				getMonitor().finish();
+				getMonitor().finished(this);
 			}
 		}
 	}

@@ -109,7 +109,7 @@ public class CoCoMo extends AbstractEvaluator implements ProjectEvaluator {
 		}
 		cocomoValues.setSloc(sloc);
 		if (getMonitor() != null) {
-			getMonitor().finish();
+			getMonitor().finished(this);
 		}
 	}
 

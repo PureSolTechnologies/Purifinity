@@ -85,7 +85,7 @@ public abstract class AbstractProjectMetric<T extends CodeRangeEvaluator>
 					translator.i18n("Error"), JOptionPane.ERROR_MESSAGE);
 		} finally {
 			if (getMonitor() != null) {
-				getMonitor().finish();
+				getMonitor().finished(this);
 			}
 		}
 	}

@@ -95,7 +95,7 @@ public class McCabeMetric extends AbstractEvaluator implements
 		calculate();
 		createResultsList();
 		if (getMonitor() != null) {
-			getMonitor().finish();
+			getMonitor().finished(this);
 		}
 	}
 
