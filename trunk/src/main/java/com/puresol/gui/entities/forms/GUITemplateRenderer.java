@@ -23,7 +23,9 @@ import java.util.Hashtable;
 import javax.i18n4java.Translator;
 import javax.persistence.Entity;
 import javax.swing.BoxLayout;
+import javax.swing.InputVerifier;
 import javax.swing.JCheckBox;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -31,11 +33,9 @@ import javax.swing.JTextField;
 import com.puresol.entities.forms.TemplateElement;
 import com.puresol.entities.forms.TemplateInformation;
 import com.puresol.exceptions.StrangeSituationException;
-import com.puresol.gui.TextField;
 import com.puresol.gui.data.Encrypter;
 import com.puresol.gui.data.Time;
 import com.puresol.gui.entities.EntityDialog;
-import com.puresol.gui.validator.IntegerValidator;
 
 public class GUITemplateRenderer extends JPanel {
 
@@ -267,7 +267,7 @@ public class GUITemplateRenderer extends JPanel {
 	private Component create4Integer(TemplateElement element)
 			throws IllegalArgumentException, IllegalAccessException,
 			InvocationTargetException {
-		TextField textField = new TextField();
+		JTextField textField = new JTextField();
 		Integer integer = (Integer) element.getGetter().invoke(
 				element.getEntity());
 		if (integer != null) {
@@ -275,7 +275,17 @@ public class GUITemplateRenderer extends JPanel {
 		} else {
 			textField.setText("0");
 		}
-		textField.setValidator(new IntegerValidator());
+		textField.setInputVerifier(new InputVerifier() {
+			@Override
+			public boolean verify(JComponent c) {
+				try {
+					Integer.valueOf(((JTextField) c).getText());
+					return true;
+				} catch (NumberFormatException e) {
+					return false;
+				}
+			}
+		});
 		return textField;
 	}
 

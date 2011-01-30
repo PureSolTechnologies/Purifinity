@@ -73,6 +73,7 @@ public class ConcurrencyTest {
 			progressWindow.setVisible(true);
 			ExecutorService service = Executors.newSingleThreadExecutor();
 			service.submit(new TestClass(100, progressWindow));
+			service.shutdown();
 			try {
 				service.awaitTermination(3, TimeUnit.SECONDS);
 			} finally {

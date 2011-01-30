@@ -33,4 +33,6 @@ public interface ProgressObservable {
 	 * @param observer
 	 */
 	public void setMonitor(ProgressObserver observer);
+
+	public ProgressObserver getMonitor();
 }

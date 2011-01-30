@@ -148,7 +148,7 @@ public class SplashWindow extends JWindow implements Runnable, ProgressObserver 
 	}
 
 	@Override
-	public void finish() {
+	public void finished(ProgressObservable o) {
 		dispose();
 	}
 
@@ -158,7 +158,7 @@ public class SplashWindow extends JWindow implements Runnable, ProgressObserver 
 			public void mousePressed(MouseEvent e) {
 				setVisible(false);
 				if (disposable) {
-					finish();
+					finished(null);
 				}
 			}
 		});
@@ -169,7 +169,7 @@ public class SplashWindow extends JWindow implements Runnable, ProgressObserver 
 		final Runnable closerRunner = new Runnable() {
 			public void run() {
 				setVisible(false);
-				finish();
+				finished(null);
 			}
 		};
 		Runnable waitRunner = new Runnable() {
@@ -196,12 +196,18 @@ public class SplashWindow extends JWindow implements Runnable, ProgressObserver 
 		setVisible(true);
 	}
 
-	/**
-	 * This is not implemented in SplashScreen!
-	 */
 	@Override
-	public ProgressObserver startSubProgress(ProgressObservable thread) {
-		return null;
+	public void runSubProcess(RunnableProgressObservable task) {
+		throw new RuntimeException("No sub processes allowed in SplashWindow!");
+	}
+
+	@Override
+	public void runSubProcess(CallableProgressObservable<?> task) {
+		throw new RuntimeException("No sub processes allowed in SplashWindow!");
+	}
+
+	@Override
+	public void terminated(ProgressObservable o) {
 	}
 
 }

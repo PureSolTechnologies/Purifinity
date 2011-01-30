@@ -18,6 +18,9 @@
 
 package com.puresol.gui.progress;
 
+import java.awt.Component;
+
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 
 import com.puresol.ListenerSet;
@@ -29,14 +32,11 @@ import com.puresol.ListenerSet;
  * @author Rick-Rainer ludwig
  * 
  */
-public class ProgressWindow extends JFrame implements ProgressObserver,
-		FinishListener {
+public class ProgressWindow extends JFrame implements FinishListener {
 
 	private static final long serialVersionUID = 4191554073727049318L;
 
 	private final ListenerSet<FinishListener> finishListeners = new ListenerSet<FinishListener>();
-
-	private final ProgressPanel progressPanel = new ProgressPanel();
 
 	private final JFrame frame;
 
@@ -53,60 +53,31 @@ public class ProgressWindow extends JFrame implements ProgressObserver,
 	}
 
 	private void initUI() {
-		getContentPane().add(progressPanel);
+		getContentPane().setLayout(
+				new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 		setLocationRelativeTo(frame);
 		setVisible(true);
 		pack();
-		progressPanel.addFinishListener(this);
 	}
 
 	@Override
-	public void setText(String text) {
-		progressPanel.setText(text);
-	}
-
-	@Override
-	public void setRange(int min, int max) {
-		progressPanel.setRange(min, max);
-	}
-
-	@Override
-	public void setStatus(int value) {
-		progressPanel.setStatus(value);
-	}
-
-	@Override
-	public void setDescription(String description) {
-		progressPanel.setDescription(description);
-	}
-
-	@Override
-	public void setProgressText(String text) {
-		progressPanel.setProgressText(text);
-	}
-
-	@Override
-	public void showProgressPercent() {
-		progressPanel.showProgressPercent();
-	}
-
-	@Override
-	public void finish() {
-		for (FinishListener listener : finishListeners) {
-			listener.finished(progressPanel.getTask());
+	public void terminated(ProgressObservable o) {
+		if (o != null) {
+			remove((Component) o.getMonitor());
+			for (FinishListener listener : finishListeners) {
+				listener.terminated(o);
+			}
 		}
-		dispose();
 	}
 
 	@Override
-	public ProgressObserver startSubProgress(ProgressObservable thread) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void finished(Object o) {
-		finish();
+	public void finished(ProgressObservable o) {
+		if (o != null) {
+			remove((Component) o.getMonitor());
+			for (FinishListener listener : finishListeners) {
+				listener.finished(o);
+			}
+		}
 	}
 
 	public void addFinishListener(FinishListener listener) {
@@ -118,12 +89,17 @@ public class ProgressWindow extends JFrame implements ProgressObserver,
 	}
 
 	public void run(RunnableProgressObservable task) {
-		task.setMonitor(this);
+		ProgressPanel progressPanel = new ProgressPanel();
+		progressPanel.addFinishListener(this);
+		add(progressPanel);
 		progressPanel.run(task);
 	}
 
 	public void run(CallableProgressObservable<?> task) {
-		task.setMonitor(this);
+		ProgressPanel progressPanel = new ProgressPanel();
+		progressPanel.addFinishListener(this);
+		add(progressPanel);
 		progressPanel.run(task);
 	}
+
 }

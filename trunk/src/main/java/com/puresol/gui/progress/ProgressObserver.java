@@ -77,12 +77,12 @@ public interface ProgressObserver {
 	 * @param task
 	 *            is the task object which was finished.
 	 */
-	public void finish();
+	public void finished(ProgressObservable o);
 
-	/**
-	 * This class is used by an observable to start sub processes which are also
-	 * meant to be observed. How (and weigher) the monitor implements such a
-	 * method is not certain.
-	 */
-	public ProgressObserver startSubProgress(ProgressObservable thread);
+	public void terminated(ProgressObservable o);
+
+	public void runSubProcess(RunnableProgressObservable task);
+
+	public void runSubProcess(CallableProgressObservable<?> task);
+
 }

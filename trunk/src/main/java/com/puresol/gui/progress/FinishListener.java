@@ -14,6 +14,8 @@ public interface FinishListener {
 	 * @param o
 	 *            is the process which is finished.
 	 */
-	public void finished(Object o);
+	public void finished(ProgressObservable o);
+
+	public void terminated(ProgressObservable o);
 
 }

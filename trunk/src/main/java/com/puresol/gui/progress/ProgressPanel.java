@@ -18,12 +18,13 @@
 
 package com.puresol.gui.progress;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 import javax.i18n4java.Translator;
 import javax.swing.BoxLayout;
@@ -42,7 +43,7 @@ import com.puresol.ListenerSet;
  * 
  */
 public class ProgressPanel extends JPanel implements ProgressObserver,
-		ActionListener {
+		ActionListener, FinishListener {
 
 	private static final long serialVersionUID = 4191554073727049318L;
 
@@ -55,8 +56,8 @@ public class ProgressPanel extends JPanel implements ProgressObserver,
 	private final JLabel description = new JLabel();
 	private final JLabel text = new JLabel();
 	private final JButton cancel = new JButton(translator.i18n("Cancel"));
+	private ProgressObservable task;
 
-	private Object task;
 	private Future<?> future = null;
 
 	public ProgressPanel() {
@@ -65,15 +66,21 @@ public class ProgressPanel extends JPanel implements ProgressObserver,
 	}
 
 	private void initUI() {
-		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+		JPanel panel = new JPanel();
+		panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
 		JPanel progressPanel = new JPanel();
 		progressPanel.setLayout(new BoxLayout(progressPanel, BoxLayout.Y_AXIS));
 		progressPanel.add(description);
 		progressPanel.add(text);
 		progressPanel.add(progressBar);
-		add(progressPanel);
-		add(cancel);
+
+		panel.add(progressPanel);
+		panel.add(cancel);
 		cancel.addActionListener(this);
+
+		add(panel);
 	}
 
 	public Object getTask() {
@@ -113,21 +120,6 @@ public class ProgressPanel extends JPanel implements ProgressObserver,
 		progressBar.setStringPainted(true);
 	}
 
-	@Override
-	public void finish() {
-		if (future != null) {
-			if (!future.isDone()) {
-				future.cancel(true);
-			}
-			future = null;
-		}
-		for (FinishListener listener : finishListeners) {
-			listener.finished(task);
-		}
-		task = null;
-		setVisible(false);
-	}
-
 	public void addFinishListener(FinishListener listener) {
 		finishListeners.add(listener);
 	}
@@ -137,27 +129,78 @@ public class ProgressPanel extends JPanel implements ProgressObserver,
 	}
 
 	@Override
-	public ProgressObserver startSubProgress(ProgressObservable thread) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == cancel) {
-			finish();
+			terminated(task);
 		}
 	}
 
-	public void run(Runnable task) {
-		this.task = task;
-		ExecutorService service = Executors.newSingleThreadExecutor();
-		future = service.submit(task);
+	public void run(RunnableProgressObservable task) {
+		try {
+			this.task = task;
+			task.setMonitor(this);
+			ExecutorService service = Executors.newSingleThreadExecutor();
+			future = service.submit(task);
+			service.shutdown();
+			service.awaitTermination(1, TimeUnit.MINUTES);
+		} catch (InterruptedException e) {
+		}
 	}
 
-	public void run(Callable<?> task) {
-		this.task = task;
-		ExecutorService service = Executors.newSingleThreadExecutor();
-		future = service.submit(task);
+	public void run(CallableProgressObservable<?> task) {
+		try {
+			this.task = task;
+			task.setMonitor(this);
+			ExecutorService service = Executors.newSingleThreadExecutor();
+			future = service.submit(task);
+			service.shutdown();
+			service.awaitTermination(1, TimeUnit.MINUTES);
+		} catch (InterruptedException e) {
+		}
+	}
+
+	public void runSubProcess(RunnableProgressObservable task) {
+		ProgressPanel progressPanel = new ProgressPanel();
+		progressPanel.addFinishListener(this);
+		add(progressPanel);
+		progressPanel.run(task);
+	}
+
+	public void runSubProcess(CallableProgressObservable<?> task) {
+		ProgressPanel progressPanel = new ProgressPanel();
+		progressPanel.addFinishListener(this);
+		add(progressPanel);
+		progressPanel.run(task);
+	}
+
+	@Override
+	public void finished(ProgressObservable o) {
+		if (o == task) {
+			future = null;
+			for (FinishListener listener : finishListeners) {
+				listener.finished(task);
+			}
+			removeAll();
+		} else {
+			if (o != null) {
+				remove((Component) ((ProgressObservable) o).getMonitor());
+			}
+		}
+	}
+
+	@Override
+	public void terminated(ProgressObservable o) {
+		if (o == task) {
+			future.cancel(true);
+			future = null;
+			for (FinishListener listener : finishListeners) {
+				listener.terminated(task);
+			}
+			removeAll();
+		} else {
+			if (o != null) {
+				remove((Component) ((ProgressObservable) o).getMonitor());
+			}
+		}
 	}
 }
