@@ -81,8 +81,6 @@ public interface ProgressObserver {
 
 	public void terminated(ProgressObservable o);
 
-	public void runSubProcess(RunnableProgressObservable task);
-
-	public void runSubProcess(CallableProgressObservable<?> task);
+	public ProgressPanel getSubProgressPanel();
 
 }

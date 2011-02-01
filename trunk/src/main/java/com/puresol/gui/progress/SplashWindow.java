@@ -197,12 +197,7 @@ public class SplashWindow extends JWindow implements Runnable, ProgressObserver 
 	}
 
 	@Override
-	public void runSubProcess(RunnableProgressObservable task) {
-		throw new RuntimeException("No sub processes allowed in SplashWindow!");
-	}
-
-	@Override
-	public void runSubProcess(CallableProgressObservable<?> task) {
+	public ProgressPanel getSubProgressPanel() {
 		throw new RuntimeException("No sub processes allowed in SplashWindow!");
 	}
 

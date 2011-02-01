@@ -18,10 +18,12 @@
 
 package com.puresol.gui.progress;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
 
-import javax.swing.BoxLayout;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import com.puresol.ListenerSet;
 
@@ -38,45 +40,77 @@ public class ProgressWindow extends JFrame implements FinishListener {
 
 	private final ListenerSet<FinishListener> finishListeners = new ListenerSet<FinishListener>();
 
+	private final ProgressPanel progressPanel = new ProgressPanel();
 	private final JFrame frame;
+	private boolean autoDispose = false;
 
 	public ProgressWindow() {
-		super();
+		super("Progress Window");
 		frame = null;
 		initUI();
 	}
 
+	public ProgressWindow(boolean autoDispose) {
+		super("Progress Window");
+		frame = null;
+		this.autoDispose = autoDispose;
+		initUI();
+	}
+
 	public ProgressWindow(JFrame frame) {
-		super();
+		super("Progress Window");
 		this.frame = frame;
 		initUI();
 	}
 
+	public ProgressWindow(JFrame frame, boolean autoDispose) {
+		super("Progress Window");
+		this.frame = frame;
+		this.autoDispose = autoDispose;
+		initUI();
+	}
+
 	private void initUI() {
-		getContentPane().setLayout(
-				new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
+		JPanel panel = new JPanel();
+		setContentPane(panel);
+		panel.setLayout(new BorderLayout());
+		panel.add(new JScrollPane(progressPanel), BorderLayout.CENTER);
+		progressPanel.addFinishListener(this);
+
+		setSize(640, 200);
 		setLocationRelativeTo(frame);
 		setVisible(true);
-		pack();
+	}
+
+	public boolean isAutoDispose() {
+		return autoDispose;
+	}
+
+	public void setAutoDispose(boolean autoDispose) {
+		this.autoDispose = autoDispose;
 	}
 
 	@Override
 	public void terminated(ProgressObservable o) {
-		if (o != null) {
-			remove((Component) o.getMonitor());
-			for (FinishListener listener : finishListeners) {
-				listener.terminated(o);
-			}
+		remove((Component) o.getMonitor());
+		for (FinishListener listener : finishListeners) {
+			listener.terminated(o);
 		}
+		autoDisposeIfSet();
 	}
 
 	@Override
 	public void finished(ProgressObservable o) {
-		if (o != null) {
-			remove((Component) o.getMonitor());
-			for (FinishListener listener : finishListeners) {
-				listener.finished(o);
-			}
+		remove((Component) o.getMonitor());
+		for (FinishListener listener : finishListeners) {
+			listener.finished(o);
+		}
+		autoDisposeIfSet();
+	}
+
+	private void autoDisposeIfSet() {
+		if (autoDispose) {
+			dispose();
 		}
 	}
 
@@ -88,18 +122,22 @@ public class ProgressWindow extends JFrame implements FinishListener {
 		finishListeners.remove(listener);
 	}
 
-	public void run(RunnableProgressObservable task) {
-		ProgressPanel progressPanel = new ProgressPanel();
-		progressPanel.addFinishListener(this);
-		add(progressPanel);
-		progressPanel.run(task);
+	public void runAsynchronous(RunnableProgressObservable task) {
+		progressPanel.runAsyncronous(task);
 	}
 
-	public void run(CallableProgressObservable<?> task) {
-		ProgressPanel progressPanel = new ProgressPanel();
-		progressPanel.addFinishListener(this);
-		add(progressPanel);
-		progressPanel.run(task);
+	public void runAsynchronous(CallableProgressObservable<?> task) {
+		progressPanel.runAsyncronous(task);
+	}
+
+	public void runSynchronous(RunnableProgressObservable task)
+			throws InterruptedException {
+		progressPanel.runSyncronous(task);
+	}
+
+	public void runSynchronous(CallableProgressObservable<?> task)
+			throws InterruptedException {
+		progressPanel.runSyncronous(task);
 	}
 
 }

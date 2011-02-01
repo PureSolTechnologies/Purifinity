@@ -24,7 +24,6 @@ import java.awt.event.ActionListener;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
 
 import javax.i18n4java.Translator;
 import javax.swing.BoxLayout;
@@ -56,9 +55,12 @@ public class ProgressPanel extends JPanel implements ProgressObserver,
 	private final JLabel description = new JLabel();
 	private final JLabel text = new JLabel();
 	private final JButton cancel = new JButton(translator.i18n("Cancel"));
-	private ProgressObservable task;
 
+	private ProgressObservable task;
 	private Future<?> future = null;
+	private boolean finished = false;
+	private boolean terminated = false;
+	private boolean syncronous = false;
 
 	public ProgressPanel() {
 		super();
@@ -85,6 +87,18 @@ public class ProgressPanel extends JPanel implements ProgressObserver,
 
 	public Object getTask() {
 		return task;
+	}
+
+	public Future<?> getFuture() {
+		return future;
+	}
+
+	public boolean isFinished() {
+		return finished;
+	}
+
+	public boolean isTerminated() {
+		return terminated;
 	}
 
 	@Override
@@ -135,72 +149,119 @@ public class ProgressPanel extends JPanel implements ProgressObserver,
 		}
 	}
 
-	public void run(RunnableProgressObservable task) {
-		try {
-			this.task = task;
-			task.setMonitor(this);
-			ExecutorService service = Executors.newSingleThreadExecutor();
-			future = service.submit(task);
-			service.shutdown();
-			service.awaitTermination(1, TimeUnit.MINUTES);
-		} catch (InterruptedException e) {
-		}
+	public Future<?> runAsyncronous(RunnableProgressObservable task) {
+		this.task = task;
+		task.setMonitor(this);
+		finished = false;
+		terminated = false;
+		syncronous = false;
+		ExecutorService service = Executors.newSingleThreadExecutor();
+		future = service.submit(task);
+		service.shutdown();
+		return future;
 	}
 
-	public void run(CallableProgressObservable<?> task) {
-		try {
-			this.task = task;
-			task.setMonitor(this);
-			ExecutorService service = Executors.newSingleThreadExecutor();
-			future = service.submit(task);
-			service.shutdown();
-			service.awaitTermination(1, TimeUnit.MINUTES);
-		} catch (InterruptedException e) {
-		}
+	public Future<?> runAsyncronous(CallableProgressObservable<?> task) {
+		this.task = task;
+		task.setMonitor(this);
+		finished = false;
+		terminated = false;
+		syncronous = false;
+		ExecutorService service = Executors.newSingleThreadExecutor();
+		future = service.submit(task);
+		service.shutdown();
+		return future;
 	}
 
-	public void runSubProcess(RunnableProgressObservable task) {
-		ProgressPanel progressPanel = new ProgressPanel();
-		progressPanel.addFinishListener(this);
-		add(progressPanel);
-		progressPanel.run(task);
+	public synchronized Future<?> runSyncronous(RunnableProgressObservable task)
+			throws InterruptedException {
+		this.task = task;
+		task.setMonitor(this);
+		finished = false;
+		terminated = false;
+		syncronous = true;
+		ExecutorService service = Executors.newSingleThreadExecutor();
+		future = service.submit(task);
+		service.shutdown();
+		wait();
+		return future;
 	}
 
-	public void runSubProcess(CallableProgressObservable<?> task) {
-		ProgressPanel progressPanel = new ProgressPanel();
-		progressPanel.addFinishListener(this);
-		add(progressPanel);
-		progressPanel.run(task);
+	public synchronized Future<?> runSyncronous(
+			CallableProgressObservable<?> task) throws InterruptedException {
+		this.task = task;
+		task.setMonitor(this);
+		finished = false;
+		terminated = false;
+		syncronous = true;
+		ExecutorService service = Executors.newSingleThreadExecutor();
+		future = service.submit(task);
+		service.shutdown();
+		wait();
+		return future;
 	}
 
 	@Override
-	public void finished(ProgressObservable o) {
-		if (o == task) {
+	public ProgressPanel getSubProgressPanel() {
+		ProgressPanel progressPanel = new ProgressPanel();
+		progressPanel.addFinishListener(this);
+		add(progressPanel);
+		return progressPanel;
+	}
+
+	@Override
+	public synchronized void finished(ProgressObservable observable) {
+		if (observable == task) {
 			future = null;
+			finished = true;
+			if (syncronous) {
+				notify();
+			}
+			finishAndRemoveAllSubProgressPanels();
 			for (FinishListener listener : finishListeners) {
 				listener.finished(task);
 			}
-			removeAll();
 		} else {
-			if (o != null) {
-				remove((Component) ((ProgressObservable) o).getMonitor());
-			}
+			remove((Component) observable.getMonitor());
 		}
 	}
 
 	@Override
-	public void terminated(ProgressObservable o) {
-		if (o == task) {
+	public synchronized void terminated(ProgressObservable observable) {
+		if (observable == task) {
 			future.cancel(true);
 			future = null;
+			terminated = true;
+			if (syncronous) {
+				notify();
+			}
+			finishAndRemoveAllSubProgressPanels();
 			for (FinishListener listener : finishListeners) {
 				listener.terminated(task);
 			}
-			removeAll();
 		} else {
-			if (o != null) {
-				remove((Component) ((ProgressObservable) o).getMonitor());
+			remove((Component) observable.getMonitor());
+			/*
+			 * If a sub process was canceled, the whole process stack becomes
+			 * invalid and is to be canceled, too.
+			 */
+			terminated(task);
+		}
+	}
+
+	/**
+	 * Reads all components and stops all sub processes.
+	 */
+	private void finishAndRemoveAllSubProgressPanels() {
+		for (Component component : getComponents()) {
+			if (component instanceof ProgressPanel) {
+				ProgressPanel panel = (ProgressPanel) component;
+				Future<?> future = panel.getFuture();
+				if (future != null) {
+					future.cancel(true);
+				}
 			}
+			remove(component);
 		}
 	}
 }
