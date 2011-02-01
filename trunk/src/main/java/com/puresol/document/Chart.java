@@ -14,21 +14,17 @@ public class Chart extends AbstractDocumentPart {
 	private static final long serialVersionUID = -3314964484840281581L;
 
 	private final ChartRenderer chartRenderer;
+	private final String caption;
 
-	private String caption = "";
-
-	public Chart(AbstractDocumentPart parent, String name,
+	public Chart(AbstractDocumentPart parent, String name, String caption,
 			ChartRenderer chartRenderer) {
 		super(parent, name);
 		this.chartRenderer = chartRenderer;
+		this.caption = caption;
 	}
 
 	public String getCaption() {
 		return caption;
-	}
-
-	public void setCaption(String caption) {
-		this.caption = caption;
 	}
 
 	public ChartRenderer getChartRenderer() {

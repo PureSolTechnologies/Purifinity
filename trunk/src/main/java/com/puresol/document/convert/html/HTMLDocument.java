@@ -1,10 +1,13 @@
 package com.puresol.document.convert.html;
 
+import java.io.IOException;
+
 import com.puresol.document.Document;
 
 public class HTMLDocument {
 
-	public static StringBuffer convert(Document document, boolean htmlFrame) {
+	public static StringBuffer convert(HTMLConverter converter,
+			Document document, boolean htmlFrame) throws IOException {
 		StringBuffer buffer = new StringBuffer();
 		if (htmlFrame) {
 			buffer.append("<html>\n");
@@ -17,7 +20,7 @@ public class HTMLDocument {
 		if (!document.getVersion().isEmpty()) {
 			buffer.append("<i>" + document.getVersion() + "</i><br/>\n");
 		}
-		HTMLConverter.convertChildren(buffer, document.getChildren());
+		converter.convertChildren(buffer, document.getChildren());
 		buffer.append("<hr/>\n");
 		buffer.append("time of creation: " + document.getCreationDate() + "\n");
 		if (htmlFrame) {

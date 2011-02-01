@@ -2,6 +2,7 @@ package com.puresol.document.convert.html;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
 import java.util.regex.Pattern;
 
 import org.junit.Test;
@@ -19,20 +20,21 @@ public class HTMLConverterTest {
 
 	@Test
 	public void testInstance() {
-		assertNotNull(new HTMLConverter(new Document("Test Document")));
+		assertNotNull(new HTMLConverter(new Document("Test Document"),
+				new File("test")));
 	}
 
 	@Test
 	public void testInitValues() {
 		Document document = new Document("Test Document");
-		HTMLConverter converter = new HTMLConverter(document);
+		HTMLConverter converter = new HTMLConverter(document, new File("test"));
 		assertSame(document, converter.getDocument());
 	}
 
 	@Test
-	public void testToString() {
+	public void testToString() throws Exception {
 		HTMLConverter converter = new HTMLConverter(new Document(
-				"Test Document"));
+				"Test Document"), new File("test"));
 		Pattern pattern = Pattern.compile("^<html>\\n" + "<body>\\n"
 				+ "<h1>Test Document</h1>\\n" + "<hr/>\\n"
 				+ "time of creation: ... ... .. ..:..:.. ... ....\\n"
@@ -41,7 +43,7 @@ public class HTMLConverterTest {
 	}
 
 	@Test
-	public void testComplexDocument() {
+	public void testComplexDocument() throws Exception {
 		Document document = new Document("Document");
 		document.setAuthor("Rick-Rainer Ludwig");
 		document.setVersion("1.2.3");
@@ -59,7 +61,7 @@ public class HTMLConverterTest {
 		new Chapter(part1, "Chapter 1.2");
 		new Part(document, "Part 2");
 		new Chapter(part1, "Chapter 2.1");
-		HTMLConverter converter = new HTMLConverter(document);
+		HTMLConverter converter = new HTMLConverter(document, new File("test"));
 		System.out.println(converter.toString());
 		Pattern pattern = Pattern.compile("^<html>\\n" + "<body>\\n"
 				+ "<h1>Document</h1>\\n" + "<b>Rick-Rainer Ludwig</b><br/>\\n"

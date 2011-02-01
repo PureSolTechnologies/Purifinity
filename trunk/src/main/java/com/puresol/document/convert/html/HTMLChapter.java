@@ -1,13 +1,16 @@
 package com.puresol.document.convert.html;
 
+import java.io.IOException;
+
 import com.puresol.document.Chapter;
 
 public class HTMLChapter {
 
-	public static StringBuffer convert(Chapter chapter) {
+	public static StringBuffer convert(HTMLConverter converter, Chapter chapter)
+			throws IOException {
 		StringBuffer buffer = new StringBuffer();
 		buffer.append("<h2>" + chapter.getName() + "</h2>\n");
-		HTMLConverter.convertChildren(buffer, chapter.getChildren());
+		converter.convertChildren(buffer, chapter.getChildren());
 		return buffer;
 	}
 
