@@ -3,6 +3,8 @@ package com.puresol.gui.coding;
 import java.awt.BorderLayout;
 import java.io.IOException;
 
+import javax.i18n4java.Translator;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -19,6 +21,7 @@ import com.puresol.coding.evaluator.CodeRangeEvaluator;
 import com.puresol.coding.evaluator.CodeRangeEvaluatorFactory;
 import com.puresol.document.Document;
 import com.puresol.document.convert.gui.GUIConverter;
+import com.puresol.gui.Application;
 import com.puresol.gui.progress.FinishListener;
 import com.puresol.gui.progress.ProgressObservable;
 import com.puresol.gui.progress.ProgressWindow;
@@ -30,6 +33,8 @@ public class CodeRangeEvaluationBrowser extends JPanel implements
 
 	private static final Logger logger = Logger
 			.getLogger(CodeRangeEvaluationBrowser.class);
+	private static final Translator translator = Translator
+			.getTranslator(CodeRangeEvaluationBrowser.class);
 
 	private ProjectAnalyzer projectAnalyzer = null;
 
@@ -97,10 +102,10 @@ public class CodeRangeEvaluationBrowser extends JPanel implements
 			Analysis analysis = projectAnalyzer.getAnalysis(file);
 			evaluator = evaluatorFactory.create(analysis.getLanguage(),
 					codeRange);
-			ProgressWindow progress = new ProgressWindow();
+			ProgressWindow progress = new ProgressWindow(
+					Application.getInstance(), true);
 			progress.addFinishListener(this);
-			progress.run(evaluator);
-
+			progress.runAsynchronous(evaluator);
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
 		}
@@ -114,7 +119,7 @@ public class CodeRangeEvaluationBrowser extends JPanel implements
 	}
 
 	@Override
-	public void finished(ProgressObservable o) {
+	public void finished(ProgressObservable observable) {
 		if (evaluator != null) {
 			Document document = evaluator.getReport();
 			documentScroller.setViewportView(new GUIConverter(document)
@@ -123,6 +128,17 @@ public class CodeRangeEvaluationBrowser extends JPanel implements
 	}
 
 	@Override
-	public void terminated(ProgressObservable o) {
+	public void terminated(ProgressObservable observable) {
+		int result = JOptionPane
+				.showConfirmDialog(
+						Application.getInstance(),
+						translator
+								.i18n("Code range calcualtion was aborted. The results are now not completed and may be wrong.\n"
+										+ "Do you want to have them displayed anyway?"),
+						translator.i18n("Caluclation aborted"),
+						JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+		if (result == JOptionPane.YES_OPTION) {
+			finished(observable);
+		}
 	}
 }

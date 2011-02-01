@@ -170,9 +170,9 @@ public class CodeAnalysis extends PureSolApplication implements FinishListener {
 		analyzer = ProjectAnalyzer.create(dialog.getSourceDirectory(),
 				dialog.getWorkspaceDirectory());
 		if (analyzer != null) {
-			ProgressWindow progress = new ProgressWindow(this);
+			ProgressWindow progress = new ProgressWindow(this, true);
 			progress.addFinishListener(this);
-			progress.run(analyzer);
+			progress.runAsynchronous(analyzer);
 		} else {
 			JOptionPane
 					.showMessageDialog(this, translator
@@ -194,9 +194,9 @@ public class CodeAnalysis extends PureSolApplication implements FinishListener {
 
 	private void updateWorkspace() {
 		if (analyzer != null) {
-			ProgressWindow progress = new ProgressWindow(this);
+			ProgressWindow progress = new ProgressWindow(this, true);
 			progress.addFinishListener(this);
-			progress.run(analyzer);
+			progress.runAsynchronous(analyzer);
 		} else {
 			JOptionPane.showMessageDialog(this,
 					translator.i18n("No workspace is open for update!!"),
@@ -221,15 +221,15 @@ public class CodeAnalysis extends PureSolApplication implements FinishListener {
 		if (filter == tsvFilter) {
 			EvaluatorASCIIExport export = new EvaluatorASCIIExport(
 					chooser.getSelectedFile(), analyzer, "\t");
-			ProgressWindow progressWindow = new ProgressWindow();
+			ProgressWindow progressWindow = new ProgressWindow(this, true);
 			progressWindow.addFinishListener(this);
-			progressWindow.run(export);
+			progressWindow.runAsynchronous(export);
 		} else if (filter == csvFilter) {
 			EvaluatorASCIIExport export = new EvaluatorASCIIExport(
 					chooser.getSelectedFile(), analyzer, ",");
-			ProgressWindow progressWindow = new ProgressWindow();
+			ProgressWindow progressWindow = new ProgressWindow(this, true);
 			progressWindow.addFinishListener(this);
-			progressWindow.run(export);
+			progressWindow.runAsynchronous(export);
 		} else if (filter == excelFilter) {
 			Application.showNotImplementedMessage();
 		}
@@ -244,8 +244,8 @@ public class CodeAnalysis extends PureSolApplication implements FinishListener {
 		}
 		ProjectAnalysisHTMLPages creator = new ProjectAnalysisHTMLPages(
 				analyzer, chooser.getSelectedFile());
-		ProgressWindow progress = new ProgressWindow();
-		progress.run(creator);
+		ProgressWindow progress = new ProgressWindow(this, true);
+		progress.runAsynchronous(creator);
 	}
 
 	private void pluginManager() {

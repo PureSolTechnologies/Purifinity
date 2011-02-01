@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 
 import javax.i18n4java.Translator;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -84,9 +85,10 @@ public class ProjectEvaluatorPanel extends JPanel implements ActionListener,
 			return;
 		}
 		Evaluator evaluator = evaluatorFactory.create(projectAnalyser);
-		ProgressWindow progress = new ProgressWindow(Application.getInstance());
+		ProgressWindow progress = new ProgressWindow(Application.getInstance(),
+				true);
 		progress.addFinishListener(this);
-		progress.run(evaluator);
+		progress.runAsynchronous(evaluator);
 	}
 
 	@Override
@@ -102,6 +104,17 @@ public class ProjectEvaluatorPanel extends JPanel implements ActionListener,
 
 	@Override
 	public void terminated(ProgressObservable observable) {
+		int result = JOptionPane
+				.showConfirmDialog(
+						Application.getInstance(),
+						translator
+								.i18n("Evaluator calcualtion was aborted. The results are now not completed and may be wrong.\n"
+										+ "Do you want to have them displayed anyway?"),
+						translator.i18n("Caluclation aborted"),
+						JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+		if (result == JOptionPane.YES_OPTION) {
+			finished(observable);
+		}
 	}
 
 	@Override
