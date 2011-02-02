@@ -135,7 +135,7 @@ public class FileUtilities {
 				result.append(File.separator);
 			}
 		}
-		return new File(result.toString());
+		return FileUtilities.normalizePath(new File(result.toString()));
 	}
 
 	private static File getRelativePathForRelatives(File from, File to) {
@@ -144,7 +144,8 @@ public class FileUtilities {
 			return to;
 		}
 		parent = parent.replaceAll("[^" + File.separator + "]+", "..");
-		return new File(new File(parent), to.getPath());
+		return FileUtilities.normalizePath(new File(new File(parent), to
+				.getPath()));
 	}
 
 	/**
