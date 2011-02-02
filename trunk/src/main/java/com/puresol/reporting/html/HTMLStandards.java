@@ -69,7 +69,7 @@ public class HTMLStandards {
 		return header;
 	}
 
-	public static String getStandardCopyrightFooter(Class<?> clazz) {
+	public static String getStandardCopyrightFooter() {
 		String footer = "<hr/>\n";
 		footer += "<p>(c) " + APIInformation.getPackageYears() + " "
 				+ Link.getPureSolTechnolgiesHomePage().toHTML()

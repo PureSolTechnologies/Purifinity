@@ -68,8 +68,7 @@ public class Time extends GregorianCalendar {
 	 *         time information.
 	 */
 	static public String getNowString(String format) {
-		SimpleDateFormat df = new SimpleDateFormat(format);
-		return df.format(now());
+		return new SimpleDateFormat(format).format(now());
 	}
 
 	/**
@@ -86,8 +85,7 @@ public class Time extends GregorianCalendar {
 		if (date == null) {
 			return "";
 		}
-		SimpleDateFormat df = new SimpleDateFormat(format);
-		return df.format(date);
+		return new SimpleDateFormat(format).format(date);
 	}
 
 	/**
@@ -165,8 +163,7 @@ public class Time extends GregorianCalendar {
 		try {
 			String format = "yyyy-MM-dd HH:mm:ss";
 			format = format.substring(0, dateString.length() - 1);
-			SimpleDateFormat df = new SimpleDateFormat(format);
-			return df.parse(dateString);
+			return new SimpleDateFormat(format).parse(dateString);
 		} catch (ParseException e) {
 			logger.error(e.getMessage(), e);
 			return null;
