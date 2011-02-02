@@ -12,7 +12,8 @@ public class GUISectionTest {
 
 	@Test
 	public void testConvert() {
-		JPanel chapter = GUISection.convert(new Section(null, "Test Section"));
+		JPanel chapter = GUISection.convert(new Section(null, "test_section",
+				"Test Section"));
 		assertNotNull(chapter);
 		assertTrue(chapter.getComponents().length > 0);
 	}

@@ -43,7 +43,7 @@ public class DocumentTest {
 		doc.setVersion("1.2.3");
 		Date date = new Date(1234567890123l);
 		doc.setCreationDate(date);
-		new Part(doc, "Test Part");
+		new Part(doc, "test_part", "Test Part");
 		assertEquals("Rick-Rainer Ludwig", doc.getAuthor());
 		assertEquals("1.2.3", doc.getVersion());
 		assertSame(date, doc.getCreationDate());

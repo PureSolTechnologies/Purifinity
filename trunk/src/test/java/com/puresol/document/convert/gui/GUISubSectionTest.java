@@ -13,7 +13,7 @@ public class GUISubSectionTest {
 	@Test
 	public void testConvert() {
 		JPanel chapter = GUISubSection.convert(new SubSection(null,
-				"Test SubSection"));
+				"test_subsection", "Test SubSection"));
 		assertNotNull(chapter);
 		assertTrue(chapter.getComponents().length > 0);
 	}

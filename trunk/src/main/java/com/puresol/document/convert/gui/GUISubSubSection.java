@@ -15,7 +15,7 @@ public class GUISubSubSection {
 		panel.setOpaque(true);
 		panel.setBackground(Color.WHITE);
 		panel.setLayout(new BorderLayout());
-		panel.add(new SubSubSectionTitle(subsubsection.getName()),
+		panel.add(new SubSubSectionTitle(subsubsection.getTitle()),
 				BorderLayout.NORTH);
 		JPanel childPanel = new JPanel();
 		childPanel.setOpaque(true);

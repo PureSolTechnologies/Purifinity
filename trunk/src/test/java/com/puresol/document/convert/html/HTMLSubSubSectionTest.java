@@ -14,7 +14,8 @@ public class HTMLSubSubSectionTest {
 	@Test
 	public void testToString() throws IOException {
 		StringBuffer buffer = HTMLSubSubSection.convert(new HTMLConverter(null,
-				new File("")), new SubSubSection(null, "Test Subsubsection"));
+				new File("")), new SubSubSection(null, "test_subsubsection",
+				"Test Subsubsection"));
 		assertEquals("<h5>Test Subsubsection</h5>\n", buffer.toString());
 	}
 }

@@ -9,7 +9,7 @@ public class HTMLChapter {
 	public static StringBuffer convert(HTMLConverter converter, Chapter chapter)
 			throws IOException {
 		StringBuffer buffer = new StringBuffer();
-		buffer.append("<h2>" + chapter.getName() + "</h2>\n");
+		buffer.append("<h2>" + chapter.getTitle() + "</h2>\n");
 		converter.convertChildren(buffer, chapter.getChildren());
 		return buffer;
 	}

@@ -8,13 +8,14 @@ public class ChapterTest {
 
 	@Test
 	public void testInstance() {
-		assertNotNull(new Chapter(null, "Test Chapter"));
+		assertNotNull(new Chapter(null, "test_chapter", "Test Chapter"));
 	}
 
 	@Test
 	public void testInitialValues() {
-		Chapter doc = new Chapter(null, "Test Chapter");
-		assertEquals("Test Chapter", doc.getName());
+		Chapter doc = new Chapter(null, "test_chapter", "Test Chapter");
+		assertEquals("test_chapter", doc.getName());
+		assertEquals("Test Chapter", doc.getTitle());
 		assertNull(doc.getParent());
 		assertFalse(doc.hasChildren());
 		assertEquals(0, doc.getChildren().size());

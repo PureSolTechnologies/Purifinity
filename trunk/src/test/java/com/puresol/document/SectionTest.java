@@ -8,13 +8,14 @@ public class SectionTest {
 
 	@Test
 	public void testInstance() {
-		assertNotNull(new Section(null, "Test Section"));
+		assertNotNull(new Section(null, "test_section", "Test Section"));
 	}
 
 	@Test
 	public void testInitialValues() {
-		Section doc = new Section(null, "Test Section");
-		assertEquals("Test Section", doc.getName());
+		Section doc = new Section(null, "test_section", "Test Section");
+		assertEquals("test_section", doc.getName());
+		assertEquals("Test Section", doc.getTitle());
 		assertNull(doc.getParent());
 		assertFalse(doc.hasChildren());
 		assertEquals(0, doc.getChildren().size());

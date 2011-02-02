@@ -47,20 +47,22 @@ public class HTMLConverterTest {
 		Document document = new Document("Document");
 		document.setAuthor("Rick-Rainer Ludwig");
 		document.setVersion("1.2.3");
-		Part part1 = new Part(document, "Part 1");
-		Chapter chapter1 = new Chapter(part1, "Chapter 1.1");
-		Section section1 = new Section(chapter1, "Section 1.1.1");
-		SubSection subsection1 = new SubSection(section1, "Subsection 1.1.1.1");
-		SubSubSection subsubsection1 = new SubSubSection(subsection1,
+		Part part1 = new Part(document, "part_1", "Part 1");
+		Chapter chapter1 = new Chapter(part1, "chapter_1+1", "Chapter 1.1");
+		Section section1 = new Section(chapter1, "section_1_1_1",
+				"Section 1.1.1");
+		SubSection subsection1 = new SubSection(section1, "subsection_1_1_1_1",
 				"Subsection 1.1.1.1");
+		SubSubSection subsubsection1 = new SubSubSection(subsection1,
+				"subsubsection_1_1_1_1", "Subsection 1.1.1.1");
 		new Paragraph(subsubsection1, "This is a sample paragraph...");
 		Table table = new Table(subsubsection1, "Table 1", "Column1", "Column2");
 		table.addRow("Cell 1,1", "Cell 1,2");
 		table.addRow("Cell 2,1", "Cell 2,2");
-		new Section(chapter1, "Section 1.1.2");
-		new Chapter(part1, "Chapter 1.2");
-		new Part(document, "Part 2");
-		new Chapter(part1, "Chapter 2.1");
+		new Section(chapter1, "section_1_1_2", "Section 1.1.2");
+		new Chapter(part1, "chapter_1_2", "Chapter 1.2");
+		new Part(document, "part_2", "Part 2");
+		new Chapter(part1, "chapter_2_1", "Chapter 2.1");
 		HTMLConverter converter = new HTMLConverter(document, new File("test"));
 		System.out.println(converter.toString());
 		Pattern pattern = Pattern.compile("^<html>\\n" + "<body>\\n"

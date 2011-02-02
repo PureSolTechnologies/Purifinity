@@ -14,7 +14,8 @@ public class HTMLChapterTest {
 	@Test
 	public void testToString() throws IOException {
 		StringBuffer buffer = HTMLChapter.convert(new HTMLConverter(null,
-				new File("")), new Chapter(null, "Test Chapter"));
+				new File("")),
+				new Chapter(null, "test_chapter", "Test Chapter"));
 		assertEquals("<h2>Test Chapter</h2>\n", buffer.toString());
 	}
 }

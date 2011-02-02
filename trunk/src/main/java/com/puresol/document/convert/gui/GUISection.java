@@ -15,7 +15,7 @@ public class GUISection {
 		panel.setOpaque(true);
 		panel.setBackground(Color.WHITE);
 		panel.setLayout(new BorderLayout());
-		panel.add(new SectionTitle(section.getName()), BorderLayout.NORTH);
+		panel.add(new SectionTitle(section.getTitle()), BorderLayout.NORTH);
 		JPanel childPanel = new JPanel();
 		childPanel.setOpaque(true);
 		childPanel.setBackground(Color.WHITE);

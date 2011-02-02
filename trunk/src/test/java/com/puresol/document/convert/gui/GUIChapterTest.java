@@ -12,7 +12,8 @@ public class GUIChapterTest {
 
 	@Test
 	public void testConvert() {
-		JPanel chapter = GUIChapter.convert(new Chapter(null, "Test Chapter"));
+		JPanel chapter = GUIChapter.convert(new Chapter(null, "test_chapter",
+				"Test Chapter"));
 		assertNotNull(chapter);
 		assertTrue(chapter.getComponents().length > 0);
 	}
