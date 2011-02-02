@@ -92,7 +92,7 @@ public class CodeDepthMetric extends AbstractEvaluator implements
 	private void calculate() {
 		if (getMonitor() != null) {
 			getMonitor().setRange(0, 1);
-			getMonitor().setDescription(NAME);
+			getMonitor().setTitle(NAME);
 		}
 		maxDepth = 0;
 		TreeIterator<ParserTree> iterator = new TreeIterator<ParserTree>(

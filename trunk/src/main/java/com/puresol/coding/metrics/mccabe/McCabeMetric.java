@@ -102,7 +102,7 @@ public class McCabeMetric extends AbstractEvaluator implements
 	private void calculate() {
 		if (getMonitor() != null) {
 			getMonitor().setRange(0, 1);
-			getMonitor().setDescription(NAME);
+			getMonitor().setTitle(NAME);
 		}
 		cyclomaticNumber = 1;
 		TreeIterator<ParserTree> iterator = new TreeIterator<ParserTree>(

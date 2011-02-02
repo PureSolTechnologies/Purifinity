@@ -94,7 +94,7 @@ public class EntropyMetric extends AbstractEvaluator implements
 	private void calculate() {
 		if (getMonitor() != null) {
 			getMonitor().setRange(0, 2);
-			getMonitor().setDescription(NAME);
+			getMonitor().setTitle(NAME);
 		}
 		halstead.run();
 		if (getMonitor() != null) {

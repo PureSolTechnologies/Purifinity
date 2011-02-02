@@ -105,7 +105,7 @@ public class MaintainabilityIndex extends AbstractEvaluator implements
 	public void run() {
 		if (getMonitor() != null) {
 			getMonitor().setRange(0, 4);
-			getMonitor().setDescription(NAME);
+			getMonitor().setTitle(NAME);
 		}
 
 		checkInput();

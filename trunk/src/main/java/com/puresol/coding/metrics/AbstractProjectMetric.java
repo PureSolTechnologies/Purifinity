@@ -52,7 +52,8 @@ public abstract class AbstractProjectMetric<T extends CodeRangeEvaluator>
 			List<AnalyzedFile> files = projectAnalyzer.getAnalyzedFiles();
 			if (getMonitor() != null) {
 				getMonitor().setRange(0, files.size());
-				getMonitor().setDescription(getName());
+				getMonitor().setTitle(getName());
+				getMonitor().showProgressPercent();
 			}
 			int sum = 0;
 			int count = 0;
@@ -65,6 +66,7 @@ public abstract class AbstractProjectMetric<T extends CodeRangeEvaluator>
 				if (getMonitor() != null) {
 					count++;
 					getMonitor().setStatus(count);
+					getMonitor().setText(file.getFile().getPath());
 				}
 				Map<String, SourceCodeQuality> levels;
 				levels = processFile(file);

@@ -63,7 +63,7 @@ public class ProjectMaintainabilityIndex extends AbstractEvaluator implements
 			List<AnalyzedFile> files = projectAnalyzer.getAnalyzedFiles();
 			if (getMonitor() != null) {
 				getMonitor().setRange(0, files.size());
-				getMonitor().setDescription(getName());
+				getMonitor().setTitle(getName());
 			}
 			int count = 0;
 			Collections.sort(files);
@@ -74,6 +74,7 @@ public class ProjectMaintainabilityIndex extends AbstractEvaluator implements
 				if (getMonitor() != null) {
 					count++;
 					getMonitor().setStatus(count);
+					getMonitor().setText(file.getFile().getPath());
 				}
 				processFile(file);
 
@@ -146,8 +147,9 @@ public class ProjectMaintainabilityIndex extends AbstractEvaluator implements
 		}
 		Chapter graphsChapter = new Chapter(document, translator.i18n("Graphs"));
 		JFreeChart chart = getMaintainabilityChart();
-		new Chart(graphsChapter, translator.i18n("Maintainability Chart"),
-				new ChartRenderer(chart));
+		new Chart(graphsChapter, "ProjectMaintainabilityChart",
+				translator.i18n("Maintainability Chart"), new ChartRenderer(
+						chart));
 		Chapter partQualityChapter = new Chapter(document,
 				translator.i18n("Quality of Parts"));
 		Table partQualityTable = new Table(partQualityChapter,

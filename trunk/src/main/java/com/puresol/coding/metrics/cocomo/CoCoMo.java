@@ -88,7 +88,7 @@ public class CoCoMo extends AbstractEvaluator implements ProjectEvaluator {
 		List<AnalyzedFile> files = projectAnalyzer.getAnalyzedFiles();
 		if (getMonitor() != null) {
 			getMonitor().setRange(0, files.size());
-			getMonitor().setDescription(NAME);
+			getMonitor().setTitle(NAME);
 		}
 		int sloc = 0;
 		int count = 0;
@@ -99,6 +99,7 @@ public class CoCoMo extends AbstractEvaluator implements ProjectEvaluator {
 			if (getMonitor() != null) {
 				count++;
 				getMonitor().setStatus(count);
+				getMonitor().setText(file.getFile().getPath());
 			}
 			try {
 				sloc += getFileSLOC(file);
