@@ -11,7 +11,7 @@ public class ProgressWindowAppTest {
 		@Override
 		public synchronized void run() {
 			if (observer != null) {
-				observer.setDescription("MainThread");
+				observer.setTitle("MainThread");
 				observer.setRange(0, 9);
 			}
 			try {
@@ -54,7 +54,7 @@ public class ProgressWindowAppTest {
 		@Override
 		public void run() {
 			if (observer != null) {
-				observer.setDescription("SubThread");
+				observer.setTitle("SubThread");
 				observer.setRange(0, 9);
 			}
 			for (int i = 0; i < 10; i++) {

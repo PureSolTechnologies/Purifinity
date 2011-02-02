@@ -129,7 +129,7 @@ public class SplashWindow extends JWindow implements Runnable, ProgressObserver 
 	}
 
 	@Override
-	public void setDescription(String description) {
+	public void setTitle(String description) {
 		// not supported in a splash window
 	}
 

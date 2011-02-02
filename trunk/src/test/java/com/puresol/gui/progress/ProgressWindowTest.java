@@ -22,7 +22,7 @@ public class ProgressWindowTest {
 
 		@Override
 		public void run() {
-			observer.setDescription("Test Description");
+			observer.setTitle("Test Description");
 			observer.setText("Text");
 			observer.setRange(0, 100);
 			for (int i = 0; i <= 100; i++) {
@@ -35,7 +35,6 @@ public class ProgressWindowTest {
 			}
 			observer.finished(this);
 		}
-
 	}
 
 	@Test

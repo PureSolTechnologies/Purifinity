@@ -31,6 +31,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+import javax.swing.border.TitledBorder;
 
 import com.puresol.ListenerSet;
 
@@ -51,8 +52,8 @@ public class ProgressPanel extends JPanel implements ProgressObserver,
 
 	private final ListenerSet<FinishListener> finishListeners = new ListenerSet<FinishListener>();
 
+	private final TitledBorder titledBorder = new TitledBorder("");
 	private final JProgressBar progressBar = new JProgressBar();
-	private final JLabel description = new JLabel();
 	private final JLabel text = new JLabel();
 	private final JButton cancel = new JButton(translator.i18n("Cancel"));
 
@@ -74,13 +75,13 @@ public class ProgressPanel extends JPanel implements ProgressObserver,
 		panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
 		JPanel progressPanel = new JPanel();
 		progressPanel.setLayout(new BoxLayout(progressPanel, BoxLayout.Y_AXIS));
-		progressPanel.add(description);
 		progressPanel.add(text);
 		progressPanel.add(progressBar);
 
 		panel.add(progressPanel);
 		panel.add(cancel);
 		cancel.addActionListener(this);
+		panel.setBorder(titledBorder);
 
 		add(panel);
 	}
@@ -118,8 +119,8 @@ public class ProgressPanel extends JPanel implements ProgressObserver,
 	}
 
 	@Override
-	public void setDescription(String description) {
-		this.description.setText(description);
+	public void setTitle(String title) {
+		titledBorder.setTitle(title);
 	}
 
 	@Override

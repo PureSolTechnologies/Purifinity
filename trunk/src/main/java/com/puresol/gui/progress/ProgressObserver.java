@@ -33,7 +33,7 @@ public interface ProgressObserver {
 	 * 
 	 * @param description
 	 */
-	public void setDescription(String description);
+	public void setTitle(String title);
 
 	/**
 	 * This method sets the range for the progress bar.
