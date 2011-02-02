@@ -64,6 +64,7 @@ public class ProjectMaintainabilityIndex extends AbstractEvaluator implements
 			if (getMonitor() != null) {
 				getMonitor().setRange(0, files.size());
 				getMonitor().setTitle(getName());
+				getMonitor().showProgressPercent();
 			}
 			int count = 0;
 			Collections.sort(files);

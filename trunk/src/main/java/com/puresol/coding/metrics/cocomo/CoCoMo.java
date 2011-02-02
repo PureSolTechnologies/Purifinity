@@ -89,6 +89,7 @@ public class CoCoMo extends AbstractEvaluator implements ProjectEvaluator {
 		if (getMonitor() != null) {
 			getMonitor().setRange(0, files.size());
 			getMonitor().setTitle(NAME);
+			getMonitor().showProgressPercent();
 		}
 		int sloc = 0;
 		int count = 0;
