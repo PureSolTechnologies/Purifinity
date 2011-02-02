@@ -32,22 +32,20 @@ public class HTMLStandards {
 
 	private static final Logger logger = Logger.getLogger(HTMLStandards.class);
 
-	public static String getStandardHeader(Class<?> clazz) {
-		return getStandardHeader(clazz, "", null, true, null);
+	public static String getStandardHeader() {
+		return getStandardHeader("", null, true, null);
 	}
 
 	/**
 	 * 
-	 * @param clazz
-	 *            is used to retrieve information from the right resource file.
 	 * @param title
 	 * @param css
 	 * @param inlineCSS
 	 * @param favoriteIcon
 	 * @return
 	 */
-	public static String getStandardHeader(Class<?> clazz, String title,
-			File css, boolean inlineCSS, File favoriteIcon) {
+	public static String getStandardHeader(String title, File css,
+			boolean inlineCSS, File favoriteIcon) {
 		String header = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\n";
 		header += "<html>\n";
 		header += "<head>\n";
@@ -257,7 +255,7 @@ public class HTMLStandards {
 		}
 	}
 
-	public static String getCopyright(Class<?> clazz) {
+	public static String getCopyright() {
 		Application application = Application.getInstance();
 		String html = "<b>" + application.getApplicationTitle() + " "
 				+ application.getApplicationVersion() + "</b><br/>\n";

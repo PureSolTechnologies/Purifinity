@@ -31,11 +31,26 @@ import com.puresol.source.SourceHeader;
 public class AddSourceHeader {
 
 	public static void main(String[] args) {
-		SourceHeader.addHeaderToFiles(new File(
-				"res/config/SourceFileHeader.template"), new File(
-				"res/config/about"), new File("src"), "**/*.java");
-		SourceHeader.addHeaderToFiles(new File(
-				"res/config/SourceFileHeader.template"), new File(
-				"res/config/about"), new File("test"), "**/*.java");
+		File topDirectory = new File("/home/ludwig/workspace/i18n4java");
+		if ((!topDirectory.exists()) || (!topDirectory.isDirectory())) {
+			throw new RuntimeException("Directory '" + topDirectory
+					+ "' is invalid!");
+		}
+		File sourceTemplate = new File(topDirectory,
+				"src/main/resources/config/SourceFileHeader.template");
+		if ((!sourceTemplate.exists()) || (!sourceTemplate.isFile())) {
+			throw new RuntimeException("Template file '" + sourceTemplate
+					+ "' is invalid!");
+		}
+		File aboutFile = new File("src/main/resources/config/about");
+		if ((!aboutFile.exists()) || (!aboutFile.isFile())) {
+			throw new RuntimeException("About file '" + aboutFile
+					+ "' is invalid!");
+		}
+
+		SourceHeader.addHeaderToFiles(sourceTemplate, aboutFile, new File(
+				topDirectory, "src/main/java"), "*.java");
+		SourceHeader.addHeaderToFiles(sourceTemplate, aboutFile, new File(
+				topDirectory, "src/test/java"), "*.java");
 	}
 }

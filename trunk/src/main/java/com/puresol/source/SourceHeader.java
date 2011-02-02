@@ -24,39 +24,52 @@ public class SourceHeader {
 			File directory, String pattern) {
 		for (File file : FileSearch.find(directory, pattern)) {
 			logger.info("Processing file '" + file.getPath() + "'...");
-			addHeaderToFile(template, about, file);
+			addHeaderToFile(template, about,
+					new File(directory, file.getPath()));
 			logger.info("done.");
 		}
 	}
 
 	public static void addHeaderToFile(File template, File about, File file) {
-		if (!template.exists()) {
-			logger.error("template '" + template.getPath()
-					+ "' is not existing!");
-		}
 		try {
-			String bakFile = file.getPath() + "~";
-			file.renameTo(new File(bakFile));
-			RandomAccessFile in;
-			in = new RandomAccessFile(bakFile, "r");
-			RandomAccessFile out = new RandomAccessFile(file, "rw");
-
-			String line;
-			line = in.readLine();
-			while ((!line.contains("package ")) && (line != null)) {
-				line = in.readLine();
+			if (!file.exists()) {
+				logger.error("could find file '" + file.getPath() + "'!");
+				return;
 			}
-
-			ConfigFile aboutFile = new ConfigFile(about);
-			writeNewHeader(out, file, template, aboutFile);
-			aboutFile.close();
-
-			while (line != null) {
-				out.writeBytes(line + "\n");
-				line = in.readLine();
+			if (!template.exists()) {
+				logger.error("template '" + template.getPath()
+						+ "' is not existing!");
+				return;
 			}
-			out.close();
-			in.close();
+			File bakFile = new File(file.getPath() + "~");
+			file.renameTo(bakFile);
+			if (!bakFile.exists()) {
+				logger.error("could not backup file '" + file.getPath()
+						+ "' to '" + bakFile.getPath() + "'!");
+				return;
+			}
+			RandomAccessFile in = new RandomAccessFile(bakFile, "r");
+			try {
+				RandomAccessFile out = new RandomAccessFile(file, "rw");
+				try {
+					String line;
+					line = in.readLine();
+					while ((!line.contains("package ")) && (line != null)) {
+						line = in.readLine();
+					}
+					ConfigFile aboutFile = new ConfigFile(about);
+					writeNewHeader(out, file, template, aboutFile);
+					aboutFile.close();
+					while (line != null) {
+						out.writeBytes(line + "\n");
+						line = in.readLine();
+					}
+				} finally {
+					out.close();
+				}
+			} finally {
+				in.close();
+			}
 		} catch (FileNotFoundException e) {
 			logger.error(e.getMessage(), e);
 		} catch (IOException e) {
