@@ -2,28 +2,17 @@ package com.puresol.coding.reporting;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 import javax.i18n4java.Translator;
 
 import org.apache.log4j.Logger;
 
-import com.puresol.coding.CodeRange;
-import com.puresol.coding.analysis.Analysis;
-import com.puresol.coding.analysis.AnalyzedFile;
 import com.puresol.coding.analysis.ProjectAnalyzer;
-import com.puresol.coding.evaluator.CodeRangeEvaluator;
-import com.puresol.coding.evaluator.CodeRangeEvaluatorFactory;
-import com.puresol.coding.evaluator.CodeRangeEvaluatorManager;
-import com.puresol.document.Document;
 import com.puresol.document.convert.html.HTMLConverter;
 import com.puresol.gui.Application;
 import com.puresol.gui.progress.ProgressObserver;
-import com.puresol.gui.progress.ProgressPanel;
 import com.puresol.gui.progress.RunnableProgressObservable;
-import com.puresol.utils.FileUtilities;
 import com.puresol.utils.JARUtilities;
-import com.puresol.utils.PersistenceException;
 
 /**
  * This class generated HTML linked pages about all results of a project
@@ -38,6 +27,35 @@ public class HTMLProjectAnalysisCreator implements RunnableProgressObservable {
 			.getLogger(HTMLProjectAnalysisCreator.class);
 	private static final Translator translator = Translator
 			.getTranslator(HTMLProjectAnalysisCreator.class);
+
+	public static File getCSSDirectory(File directory) {
+		return new File(directory, "css");
+	}
+
+	public static File getGraphicsDirectory(File directory) {
+		return new File(directory, "graphics");
+	}
+
+	public static File getProjectEvaluatorsDirectory(File directory) {
+		return new File(directory, "project");
+	}
+
+	public static File getCodeRangeEvaluatorsDirectory(File directory) {
+		return new File(directory, "files");
+	}
+
+	public static File getLogoFile(File directory) {
+		return new File(getGraphicsDirectory(directory),
+				"puresol-technologies.png");
+	}
+
+	public static File getFavIconFile(File directory) {
+		return new File(getGraphicsDirectory(directory), "favicon.png");
+	}
+
+	public static File getCSSFile(File directory) {
+		return new File(getCSSDirectory(directory), "analysis-report.css");
+	}
 
 	private ProgressObserver monitor = null;
 	private final ProjectAnalyzer projectAnalyzer;
@@ -56,6 +74,34 @@ public class HTMLProjectAnalysisCreator implements RunnableProgressObservable {
 
 	public File getDirectory() {
 		return directory;
+	}
+
+	public File getCSSDirectory() {
+		return getCSSDirectory(directory);
+	}
+
+	public File getGraphicsDirectory() {
+		return getGraphicsDirectory(directory);
+	}
+
+	public File getProjectEvaluatorsDirectory() {
+		return getProjectEvaluatorsDirectory(directory);
+	}
+
+	public File getCodeRangeEvaluatorsDirectory() {
+		return getCodeRangeEvaluatorsDirectory(directory);
+	}
+
+	public File getLogoFile() {
+		return getLogoFile(directory);
+	}
+
+	public File getFavIconFile() {
+		return getFavIconFile(directory);
+	}
+
+	public File getCSSFile() {
+		return getCSSFile(directory);
 	}
 
 	@Override
@@ -83,12 +129,12 @@ public class HTMLProjectAnalysisCreator implements RunnableProgressObservable {
 			if (monitor != null) {
 				monitor.setStatus(count);
 			}
-			createProjectEvaluatorReports();
+			createCodeRangeAnalysisReports();
 			count++;
 			if (monitor != null) {
 				monitor.setStatus(count);
 			}
-			createFileEvaluatorReports();
+			createProjectEvaluatorReports();
 			count++;
 			if (monitor != null) {
 				monitor.setStatus(count);
@@ -110,73 +156,12 @@ public class HTMLProjectAnalysisCreator implements RunnableProgressObservable {
 
 	private void createProjectEvaluatorReports() throws InterruptedException {
 		monitor.getSubProgressPanel().runSyncronous(
-				new ProjectAnalysisReports(projectAnalyzer, directory,
-						getCSSFile(), getLogoFile(), getFavIconFile()));
+				new ProjectAnalysisReports(projectAnalyzer, directory));
 	}
 
-	private synchronized void createFileEvaluatorReports()
-			throws InterruptedException {
-		ProgressPanel panel = monitor.getSubProgressPanel();
-		panel.runSyncronous(new RunnableProgressObservable() {
-
-			private ProgressObserver monitor = null;
-
-			@Override
-			public void setMonitor(ProgressObserver observer) {
-				monitor = observer;
-			}
-
-			@Override
-			public ProgressObserver getMonitor() {
-				return monitor;
-			}
-
-			@Override
-			public synchronized void run() {
-				try {
-					List<AnalyzedFile> files = projectAnalyzer
-							.getAnalyzedFiles();
-					if (monitor != null) {
-						monitor.setTitle(translator
-								.i18n("Create File Evaluation Pages..."));
-						monitor.showProgressPercent();
-						monitor.setRange(0, files.size() - 1);
-						monitor.setStatus(0);
-					}
-					for (int index = 0; index < files.size(); index++) {
-						AnalyzedFile file = files.get(index);
-						if (monitor != null) {
-							monitor.setStatus(index);
-							monitor.setText(file.getFile().getPath());
-						}
-						processFile(file);
-						if (Thread.interrupted()) {
-							if (monitor != null) {
-								monitor.terminated(this);
-							}
-							return;
-						}
-					}
-					if (monitor != null) {
-						monitor.finished(this);
-					}
-				} catch (PersistenceException e) {
-					logger.error(e.getMessage(), e);
-					Application.showStandardErrorMessage(translator
-							.i18n("Could not create HTML project pages!"), e);
-					if (monitor != null) {
-						monitor.terminated(this);
-					}
-				} catch (IOException e) {
-					logger.error(e.getMessage(), e);
-					Application.showStandardErrorMessage(translator
-							.i18n("Could not create HTML project pages!"), e);
-					if (monitor != null) {
-						monitor.terminated(this);
-					}
-				}
-			}
-		});
+	private void createCodeRangeAnalysisReports() throws InterruptedException {
+		monitor.getSubProgressPanel().runSyncronous(
+				new CodeRangeAnalysisReports(projectAnalyzer, directory));
 	}
 
 	private void createTopDirectories() throws IOException {
@@ -196,22 +181,6 @@ public class HTMLProjectAnalysisCreator implements RunnableProgressObservable {
 		}
 	}
 
-	private File getCSSDirectory() {
-		return new File(directory, "css");
-	}
-
-	private File getGraphicsDirectory() {
-		return new File(directory, "graphics");
-	}
-
-	private File getProjectEvaluatorsDirectory() {
-		return new File(directory, "project");
-	}
-
-	private File getCodeRangeEvaluatorsDirectory() {
-		return new File(directory, "files");
-	}
-
 	private void copyStandardFiles() throws IOException {
 		JARUtilities.copyResource(getClass().getResource("/graphics/logo.png"),
 				getLogoFile());
@@ -221,18 +190,6 @@ public class HTMLProjectAnalysisCreator implements RunnableProgressObservable {
 		JARUtilities.copyResource(
 				getClass().getResource("/css/analysis-report.css"),
 				getCSSFile());
-	}
-
-	private File getLogoFile() {
-		return new File(getGraphicsDirectory(), "puresol-technologies.png");
-	}
-
-	private File getFavIconFile() {
-		return new File(getGraphicsDirectory(), "favicon.png");
-	}
-
-	private File getCSSFile() {
-		return new File(getCSSDirectory(), "analysis-report.css");
 	}
 
 	private void createTopIndexHTML() throws IOException {
@@ -247,27 +204,6 @@ public class HTMLProjectAnalysisCreator implements RunnableProgressObservable {
 					indexFile.getFile().getParentFile()).toHTML(false));
 		} finally {
 			indexFile.close();
-		}
-	}
-
-	private void processFile(AnalyzedFile analyzedFile) throws IOException,
-			PersistenceException {
-		Analysis analysis = projectAnalyzer.getAnalysis(analyzedFile);
-		final File codeRangeEvaluatorsDirectory = getCodeRangeEvaluatorsDirectory();
-		for (CodeRangeEvaluatorFactory evaluatorFactory : CodeRangeEvaluatorManager
-				.getAll()) {
-			for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
-				CodeRangeEvaluator evaluator = evaluatorFactory.create(
-						analysis.getLanguage(), codeRange);
-				evaluator.run();
-				Document document = evaluator.getReport();
-				FileUtilities.writeFile(codeRangeEvaluatorsDirectory, new File(
-						analyzedFile.getFile(), evaluator.getName() + "-"
-								+ codeRange.getType().getName() + "-"
-								+ codeRange.getName() + ".html"),
-						new HTMLConverter(document, analyzedFile.getFile())
-								.toHTML(true));
-			}
 		}
 	}
 

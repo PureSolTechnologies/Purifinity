@@ -27,19 +27,13 @@ public class ProjectAnalysisReports implements RunnableProgressObservable {
 
 	private final ProjectAnalyzer projectAnalyzer;
 	private final File directory;
-	private final File cssFile;
-	private final File logoFile;
-	private final File favIconFile;
 	private ProgressObserver monitor = null;
 
 	public ProjectAnalysisReports(ProjectAnalyzer projectAnalyzer,
-			File directory, File cssFile, File logoFile, File favIconFile) {
+			File directory) {
 		super();
 		this.projectAnalyzer = projectAnalyzer;
 		this.directory = directory;
-		this.cssFile = cssFile;
-		this.logoFile = logoFile;
-		this.favIconFile = favIconFile;
 	}
 
 	@Override
@@ -93,8 +87,11 @@ public class ProjectAnalysisReports implements RunnableProgressObservable {
 
 	private void createProjectEvaluatorIndex() throws IOException {
 		File file = new File(new File(directory, "project"), "index.html");
-		HTMLReport indexFile = new HTMLReport(file, cssFile, logoFile,
-				favIconFile, translator.i18n("Project Analysis"));
+		HTMLReport indexFile = new HTMLReport(file,
+				HTMLProjectAnalysisCreator.getCSSFile(directory),
+				HTMLProjectAnalysisCreator.getLogoFile(directory),
+				HTMLProjectAnalysisCreator.getFavIconFile(directory),
+				translator.i18n("Project Analysis"));
 		try {
 			indexFile.setCopyrightFooter(true);
 			indexFile
@@ -116,8 +113,11 @@ public class ProjectAnalysisReports implements RunnableProgressObservable {
 
 		File file = new File(new File(directory, "project"),
 				evaluator.getName() + ".html");
-		HTMLReport indexFile = new HTMLReport(file, cssFile, logoFile,
-				favIconFile, translator.i18n("Project Analysis"));
+		HTMLReport indexFile = new HTMLReport(file,
+				HTMLProjectAnalysisCreator.getCSSFile(directory),
+				HTMLProjectAnalysisCreator.getLogoFile(directory),
+				HTMLProjectAnalysisCreator.getFavIconFile(directory),
+				translator.i18n("Project Analysis"));
 		try {
 			indexFile.setCopyrightFooter(true);
 			indexFile
