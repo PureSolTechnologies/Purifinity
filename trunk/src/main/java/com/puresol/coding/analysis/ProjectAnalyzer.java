@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import javax.i18n4java.Translator;
 import javax.i18n4java.utils.FileSearch;
 
 import org.apache.log4j.Logger;
@@ -27,6 +28,7 @@ import org.apache.log4j.Logger;
 import com.puresol.document.Chapter;
 import com.puresol.document.Document;
 import com.puresol.document.Paragraph;
+import com.puresol.document.Section;
 import com.puresol.gui.progress.ProgressObserver;
 import com.puresol.gui.progress.RunnableProgressObservable;
 import com.puresol.utils.DirectoryUtilities;
@@ -48,6 +50,8 @@ public class ProjectAnalyzer implements Serializable,
 
 	private static final Logger logger = Logger
 			.getLogger(ProjectAnalyzer.class);
+	private static final Translator translator = Translator
+			.getTranslator(ProjectAnalyzer.class);
 
 	/*
 	 * ****************************************************************
@@ -425,14 +429,23 @@ public class ProjectAnalyzer implements Serializable,
 	}
 
 	public Document getReport() {
-		Document document = new Document("Project Analysis Report");
-		Chapter analysedFilesChapter = new Chapter(document, "Analysed Files");
-		new Paragraph(analysedFilesChapter, analyzedFiles.size()
-				+ " files were analyzed");
-		Chapter failedFilesChapter = new Chapter(document, "Failed Files");
+		Document document = new Document(
+				translator.i18n("Project Analysis Report"));
+		new Chapter(document, "project_description",
+				translator.i18n("Project Description"));
+		// TODO put in here description of project which was configured!
+		Chapter analysedFilesChapter = new Chapter(document, "analyzed_files",
+				translator.i18n("Analysed Files"));
+		new Paragraph(analysedFilesChapter, translator.i18n(
+				"{0} files were analyzed", analyzedFiles.size()));
+		new Section(analysedFilesChapter, "used_languages",
+				translator.i18n("Used Languages"));
+		// TODO put in here some information about the found languages
+		Chapter failedFilesChapter = new Chapter(document, "failed_files",
+				translator.i18n("Failed Files"));
 		if (failedFiles.size() > 0) {
-			new Paragraph(failedFilesChapter, failedFiles.size()
-					+ " files could not be analyzed</p>");
+			new Paragraph(failedFilesChapter, translator.i18n(
+					"{0} files could not be analyzed", failedFiles.size()));
 			for (File file : failedFiles) {
 				new Paragraph(failedFilesChapter, file.getPath());
 			}
