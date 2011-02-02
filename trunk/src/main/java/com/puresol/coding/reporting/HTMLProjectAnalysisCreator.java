@@ -15,9 +15,6 @@ import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.evaluator.CodeRangeEvaluator;
 import com.puresol.coding.evaluator.CodeRangeEvaluatorFactory;
 import com.puresol.coding.evaluator.CodeRangeEvaluatorManager;
-import com.puresol.coding.evaluator.ProjectEvaluator;
-import com.puresol.coding.evaluator.ProjectEvaluatorFactory;
-import com.puresol.coding.evaluator.ProjectEvaluatorManager;
 import com.puresol.document.Document;
 import com.puresol.document.convert.html.HTMLConverter;
 import com.puresol.gui.Application;
@@ -28,18 +25,25 @@ import com.puresol.utils.FileUtilities;
 import com.puresol.utils.JARUtilities;
 import com.puresol.utils.PersistenceException;
 
-public class ProjectAnalysisHTMLPages implements RunnableProgressObservable {
+/**
+ * This class generated HTML linked pages about all results of a project
+ * analysis.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
+public class HTMLProjectAnalysisCreator implements RunnableProgressObservable {
 
 	private static final Logger logger = Logger
-			.getLogger(ProjectAnalysisHTMLPages.class);
+			.getLogger(HTMLProjectAnalysisCreator.class);
 	private static final Translator translator = Translator
-			.getTranslator(ProjectAnalysisHTMLPages.class);
+			.getTranslator(HTMLProjectAnalysisCreator.class);
 
 	private ProgressObserver monitor = null;
 	private final ProjectAnalyzer projectAnalyzer;
 	private final File directory;
 
-	public ProjectAnalysisHTMLPages(ProjectAnalyzer projectAnalyzer,
+	public HTMLProjectAnalysisCreator(ProjectAnalyzer projectAnalyzer,
 			File directory) {
 		super();
 		this.projectAnalyzer = projectAnalyzer;
@@ -102,6 +106,12 @@ public class ProjectAnalysisHTMLPages implements RunnableProgressObservable {
 									.i18n("Could not create HTML project pages due to interruption!"),
 							e);
 		}
+	}
+
+	private void createProjectEvaluatorReports() throws InterruptedException {
+		monitor.getSubProgressPanel().runSyncronous(
+				new ProjectAnalysisReports(projectAnalyzer, directory,
+						getCSSFile(), getLogoFile(), getFavIconFile()));
 	}
 
 	private synchronized void createFileEvaluatorReports()
@@ -227,109 +237,14 @@ public class ProjectAnalysisHTMLPages implements RunnableProgressObservable {
 
 	private void createTopIndexHTML() throws IOException {
 		File file = new File(directory, "index.html");
-		HTMLAnalysisReport indexFile = new HTMLAnalysisReport(file,
-				getCSSFile(), getLogoFile(), getFavIconFile(),
+		HTMLReport indexFile = new HTMLReport(file, getCSSFile(),
+				getLogoFile(), getFavIconFile(),
 				translator.i18n("Project Analysis"));
 		try {
 			indexFile.setCopyrightFooter(true);
 			indexFile.write(MainMenu.getHTML(directory, file, MainMenu.START));
 			indexFile.write(new HTMLConverter(projectAnalyzer.getReport(),
 					indexFile.getFile().getParentFile()).toHTML(false));
-		} finally {
-			indexFile.close();
-		}
-	}
-
-	private synchronized void createProjectEvaluatorReports()
-			throws InterruptedException, IOException {
-		createProjectEvaluatorIndex();
-		ProgressPanel panel = monitor.getSubProgressPanel();
-		panel.runSyncronous(new RunnableProgressObservable() {
-
-			private ProgressObserver monitor = null;
-
-			@Override
-			public void setMonitor(ProgressObserver observer) {
-				monitor = observer;
-			}
-
-			@Override
-			public ProgressObserver getMonitor() {
-				return monitor;
-			}
-
-			@Override
-			public synchronized void run() {
-				try {
-					List<ProjectEvaluatorFactory> evaluatorFactories = ProjectEvaluatorManager
-							.getAll();
-					if (monitor != null) {
-						monitor.setTitle(translator
-								.i18n("Create Project Evaluation Pages..."));
-						monitor.showProgressPercent();
-						monitor.setRange(0, evaluatorFactories.size() - 1);
-						monitor.setStatus(0);
-					}
-					for (int index = 0; index < evaluatorFactories.size(); index++) {
-						ProjectEvaluatorFactory projectEvaluatorFactory = evaluatorFactories
-								.get(index);
-						if (monitor != null) {
-							monitor.setStatus(index);
-							monitor.setText(projectEvaluatorFactory.getName());
-						}
-						processProjectEvaluator(projectEvaluatorFactory);
-						if (Thread.interrupted()) {
-							if (monitor != null) {
-								monitor.terminated(this);
-							}
-							return;
-						}
-					}
-					if (monitor != null) {
-						monitor.finished(this);
-					}
-				} catch (Exception e) {
-					logger.error(e.getMessage(), e);
-					if (monitor != null) {
-						monitor.terminated(this);
-					}
-				}
-			}
-		});
-	}
-
-	private void createProjectEvaluatorIndex() throws IOException {
-		File file = new File(new File(directory, "project"), "index.html");
-		HTMLAnalysisReport indexFile = new HTMLAnalysisReport(file,
-				getCSSFile(), getLogoFile(), getFavIconFile(),
-				translator.i18n("Project Analysis"));
-		try {
-			indexFile.setCopyrightFooter(true);
-			indexFile.write(MainMenu.getHTML(directory, file, MainMenu.START));
-			// TODO
-		} finally {
-			indexFile.close();
-		}
-	}
-
-	private void processProjectEvaluator(
-			ProjectEvaluatorFactory projectEvaluatorFactory)
-			throws InterruptedException, IOException {
-		ProjectEvaluator evaluator = projectEvaluatorFactory
-				.create(projectAnalyzer);
-		ProgressPanel panel = monitor.getSubProgressPanel();
-		panel.runSyncronous(evaluator);
-
-		File file = new File(new File(directory, "project"), evaluator
-				.getClass().getName() + ".html");
-		HTMLAnalysisReport indexFile = new HTMLAnalysisReport(file,
-				getCSSFile(), getLogoFile(), getFavIconFile(),
-				translator.i18n("Project Analysis"));
-		try {
-			indexFile.setCopyrightFooter(true);
-			indexFile.write(MainMenu.getHTML(directory, file, MainMenu.START));
-			indexFile.write(new HTMLConverter(evaluator.getReport(), indexFile
-					.getFile().getParentFile()).toHTML(false));
 		} finally {
 			indexFile.close();
 		}

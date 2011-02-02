@@ -23,7 +23,7 @@ public enum MainMenu {
 		if (current != START) {
 			output.append("<a href=\""
 					+ FileUtilities.getRelativePath(file, new File(
-							rootDirectory, "index.html")) + "/index.html\">");
+							rootDirectory, "index.html")) + "\">");
 			output.append(translator.i18n("Start"));
 			output.append("</a>");
 		} else {
@@ -35,7 +35,8 @@ public enum MainMenu {
 		if (current != PROJECT) {
 			output.append("<a href=\""
 					+ FileUtilities.getRelativePath(file, new File(
-							rootDirectory, "project/index.html")) + "\">");
+							rootDirectory, "project" + File.separator
+									+ "index.html")) + "\">");
 			output.append(translator.i18n("Project"));
 			output.append("</a>");
 		} else {
@@ -47,7 +48,8 @@ public enum MainMenu {
 		if (current != FILES) {
 			output.append("<a href=\""
 					+ FileUtilities.getRelativePath(file, new File(
-							rootDirectory, "files/index.html")) + "\">");
+							rootDirectory, "files" + File.separator
+									+ "index.html")) + "\">");
 			output.append(translator.i18n("Files"));
 			output.append("</a>");
 		} else {

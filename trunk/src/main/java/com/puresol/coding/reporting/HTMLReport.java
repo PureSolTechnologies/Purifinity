@@ -11,10 +11,10 @@ import com.puresol.reporting.html.Image;
 import com.puresol.reporting.html.Link;
 import com.puresol.utils.FileUtilities;
 
-public class HTMLAnalysisReport {
+public class HTMLReport {
 
 	private static final Translator translator = Translator
-			.getTranslator(HTMLAnalysisReport.class);
+			.getTranslator(HTMLReport.class);
 
 	private final File file;
 	private final File cssFile;
@@ -23,7 +23,7 @@ public class HTMLAnalysisReport {
 	private final FileWriter writer;
 	private boolean copyrightFooter = false;
 
-	public HTMLAnalysisReport(File file, File cssFile, File logoFile,
+	public HTMLReport(File file, File cssFile, File logoFile,
 			File favIconFile, String title) throws IOException {
 		this.file = file;
 		this.cssFile = cssFile;
@@ -91,7 +91,7 @@ public class HTMLAnalysisReport {
 	}
 
 	private void open(String title) throws IOException {
-		String output = HTMLStandards.getStandardHeader(getClass(), title,
+		String output = HTMLStandards.getStandardHeader(title,
 				FileUtilities.getRelativePath(file, cssFile), false,
 				FileUtilities.getRelativePath(file, favIconFile));
 		output += createLogoIMGTag(400, 0, false);
@@ -110,10 +110,10 @@ public class HTMLAnalysisReport {
 
 	public String createCopyrightMessage() {
 		String name = translator.i18n("Copyright Information");
-		String html = HTMLStandards.getStandardHeader(getClass(), name,
-				cssFile, false, favIconFile);
+		String html = HTMLStandards.getStandardHeader(name, cssFile, false,
+				favIconFile);
 		html += createLogoIMGTag(400, 0, false) + "<h1>" + name + "</h1>";
-		html += "<p>" + HTMLStandards.getCopyright(getClass()) + "</p>";
+		html += "<p>" + HTMLStandards.getCopyright() + "</p>";
 		html += "<p>\n";
 		html += "Permission to use, copy, modify and distribute<br/>\n";
 		html += "this Software its accompanying documentation<br/>\n";
