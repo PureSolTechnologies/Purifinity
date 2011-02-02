@@ -220,13 +220,13 @@ public class MaintainabilityIndex extends AbstractEvaluator implements
 	@Override
 	public Document getReport() {
 		Document document = new Document(getName());
-		Chapter descriptionChapter = new Chapter(document,
+		Chapter descriptionChapter = new Chapter(document, "description",
 				translator.i18n("Description"));
 		for (String paragraph : getDescription().split("\\n")) {
 			new Paragraph(descriptionChapter, paragraph);
 		}
 		Chapter resultsSummaryChapter = new Chapter(document,
-				translator.i18n("Results Summary"));
+				"results_summary", translator.i18n("Results Summary"));
 		Table resultsTable = new Table(resultsSummaryChapter, "Results Table",
 				translator.i18n("Symbol"), translator.i18n("Value"),
 				translator.i18n("Unit"), translator.i18n("Description"));

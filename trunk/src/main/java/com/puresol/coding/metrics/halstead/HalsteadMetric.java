@@ -295,13 +295,13 @@ public class HalsteadMetric extends AbstractEvaluator implements
 	@Override
 	public Document getReport() {
 		Document document = new Document(getName());
-		Chapter descriptionChapter = new Chapter(document,
+		Chapter descriptionChapter = new Chapter(document, "description",
 				translator.i18n("Description"));
 		for (String paragraph : getDescription().split("\\n")) {
 			new Paragraph(descriptionChapter, paragraph);
 		}
 		Chapter resultsSummaryChapter = new Chapter(document,
-				translator.i18n("Results Summary"));
+				"results_summary", translator.i18n("Results Summary"));
 		Table resultsTable = new Table(resultsSummaryChapter, "Results Table",
 				translator.i18n("Symbol"), translator.i18n("Value"),
 				translator.i18n("Unit"), translator.i18n("Description"));
@@ -309,16 +309,16 @@ public class HalsteadMetric extends AbstractEvaluator implements
 			resultsTable.addRow(result.getName(), result.getValue(),
 					result.getUnit(), result.getDescription());
 		}
-		Chapter symbolChapter = new Chapter(document,
+		Chapter symbolChapter = new Chapter(document, "overview_of_symbols",
 				translator.i18n("Overview of Symbols"));
-		Section operatorSection = new Section(symbolChapter,
+		Section operatorSection = new Section(symbolChapter, "operators",
 				translator.i18n("Operators"));
 		Table symbolTable = new Table(operatorSection, "Table of Operators",
 				translator.i18n("Operator"), translator.i18n("Count"));
 		for (String operator : operators.keySet()) {
 			symbolTable.addRow(operator, operators.get(operator));
 		}
-		Section operantsSection = new Section(symbolChapter,
+		Section operantsSection = new Section(symbolChapter, "operants",
 				translator.i18n("Operants"));
 		Table operantsTable = new Table(operantsSection, "Table of Operants",
 				translator.i18n("Operator"), translator.i18n("Count"));

@@ -140,17 +140,18 @@ public class ProjectMaintainabilityIndex extends AbstractEvaluator implements
 	@Override
 	public Document getReport() {
 		Document document = new Document(getName());
-		Chapter descriptionChapter = new Chapter(document,
+		Chapter descriptionChapter = new Chapter(document, "description",
 				translator.i18n("Description"));
 		for (String paragraph : getDescription().split("\\n")) {
 			new Paragraph(descriptionChapter, paragraph);
 		}
-		Chapter graphsChapter = new Chapter(document, translator.i18n("Graphs"));
+		Chapter graphsChapter = new Chapter(document, "graphs",
+				translator.i18n("Graphs"));
 		JFreeChart chart = getMaintainabilityChart();
 		new Chart(graphsChapter, "ProjectMaintainabilityChart",
 				translator.i18n("Maintainability Chart"), new ChartRenderer(
 						chart));
-		Chapter partQualityChapter = new Chapter(document,
+		Chapter partQualityChapter = new Chapter(document, "quality_of_parts",
 				translator.i18n("Quality of Parts"));
 		Table partQualityTable = new Table(partQualityChapter,
 				"Table of Part Qualities", translator.i18n("Operator"),

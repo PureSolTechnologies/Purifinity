@@ -108,14 +108,14 @@ public abstract class AbstractProjectMetric<T extends CodeRangeEvaluator>
 	@Override
 	public Document getReport() {
 		Document document = new Document(getName());
-		Chapter descriptionChapter = new Chapter(document,
+		Chapter descriptionChapter = new Chapter(document, "description",
 				translator.i18n("Description"));
 		for (String paragraph : getDescription().split("\\n")) {
 			new Paragraph(descriptionChapter, paragraph);
 		}
 		if (getResults() != null) {
 			Chapter resultsSummaryChapter = new Chapter(document,
-					translator.i18n("Results Summary"));
+					"results_summary", translator.i18n("Results Summary"));
 			Table resultsTable = new Table(resultsSummaryChapter,
 					"Results Table", translator.i18n("Symbol"),
 					translator.i18n("Value"), translator.i18n("Unit"),
@@ -125,7 +125,7 @@ public abstract class AbstractProjectMetric<T extends CodeRangeEvaluator>
 						result.getUnit(), result.getDescription());
 			}
 		}
-		Chapter partQualityChapter = new Chapter(document,
+		Chapter partQualityChapter = new Chapter(document, "quality_of_parts",
 				translator.i18n("Quality of Parts"));
 		Table partQualityTable = new Table(partQualityChapter,
 				"Table of Part Qualities", translator.i18n("Operator"),
