@@ -15,6 +15,7 @@ import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.evaluator.CodeRangeEvaluator;
 import com.puresol.coding.evaluator.CodeRangeEvaluatorFactory;
 import com.puresol.coding.evaluator.CodeRangeEvaluatorManager;
+import com.puresol.coding.evaluator.ProjectEvaluator;
 import com.puresol.coding.evaluator.ProjectEvaluatorFactory;
 import com.puresol.coding.evaluator.ProjectEvaluatorManager;
 import com.puresol.document.Document;
@@ -57,7 +58,7 @@ public class ProjectAnalysisHTMLPages implements RunnableProgressObservable {
 	public void run() {
 		try {
 			if (monitor != null) {
-				monitor.setDescription("Creating HTML project pages...");
+				monitor.setTitle("Creating HTML project pages...");
 				monitor.showProgressPercent();
 				monitor.setRange(0, 5);
 				monitor.setStatus(0);
@@ -87,6 +88,7 @@ public class ProjectAnalysisHTMLPages implements RunnableProgressObservable {
 			count++;
 			if (monitor != null) {
 				monitor.setStatus(count);
+				monitor.finished(this);
 			}
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
@@ -125,7 +127,7 @@ public class ProjectAnalysisHTMLPages implements RunnableProgressObservable {
 					List<AnalyzedFile> files = projectAnalyzer
 							.getAnalyzedFiles();
 					if (monitor != null) {
-						monitor.setDescription(translator
+						monitor.setTitle(translator
 								.i18n("Create File Evaluation Pages..."));
 						monitor.showProgressPercent();
 						monitor.setRange(0, files.size() - 1);
@@ -139,7 +141,9 @@ public class ProjectAnalysisHTMLPages implements RunnableProgressObservable {
 						}
 						processFile(file);
 						if (Thread.interrupted()) {
-							monitor.terminated(this);
+							if (monitor != null) {
+								monitor.terminated(this);
+							}
 							return;
 						}
 					}
@@ -150,10 +154,16 @@ public class ProjectAnalysisHTMLPages implements RunnableProgressObservable {
 					logger.error(e.getMessage(), e);
 					Application.showStandardErrorMessage(translator
 							.i18n("Could not create HTML project pages!"), e);
+					if (monitor != null) {
+						monitor.terminated(this);
+					}
 				} catch (IOException e) {
 					logger.error(e.getMessage(), e);
 					Application.showStandardErrorMessage(translator
 							.i18n("Could not create HTML project pages!"), e);
+					if (monitor != null) {
+						monitor.terminated(this);
+					}
 				}
 			}
 		});
@@ -223,15 +233,16 @@ public class ProjectAnalysisHTMLPages implements RunnableProgressObservable {
 		try {
 			indexFile.setCopyrightFooter(true);
 			indexFile.write(MainMenu.getHTML(directory, file, MainMenu.START));
-			indexFile.write(new HTMLConverter(projectAnalyzer.getReport())
-					.toHTML(false));
+			indexFile.write(new HTMLConverter(projectAnalyzer.getReport(),
+					indexFile.getFile().getParentFile()).toHTML(false));
 		} finally {
 			indexFile.close();
 		}
 	}
 
 	private synchronized void createProjectEvaluatorReports()
-			throws InterruptedException {
+			throws InterruptedException, IOException {
+		createProjectEvaluatorIndex();
 		ProgressPanel panel = monitor.getSubProgressPanel();
 		panel.runSyncronous(new RunnableProgressObservable() {
 
@@ -249,43 +260,78 @@ public class ProjectAnalysisHTMLPages implements RunnableProgressObservable {
 
 			@Override
 			public synchronized void run() {
-				List<ProjectEvaluatorFactory> evaluatorFactories = ProjectEvaluatorManager
-						.getAll();
-				if (monitor != null) {
-					monitor.setDescription(translator
-							.i18n("Create Project Evaluation Pages..."));
-					monitor.showProgressPercent();
-					monitor.setRange(0, evaluatorFactories.size() - 1);
-					monitor.setStatus(0);
-				}
-				for (int index = 0; index < evaluatorFactories.size(); index++) {
-					ProjectEvaluatorFactory projectEvaluatorFactory = evaluatorFactories
-							.get(index);
+				try {
+					List<ProjectEvaluatorFactory> evaluatorFactories = ProjectEvaluatorManager
+							.getAll();
 					if (monitor != null) {
-						monitor.setStatus(index);
-						monitor.setText(projectEvaluatorFactory.getName());
+						monitor.setTitle(translator
+								.i18n("Create Project Evaluation Pages..."));
+						monitor.showProgressPercent();
+						monitor.setRange(0, evaluatorFactories.size() - 1);
+						monitor.setStatus(0);
 					}
-					processProjectEvaluator(projectEvaluatorFactory);
-					if (Thread.interrupted()) {
+					for (int index = 0; index < evaluatorFactories.size(); index++) {
+						ProjectEvaluatorFactory projectEvaluatorFactory = evaluatorFactories
+								.get(index);
+						if (monitor != null) {
+							monitor.setStatus(index);
+							monitor.setText(projectEvaluatorFactory.getName());
+						}
+						processProjectEvaluator(projectEvaluatorFactory);
+						if (Thread.interrupted()) {
+							if (monitor != null) {
+								monitor.terminated(this);
+							}
+							return;
+						}
+					}
+					if (monitor != null) {
+						monitor.finished(this);
+					}
+				} catch (Exception e) {
+					logger.error(e.getMessage(), e);
+					if (monitor != null) {
 						monitor.terminated(this);
-						return;
 					}
-				}
-				if (monitor != null) {
-					monitor.finished(this);
 				}
 			}
 		});
 	}
 
-	private void processProjectEvaluator(
-			ProjectEvaluatorFactory projectEvaluatorFactory) {
-		// TODO Auto-generated method stub
+	private void createProjectEvaluatorIndex() throws IOException {
+		File file = new File(new File(directory, "project"), "index.html");
+		HTMLAnalysisReport indexFile = new HTMLAnalysisReport(file,
+				getCSSFile(), getLogoFile(), getFavIconFile(),
+				translator.i18n("Project Analysis"));
 		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			indexFile.setCopyrightFooter(true);
+			indexFile.write(MainMenu.getHTML(directory, file, MainMenu.START));
+			// TODO
+		} finally {
+			indexFile.close();
+		}
+	}
+
+	private void processProjectEvaluator(
+			ProjectEvaluatorFactory projectEvaluatorFactory)
+			throws InterruptedException, IOException {
+		ProjectEvaluator evaluator = projectEvaluatorFactory
+				.create(projectAnalyzer);
+		ProgressPanel panel = monitor.getSubProgressPanel();
+		panel.runSyncronous(evaluator);
+
+		File file = new File(new File(directory, "project"), evaluator
+				.getClass().getName() + ".html");
+		HTMLAnalysisReport indexFile = new HTMLAnalysisReport(file,
+				getCSSFile(), getLogoFile(), getFavIconFile(),
+				translator.i18n("Project Analysis"));
+		try {
+			indexFile.setCopyrightFooter(true);
+			indexFile.write(MainMenu.getHTML(directory, file, MainMenu.START));
+			indexFile.write(new HTMLConverter(evaluator.getReport(), indexFile
+					.getFile().getParentFile()).toHTML(false));
+		} finally {
+			indexFile.close();
 		}
 	}
 
@@ -304,7 +350,8 @@ public class ProjectAnalysisHTMLPages implements RunnableProgressObservable {
 						analyzedFile.getFile(), evaluator.getName() + "-"
 								+ codeRange.getType().getName() + "-"
 								+ codeRange.getName() + ".html"),
-						new HTMLConverter(document).toHTML(true));
+						new HTMLConverter(document, analyzedFile.getFile())
+								.toHTML(true));
 			}
 		}
 	}

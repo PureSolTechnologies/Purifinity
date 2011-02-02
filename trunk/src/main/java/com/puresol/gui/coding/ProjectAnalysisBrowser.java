@@ -17,8 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 import com.puresol.coding.analysis.ProjectAnalyzer;
-import com.puresol.document.convert.html.HTMLConverter;
-import com.puresol.gui.HTMLViewer;
+import com.puresol.document.convert.gui.GUIConverter;
 
 public class ProjectAnalysisBrowser extends JPanel {
 
@@ -30,7 +29,7 @@ public class ProjectAnalysisBrowser extends JPanel {
 	private ProjectAnalyzer project = null;
 
 	private final JTabbedPane tabbedPane = new JTabbedPane();
-	private HTMLViewer projectReport = new HTMLViewer();
+	private JPanel projectReport = new JPanel();
 	private final ProjectEvaluatorPanel projectEvaluatorPanel = new ProjectEvaluatorPanel();
 	private final ProjectGraphPanel projectGraphPanel = new ProjectGraphPanel();
 	private final CodeRangeBrowser codeRangeBrowser = new CodeRangeBrowser();
@@ -49,6 +48,8 @@ public class ProjectAnalysisBrowser extends JPanel {
 	private void initUI() {
 		setLayout(new BorderLayout());
 
+		projectReport.setLayout(new BorderLayout());
+
 		tabbedPane.addTab(translator.i18n("Report"), projectReport);
 		tabbedPane.addTab(translator.i18n("Project Evaluators"),
 				projectEvaluatorPanel);
@@ -60,8 +61,9 @@ public class ProjectAnalysisBrowser extends JPanel {
 
 	public void setProjectAnalyser(ProjectAnalyzer project) {
 		this.project = project;
-		projectReport.setText(new HTMLConverter(project.getReport())
-				.toHTML(true));
+		projectReport.removeAll();
+		projectReport.add(new GUIConverter(project.getReport()).toPanel(),
+				BorderLayout.CENTER);
 		tabbedPane.setSelectedIndex(0);
 		codeRangeBrowser.setProjectAnalyser(project);
 		projectEvaluatorPanel.setProjectAnalyser(project);

@@ -54,6 +54,10 @@ public class HTMLAnalysisReport {
 		this.copyrightFooter = copyrightFooter;
 	}
 
+	public File getFile() {
+		return file;
+	}
+
 	/**
 	 * @return the cssFile
 	 */
@@ -97,7 +101,7 @@ public class HTMLAnalysisReport {
 
 	public void close() throws IOException {
 		if (copyrightFooter) {
-			writer.write(HTMLStandards.getStandardCopyrightFooter(getClass()));
+			writer.write(HTMLStandards.getStandardCopyrightFooter());
 		} else {
 			writer.write(HTMLStandards.getStandardFooter());
 		}

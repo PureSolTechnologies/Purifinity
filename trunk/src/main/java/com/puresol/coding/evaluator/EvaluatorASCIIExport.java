@@ -47,7 +47,7 @@ public class EvaluatorASCIIExport implements
 			List<AnalyzedFile> analyzedFiles = analyzer.getAnalyzedFiles();
 			if (monitor != null) {
 				monitor.setRange(0, analyzedFiles.size() - 1);
-				monitor.setDescription(translator
+				monitor.setTitle(translator
 						.i18n("Exporting Values in TSV format..."));
 			}
 			List<CodeRangeEvaluatorFactory> evaluators = CodeRangeEvaluatorManager
