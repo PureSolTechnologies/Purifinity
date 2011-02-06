@@ -108,7 +108,9 @@ public class FileUtilities {
 	 */
 	public static String getRelativePath(String fromPath, String toPath,
 			String pathSeparator) throws PathResolutionException {
-
+		if (fromPath.equals(toPath)) {
+			return "";
+		}
 		// We need the -1 argument to split to make sure we get a trailing
 		// "" token if the base ends in the path separator and is therefore
 		// a directory. We require directory paths to end in the path

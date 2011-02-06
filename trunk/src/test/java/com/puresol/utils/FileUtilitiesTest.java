@@ -117,6 +117,16 @@ public class FileUtilitiesTest {
 		assertEquals(expected, relPath);
 	}
 
+	@Test
+	public void testGetRelativePathWithEqualsToAndFrom() throws Exception {
+		String to = "/a/b/c";
+		String from = "/a/b/c";
+		String expected = "";
+
+		String relPath = FileUtilities.getRelativePath(from, to, "\\");
+		assertEquals(expected, relPath);
+	}
+
 	@Test(expected = PathResolutionException.class)
 	public void testGetRelativePathDifferentDriveLetters() throws Exception {
 		String to = "D:\\sources\\recovery\\RecEnv.exe";
