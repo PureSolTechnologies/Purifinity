@@ -106,24 +106,24 @@ public class FileUtilities {
 	 * @return
 	 * @throws PathResolutionException
 	 */
-	public static String getRelativePath(String targetPath, String basePath,
+	public static String getRelativePath(String fromPath, String toPath,
 			String pathSeparator) throws PathResolutionException {
 
 		// We need the -1 argument to split to make sure we get a trailing
 		// "" token if the base ends in the path separator and is therefore
 		// a directory. We require directory paths to end in the path
 		// separator -- otherwise they are indistinguishable from files.
-		String[] base = basePath.split(Pattern.quote(pathSeparator), -1);
-		String[] target = targetPath.split(Pattern.quote(pathSeparator), 0);
+		String[] from = fromPath.split(Pattern.quote(pathSeparator), -1);
+		String[] to = toPath.split(Pattern.quote(pathSeparator), 0);
 
 		// First get all the common elements. Store them as a string,
 		// and also count how many of them there are.
 		StringBuilder common = new StringBuilder();
 
 		int commonIndex = 0;
-		while ((commonIndex < target.length) && (commonIndex < base.length)
-				&& (target[commonIndex].equals(base[commonIndex]))) {
-			common.append(target[commonIndex] + pathSeparator);
+		while ((commonIndex < to.length) && (commonIndex < from.length)
+				&& (to[commonIndex].equals(from[commonIndex]))) {
+			common.append(to[commonIndex] + pathSeparator);
 			commonIndex++;
 		}
 
@@ -132,19 +132,19 @@ public class FileUtilities {
 			// likely indicates differing drive letters, like C: and D:.
 			// These paths cannot be relativized.
 			throw new PathResolutionException(
-					"No common path element found for '" + targetPath
-							+ "' and '" + basePath + "'");
+					"No common path element found for '" + toPath + "' and '"
+							+ fromPath + "'");
 		}
 
 		StringBuffer relative = new StringBuffer();
 
-		if (base.length != commonIndex) {
-			int numDirsUp = base.length - commonIndex - 1;
+		if (from.length != commonIndex) {
+			int numDirsUp = from.length - commonIndex - 1;
 			for (int i = 0; i < numDirsUp; i++) {
 				relative.append(".." + pathSeparator);
 			}
 		}
-		relative.append(targetPath.substring(common.length()));
+		relative.append(toPath.substring(common.length()));
 		return relative.toString();
 	}
 
@@ -181,6 +181,17 @@ public class FileUtilities {
 				normalizedFile = File.separator + normalizedFile;
 			}
 			matcher = pattern.matcher(normalizedFile);
+		}
+		/* remove all '/./' and /. at the end */
+		pattern = Pattern.compile(File.separator + "\\." + File.separator);
+		matcher = pattern.matcher(normalizedFile);
+		while (matcher.find()) {
+			normalizedFile = normalizedFile.replace(matcher.group(0), "/");
+			matcher = pattern.matcher(normalizedFile);
+		}
+		if (normalizedFile.endsWith(File.separator + ".")) {
+			normalizedFile = normalizedFile.substring(0,
+					normalizedFile.length() - 2);
 		}
 		return new File(normalizedFile);
 	}

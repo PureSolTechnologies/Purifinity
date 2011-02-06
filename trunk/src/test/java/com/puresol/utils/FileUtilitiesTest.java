@@ -45,6 +45,9 @@ public class FileUtilitiesTest {
 				FileUtilities.normalizePath(
 						new File("/root//redundant/../../destination//to.txt"))
 						.getPath());
+		assertEquals("/a/b/c/d/e",
+				FileUtilities.normalizePath(new File("/a/b/././c/d/e/."))
+						.getPath());
 	}
 
 	@Test
@@ -70,55 +73,55 @@ public class FileUtilitiesTest {
 	@Test
 	public void testGetRelativePathsUnix() throws Exception {
 		assertEquals("stuff/xyz.dat", FileUtilities.getRelativePath(
-				"/var/data/stuff/xyz.dat", "/var/data/", "/"));
+				"/var/data/", "/var/data/stuff/xyz.dat", "/"));
 		assertEquals("../../b/c",
-				FileUtilities.getRelativePath("/a/b/c", "/a/x/y/", "/"));
-		assertEquals("../../b/c", FileUtilities.getRelativePath("/m/n/o/a/b/c",
-				"/m/n/o/a/x/y/", "/"));
+				FileUtilities.getRelativePath("/a/x/y/", "/a/b/c", "/"));
+		assertEquals("../../b/c", FileUtilities.getRelativePath(
+				"/m/n/o/a/x/y/", "/m/n/o/a/b/c", "/"));
 	}
 
 	@Test
 	public void testGetRelativePathFileToFile() throws Exception {
-		String target = "C:\\Windows\\Boot\\Fonts\\chs_boot.ttf";
-		String base = "C:\\Windows\\Speech\\Common\\sapisvr.exe";
+		String to = "C:\\Windows\\Boot\\Fonts\\chs_boot.ttf";
+		String from = "C:\\Windows\\Speech\\Common\\sapisvr.exe";
 
-		String relPath = FileUtilities.getRelativePath(target, base, "\\");
+		String relPath = FileUtilities.getRelativePath(from, to, "\\");
 		assertEquals("..\\..\\Boot\\Fonts\\chs_boot.ttf", relPath);
 	}
 
 	@Test
 	public void testGetRelativePathDirectoryToFile() throws Exception {
-		String target = "C:\\Windows\\Boot\\Fonts\\chs_boot.ttf";
-		String base = "C:\\Windows\\Speech\\Common\\";
+		String to = "C:\\Windows\\Boot\\Fonts\\chs_boot.ttf";
+		String from = "C:\\Windows\\Speech\\Common\\";
 
-		String relPath = FileUtilities.getRelativePath(target, base, "\\");
+		String relPath = FileUtilities.getRelativePath(from, to, "\\");
 		assertEquals("..\\..\\Boot\\Fonts\\chs_boot.ttf", relPath);
 	}
 
 	@Test
 	public void testGetRelativePathFileToDirectory() throws Exception {
-		String target = "C:\\Windows\\Boot\\Fonts";
-		String base = "C:\\Windows\\Speech\\Common\\foo.txt";
+		String to = "C:\\Windows\\Boot\\Fonts";
+		String from = "C:\\Windows\\Speech\\Common\\foo.txt";
 
-		String relPath = FileUtilities.getRelativePath(target, base, "\\");
+		String relPath = FileUtilities.getRelativePath(from, to, "\\");
 		assertEquals("..\\..\\Boot\\Fonts", relPath);
 	}
 
 	@Test
 	public void testGetRelativePathDirectoryToDirectory() throws Exception {
-		String target = "C:\\Windows\\Boot\\";
-		String base = "C:\\Windows\\Speech\\Common\\";
+		String to = "C:\\Windows\\Boot\\";
+		String from = "C:\\Windows\\Speech\\Common\\";
 		String expected = "..\\..\\Boot\\";
 
-		String relPath = FileUtilities.getRelativePath(target, base, "\\");
+		String relPath = FileUtilities.getRelativePath(from, to, "\\");
 		assertEquals(expected, relPath);
 	}
 
 	@Test(expected = PathResolutionException.class)
 	public void testGetRelativePathDifferentDriveLetters() throws Exception {
-		String target = "D:\\sources\\recovery\\RecEnv.exe";
-		String base = "C:\\Java\\workspace\\AcceptanceTests\\Standard test data\\geo\\";
-		FileUtilities.getRelativePath(target, base, "\\");
+		String to = "D:\\sources\\recovery\\RecEnv.exe";
+		String from = "C:\\Java\\workspace\\AcceptanceTests\\Standard test data\\geo\\";
+		FileUtilities.getRelativePath(from, to, "\\");
 	}
 
 }
