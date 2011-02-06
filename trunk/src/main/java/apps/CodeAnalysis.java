@@ -29,7 +29,7 @@ import org.osgi.framework.BundleException;
 
 import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.evaluator.EvaluatorASCIIExport;
-import com.puresol.coding.reporting.HTMLProjectAnalysisCreator;
+import com.puresol.coding.reporting.html.HTMLProjectAnalysisCreator;
 import com.puresol.filefilter.CSVFilter;
 import com.puresol.filefilter.ExcelFilter;
 import com.puresol.filefilter.TSVFilter;

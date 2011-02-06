@@ -105,7 +105,7 @@ public class CodeRange implements Serializable, Comparable<CodeRange> {
 		if (name.isEmpty()) {
 			return type.getName();
 		}
-		return type.getName() + " '" + name + "'";
+		return type.getName() + " " + name;
 	}
 
 }

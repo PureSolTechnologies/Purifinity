@@ -1,4 +1,4 @@
-package com.puresol.coding.reporting;
+package com.puresol.coding.reporting.html;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -10,8 +10,9 @@ import com.puresol.reporting.html.HTMLStandards;
 import com.puresol.reporting.html.Image;
 import com.puresol.reporting.html.Link;
 import com.puresol.utils.FileUtilities;
+import com.puresol.utils.PathResolutionException;
 
-public class HTMLReport {
+class HTMLReport {
 
 	private static final Translator translator = Translator
 			.getTranslator(HTMLReport.class);
@@ -23,12 +24,24 @@ public class HTMLReport {
 	private final FileWriter writer;
 	private boolean copyrightFooter = false;
 
-	public HTMLReport(File file, File cssFile, File logoFile,
-			File favIconFile, String title) throws IOException {
+	public HTMLReport(File file, File cssFile, File logoFile, File favIconFile,
+			String title) throws IOException {
 		this.file = file;
 		this.cssFile = cssFile;
 		this.logoFile = logoFile;
 		this.favIconFile = favIconFile;
+		File directory = file.getParentFile();
+		if (!directory.exists()) {
+			if (!directory.mkdirs()) {
+				throw new IOException("Could not create directory '"
+						+ directory + "'!");
+			}
+		} else {
+			if (!directory.isDirectory()) {
+				throw new IOException("'" + directory
+						+ "' should be a directory!!");
+			}
+		}
 		this.writer = new FileWriter(file);
 		open(title);
 	}
@@ -79,24 +92,42 @@ public class HTMLReport {
 		return favIconFile;
 	}
 
-	public String createLogoIMGTag() {
-		return new Image(FileUtilities.getRelativePath(file, logoFile))
-				.toHTML();
-
+	public String createLogoIMGTag() throws IOException {
+		try {
+			return new Image(new File(FileUtilities.getRelativePath(
+					file.getPath(), logoFile.getParent(), File.separator)))
+					.toHTML();
+		} catch (PathResolutionException e) {
+			throw new IOException(e);
+		}
 	}
 
-	public String createLogoIMGTag(int widht, int height, boolean relativeSize) {
-		return new Image(FileUtilities.getRelativePath(file, logoFile), widht,
-				height, relativeSize).toHTML();
+	public String createLogoIMGTag(int widht, int height, boolean relativeSize)
+			throws IOException {
+		try {
+			return new Image(new File(FileUtilities.getRelativePath(
+					file.getPath(), logoFile.getPath(), File.separator)),
+					widht, height, relativeSize).toHTML();
+		} catch (PathResolutionException e) {
+			throw new IOException(e);
+		}
 	}
 
 	private void open(String title) throws IOException {
-		String output = HTMLStandards.getStandardHeader(title,
-				FileUtilities.getRelativePath(file, cssFile), false,
-				FileUtilities.getRelativePath(file, favIconFile));
-		output += createLogoIMGTag(400, 0, false);
-		output += "<h1>" + title + "</h1>";
-		writer.write(output);
+		try {
+			String output = HTMLStandards.getStandardHeader(
+					title,
+					new File(FileUtilities.getRelativePath(file.getPath(),
+							cssFile.getPath(), File.separator)),
+					false,
+					new File(FileUtilities.getRelativePath(file.getPath(),
+							favIconFile.getPath(), File.separator)));
+			output += createLogoIMGTag(400, 0, false);
+			output += "<h1>" + title + "</h1>";
+			writer.write(output);
+		} catch (PathResolutionException e) {
+			throw new IOException(e);
+		}
 	}
 
 	public void close() throws IOException {
@@ -108,7 +139,7 @@ public class HTMLReport {
 		writer.close();
 	}
 
-	public String createCopyrightMessage() {
+	public String createCopyrightMessage() throws IOException {
 		String name = translator.i18n("Copyright Information");
 		String html = HTMLStandards.getStandardHeader(name, cssFile, false,
 				favIconFile);

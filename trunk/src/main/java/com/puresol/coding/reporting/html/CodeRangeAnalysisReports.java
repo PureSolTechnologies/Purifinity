@@ -1,4 +1,4 @@
-package com.puresol.coding.reporting;
+package com.puresol.coding.reporting.html;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,7 +16,6 @@ import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.evaluator.CodeRangeEvaluator;
 import com.puresol.coding.evaluator.CodeRangeEvaluatorFactory;
 import com.puresol.coding.evaluator.CodeRangeEvaluatorManager;
-import com.puresol.document.Document;
 import com.puresol.document.convert.html.HTMLConverter;
 import com.puresol.gui.Application;
 import com.puresol.gui.progress.ProgressObserver;
@@ -26,7 +25,7 @@ import com.puresol.trees.FileTree;
 import com.puresol.utils.FileUtilities;
 import com.puresol.utils.PersistenceException;
 
-public class CodeRangeAnalysisReports implements RunnableProgressObservable {
+class CodeRangeAnalysisReports implements RunnableProgressObservable {
 
 	private static final Logger logger = Logger
 			.getLogger(CodeRangeAnalysisReports.class);
@@ -34,23 +33,24 @@ public class CodeRangeAnalysisReports implements RunnableProgressObservable {
 			.getTranslator(CodeRangeAnalysisReports.class);
 
 	private final ProjectAnalyzer projectAnalyzer;
-	private final File directory;
+	private final File htmlRootDirectory;
 	private final List<AnalyzedFile> files;
 	private final FileTree fileTree;
+	private final List<String> usedCodeRangeNames = new ArrayList<String>();
 
 	private ProgressObserver monitor = null;
 
 	public CodeRangeAnalysisReports(ProjectAnalyzer projectAnalyzer,
-			File directory) {
+			File htmlRootDirectory) {
 		super();
 		this.projectAnalyzer = projectAnalyzer;
-		this.directory = directory;
+		this.htmlRootDirectory = htmlRootDirectory;
 		files = projectAnalyzer.getAnalyzedFiles();
 		List<File> realFiles = new ArrayList<File>();
 		for (AnalyzedFile analyzedFile : files) {
 			realFiles.add(analyzedFile.getFile());
 		}
-		fileTree = FileUtilities.convertFileListToTree(directory.getPath(),
+		fileTree = FileUtilities.convertFileListToTree(".",
 				realFiles);
 	}
 
@@ -91,30 +91,13 @@ public class CodeRangeAnalysisReports implements RunnableProgressObservable {
 			if (monitor != null) {
 				monitor.finished(this);
 			}
-		} catch (PersistenceException e) {
+		} catch (Throwable e) {
 			logger.error(e.getMessage(), e);
+			if (monitor != null) {
+				monitor.terminated(this);
+			}
 			Application.showStandardErrorMessage(
 					translator.i18n("Could not create HTML project pages!"), e);
-			if (monitor != null) {
-				monitor.terminated(this);
-			}
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-			Application.showStandardErrorMessage(
-					translator.i18n("Could not create HTML project pages!"), e);
-			if (monitor != null) {
-				monitor.terminated(this);
-			}
-		} catch (InterruptedException e) {
-			logger.error(e.getMessage(), e);
-			Application
-					.showStandardErrorMessage(
-							translator
-									.i18n("Could not create HTML project pages due to termination!"),
-							e);
-			if (monitor != null) {
-				monitor.terminated(this);
-			}
 		}
 	}
 
@@ -135,18 +118,27 @@ public class CodeRangeAnalysisReports implements RunnableProgressObservable {
 							.i18n("Processing CodeRanges..."));
 					monitor.setRange(0, codeRanges.size() - 1);
 					monitor.showProgressPercent();
+					usedCodeRangeNames.clear();
 					for (int index = 0; index < codeRanges.size(); index++) {
 						CodeRange codeRange = codeRanges.get(index);
+						String codeRangeName = codeRange.toString();
+						int dummy = 1;
+						while (usedCodeRangeNames.contains(codeRangeName)) {
+							dummy++;
+							codeRangeName = codeRange.toString() + " " + dummy;
+						}
+						usedCodeRangeNames.add(codeRangeName);
 						monitor.setText(codeRange.toString());
 						monitor.setStatus(index);
-						processFile(analyzedFile, analysis, codeRange);
+						processFile(analyzedFile, analysis, codeRange,
+								codeRangeName);
 						if (Thread.interrupted()) {
 							monitor.terminated(this);
 							return;
 						}
 					}
 					monitor.finished(this);
-				} catch (IOException e) {
+				} catch (Throwable e) {
 					logger.error(e.getMessage(), e);
 					monitor.terminated(this);
 				}
@@ -165,50 +157,79 @@ public class CodeRangeAnalysisReports implements RunnableProgressObservable {
 	}
 
 	private void processFile(AnalyzedFile analyzedFile, Analysis analysis,
-			CodeRange codeRange) throws IOException {
+			CodeRange codeRange, String codeRangeName) throws IOException {
 		for (CodeRangeEvaluatorFactory evaluatorFactory : CodeRangeEvaluatorManager
 				.getAll()) {
-			processFile(analyzedFile, analysis, evaluatorFactory, codeRange);
+			processFile(analyzedFile, analysis, evaluatorFactory, codeRange,
+					codeRangeName);
 		}
-	}
 
-	private void processFile(AnalyzedFile analyzedFile, Analysis analysis,
-			CodeRangeEvaluatorFactory evaluatorFactory, CodeRange codeRange)
-			throws IOException {
-		final File codeRangeEvaluatorsDirectory = HTMLProjectAnalysisCreator
-				.getCodeRangeEvaluatorsDirectory(directory);
-		CodeRangeEvaluator evaluator = evaluatorFactory.create(
-				analysis.getLanguage(), codeRange);
-		evaluator.run();
-		Document document = evaluator.getReport();
-		FileUtilities.writeFile(
-				codeRangeEvaluatorsDirectory,
-				new File(analyzedFile.getFile(), evaluator.getName() + "-"
-						+ codeRange.getType().getName() + "-"
-						+ codeRange.getName() + ".html"), new HTMLConverter(
-						document, analyzedFile.getFile()).toHTML(true));
-
-		File file = new File(codeRangeEvaluatorsDirectory, analyzedFile
-				.getFile().getPath());
-		file = new File(file, evaluator.getName() + "-"
-				+ codeRange.getType().getName() + "-" + codeRange.getName()
-				+ ".html");
+		File file = HTMLProjectAnalysisCreator.getFile(htmlRootDirectory, analyzedFile,
+				codeRangeName);
 
 		HTMLReport indexFile = new HTMLReport(file,
-				HTMLProjectAnalysisCreator.getCSSFile(directory),
-				HTMLProjectAnalysisCreator.getLogoFile(directory),
-				HTMLProjectAnalysisCreator.getFavIconFile(directory),
+				HTMLProjectAnalysisCreator.getCSSFile(htmlRootDirectory),
+				HTMLProjectAnalysisCreator.getLogoFile(htmlRootDirectory),
+				HTMLProjectAnalysisCreator.getFavIconFile(htmlRootDirectory),
 				translator.i18n("CodeRange Analysis for {0}", codeRange
 						.getType().getName() + " " + codeRange.getName()));
 		try {
 			indexFile.setCopyrightFooter(true);
-			indexFile.write(MainMenu.getHTML(directory, file, MainMenu.FILES));
+			indexFile.write(MainMenu.getHTML(htmlRootDirectory, file, MainMenu.FILES));
 
 			indexFile.write("<table>\n");
 			indexFile.write("<tr>\n");
 			indexFile.write("<td valign=\"top\">\n");
 
 			indexFile.write(getFilesMenu(analyzedFile));
+			indexFile.write(CodeRangeMenu.getCodeRangeMenuHTML(htmlRootDirectory,
+					analyzedFile, analysis, codeRange));
+			indexFile.write(EvaluatorMenu.getCodeRangeEvaluatorMenuHTML(
+					htmlRootDirectory, file.getPath(), analyzedFile, codeRange, null));
+
+			indexFile.write("</td>\n");
+			indexFile.write("<td>\n");
+
+			indexFile.write("Show code range source code here!");
+
+			indexFile.write("</td>\n");
+			indexFile.write("</tr>\n");
+			indexFile.write("</table>\n");
+		} finally {
+			indexFile.close();
+		}
+	}
+
+	private void processFile(AnalyzedFile analyzedFile, Analysis analysis,
+			CodeRangeEvaluatorFactory evaluatorFactory, CodeRange codeRange,
+			String codeRangeName) throws IOException {
+		CodeRangeEvaluator evaluator = evaluatorFactory.create(
+				analysis.getLanguage(), codeRange);
+		evaluator.run();
+
+		File file = HTMLProjectAnalysisCreator.getFile(htmlRootDirectory, analyzedFile,
+				codeRange, evaluatorFactory);
+
+		HTMLReport indexFile = new HTMLReport(file,
+				HTMLProjectAnalysisCreator.getCSSFile(htmlRootDirectory),
+				HTMLProjectAnalysisCreator.getLogoFile(htmlRootDirectory),
+				HTMLProjectAnalysisCreator.getFavIconFile(htmlRootDirectory),
+				translator.i18n("CodeRange Analysis for {0}", codeRange
+						.getType().getName() + " " + codeRange.getName()));
+		try {
+			indexFile.setCopyrightFooter(true);
+			indexFile.write(MainMenu.getHTML(htmlRootDirectory, file, MainMenu.FILES));
+
+			indexFile.write("<table>\n");
+			indexFile.write("<tr>\n");
+			indexFile.write("<td valign=\"top\">\n");
+
+			indexFile.write(getFilesMenu(analyzedFile));
+			indexFile.write(CodeRangeMenu.getCodeRangeMenuHTML(htmlRootDirectory,
+					analyzedFile, analysis, codeRange));
+			indexFile.write(EvaluatorMenu.getCodeRangeEvaluatorMenuHTML(
+					htmlRootDirectory, file.getPath(), analyzedFile, codeRange,
+					evaluatorFactory));
 
 			indexFile.write("</td>\n");
 			indexFile.write("<td>\n");
@@ -222,72 +243,10 @@ public class CodeRangeAnalysisReports implements RunnableProgressObservable {
 		} finally {
 			indexFile.close();
 		}
-
 	}
 
-	private String getFilesMenu(AnalyzedFile analyzedFile) {
-		String pathParts[] = analyzedFile.getFile().getPath()
-				.split(File.separator);
-		FileTree currentNode = fileTree;
-		return getFileBrowserHTML(analyzedFile.getFile(), pathParts, 1,
-				currentNode);
-	}
-
-	private String getFileBrowserHTML(File file, String[] pathParts, int i,
-			FileTree currentNode) {
-		if (i == pathParts.length) {
-			return "";
-		}
-		StringBuilder builder = new StringBuilder();
-		builder.append("<ul>\n");
-		for (FileTree node : currentNode.getChildren()) {
-			if ((!node.hasChildren()) && (node.getName().equals(pathParts[i]))) {
-				builder.append("<li><b>");
-				builder.append(node.getName());
-				builder.append("</b></li>\n");
-			} else {
-				if (node.getName().equals(pathParts[i])) {
-					builder.append("<li><b>");
-					if (node.hasChildren()) {
-						builder.append("-");
-						builder.append(createLink(file, node));
-						builder.append(File.separator);
-					} else {
-						builder.append(createLink(file, node));
-					}
-					builder.append("</b></li>");
-					builder.append(getFileBrowserHTML(file, pathParts, i + 1,
-							node));
-				} else {
-					builder.append("<li><b>");
-					if (node.hasChildren()) {
-						builder.append("+");
-						builder.append(createLink(file, node));
-						builder.append(File.separator);
-					} else {
-						builder.append(createLink(file, node));
-					}
-					builder.append("</b></li>");
-				}
-			}
-		}
-		builder.append("</ul>\n");
-		return builder.toString();
-	}
-
-	private Object createLink(File file, FileTree node) {
-		StringBuilder builder = new StringBuilder();
-		builder.append("<a href=\"");
-		File current = new File(
-				HTMLProjectAnalysisCreator
-						.getCodeRangeEvaluatorsDirectory(directory),
-				file.getPath());
-		File target = new File(node.getPath());
-		File relativePath = FileUtilities.getRelativePath(current, target);
-		builder.append(new File(relativePath, "index.html"));
-		builder.append("\">");
-		builder.append(node.getName());
-		builder.append("</a>");
-		return builder.toString();
+	private String getFilesMenu(AnalyzedFile analyzedFile) throws IOException {
+		return FileBrowser.getFileBrowserHTML(htmlRootDirectory,
+				analyzedFile.getFile(), fileTree);
 	}
 }

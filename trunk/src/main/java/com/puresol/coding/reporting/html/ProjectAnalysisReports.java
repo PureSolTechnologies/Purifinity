@@ -1,4 +1,4 @@
-package com.puresol.coding.reporting;
+package com.puresol.coding.reporting.html;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,7 +18,7 @@ import com.puresol.gui.progress.ProgressObserver;
 import com.puresol.gui.progress.ProgressPanel;
 import com.puresol.gui.progress.RunnableProgressObservable;
 
-public class ProjectAnalysisReports implements RunnableProgressObservable {
+class ProjectAnalysisReports implements RunnableProgressObservable {
 
 	private static final Logger logger = Logger
 			.getLogger(ProjectAnalysisReports.class);
