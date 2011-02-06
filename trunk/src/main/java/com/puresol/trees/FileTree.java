@@ -37,7 +37,9 @@ public class FileTree extends AbstractTreeImpl<FileTree> {
 		File file = new File(current.getName());
 		current = current.getParent();
 		while (current != null) {
-			file = new File(current.getName(), file.getPath());
+			if (!current.getName().isEmpty()) {
+				file = new File(current.getName(), file.getPath());
+			}
 			current = current.getParent();
 		}
 		return file;

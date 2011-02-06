@@ -91,61 +91,61 @@ public class FileUtilities {
 	}
 
 	/**
-	 * This method creates a relative path from a file to another. Both file
-	 * paths have to either start with a slash or not. A mixture is not allowed.
-	 * The situation in the case of two absolute paths are obvious, but for
-	 * relative paths it is assumed, that both start at the same location.
+	 * Get the relative path from one file to another, specifying the directory
+	 * separator. If one of the provided resources does not exist, it is assumed
+	 * to be a file unless it ends with '/' or '\'.
 	 * 
-	 * @param from
-	 *            the file where the starting directory is.
-	 * @param to
-	 *            is the file where to point to from the from directory.
-	 * @return A relative path is returned.
+	 * @param target
+	 *            targetPath is calculated to this file
+	 * @param base
+	 *            basePath is calculated from this file
+	 * @param separator
+	 *            directory separator. The platform default is not assumed so
+	 *            that we can test Unix behaviour when running on Windows (for
+	 *            example)
+	 * @return
+	 * @throws PathResolutionException
 	 */
-	public static File getRelativePath(File from, File to) {
-		from = normalizePath(from);
-		to = normalizePath(to);
-		if ((from.getPath().startsWith(File.separator))
-				&& (to.getPath().startsWith(File.separator))) {
-			return getRelativePathForAbsolutes(from, to);
-		} else if ((!from.getPath().startsWith(File.separator))
-				&& (!to.getPath().startsWith(File.separator))) {
-			return getRelativePathForRelatives(from, to);
-		}
-		return null;
-	}
+	public static String getRelativePath(String targetPath, String basePath,
+			String pathSeparator) throws PathResolutionException {
 
-	private static File getRelativePathForAbsolutes(File from, File to) {
-		String[] toSplit = to.getPath().split(File.separator);
-		String[] fromSplit = from.getPath().split(File.separator);
-		int matching = 0;
-		while (toSplit[matching].equals(fromSplit[matching])) {
-			matching++;
-			if ((matching >= toSplit.length) || (matching >= fromSplit.length)) {
-				break;
+		// We need the -1 argument to split to make sure we get a trailing
+		// "" token if the base ends in the path separator and is therefore
+		// a directory. We require directory paths to end in the path
+		// separator -- otherwise they are indistinguishable from files.
+		String[] base = basePath.split(Pattern.quote(pathSeparator), -1);
+		String[] target = targetPath.split(Pattern.quote(pathSeparator), 0);
+
+		// First get all the common elements. Store them as a string,
+		// and also count how many of them there are.
+		StringBuilder common = new StringBuilder();
+
+		int commonIndex = 0;
+		while ((commonIndex < target.length) && (commonIndex < base.length)
+				&& (target[commonIndex].equals(base[commonIndex]))) {
+			common.append(target[commonIndex] + pathSeparator);
+			commonIndex++;
+		}
+
+		if (commonIndex == 0) {
+			// No single common path element. This most
+			// likely indicates differing drive letters, like C: and D:.
+			// These paths cannot be relativized.
+			throw new PathResolutionException(
+					"No common path element found for '" + targetPath
+							+ "' and '" + basePath + "'");
+		}
+
+		StringBuffer relative = new StringBuffer();
+
+		if (base.length != commonIndex) {
+			int numDirsUp = base.length - commonIndex - 1;
+			for (int i = 0; i < numDirsUp; i++) {
+				relative.append(".." + pathSeparator);
 			}
 		}
-		StringBuffer result = new StringBuffer();
-		for (int i = matching; i < fromSplit.length - 1; i++) {
-			result.append(".." + File.separator);
-		}
-		for (int i = matching; i < toSplit.length; i++) {
-			result.append(toSplit[i]);
-			if (i < toSplit.length - 1) {
-				result.append(File.separator);
-			}
-		}
-		return FileUtilities.normalizePath(new File(result.toString()));
-	}
-
-	private static File getRelativePathForRelatives(File from, File to) {
-		String parent = from.getParent();
-		if ((parent == null) || (parent.isEmpty())) {
-			return to;
-		}
-		parent = parent.replaceAll("[^" + File.separator + "]+", "..");
-		return FileUtilities.normalizePath(new File(new File(parent), to
-				.getPath()));
+		relative.append(targetPath.substring(common.length()));
+		return relative.toString();
 	}
 
 	/**
