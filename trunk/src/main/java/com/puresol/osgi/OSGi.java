@@ -73,9 +73,8 @@ public class OSGi {
 		}
 	}
 
-	public void start() throws OSGiException, BundleException {
+	public synchronized void start() throws OSGiException, BundleException {
 		logger.info("Starting OSGi framework...");
-		stop();
 		preStart();
 		actualStart();
 		postStart();
@@ -170,7 +169,7 @@ public class OSGi {
 		throw new OSGiException("Could not load framework factory.");
 	}
 
-	public void stop() throws BundleException {
+	public synchronized void stop() throws BundleException {
 		if (framework == null) {
 			return;
 		}
