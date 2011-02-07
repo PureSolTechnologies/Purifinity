@@ -12,6 +12,7 @@ import org.osgi.framework.ServiceRegistration;
 
 import com.puresol.coding.evaluator.CodeRangeEvaluatorFactory;
 import com.puresol.coding.evaluator.ProjectEvaluatorFactory;
+import com.puresol.coding.metrics.cocomo.CoCoMoConfigurator;
 import com.puresol.coding.metrics.cocomo.CoCoMoServiceFactory;
 import com.puresol.coding.metrics.codedepth.CodeDepthMetricServiceFactory;
 import com.puresol.coding.metrics.entropy.EntropyMetricServiceFactory;
@@ -21,6 +22,7 @@ import com.puresol.coding.metrics.mccabe.McCabeMetricServiceFactory;
 import com.puresol.coding.metrics.normmaint.NormalizedMaintainabilityIndexServiceFactory;
 import com.puresol.coding.metrics.sloc.SLOCMetricServiceFactory;
 import com.puresol.config.APIInformation;
+import com.puresol.gui.osgi.BundleConfigurator;
 
 /**
  * This class is used as OSGi bundle activator. This class only registers and
@@ -40,7 +42,6 @@ public class Activator implements BundleActivator {
 
 		String interfaces[] = new String[] { ProjectEvaluatorFactory.class
 				.getName() };
-
 		Dictionary<Object, Object> properties = new Hashtable<Object, Object>();
 		properties.put("service.name", cocomoFactory.getName());
 		properties.put("service.description", cocomoFactory.getDescription());
@@ -49,6 +50,18 @@ public class Activator implements BundleActivator {
 		ServiceRegistration registration = context.registerService(interfaces,
 				cocomoFactory, properties);
 		serviceRegistrations.add(registration);
+
+		interfaces = new String[] { BundleConfigurator.class.getName() };
+		CoCoMoConfigurator cocomoConfigurator = new CoCoMoConfigurator();
+		properties = new Hashtable<Object, Object>();
+		properties.put("service.name", cocomoConfigurator.getName());
+		properties.put("service.description", cocomoConfigurator.getPathName());
+		properties.put("service.vendor", APIInformation.getPackageOwner());
+
+		registration = context.registerService(interfaces, cocomoConfigurator,
+				properties);
+		serviceRegistrations.add(registration);
+
 	}
 
 	private void registerCodeDepth(BundleContext context) {
@@ -60,8 +73,8 @@ public class Activator implements BundleActivator {
 
 		Dictionary<Object, Object> properties = new Hashtable<Object, Object>();
 		properties.put("service.name", codeDepthMetricFactory.getName());
-		properties.put("service.description",
-				codeDepthMetricFactory.getDescription());
+		properties.put("service.description", codeDepthMetricFactory
+				.getDescription());
 		properties.put("service.vendor", APIInformation.getPackageOwner());
 
 		ServiceRegistration registration = context.registerService(interfaces,
@@ -78,8 +91,8 @@ public class Activator implements BundleActivator {
 
 		Dictionary<Object, Object> properties = new Hashtable<Object, Object>();
 		properties.put("service.name", entropyMetricFactory.getName());
-		properties.put("service.description",
-				entropyMetricFactory.getDescription());
+		properties.put("service.description", entropyMetricFactory
+				.getDescription());
 		properties.put("service.vendor", APIInformation.getPackageOwner());
 
 		ServiceRegistration registration = context.registerService(interfaces,
@@ -96,8 +109,8 @@ public class Activator implements BundleActivator {
 
 		Dictionary<Object, Object> properties = new Hashtable<Object, Object>();
 		properties.put("service.name", halsteadMetricFactory.getName());
-		properties.put("service.description",
-				halsteadMetricFactory.getDescription());
+		properties.put("service.description", halsteadMetricFactory
+				.getDescription());
 		properties.put("service.vendor", APIInformation.getPackageOwner());
 
 		ServiceRegistration registration = context.registerService(interfaces,
@@ -114,8 +127,8 @@ public class Activator implements BundleActivator {
 
 		Dictionary<Object, Object> properties = new Hashtable<Object, Object>();
 		properties.put("service.name", maintainabilityIndexFactory.getName());
-		properties.put("service.description",
-				maintainabilityIndexFactory.getDescription());
+		properties.put("service.description", maintainabilityIndexFactory
+				.getDescription());
 		properties.put("service.vendor", APIInformation.getPackageOwner());
 
 		ServiceRegistration registration = context.registerService(interfaces,
@@ -131,8 +144,8 @@ public class Activator implements BundleActivator {
 				CodeRangeEvaluatorFactory.class.getName() };
 
 		Dictionary<Object, Object> properties = new Hashtable<Object, Object>();
-		properties.put("service.name",
-				normalizedMaintainabilityIndexFactory.getName());
+		properties.put("service.name", normalizedMaintainabilityIndexFactory
+				.getName());
 		properties.put("service.description",
 				normalizedMaintainabilityIndexFactory.getDescription());
 		properties.put("service.vendor", APIInformation.getPackageOwner());
@@ -151,8 +164,8 @@ public class Activator implements BundleActivator {
 
 		Dictionary<Object, Object> properties = new Hashtable<Object, Object>();
 		properties.put("service.name", mcCabeMetricFactory.getName());
-		properties.put("service.description",
-				mcCabeMetricFactory.getDescription());
+		properties.put("service.description", mcCabeMetricFactory
+				.getDescription());
 		properties.put("service.vendor", APIInformation.getPackageOwner());
 
 		ServiceRegistration registration = context.registerService(interfaces,
@@ -169,8 +182,8 @@ public class Activator implements BundleActivator {
 
 		Dictionary<Object, Object> properties = new Hashtable<Object, Object>();
 		properties.put("service.name", slocMetricFactory.getName());
-		properties.put("service.description",
-				slocMetricFactory.getDescription());
+		properties.put("service.description", slocMetricFactory
+				.getDescription());
 		properties.put("service.vendor", APIInformation.getPackageOwner());
 
 		ServiceRegistration registration = context.registerService(interfaces,
