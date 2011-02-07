@@ -21,11 +21,11 @@ public class BundleConfigurationDialog extends JDialog implements
 			.getTranslator(BundleConfigurationDialog.class);
 
 	private final String frameworkName;
-	private final BundleConfiguratorTreeViewer configuratorTreeView = new BundleConfiguratorTreeViewer();
+	private final BundleConfiguratorTreeModel configuratorTreeView = new BundleConfiguratorTreeModel();
 
 	public BundleConfigurationDialog(String frameworkName) {
 		super(Application.getInstance(), translator
-				.i18n("Plugin Configurations"), true);
+				.i18n("Plugin Configurations Dialog"), true);
 		this.frameworkName = frameworkName;
 		initUI();
 	}
@@ -49,9 +49,16 @@ public class BundleConfigurationDialog extends JDialog implements
 		System.out.println(treePath);
 		BundleConfiguratorTree tree = (BundleConfiguratorTree) treePath
 				.getPathComponent(treePath.getPathCount() - 1);
-		BundleConfiguratorPanel a = tree.getConfigurator().createPanel();
-		if (a != null) {
-			getContentPane().add(a.getPanel(), BorderLayout.CENTER);
+		System.out.println(tree);
+		if (tree != null) {
+			BundleConfigurator configurator = tree.getConfigurator();
+			if (configurator != null) {
+				BundleConfiguratorPanel a = tree.getConfigurator()
+						.createPanel();
+				if (a != null) {
+					getContentPane().add(a.getPanel(), BorderLayout.CENTER);
+				}
+			}
 		}
 	}
 

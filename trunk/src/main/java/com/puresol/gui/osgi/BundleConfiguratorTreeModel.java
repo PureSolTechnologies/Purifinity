@@ -10,20 +10,20 @@ import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
-public class BundleConfiguratorTreeViewer extends JTree implements TreeModel {
+public class BundleConfiguratorTreeModel extends JTree implements TreeModel {
 
 	private static final long serialVersionUID = -7273574448972584594L;
 
 	private final List<TreeModelListener> treeModelListeners = new ArrayList<TreeModelListener>();
 	private BundleConfiguratorTree configuratorTree;
 
-	public BundleConfiguratorTreeViewer() {
+	public BundleConfiguratorTreeModel() {
 		super();
 		this.setModel(this);
 		initUI();
 	}
 
-	public BundleConfiguratorTreeViewer(BundleConfiguratorTree ast) {
+	public BundleConfiguratorTreeModel(BundleConfiguratorTree ast) {
 		super();
 		this.setModel(this);
 		initUI();
