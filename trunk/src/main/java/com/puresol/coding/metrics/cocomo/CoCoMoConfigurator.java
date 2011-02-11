@@ -1,7 +1,7 @@
 package com.puresol.coding.metrics.cocomo;
 
 import com.puresol.gui.osgi.BundleConfigurator;
-import com.puresol.gui.osgi.BundleConfiguratorPanel;
+import com.puresol.gui.osgi.AbstractBundleConfiguratorPanel;
 
 public class CoCoMoConfigurator implements BundleConfigurator {
 
@@ -16,7 +16,7 @@ public class CoCoMoConfigurator implements BundleConfigurator {
 	}
 
 	@Override
-	public BundleConfiguratorPanel createPanel() {
+	public AbstractBundleConfiguratorPanel createPanel() {
 		return new CoCoMoConfiguratorPanel();
 	}
 
