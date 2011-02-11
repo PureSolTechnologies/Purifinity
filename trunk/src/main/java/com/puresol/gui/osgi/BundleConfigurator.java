@@ -6,6 +6,6 @@ public interface BundleConfigurator {
 
 	public String getPathName();
 
-	public BundleConfiguratorPanel createPanel();
+	public AbstractBundleConfiguratorPanel createPanel();
 
 }

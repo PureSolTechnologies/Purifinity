@@ -6,12 +6,19 @@ import javax.i18n4java.Translator;
 import javax.swing.BorderFactory;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 
 import com.puresol.gui.Application;
 
+/**
+ * This class provides a dialog for plug-in configuration.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class BundleConfigurationDialog extends JDialog implements
 		TreeSelectionListener {
 
@@ -20,8 +27,24 @@ public class BundleConfigurationDialog extends JDialog implements
 	private static final Translator translator = Translator
 			.getTranslator(BundleConfigurationDialog.class);
 
+	private static class EmptyPanel extends AbstractBundleConfiguratorPanel {
+
+		private static final long serialVersionUID = -4884833535616002340L;
+
+		@Override
+		public void start() {
+		}
+
+		@Override
+		public boolean stop() {
+			return false;
+		}
+	}
+
 	private final String frameworkName;
 	private final BundleConfiguratorTreeModel configuratorTreeView = new BundleConfiguratorTreeModel();
+	private final JPanel contentPanel = new JPanel();
+	private AbstractBundleConfiguratorPanel currentPanel = null;
 
 	public BundleConfigurationDialog(String frameworkName) {
 		super(Application.getInstance(), translator
@@ -31,34 +54,34 @@ public class BundleConfigurationDialog extends JDialog implements
 	}
 
 	private void initUI() {
-		JPanel panel = new JPanel();
-		setContentPane(panel);
-		panel.setLayout(new BorderLayout());
+		setContentPane(contentPanel);
+		contentPanel.setLayout(new BorderLayout());
 		configuratorTreeView.setConfiguratorTree(BundleConfiguratorTree
 				.create(frameworkName));
 		configuratorTreeView.setBorder(BorderFactory
 				.createTitledBorder(translator.i18n("Configurator")));
 		configuratorTreeView.addTreeSelectionListener(this);
-
-		panel.add(configuratorTreeView, BorderLayout.WEST);
-		panel.add(new JPanel(), BorderLayout.CENTER);
+		contentPanel.add(new JScrollPane(configuratorTreeView),
+				BorderLayout.WEST);
+		currentPanel = new EmptyPanel();
+		contentPanel.add(currentPanel, BorderLayout.CENTER);
 		pack();
 	}
 
 	private void changeConfigurator(TreePath treePath) {
-		System.out.println(treePath);
-		BundleConfiguratorTree tree = (BundleConfiguratorTree) treePath
+		final BundleConfiguratorTree tree = (BundleConfiguratorTree) treePath
 				.getPathComponent(treePath.getPathCount() - 1);
-		System.out.println(tree);
 		if (tree != null) {
+			contentPanel.remove(currentPanel);
 			BundleConfigurator configurator = tree.getConfigurator();
 			if (configurator != null) {
-				BundleConfiguratorPanel a = tree.getConfigurator()
-						.createPanel();
-				if (a != null) {
-					getContentPane().add(a.getPanel(), BorderLayout.CENTER);
-				}
+				currentPanel = configurator.createPanel();
+			} else {
+				currentPanel = new EmptyPanel();
 			}
+			currentPanel.start();
+			contentPanel.add(currentPanel, BorderLayout.CENTER);
+			contentPanel.updateUI();
 		}
 	}
 

@@ -13,7 +13,7 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 
 import com.puresol.gui.osgi.BundleConfigurator;
-import com.puresol.gui.osgi.BundleConfiguratorPanel;
+import com.puresol.gui.osgi.AbstractBundleConfiguratorPanel;
 
 public class OSGiTest {
 
@@ -78,7 +78,7 @@ public class OSGiTest {
 								}
 
 								@Override
-								public BundleConfiguratorPanel createPanel() {
+								public AbstractBundleConfiguratorPanel createPanel() {
 									return null;
 								}
 							}, properties);
