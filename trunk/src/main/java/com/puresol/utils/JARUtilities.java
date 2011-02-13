@@ -59,6 +59,9 @@ public class JARUtilities {
 	 *             is thrown in cases of IO failures.
 	 */
 	public static Properties readPropertyFile(URL url) throws IOException {
+		if (url == null) {
+			return new Properties();
+		}
 		InputStream inputStream = url.openStream();
 		if (inputStream == null) {
 			throw new IOException("No resource with the name '"

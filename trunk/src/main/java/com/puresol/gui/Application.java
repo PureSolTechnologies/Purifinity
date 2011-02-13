@@ -23,6 +23,7 @@ import static com.puresol.config.APIInformation.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.i18n4java.Translator;
 import javax.swing.JFrame;
@@ -39,7 +40,7 @@ public class Application extends JFrame implements Runnable {
 	private static final Logger logger = Logger.getLogger(Application.class);
 	private static final Translator translator = Translator
 			.getTranslator(Application.class);
-	private static ArrayList<Thread> threads = new ArrayList<Thread>();
+	private static List<Thread> threads = new ArrayList<Thread>();
 
 	/**
 	 * This variable keeps the reference to translator.

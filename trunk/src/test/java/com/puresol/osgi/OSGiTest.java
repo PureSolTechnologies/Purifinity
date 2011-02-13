@@ -19,9 +19,10 @@ public class OSGiTest {
 
 	@Test
 	public void testResourcesAvailability() {
-		assertNotNull(OSGi.class
-				.getResource(OSGi.OSGI_FRAMEWORK_FACTORY_PROPERTIES));
-		assertNotNull(OSGi.class.getResource(OSGi.OSGI_PROPERTIES));
+		assertEquals(
+				"/META-INF/services/org.osgi.framework.launch.FrameworkFactory",
+				OSGi.OSGI_FRAMEWORK_FACTORY_PROPERTIES);
+		assertEquals("/META-INF/services/osgi.properties", OSGi.OSGI_PROPERTIES);
 	}
 
 	@Test
