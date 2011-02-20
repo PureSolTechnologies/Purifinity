@@ -1,14 +1,21 @@
 package com.puresol.uhura.ust;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.i18n4java.Translator;
 
-public class CompilationUnit extends AbstractUniversalSyntaxTree {
+import com.puresol.uhura.ust.facilities.CompilerRelevantElement;
+
+public class CompilationUnit extends CompilerRelevantElement {
+
+	private static final long serialVersionUID = -5790049234290910253L;
 
 	private static final Translator translator = Translator
 			.getTranslator(CompilationUnit.class);
 
+	private final List<UniversalSyntaxTree> children = new ArrayList<UniversalSyntaxTree>();
 	/**
 	 * This file keeps the file where the compilation unit was found.
 	 */
@@ -17,7 +24,7 @@ public class CompilationUnit extends AbstractUniversalSyntaxTree {
 	private final String version;
 
 	public CompilationUnit(File file, String language, String version) {
-		super(null, "");
+		super("");
 		this.file = file;
 		this.language = language;
 		this.version = version;
@@ -41,6 +48,27 @@ public class CompilationUnit extends AbstractUniversalSyntaxTree {
 
 	public String getVersion() {
 		return version;
+	}
+
+	public void addChild(UniversalSyntaxTree child) {
+		children.add(child);
+		child.setParent(this);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final boolean hasChildren() {
+		return children.size() > 0;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final List<UniversalSyntaxTree> getChildren() {
+		return children;
 	}
 
 }

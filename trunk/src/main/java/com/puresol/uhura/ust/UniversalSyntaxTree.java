@@ -1,24 +1,62 @@
 package com.puresol.uhura.ust;
 
+import java.io.Serializable;
+
 import com.puresol.trees.Tree;
 
-public interface UniversalSyntaxTree extends Tree<UniversalSyntaxTree> {
+/**
+ * This class is an abstract implementation of a universal syntax tree node for
+ * later use in specific implementations. The normal parent and children
+ * handling is implemented here.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
+public abstract class UniversalSyntaxTree implements Tree<UniversalSyntaxTree>,
+		Serializable {
+
+	private static final long serialVersionUID = 1640932177605345931L;
+
+	private final String originalSymbol;
+
+	private UniversalSyntaxTree parent = null;
+
+	public UniversalSyntaxTree(String originalSymbol) {
+		super();
+		this.originalSymbol = originalSymbol;
+	}
 
 	/**
-	 * This method returns a symbol for the construction which is represented.
-	 * The symbol is taken from the original language and can be used for
-	 * Halstead metrics for instance.
+	 * This methods sets the parent for the current class implementation. All
+	 * class within a universal syntax tree have a parent. The top element
+	 * CompilationUnit has null as parent showing the top position.
 	 * 
-	 * As an example lets show for Java:
-	 * 
-	 * <pre>
-	 * ForAll:	for(:)
-	 * For:		for(;;)
-	 * Add:		+
-	 * </pre>
-	 * 
-	 * And so forth...
+	 * @param parent
 	 */
-	public String getOriginalLanguageSymbol();
+	protected final void setParent(UniversalSyntaxTree parent) {
+		if (parent != null) {
+			throw new IllegalStateException("A parent was already defined!");
+		}
+		this.parent = parent;
+	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final UniversalSyntaxTree getParent() {
+		return parent;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public final String getOriginalLanguageSymbol() {
+		return originalSymbol;
+	}
+
+	@Override
+	public String toString() {
+		return getName() + "(" + getOriginalLanguageSymbol() + ")";
+	}
 }
