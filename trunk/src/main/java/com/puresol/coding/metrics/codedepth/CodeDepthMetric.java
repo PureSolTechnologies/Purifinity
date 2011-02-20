@@ -19,7 +19,6 @@ import com.puresol.document.Table;
 import com.puresol.trees.TreeIterator;
 import com.puresol.uhura.lexer.Token;
 import com.puresol.uhura.parser.ParserTree;
-import com.puresol.utils.Property;
 
 /**
  * This metric looks for cascaded code blocks and finds the maximum. The code
@@ -40,13 +39,6 @@ public class CodeDepthMetric extends AbstractEvaluator implements
 
 	public static final String DESCRIPTION = translator
 			.i18n("Analysis the nested code blocks for a maximum depth.");
-
-	public static final List<Property> SUPPORTED_PROPERTIES = new ArrayList<Property>();
-	static {
-		SUPPORTED_PROPERTIES.add(new Property(CodeDepthMetric.class, "enabled",
-				"Switches calculation of CodeDepth on and off.", Boolean.class,
-				"true"));
-	}
 
 	public static final List<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new ArrayList<QualityCharacteristic>();
 	static {

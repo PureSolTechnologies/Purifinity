@@ -32,7 +32,6 @@ import com.puresol.trees.TreeIterator;
 import com.puresol.uhura.lexer.Token;
 import com.puresol.uhura.lexer.TokenMetaData;
 import com.puresol.uhura.parser.ParserTree;
-import com.puresol.utils.Property;
 
 /**
  * This class calculates a small statistics for a source code for source lines
@@ -53,13 +52,6 @@ public class SLOCMetric extends AbstractEvaluator implements CodeRangeEvaluator 
 
 	public static final String DESCRIPTION = translator
 			.i18n("SLOC Metric calculation.");
-
-	public static final ArrayList<Property> SUPPORTED_PROPERTIES = new ArrayList<Property>();
-	static {
-		SUPPORTED_PROPERTIES.add(new Property(SLOCMetric.class, "enabled",
-				"Switches calculation of SLOC Metric on and off.",
-				Boolean.class, "true"));
-	}
 
 	public static final List<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new ArrayList<QualityCharacteristic>();
 	static {

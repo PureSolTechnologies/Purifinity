@@ -29,7 +29,6 @@ import com.puresol.document.Chapter;
 import com.puresol.document.Document;
 import com.puresol.document.Paragraph;
 import com.puresol.document.Table;
-import com.puresol.utils.Property;
 
 public class MaintainabilityIndex extends AbstractEvaluator implements
 		CodeRangeEvaluator {
@@ -42,13 +41,6 @@ public class MaintainabilityIndex extends AbstractEvaluator implements
 	public static final String NAME = translator.i18n("Maintainability Index");
 	public static final String DESCRIPTION = translator
 			.i18n("Maintainability Index calculation.");
-	public static final ArrayList<Property> SUPPORTED_PROPERTIES = new ArrayList<Property>();
-	static {
-		SUPPORTED_PROPERTIES.add(new Property(MaintainabilityIndex.class,
-				"enabled",
-				"Switches calculation of Maintainability Index on and off.",
-				Boolean.class, "true"));
-	}
 	public static final List<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new ArrayList<QualityCharacteristic>();
 	static {
 		EVALUATED_QUALITY_CHARACTERISTICS

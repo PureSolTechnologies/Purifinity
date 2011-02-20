@@ -28,7 +28,6 @@ import com.puresol.document.Paragraph;
 import com.puresol.document.Table;
 import com.puresol.trees.TreeIterator;
 import com.puresol.uhura.parser.ParserTree;
-import com.puresol.utils.Property;
 
 /**
  * This class calculates the cyclomatic number v(G) from a code range.
@@ -48,13 +47,6 @@ public class McCabeMetric extends AbstractEvaluator implements
 
 	public static final String DESCRIPTION = translator
 			.i18n("McCabe Metric calculation.");
-
-	public static final ArrayList<Property> SUPPORTED_PROPERTIES = new ArrayList<Property>();
-	static {
-		SUPPORTED_PROPERTIES.add(new Property(McCabeMetric.class, "enabled",
-				"Switches calculation of McCabe Metric on and off.",
-				Boolean.class, "true"));
-	}
 
 	public static final List<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new ArrayList<QualityCharacteristic>();
 	static {

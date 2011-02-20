@@ -10,7 +10,6 @@ import com.puresol.coding.evaluator.CodeRangeEvaluatorFactory;
 import com.puresol.coding.evaluator.ProjectEvaluator;
 import com.puresol.coding.evaluator.ProjectEvaluatorFactory;
 import com.puresol.coding.quality.QualityCharacteristic;
-import com.puresol.utils.Property;
 
 public class CodeDepthMetricServiceFactory implements
 		CodeRangeEvaluatorFactory, ProjectEvaluatorFactory {
@@ -44,11 +43,6 @@ public class CodeDepthMetricServiceFactory implements
 	@Override
 	public String getName() {
 		return CodeDepthMetric.NAME;
-	}
-
-	@Override
-	public List<Property> getEvaluatorProperties() {
-		return CodeDepthMetric.SUPPORTED_PROPERTIES;
 	}
 
 	@Override

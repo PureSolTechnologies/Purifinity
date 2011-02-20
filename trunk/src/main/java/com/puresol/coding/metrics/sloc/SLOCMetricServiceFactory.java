@@ -10,7 +10,6 @@ import com.puresol.coding.evaluator.CodeRangeEvaluatorFactory;
 import com.puresol.coding.evaluator.ProjectEvaluator;
 import com.puresol.coding.evaluator.ProjectEvaluatorFactory;
 import com.puresol.coding.quality.QualityCharacteristic;
-import com.puresol.utils.Property;
 
 public class SLOCMetricServiceFactory implements ProjectEvaluatorFactory,
 		CodeRangeEvaluatorFactory {
@@ -44,11 +43,6 @@ public class SLOCMetricServiceFactory implements ProjectEvaluatorFactory,
 	@Override
 	public String getName() {
 		return SLOCMetric.NAME;
-	}
-
-	@Override
-	public List<Property> getEvaluatorProperties() {
-		return SLOCMetric.SUPPORTED_PROPERTIES;
 	}
 
 	@Override

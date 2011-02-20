@@ -7,13 +7,14 @@ import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.evaluator.ProjectEvaluator;
 import com.puresol.coding.evaluator.ProjectEvaluatorFactory;
 import com.puresol.coding.quality.QualityCharacteristic;
-import com.puresol.utils.Property;
 
 public class CoCoMoServiceFactory implements ProjectEvaluatorFactory {
 
 	@Override
 	public ProjectEvaluator create(ProjectAnalyzer projectAnalyser) {
-		return new CoCoMo(projectAnalyser);
+		CoCoMo cocomo = new CoCoMo(projectAnalyser);
+
+		return cocomo;
 	}
 
 	@Override
@@ -29,11 +30,6 @@ public class CoCoMoServiceFactory implements ProjectEvaluatorFactory {
 	@Override
 	public String getName() {
 		return CoCoMo.NAME;
-	}
-
-	@Override
-	public List<Property> getEvaluatorProperties() {
-		return CoCoMo.SUPPORTED_PROPERTIES;
 	}
 
 	/**

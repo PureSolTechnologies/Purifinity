@@ -10,7 +10,6 @@ import com.puresol.coding.evaluator.CodeRangeEvaluatorFactory;
 import com.puresol.coding.evaluator.ProjectEvaluator;
 import com.puresol.coding.evaluator.ProjectEvaluatorFactory;
 import com.puresol.coding.quality.QualityCharacteristic;
-import com.puresol.utils.Property;
 
 public class EntropyMetricServiceFactory implements CodeRangeEvaluatorFactory,
 		ProjectEvaluatorFactory {
@@ -44,11 +43,6 @@ public class EntropyMetricServiceFactory implements CodeRangeEvaluatorFactory,
 	@Override
 	public String getName() {
 		return EntropyMetric.NAME;
-	}
-
-	@Override
-	public List<Property> getEvaluatorProperties() {
-		return EntropyMetric.SUPPORTED_PROPERTIES;
 	}
 
 	@Override

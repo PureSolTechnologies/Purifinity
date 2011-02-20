@@ -35,7 +35,6 @@ import com.puresol.document.Document;
 import com.puresol.document.Paragraph;
 import com.puresol.document.Table;
 import com.puresol.uhura.parser.ParserTree;
-import com.puresol.utils.Property;
 
 /**
  * This class calculates the CoCoMo for a set number of sloc and a given average
@@ -58,8 +57,6 @@ public class CoCoMo extends AbstractEvaluator implements ProjectEvaluator {
 			.i18n("The COst COnstruction MOdel is a simple way "
 					+ "to estimate the construction costs of a "
 					+ "software project by couting the physical lines of code.");
-
-	public static final List<Property> SUPPORTED_PROPERTIES = new ArrayList<Property>();
 
 	public static final List<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new ArrayList<QualityCharacteristic>();
 

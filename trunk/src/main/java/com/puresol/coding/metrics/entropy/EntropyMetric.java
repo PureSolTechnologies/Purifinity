@@ -28,7 +28,6 @@ import com.puresol.document.Chapter;
 import com.puresol.document.Document;
 import com.puresol.document.Paragraph;
 import com.puresol.document.Table;
-import com.puresol.utils.Property;
 
 /**
  * This class calculates entropy and redundancy for a code range. The entropy is
@@ -50,13 +49,6 @@ public class EntropyMetric extends AbstractEvaluator implements
 
 	public static final String DESCRIPTION = translator
 			.i18n("Entropy Metric calculation.");
-
-	public static final List<Property> SUPPORTED_PROPERTIES = new ArrayList<Property>();
-	static {
-		SUPPORTED_PROPERTIES.add(new Property(EntropyMetric.class, "enabled",
-				"Switches calculation of EntropyMetric on and off.",
-				Boolean.class, "true"));
-	}
 
 	public static final List<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new ArrayList<QualityCharacteristic>();
 	static {
