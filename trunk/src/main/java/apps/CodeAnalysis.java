@@ -12,6 +12,7 @@ package apps;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
 
 import javax.i18n4java.Translator;
 import javax.swing.JButton;
@@ -30,6 +31,7 @@ import org.osgi.framework.BundleException;
 import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.evaluator.EvaluatorASCIIExport;
 import com.puresol.coding.reporting.html.HTMLProjectAnalysisCreator;
+import com.puresol.config.properties.ConfigurationHomePersistence;
 import com.puresol.filefilter.CSVFilter;
 import com.puresol.filefilter.ExcelFilter;
 import com.puresol.filefilter.TSVFilter;
@@ -86,9 +88,43 @@ public class CodeAnalysis extends PureSolApplication implements FinishListener {
 
 	public CodeAnalysis() {
 		super("Code Analysis", "v0.0.1");
+		loadConfiguration();
 		startOSGi();
 		initMenu();
 		initDesktop();
+	}
+
+	private void loadConfiguration() {
+		try {
+			ConfigurationHomePersistence.load(".CodeAnalysis");
+		} catch (IOException e) {
+			JOptionPane
+					.showMessageDialog(
+							this,
+							translator
+									.i18n("Could not read configuration.\nDefault values are used."),
+							translator.i18n("Error"), JOptionPane.ERROR_MESSAGE);
+		}
+	}
+
+	private boolean storeConfiguration() {
+		try {
+			ConfigurationHomePersistence.store(".CodeAnalysis");
+			return true;
+		} catch (IOException e) {
+			int result = JOptionPane
+					.showConfirmDialog(
+							this,
+							translator
+									.i18n("Could not save configuration.\nAll changes will get lost when proceeding.\n\nDo you want to proceed?"),
+							translator.i18n("Warning"),
+							JOptionPane.YES_NO_OPTION,
+							JOptionPane.WARNING_MESSAGE);
+			if (result == JOptionPane.YES_OPTION) {
+				return true;
+			}
+			return false;
+		}
 	}
 
 	private void startOSGi() {
@@ -281,7 +317,9 @@ public class CodeAnalysis extends PureSolApplication implements FinishListener {
 		} catch (BundleException e) {
 			logger.error(e.getMessage(), e);
 		}
-		super.quit();
+		if (storeConfiguration()) {
+			super.quit();
+		}
 	}
 
 	@Override

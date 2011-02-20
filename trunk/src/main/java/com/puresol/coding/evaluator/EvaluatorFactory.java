@@ -3,7 +3,6 @@ package com.puresol.coding.evaluator;
 import java.util.List;
 
 import com.puresol.coding.quality.QualityCharacteristic;
-import com.puresol.utils.Property;
 
 /**
  * This interface is the central interface for all factories for evaluators. The
@@ -18,8 +17,6 @@ public interface EvaluatorFactory {
 	public String getName();
 
 	public String getDescription();
-
-	public List<Property> getEvaluatorProperties();
 
 	public List<QualityCharacteristic> getEvaluatedQualityCharacteristics();
 

@@ -262,7 +262,7 @@ public enum QualityCharacteristic {
 		String directory = "/"
 				+ getClass().getPackage().getName().replaceAll("\\.", "/");
 		String file = name().toLowerCase() + "."
-				+ Translator.getDefaultLanguage() + ".txt";
+				+ Translator.getDefault().toString() + ".txt";
 		try {
 			return JARUtilities.readResourceFileToString(getClass()
 					.getResource(directory + "/" + file));
