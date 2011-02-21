@@ -6,7 +6,7 @@ import java.util.List;
 import javax.i18n4java.Translator;
 
 import com.puresol.uhura.ust.UniversalSyntaxTree;
-import com.puresol.uhura.ust.facilities.Operator;
+import com.puresol.uhura.ust.facilities.CompilerRelevantElement;
 
 /**
  * This is an import package statement like found in Java, Scala, D and other
@@ -15,7 +15,7 @@ import com.puresol.uhura.ust.facilities.Operator;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class ImportPackage extends Operator {
+public class ImportPackage extends CompilerRelevantElement {
 
 	private static final long serialVersionUID = -828922003801631227L;
 
