@@ -32,6 +32,7 @@ import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.evaluator.EvaluatorASCIIExport;
 import com.puresol.coding.reporting.html.HTMLProjectAnalysisCreator;
 import com.puresol.config.properties.ConfigurationHomePersistence;
+import com.puresol.config.properties.ConfigurationType;
 import com.puresol.filefilter.CSVFilter;
 import com.puresol.filefilter.ExcelFilter;
 import com.puresol.filefilter.TSVFilter;
@@ -96,7 +97,10 @@ public class CodeAnalysis extends PureSolApplication implements FinishListener {
 
 	private void loadConfiguration() {
 		try {
-			ConfigurationHomePersistence.load(".CodeAnalysis");
+			ConfigurationHomePersistence.load(".CodeAnalysis",
+					ConfigurationType.SYSTEM);
+			ConfigurationHomePersistence.load(".CodeAnalysis/plugins",
+					ConfigurationType.PLUGINS);
 		} catch (IOException e) {
 			JOptionPane
 					.showMessageDialog(
@@ -109,7 +113,10 @@ public class CodeAnalysis extends PureSolApplication implements FinishListener {
 
 	private boolean storeConfiguration() {
 		try {
-			ConfigurationHomePersistence.store(".CodeAnalysis");
+			ConfigurationHomePersistence.store(".CodeAnalysis",
+					ConfigurationType.SYSTEM);
+			ConfigurationHomePersistence.store(".CodeAnalysis/plugins",
+					ConfigurationType.PLUGINS);
 			return true;
 		} catch (IOException e) {
 			int result = JOptionPane
