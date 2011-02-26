@@ -4,8 +4,6 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.puresol.gui.osgi.AbstractBundleConfiguratorPanel;
-
 public class CoCoMoConfiguratorTest {
 
 	@Test
@@ -16,9 +14,9 @@ public class CoCoMoConfiguratorTest {
 	@Test
 	public void testCreatePanel() {
 		CoCoMoConfigurator configurator = new CoCoMoConfigurator();
-		AbstractBundleConfiguratorPanel panel = configurator.createPanel();
-		assertNotNull(panel);
-		assertTrue(panel.getComponentCount() > 0);
+		assertFalse(configurator.getName().isEmpty());
+		assertTrue(configurator.getPathName().startsWith("Evaluators/CoCoMo"));
+		assertTrue(configurator.getPropertyDescriptions().size() > 0);
 	}
 
 }

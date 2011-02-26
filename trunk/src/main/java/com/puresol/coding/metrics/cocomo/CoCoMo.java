@@ -11,9 +11,9 @@
 package com.puresol.coding.metrics.cocomo;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Vector;
 
 import javax.i18n4java.Translator;
 
@@ -27,9 +27,13 @@ import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.evaluator.ProjectEvaluator;
 import com.puresol.coding.evaluator.Result;
+import com.puresol.coding.metrics.cocomo.config.ProjectComplexity;
+import com.puresol.coding.metrics.cocomo.config.SalaryCurrency;
+import com.puresol.coding.metrics.cocomo.config.YearlyDeveloperSalary;
 import com.puresol.coding.metrics.sloc.SLOCMetric;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.SourceCodeQuality;
+import com.puresol.config.properties.PropertyDescription;
 import com.puresol.document.Chapter;
 import com.puresol.document.Document;
 import com.puresol.document.Paragraph;
@@ -58,7 +62,14 @@ public class CoCoMo extends AbstractEvaluator implements ProjectEvaluator {
 					+ "to estimate the construction costs of a "
 					+ "software project by couting the physical lines of code.");
 
-	public static final List<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new ArrayList<QualityCharacteristic>();
+	public static final List<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new Vector<QualityCharacteristic>();
+
+	public static final List<PropertyDescription<?>> CONFIGURATION_PROPERTIES = new Vector<PropertyDescription<?>>();
+	static {
+		CONFIGURATION_PROPERTIES.add(new ProjectComplexity());
+		CONFIGURATION_PROPERTIES.add(new YearlyDeveloperSalary());
+		CONFIGURATION_PROPERTIES.add(new SalaryCurrency());
+	}
 
 	private final CoCoMoValueSet cocomoValues = new CoCoMoValueSet();
 	private final Hashtable<AnalyzedFile, CoCoMoValueSet> fileCoCoMoValues = new Hashtable<AnalyzedFile, CoCoMoValueSet>();

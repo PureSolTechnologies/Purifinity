@@ -1,7 +1,9 @@
 package com.puresol.coding.metrics.cocomo;
 
+import java.util.List;
+
+import com.puresol.config.properties.PropertyDescription;
 import com.puresol.gui.osgi.BundleConfigurator;
-import com.puresol.gui.osgi.AbstractBundleConfiguratorPanel;
 
 public class CoCoMoConfigurator implements BundleConfigurator {
 
@@ -11,13 +13,18 @@ public class CoCoMoConfigurator implements BundleConfigurator {
 	}
 
 	@Override
+	public String getContext() {
+		return CoCoMo.class.getSimpleName();
+	}
+
+	@Override
 	public String getPathName() {
 		return "Evaluators/CoCoMo";
 	}
 
 	@Override
-	public AbstractBundleConfiguratorPanel createPanel() {
-		return new CoCoMoConfiguratorPanel();
+	public List<PropertyDescription<?>> getPropertyDescriptions() {
+		return CoCoMo.CONFIGURATION_PROPERTIES;
 	}
 
 }
