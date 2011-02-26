@@ -10,23 +10,28 @@ import java.util.Properties;
 
 public class ConfigurationHomePersistence {
 
-	public static void load(String directoryName) throws IOException {
+	public static void load(String directoryName,
+			ConfigurationType configurationType) throws IOException {
 		ConfigurationHomePersistence persistence = new ConfigurationHomePersistence(
-				directoryName);
+				directoryName, configurationType);
 		persistence.loadConfiguration();
 	}
 
-	public static void store(String directoryName) throws IOException {
+	public static void store(String directoryName,
+			ConfigurationType configurationType) throws IOException {
 		ConfigurationHomePersistence persistence = new ConfigurationHomePersistence(
-				directoryName);
+				directoryName, configurationType);
 		persistence.storeConfiguration();
 	}
 
 	private final String directoryName;
+	private final ConfigurationType configurationType;
 
-	private ConfigurationHomePersistence(String directoryName) {
+	private ConfigurationHomePersistence(String directoryName,
+			ConfigurationType configurationType) {
 		super();
 		this.directoryName = directoryName;
+		this.configurationType = configurationType;
 	}
 
 	private File getDirectory() {
@@ -35,7 +40,7 @@ public class ConfigurationHomePersistence {
 
 	private void loadConfiguration() throws IOException {
 		ConfigurationManager configurationManager = ConfigurationManager
-				.getInstance();
+				.getInstance(configurationType);
 		File files[] = getDirectory().listFiles(new FilenameFilter() {
 			@Override
 			public boolean accept(File directory, String name) {
@@ -57,7 +62,7 @@ public class ConfigurationHomePersistence {
 
 	private void storeConfiguration() throws IOException {
 		ConfigurationManager configurationManager = ConfigurationManager
-				.getInstance();
+				.getInstance(configurationType);
 		for (String context : configurationManager.getContexts()) {
 			File file = new File(getDirectory(), context + ".properties");
 			Properties properties = configurationManager

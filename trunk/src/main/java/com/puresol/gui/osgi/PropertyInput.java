@@ -98,18 +98,18 @@ public class PropertyInput extends JPanel {
 	}
 
 	public void setValue(Object value) {
-		if (JComboBox.class.isAssignableFrom(component.getClass())) {
-			if (value.getClass().isEnum()) {
-				((JComboBox) component).setSelectedItem(value);
-			} else {
+		if (JComboBox.class.equals(component.getClass())) {
+			if (String.class.equals(value.getClass())) {
 				for (Object o : description.getType().getEnumConstants()) {
 					if (o.toString().equals(value)) {
 						((JComboBox) component).setSelectedItem(o);
 					}
 				}
+			} else {
+				((JComboBox) component).setSelectedItem(value);
 			}
 		} else if (JTextField.class.isAssignableFrom(component.getClass())) {
-			((JTextField) component).setText((String) value);
+			((JTextField) component).setText(String.valueOf(value));
 		}
 	}
 }

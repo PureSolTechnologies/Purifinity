@@ -4,26 +4,60 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
+/**
+ * This class is the central manager for all systems configuration. The
+ * configuration is stored in properties which are assigned to different
+ * contexts.
+ * 
+ * There might be different named instances which are used for different
+ * purposes like plugin configuration, project configuration and system
+ * configuration.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class ConfigurationManager {
+
+	private static final ConcurrentMap<ConfigurationType, ConfigurationManager> instance = new ConcurrentHashMap<ConfigurationType, ConfigurationManager>();
+
+	/**
+	 * This method returns the instance named by name. If there is not instance
+	 * with that name available, a new instance is created and returned. If an
+	 * instance is available, that instance is returned.
+	 * 
+	 * @param name
+	 *            is the name of the instance to be returned.
+	 * @return
+	 */
+	public static ConfigurationManager getInstance(
+			ConfigurationType configurationType) {
+		if (!instance.containsKey(configurationType)) {
+			createInstance(configurationType);
+		}
+		return instance.get(configurationType);
+	}
+
+	/**
+	 * This method acutally creates the instance named with name.
+	 * 
+	 * @param name
+	 */
+	private static synchronized void createInstance(
+			ConfigurationType configurationType) {
+		if (!instance.containsKey(configurationType)) {
+			instance.put(configurationType, new ConfigurationManager());
+		}
+	}
 
 	private final Map<String, Properties> contextProperties = new HashMap<String, Properties>();
 
-	private static ConfigurationManager instance = null;
-
-	public static ConfigurationManager getInstance() {
-		if (instance == null) {
-			createInstance();
-		}
-		return instance;
-	}
-
-	private static synchronized void createInstance() {
-		if (instance == null) {
-			instance = new ConfigurationManager();
-		}
-	}
-
+	/**
+	 * This constructor is private to make this class private to have singleton
+	 * instances.
+	 */
 	private ConfigurationManager() {
 		super();
 	}

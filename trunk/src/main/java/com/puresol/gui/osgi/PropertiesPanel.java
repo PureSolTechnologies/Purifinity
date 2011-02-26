@@ -10,12 +10,14 @@ import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
 import com.puresol.config.properties.ConfigurationManager;
+import com.puresol.config.properties.ConfigurationType;
 import com.puresol.config.properties.PropertyDescription;
 
 public class PropertiesPanel extends JPanel {
 
 	private static final long serialVersionUID = -5497942963691954365L;
 
+	private ConfigurationType configurationType = ConfigurationType.SYSTEM;
 	private String context = "";
 	private final List<PropertyDescription<?>> propertyDescriptions = new Vector<PropertyDescription<?>>();
 	private final Map<PropertyDescription<?>, PropertyInput> propertyInputs = new HashMap<PropertyDescription<?>, PropertyInput>();
@@ -25,9 +27,10 @@ public class PropertiesPanel extends JPanel {
 		initUI();
 	}
 
-	public PropertiesPanel(String context,
+	public PropertiesPanel(ConfigurationType configurationType, String context,
 			List<PropertyDescription<?>> propertyDescriptions) {
 		super();
+		this.configurationType = configurationType;
 		this.context = context;
 		this.propertyDescriptions.addAll(propertyDescriptions);
 		initUI();
@@ -37,8 +40,12 @@ public class PropertiesPanel extends JPanel {
 		removeAll();
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		propertyInputs.clear();
-		ConfigurationManager manager = ConfigurationManager.getInstance();
+		ConfigurationManager manager = ConfigurationManager
+				.getInstance(configurationType);
 		Properties properties = manager.getContextProperties(context);
+		if (properties == null) {
+			properties = new Properties();
+		}
 		for (PropertyDescription<?> description : propertyDescriptions) {
 			PropertyInput input = new PropertyInput(description);
 			propertyInputs.put(description, input);
@@ -52,8 +59,9 @@ public class PropertiesPanel extends JPanel {
 		updateUI();
 	}
 
-	public void setPropertyDescriptions(String context,
-			List<PropertyDescription<?>> propertyDescriptions) {
+	public void setPropertyDescriptions(ConfigurationType configurationType,
+			String context, List<PropertyDescription<?>> propertyDescriptions) {
+		this.configurationType = configurationType;
 		this.context = context;
 		this.propertyDescriptions.clear();
 		this.propertyDescriptions.addAll(propertyDescriptions);
@@ -74,7 +82,8 @@ public class PropertiesPanel extends JPanel {
 	}
 
 	public void apply() {
-		ConfigurationManager manager = ConfigurationManager.getInstance();
+		ConfigurationManager manager = ConfigurationManager
+				.getInstance(configurationType);
 		Properties properties = manager.getContextProperties(context);
 		if (properties == null) {
 			properties = new Properties();

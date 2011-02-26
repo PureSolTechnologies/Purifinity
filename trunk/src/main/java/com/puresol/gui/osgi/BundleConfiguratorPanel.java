@@ -11,6 +11,8 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import com.puresol.config.properties.ConfigurationType;
+
 public class BundleConfiguratorPanel extends JPanel implements ActionListener {
 
 	private static final long serialVersionUID = -5497942963691954365L;
@@ -69,7 +71,7 @@ public class BundleConfiguratorPanel extends JPanel implements ActionListener {
 			propertiesPanel.clearPropertyDescriptions();
 		} else {
 			nameLabel.setText(bundleConfigurator.getName());
-			propertiesPanel.setPropertyDescriptions(
+			propertiesPanel.setPropertyDescriptions(ConfigurationType.PLUGINS,
 					bundleConfigurator.getContext(),
 					bundleConfigurator.getPropertyDescriptions());
 		}
