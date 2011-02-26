@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
+import java.util.List;
 
 import org.junit.Test;
 import org.osgi.framework.BundleContext;
@@ -12,8 +13,8 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 
+import com.puresol.config.properties.PropertyDescription;
 import com.puresol.gui.osgi.BundleConfigurator;
-import com.puresol.gui.osgi.AbstractBundleConfiguratorPanel;
 
 public class OSGiTest {
 
@@ -74,14 +75,20 @@ public class OSGiTest {
 								}
 
 								@Override
+								public String getContext() {
+									return null;
+								}
+
+								@Override
 								public String getPathName() {
 									return null;
 								}
 
 								@Override
-								public AbstractBundleConfiguratorPanel createPanel() {
+								public List<PropertyDescription<?>> getPropertyDescriptions() {
 									return null;
 								}
+
 							}, properties);
 					assertNotNull(registration);
 					ServiceReference reference[] = context

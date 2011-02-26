@@ -1,10 +1,14 @@
 package com.puresol.gui.osgi;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.i18n4java.Translator;
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.event.TreeSelectionEvent;
@@ -20,31 +24,18 @@ import com.puresol.gui.Application;
  * 
  */
 public class BundleConfigurationDialog extends JDialog implements
-		TreeSelectionListener {
+		TreeSelectionListener, ActionListener {
 
 	private static final long serialVersionUID = -359245614681727468L;
 
 	private static final Translator translator = Translator
 			.getTranslator(BundleConfigurationDialog.class);
 
-	private static class EmptyPanel extends AbstractBundleConfiguratorPanel {
-
-		private static final long serialVersionUID = -4884833535616002340L;
-
-		@Override
-		public void start() {
-		}
-
-		@Override
-		public boolean stop() {
-			return false;
-		}
-	}
-
 	private final String frameworkName;
 	private final BundleConfiguratorTreeModel configuratorTreeView = new BundleConfiguratorTreeModel();
 	private final JPanel contentPanel = new JPanel();
-	private AbstractBundleConfiguratorPanel currentPanel = null;
+	private final BundleConfiguratorPanel currentPanel = new BundleConfiguratorPanel();
+	private final JButton closeButton = new JButton(translator.i18n("Close"));
 
 	public BundleConfigurationDialog(String frameworkName) {
 		super(Application.getInstance(), translator
@@ -56,6 +47,7 @@ public class BundleConfigurationDialog extends JDialog implements
 	private void initUI() {
 		setContentPane(contentPanel);
 		contentPanel.setLayout(new BorderLayout());
+
 		configuratorTreeView.setConfiguratorTree(BundleConfiguratorTree
 				.create(frameworkName));
 		configuratorTreeView.setBorder(BorderFactory
@@ -63,8 +55,11 @@ public class BundleConfigurationDialog extends JDialog implements
 		configuratorTreeView.addTreeSelectionListener(this);
 		contentPanel.add(new JScrollPane(configuratorTreeView),
 				BorderLayout.WEST);
-		currentPanel = new EmptyPanel();
+
 		contentPanel.add(currentPanel, BorderLayout.CENTER);
+
+		closeButton.addActionListener(this);
+		contentPanel.add(closeButton, BorderLayout.SOUTH);
 		pack();
 	}
 
@@ -72,23 +67,32 @@ public class BundleConfigurationDialog extends JDialog implements
 		final BundleConfiguratorTree tree = (BundleConfiguratorTree) treePath
 				.getPathComponent(treePath.getPathCount() - 1);
 		if (tree != null) {
-			contentPanel.remove(currentPanel);
 			BundleConfigurator configurator = tree.getConfigurator();
-			if (configurator != null) {
-				currentPanel = configurator.createPanel();
-			} else {
-				currentPanel = new EmptyPanel();
-			}
-			currentPanel.start();
-			contentPanel.add(currentPanel, BorderLayout.CENTER);
-			contentPanel.updateUI();
+			currentPanel.setBundleConfigurator(configurator);
 		}
+	}
+
+	private void close() {
+		JOptionPane
+				.showMessageDialog(
+						Application.getInstance(),
+						translator
+								.i18n("Closeing does not perform checks\nfor changed values and does not save them!"),
+						translator.i18n("Warning"), JOptionPane.WARNING_MESSAGE);
+		dispose();
 	}
 
 	@Override
 	public void valueChanged(TreeSelectionEvent e) {
 		if (e.getSource() == configuratorTreeView) {
 			changeConfigurator(e.getPath());
+		}
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == closeButton) {
+			close();
 		}
 	}
 }
