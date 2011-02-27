@@ -25,6 +25,12 @@ public class HalsteadActivator implements BundleActivator {
 	public void start(BundleContext context) throws Exception {
 		logger.info("Starting Halstead...");
 
+		registerFactory(context);
+
+		logger.info("Started.");
+	}
+
+	private void registerFactory(BundleContext context) {
 		HalsteadMetricServiceFactory halsteadMetricFactory = new HalsteadMetricServiceFactory();
 
 		String interfaces[] = new String[] {
@@ -40,8 +46,6 @@ public class HalsteadActivator implements BundleActivator {
 		ServiceRegistration registration = context.registerService(interfaces,
 				halsteadMetricFactory, properties);
 		serviceRegistrations.add(registration);
-
-		logger.info("Started.");
 	}
 
 	@Override

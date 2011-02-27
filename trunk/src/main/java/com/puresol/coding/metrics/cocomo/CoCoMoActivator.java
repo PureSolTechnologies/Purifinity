@@ -12,7 +12,7 @@ import org.osgi.framework.ServiceRegistration;
 
 import com.puresol.coding.evaluator.ProjectEvaluatorFactory;
 import com.puresol.config.APIInformation;
-import com.puresol.gui.osgi.BundleConfigurator;
+import com.puresol.osgi.BundleConfigurator;
 
 public class CoCoMoActivator implements BundleActivator {
 
@@ -20,8 +20,6 @@ public class CoCoMoActivator implements BundleActivator {
 			.getLogger(CoCoMoActivator.class);
 
 	private final List<ServiceRegistration> serviceRegistrations = new ArrayList<ServiceRegistration>();
-
-	private final CoCoMoServiceFactory cocomoFactory = new CoCoMoServiceFactory();
 
 	@Override
 	public void start(BundleContext context) throws Exception {
@@ -34,8 +32,10 @@ public class CoCoMoActivator implements BundleActivator {
 	}
 
 	private void registerProjectFactory(BundleContext context) {
+		CoCoMoServiceFactory cocomoFactory = new CoCoMoServiceFactory();
 		String interfaces[] = new String[] { ProjectEvaluatorFactory.class
 				.getName() };
+
 		Dictionary<Object, Object> properties = new Hashtable<Object, Object>();
 		properties.put("service.name", cocomoFactory.getName());
 		properties.put("service.description", cocomoFactory.getDescription());

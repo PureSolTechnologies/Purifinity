@@ -201,7 +201,8 @@ public class CoCoMoValueSet implements Serializable {
 		results.add(new Result(
 				translator.i18n("Development Effort Estimate"),
 				translator
-						.i18n("Basic COCOMO model, Person-Months = 2.4 * (KSLOC**1.05)"),
+						.i18n("Basic COCOMO model, Person-Months = {0} * (KSLOC**{1}) / {2} complexity",
+								c1, c2, complexity.getIdentifier()),
 				personMonth, translator.i18n("Person-Months")));
 		results.add(new Result(translator.i18n("Development Effort Estimate"),
 				translator.i18n("Person-Years = Person-Month / 12"),
@@ -209,7 +210,8 @@ public class CoCoMoValueSet implements Serializable {
 		results.add(new Result(
 				translator.i18n("Schedule Estimate"),
 				translator
-						.i18n("MBasic COCOMO model, Months = 2.5 * (person-months**0.38)"),
+						.i18n("Basic COCOMO model, Months = 2.5 * (person-months**{0}) / {1} complexity",
+								c3, complexity.getIdentifier()),
 				scheduledMonth, translator.i18n("Months")));
 		results.add(new Result(translator.i18n("Schedule Estimate"), translator
 				.i18n("Years = Months / 12"), scheduledYears, translator
@@ -219,8 +221,8 @@ public class CoCoMoValueSet implements Serializable {
 				.i18n("Effort/Schedule"), teamSize, ""));
 		results.add(new Result(translator
 				.i18n("Total Estimated Cost to Develop"), translator.i18n(
-				"average salary = {0}{1}/year, overhead = 2.40",
-				averageSalary, currency), estimatedCosts, translator.i18n("k$")));
+				"average salary = {0}{1}/year, overhead = 2.40", averageSalary,
+				currency), estimatedCosts, translator.i18n("k$")));
 	}
 
 	@Override
@@ -234,13 +236,15 @@ public class CoCoMoValueSet implements Serializable {
 				.i18n("Development Effort Estimate, Person-Years (Person-Months)")
 				+ " = " + personYears + " (" + personMonth + ")\n";
 		text += translator
-				.i18n(" (Basic COCOMO model, Person-Months = 2.4 * (KSLOC**1.05))")
+				.i18n(" (Basic COCOMO model, Person-Months = {0} * (KSLOC**{1})) / {2} complexity",
+						c1, c2, complexity.getIdentifier())
 				+ "\n";
 		text += translator.i18n("Schedule Estimate, Years (Months)")
 				+ "                         = " + scheduledYears + " ("
 				+ scheduledMonth + ")\n";
 		text += translator
-				.i18n(" (Basic COCOMO model, Months = 2.5 * (person-months**0.38))")
+				.i18n(" (Basic COCOMO model, Months = 2.5 * (person-months**{0})) / {1} complexity",
+						c3, complexity.getIdentifier())
 				+ "\n";
 		text += translator
 				.i18n("Estimated Average Number of Developers (Effort/Schedule)")
@@ -252,48 +256,6 @@ public class CoCoMoValueSet implements Serializable {
 				" (average salary = {0}{1}/year, overhead = 2.40)",
 				averageSalary, currency)
 				+ "\n";
-		return text;
-	}
-
-	public String toHTMLString() {
-		String text = "<table>";
-		text += "<tr><td>"
-				+ translator.i18n("Total Physical Source Lines of Code (SLOC)")
-				+ "</td><td>=</td><td>" + sloc + "</td></tr>\n";
-		text += "<tr><td>"
-				+ translator.i18n("Calculation for a {0} complexity project.",
-						complexity.getIdentifier())
-				+ "</td><td></td><td></td></tr>\n";
-		text += "<tr><td>"
-				+ translator
-						.i18n("Development Effort Estimate, Person-Years (Person-Months)")
-				+ "</td><td>=</td><td>" + personYears + " (" + personMonth
-				+ ")</td></tr>\n";
-		text += "<tr><td>"
-				+ translator
-						.i18n(" (Basic COCOMO model, Person-Months = 2.4 * (KSLOC**1.05))")
-				+ "</td><td></td><td></td></tr>\n";
-		text += "<tr><td>"
-				+ translator.i18n("Schedule Estimate, Years (Months)")
-				+ "</td><td>=</td><td>" + scheduledYears + " ("
-				+ scheduledMonth + ")</td></tr>\n";
-		text += "<tr><td>"
-				+ translator
-						.i18n(" (Basic COCOMO model, Months = 2.5 * (person-months**0.38))")
-				+ "</td><td></td><td></td></tr>\n";
-		text += "<tr><td>"
-				+ translator
-						.i18n("Estimated Average Number of Developers (Effort/Schedule)")
-				+ "</td><td>=</td><td>" + teamSize + "</td></tr>\n";
-		text += "<tr><td>" + translator.i18n("Total Estimated Cost to Develop")
-				+ "</td><td>=</td><td>" + estimatedCosts + "k" + currency
-				+ "</td></tr>\n";
-		text += "<tr><td>"
-				+ translator.i18n(
-						" (average salary = {0}{1}/year, overhead = 2.40)",
-						averageSalary, currency)
-				+ "</td><td></td><td></td></tr>\n";
-		text += "</table>";
 		return text;
 	}
 

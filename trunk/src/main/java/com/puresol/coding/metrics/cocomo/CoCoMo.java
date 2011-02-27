@@ -110,12 +110,7 @@ public class CoCoMo extends AbstractEvaluator implements ProjectEvaluator {
 				getMonitor().setStatus(count);
 				getMonitor().setText(file.getFile().getPath());
 			}
-			try {
-				sloc += getFileSLOC(file);
-			} catch (IOException e) {
-				logger.error(e.getMessage(), e);
-				logger.error("Process with next file...");
-			}
+			sloc += getFileSLOC(file);
 		}
 		cocomoValues.setSloc(sloc);
 		if (getMonitor() != null) {
@@ -123,15 +118,21 @@ public class CoCoMo extends AbstractEvaluator implements ProjectEvaluator {
 		}
 	}
 
-	private int getFileSLOC(AnalyzedFile file) throws IOException {
-		Analysis analysis = projectAnalyzer.getAnalysis(file);
-		ParserTree parserTree = analysis.getParserTree();
-		SLOCMetric metric = new SLOCMetric(analysis.getLanguage(),
-				new CodeRange("", CodeRangeType.FILE, parserTree));
-		metric.run();
-		int sloc = metric.getResult().getProLOC();
-		addCodeRangeCoCoMo(file, sloc);
-		return sloc;
+	private int getFileSLOC(AnalyzedFile file) {
+		try {
+			Analysis analysis = projectAnalyzer.getAnalysis(file);
+			ParserTree parserTree = analysis.getParserTree();
+			SLOCMetric metric = new SLOCMetric(analysis.getLanguage(),
+					new CodeRange("", CodeRangeType.FILE, parserTree));
+			metric.run();
+			int sloc = metric.getResult().getProLOC();
+			addCodeRangeCoCoMo(file, sloc);
+			return sloc;
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e);
+			logger.error("Process with next file...");
+			return 0;
+		}
 	}
 
 	private void addCodeRangeCoCoMo(AnalyzedFile file, int sloc) {
@@ -147,6 +148,24 @@ public class CoCoMo extends AbstractEvaluator implements ProjectEvaluator {
 		cocomoValues.setComplexity(complexity);
 		for (AnalyzedFile file : fileCoCoMoValues.keySet()) {
 			fileCoCoMoValues.get(file).setComplexity(complexity);
+		}
+	}
+
+	public void setAverageSalary(int averageSalary, String currency) {
+		cocomoValues.setAverageSalary(averageSalary, currency);
+		for (AnalyzedFile file : fileCoCoMoValues.keySet()) {
+			fileCoCoMoValues.get(file)
+					.setAverageSalary(averageSalary, currency);
+		}
+	}
+
+	public void setComplexity(String complexity) {
+		for (Complexity complexityConstant : Complexity.class
+				.getEnumConstants()) {
+			if (complexityConstant.toString().equals(complexity)) {
+				setComplexity(complexityConstant);
+				return;
+			}
 		}
 	}
 

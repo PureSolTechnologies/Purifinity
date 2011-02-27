@@ -25,6 +25,12 @@ public class NormalizedMaintainabilityActivator implements BundleActivator {
 	public void start(BundleContext context) throws Exception {
 		logger.info("Starting Normalized Maintainability Index...");
 
+		registerFactory(context);
+
+		logger.info("Started.");
+	}
+
+	private void registerFactory(BundleContext context) {
 		NormalizedMaintainabilityIndexServiceFactory normalizedMaintainabilityIndexFactory = new NormalizedMaintainabilityIndexServiceFactory();
 
 		String interfaces[] = new String[] {
@@ -41,8 +47,6 @@ public class NormalizedMaintainabilityActivator implements BundleActivator {
 		ServiceRegistration registration = context.registerService(interfaces,
 				normalizedMaintainabilityIndexFactory, properties);
 		serviceRegistrations.add(registration);
-
-		logger.info("Started.");
 	}
 
 	@Override

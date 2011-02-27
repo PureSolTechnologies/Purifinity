@@ -24,6 +24,12 @@ public class SLOCActivator implements BundleActivator {
 	public void start(BundleContext context) throws Exception {
 		logger.info("Starting SLOC...");
 
+		registerFactory(context);
+
+		logger.info("Started.");
+	}
+
+	private void registerFactory(BundleContext context) {
 		SLOCMetricServiceFactory slocMetricFactory = new SLOCMetricServiceFactory();
 
 		String interfaces[] = new String[] {
@@ -39,8 +45,6 @@ public class SLOCActivator implements BundleActivator {
 		ServiceRegistration registration = context.registerService(interfaces,
 				slocMetricFactory, properties);
 		serviceRegistrations.add(registration);
-
-		logger.info("Started.");
 	}
 
 	@Override

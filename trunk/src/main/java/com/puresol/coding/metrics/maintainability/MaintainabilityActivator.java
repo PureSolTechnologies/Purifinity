@@ -25,6 +25,12 @@ public class MaintainabilityActivator implements BundleActivator {
 	public void start(BundleContext context) throws Exception {
 		logger.info("Starting Maintainability Index...");
 
+		registerFactory(context);
+
+		logger.info("Started.");
+	}
+
+	private void registerFactory(BundleContext context) {
 		MaintainabilityIndexServiceFactory maintainabilityIndexFactory = new MaintainabilityIndexServiceFactory();
 
 		String interfaces[] = new String[] {
@@ -40,8 +46,6 @@ public class MaintainabilityActivator implements BundleActivator {
 		ServiceRegistration registration = context.registerService(interfaces,
 				maintainabilityIndexFactory, properties);
 		serviceRegistrations.add(registration);
-
-		logger.info("Started.");
 	}
 
 	@Override

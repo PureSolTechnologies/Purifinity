@@ -25,6 +25,12 @@ public class McCabeActivator implements BundleActivator {
 	public void start(BundleContext context) throws Exception {
 		logger.info("Starting McCabe...");
 
+		registerFactory(context);
+
+		logger.info("Started.");
+	}
+
+	private void registerFactory(BundleContext context) {
 		McCabeMetricServiceFactory mcCabeMetricFactory = new McCabeMetricServiceFactory();
 
 		String interfaces[] = new String[] {
@@ -40,8 +46,6 @@ public class McCabeActivator implements BundleActivator {
 		ServiceRegistration registration = context.registerService(interfaces,
 				mcCabeMetricFactory, properties);
 		serviceRegistrations.add(registration);
-
-		logger.info("Started.");
 	}
 
 	@Override

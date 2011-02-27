@@ -15,7 +15,7 @@ public class CoCoMoConfiguratorTest {
 	public void testCreatePanel() {
 		CoCoMoConfigurator configurator = new CoCoMoConfigurator();
 		assertFalse(configurator.getName().isEmpty());
-		assertTrue(configurator.getPathName().startsWith("Evaluators/CoCoMo"));
+		assertTrue(configurator.getPathName().startsWith("CoCoMo"));
 		assertTrue(configurator.getPropertyDescriptions().size() > 0);
 	}
 

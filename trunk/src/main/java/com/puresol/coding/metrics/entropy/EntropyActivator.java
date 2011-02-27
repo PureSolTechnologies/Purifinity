@@ -25,6 +25,12 @@ public class EntropyActivator implements BundleActivator {
 	public void start(BundleContext context) throws Exception {
 		logger.info("Starting Entropy...");
 
+		registerFactory(context);
+
+		logger.info("Started.");
+	}
+
+	private void registerFactory(BundleContext context) {
 		EntropyMetricServiceFactory entropyMetricFactory = new EntropyMetricServiceFactory();
 
 		String interfaces[] = new String[] {
@@ -40,8 +46,6 @@ public class EntropyActivator implements BundleActivator {
 		ServiceRegistration registration = context.registerService(interfaces,
 				entropyMetricFactory, properties);
 		serviceRegistrations.add(registration);
-
-		logger.info("Started.");
 	}
 
 	@Override
