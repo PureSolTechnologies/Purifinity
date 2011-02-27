@@ -16,7 +16,7 @@ public class ConfigurationHomePersistenceTest {
 		assertFalse(System.getProperty("user.home").isEmpty());
 
 		configurationManager = ConfigurationManager
-				.getInstance(ConfigurationType.SYSTEM);
+				.getInstance(ConfigurationLayer.SYSTEM);
 		assertNotNull(configurationManager);
 		configurationManager.addProperty("Context", "Key", "Value");
 	}
@@ -25,10 +25,10 @@ public class ConfigurationHomePersistenceTest {
 	public void testLoadAndSave() throws Throwable {
 		assertEquals("Value",
 				configurationManager.getContextProperties("Context").get("Key"));
-		ConfigurationHomePersistence.store("", ConfigurationType.SYSTEM);
+		ConfigurationHomePersistence.store("", ConfigurationLayer.SYSTEM);
 		configurationManager.clear();
 		assertEquals(null, configurationManager.getContextProperties("Context"));
-		ConfigurationHomePersistence.load("", ConfigurationType.SYSTEM);
+		ConfigurationHomePersistence.load("", ConfigurationLayer.SYSTEM);
 		assertEquals("Value",
 				configurationManager.getContextProperties("Context").get("Key"));
 		/*

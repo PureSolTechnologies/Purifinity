@@ -1,7 +1,5 @@
 package com.puresol.config.properties;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -16,12 +14,14 @@ import java.util.concurrent.ConcurrentMap;
  * purposes like plugin configuration, project configuration and system
  * configuration.
  * 
+ * <b>This class is thread safe.</b>
+ * 
  * @author Rick-Rainer Ludwig
  * 
  */
 public class ConfigurationManager {
 
-	private static final ConcurrentMap<ConfigurationType, ConfigurationManager> instance = new ConcurrentHashMap<ConfigurationType, ConfigurationManager>();
+	private static final ConcurrentMap<ConfigurationLayer, ConfigurationManager> instance = new ConcurrentHashMap<ConfigurationLayer, ConfigurationManager>();
 
 	/**
 	 * This method returns the instance named by name. If there is not instance
@@ -33,11 +33,11 @@ public class ConfigurationManager {
 	 * @return
 	 */
 	public static ConfigurationManager getInstance(
-			ConfigurationType configurationType) {
-		if (!instance.containsKey(configurationType)) {
-			createInstance(configurationType);
+			ConfigurationLayer configurationLayer) {
+		if (!instance.containsKey(configurationLayer)) {
+			createInstance(configurationLayer);
 		}
-		return instance.get(configurationType);
+		return instance.get(configurationLayer);
 	}
 
 	/**
@@ -46,13 +46,59 @@ public class ConfigurationManager {
 	 * @param name
 	 */
 	private static synchronized void createInstance(
-			ConfigurationType configurationType) {
-		if (!instance.containsKey(configurationType)) {
-			instance.put(configurationType, new ConfigurationManager());
+			ConfigurationLayer configurationLayer) {
+		if (!instance.containsKey(configurationLayer)) {
+			instance.put(configurationLayer, new ConfigurationManager());
 		}
 	}
 
-	private final Map<String, Properties> contextProperties = new HashMap<String, Properties>();
+	/**
+	 * This method looks for a configuration within a specified context. The
+	 * method searches all layers of configuration in a specified order.
+	 * 
+	 * The order is:
+	 * 
+	 * <pre>
+	 *     1) PROJECT
+	 *     2) PLUGINS
+	 *     3) SYSTEM
+	 *     4) default value from PropertyDescription
+	 * </pre>
+	 * 
+	 * The search is inverse to the layers. As soon as there is a value for the
+	 * property found, the value is returned. This is needed to be fast. If
+	 * there is no setting found, the default value of PropertyDescription is
+	 * returned. It's assured than that no NULL is returned.
+	 * 
+	 * The method is safe for changes in ConfigurationType as soon as the
+	 * constants in the ConfigurationType enum are sorted correctly.
+	 * 
+	 * @param context
+	 *            is the context to be searched in.
+	 * @param description
+	 *            is the PropertyDescription of the property to be found.
+	 * @return The settings value is returned.
+	 */
+	public static String getProperty(String context,
+			PropertyDescription<?> description) {
+		Object layers[] = ConfigurationLayer.class.getEnumConstants();
+		for (int id = layers.length - 1; id >= 0; id--) {
+			ConfigurationLayer layer = (ConfigurationLayer) layers[id];
+			ConfigurationManager manager = ConfigurationManager
+					.getInstance(layer);
+			Properties properties = manager.getContextProperties(context);
+			if (properties != null) {
+				String value = properties.getProperty(description
+						.getPropertyName());
+				if ((value != null) && (!value.isEmpty())) {
+					return value;
+				}
+			}
+		}
+		return description.getDefaultValue().toString();
+	}
+
+	private final ConcurrentMap<String, Properties> contextProperties = new ConcurrentHashMap<String, Properties>();
 
 	/**
 	 * This constructor is private to make this class private to have singleton
@@ -70,10 +116,8 @@ public class ConfigurationManager {
 		contextProperties.clear();
 	}
 
-	public void addContext(String context) {
-		if (!contextProperties.containsKey(context)) {
-			contextProperties.put(context, new Properties());
-		}
+	private void addContext(String context) {
+		contextProperties.putIfAbsent(context, new Properties());
 	}
 
 	public void addProperty(String context, String key, String value) {
@@ -97,4 +141,5 @@ public class ConfigurationManager {
 	public Set<String> getContexts() {
 		return contextProperties.keySet();
 	}
+
 }

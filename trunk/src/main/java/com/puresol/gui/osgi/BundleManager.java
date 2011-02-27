@@ -40,7 +40,8 @@ public class BundleManager extends Dialog {
 	private final JButton updateBundle = new JButton(translator.i18n("Update"));
 	private final JButton startBundle = new JButton(translator.i18n("Start"));
 	private final JButton stopBundle = new JButton(translator.i18n("Stop"));
-	private final JButton updateList = new JButton(translator.i18n("Update"));
+	private final JButton updateList = new JButton(
+			translator.i18n("Update List"));
 
 	private final BundleContext bundleContext;
 	private FreeList bundles = null;
@@ -83,8 +84,10 @@ public class BundleManager extends Dialog {
 		Map<Object, Object> listData = new HashMap<Object, Object>();
 		for (Bundle bundle : bundleContext.getBundles()) {
 			if (bundle.getBundleId() != 0) {
-				// add new bundle as long it is not the OSGi base bundle with id
-				// zero (Felix or Equinox itself)
+				/*
+				 * add new bundle as long it is not the OSGi base bundle with id
+				 * zero (Felix or Equinox itself)
+				 */
 				listData.put(getText(bundle), bundle);
 			}
 		}

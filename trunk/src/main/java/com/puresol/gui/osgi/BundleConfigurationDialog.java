@@ -11,11 +11,13 @@ import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 
 import com.puresol.gui.Application;
+import com.puresol.osgi.BundleConfigurator;
 
 /**
  * This class provides a dialog for plug-in configuration.
@@ -33,8 +35,7 @@ public class BundleConfigurationDialog extends JDialog implements
 
 	private final String frameworkName;
 	private final BundleConfiguratorTreeModel configuratorTreeView = new BundleConfiguratorTreeModel();
-	private final JPanel contentPanel = new JPanel();
-	private final BundleConfiguratorPanel currentPanel = new BundleConfiguratorPanel();
+	private final BundleConfiguratorPanel configPanel = new BundleConfiguratorPanel();
 	private final JButton closeButton = new JButton(translator.i18n("Close"));
 
 	public BundleConfigurationDialog(String frameworkName) {
@@ -45,6 +46,7 @@ public class BundleConfigurationDialog extends JDialog implements
 	}
 
 	private void initUI() {
+		JPanel contentPanel = new JPanel();
 		setContentPane(contentPanel);
 		contentPanel.setLayout(new BorderLayout());
 
@@ -53,10 +55,10 @@ public class BundleConfigurationDialog extends JDialog implements
 		configuratorTreeView.setBorder(BorderFactory
 				.createTitledBorder(translator.i18n("Configurator")));
 		configuratorTreeView.addTreeSelectionListener(this);
-		contentPanel.add(new JScrollPane(configuratorTreeView),
-				BorderLayout.WEST);
 
-		contentPanel.add(currentPanel, BorderLayout.CENTER);
+		contentPanel.add(new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
+				new JScrollPane(configuratorTreeView), configPanel),
+				BorderLayout.CENTER);
 
 		closeButton.addActionListener(this);
 		contentPanel.add(closeButton, BorderLayout.SOUTH);
@@ -68,7 +70,7 @@ public class BundleConfigurationDialog extends JDialog implements
 				.getPathComponent(treePath.getPathCount() - 1);
 		if (tree != null) {
 			BundleConfigurator configurator = tree.getConfigurator();
-			currentPanel.setBundleConfigurator(configurator);
+			configPanel.setBundleConfigurator(configurator);
 		}
 	}
 

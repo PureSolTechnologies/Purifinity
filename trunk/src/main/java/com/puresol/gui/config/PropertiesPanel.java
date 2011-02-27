@@ -1,4 +1,4 @@
-package com.puresol.gui.osgi;
+package com.puresol.gui.config;
 
 import java.util.HashMap;
 import java.util.List;
@@ -10,14 +10,14 @@ import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
 import com.puresol.config.properties.ConfigurationManager;
-import com.puresol.config.properties.ConfigurationType;
+import com.puresol.config.properties.ConfigurationLayer;
 import com.puresol.config.properties.PropertyDescription;
 
 public class PropertiesPanel extends JPanel {
 
 	private static final long serialVersionUID = -5497942963691954365L;
 
-	private ConfigurationType configurationType = ConfigurationType.SYSTEM;
+	private ConfigurationLayer configurationType = ConfigurationLayer.SYSTEM;
 	private String context = "";
 	private final List<PropertyDescription<?>> propertyDescriptions = new Vector<PropertyDescription<?>>();
 	private final Map<PropertyDescription<?>, PropertyInput> propertyInputs = new HashMap<PropertyDescription<?>, PropertyInput>();
@@ -27,7 +27,7 @@ public class PropertiesPanel extends JPanel {
 		initUI();
 	}
 
-	public PropertiesPanel(ConfigurationType configurationType, String context,
+	public PropertiesPanel(ConfigurationLayer configurationType, String context,
 			List<PropertyDescription<?>> propertyDescriptions) {
 		super();
 		this.configurationType = configurationType;
@@ -59,7 +59,7 @@ public class PropertiesPanel extends JPanel {
 		updateUI();
 	}
 
-	public void setPropertyDescriptions(ConfigurationType configurationType,
+	public void setPropertyDescriptions(ConfigurationLayer configurationType,
 			String context, List<PropertyDescription<?>> propertyDescriptions) {
 		this.configurationType = configurationType;
 		this.context = context;

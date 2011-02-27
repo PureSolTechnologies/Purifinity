@@ -1,4 +1,4 @@
-package com.puresol.gui.osgi;
+package com.puresol.osgi;
 
 import java.util.List;
 

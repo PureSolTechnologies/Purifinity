@@ -10,8 +10,11 @@ import javax.i18n4java.Translator;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
-import com.puresol.config.properties.ConfigurationType;
+import com.puresol.config.properties.ConfigurationLayer;
+import com.puresol.gui.config.PropertiesPanel;
+import com.puresol.osgi.BundleConfigurator;
 
 public class BundleConfiguratorPanel extends JPanel implements ActionListener {
 
@@ -46,7 +49,7 @@ public class BundleConfiguratorPanel extends JPanel implements ActionListener {
 				.getSize() * 1.5)));
 		add(nameLabel, BorderLayout.NORTH);
 
-		add(propertiesPanel, BorderLayout.CENTER);
+		add(new JScrollPane(propertiesPanel), BorderLayout.CENTER);
 
 		JPanel buttonsPanel = new JPanel();
 		buttonsPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -71,7 +74,7 @@ public class BundleConfiguratorPanel extends JPanel implements ActionListener {
 			propertiesPanel.clearPropertyDescriptions();
 		} else {
 			nameLabel.setText(bundleConfigurator.getName());
-			propertiesPanel.setPropertyDescriptions(ConfigurationType.PLUGINS,
+			propertiesPanel.setPropertyDescriptions(ConfigurationLayer.PLUGINS,
 					bundleConfigurator.getContext(),
 					bundleConfigurator.getPropertyDescriptions());
 		}

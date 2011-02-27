@@ -9,12 +9,12 @@ public class ConfigurationManagerTest {
 	@Test
 	public void testSingleton() {
 		ConfigurationManager configurationManager = ConfigurationManager
-				.getInstance(ConfigurationType.SYSTEM);
+				.getInstance(ConfigurationLayer.SYSTEM);
 		assertNotNull(configurationManager);
 		assertSame(configurationManager,
-				ConfigurationManager.getInstance(ConfigurationType.SYSTEM));
+				ConfigurationManager.getInstance(ConfigurationLayer.SYSTEM));
 		assertNotSame(configurationManager,
-				ConfigurationManager.getInstance(ConfigurationType.PLUGINS));
+				ConfigurationManager.getInstance(ConfigurationLayer.PLUGINS));
 	}
 
 }

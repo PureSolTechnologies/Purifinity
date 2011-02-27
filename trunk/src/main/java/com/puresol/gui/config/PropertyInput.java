@@ -1,4 +1,4 @@
-package com.puresol.gui.osgi;
+package com.puresol.gui.config;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

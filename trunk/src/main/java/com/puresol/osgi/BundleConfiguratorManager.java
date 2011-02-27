@@ -1,11 +1,10 @@
-package com.puresol.gui.osgi;
+package com.puresol.osgi;
 
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.osgi.framework.InvalidSyntaxException;
 
-import com.puresol.osgi.OSGiFrameworkManager;
 
 public class BundleConfiguratorManager {
 

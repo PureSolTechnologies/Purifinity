@@ -11,24 +11,24 @@ import java.util.Properties;
 public class ConfigurationHomePersistence {
 
 	public static void load(String directoryName,
-			ConfigurationType configurationType) throws IOException {
+			ConfigurationLayer configurationType) throws IOException {
 		ConfigurationHomePersistence persistence = new ConfigurationHomePersistence(
 				directoryName, configurationType);
 		persistence.loadConfiguration();
 	}
 
 	public static void store(String directoryName,
-			ConfigurationType configurationType) throws IOException {
+			ConfigurationLayer configurationType) throws IOException {
 		ConfigurationHomePersistence persistence = new ConfigurationHomePersistence(
 				directoryName, configurationType);
 		persistence.storeConfiguration();
 	}
 
 	private final String directoryName;
-	private final ConfigurationType configurationType;
+	private final ConfigurationLayer configurationType;
 
 	private ConfigurationHomePersistence(String directoryName,
-			ConfigurationType configurationType) {
+			ConfigurationLayer configurationType) {
 		super();
 		this.directoryName = directoryName;
 		this.configurationType = configurationType;

@@ -3,6 +3,8 @@ package com.puresol.gui.osgi;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.puresol.osgi.BundleConfigurator;
+import com.puresol.osgi.BundleConfiguratorManager;
 import com.puresol.trees.Tree;
 
 public class BundleConfiguratorTree implements Tree<BundleConfiguratorTree> {
