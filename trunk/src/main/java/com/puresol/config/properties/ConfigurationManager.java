@@ -5,6 +5,8 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import com.puresol.utils.EnumUtilities;
+
 /**
  * This class is the central manager for all systems configuration. The
  * configuration is stored in properties which are assigned to different
@@ -96,6 +98,42 @@ public class ConfigurationManager {
 			}
 		}
 		return description.getDefaultValue().toString();
+	}
+
+	public static byte getByte(String context,
+			PropertyDescription<?> description) {
+		return Byte.valueOf(getProperty(context, description));
+	}
+
+	public static int getInteger(String context,
+			PropertyDescription<?> description) {
+		return Integer.valueOf(getProperty(context, description));
+	}
+
+	public static long getLong(String context,
+			PropertyDescription<?> description) {
+		return Long.valueOf(getProperty(context, description));
+	}
+
+	public static float getFloat(String context,
+			PropertyDescription<?> description) {
+		return Float.valueOf(getProperty(context, description));
+	}
+
+	public static double getDouble(String context,
+			PropertyDescription<?> description) {
+		return Double.valueOf(getProperty(context, description));
+	}
+
+	public static boolean getBoolean(String context,
+			PropertyDescription<?> description) {
+		return Boolean.valueOf(getProperty(context, description));
+	}
+
+	public static <T> T getEnumConstant(String context,
+			PropertyDescription<?> description, Class<T> enumeration) {
+		return EnumUtilities.findEnumConstante(enumeration,
+				getProperty(context, description));
 	}
 
 	private final ConcurrentMap<String, Properties> contextProperties = new ConcurrentHashMap<String, Properties>();
