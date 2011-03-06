@@ -113,6 +113,7 @@
 	LINE_TERMINATOR : '(\\n|\\r\n|\\r)' ; // removed [hide]
 	LINE_COMMENT : '![^\\n\\r]*' LINE_TERMINATOR; // removed [hide]
 	LINE_CONCATATION : AMPERSAND '[ \\t]*' LINE_TERMINATOR [ignore];
+	INCLUDE : 'INCLUDE\\s*' CHAR_LITERAL_CONSTANT [ignore];
 
 	/*
 	 * 3.1.5 Special characters
@@ -249,7 +250,7 @@
 	stmt-end :
 		( LINE_TERMINATOR | LINE_COMMENT | SEMICOLON ) +
 	;
- 
+
 /***************
 	Clause 2:	
  ***************/

@@ -33,7 +33,7 @@ import com.puresol.utils.StopWatch;
  */
 public class FortranSourceCodeDistributionTest {
 
-	private static final String INSTALL_DIRECTORY = "/home/ludwig/workspace/Dyn3D";
+	private static final String INSTALL_DIRECTORY = "/home/ludwig/workspace/TRNSYS";
 
 	@Test
 	public void test() {
@@ -142,7 +142,7 @@ public class FortranSourceCodeDistributionTest {
 
 	public static void main(String args[]) {
 		Logger.getRootLogger().setLevel(Level.DEBUG);
-		List<File> files = FileSearch.find(new File(INSTALL_DIRECTORY), "*.f");
+		List<File> files = FileSearch.find(new File(INSTALL_DIRECTORY), "*.for");
 		parseAllFiles(files);
 	}
 
