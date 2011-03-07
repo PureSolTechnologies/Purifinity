@@ -113,6 +113,11 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.puresol</groupId>
+			<artifactId>PureConfigurator</artifactId>
+			<version>0.0.1</version>
+		</dependency>
 	</dependencies>
 	<reporting>
 		<plugins>

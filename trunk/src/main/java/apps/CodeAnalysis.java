@@ -12,6 +12,7 @@ package apps;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
+import java.io.File;
 import java.io.IOException;
 
 import javax.i18n4java.Translator;
@@ -31,8 +32,8 @@ import org.osgi.framework.BundleException;
 import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.evaluator.EvaluatorASCIIExport;
 import com.puresol.coding.reporting.html.HTMLProjectAnalysisCreator;
-import com.puresol.config.properties.ConfigurationHomePersistence;
-import com.puresol.config.properties.ConfigurationLayer;
+import com.puresol.config.ConfigurationManager;
+import com.puresol.config.sources.HomeFile;
 import com.puresol.filefilter.CSVFilter;
 import com.puresol.filefilter.ExcelFilter;
 import com.puresol.filefilter.TSVFilter;
@@ -75,14 +76,16 @@ public class CodeAnalysis extends PureSolApplication implements FinishListener {
 	private final JMenuItem pluginConfiguration = new JMenuItem(
 			"Plugin Configuration...");
 
-	private final JButton newWorkspaceButton = new JButton(
-			translator.i18n("New Workspace..."));
-	private final JButton openWorkspaceButton = new JButton(
-			translator.i18n("Open Workspace..."));
-	private final JButton updateWorkspaceButton = new JButton(
-			translator.i18n("Update Workspace"));
+	private final JButton newWorkspaceButton = new JButton(translator
+			.i18n("New Workspace..."));
+	private final JButton openWorkspaceButton = new JButton(translator
+			.i18n("Open Workspace..."));
+	private final JButton updateWorkspaceButton = new JButton(translator
+			.i18n("Update Workspace"));
 
 	private final ProjectAnalysisBrowser browser = new ProjectAnalysisBrowser();
+
+	private final ConfigurationManager configManager = new ConfigurationManager();
 
 	private OSGi osgi;
 	private ProjectAnalyzer analyzer = null;
@@ -97,10 +100,9 @@ public class CodeAnalysis extends PureSolApplication implements FinishListener {
 
 	private void loadConfiguration() {
 		try {
-			ConfigurationHomePersistence.load(".CodeAnalysis",
-					ConfigurationLayer.SYSTEM);
-			ConfigurationHomePersistence.load(".CodeAnalysis/plugins",
-					ConfigurationLayer.PLUGINS);
+			configManager.addSource(new HomeFile(
+					"CodeAnalysis Main Configuration", new File(
+							".CodeAnalysis/config.properties"), true, true));
 		} catch (IOException e) {
 			JOptionPane
 					.showMessageDialog(
@@ -113,10 +115,7 @@ public class CodeAnalysis extends PureSolApplication implements FinishListener {
 
 	private boolean storeConfiguration() {
 		try {
-			ConfigurationHomePersistence.store(".CodeAnalysis",
-					ConfigurationLayer.SYSTEM);
-			ConfigurationHomePersistence.store(".CodeAnalysis/plugins",
-					ConfigurationLayer.PLUGINS);
+			configManager.save();
 			return true;
 		} catch (IOException e) {
 			int result = JOptionPane
@@ -210,17 +209,16 @@ public class CodeAnalysis extends PureSolApplication implements FinishListener {
 			return;
 		}
 		setSubtitle(dialog.getWorkspaceDirectory().toString());
-		analyzer = ProjectAnalyzer.create(dialog.getSourceDirectory(),
-				dialog.getWorkspaceDirectory());
+		analyzer = ProjectAnalyzer.create(dialog.getSourceDirectory(), dialog
+				.getWorkspaceDirectory());
 		if (analyzer != null) {
 			ProgressWindow progress = new ProgressWindow(this, true);
 			progress.addFinishListener(this);
 			progress.runAsynchronous(analyzer);
 		} else {
-			JOptionPane
-					.showMessageDialog(this, translator
-							.i18n("Could not create new analyser workspace!"),
-							translator.i18n("Error"), JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, translator
+					.i18n("Could not create new analyser workspace!"),
+					translator.i18n("Error"), JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
@@ -241,9 +239,9 @@ public class CodeAnalysis extends PureSolApplication implements FinishListener {
 			progress.addFinishListener(this);
 			progress.runAsynchronous(analyzer);
 		} else {
-			JOptionPane.showMessageDialog(this,
-					translator.i18n("No workspace is open for update!!"),
-					translator.i18n("Error"), JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, translator
+					.i18n("No workspace is open for update!!"), translator
+					.i18n("Error"), JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
@@ -262,14 +260,14 @@ public class CodeAnalysis extends PureSolApplication implements FinishListener {
 		}
 		FileFilter filter = chooser.getFileFilter();
 		if (filter == tsvFilter) {
-			EvaluatorASCIIExport export = new EvaluatorASCIIExport(
-					chooser.getSelectedFile(), analyzer, "\t");
+			EvaluatorASCIIExport export = new EvaluatorASCIIExport(chooser
+					.getSelectedFile(), analyzer, "\t");
 			ProgressWindow progressWindow = new ProgressWindow(this, true);
 			progressWindow.addFinishListener(this);
 			progressWindow.runAsynchronous(export);
 		} else if (filter == csvFilter) {
-			EvaluatorASCIIExport export = new EvaluatorASCIIExport(
-					chooser.getSelectedFile(), analyzer, ",");
+			EvaluatorASCIIExport export = new EvaluatorASCIIExport(chooser
+					.getSelectedFile(), analyzer, ",");
 			ProgressWindow progressWindow = new ProgressWindow(this, true);
 			progressWindow.addFinishListener(this);
 			progressWindow.runAsynchronous(export);
