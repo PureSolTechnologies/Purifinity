@@ -12,6 +12,7 @@ import org.osgi.framework.ServiceRegistration;
 
 import com.puresol.coding.evaluator.ProjectEvaluatorFactory;
 import com.puresol.config.APIInformation;
+import com.puresol.config.sources.BundleConfigurators;
 import com.puresol.osgi.BundleConfigurator;
 
 public class CoCoMoActivator implements BundleActivator {
@@ -20,6 +21,7 @@ public class CoCoMoActivator implements BundleActivator {
 			.getLogger(CoCoMoActivator.class);
 
 	private final List<ServiceRegistration> serviceRegistrations = new ArrayList<ServiceRegistration>();
+	private CoCoMoConfigurator cocomoConfigurator = null;
 
 	@Override
 	public void start(BundleContext context) throws Exception {
@@ -47,8 +49,11 @@ public class CoCoMoActivator implements BundleActivator {
 	}
 
 	private void registerConfigurator(BundleContext context) {
+		cocomoConfigurator = new CoCoMoConfigurator();
+		BundleConfigurators.getInstance().addSource(
+				cocomoConfigurator.getSource());
+
 		String interfaces[] = new String[] { BundleConfigurator.class.getName() };
-		CoCoMoConfigurator cocomoConfigurator = new CoCoMoConfigurator();
 		Dictionary<Object, Object> properties = new Hashtable<Object, Object>();
 		properties.put("service.name", cocomoConfigurator.getName());
 		properties.put("service.description", cocomoConfigurator.getPathName());
@@ -62,6 +67,12 @@ public class CoCoMoActivator implements BundleActivator {
 	@Override
 	public void stop(BundleContext context) throws Exception {
 		logger.info("Stopping CoCoMo...");
+
+		if (cocomoConfigurator != null) {
+			BundleConfigurators.getInstance().removeSource(
+					cocomoConfigurator.getSource());
+			cocomoConfigurator = null;
+		}
 
 		for (ServiceRegistration registration : serviceRegistrations) {
 			registration.unregister();

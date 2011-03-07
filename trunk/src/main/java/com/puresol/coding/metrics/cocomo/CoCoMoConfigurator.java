@@ -11,6 +11,19 @@ import com.puresol.osgi.BundleConfigurator;
 
 public class CoCoMoConfigurator implements BundleConfigurator {
 
+	private final ConfigurationSource configSource;
+
+	public CoCoMoConfigurator() {
+		super();
+		ConfigurationSource source = null;
+		try {
+			source = new HomeFile("CoCoMo Plugin Configuration", new File(
+					".CodeAnalysis/plugins/CoCoMo.properties"), true, false);
+		} catch (IOException e) {
+		}
+		configSource = source;
+	}
+
 	@Override
 	public String getName() {
 		return "Cost Construction Model";
@@ -28,11 +41,7 @@ public class CoCoMoConfigurator implements BundleConfigurator {
 
 	@Override
 	public ConfigurationSource getSource() {
-		try {
-			return new HomeFile("CoCoMo Plugin Configuration", new File(
-					".CodeAnalysis/plugins/cocomo.properties"), true, false);
-		} catch (IOException e) {
-			return null;
-		}
+		return configSource;
 	}
+
 }
