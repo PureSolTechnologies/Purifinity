@@ -33,7 +33,7 @@ import com.puresol.coding.metrics.cocomo.config.YearlyDeveloperSalary;
 import com.puresol.coding.metrics.sloc.SLOCMetric;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.SourceCodeQuality;
-import com.puresol.config.properties.PropertyDescription;
+import com.puresol.config.PropertyDescription;
 import com.puresol.document.Chapter;
 import com.puresol.document.Document;
 import com.puresol.document.Paragraph;
@@ -139,8 +139,8 @@ public class CoCoMo extends AbstractEvaluator implements ProjectEvaluator {
 		CoCoMoValueSet valueSet = new CoCoMoValueSet();
 		valueSet.setSloc(sloc);
 		valueSet.setComplexity(cocomoValues.getComplexity());
-		valueSet.setAverageSalary(cocomoValues.getAverageSalary(),
-				cocomoValues.getCurrency());
+		valueSet.setAverageSalary(cocomoValues.getAverageSalary(), cocomoValues
+				.getCurrency());
 		fileCoCoMoValues.put(file, valueSet);
 	}
 
@@ -220,12 +220,12 @@ public class CoCoMo extends AbstractEvaluator implements ProjectEvaluator {
 		Chapter resultsSummaryChapter = new Chapter(document,
 				"results_summary", translator.i18n("Results Summary"));
 		Table resultsTable = new Table(resultsSummaryChapter, "Results Table",
-				translator.i18n("Symbol"), translator.i18n("Value"),
-				translator.i18n("Unit"), translator.i18n("Description"));
+				translator.i18n("Symbol"), translator.i18n("Value"), translator
+						.i18n("Unit"), translator.i18n("Description"));
 
 		for (Result result : getResults()) {
-			resultsTable.addRow(result.getName(), result.getValue(),
-					result.getUnit(), result.getDescription());
+			resultsTable.addRow(result.getName(), result.getValue(), result
+					.getUnit(), result.getDescription());
 		}
 		return document;
 	}

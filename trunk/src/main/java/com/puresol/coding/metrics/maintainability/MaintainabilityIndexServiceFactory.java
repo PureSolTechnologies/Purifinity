@@ -10,6 +10,7 @@ import com.puresol.coding.evaluator.CodeRangeEvaluatorFactory;
 import com.puresol.coding.evaluator.ProjectEvaluator;
 import com.puresol.coding.evaluator.ProjectEvaluatorFactory;
 import com.puresol.coding.quality.QualityCharacteristic;
+import com.puresol.config.Configuration;
 
 public class MaintainabilityIndexServiceFactory implements
 		CodeRangeEvaluatorFactory, ProjectEvaluatorFactory {
@@ -21,7 +22,8 @@ public class MaintainabilityIndexServiceFactory implements
 	}
 
 	@Override
-	public ProjectEvaluator create(ProjectAnalyzer projectAnalyzer) {
+	public ProjectEvaluator create(ProjectAnalyzer projectAnalyzer,
+			Configuration configuration) {
 		return new ProjectMaintainabilityIndex(projectAnalyzer);
 	}
 

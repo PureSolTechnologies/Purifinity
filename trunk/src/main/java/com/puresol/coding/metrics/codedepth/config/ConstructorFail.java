@@ -2,7 +2,7 @@ package com.puresol.coding.metrics.codedepth.config;
 
 import javax.i18n4java.Translator;
 
-import com.puresol.config.properties.PropertyDescription;
+import com.puresol.config.PropertyDescription;
 
 /**
  * This class is a configurator PropertyDescription for CodeDepth. The following
@@ -42,7 +42,8 @@ public class ConstructorFail implements PropertyDescription<Integer> {
 
 	@Override
 	public String getDescription() {
-		return translator.i18n("Specify here the codepth for constructor to fail.");
+		return translator
+				.i18n("Specify here the codepth for constructor to fail.");
 	}
 
 	@Override

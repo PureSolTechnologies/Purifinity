@@ -2,7 +2,7 @@ package com.puresol.coding.metrics.cocomo.config;
 
 import javax.i18n4java.Translator;
 
-import com.puresol.config.properties.PropertyDescription;
+import com.puresol.config.PropertyDescription;
 
 public class YearlyDeveloperSalary implements PropertyDescription<Integer> {
 

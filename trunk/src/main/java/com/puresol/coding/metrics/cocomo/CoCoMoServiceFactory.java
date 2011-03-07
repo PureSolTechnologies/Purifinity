@@ -10,33 +10,38 @@ import com.puresol.coding.metrics.cocomo.config.ProjectComplexity;
 import com.puresol.coding.metrics.cocomo.config.SalaryCurrency;
 import com.puresol.coding.metrics.cocomo.config.YearlyDeveloperSalary;
 import com.puresol.coding.quality.QualityCharacteristic;
-import com.puresol.config.properties.ConfigurationManager;
-import com.puresol.config.properties.PropertyDescription;
+import com.puresol.config.Configuration;
+import com.puresol.config.PropertyDescription;
 import com.puresol.utils.EnumUtilities;
 
 public class CoCoMoServiceFactory implements ProjectEvaluatorFactory {
 
 	@Override
-	public ProjectEvaluator create(ProjectAnalyzer projectAnalyser) {
+	public ProjectEvaluator create(ProjectAnalyzer projectAnalyser,
+			Configuration configuration) {
 		CoCoMo cocomo = new CoCoMo(projectAnalyser);
-		setConfiguration(cocomo);
+		setConfiguration(cocomo, configuration);
 		return cocomo;
 	}
 
-	private void setConfiguration(CoCoMo cocomo) {
+	private void setConfiguration(CoCoMo cocomo, Configuration configuration) {
 		String complexity = "";
 		String salary = "";
 		String currency = "";
 		for (PropertyDescription<?> description : CoCoMo.CONFIGURATION_PROPERTIES) {
 			if (description.getClass().equals(ProjectComplexity.class)) {
-				complexity = ConfigurationManager.getProperty(
-						CoCoMo.class.getSimpleName(), description);
+				complexity = configuration.getProperty(description
+						.getPropertyName(), (String) description
+						.getDefaultValue());
 			} else if (description.getClass().equals(SalaryCurrency.class)) {
-				currency = ConfigurationManager.getProperty(
-						CoCoMo.class.getSimpleName(), description);
-			} else if (description.getClass().equals(YearlyDeveloperSalary.class)) {
-				salary = ConfigurationManager.getProperty(
-						CoCoMo.class.getSimpleName(), description);
+				currency = configuration.getProperty(description
+						.getPropertyName(), (String) description
+						.getDefaultValue());
+			} else if (description.getClass().equals(
+					YearlyDeveloperSalary.class)) {
+				salary = configuration.getProperty(description
+						.getPropertyName(), (String) description
+						.getDefaultValue());
 			}
 		}
 		cocomo.setComplexity(EnumUtilities.findEnumConstante(Complexity.class,

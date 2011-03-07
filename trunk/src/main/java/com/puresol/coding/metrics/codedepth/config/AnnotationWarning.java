@@ -2,7 +2,7 @@ package com.puresol.coding.metrics.codedepth.config;
 
 import javax.i18n4java.Translator;
 
-import com.puresol.config.properties.PropertyDescription;
+import com.puresol.config.PropertyDescription;
 
 /**
  * This class is a configurator PropertyDescription for CodeDepth. The following
@@ -37,12 +37,14 @@ public class AnnotationWarning implements PropertyDescription<Integer> {
 
 	@Override
 	public String getDisplayName() {
-		return translator.i18n("CodeDepth for Annotation Classes for Medium Quality");
+		return translator
+				.i18n("CodeDepth for Annotation Classes for Medium Quality");
 	}
 
 	@Override
 	public String getDescription() {
-		return translator.i18n("Specify here the codepth for annotation classes to raise a warning.");
+		return translator
+				.i18n("Specify here the codepth for annotation classes to raise a warning.");
 	}
 
 	@Override

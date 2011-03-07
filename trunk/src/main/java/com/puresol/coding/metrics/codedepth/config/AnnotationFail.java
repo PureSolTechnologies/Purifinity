@@ -3,7 +3,7 @@ package com.puresol.coding.metrics.codedepth.config;
 import javax.i18n4java.Translator;
 
 import com.puresol.coding.CodeRangeType;
-import com.puresol.config.properties.PropertyDescription;
+import com.puresol.config.PropertyDescription;
 
 /**
  * This class is a configurator PropertyDescription for CodeDepth. The following

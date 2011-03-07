@@ -33,7 +33,7 @@ import com.puresol.coding.metrics.codedepth.config.SubroutineFail;
 import com.puresol.coding.metrics.codedepth.config.SubroutineWarning;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.SourceCodeQuality;
-import com.puresol.config.properties.PropertyDescription;
+import com.puresol.config.PropertyDescription;
 import com.puresol.document.Chapter;
 import com.puresol.document.Document;
 import com.puresol.document.Paragraph;
@@ -160,11 +160,12 @@ public class CodeDepthMetric extends AbstractEvaluator implements
 
 	private void recreateResultsList() {
 		results.clear();
-		results.add(new Result(
-				translator.i18n("Maximum code depth"),
-				translator
-						.i18n("The maximum code depth is the maximum number of cascaded code blocks within the source."),
-				maxDepth, ""));
+		results
+				.add(new Result(
+						translator.i18n("Maximum code depth"),
+						translator
+								.i18n("The maximum code depth is the maximum number of cascaded code blocks within the source."),
+						maxDepth, ""));
 	}
 
 	public int getMaxDepth() {
@@ -222,12 +223,12 @@ public class CodeDepthMetric extends AbstractEvaluator implements
 		Chapter resultsSummaryChapter = new Chapter(document,
 				"results_summary", translator.i18n("Results Summary"));
 		Table resultsTable = new Table(resultsSummaryChapter, "Results Table",
-				translator.i18n("Symbol"), translator.i18n("Value"),
-				translator.i18n("Unit"), translator.i18n("Description"));
+				translator.i18n("Symbol"), translator.i18n("Value"), translator
+						.i18n("Unit"), translator.i18n("Description"));
 
 		for (Result result : getResults()) {
-			resultsTable.addRow(result.getName(), result.getValue(),
-					result.getUnit(), result.getDescription());
+			resultsTable.addRow(result.getName(), result.getValue(), result
+					.getUnit(), result.getDescription());
 		}
 		return document;
 	}
