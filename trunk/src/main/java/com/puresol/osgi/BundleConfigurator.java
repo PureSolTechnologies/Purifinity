@@ -2,7 +2,8 @@ package com.puresol.osgi;
 
 import java.util.List;
 
-import com.puresol.config.properties.PropertyDescription;
+import com.puresol.config.ConfigurationSource;
+import com.puresol.config.PropertyDescription;
 
 /**
  * This interface is used to register bundle configuration facilities. Each
@@ -16,10 +17,10 @@ public interface BundleConfigurator {
 
 	public String getName();
 
-	public String getContext();
-
 	public String getPathName();
 
 	public List<PropertyDescription<?>> getPropertyDescriptions();
+
+	public ConfigurationSource getSource();
 
 }

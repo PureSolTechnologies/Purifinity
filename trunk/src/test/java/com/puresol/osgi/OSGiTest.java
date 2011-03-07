@@ -13,7 +13,8 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 
-import com.puresol.config.properties.PropertyDescription;
+import com.puresol.config.ConfigurationSource;
+import com.puresol.config.PropertyDescription;
 
 public class OSGiTest {
 
@@ -74,11 +75,6 @@ public class OSGiTest {
 								}
 
 								@Override
-								public String getContext() {
-									return null;
-								}
-
-								@Override
 								public String getPathName() {
 									return null;
 								}
@@ -88,11 +84,16 @@ public class OSGiTest {
 									return null;
 								}
 
+								@Override
+								public ConfigurationSource getSource() {
+									return null;
+								}
+
 							}, properties);
 					assertNotNull(registration);
 					ServiceReference reference[] = context
-							.getAllServiceReferences(
-									BundleConfigurator.class.getName(), "(o=A)");
+							.getAllServiceReferences(BundleConfigurator.class
+									.getName(), "(o=A)");
 					assertNotNull(reference);
 					assertEquals(1, reference.length);
 					/*

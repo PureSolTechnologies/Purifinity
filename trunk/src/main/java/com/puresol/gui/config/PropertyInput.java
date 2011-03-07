@@ -13,7 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
-import com.puresol.config.properties.PropertyDescription;
+import com.puresol.config.PropertyDescription;
 import com.puresol.data.Identifiable;
 
 public class PropertyInput extends JPanel {

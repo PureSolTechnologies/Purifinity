@@ -12,7 +12,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import com.puresol.config.properties.ConfigurationLayer;
 import com.puresol.gui.config.PropertiesPanel;
 import com.puresol.osgi.BundleConfigurator;
 
@@ -74,9 +73,8 @@ public class BundleConfiguratorPanel extends JPanel implements ActionListener {
 			propertiesPanel.clearPropertyDescriptions();
 		} else {
 			nameLabel.setText(bundleConfigurator.getName());
-			propertiesPanel.setPropertyDescriptions(ConfigurationLayer.PLUGINS,
-					bundleConfigurator.getContext(),
-					bundleConfigurator.getPropertyDescriptions());
+			propertiesPanel.setPropertyDescriptions(bundleConfigurator
+					.getSource(), bundleConfigurator.getPropertyDescriptions());
 		}
 	}
 
