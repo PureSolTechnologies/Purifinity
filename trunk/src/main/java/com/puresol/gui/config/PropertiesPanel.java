@@ -40,10 +40,12 @@ public class PropertiesPanel extends JPanel {
 			PropertyInput input = new PropertyInput(description);
 			propertyInputs.put(description, input);
 			add(input);
-			Object value = configurationSource.getProperty(description
-					.getPropertyName());
-			if (value != null) {
-				input.setValue(value);
+			if (configurationSource != null) {
+				Object value = configurationSource.getProperty(description
+						.getPropertyName());
+				if (value != null) {
+					input.setValue(value);
+				}
 			}
 		}
 		updateUI();
