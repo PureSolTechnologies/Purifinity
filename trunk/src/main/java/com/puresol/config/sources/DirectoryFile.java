@@ -1,23 +1,25 @@
 package com.puresol.config.sources;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Properties;
 
-public class ConfigurationInHomeFile extends AbstractConfigurationSource {
+public class DirectoryFile extends AbstractConfigurationSource {
 
 	private final File file;
 	private final boolean changeable;
 	private final boolean overridable;
 	private final Properties properties = new Properties();
 
-	public ConfigurationInHomeFile(String name, File relativeFile,
+	public DirectoryFile(String name, File directory, File relativeFile,
 			boolean changeable, boolean overridable) throws IOException {
 		super(name);
 		this.changeable = changeable;
 		this.overridable = overridable;
-		file = new File(System.getProperty("user.home"), relativeFile.getPath());
+		file = new File(directory, relativeFile.getPath());
 		FileReader reader = new FileReader(file);
 		try {
 			properties.load(reader);
@@ -48,6 +50,18 @@ public class ConfigurationInHomeFile extends AbstractConfigurationSource {
 		} else {
 			throw new IllegalStateException(
 					"This source is not allowed to be changed!");
+		}
+	}
+
+	@Override
+	public void save() throws IOException {
+		if (isChangeable()) {
+			OutputStream outputStream = new FileOutputStream(file);
+			try {
+				properties.store(outputStream, getName());
+			} finally {
+				outputStream.close();
+			}
 		}
 	}
 

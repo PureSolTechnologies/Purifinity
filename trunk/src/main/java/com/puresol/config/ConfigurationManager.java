@@ -1,10 +1,11 @@
 package com.puresol.config;
 
+import java.io.IOException;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-public class ConfigurationManager {
+public class ConfigurationManager implements Configuration {
 
 	private final ConcurrentMap<String, ConfigurationSource> sources = new ConcurrentHashMap<String, ConfigurationSource>();
 
@@ -22,6 +23,11 @@ public class ConfigurationManager {
 		sources.put(source.getName(), source);
 	}
 
+	public void removeSource(ConfigurationSource source) {
+		sources.remove(source);
+	}
+
+	@Override
 	public String getProperty(String key, String defaultValue) {
 		String result = defaultValue;
 		for (String sourceName : sources.keySet()) {
@@ -102,5 +108,14 @@ public class ConfigurationManager {
 					+ "' is not defined.");
 		}
 		source.setProperty(key, value);
+	}
+
+	public void save() throws IOException {
+		for (String sourceName : sources.keySet()) {
+			ConfigurationSource source = sources.get(sourceName);
+			if (source.isChangeable()) {
+				source.save();
+			}
+		}
 	}
 }
