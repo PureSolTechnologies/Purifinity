@@ -13,6 +13,7 @@ import com.puresol.coding.evaluator.Evaluator;
 import com.puresol.coding.evaluator.ProjectEvaluator;
 import com.puresol.coding.evaluator.ProjectEvaluatorFactory;
 import com.puresol.coding.evaluator.ProjectEvaluatorManager;
+import com.puresol.config.Configuration;
 import com.puresol.document.convert.html.HTMLConverter;
 import com.puresol.gui.progress.ProgressObserver;
 import com.puresol.gui.progress.ProgressPanel;
@@ -25,15 +26,17 @@ class ProjectAnalysisReports implements RunnableProgressObservable {
 	private static final Translator translator = Translator
 			.getTranslator(ProjectAnalysisReports.class);
 
+	private final Configuration configuration;
 	private final ProjectAnalyzer projectAnalyzer;
 	private final File directory;
 	private ProgressObserver monitor = null;
 
 	public ProjectAnalysisReports(ProjectAnalyzer projectAnalyzer,
-			File directory) {
+			File directory, Configuration configuration) {
 		super();
 		this.projectAnalyzer = projectAnalyzer;
 		this.directory = directory;
+		this.configuration = configuration;
 	}
 
 	@Override
@@ -106,8 +109,8 @@ class ProjectAnalysisReports implements RunnableProgressObservable {
 	private void processProjectEvaluator(
 			ProjectEvaluatorFactory projectEvaluatorFactory)
 			throws InterruptedException, IOException {
-		ProjectEvaluator evaluator = projectEvaluatorFactory
-				.create(projectAnalyzer);
+		ProjectEvaluator evaluator = projectEvaluatorFactory.create(
+				projectAnalyzer, configuration);
 		ProgressPanel panel = monitor.getSubProgressPanel();
 		panel.runSyncronous(evaluator);
 

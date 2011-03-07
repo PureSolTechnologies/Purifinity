@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 import com.puresol.coding.analysis.ProjectAnalyzer;
+import com.puresol.config.Configuration;
 import com.puresol.document.convert.gui.GUIConverter;
 
 public class ProjectAnalysisBrowser extends JPanel {
@@ -30,18 +31,21 @@ public class ProjectAnalysisBrowser extends JPanel {
 
 	private final JTabbedPane tabbedPane = new JTabbedPane();
 	private JPanel projectReport = new JPanel();
-	private final ProjectEvaluatorPanel projectEvaluatorPanel = new ProjectEvaluatorPanel();
-	private final ProjectGraphPanel projectGraphPanel = new ProjectGraphPanel();
-	private final CodeRangeBrowser codeRangeBrowser = new CodeRangeBrowser();
+	private final ProjectEvaluatorPanel projectEvaluatorPanel;
+	private final ProjectGraphPanel projectGraphPanel;
+	private final CodeRangeBrowser codeRangeBrowser;
 
-	public ProjectAnalysisBrowser() {
+	public ProjectAnalysisBrowser(Configuration configuration) {
 		super();
+		projectEvaluatorPanel = new ProjectEvaluatorPanel(configuration);
+		projectGraphPanel = new ProjectGraphPanel(configuration);
+		codeRangeBrowser = new CodeRangeBrowser();
 		initUI();
 	}
 
-	public ProjectAnalysisBrowser(ProjectAnalyzer project) {
-		super();
-		initUI();
+	public ProjectAnalysisBrowser(ProjectAnalyzer project,
+			Configuration configuration) {
+		this(configuration);
 		setProjectAnalyser(project);
 	}
 

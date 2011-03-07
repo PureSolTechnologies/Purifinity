@@ -33,6 +33,7 @@ import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.evaluator.EvaluatorASCIIExport;
 import com.puresol.coding.reporting.html.HTMLProjectAnalysisCreator;
 import com.puresol.config.ConfigurationManager;
+import com.puresol.config.sources.BundleConfigurators;
 import com.puresol.config.sources.HomeFile;
 import com.puresol.filefilter.CSVFilter;
 import com.puresol.filefilter.ExcelFilter;
@@ -76,16 +77,16 @@ public class CodeAnalysis extends PureSolApplication implements FinishListener {
 	private final JMenuItem pluginConfiguration = new JMenuItem(
 			"Plugin Configuration...");
 
-	private final JButton newWorkspaceButton = new JButton(translator
-			.i18n("New Workspace..."));
-	private final JButton openWorkspaceButton = new JButton(translator
-			.i18n("Open Workspace..."));
-	private final JButton updateWorkspaceButton = new JButton(translator
-			.i18n("Update Workspace"));
-
-	private final ProjectAnalysisBrowser browser = new ProjectAnalysisBrowser();
+	private final JButton newWorkspaceButton = new JButton(
+			translator.i18n("New Workspace..."));
+	private final JButton openWorkspaceButton = new JButton(
+			translator.i18n("Open Workspace..."));
+	private final JButton updateWorkspaceButton = new JButton(
+			translator.i18n("Update Workspace"));
 
 	private final ConfigurationManager configManager = new ConfigurationManager();
+	private final ProjectAnalysisBrowser browser = new ProjectAnalysisBrowser(
+			configManager);
 
 	private OSGi osgi;
 	private ProjectAnalyzer analyzer = null;
@@ -103,6 +104,7 @@ public class CodeAnalysis extends PureSolApplication implements FinishListener {
 			configManager.addSource(new HomeFile(
 					"CodeAnalysis Main Configuration", new File(
 							".CodeAnalysis/config.properties"), true, true));
+			configManager.addSource(BundleConfigurators.getInstance());
 		} catch (IOException e) {
 			JOptionPane
 					.showMessageDialog(
@@ -209,16 +211,17 @@ public class CodeAnalysis extends PureSolApplication implements FinishListener {
 			return;
 		}
 		setSubtitle(dialog.getWorkspaceDirectory().toString());
-		analyzer = ProjectAnalyzer.create(dialog.getSourceDirectory(), dialog
-				.getWorkspaceDirectory());
+		analyzer = ProjectAnalyzer.create(dialog.getSourceDirectory(),
+				dialog.getWorkspaceDirectory());
 		if (analyzer != null) {
 			ProgressWindow progress = new ProgressWindow(this, true);
 			progress.addFinishListener(this);
 			progress.runAsynchronous(analyzer);
 		} else {
-			JOptionPane.showMessageDialog(this, translator
-					.i18n("Could not create new analyser workspace!"),
-					translator.i18n("Error"), JOptionPane.ERROR_MESSAGE);
+			JOptionPane
+					.showMessageDialog(this, translator
+							.i18n("Could not create new analyser workspace!"),
+							translator.i18n("Error"), JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
@@ -239,9 +242,9 @@ public class CodeAnalysis extends PureSolApplication implements FinishListener {
 			progress.addFinishListener(this);
 			progress.runAsynchronous(analyzer);
 		} else {
-			JOptionPane.showMessageDialog(this, translator
-					.i18n("No workspace is open for update!!"), translator
-					.i18n("Error"), JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this,
+					translator.i18n("No workspace is open for update!!"),
+					translator.i18n("Error"), JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
@@ -260,14 +263,14 @@ public class CodeAnalysis extends PureSolApplication implements FinishListener {
 		}
 		FileFilter filter = chooser.getFileFilter();
 		if (filter == tsvFilter) {
-			EvaluatorASCIIExport export = new EvaluatorASCIIExport(chooser
-					.getSelectedFile(), analyzer, "\t");
+			EvaluatorASCIIExport export = new EvaluatorASCIIExport(
+					chooser.getSelectedFile(), analyzer, "\t");
 			ProgressWindow progressWindow = new ProgressWindow(this, true);
 			progressWindow.addFinishListener(this);
 			progressWindow.runAsynchronous(export);
 		} else if (filter == csvFilter) {
-			EvaluatorASCIIExport export = new EvaluatorASCIIExport(chooser
-					.getSelectedFile(), analyzer, ",");
+			EvaluatorASCIIExport export = new EvaluatorASCIIExport(
+					chooser.getSelectedFile(), analyzer, ",");
 			ProgressWindow progressWindow = new ProgressWindow(this, true);
 			progressWindow.addFinishListener(this);
 			progressWindow.runAsynchronous(export);
@@ -284,7 +287,7 @@ public class CodeAnalysis extends PureSolApplication implements FinishListener {
 			return;
 		}
 		HTMLProjectAnalysisCreator creator = new HTMLProjectAnalysisCreator(
-				analyzer, chooser.getSelectedFile());
+				analyzer, chooser.getSelectedFile(), configManager);
 		ProgressWindow progress = new ProgressWindow(this, true);
 		progress.runAsynchronous(creator);
 	}
@@ -316,15 +319,25 @@ public class CodeAnalysis extends PureSolApplication implements FinishListener {
 
 	@Override
 	public void quit() {
+		if (!storeConfiguration()) {
+			if (JOptionPane
+					.showConfirmDialog(
+							this,
+							translator
+									.i18n("Could not write the configuration.\nSome settings might get lost\n\nDo you want to quit anyway?"),
+							translator.i18n("Error"),
+							JOptionPane.ERROR_MESSAGE,
+							JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) {
+				return;
+			}
+		}
 		try {
 			osgi.stop();
-			osgi = null;
 		} catch (BundleException e) {
 			logger.error(e.getMessage(), e);
 		}
-		if (storeConfiguration()) {
-			super.quit();
-		}
+		osgi = null;
+		super.quit();
 	}
 
 	@Override

@@ -12,6 +12,7 @@ import com.puresol.coding.analysis.AnalyzedFile;
 import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.evaluator.CodeRangeEvaluatorFactory;
 import com.puresol.coding.evaluator.ProjectEvaluatorFactory;
+import com.puresol.config.Configuration;
 import com.puresol.document.convert.html.HTMLConverter;
 import com.puresol.gui.Application;
 import com.puresol.gui.progress.ProgressObserver;
@@ -102,12 +103,14 @@ public class HTMLProjectAnalysisCreator implements RunnableProgressObservable {
 	}
 
 	private ProgressObserver monitor = null;
+	private final Configuration configuration;
 	private final ProjectAnalyzer projectAnalyzer;
 	private final File directory;
 
 	public HTMLProjectAnalysisCreator(ProjectAnalyzer projectAnalyzer,
-			File directory) {
+			File directory, Configuration configuration) {
 		super();
+		this.configuration = configuration;
 		this.projectAnalyzer = projectAnalyzer;
 		this.directory = directory;
 	}
@@ -201,7 +204,8 @@ public class HTMLProjectAnalysisCreator implements RunnableProgressObservable {
 
 	private void createProjectEvaluatorReports() throws InterruptedException {
 		monitor.getSubProgressPanel().runSyncronous(
-				new ProjectAnalysisReports(projectAnalyzer, directory));
+				new ProjectAnalysisReports(projectAnalyzer, directory,
+						configuration));
 	}
 
 	private void createFileAnalysisIndizes() throws InterruptedException {

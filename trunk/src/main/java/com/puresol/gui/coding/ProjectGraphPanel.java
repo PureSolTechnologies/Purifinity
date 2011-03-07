@@ -29,6 +29,7 @@ import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.evaluator.Evaluator;
 import com.puresol.coding.evaluator.ProjectEvaluatorFactory;
 import com.puresol.coding.evaluator.Result;
+import com.puresol.config.Configuration;
 import com.puresol.utils.PersistenceException;
 
 /**
@@ -46,20 +47,24 @@ public class ProjectGraphPanel extends JPanel implements ListSelectionListener,
 	private static final Logger logger = Logger
 			.getLogger(ProjectGraphPanel.class);
 
+	private final Configuration configuration;
 	private ProjectAnalyzer projectAnalyzer = null;
 
 	private final ProjectEvaluatorChooser evaluators = new ProjectEvaluatorChooser();
 	private final JTabbedPane tabbedPane = new JTabbedPane();
 	private final JButton showButton = new JButton("Show...");
 
-	public ProjectGraphPanel() {
+	public ProjectGraphPanel(Configuration configuration) {
 		super();
+		this.configuration = configuration;
 		initUI();
 	}
 
-	public ProjectGraphPanel(ProjectAnalyzer projectAnalyzer) {
+	public ProjectGraphPanel(ProjectAnalyzer projectAnalyzer,
+			Configuration configuration) {
 		super();
 		this.projectAnalyzer = projectAnalyzer;
+		this.configuration = configuration;
 		initUI();
 	}
 
@@ -94,7 +99,8 @@ public class ProjectGraphPanel extends JPanel implements ListSelectionListener,
 		Map<String, DefaultCategoryDataset> datasets = new HashMap<String, DefaultCategoryDataset>();
 		ProjectEvaluatorFactory evaluatorFactory = (ProjectEvaluatorFactory) evaluators
 				.getSelectedValue();
-		Evaluator evaluator = evaluatorFactory.create(projectAnalyzer);
+		Evaluator evaluator = evaluatorFactory.create(projectAnalyzer,
+				configuration);
 		for (AnalyzedFile analyzedFile : projectAnalyzer.getAnalyzedFiles()) {
 			Analysis analysis = projectAnalyzer.getAnalysis(analyzedFile);
 			for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
