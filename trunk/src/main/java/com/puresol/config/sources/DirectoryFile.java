@@ -20,11 +20,13 @@ public class DirectoryFile extends AbstractConfigurationSource {
 		this.changeable = changeable;
 		this.overridable = overridable;
 		file = new File(directory, relativeFile.getPath());
-		FileReader reader = new FileReader(file);
-		try {
-			properties.load(reader);
-		} finally {
-			reader.close();
+		if (file.exists()) {
+			FileReader reader = new FileReader(file);
+			try {
+				properties.load(reader);
+			} finally {
+				reader.close();
+			}
 		}
 	}
 
@@ -55,7 +57,7 @@ public class DirectoryFile extends AbstractConfigurationSource {
 
 	@Override
 	public void save() throws IOException {
-		if (isChangeable()) {
+		if (changeable) {
 			OutputStream outputStream = new FileOutputStream(file);
 			try {
 				properties.store(outputStream, getName());
