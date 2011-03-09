@@ -2,6 +2,7 @@ package com.puresol.utils;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,20 +45,25 @@ public class Persistence {
 
 	public static Object restore(File file) throws IOException,
 			PersistenceException {
+		if (!file.exists()) {
+			throw new FileNotFoundException("File '" + file
+					+ "' was not found!");
+		}
 		return restore(new FileInputStream(file));
 	}
 
 	public static Object restore(InputStream inputStream) throws IOException,
 			PersistenceException {
 		try {
+			if (inputStream == null) {
+				throw new IOException("Input stream is null!");
+			}
 			ObjectInputStream ois = new ObjectInputStream(inputStream);
-			Object o;
 			try {
-				o = ois.readObject();
+				return ois.readObject();
 			} finally {
 				ois.close();
 			}
-			return o;
 		} catch (ClassNotFoundException e) {
 			throw new PersistenceException(e);
 		}
