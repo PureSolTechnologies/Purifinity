@@ -2,12 +2,7 @@ package com.puresol.uhura.parser.lr;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.Stack;
 
 import org.apache.log4j.Logger;
@@ -74,23 +69,9 @@ public abstract class AbstractLRParser extends AbstractParser {
 	private long startTime;
 
 	/**
-	 * This field is used to store the flag for memoization. If this field is
-	 * true, memoization is turned on and the memoization buffer is filled and
-	 * used.
-	 */
-	private final boolean memoization;
-
-	/**
 	 * This stack keeps the back tracking information for back tracking.
 	 */
 	private final Stack<BacktrackLocation> backtrackStack = new Stack<BacktrackLocation>();
-
-	/**
-	 * This field is used to store the memoization information for the parsing
-	 * process. Position and state pairs stored are used to show known dead ends
-	 * and eliminate the need for parsing such states again.
-	 */
-	private final Map<Integer, Set<Integer>> memoizationBuffer = new HashMap<Integer, Set<Integer>>();
 
 	/**
 	 * This field contains the parser table to be used.
@@ -156,8 +137,6 @@ public abstract class AbstractLRParser extends AbstractParser {
 		} catch (NumberFormatException e) {
 		}
 		this.timeout = timeout;
-		memoization = Boolean.valueOf((String) grammar.getOptions().get(
-				"parser.memoization"));
 	}
 
 	/**
@@ -172,34 +151,6 @@ public abstract class AbstractLRParser extends AbstractParser {
 
 	protected ParserTable getParserTable() {
 		return parserTable;
-	}
-
-	private void addFailedStates(int streamPosition, int state) {
-		if (!memoization) {
-			return;
-		}
-		Set<Integer> failedStates = memoizationBuffer.get(streamPosition);
-		if (failedStates == null) {
-			failedStates = new LinkedHashSet<Integer>();
-			memoizationBuffer.put(streamPosition, failedStates);
-		}
-		failedStates.add(state);
-	}
-
-	private boolean isFailedState(int streamPosition, int state) {
-		if (!memoization) {
-			return false;
-		}
-		Set<Integer> failedStates = memoizationBuffer.get(streamPosition);
-		if (failedStates == null) {
-			return false;
-		}
-		if (!failedStates.contains(state)) {
-			return false;
-		}
-		logger.trace("Position " + streamPosition + " / State: " + state
-				+ " /  has already failed!");
-		return true;
 	}
 
 	/**
@@ -226,7 +177,6 @@ public abstract class AbstractLRParser extends AbstractParser {
 		streamPosition = 0;
 		stepCounter = 0;
 		stateStack.push(0);
-		memoizationBuffer.clear();
 		maxPosition = 0;
 		shiftIgnoredTokens();
 	}
@@ -266,10 +216,6 @@ public abstract class AbstractLRParser extends AbstractParser {
 				}
 				if (streamPosition > maxPosition) {
 					maxPosition = streamPosition;
-				}
-				if (isFailedState(streamPosition, stateStack.peek())) {
-					error();
-					continue;
 				}
 				final ParserActionSet actionSet;
 				final Token token;
@@ -373,10 +319,6 @@ public abstract class AbstractLRParser extends AbstractParser {
 			if (location.getLastAlternative() + stepAhead >= actionSet
 					.getActionNumber()) {
 				logger.trace("No alternative left. Abort.");
-				/*
-				 * mark last alternative as fail...
-				 */
-				addFailedStates(streamPosition, stateStack.peek());
 				return new ParserAction(ActionType.ERROR, -1);
 			}
 			addBacktrackLocation(location.getLastAlternative() + stepAhead);
@@ -571,12 +513,6 @@ public abstract class AbstractLRParser extends AbstractParser {
 			timeout.set(cloned, this.timeout);
 			timeout.setAccessible(false);
 
-			Field memoization = AbstractLRParser.class
-					.getDeclaredField("memoization");
-			memoization.setAccessible(true);
-			memoization.set(cloned, this.memoization);
-			memoization.setAccessible(false);
-
 			Field parserTable = AbstractLRParser.class
 					.getDeclaredField("parserTable");
 			parserTable.setAccessible(true);
@@ -588,13 +524,6 @@ public abstract class AbstractLRParser extends AbstractParser {
 			backtrackStack.setAccessible(true);
 			backtrackStack.set(cloned, new Stack<BacktrackLocation>());
 			backtrackStack.setAccessible(false);
-
-			Field memoizationBuffer = AbstractLRParser.class
-					.getDeclaredField("memoizationBuffer");
-			memoizationBuffer.setAccessible(true);
-			memoizationBuffer.set(cloned,
-					new HashMap<Integer, Map<Integer, Set<ParserAction>>>());
-			memoizationBuffer.setAccessible(false);
 
 			Field stateStack = AbstractLRParser.class
 					.getDeclaredField("stateStack");
