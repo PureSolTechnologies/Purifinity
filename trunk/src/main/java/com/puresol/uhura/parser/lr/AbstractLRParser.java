@@ -174,7 +174,7 @@ public abstract class AbstractLRParser extends AbstractParser {
 		return parserTable;
 	}
 
-	private void addFailedAction(int streamPosition, int state) {
+	private void addFailedStates(int streamPosition, int state) {
 		if (!memoization) {
 			return;
 		}
@@ -186,7 +186,7 @@ public abstract class AbstractLRParser extends AbstractParser {
 		failedStates.add(state);
 	}
 
-	private boolean isFailedAction(int streamPosition, int state) {
+	private boolean isFailedState(int streamPosition, int state) {
 		if (!memoization) {
 			return false;
 		}
@@ -266,6 +266,10 @@ public abstract class AbstractLRParser extends AbstractParser {
 				}
 				if (streamPosition > maxPosition) {
 					maxPosition = streamPosition;
+				}
+				if (isFailedState(streamPosition, stateStack.peek())) {
+					error();
+					continue;
 				}
 				final ParserActionSet actionSet;
 				final Token token;
@@ -372,7 +376,7 @@ public abstract class AbstractLRParser extends AbstractParser {
 				/*
 				 * mark last alternative as fail...
 				 */
-				addFailedAction(streamPosition, stateStack.peek());
+				addFailedStates(streamPosition, stateStack.peek());
 				return new ParserAction(ActionType.ERROR, -1);
 			}
 			addBacktrackLocation(location.getLastAlternative() + stepAhead);
