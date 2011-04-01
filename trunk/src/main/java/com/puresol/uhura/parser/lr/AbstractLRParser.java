@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -53,16 +54,43 @@ public abstract class AbstractLRParser extends AbstractParser {
 	 * not. If it is set to true, back tracking is allowed.
 	 */
 	private final boolean backtrackEnabled;
+
+	/**
+	 * This field stores the maximum size of the backtrack buffer. If this value
+	 * is set to zero, the backtrack buffer has no maximum size.
+	 */
 	private final int backtrackDepth;
+
+	/**
+	 * This filed is used to store the timeout value. The parser throws an
+	 * exception after the number of seconds stored in this field. If this value
+	 * is zero, timeout checking is disabled.
+	 */
 	private final int timeout;
+
+	/**
+	 * This is the startTime of the parsing process.
+	 */
 	private long startTime;
+
+	/**
+	 * This field is used to store the flag for memoization. If this field is
+	 * true, memoization is turned on and the memoization buffer is filled and
+	 * used.
+	 */
 	private final boolean memoization;
+
 	/**
 	 * This stack keeps the back tracking information for back tracking.
 	 */
 	private final Stack<BacktrackLocation> backtrackStack = new Stack<BacktrackLocation>();
 
-	private final Map<Integer, Map<Integer, Set<ParserAction>>> memoizationBuffer = new HashMap<Integer, Map<Integer, Set<ParserAction>>>();
+	/**
+	 * This field is used to store the memoization information for the parsing
+	 * process. Position and state pairs stored are used to show known dead ends
+	 * and eliminate the need for parsing such states again.
+	 */
+	private final Map<Integer, Set<Integer>> memoizationBuffer = new HashMap<Integer, Set<Integer>>();
 
 	/**
 	 * This field contains the parser table to be used.
@@ -75,6 +103,13 @@ public abstract class AbstractLRParser extends AbstractParser {
 	 */
 	private Stack<Integer> stateStack = new Stack<Integer>();
 
+	/**
+	 * This field contains the maximum position within the token stream which
+	 * was reached during parsing. This maximum position can be used after an
+	 * parser exception to retrieve to most possible position of the parsing
+	 * issue. The issue may arise due to an illegal syntax construct in the
+	 * source token stream or a wrongly or not defined grammar construct.
+	 */
 	private int maxPosition = 0;
 
 	/**
@@ -82,6 +117,13 @@ public abstract class AbstractLRParser extends AbstractParser {
 	 * states in stateStack.
 	 */
 	private final List<ParserAction> actionStack = new ArrayList<ParserAction>();
+
+	/**
+	 * This field contains a histogramm of all parser error during the parser
+	 * process. This field can be used for grammar debugging to find ambiguous
+	 * grammar constructs. The time behavior can be optimized with this
+	 * informaiton, too.
+	 */
 	private final ParserErrors parserErrors = new ParserErrors();
 
 	/**
@@ -132,44 +174,31 @@ public abstract class AbstractLRParser extends AbstractParser {
 		return parserTable;
 	}
 
-	private void addFailedAction(int streamPosition, int state,
-			ParserAction action) {
+	private void addFailedAction(int streamPosition, int state) {
 		if (!memoization) {
 			return;
 		}
-		Map<Integer, Set<ParserAction>> failedStates = memoizationBuffer
-				.get(streamPosition);
+		Set<Integer> failedStates = memoizationBuffer.get(streamPosition);
 		if (failedStates == null) {
-			failedStates = new HashMap<Integer, Set<ParserAction>>();
+			failedStates = new LinkedHashSet<Integer>();
 			memoizationBuffer.put(streamPosition, failedStates);
 		}
-		Set<ParserAction> actions = failedStates.get(state);
-		if (actions == null) {
-			actions = new HashSet<ParserAction>();
-			failedStates.put(state, actions);
-		}
-		actions.add(action);
+		failedStates.add(state);
 	}
 
-	private boolean isFailedAction(int streamPosition, int state,
-			ParserAction action) {
+	private boolean isFailedAction(int streamPosition, int state) {
 		if (!memoization) {
 			return false;
 		}
-		Map<Integer, Set<ParserAction>> failedStates = memoizationBuffer
-				.get(streamPosition);
+		Set<Integer> failedStates = memoizationBuffer.get(streamPosition);
 		if (failedStates == null) {
 			return false;
 		}
-		Set<ParserAction> actions = failedStates.get(state);
-		if (actions == null) {
-			return false;
-		}
-		if (!actions.contains(action)) {
+		if (!failedStates.contains(state)) {
 			return false;
 		}
 		logger.trace("Position " + streamPosition + " / State: " + state
-				+ " / Action : " + action + " has already failed!");
+				+ " /  has already failed!");
 		return true;
 	}
 
@@ -336,15 +365,14 @@ public abstract class AbstractLRParser extends AbstractParser {
 						+ "' is ambiguous and back tracking was performed already. Trying new alternative...");
 			}
 			BacktrackLocation location = backtrackStack.pop();
-			/*
-			 * mark last alternative as fail...
-			 */
-			addFailedAction(streamPosition, stateStack.peek(),
-					actionSet.getAction(location.getLastAlternative()));
 			int stepAhead = 1;
 			if (location.getLastAlternative() + stepAhead >= actionSet
 					.getActionNumber()) {
 				logger.trace("No alternative left. Abort.");
+				/*
+				 * mark last alternative as fail...
+				 */
+				addFailedAction(streamPosition, stateStack.peek());
 				return new ParserAction(ActionType.ERROR, -1);
 			}
 			addBacktrackLocation(location.getLastAlternative() + stepAhead);
