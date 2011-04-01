@@ -34,6 +34,10 @@ import com.puresol.uhura.parser.parsetable.ParserTable;
  * is missing. The implementation of this needs to be done in the inherited
  * class in the abstract method.
  * 
+ * This parser creates a action stack which is a collection all processes
+ * necassary to create a parser tree. The acutal creation of a parser tree is
+ * performed in an external converter.
+ * 
  * @author Rick-Rainer Ludwig
  * 
  */
@@ -52,13 +56,13 @@ public abstract class AbstractLRParser extends AbstractParser {
 	private final int backtrackDepth;
 	private final int timeout;
 	private long startTime;
-	private final boolean excludeFailsEnabled;
+	private final boolean memoization;
 	/**
 	 * This stack keeps the back tracking information for back tracking.
 	 */
 	private final Stack<BacktrackLocation> backtrackStack = new Stack<BacktrackLocation>();
 
-	private final Map<Integer, Map<Integer, Set<ParserAction>>> failedActions = new HashMap<Integer, Map<Integer, Set<ParserAction>>>();
+	private final Map<Integer, Map<Integer, Set<ParserAction>>> memoizationBuffer = new HashMap<Integer, Map<Integer, Set<ParserAction>>>();
 
 	/**
 	 * This field contains the parser table to be used.
@@ -86,8 +90,8 @@ public abstract class AbstractLRParser extends AbstractParser {
 	private int streamPosition = 0;
 
 	/**
-	 * This is the counter of the steps and gives the current steps number
-	 * during parsing.
+	 * This is the counter of the steps and gives the current step number during
+	 * parsing.
 	 */
 	private int stepCounter = 0;
 
@@ -110,8 +114,8 @@ public abstract class AbstractLRParser extends AbstractParser {
 		} catch (NumberFormatException e) {
 		}
 		this.timeout = timeout;
-		excludeFailsEnabled = Boolean.valueOf((String) grammar.getOptions()
-				.get("parser.exclude_fails"));
+		memoization = Boolean.valueOf((String) grammar.getOptions().get(
+				"parser.memoization"));
 	}
 
 	/**
@@ -130,14 +134,14 @@ public abstract class AbstractLRParser extends AbstractParser {
 
 	private void addFailedAction(int streamPosition, int state,
 			ParserAction action) {
-		if (!excludeFailsEnabled) {
+		if (!memoization) {
 			return;
 		}
-		Map<Integer, Set<ParserAction>> failedStates = failedActions
+		Map<Integer, Set<ParserAction>> failedStates = memoizationBuffer
 				.get(streamPosition);
 		if (failedStates == null) {
 			failedStates = new HashMap<Integer, Set<ParserAction>>();
-			failedActions.put(streamPosition, failedStates);
+			memoizationBuffer.put(streamPosition, failedStates);
 		}
 		Set<ParserAction> actions = failedStates.get(state);
 		if (actions == null) {
@@ -149,10 +153,10 @@ public abstract class AbstractLRParser extends AbstractParser {
 
 	private boolean isFailedAction(int streamPosition, int state,
 			ParserAction action) {
-		if (!excludeFailsEnabled) {
+		if (!memoization) {
 			return false;
 		}
-		Map<Integer, Set<ParserAction>> failedStates = failedActions
+		Map<Integer, Set<ParserAction>> failedStates = memoizationBuffer
 				.get(streamPosition);
 		if (failedStates == null) {
 			return false;
@@ -193,11 +197,15 @@ public abstract class AbstractLRParser extends AbstractParser {
 		streamPosition = 0;
 		stepCounter = 0;
 		stateStack.push(0);
-		failedActions.clear();
+		memoizationBuffer.clear();
 		maxPosition = 0;
 		shiftIgnoredTokens();
 	}
 
+	/**
+	 * This method treats all ignored tokens during a shift. The ignored tokens
+	 * are just skipped by moving the stream position variable forward.
+	 */
 	private final void shiftIgnoredTokens() {
 		if (streamPosition == getTokenStream().size()) {
 			return;
@@ -265,9 +273,6 @@ public abstract class AbstractLRParser extends AbstractParser {
 							+ "'!");
 				}
 			} while (!accepted);
-			/*
-			 * We are finished. The last element in the stack is the result...
-			 */
 			return LRTokenStreamConverter.convert(getTokenStream(),
 					getGrammar(), actionStack);
 		} catch (GrammarException e) {
@@ -276,6 +281,13 @@ public abstract class AbstractLRParser extends AbstractParser {
 		}
 	}
 
+	/**
+	 * This method checks for the timeout. If the time ran out, an
+	 * ParserException is thrown and the parser process is finished.
+	 * 
+	 * @throws ParserException
+	 *             is thrown if the time ran out.
+	 */
 	private void checkTimeout() throws ParserException {
 		if (timeout > 0) {
 			if (System.currentTimeMillis() - startTime > timeout * 1000) {
@@ -286,6 +298,14 @@ public abstract class AbstractLRParser extends AbstractParser {
 		}
 	}
 
+	/**
+	 * This mehtod returns the currently to be processed action. This method
+	 * also takes care for ambiguous grammars and backtracking.
+	 * 
+	 * @param actionSet
+	 * @return
+	 * @throws GrammarException
+	 */
 	private final ParserAction getAction(ParserActionSet actionSet)
 			throws GrammarException {
 		if (actionSet.getActionNumber() == 1) {
@@ -322,15 +342,6 @@ public abstract class AbstractLRParser extends AbstractParser {
 			addFailedAction(streamPosition, stateStack.peek(),
 					actionSet.getAction(location.getLastAlternative()));
 			int stepAhead = 1;
-			while ((location.getLastAlternative() + stepAhead < actionSet
-					.getActionNumber())
-					&& (isFailedAction(
-							streamPosition,
-							stateStack.peek(),
-							actionSet.getAction(location.getLastAlternative()
-									+ stepAhead)))) {
-				stepAhead++;
-			}
 			if (location.getLastAlternative() + stepAhead >= actionSet
 					.getActionNumber()) {
 				logger.trace("No alternative left. Abort.");
@@ -528,11 +539,11 @@ public abstract class AbstractLRParser extends AbstractParser {
 			timeout.set(cloned, this.timeout);
 			timeout.setAccessible(false);
 
-			Field excludeFailsEnabled = AbstractLRParser.class
-					.getDeclaredField("excludeFailsEnabled");
-			excludeFailsEnabled.setAccessible(true);
-			excludeFailsEnabled.set(cloned, this.excludeFailsEnabled);
-			excludeFailsEnabled.setAccessible(false);
+			Field memoization = AbstractLRParser.class
+					.getDeclaredField("memoization");
+			memoization.setAccessible(true);
+			memoization.set(cloned, this.memoization);
+			memoization.setAccessible(false);
 
 			Field parserTable = AbstractLRParser.class
 					.getDeclaredField("parserTable");
@@ -546,12 +557,12 @@ public abstract class AbstractLRParser extends AbstractParser {
 			backtrackStack.set(cloned, new Stack<BacktrackLocation>());
 			backtrackStack.setAccessible(false);
 
-			Field failedActions = AbstractLRParser.class
-					.getDeclaredField("failedActions");
-			failedActions.setAccessible(true);
-			failedActions.set(cloned,
+			Field memoizationBuffer = AbstractLRParser.class
+					.getDeclaredField("memoizationBuffer");
+			memoizationBuffer.setAccessible(true);
+			memoizationBuffer.set(cloned,
 					new HashMap<Integer, Map<Integer, Set<ParserAction>>>());
-			failedActions.setAccessible(false);
+			memoizationBuffer.setAccessible(false);
 
 			Field stateStack = AbstractLRParser.class
 					.getDeclaredField("stateStack");
