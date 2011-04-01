@@ -20,8 +20,7 @@
 	parser.backtracking=true;						// backtracking switched on?
 	parser.backtracking.depth=100;					// keep maximum backtrack locations
 	parser.timeout=10;								// timeout of parser after this amount of seconds
-//	parser.exclude_fails=true;
- 
+
 /****************************************************************************
  * H E L P E R
  ****************************************************************************/ 

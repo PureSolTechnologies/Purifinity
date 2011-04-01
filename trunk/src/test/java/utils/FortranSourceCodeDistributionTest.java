@@ -33,15 +33,13 @@ import com.puresol.utils.StopWatch;
  */
 public class FortranSourceCodeDistributionTest {
 
-	private static final String INSTALL_DIRECTORY = "/home/ludwig/workspace/TRNSYS";
+	private static final String INSTALL_DIRECTORY = "/home/ludwig/workspace/Dyn3D";
 
 	@Test
 	public void test() {
 		try {
 			Logger.getRootLogger().setLevel(Level.DEBUG);
-			File file = new File(
-					"src/test/resources/com/puresol/coding/lang/fortran/samples",
-					"zgerc.f");
+			File file = new File(INSTALL_DIRECTORY, "src/fort/ndicrs.f");
 			assertTrue(file.exists());
 			Fortran fortran = Fortran.getInstance();
 			StopWatch watch = new StopWatch();
@@ -142,7 +140,7 @@ public class FortranSourceCodeDistributionTest {
 
 	public static void main(String args[]) {
 		Logger.getRootLogger().setLevel(Level.DEBUG);
-		List<File> files = FileSearch.find(new File(INSTALL_DIRECTORY), "*.for");
+		List<File> files = FileSearch.find(new File(INSTALL_DIRECTORY), "*.f");
 		parseAllFiles(files);
 	}
 
