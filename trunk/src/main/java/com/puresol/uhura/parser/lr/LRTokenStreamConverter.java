@@ -193,7 +193,6 @@ public class LRTokenStreamConverter {
 	private ParserTree addMetaData(ParserTree tree) {
 		TreeIterator<ParserTree> iterator = new TreeIterator<ParserTree>(tree);
 		int line = 1;
-		int tokenId = 0;
 		final String sourceName = tokenStream.getName();
 		do {
 			final ParserTree currentNode = iterator.getCurrentNode();
@@ -203,7 +202,6 @@ public class LRTokenStreamConverter {
 				currentNode.setMetaData(new ParserTreeMetaData(sourceName,
 						line, lineNum));
 				line += lineNum - 1;
-				tokenId++;
 			}
 		} while (iterator.goForward());
 		iterator.gotoEnd();
