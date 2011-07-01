@@ -103,11 +103,9 @@ public class VerticalDataFile {
 			f = new RandomAccessFile(file, "r");
 			String line = "";
 			boolean isHeader = true;
-			int lineNum = 0;
 			String[] cols = null;
 			int width = 0;
 			while ((line = readLine(f)) != null) {
-				lineNum++;
 				if (line.isEmpty()) {
 					continue;
 				}
