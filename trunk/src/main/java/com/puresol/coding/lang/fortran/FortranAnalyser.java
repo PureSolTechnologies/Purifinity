@@ -28,6 +28,7 @@ import com.puresol.trees.TreeVisitor;
 import com.puresol.trees.TreeWalker;
 import com.puresol.trees.WalkingAction;
 import com.puresol.uhura.lexer.LexerException;
+import com.puresol.uhura.lexer.LexerResult;
 import com.puresol.uhura.lexer.TokenStream;
 import com.puresol.uhura.parser.Parser;
 import com.puresol.uhura.parser.ParserException;
@@ -64,12 +65,12 @@ public class FortranAnalyser implements Analyzer {
 	@Override
 	public void parse() throws AnalyzerException {
 		try {
-			TokenStream tokenStream = preConditioningAndLexing();
+			LexerResult lexerResult = preConditioningAndLexing();
 			StopWatch watch = new StopWatch();
 			Parser parser = grammar.getParser();
 			logger.debug("Starting parser...");
 			watch.start();
-			parserTree = parser.parse(tokenStream);
+			parserTree = parser.parse(lexerResult);
 			watch.stop();
 			logger.debug("done. (time: " + watch + ")");
 		} catch (IOException e) {
@@ -84,7 +85,7 @@ public class FortranAnalyser implements Analyzer {
 		}
 	}
 
-	private TokenStream preConditioningAndLexing() throws AnalyzerException {
+	private LexerResult preConditioningAndLexing() throws AnalyzerException {
 		try {
 			FortranPreConditioner preconditioner = new FortranPreConditioner(
 					file);
@@ -94,7 +95,7 @@ public class FortranAnalyser implements Analyzer {
 			TokenStream tokenStream = preconditioner.scan(grammar.getLexer());
 			watch.stop();
 			logger.debug("done. (time: " + watch + ")");
-			return tokenStream;
+			return new LexerResult(tokenStream);
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
 			throw new AnalyzerException(this);

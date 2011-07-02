@@ -11,6 +11,7 @@ import com.puresol.coding.lang.fortran.grammar.FortranGrammar;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.lexer.Lexer;
 import com.puresol.uhura.lexer.LexerException;
+import com.puresol.uhura.lexer.LexerResult;
 import com.puresol.uhura.lexer.RegExpLexer;
 import com.puresol.uhura.lexer.TokenStream;
 import com.puresol.utils.PersistenceException;
@@ -23,7 +24,9 @@ public class FortranLexerTest {
 			Grammar grammar = FortranGrammar.getInstance().getGrammar();
 			assertNotNull(grammar);
 			Lexer lexer = new RegExpLexer(grammar);
-			TokenStream stream = lexer.lex(new StringReader("2.0 - 3.0"), "TEST");
+			LexerResult result = lexer.lex(new StringReader("2.0 - 3.0"),
+					"TEST");
+			TokenStream stream = result.getTokenStream();
 			assertEquals(5, stream.size());
 			assertEquals("REAL_LITERAL_CONSTANT", stream.get(0).getName());
 			assertEquals("WHITESPACE", stream.get(1).getName());
@@ -48,7 +51,8 @@ public class FortranLexerTest {
 			Grammar grammar = FortranGrammar.getInstance().getGrammar();
 			assertNotNull(grammar);
 			Lexer lexer = new RegExpLexer(grammar);
-			TokenStream stream = lexer.lex(new StringReader("3.OR.4"), "TEST");
+			LexerResult result = lexer.lex(new StringReader("3.OR.4"), "TEST");
+			TokenStream stream = result.getTokenStream();
 			assertEquals(3, stream.size());
 			assertEquals("INT_LITERAL_CONSTANT", stream.get(0).getName());
 			assertEquals("OR", stream.get(1).getName());
