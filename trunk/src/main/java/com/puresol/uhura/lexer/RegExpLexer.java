@@ -45,10 +45,10 @@ public class RegExpLexer implements Lexer {
 	 */
 
 	@Override
-	public TokenStream lex(Reader reader, String name) throws LexerException {
+	public LexerResult lex(Reader reader, String name) throws LexerException {
 		readToString(reader);
 		scan(name);
-		return tokenStream;
+		return new LexerResult(tokenStream);
 	}
 
 	private void readToString(Reader reader) throws LexerException {

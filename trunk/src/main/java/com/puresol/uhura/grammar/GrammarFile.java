@@ -10,8 +10,8 @@ import org.apache.log4j.Logger;
 import com.puresol.uhura.grammar.uhura.UhuraGrammar;
 import com.puresol.uhura.lexer.Lexer;
 import com.puresol.uhura.lexer.LexerException;
+import com.puresol.uhura.lexer.LexerResult;
 import com.puresol.uhura.lexer.RegExpLexer;
-import com.puresol.uhura.lexer.TokenStream;
 import com.puresol.uhura.parser.Parser;
 import com.puresol.uhura.parser.ParserException;
 import com.puresol.uhura.parser.ParserTree;
@@ -78,9 +78,9 @@ public class GrammarFile {
 			logger.debug("Read grammar file:");
 			logger.debug("Starting lexer...");
 			Lexer lexer = new RegExpLexer(uhuraGrammar);
-			TokenStream tokenStream = lexer.lex(reader, "UhuraGrammar");
+			LexerResult lexerResult = lexer.lex(reader, "UhuraGrammar");
 			logger.debug("Starting parser...");
-			parse(tokenStream);
+			parse(lexerResult);
 			logger.debug("done.");
 		} catch (LexerException e) {
 			logger.error(e.getMessage(), e);
@@ -97,10 +97,10 @@ public class GrammarFile {
 	 * @param tokenStream
 	 * @throws ParserException
 	 */
-	private void parse(TokenStream tokenStream) throws ParserException {
+	private void parse(LexerResult lexerResult) throws ParserException {
 		try {
 			Parser parser = new SLR1Parser(uhuraGrammar);
-			ast = parser.parse(tokenStream);
+			ast = parser.parse(lexerResult);
 		} catch (GrammarException e) {
 			logger.fatal(e.getMessage(), e);
 			throw new RuntimeException("UhuraGrammar is broken!!!");

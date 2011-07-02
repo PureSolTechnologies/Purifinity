@@ -9,10 +9,10 @@ import java.io.Serializable;
  * @author rludwig
  * 
  */
-public interface Lexer extends Serializable, Cloneable{
+public interface Lexer extends Serializable, Cloneable {
 
-	public TokenStream lex(Reader reader, String name) throws LexerException;
+	public LexerResult lex(Reader reader, String name) throws LexerException;
 
 	public Lexer clone();
-	
+
 }

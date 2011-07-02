@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import com.puresol.uhura.grammar.GrammarException;
-import com.puresol.uhura.lexer.TokenStream;
+import com.puresol.uhura.lexer.LexerResult;
 
 /**
  * This is the general interface for a parser. The parser is initialized via its
@@ -25,7 +25,7 @@ public interface Parser extends Serializable, Cloneable {
 	 * @return A result AST is returned.
 	 * @throws ParserException
 	 */
-	public ParserTree parse(TokenStream tokenStream) throws ParserException;
+	public ParserTree parse(LexerResult lexerResult) throws ParserException;
 
 	/**
 	 * This method is used to generated maximum detail information about the

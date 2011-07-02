@@ -24,9 +24,10 @@ public class RegExpLexerTest {
 			Grammar grammar = new Grammar(new Properties(), rules,
 					new ProductionSet());
 			Lexer lexer = new RegExpLexer(grammar);
-			TokenStream tokenStream = lexer.lex(new StringReader(
+			LexerResult result = lexer.lex(new StringReader(
 					"0 1\t2 \t3 \t4 \t5\t 6 7 8 9 10 11 12 13 14 15"),
 					"SampleString");
+			TokenStream tokenStream = result.getTokenStream();
 			assertNotNull(tokenStream);
 			assertEquals(31, tokenStream.size());
 			assertEquals("NUMBER", tokenStream.get(0).getName());
