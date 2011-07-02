@@ -19,10 +19,11 @@ public class TokenDefinitionSet implements Serializable {
 
 	private static final long serialVersionUID = 8379268661591883917L;
 
+	private final Map<String, Integer> name2DefinitionID = new HashMap<String, Integer>();
 	private final Map<String, TokenDefinition> name2Definition = new HashMap<String, TokenDefinition>();
 	private final List<TokenDefinition> tokenDefinitions = new ArrayList<TokenDefinition>();
 
-	public void addDefinition(TokenDefinition definition)
+	public synchronized void addDefinition(TokenDefinition definition)
 			throws GrammarException {
 		if (definition == null) {
 			return;
@@ -31,8 +32,10 @@ public class TokenDefinitionSet implements Serializable {
 			throw new GrammarException("Double defined token definition '"
 					+ definition + "'!");
 		}
+		String name = definition.getName();
+		name2DefinitionID.put(name, tokenDefinitions.size());
 		tokenDefinitions.add(definition);
-		name2Definition.put(definition.getName(), definition);
+		name2Definition.put(name, definition);
 	}
 
 	public List<TokenDefinition> getDefinitions() {
@@ -45,6 +48,14 @@ public class TokenDefinitionSet implements Serializable {
 
 	public TokenDefinition getDefinition(String name) {
 		return name2Definition.get(name);
+	}
+
+	public int getID(String name) {
+		return name2DefinitionID.get(name);
+	}
+
+	public String getName(int id) {
+		return tokenDefinitions.get(id).getName();
 	}
 
 	@Override
