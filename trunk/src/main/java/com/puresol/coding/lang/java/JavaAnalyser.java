@@ -37,7 +37,7 @@ import com.puresol.trees.TreeWalker;
 import com.puresol.trees.WalkingAction;
 import com.puresol.uhura.lexer.Lexer;
 import com.puresol.uhura.lexer.LexerException;
-import com.puresol.uhura.lexer.TokenStream;
+import com.puresol.uhura.lexer.LexerResult;
 import com.puresol.uhura.parser.Parser;
 import com.puresol.uhura.parser.ParserException;
 import com.puresol.uhura.parser.ParserTree;
@@ -71,10 +71,10 @@ public class JavaAnalyser implements Analyzer {
 		try {
 			date = new Date();
 			Lexer lexer = grammar.getLexer();
-			TokenStream tokenStream = lexer.lex(new FileReader(file),
+			LexerResult lexerResult = lexer.lex(new FileReader(file),
 					file.toString());
 			Parser parser = grammar.getParser();
-			parserTree = parser.parse(tokenStream);
+			parserTree = parser.parse(lexerResult);
 		} catch (ParserException e) {
 			logger.error(e.getMessage(), e);
 			throw new AnalyzerException(this);
