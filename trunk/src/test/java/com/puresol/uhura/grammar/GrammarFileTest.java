@@ -2,7 +2,6 @@ package com.puresol.uhura.grammar;
 
 import static org.junit.Assert.*;
 
-import java.io.IOException;
 import java.io.InputStream;
 
 import org.junit.After;
@@ -24,29 +23,15 @@ public class GrammarFileTest {
 	}
 
 	@Test
-	public void testRead() {
-		try {
-			assertNotNull(inputStream);
-			GrammarFile file = new GrammarFile(inputStream);
-			ParserTree ast = file.getAST();
-			assertNotNull(ast);
-		} catch (IOException e) {
-			e.printStackTrace();
-			fail("No exception was expected!");
-		} catch (GrammarException e) {
-			e.printStackTrace();
-			fail("No exception was expected!");
-		}
+	public void testRead() throws Throwable {
+		assertNotNull(inputStream);
+		GrammarFile file = new GrammarFile(inputStream);
+		ParserTree ast = file.getAST();
+		assertNotNull(ast);
 	}
 
 	@After
-	public void teardown() {
-		try {
-			assertNotNull(inputStream);
-			inputStream.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-			fail("No exception was expected!");
-		}
+	public void teardown() throws Throwable {
+		inputStream.close();
 	}
 }

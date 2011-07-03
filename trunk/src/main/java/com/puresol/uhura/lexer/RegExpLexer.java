@@ -1,7 +1,5 @@
 package com.puresol.uhura.lexer;
 
-import java.io.IOException;
-import java.io.Reader;
 import java.util.regex.Matcher;
 
 import org.apache.log4j.Logger;
@@ -25,7 +23,7 @@ public class RegExpLexer implements Lexer {
 	private final Grammar grammar;
 
 	private TokenStream tokenStream = null;
-	private StringBuffer text = null;
+	private SourceCode sourceCode = null;
 
 	public RegExpLexer(Grammar grammar) {
 		this.grammar = grammar;
@@ -45,27 +43,10 @@ public class RegExpLexer implements Lexer {
 	 */
 
 	@Override
-	public LexerResult lex(Reader reader, String name) throws LexerException {
-		readToString(reader);
-		scan(name);
-		return new LexerResult(tokenStream);
-	}
-
-	private void readToString(Reader reader) throws LexerException {
-		try {
-			text = new StringBuffer();
-			char chars[] = new char[4096];
-			int len = 0;
-			do {
-				len = reader.read(chars);
-				if (len > 0) {
-					text.append(chars, 0, len);
-				}
-			} while (len == chars.length);
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-			throw new LexerException(e.getMessage());
-		}
+	public LexerResult lex(SourceCode sourceCode, String name)
+			throws LexerException {
+		this.sourceCode = sourceCode;
+		return new LexerResult(scan(name));
 	}
 
 	private TokenStream scan(String name) throws LexerException {
@@ -73,6 +54,10 @@ public class RegExpLexer implements Lexer {
 		int pos = 0;
 		int id = 0;
 		int line = 1;
+		StringBuffer text = new StringBuffer();
+		for (SourceCodeLine sourceCodeLine : sourceCode.getSource()) {
+			text.append(sourceCodeLine.getLine());
+		}
 		while (text.length() > 0) {
 			Token token = findNextToken(text, id, pos, line);
 			if ((token == null) || (token.getText().length() == 0)) {
@@ -130,8 +115,16 @@ public class RegExpLexer implements Lexer {
 	@Override
 	public Lexer clone() {
 		RegExpLexer cloned = new RegExpLexer(grammar);
-		cloned.tokenStream = this.tokenStream;
-		cloned.text = this.text;
+		if (this.tokenStream != null) {
+			cloned.tokenStream = (TokenStream) this.tokenStream.clone();
+		} else {
+			cloned.tokenStream = null;
+		}
+		if (this.sourceCode != null) {
+			cloned.sourceCode = this.sourceCode.clone();
+		} else {
+			cloned.sourceCode = null;
+		}
 		return cloned;
 	}
 }

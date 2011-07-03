@@ -1,6 +1,7 @@
 package com.puresol.uhura.grammar;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.io.StringReader;
 
@@ -15,6 +16,7 @@ import com.puresol.uhura.lexer.LexerFactory;
 import com.puresol.uhura.lexer.LexerFactoryException;
 import com.puresol.uhura.lexer.LexerResult;
 import com.puresol.uhura.lexer.RegExpLexer;
+import com.puresol.uhura.lexer.SourceCode;
 import com.puresol.uhura.parser.Parser;
 import com.puresol.uhura.parser.ParserException;
 import com.puresol.uhura.parser.ParserFactory;
@@ -45,7 +47,8 @@ public class GrammarPartTester {
 			}
 			grammar = grammar.createWithNewStartProduction(production);
 			Lexer lexer = LexerFactory.create(grammar);
-			LexerResult lexerResult = lexer.lex(new StringReader(text),
+			LexerResult lexerResult = lexer.lex(SourceCode.read(
+					new StringReader(text), new File("SampleString")),
 					"SampleString");
 
 			Parser parser = ParserFactory.create(grammar);
@@ -72,6 +75,9 @@ public class GrammarPartTester {
 		} catch (LexerFactoryException e) {
 			e.printStackTrace();
 			return false;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
 		}
 	}
 
@@ -86,7 +92,8 @@ public class GrammarPartTester {
 			StopWatch watch = new StopWatch();
 			Lexer lexer = new RegExpLexer(grammar);
 			watch.start();
-			LexerResult lexerResult = lexer.lex(new StringReader(text),
+			LexerResult lexerResult = lexer.lex(SourceCode.read(
+					new StringReader(text), new File("SampleString")),
 					"SampleString");
 			watch.stop();
 			logger.debug("Lexer time: " + watch);
@@ -113,7 +120,9 @@ public class GrammarPartTester {
 		} catch (LexerException e) {
 			e.printStackTrace();
 			return false;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
 		}
-
 	}
 }
