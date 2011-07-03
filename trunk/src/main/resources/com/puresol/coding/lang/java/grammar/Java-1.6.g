@@ -16,6 +16,8 @@ OPTIONS
 	grammar.checks=true;
 	grammar.ignore-case=false;
 	grammar.ignored-leading=true;
+	preprocessor.use=false;							// usage of preprocessor required? 
+	preprocessor="";								// usage of preprocessor required? 
 	lexer="com.puresol.uhura.lexer.RegExpLexer";
 	parser="com.puresol.uhura.parser.lr.LR1Parser";
 	parser.backtracking=true;
