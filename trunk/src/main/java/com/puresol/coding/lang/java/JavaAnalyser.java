@@ -11,7 +11,6 @@
 package com.puresol.coding.lang.java;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -38,6 +37,7 @@ import com.puresol.trees.WalkingAction;
 import com.puresol.uhura.lexer.Lexer;
 import com.puresol.uhura.lexer.LexerException;
 import com.puresol.uhura.lexer.LexerResult;
+import com.puresol.uhura.lexer.SourceCode;
 import com.puresol.uhura.parser.Parser;
 import com.puresol.uhura.parser.ParserException;
 import com.puresol.uhura.parser.ParserTree;
@@ -71,7 +71,7 @@ public class JavaAnalyser implements Analyzer {
 		try {
 			date = new Date();
 			Lexer lexer = grammar.getLexer();
-			LexerResult lexerResult = lexer.lex(new FileReader(file),
+			LexerResult lexerResult = lexer.lex(SourceCode.read(file),
 					file.toString());
 			Parser parser = grammar.getParser();
 			parserTree = parser.parse(lexerResult);
