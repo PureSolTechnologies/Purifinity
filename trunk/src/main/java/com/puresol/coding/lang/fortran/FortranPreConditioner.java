@@ -197,15 +197,14 @@ public class FortranPreConditioner {
 			String line;
 			while ((line = reader.readLine()) != null) {
 				line += "\n";
-				// XXX Put new TokenStream into last else block and initialize
-				// lexerSubResult as null!
-				LexerResult lexerSubResult = new LexerResult(new TokenStream(
-						file.toString()));
+				LexerResult lexerSubResult = null;
 				if (FIXED_FORM_EMPTY_PATTERN.matcher(line).find()
 						&& (!FREE_FORM_CONTINUATION_PATTERN.matcher(line)
 								.find())) {
 					lexerSubResult = processEmptyPattern(lexer, line);
 				} else if (FIXED_FORM_COMMENT_PATTERN.matcher(line).find()) {
+					lexerSubResult = new LexerResult(new TokenStream(
+							file.toString()));
 					processCommentPattern(line);
 				} else if (FIXED_FORM_LABEL_PATTERN.matcher(line).find()) {
 					lexerSubResult = processLabelPattern(lexer, line);
