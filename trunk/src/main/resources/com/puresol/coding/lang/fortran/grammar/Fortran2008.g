@@ -14,7 +14,9 @@
  OPTIONS
  	grammar.name="Fortran-2008";					// name of the grammar
 	grammar.checks=true;							// check grammar for plausibility?
-	grammar.ignore-case=true;						// is grammar case-insensitive? 
+	grammar.ignore-case=true;						// is grammar case-insensitive?
+	preprocessor.use=true;							// usage of preprocessor required? 
+	preprocessor="com.puresol.coding.preprocessor.c";	// usage of preprocessor required? 
 	lexer="com.puresol.uhura.lexer.RegExpLexer";	// use this lexer
 	parser="com.puresol.uhura.parser.lr.LR1Parser";	// use this parser
 	parser.backtracking=true;						// backtracking switched on?
