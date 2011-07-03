@@ -14,6 +14,7 @@ import com.puresol.uhura.grammar.token.Visibility;
 import com.puresol.uhura.lexer.Lexer;
 import com.puresol.uhura.lexer.LexerException;
 import com.puresol.uhura.lexer.LexerResult;
+import com.puresol.uhura.lexer.SourceCode;
 import com.puresol.uhura.lexer.Token;
 import com.puresol.uhura.lexer.TokenMetaData;
 import com.puresol.uhura.lexer.TokenStream;
@@ -327,7 +328,8 @@ public class FortranPreConditioner {
 	private LexerResult processBrokenCharacterLiteral(Lexer lexer, String line)
 			throws LexerException, IOException {
 		if (currentBrokenCharacterMode == BROKEN_CHARACTER_LITERAL_NONE) {
-			return lexer.lex(new StringReader(line), file.toString());
+			return lexer.lex(SourceCode.read(new StringReader(line), file),
+					file.toString());
 		}
 		final Matcher matcher;
 		if (currentBrokenCharacterMode == BROKEN_CHARACTER_LITERAL_SINGLE_QUOTE) {
@@ -348,9 +350,9 @@ public class FortranPreConditioner {
 		currentBrokenCharacterMode = BROKEN_CHARACTER_LITERAL_NONE;
 		id++;
 		pos += matcher.group().length();
-		return lexer.lex(
+		return lexer.lex(SourceCode.read(
 				new StringReader(line.substring(matcher.group().length())),
-				file.toString());
+				file), file.toString());
 	}
 
 	private void processSubTokenStream(LexerResult lexerSubResult)
