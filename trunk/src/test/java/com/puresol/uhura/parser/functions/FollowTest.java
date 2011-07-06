@@ -13,8 +13,6 @@ import com.puresol.uhura.grammar.production.Construction;
 import com.puresol.uhura.grammar.production.FinishTerminal;
 import com.puresol.uhura.grammar.production.NonTerminal;
 import com.puresol.uhura.grammar.production.Terminal;
-import com.puresol.uhura.parser.functions.First;
-import com.puresol.uhura.parser.functions.Follow;
 import com.puresol.utils.FileUtilities;
 import com.puresol.utils.PersistenceTester;
 

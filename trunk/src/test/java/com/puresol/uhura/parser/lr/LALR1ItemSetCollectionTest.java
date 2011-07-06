@@ -19,8 +19,6 @@ import com.puresol.uhura.parser.functions.First;
 import com.puresol.uhura.parser.functions.Goto0;
 import com.puresol.uhura.parser.items.LR1Item;
 import com.puresol.uhura.parser.items.LR1ItemSet;
-import com.puresol.uhura.parser.lr.LALR1ItemSetCollection;
-import com.puresol.uhura.parser.lr.LR0StateTransitions;
 import com.puresol.utils.FileUtilities;
 import com.puresol.utils.PersistenceTester;
 

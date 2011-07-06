@@ -12,7 +12,6 @@ import com.puresol.uhura.grammar.production.Terminal;
 import com.puresol.uhura.parser.functions.Closure1;
 import com.puresol.uhura.parser.functions.First;
 import com.puresol.uhura.parser.functions.Goto1;
-import com.puresol.uhura.parser.lr.LR1StateTransitions;
 
 public class LR1StateTransitionsTest {
 

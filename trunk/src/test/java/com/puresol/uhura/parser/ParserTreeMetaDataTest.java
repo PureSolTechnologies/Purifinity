@@ -6,7 +6,6 @@ import java.io.File;
 
 import org.junit.Test;
 
-import com.puresol.uhura.parser.ParserTreeMetaData;
 import com.puresol.utils.FileUtilities;
 import com.puresol.utils.PersistenceTester;
 

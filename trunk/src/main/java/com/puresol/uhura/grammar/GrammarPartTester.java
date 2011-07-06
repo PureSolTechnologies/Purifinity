@@ -9,7 +9,6 @@ import org.apache.log4j.Logger;
 
 import com.puresol.io.StringOutputStream;
 import com.puresol.trees.TreePrinter;
-import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.lexer.Lexer;
 import com.puresol.uhura.lexer.LexerException;
 import com.puresol.uhura.lexer.LexerFactory;

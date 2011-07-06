@@ -4,8 +4,6 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.puresol.uhura.grammar.Quantity;
-
 public class QuantityTest {
 
 	@Test

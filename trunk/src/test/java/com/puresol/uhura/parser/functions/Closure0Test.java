@@ -10,7 +10,6 @@ import org.junit.Test;
 
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.TestGrammars;
-import com.puresol.uhura.parser.functions.Closure0;
 import com.puresol.uhura.parser.items.LR0Item;
 import com.puresol.uhura.parser.items.LR0ItemSet;
 import com.puresol.utils.FileUtilities;
