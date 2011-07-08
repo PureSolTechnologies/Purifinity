@@ -18,7 +18,6 @@ public class NonTerminalTest {
 		assertTrue(nonTerminal.isNonTerminal());
 		assertFalse(nonTerminal.isTerminal());
 		assertEquals("NAME: (NON-TERMINAL)", nonTerminal.toString());
-		assertEquals("NAME", nonTerminal.toShortString());
 	}
 
 }

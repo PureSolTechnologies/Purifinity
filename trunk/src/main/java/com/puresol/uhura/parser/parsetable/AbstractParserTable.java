@@ -261,7 +261,7 @@ public abstract class AbstractParserTable implements ParserTable {
 		buffer.append("\n");
 		buffer.append(toColumn("|"));
 		for (Construction construction : actionTerminals) {
-			buffer.append(toColumn(construction.toShortString()));
+			buffer.append(toColumn(construction.toString()));
 		}
 		buffer.append(toColumn("|"));
 		for (Construction construction : gotoNonTerminals) {

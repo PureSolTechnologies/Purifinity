@@ -2,7 +2,7 @@ package com.puresol.uhura.parser.packrat
 
 import org.junit.Test
 
-class PackratParserTest {
+class UnitTestTest {
   
   @Test
   def testInstance() = {

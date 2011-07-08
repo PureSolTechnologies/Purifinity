@@ -38,7 +38,7 @@ public class LR1Item extends LR0Item {
 	public String toString() {
 		StringBuffer buffer = new StringBuffer(super.toString());
 		buffer.append(", {");
-		buffer.append(lookahead.toShortString());
+		buffer.append(lookahead.toString());
 		buffer.append("}");
 		return buffer.toString();
 	}

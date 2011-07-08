@@ -22,8 +22,7 @@ public class TerminalTest {
 		assertEquals("name", terminal.getText());
 		assertFalse(terminal.isNonTerminal());
 		assertTrue(terminal.isTerminal());
-		assertEquals("NAME: (TERMINAL) 'name'", terminal.toString());
-		assertEquals("NAME 'name'", terminal.toShortString());
+		assertEquals("NAME 'name'", terminal.toString());
 	}
 
 	@Test

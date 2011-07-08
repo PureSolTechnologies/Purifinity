@@ -1,5 +1,6 @@
 package com.puresol.uhura.grammar.production;
 
+import com.puresol.uhura.grammar.Quantity;
 import com.puresol.uhura.lexer.Token;
 
 /**
@@ -16,7 +17,11 @@ public final class Terminal extends AbstractConstruction {
 	private final int hashcode;
 
 	public Terminal(String name, String text) {
-		super(name, true);
+		this(name, text, Quantity.EXPECT);
+	}
+
+	public Terminal(String name, String text, Quantity quantity) {
+		super(name, quantity, true);
 		this.text = text;
 		final int prime = 31;
 		int result = super.hashCode();
@@ -51,15 +56,7 @@ public final class Terminal extends AbstractConstruction {
 		if ((text == null) || (text.isEmpty())) {
 			return super.toString();
 		}
-		return super.toString() + " '" + text + "'";
-	}
-
-	@Override
-	public String toShortString() {
-		if ((text == null) || (text.isEmpty())) {
-			return super.toShortString();
-		}
-		return super.toShortString() + " '" + text + "'";
+		return getName() + " '" + text + "'" + getQuantity().toString();
 	}
 
 	@Override
@@ -86,5 +83,4 @@ public final class Terminal extends AbstractConstruction {
 			return false;
 		return true;
 	}
-
 }
