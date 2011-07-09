@@ -37,6 +37,7 @@ public class GrammarConverter {
 	private Grammar grammar = null;
 	private Map<String, Visibility> tokenVisibility = new HashMap<String, Visibility>();
 	private int autogenId;
+	private boolean normalizeToBNF;
 
 	/**
 	 * Constructor for file reading.
@@ -102,6 +103,8 @@ public class GrammarConverter {
 			}
 			options.put(name, value);
 		}
+		normalizeToBNF = Boolean.valueOf(options.getProperty(
+				"grammar.normalize_to_bnf", "true"));
 	}
 
 	/**
@@ -365,25 +368,31 @@ public class GrammarConverter {
 	private Construction getConstruction(ParserTree productionPart,
 			TokenDefinitionSet tokenDefinitions) throws TreeException,
 			GrammarException {
-		Quantity quantity = Quantity.fromSymbol(productionPart.getChild(
-				"Quantifier").getText());
-		if (quantity == Quantity.EXPECT) {
-			return createConstruction(productionPart);
-		} else {
-			return generateExtraQuantifierRules(productionPart, quantity);
+		if (normalizeToBNF) {
+			Quantity quantity = Quantity.fromSymbol(productionPart.getChild(
+					"Quantifier").getText());
+			if (quantity != Quantity.EXPECT) {
+				return generateExtraQuantifierRules(productionPart, quantity);
+			}
 		}
+		return createConstruction(productionPart);
 	}
 
 	private Construction createConstruction(ParserTree productionPart)
 			throws TreeException, GrammarException {
+		Quantity quantity = Quantity.EXPECT;
+		if (!normalizeToBNF) {
+			quantity = Quantity.fromSymbol(productionPart
+					.getChild("Quantifier").getText());
+		}
 		if ("ConstructionIdentifier".equals(productionPart.getName())) {
 			String identifier = productionPart.getChild("IDENTIFIER").getText();
 			TokenDefinition tokenDefinition = tokenDefinitions
 					.getDefinition(identifier);
 			if (tokenDefinition != null) {
-				return new Terminal(identifier, null);
+				return new Terminal(identifier, null, quantity);
 			} else {
-				return new NonTerminal(identifier);
+				return new NonTerminal(identifier, quantity);
 			}
 		} else if ("ConstructionLiteral".equals(productionPart.getName())) {
 			ParserTree stringLiteral = productionPart
@@ -401,7 +410,8 @@ public class GrammarConverter {
 										+ text
 										+ "' satisfies several token definitions and is therefore ambiguous!");
 					}
-					terminal = new Terminal(tokenDefinition.getName(), text);
+					terminal = new Terminal(tokenDefinition.getName(), text,
+							quantity);
 				}
 			}
 			if (terminal == null) {
@@ -414,7 +424,7 @@ public class GrammarConverter {
 					.getChild("ProductionConstructions");
 			String newIdentifier = createNewIdentifier(productionPart, "group");
 			convertSingleProductions(newIdentifier, productionConstructions);
-			return new NonTerminal(newIdentifier);
+			return new NonTerminal(newIdentifier, quantity);
 		} else {
 			throw new TreeException("Invalid node '" + productionPart + "'!");
 		}
