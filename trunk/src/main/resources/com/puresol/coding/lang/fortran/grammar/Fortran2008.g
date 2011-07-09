@@ -15,6 +15,7 @@
  	grammar.name="Fortran-2008";					// name of the grammar
 	grammar.checks=true;							// check grammar for plausibility?
 	grammar.ignore-case=true;						// is grammar case-insensitive?
+	grammar.normalize_to_bnf=false;					// defines whether the grammar needs to be normalized to BNF
 	preprocessor.use=true;							// usage of preprocessor required? 
 	preprocessor="com.puresol.coding.preprocessor.c";	// usage of preprocessor required? 
 	lexer="com.puresol.uhura.lexer.RegExpLexer";	// use this lexer
