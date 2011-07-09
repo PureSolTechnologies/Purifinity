@@ -16,6 +16,7 @@ OPTIONS
 	grammar.checks=true;
 	grammar.ignore-case=false;
 	grammar.ignored-leading=true;
+	grammar.normalize_to_bnf=true;					// defines whether the grammar needs to be normalized to BNF
 	preprocessor.use=false;							// usage of preprocessor required? 
 	preprocessor="";								// usage of preprocessor required? 
 	lexer="com.puresol.uhura.lexer.RegExpLexer";
