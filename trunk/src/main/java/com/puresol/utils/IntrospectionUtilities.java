@@ -11,6 +11,7 @@
 package com.puresol.utils;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Locale;
 
@@ -66,5 +67,51 @@ public class IntrospectionUtilities {
 			throw new NoSuchMethodException();
 		}
 		return setter;
+	}
+
+	public static void setField(Object object, String name, Object value)
+			throws SecurityException, NoSuchFieldException,
+			IllegalArgumentException, IllegalAccessException {
+		Class<?> clazz = object.getClass();
+		Field field = clazz.getDeclaredField(name);
+		boolean accessable = field.isAccessible();
+		if (!accessable)
+			field.setAccessible(true);
+		field.set(object, value);
+		if (!accessable)
+			field.setAccessible(false);
+	}
+
+	public static Object setField(Object object, String name)
+			throws SecurityException, NoSuchFieldException,
+			IllegalArgumentException, IllegalAccessException {
+		Class<?> clazz = object.getClass();
+		Field field = clazz.getDeclaredField(name);
+		boolean accessable = field.isAccessible();
+		if (!accessable)
+			field.setAccessible(true);
+		Object value = field.get(object);
+		if (!accessable)
+			field.setAccessible(false);
+		return value;
+	}
+
+	public static Object invokeMethod(Object object, String name,
+			Object... arguments) throws SecurityException,
+			NoSuchMethodException, IllegalArgumentException,
+			IllegalAccessException, InvocationTargetException {
+		Class<?> clazz = object.getClass();
+		Class<?> argumentClasses[] = new Class<?>[arguments.length];
+		for (int argumentId = 0; argumentId < arguments.length; argumentId++) {
+			argumentClasses[argumentId] = arguments[argumentId].getClass();
+		}
+		Method field = clazz.getDeclaredMethod(name, argumentClasses);
+		boolean accessable = field.isAccessible();
+		if (!accessable)
+			field.setAccessible(true);
+		Object value = field.invoke(object, arguments);
+		if (!accessable)
+			field.setAccessible(false);
+		return value;
 	}
 }
