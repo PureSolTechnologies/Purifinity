@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.io.InputStream;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -13,6 +14,8 @@ import org.junit.Test;
 
 import com.puresol.trees.TreePrinter;
 import com.puresol.uhura.grammar.Grammar;
+import com.puresol.uhura.grammar.GrammarConverter;
+import com.puresol.uhura.grammar.GrammarFile;
 import com.puresol.uhura.grammar.TestGrammars;
 import com.puresol.uhura.grammar.production.NonTerminal;
 import com.puresol.uhura.grammar.production.Production;
@@ -135,25 +138,24 @@ public class PackratParserTest {
 		printer.println(parseTree);
 	}
 
-	// @Test
-	// public void testSampleParseWithRecursion() throws Throwable {
-	// File file = new File(
-	// "src/test/resources/com/puresol/uhura/grammar/TestGrammar.g");
-	// assertTrue(file.exists());
-	// InputStream inputStream = new FileInputStream(file);
-	// try {
-	// GrammarFile grammarFile = new GrammarFile(inputStream);
-	// Grammar grammar = new GrammarConverter(grammarFile.getAST())
-	// .getGrammar();
-	// assertNotNull(grammar);
-	// PackratParser parser = new PackratParser(grammar);
-	// ParserTree parseTree = parser.parse("(1 + 2) * 3 + 4 * 5)",
-	// "equation");
-	// assertNotNull(parseTree);
-	// TreePrinter printer = new TreePrinter(System.out);
-	// printer.println(parseTree);
-	// } finally {
-	// inputStream.close();
-	// }
-	// }
+	@Test
+	public void testSampleParseWithRecursionComplexSample() throws Throwable {
+		InputStream inputStream = getClass().getResourceAsStream(
+				"/com/puresol/uhura/grammar/TestGrammar.g");
+		assertNotNull(inputStream);
+		try {
+			GrammarFile grammarFile = new GrammarFile(inputStream);
+			Grammar grammar = new GrammarConverter(grammarFile.getAST())
+					.getGrammar();
+			assertNotNull(grammar);
+			PackratParser parser = new PackratParser(grammar);
+			ParserTree parseTree = parser.parse("(1 + 2) * 3 + 4 * 5",
+					"equation");
+			assertNotNull(parseTree);
+			TreePrinter printer = new TreePrinter(System.out);
+			printer.println(parseTree);
+		} finally {
+			inputStream.close();
+		}
+	}
 }

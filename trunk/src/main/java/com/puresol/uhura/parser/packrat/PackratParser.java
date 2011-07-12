@@ -98,8 +98,7 @@ public class PackratParser extends AbstractParser {
 			this.name = name;
 			ParserTree parserTree = new ParserTree(name);
 			ParserProgress progress = parse(parserTree, "_START_", 0, 0, 1);
-			if ((parserTree == null)
-					|| (progress.getDeltaPosition() != text.length()))
+			if (progress.getDeltaPosition() != text.length())
 				throw new ParserException("Could not parse the input string!");
 			return parserTree;
 		} catch (TreeException e) {
@@ -133,7 +132,7 @@ public class PackratParser extends AbstractParser {
 				return progress;
 			}
 		}
-		return null;
+		return ParserProgress.failure();
 	}
 
 	private boolean foundRecursion(Production production, int position) {
