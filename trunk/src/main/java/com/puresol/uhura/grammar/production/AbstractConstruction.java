@@ -1,7 +1,5 @@
 package com.puresol.uhura.grammar.production;
 
-import com.puresol.uhura.grammar.Quantity;
-
 /**
  * THIS CLASS IS NOT THREAD SAFE!!!
  * 
@@ -15,18 +13,14 @@ public abstract class AbstractConstruction implements Construction {
 	private final String name;
 	private final boolean isTerminal;
 	private final int hashCode;
-	private final Quantity quantity;
 
-	public AbstractConstruction(String name, Quantity quantity,
-			boolean isTerminal) {
+	public AbstractConstruction(String name, boolean isTerminal) {
 		super();
 		this.name = name;
-		this.quantity = quantity;
 		this.isTerminal = isTerminal;
 		final int prime = 31;
 		int result = prime + name.hashCode();
 		result = prime * result + (isTerminal ? 1 : 0);
-		result = prime * result + quantity.hashCode();
 		hashCode = result;
 	}
 
@@ -48,11 +42,6 @@ public abstract class AbstractConstruction implements Construction {
 		return !isTerminal;
 	}
 
-	@Override
-	public Quantity getQuantity() {
-		return quantity;
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -65,6 +54,10 @@ public abstract class AbstractConstruction implements Construction {
 		} else {
 			return name + ": (NON-TERMINAL)";
 		}
+	}
+
+	public String toShortString() {
+		return name;
 	}
 
 	@Override
@@ -90,11 +83,6 @@ public abstract class AbstractConstruction implements Construction {
 			if (other.name != null)
 				return false;
 		} else if (!name.equals(other.name))
-			return false;
-		if (quantity == null) {
-			if (other.quantity != null)
-				return false;
-		} else if (!quantity.equals(other.quantity))
 			return false;
 		return true;
 	}

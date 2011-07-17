@@ -158,7 +158,7 @@ public class Production implements Serializable {
 			}
 			position++;
 			result.append(" ");
-			result.append(element.toString());
+			result.append(element.toShortString());
 		}
 		return result.toString();
 	}
@@ -182,7 +182,7 @@ public class Production implements Serializable {
 			}
 			position++;
 			result.append(" ");
-			result.append(element.toString());
+			result.append(element.toShortString());
 		}
 		if (itemPosition == constructions.size()) {
 			result.append(" . ");
