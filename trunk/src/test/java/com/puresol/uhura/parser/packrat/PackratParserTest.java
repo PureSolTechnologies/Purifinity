@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.io.InputStream;
+import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -12,6 +14,8 @@ import org.junit.Test;
 
 import com.puresol.trees.TreePrinter;
 import com.puresol.uhura.grammar.Grammar;
+import com.puresol.uhura.grammar.GrammarConverter;
+import com.puresol.uhura.grammar.GrammarFile;
 import com.puresol.uhura.grammar.TestGrammars;
 import com.puresol.uhura.grammar.production.NonTerminal;
 import com.puresol.uhura.grammar.production.Production;
@@ -26,31 +30,31 @@ import com.puresol.utils.IntrospectionUtilities;
 
 public class PackratParserTest {
 
-	// private static Grammar iiiGrammar;
-	//
-	// private ParserTree parseText(String text) throws Throwable {
-	// InputStream inputStream = getClass().getResourceAsStream(
-	// "/com/puresol/uhura/grammar/TestGrammar.g");
-	// assertNotNull(inputStream);
-	// try {
-	// GrammarFile grammarFile = new GrammarFile(inputStream);
-	// Grammar grammar = new GrammarConverter(grammarFile.getAST())
-	// .getGrammar();
-	// assertNotNull(grammar);
-	// PackratParser parser = new PackratParser(grammar);
-	// ParserTree parseTree = parser.parse(text, "TEXT_PARSE");
-	// assertNotNull(parseTree);
-	// TreePrinter printer = new TreePrinter(System.out);
-	// printer.println(parseTree);
-	// return parseTree;
-	// } finally {
-	// inputStream.close();
-	// }
-	// }
+	private static Grammar iiiGrammar;
+
+	private ParserTree parseText(String text) throws Throwable {
+		InputStream inputStream = getClass().getResourceAsStream(
+				"/com/puresol/uhura/grammar/TestGrammar.g");
+		assertNotNull(inputStream);
+		try {
+			GrammarFile grammarFile = new GrammarFile(inputStream);
+			Grammar grammar = new GrammarConverter(grammarFile.getAST())
+					.getGrammar();
+			assertNotNull(grammar);
+			PackratParser parser = new PackratParser(grammar);
+			ParserTree parseTree = parser.parse(text, "TEXT_PARSE");
+			assertNotNull(parseTree);
+			TreePrinter printer = new TreePrinter(System.out);
+			printer.println(parseTree);
+			return parseTree;
+		} finally {
+			inputStream.close();
+		}
+	}
 
 	@BeforeClass
 	public static void setup() throws Throwable {
-		// Properties options = new Properties();
+		Properties options = new Properties();
 		TokenDefinitionSet tokenDefinitions = new TokenDefinitionSet();
 		tokenDefinitions.addDefinition(new TokenDefinition("i", "i"));
 		ProductionSet productions = new ProductionSet();
@@ -67,7 +71,7 @@ public class PackratParserTest {
 		i2.addConstruction(new Terminal("i", "i"));
 		productions.add(i2);
 
-		// iiiGrammar = new Grammar(options, tokenDefinitions, productions);
+		iiiGrammar = new Grammar(options, tokenDefinitions, productions);
 	}
 
 	@Test
@@ -142,4 +146,32 @@ public class PackratParserTest {
 		printer.println(parseTree);
 	}
 
+	@Test
+	public void testI() throws Throwable {
+		PackratParser parser = new PackratParser(iiiGrammar);
+		parser.parse("i", "i");
+	}
+
+	@Test
+	public void testII() throws Throwable {
+		PackratParser parser = new PackratParser(iiiGrammar);
+		parser.parse("ii", "ii");
+	}
+
+	@Test
+	public void testIII() throws Throwable {
+		PackratParser parser = new PackratParser(iiiGrammar);
+		parser.parse("iii", "iii");
+	}
+	
+	@Test
+	public void testEquation() throws Throwable {
+		parseText("1+2*(3+4)+5*6");
+	}
+
+	
+	@Test
+	public void testEquation2() throws Throwable {
+		parseText("1*2*3*4*5*6");
+	}
 }

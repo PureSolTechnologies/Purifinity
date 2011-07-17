@@ -83,19 +83,17 @@ public class PackratParser implements Serializable {
 			states.clear();
 			this.text = text;
 			this.name = name;
-			ParserTree resultTree = new ParserTree(name);
-			ParserProgress progress = parse(resultTree, "_START_", 0, 0, 1);
+			ParserProgress progress = parse("_START_", 0, 0, 1);
 			if (progress.getDeltaPosition() != text.length())
 				throw new ParserException("Could not parse the input string!");
-			return resultTree;
+			return progress.getTree();
 		} catch (TreeException e) {
 			throw new ParserException(e.getMessage(), e);
 		}
 	}
 
-	private ParserProgress parse(ParserTree node, String productionName,
-			int position, int id, int line) throws ParserException,
-			TreeException {
+	private ParserProgress parse(String productionName, int position, int id,
+			int line) throws ParserException, TreeException {
 		ParserProgress myProgress = ParserProgress.none();
 		for (Production production : grammar.getProductions().get(
 				productionName)) {
@@ -104,68 +102,75 @@ public class PackratParser implements Serializable {
 			if (progress.compareTo(myProgress) > 0)
 				myProgress = progress;
 		}
-		if (myProgress.madeProgress())
-			node.addChild(myProgress.getTree());
 		return myProgress;
 	}
 
 	private ParserProgress processProduction(Production production,
 			int position, int id, int line) throws TreeException,
 			ParserException {
-		ParserStatus status = getStatus(production, position);
-		System.out.println(status);
-		System.out.println(production);
-		System.out.println("pos: " + position + ", id: " + id + ", line: "
-				+ line);
-		switch (status.getStatus()) {
-		case ParserStatus.FAILED:
-			/*
-			 * Parsing this production on the current position already failed,
-			 * so we do not need to try it again and return null to show we do
-			 * not proceed here successfully.
-			 */
-			return ParserProgress.failure();
-		case ParserStatus.SUCCEEDED:
-			/*
-			 * Parsing this production on this position already succeeded and
-			 * the result can be reused.
-			 */
-			return getMemo(production, position);
-		case ParserStatus.IN_PROCESS:
-			/*
-			 * Found left recursion and need to abort here...
-			 */
-			return ParserProgress.failure();
-		case ParserStatus.NOT_PROCESSED:
-			/*
-			 * This production was never processed at this position before, so
-			 * we do nothing and proceed with parsing...
-			 */
-			break;
-		default:
-			/*
-			 * Ok, here is something wrong now and we need to throw an
-			 * exception...
-			 */
-			throw new ParserException("Unknown status '" + status.getStatus()
-					+ "'!");
+		{
+			ParserStatus status = getStatus(production, position);
+			System.out.println(status);
+			System.out.println(production);
+			System.out.println("pos: " + position + ", id: " + id + ", line: "
+					+ line);
+			switch (status.getStatus()) {
+			case ParserStatus.FAILED:
+				/*
+				 * Parsing this production on the current position already
+				 * failed, so we do not need to try it again and return null to
+				 * show we do not proceed here successfully.
+				 */
+				return ParserProgress.failure();
+			case ParserStatus.SUCCEEDED:
+				/*
+				 * Parsing this production on this position already succeeded
+				 * and the result can be reused.
+				 */
+				return getMemo(production, position);
+			case ParserStatus.IN_PROCESS:
+				/*
+				 * Found left recursion and need to abort here...
+				 */
+				return ParserProgress.failure();
+			case ParserStatus.NOT_PROCESSED:
+				/*
+				 * This production was never processed at this position before,
+				 * so we do nothing and proceed with parsing...
+				 */
+				break;
+			default:
+				/*
+				 * Ok, here is something wrong now and we need to throw an
+				 * exception...
+				 */
+				throw new ParserException("Unknown status '"
+						+ status.getStatus() + "'!");
+			}
 		}
-		ParserProgress progress = _processProduction(production, position, id,
-				line);
-		if (progress.succeeded()) {
-			setMemo(production, position, progress);
-			setStatus(production, position, new ParserStatus(
-					ParserStatus.SUCCEEDED));
-			return progress;
-		}
-
 		setStatus(production, position, new ParserStatus(ParserStatus.FAILED));
-		return ParserProgress.failure();
+		setMemo(production, position, ParserProgress.failure());
+
+		ParserProgress progress;
+		ParserProgress memo = ParserProgress.failure();
+		do {
+			progress = parseProduction(production, position, id, line);
+			if (progress.succeeded()) {
+				if (progress.getDeltaPosition() > memo.getDeltaPosition()) {
+					memo = progress;
+					setMemo(production, position, memo);
+					setStatus(production, position, new ParserStatus(
+							ParserStatus.SUCCEEDED));
+				} else {
+					break;
+				}
+			}
+		} while (progress.succeeded());
+		return getMemo(production, position);
 	}
 
-	private ParserProgress _processProduction(Production production,
-			int position, int id, int line) throws TreeException,
-			ParserException {
+	private ParserProgress parseProduction(Production production, int position,
+			int id, int line) throws TreeException, ParserException {
 		ParserTree node = new ParserTree(production);
 		ParserProgress progress = ParserProgress.success(0, 0, 0, node);
 		for (Construction construction : production.getConstructions()) {
@@ -177,14 +182,15 @@ public class PackratParser implements Serializable {
 				progress.add(newProgress);
 			}
 			if (construction.isNonTerminal()) {
-				ParserProgress newProgress = processNonTerminal(node,
+				ParserProgress newProgress = processNonTerminal(
 						(NonTerminal) construction,
 						position + progress.getDeltaPosition(),
 						id + progress.getDeltaId(),
 						line + progress.getDeltaLine());
-				if (newProgress.succeeded())
+				if (newProgress.madeProgress()) {
+					node.addChild(newProgress.getTree());
 					progress.add(newProgress);
-				else
+				} else if (newProgress.failed())
 					return ParserProgress.failure();
 			} else {
 				ParserProgress newProgress = processTerminal(node,
@@ -209,10 +215,10 @@ public class PackratParser implements Serializable {
 		return progress;
 	}
 
-	private ParserProgress processNonTerminal(ParserTree node,
-			NonTerminal nonTerminal, int position, int id, int line)
-			throws ParserException, TreeException {
-		return parse(node, nonTerminal.getName(), position, id, line);
+	private ParserProgress processNonTerminal(NonTerminal nonTerminal,
+			int position, int id, int line) throws ParserException,
+			TreeException {
+		return parse(nonTerminal.getName(), position, id, line);
 	}
 
 	private ParserProgress processTerminal(ParserTree node, Terminal terminal,
@@ -273,11 +279,14 @@ public class PackratParser implements Serializable {
 	private ParserStatus getStatus(Production production, int position) {
 		Map<Production, ParserStatus> map = states.get(position);
 		if (map == null) {
-			return new ParserStatus(ParserStatus.NOT_PROCESSED);
+			map = new HashMap<Production, ParserStatus>();
+			states.put(position, map);
 		}
 		ParserStatus status = map.get(production);
-		if (status == null)
-			return new ParserStatus(ParserStatus.NOT_PROCESSED);
+		if (status == null) {
+			status = new ParserStatus(ParserStatus.NOT_PROCESSED);
+			map.put(production, status);
+		}
 		return status;
 	}
 

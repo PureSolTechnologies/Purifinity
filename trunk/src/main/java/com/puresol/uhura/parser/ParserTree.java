@@ -77,11 +77,6 @@ public class ParserTree implements Tree<ParserTree>, Serializable {
 		return token;
 	}
 
-	@Override
-	public String toString() {
-		return name + " " + token + " (" + metaData + ")";
-	}
-
 	/**
 	 * @param parent
 	 *            the parent to set
@@ -244,4 +239,21 @@ public class ParserTree implements Tree<ParserTree>, Serializable {
 		this.metaData = metaData;
 	}
 
+	@Override
+	public String toString() {
+		StringBuffer buffer = new StringBuffer();
+		fillBuffer(buffer, this, 0);
+		return buffer.toString();
+	}
+
+	private void fillBuffer(StringBuffer buffer, ParserTree parserTree,
+			int depth) {
+		for (int i = 0; i < depth; i++) {
+			buffer.append("  ");
+		}
+		buffer.append(parserTree.getName() + ": \"" + parserTree.getText() + "\"\n");
+		for (ParserTree child : parserTree.getChildren()) {
+			fillBuffer(buffer, child, depth + 1);
+		}
+	}
 }
