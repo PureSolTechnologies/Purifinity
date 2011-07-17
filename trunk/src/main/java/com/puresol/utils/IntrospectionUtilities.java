@@ -82,7 +82,7 @@ public class IntrospectionUtilities {
 			field.setAccessible(false);
 	}
 
-	public static Object setField(Object object, String name)
+	public static Object getField(Object object, String name)
 			throws SecurityException, NoSuchFieldException,
 			IllegalArgumentException, IllegalAccessException {
 		Class<?> clazz = object.getClass();
