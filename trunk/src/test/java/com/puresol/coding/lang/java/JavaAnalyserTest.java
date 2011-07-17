@@ -6,7 +6,6 @@ import java.io.File;
 
 import org.junit.Test;
 
-import com.puresol.coding.analysis.AnalyzerException;
 import com.puresol.uhura.parser.ParserTree;
 import com.puresol.utils.FileUtilities;
 
@@ -30,19 +29,14 @@ public class JavaAnalyserTest {
 	}
 
 	@Test
-	public void testParse() {
-		try {
-			File file = new File("src/test/java", FileUtilities
-					.classToRelativePackagePath(this.getClass()).toString());
-			assertTrue(file.exists());
-			JavaAnalyser analyser = new JavaAnalyser(file);
-			analyser.parse();
-			ParserTree tree = analyser.getParserTree();
-			assertNotNull(tree);
-			// new TreePrinter(System.out).println(tree);
-		} catch (AnalyzerException e) {
-			e.printStackTrace();
-			fail("No exception was expected!");
-		}
+	public void testParse() throws Throwable {
+		File file = new File("src/test/java", FileUtilities
+				.classToRelativePackagePath(this.getClass()).toString());
+		assertTrue(file.exists());
+		JavaAnalyser analyser = new JavaAnalyser(file);
+		analyser.parse();
+		ParserTree tree = analyser.getParserTree();
+		assertNotNull(tree);
+		// new TreePrinter(System.out).println(tree);
 	}
 }

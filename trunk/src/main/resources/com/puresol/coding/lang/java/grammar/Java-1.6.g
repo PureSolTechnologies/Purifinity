@@ -478,8 +478,8 @@ HELPER
 	;
 	
 	ClassOrInterfaceType:
-		Identifier TypeArguments ?
-	|	ClassOrInterfaceType DOT Identifier TypeArguments ?
+		ClassOrInterfaceType DOT Identifier TypeArguments ?
+	|	Identifier TypeArguments ?
 	/*
 	removed due to ambiguous productions...
 		ClassType
@@ -488,19 +488,19 @@ HELPER
 	;
 	
 	ClassType:
-		Identifier TypeArguments ?
-	|	ClassType DOT Identifier TypeArguments ?
+		ClassType DOT Identifier TypeArguments ?
+	|	Identifier TypeArguments ?
 	;
 	
 	InterfaceType:
-		Identifier TypeArguments ?
-	|	InterfaceType DOT Identifier TypeArguments ?
+		InterfaceType DOT Identifier TypeArguments ?
+	|	Identifier TypeArguments ?
 	;
 	
 	TypeDeclSpecifier:
 	//	TypeName speed improvement...
-		Identifier
-	|	TypeDeclSpecifier TypeArguments ? DOT Identifier
+		TypeDeclSpecifier TypeArguments ? DOT Identifier
+	|	Identifier
 	;
 	
 	TypeVariable:
@@ -522,8 +522,8 @@ HELPER
 	;
 	
 	AdditionalBoundList:
-		AdditionalBound
-	|	AdditionalBoundList AdditionalBound
+		AdditionalBoundList AdditionalBound
+	|	AdditionalBound
 	;
 	
 	AdditionalBound:
@@ -537,8 +537,8 @@ HELPER
 	;
 	
 	ActualTypeArgumentList:
-		ActualTypeArgument
-	|	ActualTypeArgumentList COMMA ActualTypeArgument
+		ActualTypeArgumentList COMMA ActualTypeArgument
+	|	ActualTypeArgument
 	;
 	
 	ActualTypeArgument:
@@ -563,8 +563,8 @@ HELPER
 
 	// This Name is used for all names which can appear to reduce ambiguity.
 	Name:
-		Identifier					[stack=false]
-	|	Name DOT Identifier	[stack=false]
+		Name DOT Identifier			[stack=false]
+	|	Identifier					[stack=false]
 	;
 
 /**********
@@ -578,13 +578,13 @@ HELPER
 	;
 
 	ImportDeclarations:
-		ImportDeclaration
-	|	ImportDeclarations ImportDeclaration
+		ImportDeclarations ImportDeclaration
+	|	ImportDeclaration
 	;
 	
 	TypeDeclarations:
-		TypeDeclaration
-	|	TypeDeclarations TypeDeclaration
+		TypeDeclarations TypeDeclaration
+	|	TypeDeclaration
 	;
 
 /* 7.4 Package Declarations */
@@ -641,8 +641,8 @@ HELPER
 	;
 	
 	ClassModifiers:
-		ClassModifier
-	|	ClassModifiers ClassModifier
+		ClassModifiers ClassModifier
+	|	ClassModifier
 	;
 	
 	ClassModifier:
@@ -661,8 +661,8 @@ HELPER
 	;
 	
 	TypeParameterList :
-		TypeParameter
-	|	TypeParameterList COMMA TypeParameter
+		TypeParameterList COMMA TypeParameter
+	|	TypeParameter
 	;
 
 	Super:
@@ -674,8 +674,8 @@ HELPER
 	;
 	
 	InterfaceTypeList:
-		InterfaceType
-	|	InterfaceTypeList COMMA InterfaceType
+		InterfaceTypeList COMMA InterfaceType
+	|	InterfaceType
 	;
 	
 	ClassBody:
@@ -683,8 +683,8 @@ HELPER
 	;
 	
 	ClassBodyDeclarations:
-		ClassBodyDeclaration
-	|	ClassBodyDeclarations ClassBodyDeclaration
+		ClassBodyDeclarations ClassBodyDeclaration
+	|	ClassBodyDeclaration
 	;
 	
 	ClassBodyDeclaration:
@@ -709,8 +709,8 @@ HELPER
 	;
 	
 	VariableDeclarators:
-		VariableDeclarator
-	|	VariableDeclarators COMMA VariableDeclarator
+		VariableDeclarators COMMA VariableDeclarator
+	|	VariableDeclarator
 	;
 	
 	VariableDeclarator:
@@ -719,8 +719,8 @@ HELPER
 	;
 	
 	VariableDeclaratorId:
-		Identifier
-	|	VariableDeclaratorId LRECTANGULAR RRECTANGULAR
+		VariableDeclaratorId LRECTANGULAR RRECTANGULAR
+	|	Identifier
 	;
 	
 	VariableInitializer:
@@ -729,8 +729,8 @@ HELPER
 	;
 	
 	FieldModifiers:
-		FieldModifier
-	|	FieldModifiers FieldModifier
+		FieldModifiers FieldModifier
+	|	FieldModifier
 	;
 	
 	FieldModifier:
@@ -770,8 +770,8 @@ HELPER
 	;
 	
 	FormalParameters:
-		FormalParameter
-	|	FormalParameters COMMA FormalParameter
+		FormalParameters COMMA FormalParameter
+	|	FormalParameter
 	;
 	
 	FormalParameter:
@@ -779,8 +779,8 @@ HELPER
 	;
 	
 	VariableModifiers:
-		VariableModifier
-	|	VariableModifiers VariableModifier
+		VariableModifiers VariableModifier
+	|	VariableModifier
 	;
 	
 	VariableModifier:
@@ -794,8 +794,8 @@ HELPER
 	;
 	
 	MethodModifiers:
-		MethodModifier
-	|	MethodModifiers MethodModifier
+		MethodModifiers MethodModifier
+	|	MethodModifier
 	;
 	
 	MethodModifier:
@@ -816,8 +816,8 @@ HELPER
 	;
 	
 	ExceptionTypeList:
-		ExceptionType
-	|	ExceptionTypeList COMMA ExceptionType
+		ExceptionTypeList COMMA ExceptionType
+	|	ExceptionType
 	;
 	
 	ExceptionType:
@@ -852,8 +852,8 @@ HELPER
 	;
 	
 	ConstructorModifiers:
-		ConstructorModifier
-	|	ConstructorModifiers ConstructorModifier
+		ConstructorModifiers ConstructorModifier
+	|	ConstructorModifier
 	;
 	
 	ConstructorModifier:
@@ -878,8 +878,8 @@ HELPER
 	;
 	
 	ReferenceTypeList:
-		ReferenceType
-	|	ReferenceTypeList COMMA ReferenceType
+		ReferenceTypeList COMMA ReferenceType
+	|	ReferenceType
 	;
 	
 /* 8.9 Enums */
@@ -893,8 +893,8 @@ HELPER
 	;
 	
 	EnumConstants:
-		EnumConstant
-	|	EnumConstants COMMA EnumConstant
+		EnumConstants COMMA EnumConstant
+	|	EnumConstant
 	;
 	
 	EnumConstant:
@@ -925,8 +925,8 @@ HELPER
   	;
   	
   	InterfaceModifiers:
-		InterfaceModifier
-	|	InterfaceModifiers InterfaceModifier
+		InterfaceModifiers InterfaceModifier
+	|	InterfaceModifier
 	;
 	
 	InterfaceModifier:
@@ -949,8 +949,8 @@ HELPER
 	;
 	
 	InterfaceMemberDeclarations:
-		InterfaceMemberDeclaration
-	|	InterfaceMemberDeclarations InterfaceMemberDeclaration
+		InterfaceMemberDeclarations InterfaceMemberDeclaration
+	|	InterfaceMemberDeclaration
 	;
 		
 	InterfaceMemberDeclaration:
@@ -968,8 +968,8 @@ HELPER
 	;
 	
 	ConstantModifiers:
-		ConstantModifier
-	|	ConstantModifiers ConstantModifier
+		ConstantModifiers ConstantModifier
+	|	ConstantModifier
 	;
 	 
 	ConstantModifier:
@@ -986,8 +986,8 @@ HELPER
 	;
 	
 	AbstractMethodModifiers:
-		AbstractMethodModifier
-	|	AbstractMethodModifiers AbstractMethodModifier
+		AbstractMethodModifiers AbstractMethodModifier
+	|	AbstractMethodModifier
 	;
 	
 	AbstractMethodModifier:
@@ -1007,8 +1007,8 @@ HELPER
 	;
 	
 	AnnotationTypeElementDeclarations:
-		AnnotationTypeElementDeclaration
-	|	AnnotationTypeElementDeclarations AnnotationTypeElementDeclaration
+		AnnotationTypeElementDeclarations AnnotationTypeElementDeclaration
+	|	AnnotationTypeElementDeclaration
 	;
 	
 	AnnotationTypeElementDeclaration:
@@ -1028,8 +1028,8 @@ HELPER
 /* 9.7 Annotations */
 
 	Annotations:
-		Annotation
-	|	Annotations Annotation
+		Annotations Annotation
+	|	Annotation
 	;
 	
 	Annotation:
@@ -1043,8 +1043,8 @@ HELPER
 	;
 
 	ElementValuePairs:
-		ElementValuePair
-	|	ElementValuePairs COMMA ElementValuePair
+		ElementValuePairs COMMA ElementValuePair
+	|	ElementValuePair
 	;
 	
 	ElementValuePair:
@@ -1062,8 +1062,8 @@ HELPER
 	;
 	
 	ElementValues:
-		ElementValue
-	|	ElementValues COMMA ElementValue
+		ElementValues COMMA ElementValue
+	|	ElementValue
 	;
 	
 	MarkerAnnotation:
@@ -1085,8 +1085,8 @@ HELPER
 	;
 	
 	VariableInitializers:
-		VariableInitializer
-	|	VariableInitializers COMMA VariableInitializer
+		VariableInitializers COMMA VariableInitializer
+	|	VariableInitializer
 	;
 
 /************************	
@@ -1100,8 +1100,8 @@ HELPER
 	;
 	
 	BlockStatements:
-		BlockStatement
-	|	BlockStatements BlockStatement
+		BlockStatements BlockStatement
+	|	BlockStatement
 	;
 	
 	BlockStatement:
@@ -1218,8 +1218,8 @@ HELPER
 	;
 	
 	SwitchBlockStatementGroups:
-		SwitchBlockStatementGroup
-	|	SwitchBlockStatementGroups SwitchBlockStatementGroup
+		SwitchBlockStatementGroups SwitchBlockStatementGroup
+	|	SwitchBlockStatementGroup
 	;
 	
 	SwitchBlockStatementGroup:
@@ -1227,8 +1227,8 @@ HELPER
 	;
 	
 	SwitchLabels:
-		SwitchLabel
-	|	SwitchLabels SwitchLabel
+		SwitchLabels SwitchLabel
+	|	SwitchLabel
 	;
 	
 	SwitchLabel:
@@ -1278,8 +1278,8 @@ HELPER
 	;
 	
 	StatementExpressionList:
-		StatementExpression
-	|	StatementExpressionList COMMA StatementExpression
+		StatementExpressionList COMMA StatementExpression
+	|	StatementExpression
 	;
 	
 	EnhancedForStatement:
@@ -1324,8 +1324,8 @@ HELPER
 	;
 	
 	Catches:
-		CatchClause
-	|	Catches CatchClause
+		Catches CatchClause
+	|	CatchClause
 	;
 	
 	CatchClause:
@@ -1383,8 +1383,8 @@ HELPER
 	;
 	
 	ArgumentList:
-		Expression
-	|	ArgumentList COMMA Expression
+		ArgumentList COMMA Expression
+	|	Expression
 	;
 	
 /* 15.10 Array Creation Expressions */
@@ -1397,8 +1397,8 @@ HELPER
 	;
 		
 	DimExprs:
-		DimExpr
-	|	DimExprs DimExpr
+		DimExprs DimExpr
+	|	DimExpr
 	;
 	
 	DimExpr:
@@ -1406,8 +1406,8 @@ HELPER
 	;
 	
 	Dims:
-		LRECTANGULAR RRECTANGULAR
-	|	Dims LRECTANGULAR RRECTANGULAR
+		Dims LRECTANGULAR RRECTANGULAR
+	|	LRECTANGULAR RRECTANGULAR
 	;
 
 /* 15.11 Field Access Expressions */

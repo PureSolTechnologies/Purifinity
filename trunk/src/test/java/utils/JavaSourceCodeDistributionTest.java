@@ -34,33 +34,22 @@ public class JavaSourceCodeDistributionTest {
 
 	private static final String INSTALL_DIRECTORY = "/home/ludwig/JavaSource";
 
-	// private static final String INSTALL_DIRECTORY = "/data/workspace";
-	// private static final String INSTALL_DIRECTORY = "/data/workspace2";
-
 	@Test
-	public void test() {
-		try {
-			Logger.getRootLogger().setLevel(Level.DEBUG);
-			File file = new File(INSTALL_DIRECTORY,
-					"/j2se/src/share/classes/sun/nio/cs/ext/EUC_KR.java");
-			assertTrue(file.exists());
-			Java java = Java.getInstance();
-			StopWatch watch = new StopWatch();
-			watch.start();
-			Analyzer analyser = java.createAnalyser(file);
-			analyser.parse();
-			watch.stop();
-			ParserTree ast = analyser.getParserTree();
-			assertNotNull(ast);
-			// new TreePrinter(System.out).println(ast);
-			System.out.print(watch.getSeconds());
-		} catch (AnalyzerException e) {
-			e.printStackTrace();
-			fail("No exception was expected!");
-		} catch (IOException e) {
-			e.printStackTrace();
-			fail("No exception was expected!");
-		}
+	public void test() throws Throwable {
+		Logger.getRootLogger().setLevel(Level.DEBUG);
+		File file = new File(INSTALL_DIRECTORY,
+				"/j2se/src/share/classes/sun/nio/cs/ext/EUC_KR.java");
+		assertTrue(file.exists());
+		Java java = Java.getInstance();
+		StopWatch watch = new StopWatch();
+		watch.start();
+		Analyzer analyser = java.createAnalyser(file);
+		analyser.parse();
+		watch.stop();
+		ParserTree ast = analyser.getParserTree();
+		assertNotNull(ast);
+		// new TreePrinter(System.out).println(ast);
+		System.out.print(watch.getSeconds());
 	}
 
 	private static void parseAllFiles(List<File> files) {

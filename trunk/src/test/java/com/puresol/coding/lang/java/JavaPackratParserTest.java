@@ -2,6 +2,8 @@ package com.puresol.coding.lang.java;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
@@ -39,8 +41,23 @@ public class JavaPackratParserTest {
 		assertNotNull(grammar);
 		PackratParser parser = new PackratParser(grammar);
 		ParserTree tree = parser.parse(
-				"package test; import static test.test2;  class test { }",
+				"/* test */\n\npackage test.test2; class test { }",
 				"TEST");
+		assertNotNull(tree);
+		TreePrinter printer = new TreePrinter(System.out);
+		printer.println(tree);
+	}
+
+	@Test
+	public void testJavaFile() throws Throwable {
+		File file = new File(
+				"src/main/java/com/puresol/coding/lang/java/JavaAnalyser.java");
+		assertTrue(file.exists());
+		String text = readToString(new FileInputStream(file));
+		Grammar grammar = JavaGrammar.getInstance().getGrammar();
+		assertNotNull(grammar);
+		PackratParser parser = new PackratParser(grammar);
+		ParserTree tree = parser.parse(text, "TEST");
 		assertNotNull(tree);
 		TreePrinter printer = new TreePrinter(System.out);
 		printer.println(tree);
