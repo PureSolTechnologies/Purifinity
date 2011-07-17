@@ -1,10 +1,8 @@
 package com.puresol.uhura.parser.packrat;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -12,7 +10,6 @@ import java.util.regex.Matcher;
 
 import com.puresol.trees.TreeException;
 import com.puresol.uhura.grammar.Grammar;
-import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.production.Construction;
 import com.puresol.uhura.grammar.production.NonTerminal;
 import com.puresol.uhura.grammar.production.Production;
@@ -20,10 +17,8 @@ import com.puresol.uhura.grammar.production.Terminal;
 import com.puresol.uhura.grammar.token.TokenDefinition;
 import com.puresol.uhura.grammar.token.TokenDefinitionSet;
 import com.puresol.uhura.grammar.token.Visibility;
-import com.puresol.uhura.lexer.LexerResult;
 import com.puresol.uhura.lexer.Token;
 import com.puresol.uhura.lexer.TokenMetaData;
-import com.puresol.uhura.parser.AbstractParser;
 import com.puresol.uhura.parser.ParserException;
 import com.puresol.uhura.parser.ParserTree;
 import com.puresol.utils.TextUtils;
@@ -31,23 +26,27 @@ import com.puresol.utils.TextUtils;
 /**
  * This is a complete implementation of a packrat parser.
  * 
+ * <b>This class is not thread safe!</b>
+ * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class PackratParser extends AbstractParser {
+public class PackratParser implements Serializable {
 
 	private static final long serialVersionUID = -2004344389320369178L;
 
 	private final Set<TokenDefinition> hiddenAndIgnoredTokens = new LinkedHashSet<TokenDefinition>();
-	private final Map<Integer, Map<Production, ParserStackElement>> memo = new HashMap<Integer, Map<Production, ParserStackElement>>();
+	private final Map<Integer, Map<Production, ParserProgress>> memo = new HashMap<Integer, Map<Production, ParserProgress>>();
 	private final Map<Integer, Map<Production, ParserStatus>> states = new HashMap<Integer, Map<Production, ParserStatus>>();
 	private final Boolean ignoredLeading;
 
-	private String text;
-	private String name;
+	private final Grammar grammar;
+	private String text = "";
+	private String name = "";
 
 	public PackratParser(Grammar grammar) {
-		super(grammar);
+		super();
+		this.grammar = grammar;
 		extractHiddenAndIgnoredTokensFromGrammar();
 		Properties options = grammar.getOptions();
 		ignoredLeading = Boolean.valueOf(options.getProperty(
@@ -61,25 +60,13 @@ public class PackratParser extends AbstractParser {
 	 * into the parser tree.
 	 */
 	private void extractHiddenAndIgnoredTokensFromGrammar() {
-		for (TokenDefinition tokenDefinition : getGrammar()
-				.getTokenDefinitions().getDefinitions()) {
+		for (TokenDefinition tokenDefinition : grammar.getTokenDefinitions()
+				.getDefinitions()) {
 			if ((tokenDefinition.getVisibility() == Visibility.HIDDEN)
 					|| (tokenDefinition.getVisibility() == Visibility.IGNORED)) {
 				hiddenAndIgnoredTokens.add(tokenDefinition);
 			}
 		}
-	}
-
-	/**
-	 * This is the overridden part of the parser interface. A packrat parser
-	 * does not need a lexer, therefore it can be used as a normal string input.
-	 * In fact, this method adds all string within all tokens to a complete
-	 * string and passes everything on to the actual parsing process.
-	 */
-	@Override
-	public ParserTree parse(LexerResult lexerResult) throws ParserException {
-		return parse(lexerResultToString(lexerResult), lexerResult
-				.getTokenStream().getName());
 	}
 
 	/**
@@ -96,58 +83,40 @@ public class PackratParser extends AbstractParser {
 			states.clear();
 			this.text = text;
 			this.name = name;
-			ParserTree parserTree = new ParserTree(name);
-			ParserProgress progress = parse(parserTree, "_START_", 0, 0, 1);
+			ParserTree resultTree = new ParserTree(name);
+			ParserProgress progress = parse(resultTree, "_START_", 0, 0, 1);
 			if (progress.getDeltaPosition() != text.length())
 				throw new ParserException("Could not parse the input string!");
-			return parserTree;
+			return resultTree;
 		} catch (TreeException e) {
 			throw new ParserException(e.getMessage(), e);
 		}
 	}
 
-	/**
-	 * This method converts the lexer result into a String.
-	 * 
-	 * @param lexerResult
-	 * @return
-	 */
-	private String lexerResultToString(LexerResult lexerResult) {
-		StringBuffer builder = new StringBuffer();
-		for (Token token : lexerResult.getTokenStream()) {
-			builder.append(token.getText());
-		}
-		return builder.toString();
-	}
-
-	private ParserProgress parse(ParserTree parserTree, String productionName,
+	private ParserProgress parse(ParserTree node, String productionName,
 			int position, int id, int line) throws ParserException,
 			TreeException {
-		List<Production> productions = getGrammar().getProductions().get(
-				productionName);
-		for (Production production : productions) {
-			ParserProgress progress = processProduction(parserTree, production,
-					position, id, line);
-			if (progress.succeeded() || (foundRecursion(production, position))) {
-				return progress;
-			}
+		ParserProgress myProgress = ParserProgress.none();
+		for (Production production : grammar.getProductions().get(
+				productionName)) {
+			ParserProgress progress = processProduction(production, position,
+					id, line);
+			if (progress.compareTo(myProgress) > 0)
+				myProgress = progress;
 		}
-		return ParserProgress.failure();
+		if (myProgress.madeProgress())
+			node.addChild(myProgress.getTree());
+		return myProgress;
 	}
 
-	private boolean foundRecursion(Production production, int position) {
-		ParserStatus status = getStatus(production, position);
-		return (status.getCounter() == 0)
-				&& (status.getStatus() == ParserStatus.IN_PROCESS);
-	}
-
-	private ParserProgress processProduction(ParserTree parserTree,
-			Production production, int position, int id, int line)
-			throws TreeException, ParserException {
+	private ParserProgress processProduction(Production production,
+			int position, int id, int line) throws TreeException,
+			ParserException {
 		ParserStatus status = getStatus(production, position);
 		System.out.println(status);
 		System.out.println(production);
-		System.out.println("pos: " + position + ", id: " + id);
+		System.out.println("pos: " + position + ", id: " + id + ", line: "
+				+ line);
 		switch (status.getStatus()) {
 		case ParserStatus.FAILED:
 			/*
@@ -161,43 +130,17 @@ public class PackratParser extends AbstractParser {
 			 * Parsing this production on this position already succeeded and
 			 * the result can be reused.
 			 */
-			ParserStackElement stackElement = getMemo(production, position);
-			parserTree.addChild(stackElement.getParserTree());
-			return stackElement.getProgress();
+			return getMemo(production, position);
 		case ParserStatus.IN_PROCESS:
 			/*
-			 * We are processing here without knowing to be in a recursion. We
-			 * need to set the counter to zero (decrease by one) to signal the
-			 * detected recursion.
+			 * Found left recursion and need to abort here...
 			 */
-			status.decCounter();
-			if (status.getCounter() == 0)
-				return ParserProgress.failure();
-			throw new ParserException("Parser implementation error!");
-		case ParserStatus.IN_RECURSION:
-			/*
-			 * This production is already in progress at this position, so we
-			 * find ourself within an recursion! We have to deal with it
-			 * gently... ;-)
-			 */
-			status.decCounter();
-
-			if (status.getCounter() == 0)
-				return ParserProgress.failure();
-			if (status.getCounter() < 0)
-				throw new ParserException("Parser implementation error!");
-			/*
-			 * we are in a recursion, but did not reach the max depth therefore,
-			 * let's continue...
-			 */
-			break;
+			return ParserProgress.failure();
 		case ParserStatus.NOT_PROCESSED:
 			/*
 			 * This production was never processed at this position before, so
 			 * we do nothing and proceed with parsing...
 			 */
-			status = new ParserStatus(ParserStatus.IN_PROCESS);
-			setStatus(production, position, status);
 			break;
 		default:
 			/*
@@ -207,92 +150,44 @@ public class PackratParser extends AbstractParser {
 			throw new ParserException("Unknown status '" + status.getStatus()
 					+ "'!");
 		}
-		ParserTree newParserTree = new ParserTree(production);
-		ParserProgress progress = _processProduction(newParserTree, production,
-				position, id, line);
+		ParserProgress progress = _processProduction(production, position, id,
+				line);
 		if (progress.succeeded()) {
-			setMemo(production, position, new ParserStackElement(newParserTree,
-					progress));
+			setMemo(production, position, progress);
 			setStatus(production, position, new ParserStatus(
 					ParserStatus.SUCCEEDED));
-			parserTree.addChild(newParserTree);
 			return progress;
-		}
-
-		if ((status.getCounter() == 0)
-				&& (status.getStatus() == ParserStatus.IN_PROCESS)) {
-			System.out.println("Found recursion!!!");
-			newParserTree = new ParserTree(production);
-			progress = processProductionRecursion(newParserTree, production,
-					position, id, line);
-			if (progress.succeeded()) {
-				setMemo(production, position, new ParserStackElement(
-						newParserTree, progress));
-				setStatus(production, position, new ParserStatus(
-						ParserStatus.SUCCEEDED));
-				parserTree.addChild(newParserTree);
-				return progress;
-			}
 		}
 
 		setStatus(production, position, new ParserStatus(ParserStatus.FAILED));
 		return ParserProgress.failure();
 	}
 
-	private ParserProgress processProductionRecursion(ParserTree parserTree,
-			Production production, int position, int id, int line)
-			throws TreeException, ParserException {
-		boolean finished = false;
-		int counter = 0;
-		ParserTree tree = null;
-		ParserProgress progress = ParserProgress.failure();
-		do {
-			counter++;
-			setStatus(production, position, new ParserStatus(
-					ParserStatus.IN_RECURSION, counter));
-			ParserTree newTree = new ParserTree(production);
-			ParserProgress newProgress = _processProduction(newTree,
-					production, position, id, line);
-			if (newProgress.succeeded()) {
-				progress = newProgress;
-				tree = newTree;
-			} else {
-				finished = true;
-			}
-		} while (!finished);
-		if (progress.succeeded()) {
-			parserTree.addChild(tree);
-		}
-		return progress;
-	}
-
-	private ParserProgress _processProduction(ParserTree parserTree,
-			Production production, int position, int id, int line)
-			throws TreeException, ParserException {
-		ParserProgress progress = ParserProgress.none();
+	private ParserProgress _processProduction(Production production,
+			int position, int id, int line) throws TreeException,
+			ParserException {
+		ParserTree node = new ParserTree(production);
+		ParserProgress progress = ParserProgress.success(0, 0, 0, node);
 		for (Construction construction : production.getConstructions()) {
 			if (ignoredLeading) {
-				ParserProgress newProgress = processIgnoredTokens(parserTree,
+				ParserProgress newProgress = processIgnoredTokens(node,
 						position + progress.getDeltaPosition(),
 						id + progress.getDeltaId(),
 						line + progress.getDeltaLine());
 				progress.add(newProgress);
 			}
 			if (construction.isNonTerminal()) {
-				ParserProgress newProgress = processNonTerminal(parserTree,
+				ParserProgress newProgress = processNonTerminal(node,
 						(NonTerminal) construction,
 						position + progress.getDeltaPosition(),
 						id + progress.getDeltaId(),
 						line + progress.getDeltaLine());
-				if (newProgress.succeeded()
-						&& (!foundRecursion(production,
-								position + progress.getDeltaPosition()))) {
+				if (newProgress.succeeded())
 					progress.add(newProgress);
-				} else {
+				else
 					return ParserProgress.failure();
-				}
 			} else {
-				ParserProgress newProgress = processTerminal(parserTree,
+				ParserProgress newProgress = processTerminal(node,
 						(Terminal) construction,
 						position + progress.getDeltaPosition(),
 						id + progress.getDeltaId(),
@@ -304,7 +199,7 @@ public class PackratParser extends AbstractParser {
 				}
 			}
 			if (!ignoredLeading) {
-				ParserProgress newProgress = processIgnoredTokens(parserTree,
+				ParserProgress newProgress = processIgnoredTokens(node,
 						position + progress.getDeltaPosition(),
 						id + progress.getDeltaId(),
 						line + progress.getDeltaLine());
@@ -314,31 +209,27 @@ public class PackratParser extends AbstractParser {
 		return progress;
 	}
 
-	private ParserProgress processNonTerminal(ParserTree parseTree,
+	private ParserProgress processNonTerminal(ParserTree node,
 			NonTerminal nonTerminal, int position, int id, int line)
 			throws ParserException, TreeException {
-		return parse(parseTree, nonTerminal.getName(), position, id, line);
+		return parse(node, nonTerminal.getName(), position, id, line);
 	}
 
-	private ParserProgress processTerminal(ParserTree parserTree,
-			Terminal terminal, int position, int id, int line)
-			throws TreeException {
-		TokenDefinitionSet tokenDefinitions = getGrammar()
-				.getTokenDefinitions();
+	private ParserProgress processTerminal(ParserTree node, Terminal terminal,
+			int position, int id, int line) throws TreeException {
+		TokenDefinitionSet tokenDefinitions = grammar.getTokenDefinitions();
 		TokenDefinition tokenDefinition = tokenDefinitions
 				.getDefinition(terminal.getName());
-		return processTokenDefinition(parserTree, tokenDefinition, position,
-				id, line);
+		return processTokenDefinition(node, tokenDefinition, position, id, line);
 	}
 
-	ParserProgress processIgnoredTokens(ParserTree parserTree, int position,
-			int id, int line) throws TreeException {
-		ParserProgress progress = ParserProgress.none();
+	ParserProgress processIgnoredTokens(ParserTree node, int position, int id,
+			int line) throws TreeException {
+		ParserProgress progress = ParserProgress.success(0, 0, 0, node);
 		ParserProgress newProgress = ParserProgress.none();
 		do {
 			for (TokenDefinition tokenDefinition : hiddenAndIgnoredTokens) {
-				newProgress = processTokenDefinition(parserTree,
-						tokenDefinition,
+				newProgress = processTokenDefinition(node, tokenDefinition,
 						position + progress.getDeltaPosition(),
 						id + progress.getDeltaId(),
 						line + progress.getDeltaLine());
@@ -361,7 +252,7 @@ public class PackratParser extends AbstractParser {
 	 * @return
 	 * @throws TreeException
 	 */
-	private ParserProgress processTokenDefinition(ParserTree parserTree,
+	private ParserProgress processTokenDefinition(ParserTree node,
 			TokenDefinition tokenDefinition, int position, int id, int line)
 			throws TreeException {
 		Matcher matcher = tokenDefinition.getPattern().matcher(
@@ -374,9 +265,9 @@ public class PackratParser extends AbstractParser {
 		Token token = new Token(tokenDefinition.getName(), match,
 				tokenDefinition.getVisibility(), new TokenMetaData(name, id,
 						position, line, lineBreakNum + 1));
-		parserTree.addChild(new ParserTree(token));
-
-		return ParserProgress.success(match.length(), 1, lineBreakNum);
+		ParserTree myTree = new ParserTree(token);
+		node.addChild(myTree);
+		return ParserProgress.success(match.length(), 1, lineBreakNum, myTree);
 	}
 
 	private ParserStatus getStatus(Production production, int position) {
@@ -400,8 +291,8 @@ public class PackratParser extends AbstractParser {
 		map.put(production, status);
 	}
 
-	private ParserStackElement getMemo(Production production, int position) {
-		Map<Production, ParserStackElement> map = memo.get(position);
+	private ParserProgress getMemo(Production production, int position) {
+		Map<Production, ParserProgress> map = memo.get(position);
 		if (map == null) {
 			return null;
 		}
@@ -409,19 +300,12 @@ public class PackratParser extends AbstractParser {
 	}
 
 	private void setMemo(Production production, int position,
-			ParserStackElement stackElement) {
-		Map<Production, ParserStackElement> map = memo.get(position);
+			ParserProgress stackElement) {
+		Map<Production, ParserProgress> map = memo.get(position);
 		if (map == null) {
-			map = new HashMap<Production, ParserStackElement>();
+			map = new HashMap<Production, ParserProgress>();
 			memo.put(position, map);
 		}
 		map.put(production, stackElement);
 	}
-
-	@Override
-	public void generateInspectionInformation(File directory)
-			throws IOException, GrammarException {
-		// TODO nothing to do here!? check that!
-	}
-
 }

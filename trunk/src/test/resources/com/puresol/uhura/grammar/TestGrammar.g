@@ -47,19 +47,16 @@ TOKENS
  */
 PRODUCTIONS
 
-	_START_ : Expressions ;
-
-	Expressions:
-			Expressions Expression [node=true,stack=false]
-		| 	Expression
-	;
+	_START_ : Expression ;
 
 	Expression:
-		{add}				Expression '+' Term
+			{add}			Expression '+' Term
+		| 	{sub}			Expression '-' Term
 		|					Term [node=false]
 	;
 	Term:
-		{mult}				Term '*' Factor
+			{mult}			Term '*' Factor
+		|	{div}			Term '/' Factor
 		|					Factor [node=false]
 	;
 	Factor:

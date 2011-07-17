@@ -25,27 +25,15 @@ class ParserStatus {
 	public static final int IN_PROCESS = 2;
 
 	/**
-	 * Means a process is trying to process this position with knowing to have a
-	 * recursion here. A counter within this object stores the recursion depth
-	 * for tracking and seed growing method.
-	 */
-	public static final int IN_RECURSION = 3;
-
-	/**
 	 * A process already failed to parse at this position the production
 	 * associated.
 	 */
-	public static final int FAILED = 4;
+	public static final int FAILED = 3;
 
 	/**
 	 * For storing the status.
 	 */
 	private final int status;
-
-	/**
-	 * The counter for seed growing and recursion depth tracking.
-	 */
-	private int counter = 1;
 
 	public ParserStatus(int status) {
 		super();
@@ -55,19 +43,10 @@ class ParserStatus {
 	public ParserStatus(int status, int counter) {
 		super();
 		this.status = status;
-		this.counter = counter;
 	}
 
 	public int getStatus() {
 		return status;
-	}
-
-	public void decCounter() {
-		counter--;
-	}
-
-	public int getCounter() {
-		return counter;
 	}
 
 	@Override
@@ -81,10 +60,7 @@ class ParserStatus {
 			result += "succeeded";
 			break;
 		case IN_PROCESS:
-			result += "in process (" + counter + ")";
-			break;
-		case IN_RECURSION:
-			result += "in recursion (" + counter + ")";
+			result += "in process";
 			break;
 		case FAILED:
 			result += "failed";
