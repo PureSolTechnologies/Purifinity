@@ -110,10 +110,6 @@ public class PackratParser implements Serializable {
 			ParserException {
 		{
 			ParserStatus status = getStatus(production, position);
-			System.out.println(status);
-			System.out.println(production);
-			System.out.println("pos: " + position + ", id: " + id + ", line: "
-					+ line);
 			switch (status.getStatus()) {
 			case ParserStatus.FAILED:
 				/*

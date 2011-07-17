@@ -241,6 +241,10 @@ public class ParserTree implements Tree<ParserTree>, Serializable {
 
 	@Override
 	public String toString() {
+		return getName() + " \"" + getText() + "\"";
+	}
+
+	public String toTreeString() {
 		StringBuffer buffer = new StringBuffer();
 		fillBuffer(buffer, this, 0);
 		return buffer.toString();
@@ -251,7 +255,8 @@ public class ParserTree implements Tree<ParserTree>, Serializable {
 		for (int i = 0; i < depth; i++) {
 			buffer.append("  ");
 		}
-		buffer.append(parserTree.getName() + ": \"" + parserTree.getText() + "\"\n");
+		buffer.append(parserTree.getName() + ": \"" + parserTree.getText()
+				+ "\"\n");
 		for (ParserTree child : parserTree.getChildren()) {
 			fillBuffer(buffer, child, depth + 1);
 		}
