@@ -7,64 +7,55 @@ package com.puresol.uhura.parser.packrat;
  * @author Rick-Rainer Ludwig
  * 
  */
-class ParserStatus {
+enum ParserStatus {
 	/**
 	 * Means a processing was neither done nor tried.
 	 */
-	public static final int NOT_PROCESSED = 0;
+	NOT_PROCESSED,
 
 	/**
 	 * Means processing was successfully done.
 	 */
-	public static final int SUCCEEDED = 1;
+	SUCCEEDED,
 
 	/**
 	 * Means a process is trying to process this position without knowing to
 	 * have a recursion here.
 	 */
-	public static final int IN_PROCESS = 2;
+	NEW_IN_PROCESS,
 
 	/**
 	 * A process already failed to parse at this position the production
 	 * associated.
 	 */
-	public static final int FAILED = 3;
+	FAILED,
 
 	/**
-	 * For storing the status.
+	 * Means that a recursion was found.
 	 */
-	private final int status;
-
-	public ParserStatus(int status) {
-		super();
-		this.status = status;
-	}
-
-	public ParserStatus(int status, int counter) {
-		super();
-		this.status = status;
-	}
-
-	public int getStatus() {
-		return status;
-	}
+	FOUND_RECURSION;
 
 	@Override
 	public String toString() {
 		String result = "";
-		switch (status) {
+		switch (this) {
 		case NOT_PROCESSED:
 			result += "not processed";
 			break;
 		case SUCCEEDED:
 			result += "succeeded";
 			break;
-		case IN_PROCESS:
+		case NEW_IN_PROCESS:
 			result += "in process";
 			break;
 		case FAILED:
 			result += "failed";
 			break;
+		case FOUND_RECURSION:
+			result += "found recursion";
+			break;
+		default:
+			throw new RuntimeException("Unknown and undefined state!");
 		}
 		return result;
 	}
