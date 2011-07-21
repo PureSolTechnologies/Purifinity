@@ -30,7 +30,8 @@ import com.puresol.utils.IntrospectionUtilities;
 
 public class PackratParserTest {
 
-	private static Grammar iiiGrammar;
+	private static Grammar directGrammar;
+	private static Grammar indirectRecursionGrammar;
 
 	private ParserTree parseText(String text) throws Throwable {
 		InputStream inputStream = getClass().getResourceAsStream(
@@ -55,9 +56,12 @@ public class PackratParserTest {
 	@BeforeClass
 	public static void setup() throws Throwable {
 		Properties options = new Properties();
+
 		TokenDefinitionSet tokenDefinitions = new TokenDefinitionSet();
 		tokenDefinitions.addDefinition(new TokenDefinition("i", "i"));
+
 		ProductionSet productions = new ProductionSet();
+
 		Production start = new Production("_START_");
 		start.addConstruction(new NonTerminal("I"));
 		productions.add(start);
@@ -71,7 +75,34 @@ public class PackratParserTest {
 		i2.addConstruction(new Terminal("i", "i"));
 		productions.add(i2);
 
-		iiiGrammar = new Grammar(options, tokenDefinitions, productions);
+		directGrammar = new Grammar(options, tokenDefinitions, productions);
+
+		options = new Properties();
+
+		tokenDefinitions = new TokenDefinitionSet();
+		tokenDefinitions.addDefinition(new TokenDefinition("i", "i"));
+
+		productions = new ProductionSet();
+
+		start = new Production("_START_");
+		start.addConstruction(new NonTerminal("J"));
+		productions.add(start);
+
+		Production j = new Production("J");
+		j.addConstruction(new NonTerminal("I"));
+		productions.add(j);
+
+		i1 = new Production("I");
+		i1.addConstruction(new NonTerminal("J"));
+		i1.addConstruction(new Terminal("i", "i"));
+		productions.add(i1);
+
+		i2 = new Production("I");
+		i2.addConstruction(new Terminal("i", "i"));
+		productions.add(i2);
+
+		indirectRecursionGrammar = new Grammar(options, tokenDefinitions,
+				productions);
 	}
 
 	@Test
@@ -103,12 +134,9 @@ public class PackratParserTest {
 		 * process some white spaces...
 		 */
 		ParserTree parserTree = new ParserTree("ROOT");
-		ParserProgress progress = parser.processIgnoredTokens(parserTree,
-				(int) 0, (int) 0, (int) 1);
+		MemoEntry memoEntry = parser.processIgnoredTokens(parserTree, 0, 0, 1);
 
-		assertEquals(3, progress.getDeltaId());
-		assertEquals(3, progress.getDeltaPosition());
-		assertEquals(0, progress.getDeltaLine());
+		assertEquals(3, memoEntry.getDeltaPosition());
 
 		assertEquals(3, parserTree.getChildren().size());
 		Token token0 = parserTree.getChildren().get(0).getToken();
@@ -147,31 +175,33 @@ public class PackratParserTest {
 	}
 
 	@Test
-	public void testI() throws Throwable {
-		PackratParser parser = new PackratParser(iiiGrammar);
+	public void testDirectRecursion() throws Throwable {
+		PackratParser parser = new PackratParser(directGrammar);
 		parser.parse("i", "i");
-	}
-
-	@Test
-	public void testII() throws Throwable {
-		PackratParser parser = new PackratParser(iiiGrammar);
 		parser.parse("ii", "ii");
-	}
-
-	@Test
-	public void testIII() throws Throwable {
-		PackratParser parser = new PackratParser(iiiGrammar);
 		parser.parse("iii", "iii");
 	}
-	
+
 	@Test
-	public void testEquation() throws Throwable {
-		parseText("1+2*(3+4)+5*6");
+	public void testIndirectRecursion() throws Throwable {
+		PackratParser parser = new PackratParser(indirectRecursionGrammar);
+		parser.parse("i", "i");
+		parser.parse("ii", "ii");
+		parser.parse("iii", "iii");
 	}
 
-	
+	@Test
+	public void testEquation() throws Throwable {
+		parseText("1");
+		parseText("(1)");
+		parseText("1+2");
+		parseText("(1+2)");
+		parseText("1*2");
+		parseText("(1*2)");
+	}
+
 	@Test
 	public void testEquation2() throws Throwable {
-		parseText("1*2*3*4*5*6");
+		parseText("1*2+3*4+5*(6+7*(8+9))");
 	}
 }

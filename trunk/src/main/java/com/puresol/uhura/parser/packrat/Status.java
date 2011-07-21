@@ -7,11 +7,11 @@ package com.puresol.uhura.parser.packrat;
  * @author Rick-Rainer Ludwig
  * 
  */
-enum ParserStatus {
+enum Status {
 	/**
 	 * Means a processing was neither done nor tried.
 	 */
-	NOT_PROCESSED,
+	NONE,
 
 	/**
 	 * Means processing was successfully done.
@@ -19,40 +19,23 @@ enum ParserStatus {
 	SUCCEEDED,
 
 	/**
-	 * Means a process is trying to process this position without knowing to
-	 * have a recursion here.
-	 */
-	NEW_IN_PROCESS,
-
-	/**
 	 * A process already failed to parse at this position the production
 	 * associated.
 	 */
-	FAILED,
-
-	/**
-	 * Means that a recursion was found.
-	 */
-	FOUND_RECURSION;
+	FAILED;
 
 	@Override
 	public String toString() {
 		String result = "";
 		switch (this) {
-		case NOT_PROCESSED:
-			result += "not processed";
+		case NONE:
+			result += "none";
 			break;
 		case SUCCEEDED:
 			result += "succeeded";
 			break;
-		case NEW_IN_PROCESS:
-			result += "in process";
-			break;
 		case FAILED:
 			result += "failed";
-			break;
-		case FOUND_RECURSION:
-			result += "found recursion";
 			break;
 		default:
 			throw new RuntimeException("Unknown and undefined state!");

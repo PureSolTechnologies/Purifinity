@@ -1,56 +1,51 @@
 package com.puresol.uhura.parser.packrat;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
 
 import org.junit.Test;
 
 import com.puresol.uhura.parser.ParserTree;
 
-public class ParserProgressTest {
+public class MemoEntryTest {
 
 	@Test
 	public void testFactoryMethods() {
-		assertNotNull(ParserProgress.success(1, 2, 3, null));
-		assertNotNull(ParserProgress.none());
-		assertNotNull(ParserProgress.failure());
+		assertNotNull(MemoEntry.success(1, 2, 3, null));
+		assertNotNull(MemoEntry.none());
+		assertNotNull(MemoEntry.failure());
 	}
 
 	@Test
 	public void testInitialValuesForSuccess() {
 		ParserTree tree = new ParserTree("TEST");
-		ParserProgress success = ParserProgress.success(1, 2, 3, tree);
+		MemoEntry success = MemoEntry.success(1, 2, 3, tree);
 		assertEquals(1, success.getDeltaPosition());
-		assertEquals(2, success.getDeltaId());
-		assertEquals(3, success.getDeltaLine());
 		assertSame(tree, success.getTree());
 	}
 
 	@Test
 	public void testInitialValuesForNone() {
-		ParserProgress success = ParserProgress.none();
+		MemoEntry success = MemoEntry.none();
 		assertEquals(0, success.getDeltaPosition());
-		assertEquals(0, success.getDeltaId());
-		assertEquals(0, success.getDeltaLine());
 		assertSame(null, success.getTree());
 	}
 
 	@Test
 	public void testInitialValuesForFailure() {
-		ParserProgress success = ParserProgress.failure();
+		MemoEntry success = MemoEntry.failure();
 		assertEquals(-1, success.getDeltaPosition());
-		assertEquals(-1, success.getDeltaId());
-		assertEquals(-1, success.getDeltaLine());
 		assertSame(null, success.getTree());
 	}
 
 	@Test
 	public void testCompareTo() {
-		ParserProgress success = ParserProgress.success(1, 2, 3,
-				new ParserTree("TEST"));
-		ParserProgress success2 = ParserProgress.success(2, 3, 4,
-				new ParserTree("TEST2"));
-		ParserProgress none = ParserProgress.none();
-		ParserProgress failure = ParserProgress.failure();
+		MemoEntry success = MemoEntry.success(1, 2, 3, new ParserTree("TEST"));
+		MemoEntry success2 = MemoEntry
+				.success(2, 3, 4, new ParserTree("TEST2"));
+		MemoEntry none = MemoEntry.none();
+		MemoEntry failure = MemoEntry.failure();
 
 		assertEquals(1, none.compareTo(failure));
 		assertEquals(1, success.compareTo(none));

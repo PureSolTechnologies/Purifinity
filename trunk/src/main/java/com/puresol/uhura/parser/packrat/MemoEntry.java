@@ -4,35 +4,48 @@ import java.io.Serializable;
 
 import com.puresol.uhura.parser.ParserTree;
 
-class ParserProgress implements Serializable, Comparable<ParserProgress> {
+class MemoEntry implements Serializable, Comparable<MemoEntry> {
 
 	private static final long serialVersionUID = 2910217488523982637L;
 
-	static ParserProgress success(int deltaPosition, int deltaId,
-			int deltaLine, ParserTree tree) {
-		return new ParserProgress(deltaPosition, deltaId, deltaLine, tree);
+	static MemoEntry success(int deltaPosition, int deltaId, int deltaLine,
+			ParserTree tree) {
+		return new MemoEntry(deltaPosition, deltaId, deltaLine, tree, null,
+				Status.SUCCEEDED);
 	}
 
-	static ParserProgress failure() {
-		return new ParserProgress(-1, -1, -1, null);
+	static MemoEntry failure() {
+		return new MemoEntry(-1, -1, -1, null, null, Status.FAILED);
 	}
 
-	public static ParserProgress none() {
-		return new ParserProgress(0, 0, 0, null);
+	static MemoEntry failure(LR lr) {
+		return new MemoEntry(-1, -1, -1, null, lr, Status.FAILED);
+	}
+
+	static MemoEntry none() {
+		return new MemoEntry(0, 0, 0, null, null, Status.NONE);
 	}
 
 	private int deltaPosition;
 	private int deltaId;
 	private int deltaLine;
 	private ParserTree tree;
+	private LR lr;
+	private Status status;
 
-	private ParserProgress(int deltaPosition, int deltaId, int deltaLine,
-			ParserTree tree) {
+	private MemoEntry(int deltaPosition, int deltaId, int deltaLine,
+			ParserTree tree, LR lr, Status status) {
 		super();
 		this.deltaPosition = deltaPosition;
 		this.deltaId = deltaId;
 		this.deltaLine = deltaLine;
 		this.tree = tree;
+		this.lr = lr;
+		this.status = status;
+	}
+
+	void setDeltaPosition(int deltaPosition) {
+		this.deltaPosition = deltaPosition;
 	}
 
 	int getDeltaPosition() {
@@ -43,28 +56,56 @@ class ParserProgress implements Serializable, Comparable<ParserProgress> {
 		return deltaId;
 	}
 
+	void setDeltaId(int deltaId) {
+		this.deltaId = deltaId;
+	}
+
 	int getDeltaLine() {
 		return deltaLine;
+	}
+
+	void setDeltaLine(int deltaLine) {
+		this.deltaLine = deltaLine;
+	}
+
+	void setTree(ParserTree tree) {
+		this.tree = tree;
 	}
 
 	ParserTree getTree() {
 		return tree;
 	}
 
+	void setLR(LR lr) {
+		this.lr = lr;
+	}
+
+	LR getLR() {
+		return lr;
+	}
+
+	void setStatus(Status status) {
+		this.status = status;
+	}
+
+	Status getStatus() {
+		return status;
+	}
+
 	boolean madeProgress() {
-		return (deltaLine >= 0) && (deltaId > 0) && (deltaPosition > 0)
-				&& (tree != null);
+		return (deltaPosition > 0) && (tree != null)
+				&& (status == Status.SUCCEEDED);
 	}
 
 	boolean failed() {
-		return (deltaLine < 0) || (deltaId < 0) || (deltaPosition < 0);
+		return (status == Status.FAILED);
 	}
 
 	boolean succeeded() {
-		return !failed();
+		return (status == Status.SUCCEEDED);
 	}
 
-	void add(ParserProgress progress) {
+	void add(MemoEntry progress) {
 		deltaPosition += progress.deltaPosition;
 		deltaId += progress.deltaId;
 		deltaLine += progress.deltaLine;
@@ -74,8 +115,6 @@ class ParserProgress implements Serializable, Comparable<ParserProgress> {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + deltaId;
-		result = prime * result + deltaLine;
 		result = prime * result + deltaPosition;
 		result = prime * result + ((tree == null) ? 0 : tree.hashCode());
 		return result;
@@ -89,11 +128,7 @@ class ParserProgress implements Serializable, Comparable<ParserProgress> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ParserProgress other = (ParserProgress) obj;
-		if (deltaId != other.deltaId)
-			return false;
-		if (deltaLine != other.deltaLine)
-			return false;
+		MemoEntry other = (MemoEntry) obj;
 		if (deltaPosition != other.deltaPosition)
 			return false;
 		if (tree == null) {
@@ -105,12 +140,11 @@ class ParserProgress implements Serializable, Comparable<ParserProgress> {
 	}
 
 	@Override
-	public int compareTo(ParserProgress other) {
+	public int compareTo(MemoEntry other) {
 		if (this.deltaPosition < other.deltaPosition)
 			return -1;
 		else if (this.deltaPosition > other.deltaPosition)
 			return 1;
 		return 0;
 	}
-
 }

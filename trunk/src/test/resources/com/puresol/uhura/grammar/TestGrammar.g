@@ -31,7 +31,7 @@ TOKENS
 
 	NEWLINE:			"(\r\n|\n|\r)" [ignore];
 	WHITESPACE:			"[ \t]" [hide];
-	INTEGER_LITERAL:	"(\\+|\\-)?" DIGITS_NONZERO + DIGITS *;
+	INTEGER_LITERAL:	"(\\+|\\-)?" DIGITS_NONZERO DIGITS *;
 	PLUS:				"\\+";
 	MINUS:				"\\-";
 	STAR:				"\\*";
@@ -50,16 +50,16 @@ PRODUCTIONS
 	_START_ : Expression ;
 
 	Expression:
-			{add}			Expression '+' Term
-		| 	{sub}			Expression '-' Term
+			{add}			Expression PLUS Term
+		| 	{sub}			Expression MINUS Term
 		|					Term [node=false]
 	;
 	Term:
-			{mult}			Term '*' Factor
-		|	{div}			Term '/' Factor
+			{mult}			Term STAR Factor
+		|	{div}			Term SLASH Factor
 		|					Factor [node=false]
 	;
 	Factor:
-		{paren}				'(' Expression ')'
+		{paren}				LPAREN Expression RPAREN
 		|					INTEGER_LITERAL [node=false]
 	;
