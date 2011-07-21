@@ -202,6 +202,6 @@ public class PackratParserTest {
 
 	@Test
 	public void testEquation2() throws Throwable {
-		parseText("1*2+3*4+5*(6+7*(8+9))");
+		parseText("1 * 2 + 3 * 4 + 5 * (6 + 7 * 	 (8 + 9))");
 	}
 }

@@ -102,8 +102,6 @@ public class PackratParser implements Serializable {
 			if (progress.getDeltaPosition() != text.length()) {
 				throw new ParserException(getParserErrorMessage());
 			}
-			// FIXME Normalize tree here to get the correct token id and line
-			// numbers!
 			return progress.getTree();
 		} catch (TreeException e) {
 			throw new ParserException(e.getMessage(), e);
@@ -353,13 +351,17 @@ public class PackratParser implements Serializable {
 	 */
 	private MemoEntry eval(String productionName, int position, int id, int line)
 			throws ParserException, TreeException {
+		MemoEntry saved = MemoEntry.failure();
 		for (Production production : grammar.getProductions().get(
 				productionName)) {
 			MemoEntry progress = parseProduction(production, position, id, line);
-			if (progress.succeeded())
-				return progress;
+			// if (progress.succeeded())
+			// return progress;
+			if (progress.compareTo(saved) > 0) {
+				saved = progress;
+			}
 		}
-		return MemoEntry.failure();
+		return saved;
 	}
 
 	/**
@@ -512,8 +514,7 @@ public class PackratParser implements Serializable {
 		if (maxPosition < position + match.length()) {
 			maxPosition = position + match.length();
 		}
-		return MemoEntry.success(match.length(), 1, lineBreakNum,
-				myTree);
+		return MemoEntry.success(match.length(), 1, lineBreakNum, myTree);
 	}
 
 	/**
