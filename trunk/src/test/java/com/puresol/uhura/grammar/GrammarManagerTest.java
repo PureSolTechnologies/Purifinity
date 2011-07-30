@@ -1,9 +1,11 @@
 package com.puresol.uhura.grammar;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 
 import org.junit.Test;
@@ -23,23 +25,18 @@ public class GrammarManagerTest {
 	}
 
 	@Test
-	public void testTimeHandlingForGrammarModified() {
-		try {
-			File directory = new File("test/", FileUtilities
-					.classToRelativePackagePath(getClass()).getParentFile()
-					.toString());
-			assertEquals("test/com/puresol/uhura/grammar", directory.toString());
-			File file = new File(directory, "test.test");
-			assertFalse(file.exists());
-			assertTrue(file.createNewFile());
-			long modified = file.lastModified();
-			long currentTime = System.currentTimeMillis();
-			assertTrue(modified <= currentTime);
-			assertTrue(file.delete());
-		} catch (IOException e) {
-			e.printStackTrace();
-			fail("No exception was expected!");
-		}
+	public void testTimeHandlingForGrammarModified() throws Throwable {
+		File directory = new File("test/", FileUtilities
+				.classToRelativePackagePath(getClass()).getParentFile()
+				.toString());
+		assertEquals("test/com/puresol/uhura/grammar", directory.toString());
+		File file = new File(directory, "test.test");
+		assertFalse(file.exists());
+		assertTrue(file.createNewFile());
+		long modified = file.lastModified();
+		long currentTime = System.currentTimeMillis();
+		assertTrue(modified <= currentTime);
+		assertTrue(file.delete());
 	}
 
 }
