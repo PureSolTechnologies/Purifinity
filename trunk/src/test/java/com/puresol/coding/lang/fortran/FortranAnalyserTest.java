@@ -3,15 +3,17 @@
  */
 package com.puresol.coding.lang.fortran;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.Test;
-
-import com.puresol.coding.analysis.AnalyzerException;
 
 /**
  * This test checks the JavaAnalyser.
@@ -36,16 +38,11 @@ public class FortranAnalyserTest {
 		assertNull(analyser.getParserTree());
 	}
 
-	private void test(File file) {
-		try {
-			assertTrue(file.exists());
-			Logger.getRootLogger().setLevel(Level.DEBUG);
-			FortranAnalyser analyser = new FortranAnalyser(file);
-			analyser.parse();
-		} catch (AnalyzerException e) {
-			e.printStackTrace();
-			fail("No exception was expected!");
-		}
+	private void test(File file) throws Throwable {
+		assertTrue(file.exists());
+		Logger.getRootLogger().setLevel(Level.DEBUG);
+		FortranAnalyser analyser = new FortranAnalyser(file);
+		analyser.parse();
 	}
 
 	// @Test
@@ -67,7 +64,7 @@ public class FortranAnalyserTest {
 	// }
 
 	@Test
-	public void test2() {
+	public void test2() throws Throwable {
 		test(new File(
 				"src/test/resources/com/puresol/coding/lang/fortran/samples/FortranTest.f"));
 	}
