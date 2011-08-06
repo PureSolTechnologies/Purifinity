@@ -2,6 +2,7 @@ package com.puresol.uhura.parser.packrat;
 
 import java.io.Serializable;
 
+import com.puresol.uhura.parser.ParserException;
 import com.puresol.uhura.parser.ParserTree;
 
 class MemoEntry implements Serializable, Comparable<MemoEntry> {
@@ -93,19 +94,22 @@ class MemoEntry implements Serializable, Comparable<MemoEntry> {
 	}
 
 	boolean madeProgress() {
-		return (deltaPosition > 0) && (tree != null)
-				&& (status == Status.SUCCEEDED);
+		return (deltaPosition > 0) && (deltaId > 0) && (deltaLine >= 0)
+				&& (tree != null) && (status == Status.SUCCEEDED);
 	}
 
 	boolean failed() {
 		return (status == Status.FAILED);
 	}
 
-	boolean succeeded() {
+	boolean succeeded() throws ParserException {
 		return (status == Status.SUCCEEDED);
 	}
 
-	void add(MemoEntry progress) {
+	void add(MemoEntry progress) throws ParserException {
+		if ((deltaPosition < 0) || (deltaId < 0) || (deltaLine < 0)) {
+			throw new ParserException("Negative progress is not supported!");
+		}
 		deltaPosition += progress.deltaPosition;
 		deltaId += progress.deltaId;
 		deltaLine += progress.deltaLine;
@@ -146,5 +150,14 @@ class MemoEntry implements Serializable, Comparable<MemoEntry> {
 		else if (this.deltaPosition > other.deltaPosition)
 			return 1;
 		return 0;
+	}
+
+	public void set(MemoEntry ans) {
+		this.deltaPosition = ans.deltaPosition;
+		this.deltaId = ans.deltaId;
+		this.deltaLine = ans.deltaLine;
+		this.status = ans.status;
+		this.tree = ans.tree;
+		this.lr = ans.lr; // TODO Check the correctness!!!
 	}
 }

@@ -3,6 +3,7 @@ package com.puresol.uhura.parser.packrat;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -74,8 +75,9 @@ public class PackratParser implements Serializable {
 	 * into the parser tree.
 	 */
 	private void extractHiddenAndIgnoredTokensFromGrammar() {
-		for (TokenDefinition tokenDefinition : grammar.getTokenDefinitions()
-				.getDefinitions()) {
+		List<TokenDefinition> tokenDefinitions = grammar.getTokenDefinitions()
+				.getDefinitions();
+		for (TokenDefinition tokenDefinition : tokenDefinitions) {
 			if ((tokenDefinition.getVisibility() == Visibility.HIDDEN)
 					|| (tokenDefinition.getVisibility() == Visibility.IGNORED)) {
 				hiddenAndIgnoredTokens.add(tokenDefinition);
@@ -109,6 +111,32 @@ public class PackratParser implements Serializable {
 	}
 
 	/**
+	 * This is the actual parser start. Work is performed on StringBuffer
+	 * object.
+	 * 
+	 * @param buffer
+	 * @return
+	 * @throws ParserException
+	 */
+	public ParserTree parse(String text, String production, String name)
+			throws ParserException {
+		try {
+			memo.clear();
+			lrStack.clear();
+			this.text = text;
+			this.name = name;
+			maxPosition = 0;
+			MemoEntry progress = applyRule(production, 0, 0, 1);
+			if (progress.getDeltaPosition() != text.length()) {
+				throw new ParserException(getParserErrorMessage());
+			}
+			return progress.getTree();
+		} catch (TreeException e) {
+			throw new ParserException(e.getMessage(), e);
+		}
+	}
+
+	/**
 	 * This message just generates a parser exception message to be returned
 	 * containing the maximum position where the parser could not proceed. This
 	 * should be in most cases the position where the error within the text is
@@ -126,6 +154,27 @@ public class PackratParser implements Serializable {
 		return "Could not parse the input string near " + codeString + "!";
 	}
 
+	private void printStackContent() {
+		for (int i = 0; i < lrStack.size(); i++) {
+			indentLine();
+			for (int indent = 0; indent < i + 1; indent++) {
+				System.out.print("  ");
+			}
+			System.out.println(lrStack.get(i).getProduction());
+		}
+	}
+
+	private void indentLine() {
+		for (int indent = 0; indent < lrStack.size(); indent++) {
+			System.out.print("  ");
+		}
+	}
+
+	private void printMessage(String text, int position, int id, int line) {
+		indentLine();
+		System.out.println(position + " " + id + " " + line + " : " + text);
+	}
+
 	/**
 	 * This method tries to apply a production at a given position. The
 	 * production is given as a name and not as a concrete rule to process all
@@ -140,6 +189,8 @@ public class PackratParser implements Serializable {
 	private MemoEntry applyRule(String production, int position, int id,
 			int line) throws TreeException, ParserException {
 		MemoEntry m = recall(production, position, id, line);
+		printMessage(production, position, id, line);
+		// printStackContent();
 		if (m.getStatus() == Status.NONE) {
 			/*
 			 * "Create a new LR and push it onto the rule invocation stack."
@@ -174,14 +225,12 @@ public class PackratParser implements Serializable {
 				 * recursion evaluation. For that purpose we grow m with ans as
 				 * seed.
 				 */
+				printMessage("Found recursion for: " + production, position,
+						id, line);
 				lr.setSeed(ans);
 				return lrAnswer(production, position, id, line, m);
 			} else {
-				m.setDeltaPosition(ans.getDeltaPosition());
-				m.setTree(ans.getTree());
-				m.setStatus(ans.getStatus());
-				m.setLR(null); // we can either have a lr or a result in
-								// memoEntry!
+				m.set(ans);
 				return ans;
 			}
 		} else {
@@ -189,7 +238,8 @@ public class PackratParser implements Serializable {
 			if (m.getLR() != null) {
 				LR lr = m.getLR();
 				setupLR(production, lr);
-				return lr.getSeed();
+				MemoEntry seed = lr.getSeed();
+				return seed;
 			} else {
 				return m;
 			}
@@ -269,19 +319,17 @@ public class PackratParser implements Serializable {
 		 * containing rule and evaluate it necessary. If the rule is within the
 		 * eval set, we need to parse it once.
 		 */
-		if (h.getEvalSet().contains(h.getProduction())) {
+		if (h.getEvalSet().contains(production)) {
 			h.getEvalSet().remove(production);
 			MemoEntry ans = eval(production, position, id, line);
-			m.setDeltaPosition(ans.getDeltaPosition());
-			m.setTree(ans.getTree());
-			m.setStatus(ans.getStatus());
-			m.setLR(null);
+			m.set(ans);
 		}
 		return m;
 	}
 
 	private MemoEntry growLR(String production, int position, int id, int line,
 			MemoEntry m, Head head) throws TreeException, ParserException {
+		printMessage("Growing: " + production, position, id, line);
 		/*
 		 * We need to mark that at position a seed growing takes place with the
 		 * head rule.
@@ -300,15 +348,13 @@ public class PackratParser implements Serializable {
 					|| (ans.getDeltaPosition() <= m.getDeltaPosition())) {
 				break;
 			}
-			m.setDeltaPosition(ans.getDeltaPosition());
-			m.setTree(ans.getTree());
-			m.setStatus(ans.getStatus());
-			m.setLR(null);
+			m.set(ans);
 		}
 		/*
 		 * Delete head from head buffer to signal end of seed growing.
 		 */
 		heads.remove(position);
+		printMessage("End of growing: " + production, position, id, line);
 		return m;
 	}
 
@@ -320,10 +366,7 @@ public class PackratParser implements Serializable {
 		if (!h.getProduction().equals(production)) {
 			return seed;
 		} else {
-			m.setDeltaPosition(seed.getDeltaPosition());
-			m.setTree(seed.getTree());
-			m.setStatus(seed.getStatus());
-			m.setLR(null);
+			m.set(seed);
 			if (m.getStatus() == Status.NONE) {
 				throw new ParserException("Error during parser implementation!");
 			}
@@ -395,7 +438,7 @@ public class PackratParser implements Serializable {
 						position + progress.getDeltaPosition(),
 						id + progress.getDeltaId(),
 						line + progress.getDeltaLine());
-				if (newProgress.madeProgress()) {
+				if (newProgress.succeeded()) {
 					node.addChild(newProgress.getTree());
 					progress.add(newProgress);
 				} else if (newProgress.failed())
@@ -406,7 +449,7 @@ public class PackratParser implements Serializable {
 						position + progress.getDeltaPosition(),
 						id + progress.getDeltaId(),
 						line + progress.getDeltaLine());
-				if (newProgress.madeProgress()) {
+				if (newProgress.succeeded()) {
 					progress.add(newProgress);
 				} else {
 					return MemoEntry.failure();
@@ -453,6 +496,8 @@ public class PackratParser implements Serializable {
 		TokenDefinitionSet tokenDefinitions = grammar.getTokenDefinitions();
 		TokenDefinition tokenDefinition = tokenDefinitions
 				.getDefinition(terminal.getName());
+		// printMessage(terminal.toString() + "\t" + tokenDefinition, position,
+		// id, line);
 		return processTokenDefinition(node, tokenDefinition, position, id, line);
 	}
 
@@ -466,9 +511,10 @@ public class PackratParser implements Serializable {
 	 * @param position
 	 * @return
 	 * @throws TreeException
+	 * @throws ParserException
 	 */
 	MemoEntry processIgnoredTokens(ParserTree node, int position, int id,
-			int line) throws TreeException {
+			int line) throws TreeException, ParserException {
 		MemoEntry progress = MemoEntry.success(0, 0, 0, node);
 		MemoEntry newProgress = MemoEntry.none();
 		do {
@@ -514,6 +560,7 @@ public class PackratParser implements Serializable {
 		if (maxPosition < position + match.length()) {
 			maxPosition = position + match.length();
 		}
+		// printMessage("'" + match + "'", position, id, line);
 		return MemoEntry.success(match.length(), 1, lineBreakNum, myTree);
 	}
 

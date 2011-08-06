@@ -5,7 +5,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.InputStream;
-import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,8 +18,6 @@ import com.puresol.uhura.grammar.GrammarFile;
 import com.puresol.uhura.grammar.TestGrammars;
 import com.puresol.uhura.grammar.production.NonTerminal;
 import com.puresol.uhura.grammar.production.Production;
-import com.puresol.uhura.grammar.production.ProductionSet;
-import com.puresol.uhura.grammar.production.Terminal;
 import com.puresol.uhura.grammar.token.TokenDefinition;
 import com.puresol.uhura.grammar.token.TokenDefinitionSet;
 import com.puresol.uhura.grammar.token.Visibility;
@@ -30,7 +27,8 @@ import com.puresol.utils.IntrospectionUtilities;
 
 public class PackratParserTest {
 
-	private static Grammar directGrammar;
+	private static Grammar directRecursionGrammar;
+	private static Grammar directRecursionGrammarZero;
 	private static Grammar indirectRecursionGrammar;
 
 	private ParserTree parseText(String text) throws Throwable {
@@ -55,54 +53,38 @@ public class PackratParserTest {
 
 	@BeforeClass
 	public static void setup() throws Throwable {
-		Properties options = new Properties();
+		InputStream inStream = PackratParserTest.class
+				.getResourceAsStream("/com/puresol/uhura/grammar/DirectRecursiveTestGrammar.g");
+		assertNotNull(inStream);
+		try {
+			GrammarFile file = new GrammarFile(inStream);
+			directRecursionGrammar = new GrammarConverter(file.getAST())
+					.getGrammar();
+		} finally {
+			inStream.close();
+		}
 
-		TokenDefinitionSet tokenDefinitions = new TokenDefinitionSet();
-		tokenDefinitions.addDefinition(new TokenDefinition("i", "i"));
+		inStream = PackratParserTest.class
+				.getResourceAsStream("/com/puresol/uhura/grammar/DirectRecursiveTestGrammarZero.g");
+		assertNotNull(inStream);
+		try {
+			GrammarFile file = new GrammarFile(inStream);
+			directRecursionGrammarZero = new GrammarConverter(file.getAST())
+					.getGrammar();
+		} finally {
+			inStream.close();
+		}
 
-		ProductionSet productions = new ProductionSet();
-
-		Production start = new Production("_START_");
-		start.addConstruction(new NonTerminal("I"));
-		productions.add(start);
-
-		Production i1 = new Production("I");
-		i1.addConstruction(new NonTerminal("I"));
-		i1.addConstruction(new Terminal("i", "i"));
-		productions.add(i1);
-
-		Production i2 = new Production("I");
-		i2.addConstruction(new Terminal("i", "i"));
-		productions.add(i2);
-
-		directGrammar = new Grammar(options, tokenDefinitions, productions);
-
-		options = new Properties();
-
-		tokenDefinitions = new TokenDefinitionSet();
-		tokenDefinitions.addDefinition(new TokenDefinition("i", "i"));
-
-		productions = new ProductionSet();
-
-		start = new Production("_START_");
-		start.addConstruction(new NonTerminal("J"));
-		productions.add(start);
-
-		Production j = new Production("J");
-		j.addConstruction(new NonTerminal("I"));
-		productions.add(j);
-
-		i1 = new Production("I");
-		i1.addConstruction(new NonTerminal("J"));
-		i1.addConstruction(new Terminal("i", "i"));
-		productions.add(i1);
-
-		i2 = new Production("I");
-		i2.addConstruction(new Terminal("i", "i"));
-		productions.add(i2);
-
-		indirectRecursionGrammar = new Grammar(options, tokenDefinitions,
-				productions);
+		inStream = PackratParserTest.class
+				.getResourceAsStream("/com/puresol/uhura/grammar/IndirectRecursiveTestGrammar.g");
+		assertNotNull(inStream);
+		try {
+			GrammarFile file = new GrammarFile(inStream);
+			indirectRecursionGrammar = new GrammarConverter(file.getAST())
+					.getGrammar();
+		} finally {
+			inStream.close();
+		}
 	}
 
 	@Test
@@ -176,7 +158,15 @@ public class PackratParserTest {
 
 	@Test
 	public void testDirectRecursion() throws Throwable {
-		PackratParser parser = new PackratParser(directGrammar);
+		PackratParser parser = new PackratParser(directRecursionGrammar);
+		parser.parse("i", "i");
+		parser.parse("ii", "ii");
+		parser.parse("iii", "iii");
+	}
+
+	@Test
+	public void testDirectRecursionWithEmpty() throws Throwable {
+		PackratParser parser = new PackratParser(directRecursionGrammarZero);
 		parser.parse("i", "i");
 		parser.parse("ii", "ii");
 		parser.parse("iii", "iii");
