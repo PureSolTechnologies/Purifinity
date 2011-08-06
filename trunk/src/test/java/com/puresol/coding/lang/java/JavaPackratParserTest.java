@@ -41,8 +41,20 @@ public class JavaPackratParserTest {
 		assertNotNull(grammar);
 		PackratParser parser = new PackratParser(grammar);
 		ParserTree tree = parser.parse(
-				"/* test */\n\npackage test.test2; class test { }",
-				"TEST");
+				"/* test */\n\npackage test.test2; class test { }", "TEST");
+		assertNotNull(tree);
+		TreePrinter printer = new TreePrinter(System.out);
+		printer.println(tree);
+	}
+
+	@Test
+	public void testBasic1() throws Throwable {
+		Grammar grammar = JavaGrammar.getInstance().getGrammar();
+		assertNotNull(grammar);
+		PackratParser parser = new PackratParser(grammar);
+		ParserTree tree = parser.parse(
+				"new a[1][2][]",
+				"ArrayCreationExpression", "TEST");
 		assertNotNull(tree);
 		TreePrinter printer = new TreePrinter(System.out);
 		printer.println(tree);
@@ -51,7 +63,7 @@ public class JavaPackratParserTest {
 	@Test
 	public void testJavaFile() throws Throwable {
 		File file = new File(
-				"src/main/java/com/puresol/coding/lang/java/JavaAnalyser.java");
+				"src/test/java/com/puresol/coding/lang/java/JavaPackratParserTest.java");
 		assertTrue(file.exists());
 		String text = readToString(new FileInputStream(file));
 		Grammar grammar = JavaGrammar.getInstance().getGrammar();
