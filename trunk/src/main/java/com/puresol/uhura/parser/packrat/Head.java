@@ -4,7 +4,14 @@ import java.io.Serializable;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-public class Head implements Serializable {
+/**
+ * This class represents a head for packrat parser to support indirect left
+ * recursion.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
+public class Head implements Serializable, Cloneable {
 
 	private static final long serialVersionUID = 1217226903924359385L;
 
@@ -12,6 +19,12 @@ public class Head implements Serializable {
 	private final Set<String> involvedSet = new LinkedHashSet<String>();
 	private final Set<String> evalSet = new LinkedHashSet<String>();
 
+	/**
+	 * This constructor creates a new head for packrat parser with an empty
+	 * involvedSet and empty evalSet as used in setupLR.
+	 * 
+	 * @param production
+	 */
 	public Head(String production) {
 		super();
 		this.production = production;
@@ -84,5 +97,13 @@ public class Head implements Serializable {
 		} else if (!production.equals(other.production))
 			return false;
 		return true;
+	}
+
+	@Override
+	public Head clone() {
+		Head cloned = new Head(getProduction());
+		cloned.evalSet.addAll(this.evalSet);
+		cloned.involvedSet.addAll(this.involvedSet);
+		return cloned;
 	}
 }

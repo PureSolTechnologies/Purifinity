@@ -189,9 +189,10 @@ public class PackratParser implements Serializable {
 	private MemoEntry applyRule(String production, int position, int id,
 			int line) throws TreeException, ParserException {
 		MemoEntry m = recall(production, position, id, line);
-		printMessage(production, position, id, line);
+		printMessage("applyRule: " + production, position, id, line);
 		// printStackContent();
 		if (m.getStatus() == Status.NONE) {
+			printMessage("none.", position, id, line);
 			/*
 			 * "Create a new LR and push it onto the rule invocation stack."
 			 * 
@@ -220,27 +221,28 @@ public class PackratParser implements Serializable {
 			lrStack.pop();
 			if (lr.getHead() != null) {
 				/*
-				 * If a head was set to lr, we found a recursion during
+				 * If a head was added to lr, we found a recursion during
 				 * evaluation. We need to set the seed and process with left
 				 * recursion evaluation. For that purpose we grow m with ans as
 				 * seed.
 				 */
 				printMessage("Found recursion for: " + production, position,
-						id, line);
-				lr.setSeed(ans);
+						id, line);	
+				lr.setSeed(ans.clone());
 				return lrAnswer(production, position, id, line, m);
 			} else {
-				m.set(ans);
+				m.set(ans.clone());
 				return ans;
 			}
 		} else {
 			// ??? Pos <-- m.pos
 			if (m.getLR() != null) {
-				LR lr = m.getLR();
+				printMessage(m.getLR().toString(), position, id, line);
+				LR lr = m.getLR().clone();
 				setupLR(production, lr);
-				MemoEntry seed = lr.getSeed();
-				return seed;
+				return lr.getSeed();
 			} else {
+				printMessage("done already.", position, id, line);
 				return m;
 			}
 		}
@@ -262,8 +264,8 @@ public class PackratParser implements Serializable {
 		while ((s.getHead() == null)
 				|| (!l.getHead().getProduction()
 						.equals(s.getHead().getProduction()))) {
-			s.setHead(l.getHead());
-			s.getHead().setInvolved(s.getProduction());
+			s.setHead(l.getHead().clone());
+			l.getHead().addInvolved(s.getProduction());
 			s = s.getNext();
 			if (s == null)
 				break;
@@ -307,7 +309,7 @@ public class PackratParser implements Serializable {
 		 * to return a failure.
 		 */
 		if ((m.getStatus() == Status.NONE)
-				&& (!production.equals(h.getProduction()))
+				&& (!h.getProduction().equals(production))
 				&& (!h.getInvolvedSet().contains(production))) {
 			return MemoEntry.failure();
 		}
@@ -322,7 +324,7 @@ public class PackratParser implements Serializable {
 		if (h.getEvalSet().contains(production)) {
 			h.getEvalSet().remove(production);
 			MemoEntry ans = eval(production, position, id, line);
-			m.set(ans);
+			m.set(ans.clone());
 		}
 		return m;
 	}
@@ -334,10 +336,10 @@ public class PackratParser implements Serializable {
 		 * We need to mark that at position a seed growing takes place with the
 		 * head rule.
 		 */
-		heads.put(position, head);
+		heads.put(position, head.clone());
 		while (true) {
 			/*
-			 * Set all involved production into evluation status.
+			 * Set all involved production into evaluation status.
 			 */
 			head.setEvalSet(head.getInvolvedSet());
 			/*
@@ -348,7 +350,7 @@ public class PackratParser implements Serializable {
 					|| (ans.getDeltaPosition() <= m.getDeltaPosition())) {
 				break;
 			}
-			m.set(ans);
+			m.set(ans.clone());
 		}
 		/*
 		 * Delete head from head buffer to signal end of seed growing.
@@ -366,7 +368,7 @@ public class PackratParser implements Serializable {
 		if (!h.getProduction().equals(production)) {
 			return seed;
 		} else {
-			m.set(seed);
+			m.set(seed.clone());
 			if (m.getStatus() == Status.NONE) {
 				throw new ParserException("Error during parser implementation!");
 			}
@@ -398,11 +400,11 @@ public class PackratParser implements Serializable {
 		for (Production production : grammar.getProductions().get(
 				productionName)) {
 			MemoEntry progress = parseProduction(production, position, id, line);
-			// if (progress.succeeded())
-			// return progress;
-			if (progress.compareTo(saved) > 0) {
-				saved = progress;
-			}
+			if (progress.succeeded())
+				return progress;
+			// if (progress.compareTo(saved) > 0) {
+			// saved = progress;
+			// }
 		}
 		return saved;
 	}
@@ -422,6 +424,8 @@ public class PackratParser implements Serializable {
 	 */
 	private MemoEntry parseProduction(Production production, int position,
 			int id, int line) throws TreeException, ParserException {
+		indentLine();
+		System.out.println("Try: " + production);
 		ParserTree node = new ParserTree(production);
 		MemoEntry progress = MemoEntry.success(0, 0, 0, node);
 		for (Construction construction : production.getConstructions()) {
@@ -463,6 +467,8 @@ public class PackratParser implements Serializable {
 				progress.add(newProgress);
 			}
 		}
+		indentLine();
+		System.out.println("Parsed: " + production);
 		return progress;
 	}
 

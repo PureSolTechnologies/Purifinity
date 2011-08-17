@@ -20,14 +20,14 @@ import com.puresol.uhura.lexer.Token;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class ParserTree implements Tree<ParserTree>, Serializable {
+public class ParserTree implements Tree<ParserTree>, Serializable, Cloneable {
 
 	private static final long serialVersionUID = -651453440127029204L;
 
 	private final String name;
 	private final Token token;
 	private ParserTree parent = null;
-	private final List<ParserTree> children = new ArrayList<ParserTree>();
+	private final ArrayList<ParserTree> children = new ArrayList<ParserTree>();
 	private final boolean node;
 	private final boolean stackingAllowed;
 	private ParserTreeMetaData metaData = null;
@@ -260,5 +260,20 @@ public class ParserTree implements Tree<ParserTree>, Serializable {
 		for (ParserTree child : parserTree.getChildren()) {
 			fillBuffer(buffer, child, depth + 1);
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public ParserTree clone() {
+		ParserTree cloned;
+		if (token != null)
+			cloned = new ParserTree(name, token.clone(), node, stackingAllowed);
+		else
+			cloned = new ParserTree(name, null, node, stackingAllowed);
+		cloned.parent = parent;
+		if (metaData != null)
+			cloned.metaData = metaData.clone();
+		cloned.children.addAll((ArrayList<ParserTree>) children.clone());
+		return cloned;
 	}
 }

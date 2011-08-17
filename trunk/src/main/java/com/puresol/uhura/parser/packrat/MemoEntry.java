@@ -5,7 +5,7 @@ import java.io.Serializable;
 import com.puresol.uhura.parser.ParserException;
 import com.puresol.uhura.parser.ParserTree;
 
-class MemoEntry implements Serializable, Comparable<MemoEntry> {
+class MemoEntry implements Serializable, Comparable<MemoEntry>, Cloneable {
 
 	private static final long serialVersionUID = 2910217488523982637L;
 
@@ -159,5 +159,28 @@ class MemoEntry implements Serializable, Comparable<MemoEntry> {
 		this.status = ans.status;
 		this.tree = ans.tree;
 		this.lr = ans.lr; // TODO Check the correctness!!!
+	}
+
+	@Override
+	public String toString() {
+		String result = "dPos: " + deltaPosition;
+		result += "; dId: " + deltaId;
+		result += "; dLine: " + deltaLine;
+		if (lr != null)
+		result += "; LR: " + lr.toString();
+		else
+			result += "; LR: %";
+		result += "; Status: " + status;
+		return result;
+	}
+
+	@Override
+	public MemoEntry clone() {
+		if (tree != null)
+			return new MemoEntry(deltaPosition, deltaId, deltaLine,
+					tree.clone(), lr, status);
+		else
+			return new MemoEntry(deltaPosition, deltaId, deltaLine, null, lr,
+					status);
 	}
 }

@@ -8,7 +8,7 @@ import java.io.Serializable;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class ParserTreeMetaData implements Serializable {
+public class ParserTreeMetaData implements Serializable, Cloneable {
 
 	private static final long serialVersionUID = 7846977139079079374L;
 
@@ -77,5 +77,10 @@ public class ParserTreeMetaData implements Serializable {
 			string += " - " + (line + lineNum - 1);
 		}
 		return string;
+	}
+
+	@Override
+	public ParserTreeMetaData clone() {
+		return new ParserTreeMetaData(sourceName, line, lineNum);
 	}
 }

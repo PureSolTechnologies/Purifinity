@@ -2,7 +2,14 @@ package com.puresol.uhura.parser.packrat;
 
 import java.io.Serializable;
 
-public class LR implements Serializable {
+/**
+ * This class represents a LR element in packrat parser. This LR element is used
+ * to track the left recursion growing process.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
+public class LR implements Serializable, Cloneable {
 
 	private static final long serialVersionUID = -5890456350006297830L;
 
@@ -52,4 +59,31 @@ public class LR implements Serializable {
 		return next;
 	}
 
+	@Override
+	public String toString() {
+		String result = production;
+		if (detected)
+			result += " ";
+		else
+			result += "*";
+		result += "; seed: " + seed;
+		result += "; head: " + head;
+		if (next != null)
+			result += "; next: " + next.getProduction();
+		return result;
+	}
+
+	@Override
+	public LR clone() {
+		MemoEntry clonedSeed = null;
+		if (seed != null)
+			clonedSeed = seed.clone();
+		Head clonedHead = null;
+		if (head != null)
+			clonedHead = head.clone();
+		LR clonedNext = null;
+		if (next != null)
+			clonedNext = next.clone();
+		return new LR(clonedSeed, production, clonedHead, clonedNext);
+	}
 }

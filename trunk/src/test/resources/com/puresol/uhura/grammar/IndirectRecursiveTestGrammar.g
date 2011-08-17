@@ -37,6 +37,9 @@ PRODUCTIONS
 	_START_ : i ;
 
 	i:
-				i I
+				j I
 		| 		I
 	;
+
+	j:			i;
+	
