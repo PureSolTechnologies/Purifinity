@@ -6,14 +6,14 @@ import java.io.Serializable;
  * This class represents a LR element in packrat parser. This LR element is used
  * to track the left recursion growing process.
  * 
- * @author Rick-Rainer Ludwig
+ * <b>This class is not thread-safe!</b>
  * 
+ * @author Rick-Rainer Ludwig
  */
-public class LR implements Serializable, Cloneable {
+public class LR implements Serializable{
 
 	private static final long serialVersionUID = -5890456350006297830L;
 
-	private boolean detected = false;
 	private MemoEntry seed;
 	private final String production;
 	private Head head;
@@ -25,14 +25,6 @@ public class LR implements Serializable, Cloneable {
 		this.production = production;
 		this.head = head;
 		this.next = next;
-	}
-
-	void setDetected(boolean detected) {
-		this.detected = detected;
-	}
-
-	boolean isDetected() {
-		return detected;
 	}
 
 	void setSeed(MemoEntry seed) {
@@ -62,28 +54,12 @@ public class LR implements Serializable, Cloneable {
 	@Override
 	public String toString() {
 		String result = production;
-		if (detected)
+		if (head != null)
 			result += " ";
 		else
 			result += "*";
 		result += "; seed: " + seed;
 		result += "; head: " + head;
-		if (next != null)
-			result += "; next: " + next.getProduction();
 		return result;
-	}
-
-	@Override
-	public LR clone() {
-		MemoEntry clonedSeed = null;
-		if (seed != null)
-			clonedSeed = seed.clone();
-		Head clonedHead = null;
-		if (head != null)
-			clonedHead = head.clone();
-		LR clonedNext = null;
-		if (next != null)
-			clonedNext = next.clone();
-		return new LR(clonedSeed, production, clonedHead, clonedNext);
 	}
 }

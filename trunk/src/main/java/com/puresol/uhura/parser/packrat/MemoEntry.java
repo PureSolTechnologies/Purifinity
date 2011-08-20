@@ -5,44 +5,35 @@ import java.io.Serializable;
 import com.puresol.uhura.parser.ParserException;
 import com.puresol.uhura.parser.ParserTree;
 
-class MemoEntry implements Serializable, Comparable<MemoEntry>, Cloneable {
+class MemoEntry implements Serializable, Comparable<MemoEntry> {
 
 	private static final long serialVersionUID = 2910217488523982637L;
 
 	static MemoEntry success(int deltaPosition, int deltaId, int deltaLine,
 			ParserTree tree) {
-		return new MemoEntry(deltaPosition, deltaId, deltaLine, tree, null,
-				Status.SUCCEEDED);
+		return new MemoEntry(deltaPosition, deltaId, deltaLine, tree);
 	}
 
-	static MemoEntry failure() {
-		return new MemoEntry(-1, -1, -1, null, null, Status.FAILED);
+	static MemoEntry failed() {
+		return new MemoEntry(-1, -1, -1, Status.FAILED);
 	}
 
-	static MemoEntry failure(LR lr) {
-		return new MemoEntry(-1, -1, -1, null, lr, Status.FAILED);
-	}
-
-	static MemoEntry none() {
-		return new MemoEntry(0, 0, 0, null, null, Status.NONE);
+	static MemoEntry create(LR lr) {
+		return new MemoEntry(-1, -1, -1, lr);
 	}
 
 	private int deltaPosition;
 	private int deltaId;
 	private int deltaLine;
-	private ParserTree tree;
-	private LR lr;
-	private Status status;
+	private Object answer;
 
 	private MemoEntry(int deltaPosition, int deltaId, int deltaLine,
-			ParserTree tree, LR lr, Status status) {
+			Object answer) {
 		super();
 		this.deltaPosition = deltaPosition;
 		this.deltaId = deltaId;
 		this.deltaLine = deltaLine;
-		this.tree = tree;
-		this.lr = lr;
-		this.status = status;
+		this.answer = answer;
 	}
 
 	void setDeltaPosition(int deltaPosition) {
@@ -69,41 +60,12 @@ class MemoEntry implements Serializable, Comparable<MemoEntry>, Cloneable {
 		this.deltaLine = deltaLine;
 	}
 
-	void setTree(ParserTree tree) {
-		this.tree = tree;
+	void setAnswer(Object answer) {
+		this.answer = answer;
 	}
 
-	ParserTree getTree() {
-		return tree;
-	}
-
-	void setLR(LR lr) {
-		this.lr = lr;
-	}
-
-	LR getLR() {
-		return lr;
-	}
-
-	void setStatus(Status status) {
-		this.status = status;
-	}
-
-	Status getStatus() {
-		return status;
-	}
-
-	boolean madeProgress() {
-		return (deltaPosition > 0) && (deltaId > 0) && (deltaLine >= 0)
-				&& (tree != null) && (status == Status.SUCCEEDED);
-	}
-
-	boolean failed() {
-		return (status == Status.FAILED);
-	}
-
-	boolean succeeded() throws ParserException {
-		return (status == Status.SUCCEEDED);
+	Object getAnswer() {
+		return answer;
 	}
 
 	void add(MemoEntry progress) throws ParserException {
@@ -120,7 +82,7 @@ class MemoEntry implements Serializable, Comparable<MemoEntry>, Cloneable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + deltaPosition;
-		result = prime * result + ((tree == null) ? 0 : tree.hashCode());
+		result = prime * result + ((answer == null) ? 0 : answer.hashCode());
 		return result;
 	}
 
@@ -135,10 +97,10 @@ class MemoEntry implements Serializable, Comparable<MemoEntry>, Cloneable {
 		MemoEntry other = (MemoEntry) obj;
 		if (deltaPosition != other.deltaPosition)
 			return false;
-		if (tree == null) {
-			if (other.tree != null)
+		if (answer == null) {
+			if (other.answer != null)
 				return false;
-		} else if (!tree.equals(other.tree))
+		} else if (!answer.equals(other.answer))
 			return false;
 		return true;
 	}
@@ -156,9 +118,7 @@ class MemoEntry implements Serializable, Comparable<MemoEntry>, Cloneable {
 		this.deltaPosition = ans.deltaPosition;
 		this.deltaId = ans.deltaId;
 		this.deltaLine = ans.deltaLine;
-		this.status = ans.status;
-		this.tree = ans.tree;
-		this.lr = ans.lr; // TODO Check the correctness!!!
+		this.answer = ans.answer;
 	}
 
 	@Override
@@ -166,21 +126,7 @@ class MemoEntry implements Serializable, Comparable<MemoEntry>, Cloneable {
 		String result = "dPos: " + deltaPosition;
 		result += "; dId: " + deltaId;
 		result += "; dLine: " + deltaLine;
-		if (lr != null)
-		result += "; LR: " + lr.toString();
-		else
-			result += "; LR: %";
-		result += "; Status: " + status;
+		result += "; Answer: " + answer;
 		return result;
-	}
-
-	@Override
-	public MemoEntry clone() {
-		if (tree != null)
-			return new MemoEntry(deltaPosition, deltaId, deltaLine,
-					tree.clone(), lr, status);
-		else
-			return new MemoEntry(deltaPosition, deltaId, deltaLine, null, lr,
-					status);
 	}
 }

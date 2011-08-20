@@ -13,7 +13,6 @@ import java.util.regex.Matcher;
 import com.puresol.trees.TreeException;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.production.Construction;
-import com.puresol.uhura.grammar.production.NonTerminal;
 import com.puresol.uhura.grammar.production.Production;
 import com.puresol.uhura.grammar.production.Terminal;
 import com.puresol.uhura.grammar.token.TokenDefinition;
@@ -104,7 +103,7 @@ public class PackratParser implements Serializable {
 			if (progress.getDeltaPosition() != text.length()) {
 				throw new ParserException(getParserErrorMessage());
 			}
-			return progress.getTree();
+			return (ParserTree) progress.getAnswer();
 		} catch (TreeException e) {
 			throw new ParserException(e.getMessage(), e);
 		}
@@ -130,7 +129,7 @@ public class PackratParser implements Serializable {
 			if (progress.getDeltaPosition() != text.length()) {
 				throw new ParserException(getParserErrorMessage());
 			}
-			return progress.getTree();
+			return (ParserTree) progress.getAnswer();
 		} catch (TreeException e) {
 			throw new ParserException(e.getMessage(), e);
 		}
@@ -149,19 +148,9 @@ public class PackratParser implements Serializable {
 		code = code.insert(maxPosition, " >><< ");
 		String codeString = code.substring(maxPosition - 100 < 0 ? 0
 				: maxPosition - 100,
-				maxPosition + 100 >= code.length() ? code.length() - 1
+				maxPosition + 100 >= code.length() ? code.length()
 						: maxPosition + 100);
-		return "Could not parse the input string near " + codeString + "!";
-	}
-
-	private void printStackContent() {
-		for (int i = 0; i < lrStack.size(); i++) {
-			indentLine();
-			for (int indent = 0; indent < i + 1; indent++) {
-				System.out.print("  ");
-			}
-			System.out.println(lrStack.get(i).getProduction());
-		}
+		return "Could not parse the input string near '" + codeString + "'!";
 	}
 
 	private void indentLine() {
@@ -180,27 +169,26 @@ public class PackratParser implements Serializable {
 	 * production is given as a name and not as a concrete rule to process all
 	 * choices afterwards.
 	 * 
-	 * @param production
+	 * @param rule
 	 * @param position
 	 * @return
 	 * @throws TreeException
 	 * @throws ParserException
 	 */
-	private MemoEntry applyRule(String production, int position, int id,
-			int line) throws TreeException, ParserException {
-		MemoEntry m = recall(production, position, id, line);
-		printMessage("applyRule: " + production, position, id, line);
-		// printStackContent();
-		if (m.getStatus() == Status.NONE) {
-			printMessage("none.", position, id, line);
+	private MemoEntry applyRule(String rule, int position, int id, int line)
+			throws TreeException, ParserException {
+		MemoEntry m = recall(rule, position, id, line);
+		printMessage("applyRule: " + rule, position, id, line);
+		if (m == null) {
 			/*
 			 * "Create a new LR and push it onto the rule invocation stack."
 			 * 
 			 * At this point we found a rule which was never processed at this
 			 * position.
 			 */
-			LR lr = new LR(MemoEntry.failure(), production, null,
+			LR lr = new LR(MemoEntry.failed(), rule, null,
 					lrStack.size() == 0 ? null : lrStack.peek());
+
 			lrStack.push(lr);
 			/*
 			 * "Memoize lr, then evaluate R."
@@ -208,9 +196,9 @@ public class PackratParser implements Serializable {
 			 * Put a fail into memoization memory and evaluate the rule
 			 * afterwards.
 			 */
-			m = MemoEntry.failure(lr);
-			setMemo(production, position, id, line, m);
-			MemoEntry ans = eval(production, position, id, line);
+			m = MemoEntry.create(lr);
+			setMemo(rule, position, id, line, m);
+			final MemoEntry ans = eval(rule, position, id, line);
 			/*
 			 * "Pop lr off the rule invocation stack."
 			 * 
@@ -219,56 +207,77 @@ public class PackratParser implements Serializable {
 			 * found within the rule.
 			 */
 			lrStack.pop();
-			if (lr.getHead() != null) {
+
+			if ((lr != null) && (lr.getHead() != null)) {
 				/*
 				 * If a head was added to lr, we found a recursion during
 				 * evaluation. We need to set the seed and process with left
 				 * recursion evaluation. For that purpose we grow m with ans as
 				 * seed.
 				 */
-				printMessage("Found recursion for: " + production, position,
-						id, line);	
-				lr.setSeed(ans.clone());
-				return lrAnswer(production, position, id, line, m);
+				printMessage("Found recursion for: " + rule, position, id, line);
+				lr.setSeed(ans);
+				return lrAnswer(rule, position, id, line, m);
 			} else {
-				m.set(ans.clone());
+				/*
+				 * We finished an evaluation and did not find a recursion. So
+				 * the result (independent of the the state) is stored in memo
+				 * and returned.
+				 */
+				m.set(ans);
 				return ans;
 			}
 		} else {
-			// ??? Pos <-- m.pos
-			if (m.getLR() != null) {
-				printMessage(m.getLR().toString(), position, id, line);
-				LR lr = m.getLR().clone();
-				setupLR(production, lr);
-				return lr.getSeed();
+			if ((m.getAnswer() instanceof LR)) {
+				/*
+				 * We were already here and we have a set LR object. So we need
+				 * to setup the LR process by calling setupLR which puts all
+				 * information in place and returning the seed.
+				 */
+				setupLR(rule, (LR) m.getAnswer());
+				/* check and return the seed... */
+				return ((LR) m.getAnswer()).getSeed();
 			} else {
-				printMessage("done already.", position, id, line);
+				/*
+				 * We were already here and we do not have a LR object here. So
+				 * we just return the result of the memoization.
+				 */
 				return m;
 			}
 		}
 	}
 
-	private void setupLR(String production, LR l) throws ParserException {
-		if (l == null) {
-			throw new ParserException(
-					"Error in Parser implementation. There shouldn't be a null pointer!");
-		}
+	/**
+	 * After finding to be in a left recursion, this method puts all information
+	 * in place for left recursion evaluation.
+	 * 
+	 * @param production
+	 * @param l
+	 * @throws ParserException
+	 */
+	private void setupLR(String production, final LR l) throws ParserException {
+		/*
+		 * If the lr object does not contain a head, we need to put a new in.
+		 */
 		if (l.getHead() == null) {
 			l.setHead(new Head(production));
 		}
+		/*
+		 * Go over all heads and...!?
+		 */
 		LR s = lrStack.peek();
-		if (s == null) {
-			throw new ParserException(
-					"Error in Parser implementation. Stack must not be empty here!");
-		}
-		while ((s.getHead() == null)
-				|| (!l.getHead().getProduction()
-						.equals(s.getHead().getProduction()))) {
-			s.setHead(l.getHead().clone());
-			l.getHead().addInvolved(s.getProduction());
-			s = s.getNext();
-			if (s == null)
-				break;
+		try {
+			while (!l.getHead().getProduction()
+					.equals(s.getHead().getProduction())) {
+				s.setHead(l.getHead());
+				l.getHead().addInvolved(s.getProduction());
+				s = s.getNext();
+				if (s == null)
+					throw new RuntimeException(
+							"We should find a head here, which fits!");
+			}
+		} catch (Exception e) {
+			// FIXIT!
 		}
 	}
 
@@ -291,8 +300,8 @@ public class PackratParser implements Serializable {
 		 * Retrieve the current memoized item for the production and the head on
 		 * the current position.
 		 */
-		MemoEntry m = getMemo(production, position);
-		Head h = heads.get(position);
+		final MemoEntry m = getMemo(production, position);
+		final Head h = heads.get(position);
 		/*
 		 * "If not growing a seed parse, just return what is stored in the memo
 		 * table."
@@ -308,10 +317,9 @@ public class PackratParser implements Serializable {
 		 * the heads also do not fit, then we are on a wrong pass here. We need
 		 * to return a failure.
 		 */
-		if ((m.getStatus() == Status.NONE)
-				&& (!h.getProduction().equals(production))
+		if ((m == null) && (!h.getProduction().equals(production))
 				&& (!h.getInvolvedSet().contains(production))) {
-			return MemoEntry.failure();
+			return MemoEntry.failed();
 		}
 		/*
 		 * "Allow involved rules to be evaluated, but only once, during a
@@ -323,20 +331,21 @@ public class PackratParser implements Serializable {
 		 */
 		if (h.getEvalSet().contains(production)) {
 			h.getEvalSet().remove(production);
-			MemoEntry ans = eval(production, position, id, line);
-			m.set(ans.clone());
+			final MemoEntry ans = eval(production, position, id, line);
+			m.set(ans);
 		}
 		return m;
 	}
 
 	private MemoEntry growLR(String production, int position, int id, int line,
-			MemoEntry m, Head head) throws TreeException, ParserException {
+			final MemoEntry m, final Head head) throws TreeException,
+			ParserException {
 		printMessage("Growing: " + production, position, id, line);
 		/*
 		 * We need to mark that at position a seed growing takes place with the
 		 * head rule.
 		 */
-		heads.put(position, head.clone());
+		heads.put(position, head);
 		while (true) {
 			/*
 			 * Set all involved production into evaluation status.
@@ -345,12 +354,12 @@ public class PackratParser implements Serializable {
 			/*
 			 * Evaluate production.
 			 */
-			MemoEntry ans = eval(production, position, id, line);
-			if (ans.failed()
+			final MemoEntry ans = eval(production, position, id, line);
+			if (ans.getAnswer().equals(Status.FAILED)
 					|| (ans.getDeltaPosition() <= m.getDeltaPosition())) {
 				break;
 			}
-			m.set(ans.clone());
+			m.set(ans);
 		}
 		/*
 		 * Delete head from head buffer to signal end of seed growing.
@@ -361,19 +370,16 @@ public class PackratParser implements Serializable {
 	}
 
 	private MemoEntry lrAnswer(String production, int position, int id,
-			int line, MemoEntry m) throws TreeException, ParserException {
-		LR lr = m.getLR();
-		Head h = lr.getHead();
+			int line, final MemoEntry m) throws TreeException, ParserException {
+		final LR lr = (LR) m.getAnswer();
+		final Head h = lr.getHead();
 		MemoEntry seed = lr.getSeed();
 		if (!h.getProduction().equals(production)) {
 			return seed;
 		} else {
-			m.set(seed.clone());
-			if (m.getStatus() == Status.NONE) {
-				throw new ParserException("Error during parser implementation!");
-			}
-			if (m.getStatus() == Status.FAILED) {
-				return MemoEntry.failure();
+			m.set(seed);
+			if (m.getAnswer().equals(Status.FAILED)) {
+				return MemoEntry.failed();
 			} else {
 				return growLR(production, position, id, line, m, h);
 			}
@@ -396,17 +402,13 @@ public class PackratParser implements Serializable {
 	 */
 	private MemoEntry eval(String productionName, int position, int id, int line)
 			throws ParserException, TreeException {
-		MemoEntry saved = MemoEntry.failure();
 		for (Production production : grammar.getProductions().get(
 				productionName)) {
 			MemoEntry progress = parseProduction(production, position, id, line);
-			if (progress.succeeded())
+			if (progress.getAnswer() instanceof ParserTree)
 				return progress;
-			// if (progress.compareTo(saved) > 0) {
-			// saved = progress;
-			// }
 		}
-		return saved;
+		return MemoEntry.failed();
 	}
 
 	/**
@@ -434,29 +436,29 @@ public class PackratParser implements Serializable {
 						+ progress.getDeltaPosition(),
 						id + progress.getDeltaId(),
 						line + progress.getDeltaLine());
-				progress.add(newProgress);
+				if (newProgress != null)
+					progress.add(newProgress);
 			}
 			if (construction.isNonTerminal()) {
-				MemoEntry newProgress = processNonTerminal(
-						(NonTerminal) construction,
+				MemoEntry newProgress = applyRule(construction.getName(),
 						position + progress.getDeltaPosition(),
 						id + progress.getDeltaId(),
 						line + progress.getDeltaLine());
-				if (newProgress.succeeded()) {
-					node.addChild(newProgress.getTree());
+				if (newProgress.getAnswer() instanceof ParserTree) {
+					node.addChild((ParserTree) newProgress.getAnswer());
 					progress.add(newProgress);
-				} else if (newProgress.failed())
-					return MemoEntry.failure();
+				} else if (newProgress.getAnswer().equals(Status.FAILED))
+					return MemoEntry.failed();
 			} else {
 				MemoEntry newProgress = processTerminal(node,
 						(Terminal) construction,
 						position + progress.getDeltaPosition(),
 						id + progress.getDeltaId(),
 						line + progress.getDeltaLine());
-				if (newProgress.succeeded()) {
+				if (newProgress.getAnswer() instanceof ParserTree) {
 					progress.add(newProgress);
 				} else {
-					return MemoEntry.failure();
+					return MemoEntry.failed();
 				}
 			}
 			if (!ignoredLeading) {
@@ -464,26 +466,13 @@ public class PackratParser implements Serializable {
 						+ progress.getDeltaPosition(),
 						id + progress.getDeltaId(),
 						line + progress.getDeltaLine());
-				progress.add(newProgress);
+				if (newProgress != null)
+					progress.add(newProgress);
 			}
 		}
 		indentLine();
 		System.out.println("Parsed: " + production);
 		return progress;
-	}
-
-	/**
-	 * This method processes a single non terminal.
-	 * 
-	 * @param nonTerminal
-	 * @param position
-	 * @return
-	 * @throws ParserException
-	 * @throws TreeException
-	 */
-	private MemoEntry processNonTerminal(NonTerminal nonTerminal, int position,
-			int id, int line) throws ParserException, TreeException {
-		return applyRule(nonTerminal.getName(), position, id, line);
 	}
 
 	/**
@@ -504,7 +493,13 @@ public class PackratParser implements Serializable {
 				.getDefinition(terminal.getName());
 		// printMessage(terminal.toString() + "\t" + tokenDefinition, position,
 		// id, line);
-		return processTokenDefinition(node, tokenDefinition, position, id, line);
+		MemoEntry result = processTokenDefinition(node, tokenDefinition,
+				position, id, line);
+		if (result.getAnswer() instanceof ParserTree)
+			printMessage(
+					"Terminal: '" + ((ParserTree) result.getAnswer()).getText()
+							+ "'", position, id, line);
+		return result;
 	}
 
 	/**
@@ -522,19 +517,21 @@ public class PackratParser implements Serializable {
 	MemoEntry processIgnoredTokens(ParserTree node, int position, int id,
 			int line) throws TreeException, ParserException {
 		MemoEntry progress = MemoEntry.success(0, 0, 0, node);
-		MemoEntry newProgress = MemoEntry.none();
+		MemoEntry newProgress = MemoEntry.success(0, 0, 0, null);
 		do {
 			for (TokenDefinition tokenDefinition : hiddenAndIgnoredTokens) {
 				newProgress = processTokenDefinition(node, tokenDefinition,
 						position + progress.getDeltaPosition(),
 						id + progress.getDeltaId(),
 						line + progress.getDeltaLine());
-				if (newProgress.madeProgress()) {
+				if (newProgress != null) {
 					progress.add(newProgress);
 					break;
 				}
 			}
-		} while (newProgress.madeProgress());
+		} while (newProgress.getDeltaPosition() > 0);
+		if (newProgress.getDeltaPosition() == 0)
+			return null;
 		return progress;
 	}
 
@@ -554,7 +551,7 @@ public class PackratParser implements Serializable {
 		Matcher matcher = tokenDefinition.getPattern().matcher(
 				text.substring(position));
 		if (!matcher.find()) {
-			return MemoEntry.none();
+			return null;
 		}
 		String match = matcher.group();
 		int lineBreakNum = TextUtils.countLineBreaks(match);
@@ -581,32 +578,36 @@ public class PackratParser implements Serializable {
 	 */
 	private MemoEntry getMemo(String production, int position) {
 		Map<String, MemoEntry> map = memo.get(position);
-		if (map == null) {
-			map = new HashMap<String, MemoEntry>();
-			memo.put(position, map);
-		}
+		if (map == null)
+			return null;
 		MemoEntry memo = map.get(production);
-		if (memo == null) {
-			memo = MemoEntry.none();
-			map.put(production, memo);
-		}
+		if (memo == null)
+			return null;
 		return memo;
 	}
 
 	/**
-	 * This method puts memozation elements into the buffer.
+	 * This method puts memozation elements into the buffer. It is designed in a
+	 * way, that entries, once set, are not changed anymore. This is needed not
+	 * to break references!
 	 * 
 	 * @param production
 	 * @param position
 	 * @param stackElement
 	 */
 	private void setMemo(String production, int position, int id, int line,
-			MemoEntry stackElement) {
+			final MemoEntry stackElement) {
 		Map<String, MemoEntry> map = memo.get(position);
 		if (map == null) {
 			map = new HashMap<String, MemoEntry>();
 			memo.put(position, map);
+			map.put(production, stackElement);
+		} else {
+			if (map.containsKey(production)) {
+				throw new RuntimeException(
+						"We should not set a memo twice. Modifying is needed afterwards.");
+			}
+			map.put(production, stackElement);
 		}
-		map.put(production, stackElement);
 	}
 }

@@ -8,10 +8,6 @@ package com.puresol.uhura.parser.packrat;
  * 
  */
 enum Status {
-	/**
-	 * Means a processing was neither done nor tried.
-	 */
-	NONE,
 
 	/**
 	 * Means processing was successfully done.
@@ -28,9 +24,6 @@ enum Status {
 	public String toString() {
 		String result = "";
 		switch (this) {
-		case NONE:
-			result += "none";
-			break;
 		case SUCCEEDED:
 			result += "succeeded";
 			break;
