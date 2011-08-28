@@ -274,8 +274,9 @@ public class PackratParser implements Serializable {
 			l.getHead().addInvolved(s.getProduction());
 			s = s.getNext();
 			if (s == null)
-				throw new RuntimeException(
-						"We should find a head here, which fits!");
+				break;
+//				throw new RuntimeException(
+//						"We should find a head here, which fits!");
 		}
 	}
 
@@ -389,6 +390,12 @@ public class PackratParser implements Serializable {
 	 * choices are tried from the first to the last. The first choice matching
 	 * is returned.
 	 * 
+	 * <b><i>Attention:</i></b> There was a test to introduce a parse where the alternative
+	 * with the largest progress is returned. <b>This does not work!</b> During
+	 * the parsing of a succeeding alternative a lot of states are changed on
+	 * the way. By trying another alternative, the parser gets confused by some
+	 * inconsistent information.
+	 * 
 	 * @param productionName
 	 *            is the name of the production to be evaluated.
 	 * @param position
@@ -425,7 +432,7 @@ public class PackratParser implements Serializable {
 	private MemoEntry parseProduction(Production production, int position,
 			int id, int line) throws TreeException, ParserException {
 		indentLine();
-		System.out.println("Try: " + production);
+//		System.out.println("Try: " + production);
 		ParserTree node = new ParserTree(production);
 		MemoEntry progress = MemoEntry.success(0, 0, 0, node);
 		for (Construction construction : production.getConstructions()) {
