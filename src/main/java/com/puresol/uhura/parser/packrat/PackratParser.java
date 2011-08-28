@@ -525,14 +525,12 @@ public class PackratParser implements Serializable {
 						position + progress.getDeltaPosition(),
 						id + progress.getDeltaId(),
 						line + progress.getDeltaLine());
-				if (newProgress != null) {
+				if (!newProgress.getAnswer().equals(Status.FAILED)) {
 					progress.add(newProgress);
 					break;
 				}
 			}
 		} while (newProgress.getDeltaPosition() > 0);
-		if (newProgress.getDeltaPosition() == 0)
-			return null;
 		return progress;
 	}
 
