@@ -26,7 +26,6 @@ HELPER
  */
 TOKENS
 
-	START: "start:";
 	I:	"i";
 
 /*
@@ -35,7 +34,7 @@ TOKENS
  */
 PRODUCTIONS
 
-	_START_ : 'start:' i ;
+	_START_ : i ;
 
 	i:
 				j I

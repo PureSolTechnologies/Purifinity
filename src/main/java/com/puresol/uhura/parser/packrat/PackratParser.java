@@ -184,7 +184,7 @@ public class PackratParser implements Serializable {
 			 * "Create a new LR and push it onto the rule invocation stack."
 			 * 
 			 * At this point we found a rule which was never processed at this
-			 * position.
+			 * position. We start completely vergin here...
 			 */
 			LR lr = new LR(MemoEntry.failed(), rule, null,
 					lrStack.size() == 0 ? null : lrStack.peek());
@@ -228,19 +228,22 @@ public class PackratParser implements Serializable {
 				return ans;
 			}
 		} else {
+			/*
+			 * We were here already and with the same production. We either have
+			 * a real answer or we are growing here. Let's see...
+			 */
 			if ((m.getAnswer() instanceof LR)) {
 				/*
-				 * We were already here and we have a set LR object. So we need
-				 * to setup the LR process by calling setupLR which puts all
-				 * information in place and returning the seed.
+				 * We grow a seed here. So we update the LR setup and return the
+				 * new seed.
 				 */
 				setupLR(rule, (LR) m.getAnswer());
 				/* check and return the seed... */
 				return ((LR) m.getAnswer()).getSeed();
 			} else {
 				/*
-				 * We were already here and we do not have a LR object here. So
-				 * we just return the result of the memoization.
+				 * We were already here and we do not grow a seed here, so we
+				 * just return the result of the recall.
 				 */
 				return m;
 			}
@@ -266,18 +269,13 @@ public class PackratParser implements Serializable {
 		 * Go over all heads and...!?
 		 */
 		LR s = lrStack.peek();
-		try {
-			while (!l.getHead().getProduction()
-					.equals(s.getHead().getProduction())) {
-				s.setHead(l.getHead());
-				l.getHead().addInvolved(s.getProduction());
-				s = s.getNext();
-				if (s == null)
-					throw new RuntimeException(
-							"We should find a head here, which fits!");
-			}
-		} catch (Exception e) {
-			// FIXIT!
+		while (!l.getHead().equals(s.getHead())) {
+			s.setHead(l.getHead());
+			l.getHead().addInvolved(s.getProduction());
+			s = s.getNext();
+			if (s == null)
+				throw new RuntimeException(
+						"We should find a head here, which fits!");
 		}
 	}
 
@@ -495,6 +493,9 @@ public class PackratParser implements Serializable {
 		// id, line);
 		MemoEntry result = processTokenDefinition(node, tokenDefinition,
 				position, id, line);
+		if (result == null) {
+			throw new RuntimeException("There should be a result not null!");
+		}
 		if (result.getAnswer() instanceof ParserTree)
 			printMessage(
 					"Terminal: '" + ((ParserTree) result.getAnswer()).getText()
@@ -551,7 +552,7 @@ public class PackratParser implements Serializable {
 		Matcher matcher = tokenDefinition.getPattern().matcher(
 				text.substring(position));
 		if (!matcher.find()) {
-			return null;
+			return MemoEntry.failed();
 		}
 		String match = matcher.group();
 		int lineBreakNum = TextUtils.countLineBreaks(match);

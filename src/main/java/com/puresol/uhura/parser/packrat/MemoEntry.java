@@ -15,11 +15,11 @@ class MemoEntry implements Serializable, Comparable<MemoEntry> {
 	}
 
 	static MemoEntry failed() {
-		return new MemoEntry(-1, -1, -1, Status.FAILED);
+		return new MemoEntry(0, 0, 0, Status.FAILED);
 	}
 
 	static MemoEntry create(LR lr) {
-		return new MemoEntry(-1, -1, -1, lr);
+		return new MemoEntry(0, 0, 0, lr);
 	}
 
 	private int deltaPosition;

@@ -13,7 +13,7 @@ public class MemoEntryTest {
 	@Test
 	public void testFactoryMethods() {
 		assertNotNull(MemoEntry.success(1, 2, 3, null));
-		assertNotNull(MemoEntry.failure());
+		assertNotNull(MemoEntry.failed());
 	}
 
 	@Test
@@ -21,14 +21,19 @@ public class MemoEntryTest {
 		ParserTree tree = new ParserTree("TEST");
 		MemoEntry success = MemoEntry.success(1, 2, 3, tree);
 		assertEquals(1, success.getDeltaPosition());
-		assertSame(tree, success.getTree());
+		assertEquals(2, success.getDeltaId());
+		assertEquals(3, success.getDeltaLine());
+		assertSame(tree, success.getAnswer());
 	}
 
 	@Test
 	public void testInitialValuesForFailure() {
-		MemoEntry success = MemoEntry.failure();
-		assertEquals(-1, success.getDeltaPosition());
-		assertSame(null, success.getTree());
+		MemoEntry success = MemoEntry.failed();
+		assertEquals(0, success.getDeltaPosition());
+		assertEquals(0, success.getDeltaLine());
+		assertEquals(0, success.getDeltaId());
+		assertNotNull(success.getAnswer());
+		assertEquals(Status.FAILED, success.getAnswer());
 	}
 
 	@Test
@@ -36,7 +41,7 @@ public class MemoEntryTest {
 		MemoEntry success = MemoEntry.success(1, 2, 3, new ParserTree("TEST"));
 		MemoEntry success2 = MemoEntry
 				.success(2, 3, 4, new ParserTree("TEST2"));
-		MemoEntry failure = MemoEntry.failure();
+		MemoEntry failure = MemoEntry.failed();
 
 		assertEquals(1, success2.compareTo(success));
 		assertEquals(-1, success.compareTo(success2));

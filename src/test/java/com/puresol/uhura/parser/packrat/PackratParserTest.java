@@ -175,9 +175,9 @@ public class PackratParserTest {
 	@Test
 	public void testIndirectRecursion() throws Throwable {
 		PackratParser parser = new PackratParser(indirectRecursionGrammar);
-//		parser.parse("i", "i");
-		parser.parse("start:iii", "Name");
-//		parser.parse("iii", "iii");
+		parser.parse("i", "i");
+		parser.parse("ii", "ii");
+		parser.parse("iii", "iii");
 	}
 
 //	@Test
