@@ -26,8 +26,9 @@ HELPER
  */
 TOKENS
 
-	Ilower:	"i";
-	Iupper:	"I";
+	I:	"i";
+	J:	"j";
+	K:	"k";
 
 /*
  The next section is the PRODUCTIONS section where all grammar productions are
@@ -35,15 +36,31 @@ TOKENS
  */
 PRODUCTIONS
 
-	_START_ : i ;
+	_START_ : blocks ;
 
-	i:
-				i i2
-		| 		i2
+	blocks:
+		blocks block
+	|	block 		
 	;
 
-	i2:
-		 		Ilower
-		 |		Iupper
+	block:
+		i
+	|	j
+	|	k
+	;
+	
+	i:	
+		i	I
+	|	I
+	;
+	
+	j:	
+		j	J
+	|	J
+	;
+	
+	k:	
+		k	K
+	|	K
 	;
 	

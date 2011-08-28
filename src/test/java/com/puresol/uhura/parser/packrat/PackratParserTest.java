@@ -30,6 +30,7 @@ public class PackratParserTest {
 	private static Grammar directRecursionGrammar;
 	private static Grammar directRecursionGrammarZero;
 	private static Grammar indirectRecursionGrammar;
+	private static Grammar nestedRecursionsGrammar;
 
 	private ParserTree parseText(String text) throws Throwable {
 		InputStream inputStream = getClass().getResourceAsStream(
@@ -81,6 +82,17 @@ public class PackratParserTest {
 		try {
 			GrammarFile file = new GrammarFile(inStream);
 			indirectRecursionGrammar = new GrammarConverter(file.getAST())
+					.getGrammar();
+		} finally {
+			inStream.close();
+		}
+
+		inStream = PackratParserTest.class
+				.getResourceAsStream("/com/puresol/uhura/grammar/NestedRecursionTestGrammar.g");
+		assertNotNull(inStream);
+		try {
+			GrammarFile file = new GrammarFile(inStream);
+			nestedRecursionsGrammar = new GrammarConverter(file.getAST())
 					.getGrammar();
 		} finally {
 			inStream.close();
@@ -178,6 +190,24 @@ public class PackratParserTest {
 		parser.parse("i", "i");
 		parser.parse("ii", "ii");
 		parser.parse("iii", "iii");
+	}
+
+	@Test
+	public void testNestedRecursions() throws Throwable {
+		PackratParser parser = new PackratParser(nestedRecursionsGrammar);
+		parser.parse("i", "i");
+		parser.parse("ii", "ii");
+		parser.parse("iii", "iii");
+		parser.parse("j", "j");
+		parser.parse("jj", "jj");
+		parser.parse("jjj", "jjj");
+		parser.parse("k", "k");
+		parser.parse("kk", "kk");
+		parser.parse("kkk", "kkk");
+		
+		parser.parse("ijk", "ijk");
+		parser.parse("ijkijk", "ijkijk");
+		parser.parse("iijjkkiijjkk", "iijjkkiijjkk");
 	}
 
 	@Test
