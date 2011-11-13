@@ -62,6 +62,7 @@ public class JavaSourceCodeDistributionTest {
 	}
 
 	@Test
+	@Ignore
 	public void test2() throws Throwable {
 		Logger.getRootLogger().setLevel(Level.DEBUG);
 		assertTrue(file.exists());

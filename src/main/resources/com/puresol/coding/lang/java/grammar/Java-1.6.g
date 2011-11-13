@@ -611,7 +611,7 @@ HELPER
 	;
 	
 	SingleStaticImportDeclaration:
-		IMPORT STATIC Name DOT Identifier SEMICOLON
+		IMPORT STATIC Name SEMICOLON
 	;
 	
 	StaticImportOnDemandDeclaration:
@@ -714,8 +714,8 @@ HELPER
 	;
 	
 	VariableDeclarator:
-		VariableDeclaratorId
-	|	VariableDeclaratorId EQUALS VariableInitializer
+		VariableDeclaratorId EQUALS VariableInitializer
+	|	VariableDeclaratorId
 	;
 	
 	VariableDeclaratorId:
@@ -1105,8 +1105,8 @@ HELPER
 	;
 	
 	BlockStatement:
-		LocalVariableDeclarationStatement
-	|	ClassDeclaration
+		ClassDeclaration
+	|	LocalVariableDeclarationStatement
 	|	Statement
 	;
 	
@@ -1361,8 +1361,8 @@ HELPER
 	;	
 	
 	Literal:
-		IntegerLiteral
-	|	FloatingPointLiteral
+		FloatingPointLiteral
+	|	IntegerLiteral
 	|	BooleanLiteral
 	|	CharacterLiteral
 	|	StringLiteral
@@ -1413,35 +1413,35 @@ HELPER
 /* 15.11 Field Access Expressions */
 
 	FieldAccess:
-		Primary DOT Identifier
-	|	SUPER DOT Identifier
+		SUPER DOT Identifier
+	|	Primary DOT Identifier
 	|	Name DOT SUPER DOT Identifier
 	;
 	
 /* 15.12 Method Invocation Expressions */
 
 	MethodInvocation:
-		Name Arguments
-	|	Primary DOT NonWildTypeArguments ? Identifier Arguments
-	|	SUPER DOT NonWildTypeArguments ? Identifier Arguments
+		SUPER DOT NonWildTypeArguments ? Identifier Arguments
 	|	Name DOT SUPER DOT NonWildTypeArguments ? Identifier Arguments
 	|	Name DOT NonWildTypeArguments Identifier Arguments
+	|	Name Arguments
+	|	Primary DOT NonWildTypeArguments ? Identifier Arguments
 	;
 
 /* 15.13 Array Access Expressions */
 
 	ArrayAccess:
-		Name LRECTANGULAR Expression RRECTANGULAR
-	|	PrimaryNoNewArray LRECTANGULAR Expression RRECTANGULAR
+		PrimaryNoNewArray LRECTANGULAR Expression RRECTANGULAR
+	|	Name LRECTANGULAR Expression RRECTANGULAR
 	;
 	
 /* 15.14 Postfix Expressions */
 
 	PostfixExpression:
 		Primary
-	|	Name
 	|	PostIncrementExpression
 	|	PostDecrementExpression
+	|	Name
 	;
 	
 	PostIncrementExpression:
@@ -1455,10 +1455,10 @@ HELPER
 /* 15.15 Unary Operators */
 
 	UnaryExpression:
-		PreIncrementExpression
-	|	PreDecrementExpression
-	|	PLUS UnaryExpression
+		PLUS UnaryExpression
 	|	MINUS UnaryExpression
+	|	PreIncrementExpression
+	|	PreDecrementExpression
 	|	UnaryExpressionNotPlusMinus
 	;
 	
@@ -1471,10 +1471,10 @@ HELPER
 	;
 	
 	UnaryExpressionNotPlusMinus:
-		PostfixExpression
-	|	TILDE UnaryExpression
+		TILDE UnaryExpression
 	|	EXCLAMATION_MARK UnaryExpression
 	|	CastExpression
+	|	PostfixExpression
 	;
 	
 /* 15.16 Cast Expressions */
@@ -1513,10 +1513,10 @@ HELPER
 /* 15.20 Relational Operators */
 
 	RelationalExpression:
-		RelationalExpression LESS_THAN ShiftExpression
-	|	RelationalExpression GREATER_THAN ShiftExpression
-	|	RelationalExpression LESS_THAN EQUALS ShiftExpression
+		RelationalExpression LESS_THAN EQUALS ShiftExpression
 	|	RelationalExpression GREATER_THAN EQUALS ShiftExpression
+	|	RelationalExpression LESS_THAN ShiftExpression
+	|	RelationalExpression GREATER_THAN ShiftExpression
 	|	RelationalExpression INSTANCEOF ReferenceType
 	|	ShiftExpression
 	;
@@ -1579,9 +1579,9 @@ HELPER
 	;
 	
 	LeftHandSide:
-		Name
-	|	FieldAccess
+		FieldAccess
 	|	ArrayAccess
+	|	Name
 	;
 	
 	AssignmentOperator:
