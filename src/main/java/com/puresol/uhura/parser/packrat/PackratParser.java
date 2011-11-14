@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-import java.util.Stack;
 import java.util.regex.Matcher;
 
 import com.puresol.trees.TreeException;
@@ -46,7 +45,8 @@ public class PackratParser implements Serializable {
 	 * nested. The data is kept in left-recursive data elements to put data in
 	 * here if needed for recursion detection and seed growing.
 	 */
-	private final Stack<LR> lrStack = new Stack<LR>();
+	private LR lrStack = null;
+	private int indentation = 0;
 	/**
 	 * This is a list of all heads on all positions which are currently grown.
 	 */
@@ -93,25 +93,30 @@ public class PackratParser implements Serializable {
 	 * @throws ParserException
 	 */
 	public ParserTree parse(String text, String name) throws ParserException {
-		try {
-			memo.clear();
-			lrStack.clear();
-			this.text = text;
-			this.name = name;
-			maxPosition = 0;
-			MemoEntry progress = applyRule("_START_", 0, 0, 1);
-			if (progress.getDeltaPosition() != text.length()) {
-				throw new ParserException(getParserErrorMessage());
-			}
-			return (ParserTree) progress.getAnswer();
-		} catch (TreeException e) {
-			throw new ParserException(e.getMessage(), e);
-		}
+		initialize(text, name);
+		return parse(text, "_START_", name);
 	}
 
 	/**
-	 * This is the actual parser start. Work is performed on StringBuffer
-	 * object.
+	 * This method resets the whole parser and sets the new values for text and
+	 * name to start the parsing process afterwards.
+	 * 
+	 * @param text
+	 * @param name
+	 */
+	private void initialize(String text, String name) {
+		memo.clear();
+		lrStack = null;
+		indentation = 0;
+		this.text = text;
+		this.name = name;
+		maxPosition = 0;
+	}
+
+	/**
+	 * This is the actual parser start. After running the parse, a check is
+	 * applied to check for full parsing or partial parsing. If partial parsing
+	 * is found, an exception is thrown.
 	 * 
 	 * @param buffer
 	 * @return
@@ -120,11 +125,6 @@ public class PackratParser implements Serializable {
 	public ParserTree parse(String text, String production, String name)
 			throws ParserException {
 		try {
-			memo.clear();
-			lrStack.clear();
-			this.text = text;
-			this.name = name;
-			maxPosition = 0;
 			MemoEntry progress = applyRule(production, 0, 0, 1);
 			if (progress.getDeltaPosition() != text.length()) {
 				throw new ParserException(getParserErrorMessage());
@@ -154,8 +154,8 @@ public class PackratParser implements Serializable {
 	}
 
 	private void indentLine() {
-		for (int indent = 0; indent < lrStack.size(); indent++) {
-			System.out.print("  ");
+		for (int indent = 0; indent < indentation; indent++) {
+			System.out.print("    ");
 		}
 	}
 
@@ -166,7 +166,7 @@ public class PackratParser implements Serializable {
 
 	private void printMessage(String text) {
 		indentLine();
-		System.out.println("        : " + text);
+		System.out.println(text);
 	}
 
 	/**
@@ -191,10 +191,9 @@ public class PackratParser implements Serializable {
 			 * At this point we found a rule which was never processed at this
 			 * position. We start completely vergin here...
 			 */
-			LR lr = new LR(MemoEntry.failed(), rule, null,
-					lrStack.size() == 0 ? null : lrStack.peek());
-
-			lrStack.push(lr);
+			LR lr = new LR(MemoEntry.failed(), rule, null, lrStack);
+			lrStack = lr;
+			indentation++;
 			/*
 			 * "Memoize lr, then evaluate R."
 			 * 
@@ -211,7 +210,8 @@ public class PackratParser implements Serializable {
 			 * from stack. This was needed in cases a left recursion whould be
 			 * found within the rule.
 			 */
-			lrStack.pop();
+			lrStack = lrStack.getNext();
+			indentation--;
 
 			if ((m.getAnswer() instanceof LR)
 					&& (((LR) m.getAnswer()).getHead() != null)) {
@@ -236,20 +236,21 @@ public class PackratParser implements Serializable {
 		} else {
 			/*
 			 * We were here already and with the same production. We either have
-			 * a real answer or we are growing here. Let's see...
+			 * a real answer or we found a recursion with or without currently
+			 * seed growing...
 			 */
 			if ((m.getAnswer() instanceof LR)) {
 				/*
-				 * We grow a seed here. So we update the LR setup and return the
-				 * new seed.
+				 * There is still a LR object in the memo, so we found a
+				 * recursion or an in-progress seed grow. We setup the LR seed
+				 * grow and return the current seed.
 				 */
 				setupLR(rule, (LR) m.getAnswer());
-				/* check and return the seed... */
 				return ((LR) m.getAnswer()).getSeed();
 			} else {
 				/*
-				 * We were already here and we do not grow a seed here, so we
-				 * just return the result of the recall.
+				 * We were already here and we have a real result. So we can
+				 * just return the answer.
 				 */
 				return m;
 			}
@@ -257,8 +258,10 @@ public class PackratParser implements Serializable {
 	}
 
 	/**
-	 * After finding to be in a left recursion, this method puts all information
-	 * in place for left recursion evaluation.
+	 * After finding a recursion or a seed grow in process, this method puts all
+	 * information in place for seed grow. This might be the start information
+	 * for the growth or the current result in the growing, which means the
+	 * current result.
 	 * 
 	 * @param production
 	 * @param l
@@ -266,24 +269,26 @@ public class PackratParser implements Serializable {
 	 */
 	private void setupLR(String production, final LR l) throws ParserException {
 		/*
-		 * If the lr object does not contain a head, we need to put a new in.
+		 * If the lr object does not contain a head, we found a new recursion
+		 * production. Otherwise we already know the production, but we found
+		 * another production which is involved in the recursion.
 		 */
-		printMessage("Found recursion for: " + production);
 		if (l.getHead() == null) {
+			printMessage("Found recursion for: " + production);
 			l.setHead(new Head(production));
 		}
 		/*
 		 * Go over all heads and...!?
 		 */
-		LR s = lrStack.peek();
-		while ((s.getHead() == null)
-				|| (!l.getHead().getProduction()
-						.equals(s.getHead().getProduction()))) {
+		LR s = lrStack;
+		while (!l.getHead().getProduction().equals(s.getProduction())) {
 			s.setHead(l.getHead());
 			l.getHead().addInvolved(s.getProduction());
 			s = s.getNext();
 			if (s == null)
-				break;
+				throw new RuntimeException(
+						"We should find the head again, when we search the stack.\n"
+								+ "We found a recursion and the rule should be there again.");
 		}
 	}
 
@@ -448,7 +453,7 @@ public class PackratParser implements Serializable {
 						+ progress.getDeltaPosition(),
 						id + progress.getDeltaId(),
 						line + progress.getDeltaLine());
-				if (newProgress != null)
+				if ((!newProgress.getAnswer().equals(Status.FAILED)))
 					progress.add(newProgress);
 			}
 			if (construction.isNonTerminal()) {
@@ -478,7 +483,7 @@ public class PackratParser implements Serializable {
 						+ progress.getDeltaPosition(),
 						id + progress.getDeltaId(),
 						line + progress.getDeltaLine());
-				if (newProgress != null)
+				if ((!newProgress.getAnswer().equals(Status.FAILED)))
 					progress.add(newProgress);
 			}
 		}
@@ -500,6 +505,7 @@ public class PackratParser implements Serializable {
 	 */
 	private MemoEntry processTerminal(ParserTree node, Terminal terminal,
 			int position, int id, int line) throws TreeException {
+		printMessage("applyTerminal: " + terminal, position, id, line);
 		TokenDefinitionSet tokenDefinitions = grammar.getTokenDefinitions();
 		TokenDefinition tokenDefinition = tokenDefinitions
 				.getDefinition(terminal.getName());
