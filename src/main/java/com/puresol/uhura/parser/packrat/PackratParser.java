@@ -35,33 +35,69 @@ public class PackratParser implements Serializable {
 
 	private static final long serialVersionUID = -2004344389320369178L;
 
-	private final Set<TokenDefinition> hiddenAndIgnoredTokens = new LinkedHashSet<TokenDefinition>();
 	/**
 	 * This is the memoization buffer to put all memoized data in.
 	 */
 	private final Map<Integer, Map<String, MemoEntry>> memo = new HashMap<Integer, Map<String, MemoEntry>>();
+
+	/**
+	 * This field contains a list of all token definitions which are to ignored
+	 * or hidden. This is used by the parser to move all parts away which is at
+	 * the moment of parsing not of any interest.
+	 */
+	private final Set<TokenDefinition> hiddenAndIgnoredTokens;
+
 	/**
 	 * This stack contains all rules which are currently processed and which are
 	 * nested. The data is kept in left-recursive data elements to put data in
 	 * here if needed for recursion detection and seed growing.
 	 */
 	private LR lrStack = null;
+
+	/**
+	 * Within this field the number of intendation is counted to make the parser
+	 * output prettier.
+	 */
 	private int indentation = 0;
+
 	/**
 	 * This is a list of all heads on all positions which are currently grown.
 	 */
 	private final Map<Integer, Head> heads = new HashMap<Integer, Head>();
+
+	/**
+	 * This flag specified whether ignored or hidden tokens are put leading to
+	 * the following instructions or trailing after the latest instructions
+	 * processed.
+	 */
 	private final Boolean ignoredLeading;
 
+	/**
+	 * This is the grammer to be used for parsing.
+	 */
 	private final Grammar grammar;
+
+	/**
+	 * This is the text to be parsed.
+	 */
 	private String text = "";
+
+	/**
+	 * This is the name of the object to be parsed.
+	 */
 	private String name = "";
+
+	/**
+	 * This is a field for tracking the maximum position of the parsing process.
+	 * When the parsing process aborts, this position is the most likely
+	 * position where an error is within the input stream.
+	 */
 	private int maxPosition = 0;
 
 	public PackratParser(Grammar grammar) {
 		super();
 		this.grammar = grammar;
-		extractHiddenAndIgnoredTokensFromGrammar();
+		hiddenAndIgnoredTokens = extractHiddenAndIgnoredTokensFromGrammar();
 		Properties options = grammar.getOptions();
 		ignoredLeading = Boolean.valueOf(options.getProperty(
 				"grammar.ignored-leading", "true"));
@@ -72,16 +108,20 @@ public class PackratParser implements Serializable {
 	 * This method extracts all token definitions which are to be ignored or
 	 * hidden to process them separately and to put them into special locations
 	 * into the parser tree.
+	 * 
+	 * @return
 	 */
-	private void extractHiddenAndIgnoredTokensFromGrammar() {
-		List<TokenDefinition> tokenDefinitions = grammar.getTokenDefinitions()
-				.getDefinitions();
-		for (TokenDefinition tokenDefinition : tokenDefinitions) {
-			if ((tokenDefinition.getVisibility() == Visibility.HIDDEN)
-					|| (tokenDefinition.getVisibility() == Visibility.IGNORED)) {
+	private Set<TokenDefinition> extractHiddenAndIgnoredTokensFromGrammar() {
+		Set<TokenDefinition> hiddenAndIgnoredTokens = new LinkedHashSet<TokenDefinition>();
+		for (TokenDefinition tokenDefinition : grammar.getTokenDefinitions()
+				.getDefinitions()) {
+			Visibility visibility = tokenDefinition.getVisibility();
+			if ((visibility == Visibility.HIDDEN)
+					|| (visibility == Visibility.IGNORED)) {
 				hiddenAndIgnoredTokens.add(tokenDefinition);
 			}
 		}
+		return hiddenAndIgnoredTokens;
 	}
 
 	/**
@@ -131,7 +171,7 @@ public class PackratParser implements Serializable {
 			}
 			return (ParserTree) progress.getAnswer();
 		} catch (TreeException e) {
-			throw new ParserException(e.getMessage(), e);
+			throw new ParserException(e);
 		}
 	}
 

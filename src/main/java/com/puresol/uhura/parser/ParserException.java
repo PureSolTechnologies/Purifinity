@@ -12,4 +12,8 @@ public class ParserException extends Exception {
 		super(message, cause);
 	}
 
+	public ParserException(Throwable cause) {
+		super(cause);
+	}
+
 }

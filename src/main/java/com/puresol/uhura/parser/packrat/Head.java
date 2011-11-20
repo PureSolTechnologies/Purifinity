@@ -15,8 +15,17 @@ public class Head implements Serializable, Cloneable {
 
 	private static final long serialVersionUID = 1217226903924359385L;
 
+	/**
+	 * Production for this head.
+	 */
 	private final String production;
+	/**
+	 * 
+	 */
 	private final Set<String> involvedSet = new LinkedHashSet<String>();
+	/**
+	 * 
+	 */
 	private final Set<String> evalSet = new LinkedHashSet<String>();
 
 	/**

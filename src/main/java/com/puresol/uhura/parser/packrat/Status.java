@@ -22,17 +22,6 @@ enum Status {
 
 	@Override
 	public String toString() {
-		String result = "";
-		switch (this) {
-		case SUCCEEDED:
-			result += "succeeded";
-			break;
-		case FAILED:
-			result += "failed";
-			break;
-		default:
-			throw new RuntimeException("Unknown and undefined state!");
-		}
-		return result;
+		return name().toLowerCase();
 	}
 }

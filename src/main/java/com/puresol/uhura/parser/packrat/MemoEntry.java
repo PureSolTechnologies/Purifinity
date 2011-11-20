@@ -5,19 +5,46 @@ import java.io.Serializable;
 import com.puresol.uhura.parser.ParserException;
 import com.puresol.uhura.parser.ParserTree;
 
+/**
+ * This is a memo entry for packrat parsing. The memoization process keeps all
+ * importan information for the run.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 class MemoEntry implements Serializable, Comparable<MemoEntry> {
 
 	private static final long serialVersionUID = 2910217488523982637L;
 
+	/**
+	 * Creates a simple successs memo entry.
+	 * 
+	 * @param deltaPosition
+	 * @param deltaId
+	 * @param deltaLine
+	 * @param tree
+	 * @return
+	 */
 	static MemoEntry success(int deltaPosition, int deltaId, int deltaLine,
 			ParserTree tree) {
 		return new MemoEntry(deltaPosition, deltaId, deltaLine, tree);
 	}
 
+	/**
+	 * Creates a simple failed memo entry.
+	 * 
+	 * @return
+	 */
 	static MemoEntry failed() {
 		return new MemoEntry(0, 0, 0, Status.FAILED);
 	}
 
+	/**
+	 * Creates a memo entry for the given lr object.
+	 * 
+	 * @param lr
+	 * @return
+	 */
 	static MemoEntry create(LR lr) {
 		return new MemoEntry(0, 0, 0, lr);
 	}
