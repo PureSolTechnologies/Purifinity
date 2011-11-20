@@ -10,27 +10,26 @@ import java.io.Serializable;
  * 
  * @author Rick-Rainer Ludwig
  */
-public class LR implements Serializable {
+public class RuleInvocation implements Serializable {
 
 	private static final long serialVersionUID = -5890456350006297830L;
 
-	private MemoEntry seed;
 	private final String production;
 	private Head head;
+	private final RuleInvocation next;
+	private final int nestingDepth;
 
-	public LR(MemoEntry seed, String production, Head head) {
+	public RuleInvocation(MemoEntry seed, String production, Head head,
+			RuleInvocation next) {
 		super();
-		this.seed = seed;
 		this.production = production;
 		this.head = head;
-	}
-
-	void setSeed(MemoEntry seed) {
-		this.seed = seed;
-	}
-
-	MemoEntry getSeed() {
-		return seed;
+		this.next = next;
+		if (next == null) {
+			nestingDepth = 0;
+		} else {
+			nestingDepth = next.getNestingDepth() + 1;
+		}
 	}
 
 	String getProduction() {
@@ -45,6 +44,14 @@ public class LR implements Serializable {
 		return head;
 	}
 
+	RuleInvocation getNext() {
+		return next;
+	}
+
+	int getNestingDepth() {
+		return nestingDepth;
+	}
+
 	@Override
 	public String toString() {
 		String result = production;
@@ -52,7 +59,6 @@ public class LR implements Serializable {
 			result += " ";
 		else
 			result += "*";
-		result += "; seed: " + seed;
 		result += "; head: " + head;
 		return result;
 	}

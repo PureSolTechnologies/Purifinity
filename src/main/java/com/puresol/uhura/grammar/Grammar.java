@@ -37,12 +37,13 @@ public class Grammar implements Serializable {
 		this.productions = productions;
 		this.ignoreCase = Boolean.valueOf(options
 				.getProperty("grammar.ignore-case"));
-		if (Boolean.valueOf(options.getProperty("grammar.checks"))) {
-			checkConsistency();
-		}
+		checkConsistencyIfConfigured();
 	}
 
-	private void checkConsistency() throws GrammarException {
+	private void checkConsistencyIfConfigured() throws GrammarException {
+		if (!Boolean.valueOf(options.getProperty("grammar.checks"))) {
+			return;
+		}
 		for (Production production : productions.getList()) {
 			for (Construction construction : production.getConstructions()) {
 				if (construction.isTerminal()) {
@@ -122,7 +123,7 @@ public class Grammar implements Serializable {
 		return buffer.toString();
 	}
 
-	public StringBuilder toOptionsString() {
+	private StringBuilder toOptionsString() {
 		StringBuilder buffer = new StringBuilder();
 		for (Object key : options.keySet()) {
 			buffer.append(key + " : " + options.getProperty((String) key)
@@ -131,7 +132,7 @@ public class Grammar implements Serializable {
 		return buffer;
 	}
 
-	public StringBuilder toTokenDefinitionsString() {
+	private  StringBuilder toTokenDefinitionsString() {
 		StringBuilder buffer = new StringBuilder();
 		for (TokenDefinition definition : tokenDefinitions.getDefinitions()) {
 			buffer.append(definition + "\n");

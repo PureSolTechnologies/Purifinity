@@ -115,4 +115,23 @@ public class Head implements Serializable, Cloneable {
 		cloned.involvedSet.addAll(this.involvedSet);
 		return cloned;
 	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append(production);
+		builder.append(" involved: (");
+		for (String involved : involvedSet) {
+			builder.append(" ");
+			builder.append(involved);
+		}
+		builder.append(" )");
+		builder.append(" eval: (");
+		for (String eval : evalSet) {
+			builder.append(" ");
+			builder.append(eval);
+		}
+		builder.append(" )");
+		return builder.toString();
+	}
 }

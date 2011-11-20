@@ -3,7 +3,6 @@ package com.puresol.uhura.parser.packrat;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -36,9 +35,9 @@ public class PackratParser implements Serializable {
 	private static final long serialVersionUID = -2004344389320369178L;
 
 	/**
-	 * This is the memoization buffer to put all memoized data in.
+	 * This is the memo for this parser.
 	 */
-	private final Map<Integer, Map<String, MemoEntry>> memo = new HashMap<Integer, Map<String, MemoEntry>>();
+	private final PackratMemo memo = new PackratMemo();
 
 	/**
 	 * This field contains a list of all token definitions which are to ignored
@@ -48,17 +47,13 @@ public class PackratParser implements Serializable {
 	private final Set<TokenDefinition> hiddenAndIgnoredTokens;
 
 	/**
-	 * This stack contains all rules which are currently processed and which are
-	 * nested. The data is kept in left-recursive data elements to put data in
-	 * here if needed for recursion detection and seed growing.
+	 * This is the rule invocation stack which contains all rules which are
+	 * currently processed. These rules are nested. The data is kept in
+	 * left-recursive data elements to put data in here if needed for recursion
+	 * detection and seed growing. This field contains only one element, but the
+	 * next elements is referenced.
 	 */
-	private LR lrStack = null;
-
-	/**
-	 * Within this field the number of intendation is counted to make the parser
-	 * output prettier.
-	 */
-	private int indentation = 0;
+	private RuleInvocation ruleInvocationStack = null;
 
 	/**
 	 * This is a list of all heads on all positions which are currently grown.
@@ -146,8 +141,7 @@ public class PackratParser implements Serializable {
 	 */
 	private void initialize(String text, String name) {
 		memo.clear();
-		lrStack = null;
-		indentation = 0;
+		ruleInvocationStack = null;
 		this.text = text;
 		this.name = name;
 		maxPosition = 0;
@@ -194,9 +188,10 @@ public class PackratParser implements Serializable {
 	}
 
 	private void indentLine() {
-		for (int indent = 0; indent < indentation; indent++) {
-			System.out.print("    ");
-		}
+		if (ruleInvocationStack != null)
+			for (int indent = 0; indent < ruleInvocationStack.getNestingDepth(); indent++) {
+				System.out.print("    ");
+			}
 	}
 
 	private void printMessage(String text, int position, int id, int line) {
@@ -229,11 +224,11 @@ public class PackratParser implements Serializable {
 			 * "Create a new LR and push it onto the rule invocation stack."
 			 * 
 			 * At this point we found a rule which was never processed at this
-			 * position. We start completely vergin here...
+			 * position. We start completely virgin here...
 			 */
-			LR lr = new LR(MemoEntry.failed(), rule, null, lrStack);
-			lrStack = lr;
-			indentation++;
+			LR lr = new LR(MemoEntry.failed(), rule, null);
+			ruleInvocationStack = new RuleInvocation(MemoEntry.failed(), rule,
+					null, ruleInvocationStack);
 			/*
 			 * "Memoize lr, then evaluate R."
 			 * 
@@ -241,7 +236,7 @@ public class PackratParser implements Serializable {
 			 * afterwards.
 			 */
 			m = MemoEntry.create(lr);
-			setMemo(rule, position, id, line, m);
+			memo.setMemo(rule, position, id, line, m);
 			final MemoEntry ans = eval(rule, position, id, line);
 			/*
 			 * "Pop lr off the rule invocation stack."
@@ -250,8 +245,7 @@ public class PackratParser implements Serializable {
 			 * from stack. This was needed in cases a left recursion whould be
 			 * found within the rule.
 			 */
-			lrStack = lrStack.getNext();
-			indentation--;
+			ruleInvocationStack = ruleInvocationStack.getNext();
 
 			if ((m.getAnswer() instanceof LR)
 					&& (((LR) m.getAnswer()).getHead() != null)) {
@@ -320,7 +314,7 @@ public class PackratParser implements Serializable {
 		/*
 		 * Go over all heads and...!?
 		 */
-		LR s = lrStack;
+		RuleInvocation s = ruleInvocationStack;
 		while (!l.getHead().getProduction().equals(s.getProduction())) {
 			s.setHead(l.getHead());
 			l.getHead().addInvolved(s.getProduction());
@@ -351,7 +345,7 @@ public class PackratParser implements Serializable {
 		 * Retrieve the current memoized item for the production and the head on
 		 * the current position.
 		 */
-		final MemoEntry m = getMemo(production, position);
+		final MemoEntry m = memo.getMemo(production, position);
 		final Head h = heads.get(position);
 		/*
 		 * "If not growing a seed parse, just return what is stored in the memo
@@ -488,14 +482,7 @@ public class PackratParser implements Serializable {
 		ParserTree node = new ParserTree(production);
 		MemoEntry progress = MemoEntry.success(0, 0, 0, node);
 		for (Construction construction : production.getConstructions()) {
-			if (ignoredLeading) {
-				MemoEntry newProgress = processIgnoredTokens(node, position
-						+ progress.getDeltaPosition(),
-						id + progress.getDeltaId(),
-						line + progress.getDeltaLine());
-				if ((!newProgress.getAnswer().equals(Status.FAILED)))
-					progress.add(newProgress);
-			}
+			processIgnoredLeadingTokens(node, position, id, line, progress);
 			if (construction.isNonTerminal()) {
 				MemoEntry newProgress = applyRule(construction.getName(),
 						position + progress.getDeltaPosition(),
@@ -518,18 +505,60 @@ public class PackratParser implements Serializable {
 					return MemoEntry.failed();
 				}
 			}
-			if (!ignoredLeading) {
-				MemoEntry newProgress = processIgnoredTokens(node, position
-						+ progress.getDeltaPosition(),
-						id + progress.getDeltaId(),
-						line + progress.getDeltaLine());
-				if ((!newProgress.getAnswer().equals(Status.FAILED)))
-					progress.add(newProgress);
-			}
+			processIgnoredTrailingTokens(node, position, id, line, progress);
 		}
 		indentLine();
 		System.out.println("Parsed: " + production);
 		return progress;
+	}
+
+	/**
+	 * This method processes leading tokens which are either hidden or ignored.
+	 * The processing only happens if the configuration allows it.
+	 * 
+	 * @param node
+	 * @param position
+	 * @param id
+	 * @param line
+	 * @param progress
+	 * @throws TreeException
+	 * @throws ParserException
+	 */
+	private void processIgnoredLeadingTokens(ParserTree node, int position,
+			int id, int line, MemoEntry progress) throws TreeException,
+			ParserException {
+		if (ignoredLeading) {
+			processIgnoredTokens(node, position, id, line, progress);
+		}
+	}
+
+	/**
+	 * This method processes trailing tokens which are either hidden or ignored.
+	 * The processing only happens if the configuration allows it.
+	 * 
+	 * @param node
+	 * @param position
+	 * @param id
+	 * @param line
+	 * @param progress
+	 * @throws TreeException
+	 * @throws ParserException
+	 */
+	private void processIgnoredTrailingTokens(ParserTree node, int position,
+			int id, int line, MemoEntry progress) throws TreeException,
+			ParserException {
+		if (!ignoredLeading) {
+			processIgnoredTokens(node, position, id, line, progress);
+		}
+	}
+
+	private void processIgnoredTokens(ParserTree node, int position, int id,
+			int line, MemoEntry progress) throws TreeException, ParserException {
+		MemoEntry newProgress = processIgnoredTokens(node,
+				position + progress.getDeltaPosition(),
+				id + progress.getDeltaId(), line + progress.getDeltaLine());
+		if ((!newProgress.getAnswer().equals(Status.FAILED)))
+			progress.add(newProgress);
 	}
 
 	/**
@@ -624,49 +653,5 @@ public class PackratParser implements Serializable {
 		}
 		// printMessage("'" + match + "'", position, id, line);
 		return MemoEntry.success(match.length(), 1, lineBreakNum, myTree);
-	}
-
-	/**
-	 * This method returns the current memoization element from the buffer. This
-	 * element is unprocessed. If the element is not set (null) a NONE element
-	 * is put into the buffer and returned.
-	 * 
-	 * @param production
-	 * @param position
-	 * @return
-	 */
-	private MemoEntry getMemo(String production, int position) {
-		Map<String, MemoEntry> map = memo.get(position);
-		if (map == null)
-			return null;
-		MemoEntry memo = map.get(production);
-		if (memo == null)
-			return null;
-		return memo;
-	}
-
-	/**
-	 * This method puts memozation elements into the buffer. It is designed in a
-	 * way, that entries, once set, are not changed anymore. This is needed not
-	 * to break references!
-	 * 
-	 * @param production
-	 * @param position
-	 * @param stackElement
-	 */
-	private void setMemo(String production, int position, int id, int line,
-			final MemoEntry stackElement) {
-		Map<String, MemoEntry> map = memo.get(position);
-		if (map == null) {
-			map = new HashMap<String, MemoEntry>();
-			memo.put(position, map);
-			map.put(production, stackElement);
-		} else {
-			if (map.containsKey(production)) {
-				throw new RuntimeException(
-						"We should not set a memo twice. Modifying is needed afterwards.");
-			}
-			map.put(production, stackElement);
-		}
 	}
 }
