@@ -123,6 +123,8 @@ PRODUCTIONS
 	Identifier:
 			X_
 		|	Y_
+		|	M_
+		|	N_
 		|	ClassOrInterfaceType
 	;
 	
