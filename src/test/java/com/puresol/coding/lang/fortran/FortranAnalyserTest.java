@@ -23,49 +23,50 @@ import org.junit.Test;
  */
 public class FortranAnalyserTest {
 
-	@Test
-	public void testInstance() {
-		assertNotNull(new FortranAnalyser(new File("")));
-	}
+    @Test
+    public void testInstance() {
+	assertNotNull(new FortranAnalyser(new File("")));
+    }
 
-	@Test
-	public void testInitValues() {
-		File file = new File("src/test/TestFile.f");
-		FortranAnalyser analyser = new FortranAnalyser(file);
-		assertEquals(file, analyser.getFile());
-		assertNotNull(analyser.getTimeStamp());
-		assertSame(Fortran.getInstance(), analyser.getLanguage());
-		assertNull(analyser.getParserTree());
-	}
+    @Test
+    public void testInitValues() {
+	File file = new File("src/test/TestFile.f");
+	FortranAnalyser analyser = new FortranAnalyser(file);
+	assertEquals(file, analyser.getFile());
+	assertNotNull(analyser.getTimeStamp());
+	assertSame(Fortran.getInstance(), analyser.getLanguage());
+	assertNull(analyser.getParserTree());
+    }
 
-	private void test(File file) throws Throwable {
-		assertTrue(file.exists());
-		Logger.getRootLogger().setLevel(Level.DEBUG);
-		FortranAnalyser analyser = new FortranAnalyser(file);
-		analyser.parse();
-	}
+    private void test(File file) throws Throwable {
+	assertTrue(file.exists());
+	Logger.getRootLogger().setLevel(Level.DEBUG);
+	FortranAnalyser analyser = new FortranAnalyser(file);
+	analyser.parse();
+    }
 
-	// @Test
-	// public void testEmptyProgram() {
-	// test(new File(
-	// "test/com/puresol/coding/lang/fortran/samples/EmptyProgram.f"));
-	// }
-	//
-	// @Test
-	// public void testEmptySubroutine() {
-	// Logger.getRootLogger().setLevel(Level.TRACE);
-	// test(new File(
-	// "test/com/puresol/coding/lang/fortran/samples/EmptySubroutine.f"));
-	// }
-	//
-	// @Test
-	// public void testZGERC() {
-	// test(new File("test/com/puresol/coding/lang/fortran/samples/zgerc.f"));
-	// }
+    @Test
+    public void testEmptyProgram() throws Throwable {
+	test(new File(
+		"src/test/resources/com/puresol/coding/lang/fortran/samples/EmptyProgram.f"));
+    }
 
-	@Test
-	public void test2() throws Throwable {
-		test(new File(
-				"src/test/resources/com/puresol/coding/lang/fortran/samples/FortranTest.f"));
-	}
+    @Test
+    public void testEmptySubroutine() throws Throwable {
+	Logger.getRootLogger().setLevel(Level.TRACE);
+	test(new File(
+		"src/test/resources/com/puresol/coding/lang/fortran/samples/EmptySubroutine.f"));
+    }
+
+    @Test
+    public void testZGERC() throws Throwable {
+	test(new File(
+		"src/test/resources/com/puresol/coding/lang/fortran/samples/zgerc.f"));
+    }
+
+    @Test
+    public void test2() throws Throwable {
+	test(new File(
+		"src/test/resources/com/puresol/coding/lang/fortran/samples/FortranTest.f"));
+    }
 }
