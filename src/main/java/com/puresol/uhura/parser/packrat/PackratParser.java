@@ -128,7 +128,6 @@ public class PackratParser implements Serializable {
      * @throws ParserException
      */
     public ParserTree parse(String text, String name) throws ParserException {
-	initialize(text, name);
 	return parse(text, "_START_", name);
     }
 
@@ -159,6 +158,7 @@ public class PackratParser implements Serializable {
     public ParserTree parse(String text, String production, String name)
 	    throws ParserException {
 	try {
+	    initialize(text, name);
 	    MemoEntry progress = applyRule(production, 0, 0, 1);
 	    if (progress.getDeltaPosition() != text.length()) {
 		throw new ParserException(getParserErrorMessage());
@@ -457,13 +457,19 @@ public class PackratParser implements Serializable {
      */
     private MemoEntry eval(String productionName, int position, int id, int line)
 	    throws ParserException, TreeException {
+	MemoEntry maxProgress = MemoEntry.failed();
 	for (Production production : grammar.getProductions().get(
 		productionName)) {
 	    MemoEntry progress = parseProduction(production, position, id, line);
-	    if (progress.getAnswer() instanceof ParserTree)
-		return progress;
+	    if (progress.getAnswer() instanceof ParserTree) {
+		if ((maxProgress.getAnswer() == Status.FAILED)
+			|| (maxProgress.getDeltaPosition() < progress
+				.getDeltaPosition())) {
+		    maxProgress = progress;
+		}
+	    }
 	}
-	return MemoEntry.failed();
+	return maxProgress;
     }
 
     /**
