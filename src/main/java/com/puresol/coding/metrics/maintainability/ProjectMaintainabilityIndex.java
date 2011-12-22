@@ -17,6 +17,7 @@ import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 
 import com.puresol.coding.CodeRange;
+import com.puresol.coding.CodeRangeType;
 import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.analysis.Analysis;
 import com.puresol.coding.analysis.AnalyzedFile;
@@ -188,18 +189,29 @@ public class ProjectMaintainabilityIndex extends AbstractEvaluator implements
 
     private JFreeChart getMaintainabilityPieChart() {
 	Map<SourceCodeQuality, Integer> pieChartQualitiesNumbers = new HashMap<SourceCodeQuality, Integer>();
-	List<String> identifiers = new ArrayList<String>(
-		evaluatorResults.keySet());
-	for (String identifier : identifiers) {
-	    SourceCodeQuality quality = qualities.get(identifier);
-	    Integer number = pieChartQualitiesNumbers.get(quality);
-	    if (number == null) {
-		number = new Integer(1);
-		pieChartQualitiesNumbers.put(quality, number);
-	    } else {
-		pieChartQualitiesNumbers.put(quality, new Integer(number + 1));
+
+	List<AnalyzedFile> analyzedFiles = projectAnalyzer.getAnalyzedFiles();
+	for (AnalyzedFile analyzedFile : analyzedFiles) {
+	    Analysis analysis = projectAnalyzer.getAnalysis(analyzedFile);
+	    List<CodeRange> codeRanges = analysis.getAnalyzableCodeRanges();
+	    for (CodeRange codeRange : codeRanges) {
+		if (codeRange.getType() == CodeRangeType.FILE) {
+		    String identifier = analyzedFile.getFile().getPath() + ": "
+			    + codeRange.getType().getName() + " '"
+			    + codeRange.getName() + "'";
+		    SourceCodeQuality quality = qualities.get(identifier);
+		    Integer number = pieChartQualitiesNumbers.get(quality);
+		    if (number == null) {
+			number = new Integer(1);
+			pieChartQualitiesNumbers.put(quality, number);
+		    } else {
+			pieChartQualitiesNumbers.put(quality, new Integer(
+				number + 1));
+		    }
+		    System.err.println(identifier + " " + quality + " "
+			    + number);
+		}
 	    }
-	    System.err.println(identifier + " " + quality + " " + number);
 	}
 	DefaultPieDataset dataset = new DefaultPieDataset();
 	for (SourceCodeQuality quality : pieChartQualitiesNumbers.keySet()) {
