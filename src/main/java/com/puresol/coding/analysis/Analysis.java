@@ -29,31 +29,31 @@ import com.puresol.uhura.parser.ParserTree;
  */
 public interface Analysis extends Serializable {
 
-	/**
-	 * This method returns the time stamp of the analysis. This can be used for
-	 * validity analysis by time stamp comparison for evaluators.
-	 * 
-	 * @return
-	 * @throws IOException
-	 */
-	public Date getTimeStamp() throws IOException;
+    /**
+     * This method returns the time stamp of the analysis. This can be used for
+     * validity analysis by time stamp comparison for evaluators.
+     * 
+     * @return
+     * @throws IOException
+     */
+    public Date getTimeStamp() throws IOException;
 
-	/**
-	 * Returns the language of the file analysed.
-	 * 
-	 * @return The language is returned.
-	 * @throws IOException
-	 */
-	public ProgrammingLanguage getLanguage() throws IOException;
+    /**
+     * Returns the language of the file analysed.
+     * 
+     * @return The language is returned.
+     * @throws IOException
+     */
+    public ProgrammingLanguage getLanguage() throws IOException;
 
-	/**
-	 * The file which was analyzed is returned.
-	 * 
-	 * @return The file is returned.
-	 */
-	public File getFile();
+    /**
+     * The file which was analyzed is returned.
+     * 
+     * @return The file is returned.
+     */
+    public File getFile();
 
-	public ParserTree getParserTree() throws IOException;
+    public ParserTree getParserTree() throws IOException;
 
-	public List<CodeRange> getAnalyzableCodeRanges() throws IOException;
+    public List<CodeRange> getAnalyzableCodeRanges();
 }

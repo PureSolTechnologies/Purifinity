@@ -1,6 +1,5 @@
 package com.puresol.gui.coding;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -9,7 +8,6 @@ import java.util.Vector;
 import javax.i18n4java.Translator;
 import javax.swing.BoxLayout;
 import javax.swing.JList;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -19,13 +17,10 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 
-import org.apache.log4j.Logger;
-
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.analysis.Analysis;
 import com.puresol.coding.analysis.AnalyzedFile;
 import com.puresol.coding.analysis.ProjectAnalyzer;
-import com.puresol.gui.Application;
 
 /**
  * This GUI element is for selecting files and code ranges from a project
@@ -39,115 +34,106 @@ import com.puresol.gui.Application;
  * 
  */
 public class CodeRangeChooser extends JPanel implements TreeSelectionListener,
-		ListSelectionListener {
+	ListSelectionListener {
 
-	private static final long serialVersionUID = 7855693564694783199L;
+    private static final long serialVersionUID = 7855693564694783199L;
 
-	private static final Logger logger = Logger
-			.getLogger(CodeRangeChooser.class);
-	private static final Translator translator = Translator
-			.getTranslator(CodeRangeChooser.class);
+    private static final Translator translator = Translator
+	    .getTranslator(CodeRangeChooser.class);
 
-	private ProjectAnalyzer projectAnalyser = null;
+    private ProjectAnalyzer projectAnalyser = null;
 
-	private final AnalyzedFileChooser fileChooser = new AnalyzedFileChooser();
-	private final JList codeRangeList = new JList();
+    private final AnalyzedFileChooser fileChooser = new AnalyzedFileChooser();
+    private final JList codeRangeList = new JList();
 
-	private final List<TreeSelectionListener> treeListener = new ArrayList<TreeSelectionListener>();
-	private final List<ListSelectionListener> listListener = new ArrayList<ListSelectionListener>();
+    private final List<TreeSelectionListener> treeListener = new ArrayList<TreeSelectionListener>();
+    private final List<ListSelectionListener> listListener = new ArrayList<ListSelectionListener>();
 
-	public CodeRangeChooser() {
-		super();
-		initUI();
+    public CodeRangeChooser() {
+	super();
+	initUI();
+    }
+
+    public CodeRangeChooser(ProjectAnalyzer projectAnalyser) {
+	super();
+	this.projectAnalyser = projectAnalyser;
+	initUI();
+    }
+
+    private void initUI() {
+	setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+
+	fileChooser.setBorder(new TitledBorder(translator
+		.i18n("Analyzed Files")));
+	fileChooser.addTreeSelectionListener(this);
+
+	codeRangeList.addListSelectionListener(this);
+
+	JScrollPane codeRangeScroller = new JScrollPane(codeRangeList);
+	codeRangeScroller.setBorder(new TitledBorder(translator
+		.i18n("Analyzable Code Ranges")));
+
+	JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true,
+		new JScrollPane(fileChooser), codeRangeScroller);
+	add(splitPane);
+    }
+
+    public ProjectAnalyzer getProjectAnlayser() {
+	return projectAnalyser;
+    }
+
+    public void setProjectAnalyser(ProjectAnalyzer projectAnalyser) {
+	this.projectAnalyser = projectAnalyser;
+	fileChooser.setProjectAnalyzer(projectAnalyser);
+	codeRangeList.removeAll();
+    }
+
+    public AnalyzedFile getAnalyzedFile() {
+	return fileChooser.getAnalyzedFile();
+    }
+
+    public CodeRange getCodeRange() {
+	return (CodeRange) codeRangeList.getSelectedValue();
+    }
+
+    void fileSelected(AnalyzedFile file) {
+	Analysis analysis = projectAnalyser.getAnalysis(file);
+	if (analysis != null) {
+	    java.util.List<CodeRange> codeRanges = analysis
+		    .getAnalyzableCodeRanges();
+	    Collections.sort(codeRanges);
+	    codeRangeList.setListData(new Vector<CodeRange>(codeRanges));
 	}
+    }
 
-	public CodeRangeChooser(ProjectAnalyzer projectAnalyser) {
-		super();
-		this.projectAnalyser = projectAnalyser;
-		initUI();
-	}
+    public void addTreeListener(TreeSelectionListener listener) {
+	treeListener.add(listener);
+    }
 
-	private void initUI() {
-		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+    public void removeTreeListener(TreeSelectionListener listener) {
+	treeListener.remove(listener);
+    }
 
-		fileChooser.setBorder(new TitledBorder(translator
-				.i18n("Analyzed Files")));
-		fileChooser.addTreeSelectionListener(this);
+    public void addListListener(ListSelectionListener listener) {
+	listListener.add(listener);
+    }
 
-		codeRangeList.addListSelectionListener(this);
+    public void removeListListener(ListSelectionListener listener) {
+	listListener.remove(listener);
+    }
 
-		JScrollPane codeRangeScroller = new JScrollPane(codeRangeList);
-		codeRangeScroller.setBorder(new TitledBorder(translator
-				.i18n("Analyzable Code Ranges")));
+    @Override
+    public void valueChanged(TreeSelectionEvent e) {
+	fileSelected(fileChooser.getAnalyzedFile());
+	for (TreeSelectionListener listener : treeListener) {
+	    listener.valueChanged(e);
+	}
+    }
 
-		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true,
-				new JScrollPane(fileChooser), codeRangeScroller);
-		add(splitPane);
+    @Override
+    public void valueChanged(ListSelectionEvent e) {
+	for (ListSelectionListener listener : listListener) {
+	    listener.valueChanged(e);
 	}
-
-	public ProjectAnalyzer getProjectAnlayser() {
-		return projectAnalyser;
-	}
-
-	public void setProjectAnalyser(ProjectAnalyzer projectAnalyser) {
-		this.projectAnalyser = projectAnalyser;
-		fileChooser.setProjectAnalyzer(projectAnalyser);
-		codeRangeList.removeAll();
-	}
-
-	public AnalyzedFile getAnalyzedFile() {
-		return fileChooser.getAnalyzedFile();
-	}
-
-	public CodeRange getCodeRange() {
-		return (CodeRange) codeRangeList.getSelectedValue();
-	}
-
-	void fileSelected(AnalyzedFile file) {
-		try {
-			Analysis analysis = projectAnalyser.getAnalysis(file);
-			if (analysis != null) {
-				java.util.List<CodeRange> codeRanges = analysis
-						.getAnalyzableCodeRanges();
-				Collections.sort(codeRanges);
-				codeRangeList.setListData(new Vector<CodeRange>(codeRanges));
-			}
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-			JOptionPane.showMessageDialog(Application.getInstance(),
-					translator.i18n("IOException was thrown!"),
-					translator.i18n("Error"), JOptionPane.ERROR_MESSAGE);
-		}
-	}
-
-	public void addTreeListener(TreeSelectionListener listener) {
-		treeListener.add(listener);
-	}
-	
-	public void removeTreeListener(TreeSelectionListener listener) {
-		treeListener.remove(listener);
-	}
-	
-	public void addListListener(ListSelectionListener listener) {
-		listListener.add(listener);
-	}
-	
-	public void removeListListener(ListSelectionListener listener) {
-		listListener.remove(listener);
-	}
-	
-	@Override
-	public void valueChanged(TreeSelectionEvent e) {
-		fileSelected(fileChooser.getAnalyzedFile());
-		for (TreeSelectionListener listener : treeListener) {
-			listener.valueChanged(e);
-		}
-	}
-
-	@Override
-	public void valueChanged(ListSelectionEvent e) {
-		for (ListSelectionListener listener : listListener) {
-			listener.valueChanged(e);
-		}
-	}
+    }
 }

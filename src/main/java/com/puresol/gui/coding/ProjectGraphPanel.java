@@ -117,38 +117,33 @@ public class ProjectGraphPanel extends JPanel implements ListSelectionListener,
 
     @Override
     public void finished(ProgressObservable observable) {
-	try {
-	    Evaluator evaluator = (Evaluator) observable;
-	    Map<String, DefaultCategoryDataset> datasets = new HashMap<String, DefaultCategoryDataset>();
-	    for (AnalyzedFile analyzedFile : projectAnalyzer.getAnalyzedFiles()) {
-		Analysis analysis = projectAnalyzer.getAnalysis(analyzedFile);
-		for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
-		    for (Result result : evaluator.getResults()) {
-			DefaultCategoryDataset dataset = datasets.get(result
-				.getName());
-			if (dataset == null) {
-			    dataset = new DefaultCategoryDataset();
-			    datasets.put(result.getName(), dataset);
-			}
-			dataset.addValue(Double.valueOf(result.getValue()),
-				codeRange.getType().getName(),
-				analyzedFile.getFile());
+	Evaluator evaluator = (Evaluator) observable;
+	Map<String, DefaultCategoryDataset> datasets = new HashMap<String, DefaultCategoryDataset>();
+	for (AnalyzedFile analyzedFile : projectAnalyzer.getAnalyzedFiles()) {
+	    Analysis analysis = projectAnalyzer.getAnalysis(analyzedFile);
+	    for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
+		for (Result result : evaluator.getResults()) {
+		    DefaultCategoryDataset dataset = datasets.get(result
+			    .getName());
+		    if (dataset == null) {
+			dataset = new DefaultCategoryDataset();
+			datasets.put(result.getName(), dataset);
 		    }
+		    dataset.addValue(Double.valueOf(result.getValue()),
+			    codeRange.getType().getName(),
+			    analyzedFile.getFile());
 		}
 	    }
-	    tabbedPane.removeAll();
-	    for (String name : datasets.keySet()) {
-		JFreeChart chart = ChartFactory.createLineChart(
-			evaluator.getName() + " - " + name, "code range",
-			"value", datasets.get(name), PlotOrientation.VERTICAL,
-			true, false, false);
-		chart.setAntiAlias(true);
-		chart.setTextAntiAlias(false);
-		ChartPanel panel = new ChartPanel(chart);
-		tabbedPane.add(panel, evaluator.getName() + " - " + name);
-	    }
-	} catch (IOException e) {
-	    logger.error(e.getMessage(), e);
+	}
+	tabbedPane.removeAll();
+	for (String name : datasets.keySet()) {
+	    JFreeChart chart = ChartFactory.createLineChart(evaluator.getName()
+		    + " - " + name, "code range", "value", datasets.get(name),
+		    PlotOrientation.VERTICAL, true, false, false);
+	    chart.setAntiAlias(true);
+	    chart.setTextAntiAlias(false);
+	    ChartPanel panel = new ChartPanel(chart);
+	    tabbedPane.add(panel, evaluator.getName() + " - " + name);
 	}
     }
 
