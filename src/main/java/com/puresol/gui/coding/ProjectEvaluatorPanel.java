@@ -32,101 +32,101 @@ import com.puresol.gui.progress.ProgressWindow;
  * 
  */
 public class ProjectEvaluatorPanel extends JPanel implements ActionListener,
-		FinishListener {
+	FinishListener {
 
-	private static final long serialVersionUID = 7855693564694783199L;
+    private static final long serialVersionUID = 7855693564694783199L;
 
-	private static final Translator translator = Translator
-			.getTranslator(ProjectEvaluatorPanel.class);
+    private static final Translator translator = Translator
+	    .getTranslator(ProjectEvaluatorPanel.class);
 
-	private ProjectAnalyzer projectAnalyser = null;
+    private ProjectAnalyzer projectAnalyser = null;
 
-	private final Configuration configuration;
-	private final ProjectEvaluatorChooser evaluators = new ProjectEvaluatorChooser();
-	private final JTabbedPane tabbedPane = new JTabbedPane();
-	private final JButton run = new JButton(translator.i18n("Run..."));
+    private final Configuration configuration;
+    private final ProjectEvaluatorChooser evaluators = new ProjectEvaluatorChooser();
+    private final JTabbedPane tabbedPane = new JTabbedPane();
+    private final JButton run = new JButton(translator.i18n("Run..."));
 
-	public ProjectEvaluatorPanel(Configuration configuration) {
-		super();
-		this.configuration = configuration;
-		initUI();
+    public ProjectEvaluatorPanel(Configuration configuration) {
+	super();
+	this.configuration = configuration;
+	initUI();
+    }
+
+    public ProjectEvaluatorPanel(ProjectAnalyzer projectAnalyser,
+	    Configuration configuration) {
+	super();
+	this.configuration = configuration;
+	this.projectAnalyser = projectAnalyser;
+	initUI();
+    }
+
+    private void initUI() {
+	setLayout(new BorderLayout());
+
+	JToolBar tools = new JToolBar();
+	tools.add(run);
+
+	JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
+		true, new JScrollPane(evaluators), tabbedPane);
+
+	run.addActionListener(this);
+
+	add(tools, BorderLayout.NORTH);
+	add(splitPane, BorderLayout.CENTER);
+    }
+
+    public ProjectAnalyzer getProjectAnlayser() {
+	return projectAnalyser;
+    }
+
+    public void setProjectAnalyser(ProjectAnalyzer projectAnalyser) {
+	this.projectAnalyser = projectAnalyser;
+    }
+
+    private void run() {
+	ProjectEvaluatorFactory evaluatorFactory = (ProjectEvaluatorFactory) evaluators
+		.getSelectedValue();
+	if ((evaluatorFactory == null) || (projectAnalyser == null)) {
+	    return;
 	}
+	Evaluator evaluator = evaluatorFactory.create(projectAnalyser,
+		configuration);
+	ProgressWindow progress = new ProgressWindow(Application.getInstance(),
+		true);
+	progress.addFinishListener(this);
+	progress.runAsynchronous(evaluator);
+    }
 
-	public ProjectEvaluatorPanel(ProjectAnalyzer projectAnalyser,
-			Configuration configuration) {
-		super();
-		this.configuration = configuration;
-		this.projectAnalyser = projectAnalyser;
-		initUI();
+    @Override
+    public void finished(ProgressObservable observable) {
+	Evaluator evaluator = (Evaluator) observable;
+	JPanel viewer = new GUIConverter(evaluator.getReport()).toPanel();
+	tabbedPane.add(evaluator.getName(), new JScrollPane(viewer,
+		JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+		JScrollPane.HORIZONTAL_SCROLLBAR_NEVER));
+	tabbedPane.setTabComponentAt(tabbedPane.getTabCount() - 1,
+		new TabButton(tabbedPane));
+    }
+
+    @Override
+    public void terminated(ProgressObservable observable) {
+	int result = JOptionPane
+		.showConfirmDialog(
+			Application.getInstance(),
+			translator
+				.i18n("Evaluator calcualtion was aborted. The results are now not completed and may be wrong.\n"
+					+ "Do you want to have them displayed anyway?"),
+			translator.i18n("Caluclation aborted"),
+			JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+	if (result == JOptionPane.YES_OPTION) {
+	    finished(observable);
 	}
+    }
 
-	private void initUI() {
-		setLayout(new BorderLayout());
-
-		JToolBar tools = new JToolBar();
-		tools.add(run);
-
-		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-				true, new JScrollPane(evaluators), tabbedPane);
-
-		run.addActionListener(this);
-
-		add(tools, BorderLayout.NORTH);
-		add(splitPane, BorderLayout.CENTER);
+    @Override
+    public void actionPerformed(ActionEvent e) {
+	if (e.getSource() == run) {
+	    run();
 	}
-
-	public ProjectAnalyzer getProjectAnlayser() {
-		return projectAnalyser;
-	}
-
-	public void setProjectAnalyser(ProjectAnalyzer projectAnalyser) {
-		this.projectAnalyser = projectAnalyser;
-	}
-
-	private void run() {
-		ProjectEvaluatorFactory evaluatorFactory = (ProjectEvaluatorFactory) evaluators
-				.getSelectedValue();
-		if ((evaluatorFactory == null) || (projectAnalyser == null)) {
-			return;
-		}
-		Evaluator evaluator = evaluatorFactory.create(projectAnalyser,
-				configuration);
-		ProgressWindow progress = new ProgressWindow(Application.getInstance(),
-				true);
-		progress.addFinishListener(this);
-		progress.runAsynchronous(evaluator);
-	}
-
-	@Override
-	public void finished(ProgressObservable observable) {
-		Evaluator evaluator = (Evaluator) observable;
-		JPanel viewer = new GUIConverter(evaluator.getReport()).toPanel();
-		tabbedPane.add(evaluator.getName(), new JScrollPane(viewer,
-				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER));
-		tabbedPane.setTabComponentAt(tabbedPane.getTabCount() - 1,
-				new TabButton(tabbedPane));
-	}
-
-	@Override
-	public void terminated(ProgressObservable observable) {
-		int result = JOptionPane
-				.showConfirmDialog(
-						Application.getInstance(),
-						translator
-								.i18n("Evaluator calcualtion was aborted. The results are now not completed and may be wrong.\n"
-										+ "Do you want to have them displayed anyway?"),
-						translator.i18n("Caluclation aborted"),
-						JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-		if (result == JOptionPane.YES_OPTION) {
-			finished(observable);
-		}
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == run) {
-			run();
-		}
-	}
+    }
 }
