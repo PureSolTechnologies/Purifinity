@@ -30,6 +30,7 @@ import org.apache.log4j.Logger;
 import org.osgi.framework.BundleException;
 
 import com.puresol.coding.analysis.ProjectAnalyzer;
+import com.puresol.coding.analysis.ProjectAnalyzerFactory;
 import com.puresol.coding.evaluator.EvaluatorASCIIExport;
 import com.puresol.coding.reporting.html.HTMLProjectAnalysisCreator;
 import com.puresol.config.ConfigurationManager;
@@ -60,325 +61,325 @@ import com.puresol.osgi.OSGiFrameworkManager;
  */
 public class CodeAnalysis extends PureSolApplication implements FinishListener {
 
-	private static final long serialVersionUID = -3002673096551916032L;
+    private static final long serialVersionUID = -3002673096551916032L;
 
-	private static final Logger logger = Logger.getLogger(CodeAnalysis.class);
-	private static final Translator translator = Translator
-			.getTranslator(CodeAnalysis.class);
+    private static final Logger logger = Logger.getLogger(CodeAnalysis.class);
+    private static final Translator translator = Translator
+	    .getTranslator(CodeAnalysis.class);
 
-	private final JMenuItem newWorkspace = new JMenuItem("New Workspace...");
-	private final JMenuItem openWorkspace = new JMenuItem("Open Workspace...");
-	private final JMenuItem updateWorkspace = new JMenuItem("Update Workspace");
-	private final JMenuItem exportValues = new JMenuItem("Export Values...");
-	private final JMenuItem createEvaluatorHTML = new JMenuItem(
-			"Create HTML Project...");
-	private final JMenuItem exit = new JMenuItem("Exit");
-	private final JMenuItem pluginManager = new JMenuItem("Plugin Manager...");
-	private final JMenuItem pluginConfiguration = new JMenuItem(
-			"Plugin Configuration...");
+    private final JMenuItem newWorkspace = new JMenuItem("New Workspace...");
+    private final JMenuItem openWorkspace = new JMenuItem("Open Workspace...");
+    private final JMenuItem updateWorkspace = new JMenuItem("Update Workspace");
+    private final JMenuItem exportValues = new JMenuItem("Export Values...");
+    private final JMenuItem createEvaluatorHTML = new JMenuItem(
+	    "Create HTML Project...");
+    private final JMenuItem exit = new JMenuItem("Exit");
+    private final JMenuItem pluginManager = new JMenuItem("Plugin Manager...");
+    private final JMenuItem pluginConfiguration = new JMenuItem(
+	    "Plugin Configuration...");
 
-	private final JButton newWorkspaceButton = new JButton(
-			translator.i18n("New Workspace..."));
-	private final JButton openWorkspaceButton = new JButton(
-			translator.i18n("Open Workspace..."));
-	private final JButton updateWorkspaceButton = new JButton(
-			translator.i18n("Update Workspace"));
+    private final JButton newWorkspaceButton = new JButton(
+	    translator.i18n("New Workspace..."));
+    private final JButton openWorkspaceButton = new JButton(
+	    translator.i18n("Open Workspace..."));
+    private final JButton updateWorkspaceButton = new JButton(
+	    translator.i18n("Update Workspace"));
 
-	private final ConfigurationManager configManager = new ConfigurationManager();
-	private final ProjectAnalysisBrowser browser = new ProjectAnalysisBrowser(
-			configManager);
+    private final ConfigurationManager configManager = new ConfigurationManager();
+    private final ProjectAnalysisBrowser browser = new ProjectAnalysisBrowser(
+	    configManager);
 
-	private OSGi osgi;
-	private ProjectAnalyzer analyzer = null;
+    private OSGi osgi;
+    private ProjectAnalyzer analyzer = null;
 
-	public CodeAnalysis() {
-		super("Code Analysis", "v0.0.1");
-		loadConfiguration();
-		startOSGi();
-		initMenu();
-		initDesktop();
+    public CodeAnalysis() {
+	super("Code Analysis", "v0.0.1");
+	loadConfiguration();
+	startOSGi();
+	initMenu();
+	initDesktop();
+    }
+
+    private void loadConfiguration() {
+	try {
+	    configManager.addSource(new HomeFile(
+		    "CodeAnalysis Main Configuration", new File(
+			    ".CodeAnalysis/config.properties"), true, true));
+	    configManager.addSource(BundleConfigurators.getInstance());
+	} catch (IOException e) {
+	    JOptionPane
+		    .showMessageDialog(
+			    this,
+			    translator
+				    .i18n("Could not read configuration.\nDefault values are used."),
+			    translator.i18n("Error"), JOptionPane.ERROR_MESSAGE);
 	}
+    }
 
-	private void loadConfiguration() {
-		try {
-			configManager.addSource(new HomeFile(
-					"CodeAnalysis Main Configuration", new File(
-							".CodeAnalysis/config.properties"), true, true));
-			configManager.addSource(BundleConfigurators.getInstance());
-		} catch (IOException e) {
-			JOptionPane
-					.showMessageDialog(
-							this,
-							translator
-									.i18n("Could not read configuration.\nDefault values are used."),
-							translator.i18n("Error"), JOptionPane.ERROR_MESSAGE);
-		}
+    private boolean storeConfiguration() {
+	try {
+	    configManager.save();
+	    return true;
+	} catch (IOException e) {
+	    int result = JOptionPane
+		    .showConfirmDialog(
+			    this,
+			    translator
+				    .i18n("Could not save configuration.\nAll changes will get lost when proceeding.\n\nDo you want to proceed?"),
+			    translator.i18n("Warning"),
+			    JOptionPane.YES_NO_OPTION,
+			    JOptionPane.WARNING_MESSAGE);
+	    if (result == JOptionPane.YES_OPTION) {
+		return true;
+	    }
+	    return false;
 	}
+    }
 
-	private boolean storeConfiguration() {
-		try {
-			configManager.save();
-			return true;
-		} catch (IOException e) {
-			int result = JOptionPane
-					.showConfirmDialog(
-							this,
-							translator
-									.i18n("Could not save configuration.\nAll changes will get lost when proceeding.\n\nDo you want to proceed?"),
-							translator.i18n("Warning"),
-							JOptionPane.YES_NO_OPTION,
-							JOptionPane.WARNING_MESSAGE);
-			if (result == JOptionPane.YES_OPTION) {
-				return true;
-			}
-			return false;
-		}
+    private void startOSGi() {
+	try {
+	    osgi = OSGiFrameworkManager.getInstance();
+	    osgi.start();
+	} catch (OSGiException e) {
+	    logger.error(e.getMessage(), e);
+	    Application.showStandardErrorMessage(translator
+		    .i18n("An error within the plugin system occured!"), e);
+	    throw new RuntimeException(e.getMessage());
+	} catch (BundleException e) {
+	    logger.error(e.getMessage(), e);
+	    Application.showStandardErrorMessage(translator
+		    .i18n("An error within the plugin system occured!"), e);
+	    throw new RuntimeException(e.getMessage());
 	}
+    }
 
-	private void startOSGi() {
-		try {
-			osgi = OSGiFrameworkManager.getInstance();
-			osgi.start();
-		} catch (OSGiException e) {
-			logger.error(e.getMessage(), e);
-			Application.showStandardErrorMessage(translator
-					.i18n("An error within the plugin system occured!"), e);
-			throw new RuntimeException(e.getMessage());
-		} catch (BundleException e) {
-			logger.error(e.getMessage(), e);
-			Application.showStandardErrorMessage(translator
-					.i18n("An error within the plugin system occured!"), e);
-			throw new RuntimeException(e.getMessage());
-		}
+    private void initMenu() {
+	JMenuBar menuBar = new JMenuBar();
+
+	JMenu fileMenu = new JMenu(translator.i18n("File"));
+	JMenu optionsMenu = new JMenu(translator.i18n("Options"));
+
+	newWorkspace.addActionListener(this);
+	openWorkspace.addActionListener(this);
+	updateWorkspace.addActionListener(this);
+	exportValues.addActionListener(this);
+	createEvaluatorHTML.addActionListener(this);
+	exit.addActionListener(this);
+	pluginManager.addActionListener(this);
+	pluginConfiguration.addActionListener(this);
+
+	menuBar.add(fileMenu);
+	fileMenu.add(newWorkspace);
+	fileMenu.addSeparator();
+	fileMenu.add(openWorkspace);
+	fileMenu.add(updateWorkspace);
+	fileMenu.addSeparator();
+	fileMenu.add(exportValues);
+	fileMenu.add(createEvaluatorHTML);
+	fileMenu.addSeparator();
+	fileMenu.add(exit);
+
+	menuBar.add(optionsMenu);
+	optionsMenu.add(pluginManager);
+	optionsMenu.addSeparator();
+	optionsMenu.add(pluginConfiguration);
+
+	setJMenuBar(menuBar);
+    }
+
+    private void initDesktop() {
+	JPanel widget = new JPanel();
+	widget.setLayout(new BorderLayout());
+	setContentPane(widget);
+
+	JToolBar toolbar = new JToolBar();
+	toolbar.add(newWorkspaceButton);
+	toolbar.add(openWorkspaceButton);
+	toolbar.add(updateWorkspaceButton);
+
+	newWorkspaceButton.addActionListener(this);
+	openWorkspaceButton.addActionListener(this);
+	updateWorkspaceButton.addActionListener(this);
+
+	widget.add(toolbar, BorderLayout.NORTH);
+	widget.add(browser, BorderLayout.CENTER);
+	widget.add(new MemoryMonitor(), BorderLayout.SOUTH);
+    }
+
+    private void newWorkspace() {
+	NewProjectAnalyserDialog dialog = new NewProjectAnalyserDialog();
+	if (!dialog.run()) {
+	    return;
 	}
-
-	private void initMenu() {
-		JMenuBar menuBar = new JMenuBar();
-
-		JMenu fileMenu = new JMenu(translator.i18n("File"));
-		JMenu optionsMenu = new JMenu(translator.i18n("Options"));
-
-		newWorkspace.addActionListener(this);
-		openWorkspace.addActionListener(this);
-		updateWorkspace.addActionListener(this);
-		exportValues.addActionListener(this);
-		createEvaluatorHTML.addActionListener(this);
-		exit.addActionListener(this);
-		pluginManager.addActionListener(this);
-		pluginConfiguration.addActionListener(this);
-
-		menuBar.add(fileMenu);
-		fileMenu.add(newWorkspace);
-		fileMenu.addSeparator();
-		fileMenu.add(openWorkspace);
-		fileMenu.add(updateWorkspace);
-		fileMenu.addSeparator();
-		fileMenu.add(exportValues);
-		fileMenu.add(createEvaluatorHTML);
-		fileMenu.addSeparator();
-		fileMenu.add(exit);
-
-		menuBar.add(optionsMenu);
-		optionsMenu.add(pluginManager);
-		optionsMenu.addSeparator();
-		optionsMenu.add(pluginConfiguration);
-
-		setJMenuBar(menuBar);
+	setSubtitle(dialog.getWorkspaceDirectory().toString());
+	analyzer = ProjectAnalyzerFactory.create(dialog.getSourceDirectory(),
+		dialog.getWorkspaceDirectory());
+	if (analyzer != null) {
+	    ProgressWindow progress = new ProgressWindow(this, true);
+	    progress.addFinishListener(this);
+	    progress.runAsynchronous(analyzer);
+	} else {
+	    JOptionPane
+		    .showMessageDialog(this, translator
+			    .i18n("Could not create new analyser workspace!"),
+			    translator.i18n("Error"), JOptionPane.ERROR_MESSAGE);
 	}
+    }
 
-	private void initDesktop() {
-		JPanel widget = new JPanel();
-		widget.setLayout(new BorderLayout());
-		setContentPane(widget);
-
-		JToolBar toolbar = new JToolBar();
-		toolbar.add(newWorkspaceButton);
-		toolbar.add(openWorkspaceButton);
-		toolbar.add(updateWorkspaceButton);
-
-		newWorkspaceButton.addActionListener(this);
-		openWorkspaceButton.addActionListener(this);
-		updateWorkspaceButton.addActionListener(this);
-
-		widget.add(toolbar, BorderLayout.NORTH);
-		widget.add(browser, BorderLayout.CENTER);
-		widget.add(new MemoryMonitor(), BorderLayout.SOUTH);
+    private void openWorkspace() {
+	JFileChooser file = new JFileChooser();
+	file.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+	file.setName(translator.i18n("Open Analysis Workspace"));
+	if (file.showOpenDialog(this) == JFileChooser.CANCEL_OPTION) {
+	    return;
 	}
+	analyzer = ProjectAnalyzerFactory.open(file.getSelectedFile());
+	refresh();
+    }
 
-	private void newWorkspace() {
-		NewProjectAnalyserDialog dialog = new NewProjectAnalyserDialog();
-		if (!dialog.run()) {
-			return;
-		}
-		setSubtitle(dialog.getWorkspaceDirectory().toString());
-		analyzer = ProjectAnalyzer.create(dialog.getSourceDirectory(),
-				dialog.getWorkspaceDirectory());
-		if (analyzer != null) {
-			ProgressWindow progress = new ProgressWindow(this, true);
-			progress.addFinishListener(this);
-			progress.runAsynchronous(analyzer);
-		} else {
-			JOptionPane
-					.showMessageDialog(this, translator
-							.i18n("Could not create new analyser workspace!"),
-							translator.i18n("Error"), JOptionPane.ERROR_MESSAGE);
-		}
+    private void updateWorkspace() {
+	if (analyzer != null) {
+	    ProgressWindow progress = new ProgressWindow(this, true);
+	    progress.addFinishListener(this);
+	    progress.runAsynchronous(analyzer);
+	} else {
+	    JOptionPane.showMessageDialog(this,
+		    translator.i18n("No workspace is open for update!!"),
+		    translator.i18n("Error"), JOptionPane.ERROR_MESSAGE);
 	}
+    }
 
-	private void openWorkspace() {
-		JFileChooser file = new JFileChooser();
-		file.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		file.setName(translator.i18n("Open Analysis Workspace"));
-		if (file.showOpenDialog(this) == JFileChooser.CANCEL_OPTION) {
-			return;
-		}
-		analyzer = ProjectAnalyzer.open(file.getSelectedFile());
-		refresh();
+    private void exportValues() {
+	JFileChooser chooser = new JFileChooser();
+	ExcelFilter excelFilter = new ExcelFilter();
+	CSVFilter csvFilter = new CSVFilter();
+	TSVFilter tsvFilter = new TSVFilter();
+	chooser.setFileFilter(excelFilter);
+	chooser.setFileFilter(csvFilter);
+	chooser.setFileFilter(tsvFilter);
+	chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+	int result = chooser.showOpenDialog(Application.getInstance());
+	if (result == JFileChooser.CANCEL_OPTION) {
+	    return;
 	}
-
-	private void updateWorkspace() {
-		if (analyzer != null) {
-			ProgressWindow progress = new ProgressWindow(this, true);
-			progress.addFinishListener(this);
-			progress.runAsynchronous(analyzer);
-		} else {
-			JOptionPane.showMessageDialog(this,
-					translator.i18n("No workspace is open for update!!"),
-					translator.i18n("Error"), JOptionPane.ERROR_MESSAGE);
-		}
+	FileFilter filter = chooser.getFileFilter();
+	if (filter == tsvFilter) {
+	    EvaluatorASCIIExport export = new EvaluatorASCIIExport(
+		    chooser.getSelectedFile(), analyzer, "\t");
+	    ProgressWindow progressWindow = new ProgressWindow(this, true);
+	    progressWindow.addFinishListener(this);
+	    progressWindow.runAsynchronous(export);
+	} else if (filter == csvFilter) {
+	    EvaluatorASCIIExport export = new EvaluatorASCIIExport(
+		    chooser.getSelectedFile(), analyzer, ",");
+	    ProgressWindow progressWindow = new ProgressWindow(this, true);
+	    progressWindow.addFinishListener(this);
+	    progressWindow.runAsynchronous(export);
+	} else if (filter == excelFilter) {
+	    Application.showNotImplementedMessage();
 	}
+    }
 
-	private void exportValues() {
-		JFileChooser chooser = new JFileChooser();
-		ExcelFilter excelFilter = new ExcelFilter();
-		CSVFilter csvFilter = new CSVFilter();
-		TSVFilter tsvFilter = new TSVFilter();
-		chooser.setFileFilter(excelFilter);
-		chooser.setFileFilter(csvFilter);
-		chooser.setFileFilter(tsvFilter);
-		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		int result = chooser.showOpenDialog(Application.getInstance());
-		if (result == JFileChooser.CANCEL_OPTION) {
-			return;
-		}
-		FileFilter filter = chooser.getFileFilter();
-		if (filter == tsvFilter) {
-			EvaluatorASCIIExport export = new EvaluatorASCIIExport(
-					chooser.getSelectedFile(), analyzer, "\t");
-			ProgressWindow progressWindow = new ProgressWindow(this, true);
-			progressWindow.addFinishListener(this);
-			progressWindow.runAsynchronous(export);
-		} else if (filter == csvFilter) {
-			EvaluatorASCIIExport export = new EvaluatorASCIIExport(
-					chooser.getSelectedFile(), analyzer, ",");
-			ProgressWindow progressWindow = new ProgressWindow(this, true);
-			progressWindow.addFinishListener(this);
-			progressWindow.runAsynchronous(export);
-		} else if (filter == excelFilter) {
-			Application.showNotImplementedMessage();
-		}
+    private void createHTMLProject() {
+	JFileChooser chooser = new JFileChooser();
+	chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+	int result = chooser.showSaveDialog(Application.getInstance());
+	if (result == JFileChooser.CANCEL_OPTION) {
+	    return;
 	}
+	HTMLProjectAnalysisCreator creator = new HTMLProjectAnalysisCreator(
+		analyzer, chooser.getSelectedFile(), configManager);
+	ProgressWindow progress = new ProgressWindow(this, true);
+	progress.runAsynchronous(creator);
+    }
 
-	private void createHTMLProject() {
-		JFileChooser chooser = new JFileChooser();
-		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		int result = chooser.showSaveDialog(Application.getInstance());
-		if (result == JFileChooser.CANCEL_OPTION) {
-			return;
-		}
-		HTMLProjectAnalysisCreator creator = new HTMLProjectAnalysisCreator(
-				analyzer, chooser.getSelectedFile(), configManager);
-		ProgressWindow progress = new ProgressWindow(this, true);
-		progress.runAsynchronous(creator);
+    private void pluginManager() {
+	if (osgi.isStarted()) {
+	    new BundleManager(osgi.getContext()).run();
+	} else {
+	    JOptionPane
+		    .showConfirmDialog(
+			    getInstance(),
+			    translator
+				    .i18n("No plugin system was started. There is nothing to manage."),
+			    translator.i18n("Information"),
+			    JOptionPane.DEFAULT_OPTION,
+			    JOptionPane.INFORMATION_MESSAGE);
 	}
+    }
 
-	private void pluginManager() {
-		if (osgi.isStarted()) {
-			new BundleManager(osgi.getContext()).run();
-		} else {
-			JOptionPane
-					.showConfirmDialog(
-							getInstance(),
-							translator
-									.i18n("No plugin system was started. There is nothing to manage."),
-							translator.i18n("Information"),
-							JOptionPane.DEFAULT_OPTION,
-							JOptionPane.INFORMATION_MESSAGE);
-		}
+    private void pluginConfiguration() {
+	new BundleConfigurationDialog(CodeAnalysis.class.getName())
+		.setVisible(true);
+    }
+
+    private void refresh() {
+	setSubtitle(analyzer.getWorkspaceDirectory().getPath());
+	browser.setProjectAnalyser(analyzer);
+    }
+
+    @Override
+    public void quit() {
+	if (!storeConfiguration()) {
+	    if (JOptionPane
+		    .showConfirmDialog(
+			    this,
+			    translator
+				    .i18n("Could not write the configuration.\nSome settings might get lost\n\nDo you want to quit anyway?"),
+			    translator.i18n("Error"),
+			    JOptionPane.ERROR_MESSAGE,
+			    JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) {
+		return;
+	    }
 	}
-
-	private void pluginConfiguration() {
-		new BundleConfigurationDialog(CodeAnalysis.class.getName())
-				.setVisible(true);
+	try {
+	    osgi.stop();
+	} catch (BundleException e) {
+	    logger.error(e.getMessage(), e);
 	}
+	osgi = null;
+	super.quit();
+    }
 
-	private void refresh() {
-		setSubtitle(analyzer.getWorkspaceDirectory().getPath());
-		browser.setProjectAnalyser(analyzer);
+    @Override
+    public void actionPerformed(ActionEvent e) {
+
+	if ((e.getSource() == newWorkspace)
+		|| (e.getSource() == newWorkspaceButton)) {
+	    newWorkspace();
+	} else if ((e.getSource() == openWorkspace)
+		|| (e.getSource() == openWorkspaceButton)) {
+	    openWorkspace();
+	} else if ((e.getSource() == updateWorkspace)
+		|| (e.getSource() == updateWorkspaceButton)) {
+	    updateWorkspace();
+	} else if (e.getSource() == exportValues) {
+	    exportValues();
+	} else if (e.getSource() == createEvaluatorHTML) {
+	    createHTMLProject();
+	} else if (e.getSource() == exit) {
+	    quit();
+	} else if (e.getSource() == pluginManager) {
+	    pluginManager();
+	} else if (e.getSource() == pluginConfiguration) {
+	    pluginConfiguration();
+	} else {
+	    super.actionPerformed(e);
 	}
+    }
 
-	@Override
-	public void quit() {
-		if (!storeConfiguration()) {
-			if (JOptionPane
-					.showConfirmDialog(
-							this,
-							translator
-									.i18n("Could not write the configuration.\nSome settings might get lost\n\nDo you want to quit anyway?"),
-							translator.i18n("Error"),
-							JOptionPane.ERROR_MESSAGE,
-							JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) {
-				return;
-			}
-		}
-		try {
-			osgi.stop();
-		} catch (BundleException e) {
-			logger.error(e.getMessage(), e);
-		}
-		osgi = null;
-		super.quit();
-	}
+    @Override
+    public void finished(ProgressObservable o) {
+	refresh();
+    }
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
+    @Override
+    public void terminated(ProgressObservable o) {
+	refresh();
+    }
 
-		if ((e.getSource() == newWorkspace)
-				|| (e.getSource() == newWorkspaceButton)) {
-			newWorkspace();
-		} else if ((e.getSource() == openWorkspace)
-				|| (e.getSource() == openWorkspaceButton)) {
-			openWorkspace();
-		} else if ((e.getSource() == updateWorkspace)
-				|| (e.getSource() == updateWorkspaceButton)) {
-			updateWorkspace();
-		} else if (e.getSource() == exportValues) {
-			exportValues();
-		} else if (e.getSource() == createEvaluatorHTML) {
-			createHTMLProject();
-		} else if (e.getSource() == exit) {
-			quit();
-		} else if (e.getSource() == pluginManager) {
-			pluginManager();
-		} else if (e.getSource() == pluginConfiguration) {
-			pluginConfiguration();
-		} else {
-			super.actionPerformed(e);
-		}
-	}
-
-	@Override
-	public void finished(ProgressObservable o) {
-		refresh();
-	}
-
-	@Override
-	public void terminated(ProgressObservable o) {
-		refresh();
-	}
-
-	public static void main(String[] args) {
-		new CodeAnalysis().run();
-	}
+    public static void main(String[] args) {
+	new CodeAnalysis().run();
+    }
 
 }
