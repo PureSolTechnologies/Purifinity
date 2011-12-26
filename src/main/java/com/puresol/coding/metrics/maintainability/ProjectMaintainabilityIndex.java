@@ -202,11 +202,9 @@ public class ProjectMaintainabilityIndex extends AbstractEvaluator implements
 		    SourceCodeQuality quality = qualities.get(identifier);
 		    Integer number = pieChartQualitiesNumbers.get(quality);
 		    if (number == null) {
-			number = new Integer(1);
-			pieChartQualitiesNumbers.put(quality, number);
+			pieChartQualitiesNumbers.put(quality, 1);
 		    } else {
-			pieChartQualitiesNumbers.put(quality, new Integer(
-				number + 1));
+			pieChartQualitiesNumbers.put(quality, number + 1);
 		    }
 		    System.err.println(identifier + " " + quality + " "
 			    + number);
