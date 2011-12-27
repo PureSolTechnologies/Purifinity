@@ -41,6 +41,7 @@ import com.puresol.filefilter.CSVFilter;
 import com.puresol.filefilter.ExcelFilter;
 import com.puresol.filefilter.TSVFilter;
 import com.puresol.gui.Application;
+import com.puresol.gui.DialogButtons;
 import com.puresol.gui.MemoryMonitor;
 import com.puresol.gui.PureSolApplication;
 import com.puresol.gui.coding.NewProjectAnalyserDialog;
@@ -214,7 +215,8 @@ public class CodeAnalysis extends PureSolApplication implements FinishListener {
 
     private void newWorkspace() {
 	NewProjectAnalyserDialog dialog = new NewProjectAnalyserDialog();
-	if (!dialog.run()) {
+	dialog.setVisible(true);
+	if (dialog.getClosingButton() != DialogButtons.OK) {
 	    return;
 	}
 	setSubtitle(dialog.getWorkspaceDirectory().toString());
@@ -301,7 +303,7 @@ public class CodeAnalysis extends PureSolApplication implements FinishListener {
 
     private void pluginManager() {
 	if (osgi.isStarted()) {
-	    new BundleManager(osgi.getContext()).run();
+	    new BundleManager(osgi.getContext()).setVisible(true);
 	} else {
 	    JOptionPane
 		    .showConfirmDialog(

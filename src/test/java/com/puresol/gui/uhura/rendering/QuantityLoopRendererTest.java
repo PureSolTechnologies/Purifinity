@@ -16,23 +16,23 @@ import com.puresol.uhura.grammar.Quantity;
 
 public class QuantityLoopRendererTest {
 
-	@Before
-	public void createEnvironment() {
-	}
+    @Before
+    public void createEnvironment() {
+    }
 
-	@Test
-	public void testInstance() {
-		assertNotNull(new QuantityLoopRenderer(new TextBoxRenderer(new Font(
-				"Verdana", Font.TRUETYPE_FONT | Font.BOLD, 12), Color.BLACK,
-				"TestString"), Quantity.ACCEPT_MANY));
-	}
+    @Test
+    public void testInstance() {
+	assertNotNull(new QuantityLoopRenderer(new TextBoxRenderer(new Font(
+		"Verdana", Font.TRUETYPE_FONT | Font.BOLD, 12), Color.BLACK,
+		"TestString"), Quantity.ACCEPT_MANY));
+    }
 
-	public static void main(String args[]) {
-		Renderer renderer = new QuantityLoopRenderer(new TextBoxRenderer(
-				new Font("Verdana", Font.TRUETYPE_FONT | Font.BOLD, 12),
-				Color.BLACK, "TestString"), Quantity.ACCEPT_MANY);
-		RendererTester tester = new RendererTester(renderer);
-		tester.run();
-	}
+    public static void main(String args[]) {
+	Renderer renderer = new QuantityLoopRenderer(new TextBoxRenderer(
+		new Font("Verdana", Font.TRUETYPE_FONT | Font.BOLD, 12),
+		Color.BLACK, "TestString"), Quantity.ACCEPT_MANY);
+	RendererTester tester = new RendererTester(renderer);
+	tester.setVisible(true);
+    }
 
 }
