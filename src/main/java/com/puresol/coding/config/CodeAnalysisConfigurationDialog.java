@@ -24,13 +24,13 @@ public class CodeAnalysisConfigurationDialog extends PureSolDialog implements
 	super(CodeAnalysis.getInstance(), "Code Analysis Configuration", true);
 	this.homeFileSource = homeFileSource;
 	initUI();
+	initLocation();
     }
 
     private void initUI() {
 	setButtonVisible(DialogButtons.OK, true);
 	setButtonVisible(DialogButtons.CANCEL, true);
 	setButtonVisible(DialogButtons.HELP, true);
-	pack();
     }
 
     @Override

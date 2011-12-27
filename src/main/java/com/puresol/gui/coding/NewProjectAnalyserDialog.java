@@ -36,11 +36,10 @@ public class NewProjectAnalyserDialog extends PureSolDialog implements
 	super(Application.getInstance(), translator
 		.i18n("New Project Analyser"), true);
 	initUI();
+	initLocation();
     }
 
     private void initUI() {
-	setLayout(new BorderLayout());
-
 	JPanel directoriesPanel = new JPanel();
 	directoriesPanel.setLayout(new BoxLayout(directoriesPanel,
 		BoxLayout.Y_AXIS));
@@ -71,8 +70,6 @@ public class NewProjectAnalyserDialog extends PureSolDialog implements
 
 	sourceDirectoryButton.addActionListener(this);
 	workspaceDirectoryButton.addActionListener(this);
-
-	pack();
     }
 
     private void chooseSourceDirectory() {

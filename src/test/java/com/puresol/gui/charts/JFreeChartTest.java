@@ -33,7 +33,7 @@ public class JFreeChartTest {
 
 	PureSolDialog dialog = new PureSolDialog(Application.getInstance(),
 		"Test", true);
-	dialog.getContentPane().add(new ChartPanel(chart));
+	dialog.add(new ChartPanel(chart));
 	dialog.pack();
 	// dialog.setVisible(true);
     }
