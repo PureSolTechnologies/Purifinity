@@ -31,6 +31,7 @@ import org.osgi.framework.BundleException;
 
 import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.analysis.ProjectAnalyzerFactory;
+import com.puresol.coding.config.CodeAnalysisConfigurationDialog;
 import com.puresol.coding.evaluator.EvaluatorASCIIExport;
 import com.puresol.coding.reporting.html.HTMLProjectAnalysisCreator;
 import com.puresol.config.ConfigurationManager;
@@ -77,6 +78,7 @@ public class CodeAnalysis extends PureSolApplication implements FinishListener {
     private final JMenuItem pluginManager = new JMenuItem("Plugin Manager...");
     private final JMenuItem pluginConfiguration = new JMenuItem(
 	    "Plugin Configuration...");
+    private final JMenuItem configuration = new JMenuItem("Configuration...");
 
     private final JButton newWorkspaceButton = new JButton(
 	    translator.i18n("New Workspace..."));
@@ -85,11 +87,13 @@ public class CodeAnalysis extends PureSolApplication implements FinishListener {
     private final JButton updateWorkspaceButton = new JButton(
 	    translator.i18n("Update Workspace"));
 
-    private final ConfigurationManager configManager = new ConfigurationManager();
+    private final ConfigurationManager configManager = ConfigurationManager
+	    .getInstance();
     private final ProjectAnalysisBrowser browser = new ProjectAnalysisBrowser(
 	    configManager);
 
     private OSGi osgi;
+    private HomeFile homeFileSource;
     private ProjectAnalyzer analyzer = null;
 
     public CodeAnalysis() {
@@ -102,9 +106,9 @@ public class CodeAnalysis extends PureSolApplication implements FinishListener {
 
     private void loadConfiguration() {
 	try {
-	    configManager.addSource(new HomeFile(
-		    "CodeAnalysis Main Configuration", new File(
-			    ".CodeAnalysis/config.properties"), true, true));
+	    homeFileSource = new HomeFile("CodeAnalysis Main Configuration",
+		    new File(".CodeAnalysis/config.properties"), true, true);
+	    configManager.addSource(homeFileSource);
 	    configManager.addSource(BundleConfigurators.getInstance());
 	} catch (IOException e) {
 	    JOptionPane
@@ -167,6 +171,7 @@ public class CodeAnalysis extends PureSolApplication implements FinishListener {
 	exit.addActionListener(this);
 	pluginManager.addActionListener(this);
 	pluginConfiguration.addActionListener(this);
+	configuration.addActionListener(this);
 
 	menuBar.add(fileMenu);
 	fileMenu.add(newWorkspace);
@@ -181,8 +186,9 @@ public class CodeAnalysis extends PureSolApplication implements FinishListener {
 
 	menuBar.add(optionsMenu);
 	optionsMenu.add(pluginManager);
-	optionsMenu.addSeparator();
 	optionsMenu.add(pluginConfiguration);
+	optionsMenu.addSeparator();
+	optionsMenu.add(configuration);
 
 	setJMenuBar(menuBar);
     }
@@ -313,6 +319,10 @@ public class CodeAnalysis extends PureSolApplication implements FinishListener {
 		.setVisible(true);
     }
 
+    private void configuration() {
+	new CodeAnalysisConfigurationDialog(homeFileSource).setVisible(true);
+    }
+
     private void refresh() {
 	setSubtitle(analyzer.getWorkspaceDirectory().getPath());
 	browser.setProjectAnalyser(analyzer);
@@ -363,6 +373,8 @@ public class CodeAnalysis extends PureSolApplication implements FinishListener {
 	    pluginManager();
 	} else if (e.getSource() == pluginConfiguration) {
 	    pluginConfiguration();
+	} else if (e.getSource() == configuration) {
+	    configuration();
 	} else {
 	    super.actionPerformed(e);
 	}
