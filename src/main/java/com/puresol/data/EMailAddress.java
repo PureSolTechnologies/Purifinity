@@ -1,6 +1,5 @@
 package com.puresol.data;
 
-import com.puresol.exceptions.StrangeSituationException;
 
 public class EMailAddress implements Cloneable {
 
@@ -32,6 +31,7 @@ public class EMailAddress implements Cloneable {
 	addressServer = splits[1];
     }
 
+    @Override
     public String toString() {
 	return addressName + "@" + addressServer;
     }
@@ -53,16 +53,10 @@ public class EMailAddress implements Cloneable {
     public int hashCode() {
 	final int prime = 31;
 	int result = 1;
-	result =
-		prime
-			* result
-			+ ((addressName == null) ? 0 : addressName
-				.hashCode());
-	result =
-		prime
-			* result
-			+ ((addressServer == null) ? 0 : addressServer
-				.hashCode());
+	result = prime * result
+		+ ((addressName == null) ? 0 : addressName.hashCode());
+	result = prime * result
+		+ ((addressServer == null) ? 0 : addressServer.hashCode());
 	return result;
     }
 
@@ -96,7 +90,7 @@ public class EMailAddress implements Cloneable {
 	    cloned.addressServer = this.addressServer;
 	    return cloned;
 	} catch (CloneNotSupportedException e) {
-	    throw new StrangeSituationException(e);
+	    throw new RuntimeException(e);
 	}
     }
 }

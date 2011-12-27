@@ -19,8 +19,8 @@
 package com.puresol.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Container;
 import java.awt.FlowLayout;
-import java.util.Locale;
 
 import javax.i18n4java.Translator;
 import javax.swing.JPanel;
@@ -36,111 +36,106 @@ import com.puresol.config.CustomerInformation;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class AboutBox extends Dialog {
+public class AboutBox extends PureSolDialog {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private static final Translator translator = Translator
-			.getTranslator(AboutBox.class);
+    private static final Translator translator = Translator
+	    .getTranslator(AboutBox.class);
 
-	/**
-	 * This is the standard constructor for the about box. Only a parent
-	 * reference is needed. All other information are standard or taken out of
-	 * APIConfig and CustomerConfig.
-	 * 
-	 * @see com.APIInformation.api.APIConfig
-	 * @see com.CustomerInformation.config.api.CustomerConfig
-	 * 
-	 * @param parent
-	 *            is the reference to the parent Application showing this
-	 *            dialog.
-	 */
-	public AboutBox() {
-		super(translator.i18n("About"), false);
-		initView();
-	}
+    /**
+     * This is the standard constructor for the about box. Only a parent
+     * reference is needed. All other information are standard or taken out of
+     * APIConfig and CustomerConfig.
+     * 
+     * @see com.APIInformation.api.APIConfig
+     * @see com.CustomerInformation.config.api.CustomerConfig
+     * 
+     * @param parent
+     *            is the reference to the parent Application showing this
+     *            dialog.
+     */
+    public AboutBox() {
+	super(Application.getInstance(), translator.i18n("About"), false);
+	initView();
+    }
 
-	/**
-	 * This is the method for creating the complete UI.
-	 */
-	protected void initView() {
-		setDefaultLayout();
-		JPanel content = (JPanel) getContentPane();
-		JTabbedPane tabbedPane = new JTabbedPane();
-		content.add(tabbedPane, BorderLayout.CENTER);
-		tabbedPane.add(translator.i18n("Copyright"), new JScrollPane(
-				getCopyrightPanel()));
-		tabbedPane.add(translator.i18n("Vendor"), new JScrollPane(
-				getVendorPanel()));
-		tabbedPane.add(translator.i18n("Customer"), new JScrollPane(
-				getCustomerPanel()));
-		tabbedPane.add(translator.i18n("Contact"), new JScrollPane(
-				getContactPanel()));
-		pack();
-	}
+    /**
+     * This is the method for creating the complete UI.
+     */
+    protected void initView() {
+	Container content = getContentPane();
+	JTabbedPane tabbedPane = new JTabbedPane();
+	content.add(tabbedPane, BorderLayout.CENTER);
+	tabbedPane.add(translator.i18n("Copyright"), new JScrollPane(
+		getCopyrightPanel()));
+	tabbedPane.add(translator.i18n("Vendor"), new JScrollPane(
+		getVendorPanel()));
+	tabbedPane.add(translator.i18n("Customer"), new JScrollPane(
+		getCustomerPanel()));
+	tabbedPane.add(translator.i18n("Contact"), new JScrollPane(
+		getContactPanel()));
+	setButtonVisible(DialogButtons.OK, true);
+	pack();
+    }
 
-	/**
-	 * This method creates the copyright panel for this about box.
-	 * 
-	 * @return The Panel is returned for the TabbedPane.
-	 */
-	private JPanel getCopyrightPanel() {
-		JPanel panel = new JPanel();
-		panel.setLayout(new FlowLayout(FlowLayout.LEFT));
-		HTMLViewer html = new HTMLViewer();
-		html.setText(Application.getCopyrightMessage());
-		panel.add(html);
-		return panel;
-	}
+    /**
+     * This method creates the copyright panel for this about box.
+     * 
+     * @return The Panel is returned for the TabbedPane.
+     */
+    private JPanel getCopyrightPanel() {
+	JPanel panel = new JPanel();
+	panel.setLayout(new FlowLayout(FlowLayout.LEFT));
+	HTMLViewer html = new HTMLViewer();
+	html.setText(Application.getCopyrightMessage());
+	panel.add(html);
+	return panel;
+    }
 
-	/**
-	 * This method creates the vendor panel for this about box.
-	 * 
-	 * @return The Panel is returned for the TabbedPane.
-	 */
-	private JPanel getVendorPanel() {
-		JPanel panel = new JPanel();
-		panel.setLayout(new FlowLayout(FlowLayout.LEFT));
-		HTMLViewer html = new HTMLViewer();
-		html.setText(Application.getVendorInformation());
-		panel.add(html);
-		return panel;
-	}
+    /**
+     * This method creates the vendor panel for this about box.
+     * 
+     * @return The Panel is returned for the TabbedPane.
+     */
+    private JPanel getVendorPanel() {
+	JPanel panel = new JPanel();
+	panel.setLayout(new FlowLayout(FlowLayout.LEFT));
+	HTMLViewer html = new HTMLViewer();
+	html.setText(Application.getVendorInformation());
+	panel.add(html);
+	return panel;
+    }
 
-	/**
-	 * This method creates the customer panel for this about box.
-	 * 
-	 * @return The Panel is returned for the TabbedPane.
-	 */
-	private JPanel getCustomerPanel() {
-		JPanel panel = new JPanel();
-		panel.setLayout(new FlowLayout(FlowLayout.LEFT));
-		HTMLViewer html = new HTMLViewer();
-		html.setText(CustomerInformation.getCustomerInformation());
-		panel.add(html);
-		return panel;
-	}
+    /**
+     * This method creates the customer panel for this about box.
+     * 
+     * @return The Panel is returned for the TabbedPane.
+     */
+    private JPanel getCustomerPanel() {
+	JPanel panel = new JPanel();
+	panel.setLayout(new FlowLayout(FlowLayout.LEFT));
+	HTMLViewer html = new HTMLViewer();
+	html.setText(CustomerInformation.getCustomerInformation());
+	panel.add(html);
+	return panel;
+    }
 
-	/**
-	 * This method creates the contact panel for this about box.
-	 * 
-	 * @return The Panel is returned for the TabbedPane.
-	 */
-	private JPanel getContactPanel() {
-		JPanel panel = new JPanel();
-		panel.setLayout(new FlowLayout(FlowLayout.LEFT));
-		HTMLViewer html = new HTMLViewer();
-		html.setText(Application.getContactInformation());
-		panel.add(html);
-		return panel;
-	}
+    /**
+     * This method creates the contact panel for this about box.
+     * 
+     * @return The Panel is returned for the TabbedPane.
+     */
+    private JPanel getContactPanel() {
+	JPanel panel = new JPanel();
+	panel.setLayout(new FlowLayout(FlowLayout.LEFT));
+	HTMLViewer html = new HTMLViewer();
+	html.setText(Application.getContactInformation());
+	panel.add(html);
+	return panel;
+    }
 
-	static public void about() {
-		new AboutBox().run();
-	}
-
-	static public void main(String args[]) {
-		Translator.setDefault(new Locale("de", "DE"));
-		new AboutBox().run();
-	}
+    public static void about() {
+	new AboutBox().setVisible(true);
+    }
 }

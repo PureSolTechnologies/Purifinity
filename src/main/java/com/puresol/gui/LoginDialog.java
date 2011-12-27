@@ -18,13 +18,11 @@
 
 package com.puresol.gui;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.BorderLayout;
 import java.io.IOException;
 
 import javax.i18n4java.Translator;
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
@@ -37,131 +35,92 @@ import javax.swing.JTextField;
  * 
  * @author Rick-Rainer Ludwig
  */
-public final class LoginDialog extends Dialog implements ActionListener {
+public final class LoginDialog extends PureSolDialog {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private static final Translator translator = Translator
-			.getTranslator(LoginDialog.class);
+    private static final Translator translator = Translator
+	    .getTranslator(LoginDialog.class);
 
-	private final JLabel message = new JLabel();
-	/**
-	 * This JTextField holds the user name.
-	 */
-	private final JTextField username = new JTextField();
+    private final JLabel message = new JLabel();
+    /**
+     * This JTextField holds the user name.
+     */
+    private final JTextField username = new JTextField();
 
-	/**
-	 * This JPasswordField holds the password. It is not shown and only
-	 * represented as stars.
-	 */
-	private final JPasswordField password = new JPasswordField();
+    /**
+     * This JPasswordField holds the password. It is not shown and only
+     * represented as stars.
+     */
+    private final JPasswordField password = new JPasswordField();
 
-	/**
-	 * Ok is for starting the login process.
-	 */
-	private final JButton ok = new JButton(translator.i18n("OK"));
+    /**
+     * This is the constructor for PasswordDialog.
+     * 
+     * @param parent
+     * 
+     * @param owner
+     *            is the calling parent window. If the password dialog is to be
+     *            used during startup without a parent window, that null should
+     *            be used.
+     */
+    public LoginDialog() {
+	super(Application.getInstance(), translator.i18n("User Confirmation"),
+		true);
 
-	/**
-	 * Cancel is for interrupting the login process.
-	 */
-	private final JButton cancel = new JButton(translator.i18n("Cancel"));
+	JPanel panel = new JPanel();
+	panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+	message.setVisible(false);
+	panel.add(message);
+	panel.add(new JLabel(translator.i18n("Username")));
+	panel.add(username);
+	panel.add(new JLabel(translator.i18n("Password")));
+	panel.add(password);
 
-	private boolean finishedByOk = false;
+	setButtonVisible(DialogButtons.OK, true);
+	setButtonVisible(DialogButtons.CANCEL, true);
 
-	/**
-	 * This is the constructor for PasswordDialog.
-	 * 
-	 * @param parent
-	 * 
-	 * @param owner
-	 *            is the calling parent window. If the password dialog is to be
-	 *            used during startup without a parent window, that null should
-	 *            be used.
-	 */
-	public LoginDialog() {
-		super(translator.i18n("User Confirmation"), true);
+	getContentPane().add(panel, BorderLayout.CENTER);
 
-		JPanel panel = new JPanel();
-		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-		message.setVisible(false);
-		panel.add(message);
-		panel.add(new JLabel(translator.i18n("Username")));
-		panel.add(username);
-		panel.add(new JLabel(translator.i18n("Password")));
-		panel.add(password);
+	pack();
 
-		JPanel buttonPanel = new JPanel();
-		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
-		buttonPanel.add(ok);
-		buttonPanel.add(cancel);
+	setDefaultButton(DialogButtons.OK);
+    }
 
-		ok.addActionListener(this);
-		cancel.addActionListener(this);
-
-		panel.add(buttonPanel);
-		setContentPane(panel);
-
-		pack();
-		getRootPane().setDefaultButton(ok);
+    /**
+     * This method returns the set user name after the dialog was closed.
+     * 
+     * @return A string with the user name is returned.
+     * @throws IOException
+     *             is thrown in a case of IO error.
+     */
+    public String getUsername() {
+	if (getClosingButton() == DialogButtons.OK) {
+	    return "";
 	}
+	return username.getText();
+    }
 
-	/**
-	 * This method returns the set user name after the dialog was closed.
-	 * 
-	 * @return A string with the user name is returned.
-	 * @throws IOException
-	 *             is thrown in a case of IO error.
-	 */
-	public String getUsername() {
-		if (!finishedByOk) {
-			return "";
-		}
-		return username.getText();
+    /**
+     * This method returns the set password after the dialog was closed.
+     * 
+     * @return A string with the password is returned.
+     * @throws IOException
+     *             is thrown in a case of IO error.
+     */
+    public String getPassword() {
+	if (getClosingButton() == DialogButtons.OK) {
+	    return "";
 	}
+	return String.valueOf(password.getPassword());
+    }
 
-	/**
-	 * This method returns the set password after the dialog was closed.
-	 * 
-	 * @return A string with the password is returned.
-	 * @throws IOException
-	 *             is thrown in a case of IO error.
-	 */
-	public String getPassword() {
-		if (!finishedByOk) {
-			return "";
-		}
-		return String.valueOf(password.getPassword());
-	}
+    public void setMessage(String message) {
+	this.message.setVisible(true);
+	this.message.setText(message);
+    }
 
-	public boolean run() {
-		setVisible(true);
-		return finishedByOk;
-	}
-
-	public void abort() {
-		super.abort();
-	}
-
-	public void quit() {
-		finishedByOk = true;
-		super.quit();
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == ok) {
-			quit();
-		} else if (e.getSource() == cancel) {
-			abort();
-		}
-	}
-
-	public void setMessage(String message) {
-		this.message.setVisible(true);
-		this.message.setText(message);
-	}
-
-	public void setUsername(String name) {
-		username.setText(name);
-	}
+    public void setUsername(String name) {
+	username.setText(name);
+    }
 }

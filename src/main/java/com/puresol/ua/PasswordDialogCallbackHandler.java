@@ -9,6 +9,7 @@ import javax.security.auth.callback.PasswordCallback;
 import javax.security.auth.callback.TextOutputCallback;
 import javax.security.auth.callback.UnsupportedCallbackException;
 
+import com.puresol.gui.DialogButtons;
 import com.puresol.gui.LoginDialog;
 
 /**
@@ -21,30 +22,31 @@ import com.puresol.gui.LoginDialog;
  */
 public class PasswordDialogCallbackHandler implements CallbackHandler {
 
-	@Override
-	public void handle(Callback[] callbacks) throws IOException,
-			UnsupportedCallbackException {
-		LoginDialog passwd = new LoginDialog();
-		for (Callback callback : callbacks) {
-			if (callback instanceof TextOutputCallback) {
-				TextOutputCallback toc = (TextOutputCallback) callback;
-				passwd.setMessage(toc.getMessage());
-			} else if (callback instanceof NameCallback) {
-				NameCallback nc = (NameCallback) callback;
-				passwd.setUsername(nc.getName());
-			}
-		}
-		if (passwd.run()) {
-			for (Callback callback : callbacks) {
-				if (callback instanceof NameCallback) {
-					NameCallback nc = (NameCallback) callback;
-					nc.setName(passwd.getUsername());
-				} else if (callback instanceof PasswordCallback) {
-					PasswordCallback pc = (PasswordCallback) callback;
-					pc.setPassword(passwd.getPassword().toCharArray());
-				}
-			}
-		}
+    @Override
+    public void handle(Callback[] callbacks) throws IOException,
+	    UnsupportedCallbackException {
+	LoginDialog passwd = new LoginDialog();
+	for (Callback callback : callbacks) {
+	    if (callback instanceof TextOutputCallback) {
+		TextOutputCallback toc = (TextOutputCallback) callback;
+		passwd.setMessage(toc.getMessage());
+	    } else if (callback instanceof NameCallback) {
+		NameCallback nc = (NameCallback) callback;
+		passwd.setUsername(nc.getName());
+	    }
 	}
+	passwd.setVisible(true);
+	if (passwd.getClosingButton() == DialogButtons.OK) {
+	    for (Callback callback : callbacks) {
+		if (callback instanceof NameCallback) {
+		    NameCallback nc = (NameCallback) callback;
+		    nc.setName(passwd.getUsername());
+		} else if (callback instanceof PasswordCallback) {
+		    PasswordCallback pc = (PasswordCallback) callback;
+		    pc.setPassword(passwd.getPassword().toCharArray());
+		}
+	    }
+	}
+    }
 
 }

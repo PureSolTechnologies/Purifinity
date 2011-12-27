@@ -2,24 +2,24 @@ package com.puresol.rendering;
 
 import java.awt.BorderLayout;
 
-import com.puresol.gui.Dialog;
+import com.puresol.gui.Application;
+import com.puresol.gui.PureSolDialog;
 
-public class RendererTester extends Dialog {
+public class RendererTester extends PureSolDialog {
 
-	private static final long serialVersionUID = -6972450146648013502L;
+    private static final long serialVersionUID = -6972450146648013502L;
 
-	private final RendererPanel panel;
+    private final RendererPanel panel;
 
-	public RendererTester(Renderer renderer) {
-		super("Renderer Test", true);
+    public RendererTester(Renderer renderer) {
+	super(Application.getInstance(), "Renderer Test", true);
 
-		getContentPane().setLayout(new BorderLayout());
-		panel = new RendererPanel(renderer);
-		getContentPane().add(panel, BorderLayout.CENTER);
-	}
+	panel = new RendererPanel(renderer);
+	getContentPane().add(panel, BorderLayout.CENTER);
+    }
 
-	public Renderer getRenderer() {
-		return panel.getRenderer();
-	}
+    public Renderer getRenderer() {
+	return panel.getRenderer();
+    }
 
 }

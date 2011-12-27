@@ -19,14 +19,17 @@
 package com.puresol.gui.log;
 
 import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
+import java.awt.Container;
 
-import javax.swing.JButton;
-import javax.swing.JPanel;
+import javax.i18n4java.Translator;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-import com.puresol.gui.Dialog;
+import org.apache.log4j.Level;
+
+import com.puresol.gui.Application;
+import com.puresol.gui.DialogButtons;
+import com.puresol.gui.PureSolDialog;
 import com.puresol.log.LogViewerAppender;
 
 /**
@@ -39,78 +42,70 @@ import com.puresol.log.LogViewerAppender;
  * 
  * @author Rick-Rainer Ludwig
  */
-public class LogViewer extends Dialog {
+public class LogViewer extends PureSolDialog {
 
-	static public void startNonModal() {
-		new LogViewer().run();
+    private static final long serialVersionUID = 1L;
+
+    private static final Translator translator = Translator
+	    .getTranslator(LogViewer.class);
+
+    public static void startNonModal() {
+	new LogViewer().setVisible(true);
+    }
+
+    /**
+     * This text area is the place to view the logs.
+     */
+    private JTextArea textArea;
+
+    /**
+     * This is the standard constructor. All initializations are performed here.
+     * 
+     */
+    public LogViewer() {
+	super(Application.getInstance(), translator.i18n("Log Viewer"), false);
+    }
+
+    @Override
+    protected void dialogInit() {
+	super.dialogInit();
+	Container pane = getContentPane();
+
+	textArea = new JTextArea();
+	textArea.setEditable(false);
+	JScrollPane scrollPane = new JScrollPane(textArea);
+	scrollPane
+		.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+	scrollPane
+		.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+	pane.add(scrollPane, BorderLayout.CENTER);
+
+	setButtonVisible(DialogButtons.CLOSE, true);
+	pack();
+
+	LogViewerAppender.getInstance().addViewer(this);
+    }
+
+    public void addLog(Level level, String message) {
+	if (message == null) {
+	    return;
 	}
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	/**
-	 * This text area is the place to view the logs.
-	 */
-	private final JTextArea textArea = new JTextArea();
-
-	/**
-	 * This button is for closing the dialog.
-	 */
-	private final JButton ok = new JButton("ok");
-
-	/**
-	 * This is the standard constructor. All initializations are performed here.
-	 * 
-	 */
-	public LogViewer() {
-		super();
-		this.setTitle("Log Viewer");
-		this.setModal(false);
+	if (textArea == null) {
+	    return;
 	}
+	textArea.append(message);
+	textArea.append("\n");
+    }
 
-	protected void dialogInit() {
-		super.dialogInit();
-		JPanel pane = new JPanel();
-		pane.setLayout(new BorderLayout());
+    @Override
+    public void cancel() {
+	LogViewerAppender.getInstance().removeViewer(this);
+	super.cancel();
+    }
 
-		JScrollPane scrollPane = new JScrollPane(textArea);
-		scrollPane
-				.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		scrollPane
-				.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-		pane.add(scrollPane, BorderLayout.CENTER);
-
-		pane.add(ok, BorderLayout.SOUTH);
-		ok.addActionListener(this);
-
-		LogViewerAppender.getInstance().addViewer(this);
-
-		setContentPane(pane);
-	}
-
-	public void addLog(String message) {
-		if (message == null) {
-			return;
-		}
-		if (textArea == null) {
-			return;
-		}
-		textArea.append(message);
-	}
-
-	public void quit() {
-		LogViewerAppender.getInstance().removeViewer(this);
-		super.quit();
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == ok) {
-			quit();
-		} else {
-			super.actionPerformed(e);
-		}
-	}
+    @Override
+    public void close() {
+	LogViewerAppender.getInstance().removeViewer(this);
+	super.close();
+    }
 }

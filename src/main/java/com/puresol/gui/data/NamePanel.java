@@ -14,8 +14,6 @@ import com.puresol.data.IllegalNamePartException;
 import com.puresol.data.IllegalPersonNameException;
 import com.puresol.data.PersonName;
 import com.puresol.data.PersonNamePart;
-import com.puresol.exceptions.StrangeSituationException;
-import com.puresol.gui.Dialog;
 
 /**
  * This class provides a GUI for input of extended names.
@@ -25,94 +23,79 @@ import com.puresol.gui.Dialog;
  */
 public class NamePanel extends JPanel implements ActionListener {
 
-	private static final long serialVersionUID = 7298257976109780145L;
+    private static final long serialVersionUID = 7298257976109780145L;
 
-	private static final Translator translator = Translator
-			.getTranslator(NamePanel.class);
+    private static final Translator translator = Translator
+	    .getTranslator(NamePanel.class);
 
-	private ArrayList<NamePartPanel> nameParts = new ArrayList<NamePartPanel>();
+    private final ArrayList<NamePartPanel> nameParts = new ArrayList<NamePartPanel>();
 
-	private final JButton reduce = new JButton(translator.i18n("reduce"));
-	private final JButton extend = new JButton(translator.i18n("extend"));
-	private final JPanel partsPanel = new JPanel();
+    private final JButton reduce = new JButton(translator.i18n("reduce"));
+    private final JButton extend = new JButton(translator.i18n("extend"));
+    private final JPanel partsPanel = new JPanel();
 
-	public NamePanel() {
-		initValues();
-		initUI();
+    public NamePanel() {
+	initValues();
+	initUI();
+    }
+
+    private void initValues() {
+	nameParts.add(new NamePartPanel());
+    }
+
+    private void initUI() {
+	setLayout(new BorderLayout());
+	add(reduce, BorderLayout.WEST);
+	add(partsPanel, BorderLayout.CENTER);
+	add(extend, BorderLayout.EAST);
+
+	reduce.addActionListener(this);
+	extend.addActionListener(this);
+	partsPanel.setLayout(new BoxLayout(partsPanel, BoxLayout.X_AXIS));
+	updateNamePartsPanel();
+    }
+
+    private void updateNamePartsPanel() {
+	partsPanel.removeAll();
+	for (NamePartPanel namePartPanel : nameParts
+		.toArray(new NamePartPanel[0])) {
+	    partsPanel.add(namePartPanel);
 	}
+	partsPanel.revalidate();
+    }
 
-	private void initValues() {
-		nameParts.add(new NamePartPanel());
+    private void reduce() {
+	nameParts.remove(nameParts.size() - 1);
+	updateNamePartsPanel();
+    }
+
+    private void extend() {
+	nameParts.add(new NamePartPanel());
+	updateNamePartsPanel();
+    }
+
+    public PersonName getPersonName() throws IllegalPersonNameException {
+	try {
+	    ArrayList<PersonNamePart> personNameParts = new ArrayList<PersonNamePart>();
+	    for (NamePartPanel namePart : nameParts
+		    .toArray(new NamePartPanel[0])) {
+		personNameParts.add(namePart.get());
+	    }
+	    PersonName personName = new PersonName(personNameParts);
+	    return personName;
+	} catch (IllegalPersonNameException e) {
+	    throw new RuntimeException(e);
+	} catch (IllegalNamePartException e) {
+	    throw new IllegalPersonNameException(e.getMessage());
 	}
+    }
 
-	private void initUI() {
-		setLayout(new BorderLayout());
-		add(reduce, BorderLayout.WEST);
-		add(partsPanel, BorderLayout.CENTER);
-		add(extend, BorderLayout.EAST);
-
-		reduce.addActionListener(this);
-		extend.addActionListener(this);
-		partsPanel.setLayout(new BoxLayout(partsPanel, BoxLayout.X_AXIS));
-		updateNamePartsPanel();
+    @Override
+    public void actionPerformed(ActionEvent e) {
+	if (e.getSource() == reduce) {
+	    reduce();
+	} else if (e.getSource() == extend) {
+	    extend();
 	}
-
-	private void updateNamePartsPanel() {
-		partsPanel.removeAll();
-		for (NamePartPanel namePartPanel : nameParts
-				.toArray(new NamePartPanel[0])) {
-			partsPanel.add(namePartPanel);
-		}
-		partsPanel.revalidate();
-	}
-
-	private void reduce() {
-		nameParts.remove(nameParts.size() - 1);
-		updateNamePartsPanel();
-	}
-
-	private void extend() {
-		nameParts.add(new NamePartPanel());
-		updateNamePartsPanel();
-	}
-
-	public PersonName getPersonName() throws IllegalPersonNameException {
-		try {
-			ArrayList<PersonNamePart> personNameParts = new ArrayList<PersonNamePart>();
-			for (NamePartPanel namePart : nameParts
-					.toArray(new NamePartPanel[0])) {
-				personNameParts.add(namePart.get());
-			}
-			PersonName personName = new PersonName(personNameParts);
-			return personName;
-		} catch (IllegalPersonNameException e) {
-			throw new StrangeSituationException(e);
-		} catch (IllegalNamePartException e) {
-			throw new IllegalPersonNameException(e.getMessage());
-		}
-	}
-
-	public static void main(String[] args) {
-		Dialog dialog = new Dialog("Test", true);
-		dialog.setLayout(new BorderLayout());
-		NamePanel name;
-		dialog.add(name = new NamePanel(), BorderLayout.CENTER);
-		dialog.pack();
-		dialog.run();
-		try {
-			System.out.println(name.getPersonName().toString());
-		} catch (IllegalPersonNameException e) {
-			e.printStackTrace();
-		}
-
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == reduce) {
-			reduce();
-		} else if (e.getSource() == extend) {
-			extend();
-		}
-	}
+    }
 }

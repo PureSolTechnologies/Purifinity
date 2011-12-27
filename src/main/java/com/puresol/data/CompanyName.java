@@ -1,6 +1,5 @@
 package com.puresol.data;
 
-import com.puresol.exceptions.StrangeSituationException;
 
 public class CompanyName implements Cloneable {
 
@@ -26,6 +25,7 @@ public class CompanyName implements Cloneable {
 	}
     }
 
+    @Override
     public String toString() {
 	return name + " " + organizationalForm;
     }
@@ -35,11 +35,10 @@ public class CompanyName implements Cloneable {
 	final int prime = 31;
 	int result = 1;
 	result = prime * result + ((name == null) ? 0 : name.hashCode());
-	result =
-		prime
-			* result
-			+ ((organizationalForm == null) ? 0
-				: organizationalForm.hashCode());
+	result = prime
+		* result
+		+ ((organizationalForm == null) ? 0 : organizationalForm
+			.hashCode());
 	return result;
     }
 
@@ -73,7 +72,7 @@ public class CompanyName implements Cloneable {
 	    cloned.organizationalForm = this.organizationalForm;
 	    return cloned;
 	} catch (CloneNotSupportedException e) {
-	    throw new StrangeSituationException(e);
+	    throw new RuntimeException(e);
 	}
     }
 }
