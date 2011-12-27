@@ -67,7 +67,11 @@ public final class LoginDialog extends PureSolDialog {
     public LoginDialog() {
 	super(Application.getInstance(), translator.i18n("User Confirmation"),
 		true);
+	initUI();
+	initLocation();
+    }
 
+    private void initUI() {
 	JPanel panel = new JPanel();
 	panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 	message.setVisible(false);
@@ -81,8 +85,6 @@ public final class LoginDialog extends PureSolDialog {
 	setButtonVisible(DialogButtons.CANCEL, true);
 
 	getContentPane().add(panel, BorderLayout.CENTER);
-
-	pack();
 
 	setDefaultButton(DialogButtons.OK);
     }

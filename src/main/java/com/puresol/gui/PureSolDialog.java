@@ -101,7 +101,7 @@ public class PureSolDialog extends JDialog implements DialogButtonsListener {
     protected void dialogInit() {
 	super.dialogInit();
 	initCloseBehavior();
-	initUI();
+	initButtons();
     }
 
     private void initCloseBehavior() {
@@ -114,11 +114,21 @@ public class PureSolDialog extends JDialog implements DialogButtonsListener {
 	});
     }
 
-    private void initUI() {
+    private void initButtons() {
 	buttonPanel = new DialogButtonsPanel(this);
 	Container contentPane = getContentPane();
 	contentPane.setLayout(new BorderLayout());
 	contentPane.add(buttonPanel, BorderLayout.SOUTH);
+    }
+
+    /**
+     * This method is called to pack all components and to set the location of
+     * the dialog into the center of the owner component. It is recommended to
+     * use this method after initialization of the UI.
+     */
+    protected void initLocation() {
+	pack();
+	setLocationRelativeTo(getOwner());
     }
 
     /**

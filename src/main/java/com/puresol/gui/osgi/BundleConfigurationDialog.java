@@ -41,6 +41,7 @@ public class BundleConfigurationDialog extends PureSolDialog implements
 	this.frameworkName = frameworkName;
 	setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 	initUI();
+	initLocation();
     }
 
     private void initUI() {
@@ -57,8 +58,6 @@ public class BundleConfigurationDialog extends PureSolDialog implements
 		BorderLayout.CENTER);
 
 	setButtonVisible(DialogButtons.CLOSE, true);
-
-	pack();
     }
 
     private void changeConfigurator(TreePath treePath) {

@@ -64,11 +64,11 @@ public class LogViewer extends PureSolDialog {
      */
     public LogViewer() {
 	super(Application.getInstance(), translator.i18n("Log Viewer"), false);
+	initUI();
+	initLocation();
     }
 
-    @Override
-    protected void dialogInit() {
-	super.dialogInit();
+    private void initUI() {
 	Container pane = getContentPane();
 
 	textArea = new JTextArea();
@@ -81,7 +81,6 @@ public class LogViewer extends PureSolDialog {
 	pane.add(scrollPane, BorderLayout.CENTER);
 
 	setButtonVisible(DialogButtons.CLOSE, true);
-	pack();
 
 	LogViewerAppender.getInstance().addViewer(this);
     }

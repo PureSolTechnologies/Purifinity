@@ -15,11 +15,16 @@ public class RendererTester extends PureSolDialog {
 	super(Application.getInstance(), "Renderer Test", true);
 
 	panel = new RendererPanel(renderer);
+
+	initUI(renderer);
+	initLocation();
+    }
+
+    private void initUI(Renderer renderer) {
 	getContentPane().add(panel, BorderLayout.CENTER);
     }
 
     public Renderer getRenderer() {
 	return panel.getRenderer();
     }
-
 }

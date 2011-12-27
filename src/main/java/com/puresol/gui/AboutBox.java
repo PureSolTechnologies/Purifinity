@@ -57,13 +57,14 @@ public class AboutBox extends PureSolDialog {
      */
     public AboutBox() {
 	super(Application.getInstance(), translator.i18n("About"), false);
-	initView();
+	initUI();
+	initLocation();
     }
 
     /**
      * This is the method for creating the complete UI.
      */
-    protected void initView() {
+    private void initUI() {
 	Container content = getContentPane();
 	JTabbedPane tabbedPane = new JTabbedPane();
 	content.add(tabbedPane, BorderLayout.CENTER);
@@ -76,7 +77,6 @@ public class AboutBox extends PureSolDialog {
 	tabbedPane.add(translator.i18n("Contact"), new JScrollPane(
 		getContactPanel()));
 	setButtonVisible(DialogButtons.OK, true);
-	pack();
     }
 
     /**

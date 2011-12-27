@@ -24,6 +24,7 @@ public class SubjectInformationDialog extends PureSolDialog {
 		translator.i18n("Subject Information"), false);
 	this.subjectInformation = subjectInformation;
 	initUI();
+	initLocation();
     }
 
     private void initUI() {
@@ -34,8 +35,6 @@ public class SubjectInformationDialog extends PureSolDialog {
 		BorderLayout.WEST);
 
 	setButtonVisible(DialogButtons.OK, true);
-
-	pack();
     }
 
     public SubjectInformation getSubjectInformation() {

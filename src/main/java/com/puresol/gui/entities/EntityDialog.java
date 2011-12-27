@@ -94,6 +94,7 @@ public class EntityDialog extends PureSolDialog {
 
 	setTitle(type, entity);
 	initUI(entity);
+	initLocation();
     }
 
     private void setTitle(int type, Object entity) {
@@ -123,7 +124,6 @@ public class EntityDialog extends PureSolDialog {
 	}
 	template = GUITemplateRenderer.render(entity, type);
 	getContentPane().add(template, BorderLayout.CENTER);
-	pack();
     }
 
     public Object getEntity() {

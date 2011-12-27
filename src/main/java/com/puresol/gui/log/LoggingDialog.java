@@ -56,6 +56,7 @@ public class LoggingDialog extends PureSolDialog implements ActionListener {
 	super(Application.getInstance(), translator.i18n("Configure Logging"),
 		false);
 	initUI();
+	initLocation();
     }
 
     private void initUI() {
@@ -75,8 +76,6 @@ public class LoggingDialog extends PureSolDialog implements ActionListener {
 	logLevels.addActionListener(this);
 
 	setButtonVisible(DialogButtons.CLOSE, true);
-
-	pack();
     }
 
     private void changeLogLevel(Object o) {

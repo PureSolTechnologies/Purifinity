@@ -78,6 +78,7 @@ public class ArrowTest {
 		drawArrowSpiral(arrow, 50);
 	    }
 	});
+
 	frame.setVisible(true);
 
     }

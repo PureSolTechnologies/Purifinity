@@ -54,7 +54,7 @@ public class BundleManager extends PureSolDialog implements ActionListener {
 	this.bundleContext = context;
 	initUI();
 	update();
-	pack();
+	initLocation();
     }
 
     private void initUI() {
