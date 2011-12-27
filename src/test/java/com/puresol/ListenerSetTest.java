@@ -69,12 +69,12 @@ public class ListenerSetTest {
 
 	@Test
 	public void testInstance() {
-		assertNotNull(new ListenerSet<String>());
+		assertNotNull(new WeakReferenceSet<String>());
 	}
 
 	@Test
 	public void testInitValues() {
-		ListenerSet<String> set = new ListenerSet<String>();
+		WeakReferenceSet<String> set = new WeakReferenceSet<String>();
 		assertEquals(0, set.size());
 	}
 
@@ -82,7 +82,7 @@ public class ListenerSetTest {
 	public void testAddingAndRemoveing() {
 		Integer s1 = 1;
 		Integer s2 = 2;
-		ListenerSet<Integer> set = new ListenerSet<Integer>();
+		WeakReferenceSet<Integer> set = new WeakReferenceSet<Integer>();
 		assertEquals(0, set.size());
 		set.add(s1);
 		assertEquals(1, set.size());

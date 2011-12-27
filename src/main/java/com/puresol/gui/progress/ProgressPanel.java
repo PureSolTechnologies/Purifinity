@@ -33,7 +33,7 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.border.TitledBorder;
 
-import com.puresol.ListenerSet;
+import com.puresol.WeakReferenceSet;
 
 /**
  * This class is a simple implementation for a splash screen for application
@@ -50,7 +50,7 @@ public class ProgressPanel extends JPanel implements ProgressObserver,
 	private static final Translator translator = Translator
 			.getTranslator(ProgressPanel.class);
 
-	private final ListenerSet<FinishListener> finishListeners = new ListenerSet<FinishListener>();
+	private final WeakReferenceSet<FinishListener> finishListeners = new WeakReferenceSet<FinishListener>();
 
 	private final TitledBorder titledBorder = new TitledBorder("");
 	private final JProgressBar progressBar = new JProgressBar();

@@ -14,7 +14,7 @@ import org.osgi.framework.BundleException;
 import org.osgi.framework.launch.Framework;
 import org.osgi.framework.launch.FrameworkFactory;
 
-import com.puresol.ListenerSet;
+import com.puresol.WeakReferenceSet;
 import com.puresol.utils.JARUtilities;
 
 /**
@@ -44,7 +44,7 @@ public class OSGi {
 	private Framework framework = null;
 	private BundleContext context = null;
 
-	private final ListenerSet<OSGiFrameworkListener> frameworkListeners = new ListenerSet<OSGiFrameworkListener>();
+	private final WeakReferenceSet<OSGiFrameworkListener> frameworkListeners = new WeakReferenceSet<OSGiFrameworkListener>();
 
 	/**
 	 * Used to force this class into singleton pattern.

@@ -18,14 +18,13 @@
 
 package com.puresol.log;
 
-import java.util.Vector;
-
 import org.apache.log4j.AsyncAppender;
 import org.apache.log4j.Logger;
 import org.apache.log4j.TTCCLayout;
 import org.apache.log4j.helpers.ISO8601DateFormat;
 import org.apache.log4j.spi.LoggingEvent;
 
+import com.puresol.WeakReferenceSet;
 import com.puresol.gui.log.LogViewer;
 
 /**
@@ -41,7 +40,7 @@ public class LogViewerAppender extends AsyncAppender {
 
     private static LogViewerAppender instance = null;
 
-    private Vector<LogViewer> viewers = null;
+    private final WeakReferenceSet<LogViewer> viewers = new WeakReferenceSet<LogViewer>();
 
     static public LogViewerAppender getInstance() {
 	if (instance == null) {
@@ -58,7 +57,6 @@ public class LogViewerAppender extends AsyncAppender {
 
     private LogViewerAppender() {
 	super();
-	viewers = new Vector<LogViewer>();
 	this.setLayout(new TTCCLayout(ISO8601DateFormat.ISO8601_DATE_FORMAT));
     }
 
@@ -80,8 +78,8 @@ public class LogViewerAppender extends AsyncAppender {
     public void append(LoggingEvent event) {
 	super.append(event);
 	String message = getLayout().format(event).trim();
-	for (int index = 0; index < viewers.size(); index++) {
-	    viewers.get(index).addLog(event.getLevel(), message);
+	for (LogViewer viewer : viewers) {
+	    viewer.addLog(event.getLevel(), message);
 	}
     }
 }

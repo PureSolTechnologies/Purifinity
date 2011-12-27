@@ -26,7 +26,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import com.puresol.ListenerSet;
+import com.puresol.WeakReferenceSet;
 
 /**
  * This class is a simple implementation for a splash screen for application
@@ -39,7 +39,7 @@ public class ProgressWindow extends JFrame implements FinishListener {
 
     private static final long serialVersionUID = 4191554073727049318L;
 
-    private final ListenerSet<FinishListener> finishListeners = new ListenerSet<FinishListener>();
+    private final WeakReferenceSet<FinishListener> finishListeners = new WeakReferenceSet<FinishListener>();
 
     private final ProgressPanel progressPanel = new ProgressPanel();
     private final Window frame;
