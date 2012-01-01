@@ -13,6 +13,7 @@ import java.io.File;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -46,12 +47,14 @@ public class FortranAnalyserTest {
     }
 
     @Test
+    @Ignore
     public void testEmptyProgram() throws Throwable {
 	test(new File(
 		"src/test/resources/com/puresol/coding/lang/fortran/samples/EmptyProgram.f"));
     }
 
     @Test
+    @Ignore
     public void testEmptySubroutine() throws Throwable {
 	Logger.getRootLogger().setLevel(Level.TRACE);
 	test(new File(
@@ -59,12 +62,14 @@ public class FortranAnalyserTest {
     }
 
     @Test
+    @Ignore
     public void testZGERC() throws Throwable {
 	test(new File(
 		"src/test/resources/com/puresol/coding/lang/fortran/samples/zgerc.f"));
     }
 
     @Test
+    @Ignore
     public void test2() throws Throwable {
 	test(new File(
 		"src/test/resources/com/puresol/coding/lang/fortran/samples/FortranTest.f"));
