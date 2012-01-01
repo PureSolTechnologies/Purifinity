@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-Name: JavaLanguagePack
+Bundle-SymbolicName: com.puresol.coding.lang.java
+Bundle-Description: Contains the plugin for working with Java programming language. 
+Bundle-Vendor: Puresol Technologies
+Bundle-Version: 1.0.0
+Bundle-Activator: com.puresol.coding.lang.java.Activator
+Import-Package: com.puresol.coding.metrics,
+ com.puresol.coding.metrics.codedepth,
+ com.puresol.coding.metrics.halstead,
+ com.puresol.coding.metrics.mccabe,
+ com.puresol.coding.metrics.sloc,
+ org.osgi.framework
+Export-Package: com.puresol.coding.lang.java
+Require-Bundle: com.puresol.coding.metrics;bundle-version="1.0.0"
