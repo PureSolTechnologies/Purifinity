@@ -10,7 +10,6 @@
 
 	<groupId>com.puresol</groupId>
 	<artifactId>uhura</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<name>NyotaUhura</name>
 	<description>Parser collection</description>
 	<build>

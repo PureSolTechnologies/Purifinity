@@ -10,7 +10,6 @@
 
 	<groupId>com.puresol</groupId>
 	<artifactId>CodeAnalysis</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<name>CodeAnalysis</name>
 	<description>Code Analysis tool for static code analysis and quality
 		evaluation</description>

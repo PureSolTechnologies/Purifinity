@@ -10,7 +10,6 @@
 
 	<groupId>com.puresol</groupId>
 	<artifactId>FortranLanguagePack</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<name>FortranLanguagePack</name>
 	<description>Contains language specific parser and evluators for Fortran</description>
 	<url>http://puresol-technologies.com</url>

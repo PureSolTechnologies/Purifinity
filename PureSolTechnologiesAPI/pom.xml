@@ -10,7 +10,6 @@
 
 	<groupId>com.puresol</groupId>
 	<artifactId>PureSolTechnologiesAPI</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<name>PureSolTechnologies_API</name>
 	<description>API basics for PureSol Technologies</description>
 	<url>http://puresol-technologies.com</url>

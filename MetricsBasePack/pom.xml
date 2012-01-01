@@ -10,7 +10,6 @@
 
 	<groupId>com.puresol</groupId>
 	<artifactId>MetricsBasePack</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<name>MetricsBasePack</name>
 	<description>Contains basic classes for metrics evaluation</description>
 	<url>http://puresol-technologies.com</url>

@@ -10,7 +10,6 @@
 
 	<groupId>com.puresol</groupId>
 	<artifactId>DocumentBuilder</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<name>DocumentBuilder</name>
 	<build>
 		<plugins>
