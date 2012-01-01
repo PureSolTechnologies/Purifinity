@@ -20,33 +20,33 @@ import com.puresol.config.APIInformation;
  */
 public class Activator implements BundleActivator {
 
-	private static final Logger logger = Logger.getLogger(Activator.class);
+    private static final Logger logger = Logger.getLogger(Activator.class);
 
-	private ServiceRegistration registration;
+    private ServiceRegistration<?> registration;
 
-	@Override
-	public void start(BundleContext context) throws Exception {
-		logger.info("Starting Java Language Pack...");
-		Java java = Java.getInstance();
-		java.setBundleContext(context);
+    @Override
+    public void start(BundleContext context) throws Exception {
+	logger.info("Starting Java Language Pack...");
+	Java java = Java.getInstance();
+	java.setBundleContext(context);
 
-		Dictionary<Object, Object> properties = new Hashtable<Object, Object>();
-		properties.put("service.name", java.getName());
-		properties.put("service.description", java.getName());
-		properties.put("service.vendor", APIInformation.getPackageOwner());
+	Dictionary<String, Object> properties = new Hashtable<String, Object>();
+	properties.put("service.name", java.getName());
+	properties.put("service.description", java.getName());
+	properties.put("service.vendor", APIInformation.getPackageOwner());
 
-		registration = context.registerService(
-				ProgrammingLanguage.class.getName(), java, properties);
+	registration = context.registerService(
+		ProgrammingLanguage.class.getName(), java, properties);
 
-		logger.info("Started.");
-	}
+	logger.info("Started.");
+    }
 
-	@Override
-	public void stop(BundleContext context) throws Exception {
-		logger.info("Stopping Java Language Pack...");
-		registration.unregister();
-		registration = null;
-		logger.info("Stopped.");
-	}
+    @Override
+    public void stop(BundleContext context) throws Exception {
+	logger.info("Stopping Java Language Pack...");
+	registration.unregister();
+	registration = null;
+	logger.info("Stopped.");
+    }
 
 }

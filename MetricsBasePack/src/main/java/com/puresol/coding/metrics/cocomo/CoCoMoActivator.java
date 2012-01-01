@@ -17,69 +17,69 @@ import com.puresol.osgi.BundleConfigurator;
 
 public class CoCoMoActivator implements BundleActivator {
 
-	private static final Logger logger = Logger
-			.getLogger(CoCoMoActivator.class);
+    private static final Logger logger = Logger
+	    .getLogger(CoCoMoActivator.class);
 
-	private final List<ServiceRegistration> serviceRegistrations = new ArrayList<ServiceRegistration>();
-	private CoCoMoConfigurator cocomoConfigurator = null;
+    private final List<ServiceRegistration<?>> serviceRegistrations = new ArrayList<ServiceRegistration<?>>();
+    private CoCoMoConfigurator cocomoConfigurator = null;
 
-	@Override
-	public void start(BundleContext context) throws Exception {
-		logger.info("Starting CoCoMo...");
+    @Override
+    public void start(BundleContext context) throws Exception {
+	logger.info("Starting CoCoMo...");
 
-		registerProjectFactory(context);
-		registerConfigurator(context);
+	registerProjectFactory(context);
+	registerConfigurator(context);
 
-		logger.info("Started.");
+	logger.info("Started.");
+    }
+
+    private void registerProjectFactory(BundleContext context) {
+	CoCoMoServiceFactory cocomoFactory = new CoCoMoServiceFactory();
+	String interfaces[] = new String[] { ProjectEvaluatorFactory.class
+		.getName() };
+
+	Dictionary<String, Object> properties = new Hashtable<String, Object>();
+	properties.put("service.name", cocomoFactory.getName());
+	properties.put("service.description", cocomoFactory.getDescription());
+	properties.put("service.vendor", APIInformation.getPackageOwner());
+
+	ServiceRegistration<?> registration = context.registerService(
+		interfaces, cocomoFactory, properties);
+	serviceRegistrations.add(registration);
+    }
+
+    private void registerConfigurator(BundleContext context) {
+	cocomoConfigurator = new CoCoMoConfigurator();
+	BundleConfigurators.getInstance().addSource(
+		cocomoConfigurator.getSource());
+
+	String interfaces[] = new String[] { BundleConfigurator.class.getName() };
+	Dictionary<String, Object> properties = new Hashtable<String, Object>();
+	properties.put("service.name", cocomoConfigurator.getName());
+	properties.put("service.description", cocomoConfigurator.getPathName());
+	properties.put("service.vendor", APIInformation.getPackageOwner());
+
+	ServiceRegistration<?> registration = context.registerService(
+		interfaces, cocomoConfigurator, properties);
+	serviceRegistrations.add(registration);
+    }
+
+    @Override
+    public void stop(BundleContext context) throws Exception {
+	logger.info("Stopping CoCoMo...");
+
+	if (cocomoConfigurator != null) {
+	    BundleConfigurators.getInstance().removeSource(
+		    cocomoConfigurator.getSource());
+	    cocomoConfigurator = null;
 	}
 
-	private void registerProjectFactory(BundleContext context) {
-		CoCoMoServiceFactory cocomoFactory = new CoCoMoServiceFactory();
-		String interfaces[] = new String[] { ProjectEvaluatorFactory.class
-				.getName() };
-
-		Dictionary<Object, Object> properties = new Hashtable<Object, Object>();
-		properties.put("service.name", cocomoFactory.getName());
-		properties.put("service.description", cocomoFactory.getDescription());
-		properties.put("service.vendor", APIInformation.getPackageOwner());
-
-		ServiceRegistration registration = context.registerService(interfaces,
-				cocomoFactory, properties);
-		serviceRegistrations.add(registration);
+	for (ServiceRegistration<?> registration : serviceRegistrations) {
+	    registration.unregister();
 	}
+	serviceRegistrations.clear();
 
-	private void registerConfigurator(BundleContext context) {
-		cocomoConfigurator = new CoCoMoConfigurator();
-		BundleConfigurators.getInstance().addSource(
-				cocomoConfigurator.getSource());
-
-		String interfaces[] = new String[] { BundleConfigurator.class.getName() };
-		Dictionary<Object, Object> properties = new Hashtable<Object, Object>();
-		properties.put("service.name", cocomoConfigurator.getName());
-		properties.put("service.description", cocomoConfigurator.getPathName());
-		properties.put("service.vendor", APIInformation.getPackageOwner());
-
-		ServiceRegistration registration = context.registerService(interfaces,
-				cocomoConfigurator, properties);
-		serviceRegistrations.add(registration);
-	}
-
-	@Override
-	public void stop(BundleContext context) throws Exception {
-		logger.info("Stopping CoCoMo...");
-
-		if (cocomoConfigurator != null) {
-			BundleConfigurators.getInstance().removeSource(
-					cocomoConfigurator.getSource());
-			cocomoConfigurator = null;
-		}
-
-		for (ServiceRegistration registration : serviceRegistrations) {
-			registration.unregister();
-		}
-		serviceRegistrations.clear();
-
-		logger.info("Stopped.");
-	}
+	logger.info("Stopped.");
+    }
 
 }

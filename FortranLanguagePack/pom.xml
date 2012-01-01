@@ -12,29 +12,16 @@
 	<artifactId>FortranLanguagePack</artifactId>
 	<name>FortranLanguagePack</name>
 	<description>Contains language specific parser and evluators for Fortran</description>
-	<url>http://puresol-technologies.com</url>
-	<organization>
-		<name>PureSol Technologies</name>
-		<url>http://puresol-technologies.com</url>
-	</organization>
-	<distributionManagement>
-		<repository>
-			<id>com.puresol</id>
-			<name>FortranLanguagePack</name>
-			<url>file:///home/ludwig/deployment</url>
-		</repository>
-	</distributionManagement>
+
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>findbugs-maven-plugin</artifactId>
-				<version>2.3.1</version>
 			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>cobertura-maven-plugin</artifactId>
-				<version>2.4</version>
 				<configuration>
 					<formats>
 						<format>xml</format>
@@ -42,8 +29,7 @@
 					<check>
 						<branchRate>0</branchRate>
 						<lineRate>0</lineRate>
-						<!-- totalBranchRate>40</totalBranchRate>
-						<totalLineRate>20</totalLineRate -->
+						<!-- totalBranchRate>40</totalBranchRate> <totalLineRate>20</totalLineRate -->
 					</check>
 				</configuration>
 				<executions>
@@ -66,7 +52,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.3.2</version>
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
@@ -83,7 +68,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-site-plugin</artifactId>
-				<version>3.0-beta-3</version>
 			</plugin>
 		</plugins>
 	</build>
@@ -91,12 +75,10 @@
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
-			<version>1.2.16</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.8.2</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -110,29 +92,4 @@
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
-	<reporting>
-		<plugins>
-			<plugin>
-				<artifactId>maven-javadoc-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>jxr-maven-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-report-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>cobertura-maven-plugin</artifactId>
-				<configuration>
-					<formats>
-						<format>xml</format>
-						<format>html</format>
-					</formats>
-				</configuration>
-			</plugin>
-		</plugins>
-	</reporting>
 </project>
