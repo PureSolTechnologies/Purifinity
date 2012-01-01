@@ -2,3 +2,4 @@ test
 target
 *.log
 *.log-*
+*.lock
