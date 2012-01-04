@@ -1,5 +1,5 @@
 test
 target
 *.log
-*.log-*
+*.log.*
 *.lock

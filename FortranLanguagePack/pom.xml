@@ -3,12 +3,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.puresol-technologies</groupId>
+		<groupId>com.puresol</groupId>
 		<artifactId>SourceCodeAnalysisRCP</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
-	<groupId>com.puresol</groupId>
 	<artifactId>FortranLanguagePack</artifactId>
 	<name>FortranLanguagePack</name>
 	<description>Contains language specific parser and evluators for Fortran</description>

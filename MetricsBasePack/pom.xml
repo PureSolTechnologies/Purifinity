@@ -3,12 +3,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.puresol-technologies</groupId>
+		<groupId>com.puresol</groupId>
 		<artifactId>SourceCodeAnalysisRCP</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
-	<groupId>com.puresol</groupId>
 	<artifactId>MetricsBasePack</artifactId>
 	<name>MetricsBasePack</name>
 	<description>Contains basic classes for metrics evaluation</description>

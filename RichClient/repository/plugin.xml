@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         id="application"
+         point="org.eclipse.core.runtime.applications">
+      <application>
+         <run
+               class="com.puresol.coding.client.SourceCodeAnalysis">
+         </run>
+      </application>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            name="RCP Perspective"
+            class="com.puresol.coding.client.Perspective"
+            id="RichClient.Repository.perspective">
+      </perspective>
+   </extension>
+   <extension
+         id="product"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="RichClient.Repository.application"
+            name="RichClient">
+         <property
+               name="appName"
+               value="RichClient">
+         </property>
+      </product>
+   </extension>
+   <extension
+         id="RichClient"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="RichClient.Repository.application"
+            name="RichClient">
+         <property
+               name="appName"
+               value="RichClient">
+         </property>
+      </product>
+   </extension>
+   <extension
+         id="RichClientRepository"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="RichClient.Repository.application"
+            name="Source Code Analysis">
+         <property
+               name="appName"
+               value="Source Code Analysis">
+         </property>
+      </product>
+   </extension>
+
+</plugin>
