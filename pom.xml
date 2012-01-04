@@ -30,7 +30,7 @@
 		<module>PureConfigurator</module>
 		<module>PureSolTechnologiesAPI</module>
 		<module>RichClient</module>
-		<module>MetricsBasePlugin</module>
+		<module>MetricsBase</module>
 	</modules>
 
 	<!-- DEPENDENCY MANAGEMENT -->
