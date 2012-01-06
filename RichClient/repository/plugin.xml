@@ -66,6 +66,75 @@
             </command>
          </menu>
          <menu
+               id="window"
+               label="Window"
+               mnemonic="W">
+            <command
+                  commandId="org.eclipse.ui.window.newWindow"
+                  id="newWindow"
+                  label="New Window"
+                  mnemonic="N"
+                  style="push">
+            </command>
+            <separator
+                  name="RichClient.Repository.separator1"
+                  visible="true">
+            </separator>
+            <command
+                  commandId="org.eclipse.ui.views.showView"
+                  id="showView"
+                  label="Show View..."
+                  mnemonic="V"
+                  style="push">
+            </command>
+            <command
+                  commandId="org.eclipse.ui.perspectives.showPerspective"
+                  id="showPerspective"
+                  label="Show Perspective..."
+                  mnemonic="P"
+                  style="push">
+            </command>
+            <separator
+                  name="RichClient.Repository.separator2"
+                  visible="true">
+            </separator>
+            <command
+                  commandId="org.eclipse.ui.window.customizePerspective"
+                  id="customizePerspectiveAs"
+                  label="Customize Perspective..."
+                  mnemonic="A"
+                  style="push">
+            </command>
+            <command
+                  commandId="org.eclipse.ui.window.savePerspective"
+                  id="savePerspective"
+                  label="Save Perspective As..."
+                  mnemonic="A"
+                  style="push">
+            </command>
+            <command
+                  commandId="org.eclipse.ui.window.resetPerspective"
+                  id="resetPerspective"
+                  label="Reset Perspective..."
+                  mnemonic="R"
+                  style="push">
+            </command>
+            <command
+                  commandId="org.eclipse.ui.window.closePerspective"
+                  id="closePerspective"
+                  label="Close Perspective"
+                  mnemonic="C"
+                  style="push">
+            </command>
+            <command
+                  commandId="org.eclipse.ui.window.closeAllPerspectives"
+                  id="closeAllPerspectives"
+                  label="Close All Perspectives"
+                  mnemonic="l"
+                  style="push">
+            </command>
+         </menu>
+         <menu
                id="help"
                label="Help"
                mnemonic="H">
