@@ -46,6 +46,28 @@
                label="File"
                mnemonic="F">
             <command
+                  commandId="org.eclipse.ui.file.print"
+                  id="print"
+                  label="Print..."
+                  mnemonic="P"
+                  style="push">
+            </command>
+            <separator
+                  name="RichClient.Repository.separator5"
+                  visible="true">
+            </separator>
+            <command
+                  commandId="org.eclipse.ui.file.export"
+                  id="export"
+                  label="Export..."
+                  mnemonic="E"
+                  style="push">
+            </command>
+            <separator
+                  name="RichClient.Repository.separator6"
+                  visible="true">
+            </separator>
+            <command
                   commandId="org.eclipse.ui.file.exit"
                   id="Exit"
                   label="Exit"
@@ -151,14 +173,20 @@
          point="org.eclipse.ui.views">
       <view
             class="com.puresol.coding.client.views.AnalysisNavigator"
-            id="com.puresol.coding.AnalysisNavigator"
+            id="com.puresol.coding.client.AnalysisNavigator"
             name="Analysis Navigator"
             restorable="true">
       </view>
       <view
             class="com.puresol.coding.client.views.SourceNavigator"
-            id="com.puresol.coding.SourceNavigator"
+            id="com.puresol.coding.client.SourceNavigator"
             name="Source Navigator"
+            restorable="true">
+      </view>
+      <view
+            class="com.puresol.coding.client.views.AnalysisReport"
+            id="com.puresol.coding.client.AnalysisReport"
+            name="Analysis Report"
             restorable="true">
       </view>
    </extension>
