@@ -4,9 +4,9 @@ import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchAdvisor;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
 
-public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
+import com.puresol.coding.client.perspectives.PerspectiveIds;
 
-    private static final String PERSPECTIVE_ID = "RichClient.Repository.perspective"; //$NON-NLS-1$
+public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 
     @Override
     public WorkbenchWindowAdvisor createWorkbenchWindowAdvisor(
@@ -16,6 +16,6 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 
     @Override
     public String getInitialWindowPerspectiveId() {
-	return PERSPECTIVE_ID;
+	return PerspectiveIds.ANALYSIS_PERSPECTIVE;
     }
 }

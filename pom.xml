@@ -2,6 +2,10 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
+	<prerequisites>
+		<maven>3.0</maven>
+	</prerequisites>
+
 	<groupId>com.puresol</groupId>
 	<artifactId>SourceCodeAnalysisRCP</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
@@ -31,7 +35,18 @@
 		<module>PureSolTechnologiesAPI</module>
 		<module>RichClient</module>
 		<module>MetricsBase</module>
+		<module>ExternalDependencyBundle</module>
 	</modules>
+
+	<!-- REPOSITORIES -->
+
+	<repositories>
+		<repository>
+			<id>eclipse-indigo</id>
+			<layout>p2</layout>
+			<url>http://download.eclipse.org/releases/indigo</url>
+		</repository>
+	</repositories>
 
 	<!-- DEPENDENCY MANAGEMENT -->
 
@@ -106,9 +121,11 @@
 		</dependencies>
 	</dependencyManagement>
 
-	<!-- PLUGIN MANAGEMENT -->
 
 	<build>
+
+		<!-- PLUGIN MANAGEMENT -->
+
 		<pluginManagement>
 			<plugins>
 				<plugin>
@@ -122,6 +139,7 @@
 				</plugin>
 				<plugin>
 					<artifactId>maven-jar-plugin</artifactId>
+					<version>2.3.2</version>
 					<configuration>
 						<archive>
 							<manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
@@ -177,6 +195,43 @@
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>hibernate3-maven-plugin</artifactId>
 					<version>2.2</version>
+				</plugin>
+				<plugin>
+					<groupId>org.eclipse.tycho</groupId>
+					<artifactId>tycho-maven-plugin</artifactId>
+					<version>0.13.0</version>
+					<extensions>true</extensions>
+				</plugin>
+				<plugin>
+					<groupId>org.eclipse.tycho</groupId>
+					<artifactId>target-platform-configuration</artifactId>
+					<version>0.13.0</version>
+					<configuration>
+						<resolver>p2</resolver>
+						<pomDependencies>consider</pomDependencies>
+						<environments>
+							<!-- environment> <os>win32</os> <ws>win32</ws> <arch>x86_64</arch> 
+								</environment -->
+							<environment>
+								<os>linux</os>
+								<ws>gtk</ws>
+								<arch>x86_64</arch>
+							</environment>
+						</environments>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.eclipse.tycho</groupId>
+					<artifactId>tycho-p2-repository-plugin</artifactId>
+					<version>0.13.0</version>
+					<configuration>
+						<includeAllDependencies>true</includeAllDependencies>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.felix</groupId>
+					<artifactId>maven-bundle-plugin</artifactId>
+					<version>2.3.6</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>

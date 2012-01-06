@@ -14,34 +14,15 @@
    <extension
          point="org.eclipse.ui.perspectives">
       <perspective
-            name="RCP Perspective"
-            class="com.puresol.coding.client.Perspective"
-            id="RichClient.Repository.perspective">
+            name="Analysis Perspective"
+            class="com.puresol.coding.client.perspectives.AnalysisPerspective"
+            id="com.puresol.coding.client.AnalysisPerspective">
       </perspective>
-   </extension>
-   <extension
-         id="product"
-         point="org.eclipse.core.runtime.products">
-      <product
-            application="RichClient.Repository.application"
-            name="RichClient">
-         <property
-               name="appName"
-               value="RichClient">
-         </property>
-      </product>
-   </extension>
-   <extension
-         id="RichClient"
-         point="org.eclipse.core.runtime.products">
-      <product
-            application="RichClient.Repository.application"
-            name="RichClient">
-         <property
-               name="appName"
-               value="RichClient">
-         </property>
-      </product>
+      <perspective
+            class="com.puresol.coding.client.perspectives.EvaluationPerspective"
+            id="com.puresol.coding.client.EvaluationPerspective"
+            name="Evaluation Perspective">
+      </perspective>
    </extension>
    <extension
          id="RichClientRepository"
@@ -54,6 +35,63 @@
                value="Source Code Analysis">
          </property>
       </product>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="menu:org.eclipse.ui.main.menu">
+         <menu
+               id="file"
+               label="File"
+               mnemonic="F">
+            <command
+                  commandId="org.eclipse.ui.file.exit"
+                  id="Exit"
+                  label="Exit"
+                  mnemonic="x"
+                  style="push">
+            </command>
+         </menu>
+         <menu
+               id="options"
+               label="Options"
+               mnemonic="O">
+            <command
+                  commandId="org.eclipse.ui.window.preferences"
+                  id="preferences"
+                  label="Preferences..."
+                  mnemonic="P"
+                  style="push">
+            </command>
+         </menu>
+         <menu
+               id="help"
+               label="Help"
+               mnemonic="H">
+            <command
+                  commandId="org.eclipse.ui.help.aboutAction"
+                  id="about"
+                  label="About Source Code Analysis..."
+                  style="push">
+            </command>
+         </menu>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            class="com.puresol.coding.client.views.AnalysisNavigator"
+            id="com.puresol.coding.AnalysisNavigator"
+            name="Analysis Navigator"
+            restorable="true">
+      </view>
+      <view
+            class="com.puresol.coding.client.views.SourceNavigator"
+            id="com.puresol.coding.SourceNavigator"
+            name="Source Navigator"
+            restorable="true">
+      </view>
    </extension>
 
 </plugin>
