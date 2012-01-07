@@ -36,6 +36,7 @@
 		<module>RichClient</module>
 		<module>MetricsBase</module>
 		<module>ExternalDependencyBundle</module>
+		<module>licensing</module>
 	</modules>
 
 	<!-- REPOSITORIES -->
