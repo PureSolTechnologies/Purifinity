@@ -3,14 +3,13 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.puresol</groupId>
-		<artifactId>RichClient</artifactId>
+		<groupId>com.puresol.coding</groupId>
+		<artifactId>client</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 
-	<groupId>RichClient.Repository</groupId>
-	<artifactId>RichClient.Repository</artifactId>
+	<artifactId>client.impl</artifactId>
 
 	<packaging>eclipse-plugin</packaging>
 
