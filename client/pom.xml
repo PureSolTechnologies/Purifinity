@@ -9,11 +9,11 @@
 		<relativePath>..</relativePath>
 	</parent>
 
-	<artifactId>RichClient</artifactId>
+	<artifactId>client.impl</artifactId>
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>repository</module>
+		<module>impl</module>
 		<module>product</module>
 	</modules>
 

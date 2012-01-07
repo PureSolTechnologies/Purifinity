@@ -33,7 +33,7 @@
 		<module>NyotaUhura</module>
 		<module>PureConfigurator</module>
 		<module>PureSolTechnologiesAPI</module>
-		<module>RichClient</module>
+		<module>client</module>
 		<module>MetricsBase</module>
 		<module>ExternalDependencyBundle</module>
 		<module>licensing</module>
