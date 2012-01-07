@@ -13,9 +13,6 @@
 
 	<name>Source Code Analysis RCP</name>
 
-	<scm>
-		<url>http://svn:10080/svn/CodeAnalysis</url>
-	</scm>
 	<organization>
 		<name>PureSol Technologies</name>
 		<url>http://puresol-technologies.com</url>

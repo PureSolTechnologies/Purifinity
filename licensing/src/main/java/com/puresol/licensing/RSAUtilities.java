@@ -16,6 +16,9 @@ import javax.crypto.NoSuchPaddingException;
  * This class contains utilities and simplifying helper functions for RSA
  * encryption.
  * 
+ * For saving of keys have a look to http://www.jcraft.com/jsch/ for later
+ * implementation!
+ * 
  * @author Rick-Rainer Ludwig
  * 
  */

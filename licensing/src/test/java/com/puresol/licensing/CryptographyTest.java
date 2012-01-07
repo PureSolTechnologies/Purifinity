@@ -7,13 +7,16 @@ import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.PrivateKey;
+import java.security.Provider;
 import java.security.PublicKey;
+import java.security.Security;
 import java.security.spec.RSAPrivateKeySpec;
 import java.security.spec.RSAPublicKeySpec;
+import java.util.Set;
 
 import org.junit.Test;
 
-public class TestEncryption {
+public class CryptographyTest {
 
     @Test
     public void testRSA() throws Exception {
@@ -52,4 +55,18 @@ public class TestEncryption {
 	System.out.println("publicExponent: " + publicExponent);
     }
 
+    @Test
+    public void testListAllCiphers() throws Exception {
+	Provider[] providers = Security.getProviders();
+	for (int providerId = 0; providerId < providers.length; providerId++) {
+	    System.out.println("===========");
+	    System.out.println("Provider " + providerId);
+	    System.out.println("===========");
+	    Provider provider = providers[providerId];
+	    Set<Object> keys = provider.keySet();
+	    for (Object key : keys) {
+		System.out.println(key + " = " + provider.get(key));
+	    }
+	}
+    }
 }
