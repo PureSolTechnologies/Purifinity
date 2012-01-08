@@ -25,18 +25,6 @@
       </perspective>
    </extension>
    <extension
-         id="RichClientRepository"
-         point="org.eclipse.core.runtime.products">
-      <product
-            application="RichClient.Repository.application"
-            name="Source Code Analysis">
-         <property
-               name="appName"
-               value="Source Code Analysis">
-         </property>
-      </product>
-   </extension>
-   <extension
          point="org.eclipse.ui.menus">
       <menuContribution
             allPopups="false"

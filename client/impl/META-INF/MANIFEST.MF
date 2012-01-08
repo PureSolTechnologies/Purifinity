@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Repository
-Bundle-SymbolicName: RichClient.Repository; singleton:=true
+Bundle-SymbolicName: client.impl;singleton:=true
 Bundle-Version: 0.0.1.qualifier
 Bundle-Activator: richclient.repository.Activator
 Require-Bundle: org.eclipse.ui,

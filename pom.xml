@@ -31,7 +31,6 @@
 		<module>PureConfigurator</module>
 		<module>PureSolTechnologiesAPI</module>
 		<module>client</module>
-		<module>MetricsBase</module>
 		<module>ExternalDependencyBundle</module>
 		<module>licensing</module>
 	</modules>
