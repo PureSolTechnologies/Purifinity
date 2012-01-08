@@ -178,5 +178,17 @@
             restorable="true">
       </view>
    </extension>
+   <extension
+         id="product"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="client.impl.application"
+            name="Source Code Analysis">
+         <property
+               name="appName"
+               value="Source Code Analysis">
+         </property>
+      </product>
+   </extension>
 
 </plugin>
