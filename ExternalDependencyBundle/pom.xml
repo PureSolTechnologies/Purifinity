@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>SourceCodeAnalysisRCP</artifactId>
 		<groupId>com.puresol</groupId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>0.1.0-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 
@@ -15,7 +15,7 @@
 		<dependency>
 			<groupId>com.puresol</groupId>
 			<artifactId>CodeAnalysis</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>0.1.0-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 	

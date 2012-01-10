@@ -5,11 +5,11 @@
 	<parent>
 		<groupId>com.puresol</groupId>
 		<artifactId>SourceCodeAnalysisRCP</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>0.1.0-SNAPSHOT</version>
+		<relativePath>..</relativePath>
 	</parent>
 
 	<artifactId>PureConfigurator</artifactId>
-	<version>0.0.1</version>
 	<name>PureConfigurator</name>
 	<description>Configuration Framework for stand alone applications and JavaEE solutions</description>
 
