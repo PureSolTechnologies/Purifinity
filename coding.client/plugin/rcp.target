@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.6"?>
 
-<target name="Eclipse RCP 3.7.1" sequenceNumber="1">
+<target includeMode="feature" name="Eclipse RCP 3.7.1" sequenceNumber="2">
 <locations>
+<location includeAllPlatforms="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.swtbot.eclipse.feature.group" version="2.0.5.20111003_1754-3676ac8-dev-e36"/>
+<repository location="http://download.eclipse.org/technology/swtbot/helios/dev-build/update-site"/>
+</location>
 <location includeAllPlatforms="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.rcp.sdk.id" version="3.7.1.M20110909-1335"/>
 <unit id="org.eclipse.equinox.executable.feature.group" version="3.5.0.v20110530-7P7NFUFFLWUl76mart"/>
@@ -15,14 +19,6 @@
 <unit id="org.hamcrest.core" version="1.1.0.v20090501071000"/>
 <unit id="org.eclipse.ui.forms" version="3.5.100.v20110425"/>
 <repository location="http://download.eclipse.org/releases/indigo/"/>
-</location>
-<location includeAllPlatforms="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.rcp.nl_de.feature.group" version="3.5.0"/>
-<repository location="http://www.ralfebert.de/projects/releases/"/>
-</location>
-<location includeAllPlatforms="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.swtbot.eclipse.feature.group" version="2.0.5.20111003_1754-3676ac8-dev-e36"/>
-<repository location="http://download.eclipse.org/technology/swtbot/helios/dev-build/update-site"/>
 </location>
 </locations>
 </target>

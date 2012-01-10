@@ -179,10 +179,10 @@
       </view>
    </extension>
    <extension
-         id="product"
+         id="client"
          point="org.eclipse.core.runtime.products">
       <product
-            application="com.puresol.coding.client.application"
+            application="coding.client.plugin.application"
             name="ClientProduct">
          <property
                name="appName"
