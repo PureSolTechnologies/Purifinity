@@ -27,12 +27,12 @@
 		<module>FortranLanguagePack</module>
 		<module>JavaLanguagePack</module>
 		<module>MetricsBasePack</module>
-		<module>NyotaUhura</module>
 		<module>PureConfigurator</module>
 		<module>PureSolTechnologiesAPI</module>
 		<module>ExternalDependencyBundle</module>
 		<module>licensing</module>
 		<module>coding.client</module>
+		<module>uhura</module>
 	</modules>
 
 	<!-- REPOSITORIES -->

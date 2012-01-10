@@ -9,22 +9,12 @@
 		<relativePath>..</relativePath>
 	</parent>
 
-	<artifactId>coding.client</artifactId>
-	<packaging>pom</packaging>
-
 	<modules>
-		<module>plugin</module>
-		<module>product</module>
-		<module>coding.client.plugins</module>
+		<module>uhura.lib</module>
 	</modules>
 
-	<repositories>
-		<repository>
-			<id>indigo</id>
-			<layout>p2</layout>
-			<url>http://download.eclipse.org/releases/indigo</url>
-		</repository>
-	</repositories>
+	<artifactId>uhura</artifactId>
+	<packaging>pom</packaging>
 
 	<build>
 		<plugins>
