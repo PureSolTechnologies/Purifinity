@@ -1,0 +1,412 @@
+/****************************************************************************
+* CSS-Stylesheet for PureSol Technologies
+* Author: Rick-Rainer Ludwig
+* (c) 2009 Rick-Rainer Ludwig
+*****************************************************************************/
+	/* general frame settings */
+html {
+	font-family: Verdana, sans-serif;
+	font-size: 10pt;
+	background-color: gray;
+	text-align: left;
+}
+
+body {
+	width: 95%;
+	color: black;
+	background-color: #fbfcfd;
+	border: 2pt groove black;
+	/*    padding:0em;*/
+	text-align: left;
+	margin: 1em auto;
+}
+
+/* title */
+.title {
+	background-color: darkred;
+	border: 0pt solid darkred;
+}
+
+.titleimage {
+	border: 0pt solid black;
+	border-left: 1pt solid black;
+}
+
+.titlebanner {
+	background-color: black;
+	border: 0pt solid black;
+	border-left: 1pt solid black;
+}
+
+a.title:link {
+	border-width: 0pt;
+	background-color: darkred;
+}
+
+a.title:visited {
+	border-width: 0pt;
+	background-color: darkred;
+}
+
+a.title:active {
+	border-width: 0pt;
+	background-color: darkred;
+}
+
+a.title:focus {
+	border-width: 0pt;
+	background-color: darkred;
+}
+
+a.title:hover {
+	border-width: 0pt;
+	background-color: darkred;
+}
+
+a.optionlink:link {
+	color: white;
+	border-bottom: 0pt dashed red;
+	font-size: 8pt;
+}
+
+a.optionlink:visited {
+	color: white;
+	border-bottom: 0pt dashed darkred;
+	font-size: 8pt;
+}
+
+a.optionlink:active {
+	color: white;
+	background-color: darkred;
+	border-bottom: 0pt dashed darkred;
+	font-size: 8pt;
+}
+
+a.optionlink:focus {
+	color: white;
+	background-color: darkred;
+	border-bottom: 0pt dashed darkred;
+	font-size: 8pt;
+}
+
+a.optionlink:hover {
+	color: white;
+	background-color: darkred;
+	border-bottom: 0pt dashed darkred;
+	font-size: 8pt;
+}
+
+/* header styles */
+h1 {
+	font-size: 18pt;
+	font-weight: bold;
+	font-style: italic;
+	margin-top: 0.5em;
+	border-top: 1pt solid black;
+	border-bottom: 1pt solid black;
+	text-align: left;
+	width: 100%;
+}
+
+h2 {
+	font-size: 14pt;
+	font-weight: bold;
+	font-style: italic;
+	margin-top: 0.5em;
+	text-align: left;
+	width: 62%;
+}
+
+h3 {
+	font-size: 12pt;
+	font-weight: bold;
+	font-style: italic;
+	margin-top: 0.5em;
+	text-align: left;
+	width: 39%;
+}
+
+p {
+	margin: 1em;
+}
+
+tt {
+	font-family: Courier, sans-serif;
+	font-size: 10pt;
+	margin-top: 0pt;
+	margin-bottom: 0pt;
+	text-align: left;
+}
+
+.contentcolumn {
+	border-left: 1pt dotted black;
+	spacing-left: 1em;
+	padding-left: 1em;
+	border-right: 1pt dotted black;
+	spaceing-right: 1em;
+	padding-right: 1em;
+	text-align: justify;
+}
+
+/* footer */
+.footer {
+	color: white;
+	background-color: darkred;
+	border: 0pt solid darkred;
+}
+
+a.footer:link {
+	color: white;
+	border-bottom: 1pt dashed white;
+	text-decoration: none;
+}
+
+a.footer:visited {
+	color: white;
+	border-bottom: 1pt dashed gray;
+}
+
+a.footer:active {
+	color: white;
+	border-bottom: 1pt dashed white;
+}
+
+a.footer:focus {
+	color: white;
+	border-bottom: 1pt dashed white;
+}
+
+a.footer:hover {
+	color: red;
+	border-bottom: 1pt dashed red;
+}
+
+/* main menu */
+.menubar {
+	color: white;
+	padding: 1pt;
+	spacing: 1pt;
+	background-color: black;
+	border-top: 0pt solid darkred;
+	border-left: 0pt solid black;
+	border-right: 0pt solid black;
+	border-bottom: 0pt solid darkred;
+	text-align: center;
+	font-size: 11pt;
+}
+
+.activemenuitem {
+	padding: 1pt;
+	spacing: 1pt;
+	margin: 1pt;
+	color: white;
+	background-color: darkred;
+}
+
+.menuitem {
+	padding: 1pt;
+	spacing: 1pt;
+	margin: 1pt;
+	color: white;
+	background-color: black;
+}
+
+a.menulink:link {
+	padding: 1pt;
+	spacing: 1pt;
+	color: white;
+	border-bottom: 0pt dashed red;
+}
+
+a.menulink:visited {
+	padding: 1pt;
+	spacing: 1pt;
+	color: white;
+	border-bottom: 0pt dashed darkred;
+}
+
+a.menulink:active {
+	padding: 1pt;
+	spacing: 1pt;
+	color: white;
+	background-color: darkred;
+	border-bottom: 0pt dashed darkred;
+}
+
+a.menulink:focus {
+	padding: 1pt;
+	spacing: 1pt;
+	color: white;
+	background-color: darkred;
+	border-bottom: 0pt dashed darkred;
+}
+
+a.menulink:hover {
+	padding: 1pt;
+	spacing: 1pt;
+	color: white;
+	background-color: darkred;
+	border-bottom: 0pt dashed darkred;
+}
+
+/* sub menu */
+.submenu {
+	padding: 1pt;
+	spacing: 1pt;
+	color: white;
+	background-color: black;
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+	text-align: left;
+	font-size: 11pt;
+}
+
+.activesubmenuitem {
+	padding: 1pt;
+	spacing: 1pt;
+	margin: 1pt;
+	color: white;
+	background-color: darkred;
+}
+
+.submenuitem {
+	padding: 1pt;
+	spacing: 1pt;
+	margin: 1pt;
+	color: white;
+	background-color: black;
+}
+
+a.submenulink:link {
+	padding: 1pt;
+	spacing: 1pt;
+	color: white;
+	border-bottom: 0pt dashed red;
+}
+
+a.submenulink:visited {
+	padding: 1pt;
+	spacing: 1pt;
+	color: white;
+	border-bottom: 0pt dashed darkred;
+}
+
+a.submenulink:active {
+	padding: 1pt;
+	spacing: 1pt;
+	color: white;
+	background-color: darkred;
+	border-bottom: 0pt dashed darkred;
+}
+
+a.submenulink:focus {
+	padding: 1pt;
+	spacing: 1pt;
+	color: white;
+	background-color: darkred;
+	border-bottom: 0pt dashed darkred;
+}
+
+a.submenulink:hover {
+	padding: 1pt;
+	spacing: 1pt;
+	color: white;
+	background-color: darkred;
+	border-bottom: 0pt dashed darkred;
+}
+
+.highlighted {
+	background-color: yellow;
+}
+
+div.float {
+	float: right;
+	border: 0pt dashed black;
+	margin-top: 0em;
+	margin-right: 0em;
+	margin-left: 1em;
+	margin-bottom: 1em;
+	padding: 0em;
+	text-align: center;
+	font-style: italic;
+	font-weight: bold;
+}
+
+img.float {
+	float: right;
+	margin-top: 0em;
+	margin-right: 0em;
+	margin-left: 1em;
+	margin-bottom: 1em;
+	padding: 0em;
+	border: 2pt solid black;
+}
+
+div.cite {
+	text-align: right;
+	font-style: italic;
+	margin-top: 0em;
+	margin-right: 0em;
+	margin-left: 1em;
+	margin-bottom: 1em;
+	padding: 0.5em;
+	border: 0pt solid black;
+}
+
+.person {
+	font-weight: bold;
+}
+
+a:link {
+	color: black;
+	border-bottom: 1pt dashed darkred;
+	text-decoration: none;
+}
+
+a:visited {
+	color: black;
+	border-bottom: 1pt dashed black;
+	text-decoration: none;
+}
+
+a:active {
+	color: black;
+	border-bottom: 1pt dashed red;
+	text-decoration: none;
+}
+
+a:focus {
+	color: red;
+	border-bottom: 1pt dashed red;
+	text-decoration: none;
+}
+
+a:hover {
+	color: red;
+	border-bottom: 1pt dashed red;
+	text-decoration: none;
+}
+
+.outer {
+	background-color: darkred;
+	color: white;
+	font-weight: bold;
+	spacing: 1pt;
+	padding: 1pt;
+	text-align: center;
+	border-width: 1pt;
+	border-color: darkred;
+	border-style: outset;
+}
+
+.inner {
+	background-color: #fbfcfd;
+	color: black;
+	font-weight: normal;
+	spacing: 1pt;
+	padding: 1pt;
+	text-align: left;
+	border-width: 1pt;
+	border-color: darkred;
+	border-style: inset;
+}

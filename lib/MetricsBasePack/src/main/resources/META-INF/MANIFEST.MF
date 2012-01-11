@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-Name: MetricsBasePack
+Bundle-SymbolicName: com.puresol.coding.metrics
+Bundle-Description: Contains some language independent metrics and base\
+ classes for metrics implemented in special language packs
+Bundle-Vendor: PureSol Technologies
+Bundle-Version: 1.0.0
+Bundle-Activator: com.puresol.coding.metrics.Activator
+Export-Package: com.puresol.coding.metrics,
+ com.puresol.coding.metrics.codedepth,
+ com.puresol.coding.metrics.entropy,
+ com.puresol.coding.metrics.halstead,
+ com.puresol.coding.metrics.maintainability,
+ com.puresol.coding.metrics.mccabe,
+ com.puresol.coding.metrics.sloc

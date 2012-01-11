@@ -1,0 +1,45 @@
+[GENERAL]
+version=0.0.1
+years=2009-2011
+author=Rick-Rainer Ludwig
+bugreport=ludwig@puresol-technologies.com
+copyright=PureSol-Technologies
+owner=PureSol-Technologies
+
+[COPYRIGHT]
+<html><body>
+<font size="+1">%APPLICATION% version %VERSION%</font>
+<br/><br/>
+Copyright (C) %YEARS% by %OWNER%
+<br/><br/>
+Permission to use, copy, modify and distribute<br/>
+this Software its accompanying documentation<br/>
+for any purpose is not allowed without further<br/>
+permission of the copyright holder.<br/>
+<br/>
+<font size="+1">Third Party Software</font>
+<br/><br/>
+This software incorporates JFreeChart,<br/>
+(C)opyright 2000-2009 by Object Refinery Limited and Contributors.<br/>
+JFreeChart is licensed under the LGPL
+</body></html>
+
+[VENDOR]
+<html><body>
+	<font size="+1">%OWNER%</font><br/>
+	Rick-Rainer Ludwig<br/>
+	Mansfelder Str. 9<br/>
+	D-01309 Dresden
+	Germany
+</body></html>
+
+[CONTACT]
+<html><body>
+	<font size="+1">%OWNER%</font><br/>
+	<br/>
+	<b><u>Support</u></b><br/>
+	%BUGREPORT%<br/>
+	<br/>
+	<b><u>Bug reports</u></b><br/>
+	%BUGREPORT%<br/>
+</body></html>
