@@ -1,3 +1,0 @@
-[com.puresol.ua.UA]
-class=com.puresol.ua.DefaultJAAS
-type=FACTORY
