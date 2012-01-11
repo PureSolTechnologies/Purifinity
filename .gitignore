@@ -1,5 +1,6 @@
 bin
 target
+felix-cache
 workspace
 *.log
 *.log.*
