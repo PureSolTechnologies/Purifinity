@@ -17,7 +17,6 @@
 		<module>MetricsBasePack</module>
 		<module>PureConfigurator</module>
 		<module>PureSolTechnologiesAPI</module>
-		<module>ExternalDependencyBundle</module>
 		<module>licensing</module>
 		<module>uhura</module>
 		<module>PureConfigurator.bundle</module>
@@ -67,7 +66,6 @@
 				<groupId>junit</groupId>
 				<artifactId>junit</artifactId>
 				<version>4.10</version>
-				<scope>test</scope>
 			</dependency>
 			<dependency>
 				<groupId>log4j</groupId>
@@ -94,21 +92,6 @@
 				<version>5.1.18</version>
 			</dependency>
 			<dependency>
-				<groupId>javax</groupId>
-				<artifactId>javaee-api</artifactId>
-				<version>6.0</version>
-			</dependency>
-			<dependency>
-				<groupId>org.hibernate</groupId>
-				<artifactId>hibernate-entitymanager</artifactId>
-				<version>4.0.0.Final</version>
-			</dependency>
-			<dependency>
-				<groupId>org.hibernate</groupId>
-				<artifactId>hibernate-core</artifactId>
-				<version>4.0.0.Final</version>
-			</dependency>
-			<dependency>
 				<groupId>org.apache.felix</groupId>
 				<artifactId>org.apache.felix.framework</artifactId>
 				<version>4.0.2</version>
@@ -121,11 +104,6 @@
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
-				<groupId>org.scala-lang</groupId>
-				<artifactId>scala-library</artifactId>
-				<version>2.9.1</version>
-			</dependency>
-			<dependency>
 				<groupId>net.java.dev.jna</groupId>
 				<artifactId>jna</artifactId>
 				<version>3.4.0</version>
@@ -134,6 +112,11 @@
 				<groupId>javax</groupId>
 				<artifactId>i18n4java</artifactId>
 				<version>1.1.0</version>
+			</dependency>
+			<dependency>
+				<groupId>javax.mail</groupId>
+				<artifactId>mail</artifactId>
+				<version>1.4.4</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

@@ -13,11 +13,6 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.puresol</groupId>
-			<artifactId>PureConfigurator</artifactId>
-			<version>0.1.0-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>com.puresol</groupId>
 			<artifactId>PureSolTechnologiesAPI</artifactId>
 			<version>0.1.0-SNAPSHOT</version>
 		</dependency>
@@ -32,7 +27,7 @@
 				<configuration>
 					<instructions>
 						<Embed-Dependency>
-							PureConfigurator,PureSolTechnologiesAPI
+							PureSolTechnologiesAPI
 						</Embed-Dependency>
 						<_exportcontents>
 							*;version="0.1.0"

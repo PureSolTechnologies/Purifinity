@@ -11,7 +11,6 @@
 package com.puresol.testing;
 
 import com.puresol.data.Identifiable;
-import com.puresol.entities.EntityTester;
 
 /**
  * Tester is a class with public static methods to get a clean and easy access
@@ -22,23 +21,19 @@ import com.puresol.entities.EntityTester;
  */
 public class Tester {
 
-	public static boolean testGetterAndSetter(Class<?> clazz) {
-		return GetterAndSetterTester.test(clazz);
-	}
+    public static boolean testGetterAndSetter(Class<?> clazz) {
+	return GetterAndSetterTester.test(clazz);
+    }
 
-	public static boolean testClone(Object object) {
-		return CloneTester.test(object);
-	}
+    public static boolean testClone(Object object) {
+	return CloneTester.test(object);
+    }
 
-	public static boolean testEntity(Class<?> clazz) {
-		return EntityTester.test(clazz);
-	}
+    public static boolean testIdentifiable(Class<? extends Identifiable> clazz) {
+	return IdentifiableTester.test(clazz);
+    }
 
-	public static boolean testIdentifiable(Class<? extends Identifiable> clazz) {
-		return IdentifiableTester.test(clazz);
-	}
-
-	public static boolean testStandards(Class<?> clazz) {
-		return StandardsTester.test(clazz);
-	}
+    public static boolean testStandards(Class<?> clazz) {
+	return StandardsTester.test(clazz);
+    }
 }

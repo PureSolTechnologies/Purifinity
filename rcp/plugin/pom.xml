@@ -4,7 +4,7 @@
 
 	<parent>
 		<groupId>com.puresol</groupId>
-		<artifactId>coding.client</artifactId>
+		<artifactId>rcp</artifactId>
 		<version>0.1.0-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
