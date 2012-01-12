@@ -20,6 +20,8 @@
 		<module>ExternalDependencyBundle</module>
 		<module>licensing</module>
 		<module>uhura</module>
+		<module>PureConfigurator.bundle</module>
+		<module>PureSolTechnologiesAPI.bundle</module>
 	</modules>
 
 	<!-- REPOSITORIES -->
