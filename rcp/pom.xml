@@ -18,12 +18,7 @@
 			<version>3.7</version> </dependency -->
 		<dependency>
 			<groupId>javax</groupId>
-			<artifactId>i18n4java</artifactId>
-			<version>1.1.0</version>
-		</dependency>
-		<dependency>
-			<groupId>com.puresol</groupId>
-			<artifactId>javax.i18n4java.plugin</artifactId>
+			<artifactId>i18n4java.plugin</artifactId>
 			<version>1.1.0</version>
 		</dependency>
 		<!-- dependency> <groupId>com.puresol</groupId> <artifactId>PureConfigurator.bundle</artifactId> 
