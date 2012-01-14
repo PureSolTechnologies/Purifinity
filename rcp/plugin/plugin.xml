@@ -34,6 +34,24 @@
                label="File"
                mnemonic="F">
             <command
+                  commandId="com.puresol.ui.file.newAnalysis"
+                  id="newAnalysis"
+                  label="New Analysis..."
+                  mnemonic="N"
+                  style="push">
+            </command>
+            <command
+                  commandId="com.puresol.ui.file.openAnalysis"
+                  id="openAnalysis"
+                  label="Open Analysis..."
+                  mnemonic="O"
+                  style="push">
+            </command>
+            <separator
+                  name="coding.client.plugin.separator1"
+                  visible="true">
+            </separator>
+            <command
                   commandId="org.eclipse.ui.file.print"
                   id="print"
                   label="Print..."
@@ -183,12 +201,25 @@
          point="org.eclipse.core.runtime.products">
       <product
             application="coding.client.plugin.application"
-            name="ClientProduct">
+            name="Source Code Analysis">
          <property
                name="appName"
-               value="ClientProduct">
+               value="Source Code Analysis">
          </property>
       </product>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="com.puresol.coding.client.commands.NewAnalysis"
+            id="com.puresol.ui.file.newAnalysis"
+            name="newAnalysis">
+      </command>
+      <command
+            defaultHandler="com.puresol.coding.client.commands.OpenAnalysis"
+            id="com.puresol.ui.file.openAnalysis"
+            name="openAnalysis">
+      </command>
    </extension>
 
 </plugin>
