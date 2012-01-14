@@ -45,6 +45,8 @@
       <plugin id="org.eclipse.ui"/>
       <plugin id="org.eclipse.ui.workbench"/>
       
+      <plugin id="com.puresol.javax.i18n4java.plugin" fragment="true" />
+      
       <plugin id="org.eclipse.ui.carbon" fragment="true" os="macosx" ws="carbon" arch="x86"/>
       <plugin id="org.eclipse.ui.cocoa" fragment="true" os="macosx" ws="carbon" arch="x86"/>
       <plugin id="org.eclipse.swt.carbon.macosx" fragment="true" os="macosx" ws="carbon" arch="x86"/>
