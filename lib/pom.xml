@@ -10,17 +10,18 @@
 	<!-- MODULES -->
 
 	<modules>
+		<module>PureConfigurator</module>
+		<module>PureConfigurator.bundle</module>
+		<module>PureSolTechnologiesAPI</module>
+		<module>PureSolTechnologiesAPI.bundle</module>
 		<module>CodeAnalysis</module>
 		<module>DocumentBuilder</module>
 		<module>FortranLanguagePack</module>
 		<module>JavaLanguagePack</module>
 		<module>MetricsBasePack</module>
-		<module>PureConfigurator</module>
-		<module>PureSolTechnologiesAPI</module>
 		<module>licensing</module>
 		<module>uhura</module>
-		<module>PureConfigurator.bundle</module>
-		<module>PureSolTechnologiesAPI.bundle</module>
+		<module>external.bundles</module>
 	</modules>
 
 	<!-- REPOSITORIES -->
