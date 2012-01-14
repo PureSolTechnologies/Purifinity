@@ -6,10 +6,11 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.commands.IHandlerListener;
 import org.eclipse.core.runtime.ListenerList;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
+
+import com.puresol.coding.client.wizards.NewAnalysisWizard;
 
 public class NewAnalysis extends AbstractHandler implements IHandler {
 
@@ -29,8 +30,9 @@ public class NewAnalysis extends AbstractHandler implements IHandler {
     public Object execute(ExecutionEvent event) throws ExecutionException {
 	Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
 		.getShell();
-	FileDialog fileDialog = new FileDialog(shell, SWT.OPEN);
-	fileDialog.open();
+	WizardDialog wizardDialog = new WizardDialog(shell,
+		new NewAnalysisWizard());
+	wizardDialog.open();
 	return null;
     }
 

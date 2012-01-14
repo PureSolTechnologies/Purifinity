@@ -5,3 +5,4 @@ Bundle-SymbolicName: javax.i18n4java.plugin;singleton:=true
 Bundle-Version: 1.1.0.qualifier
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Export-Package: javax.i18n4java
