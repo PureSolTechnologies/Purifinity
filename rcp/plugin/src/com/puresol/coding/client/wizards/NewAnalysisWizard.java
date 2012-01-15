@@ -7,7 +7,7 @@ public class NewAnalysisWizard extends Wizard {
     public NewAnalysisWizard() {
 	super();
 	setWindowTitle("New Analysis");
-	addPage(new NewAnalysisStartPage());
+	addPage(new NewAnalysisGeneralSettingsPage());
     }
 
     @Override
