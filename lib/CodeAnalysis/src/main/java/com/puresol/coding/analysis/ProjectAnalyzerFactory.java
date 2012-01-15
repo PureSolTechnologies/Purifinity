@@ -25,10 +25,6 @@ import javax.i18n4java.utils.FileSearch;
 
 import org.apache.log4j.Logger;
 
-import com.puresol.document.Chapter;
-import com.puresol.document.Document;
-import com.puresol.document.Paragraph;
-import com.puresol.document.Section;
 import com.puresol.gui.progress.ProgressObserver;
 import com.puresol.gui.progress.RunnableProgressObservable;
 import com.puresol.utils.DirectoryUtilities;
@@ -481,37 +477,6 @@ public class ProjectAnalyzerFactory implements Serializable,
 	} else if (!workspaceDirectory.equals(other.workspaceDirectory))
 	    return false;
 	return true;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.puresol.coding.analysis.IProjectAnalyzer#getReport()
-     */
-    @Override
-    public Document getReport() {
-	Document document = new Document(
-		translator.i18n("Project Analysis Report"));
-	new Chapter(document, "project_description",
-		translator.i18n("Project Description"));
-	// TODO put in here description of project which was configured!
-	Chapter analysedFilesChapter = new Chapter(document, "analyzed_files",
-		translator.i18n("Analysed Files"));
-	new Paragraph(analysedFilesChapter, translator.i18n(
-		"{0} files were analyzed", analyzedFiles.size()));
-	new Section(analysedFilesChapter, "used_languages",
-		translator.i18n("Used Languages"));
-	// TODO put in here some information about the found languages
-	Chapter failedFilesChapter = new Chapter(document, "failed_files",
-		translator.i18n("Failed Files"));
-	if (failedFiles.size() > 0) {
-	    new Paragraph(failedFilesChapter, translator.i18n(
-		    "{0} files could not be analyzed", failedFiles.size()));
-	    for (File file : failedFiles) {
-		new Paragraph(failedFilesChapter, file.getPath());
-	    }
-	}
-	return document;
     }
 
     /*

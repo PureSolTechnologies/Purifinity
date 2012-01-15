@@ -16,7 +16,6 @@
 		<module>PureConfigurator.plugin</module>
 		<module>PureSolTechnologiesAPI</module>
 		<module>CodeAnalysis</module>
-		<module>DocumentBuilder</module>
 		<module>FortranLanguagePack</module>
 		<module>JavaLanguagePack</module>
 		<module>MetricsBasePack</module>

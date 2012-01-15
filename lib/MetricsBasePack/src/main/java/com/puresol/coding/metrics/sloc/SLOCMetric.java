@@ -23,10 +23,6 @@ import com.puresol.coding.evaluator.CodeRangeEvaluator;
 import com.puresol.coding.evaluator.Result;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.SourceCodeQuality;
-import com.puresol.document.Chapter;
-import com.puresol.document.Document;
-import com.puresol.document.Paragraph;
-import com.puresol.document.Table;
 import com.puresol.math.statistics.Statistics;
 import com.puresol.trees.TreeIterator;
 import com.puresol.uhura.lexer.Token;
@@ -43,233 +39,210 @@ import com.puresol.uhura.parser.ParserTree;
  */
 public class SLOCMetric extends AbstractEvaluator implements CodeRangeEvaluator {
 
-	private static final long serialVersionUID = -4313208925226028154L;
+    private static final long serialVersionUID = -4313208925226028154L;
 
-	private static final Translator translator = Translator
-			.getTranslator(SLOCMetric.class);
+    private static final Translator translator = Translator
+	    .getTranslator(SLOCMetric.class);
 
-	public static final String NAME = translator.i18n("SLOC Metric");
+    public static final String NAME = translator.i18n("SLOC Metric");
 
-	public static final String DESCRIPTION = translator
-			.i18n("SLOC Metric calculation.");
+    public static final String DESCRIPTION = translator
+	    .i18n("SLOC Metric calculation.");
 
-	public static final List<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new ArrayList<QualityCharacteristic>();
-	static {
-		EVALUATED_QUALITY_CHARACTERISTICS
-				.add(QualityCharacteristic.ANALYSABILITY);
-		EVALUATED_QUALITY_CHARACTERISTICS
-				.add(QualityCharacteristic.TESTABILITY);
+    public static final List<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new ArrayList<QualityCharacteristic>();
+    static {
+	EVALUATED_QUALITY_CHARACTERISTICS
+		.add(QualityCharacteristic.ANALYSABILITY);
+	EVALUATED_QUALITY_CHARACTERISTICS
+		.add(QualityCharacteristic.TESTABILITY);
+    }
+
+    private class LineResults implements Serializable {
+
+	private static final long serialVersionUID = -7222483379600215412L;
+
+	private int length = 0;
+	private boolean comments = false;
+	private boolean productiveContent = false;
+
+	public int getLength() {
+	    return length;
 	}
 
-	private class LineResults implements Serializable {
+	public void addLength(int length) {
+	    this.length += length;
+	}
 
-		private static final long serialVersionUID = -7222483379600215412L;
+	public boolean hasComments() {
+	    return comments;
+	}
 
-		private int length = 0;
-		private boolean comments = false;
-		private boolean productiveContent = false;
+	public void setComments(boolean comments) {
+	    this.comments = comments;
+	}
 
-		public int getLength() {
-			return length;
+	public boolean hasProductiveContent() {
+	    return productiveContent;
+	}
+
+	public void setProductiveContent(boolean productiveContent) {
+	    this.productiveContent = productiveContent;
+	}
+
+	public boolean isBlank() {
+	    return (!hasProductiveContent()) && (!hasComments());
+	}
+    }
+
+    private final List<LineResults> lineResults = new ArrayList<LineResults>();
+    private SLOCResult sloc;
+
+    private final CodeRange codeRange;
+    private final LanguageDependedSLOCMetric langDepended;
+
+    public SLOCMetric(ProgrammingLanguage language, CodeRange codeRange) {
+	super();
+	this.codeRange = codeRange;
+	langDepended = language
+		.getImplementation(LanguageDependedSLOCMetric.class);
+	if (langDepended == null) {
+	    throw new RuntimeException();
+	}
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public CodeRange getCodeRange() {
+	return codeRange;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void run() {
+	if (getMonitor() != null) {
+	    getMonitor().setRange(0, 1);
+	    getMonitor().setTitle(NAME);
+	}
+	setup();
+	count();
+	if (getMonitor() != null) {
+	    getMonitor().finished(this);
+	}
+    }
+
+    private void setup() {
+	sloc = null;
+	lineResults.clear();
+	for (int i = 0; i < codeRange.getParserTree().getMetaData()
+		.getLineNum(); i++) {
+	    lineResults.add(new LineResults());
+	}
+    }
+
+    private void count() {
+	TreeIterator<ParserTree> iterator = new TreeIterator<ParserTree>(
+		codeRange.getParserTree());
+	int lineOffset = codeRange.getParserTree().getMetaData().getLine();
+	do {
+	    ParserTree node = iterator.getCurrentNode();
+	    Token token = node.getToken();
+	    if (token != null) {
+		SLOCType type = langDepended.getType(token);
+		TokenMetaData metaData = token.getMetaData();
+		int lineId = metaData.getLine() - lineOffset;
+		int lineNum = metaData.getLineNum();
+		for (int line = lineId; line < lineId + lineNum; line++) {
+		    if (type == SLOCType.COMMENT) {
+			lineResults.get(line).setComments(true);
+		    } else if (type == SLOCType.PRODUCTIVE) {
+			lineResults.get(line).setProductiveContent(true);
+		    }
+		    if (type != SLOCType.PHYSICAL) {
+			lineResults.get(line).addLength(
+				token.getText().length());
+		    }
 		}
+	    }
+	} while (iterator.goForward());
+	int blLOC = 0;
+	int comLOC = 0;
+	int proLOC = 0;
+	int phyLOC = 0;
 
-		public void addLength(int length) {
-			this.length += length;
+	List<Double> lineLengths = new ArrayList<Double>();
+	for (LineResults lineResult : lineResults) {
+	    if (lineResult.isBlank()) {
+		blLOC++;
+	    } else {
+		if (lineResult.hasComments()) {
+		    comLOC++;
 		}
-
-		public boolean hasComments() {
-			return comments;
+		if (lineResult.hasProductiveContent()) {
+		    proLOC++;
 		}
-
-		public void setComments(boolean comments) {
-			this.comments = comments;
-		}
-
-		public boolean hasProductiveContent() {
-			return productiveContent;
-		}
-
-		public void setProductiveContent(boolean productiveContent) {
-			this.productiveContent = productiveContent;
-		}
-
-		public boolean isBlank() {
-			return (!hasProductiveContent()) && (!hasComments());
-		}
+	    }
+	    phyLOC++;
+	    lineLengths.add((double) lineResult.getLength());
 	}
+	sloc = new SLOCResult(phyLOC, proLOC, comLOC, blLOC, new Statistics(
+		lineLengths));
+    }
 
-	private final List<LineResults> lineResults = new ArrayList<LineResults>();
-	private SLOCResult sloc;
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.puresol.coding.analysis.SLOCMetric#getPhyLOC()
+     */
+    public SLOCResult getResult() {
+	return sloc;
+    }
 
-	private final CodeRange codeRange;
-	private final LanguageDependedSLOCMetric langDepended;
+    public void print() {
+	System.out.println("physical lines: " + sloc.getPhyLOC());
+	System.out.println("productive lines: " + sloc.getProLOC());
+	System.out.println("commented lines: " + sloc.getComLOC());
+	System.out.println("blank lines: " + sloc.getBlLOC());
+    }
 
-	public SLOCMetric(ProgrammingLanguage language, CodeRange codeRange) {
-		super();
-		this.codeRange = codeRange;
-		langDepended = language
-				.getImplementation(LanguageDependedSLOCMetric.class);
-		if (langDepended == null) {
-			throw new RuntimeException();
-		}
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SourceCodeQuality getQuality() {
+	return SLOCQuality.get(codeRange.getType(), sloc);
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public CodeRange getCodeRange() {
-		return codeRange;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getName() {
+	return NAME;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void run() {
-		if (getMonitor() != null) {
-			getMonitor().setRange(0, 1);
-			getMonitor().setTitle(NAME);
-		}
-		setup();
-		count();
-		if (getMonitor() != null) {
-			getMonitor().finished(this);
-		}
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getDescription() {
+	return DESCRIPTION;
+    }
 
-	private void setup() {
-		sloc = null;
-		lineResults.clear();
-		for (int i = 0; i < codeRange.getParserTree().getMetaData()
-				.getLineNum(); i++) {
-			lineResults.add(new LineResults());
-		}
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
+	return EVALUATED_QUALITY_CHARACTERISTICS;
+    }
 
-	private void count() {
-		TreeIterator<ParserTree> iterator = new TreeIterator<ParserTree>(
-				codeRange.getParserTree());
-		int lineOffset = codeRange.getParserTree().getMetaData().getLine();
-		do {
-			ParserTree node = iterator.getCurrentNode();
-			Token token = node.getToken();
-			if (token != null) {
-				SLOCType type = langDepended.getType(token);
-				TokenMetaData metaData = token.getMetaData();
-				int lineId = metaData.getLine() - lineOffset;
-				int lineNum = metaData.getLineNum();
-				for (int line = lineId; line < lineId + lineNum; line++) {
-					if (type == SLOCType.COMMENT) {
-						lineResults.get(line).setComments(true);
-					} else if (type == SLOCType.PRODUCTIVE) {
-						lineResults.get(line).setProductiveContent(true);
-					}
-					if (type != SLOCType.PHYSICAL) {
-						lineResults.get(line).addLength(
-								token.getText().length());
-					}
-				}
-			}
-		} while (iterator.goForward());
-		int blLOC = 0;
-		int comLOC = 0;
-		int proLOC = 0;
-		int phyLOC = 0;
+    @Override
+    public List<Result> getResults() {
+	return sloc.getResults();
+    }
 
-		List<Double> lineLengths = new ArrayList<Double>();
-		for (LineResults lineResult : lineResults) {
-			if (lineResult.isBlank()) {
-				blLOC++;
-			} else {
-				if (lineResult.hasComments()) {
-					comLOC++;
-				}
-				if (lineResult.hasProductiveContent()) {
-					proLOC++;
-				}
-			}
-			phyLOC++;
-			lineLengths.add((double) lineResult.getLength());
-		}
-		sloc = new SLOCResult(phyLOC, proLOC, comLOC, blLOC, new Statistics(
-				lineLengths));
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.puresol.coding.analysis.SLOCMetric#getPhyLOC()
-	 */
-	public SLOCResult getResult() {
-		return sloc;
-	}
-
-	public void print() {
-		System.out.println("physical lines: " + sloc.getPhyLOC());
-		System.out.println("productive lines: " + sloc.getProLOC());
-		System.out.println("commented lines: " + sloc.getComLOC());
-		System.out.println("blank lines: " + sloc.getBlLOC());
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public SourceCodeQuality getQuality() {
-		return SLOCQuality.get(codeRange.getType(), sloc);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String getName() {
-		return NAME;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String getDescription() {
-		return DESCRIPTION;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
-		return EVALUATED_QUALITY_CHARACTERISTICS;
-	}
-
-	@Override
-	public List<Result> getResults() {
-		return sloc.getResults();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Document getReport() {
-		Document document = new Document(getName());
-		Chapter descriptionChapter = new Chapter(document, "description",
-				translator.i18n("Description"));
-		for (String paragraph : getDescription().split("\\n")) {
-			new Paragraph(descriptionChapter, paragraph);
-		}
-		Chapter resultsSummaryChapter = new Chapter(document,
-				"results_summary", translator.i18n("Results Summary"));
-		Table resultsTable = new Table(resultsSummaryChapter, "Results Table",
-				translator.i18n("Symbol"), translator.i18n("Value"),
-				translator.i18n("Unit"), translator.i18n("Description"));
-
-		for (Result result : getResults()) {
-			resultsTable.addRow(result.getName(), result.getValue(),
-					result.getUnit(), result.getDescription());
-		}
-		return document;
-	}
 }

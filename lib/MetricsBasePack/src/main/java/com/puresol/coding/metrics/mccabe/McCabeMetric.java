@@ -22,10 +22,6 @@ import com.puresol.coding.evaluator.CodeRangeEvaluator;
 import com.puresol.coding.evaluator.Result;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.SourceCodeQuality;
-import com.puresol.document.Chapter;
-import com.puresol.document.Document;
-import com.puresol.document.Paragraph;
-import com.puresol.document.Table;
 import com.puresol.trees.TreeIterator;
 import com.puresol.uhura.parser.ParserTree;
 
@@ -36,156 +32,132 @@ import com.puresol.uhura.parser.ParserTree;
  * 
  */
 public class McCabeMetric extends AbstractEvaluator implements
-		CodeRangeEvaluator {
+	CodeRangeEvaluator {
 
-	private static final long serialVersionUID = 4402746003873908301L;
+    private static final long serialVersionUID = 4402746003873908301L;
 
-	private static final Translator translator = Translator
-			.getTranslator(McCabeMetric.class);
+    private static final Translator translator = Translator
+	    .getTranslator(McCabeMetric.class);
 
-	public static final String NAME = translator.i18n("McCabe Metric");
+    public static final String NAME = translator.i18n("McCabe Metric");
 
-	public static final String DESCRIPTION = translator
-			.i18n("McCabe Metric calculation.");
+    public static final String DESCRIPTION = translator
+	    .i18n("McCabe Metric calculation.");
 
-	public static final List<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new ArrayList<QualityCharacteristic>();
-	static {
-		EVALUATED_QUALITY_CHARACTERISTICS
-				.add(QualityCharacteristic.ANALYSABILITY);
-		EVALUATED_QUALITY_CHARACTERISTICS
-				.add(QualityCharacteristic.TESTABILITY);
+    public static final List<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new ArrayList<QualityCharacteristic>();
+    static {
+	EVALUATED_QUALITY_CHARACTERISTICS
+		.add(QualityCharacteristic.ANALYSABILITY);
+	EVALUATED_QUALITY_CHARACTERISTICS
+		.add(QualityCharacteristic.TESTABILITY);
+    }
+
+    private int cyclomaticNumber = 1;
+    private final List<Result> results = new ArrayList<Result>();
+    private final LanguageDependedMcCabeMetric langDepended;
+    private final CodeRange codeRange;
+
+    public McCabeMetric(ProgrammingLanguage language, CodeRange codeRange) {
+	super();
+	this.codeRange = codeRange;
+	langDepended = language
+		.getImplementation(LanguageDependedMcCabeMetric.class);
+	if (langDepended == null) {
+	    throw new RuntimeException();
 	}
+    }
 
-	private int cyclomaticNumber = 1;
-	private final List<Result> results = new ArrayList<Result>();
-	private final LanguageDependedMcCabeMetric langDepended;
-	private final CodeRange codeRange;
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public CodeRange getCodeRange() {
+	return codeRange;
+    }
 
-	public McCabeMetric(ProgrammingLanguage language, CodeRange codeRange) {
-		super();
-		this.codeRange = codeRange;
-		langDepended = language
-				.getImplementation(LanguageDependedMcCabeMetric.class);
-		if (langDepended == null) {
-			throw new RuntimeException();
-		}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void run() {
+	calculate();
+	createResultsList();
+	if (getMonitor() != null) {
+	    getMonitor().finished(this);
 	}
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public CodeRange getCodeRange() {
-		return codeRange;
+    private void calculate() {
+	if (getMonitor() != null) {
+	    getMonitor().setRange(0, 1);
+	    getMonitor().setTitle(NAME);
 	}
+	cyclomaticNumber = 1;
+	TreeIterator<ParserTree> iterator = new TreeIterator<ParserTree>(
+		codeRange.getParserTree());
+	do {
+	    cyclomaticNumber += langDepended
+		    .increasesCyclomaticComplexityBy(iterator.getCurrentNode());
+	} while (iterator.goForward());
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void run() {
-		calculate();
-		createResultsList();
-		if (getMonitor() != null) {
-			getMonitor().finished(this);
-		}
-	}
+    private void createResultsList() {
+	results.clear();
+	results.add(new Result("v(G)",
+		translator.i18n("Cyclomatic complexity"), cyclomaticNumber, ""));
+    }
 
-	private void calculate() {
-		if (getMonitor() != null) {
-			getMonitor().setRange(0, 1);
-			getMonitor().setTitle(NAME);
-		}
-		cyclomaticNumber = 1;
-		TreeIterator<ParserTree> iterator = new TreeIterator<ParserTree>(
-				codeRange.getParserTree());
-		do {
-			cyclomaticNumber += langDepended
-					.increasesCyclomaticComplexityBy(iterator.getCurrentNode());
-		} while (iterator.goForward());
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.puresol.coding.analysis.McCabeMetric#getCyclomaticNumber()
+     */
+    public int getCyclomaticNumber() {
+	return cyclomaticNumber;
+    }
 
-	private void createResultsList() {
-		results.clear();
-		results.add(new Result("v(G)",
-				translator.i18n("Cyclomatic complexity"), cyclomaticNumber, ""));
-	}
+    public void print() {
+	System.out.println("v(G) = " + cyclomaticNumber);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.puresol.coding.analysis.McCabeMetric#getCyclomaticNumber()
-	 */
-	public int getCyclomaticNumber() {
-		return cyclomaticNumber;
-	}
+    public static boolean isSuitable(CodeRange codeRange) {
+	return true;
+    }
 
-	public void print() {
-		System.out.println("v(G) = " + cyclomaticNumber);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SourceCodeQuality getQuality() {
+	return McCabeQuality.get(getCodeRange().getType(), cyclomaticNumber);
+    }
 
-	public static boolean isSuitable(CodeRange codeRange) {
-		return true;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getName() {
+	return NAME;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public SourceCodeQuality getQuality() {
-		return McCabeQuality.get(getCodeRange().getType(), cyclomaticNumber);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getDescription() {
+	return DESCRIPTION;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String getName() {
-		return NAME;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
+	return EVALUATED_QUALITY_CHARACTERISTICS;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String getDescription() {
-		return DESCRIPTION;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
-		return EVALUATED_QUALITY_CHARACTERISTICS;
-	}
-
-	@Override
-	public List<Result> getResults() {
-		return results;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Document getReport() {
-		Document document = new Document(getName());
-		Chapter descriptionChapter = new Chapter(document, "description",
-				translator.i18n("Description"));
-		for (String paragraph : getDescription().split("\\n")) {
-			new Paragraph(descriptionChapter, paragraph);
-		}
-		Chapter resultsSummaryChapter = new Chapter(document,
-				"results_summary", translator.i18n("Results Summary"));
-		Table resultsTable = new Table(resultsSummaryChapter, "Results Table",
-				translator.i18n("Symbol"), translator.i18n("Value"),
-				translator.i18n("Unit"), translator.i18n("Description"));
-
-		for (Result result : getResults()) {
-			resultsTable.addRow(result.getName(), result.getValue(),
-					result.getUnit(), result.getDescription());
-		}
-		return document;
-	}
+    @Override
+    public List<Result> getResults() {
+	return results;
+    }
 }

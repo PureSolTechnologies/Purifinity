@@ -10,14 +10,7 @@ import java.util.Map;
 import javax.i18n4java.Translator;
 import javax.swing.JOptionPane;
 
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.data.category.DefaultCategoryDataset;
-import org.jfree.data.general.DefaultPieDataset;
-
 import com.puresol.coding.CodeRange;
-import com.puresol.coding.CodeRangeType;
 import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.analysis.Analysis;
 import com.puresol.coding.analysis.AnalyzedFile;
@@ -27,13 +20,7 @@ import com.puresol.coding.evaluator.ProjectEvaluator;
 import com.puresol.coding.evaluator.Result;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.SourceCodeQuality;
-import com.puresol.document.Chapter;
-import com.puresol.document.Chart;
-import com.puresol.document.Document;
-import com.puresol.document.Paragraph;
-import com.puresol.document.Table;
 import com.puresol.gui.Application;
-import com.puresol.rendering.ChartRenderer;
 
 public class ProjectMaintainabilityIndex extends AbstractEvaluator implements
 	ProjectEvaluator {
@@ -137,92 +124,6 @@ public class ProjectMaintainabilityIndex extends AbstractEvaluator implements
     @Override
     public List<Result> getResults() {
 	return new ArrayList<Result>();
-    }
-
-    @Override
-    public Document getReport() {
-	Document document = new Document(getName());
-	Chapter descriptionChapter = new Chapter(document, "description",
-		translator.i18n("Description"));
-	for (String paragraph : getDescription().split("\\n")) {
-	    new Paragraph(descriptionChapter, paragraph);
-	}
-	Chapter graphsChapter = new Chapter(document, "graphs",
-		translator.i18n("Graphs"));
-	JFreeChart chart = getMaintainabilityChart();
-	new Chart(graphsChapter, "ProjectMaintainabilityChart",
-		translator.i18n("Maintainability Chart"), new ChartRenderer(
-			chart));
-	JFreeChart pieChart = getMaintainabilityPieChart();
-	new Chart(graphsChapter, "ProjectMaintainabilityPieChart",
-		translator.i18n("Maintainability Pie Chart"),
-		new ChartRenderer(pieChart));
-	Chapter partQualityChapter = new Chapter(document, "quality_of_parts",
-		translator.i18n("Quality of Parts"));
-	Table partQualityTable = new Table(partQualityChapter,
-		"Table of Part Qualities", translator.i18n("Operator"),
-		translator.i18n("Count"));
-	for (String partName : qualities.keySet()) {
-	    partQualityTable.addRow(partName, qualities.get(partName));
-	}
-	return document;
-    }
-
-    private JFreeChart getMaintainabilityChart() {
-	DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-	List<String> identifiers = new ArrayList<String>(
-		evaluatorResults.keySet());
-	for (String identifier : identifiers) {
-	    List<Result> results = evaluatorResults.get(identifier);
-	    for (Result result : results) {
-		dataset.addValue(result.getValue(), result.getName(),
-			identifier);
-	    }
-	}
-	JFreeChart chart = ChartFactory.createLineChart(getName(),
-		"code range", "value", dataset, PlotOrientation.VERTICAL, true,
-		true, true);
-	chart.setAntiAlias(false);
-	chart.setTextAntiAlias(false);
-	return chart;
-    }
-
-    private JFreeChart getMaintainabilityPieChart() {
-	Map<SourceCodeQuality, Integer> pieChartQualitiesNumbers = new HashMap<SourceCodeQuality, Integer>();
-
-	List<AnalyzedFile> analyzedFiles = projectAnalyzer.getAnalyzedFiles();
-	for (AnalyzedFile analyzedFile : analyzedFiles) {
-	    Analysis analysis = projectAnalyzer.getAnalysis(analyzedFile);
-	    List<CodeRange> codeRanges = analysis.getAnalyzableCodeRanges();
-	    for (CodeRange codeRange : codeRanges) {
-		if (codeRange.getType() == CodeRangeType.FILE) {
-		    String identifier = analyzedFile.getFile().getPath() + ": "
-			    + codeRange.getType().getName() + " '"
-			    + codeRange.getName() + "'";
-		    SourceCodeQuality quality = qualities.get(identifier);
-		    Integer number = pieChartQualitiesNumbers.get(quality);
-		    if (number == null) {
-			pieChartQualitiesNumbers.put(quality, 1);
-		    } else {
-			pieChartQualitiesNumbers.put(quality, number + 1);
-		    }
-		    System.err.println(identifier + " " + quality + " "
-			    + number);
-		}
-	    }
-	}
-	DefaultPieDataset dataset = new DefaultPieDataset();
-	for (SourceCodeQuality quality : pieChartQualitiesNumbers.keySet()) {
-	    dataset.setValue(quality.getIdentifier(),
-		    pieChartQualitiesNumbers.get(quality));
-	    System.out.println(quality.getIdentifier() + " "
-		    + pieChartQualitiesNumbers.get(quality));
-	}
-	JFreeChart chart = ChartFactory.createPieChart(getName(), dataset,
-		true, true, true);
-	chart.setAntiAlias(false);
-	chart.setTextAntiAlias(false);
-	return chart;
     }
 
     @Override

@@ -42,7 +42,6 @@ public class ProjectEntropyMetricTest {
 	assertNotNull(metric.getEvaluatedQualityCharacteristics());
 	assertNull(metric.getMonitor());
 	assertEquals(SourceCodeQuality.UNSPECIFIED, metric.getQuality());
-	assertNotNull(metric.getReport());
 	assertNotNull(metric.getResults());
 	assertNotNull(metric.getTimeStamp());
     }
