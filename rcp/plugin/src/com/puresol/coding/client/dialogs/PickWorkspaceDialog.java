@@ -9,6 +9,7 @@ import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
@@ -79,18 +80,29 @@ public class PickWorkspaceDialog extends TitleAreaDialog {
 
     @Override
     protected Control createDialogArea(Composite parent) {
+	Composite superComposite = (Composite) super.createDialogArea(parent);
+
 	setTitle("Pick Workspace");
 	setMessage("Specify the location of the workspace where analysis projects and settings are to be stored.");
 
-	Composite locationComposite = new Composite(parent, SWT.NONE);
+	Composite locationComposite = new Composite(superComposite, SWT.NONE);
+	locationComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false,
+		false, 1, 1));
 	locationComposite.setLayout(new GridLayout(3, false));
 
 	Label lblLocation = new Label(locationComposite, SWT.NONE);
+	lblLocation.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
+		false, 1, 1));
+	lblLocation.setAlignment(SWT.CENTER);
 	lblLocation.setText("Workspace:");
 
 	comboLocation = new Combo(locationComposite, SWT.NONE);
+	comboLocation.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
+		false, 1, 1));
 
 	Button btnBrowse = new Button(locationComposite, SWT.NONE);
+	btnBrowse.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
+		false, 1, 1));
 	btnBrowse.setText("Browse...");
 	new Label(locationComposite, SWT.NONE);
 
@@ -108,7 +120,7 @@ public class PickWorkspaceDialog extends TitleAreaDialog {
 
 	readSettings();
 
-	return locationComposite;
+	return superComposite;
     }
 
     private void browse() {
