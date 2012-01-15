@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: PureConfigurator.plugin
+Bundle-SymbolicName: PureConfigurator.plugin
+Bundle-Version: 1.0.0.qualifier

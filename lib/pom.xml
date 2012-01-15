@@ -15,7 +15,6 @@
 		<module>PureConfigurator</module>
 		<module>PureConfigurator.plugin</module>
 		<module>PureSolTechnologiesAPI</module>
-		<module>PureSolTechnologiesAPI.plugin</module>
 		<module>CodeAnalysis</module>
 		<module>DocumentBuilder</module>
 		<module>FortranLanguagePack</module>
@@ -104,11 +103,6 @@
 				<version>3.7</version>
 				<type>jar</type>
 				<scope>compile</scope>
-			</dependency>
-			<dependency>
-				<groupId>net.java.dev.jna</groupId>
-				<artifactId>jna</artifactId>
-				<version>3.4.0</version>
 			</dependency>
 			<dependency>
 				<groupId>javax</groupId>
