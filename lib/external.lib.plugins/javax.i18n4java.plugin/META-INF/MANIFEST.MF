@@ -1,8 +1,12 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Plugin
-Bundle-SymbolicName: javax.i18n4java.plugin;singleton:=true
-Bundle-Version: 1.1.0.qualifier
-Bundle-ActivationPolicy: lazy
+Bundle-Name: javax.i18n4java.plugin
+Bundle-SymbolicName: javax.i18n4java.plugin
+Bundle-Version: 1.1.0
+Bundle-ClassPath: i18n4java-1.1.0.jar
+Export-Package: javax.i18n4java,
+ javax.i18n4java.data,
+ javax.i18n4java.linguist,
+ javax.i18n4java.proc,
+ javax.i18n4java.utils
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Export-Package: javax.i18n4java

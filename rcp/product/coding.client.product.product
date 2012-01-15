@@ -25,6 +25,7 @@
    <plugins>
       <plugin id="coding.client.plugin"/>
       <plugin id="com.ibm.icu"/>
+      <plugin id="javax.i18n4java.plugin"/>
       <plugin id="org.eclipse.core.commands"/>
       <plugin id="org.eclipse.core.contenttype"/>
       <plugin id="org.eclipse.core.databinding"/>
@@ -44,8 +45,6 @@
       <plugin id="org.eclipse.swt"/>
       <plugin id="org.eclipse.ui"/>
       <plugin id="org.eclipse.ui.workbench"/>
-      
-      <plugin id="javax.i18n4java.plugin" fragment="true" />
       
       <plugin id="org.eclipse.ui.carbon" fragment="true" os="macosx" ws="carbon" arch="x86"/>
       <plugin id="org.eclipse.ui.cocoa" fragment="true" os="macosx" ws="carbon" arch="x86"/>
