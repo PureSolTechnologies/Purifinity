@@ -59,6 +59,23 @@
                   style="push">
             </command>
             <separator
+                  name="coding.client.plugin.separator2"
+                  visible="true">
+            </separator>
+            <command
+                  commandId="com.puresol.ui.file.switchWorkspace"
+                  id="switchWorkspace"
+                  label="Switch Workspace..."
+                  mnemonic="W"
+                  style="push">
+            </command>
+            <command
+                  commandId="org.eclipse.ui.file.restartWorkbench"
+                  id="restart"
+                  label="Restart"
+                  style="push">
+            </command>
+            <separator
                   name="RichClient.Repository.separator5"
                   visible="true">
             </separator>
@@ -219,6 +236,11 @@
             defaultHandler="com.puresol.coding.client.commands.OpenAnalysis"
             id="com.puresol.ui.file.openAnalysis"
             name="openAnalysis">
+      </command>
+      <command
+            defaultHandler="com.puresol.coding.client.commands.SwitchWorkspace"
+            id="com.puresol.ui.file.switchWorkspace"
+            name="switchWorkspace">
       </command>
    </extension>
 
