@@ -214,18 +214,6 @@
       </view>
    </extension>
    <extension
-         id="client"
-         point="org.eclipse.core.runtime.products">
-      <product
-            application="coding.client.plugin.application"
-            name="Source Code Analysis">
-         <property
-               name="appName"
-               value="Source Code Analysis">
-         </property>
-      </product>
-   </extension>
-   <extension
          point="org.eclipse.ui.commands">
       <command
             defaultHandler="com.puresol.coding.client.commands.NewAnalysis"
@@ -242,6 +230,18 @@
             id="com.puresol.ui.file.switchWorkspace"
             name="switchWorkspace">
       </command>
+   </extension>
+   <extension
+         id="product"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="client.plugin.application"
+            name="Source Code Analysis">
+         <property
+               name="appName"
+               value="Source Code Analysis">
+         </property>
+      </product>
    </extension>
 
 </plugin>

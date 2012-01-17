@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="coding.client.feature"
+      id="client.feature"
       label="Source Code Analysis Feature"
       version="0.1.0.qualifier"
       os="linux,macosx,win32"
@@ -58,13 +58,6 @@
       <import plugin="org.eclipse.core.databinding" version="1.2.0" match="compatible"/>
       <import plugin="org.eclipse.core.expressions" version="3.4.200" match="compatible"/>
    </requires>
-
-   <plugin
-         id="coding.client.plugin"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
 
    <plugin
          id="org.eclipse.core.runtime"
@@ -306,5 +299,12 @@
          download-size="0"
          install-size="0"
          version="0.0.0"/>
+
+   <plugin
+         id="client.plugin"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
 
 </feature>
