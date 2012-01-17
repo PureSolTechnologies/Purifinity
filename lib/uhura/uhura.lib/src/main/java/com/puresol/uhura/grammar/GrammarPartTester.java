@@ -1,13 +1,14 @@
 package com.puresol.uhura.grammar;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.StringReader;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
-import com.puresol.io.StringOutputStream;
 import com.puresol.trees.TreePrinter;
 import com.puresol.uhura.lexer.Lexer;
 import com.puresol.uhura.lexer.LexerException;
@@ -35,93 +36,94 @@ import com.puresol.utils.StopWatch;
  */
 public class GrammarPartTester {
 
-	private static final Logger logger = Logger
-			.getLogger(GrammarPartTester.class);
+    private static final Logger logger = Logger
+	    .getLogger(GrammarPartTester.class);
 
-	public static boolean test(Grammar grammar, String production, String text) {
-		try {
-			if (logger.isDebugEnabled()) {
-				logger.debug("Testing production '" + production
-						+ "' with text '" + text + "' ...");
-			}
-			grammar = grammar.createWithNewStartProduction(production);
-			Lexer lexer = LexerFactory.create(grammar);
-			LexerResult lexerResult = lexer.lex(SourceCode.read(
-					new StringReader(text), new File("SampleString")),
-					"SampleString");
+    public static boolean test(Grammar grammar, String production, String text) {
+	logger.setLevel(Level.TRACE);
+	try {
+	    if (logger.isDebugEnabled()) {
+		logger.debug("Testing production '" + production
+			+ "' with text '" + text + "' ...");
+	    }
+	    grammar = grammar.createWithNewStartProduction(production);
+	    Lexer lexer = LexerFactory.create(grammar);
+	    LexerResult lexerResult = lexer.lex(SourceCode.read(
+		    new StringReader(text), new File("SampleString")),
+		    "SampleString");
 
-			Parser parser = ParserFactory.create(grammar);
-			ParserTree ast = parser.parse(lexerResult);
-			if (logger.isTraceEnabled()) {
-				StringOutputStream out = new StringOutputStream();
-				new TreePrinter(new PrintStream(out)).println(ast);
-				logger.trace(out.toString());
-			}
-			logger.debug("passed.");
-			return true;
-		} catch (GrammarException e) {
-			e.printStackTrace();
-			return false;
-		} catch (LexerException e) {
-			e.printStackTrace();
-			return false;
-		} catch (ParserFactoryException e) {
-			e.printStackTrace();
-			return false;
-		} catch (ParserException e) {
-			e.printStackTrace();
-			return false;
-		} catch (LexerFactoryException e) {
-			e.printStackTrace();
-			return false;
-		} catch (IOException e) {
-			e.printStackTrace();
-			return false;
-		}
+	    Parser parser = ParserFactory.create(grammar);
+	    ParserTree ast = parser.parse(lexerResult);
+	    if (logger.isTraceEnabled()) {
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		new TreePrinter(new PrintStream(out)).println(ast);
+		logger.trace(new String(out.toByteArray()));
+	    }
+	    logger.debug("passed.");
+	    return true;
+	} catch (GrammarException e) {
+	    e.printStackTrace();
+	    return false;
+	} catch (LexerException e) {
+	    e.printStackTrace();
+	    return false;
+	} catch (ParserFactoryException e) {
+	    e.printStackTrace();
+	    return false;
+	} catch (ParserException e) {
+	    e.printStackTrace();
+	    return false;
+	} catch (LexerFactoryException e) {
+	    e.printStackTrace();
+	    return false;
+	} catch (IOException e) {
+	    e.printStackTrace();
+	    return false;
 	}
+    }
 
-	public static boolean test(File parserDirectory, String parserName,
-			Grammar grammar, String production, String text) {
-		try {
-			if (logger.isDebugEnabled()) {
-				logger.debug("Testing text '" + production + "' with text '"
-						+ text + "' ...");
-			}
-			grammar = grammar.createWithNewStartProduction(production);
-			StopWatch watch = new StopWatch();
-			Lexer lexer = new RegExpLexer(grammar);
-			watch.start();
-			LexerResult lexerResult = lexer.lex(SourceCode.read(
-					new StringReader(text), new File("SampleString")),
-					"SampleString");
-			watch.stop();
-			logger.debug("Lexer time: " + watch);
+    public static boolean test(File parserDirectory, String parserName,
+	    Grammar grammar, String production, String text) {
+	try {
+	    if (logger.isDebugEnabled()) {
+		logger.debug("Testing text '" + production + "' with text '"
+			+ text + "' ...");
+	    }
+	    grammar = grammar.createWithNewStartProduction(production);
+	    StopWatch watch = new StopWatch();
+	    Lexer lexer = new RegExpLexer(grammar);
+	    watch.start();
+	    LexerResult lexerResult = lexer.lex(SourceCode.read(
+		    new StringReader(text), new File("SampleString")),
+		    "SampleString");
+	    watch.stop();
+	    logger.debug("Lexer time: " + watch);
 
-			Parser parser = ParserManager.getManagerParser(parserDirectory,
-					parserName, grammar);
-			watch.start();
-			ParserTree ast = parser.parse(lexerResult);
-			watch.stop();
-			logger.debug("Parser time: " + watch);
-			if (logger.isTraceEnabled()) {
-				StringOutputStream out = new StringOutputStream();
-				new TreePrinter(new PrintStream(out)).println(ast);
-				logger.trace(out.toString());
-			}
-			logger.debug("passed.");
-			return true;
-		} catch (GrammarException e) {
-			e.printStackTrace();
-			return false;
-		} catch (ParserException e) {
-			e.printStackTrace();
-			return false;
-		} catch (LexerException e) {
-			e.printStackTrace();
-			return false;
-		} catch (IOException e) {
-			e.printStackTrace();
-			return false;
-		}
+	    Parser parser = ParserManager.getManagerParser(parserDirectory,
+		    parserName, grammar);
+	    watch.start();
+	    ParserTree ast = parser.parse(lexerResult);
+	    watch.stop();
+	    logger.debug("Parser time: " + watch);
+	    if (logger.isTraceEnabled()) {
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		new TreePrinter(new PrintStream(out)).println(ast);
+		logger.trace(new String(out.toByteArray()));
+	    }
+	    logger.debug("passed.");
+	    return true;
+	} catch (GrammarException e) {
+	    e.printStackTrace();
+	    return false;
+	} catch (ParserException e) {
+	    e.printStackTrace();
+	    return false;
+	} catch (LexerException e) {
+	    e.printStackTrace();
+	    return false;
+	} catch (IOException e) {
+	    e.printStackTrace();
+	    return false;
 	}
+    }
 }
