@@ -10,6 +10,7 @@
 	<modules>
 		<module>plugin</module>
 		<module>product</module>
+		<module>coding.client.feature</module>
 		<module>coding.client.target</module>
 	</modules>
 
