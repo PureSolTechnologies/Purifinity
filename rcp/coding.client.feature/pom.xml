@@ -1,7 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-
 	<parent>
 		<groupId>com.puresol</groupId>
 		<artifactId>rcp</artifactId>
@@ -9,8 +8,21 @@
 		<relativePath>..</relativePath>
 	</parent>
 
-	<artifactId>client.product</artifactId>
+	<artifactId>coding.client.feature</artifactId>
 
-	<packaging>eclipse-application</packaging>
+	<packaging>eclipse-feature</packaging>
+
+	<!--  build>
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-p2-repository-plugin</artifactId>
+				<version>0.13.0</version>
+				<configuration>
+					<includeAllDependencies>true</includeAllDependencies>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build -->
 
 </project>

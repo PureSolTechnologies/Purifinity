@@ -8,7 +8,10 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>client</module>
+		<module>plugin</module>
+		<module>product</module>
+		<module>coding.client.feature</module>
+		<module>coding.client.target</module>
 	</modules>
 
 	<dependencies>
