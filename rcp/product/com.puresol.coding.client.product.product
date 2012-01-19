@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="Source Code Analysis" uid="coding.client.product" id="coding.client.plugin.client" application="coding.client.plugin.application" version="0.1.0.qualifier" useFeatures="true" includeLaunchers="true">
+<product name="Source Code Analysis" uid="com.puresol.coding.client.product" id="com.puresol.coding.client.plugin.product" application="com.puresol.coding.client.plugin.application" version="0.1.0.qualifier" useFeatures="true" includeLaunchers="true">
+
 
    <configIni use="default">
    </configIni>
@@ -14,13 +15,14 @@
    <windowImages/>
 
    <splash
-      location="coding.client.plugin" />
+      location="com.puresol.coding.client.plugin" />
    <launcher>
       <solaris/>
       <win useIco="false">
          <bmp/>
       </win>
    </launcher>
+
 
    <vm>
    </vm>
@@ -29,7 +31,7 @@
    </plugins>
 
    <features>
-      <feature id="coding.client.feature" version="0.1.0.qualifier"/>
+      <feature id="com.puresol.coding.client.feature" version="0.1.0.qualifier"/>
    </features>
 
 

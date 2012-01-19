@@ -8,7 +8,7 @@
 		<relativePath>..</relativePath>
 	</parent>
 
-	<artifactId>coding.client.feature</artifactId>
+	<artifactId>com.puresol.coding.client.feature</artifactId>
 
 	<packaging>eclipse-feature</packaging>
 

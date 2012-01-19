@@ -9,7 +9,7 @@
 		<relativePath>..</relativePath>
 	</parent>
 
-	<artifactId>coding.client.plugin</artifactId>
+	<artifactId>com.puresol.coding.client.plugin</artifactId>
 
 	<packaging>eclipse-plugin</packaging>
 
