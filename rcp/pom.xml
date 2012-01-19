@@ -8,10 +8,10 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>plugin</module>
-		<module>product</module>
-		<module>coding.client.feature</module>
-		<module>coding.client.target</module>
+		<module>com.puresol.coding.client.plugin</module>
+		<module>com.puresol.coding.client.product</module>
+		<module>com.puresol.coding.client.feature</module>
+		<module>com.puresol.coding.client.target</module>
 	</modules>
 
 	<dependencies>
