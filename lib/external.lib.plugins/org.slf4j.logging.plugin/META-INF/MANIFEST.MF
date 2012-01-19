@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: slf4j-api
+Bundle-SymbolicName: org.slf4j.logging.plugin;singleton:=true
+Bundle-Version: 1.6.4
+Bundle-ClassPath: slf4j-api-1.6.4.jar
+Export-Package: org.slf4j,
+ org.slf4j.helpers,
+ org.slf4j.spi
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ActivationPolicy: lazy

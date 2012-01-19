@@ -13,6 +13,7 @@
 
 	<modules>
 		<module>javax.i18n4java.plugin</module>
+		<module>org.slf4j.logging.plugin</module>
 	</modules>
 	
 </project>

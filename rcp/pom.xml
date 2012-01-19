@@ -12,8 +12,6 @@
 	</modules>
 
 	<dependencies>
-		<!-- dependency> <groupId>org.apache.poi</groupId> <artifactId>poi</artifactId> 
-			<version>3.7</version> </dependency -->
 		<dependency>
 			<groupId>javax</groupId>
 			<artifactId>i18n4java.plugin</artifactId>
@@ -24,11 +22,11 @@
 			<artifactId>uhura.plugin</artifactId>
 			<version>0.1.0</version>
 		</dependency>
-		<!-- dependency> <groupId>com.puresol</groupId> <artifactId>PureConfigurator.bundle</artifactId> 
-			<version>0.1.0-SNAPSHOT</version> </dependency -->
-		<!-- dependency> <groupId>com.puresol</groupId> <artifactId>PureSolTechnologiesAPI.bundle</artifactId> 
-			<version>0.1.0</version> </dependency> <dependency> <groupId>com.puresol</groupId> 
-			<artifactId>uhura.plugin</artifactId> <version>0.1.0-SNAPSHOT</version> </dependency -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>logging.plugin</artifactId> 
+			<version>1.6.4</version>
+		</dependency>
 	</dependencies>
 
 	<repositories>

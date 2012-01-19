@@ -4,3 +4,4 @@ Bundle-SymbolicName: com.puresol.uhura.plugin;singleton:=true
 Bundle-Version: 0.1.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
+Require-Bundle: org.slf4j.logging.plugin;bundle-version="1.6.4"

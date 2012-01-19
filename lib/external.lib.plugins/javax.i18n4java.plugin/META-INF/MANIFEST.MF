@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: javax.i18n4java.plugin
-Bundle-SymbolicName: javax.i18n4java.plugin
+Bundle-SymbolicName: javax.i18n4java.plugin;singleton:=true
 Bundle-Version: 1.1.0
 Bundle-ClassPath: i18n4java-1.1.0.jar
 Export-Package: javax.i18n4java,
@@ -10,3 +10,4 @@ Export-Package: javax.i18n4java,
  javax.i18n4java.proc,
  javax.i18n4java.utils
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ActivationPolicy: lazy

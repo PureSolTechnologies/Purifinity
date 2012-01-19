@@ -3,7 +3,6 @@
 
 <product name="Source Code Analysis" uid="com.puresol.coding.client.product" id="com.puresol.coding.client.plugin.product" application="com.puresol.coding.client.plugin.application" version="0.1.0.qualifier" useFeatures="true" includeLaunchers="true">
 
-
    <configIni use="default">
    </configIni>
 
@@ -22,7 +21,6 @@
          <bmp/>
       </win>
    </launcher>
-
 
    <vm>
    </vm>
