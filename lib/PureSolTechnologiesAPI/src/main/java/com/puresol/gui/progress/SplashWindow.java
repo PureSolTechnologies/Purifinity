@@ -32,7 +32,8 @@ import javax.swing.JProgressBar;
 import javax.swing.JWindow;
 import javax.swing.SwingUtilities;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.puresol.gui.ImageBox;
 
@@ -45,164 +46,168 @@ import com.puresol.gui.ImageBox;
  */
 public class SplashWindow extends JWindow implements Runnable, ProgressObserver {
 
-	private static final long serialVersionUID = 4191554073727049318L;
+    private static final long serialVersionUID = 4191554073727049318L;
 
-	private static final Logger logger = Logger.getLogger(SplashWindow.class);
+    private static final Logger logger = LoggerFactory
+	    .getLogger(SplashWindow.class);
 
-	private Thread splashThread = null;
-	private Image image = null;
-	private JProgressBar progressBar = null;
+    private Thread splashThread = null;
+    private Image image = null;
+    private JProgressBar progressBar = null;
 
-	public SplashWindow(URL imageURL, int width, int height) {
-		this(imageURL, width, height, null);
+    public SplashWindow(URL imageURL, int width, int height) {
+	this(imageURL, width, height, null);
+    }
+
+    public SplashWindow(URL imageURL, int width, int height, Frame f) {
+	super(f);
+	setImage(imageURL);
+	initUI(width, height);
+    }
+
+    public SplashWindow(URL imageURL) {
+	this(imageURL, null);
+    }
+
+    public SplashWindow(URL imageURL, Frame f) {
+	super(f);
+	setImage(imageURL);
+	initUI(image.getWidth(this), image.getHeight(this));
+    }
+
+    private void initUI(int width, int height) {
+	this.getContentPane().setLayout(new BorderLayout());
+	ImageBox box = new ImageBox(image, width, height);
+	box.setVisible(true);
+	this.getContentPane().add(box, BorderLayout.CENTER);
+	pack();
+	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+	setLocation(screenSize.width / 2 - (getWidth() / 2), screenSize.height
+		/ 2 - (getHeight() / 2));
+    }
+
+    private void setImage(URL imageURL) {
+	image = Toolkit.getDefaultToolkit().getImage(imageURL);
+    }
+
+    public void showProgressBar(boolean visible) {
+	if (visible) {
+	    progressBar = new JProgressBar();
+	    getContentPane().add(progressBar, BorderLayout.SOUTH);
+	    pack();
+	    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+	    setLocation(screenSize.width / 2 - (getWidth() / 2),
+		    screenSize.height / 2 - (getHeight() / 2));
+	} else {
+	    getContentPane().remove(progressBar);
+	    progressBar = null;
 	}
+    }
 
-	public SplashWindow(URL imageURL, int width, int height, Frame f) {
-		super(f);
-		setImage(imageURL);
-		initUI(width, height);
+    public void showText(boolean visible) {
+	if (progressBar != null) {
+	    progressBar.setStringPainted(visible);
 	}
+    }
 
-	public SplashWindow(URL imageURL) {
-		this(imageURL, null);
+    @Override
+    public void setText(String text) {
+	// not supported in a splash window
+    }
+
+    @Override
+    public void setRange(int min, int max) {
+	if (progressBar != null) {
+	    progressBar.setMinimum(min);
+	    progressBar.setMaximum(max);
 	}
+    }
 
-	public SplashWindow(URL imageURL, Frame f) {
-		super(f);
-		setImage(imageURL);
-		initUI(image.getWidth(this), image.getHeight(this));
+    @Override
+    public void setStatus(int value) {
+	if (progressBar != null) {
+	    progressBar.setValue(value);
 	}
+    }
 
-	private void initUI(int width, int height) {
-		this.getContentPane().setLayout(new BorderLayout());
-		ImageBox box = new ImageBox(image, width, height);
-		box.setVisible(true);
-		this.getContentPane().add(box, BorderLayout.CENTER);
-		pack();
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		setLocation(screenSize.width / 2 - (getWidth() / 2), screenSize.height
-				/ 2 - (getHeight() / 2));
+    @Override
+    public void setTitle(String description) {
+	// not supported in a splash window
+    }
+
+    @Override
+    public void setProgressText(String text) {
+	if (progressBar != null) {
+	    progressBar.setString(text);
 	}
+	this.showText(true);
+    }
 
-	private void setImage(URL imageURL) {
-		image = Toolkit.getDefaultToolkit().getImage(imageURL);
-	}
+    @Override
+    public void showProgressPercent() {
+	progressBar.setString(null);
+	this.showText(true);
+    }
 
-	public void showProgressBar(boolean visible) {
-		if (visible) {
-			progressBar = new JProgressBar();
-			getContentPane().add(progressBar, BorderLayout.SOUTH);
-			pack();
-			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-			setLocation(screenSize.width / 2 - (getWidth() / 2),
-					screenSize.height / 2 - (getHeight() / 2));
-		} else {
-			getContentPane().remove(progressBar);
-			progressBar = null;
+    @Override
+    public void finished(ProgressObservable o) {
+	dispose();
+    }
+
+    public void setClosable(boolean dispose) {
+	final boolean disposable = dispose;
+	addMouseListener(new MouseAdapter() {
+	    @Override
+	    public void mousePressed(MouseEvent e) {
+		setVisible(false);
+		if (disposable) {
+		    finished(null);
 		}
-	}
+	    }
+	});
+    }
 
-	public void showText(boolean visible) {
-		if (progressBar != null) {
-			progressBar.setStringPainted(visible);
+    public void setTimer(int seconds) {
+	final int pause = seconds * 1000;
+	final Runnable closerRunner = new Runnable() {
+	    @Override
+	    public void run() {
+		setVisible(false);
+		finished(null);
+	    }
+	};
+	Runnable waitRunner = new Runnable() {
+	    @Override
+	    public void run() {
+		try {
+		    Thread.sleep(pause);
+		    SwingUtilities.invokeAndWait(closerRunner);
+		} catch (InterruptedException e) {
+		    logger.error(e.getMessage(), e);
+		} catch (InvocationTargetException e) {
+		    logger.error(e.getMessage(), e);
 		}
-	}
+	    }
+	};
+	setVisible(true);
+	splashThread = new Thread(waitRunner, "SplashThread");
+    }
 
-	@Override
-	public void setText(String text) {
-		// not supported in a splash window
+    @Override
+    public void run() {
+	if (splashThread != null) {
+	    splashThread.start();
 	}
+	setVisible(true);
+    }
 
-	@Override
-	public void setRange(int min, int max) {
-		if (progressBar != null) {
-			progressBar.setMinimum(min);
-			progressBar.setMaximum(max);
-		}
-	}
+    @Override
+    public ProgressPanel getSubProgressPanel() {
+	throw new RuntimeException("No sub processes allowed in SplashWindow!");
+    }
 
-	@Override
-	public void setStatus(int value) {
-		if (progressBar != null) {
-			progressBar.setValue(value);
-		}
-	}
-
-	@Override
-	public void setTitle(String description) {
-		// not supported in a splash window
-	}
-
-	@Override
-	public void setProgressText(String text) {
-		if (progressBar != null) {
-			progressBar.setString(text);
-		}
-		this.showText(true);
-	}
-
-	@Override
-	public void showProgressPercent() {
-		progressBar.setString(null);
-		this.showText(true);
-	}
-
-	@Override
-	public void finished(ProgressObservable o) {
-		dispose();
-	}
-
-	public void setClosable(boolean dispose) {
-		final boolean disposable = dispose;
-		addMouseListener(new MouseAdapter() {
-			public void mousePressed(MouseEvent e) {
-				setVisible(false);
-				if (disposable) {
-					finished(null);
-				}
-			}
-		});
-	}
-
-	public void setTimer(int seconds) {
-		final int pause = seconds * 1000;
-		final Runnable closerRunner = new Runnable() {
-			public void run() {
-				setVisible(false);
-				finished(null);
-			}
-		};
-		Runnable waitRunner = new Runnable() {
-			public void run() {
-				try {
-					Thread.sleep(pause);
-					SwingUtilities.invokeAndWait(closerRunner);
-				} catch (InterruptedException e) {
-					logger.error(e.getMessage(), e);
-				} catch (InvocationTargetException e) {
-					logger.error(e.getMessage(), e);
-				}
-			}
-		};
-		setVisible(true);
-		splashThread = new Thread(waitRunner, "SplashThread");
-	}
-
-	@Override
-	public void run() {
-		if (splashThread != null) {
-			splashThread.start();
-		}
-		setVisible(true);
-	}
-
-	@Override
-	public ProgressPanel getSubProgressPanel() {
-		throw new RuntimeException("No sub processes allowed in SplashWindow!");
-	}
-
-	@Override
-	public void terminated(ProgressObservable o) {
-	}
+    @Override
+    public void terminated(ProgressObservable o) {
+    }
 
 }

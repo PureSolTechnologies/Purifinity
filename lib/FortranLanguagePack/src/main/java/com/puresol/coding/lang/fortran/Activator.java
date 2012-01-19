@@ -3,10 +3,11 @@ package com.puresol.coding.lang.fortran;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
-import org.apache.log4j.Logger;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.config.APIInformation;
@@ -20,7 +21,8 @@ import com.puresol.config.APIInformation;
  */
 public class Activator implements BundleActivator {
 
-    private static final Logger logger = Logger.getLogger(Activator.class);
+    private static final Logger logger = LoggerFactory
+	    .getLogger(Activator.class);
 
     private ServiceRegistration<?> registration = null;
 

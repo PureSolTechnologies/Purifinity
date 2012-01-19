@@ -6,8 +6,8 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.StringReader;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.puresol.trees.TreePrinter;
 import com.puresol.uhura.lexer.Lexer;
@@ -36,11 +36,10 @@ import com.puresol.utils.StopWatch;
  */
 public class GrammarPartTester {
 
-    private static final Logger logger = Logger
+    private static final Logger logger = LoggerFactory
 	    .getLogger(GrammarPartTester.class);
 
     public static boolean test(Grammar grammar, String production, String text) {
-	logger.setLevel(Level.TRACE);
 	try {
 	    if (logger.isDebugEnabled()) {
 		logger.debug("Testing production '" + production

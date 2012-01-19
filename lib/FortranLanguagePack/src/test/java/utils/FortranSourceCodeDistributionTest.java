@@ -5,18 +5,20 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.junit.Assume.assumeTrue;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.i18n4java.utils.FileSearch;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.puresol.coding.analysis.Analyzer;
 import com.puresol.coding.analysis.AnalyzerException;
@@ -38,10 +40,12 @@ public class FortranSourceCodeDistributionTest {
 
     private static final String INSTALL_DIRECTORY = "/home/ludwig/workspace/Dyn3D";
 
+    private final static Logger logger = LoggerFactory
+	    .getLogger(FortranSourceCodeDistributionTest.class);
+
     @Test
     public void test() {
 	try {
-	    Logger.getRootLogger().setLevel(Level.DEBUG);
 	    File file = new File(INSTALL_DIRECTORY, "src/fort/ndicrs.f");
 	    assumeTrue(file.exists());
 	    Fortran fortran = Fortran.getInstance();
@@ -53,8 +57,10 @@ public class FortranSourceCodeDistributionTest {
 	    ParserTree ast = analyser.getParserTree();
 	    assertNotNull(ast);
 	    System.out.print(watch.getSeconds());
-	    if (Logger.getRootLogger().isTraceEnabled()) {
-		new TreePrinter(System.out).println(ast);
+	    if (logger.isTraceEnabled()) {
+		ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+		new TreePrinter(new PrintStream(outStream)).println(ast);
+		logger.trace(outStream.toString());
 	    }
 	} catch (AnalyzerException e) {
 	    e.printStackTrace();
@@ -142,7 +148,6 @@ public class FortranSourceCodeDistributionTest {
     }
 
     public static void main(String args[]) {
-	Logger.getRootLogger().setLevel(Level.DEBUG);
 	List<File> files = FileSearch.find(new File(INSTALL_DIRECTORY), "*.f");
 	parseAllFiles(files);
     }

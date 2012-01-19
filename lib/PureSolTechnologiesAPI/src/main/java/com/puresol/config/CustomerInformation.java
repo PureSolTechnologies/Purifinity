@@ -21,7 +21,8 @@ package com.puresol.config;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This object stores all customer information like names, contacts and logos
@@ -33,43 +34,43 @@ import org.apache.log4j.Logger;
  */
 public class CustomerInformation {
 
-	private static final Logger logger = Logger
-			.getLogger(CustomerInformation.class);
+    private static final Logger logger = LoggerFactory
+	    .getLogger(CustomerInformation.class);
 
-	private static final String CUSTOMER_CONFIG_FILE = "/config/customer";
+    private static final String CUSTOMER_CONFIG_FILE = "/config/customer";
 
-	/**
-	 * This method returns the set customers short name.
-	 * 
-	 * @return A String containing the customers short name is returned.
-	 */
-	public static String getShortName() {
-		return Configurator.getEntry(CUSTOMER_CONFIG_FILE, "GENERAL",
-				"shortname", true);
+    /**
+     * This method returns the set customers short name.
+     * 
+     * @return A String containing the customers short name is returned.
+     */
+    public static String getShortName() {
+	return Configurator.getEntry(CUSTOMER_CONFIG_FILE, "GENERAL",
+		"shortname", true);
+    }
+
+    /**
+     * This method returns the set customers long name.
+     * 
+     * @return A String containing the customers long name is returned.
+     */
+    public static String getLongName() {
+	return Configurator.getEntry(CUSTOMER_CONFIG_FILE, "GENERAL", "name",
+		true);
+    }
+
+    static public String getCustomerInformation() {
+	try {
+	    InputStream inStream = CustomerInformation.class
+		    .getResourceAsStream(CUSTOMER_CONFIG_FILE);
+	    if (inStream == null) {
+		return ConfigFile.readSection(CUSTOMER_CONFIG_FILE, "ABOUT");
+	    }
+	    return ConfigFile.readSection(inStream, "ABOUT");
+	} catch (IOException e) {
+	    logger.warn("Resource '" + CUSTOMER_CONFIG_FILE
+		    + "' was not found!");
+	    return "";
 	}
-
-	/**
-	 * This method returns the set customers long name.
-	 * 
-	 * @return A String containing the customers long name is returned.
-	 */
-	public static String getLongName() {
-		return Configurator.getEntry(CUSTOMER_CONFIG_FILE, "GENERAL", "name",
-				true);
-	}
-
-	static public String getCustomerInformation() {
-		try {
-			InputStream inStream = CustomerInformation.class
-					.getResourceAsStream(CUSTOMER_CONFIG_FILE);
-			if (inStream == null) {
-				return ConfigFile.readSection(CUSTOMER_CONFIG_FILE, "ABOUT");
-			}
-			return ConfigFile.readSection(inStream, "ABOUT");
-		} catch (IOException e) {
-			logger.warn("Resource '" + CUSTOMER_CONFIG_FILE
-					+ "' was not found!");
-			return "";
-		}
-	}
+    }
 }

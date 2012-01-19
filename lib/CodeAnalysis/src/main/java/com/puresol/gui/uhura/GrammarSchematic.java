@@ -12,7 +12,8 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileFilter;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.puresol.gui.Saveable;
 import com.puresol.gui.uhura.rendering.GrammarRenderer;
@@ -33,114 +34,114 @@ import com.puresol.uhura.parser.ParserTree;
  */
 public class GrammarSchematic extends JPanel implements Saveable {
 
-	private static final long serialVersionUID = 1804025428672500990L;
+    private static final long serialVersionUID = 1804025428672500990L;
 
-	private static final Logger logger = Logger
-			.getLogger(GrammarSchematic.class);
+    private static final Logger logger = LoggerFactory
+	    .getLogger(GrammarSchematic.class);
 
-	private ParserTree grammarAST = null;
+    private ParserTree grammarAST = null;
 
-	public GrammarSchematic() {
-		super();
+    public GrammarSchematic() {
+	super();
+    }
+
+    public GrammarSchematic(ParserTree grammarAST) {
+	super();
+	setGrammarAST(grammarAST);
+    }
+
+    public ParserTree getGrammarAST() {
+	return grammarAST;
+    }
+
+    public void setGrammarAST(ParserTree grammarAST) {
+	this.grammarAST = grammarAST;
+    }
+
+    @Override
+    public void paintComponent(Graphics graphics) {
+	try {
+	    long start = System.currentTimeMillis();
+	    super.paintComponent(graphics);
+	    Renderer renderer = new GrammarRenderer(grammarAST);
+	    Dimension preferredSize = renderer.getPreferredSize();
+	    Dimension currentSize = getSize();
+	    if ((currentSize.width < preferredSize.width)
+		    || (currentSize.height < preferredSize.height)) {
+		System.out.println("Changed size! " + preferredSize + " -> "
+			+ currentSize);
+		setMinimumSize(preferredSize);
+		setPreferredSize(preferredSize);
+		setSize(preferredSize.width, preferredSize.height);
+	    }
+	    renderer.render(graphics, 0, 0, renderer.getPreferredSize().width,
+		    renderer.getPreferredSize().height);
+	    long stop = System.currentTimeMillis();
+	    System.out.println("Rendering time: " + ((stop - start) / 1000.0)
+		    + "s");
+	} catch (RenderException e) {
+	    logger.error(e.getMessage(), e);
 	}
+    }
 
-	public GrammarSchematic(ParserTree grammarAST) {
-		super();
-		setGrammarAST(grammarAST);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public FileFilter[] getPossibleFileFilters() {
+	return null;
+    }
 
-	public ParserTree getGrammarAST() {
-		return grammarAST;
-	}
-
-	public void setGrammarAST(ParserTree grammarAST) {
-		this.grammarAST = grammarAST;
-	}
-
-	@Override
-	public void paintComponent(Graphics graphics) {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void save(File directory) throws IOException {
+	try {
+	    if (!directory.isDirectory()) {
+		throw new IOException(
+			"A directory was awaited as storage destination!");
+	    }
+	    ParserTree productionDefinitionsAST = grammarAST.getChild(
+		    "Productions").getChild("ProductionDefinitions");
+	    for (ParserTree productionDefinition : productionDefinitionsAST
+		    .getChildren("ProductionDefinition")) {
+		String identifier = productionDefinition.getChild("IDENTIFIER")
+			.getText();
+		File file = new File(directory, identifier + ".png");
+		logger.info("Saving " + file.toString() + "...");
+		FileOutputStream outputStream = null;
 		try {
-			long start = System.currentTimeMillis();
-			super.paintComponent(graphics);
-			Renderer renderer = new GrammarRenderer(grammarAST);
-			Dimension preferredSize = renderer.getPreferredSize();
-			Dimension currentSize = getSize();
-			if ((currentSize.width < preferredSize.width)
-					|| (currentSize.height < preferredSize.height)) {
-				System.out.println("Changed size! " + preferredSize + " -> "
-						+ currentSize);
-				setMinimumSize(preferredSize);
-				setPreferredSize(preferredSize);
-				setSize(preferredSize.width, preferredSize.height);
-			}
-			renderer.render(graphics, 0, 0, renderer.getPreferredSize().width,
-					renderer.getPreferredSize().height);
-			long stop = System.currentTimeMillis();
-			System.out.println("Rendering time: "
-					+ ((double) (stop - start) / 1000.0) + "s");
+		    BufferedImage image = new BufferedImage(1, 1,
+			    BufferedImage.TYPE_INT_RGB);
+		    Renderer renderer = new ProductionDefinitionRenderer(
+			    productionDefinition);
+		    Dimension size = renderer.getPreferredSize();
+		    image = new BufferedImage(size.width, size.height,
+			    BufferedImage.TYPE_INT_RGB);
+		    Graphics graphics = image.getGraphics();
+		    graphics.setColor(Color.WHITE);
+		    graphics.fillRect(0, 0, size.width, size.height);
+		    renderer = new ProductionDefinitionRenderer(
+			    productionDefinition);
+		    renderer.render(graphics, 0, 0,
+			    renderer.getPreferredSize().width,
+			    renderer.getPreferredSize().height);
+		    outputStream = new FileOutputStream(file);
+		    ImageIO.write(image, "png", outputStream);
+		    logger.info("done.");
 		} catch (RenderException e) {
-			logger.error(e.getMessage(), e);
+		    logger.info("aborted!");
+		    throw new IOException(e.getMessage());
+		} finally {
+		    if (outputStream != null) {
+			outputStream.close();
+		    }
 		}
+	    }
+	} catch (TreeException e) {
+	    throw new IOException(e.getMessage(), e);
 	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public FileFilter[] getPossibleFileFilters() {
-		return null;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void save(File directory) throws IOException {
-		try {
-			if (!directory.isDirectory()) {
-				throw new IOException(
-						"A directory was awaited as storage destination!");
-			}
-			ParserTree productionDefinitionsAST = grammarAST.getChild(
-					"Productions").getChild("ProductionDefinitions");
-			for (ParserTree productionDefinition : productionDefinitionsAST
-					.getChildren("ProductionDefinition")) {
-				String identifier = productionDefinition.getChild("IDENTIFIER")
-						.getText();
-				File file = new File(directory, identifier + ".png");
-				logger.info("Saving " + file.toString() + "...");
-				FileOutputStream outputStream = null;
-				try {
-					BufferedImage image = new BufferedImage(1, 1,
-							BufferedImage.TYPE_INT_RGB);
-					Renderer renderer = new ProductionDefinitionRenderer(
-							productionDefinition);
-					Dimension size = renderer.getPreferredSize();
-					image = new BufferedImage(size.width, size.height,
-							BufferedImage.TYPE_INT_RGB);
-					Graphics graphics = image.getGraphics();
-					graphics.setColor(Color.WHITE);
-					graphics.fillRect(0, 0, size.width, size.height);
-					renderer = new ProductionDefinitionRenderer(
-							productionDefinition);
-					renderer.render(graphics, 0, 0,
-							renderer.getPreferredSize().width,
-							renderer.getPreferredSize().height);
-					outputStream = new FileOutputStream(file);
-					ImageIO.write(image, "png", outputStream);
-					logger.info("done.");
-				} catch (RenderException e) {
-					logger.info("aborted!");
-					throw new IOException(e.getMessage());
-				} finally {
-					if (outputStream != null) {
-						outputStream.close();
-					}
-				}
-			}
-		} catch (TreeException e) {
-			throw new IOException(e.getMessage(), e);
-		}
-	}
+    }
 
 }

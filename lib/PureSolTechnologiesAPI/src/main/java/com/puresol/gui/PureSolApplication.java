@@ -39,10 +39,9 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.puresol.gui.log.LogViewer;
-import com.puresol.gui.log.LoggingDialog;
 import com.puresol.gui.progress.SplashWindow;
 
 /**
@@ -59,7 +58,7 @@ public class PureSolApplication extends Application implements ActionListener {
 
     private static final long serialVersionUID = 8061458459180754032L;
 
-    private static final Logger logger = Logger
+    private static final Logger logger = LoggerFactory
 	    .getLogger(PureSolApplication.class);
     private static final Translator translator = Translator
 	    .getTranslator(PureSolApplication.class);
@@ -83,10 +82,6 @@ public class PureSolApplication extends Application implements ActionListener {
 
     private final JMenuItem webItem = new JMenuItem(
 	    translator.i18n("PureSol-Technologies Website..."));
-    private final JMenuItem logLevelItem = new JMenuItem(
-	    translator.i18n("Set Log Level..."));
-    private final JMenuItem logViewerItem = new JMenuItem(
-	    translator.i18n("Show Log..."));
     private final JMenuItem aboutItem = new JMenuItem(
 	    translator.i18n("About..."));
 
@@ -160,14 +155,9 @@ public class PureSolApplication extends Application implements ActionListener {
 	JMenu helpMenu = new JMenu(translator.i18n("Help"));
 
 	webItem.addActionListener(this);
-	logLevelItem.addActionListener(this);
-	logViewerItem.addActionListener(this);
 	aboutItem.addActionListener(this);
 
 	helpMenu.add(webItem);
-	helpMenu.addSeparator();
-	helpMenu.add(logLevelItem);
-	helpMenu.add(logViewerItem);
 	helpMenu.addSeparator();
 	helpMenu.add(aboutItem);
 	return helpMenu;
@@ -228,14 +218,6 @@ public class PureSolApplication extends Application implements ActionListener {
 	}
     }
 
-    private void setLogLevel() {
-	new LoggingDialog().setVisible(true);
-    }
-
-    private void showLogViewer() {
-	LogViewer.startNonModal();
-    }
-
     private void about() {
 	AboutBox.about();
     }
@@ -244,10 +226,6 @@ public class PureSolApplication extends Application implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 	if (e.getSource() == webItem) {
 	    openPureSolTechnologiesWebsite();
-	} else if (e.getSource() == logLevelItem) {
-	    setLogLevel();
-	} else if (e.getSource() == logViewerItem) {
-	    showLogViewer();
 	} else if (e.getSource() == aboutItem) {
 	    about();
 	}

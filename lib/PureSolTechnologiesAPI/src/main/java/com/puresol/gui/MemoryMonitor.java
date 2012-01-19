@@ -24,7 +24,8 @@ import java.awt.event.ActionListener;
 import javax.swing.JLabel;
 import javax.swing.Timer;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This element is a typical Label, but contains memory usage information.
@@ -34,82 +35,83 @@ import org.apache.log4j.Logger;
  */
 public class MemoryMonitor extends JLabel implements Runnable, ActionListener {
 
-	private static final long serialVersionUID = 4484584488099486969L;
+    private static final long serialVersionUID = 4484584488099486969L;
 
-	private static final Logger logger = Logger.getLogger(MemoryMonitor.class);
-	private static final Runtime runtime = Runtime.getRuntime();
+    private static final Logger logger = LoggerFactory
+	    .getLogger(MemoryMonitor.class);
+    private static final Runtime runtime = Runtime.getRuntime();
 
-	private static int millisecondsDelay = 1000;
-	private final boolean swingTimer;
-	private Timer timer = null;
-	private Thread thread = null;
+    private static int millisecondsDelay = 1000;
+    private final boolean swingTimer;
+    private Timer timer = null;
+    private Thread thread = null;
 
-	public MemoryMonitor() {
-		super();
-		this.swingTimer = false;
-		init();
+    public MemoryMonitor() {
+	super();
+	this.swingTimer = false;
+	init();
+    }
+
+    public MemoryMonitor(boolean swingTimer) {
+	super();
+	this.swingTimer = swingTimer;
+	init();
+    }
+
+    private void init() {
+	if (swingTimer) {
+	    logger.info("Start memory monitor with Swing timer...");
+	    timer = new Timer(1000, this);
+	    timer.start();
+	} else {
+	    logger.info("Start memory monitor with Application managed thread...");
+	    thread = Application.getInstance().getThread(this);
+	    thread.start();
 	}
+    }
 
-	public MemoryMonitor(boolean swingTimer) {
-		super();
-		this.swingTimer = swingTimer;
-		init();
-	}
+    public static int getMillisecondsDelay() {
+	return millisecondsDelay;
+    }
 
-	private void init() {
-		if (swingTimer) {
-			logger.info("Start memory monitor with Swing timer...");
-			timer = new Timer(1000, this);
-			timer.start();
-		} else {
-			logger.info("Start memory monitor with Application managed thread...");
-			thread = Application.getInstance().getThread(this);
-			thread.start();
-		}
-	}
+    public static void setMillisecondsDelay(int millisecondsDelay) {
+	MemoryMonitor.millisecondsDelay = millisecondsDelay;
+    }
 
-	public static int getMillisecondsDelay() {
-		return millisecondsDelay;
-	}
+    public static String getMemoryStatus() {
+	double max = runtime.maxMemory() / 1024.0 / 1024.0;
+	double total = runtime.totalMemory() / 1024.0 / 1024.0;
+	double free = runtime.freeMemory() / 1024.0 / 1024.0;
+	double usage = total / max * 100.0;
+	max = Math.round(max * 100.0) / 100.0;
+	total = Math.round(total * 100.0) / 100.0;
+	free = Math.round(free * 100.0) / 100.0;
+	usage = Math.round(usage * 100.0) / 100.0;
+	return "max: " + max + "MB, total: " + total + "MB, free: " + free
+		+ "MB (usage: " + usage + "%)";
+    }
 
-	public static void setMillisecondsDelay(int millisecondsDelay) {
-		MemoryMonitor.millisecondsDelay = millisecondsDelay;
-	}
+    private void setText() {
+	setText(getMemoryStatus());
+    }
 
-	public static String getMemoryStatus() {
-		double max = (double) runtime.maxMemory() / 1024.0 / 1024.0;
-		double total = (double) runtime.totalMemory() / 1024.0 / 1024.0;
-		double free = (double) runtime.freeMemory() / 1024.0 / 1024.0;
-		double usage = total / max * 100.0;
-		max = Math.round(max * 100.0) / 100.0;
-		total = Math.round(total * 100.0) / 100.0;
-		free = Math.round(free * 100.0) / 100.0;
-		usage = Math.round(usage * 100.0) / 100.0;
-		return "max: " + max + "MB, total: " + total + "MB, free: " + free
-				+ "MB (usage: " + usage + "%)";
-	}
-
-	private void setText() {
-		setText(getMemoryStatus());
-	}
-
-	@Override
-	public void run() {
-		try {
-			while (true) {
-				setText();
-				Thread.sleep(millisecondsDelay);
-			}
-		} catch (InterruptedException e) {
-			logger.info("Memory monitor interrupted.");
-		}
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
+    @Override
+    public void run() {
+	try {
+	    while (true) {
 		setText();
-		if (timer.getDelay() != millisecondsDelay) {
-			timer.setDelay(millisecondsDelay);
-		}
+		Thread.sleep(millisecondsDelay);
+	    }
+	} catch (InterruptedException e) {
+	    logger.info("Memory monitor interrupted.");
 	}
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent arg0) {
+	setText();
+	if (timer.getDelay() != millisecondsDelay) {
+	    timer.setDelay(millisecondsDelay);
+	}
+    }
 }

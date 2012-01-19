@@ -11,7 +11,8 @@ import javax.swing.JSplitPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.analysis.Analysis;
@@ -29,7 +30,7 @@ public class CodeRangeEvaluationBrowser extends JPanel implements
 
     private static final long serialVersionUID = 7855693564694783199L;
 
-    private static final Logger logger = Logger
+    private static final Logger logger = LoggerFactory
 	    .getLogger(CodeRangeEvaluationBrowser.class);
     private static final Translator translator = Translator
 	    .getTranslator(CodeRangeEvaluationBrowser.class);

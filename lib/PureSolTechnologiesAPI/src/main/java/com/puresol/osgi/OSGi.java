@@ -8,11 +8,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.launch.Framework;
 import org.osgi.framework.launch.FrameworkFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.puresol.WeakReferenceSet;
 import com.puresol.utils.JARUtilities;
@@ -26,7 +27,7 @@ import com.puresol.utils.JARUtilities;
  */
 public class OSGi {
 
-    private static final Logger logger = Logger.getLogger(OSGi.class);
+    private static final Logger logger = LoggerFactory.getLogger(OSGi.class);
 
     /**
      * This is the resource path for the class name of the OSGi framework

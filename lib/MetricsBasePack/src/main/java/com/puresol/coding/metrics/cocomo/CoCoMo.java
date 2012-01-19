@@ -17,7 +17,8 @@ import java.util.Vector;
 
 import javax.i18n4java.Translator;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.CodeRangeType;
@@ -47,7 +48,7 @@ public class CoCoMo extends AbstractEvaluator implements ProjectEvaluator {
 
     private static final long serialVersionUID = 5098378023541671490L;
 
-    private static final Logger logger = Logger.getLogger(CoCoMo.class);
+    private static final Logger logger = LoggerFactory.getLogger(CoCoMo.class);
     private static final Translator translator = Translator
 	    .getTranslator(CoCoMo.class);
 

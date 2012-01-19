@@ -2,8 +2,9 @@ package com.puresol.coding;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.osgi.framework.InvalidSyntaxException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.puresol.osgi.OSGiFrameworkManager;
 
@@ -16,7 +17,7 @@ import com.puresol.osgi.OSGiFrameworkManager;
  */
 public class ProgrammingLanguages {
 
-    private static final Logger logger = Logger
+    private static final Logger logger = LoggerFactory
 	    .getLogger(ProgrammingLanguages.class);
 
     public static List<ProgrammingLanguage> getAll() {

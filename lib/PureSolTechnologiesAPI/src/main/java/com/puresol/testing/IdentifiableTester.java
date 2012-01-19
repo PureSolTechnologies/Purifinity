@@ -1,19 +1,20 @@
 package com.puresol.testing;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.puresol.data.Identifiable;
 
 public class IdentifiableTester {
 
-    private static final Logger logger =
-	    Logger.getLogger(IdentifiableTester.class);
+    private static final Logger logger = LoggerFactory
+	    .getLogger(IdentifiableTester.class);
 
     public static boolean test(Class<? extends Identifiable> clazz) {
 	return new IdentifiableTester(clazz).test();
     }
 
-    private Class<? extends Identifiable> clazz;
+    private final Class<? extends Identifiable> clazz;
 
     private IdentifiableTester(Class<? extends Identifiable> clazz) {
 	this.clazz = clazz;

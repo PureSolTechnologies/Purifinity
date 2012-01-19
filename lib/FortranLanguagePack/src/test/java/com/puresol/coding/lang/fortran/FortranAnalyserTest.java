@@ -11,9 +11,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -41,35 +38,29 @@ public class FortranAnalyserTest {
 
     private void test(File file) throws Throwable {
 	assertTrue(file.exists());
-	Logger.getRootLogger().setLevel(Level.DEBUG);
 	FortranAnalyser analyser = new FortranAnalyser(file);
 	analyser.parse();
     }
 
     @Test
-    @Ignore
     public void testEmptyProgram() throws Throwable {
 	test(new File(
 		"src/test/resources/com/puresol/coding/lang/fortran/samples/EmptyProgram.f"));
     }
 
     @Test
-    @Ignore
     public void testEmptySubroutine() throws Throwable {
-	Logger.getRootLogger().setLevel(Level.TRACE);
 	test(new File(
 		"src/test/resources/com/puresol/coding/lang/fortran/samples/EmptySubroutine.f"));
     }
 
     @Test
-    @Ignore
     public void testZGERC() throws Throwable {
 	test(new File(
 		"src/test/resources/com/puresol/coding/lang/fortran/samples/zgerc.f"));
     }
 
     @Test
-    @Ignore
     public void test2() throws Throwable {
 	test(new File(
 		"src/test/resources/com/puresol/coding/lang/fortran/samples/FortranTest.f"));

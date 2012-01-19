@@ -18,12 +18,13 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import org.apache.log4j.Logger;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.analysis.Analysis;
@@ -51,7 +52,7 @@ public class ProjectGraphPanel extends JPanel implements ListSelectionListener,
 
     private static final long serialVersionUID = 7855693564694783199L;
 
-    private static final Logger logger = Logger
+    private static final Logger logger = LoggerFactory
 	    .getLogger(ProjectGraphPanel.class);
     private static final Translator translator = Translator
 	    .getTranslator(ProjectGraphPanel.class);

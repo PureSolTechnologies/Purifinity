@@ -17,20 +17,20 @@ import java.net.URL;
 
 import javax.swing.ImageIcon;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class PureSolSystemTray {
 
-    private static final Logger logger =
-	    Logger.getLogger(PureSolSystemTray.class);
+    private static final Logger logger = LoggerFactory
+	    .getLogger(PureSolSystemTray.class);
 
-    private static final SystemTray systemTray =
-	    SystemTray.getSystemTray();
+    private static final SystemTray systemTray = SystemTray.getSystemTray();
     private static TrayIcon trayIcon = null;
 
     public static TrayIcon getTrayIcon() {
-	URL imageURL =
-		PureSolSystemTray.class.getResource("/META-INF/logo.jpeg");
+	URL imageURL = PureSolSystemTray.class
+		.getResource("/META-INF/logo.jpeg");
 	Image image = null;
 	if (imageURL == null) {
 	    logger.error("Resource not found: " + imageURL);

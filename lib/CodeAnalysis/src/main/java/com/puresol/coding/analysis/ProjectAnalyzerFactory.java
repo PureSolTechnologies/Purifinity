@@ -20,10 +20,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import javax.i18n4java.Translator;
 import javax.i18n4java.utils.FileSearch;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.puresol.gui.progress.ProgressObserver;
 import com.puresol.gui.progress.RunnableProgressObservable;
@@ -44,10 +44,8 @@ public class ProjectAnalyzerFactory implements Serializable,
 
     private static final long serialVersionUID = -5080062306149072901L;
 
-    private static final Logger logger = Logger
+    private static final Logger logger = LoggerFactory
 	    .getLogger(ProjectAnalyzerFactory.class);
-    private static final Translator translator = Translator
-	    .getTranslator(ProjectAnalyzerFactory.class);
 
     /*
      * ****************************************************************
