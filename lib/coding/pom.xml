@@ -10,12 +10,10 @@
 	</parent>
 
 	<modules>
-		<module>uhura.lib</module>
-		<module>uhura.test</module>
-		<module>uhura.plugin</module>
+		<module>analysis</module>
 	</modules>
 
-	<artifactId>uhura</artifactId>
+	<artifactId>coding</artifactId>
 	<packaging>pom</packaging>
-
+	
 </project>

@@ -14,13 +14,17 @@
 
 		<module>PureConfigurator</module>
 		<module>PureConfigurator.plugin</module>
+
 		<module>PureSolTechnologiesAPI</module>
+
+		<module>uhura</module>
+		<module>coding</module>
+
 		<module>CodeAnalysis</module>
 		<module>FortranLanguagePack</module>
 		<module>JavaLanguagePack</module>
 		<module>MetricsBasePack</module>
 		<module>licensing</module>
-		<module>uhura</module>
 	</modules>
 
 	<!-- REPOSITORIES -->
