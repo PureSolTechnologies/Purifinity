@@ -50,31 +50,6 @@
 		<plugins>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>cobertura-maven-plugin</artifactId>
-				<configuration>
-					<formats>
-						<format>xml</format>
-					</formats>
-					<check>
-						<branchRate>0</branchRate>
-						<lineRate>0</lineRate>
-						<totalBranchRate>20</totalBranchRate>
-						<totalLineRate>20</totalLineRate>
-					</check>
-				</configuration>
-				<executions>
-					<execution>
-						<id>coverage-tests</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>clean</goal>
-							<goal>check</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>findbugs-maven-plugin</artifactId>
 			</plugin>
 			<plugin>

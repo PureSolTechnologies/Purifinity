@@ -9,7 +9,6 @@
 		<relativePath>..</relativePath>
 	</parent>
 
-	<groupId>com.puresol</groupId>
 	<artifactId>uhura.plugin</artifactId>
 	<version>0.1.0</version>
 	<packaging>bundle</packaging>

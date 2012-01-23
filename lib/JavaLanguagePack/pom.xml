@@ -19,36 +19,6 @@
 				<artifactId>findbugs-maven-plugin</artifactId>
 			</plugin>
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>cobertura-maven-plugin</artifactId>
-				<configuration>
-					<formats>
-						<format>xml</format>
-					</formats>
-					<check>
-						<branchRate>0</branchRate>
-						<lineRate>0</lineRate>
-						<!-- totalBranchRate>24</totalBranchRate> <totalLineRate>13</totalLineRate -->
-					</check>
-				</configuration>
-				<executions>
-					<execution>
-						<goals>
-							<goal>clean</goal>
-							<goal>check</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>coverage-tests</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>clean</goal>
-							<goal>check</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
 				<artifactId>maven-jar-plugin</artifactId>
 				<configuration>
 					<archive>

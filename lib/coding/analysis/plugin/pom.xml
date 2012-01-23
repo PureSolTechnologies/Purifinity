@@ -9,7 +9,6 @@
 	</parent>
 
 
-	<groupId>com.puresol</groupId>
 	<artifactId>coding.analysis.plugin</artifactId>
 	<version>0.1.0</version>
 	<packaging>bundle</packaging>
