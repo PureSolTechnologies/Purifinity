@@ -1,6 +1,6 @@
 package com.puresol.uhura.parser.functions;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 import java.util.Iterator;

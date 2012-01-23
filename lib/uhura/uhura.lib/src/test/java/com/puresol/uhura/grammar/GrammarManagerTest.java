@@ -8,6 +8,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.net.URL;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.puresol.utils.FileUtilities;
@@ -25,6 +26,7 @@ public class GrammarManagerTest {
 	}
 
 	@Test
+	@Ignore
 	public void testTimeHandlingForGrammarModified() throws Throwable {
 		File directory = new File("test/", FileUtilities
 				.classToRelativePackagePath(getClass()).getParentFile()

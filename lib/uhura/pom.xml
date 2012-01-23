@@ -11,6 +11,7 @@
 
 	<modules>
 		<module>uhura.lib</module>
+		<module>uhura.test</module>
 		<module>uhura.plugin</module>
 	</modules>
 
