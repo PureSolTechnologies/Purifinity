@@ -21,6 +21,17 @@
 	</dependencies>
 
 	<build>
+		<sourceDirectory>src</sourceDirectory>
+		<outputDirectory>bin</outputDirectory>
+		<resources>
+			<resource>
+				<directory>.</directory>
+				<includes>
+					<include>META-INF/*</include>
+					<include>slf4j*.jar</include>
+				</includes>
+			</resource>
+		</resources>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.felix</groupId>
@@ -28,15 +39,15 @@
 				<extensions>true</extensions>
 				<configuration>
 					<instructions>
-						<Embed-Dependency>
+						<!-- Embed-Dependency>
 							slf4j-api
-						</Embed-Dependency>
+						</Embed-Dependency-->
 						<_exportcontents>
 							*;version="1.6.4"
 						</_exportcontents>
 						<Bundle-ClassPath>{maven-dependencies}</Bundle-ClassPath>
-						<Embed-Transitive>true</Embed-Transitive>
-						<Embed-Directory>jars</Embed-Directory>
+						<Embed-Transitive>false</Embed-Transitive>
+						<!-- Embed-Directory>jars</Embed-Directory -->
 						<_failok>true</_failok>
 						<_nouses>true</_nouses>
 					</instructions>

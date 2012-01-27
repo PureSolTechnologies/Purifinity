@@ -11,6 +11,8 @@ import org.eclipse.osgi.service.datalocation.Location;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.puresol.coding.client.dialogs.PickWorkspaceDialog;
 
@@ -18,6 +20,9 @@ import com.puresol.coding.client.dialogs.PickWorkspaceDialog;
  * This class controls all aspects of the application's execution
  */
 public class SourceCodeAnalysis implements IApplication {
+
+	private static final Logger logger = LoggerFactory
+			.getLogger(SourceCodeAnalysis.class);
 
 	/*
 	 * (non-Javadoc)
@@ -27,6 +32,7 @@ public class SourceCodeAnalysis implements IApplication {
 	 */
 	@Override
 	public Object start(IApplicationContext context) throws Exception {
+		logger.info("Starting up SourceCodeAnalysis client...");
 		if (!changeWorkspace()) {
 			return IApplication.EXIT_OK;
 		}
