@@ -10,4 +10,6 @@ Export-Package: javax.i18n4java,
  javax.i18n4java.proc,
  javax.i18n4java.utils
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Bundle-ActivationPolicy: lazy
+Require-Bundle: org.eclipse.osgi;bundle-version="3.7.1"
+Bundle-Activator: javax.i18n4java.Activator
+Bundle-Vendor: PureSol Technologies

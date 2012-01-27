@@ -1,19 +1,24 @@
 package com.puresol.coding.client.wizards;
 
+import javax.i18n4java.Translator;
+
 import org.eclipse.jface.wizard.Wizard;
 
 public class NewAnalysisWizard extends Wizard {
 
-    public NewAnalysisWizard() {
-	super();
-	setWindowTitle("New Analysis");
-	addPage(new NewAnalysisGeneralSettingsPage());
-    }
+	private static final Translator translator = Translator
+			.getTranslator(NewAnalysisWizard.class);
 
-    @Override
-    public boolean performFinish() {
-	// TODO Auto-generated method stub
-	return false;
-    }
+	public NewAnalysisWizard() {
+		super();
+		setWindowTitle(translator.i18n("New Analysis"));
+		addPage(new NewAnalysisGeneralSettingsPage());
+	}
+
+	@Override
+	public boolean performFinish() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
 }

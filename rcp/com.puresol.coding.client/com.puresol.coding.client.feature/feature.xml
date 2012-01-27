@@ -3,6 +3,7 @@
       id="com.puresol.coding.client.feature"
       label="Source Code Analysis Feature"
       version="0.1.0.qualifier"
+      plugin="com.puresol.coding.client.plugin"
       os="linux,macosx,win32"
       ws="carbon,cocoa,gtk,win32"
       arch="x86,x86_64">
@@ -54,6 +55,7 @@
       <import plugin="org.eclipse.core.expressions" version="3.4.200" match="compatible"/>
       <import plugin="org.eclipse.ui" version="3.7.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.core.runtime" version="3.7.0" match="greaterOrEqual"/>
+      <import plugin="javax.i18n4java.plugin" version="1.1.0" match="greaterOrEqual"/>
    </requires>
 
    <plugin
@@ -297,5 +299,11 @@
          install-size="0"
          version="0.0.0"
          unpack="false"/>
+
+   <plugin
+         id="javax.i18n4java.plugin"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
 
 </feature>
