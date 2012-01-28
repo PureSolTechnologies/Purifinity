@@ -108,7 +108,6 @@
 		</dependencies>
 	</dependencyManagement>
 
-
 	<build>
 
 		<!-- PLUGIN MANAGEMENT -->

@@ -3,7 +3,6 @@ Bundle-ManifestVersion: 2
 Bundle-Name: javax.i18n4java.plugin
 Bundle-SymbolicName: javax.i18n4java.plugin;singleton:=true
 Bundle-Version: 1.1.0
-Bundle-ClassPath: i18n4java-1.1.0.jar
 Export-Package: javax.i18n4java,
  javax.i18n4java.data,
  javax.i18n4java.linguist,
@@ -12,3 +11,5 @@ Export-Package: javax.i18n4java,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Activator: javax.i18n4java.Activator
 Bundle-Vendor: PureSol Technologies
+Require-Bundle: org.eclipse.osgi;bundle-version="3.7.1"
+Bundle-ClassPath: ../i18n4java-1.1.0.jar
