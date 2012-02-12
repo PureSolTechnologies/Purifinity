@@ -1,5 +1,7 @@
 package com.puresol.coding.client.wizards;
 
+import javax.i18n4java.Translator;
+
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -16,14 +18,17 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 
 public class NewAnalysisGeneralSettingsPage extends WizardPage {
+	private static final Translator translator = Translator
+			.getTranslator(NewAnalysisGeneralSettingsPage.class);
 
 	private Text textSourceDirectory;
 	private Text textProjectName;
 
 	protected NewAnalysisGeneralSettingsPage() {
-		super("Source Directory");
-		setTitle("General Settings");
-		setMessage("Provide the general settings for the new analysis.");
+		super(translator.i18n("Source Directory"));
+		setTitle(translator.i18n("General Settings"));
+		setMessage(translator
+				.i18n("Provide the general settings for the new analysis."));
 	}
 
 	@Override
@@ -69,7 +74,7 @@ public class NewAnalysisGeneralSettingsPage extends WizardPage {
 		Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
 				.getShell();
 		DirectoryDialog dialog = new DirectoryDialog(shell);
-		dialog.setText("Select Source Directory...");
+		dialog.setText(translator.i18n("Select Source Directory..."));
 		String directory = dialog.open();
 		if (directory != null) {
 			textSourceDirectory.setText(directory);

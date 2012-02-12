@@ -19,6 +19,10 @@
 			<artifactId>i18n4java</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.osgi</groupId>
 			<artifactId>org.osgi.core</artifactId>
 		</dependency>
@@ -51,7 +55,7 @@
 						</_exportcontents>
 						<Bundle-ClassPath>{maven-dependencies}</Bundle-ClassPath>
 						<Embed-Transitive>true</Embed-Transitive>
-						<!--  Embed-Directory>jars</Embed-Directory -->
+						<!-- Embed-Directory>jars</Embed-Directory -->
 						<_failok>true</_failok>
 						<_nouses>true</_nouses>
 					</instructions>
