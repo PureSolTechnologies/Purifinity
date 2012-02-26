@@ -75,4 +75,12 @@ public class NewAnalysisGeneralSettingsPage extends WizardPage {
 	    textSourceDirectory.setText(directory);
 	}
     }
+
+    public String getProjectName() {
+	return textProjectName.getText();
+    }
+
+    public String getSourceDirectory() {
+	return textSourceDirectory.getText();
+    }
 }

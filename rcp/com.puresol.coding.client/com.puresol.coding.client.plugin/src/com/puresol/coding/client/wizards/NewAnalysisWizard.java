@@ -9,18 +9,21 @@ import com.puresol.coding.client.Activator;
 public class NewAnalysisWizard extends Wizard {
 
     private final ILog logger = Activator.getDefault().getLog();
+    private final NewAnalysisGeneralSettingsPage generalSettingsPage = new NewAnalysisGeneralSettingsPage();
 
     public NewAnalysisWizard() {
 	super();
 	setWindowTitle("New Analysis");
-	addPage(new NewAnalysisGeneralSettingsPage());
+	addPage(generalSettingsPage);
     }
 
     @Override
     public boolean performFinish() {
+	String name = generalSettingsPage.getProjectName();
+	String sourceDirectory = generalSettingsPage.getSourceDirectory();
 	logger.log(new Status(Status.INFO, getClass().getName(),
-		"Creating new analysis..."));
-	// TODO Auto-generated method stub
+		"Creating new analysis " + name + " for directory "
+			+ sourceDirectory + "..."));
 	return false;
     }
 }
