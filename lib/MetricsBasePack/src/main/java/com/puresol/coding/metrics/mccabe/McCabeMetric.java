@@ -13,8 +13,6 @@ package com.puresol.coding.metrics.mccabe;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.i18n4java.Translator;
-
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.evaluator.AbstractEvaluator;
@@ -36,13 +34,9 @@ public class McCabeMetric extends AbstractEvaluator implements
 
     private static final long serialVersionUID = 4402746003873908301L;
 
-    private static final Translator translator = Translator
-	    .getTranslator(McCabeMetric.class);
+    public static final String NAME = "McCabe Metric";
 
-    public static final String NAME = translator.i18n("McCabe Metric");
-
-    public static final String DESCRIPTION = translator
-	    .i18n("McCabe Metric calculation.");
+    public static final String DESCRIPTION = "McCabe Metric calculation.";
 
     public static final List<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new ArrayList<QualityCharacteristic>();
     static {
@@ -103,8 +97,8 @@ public class McCabeMetric extends AbstractEvaluator implements
 
     private void createResultsList() {
 	results.clear();
-	results.add(new Result("v(G)",
-		translator.i18n("Cyclomatic complexity"), cyclomaticNumber, ""));
+	results.add(new Result("v(G)", "Cyclomatic complexity",
+		cyclomaticNumber, ""));
     }
 
     /*

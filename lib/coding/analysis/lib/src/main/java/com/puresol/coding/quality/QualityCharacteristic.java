@@ -2,8 +2,6 @@ package com.puresol.coding.quality;
 
 import java.io.IOException;
 
-import javax.i18n4java.Translator;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,7 +19,7 @@ public enum QualityCharacteristic {
     SUITABILITY {
 	@Override
 	public String getName() {
-	    return translator.i18n("Suitability");
+	    return "Suitability";
 	}
 
 	@Override
@@ -32,7 +30,7 @@ public enum QualityCharacteristic {
     ACCURACY {
 	@Override
 	public String getName() {
-	    return translator.i18n("Accuracy");
+	    return "Accuracy";
 	}
 
 	@Override
@@ -43,7 +41,7 @@ public enum QualityCharacteristic {
     INTEROPERABILITY {
 	@Override
 	public String getName() {
-	    return translator.i18n("Interoperability");
+	    return "Interoperability";
 	}
 
 	@Override
@@ -54,7 +52,7 @@ public enum QualityCharacteristic {
     SECURIY {
 	@Override
 	public String getName() {
-	    return translator.i18n("Security");
+	    return "Security";
 	}
 
 	@Override
@@ -65,7 +63,7 @@ public enum QualityCharacteristic {
     MATURITY {
 	@Override
 	public String getName() {
-	    return translator.i18n("Maturiy");
+	    return "Maturiy";
 	}
 
 	@Override
@@ -76,7 +74,7 @@ public enum QualityCharacteristic {
     FAULT_TOLERANCE {
 	@Override
 	public String getName() {
-	    return translator.i18n("Fault Tolerance");
+	    return "Fault Tolerance";
 	}
 
 	@Override
@@ -87,7 +85,7 @@ public enum QualityCharacteristic {
     RECOVERABILITY {
 	@Override
 	public String getName() {
-	    return translator.i18n("Recoverability");
+	    return "Recoverability";
 	}
 
 	@Override
@@ -98,7 +96,7 @@ public enum QualityCharacteristic {
     UNDERSTANDABILITY {
 	@Override
 	public String getName() {
-	    return translator.i18n("Understandability");
+	    return "Understandability";
 	}
 
 	@Override
@@ -109,7 +107,7 @@ public enum QualityCharacteristic {
     LEARNABILITY {
 	@Override
 	public String getName() {
-	    return translator.i18n("Learnability");
+	    return "Learnability";
 	}
 
 	@Override
@@ -120,7 +118,7 @@ public enum QualityCharacteristic {
     OPERABILITY {
 	@Override
 	public String getName() {
-	    return translator.i18n("Operability");
+	    return "Operability";
 	}
 
 	@Override
@@ -131,7 +129,7 @@ public enum QualityCharacteristic {
     ATTRACTIVENESS {
 	@Override
 	public String getName() {
-	    return translator.i18n("Attractiveness");
+	    return "Attractiveness";
 	}
 
 	@Override
@@ -142,7 +140,7 @@ public enum QualityCharacteristic {
     TIME_BEHAVIOR {
 	@Override
 	public String getName() {
-	    return translator.i18n("Time Behavior");
+	    return "Time Behavior";
 	}
 
 	@Override
@@ -153,7 +151,7 @@ public enum QualityCharacteristic {
     RESOURCE_UTILIZATION {
 	@Override
 	public String getName() {
-	    return translator.i18n("Resource Utilization");
+	    return "Resource Utilization";
 	}
 
 	@Override
@@ -164,7 +162,7 @@ public enum QualityCharacteristic {
     ANALYSABILITY {
 	@Override
 	public String getName() {
-	    return translator.i18n("Analysability");
+	    return "Analysability";
 	}
 
 	@Override
@@ -175,7 +173,7 @@ public enum QualityCharacteristic {
     CHANGEABILITY {
 	@Override
 	public String getName() {
-	    return translator.i18n("Changeability");
+	    return "Changeability";
 	}
 
 	@Override
@@ -186,7 +184,7 @@ public enum QualityCharacteristic {
     STABILITY {
 	@Override
 	public String getName() {
-	    return translator.i18n("Stability");
+	    return "Stability";
 	}
 
 	@Override
@@ -197,7 +195,7 @@ public enum QualityCharacteristic {
     TESTABILITY {
 	@Override
 	public String getName() {
-	    return translator.i18n("Testability");
+	    return "Testability";
 	}
 
 	@Override
@@ -208,7 +206,7 @@ public enum QualityCharacteristic {
     ADAPTABILITY {
 	@Override
 	public String getName() {
-	    return translator.i18n("Adaptability");
+	    return "Adaptability";
 	}
 
 	@Override
@@ -219,7 +217,7 @@ public enum QualityCharacteristic {
     INSTALLABILITY {
 	@Override
 	public String getName() {
-	    return translator.i18n("Installability");
+	    return "Installability";
 	}
 
 	@Override
@@ -230,7 +228,7 @@ public enum QualityCharacteristic {
     CO_EXISTANCE {
 	@Override
 	public String getName() {
-	    return translator.i18n("Co-existence");
+	    return "Co-existence";
 	}
 
 	@Override
@@ -241,7 +239,7 @@ public enum QualityCharacteristic {
     REPLACEABILITY {
 	@Override
 	public String getName() {
-	    return translator.i18n("Replaceability");
+	    return "Replaceability";
 	}
 
 	@Override
@@ -252,8 +250,6 @@ public enum QualityCharacteristic {
 
     private static final Logger logger = LoggerFactory
 	    .getLogger(QualityCharacteristic.class);
-    private static final Translator translator = Translator
-	    .getTranslator(QualityCharacteristic.class);
 
     public abstract String getName();
 
@@ -262,8 +258,7 @@ public enum QualityCharacteristic {
     public String getDescription() {
 	String directory = "/"
 		+ getClass().getPackage().getName().replaceAll("\\.", "/");
-	String file = name().toLowerCase() + "."
-		+ Translator.getDefault().toString() + ".txt";
+	String file = name().toLowerCase() + ".txt";
 	try {
 	    return JARUtilities.readResourceFileToString(getClass()
 		    .getResource(directory + "/" + file));

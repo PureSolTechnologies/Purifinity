@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
-import javax.i18n4java.Translator;
-
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.evaluator.AbstractEvaluator;
@@ -50,13 +48,9 @@ public class CodeDepthMetric extends AbstractEvaluator implements
 
     private static final long serialVersionUID = -2151200082569811564L;
 
-    private static final Translator translator = Translator
-	    .getTranslator(CodeDepthMetric.class);
+    public static final String NAME = "Code Depth Metric";
 
-    public static final String NAME = translator.i18n("Code Depth Metric");
-
-    public static final String DESCRIPTION = translator
-	    .i18n("Analysis the nested code blocks for a maximum depth.");
+    public static final String DESCRIPTION = "Analysis the nested code blocks for a maximum depth.";
 
     public static final List<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new ArrayList<QualityCharacteristic>();
     static {
@@ -157,9 +151,8 @@ public class CodeDepthMetric extends AbstractEvaluator implements
     private void recreateResultsList() {
 	results.clear();
 	results.add(new Result(
-		translator.i18n("Maximum code depth"),
-		translator
-			.i18n("The maximum code depth is the maximum number of cascaded code blocks within the source."),
+		"Maximum code depth",
+		"The maximum code depth is the maximum number of cascaded code blocks within the source.",
 		maxDepth, ""));
     }
 

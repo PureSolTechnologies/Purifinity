@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
 
-import javax.i18n4java.Translator;
 import javax.swing.BoxLayout;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -38,9 +37,6 @@ public class CodeRangeChooser extends JPanel implements TreeSelectionListener,
 
     private static final long serialVersionUID = 7855693564694783199L;
 
-    private static final Translator translator = Translator
-	    .getTranslator(CodeRangeChooser.class);
-
     private ProjectAnalyzer projectAnalyser = null;
 
     private final AnalyzedFileChooser fileChooser = new AnalyzedFileChooser();
@@ -63,15 +59,13 @@ public class CodeRangeChooser extends JPanel implements TreeSelectionListener,
     private void initUI() {
 	setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
-	fileChooser.setBorder(new TitledBorder(translator
-		.i18n("Analyzed Files")));
+	fileChooser.setBorder(new TitledBorder("Analyzed Files"));
 	fileChooser.addTreeSelectionListener(this);
 
 	codeRangeList.addListSelectionListener(this);
 
 	JScrollPane codeRangeScroller = new JScrollPane(codeRangeList);
-	codeRangeScroller.setBorder(new TitledBorder(translator
-		.i18n("Analyzable Code Ranges")));
+	codeRangeScroller.setBorder(new TitledBorder("Analyzable Code Ranges"));
 
 	JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true,
 		new JScrollPane(fileChooser), codeRangeScroller);

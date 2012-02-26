@@ -20,21 +20,17 @@ package com.puresol.filefilter;
 
 import java.io.Serializable;
 
-import javax.i18n4java.Translator;
-
 public class TSVFilter extends AbstractFileFilter implements Serializable {
 
-	private static final long serialVersionUID = 1L;
-	private static final Translator translator = Translator
-			.getTranslator(TSVFilter.class);
+    private static final long serialVersionUID = 1L;
 
-	@Override
-	public String getDescription() {
-		return translator.i18n("Tabulator separated values (*.txt)");
-	}
+    @Override
+    public String getDescription() {
+	return "Tabulator separated values (*.txt)";
+    }
 
-	@Override
-	public String getSuffixes() {
-		return ".txt";
-	}
+    @Override
+    public String getSuffixes() {
+	return ".txt";
+    }
 }

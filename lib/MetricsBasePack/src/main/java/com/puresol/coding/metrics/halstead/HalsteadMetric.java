@@ -14,8 +14,6 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
-import javax.i18n4java.Translator;
-
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.CodeRangeType;
 import com.puresol.coding.ProgrammingLanguage;
@@ -32,12 +30,8 @@ public class HalsteadMetric extends AbstractEvaluator implements
 
     private static final long serialVersionUID = -7823038852668468658L;
 
-    private static final Translator translator = Translator
-	    .getTranslator(HalsteadMetric.class);
-
-    public static final String NAME = translator.i18n("Halstead Metric");
-    public static final String DESCRIPTION = translator
-	    .i18n("Halstead Metric calculation.");
+    public static final String NAME = "Halstead Metric";
+    public static final String DESCRIPTION = "Halstead Metric calculation.";
     public static final List<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new ArrayList<QualityCharacteristic>();
     static {
 	EVALUATED_QUALITY_CHARACTERISTICS

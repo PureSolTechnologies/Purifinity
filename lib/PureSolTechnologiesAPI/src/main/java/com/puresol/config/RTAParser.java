@@ -18,13 +18,7 @@
 
 package com.puresol.config;
 
-import java.util.Locale;
 import java.util.Vector;
-
-import javax.i18n4java.Translator;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * RTAParser is an object to handle runtime arguments. This object is
@@ -40,9 +34,6 @@ import org.slf4j.LoggerFactory;
  * 
  */
 public class RTAParser {
-
-    private static final Logger logger = LoggerFactory
-	    .getLogger(RTAParser.class);
 
     /**
      * This constant is used for reading stackable command line arguments.
@@ -476,16 +467,5 @@ public class RTAParser {
 		RTAParser.RTA_STACKABLE, "show this help page"));
 	APIInformation.setVersionRequest(isSwitchSet("", "version",
 		RTAParser.RTA_NOT_STACKABLE, "show current version of tool"));
-	String locale = getParameterString("", "locale",
-		"Localization (L10N) string for language and locale settings.");
-	if (!locale.isEmpty()) {
-	    logger.info("Found localization setting '" + locale + "'");
-	    if (!locale.contains("_")) {
-		Translator.setDefault(new Locale(locale));
-	    } else {
-		String[] splits = locale.split("_");
-		Translator.setDefault(new Locale(splits[0], splits[1]));
-	    }
-	}
     }
 }

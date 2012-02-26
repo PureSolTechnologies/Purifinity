@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.i18n4java.Translator;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -35,15 +34,12 @@ public class ProjectEvaluatorPanel extends JPanel implements ActionListener,
 
     private static final long serialVersionUID = 7855693564694783199L;
 
-    private static final Translator translator = Translator
-	    .getTranslator(ProjectEvaluatorPanel.class);
-
     private ProjectAnalyzer projectAnalyser = null;
 
     private final Configuration configuration;
     private final ProjectEvaluatorChooser evaluators = new ProjectEvaluatorChooser();
     private final JTabbedPane tabbedPane = new JTabbedPane();
-    private final JButton run = new JButton(translator.i18n("Run..."));
+    private final JButton run = new JButton("Run...");
 
     public ProjectEvaluatorPanel(Configuration configuration) {
 	super();
@@ -107,11 +103,10 @@ public class ProjectEvaluatorPanel extends JPanel implements ActionListener,
 	int result = JOptionPane
 		.showConfirmDialog(
 			Application.getInstance(),
-			translator
-				.i18n("Evaluator calcualtion was aborted. The results are now not completed and may be wrong.\n"
-					+ "Do you want to have them displayed anyway?"),
-			translator.i18n("Caluclation aborted"),
-			JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+			"Evaluator calcualtion was aborted. The results are now not completed and may be wrong.\n"
+				+ "Do you want to have them displayed anyway?",
+			"Caluclation aborted", JOptionPane.YES_NO_OPTION,
+			JOptionPane.WARNING_MESSAGE);
 	if (result == JOptionPane.YES_OPTION) {
 	    finished(observable);
 	}

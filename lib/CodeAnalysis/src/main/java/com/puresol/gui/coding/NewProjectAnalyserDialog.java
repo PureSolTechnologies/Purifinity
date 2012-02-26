@@ -5,7 +5,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
-import javax.i18n4java.Translator;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -22,19 +21,13 @@ public class NewProjectAnalyserDialog extends PureSolDialog implements
 
     private static final long serialVersionUID = 7343378623505747546L;
 
-    private static final Translator translator = Translator
-	    .getTranslator(NewProjectAnalyserDialog.class);
-
     private final JTextField sourceDirectory = new JTextField();
-    private final JButton sourceDirectoryButton = new JButton(
-	    translator.i18n("Choose..."));
+    private final JButton sourceDirectoryButton = new JButton("Choose...");
     private final JTextField workspaceDirectory = new JTextField();
-    private final JButton workspaceDirectoryButton = new JButton(
-	    translator.i18n("Choose..."));
+    private final JButton workspaceDirectoryButton = new JButton("Choose...");
 
     public NewProjectAnalyserDialog() {
-	super(Application.getInstance(), translator
-		.i18n("New Project Analyser"), true);
+	super(Application.getInstance(), "New Project Analyser", true);
 	initUI();
 	initLocation();
     }
@@ -47,16 +40,14 @@ public class NewProjectAnalyserDialog extends PureSolDialog implements
 	JPanel sourceDirectoryPanel = new JPanel();
 	sourceDirectoryPanel.setLayout(new BoxLayout(sourceDirectoryPanel,
 		BoxLayout.X_AXIS));
-	sourceDirectoryPanel.add(new JLabel(translator
-		.i18n("Source Directory: ")));
+	sourceDirectoryPanel.add(new JLabel("Source Directory: "));
 	sourceDirectoryPanel.add(sourceDirectory);
 	sourceDirectoryPanel.add(sourceDirectoryButton);
 
 	JPanel workspaceDirectoryPanel = new JPanel();
 	workspaceDirectoryPanel.setLayout(new BoxLayout(
 		workspaceDirectoryPanel, BoxLayout.X_AXIS));
-	workspaceDirectoryPanel.add(new JLabel(translator
-		.i18n("Workspace Directory: ")));
+	workspaceDirectoryPanel.add(new JLabel("Workspace Directory: "));
 	workspaceDirectoryPanel.add(workspaceDirectory);
 	workspaceDirectoryPanel.add(workspaceDirectoryButton);
 
@@ -73,14 +64,14 @@ public class NewProjectAnalyserDialog extends PureSolDialog implements
     }
 
     private void chooseSourceDirectory() {
-	File directory = chooseDirectory(translator.i18n("Source Directory"));
+	File directory = chooseDirectory("Source Directory");
 	if (directory != null) {
 	    sourceDirectory.setText(directory.toString());
 	}
     }
 
     private void chooseWorkspaceDirectory() {
-	File directory = chooseDirectory(translator.i18n("Workspace Directory"));
+	File directory = chooseDirectory("Workspace Directory");
 	if (directory != null) {
 	    workspaceDirectory.setText(directory.toString());
 	}

@@ -55,10 +55,8 @@
       <import plugin="org.eclipse.core.expressions" version="3.4.200" match="compatible"/>
       <import plugin="org.eclipse.ui" version="3.7.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.core.runtime" version="3.7.0" match="greaterOrEqual"/>
-      <import plugin="javax.i18n4java.plugin" version="1.1.0" match="greaterOrEqual"/>
-      <import plugin="org.slf4j.logging.plugin" version="1.6.4" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.osgi" version="3.7.1" match="greaterOrEqual"/>
-      <import plugin="org.slf4j.api"/>
+      <import plugin="org.eclipse.ui.views.log" version="1.0.200" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui" version="3.3.0" match="compatible"/>
    </requires>
 
    <plugin
@@ -304,15 +302,10 @@
          unpack="false"/>
 
    <plugin
-         id="javax.i18n4java.plugin"
+         id="org.eclipse.ui.views.log"
          download-size="0"
          install-size="0"
-         version="0.0.0"/>
-
-   <plugin
-         id="org.slf4j.logging.plugin"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"/>
+         version="0.0.0"
+         unpack="false"/>
 
 </feature>

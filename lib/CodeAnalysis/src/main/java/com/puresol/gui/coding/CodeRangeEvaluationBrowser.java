@@ -3,7 +3,6 @@ package com.puresol.gui.coding;
 import java.awt.BorderLayout;
 import java.io.IOException;
 
-import javax.i18n4java.Translator;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -32,8 +31,6 @@ public class CodeRangeEvaluationBrowser extends JPanel implements
 
     private static final Logger logger = LoggerFactory
 	    .getLogger(CodeRangeEvaluationBrowser.class);
-    private static final Translator translator = Translator
-	    .getTranslator(CodeRangeEvaluationBrowser.class);
 
     private ProjectAnalyzer projectAnalyzer = null;
 
@@ -126,11 +123,10 @@ public class CodeRangeEvaluationBrowser extends JPanel implements
 	int result = JOptionPane
 		.showConfirmDialog(
 			Application.getInstance(),
-			translator
-				.i18n("Code range calcualtion was aborted. The results are now not completed and may be wrong.\n"
-					+ "Do you want to have them displayed anyway?"),
-			translator.i18n("Caluclation aborted"),
-			JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+			"Code range calcualtion was aborted. The results are now not completed and may be wrong.\n"
+				+ "Do you want to have them displayed anyway?",
+			"Caluclation aborted", JOptionPane.YES_NO_OPTION,
+			JOptionPane.WARNING_MESSAGE);
 	if (result == JOptionPane.YES_OPTION) {
 	    finished(observable);
 	}

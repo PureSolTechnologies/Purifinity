@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.i18n4java.Translator;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -54,8 +53,6 @@ public class ProjectGraphPanel extends JPanel implements ListSelectionListener,
 
     private static final Logger logger = LoggerFactory
 	    .getLogger(ProjectGraphPanel.class);
-    private static final Translator translator = Translator
-	    .getTranslator(ProjectGraphPanel.class);
 
     private final Configuration configuration;
     private ProjectAnalyzer projectAnalyzer = null;
@@ -153,11 +150,10 @@ public class ProjectGraphPanel extends JPanel implements ListSelectionListener,
 	int result = JOptionPane
 		.showConfirmDialog(
 			Application.getInstance(),
-			translator
-				.i18n("Evaluator calcualtion was aborted. The results are now not completed and may be wrong.\n"
-					+ "Do you want to have them displayed anyway?"),
-			translator.i18n("Caluclation aborted"),
-			JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+			"Evaluator calcualtion was aborted. The results are now not completed and may be wrong.\n"
+				+ "Do you want to have them displayed anyway?",
+			"Caluclation aborted", JOptionPane.YES_NO_OPTION,
+			JOptionPane.WARNING_MESSAGE);
 	if (result == JOptionPane.YES_OPTION) {
 	    finished(observable);
 	}

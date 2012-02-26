@@ -14,8 +14,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.i18n4java.Translator;
-
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.evaluator.AbstractEvaluator;
@@ -41,13 +39,9 @@ public class SLOCMetric extends AbstractEvaluator implements CodeRangeEvaluator 
 
     private static final long serialVersionUID = -4313208925226028154L;
 
-    private static final Translator translator = Translator
-	    .getTranslator(SLOCMetric.class);
+    public static final String NAME = "SLOC Metric";
 
-    public static final String NAME = translator.i18n("SLOC Metric");
-
-    public static final String DESCRIPTION = translator
-	    .i18n("SLOC Metric calculation.");
+    public static final String DESCRIPTION = "SLOC Metric calculation.";
 
     public static final List<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new ArrayList<QualityCharacteristic>();
     static {

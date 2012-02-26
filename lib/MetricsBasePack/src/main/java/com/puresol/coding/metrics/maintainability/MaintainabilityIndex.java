@@ -13,8 +13,6 @@ package com.puresol.coding.metrics.maintainability;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.i18n4java.Translator;
-
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.evaluator.AbstractEvaluator;
@@ -32,12 +30,8 @@ public class MaintainabilityIndex extends AbstractEvaluator implements
 
     private static final long serialVersionUID = 2789695185933616684L;
 
-    private static final Translator translator = Translator
-	    .getTranslator(MaintainabilityIndex.class);
-
-    public static final String NAME = translator.i18n("Maintainability Index");
-    public static final String DESCRIPTION = translator
-	    .i18n("Maintainability Index calculation.");
+    public static final String NAME = "Maintainability Index";
+    public static final String DESCRIPTION = "Maintainability Index calculation.";
     public static final List<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new ArrayList<QualityCharacteristic>();
     static {
 	EVALUATED_QUALITY_CHARACTERISTICS

@@ -1,7 +1,5 @@
 package com.puresol.uhura.ust.types;
 
-import javax.i18n4java.Translator;
-
 /**
  * This class represents a signed integer type with variable to set bit length.
  * 
@@ -10,18 +8,15 @@ import javax.i18n4java.Translator;
  */
 public class SignedIntegerType extends IntegerType {
 
-	private static final long serialVersionUID = 2322028164241606186L;
+    private static final long serialVersionUID = 2322028164241606186L;
 
-	private static final Translator translator = Translator
-			.getTranslator(SignedIntegerType.class);
+    public SignedIntegerType(String originalSymbol, int bitLength) {
+	super(originalSymbol, bitLength);
+    }
 
-	public SignedIntegerType(String originalSymbol, int bitLength) {
-		super(originalSymbol, bitLength);
-	}
-
-	@Override
-	public String getName() {
-		return translator.i18n("Signed {0} bit Integer Type", getBitLength());
-	}
+    @Override
+    public String getName() {
+	return "Signed " + getBitLength() + "bit Integer Type";
+    }
 
 }

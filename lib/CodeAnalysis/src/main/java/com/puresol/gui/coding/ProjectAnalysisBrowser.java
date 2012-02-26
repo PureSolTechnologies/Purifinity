@@ -12,7 +12,6 @@ package com.puresol.gui.coding;
 
 import java.awt.BorderLayout;
 
-import javax.i18n4java.Translator;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
@@ -22,9 +21,6 @@ import com.puresol.config.Configuration;
 public class ProjectAnalysisBrowser extends JPanel {
 
     private static final long serialVersionUID = 3469716304984536673L;
-
-    private static final Translator translator = Translator
-	    .getTranslator(ProjectAnalysisBrowser.class);
 
     private ProjectAnalyzer project = null;
 
@@ -53,11 +49,10 @@ public class ProjectAnalysisBrowser extends JPanel {
 
 	projectReport.setLayout(new BorderLayout());
 
-	tabbedPane.addTab(translator.i18n("Report"), projectReport);
-	tabbedPane.addTab(translator.i18n("Project Evaluators"),
-		projectEvaluatorPanel);
-	tabbedPane.addTab(translator.i18n("Project Graphs"), projectGraphPanel);
-	tabbedPane.addTab(translator.i18n("Code Ranges"), codeRangeBrowser);
+	tabbedPane.addTab("Report", projectReport);
+	tabbedPane.addTab("Project Evaluators", projectEvaluatorPanel);
+	tabbedPane.addTab("Project Graphs", projectGraphPanel);
+	tabbedPane.addTab("Code Ranges", codeRangeBrowser);
 
 	add(tabbedPane, BorderLayout.CENTER);
     }

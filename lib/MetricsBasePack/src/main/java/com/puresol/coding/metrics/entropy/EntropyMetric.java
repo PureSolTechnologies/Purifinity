@@ -14,8 +14,6 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
-import javax.i18n4java.Translator;
-
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.evaluator.AbstractEvaluator;
@@ -38,13 +36,9 @@ public class EntropyMetric extends AbstractEvaluator implements
 
     private static final long serialVersionUID = 1300404171923622327L;
 
-    private static final Translator translator = Translator
-	    .getTranslator(EntropyMetric.class);
+    public static final String NAME = "Entropy Metric";
 
-    public static final String NAME = translator.i18n("Entropy Metric");
-
-    public static final String DESCRIPTION = translator
-	    .i18n("Entropy Metric calculation.");
+    public static final String DESCRIPTION = "Entropy Metric calculation.";
 
     public static final List<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new ArrayList<QualityCharacteristic>();
     static {

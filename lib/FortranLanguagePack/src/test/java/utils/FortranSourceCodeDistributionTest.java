@@ -14,8 +14,6 @@ import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.i18n4java.utils.FileSearch;
-
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +24,7 @@ import com.puresol.coding.lang.fortran.Fortran;
 import com.puresol.trees.TreePrinter;
 import com.puresol.uhura.parser.ParserTree;
 import com.puresol.utils.ConsoleUtils;
+import com.puresol.utils.FileSearch;
 import com.puresol.utils.StopWatch;
 
 /**

@@ -1,6 +1,5 @@
 package com.puresol.uhura.ust.modifiers;
 
-import javax.i18n4java.Translator;
 
 /**
  * This class represents a modifier which sets a variable to immutable. This
@@ -17,18 +16,15 @@ import javax.i18n4java.Translator;
  */
 public class ConstantModifier extends Modifier {
 
-	private static final long serialVersionUID = -5800466279299023817L;
+    private static final long serialVersionUID = -5800466279299023817L;
 
-	private static final Translator translator = Translator
-			.getTranslator(ConstantModifier.class);
+    public ConstantModifier(String originalSymbol) {
+	super(originalSymbol);
+    }
 
-	public ConstantModifier(String originalSymbol) {
-		super(originalSymbol);
-	}
-
-	@Override
-	public String getName() {
-		return translator.i18n("Constant Modifier");
-	}
+    @Override
+    public String getName() {
+	return "Constant Modifier";
+    }
 
 }

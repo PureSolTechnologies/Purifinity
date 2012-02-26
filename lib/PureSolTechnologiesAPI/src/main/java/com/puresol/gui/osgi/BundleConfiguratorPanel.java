@@ -6,7 +6,6 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.i18n4java.Translator;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -19,15 +18,12 @@ public class BundleConfiguratorPanel extends JPanel implements ActionListener {
 
     private static final long serialVersionUID = -5497942963691954365L;
 
-    private static final Translator translator = Translator
-	    .getTranslator(BundleConfiguratorPanel.class);
-
     private final PropertiesPanel propertiesPanel = new PropertiesPanel();
     private final JLabel nameLabel = new JLabel();
-    private final JButton okButton = new JButton(translator.i18n("OK"));
-    private final JButton applyButton = new JButton(translator.i18n("Apply"));
-    private final JButton resetButton = new JButton(translator.i18n("Reset"));
-    private final JButton cancelButton = new JButton(translator.i18n("Cancel"));
+    private final JButton okButton = new JButton("OK");
+    private final JButton applyButton = new JButton("Apply");
+    private final JButton resetButton = new JButton("Reset");
+    private final JButton cancelButton = new JButton("Cancel");
 
     public BundleConfiguratorPanel() {
 	super();
@@ -69,7 +65,7 @@ public class BundleConfiguratorPanel extends JPanel implements ActionListener {
 
     public void setBundleConfigurator(BundleConfigurator bundleConfigurator) {
 	if (bundleConfigurator == null) {
-	    nameLabel.setText(translator.i18n("Nothing selected..."));
+	    nameLabel.setText("Nothing selected...");
 	    propertiesPanel.clearPropertyDescriptions();
 	} else {
 	    nameLabel.setText(bundleConfigurator.getName());

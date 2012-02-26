@@ -1,7 +1,5 @@
 package com.puresol.coding.metrics.codedepth.config;
 
-import javax.i18n4java.Translator;
-
 import com.puresol.config.PropertyDescription;
 
 /**
@@ -27,33 +25,29 @@ import com.puresol.config.PropertyDescription;
  */
 public class ModuleWarning implements PropertyDescription<Integer> {
 
-	private static final Translator translator = Translator
-			.getTranslator(ModuleWarning.class);
+    @Override
+    public String getPropertyName() {
+	return "codedepth.modules.warning";
+    }
 
-	@Override
-	public String getPropertyName() {
-		return "codedepth.modules.warning";
-	}
+    @Override
+    public String getDisplayName() {
+	return "CodeDepth for Modules for Medium Quality";
+    }
 
-	@Override
-	public String getDisplayName() {
-		return translator.i18n("CodeDepth for Modules for Medium Quality");
-	}
+    @Override
+    public String getDescription() {
+	return "Specify here the codepth for modules to raise a warning.";
+    }
 
-	@Override
-	public String getDescription() {
-		return translator
-				.i18n("Specify here the codepth for modules to raise a warning.");
-	}
+    @Override
+    public Class<Integer> getType() {
+	return Integer.class;
+    }
 
-	@Override
-	public Class<Integer> getType() {
-		return Integer.class;
-	}
-
-	@Override
-	public Integer getDefaultValue() {
-		return 6;
-	}
+    @Override
+    public Integer getDefaultValue() {
+	return 6;
+    }
 
 }

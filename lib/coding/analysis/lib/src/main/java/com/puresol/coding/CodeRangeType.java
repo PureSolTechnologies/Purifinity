@@ -1,79 +1,74 @@
 package com.puresol.coding;
 
-import javax.i18n4java.Translator;
-
 public enum CodeRangeType {
 
-	FILE {
-		@Override
-		public String getName() {
-			return translator.i18n("file");
-		}
-	},
-	CLASS {
-		@Override
-		public String getName() {
-			return translator.i18n("class");
-		}
-	},
-	INTERFACE {
-		@Override
-		public String getName() {
-			return translator.i18n("interface");
-		}
-	},
-	ENUMERATION {
-		@Override
-		public String getName() {
-			return translator.i18n("enumeration");
-		}
-	},
-	ANNOTATION {
-		@Override
-		public String getName() {
-			return translator.i18n("annotation");
-		}
-	},
-	MODULE {
-		@Override
-		public String getName() {
-			return translator.i18n("module");
-		}
-	},
-	CONSTRUCTOR {
-		@Override
-		public String getName() {
-			return translator.i18n("constructor");
-		}
-	},
-	METHOD {
-		@Override
-		public String getName() {
-			return translator.i18n("method");
-		}
-	},
-	PROGRAM {
-		@Override
-		public String getName() {
-			return translator.i18n("program");
-		}
-	},
-	FUNCTION {
-		@Override
-		public String getName() {
-			return translator.i18n("function");
-		}
-	},
-	SUBROUTINE {
-		@Override
-		public String getName() {
-			return translator.i18n("subroutine");
-		}
-	};
+    FILE {
+	@Override
+	public String getName() {
+	    return "file";
+	}
+    },
+    CLASS {
+	@Override
+	public String getName() {
+	    return "class";
+	}
+    },
+    INTERFACE {
+	@Override
+	public String getName() {
+	    return "interface";
+	}
+    },
+    ENUMERATION {
+	@Override
+	public String getName() {
+	    return "enumeration";
+	}
+    },
+    ANNOTATION {
+	@Override
+	public String getName() {
+	    return "annotation";
+	}
+    },
+    MODULE {
+	@Override
+	public String getName() {
+	    return "module";
+	}
+    },
+    CONSTRUCTOR {
+	@Override
+	public String getName() {
+	    return "constructor";
+	}
+    },
+    METHOD {
+	@Override
+	public String getName() {
+	    return "method";
+	}
+    },
+    PROGRAM {
+	@Override
+	public String getName() {
+	    return "program";
+	}
+    },
+    FUNCTION {
+	@Override
+	public String getName() {
+	    return "function";
+	}
+    },
+    SUBROUTINE {
+	@Override
+	public String getName() {
+	    return "subroutine";
+	}
+    };
 
-	private static final Translator translator = Translator
-			.getTranslator(CodeRangeType.class);
-
-	public abstract String getName();
+    public abstract String getName();
 
 }

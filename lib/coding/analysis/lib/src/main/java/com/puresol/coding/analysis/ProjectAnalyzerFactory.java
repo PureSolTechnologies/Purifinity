@@ -20,14 +20,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import javax.i18n4java.utils.FileSearch;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.puresol.gui.progress.ProgressObserver;
 import com.puresol.gui.progress.RunnableProgressObservable;
 import com.puresol.utils.DirectoryUtilities;
+import com.puresol.utils.FileSearch;
 import com.puresol.utils.Persistence;
 import com.puresol.utils.PersistenceException;
 

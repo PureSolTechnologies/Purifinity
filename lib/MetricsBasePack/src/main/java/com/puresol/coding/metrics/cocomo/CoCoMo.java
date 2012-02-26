@@ -15,8 +15,6 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Vector;
 
-import javax.i18n4java.Translator;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,15 +47,12 @@ public class CoCoMo extends AbstractEvaluator implements ProjectEvaluator {
     private static final long serialVersionUID = 5098378023541671490L;
 
     private static final Logger logger = LoggerFactory.getLogger(CoCoMo.class);
-    private static final Translator translator = Translator
-	    .getTranslator(CoCoMo.class);
 
     public static final String NAME = "COst COnstruction MOdel";
 
-    public static final String DESCRIPTION = translator
-	    .i18n("The COst COnstruction MOdel is a simple way "
-		    + "to estimate the construction costs of a "
-		    + "software project by couting the physical lines of code.");
+    public static final String DESCRIPTION = "The COst COnstruction MOdel is a simple way "
+	    + "to estimate the construction costs of a "
+	    + "software project by couting the physical lines of code.";
 
     public static final List<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new Vector<QualityCharacteristic>();
 

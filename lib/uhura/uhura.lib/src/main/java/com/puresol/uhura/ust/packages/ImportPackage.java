@@ -3,8 +3,6 @@ package com.puresol.uhura.ust.packages;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.i18n4java.Translator;
-
 import com.puresol.uhura.ust.UniversalSyntaxTree;
 import com.puresol.uhura.ust.facilities.CompilerRelevantElement;
 
@@ -17,34 +15,32 @@ import com.puresol.uhura.ust.facilities.CompilerRelevantElement;
  */
 public class ImportPackage extends CompilerRelevantElement {
 
-	private static final long serialVersionUID = -828922003801631227L;
+    private static final long serialVersionUID = -828922003801631227L;
 
-	private static final Translator translator = Translator
-			.getTranslator(ImportPackage.class);
-	private final String packageName;
+    private final String packageName;
 
-	public ImportPackage(String originalSymbol, String packageName) {
-		super(originalSymbol);
-		this.packageName = packageName;
-	}
+    public ImportPackage(String originalSymbol, String packageName) {
+	super(originalSymbol);
+	this.packageName = packageName;
+    }
 
-	@Override
-	public final String getName() {
-		return translator.i18n("Import Declaration for {0}", packageName);
-	}
+    @Override
+    public final String getName() {
+	return "Import Declaration for " + packageName;
+    }
 
-	public final String getPackageName() {
-		return packageName;
-	}
+    public final String getPackageName() {
+	return packageName;
+    }
 
-	@Override
-	public final boolean hasChildren() {
-		return false;
-	}
+    @Override
+    public final boolean hasChildren() {
+	return false;
+    }
 
-	@Override
-	public final List<UniversalSyntaxTree> getChildren() {
-		return new ArrayList<UniversalSyntaxTree>();
-	}
+    @Override
+    public final List<UniversalSyntaxTree> getChildren() {
+	return new ArrayList<UniversalSyntaxTree>();
+    }
 
 }

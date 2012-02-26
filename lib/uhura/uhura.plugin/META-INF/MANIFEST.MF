@@ -3,7 +3,5 @@ Bundle-ManifestVersion: 2
 Bundle-SymbolicName: com.puresol.uhura.plugin;singleton:=true
 Bundle-Version: 0.1.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Require-Bundle: javax.i18n4java.plugin;bundle-version="1.1.0",
- org.slf4j.logging.plugin;bundle-version="1.6.4"
 Bundle-Name: Nyota Uhura
 Bundle-Vendor: PureSol Technologies

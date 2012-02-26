@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.i18n4java.Translator;
 import javax.swing.JOptionPane;
 
 import com.puresol.coding.analysis.AnalyzedFile;
@@ -23,9 +22,6 @@ public abstract class AbstractProjectMetric<T extends CodeRangeEvaluator>
 	extends AbstractEvaluator implements ProjectEvaluator {
 
     private static final long serialVersionUID = -5093217611195212999L;
-
-    private static final Translator translator = Translator
-	    .getTranslator(AbstractProjectMetric.class);
 
     private final ProjectAnalyzer projectAnalyzer;
     private final Map<String, SourceCodeQuality> qualities = new HashMap<String, SourceCodeQuality>();
@@ -79,8 +75,8 @@ public abstract class AbstractProjectMetric<T extends CodeRangeEvaluator>
 	    projectQuality = SourceCodeQuality.fromLevel(result);
 	} catch (IOException e) {
 	    JOptionPane.showMessageDialog(Application.getInstance(),
-		    translator.i18n("IOException was thrown!"),
-		    translator.i18n("Error"), JOptionPane.ERROR_MESSAGE);
+		    "IOException was thrown!", "Error",
+		    JOptionPane.ERROR_MESSAGE);
 	} finally {
 	    if (getMonitor() != null) {
 		getMonitor().finished(this);

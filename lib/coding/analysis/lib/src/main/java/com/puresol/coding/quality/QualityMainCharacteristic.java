@@ -2,8 +2,6 @@ package com.puresol.coding.quality;
 
 import java.io.IOException;
 
-import javax.i18n4java.Translator;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,52 +12,49 @@ public enum QualityMainCharacteristic {
     FUNCTIONALITY {
 	@Override
 	public String getName() {
-	    return translator.i18n("Functionality");
+	    return "Functionality";
 	}
     },
     RELIABILITY {
 	@Override
 	public String getName() {
-	    return translator.i18n("Reliability");
+	    return "Reliability";
 	}
     },
     USABILITY {
 	@Override
 	public String getName() {
-	    return translator.i18n("Usability");
+	    return "Usability";
 	}
     },
     EFFICIENCY {
 	@Override
 	public String getName() {
-	    return translator.i18n("Efficiency");
+	    return "Efficiency";
 	}
     },
     MAINTAINABILITY {
 	@Override
 	public String getName() {
-	    return translator.i18n("Maintainability");
+	    return "Maintainability";
 	}
     },
     PORTABILITY {
 	@Override
 	public String getName() {
-	    return translator.i18n("Portability");
+	    return "Portability";
 	}
     };
 
     private static final Logger logger = LoggerFactory
 	    .getLogger(QualityMainCharacteristic.class);
-    private static final Translator translator = Translator
-	    .getTranslator(QualityMainCharacteristic.class);
 
     public abstract String getName();
 
     public String getDescription() {
 	String directory = "/"
 		+ getClass().getPackage().getName().replaceAll("\\.", "/");
-	String file = name().toLowerCase() + "."
-		+ Translator.getDefault().toString() + ".txt";
+	String file = name().toLowerCase() + ".txt";
 	try {
 	    return JARUtilities.readResourceFileToString(getClass()
 		    .getResource(directory + "/" + file));

@@ -30,7 +30,6 @@ import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.i18n4java.Translator;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -45,8 +44,6 @@ public class Application extends JFrame implements Runnable {
 
     private static final Logger logger = LoggerFactory
 	    .getLogger(Application.class);
-    private static final Translator translator = Translator
-	    .getTranslator(Application.class);
     private static List<Thread> threads = new ArrayList<Thread>();
 
     /**
@@ -60,8 +57,7 @@ public class Application extends JFrame implements Runnable {
 
     public static void showNotImplementedMessage() {
 	JOptionPane.showMessageDialog(getInstance(),
-		translator.i18n("This function is not implemented yet!"),
-		translator.i18n("No Implementation"),
+		"This function is not implemented yet!", "No Implementation",
 		JOptionPane.INFORMATION_MESSAGE | JOptionPane.OK_OPTION);
     }
 

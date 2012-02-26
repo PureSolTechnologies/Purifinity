@@ -4,7 +4,6 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.i18n4java.Translator;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JRootPane;
@@ -21,17 +20,14 @@ public class DialogButtonsPanel extends JPanel implements ActionListener {
 
     private static final long serialVersionUID = 8797180878887104949L;
 
-    private static final Translator translator = Translator
-	    .getTranslator(DialogButtonsPanel.class);
-
     private final DialogButtonsListener listener;
 
-    private final JButton yesButton = new JButton(translator.i18n("Yes"));
-    private final JButton noButton = new JButton(translator.i18n("No"));
-    private final JButton okButton = new JButton(translator.i18n("OK"));
-    private final JButton cancelButton = new JButton(translator.i18n("Cancel"));
-    private final JButton closeButton = new JButton(translator.i18n("Close"));
-    private final JButton helpButton = new JButton(translator.i18n("Help"));
+    private final JButton yesButton = new JButton("Yes");
+    private final JButton noButton = new JButton("No");
+    private final JButton okButton = new JButton("OK");
+    private final JButton cancelButton = new JButton("Cancel");
+    private final JButton closeButton = new JButton("Close");
+    private final JButton helpButton = new JButton("Help");
 
     public DialogButtonsPanel(DialogButtonsListener listener) {
 	super();

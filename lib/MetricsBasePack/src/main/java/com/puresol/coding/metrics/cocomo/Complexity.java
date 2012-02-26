@@ -10,8 +10,6 @@
 
 package com.puresol.coding.metrics.cocomo;
 
-import javax.i18n4java.Translator;
-
 import com.puresol.data.Identifiable;
 
 /**
@@ -23,28 +21,10 @@ import com.puresol.data.Identifiable;
  * 
  */
 public enum Complexity implements Identifiable {
-	LOW {
-		@Override
-		public String getIdentifier() {
-			return translator.i18n("low");
-		}
-	},
-	MEDIUM {
-		@Override
-		public String getIdentifier() {
-			return translator.i18n("medium");
-		}
-	},
-	HIGH {
-		@Override
-		public String getIdentifier() {
-			return translator.i18n("high");
-		}
-	};
+    LOW, MEDIUM, HIGH;
 
-	private static final Translator translator = Translator
-			.getTranslator(Complexity.class);
-
-	@Override
-	public abstract String getIdentifier();
+    @Override
+    public String getIdentifier() {
+	return name().toLowerCase();
+    }
 }

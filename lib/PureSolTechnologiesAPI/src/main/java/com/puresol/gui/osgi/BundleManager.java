@@ -7,7 +7,6 @@ import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.i18n4java.Translator;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
@@ -32,25 +31,18 @@ public class BundleManager extends PureSolDialog implements ActionListener {
 
     private static final long serialVersionUID = -1851664339619930401L;
 
-    private static final Translator translator = Translator
-	    .getTranslator(BundleManager.class);
-
-    private final JButton installBundle = new JButton(
-	    translator.i18n("Install new plugin..."));
-    private final JButton uninstallBundle = new JButton(
-	    translator.i18n("Uninstall plugin..."));
-    private final JButton updateBundle = new JButton(translator.i18n("Update"));
-    private final JButton startBundle = new JButton(translator.i18n("Start"));
-    private final JButton stopBundle = new JButton(translator.i18n("Stop"));
-    private final JButton updateList = new JButton(
-	    translator.i18n("Update List"));
+    private final JButton installBundle = new JButton("Install new plugin...");
+    private final JButton uninstallBundle = new JButton("Uninstall plugin...");
+    private final JButton updateBundle = new JButton("Update");
+    private final JButton startBundle = new JButton("Start");
+    private final JButton stopBundle = new JButton("Stop");
+    private final JButton updateList = new JButton("Update List");
 
     private final BundleContext bundleContext;
     private FreeList bundles = null;
 
     public BundleManager(BundleContext context) {
-	super(Application.getInstance(), translator.i18n("Plugin Manager"),
-		true);
+	super(Application.getInstance(), "Plugin Manager", true);
 	this.bundleContext = context;
 	initUI();
 	update();

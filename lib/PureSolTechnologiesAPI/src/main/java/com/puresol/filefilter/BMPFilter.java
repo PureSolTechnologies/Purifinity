@@ -20,21 +20,17 @@ package com.puresol.filefilter;
 
 import java.io.Serializable;
 
-import javax.i18n4java.Translator;
-
 public class BMPFilter extends AbstractFileFilter implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private static final Translator translator = Translator
-			.getTranslator(BMPFilter.class);
+    @Override
+    public String getDescription() {
+	return "BMP images (*.bmp)";
+    }
 
-	@Override
-	public String getDescription() {
-		return translator.i18n("BMP images (*.bmp)");
-	}
-
-	public String getSuffixes() {
-		return ".bmp";
-	}
+    @Override
+    public String getSuffixes() {
+	return ".bmp";
+    }
 }

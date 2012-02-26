@@ -1,7 +1,5 @@
 package com.puresol.coding.metrics.codedepth.config;
 
-import javax.i18n4java.Translator;
-
 import com.puresol.config.PropertyDescription;
 
 /**
@@ -27,32 +25,29 @@ import com.puresol.config.PropertyDescription;
  */
 public class FileFail implements PropertyDescription<Integer> {
 
-	private static final Translator translator = Translator
-			.getTranslator(FileFail.class);
+    @Override
+    public String getPropertyName() {
+	return "codedepth.files.fail";
+    }
 
-	@Override
-	public String getPropertyName() {
-		return "codedepth.files.fail";
-	}
+    @Override
+    public String getDisplayName() {
+	return "CodeDepth for Files for Low Quality";
+    }
 
-	@Override
-	public String getDisplayName() {
-		return translator.i18n("CodeDepth for Files for Low Quality");
-	}
+    @Override
+    public String getDescription() {
+	return "Specify here the codepth for files to fail.";
+    }
 
-	@Override
-	public String getDescription() {
-		return translator.i18n("Specify here the codepth for files to fail.");
-	}
+    @Override
+    public Class<Integer> getType() {
+	return Integer.class;
+    }
 
-	@Override
-	public Class<Integer> getType() {
-		return Integer.class;
-	}
-
-	@Override
-	public Integer getDefaultValue() {
-		return 8;
-	}
+    @Override
+    public Integer getDefaultValue() {
+	return 8;
+    }
 
 }

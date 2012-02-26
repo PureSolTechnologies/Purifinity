@@ -3,8 +3,6 @@ package com.puresol.testing;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
-import javax.i18n4java.Translator;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,17 +38,6 @@ public class StandardsTester {
 	    if (!name.equals("logger")) {
 		logger.error("Field '" + name + "' in class '"
 			+ clazz.getName() + "' should be named 'logger'!");
-		return false;
-	    }
-	    if (!Modifier.isStatic(modifiers)) {
-		logger.error("Field '" + name + "' in class '"
-			+ clazz.getName() + "' should be declared as static!");
-	    }
-	}
-	if (type.equals(Translator.class)) {
-	    if (!name.equals("translator")) {
-		logger.error("Field '" + name + "' in class '"
-			+ clazz.getName() + "' should be named 'translator'!");
 		return false;
 	    }
 	    if (!Modifier.isStatic(modifiers)) {

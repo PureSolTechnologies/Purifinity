@@ -21,7 +21,6 @@ package com.puresol.gui;
 import java.awt.BorderLayout;
 import java.io.IOException;
 
-import javax.i18n4java.Translator;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -38,9 +37,6 @@ import javax.swing.JTextField;
 public final class LoginDialog extends PureSolDialog {
 
     private static final long serialVersionUID = 1L;
-
-    private static final Translator translator = Translator
-	    .getTranslator(LoginDialog.class);
 
     private final JLabel message = new JLabel();
     /**
@@ -65,8 +61,7 @@ public final class LoginDialog extends PureSolDialog {
      *            be used.
      */
     public LoginDialog() {
-	super(Application.getInstance(), translator.i18n("User Confirmation"),
-		true);
+	super(Application.getInstance(), "User Confirmation", true);
 	initUI();
 	initLocation();
     }
@@ -76,9 +71,9 @@ public final class LoginDialog extends PureSolDialog {
 	panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 	message.setVisible(false);
 	panel.add(message);
-	panel.add(new JLabel(translator.i18n("Username")));
+	panel.add(new JLabel("Username"));
 	panel.add(username);
-	panel.add(new JLabel(translator.i18n("Password")));
+	panel.add(new JLabel("Password"));
 	panel.add(password);
 
 	setButtonVisible(DialogButtons.OK, true);

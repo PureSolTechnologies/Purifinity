@@ -3,7 +3,6 @@ package com.puresol.gui.osgi;
 import java.awt.BorderLayout;
 import java.awt.Container;
 
-import javax.i18n4java.Translator;
 import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
@@ -28,16 +27,12 @@ public class BundleConfigurationDialog extends PureSolDialog implements
 
     private static final long serialVersionUID = -359245614681727468L;
 
-    private static final Translator translator = Translator
-	    .getTranslator(BundleConfigurationDialog.class);
-
     private final String frameworkName;
     private final BundleConfiguratorTreeModel configuratorTreeView = new BundleConfiguratorTreeModel();
     private final BundleConfiguratorPanel configPanel = new BundleConfiguratorPanel();
 
     public BundleConfigurationDialog(String frameworkName) {
-	super(Application.getInstance(), translator
-		.i18n("Plugin Configurations Dialog"), true);
+	super(Application.getInstance(), "Plugin Configurations Dialog", true);
 	this.frameworkName = frameworkName;
 	setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 	initUI();
@@ -50,7 +45,7 @@ public class BundleConfigurationDialog extends PureSolDialog implements
 	configuratorTreeView.setConfiguratorTree(BundleConfiguratorTree
 		.create(frameworkName));
 	configuratorTreeView.setBorder(BorderFactory
-		.createTitledBorder(translator.i18n("Configurator")));
+		.createTitledBorder("Configurator"));
 	configuratorTreeView.addTreeSelectionListener(this);
 
 	contentPane.add(new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
@@ -74,9 +69,8 @@ public class BundleConfigurationDialog extends PureSolDialog implements
 	JOptionPane
 		.showMessageDialog(
 			Application.getInstance(),
-			translator
-				.i18n("Closeing does not perform checks\nfor changed values and does not save them!"),
-			translator.i18n("Warning"), JOptionPane.WARNING_MESSAGE);
+			"Closeing does not perform checks\nfor changed values and does not save them!",
+			"Warning", JOptionPane.WARNING_MESSAGE);
 	super.close();
     }
 

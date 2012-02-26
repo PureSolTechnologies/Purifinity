@@ -20,21 +20,17 @@ package com.puresol.filefilter;
 
 import java.io.Serializable;
 
-import javax.i18n4java.Translator;
-
 public class CSVFilter extends AbstractFileFilter implements Serializable {
 
-	private static final long serialVersionUID = 1L;
-	private static final Translator translator = Translator
-			.getTranslator(CSVFilter.class);
+    private static final long serialVersionUID = 1L;
 
-	@Override
-	public String getDescription() {
-		return translator.i18n("Comma separated values (*.csv)");
-	}
+    @Override
+    public String getDescription() {
+	return "Comma separated values (*.csv)";
+    }
 
-	@Override
-	public String getSuffixes() {
-		return ".csv";
-	}
+    @Override
+    public String getSuffixes() {
+	return ".csv";
+    }
 }

@@ -13,19 +13,9 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>javax</groupId>
-			<artifactId>i18n4java.plugin</artifactId>
-			<version>1.1.0</version>
-		</dependency>
-		<dependency>
 			<groupId>com.puresol</groupId>
 			<artifactId>uhura.plugin</artifactId>
 			<version>0.1.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>logging.plugin</artifactId> 
-			<version>1.6.4</version>
 		</dependency>
 	</dependencies>
 
