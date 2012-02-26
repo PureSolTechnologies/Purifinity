@@ -10,9 +10,7 @@
 	</parent>
 
 	<modules>
-		<module>lib</module>
 		<module>test</module>
-		<module>plugin</module>
 	</modules>
 
 	<artifactId>coding.analysis</artifactId>
