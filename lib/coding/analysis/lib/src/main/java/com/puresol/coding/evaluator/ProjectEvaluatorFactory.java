@@ -1,13 +1,11 @@
 package com.puresol.coding.evaluator;
 
 import com.puresol.coding.analysis.ProjectAnalyzer;
-import com.puresol.config.Configuration;
 
 public interface ProjectEvaluatorFactory extends EvaluatorFactory {
 
-	public ProjectEvaluator create(ProjectAnalyzer projectAnalyzer,
-			Configuration configuration);
+    public ProjectEvaluator create(ProjectAnalyzer projectAnalyzer);
 
-	public Class<? extends ProjectEvaluator> getProjectEvaluatorClass();
+    public Class<? extends ProjectEvaluator> getProjectEvaluatorClass();
 
 }

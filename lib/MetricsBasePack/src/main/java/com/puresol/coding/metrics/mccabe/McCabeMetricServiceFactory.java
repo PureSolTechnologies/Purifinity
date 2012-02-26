@@ -10,46 +10,44 @@ import com.puresol.coding.evaluator.CodeRangeEvaluatorFactory;
 import com.puresol.coding.evaluator.ProjectEvaluator;
 import com.puresol.coding.evaluator.ProjectEvaluatorFactory;
 import com.puresol.coding.quality.QualityCharacteristic;
-import com.puresol.config.Configuration;
 
 public class McCabeMetricServiceFactory implements CodeRangeEvaluatorFactory,
-		ProjectEvaluatorFactory {
+	ProjectEvaluatorFactory {
 
-	@Override
-	public CodeRangeEvaluator create(ProgrammingLanguage language,
-			CodeRange codeRange) {
-		return new McCabeMetric(language, codeRange);
-	}
+    @Override
+    public CodeRangeEvaluator create(ProgrammingLanguage language,
+	    CodeRange codeRange) {
+	return new McCabeMetric(language, codeRange);
+    }
 
-	@Override
-	public ProjectEvaluator create(ProjectAnalyzer projectAnalyzer,
-			Configuration configuration) {
-		return new ProjectMcCabeMetric(projectAnalyzer);
-	}
+    @Override
+    public ProjectEvaluator create(ProjectAnalyzer projectAnalyzer) {
+	return new ProjectMcCabeMetric(projectAnalyzer);
+    }
 
-	@Override
-	public Class<? extends ProjectEvaluator> getProjectEvaluatorClass() {
-		return ProjectMcCabeMetric.class;
-	}
+    @Override
+    public Class<? extends ProjectEvaluator> getProjectEvaluatorClass() {
+	return ProjectMcCabeMetric.class;
+    }
 
-	@Override
-	public Class<? extends CodeRangeEvaluator> getCodeRangeEvaluatorClass() {
-		return McCabeMetric.class;
-	}
+    @Override
+    public Class<? extends CodeRangeEvaluator> getCodeRangeEvaluatorClass() {
+	return McCabeMetric.class;
+    }
 
-	@Override
-	public String getDescription() {
-		return McCabeMetric.DESCRIPTION;
-	}
+    @Override
+    public String getDescription() {
+	return McCabeMetric.DESCRIPTION;
+    }
 
-	@Override
-	public String getName() {
-		return McCabeMetric.NAME;
-	}
+    @Override
+    public String getName() {
+	return McCabeMetric.NAME;
+    }
 
-	@Override
-	public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
-		return McCabeMetric.EVALUATED_QUALITY_CHARACTERISTICS;
-	}
+    @Override
+    public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
+	return McCabeMetric.EVALUATED_QUALITY_CHARACTERISTICS;
+    }
 
 }

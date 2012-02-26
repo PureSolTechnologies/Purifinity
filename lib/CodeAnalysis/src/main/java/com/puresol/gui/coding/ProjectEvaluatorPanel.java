@@ -15,7 +15,6 @@ import javax.swing.JToolBar;
 import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.evaluator.Evaluator;
 import com.puresol.coding.evaluator.ProjectEvaluatorFactory;
-import com.puresol.config.Configuration;
 import com.puresol.gui.Application;
 import com.puresol.gui.TabButton;
 import com.puresol.gui.progress.FinishListener;
@@ -36,21 +35,17 @@ public class ProjectEvaluatorPanel extends JPanel implements ActionListener,
 
     private ProjectAnalyzer projectAnalyser = null;
 
-    private final Configuration configuration;
     private final ProjectEvaluatorChooser evaluators = new ProjectEvaluatorChooser();
     private final JTabbedPane tabbedPane = new JTabbedPane();
     private final JButton run = new JButton("Run...");
 
-    public ProjectEvaluatorPanel(Configuration configuration) {
+    public ProjectEvaluatorPanel() {
 	super();
-	this.configuration = configuration;
 	initUI();
     }
 
-    public ProjectEvaluatorPanel(ProjectAnalyzer projectAnalyser,
-	    Configuration configuration) {
+    public ProjectEvaluatorPanel(ProjectAnalyzer projectAnalyser) {
 	super();
-	this.configuration = configuration;
 	this.projectAnalyser = projectAnalyser;
 	initUI();
     }
@@ -84,8 +79,7 @@ public class ProjectEvaluatorPanel extends JPanel implements ActionListener,
 	if ((evaluatorFactory == null) || (projectAnalyser == null)) {
 	    return;
 	}
-	Evaluator evaluator = evaluatorFactory.create(projectAnalyser,
-		configuration);
+	Evaluator evaluator = evaluatorFactory.create(projectAnalyser);
 	ProgressWindow progress = new ProgressWindow(Application.getInstance(),
 		true);
 	progress.addFinishListener(this);

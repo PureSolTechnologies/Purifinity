@@ -26,13 +26,9 @@ import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.evaluator.ProjectEvaluator;
 import com.puresol.coding.evaluator.Result;
-import com.puresol.coding.metrics.cocomo.config.ProjectComplexity;
-import com.puresol.coding.metrics.cocomo.config.SalaryCurrency;
-import com.puresol.coding.metrics.cocomo.config.YearlyDeveloperSalary;
 import com.puresol.coding.metrics.sloc.SLOCMetric;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.SourceCodeQuality;
-import com.puresol.config.PropertyDescription;
 import com.puresol.uhura.parser.ParserTree;
 
 /**
@@ -55,13 +51,6 @@ public class CoCoMo extends AbstractEvaluator implements ProjectEvaluator {
 	    + "software project by couting the physical lines of code.";
 
     public static final List<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new Vector<QualityCharacteristic>();
-
-    public static final List<PropertyDescription<?>> CONFIGURATION_PROPERTIES = new Vector<PropertyDescription<?>>();
-    static {
-	CONFIGURATION_PROPERTIES.add(new ProjectComplexity());
-	CONFIGURATION_PROPERTIES.add(new YearlyDeveloperSalary());
-	CONFIGURATION_PROPERTIES.add(new SalaryCurrency());
-    }
 
     private final CoCoMoValueSet cocomoValues = new CoCoMoValueSet();
     private final Hashtable<AnalyzedFile, CoCoMoValueSet> fileCoCoMoValues = new Hashtable<AnalyzedFile, CoCoMoValueSet>();

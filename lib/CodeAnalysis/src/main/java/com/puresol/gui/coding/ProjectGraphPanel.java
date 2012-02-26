@@ -32,7 +32,6 @@ import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.evaluator.Evaluator;
 import com.puresol.coding.evaluator.ProjectEvaluatorFactory;
 import com.puresol.coding.evaluator.Result;
-import com.puresol.config.Configuration;
 import com.puresol.gui.Application;
 import com.puresol.gui.progress.FinishListener;
 import com.puresol.gui.progress.ProgressObservable;
@@ -54,24 +53,20 @@ public class ProjectGraphPanel extends JPanel implements ListSelectionListener,
     private static final Logger logger = LoggerFactory
 	    .getLogger(ProjectGraphPanel.class);
 
-    private final Configuration configuration;
     private ProjectAnalyzer projectAnalyzer = null;
 
     private final ProjectEvaluatorChooser evaluators = new ProjectEvaluatorChooser();
     private final JTabbedPane tabbedPane = new JTabbedPane();
     private final JButton showButton = new JButton("Show...");
 
-    public ProjectGraphPanel(Configuration configuration) {
+    public ProjectGraphPanel() {
 	super();
-	this.configuration = configuration;
 	initUI();
     }
 
-    public ProjectGraphPanel(ProjectAnalyzer projectAnalyzer,
-	    Configuration configuration) {
+    public ProjectGraphPanel(ProjectAnalyzer projectAnalyzer) {
 	super();
 	this.projectAnalyzer = projectAnalyzer;
-	this.configuration = configuration;
 	initUI();
     }
 
@@ -105,8 +100,7 @@ public class ProjectGraphPanel extends JPanel implements ListSelectionListener,
     private void showDiagrams() throws IOException, PersistenceException {
 	ProjectEvaluatorFactory evaluatorFactory = (ProjectEvaluatorFactory) evaluators
 		.getSelectedValue();
-	Evaluator evaluator = evaluatorFactory.create(projectAnalyzer,
-		configuration);
+	Evaluator evaluator = evaluatorFactory.create(projectAnalyzer);
 	ProgressWindow progress = new ProgressWindow(
 		SwingUtilities.getWindowAncestor(this), true);
 	progress.addFinishListener(this);

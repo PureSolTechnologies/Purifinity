@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import com.puresol.coding.evaluator.CodeRangeEvaluatorFactory;
 import com.puresol.coding.evaluator.ProjectEvaluatorFactory;
 import com.puresol.config.APIInformation;
-import com.puresol.osgi.BundleConfigurator;
 
 public class CodeDepthActivator implements BundleActivator {
 
@@ -28,7 +27,6 @@ public class CodeDepthActivator implements BundleActivator {
 	logger.info("Starting CodeDepth...");
 
 	registerFactory(context);
-	registerConfigurator(context);
 	logger.info("Started.");
     }
 
@@ -46,19 +44,6 @@ public class CodeDepthActivator implements BundleActivator {
 
 	ServiceRegistration<?> registration = context.registerService(
 		interfaces, codeDepthFactory, properties);
-	serviceRegistrations.add(registration);
-    }
-
-    private void registerConfigurator(BundleContext context) {
-	String interfaces[] = new String[] { BundleConfigurator.class.getName() };
-	CodeDepthMetricConfigurator cocomoConfigurator = new CodeDepthMetricConfigurator();
-	Dictionary<String, Object> properties = new Hashtable<String, Object>();
-	properties.put("service.name", cocomoConfigurator.getName());
-	properties.put("service.description", cocomoConfigurator.getPathName());
-	properties.put("service.vendor", APIInformation.getPackageOwner());
-
-	ServiceRegistration<?> registration = context.registerService(
-		interfaces, cocomoConfigurator, properties);
 	serviceRegistrations.add(registration);
     }
 

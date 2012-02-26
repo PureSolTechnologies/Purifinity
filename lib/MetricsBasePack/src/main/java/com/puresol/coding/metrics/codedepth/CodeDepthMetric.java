@@ -2,36 +2,14 @@ package com.puresol.coding.metrics.codedepth;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.evaluator.CodeRangeEvaluator;
 import com.puresol.coding.evaluator.Result;
-import com.puresol.coding.metrics.codedepth.config.AnnotationFail;
-import com.puresol.coding.metrics.codedepth.config.AnnotationWarning;
-import com.puresol.coding.metrics.codedepth.config.ClassFail;
-import com.puresol.coding.metrics.codedepth.config.ClassWarning;
-import com.puresol.coding.metrics.codedepth.config.ConstructorFail;
-import com.puresol.coding.metrics.codedepth.config.ConstructorWarning;
-import com.puresol.coding.metrics.codedepth.config.EnumerationFail;
-import com.puresol.coding.metrics.codedepth.config.EnumerationWarning;
-import com.puresol.coding.metrics.codedepth.config.FileFail;
-import com.puresol.coding.metrics.codedepth.config.FileWarning;
-import com.puresol.coding.metrics.codedepth.config.FunctionFail;
-import com.puresol.coding.metrics.codedepth.config.FunctionWarning;
-import com.puresol.coding.metrics.codedepth.config.InterfaceFail;
-import com.puresol.coding.metrics.codedepth.config.InterfaceWarning;
-import com.puresol.coding.metrics.codedepth.config.ModuleFail;
-import com.puresol.coding.metrics.codedepth.config.ModuleWarning;
-import com.puresol.coding.metrics.codedepth.config.ProgramFail;
-import com.puresol.coding.metrics.codedepth.config.ProgramWarning;
-import com.puresol.coding.metrics.codedepth.config.SubroutineFail;
-import com.puresol.coding.metrics.codedepth.config.SubroutineWarning;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.SourceCodeQuality;
-import com.puresol.config.PropertyDescription;
 import com.puresol.trees.TreeIterator;
 import com.puresol.uhura.lexer.Token;
 import com.puresol.uhura.parser.ParserTree;
@@ -58,31 +36,6 @@ public class CodeDepthMetric extends AbstractEvaluator implements
 		.add(QualityCharacteristic.ANALYSABILITY);
 	EVALUATED_QUALITY_CHARACTERISTICS
 		.add(QualityCharacteristic.UNDERSTANDABILITY);
-    }
-    public static final List<PropertyDescription<?>> CONFIGURATION_PROPERTIES = new Vector<PropertyDescription<?>>();
-    static {
-	CONFIGURATION_PROPERTIES.add(new FileFail());
-	CONFIGURATION_PROPERTIES.add(new FileWarning());
-	CONFIGURATION_PROPERTIES.add(new ClassFail());
-	CONFIGURATION_PROPERTIES.add(new ClassWarning());
-	CONFIGURATION_PROPERTIES.add(new InterfaceFail());
-	CONFIGURATION_PROPERTIES.add(new InterfaceWarning());
-	CONFIGURATION_PROPERTIES.add(new EnumerationFail());
-	CONFIGURATION_PROPERTIES.add(new EnumerationWarning());
-	CONFIGURATION_PROPERTIES.add(new AnnotationFail());
-	CONFIGURATION_PROPERTIES.add(new AnnotationWarning());
-	CONFIGURATION_PROPERTIES.add(new ModuleFail());
-	CONFIGURATION_PROPERTIES.add(new ModuleWarning());
-	CONFIGURATION_PROPERTIES.add(new ConstructorFail());
-	CONFIGURATION_PROPERTIES.add(new ConstructorWarning());
-	CONFIGURATION_PROPERTIES.add(new ConstructorFail());
-	CONFIGURATION_PROPERTIES.add(new ConstructorWarning());
-	CONFIGURATION_PROPERTIES.add(new ProgramFail());
-	CONFIGURATION_PROPERTIES.add(new ProgramWarning());
-	CONFIGURATION_PROPERTIES.add(new SubroutineFail());
-	CONFIGURATION_PROPERTIES.add(new SubroutineWarning());
-	CONFIGURATION_PROPERTIES.add(new FunctionFail());
-	CONFIGURATION_PROPERTIES.add(new FunctionWarning());
     }
 
     private final List<Result> results = new ArrayList<Result>();

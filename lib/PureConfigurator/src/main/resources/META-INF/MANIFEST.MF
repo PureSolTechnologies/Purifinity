@@ -1,7 +1,0 @@
-Manifest-Version: 1.0
-Implementation-Title: PureConfigurator
-Implementation-Vendor: PureSol Technologies (http://www.puresol-technologies.com)
-Implementation-URL: http://www.puresol-technologies.com
-Implementation-Vendor-Id: http://www.puresol-technologies.com
-Specification-Title: PureConfigurator
-Specification-Vendor: PureSol Technologies (http://www.puresol-technologies.com)

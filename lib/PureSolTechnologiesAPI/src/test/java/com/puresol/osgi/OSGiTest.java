@@ -7,14 +7,9 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
-import java.util.List;
 
 import org.junit.Test;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceRegistration;
-
-import com.puresol.config.ConfigurationSource;
-import com.puresol.config.PropertyDescription;
 
 public class OSGiTest {
 
@@ -56,32 +51,6 @@ public class OSGiTest {
 		assertNotNull(context);
 		Dictionary<String, Object> properties = new Hashtable<String, Object>();
 		properties.put("o", "A");
-		ServiceRegistration<?> registration = context.registerService(
-			BundleConfigurator.class.getName(),
-			new BundleConfigurator() {
-
-			    @Override
-			    public String getName() {
-				return null;
-			    }
-
-			    @Override
-			    public String getPathName() {
-				return null;
-			    }
-
-			    @Override
-			    public List<PropertyDescription<?>> getPropertyDescriptions() {
-				return null;
-			    }
-
-			    @Override
-			    public ConfigurationSource getSource() {
-				return null;
-			    }
-
-			}, properties);
-		assertNotNull(registration);
 		/*
 		 * TODO check the uncommented code as soon as it is clear, that
 		 * the rest if the code is stable

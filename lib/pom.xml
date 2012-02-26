@@ -10,9 +10,6 @@
 	<!-- MODULES -->
 
 	<modules>
-		<module>PureConfigurator</module>
-		<module>PureConfigurator.plugin</module>
-
 		<module>PureSolTechnologiesAPI</module>
 
 		<module>uhura</module>
