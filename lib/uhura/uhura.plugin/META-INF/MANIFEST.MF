@@ -5,3 +5,4 @@ Bundle-Version: 0.1.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Name: Nyota Uhura
 Bundle-Vendor: PureSol Technologies
+Require-Bundle: org.slf4j.api;bundle-version="1.6.1"

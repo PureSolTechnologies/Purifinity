@@ -8,6 +8,8 @@
 	<packaging>pom</packaging>
 
 	<modules>
+		<module>com.puresol.utils</module>
+		<module>com.puresol.coding.analysis</module>
 		<module>com.puresol.coding.client</module>
 	</modules>
 
