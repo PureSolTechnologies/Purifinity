@@ -212,6 +212,12 @@
             name="Analysis Report"
             restorable="true">
       </view>
+      <view
+            class="com.puresol.coding.client.views.OsgiDebug"
+            id="com.puresol.coding.client.OsgiDebug"
+            name="OSGI Debug"
+            restorable="true">
+      </view>
    </extension>
    <extension
          point="org.eclipse.ui.commands">
