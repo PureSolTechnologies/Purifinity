@@ -1,4 +1,4 @@
-package com.puresol.uhura;
+package com.puresol.utils;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -19,7 +19,7 @@ public class Activator implements BundleActivator {
      */
     @Override
     public void start(BundleContext context) throws Exception {
-	logger.info("Starting Uhura library...");
+	logger.info("Starting PureSol Technologies utilities...");
 	System.out.println("Hello World!!");
     }
 
@@ -31,7 +31,7 @@ public class Activator implements BundleActivator {
      */
     @Override
     public void stop(BundleContext context) throws Exception {
-	logger.info("Stopping Uhura library...");
+	logger.info("Stopping PureSol Technologies utilities...");
 	System.out.println("Goodbye World!!");
     }
 

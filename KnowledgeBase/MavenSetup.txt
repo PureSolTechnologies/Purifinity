@@ -11,4 +11,5 @@ Manifest:
 	
 Name of project: com.puresol.uhura.lib (seems to be free!)
 
-Add dependency to parent RCP pom.xml (where the Eclipse RCP repository is defined!).
+IMPORTANT(!!!): Add dependency to parent RCP pom.xml (where the Eclipse RCP
+                repository is defined!).
