@@ -8,6 +8,7 @@
 	<name>Library parent module</name>
 
 	<modules>
+		<module>org.jfree.rcp.jfreechart</module>
 		<module>com.puresol.utils</module>
 		<module>com.puresol.uhura.lib</module>
 	</modules>

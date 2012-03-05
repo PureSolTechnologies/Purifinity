@@ -62,6 +62,8 @@
       <import plugin="javax.mail"/>
       <import plugin="org.eclipse.net4j.jms.api"/>
       <import plugin="org.slf4j.api" version="1.6.1" match="greaterOrEqual"/>
+      <import plugin="org.jfree.rcp.jfreechart" version="1.0.14" match="greaterOrEqual"/>
+      <import plugin="org.junit" version="4.8.2" match="greaterOrEqual"/>
    </requires>
 
    <plugin

@@ -37,10 +37,10 @@
 				<extensions>true</extensions>
 				<executions>
 					<execution>
+						<phase>package</phase>
 						<goals>
 							<goal>bundle</goal>
 						</goals>
-						<phase>package</phase>
 					</execution>
 				</executions>
 			</plugin>
