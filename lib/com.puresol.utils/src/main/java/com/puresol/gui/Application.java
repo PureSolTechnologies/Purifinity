@@ -18,13 +18,6 @@
 
 package com.puresol.gui;
 
-import static com.puresol.config.APIInformation.getPackageAuthor;
-import static com.puresol.config.APIInformation.getPackageBugReport;
-import static com.puresol.config.APIInformation.getPackageCopyright;
-import static com.puresol.config.APIInformation.getPackageOwner;
-import static com.puresol.config.APIInformation.getPackageVersion;
-import static com.puresol.config.APIInformation.getPackageYears;
-
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
@@ -35,8 +28,6 @@ import javax.swing.JOptionPane;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.puresol.config.ConfigFile;
 
 public class Application extends JFrame implements Runnable {
 
@@ -70,59 +61,6 @@ public class Application extends JFrame implements Runnable {
 		+ "\n\nMessage:\n\"" + e.getMessage() + "\"\n\nTrace:\n\""
 		+ stackTrace.toString() + "\"", "An error occured",
 		JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
-    }
-
-    /**
-     * This method generates the default copyright message of this API in HTML
-     * code.
-     * 
-     * @return A String containing the copyright information is returned in HTML
-     *         code.
-     */
-    public static String getCopyrightMessage() {
-	return createAboutMessage("config/about", "COPYRIGHT");
-    }
-
-    /**
-     * This method generates the default vendor information of this API in HTML
-     * code.
-     * 
-     * @return A String containing the vendor information is returned in HTML
-     *         code.
-     */
-    public static String getVendorInformation() {
-	return createAboutMessage("config/about", "VENDOR");
-    }
-
-    /**
-     * This method generates the default contact information of this API in HTML
-     * code.
-     * 
-     * @return A String containing the contact information is returned in HTML
-     *         code.
-     */
-    public static String getContactInformation() {
-	return createAboutMessage("config/about", "CONTACT");
-    }
-
-    private static String createAboutMessage(String file, String section) {
-	Application application = Application.getInstance();
-	String message = ConfigFile.readSection(file, section);
-	if (application != null) {
-	    message = message.replaceAll(
-		    "%APPLICATION%",
-		    application.getApplicationTitle() + " "
-			    + application.getApplicationVersion());
-	} else {
-	    message = message.replaceAll("%APPLICATION%", "Noname Application");
-	}
-	message = message.replaceAll("%VERSION%", getPackageVersion());
-	message = message.replaceAll("%YEARS%", getPackageYears());
-	message = message.replaceAll("%OWNER%", getPackageOwner());
-	message = message.replaceAll("%AUTHOR%", getPackageAuthor());
-	message = message.replaceAll("%COPYRIGHT%", getPackageCopyright());
-	message = message.replaceAll("%BUGREPORT%", getPackageBugReport());
-	return message;
     }
 
     private final String title;
