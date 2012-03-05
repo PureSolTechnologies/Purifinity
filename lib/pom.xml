@@ -11,6 +11,7 @@
 		<module>org.jfree.rcp.jfreechart</module>
 		<module>com.puresol.utils</module>
 		<module>com.puresol.uhura.lib</module>
+		<module>com.puresol.uhura.test</module>
 	</modules>
 
 	<repositories>
