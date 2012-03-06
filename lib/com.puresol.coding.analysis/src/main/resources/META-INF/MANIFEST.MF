@@ -11,3 +11,7 @@ Bundle-ActivationPolicy: lazy
 Require-Bundle: com.puresol.uhura.lib;bundle-version="0.1.0",
  org.slf4j.api;bundle-version="1.6.1",
  org.eclipse.core.jobs;bundle-version="3.5.101"
+Export-Package: com.puresol.coding,
+ com.puresol.coding.analysis,
+ com.puresol.coding.evaluator,
+ com.puresol.coding.quality

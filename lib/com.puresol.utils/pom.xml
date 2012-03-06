@@ -11,6 +11,7 @@
 
 	<artifactId>utils</artifactId>
 	<name>com.puresol.utils</name>
+	<packaging>bundle</packaging>
 
 	<dependencies>
 		<dependency>
@@ -36,6 +37,12 @@
 		<dependency>
 			<groupId>org.jfree</groupId>
 			<artifactId>jfreechart</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.puresol</groupId>
+			<artifactId>trees</artifactId>
+			<version>0.1.0-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
