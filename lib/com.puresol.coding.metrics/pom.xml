@@ -9,8 +9,8 @@
 		<relativePath>..</relativePath>
 	</parent>
 
-	<artifactId>utils</artifactId>
-	<name>com.puresol.utils</name>
+	<artifactId>coding.metrics</artifactId>
+	<name>com.puresol.coding.metrics</name>
 
 	<dependencies>
 		<dependency>
@@ -26,17 +26,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.jfree</groupId>
-			<artifactId>jcommon</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.jfree</groupId>
-			<artifactId>jfreechart</artifactId>
-			<scope>provided</scope>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
@@ -48,13 +38,14 @@
 				<extensions>true</extensions>
 				<executions>
 					<execution>
-						<phase>package</phase>
 						<goals>
 							<goal>bundle</goal>
 						</goals>
+						<phase>package</phase>
 					</execution>
 				</executions>
 			</plugin>
 		</plugins>
 	</build>
+
 </project>

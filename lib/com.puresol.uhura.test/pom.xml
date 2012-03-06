@@ -9,6 +9,7 @@
 	</parent>
 
 	<artifactId>uhura.test</artifactId>
+	<name>com.puresol.uhura.test</name>
 
 	<dependencies>
 		<dependency>

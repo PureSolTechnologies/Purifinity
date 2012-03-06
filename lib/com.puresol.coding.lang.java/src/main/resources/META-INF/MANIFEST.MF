@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Java Language Pack
+Bundle-SymbolicName: com.puresol.coding.lang.java
+Bundle-Version: 0.1.0.qualifier
+Bundle-Activator: com.puresol.coding.lang.java.Activator
+Bundle-Vendor: PureSol Technologies
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Import-Package: org.osgi.framework;version="1.3.0"
+Bundle-ActivationPolicy: lazy

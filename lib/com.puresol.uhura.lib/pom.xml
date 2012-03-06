@@ -10,6 +10,7 @@
 	</parent>
 
 	<artifactId>uhura.lib</artifactId>
+	<name>com.puresol.uhura.lib</name>
 
 	<dependencies>
 		<dependency>
