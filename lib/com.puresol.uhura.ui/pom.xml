@@ -12,6 +12,13 @@
 	<artifactId>uhura.ui</artifactId>
 	<name>com.puresol.uhura.ui</name>
 
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
+	</dependencies>
+
 	<build>
 		<plugins>
 			<plugin>
