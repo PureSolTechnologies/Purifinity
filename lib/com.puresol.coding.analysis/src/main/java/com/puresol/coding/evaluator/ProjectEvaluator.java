@@ -2,7 +2,7 @@ package com.puresol.coding.evaluator;
 
 import com.puresol.coding.analysis.ProjectAnalyzer;
 
-public abstract class ProjectEvaluator extends Evaluator {
+public abstract class ProjectEvaluator extends AbstractEvaluator {
 
     private static final long serialVersionUID = -4543626577984599766L;
 

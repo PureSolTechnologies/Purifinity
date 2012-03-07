@@ -2,7 +2,6 @@ package com.puresol.coding.metrics.cocomo;
 
 import java.util.ArrayList;
 import java.util.Dictionary;
-import java.util.Hashtable;
 import java.util.List;
 
 import org.osgi.framework.BundleActivator;
@@ -12,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.puresol.coding.evaluator.ProjectEvaluatorFactory;
-import com.puresol.config.APIInformation;
 
 public class CoCoMoActivator implements BundleActivator {
 
@@ -32,16 +30,10 @@ public class CoCoMoActivator implements BundleActivator {
 
     private void registerProjectFactory(BundleContext context) {
 	CoCoMoServiceFactory cocomoFactory = new CoCoMoServiceFactory();
-	String interfaces[] = new String[] { ProjectEvaluatorFactory.class
-		.getName() };
-
-	Dictionary<String, Object> properties = new Hashtable<String, Object>();
-	properties.put("service.name", cocomoFactory.getName());
-	properties.put("service.description", cocomoFactory.getDescription());
-	properties.put("service.vendor", APIInformation.getPackageOwner());
+	Dictionary<String, String> headers = context.getBundle().getHeaders();
 
 	ServiceRegistration<?> registration = context.registerService(
-		interfaces, cocomoFactory, properties);
+		ProjectEvaluatorFactory.class, cocomoFactory, headers);
 	serviceRegistrations.add(registration);
     }
 

@@ -3,9 +3,12 @@ package com.puresol.coding.metrics.codedepth;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.ProgrammingLanguage;
-import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.evaluator.CodeRangeEvaluator;
 import com.puresol.coding.evaluator.Result;
 import com.puresol.coding.quality.QualityCharacteristic;
@@ -21,8 +24,7 @@ import com.puresol.uhura.parser.ParserTree;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class CodeDepthMetric extends AbstractEvaluator implements
-	CodeRangeEvaluator {
+public class CodeDepthMetric extends CodeRangeEvaluator {
 
     private static final long serialVersionUID = -2151200082569811564L;
 
@@ -44,7 +46,7 @@ public class CodeDepthMetric extends AbstractEvaluator implements
     private int maxDepth = 0;
 
     public CodeDepthMetric(ProgrammingLanguage language, CodeRange codeRange) {
-	super();
+	super(NAME);
 	this.codeRange = codeRange;
 	langDepended = language
 		.getImplementation(LanguageDependedCodeDepthMetric.class);
@@ -65,19 +67,15 @@ public class CodeDepthMetric extends AbstractEvaluator implements
      * {@inheritDoc}
      */
     @Override
-    public void run() {
-	calculate();
+    public IStatus run(IProgressMonitor monitor) {
+	IStatus retVal = calculate(monitor);
 	recreateResultsList();
-	if (getMonitor() != null) {
-	    getMonitor().finished(this);
-	}
+	monitor.done();
+	return retVal;
     }
 
-    private void calculate() {
-	if (getMonitor() != null) {
-	    getMonitor().setRange(0, 1);
-	    getMonitor().setTitle(NAME);
-	}
+    private IStatus calculate(IProgressMonitor monitor) {
+	monitor.beginTask(NAME, 1);
 	maxDepth = 0;
 	TreeIterator<ParserTree> iterator = new TreeIterator<ParserTree>(
 		getCodeRange().getParserTree());
@@ -99,6 +97,7 @@ public class CodeDepthMetric extends AbstractEvaluator implements
 		}
 	    }
 	} while (iterator.goForward());
+	return Status.OK_STATUS;
     }
 
     private void recreateResultsList() {
@@ -111,14 +110,6 @@ public class CodeDepthMetric extends AbstractEvaluator implements
 
     public int getMaxDepth() {
 	return maxDepth;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getName() {
-	return NAME;
     }
 
     /**

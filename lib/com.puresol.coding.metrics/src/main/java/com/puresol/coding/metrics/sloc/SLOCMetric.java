@@ -14,9 +14,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.ProgrammingLanguage;
-import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.evaluator.CodeRangeEvaluator;
 import com.puresol.coding.evaluator.Result;
 import com.puresol.coding.quality.QualityCharacteristic;
@@ -35,7 +38,7 @@ import com.puresol.uhura.parser.ParserTree;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class SLOCMetric extends AbstractEvaluator implements CodeRangeEvaluator {
+public class SLOCMetric extends CodeRangeEvaluator {
 
     private static final long serialVersionUID = -4313208925226028154L;
 
@@ -95,7 +98,7 @@ public class SLOCMetric extends AbstractEvaluator implements CodeRangeEvaluator 
     private final LanguageDependedSLOCMetric langDepended;
 
     public SLOCMetric(ProgrammingLanguage language, CodeRange codeRange) {
-	super();
+	super(NAME);
 	this.codeRange = codeRange;
 	langDepended = language
 		.getImplementation(LanguageDependedSLOCMetric.class);
@@ -116,16 +119,12 @@ public class SLOCMetric extends AbstractEvaluator implements CodeRangeEvaluator 
      * {@inheritDoc}
      */
     @Override
-    public void run() {
-	if (getMonitor() != null) {
-	    getMonitor().setRange(0, 1);
-	    getMonitor().setTitle(NAME);
-	}
+    public IStatus run(IProgressMonitor monitor) {
+	monitor.beginTask(NAME, 1);
 	setup();
 	count();
-	if (getMonitor() != null) {
-	    getMonitor().finished(this);
-	}
+	monitor.done();
+	return Status.OK_STATUS;
     }
 
     private void setup() {
@@ -186,15 +185,6 @@ public class SLOCMetric extends AbstractEvaluator implements CodeRangeEvaluator 
 		lineLengths));
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.puresol.coding.analysis.SLOCMetric#getPhyLOC()
-     */
-    public SLOCResult getResult() {
-	return sloc;
-    }
-
     public void print() {
 	System.out.println("physical lines: " + sloc.getPhyLOC());
 	System.out.println("productive lines: " + sloc.getProLOC());
@@ -202,33 +192,20 @@ public class SLOCMetric extends AbstractEvaluator implements CodeRangeEvaluator 
 	System.out.println("blank lines: " + sloc.getBlLOC());
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    public SLOCResult getSLOCResult() {
+	return sloc;
+    }
+
     @Override
     public SourceCodeQuality getQuality() {
 	return SLOCQuality.get(codeRange.getType(), sloc);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getName() {
-	return NAME;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String getDescription() {
 	return DESCRIPTION;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
 	return EVALUATED_QUALITY_CHARACTERISTICS;

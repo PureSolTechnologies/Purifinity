@@ -9,7 +9,7 @@ import com.puresol.coding.CodeRange;
  * @author Rick-Rainer Ludwig
  * 
  */
-public abstract class CodeRangeEvaluator extends Evaluator {
+public abstract class CodeRangeEvaluator extends AbstractEvaluator {
 
     private static final long serialVersionUID = 342860258552477405L;
 

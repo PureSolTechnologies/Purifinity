@@ -15,45 +15,40 @@ import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.SourceCodeQuality;
 
 public class ProjectNormalizedMaintainabilityIndex extends
-		AbstractProjectMetric<NormalizedMaintainabilityIndex> {
+	AbstractProjectMetric<NormalizedMaintainabilityIndex> {
 
-	private static final long serialVersionUID = -5093217611195212999L;
+    private static final long serialVersionUID = -5093217611195212999L;
 
-	public ProjectNormalizedMaintainabilityIndex(ProjectAnalyzer projectAnalyzer) {
-		super(projectAnalyzer);
+    public ProjectNormalizedMaintainabilityIndex(ProjectAnalyzer projectAnalyzer) {
+	super(projectAnalyzer);
+    }
+
+    @Override
+    protected Map<String, SourceCodeQuality> processFile(AnalyzedFile file)
+	    throws IOException {
+	Map<String, SourceCodeQuality> results = new HashMap<String, SourceCodeQuality>();
+	Analysis analysis = getProjectAnalyzer().getAnalysis(file);
+	ProgrammingLanguage language = analysis.getLanguage();
+
+	for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
+	    NormalizedMaintainabilityIndex metric = new NormalizedMaintainabilityIndex(
+		    language, codeRange);
+	    metric.schedule();
+	    results.put(
+		    file.getFile().getPath() + ": "
+			    + codeRange.getType().getName() + " '"
+			    + codeRange.getName() + "'", metric.getQuality());
 	}
+	return results;
+    }
 
-	@Override
-	protected Map<String, SourceCodeQuality> processFile(AnalyzedFile file)
-			throws IOException {
-		Map<String, SourceCodeQuality> results = new HashMap<String, SourceCodeQuality>();
-		Analysis analysis = getProjectAnalyzer().getAnalysis(file);
-		ProgrammingLanguage language = analysis.getLanguage();
+    @Override
+    public String getDescription() {
+	return NormalizedMaintainabilityIndex.DESCRIPTION;
+    }
 
-		for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
-			NormalizedMaintainabilityIndex metric = new NormalizedMaintainabilityIndex(
-					language, codeRange);
-			metric.run();
-			results.put(
-					file.getFile().getPath() + ": "
-							+ codeRange.getType().getName() + " '"
-							+ codeRange.getName() + "'", metric.getQuality());
-		}
-		return results;
-	}
-
-	@Override
-	public String getName() {
-		return NormalizedMaintainabilityIndex.NAME;
-	}
-
-	@Override
-	public String getDescription() {
-		return NormalizedMaintainabilityIndex.DESCRIPTION;
-	}
-
-	@Override
-	public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
-		return NormalizedMaintainabilityIndex.EVALUATED_QUALITY_CHARACTERISTICS;
-	}
+    @Override
+    public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
+	return NormalizedMaintainabilityIndex.EVALUATED_QUALITY_CHARACTERISTICS;
+    }
 }

@@ -13,9 +13,12 @@ package com.puresol.coding.metrics.normmaint;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.ProgrammingLanguage;
-import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.evaluator.CodeRangeEvaluator;
 import com.puresol.coding.evaluator.Result;
 import com.puresol.coding.metrics.halstead.HalsteadMetric;
@@ -25,8 +28,7 @@ import com.puresol.coding.metrics.sloc.SLOCResult;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.SourceCodeQuality;
 
-public class NormalizedMaintainabilityIndex extends AbstractEvaluator implements
-	CodeRangeEvaluator {
+public class NormalizedMaintainabilityIndex extends CodeRangeEvaluator {
 
     private static final long serialVersionUID = 2789695185933616684L;
 
@@ -51,7 +53,7 @@ public class NormalizedMaintainabilityIndex extends AbstractEvaluator implements
 
     public NormalizedMaintainabilityIndex(ProgrammingLanguage language,
 	    CodeRange codeRange) {
-	super();
+	super(NAME);
 	this.codeRange = codeRange;
 	slocMetric = new SLOCMetric(language, getCodeRange());
 	mcCabeMetric = new McCabeMetric(language, getCodeRange());
@@ -86,28 +88,19 @@ public class NormalizedMaintainabilityIndex extends AbstractEvaluator implements
      * @return
      */
     @Override
-    public void run() {
-	if (getMonitor() != null) {
-	    getMonitor().setRange(0, 4);
-	    getMonitor().setTitle(NAME);
-	}
+    public IStatus run(IProgressMonitor monitor) {
+	monitor.beginTask(NAME, 4);
 
 	checkInput();
 
-	slocMetric.run();
-	if (getMonitor() != null) {
-	    getMonitor().setStatus(1);
-	}
-	mcCabeMetric.run();
-	if (getMonitor() != null) {
-	    getMonitor().setStatus(2);
-	}
-	halsteadMetric.run();
-	if (getMonitor() != null) {
-	    getMonitor().setStatus(3);
-	}
+	slocMetric.schedule();
+	monitor.worked(1);
+	mcCabeMetric.schedule();
+	monitor.worked(2);
+	halsteadMetric.schedule();
+	monitor.worked(3);
 
-	SLOCResult sloc = slocMetric.getResult();
+	SLOCResult sloc = slocMetric.getSLOCResult();
 	double MIwoc = 171.0 - 5.2
 		* Math.log(halsteadMetric.getHalsteadVolume()) - 0.23
 		* mcCabeMetric.getCyclomaticNumber() - 16.2
@@ -115,9 +108,8 @@ public class NormalizedMaintainabilityIndex extends AbstractEvaluator implements
 	double MIcw = 50 * Math.sin(Math.sqrt(2.4 * sloc.getComLOC()
 		/ sloc.getPhyLOC()));
 	result = new NormalizedMaintainabilityIndexResult(MIwoc, MIcw);
-	if (getMonitor() != null) {
-	    getMonitor().finished(this);
-	}
+	monitor.done();
+	return Status.OK_STATUS;
     }
 
     public void print() {
@@ -162,16 +154,6 @@ public class NormalizedMaintainabilityIndex extends AbstractEvaluator implements
     public SourceCodeQuality getQuality() {
 	return NormalizedMaintainabilityQuality.get(getCodeRange().getType(),
 		result);
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @return
-     */
-    @Override
-    public String getName() {
-	return NAME;
     }
 
     /**

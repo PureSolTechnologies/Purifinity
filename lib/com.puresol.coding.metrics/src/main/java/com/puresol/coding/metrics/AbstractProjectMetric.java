@@ -9,9 +9,12 @@ import java.util.Map;
 
 import javax.swing.JOptionPane;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+
 import com.puresol.coding.analysis.AnalyzedFile;
 import com.puresol.coding.analysis.ProjectAnalyzer;
-import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.evaluator.CodeRangeEvaluator;
 import com.puresol.coding.evaluator.ProjectEvaluator;
 import com.puresol.coding.evaluator.Result;
@@ -19,7 +22,7 @@ import com.puresol.coding.quality.SourceCodeQuality;
 import com.puresol.gui.Application;
 
 public abstract class AbstractProjectMetric<T extends CodeRangeEvaluator>
-	extends AbstractEvaluator implements ProjectEvaluator {
+	extends ProjectEvaluator {
 
     private static final long serialVersionUID = -5093217611195212999L;
 
@@ -28,7 +31,7 @@ public abstract class AbstractProjectMetric<T extends CodeRangeEvaluator>
     private SourceCodeQuality projectQuality = SourceCodeQuality.UNSPECIFIED;
 
     public AbstractProjectMetric(ProjectAnalyzer projectAnalyzer) {
-	super();
+	super(projectAnalyzer.getName());
 	this.projectAnalyzer = projectAnalyzer;
     }
 
@@ -38,28 +41,22 @@ public abstract class AbstractProjectMetric<T extends CodeRangeEvaluator>
     }
 
     @Override
-    public void run() {
+    public IStatus run(IProgressMonitor monitor) {
 	try {
 	    qualities.clear();
 	    List<AnalyzedFile> files = projectAnalyzer.getAnalyzedFiles();
-	    if (getMonitor() != null) {
-		getMonitor().setRange(0, files.size());
-		getMonitor().setTitle(getName());
-		getMonitor().showProgressPercent();
-	    }
+	    monitor.beginTask(getName(), files.size());
 	    int sum = 0;
 	    int count = 0;
 	    int qualCount = 0;
 	    Collections.sort(files);
 	    for (AnalyzedFile file : files) {
-		if (Thread.interrupted()) {
-		    return;
+		if (monitor.isCanceled()) {
+		    monitor.done();
+		    return Status.CANCEL_STATUS;
 		}
-		if (getMonitor() != null) {
-		    count++;
-		    getMonitor().setStatus(count);
-		    getMonitor().setText(file.getFile().getPath());
-		}
+		count++;
+		monitor.worked(count);
 		Map<String, SourceCodeQuality> levels;
 		levels = processFile(file);
 		qualities.putAll(levels);
@@ -73,14 +70,14 @@ public abstract class AbstractProjectMetric<T extends CodeRangeEvaluator>
 	    }
 	    int result = (int) Math.round((double) sum / (double) qualCount);
 	    projectQuality = SourceCodeQuality.fromLevel(result);
+	    monitor.done();
+	    return Status.OK_STATUS;
 	} catch (IOException e) {
 	    JOptionPane.showMessageDialog(Application.getInstance(),
 		    "IOException was thrown!", "Error",
 		    JOptionPane.ERROR_MESSAGE);
-	} finally {
-	    if (getMonitor() != null) {
-		getMonitor().finished(this);
-	    }
+	    monitor.done();
+	    return new Status(IStatus.ERROR, getName(), e.getMessage(), e);
 	}
     }
 

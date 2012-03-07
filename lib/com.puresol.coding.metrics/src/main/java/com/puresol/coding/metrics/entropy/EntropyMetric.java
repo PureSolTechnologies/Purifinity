@@ -14,9 +14,12 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.ProgrammingLanguage;
-import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.evaluator.CodeRangeEvaluator;
 import com.puresol.coding.evaluator.Result;
 import com.puresol.coding.metrics.halstead.HalsteadMetric;
@@ -31,8 +34,7 @@ import com.puresol.coding.quality.SourceCodeQuality;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class EntropyMetric extends AbstractEvaluator implements
-	CodeRangeEvaluator {
+public class EntropyMetric extends CodeRangeEvaluator {
 
     private static final long serialVersionUID = 1300404171923622327L;
 
@@ -51,7 +53,7 @@ public class EntropyMetric extends AbstractEvaluator implements
     private EntropyResult result;
 
     public EntropyMetric(ProgrammingLanguage language, CodeRange codeRange) {
-	super();
+	super(NAME);
 	this.codeRange = codeRange;
 	halstead = new HalsteadMetric(language, getCodeRange());
     }
@@ -68,20 +70,16 @@ public class EntropyMetric extends AbstractEvaluator implements
      * {@inheritDoc}
      */
     @Override
-    public void run() {
-	calculate();
+    public IStatus run(IProgressMonitor monitor) {
+	IStatus retVal = calculate(monitor);
 	recreateResultsList();
+	return retVal;
     }
 
-    private void calculate() {
-	if (getMonitor() != null) {
-	    getMonitor().setRange(0, 2);
-	    getMonitor().setTitle(NAME);
-	}
-	halstead.run();
-	if (getMonitor() != null) {
-	    getMonitor().setStatus(1);
-	}
+    private IStatus calculate(IProgressMonitor monitor) {
+	monitor.beginTask(NAME, 2);
+	halstead.schedule();
+	monitor.worked(1);
 
 	Hashtable<String, Integer> operands = halstead.getOperands();
 
@@ -106,9 +104,8 @@ public class EntropyMetric extends AbstractEvaluator implements
 	result = new EntropyResult(halstead.getVocabularySize(),
 		halstead.getProgramLength(), entropy, maxEntropy, normEntropy,
 		entropyRedundancy, redundancy, normalizedRedundancy);
-	if (getMonitor() != null) {
-	    getMonitor().finished(this);
-	}
+	monitor.done();
+	return Status.OK_STATUS;
     }
 
     private void recreateResultsList() {
@@ -204,14 +201,6 @@ public class EntropyMetric extends AbstractEvaluator implements
 	    return SourceCodeQuality.MEDIUM;
 	}
 	return SourceCodeQuality.HIGH;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getName() {
-	return NAME;
     }
 
     /**

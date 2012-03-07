@@ -16,42 +16,37 @@ import com.puresol.coding.quality.SourceCodeQuality;
 
 public class ProjectEntropyMetric extends AbstractProjectMetric<EntropyMetric> {
 
-	private static final long serialVersionUID = -5093217611195212999L;
+    private static final long serialVersionUID = -5093217611195212999L;
 
-	public ProjectEntropyMetric(ProjectAnalyzer projectAnalyzer) {
-		super(projectAnalyzer);
+    public ProjectEntropyMetric(ProjectAnalyzer projectAnalyzer) {
+	super(projectAnalyzer);
+    }
+
+    @Override
+    protected Map<String, SourceCodeQuality> processFile(AnalyzedFile file)
+	    throws IOException {
+	Map<String, SourceCodeQuality> results = new HashMap<String, SourceCodeQuality>();
+	Analysis analysis = getProjectAnalyzer().getAnalysis(file);
+	ProgrammingLanguage language = analysis.getLanguage();
+
+	for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
+	    EntropyMetric metric = new EntropyMetric(language, codeRange);
+	    metric.schedule();
+	    results.put(
+		    file.getFile().getPath() + ": "
+			    + codeRange.getType().getName() + " '"
+			    + codeRange.getName() + "'", metric.getQuality());
 	}
+	return results;
+    }
 
-	@Override
-	protected Map<String, SourceCodeQuality> processFile(AnalyzedFile file)
-			throws IOException {
-		Map<String, SourceCodeQuality> results = new HashMap<String, SourceCodeQuality>();
-		Analysis analysis = getProjectAnalyzer().getAnalysis(file);
-		ProgrammingLanguage language = analysis.getLanguage();
+    @Override
+    public String getDescription() {
+	return EntropyMetric.DESCRIPTION;
+    }
 
-		for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
-			EntropyMetric metric = new EntropyMetric(language, codeRange);
-			metric.run();
-			results.put(
-					file.getFile().getPath() + ": "
-							+ codeRange.getType().getName() + " '"
-							+ codeRange.getName() + "'", metric.getQuality());
-		}
-		return results;
-	}
-
-	@Override
-	public String getName() {
-		return EntropyMetric.NAME;
-	}
-
-	@Override
-	public String getDescription() {
-		return EntropyMetric.DESCRIPTION;
-	}
-
-	@Override
-	public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
-		return EntropyMetric.EVALUATED_QUALITY_CHARACTERISTICS;
-	}
+    @Override
+    public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
+	return EntropyMetric.EVALUATED_QUALITY_CHARACTERISTICS;
+    }
 }

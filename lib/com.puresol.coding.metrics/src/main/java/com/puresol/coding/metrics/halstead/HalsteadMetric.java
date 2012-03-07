@@ -14,10 +14,13 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.CodeRangeType;
 import com.puresol.coding.ProgrammingLanguage;
-import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.evaluator.CodeRangeEvaluator;
 import com.puresol.coding.evaluator.Result;
 import com.puresol.coding.quality.QualityCharacteristic;
@@ -25,8 +28,7 @@ import com.puresol.coding.quality.SourceCodeQuality;
 import com.puresol.trees.TreeIterator;
 import com.puresol.uhura.parser.ParserTree;
 
-public class HalsteadMetric extends AbstractEvaluator implements
-	CodeRangeEvaluator {
+public class HalsteadMetric extends CodeRangeEvaluator {
 
     private static final long serialVersionUID = -7823038852668468658L;
 
@@ -46,7 +48,7 @@ public class HalsteadMetric extends AbstractEvaluator implements
     private HalsteadResult result;
 
     public HalsteadMetric(ProgrammingLanguage language, CodeRange codeRange) {
-	super();
+	super(NAME);
 	this.codeRange = codeRange;
 	langDepended = language
 		.getImplementation(LanguageDependedHalsteadMetric.class);
@@ -67,16 +69,12 @@ public class HalsteadMetric extends AbstractEvaluator implements
      * {@inheritDoc}
      */
     @Override
-    public void run() {
-	if (getMonitor() != null) {
-	    getMonitor().setRange(0, 1);
-	    getMonitor().setTitle(NAME);
-	}
+    public IStatus run(IProgressMonitor monitor) {
+	monitor.beginTask(NAME, 1);
 	createHashtables();
 	calculateValues();
-	if (getMonitor() != null) {
-	    getMonitor().finished(this);
-	}
+	monitor.done();
+	return Status.OK_STATUS;
     }
 
     private void createHashtables() {
@@ -240,14 +238,6 @@ public class HalsteadMetric extends AbstractEvaluator implements
 	    return SourceCodeQuality.HIGH;
 	}
 	return SourceCodeQuality.HIGH; // not evaluated...
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getName() {
-	return NAME;
     }
 
     /**

@@ -3,7 +3,6 @@ package com.puresol.coding.metrics.normmaint;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 
 import java.io.File;
@@ -41,7 +40,6 @@ public class ProjectNormalizedMaintainabilityIndexTest {
 	assertFalse(metric.getName().isEmpty());
 	assertFalse(metric.getDescription().isEmpty());
 	assertNotNull(metric.getEvaluatedQualityCharacteristics());
-	assertNull(metric.getMonitor());
 	assertEquals(SourceCodeQuality.UNSPECIFIED, metric.getQuality());
 	assertNotNull(metric.getResults());
 	assertNotNull(metric.getTimeStamp());

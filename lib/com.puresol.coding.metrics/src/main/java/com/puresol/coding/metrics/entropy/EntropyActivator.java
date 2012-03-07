@@ -2,7 +2,6 @@ package com.puresol.coding.metrics.entropy;
 
 import java.util.ArrayList;
 import java.util.Dictionary;
-import java.util.Hashtable;
 import java.util.List;
 
 import org.osgi.framework.BundleActivator;
@@ -13,7 +12,6 @@ import org.slf4j.LoggerFactory;
 
 import com.puresol.coding.evaluator.CodeRangeEvaluatorFactory;
 import com.puresol.coding.evaluator.ProjectEvaluatorFactory;
-import com.puresol.config.APIInformation;
 
 public class EntropyActivator implements BundleActivator {
 
@@ -33,19 +31,14 @@ public class EntropyActivator implements BundleActivator {
 
     private void registerFactory(BundleContext context) {
 	EntropyMetricServiceFactory entropyMetricFactory = new EntropyMetricServiceFactory();
-
-	String interfaces[] = new String[] {
-		ProjectEvaluatorFactory.class.getName(),
-		CodeRangeEvaluatorFactory.class.getName() };
-
-	Dictionary<String, Object> properties = new Hashtable<String, Object>();
-	properties.put("service.name", entropyMetricFactory.getName());
-	properties.put("service.description",
-		entropyMetricFactory.getDescription());
-	properties.put("service.vendor", APIInformation.getPackageOwner());
+	Dictionary<String, String> headers = context.getBundle().getHeaders();
 
 	ServiceRegistration<?> registration = context.registerService(
-		interfaces, entropyMetricFactory, properties);
+		ProjectEvaluatorFactory.class, entropyMetricFactory, headers);
+	serviceRegistrations.add(registration);
+
+	registration = context.registerService(CodeRangeEvaluatorFactory.class,
+		entropyMetricFactory, headers);
 	serviceRegistrations.add(registration);
     }
 

@@ -15,6 +15,9 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Vector;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +26,6 @@ import com.puresol.coding.CodeRangeType;
 import com.puresol.coding.analysis.Analysis;
 import com.puresol.coding.analysis.AnalyzedFile;
 import com.puresol.coding.analysis.ProjectAnalyzer;
-import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.evaluator.ProjectEvaluator;
 import com.puresol.coding.evaluator.Result;
 import com.puresol.coding.metrics.sloc.SLOCMetric;
@@ -38,7 +40,7 @@ import com.puresol.uhura.parser.ParserTree;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class CoCoMo extends AbstractEvaluator implements ProjectEvaluator {
+public class CoCoMo extends ProjectEvaluator {
 
     private static final long serialVersionUID = 5098378023541671490L;
 
@@ -57,7 +59,7 @@ public class CoCoMo extends AbstractEvaluator implements ProjectEvaluator {
     private final ProjectAnalyzer projectAnalyzer;
 
     public CoCoMo(ProjectAnalyzer projectAnalyzer) {
-	super();
+	super(NAME);
 	this.projectAnalyzer = projectAnalyzer;
     }
 
@@ -73,30 +75,23 @@ public class CoCoMo extends AbstractEvaluator implements ProjectEvaluator {
      * {@inheritDoc}
      */
     @Override
-    public void run() {
+    public IStatus run(IProgressMonitor monitor) {
 	List<AnalyzedFile> files = projectAnalyzer.getAnalyzedFiles();
-	if (getMonitor() != null) {
-	    getMonitor().setRange(0, files.size());
-	    getMonitor().setTitle(NAME);
-	    getMonitor().showProgressPercent();
-	}
+	monitor.beginTask(NAME, files.size());
 	int sloc = 0;
 	int count = 0;
 	for (AnalyzedFile file : files) {
-	    if (Thread.interrupted()) {
-		return;
+	    if (monitor.isCanceled()) {
+		monitor.done();
+		return Status.CANCEL_STATUS;
 	    }
-	    if (getMonitor() != null) {
-		count++;
-		getMonitor().setStatus(count);
-		getMonitor().setText(file.getFile().getPath());
-	    }
+	    count++;
+	    monitor.worked(count);
 	    sloc += getFileSLOC(file);
 	}
 	cocomoValues.setSloc(sloc);
-	if (getMonitor() != null) {
-	    getMonitor().finished(this);
-	}
+	monitor.done();
+	return Status.OK_STATUS;
     }
 
     private int getFileSLOC(AnalyzedFile file) {
@@ -105,8 +100,8 @@ public class CoCoMo extends AbstractEvaluator implements ProjectEvaluator {
 	    ParserTree parserTree = analysis.getParserTree();
 	    SLOCMetric metric = new SLOCMetric(analysis.getLanguage(),
 		    new CodeRange("", CodeRangeType.FILE, parserTree));
-	    metric.run();
-	    int sloc = metric.getResult().getProLOC();
+	    metric.schedule();
+	    int sloc = metric.getSLOCResult().getProLOC();
 	    addCodeRangeCoCoMo(file, sloc);
 	    return sloc;
 	} catch (IOException e) {
@@ -148,14 +143,6 @@ public class CoCoMo extends AbstractEvaluator implements ProjectEvaluator {
 		return;
 	    }
 	}
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getName() {
-	return NAME;
     }
 
     /**

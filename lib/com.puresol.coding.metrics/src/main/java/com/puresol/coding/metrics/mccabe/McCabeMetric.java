@@ -13,9 +13,12 @@ package com.puresol.coding.metrics.mccabe;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.ProgrammingLanguage;
-import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.evaluator.CodeRangeEvaluator;
 import com.puresol.coding.evaluator.Result;
 import com.puresol.coding.quality.QualityCharacteristic;
@@ -29,8 +32,7 @@ import com.puresol.uhura.parser.ParserTree;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class McCabeMetric extends AbstractEvaluator implements
-	CodeRangeEvaluator {
+public class McCabeMetric extends CodeRangeEvaluator {
 
     private static final long serialVersionUID = 4402746003873908301L;
 
@@ -52,7 +54,7 @@ public class McCabeMetric extends AbstractEvaluator implements
     private final CodeRange codeRange;
 
     public McCabeMetric(ProgrammingLanguage language, CodeRange codeRange) {
-	super();
+	super(NAME);
 	this.codeRange = codeRange;
 	langDepended = language
 		.getImplementation(LanguageDependedMcCabeMetric.class);
@@ -61,31 +63,20 @@ public class McCabeMetric extends AbstractEvaluator implements
 	}
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public CodeRange getCodeRange() {
 	return codeRange;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public void run() {
-	calculate();
+    public IStatus run(IProgressMonitor monitor) {
+	IStatus retVal = calculate(monitor);
 	createResultsList();
-	if (getMonitor() != null) {
-	    getMonitor().finished(this);
-	}
+	return retVal;
     }
 
-    private void calculate() {
-	if (getMonitor() != null) {
-	    getMonitor().setRange(0, 1);
-	    getMonitor().setTitle(NAME);
-	}
+    private IStatus calculate(IProgressMonitor monitor) {
+	monitor.beginTask(NAME, 1);
 	cyclomaticNumber = 1;
 	TreeIterator<ParserTree> iterator = new TreeIterator<ParserTree>(
 		codeRange.getParserTree());
@@ -93,6 +84,8 @@ public class McCabeMetric extends AbstractEvaluator implements
 	    cyclomaticNumber += langDepended
 		    .increasesCyclomaticComplexityBy(iterator.getCurrentNode());
 	} while (iterator.goForward());
+	monitor.done();
+	return Status.OK_STATUS;
     }
 
     private void createResultsList() {
@@ -118,33 +111,16 @@ public class McCabeMetric extends AbstractEvaluator implements
 	return true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public SourceCodeQuality getQuality() {
 	return McCabeQuality.get(getCodeRange().getType(), cyclomaticNumber);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getName() {
-	return NAME;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String getDescription() {
 	return DESCRIPTION;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
 	return EVALUATED_QUALITY_CHARACTERISTICS;

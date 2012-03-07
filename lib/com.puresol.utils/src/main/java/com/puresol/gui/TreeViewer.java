@@ -17,44 +17,44 @@ import javax.swing.tree.TreeSelectionModel;
  */
 public class TreeViewer<T extends com.puresol.trees.Tree<T>> extends JTree {
 
-	private static final long serialVersionUID = 3032479272552076138L;
+    private static final long serialVersionUID = 3032479272552076138L;
 
-	private final TreeViewerModel<T> treeModel;
+    private final TreeViewerModel<T> treeModel;
 
+    @SuppressWarnings("unchecked")
+    public TreeViewer() {
+	super(new TreeViewerModel<T>());
+	treeModel = (TreeViewerModel<T>) getModel();
+	initUI();
+    }
+
+    @SuppressWarnings("unchecked")
+    public TreeViewer(T dataTree) {
+	super(new TreeViewerModel<T>());
+	treeModel = (TreeViewerModel<T>) getModel();
+	initUI();
+	treeModel.setDataTree(dataTree);
+    }
+
+    private void initUI() {
+	setEditable(false);
+	getSelectionModel().setSelectionMode(
+		TreeSelectionModel.SINGLE_TREE_SELECTION);
+	setShowsRootHandles(true);
+    }
+
+    public T getSelection() {
+	TreePath path = getSelectionPath();
+	if (path == null) {
+	    return null;
+	}
 	@SuppressWarnings("unchecked")
-	public TreeViewer() {
-		super(new TreeViewerModel<T>());
-		treeModel = (TreeViewerModel<T>) getModel();
-		initUI();
-	}
+	T t = (T) path.getLastPathComponent();
+	return t;
+    }
 
-	@SuppressWarnings("unchecked")
-	public TreeViewer(T dataTree) {
-		super(new TreeViewerModel<T>());
-		treeModel = (TreeViewerModel<T>) getModel();
-		initUI();
-		treeModel.setDataTree(dataTree);
-	}
-
-	private void initUI() {
-		setEditable(false);
-		getSelectionModel().setSelectionMode(
-				TreeSelectionModel.SINGLE_TREE_SELECTION);
-		setShowsRootHandles(true);
-	}
-
-	public T getSelection() {
-		TreePath path = getSelectionPath();
-		if (path == null) {
-			return null;
-		}
-		@SuppressWarnings("unchecked")
-		T t = (T) path.getLastPathComponent();
-		return t;
-	}
-
-	public void setTreeData(T dataTree) {
-		treeModel.setDataTree(dataTree);
-	}
+    public void setTreeData(T dataTree) {
+	treeModel.setDataTree(dataTree);
+    }
 
 }

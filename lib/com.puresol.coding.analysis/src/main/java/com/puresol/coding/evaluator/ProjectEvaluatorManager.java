@@ -32,7 +32,7 @@ public class ProjectEvaluatorManager {
 	}
     }
 
-    public static List<Result> getAvailableResults(Evaluator evaluator) {
+    public static List<Result> getAvailableResults(AbstractEvaluator evaluator) {
 	return evaluator.getResults();
     }
 
