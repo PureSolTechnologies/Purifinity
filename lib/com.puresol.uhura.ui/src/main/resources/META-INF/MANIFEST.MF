@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Uhura UI
+Bundle-SymbolicName: com.puresol.uhura.ui
+Bundle-Version: 0.1.0.qualifier
+Bundle-Activator: com.puresol.uhura.ui.Activator
+Bundle-Vendor: PureSol Technologies
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Import-Package: org.osgi.framework;version="1.3.0"
+Bundle-ActivationPolicy: lazy
