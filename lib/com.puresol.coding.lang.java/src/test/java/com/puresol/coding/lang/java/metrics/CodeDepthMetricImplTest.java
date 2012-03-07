@@ -34,7 +34,7 @@ public class CodeDepthMetricImplTest {
 	assertNotNull(codeRanges);
 	assertTrue(codeRanges.size() > 0);
 	CodeDepthMetric metric = new CodeDepthMetric(java, codeRanges.get(0));
-	metric.run();
+	metric.schedule();
 	assertEquals(2, metric.getMaxDepth());
     }
 }

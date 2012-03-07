@@ -1,7 +1,6 @@
 package com.puresol.coding.lang.java;
 
 import java.util.Dictionary;
-import java.util.Hashtable;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -10,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.puresol.coding.ProgrammingLanguage;
-import com.puresol.config.APIInformation;
 
 /**
  * This class is used as OSGi bundle activator. This class only registers and
@@ -32,13 +30,10 @@ public class Activator implements BundleActivator {
 	Java java = Java.getInstance();
 	java.setBundleContext(context);
 
-	Dictionary<String, Object> properties = new Hashtable<String, Object>();
-	properties.put("service.name", java.getName());
-	properties.put("service.description", java.getName());
-	properties.put("service.vendor", APIInformation.getPackageOwner());
+	Dictionary<String, String> headers = context.getBundle().getHeaders();
 
-	registration = context.registerService(
-		ProgrammingLanguage.class.getName(), java, properties);
+	registration = context.registerService(ProgrammingLanguage.class, java,
+		headers);
 
 	logger.info("Started.");
     }

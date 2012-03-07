@@ -28,6 +28,22 @@
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.jibx.config.3rdparty.org.eclipse</groupId>
+			<artifactId>org.eclipse.core.jobs</artifactId>
+			<version>3.5.100.v20110404</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jibx.config.3rdparty.org.eclipse</groupId>
+			<artifactId>org.eclipse.core.runtime</artifactId>
+			<version>3.7.0.v20110110</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jibx.config.3rdparty.org.eclipse</groupId>
+			<artifactId>org.eclipse.equinox.common</artifactId>
+			<version>3.6.0.v20110523</version>
+		</dependency>
 	</dependencies>
 
 	<build>

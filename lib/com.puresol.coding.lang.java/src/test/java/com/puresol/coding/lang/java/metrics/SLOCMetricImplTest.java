@@ -37,8 +37,8 @@ public class SLOCMetricImplTest {
 	    assertNotNull(codeRanges);
 	    assertTrue(codeRanges.size() > 0);
 	    SLOCMetric metric = new SLOCMetric(java, codeRanges.get(2));
-	    metric.run();
-	    SLOCResult sloc = metric.getResult();
+	    metric.schedule();
+	    SLOCResult sloc = metric.getSLOCResult();
 	    System.out.println("phyLOC: " + sloc.getPhyLOC());
 	    System.out.println("proLOC: " + sloc.getProLOC());
 	    System.out.println("comLOC: " + sloc.getComLOC());

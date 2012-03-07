@@ -1,7 +1,6 @@
 package com.puresol.coding.lang.fortran;
 
 import java.util.Dictionary;
-import java.util.Hashtable;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -10,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.puresol.coding.ProgrammingLanguage;
-import com.puresol.config.APIInformation;
 
 /**
  * This class is used as OSGi bundle activator. This class only registers and
@@ -33,13 +31,10 @@ public class Activator implements BundleActivator {
 	Fortran fortran = Fortran.getInstance();
 	fortran.setBundleContext(context);
 
-	Dictionary<String, Object> properties = new Hashtable<String, Object>();
-	properties.put("service.name", fortran.getName());
-	properties.put("service.description", fortran.getName());
-	properties.put("service.vendor", APIInformation.getPackageOwner());
+	Dictionary<String, String> headers = context.getBundle().getHeaders();
 
-	registration = context.registerService(
-		ProgrammingLanguage.class.getName(), fortran, properties);
+	registration = context.registerService(ProgrammingLanguage.class,
+		fortran, headers);
 
 	logger.info("Started.");
     }
