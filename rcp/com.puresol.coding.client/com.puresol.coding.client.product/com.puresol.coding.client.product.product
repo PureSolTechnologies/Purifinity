@@ -30,6 +30,7 @@
 
    <features>
       <feature id="com.puresol.coding.client.feature" version="0.1.0.qualifier"/>
+      <feature id="com.puresol.coding.analysis.feature" version="0.1.0.qualifier"/>
    </features>
 
 
