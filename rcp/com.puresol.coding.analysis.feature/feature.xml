@@ -23,10 +23,54 @@
    <requires>
       <import plugin="org.eclipse.osgi"/>
       <import plugin="org.slf4j.api"/>
+      <import plugin="org.slf4j.api" version="1.6.1" match="greaterOrEqual"/>
+      <import plugin="org.jfree.rcp.jfreechart" version="1.0.14" match="greaterOrEqual"/>
+      <import plugin="org.junit" version="4.8.2" match="greaterOrEqual"/>
+      <import plugin="com.puresol.trees" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="com.puresol.utils" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="com.puresol.coding.analysis" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="com.puresol.uhura.lib" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.jobs" version="3.5.101" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.runtime"/>
    </requires>
 
    <plugin
          id="com.puresol.trees"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.puresol.utils"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.puresol.uhura.lib"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.puresol.uhura.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.puresol.coding.metrics"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.puresol.coding.analysis"
          download-size="0"
          install-size="0"
          version="0.0.0"

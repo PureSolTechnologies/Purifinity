@@ -1,40 +1,41 @@
 Manifest-Version: 1.0
-Export-Package: com.puresol.utils;uses:="org.osgi.framework,org.slf4j,
- org.junit",com.puresol.config;uses:="org.slf4j",com.puresol.data,com.
- puresol.filefilter;uses:="javax.swing.filechooser",com.puresol.gui;us
- es:="javax.swing,javax.swing.table,org.slf4j,javax.swing.text,javax.s
- wing.text.html,javax.swing.event,javax.swing.filechooser,com.puresol.
- filefilter,javax.swing.border,javax.swing.tree,com.puresol.trees,com.
- puresol.gui.data",com.puresol.gui.data;uses:="javax.swing,com.puresol
- .data,com.puresol.gui,org.slf4j",com.puresol.gui.osgi;uses:="javax.sw
- ing,javax.swing.filechooser,com.puresol.filefilter,com.puresol.gui,or
- g.osgi.framework",com.puresol.gui.progress;uses:="javax.swing.border,
- com.puresol,javax.swing,org.slf4j,com.puresol.gui",com.puresol.io,com
- .puresol.math.statistics;uses:="org.slf4j",com.puresol.packages;uses:
- ="com.puresol.utils,org.slf4j",com.puresol.rendering;uses:="org.jfree
- .chart,javax.swing,javax.swing.event,com.puresol.gui",com.puresol
-Built-By: ludwig
-Tool: Bnd-0.0.357
-Bundle-Name: com.puresol.utils
-Created-By: Apache Maven Bundle Plugin
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Require-Bundle: org.slf4j.api;bundle-version="1.6.1",org.jfree.rcp.jfr
- eechart;bundle-version="1.0.14",org.junit;bundle-version="4.8.2",com.
- puresol.trees;bundle-version="0.1.0"
-Bundle-Vendor: PureSol Technologies
+Bnd-LastModified: 1331333759667
 Build-Jdk: 1.6.0_22
-Bundle-Version: 0.1.0.SNAPSHOT
-Bnd-LastModified: 1331319581292
+Built-By: ludwig
 Bundle-Activator: com.puresol.utils.Activator
 Bundle-ManifestVersion: 2
-Import-Package: com.puresol,com.puresol.config,com.puresol.data,com.pu
- resol.filefilter,com.puresol.gui,com.puresol.gui.data,com.puresol.gui
- .osgi,com.puresol.gui.progress,com.puresol.io,com.puresol.math.statis
- tics,com.puresol.packages,com.puresol.rendering,com.puresol.trees;ver
- sion="0.1",com.puresol.utils,javax.swing,javax.swing.border,javax.swi
- ng.event,javax.swing.filechooser,javax.swing.table,javax.swing.text,j
- avax.swing.text.html,javax.swing.tree,org.jfree.chart,org.junit,org.o
- sgi.framework;version="1.6",org.slf4j;version="1.6"
+Bundle-Name: com.puresol.utils
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-SymbolicName: com.puresol.utils
+Bundle-Vendor: PureSol Technologies
+Bundle-Version: 0.1.0.SNAPSHOT
+Created-By: Apache Maven Bundle Plugin
+Export-Package: com.puresol;version="0.1.0.SNAPSHOT",com.puresol.config;
+ uses:="org.slf4j";version="0.1.0.SNAPSHOT",com.puresol.data;version="0.
+ 1.0.SNAPSHOT",com.puresol.filefilter;uses:="javax.swing.filechooser";ve
+ rsion="0.1.0.SNAPSHOT",com.puresol.gui;uses:="javax.swing,javax.swing.t
+ able,org.slf4j,javax.swing.text,javax.swing.text.html,javax.swing.event
+ ,javax.swing.filechooser,com.puresol.filefilter,javax.swing.border,java
+ x.swing.tree,com.puresol.trees,com.puresol.gui.data";version="0.1.0.SNA
+ PSHOT",com.puresol.gui.data;uses:="javax.swing,com.puresol.data,com.pur
+ esol.gui,org.slf4j";version="0.1.0.SNAPSHOT",com.puresol.gui.osgi;uses:
+ ="javax.swing,javax.swing.filechooser,com.puresol.filefilter,com.pureso
+ l.gui,org.osgi.framework";version="0.1.0.SNAPSHOT",com.puresol.gui.prog
+ ress;uses:="javax.swing.border,com.puresol,javax.swing,org.slf4j,com.pu
+ resol.gui";version="0.1.0.SNAPSHOT",com.puresol.io;version="0.1.0.SNAPS
+ HOT",com.puresol.math.statistics;uses:="org.slf4j";version="0.1.0.SNAPS
+ HOT",com.puresol.packages;uses:="com.puresol.utils,org.slf4j";version="
+ 0.1.0.SNAPSHOT",com.puresol.rendering;uses:="org.jfree.chart,javax.swin
+ g,javax.swing.event,com.puresol.gui";version="0.1.0.SNAPSHOT",com.pures
+ ol.utils;uses:="org.osgi.framework,org.slf4j,org.junit";version="0.1.0.
+ SNAPSHOT"
+Import-Package: com.puresol.trees;version="[0.1,1)",javax.swing,javax.sw
+ ing.border,javax.swing.event,javax.swing.filechooser,javax.swing.table,
+ javax.swing.text,javax.swing.text.html,javax.swing.tree,org.jfree.chart
+ ,org.junit,org.osgi.framework;version="[1.6,2)",org.slf4j;version="[1.6
+ ,2)"
 Originally-Created-By: Apache Maven Bundle Plugin
-
+Require-Bundle: org.slf4j.api;bundle-version="1.6.1",org.jfree.rcp.jfree
+ chart;bundle-version="1.0.14",org.junit;bundle-version="4.8.2",com.pure
+ sol.trees;bundle-version="0.1.0"
+Tool: Bnd-1.50.0
