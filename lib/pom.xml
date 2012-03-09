@@ -9,14 +9,11 @@
 
 	<modules>
 		<module>org.jfree.rcp.jfreechart</module>
-		<module>com.puresol.license</module>
 		<module>com.puresol.trees</module>
 		<module>com.puresol.utils</module>
 		<module>com.puresol.uhura.lib</module>
 		<module>com.puresol.uhura.test</module>
-		<module>com.puresol.uhura.ui</module>
 		<module>com.puresol.coding.analysis</module>
-		<module>com.puresol.coding.analysis.test</module>
 		<module>com.puresol.coding.metrics</module>
 		<module>com.puresol.coding.lang.java</module>
 		<module>com.puresol.coding.lang.fortran</module>
@@ -108,6 +105,14 @@
 					<artifactId>maven-bundle-plugin</artifactId>
 					<version>2.3.7</version>
 					<extensions>true</extensions>
+					<executions>
+						<execution>
+							<goals>
+								<goal>bundle</goal>
+							</goals>
+							<phase>package</phase>
+						</execution>
+					</executions>
 				</plugin>
 			</plugins>
 		</pluginManagement>

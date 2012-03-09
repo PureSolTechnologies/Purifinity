@@ -11,6 +11,7 @@
 
 	<artifactId>coding.analysis</artifactId>
 	<name>com.puresol.coding.analysis</name>
+	<packaging>bundle</packaging>
 
 	<dependencies>
 		<dependency>
@@ -58,14 +59,6 @@
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>
 				<extensions>true</extensions>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>bundle</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 	</build>
