@@ -1,17 +1,18 @@
 Manifest-Version: 1.0
-Export-Package: com.puresol.trees;uses:="org.osgi.framework,org.slf4j"
- ;version="0.1.0.SNAPSHOT"
-Tool: Bnd-0.0.357
+Bnd-LastModified: 1331325692469
+Build-Jdk: 1.6.0_22
+Built-By: ludwig
+Bundle-Activator: com.puresol.trees.Activator
+Bundle-ManifestVersion: 2
 Bundle-Name: com.puresol.trees
-Created-By: 1.6.0_22 (Sun Microsystems Inc.)
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-SymbolicName: com.puresol.trees
 Bundle-Vendor: PureSol Technologies
 Bundle-Version: 0.1.0.SNAPSHOT
-Bnd-LastModified: 1331319581188
-Bundle-ManifestVersion: 2
-Bundle-Activator: com.puresol.trees.Activator
-Import-Package: com.puresol.trees;version="0.1",org.osgi.framework;ver
- sion="1.6",org.slf4j;version="1.6"
-Bundle-SymbolicName: com.puresol.trees
-Originally-Created-By: 1.6.0_22 (Sun Microsystems Inc.)
-
+Created-By: Apache Maven Bundle Plugin
+Export-Package: com.puresol.trees;uses:="org.osgi.framework,org.slf4j";v
+ ersion="0.1.0.SNAPSHOT"
+Import-Package: org.osgi.framework;version="[1.6,2)",org.slf4j;version="
+ [1.6,2)"
+Originally-Created-By: Apache Maven Bundle Plugin
+Tool: Bnd-1.50.0

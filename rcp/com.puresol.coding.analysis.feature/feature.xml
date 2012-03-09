@@ -21,8 +21,8 @@
    </license>
 
    <requires>
-      <import plugin="org.slf4j.api" version="1.6.1" match="greaterOrEqual"/>
       <import plugin="org.eclipse.osgi"/>
+      <import plugin="org.slf4j.api"/>
    </requires>
 
    <plugin
