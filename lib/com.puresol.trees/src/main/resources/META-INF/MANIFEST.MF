@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Bnd-LastModified: 1331414606994
+Bnd-LastModified: 1331417268038
 Build-Jdk: 1.6.0_22
 Built-By: ludwig
 Bundle-Activator: com.puresol.trees.Activator

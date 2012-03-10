@@ -11,6 +11,7 @@
 
 	<artifactId>trees</artifactId>
 	<name>com.puresol.trees</name>
+	<packaging>bundle</packaging>
 
 	<dependencies>
 		<dependency>
@@ -35,18 +36,6 @@
 			<plugin>
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>
-				<extensions>true</extensions>
-				<configuration>
-				<manifestLocation>src/main/resources/META-INF</manifestLocation>
-				</configuration>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>bundle</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 	</build>

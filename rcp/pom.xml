@@ -12,7 +12,6 @@
 	</properties>
 
 	<modules>
-		<module>com.puresol.rcp.coding.analysis</module>
 		<module>com.puresol.rcp.coding.client</module>
 	</modules>
 

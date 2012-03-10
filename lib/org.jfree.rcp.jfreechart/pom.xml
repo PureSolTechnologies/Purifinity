@@ -12,6 +12,7 @@
 	<groupId>org.jfree</groupId>
 	<artifactId>rcp.jfreechart</artifactId>
 	<version>1.0.14</version>
+	<packaging>bundle</packaging>
 
 	<dependencies>
 		<dependency>
