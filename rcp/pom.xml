@@ -94,6 +94,10 @@
 	</dependencies>
 
 	<build>
+
+		<sourceDirectory>src</sourceDirectory>
+		<testSourceDirectory>test</testSourceDirectory>
+
 		<plugins>
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
@@ -110,7 +114,7 @@
 					<pomDependencies>consider</pomDependencies>
 					<target>
 						<groupId>com.puresol</groupId>
-						<artifactId>coding.client.target</artifactId>
+						<artifactId>com.puresol.rcp.coding.client.target</artifactId>
 						<version>0.1.0-SNAPSHOT</version>
 						<classifier>indigo</classifier>
 					</target>

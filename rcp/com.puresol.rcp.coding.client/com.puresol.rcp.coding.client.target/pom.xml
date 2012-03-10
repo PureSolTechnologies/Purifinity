@@ -9,7 +9,7 @@
 		<relativePath>..</relativePath>
 	</parent>
 
-	<artifactId>com.puresol.coding.rcp.client.target</artifactId>
+	<artifactId>com.puresol.rcp.coding.client.target</artifactId>
 	<packaging>pom</packaging>
 
 	<build>
