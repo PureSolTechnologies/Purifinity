@@ -53,6 +53,17 @@ public class FileSearch {
 	return pattern;
     }
 
+    /**
+     * This method searches a directory recursively. A pattern specifies which
+     * files are to be put into the output list.
+     * 
+     * @param directory
+     *            is the directory where the recursive search is to be started.
+     * @param pattern
+     *            is a Apache like pattern to specify the files which are to be
+     *            put into the output list.
+     * @return
+     */
     public static List<File> find(File directory, String pattern) {
 	pattern = wildcardsToRegExp(pattern);
 	List<File> files = findFilesInDirectory(directory,

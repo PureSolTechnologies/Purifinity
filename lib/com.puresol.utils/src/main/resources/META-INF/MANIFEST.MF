@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Bnd-LastModified: 1331376240906
+Bnd-LastModified: 1331378203010
 Build-Jdk: 1.6.0_22
 Built-By: ludwig
 Bundle-Activator: com.puresol.utils.Activator

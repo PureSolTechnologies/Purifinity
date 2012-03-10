@@ -69,6 +69,7 @@ public class NewAnalysisGeneralSettingsPage extends WizardPage {
 	Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
 		.getShell();
 	DirectoryDialog dialog = new DirectoryDialog(shell);
+	dialog.setFilterPath("/");
 	dialog.setText("Select Source Directory...");
 	String directory = dialog.open();
 	if (directory != null) {
