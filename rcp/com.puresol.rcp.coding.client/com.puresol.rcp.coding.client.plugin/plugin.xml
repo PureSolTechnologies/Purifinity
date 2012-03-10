@@ -241,7 +241,7 @@
          id="product"
          point="org.eclipse.core.runtime.products">
       <product
-            application="com.puresol.coding.client.plugin.application"
+            application="com.puresol.rcp.coding.client.plugin.application"
             name="Source Code Analysis">
          <property
                name="appName"

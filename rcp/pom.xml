@@ -12,8 +12,8 @@
 	</properties>
 
 	<modules>
-		<module>com.puresol.coding.analysis.feature</module>
-		<module>com.puresol.coding.client</module>
+		<module>com.puresol.rcp.coding.analysis</module>
+		<module>com.puresol.rcp.coding.client</module>
 	</modules>
 
 	<repositories>

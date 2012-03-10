@@ -9,14 +9,11 @@
 		<relativePath>..</relativePath>
 	</parent>
 
-	<artifactId>com.puresol.coding.client</artifactId>
+	<artifactId>com.puresol.rcp.coding.analysis</artifactId>
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>com.puresol.coding.client.plugin</module>
-		<module>com.puresol.coding.client.product</module>
-		<module>com.puresol.coding.client.feature</module>
-		<module>com.puresol.coding.client.target</module>
+		<module>com.puresol.rcp.coding.analysis.feature</module>
 	</modules>
 
 </project>

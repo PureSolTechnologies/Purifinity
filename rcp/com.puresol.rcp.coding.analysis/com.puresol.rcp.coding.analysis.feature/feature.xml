@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="com.puresol.coding.analysis.feature"
+      id="com.puresol.rcp.coding.analysis.feature"
       label="Code Analysis Feature"
       version="0.1.0.qualifier"
       provider-name="PureSol Technologies"

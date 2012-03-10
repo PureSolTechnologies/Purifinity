@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="com.puresol.coding.client.feature"
+      id="com.puresol.rcp.coding.client.feature"
       label="Source Code Analysis Feature"
       version="0.1.0.qualifier"
       plugin="com.puresol.coding.client.plugin"
@@ -299,13 +299,6 @@
          unpack="false"/>
 
    <plugin
-         id="com.puresol.coding.client.plugin"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="org.eclipse.ui.views.log"
          download-size="0"
          install-size="0"
@@ -336,6 +329,13 @@
 
    <plugin
          id="org.slf4j.api"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.puresol.rcp.coding.client.plugin"
          download-size="0"
          install-size="0"
          version="0.0.0"

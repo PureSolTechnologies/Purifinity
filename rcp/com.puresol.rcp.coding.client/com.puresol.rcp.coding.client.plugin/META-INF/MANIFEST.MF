@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Source Code Analysis
-Bundle-SymbolicName: com.puresol.coding.client.plugin;singleton:=true
+Bundle-SymbolicName: com.puresol.rcp.coding.client.plugin;singleton:=true
 Bundle-Version: 0.1.0.qualifier
 Bundle-Activator: com.puresol.coding.client.Activator
 Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
