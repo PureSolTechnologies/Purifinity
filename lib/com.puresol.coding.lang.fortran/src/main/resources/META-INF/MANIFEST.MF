@@ -25,7 +25,7 @@ Require-Bundle: com.puresol.utils;bundle-version="0.1.0",
  com.puresol.coding.metrics;bundle-version="0.1.0"
 Bundle-Vendor: PureSol Technologies
 Build-Jdk: 1.6.0_22
-Bundle-Version: 0.1.0.SNAPSHOT
+Bundle-Version: 0.1.0.quantifier
 Bnd-LastModified: 1331319581752
 Bundle-ManifestVersion: 2
 Import-Package: com.puresol.coding,com.puresol.coding.analysis,com.pur
