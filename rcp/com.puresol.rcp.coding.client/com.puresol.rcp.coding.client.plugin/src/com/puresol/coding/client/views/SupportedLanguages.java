@@ -1,5 +1,6 @@
 package com.puresol.coding.client.views;
 
+import java.util.Collection;
 import java.util.Date;
 
 import org.eclipse.swt.SWT;
@@ -15,9 +16,11 @@ import org.osgi.framework.ServiceReference;
 
 import swing2swt.layout.BorderLayout;
 
+import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.client.Activator;
 
-public class OsgiDebug extends ViewPart implements SelectionListener {
+public class SupportedLanguages extends ViewPart implements SelectionListener {
+
     private Text text;
 
     @Override
@@ -43,13 +46,14 @@ public class OsgiDebug extends ViewPart implements SelectionListener {
 	try {
 	    BundleContext bundleContext = Activator.getDefault().getBundle()
 		    .getBundleContext();
-	    ServiceReference<?>[] allServiceReferences = bundleContext
-		    .getAllServiceReferences(null, null);
+	    Collection<ServiceReference<ProgrammingLanguage>> allServiceReferences = bundleContext
+		    .getServiceReferences(ProgrammingLanguage.class, null);
 	    StringBuilder stringBuilder = new StringBuilder(
 		    "All Available Services (" + new Date().toString()
 			    + "):\n\n");
-	    for (ServiceReference<?> serviceReference : allServiceReferences) {
-		Object service = bundleContext.getService(serviceReference);
+	    for (ServiceReference<ProgrammingLanguage> serviceReference : allServiceReferences) {
+		ProgrammingLanguage service = bundleContext
+			.getService(serviceReference);
 		stringBuilder.append(service.getClass().getName() + "\n");
 		bundleContext.ungetService(serviceReference);
 	    }

@@ -14,7 +14,6 @@ Export-Package: com.puresol.coding.lang.java;uses:="com.puresol.coding
  resol.utils,com.puresol.packages,com.puresol.uhura.parser,com.puresol
  .uhura.lexer,com.puresol.uhura.grammar,org.slf4j,com.puresol.coding.l
  ang.java.grammar"
-Bundle-ActivationPolicy: lazy
 Built-By: ludwig
 Tool: Bnd-0.0.357
 Bundle-Name: com.puresol.coding.lang.java

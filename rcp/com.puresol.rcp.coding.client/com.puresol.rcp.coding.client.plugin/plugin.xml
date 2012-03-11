@@ -195,29 +195,44 @@
    <extension
          point="org.eclipse.ui.views">
       <view
+            category="com.puresol.coding.Analysis"
             class="com.puresol.coding.client.views.AnalysisNavigator"
             id="com.puresol.coding.client.AnalysisNavigator"
             name="Analysis Navigator"
             restorable="true">
       </view>
       <view
+            category="com.puresol.coding.Analysis"
             class="com.puresol.coding.client.views.SourceNavigator"
             id="com.puresol.coding.client.SourceNavigator"
             name="Source Navigator"
             restorable="true">
       </view>
       <view
+            category="com.puresol.coding.Analysis"
             class="com.puresol.coding.client.views.AnalysisReport"
             id="com.puresol.coding.client.AnalysisReport"
             name="Analysis Report"
             restorable="true">
       </view>
       <view
+            category="org.eclipse.debug.ui"
             class="com.puresol.coding.client.views.OsgiDebug"
             id="com.puresol.coding.client.OsgiDebug"
             name="OSGI Debug"
             restorable="true">
       </view>
+      <view
+            category="com.puresol.coding.Analysis"
+            class="com.puresol.coding.client.views.SupportedLanguages"
+            id="com.puresol.coding.client.SupportedLanguages"
+            name="Supported Languages"
+            restorable="true">
+      </view>
+      <category
+            id="com.puresol.coding.Analysis"
+            name="Code Analysis">
+      </category>
    </extension>
    <extension
          point="org.eclipse.ui.commands">

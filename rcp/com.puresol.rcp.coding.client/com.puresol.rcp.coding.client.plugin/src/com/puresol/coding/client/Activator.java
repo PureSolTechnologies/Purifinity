@@ -13,13 +13,7 @@ public class Activator extends AbstractUIPlugin {
     public static final String PLUGIN_ID = "com.puresol.coding.client.plugin"; //$NON-NLS-1$
 
     // The shared instance
-    private static Activator plugin;
-
-    /**
-     * The constructor
-     */
-    public Activator() {
-    }
+    private static Activator plugin = null;
 
     /*
      * (non-Javadoc)
@@ -31,6 +25,10 @@ public class Activator extends AbstractUIPlugin {
     @Override
     public void start(BundleContext context) throws Exception {
 	super.start(context);
+	if (plugin != null) {
+	    throw new RuntimeException("A " + getClass().getName()
+		    + " plugin was already started!");
+	}
 	plugin = this;
     }
 
@@ -43,8 +41,12 @@ public class Activator extends AbstractUIPlugin {
      */
     @Override
     public void stop(BundleContext context) throws Exception {
-	plugin = null;
 	super.stop(context);
+	if (plugin == null) {
+	    throw new RuntimeException("A " + getClass().getName()
+		    + " plugin was never started!");
+	}
+	plugin = null;
     }
 
     /**
@@ -53,6 +55,10 @@ public class Activator extends AbstractUIPlugin {
      * @return the shared instance
      */
     public static Activator getDefault() {
+	if (plugin == null) {
+	    throw new RuntimeException("A " + Activator.class.getName()
+		    + " plugin was never started!");
+	}
 	return plugin;
     }
 

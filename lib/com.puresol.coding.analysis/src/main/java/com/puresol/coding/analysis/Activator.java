@@ -16,6 +16,10 @@ public class Activator implements BundleActivator {
      */
     @Override
     public void start(BundleContext context) throws Exception {
+	if (Activator.context != null) {
+	    throw new RuntimeException("Plugin " + getClass().getName()
+		    + " was already activated!");
+	}
 	Activator.context = context;
     }
 
@@ -27,10 +31,18 @@ public class Activator implements BundleActivator {
      */
     @Override
     public void stop(BundleContext context) throws Exception {
+	if (Activator.context == null) {
+	    throw new RuntimeException("Plugin " + getClass().getName()
+		    + " was never activated!");
+	}
 	context = null;
     }
 
     public static BundleContext getContext() {
+	if (Activator.context == null) {
+	    throw new RuntimeException("Plugin " + Activator.class.getName()
+		    + " was never activated!");
+	}
 	return context;
     }
 

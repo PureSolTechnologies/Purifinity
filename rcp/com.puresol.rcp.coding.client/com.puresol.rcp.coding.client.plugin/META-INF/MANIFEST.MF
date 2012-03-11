@@ -13,3 +13,4 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ClassPath: .,
  swing2swt.jar
 Bundle-Vendor: PureSol Technologies
+Bundle-ActivationPolicy: lazy

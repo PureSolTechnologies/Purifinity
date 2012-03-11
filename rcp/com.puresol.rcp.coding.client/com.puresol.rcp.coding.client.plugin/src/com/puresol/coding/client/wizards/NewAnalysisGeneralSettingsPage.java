@@ -1,5 +1,10 @@
 package com.puresol.coding.client.wizards;
 
+import org.eclipse.core.runtime.ILog;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.preferences.ConfigurationScope;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -14,8 +19,16 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
+import org.osgi.service.prefs.BackingStoreException;
+import org.osgi.service.prefs.Preferences;
+
+import com.puresol.coding.client.Activator;
 
 public class NewAnalysisGeneralSettingsPage extends WizardPage {
+
+    public static final String LAST_NEW_ANALYSIS_SOURCE_DIRECTORY = "lastNewAnalysisSourceDirectory";
+
+    private static final ILog log = Activator.getDefault().getLog();
 
     private Text textSourceDirectory;
     private Text textProjectName;
@@ -69,11 +82,36 @@ public class NewAnalysisGeneralSettingsPage extends WizardPage {
 	Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
 		.getShell();
 	DirectoryDialog dialog = new DirectoryDialog(shell);
-	dialog.setFilterPath("/");
+
+	String directory = getLastSourceDirectory();
+	dialog.setFilterPath(directory);
+
 	dialog.setText("Select Source Directory...");
-	String directory = dialog.open();
+	directory = dialog.open();
 	if (directory != null) {
 	    textSourceDirectory.setText(directory);
+	    setLastSourceDirectory(directory);
+	}
+    }
+
+    private String getLastSourceDirectory() {
+	IEclipsePreferences preferences = ConfigurationScope.INSTANCE
+		.getNode("Code Analysis");
+	Preferences newAnalysisNode = preferences.node("New Analysis");
+	return newAnalysisNode.get(LAST_NEW_ANALYSIS_SOURCE_DIRECTORY,
+		System.getProperty("user.home", ""));
+    }
+
+    private void setLastSourceDirectory(String directory) {
+	try {
+	    IEclipsePreferences preferences = ConfigurationScope.INSTANCE
+		    .getNode("Code Analysis");
+	    Preferences newAnalysisNode = preferences.node("New Analysis");
+	    newAnalysisNode.put(LAST_NEW_ANALYSIS_SOURCE_DIRECTORY, directory);
+	    preferences.flush();
+	} catch (BackingStoreException e) {
+	    log.log(new Status(IStatus.ERROR, Activator.getDefault()
+		    .getBundle().getSymbolicName(), e.getMessage(), e));
 	}
     }
 
