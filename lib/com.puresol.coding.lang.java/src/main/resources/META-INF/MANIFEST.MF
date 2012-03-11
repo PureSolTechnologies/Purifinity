@@ -28,7 +28,6 @@ Bundle-Vendor: PureSol Technologies
 Build-Jdk: 1.6.0_22
 Bundle-Version: 0.1.0.SNAPSHOT
 Bnd-LastModified: 1331319581687
-Bundle-Activator: com.puresol.coding.lang.java.Activator
 Bundle-ManifestVersion: 2
 Import-Package: com.puresol.coding,com.puresol.coding.analysis,com.pur
  esol.coding.lang.java,com.puresol.coding.lang.java.grammar,com.pureso
@@ -41,4 +40,4 @@ Import-Package: com.puresol.coding,com.puresol.coding.analysis,com.pur
  "1.6",org.slf4j;version="1.6",utils
 Bundle-SymbolicName: com.puresol.coding.lang.java
 Originally-Created-By: Apache Maven Bundle Plugin
-
+Service-Component: OSGI-INF/component.xml

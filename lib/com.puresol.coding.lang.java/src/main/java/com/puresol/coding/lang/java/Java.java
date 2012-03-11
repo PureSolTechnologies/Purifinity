@@ -49,7 +49,7 @@ public class Java extends AbstractProgrammingLanguage {
 
     private BundleContext bundleContext;
 
-    private Java() {
+    public Java() {
 	super("Java");
     }
 

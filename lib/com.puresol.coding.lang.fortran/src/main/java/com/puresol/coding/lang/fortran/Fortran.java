@@ -43,7 +43,7 @@ public class Fortran extends AbstractProgrammingLanguage {
     private SourceForm sourceForm = SourceForm.FREE_FORM;
     private BundleContext bundleContext;
 
-    private Fortran() {
+    public Fortran() {
 	super("Fortran");
     }
 
