@@ -62,6 +62,7 @@ Import-Package: com.puresol.trees;version="0.1",com.puresol.uhura,com.
  ls,com.puresol.uhura.ust.modifiers,com.puresol.uhura.ust.packages,com
  .puresol.uhura.ust.types,com.puresol.utils,org.junit,org.osgi.framewo
  rk;version="1.6",org.slf4j;version="1.6"
-Bundle-SymbolicName: com.puresol.uhura.lib;singleton:=true
+Bundle-SymbolicName: com.puresol.uhura.lib
 Originally-Created-By: Apache Maven Bundle Plugin
+Bundle-ActivationPolicy: lazy
 

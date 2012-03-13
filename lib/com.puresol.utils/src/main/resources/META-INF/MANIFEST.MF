@@ -39,3 +39,4 @@ Require-Bundle: org.slf4j.api;bundle-version="1.6.1",org.jfree.rcp.jfree
  chart;bundle-version="1.0.14",org.junit;bundle-version="4.8.2",com.pure
  sol.trees;bundle-version="0.1.0"
 Tool: Bnd-1.50.0
+Bundle-ActivationPolicy: lazy

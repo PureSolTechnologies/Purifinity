@@ -8,7 +8,6 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.puresol.coding.lang.java.grammar.JavaGrammar;
@@ -37,7 +36,6 @@ public class JavaPackratParserTest {
     }
 
     @Test
-    @Ignore
     public void testCompilationUnit() throws Throwable {
 	Grammar grammar = JavaGrammar.getInstance().getGrammar();
 	assertNotNull(grammar);
@@ -47,7 +45,6 @@ public class JavaPackratParserTest {
     }
 
     @Test
-    @Ignore
     public void testArrayCreationExpression() throws Throwable {
 	Grammar grammar = JavaGrammar.getInstance().getGrammar();
 	assertNotNull(grammar);
@@ -57,7 +54,6 @@ public class JavaPackratParserTest {
     }
 
     @Test
-    @Ignore
     public void testClassInstanceCreationExpression() throws Throwable {
 	Grammar grammar = JavaGrammar.getInstance().getGrammar();
 	assertNotNull(grammar);
@@ -67,7 +63,6 @@ public class JavaPackratParserTest {
     }
 
     @Test
-    @Ignore
     public void testExpression() throws Throwable {
 	Grammar grammar = JavaGrammar.getInstance().getGrammar();
 	assertNotNull(grammar);
@@ -81,7 +76,6 @@ public class JavaPackratParserTest {
     }
 
     @Test
-    @Ignore
     public void testMethodInvokation() throws Throwable {
 	Grammar grammar = JavaGrammar.getInstance().getGrammar();
 	assertNotNull(grammar);
@@ -102,18 +96,17 @@ public class JavaPackratParserTest {
 	Grammar grammar = JavaGrammar.getInstance().getGrammar();
 	assertNotNull(grammar);
 	PackratParser parser = new PackratParser(grammar);
-	// assertNotNull(parser.parse("A a = new A();",
-	// "LocalVariableDeclarationStatement", "TEST"));
-	// assertNotNull(parser.parse("B b = new B();",
-	// "LocalVariableDeclarationStatement", "TEST"));
-	// assertNotNull(parser.parse("char b[] = new char[1024];",
-	// "LocalVariableDeclarationStatement", "TEST"));
+	assertNotNull(parser.parse("A a = new A();",
+		"LocalVariableDeclarationStatement", "TEST"));
+	assertNotNull(parser.parse("B b = new B();",
+		"LocalVariableDeclarationStatement", "TEST"));
+	assertNotNull(parser.parse("char b[] = new char[1024];",
+		"LocalVariableDeclarationStatement", "TEST"));
 	assertNotNull(parser.parse("char[] b = new char[1024];",
 		"LocalVariableDeclarationStatement", "TEST"));
     }
 
     @Test
-    @Ignore
     public void testBlockStatements() throws Throwable {
 	Grammar grammar = JavaGrammar.getInstance().getGrammar();
 	assertNotNull(grammar);
@@ -132,7 +125,6 @@ public class JavaPackratParserTest {
     }
 
     @Test
-    @Ignore
     public void testBlock() throws Throwable {
 	Grammar grammar = JavaGrammar.getInstance().getGrammar();
 	assertNotNull(grammar);
@@ -149,7 +141,6 @@ public class JavaPackratParserTest {
     }
 
     @Test
-    @Ignore
     public void testMethodBlock() throws Throwable {
 	Grammar grammar = JavaGrammar.getInstance().getGrammar();
 	assertNotNull(grammar);
@@ -159,7 +150,6 @@ public class JavaPackratParserTest {
     }
 
     @Test
-    @Ignore
     public void testJavaFile() throws Throwable {
 	File file = new File(
 		"src/test/java/com/puresol/coding/lang/java/JavaPackratParserTest.java");

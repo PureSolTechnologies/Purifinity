@@ -8,7 +8,6 @@ import static org.junit.Assert.fail;
 import java.io.File;
 import java.util.List;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.puresol.coding.CodeRange;
@@ -22,8 +21,7 @@ import com.puresol.utils.FileUtilities;
 public class SLOCMetricImplTest {
 
     @Test
-    @Ignore
-    public void test() {
+    public void test() throws InterruptedException {
 	try {
 	    Java java = Java.getInstance();
 	    assertNotNull(java);
@@ -38,6 +36,7 @@ public class SLOCMetricImplTest {
 	    assertTrue(codeRanges.size() > 0);
 	    SLOCMetric metric = new SLOCMetric(java, codeRanges.get(2));
 	    metric.schedule();
+	    metric.join();
 	    SLOCResult sloc = metric.getSLOCResult();
 	    System.out.println("phyLOC: " + sloc.getPhyLOC());
 	    System.out.println("proLOC: " + sloc.getProLOC());

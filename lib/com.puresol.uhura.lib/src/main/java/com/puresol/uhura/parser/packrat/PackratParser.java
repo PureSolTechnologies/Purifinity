@@ -188,16 +188,16 @@ public class PackratParser implements Serializable {
     }
 
     private void indentLine() {
-	RuleInvocation invokation = ruleInvocationStack;
-	while (invokation != null) {
-	    System.out.print("    ");
-	    invokation = invokation.getNext();
-	}
+	// RuleInvocation invokation = ruleInvocationStack;
+	// while (invokation != null) {
+	// System.out.print("    ");
+	// invokation = invokation.getNext();
+	// }
     }
 
     private void printMessage(String text, int position, int id, int line) {
-	indentLine();
-	System.out.println(position + " " + id + " " + line + " : " + text);
+	// indentLine();
+	// System.out.println(position + " " + id + " " + line + " : " + text);
     }
 
     /**
@@ -516,7 +516,7 @@ public class PackratParser implements Serializable {
 	    processIgnoredTrailingTokens(node, position, id, line, progress);
 	}
 	indentLine();
-	System.out.println("Parsed: " + production);
+	// System.out.println("Parsed: " + production);
 	return progress;
     }
 

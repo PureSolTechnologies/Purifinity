@@ -58,7 +58,7 @@ public class JavaSourceCodeDistributionTest {
     }
 
     @Test
-    @Ignore
+    @Ignore("Takes too long...")
     public void test2() throws Throwable {
 	assertTrue(file.exists());
 	Grammar grammar = JavaGrammar.getInstance().getGrammar();

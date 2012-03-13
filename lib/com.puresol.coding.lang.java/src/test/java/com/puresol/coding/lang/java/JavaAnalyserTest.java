@@ -8,7 +8,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.puresol.uhura.parser.ParserTree;
@@ -34,7 +33,6 @@ public class JavaAnalyserTest {
     }
 
     @Test
-    @Ignore
     public void testParse() throws Throwable {
 	File file = new File("src/test/java", FileUtilities
 		.classToRelativePackagePath(this.getClass()).toString());

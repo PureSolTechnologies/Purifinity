@@ -41,3 +41,4 @@ Import-Package: com.puresol.coding,com.puresol.coding.analysis,com.pur
 Bundle-SymbolicName: com.puresol.coding.lang.java
 Originally-Created-By: Apache Maven Bundle Plugin
 Service-Component: OSGI-INF/component.xml
+Bundle-Activator: com.puresol.coding.lang.java.Activator
