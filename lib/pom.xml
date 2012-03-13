@@ -16,7 +16,7 @@
 		<module>com.puresol.uhura.ui</module>
 		<module>com.puresol.coding.analysis</module>
 		<module>com.puresol.coding.analysis.test</module>
-		<module>com.puresol.coding.metrics</module>
+		<!-- module>com.puresol.coding.metrics</module -->
 		<module>com.puresol.coding.lang.java</module>
 		<module>com.puresol.coding.lang.fortran</module>
 	</modules>

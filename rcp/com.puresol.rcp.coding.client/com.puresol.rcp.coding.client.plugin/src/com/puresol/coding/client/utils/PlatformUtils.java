@@ -23,6 +23,10 @@ public class PlatformUtils {
     public static File getWorkspaceDirectory() {
 	Location instanceLocation = Platform.getInstanceLocation();
 	URL locationURL = instanceLocation.getURL();
+	if (locationURL == null) {
+	    throw new IllegalStateException(
+		    "The location URL can not be retrieved!");
+	}
 	return new File(locationURL.getPath());
     }
 

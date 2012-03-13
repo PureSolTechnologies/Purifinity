@@ -1,11 +1,6 @@
 package com.puresol.coding.lang.test;
 
 import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.net.URL;
-import java.util.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,44 +58,5 @@ public class TestLanguage extends AbstractProgrammingLanguage {
     @Override
     public Analyzer createAnalyser(File file) {
 	return new TestLanguageAnalyser(file);
-    }
-
-    @Override
-    public <T> T getImplementation(Class<T> clazz) {
-	try {
-	    URL url = getClass().getResource("/config/registry");
-	    Properties properties = new Properties();
-	    properties.load(url.openStream());
-	    String className = (String) properties.get(clazz.getName());
-	    Class<?> clazzz = Class.forName(className);
-	    Constructor<?> constructor = clazzz.getConstructor();
-	    @SuppressWarnings("unchecked")
-	    T t = (T) constructor.newInstance();
-	    return t;
-	} catch (IOException e) {
-	    logger.error(e.getMessage(), e);
-	    return null;
-	} catch (IllegalArgumentException e) {
-	    logger.error(e.getMessage(), e);
-	    return null;
-	} catch (SecurityException e) {
-	    logger.error(e.getMessage(), e);
-	    return null;
-	} catch (InstantiationException e) {
-	    logger.error(e.getMessage(), e);
-	    return null;
-	} catch (IllegalAccessException e) {
-	    logger.error(e.getMessage(), e);
-	    return null;
-	} catch (InvocationTargetException e) {
-	    logger.error(e.getMessage(), e);
-	    return null;
-	} catch (NoSuchMethodException e) {
-	    logger.error(e.getMessage(), e);
-	    return null;
-	} catch (ClassNotFoundException e) {
-	    logger.error(e.getMessage(), e);
-	    return null;
-	}
     }
 }

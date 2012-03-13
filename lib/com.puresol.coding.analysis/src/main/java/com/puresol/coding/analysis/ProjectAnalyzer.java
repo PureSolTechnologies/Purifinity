@@ -102,9 +102,14 @@ public class ProjectAnalyzer extends Job implements Serializable {
 	    Properties properties = new Properties();
 	    properties.put(getClass().getSimpleName() + ".projectDirectory",
 		    projectDirectory.toString());
-	    properties.store(new FileOutputStream(SETTINGS_FILE),
-		    SETTINGS_FILE_HEADER);
-	    return true;
+	    FileOutputStream fileOutputStream = new FileOutputStream(
+		    SETTINGS_FILE);
+	    try {
+		properties.store(fileOutputStream, SETTINGS_FILE_HEADER);
+		return true;
+	    } finally {
+		fileOutputStream.close();
+	    }
 	} catch (FileNotFoundException e) {
 	    logger.error(e.getMessage(), e);
 	} catch (IOException e) {
@@ -161,7 +166,7 @@ public class ProjectAnalyzer extends Job implements Serializable {
     @Override
     protected IStatus run(IProgressMonitor monitor) {
 	reset();
-	analyzeFiles(monitor);
+	IStatus retVal = analyzeFiles(monitor);
 	storeProjectInformation();
 	return Status.OK_STATUS;
     }
@@ -174,7 +179,7 @@ public class ProjectAnalyzer extends Job implements Serializable {
 	failedFiles.clear();
     }
 
-    private void analyzeFiles(IProgressMonitor monitor) {
+    private IStatus analyzeFiles(IProgressMonitor monitor) {
 	List<File> files = FileSearch.find(projectDirectory, "*");
 	monitor.beginTask("Analyze files", files.size());
 	for (int index = 0; index < files.size(); index++) {
@@ -183,11 +188,13 @@ public class ProjectAnalyzer extends Job implements Serializable {
 		monitor.worked(index);
 	    }
 	    analyzeFile(file);
-	    if (Thread.interrupted()) {
-		return;
+	    if (monitor.isCanceled()) {
+		monitor.done();
+		return Status.CANCEL_STATUS;
 	    }
 	}
 	monitor.done();
+	return Status.OK_STATUS;
     }
 
     /**

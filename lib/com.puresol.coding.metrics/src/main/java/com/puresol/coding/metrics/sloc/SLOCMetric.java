@@ -100,8 +100,9 @@ public class SLOCMetric extends CodeRangeEvaluator {
     public SLOCMetric(ProgrammingLanguage language, CodeRange codeRange) {
 	super(NAME);
 	this.codeRange = codeRange;
-	langDepended = language
-		.getImplementation(LanguageDependedSLOCMetric.class);
+	langDepended = null;
+	// langDepended = language
+	// .getImplementation(LanguageDependedSLOCMetric.class);
 	if (langDepended == null) {
 	    throw new RuntimeException();
 	}

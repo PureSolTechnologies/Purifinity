@@ -56,8 +56,9 @@ public class McCabeMetric extends CodeRangeEvaluator {
     public McCabeMetric(ProgrammingLanguage language, CodeRange codeRange) {
 	super(NAME);
 	this.codeRange = codeRange;
-	langDepended = language
-		.getImplementation(LanguageDependedMcCabeMetric.class);
+	langDepended = null;
+	// langDepended = language
+	// .getImplementation(LanguageDependedMcCabeMetric.class);
 	if (langDepended == null) {
 	    throw new RuntimeException();
 	}

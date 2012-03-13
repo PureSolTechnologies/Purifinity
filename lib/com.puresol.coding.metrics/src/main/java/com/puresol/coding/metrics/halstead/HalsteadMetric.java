@@ -50,8 +50,9 @@ public class HalsteadMetric extends CodeRangeEvaluator {
     public HalsteadMetric(ProgrammingLanguage language, CodeRange codeRange) {
 	super(NAME);
 	this.codeRange = codeRange;
-	langDepended = language
-		.getImplementation(LanguageDependedHalsteadMetric.class);
+	langDepended = null;
+	// langDepended = language
+	// .getImplementation(LanguageDependedHalsteadMetric.class);
 	if (langDepended == null) {
 	    throw new RuntimeException();
 	}
