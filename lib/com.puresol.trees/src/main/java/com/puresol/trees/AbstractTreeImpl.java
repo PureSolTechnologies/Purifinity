@@ -1,48 +1,53 @@
 package com.puresol.trees;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
-import com.puresol.trees.Tree;
+public class AbstractTreeImpl<T extends AbstractTreeImpl<T>> implements
+	Tree<T>, Iterable<T> {
 
-public class AbstractTreeImpl<T extends AbstractTreeImpl<T>> implements Tree<T> {
+    private final T parent;
+    private final List<T> children = new ArrayList<T>();
+    private final String name;
 
-	private final T parent;
-	private final List<T> children = new ArrayList<T>();
-	private final String name;
-
-	public AbstractTreeImpl(T parent, String name) {
-		super();
-		this.parent = parent;
-		if (parent != null) {
-			@SuppressWarnings("unchecked")
-			T t = (T) this;
-			parent.addChild(t);
-		}
-		this.name = name;
+    public AbstractTreeImpl(T parent, String name) {
+	super();
+	this.parent = parent;
+	if (parent != null) {
+	    @SuppressWarnings("unchecked")
+	    T t = (T) this;
+	    parent.addChild(t);
 	}
+	this.name = name;
+    }
 
-	@Override
-	public T getParent() {
-		return parent;
-	}
+    @Override
+    public T getParent() {
+	return parent;
+    }
 
-	private void addChild(T child) {
-		children.add(child);
-	}
+    private void addChild(T child) {
+	children.add(child);
+    }
 
-	@Override
-	public boolean hasChildren() {
-		return children.size() > 0;
-	}
+    @Override
+    public boolean hasChildren() {
+	return children.size() > 0;
+    }
 
-	@Override
-	public List<T> getChildren() {
-		return children;
-	}
+    @Override
+    public List<T> getChildren() {
+	return children;
+    }
 
-	@Override
-	public String getName() {
-		return name;
-	}
+    @Override
+    public String getName() {
+	return name;
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+	return new TreeIterator<T>((T) this);
+    }
 }

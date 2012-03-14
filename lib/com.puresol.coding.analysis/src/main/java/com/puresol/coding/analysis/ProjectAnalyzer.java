@@ -168,7 +168,7 @@ public class ProjectAnalyzer extends Job implements Serializable {
 	reset();
 	IStatus retVal = analyzeFiles(monitor);
 	storeProjectInformation();
-	return Status.OK_STATUS;
+	return retVal;
     }
 
     /**
