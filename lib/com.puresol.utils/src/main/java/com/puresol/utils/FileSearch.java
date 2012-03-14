@@ -33,6 +33,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import com.puresol.trees.FileTree;
+
 /**
  * This class was implemented for recursive file search.
  * 
@@ -106,5 +108,80 @@ public class FileSearch {
 	    }
 	}
 	return files;
+    }
+
+    public static FileTree getFileTree(File directory,
+	    List<String> dirIncludes, List<String> dirExcludes,
+	    List<String> fileIncludes, List<String> fileExcludes) {
+
+	List<Pattern> dirIncludePatterns = convertStringListToPatternList(dirIncludes);
+	List<Pattern> dirExcludePatterns = convertStringListToPatternList(dirExcludes);
+	List<Pattern> fileIncludePatterns = convertStringListToPatternList(fileIncludes);
+	List<Pattern> fileExcludePatterns = convertStringListToPatternList(fileExcludes);
+
+	FileTree fileTree = new FileTree(null, directory.getPath());
+	fileTree = getFileTree(directory, fileTree, dirIncludePatterns,
+		dirExcludePatterns, fileIncludePatterns, fileExcludePatterns);
+	return fileTree;
+    }
+
+    private static List<Pattern> convertStringListToPatternList(
+	    List<String> strings) {
+	List<Pattern> patterns = new ArrayList<Pattern>();
+	for (String string : strings) {
+	    patterns.add(Pattern.compile(string));
+	}
+	return patterns;
+    }
+
+    private static FileTree getFileTree(File directory, FileTree fileTree,
+	    List<Pattern> dirIncludes, List<Pattern> dirExcludes,
+	    List<Pattern> fileIncludes, List<Pattern> fileExcludes) {
+	String[] fileNames = directory.list();
+	for (String fileName : fileNames) {
+	    File file = new File(directory, fileName);
+	    if (file.isDirectory()
+		    && useDirectory(fileName, file.isHidden(), dirIncludes,
+			    dirExcludes)) {
+		FileTree fileSubTree = new FileTree(fileTree, fileName);
+		getFileTree(file, fileSubTree, dirIncludes, dirExcludes,
+			fileIncludes, fileExcludes);
+	    } else if (file.isFile()
+		    && useFile(fileName, file.isHidden(), fileIncludes,
+			    fileExcludes)) {
+		new FileTree(fileTree, fileName);
+	    }
+	}
+	return fileTree;
+    }
+
+    private static boolean useFile(String fileName, boolean hidden,
+	    List<Pattern> fileIncludes, List<Pattern> fileExcludes) {
+	for (Pattern includePattern : fileIncludes) {
+	    if (includePattern.matcher(fileName).find()) {
+		return true;
+	    }
+	}
+	for (Pattern excludePattern : fileExcludes) {
+	    if (excludePattern.matcher(fileName).find()) {
+		return false;
+	    }
+	}
+	return !hidden;
+    }
+
+    private static boolean useDirectory(String fileName, boolean hidden,
+	    List<Pattern> dirIncludes, List<Pattern> dirExcludes) {
+	for (Pattern includePattern : dirIncludes) {
+	    if (includePattern.matcher(fileName).find()) {
+		return true;
+	    }
+	}
+	for (Pattern excludePattern : dirExcludes) {
+	    if (excludePattern.matcher(fileName).find()) {
+		return false;
+	    }
+	}
+	return !hidden;
     }
 }
