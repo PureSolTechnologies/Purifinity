@@ -1,12 +1,12 @@
 package com.puresol.coding.client.content;
 
-import java.io.File;
 import java.util.List;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
 import com.puresol.coding.analysis.ProjectAnalyzer;
+import com.puresol.trees.FileTree;
 
 public class AnalysisTreeContentProvider implements ITreeContentProvider {
 
@@ -24,6 +24,9 @@ public class AnalysisTreeContentProvider implements ITreeContentProvider {
 
     @Override
     public Object[] getElements(Object inputElement) {
+	if (model == null) {
+	    return new Object[0];
+	}
 	List<ProjectAnalyzer> analyzers = model.getAnalyzers();
 	return analyzers.toArray(new ProjectAnalyzer[analyzers.size()]);
     }
@@ -32,25 +35,25 @@ public class AnalysisTreeContentProvider implements ITreeContentProvider {
     public Object[] getChildren(Object parentElement) {
 	if (parentElement instanceof ProjectAnalyzer) {
 	    ProjectAnalyzer analyzer = (ProjectAnalyzer) parentElement;
-	    File directory = analyzer.getWorkspaceDirectory();
-	    return directory.listFiles();
+	    FileTree fileTree = analyzer.getFileTree();
+	    return fileTree.getChildren().toArray();
 	}
-	File directory = (File) parentElement;
-	return directory.listFiles();
+	FileTree fileTree = (FileTree) parentElement;
+	return fileTree.getChildren().toArray();
     }
 
     @Override
     public Object getParent(Object element) {
-	if (element instanceof ProjectAnalyzer) {
+	if ((model == null) || (element instanceof ProjectAnalyzer)) {
 	    return null;
 	}
-	File file = (File) element;
+	FileTree fileTree = (FileTree) element;
 	for (ProjectAnalyzer analyzer : model.getAnalyzers()) {
-	    if (analyzer.getWorkspaceDirectory().equals(file)) {
+	    if (analyzer.getFileTree().equals(fileTree)) {
 		return analyzer;
 	    }
 	}
-	return file.getParentFile();
+	return fileTree.getParent();
     }
 
     @Override
@@ -58,8 +61,8 @@ public class AnalysisTreeContentProvider implements ITreeContentProvider {
 	if (element instanceof ProjectAnalyzer) {
 	    return true;
 	}
-	File directory = (File) element;
-	return directory.isDirectory();
+	FileTree fileTree = (FileTree) element;
+	return fileTree.hasChildren();
     }
 
 }

@@ -264,5 +264,19 @@
          </property>
       </product>
    </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="com.puresol.coding.client.CodeAnalysisPreferences"
+            class="com.puresol.coding.client.preferences.NewAnalysisPreferencePage"
+            id="com.puresol.coding.client.NewAnalysisPreferences"
+            name="New Analysis">
+      </page>
+      <page
+            class="com.puresol.coding.client.preferences.CodeAnalysisPreferencePage"
+            id="com.puresol.coding.client.CodeAnalysisPreferences"
+            name="Code Analysis">
+      </page>
+   </extension>
 
 </plugin>

@@ -13,9 +13,10 @@ Tool: Bnd-0.0.357
 Bundle-Name: com.puresol.coding.analysis
 Created-By: Apache Maven Bundle Plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Require-Bundle: com.puresol.uhura.lib;bundle-version="0.1.0",org.slf4j
- .api;bundle-version="1.6.1",org.eclipse.core.jobs;bundle-version="3.5
- .101"
+Require-Bundle: com.puresol.uhura.lib;bundle-version="0.1.0",
+ org.slf4j.api;bundle-version="1.6.1",
+ org.eclipse.core.jobs;bundle-version="3.5.101",
+ com.puresol.trees;bundle-version="0.1.0"
 Bundle-Vendor: PureSol Technologies
 Build-Jdk: 1.6.0_22
 Bundle-Version: 0.1.0.SNAPSHOT

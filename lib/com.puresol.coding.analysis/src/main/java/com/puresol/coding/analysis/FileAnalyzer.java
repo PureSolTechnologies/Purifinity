@@ -40,8 +40,7 @@ public class FileAnalyzer {
 
 	    analyzedFile = new AnalyzedFile(sourceDirectory, targetDirectory,
 		    file);
-	    if (analyzedFile.getFile().getPath().contains("/.")
-		    || (!analyzedFile.getSourceFile().isFile())) {
+	    if (!analyzedFile.getSourceFile().isFile()) {
 		return;
 	    }
 	    analyzeIfRequired();

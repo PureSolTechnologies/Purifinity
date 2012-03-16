@@ -17,8 +17,11 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.puresol.trees.FileTree;
 import com.puresol.utils.DirectoryUtilities;
 import com.puresol.utils.FileSearch;
+import com.puresol.utils.FileUtilities;
+import com.puresol.utils.PathResolutionException;
 import com.puresol.utils.Persistence;
 import com.puresol.utils.PersistenceException;
 
@@ -45,6 +48,7 @@ public class ProjectAnalyzer extends Job implements Serializable {
     private final File workspaceDirectory;
     private final List<AnalyzedFile> analyzedFiles = new ArrayList<AnalyzedFile>();
     private final List<File> failedFiles = new ArrayList<File>();
+    private FileTree fileTree = new FileTree(null, "");
     private transient final AnalyzerFactory analyzerFactory = AnalyzerFactory
 	    .createFactory();
 
@@ -158,16 +162,12 @@ public class ProjectAnalyzer extends Job implements Serializable {
 	}
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.puresol.coding.analysis.IProjectAnalyzer#run()
-     */
     @Override
     protected IStatus run(IProgressMonitor monitor) {
 	reset();
 	IStatus retVal = analyzeFiles(monitor);
 	storeProjectInformation();
+	monitor.done();
 	return retVal;
     }
 
@@ -179,22 +179,60 @@ public class ProjectAnalyzer extends Job implements Serializable {
 	failedFiles.clear();
     }
 
-    private IStatus analyzeFiles(IProgressMonitor monitor) {
-	List<File> files = FileSearch.find(projectDirectory, "*");
+    private IStatus analyzeFiles(final IProgressMonitor monitor) {
+	fileTree = FileSearch.getFileTree(projectDirectory,
+		new ArrayList<String>(), new ArrayList<String>(),
+		new ArrayList<String>(), new ArrayList<String>());
+
+	List<File> files = getFileListFromFileTree();
+	int processors = Runtime.getRuntime().availableProcessors();
+	// ExecutorService threadPool =
+	// Executors.newFixedThreadPool(processors);
 	monitor.beginTask("Analyze files", files.size());
 	for (int index = 0; index < files.size(); index++) {
-	    File file = files.get(index);
-	    if (monitor != null) {
-		monitor.worked(index);
-	    }
+	    final File file = files.get(index);
+	    // Runnable callable = new Runnable() {
+	    //
+	    // @Override
+	    // public void run() {
+	    // analyzeFile(file);
+	    // finished(file, monitor);
+	    // }
+	    // };
+	    // threadPool.execute(callable);
 	    analyzeFile(file);
+	    monitor.worked(1);
 	    if (monitor.isCanceled()) {
-		monitor.done();
 		return Status.CANCEL_STATUS;
 	    }
 	}
-	monitor.done();
+	// threadPool.shutdown();
+	// while (!threadPool.isTerminated()) {
+	// }
 	return Status.OK_STATUS;
+    }
+
+    private List<File> getFileListFromFileTree() {
+	List<File> files = new ArrayList<File>();
+	for (FileTree fileTreeNode : fileTree) {
+	    File file = fileTreeNode.getPathFile();
+	    if (file.isFile()) {
+		try {
+		    File relativePath = new File(FileUtilities.getRelativePath(
+			    projectDirectory.getPath(), file.getPath(),
+			    File.separator));
+		    files.add(relativePath);
+		} catch (PathResolutionException e) {
+		    logger.error(e.getMessage(), e);
+		}
+	    }
+	}
+	return files;
+    }
+
+    private void finished(File file, IProgressMonitor monitor) {
+	logger.info("Finsihed " + file);
+	monitor.worked(1);
     }
 
     /**
@@ -216,11 +254,10 @@ public class ProjectAnalyzer extends Job implements Serializable {
 	    FileAnalyzer fileAnalyzer = new FileAnalyzer(projectDirectory,
 		    workspaceDirectory, file);
 	    fileAnalyzer.analyze();
-	    AnalyzedFile analyzedFile = fileAnalyzer.getAnalyzedFile();
-	    if (!fileAnalyzer.isAnalyzed()) {
-		return;
+	    if (fileAnalyzer.isAnalyzed()) {
+		AnalyzedFile analyzedFile = fileAnalyzer.getAnalyzedFile();
+		analyzedFiles.add(analyzedFile);
 	    }
-	    analyzedFiles.add(analyzedFile);
 	} catch (Exception e) {
 	    failedFiles.add(file);
 	    logger.error(e.getMessage(), e);
@@ -254,6 +291,10 @@ public class ProjectAnalyzer extends Job implements Serializable {
 	return analyzedFiles;
     }
 
+    public FileTree getFileTree() {
+	return fileTree;
+    }
+
     /*
      * (non-Javadoc)
      * 
@@ -275,92 +316,6 @@ public class ProjectAnalyzer extends Job implements Serializable {
 	    return null;
 	}
 	return analyzerFactory.restore(file.getAnalyzerFile());
-    }
-
-    @Override
-    public int hashCode() {
-	final int prime = 31;
-	int result = 1;
-	result = prime
-		* result
-		+ ((ANALYZED_FILES_FILE == null) ? 0 : ANALYZED_FILES_FILE
-			.hashCode());
-	result = prime
-		* result
-		+ ((FAILED_FILES_FILE == null) ? 0 : FAILED_FILES_FILE
-			.hashCode());
-	result = prime * result
-		+ ((SETTINGS_FILE == null) ? 0 : SETTINGS_FILE.hashCode());
-	result = prime * result
-		+ ((analyzedFiles == null) ? 0 : analyzedFiles.hashCode());
-	result = prime * result
-		+ ((failedFiles == null) ? 0 : failedFiles.hashCode());
-	result = prime
-		* result
-		+ ((projectDirectory == null) ? 0 : projectDirectory.hashCode());
-	result = prime
-		* result
-		+ ((workspaceDirectory == null) ? 0 : workspaceDirectory
-			.hashCode());
-	return result;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * com.puresol.coding.analysis.IProjectAnalyzer#equals(java.lang.Object)
-     */
-    @Override
-    public boolean equals(Object obj) {
-	if (this == obj)
-	    return true;
-	if (obj == null)
-	    return false;
-	if (getClass() != obj.getClass())
-	    return false;
-	ProjectAnalyzer other = (ProjectAnalyzer) obj;
-	if (ANALYZED_FILES_FILE == null) {
-	    if (other.ANALYZED_FILES_FILE != null)
-		return false;
-	} else if (!ANALYZED_FILES_FILE.equals(other.ANALYZED_FILES_FILE))
-	    return false;
-	if (FAILED_FILES_FILE == null) {
-	    if (other.FAILED_FILES_FILE != null)
-		return false;
-	} else if (!FAILED_FILES_FILE.equals(other.FAILED_FILES_FILE))
-	    return false;
-	if (SETTINGS_FILE == null) {
-	    if (other.SETTINGS_FILE != null)
-		return false;
-	} else if (!SETTINGS_FILE.equals(other.SETTINGS_FILE))
-	    return false;
-	if (analyzedFiles == null) {
-	    if (other.analyzedFiles != null)
-		return false;
-	} else if (!analyzedFiles.equals(other.analyzedFiles))
-	    return false;
-	if (failedFiles == null) {
-	    if (other.failedFiles != null)
-		return false;
-	} else if (!failedFiles.equals(other.failedFiles))
-	    return false;
-	if (projectDirectory == null) {
-	    if (other.projectDirectory != null)
-		return false;
-	} else if (!projectDirectory.equals(other.projectDirectory))
-	    return false;
-	if (workspaceDirectory == null) {
-	    if (other.workspaceDirectory != null)
-		return false;
-	} else if (!workspaceDirectory.equals(other.workspaceDirectory))
-	    return false;
-	return true;
     }
 
     /*

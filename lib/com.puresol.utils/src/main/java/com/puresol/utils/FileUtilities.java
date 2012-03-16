@@ -90,6 +90,10 @@ public class FileUtilities {
     }
 
     /**
+     * (Found at:
+     * http://stackoverflow.com/questions/204784/how-to-construct-a-relative
+     * -path-in-java-from-two-absolute-paths-or-urls)
+     * 
      * Get the relative path from one file to another, specifying the directory
      * separator. If one of the provided resources does not exist, it is assumed
      * to be a file unless it ends with '/' or '\'.
@@ -145,7 +149,10 @@ public class FileUtilities {
 		relative.append(".." + pathSeparator);
 	    }
 	}
-	relative.append(toPath.substring(common.length()));
+	int commonLength = common.length();
+	if (commonLength < toPath.length()) {
+	    relative.append(toPath.substring(commonLength));
+	}
 	return relative.toString();
     }
 
