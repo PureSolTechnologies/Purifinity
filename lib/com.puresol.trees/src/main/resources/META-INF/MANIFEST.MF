@@ -8,7 +8,7 @@ Bundle-Name: com.puresol.trees
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-SymbolicName: com.puresol.trees
 Bundle-Vendor: PureSol Technologies
-Bundle-Version: 0.1.0.SNAPSHOT
+Bundle-Version: 0.1.0.qualifier
 Created-By: Apache Maven Bundle Plugin
 Export-Package: com.puresol.trees;uses:="org.osgi.framework,org.slf4j";v
  ersion="0.1.0.SNAPSHOT"
