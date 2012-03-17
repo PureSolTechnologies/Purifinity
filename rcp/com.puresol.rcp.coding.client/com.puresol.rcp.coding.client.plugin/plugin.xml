@@ -278,5 +278,11 @@
             name="Code Analysis">
       </page>
    </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="com.puresol.coding.client.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
 
 </plugin>

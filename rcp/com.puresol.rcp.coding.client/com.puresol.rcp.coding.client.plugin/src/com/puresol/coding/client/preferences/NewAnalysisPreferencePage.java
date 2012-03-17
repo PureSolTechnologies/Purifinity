@@ -52,6 +52,11 @@ public class NewAnalysisPreferencePage extends PreferencePage implements
 	IPreferenceStore preferenceStore = Activator.getDefault()
 		.getPreferenceStore();
 	setPreferenceStore(preferenceStore);
+	setDefaultValuesToPreferencesStore(preferenceStore);
+    }
+
+    public static void setDefaultValuesToPreferencesStore(
+	    IPreferenceStore preferenceStore) {
 	preferenceStore.setDefault(DIRECTORY_INCLUDES,
 		DIRECTORY_INCLUDES_DEFAULT);
 	preferenceStore.setDefault(DIRECTORY_EXCLUDES,

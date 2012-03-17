@@ -41,7 +41,6 @@ public class SourceCodeAnalysis implements IApplication {
 	} finally {
 	    display.dispose();
 	}
-
     }
 
     private boolean changeWorkspace() throws IOException, MalformedURLException {
