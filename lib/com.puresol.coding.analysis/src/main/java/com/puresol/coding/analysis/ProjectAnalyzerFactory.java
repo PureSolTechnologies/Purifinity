@@ -12,6 +12,8 @@ package com.puresol.coding.analysis;
 
 import java.io.File;
 
+import com.puresol.utils.FileSearchConfiguration;
+
 /**
  * This class is for analyzing a whole project. All source code found is checked
  * for a known language and parsed to CodeRange objects. These CodeRange objects
@@ -33,9 +35,9 @@ public class ProjectAnalyzerFactory {
      *            is the directory to put the persisted results to.
      */
     public static ProjectAnalyzer create(File projectDirectory,
-	    File workspaceDirectory) {
+	    File workspaceDirectory, FileSearchConfiguration searchConfiguration) {
 	ProjectAnalyzer projectAnalyser = new ProjectAnalyzer(
-		workspaceDirectory);
+		workspaceDirectory, searchConfiguration);
 	if (!projectAnalyser.createProjectDirectory(projectDirectory)) {
 	    return null;
 	}
@@ -50,9 +52,10 @@ public class ProjectAnalyzerFactory {
      *            is the directory where the persisted results can be found.
      * @return
      */
-    public static ProjectAnalyzer open(File workspaceDirectory) {
+    public static ProjectAnalyzer open(File workspaceDirectory,
+	    FileSearchConfiguration searchConfiguration) {
 	ProjectAnalyzer projectAnalyser = new ProjectAnalyzer(
-		workspaceDirectory);
+		workspaceDirectory, searchConfiguration);
 	if (!projectAnalyser.openAndReadSettings()) {
 	    return null;
 	}

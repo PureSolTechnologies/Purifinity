@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import com.puresol.trees.FileTree;
 import com.puresol.utils.DirectoryUtilities;
 import com.puresol.utils.FileSearch;
+import com.puresol.utils.FileSearchConfiguration;
 import com.puresol.utils.FileUtilities;
 import com.puresol.utils.PathResolutionException;
 import com.puresol.utils.Persistence;
@@ -51,12 +52,16 @@ public class ProjectAnalyzer extends Job implements Serializable {
     private FileTree fileTree = new FileTree(null, "");
     private transient final AnalyzerFactory analyzerFactory = AnalyzerFactory
 	    .createFactory();
+    private final FileSearchConfiguration searchConfig;
 
     private File projectDirectory;
 
-    public ProjectAnalyzer(File workspaceDirectory) {
+    public ProjectAnalyzer(File workspaceDirectory,
+	    FileSearchConfiguration searchConfiguration) {
 	super("Project Analyser Factory");
 	this.workspaceDirectory = workspaceDirectory;
+	this.searchConfig = searchConfiguration;
+
 	SETTINGS_FILE = new File(workspaceDirectory, SETTINGS_FILENAME);
 	ANALYZED_FILES_FILE = new File(workspaceDirectory,
 		ANALYZED_FILES_FILENAME);
@@ -180,9 +185,7 @@ public class ProjectAnalyzer extends Job implements Serializable {
     }
 
     private IStatus analyzeFiles(final IProgressMonitor monitor) {
-	fileTree = FileSearch.getFileTree(projectDirectory,
-		new ArrayList<String>(), new ArrayList<String>(),
-		new ArrayList<String>(), new ArrayList<String>());
+	fileTree = FileSearch.getFileTree(projectDirectory, searchConfig);
 
 	List<File> files = getFileListFromFileTree();
 	int processors = Runtime.getRuntime().availableProcessors();

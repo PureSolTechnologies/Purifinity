@@ -13,6 +13,7 @@ import org.junit.Test;
 import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.analysis.ProjectAnalyzerFactory;
 import com.puresol.coding.quality.SourceCodeQuality;
+import com.puresol.utils.FileSearchConfiguration;
 import com.puresol.utils.FileUtilities;
 import com.puresol.utils.PersistenceTester;
 
@@ -24,7 +25,7 @@ public class ProjectHalsteadMetricTest {
     public void setup() {
 	File workspaceDirectory = new File("test/analysis");
 	analyzer = ProjectAnalyzerFactory.create(new File("src/main/java"),
-		workspaceDirectory);
+		workspaceDirectory, new FileSearchConfiguration());
     }
 
     @Test

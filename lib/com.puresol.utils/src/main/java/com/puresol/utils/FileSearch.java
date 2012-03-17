@@ -111,17 +111,21 @@ public class FileSearch {
     }
 
     public static FileTree getFileTree(File directory,
-	    List<String> dirIncludes, List<String> dirExcludes,
-	    List<String> fileIncludes, List<String> fileExcludes) {
+	    FileSearchConfiguration configuration) {
 
-	List<Pattern> dirIncludePatterns = convertStringListToPatternList(dirIncludes);
-	List<Pattern> dirExcludePatterns = convertStringListToPatternList(dirExcludes);
-	List<Pattern> fileIncludePatterns = convertStringListToPatternList(fileIncludes);
-	List<Pattern> fileExcludePatterns = convertStringListToPatternList(fileExcludes);
+	List<Pattern> dirIncludePatterns = convertStringListToPatternList(configuration
+		.getDirectoryIncludes());
+	List<Pattern> dirExcludePatterns = convertStringListToPatternList(configuration
+		.getDirectoryExcludes());
+	List<Pattern> fileIncludePatterns = convertStringListToPatternList(configuration
+		.getFileIncludes());
+	List<Pattern> fileExcludePatterns = convertStringListToPatternList(configuration
+		.getFileExcludes());
 
 	FileTree fileTree = new FileTree(null, directory.getPath());
 	fileTree = getFileTree(directory, fileTree, dirIncludePatterns,
-		dirExcludePatterns, fileIncludePatterns, fileExcludePatterns);
+		dirExcludePatterns, fileIncludePatterns, fileExcludePatterns,
+		configuration.isIgnoreHidden());
 	return fileTree;
     }
 
@@ -129,59 +133,58 @@ public class FileSearch {
 	    List<String> strings) {
 	List<Pattern> patterns = new ArrayList<Pattern>();
 	for (String string : strings) {
-	    patterns.add(Pattern.compile(string));
+	    patterns.add(Pattern.compile(FileSearch.wildcardsToRegExp(string)));
 	}
 	return patterns;
     }
 
     private static FileTree getFileTree(File directory, FileTree fileTree,
 	    List<Pattern> dirIncludes, List<Pattern> dirExcludes,
-	    List<Pattern> fileIncludes, List<Pattern> fileExcludes) {
+	    List<Pattern> fileIncludes, List<Pattern> fileExcludes,
+	    boolean ignoreHidden) {
 	String[] fileNames = directory.list();
 	for (String fileName : fileNames) {
 	    File file = new File(directory, fileName);
 	    if (file.isDirectory()
-		    && useDirectory(fileName, file.isHidden(), dirIncludes,
-			    dirExcludes)) {
+		    && use(fileName, file.isHidden(), dirIncludes, dirExcludes,
+			    ignoreHidden)) {
 		FileTree fileSubTree = new FileTree(fileTree, fileName);
 		getFileTree(file, fileSubTree, dirIncludes, dirExcludes,
-			fileIncludes, fileExcludes);
+			fileIncludes, fileExcludes, ignoreHidden);
 	    } else if (file.isFile()
-		    && useFile(fileName, file.isHidden(), fileIncludes,
-			    fileExcludes)) {
+		    && use(fileName, file.isHidden(), fileIncludes,
+			    fileExcludes, ignoreHidden)) {
 		new FileTree(fileTree, fileName);
 	    }
 	}
 	return fileTree;
     }
 
-    private static boolean useFile(String fileName, boolean hidden,
-	    List<Pattern> fileIncludes, List<Pattern> fileExcludes) {
-	for (Pattern includePattern : fileIncludes) {
-	    if (includePattern.matcher(fileName).find()) {
+    /**
+     * Checks whether a file or directory name is to be used.
+     * 
+     * @param fileName
+     * @param hidden
+     * @param includes
+     * @param excludes
+     * @param ignoreHidden
+     * @return
+     */
+    private static boolean use(String fileName, boolean hidden,
+	    List<Pattern> includes, List<Pattern> excludes, boolean ignoreHidden) {
+	for (Pattern includePattern : includes) {
+	    if (includePattern.matcher(fileName).matches()) {
 		return true;
 	    }
 	}
-	for (Pattern excludePattern : fileExcludes) {
-	    if (excludePattern.matcher(fileName).find()) {
+	for (Pattern excludePattern : excludes) {
+	    if (excludePattern.matcher(fileName).matches()) {
 		return false;
 	    }
 	}
-	return !hidden;
-    }
-
-    private static boolean useDirectory(String fileName, boolean hidden,
-	    List<Pattern> dirIncludes, List<Pattern> dirExcludes) {
-	for (Pattern includePattern : dirIncludes) {
-	    if (includePattern.matcher(fileName).find()) {
-		return true;
-	    }
+	if (ignoreHidden) {
+	    return !hidden;
 	}
-	for (Pattern excludePattern : dirExcludes) {
-	    if (excludePattern.matcher(fileName).find()) {
-		return false;
-	    }
-	}
-	return !hidden;
+	return true;
     }
 }

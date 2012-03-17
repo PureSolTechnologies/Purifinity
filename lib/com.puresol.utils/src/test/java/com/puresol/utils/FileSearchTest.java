@@ -3,7 +3,6 @@ package com.puresol.utils;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
@@ -21,8 +20,7 @@ public class FileSearchTest {
     @Test
     public void testFileSearch() {
 	FileTree fileTree = FileSearch.getFileTree(new File("."),
-		new ArrayList<String>(), new ArrayList<String>(),
-		new ArrayList<String>(), new ArrayList<String>());
+		new FileSearchConfiguration());
 
 	final List<File> fileList = FileSearch.find(new File("."), "*");
 
