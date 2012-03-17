@@ -1,24 +1,27 @@
 package com.puresol.coding.client.views;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.part.ViewPart;
 
 public class AnalysisReport extends ViewPart {
+    private Text text;
 
     public AnalysisReport() {
-	// TODO Auto-generated constructor stub
     }
 
     @Override
     public void createPartControl(Composite parent) {
-	// TODO Auto-generated method stub
+	parent.setLayout(new FillLayout(SWT.HORIZONTAL));
 
+	text = new Text(parent, SWT.BORDER | SWT.V_SCROLL | SWT.MULTI);
     }
 
     @Override
     public void setFocus() {
-	// TODO Auto-generated method stub
-
+	text.setFocus();
     }
 
 }

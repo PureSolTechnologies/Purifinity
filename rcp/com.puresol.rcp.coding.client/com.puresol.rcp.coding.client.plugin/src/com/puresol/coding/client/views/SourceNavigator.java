@@ -8,23 +8,22 @@ import org.eclipse.ui.part.ViewPart;
 
 public class SourceNavigator extends ViewPart {
 
+    private Tree tree;
+
     public SourceNavigator() {
-	// TODO Auto-generated constructor stub
     }
 
     @Override
     public void createPartControl(Composite parent) {
 	parent.setLayout(new FillLayout(SWT.HORIZONTAL));
 
-	Tree tree = new Tree(parent, SWT.BORDER);
+	tree = new Tree(parent, SWT.BORDER);
 	// TODO Auto-generated method stub
-
     }
 
     @Override
     public void setFocus() {
-	// TODO Auto-generated method stub
-
+	tree.setFocus();
     }
 
 }

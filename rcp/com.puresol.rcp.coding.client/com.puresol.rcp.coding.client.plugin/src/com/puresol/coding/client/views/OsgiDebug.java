@@ -36,6 +36,7 @@ public class OsgiDebug extends ViewPart implements SelectionListener {
 
     @Override
     public void setFocus() {
+	text.setFocus();
     }
 
     @Override

@@ -39,6 +39,7 @@ public class SupportedLanguages extends ViewPart implements SelectionListener {
 
     @Override
     public void setFocus() {
+	text.setFocus();
     }
 
     @Override
