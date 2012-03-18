@@ -34,6 +34,7 @@ import com.puresol.uhura.parser.ParserException;
 import com.puresol.uhura.parser.ParserTree;
 import com.puresol.utils.Persistence;
 import com.puresol.utils.PersistenceException;
+import com.puresol.utils.StopWatch;
 
 /**
  * 
@@ -51,6 +52,7 @@ public class TestLanguageAnalyser implements Analyzer {
     private final transient TestLanguageGrammar grammar;
     private Date date = new Date();
     private ParserTree parserTree = null;
+    private double timeEffort = 0.0;
 
     public TestLanguageAnalyser(File file) {
 	super();
@@ -62,11 +64,15 @@ public class TestLanguageAnalyser implements Analyzer {
     public void parse() throws AnalyzerException {
 	try {
 	    date = new Date();
+	    StopWatch watch = new StopWatch();
+	    watch.start();
 	    Lexer lexer = grammar.getLexer();
 	    LexerResult lexerResult = lexer.lex(SourceCode.read(file),
 		    file.toString());
 	    Parser parser = grammar.getParser();
 	    parserTree = parser.parse(lexerResult);
+	    watch.stop();
+	    timeEffort = watch.getSeconds();
 	} catch (ParserException e) {
 	    logger.error(e.getMessage(), e);
 	    throw new AnalyzerException(this);
@@ -91,6 +97,11 @@ public class TestLanguageAnalyser implements Analyzer {
     @Override
     public Date getTimeStamp() {
 	return date;
+    }
+
+    @Override
+    public double getTimeEffort() {
+	return timeEffort;
     }
 
     @Override

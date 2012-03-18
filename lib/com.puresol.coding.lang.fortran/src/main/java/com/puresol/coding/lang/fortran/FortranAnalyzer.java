@@ -45,19 +45,20 @@ import com.puresol.utils.StopWatch;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class FortranAnalyser implements Analyzer {
+public class FortranAnalyzer implements Analyzer {
 
     private static final long serialVersionUID = 2265150343844799735L;
 
     private static final Logger logger = LoggerFactory
-	    .getLogger(FortranAnalyser.class);
+	    .getLogger(FortranAnalyzer.class);
 
     private final File file;
     private final transient FortranGrammar grammar;
     private final Date date = new Date();
     private ParserTree parserTree = null;
+    private double timeEffort = 0.0;
 
-    public FortranAnalyser(File file) {
+    public FortranAnalyzer(File file) {
 	super();
 	this.file = file;
 	grammar = FortranGrammar.getInstance();
@@ -66,14 +67,13 @@ public class FortranAnalyser implements Analyzer {
     @Override
     public void parse() throws AnalyzerException {
 	try {
-	    LexerResult lexerResult = preConditioningAndLexing();
 	    StopWatch watch = new StopWatch();
-	    Parser parser = grammar.getParser();
-	    logger.debug("Starting parser...");
 	    watch.start();
+	    LexerResult lexerResult = preConditioningAndLexing();
+	    Parser parser = grammar.getParser();
 	    parserTree = parser.parse(lexerResult);
 	    watch.stop();
-	    logger.debug("done. (time: " + watch + ")");
+	    timeEffort = watch.getSeconds();
 	} catch (IOException e) {
 	    logger.error(e.getMessage(), e);
 	    throw new AnalyzerException(this);
@@ -90,12 +90,7 @@ public class FortranAnalyser implements Analyzer {
 	try {
 	    FortranPreConditioner preconditioner = new FortranPreConditioner(
 		    file);
-	    StopWatch watch = new StopWatch();
-	    logger.debug("Start lexical scanner...");
-	    watch.start();
 	    TokenStream tokenStream = preconditioner.scan(grammar.getLexer());
-	    watch.stop();
-	    logger.debug("done. (time: " + watch + ")");
 	    return new LexerResult(tokenStream);
 	} catch (IOException e) {
 	    logger.error(e.getMessage(), e);
@@ -127,6 +122,11 @@ public class FortranAnalyser implements Analyzer {
     @Override
     public Date getTimeStamp() {
 	return date;
+    }
+
+    @Override
+    public double getTimeEffort() {
+	return timeEffort;
     }
 
     @Override

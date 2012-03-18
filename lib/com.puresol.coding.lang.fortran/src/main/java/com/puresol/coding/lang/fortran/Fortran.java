@@ -82,7 +82,7 @@ public class Fortran extends AbstractProgrammingLanguage {
 
     @Override
     public Analyzer createAnalyser(File file) {
-	return new FortranAnalyser(file);
+	return new FortranAnalyzer(file);
     }
 
     public void setSourceForm(SourceForm sourceForm) {

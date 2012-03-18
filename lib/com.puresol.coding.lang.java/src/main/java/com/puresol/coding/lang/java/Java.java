@@ -7,8 +7,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 
 import org.osgi.framework.BundleContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.puresol.coding.AbstractProgrammingLanguage;
 import com.puresol.coding.analysis.Analyzer;
@@ -23,8 +21,6 @@ import com.puresol.utils.PersistenceException;
  * 
  */
 public class Java extends AbstractProgrammingLanguage {
-
-    private static final Logger logger = LoggerFactory.getLogger(Java.class);
 
     private static final String[] FILE_SUFFIXES = { ".java" };
 
@@ -91,6 +87,6 @@ public class Java extends AbstractProgrammingLanguage {
 
     @Override
     public Analyzer createAnalyser(File file) {
-	return new JavaAnalyser(file);
+	return new JavaAnalyzer(file);
     }
 }

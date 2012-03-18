@@ -39,6 +39,14 @@ public interface Analysis extends Serializable {
     public Date getTimeStamp() throws IOException;
 
     /**
+     * This method returns the time effort which was needed for analysis.
+     * 
+     * @return Returns the time effort in seconds
+     * @throws IOException
+     */
+    public double getTimeEffort() throws IOException;
+
+    /**
      * Returns the language of the file analysed.
      * 
      * @return The language is returned.

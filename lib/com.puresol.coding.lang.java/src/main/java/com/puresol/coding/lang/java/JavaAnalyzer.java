@@ -44,25 +44,27 @@ import com.puresol.uhura.parser.ParserException;
 import com.puresol.uhura.parser.ParserTree;
 import com.puresol.utils.Persistence;
 import com.puresol.utils.PersistenceException;
+import com.puresol.utils.StopWatch;
 
 /**
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class JavaAnalyser implements Analyzer {
+public class JavaAnalyzer implements Analyzer {
 
     private static final long serialVersionUID = -3601131473616977648L;
 
     private static final Logger logger = LoggerFactory
-	    .getLogger(JavaAnalyser.class);
+	    .getLogger(JavaAnalyzer.class);
 
     private final File file;
     private final transient JavaGrammar grammar;
     private Date date = new Date();
+    private double timeEffort = 0;
     private ParserTree parserTree = null;
 
-    public JavaAnalyser(File file) {
+    public JavaAnalyzer(File file) {
 	super();
 	this.file = file;
 	grammar = JavaGrammar.getInstance();
@@ -72,11 +74,15 @@ public class JavaAnalyser implements Analyzer {
     public void parse() throws AnalyzerException {
 	try {
 	    date = new Date();
+	    StopWatch watch = new StopWatch();
+	    watch.start();
 	    Lexer lexer = grammar.getLexer();
 	    LexerResult lexerResult = lexer.lex(SourceCode.read(file),
 		    file.toString());
 	    Parser parser = grammar.getParser();
 	    parserTree = parser.parse(lexerResult);
+	    watch.stop();
+	    timeEffort = watch.getSeconds();
 	} catch (ParserException e) {
 	    logger.error(e.getMessage(), e);
 	    throw new AnalyzerException(this);
@@ -101,6 +107,11 @@ public class JavaAnalyser implements Analyzer {
     @Override
     public Date getTimeStamp() {
 	return date;
+    }
+
+    @Override
+    public double getTimeEffort() {
+	return timeEffort;
     }
 
     @Override

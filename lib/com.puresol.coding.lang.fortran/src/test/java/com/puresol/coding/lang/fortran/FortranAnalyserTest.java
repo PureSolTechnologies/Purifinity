@@ -23,13 +23,13 @@ public class FortranAnalyserTest {
 
     @Test
     public void testInstance() {
-	assertNotNull(new FortranAnalyser(new File("")));
+	assertNotNull(new FortranAnalyzer(new File("")));
     }
 
     @Test
     public void testInitValues() {
 	File file = new File("src/test/TestFile.f");
-	FortranAnalyser analyser = new FortranAnalyser(file);
+	FortranAnalyzer analyser = new FortranAnalyzer(file);
 	assertEquals(file, analyser.getFile());
 	assertNotNull(analyser.getTimeStamp());
 	assertSame(Fortran.getInstance(), analyser.getLanguage());
@@ -38,7 +38,7 @@ public class FortranAnalyserTest {
 
     private void test(File file) throws Throwable {
 	assertTrue(file.exists());
-	FortranAnalyser analyser = new FortranAnalyser(file);
+	FortranAnalyzer analyser = new FortranAnalyzer(file);
 	analyser.parse();
     }
 
