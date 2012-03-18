@@ -25,7 +25,7 @@ public class FileSearchTest {
 	final List<File> fileList = FileSearch.find(new File("."), "*");
 
 	for (FileTree file : fileTree) {
-	    File treeFile = file.getPathFile();
+	    File treeFile = file.getPathFile(true);
 	    if (treeFile.isFile()) {
 		File expected = new File(treeFile.getPath().substring(1));
 		assertTrue(treeFile.getPath()
@@ -37,7 +37,7 @@ public class FileSearchTest {
 	for (File file : fileList) {
 	    boolean found = false;
 	    for (FileTree file2 : fileTree) {
-		File treeFile = file2.getPathFile();
+		File treeFile = file2.getPathFile(true);
 		if (treeFile.isFile()) {
 		    File expected = new File(treeFile.getPath().substring(1));
 		    if (expected.equals(file)) {

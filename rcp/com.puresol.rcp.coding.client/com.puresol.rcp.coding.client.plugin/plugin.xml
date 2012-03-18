@@ -233,6 +233,13 @@
             id="com.puresol.coding.Analysis"
             name="Code Analysis">
       </category>
+      <view
+            category="com.puresol.coding.Analysis"
+            class="com.puresol.coding.client.views.ParserTreeViewer"
+            id="com.puresol.coding.client.ParserTreeViewer"
+            name="Parser Tree Viewer"
+            restorable="true">
+      </view>
    </extension>
    <extension
          point="org.eclipse.ui.commands">

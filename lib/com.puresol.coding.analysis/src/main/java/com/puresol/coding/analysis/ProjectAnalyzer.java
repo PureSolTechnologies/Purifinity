@@ -21,8 +21,6 @@ import com.puresol.trees.FileTree;
 import com.puresol.utils.DirectoryUtilities;
 import com.puresol.utils.FileSearch;
 import com.puresol.utils.FileSearchConfiguration;
-import com.puresol.utils.FileUtilities;
-import com.puresol.utils.PathResolutionException;
 import com.puresol.utils.Persistence;
 import com.puresol.utils.PersistenceException;
 
@@ -56,9 +54,9 @@ public class ProjectAnalyzer extends Job implements Serializable {
 
     private File projectDirectory;
 
-    public ProjectAnalyzer(File workspaceDirectory,
+    public ProjectAnalyzer(String name, File workspaceDirectory,
 	    FileSearchConfiguration searchConfiguration) {
-	super("Project Analyser Factory");
+	super(name);
 	this.workspaceDirectory = workspaceDirectory;
 	this.searchConfig = searchConfiguration;
 
@@ -218,16 +216,9 @@ public class ProjectAnalyzer extends Job implements Serializable {
     private List<File> getFileListFromFileTree() {
 	List<File> files = new ArrayList<File>();
 	for (FileTree fileTreeNode : fileTree) {
-	    File file = fileTreeNode.getPathFile();
-	    if (file.isFile()) {
-		try {
-		    File relativePath = new File(FileUtilities.getRelativePath(
-			    projectDirectory.getPath(), file.getPath(),
-			    File.separator));
-		    files.add(relativePath);
-		} catch (PathResolutionException e) {
-		    logger.error(e.getMessage(), e);
-		}
+	    File file = fileTreeNode.getPathFile(false);
+	    if (new File(projectDirectory, file.getPath()).isFile()) {
+		files.add(file);
 	    }
 	}
 	return files;
@@ -260,6 +251,9 @@ public class ProjectAnalyzer extends Job implements Serializable {
 	    if (fileAnalyzer.isAnalyzed()) {
 		AnalyzedFile analyzedFile = fileAnalyzer.getAnalyzedFile();
 		analyzedFiles.add(analyzedFile);
+	    } else {
+		failedFiles.add(file);
+		logger.warn("File " + file + " could be analyzed.");
 	    }
 	} catch (Exception e) {
 	    failedFiles.add(file);

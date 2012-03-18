@@ -43,7 +43,7 @@ public class NewAnalysisWizard extends Wizard {
 		ignoreHidden);
 	String name = generalSettingsPage.getProjectName();
 	String sourceDirectory = generalSettingsPage.getSourceDirectory();
-	ProjectAnalyzer job = ProjectAnalyzerFactory.create(new File(
+	ProjectAnalyzer job = ProjectAnalyzerFactory.create(name, new File(
 		sourceDirectory),
 		new File(PlatformUtils.getWorkspaceDirectory(), name),
 		searchConfiguration);

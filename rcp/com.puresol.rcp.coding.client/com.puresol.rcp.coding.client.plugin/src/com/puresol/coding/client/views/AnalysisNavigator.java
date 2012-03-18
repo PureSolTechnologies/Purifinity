@@ -12,31 +12,39 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.progress.UIJob;
 
 import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.client.content.AnalysisLabelProvider;
 import com.puresol.coding.client.content.AnalysisNavigatorModel;
+import com.puresol.coding.client.content.AnalysisNavigatorTreeNodeElement;
 import com.puresol.coding.client.content.AnalysisTreeContentProvider;
 
+/**
+ * This view shows a list of all analysis which are opened and the tree of files
+ * below the analysis.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class AnalysisNavigator extends ViewPart implements IJobChangeListener,
-	ISelectionProvider {
+	ISelectionProvider, SelectionListener {
 
     private Tree tree;
     private TreeViewer treeViewer;
+    private ISelection selection = null;
 
     private final List<ISelectionChangedListener> listeners = new ArrayList<ISelectionChangedListener>();
-
-    public AnalysisNavigator() {
-	Job.getJobManager().addJobChangeListener(this);
-	getSite().setSelectionProvider(this);
-    }
 
     @Override
     public void createPartControl(Composite parent) {
@@ -48,6 +56,10 @@ public class AnalysisNavigator extends ViewPart implements IJobChangeListener,
 	treeViewer.setInput(AnalysisNavigatorModel.INSTANCE);
 	treeViewer.setLabelProvider(new AnalysisLabelProvider());
 	tree.setVisible(true);
+	tree.addSelectionListener(this);
+
+	Job.getJobManager().addJobChangeListener(this);
+	getSite().setSelectionProvider(this);
     }
 
     @Override
@@ -105,7 +117,7 @@ public class AnalysisNavigator extends ViewPart implements IJobChangeListener,
 
     @Override
     public ISelection getSelection() {
-	return null;
+	return selection;
     }
 
     @Override
@@ -116,7 +128,46 @@ public class AnalysisNavigator extends ViewPart implements IJobChangeListener,
 
     @Override
     public void setSelection(ISelection selection) {
-	// TODO Auto-generated method stub
+	this.selection = selection;
+	for (ISelectionChangedListener listener : listeners) {
+	    listener.selectionChanged(new SelectionChangedEvent(this,
+		    getSelection()));
+	}
+    }
+
+    @Override
+    public void widgetSelected(SelectionEvent e) {
+	if (e.getSource().equals(tree)) {
+	    TreeItem[] treeItems = tree.getSelection();
+	    if (treeItems.length > 0) {
+		AnalysisSelection analysisSelection = createAnalysisNavigatorSelection(treeItems[0]);
+		setSelection(analysisSelection);
+	    }
+	}
+    }
+
+    /**
+     * This method takes the tree items of the tree selection and creates a
+     * navigator selection.
+     * 
+     * @param treeItems
+     * @return
+     */
+    private AnalysisSelection createAnalysisNavigatorSelection(
+	    TreeItem treeItem) {
+	AnalysisNavigatorTreeNodeElement analyzer = (AnalysisNavigatorTreeNodeElement) treeItem
+		.getData();
+	AnalysisSelection analysisSelection = new AnalysisSelection(
+		analyzer.getAnalyser(), analyzer.getSourceFile().getPathFile(
+			false));
+	return analysisSelection;
+    }
+
+    @Override
+    public void widgetDefaultSelected(SelectionEvent e) {
+	if (e.getSource().equals(tree)) {
+
+	}
     }
 
 }

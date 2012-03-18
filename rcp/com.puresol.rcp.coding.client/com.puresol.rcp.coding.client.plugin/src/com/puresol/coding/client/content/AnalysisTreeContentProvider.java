@@ -1,5 +1,6 @@
 package com.puresol.coding.client.content;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
@@ -28,41 +29,39 @@ public class AnalysisTreeContentProvider implements ITreeContentProvider {
 	    return new Object[0];
 	}
 	List<ProjectAnalyzer> analyzers = model.getAnalyzers();
-	return analyzers.toArray(new ProjectAnalyzer[analyzers.size()]);
+	List<AnalysisNavigatorTreeNodeElement> elements = new ArrayList<AnalysisNavigatorTreeNodeElement>();
+	for (ProjectAnalyzer analyzer : analyzers) {
+	    elements.add(new AnalysisNavigatorTreeNodeElement(null, analyzer,
+		    analyzer.getFileTree(), analyzer.getName()));
+	}
+	return elements.toArray(new AnalysisNavigatorTreeNodeElement[elements
+		.size()]);
     }
 
     @Override
     public Object[] getChildren(Object parentElement) {
-	if (parentElement instanceof ProjectAnalyzer) {
-	    ProjectAnalyzer analyzer = (ProjectAnalyzer) parentElement;
-	    FileTree fileTree = analyzer.getFileTree();
-	    return fileTree.getChildren().toArray();
+	AnalysisNavigatorTreeNodeElement nodeElement = (AnalysisNavigatorTreeNodeElement) parentElement;
+	ProjectAnalyzer analyzer = nodeElement.getAnalyser();
+	FileTree fileTree = nodeElement.getSourceFile();
+	List<AnalysisNavigatorTreeNodeElement> elements = new ArrayList<AnalysisNavigatorTreeNodeElement>();
+	for (FileTree child : fileTree.getChildren()) {
+	    elements.add(new AnalysisNavigatorTreeNodeElement(nodeElement,
+		    analyzer, child, child.getName()));
 	}
-	FileTree fileTree = (FileTree) parentElement;
-	return fileTree.getChildren().toArray();
+	return elements.toArray(new AnalysisNavigatorTreeNodeElement[elements
+		.size()]);
     }
 
     @Override
     public Object getParent(Object element) {
-	if ((model == null) || (element instanceof ProjectAnalyzer)) {
-	    return null;
-	}
-	FileTree fileTree = (FileTree) element;
-	for (ProjectAnalyzer analyzer : model.getAnalyzers()) {
-	    if (analyzer.getFileTree().equals(fileTree)) {
-		return analyzer;
-	    }
-	}
-	return fileTree.getParent();
+	AnalysisNavigatorTreeNodeElement nodeElement = (AnalysisNavigatorTreeNodeElement) element;
+	return nodeElement.getParent();
     }
 
     @Override
     public boolean hasChildren(Object element) {
-	if (element instanceof ProjectAnalyzer) {
-	    return true;
-	}
-	FileTree fileTree = (FileTree) element;
-	return fileTree.hasChildren();
+	AnalysisNavigatorTreeNodeElement nodeElement = (AnalysisNavigatorTreeNodeElement) element;
+	return nodeElement.getSourceFile().hasChildren();
     }
 
 }

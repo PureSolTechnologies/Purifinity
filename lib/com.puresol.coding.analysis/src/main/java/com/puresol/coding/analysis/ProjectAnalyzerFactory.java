@@ -34,9 +34,9 @@ public class ProjectAnalyzerFactory {
      * @param workspaceDirectory
      *            is the directory to put the persisted results to.
      */
-    public static ProjectAnalyzer create(File projectDirectory,
+    public static ProjectAnalyzer create(String name, File projectDirectory,
 	    File workspaceDirectory, FileSearchConfiguration searchConfiguration) {
-	ProjectAnalyzer projectAnalyser = new ProjectAnalyzer(
+	ProjectAnalyzer projectAnalyser = new ProjectAnalyzer(name,
 		workspaceDirectory, searchConfiguration);
 	if (!projectAnalyser.createProjectDirectory(projectDirectory)) {
 	    return null;
@@ -54,7 +54,7 @@ public class ProjectAnalyzerFactory {
      */
     public static ProjectAnalyzer open(File workspaceDirectory,
 	    FileSearchConfiguration searchConfiguration) {
-	ProjectAnalyzer projectAnalyser = new ProjectAnalyzer(
+	ProjectAnalyzer projectAnalyser = new ProjectAnalyzer("<opening>",
 		workspaceDirectory, searchConfiguration);
 	if (!projectAnalyser.openAndReadSettings()) {
 	    return null;

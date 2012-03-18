@@ -49,7 +49,7 @@ public class FileTreeTest {
     public void testGetPath() {
 	FileTree node = tree.getChild("test1").getChild("test12").getChildren()
 		.get(0);
-	assertEquals("/test1/test12/File2.txt", node.getPath());
+	assertEquals("/test1/test12/File2.txt", node.getPath(true));
     }
 
     @Test
@@ -57,6 +57,6 @@ public class FileTreeTest {
 	FileTree node = tree2.getChild("test1").getChild("test12")
 		.getChildren().get(0);
 	assertEquals(new File("/home/test/test1/test12/File2.txt"),
-		node.getPathFile());
+		node.getPathFile(true));
     }
 }

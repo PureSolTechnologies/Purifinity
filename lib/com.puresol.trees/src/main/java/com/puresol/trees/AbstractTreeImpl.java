@@ -4,6 +4,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * This is an abstract, immutable implementation of a Tree<T>.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ * @param <T>
+ *            is the type of the nodes. T needs to implement AbstractTreeImpl.
+ */
 public class AbstractTreeImpl<T extends AbstractTreeImpl<T>> implements
 	Tree<T>, Iterable<T> {
 
@@ -11,6 +19,14 @@ public class AbstractTreeImpl<T extends AbstractTreeImpl<T>> implements
     private final List<T> children = new ArrayList<T>();
     private final String name;
 
+    /**
+     * This is the initial value constructor.
+     * 
+     * @param parent
+     *            is the parent where this node is to be added to.
+     * @param name
+     *            is the identifier of this node.
+     */
     public AbstractTreeImpl(T parent, String name) {
 	super();
 	this.parent = parent;
@@ -22,13 +38,13 @@ public class AbstractTreeImpl<T extends AbstractTreeImpl<T>> implements
 	this.name = name;
     }
 
+    private void addChild(T child) {
+	children.add(child);
+    }
+
     @Override
     public T getParent() {
 	return parent;
-    }
-
-    private void addChild(T child) {
-	children.add(child);
     }
 
     @Override
@@ -48,6 +64,8 @@ public class AbstractTreeImpl<T extends AbstractTreeImpl<T>> implements
 
     @Override
     public Iterator<T> iterator() {
-	return new TreeIterator<T>((T) this);
+	@SuppressWarnings("unchecked")
+	T t = (T) this;
+	return new TreeIterator<T>(t);
     }
 }

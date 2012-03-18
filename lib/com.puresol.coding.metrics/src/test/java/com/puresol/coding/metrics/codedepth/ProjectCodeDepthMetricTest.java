@@ -24,8 +24,9 @@ public class ProjectCodeDepthMetricTest {
     @Before
     public void setup() {
 	File workspaceDirectory = new File("test/analysis");
-	analyzer = ProjectAnalyzerFactory.create(new File("src/main/java"),
-		workspaceDirectory, new FileSearchConfiguration());
+	analyzer = ProjectAnalyzerFactory.create("ProjectAnalyzer", new File(
+		"src/main/java"), workspaceDirectory,
+		new FileSearchConfiguration());
     }
 
     @Test
