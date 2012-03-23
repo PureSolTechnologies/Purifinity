@@ -38,20 +38,6 @@ Build-Jdk: 1.6.0_22
 Bundle-Version: 0.1.0.quantifier
 Bnd-LastModified: 1331319581687
 Bundle-ManifestVersion: 2
-Import-Package: com.puresol.coding,
- com.puresol.coding.analysis,
- com.puresol.coding.lang.java,
- com.puresol.coding.lang.java.grammar,
- com.puresol.coding.lang.java.grammar.parts,
- com.puresol.packages,
- com.puresol.trees;version="0.1",
- com.puresol.uhura.grammar,
- com.puresol.uhura.lexer,
- com.puresol.uhura.parser,
- com.puresol.utils,
- org.osgi.framework;version="1.6",
- org.slf4j;version="1.6",
- utils
 Bundle-SymbolicName: com.puresol.coding.lang.java
 Originally-Created-By: Apache Maven Bundle Plugin
 Service-Component: OSGI-INF/component.xml

@@ -23,17 +23,6 @@ Bundle-Version: 0.1.0.SNAPSHOT
 Bnd-LastModified: 1331319581467
 Bundle-Activator: com.puresol.coding.analysis.Activator
 Bundle-ManifestVersion: 2
-Import-Package: com.puresol.coding,
- com.puresol.coding.analysis,
- com.puresol.coding.evaluator,
- com.puresol.coding.quality,
- com.puresol.trees,
- com.puresol.uhura.parser,
- com.puresol.utils,
- org.eclipse.core.runtime;common=split;version="3.4",
- org.eclipse.core.runtime.jobs,
- org.osgi.framework;version="1.6",
- org.slf4j;version="1.6"
 Bundle-SymbolicName: com.puresol.coding.analysis
 Originally-Created-By: Apache Maven Bundle Plugin
 Bundle-ActivationPolicy: lazy
