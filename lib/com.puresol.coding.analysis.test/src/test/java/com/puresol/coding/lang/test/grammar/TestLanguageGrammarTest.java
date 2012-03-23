@@ -12,7 +12,6 @@ import org.junit.Test;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.GrammarReader;
-import com.puresol.utils.PersistenceException;
 
 public class TestLanguageGrammarTest {
 
@@ -43,23 +42,15 @@ public class TestLanguageGrammarTest {
 
     @Test
     public void testSingleton() {
-	try {
-	    Grammar grammar = TestLanguageGrammar.getInstance().getGrammar();
-	    assertNotNull(grammar);
-	    assertSame(grammar, TestLanguageGrammar.getInstance().getGrammar());
-	} catch (PersistenceException e) {
-	    e.printStackTrace();
-	    fail("No exception was expected!");
-	} catch (IOException e) {
-	    e.printStackTrace();
-	    fail("No exception was expected!");
-	}
+	Grammar grammar = TestLanguageGrammar.getInstance();
+	assertNotNull(grammar);
+	assertSame(grammar, TestLanguageGrammar.getInstance());
     }
 
     @Test
     public void testPrint() {
 	try {
-	    Grammar grammar = TestLanguageGrammar.getInstance().getGrammar();
+	    Grammar grammar = TestLanguageGrammar.getInstance();
 	    System.out.println(grammar);
 	} catch (Throwable e) {
 	    e.printStackTrace();

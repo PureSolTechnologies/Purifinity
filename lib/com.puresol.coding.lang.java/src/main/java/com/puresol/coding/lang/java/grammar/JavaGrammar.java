@@ -5,10 +5,10 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 
 import com.puresol.uhura.grammar.Grammar;
+import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.GrammarManager;
 import com.puresol.uhura.lexer.Lexer;
 import com.puresol.uhura.parser.Parser;
-import com.puresol.utils.Persistence;
 import com.puresol.utils.PersistenceException;
 
 /**
@@ -17,7 +17,9 @@ import com.puresol.utils.PersistenceException;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class JavaGrammar {
+public class JavaGrammar extends Grammar {
+
+    private static final long serialVersionUID = 7320197893887717979L;
 
     public static final String GRAMMAR_RESOURCE = "/com/puresol/coding/lang/java/grammar/Java-1.6.g";
     public static final String PERSISTED_GRAMMAR_RESOURCE = GrammarManager
@@ -40,23 +42,32 @@ public class JavaGrammar {
     }
 
     private static synchronized void createInstance() {
-	if (instance == null) {
-	    instance = new JavaGrammar();
+	try {
+	    if (instance == null) {
+		instance = new JavaGrammar();
+	    }
+	} catch (GrammarException e) {
+	    throw new RuntimeException("Java Grammar is invalid!", e);
 	}
     }
 
-    private Grammar grammar = null;
-
-    private JavaGrammar() {
-	super();
+    private static final Grammar grammar;
+    static {
+	try {
+	    grammar = restore(
+		    JavaGrammar.class
+			    .getResourceAsStream(PERSISTED_GRAMMAR_RESOURCE),
+		    Grammar.class);
+	} catch (IOException e) {
+	    throw new RuntimeException("Could not load grammar.", e);
+	} catch (PersistenceException e) {
+	    throw new RuntimeException("Could not load grammar.", e);
+	}
     }
 
-    public Grammar getGrammar() throws IOException, PersistenceException {
-	if (grammar == null) {
-	    grammar = (Grammar) Persistence.restore(getClass()
-		    .getResourceAsStream(PERSISTED_GRAMMAR_RESOURCE));
-	}
-	return grammar;
+    private JavaGrammar() throws GrammarException {
+	super(grammar.getOptions(), grammar.getTokenDefinitions(), grammar
+		.getProductions());
     }
 
     public Lexer getLexer() throws IOException, PersistenceException {
@@ -85,7 +96,7 @@ public class JavaGrammar {
 	return parser.clone();
     }
 
-    public static <T> T restore(InputStream inputStream, Class<T> clazz)
+    private static <T> T restore(InputStream inputStream, Class<T> clazz)
 	    throws IOException, PersistenceException {
 	try {
 	    if (inputStream == null) {
@@ -104,4 +115,8 @@ public class JavaGrammar {
 	}
     }
 
+    @Override
+    public InputStream getGrammarDefinition() {
+	return JavaGrammar.class.getResourceAsStream(GRAMMAR_RESOURCE);
+    }
 }

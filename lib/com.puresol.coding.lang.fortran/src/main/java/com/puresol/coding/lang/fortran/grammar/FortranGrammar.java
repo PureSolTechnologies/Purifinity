@@ -1,72 +1,117 @@
 package com.puresol.coding.lang.fortran.grammar;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
 
 import com.puresol.uhura.grammar.Grammar;
+import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.GrammarManager;
 import com.puresol.uhura.lexer.Lexer;
 import com.puresol.uhura.parser.Parser;
-import com.puresol.utils.Persistence;
 import com.puresol.utils.PersistenceException;
 
-public class FortranGrammar {
+public class FortranGrammar extends Grammar {
 
-	public static final String GRAMMAR_RESOURCE = "/com/puresol/coding/lang/fortran/grammar/Fortran2008.g";
-	public static final String PERSISTED_GRAMMAR_RESOURCE = GrammarManager
-			.getPersistedGrammarPath(GRAMMAR_RESOURCE);
-	public static final String PERSISTED_LEXER_RESOURCE = GrammarManager
-			.getPersistedLexerPath(GRAMMAR_RESOURCE);
-	public static final String PERSISTED_PARSER_RESOURCE = GrammarManager
-			.getPersistedParserPath(GRAMMAR_RESOURCE);
+    private static final long serialVersionUID = -8286230838527909083L;
 
-	private static FortranGrammar instance = null;
-	private static Lexer lexer = null;
-	private static Parser parser = null;
+    public static final String GRAMMAR_RESOURCE = "/com/puresol/coding/lang/fortran/grammar/Fortran2008.g";
+    public static final String PERSISTED_GRAMMAR_RESOURCE = GrammarManager
+	    .getPersistedGrammarPath(GRAMMAR_RESOURCE);
+    public static final String PERSISTED_LEXER_RESOURCE = GrammarManager
+	    .getPersistedLexerPath(GRAMMAR_RESOURCE);
+    public static final String PERSISTED_PARSER_RESOURCE = GrammarManager
+	    .getPersistedParserPath(GRAMMAR_RESOURCE);
 
-	public static FortranGrammar getInstance() {
-		if (instance == null) {
-			createInstance();
-		}
-		return instance;
+    private static FortranGrammar instance = null;
+    private static Lexer lexer = null;
+    private static Parser parser = null;
+
+    public static FortranGrammar getInstance() {
+	if (instance == null) {
+	    createInstance();
 	}
+	return instance;
+    }
 
-	private static synchronized void createInstance() {
-		if (instance == null) {
-			instance = new FortranGrammar();
-		}
+    private static synchronized void createInstance() {
+	try {
+	    if (instance == null) {
+		instance = new FortranGrammar();
+	    }
+	} catch (GrammarException e) {
+	    throw new RuntimeException("Fortran Grammar is invalid!", e);
 	}
+    }
 
-	private FortranGrammar() {
-		super();
+    private static final Grammar grammar;
+    static {
+	try {
+	    grammar = restore(
+		    FortranGrammar.class
+			    .getResourceAsStream(PERSISTED_GRAMMAR_RESOURCE),
+		    Grammar.class);
+	} catch (IOException e) {
+	    throw new RuntimeException("Could not load grammar.", e);
+	} catch (PersistenceException e) {
+	    throw new RuntimeException("Could not load grammar.", e);
 	}
+    }
 
-	public Grammar getGrammar() throws IOException, PersistenceException {
-		return (Grammar) Persistence.restore(getClass().getResourceAsStream(
-				PERSISTED_GRAMMAR_RESOURCE));
-	}
+    private FortranGrammar() throws GrammarException {
+	super(grammar.getOptions(), grammar.getTokenDefinitions(), grammar
+		.getProductions());
+    }
 
-	public Lexer getLexer() throws IOException, PersistenceException {
+    public Lexer getLexer() throws IOException, PersistenceException {
+	if (lexer == null) {
+	    synchronized (this) {
 		if (lexer == null) {
-			synchronized (this) {
-				if (lexer == null) {
-					lexer = (Lexer) Persistence.restore(getClass()
-							.getResourceAsStream(PERSISTED_LEXER_RESOURCE));
+		    lexer = restore(
+			    getClass().getResourceAsStream(
+				    PERSISTED_LEXER_RESOURCE), Lexer.class);
 
-				}
-			}
 		}
-		return lexer.clone();
+	    }
 	}
+	return lexer.clone();
+    }
 
-	public Parser getParser() throws IOException, PersistenceException {
+    public Parser getParser() throws IOException, PersistenceException {
+	if (parser == null) {
+	    synchronized (this) {
 		if (parser == null) {
-			synchronized (this) {
-				if (parser == null) {
-					parser = (Parser) Persistence.restore(getClass()
-							.getResourceAsStream(PERSISTED_PARSER_RESOURCE));
-				}
-			}
+		    parser = restore(
+			    getClass().getResourceAsStream(
+				    PERSISTED_PARSER_RESOURCE), Parser.class);
 		}
-		return parser.clone();
+	    }
 	}
+	return parser.clone();
+    }
+
+    private static <T> T restore(InputStream inputStream, Class<T> clazz)
+	    throws IOException, PersistenceException {
+	try {
+	    if (inputStream == null) {
+		throw new IOException("Input stream is null!");
+	    }
+	    ObjectInputStream ois = new ObjectInputStream(inputStream);
+	    try {
+		@SuppressWarnings("unchecked")
+		T t = (T) ois.readObject();
+		return t;
+	    } finally {
+		ois.close();
+	    }
+	} catch (ClassNotFoundException e) {
+	    throw new PersistenceException(e);
+	}
+    }
+
+    @Override
+    public InputStream getGrammarDefinition() {
+	return FortranGrammar.class.getResourceAsStream(GRAMMAR_RESOURCE);
+    }
+
 }

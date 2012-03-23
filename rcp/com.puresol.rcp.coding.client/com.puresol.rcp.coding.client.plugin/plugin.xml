@@ -240,6 +240,12 @@
             name="Parser Tree Viewer"
             restorable="true">
       </view>
+      <view
+            class="com.puresol.coding.client.GrammarViewer"
+            id="com.puresol.coding.client.GrammarViewer"
+            name="Grammar Viewer"
+            restorable="true">
+      </view>
    </extension>
    <extension
          point="org.eclipse.ui.commands">

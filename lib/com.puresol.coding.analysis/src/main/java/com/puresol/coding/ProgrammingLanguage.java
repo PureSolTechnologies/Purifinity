@@ -3,6 +3,7 @@ package com.puresol.coding;
 import java.io.File;
 
 import com.puresol.coding.analysis.Analyzer;
+import com.puresol.uhura.grammar.Grammar;
 import com.puresol.utils.PersistenceException;
 
 /**
@@ -25,12 +26,26 @@ public interface ProgrammingLanguage { // do not Serialize!
     public String getName();
 
     /**
+     * This method returns the version of the programming language.
+     * 
+     * @return
+     */
+    public String getVersion();
+
+    /**
      * This method specifies whether the programming language is suitable for a
      * specified file or not.
      * 
      * @return
      */
     public boolean isSuitable(File file);
+
+    /**
+     * This method returns the grammar of the programming language.
+     * 
+     * @return
+     */
+    public Grammar getGrammar();
 
     /**
      * This method is a factory method for analyser objects for the programming

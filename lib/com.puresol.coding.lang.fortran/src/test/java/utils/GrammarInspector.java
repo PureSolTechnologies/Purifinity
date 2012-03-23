@@ -8,13 +8,12 @@ import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.parser.ParserFactory;
 import com.puresol.uhura.parser.ParserFactoryException;
-import com.puresol.utils.PersistenceException;
 
 public class GrammarInspector {
 
     public static void main(String args[]) {
 	try {
-	    Grammar grammar = FortranGrammar.getInstance().getGrammar();
+	    Grammar grammar = FortranGrammar.getInstance();
 	    // grammar = grammar
 	    // .createWithNewStartProduction("specification-part");
 
@@ -26,8 +25,6 @@ public class GrammarInspector {
 	} catch (GrammarException e) {
 	    e.printStackTrace();
 	} catch (ParserFactoryException e) {
-	    e.printStackTrace();
-	} catch (PersistenceException e) {
 	    e.printStackTrace();
 	}
     }

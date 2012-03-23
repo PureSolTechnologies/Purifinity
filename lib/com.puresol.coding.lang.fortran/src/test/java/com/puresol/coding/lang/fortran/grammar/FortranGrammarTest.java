@@ -1,34 +1,23 @@
 package com.puresol.coding.lang.fortran.grammar;
 
-import java.io.IOException;
-
 import junit.framework.TestCase;
 
 import org.junit.Test;
 
 import com.puresol.uhura.grammar.Grammar;
-import com.puresol.utils.PersistenceException;
 
 public class FortranGrammarTest extends TestCase {
 
     @Test
     public void testInstance() {
-	try {
-	    Grammar grammar = FortranGrammar.getInstance().getGrammar();
-	    assertNotNull(grammar);
-	} catch (PersistenceException e) {
-	    e.printStackTrace();
-	    fail("No exception was expected!");
-	} catch (IOException e) {
-	    e.printStackTrace();
-	    fail("No exception was expected!");
-	}
+	Grammar grammar = FortranGrammar.getInstance();
+	assertNotNull(grammar);
     }
 
     @Test
     public void testPrint() {
 	try {
-	    Grammar grammar = FortranGrammar.getInstance().getGrammar();
+	    Grammar grammar = FortranGrammar.getInstance();
 	    System.out.println(grammar);
 	} catch (Throwable e) {
 	    e.printStackTrace();

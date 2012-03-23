@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
 
 import com.puresol.coding.AbstractProgrammingLanguage;
 import com.puresol.coding.analysis.Analyzer;
+import com.puresol.coding.lang.fortran.grammar.FortranGrammar;
+import com.puresol.uhura.grammar.Grammar;
 import com.puresol.utils.PersistenceException;
 
 public class Fortran extends AbstractProgrammingLanguage {
@@ -40,7 +42,7 @@ public class Fortran extends AbstractProgrammingLanguage {
     private BundleContext bundleContext;
 
     public Fortran() {
-	super("Fortran");
+	super("Fortran", "2008");
     }
 
     public BundleContext getBundleContext() {
@@ -91,5 +93,10 @@ public class Fortran extends AbstractProgrammingLanguage {
 
     public SourceForm getSourceForm() {
 	return sourceForm;
+    }
+
+    @Override
+    public Grammar getGrammar() {
+	return FortranGrammar.getInstance();
     }
 }

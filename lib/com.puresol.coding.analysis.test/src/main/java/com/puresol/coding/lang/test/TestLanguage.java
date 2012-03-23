@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 
 import com.puresol.coding.AbstractProgrammingLanguage;
 import com.puresol.coding.analysis.Analyzer;
+import com.puresol.coding.lang.test.grammar.TestLanguageGrammar;
+import com.puresol.uhura.grammar.Grammar;
 import com.puresol.utils.PersistenceException;
 
 /**
@@ -41,7 +43,7 @@ public class TestLanguage extends AbstractProgrammingLanguage {
     }
 
     public TestLanguage() {
-	super("TestLanguage");
+	super("TestLanguage", "0.0");
     }
 
     @Override
@@ -58,5 +60,10 @@ public class TestLanguage extends AbstractProgrammingLanguage {
     @Override
     public Analyzer createAnalyser(File file) {
 	return new TestLanguageAnalyser(file);
+    }
+
+    @Override
+    public Grammar getGrammar() {
+	return TestLanguageGrammar.getInstance();
     }
 }

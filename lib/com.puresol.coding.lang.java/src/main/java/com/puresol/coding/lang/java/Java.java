@@ -10,6 +10,8 @@ import org.osgi.framework.BundleContext;
 
 import com.puresol.coding.AbstractProgrammingLanguage;
 import com.puresol.coding.analysis.Analyzer;
+import com.puresol.coding.lang.java.grammar.JavaGrammar;
+import com.puresol.uhura.grammar.Grammar;
 import com.puresol.utils.PersistenceException;
 
 /**
@@ -42,7 +44,7 @@ public class Java extends AbstractProgrammingLanguage {
     private BundleContext bundleContext;
 
     public Java() {
-	super("Java");
+	super("Java", "1.6");
     }
 
     public BundleContext getBundleContext() {
@@ -88,5 +90,10 @@ public class Java extends AbstractProgrammingLanguage {
     @Override
     public Analyzer createAnalyser(File file) {
 	return new JavaAnalyzer(file);
+    }
+
+    @Override
+    public Grammar getGrammar() {
+	return JavaGrammar.getInstance();
     }
 }

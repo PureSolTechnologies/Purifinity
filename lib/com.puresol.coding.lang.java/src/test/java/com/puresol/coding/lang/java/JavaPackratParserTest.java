@@ -37,7 +37,7 @@ public class JavaPackratParserTest {
 
     @Test
     public void testCompilationUnit() throws Throwable {
-	Grammar grammar = JavaGrammar.getInstance().getGrammar();
+	Grammar grammar = JavaGrammar.getInstance();
 	assertNotNull(grammar);
 	PackratParser parser = new PackratParser(grammar);
 	assertNotNull(parser.parse(
@@ -46,7 +46,7 @@ public class JavaPackratParserTest {
 
     @Test
     public void testArrayCreationExpression() throws Throwable {
-	Grammar grammar = JavaGrammar.getInstance().getGrammar();
+	Grammar grammar = JavaGrammar.getInstance();
 	assertNotNull(grammar);
 	PackratParser parser = new PackratParser(grammar);
 	assertNotNull(parser.parse("new a[1][2][]", "ArrayCreationExpression",
@@ -55,7 +55,7 @@ public class JavaPackratParserTest {
 
     @Test
     public void testClassInstanceCreationExpression() throws Throwable {
-	Grammar grammar = JavaGrammar.getInstance().getGrammar();
+	Grammar grammar = JavaGrammar.getInstance();
 	assertNotNull(grammar);
 	PackratParser parser = new PackratParser(grammar);
 	assertNotNull(parser.parse("new A()",
@@ -64,7 +64,7 @@ public class JavaPackratParserTest {
 
     @Test
     public void testExpression() throws Throwable {
-	Grammar grammar = JavaGrammar.getInstance().getGrammar();
+	Grammar grammar = JavaGrammar.getInstance();
 	assertNotNull(grammar);
 	PackratParser parser = new PackratParser(grammar);
 	assertNotNull(parser.parse("\"string\"", "Expression", "TEST"));
@@ -77,7 +77,7 @@ public class JavaPackratParserTest {
 
     @Test
     public void testMethodInvokation() throws Throwable {
-	Grammar grammar = JavaGrammar.getInstance().getGrammar();
+	Grammar grammar = JavaGrammar.getInstance();
 	assertNotNull(grammar);
 	PackratParser parser = new PackratParser(grammar);
 	assertNotNull(parser.parse("method()", "MethodInvocation", "TEST"));
@@ -93,7 +93,7 @@ public class JavaPackratParserTest {
 
     @Test
     public void testLocalVariableDeclarationStatement() throws Throwable {
-	Grammar grammar = JavaGrammar.getInstance().getGrammar();
+	Grammar grammar = JavaGrammar.getInstance();
 	assertNotNull(grammar);
 	PackratParser parser = new PackratParser(grammar);
 	assertNotNull(parser.parse("A a = new A();",
@@ -108,7 +108,7 @@ public class JavaPackratParserTest {
 
     @Test
     public void testBlockStatements() throws Throwable {
-	Grammar grammar = JavaGrammar.getInstance().getGrammar();
+	Grammar grammar = JavaGrammar.getInstance();
 	assertNotNull(grammar);
 	PackratParser parser = new PackratParser(grammar);
 	assertNotNull(parser.parse("int i;", "BlockStatements", "TEST"));
@@ -126,7 +126,7 @@ public class JavaPackratParserTest {
 
     @Test
     public void testBlock() throws Throwable {
-	Grammar grammar = JavaGrammar.getInstance().getGrammar();
+	Grammar grammar = JavaGrammar.getInstance();
 	assertNotNull(grammar);
 	PackratParser parser = new PackratParser(grammar);
 	assertNotNull(parser.parse("{}", "Block", "TEST"));
@@ -142,7 +142,7 @@ public class JavaPackratParserTest {
 
     @Test
     public void testMethodBlock() throws Throwable {
-	Grammar grammar = JavaGrammar.getInstance().getGrammar();
+	Grammar grammar = JavaGrammar.getInstance();
 	assertNotNull(grammar);
 	PackratParser parser = new PackratParser(grammar);
 	assertNotNull(parser.parse(";", "MethodBody", "TEST"));
@@ -155,7 +155,7 @@ public class JavaPackratParserTest {
 		"src/test/java/com/puresol/coding/lang/java/JavaPackratParserTest.java");
 	assertTrue(file.exists());
 	String text = readToString(new FileInputStream(file));
-	Grammar grammar = JavaGrammar.getInstance().getGrammar();
+	Grammar grammar = JavaGrammar.getInstance();
 	assertNotNull(grammar);
 	PackratParser parser = new PackratParser(grammar);
 	ParserTree tree = parser.parse(text, "TEST");

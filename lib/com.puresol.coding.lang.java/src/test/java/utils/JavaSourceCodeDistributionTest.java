@@ -23,7 +23,6 @@ import com.puresol.uhura.parser.packrat.PackratParser;
 import com.puresol.utils.ConsoleUtils;
 import com.puresol.utils.FileSearch;
 import com.puresol.utils.FileUtilities;
-import com.puresol.utils.PersistenceException;
 import com.puresol.utils.StopWatch;
 
 /**
@@ -61,7 +60,7 @@ public class JavaSourceCodeDistributionTest {
     @Ignore("Takes too long...")
     public void test2() throws Throwable {
 	assertTrue(file.exists());
-	Grammar grammar = JavaGrammar.getInstance().getGrammar();
+	Grammar grammar = JavaGrammar.getInstance();
 	PackratParser parser = new PackratParser(grammar);
 	String text = FileUtilities.readFileToString(file);
 	StopWatch watch = new StopWatch();
@@ -79,7 +78,7 @@ public class JavaSourceCodeDistributionTest {
 	StopWatch totalWatch = new StopWatch();
 	totalWatch.start();
 	try {
-	    javaGrammar = JavaGrammar.getInstance().getGrammar();
+	    javaGrammar = JavaGrammar.getInstance();
 	    List<File> errors = new ArrayList<File>();
 	    List<String> successes = new ArrayList<String>();
 	    RandomAccessFile raFile = new RandomAccessFile("succeeded.txt",
@@ -133,8 +132,6 @@ public class JavaSourceCodeDistributionTest {
 	} catch (FileNotFoundException e) {
 	    e.printStackTrace();
 	} catch (IOException e) {
-	    e.printStackTrace();
-	} catch (PersistenceException e) {
 	    e.printStackTrace();
 	}
 	totalWatch.stop();
