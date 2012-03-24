@@ -1,4 +1,0 @@
-com.puresol.coding.metrics.sloc.LanguageDependedSLOCMetric=com.puresol.coding.lang.test.metrics.SLOCMetricImpl
-com.puresol.coding.metrics.codedepth.LanguageDependedCodeDepthMetric=com.puresol.coding.lang.test.metrics.CodeDepthMetricImpl
-com.puresol.coding.metrics.mccabe.LanguageDependedMcCabeMetric=com.puresol.coding.lang.test.metrics.McCabeMetricImpl
-com.puresol.coding.metrics.halstead.LanguageDependedHalsteadMetric=com.puresol.coding.lang.test.metrics.HalsteadMetricImpl
