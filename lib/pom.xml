@@ -13,7 +13,6 @@
 		<module>com.puresol.utils</module>
 		<module>com.puresol.uhura.lib</module>
 		<module>com.puresol.uhura.test</module>
-		<module>com.puresol.uhura.ui</module>
 		<module>com.puresol.coding.analysis</module>
 		<module>com.puresol.coding.analysis.test</module>
 		<!-- module>com.puresol.coding.metrics</module -->
