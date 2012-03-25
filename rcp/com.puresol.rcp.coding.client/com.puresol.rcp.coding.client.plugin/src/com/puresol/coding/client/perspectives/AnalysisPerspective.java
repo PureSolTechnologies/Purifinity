@@ -15,5 +15,6 @@ public class AnalysisPerspective implements IPerspectiveFactory {
 		ViewIds.ANALYSIS_NAVIGATOR);
 	layout.addView(ViewIds.ANALYSIS_REPORT, IPageLayout.BOTTOM, 0.8f,
 		layout.getEditorArea());
+	layout.setEditorAreaVisible(false);
     }
 }

@@ -241,6 +241,7 @@
             restorable="true">
       </view>
       <view
+            category="com.puresol.coding.Analysis"
             class="com.puresol.coding.client.GrammarViewer"
             id="com.puresol.coding.client.GrammarViewer"
             name="Grammar Viewer"
@@ -296,6 +297,27 @@
       <initializer
             class="com.puresol.coding.client.preferences.PreferenceInitializer">
       </initializer>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="com.puresol.coding.client.editors.FileAnalysisEditor"
+            default="false"
+            id="com.puresol.coding.client.FileAnalysisEditor"
+            name="File Analysis">
+      </editor>
+      <editor
+            class="com.puresol.coding.client.editors.DirectoryAnalysisEditor"
+            default="false"
+            id="com.puresol.coding.client.DirectoryAnalysisEditor"
+            name="Directory Analysis">
+      </editor>
+      <editor
+            class="com.puresol.coding.client.editors.NotAnalyzedEditor"
+            default="false"
+            id="com.puresol.coding.client.NotAnalyzedEditor"
+            name="Not Analyzed">
+      </editor>
    </extension>
 
 </plugin>
