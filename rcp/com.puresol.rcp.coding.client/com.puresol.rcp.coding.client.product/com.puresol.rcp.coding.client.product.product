@@ -32,5 +32,11 @@
       <feature id="com.puresol.rcp.coding.client.feature" version="0.1.0.qualifier"/>
    </features>
 
+   <configurations>
+      <plugin id="com.puresol.coding.lang.fortran" autoStart="true" startLevel="4" />
+      <plugin id="com.puresol.coding.lang.java" autoStart="true" startLevel="4" />
+      <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="2" />
+      <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="3" />
+   </configurations>
 
 </product>

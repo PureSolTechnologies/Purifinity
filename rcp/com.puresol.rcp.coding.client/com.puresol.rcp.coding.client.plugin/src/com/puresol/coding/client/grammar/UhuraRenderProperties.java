@@ -2,6 +2,7 @@ package com.puresol.coding.client.grammar;
 
 import java.awt.Dimension;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 import org.eclipse.core.runtime.ILog;
@@ -18,13 +19,20 @@ import com.puresol.coding.client.Activator;
  */
 public class UhuraRenderProperties {
 
+    private static final String UHURA_RENDERER_PROPERTIES = "/config/UhuraRenderer.properties";
+
     private static final ILog logger = Activator.getDefault().getLog();
 
     private static final Properties properties = new Properties();
     static {
 	try {
-	    properties.load(UhuraRenderProperties.class
-		    .getResourceAsStream("/config/UhuraRenderer.properties"));
+	    InputStream resourceAsStream = UhuraRenderProperties.class
+		    .getResourceAsStream(UHURA_RENDERER_PROPERTIES);
+	    if (resourceAsStream == null) {
+		throw new RuntimeException("Could not open properties file '"
+			+ UHURA_RENDERER_PROPERTIES + "'!");
+	    }
+	    properties.load(resourceAsStream);
 	} catch (IOException e) {
 	    logger.log(new Status(Status.ERROR, UhuraRenderProperties.class
 		    .getName(),
