@@ -12,13 +12,13 @@ package com.puresol.coding.analysis;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.ProgrammingLanguages;
-import com.puresol.utils.PersistenceException;
 
 /**
  * This factory creates an Analyser class for a given File in dependence for its
@@ -95,7 +95,7 @@ public class AnalyzerFactory {
 		}
 	    }
 	    return null;
-	} catch (PersistenceException e) {
+	} catch (IOException e) {
 	    logger.error(e.getMessage(), e);
 	    return null;
 	}

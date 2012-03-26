@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.io.File;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -19,8 +18,6 @@ import com.puresol.uhura.grammar.production.FinishTerminal;
 import com.puresol.uhura.grammar.production.Terminal;
 import com.puresol.uhura.parser.items.LR1Item;
 import com.puresol.uhura.parser.items.LR1ItemSet;
-import com.puresol.utils.FileUtilities;
-import com.puresol.utils.PersistenceTester;
 
 /**
  * This test suite checks the Closure1 class.
@@ -32,17 +29,6 @@ public class Closure1Test {
 
     private static final Logger logger = LoggerFactory
 	    .getLogger(Closure1Test.class);
-
-    @Test
-    public void testPersistence() {
-	Grammar grammar = TestGrammars.getLR1TestGrammarFromDragonBook();
-	First first = new First(grammar);
-	Closure1 closure1 = new Closure1(grammar, first);
-	File file = new File("test", FileUtilities.classToRelativePackagePath(
-		Closure1.class).toString()
-		+ ".persist");
-	PersistenceTester.test(closure1, file);
-    }
 
     @Test
     public void testForGrammarFromLR1Pamphlet() {

@@ -18,7 +18,6 @@ import com.puresol.uhura.lexer.LexerFactoryException;
 import com.puresol.uhura.parser.Parser;
 import com.puresol.uhura.parser.ParserFactory;
 import com.puresol.uhura.parser.ParserFactoryException;
-import com.puresol.utils.PersistenceException;
 
 public class PreparePackageResources {
 
@@ -54,8 +53,6 @@ public class PreparePackageResources {
 	} catch (GrammarException e) {
 	    e.printStackTrace();
 	} catch (IOException e) {
-	    e.printStackTrace();
-	} catch (PersistenceException e) {
 	    e.printStackTrace();
 	} catch (LexerFactoryException e) {
 	    e.printStackTrace();

@@ -14,8 +14,6 @@ import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.analysis.ProjectAnalyzerFactory;
 import com.puresol.coding.quality.SourceCodeQuality;
 import com.puresol.utils.FileSearchConfiguration;
-import com.puresol.utils.FileUtilities;
-import com.puresol.utils.PersistenceTester;
 
 public class ProjectMcCabeMetricTest {
 
@@ -45,14 +43,4 @@ public class ProjectMcCabeMetricTest {
 	assertNotNull(metric.getResults());
 	assertNotNull(metric.getTimeStamp());
     }
-
-    @Test
-    public void testPersistence() {
-	File file = new File("test", FileUtilities.classToRelativePackagePath(
-		ProjectMcCabeMetric.class).toString()
-		+ ".persist");
-	ProjectMcCabeMetric metric = new ProjectMcCabeMetric(analyzer);
-	PersistenceTester.test(metric, file);
-    }
-
 }

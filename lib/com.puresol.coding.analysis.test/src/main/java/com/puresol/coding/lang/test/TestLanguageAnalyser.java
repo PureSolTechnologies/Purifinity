@@ -11,7 +11,9 @@
 package com.puresol.coding.lang.test;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -32,8 +34,6 @@ import com.puresol.uhura.lexer.SourceCode;
 import com.puresol.uhura.parser.Parser;
 import com.puresol.uhura.parser.ParserException;
 import com.puresol.uhura.parser.ParserTree;
-import com.puresol.utils.Persistence;
-import com.puresol.utils.PersistenceException;
 import com.puresol.utils.StopWatch;
 
 /**
@@ -82,9 +82,6 @@ public class TestLanguageAnalyser implements Analyzer {
 	} catch (LexerException e) {
 	    logger.error(e.getMessage(), e);
 	    throw new AnalyzerException(this);
-	} catch (PersistenceException e) {
-	    logger.error(e.getMessage(), e);
-	    throw new AnalyzerException(this);
 	}
 	return;
     }
@@ -112,7 +109,7 @@ public class TestLanguageAnalyser implements Analyzer {
     @Override
     public boolean persist(File file) {
 	try {
-	    Persistence.persist(this, file);
+	    persist(this, file);
 	    return true;
 	} catch (IOException e) {
 	    logger.error(e.getMessage(), e);
@@ -131,4 +128,15 @@ public class TestLanguageAnalyser implements Analyzer {
 	result.add(new CodeRange("", CodeRangeType.FILE, parserTree));
 	return result;
     }
+
+    private <T> void persist(T object, File file) throws IOException {
+	ObjectOutputStream objectOutputStream = new ObjectOutputStream(
+		new FileOutputStream(file));
+	try {
+	    objectOutputStream.writeObject(object);
+	} finally {
+	    objectOutputStream.close();
+	}
+    }
+
 }

@@ -11,7 +11,9 @@
 package com.puresol.coding.lang.fortran;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -34,8 +36,6 @@ import com.puresol.uhura.lexer.TokenStream;
 import com.puresol.uhura.parser.Parser;
 import com.puresol.uhura.parser.ParserException;
 import com.puresol.uhura.parser.ParserTree;
-import com.puresol.utils.Persistence;
-import com.puresol.utils.PersistenceException;
 import com.puresol.utils.StopWatch;
 
 /**
@@ -80,9 +80,6 @@ public class FortranAnalyzer implements Analyzer {
 	} catch (ParserException e) {
 	    logger.error(e.getMessage(), e);
 	    throw new AnalyzerException(this);
-	} catch (PersistenceException e) {
-	    logger.error(e.getMessage(), e);
-	    throw new AnalyzerException(this);
 	}
     }
 
@@ -96,9 +93,6 @@ public class FortranAnalyzer implements Analyzer {
 	    logger.error(e.getMessage(), e);
 	    throw new AnalyzerException(this);
 	} catch (LexerException e) {
-	    logger.error(e.getMessage(), e);
-	    throw new AnalyzerException(this);
-	} catch (PersistenceException e) {
 	    logger.error(e.getMessage(), e);
 	    throw new AnalyzerException(this);
 	}
@@ -132,7 +126,13 @@ public class FortranAnalyzer implements Analyzer {
     @Override
     public boolean persist(File file) {
 	try {
-	    Persistence.persist(this, file);
+	    ObjectOutputStream objectOutputStream = new ObjectOutputStream(
+		    new FileOutputStream(file));
+	    try {
+		objectOutputStream.writeObject(this);
+	    } finally {
+		objectOutputStream.close();
+	    }
 	    return true;
 	} catch (IOException e) {
 	    logger.error(e.getMessage(), e);

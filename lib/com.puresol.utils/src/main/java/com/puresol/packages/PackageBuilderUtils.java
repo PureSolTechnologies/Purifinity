@@ -1,13 +1,12 @@
 package com.puresol.packages;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.puresol.utils.Persistence;
-import com.puresol.utils.PersistenceException;
 
 public class PackageBuilderUtils {
 
@@ -32,8 +31,14 @@ public class PackageBuilderUtils {
     }
 
     public static void persistObject(PackageDirectory packageDirectory,
-	    File file, Object object) throws PersistenceException, IOException {
-	Persistence.persist(object,
-		new File(packageDirectory.getDirectoryName(), file.toString()));
+	    File file, Object object) throws IOException {
+	ObjectOutputStream objectOutputStream = new ObjectOutputStream(
+		new FileOutputStream(new File(
+			packageDirectory.getDirectoryName(), file.toString())));
+	try {
+	    objectOutputStream.writeObject(object);
+	} finally {
+	    objectOutputStream.close();
+	}
     }
 }

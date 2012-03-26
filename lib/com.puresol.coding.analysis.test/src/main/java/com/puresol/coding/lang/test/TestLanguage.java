@@ -1,15 +1,12 @@
 package com.puresol.coding.lang.test;
 
 import java.io.File;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.io.IOException;
 
 import com.puresol.coding.AbstractProgrammingLanguage;
 import com.puresol.coding.analysis.Analyzer;
 import com.puresol.coding.lang.test.grammar.TestLanguageGrammar;
 import com.puresol.uhura.grammar.Grammar;
-import com.puresol.utils.PersistenceException;
 
 /**
  * This is a test programming languages which is used as a mock up for real
@@ -21,9 +18,6 @@ import com.puresol.utils.PersistenceException;
  * 
  */
 public class TestLanguage extends AbstractProgrammingLanguage {
-
-    private static final Logger logger = LoggerFactory
-	    .getLogger(TestLanguage.class);
 
     private static final String[] FILE_SUFFIXES = { ".d" };
 
@@ -52,8 +46,8 @@ public class TestLanguage extends AbstractProgrammingLanguage {
     }
 
     @Override
-    public Analyzer restoreAnalyzer(File file) throws PersistenceException {
-	throw new PersistenceException(
+    public Analyzer restoreAnalyzer(File file) throws IOException {
+	throw new IOException(
 		"Persistence not implemented in TestProgrammingLanguage!");
     }
 

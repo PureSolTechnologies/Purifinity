@@ -14,8 +14,6 @@ import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.analysis.ProjectAnalyzerFactory;
 import com.puresol.coding.quality.SourceCodeQuality;
 import com.puresol.utils.FileSearchConfiguration;
-import com.puresol.utils.FileUtilities;
-import com.puresol.utils.PersistenceTester;
 
 public class CoCoMoTest {
 
@@ -44,15 +42,6 @@ public class CoCoMoTest {
 	assertEquals(SourceCodeQuality.UNSPECIFIED, metric.getQuality());
 	assertNotNull(metric.getResults());
 	assertNotNull(metric.getTimeStamp());
-    }
-
-    @Test
-    public void testPersistence() {
-	File file = new File("test", FileUtilities.classToRelativePackagePath(
-		CoCoMo.class).toString()
-		+ ".persist");
-	CoCoMo metric = new CoCoMo(analyzer);
-	PersistenceTester.test(metric, file);
     }
 
 }

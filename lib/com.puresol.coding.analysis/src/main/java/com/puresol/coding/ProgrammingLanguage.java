@@ -1,10 +1,10 @@
 package com.puresol.coding;
 
 import java.io.File;
+import java.io.IOException;
 
 import com.puresol.coding.analysis.Analyzer;
 import com.puresol.uhura.grammar.Grammar;
-import com.puresol.utils.PersistenceException;
 
 /**
  * This interface is the central interface for a programming language
@@ -57,5 +57,5 @@ public interface ProgrammingLanguage { // do not Serialize!
      */
     public Analyzer createAnalyser(File file);
 
-    public Analyzer restoreAnalyzer(File file) throws PersistenceException;
+    public Analyzer restoreAnalyzer(File file) throws IOException;
 }

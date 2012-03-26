@@ -14,8 +14,6 @@ import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.analysis.ProjectAnalyzerFactory;
 import com.puresol.coding.quality.SourceCodeQuality;
 import com.puresol.utils.FileSearchConfiguration;
-import com.puresol.utils.FileUtilities;
-import com.puresol.utils.PersistenceTester;
 
 public class ProjectHalsteadMetricTest {
 
@@ -45,14 +43,4 @@ public class ProjectHalsteadMetricTest {
 	assertNotNull(metric.getResults());
 	assertNotNull(metric.getTimeStamp());
     }
-
-    @Test
-    public void testPersistence() {
-	File file = new File("test", FileUtilities.classToRelativePackagePath(
-		ProjectHalsteadMetric.class).toString()
-		+ ".persist");
-	ProjectHalsteadMetric metric = new ProjectHalsteadMetric(analyzer);
-	PersistenceTester.test(metric, file);
-    }
-
 }

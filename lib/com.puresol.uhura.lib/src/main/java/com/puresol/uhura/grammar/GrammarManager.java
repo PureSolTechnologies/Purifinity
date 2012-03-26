@@ -1,8 +1,13 @@
 package com.puresol.uhura.grammar;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.URL;
 
 import com.puresol.uhura.lexer.Lexer;
@@ -11,8 +16,6 @@ import com.puresol.uhura.lexer.LexerFactoryException;
 import com.puresol.uhura.parser.Parser;
 import com.puresol.uhura.parser.ParserFactory;
 import com.puresol.uhura.parser.ParserFactoryException;
-import com.puresol.utils.Persistence;
-import com.puresol.utils.PersistenceException;
 
 /**
  * This class manages a single grammar with all its lexer and parser facilities.
@@ -24,168 +27,200 @@ import com.puresol.utils.PersistenceException;
  */
 public class GrammarManager {
 
-	public static String getPersistedGrammarPath(String grammarPath) {
-		return grammarPath + ".persist";
+    public static String getPersistedGrammarPath(String grammarPath) {
+	return grammarPath + ".persist";
+    }
+
+    public static String getPersistedLexerPath(String grammarPath) {
+	return grammarPath + ".lexer.persist";
+    }
+
+    public static String getPersistedParserPath(String grammarPath) {
+	return grammarPath + ".parser.persist";
+    }
+
+    private final URL grammarURL;
+    private final File grammarPersistencePath;
+    private final File lexerPersistencePath;
+    private final File parserPersistencePath;
+
+    private Grammar grammar = null;
+    private Lexer lexer = null;
+    private Parser parser = null;
+
+    public GrammarManager(URL grammarURL) {
+	super();
+	this.grammarURL = grammarURL;
+	this.grammarPersistencePath = new File(
+		getPersistedGrammarPath(grammarURL.getPath()));
+	this.lexerPersistencePath = new File(
+		getPersistedLexerPath(grammarURL.getPath()));
+	this.parserPersistencePath = new File(
+		getPersistedParserPath(grammarURL.getPath()));
+    }
+
+    /**
+     * @return the grammarFile
+     */
+    public URL getGrammarURL() {
+	return grammarURL;
+    }
+
+    /**
+     * @return the grammarPersistenceFile
+     */
+    public File getGrammarPersistenceFile() {
+	return grammarPersistencePath;
+    }
+
+    /**
+     * @return the lexerPersistenceFile
+     */
+    public File getLexerPersistenceFile() {
+	return lexerPersistencePath;
+    }
+
+    /**
+     * @return the parserPersistenceFile
+     */
+    public File getParserPersistenceFile() {
+	return parserPersistencePath;
+    }
+
+    public Grammar getGrammar() throws IOException, GrammarException {
+	if ((!grammarPersistencePath.exists())
+		|| (grammarModified() > grammarPersistencePath.lastModified())) {
+	    updateGrammarPersistenceFile();
+	} else if (grammar == null) {
+	    readGrammarPersistenceFile();
 	}
+	return grammar;
+    }
 
-	public static String getPersistedLexerPath(String grammarPath) {
-		return grammarPath + ".lexer.persist";
-	}
-
-	public static String getPersistedParserPath(String grammarPath) {
-		return grammarPath + ".parser.persist";
-	}
-
-	private final URL grammarURL;
-	private final File grammarPersistencePath;
-	private final File lexerPersistencePath;
-	private final File parserPersistencePath;
-
-	private Grammar grammar = null;
-	private Lexer lexer = null;
-	private Parser parser = null;
-
-	public GrammarManager(URL grammarURL) {
-		super();
-		this.grammarURL = grammarURL;
-		this.grammarPersistencePath = new File(
-				getPersistedGrammarPath(grammarURL.getPath()));
-		this.lexerPersistencePath = new File(
-				getPersistedLexerPath(grammarURL.getPath()));
-		this.parserPersistencePath = new File(
-				getPersistedParserPath(grammarURL.getPath()));
-	}
-
-	/**
-	 * @return the grammarFile
-	 */
-	public URL getGrammarURL() {
-		return grammarURL;
-	}
-
-	/**
-	 * @return the grammarPersistenceFile
-	 */
-	public File getGrammarPersistenceFile() {
-		return grammarPersistencePath;
-	}
-
-	/**
-	 * @return the lexerPersistenceFile
-	 */
-	public File getLexerPersistenceFile() {
-		return lexerPersistencePath;
-	}
-
-	/**
-	 * @return the parserPersistenceFile
-	 */
-	public File getParserPersistenceFile() {
-		return parserPersistencePath;
-	}
-
-	public Grammar getGrammar() throws IOException, GrammarException {
-		if ((!grammarPersistencePath.exists())
-				|| (grammarModified() > grammarPersistencePath.lastModified())) {
-			updateGrammarPersistenceFile();
-		} else if (grammar == null) {
-			readGrammarPersistenceFile();
-		}
-		return grammar;
-	}
-
-	private void updateGrammarPersistenceFile() throws IOException,
-			GrammarException {
-		InputStream inputStream = null;
+    private void updateGrammarPersistenceFile() throws IOException,
+	    GrammarException {
+	InputStream inputStream = null;
+	try {
+	    if ((!grammarPersistencePath.exists())
+		    || (grammarModified() > grammarPersistencePath
+			    .lastModified())) {
+		inputStream = grammarURL.openStream();
+		GrammarReader reader = new GrammarReader(inputStream);
+		grammar = reader.getGrammar();
+		ObjectOutputStream objectOutputStream = new ObjectOutputStream(
+			new FileOutputStream(grammarPersistencePath));
 		try {
-			if ((!grammarPersistencePath.exists())
-					|| (grammarModified() > grammarPersistencePath
-							.lastModified())) {
-				inputStream = grammarURL.openStream();
-				GrammarReader reader = new GrammarReader(inputStream);
-				grammar = reader.getGrammar();
-				Persistence.persist(grammar, grammarPersistencePath);
-			}
+		    objectOutputStream.writeObject(grammar);
 		} finally {
-			if (inputStream != null) {
-				inputStream.close();
-			}
+		    objectOutputStream.close();
 		}
+	    }
+	} finally {
+	    if (inputStream != null) {
+		inputStream.close();
+	    }
 	}
+    }
 
-	private void readGrammarPersistenceFile() throws IOException,
-			GrammarException {
-		try {
-			grammar = (Grammar) Persistence.restore(grammarPersistencePath);
-		} catch (PersistenceException e) {
-			updateGrammarPersistenceFile();
-		}
+    private void readGrammarPersistenceFile() throws IOException,
+	    GrammarException {
+	try {
+	    grammar = (Grammar) restore(grammarPersistencePath);
+	} catch (FileNotFoundException e) {
+	    updateGrammarPersistenceFile();
 	}
+    }
 
-	public Lexer getLexer() throws IOException, GrammarException,
-			LexerFactoryException {
-		if ((!lexerPersistencePath.exists())
-				|| (grammarModified() > lexerPersistencePath.lastModified())) {
-			updateGrammarPersistenceFile();
-			updateLexerPersistenceFile();
-		} else if (lexer == null) {
-			readLexerPersistenceFile();
-		}
-		return lexer;
+    public Lexer getLexer() throws IOException, GrammarException,
+	    LexerFactoryException {
+	if ((!lexerPersistencePath.exists())
+		|| (grammarModified() > lexerPersistencePath.lastModified())) {
+	    updateGrammarPersistenceFile();
+	    updateLexerPersistenceFile();
+	} else if (lexer == null) {
+	    readLexerPersistenceFile();
 	}
+	return lexer;
+    }
 
-	private void updateLexerPersistenceFile() throws IOException,
-			GrammarException, LexerFactoryException {
-		if (grammar == null) {
-			readGrammarPersistenceFile();
-		}
-		lexer = LexerFactory.create(grammar);
-		Persistence.persist(lexer, lexerPersistencePath);
+    private void updateLexerPersistenceFile() throws IOException,
+	    GrammarException, LexerFactoryException {
+	if (grammar == null) {
+	    readGrammarPersistenceFile();
 	}
+	lexer = LexerFactory.create(grammar);
+	persist(lexer, lexerPersistencePath);
+    }
 
-	private void readLexerPersistenceFile() throws IOException,
-			GrammarException, LexerFactoryException {
-		try {
-			lexer = (Lexer) Persistence.restore(lexerPersistencePath);
-		} catch (PersistenceException e) {
-			updateLexerPersistenceFile();
-		}
+    private void readLexerPersistenceFile() throws IOException,
+	    GrammarException, LexerFactoryException {
+	try {
+	    lexer = (Lexer) restore(lexerPersistencePath);
+	} catch (FileNotFoundException e) {
+	    updateLexerPersistenceFile();
 	}
+    }
 
-	public Parser getParser() throws IOException, GrammarException,
-			ParserFactoryException {
-		if ((!parserPersistencePath.exists())
-				|| (grammarModified() > parserPersistencePath.lastModified())) {
-			updateGrammarPersistenceFile();
-			updateParserPersistenceFile();
-		} else if (parser == null) {
-			readParserPersistenceFile();
-		}
-		return parser;
+    public Parser getParser() throws IOException, GrammarException,
+	    ParserFactoryException {
+	if ((!parserPersistencePath.exists())
+		|| (grammarModified() > parserPersistencePath.lastModified())) {
+	    updateGrammarPersistenceFile();
+	    updateParserPersistenceFile();
+	} else if (parser == null) {
+	    readParserPersistenceFile();
 	}
+	return parser;
+    }
 
-	private void updateParserPersistenceFile() throws IOException,
-			GrammarException, ParserFactoryException {
-		if (grammar == null) {
-			readGrammarPersistenceFile();
-		}
-		parser = (Parser) ParserFactory.create(grammar);
-		Persistence.persist(parser, parserPersistencePath);
+    private void updateParserPersistenceFile() throws IOException,
+	    GrammarException, ParserFactoryException {
+	if (grammar == null) {
+	    readGrammarPersistenceFile();
 	}
+	parser = ParserFactory.create(grammar);
+	persist(parser, parserPersistencePath);
+    }
 
-	private void readParserPersistenceFile() throws IOException,
-			GrammarException, ParserFactoryException {
-		try {
-			parser = (Parser) Persistence.restore(parserPersistencePath);
-		} catch (PersistenceException e) {
-			updateParserPersistenceFile();
-		}
+    private void readParserPersistenceFile() throws IOException,
+	    GrammarException, ParserFactoryException {
+	try {
+	    parser = restore(parserPersistencePath);
+	} catch (FileNotFoundException e) {
+	    updateParserPersistenceFile();
 	}
+    }
 
-	private long grammarModified() {
-		if ("file".equals(grammarURL.getProtocol())) {
-			return new File(grammarURL.getFile()).lastModified();
-		}
-		return System.currentTimeMillis();
+    private long grammarModified() {
+	if ("file".equals(grammarURL.getProtocol())) {
+	    return new File(grammarURL.getFile()).lastModified();
 	}
+	return System.currentTimeMillis();
+    }
+
+    private <T> void persist(T object, File file) throws IOException {
+	ObjectOutputStream objectOutputStream = new ObjectOutputStream(
+		new FileOutputStream(file));
+	try {
+	    objectOutputStream.writeObject(object);
+	} finally {
+	    objectOutputStream.close();
+	}
+    }
+
+    private <T> T restore(File file) throws FileNotFoundException, IOException {
+	ObjectInputStream objectOutputStream = new ObjectInputStream(
+		new FileInputStream(file));
+	try {
+	    @SuppressWarnings("unchecked")
+	    T t = (T) objectOutputStream.readObject();
+	    return t;
+	} catch (ClassNotFoundException e) {
+	    throw new RuntimeException("Could not restore class from '" + file
+		    + "'!", e);
+	} finally {
+	    objectOutputStream.close();
+	}
+    }
+
 }

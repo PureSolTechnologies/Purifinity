@@ -5,6 +5,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,8 +23,6 @@ import com.puresol.trees.FileTree;
 import com.puresol.utils.DirectoryUtilities;
 import com.puresol.utils.FileSearch;
 import com.puresol.utils.FileSearchConfiguration;
-import com.puresol.utils.Persistence;
-import com.puresol.utils.PersistenceException;
 
 public class ProjectAnalyzer extends Job implements Serializable {
 
@@ -107,8 +107,10 @@ public class ProjectAnalyzer extends Job implements Serializable {
     private boolean writeSettings() {
 	try {
 	    Properties properties = new Properties();
-	    properties.put(getClass().getSimpleName() + ".projectDirectory",
-		    projectDirectory.toString());
+	    properties.put(ProjectAnalyzer.class.getSimpleName() + ".name",
+		    getName());
+	    properties.put(ProjectAnalyzer.class.getSimpleName()
+		    + ".projectDirectory", projectDirectory.toString());
 	    FileOutputStream fileOutputStream = new FileOutputStream(
 		    SETTINGS_FILE);
 	    try {
@@ -131,6 +133,8 @@ public class ProjectAnalyzer extends Job implements Serializable {
 	    properties.load(new FileInputStream(SETTINGS_FILE));
 	    projectDirectory = new File(
 		    properties.getProperty(PROJECT_DIRECTORY_KEY));
+	    setName(properties.getProperty(
+		    ProjectAnalyzer.class.getSimpleName() + ".name", "unnamed"));
 	    return true;
 	} catch (FileNotFoundException e) {
 	    logger.error(e.getMessage(), e);
@@ -143,13 +147,10 @@ public class ProjectAnalyzer extends Job implements Serializable {
     @SuppressWarnings("unchecked")
     private boolean loadProjectInformation() {
 	try {
-	    analyzedFiles.addAll((List<AnalyzedFile>) Persistence
-		    .restore(ANALYZED_FILES_FILE));
-	    failedFiles.addAll((List<File>) Persistence
-		    .restore(FAILED_FILES_FILE));
+	    analyzedFiles
+		    .addAll((List<AnalyzedFile>) restore(ANALYZED_FILES_FILE));
+	    failedFiles.addAll((List<File>) restore(FAILED_FILES_FILE));
 	    return true;
-	} catch (PersistenceException e) {
-	    logger.error(e.getMessage(), e);
 	} catch (IOException e) {
 	    logger.error(e.getMessage(), e);
 	}
@@ -158,8 +159,8 @@ public class ProjectAnalyzer extends Job implements Serializable {
 
     private void storeProjectInformation() {
 	try {
-	    Persistence.persist(analyzedFiles, ANALYZED_FILES_FILE);
-	    Persistence.persist(failedFiles, FAILED_FILES_FILE);
+	    persist(analyzedFiles, ANALYZED_FILES_FILE);
+	    persist(failedFiles, FAILED_FILES_FILE);
 	} catch (IOException e) {
 	    logger.error(e.getMessage(), e);
 	}
@@ -345,6 +346,32 @@ public class ProjectAnalyzer extends Job implements Serializable {
 	    }
 	}
 	return null;
+    }
+
+    private static <T> void persist(T object, File file) throws IOException {
+	ObjectOutputStream objectOutputStream = new ObjectOutputStream(
+		new FileOutputStream(file));
+	try {
+	    objectOutputStream.writeObject(object);
+	} finally {
+	    objectOutputStream.close();
+	}
+    }
+
+    private static <T> T restore(File file) throws FileNotFoundException,
+	    IOException {
+	ObjectInputStream objectOutputStream = new ObjectInputStream(
+		new FileInputStream(file));
+	try {
+	    @SuppressWarnings("unchecked")
+	    T t = (T) objectOutputStream.readObject();
+	    return t;
+	} catch (ClassNotFoundException e) {
+	    throw new RuntimeException("Could not restore class from file '"
+		    + file + "'!", e);
+	} finally {
+	    objectOutputStream.close();
+	}
     }
 
 }

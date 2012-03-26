@@ -14,8 +14,6 @@ import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.analysis.ProjectAnalyzerFactory;
 import com.puresol.coding.quality.SourceCodeQuality;
 import com.puresol.utils.FileSearchConfiguration;
-import com.puresol.utils.FileUtilities;
-import com.puresol.utils.PersistenceTester;
 
 public class ProjectSLOCMetricTest {
 
@@ -45,14 +43,4 @@ public class ProjectSLOCMetricTest {
 	assertNotNull(metric.getResults());
 	assertNotNull(metric.getTimeStamp());
     }
-
-    @Test
-    public void testPersistence() {
-	File file = new File("test", FileUtilities.classToRelativePackagePath(
-		ProjectSLOCMetric.class).toString()
-		+ ".persist");
-	ProjectSLOCMetric metric = new ProjectSLOCMetric(analyzer);
-	PersistenceTester.test(metric, file);
-    }
-
 }

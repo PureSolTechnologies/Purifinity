@@ -2,7 +2,6 @@ package com.puresol.coding.lang.java;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 
@@ -12,7 +11,6 @@ import com.puresol.coding.AbstractProgrammingLanguage;
 import com.puresol.coding.analysis.Analyzer;
 import com.puresol.coding.lang.java.grammar.JavaGrammar;
 import com.puresol.uhura.grammar.Grammar;
-import com.puresol.utils.PersistenceException;
 
 /**
  * This is the base class for Java Programming Language. The lexical and
@@ -64,7 +62,7 @@ public class Java extends AbstractProgrammingLanguage {
     }
 
     @Override
-    public Analyzer restoreAnalyzer(File file) throws PersistenceException {
+    public Analyzer restoreAnalyzer(File file) throws IOException {
 	try {
 	    ObjectInputStream ois = new ObjectInputStream(new FileInputStream(
 		    file));
@@ -75,15 +73,10 @@ public class Java extends AbstractProgrammingLanguage {
 	    }
 	} catch (ClassNotFoundException e) {
 	    /*
-	     * In this case the analyzer could not be restored due to missing
-	     * classes. This happens with files from another language. We need
-	     * to signal this by returning null.
+	     * XXX This needs to be null to go on with the language try out...
+	     * :-(
 	     */
 	    return null;
-	} catch (FileNotFoundException e) {
-	    throw new PersistenceException(e);
-	} catch (IOException e) {
-	    throw new PersistenceException(e);
 	}
     }
 

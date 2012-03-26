@@ -45,7 +45,7 @@ public class NotAnalyzedEditorInput implements IEditorInput {
 	return file.getPath();
     }
 
-    public final File getAnalysisFile() {
+    public final File getFile() {
 	return file;
     }
 

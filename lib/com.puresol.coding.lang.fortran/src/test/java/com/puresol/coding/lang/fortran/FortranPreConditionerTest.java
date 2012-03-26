@@ -6,17 +6,14 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.regex.Pattern;
 
 import org.junit.Test;
 
 import com.puresol.coding.lang.fortran.grammar.FortranGrammar;
-import com.puresol.uhura.lexer.LexerException;
 import com.puresol.uhura.lexer.Token;
 import com.puresol.uhura.lexer.TokenStream;
-import com.puresol.utils.PersistenceException;
 
 public class FortranPreConditionerTest {
 
@@ -118,48 +115,30 @@ public class FortranPreConditionerTest {
     }
 
     @Test
-    public void testIsFixedForm() {
-	try {
-	    File file = new File(
-		    "src/test/resources/com/puresol/coding/lang/fortran/samples/FixedFormSample.f");
-	    assertTrue(file.exists());
-	    FortranPreConditioner fixedFormFile = new FortranPreConditioner(
-		    file);
-	    assertTrue(fixedFormFile.isValidFixedForm());
-	} catch (IOException e) {
-	    e.printStackTrace();
-	    fail("No exception was expected!");
-	}
+    public void testIsFixedForm() throws Exception {
+	File file = new File(
+		"src/test/resources/com/puresol/coding/lang/fortran/samples/FixedFormSample.f");
+	assertTrue(file.exists());
+	FortranPreConditioner fixedFormFile = new FortranPreConditioner(file);
+	assertTrue(fixedFormFile.isValidFixedForm());
     }
 
     @Test
-    public void testScan() {
-	try {
-	    File file = new File(
-		    "src/test/resources/com/puresol/coding/lang/fortran/samples/FixedFormSample.f");
-	    assertTrue(file.exists());
-	    FortranPreConditioner fixedFormFile = new FortranPreConditioner(
-		    file);
-	    TokenStream tokenStream = fixedFormFile.scan(FortranGrammar
-		    .getInstance().getLexer());
-	    for (Token token : tokenStream) {
-		System.out.print(token);
-		System.out.print("\t");
-		System.out.print(token.getVisibility());
-		System.out.print("\t");
-		System.out.println(token.getMetaData());
-	    }
-	    assertEquals("WHITESPACE", tokenStream.get(0).getName());
-	    assertEquals("COMMENT_LINE", tokenStream.get(6).getName());
-	} catch (IOException e) {
-	    e.printStackTrace();
-	    fail("No exception was expected!");
-	} catch (LexerException e) {
-	    e.printStackTrace();
-	    fail("No exception was expected!");
-	} catch (PersistenceException e) {
-	    e.printStackTrace();
-	    fail("No exception was expected!");
+    public void testScan() throws Exception {
+	File file = new File(
+		"src/test/resources/com/puresol/coding/lang/fortran/samples/FixedFormSample.f");
+	assertTrue(file.exists());
+	FortranPreConditioner fixedFormFile = new FortranPreConditioner(file);
+	TokenStream tokenStream = fixedFormFile.scan(FortranGrammar
+		.getInstance().getLexer());
+	for (Token token : tokenStream) {
+	    System.out.print(token);
+	    System.out.print("\t");
+	    System.out.print(token.getVisibility());
+	    System.out.print("\t");
+	    System.out.println(token.getMetaData());
 	}
+	assertEquals("WHITESPACE", tokenStream.get(0).getName());
+	assertEquals("COMMENT_LINE", tokenStream.get(6).getName());
     }
 }

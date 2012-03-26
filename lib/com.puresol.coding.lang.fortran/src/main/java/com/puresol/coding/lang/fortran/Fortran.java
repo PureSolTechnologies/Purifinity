@@ -2,23 +2,17 @@ package com.puresol.coding.lang.fortran;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 
 import org.osgi.framework.BundleContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.puresol.coding.AbstractProgrammingLanguage;
 import com.puresol.coding.analysis.Analyzer;
 import com.puresol.coding.lang.fortran.grammar.FortranGrammar;
 import com.puresol.uhura.grammar.Grammar;
-import com.puresol.utils.PersistenceException;
 
 public class Fortran extends AbstractProgrammingLanguage {
-
-    private static final Logger logger = LoggerFactory.getLogger(Fortran.class);
 
     private static final String[] FILE_SUFFIXES = { ".f", ".f77", ".f90",
 	    ".f95", ".for" };
@@ -59,7 +53,7 @@ public class Fortran extends AbstractProgrammingLanguage {
     }
 
     @Override
-    public Analyzer restoreAnalyzer(File file) throws PersistenceException {
+    public Analyzer restoreAnalyzer(File file) throws IOException {
 	try {
 	    ObjectInputStream ois = new ObjectInputStream(new FileInputStream(
 		    file));
@@ -70,15 +64,10 @@ public class Fortran extends AbstractProgrammingLanguage {
 	    }
 	} catch (ClassNotFoundException e) {
 	    /*
-	     * In this case the analyzer could not be restored due to missing
-	     * classes. This happens with files from another language. We need
-	     * to signal this by returning null.
+	     * XXX This needs to be null to go on with the language try out...
+	     * :-(
 	     */
 	    return null;
-	} catch (FileNotFoundException e) {
-	    throw new PersistenceException(e);
-	} catch (IOException e) {
-	    throw new PersistenceException(e);
 	}
     }
 

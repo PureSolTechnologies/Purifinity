@@ -1,15 +1,18 @@
 package com.puresol.uhura.parser;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
-import com.puresol.utils.Persistence;
-import com.puresol.utils.PersistenceException;
 
 public class ParserManager {
 
@@ -18,13 +21,12 @@ public class ParserManager {
 
     public static void storeParser(File directory, String name, Parser parser)
 	    throws IOException {
-	Persistence.persist(parser, new File(directory, name + ".persist"));
+	persist(parser, new File(directory, name + ".persist"));
     }
 
     public static Parser loadParser(File directory, String name)
-	    throws PersistenceException, IOException {
-	return (Parser) Persistence.restore(new File(directory, name
-		+ ".persist"));
+	    throws IOException {
+	return (Parser) restore(new File(directory, name + ".persist"));
     }
 
     public static Parser getManagerParser(File directory, String name,
@@ -35,8 +37,6 @@ public class ParserManager {
 	    Parser parser = loadParser(directory, name);
 	    logger.debug("Parser '" + name + "' was successfully loaded!");
 	    return parser;
-	} catch (PersistenceException e) {
-	    logger.debug("Parser '" + name + "' not available, yet.");
 	} catch (IOException e) {
 	    logger.debug("Parser '" + name + "' not available, yet.");
 	}
@@ -57,4 +57,31 @@ public class ParserManager {
 	}
 	return parser;
     }
+
+    private static <T> void persist(T object, File file) throws IOException {
+	ObjectOutputStream objectOutputStream = new ObjectOutputStream(
+		new FileOutputStream(file));
+	try {
+	    objectOutputStream.writeObject(object);
+	} finally {
+	    objectOutputStream.close();
+	}
+    }
+
+    private static <T> T restore(File file) throws FileNotFoundException,
+	    IOException {
+	ObjectInputStream objectOutputStream = new ObjectInputStream(
+		new FileInputStream(file));
+	try {
+	    @SuppressWarnings("unchecked")
+	    T t = (T) objectOutputStream.readObject();
+	    return t;
+	} catch (ClassNotFoundException e) {
+	    throw new RuntimeException("Could not restore class from file '"
+		    + file + "'!", e);
+	} finally {
+	    objectOutputStream.close();
+	}
+    }
+
 }

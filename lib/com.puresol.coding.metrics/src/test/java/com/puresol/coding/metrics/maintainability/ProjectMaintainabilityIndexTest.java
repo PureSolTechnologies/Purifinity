@@ -14,8 +14,6 @@ import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.analysis.ProjectAnalyzerFactory;
 import com.puresol.coding.quality.SourceCodeQuality;
 import com.puresol.utils.FileSearchConfiguration;
-import com.puresol.utils.FileUtilities;
-import com.puresol.utils.PersistenceTester;
 
 public class ProjectMaintainabilityIndexTest {
 
@@ -46,15 +44,4 @@ public class ProjectMaintainabilityIndexTest {
 	assertNotNull(metric.getResults());
 	assertNotNull(metric.getTimeStamp());
     }
-
-    @Test
-    public void testPersistence() {
-	File file = new File("test", FileUtilities.classToRelativePackagePath(
-		ProjectMaintainabilityIndex.class).toString()
-		+ ".persist");
-	ProjectMaintainabilityIndex metric = new ProjectMaintainabilityIndex(
-		analyzer);
-	PersistenceTester.test(metric, file);
-    }
-
 }
