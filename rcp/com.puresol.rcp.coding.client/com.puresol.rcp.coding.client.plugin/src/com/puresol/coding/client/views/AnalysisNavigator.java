@@ -30,7 +30,6 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.progress.UIJob;
 
-import com.puresol.coding.analysis.Analysis;
 import com.puresol.coding.analysis.AnalyzedFile;
 import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.client.Activator;
@@ -215,10 +214,8 @@ public class AnalysisNavigator extends ViewPart implements IJobChangeListener,
 			AnalyzedFile analyzedFile = analyzer
 				.findAnalyzedFile(sourceFile);
 			if (analyzedFile != null) {
-			    Analysis analysis = analyzer
-				    .getAnalysis(analyzedFile);
 			    page.openEditor(new FileAnalysisEditorInput(
-				    analyzedFile, analysis),
+				    analyzedFile, analyzer),
 				    EditorIds.FILE_ANALYSIS_EDITOR_ID);
 			} else {
 			    page.openEditor(new NotAnalyzedEditorInput(
@@ -237,5 +234,4 @@ public class AnalysisNavigator extends ViewPart implements IJobChangeListener,
 		    .getName(), e.getMessage(), e));
 	}
     }
-
 }

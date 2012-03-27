@@ -1,13 +1,16 @@
 package com.puresol.coding.client.editors;
 
+import java.io.IOException;
+
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
@@ -15,8 +18,15 @@ import org.eclipse.ui.part.EditorPart;
 
 import swing2swt.layout.BorderLayout;
 
+import com.puresol.coding.client.Activator;
+import com.puresol.coding.client.controls.ParserTreeViewer;
+import com.puresol.coding.client.controls.ScrollableFileViewer;
+
 public class FileAnalysisEditor extends EditorPart {
-    private Text text;
+
+    private static final ILog logger = Activator.getDefault().getLog();
+    private ScrollableFileViewer fileViewer;
+    private ParserTreeViewer treeViewer;
 
     public FileAnalysisEditor() {
 	super();
@@ -53,35 +63,46 @@ public class FileAnalysisEditor extends EditorPart {
 
     @Override
     public void createPartControl(Composite parent) {
-	parent.setLayout(new BorderLayout(0, 0));
+	try {
+	    parent.setLayout(new BorderLayout(0, 0));
 
-	Composite composite = new Composite(parent, SWT.NONE);
-	composite.setLayoutData(BorderLayout.NORTH);
-	composite.setLayout(new FillLayout(SWT.HORIZONTAL));
+	    Composite composite = new Composite(parent, SWT.NONE);
+	    composite.setLayoutData(BorderLayout.NORTH);
+	    composite.setLayout(new FillLayout(SWT.HORIZONTAL));
 
-	Button btnNewButton = new Button(composite, SWT.NONE);
-	btnNewButton.setText("New Button");
+	    Button btnNewButton = new Button(composite, SWT.NONE);
+	    btnNewButton.setText("Refresh");
 
-	TabFolder tabFolder = new TabFolder(parent, SWT.NONE);
-	tabFolder.setLayoutData(BorderLayout.CENTER);
+	    TabFolder tabFolder = new TabFolder(parent, SWT.NONE);
+	    tabFolder.setLayoutData(BorderLayout.CENTER);
 
-	TabItem tbtmNewItem = new TabItem(tabFolder, SWT.NONE);
-	tbtmNewItem.setText("New Item");
+	    TabItem tbtmNewItem = new TabItem(tabFolder, SWT.NONE);
+	    tbtmNewItem.setText("Original File");
 
-	text = new Text(tabFolder, SWT.BORDER);
-	tbtmNewItem.setControl(text);
+	    fileViewer = new ScrollableFileViewer(tabFolder);
+	    tbtmNewItem.setControl(fileViewer);
 
-	TabItem tbtmNewItem_1 = new TabItem(tabFolder, SWT.NONE);
-	tbtmNewItem_1.setText("New Item");
+	    TabItem tbtmNewItem_1 = new TabItem(tabFolder, SWT.NONE);
+	    tbtmNewItem_1.setText("Analyzer Tree");
 
-	Composite composite_2 = new Composite(tabFolder, SWT.NONE);
-	tbtmNewItem_1.setControl(composite_2);
-	// TODO Auto-generated method stub
+	    treeViewer = new ParserTreeViewer(tabFolder);
+	    tbtmNewItem_1.setControl(treeViewer);
+
+	    FileAnalysisEditorInput editorInput = (FileAnalysisEditorInput) getEditorInput();
+	    fileViewer.setFileAndUpdateContent(editorInput.getAnalysisFile()
+		    .getSourceFile());
+	    treeViewer.setContentAndUpdateContent(
+		    editorInput.getAnalysisFile(),
+		    editorInput.getProjectAnalyzer());
+	} catch (IOException e) {
+	    logger.log(new Status(Status.ERROR, FileAnalysisEditor.class
+		    .getName(), e.getMessage(), e));
+	}
     }
 
     @Override
     public void setFocus() {
-	text.setFocus();
+	fileViewer.setFocus();
     }
 
 }

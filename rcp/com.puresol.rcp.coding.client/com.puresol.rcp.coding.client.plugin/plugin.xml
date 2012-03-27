@@ -235,7 +235,7 @@
       </category>
       <view
             category="com.puresol.coding.Analysis"
-            class="com.puresol.coding.client.views.ParserTreeViewer"
+            class="com.puresol.coding.client.views.ParserTreeView"
             id="com.puresol.coding.client.ParserTreeViewer"
             name="Parser Tree Viewer"
             restorable="true">
