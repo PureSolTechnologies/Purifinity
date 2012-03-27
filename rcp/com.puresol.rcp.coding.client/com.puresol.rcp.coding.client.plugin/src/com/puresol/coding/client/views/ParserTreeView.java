@@ -15,13 +15,13 @@ import org.eclipse.ui.part.ViewPart;
 import com.puresol.coding.analysis.AnalyzedFile;
 import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.client.Activator;
-import com.puresol.coding.client.controls.ParserTreeViewer;
+import com.puresol.coding.client.controls.ParserTreeControl;
 
 public class ParserTreeView extends ViewPart implements ISelectionListener {
 
     private static final ILog log = Activator.getDefault().getLog();
 
-    private ParserTreeViewer viewer;
+    private ParserTreeControl viewer;
 
     public ParserTreeView() {
 	super();
@@ -30,7 +30,7 @@ public class ParserTreeView extends ViewPart implements ISelectionListener {
     @Override
     public void createPartControl(Composite parent) {
 	parent.setLayout(new FillLayout());
-	viewer = new ParserTreeViewer(parent);
+	viewer = new ParserTreeControl(parent);
 	getSite().getWorkbenchWindow().getSelectionService()
 		.addSelectionListener(this);
     }

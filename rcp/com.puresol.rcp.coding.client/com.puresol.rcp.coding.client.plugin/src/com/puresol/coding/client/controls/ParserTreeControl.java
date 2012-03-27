@@ -22,13 +22,13 @@ import com.puresol.coding.client.content.ParserTreeLabelProvider;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class ParserTreeViewer extends Composite {
+public class ParserTreeControl extends Composite {
 
     private final Label lblNewLabel;
     private final Tree tree;
     private final TreeViewer treeViewer;
 
-    public ParserTreeViewer(Composite parent) {
+    public ParserTreeControl(Composite parent) {
 	super(parent, SWT.NONE);
 
 	setLayout(new BorderLayout(0, 0));

@@ -19,14 +19,17 @@ import org.eclipse.ui.part.EditorPart;
 import swing2swt.layout.BorderLayout;
 
 import com.puresol.coding.client.Activator;
-import com.puresol.coding.client.controls.ParserTreeViewer;
+import com.puresol.coding.client.controls.MetricsControl;
+import com.puresol.coding.client.controls.ParserTreeControl;
 import com.puresol.coding.client.controls.ScrollableFileViewer;
 
 public class FileAnalysisEditor extends EditorPart {
 
     private static final ILog logger = Activator.getDefault().getLog();
+
     private ScrollableFileViewer fileViewer;
-    private ParserTreeViewer treeViewer;
+    private ParserTreeControl treeViewer;
+    private MetricsControl metricsViewer;
 
     public FileAnalysisEditor() {
 	super();
@@ -66,27 +69,33 @@ public class FileAnalysisEditor extends EditorPart {
 	try {
 	    parent.setLayout(new BorderLayout(0, 0));
 
-	    Composite composite = new Composite(parent, SWT.NONE);
-	    composite.setLayoutData(BorderLayout.NORTH);
-	    composite.setLayout(new FillLayout(SWT.HORIZONTAL));
+	    Composite buttonArea = new Composite(parent, SWT.NONE);
+	    buttonArea.setLayoutData(BorderLayout.NORTH);
+	    buttonArea.setLayout(new FillLayout(SWT.HORIZONTAL));
 
-	    Button btnNewButton = new Button(composite, SWT.NONE);
-	    btnNewButton.setText("Refresh");
+	    Button refreshButton = new Button(buttonArea, SWT.NONE);
+	    refreshButton.setText("Refresh");
 
 	    TabFolder tabFolder = new TabFolder(parent, SWT.NONE);
 	    tabFolder.setLayoutData(BorderLayout.CENTER);
 
-	    TabItem tbtmNewItem = new TabItem(tabFolder, SWT.NONE);
-	    tbtmNewItem.setText("Original File");
+	    TabItem fileViewerTab = new TabItem(tabFolder, SWT.NONE);
+	    fileViewerTab.setText("Original File");
 
 	    fileViewer = new ScrollableFileViewer(tabFolder);
-	    tbtmNewItem.setControl(fileViewer);
+	    fileViewerTab.setControl(fileViewer);
 
-	    TabItem tbtmNewItem_1 = new TabItem(tabFolder, SWT.NONE);
-	    tbtmNewItem_1.setText("Analyzer Tree");
+	    TabItem treeViewerTab = new TabItem(tabFolder, SWT.NONE);
+	    treeViewerTab.setText("Parser Tree");
 
-	    treeViewer = new ParserTreeViewer(tabFolder);
-	    tbtmNewItem_1.setControl(treeViewer);
+	    treeViewer = new ParserTreeControl(tabFolder);
+	    treeViewerTab.setControl(treeViewer);
+
+	    TabItem metricsViewerTab = new TabItem(tabFolder, SWT.NONE);
+	    metricsViewerTab.setText("Metrics");
+
+	    metricsViewer = new MetricsControl(tabFolder, SWT.NONE);
+	    metricsViewerTab.setControl(metricsViewer);
 
 	    FileAnalysisEditorInput editorInput = (FileAnalysisEditorInput) getEditorInput();
 	    fileViewer.setFileAndUpdateContent(editorInput.getAnalysisFile()
