@@ -16,18 +16,8 @@
  *
  ***************************************************************************/
 
-package com.puresol.gui.data;
+package com.puresol.io;
 
-public enum LineEnd {
-	WINDOWS("\r\n"), UNIX("\n");
-
-	private String string;
-
-	private LineEnd(String string) {
-		this.string = string;
-	}
-
-	public String getCRString() {
-		return string;
-	}
+public enum VerticalDataFileFormat {
+	COMMA_SEPARATED, TAB_SEPARATED;
 }

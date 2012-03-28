@@ -16,15 +16,18 @@
  *
  ***************************************************************************/
 
-package com.puresol.gui.data;
+package com.puresol.io;
 
-public class Encrypter {
-	static public String encryptPassword(String password) {
-		/**
-		 * A combination of MD5 and SHA is used to overcome the weakness of MD5
-		 * and SHA. In combination it should be strong enough!
-		 */
-		return HashCodeGenerator.getSHA(HashCodeGenerator.getMD5(password));
+public enum LineEnd {
+	WINDOWS("\r\n"), UNIX("\n");
+
+	private String string;
+
+	private LineEnd(String string) {
+		this.string = string;
 	}
 
+	public String getCRString() {
+		return string;
+	}
 }

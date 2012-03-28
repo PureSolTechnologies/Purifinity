@@ -7,11 +7,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.JOptionPane;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.puresol.coding.analysis.AnalyzedFile;
 import com.puresol.coding.analysis.ProjectAnalyzer;
@@ -19,12 +19,14 @@ import com.puresol.coding.evaluator.CodeRangeEvaluator;
 import com.puresol.coding.evaluator.ProjectEvaluator;
 import com.puresol.coding.evaluator.Result;
 import com.puresol.coding.quality.SourceCodeQuality;
-import com.puresol.gui.Application;
 
 public abstract class AbstractProjectMetric<T extends CodeRangeEvaluator>
 	extends ProjectEvaluator {
 
     private static final long serialVersionUID = -5093217611195212999L;
+
+    private static final Logger logger = LoggerFactory
+	    .getLogger(AbstractProjectMetric.class);
 
     private final ProjectAnalyzer projectAnalyzer;
     private final Map<String, SourceCodeQuality> qualities = new HashMap<String, SourceCodeQuality>();
@@ -73,9 +75,8 @@ public abstract class AbstractProjectMetric<T extends CodeRangeEvaluator>
 	    monitor.done();
 	    return Status.OK_STATUS;
 	} catch (IOException e) {
-	    JOptionPane.showMessageDialog(Application.getInstance(),
-		    "IOException was thrown!", "Error",
-		    JOptionPane.ERROR_MESSAGE);
+	    logger.error("Could not calculate project metric!", e);
+	    monitor.setCanceled(true);
 	    monitor.done();
 	    return new Status(IStatus.ERROR, getName(), e.getMessage(), e);
 	}

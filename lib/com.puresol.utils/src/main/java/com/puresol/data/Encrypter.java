@@ -16,25 +16,16 @@
  *
  ***************************************************************************/
 
-package com.puresol.gui;
+package com.puresol.data;
 
-import java.util.ArrayList;
-import java.util.Hashtable;
 
-public class FreeComboBox extends AbstractExtendedComboBox {
-
-	private static final long serialVersionUID = -1078072332476864091L;
-
-	public FreeComboBox() {
-		super();
+public class Encrypter {
+	static public String encryptPassword(String password) {
+		/**
+		 * A combination of MD5 and SHA is used to overcome the weakness of MD5
+		 * and SHA. In combination it should be strong enough!
+		 */
+		return HashCodeGenerator.getSHA(HashCodeGenerator.getMD5(password));
 	}
 
-	protected void setItems(ArrayList<Object> displayItems,
-			ArrayList<Object> assignedItems) {
-		super.setItems(displayItems, assignedItems);
-	}
-
-	protected void setItems(Hashtable<Object, Object> listData) {
-		super.setItems(listData);
-	}
 }

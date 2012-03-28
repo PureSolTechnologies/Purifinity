@@ -7,11 +7,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.JOptionPane;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.puresol.coding.CodeRange;
 import com.puresol.coding.ProgrammingLanguage;
@@ -22,11 +22,13 @@ import com.puresol.coding.evaluator.ProjectEvaluator;
 import com.puresol.coding.evaluator.Result;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.SourceCodeQuality;
-import com.puresol.gui.Application;
 
 public class ProjectMaintainabilityIndex extends ProjectEvaluator {
 
     private static final long serialVersionUID = -5093217611195212999L;
+
+    private static final Logger logger = LoggerFactory
+	    .getLogger(ProjectMaintainabilityIndex.class);
 
     private final Map<String, SourceCodeQuality> qualities = new HashMap<String, SourceCodeQuality>();
     private final Map<String, List<Result>> evaluatorResults = new HashMap<String, List<Result>>();
@@ -71,9 +73,8 @@ public class ProjectMaintainabilityIndex extends ProjectEvaluator {
 	    monitor.done();
 	    return Status.OK_STATUS;
 	} catch (IOException e) {
-	    JOptionPane.showMessageDialog(Application.getInstance(),
-		    "IOException was thrown!", "Error",
-		    JOptionPane.ERROR_MESSAGE);
+	    logger.error("Could not calculate maintainability index!", e);
+	    monitor.setCanceled(true);
 	    monitor.done();
 	    return new Status(IStatus.ERROR, getName(), e.getMessage(), e);
 	}

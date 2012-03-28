@@ -16,7 +16,7 @@
  *
  ***************************************************************************/
 
-package com.puresol.gui.progress;
+package com.puresol.progress;
 
 /**
  * This interfaces is used for classes which are to be monitored.
@@ -26,13 +26,19 @@ package com.puresol.gui.progress;
  */
 public interface ProgressObservable {
 
-	/**
-	 * The monitor (observer) is set here and the class itself has to take care
-	 * about the information which are set to the monitor.
-	 * 
-	 * @param observer
-	 */
-	public void setMonitor(ProgressObserver observer);
+    /**
+     * This method adds a new progress listener.
+     * 
+     * @param progressListener
+     *            is the listener object to be added.
+     */
+    public void addProgressListener(ProgressListener progressListener);
 
-	public ProgressObserver getMonitor();
+    /**
+     * This method removes a former added progress listener.
+     * 
+     * @param progressListener
+     *            is the object to be added as listener.
+     */
+    public void removeProgressListener(ProgressListener progressListener);
 }

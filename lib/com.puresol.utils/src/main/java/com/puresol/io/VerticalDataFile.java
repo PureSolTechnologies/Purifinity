@@ -16,7 +16,7 @@
  *
  ***************************************************************************/
 
-package com.puresol.gui.data;
+package com.puresol.io;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -29,6 +29,9 @@ import java.util.Locale;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.puresol.data.TypeWrapper;
+import com.puresol.data.VerticalData;
 
 public class VerticalDataFile {
 
@@ -155,7 +158,7 @@ public class VerticalDataFile {
 		separator = ",";
 	    }
 	    boolean first = true;
-	    for (String columnName : data.columnNames) {
+	    for (String columnName : data.getColumnNames()) {
 		if (first) {
 		    first = false;
 		} else {

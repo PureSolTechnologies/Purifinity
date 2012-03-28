@@ -16,11 +16,13 @@
  *
  ***************************************************************************/
 
-package com.puresol.gui.data;
+package com.puresol.io;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Date;
+
+import com.puresol.data.TypeWrapper;
 
 /**
  * This class represents the complete information about the type of a variable.
