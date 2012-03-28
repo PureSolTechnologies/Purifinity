@@ -12,8 +12,8 @@ Bundle-Version: 0.1.0.qualifier
 Created-By: Apache Maven Bundle Plugin
 Export-Package: com.puresol.trees;uses:="org.osgi.framework,org.slf4j";v
  ersion="0.1.0.SNAPSHOT"
-Import-Package: org.osgi.framework;version="[1.6,2)",org.slf4j;version="
- [1.6,2)"
 Originally-Created-By: Apache Maven Bundle Plugin
 Tool: Bnd-1.50.0
 Bundle-ActivationPolicy: lazy
+Require-Bundle: org.slf4j.api;bundle-version="1.6.1",
+ org.eclipse.osgi;bundle-version="3.7.2"
