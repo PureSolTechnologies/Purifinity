@@ -29,7 +29,7 @@ public class FileAnalysisEditor extends EditorPart {
 
     private ScrollableFileViewer fileViewer;
     private ParserTreeControl treeViewer;
-    private MetricsControl metricsViewer;
+    private MetricsControl metricsControl;
 
     public FileAnalysisEditor() {
 	super();
@@ -94,8 +94,8 @@ public class FileAnalysisEditor extends EditorPart {
 	    TabItem metricsViewerTab = new TabItem(tabFolder, SWT.NONE);
 	    metricsViewerTab.setText("Metrics");
 
-	    metricsViewer = new MetricsControl(tabFolder, SWT.NONE);
-	    metricsViewerTab.setControl(metricsViewer);
+	    metricsControl = new MetricsControl(tabFolder, SWT.NONE);
+	    metricsViewerTab.setControl(metricsControl);
 
 	    FileAnalysisEditorInput editorInput = (FileAnalysisEditorInput) getEditorInput();
 	    fileViewer.setFileAndUpdateContent(editorInput.getAnalysisFile()

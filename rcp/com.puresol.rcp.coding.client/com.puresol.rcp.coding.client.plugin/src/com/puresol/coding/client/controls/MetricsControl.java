@@ -1,15 +1,17 @@
 package com.puresol.coding.client.controls;
 
-import org.eclipse.core.runtime.ILog;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.RowData;
+import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
 
-import swing2swt.layout.BoxLayout;
-
-import com.puresol.coding.client.Activator;
+import com.puresol.coding.client.content.ProjectEvaluatorFactoryComboViewer;
+import com.puresol.coding.evaluator.ProjectEvaluatorFactory;
 
 /**
  * This is a simple text element which show a text file.
@@ -17,29 +19,38 @@ import com.puresol.coding.client.Activator;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class MetricsControl extends Composite {
+public class MetricsControl extends Composite implements
+	ISelectionChangedListener {
 
-    private static final ILog logger = Activator.getDefault().getLog();
+    private final ProjectEvaluatorFactoryComboViewer comboViewer;
+    private final Text metricDescriptionLabel;
 
     public MetricsControl(Composite parent, int style) {
 	super(parent, style);
-	setLayout(new BoxLayout(BoxLayout.Y_AXIS));
+	setLayout(new RowLayout());
 
-	Composite composite = new Composite(this, SWT.NONE);
-	composite.setLayout(new BoxLayout(BoxLayout.Y_AXIS));
+	Combo combo = new Combo(this, SWT.READ_ONLY);
+	combo.setLayoutData(new RowData(SWT.DEFAULT, SWT.DEFAULT));
 
-	Composite composite_1 = new Composite(composite, SWT.NONE);
-	composite_1.setLayout(new BoxLayout(BoxLayout.X_AXIS));
+	comboViewer = new ProjectEvaluatorFactoryComboViewer(combo);
+	comboViewer.addSelectionChangedListener(this);
 
-	Combo combo = new Combo(composite_1, SWT.NONE);
+	metricDescriptionLabel = new Text(this, SWT.MULTI);
+	metricDescriptionLabel.setText("");
+	metricDescriptionLabel.setLayoutData(new RowData(SWT.DEFAULT,
+		SWT.DEFAULT));
+    }
 
-	Label lblNewLabel = new Label(composite_1, SWT.NONE);
-	lblNewLabel.setText("Explanation");
-
-	Composite composite_2 = new Composite(composite, SWT.NONE);
-	composite_2.setLayout(new FillLayout(SWT.VERTICAL));
-
-	Label lblMetric = new Label(composite_2, SWT.NONE);
-	lblMetric.setText("Metric");
+    @Override
+    public void selectionChanged(SelectionChangedEvent event) {
+	if (event.getSource() == comboViewer) {
+	    StructuredSelection selection = (StructuredSelection) event
+		    .getSelection();
+	    ProjectEvaluatorFactory factory = (ProjectEvaluatorFactory) selection
+		    .getFirstElement();
+	    metricDescriptionLabel.setText(factory.getDescription());
+	    metricDescriptionLabel.setSize(metricDescriptionLabel.computeSize(
+		    SWT.DEFAULT, SWT.DEFAULT));
+	}
     }
 }

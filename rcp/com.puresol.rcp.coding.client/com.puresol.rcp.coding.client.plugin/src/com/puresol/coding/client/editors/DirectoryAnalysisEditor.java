@@ -1,13 +1,18 @@
 package com.puresol.coding.client.editors;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 
+import com.puresol.coding.client.controls.MetricsControl;
+
 public class DirectoryAnalysisEditor extends EditorPart {
+
+    private MetricsControl metricsControl;
 
     public DirectoryAnalysisEditor() {
 	super();
@@ -45,7 +50,7 @@ public class DirectoryAnalysisEditor extends EditorPart {
 
     @Override
     public void createPartControl(Composite parent) {
-	// TODO Auto-generated method stub
+	metricsControl = new MetricsControl(parent, SWT.NONE);
     }
 
     @Override
