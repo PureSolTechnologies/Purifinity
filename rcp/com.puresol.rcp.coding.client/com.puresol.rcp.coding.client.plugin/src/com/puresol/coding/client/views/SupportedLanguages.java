@@ -16,7 +16,7 @@ import org.osgi.framework.ServiceReference;
 
 import swing2swt.layout.BorderLayout;
 
-import com.puresol.coding.ProgrammingLanguage;
+import com.puresol.coding.analysis.api.ProgrammingLanguage;
 import com.puresol.coding.client.Activator;
 
 public class SupportedLanguages extends ViewPart implements SelectionListener {

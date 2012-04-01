@@ -15,7 +15,7 @@ import org.eclipse.ui.part.ViewPart;
 
 import swing2swt.layout.BorderLayout;
 
-import com.puresol.coding.ProgrammingLanguage;
+import com.puresol.coding.analysis.api.ProgrammingLanguage;
 import com.puresol.coding.client.controls.GrammarCanvas;
 import com.puresol.coding.client.controls.ProgrammingLanguageViewer;
 import com.puresol.coding.client.grammar.RenderException;

@@ -18,9 +18,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
-import com.puresol.coding.CodeRange;
-import com.puresol.coding.CodeRangeType;
-import com.puresol.coding.ProgrammingLanguage;
+import com.puresol.coding.analysis.api.CodeRange;
+import com.puresol.coding.analysis.api.CodeRangeType;
+import com.puresol.coding.analysis.api.ProgrammingLanguage;
 import com.puresol.coding.evaluator.CodeRangeEvaluator;
 import com.puresol.coding.evaluator.Result;
 import com.puresol.coding.quality.QualityCharacteristic;

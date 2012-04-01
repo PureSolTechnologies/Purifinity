@@ -18,8 +18,8 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresol.coding.analysis.Analyzer;
-import com.puresol.coding.analysis.AnalyzerException;
+import com.puresol.coding.analysis.api.Analyzer;
+import com.puresol.coding.analysis.api.AnalyzerException;
 import com.puresol.coding.lang.fortran.Fortran;
 import com.puresol.trees.TreePrinter;
 import com.puresol.uhura.parser.ParserTree;

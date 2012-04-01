@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import com.puresol.coding.AbstractProgrammingLanguage;
-import com.puresol.coding.analysis.Analyzer;
+import com.puresol.coding.analysis.api.Analyzer;
 import com.puresol.coding.lang.test.grammar.TestLanguageGrammar;
 import com.puresol.uhura.grammar.Grammar;
 

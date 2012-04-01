@@ -31,7 +31,8 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: com.puresol.utils;bundle-version="0.1.0",
  com.puresol.uhura.lib;bundle-version="0.1.0",
  com.puresol.trees;bundle-version="0.1.0",
- com.puresol.coding.analysis;bundle-version="0.1.0"
+ com.puresol.coding.analysis.api;bundle-version="0.1.0",
+ com.puresol.coding.analysis.impl;bundle-version="0.1.0"
 Bundle-Vendor: PureSol Technologies
 Build-Jdk: 1.6.0_22
 Bundle-Version: 0.1.0.quantifier
@@ -39,5 +40,4 @@ Bnd-LastModified: 1331319581752
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: com.puresol.coding.lang.fortran
 Originally-Created-By: Apache Maven Bundle Plugin
-Service-Component: OSGI-INF/component.xml
 Bundle-Activator: com.puresol.coding.lang.fortran.Activator

@@ -4,7 +4,7 @@ import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
-import com.puresol.coding.CodeRangeType;
+import com.puresol.coding.analysis.api.CodeRangeType;
 import com.puresol.coding.quality.SourceCodeQuality;
 
 public class EntropyQualityTest {

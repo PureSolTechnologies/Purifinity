@@ -12,7 +12,7 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 
-import com.puresol.coding.ProgrammingLanguage;
+import com.puresol.coding.analysis.api.ProgrammingLanguage;
 import com.puresol.coding.client.grammar.GrammarRenderer;
 import com.puresol.coding.client.grammar.RenderException;
 import com.puresol.uhura.grammar.Grammar;

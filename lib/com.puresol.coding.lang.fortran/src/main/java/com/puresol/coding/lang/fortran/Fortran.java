@@ -8,7 +8,7 @@ import java.io.ObjectInputStream;
 import org.osgi.framework.BundleContext;
 
 import com.puresol.coding.AbstractProgrammingLanguage;
-import com.puresol.coding.analysis.Analyzer;
+import com.puresol.coding.analysis.api.Analyzer;
 import com.puresol.coding.lang.fortran.grammar.FortranGrammar;
 import com.puresol.uhura.grammar.Grammar;
 

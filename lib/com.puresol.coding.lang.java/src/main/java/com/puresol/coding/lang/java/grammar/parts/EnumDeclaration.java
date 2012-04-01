@@ -1,7 +1,7 @@
 package com.puresol.coding.lang.java.grammar.parts;
 
-import com.puresol.coding.CodeRange;
-import com.puresol.coding.CodeRangeType;
+import com.puresol.coding.analysis.api.CodeRange;
+import com.puresol.coding.analysis.api.CodeRangeType;
 import com.puresol.trees.TreeException;
 import com.puresol.uhura.parser.ParserTree;
 

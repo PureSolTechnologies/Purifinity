@@ -13,7 +13,7 @@ import java.util.List;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.puresol.coding.analysis.Analyzer;
+import com.puresol.coding.analysis.api.Analyzer;
 import com.puresol.coding.lang.java.Java;
 import com.puresol.coding.lang.java.grammar.JavaGrammar;
 import com.puresol.uhura.grammar.Grammar;

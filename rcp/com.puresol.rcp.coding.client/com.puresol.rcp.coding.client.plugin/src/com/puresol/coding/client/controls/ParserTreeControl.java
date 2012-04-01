@@ -10,9 +10,9 @@ import org.eclipse.swt.widgets.Tree;
 
 import swing2swt.layout.BorderLayout;
 
-import com.puresol.coding.analysis.Analysis;
 import com.puresol.coding.analysis.AnalyzedFile;
 import com.puresol.coding.analysis.ProjectAnalyzer;
+import com.puresol.coding.analysis.api.Analysis;
 import com.puresol.coding.client.content.ParserTreeContentProvider;
 import com.puresol.coding.client.content.ParserTreeLabelProvider;
 

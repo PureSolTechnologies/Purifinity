@@ -21,11 +21,11 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresol.coding.CodeRange;
-import com.puresol.coding.CodeRangeType;
-import com.puresol.coding.ProgrammingLanguage;
-import com.puresol.coding.analysis.Analyzer;
-import com.puresol.coding.analysis.AnalyzerException;
+import com.puresol.coding.analysis.api.Analyzer;
+import com.puresol.coding.analysis.api.AnalyzerException;
+import com.puresol.coding.analysis.api.CodeRange;
+import com.puresol.coding.analysis.api.CodeRangeType;
+import com.puresol.coding.analysis.api.ProgrammingLanguage;
 import com.puresol.coding.lang.test.grammar.TestLanguageGrammar;
 import com.puresol.uhura.lexer.Lexer;
 import com.puresol.uhura.lexer.LexerException;
@@ -52,7 +52,7 @@ public class TestLanguageAnalyser implements Analyzer {
     private final transient TestLanguageGrammar grammar;
     private Date date = new Date();
     private ParserTree parserTree = null;
-    private double timeEffort = 0.0;
+    private long timeEffort = 0;
 
     public TestLanguageAnalyser(File file) {
 	super();
@@ -72,7 +72,7 @@ public class TestLanguageAnalyser implements Analyzer {
 	    Parser parser = grammar.getParser();
 	    parserTree = parser.parse(lexerResult);
 	    watch.stop();
-	    timeEffort = watch.getSeconds();
+	    timeEffort = Math.round(watch.getSeconds() * 1000.0);
 	} catch (ParserException e) {
 	    logger.error(e.getMessage(), e);
 	    throw new AnalyzerException(this);
@@ -97,7 +97,7 @@ public class TestLanguageAnalyser implements Analyzer {
     }
 
     @Override
-    public double getTimeEffort() {
+    public long getTimeOfRun() {
 	return timeEffort;
     }
 

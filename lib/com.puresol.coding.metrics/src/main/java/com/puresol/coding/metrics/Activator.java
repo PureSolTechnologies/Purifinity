@@ -29,11 +29,23 @@ public class Activator implements BundleActivator {
     private static final Logger logger = LoggerFactory
 	    .getLogger(Activator.class);
 
+    private static BundleContext bundleContext = null;
+
+    public static BundleContext getBundleContext() {
+	return bundleContext;
+    }
+
     private final List<BundleActivator> bundleActivators = new ArrayList<BundleActivator>();
 
     @Override
     public void start(BundleContext context) throws Exception {
 	logger.info("Starting Metrics Base Package...");
+
+	if (Activator.bundleContext == null) {
+	    Activator.bundleContext = context;
+	} else {
+	    throw new RuntimeException("Context should be not set already!");
+	}
 
 	bundleActivators.add(new CoCoMoActivator());
 	bundleActivators.add(new CodeDepthActivator());
@@ -58,6 +70,12 @@ public class Activator implements BundleActivator {
 	    activator.stop(context);
 	}
 	bundleActivators.clear();
+
+	if (Activator.bundleContext != null) {
+	    Activator.bundleContext = null;
+	} else {
+	    throw new RuntimeException("Context should be set already!");
+	}
 
 	logger.info("Stopped.");
     }

@@ -2,9 +2,9 @@ package com.puresol.coding.metrics.entropy;
 
 import java.util.List;
 
-import com.puresol.coding.CodeRange;
-import com.puresol.coding.ProgrammingLanguage;
 import com.puresol.coding.analysis.ProjectAnalyzer;
+import com.puresol.coding.analysis.api.CodeRange;
+import com.puresol.coding.analysis.api.ProgrammingLanguage;
 import com.puresol.coding.evaluator.CodeRangeEvaluator;
 import com.puresol.coding.evaluator.CodeRangeEvaluatorFactory;
 import com.puresol.coding.evaluator.ProjectEvaluator;

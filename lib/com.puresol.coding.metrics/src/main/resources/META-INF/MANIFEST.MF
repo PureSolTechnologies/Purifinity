@@ -26,8 +26,9 @@ Tool: Bnd-0.0.357
 Bundle-Name: com.puresol.coding.metrics
 Created-By: Apache Maven Bundle Plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Require-Bundle: com.puresol.coding.analysis;bundle-version="0.1.0",
- com.puresol.utils;bundle-version="0.1.0"
+Require-Bundle: com.puresol.coding.analysis.api;bundle-version="0.1.0",
+ com.puresol.utils;bundle-version="0.1.0",
+ com.puresol.coding.analysis.impl;bundle-version="0.1.0"
 Bundle-Vendor: PureSol Technologies
 Build-Jdk: 1.6.0_22
 Bundle-Version: 0.1.0.SNAPSHOT

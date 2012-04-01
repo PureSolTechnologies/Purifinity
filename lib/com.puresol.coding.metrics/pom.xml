@@ -55,7 +55,13 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresol</groupId>
-			<artifactId>coding.analysis</artifactId>
+			<artifactId>coding.analysis.api</artifactId>
+			<version>0.1.0-SNAPSHOT</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.puresol</groupId>
+			<artifactId>coding.analysis.impl</artifactId>
 			<version>0.1.0-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>

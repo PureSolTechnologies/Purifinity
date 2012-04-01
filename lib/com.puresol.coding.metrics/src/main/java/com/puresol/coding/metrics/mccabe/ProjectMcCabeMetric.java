@@ -5,11 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.puresol.coding.CodeRange;
-import com.puresol.coding.ProgrammingLanguage;
-import com.puresol.coding.analysis.Analysis;
 import com.puresol.coding.analysis.AnalyzedFile;
 import com.puresol.coding.analysis.ProjectAnalyzer;
+import com.puresol.coding.analysis.api.Analysis;
+import com.puresol.coding.analysis.api.CodeRange;
+import com.puresol.coding.analysis.api.ProgrammingLanguage;
 import com.puresol.coding.metrics.AbstractProjectMetric;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.SourceCodeQuality;

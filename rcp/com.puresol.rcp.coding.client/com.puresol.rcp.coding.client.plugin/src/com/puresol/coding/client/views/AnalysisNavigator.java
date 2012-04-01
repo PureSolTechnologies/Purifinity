@@ -41,6 +41,7 @@ import com.puresol.coding.client.editors.DirectoryAnalysisEditorInput;
 import com.puresol.coding.client.editors.EditorIds;
 import com.puresol.coding.client.editors.FileAnalysisEditorInput;
 import com.puresol.coding.client.editors.NotAnalyzedEditorInput;
+import com.puresol.coding.client.wizards.NewAnalysisJob;
 
 /**
  * This view shows a list of all analysis which are opened and the tree of files
@@ -98,7 +99,7 @@ public class AnalysisNavigator extends ViewPart implements IJobChangeListener,
     @Override
     public void done(IJobChangeEvent event) {
 	Job job = event.getJob();
-	if (job.getClass().equals(ProjectAnalyzer.class)) {
+	if (job.getClass().equals(NewAnalysisJob.class)) {
 	    ProjectAnalyzer analyzer = (ProjectAnalyzer) job;
 	    AnalysisNavigatorModel.INSTANCE.addAnalysis(analyzer);
 	    UIJob refresh = new UIJob("Refresh Analysis Navigator") {

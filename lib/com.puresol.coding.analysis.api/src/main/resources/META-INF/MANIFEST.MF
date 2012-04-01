@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: com.puresol.coding.analysis.api
+Bundle-SymbolicName: com.puresol.coding.analysis.api
+Bundle-Version: 0.1.0.quantifier
+Bundle-Activator: com.puresol.coding.analysis.api.Activator
+Bundle-Vendor: PureSol Technologies
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ActivationPolicy: lazy
+Require-Bundle: org.eclipse.osgi;bundle-version="3.7.2"
+Export-Package: com.puresol.coding.analysis.api

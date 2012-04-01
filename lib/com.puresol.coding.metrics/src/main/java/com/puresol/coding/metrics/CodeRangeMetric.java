@@ -1,6 +1,6 @@
 package com.puresol.coding.metrics;
 
-import com.puresol.coding.CodeRange;
+import com.puresol.coding.analysis.api.CodeRange;
 
 /**
  * This is an interface for a single code range metric.

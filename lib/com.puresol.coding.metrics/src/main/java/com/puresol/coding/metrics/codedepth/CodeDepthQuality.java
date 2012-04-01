@@ -1,6 +1,6 @@
 package com.puresol.coding.metrics.codedepth;
 
-import com.puresol.coding.CodeRangeType;
+import com.puresol.coding.analysis.api.CodeRangeType;
 import com.puresol.coding.quality.SourceCodeQuality;
 
 public class CodeDepthQuality {

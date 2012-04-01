@@ -21,11 +21,11 @@ import org.eclipse.core.runtime.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresol.coding.CodeRange;
-import com.puresol.coding.CodeRangeType;
-import com.puresol.coding.analysis.Analysis;
 import com.puresol.coding.analysis.AnalyzedFile;
 import com.puresol.coding.analysis.ProjectAnalyzer;
+import com.puresol.coding.analysis.api.Analysis;
+import com.puresol.coding.analysis.api.CodeRange;
+import com.puresol.coding.analysis.api.CodeRangeType;
 import com.puresol.coding.evaluator.ProjectEvaluator;
 import com.puresol.coding.evaluator.Result;
 import com.puresol.coding.metrics.sloc.SLOCMetric;

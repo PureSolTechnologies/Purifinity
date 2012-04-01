@@ -21,11 +21,11 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresol.coding.CodeRange;
-import com.puresol.coding.CodeRangeType;
-import com.puresol.coding.ProgrammingLanguage;
-import com.puresol.coding.analysis.Analyzer;
-import com.puresol.coding.analysis.AnalyzerException;
+import com.puresol.coding.analysis.api.Analyzer;
+import com.puresol.coding.analysis.api.AnalyzerException;
+import com.puresol.coding.analysis.api.CodeRange;
+import com.puresol.coding.analysis.api.CodeRangeType;
+import com.puresol.coding.analysis.api.ProgrammingLanguage;
 import com.puresol.coding.lang.java.grammar.JavaGrammar;
 import com.puresol.coding.lang.java.grammar.parts.AnnotationTypeDeclaration;
 import com.puresol.coding.lang.java.grammar.parts.ConstructorDeclaration;
@@ -61,7 +61,7 @@ public class JavaAnalyzer implements Analyzer {
     private final File file;
     private final transient JavaGrammar grammar;
     private Date date = new Date();
-    private double timeEffort = 0;
+    private long timeEffort = 0;
     private ParserTree parserTree = null;
 
     public JavaAnalyzer(File file) {
@@ -82,7 +82,7 @@ public class JavaAnalyzer implements Analyzer {
 	    Parser parser = grammar.getParser();
 	    parserTree = parser.parse(lexerResult);
 	    watch.stop();
-	    timeEffort = watch.getSeconds();
+	    timeEffort = Math.round(watch.getSeconds() * 1000.0);
 	} catch (ParserException e) {
 	    logger.error(e.getMessage(), e);
 	    throw new AnalyzerException(this);
@@ -107,7 +107,7 @@ public class JavaAnalyzer implements Analyzer {
     }
 
     @Override
-    public double getTimeEffort() {
+    public long getTimeOfRun() {
 	return timeEffort;
     }
 
