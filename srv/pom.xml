@@ -8,10 +8,12 @@
 	<packaging>pom</packaging>
 
 	<properties>
+		<coding.analysis.work.dir>/home/ludwig/coding.analysis.work.dir</coding.analysis.work.dir>
 	</properties>
 
 	<modules>
 		<module>database</module>
+		<module>jboss</module>
 	</modules>
 
 	<repositories>
@@ -71,6 +73,11 @@
 				<artifactId>liquibase-core</artifactId>
 				<version>2.0.3</version>
 			</dependency>
+			<dependency>
+				<groupId>org.jboss.as</groupId>
+				<artifactId>jboss-as-server</artifactId>
+				<version>7.1.1.Final</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -90,6 +97,11 @@
 					<groupId>org.liquibase</groupId>
 					<artifactId>liquibase-maven-plugin</artifactId>
 					<version>2.0.3</version>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.cargo</groupId>
+					<artifactId>cargo-maven2-plugin</artifactId>
+					<version>1.2.1</version>
 				</plugin>
 				<!--This plugin's configuration is used to store Eclipse m2e settings 
 					only. It has no influence on the Maven build itself. -->

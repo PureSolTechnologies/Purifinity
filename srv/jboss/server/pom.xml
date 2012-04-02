@@ -1,0 +1,46 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.puresol</groupId>
+		<artifactId>jboss</artifactId>
+		<version>0.1.0-SNAPSHOT</version>
+		<relativePath>..</relativePath>
+	</parent>
+
+	<artifactId>jboss.server</artifactId>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.cargo</groupId>
+				<artifactId>cargo-maven2-plugin</artifactId>
+				<configuration>
+					<!-- wait>false</wait -->
+					<container>
+						<containerId>jboss71x</containerId>
+						<home>${coding.analysis.work.dir}</home>
+						<!-- timeout>10000</timeout -->
+						<artifactInstaller>
+							<groupId>org.jboss.as</groupId>
+							<artifactId>jboss-as-dist</artifactId>
+							<version>7.1.1.Final</version>
+							<type>zip</type>
+						</artifactInstaller>
+					</container>
+					<configuration>
+						<type>standalone</type>
+						<home>${project.build.directory}/jboss71</home>
+						<properties>
+							<cargo.jboss.configuration>default</cargo.jboss.configuration>
+							<cargo.servlet.port>8080</cargo.servlet.port>
+							<cargo.rmi.port>1099</cargo.rmi.port>
+							<cargo.jvmargs>-Xmx512m</cargo.jvmargs>
+						</properties>
+					</configuration>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>
