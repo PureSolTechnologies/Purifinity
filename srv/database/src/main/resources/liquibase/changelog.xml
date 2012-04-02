@@ -14,13 +14,13 @@
 		</createTable>
 		<createTable tableName="FileStore">
 			<column name="FileKey" type="char(64)">
-				<constraints unique="true"  />
+				<constraints primaryKey="true"  />
 			</column>
 			<column name="FileContent" type="blob" />
 		</createTable>
 		<createTable tableName="AnalysisStore">
-			<column name="FileKey" type="char(64)">
-				<constraints primaryKey="true"/>
+			<column name="ParserTreeKey" type="char(64)">
+				<constraints primaryKey="true" foreignKeyName="AnalysisStoreToFileStoreFK"/>
 			</column>
 			<column name="Language" type="varchar(256)" />
 			<column name="Time" type="datetime" />
@@ -28,7 +28,7 @@
 			<column name="ParserTree" type="clob" />
 		</createTable>
 		<addForeignKeyConstraint constraintName="AnalysisStoreToFileStoreFK"
-			referencedTableName="FileStore" baseColumnNames="FileKey"
+			referencedTableName="FileStore" baseColumnNames="ParserTreeKey"
 			baseTableName="AnalysisStore" referencedColumnNames="FileKey" />
 		<rollback>
 			<dropTable tableName="AnalysisRuns" />

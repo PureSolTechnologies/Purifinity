@@ -64,6 +64,12 @@
 				<groupId>junit</groupId>
 				<artifactId>junit</artifactId>
 				<version>4.10</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.liquibase</groupId>
+				<artifactId>liquibase-core</artifactId>
+				<version>2.0.3</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -71,6 +77,15 @@
 	<build>
 		<pluginManagement>
 			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>2.3.2</version>
+					<configuration>
+						<source>1.6</source>
+						<target>1.6</target>
+					</configuration>
+				</plugin>
 				<plugin>
 					<groupId>org.liquibase</groupId>
 					<artifactId>liquibase-maven-plugin</artifactId>
@@ -96,6 +111,7 @@
 										</versionRange>
 										<goals>
 											<goal>update</goal>
+											<goal>dropAll</goal>
 										</goals>
 									</pluginExecutionFilter>
 									<action>
