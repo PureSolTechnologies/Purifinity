@@ -20,18 +20,23 @@
 					<!-- wait>false</wait -->
 					<container>
 						<containerId>jboss71x</containerId>
-						<home>${coding.analysis.work.dir}</home>
-						<!-- timeout>10000</timeout -->
+						<timeout>60000</timeout>
 						<artifactInstaller>
 							<groupId>org.jboss.as</groupId>
 							<artifactId>jboss-as-dist</artifactId>
 							<version>7.1.1.Final</version>
 							<type>zip</type>
+							<extractDir>${project.build.directory}/installation</extractDir>
 						</artifactInstaller>
 					</container>
 					<configuration>
 						<type>standalone</type>
-						<home>${project.build.directory}/jboss71</home>
+						<home>${project.build.directory}/jboss</home>
+						<configfiles>
+							<configfile>
+								<file>${basedir}/configuration/standalone.xml</file>
+							</configfile>
+						</configfiles>
 						<properties>
 							<cargo.jboss.configuration>default</cargo.jboss.configuration>
 							<cargo.servlet.port>8080</cargo.servlet.port>
@@ -40,6 +45,15 @@
 						</properties>
 					</configuration>
 				</configuration>
+				<executions>
+					<execution>
+						<id>JBoss Configuration</id>
+						<phase>package</phase>
+						<goals>
+							<goal>configure</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
