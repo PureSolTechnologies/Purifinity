@@ -9,9 +9,15 @@
 		<relativePath>..</relativePath>
 	</parent>
 
-	<artifactId>jboss.server</artifactId>
+	<artifactId>jboss.configuration</artifactId>
 
 	<build>
+		<resources>
+			<resource>
+				<directory>${basedir}/src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
 		<plugins>
 			<plugin>
 				<groupId>org.codehaus.cargo</groupId>
@@ -34,7 +40,7 @@
 						<home>${project.build.directory}/jboss</home>
 						<configfiles>
 							<configfile>
-								<file>${basedir}/configuration/standalone.xml</file>
+								<file>${basedir}/src/main/resources/configuration/standalone.xml</file>
 							</configfile>
 						</configfiles>
 						<properties>

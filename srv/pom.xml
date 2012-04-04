@@ -8,7 +8,10 @@
 	<packaging>pom</packaging>
 
 	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<coding.analysis.work.dir>/home/ludwig/coding.analysis.work.dir</coding.analysis.work.dir>
+		<arquillian.version>1.0.0.CR7</arquillian.version>
+		<jbossas.version>7.1.0.Final</jbossas.version>
 	</properties>
 
 	<modules>
@@ -17,11 +20,6 @@
 	</modules>
 
 	<repositories>
-		<repository>
-			<id>indigo</id>
-			<layout>p2</layout>
-			<url>http://download.eclipse.org/releases/indigo</url>
-		</repository>
 		<repository>
 			<snapshots>
 				<enabled>false</enabled>
@@ -58,6 +56,13 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
+				<groupId>org.jboss.spec</groupId>
+				<artifactId>jboss-javaee-6.0</artifactId>
+				<version>2.0.0.Final</version>
+				<type>pom</type>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
 				<groupId>postgresql</groupId>
 				<artifactId>postgresql</artifactId>
 				<version>8.4-702.jdbc4</version>
@@ -76,7 +81,26 @@
 			<dependency>
 				<groupId>org.jboss.as</groupId>
 				<artifactId>jboss-as-server</artifactId>
-				<version>7.1.1.Final</version>
+				<version>${jbossas.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.jboss.arquillian.junit</groupId>
+				<artifactId>arquillian-junit-container</artifactId>
+				<version>${arquillian.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.arquillian.protocol</groupId>
+				<artifactId>arquillian-protocol-servlet</artifactId>
+				<version>${arquillian.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.as</groupId>
+				<artifactId>jboss-as-arquillian-container-managed</artifactId>
+				<version>${jbossas.version}</version>
+				<scope>test</scope>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
