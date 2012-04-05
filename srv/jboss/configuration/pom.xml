@@ -32,7 +32,7 @@
 							<artifactId>jboss-as-dist</artifactId>
 							<version>7.1.1.Final</version>
 							<type>zip</type>
-							<extractDir>${project.build.directory}/installation</extractDir>
+							<extractDir>${coding.analysis.work.dir}/cargo</extractDir>
 						</artifactInstaller>
 					</container>
 					<configuration>

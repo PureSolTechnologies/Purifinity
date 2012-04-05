@@ -7,19 +7,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 
-import org.jboss.arquillian.container.test.api.RunAsClient;
-import org.jboss.arquillian.junit.Arquillian;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
-@RunWith(Arquillian.class)
-@RunAsClient
-public class ArquillianIT {
+public class ArquillianConfigurationTest {
 
-    @BeforeClass
-    public static void initialize() throws Exception {
-	URL resource = ArquillianIT.class.getResource("/arquillian.xml");
+    @Test
+    public void initialize() throws Exception {
+	URL resource = ArquillianConfigurationTest.class
+		.getResource("/arquillian.xml");
 	assertNotNull(resource);
 	InputStream inStream = resource.openStream();
 	try {
@@ -32,11 +27,6 @@ public class ArquillianIT {
 	} finally {
 	    inStream.close();
 	}
-    }
-
-    @Test
-    public void test() {
-
     }
 
 }
