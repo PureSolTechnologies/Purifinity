@@ -1,4 +1,4 @@
-package com.puresol.coding.db;
+package com.puresol.database.test;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -10,7 +10,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.postgresql.util.PSQLException;
 
-import com.puresol.db.LiquibaseHelper;
+import com.puresol.database.utils.LiquibaseHelper;
 
 public class DatabaseSchemaTest {
 
@@ -31,7 +31,9 @@ public class DatabaseSchemaTest {
 
     @After
     public void tearDown() throws Exception {
-	connection.close();
+	if (connection != null) {
+	    connection.close();
+	}
     }
 
     @Test(expected = PSQLException.class)

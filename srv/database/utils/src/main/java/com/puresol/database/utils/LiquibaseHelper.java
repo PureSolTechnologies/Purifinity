@@ -1,4 +1,4 @@
-package com.puresol.db;
+package com.puresol.database.utils;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
