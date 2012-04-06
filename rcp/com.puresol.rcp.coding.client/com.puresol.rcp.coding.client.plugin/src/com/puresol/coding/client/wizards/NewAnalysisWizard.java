@@ -17,8 +17,10 @@ public class NewAnalysisWizard extends Wizard {
     @Override
     public boolean performFinish() {
 	String name = generalSettingsPage.getProjectName();
+	String description = generalSettingsPage.getProjectDescription();
 	String sourceDirectory = generalSettingsPage.getSourceDirectory();
-	NewAnalysisJob job = new NewAnalysisJob(name, new File(sourceDirectory));
+	NewAnalysisJob job = new NewAnalysisJob(name, description, new File(
+		sourceDirectory));
 	job.schedule();
 	return true;
     }

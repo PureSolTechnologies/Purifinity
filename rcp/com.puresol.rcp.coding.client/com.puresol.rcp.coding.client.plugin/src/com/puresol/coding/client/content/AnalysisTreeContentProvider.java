@@ -7,6 +7,7 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
 import com.puresol.coding.analysis.api.Analysis;
+import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.trees.FileTree;
 
 public class AnalysisTreeContentProvider implements ITreeContentProvider {
@@ -31,9 +32,12 @@ public class AnalysisTreeContentProvider implements ITreeContentProvider {
 	List<Analysis> analyses = model.getAnalyses();
 	List<AnalysisNavigatorTreeNodeElement> elements = new ArrayList<AnalysisNavigatorTreeNodeElement>();
 	for (Analysis analysis : analyses) {
-	    elements.add(new AnalysisNavigatorTreeNodeElement(null, analysis,
-		    analysis.loadLastAnalysisRun().getFileTree(), analysis
-			    .getInformation().getName()));
+	    AnalysisRun loadLastAnalysisRun = analysis.loadLastAnalysisRun();
+	    if (loadLastAnalysisRun != null) {
+		elements.add(new AnalysisNavigatorTreeNodeElement(null,
+			analysis, loadLastAnalysisRun.getFileTree(), analysis
+				.getInformation().getName()));
+	    }
 	}
 	return elements.toArray(new AnalysisNavigatorTreeNodeElement[elements
 		.size()]);

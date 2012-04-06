@@ -151,7 +151,7 @@ public class AnalysisImpl implements Analysis {
 		getSettings().getName(), getSettings().getSourceDirectory(),
 		new File(analysisDirectory, uuid.toString()), getSettings()
 			.getFileSearchConfiguration());
-	// TODO Auto-generated method stub
+	run.schedule();
 	return run;
     }
 

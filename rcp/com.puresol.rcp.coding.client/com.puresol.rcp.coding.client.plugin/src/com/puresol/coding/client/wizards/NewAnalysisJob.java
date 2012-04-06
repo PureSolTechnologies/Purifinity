@@ -22,11 +22,13 @@ public class NewAnalysisJob extends Job {
 
     private final FileSearchConfiguration searchConfiguration;
     private final File sourceDirectory;
+    private final String description;
     private Analysis analysis = null;
 
-    public NewAnalysisJob(String name, File sourceDirectory) {
+    public NewAnalysisJob(String name, String description, File sourceDirectory) {
 	super(name);
 	this.sourceDirectory = sourceDirectory;
+	this.description = description;
 	IPreferenceStore preferenceStore = Activator.getDefault()
 		.getPreferenceStore();
 	searchConfiguration = PreferencesUtils
@@ -39,8 +41,7 @@ public class NewAnalysisJob extends Job {
 	    monitor.beginTask("Analysis of '" + getName() + "'", 1);
 	    AnalysisStore analysisStore = AnalysisStoreFactory.getInstance();
 	    AnalysisSettings analysisSettings = new AnalysisSettings(getName(),
-		    "<Not implemented, yet!>", searchConfiguration,
-		    sourceDirectory);
+		    description, searchConfiguration, sourceDirectory);
 	    analysis = analysisStore.createAnalysis(analysisSettings);
 	    return Status.OK_STATUS;
 	} catch (OperationCanceledException e) {

@@ -32,6 +32,7 @@ public class NewAnalysisGeneralSettingsPage extends WizardPage {
 
     private Text textSourceDirectory;
     private Text textProjectName;
+    private Text textDescription;
 
     protected NewAnalysisGeneralSettingsPage() {
 	super("Source Directory");
@@ -75,6 +76,14 @@ public class NewAnalysisGeneralSettingsPage extends WizardPage {
 	    }
 	});
 	btnBrowse.setText("Browse...");
+
+	Label lblDescription = new Label(composite, SWT.NONE);
+	lblDescription.setText("Description:");
+
+	textDescription = new Text(composite, SWT.BORDER);
+	textDescription.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
+		false, 1, 1));
+	new Label(composite, SWT.NONE);
 	return composite;
     }
 
@@ -117,6 +126,10 @@ public class NewAnalysisGeneralSettingsPage extends WizardPage {
 
     public String getProjectName() {
 	return textProjectName.getText();
+    }
+
+    public String getProjectDescription() {
+	return textDescription.getText();
     }
 
     public String getSourceDirectory() {
