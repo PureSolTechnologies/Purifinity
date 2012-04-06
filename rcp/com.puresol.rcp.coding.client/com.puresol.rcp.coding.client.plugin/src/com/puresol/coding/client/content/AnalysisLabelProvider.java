@@ -14,8 +14,8 @@ public class AnalysisLabelProvider extends LabelProvider {
 	String text = nodeElement.getTreeNodeName();
 	Analysis analyser = nodeElement.getAnalysis();
 	FileTree sourceFile = nodeElement.getSourceFile();
-	AnalyzedFile analyzedFile = analyser
-		.findAnalyzedFileBySourceFile(sourceFile.getPathFile(true));
+	AnalyzedFile analyzedFile = analyser.loadLastAnalysisRun()
+		.findAnalyzedFile(sourceFile.getPathFile(false));
 	if (analyzedFile != null) {
 	    text += " [ok]";
 	} else {

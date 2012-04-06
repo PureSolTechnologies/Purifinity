@@ -45,12 +45,12 @@ public class ParserTreeView extends ViewPart implements ISelectionListener {
 	try {
 	    if (selection instanceof AnalysisSelection) {
 		AnalysisSelection analysisSelection = (AnalysisSelection) selection;
-		Analysis analyzer = analysisSelection.getAnalysis();
+		Analysis analysis = analysisSelection.getAnalysis();
 		File sourceFile = analysisSelection.getSourceFile();
 
-		AnalyzedFile analyzedFile = analyzer
+		AnalyzedFile analyzedFile = analysis.loadLastAnalysisRun()
 			.findAnalyzedFile(sourceFile);
-		viewer.setContentAndUpdateContent(analyzedFile, analyzer);
+		viewer.setContentAndUpdateContent(analyzedFile, analysis);
 	    }
 	} catch (IOException e) {
 	    log.log(new Status(Status.ERROR, Activator.getDefault().getBundle()

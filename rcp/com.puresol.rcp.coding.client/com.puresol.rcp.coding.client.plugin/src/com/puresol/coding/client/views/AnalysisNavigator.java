@@ -100,8 +100,9 @@ public class AnalysisNavigator extends ViewPart implements IJobChangeListener,
     public void done(IJobChangeEvent event) {
 	Job job = event.getJob();
 	if (job.getClass().equals(NewAnalysisJob.class)) {
-	    Analysis analyzer = (Analysis) job;
-	    AnalysisNavigatorModel.INSTANCE.addAnalysis(analyzer);
+	    NewAnalysisJob newAnalysisJob = (NewAnalysisJob) job;
+	    AnalysisNavigatorModel.INSTANCE.addAnalysis(newAnalysisJob
+		    .getAnalysis());
 	    UIJob refresh = new UIJob("Refresh Analysis Navigator") {
 
 		@Override
@@ -200,9 +201,8 @@ public class AnalysisNavigator extends ViewPart implements IJobChangeListener,
 		    Analysis analysis = analysisSelection.getAnalysis();
 		    File sourceFile = analysisSelection.getSourceFile();
 
-		    File originalFile = new File(
-			    analysis.getProjectDirectory(),
-			    sourceFile.getPath());
+		    File originalFile = new File(analysis.getSettings()
+			    .getSourceDirectory(), sourceFile.getPath());
 		    if (!originalFile.exists()) {
 			logger.log(new Status(Status.ERROR,
 				AnalysisNavigator.class.getName(),
@@ -213,7 +213,8 @@ public class AnalysisNavigator extends ViewPart implements IJobChangeListener,
 		    IWorkbenchPage page = getSite().getPage();
 		    if (originalFile.isFile()) {
 			AnalyzedFile analyzedFile = analysis
-				.findAnalyzedFile(sourceFile);
+				.loadLastAnalysisRun().findAnalyzedFile(
+					sourceFile);
 			if (analyzedFile != null) {
 			    page.openEditor(new FileAnalysisEditorInput(
 				    analyzedFile, analysis),

@@ -7,7 +7,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.IJobManager;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.preference.IPreferenceStore;
 
@@ -25,6 +24,7 @@ public class NewAnalysisJob extends Job {
 
     private final FileSearchConfiguration searchConfiguration;
     private final File sourceDirectory;
+    private Analysis analysis = null;
 
     public NewAnalysisJob(String name, File sourceDirectory) {
 	super(name);
@@ -38,7 +38,6 @@ public class NewAnalysisJob extends Job {
     @Override
     protected IStatus run(IProgressMonitor monitor) {
 	try {
-	    IJobManager jobManager = Job.getJobManager();
 	    List<ProjectEvaluatorFactory> projectEvaluatorFactories = EvaluatorUtils
 		    .getProjectEvaluatorFactories();
 	    monitor.beginTask("Analysis and Evaluation of '" + getName() + "'",
@@ -47,15 +46,15 @@ public class NewAnalysisJob extends Job {
 	    AnalysisSettings analysisSettings = new AnalysisSettings(getName(),
 		    "<Not implemented, yet!>", searchConfiguration,
 		    sourceDirectory);
-	    Analysis analysis = analysisStore.createAnalysis(analysisSettings);
-	    analysis.schedule();
+	    analysis = analysisStore.createAnalysis(analysisSettings);
 	    return Status.OK_STATUS;
 	} catch (OperationCanceledException e) {
 	    e.printStackTrace();
 	    return Status.CANCEL_STATUS;
-	} catch (InterruptedException e) {
-	    e.printStackTrace();
-	    return Status.CANCEL_STATUS;
 	}
+    }
+
+    public Analysis getAnalysis() {
+	return analysis;
     }
 }

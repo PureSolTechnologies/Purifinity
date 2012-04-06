@@ -5,7 +5,6 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.commands.IHandlerListener;
-import org.eclipse.core.runtime.ILog;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -17,11 +16,10 @@ import com.puresol.coding.analysis.api.Analysis;
 import com.puresol.coding.analysis.api.AnalysisInformation;
 import com.puresol.coding.analysis.api.AnalysisStore;
 import com.puresol.coding.analysis.api.AnalysisStoreFactory;
-import com.puresol.coding.client.Activator;
 
 public class OpenAnalysis extends AbstractHandler implements IHandler {
 
-    private static final ILog logger = Activator.getDefault().getLog();
+    private Analysis analysis;
 
     @Override
     public void addHandlerListener(IHandlerListener handlerListener) {
@@ -48,9 +46,8 @@ public class OpenAnalysis extends AbstractHandler implements IHandler {
 	if (listDialog.open() == Dialog.OK) {
 	    Object[] infos = listDialog.getResult();
 	    AnalysisInformation analysisInformation = (AnalysisInformation) infos[0];
-	    Analysis projectAnalyzer = analysisStore
+	    analysis = analysisStore
 		    .loadAnalysis(analysisInformation.getUUID());
-	    projectAnalyzer.schedule();
 	}
 	return "";
     }
@@ -70,4 +67,7 @@ public class OpenAnalysis extends AbstractHandler implements IHandler {
 	// not needed...
     }
 
+    public Analysis getAnalysis() {
+	return analysis;
+    }
 }
