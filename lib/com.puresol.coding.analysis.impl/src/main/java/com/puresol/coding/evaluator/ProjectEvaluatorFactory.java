@@ -1,10 +1,10 @@
 package com.puresol.coding.evaluator;
 
-import com.puresol.coding.analysis.FileSystemAnalysisRun;
+import com.puresol.coding.analysis.AnalysisRunImpl;
 
 public interface ProjectEvaluatorFactory extends EvaluatorFactory {
 
-    public ProjectEvaluator create(FileSystemAnalysisRun projectAnalyzer);
+    public ProjectEvaluator create(AnalysisRunImpl projectAnalyzer);
 
     public Class<? extends ProjectEvaluator> getProjectEvaluatorClass();
 

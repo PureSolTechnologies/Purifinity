@@ -1,9 +1,13 @@
 package com.puresol.coding.analysis;
 
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 import java.util.UUID;
 
 import com.puresol.coding.analysis.api.Analysis;
@@ -17,7 +21,6 @@ public class AnalysisImpl implements Analysis {
 
     private static final String DIRECTORY_FLAG = ".analysis";
     private static final String SETTINGS_FILE = "analysis_settings.persist";
-    private static final String INFORMATION_FILE = "analysis_information.persist";
 
     public static boolean isAnalysisDirectory(File directory) {
 	return new File(directory, DIRECTORY_FLAG).exists();
@@ -37,8 +40,9 @@ public class AnalysisImpl implements Analysis {
 	return analysis;
     }
 
-    private AnalysisInformation information;
     private AnalysisSettings settings;
+    private UUID uuid;
+    private Date creationTime;
 
     private final File analysisDirectory;
 
@@ -51,8 +55,17 @@ public class AnalysisImpl implements Analysis {
 	try {
 	    settings = PersistenceUtils.restore(new File(analysisDirectory,
 		    SETTINGS_FILE));
-	    information = PersistenceUtils.restore(new File(analysisDirectory,
-		    INFORMATION_FILE));
+	    Properties properties = new Properties();
+	    FileReader reader = new FileReader(new File(analysisDirectory,
+		    "analysis.properties"));
+	    try {
+		properties.load(reader);
+		uuid = UUID.fromString(properties.get("uuid").toString());
+		creationTime = new Date(Long.valueOf((String) properties
+			.get("creation.time")));
+	    } finally {
+		reader.close();
+	    }
 	} catch (IOException e) {
 	    throw new AnalysisStoreException("Could not open the analysis!", e);
 	}
@@ -62,17 +75,26 @@ public class AnalysisImpl implements Analysis {
     private void create(UUID uuid, AnalysisSettings settings)
 	    throws AnalysisStoreException {
 	try {
+	    this.uuid = uuid;
 	    this.settings = settings;
-	    information = new AnalysisInformation(uuid, settings.getName(),
-		    settings.getDescription(), new Date());
+	    this.creationTime = new Date();
 	    if (!analysisDirectory.exists()) {
 		analysisDirectory.mkdirs();
 	    }
 	    new File(analysisDirectory, DIRECTORY_FLAG).createNewFile();
-	    PersistenceUtils.store(
-		    new File(analysisDirectory, INFORMATION_FILE), information);
 	    PersistenceUtils.store(new File(analysisDirectory, SETTINGS_FILE),
 		    settings);
+	    Properties properties = new Properties();
+	    properties.put("uuid", uuid.toString());
+	    properties.put("creation.time",
+		    String.valueOf(creationTime.getTime()));
+	    FileWriter writer = new FileWriter(new File(analysisDirectory,
+		    "analysis.properties"));
+	    try {
+		properties.store(writer, "");
+	    } finally {
+		writer.close();
+	    }
 	} catch (IOException e) {
 	    throw new AnalysisStoreException(
 		    "Could not store files for analysis!", e);
@@ -81,13 +103,22 @@ public class AnalysisImpl implements Analysis {
 
     @Override
     public AnalysisInformation getInformation() {
-	return information;
+	return new AnalysisInformation(uuid, settings.getName(),
+		settings.getDescription(), creationTime);
     }
 
     @Override
     public List<AnalysisRunInformation> getAllRunInformation() {
-	// TODO Auto-generated method stub
-	return null;
+	List<AnalysisRunInformation> analysisInformation = new ArrayList<AnalysisRunInformation>();
+	File[] files = analysisDirectory.listFiles();
+	for (File analysisDirectory : files) {
+	    if (AnalysisRunImpl.isAnalysisRunDirectory(analysisDirectory)) {
+		AnalysisRun analysisRun = AnalysisRunImpl
+			.open(analysisDirectory);
+		analysisInformation.add(analysisRun.getInformation());
+	    }
+	}
+	return analysisInformation;
     }
 
     @Override
@@ -96,9 +127,15 @@ public class AnalysisImpl implements Analysis {
     }
 
     @Override
-    public void updateSettings(AnalysisSettings settings) {
-	// TODO Auto-generated method stub
-
+    public void updateSettings(AnalysisSettings settings)
+	    throws AnalysisStoreException {
+	try {
+	    this.settings = settings;
+	    PersistenceUtils.store(new File(analysisDirectory, SETTINGS_FILE),
+		    settings);
+	} catch (IOException e) {
+	    throw new AnalysisStoreException("Could not store new settings!", e);
+	}
     }
 
     @Override
@@ -109,14 +146,28 @@ public class AnalysisImpl implements Analysis {
 
     @Override
     public AnalysisRun runAnalysis() {
+	UUID uuid = UUID.randomUUID();
+	AnalysisRunImpl run = (AnalysisRunImpl) AnalysisRunImpl.create(
+		getSettings().getName(), getSettings().getSourceDirectory(),
+		new File(analysisDirectory, uuid.toString()), getSettings()
+			.getFileSearchConfiguration());
 	// TODO Auto-generated method stub
-	return null;
+	return run;
     }
 
     @Override
     public AnalysisRun loadLastAnalysisRun() {
-	// TODO Auto-generated method stub
-	return null;
+	List<AnalysisRunInformation> allRunInformation = getAllRunInformation();
+	UUID uuid = null;
+	Date time = null;
+	for (AnalysisRunInformation runInformation : allRunInformation) {
+	    if ((uuid == null)
+		    || (runInformation.getTime().compareTo(time) < 0)) {
+		uuid = runInformation.getUUID();
+		time = runInformation.getTime();
+	    }
+	}
+	return loadAnalysisRun(uuid);
     }
 
 }

@@ -2,7 +2,7 @@ package com.puresol.coding.metrics.mccabe;
 
 import java.util.List;
 
-import com.puresol.coding.analysis.FileSystemAnalysisRun;
+import com.puresol.coding.analysis.AnalysisRunImpl;
 import com.puresol.coding.analysis.api.CodeRange;
 import com.puresol.coding.analysis.api.ProgrammingLanguage;
 import com.puresol.coding.evaluator.CodeRangeEvaluator;
@@ -21,7 +21,7 @@ public class McCabeMetricServiceFactory implements CodeRangeEvaluatorFactory,
     }
 
     @Override
-    public ProjectEvaluator create(FileSystemAnalysisRun projectAnalyzer) {
+    public ProjectEvaluator create(AnalysisRunImpl projectAnalyzer) {
 	return new ProjectMcCabeMetric(projectAnalyzer);
     }
 

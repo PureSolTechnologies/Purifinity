@@ -43,8 +43,11 @@ public interface Analysis {
      * 
      * @param settings
      *            is a {@link AnalysisSettings} object containing the settings.
+     * @throws AnalysisStoreException
+     *             is thrown in cases of issues.
      */
-    public void updateSettings(AnalysisSettings settings);
+    public void updateSettings(AnalysisSettings settings)
+	    throws AnalysisStoreException;
 
     /**
      * This method returns the analysis run defined by the uuid.

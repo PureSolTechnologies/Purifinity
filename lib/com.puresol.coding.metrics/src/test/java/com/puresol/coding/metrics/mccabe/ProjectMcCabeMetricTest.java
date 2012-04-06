@@ -10,7 +10,7 @@ import java.io.File;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.puresol.coding.analysis.FileSystemAnalysisRun;
+import com.puresol.coding.analysis.AnalysisRunImpl;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.quality.SourceCodeQuality;
 import com.puresol.utils.FileSearchConfiguration;
@@ -22,7 +22,7 @@ public class ProjectMcCabeMetricTest {
     @Before
     public void setup() {
 	File workspaceDirectory = new File("test/analysis");
-	analyzer = FileSystemAnalysisRun.create("ProjectAnalyzer",
+	analyzer = AnalysisRunImpl.create("ProjectAnalyzer",
 		new File("src/main/java"), workspaceDirectory,
 		new FileSearchConfiguration());
     }

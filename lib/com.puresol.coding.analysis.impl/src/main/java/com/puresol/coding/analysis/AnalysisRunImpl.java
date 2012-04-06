@@ -31,13 +31,18 @@ import com.puresol.utils.DirectoryUtilities;
 import com.puresol.utils.FileSearch;
 import com.puresol.utils.FileSearchConfiguration;
 
-public class FileSystemAnalysisRun extends Job implements Serializable,
-	AnalysisRun {
+public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
 
     private static final long serialVersionUID = 6413809660830217670L;
 
+    private static final String DIRECTORY_FLAG = ".analysis_run";
+
     private static final Logger logger = LoggerFactory
-	    .getLogger(FileSystemAnalysisRun.class);
+	    .getLogger(AnalysisRunImpl.class);
+
+    public static boolean isAnalysisDirectory(File directory) {
+	return new File(directory, DIRECTORY_FLAG).exists();
+    }
 
     /**
      * This method creates a new project analyzer with a new workspace
@@ -51,7 +56,7 @@ public class FileSystemAnalysisRun extends Job implements Serializable,
      */
     public static AnalysisRun create(String name, File projectDirectory,
 	    File workspaceDirectory, FileSearchConfiguration searchConfiguration) {
-	FileSystemAnalysisRun projectAnalyser = new FileSystemAnalysisRun(name,
+	AnalysisRunImpl projectAnalyser = new AnalysisRunImpl(name,
 		workspaceDirectory, searchConfiguration);
 	if (!projectAnalyser.createProjectDirectory(projectDirectory)) {
 	    return null;
@@ -68,7 +73,7 @@ public class FileSystemAnalysisRun extends Job implements Serializable,
      * @return
      */
     public static AnalysisRun open(File workspaceDirectory) {
-	FileSystemAnalysisRun projectAnalyser = new FileSystemAnalysisRun(
+	AnalysisRunImpl projectAnalyser = new AnalysisRunImpl(
 		workspaceDirectory);
 	if (!projectAnalyser.openAndReadSettings()) {
 	    return null;
@@ -109,7 +114,7 @@ public class FileSystemAnalysisRun extends Job implements Serializable,
      * @param workspaceDirectory
      * @param searchConfiguration
      */
-    private FileSystemAnalysisRun(String name, File workspaceDirectory,
+    private AnalysisRunImpl(String name, File workspaceDirectory,
 	    FileSearchConfiguration searchConfiguration) {
 	super(name);
 	this.workspaceDirectory = workspaceDirectory;
@@ -128,7 +133,7 @@ public class FileSystemAnalysisRun extends Job implements Serializable,
      * 
      * @param workspaceDirectory
      */
-    private FileSystemAnalysisRun(File workspaceDirectory) {
+    private AnalysisRunImpl(File workspaceDirectory) {
 	this("", workspaceDirectory, new FileSearchConfiguration());
     }
 
@@ -236,9 +241,9 @@ public class FileSystemAnalysisRun extends Job implements Serializable,
     private boolean writeSettings() {
 	try {
 	    Properties properties = new Properties();
-	    properties.put(FileSystemAnalysisRun.class.getSimpleName()
-		    + ".name", getName());
-	    properties.put(FileSystemAnalysisRun.class.getSimpleName()
+	    properties.put(AnalysisRunImpl.class.getSimpleName() + ".name",
+		    getName());
+	    properties.put(AnalysisRunImpl.class.getSimpleName()
 		    + ".projectDirectory", projectDirectory.toString());
 	    FileOutputStream fileOutputStream = new FileOutputStream(
 		    SETTINGS_FILE);
@@ -263,8 +268,7 @@ public class FileSystemAnalysisRun extends Job implements Serializable,
 	    projectDirectory = new File(
 		    properties.getProperty(PROJECT_DIRECTORY_KEY));
 	    setName(properties.getProperty(
-		    FileSystemAnalysisRun.class.getSimpleName() + ".name",
-		    "unnamed"));
+		    AnalysisRunImpl.class.getSimpleName() + ".name", "unnamed"));
 	    return true;
 	} catch (FileNotFoundException e) {
 	    logger.error(e.getMessage(), e);
@@ -515,6 +519,11 @@ public class FileSystemAnalysisRun extends Job implements Serializable,
     public AnalysisRunInformation getInformation() {
 	// TODO Auto-generated method stub
 	return null;
+    }
+
+    public static boolean isAnalysisRunDirectory(File analysisDirectory) {
+	// TODO Auto-generated method stub
+	return false;
     }
 
 }

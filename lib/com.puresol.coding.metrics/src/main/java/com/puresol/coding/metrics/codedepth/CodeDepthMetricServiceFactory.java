@@ -2,7 +2,7 @@ package com.puresol.coding.metrics.codedepth;
 
 import java.util.List;
 
-import com.puresol.coding.analysis.FileSystemAnalysisRun;
+import com.puresol.coding.analysis.AnalysisRunImpl;
 import com.puresol.coding.analysis.api.CodeRange;
 import com.puresol.coding.analysis.api.ProgrammingLanguage;
 import com.puresol.coding.evaluator.CodeRangeEvaluator;
@@ -31,7 +31,7 @@ public class CodeDepthMetricServiceFactory implements
     }
 
     @Override
-    public ProjectEvaluator create(FileSystemAnalysisRun projectAnalyzer) {
+    public ProjectEvaluator create(AnalysisRunImpl projectAnalyzer) {
 	return new ProjectCodeDepthMetric(projectAnalyzer);
     }
 
