@@ -11,7 +11,15 @@ import java.util.UUID;
  * @author Rick-Rainer Ludwig
  * 
  */
-public interface Analysis extends AnalysisInformation {
+public interface Analysis {
+
+    /**
+     * This method returns detailed information about the analysis.
+     * 
+     * @return An {@link AnalysisInformation} object is returned containing the
+     *         information.
+     */
+    public AnalysisInformation getInformation();
 
     /**
      * This method returns all relevant meta information for the analysis for

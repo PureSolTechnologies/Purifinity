@@ -117,4 +117,54 @@ public class FileSearchConfiguration implements Serializable {
 	return ignoreHidden;
     }
 
+    @Override
+    public int hashCode() {
+	final int prime = 31;
+	int result = 1;
+	result = prime * result
+		+ ((dirExcludes == null) ? 0 : dirExcludes.hashCode());
+	result = prime * result
+		+ ((dirIncludes == null) ? 0 : dirIncludes.hashCode());
+	result = prime * result
+		+ ((fileExcludes == null) ? 0 : fileExcludes.hashCode());
+	result = prime * result
+		+ ((fileIncludes == null) ? 0 : fileIncludes.hashCode());
+	result = prime * result + (ignoreHidden ? 1231 : 1237);
+	return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+	if (this == obj)
+	    return true;
+	if (obj == null)
+	    return false;
+	if (getClass() != obj.getClass())
+	    return false;
+	FileSearchConfiguration other = (FileSearchConfiguration) obj;
+	if (dirExcludes == null) {
+	    if (other.dirExcludes != null)
+		return false;
+	} else if (!dirExcludes.equals(other.dirExcludes))
+	    return false;
+	if (dirIncludes == null) {
+	    if (other.dirIncludes != null)
+		return false;
+	} else if (!dirIncludes.equals(other.dirIncludes))
+	    return false;
+	if (fileExcludes == null) {
+	    if (other.fileExcludes != null)
+		return false;
+	} else if (!fileExcludes.equals(other.fileExcludes))
+	    return false;
+	if (fileIncludes == null) {
+	    if (other.fileIncludes != null)
+		return false;
+	} else if (!fileIncludes.equals(other.fileIncludes))
+	    return false;
+	if (ignoreHidden != other.ignoreHidden)
+	    return false;
+	return true;
+    }
+
 }

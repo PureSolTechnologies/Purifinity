@@ -15,7 +15,15 @@ import com.puresol.trees.FileTree;
  * @author Rick-Rainer Ludwig
  * 
  */
-public interface AnalysisRun extends Serializable, AnalysisRunInformation {
+public interface AnalysisRun extends Serializable {
+
+    /**
+     * This method returns the information about the run.
+     * 
+     * @return An {@link AnalysisRunInformation} object is returned containing
+     *         detailed information about the run.
+     */
+    public AnalysisRunInformation getInformation();
 
     /**
      * This method returns all analyzed file as a simple list.

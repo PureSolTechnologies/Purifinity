@@ -9,10 +9,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Properties;
-import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -25,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.puresol.coding.analysis.api.AnalysisRun;
+import com.puresol.coding.analysis.api.AnalysisRunInformation;
 import com.puresol.coding.analysis.api.AnalyzedFile;
 import com.puresol.coding.analysis.api.FileAnalysis;
 import com.puresol.trees.FileTree;
@@ -513,26 +512,9 @@ public class FileSystemAnalysisRun extends Job implements Serializable,
     }
 
     @Override
-    public UUID getUUID() {
+    public AnalysisRunInformation getInformation() {
 	// TODO Auto-generated method stub
 	return null;
-    }
-
-    @Override
-    public Date getTime() {
-	// TODO Auto-generated method stub
-	return null;
-    }
-
-    @Override
-    public long getTimeOfRun() {
-	// TODO Auto-generated method stub
-	return 0;
-    }
-
-    @Override
-    public String getDescription() {
-	return "<Not implemented, yet!>";
     }
 
 }

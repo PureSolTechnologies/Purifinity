@@ -107,7 +107,7 @@ public class AnalysisReport extends ViewPart implements ISelectionListener {
 	if (selection instanceof AnalysisSelection) {
 	    AnalysisSelection analysisSelection = (AnalysisSelection) selection;
 	    Analysis analysis = analysisSelection.getAnalysis();
-	    name.setText(analysis.getName());
+	    name.setText(analysis.getInformation().getName());
 	    AnalysisRun lastAnalysisRun = analysis.loadLastAnalysisRun();
 	    java.util.List<AnalyzedFile> analyzedFiles = lastAnalysisRun
 		    .getAnalyzedFiles();

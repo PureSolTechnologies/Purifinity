@@ -10,7 +10,7 @@ import com.puresol.utils.FileSearchConfiguration;
  * 
  * @author Rick-Rainer Ludwig
  */
-public class AnalysisSettings implements Serializable {
+public final class AnalysisSettings implements Serializable {
 
     private static final long serialVersionUID = -1358261012685866713L;
 
@@ -65,7 +65,7 @@ public class AnalysisSettings implements Serializable {
      * 
      * @return A String is returned.
      */
-    public String getName() {
+    public final String getName() {
 	return name;
     }
 
@@ -74,7 +74,7 @@ public class AnalysisSettings implements Serializable {
      * 
      * @return A String is returned.
      */
-    public String getDescription() {
+    public final String getDescription() {
 	return description;
     }
 
@@ -83,7 +83,7 @@ public class AnalysisSettings implements Serializable {
      * 
      * @return A {@link FileSearchConfiguration} is returned.
      */
-    public FileSearchConfiguration getFileSearchConfiguration() {
+    public final FileSearchConfiguration getFileSearchConfiguration() {
 	return fileSearchConfiguration;
     }
 
@@ -92,8 +92,57 @@ public class AnalysisSettings implements Serializable {
      * 
      * @return A {@link File} is returned.
      */
-    public File getSourceDirectory() {
+    public final File getSourceDirectory() {
 	return sourceDirectory;
+    }
+
+    @Override
+    public final int hashCode() {
+	final int prime = 31;
+	int result = 1;
+	result = prime * result
+		+ ((description == null) ? 0 : description.hashCode());
+	result = prime
+		* result
+		+ ((fileSearchConfiguration == null) ? 0
+			: fileSearchConfiguration.hashCode());
+	result = prime * result + ((name == null) ? 0 : name.hashCode());
+	result = prime * result
+		+ ((sourceDirectory == null) ? 0 : sourceDirectory.hashCode());
+	return result;
+    }
+
+    @Override
+    public final boolean equals(Object obj) {
+	if (this == obj)
+	    return true;
+	if (obj == null)
+	    return false;
+	if (getClass() != obj.getClass())
+	    return false;
+	AnalysisSettings other = (AnalysisSettings) obj;
+	if (description == null) {
+	    if (other.description != null)
+		return false;
+	} else if (!description.equals(other.description))
+	    return false;
+	if (fileSearchConfiguration == null) {
+	    if (other.fileSearchConfiguration != null)
+		return false;
+	} else if (!fileSearchConfiguration
+		.equals(other.fileSearchConfiguration))
+	    return false;
+	if (name == null) {
+	    if (other.name != null)
+		return false;
+	} else if (!name.equals(other.name))
+	    return false;
+	if (sourceDirectory == null) {
+	    if (other.sourceDirectory != null)
+		return false;
+	} else if (!sourceDirectory.equals(other.sourceDirectory))
+	    return false;
+	return true;
     }
 
 }

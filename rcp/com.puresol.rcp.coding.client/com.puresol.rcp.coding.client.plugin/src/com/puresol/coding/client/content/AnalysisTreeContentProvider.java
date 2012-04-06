@@ -33,7 +33,7 @@ public class AnalysisTreeContentProvider implements ITreeContentProvider {
 	for (Analysis analysis : analyses) {
 	    elements.add(new AnalysisNavigatorTreeNodeElement(null, analysis,
 		    analysis.loadLastAnalysisRun().getFileTree(), analysis
-			    .getName()));
+			    .getInformation().getName()));
 	}
 	return elements.toArray(new AnalysisNavigatorTreeNodeElement[elements
 		.size()]);

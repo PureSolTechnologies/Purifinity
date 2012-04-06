@@ -15,6 +15,7 @@ import org.eclipse.ui.dialogs.ListDialog;
 import com.puresol.coding.analysis.api.Analysis;
 import com.puresol.coding.analysis.api.AnalysisInformation;
 import com.puresol.coding.analysis.api.AnalysisStore;
+import com.puresol.coding.analysis.api.AnalysisStoreException;
 import com.puresol.coding.analysis.api.AnalysisStoreFactory;
 
 public class OpenAnalysis extends AbstractHandler implements IHandler {
@@ -46,8 +47,12 @@ public class OpenAnalysis extends AbstractHandler implements IHandler {
 	if (listDialog.open() == Dialog.OK) {
 	    Object[] infos = listDialog.getResult();
 	    AnalysisInformation analysisInformation = (AnalysisInformation) infos[0];
-	    analysis = analysisStore
-		    .loadAnalysis(analysisInformation.getUUID());
+	    try {
+		analysis = analysisStore.loadAnalysis(analysisInformation
+			.getUUID());
+	    } catch (AnalysisStoreException e) {
+		e.printStackTrace();
+	    }
 	}
 	return "";
     }

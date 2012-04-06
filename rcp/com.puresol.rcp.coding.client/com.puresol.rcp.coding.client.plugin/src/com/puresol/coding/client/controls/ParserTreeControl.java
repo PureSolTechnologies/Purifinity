@@ -53,7 +53,7 @@ public class ParserTreeControl extends Composite {
 	FileAnalysis fileAnalysis = analysis.loadLastAnalysisRun().getAnalysis(
 		analyzedFile);
 	if (fileAnalysis != null) {
-	    lblNewLabel.setText(analysis.getName() + ": "
+	    lblNewLabel.setText(analysis.getInformation().getName() + ": "
 		    + analyzedFile.getFile());
 	    treeViewer.setInput(fileAnalysis.getParserTree());
 	} else {

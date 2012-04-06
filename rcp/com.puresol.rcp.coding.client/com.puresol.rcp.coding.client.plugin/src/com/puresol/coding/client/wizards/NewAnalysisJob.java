@@ -1,7 +1,6 @@
 package com.puresol.coding.client.wizards;
 
 import java.io.File;
-import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -13,11 +12,10 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import com.puresol.coding.analysis.api.Analysis;
 import com.puresol.coding.analysis.api.AnalysisSettings;
 import com.puresol.coding.analysis.api.AnalysisStore;
+import com.puresol.coding.analysis.api.AnalysisStoreException;
 import com.puresol.coding.analysis.api.AnalysisStoreFactory;
 import com.puresol.coding.client.Activator;
 import com.puresol.coding.client.utils.PreferencesUtils;
-import com.puresol.coding.evaluator.EvaluatorUtils;
-import com.puresol.coding.evaluator.ProjectEvaluatorFactory;
 import com.puresol.utils.FileSearchConfiguration;
 
 public class NewAnalysisJob extends Job {
@@ -38,10 +36,7 @@ public class NewAnalysisJob extends Job {
     @Override
     protected IStatus run(IProgressMonitor monitor) {
 	try {
-	    List<ProjectEvaluatorFactory> projectEvaluatorFactories = EvaluatorUtils
-		    .getProjectEvaluatorFactories();
-	    monitor.beginTask("Analysis and Evaluation of '" + getName() + "'",
-		    projectEvaluatorFactories.size() + 1);
+	    monitor.beginTask("Analysis of '" + getName() + "'", 1);
 	    AnalysisStore analysisStore = AnalysisStoreFactory.getInstance();
 	    AnalysisSettings analysisSettings = new AnalysisSettings(getName(),
 		    "<Not implemented, yet!>", searchConfiguration,
@@ -49,6 +44,9 @@ public class NewAnalysisJob extends Job {
 	    analysis = analysisStore.createAnalysis(analysisSettings);
 	    return Status.OK_STATUS;
 	} catch (OperationCanceledException e) {
+	    e.printStackTrace();
+	    return Status.CANCEL_STATUS;
+	} catch (AnalysisStoreException e) {
 	    e.printStackTrace();
 	    return Status.CANCEL_STATUS;
 	}

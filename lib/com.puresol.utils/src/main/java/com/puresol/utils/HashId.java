@@ -1,11 +1,15 @@
 package com.puresol.utils;
 
+import java.io.Serializable;
+
 /**
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class HashId {
+public class HashId implements Serializable {
+
+    private static final long serialVersionUID = 1219606473615058203L;
 
     /**
      * This is the name of the algorithm used to calculate the hash.
@@ -37,6 +41,35 @@ public class HashId {
 
     public String getHash() {
 	return hash;
+    }
+
+    @Override
+    public int hashCode() {
+	final int prime = 31;
+	int result = 1;
+	result = prime * result
+		+ ((algorithm == null) ? 0 : algorithm.hashCode());
+	result = prime * result + ((hash == null) ? 0 : hash.hashCode());
+	return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+	if (this == obj)
+	    return true;
+	if (obj == null)
+	    return false;
+	if (getClass() != obj.getClass())
+	    return false;
+	HashId other = (HashId) obj;
+	if (algorithm != other.algorithm)
+	    return false;
+	if (hash == null) {
+	    if (other.hash != null)
+		return false;
+	} else if (!hash.equals(other.hash))
+	    return false;
+	return true;
     }
 
 }

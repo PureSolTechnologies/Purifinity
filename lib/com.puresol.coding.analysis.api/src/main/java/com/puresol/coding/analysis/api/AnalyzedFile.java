@@ -6,7 +6,6 @@ import java.io.Serializable;
 
 import com.puresol.utils.FileUtilities;
 import com.puresol.utils.HashAlgorithm;
-import com.puresol.utils.HashId;
 import com.puresol.utils.ObjectUtilities;
 
 /**
@@ -17,8 +16,7 @@ import com.puresol.utils.ObjectUtilities;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class AnalyzedFile implements Comparable<AnalyzedFile>, Serializable,
-	AnalyzedFileInformation {
+public class AnalyzedFile implements Comparable<AnalyzedFile>, Serializable {
 
     private static final long serialVersionUID = 2030120585873480183L;
 
@@ -26,7 +24,7 @@ public class AnalyzedFile implements Comparable<AnalyzedFile>, Serializable,
     private final File workspaceDirectory;
     private final File file;
     private final int hashcode;
-    private final HashId hashId;
+    private final AnalyzedFileInformation information;
 
     public AnalyzedFile(File sourceDirectory, File workspaceDirectory, File file)
 	    throws IOException {
@@ -45,25 +43,23 @@ public class AnalyzedFile implements Comparable<AnalyzedFile>, Serializable,
 	this.file = file;
 	hashcode = ObjectUtilities.calculateConstantHashCode(sourceDirectory,
 		workspaceDirectory, file);
-	hashId = FileUtilities.createHashId(getSourceFile(),
-		HashAlgorithm.SHA256);
+	information = new AnalyzedFileInformation(FileUtilities.createHashId(
+		getSourceFile(), HashAlgorithm.SHA256), file);
     }
 
-    public File getSourceFile() {
-	return new File(sourceDirectory, file.getPath());
-    }
-
-    @Override
-    public HashId getHashId() {
-	return hashId;
-    }
-
-    @Override
-    public File getFile() {
+    public final File getFile() {
 	return file;
     }
 
-    public File getFileDirectory() {
+    public final File getSourceFile() {
+	return new File(sourceDirectory, file.getPath());
+    }
+
+    public final AnalyzedFileInformation getInformation() {
+	return information;
+    }
+
+    public final File getFileDirectory() {
 	return new File(workspaceDirectory, file.getPath());
     }
 
