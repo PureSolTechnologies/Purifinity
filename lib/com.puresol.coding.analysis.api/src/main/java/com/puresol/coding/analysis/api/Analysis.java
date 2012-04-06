@@ -57,4 +57,12 @@ public interface Analysis extends AnalysisInformation {
      *         information and results about the run.
      */
     public AnalysisRun runAnalysis();
+
+    /**
+     * This method loads the last analysis run available. It is the most
+     * up-to-date analysis.
+     * 
+     * @return An {@link AnalysisRun} is returned.
+     */
+    public AnalysisRun loadLastAnalysisRun();
 }

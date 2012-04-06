@@ -21,8 +21,9 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.wb.swt.SWTResourceManager;
 
-import com.puresol.coding.analysis.AnalyzedFile;
-import com.puresol.coding.analysis.ProjectAnalyzer;
+import com.puresol.coding.analysis.api.Analysis;
+import com.puresol.coding.analysis.api.AnalysisRun;
+import com.puresol.coding.analysis.api.AnalyzedFile;
 
 public class AnalysisReport extends ViewPart implements ISelectionListener {
     private Text name;
@@ -105,12 +106,13 @@ public class AnalysisReport extends ViewPart implements ISelectionListener {
     public void selectionChanged(IWorkbenchPart part, ISelection selection) {
 	if (selection instanceof AnalysisSelection) {
 	    AnalysisSelection analysisSelection = (AnalysisSelection) selection;
-	    ProjectAnalyzer analyzer = analysisSelection.getAnalyzer();
-	    name.setText(analyzer.getName());
-	    java.util.List<AnalyzedFile> analyzedFiles = analyzer
+	    Analysis analysis = analysisSelection.getAnalysis();
+	    name.setText(analysis.getName());
+	    AnalysisRun lastAnalysisRun = analysis.loadLastAnalysisRun();
+	    java.util.List<AnalyzedFile> analyzedFiles = lastAnalysisRun
 		    .getAnalyzedFiles();
 	    numAnalyzedFiles.setText(String.valueOf(analyzedFiles.size()));
-	    List<File> failedFiles = analyzer.getFailedFiles();
+	    List<File> failedFiles = lastAnalysisRun.getFailedFiles();
 	    numFailedFiles.setText(String.valueOf(String.valueOf(failedFiles
 		    .size())));
 	}

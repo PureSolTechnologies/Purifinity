@@ -51,17 +51,6 @@ Bundle-Version: 0.1.0.SNAPSHOT
 Bnd-LastModified: 1331319581390
 Bundle-Activator: com.puresol.uhura.Activator
 Bundle-ManifestVersion: 2
-Import-Package: com.puresol.trees;version="0.1",com.puresol.uhura,com.
- puresol.uhura.grammar,com.puresol.uhura.grammar.production,com.pureso
- l.uhura.grammar.token,com.puresol.uhura.grammar.uhura,com.puresol.uhu
- ra.lexer,com.puresol.uhura.parser,com.puresol.uhura.parser.functions,
- com.puresol.uhura.parser.items,com.puresol.uhura.parser.lr,com.pureso
- l.uhura.parser.packrat,com.puresol.uhura.parser.parsetable,com.pureso
- l.uhura.ust,com.puresol.uhura.ust.comments,com.puresol.uhura.ust.expr
- essions,com.puresol.uhura.ust.facilities,com.puresol.uhura.ust.litera
- ls,com.puresol.uhura.ust.modifiers,com.puresol.uhura.ust.packages,com
- .puresol.uhura.ust.types,com.puresol.utils,org.junit,org.osgi.framewo
- rk;version="1.6",org.slf4j;version="1.6"
 Bundle-SymbolicName: com.puresol.uhura.lib
 Originally-Created-By: Apache Maven Bundle Plugin
 Bundle-ActivationPolicy: lazy

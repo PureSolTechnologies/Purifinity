@@ -12,8 +12,8 @@ import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.ViewPart;
 
-import com.puresol.coding.analysis.AnalyzedFile;
-import com.puresol.coding.analysis.ProjectAnalyzer;
+import com.puresol.coding.analysis.api.Analysis;
+import com.puresol.coding.analysis.api.AnalyzedFile;
 import com.puresol.coding.client.Activator;
 import com.puresol.coding.client.controls.ParserTreeControl;
 
@@ -45,7 +45,7 @@ public class ParserTreeView extends ViewPart implements ISelectionListener {
 	try {
 	    if (selection instanceof AnalysisSelection) {
 		AnalysisSelection analysisSelection = (AnalysisSelection) selection;
-		ProjectAnalyzer analyzer = analysisSelection.getAnalyzer();
+		Analysis analyzer = analysisSelection.getAnalysis();
 		File sourceFile = analysisSelection.getSourceFile();
 
 		AnalyzedFile analyzedFile = analyzer

@@ -5,20 +5,29 @@ import org.osgi.framework.BundleContext;
 
 public class Activator implements BundleActivator {
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
-	 */
-	public void start(BundleContext context) throws Exception {
-		System.out.println("Hello World!!");
+    private static BundleContext bundleContext;
+
+    public static BundleContext getBundleContext() {
+	if (bundleContext == null) {
+	    throw new RuntimeException("BundleContext is null!");
 	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
-	 */
-	public void stop(BundleContext context) throws Exception {
-		System.out.println("Goodbye World!!");
+	return bundleContext;
+    }
+
+    @Override
+    public void start(BundleContext context) throws Exception {
+	if (bundleContext != null) {
+	    throw new RuntimeException("BundleContext already set!");
 	}
+	bundleContext = context;
+    }
+
+    @Override
+    public void stop(BundleContext context) throws Exception {
+	if (bundleContext == null) {
+	    throw new RuntimeException("No BundleContext set, yet!");
+	}
+	bundleContext = null;
+    }
 
 }

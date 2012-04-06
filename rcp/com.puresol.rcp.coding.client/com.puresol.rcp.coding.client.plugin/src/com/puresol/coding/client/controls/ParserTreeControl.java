@@ -10,9 +10,9 @@ import org.eclipse.swt.widgets.Tree;
 
 import swing2swt.layout.BorderLayout;
 
-import com.puresol.coding.analysis.AnalyzedFile;
-import com.puresol.coding.analysis.ProjectAnalyzer;
 import com.puresol.coding.analysis.api.Analysis;
+import com.puresol.coding.analysis.api.AnalyzedFile;
+import com.puresol.coding.analysis.api.FileAnalysis;
 import com.puresol.coding.client.content.ParserTreeContentProvider;
 import com.puresol.coding.client.content.ParserTreeLabelProvider;
 
@@ -49,12 +49,13 @@ public class ParserTreeControl extends Composite {
      * @throws IOException
      */
     public void setContentAndUpdateContent(AnalyzedFile analyzedFile,
-	    ProjectAnalyzer projectAnalyzer) throws IOException {
-	Analysis analysis = projectAnalyzer.getAnalysis(analyzedFile);
-	if (analysis != null) {
-	    lblNewLabel.setText(projectAnalyzer.getName() + ": "
+	    Analysis analysis) throws IOException {
+	FileAnalysis fileAnalysis = analysis.loadLastAnalysisRun().getAnalysis(
+		analyzedFile);
+	if (fileAnalysis != null) {
+	    lblNewLabel.setText(analysis.getName() + ": "
 		    + analyzedFile.getFile());
-	    treeViewer.setInput(analysis.getParserTree());
+	    treeViewer.setInput(fileAnalysis.getParserTree());
 	} else {
 	    lblNewLabel.setText("");
 	    treeViewer.setInput(null);

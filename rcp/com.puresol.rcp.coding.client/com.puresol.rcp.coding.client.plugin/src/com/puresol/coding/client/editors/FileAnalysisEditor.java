@@ -102,7 +102,7 @@ public class FileAnalysisEditor extends EditorPart {
 		    .getSourceFile());
 	    treeViewer.setContentAndUpdateContent(
 		    editorInput.getAnalysisFile(),
-		    editorInput.getProjectAnalyzer());
+		    editorInput.getAnalysis());
 	} catch (IOException e) {
 	    logger.log(new Status(Status.ERROR, FileAnalysisEditor.class
 		    .getName(), e.getMessage(), e));

@@ -11,13 +11,13 @@ import org.eclipse.core.runtime.jobs.IJobManager;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.preference.IPreferenceStore;
 
-import com.puresol.coding.analysis.ProjectAnalyzer;
-import com.puresol.coding.analysis.ProjectAnalyzerFactory;
+import com.puresol.coding.analysis.api.Analysis;
+import com.puresol.coding.analysis.api.AnalysisSettings;
+import com.puresol.coding.analysis.api.AnalysisStore;
+import com.puresol.coding.analysis.api.AnalysisStoreFactory;
 import com.puresol.coding.client.Activator;
-import com.puresol.coding.client.utils.PlatformUtils;
 import com.puresol.coding.client.utils.PreferencesUtils;
 import com.puresol.coding.evaluator.EvaluatorUtils;
-import com.puresol.coding.evaluator.ProjectEvaluator;
 import com.puresol.coding.evaluator.ProjectEvaluatorFactory;
 import com.puresol.utils.FileSearchConfiguration;
 
@@ -43,26 +43,12 @@ public class NewAnalysisJob extends Job {
 		    .getProjectEvaluatorFactories();
 	    monitor.beginTask("Analysis and Evaluation of '" + getName() + "'",
 		    projectEvaluatorFactories.size() + 1);
-	    ProjectAnalyzer job = ProjectAnalyzerFactory.create(getName(),
-		    sourceDirectory,
-		    new File(PlatformUtils.getWorkspaceDirectory(), getName()),
-		    searchConfiguration);
-	    job.setUser(true);
-	    job.schedule();
-	    job.join();
-
-	    IProgressMonitor progressGroup = jobManager.createProgressGroup();
-	    progressGroup.beginTask("Evaluation...",
-		    projectEvaluatorFactories.size());
-	    monitor.worked(1);
-	    for (ProjectEvaluatorFactory factory : projectEvaluatorFactories) {
-		ProjectEvaluator evaluatorJob = factory.create(job);
-		evaluatorJob.setUser(true);
-		evaluatorJob.setProgressGroup(progressGroup, 1);
-		evaluatorJob.schedule();
-	    }
-	    progressGroup.done();
-	    monitor.done();
+	    AnalysisStore analysisStore = AnalysisStoreFactory.getInstance();
+	    AnalysisSettings analysisSettings = new AnalysisSettings(getName(),
+		    "<Not implemented, yet!>", searchConfiguration,
+		    sourceDirectory);
+	    Analysis analysis = analysisStore.createAnalysis(analysisSettings);
+	    analysis.schedule();
 	    return Status.OK_STATUS;
 	} catch (OperationCanceledException e) {
 	    e.printStackTrace();

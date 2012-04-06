@@ -2,8 +2,8 @@ package com.puresol.coding.client.content;
 
 import org.eclipse.jface.viewers.LabelProvider;
 
-import com.puresol.coding.analysis.AnalyzedFile;
-import com.puresol.coding.analysis.ProjectAnalyzer;
+import com.puresol.coding.analysis.api.Analysis;
+import com.puresol.coding.analysis.api.AnalyzedFile;
 import com.puresol.trees.FileTree;
 
 public class AnalysisLabelProvider extends LabelProvider {
@@ -12,7 +12,7 @@ public class AnalysisLabelProvider extends LabelProvider {
     public String getText(Object element) {
 	AnalysisNavigatorTreeNodeElement nodeElement = (AnalysisNavigatorTreeNodeElement) element;
 	String text = nodeElement.getTreeNodeName();
-	ProjectAnalyzer analyser = nodeElement.getAnalyser();
+	Analysis analyser = nodeElement.getAnalysis();
 	FileTree sourceFile = nodeElement.getSourceFile();
 	AnalyzedFile analyzedFile = analyser
 		.findAnalyzedFileBySourceFile(sourceFile.getPathFile(true));

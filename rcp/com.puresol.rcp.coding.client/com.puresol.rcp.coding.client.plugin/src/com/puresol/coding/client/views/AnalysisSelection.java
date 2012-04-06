@@ -4,7 +4,7 @@ import java.io.File;
 
 import org.eclipse.jface.viewers.ISelection;
 
-import com.puresol.coding.analysis.ProjectAnalyzer;
+import com.puresol.coding.analysis.api.Analysis;
 
 /**
  * This class contains the selection of AnalysisNavigator.
@@ -14,17 +14,17 @@ import com.puresol.coding.analysis.ProjectAnalyzer;
  */
 public class AnalysisSelection implements ISelection {
 
-    private final ProjectAnalyzer analyzer;
+    private final Analysis analysis;
     private final File sourceFile;
 
-    public AnalysisSelection(ProjectAnalyzer analyzer, File sourceFile) {
+    public AnalysisSelection(Analysis analysis, File sourceFile) {
 	super();
-	this.analyzer = analyzer;
+	this.analysis = analysis;
 	this.sourceFile = sourceFile;
     }
 
-    public ProjectAnalyzer getAnalyzer() {
-	return analyzer;
+    public Analysis getAnalysis() {
+	return analysis;
     }
 
     public File getSourceFile() {

@@ -3,23 +3,23 @@ package com.puresol.coding.client.content;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.puresol.coding.analysis.ProjectAnalyzer;
+import com.puresol.coding.analysis.api.Analysis;
 
 public enum AnalysisNavigatorModel {
 
     INSTANCE;
 
-    private final List<ProjectAnalyzer> analyzers = new ArrayList<ProjectAnalyzer>();
+    private final List<Analysis> analyzers = new ArrayList<Analysis>();
 
-    public void addAnalysis(ProjectAnalyzer analyzer) {
+    public void addAnalysis(Analysis analyzer) {
 	analyzers.add(analyzer);
     }
 
-    public void removeAnalysis(ProjectAnalyzer analyzer) {
+    public void removeAnalysis(Analysis analyzer) {
 	analyzers.remove(analyzer);
     }
 
-    public List<ProjectAnalyzer> getAnalyzers() {
+    public List<Analysis> getAnalyses() {
 	return analyzers;
     }
 

@@ -30,8 +30,8 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.progress.UIJob;
 
-import com.puresol.coding.analysis.AnalyzedFile;
-import com.puresol.coding.analysis.ProjectAnalyzer;
+import com.puresol.coding.analysis.api.Analysis;
+import com.puresol.coding.analysis.api.AnalyzedFile;
 import com.puresol.coding.client.Activator;
 import com.puresol.coding.client.content.AnalysisLabelProvider;
 import com.puresol.coding.client.content.AnalysisNavigatorModel;
@@ -100,7 +100,7 @@ public class AnalysisNavigator extends ViewPart implements IJobChangeListener,
     public void done(IJobChangeEvent event) {
 	Job job = event.getJob();
 	if (job.getClass().equals(NewAnalysisJob.class)) {
-	    ProjectAnalyzer analyzer = (ProjectAnalyzer) job;
+	    Analysis analyzer = (Analysis) job;
 	    AnalysisNavigatorModel.INSTANCE.addAnalysis(analyzer);
 	    UIJob refresh = new UIJob("Refresh Analysis Navigator") {
 
@@ -176,7 +176,7 @@ public class AnalysisNavigator extends ViewPart implements IJobChangeListener,
 	AnalysisNavigatorTreeNodeElement analyzer = (AnalysisNavigatorTreeNodeElement) treeItem
 		.getData();
 	AnalysisSelection analysisSelection = new AnalysisSelection(
-		analyzer.getAnalyser(), analyzer.getSourceFile().getPathFile(
+		analyzer.getAnalysis(), analyzer.getSourceFile().getPathFile(
 			false));
 	return analysisSelection;
     }
@@ -197,11 +197,11 @@ public class AnalysisNavigator extends ViewPart implements IJobChangeListener,
 		TreeItem[] treeItems = tree.getSelection();
 		if (treeItems.length > 0) {
 		    AnalysisSelection analysisSelection = createAnalysisNavigatorSelection(treeItems[0]);
-		    ProjectAnalyzer analyzer = analysisSelection.getAnalyzer();
+		    Analysis analysis = analysisSelection.getAnalysis();
 		    File sourceFile = analysisSelection.getSourceFile();
 
 		    File originalFile = new File(
-			    analyzer.getProjectDirectory(),
+			    analysis.getProjectDirectory(),
 			    sourceFile.getPath());
 		    if (!originalFile.exists()) {
 			logger.log(new Status(Status.ERROR,
@@ -212,11 +212,11 @@ public class AnalysisNavigator extends ViewPart implements IJobChangeListener,
 		    }
 		    IWorkbenchPage page = getSite().getPage();
 		    if (originalFile.isFile()) {
-			AnalyzedFile analyzedFile = analyzer
+			AnalyzedFile analyzedFile = analysis
 				.findAnalyzedFile(sourceFile);
 			if (analyzedFile != null) {
 			    page.openEditor(new FileAnalysisEditorInput(
-				    analyzedFile, analyzer),
+				    analyzedFile, analysis),
 				    EditorIds.FILE_ANALYSIS_EDITOR_ID);
 			} else {
 			    page.openEditor(new NotAnalyzedEditorInput(
@@ -225,7 +225,7 @@ public class AnalysisNavigator extends ViewPart implements IJobChangeListener,
 			}
 		    } else {
 			page.openEditor(new DirectoryAnalysisEditorInput(
-				originalFile, analyzer),
+				originalFile, analysis),
 				EditorIds.DIRECTORY_ANALYSIS_EDITOR_ID);
 		    }
 		}

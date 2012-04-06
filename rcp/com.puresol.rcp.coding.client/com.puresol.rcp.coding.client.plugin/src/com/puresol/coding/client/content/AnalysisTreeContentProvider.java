@@ -6,7 +6,7 @@ import java.util.List;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
-import com.puresol.coding.analysis.ProjectAnalyzer;
+import com.puresol.coding.analysis.api.Analysis;
 import com.puresol.trees.FileTree;
 
 public class AnalysisTreeContentProvider implements ITreeContentProvider {
@@ -28,11 +28,12 @@ public class AnalysisTreeContentProvider implements ITreeContentProvider {
 	if (model == null) {
 	    return new Object[0];
 	}
-	List<ProjectAnalyzer> analyzers = model.getAnalyzers();
+	List<Analysis> analyses = model.getAnalyses();
 	List<AnalysisNavigatorTreeNodeElement> elements = new ArrayList<AnalysisNavigatorTreeNodeElement>();
-	for (ProjectAnalyzer analyzer : analyzers) {
-	    elements.add(new AnalysisNavigatorTreeNodeElement(null, analyzer,
-		    analyzer.getFileTree(), analyzer.getName()));
+	for (Analysis analysis : analyses) {
+	    elements.add(new AnalysisNavigatorTreeNodeElement(null, analysis,
+		    analysis.loadLastAnalysisRun().getFileTree(), analysis
+			    .getName()));
 	}
 	return elements.toArray(new AnalysisNavigatorTreeNodeElement[elements
 		.size()]);
@@ -41,12 +42,12 @@ public class AnalysisTreeContentProvider implements ITreeContentProvider {
     @Override
     public Object[] getChildren(Object parentElement) {
 	AnalysisNavigatorTreeNodeElement nodeElement = (AnalysisNavigatorTreeNodeElement) parentElement;
-	ProjectAnalyzer analyzer = nodeElement.getAnalyser();
+	Analysis analysis = nodeElement.getAnalysis();
 	FileTree fileTree = nodeElement.getSourceFile();
 	List<AnalysisNavigatorTreeNodeElement> elements = new ArrayList<AnalysisNavigatorTreeNodeElement>();
 	for (FileTree child : fileTree.getChildren()) {
 	    elements.add(new AnalysisNavigatorTreeNodeElement(nodeElement,
-		    analyzer, child, child.getName()));
+		    analysis, child, child.getName()));
 	}
 	return elements.toArray(new AnalysisNavigatorTreeNodeElement[elements
 		.size()]);
