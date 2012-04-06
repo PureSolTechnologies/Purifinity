@@ -11,25 +11,26 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.puresol.coding.analysis.api.Analysis;
 import com.puresol.coding.analysis.api.AnalysisInformation;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalysisRunInformation;
 import com.puresol.coding.analysis.api.AnalysisSettings;
+import com.puresol.coding.analysis.api.AnalysisStore;
 import com.puresol.coding.analysis.api.AnalysisStoreException;
 import com.puresol.utils.FileSearchConfiguration;
 
 public class AnalysisImplTest {
 
-    private AnalysisStoreImpl analysisStore;
-    private AnalysisImpl analysis;
+    private AnalysisStore analysisStore;
+    private Analysis analysis;
 
     @Before
     public void setup() throws AnalysisStoreException {
 	analysisStore = new AnalysisStoreImpl();
-	analysis = (AnalysisImpl) analysisStore
-		.createAnalysis(new AnalysisSettings("Name", "Description",
-			new FileSearchConfiguration(), new File(System
-				.getProperty("user.home"))));
+	analysis = analysisStore.createAnalysis(new AnalysisSettings("Name",
+		"Description", new FileSearchConfiguration(), new File(System
+			.getProperty("user.home"))));
 	assertNotNull(analysis);
     }
 

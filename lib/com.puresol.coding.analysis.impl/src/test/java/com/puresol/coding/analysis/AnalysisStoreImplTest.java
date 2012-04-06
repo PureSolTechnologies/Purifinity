@@ -13,6 +13,7 @@ import org.junit.Test;
 import com.puresol.coding.analysis.api.Analysis;
 import com.puresol.coding.analysis.api.AnalysisInformation;
 import com.puresol.coding.analysis.api.AnalysisSettings;
+import com.puresol.coding.analysis.api.AnalysisStore;
 import com.puresol.coding.analysis.api.AnalysisStoreException;
 import com.puresol.utils.FileSearchConfiguration;
 
@@ -20,7 +21,7 @@ public class AnalysisStoreImplTest {
 
     @Test
     public void testGetAllAnalysisInformation() {
-	AnalysisStoreImpl store = new AnalysisStoreImpl();
+	AnalysisStore store = new AnalysisStoreImpl();
 	List<AnalysisInformation> allAnalysisInformation = store
 		.getAllAnalysisInformation();
 	assertNotNull(allAnalysisInformation);
@@ -32,7 +33,7 @@ public class AnalysisStoreImplTest {
 
     @Test
     public void testCreateAndDeleteAnalysis() throws AnalysisStoreException {
-	AnalysisStoreImpl store = new AnalysisStoreImpl();
+	AnalysisStore store = new AnalysisStoreImpl();
 	File sourceDirectory = new File(System.getProperty("user.dir"));
 	Analysis analysis = store.createAnalysis(new AnalysisSettings("Name",
 		"Description", new FileSearchConfiguration(), sourceDirectory));
@@ -56,7 +57,7 @@ public class AnalysisStoreImplTest {
     @Test
     public void testCreateAndOpenAndDeleteAnalysis()
 	    throws AnalysisStoreException {
-	AnalysisStoreImpl store = new AnalysisStoreImpl();
+	AnalysisStore store = new AnalysisStoreImpl();
 	File sourceDirectory = new File(System.getProperty("user.dir"));
 	Analysis analysis = store.createAnalysis(new AnalysisSettings("Name",
 		"Description", new FileSearchConfiguration(), sourceDirectory));
