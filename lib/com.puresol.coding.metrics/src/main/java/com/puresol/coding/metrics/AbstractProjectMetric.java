@@ -13,8 +13,8 @@ import org.eclipse.core.runtime.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresol.coding.analysis.AnalyzedFile;
-import com.puresol.coding.analysis.ProjectAnalyzer;
+import com.puresol.coding.analysis.api.AnalysisRun;
+import com.puresol.coding.analysis.api.AnalyzedFile;
 import com.puresol.coding.evaluator.CodeRangeEvaluator;
 import com.puresol.coding.evaluator.ProjectEvaluator;
 import com.puresol.coding.evaluator.Result;
@@ -28,17 +28,17 @@ public abstract class AbstractProjectMetric<T extends CodeRangeEvaluator>
     private static final Logger logger = LoggerFactory
 	    .getLogger(AbstractProjectMetric.class);
 
-    private final ProjectAnalyzer projectAnalyzer;
+    private final AnalysisRun projectAnalyzer;
     private final Map<String, SourceCodeQuality> qualities = new HashMap<String, SourceCodeQuality>();
     private SourceCodeQuality projectQuality = SourceCodeQuality.UNSPECIFIED;
 
-    public AbstractProjectMetric(ProjectAnalyzer projectAnalyzer) {
-	super(projectAnalyzer.getName());
+    public AbstractProjectMetric(AnalysisRun projectAnalyzer) {
+	super("Project Metric");
 	this.projectAnalyzer = projectAnalyzer;
     }
 
     @Override
-    public ProjectAnalyzer getProjectAnalyzer() {
+    public AnalysisRun getProjectAnalyzer() {
 	return projectAnalyzer;
     }
 

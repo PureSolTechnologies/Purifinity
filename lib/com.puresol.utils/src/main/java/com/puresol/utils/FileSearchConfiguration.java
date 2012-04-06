@@ -1,5 +1,6 @@
 package com.puresol.utils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +12,9 @@ import java.util.List;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class FileSearchConfiguration {
+public class FileSearchConfiguration implements Serializable {
+
+    private static final long serialVersionUID = 4724648711481875290L;
 
     /**
      * Contains FS patterns which specify directory names which are to be

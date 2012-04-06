@@ -2,7 +2,7 @@ package com.puresol.coding.metrics.normmaint;
 
 import java.util.List;
 
-import com.puresol.coding.analysis.ProjectAnalyzer;
+import com.puresol.coding.analysis.FileSystemAnalysisRun;
 import com.puresol.coding.analysis.api.CodeRange;
 import com.puresol.coding.analysis.api.ProgrammingLanguage;
 import com.puresol.coding.evaluator.CodeRangeEvaluator;
@@ -21,7 +21,7 @@ public class NormalizedMaintainabilityIndexServiceFactory implements
     }
 
     @Override
-    public ProjectEvaluator create(ProjectAnalyzer projectAnalyzer) {
+    public ProjectEvaluator create(FileSystemAnalysisRun projectAnalyzer) {
 	return new ProjectNormalizedMaintainabilityIndex(projectAnalyzer);
     }
 

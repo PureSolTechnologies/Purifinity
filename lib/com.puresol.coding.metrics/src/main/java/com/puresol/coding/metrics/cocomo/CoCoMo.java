@@ -21,11 +21,11 @@ import org.eclipse.core.runtime.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresol.coding.analysis.AnalyzedFile;
-import com.puresol.coding.analysis.ProjectAnalyzer;
-import com.puresol.coding.analysis.api.Analysis;
+import com.puresol.coding.analysis.api.FileAnalysis;
+import com.puresol.coding.analysis.api.AnalyzedFile;
 import com.puresol.coding.analysis.api.CodeRange;
 import com.puresol.coding.analysis.api.CodeRangeType;
+import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.evaluator.ProjectEvaluator;
 import com.puresol.coding.evaluator.Result;
 import com.puresol.coding.metrics.sloc.SLOCMetric;
@@ -56,9 +56,9 @@ public class CoCoMo extends ProjectEvaluator {
 
     private final CoCoMoValueSet cocomoValues = new CoCoMoValueSet();
     private final Hashtable<AnalyzedFile, CoCoMoValueSet> fileCoCoMoValues = new Hashtable<AnalyzedFile, CoCoMoValueSet>();
-    private final ProjectAnalyzer projectAnalyzer;
+    private final AnalysisRun projectAnalyzer;
 
-    public CoCoMo(ProjectAnalyzer projectAnalyzer) {
+    public CoCoMo(AnalysisRun projectAnalyzer) {
 	super(NAME);
 	this.projectAnalyzer = projectAnalyzer;
     }
@@ -67,7 +67,7 @@ public class CoCoMo extends ProjectEvaluator {
      * {@inheritDoc}
      */
     @Override
-    public ProjectAnalyzer getProjectAnalyzer() {
+    public AnalysisRun getProjectAnalyzer() {
 	return projectAnalyzer;
     }
 
@@ -96,7 +96,7 @@ public class CoCoMo extends ProjectEvaluator {
 
     private int getFileSLOC(AnalyzedFile file) {
 	try {
-	    Analysis analysis = projectAnalyzer.getAnalysis(file);
+	    FileAnalysis analysis = projectAnalyzer.getAnalysis(file);
 	    ParserTree parserTree = analysis.getParserTree();
 	    SLOCMetric metric = new SLOCMetric(analysis.getLanguage(),
 		    new CodeRange("", CodeRangeType.FILE, parserTree));

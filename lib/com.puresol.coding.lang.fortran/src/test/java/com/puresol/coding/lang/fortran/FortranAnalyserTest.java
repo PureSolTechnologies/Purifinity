@@ -39,7 +39,7 @@ public class FortranAnalyserTest {
     private void test(File file) throws Throwable {
 	assertTrue(file.exists());
 	FortranAnalyzer analyser = new FortranAnalyzer(file);
-	analyser.parse();
+	analyser.analyze();
     }
 
     @Test

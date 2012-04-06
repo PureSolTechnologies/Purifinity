@@ -1,14 +1,15 @@
 package com.puresol.utils;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.puresol.data.HashCodeGenerator;
 
 /**
  * This class contains several static methods for easier access to standard
@@ -21,19 +22,6 @@ public class FileUtilities {
 
     private static final Logger logger = LoggerFactory
 	    .getLogger(FileUtilities.class);
-
-    /**
-     * This method converts a Class into a File which contains the package path.
-     * This is used to access Jar contents or the content of source directories
-     * to find source or class files.
-     * 
-     * @param clazz
-     * @return
-     */
-    public static File classToRelativePackagePath(Class<?> clazz) {
-	return new File(clazz.getName().replaceAll("\\.", File.separator)
-		+ ".java");
-    }
 
     /**
      * This method checks for the requirement for an update.
@@ -89,145 +77,26 @@ public class FileUtilities {
 	}
     }
 
-    /**
-     * (Found at:
-     * http://stackoverflow.com/questions/204784/how-to-construct-a-relative
-     * -path-in-java-from-two-absolute-paths-or-urls)
-     * 
-     * Get the relative path from one file to another, specifying the directory
-     * separator. If one of the provided resources does not exist, it is assumed
-     * to be a file unless it ends with '/' or '\'.
-     * 
-     * @param target
-     *            targetPath is calculated to this file
-     * @param base
-     *            basePath is calculated from this file
-     * @param separator
-     *            directory separator. The platform default is not assumed so
-     *            that we can test Unix behaviour when running on Windows (for
-     *            example)
-     * @return
-     * @throws PathResolutionException
-     */
-    public static String getRelativePath(String fromPath, String toPath,
-	    String pathSeparator) throws PathResolutionException {
-	if (fromPath.equals(toPath)) {
-	    return "";
-	}
-	// We need the -1 argument to split to make sure we get a trailing
-	// "" token if the base ends in the path separator and is therefore
-	// a directory. We require directory paths to end in the path
-	// separator -- otherwise they are indistinguishable from files.
-	String[] from = fromPath.split(Pattern.quote(pathSeparator), -1);
-	String[] to = toPath.split(Pattern.quote(pathSeparator), 0);
-
-	// First get all the common elements. Store them as a string,
-	// and also count how many of them there are.
-	StringBuilder common = new StringBuilder();
-
-	int commonIndex = 0;
-	while ((commonIndex < to.length) && (commonIndex < from.length)
-		&& (to[commonIndex].equals(from[commonIndex]))) {
-	    common.append(to[commonIndex] + pathSeparator);
-	    commonIndex++;
-	}
-
-	if (commonIndex == 0) {
-	    // No single common path element. This most
-	    // likely indicates differing drive letters, like C: and D:.
-	    // These paths cannot be relativized.
-	    throw new PathResolutionException(
-		    "No common path element found for '" + toPath + "' and '"
-			    + fromPath + "'");
-	}
-
-	StringBuffer relative = new StringBuffer();
-
-	if (from.length != commonIndex) {
-	    int numDirsUp = from.length - commonIndex - 1;
-	    for (int i = 0; i < numDirsUp; i++) {
-		relative.append(".." + pathSeparator);
-	    }
-	}
-	int commonLength = common.length();
-	if (commonLength < toPath.length()) {
-	    relative.append(toPath.substring(commonLength));
-	}
-	return relative.toString();
-    }
-
-    /**
-     * This method normalized paths by removing '//' and redundant '..'.
-     * 
-     * @param file
-     * @return
-     */
-    public static File normalizePath(File file) {
-	if (file == null) {
-	    return new File("");
-	}
-	String normalizedFile = file.getPath();
-	boolean isAbsolute = file.isAbsolute();
-	// remove all '//'...
-	while (normalizedFile.contains(File.separator + File.separator)) {
-	    normalizedFile = normalizedFile.replaceAll(File.separator
-		    + File.separator, File.separator);
-	}
-	// remove all redundant '..'
-	Pattern pattern = Pattern.compile("([^\\." + File.separator + "]+"
-		+ File.separator + "\\.\\.)");
-	Matcher matcher = pattern.matcher(normalizedFile);
-	while (matcher.find()) {
-	    normalizedFile = normalizedFile
-		    .replace(matcher.group(1), "")
-		    .replaceAll(File.separator + File.separator, File.separator);
-	    if ((!isAbsolute) && (normalizedFile.startsWith(File.separator))) {
-		normalizedFile = normalizedFile
-			.replaceFirst(File.separator, "");
-	    } else if ((isAbsolute)
-		    && (!normalizedFile.startsWith(File.separator))) {
-		normalizedFile = File.separator + normalizedFile;
-	    }
-	    matcher = pattern.matcher(normalizedFile);
-	}
-	/* remove all '/./' and /. at the end */
-	pattern = Pattern.compile(File.separator + "\\." + File.separator);
-	matcher = pattern.matcher(normalizedFile);
-	while (matcher.find()) {
-	    normalizedFile = normalizedFile.replace(matcher.group(0), "/");
-	    matcher = pattern.matcher(normalizedFile);
-	}
-	if (normalizedFile.endsWith(File.separator + ".")) {
-	    normalizedFile = normalizedFile.substring(0,
-		    normalizedFile.length() - 2);
-	}
-	return new File(normalizedFile);
-    }
-
-    public static String readFileToString(File directory, String fileName) {
+    public static String readFileToString(File directory, String fileName)
+	    throws IOException {
 	return readFileToString(new File(directory, fileName));
     }
 
-    public static String readFileToString(File file) {
+    public static String readFileToString(File file) throws IOException {
+	byte[] buffer = new byte[1024];
+	StringBuilder text = new StringBuilder();
+	FileInputStream inStream = new FileInputStream(file);
 	try {
-	    StringBuffer text = new StringBuffer();
-	    RandomAccessFile ra = new RandomAccessFile(file, "r");
-	    try {
-		String line;
-		while ((line = ra.readLine()) != null) {
-		    text.append(line);
-		    text.append("\n");
+	    int len;
+	    do {
+		len = inStream.read(buffer);
+		if (len > 0) {
+		    text.append(new String(buffer, 0, len));
 		}
-	    } finally {
-		ra.close();
-	    }
+	    } while (len == buffer.length);
 	    return text.toString();
-	} catch (FileNotFoundException e) {
-	    logger.error(e.getMessage(), e);
-	    return "";
-	} catch (IOException e) {
-	    logger.error(e.getMessage(), e);
-	    return "";
+	} finally {
+	    inStream.close();
 	}
     }
 
@@ -245,5 +114,14 @@ public class FileUtilities {
 	    }
 	}
 	file.delete();
+    }
+
+    public static HashId createHashId(File file, HashAlgorithm algorithm)
+	    throws IOException {
+	if (!file.isFile()) {
+	    throw new IOException("'" + file + "' is not a file!");
+	}
+	String content = readFileToString(file);
+	return new HashId(algorithm, HashCodeGenerator.get(algorithm, content));
     }
 }

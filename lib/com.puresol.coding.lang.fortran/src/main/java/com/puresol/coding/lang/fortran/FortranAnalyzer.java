@@ -21,7 +21,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresol.coding.analysis.api.Analyzer;
+import com.puresol.coding.analysis.api.FileAnalyzer;
 import com.puresol.coding.analysis.api.AnalyzerException;
 import com.puresol.coding.analysis.api.CodeRange;
 import com.puresol.coding.analysis.api.CodeRangeType;
@@ -45,7 +45,7 @@ import com.puresol.utils.StopWatch;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class FortranAnalyzer implements Analyzer {
+public class FortranAnalyzer implements FileAnalyzer {
 
     private static final long serialVersionUID = 2265150343844799735L;
 
@@ -65,7 +65,7 @@ public class FortranAnalyzer implements Analyzer {
     }
 
     @Override
-    public void parse() throws AnalyzerException {
+    public void analyze() throws AnalyzerException {
 	try {
 	    StopWatch watch = new StopWatch();
 	    watch.start();

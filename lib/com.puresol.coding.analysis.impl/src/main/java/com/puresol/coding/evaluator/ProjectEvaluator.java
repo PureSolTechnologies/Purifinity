@@ -1,6 +1,6 @@
 package com.puresol.coding.evaluator;
 
-import com.puresol.coding.analysis.ProjectAnalyzer;
+import com.puresol.coding.analysis.api.AnalysisRun;
 
 public abstract class ProjectEvaluator extends AbstractEvaluator {
 
@@ -10,6 +10,6 @@ public abstract class ProjectEvaluator extends AbstractEvaluator {
 	super(name);
     }
 
-    public abstract ProjectAnalyzer getProjectAnalyzer();
+    public abstract AnalysisRun getProjectAnalyzer();
 
 }

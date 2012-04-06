@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import com.puresol.coding.AbstractProgrammingLanguage;
-import com.puresol.coding.analysis.api.Analyzer;
+import com.puresol.coding.analysis.api.FileAnalyzer;
 import com.puresol.coding.lang.test.grammar.TestLanguageGrammar;
 import com.puresol.uhura.grammar.Grammar;
 
@@ -46,13 +46,13 @@ public class TestLanguage extends AbstractProgrammingLanguage {
     }
 
     @Override
-    public Analyzer restoreAnalyzer(File file) throws IOException {
+    public FileAnalyzer restoreAnalyzer(File file) throws IOException {
 	throw new IOException(
 		"Persistence not implemented in TestProgrammingLanguage!");
     }
 
     @Override
-    public Analyzer createAnalyser(File file) {
+    public FileAnalyzer createAnalyser(File file) {
 	return new TestLanguageAnalyser(file);
     }
 

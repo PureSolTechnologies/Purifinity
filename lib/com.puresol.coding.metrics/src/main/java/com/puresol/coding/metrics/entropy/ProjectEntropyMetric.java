@@ -5,11 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.puresol.coding.analysis.AnalyzedFile;
-import com.puresol.coding.analysis.ProjectAnalyzer;
-import com.puresol.coding.analysis.api.Analysis;
+import com.puresol.coding.analysis.api.FileAnalysis;
+import com.puresol.coding.analysis.api.AnalyzedFile;
 import com.puresol.coding.analysis.api.CodeRange;
 import com.puresol.coding.analysis.api.ProgrammingLanguage;
+import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.metrics.AbstractProjectMetric;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.SourceCodeQuality;
@@ -18,7 +18,7 @@ public class ProjectEntropyMetric extends AbstractProjectMetric<EntropyMetric> {
 
     private static final long serialVersionUID = -5093217611195212999L;
 
-    public ProjectEntropyMetric(ProjectAnalyzer projectAnalyzer) {
+    public ProjectEntropyMetric(AnalysisRun projectAnalyzer) {
 	super(projectAnalyzer);
     }
 
@@ -26,7 +26,7 @@ public class ProjectEntropyMetric extends AbstractProjectMetric<EntropyMetric> {
     protected Map<String, SourceCodeQuality> processFile(AnalyzedFile file)
 	    throws IOException {
 	Map<String, SourceCodeQuality> results = new HashMap<String, SourceCodeQuality>();
-	Analysis analysis = getProjectAnalyzer().getAnalysis(file);
+	FileAnalysis analysis = getProjectAnalyzer().getAnalysis(file);
 	ProgrammingLanguage language = analysis.getLanguage();
 
 	for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {

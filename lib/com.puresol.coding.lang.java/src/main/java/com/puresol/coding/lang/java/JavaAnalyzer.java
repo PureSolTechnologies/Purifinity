@@ -21,7 +21,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresol.coding.analysis.api.Analyzer;
+import com.puresol.coding.analysis.api.FileAnalyzer;
 import com.puresol.coding.analysis.api.AnalyzerException;
 import com.puresol.coding.analysis.api.CodeRange;
 import com.puresol.coding.analysis.api.CodeRangeType;
@@ -51,7 +51,7 @@ import com.puresol.utils.StopWatch;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class JavaAnalyzer implements Analyzer {
+public class JavaAnalyzer implements FileAnalyzer {
 
     private static final long serialVersionUID = -3601131473616977648L;
 
@@ -71,7 +71,7 @@ public class JavaAnalyzer implements Analyzer {
     }
 
     @Override
-    public void parse() throws AnalyzerException {
+    public void analyze() throws AnalyzerException {
 	try {
 	    date = new Date();
 	    StopWatch watch = new StopWatch();

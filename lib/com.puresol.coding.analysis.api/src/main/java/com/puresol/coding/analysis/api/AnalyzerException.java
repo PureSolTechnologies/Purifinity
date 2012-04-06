@@ -10,7 +10,7 @@ public class AnalyzerException extends Exception {
 
     private static final long serialVersionUID = 8839355501039462048L;
 
-    public AnalyzerException(Analyzer analyser) {
+    public AnalyzerException(FileAnalyzer analyser) {
 	super("Analyser " + analyser.getClass() + " is not suitable for file "
 		+ analyser.getFile());
     }
@@ -19,7 +19,7 @@ public class AnalyzerException extends Exception {
 	super(e);
     }
 
-    public AnalyzerException(Analyzer analyser, Exception e) {
+    public AnalyzerException(FileAnalyzer analyser, Exception e) {
 	super("Analyser " + analyser.getClass() + " is not suitable for file "
 		+ analyser.getFile(), e);
     }

@@ -1,65 +1,60 @@
-/***************************************************************************
- *
- *   Analyser.java
- *   -------------------
- *   copyright            : (c) 2009 by PureSol-Technologies
- *   author               : Rick-Rainer Ludwig
- *   email                : ludwig@puresol-technologies.com
- *
- ***************************************************************************/
-
 package com.puresol.coding.analysis.api;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
-
-import com.puresol.uhura.parser.ParserTree;
+import java.util.UUID;
 
 /**
- * This is a interface to a single analysis. It's used to implement a language
- * independent way to access a single file analysis.
+ * This is the central interface for a project analyzer. This analyzer handles a
+ * whole software project. It is responsible for storing and loading the
+ * different analysis runs.
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public interface Analysis extends Serializable {
+public interface Analysis extends AnalysisInformation {
 
     /**
-     * This method returns the time stamp of the analysis. This can be used for
-     * validity analysis by time stamp comparison for evaluators.
+     * This method returns all relevant meta information for the analysis for
+     * user selection.
      * 
-     * @return
-     * @throws IOException
+     * @return A {@link AnalysisRunInformation} object is returned containing
+     *         the information.
      */
-    public Date getTimeStamp() throws IOException;
+    public List<AnalysisRunInformation> getAllRunInformation();
 
     /**
-     * This method returns the time effort which was needed for analysis.
+     * This method returns the settings of the analysis.
      * 
-     * @return Returns the time effort in milliseconds
-     * @throws IOException
+     * @return A {@link AnalysisSettings} object is returned containing the
+     *         settings.
      */
-    public long getTimeOfRun() throws IOException;
+    public AnalysisSettings getSettings();
 
     /**
-     * Returns the language of the file analysed.
+     * This method updates the settings of the analysis.
      * 
-     * @return The language is returned.
-     * @throws IOException
+     * @param settings
+     *            is a {@link AnalysisSettings} object containing the settings.
      */
-    public ProgrammingLanguage getLanguage() throws IOException;
+    public void updateSettings(AnalysisSettings settings);
 
     /**
-     * The file which was analyzed is returned.
+     * This method returns the analysis run defined by the uuid.
      * 
-     * @return The file is returned.
+     * @param uuid
+     *            is a {@link UUID} object containing the UUID for the run to
+     *            load.
+     * @return An {@link AnalysisRun} object is returned containing the analysis
+     *         run.
      */
-    public File getFile();
+    public AnalysisRun loadAnalysisRun(UUID uuid);
 
-    public ParserTree getParserTree() throws IOException;
-
-    public List<CodeRange> getAnalyzableCodeRanges();
+    /**
+     * A new analysis is run with this method. After the run a new
+     * {@link AnalysisRun} object is created and returned.
+     * 
+     * @return A {@link AnalysisRun} object is returned containing the
+     *         information and results about the run.
+     */
+    public AnalysisRun runAnalysis();
 }

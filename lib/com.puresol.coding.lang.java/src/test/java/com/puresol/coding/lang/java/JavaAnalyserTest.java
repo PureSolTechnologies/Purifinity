@@ -11,7 +11,7 @@ import java.io.File;
 import org.junit.Test;
 
 import com.puresol.uhura.parser.ParserTree;
-import com.puresol.utils.FileUtilities;
+import com.puresol.utils.PathUtils;
 
 public class JavaAnalyserTest {
 
@@ -22,7 +22,7 @@ public class JavaAnalyserTest {
 
     @Test
     public void testInitValues() {
-	File file = new File("src/test/java", FileUtilities
+	File file = new File("src/test/java", PathUtils
 		.classToRelativePackagePath(this.getClass()).toString());
 	assertTrue(file.exists());
 	JavaAnalyzer analyser = new JavaAnalyzer(file);
@@ -34,11 +34,11 @@ public class JavaAnalyserTest {
 
     @Test
     public void testParse() throws Throwable {
-	File file = new File("src/test/java", FileUtilities
+	File file = new File("src/test/java", PathUtils
 		.classToRelativePackagePath(this.getClass()).toString());
 	assertTrue(file.exists());
 	JavaAnalyzer analyser = new JavaAnalyzer(file);
-	analyser.parse();
+	analyser.analyze();
 	ParserTree tree = analyser.getParserTree();
 	assertNotNull(tree);
 	// new TreePrinter(System.out).println(tree);

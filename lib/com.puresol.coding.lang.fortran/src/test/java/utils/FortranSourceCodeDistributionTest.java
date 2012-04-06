@@ -18,7 +18,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresol.coding.analysis.api.Analyzer;
+import com.puresol.coding.analysis.api.FileAnalyzer;
 import com.puresol.coding.analysis.api.AnalyzerException;
 import com.puresol.coding.lang.fortran.Fortran;
 import com.puresol.trees.TreePrinter;
@@ -50,8 +50,8 @@ public class FortranSourceCodeDistributionTest {
 	    Fortran fortran = Fortran.getInstance();
 	    StopWatch watch = new StopWatch();
 	    watch.start();
-	    Analyzer analyser = fortran.createAnalyser(file);
-	    analyser.parse();
+	    FileAnalyzer analyser = fortran.createAnalyser(file);
+	    analyser.analyze();
 	    watch.stop();
 	    ParserTree ast = analyser.getParserTree();
 	    assertNotNull(ast);
@@ -136,8 +136,8 @@ public class FortranSourceCodeDistributionTest {
     private static boolean parseFile(File file) {
 	try {
 	    Fortran fortran = Fortran.getInstance();
-	    Analyzer analyser = fortran.createAnalyser(file);
-	    analyser.parse();
+	    FileAnalyzer analyser = fortran.createAnalyser(file);
+	    analyser.analyze();
 	    analyser = null;
 	    return true;
 	} catch (AnalyzerException e) {

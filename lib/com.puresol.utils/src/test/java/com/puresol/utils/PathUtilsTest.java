@@ -7,12 +7,12 @@ import java.io.File;
 
 import org.junit.Test;
 
-public class FileUtilitiesTest {
+public class PathUtilsTest {
 
     @Test
     public void testClassToRelativePackagePath() {
-	File relativePath = FileUtilities
-		.classToRelativePackagePath(FileUtilitiesTest.class);
+	File relativePath = PathUtils
+		.classToRelativePackagePath(PathUtilsTest.class);
 	assertTrue(new File("src/test/java", relativePath.getPath()).exists());
     }
 
@@ -20,40 +20,39 @@ public class FileUtilitiesTest {
     public void testNormalizePath() {
 	assertEquals(
 		"destination/to.txt",
-		FileUtilities.normalizePath(
+		PathUtils.normalizePath(
 			new File("redundant/../destination/to.txt")).getPath());
 	assertEquals(
 		"/destination/to.txt",
-		FileUtilities.normalizePath(
+		PathUtils.normalizePath(
 			new File("/redundant/../destination/to.txt")).getPath());
 	assertEquals(
 		"/root/destination/to.txt",
-		FileUtilities.normalizePath(
+		PathUtils.normalizePath(
 			new File("/root/redundant/../destination/to.txt"))
 			.getPath());
 	assertEquals(
 		"/destination/to.txt",
-		FileUtilities.normalizePath(
+		PathUtils.normalizePath(
 			new File("/root/redundant/../../destination/to.txt"))
 			.getPath());
 	assertEquals(
 		"/destination/to.txt",
-		FileUtilities.normalizePath(
+		PathUtils.normalizePath(
 			new File("/root//redundant/../../destination//to.txt"))
 			.getPath());
 	assertEquals("/a/b/c/d/e",
-		FileUtilities.normalizePath(new File("/a/b/././c/d/e/."))
-			.getPath());
+		PathUtils.normalizePath(new File("/a/b/././c/d/e/.")).getPath());
     }
 
     @Test
     public void testGetRelativePathsUnix() throws Exception {
-	assertEquals("stuff/xyz.dat", FileUtilities.getRelativePath(
-		"/var/data/", "/var/data/stuff/xyz.dat", "/"));
+	assertEquals("stuff/xyz.dat", PathUtils.getRelativePath("/var/data/",
+		"/var/data/stuff/xyz.dat", "/"));
 	assertEquals("../../b/c",
-		FileUtilities.getRelativePath("/a/x/y/", "/a/b/c", "/"));
-	assertEquals("../../b/c", FileUtilities.getRelativePath(
-		"/m/n/o/a/x/y/", "/m/n/o/a/b/c", "/"));
+		PathUtils.getRelativePath("/a/x/y/", "/a/b/c", "/"));
+	assertEquals("../../b/c",
+		PathUtils.getRelativePath("/m/n/o/a/x/y/", "/m/n/o/a/b/c", "/"));
     }
 
     @Test
@@ -61,7 +60,7 @@ public class FileUtilitiesTest {
 	String to = "C:\\Windows\\Boot\\Fonts\\chs_boot.ttf";
 	String from = "C:\\Windows\\Speech\\Common\\sapisvr.exe";
 
-	String relPath = FileUtilities.getRelativePath(from, to, "\\");
+	String relPath = PathUtils.getRelativePath(from, to, "\\");
 	assertEquals("..\\..\\Boot\\Fonts\\chs_boot.ttf", relPath);
     }
 
@@ -70,7 +69,7 @@ public class FileUtilitiesTest {
 	String to = "C:\\Windows\\Boot\\Fonts\\chs_boot.ttf";
 	String from = "C:\\Windows\\Speech\\Common\\";
 
-	String relPath = FileUtilities.getRelativePath(from, to, "\\");
+	String relPath = PathUtils.getRelativePath(from, to, "\\");
 	assertEquals("..\\..\\Boot\\Fonts\\chs_boot.ttf", relPath);
     }
 
@@ -79,7 +78,7 @@ public class FileUtilitiesTest {
 	String to = "C:\\Windows\\Boot\\Fonts";
 	String from = "C:\\Windows\\Speech\\Common\\foo.txt";
 
-	String relPath = FileUtilities.getRelativePath(from, to, "\\");
+	String relPath = PathUtils.getRelativePath(from, to, "\\");
 	assertEquals("..\\..\\Boot\\Fonts", relPath);
     }
 
@@ -89,7 +88,7 @@ public class FileUtilitiesTest {
 	String from = "C:\\Windows\\Speech\\Common\\";
 	String expected = "..\\..\\Boot\\";
 
-	String relPath = FileUtilities.getRelativePath(from, to, "\\");
+	String relPath = PathUtils.getRelativePath(from, to, "\\");
 	assertEquals(expected, relPath);
     }
 
@@ -99,7 +98,7 @@ public class FileUtilitiesTest {
 	String from = "/a/b/c";
 	String expected = "";
 
-	String relPath = FileUtilities.getRelativePath(from, to, "\\");
+	String relPath = PathUtils.getRelativePath(from, to, "\\");
 	assertEquals(expected, relPath);
     }
 
@@ -107,7 +106,7 @@ public class FileUtilitiesTest {
     public void testGetRelativePathDifferentDriveLetters() throws Exception {
 	String to = "D:\\sources\\recovery\\RecEnv.exe";
 	String from = "C:\\Java\\workspace\\AcceptanceTests\\Standard test data\\geo\\";
-	FileUtilities.getRelativePath(from, to, "\\");
+	PathUtils.getRelativePath(from, to, "\\");
     }
 
 }

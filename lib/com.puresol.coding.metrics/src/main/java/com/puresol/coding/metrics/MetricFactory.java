@@ -3,8 +3,8 @@ package com.puresol.coding.metrics;
 import java.io.File;
 import java.util.List;
 
-import com.puresol.coding.analysis.AnalyzedFile;
-import com.puresol.coding.analysis.ProjectAnalyzer;
+import com.puresol.coding.analysis.api.AnalyzedFile;
+import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.quality.QualityCharacteristic;
 
 /**
@@ -46,7 +46,7 @@ public interface MetricFactory {
      * @param projectAnalyzer
      * @return A project metric object is returned.
      */
-    public ProjectMetric createProjectMetric(ProjectAnalyzer projectAnalyzer);
+    public ProjectMetric createProjectMetric(AnalysisRun projectAnalyzer);
 
     /**
      * This method creates a DirectoryMetric for the provided project analyzer
@@ -58,7 +58,7 @@ public interface MetricFactory {
      *            directory and workspace directory.
      * @return A directory metric object is returned.
      */
-    public FileMetric createDirectoryMetric(ProjectAnalyzer projectAnalyzer,
+    public FileMetric createDirectoryMetric(AnalysisRun projectAnalyzer,
 	    File directory);
 
     /**
@@ -71,6 +71,6 @@ public interface MetricFactory {
      *            and workspace directory.
      * @return A file metric object is returned.
      */
-    public FileMetric createFileMetric(ProjectAnalyzer projectAnalyzer,
+    public FileMetric createFileMetric(AnalysisRun projectAnalyzer,
 	    AnalyzedFile file);
 }

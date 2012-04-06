@@ -13,10 +13,10 @@ import org.eclipse.core.runtime.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresol.coding.analysis.AnalyzedFile;
-import com.puresol.coding.analysis.ProjectAnalyzer;
-import com.puresol.coding.analysis.api.Analysis;
+import com.puresol.coding.analysis.api.AnalysisRun;
+import com.puresol.coding.analysis.api.AnalyzedFile;
 import com.puresol.coding.analysis.api.CodeRange;
+import com.puresol.coding.analysis.api.FileAnalysis;
 import com.puresol.coding.analysis.api.ProgrammingLanguage;
 import com.puresol.coding.evaluator.ProjectEvaluator;
 import com.puresol.coding.evaluator.Result;
@@ -36,15 +36,15 @@ public class ProjectMaintainabilityIndex extends ProjectEvaluator {
     private SourceCodeQuality projectQuality = SourceCodeQuality.UNSPECIFIED;
     private int qualitySum = 0;
     private int qualityCount = 0;
-    private final ProjectAnalyzer projectAnalyzer;
+    private final AnalysisRun projectAnalyzer;
 
     public ProjectMaintainabilityIndex() {
 	super("");
 	this.projectAnalyzer = null;
     }
 
-    public ProjectMaintainabilityIndex(ProjectAnalyzer projectAnalyzer) {
-	super(projectAnalyzer.getName());
+    public ProjectMaintainabilityIndex(AnalysisRun projectAnalyzer) {
+	super("Project Maintainability Index");
 	this.projectAnalyzer = projectAnalyzer;
     }
 
@@ -81,7 +81,7 @@ public class ProjectMaintainabilityIndex extends ProjectEvaluator {
     }
 
     private void processFile(AnalyzedFile file) throws IOException {
-	Analysis analysis = getProjectAnalyzer().getAnalysis(file);
+	FileAnalysis analysis = getProjectAnalyzer().getAnalysis(file);
 	ProgrammingLanguage language = analysis.getLanguage();
 
 	for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
@@ -125,7 +125,7 @@ public class ProjectMaintainabilityIndex extends ProjectEvaluator {
     }
 
     @Override
-    public ProjectAnalyzer getProjectAnalyzer() {
+    public AnalysisRun getProjectAnalyzer() {
 	return projectAnalyzer;
     }
 }

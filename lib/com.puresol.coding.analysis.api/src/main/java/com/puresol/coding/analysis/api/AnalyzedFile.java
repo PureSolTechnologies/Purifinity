@@ -1,8 +1,12 @@
-package com.puresol.coding.analysis;
+package com.puresol.coding.analysis.api;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 
+import com.puresol.utils.FileUtilities;
+import com.puresol.utils.HashAlgorithm;
+import com.puresol.utils.HashId;
 import com.puresol.utils.ObjectUtilities;
 
 /**
@@ -13,7 +17,8 @@ import com.puresol.utils.ObjectUtilities;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class AnalyzedFile implements Comparable<AnalyzedFile>, Serializable {
+public class AnalyzedFile implements Comparable<AnalyzedFile>, Serializable,
+	AnalyzedFileInformation {
 
     private static final long serialVersionUID = 2030120585873480183L;
 
@@ -21,8 +26,10 @@ public class AnalyzedFile implements Comparable<AnalyzedFile>, Serializable {
     private final File workspaceDirectory;
     private final File file;
     private final int hashcode;
+    private final HashId hashId;
 
-    public AnalyzedFile(File sourceDirectory, File workspaceDirectory, File file) {
+    public AnalyzedFile(File sourceDirectory, File workspaceDirectory, File file)
+	    throws IOException {
 	super();
 	if (sourceDirectory == null) {
 	    throw new IllegalArgumentException("sourceDirectory is null!");
@@ -38,38 +45,26 @@ public class AnalyzedFile implements Comparable<AnalyzedFile>, Serializable {
 	this.file = file;
 	hashcode = ObjectUtilities.calculateConstantHashCode(sourceDirectory,
 		workspaceDirectory, file);
-    }
-
-    public File getSourceDirectory() {
-	return sourceDirectory;
+	hashId = FileUtilities.createHashId(getSourceFile(),
+		HashAlgorithm.SHA256);
     }
 
     public File getSourceFile() {
 	return new File(sourceDirectory, file.getPath());
     }
 
-    public File getWorkspaceDirectory() {
-	return workspaceDirectory;
+    @Override
+    public HashId getHashId() {
+	return hashId;
     }
 
+    @Override
     public File getFile() {
 	return file;
     }
 
     public File getFileDirectory() {
 	return new File(workspaceDirectory, file.getPath());
-    }
-
-    public File getAnalyzerFile() {
-	return new File(getFileDirectory(), "analyzer.persist");
-    }
-
-    public File getParserTreeFile() {
-	return new File(getFileDirectory(), "parser_tree.persist");
-    }
-
-    public File getPropertyFile() {
-	return new File(getFileDirectory(), "analysis.properties");
     }
 
     @Override

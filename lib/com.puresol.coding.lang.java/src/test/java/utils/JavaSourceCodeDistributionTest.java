@@ -13,7 +13,7 @@ import java.util.List;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.puresol.coding.analysis.api.Analyzer;
+import com.puresol.coding.analysis.api.FileAnalyzer;
 import com.puresol.coding.lang.java.Java;
 import com.puresol.coding.lang.java.grammar.JavaGrammar;
 import com.puresol.uhura.grammar.Grammar;
@@ -47,8 +47,8 @@ public class JavaSourceCodeDistributionTest {
 	Java java = Java.getInstance();
 	StopWatch watch = new StopWatch();
 	watch.start();
-	Analyzer analyser = java.createAnalyser(file);
-	analyser.parse();
+	FileAnalyzer analyser = java.createAnalyser(file);
+	analyser.analyze();
 	watch.stop();
 	ParserTree ast = analyser.getParserTree();
 	assertNotNull(ast);
@@ -138,7 +138,7 @@ public class JavaSourceCodeDistributionTest {
 	System.out.println("\n\nTotal time:\t" + totalWatch.toString());
     }
 
-    private static boolean parseFile(File file) {
+    private static boolean parseFile(File file) throws IOException {
 	try {
 	    // Java java = Java.getInstance();
 	    // Analyzer analyser = java.createAnalyser(file);

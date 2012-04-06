@@ -10,20 +10,20 @@ import java.io.File;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.puresol.coding.analysis.ProjectAnalyzer;
-import com.puresol.coding.analysis.ProjectAnalyzerFactory;
+import com.puresol.coding.analysis.FileSystemAnalysisRun;
+import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.quality.SourceCodeQuality;
 import com.puresol.utils.FileSearchConfiguration;
 
 public class ProjectEntropyMetricTest {
 
-    private ProjectAnalyzer analyzer = null;
+    private AnalysisRun analyzer = null;
 
     @Before
     public void setup() {
 	File workspaceDirectory = new File("test/analysis");
-	analyzer = ProjectAnalyzerFactory.create("ProjectAnalyzer", new File(
-		"src/main/java"), workspaceDirectory,
+	analyzer = FileSystemAnalysisRun.create("ProjectAnalyzer",
+		new File("src/main/java"), workspaceDirectory,
 		new FileSearchConfiguration());
     }
 

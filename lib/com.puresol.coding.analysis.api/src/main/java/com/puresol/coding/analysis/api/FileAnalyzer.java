@@ -19,14 +19,14 @@ import java.io.File;
  * @author Rick-Rainer Ludwig
  * 
  */
-public interface Analyzer extends Analysis {
+public interface FileAnalyzer extends FileAnalysis {
 
     /**
      * This method is called to start the actual parsing process.
      * 
      * @throws AnalyzerException
      */
-    public void parse() throws AnalyzerException;
+    public void analyze() throws AnalyzerException;
 
     /**
      * This method persists the analyzer into a file specified.

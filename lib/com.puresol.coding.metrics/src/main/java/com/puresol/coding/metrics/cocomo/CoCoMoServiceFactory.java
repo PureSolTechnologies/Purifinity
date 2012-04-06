@@ -3,7 +3,7 @@ package com.puresol.coding.metrics.cocomo;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.puresol.coding.analysis.ProjectAnalyzer;
+import com.puresol.coding.analysis.FileSystemAnalysisRun;
 import com.puresol.coding.evaluator.ProjectEvaluator;
 import com.puresol.coding.evaluator.ProjectEvaluatorFactory;
 import com.puresol.coding.quality.QualityCharacteristic;
@@ -11,7 +11,7 @@ import com.puresol.coding.quality.QualityCharacteristic;
 public class CoCoMoServiceFactory implements ProjectEvaluatorFactory {
 
     @Override
-    public ProjectEvaluator create(ProjectAnalyzer projectAnalyser) {
+    public ProjectEvaluator create(FileSystemAnalysisRun projectAnalyser) {
 	CoCoMo cocomo = new CoCoMo(projectAnalyser);
 	return cocomo;
     }

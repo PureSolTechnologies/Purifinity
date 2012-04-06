@@ -8,7 +8,7 @@ import java.io.ObjectInputStream;
 import org.osgi.framework.BundleContext;
 
 import com.puresol.coding.AbstractProgrammingLanguage;
-import com.puresol.coding.analysis.api.Analyzer;
+import com.puresol.coding.analysis.api.FileAnalyzer;
 import com.puresol.coding.lang.java.grammar.JavaGrammar;
 import com.puresol.uhura.grammar.Grammar;
 
@@ -62,12 +62,12 @@ public class Java extends AbstractProgrammingLanguage {
     }
 
     @Override
-    public Analyzer restoreAnalyzer(File file) throws IOException {
+    public FileAnalyzer restoreAnalyzer(File file) throws IOException {
 	try {
 	    ObjectInputStream ois = new ObjectInputStream(new FileInputStream(
 		    file));
 	    try {
-		return (Analyzer) ois.readObject();
+		return (FileAnalyzer) ois.readObject();
 	    } finally {
 		ois.close();
 	    }
@@ -81,7 +81,7 @@ public class Java extends AbstractProgrammingLanguage {
     }
 
     @Override
-    public Analyzer createAnalyser(File file) {
+    public FileAnalyzer createAnalyser(File file) {
 	return new JavaAnalyzer(file);
     }
 
