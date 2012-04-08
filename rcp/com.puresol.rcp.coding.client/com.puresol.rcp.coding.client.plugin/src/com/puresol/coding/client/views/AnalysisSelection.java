@@ -1,34 +1,27 @@
 package com.puresol.coding.client.views;
 
-import java.io.File;
-
 import org.eclipse.jface.viewers.ISelection;
 
 import com.puresol.coding.analysis.api.Analysis;
+import com.puresol.coding.analysis.api.AnalysisInformation;
 
 /**
- * This class contains the selection of AnalysisNavigator.
+ * This class contains the selection of an {@link Analysis}.
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
 public class AnalysisSelection implements ISelection {
 
-    private final Analysis analysis;
-    private final File sourceFile;
+    private final AnalysisInformation information;
 
-    public AnalysisSelection(Analysis analysis, File sourceFile) {
+    public AnalysisSelection(AnalysisInformation information) {
 	super();
-	this.analysis = analysis;
-	this.sourceFile = sourceFile;
+	this.information = information;
     }
 
-    public Analysis getAnalysis() {
-	return analysis;
-    }
-
-    public File getSourceFile() {
-	return sourceFile;
+    public AnalysisInformation getInformation() {
+	return information;
     }
 
     @Override

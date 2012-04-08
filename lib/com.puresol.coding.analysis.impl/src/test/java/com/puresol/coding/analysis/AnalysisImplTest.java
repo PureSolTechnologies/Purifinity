@@ -7,8 +7,8 @@ import static org.junit.Assert.assertNotSame;
 import java.io.File;
 import java.util.List;
 
-import org.junit.After;
-import org.junit.Before;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.puresol.coding.analysis.api.Analysis;
@@ -18,24 +18,23 @@ import com.puresol.coding.analysis.api.AnalysisRunInformation;
 import com.puresol.coding.analysis.api.AnalysisSettings;
 import com.puresol.coding.analysis.api.AnalysisStore;
 import com.puresol.coding.analysis.api.AnalysisStoreException;
-import com.puresol.utils.FileSearchConfiguration;
 
 public class AnalysisImplTest {
 
-    private AnalysisStore analysisStore;
-    private Analysis analysis;
+    private static AnalysisStore analysisStore;
+    private static Analysis analysis;
 
-    @Before
-    public void setup() throws AnalysisStoreException {
+    @BeforeClass
+    public static void initialize() throws AnalysisStoreException {
 	analysisStore = new AnalysisStoreImpl();
-	analysis = analysisStore.createAnalysis(new AnalysisSettings("Name",
-		"Description", new FileSearchConfiguration(), new File(System
-			.getProperty("user.home"))));
+	analysis = analysisStore
+		.createAnalysis(new AnalysisSettings("Name", "Description",
+			new TestFileSearchConfiguration(), new File(".")));
 	assertNotNull(analysis);
     }
 
     @Test
-    public void test() {
+    public void test() throws AnalysisStoreException {
 	List<AnalysisRunInformation> allRunInformation = analysis
 		.getAllRunInformation();
 	assertNotNull(allRunInformation);
@@ -45,7 +44,8 @@ public class AnalysisImplTest {
     public void testUpdateSettings() throws AnalysisStoreException {
 	AnalysisInformation oldInformation = analysis.getInformation();
 	AnalysisSettings settingsForUpdate = new AnalysisSettings("Name2",
-		"Description2", new FileSearchConfiguration(), new File("/"));
+		"Description2", new TestFileSearchConfiguration(),
+		new File("/"));
 
 	analysis.updateSettings(settingsForUpdate);
 
@@ -67,13 +67,15 @@ public class AnalysisImplTest {
     }
 
     @Test
-    public void testCreateRun() {
+    public void testCreateRun() throws Exception {
 	AnalysisRun analysisRun = analysis.runAnalysis();
 	assertNotNull(analysisRun);
+	AnalysisRun run = analysis.loadLastAnalysisRun();
+	assertNotNull(run);
     }
 
-    @After
-    public void tearDown() {
+    @AfterClass
+    public static void destroy() {
 	assertNotNull(analysisStore);
 	assertNotNull(analysis);
 	analysisStore.removeAnalysis(analysis.getInformation().getUUID());

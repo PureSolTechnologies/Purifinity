@@ -19,8 +19,11 @@ public interface AnalysisStore {
      * 
      * @return A {@link List} of {@link AnalysisInformation} is returned
      *         containing all available analysis.
+     * @throws AnalysisStoreException
+     *             is thrown in cases of issues.
      */
-    public List<AnalysisInformation> getAllAnalysisInformation();
+    public List<AnalysisInformation> getAllAnalysisInformation()
+	    throws AnalysisStoreException;
 
     /**
      * This method is used to load a single Analysis by {@link UUID}.

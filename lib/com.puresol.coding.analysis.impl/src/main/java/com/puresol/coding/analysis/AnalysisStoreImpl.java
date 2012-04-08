@@ -5,9 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.puresol.coding.analysis.api.Analysis;
 import com.puresol.coding.analysis.api.AnalysisInformation;
 import com.puresol.coding.analysis.api.AnalysisSettings;
@@ -16,9 +13,6 @@ import com.puresol.coding.analysis.api.AnalysisStoreException;
 import com.puresol.utils.FileUtilities;
 
 public class AnalysisStoreImpl implements AnalysisStore {
-
-    private static final Logger logger = LoggerFactory
-	    .getLogger(AnalysisStoreImpl.class);
 
     private final File storageDirectory;
 
@@ -39,17 +33,14 @@ public class AnalysisStoreImpl implements AnalysisStore {
     }
 
     @Override
-    public List<AnalysisInformation> getAllAnalysisInformation() {
+    public List<AnalysisInformation> getAllAnalysisInformation()
+	    throws AnalysisStoreException {
 	List<AnalysisInformation> analysisInformation = new ArrayList<AnalysisInformation>();
 	File[] files = storageDirectory.listFiles();
 	for (File analysisDirectory : files) {
 	    if (AnalysisImpl.isAnalysisDirectory(analysisDirectory)) {
-		try {
-		    Analysis analysis = AnalysisImpl.open(analysisDirectory);
-		    analysisInformation.add(analysis.getInformation());
-		} catch (AnalysisStoreException e) {
-		    logger.warn(e.getMessage(), e);
-		}
+		Analysis analysis = AnalysisImpl.open(analysisDirectory);
+		analysisInformation.add(analysis.getInformation());
 	    }
 	}
 	return analysisInformation;

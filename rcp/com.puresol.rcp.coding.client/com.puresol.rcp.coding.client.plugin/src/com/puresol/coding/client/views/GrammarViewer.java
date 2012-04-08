@@ -1,4 +1,4 @@
-package com.puresol.coding.client;
+package com.puresol.coding.client.views;
 
 import java.io.IOException;
 

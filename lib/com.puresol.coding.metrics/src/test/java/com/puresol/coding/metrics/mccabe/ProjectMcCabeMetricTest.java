@@ -6,12 +6,14 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 
 import java.io.File;
+import java.util.UUID;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import com.puresol.coding.analysis.AnalysisRunImpl;
 import com.puresol.coding.analysis.api.AnalysisRun;
+import com.puresol.coding.analysis.api.AnalysisStoreException;
 import com.puresol.coding.quality.SourceCodeQuality;
 import com.puresol.utils.FileSearchConfiguration;
 
@@ -20,10 +22,10 @@ public class ProjectMcCabeMetricTest {
     private AnalysisRun analyzer = null;
 
     @Before
-    public void setup() {
-	File workspaceDirectory = new File("test/analysis");
-	analyzer = AnalysisRunImpl.create("ProjectAnalyzer",
-		new File("src/main/java"), workspaceDirectory,
+    public void setup() throws AnalysisStoreException {
+	File runDirectory = new File("test/analysis");
+	analyzer = AnalysisRunImpl.create(runDirectory, "ProjectAnalyzer",
+		UUID.randomUUID(), new File("src/main/java"),
 		new FileSearchConfiguration());
     }
 

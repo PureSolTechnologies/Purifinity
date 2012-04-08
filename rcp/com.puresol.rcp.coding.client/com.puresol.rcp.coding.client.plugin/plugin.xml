@@ -203,6 +203,13 @@
       </view>
       <view
             category="com.puresol.coding.Analysis"
+            class="com.puresol.coding.client.views.AnalysisRunNavigator"
+            id="com.puresol.coding.client.AnalysisRunNavigator"
+            name="Analysis Run Navigator"
+            restorable="true">
+      </view>
+      <view
+            category="com.puresol.coding.Analysis"
             class="com.puresol.coding.client.views.SourceNavigator"
             id="com.puresol.coding.client.SourceNavigator"
             name="Source Navigator"
@@ -242,9 +249,16 @@
       </view>
       <view
             category="com.puresol.coding.Analysis"
-            class="com.puresol.coding.client.GrammarViewer"
+            class="com.puresol.coding.client.views.GrammarViewer"
             id="com.puresol.coding.client.GrammarViewer"
             name="Grammar Viewer"
+            restorable="true">
+      </view>
+      <view
+            category="com.puresol.coding.Analysis"
+            class="com.puresol.coding.client.views.AnalysisStoreView"
+            id="com.puresol.coding.client.AnalysisStore"
+            name="Analysis Store"
             restorable="true">
       </view>
    </extension>

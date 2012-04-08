@@ -43,6 +43,8 @@ public class NewAnalysisJob extends Job {
 	    AnalysisSettings analysisSettings = new AnalysisSettings(getName(),
 		    description, searchConfiguration, sourceDirectory);
 	    analysis = analysisStore.createAnalysis(analysisSettings);
+	    // run first analysis...
+	    analysis.runAnalysis();
 	    return Status.OK_STATUS;
 	} catch (OperationCanceledException e) {
 	    e.printStackTrace();

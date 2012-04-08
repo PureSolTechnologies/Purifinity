@@ -3,6 +3,8 @@ package com.puresol.coding.client.views;
 import java.io.File;
 import java.util.List;
 
+import org.eclipse.core.runtime.ILog;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
@@ -22,10 +24,21 @@ import org.eclipse.ui.part.ViewPart;
 import org.eclipse.wb.swt.SWTResourceManager;
 
 import com.puresol.coding.analysis.api.Analysis;
+import com.puresol.coding.analysis.api.AnalysisInformation;
 import com.puresol.coding.analysis.api.AnalysisRun;
+import com.puresol.coding.analysis.api.AnalysisStore;
+import com.puresol.coding.analysis.api.AnalysisStoreException;
+import com.puresol.coding.analysis.api.AnalysisStoreFactory;
 import com.puresol.coding.analysis.api.AnalyzedFile;
+import com.puresol.coding.client.Activator;
+import com.puresol.coding.client.controls.ParserTreeControl;
 
 public class AnalysisReport extends ViewPart implements ISelectionListener {
+
+    private static final ILog logger = Activator.getDefault().getLog();
+
+    private final AnalysisStore store = AnalysisStoreFactory.getInstance();
+
     private Text name;
     private Text numAnalyzedFiles;
     private Text numFailedFiles;
@@ -104,17 +117,25 @@ public class AnalysisReport extends ViewPart implements ISelectionListener {
 
     @Override
     public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-	if (selection instanceof AnalysisSelection) {
-	    AnalysisSelection analysisSelection = (AnalysisSelection) selection;
-	    Analysis analysis = analysisSelection.getAnalysis();
-	    name.setText(analysis.getInformation().getName());
-	    AnalysisRun lastAnalysisRun = analysis.loadLastAnalysisRun();
-	    java.util.List<AnalyzedFile> analyzedFiles = lastAnalysisRun
-		    .getAnalyzedFiles();
-	    numAnalyzedFiles.setText(String.valueOf(analyzedFiles.size()));
-	    List<File> failedFiles = lastAnalysisRun.getFailedFiles();
-	    numFailedFiles.setText(String.valueOf(String.valueOf(failedFiles
-		    .size())));
+	try {
+	    if (selection instanceof AnalysisSelection) {
+		AnalysisSelection analysisSelection = (AnalysisSelection) selection;
+		AnalysisInformation analysisInformation = analysisSelection
+			.getInformation();
+		name.setText(analysisInformation.getName());
+		Analysis analysis = store.loadAnalysis(analysisInformation
+			.getUUID());
+		AnalysisRun lastAnalysisRun = analysis.loadLastAnalysisRun();
+		java.util.List<AnalyzedFile> analyzedFiles = lastAnalysisRun
+			.getAnalyzedFiles();
+		numAnalyzedFiles.setText(String.valueOf(analyzedFiles.size()));
+		List<File> failedFiles = lastAnalysisRun.getFailedFiles();
+		numFailedFiles.setText(String.valueOf(String
+			.valueOf(failedFiles.size())));
+	    }
+	} catch (AnalysisStoreException e) {
+	    logger.log(new Status(Status.ERROR, ParserTreeControl.class
+		    .getName(), "Can not read analysis store!", e));
 	}
     }
 }

@@ -5,12 +5,14 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.commands.IHandlerListener;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ListDialog;
+import org.eclipse.ui.internal.views.log.Activator;
 
 import com.puresol.coding.analysis.api.Analysis;
 import com.puresol.coding.analysis.api.AnalysisInformation;
@@ -19,6 +21,8 @@ import com.puresol.coding.analysis.api.AnalysisStoreException;
 import com.puresol.coding.analysis.api.AnalysisStoreFactory;
 
 public class OpenAnalysis extends AbstractHandler implements IHandler {
+
+    private static final ILog logger = Activator.getDefault().getLog();
 
     private Analysis analysis;
 
@@ -34,27 +38,31 @@ public class OpenAnalysis extends AbstractHandler implements IHandler {
 
     @Override
     public String execute(ExecutionEvent event) throws ExecutionException {
-	Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
-		.getShell();
-	AnalysisStore analysisStore = AnalysisStoreFactory.getInstance();
+	try {
+	    Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
+		    .getShell();
+	    AnalysisStore analysisStore = AnalysisStoreFactory.getInstance();
 
-	ListDialog listDialog = new ListDialog(shell);
-	listDialog.setTitle("Open Analysis");
-	listDialog.setMessage("Please, select the analysis to be opened.");
-	listDialog.setContentProvider(ArrayContentProvider.getInstance());
-	listDialog.setLabelProvider(new LabelProvider());
-	listDialog.setInput(analysisStore.getAllAnalysisInformation());
-	if (listDialog.open() == Dialog.OK) {
-	    Object[] infos = listDialog.getResult();
-	    AnalysisInformation analysisInformation = (AnalysisInformation) infos[0];
-	    try {
-		analysis = analysisStore.loadAnalysis(analysisInformation
-			.getUUID());
-	    } catch (AnalysisStoreException e) {
-		e.printStackTrace();
+	    ListDialog listDialog = new ListDialog(shell);
+	    listDialog.setTitle("Open Analysis");
+	    listDialog.setMessage("Please, select the analysis to be opened.");
+	    listDialog.setContentProvider(ArrayContentProvider.getInstance());
+	    listDialog.setLabelProvider(new LabelProvider());
+	    listDialog.setInput(analysisStore.getAllAnalysisInformation());
+	    if (listDialog.open() == Dialog.OK) {
+		Object[] infos = listDialog.getResult();
+		AnalysisInformation analysisInformation = (AnalysisInformation) infos[0];
+		try {
+		    analysis = analysisStore.loadAnalysis(analysisInformation
+			    .getUUID());
+		} catch (AnalysisStoreException e) {
+		    e.printStackTrace();
+		}
 	    }
+	    return "";
+	} catch (AnalysisStoreException e) {
+	    throw new ExecutionException(e.getMessage(), e);
 	}
-	return "";
     }
 
     @Override

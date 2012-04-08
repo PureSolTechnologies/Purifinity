@@ -55,21 +55,25 @@ public class AnalysisImpl implements Analysis {
 	try {
 	    settings = PersistenceUtils.restore(new File(analysisDirectory,
 		    SETTINGS_FILE));
-	    Properties properties = new Properties();
-	    FileReader reader = new FileReader(new File(analysisDirectory,
-		    "analysis.properties"));
-	    try {
-		properties.load(reader);
-		uuid = UUID.fromString(properties.get("uuid").toString());
-		creationTime = new Date(Long.valueOf((String) properties
-			.get("creation.time")));
-	    } finally {
-		reader.close();
-	    }
+	    loadProperties();
 	} catch (IOException e) {
 	    throw new AnalysisStoreException("Could not open the analysis!", e);
 	}
 
+    }
+
+    private void loadProperties() throws IOException {
+	Properties properties = new Properties();
+	FileReader reader = new FileReader(new File(analysisDirectory,
+		"analysis.properties"));
+	try {
+	    properties.load(reader);
+	    uuid = UUID.fromString(properties.get("uuid").toString());
+	    creationTime = new Date(Long.valueOf((String) properties
+		    .get("creation.time")));
+	} finally {
+	    reader.close();
+	}
     }
 
     private void create(UUID uuid, AnalysisSettings settings)
@@ -84,20 +88,23 @@ public class AnalysisImpl implements Analysis {
 	    new File(analysisDirectory, DIRECTORY_FLAG).createNewFile();
 	    PersistenceUtils.store(new File(analysisDirectory, SETTINGS_FILE),
 		    settings);
-	    Properties properties = new Properties();
-	    properties.put("uuid", uuid.toString());
-	    properties.put("creation.time",
-		    String.valueOf(creationTime.getTime()));
-	    FileWriter writer = new FileWriter(new File(analysisDirectory,
-		    "analysis.properties"));
-	    try {
-		properties.store(writer, "");
-	    } finally {
-		writer.close();
-	    }
+	    saveProperties();
 	} catch (IOException e) {
 	    throw new AnalysisStoreException(
 		    "Could not store files for analysis!", e);
+	}
+    }
+
+    private void saveProperties() throws IOException {
+	Properties properties = new Properties();
+	properties.put("uuid", uuid.toString());
+	properties.put("creation.time", String.valueOf(creationTime.getTime()));
+	FileWriter writer = new FileWriter(new File(analysisDirectory,
+		"analysis.properties"));
+	try {
+	    properties.store(writer, "");
+	} finally {
+	    writer.close();
 	}
     }
 
@@ -108,14 +115,17 @@ public class AnalysisImpl implements Analysis {
     }
 
     @Override
-    public List<AnalysisRunInformation> getAllRunInformation() {
+    public List<AnalysisRunInformation> getAllRunInformation()
+	    throws AnalysisStoreException {
 	List<AnalysisRunInformation> analysisInformation = new ArrayList<AnalysisRunInformation>();
 	File[] files = analysisDirectory.listFiles();
-	for (File analysisDirectory : files) {
-	    if (AnalysisRunImpl.isAnalysisRunDirectory(analysisDirectory)) {
-		AnalysisRun analysisRun = AnalysisRunImpl
-			.open(analysisDirectory);
-		analysisInformation.add(analysisRun.getInformation());
+	for (File runDirectory : files) {
+	    if (AnalysisRunImpl.isAnalysisRunDirectory(runDirectory)) {
+		AnalysisRun analysisRun = AnalysisRunImpl.open(runDirectory,
+			getSettings().getName());
+		if (analysisRun != null) {
+		    analysisInformation.add(analysisRun.getInformation());
+		}
 	    }
 	}
 	return analysisInformation;
@@ -139,24 +149,24 @@ public class AnalysisImpl implements Analysis {
     }
 
     @Override
-    public AnalysisRun loadAnalysisRun(UUID uuid) {
-	// TODO Auto-generated method stub
-	return null;
+    public AnalysisRun loadAnalysisRun(UUID uuid) throws AnalysisStoreException {
+	File runDir = new File(analysisDirectory, uuid.toString());
+	return AnalysisRunImpl.open(runDir, getSettings().getName());
     }
 
     @Override
-    public AnalysisRun runAnalysis() {
+    public AnalysisRun runAnalysis() throws AnalysisStoreException {
 	UUID uuid = UUID.randomUUID();
 	AnalysisRunImpl run = (AnalysisRunImpl) AnalysisRunImpl.create(
-		getSettings().getName(), getSettings().getSourceDirectory(),
 		new File(analysisDirectory, uuid.toString()), getSettings()
-			.getFileSearchConfiguration());
+			.getName(), uuid, getSettings().getSourceDirectory(),
+		getSettings().getFileSearchConfiguration());
 	run.schedule();
 	return run;
     }
 
     @Override
-    public AnalysisRun loadLastAnalysisRun() {
+    public AnalysisRun loadLastAnalysisRun() throws AnalysisStoreException {
 	List<AnalysisRunInformation> allRunInformation = getAllRunInformation();
 	UUID uuid = null;
 	Date time = null;
@@ -167,7 +177,11 @@ public class AnalysisImpl implements Analysis {
 		time = runInformation.getTime();
 	    }
 	}
-	return loadAnalysisRun(uuid);
+	if (uuid != null) {
+	    return loadAnalysisRun(uuid);
+	} else {
+	    return null;
+	}
     }
 
 }

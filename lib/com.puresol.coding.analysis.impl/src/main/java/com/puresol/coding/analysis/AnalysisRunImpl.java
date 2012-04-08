@@ -2,15 +2,18 @@ package com.puresol.coding.analysis;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
+import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -24,6 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalysisRunInformation;
+import com.puresol.coding.analysis.api.AnalysisStoreException;
 import com.puresol.coding.analysis.api.AnalyzedFile;
 import com.puresol.coding.analysis.api.FileAnalysis;
 import com.puresol.trees.FileTree;
@@ -45,165 +49,186 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
     }
 
     /**
+     * This method opens an existing project analyzer via its workspace
+     * directory.
+     * 
+     * @param runDirectory
+     *            is the directory where the persisted results can be found.
+     * @return
+     * @throws AnalysisStoreException
+     */
+    public static AnalysisRun open(File runDirectory, String name)
+	    throws AnalysisStoreException {
+	AnalysisRunImpl projectAnalyser = new AnalysisRunImpl(runDirectory,
+		name);
+	projectAnalyser.open();
+	return projectAnalyser;
+    }
+
+    /**
      * This method creates a new project analyzer with a new workspace
      * associated.
      * 
      * @param projectDirectory
      *            is the directory which is to scan for files and to be
      *            analyzed.
-     * @param workspaceDirectory
+     * @param runDirectory
      *            is the directory to put the persisted results to.
+     * @throws AnalysisStoreException
+     * @throws IOException
      */
-    public static AnalysisRun create(String name, File projectDirectory,
-	    File workspaceDirectory, FileSearchConfiguration searchConfiguration) {
-	AnalysisRunImpl projectAnalyser = new AnalysisRunImpl(name,
-		workspaceDirectory, searchConfiguration);
-	if (!projectAnalyser.createProjectDirectory(projectDirectory)) {
-	    return null;
-	}
+    public static AnalysisRun create(File runDirectory, String name, UUID uuid,
+	    File sourceDirectory, FileSearchConfiguration searchConfiguration)
+	    throws AnalysisStoreException {
+	AnalysisRunImpl projectAnalyser = new AnalysisRunImpl(runDirectory,
+		name);
+	projectAnalyser.create(sourceDirectory, uuid, searchConfiguration);
 	return projectAnalyser;
     }
 
-    /**
-     * This method opens an existing project analyzer via its workspace
-     * directory.
-     * 
-     * @param workspaceDirectory
-     *            is the directory where the persisted results can be found.
-     * @return
-     */
-    public static AnalysisRun open(File workspaceDirectory) {
-	AnalysisRunImpl projectAnalyser = new AnalysisRunImpl(
-		workspaceDirectory);
-	if (!projectAnalyser.openAndReadSettings()) {
-	    return null;
-	}
-	return projectAnalyser;
-    }
+    private static final String SOURCE_DIRECTORY_KEY = "ProjectAnalyzer.projectDirectory";
 
-    private static final String PROJECT_DIRECTORY_KEY = "ProjectAnalyzer.projectDirectory";
-    private static final String SETTINGS_FILE_HEADER = "***********************************************************************\n"
-	    + "* These are the settings of the analysis workspace.                   *\n"
-	    + "***********************************************************************\n"
-	    + "\n";
-
-    private static final String SETTINGS_FILENAME = "settings.properties";
-    private static final String ANALYZED_FILES_FILENAME = "analzsed_files.persist";
+    private static final String ANALYZED_FILES_FILENAME = "analyzed_files.persist";
     private static final String FAILED_FILES_FILENAME = "failed_files.persist";
     private static final String SEARCH_CONFIGURATION_FILENAME = "search_configuration.persist";
+    private static final String ANALYSIS_RUN_PROPERTIES_FILE = "analysis_run.properties";
 
-    private final File SETTINGS_FILE;
-    private final File ANALYZED_FILES_FILE;
-    private final File FAILED_FILES_FILE;
-    private final File SEARCH_CONFIGURATION_FILE;
-    private final File workspaceDirectory;
+    private final File runDirectory;
+
+    private transient final FileAnalysisFactory analyzerFactory = FileAnalysisFactory
+	    .createFactory();
+
     private final List<AnalyzedFile> analyzedFiles = new ArrayList<AnalyzedFile>();
     private final List<File> failedFiles = new ArrayList<File>();
     private FileTree fileTree = new FileTree(null, "");
-    private transient final FileAnalysisFactory analyzerFactory = FileAnalysisFactory
-	    .createFactory();
-    private final FileSearchConfiguration searchConfig;
+    private FileSearchConfiguration searchConfig;
 
-    private File projectDirectory;
+    private UUID uuid;
+    private Date creationTime;
+    private long timeOfRun;
+    private File sourceDirectory;
 
     /**
      * This constructor is used to create a new analysis run. All setup
      * information is set and is immutable.
      * 
      * @param name
-     * @param workspaceDirectory
+     * @param runDirectory
      * @param searchConfiguration
      */
-    private AnalysisRunImpl(String name, File workspaceDirectory,
-	    FileSearchConfiguration searchConfiguration) {
+    private AnalysisRunImpl(File runDirectory, String name) {
 	super(name);
-	this.workspaceDirectory = workspaceDirectory;
-	this.searchConfig = searchConfiguration;
-
-	SETTINGS_FILE = new File(workspaceDirectory, SETTINGS_FILENAME);
-	ANALYZED_FILES_FILE = new File(workspaceDirectory,
-		ANALYZED_FILES_FILENAME);
-	FAILED_FILES_FILE = new File(workspaceDirectory, FAILED_FILES_FILENAME);
-	SEARCH_CONFIGURATION_FILE = new File(workspaceDirectory,
-		SEARCH_CONFIGURATION_FILENAME);
-    }
-
-    /**
-     * This constructor is used to open an existing analysis run.
-     * 
-     * @param workspaceDirectory
-     */
-    private AnalysisRunImpl(File workspaceDirectory) {
-	this("", workspaceDirectory, new FileSearchConfiguration());
+	this.runDirectory = runDirectory;
     }
 
     /**
      * This methods creates a new project directory.
      * 
-     * @param projectDirectory
+     * @param sourceDirectory
+     * @param searchConfiguration
+     * @param name
+     * @param uuid2
      * @return
+     * @throws AnalysisStoreException
+     * @throws IOException
      */
-    boolean createProjectDirectory(File projectDirectory) {
-	this.projectDirectory = projectDirectory;
-	DirectoryUtilities.checkAndCreateDirectory(workspaceDirectory);
-	if (!writeSettings()) {
-	    return false;
+    void create(File sourceDirectory, UUID uuid,
+	    FileSearchConfiguration searchConfiguration)
+	    throws AnalysisStoreException {
+	try {
+	    this.sourceDirectory = sourceDirectory;
+	    this.uuid = uuid;
+	    this.searchConfig = searchConfiguration;
+	    this.creationTime = new Date();
+	    this.timeOfRun = 0;
+	    DirectoryUtilities.checkAndCreateDirectory(runDirectory);
+	    new File(runDirectory, DIRECTORY_FLAG).createNewFile();
+	    saveProperties();
+	    writeSearchConfiguration();
+	    storeProjectInformation();
+	} catch (IOException e) {
+	    throw new AnalysisStoreException("Could not create analysis run!",
+		    e);
 	}
-	if (!writeSearchConfiguration()) {
-	    return false;
-	}
-	return true;
     }
 
-    private boolean writeSearchConfiguration() {
+    private void saveProperties() throws IOException {
+	Properties properties = new Properties();
+	properties.put("uuid", uuid.toString());
+	properties.put("creation.time", String.valueOf(creationTime.getTime()));
+	properties.put("run.time", String.valueOf(timeOfRun));
+	properties.put(AnalysisRunImpl.class.getSimpleName() + ".name",
+		getName());
+	properties.put(SOURCE_DIRECTORY_KEY, sourceDirectory.toString());
+	FileWriter writer = new FileWriter(new File(runDirectory,
+		ANALYSIS_RUN_PROPERTIES_FILE));
 	try {
-	    FileOutputStream fileOutputStream = new FileOutputStream(
-		    SEARCH_CONFIGURATION_FILE);
-	    try {
-		ObjectOutputStream objectOutputStream = new ObjectOutputStream(
-			fileOutputStream);
-		try {
-		    objectOutputStream.writeObject(searchConfig);
-		    return true;
-		} finally {
-		    objectOutputStream.close();
-		}
-	    } finally {
-		fileOutputStream.close();
-	    }
-	} catch (FileNotFoundException e) {
-	    logger.error(e.getMessage(), e);
-	} catch (IOException e) {
-	    logger.error(e.getMessage(), e);
+	    properties.store(writer, "");
+	} finally {
+	    writer.close();
 	}
-	return false;
+    }
+
+    private void writeSearchConfiguration() throws IOException {
+	FileOutputStream fileOutputStream = new FileOutputStream(new File(
+		runDirectory, SEARCH_CONFIGURATION_FILENAME));
+	try {
+	    ObjectOutputStream objectOutputStream = new ObjectOutputStream(
+		    fileOutputStream);
+	    try {
+		objectOutputStream.writeObject(searchConfig);
+	    } finally {
+		objectOutputStream.close();
+	    }
+	} finally {
+	    fileOutputStream.close();
+	}
     }
 
     /**
      * This method opens the project directory and loads all information files.
      * 
      * @return
+     * @throws AnalysisStoreException
      */
-    boolean openAndReadSettings() {
-	if (!workspaceDirectory.exists()) {
-	    return false;
+    void open() throws AnalysisStoreException {
+	try {
+	    if (!runDirectory.exists()) {
+		throw new IOException("Analysis run directory '" + runDirectory
+			+ "' does not exist!");
+	    }
+	    loadProperties();
+	    readSearchConfiguration();
+	    loadProjectInformation();
+	} catch (IOException e) {
+	    throw new AnalysisStoreException("Could not open analysis run!", e);
 	}
-	if (!readSettings()) {
-	    return false;
-	}
-	if (!readSearchConfiguration()) {
-	    return false;
-	}
-	if (!loadProjectInformation()) {
-	    return false;
-	}
-	return true;
     }
 
-    private boolean readSearchConfiguration() {
+    private void loadProperties() throws IOException {
+	Properties properties = new Properties();
+	FileReader reader = new FileReader(new File(runDirectory,
+		ANALYSIS_RUN_PROPERTIES_FILE));
 	try {
-	    FileInputStream fileInputStream = new FileInputStream(
-		    SEARCH_CONFIGURATION_FILE);
+	    properties.load(reader);
+	    uuid = UUID.fromString(properties.get("uuid").toString());
+	    creationTime = new Date(Long.valueOf(properties
+		    .get("creation.time").toString()));
+	    timeOfRun = Long.valueOf(properties.get("run.time").toString());
+	    sourceDirectory = new File(
+		    properties.getProperty(SOURCE_DIRECTORY_KEY));
+	    setName(properties.getProperty(
+		    AnalysisRunImpl.class.getSimpleName() + ".name", "unnamed"));
+	} finally {
+	    reader.close();
+	}
+    }
+
+    private void readSearchConfiguration() throws IOException {
+	try {
+	    searchConfig = new FileSearchConfiguration();
+	    FileInputStream fileInputStream = new FileInputStream(new File(
+		    runDirectory, SEARCH_CONFIGURATION_FILENAME));
 	    try {
 		ObjectInputStream objectOutputStream = new ObjectInputStream(
 			fileInputStream);
@@ -216,85 +241,33 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
 			    .getDirectoryIncludes());
 		    searchConfig.setFileExcludes(config.getFileExcludes());
 		    searchConfig.setFileIncludes(config.getFileIncludes());
-		    return true;
 		} finally {
 		    objectOutputStream.close();
 		}
 	    } finally {
 		fileInputStream.close();
 	    }
-	} catch (FileNotFoundException e) {
-	    logger.error(e.getMessage(), e);
 	} catch (ClassNotFoundException e) {
-	    logger.error(e.getMessage(), e);
-	} catch (IOException e) {
-	    logger.error(e.getMessage(), e);
+	    throw new RuntimeException(e);
 	}
-	return false;
     }
 
-    /**
-     * This method writes the project settings to the project directory.
-     * 
-     * @return
-     */
-    private boolean writeSettings() {
-	try {
-	    Properties properties = new Properties();
-	    properties.put(AnalysisRunImpl.class.getSimpleName() + ".name",
-		    getName());
-	    properties.put(AnalysisRunImpl.class.getSimpleName()
-		    + ".projectDirectory", projectDirectory.toString());
-	    FileOutputStream fileOutputStream = new FileOutputStream(
-		    SETTINGS_FILE);
-	    try {
-		properties.store(fileOutputStream, SETTINGS_FILE_HEADER);
-		return true;
-	    } finally {
-		fileOutputStream.close();
-	    }
-	} catch (FileNotFoundException e) {
-	    logger.error(e.getMessage(), e);
-	} catch (IOException e) {
-	    logger.error(e.getMessage(), e);
-	}
-	return false;
-    }
-
-    private boolean readSettings() {
-	try {
-	    Properties properties = new Properties();
-	    properties.load(new FileInputStream(SETTINGS_FILE));
-	    projectDirectory = new File(
-		    properties.getProperty(PROJECT_DIRECTORY_KEY));
-	    setName(properties.getProperty(
-		    AnalysisRunImpl.class.getSimpleName() + ".name", "unnamed"));
-	    return true;
-	} catch (FileNotFoundException e) {
-	    logger.error(e.getMessage(), e);
-	} catch (IOException e) {
-	    logger.error(e.getMessage(), e);
-	}
-	return false;
-    }
-
-    @SuppressWarnings("unchecked")
-    private boolean loadProjectInformation() {
-	try {
-	    analyzedFiles
-		    .addAll((List<AnalyzedFile>) restore(ANALYZED_FILES_FILE));
-	    failedFiles.addAll((List<File>) restore(FAILED_FILES_FILE));
-	    return true;
-	} catch (IOException e) {
-	    logger.error(e.getMessage(), e);
-	}
-	return false;
+    private void loadProjectInformation() throws IOException {
+	@SuppressWarnings("unchecked")
+	List<AnalyzedFile> analyzed = (List<AnalyzedFile>) restore(new File(
+		runDirectory, ANALYZED_FILES_FILENAME));
+	analyzedFiles.addAll(analyzed);
+	@SuppressWarnings("unchecked")
+	List<File> failed = (List<File>) restore(new File(runDirectory,
+		FAILED_FILES_FILENAME));
+	failedFiles.addAll(failed);
     }
 
     private void storeProjectInformation() {
 	try {
-	    persist(analyzedFiles, ANALYZED_FILES_FILE);
-	    persist(failedFiles, FAILED_FILES_FILE);
+	    persist(analyzedFiles, new File(runDirectory,
+		    ANALYZED_FILES_FILENAME));
+	    persist(failedFiles, new File(runDirectory, FAILED_FILES_FILENAME));
 	} catch (IOException e) {
 	    logger.error(e.getMessage(), e);
 	}
@@ -302,11 +275,17 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
 
     @Override
     protected IStatus run(IProgressMonitor monitor) {
-	reset();
-	IStatus retVal = analyzeFiles(monitor);
-	storeProjectInformation();
-	monitor.done();
-	return retVal;
+	try {
+	    reset();
+	    IStatus retVal = analyzeFiles(monitor);
+	    saveProperties();
+	    storeProjectInformation();
+	    monitor.done();
+	    return retVal;
+	} catch (IOException e) {
+	    return new Status(IStatus.ERROR, AnalysisRunImpl.class.getName(),
+		    "Could not finish analysis run!", e);
+	}
     }
 
     /**
@@ -318,7 +297,7 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
     }
 
     private IStatus analyzeFiles(final IProgressMonitor monitor) {
-	fileTree = FileSearch.getFileTree(projectDirectory, searchConfig);
+	fileTree = FileSearch.getFileTree(sourceDirectory, searchConfig);
 
 	List<File> files = getFileListFromFileTree();
 	int processors = Runtime.getRuntime().availableProcessors();
@@ -359,7 +338,7 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
 	List<File> files = new ArrayList<File>();
 	for (FileTree fileTreeNode : fileTree) {
 	    File file = fileTreeNode.getPathFile(false);
-	    if (new File(projectDirectory, file.getPath()).isFile()) {
+	    if (new File(sourceDirectory, file.getPath()).isFile()) {
 		files.add(file);
 	    }
 	}
@@ -383,7 +362,7 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
     private void analyzeFile(File file) {
 	try {
 	    FileAnalyzerImpl fileAnalyzer = new FileAnalyzerImpl(
-		    projectDirectory, workspaceDirectory, file);
+		    sourceDirectory, runDirectory, file);
 	    fileAnalyzer.analyze();
 	    if (fileAnalyzer.isAnalyzed()) {
 		AnalyzedFile analyzedFile = fileAnalyzer.getAnalyzedFile();
@@ -404,7 +383,7 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
      * @see com.puresol.coding.analysis.IProjectAnalyzer#getWorkspaceDirectory()
      */
     public File getWorkspaceDirectory() {
-	return workspaceDirectory;
+	return runDirectory;
     }
 
     /*
@@ -413,7 +392,7 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
      * @see com.puresol.coding.analysis.IProjectAnalyzer#getProjectDirectory()
      */
     public File getProjectDirectory() {
-	return projectDirectory;
+	return sourceDirectory;
     }
 
     /*
@@ -499,8 +478,7 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
 	}
     }
 
-    private static <T> T restore(File file) throws FileNotFoundException,
-	    IOException {
+    private static <T> T restore(File file) throws IOException {
 	ObjectInputStream objectOutputStream = new ObjectInputStream(
 		new FileInputStream(file));
 	try {
@@ -517,13 +495,12 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
 
     @Override
     public AnalysisRunInformation getInformation() {
-	// TODO Auto-generated method stub
-	return null;
+	return new AnalysisRunInformation(uuid, creationTime, timeOfRun,
+		"<Not implemented, yet!>");
     }
 
-    public static boolean isAnalysisRunDirectory(File analysisDirectory) {
-	// TODO Auto-generated method stub
-	return false;
+    public static boolean isAnalysisRunDirectory(File runDirectory) {
+	return new File(runDirectory, DIRECTORY_FLAG).exists();
     }
 
 }

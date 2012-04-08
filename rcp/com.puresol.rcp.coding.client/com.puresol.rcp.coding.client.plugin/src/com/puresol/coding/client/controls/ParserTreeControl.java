@@ -2,6 +2,8 @@ package com.puresol.coding.client.controls;
 
 import java.io.IOException;
 
+import org.eclipse.core.runtime.ILog;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -11,8 +13,10 @@ import org.eclipse.swt.widgets.Tree;
 import swing2swt.layout.BorderLayout;
 
 import com.puresol.coding.analysis.api.Analysis;
+import com.puresol.coding.analysis.api.AnalysisStoreException;
 import com.puresol.coding.analysis.api.AnalyzedFile;
 import com.puresol.coding.analysis.api.FileAnalysis;
+import com.puresol.coding.client.Activator;
 import com.puresol.coding.client.content.ParserTreeContentProvider;
 import com.puresol.coding.client.content.ParserTreeLabelProvider;
 
@@ -23,6 +27,8 @@ import com.puresol.coding.client.content.ParserTreeLabelProvider;
  * 
  */
 public class ParserTreeControl extends Composite {
+
+    private static final ILog logger = Activator.getDefault().getLog();
 
     private final Label lblNewLabel;
     private final Tree tree;
@@ -50,15 +56,20 @@ public class ParserTreeControl extends Composite {
      */
     public void setContentAndUpdateContent(AnalyzedFile analyzedFile,
 	    Analysis analysis) throws IOException {
-	FileAnalysis fileAnalysis = analysis.loadLastAnalysisRun().getAnalysis(
-		analyzedFile);
-	if (fileAnalysis != null) {
-	    lblNewLabel.setText(analysis.getInformation().getName() + ": "
-		    + analyzedFile.getFile());
-	    treeViewer.setInput(fileAnalysis.getParserTree());
-	} else {
-	    lblNewLabel.setText("");
-	    treeViewer.setInput(null);
+	try {
+	    FileAnalysis fileAnalysis = analysis.loadLastAnalysisRun()
+		    .getAnalysis(analyzedFile);
+	    if (fileAnalysis != null) {
+		lblNewLabel.setText(analysis.getInformation().getName() + ": "
+			+ analyzedFile.getFile());
+		treeViewer.setInput(fileAnalysis.getParserTree());
+	    } else {
+		lblNewLabel.setText("");
+		treeViewer.setInput(null);
+	    }
+	} catch (AnalysisStoreException e) {
+	    logger.log(new Status(Status.ERROR, ParserTreeControl.class
+		    .getName(), "Can not read analysis store!", e));
 	}
     }
 }

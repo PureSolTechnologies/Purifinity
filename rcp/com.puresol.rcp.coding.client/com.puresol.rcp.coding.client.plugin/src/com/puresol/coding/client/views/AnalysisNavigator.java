@@ -1,46 +1,34 @@
 package com.puresol.coding.client.views;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 
-import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.IJobChangeListener;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.jface.viewers.DoubleClickEvent;
-import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.jface.viewers.ListViewer;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Tree;
-import org.eclipse.swt.widgets.TreeItem;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PartInitException;
+import org.eclipse.swt.widgets.List;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.progress.UIJob;
 
-import com.puresol.coding.analysis.api.Analysis;
-import com.puresol.coding.analysis.api.AnalyzedFile;
-import com.puresol.coding.client.Activator;
-import com.puresol.coding.client.content.AnalysisLabelProvider;
-import com.puresol.coding.client.content.AnalysisNavigatorModel;
-import com.puresol.coding.client.content.AnalysisNavigatorTreeNodeElement;
-import com.puresol.coding.client.content.AnalysisTreeContentProvider;
-import com.puresol.coding.client.editors.DirectoryAnalysisEditorInput;
-import com.puresol.coding.client.editors.EditorIds;
-import com.puresol.coding.client.editors.FileAnalysisEditorInput;
-import com.puresol.coding.client.editors.NotAnalyzedEditorInput;
+import com.puresol.coding.analysis.api.AnalysisInformation;
+import com.puresol.coding.analysis.api.AnalysisStore;
+import com.puresol.coding.analysis.api.AnalysisStoreException;
+import com.puresol.coding.analysis.api.AnalysisStoreFactory;
+import com.puresol.coding.client.content.AnalysisListContentProvider;
+import com.puresol.coding.client.content.AnalysisListLabelProvider;
 import com.puresol.coding.client.wizards.NewAnalysisJob;
 
 /**
@@ -51,39 +39,39 @@ import com.puresol.coding.client.wizards.NewAnalysisJob;
  * 
  */
 public class AnalysisNavigator extends ViewPart implements IJobChangeListener,
-	ISelectionProvider, SelectionListener, IDoubleClickListener {
+	ISelectionProvider, SelectionListener {
 
-    private static final ILog logger = Activator.getDefault().getLog();
+    private final AnalysisStore store = AnalysisStoreFactory.getInstance();
 
     public AnalysisNavigator() {
     }
 
-    private Tree tree;
-    private TreeViewer treeViewer;
+    private List analyzesList;
+    private ListViewer analyzesViewer;
     private ISelection selection = null;
 
-    private final List<ISelectionChangedListener> listeners = new ArrayList<ISelectionChangedListener>();
+    private final java.util.List<ISelectionChangedListener> listeners = new ArrayList<ISelectionChangedListener>();
 
     @Override
     public void createPartControl(Composite parent) {
 	parent.setLayout(new FillLayout(SWT.HORIZONTAL));
 
-	tree = new Tree(parent, SWT.BORDER);
-	treeViewer = new TreeViewer(tree);
-	treeViewer.addDoubleClickListener(this);
-	treeViewer.setContentProvider(new AnalysisTreeContentProvider());
-	treeViewer.setInput(AnalysisNavigatorModel.INSTANCE);
-	treeViewer.setLabelProvider(new AnalysisLabelProvider());
-	tree.setVisible(true);
-	tree.addSelectionListener(this);
+	analyzesList = new List(parent, SWT.BORDER);
+	analyzesViewer = new ListViewer(analyzesList);
+	analyzesViewer.setContentProvider(new AnalysisListContentProvider());
+	analyzesViewer.setLabelProvider(new AnalysisListLabelProvider());
+	analyzesList.redraw();
+	analyzesViewer.refresh();
+	analyzesList.addSelectionListener(this);
 
+	updateAnalysisList();
 	Job.getJobManager().addJobChangeListener(this);
 	getSite().setSelectionProvider(this);
     }
 
     @Override
     public void setFocus() {
-	tree.setFocus();
+	analyzesList.setFocus();
     }
 
     @Override
@@ -100,19 +88,27 @@ public class AnalysisNavigator extends ViewPart implements IJobChangeListener,
     public void done(IJobChangeEvent event) {
 	Job job = event.getJob();
 	if (job.getClass().equals(NewAnalysisJob.class)) {
-	    NewAnalysisJob newAnalysisJob = (NewAnalysisJob) job;
-	    AnalysisNavigatorModel.INSTANCE.addAnalysis(newAnalysisJob
-		    .getAnalysis());
-	    UIJob refresh = new UIJob("Refresh Analysis Navigator") {
-
-		@Override
-		public IStatus runInUIThread(IProgressMonitor monitor) {
-		    treeViewer.refresh();
-		    return Status.OK_STATUS;
-		}
-	    };
-	    refresh.schedule();
+	    updateAnalysisList();
 	}
+    }
+
+    private void updateAnalysisList() {
+	UIJob uiJob = new UIJob("Update Analysis Navigator") {
+	    @Override
+	    public IStatus runInUIThread(IProgressMonitor monitor) {
+		try {
+		    analyzesViewer.setInput(store.getAllAnalysisInformation());
+		    return Status.OK_STATUS;
+		} catch (AnalysisStoreException e) {
+		    return new Status(
+			    Status.ERROR,
+			    AnalysisNavigator.class.getName(),
+			    "Could not retrieve available analyzes from analysis store!",
+			    e);
+		}
+	    }
+	};
+	uiJob.schedule();
     }
 
     @Override
@@ -157,29 +153,13 @@ public class AnalysisNavigator extends ViewPart implements IJobChangeListener,
 
     @Override
     public void widgetSelected(SelectionEvent e) {
-	if (e.getSource().equals(tree)) {
-	    TreeItem[] treeItems = tree.getSelection();
-	    if (treeItems.length > 0) {
-		AnalysisSelection analysisSelection = createAnalysisNavigatorSelection(treeItems[0]);
-		setSelection(analysisSelection);
-	    }
+	if (e.getSource() == analyzesList) {
+	    StructuredSelection selection = (StructuredSelection) analyzesViewer
+		    .getSelection();
+	    AnalysisInformation information = (AnalysisInformation) selection
+		    .getFirstElement();
+	    setSelection(new AnalysisSelection(information));
 	}
-    }
-
-    /**
-     * This method takes the tree items of the tree selection and creates a
-     * navigator selection.
-     * 
-     * @param treeItems
-     * @return
-     */
-    private AnalysisSelection createAnalysisNavigatorSelection(TreeItem treeItem) {
-	AnalysisNavigatorTreeNodeElement analyzer = (AnalysisNavigatorTreeNodeElement) treeItem
-		.getData();
-	AnalysisSelection analysisSelection = new AnalysisSelection(
-		analyzer.getAnalysis(), analyzer.getSourceFile().getPathFile(
-			false));
-	return analysisSelection;
     }
 
     @Override
@@ -187,53 +167,4 @@ public class AnalysisNavigator extends ViewPart implements IJobChangeListener,
 	// intentionally left blank.
     }
 
-    /**
-     * This method is implemened for IDoubleClickListener and is used to open a
-     * file editor.
-     */
-    @Override
-    public void doubleClick(DoubleClickEvent event) {
-	try {
-	    if (event.getSource() == treeViewer) {
-		TreeItem[] treeItems = tree.getSelection();
-		if (treeItems.length > 0) {
-		    AnalysisSelection analysisSelection = createAnalysisNavigatorSelection(treeItems[0]);
-		    Analysis analysis = analysisSelection.getAnalysis();
-		    File sourceFile = analysisSelection.getSourceFile();
-
-		    File originalFile = new File(analysis.getSettings()
-			    .getSourceDirectory(), sourceFile.getPath());
-		    if (!originalFile.exists()) {
-			logger.log(new Status(Status.ERROR,
-				AnalysisNavigator.class.getName(),
-				"Could not find original file: '"
-					+ originalFile.getPath() + "'"));
-			return;
-		    }
-		    IWorkbenchPage page = getSite().getPage();
-		    if (originalFile.isFile()) {
-			AnalyzedFile analyzedFile = analysis
-				.loadLastAnalysisRun().findAnalyzedFile(
-					sourceFile);
-			if (analyzedFile != null) {
-			    page.openEditor(new FileAnalysisEditorInput(
-				    analyzedFile, analysis),
-				    EditorIds.FILE_ANALYSIS_EDITOR_ID);
-			} else {
-			    page.openEditor(new NotAnalyzedEditorInput(
-				    originalFile),
-				    EditorIds.NOT_ANALYZED_ANALYSIS_EDITOR_ID);
-			}
-		    } else {
-			page.openEditor(new DirectoryAnalysisEditorInput(
-				originalFile, analysis),
-				EditorIds.DIRECTORY_ANALYSIS_EDITOR_ID);
-		    }
-		}
-	    }
-	} catch (PartInitException e) {
-	    logger.log(new Status(Status.ERROR, AnalysisNavigator.class
-		    .getName(), e.getMessage(), e));
-	}
-    }
 }
