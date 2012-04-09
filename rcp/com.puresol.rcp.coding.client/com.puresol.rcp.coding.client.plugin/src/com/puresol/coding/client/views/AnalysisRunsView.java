@@ -41,6 +41,8 @@ public class AnalysisRunsView extends ViewPart implements SelectionListener,
 
     private static final ILog logger = Activator.getDefault().getLog();
 
+    public static final String ID = "com.puresol.coding.client.AnalysisRunsView";
+
     private final ImageRegistry imageRegistry = Activator.getDefault()
 	    .getImageRegistry();
     private final Image databaseRefreshImage = imageRegistry

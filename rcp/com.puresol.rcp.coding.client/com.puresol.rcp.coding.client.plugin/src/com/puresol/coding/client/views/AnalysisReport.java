@@ -34,6 +34,8 @@ public class AnalysisReport extends ViewPart implements ISelectionListener {
 
     private static final ILog logger = Activator.getDefault().getLog();
 
+    public static final String ID = "com.puresol.coding.client.AnalysisReport";
+
     private Text name;
     private Text numAnalyzedFiles;
     private Text numFailedFiles;

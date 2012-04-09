@@ -58,6 +58,8 @@ public class AnalyzesView extends ViewPart implements IJobChangeListener,
 
     private static final ILog logger = Activator.getDefault().getLog();
 
+    public static final String ID = "com.puresol.coding.client.AnalyzesView";
+
     private final ImageRegistry imageRegistry = Activator.getDefault()
 	    .getImageRegistry();
     private final Image databaseRefreshImage = imageRegistry

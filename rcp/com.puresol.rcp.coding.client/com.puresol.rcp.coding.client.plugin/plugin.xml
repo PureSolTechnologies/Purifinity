@@ -191,7 +191,7 @@
             category="com.puresol.coding.Analysis"
             class="com.puresol.coding.client.views.AnalyzesView"
             icon="icons/16x16/analyzes_view.png"
-            id="com.puresol.coding.client.AnalysisNavigator"
+            id="com.puresol.coding.client.AnalyzesView"
             name="Analyzes"
             restorable="true">
       </view>
@@ -200,7 +200,7 @@
             category="com.puresol.coding.Analysis"
             class="com.puresol.coding.client.views.AnalysisRunsView"
             icon="icons/16x16/analysis_runs_view.png"
-            id="com.puresol.coding.client.AnalysisRunNavigator"
+            id="com.puresol.coding.client.AnalysisRunsView"
             name="Analysis Runs"
             restorable="true">
       </view>
@@ -208,7 +208,7 @@
             category="com.puresol.coding.Analysis"
             class="com.puresol.coding.client.views.AnalysisRunContentBrowserView"
             icon="icons/16x16/folders_explorer.png"
-            id="com.puresol.coding.client.SourceNavigator"
+            id="com.puresol.coding.client.AnalysisRunContentBrowserView"
             name="Analysis Run Content Explorer"
             restorable="true">
       </view>

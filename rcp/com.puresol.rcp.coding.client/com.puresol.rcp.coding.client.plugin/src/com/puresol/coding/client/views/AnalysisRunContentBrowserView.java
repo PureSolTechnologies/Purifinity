@@ -13,15 +13,18 @@ import swing2swt.layout.BorderLayout;
 
 import com.puresol.coding.analysis.api.Analysis;
 import com.puresol.coding.analysis.api.AnalysisRun;
-import com.puresol.coding.client.content.FileTreeContentProvider;
-import com.puresol.coding.client.content.FileTreeLabelProvider;
+import com.puresol.coding.client.content.AnalysisContentTreeContentProvider;
+import com.puresol.coding.client.content.AnalysisContentTreeLabelProvider;
 
-public class AnalysisRunContentBrowserView extends ViewPart implements ISelectionListener {
+public class AnalysisRunContentBrowserView extends ViewPart implements
+	ISelectionListener {
 
+    public static final String ID = "com.puresol.coding.client.AnalysisRunContentBrowserView";
     private Analysis analysis;
     private AnalysisRun analysisRun;
     private Tree fileTree;
     private TreeViewer fileTreeViewer;
+    private AnalysisContentTreeLabelProvider labelProvider;
 
     public AnalysisRunContentBrowserView() {
     }
@@ -32,8 +35,10 @@ public class AnalysisRunContentBrowserView extends ViewPart implements ISelectio
 
 	fileTree = new Tree(parent, SWT.BORDER);
 	fileTreeViewer = new TreeViewer(fileTree);
-	fileTreeViewer.setContentProvider(new FileTreeContentProvider());
-	fileTreeViewer.setLabelProvider(new FileTreeLabelProvider());
+	fileTreeViewer
+		.setContentProvider(new AnalysisContentTreeContentProvider());
+	labelProvider = new AnalysisContentTreeLabelProvider();
+	fileTreeViewer.setLabelProvider(labelProvider);
 
 	getSite().getWorkbenchWindow().getSelectionService()
 		.addSelectionListener(this);
@@ -52,6 +57,7 @@ public class AnalysisRunContentBrowserView extends ViewPart implements ISelectio
 	} else if (selection instanceof AnalysisRunSelection) {
 	    AnalysisRunSelection analysisRunSelection = (AnalysisRunSelection) selection;
 	    analysisRun = analysisRunSelection.getAnalysisRun();
+	    labelProvider.setAnalysisRun(analysisRun);
 	    fileTreeViewer.setInput(analysisRun.getFileTree());
 	}
     }

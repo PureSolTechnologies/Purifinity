@@ -48,6 +48,7 @@ public class Activator extends AbstractUIPlugin {
 	add(reg, ClientImages.FOLDER_EDIT_16x16);
 	add(reg, ClientImages.FOLDER_DELETE_16x16);
 	add(reg, ClientImages.DATABASE_FOLDER_16x16);
+	add(reg, ClientImages.DOCUMENT_EMPTY_16x16);
 
 	add(reg, ClientImages.ANALYSIS_16x16);
 	add(reg, ClientImages.ANALYZES_VIEW_16x16);
