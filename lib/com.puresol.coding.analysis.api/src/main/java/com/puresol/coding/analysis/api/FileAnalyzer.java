@@ -11,6 +11,7 @@
 package com.puresol.coding.analysis.api;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * This is a interface to a analyzer. It's used to implement a language
@@ -26,7 +27,7 @@ public interface FileAnalyzer extends FileAnalysis {
      * 
      * @throws AnalyzerException
      */
-    public void analyze() throws AnalyzerException;
+    public void analyze() throws AnalyzerException, IOException;
 
     /**
      * This method persists the analyzer into a file specified.

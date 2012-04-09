@@ -1,10 +1,11 @@
 package com.puresol.coding.analysis;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 import java.util.Properties;
 
 import org.slf4j.Logger;
@@ -12,10 +13,17 @@ import org.slf4j.LoggerFactory;
 
 import com.puresol.coding.analysis.api.AnalyzedFile;
 import com.puresol.coding.analysis.api.AnalyzerException;
+import com.puresol.coding.analysis.api.CodeRange;
 import com.puresol.coding.analysis.api.FileAnalyzer;
+import com.puresol.coding.analysis.api.ProgrammingLanguage;
+import com.puresol.uhura.parser.ParserTree;
 import com.puresol.utils.FileUtilities;
+import com.puresol.utils.HashAlgorithm;
+import com.puresol.utils.HashId;
 
-public class FileAnalyzerImpl {
+public class FileAnalyzerImpl implements FileAnalyzer {
+
+    private static final long serialVersionUID = -5962553384294545665L;
 
     private static final Logger logger = LoggerFactory
 	    .getLogger(FileAnalyzerImpl.class);
@@ -27,6 +35,8 @@ public class FileAnalyzerImpl {
     private AnalyzedFile analyzedFile = null;
     private boolean analyzed = false;
     private boolean updated = false;
+    private Date time;
+    private long timeOfRun;
 
     public FileAnalyzerImpl(File sourceDirectory, File targetDirectory,
 	    File file) throws AnalyzerException {
@@ -36,13 +46,19 @@ public class FileAnalyzerImpl {
 	this.file = file;
     }
 
+    @Override
     public void analyze() throws AnalyzerException, IOException {
 	try {
 	    analyzed = false;
 	    updated = false;
 
-	    analyzedFile = new AnalyzedFile(sourceDirectory, file);
+	    HashId hashId = FileUtilities.createHashId(new File(
+		    sourceDirectory, file.getPath()), HashAlgorithm.SHA256);
+	    time = new Date();
+	    timeOfRun = System.currentTimeMillis();
 	    analyzeIfRequired();
+	    analyzedFile = new AnalyzedFile(hashId, file, new Date(), 0,
+		    getAnalyzer().getLanguage());
 	} catch (LanguageNotSupportedException e) {
 	    analyzedFile = null;
 	    logger.debug("File '" + file.getPath()
@@ -53,9 +69,9 @@ public class FileAnalyzerImpl {
 
     private void analyzeIfRequired() throws AnalyzerException,
 	    LanguageNotSupportedException, IOException {
-	if (FileUtilities.isUpdateRequired(analyzedFile.getSourceFile(),
-		AnalyzedFileHelper.getPropertyFile(targetDirectory,
-			analyzedFile))) {
+	if (FileUtilities.isUpdateRequired(
+		new File(sourceDirectory, file.getPath()), AnalyzedFileHelper
+			.getPropertyFile(targetDirectory, analyzedFile))) {
 	    AnalyzedFileHelper.getAnalyzerFile(targetDirectory, analyzedFile)
 		    .getParentFile().mkdirs();
 	    analyzeFile();
@@ -68,12 +84,13 @@ public class FileAnalyzerImpl {
 	     */
 	    analyzed = true;
 	}
+	timeOfRun = System.currentTimeMillis() - timeOfRun;
     }
 
-    private void analyzeFile() throws FileNotFoundException, AnalyzerException,
+    private void analyzeFile() throws IOException, AnalyzerException,
 	    LanguageNotSupportedException {
 	analyzer = FileAnalysisFactory.createFactory().create(
-		analyzedFile.getSourceFile());
+		new File(sourceDirectory, file.getPath()));
 	analyzer.analyze();
 	analyzer.persist(AnalyzedFileHelper.getAnalyzerFile(targetDirectory,
 		analyzedFile));
@@ -105,6 +122,41 @@ public class FileAnalyzerImpl {
 
     public boolean isUpdated() {
 	return updated;
+    }
+
+    @Override
+    public Date getTimeStamp() throws IOException {
+	return time;
+    }
+
+    @Override
+    public long getTimeOfRun() throws IOException {
+	return timeOfRun;
+    }
+
+    @Override
+    public ProgrammingLanguage getLanguage() throws IOException {
+	return analyzer.getLanguage();
+    }
+
+    @Override
+    public File getFile() {
+	return file;
+    }
+
+    @Override
+    public ParserTree getParserTree() throws IOException {
+	return analyzer.getParserTree();
+    }
+
+    @Override
+    public List<CodeRange> getAnalyzableCodeRanges() {
+	return analyzer.getAnalyzableCodeRanges();
+    }
+
+    @Override
+    public boolean persist(File file) {
+	return false;
     }
 
 }

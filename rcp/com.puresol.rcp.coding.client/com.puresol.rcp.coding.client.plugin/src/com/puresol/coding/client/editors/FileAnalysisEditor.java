@@ -98,8 +98,9 @@ public class FileAnalysisEditor extends EditorPart {
 	    metricsViewerTab.setControl(metricsControl);
 
 	    FileAnalysisEditorInput editorInput = (FileAnalysisEditorInput) getEditorInput();
-	    fileViewer.setFileAndUpdateContent(editorInput.getAnalysisFile()
-		    .getSourceFile());
+	    // FIXME !!!
+//	    fileViewer.setFileAndUpdateContent(editorInput.getAnalysisFile()
+//		    .getSourceFile());
 	    treeViewer.setContentAndUpdateContent(
 		    editorInput.getAnalysisFile(),
 		    editorInput.getAnalysis());

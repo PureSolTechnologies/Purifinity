@@ -1,12 +1,10 @@
 package com.puresol.coding.analysis.api;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.Serializable;
+import java.util.Date;
 
-import com.puresol.utils.FileUtilities;
-import com.puresol.utils.HashAlgorithm;
-import com.puresol.utils.ObjectUtilities;
+import com.puresol.utils.HashId;
 
 /**
  * This class is for keeping a list of analyzed files within ProjectAnalyzer.
@@ -20,42 +18,53 @@ public class AnalyzedFile implements Comparable<AnalyzedFile>, Serializable {
 
     private static final long serialVersionUID = 2030120585873480183L;
 
-    private final File sourceDirectory;
+    private final HashId hashId;
     private final File file;
-    private final int hashcode;
-    private final AnalyzedFileInformation information;
+    private final Date time;
+    private final long timeOfRun;
+    private final ProgrammingLanguage language;
 
-    public AnalyzedFile(File sourceDirectory, File file) throws IOException {
+    public AnalyzedFile(HashId hashId, File file, Date time, long timeOfRun,
+	    ProgrammingLanguage language) {
 	super();
-	if (sourceDirectory == null) {
-	    throw new IllegalArgumentException("sourceDirectory is null!");
-	}
-	if (file == null) {
-	    throw new IllegalArgumentException("file is null!");
-	}
-	this.sourceDirectory = sourceDirectory;
+	this.hashId = hashId;
 	this.file = file;
-	hashcode = ObjectUtilities.calculateConstantHashCode(sourceDirectory,
-		file);
-	information = new AnalyzedFileInformation(FileUtilities.createHashId(
-		getSourceFile(), HashAlgorithm.SHA256), file);
+	this.time = time;
+	this.timeOfRun = timeOfRun;
+	this.language = language;
     }
 
-    public final File getFile() {
+    public HashId getHashId() {
+	return hashId;
+    }
+
+    public File getFile() {
 	return file;
     }
 
-    public final File getSourceFile() {
-	return new File(sourceDirectory, file.getPath());
+    public Date getTime() {
+	return time;
     }
 
-    public final AnalyzedFileInformation getInformation() {
-	return information;
+    public long getTimeOfRun() {
+	return timeOfRun;
+    }
+
+    public ProgrammingLanguage getLanguage() {
+	return language;
     }
 
     @Override
     public int hashCode() {
-	return hashcode;
+	final int prime = 31;
+	int result = 1;
+	result = prime * result + ((file == null) ? 0 : file.hashCode());
+	result = prime * result + ((hashId == null) ? 0 : hashId.hashCode());
+	result = prime * result
+		+ ((language == null) ? 0 : language.hashCode());
+	result = prime * result + ((time == null) ? 0 : time.hashCode());
+	result = prime * result + (int) (timeOfRun ^ (timeOfRun >>> 32));
+	return result;
     }
 
     @Override
@@ -67,13 +76,27 @@ public class AnalyzedFile implements Comparable<AnalyzedFile>, Serializable {
 	if (getClass() != obj.getClass())
 	    return false;
 	AnalyzedFile other = (AnalyzedFile) obj;
-	if (this.hashcode != other.hashcode) {
-	    return false;
-	}
 	if (file == null) {
 	    if (other.file != null)
 		return false;
 	} else if (!file.equals(other.file))
+	    return false;
+	if (hashId == null) {
+	    if (other.hashId != null)
+		return false;
+	} else if (!hashId.equals(other.hashId))
+	    return false;
+	if (language == null) {
+	    if (other.language != null)
+		return false;
+	} else if (!language.equals(other.language))
+	    return false;
+	if (time == null) {
+	    if (other.time != null)
+		return false;
+	} else if (!time.equals(other.time))
+	    return false;
+	if (timeOfRun != other.timeOfRun)
 	    return false;
 	return true;
     }

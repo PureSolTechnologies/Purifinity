@@ -18,8 +18,8 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresol.coding.analysis.api.FileAnalyzer;
 import com.puresol.coding.analysis.api.AnalyzerException;
+import com.puresol.coding.analysis.api.FileAnalyzer;
 import com.puresol.coding.lang.fortran.Fortran;
 import com.puresol.trees.TreePrinter;
 import com.puresol.uhura.parser.ParserTree;
@@ -141,6 +141,9 @@ public class FortranSourceCodeDistributionTest {
 	    analyser = null;
 	    return true;
 	} catch (AnalyzerException e) {
+	    e.printStackTrace();
+	    return false;
+	} catch (IOException e) {
 	    e.printStackTrace();
 	    return false;
 	}
