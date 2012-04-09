@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -13,6 +14,7 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.ToolBar;
@@ -28,6 +30,7 @@ import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalysisRunInformation;
 import com.puresol.coding.analysis.api.AnalysisStoreException;
 import com.puresol.coding.client.Activator;
+import com.puresol.coding.client.ClientImages;
 import com.puresol.coding.client.content.AnalysisRunListContentProvider;
 import com.puresol.coding.client.content.AnalysisRunListLabelProvider;
 import com.puresol.coding.client.controls.ParserTreeControl;
@@ -36,6 +39,11 @@ public class AnalysisRunNavigator extends ViewPart implements
 	SelectionListener, ISelectionProvider, ISelectionListener {
 
     private static final ILog logger = Activator.getDefault().getLog();
+
+    private final ImageRegistry imageRegistry = Activator.getDefault()
+	    .getImageRegistry();
+    private final Image databaseRefreshImage = imageRegistry
+	    .get(ClientImages.DATABASE_REFRESH);
 
     private Analysis analysis;
     private List analysisRunsList;
@@ -64,6 +72,7 @@ public class AnalysisRunNavigator extends ViewPart implements
 	refresh = new ToolItem(toolBar, SWT.NONE);
 	refresh.setToolTipText("Refreshs the analysis runs for the selected analysis from the analysis store.");
 	refresh.setText("refresh");
+	refresh.setImage(databaseRefreshImage);
 	analysisRunsViewer
 		.setContentProvider(new AnalysisRunListContentProvider());
 	analysisRunsViewer.setLabelProvider(new AnalysisRunListLabelProvider());
@@ -130,9 +139,9 @@ public class AnalysisRunNavigator extends ViewPart implements
 		    .getSelection();
 	    AnalysisRunInformation information = (AnalysisRunInformation) selection
 		    .getFirstElement();
-	    AnalysisRun analysisRun = analysis.loadAnalysisRun(information.getUUID());
-	    setSelection(new AnalysisRunSelection(
-		    analysisRun));
+	    AnalysisRun analysisRun = analysis.loadAnalysisRun(information
+		    .getUUID());
+	    setSelection(new AnalysisRunSelection(analysisRun));
 	} catch (AnalysisStoreException e) {
 	    logger.log(new Status(Status.ERROR, ParserTreeControl.class
 		    .getName(), "Can not read analysis runs from store!", e));

@@ -1,6 +1,7 @@
 package com.puresol.coding.client;
 
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -47,6 +48,17 @@ public class Activator extends AbstractUIPlugin {
 		    + " plugin was never started!");
 	}
 	plugin = null;
+    }
+
+    @Override
+    protected void initializeImageRegistry(ImageRegistry reg) {
+	super.initializeImageRegistry(reg);
+	reg.put(ClientImages.DATABASE_REFRESH, ImageDescriptor
+		.createFromURL(Activator.class
+			.getResource("/icons/16x16/database_refresh.png")));
+	reg.put(ClientImages.FOLDER, ImageDescriptor
+		.createFromURL(Activator.class
+			.getResource("/icons/16x16/folder.png")));
     }
 
     /**

@@ -9,17 +9,19 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.IJobChangeListener;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
-import org.eclipse.jface.viewers.ListViewer;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.List;
+import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.part.ViewPart;
@@ -32,6 +34,7 @@ import com.puresol.coding.analysis.api.AnalysisStore;
 import com.puresol.coding.analysis.api.AnalysisStoreException;
 import com.puresol.coding.analysis.api.AnalysisStoreFactory;
 import com.puresol.coding.client.Activator;
+import com.puresol.coding.client.ClientImages;
 import com.puresol.coding.client.content.AnalysisListContentProvider;
 import com.puresol.coding.client.content.AnalysisListLabelProvider;
 import com.puresol.coding.client.wizards.NewAnalysisJob;
@@ -48,13 +51,18 @@ public class AnalysisNavigator extends ViewPart implements IJobChangeListener,
 
     private static final ILog logger = Activator.getDefault().getLog();
 
+    private final ImageRegistry imageRegistry = Activator.getDefault()
+	    .getImageRegistry();
+    private final Image databaseRefreshImage = imageRegistry
+	    .get(ClientImages.DATABASE_REFRESH);
     private final AnalysisStore store = AnalysisStoreFactory.getInstance();
 
     public AnalysisNavigator() {
+	super();
     }
 
-    private List analyzesList;
-    private ListViewer analyzesViewer;
+    private Table analyzesList;
+    private TableViewer analyzesViewer;
     private ISelection selection = null;
     private ToolItem refresh;
 
@@ -64,8 +72,8 @@ public class AnalysisNavigator extends ViewPart implements IJobChangeListener,
     public void createPartControl(Composite parent) {
 	parent.setLayout(new BorderLayout(0, 0));
 
-	analyzesList = new List(parent, SWT.BORDER);
-	analyzesViewer = new ListViewer(analyzesList);
+	analyzesList = new Table(parent, SWT.BORDER);
+	analyzesViewer = new TableViewer(analyzesList);
 
 	ToolBar toolBar = new ToolBar(parent, SWT.FLAT | SWT.RIGHT);
 	toolBar.setToolTipText("Refreshs the list of available analyzes.");
@@ -81,6 +89,7 @@ public class AnalysisNavigator extends ViewPart implements IJobChangeListener,
 
 	updateAnalysisList();
 	refresh.addSelectionListener(this);
+	refresh.setImage(databaseRefreshImage);
 	Job.getJobManager().addJobChangeListener(this);
 	getSite().setSelectionProvider(this);
     }
@@ -170,7 +179,9 @@ public class AnalysisNavigator extends ViewPart implements IJobChangeListener,
 
     private void refreshAnalysisList() {
 	try {
-	    analyzesViewer.setInput(store.getAllAnalysisInformation());
+	    if (!analyzesList.isDisposed()) {
+		analyzesViewer.setInput(store.getAllAnalysisInformation());
+	    }
 	} catch (AnalysisStoreException e) {
 	    logger.log(new Status(Status.ERROR, AnalysisNavigator.class
 		    .getName(),
