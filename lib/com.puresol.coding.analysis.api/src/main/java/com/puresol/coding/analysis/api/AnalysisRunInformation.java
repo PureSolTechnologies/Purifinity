@@ -14,14 +14,16 @@ public final class AnalysisRunInformation implements Serializable {
 
     private static final long serialVersionUID = -2618256066434770094L;
 
+    private final AnalysisInformation analysisInformation;
     private final UUID uuid;
     private final Date time;
     private final long timeOfRun;
     private final String description;
 
-    public AnalysisRunInformation(UUID uuid, Date time, long timeOfRun,
-	    String description) {
+    public AnalysisRunInformation(AnalysisInformation analysisInformation,
+	    UUID uuid, Date time, long timeOfRun, String description) {
 	super();
+	this.analysisInformation = analysisInformation;
 	this.uuid = uuid;
 	this.time = time;
 	this.timeOfRun = timeOfRun;
@@ -29,8 +31,18 @@ public final class AnalysisRunInformation implements Serializable {
     }
 
     /**
-     * This method returns the UUID for this analysis. This UUID is used to load
-     * the analysis from the underlying store.
+     * This method returns the UUID of the parent analysis for this analysis
+     * run. This UUID is used to load the analysis from the underlying store.
+     * 
+     * @return An UUID object is returned.
+     */
+    public final AnalysisInformation getAnalysisInformation() {
+	return analysisInformation;
+    }
+
+    /**
+     * This method returns the UUID for this analysis run. This UUID is used to
+     * load the analysis run from the underlying store with the analysis.
      * 
      * @return An UUID object is returned.
      */

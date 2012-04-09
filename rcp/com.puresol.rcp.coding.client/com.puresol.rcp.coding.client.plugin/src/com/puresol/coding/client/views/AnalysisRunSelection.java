@@ -2,19 +2,25 @@ package com.puresol.coding.client.views;
 
 import org.eclipse.jface.viewers.ISelection;
 
-import com.puresol.coding.analysis.api.AnalysisRunInformation;
+import com.puresol.coding.analysis.api.AnalysisRun;
 
+/**
+ * This class represents a single analysis run selection.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class AnalysisRunSelection implements ISelection {
 
-    private final AnalysisRunInformation information;
+    private final AnalysisRun analysisRun;
 
-    public AnalysisRunSelection(AnalysisRunInformation information) {
+    public AnalysisRunSelection(AnalysisRun analysisRun) {
 	super();
-	this.information = information;
+	this.analysisRun = analysisRun;
     }
 
-    public AnalysisRunInformation getInformation() {
-	return information;
+    public AnalysisRun getAnalysisRun() {
+	return analysisRun;
     }
 
     @Override

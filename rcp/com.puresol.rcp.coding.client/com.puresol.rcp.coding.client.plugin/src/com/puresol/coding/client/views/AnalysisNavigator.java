@@ -2,6 +2,7 @@ package com.puresol.coding.client.views;
 
 import java.util.ArrayList;
 
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -17,16 +18,20 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.List;
+import org.eclipse.swt.widgets.ToolBar;
+import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.progress.UIJob;
+
+import swing2swt.layout.BorderLayout;
 
 import com.puresol.coding.analysis.api.AnalysisInformation;
 import com.puresol.coding.analysis.api.AnalysisStore;
 import com.puresol.coding.analysis.api.AnalysisStoreException;
 import com.puresol.coding.analysis.api.AnalysisStoreFactory;
+import com.puresol.coding.client.Activator;
 import com.puresol.coding.client.content.AnalysisListContentProvider;
 import com.puresol.coding.client.content.AnalysisListLabelProvider;
 import com.puresol.coding.client.wizards.NewAnalysisJob;
@@ -41,6 +46,8 @@ import com.puresol.coding.client.wizards.NewAnalysisJob;
 public class AnalysisNavigator extends ViewPart implements IJobChangeListener,
 	ISelectionProvider, SelectionListener {
 
+    private static final ILog logger = Activator.getDefault().getLog();
+
     private final AnalysisStore store = AnalysisStoreFactory.getInstance();
 
     public AnalysisNavigator() {
@@ -49,15 +56,23 @@ public class AnalysisNavigator extends ViewPart implements IJobChangeListener,
     private List analyzesList;
     private ListViewer analyzesViewer;
     private ISelection selection = null;
+    private ToolItem refresh;
 
     private final java.util.List<ISelectionChangedListener> listeners = new ArrayList<ISelectionChangedListener>();
 
     @Override
     public void createPartControl(Composite parent) {
-	parent.setLayout(new FillLayout(SWT.HORIZONTAL));
+	parent.setLayout(new BorderLayout(0, 0));
 
 	analyzesList = new List(parent, SWT.BORDER);
 	analyzesViewer = new ListViewer(analyzesList);
+
+	ToolBar toolBar = new ToolBar(parent, SWT.FLAT | SWT.RIGHT);
+	toolBar.setToolTipText("Refreshs the list of available analyzes.");
+	toolBar.setLayoutData(BorderLayout.NORTH);
+
+	refresh = new ToolItem(toolBar, SWT.NONE);
+	refresh.setText("Refresh");
 	analyzesViewer.setContentProvider(new AnalysisListContentProvider());
 	analyzesViewer.setLabelProvider(new AnalysisListLabelProvider());
 	analyzesList.redraw();
@@ -65,6 +80,7 @@ public class AnalysisNavigator extends ViewPart implements IJobChangeListener,
 	analyzesList.addSelectionListener(this);
 
 	updateAnalysisList();
+	refresh.addSelectionListener(this);
 	Job.getJobManager().addJobChangeListener(this);
 	getSite().setSelectionProvider(this);
     }
@@ -96,16 +112,8 @@ public class AnalysisNavigator extends ViewPart implements IJobChangeListener,
 	UIJob uiJob = new UIJob("Update Analysis Navigator") {
 	    @Override
 	    public IStatus runInUIThread(IProgressMonitor monitor) {
-		try {
-		    analyzesViewer.setInput(store.getAllAnalysisInformation());
-		    return Status.OK_STATUS;
-		} catch (AnalysisStoreException e) {
-		    return new Status(
-			    Status.ERROR,
-			    AnalysisNavigator.class.getName(),
-			    "Could not retrieve available analyzes from analysis store!",
-			    e);
-		}
+		refreshAnalysisList();
+		return Status.OK_STATUS;
 	    }
 	};
 	uiJob.schedule();
@@ -152,13 +160,37 @@ public class AnalysisNavigator extends ViewPart implements IJobChangeListener,
     }
 
     @Override
-    public void widgetSelected(SelectionEvent e) {
-	if (e.getSource() == analyzesList) {
+    public void widgetSelected(SelectionEvent event) {
+	if (event.getSource() == analyzesList) {
+	    processAnalysisSelection();
+	} else if (event.getSource() == refresh) {
+	    refreshAnalysisList();
+	}
+    }
+
+    private void refreshAnalysisList() {
+	try {
+	    analyzesViewer.setInput(store.getAllAnalysisInformation());
+	} catch (AnalysisStoreException e) {
+	    logger.log(new Status(Status.ERROR, AnalysisNavigator.class
+		    .getName(),
+		    "Could not retrieve list of analyzes from analysis store!",
+		    e));
+	}
+    }
+
+    private void processAnalysisSelection() {
+	try {
 	    StructuredSelection selection = (StructuredSelection) analyzesViewer
 		    .getSelection();
 	    AnalysisInformation information = (AnalysisInformation) selection
 		    .getFirstElement();
-	    setSelection(new AnalysisSelection(information));
+	    setSelection(new AnalysisSelection(store.loadAnalysis(information
+		    .getUUID())));
+	} catch (AnalysisStoreException e) {
+	    logger.log(new Status(Status.ERROR, AnalysisNavigator.class
+		    .getName(),
+		    "Could not retrieve analysis from analysis store!", e));
 	}
     }
 
@@ -166,5 +198,4 @@ public class AnalysisNavigator extends ViewPart implements IJobChangeListener,
     public void widgetDefaultSelected(SelectionEvent e) {
 	// intentionally left blank.
     }
-
 }

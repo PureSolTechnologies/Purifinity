@@ -121,8 +121,7 @@ public class AnalysisImpl implements Analysis {
 	File[] files = analysisDirectory.listFiles();
 	for (File runDirectory : files) {
 	    if (AnalysisRunImpl.isAnalysisRunDirectory(runDirectory)) {
-		AnalysisRun analysisRun = AnalysisRunImpl.open(runDirectory,
-			getSettings().getName());
+		AnalysisRun analysisRun = AnalysisRunImpl.open(runDirectory);
 		if (analysisRun != null) {
 		    analysisInformation.add(analysisRun.getInformation());
 		}
@@ -151,16 +150,16 @@ public class AnalysisImpl implements Analysis {
     @Override
     public AnalysisRun loadAnalysisRun(UUID uuid) throws AnalysisStoreException {
 	File runDir = new File(analysisDirectory, uuid.toString());
-	return AnalysisRunImpl.open(runDir, getSettings().getName());
+	return AnalysisRunImpl.open(runDir);
     }
 
     @Override
     public AnalysisRun runAnalysis() throws AnalysisStoreException {
 	UUID uuid = UUID.randomUUID();
 	AnalysisRunImpl run = (AnalysisRunImpl) AnalysisRunImpl.create(
-		new File(analysisDirectory, uuid.toString()), getSettings()
-			.getName(), uuid, getSettings().getSourceDirectory(),
-		getSettings().getFileSearchConfiguration());
+		new File(analysisDirectory, uuid.toString()), getInformation(),
+		uuid, getSettings().getSourceDirectory(), getSettings()
+			.getFileSearchConfiguration());
 	run.schedule();
 	return run;
     }

@@ -25,12 +25,14 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.puresol.coding.analysis.api.AnalysisInformation;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalysisRunInformation;
 import com.puresol.coding.analysis.api.AnalysisStoreException;
 import com.puresol.coding.analysis.api.AnalyzedFile;
 import com.puresol.coding.analysis.api.FileAnalysis;
 import com.puresol.trees.FileTree;
+import com.puresol.trees.FileTreeConverter;
 import com.puresol.utils.DirectoryUtilities;
 import com.puresol.utils.FileSearch;
 import com.puresol.utils.FileSearchConfiguration;
@@ -57,10 +59,9 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
      * @return
      * @throws AnalysisStoreException
      */
-    public static AnalysisRun open(File runDirectory, String name)
+    public static AnalysisRun open(File runDirectory)
 	    throws AnalysisStoreException {
-	AnalysisRunImpl projectAnalyser = new AnalysisRunImpl(runDirectory,
-		name);
+	AnalysisRunImpl projectAnalyser = new AnalysisRunImpl(runDirectory);
 	projectAnalyser.open();
 	return projectAnalyser;
     }
@@ -77,21 +78,23 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
      * @throws AnalysisStoreException
      * @throws IOException
      */
-    public static AnalysisRun create(File runDirectory, String name, UUID uuid,
+    public static AnalysisRun create(File runDirectory,
+	    AnalysisInformation analysisInformation, UUID uuid,
 	    File sourceDirectory, FileSearchConfiguration searchConfiguration)
 	    throws AnalysisStoreException {
-	AnalysisRunImpl projectAnalyser = new AnalysisRunImpl(runDirectory,
-		name);
-	projectAnalyser.create(sourceDirectory, uuid, searchConfiguration);
+	AnalysisRunImpl projectAnalyser = new AnalysisRunImpl(runDirectory);
+	projectAnalyser.create(sourceDirectory, analysisInformation, uuid,
+		searchConfiguration);
 	return projectAnalyser;
     }
 
     private static final String SOURCE_DIRECTORY_KEY = "ProjectAnalyzer.projectDirectory";
 
-    private static final String ANALYZED_FILES_FILENAME = "analyzed_files.persist";
-    private static final String FAILED_FILES_FILENAME = "failed_files.persist";
-    private static final String SEARCH_CONFIGURATION_FILENAME = "search_configuration.persist";
+    private static final String ANALYZED_FILES_FILE = "analyzed_files.persist";
+    private static final String FAILED_FILES_FILE = "failed_files.persist";
+    private static final String SEARCH_CONFIGURATION_FILE = "search_configuration.persist";
     private static final String ANALYSIS_RUN_PROPERTIES_FILE = "analysis_run.properties";
+    private static final String ANALYSIS_INFORMATION_FILE = "analysis_information.persist";
 
     private final File runDirectory;
 
@@ -103,6 +106,7 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
     private FileTree fileTree = new FileTree(null, "");
     private FileSearchConfiguration searchConfig;
 
+    private AnalysisInformation analysisInformation;
     private UUID uuid;
     private Date creationTime;
     private long timeOfRun;
@@ -116,8 +120,8 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
      * @param runDirectory
      * @param searchConfiguration
      */
-    private AnalysisRunImpl(File runDirectory, String name) {
-	super(name);
+    private AnalysisRunImpl(File runDirectory) {
+	super("Analysis Run");
 	this.runDirectory = runDirectory;
     }
 
@@ -132,11 +136,12 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
      * @throws AnalysisStoreException
      * @throws IOException
      */
-    void create(File sourceDirectory, UUID uuid,
-	    FileSearchConfiguration searchConfiguration)
+    void create(File sourceDirectory, AnalysisInformation analysisInformation,
+	    UUID uuid, FileSearchConfiguration searchConfiguration)
 	    throws AnalysisStoreException {
 	try {
 	    this.sourceDirectory = sourceDirectory;
+	    this.analysisInformation = analysisInformation;
 	    this.uuid = uuid;
 	    this.searchConfig = searchConfiguration;
 	    this.creationTime = new Date();
@@ -171,7 +176,7 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
 
     private void writeSearchConfiguration() throws IOException {
 	FileOutputStream fileOutputStream = new FileOutputStream(new File(
-		runDirectory, SEARCH_CONFIGURATION_FILENAME));
+		runDirectory, SEARCH_CONFIGURATION_FILE));
 	try {
 	    ObjectOutputStream objectOutputStream = new ObjectOutputStream(
 		    fileOutputStream);
@@ -228,7 +233,7 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
 	try {
 	    searchConfig = new FileSearchConfiguration();
 	    FileInputStream fileInputStream = new FileInputStream(new File(
-		    runDirectory, SEARCH_CONFIGURATION_FILENAME));
+		    runDirectory, SEARCH_CONFIGURATION_FILE));
 	    try {
 		ObjectInputStream objectOutputStream = new ObjectInputStream(
 			fileInputStream);
@@ -255,19 +260,35 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
     private void loadProjectInformation() throws IOException {
 	@SuppressWarnings("unchecked")
 	List<AnalyzedFile> analyzed = (List<AnalyzedFile>) restore(new File(
-		runDirectory, ANALYZED_FILES_FILENAME));
+		runDirectory, ANALYZED_FILES_FILE));
 	analyzedFiles.addAll(analyzed);
 	@SuppressWarnings("unchecked")
 	List<File> failed = (List<File>) restore(new File(runDirectory,
-		FAILED_FILES_FILENAME));
+		FAILED_FILES_FILE));
 	failedFiles.addAll(failed);
+	analysisInformation = restore(new File(runDirectory,
+		ANALYSIS_INFORMATION_FILE));
+	createFileTree();
+    }
+
+    private void createFileTree() {
+	List<File> files = new ArrayList<File>();
+	for (AnalyzedFile analyzedFile : analyzedFiles) {
+	    files.add(analyzedFile.getFile());
+	}
+	for (File failedFile : failedFiles) {
+	    files.add(failedFile);
+	}
+	fileTree = FileTreeConverter.convertFileListToTree(
+		analysisInformation.getName(), files);
     }
 
     private void storeProjectInformation() {
 	try {
-	    persist(analyzedFiles, new File(runDirectory,
-		    ANALYZED_FILES_FILENAME));
-	    persist(failedFiles, new File(runDirectory, FAILED_FILES_FILENAME));
+	    persist(analysisInformation, new File(runDirectory,
+		    ANALYSIS_INFORMATION_FILE));
+	    persist(analyzedFiles, new File(runDirectory, ANALYZED_FILES_FILE));
+	    persist(failedFiles, new File(runDirectory, FAILED_FILES_FILE));
 	} catch (IOException e) {
 	    logger.error(e.getMessage(), e);
 	}
@@ -495,8 +516,8 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
 
     @Override
     public AnalysisRunInformation getInformation() {
-	return new AnalysisRunInformation(uuid, creationTime, timeOfRun,
-		"<Not implemented, yet!>");
+	return new AnalysisRunInformation(analysisInformation, uuid,
+		creationTime, timeOfRun, "<Not implemented, yet!>");
     }
 
     public static boolean isAnalysisRunDirectory(File runDirectory) {

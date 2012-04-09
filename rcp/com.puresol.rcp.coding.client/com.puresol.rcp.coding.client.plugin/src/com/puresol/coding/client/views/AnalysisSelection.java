@@ -3,7 +3,6 @@ package com.puresol.coding.client.views;
 import org.eclipse.jface.viewers.ISelection;
 
 import com.puresol.coding.analysis.api.Analysis;
-import com.puresol.coding.analysis.api.AnalysisInformation;
 
 /**
  * This class contains the selection of an {@link Analysis}.
@@ -13,15 +12,15 @@ import com.puresol.coding.analysis.api.AnalysisInformation;
  */
 public class AnalysisSelection implements ISelection {
 
-    private final AnalysisInformation information;
+    private final Analysis analysis;
 
-    public AnalysisSelection(AnalysisInformation information) {
+    public AnalysisSelection(Analysis analysis) {
 	super();
-	this.information = information;
+	this.analysis = analysis;
     }
 
-    public AnalysisInformation getInformation() {
-	return information;
+    public Analysis getAnalysis() {
+	return analysis;
     }
 
     @Override

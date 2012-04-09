@@ -24,11 +24,8 @@ import org.eclipse.ui.part.ViewPart;
 import org.eclipse.wb.swt.SWTResourceManager;
 
 import com.puresol.coding.analysis.api.Analysis;
-import com.puresol.coding.analysis.api.AnalysisInformation;
 import com.puresol.coding.analysis.api.AnalysisRun;
-import com.puresol.coding.analysis.api.AnalysisStore;
 import com.puresol.coding.analysis.api.AnalysisStoreException;
-import com.puresol.coding.analysis.api.AnalysisStoreFactory;
 import com.puresol.coding.analysis.api.AnalyzedFile;
 import com.puresol.coding.client.Activator;
 import com.puresol.coding.client.controls.ParserTreeControl;
@@ -36,8 +33,6 @@ import com.puresol.coding.client.controls.ParserTreeControl;
 public class AnalysisReport extends ViewPart implements ISelectionListener {
 
     private static final ILog logger = Activator.getDefault().getLog();
-
-    private final AnalysisStore store = AnalysisStoreFactory.getInstance();
 
     private Text name;
     private Text numAnalyzedFiles;
@@ -120,11 +115,8 @@ public class AnalysisReport extends ViewPart implements ISelectionListener {
 	try {
 	    if (selection instanceof AnalysisSelection) {
 		AnalysisSelection analysisSelection = (AnalysisSelection) selection;
-		AnalysisInformation analysisInformation = analysisSelection
-			.getInformation();
-		name.setText(analysisInformation.getName());
-		Analysis analysis = store.loadAnalysis(analysisInformation
-			.getUUID());
+		Analysis analysis = analysisSelection.getAnalysis();
+		name.setText(analysis.getInformation().getName());
 		AnalysisRun lastAnalysisRun = analysis.loadLastAnalysisRun();
 		java.util.List<AnalyzedFile> analyzedFiles = lastAnalysisRun
 			.getAnalyzedFiles();

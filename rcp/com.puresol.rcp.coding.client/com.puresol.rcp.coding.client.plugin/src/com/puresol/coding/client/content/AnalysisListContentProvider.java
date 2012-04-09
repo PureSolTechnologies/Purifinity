@@ -39,6 +39,6 @@ public class AnalysisListContentProvider implements IStructuredContentProvider {
 
     @Override
     public Object[] getElements(Object inputElement) {
-	return allAnalyzes.toArray(new AnalysisInformation[allAnalyzes.size()]);
+	return allAnalyzes.toArray();
     }
 }

@@ -6,12 +6,14 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 
 import java.io.File;
+import java.util.Date;
 import java.util.UUID;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import com.puresol.coding.analysis.AnalysisRunImpl;
+import com.puresol.coding.analysis.api.AnalysisInformation;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalysisStoreException;
 import com.puresol.coding.quality.SourceCodeQuality;
@@ -24,7 +26,9 @@ public class ProjectEntropyMetricTest {
     @Before
     public void setup() throws AnalysisStoreException {
 	File runDirectory = new File("test/analysis");
-	analyzer = AnalysisRunImpl.create(runDirectory, "ProjectAnalyzer",
+	AnalysisInformation analysisInformation = new AnalysisInformation(
+		UUID.randomUUID(), "ProjectAnalyzer", "description", new Date());
+	analyzer = AnalysisRunImpl.create(runDirectory, analysisInformation,
 		UUID.randomUUID(), new File("src/main/java"),
 		new FileSearchConfiguration());
     }
