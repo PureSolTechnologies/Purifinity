@@ -2,20 +2,15 @@ package com.puresol.coding.client.content;
 
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
 
+import com.puresol.coding.client.Activator;
+import com.puresol.coding.client.ClientImages;
 import com.puresol.trees.FileTree;
 
 public class FileTreeLabelProvider extends LabelProvider {
 
-    private final Image folderImage = PlatformUI.getWorkbench()
-	    .getSharedImages().getImage(ISharedImages.IMG_OBJ_FOLDER);
-
-    @Override
-    public void dispose() {
-	folderImage.dispose();
-    }
+    private final Image databaseFolderImage = Activator.getDefault()
+	    .getImageRegistry().get(ClientImages.FOLDER_16x16);
 
     @Override
     public String getText(Object element) {
@@ -28,7 +23,7 @@ public class FileTreeLabelProvider extends LabelProvider {
 
     @Override
     public Image getImage(Object element) {
-	return folderImage;
+	return databaseFolderImage;
 
     }
 }

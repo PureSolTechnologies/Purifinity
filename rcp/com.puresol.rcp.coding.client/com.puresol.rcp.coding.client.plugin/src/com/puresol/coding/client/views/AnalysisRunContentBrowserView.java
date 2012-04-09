@@ -16,14 +16,14 @@ import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.client.content.FileTreeContentProvider;
 import com.puresol.coding.client.content.FileTreeLabelProvider;
 
-public class SourceNavigator extends ViewPart implements ISelectionListener {
+public class AnalysisRunContentBrowserView extends ViewPart implements ISelectionListener {
 
     private Analysis analysis;
     private AnalysisRun analysisRun;
     private Tree fileTree;
     private TreeViewer fileTreeViewer;
 
-    public SourceNavigator() {
+    public AnalysisRunContentBrowserView() {
     }
 
     @Override

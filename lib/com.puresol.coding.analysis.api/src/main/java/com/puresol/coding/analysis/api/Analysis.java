@@ -85,4 +85,14 @@ public interface Analysis {
      *             is thrown in cases of issues.
      */
     public AnalysisRun loadLastAnalysisRun() throws AnalysisStoreException;
+
+    /**
+     * This method deletes an analysis run from the store.
+     * 
+     * @param uuid
+     *            is the uuid of the run to be deleted.
+     * @throws AnalysisStoreException
+     *             is thrown in events of issues.
+     */
+    public void removeAnalysisRun(UUID uuid) throws AnalysisStoreException;
 }

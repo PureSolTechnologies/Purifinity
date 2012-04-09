@@ -1,6 +1,7 @@
 package com.puresol.coding.analysis;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -61,8 +62,14 @@ public class AnalysisStoreImpl implements AnalysisStore {
     }
 
     @Override
-    public void removeAnalysis(UUID uuid) {
-	File analysisDirectory = new File(storageDirectory, uuid.toString());
-	FileUtilities.deleteFileOrDir(analysisDirectory);
+    public void removeAnalysis(UUID uuid) throws AnalysisStoreException {
+	try {
+	    File analysisDirectory = new File(storageDirectory, uuid.toString());
+	    FileUtilities.deleteFileOrDir(analysisDirectory);
+	} catch (IOException e) {
+	    throw new AnalysisStoreException(
+		    "Could not delete analysis with UUID '" + uuid.toString()
+			    + "'!", e);
+	}
     }
 }

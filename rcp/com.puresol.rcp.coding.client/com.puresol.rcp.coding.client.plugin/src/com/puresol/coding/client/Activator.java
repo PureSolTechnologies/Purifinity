@@ -16,13 +16,6 @@ public class Activator extends AbstractUIPlugin {
     // The shared instance
     private static Activator plugin = null;
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext
-     * )
-     */
     @Override
     public void start(BundleContext context) throws Exception {
 	super.start(context);
@@ -33,13 +26,6 @@ public class Activator extends AbstractUIPlugin {
 	plugin = this;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext
-     * )
-     */
     @Override
     public void stop(BundleContext context) throws Exception {
 	super.stop(context);
@@ -53,12 +39,32 @@ public class Activator extends AbstractUIPlugin {
     @Override
     protected void initializeImageRegistry(ImageRegistry reg) {
 	super.initializeImageRegistry(reg);
-	reg.put(ClientImages.DATABASE_REFRESH, ImageDescriptor
-		.createFromURL(Activator.class
-			.getResource("/icons/16x16/database_refresh.png")));
-	reg.put(ClientImages.FOLDER, ImageDescriptor
-		.createFromURL(Activator.class
-			.getResource("/icons/16x16/folder.png")));
+	add(reg, ClientImages.DATABASE_REFRESH_16x16);
+
+	add(reg, ClientImages.FOLDER_16x16);
+	add(reg, ClientImages.FOLDERS_16x16);
+	add(reg, ClientImages.FOLDERS_EXPLORER_16x16);
+	add(reg, ClientImages.FOLDER_ADD_16x16);
+	add(reg, ClientImages.FOLDER_EDIT_16x16);
+	add(reg, ClientImages.FOLDER_DELETE_16x16);
+	add(reg, ClientImages.DATABASE_FOLDER_16x16);
+
+	add(reg, ClientImages.ANALYSIS_16x16);
+	add(reg, ClientImages.ANALYZES_VIEW_16x16);
+	add(reg, ClientImages.ANALYSIS_ADD_16x16);
+	add(reg, ClientImages.ANALYSIS_EDIT_16x16);
+	add(reg, ClientImages.ANALYSIS_DELETE_16x16);
+
+	add(reg, ClientImages.ANALYSIS_RUN_16x16);
+	add(reg, ClientImages.ANALYSIS_RUNS_VIEW_16x16);
+	add(reg, ClientImages.ANALYSIS_RUN_ADD_16x16);
+	add(reg, ClientImages.ANALYSIS_RUN_EDIT_16x16);
+	add(reg, ClientImages.ANALYSIS_RUN_DELETE_16x16);
+    }
+
+    private void add(ImageRegistry reg, String keyAndPath) {
+	reg.put(keyAndPath, ImageDescriptor.createFromURL(Activator.class
+		.getResource(keyAndPath)));
     }
 
     /**

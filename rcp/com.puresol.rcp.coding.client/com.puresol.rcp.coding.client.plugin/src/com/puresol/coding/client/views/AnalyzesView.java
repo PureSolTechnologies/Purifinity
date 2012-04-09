@@ -2,6 +2,10 @@ package com.puresol.coding.client.views;
 
 import java.util.ArrayList;
 
+import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.commands.NotEnabledException;
+import org.eclipse.core.commands.NotHandledException;
+import org.eclipse.core.commands.common.NotDefinedException;
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -9,6 +13,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.IJobChangeListener;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -24,6 +29,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
+import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.progress.UIJob;
 
@@ -35,6 +41,7 @@ import com.puresol.coding.analysis.api.AnalysisStoreException;
 import com.puresol.coding.analysis.api.AnalysisStoreFactory;
 import com.puresol.coding.client.Activator;
 import com.puresol.coding.client.ClientImages;
+import com.puresol.coding.client.commands.NewAnalysis;
 import com.puresol.coding.client.content.AnalysisListContentProvider;
 import com.puresol.coding.client.content.AnalysisListLabelProvider;
 import com.puresol.coding.client.wizards.NewAnalysisJob;
@@ -46,7 +53,7 @@ import com.puresol.coding.client.wizards.NewAnalysisJob;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class AnalysisNavigator extends ViewPart implements IJobChangeListener,
+public class AnalyzesView extends ViewPart implements IJobChangeListener,
 	ISelectionProvider, SelectionListener {
 
     private static final ILog logger = Activator.getDefault().getLog();
@@ -54,10 +61,16 @@ public class AnalysisNavigator extends ViewPart implements IJobChangeListener,
     private final ImageRegistry imageRegistry = Activator.getDefault()
 	    .getImageRegistry();
     private final Image databaseRefreshImage = imageRegistry
-	    .get(ClientImages.DATABASE_REFRESH);
+	    .get(ClientImages.DATABASE_REFRESH_16x16);
+    private final Image analysisAddImage = imageRegistry
+	    .get(ClientImages.ANALYSIS_ADD_16x16);
+    private final Image analysisEditImage = imageRegistry
+	    .get(ClientImages.ANALYSIS_EDIT_16x16);
+    private final Image analysisDeleteImage = imageRegistry
+	    .get(ClientImages.ANALYSIS_DELETE_16x16);
     private final AnalysisStore store = AnalysisStoreFactory.getInstance();
 
-    public AnalysisNavigator() {
+    public AnalyzesView() {
 	super();
     }
 
@@ -65,6 +78,9 @@ public class AnalysisNavigator extends ViewPart implements IJobChangeListener,
     private TableViewer analyzesViewer;
     private ISelection selection = null;
     private ToolItem refresh;
+    private ToolItem addAnalysis;
+    private ToolItem editAnalysis;
+    private ToolItem deleteAnalysis;
 
     private final java.util.List<ISelectionChangedListener> listeners = new ArrayList<ISelectionChangedListener>();
 
@@ -90,8 +106,25 @@ public class AnalysisNavigator extends ViewPart implements IJobChangeListener,
 	updateAnalysisList();
 	refresh.addSelectionListener(this);
 	refresh.setImage(databaseRefreshImage);
+
+	addAnalysis = new ToolItem(toolBar, SWT.NONE);
+	addAnalysis.setText("Add...");
+	addAnalysis.setImage(analysisAddImage);
+	addAnalysis.addSelectionListener(this);
+
+	editAnalysis = new ToolItem(toolBar, SWT.NONE);
+	editAnalysis.setText("Edit...");
+	editAnalysis.setImage(analysisEditImage);
+	editAnalysis.addSelectionListener(this);
+
+	deleteAnalysis = new ToolItem(toolBar, SWT.NONE);
+	deleteAnalysis.setText("Delete...");
+	deleteAnalysis.setImage(analysisDeleteImage);
+	deleteAnalysis.addSelectionListener(this);
+
 	Job.getJobManager().addJobChangeListener(this);
 	getSite().setSelectionProvider(this);
+	setContentDescription("All available analyzes from analysis store");
     }
 
     @Override
@@ -174,6 +207,57 @@ public class AnalysisNavigator extends ViewPart implements IJobChangeListener,
 	    processAnalysisSelection();
 	} else if (event.getSource() == refresh) {
 	    refreshAnalysisList();
+	} else if (event.getSource() == addAnalysis) {
+	    addAnalysis();
+	} else if (event.getSource() == editAnalysis) {
+	    editAnalysis();
+	} else if (event.getSource() == deleteAnalysis) {
+	    deleteAnalysis();
+	}
+    }
+
+    private void editAnalysis() {
+	MessageDialog.openInformation(getSite().getShell(), "Not implemented",
+		"This functionality is not implemented, yet!");
+    }
+
+    private void addAnalysis() {
+	try {
+	    IHandlerService handlerService = (IHandlerService) getSite()
+		    .getService(IHandlerService.class);
+	    handlerService.executeCommand(NewAnalysis.ID, null);
+	} catch (ExecutionException e) {
+	    logger.log(new Status(Status.ERROR, AnalyzesView.class.getName(),
+		    "Could not run new analysis!", e));
+	} catch (NotDefinedException e) {
+	    logger.log(new Status(Status.ERROR, AnalyzesView.class.getName(),
+		    "Could not run new analysis!", e));
+	} catch (NotEnabledException e) {
+	    logger.log(new Status(Status.ERROR, AnalyzesView.class.getName(),
+		    "Could not run new analysis!", e));
+	} catch (NotHandledException e) {
+	    logger.log(new Status(Status.ERROR, AnalyzesView.class.getName(),
+		    "Could not run new analysis!", e));
+	}
+    }
+
+    private void deleteAnalysis() {
+	try {
+	    StructuredSelection selection = (StructuredSelection) analyzesViewer
+		    .getSelection();
+	    AnalysisInformation information = (AnalysisInformation) selection
+		    .getFirstElement();
+	    if (MessageDialog.openQuestion(
+		    getSite().getShell(),
+		    "Delete?",
+		    "Do you really want to delete analysis '"
+			    + information.getName() + "'?")) {
+		store.removeAnalysis(information.getUUID());
+		refreshAnalysisList();
+	    }
+	} catch (AnalysisStoreException e) {
+	    logger.log(new Status(Status.ERROR, AnalyzesView.class.getName(),
+		    "Could not retrieve analysis from analysis store!", e));
 	}
     }
 
@@ -183,8 +267,7 @@ public class AnalysisNavigator extends ViewPart implements IJobChangeListener,
 		analyzesViewer.setInput(store.getAllAnalysisInformation());
 	    }
 	} catch (AnalysisStoreException e) {
-	    logger.log(new Status(Status.ERROR, AnalysisNavigator.class
-		    .getName(),
+	    logger.log(new Status(Status.ERROR, AnalyzesView.class.getName(),
 		    "Could not retrieve list of analyzes from analysis store!",
 		    e));
 	}
@@ -199,8 +282,7 @@ public class AnalysisNavigator extends ViewPart implements IJobChangeListener,
 	    setSelection(new AnalysisSelection(store.loadAnalysis(information
 		    .getUUID())));
 	} catch (AnalysisStoreException e) {
-	    logger.log(new Status(Status.ERROR, AnalysisNavigator.class
-		    .getName(),
+	    logger.log(new Status(Status.ERROR, AnalyzesView.class.getName(),
 		    "Could not retrieve analysis from analysis store!", e));
 	}
     }

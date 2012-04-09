@@ -55,6 +55,8 @@ public interface AnalysisStore {
      * 
      * @param uuid
      *            is the identifier of the analysis to be deleted.
+     * @throws AnalysisStoreException
+     *             is thrown in cases of issues.
      */
-    public void removeAnalysis(UUID uuid);
+    public void removeAnalysis(UUID uuid) throws AnalysisStoreException;
 }

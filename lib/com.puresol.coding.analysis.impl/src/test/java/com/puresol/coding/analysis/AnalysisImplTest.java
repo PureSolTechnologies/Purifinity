@@ -75,7 +75,7 @@ public class AnalysisImplTest {
     }
 
     @AfterClass
-    public static void destroy() {
+    public static void destroy() throws AnalysisStoreException {
 	assertNotNull(analysisStore);
 	assertNotNull(analysis);
 	analysisStore.removeAnalysis(analysis.getInformation().getUUID());

@@ -106,14 +106,17 @@ public class FileUtilities {
      * 
      * @param file
      *            The file to recursively delete.
+     * @throws IOException
      **/
-    public static void deleteFileOrDir(File file) {
+    public static void deleteFileOrDir(File file) throws IOException {
 	if (file.isDirectory()) {
 	    for (File child : file.listFiles()) {
 		deleteFileOrDir(child);
 	    }
 	}
-	file.delete();
+	if (!file.delete()) {
+	    throw new IOException("Could not remove '" + file + "'!");
+	}
     }
 
     public static HashId createHashId(File file, HashAlgorithm algorithm)

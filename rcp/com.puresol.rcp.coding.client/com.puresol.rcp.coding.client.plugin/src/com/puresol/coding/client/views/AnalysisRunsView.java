@@ -4,19 +4,20 @@ import java.util.ArrayList;
 
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
-import org.eclipse.jface.viewers.ListViewer;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.List;
+import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.ISelectionListener;
@@ -35,35 +36,45 @@ import com.puresol.coding.client.content.AnalysisRunListContentProvider;
 import com.puresol.coding.client.content.AnalysisRunListLabelProvider;
 import com.puresol.coding.client.controls.ParserTreeControl;
 
-public class AnalysisRunNavigator extends ViewPart implements
-	SelectionListener, ISelectionProvider, ISelectionListener {
+public class AnalysisRunsView extends ViewPart implements SelectionListener,
+	ISelectionProvider, ISelectionListener {
 
     private static final ILog logger = Activator.getDefault().getLog();
 
     private final ImageRegistry imageRegistry = Activator.getDefault()
 	    .getImageRegistry();
     private final Image databaseRefreshImage = imageRegistry
-	    .get(ClientImages.DATABASE_REFRESH);
+	    .get(ClientImages.DATABASE_REFRESH_16x16);
+    private final Image analysisRunAddImage = imageRegistry
+	    .get(ClientImages.ANALYSIS_RUN_ADD_16x16);
+    private final Image analysisRunEditImage = imageRegistry
+	    .get(ClientImages.ANALYSIS_RUN_EDIT_16x16);
+    private final Image analysisRunDeleteImage = imageRegistry
+	    .get(ClientImages.ANALYSIS_RUN_DELETE_16x16);
 
     private Analysis analysis;
-    private List analysisRunsList;
-    private ListViewer analysisRunsViewer;
+    private Table analysisRunsList;
+    private TableViewer analysisRunsViewer;
     private ToolItem refresh;
+    private ToolItem addAnalysisRun;
+    private ToolItem editAnalysisRun;
+    private ToolItem deleteAnalysisRun;
+
     private ISelection selection = null;
 
     private final java.util.List<ISelectionChangedListener> listeners = new ArrayList<ISelectionChangedListener>();
 
-    public AnalysisRunNavigator() {
+    public AnalysisRunsView() {
     }
 
     @Override
     public void createPartControl(Composite parent) {
 	parent.setLayout(new BorderLayout(0, 0));
 
-	analysisRunsList = new List(parent, SWT.BORDER);
+	analysisRunsList = new Table(parent, SWT.BORDER);
 	analysisRunsList
 		.setToolTipText("Refreshs the analysis runs for the currently selected analysis from the analysis store.");
-	analysisRunsViewer = new ListViewer(analysisRunsList);
+	analysisRunsViewer = new TableViewer(analysisRunsList);
 
 	ToolBar toolBar = new ToolBar(parent, SWT.FLAT | SWT.RIGHT);
 	toolBar.setToolTipText("Refreshs the analysis runs for the currently selected analysis from the analysis store.");
@@ -71,8 +82,24 @@ public class AnalysisRunNavigator extends ViewPart implements
 
 	refresh = new ToolItem(toolBar, SWT.NONE);
 	refresh.setToolTipText("Refreshs the analysis runs for the selected analysis from the analysis store.");
-	refresh.setText("refresh");
+	refresh.setText("Refresh");
 	refresh.setImage(databaseRefreshImage);
+
+	addAnalysisRun = new ToolItem(toolBar, SWT.NONE);
+	addAnalysisRun.setText("Add...");
+	addAnalysisRun.setImage(analysisRunAddImage);
+	addAnalysisRun.addSelectionListener(this);
+
+	editAnalysisRun = new ToolItem(toolBar, SWT.NONE);
+	editAnalysisRun.setText("Edit...");
+	editAnalysisRun.setImage(analysisRunEditImage);
+	editAnalysisRun.addSelectionListener(this);
+
+	deleteAnalysisRun = new ToolItem(toolBar, SWT.NONE);
+	deleteAnalysisRun.setText("Delete...");
+	deleteAnalysisRun.setImage(analysisRunDeleteImage);
+	deleteAnalysisRun.addSelectionListener(this);
+
 	analysisRunsViewer
 		.setContentProvider(new AnalysisRunListContentProvider());
 	analysisRunsViewer.setLabelProvider(new AnalysisRunListLabelProvider());
@@ -83,6 +110,7 @@ public class AnalysisRunNavigator extends ViewPart implements
 	getSite().setSelectionProvider(this);
 	getSite().getWorkbenchWindow().getSelectionService()
 		.addSelectionListener(this);
+	setContentDescription("All available analysis runs for the selected analysis");
     }
 
     @Override
@@ -121,6 +149,47 @@ public class AnalysisRunNavigator extends ViewPart implements
 	    processAnalysisRunSelection();
 	} else if (event.getSource() == refresh) {
 	    refreshAnalysisRunList();
+	} else if (event.getSource() == addAnalysisRun) {
+	    addAnalysisRun();
+	} else if (event.getSource() == editAnalysisRun) {
+	    editAnalysisRun();
+	} else if (event.getSource() == deleteAnalysisRun) {
+	    deleteAnalysisRun();
+	}
+    }
+
+    private void addAnalysisRun() {
+	try {
+	    analysis.runAnalysis();
+	    refreshAnalysisRunList();
+	} catch (AnalysisStoreException e) {
+	    logger.log(new Status(Status.ERROR, AnalysisRunsView.class
+		    .getName(), "Could not start new analysis run!", e));
+	}
+    }
+
+    private void editAnalysisRun() {
+	MessageDialog.openInformation(getSite().getShell(), "Not implemented",
+		"This functionality is not implemented, yet!");
+    }
+
+    private void deleteAnalysisRun() {
+	try {
+	    StructuredSelection selection = (StructuredSelection) analysisRunsViewer
+		    .getSelection();
+	    AnalysisRunInformation information = (AnalysisRunInformation) selection
+		    .getFirstElement();
+	    if (MessageDialog.openQuestion(
+		    getSite().getShell(),
+		    "Delete?",
+		    "Do you really want to delete analysis '"
+			    + information.getTime() + "'?")) {
+		analysis.removeAnalysisRun(information.getUUID());
+		refreshAnalysisRunList();
+	    }
+	} catch (AnalysisStoreException e) {
+	    logger.log(new Status(Status.ERROR, ParserTreeControl.class
+		    .getName(), "Can not read analysis runs from store!", e));
 	}
     }
 

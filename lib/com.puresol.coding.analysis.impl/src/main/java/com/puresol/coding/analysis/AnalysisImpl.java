@@ -16,6 +16,7 @@ import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalysisRunInformation;
 import com.puresol.coding.analysis.api.AnalysisSettings;
 import com.puresol.coding.analysis.api.AnalysisStoreException;
+import com.puresol.utils.FileUtilities;
 
 public class AnalysisImpl implements Analysis {
 
@@ -180,6 +181,20 @@ public class AnalysisImpl implements Analysis {
 	    return loadAnalysisRun(uuid);
 	} else {
 	    return null;
+	}
+    }
+
+    @Override
+    public void removeAnalysisRun(UUID uuid) throws AnalysisStoreException {
+	try {
+	    File analysisRunDirectory = new File(analysisDirectory,
+		    uuid.toString());
+	    FileUtilities.deleteFileOrDir(analysisRunDirectory);
+	} catch (IOException e) {
+	    throw new AnalysisStoreException(
+		    "Could not delete analysis run with UUID '"
+			    + uuid.toString() + "' for analysis with UUID '"
+			    + this.uuid.toString() + "'!", e);
 	}
     }
 

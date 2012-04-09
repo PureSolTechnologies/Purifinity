@@ -40,13 +40,6 @@
                   mnemonic="N"
                   style="push">
             </command>
-            <command
-                  commandId="com.puresol.ui.file.openAnalysis"
-                  id="openAnalysis"
-                  label="Open Analysis..."
-                  mnemonic="O"
-                  style="push">
-            </command>
             <separator
                   name="coding.client.plugin.separator1"
                   visible="true">
@@ -196,23 +189,27 @@
          point="org.eclipse.ui.views">
       <view
             category="com.puresol.coding.Analysis"
-            class="com.puresol.coding.client.views.AnalysisNavigator"
+            class="com.puresol.coding.client.views.AnalyzesView"
+            icon="icons/16x16/analyzes_view.png"
             id="com.puresol.coding.client.AnalysisNavigator"
-            name="Analysis Navigator"
+            name="Analyzes"
             restorable="true">
       </view>
       <view
+            allowMultiple="false"
             category="com.puresol.coding.Analysis"
-            class="com.puresol.coding.client.views.AnalysisRunNavigator"
+            class="com.puresol.coding.client.views.AnalysisRunsView"
+            icon="icons/16x16/analysis_runs_view.png"
             id="com.puresol.coding.client.AnalysisRunNavigator"
-            name="Analysis Run Navigator"
+            name="Analysis Runs"
             restorable="true">
       </view>
       <view
             category="com.puresol.coding.Analysis"
-            class="com.puresol.coding.client.views.SourceNavigator"
+            class="com.puresol.coding.client.views.AnalysisRunContentBrowserView"
+            icon="icons/16x16/folders_explorer.png"
             id="com.puresol.coding.client.SourceNavigator"
-            name="Source Navigator"
+            name="Analysis Run Content Explorer"
             restorable="true">
       </view>
       <view
@@ -268,11 +265,6 @@
             defaultHandler="com.puresol.coding.client.commands.NewAnalysis"
             id="com.puresol.ui.file.newAnalysis"
             name="newAnalysis">
-      </command>
-      <command
-            defaultHandler="com.puresol.coding.client.commands.OpenAnalysis"
-            id="com.puresol.ui.file.openAnalysis"
-            name="openAnalysis">
       </command>
       <command
             defaultHandler="com.puresol.coding.client.commands.SwitchWorkspace"

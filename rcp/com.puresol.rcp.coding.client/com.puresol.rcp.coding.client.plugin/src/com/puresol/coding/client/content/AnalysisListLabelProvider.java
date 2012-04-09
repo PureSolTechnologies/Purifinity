@@ -17,8 +17,8 @@ import com.puresol.coding.client.ClientImages;
  */
 public class AnalysisListLabelProvider extends LabelProvider {
 
-    private final Image folderImage = Activator.getDefault().getImageRegistry()
-	    .get(ClientImages.FOLDER);
+    private final Image analysisImage = Activator.getDefault().getImageRegistry()
+	    .get(ClientImages.ANALYSIS_16x16);
 
     @Override
     public String getText(Object element) {
@@ -30,7 +30,7 @@ public class AnalysisListLabelProvider extends LabelProvider {
 
     @Override
     public Image getImage(Object element) {
-	return folderImage;
+	return analysisImage;
 
     }
 }
