@@ -475,8 +475,8 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
 	if (file == null) {
 	    return null;
 	}
-	return analyzerFactory
-		.restore(AnalyzedFileHelper.getAnalyzerFile(file));
+	return analyzerFactory.restore(AnalyzedFileHelper.getAnalyzerFile(
+		runDirectory, file));
     }
 
     @Override

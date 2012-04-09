@@ -21,28 +21,22 @@ public class AnalyzedFile implements Comparable<AnalyzedFile>, Serializable {
     private static final long serialVersionUID = 2030120585873480183L;
 
     private final File sourceDirectory;
-    private final File workspaceDirectory;
     private final File file;
     private final int hashcode;
     private final AnalyzedFileInformation information;
 
-    public AnalyzedFile(File sourceDirectory, File workspaceDirectory, File file)
-	    throws IOException {
+    public AnalyzedFile(File sourceDirectory, File file) throws IOException {
 	super();
 	if (sourceDirectory == null) {
 	    throw new IllegalArgumentException("sourceDirectory is null!");
-	}
-	if (workspaceDirectory == null) {
-	    throw new IllegalArgumentException("workspaceDirectory is null!");
 	}
 	if (file == null) {
 	    throw new IllegalArgumentException("file is null!");
 	}
 	this.sourceDirectory = sourceDirectory;
-	this.workspaceDirectory = workspaceDirectory;
 	this.file = file;
 	hashcode = ObjectUtilities.calculateConstantHashCode(sourceDirectory,
-		workspaceDirectory, file);
+		file);
 	information = new AnalyzedFileInformation(FileUtilities.createHashId(
 		getSourceFile(), HashAlgorithm.SHA256), file);
     }
@@ -57,10 +51,6 @@ public class AnalyzedFile implements Comparable<AnalyzedFile>, Serializable {
 
     public final AnalyzedFileInformation getInformation() {
 	return information;
-    }
-
-    public final File getFileDirectory() {
-	return new File(workspaceDirectory, file.getPath());
     }
 
     @Override
@@ -84,11 +74,6 @@ public class AnalyzedFile implements Comparable<AnalyzedFile>, Serializable {
 	    if (other.file != null)
 		return false;
 	} else if (!file.equals(other.file))
-	    return false;
-	if (workspaceDirectory == null) {
-	    if (other.workspaceDirectory != null)
-		return false;
-	} else if (!workspaceDirectory.equals(other.workspaceDirectory))
 	    return false;
 	return true;
     }

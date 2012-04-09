@@ -41,11 +41,7 @@ public class FileAnalyzerImpl {
 	    analyzed = false;
 	    updated = false;
 
-	    analyzedFile = new AnalyzedFile(sourceDirectory, targetDirectory,
-		    file);
-	    if (!analyzedFile.getSourceFile().isFile()) {
-		return;
-	    }
+	    analyzedFile = new AnalyzedFile(sourceDirectory, file);
 	    analyzeIfRequired();
 	} catch (LanguageNotSupportedException e) {
 	    analyzedFile = null;
@@ -58,9 +54,10 @@ public class FileAnalyzerImpl {
     private void analyzeIfRequired() throws AnalyzerException,
 	    LanguageNotSupportedException, IOException {
 	if (FileUtilities.isUpdateRequired(analyzedFile.getSourceFile(),
-		AnalyzedFileHelper.getPropertyFile(analyzedFile))) {
-	    AnalyzedFileHelper.getAnalyzerFile(analyzedFile).getParentFile()
-		    .mkdirs();
+		AnalyzedFileHelper.getPropertyFile(targetDirectory,
+			analyzedFile))) {
+	    AnalyzedFileHelper.getAnalyzerFile(targetDirectory, analyzedFile)
+		    .getParentFile().mkdirs();
 	    analyzeFile();
 	    analyzed = true;
 	    writeProperties();
@@ -78,7 +75,8 @@ public class FileAnalyzerImpl {
 	analyzer = FileAnalysisFactory.createFactory().create(
 		analyzedFile.getSourceFile());
 	analyzer.analyze();
-	analyzer.persist(AnalyzedFileHelper.getAnalyzerFile(analyzedFile));
+	analyzer.persist(AnalyzedFileHelper.getAnalyzerFile(targetDirectory,
+		analyzedFile));
     }
 
     private void writeProperties() throws IOException {
@@ -88,7 +86,8 @@ public class FileAnalyzerImpl {
 	props.put("timestamp", dateFormat.format(analyzer.getTimeStamp()));
 	props.put("language", analyzer.getLanguage().getName());
 	props.store(
-		new FileWriter(AnalyzedFileHelper.getPropertyFile(analyzedFile)),
+		new FileWriter(AnalyzedFileHelper.getPropertyFile(
+			targetDirectory, analyzedFile)),
 		"PropertyFile for Analysis");
     }
 
