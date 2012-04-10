@@ -47,7 +47,8 @@ public class AnalysisContentTreeLabelProvider extends LabelProvider {
 	File path = input.getPathFile(false);
 	AnalyzedFile analyzedFile = analysisRun.findAnalyzedFile(path);
 	if (analyzedFile != null) {
-	    FileAnalysis analysisResult = analysisRun.getAnalysis(analyzedFile);
+	    FileAnalysis analysisResult = analysisRun.getAnalysis(analyzedFile
+		    .getHashId());
 	    try {
 		text += " (" + analysisResult.getLanguage().getName() + " "
 			+ analysisResult.getLanguage().getVersion() + ")";

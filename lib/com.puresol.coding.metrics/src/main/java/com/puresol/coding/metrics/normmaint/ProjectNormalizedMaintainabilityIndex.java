@@ -5,11 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.puresol.coding.analysis.api.FileAnalysis;
+import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalyzedFile;
 import com.puresol.coding.analysis.api.CodeRange;
+import com.puresol.coding.analysis.api.FileAnalysis;
 import com.puresol.coding.analysis.api.ProgrammingLanguage;
-import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.metrics.AbstractProjectMetric;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.SourceCodeQuality;
@@ -27,7 +27,8 @@ public class ProjectNormalizedMaintainabilityIndex extends
     protected Map<String, SourceCodeQuality> processFile(AnalyzedFile file)
 	    throws IOException {
 	Map<String, SourceCodeQuality> results = new HashMap<String, SourceCodeQuality>();
-	FileAnalysis analysis = getProjectAnalyzer().getAnalysis(file);
+	FileAnalysis analysis = getProjectAnalyzer().getAnalysis(
+		file.getHashId());
 	ProgrammingLanguage language = analysis.getLanguage();
 
 	for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {

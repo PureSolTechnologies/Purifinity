@@ -26,7 +26,7 @@ public class JavaAnalyserTest {
 		.classToRelativePackagePath(this.getClass()).toString());
 	assertTrue(file.exists());
 	JavaAnalyzer analyser = new JavaAnalyzer(file);
-	assertEquals(file, analyser.getFile());
+	assertEquals(file, analyser.getAnalyzedFile().getFile());
 	assertNotNull(analyser.getTimeStamp());
 	assertSame(Java.getInstance(), analyser.getLanguage());
 	assertNull(analyser.getParserTree());

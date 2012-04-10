@@ -21,10 +21,11 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresol.coding.analysis.api.FileAnalyzer;
+import com.puresol.coding.analysis.api.AnalyzedFile;
 import com.puresol.coding.analysis.api.AnalyzerException;
 import com.puresol.coding.analysis.api.CodeRange;
 import com.puresol.coding.analysis.api.CodeRangeType;
+import com.puresol.coding.analysis.api.FileAnalyzer;
 import com.puresol.coding.lang.fortran.grammar.FortranGrammar;
 import com.puresol.trees.TreeException;
 import com.puresol.trees.TreeVisitor;
@@ -36,6 +37,9 @@ import com.puresol.uhura.lexer.TokenStream;
 import com.puresol.uhura.parser.Parser;
 import com.puresol.uhura.parser.ParserException;
 import com.puresol.uhura.parser.ParserTree;
+import com.puresol.utils.FileUtilities;
+import com.puresol.utils.HashAlgorithm;
+import com.puresol.utils.HashId;
 import com.puresol.utils.StopWatch;
 
 /**
@@ -57,6 +61,7 @@ public class FortranAnalyzer implements FileAnalyzer {
     private final Date date = new Date();
     private ParserTree parserTree = null;
     private long timeEffort = 0;
+    private HashId hashId;
 
     public FortranAnalyzer(File file) {
 	super();
@@ -69,6 +74,7 @@ public class FortranAnalyzer implements FileAnalyzer {
 	try {
 	    StopWatch watch = new StopWatch();
 	    watch.start();
+	    hashId = FileUtilities.createHashId(file, HashAlgorithm.SHA256);
 	    LexerResult lexerResult = preConditioningAndLexing();
 	    Parser parser = grammar.getParser();
 	    parserTree = parser.parse(lexerResult);
@@ -109,8 +115,10 @@ public class FortranAnalyzer implements FileAnalyzer {
     }
 
     @Override
-    public File getFile() {
-	return file;
+    public AnalyzedFile getAnalyzedFile() {
+	Fortran fortran = Fortran.getInstance();
+	return new AnalyzedFile(hashId, file, date, timeEffort,
+		fortran.getName(), fortran.getVersion());
     }
 
     @Override

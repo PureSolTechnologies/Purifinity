@@ -30,7 +30,7 @@ public class FortranAnalyserTest {
     public void testInitValues() {
 	File file = new File("src/test/TestFile.f");
 	FortranAnalyzer analyser = new FortranAnalyzer(file);
-	assertEquals(file, analyser.getFile());
+	assertEquals(file, analyser.getAnalyzedFile().getFile());
 	assertNotNull(analyser.getTimeStamp());
 	assertSame(Fortran.getInstance(), analyser.getLanguage());
 	assertNull(analyser.getParserTree());

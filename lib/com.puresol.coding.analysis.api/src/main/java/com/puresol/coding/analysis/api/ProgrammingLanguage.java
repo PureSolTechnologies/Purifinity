@@ -50,7 +50,6 @@ public interface ProgrammingLanguage { // do not Serialize!
      * This method is a factory method for analyser objects for the programming
      * language for a specified file within a specified project directory.
      * 
-     * @param directory
      * @param file
      * @return
      */

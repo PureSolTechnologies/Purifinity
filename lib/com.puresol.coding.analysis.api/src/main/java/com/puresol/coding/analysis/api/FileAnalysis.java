@@ -10,7 +10,6 @@
 
 package com.puresol.coding.analysis.api;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Date;
@@ -55,9 +54,9 @@ public interface FileAnalysis extends Serializable {
     /**
      * The file which was analyzed is returned.
      * 
-     * @return The file is returned.
+     * @return The analyzed file is returned.
      */
-    public File getFile();
+    public AnalyzedFile getAnalyzedFile();
 
     public ParserTree getParserTree() throws IOException;
 

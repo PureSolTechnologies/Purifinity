@@ -1,10 +1,12 @@
 package com.puresol.coding.analysis.api;
 
 import java.io.File;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.List;
 
 import com.puresol.trees.FileTree;
+import com.puresol.utils.HashId;
 
 /**
  * This is the general interface for a single project analysis. This analysis
@@ -57,7 +59,7 @@ public interface AnalysisRun extends Serializable {
      *            is the analyzed file.
      * @return A {@link FileAnalysis} is returned.
      */
-    public FileAnalysis getAnalysis(AnalyzedFile file);
+    public FileAnalysis getAnalysis(HashId hashId);
 
     /**
      * This method performs a lookup of the file provided and find the
@@ -73,4 +75,16 @@ public interface AnalysisRun extends Serializable {
      */
     public AnalyzedFile findAnalyzedFile(File file);
 
+    /**
+     * This method loads a file from the store which was saved during an
+     * analysis run.
+     * 
+     * @param hashId
+     *            is the identifier for the file.
+     * @return An input stream is returned to access the content of the file.
+     *         This stream needs to be closed from the caller!
+     * @throws AnalysisStoreException
+     *             is thrown in cases of issues.
+     */
+    public InputStream loadFile(HashId hashId) throws AnalysisStoreException;
 }

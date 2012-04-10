@@ -2,10 +2,12 @@ package com.puresol.coding.analysis;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
@@ -36,12 +38,16 @@ import com.puresol.trees.FileTreeConverter;
 import com.puresol.utils.DirectoryUtilities;
 import com.puresol.utils.FileSearch;
 import com.puresol.utils.FileSearchConfiguration;
+import com.puresol.utils.FileUtilities;
+import com.puresol.utils.HashAlgorithm;
+import com.puresol.utils.HashId;
 
 public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
 
     private static final long serialVersionUID = 6413809660830217670L;
 
     private static final String DIRECTORY_FLAG = ".analysis_run";
+    private static final String FILE_CONTENT_FILE = "content.txt";
 
     private static final Logger logger = LoggerFactory
 	    .getLogger(AnalysisRunImpl.class);
@@ -382,15 +388,31 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
      */
     private void analyzeFile(File file) {
 	try {
-	    FileAnalyzerImpl fileAnalyzer = new FileAnalyzerImpl(
-		    sourceDirectory, runDirectory, file);
-	    fileAnalyzer.analyze();
-	    if (fileAnalyzer.isAnalyzed()) {
-		AnalyzedFile analyzedFile = fileAnalyzer.getAnalyzedFile();
-		analyzedFiles.add(analyzedFile);
+	    HashId hashId = FileUtilities.createHashId(new File(
+		    sourceDirectory, file.getPath()), HashAlgorithm.SHA256);
+	    if (storedAlready(hashId)) {
+		if (wasAnalyzed(hashId)) {
+		    FileAnalysis analysis = getAnalysis(hashId);
+		    analyzedFiles.add(new AnalyzedFile(hashId, file, analysis
+			    .getTimeStamp(), analysis.getTimeOfRun(), analysis
+			    .getLanguage().getName(), analysis.getLanguage()
+			    .getVersion()));
+		} else {
+		    failedFiles.add(file);
+		}
 	    } else {
-		failedFiles.add(file);
-		logger.warn("File " + file + " could be analyzed.");
+		storeFile(file, hashId);
+		FileAnalyzerImpl fileAnalyzer = new FileAnalyzerImpl(
+			sourceDirectory, getFileStoreDirectory(runDirectory,
+				hashId), file, hashId);
+		fileAnalyzer.analyze();
+		if (fileAnalyzer.isAnalyzed()) {
+		    AnalyzedFile analyzedFile = fileAnalyzer.getAnalyzedFile();
+		    analyzedFiles.add(analyzedFile);
+		} else {
+		    failedFiles.add(file);
+		    logger.warn("File " + file + " could be analyzed.");
+		}
 	    }
 	} catch (Exception e) {
 	    failedFiles.add(file);
@@ -398,85 +420,27 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
 	}
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.puresol.coding.analysis.IProjectAnalyzer#getWorkspaceDirectory()
-     */
-    public File getWorkspaceDirectory() {
-	return runDirectory;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.puresol.coding.analysis.IProjectAnalyzer#getProjectDirectory()
-     */
-    public File getProjectDirectory() {
-	return sourceDirectory;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.puresol.coding.analysis.IProjectAnalyzer#getAnalyzedFiles()
-     */
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.puresol.coding.analysis.ProjectAnalysis#getAnalyzedFiles()
-     */
     @Override
     public List<AnalyzedFile> getAnalyzedFiles() {
 	return analyzedFiles;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.puresol.coding.analysis.ProjectAnalysis#getFileTree()
-     */
     @Override
     public FileTree getFileTree() {
 	return fileTree;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.puresol.coding.analysis.IProjectAnalyzer#getFailedFiles()
-     */
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.puresol.coding.analysis.ProjectAnalysis#getFailedFiles()
-     */
     @Override
     public List<File> getFailedFiles() {
 	return failedFiles;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * com.puresol.coding.analysis.IProjectAnalyzer#getAnalysis(com.puresol.
-     * coding.analysis.AnalyzedFile)
-     */
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * com.puresol.coding.analysis.ProjectAnalysis#getAnalysis(com.puresol.coding
-     * .analysis.AnalyzedFile)
-     */
     @Override
-    public FileAnalysis getAnalysis(AnalyzedFile file) {
-	if (file == null) {
-	    return null;
-	}
-	return analyzerFactory.restore(AnalyzedFileHelper.getAnalyzerFile(
-		runDirectory, file));
+    public FileAnalysis getAnalysis(HashId hashId) {
+	File fileStoreDirectory = getFileStoreDirectory(runDirectory, hashId);
+	File analyzerFile = AnalyzedFileHelper
+		.getAnalyzerFile(fileStoreDirectory);
+	return analyzerFactory.restore(analyzerFile);
     }
 
     @Override
@@ -524,4 +488,48 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
 	return new File(runDirectory, DIRECTORY_FLAG).exists();
     }
 
+    @Override
+    public InputStream loadFile(HashId hashId) throws AnalysisStoreException {
+	try {
+	    File file = getFileStoreDirectory(new File(runDirectory, "files"),
+		    hashId);
+	    return new FileInputStream(new File(file, FILE_CONTENT_FILE));
+	} catch (FileNotFoundException e) {
+	    throw new AnalysisStoreException("Could not load file with id '"
+		    + hashId.toString() + "'!", e);
+	}
+    }
+
+    private void storeFile(File file, HashId hashId) throws IOException {
+	File fileStoreDirectory = getFileStoreDirectory(runDirectory, hashId);
+	if (!fileStoreDirectory.exists()) {
+	    if (!fileStoreDirectory.mkdirs()) {
+		throw new IOException("Could not create directory '"
+			+ fileStoreDirectory.getPath() + "'");
+	    }
+	}
+	File contentFile = new File(fileStoreDirectory, FILE_CONTENT_FILE);
+	FileUtilities.copy(new File(sourceDirectory, file.getPath()),
+		contentFile);
+    }
+
+    private boolean storedAlready(HashId hashId) {
+	File fileStoreDirectory = getFileStoreDirectory(runDirectory, hashId);
+	return fileStoreDirectory.exists();
+    }
+
+    private boolean wasAnalyzed(HashId hashId) {
+	File fileStoreDirectory = getFileStoreDirectory(runDirectory, hashId);
+	return AnalyzedFileHelper.getAnalyzerFile(fileStoreDirectory).exists();
+    }
+
+    static File getFileStoreDirectory(File runDirectory, HashId hashId) {
+	String hash = hashId.getHash();
+	String subDir1 = hash.substring(0, 2);
+	String subDir2 = hash.substring(2, 4);
+	String subDir3 = hash.substring(4);
+	return new File(new File(new File(new File(
+		new File(runDirectory, ".."), "files"), subDir1), subDir2),
+		subDir3);
+    }
 }

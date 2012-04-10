@@ -18,7 +18,6 @@ import com.puresol.coding.analysis.api.FileAnalyzer;
 import com.puresol.coding.analysis.api.ProgrammingLanguage;
 import com.puresol.uhura.parser.ParserTree;
 import com.puresol.utils.FileUtilities;
-import com.puresol.utils.HashAlgorithm;
 import com.puresol.utils.HashId;
 
 public class FileAnalyzerImpl implements FileAnalyzer {
@@ -29,8 +28,9 @@ public class FileAnalyzerImpl implements FileAnalyzer {
 	    .getLogger(FileAnalyzerImpl.class);
 
     private final File sourceDirectory;
-    private final File targetDirectory;
+    private final File storageDirectory;
     private final File file;
+    private final HashId hashId;
     private FileAnalyzer analyzer = null;
     private AnalyzedFile analyzedFile = null;
     private boolean analyzed = false;
@@ -38,12 +38,13 @@ public class FileAnalyzerImpl implements FileAnalyzer {
     private Date time;
     private long timeOfRun;
 
-    public FileAnalyzerImpl(File sourceDirectory, File targetDirectory,
-	    File file) throws AnalyzerException {
+    public FileAnalyzerImpl(File sourceDirectory, File storageDirectory,
+	    File file, HashId hashId) throws AnalyzerException {
 	super();
 	this.sourceDirectory = sourceDirectory;
-	this.targetDirectory = targetDirectory;
+	this.storageDirectory = storageDirectory;
 	this.file = file;
+	this.hashId = hashId;
     }
 
     @Override
@@ -52,13 +53,12 @@ public class FileAnalyzerImpl implements FileAnalyzer {
 	    analyzed = false;
 	    updated = false;
 
-	    HashId hashId = FileUtilities.createHashId(new File(
-		    sourceDirectory, file.getPath()), HashAlgorithm.SHA256);
 	    time = new Date();
 	    timeOfRun = System.currentTimeMillis();
 	    analyzeIfRequired();
+	    ProgrammingLanguage language = getAnalyzer().getLanguage();
 	    analyzedFile = new AnalyzedFile(hashId, file, new Date(), 0,
-		    getAnalyzer().getLanguage());
+		    language.getName(), language.getVersion());
 	} catch (LanguageNotSupportedException e) {
 	    analyzedFile = null;
 	    logger.debug("File '" + file.getPath()
@@ -70,9 +70,9 @@ public class FileAnalyzerImpl implements FileAnalyzer {
     private void analyzeIfRequired() throws AnalyzerException,
 	    LanguageNotSupportedException, IOException {
 	if (FileUtilities.isUpdateRequired(
-		new File(sourceDirectory, file.getPath()), AnalyzedFileHelper
-			.getPropertyFile(targetDirectory, analyzedFile))) {
-	    AnalyzedFileHelper.getAnalyzerFile(targetDirectory, analyzedFile)
+		new File(sourceDirectory, file.getPath()),
+		AnalyzedFileHelper.getPropertyFile(storageDirectory))) {
+	    AnalyzedFileHelper.getAnalyzerFile(storageDirectory)
 		    .getParentFile().mkdirs();
 	    analyzeFile();
 	    analyzed = true;
@@ -92,8 +92,7 @@ public class FileAnalyzerImpl implements FileAnalyzer {
 	analyzer = FileAnalysisFactory.createFactory().create(
 		new File(sourceDirectory, file.getPath()));
 	analyzer.analyze();
-	analyzer.persist(AnalyzedFileHelper.getAnalyzerFile(targetDirectory,
-		analyzedFile));
+	analyzer.persist(AnalyzedFileHelper.getAnalyzerFile(storageDirectory));
     }
 
     private void writeProperties() throws IOException {
@@ -103,11 +102,12 @@ public class FileAnalyzerImpl implements FileAnalyzer {
 	props.put("timestamp", dateFormat.format(analyzer.getTimeStamp()));
 	props.put("language", analyzer.getLanguage().getName());
 	props.store(
-		new FileWriter(AnalyzedFileHelper.getPropertyFile(
-			targetDirectory, analyzedFile)),
+		new FileWriter(AnalyzedFileHelper
+			.getPropertyFile(storageDirectory)),
 		"PropertyFile for Analysis");
     }
 
+    @Override
     public AnalyzedFile getAnalyzedFile() {
 	return analyzedFile;
     }
@@ -137,11 +137,6 @@ public class FileAnalyzerImpl implements FileAnalyzer {
     @Override
     public ProgrammingLanguage getLanguage() throws IOException {
 	return analyzer.getLanguage();
-    }
-
-    @Override
-    public File getFile() {
-	return file;
     }
 
     @Override

@@ -21,10 +21,11 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresol.coding.analysis.api.FileAnalyzer;
+import com.puresol.coding.analysis.api.AnalyzedFile;
 import com.puresol.coding.analysis.api.AnalyzerException;
 import com.puresol.coding.analysis.api.CodeRange;
 import com.puresol.coding.analysis.api.CodeRangeType;
+import com.puresol.coding.analysis.api.FileAnalyzer;
 import com.puresol.coding.analysis.api.ProgrammingLanguage;
 import com.puresol.coding.lang.java.grammar.JavaGrammar;
 import com.puresol.coding.lang.java.grammar.parts.AnnotationTypeDeclaration;
@@ -44,6 +45,9 @@ import com.puresol.uhura.lexer.SourceCode;
 import com.puresol.uhura.parser.Parser;
 import com.puresol.uhura.parser.ParserException;
 import com.puresol.uhura.parser.ParserTree;
+import com.puresol.utils.FileUtilities;
+import com.puresol.utils.HashAlgorithm;
+import com.puresol.utils.HashId;
 import com.puresol.utils.StopWatch;
 
 /**
@@ -63,6 +67,7 @@ public class JavaAnalyzer implements FileAnalyzer {
     private Date date = new Date();
     private long timeEffort = 0;
     private ParserTree parserTree = null;
+    private HashId hashId;
 
     public JavaAnalyzer(File file) {
 	super();
@@ -75,6 +80,7 @@ public class JavaAnalyzer implements FileAnalyzer {
 	try {
 	    date = new Date();
 	    StopWatch watch = new StopWatch();
+	    hashId = FileUtilities.createHashId(file, HashAlgorithm.SHA256);
 	    watch.start();
 	    Lexer lexer = grammar.getLexer();
 	    LexerResult lexerResult = lexer.lex(SourceCode.read(file),
@@ -112,8 +118,10 @@ public class JavaAnalyzer implements FileAnalyzer {
     }
 
     @Override
-    public File getFile() {
-	return file;
+    public AnalyzedFile getAnalyzedFile() {
+	Java java = Java.getInstance();
+	return new AnalyzedFile(hashId, file, date, timeEffort, java.getName(),
+		java.getVersion());
     }
 
     @Override

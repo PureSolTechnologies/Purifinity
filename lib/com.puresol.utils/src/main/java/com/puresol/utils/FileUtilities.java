@@ -3,6 +3,7 @@ package com.puresol.utils;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
@@ -22,6 +23,35 @@ public class FileUtilities {
 
     private static final Logger logger = LoggerFactory
 	    .getLogger(FileUtilities.class);
+
+    /**
+     * This method performs a simple copy of sourceFile to targetFile.
+     * 
+     * @param sourceFile
+     * @param targetFile
+     * @throws IOException
+     */
+    public static void copy(File sourceFile, File targetFile)
+	    throws IOException {
+	FileInputStream in = new FileInputStream(sourceFile);
+	try {
+	    FileOutputStream out = new FileOutputStream(targetFile);
+	    try {
+		byte[] buffer = new byte[1024];
+		int len = 0;
+		do {
+		    len = in.read(buffer);
+		    if (len > 0) {
+			out.write(buffer, 0, len);
+		    }
+		} while (len > 0);
+	    } finally {
+		out.close();
+	    }
+	} finally {
+	    in.close();
+	}
+    }
 
     /**
      * This method checks for the requirement for an update.

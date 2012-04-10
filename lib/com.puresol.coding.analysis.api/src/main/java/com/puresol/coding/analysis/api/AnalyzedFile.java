@@ -14,7 +14,8 @@ import com.puresol.utils.HashId;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class AnalyzedFile implements Comparable<AnalyzedFile>, Serializable {
+public final class AnalyzedFile implements Comparable<AnalyzedFile>,
+	Serializable {
 
     private static final long serialVersionUID = 2030120585873480183L;
 
@@ -22,36 +23,42 @@ public class AnalyzedFile implements Comparable<AnalyzedFile>, Serializable {
     private final File file;
     private final Date time;
     private final long timeOfRun;
-    private final ProgrammingLanguage language;
+    private final String languageName;
+    private final String languageVersion;
 
     public AnalyzedFile(HashId hashId, File file, Date time, long timeOfRun,
-	    ProgrammingLanguage language) {
+	    String languageName, String languageVersion) {
 	super();
 	this.hashId = hashId;
 	this.file = file;
 	this.time = time;
 	this.timeOfRun = timeOfRun;
-	this.language = language;
+	this.languageName = languageName;
+	this.languageVersion = languageVersion;
     }
 
-    public HashId getHashId() {
+    public final HashId getHashId() {
 	return hashId;
     }
 
-    public File getFile() {
+    public final File getFile() {
 	return file;
     }
 
-    public Date getTime() {
+    public final Date getTime() {
 	return time;
     }
 
-    public long getTimeOfRun() {
+    public final long getTimeOfRun() {
 	return timeOfRun;
     }
 
-    public ProgrammingLanguage getLanguage() {
-	return language;
+    public final String getLanguageName() {
+	return languageName;
+    }
+
+    public final String getLanguageVersion() {
+	return languageVersion;
     }
 
     @Override
@@ -61,7 +68,9 @@ public class AnalyzedFile implements Comparable<AnalyzedFile>, Serializable {
 	result = prime * result + ((file == null) ? 0 : file.hashCode());
 	result = prime * result + ((hashId == null) ? 0 : hashId.hashCode());
 	result = prime * result
-		+ ((language == null) ? 0 : language.hashCode());
+		+ ((languageName == null) ? 0 : languageName.hashCode());
+	result = prime * result
+		+ ((languageVersion == null) ? 0 : languageVersion.hashCode());
 	result = prime * result + ((time == null) ? 0 : time.hashCode());
 	result = prime * result + (int) (timeOfRun ^ (timeOfRun >>> 32));
 	return result;
@@ -86,10 +95,15 @@ public class AnalyzedFile implements Comparable<AnalyzedFile>, Serializable {
 		return false;
 	} else if (!hashId.equals(other.hashId))
 	    return false;
-	if (language == null) {
-	    if (other.language != null)
+	if (languageName == null) {
+	    if (other.languageName != null)
 		return false;
-	} else if (!language.equals(other.language))
+	} else if (!languageName.equals(other.languageName))
+	    return false;
+	if (languageVersion == null) {
+	    if (other.languageVersion != null)
+		return false;
+	} else if (!languageVersion.equals(other.languageVersion))
 	    return false;
 	if (time == null) {
 	    if (other.time != null)

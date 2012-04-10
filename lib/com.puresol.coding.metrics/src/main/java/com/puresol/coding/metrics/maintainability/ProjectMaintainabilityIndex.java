@@ -81,7 +81,8 @@ public class ProjectMaintainabilityIndex extends ProjectEvaluator {
     }
 
     private void processFile(AnalyzedFile file) throws IOException {
-	FileAnalysis analysis = getProjectAnalyzer().getAnalysis(file);
+	FileAnalysis analysis = getProjectAnalyzer().getAnalysis(
+		file.getHashId());
 	ProgrammingLanguage language = analysis.getLanguage();
 
 	for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {

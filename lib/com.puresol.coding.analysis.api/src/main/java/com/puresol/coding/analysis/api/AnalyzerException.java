@@ -12,7 +12,7 @@ public class AnalyzerException extends Exception {
 
     public AnalyzerException(FileAnalyzer analyser) {
 	super("Analyser " + analyser.getClass() + " is not suitable for file "
-		+ analyser.getFile());
+		+ analyser.getAnalyzedFile().getFile());
     }
 
     public AnalyzerException(Exception e) {
@@ -21,6 +21,6 @@ public class AnalyzerException extends Exception {
 
     public AnalyzerException(FileAnalyzer analyser, Exception e) {
 	super("Analyser " + analyser.getClass() + " is not suitable for file "
-		+ analyser.getFile(), e);
+		+ analyser.getAnalyzedFile().getFile(), e);
     }
 }

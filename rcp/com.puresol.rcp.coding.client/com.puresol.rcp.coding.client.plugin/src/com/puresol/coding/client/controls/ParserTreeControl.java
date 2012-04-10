@@ -58,7 +58,7 @@ public class ParserTreeControl extends Composite {
 	    Analysis analysis) throws IOException {
 	try {
 	    FileAnalysis fileAnalysis = analysis.loadLastAnalysisRun()
-		    .getAnalysis(analyzedFile);
+		    .getAnalysis(analyzedFile.getHashId());
 	    if (fileAnalysis != null) {
 		lblNewLabel.setText(analysis.getInformation().getName() + ": "
 			+ analyzedFile.getFile());
