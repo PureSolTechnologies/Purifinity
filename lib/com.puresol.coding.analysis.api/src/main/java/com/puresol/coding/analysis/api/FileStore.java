@@ -25,10 +25,10 @@ public interface FileStore {
      *         returned in case of an already stored file. In this case the new
      *         file is not stored and the already stored file is assumed to be
      *         equal due to the same hash id.
-     * @throws DirectoryStoreException
+     * @throws FileStoreException
      */
     boolean storeFile(HashId analyzedFile, InputStream conent)
-	    throws DirectoryStoreException;
+	    throws FileStoreException;
 
     /**
      * This method loads a single analysis.
@@ -43,8 +43,10 @@ public interface FileStore {
      * 
      * @param hashId
      * @param fileAnalysis
+     * @throws FileStoreException
      */
-    void storeAnalysis(HashId hashId, FileAnalysis fileAnalysis);
+    void storeAnalysis(HashId hashId, FileAnalysis fileAnalysis)
+	    throws FileStoreException;
 
     /**
      * Checks whether a file is available or not.
@@ -59,6 +61,9 @@ public interface FileStore {
      * 
      * @param hashId
      * @return
+     * @throws FileStoreException
      */
-    public InputStream loadContent(HashId hashId);
+    public InputStream loadContent(HashId hashId) throws FileStoreException;
+
+    public boolean wasAnalyzed(HashId hashId);
 }

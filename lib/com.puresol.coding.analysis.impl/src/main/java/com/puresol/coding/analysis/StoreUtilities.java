@@ -9,9 +9,10 @@ import java.util.List;
 import java.util.Map;
 
 import com.puresol.coding.analysis.api.DirectoryStore;
+import com.puresol.coding.analysis.api.DirectoryStoreException;
 import com.puresol.coding.analysis.api.DirectoryStoreFactory;
 import com.puresol.coding.analysis.api.FileStore;
-import com.puresol.coding.analysis.api.DirectoryStoreException;
+import com.puresol.coding.analysis.api.FileStoreException;
 import com.puresol.coding.analysis.api.FileStoreFactory;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.data.HashCodeGenerator;
@@ -121,6 +122,8 @@ public class StoreUtilities {
 		    }
 		    return WalkingAction.PROCEED;
 		} catch (IOException e) {
+		    return WalkingAction.ABORT;
+		} catch (FileStoreException e) {
 		    return WalkingAction.ABORT;
 		} catch (DirectoryStoreException e) {
 		    return WalkingAction.ABORT;

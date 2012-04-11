@@ -2,12 +2,10 @@ package com.puresol.coding.analysis;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
@@ -31,8 +29,10 @@ import com.puresol.coding.analysis.api.AnalysisInformation;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalysisRunInformation;
 import com.puresol.coding.analysis.api.AnalyzedFile;
-import com.puresol.coding.analysis.api.FileAnalysis;
 import com.puresol.coding.analysis.api.DirectoryStoreException;
+import com.puresol.coding.analysis.api.FileAnalysis;
+import com.puresol.coding.analysis.api.FileStore;
+import com.puresol.coding.analysis.api.FileStoreFactory;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.trees.FileTree;
 import com.puresol.trees.FileTreeConverter;
@@ -48,7 +48,6 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
     private static final long serialVersionUID = 6413809660830217670L;
 
     private static final String DIRECTORY_FLAG = ".analysis_run";
-    private static final String FILE_CONTENT_FILE = "content.txt";
 
     private static final Logger logger = LoggerFactory
 	    .getLogger(AnalysisRunImpl.class);
@@ -66,7 +65,8 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
      * @return
      * @throws DirectoryStoreException
      */
-    public static AnalysisRun open(File runDirectory) throws DirectoryStoreException {
+    public static AnalysisRun open(File runDirectory)
+	    throws DirectoryStoreException {
 	AnalysisRunImpl projectAnalyser = new AnalysisRunImpl(runDirectory);
 	projectAnalyser.open();
 	return projectAnalyser;
@@ -104,11 +104,10 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
 
     private final File runDirectory;
 
-    private transient final FileAnalysisFactory analyzerFactory = FileAnalysisFactory
-	    .createFactory();
-
     private final List<AnalyzedFile> analyzedFiles = new ArrayList<AnalyzedFile>();
     private final List<File> failedFiles = new ArrayList<File>();
+    private final FileStore fileStore = FileStoreFactory.getInstance();
+
     private FileTree fileTree = new FileTree(null, "");
     private FileSearchConfiguration searchConfig;
 
@@ -158,7 +157,8 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
 	    writeSearchConfiguration();
 	    storeProjectInformation();
 	} catch (IOException e) {
-	    throw new DirectoryStoreException("Could not create analysis run!", e);
+	    throw new DirectoryStoreException("Could not create analysis run!",
+		    e);
 	}
     }
 
@@ -324,7 +324,6 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
 
     private IStatus analyzeFiles(final IProgressMonitor monitor) {
 	fileTree = FileSearch.getFileTree(sourceDirectory, searchConfig);
-
 	HashIdFileTree hashIdFileTree = StoreUtilities
 		.createHashIdFileTree(fileTree);
 	StoreUtilities.storeFiles(hashIdFileTree);
@@ -393,22 +392,17 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
 	try {
 	    HashId hashId = FileUtilities.createHashId(new File(
 		    sourceDirectory, file.getPath()), HashAlgorithm.SHA256);
-	    if (storedAlready(hashId)) {
-		if (wasAnalyzed(hashId)) {
-		    FileAnalysis analysis = getAnalysis(hashId);
-		    analyzedFiles.add(new AnalyzedFile(hashId, file, analysis
-			    .getTimeStamp(), analysis.getTimeOfRun(), analysis
-			    .getLanguage().getName(), analysis.getLanguage()
-			    .getVersion()));
-		} else {
-		    failedFiles.add(file);
-		}
+	    if (fileStore.isAvailable(hashId) && fileStore.wasAnalyzed(hashId)) {
+		FileAnalysis analysis = fileStore.loadAnalysis(hashId);
+		analyzedFiles.add(new AnalyzedFile(hashId, file, analysis
+			.getTimeStamp(), analysis.getTimeOfRun(), analysis
+			.getLanguage().getName(), analysis.getLanguage()
+			.getVersion()));
 	    } else {
-		storeFile(file, hashId);
 		FileAnalyzerImpl fileAnalyzer = new FileAnalyzerImpl(
-			sourceDirectory, FileStoreImpl.getFileStoreDirectory(
-				runDirectory, hashId), file, hashId);
+			sourceDirectory, file, hashId);
 		fileAnalyzer.analyze();
+		fileStore.storeAnalysis(hashId, fileAnalyzer.getAnalyzer());
 		if (fileAnalyzer.isAnalyzed()) {
 		    AnalyzedFile analyzedFile = fileAnalyzer.getAnalyzedFile();
 		    analyzedFiles.add(analyzedFile);
@@ -436,15 +430,6 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
     @Override
     public List<File> getFailedFiles() {
 	return failedFiles;
-    }
-
-    @Override
-    public FileAnalysis getAnalysis(HashId hashId) {
-	File fileStoreDirectory = FileStoreImpl.getFileStoreDirectory(
-		runDirectory, hashId);
-	File analyzerFile = AnalyzedFileHelper
-		.getAnalyzerFile(fileStoreDirectory);
-	return analyzerFactory.restore(analyzerFile);
     }
 
     @Override
@@ -490,44 +475,6 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
 
     public static boolean isAnalysisRunDirectory(File runDirectory) {
 	return new File(runDirectory, DIRECTORY_FLAG).exists();
-    }
-
-    @Override
-    public InputStream loadFile(HashId hashId) throws DirectoryStoreException {
-	try {
-	    File file = FileStoreImpl.getFileStoreDirectory(new File(
-		    runDirectory, "files"), hashId);
-	    return new FileInputStream(new File(file, FILE_CONTENT_FILE));
-	} catch (FileNotFoundException e) {
-	    throw new DirectoryStoreException("Could not load file with id '"
-		    + hashId.toString() + "'!", e);
-	}
-    }
-
-    private void storeFile(File file, HashId hashId) throws IOException {
-	File fileStoreDirectory = FileStoreImpl.getFileStoreDirectory(
-		runDirectory, hashId);
-	if (!fileStoreDirectory.exists()) {
-	    if (!fileStoreDirectory.mkdirs()) {
-		throw new IOException("Could not create directory '"
-			+ fileStoreDirectory.getPath() + "'");
-	    }
-	}
-	File contentFile = new File(fileStoreDirectory, FILE_CONTENT_FILE);
-	FileUtilities.copy(new File(sourceDirectory, file.getPath()),
-		contentFile);
-    }
-
-    private boolean storedAlready(HashId hashId) {
-	File fileStoreDirectory = FileStoreImpl.getFileStoreDirectory(
-		runDirectory, hashId);
-	return fileStoreDirectory.exists();
-    }
-
-    private boolean wasAnalyzed(HashId hashId) {
-	File fileStoreDirectory = FileStoreImpl.getFileStoreDirectory(
-		runDirectory, hashId);
-	return AnalyzedFileHelper.getAnalyzerFile(fileStoreDirectory).exists();
     }
 
 }

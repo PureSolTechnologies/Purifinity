@@ -17,6 +17,8 @@ import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalyzedFile;
 import com.puresol.coding.analysis.api.CodeRange;
 import com.puresol.coding.analysis.api.FileAnalysis;
+import com.puresol.coding.analysis.api.FileStore;
+import com.puresol.coding.analysis.api.FileStoreFactory;
 import com.puresol.coding.analysis.api.ProgrammingLanguage;
 import com.puresol.coding.evaluator.ProjectEvaluator;
 import com.puresol.coding.evaluator.Result;
@@ -32,6 +34,7 @@ public class ProjectMaintainabilityIndex extends ProjectEvaluator {
 
     private final Map<String, SourceCodeQuality> qualities = new HashMap<String, SourceCodeQuality>();
     private final Map<String, List<Result>> evaluatorResults = new HashMap<String, List<Result>>();
+    private final FileStore fileStore = FileStoreFactory.getInstance();
 
     private SourceCodeQuality projectQuality = SourceCodeQuality.UNSPECIFIED;
     private int qualitySum = 0;
@@ -81,8 +84,7 @@ public class ProjectMaintainabilityIndex extends ProjectEvaluator {
     }
 
     private void processFile(AnalyzedFile file) throws IOException {
-	FileAnalysis analysis = getProjectAnalyzer().getAnalysis(
-		file.getHashId());
+	FileAnalysis analysis = fileStore.loadAnalysis(file.getHashId());
 	ProgrammingLanguage language = analysis.getLanguage();
 
 	for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {

@@ -9,6 +9,8 @@ import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalyzedFile;
 import com.puresol.coding.analysis.api.CodeRange;
 import com.puresol.coding.analysis.api.FileAnalysis;
+import com.puresol.coding.analysis.api.FileStore;
+import com.puresol.coding.analysis.api.FileStoreFactory;
 import com.puresol.coding.analysis.api.ProgrammingLanguage;
 import com.puresol.coding.metrics.AbstractProjectMetric;
 import com.puresol.coding.quality.QualityCharacteristic;
@@ -19,6 +21,8 @@ public class ProjectHalsteadMetric extends
 
     private static final long serialVersionUID = -5093217611195212999L;
 
+    private final FileStore fileStore = FileStoreFactory.getInstance();
+
     public ProjectHalsteadMetric(AnalysisRun projectAnalyzer) {
 	super(projectAnalyzer);
     }
@@ -27,8 +31,7 @@ public class ProjectHalsteadMetric extends
     protected Map<String, SourceCodeQuality> processFile(AnalyzedFile file)
 	    throws IOException {
 	Map<String, SourceCodeQuality> results = new HashMap<String, SourceCodeQuality>();
-	FileAnalysis analysis = getProjectAnalyzer().getAnalysis(
-		file.getHashId());
+	FileAnalysis analysis = fileStore.loadAnalysis(file.getHashId());
 	ProgrammingLanguage language = analysis.getLanguage();
 
 	for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {

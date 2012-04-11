@@ -1,7 +1,6 @@
 package com.puresol.coding.analysis;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -17,7 +16,6 @@ import com.puresol.coding.analysis.api.CodeRange;
 import com.puresol.coding.analysis.api.FileAnalyzer;
 import com.puresol.coding.analysis.api.ProgrammingLanguage;
 import com.puresol.uhura.parser.ParserTree;
-import com.puresol.utils.FileUtilities;
 import com.puresol.utils.HashId;
 
 public class FileAnalyzerImpl implements FileAnalyzer {
@@ -28,7 +26,6 @@ public class FileAnalyzerImpl implements FileAnalyzer {
 	    .getLogger(FileAnalyzerImpl.class);
 
     private final File sourceDirectory;
-    private final File storageDirectory;
     private final File file;
     private final HashId hashId;
     private FileAnalyzer analyzer = null;
@@ -38,11 +35,10 @@ public class FileAnalyzerImpl implements FileAnalyzer {
     private Date time;
     private long timeOfRun;
 
-    public FileAnalyzerImpl(File sourceDirectory, File storageDirectory,
-	    File file, HashId hashId) throws AnalyzerException {
+    public FileAnalyzerImpl(File sourceDirectory, File file, HashId hashId)
+	    throws AnalyzerException {
 	super();
 	this.sourceDirectory = sourceDirectory;
-	this.storageDirectory = storageDirectory;
 	this.file = file;
 	this.hashId = hashId;
     }
@@ -69,21 +65,10 @@ public class FileAnalyzerImpl implements FileAnalyzer {
 
     private void analyzeIfRequired() throws AnalyzerException,
 	    LanguageNotSupportedException, IOException {
-	if (FileUtilities.isUpdateRequired(
-		new File(sourceDirectory, file.getPath()),
-		AnalyzedFileHelper.getPropertyFile(storageDirectory))) {
-	    AnalyzedFileHelper.getAnalyzerFile(storageDirectory)
-		    .getParentFile().mkdirs();
-	    analyzeFile();
-	    analyzed = true;
-	    writeProperties();
-	    updated = true;
-	} else {
-	    /*
-	     * File is present and therefore, it is analyzed.
-	     */
-	    analyzed = true;
-	}
+	analyzeFile();
+	analyzed = true;
+	writeProperties();
+	updated = true;
 	timeOfRun = System.currentTimeMillis() - timeOfRun;
     }
 
@@ -92,7 +77,6 @@ public class FileAnalyzerImpl implements FileAnalyzer {
 	analyzer = FileAnalysisFactory.createFactory().create(
 		new File(sourceDirectory, file.getPath()));
 	analyzer.analyze();
-	analyzer.persist(AnalyzedFileHelper.getAnalyzerFile(storageDirectory));
     }
 
     private void writeProperties() throws IOException {
@@ -101,10 +85,6 @@ public class FileAnalyzerImpl implements FileAnalyzer {
 		"yyyy-MM-dd HH:mm:ss");
 	props.put("timestamp", dateFormat.format(analyzer.getTimeStamp()));
 	props.put("language", analyzer.getLanguage().getName());
-	props.store(
-		new FileWriter(AnalyzedFileHelper
-			.getPropertyFile(storageDirectory)),
-		"PropertyFile for Analysis");
     }
 
     @Override

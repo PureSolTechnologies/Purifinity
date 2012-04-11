@@ -14,6 +14,8 @@ import org.eclipse.ui.PlatformUI;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalyzedFile;
 import com.puresol.coding.analysis.api.FileAnalysis;
+import com.puresol.coding.analysis.api.FileStore;
+import com.puresol.coding.analysis.api.FileStoreFactory;
 import com.puresol.coding.client.Activator;
 import com.puresol.coding.client.ClientImages;
 import com.puresol.trees.FileTree;
@@ -31,6 +33,8 @@ public class AnalysisContentTreeLabelProvider extends LabelProvider {
 	    .getWorkbench().getSharedImages()
 	    .getImageDescriptor(ISharedImages.IMG_DEC_FIELD_ERROR);
 
+    private final FileStore fileStore = FileStoreFactory.getInstance();
+
     private AnalysisRun analysisRun;
 
     public void setAnalysisRun(AnalysisRun analysisRun) {
@@ -47,7 +51,7 @@ public class AnalysisContentTreeLabelProvider extends LabelProvider {
 	File path = input.getPathFile(false);
 	AnalyzedFile analyzedFile = analysisRun.findAnalyzedFile(path);
 	if (analyzedFile != null) {
-	    FileAnalysis analysisResult = analysisRun.getAnalysis(analyzedFile
+	    FileAnalysis analysisResult = fileStore.loadAnalysis(analyzedFile
 		    .getHashId());
 	    try {
 		text += " (" + analysisResult.getLanguage().getName() + " "

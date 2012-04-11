@@ -26,6 +26,8 @@ import com.puresol.coding.analysis.api.AnalyzedFile;
 import com.puresol.coding.analysis.api.CodeRange;
 import com.puresol.coding.analysis.api.CodeRangeType;
 import com.puresol.coding.analysis.api.FileAnalysis;
+import com.puresol.coding.analysis.api.FileStore;
+import com.puresol.coding.analysis.api.FileStoreFactory;
 import com.puresol.coding.evaluator.ProjectEvaluator;
 import com.puresol.coding.evaluator.Result;
 import com.puresol.coding.metrics.sloc.SLOCMetric;
@@ -54,6 +56,7 @@ public class CoCoMo extends ProjectEvaluator {
 
     public static final List<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new Vector<QualityCharacteristic>();
 
+    private final FileStore fileStore = FileStoreFactory.getInstance();
     private final CoCoMoValueSet cocomoValues = new CoCoMoValueSet();
     private final Hashtable<AnalyzedFile, CoCoMoValueSet> fileCoCoMoValues = new Hashtable<AnalyzedFile, CoCoMoValueSet>();
     private final AnalysisRun projectAnalyzer;
@@ -96,8 +99,7 @@ public class CoCoMo extends ProjectEvaluator {
 
     private int getFileSLOC(AnalyzedFile file) {
 	try {
-	    FileAnalysis analysis = projectAnalyzer.getAnalysis(file
-		    .getHashId());
+	    FileAnalysis analysis = fileStore.loadAnalysis(file.getHashId());
 	    ParserTree parserTree = analysis.getParserTree();
 	    SLOCMetric metric = new SLOCMetric(analysis.getLanguage(),
 		    new CodeRange("", CodeRangeType.FILE, parserTree));
