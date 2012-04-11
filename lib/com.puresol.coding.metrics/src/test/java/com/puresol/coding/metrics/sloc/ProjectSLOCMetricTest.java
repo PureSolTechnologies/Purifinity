@@ -15,7 +15,7 @@ import org.junit.Test;
 import com.puresol.coding.analysis.AnalysisRunImpl;
 import com.puresol.coding.analysis.api.AnalysisInformation;
 import com.puresol.coding.analysis.api.AnalysisRun;
-import com.puresol.coding.analysis.api.AnalysisStoreException;
+import com.puresol.coding.analysis.api.DirectoryStoreException;
 import com.puresol.coding.quality.SourceCodeQuality;
 import com.puresol.utils.FileSearchConfiguration;
 
@@ -24,7 +24,7 @@ public class ProjectSLOCMetricTest {
     private AnalysisRun analyzer = null;
 
     @Before
-    public void setup() throws AnalysisStoreException {
+    public void setup() throws DirectoryStoreException {
 	File runDirectory = new File("test/analysis");
 	AnalysisInformation analysisInformation = new AnalysisInformation(
 		UUID.randomUUID(), "ProjectAnalyzer", "description", new Date());

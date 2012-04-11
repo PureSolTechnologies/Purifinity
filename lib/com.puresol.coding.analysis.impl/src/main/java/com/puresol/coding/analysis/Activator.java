@@ -7,11 +7,15 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
 import com.puresol.coding.analysis.api.AnalysisStore;
+import com.puresol.coding.analysis.api.DirectoryStore;
+import com.puresol.coding.analysis.api.FileStore;
 
 public class Activator implements BundleActivator {
 
     private static BundleContext context = null;
     private ServiceRegistration<AnalysisStore> analysisStoreService;
+    private ServiceRegistration<FileStore> fileStoreService;
+    private ServiceRegistration<DirectoryStore> directoryStoreService;
 
     /*
      * (non-Javadoc)
@@ -29,6 +33,10 @@ public class Activator implements BundleActivator {
 	Activator.context = context;
 	analysisStoreService = context.registerService(AnalysisStore.class,
 		new AnalysisStoreImpl(), new Hashtable<String, Object>());
+	fileStoreService = context.registerService(FileStore.class,
+		new FileStoreImpl(), new Hashtable<String, Object>());
+	directoryStoreService = context.registerService(DirectoryStore.class,
+		new DirectoryStoreImpl(), new Hashtable<String, Object>());
     }
 
     /*
@@ -44,7 +52,11 @@ public class Activator implements BundleActivator {
 		    + " was never activated!");
 	}
 	context.ungetService(analysisStoreService.getReference());
+	context.ungetService(fileStoreService.getReference());
+	context.ungetService(directoryStoreService.getReference());
 	analysisStoreService = null;
+	fileStoreService = null;
+	directoryStoreService = null;
 	Activator.context = null;
     }
 

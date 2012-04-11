@@ -37,7 +37,7 @@ import swing2swt.layout.BorderLayout;
 
 import com.puresol.coding.analysis.api.AnalysisInformation;
 import com.puresol.coding.analysis.api.AnalysisStore;
-import com.puresol.coding.analysis.api.AnalysisStoreException;
+import com.puresol.coding.analysis.api.DirectoryStoreException;
 import com.puresol.coding.analysis.api.AnalysisStoreFactory;
 import com.puresol.coding.client.Activator;
 import com.puresol.coding.client.ClientImages;
@@ -257,7 +257,7 @@ public class AnalyzesView extends ViewPart implements IJobChangeListener,
 		store.removeAnalysis(information.getUUID());
 		refreshAnalysisList();
 	    }
-	} catch (AnalysisStoreException e) {
+	} catch (DirectoryStoreException e) {
 	    logger.log(new Status(Status.ERROR, AnalyzesView.class.getName(),
 		    "Could not retrieve analysis from analysis store!", e));
 	}
@@ -268,7 +268,7 @@ public class AnalyzesView extends ViewPart implements IJobChangeListener,
 	    if (!analyzesList.isDisposed()) {
 		analyzesViewer.setInput(store.getAllAnalysisInformation());
 	    }
-	} catch (AnalysisStoreException e) {
+	} catch (DirectoryStoreException e) {
 	    logger.log(new Status(Status.ERROR, AnalyzesView.class.getName(),
 		    "Could not retrieve list of analyzes from analysis store!",
 		    e));
@@ -283,7 +283,7 @@ public class AnalyzesView extends ViewPart implements IJobChangeListener,
 		    .getFirstElement();
 	    setSelection(new AnalysisSelection(store.loadAnalysis(information
 		    .getUUID())));
-	} catch (AnalysisStoreException e) {
+	} catch (DirectoryStoreException e) {
 	    logger.log(new Status(Status.ERROR, AnalyzesView.class.getName(),
 		    "Could not retrieve analysis from analysis store!", e));
 	}

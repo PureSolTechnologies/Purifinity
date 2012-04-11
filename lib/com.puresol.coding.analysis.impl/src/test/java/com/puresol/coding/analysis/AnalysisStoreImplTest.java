@@ -14,12 +14,12 @@ import com.puresol.coding.analysis.api.Analysis;
 import com.puresol.coding.analysis.api.AnalysisInformation;
 import com.puresol.coding.analysis.api.AnalysisSettings;
 import com.puresol.coding.analysis.api.AnalysisStore;
-import com.puresol.coding.analysis.api.AnalysisStoreException;
+import com.puresol.coding.analysis.api.DirectoryStoreException;
 
 public class AnalysisStoreImplTest {
 
     @Test
-    public void testGetAllAnalysisInformation() throws AnalysisStoreException {
+    public void testGetAllAnalysisInformation() throws DirectoryStoreException {
 	AnalysisStore store = new AnalysisStoreImpl();
 	List<AnalysisInformation> allAnalysisInformation = store
 		.getAllAnalysisInformation();
@@ -31,7 +31,7 @@ public class AnalysisStoreImplTest {
     }
 
     @Test
-    public void testCreateAndDeleteAnalysis() throws AnalysisStoreException {
+    public void testCreateAndDeleteAnalysis() throws DirectoryStoreException {
 	AnalysisStore store = new AnalysisStoreImpl();
 	File sourceDirectory = new File(".");
 	Analysis analysis = store.createAnalysis(new AnalysisSettings("Name",
@@ -56,7 +56,7 @@ public class AnalysisStoreImplTest {
 
     @Test
     public void testCreateAndOpenAndDeleteAnalysis()
-	    throws AnalysisStoreException {
+	    throws DirectoryStoreException {
 	AnalysisStore store = new AnalysisStoreImpl();
 	File sourceDirectory = new File(System.getProperty("user.dir"));
 	Analysis analysis = store.createAnalysis(new AnalysisSettings("Name",

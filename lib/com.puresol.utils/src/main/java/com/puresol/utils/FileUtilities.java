@@ -5,6 +5,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.RandomAccessFile;
 
 import org.slf4j.Logger;
@@ -37,20 +39,25 @@ public class FileUtilities {
 	try {
 	    FileOutputStream out = new FileOutputStream(targetFile);
 	    try {
-		byte[] buffer = new byte[1024];
-		int len = 0;
-		do {
-		    len = in.read(buffer);
-		    if (len > 0) {
-			out.write(buffer, 0, len);
-		    }
-		} while (len > 0);
+		copy(in, out);
 	    } finally {
 		out.close();
 	    }
 	} finally {
 	    in.close();
 	}
+    }
+
+    public static void copy(InputStream in, OutputStream out)
+	    throws IOException {
+	byte[] buffer = new byte[1024];
+	int len = 0;
+	do {
+	    len = in.read(buffer);
+	    if (len > 0) {
+		out.write(buffer, 0, len);
+	    }
+	} while (len > 0);
     }
 
     /**

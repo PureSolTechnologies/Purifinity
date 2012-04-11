@@ -58,6 +58,12 @@ public interface FileAnalysis extends Serializable {
      */
     public AnalyzedFile getAnalyzedFile();
 
+    /**
+     * This method returns the parser tree.
+     * 
+     * @return
+     * @throws IOException
+     */
     public ParserTree getParserTree() throws IOException;
 
     public List<CodeRange> getAnalyzableCodeRanges();

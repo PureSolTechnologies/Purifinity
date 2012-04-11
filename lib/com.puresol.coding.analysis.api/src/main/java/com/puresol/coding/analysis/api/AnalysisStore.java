@@ -19,11 +19,11 @@ public interface AnalysisStore {
      * 
      * @return A {@link List} of {@link AnalysisInformation} is returned
      *         containing all available analysis.
-     * @throws AnalysisStoreException
+     * @throws DirectoryStoreException
      *             is thrown in cases of issues.
      */
     public List<AnalysisInformation> getAllAnalysisInformation()
-	    throws AnalysisStoreException;
+	    throws DirectoryStoreException;
 
     /**
      * This method is used to load a single Analysis by {@link UUID}.
@@ -31,10 +31,10 @@ public interface AnalysisStore {
      * @param uuid
      *            is the {@link UUID} of the analysis to be loaded.
      * @return An {@link Analysis} is returned which was loaded.
-     * @throws AnalysisStoreException
+     * @throws DirectoryStoreException
      *             is thrown for unexpected issues.
      */
-    public Analysis loadAnalysis(UUID uuid) throws AnalysisStoreException;
+    public Analysis loadAnalysis(UUID uuid) throws DirectoryStoreException;
 
     /**
      * This method creates a new Analysis which is specified by
@@ -44,19 +44,19 @@ public interface AnalysisStore {
      *            are the settings to be used for a new analysis.
      * @return An {@link Analysis} is returned containing the analysis created
      *         before.
-     * @throws AnalysisStoreException
+     * @throws DirectoryStoreException
      *             is thrown for unexpected issues.
      */
     public Analysis createAnalysis(AnalysisSettings settings)
-	    throws AnalysisStoreException;
+	    throws DirectoryStoreException;
 
     /**
      * This method deletes an analysis from the store.
      * 
      * @param uuid
      *            is the identifier of the analysis to be deleted.
-     * @throws AnalysisStoreException
+     * @throws DirectoryStoreException
      *             is thrown in cases of issues.
      */
-    public void removeAnalysis(UUID uuid) throws AnalysisStoreException;
+    public void removeAnalysis(UUID uuid) throws DirectoryStoreException;
 }

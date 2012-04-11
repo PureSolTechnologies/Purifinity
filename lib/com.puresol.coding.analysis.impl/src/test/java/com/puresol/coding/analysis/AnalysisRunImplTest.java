@@ -15,8 +15,8 @@ import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalysisRunInformation;
 import com.puresol.coding.analysis.api.AnalysisSettings;
 import com.puresol.coding.analysis.api.AnalysisStore;
-import com.puresol.coding.analysis.api.AnalysisStoreException;
 import com.puresol.coding.analysis.api.AnalyzedFile;
+import com.puresol.coding.analysis.api.DirectoryStoreException;
 import com.puresol.trees.FileTree;
 import com.puresol.utils.HashAlgorithm;
 import com.puresol.utils.HashId;
@@ -27,7 +27,7 @@ public class AnalysisRunImplTest {
     private static Analysis analysis;
 
     @BeforeClass
-    public static void initialize() throws AnalysisStoreException {
+    public static void initialize() throws DirectoryStoreException {
 	analysisStore = new AnalysisStoreImpl();
 	analysis = analysisStore.createAnalysis(new AnalysisSettings("Name",
 		"Description", new TestFileSearchConfiguration(), new File(
@@ -36,7 +36,7 @@ public class AnalysisRunImplTest {
     }
 
     @Test
-    public void test() throws AnalysisStoreException {
+    public void test() throws DirectoryStoreException {
 	AnalysisRun analysisRun = analysis.runAnalysis();
 	assertNotNull(analysisRun);
 	List<AnalyzedFile> analyzedFiles = analysisRun.getAnalyzedFiles();
@@ -51,15 +51,14 @@ public class AnalysisRunImplTest {
 
     @Test
     public void testGetFileStoreDirectory() {
-	File fileStoreDirectory = AnalysisRunImpl.getFileStoreDirectory(
-		new File("test/test2"), new HashId(HashAlgorithm.SHA256,
-			"1234567890"));
+	File fileStoreDirectory = FileStoreImpl.getFileStoreDirectory(new File(
+		"test/test2"), new HashId(HashAlgorithm.SHA256, "1234567890"));
 	assertEquals("test/test2/files/12/34/567890",
 		fileStoreDirectory.getPath());
     }
 
     @AfterClass
-    public static void destroy() throws AnalysisStoreException {
+    public static void destroy() throws DirectoryStoreException {
 	assertNotNull(analysisStore);
 	assertNotNull(analysis);
 	analysisStore.removeAnalysis(analysis.getInformation().getUUID());

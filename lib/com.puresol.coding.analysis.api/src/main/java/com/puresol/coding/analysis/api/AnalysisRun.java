@@ -83,8 +83,8 @@ public interface AnalysisRun extends Serializable {
      *            is the identifier for the file.
      * @return An input stream is returned to access the content of the file.
      *         This stream needs to be closed from the caller!
-     * @throws AnalysisStoreException
+     * @throws DirectoryStoreException
      *             is thrown in cases of issues.
      */
-    public InputStream loadFile(HashId hashId) throws AnalysisStoreException;
+    public InputStream loadFile(HashId hashId) throws DirectoryStoreException;
 }

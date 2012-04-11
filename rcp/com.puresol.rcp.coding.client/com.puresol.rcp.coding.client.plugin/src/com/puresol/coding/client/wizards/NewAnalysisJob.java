@@ -12,7 +12,7 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import com.puresol.coding.analysis.api.Analysis;
 import com.puresol.coding.analysis.api.AnalysisSettings;
 import com.puresol.coding.analysis.api.AnalysisStore;
-import com.puresol.coding.analysis.api.AnalysisStoreException;
+import com.puresol.coding.analysis.api.DirectoryStoreException;
 import com.puresol.coding.analysis.api.AnalysisStoreFactory;
 import com.puresol.coding.client.Activator;
 import com.puresol.coding.client.utils.PreferencesUtils;
@@ -49,7 +49,7 @@ public class NewAnalysisJob extends Job {
 	} catch (OperationCanceledException e) {
 	    e.printStackTrace();
 	    return Status.CANCEL_STATUS;
-	} catch (AnalysisStoreException e) {
+	} catch (DirectoryStoreException e) {
 	    e.printStackTrace();
 	    return Status.CANCEL_STATUS;
 	}

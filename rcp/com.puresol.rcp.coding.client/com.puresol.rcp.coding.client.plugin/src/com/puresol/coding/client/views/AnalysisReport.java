@@ -25,7 +25,7 @@ import org.eclipse.wb.swt.SWTResourceManager;
 
 import com.puresol.coding.analysis.api.Analysis;
 import com.puresol.coding.analysis.api.AnalysisRun;
-import com.puresol.coding.analysis.api.AnalysisStoreException;
+import com.puresol.coding.analysis.api.DirectoryStoreException;
 import com.puresol.coding.analysis.api.AnalyzedFile;
 import com.puresol.coding.client.Activator;
 import com.puresol.coding.client.controls.ParserTreeControl;
@@ -127,7 +127,7 @@ public class AnalysisReport extends ViewPart implements ISelectionListener {
 		numFailedFiles.setText(String.valueOf(String
 			.valueOf(failedFiles.size())));
 	    }
-	} catch (AnalysisStoreException e) {
+	} catch (DirectoryStoreException e) {
 	    logger.log(new Status(Status.ERROR, ParserTreeControl.class
 		    .getName(), "Can not read analysis store!", e));
 	}

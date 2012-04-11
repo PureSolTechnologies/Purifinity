@@ -17,7 +17,7 @@ import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalysisRunInformation;
 import com.puresol.coding.analysis.api.AnalysisSettings;
 import com.puresol.coding.analysis.api.AnalysisStore;
-import com.puresol.coding.analysis.api.AnalysisStoreException;
+import com.puresol.coding.analysis.api.DirectoryStoreException;
 
 public class AnalysisImplTest {
 
@@ -25,7 +25,7 @@ public class AnalysisImplTest {
     private static Analysis analysis;
 
     @BeforeClass
-    public static void initialize() throws AnalysisStoreException {
+    public static void initialize() throws DirectoryStoreException {
 	analysisStore = new AnalysisStoreImpl();
 	analysis = analysisStore
 		.createAnalysis(new AnalysisSettings("Name", "Description",
@@ -34,14 +34,14 @@ public class AnalysisImplTest {
     }
 
     @Test
-    public void test() throws AnalysisStoreException {
+    public void test() throws DirectoryStoreException {
 	List<AnalysisRunInformation> allRunInformation = analysis
 		.getAllRunInformation();
 	assertNotNull(allRunInformation);
     }
 
     @Test
-    public void testUpdateSettings() throws AnalysisStoreException {
+    public void testUpdateSettings() throws DirectoryStoreException {
 	AnalysisInformation oldInformation = analysis.getInformation();
 	AnalysisSettings settingsForUpdate = new AnalysisSettings("Name2",
 		"Description2", new TestFileSearchConfiguration(),
@@ -75,7 +75,7 @@ public class AnalysisImplTest {
     }
 
     @AfterClass
-    public static void destroy() throws AnalysisStoreException {
+    public static void destroy() throws DirectoryStoreException {
 	assertNotNull(analysisStore);
 	assertNotNull(analysis);
 	analysisStore.removeAnalysis(analysis.getInformation().getUUID());

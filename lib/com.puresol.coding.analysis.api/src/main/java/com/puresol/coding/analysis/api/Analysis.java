@@ -27,11 +27,11 @@ public interface Analysis {
      * 
      * @return A {@link AnalysisRunInformation} object is returned containing
      *         the information.
-     * @throws AnalysisStoreException
+     * @throws DirectoryStoreException
      *             is thrown in cases of issues.
      */
     public List<AnalysisRunInformation> getAllRunInformation()
-	    throws AnalysisStoreException;
+	    throws DirectoryStoreException;
 
     /**
      * This method returns the settings of the analysis.
@@ -46,11 +46,11 @@ public interface Analysis {
      * 
      * @param settings
      *            is a {@link AnalysisSettings} object containing the settings.
-     * @throws AnalysisStoreException
+     * @throws DirectoryStoreException
      *             is thrown in cases of issues.
      */
     public void updateSettings(AnalysisSettings settings)
-	    throws AnalysisStoreException;
+	    throws DirectoryStoreException;
 
     /**
      * This method returns the analysis run defined by the uuid.
@@ -60,10 +60,10 @@ public interface Analysis {
      *            load.
      * @return An {@link AnalysisRun} object is returned containing the analysis
      *         run.
-     * @throws AnalysisStoreException
+     * @throws DirectoryStoreException
      *             is thrown in cases of issues.
      */
-    public AnalysisRun loadAnalysisRun(UUID uuid) throws AnalysisStoreException;
+    public AnalysisRun loadAnalysisRun(UUID uuid) throws DirectoryStoreException;
 
     /**
      * A new analysis is run with this method. After the run a new
@@ -71,28 +71,28 @@ public interface Analysis {
      * 
      * @return A {@link AnalysisRun} object is returned containing the
      *         information and results about the run.
-     * @throws AnalysisStoreException
+     * @throws DirectoryStoreException
      *             is thrown in cases of issues.
      */
-    public AnalysisRun runAnalysis() throws AnalysisStoreException;
+    public AnalysisRun runAnalysis() throws DirectoryStoreException;
 
     /**
      * This method loads the last analysis run available. It is the most
      * up-to-date analysis.
      * 
      * @return An {@link AnalysisRun} is returned.
-     * @throws AnalysisStoreException
+     * @throws DirectoryStoreException
      *             is thrown in cases of issues.
      */
-    public AnalysisRun loadLastAnalysisRun() throws AnalysisStoreException;
+    public AnalysisRun loadLastAnalysisRun() throws DirectoryStoreException;
 
     /**
      * This method deletes an analysis run from the store.
      * 
      * @param uuid
      *            is the uuid of the run to be deleted.
-     * @throws AnalysisStoreException
+     * @throws DirectoryStoreException
      *             is thrown in events of issues.
      */
-    public void removeAnalysisRun(UUID uuid) throws AnalysisStoreException;
+    public void removeAnalysisRun(UUID uuid) throws DirectoryStoreException;
 }

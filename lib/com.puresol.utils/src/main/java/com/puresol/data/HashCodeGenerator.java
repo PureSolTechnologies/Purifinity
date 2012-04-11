@@ -84,7 +84,12 @@ public class HashCodeGenerator {
 	    byte[] result = digest.digest();
 	    StringBuffer hexString = new StringBuffer();
 	    for (int i = 0; i < result.length; i++) {
-		hexString.append(Integer.toHexString(0xFF & result[i]));
+		int digit = 0xFF & result[i];
+		String hexDigits = Integer.toHexString(digit);
+		if (hexDigits.length() < 2) {
+		    hexString.append("0");
+		}
+		hexString.append(hexDigits);
 	    }
 	    return hexString.toString();
 	} catch (NoSuchAlgorithmException e) {

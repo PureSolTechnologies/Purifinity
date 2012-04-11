@@ -13,7 +13,7 @@ import org.eclipse.swt.widgets.Tree;
 import swing2swt.layout.BorderLayout;
 
 import com.puresol.coding.analysis.api.Analysis;
-import com.puresol.coding.analysis.api.AnalysisStoreException;
+import com.puresol.coding.analysis.api.DirectoryStoreException;
 import com.puresol.coding.analysis.api.AnalyzedFile;
 import com.puresol.coding.analysis.api.FileAnalysis;
 import com.puresol.coding.client.Activator;
@@ -67,7 +67,7 @@ public class ParserTreeControl extends Composite {
 		lblNewLabel.setText("");
 		treeViewer.setInput(null);
 	    }
-	} catch (AnalysisStoreException e) {
+	} catch (DirectoryStoreException e) {
 	    logger.log(new Status(Status.ERROR, ParserTreeControl.class
 		    .getName(), "Can not read analysis store!", e));
 	}

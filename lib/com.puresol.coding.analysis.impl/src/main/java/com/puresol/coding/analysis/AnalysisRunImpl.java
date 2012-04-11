@@ -30,9 +30,10 @@ import org.slf4j.LoggerFactory;
 import com.puresol.coding.analysis.api.AnalysisInformation;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalysisRunInformation;
-import com.puresol.coding.analysis.api.AnalysisStoreException;
 import com.puresol.coding.analysis.api.AnalyzedFile;
 import com.puresol.coding.analysis.api.FileAnalysis;
+import com.puresol.coding.analysis.api.DirectoryStoreException;
+import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.trees.FileTree;
 import com.puresol.trees.FileTreeConverter;
 import com.puresol.utils.DirectoryUtilities;
@@ -63,10 +64,9 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
      * @param runDirectory
      *            is the directory where the persisted results can be found.
      * @return
-     * @throws AnalysisStoreException
+     * @throws DirectoryStoreException
      */
-    public static AnalysisRun open(File runDirectory)
-	    throws AnalysisStoreException {
+    public static AnalysisRun open(File runDirectory) throws DirectoryStoreException {
 	AnalysisRunImpl projectAnalyser = new AnalysisRunImpl(runDirectory);
 	projectAnalyser.open();
 	return projectAnalyser;
@@ -81,13 +81,13 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
      *            analyzed.
      * @param runDirectory
      *            is the directory to put the persisted results to.
-     * @throws AnalysisStoreException
+     * @throws DirectoryStoreException
      * @throws IOException
      */
     public static AnalysisRun create(File runDirectory,
 	    AnalysisInformation analysisInformation, UUID uuid,
 	    File sourceDirectory, FileSearchConfiguration searchConfiguration)
-	    throws AnalysisStoreException {
+	    throws DirectoryStoreException {
 	AnalysisRunImpl projectAnalyser = new AnalysisRunImpl(runDirectory);
 	projectAnalyser.create(sourceDirectory, analysisInformation, uuid,
 		searchConfiguration);
@@ -139,12 +139,12 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
      * @param name
      * @param uuid2
      * @return
-     * @throws AnalysisStoreException
+     * @throws DirectoryStoreException
      * @throws IOException
      */
     void create(File sourceDirectory, AnalysisInformation analysisInformation,
 	    UUID uuid, FileSearchConfiguration searchConfiguration)
-	    throws AnalysisStoreException {
+	    throws DirectoryStoreException {
 	try {
 	    this.sourceDirectory = sourceDirectory;
 	    this.analysisInformation = analysisInformation;
@@ -158,8 +158,7 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
 	    writeSearchConfiguration();
 	    storeProjectInformation();
 	} catch (IOException e) {
-	    throw new AnalysisStoreException("Could not create analysis run!",
-		    e);
+	    throw new DirectoryStoreException("Could not create analysis run!", e);
 	}
     }
 
@@ -200,9 +199,9 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
      * This method opens the project directory and loads all information files.
      * 
      * @return
-     * @throws AnalysisStoreException
+     * @throws DirectoryStoreException
      */
-    void open() throws AnalysisStoreException {
+    void open() throws DirectoryStoreException {
 	try {
 	    if (!runDirectory.exists()) {
 		throw new IOException("Analysis run directory '" + runDirectory
@@ -212,7 +211,7 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
 	    readSearchConfiguration();
 	    loadProjectInformation();
 	} catch (IOException e) {
-	    throw new AnalysisStoreException("Could not open analysis run!", e);
+	    throw new DirectoryStoreException("Could not open analysis run!", e);
 	}
     }
 
@@ -326,6 +325,10 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
     private IStatus analyzeFiles(final IProgressMonitor monitor) {
 	fileTree = FileSearch.getFileTree(sourceDirectory, searchConfig);
 
+	HashIdFileTree hashIdFileTree = StoreUtilities
+		.createHashIdFileTree(fileTree);
+	StoreUtilities.storeFiles(hashIdFileTree);
+
 	List<File> files = getFileListFromFileTree();
 	int processors = Runtime.getRuntime().availableProcessors();
 	ExecutorService threadPool = Executors.newFixedThreadPool(processors);
@@ -403,8 +406,8 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
 	    } else {
 		storeFile(file, hashId);
 		FileAnalyzerImpl fileAnalyzer = new FileAnalyzerImpl(
-			sourceDirectory, getFileStoreDirectory(runDirectory,
-				hashId), file, hashId);
+			sourceDirectory, FileStoreImpl.getFileStoreDirectory(
+				runDirectory, hashId), file, hashId);
 		fileAnalyzer.analyze();
 		if (fileAnalyzer.isAnalyzed()) {
 		    AnalyzedFile analyzedFile = fileAnalyzer.getAnalyzedFile();
@@ -437,7 +440,8 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
 
     @Override
     public FileAnalysis getAnalysis(HashId hashId) {
-	File fileStoreDirectory = getFileStoreDirectory(runDirectory, hashId);
+	File fileStoreDirectory = FileStoreImpl.getFileStoreDirectory(
+		runDirectory, hashId);
 	File analyzerFile = AnalyzedFileHelper
 		.getAnalyzerFile(fileStoreDirectory);
 	return analyzerFactory.restore(analyzerFile);
@@ -489,19 +493,20 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
     }
 
     @Override
-    public InputStream loadFile(HashId hashId) throws AnalysisStoreException {
+    public InputStream loadFile(HashId hashId) throws DirectoryStoreException {
 	try {
-	    File file = getFileStoreDirectory(new File(runDirectory, "files"),
-		    hashId);
+	    File file = FileStoreImpl.getFileStoreDirectory(new File(
+		    runDirectory, "files"), hashId);
 	    return new FileInputStream(new File(file, FILE_CONTENT_FILE));
 	} catch (FileNotFoundException e) {
-	    throw new AnalysisStoreException("Could not load file with id '"
+	    throw new DirectoryStoreException("Could not load file with id '"
 		    + hashId.toString() + "'!", e);
 	}
     }
 
     private void storeFile(File file, HashId hashId) throws IOException {
-	File fileStoreDirectory = getFileStoreDirectory(runDirectory, hashId);
+	File fileStoreDirectory = FileStoreImpl.getFileStoreDirectory(
+		runDirectory, hashId);
 	if (!fileStoreDirectory.exists()) {
 	    if (!fileStoreDirectory.mkdirs()) {
 		throw new IOException("Could not create directory '"
@@ -514,22 +519,15 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
     }
 
     private boolean storedAlready(HashId hashId) {
-	File fileStoreDirectory = getFileStoreDirectory(runDirectory, hashId);
+	File fileStoreDirectory = FileStoreImpl.getFileStoreDirectory(
+		runDirectory, hashId);
 	return fileStoreDirectory.exists();
     }
 
     private boolean wasAnalyzed(HashId hashId) {
-	File fileStoreDirectory = getFileStoreDirectory(runDirectory, hashId);
+	File fileStoreDirectory = FileStoreImpl.getFileStoreDirectory(
+		runDirectory, hashId);
 	return AnalyzedFileHelper.getAnalyzerFile(fileStoreDirectory).exists();
     }
 
-    static File getFileStoreDirectory(File runDirectory, HashId hashId) {
-	String hash = hashId.getHash();
-	String subDir1 = hash.substring(0, 2);
-	String subDir2 = hash.substring(2, 4);
-	String subDir3 = hash.substring(4);
-	return new File(new File(new File(new File(
-		new File(runDirectory, ".."), "files"), subDir1), subDir2),
-		subDir3);
-    }
 }

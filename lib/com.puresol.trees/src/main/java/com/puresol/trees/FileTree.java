@@ -9,7 +9,8 @@ import java.io.File;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class FileTree extends AbstractTreeImpl<FileTree> {
+public class FileTree extends AbstractTreeImpl<FileTree> implements
+	Comparable<FileTree> {
 
     /**
      * This is the initial value constructor.
@@ -86,4 +87,10 @@ public class FileTree extends AbstractTreeImpl<FileTree> {
 	}
 	return file;
     }
+
+    @Override
+    public int compareTo(FileTree o) {
+	return getName().compareTo(o.getName());
+    }
+
 }
