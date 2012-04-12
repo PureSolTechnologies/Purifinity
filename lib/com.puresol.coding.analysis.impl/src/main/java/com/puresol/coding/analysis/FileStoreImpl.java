@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import com.puresol.coding.analysis.api.AnalyzedFile;
@@ -19,9 +20,6 @@ public class FileStoreImpl implements FileStore {
 
     private static final String CONTENT_FILE = "content.txt";
     private static final String PARSER_TREE_FILE = "parser_tree.persist";
-
-    private transient final FileAnalysisFactory analyzerFactory = FileAnalysisFactory
-	    .createFactory();
 
     private final File fileStoreDirectory;
 
@@ -62,10 +60,26 @@ public class FileStoreImpl implements FileStore {
     }
 
     @Override
-    public FileAnalysis loadAnalysis(HashId hashId) {
-	File fileDirectory = getFileDirectory(fileStoreDirectory, hashId);
-	File analyzerFile = AnalyzedFileHelper.getAnalyzerFile(fileDirectory);
-	return analyzerFactory.restore(analyzerFile);
+    public FileAnalysis loadAnalysis(HashId hashId) throws FileStoreException {
+	try {
+	    File fileDirectory = getFileDirectory(fileStoreDirectory, hashId);
+	    File parserTreeFile = new File(fileDirectory, PARSER_TREE_FILE);
+	    ObjectInputStream inStream = new ObjectInputStream(
+		    new FileInputStream(parserTreeFile));
+	    try {
+		return (FileAnalysis) inStream.readObject();
+	    } finally {
+		inStream.close();
+	    }
+	} catch (ClassNotFoundException e) {
+	    throw new FileStoreException(
+		    "Could not store analysis for file with hash '" + hashId
+			    + "'", e);
+	} catch (IOException e) {
+	    throw new FileStoreException(
+		    "Could not store analysis for file with hash '" + hashId
+			    + "'", e);
+	}
     }
 
     @Override

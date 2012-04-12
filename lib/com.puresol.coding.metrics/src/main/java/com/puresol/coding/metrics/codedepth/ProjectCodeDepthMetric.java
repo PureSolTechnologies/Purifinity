@@ -10,6 +10,7 @@ import com.puresol.coding.analysis.api.AnalyzedFile;
 import com.puresol.coding.analysis.api.CodeRange;
 import com.puresol.coding.analysis.api.FileAnalysis;
 import com.puresol.coding.analysis.api.FileStore;
+import com.puresol.coding.analysis.api.FileStoreException;
 import com.puresol.coding.analysis.api.FileStoreFactory;
 import com.puresol.coding.analysis.api.ProgrammingLanguage;
 import com.puresol.coding.metrics.AbstractProjectMetric;
@@ -29,7 +30,7 @@ public class ProjectCodeDepthMetric extends
 
     @Override
     protected Map<String, SourceCodeQuality> processFile(AnalyzedFile file)
-	    throws IOException {
+	    throws IOException, FileStoreException {
 	Map<String, SourceCodeQuality> results = new HashMap<String, SourceCodeQuality>();
 	FileAnalysis analysis = fileStore.loadAnalysis(file.getHashId());
 	ProgrammingLanguage language = analysis.getLanguage();

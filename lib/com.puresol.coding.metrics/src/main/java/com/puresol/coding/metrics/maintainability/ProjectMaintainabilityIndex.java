@@ -18,6 +18,7 @@ import com.puresol.coding.analysis.api.AnalyzedFile;
 import com.puresol.coding.analysis.api.CodeRange;
 import com.puresol.coding.analysis.api.FileAnalysis;
 import com.puresol.coding.analysis.api.FileStore;
+import com.puresol.coding.analysis.api.FileStoreException;
 import com.puresol.coding.analysis.api.FileStoreFactory;
 import com.puresol.coding.analysis.api.ProgrammingLanguage;
 import com.puresol.coding.evaluator.ProjectEvaluator;
@@ -80,10 +81,16 @@ public class ProjectMaintainabilityIndex extends ProjectEvaluator {
 	    monitor.setCanceled(true);
 	    monitor.done();
 	    return new Status(IStatus.ERROR, getName(), e.getMessage(), e);
+	} catch (FileStoreException e) {
+	    logger.error("Could not calculate maintainability index!", e);
+	    monitor.setCanceled(true);
+	    monitor.done();
+	    return new Status(IStatus.ERROR, getName(), e.getMessage(), e);
 	}
     }
 
-    private void processFile(AnalyzedFile file) throws IOException {
+    private void processFile(AnalyzedFile file) throws IOException,
+	    FileStoreException {
 	FileAnalysis analysis = fileStore.loadAnalysis(file.getHashId());
 	ProgrammingLanguage language = analysis.getLanguage();
 

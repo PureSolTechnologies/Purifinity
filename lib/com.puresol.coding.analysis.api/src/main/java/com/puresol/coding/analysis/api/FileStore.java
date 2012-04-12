@@ -35,8 +35,9 @@ public interface FileStore {
      * 
      * @param hashId
      * @return
+     * @throws FileStoreException
      */
-    public FileAnalysis loadAnalysis(HashId hashId);
+    public FileAnalysis loadAnalysis(HashId hashId) throws FileStoreException;
 
     /**
      * This method stores a single analysis for a file.

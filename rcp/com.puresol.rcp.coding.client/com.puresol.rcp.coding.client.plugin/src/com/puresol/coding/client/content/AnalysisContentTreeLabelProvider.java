@@ -15,6 +15,7 @@ import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalyzedFile;
 import com.puresol.coding.analysis.api.FileAnalysis;
 import com.puresol.coding.analysis.api.FileStore;
+import com.puresol.coding.analysis.api.FileStoreException;
 import com.puresol.coding.analysis.api.FileStoreFactory;
 import com.puresol.coding.client.Activator;
 import com.puresol.coding.client.ClientImages;
@@ -51,12 +52,15 @@ public class AnalysisContentTreeLabelProvider extends LabelProvider {
 	File path = input.getPathFile(false);
 	AnalyzedFile analyzedFile = analysisRun.findAnalyzedFile(path);
 	if (analyzedFile != null) {
-	    FileAnalysis analysisResult = fileStore.loadAnalysis(analyzedFile
-		    .getHashId());
 	    try {
+		FileAnalysis analysisResult = fileStore
+			.loadAnalysis(analyzedFile.getHashId());
 		text += " (" + analysisResult.getLanguage().getName() + " "
 			+ analysisResult.getLanguage().getVersion() + ")";
 	    } catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	    } catch (FileStoreException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	    }

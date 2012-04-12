@@ -14,6 +14,7 @@ import com.puresol.coding.analysis.api.Analysis;
 import com.puresol.coding.analysis.api.AnalyzedFile;
 import com.puresol.coding.analysis.api.FileAnalysis;
 import com.puresol.coding.analysis.api.FileStore;
+import com.puresol.coding.analysis.api.FileStoreException;
 import com.puresol.coding.analysis.api.FileStoreFactory;
 import com.puresol.coding.client.content.ParserTreeContentProvider;
 import com.puresol.coding.client.content.ParserTreeLabelProvider;
@@ -51,9 +52,10 @@ public class ParserTreeControl extends Composite {
      * 
      * @param file
      * @throws IOException
+     * @throws FileStoreException
      */
     public void setContentAndUpdateContent(AnalyzedFile analyzedFile,
-	    Analysis analysis) throws IOException {
+	    Analysis analysis) throws IOException, FileStoreException {
 	FileAnalysis fileAnalysis = fileStore.loadAnalysis(analyzedFile
 		.getHashId());
 	if (fileAnalysis != null) {

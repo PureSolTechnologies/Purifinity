@@ -18,6 +18,7 @@ import org.eclipse.ui.part.EditorPart;
 
 import swing2swt.layout.BorderLayout;
 
+import com.puresol.coding.analysis.api.FileStoreException;
 import com.puresol.coding.client.Activator;
 import com.puresol.coding.client.controls.MetricsControl;
 import com.puresol.coding.client.controls.ParserTreeControl;
@@ -99,12 +100,14 @@ public class FileAnalysisEditor extends EditorPart {
 
 	    FileAnalysisEditorInput editorInput = (FileAnalysisEditorInput) getEditorInput();
 	    // FIXME !!!
-//	    fileViewer.setFileAndUpdateContent(editorInput.getAnalysisFile()
-//		    .getSourceFile());
+	    // fileViewer.setFileAndUpdateContent(editorInput.getAnalysisFile()
+	    // .getSourceFile());
 	    treeViewer.setContentAndUpdateContent(
-		    editorInput.getAnalysisFile(),
-		    editorInput.getAnalysis());
+		    editorInput.getAnalysisFile(), editorInput.getAnalysis());
 	} catch (IOException e) {
+	    logger.log(new Status(Status.ERROR, FileAnalysisEditor.class
+		    .getName(), e.getMessage(), e));
+	} catch (FileStoreException e) {
 	    logger.log(new Status(Status.ERROR, FileAnalysisEditor.class
 		    .getName(), e.getMessage(), e));
 	}

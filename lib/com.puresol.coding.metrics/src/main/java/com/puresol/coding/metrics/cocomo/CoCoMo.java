@@ -27,6 +27,7 @@ import com.puresol.coding.analysis.api.CodeRange;
 import com.puresol.coding.analysis.api.CodeRangeType;
 import com.puresol.coding.analysis.api.FileAnalysis;
 import com.puresol.coding.analysis.api.FileStore;
+import com.puresol.coding.analysis.api.FileStoreException;
 import com.puresol.coding.analysis.api.FileStoreFactory;
 import com.puresol.coding.evaluator.ProjectEvaluator;
 import com.puresol.coding.evaluator.Result;
@@ -108,6 +109,10 @@ public class CoCoMo extends ProjectEvaluator {
 	    addCodeRangeCoCoMo(file, sloc);
 	    return sloc;
 	} catch (IOException e) {
+	    logger.error(e.getMessage(), e);
+	    logger.error("Process with next file...");
+	    return 0;
+	} catch (FileStoreException e) {
 	    logger.error(e.getMessage(), e);
 	    logger.error("Process with next file...");
 	    return 0;

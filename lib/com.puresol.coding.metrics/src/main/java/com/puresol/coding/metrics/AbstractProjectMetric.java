@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalyzedFile;
+import com.puresol.coding.analysis.api.FileStoreException;
 import com.puresol.coding.evaluator.CodeRangeEvaluator;
 import com.puresol.coding.evaluator.ProjectEvaluator;
 import com.puresol.coding.evaluator.Result;
@@ -79,11 +80,16 @@ public abstract class AbstractProjectMetric<T extends CodeRangeEvaluator>
 	    monitor.setCanceled(true);
 	    monitor.done();
 	    return new Status(IStatus.ERROR, getName(), e.getMessage(), e);
+	} catch (FileStoreException e) {
+	    logger.error("Could not calculate project metric!", e);
+	    monitor.setCanceled(true);
+	    monitor.done();
+	    return new Status(IStatus.ERROR, getName(), e.getMessage(), e);
 	}
     }
 
     abstract protected Map<String, SourceCodeQuality> processFile(
-	    AnalyzedFile file) throws IOException;
+	    AnalyzedFile file) throws IOException, FileStoreException;
 
     @Override
     public SourceCodeQuality getQuality() {
