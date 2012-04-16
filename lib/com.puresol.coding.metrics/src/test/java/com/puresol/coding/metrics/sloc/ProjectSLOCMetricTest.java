@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.UUID;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.puresol.coding.analysis.AnalysisRunImpl;
@@ -19,6 +20,7 @@ import com.puresol.coding.analysis.api.DirectoryStoreException;
 import com.puresol.coding.quality.SourceCodeQuality;
 import com.puresol.utils.FileSearchConfiguration;
 
+@Ignore
 public class ProjectSLOCMetricTest {
 
     private AnalysisRun analyzer = null;

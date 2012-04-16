@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.puresol.coding.analysis.api.Analysis;
@@ -19,6 +20,7 @@ import com.puresol.coding.analysis.api.AnalysisSettings;
 import com.puresol.coding.analysis.api.AnalysisStore;
 import com.puresol.coding.analysis.api.DirectoryStoreException;
 
+@Ignore
 public class AnalysisImplTest {
 
     private static AnalysisStore analysisStore;

@@ -6,13 +6,11 @@ import static org.junit.Assert.assertNotNull;
 import java.io.File;
 import java.util.List;
 
-import org.eclipse.core.runtime.adaptor.EclipseStarter;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
-import org.osgi.framework.BundleContext;
 
-import com.puresol.coding.analysis.api.Activator;
 import com.puresol.coding.analysis.api.Analysis;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalysisRunInformation;
@@ -24,6 +22,7 @@ import com.puresol.trees.FileTree;
 import com.puresol.utils.HashAlgorithm;
 import com.puresol.utils.HashId;
 
+@Ignore
 public class AnalysisRunImplTest {
 
     private static AnalysisStore analysisStore;
@@ -36,18 +35,6 @@ public class AnalysisRunImplTest {
 		"Description", new TestFileSearchConfiguration(), new File(
 			"src")));
 	assertNotNull(analysis);
-    }
-
-    @BeforeClass
-    public static void initializeOSGi() throws Exception {
-	BundleContext startup = EclipseStarter.startup(new String[] {}, null);
-	new Activator().start(startup);
-	assertNotNull(Activator.getBundleContext());
-    }
-
-    @AfterClass
-    public static void destroyOSGi() throws Exception {
-	EclipseStarter.shutdown();
     }
 
     @Test
