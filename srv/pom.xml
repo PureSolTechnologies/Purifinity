@@ -55,35 +55,28 @@
 
 	<dependencyManagement>
 		<dependencies>
+			<!-- SHARED -->
 			<dependency>
-				<groupId>org.jboss.spec</groupId>
-				<artifactId>jboss-javaee-6.0</artifactId>
-				<version>2.0.0.Final</version>
-				<type>pom</type>
-				<scope>provided</scope>
+				<groupId>com.puresol</groupId>
+				<artifactId>database.utils</artifactId>
+				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>postgresql</groupId>
-				<artifactId>postgresql</artifactId>
-				<version>8.4-702.jdbc4</version>
+				<groupId>com.puresol</groupId>
+				<artifactId>database.setup</artifactId>
+				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>junit</groupId>
-				<artifactId>junit</artifactId>
-				<version>4.10</version>
-				<scope>test</scope>
+				<groupId>com.puresol</groupId>
+				<artifactId>jboss.configuration</artifactId>
+				<version>${project.version}</version>
 			</dependency>
-			<dependency>
-				<groupId>org.liquibase</groupId>
-				<artifactId>liquibase-core</artifactId>
-				<version>2.0.3</version>
-			</dependency>
+			<!-- JBoss -->
 			<dependency>
 				<groupId>org.jboss.as</groupId>
 				<artifactId>jboss-as-server</artifactId>
 				<version>${jbossas.version}</version>
 			</dependency>
-
 			<dependency>
 				<groupId>org.jboss.arquillian.junit</groupId>
 				<artifactId>arquillian-junit-container</artifactId>
@@ -100,6 +93,31 @@
 				<groupId>org.jboss.as</groupId>
 				<artifactId>jboss-as-arquillian-container-managed</artifactId>
 				<version>${jbossas.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.spec</groupId>
+				<artifactId>jboss-javaee-6.0</artifactId>
+				<version>2.0.0.Final</version>
+				<type>pom</type>
+				<scope>provided</scope>
+			</dependency>
+			<!-- PostgreSQL -->
+			<dependency>
+				<groupId>postgresql</groupId>
+				<artifactId>postgresql</artifactId>
+				<version>8.4-702.jdbc4</version>
+			</dependency>
+			<dependency>
+				<groupId>org.liquibase</groupId>
+				<artifactId>liquibase-core</artifactId>
+				<version>2.0.3</version>
+			</dependency>
+			<!-- Testing -->
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>4.10</version>
 				<scope>test</scope>
 			</dependency>
 		</dependencies>

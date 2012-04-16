@@ -26,12 +26,14 @@
 		<dependency>
 			<groupId>com.puresol</groupId>
 			<artifactId>trees</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.puresol</groupId>
 			<artifactId>uhura.lib</artifactId>
-			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.puresol</groupId>
+			<artifactId>utils</artifactId>
 		</dependency>
 	</dependencies>
 

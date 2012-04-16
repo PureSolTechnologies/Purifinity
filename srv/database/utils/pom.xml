@@ -26,7 +26,6 @@
 		<dependency>
 			<groupId>com.puresol</groupId>
 			<artifactId>database.setup</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 

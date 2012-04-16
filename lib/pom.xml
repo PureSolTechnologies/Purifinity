@@ -57,24 +57,44 @@
 
 	<dependencyManagement>
 		<dependencies>
+			<!-- SHARED -->
+			<dependency>
+				<groupId>com.puresol</groupId>
+				<artifactId>trees</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresol</groupId>
+				<artifactId>uhura.lib</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresol</groupId>
+				<artifactId>utils</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<!-- OSGi -->
 			<dependency>
 				<groupId>org.osgi</groupId>
 				<artifactId>org.osgi.core</artifactId>
 				<version>4.3.0</version>
 				<scope>provided</scope>
 			</dependency>
+			<!-- LOGGING -->
 			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-api</artifactId>
 				<version>1.6.4</version>
 				<scope>provided</scope>
 			</dependency>
+			<!-- TESTING -->
 			<dependency>
 				<groupId>junit</groupId>
 				<artifactId>junit</artifactId>
 				<version>4.10</version>
 				<scope>test</scope>
 			</dependency>
+			<!-- JFreeChart -->
 			<dependency>
 				<groupId>org.jfree</groupId>
 				<artifactId>jcommon</artifactId>
