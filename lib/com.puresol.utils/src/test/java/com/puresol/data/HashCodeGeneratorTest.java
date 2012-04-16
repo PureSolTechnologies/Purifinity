@@ -70,7 +70,7 @@ public class HashCodeGeneratorTest {
     public void checkSHA256() {
 	String encoder = HashCodeGenerator.getSHA256(SAMPLE_STRING);
 	assertEquals(
-		"7f24c25aa1efc5f2240c6a6c40538c6760681b6522212373afc7c0c63676",
+		"7f24c25a0a1efc5f2240c6a6c400538c6760681b6522212373afc7c0c6030676",
 		encoder);
     }
 
@@ -78,7 +78,7 @@ public class HashCodeGeneratorTest {
     public void checkSHA384() {
 	String encoder = HashCodeGenerator.getSHA384(SAMPLE_STRING);
 	assertEquals(
-		"e689fd85b7d151cc6ba3e809c12a0dcff2c991295499d84383b39acb772a6e1e86a5de7aef79da2d5ce4f79a5fb5b76",
+		"e6890fd85b7d151cc6ba3e809c12a0dcff2c991295499d84383b39acb772a6e1e86a5de7aef79da2d5ce4f79a5fb5b76",
 		encoder);
     }
 
@@ -86,7 +86,7 @@ public class HashCodeGeneratorTest {
     public void checkSHA512() {
 	String encoder = HashCodeGenerator.getSHA512(SAMPLE_STRING);
 	assertEquals(
-		"4679e1f1114bda58f5792c6a40715a4fe73e5ce989fab023829c111ddae78742851a2cb77734f6d6bb8e57c95f56d4309c69efe8ba2a73b510aa1ba35773",
+		"4679e1f1114bda58f5792c060a40715a4fe73e5ce989fab0238209c111ddae78742851a2cb77734f6d6bb8e57c95f506d4309c69efe8ba2a73b510aa1ba35773",
 		encoder);
     }
 }
