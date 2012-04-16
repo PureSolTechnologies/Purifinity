@@ -65,12 +65,17 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresol</groupId>
+				<artifactId>utils</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresol</groupId>
 				<artifactId>uhura.lib</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.puresol</groupId>
-				<artifactId>utils</artifactId>
+				<artifactId>coding.analysis.api</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<!-- OSGi -->

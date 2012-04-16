@@ -6,10 +6,13 @@ import static org.junit.Assert.assertNotNull;
 import java.io.File;
 import java.util.List;
 
+import org.eclipse.core.runtime.adaptor.EclipseStarter;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.osgi.framework.BundleContext;
 
+import com.puresol.coding.analysis.api.Activator;
 import com.puresol.coding.analysis.api.Analysis;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalysisRunInformation;
@@ -35,6 +38,18 @@ public class AnalysisRunImplTest {
 	assertNotNull(analysis);
     }
 
+    @BeforeClass
+    public static void initializeOSGi() throws Exception {
+	BundleContext startup = EclipseStarter.startup(new String[] {}, null);
+	new Activator().start(startup);
+	assertNotNull(Activator.getBundleContext());
+    }
+
+    @AfterClass
+    public static void destroyOSGi() throws Exception {
+	EclipseStarter.shutdown();
+    }
+
     @Test
     public void test() throws DirectoryStoreException {
 	AnalysisRun analysisRun = analysis.runAnalysis();
@@ -53,8 +68,7 @@ public class AnalysisRunImplTest {
     public void testGetFileStoreDirectory() {
 	File fileStoreDirectory = FileStoreImpl.getFileDirectory(new File(
 		"test/test2"), new HashId(HashAlgorithm.SHA256, "1234567890"));
-	assertEquals("test/test2/files/12/34/567890",
-		fileStoreDirectory.getPath());
+	assertEquals("test/test2/12/34/567890", fileStoreDirectory.getPath());
     }
 
     @AfterClass
