@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.puresol.coding.ProgrammingLanguages;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalyzedFile;
 import com.puresol.coding.analysis.api.CodeRange;
@@ -32,7 +33,8 @@ public class ProjectMcCabeMetric extends AbstractProjectMetric<McCabeMetric> {
 	    throws IOException, FileStoreException {
 	Map<String, SourceCodeQuality> results = new HashMap<String, SourceCodeQuality>();
 	FileAnalysis analysis = fileStore.loadAnalysis(file.getHashId());
-	ProgrammingLanguage language = analysis.getLanguage();
+	ProgrammingLanguage language = ProgrammingLanguages.findByName(
+		analysis.getLanguageName(), analysis.getLanguageVersion());
 
 	for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
 	    McCabeMetric metric = new McCabeMetric(language, codeRange);

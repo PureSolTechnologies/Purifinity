@@ -54,8 +54,8 @@ public class AnalysisContentTreeLabelProvider extends LabelProvider {
 	    try {
 		FileAnalysis analysisResult = fileStore
 			.loadAnalysis(analyzedFile.getHashId());
-		text += " (" + analysisResult.getLanguage().getName() + " "
-			+ analysisResult.getLanguage().getVersion() + ")";
+		text += " (" + analysisResult.getLanguageName() + " "
+			+ analysisResult.getLanguageVersion() + ")";
 	    } catch (FileStoreException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();

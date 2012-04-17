@@ -13,6 +13,7 @@ import org.eclipse.core.runtime.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.puresol.coding.ProgrammingLanguages;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalyzedFile;
 import com.puresol.coding.analysis.api.CodeRange;
@@ -92,7 +93,8 @@ public class ProjectMaintainabilityIndex extends ProjectEvaluator {
     private void processFile(AnalyzedFile file) throws IOException,
 	    FileStoreException {
 	FileAnalysis analysis = fileStore.loadAnalysis(file.getHashId());
-	ProgrammingLanguage language = analysis.getLanguage();
+	ProgrammingLanguage language = ProgrammingLanguages.findByName(
+		analysis.getLanguageName(), analysis.getLanguageVersion());
 
 	for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
 	    MaintainabilityIndex metric = new MaintainabilityIndex(language,

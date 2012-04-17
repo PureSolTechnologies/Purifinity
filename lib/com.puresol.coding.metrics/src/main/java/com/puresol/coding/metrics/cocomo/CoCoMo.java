@@ -20,6 +20,7 @@ import org.eclipse.core.runtime.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.puresol.coding.ProgrammingLanguages;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalyzedFile;
 import com.puresol.coding.analysis.api.CodeRange;
@@ -101,7 +102,8 @@ public class CoCoMo extends ProjectEvaluator {
 	try {
 	    FileAnalysis analysis = fileStore.loadAnalysis(file.getHashId());
 	    ParserTree parserTree = analysis.getParserTree();
-	    SLOCMetric metric = new SLOCMetric(analysis.getLanguage(),
+	    SLOCMetric metric = new SLOCMetric(ProgrammingLanguages.findByName(
+		    analysis.getLanguageName(), analysis.getLanguageVersion()),
 		    new CodeRange("", CodeRangeType.FILE, parserTree));
 	    metric.schedule();
 	    int sloc = metric.getSLOCResult().getProLOC();

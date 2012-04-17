@@ -82,9 +82,9 @@ public class FortranAnalyzer implements FileAnalyzer {
 	    Fortran fortran = Fortran.getInstance();
 	    AnalyzedFile analyzedFile = new AnalyzedFile(hashId, file, date,
 		    timeEffort, fortran.getName(), fortran.getVersion());
-	    fileAnalysis = new FileAnalysis(date, timeEffort, fortran,
-		    analyzedFile, parserTree,
-		    getAnalyzableCodeRanges(parserTree));
+	    fileAnalysis = new FileAnalysis(date, timeEffort,
+		    fortran.getName(), fortran.getVersion(), analyzedFile,
+		    parserTree, getAnalyzableCodeRanges(parserTree));
 	} catch (IOException e) {
 	    logger.error(e.getMessage(), e);
 	    throw new AnalyzerException(this);

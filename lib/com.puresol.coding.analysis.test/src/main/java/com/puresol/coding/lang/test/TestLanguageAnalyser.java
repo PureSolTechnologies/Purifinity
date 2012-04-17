@@ -78,7 +78,8 @@ public class TestLanguageAnalyser implements FileAnalyzer {
 	    watch.stop();
 	    long timeEffort = Math.round(watch.getSeconds() * 1000.0);
 	    TestLanguage language = TestLanguage.getInstance();
-	    fileAnalysis = new FileAnalysis(date, timeEffort, language,
+	    fileAnalysis = new FileAnalysis(date, timeEffort,
+		    language.getName(), language.getVersion(),
 		    new AnalyzedFile(hashId, file, date, timeEffort, language
 			    .getName(), language.getVersion()),
 		    parserTree, getAnalyzableCodeRanges(parserTree));

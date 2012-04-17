@@ -49,9 +49,10 @@ public class ProgrammingLanguages {
      * @return The programming language is returned. If the language was not
      *         found null is returned.
      */
-    public static ProgrammingLanguage findByName(String name) {
+    public static ProgrammingLanguage findByName(String name, String version) {
 	for (ProgrammingLanguage language : getAll()) {
-	    if (language.getName().equals(name)) {
+	    if ((language.getName().equals(name))
+		    && (language.getVersion().equals(version))) {
 		return language;
 	    }
 	}

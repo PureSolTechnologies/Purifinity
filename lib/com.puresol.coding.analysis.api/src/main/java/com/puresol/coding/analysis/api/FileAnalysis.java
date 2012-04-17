@@ -30,18 +30,20 @@ public class FileAnalysis implements Serializable {
 
     private final Date timeStamp;
     private final long timeOfRun;
-    private final ProgrammingLanguage language;
+    private final String languageName;
+    private final String languageVersion;
     private final AnalyzedFile analyzedFile;
     private final ParserTree parserTree;
     private final List<CodeRange> analyzableCodeRanges;
 
-    public FileAnalysis(Date timeStamp, long timeOfRun,
-	    ProgrammingLanguage language, AnalyzedFile analyzedFile,
+    public FileAnalysis(Date timeStamp, long timeOfRun, String languageName,
+	    String languageVersion, AnalyzedFile analyzedFile,
 	    ParserTree parserTree, List<CodeRange> analyzableCodeRanges) {
 	super();
 	this.timeStamp = timeStamp;
 	this.timeOfRun = timeOfRun;
-	this.language = language;
+	this.languageName = languageName;
+	this.languageVersion = languageVersion;
 	this.analyzedFile = analyzedFile;
 	this.parserTree = parserTree;
 	this.analyzableCodeRanges = analyzableCodeRanges;
@@ -74,8 +76,17 @@ public class FileAnalysis implements Serializable {
      * @return The language is returned.
      * @throws IOException
      */
-    public ProgrammingLanguage getLanguage() {
-	return language;
+    public String getLanguageName() {
+	return languageName;
+    }
+
+    /**
+     * Returns the language version of the analyzed file.
+     * 
+     * @return
+     */
+    public String getLanguageVersion() {
+	return languageVersion;
     }
 
     /**

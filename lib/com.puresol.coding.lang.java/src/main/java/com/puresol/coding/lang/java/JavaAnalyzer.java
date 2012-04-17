@@ -90,8 +90,8 @@ public class JavaAnalyzer implements FileAnalyzer {
 	    Java java = Java.getInstance();
 	    AnalyzedFile analyzedFile = new AnalyzedFile(hashId, file, date,
 		    timeEffort, java.getName(), java.getVersion());
-	    fileAnalysis = new FileAnalysis(date, timeEffort, java,
-		    analyzedFile, parserTree,
+	    fileAnalysis = new FileAnalysis(date, timeEffort, java.getName(),
+		    java.getVersion(), analyzedFile, parserTree,
 		    this.getAnalyzableCodeRanges(parserTree));
 	} catch (ParserException e) {
 	    logger.error(e.getMessage(), e);
