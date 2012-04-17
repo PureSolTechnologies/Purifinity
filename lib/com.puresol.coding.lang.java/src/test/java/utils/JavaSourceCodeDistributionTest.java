@@ -37,7 +37,7 @@ public class JavaSourceCodeDistributionTest {
 
     private static final String INSTALL_DIRECTORY = "/home/ludwig/JavaSource";
 
-    private static final File file = new File(INSTALL_DIRECTORY,
+    private static final File file = new File(
 	    "j2se/src/share/classes/sun/nio/cs/ext/EUC_TW.java");
 
     @Test
@@ -47,7 +47,8 @@ public class JavaSourceCodeDistributionTest {
 	Java java = Java.getInstance();
 	StopWatch watch = new StopWatch();
 	watch.start();
-	FileAnalyzer analyser = java.createAnalyser(file);
+	FileAnalyzer analyser = java.createAnalyser(
+		new File(INSTALL_DIRECTORY), file);
 	analyser.analyze();
 	watch.stop();
 	ParserTree ast = analyser.getAnalysis().getParserTree();

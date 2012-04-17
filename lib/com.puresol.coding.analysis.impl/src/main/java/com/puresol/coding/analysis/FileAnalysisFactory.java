@@ -52,11 +52,11 @@ public class FileAnalysisFactory {
 	// needs to be private...
     }
 
-    public FileAnalyzer create(File file) throws LanguageNotSupportedException,
-	    FileNotFoundException {
+    public FileAnalyzer create(File sourceDirectory, File file)
+	    throws LanguageNotSupportedException, FileNotFoundException {
 	logger.debug("Create analyser for file '" + file.getPath() + "'...");
 	checkFile(file);
-	return createAnalyser(file);
+	return createAnalyser(sourceDirectory, file);
     }
 
     private void checkFile(File file) throws FileNotFoundException {
@@ -67,10 +67,11 @@ public class FileAnalysisFactory {
 	}
     }
 
-    private FileAnalyzer createAnalyser(File file)
+    private FileAnalyzer createAnalyser(File sourceDirectory, File file)
 	    throws LanguageNotSupportedException {
 	for (ProgrammingLanguage language : ProgrammingLanguages.getAll()) {
-	    FileAnalyzer analyser = checkAndCreate(language, file);
+	    FileAnalyzer analyser = checkAndCreate(language, sourceDirectory,
+		    file);
 	    if (analyser != null) {
 		return analyser;
 	    }
@@ -80,11 +81,12 @@ public class FileAnalysisFactory {
 		"No coding language found for file " + file.getPath());
     }
 
-    private FileAnalyzer checkAndCreate(ProgrammingLanguage clazz, File file) {
+    private FileAnalyzer checkAndCreate(ProgrammingLanguage clazz,
+	    File sourceDirectory, File file) {
 	if (!clazz.isSuitable(file)) {
 	    return null;
 	}
-	return clazz.createAnalyser(file);
+	return clazz.createAnalyser(sourceDirectory, file);
     }
 
     public FileAnalyzer restore(File persistFile) {

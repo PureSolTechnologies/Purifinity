@@ -47,8 +47,8 @@ public class FileAnalyzerImpl implements FileAnalyzer {
 
     private void analyzeFile() throws IOException, AnalyzerException,
 	    LanguageNotSupportedException {
-	analyzer = FileAnalysisFactory.createFactory().create(
-		new File(sourceDirectory, file.getPath()));
+	analyzer = FileAnalysisFactory.createFactory().create(sourceDirectory,
+		file);
 	analyzer.analyze();
     }
 

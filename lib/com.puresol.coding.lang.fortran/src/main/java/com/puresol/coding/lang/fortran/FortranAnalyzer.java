@@ -55,12 +55,14 @@ public class FortranAnalyzer implements FileAnalyzer {
     private static final Logger logger = LoggerFactory
 	    .getLogger(FortranAnalyzer.class);
 
+    private final File sourceDirectory;
     private final File file;
     private final transient FortranGrammar grammar;
     private FileAnalysis fileAnalysis;
 
-    public FortranAnalyzer(File file) {
+    public FortranAnalyzer(File sourceDirectory, File file) {
 	super();
+	this.sourceDirectory = sourceDirectory;
 	this.file = file;
 	grammar = FortranGrammar.getInstance();
     }
@@ -72,8 +74,8 @@ public class FortranAnalyzer implements FileAnalyzer {
 	    Date date = new Date();
 	    StopWatch watch = new StopWatch();
 	    watch.start();
-	    HashId hashId = FileUtilities.createHashId(file,
-		    HashAlgorithm.SHA256);
+	    HashId hashId = FileUtilities.createHashId(new File(
+		    sourceDirectory, file.getPath()), HashAlgorithm.SHA256);
 	    LexerResult lexerResult = preConditioningAndLexing();
 	    Parser parser = grammar.getParser();
 	    ParserTree parserTree = parser.parse(lexerResult);
@@ -97,7 +99,7 @@ public class FortranAnalyzer implements FileAnalyzer {
     private LexerResult preConditioningAndLexing() throws AnalyzerException {
 	try {
 	    FortranPreConditioner preconditioner = new FortranPreConditioner(
-		    file);
+		    new File(sourceDirectory, file.getPath()));
 	    TokenStream tokenStream = preconditioner.scan(grammar.getLexer());
 	    return new LexerResult(tokenStream);
 	} catch (IOException e) {

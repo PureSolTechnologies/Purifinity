@@ -72,8 +72,8 @@ public class Fortran extends AbstractProgrammingLanguage {
     }
 
     @Override
-    public FileAnalyzer createAnalyser(File file) {
-	return new FortranAnalyzer(file);
+    public FileAnalyzer createAnalyser(File sourceDirectory, File file) {
+	return new FortranAnalyzer(sourceDirectory, file);
     }
 
     public void setSourceForm(SourceForm sourceForm) {

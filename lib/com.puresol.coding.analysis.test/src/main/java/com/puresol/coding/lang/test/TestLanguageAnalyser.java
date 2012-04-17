@@ -51,12 +51,14 @@ public class TestLanguageAnalyser implements FileAnalyzer {
     private static final Logger logger = LoggerFactory
 	    .getLogger(TestLanguageAnalyser.class);
 
+    private final File sourceDirectory;
     private final File file;
     private final transient TestLanguageGrammar grammar;
     private FileAnalysis fileAnalysis;
 
-    public TestLanguageAnalyser(File file) {
+    public TestLanguageAnalyser(File sourceDirectory, File file) {
 	super();
+	this.sourceDirectory = sourceDirectory;
 	this.file = file;
 	grammar = TestLanguageGrammar.getInstance();
     }
@@ -68,10 +70,11 @@ public class TestLanguageAnalyser implements FileAnalyzer {
 	    Date date = new Date();
 	    StopWatch watch = new StopWatch();
 	    watch.start();
-	    HashId hashId = FileUtilities.createHashId(file,
-		    HashAlgorithm.SHA256);
+	    HashId hashId = FileUtilities.createHashId(new File(
+		    sourceDirectory, file.getPath()), HashAlgorithm.SHA256);
 	    Lexer lexer = grammar.getLexer();
-	    LexerResult lexerResult = lexer.lex(SourceCode.read(file),
+	    LexerResult lexerResult = lexer.lex(
+		    SourceCode.read(new File(sourceDirectory, file.getPath())),
 		    file.toString());
 	    Parser parser = grammar.getParser();
 	    ParserTree parserTree = parser.parse(lexerResult);

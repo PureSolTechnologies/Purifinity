@@ -53,7 +53,7 @@ public interface ProgrammingLanguage { // do not Serialize!
      * @param file
      * @return
      */
-    public FileAnalyzer createAnalyser(File file);
+    public FileAnalyzer createAnalyser(File sourceDirectory, File file);
 
     public FileAnalyzer restoreAnalyzer(File file) throws IOException;
 }

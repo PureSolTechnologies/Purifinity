@@ -61,12 +61,14 @@ public class JavaAnalyzer implements FileAnalyzer {
     private static final Logger logger = LoggerFactory
 	    .getLogger(JavaAnalyzer.class);
 
+    private final File sourceDirectory;
     private final File file;
     private final transient JavaGrammar grammar;
     private FileAnalysis fileAnalysis;
 
-    public JavaAnalyzer(File file) {
+    public JavaAnalyzer(File sourceDirectory, File file) {
 	super();
+	this.sourceDirectory = sourceDirectory;
 	this.file = file;
 	grammar = JavaGrammar.getInstance();
     }
@@ -77,11 +79,12 @@ public class JavaAnalyzer implements FileAnalyzer {
 	    fileAnalysis = null;
 	    Date date = new Date();
 	    StopWatch watch = new StopWatch();
-	    HashId hashId = FileUtilities.createHashId(file,
-		    HashAlgorithm.SHA256);
+	    HashId hashId = FileUtilities.createHashId(new File(
+		    sourceDirectory, file.getPath()), HashAlgorithm.SHA256);
 	    watch.start();
 	    Lexer lexer = grammar.getLexer();
-	    LexerResult lexerResult = lexer.lex(SourceCode.read(file),
+	    LexerResult lexerResult = lexer.lex(
+		    SourceCode.read(new File(sourceDirectory, file.getPath())),
 		    file.toString());
 	    Parser parser = grammar.getParser();
 	    ParserTree parserTree = parser.parse(lexerResult);

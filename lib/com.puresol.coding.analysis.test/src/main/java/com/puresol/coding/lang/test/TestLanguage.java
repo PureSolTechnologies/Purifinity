@@ -52,8 +52,8 @@ public class TestLanguage extends AbstractProgrammingLanguage {
     }
 
     @Override
-    public FileAnalyzer createAnalyser(File file) {
-	return new TestLanguageAnalyser(file);
+    public FileAnalyzer createAnalyser(File sourceDirectory, File file) {
+	return new TestLanguageAnalyser(sourceDirectory, file);
     }
 
     @Override

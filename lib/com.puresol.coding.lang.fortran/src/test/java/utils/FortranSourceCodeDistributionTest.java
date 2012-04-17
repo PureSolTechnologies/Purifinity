@@ -3,7 +3,6 @@ package utils;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.junit.Assume.assumeTrue;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -45,12 +44,12 @@ public class FortranSourceCodeDistributionTest {
     @Test
     public void test() {
 	try {
-	    File file = new File(INSTALL_DIRECTORY, "src/fort/ndicrs.f");
-	    assumeTrue(file.exists());
+	    File file = new File("src/fort/ndicrs.f");
 	    Fortran fortran = Fortran.getInstance();
 	    StopWatch watch = new StopWatch();
 	    watch.start();
-	    FileAnalyzer analyser = fortran.createAnalyser(file);
+	    FileAnalyzer analyser = fortran.createAnalyser(new File(
+		    INSTALL_DIRECTORY), file);
 	    analyser.analyze();
 	    watch.stop();
 	    ParserTree ast = analyser.getAnalysis().getParserTree();
@@ -110,7 +109,7 @@ public class FortranSourceCodeDistributionTest {
 		    continue;
 		}
 		watch.start();
-		if (parseFile(new File(INSTALL_DIRECTORY, file.toString()))) {
+		if (parseFile(new File(INSTALL_DIRECTORY), file)) {
 		    raFile.writeBytes(file.toString() + "\n");
 		    successes.add(file.toString());
 		} else {
@@ -133,10 +132,11 @@ public class FortranSourceCodeDistributionTest {
 	System.out.println("\n\nTotal time:\t" + totalWatch.toString());
     }
 
-    private static boolean parseFile(File file) {
+    private static boolean parseFile(File sourceDirectory, File file) {
 	try {
 	    Fortran fortran = Fortran.getInstance();
-	    FileAnalyzer analyser = fortran.createAnalyser(file);
+	    FileAnalyzer analyser = fortran.createAnalyser(sourceDirectory,
+		    file);
 	    analyser.analyze();
 	    analyser = null;
 	    return true;

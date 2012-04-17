@@ -11,13 +11,13 @@ public class TestLanguageAnalyserTest {
 
     @Test
     public void test() {
-	assertNotNull(new TestLanguageAnalyser(new File("")));
+	assertNotNull(new TestLanguageAnalyser(new File(""), new File("")));
     }
 
     @Test
     public void testInitValues() {
-	TestLanguageAnalyser analyser = new TestLanguageAnalyser(new File(
-		"TestFile.test"));
+	TestLanguageAnalyser analyser = new TestLanguageAnalyser(new File("."),
+		new File("TestFile.test"));
 	assertEquals(new File("TestFile.test"), analyser.getFile());
 
     }
