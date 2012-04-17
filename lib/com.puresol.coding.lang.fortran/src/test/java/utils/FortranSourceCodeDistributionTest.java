@@ -53,7 +53,7 @@ public class FortranSourceCodeDistributionTest {
 	    FileAnalyzer analyser = fortran.createAnalyser(file);
 	    analyser.analyze();
 	    watch.stop();
-	    ParserTree ast = analyser.getParserTree();
+	    ParserTree ast = analyser.getAnalysis().getParserTree();
 	    assertNotNull(ast);
 	    System.out.print(watch.getSeconds());
 	    if (logger.isTraceEnabled()) {

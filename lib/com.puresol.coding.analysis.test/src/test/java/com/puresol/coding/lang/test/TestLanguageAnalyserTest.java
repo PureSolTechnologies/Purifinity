@@ -7,7 +7,7 @@ import java.io.File;
 
 import org.junit.Test;
 
-public class JavaAnalyserTest {
+public class TestLanguageAnalyserTest {
 
     @Test
     public void test() {
@@ -18,8 +18,7 @@ public class JavaAnalyserTest {
     public void testInitValues() {
 	TestLanguageAnalyser analyser = new TestLanguageAnalyser(new File(
 		"TestFile.test"));
-	assertEquals(new File("TestFile.test"), analyser.getAnalyzedFile()
-		.getFile());
+	assertEquals(new File("TestFile.test"), analyser.getFile());
 
     }
 }

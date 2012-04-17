@@ -1,7 +1,6 @@
 package com.puresol.coding.client.content;
 
 import java.io.File;
-import java.io.IOException;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.DecorationOverlayIcon;
@@ -57,9 +56,6 @@ public class AnalysisContentTreeLabelProvider extends LabelProvider {
 			.loadAnalysis(analyzedFile.getHashId());
 		text += " (" + analysisResult.getLanguage().getName() + " "
 			+ analysisResult.getLanguage().getVersion() + ")";
-	    } catch (IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
 	    } catch (FileStoreException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();

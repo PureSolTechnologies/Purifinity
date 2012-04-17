@@ -10,7 +10,6 @@
 
 package com.puresol.coding.metrics.cocomo;
 
-import java.io.IOException;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Vector;
@@ -108,10 +107,6 @@ public class CoCoMo extends ProjectEvaluator {
 	    int sloc = metric.getSLOCResult().getProLOC();
 	    addCodeRangeCoCoMo(file, sloc);
 	    return sloc;
-	} catch (IOException e) {
-	    logger.error(e.getMessage(), e);
-	    logger.error("Process with next file...");
-	    return 0;
 	} catch (FileStoreException e) {
 	    logger.error(e.getMessage(), e);
 	    logger.error("Process with next file...");

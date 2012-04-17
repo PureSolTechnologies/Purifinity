@@ -25,6 +25,7 @@ import com.puresol.coding.analysis.api.AnalyzedFile;
 import com.puresol.coding.analysis.api.AnalyzerException;
 import com.puresol.coding.analysis.api.CodeRange;
 import com.puresol.coding.analysis.api.CodeRangeType;
+import com.puresol.coding.analysis.api.FileAnalysis;
 import com.puresol.coding.analysis.api.FileAnalyzer;
 import com.puresol.coding.lang.fortran.grammar.FortranGrammar;
 import com.puresol.trees.TreeException;
@@ -51,17 +52,12 @@ import com.puresol.utils.StopWatch;
  */
 public class FortranAnalyzer implements FileAnalyzer {
 
-    private static final long serialVersionUID = 2265150343844799735L;
-
     private static final Logger logger = LoggerFactory
 	    .getLogger(FortranAnalyzer.class);
 
     private final File file;
     private final transient FortranGrammar grammar;
-    private final Date date = new Date();
-    private ParserTree parserTree = null;
-    private long timeEffort = 0;
-    private HashId hashId;
+    private FileAnalysis fileAnalysis;
 
     public FortranAnalyzer(File file) {
 	super();
@@ -72,14 +68,23 @@ public class FortranAnalyzer implements FileAnalyzer {
     @Override
     public void analyze() throws AnalyzerException {
 	try {
+	    fileAnalysis = null;
+	    Date date = new Date();
 	    StopWatch watch = new StopWatch();
 	    watch.start();
-	    hashId = FileUtilities.createHashId(file, HashAlgorithm.SHA256);
+	    HashId hashId = FileUtilities.createHashId(file,
+		    HashAlgorithm.SHA256);
 	    LexerResult lexerResult = preConditioningAndLexing();
 	    Parser parser = grammar.getParser();
-	    parserTree = parser.parse(lexerResult);
+	    ParserTree parserTree = parser.parse(lexerResult);
 	    watch.stop();
-	    timeEffort = Math.round(watch.getSeconds() * 1000.0);
+	    long timeEffort = Math.round(watch.getSeconds() * 1000.0);
+	    Fortran fortran = Fortran.getInstance();
+	    AnalyzedFile analyzedFile = new AnalyzedFile(hashId, file, date,
+		    timeEffort, fortran.getName(), fortran.getVersion());
+	    fileAnalysis = new FileAnalysis(date, timeEffort, fortran,
+		    analyzedFile, parserTree,
+		    getAnalyzableCodeRanges(parserTree));
 	} catch (IOException e) {
 	    logger.error(e.getMessage(), e);
 	    throw new AnalyzerException(this);
@@ -110,28 +115,6 @@ public class FortranAnalyzer implements FileAnalyzer {
     }
 
     @Override
-    public ParserTree getParserTree() {
-	return parserTree;
-    }
-
-    @Override
-    public AnalyzedFile getAnalyzedFile() {
-	Fortran fortran = Fortran.getInstance();
-	return new AnalyzedFile(hashId, file, date, timeEffort,
-		fortran.getName(), fortran.getVersion());
-    }
-
-    @Override
-    public Date getTimeStamp() {
-	return date;
-    }
-
-    @Override
-    public long getTimeOfRun() {
-	return timeEffort;
-    }
-
-    @Override
     public boolean persist(File file) {
 	try {
 	    ObjectOutputStream objectOutputStream = new ObjectOutputStream(
@@ -148,8 +131,7 @@ public class FortranAnalyzer implements FileAnalyzer {
 	}
     }
 
-    @Override
-    public List<CodeRange> getAnalyzableCodeRanges() {
+    private List<CodeRange> getAnalyzableCodeRanges(ParserTree parserTree) {
 	final List<CodeRange> result = new ArrayList<CodeRange>();
 	result.add(new CodeRange("", CodeRangeType.FILE, parserTree));
 	TreeWalker<ParserTree> walker = new TreeWalker<ParserTree>(parserTree);
@@ -193,6 +175,16 @@ public class FortranAnalyzer implements FileAnalyzer {
 
 	});
 	return result;
+    }
+
+    @Override
+    public File getFile() {
+	return file;
+    }
+
+    @Override
+    public FileAnalysis getAnalysis() {
+	return fileAnalysis;
     }
 
 }

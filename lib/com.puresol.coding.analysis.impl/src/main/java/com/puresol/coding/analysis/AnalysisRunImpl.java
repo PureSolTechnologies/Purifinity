@@ -402,9 +402,11 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
 		FileAnalyzerImpl fileAnalyzer = new FileAnalyzerImpl(
 			sourceDirectory, file, hashId);
 		fileAnalyzer.analyze();
-		fileStore.storeAnalysis(hashId, fileAnalyzer.getAnalyzer());
+		fileStore.storeAnalysis(hashId, fileAnalyzer.getAnalyzer()
+			.getAnalysis());
 		if (fileAnalyzer.isAnalyzed()) {
-		    AnalyzedFile analyzedFile = fileAnalyzer.getAnalyzedFile();
+		    AnalyzedFile analyzedFile = fileAnalyzer.getAnalysis()
+			    .getAnalyzedFile();
 		    analyzedFiles.add(analyzedFile);
 		} else {
 		    failedFiles.add(file);

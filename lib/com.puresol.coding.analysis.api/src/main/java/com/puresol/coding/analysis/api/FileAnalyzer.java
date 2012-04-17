@@ -20,7 +20,22 @@ import java.io.IOException;
  * @author Rick-Rainer Ludwig
  * 
  */
-public interface FileAnalyzer extends FileAnalysis {
+public interface FileAnalyzer {
+
+    /**
+     * This method returns the file which is to be analyzed.
+     * 
+     * @return
+     */
+    public File getFile();
+
+    /**
+     * This method returns from the implemented parser the supported programming
+     * language.
+     * 
+     * @return
+     */
+    public ProgrammingLanguage getLanguage();
 
     /**
      * This method is called to start the actual parsing process.
@@ -37,4 +52,10 @@ public interface FileAnalyzer extends FileAnalysis {
      */
     boolean persist(File file);
 
+    /**
+     * This method returns the analysis of the parsing of process.
+     * 
+     * @return
+     */
+    public FileAnalysis getAnalysis();
 }

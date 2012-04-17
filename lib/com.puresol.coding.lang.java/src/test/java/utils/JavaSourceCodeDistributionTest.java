@@ -50,7 +50,7 @@ public class JavaSourceCodeDistributionTest {
 	FileAnalyzer analyser = java.createAnalyser(file);
 	analyser.analyze();
 	watch.stop();
-	ParserTree ast = analyser.getParserTree();
+	ParserTree ast = analyser.getAnalysis().getParserTree();
 	assertNotNull(ast);
 	// new TreePrinter(System.out).println(ast);
 	System.out.print(watch.getSeconds());

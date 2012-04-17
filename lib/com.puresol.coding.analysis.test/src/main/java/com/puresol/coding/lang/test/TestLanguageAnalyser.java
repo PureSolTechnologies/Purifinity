@@ -25,6 +25,7 @@ import com.puresol.coding.analysis.api.AnalyzedFile;
 import com.puresol.coding.analysis.api.AnalyzerException;
 import com.puresol.coding.analysis.api.CodeRange;
 import com.puresol.coding.analysis.api.CodeRangeType;
+import com.puresol.coding.analysis.api.FileAnalysis;
 import com.puresol.coding.analysis.api.FileAnalyzer;
 import com.puresol.coding.analysis.api.ProgrammingLanguage;
 import com.puresol.coding.lang.test.grammar.TestLanguageGrammar;
@@ -47,17 +48,12 @@ import com.puresol.utils.StopWatch;
  */
 public class TestLanguageAnalyser implements FileAnalyzer {
 
-    private static final long serialVersionUID = -3601131473616977648L;
-
     private static final Logger logger = LoggerFactory
 	    .getLogger(TestLanguageAnalyser.class);
 
     private final File file;
     private final transient TestLanguageGrammar grammar;
-    private Date date = new Date();
-    private ParserTree parserTree = null;
-    private long timeEffort = 0;
-    private HashId hashId;
+    private FileAnalysis fileAnalysis;
 
     public TestLanguageAnalyser(File file) {
 	super();
@@ -68,17 +64,25 @@ public class TestLanguageAnalyser implements FileAnalyzer {
     @Override
     public void analyze() throws AnalyzerException {
 	try {
-	    date = new Date();
+	    fileAnalysis = null;
+	    Date date = new Date();
 	    StopWatch watch = new StopWatch();
 	    watch.start();
-	    hashId = FileUtilities.createHashId(file, HashAlgorithm.SHA256);
+	    HashId hashId = FileUtilities.createHashId(file,
+		    HashAlgorithm.SHA256);
 	    Lexer lexer = grammar.getLexer();
 	    LexerResult lexerResult = lexer.lex(SourceCode.read(file),
 		    file.toString());
 	    Parser parser = grammar.getParser();
-	    parserTree = parser.parse(lexerResult);
+	    ParserTree parserTree = parser.parse(lexerResult);
 	    watch.stop();
-	    timeEffort = Math.round(watch.getSeconds() * 1000.0);
+	    long timeEffort = Math.round(watch.getSeconds() * 1000.0);
+	    TestLanguage language = TestLanguage.getInstance();
+	    fileAnalysis = new FileAnalysis(date, timeEffort, language,
+		    new AnalyzedFile(hashId, file, date, timeEffort, language
+			    .getName(), language.getVersion()),
+		    parserTree, getAnalyzableCodeRanges(parserTree));
+
 	} catch (ParserException e) {
 	    logger.error(e.getMessage(), e);
 	    throw new AnalyzerException(this);
@@ -98,23 +102,6 @@ public class TestLanguageAnalyser implements FileAnalyzer {
     }
 
     @Override
-    public Date getTimeStamp() {
-	return date;
-    }
-
-    @Override
-    public long getTimeOfRun() {
-	return timeEffort;
-    }
-
-    @Override
-    public AnalyzedFile getAnalyzedFile() {
-	TestLanguage language = TestLanguage.getInstance();
-	return new AnalyzedFile(hashId, file, date, timeEffort,
-		language.getName(), language.getVersion());
-    }
-
-    @Override
     public boolean persist(File file) {
 	try {
 	    persist(this, file);
@@ -125,13 +112,7 @@ public class TestLanguageAnalyser implements FileAnalyzer {
 	}
     }
 
-    @Override
-    public ParserTree getParserTree() {
-	return parserTree;
-    }
-
-    @Override
-    public List<CodeRange> getAnalyzableCodeRanges() {
+    private List<CodeRange> getAnalyzableCodeRanges(ParserTree parserTree) {
 	List<CodeRange> result = new ArrayList<CodeRange>();
 	result.add(new CodeRange("", CodeRangeType.FILE, parserTree));
 	return result;
@@ -145,6 +126,16 @@ public class TestLanguageAnalyser implements FileAnalyzer {
 	} finally {
 	    objectOutputStream.close();
 	}
+    }
+
+    @Override
+    public File getFile() {
+	return file;
+    }
+
+    @Override
+    public FileAnalysis getAnalysis() {
+	return fileAnalysis;
     }
 
 }

@@ -24,7 +24,28 @@ import com.puresol.uhura.parser.ParserTree;
  * @author Rick-Rainer Ludwig
  * 
  */
-public interface FileAnalysis extends Serializable {
+public class FileAnalysis implements Serializable {
+
+    private static final long serialVersionUID = 4670045857614462051L;
+
+    private final Date timeStamp;
+    private final long timeOfRun;
+    private final ProgrammingLanguage language;
+    private final AnalyzedFile analyzedFile;
+    private final ParserTree parserTree;
+    private final List<CodeRange> analyzableCodeRanges;
+
+    public FileAnalysis(Date timeStamp, long timeOfRun,
+	    ProgrammingLanguage language, AnalyzedFile analyzedFile,
+	    ParserTree parserTree, List<CodeRange> analyzableCodeRanges) {
+	super();
+	this.timeStamp = timeStamp;
+	this.timeOfRun = timeOfRun;
+	this.language = language;
+	this.analyzedFile = analyzedFile;
+	this.parserTree = parserTree;
+	this.analyzableCodeRanges = analyzableCodeRanges;
+    }
 
     /**
      * This method returns the time stamp of the analysis. This can be used for
@@ -33,7 +54,9 @@ public interface FileAnalysis extends Serializable {
      * @return
      * @throws IOException
      */
-    public Date getTimeStamp() throws IOException;
+    public Date getTimeStamp() {
+	return timeStamp;
+    }
 
     /**
      * This method returns the time effort which was needed for analysis.
@@ -41,7 +64,9 @@ public interface FileAnalysis extends Serializable {
      * @return Returns the time effort in milliseconds
      * @throws IOException
      */
-    public long getTimeOfRun() throws IOException;
+    public long getTimeOfRun() {
+	return timeOfRun;
+    }
 
     /**
      * Returns the language of the file analysed.
@@ -49,14 +74,18 @@ public interface FileAnalysis extends Serializable {
      * @return The language is returned.
      * @throws IOException
      */
-    public ProgrammingLanguage getLanguage() throws IOException;
+    public ProgrammingLanguage getLanguage() {
+	return language;
+    }
 
     /**
      * The file which was analyzed is returned.
      * 
      * @return The analyzed file is returned.
      */
-    public AnalyzedFile getAnalyzedFile();
+    public AnalyzedFile getAnalyzedFile() {
+	return analyzedFile;
+    }
 
     /**
      * This method returns the parser tree.
@@ -64,7 +93,11 @@ public interface FileAnalysis extends Serializable {
      * @return
      * @throws IOException
      */
-    public ParserTree getParserTree() throws IOException;
+    public ParserTree getParserTree() {
+	return parserTree;
+    }
 
-    public List<CodeRange> getAnalyzableCodeRanges();
+    public List<CodeRange> getAnalyzableCodeRanges() {
+	return analyzableCodeRanges;
+    }
 }

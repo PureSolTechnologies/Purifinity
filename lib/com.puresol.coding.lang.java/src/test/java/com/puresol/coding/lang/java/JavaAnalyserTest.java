@@ -26,10 +26,9 @@ public class JavaAnalyserTest {
 		.classToRelativePackagePath(this.getClass()).toString());
 	assertTrue(file.exists());
 	JavaAnalyzer analyser = new JavaAnalyzer(file);
-	assertEquals(file, analyser.getAnalyzedFile().getFile());
-	assertNotNull(analyser.getTimeStamp());
+	assertEquals(file, analyser.getFile());
+	assertNull(analyser.getAnalysis());
 	assertSame(Java.getInstance(), analyser.getLanguage());
-	assertNull(analyser.getParserTree());
     }
 
     @Test
@@ -39,7 +38,7 @@ public class JavaAnalyserTest {
 	assertTrue(file.exists());
 	JavaAnalyzer analyser = new JavaAnalyzer(file);
 	analyser.analyze();
-	ParserTree tree = analyser.getParserTree();
+	ParserTree tree = analyser.getAnalysis().getParserTree();
 	assertNotNull(tree);
 	// new TreePrinter(System.out).println(tree);
     }
