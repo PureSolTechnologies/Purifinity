@@ -13,6 +13,7 @@ import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,20 +37,21 @@ import com.puresol.utils.StopWatch;
  */
 public class FortranSourceCodeDistributionTest {
 
-    private static final String INSTALL_DIRECTORY = "/home/ludwig/workspace/Dyn3D";
+    private static final String INSTALL_DIRECTORY = "/home/ludwig/workspaces/Dyn3D";
 
     private final static Logger logger = LoggerFactory
 	    .getLogger(FortranSourceCodeDistributionTest.class);
 
     @Test
+    @Ignore
     public void test() {
 	try {
-	    File file = new File("src/fort/ndicrs.f");
+	    File file = new File("ndicrs.f");
 	    Fortran fortran = Fortran.getInstance();
 	    StopWatch watch = new StopWatch();
 	    watch.start();
-	    FileAnalyzer analyser = fortran.createAnalyser(new File(
-		    INSTALL_DIRECTORY), file);
+	    FileAnalyzer analyser = fortran.createAnalyser(
+		    new File("src/fort"), file);
 	    analyser.analyze();
 	    watch.stop();
 	    ParserTree ast = analyser.getAnalysis().getParserTree();

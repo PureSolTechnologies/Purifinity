@@ -6,7 +6,6 @@ package com.puresol.coding.lang.fortran;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 
@@ -34,7 +33,6 @@ public class FortranAnalyserTest {
     }
 
     private void test(File sourceDirectory, File file) throws Throwable {
-	assertTrue(file.exists());
 	FortranAnalyzer analyser = new FortranAnalyzer(sourceDirectory, file);
 	analyser.analyze();
     }
