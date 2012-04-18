@@ -1,9 +1,9 @@
 package com.puresol.coding.client.controls;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.Status;
@@ -30,39 +30,33 @@ public class ScrollableFileViewer extends Composite {
 
     private final Text text = new Text(this, SWT.BORDER | SWT.H_SCROLL
 	    | SWT.V_SCROLL | SWT.CANCEL | SWT.MULTI);
-    private File file;
 
     public ScrollableFileViewer(Composite parent) {
 	this(parent, null);
     }
 
-    public ScrollableFileViewer(Composite parent, File file) {
+    public ScrollableFileViewer(Composite parent, InputStream file) {
 	super(parent, SWT.NONE);
-	this.file = file;
 	setLayout(new FillLayout());
 	text.setEditable(false);
 	text.setFont(new Font(getDisplay(), "Courier", 12, SWT.NONE));
-	updateContent();
+	updateContent(file);
     }
 
-    private void updateContent() {
+    private void updateContent(InputStream file) {
 	Color red = new Color(getDisplay(), new RGB(255, 0, 0));
 	try {
 	    Color black = new Color(getDisplay(), new RGB(0, 0, 0));
 	    try {
 		try {
 		    if (file == null) {
-			text.setText("");
-			return;
-		    }
-		    if (!file.exists()) {
 			text.setForeground(red);
 			text.setText("FILE DOES NOT EXIST!");
 		    } else {
 			StringBuilder builder = new StringBuilder();
 			text.setForeground(black);
 			BufferedReader reader = new BufferedReader(
-				new FileReader(file));
+				new InputStreamReader(file));
 			try {
 			    String line;
 			    while ((line = reader.readLine()) != null) {
@@ -93,9 +87,8 @@ public class ScrollableFileViewer extends Composite {
      * 
      * @param file
      */
-    public void setFileAndUpdateContent(File file) {
-	this.file = file;
-	updateContent();
+    public void setStreamAndUpdateContent(InputStream file) {
+	updateContent(file);
     }
 
 }

@@ -16,9 +16,9 @@ import com.puresol.coding.analysis.api.FileAnalysis;
 import com.puresol.coding.analysis.api.FileStore;
 import com.puresol.coding.analysis.api.FileStoreException;
 import com.puresol.coding.analysis.api.FileStoreFactory;
+import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.client.Activator;
 import com.puresol.coding.client.ClientImages;
-import com.puresol.trees.FileTree;
 
 public class AnalysisContentTreeLabelProvider extends LabelProvider {
 
@@ -46,7 +46,7 @@ public class AnalysisContentTreeLabelProvider extends LabelProvider {
 	if (element instanceof String) {
 	    return (String) element;
 	}
-	FileTree input = (FileTree) element;
+	HashIdFileTree input = (HashIdFileTree) element;
 	String text = input.getName();
 	File path = input.getPathFile(false);
 	AnalyzedFile analyzedFile = analysisRun.findAnalyzedFile(path);
@@ -69,7 +69,7 @@ public class AnalysisContentTreeLabelProvider extends LabelProvider {
 	if (element instanceof String) {
 	    return analysisRunImage;
 	}
-	FileTree input = (FileTree) element;
+	HashIdFileTree input = (HashIdFileTree) element;
 	File path = input.getPathFile(false);
 	AnalyzedFile analyzedFile = analysisRun.findAnalyzedFile(path);
 	if (analyzedFile != null) {

@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.puresol.trees.Tree;
+import com.puresol.trees.TreeVisitor;
+import com.puresol.trees.TreeWalker;
+import com.puresol.trees.WalkingAction;
 import com.puresol.utils.HashId;
 
 public final class HashIdFileTree implements Tree<HashIdFileTree>, Serializable {
@@ -101,4 +104,34 @@ public final class HashIdFileTree implements Tree<HashIdFileTree>, Serializable 
 	return file;
     }
 
+    private static class FindFileTreeVisitor implements
+	    TreeVisitor<HashIdFileTree> {
+
+	private HashIdFileTree found = null;
+	private final File file;
+
+	public FindFileTreeVisitor(File file) {
+	    this.file = file;
+	}
+
+	@Override
+	public WalkingAction visit(HashIdFileTree tree) {
+	    if (tree.getPathFile(false).equals(file)) {
+		found = tree;
+		return WalkingAction.ABORT;
+	    }
+	    return WalkingAction.PROCEED;
+	}
+
+	public HashIdFileTree getFound() {
+	    return found;
+	}
+    }
+
+    public HashIdFileTree findFile(final File file2) {
+	FindFileTreeVisitor visitor = new FindFileTreeVisitor(file2);
+	TreeWalker<HashIdFileTree> walker = new TreeWalker<HashIdFileTree>(this);
+	walker.walk(visitor);
+	return visitor.getFound();
+    }
 }

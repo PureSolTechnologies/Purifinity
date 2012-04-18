@@ -35,7 +35,6 @@ import com.puresol.coding.analysis.api.FileStore;
 import com.puresol.coding.analysis.api.FileStoreFactory;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.trees.FileTree;
-import com.puresol.trees.FileTreeConverter;
 import com.puresol.utils.DirectoryUtilities;
 import com.puresol.utils.FileSearch;
 import com.puresol.utils.FileSearchConfiguration;
@@ -101,6 +100,7 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
     private static final String SEARCH_CONFIGURATION_FILE = "search_configuration.persist";
     private static final String ANALYSIS_RUN_PROPERTIES_FILE = "analysis_run.properties";
     private static final String ANALYSIS_INFORMATION_FILE = "analysis_information.persist";
+    private static final String FILE_TREE = "file_tree.persist";
 
     private final File runDirectory;
 
@@ -108,7 +108,7 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
     private final List<File> failedFiles = new ArrayList<File>();
     private final FileStore fileStore = FileStoreFactory.getInstance();
 
-    private FileTree fileTree = new FileTree(null, "");
+    private HashIdFileTree hashIdFileTree = null;
     private FileSearchConfiguration searchConfig;
 
     private AnalysisInformation analysisInformation;
@@ -273,19 +273,7 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
 	failedFiles.addAll(failed);
 	analysisInformation = restore(new File(runDirectory,
 		ANALYSIS_INFORMATION_FILE));
-	createFileTree();
-    }
-
-    private void createFileTree() {
-	List<File> files = new ArrayList<File>();
-	for (AnalyzedFile analyzedFile : analyzedFiles) {
-	    files.add(analyzedFile.getFile());
-	}
-	for (File failedFile : failedFiles) {
-	    files.add(failedFile);
-	}
-	fileTree = FileTreeConverter.convertFileListToTree(
-		analysisInformation.getName(), files);
+	hashIdFileTree = restore(new File(runDirectory, FILE_TREE));
     }
 
     private void storeProjectInformation() {
@@ -306,6 +294,7 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
 	    IStatus retVal = analyzeFiles(monitor);
 	    saveProperties();
 	    storeProjectInformation();
+	    persist(hashIdFileTree, new File(runDirectory, FILE_TREE));
 	    monitor.done();
 	    return retVal;
 	} catch (IOException e) {
@@ -323,12 +312,12 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
     }
 
     private IStatus analyzeFiles(final IProgressMonitor monitor) {
-	fileTree = FileSearch.getFileTree(sourceDirectory, searchConfig);
-	HashIdFileTree hashIdFileTree = StoreUtilities
-		.createHashIdFileTree(fileTree);
+	FileTree fileTree = FileSearch.getFileTree(sourceDirectory,
+		searchConfig);
+	hashIdFileTree = StoreUtilities.createHashIdFileTree(fileTree);
 	StoreUtilities.storeFiles(hashIdFileTree);
 
-	List<File> files = getFileListFromFileTree();
+	List<File> files = getFileListFromFileTree(fileTree);
 	int processors = Runtime.getRuntime().availableProcessors();
 	ExecutorService threadPool = Executors.newFixedThreadPool(processors);
 	monitor.beginTask("Analyze files", files.size());
@@ -363,7 +352,7 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
 	return Status.OK_STATUS;
     }
 
-    private List<File> getFileListFromFileTree() {
+    private List<File> getFileListFromFileTree(FileTree fileTree) {
 	List<File> files = new ArrayList<File>();
 	for (FileTree fileTreeNode : fileTree) {
 	    File file = fileTreeNode.getPathFile(false);
@@ -401,9 +390,9 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
 		FileAnalyzerImpl fileAnalyzer = new FileAnalyzerImpl(
 			sourceDirectory, file, hashId);
 		fileAnalyzer.analyze();
-		fileStore.storeAnalysis(hashId, fileAnalyzer.getAnalyzer()
-			.getAnalysis());
 		if (fileAnalyzer.isAnalyzed()) {
+		    fileStore.storeAnalysis(hashId, fileAnalyzer.getAnalyzer()
+			    .getAnalysis());
 		    AnalyzedFile analyzedFile = fileAnalyzer.getAnalysis()
 			    .getAnalyzedFile();
 		    analyzedFiles.add(analyzedFile);
@@ -424,8 +413,8 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
     }
 
     @Override
-    public FileTree getFileTree() {
-	return fileTree;
+    public HashIdFileTree getFileTree() {
+	return hashIdFileTree;
     }
 
     @Override

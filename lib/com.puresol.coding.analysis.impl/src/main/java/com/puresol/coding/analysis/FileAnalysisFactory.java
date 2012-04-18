@@ -55,7 +55,7 @@ public class FileAnalysisFactory {
     public FileAnalyzer create(File sourceDirectory, File file)
 	    throws LanguageNotSupportedException, FileNotFoundException {
 	logger.debug("Create analyser for file '" + file.getPath() + "'...");
-	checkFile(file);
+	checkFile(new File(sourceDirectory, file.getPath()));
 	return createAnalyser(sourceDirectory, file);
     }
 

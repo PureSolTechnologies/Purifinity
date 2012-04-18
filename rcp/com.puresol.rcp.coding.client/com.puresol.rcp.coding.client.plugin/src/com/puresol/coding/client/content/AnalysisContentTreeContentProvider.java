@@ -5,11 +5,11 @@ import java.util.List;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
-import com.puresol.trees.FileTree;
+import com.puresol.coding.analysis.api.HashIdFileTree;
 
 public class AnalysisContentTreeContentProvider implements ITreeContentProvider {
 
-    private FileTree fileTree;
+    private HashIdFileTree fileTree;
 
     @Override
     public void dispose() {
@@ -18,7 +18,7 @@ public class AnalysisContentTreeContentProvider implements ITreeContentProvider 
 
     @Override
     public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-	fileTree = (FileTree) newInput;
+	fileTree = (HashIdFileTree) newInput;
     }
 
     @Override
@@ -28,11 +28,11 @@ public class AnalysisContentTreeContentProvider implements ITreeContentProvider 
 
     @Override
     public Object[] getChildren(Object parentElement) {
-	List<FileTree> children;
+	List<HashIdFileTree> children;
 	if (parentElement instanceof String) {
 	    children = fileTree.getChildren();
 	} else {
-	    FileTree input = (FileTree) parentElement;
+	    HashIdFileTree input = (HashIdFileTree) parentElement;
 	    children = input.getChildren();
 	}
 	return children.toArray();
@@ -43,7 +43,7 @@ public class AnalysisContentTreeContentProvider implements ITreeContentProvider 
 	if (element instanceof String) {
 	    return null;
 	} else {
-	    FileTree input = (FileTree) element;
+	    HashIdFileTree input = (HashIdFileTree) element;
 	    if (input.getParent() == null) {
 		return fileTree.getName();
 	    }
@@ -56,7 +56,7 @@ public class AnalysisContentTreeContentProvider implements ITreeContentProvider 
 	if (element instanceof String) {
 	    return fileTree.hasChildren();
 	}
-	FileTree input = (FileTree) element;
+	HashIdFileTree input = (HashIdFileTree) element;
 	return input.hasChildren();
     }
 

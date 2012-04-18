@@ -6,13 +6,17 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
 
+import com.puresol.coding.analysis.api.AnalysisRun;
+
 public class NotAnalyzedEditorInput implements IEditorInput {
 
     private final File file;
+    private final AnalysisRun analysisRun;
 
-    public NotAnalyzedEditorInput(File file) {
+    public NotAnalyzedEditorInput(File file, AnalysisRun analysisRun) {
 	super();
 	this.file = file;
+	this.analysisRun = analysisRun;
     }
 
     @Override
@@ -49,4 +53,7 @@ public class NotAnalyzedEditorInput implements IEditorInput {
 	return file;
     }
 
+    public final AnalysisRun getAnalysisRun() {
+	return analysisRun;
+    }
 }

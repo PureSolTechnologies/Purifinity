@@ -134,4 +134,9 @@ public class StoreUtilities {
 		hashIdFileTree);
 	walker.walk(visitor);
     }
+
+    public static void restoreFile(HashIdFileTree hashIdFileTree) {
+	// TODO Auto-generated method stub
+
+    }
 }

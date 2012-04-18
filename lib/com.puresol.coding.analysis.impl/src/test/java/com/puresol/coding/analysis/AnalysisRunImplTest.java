@@ -18,7 +18,7 @@ import com.puresol.coding.analysis.api.AnalysisSettings;
 import com.puresol.coding.analysis.api.AnalysisStore;
 import com.puresol.coding.analysis.api.AnalyzedFile;
 import com.puresol.coding.analysis.api.DirectoryStoreException;
-import com.puresol.trees.FileTree;
+import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.utils.HashAlgorithm;
 import com.puresol.utils.HashId;
 
@@ -45,7 +45,7 @@ public class AnalysisRunImplTest {
 	assertNotNull(analyzedFiles);
 	List<File> failedFiles = analysisRun.getFailedFiles();
 	assertNotNull(failedFiles);
-	FileTree fileTree = analysisRun.getFileTree();
+	HashIdFileTree fileTree = analysisRun.getFileTree();
 	assertNotNull(fileTree);
 	AnalysisRunInformation information = analysisRun.getInformation();
 	assertNotNull(information);

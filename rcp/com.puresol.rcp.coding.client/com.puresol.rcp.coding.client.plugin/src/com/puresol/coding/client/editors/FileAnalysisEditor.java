@@ -1,6 +1,7 @@
 package com.puresol.coding.client.editors;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -18,15 +19,20 @@ import org.eclipse.ui.part.EditorPart;
 
 import swing2swt.layout.BorderLayout;
 
+import com.puresol.coding.analysis.api.FileStore;
 import com.puresol.coding.analysis.api.FileStoreException;
+import com.puresol.coding.analysis.api.FileStoreFactory;
 import com.puresol.coding.client.Activator;
 import com.puresol.coding.client.controls.MetricsControl;
 import com.puresol.coding.client.controls.ParserTreeControl;
 import com.puresol.coding.client.controls.ScrollableFileViewer;
+import com.puresol.utils.HashId;
 
 public class FileAnalysisEditor extends EditorPart {
 
     private static final ILog logger = Activator.getDefault().getLog();
+
+    public static final String ID = "com.puresol.coding.client.FileAnalysisEditor";
 
     private ScrollableFileViewer fileViewer;
     private ParserTreeControl treeViewer;
@@ -99,11 +105,17 @@ public class FileAnalysisEditor extends EditorPart {
 	    metricsViewerTab.setControl(metricsControl);
 
 	    FileAnalysisEditorInput editorInput = (FileAnalysisEditorInput) getEditorInput();
-	    // FIXME !!!
-	    // fileViewer.setFileAndUpdateContent(editorInput.getAnalysisFile()
-	    // .getSourceFile());
-	    treeViewer.setContentAndUpdateContent(
-		    editorInput.getAnalysisFile(), editorInput.getAnalysis());
+	    HashId hashId = editorInput.getAnalysisFile().getHashId();
+	    FileStore fileStore = FileStoreFactory.getInstance();
+	    InputStream inputStream = fileStore.loadContent(hashId);
+	    try {
+		fileViewer.setStreamAndUpdateContent(inputStream);
+		treeViewer.setContentAndUpdateContent(
+			editorInput.getAnalysisFile(),
+			editorInput.getAnalysis());
+	    } finally {
+		inputStream.close();
+	    }
 	} catch (IOException e) {
 	    logger.log(new Status(Status.ERROR, FileAnalysisEditor.class
 		    .getName(), e.getMessage(), e));

@@ -1,5 +1,8 @@
 package com.puresol.coding.client.editors;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.SWT;
@@ -10,12 +13,18 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 
+import com.puresol.coding.analysis.api.FileStore;
+import com.puresol.coding.analysis.api.FileStoreException;
+import com.puresol.coding.analysis.api.FileStoreFactory;
+import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.client.Activator;
 import com.puresol.coding.client.controls.ScrollableFileViewer;
 
 public class NotAnalyzedEditor extends EditorPart {
 
     private static final ILog logger = Activator.getDefault().getLog();
+
+    public static final String ID = "com.puresol.coding.client.NotAnalyzedEditor";
 
     private ScrollableFileViewer text;
 
@@ -56,7 +65,23 @@ public class NotAnalyzedEditor extends EditorPart {
 	parent.setLayout(new FillLayout(SWT.HORIZONTAL));
 	text = new ScrollableFileViewer(parent);
 	NotAnalyzedEditorInput editorInput = (NotAnalyzedEditorInput) getEditorInput();
-	text.setFileAndUpdateContent(editorInput.getFile());
+	HashIdFileTree hashIdFile = editorInput.getAnalysisRun().getFileTree()
+		.findFile(editorInput.getFile());
+	FileStore fileStore = FileStoreFactory.getInstance();
+	try {
+	    InputStream inputStream = fileStore.loadContent(hashIdFile
+		    .getHashId());
+	    try {
+		text.setStreamAndUpdateContent(inputStream);
+	    } finally {
+		inputStream.close();
+	    }
+	} catch (IOException e) {
+	    // TODO
+	} catch (FileStoreException e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
     }
 
     @Override

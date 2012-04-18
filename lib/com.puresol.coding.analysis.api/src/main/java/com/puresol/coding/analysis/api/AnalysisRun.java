@@ -39,7 +39,7 @@ public interface AnalysisRun extends Serializable {
      * 
      * @return A {@link FileTree} object is returned.
      */
-    public FileTree getFileTree();
+    public HashIdFileTree getFileTree();
 
     /**
      * This method returns a list of all files which failed an analysis as flat
