@@ -25,6 +25,12 @@ public class ProgrammingLanguages {
     private static final Logger logger = LoggerFactory
 	    .getLogger(ProgrammingLanguages.class);
 
+    /**
+     * This method looks into the bundle context and returns all available
+     * programming languages.
+     * 
+     * @return
+     */
     public static List<ProgrammingLanguage> getAll() {
 	try {
 	    BundleContext context = Activator.getBundleContext();
@@ -42,7 +48,8 @@ public class ProgrammingLanguages {
     }
 
     /**
-     * This method is used to find a programming language by its name.
+     * This method is used to find a programming language by its name and
+     * version.
      * 
      * @param name
      *            is the name of the programming language to be found.
