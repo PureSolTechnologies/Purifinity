@@ -10,6 +10,7 @@ import org.osgi.framework.ServiceRegistration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.puresol.coding.evaluation.api.EvaluatorFactory;
 import com.puresol.coding.evaluator.CodeRangeEvaluatorFactory;
 import com.puresol.coding.evaluator.ProjectEvaluatorFactory;
 
@@ -35,6 +36,10 @@ public class McCabeActivator implements BundleActivator {
 
 	ServiceRegistration<?> registration = context.registerService(
 		ProjectEvaluatorFactory.class, mcCabeMetricFactory, headers);
+	serviceRegistrations.add(registration);
+
+	registration = context.registerService(EvaluatorFactory.class,
+		mcCabeMetricFactory, headers);
 	serviceRegistrations.add(registration);
 
 	registration = context.registerService(CodeRangeEvaluatorFactory.class,

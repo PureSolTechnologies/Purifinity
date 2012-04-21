@@ -19,6 +19,6 @@ public class EvaluatorComboViewer extends ComboViewer {
 		return evaluator.getMetaData().getName();
 	    }
 	});
-	setInput(Evaluators.getAll());
+	setInput(Evaluators.getAllFactories());
     }
 }

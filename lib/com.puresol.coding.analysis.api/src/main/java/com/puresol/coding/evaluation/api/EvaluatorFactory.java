@@ -14,10 +14,35 @@ import com.puresol.coding.quality.QualityCharacteristic;
  */
 public interface EvaluatorFactory {
 
-	public String getName();
+    /**
+     * This method returns a name for the evaluator which is created with this
+     * factory.
+     * 
+     * @return
+     */
+    public String getName();
 
-	public String getDescription();
+    /**
+     * This method returns a description for the evaluator which is created with
+     * this factory.
+     * 
+     * @return
+     */
+    public String getDescription();
 
-	public List<QualityCharacteristic> getEvaluatedQualityCharacteristics();
+    /**
+     * This method returns a list with all quality characteristics which are
+     * evaluated with the evaluator created with this factory.
+     * 
+     * @return
+     */
+    public List<QualityCharacteristic> getEvaluatedQualityCharacteristics();
 
+    /**
+     * This method actually creates the evaluator.
+     * 
+     * @param analysisRun
+     * @return
+     */
+    // TODO public Evaluator create(AnalysisRun analysisRun);
 }

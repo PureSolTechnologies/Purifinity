@@ -79,6 +79,7 @@
       <import plugin="org.hamcrest.core" version="1.1.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.core.jobs" version="3.5.101" match="greaterOrEqual"/>
       <import plugin="com.puresol.coding.analysis.impl" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="com.puresol.coding.metrics"/>
    </requires>
 
    <plugin
@@ -458,6 +459,13 @@
 
    <plugin
          id="com.puresol.coding.analysis.impl"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.puresol.coding.metrics"
          download-size="0"
          install-size="0"
          version="0.0.0"

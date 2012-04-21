@@ -23,13 +23,13 @@ public class Evaluators {
      * 
      * @return Returns a list of project evaluator factories.
      */
-    public static List<Evaluator> getAll() {
+    public static List<EvaluatorFactory> getAllFactories() {
 	try {
 	    BundleContext bundleContext = Activator.getBundleContext();
-	    Collection<ServiceReference<Evaluator>> serviceReferences = bundleContext
-		    .getServiceReferences(Evaluator.class, null);
-	    List<Evaluator> evaluatorFactories = new ArrayList<Evaluator>();
-	    for (ServiceReference<Evaluator> serviceReference : serviceReferences) {
+	    Collection<ServiceReference<EvaluatorFactory>> serviceReferences = bundleContext
+		    .getServiceReferences(EvaluatorFactory.class, null);
+	    List<EvaluatorFactory> evaluatorFactories = new ArrayList<EvaluatorFactory>();
+	    for (ServiceReference<EvaluatorFactory> serviceReference : serviceReferences) {
 		evaluatorFactories.add(bundleContext
 			.getService(serviceReference));
 	    }
