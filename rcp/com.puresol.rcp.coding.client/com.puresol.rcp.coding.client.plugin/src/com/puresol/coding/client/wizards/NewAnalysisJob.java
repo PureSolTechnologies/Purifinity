@@ -10,11 +10,13 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 import com.puresol.coding.analysis.api.Analysis;
+import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalysisSettings;
 import com.puresol.coding.analysis.api.AnalysisStore;
-import com.puresol.coding.analysis.api.DirectoryStoreException;
 import com.puresol.coding.analysis.api.AnalysisStoreFactory;
+import com.puresol.coding.analysis.api.DirectoryStoreException;
 import com.puresol.coding.client.Activator;
+import com.puresol.coding.client.jobs.EvaluationJob;
 import com.puresol.coding.client.utils.PreferencesUtils;
 import com.puresol.utils.FileSearchConfiguration;
 
@@ -43,8 +45,10 @@ public class NewAnalysisJob extends Job {
 	    AnalysisSettings analysisSettings = new AnalysisSettings(getName(),
 		    description, searchConfiguration, sourceDirectory);
 	    analysis = analysisStore.createAnalysis(analysisSettings);
-	    // run first analysis...
-	    analysis.runAnalysis();
+	    AnalysisRun analysisRun = analysis.runAnalysis();
+	    monitor.done();
+	    EvaluationJob job = new EvaluationJob(analysisRun);
+	    job.schedule();
 	    return Status.OK_STATUS;
 	} catch (OperationCanceledException e) {
 	    e.printStackTrace();

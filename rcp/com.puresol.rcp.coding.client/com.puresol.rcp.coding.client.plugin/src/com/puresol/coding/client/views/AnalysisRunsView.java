@@ -35,6 +35,7 @@ import com.puresol.coding.client.ClientImages;
 import com.puresol.coding.client.content.AnalysisRunListContentProvider;
 import com.puresol.coding.client.content.AnalysisRunListLabelProvider;
 import com.puresol.coding.client.controls.ParserTreeControl;
+import com.puresol.coding.client.jobs.EvaluationJob;
 
 public class AnalysisRunsView extends ViewPart implements SelectionListener,
 	ISelectionProvider, ISelectionListener {
@@ -162,7 +163,9 @@ public class AnalysisRunsView extends ViewPart implements SelectionListener,
 
     private void addAnalysisRun() {
 	try {
-	    analysis.runAnalysis();
+	    AnalysisRun analysisRun = analysis.runAnalysis();
+	    EvaluationJob evaluationJob = new EvaluationJob(analysisRun);
+	    evaluationJob.schedule();
 	    refreshAnalysisRunList();
 	} catch (DirectoryStoreException e) {
 	    logger.log(new Status(Status.ERROR, AnalysisRunsView.class

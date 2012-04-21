@@ -11,7 +11,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
 import com.puresol.coding.client.content.EvaluatorComboViewer;
-import com.puresol.coding.evaluation.api.Evaluator;
+import com.puresol.coding.evaluation.api.EvaluatorFactory;
 
 /**
  * This is a simple text element which show a text file.
@@ -46,9 +46,9 @@ public class MetricsControl extends Composite implements
 	if (event.getSource() == comboViewer) {
 	    StructuredSelection selection = (StructuredSelection) event
 		    .getSelection();
-	    Evaluator evaluator = (Evaluator) selection.getFirstElement();
-	    metricDescriptionLabel.setText(evaluator.getMetaData()
-		    .getDescription());
+	    EvaluatorFactory evaluator = (EvaluatorFactory) selection
+		    .getFirstElement();
+	    metricDescriptionLabel.setText(evaluator.getDescription());
 	    metricDescriptionLabel.setSize(metricDescriptionLabel.computeSize(
 		    SWT.DEFAULT, SWT.DEFAULT));
 	}
