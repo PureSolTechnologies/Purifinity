@@ -10,6 +10,8 @@
 
 package com.puresol.coding.quality;
 
+import com.puresol.data.Identifiable;
+
 /**
  * This enum stands for a quality level. There are three levels defined: low,
  * medium and high level.
@@ -17,55 +19,27 @@ package com.puresol.coding.quality;
  * @author Rick-Rainer Ludwig
  * 
  */
-public enum SourceCodeQuality implements Comparable<SourceCodeQuality> {
-    UNSPECIFIED {
-	@Override
-	public String getIdentifier() {
-	    return "unspecified";
-	}
+public enum SourceCodeQuality implements Comparable<SourceCodeQuality>,
+	Identifiable {
+    UNSPECIFIED(10, "unspecified"), LOW(1, "low"), MEDIUM(2, "medium"), HIGH(3,
+	    "high");
 
-	@Override
-	public int getLevel() {
-	    return 10;
-	}
-    },
-    LOW {
-	@Override
-	public String getIdentifier() {
-	    return "low";
-	}
+    private final int level;
+    private final String identifier;
 
-	@Override
-	public int getLevel() {
-	    return 1;
-	}
-    },
-    MEDIUM {
-	@Override
-	public String getIdentifier() {
-	    return "medium";
-	}
+    private SourceCodeQuality(int level, String identifier) {
+	this.level = level;
+	this.identifier = identifier;
+    }
 
-	@Override
-	public int getLevel() {
-	    return 2;
-	}
-    },
-    HIGH {
-	@Override
-	public String getIdentifier() {
-	    return "high";
-	}
+    public int getLevel() {
+	return level;
+    }
 
-	@Override
-	public int getLevel() {
-	    return 3;
-	}
-    };
-
-    public abstract int getLevel();
-
-    public abstract String getIdentifier();
+    @Override
+    public String getIdentifier() {
+	return identifier;
+    }
 
     public static SourceCodeQuality fromLevel(int level) {
 	for (SourceCodeQuality qualityLevel : SourceCodeQuality.values()) {
@@ -76,20 +50,13 @@ public enum SourceCodeQuality implements Comparable<SourceCodeQuality> {
 	return SourceCodeQuality.UNSPECIFIED;
     }
 
-    public static SourceCodeQuality getMinLevel(SourceCodeQuality level1,
-	    SourceCodeQuality level2) {
-	if ((level1 == null) && (level2 == null)) {
-	    throw new NullPointerException("Both levels are null!");
+    public static SourceCodeQuality getMinLevel(SourceCodeQuality... levels) {
+	SourceCodeQuality resultLevel = UNSPECIFIED;
+	for (SourceCodeQuality level : levels) {
+	    if (level.getLevel() < resultLevel.getLevel()) {
+		resultLevel = level;
+	    }
 	}
-	if (level1 == null) {
-	    return level2;
-	}
-	if (level2 == null) {
-	    return level1;
-	}
-	if (level1.getLevel() < level2.getLevel()) {
-	    return level1;
-	}
-	return level2;
+	return resultLevel;
     }
 }

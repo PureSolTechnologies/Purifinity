@@ -1,4 +1,4 @@
-package com.puresol.coding.evaluator;
+package com.puresol.coding.evaluation.api;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -8,7 +8,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 
-import com.puresol.coding.analysis.Activator;
+import com.puresol.coding.analysis.api.Activator;
 
 /**
  * This is a utilities class which provides functionality to access the metrics
@@ -16,20 +16,20 @@ import com.puresol.coding.analysis.Activator;
  * 
  * @author Rick-Rainer Ludwig
  */
-public class EvaluatorUtils {
+public class Evaluators {
 
     /**
      * This method returns a list of all project evaluators available.
      * 
      * @return Returns a list of project evaluator factories.
      */
-    public static List<ProjectEvaluatorFactory> getProjectEvaluatorFactories() {
+    public static List<Evaluator> getAll() {
 	try {
 	    BundleContext bundleContext = Activator.getBundleContext();
-	    Collection<ServiceReference<ProjectEvaluatorFactory>> serviceReferences = bundleContext
-		    .getServiceReferences(ProjectEvaluatorFactory.class, null);
-	    List<ProjectEvaluatorFactory> evaluatorFactories = new ArrayList<ProjectEvaluatorFactory>();
-	    for (ServiceReference<ProjectEvaluatorFactory> serviceReference : serviceReferences) {
+	    Collection<ServiceReference<Evaluator>> serviceReferences = bundleContext
+		    .getServiceReferences(Evaluator.class, null);
+	    List<Evaluator> evaluatorFactories = new ArrayList<Evaluator>();
+	    for (ServiceReference<Evaluator> serviceReference : serviceReferences) {
 		evaluatorFactories.add(bundleContext
 			.getService(serviceReference));
 	    }

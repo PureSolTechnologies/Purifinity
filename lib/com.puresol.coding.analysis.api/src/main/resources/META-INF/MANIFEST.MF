@@ -8,4 +8,5 @@ Bundle-Vendor: PureSol Technologies
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.osgi;bundle-version="3.7.2"
-Export-Package: com.puresol.coding.analysis.api
+Export-Package: com.puresol.coding.analysis.api,
+ com.puresol.coding.evaluation.api

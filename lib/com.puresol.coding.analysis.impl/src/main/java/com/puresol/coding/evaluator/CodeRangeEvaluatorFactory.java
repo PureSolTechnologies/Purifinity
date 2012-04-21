@@ -1,7 +1,6 @@
 package com.puresol.coding.evaluator;
 
-import com.puresol.coding.analysis.api.CodeRange;
-import com.puresol.coding.analysis.api.ProgrammingLanguage;
+import com.puresol.coding.evaluation.api.EvaluatorFactory;
 
 /**
  * This interface is meant for all factories which create code range evaluators.
@@ -11,9 +10,6 @@ import com.puresol.coding.analysis.api.ProgrammingLanguage;
  */
 public interface CodeRangeEvaluatorFactory extends EvaluatorFactory {
 
-	public CodeRangeEvaluator create(ProgrammingLanguage language,
-			CodeRange codeRange);
-
-	public Class<? extends CodeRangeEvaluator> getCodeRangeEvaluatorClass();
+    public Class<? extends CodeRangeEvaluator> getCodeRangeEvaluatorClass();
 
 }

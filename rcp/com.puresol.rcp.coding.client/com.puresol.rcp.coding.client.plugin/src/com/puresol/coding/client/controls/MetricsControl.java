@@ -10,8 +10,8 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
-import com.puresol.coding.client.content.ProjectEvaluatorFactoryComboViewer;
-import com.puresol.coding.evaluator.ProjectEvaluatorFactory;
+import com.puresol.coding.client.content.EvaluatorComboViewer;
+import com.puresol.coding.evaluation.api.Evaluator;
 
 /**
  * This is a simple text element which show a text file.
@@ -22,7 +22,7 @@ import com.puresol.coding.evaluator.ProjectEvaluatorFactory;
 public class MetricsControl extends Composite implements
 	ISelectionChangedListener {
 
-    private final ProjectEvaluatorFactoryComboViewer comboViewer;
+    private final EvaluatorComboViewer comboViewer;
     private final Text metricDescriptionLabel;
 
     public MetricsControl(Composite parent, int style) {
@@ -32,7 +32,7 @@ public class MetricsControl extends Composite implements
 	Combo combo = new Combo(this, SWT.READ_ONLY);
 	combo.setLayoutData(new RowData(SWT.DEFAULT, SWT.DEFAULT));
 
-	comboViewer = new ProjectEvaluatorFactoryComboViewer(combo);
+	comboViewer = new EvaluatorComboViewer(combo);
 	comboViewer.addSelectionChangedListener(this);
 
 	metricDescriptionLabel = new Text(this, SWT.MULTI);
@@ -46,9 +46,9 @@ public class MetricsControl extends Composite implements
 	if (event.getSource() == comboViewer) {
 	    StructuredSelection selection = (StructuredSelection) event
 		    .getSelection();
-	    ProjectEvaluatorFactory factory = (ProjectEvaluatorFactory) selection
-		    .getFirstElement();
-	    metricDescriptionLabel.setText(factory.getDescription());
+	    Evaluator evaluator = (Evaluator) selection.getFirstElement();
+	    metricDescriptionLabel.setText(evaluator.getMetaData()
+		    .getDescription());
 	    metricDescriptionLabel.setSize(metricDescriptionLabel.computeSize(
 		    SWT.DEFAULT, SWT.DEFAULT));
 	}

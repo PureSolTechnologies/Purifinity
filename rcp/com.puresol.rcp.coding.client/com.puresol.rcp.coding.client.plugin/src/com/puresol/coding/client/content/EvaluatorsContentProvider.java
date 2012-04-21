@@ -6,12 +6,11 @@ import java.util.List;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
-import com.puresol.coding.evaluator.ProjectEvaluatorFactory;
+import com.puresol.coding.evaluation.api.Evaluator;
 
-public class ProjectEvaluatorFactoryContentProvider implements
-	IStructuredContentProvider {
+public class EvaluatorsContentProvider implements IStructuredContentProvider {
 
-    private final List<ProjectEvaluatorFactory> factories = new ArrayList<ProjectEvaluatorFactory>();
+    private final List<Evaluator> factories = new ArrayList<Evaluator>();
 
     @Override
     public void dispose() {
@@ -23,7 +22,7 @@ public class ProjectEvaluatorFactoryContentProvider implements
 	factories.clear();
 	if (newInput != null) {
 	    @SuppressWarnings("unchecked")
-	    List<ProjectEvaluatorFactory> factoryList = (List<ProjectEvaluatorFactory>) newInput;
+	    List<Evaluator> factoryList = (List<Evaluator>) newInput;
 	    factories.addAll(factoryList);
 	}
     }
