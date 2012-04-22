@@ -22,17 +22,17 @@ import com.puresol.coding.analysis.api.FileStore;
 import com.puresol.coding.analysis.api.FileStoreException;
 import com.puresol.coding.analysis.api.FileStoreFactory;
 import com.puresol.coding.analysis.api.ProgrammingLanguage;
-import com.puresol.coding.evaluator.ProjectEvaluator;
+import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.evaluator.Result;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.SourceCodeQuality;
 
-public class ProjectMaintainabilityIndex extends ProjectEvaluator {
+public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 
     private static final long serialVersionUID = -5093217611195212999L;
 
     private static final Logger logger = LoggerFactory
-	    .getLogger(ProjectMaintainabilityIndex.class);
+	    .getLogger(MaintainabilityIndexEvaluator.class);
 
     private final Map<String, SourceCodeQuality> qualities = new HashMap<String, SourceCodeQuality>();
     private final Map<String, List<Result>> evaluatorResults = new HashMap<String, List<Result>>();
@@ -41,16 +41,9 @@ public class ProjectMaintainabilityIndex extends ProjectEvaluator {
     private SourceCodeQuality projectQuality = SourceCodeQuality.UNSPECIFIED;
     private int qualitySum = 0;
     private int qualityCount = 0;
-    private final AnalysisRun projectAnalyzer;
 
-    public ProjectMaintainabilityIndex() {
-	super("");
-	this.projectAnalyzer = null;
-    }
-
-    public ProjectMaintainabilityIndex(AnalysisRun projectAnalyzer) {
-	super("Project Maintainability Index");
-	this.projectAnalyzer = projectAnalyzer;
+    public MaintainabilityIndexEvaluator(AnalysisRun analysisRun) {
+	super(analysisRun, "Project Maintainability Index");
     }
 
     @Override
@@ -59,7 +52,7 @@ public class ProjectMaintainabilityIndex extends ProjectEvaluator {
 	    qualities.clear();
 	    qualitySum = 0;
 	    qualityCount = 0;
-	    List<AnalyzedFile> files = projectAnalyzer.getAnalyzedFiles();
+	    List<AnalyzedFile> files = getAnalysisRun().getAnalyzedFiles();
 	    monitor.beginTask(getName(), files.size());
 	    int count = 0;
 	    Collections.sort(files);
@@ -90,8 +83,9 @@ public class ProjectMaintainabilityIndex extends ProjectEvaluator {
 	}
     }
 
-    private void processFile(AnalyzedFile file) throws IOException,
-	    FileStoreException {
+    @Override
+    protected Map<String, SourceCodeQuality> processFile(AnalyzedFile file)
+	    throws IOException, FileStoreException {
 	FileAnalysis analysis = fileStore.loadAnalysis(file.getHashId());
 	ProgrammingLanguage language = ProgrammingLanguages.findByName(
 		analysis.getLanguageName(), analysis.getLanguageVersion());
@@ -107,6 +101,7 @@ public class ProjectMaintainabilityIndex extends ProjectEvaluator {
 	    evaluatorResults.put(identifier, metric.getResults());
 	    addProjectQualityPart(metric.getQuality());
 	}
+	return qualities;
     }
 
     private void addProjectQualityPart(SourceCodeQuality level) {
@@ -134,10 +129,5 @@ public class ProjectMaintainabilityIndex extends ProjectEvaluator {
     @Override
     public SourceCodeQuality getQuality() {
 	return projectQuality;
-    }
-
-    @Override
-    public AnalysisRun getAnalysisRun() {
-	return projectAnalyzer;
     }
 }

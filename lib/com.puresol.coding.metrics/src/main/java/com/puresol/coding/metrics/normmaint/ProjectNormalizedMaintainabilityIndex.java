@@ -14,19 +14,18 @@ import com.puresol.coding.analysis.api.FileStore;
 import com.puresol.coding.analysis.api.FileStoreException;
 import com.puresol.coding.analysis.api.FileStoreFactory;
 import com.puresol.coding.analysis.api.ProgrammingLanguage;
-import com.puresol.coding.metrics.AbstractProjectMetric;
+import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.SourceCodeQuality;
 
-public class ProjectNormalizedMaintainabilityIndex extends
-	AbstractProjectMetric<NormalizedMaintainabilityIndex> {
+public class ProjectNormalizedMaintainabilityIndex extends AbstractEvaluator {
 
     private static final long serialVersionUID = -5093217611195212999L;
 
     private final FileStore fileStore = FileStoreFactory.getInstance();
 
     public ProjectNormalizedMaintainabilityIndex(AnalysisRun projectAnalyzer) {
-	super(projectAnalyzer);
+	super(projectAnalyzer, NormalizedMaintainabilityIndex.NAME);
     }
 
     @Override

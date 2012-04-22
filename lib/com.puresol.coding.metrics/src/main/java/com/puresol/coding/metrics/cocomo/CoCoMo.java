@@ -10,8 +10,10 @@
 
 package com.puresol.coding.metrics.cocomo;
 
+import java.io.IOException;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -29,7 +31,7 @@ import com.puresol.coding.analysis.api.FileAnalysis;
 import com.puresol.coding.analysis.api.FileStore;
 import com.puresol.coding.analysis.api.FileStoreException;
 import com.puresol.coding.analysis.api.FileStoreFactory;
-import com.puresol.coding.evaluator.ProjectEvaluator;
+import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.evaluator.Result;
 import com.puresol.coding.metrics.sloc.SLOCMetric;
 import com.puresol.coding.quality.QualityCharacteristic;
@@ -43,7 +45,7 @@ import com.puresol.uhura.parser.ParserTree;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class CoCoMo extends ProjectEvaluator {
+public class CoCoMo extends AbstractEvaluator {
 
     private static final long serialVersionUID = 5098378023541671490L;
 
@@ -60,19 +62,9 @@ public class CoCoMo extends ProjectEvaluator {
     private final FileStore fileStore = FileStoreFactory.getInstance();
     private final CoCoMoValueSet cocomoValues = new CoCoMoValueSet();
     private final Hashtable<AnalyzedFile, CoCoMoValueSet> fileCoCoMoValues = new Hashtable<AnalyzedFile, CoCoMoValueSet>();
-    private final AnalysisRun projectAnalyzer;
 
-    public CoCoMo(AnalysisRun projectAnalyzer) {
-	super(NAME);
-	this.projectAnalyzer = projectAnalyzer;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public AnalysisRun getAnalysisRun() {
-	return projectAnalyzer;
+    public CoCoMo(AnalysisRun analysisRun) {
+	super(analysisRun, NAME);
     }
 
     /**
@@ -80,7 +72,7 @@ public class CoCoMo extends ProjectEvaluator {
      */
     @Override
     public IStatus run(IProgressMonitor monitor) {
-	List<AnalyzedFile> files = projectAnalyzer.getAnalyzedFiles();
+	List<AnalyzedFile> files = getAnalysisRun().getAnalyzedFiles();
 	monitor.beginTask(NAME, files.size());
 	int sloc = 0;
 	int count = 0;
@@ -178,6 +170,13 @@ public class CoCoMo extends ProjectEvaluator {
     @Override
     public List<Result> getResults() {
 	return cocomoValues.getResults();
+    }
+
+    @Override
+    protected Map<String, SourceCodeQuality> processFile(AnalyzedFile file)
+	    throws IOException, FileStoreException {
+	// TODO Auto-generated method stub
+	return null;
     }
 
 }

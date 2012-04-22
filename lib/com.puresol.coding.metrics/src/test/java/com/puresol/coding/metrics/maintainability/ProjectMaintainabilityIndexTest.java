@@ -37,12 +37,12 @@ public class ProjectMaintainabilityIndexTest {
 
     @Test
     public void testInstance() {
-	assertNotNull(new ProjectMaintainabilityIndex(analyzer));
+	assertNotNull(new MaintainabilityIndexEvaluator(analyzer));
     }
 
     @Test
     public void testInitValues() {
-	ProjectMaintainabilityIndex metric = new ProjectMaintainabilityIndex(
+	MaintainabilityIndexEvaluator metric = new MaintainabilityIndexEvaluator(
 		analyzer);
 	assertSame(analyzer, metric.getAnalysisRun());
 	assertFalse(metric.getName().isEmpty());

@@ -14,18 +14,18 @@ import com.puresol.coding.analysis.api.FileStore;
 import com.puresol.coding.analysis.api.FileStoreException;
 import com.puresol.coding.analysis.api.FileStoreFactory;
 import com.puresol.coding.analysis.api.ProgrammingLanguage;
-import com.puresol.coding.metrics.AbstractProjectMetric;
+import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.SourceCodeQuality;
 
-public class ProjectSLOCMetric extends AbstractProjectMetric<SLOCMetric> {
+public class ProjectSLOCMetric extends AbstractEvaluator {
 
     private static final long serialVersionUID = -5093217611195212999L;
 
     private final FileStore fileStore = FileStoreFactory.getInstance();
 
-    public ProjectSLOCMetric(AnalysisRun projectAnalyzer) {
-	super(projectAnalyzer);
+    public ProjectSLOCMetric(AnalysisRun analysisRun) {
+	super(analysisRun, SLOCMetric.NAME);
     }
 
     @Override
