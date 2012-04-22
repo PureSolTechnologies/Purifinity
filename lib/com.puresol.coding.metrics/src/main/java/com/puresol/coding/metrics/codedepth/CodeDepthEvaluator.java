@@ -14,6 +14,7 @@ import com.puresol.coding.analysis.api.FileStore;
 import com.puresol.coding.analysis.api.FileStoreException;
 import com.puresol.coding.analysis.api.FileStoreFactory;
 import com.puresol.coding.analysis.api.ProgrammingLanguage;
+import com.puresol.coding.evaluation.api.EvaluatorInformation;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.SourceCodeQuality;
@@ -25,7 +26,8 @@ public class CodeDepthEvaluator extends AbstractEvaluator {
     private final FileStore fileStore = FileStoreFactory.getInstance();
 
     public CodeDepthEvaluator(AnalysisRun analysisRun) {
-	super(analysisRun, CodeDepthMetric.NAME);
+	super(new EvaluatorInformation(CodeDepthMetric.NAME,
+		CodeDepthMetric.DESCRIPTION), analysisRun);
     }
 
     @Override
@@ -48,13 +50,7 @@ public class CodeDepthEvaluator extends AbstractEvaluator {
     }
 
     @Override
-    public String getDescription() {
-	return CodeDepthMetric.DESCRIPTION;
-    }
-
-    @Override
     public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
 	return CodeDepthMetric.EVALUATED_QUALITY_CHARACTERISTICS;
     }
-
 }

@@ -31,8 +31,9 @@ import com.puresol.coding.analysis.api.FileAnalysis;
 import com.puresol.coding.analysis.api.FileStore;
 import com.puresol.coding.analysis.api.FileStoreException;
 import com.puresol.coding.analysis.api.FileStoreFactory;
+import com.puresol.coding.evaluation.api.EvaluatorInformation;
+import com.puresol.coding.evaluation.api.Result;
 import com.puresol.coding.evaluator.AbstractEvaluator;
-import com.puresol.coding.evaluator.Result;
 import com.puresol.coding.metrics.sloc.SLOCMetric;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.SourceCodeQuality;
@@ -64,7 +65,7 @@ public class CoCoMo extends AbstractEvaluator {
     private final Hashtable<AnalyzedFile, CoCoMoValueSet> fileCoCoMoValues = new Hashtable<AnalyzedFile, CoCoMoValueSet>();
 
     public CoCoMo(AnalysisRun analysisRun) {
-	super(analysisRun, NAME);
+	super(new EvaluatorInformation(NAME, DESCRIPTION), analysisRun);
     }
 
     /**
@@ -147,14 +148,6 @@ public class CoCoMo extends AbstractEvaluator {
      * {@inheritDoc}
      */
     @Override
-    public String getDescription() {
-	return DESCRIPTION;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public SourceCodeQuality getQuality() {
 	return SourceCodeQuality.UNSPECIFIED;
     }
@@ -175,7 +168,7 @@ public class CoCoMo extends AbstractEvaluator {
     @Override
     protected Map<String, SourceCodeQuality> processFile(AnalyzedFile file)
 	    throws IOException, FileStoreException {
-	// TODO Auto-generated method stub
+	// intentionally left blank
 	return null;
     }
 

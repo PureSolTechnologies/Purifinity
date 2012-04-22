@@ -14,6 +14,7 @@ import com.puresol.coding.analysis.api.FileStore;
 import com.puresol.coding.analysis.api.FileStoreException;
 import com.puresol.coding.analysis.api.FileStoreFactory;
 import com.puresol.coding.analysis.api.ProgrammingLanguage;
+import com.puresol.coding.evaluation.api.EvaluatorInformation;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.SourceCodeQuality;
@@ -25,7 +26,9 @@ public class McCabeMetricEvaluator extends AbstractEvaluator {
     private final FileStore fileStore = FileStoreFactory.getInstance();
 
     public McCabeMetricEvaluator(AnalysisRun analysisRun) {
-	super(analysisRun, McCabeMetric.NAME);
+	super(
+		new EvaluatorInformation(McCabeMetric.NAME,
+			McCabeMetric.DESCRIPTION), analysisRun);
     }
 
     @Override
@@ -46,11 +49,6 @@ public class McCabeMetricEvaluator extends AbstractEvaluator {
 			    + codeRange.getName() + "'", metric.getQuality());
 	}
 	return results;
-    }
-
-    @Override
-    public String getDescription() {
-	return McCabeMetric.DESCRIPTION;
     }
 
     @Override

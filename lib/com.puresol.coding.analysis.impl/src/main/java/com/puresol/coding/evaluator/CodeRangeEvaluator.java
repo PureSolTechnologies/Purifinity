@@ -7,6 +7,7 @@ import org.eclipse.core.runtime.jobs.Job;
 
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.CodeRange;
+import com.puresol.coding.evaluation.api.Result;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.SourceCodeQuality;
 

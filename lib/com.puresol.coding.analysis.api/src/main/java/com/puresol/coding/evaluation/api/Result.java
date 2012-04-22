@@ -1,4 +1,4 @@
-package com.puresol.coding.evaluator;
+package com.puresol.coding.evaluation.api;
 
 import java.io.Serializable;
 

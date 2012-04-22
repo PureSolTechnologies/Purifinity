@@ -8,15 +8,18 @@ package com.puresol.coding.evaluation.api;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class EvaluatorMetaData {
+public class EvaluatorInformation {
 
     /**
      * Contains the name of the evaluator.
      */
     private final String name;
+    /**
+     * Contains the description of the evaluator.
+     */
     private final String description;
 
-    public EvaluatorMetaData(String name, String description) {
+    public EvaluatorInformation(String name, String description) {
 	super();
 	this.name = name;
 	this.description = description;

@@ -16,11 +16,15 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.puresol.coding.analysis.api.Analysis;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalyzedFile;
 import com.puresol.coding.analysis.api.FileStoreException;
-import com.puresol.coding.quality.QualityCharacteristic;
+import com.puresol.coding.evaluation.api.Evaluator;
+import com.puresol.coding.evaluation.api.EvaluatorInformation;
+import com.puresol.coding.evaluation.api.Result;
 import com.puresol.coding.quality.SourceCodeQuality;
+import com.puresol.utils.HashId;
 
 /**
  * This interface is the main interface for all evaluators and the general
@@ -31,7 +35,8 @@ import com.puresol.coding.quality.SourceCodeQuality;
  * @author Rick-Rainer Ludwig
  * 
  */
-public abstract class AbstractEvaluator extends Job implements Serializable {
+public abstract class AbstractEvaluator extends Job implements Serializable,
+	Evaluator {
 
     private static final long serialVersionUID = -497819792461488182L;
 
@@ -42,66 +47,79 @@ public abstract class AbstractEvaluator extends Job implements Serializable {
     private SourceCodeQuality projectQuality = SourceCodeQuality.UNSPECIFIED;
 
     private final AnalysisRun analysisRun;
+    private final EvaluatorInformation information;
     private final Date timeStamp;
+    private long timeOfRun;
 
-    public AbstractEvaluator(AnalysisRun analysisRun, String name) {
-	super(name);
+    public AbstractEvaluator(EvaluatorInformation information, AnalysisRun analysisRun) {
+	super(information.getName());
+	this.information = information;
 	this.analysisRun = analysisRun;
 	timeStamp = new Date();
     }
 
+    @Override
+    public final EvaluatorInformation getInformation() {
+	return information;
+    }
+
+    @Override
     public final AnalysisRun getAnalysisRun() {
 	return analysisRun;
     }
 
-    /**
-     * This method returns the name of the time stamp of the evaluation. This is
-     * used to track the need for a re-evaluation.
-     * 
-     * @return
-     */
+    @Override
     public final Date getTimeStamp() {
 	return timeStamp;
     }
 
-    /**
-     * This method returns the description of the evaluator which might be
-     * displayed in reports or within applications.
-     * 
-     * @return
-     */
-    public abstract String getDescription();
+    @Override
+    public long getTimeOfRun() {
+	return timeOfRun;
+    }
 
-    /**
-     * This method returns a list of results from the evaluator. This values are
-     * used for creating a report and for storing and tracking them over a
-     * longer time (SPC).
-     * 
-     * @return
-     */
+    @Override
     public List<Result> getResults() {
 	return new ArrayList<Result>();
     }
 
-    /**
-     * This method returns the quality level after an evalutation was performed.
-     * 
-     * @return
-     */
+    @Override
     public SourceCodeQuality getQuality() {
 	return projectQuality;
     }
 
     /**
-     * This method returns a list with quality characteristics which might be
-     * evaluated by the evaluator.
+     * This method is used to run an evaluation of an analyzed file. This method
+     * is called by the run method.
      * 
+     * @param file
      * @return
+     * @throws IOException
+     * @throws FileStoreException
      */
-    public abstract List<QualityCharacteristic> getEvaluatedQualityCharacteristics();
-
     abstract protected Map<String, SourceCodeQuality> processFile(
 	    AnalyzedFile file) throws IOException, FileStoreException;
+
+    @Override
+    public Object getFileEvaluation(Analysis analysis, AnalysisRun analysisRun,
+	    HashId hashId) {
+	// TODO Auto-generated method stub
+	return null;
+    }
+
+    @Override
+    public Object getDirectoryEvaluation(Analysis analysis,
+	    AnalysisRun analysisRun, HashId hashId) {
+	// TODO Auto-generated method stub
+	return null;
+    }
+
+    @Override
+    public Object getProjectEvaluation(Analysis analysis,
+	    AnalysisRun analysisRun, HashId hashId) {
+	// TODO Auto-generated method stub
+	return null;
+    }
 
     @Override
     public IStatus run(IProgressMonitor monitor) {

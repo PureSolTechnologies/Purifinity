@@ -14,6 +14,7 @@ import com.puresol.coding.analysis.api.FileStore;
 import com.puresol.coding.analysis.api.FileStoreException;
 import com.puresol.coding.analysis.api.FileStoreFactory;
 import com.puresol.coding.analysis.api.ProgrammingLanguage;
+import com.puresol.coding.evaluation.api.EvaluatorInformation;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.SourceCodeQuality;
@@ -25,7 +26,8 @@ public class EntropyEvaluator extends AbstractEvaluator {
     private final FileStore fileStore = FileStoreFactory.getInstance();
 
     public EntropyEvaluator(AnalysisRun analysisRun) {
-	super(analysisRun, EntropyMetric.NAME);
+	super(new EvaluatorInformation(EntropyMetric.NAME,
+		EntropyMetric.DESCRIPTION), analysisRun);
     }
 
     @Override
@@ -46,11 +48,6 @@ public class EntropyEvaluator extends AbstractEvaluator {
 			    + codeRange.getName() + "'", metric.getQuality());
 	}
 	return results;
-    }
-
-    @Override
-    public String getDescription() {
-	return EntropyMetric.DESCRIPTION;
     }
 
     @Override

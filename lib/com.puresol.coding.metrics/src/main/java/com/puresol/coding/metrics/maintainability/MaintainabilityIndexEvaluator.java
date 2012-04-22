@@ -22,8 +22,9 @@ import com.puresol.coding.analysis.api.FileStore;
 import com.puresol.coding.analysis.api.FileStoreException;
 import com.puresol.coding.analysis.api.FileStoreFactory;
 import com.puresol.coding.analysis.api.ProgrammingLanguage;
+import com.puresol.coding.evaluation.api.EvaluatorInformation;
+import com.puresol.coding.evaluation.api.Result;
 import com.puresol.coding.evaluator.AbstractEvaluator;
-import com.puresol.coding.evaluator.Result;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.SourceCodeQuality;
 
@@ -43,7 +44,8 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
     private int qualityCount = 0;
 
     public MaintainabilityIndexEvaluator(AnalysisRun analysisRun) {
-	super(analysisRun, "Project Maintainability Index");
+	super(new EvaluatorInformation(MaintainabilityIndex.NAME,
+		MaintainabilityIndex.DESCRIPTION), analysisRun);
     }
 
     @Override
@@ -109,11 +111,6 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 	    qualitySum += level.getLevel();
 	    qualityCount++;
 	}
-    }
-
-    @Override
-    public String getDescription() {
-	return MaintainabilityIndex.DESCRIPTION;
     }
 
     @Override

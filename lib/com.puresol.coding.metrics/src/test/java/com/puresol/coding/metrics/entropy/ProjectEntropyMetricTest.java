@@ -45,8 +45,8 @@ public class ProjectEntropyMetricTest {
 	EntropyEvaluator metric = new EntropyEvaluator(analyzer);
 	assertSame(analyzer, metric.getAnalysisRun());
 	assertFalse(metric.getName().isEmpty());
-	assertFalse(metric.getDescription().isEmpty());
 	assertNotNull(metric.getEvaluatedQualityCharacteristics());
+	assertNotNull(metric.getInformation());
 	assertEquals(SourceCodeQuality.UNSPECIFIED, metric.getQuality());
 	assertNotNull(metric.getResults());
 	assertNotNull(metric.getTimeStamp());

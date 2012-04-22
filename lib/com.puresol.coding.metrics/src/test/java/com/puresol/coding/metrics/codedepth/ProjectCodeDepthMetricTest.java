@@ -45,7 +45,7 @@ public class ProjectCodeDepthMetricTest {
 	CodeDepthEvaluator metric = new CodeDepthEvaluator(analyzer);
 	assertSame(analyzer, metric.getAnalysisRun());
 	assertFalse(metric.getName().isEmpty());
-	assertFalse(metric.getDescription().isEmpty());
+	assertNotNull(metric.getInformation());
 	assertNotNull(metric.getEvaluatedQualityCharacteristics());
 	assertEquals(SourceCodeQuality.UNSPECIFIED, metric.getQuality());
 	assertNotNull(metric.getResults());

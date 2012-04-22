@@ -14,6 +14,7 @@ import com.puresol.coding.analysis.api.FileStore;
 import com.puresol.coding.analysis.api.FileStoreException;
 import com.puresol.coding.analysis.api.FileStoreFactory;
 import com.puresol.coding.analysis.api.ProgrammingLanguage;
+import com.puresol.coding.evaluation.api.EvaluatorInformation;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.SourceCodeQuality;
@@ -25,7 +26,8 @@ public class HalsteadMetricEvaluator extends AbstractEvaluator {
     private final FileStore fileStore = FileStoreFactory.getInstance();
 
     public HalsteadMetricEvaluator(AnalysisRun analysisRun) {
-	super(analysisRun, HalsteadMetric.NAME);
+	super(new EvaluatorInformation(HalsteadMetric.NAME,
+		HalsteadMetric.DESCRIPTION), analysisRun);
     }
 
     @Override
@@ -46,11 +48,6 @@ public class HalsteadMetricEvaluator extends AbstractEvaluator {
 			    + codeRange.getName() + "'", metric.getQuality());
 	}
 	return results;
-    }
-
-    @Override
-    public String getDescription() {
-	return HalsteadMetric.DESCRIPTION;
     }
 
     @Override
