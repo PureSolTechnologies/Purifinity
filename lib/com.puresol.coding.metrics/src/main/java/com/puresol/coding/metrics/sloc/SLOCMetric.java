@@ -18,6 +18,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
+import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.CodeRange;
 import com.puresol.coding.analysis.api.ProgrammingLanguage;
 import com.puresol.coding.evaluator.CodeRangeEvaluator;
@@ -94,11 +95,14 @@ public class SLOCMetric extends CodeRangeEvaluator {
     private final List<LineResults> lineResults = new ArrayList<LineResults>();
     private SLOCResult sloc;
 
+    private final AnalysisRun analysisRun;
     private final CodeRange codeRange;
     private final LanguageDependedSLOCMetric langDepended;
 
-    public SLOCMetric(ProgrammingLanguage language, CodeRange codeRange) {
+    public SLOCMetric(AnalysisRun analysisRun, ProgrammingLanguage language,
+	    CodeRange codeRange) {
 	super(NAME);
+	this.analysisRun = analysisRun;
 	this.codeRange = codeRange;
 	langDepended = null;
 	// langDepended = language
@@ -106,6 +110,11 @@ public class SLOCMetric extends CodeRangeEvaluator {
 	if (langDepended == null) {
 	    throw new RuntimeException();
 	}
+    }
+
+    @Override
+    public AnalysisRun getAnalysisRun() {
+	return analysisRun;
     }
 
     /**

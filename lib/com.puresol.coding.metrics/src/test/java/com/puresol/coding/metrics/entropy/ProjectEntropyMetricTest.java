@@ -43,7 +43,7 @@ public class ProjectEntropyMetricTest {
     @Test
     public void testInitValues() {
 	ProjectEntropyMetric metric = new ProjectEntropyMetric(analyzer);
-	assertSame(analyzer, metric.getProjectAnalyzer());
+	assertSame(analyzer, metric.getAnalysisRun());
 	assertFalse(metric.getName().isEmpty());
 	assertFalse(metric.getDescription().isEmpty());
 	assertNotNull(metric.getEvaluatedQualityCharacteristics());

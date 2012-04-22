@@ -17,6 +17,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
+import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.CodeRange;
 import com.puresol.coding.analysis.api.ProgrammingLanguage;
 import com.puresol.coding.evaluator.CodeRangeEvaluator;
@@ -51,10 +52,13 @@ public class McCabeMetric extends CodeRangeEvaluator {
     private int cyclomaticNumber = 1;
     private final List<Result> results = new ArrayList<Result>();
     private final LanguageDependedMcCabeMetric langDepended;
+    private final AnalysisRun analysisRun;
     private final CodeRange codeRange;
 
-    public McCabeMetric(ProgrammingLanguage language, CodeRange codeRange) {
+    public McCabeMetric(AnalysisRun analysisRun, ProgrammingLanguage language,
+	    CodeRange codeRange) {
 	super(NAME);
+	this.analysisRun = analysisRun;
 	this.codeRange = codeRange;
 	langDepended = null;
 	// langDepended = language
@@ -62,6 +66,11 @@ public class McCabeMetric extends CodeRangeEvaluator {
 	if (langDepended == null) {
 	    throw new RuntimeException();
 	}
+    }
+
+    @Override
+    public AnalysisRun getAnalysisRun() {
+	return analysisRun;
     }
 
     @Override

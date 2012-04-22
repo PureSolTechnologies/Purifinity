@@ -37,7 +37,8 @@ public class ProjectMcCabeMetric extends AbstractProjectMetric<McCabeMetric> {
 		analysis.getLanguageName(), analysis.getLanguageVersion());
 
 	for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
-	    McCabeMetric metric = new McCabeMetric(language, codeRange);
+	    McCabeMetric metric = new McCabeMetric(getAnalysisRun(), language,
+		    codeRange);
 	    metric.schedule();
 	    results.put(
 		    file.getFile().getPath() + ": "

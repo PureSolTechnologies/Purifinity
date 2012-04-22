@@ -18,6 +18,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
+import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.CodeRange;
 import com.puresol.coding.analysis.api.CodeRangeType;
 import com.puresol.coding.analysis.api.ProgrammingLanguage;
@@ -40,6 +41,7 @@ public class HalsteadMetric extends CodeRangeEvaluator {
 		.add(QualityCharacteristic.ANALYSABILITY);
     }
 
+    private final AnalysisRun analysisRun;
     private final Hashtable<String, Integer> operators = new Hashtable<String, Integer>();
     private final Hashtable<String, Integer> operants = new Hashtable<String, Integer>();
     private final CodeRange codeRange;
@@ -47,15 +49,22 @@ public class HalsteadMetric extends CodeRangeEvaluator {
 
     private HalsteadResult result;
 
-    public HalsteadMetric(ProgrammingLanguage language, CodeRange codeRange) {
+    public HalsteadMetric(AnalysisRun analysisRun,
+	    ProgrammingLanguage language, CodeRange codeRange) {
 	super(NAME);
+	this.analysisRun = analysisRun;
 	this.codeRange = codeRange;
 	langDepended = null;
 	// langDepended = language
 	// .getImplementation(LanguageDependedHalsteadMetric.class);
 	if (langDepended == null) {
-	    throw new RuntimeException();
+	    throw new RuntimeException("No language depdend part found!");
 	}
+    }
+
+    @Override
+    public AnalysisRun getAnalysisRun() {
+	return analysisRun;
     }
 
     /**

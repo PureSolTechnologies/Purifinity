@@ -37,7 +37,8 @@ public class ProjectCodeDepthMetric extends
 	ProgrammingLanguage language = ProgrammingLanguages.findByName(
 		analysis.getLanguageName(), analysis.getLanguageVersion());
 	for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
-	    CodeDepthMetric metric = new CodeDepthMetric(language, codeRange);
+	    CodeDepthMetric metric = new CodeDepthMetric(getAnalysisRun(),
+		    language, codeRange);
 	    metric.schedule();
 	    results.put(
 		    file.getFile().getPath() + ": "

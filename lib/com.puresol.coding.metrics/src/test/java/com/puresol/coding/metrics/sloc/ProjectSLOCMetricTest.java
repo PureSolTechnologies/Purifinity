@@ -43,7 +43,7 @@ public class ProjectSLOCMetricTest {
     @Test
     public void testInitValues() {
 	ProjectSLOCMetric metric = new ProjectSLOCMetric(analyzer);
-	assertSame(analyzer, metric.getProjectAnalyzer());
+	assertSame(analyzer, metric.getAnalysisRun());
 	assertFalse(metric.getName().isEmpty());
 	assertFalse(metric.getDescription().isEmpty());
 	assertNotNull(metric.getEvaluatedQualityCharacteristics());

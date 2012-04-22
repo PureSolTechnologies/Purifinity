@@ -39,7 +39,7 @@ public abstract class AbstractProjectMetric<T extends CodeRangeEvaluator>
     }
 
     @Override
-    public AnalysisRun getProjectAnalyzer() {
+    public AnalysisRun getAnalysisRun() {
 	return projectAnalyzer;
     }
 

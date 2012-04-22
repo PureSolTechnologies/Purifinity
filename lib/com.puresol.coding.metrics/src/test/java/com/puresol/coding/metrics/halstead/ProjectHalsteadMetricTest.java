@@ -43,7 +43,7 @@ public class ProjectHalsteadMetricTest {
     @Test
     public void testInitValues() {
 	ProjectHalsteadMetric metric = new ProjectHalsteadMetric(analyzer);
-	assertSame(analyzer, metric.getProjectAnalyzer());
+	assertSame(analyzer, metric.getAnalysisRun());
 	assertFalse(metric.getName().isEmpty());
 	assertFalse(metric.getDescription().isEmpty());
 	assertNotNull(metric.getEvaluatedQualityCharacteristics());

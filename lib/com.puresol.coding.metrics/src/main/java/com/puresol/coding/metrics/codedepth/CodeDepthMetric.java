@@ -7,6 +7,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
+import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.CodeRange;
 import com.puresol.coding.analysis.api.ProgrammingLanguage;
 import com.puresol.coding.evaluator.CodeRangeEvaluator;
@@ -40,13 +41,16 @@ public class CodeDepthMetric extends CodeRangeEvaluator {
 		.add(QualityCharacteristic.UNDERSTANDABILITY);
     }
 
+    private final AnalysisRun analysisRun;
     private final List<Result> results = new ArrayList<Result>();
     private final CodeRange codeRange;
     private final LanguageDependedCodeDepthMetric langDepended;
     private int maxDepth = 0;
 
-    public CodeDepthMetric(ProgrammingLanguage language, CodeRange codeRange) {
+    public CodeDepthMetric(AnalysisRun analysisRun,
+	    ProgrammingLanguage language, CodeRange codeRange) {
 	super(NAME);
+	this.analysisRun = analysisRun;
 	this.codeRange = codeRange;
 	langDepended = null;
 	// langDepended = language
@@ -56,9 +60,11 @@ public class CodeDepthMetric extends CodeRangeEvaluator {
 	}
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
+    public AnalysisRun getAnalysisRun() {
+	return analysisRun;
+    }
+
     @Override
     public CodeRange getCodeRange() {
 	return codeRange;

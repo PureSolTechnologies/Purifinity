@@ -17,6 +17,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
+import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.CodeRange;
 import com.puresol.coding.analysis.api.ProgrammingLanguage;
 import com.puresol.coding.evaluator.CodeRangeEvaluator;
@@ -45,19 +46,27 @@ public class NormalizedMaintainabilityIndex extends CodeRangeEvaluator {
 		.add(QualityCharacteristic.TESTABILITY);
     }
 
+    private final AnalysisRun analysisRun;
     private final CodeRange codeRange;
     private final SLOCMetric slocMetric;
     private final McCabeMetric mcCabeMetric;
     private final HalsteadMetric halsteadMetric;
     private NormalizedMaintainabilityIndexResult result;
 
-    public NormalizedMaintainabilityIndex(ProgrammingLanguage language,
-	    CodeRange codeRange) {
+    public NormalizedMaintainabilityIndex(AnalysisRun analysisRun,
+	    ProgrammingLanguage language, CodeRange codeRange) {
 	super(NAME);
+	this.analysisRun = analysisRun;
 	this.codeRange = codeRange;
-	slocMetric = new SLOCMetric(language, getCodeRange());
-	mcCabeMetric = new McCabeMetric(language, getCodeRange());
-	halsteadMetric = new HalsteadMetric(language, getCodeRange());
+	slocMetric = new SLOCMetric(analysisRun, language, getCodeRange());
+	mcCabeMetric = new McCabeMetric(analysisRun, language, getCodeRange());
+	halsteadMetric = new HalsteadMetric(analysisRun, language,
+		getCodeRange());
+    }
+
+    @Override
+    public AnalysisRun getAnalysisRun() {
+	return analysisRun;
     }
 
     /**

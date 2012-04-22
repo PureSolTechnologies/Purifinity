@@ -37,7 +37,8 @@ public class ProjectEntropyMetric extends AbstractProjectMetric<EntropyMetric> {
 		analysis.getLanguageName(), analysis.getLanguageVersion());
 
 	for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
-	    EntropyMetric metric = new EntropyMetric(language, codeRange);
+	    EntropyMetric metric = new EntropyMetric(getAnalysisRun(),
+		    language, codeRange);
 	    metric.schedule();
 	    results.put(
 		    file.getFile().getPath() + ": "

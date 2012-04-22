@@ -39,7 +39,7 @@ public class ProjectNormalizedMaintainabilityIndex extends
 
 	for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
 	    NormalizedMaintainabilityIndex metric = new NormalizedMaintainabilityIndex(
-		    language, codeRange);
+		    getAnalysisRun(), language, codeRange);
 	    metric.schedule();
 	    results.put(
 		    file.getFile().getPath() + ": "

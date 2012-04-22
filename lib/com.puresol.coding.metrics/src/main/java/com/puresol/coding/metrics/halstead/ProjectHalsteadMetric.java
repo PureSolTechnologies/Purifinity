@@ -38,7 +38,8 @@ public class ProjectHalsteadMetric extends
 		analysis.getLanguageName(), analysis.getLanguageVersion());
 
 	for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
-	    HalsteadMetric metric = new HalsteadMetric(language, codeRange);
+	    HalsteadMetric metric = new HalsteadMetric(getAnalysisRun(),
+		    language, codeRange);
 	    metric.schedule();
 	    results.put(
 		    file.getFile().getPath() + ": "

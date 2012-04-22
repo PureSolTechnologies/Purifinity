@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.eclipse.core.runtime.jobs.Job;
 
+import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.SourceCodeQuality;
 
@@ -70,5 +71,12 @@ public abstract class AbstractEvaluator extends Job implements Serializable {
      * @return
      */
     public abstract List<QualityCharacteristic> getEvaluatedQualityCharacteristics();
+
+    /**
+     * This method returns the analysis run which is base for the evaluation.
+     * 
+     * @return
+     */
+    public abstract AnalysisRun getAnalysisRun();
 
 }

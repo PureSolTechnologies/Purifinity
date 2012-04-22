@@ -97,8 +97,8 @@ public class ProjectMaintainabilityIndex extends ProjectEvaluator {
 		analysis.getLanguageName(), analysis.getLanguageVersion());
 
 	for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
-	    MaintainabilityIndex metric = new MaintainabilityIndex(language,
-		    codeRange);
+	    MaintainabilityIndex metric = new MaintainabilityIndex(
+		    getAnalysisRun(), language, codeRange);
 	    metric.schedule();
 	    String identifier = file.getFile().getPath() + ": "
 		    + codeRange.getType().getName() + " '"
@@ -137,7 +137,7 @@ public class ProjectMaintainabilityIndex extends ProjectEvaluator {
     }
 
     @Override
-    public AnalysisRun getProjectAnalyzer() {
+    public AnalysisRun getAnalysisRun() {
 	return projectAnalyzer;
     }
 }

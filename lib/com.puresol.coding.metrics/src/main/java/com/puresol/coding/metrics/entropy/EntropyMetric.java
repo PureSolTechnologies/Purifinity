@@ -18,6 +18,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
+import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.CodeRange;
 import com.puresol.coding.analysis.api.ProgrammingLanguage;
 import com.puresol.coding.evaluator.CodeRangeEvaluator;
@@ -48,14 +49,22 @@ public class EntropyMetric extends CodeRangeEvaluator {
 		.add(QualityCharacteristic.ANALYSABILITY);
     }
 
+    private final AnalysisRun analysisRun;
     private final CodeRange codeRange;
     private final HalsteadMetric halstead;
     private EntropyResult result;
 
-    public EntropyMetric(ProgrammingLanguage language, CodeRange codeRange) {
+    public EntropyMetric(AnalysisRun analysisRun, ProgrammingLanguage language,
+	    CodeRange codeRange) {
 	super(NAME);
+	this.analysisRun = analysisRun;
 	this.codeRange = codeRange;
-	halstead = new HalsteadMetric(language, getCodeRange());
+	halstead = new HalsteadMetric(analysisRun, language, getCodeRange());
+    }
+
+    @Override
+    public AnalysisRun getAnalysisRun() {
+	return analysisRun;
     }
 
     /**

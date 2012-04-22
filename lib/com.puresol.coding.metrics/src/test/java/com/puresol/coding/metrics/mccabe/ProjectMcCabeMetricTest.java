@@ -43,7 +43,7 @@ public class ProjectMcCabeMetricTest {
     @Test
     public void testInitValues() {
 	ProjectMcCabeMetric metric = new ProjectMcCabeMetric(analyzer);
-	assertSame(analyzer, metric.getProjectAnalyzer());
+	assertSame(analyzer, metric.getAnalysisRun());
 	assertFalse(metric.getName().isEmpty());
 	assertFalse(metric.getDescription().isEmpty());
 	assertNotNull(metric.getEvaluatedQualityCharacteristics());
