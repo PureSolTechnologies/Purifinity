@@ -2,6 +2,7 @@ package com.puresol.coding.evaluation.api;
 
 import java.util.List;
 
+import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.quality.QualityCharacteristic;
 
 /**
@@ -44,5 +45,5 @@ public interface EvaluatorFactory {
      * @param analysisRun
      * @return
      */
-    // TODO public Evaluator create(AnalysisRun analysisRun);
+    public Evaluator create(AnalysisRun analysisRun);
 }

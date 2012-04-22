@@ -8,13 +8,6 @@ import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresol.coding.metrics.cocomo.CoCoMoActivator;
-import com.puresol.coding.metrics.codedepth.CodeDepthActivator;
-import com.puresol.coding.metrics.entropy.EntropyActivator;
-import com.puresol.coding.metrics.halstead.HalsteadActivator;
-import com.puresol.coding.metrics.maintainability.MaintainabilityActivator;
-import com.puresol.coding.metrics.mccabe.McCabeActivator;
-import com.puresol.coding.metrics.normmaint.NormalizedMaintainabilityActivator;
 import com.puresol.coding.metrics.sloc.SLOCActivator;
 
 /**
@@ -47,13 +40,13 @@ public class Activator implements BundleActivator {
 	    throw new RuntimeException("Context should be not set already!");
 	}
 
-	bundleActivators.add(new CoCoMoActivator());
-	bundleActivators.add(new CodeDepthActivator());
-	bundleActivators.add(new EntropyActivator());
-	bundleActivators.add(new HalsteadActivator());
-	bundleActivators.add(new MaintainabilityActivator());
-	bundleActivators.add(new McCabeActivator());
-	bundleActivators.add(new NormalizedMaintainabilityActivator());
+	// TODO bundleActivators.add(new CoCoMoActivator());
+	// TODO bundleActivators.add(new CodeDepthActivator());
+	// TODO bundleActivators.add(new EntropyActivator());
+	// TODO bundleActivators.add(new HalsteadActivator());
+	// TODO bundleActivators.add(new MaintainabilityActivator());
+	// TODO bundleActivators.add(new McCabeActivator());
+	// TODO bundleActivators.add(new NormalizedMaintainabilityActivator());
 	bundleActivators.add(new SLOCActivator());
 	for (BundleActivator activator : bundleActivators) {
 	    activator.start(context);
