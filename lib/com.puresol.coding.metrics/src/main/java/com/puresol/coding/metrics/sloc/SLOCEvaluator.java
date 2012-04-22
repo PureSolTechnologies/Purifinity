@@ -1,4 +1,4 @@
-package com.puresol.coding.metrics.mccabe;
+package com.puresol.coding.metrics.sloc;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -18,14 +18,14 @@ import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.SourceCodeQuality;
 
-public class ProjectMcCabeMetric extends AbstractEvaluator {
+public class SLOCEvaluator extends AbstractEvaluator {
 
     private static final long serialVersionUID = -5093217611195212999L;
 
     private final FileStore fileStore = FileStoreFactory.getInstance();
 
-    public ProjectMcCabeMetric(AnalysisRun analysisRun) {
-	super(analysisRun, McCabeMetric.NAME);
+    public SLOCEvaluator(AnalysisRun analysisRun) {
+	super(analysisRun, SLOCMetric.NAME);
     }
 
     @Override
@@ -37,7 +37,7 @@ public class ProjectMcCabeMetric extends AbstractEvaluator {
 		analysis.getLanguageName(), analysis.getLanguageVersion());
 
 	for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
-	    McCabeMetric metric = new McCabeMetric(getAnalysisRun(), language,
+	    SLOCMetric metric = new SLOCMetric(getAnalysisRun(), language,
 		    codeRange);
 	    metric.schedule();
 	    results.put(
@@ -50,11 +50,11 @@ public class ProjectMcCabeMetric extends AbstractEvaluator {
 
     @Override
     public String getDescription() {
-	return McCabeMetric.DESCRIPTION;
+	return SLOCMetric.DESCRIPTION;
     }
 
     @Override
     public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
-	return McCabeMetric.EVALUATED_QUALITY_CHARACTERISTICS;
+	return SLOCMetric.EVALUATED_QUALITY_CHARACTERISTICS;
     }
 }

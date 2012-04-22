@@ -41,8 +41,6 @@ import com.puresol.uhura.parser.ParserTree;
  */
 public class SLOCMetric extends CodeRangeEvaluator {
 
-    private static final long serialVersionUID = -4313208925226028154L;
-
     public static final String NAME = "SLOC Metric";
 
     public static final String DESCRIPTION = "SLOC Metric calculation.";

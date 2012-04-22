@@ -37,12 +37,12 @@ public class ProjectHalsteadMetricTest {
 
     @Test
     public void testInstance() {
-	assertNotNull(new ProjectHalsteadMetric(analyzer));
+	assertNotNull(new HalsteadMetricEvaluator(analyzer));
     }
 
     @Test
     public void testInitValues() {
-	ProjectHalsteadMetric metric = new ProjectHalsteadMetric(analyzer);
+	HalsteadMetricEvaluator metric = new HalsteadMetricEvaluator(analyzer);
 	assertSame(analyzer, metric.getAnalysisRun());
 	assertFalse(metric.getName().isEmpty());
 	assertFalse(metric.getDescription().isEmpty());

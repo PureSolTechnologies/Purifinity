@@ -1,4 +1,4 @@
-package com.puresol.coding.metrics.halstead;
+package com.puresol.coding.metrics.codedepth;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -18,14 +18,14 @@ import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.SourceCodeQuality;
 
-public class ProjectHalsteadMetric extends AbstractEvaluator {
+public class CodeDepthEvaluator extends AbstractEvaluator {
 
     private static final long serialVersionUID = -5093217611195212999L;
 
     private final FileStore fileStore = FileStoreFactory.getInstance();
 
-    public ProjectHalsteadMetric(AnalysisRun analysisRun) {
-	super(analysisRun, HalsteadMetric.NAME);
+    public CodeDepthEvaluator(AnalysisRun analysisRun) {
+	super(analysisRun, CodeDepthMetric.NAME);
     }
 
     @Override
@@ -35,9 +35,8 @@ public class ProjectHalsteadMetric extends AbstractEvaluator {
 	FileAnalysis analysis = fileStore.loadAnalysis(file.getHashId());
 	ProgrammingLanguage language = ProgrammingLanguages.findByName(
 		analysis.getLanguageName(), analysis.getLanguageVersion());
-
 	for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
-	    HalsteadMetric metric = new HalsteadMetric(getAnalysisRun(),
+	    CodeDepthMetric metric = new CodeDepthMetric(getAnalysisRun(),
 		    language, codeRange);
 	    metric.schedule();
 	    results.put(
@@ -50,11 +49,12 @@ public class ProjectHalsteadMetric extends AbstractEvaluator {
 
     @Override
     public String getDescription() {
-	return HalsteadMetric.DESCRIPTION;
+	return CodeDepthMetric.DESCRIPTION;
     }
 
     @Override
     public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
-	return HalsteadMetric.EVALUATED_QUALITY_CHARACTERISTICS;
+	return CodeDepthMetric.EVALUATED_QUALITY_CHARACTERISTICS;
     }
+
 }

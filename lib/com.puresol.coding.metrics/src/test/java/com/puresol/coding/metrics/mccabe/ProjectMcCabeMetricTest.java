@@ -37,12 +37,12 @@ public class ProjectMcCabeMetricTest {
 
     @Test
     public void testInstance() {
-	assertNotNull(new ProjectMcCabeMetric(analyzer));
+	assertNotNull(new McCabeMetricEvaluator(analyzer));
     }
 
     @Test
     public void testInitValues() {
-	ProjectMcCabeMetric metric = new ProjectMcCabeMetric(analyzer);
+	McCabeMetricEvaluator metric = new McCabeMetricEvaluator(analyzer);
 	assertSame(analyzer, metric.getAnalysisRun());
 	assertFalse(metric.getName().isEmpty());
 	assertFalse(metric.getDescription().isEmpty());

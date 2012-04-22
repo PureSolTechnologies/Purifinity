@@ -1,4 +1,4 @@
-package com.puresol.coding.metrics.entropy;
+package com.puresol.coding.metrics.halstead;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -18,26 +18,26 @@ import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.quality.QualityCharacteristic;
 import com.puresol.coding.quality.SourceCodeQuality;
 
-public class ProjectEntropyMetric extends AbstractEvaluator {
+public class HalsteadMetricEvaluator extends AbstractEvaluator {
 
     private static final long serialVersionUID = -5093217611195212999L;
 
     private final FileStore fileStore = FileStoreFactory.getInstance();
 
-    public ProjectEntropyMetric(AnalysisRun analysisRun) {
-	super(analysisRun, EntropyMetric.NAME);
+    public HalsteadMetricEvaluator(AnalysisRun analysisRun) {
+	super(analysisRun, HalsteadMetric.NAME);
     }
 
     @Override
     protected Map<String, SourceCodeQuality> processFile(AnalyzedFile file)
-	    throws FileStoreException, IOException {
+	    throws IOException, FileStoreException {
 	Map<String, SourceCodeQuality> results = new HashMap<String, SourceCodeQuality>();
 	FileAnalysis analysis = fileStore.loadAnalysis(file.getHashId());
 	ProgrammingLanguage language = ProgrammingLanguages.findByName(
 		analysis.getLanguageName(), analysis.getLanguageVersion());
 
 	for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
-	    EntropyMetric metric = new EntropyMetric(getAnalysisRun(),
+	    HalsteadMetric metric = new HalsteadMetric(getAnalysisRun(),
 		    language, codeRange);
 	    metric.schedule();
 	    results.put(
@@ -50,11 +50,11 @@ public class ProjectEntropyMetric extends AbstractEvaluator {
 
     @Override
     public String getDescription() {
-	return EntropyMetric.DESCRIPTION;
+	return HalsteadMetric.DESCRIPTION;
     }
 
     @Override
     public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
-	return EntropyMetric.EVALUATED_QUALITY_CHARACTERISTICS;
+	return HalsteadMetric.EVALUATED_QUALITY_CHARACTERISTICS;
     }
 }
