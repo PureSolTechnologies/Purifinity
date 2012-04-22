@@ -74,6 +74,13 @@ public interface Evaluator {
      */
     public List<QualityCharacteristic> getEvaluatedQualityCharacteristics();
 
+    /**
+     * This method starts the acutal evaluation.
+     * 
+     * @throws InterruptedException
+     */
+    public void runEvaluation() throws InterruptedException;
+
     public Object getFileEvaluation(Analysis analysis, AnalysisRun analysisRun,
 	    HashId hashId);
 

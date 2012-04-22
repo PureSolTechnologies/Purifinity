@@ -51,7 +51,8 @@ public abstract class AbstractEvaluator extends Job implements Serializable,
     private final Date timeStamp;
     private long timeOfRun;
 
-    public AbstractEvaluator(EvaluatorInformation information, AnalysisRun analysisRun) {
+    public AbstractEvaluator(EvaluatorInformation information,
+	    AnalysisRun analysisRun) {
 	super(information.getName());
 	this.information = information;
 	this.analysisRun = analysisRun;
@@ -99,6 +100,12 @@ public abstract class AbstractEvaluator extends Job implements Serializable,
      */
     abstract protected Map<String, SourceCodeQuality> processFile(
 	    AnalyzedFile file) throws IOException, FileStoreException;
+
+    @Override
+    public final void runEvaluation() throws InterruptedException {
+	schedule();
+	join();
+    }
 
     @Override
     public Object getFileEvaluation(Analysis analysis, AnalysisRun analysisRun,
