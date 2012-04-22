@@ -3,28 +3,17 @@ package com.puresol.coding.metrics.halstead;
 import java.util.List;
 
 import com.puresol.coding.analysis.AnalysisRunImpl;
-import com.puresol.coding.evaluator.CodeRangeEvaluator;
-import com.puresol.coding.evaluator.CodeRangeEvaluatorFactory;
+import com.puresol.coding.evaluation.api.EvaluatorFactory;
 import com.puresol.coding.evaluator.ProjectEvaluator;
 import com.puresol.coding.evaluator.ProjectEvaluatorFactory;
 import com.puresol.coding.quality.QualityCharacteristic;
 
-public class HalsteadMetricServiceFactory implements CodeRangeEvaluatorFactory,
+public class HalsteadMetricServiceFactory implements EvaluatorFactory,
 	ProjectEvaluatorFactory {
 
     @Override
     public ProjectEvaluator create(AnalysisRunImpl projectAnalyzer) {
 	return new ProjectHalsteadMetric(projectAnalyzer);
-    }
-
-    @Override
-    public Class<? extends ProjectEvaluator> getProjectEvaluatorClass() {
-	return ProjectHalsteadMetric.class;
-    }
-
-    @Override
-    public Class<? extends CodeRangeEvaluator> getCodeRangeEvaluatorClass() {
-	return HalsteadMetric.class;
     }
 
     @Override

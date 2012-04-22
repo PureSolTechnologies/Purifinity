@@ -11,18 +11,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.puresol.coding.analysis.Activator;
+import com.puresol.coding.evaluation.api.EvaluatorFactory;
 
 public class CodeRangeEvaluatorManager {
     private static final Logger logger = LoggerFactory
 	    .getLogger(CodeRangeEvaluatorManager.class);
 
-    public static List<CodeRangeEvaluatorFactory> getAll() {
+    public static List<EvaluatorFactory> getAll() {
 	try {
 	    BundleContext context = Activator.getBundleContext();
-	    Collection<ServiceReference<CodeRangeEvaluatorFactory>> serviceReferences = context
-		    .getServiceReferences(CodeRangeEvaluatorFactory.class, null);
-	    List<CodeRangeEvaluatorFactory> services = new ArrayList<CodeRangeEvaluatorFactory>();
-	    for (ServiceReference<CodeRangeEvaluatorFactory> serviceReference : serviceReferences) {
+	    Collection<ServiceReference<EvaluatorFactory>> serviceReferences = context
+		    .getServiceReferences(EvaluatorFactory.class, null);
+	    List<EvaluatorFactory> services = new ArrayList<EvaluatorFactory>();
+	    for (ServiceReference<EvaluatorFactory> serviceReference : serviceReferences) {
 		services.add(context.getService(serviceReference));
 	    }
 	    return services;

@@ -3,28 +3,17 @@ package com.puresol.coding.metrics.maintainability;
 import java.util.List;
 
 import com.puresol.coding.analysis.AnalysisRunImpl;
-import com.puresol.coding.evaluator.CodeRangeEvaluator;
-import com.puresol.coding.evaluator.CodeRangeEvaluatorFactory;
+import com.puresol.coding.evaluation.api.EvaluatorFactory;
 import com.puresol.coding.evaluator.ProjectEvaluator;
 import com.puresol.coding.evaluator.ProjectEvaluatorFactory;
 import com.puresol.coding.quality.QualityCharacteristic;
 
-public class MaintainabilityIndexServiceFactory implements
-	CodeRangeEvaluatorFactory, ProjectEvaluatorFactory {
+public class MaintainabilityIndexServiceFactory implements EvaluatorFactory,
+	ProjectEvaluatorFactory {
 
     @Override
     public ProjectEvaluator create(AnalysisRunImpl projectAnalyzer) {
 	return new ProjectMaintainabilityIndex(projectAnalyzer);
-    }
-
-    @Override
-    public Class<? extends ProjectEvaluator> getProjectEvaluatorClass() {
-	return ProjectMaintainabilityIndex.class;
-    }
-
-    @Override
-    public Class<? extends CodeRangeEvaluator> getCodeRangeEvaluatorClass() {
-	return MaintainabilityIndex.class;
     }
 
     @Override

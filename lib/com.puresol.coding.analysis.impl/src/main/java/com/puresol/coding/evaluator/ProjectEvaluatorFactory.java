@@ -7,6 +7,4 @@ public interface ProjectEvaluatorFactory extends EvaluatorFactory {
 
     public ProjectEvaluator create(AnalysisRunImpl projectAnalyzer);
 
-    public Class<? extends ProjectEvaluator> getProjectEvaluatorClass();
-
 }

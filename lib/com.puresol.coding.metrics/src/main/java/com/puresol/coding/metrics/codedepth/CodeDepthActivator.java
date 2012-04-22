@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.puresol.coding.evaluation.api.EvaluatorFactory;
-import com.puresol.coding.evaluator.CodeRangeEvaluatorFactory;
 import com.puresol.coding.evaluator.ProjectEvaluatorFactory;
 
 public class CodeDepthActivator implements BundleActivator {
@@ -38,10 +37,6 @@ public class CodeDepthActivator implements BundleActivator {
 	serviceRegistrations.add(registration);
 
 	registration = context.registerService(EvaluatorFactory.class,
-		codeDepthFactory, headers);
-	serviceRegistrations.add(registration);
-
-	registration = context.registerService(CodeRangeEvaluatorFactory.class,
 		codeDepthFactory, headers);
 	serviceRegistrations.add(registration);
     }

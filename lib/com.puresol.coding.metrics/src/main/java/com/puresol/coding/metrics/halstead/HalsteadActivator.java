@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.puresol.coding.evaluation.api.EvaluatorFactory;
-import com.puresol.coding.evaluator.CodeRangeEvaluatorFactory;
 import com.puresol.coding.evaluator.ProjectEvaluatorFactory;
 
 public class HalsteadActivator implements BundleActivator {
@@ -39,10 +38,6 @@ public class HalsteadActivator implements BundleActivator {
 	serviceRegistrations.add(registration);
 
 	registration = context.registerService(EvaluatorFactory.class,
-		halsteadMetricFactory, headers);
-	serviceRegistrations.add(registration);
-
-	registration = context.registerService(CodeRangeEvaluatorFactory.class,
 		halsteadMetricFactory, headers);
 	serviceRegistrations.add(registration);
     }

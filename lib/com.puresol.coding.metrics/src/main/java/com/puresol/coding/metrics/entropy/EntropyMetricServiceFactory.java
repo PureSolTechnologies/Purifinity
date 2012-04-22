@@ -3,28 +3,17 @@ package com.puresol.coding.metrics.entropy;
 import java.util.List;
 
 import com.puresol.coding.analysis.AnalysisRunImpl;
-import com.puresol.coding.evaluator.CodeRangeEvaluator;
-import com.puresol.coding.evaluator.CodeRangeEvaluatorFactory;
+import com.puresol.coding.evaluation.api.EvaluatorFactory;
 import com.puresol.coding.evaluator.ProjectEvaluator;
 import com.puresol.coding.evaluator.ProjectEvaluatorFactory;
 import com.puresol.coding.quality.QualityCharacteristic;
 
-public class EntropyMetricServiceFactory implements CodeRangeEvaluatorFactory,
+public class EntropyMetricServiceFactory implements EvaluatorFactory,
 	ProjectEvaluatorFactory {
 
     @Override
     public ProjectEvaluator create(AnalysisRunImpl projectAnalyzer) {
 	return new ProjectEntropyMetric(projectAnalyzer);
-    }
-
-    @Override
-    public Class<? extends ProjectEvaluator> getProjectEvaluatorClass() {
-	return ProjectEntropyMetric.class;
-    }
-
-    @Override
-    public Class<? extends CodeRangeEvaluator> getCodeRangeEvaluatorClass() {
-	return EntropyMetric.class;
     }
 
     @Override

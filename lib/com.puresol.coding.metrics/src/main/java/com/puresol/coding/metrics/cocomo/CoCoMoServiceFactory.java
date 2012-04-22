@@ -17,11 +17,6 @@ public class CoCoMoServiceFactory implements ProjectEvaluatorFactory {
     }
 
     @Override
-    public Class<? extends ProjectEvaluator> getProjectEvaluatorClass() {
-	return CoCoMo.class;
-    }
-
-    @Override
     public String getDescription() {
 	return CoCoMo.DESCRIPTION;
     }
