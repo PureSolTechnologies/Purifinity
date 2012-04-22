@@ -3,10 +3,10 @@ package com.puresol.coding.metrics.cocomo;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.puresol.coding.evaluator.ProjectEvaluatorFactory;
+import com.puresol.coding.evaluation.api.EvaluatorFactory;
 import com.puresol.coding.quality.QualityCharacteristic;
 
-public class CoCoMoServiceFactory implements ProjectEvaluatorFactory {
+public class CoCoMoServiceFactory implements EvaluatorFactory {
 
     @Override
     public String getDescription() {

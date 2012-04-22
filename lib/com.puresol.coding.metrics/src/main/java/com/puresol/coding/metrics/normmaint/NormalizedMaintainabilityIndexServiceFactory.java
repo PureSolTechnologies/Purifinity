@@ -3,11 +3,10 @@ package com.puresol.coding.metrics.normmaint;
 import java.util.List;
 
 import com.puresol.coding.evaluation.api.EvaluatorFactory;
-import com.puresol.coding.evaluator.ProjectEvaluatorFactory;
 import com.puresol.coding.quality.QualityCharacteristic;
 
 public class NormalizedMaintainabilityIndexServiceFactory implements
-	EvaluatorFactory, ProjectEvaluatorFactory {
+	EvaluatorFactory {
 
     @Override
     public String getDescription() {

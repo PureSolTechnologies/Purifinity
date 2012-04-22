@@ -3,11 +3,9 @@ package com.puresol.coding.metrics.entropy;
 import java.util.List;
 
 import com.puresol.coding.evaluation.api.EvaluatorFactory;
-import com.puresol.coding.evaluator.ProjectEvaluatorFactory;
 import com.puresol.coding.quality.QualityCharacteristic;
 
-public class EntropyMetricServiceFactory implements EvaluatorFactory,
-	ProjectEvaluatorFactory {
+public class EntropyMetricServiceFactory implements EvaluatorFactory {
 
     @Override
     public String getDescription() {
