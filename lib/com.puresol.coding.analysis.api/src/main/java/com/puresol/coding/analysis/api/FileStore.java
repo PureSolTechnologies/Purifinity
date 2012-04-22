@@ -15,8 +15,6 @@ import com.puresol.utils.HashId;
  */
 public interface FileStore {
 
-    public AnalyzedFile loadFile(HashId hashId);
-
     /**
      * Stores the file in the store.
      * 

@@ -8,7 +8,7 @@
  *
  ***************************************************************************/
 
-package com.puresol.coding.quality;
+package com.puresol.coding.quality.api;
 
 import com.puresol.data.Identifiable;
 

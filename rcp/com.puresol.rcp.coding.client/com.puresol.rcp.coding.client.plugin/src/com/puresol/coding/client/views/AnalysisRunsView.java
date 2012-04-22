@@ -170,6 +170,9 @@ public class AnalysisRunsView extends ViewPart implements SelectionListener,
 	} catch (DirectoryStoreException e) {
 	    logger.log(new Status(Status.ERROR, AnalysisRunsView.class
 		    .getName(), "Could not start new analysis run!", e));
+	} catch (InterruptedException e) {
+	    logger.log(new Status(Status.ERROR, AnalysisRunsView.class
+		    .getName(), "Analysis was interrupted!", e));
 	}
     }
 

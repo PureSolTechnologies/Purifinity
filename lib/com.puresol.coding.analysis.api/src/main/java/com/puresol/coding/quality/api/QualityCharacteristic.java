@@ -1,4 +1,4 @@
-package com.puresol.coding.quality;
+package com.puresol.coding.quality.api;
 
 import java.io.IOException;
 

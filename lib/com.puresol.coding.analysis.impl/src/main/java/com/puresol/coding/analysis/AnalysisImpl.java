@@ -120,11 +120,14 @@ public class AnalysisImpl implements Analysis {
 	    throws DirectoryStoreException {
 	List<AnalysisRunInformation> analysisInformation = new ArrayList<AnalysisRunInformation>();
 	File[] files = analysisDirectory.listFiles();
-	for (File runDirectory : files) {
-	    if (AnalysisRunImpl.isAnalysisRunDirectory(runDirectory)) {
-		AnalysisRun analysisRun = AnalysisRunImpl.open(runDirectory);
-		if (analysisRun != null) {
-		    analysisInformation.add(analysisRun.getInformation());
+	if (files != null) {
+	    for (File runDirectory : files) {
+		if (AnalysisRunImpl.isAnalysisRunDirectory(runDirectory)) {
+		    AnalysisRun analysisRun = AnalysisRunImpl
+			    .open(runDirectory);
+		    if (analysisRun != null) {
+			analysisInformation.add(analysisRun.getInformation());
+		    }
 		}
 	    }
 	}
@@ -144,24 +147,28 @@ public class AnalysisImpl implements Analysis {
 	    PersistenceUtils.store(new File(analysisDirectory, SETTINGS_FILE),
 		    settings);
 	} catch (IOException e) {
-	    throw new DirectoryStoreException("Could not store new settings!", e);
+	    throw new DirectoryStoreException("Could not store new settings!",
+		    e);
 	}
     }
 
     @Override
-    public AnalysisRun loadAnalysisRun(UUID uuid) throws DirectoryStoreException {
+    public AnalysisRun loadAnalysisRun(UUID uuid)
+	    throws DirectoryStoreException {
 	File runDir = new File(analysisDirectory, uuid.toString());
 	return AnalysisRunImpl.open(runDir);
     }
 
     @Override
-    public AnalysisRun runAnalysis() throws DirectoryStoreException {
+    public AnalysisRun runAnalysis() throws DirectoryStoreException,
+	    InterruptedException {
 	UUID uuid = UUID.randomUUID();
 	AnalysisRunImpl run = (AnalysisRunImpl) AnalysisRunImpl.create(
 		new File(analysisDirectory, uuid.toString()), getInformation(),
 		uuid, getSettings().getSourceDirectory(), getSettings()
 			.getFileSearchConfiguration());
 	run.schedule();
+	run.join();
 	return run;
     }
 

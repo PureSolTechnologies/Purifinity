@@ -17,7 +17,7 @@ import com.puresol.coding.analysis.AnalysisRunImpl;
 import com.puresol.coding.analysis.api.AnalysisInformation;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.DirectoryStoreException;
-import com.puresol.coding.quality.SourceCodeQuality;
+import com.puresol.coding.quality.api.SourceCodeQuality;
 import com.puresol.utils.FileSearchConfiguration;
 
 @Ignore

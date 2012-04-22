@@ -5,7 +5,7 @@ import static org.junit.Assert.fail;
 import org.junit.Test;
 
 import com.puresol.coding.analysis.api.CodeRangeType;
-import com.puresol.coding.quality.SourceCodeQuality;
+import com.puresol.coding.quality.api.SourceCodeQuality;
 
 public class McCabeQualityTest {
 

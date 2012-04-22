@@ -38,7 +38,7 @@ public class AnalysisRunImplTest {
     }
 
     @Test
-    public void test() throws DirectoryStoreException {
+    public void test() throws Exception {
 	AnalysisRun analysisRun = analysis.runAnalysis();
 	assertNotNull(analysisRun);
 	List<AnalyzedFile> analyzedFiles = analysisRun.getAnalyzedFiles();

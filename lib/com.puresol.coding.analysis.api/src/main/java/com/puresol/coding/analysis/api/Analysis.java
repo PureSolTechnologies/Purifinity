@@ -63,18 +63,24 @@ public interface Analysis {
      * @throws DirectoryStoreException
      *             is thrown in cases of issues.
      */
-    public AnalysisRun loadAnalysisRun(UUID uuid) throws DirectoryStoreException;
+    public AnalysisRun loadAnalysisRun(UUID uuid)
+	    throws DirectoryStoreException;
 
     /**
      * A new analysis is run with this method. After the run a new
      * {@link AnalysisRun} object is created and returned.
      * 
+     * ATTENTION(!): This method work synchronously! The method only returns
+     * after the analysis is finished or interrupted!
+     * 
      * @return A {@link AnalysisRun} object is returned containing the
      *         information and results about the run.
      * @throws DirectoryStoreException
      *             is thrown in cases of issues.
+     * @throws InterruptedException
      */
-    public AnalysisRun runAnalysis() throws DirectoryStoreException;
+    public AnalysisRun runAnalysis() throws DirectoryStoreException,
+	    InterruptedException;
 
     /**
      * This method loads the last analysis run available. It is the most

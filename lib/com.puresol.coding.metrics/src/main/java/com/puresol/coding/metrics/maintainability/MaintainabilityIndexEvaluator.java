@@ -25,8 +25,8 @@ import com.puresol.coding.analysis.api.ProgrammingLanguage;
 import com.puresol.coding.evaluation.api.EvaluatorInformation;
 import com.puresol.coding.evaluation.api.Result;
 import com.puresol.coding.evaluator.AbstractEvaluator;
-import com.puresol.coding.quality.QualityCharacteristic;
-import com.puresol.coding.quality.SourceCodeQuality;
+import com.puresol.coding.quality.api.QualityCharacteristic;
+import com.puresol.coding.quality.api.SourceCodeQuality;
 
 public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 
@@ -65,7 +65,9 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 		}
 		count++;
 		monitor.worked(count);
-		processFile(file);
+		FileAnalysis analysis = fileStore
+			.loadAnalysis(file.getHashId());
+		processFile(analysis);
 	    }
 	    int result = (int) Math.round((double) qualitySum
 		    / (double) qualityCount);
@@ -86,9 +88,8 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
     }
 
     @Override
-    protected Map<String, SourceCodeQuality> processFile(AnalyzedFile file)
+    protected Map<String, SourceCodeQuality> processFile(FileAnalysis analysis)
 	    throws IOException, FileStoreException {
-	FileAnalysis analysis = fileStore.loadAnalysis(file.getHashId());
 	ProgrammingLanguage language = ProgrammingLanguages.findByName(
 		analysis.getLanguageName(), analysis.getLanguageVersion());
 
@@ -96,8 +97,8 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 	    MaintainabilityIndex metric = new MaintainabilityIndex(
 		    getAnalysisRun(), language, codeRange);
 	    metric.schedule();
-	    String identifier = file.getFile().getPath() + ": "
-		    + codeRange.getType().getName() + " '"
+	    String identifier = analysis.getAnalyzedFile().getFile().getPath()
+		    + ": " + codeRange.getType().getName() + " '"
 		    + codeRange.getName() + "'";
 	    qualities.put(identifier, metric.getQuality());
 	    evaluatorResults.put(identifier, metric.getResults());

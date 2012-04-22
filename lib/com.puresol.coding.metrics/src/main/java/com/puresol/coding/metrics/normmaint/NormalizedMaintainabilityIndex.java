@@ -26,8 +26,8 @@ import com.puresol.coding.metrics.halstead.HalsteadMetric;
 import com.puresol.coding.metrics.mccabe.McCabeMetric;
 import com.puresol.coding.metrics.sloc.SLOCMetric;
 import com.puresol.coding.metrics.sloc.SLOCResult;
-import com.puresol.coding.quality.QualityCharacteristic;
-import com.puresol.coding.quality.SourceCodeQuality;
+import com.puresol.coding.quality.api.QualityCharacteristic;
+import com.puresol.coding.quality.api.SourceCodeQuality;
 
 public class NormalizedMaintainabilityIndex extends CodeRangeEvaluator {
 

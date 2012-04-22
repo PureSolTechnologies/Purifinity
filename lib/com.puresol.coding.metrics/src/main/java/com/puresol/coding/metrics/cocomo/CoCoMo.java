@@ -35,8 +35,8 @@ import com.puresol.coding.evaluation.api.EvaluatorInformation;
 import com.puresol.coding.evaluation.api.Result;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.metrics.sloc.SLOCMetric;
-import com.puresol.coding.quality.QualityCharacteristic;
-import com.puresol.coding.quality.SourceCodeQuality;
+import com.puresol.coding.quality.api.QualityCharacteristic;
+import com.puresol.coding.quality.api.SourceCodeQuality;
 import com.puresol.uhura.parser.ParserTree;
 
 /**
@@ -166,7 +166,7 @@ public class CoCoMo extends AbstractEvaluator {
     }
 
     @Override
-    protected Map<String, SourceCodeQuality> processFile(AnalyzedFile file)
+    protected Map<String, SourceCodeQuality> processFile(FileAnalysis analysis)
 	    throws IOException, FileStoreException {
 	// intentionally left blank
 	return null;

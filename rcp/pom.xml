@@ -63,37 +63,42 @@
 		<dependency>
 			<groupId>com.puresol</groupId>
 			<artifactId>trees</artifactId>
-			<version>0.1.0-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.puresol</groupId>
 			<artifactId>utils</artifactId>
-			<version>0.1.0-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.puresol</groupId>
 			<artifactId>uhura.lib</artifactId>
-			<version>0.1.0-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.puresol</groupId>
 			<artifactId>coding.analysis.api</artifactId>
-			<version>0.1.0-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.puresol</groupId>
 			<artifactId>coding.analysis.impl</artifactId>
-			<version>0.1.0-SNAPSHOT</version>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.puresol</groupId>
+			<artifactId>coding.metrics</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.puresol</groupId>
 			<artifactId>coding.lang.java</artifactId>
-			<version>0.1.0-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.puresol</groupId>
 			<artifactId>coding.lang.fortran</artifactId>
-			<version>0.1.0-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 
@@ -119,7 +124,7 @@
 					<target>
 						<groupId>com.puresol</groupId>
 						<artifactId>com.puresol.rcp.coding.client.target</artifactId>
-						<version>0.1.0-SNAPSHOT</version>
+						<version>${project.version}</version>
 						<classifier>indigo</classifier>
 					</target>
 					<environments>

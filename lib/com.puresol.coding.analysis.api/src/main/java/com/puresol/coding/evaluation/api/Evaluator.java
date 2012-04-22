@@ -5,8 +5,8 @@ import java.util.List;
 
 import com.puresol.coding.analysis.api.Analysis;
 import com.puresol.coding.analysis.api.AnalysisRun;
-import com.puresol.coding.quality.QualityCharacteristic;
-import com.puresol.coding.quality.SourceCodeQuality;
+import com.puresol.coding.quality.api.QualityCharacteristic;
+import com.puresol.coding.quality.api.SourceCodeQuality;
 import com.puresol.utils.HashId;
 
 /**

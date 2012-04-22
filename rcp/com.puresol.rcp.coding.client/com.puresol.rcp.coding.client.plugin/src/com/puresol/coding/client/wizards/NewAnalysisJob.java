@@ -2,6 +2,7 @@ package com.puresol.coding.client.wizards;
 
 import java.io.File;
 
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -21,6 +22,8 @@ import com.puresol.coding.client.utils.PreferencesUtils;
 import com.puresol.utils.FileSearchConfiguration;
 
 public class NewAnalysisJob extends Job {
+
+    private static final ILog logger = Activator.getDefault().getLog();
 
     private final FileSearchConfiguration searchConfiguration;
     private final File sourceDirectory;
@@ -51,10 +54,16 @@ public class NewAnalysisJob extends Job {
 	    job.schedule();
 	    return Status.OK_STATUS;
 	} catch (OperationCanceledException e) {
-	    e.printStackTrace();
+	    logger.log(new Status(Status.INFO, NewAnalysisJob.class.getName(),
+		    "Analysis was cancelled!", e));
 	    return Status.CANCEL_STATUS;
 	} catch (DirectoryStoreException e) {
-	    e.printStackTrace();
+	    logger.log(new Status(Status.ERROR, NewAnalysisJob.class.getName(),
+		    "Error in directory store!", e));
+	    return Status.CANCEL_STATUS;
+	} catch (InterruptedException e) {
+	    logger.log(new Status(Status.ERROR, NewAnalysisJob.class.getName(),
+		    "Analysis was interrupted!", e));
 	    return Status.CANCEL_STATUS;
 	}
     }

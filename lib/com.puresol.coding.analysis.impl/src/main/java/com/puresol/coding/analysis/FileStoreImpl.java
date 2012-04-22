@@ -9,7 +9,6 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import com.puresol.coding.analysis.api.AnalyzedFile;
 import com.puresol.coding.analysis.api.FileAnalysis;
 import com.puresol.coding.analysis.api.FileStore;
 import com.puresol.coding.analysis.api.FileStoreException;
@@ -26,12 +25,6 @@ public class FileStoreImpl implements FileStore {
     public FileStoreImpl() {
 	fileStoreDirectory = new File(AnalysisStoreImpl.getStorageDirectory(),
 		"files");
-    }
-
-    @Override
-    public AnalyzedFile loadFile(HashId hashId) {
-	// TODO Auto-generated method stub
-	return null;
     }
 
     @Override

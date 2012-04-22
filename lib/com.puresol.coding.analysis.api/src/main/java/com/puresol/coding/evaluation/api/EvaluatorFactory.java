@@ -3,7 +3,7 @@ package com.puresol.coding.evaluation.api;
 import java.util.List;
 
 import com.puresol.coding.analysis.api.AnalysisRun;
-import com.puresol.coding.quality.QualityCharacteristic;
+import com.puresol.coding.quality.api.QualityCharacteristic;
 
 /**
  * This interface is the central interface for all factories for evaluators. The
