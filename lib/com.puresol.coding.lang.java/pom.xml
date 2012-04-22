@@ -55,6 +55,11 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
+			<groupId>com.puresol</groupId>
+			<artifactId>coding.metrics</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
 			<groupId>org.jibx.config.3rdparty.org.eclipse</groupId>
 			<artifactId>org.eclipse.core.jobs</artifactId>
 			<version>3.5.100.v20110404</version>

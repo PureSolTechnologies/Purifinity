@@ -88,6 +88,11 @@
 				<artifactId>coding.analysis.impl</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>com.puresol</groupId>
+				<artifactId>coding.metrics</artifactId>
+				<version>${project.version}</version>
+			</dependency>
 			<!-- OSGi -->
 			<dependency>
 				<groupId>org.osgi</groupId>

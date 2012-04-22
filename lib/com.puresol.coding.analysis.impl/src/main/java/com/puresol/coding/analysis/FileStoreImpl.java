@@ -66,11 +66,11 @@ public class FileStoreImpl implements FileStore {
 	    }
 	} catch (ClassNotFoundException e) {
 	    throw new FileStoreException(
-		    "Could not store analysis for file with hash '" + hashId
+		    "Could not load analysis for file with hash '" + hashId
 			    + "'", e);
 	} catch (IOException e) {
 	    throw new FileStoreException(
-		    "Could not store analysis for file with hash '" + hashId
+		    "Could not load analysis for file with hash '" + hashId
 			    + "'", e);
 	}
     }

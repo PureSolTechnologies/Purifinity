@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.util.Iterator;
+import java.util.ServiceLoader;
 
 import org.osgi.framework.BundleContext;
 
@@ -87,5 +89,18 @@ public class Fortran extends AbstractProgrammingLanguage {
     @Override
     public Grammar getGrammar() {
 	return FortranGrammar.getInstance();
+    }
+
+    @Override
+    public <T> T getImplementation(Class<T> clazz) {
+	ServiceLoader<T> service = ServiceLoader.load(clazz);
+	Iterator<T> iterator = service.iterator();
+	T result = iterator.next();
+	if (iterator.hasNext()) {
+	    throw new RuntimeException(
+		    "There is more than one implementation available for '"
+			    + clazz.getName() + "'!");
+	}
+	return result;
     }
 }

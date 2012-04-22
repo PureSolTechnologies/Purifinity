@@ -1,6 +1,5 @@
 package com.puresol.coding.metrics.codedepth;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,7 +8,6 @@ import com.puresol.coding.ProgrammingLanguages;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.CodeRange;
 import com.puresol.coding.analysis.api.FileAnalysis;
-import com.puresol.coding.analysis.api.FileStoreException;
 import com.puresol.coding.analysis.api.ProgrammingLanguage;
 import com.puresol.coding.evaluation.api.EvaluatorInformation;
 import com.puresol.coding.evaluator.AbstractEvaluator;
@@ -27,7 +25,7 @@ public class CodeDepthEvaluator extends AbstractEvaluator {
 
     @Override
     protected Map<String, SourceCodeQuality> processFile(FileAnalysis analysis)
-	    throws IOException, FileStoreException {
+	    throws InterruptedException {
 	Map<String, SourceCodeQuality> results = new HashMap<String, SourceCodeQuality>();
 	ProgrammingLanguage language = ProgrammingLanguages.findByName(
 		analysis.getLanguageName(), analysis.getLanguageVersion());
@@ -35,6 +33,7 @@ public class CodeDepthEvaluator extends AbstractEvaluator {
 	    CodeDepthMetric metric = new CodeDepthMetric(getAnalysisRun(),
 		    language, codeRange);
 	    metric.schedule();
+	    metric.join();
 	    results.put(
 		    analysis.getAnalyzedFile().getFile().getPath() + ": "
 			    + codeRange.getType().getName() + " '"

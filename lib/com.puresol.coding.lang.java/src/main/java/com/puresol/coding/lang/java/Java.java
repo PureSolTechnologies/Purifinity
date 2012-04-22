@@ -4,8 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-
-import org.osgi.framework.BundleContext;
+import java.util.Iterator;
+import java.util.ServiceLoader;
 
 import com.puresol.coding.AbstractProgrammingLanguage;
 import com.puresol.coding.analysis.api.FileAnalyzer;
@@ -39,18 +39,8 @@ public class Java extends AbstractProgrammingLanguage {
 	}
     }
 
-    private BundleContext bundleContext;
-
     public Java() {
 	super("Java", "1.6");
-    }
-
-    public BundleContext getBundleContext() {
-	return bundleContext;
-    }
-
-    public void setBundleContext(BundleContext context) {
-	this.bundleContext = context;
     }
 
     /**
@@ -88,5 +78,18 @@ public class Java extends AbstractProgrammingLanguage {
     @Override
     public Grammar getGrammar() {
 	return JavaGrammar.getInstance();
+    }
+
+    @Override
+    public <T> T getImplementation(Class<T> clazz) {
+	ServiceLoader<T> service = ServiceLoader.load(clazz);
+	Iterator<T> iterator = service.iterator();
+	T result = iterator.next();
+	if (iterator.hasNext()) {
+	    throw new RuntimeException(
+		    "There is more than one implementation available for '"
+			    + clazz.getName() + "'!");
+	}
+	return result;
     }
 }

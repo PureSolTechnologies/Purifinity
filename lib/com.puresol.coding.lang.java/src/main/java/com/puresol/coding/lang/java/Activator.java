@@ -22,16 +22,20 @@ public class Activator implements BundleActivator {
     private static final Logger logger = LoggerFactory
 	    .getLogger(Activator.class);
 
+    private static BundleContext bundleContext;
+
     private ServiceRegistration<?> registration;
 
     @Override
     public void start(BundleContext context) throws Exception {
+	if (Activator.bundleContext != null) {
+	    throw new RuntimeException("Bundle was already started!");
+
+	}
+	Activator.bundleContext = context;
 	logger.info("Starting Java Language Pack...");
 	Java java = Java.getInstance();
-	java.setBundleContext(context);
-
 	Dictionary<String, String> headers = context.getBundle().getHeaders();
-
 	registration = context.registerService(ProgrammingLanguage.class, java,
 		headers);
 
@@ -40,10 +44,22 @@ public class Activator implements BundleActivator {
 
     @Override
     public void stop(BundleContext context) throws Exception {
+	if (Activator.bundleContext == null) {
+	    throw new RuntimeException("Bundle was never started!");
+
+	}
 	logger.info("Stopping Java Language Pack...");
 	registration.unregister();
 	registration = null;
+	Activator.bundleContext = null;
 	logger.info("Stopped.");
+    }
+
+    public static BundleContext getBundleContext() {
+	if (bundleContext == null) {
+	    throw new RuntimeException("Bundle was never started!");
+	}
+	return bundleContext;
     }
 
 }

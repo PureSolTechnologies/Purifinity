@@ -10,7 +10,6 @@
 
 package com.puresol.coding.metrics.cocomo;
 
-import java.io.IOException;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -73,25 +72,31 @@ public class CoCoMo extends AbstractEvaluator {
      */
     @Override
     public IStatus run(IProgressMonitor monitor) {
-	List<AnalyzedFile> files = getAnalysisRun().getAnalyzedFiles();
-	monitor.beginTask(NAME, files.size());
-	int sloc = 0;
-	int count = 0;
-	for (AnalyzedFile file : files) {
-	    if (monitor.isCanceled()) {
-		monitor.done();
-		return Status.CANCEL_STATUS;
+	try {
+	    List<AnalyzedFile> files = getAnalysisRun().getAnalyzedFiles();
+	    monitor.beginTask(NAME, files.size());
+	    int sloc = 0;
+	    int count = 0;
+	    for (AnalyzedFile file : files) {
+		if (monitor.isCanceled()) {
+		    monitor.done();
+		    return Status.CANCEL_STATUS;
+		}
+		count++;
+		monitor.worked(count);
+		sloc += getFileSLOC(file);
 	    }
-	    count++;
-	    monitor.worked(count);
-	    sloc += getFileSLOC(file);
+	    cocomoValues.setSloc(sloc);
+	    monitor.done();
+	    return Status.OK_STATUS;
+	} catch (InterruptedException e) {
+	    logger.error("CoCoMo evaluation was interrupted!", e);
+	    return new Status(Status.ERROR, CoCoMo.class.getName(),
+		    "CoCoMo evaluation was interrupted!", e);
 	}
-	cocomoValues.setSloc(sloc);
-	monitor.done();
-	return Status.OK_STATUS;
     }
 
-    private int getFileSLOC(AnalyzedFile file) {
+    private int getFileSLOC(AnalyzedFile file) throws InterruptedException {
 	try {
 	    FileAnalysis analysis = fileStore.loadAnalysis(file.getHashId());
 	    ParserTree parserTree = analysis.getParserTree();
@@ -100,6 +105,7 @@ public class CoCoMo extends AbstractEvaluator {
 			    analysis.getLanguageVersion()), new CodeRange("",
 			    CodeRangeType.FILE, parserTree));
 	    metric.schedule();
+	    metric.join();
 	    int sloc = metric.getSLOCResult().getProLOC();
 	    addCodeRangeCoCoMo(file, sloc);
 	    return sloc;
@@ -166,8 +172,7 @@ public class CoCoMo extends AbstractEvaluator {
     }
 
     @Override
-    protected Map<String, SourceCodeQuality> processFile(FileAnalysis analysis)
-	    throws IOException, FileStoreException {
+    protected Map<String, SourceCodeQuality> processFile(FileAnalysis analysis) {
 	// intentionally left blank
 	return null;
     }

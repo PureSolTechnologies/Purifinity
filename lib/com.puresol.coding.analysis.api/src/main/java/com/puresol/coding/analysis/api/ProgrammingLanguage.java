@@ -56,4 +56,14 @@ public interface ProgrammingLanguage { // do not Serialize!
     public FileAnalyzer createAnalyser(File sourceDirectory, File file);
 
     public FileAnalyzer restoreAnalyzer(File file) throws IOException;
+
+    /**
+     * This is a current workaround to get language specifics working for
+     * metrics and evaluators.
+     * 
+     * @param clazz
+     * @return
+     */
+    public <T> T getImplementation(Class<T> clazz);
+
 }

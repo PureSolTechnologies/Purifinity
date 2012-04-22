@@ -12,8 +12,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.puresol.coding.analysis.api.Analysis;
 import com.puresol.coding.analysis.api.AnalysisRun;
@@ -45,9 +43,6 @@ public abstract class AbstractEvaluator extends Job implements Serializable,
 	Evaluator {
 
     private static final long serialVersionUID = -497819792461488182L;
-
-    private static final Logger logger = LoggerFactory
-	    .getLogger(AbstractEvaluator.class);
 
     private final Map<String, SourceCodeQuality> qualities = new HashMap<String, SourceCodeQuality>();
     private SourceCodeQuality projectQuality;
@@ -106,7 +101,7 @@ public abstract class AbstractEvaluator extends Job implements Serializable,
      * @throws FileStoreException
      */
     abstract protected Map<String, SourceCodeQuality> processFile(
-	    FileAnalysis analysis) throws IOException, FileStoreException;
+	    FileAnalysis analysis) throws InterruptedException;
 
     @Override
     public final void runEvaluation() throws InterruptedException {
@@ -160,25 +155,27 @@ public abstract class AbstractEvaluator extends Job implements Serializable,
 		}
 		monitor.worked(1);
 		return WalkingAction.PROCEED;
-	    } catch (IOException e) {
+	    } catch (FileStoreException e) {
 		e.printStackTrace();
 		return WalkingAction.ABORT;
-	    } catch (FileStoreException e) {
+	    } catch (InterruptedException e) {
 		e.printStackTrace();
 		return WalkingAction.ABORT;
 	    }
 	}
 
-	private void processAsFile(HashIdFileTree tree) throws IOException,
-		FileStoreException {
-	    FileAnalysis fileAnalysis = fileStore
-		    .loadAnalysis(tree.getHashId());
-	    Map<String, SourceCodeQuality> levels = processFile(fileAnalysis);
-	    qualities.putAll(levels);
-	    for (SourceCodeQuality level : levels.values()) {
-		if (level != SourceCodeQuality.UNSPECIFIED) {
-		    sum += level.getLevel();
-		    qualCount++;
+	private void processAsFile(HashIdFileTree tree)
+		throws FileStoreException, InterruptedException {
+	    if (fileStore.wasAnalyzed(tree.getHashId())) {
+		FileAnalysis fileAnalysis = fileStore.loadAnalysis(tree
+			.getHashId());
+		Map<String, SourceCodeQuality> levels = processFile(fileAnalysis);
+		qualities.putAll(levels);
+		for (SourceCodeQuality level : levels.values()) {
+		    if (level != SourceCodeQuality.UNSPECIFIED) {
+			sum += level.getLevel();
+			qualCount++;
+		    }
 		}
 	    }
 	}
@@ -207,50 +204,4 @@ public abstract class AbstractEvaluator extends Job implements Serializable,
 	return Status.OK_STATUS;
     }
 
-    // @Override
-    // public IStatus run(IProgressMonitor monitor) {
-    // try {
-    // qualities.clear();
-    // HashIdFileTree fileTree = getAnalysisRun().getFileTree();
-    // int nodeCount = TreeUtils.countNodes(fileTree);
-    // monitor.beginTask(getName(), nodeCount);
-    // List<AnalyzedFile> files = getAnalysisRun().getAnalyzedFiles();
-    // int sum = 0;
-    // int count = 0;
-    // int qualCount = 0;
-    // Collections.sort(files);
-    // for (AnalyzedFile file : files) {
-    // if (monitor.isCanceled()) {
-    // monitor.done();
-    // return Status.CANCEL_STATUS;
-    // }
-    // count++;
-    // monitor.worked(count);
-    // Map<String, SourceCodeQuality> levels = processFile(file);
-    // qualities.putAll(levels);
-    // for (SourceCodeQuality level : levels.values()) {
-    // if (level != SourceCodeQuality.UNSPECIFIED) {
-    // sum += level.getLevel();
-    // qualCount++;
-    // }
-    // }
-    //
-    // }
-    // int result = (int) Math.round((double) sum / (double) qualCount);
-    // projectQuality = SourceCodeQuality.fromLevel(result);
-    // monitor.done();
-    // return Status.OK_STATUS;
-    // } catch (IOException e) {
-    // logger.error("Could not calculate project metric!", e);
-    // monitor.setCanceled(true);
-    // monitor.done();
-    // return new Status(IStatus.ERROR, getName(), e.getMessage(), e);
-    // } catch (FileStoreException e) {
-    // logger.error("Could not calculate project metric!", e);
-    // monitor.setCanceled(true);
-    // monitor.done();
-    // return new Status(IStatus.ERROR, getName(), e.getMessage(), e);
-    // }
-    // }
-    //
 }

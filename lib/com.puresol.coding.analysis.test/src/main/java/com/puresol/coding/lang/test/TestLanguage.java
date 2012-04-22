@@ -2,6 +2,8 @@ package com.puresol.coding.lang.test;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.ServiceLoader;
 
 import com.puresol.coding.AbstractProgrammingLanguage;
 import com.puresol.coding.analysis.api.FileAnalyzer;
@@ -59,5 +61,18 @@ public class TestLanguage extends AbstractProgrammingLanguage {
     @Override
     public Grammar getGrammar() {
 	return TestLanguageGrammar.getInstance();
+    }
+
+    @Override
+    public <T> T getImplementation(Class<T> clazz) {
+	ServiceLoader<T> service = ServiceLoader.load(clazz);
+	Iterator<T> iterator = service.iterator();
+	T result = iterator.next();
+	if (iterator.hasNext()) {
+	    throw new RuntimeException(
+		    "There is more than one implementation available for '"
+			    + clazz.getName() + "'!");
+	}
+	return result;
     }
 }

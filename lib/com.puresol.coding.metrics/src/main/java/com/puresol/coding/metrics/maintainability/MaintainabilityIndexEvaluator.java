@@ -1,6 +1,5 @@
 package com.puresol.coding.metrics.maintainability;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -74,13 +73,13 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 	    projectQuality = SourceCodeQuality.fromLevel(result);
 	    monitor.done();
 	    return Status.OK_STATUS;
-	} catch (IOException e) {
+	} catch (FileStoreException e) {
 	    logger.error("Could not calculate maintainability index!", e);
 	    monitor.setCanceled(true);
 	    monitor.done();
 	    return new Status(IStatus.ERROR, getName(), e.getMessage(), e);
-	} catch (FileStoreException e) {
-	    logger.error("Could not calculate maintainability index!", e);
+	} catch (InterruptedException e) {
+	    logger.error("Maintainability index evaluation was interrupted!", e);
 	    monitor.setCanceled(true);
 	    monitor.done();
 	    return new Status(IStatus.ERROR, getName(), e.getMessage(), e);
@@ -89,7 +88,7 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 
     @Override
     protected Map<String, SourceCodeQuality> processFile(FileAnalysis analysis)
-	    throws IOException, FileStoreException {
+	    throws InterruptedException {
 	ProgrammingLanguage language = ProgrammingLanguages.findByName(
 		analysis.getLanguageName(), analysis.getLanguageVersion());
 
@@ -97,6 +96,7 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 	    MaintainabilityIndex metric = new MaintainabilityIndex(
 		    getAnalysisRun(), language, codeRange);
 	    metric.schedule();
+	    metric.join();
 	    String identifier = analysis.getAnalyzedFile().getFile().getPath()
 		    + ": " + codeRange.getType().getName() + " '"
 		    + codeRange.getName() + "'";
