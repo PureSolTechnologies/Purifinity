@@ -3,7 +3,6 @@ package com.puresol.coding.metrics.sloc;
 import java.util.List;
 
 import com.puresol.coding.analysis.api.AnalysisRun;
-import com.puresol.coding.evaluation.api.Evaluator;
 import com.puresol.coding.evaluation.api.EvaluatorFactory;
 import com.puresol.coding.quality.api.QualityCharacteristic;
 
@@ -25,7 +24,7 @@ public class SLOCMetricServiceFactory implements EvaluatorFactory {
     }
 
     @Override
-    public Evaluator create(AnalysisRun analysisRun) {
+    public SLOCEvaluator create(AnalysisRun analysisRun) {
 	return new SLOCEvaluator(analysisRun);
     }
 }

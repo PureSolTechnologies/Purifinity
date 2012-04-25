@@ -57,5 +57,4 @@ public class NormalizedMaintainabilityIndexResult implements Serializable {
     public List<Result> getResults() {
 	return results;
     }
-
 }

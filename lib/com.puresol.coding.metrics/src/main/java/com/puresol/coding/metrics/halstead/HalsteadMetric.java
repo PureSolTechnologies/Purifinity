@@ -31,8 +31,6 @@ import com.puresol.uhura.parser.ParserTree;
 
 public class HalsteadMetric extends CodeRangeEvaluator {
 
-    private static final long serialVersionUID = -7823038852668468658L;
-
     public static final String NAME = "Halstead Metric";
     public static final String DESCRIPTION = "Halstead Metric calculation.";
     public static final List<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new ArrayList<QualityCharacteristic>();

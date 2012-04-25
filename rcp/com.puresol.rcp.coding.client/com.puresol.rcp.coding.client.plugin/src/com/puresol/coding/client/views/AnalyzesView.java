@@ -44,7 +44,7 @@ import com.puresol.coding.client.ClientImages;
 import com.puresol.coding.client.commands.NewAnalysis;
 import com.puresol.coding.client.content.AnalysisListContentProvider;
 import com.puresol.coding.client.content.AnalysisListLabelProvider;
-import com.puresol.coding.client.wizards.NewAnalysisJob;
+import com.puresol.coding.client.jobs.NewAnalysisJob;
 
 /**
  * This view shows a list of all analysis which are opened and the tree of files

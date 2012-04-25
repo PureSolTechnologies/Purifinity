@@ -14,7 +14,7 @@ import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.quality.api.QualityCharacteristic;
 import com.puresol.coding.quality.api.SourceCodeQuality;
 
-public class SLOCEvaluator extends AbstractEvaluator {
+public class SLOCEvaluator extends AbstractEvaluator<SLOCEvaluatorResult> {
 
     private static final long serialVersionUID = -5093217611195212999L;
 
@@ -47,5 +47,11 @@ public class SLOCEvaluator extends AbstractEvaluator {
     @Override
     public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
 	return SLOCMetric.EVALUATED_QUALITY_CHARACTERISTICS;
+    }
+
+    @Override
+    public SLOCEvaluatorResult getResults() {
+	// TODO Auto-generated method stub
+	return null;
     }
 }

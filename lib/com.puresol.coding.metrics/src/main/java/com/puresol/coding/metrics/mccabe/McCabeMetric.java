@@ -35,8 +35,6 @@ import com.puresol.uhura.parser.ParserTree;
  */
 public class McCabeMetric extends CodeRangeEvaluator {
 
-    private static final long serialVersionUID = 4402746003873908301L;
-
     public static final String NAME = "McCabe Metric";
 
     public static final String DESCRIPTION = "McCabe Metric calculation.";

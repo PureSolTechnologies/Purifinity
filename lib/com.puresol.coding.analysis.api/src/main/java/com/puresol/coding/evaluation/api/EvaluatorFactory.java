@@ -45,5 +45,5 @@ public interface EvaluatorFactory {
      * @param analysisRun
      * @return
      */
-    public Evaluator create(AnalysisRun analysisRun);
+    public Evaluator<?> create(AnalysisRun analysisRun);
 }

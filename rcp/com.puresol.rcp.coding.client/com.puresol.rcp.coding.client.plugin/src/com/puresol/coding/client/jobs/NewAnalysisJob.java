@@ -1,4 +1,4 @@
-package com.puresol.coding.client.wizards;
+package com.puresol.coding.client.jobs;
 
 import java.io.File;
 
@@ -17,7 +17,6 @@ import com.puresol.coding.analysis.api.AnalysisStore;
 import com.puresol.coding.analysis.api.AnalysisStoreFactory;
 import com.puresol.coding.analysis.api.DirectoryStoreException;
 import com.puresol.coding.client.Activator;
-import com.puresol.coding.client.jobs.EvaluationJob;
 import com.puresol.coding.client.utils.PreferencesUtils;
 import com.puresol.utils.FileSearchConfiguration;
 

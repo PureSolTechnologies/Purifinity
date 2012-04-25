@@ -37,8 +37,6 @@ import com.puresol.coding.quality.api.SourceCodeQuality;
  */
 public class EntropyMetric extends CodeRangeEvaluator {
 
-    private static final long serialVersionUID = 1300404171923622327L;
-
     public static final String NAME = "Entropy Metric";
 
     public static final String DESCRIPTION = "Entropy Metric calculation.";

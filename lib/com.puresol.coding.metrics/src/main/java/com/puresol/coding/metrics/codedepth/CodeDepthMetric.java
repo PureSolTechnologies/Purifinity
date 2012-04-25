@@ -27,8 +27,6 @@ import com.puresol.uhura.parser.ParserTree;
  */
 public class CodeDepthMetric extends CodeRangeEvaluator {
 
-    private static final long serialVersionUID = -2151200082569811564L;
-
     public static final String NAME = "Code Depth Metric";
 
     public static final String DESCRIPTION = "Analysis the nested code blocks for a maximum depth.";

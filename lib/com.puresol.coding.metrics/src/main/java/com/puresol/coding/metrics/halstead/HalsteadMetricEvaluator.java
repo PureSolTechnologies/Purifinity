@@ -14,7 +14,8 @@ import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.quality.api.QualityCharacteristic;
 import com.puresol.coding.quality.api.SourceCodeQuality;
 
-public class HalsteadMetricEvaluator extends AbstractEvaluator {
+public class HalsteadMetricEvaluator extends
+	AbstractEvaluator<HalsteadMetricEvaluatorResults> {
 
     private static final long serialVersionUID = -5093217611195212999L;
 
@@ -46,5 +47,10 @@ public class HalsteadMetricEvaluator extends AbstractEvaluator {
     @Override
     public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
 	return HalsteadMetric.EVALUATED_QUALITY_CHARACTERISTICS;
+    }
+
+    @Override
+    public HalsteadMetricEvaluatorResults getResults() {
+	return null;
     }
 }

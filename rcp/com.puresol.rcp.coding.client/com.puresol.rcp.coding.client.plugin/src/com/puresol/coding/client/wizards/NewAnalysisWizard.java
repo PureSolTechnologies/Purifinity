@@ -4,6 +4,8 @@ import java.io.File;
 
 import org.eclipse.jface.wizard.Wizard;
 
+import com.puresol.coding.client.jobs.NewAnalysisJob;
+
 public class NewAnalysisWizard extends Wizard {
 
     private final NewAnalysisGeneralSettingsPage generalSettingsPage = new NewAnalysisGeneralSettingsPage();

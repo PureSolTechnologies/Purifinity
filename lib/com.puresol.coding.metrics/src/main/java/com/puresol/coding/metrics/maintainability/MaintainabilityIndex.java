@@ -31,8 +31,6 @@ import com.puresol.coding.quality.api.SourceCodeQuality;
 
 public class MaintainabilityIndex extends CodeRangeEvaluator {
 
-    private static final long serialVersionUID = 2789695185933616684L;
-
     public static final String NAME = "Maintainability Index";
     public static final String DESCRIPTION = "Maintainability Index calculation.";
     public static final List<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new ArrayList<QualityCharacteristic>();

@@ -14,7 +14,8 @@ import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.quality.api.QualityCharacteristic;
 import com.puresol.coding.quality.api.SourceCodeQuality;
 
-public class CodeDepthEvaluator extends AbstractEvaluator {
+public class CodeDepthEvaluator extends
+	AbstractEvaluator<CodeDepthEvaluatorResults> {
 
     private static final long serialVersionUID = -5093217611195212999L;
 
@@ -45,5 +46,10 @@ public class CodeDepthEvaluator extends AbstractEvaluator {
     @Override
     public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
 	return CodeDepthMetric.EVALUATED_QUALITY_CHARACTERISTICS;
+    }
+
+    @Override
+    public CodeDepthEvaluatorResults getResults() {
+	return null;
     }
 }

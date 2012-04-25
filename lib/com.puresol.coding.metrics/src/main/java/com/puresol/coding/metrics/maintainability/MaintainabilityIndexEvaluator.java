@@ -1,6 +1,5 @@
 package com.puresol.coding.metrics.maintainability;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -27,7 +26,8 @@ import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.quality.api.QualityCharacteristic;
 import com.puresol.coding.quality.api.SourceCodeQuality;
 
-public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
+public class MaintainabilityIndexEvaluator extends
+	AbstractEvaluator<MaintainabilityIndexEvaluatorResults> {
 
     private static final long serialVersionUID = -5093217611195212999L;
 
@@ -120,8 +120,8 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
     }
 
     @Override
-    public List<Result> getResults() {
-	return new ArrayList<Result>();
+    public MaintainabilityIndexEvaluatorResults getResults() {
+	return null;
     }
 
     @Override

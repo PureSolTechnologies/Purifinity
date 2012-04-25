@@ -3,11 +3,9 @@ package com.puresol.coding.evaluation.api;
 import java.util.Date;
 import java.util.List;
 
-import com.puresol.coding.analysis.api.Analysis;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.quality.api.QualityCharacteristic;
 import com.puresol.coding.quality.api.SourceCodeQuality;
-import com.puresol.utils.HashId;
 
 /**
  * This is the central interface for an evaluator. An evaluator is responsible
@@ -17,7 +15,7 @@ import com.puresol.utils.HashId;
  * @author Rick-Rainer Ludwig
  * 
  */
-public interface Evaluator {
+public interface Evaluator<T extends EvaluatorResults> {
 
     /**
      * This method returns the evaluator meta data which describes the evaluator
@@ -57,7 +55,7 @@ public interface Evaluator {
      * 
      * @return
      */
-    public List<Result> getResults();
+    public T getResults();
 
     /**
      * This method returns the quality level after an evalutation was performed.
@@ -75,19 +73,9 @@ public interface Evaluator {
     public List<QualityCharacteristic> getEvaluatedQualityCharacteristics();
 
     /**
-     * This method starts the acutal evaluation.
+     * This method starts the actual evaluation.
      * 
      * @throws InterruptedException
      */
     public void runEvaluation() throws InterruptedException;
-
-    public Object getFileEvaluation(Analysis analysis, AnalysisRun analysisRun,
-	    HashId hashId);
-
-    public Object getDirectoryEvaluation(Analysis analysis,
-	    AnalysisRun analysisRun, HashId hashId);
-
-    public Object getProjectEvaluation(Analysis analysis,
-	    AnalysisRun analysisRun, HashId hashId);
-
 }

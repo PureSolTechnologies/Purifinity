@@ -31,8 +31,6 @@ import com.puresol.coding.quality.api.SourceCodeQuality;
 
 public class NormalizedMaintainabilityIndex extends CodeRangeEvaluator {
 
-    private static final long serialVersionUID = 2789695185933616684L;
-
     public static final String NAME = "Normalized Maintainability Index";
     public static final String DESCRIPTION = "Normalized Maintainability Index calculation.";
 

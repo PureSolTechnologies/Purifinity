@@ -34,7 +34,7 @@ public class EvaluationJob extends Job {
 	monitor.beginTask("Running evaluations for '" + getName() + "'",
 		evaluatorFactories.size());
 	for (EvaluatorFactory factory : evaluatorFactories) {
-	    Evaluator evaluator = factory.create(analysisRun);
+	    Evaluator<?> evaluator = factory.create(analysisRun);
 	    try {
 		evaluator.runEvaluation();
 		monitor.worked(1);

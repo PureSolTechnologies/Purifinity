@@ -2,10 +2,8 @@ package com.puresol.coding.evaluator;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -13,7 +11,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
-import com.puresol.coding.analysis.api.Analysis;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.FileAnalysis;
 import com.puresol.coding.analysis.api.FileStore;
@@ -22,13 +19,12 @@ import com.puresol.coding.analysis.api.FileStoreFactory;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.evaluation.api.Evaluator;
 import com.puresol.coding.evaluation.api.EvaluatorInformation;
-import com.puresol.coding.evaluation.api.Result;
+import com.puresol.coding.evaluation.api.EvaluatorResults;
 import com.puresol.coding.quality.api.SourceCodeQuality;
 import com.puresol.trees.TreeUtils;
 import com.puresol.trees.TreeVisitor;
 import com.puresol.trees.TreeWalker;
 import com.puresol.trees.WalkingAction;
-import com.puresol.utils.HashId;
 
 /**
  * This interface is the main interface for all evaluators and the general
@@ -39,8 +35,8 @@ import com.puresol.utils.HashId;
  * @author Rick-Rainer Ludwig
  * 
  */
-public abstract class AbstractEvaluator extends Job implements Serializable,
-	Evaluator {
+public abstract class AbstractEvaluator<T extends EvaluatorResults> extends Job
+	implements Serializable, Evaluator<T> {
 
     private static final long serialVersionUID = -497819792461488182L;
 
@@ -82,11 +78,6 @@ public abstract class AbstractEvaluator extends Job implements Serializable,
     }
 
     @Override
-    public List<Result> getResults() {
-	return new ArrayList<Result>();
-    }
-
-    @Override
     public SourceCodeQuality getQuality() {
 	return projectQuality;
     }
@@ -107,27 +98,6 @@ public abstract class AbstractEvaluator extends Job implements Serializable,
     public final void runEvaluation() throws InterruptedException {
 	schedule();
 	join();
-    }
-
-    @Override
-    public Object getFileEvaluation(Analysis analysis, AnalysisRun analysisRun,
-	    HashId hashId) {
-	// TODO Auto-generated method stub
-	return null;
-    }
-
-    @Override
-    public Object getDirectoryEvaluation(Analysis analysis,
-	    AnalysisRun analysisRun, HashId hashId) {
-	// TODO Auto-generated method stub
-	return null;
-    }
-
-    @Override
-    public Object getProjectEvaluation(Analysis analysis,
-	    AnalysisRun analysisRun, HashId hashId) {
-	// TODO Auto-generated method stub
-	return null;
     }
 
     private class EvaluationVisitor implements TreeVisitor<HashIdFileTree> {

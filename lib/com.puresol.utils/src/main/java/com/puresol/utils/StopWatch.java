@@ -1,5 +1,8 @@
 package com.puresol.utils;
 
+import java.io.Serializable;
+import java.util.Date;
+
 /**
  * This class is a simple implementation of a stop watch used for debugging and
  * performance tests.
@@ -7,30 +10,46 @@ package com.puresol.utils;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class StopWatch {
+public class StopWatch implements Serializable {
 
-	private long start = 0;
-	private long stop = 0;
+    private static final long serialVersionUID = -8824942249939423671L;
 
-	public void start() {
-		stop = 0;
-		start = System.nanoTime();
+    private Date startTime;
+    private Date stopTime;
+    private long start = 0;
+    private long stop = 0;
+
+    public void start() {
+	stop = 0;
+	start = System.nanoTime();
+    }
+
+    public void stop() {
+	stop = System.nanoTime();
+
+    }
+
+    public double getSeconds() {
+	if (stop == 0) {
+	    stop();
 	}
+	return (stop - start) / 1000000000;
+    }
 
-	public void stop() {
-		stop = System.nanoTime();
+    public Date getStartTime() {
+	return startTime;
+    }
 
-	}
+    public Date getStopTime() {
+	return stopTime;
+    }
 
-	public double getSeconds() {
-		if (stop == 0) {
-			stop();
-		}
-		return (double) (stop - start) / 1e9;
-	}
+    public long getMilliseconds() {
+	return ((stop - start) / 1000000);
+    }
 
-	@Override
-	public String toString() {
-		return getSeconds() + "s";
-	}
+    @Override
+    public String toString() {
+	return getSeconds() + "s";
+    }
 }

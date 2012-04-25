@@ -31,12 +31,12 @@ import com.puresol.coding.analysis.api.FileStore;
 import com.puresol.coding.analysis.api.FileStoreException;
 import com.puresol.coding.analysis.api.FileStoreFactory;
 import com.puresol.coding.evaluation.api.EvaluatorInformation;
-import com.puresol.coding.evaluation.api.Result;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.metrics.sloc.SLOCMetric;
 import com.puresol.coding.quality.api.QualityCharacteristic;
 import com.puresol.coding.quality.api.SourceCodeQuality;
 import com.puresol.uhura.parser.ParserTree;
+import com.puresol.utils.StopWatch;
 
 /**
  * This class calculates the CoCoMo for a set number of sloc and a given average
@@ -45,7 +45,7 @@ import com.puresol.uhura.parser.ParserTree;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class CoCoMo extends AbstractEvaluator {
+public class CoCoMo extends AbstractEvaluator<CoCoMoValueSet> {
 
     private static final long serialVersionUID = 5098378023541671490L;
 
@@ -60,7 +60,7 @@ public class CoCoMo extends AbstractEvaluator {
     public static final List<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new Vector<QualityCharacteristic>();
 
     private final FileStore fileStore = FileStoreFactory.getInstance();
-    private final CoCoMoValueSet cocomoValues = new CoCoMoValueSet();
+    private CoCoMoValueSet cocomoValues;
     private final Hashtable<AnalyzedFile, CoCoMoValueSet> fileCoCoMoValues = new Hashtable<AnalyzedFile, CoCoMoValueSet>();
 
     public CoCoMo(AnalysisRun analysisRun) {
@@ -73,6 +73,8 @@ public class CoCoMo extends AbstractEvaluator {
     @Override
     public IStatus run(IProgressMonitor monitor) {
 	try {
+	    StopWatch watch = new StopWatch();
+	    watch.start();
 	    List<AnalyzedFile> files = getAnalysisRun().getAnalyzedFiles();
 	    monitor.beginTask(NAME, files.size());
 	    int sloc = 0;
@@ -86,6 +88,9 @@ public class CoCoMo extends AbstractEvaluator {
 		monitor.worked(count);
 		sloc += getFileSLOC(file);
 	    }
+	    watch.stop();
+	    cocomoValues = new CoCoMoValueSet(CoCoMo.NAME,
+		    watch.getStartTime(), watch.getMilliseconds());
 	    cocomoValues.setSloc(sloc);
 	    monitor.done();
 	    return Status.OK_STATUS;
@@ -98,16 +103,17 @@ public class CoCoMo extends AbstractEvaluator {
 
     private int getFileSLOC(AnalyzedFile file) throws InterruptedException {
 	try {
-	    FileAnalysis analysis = fileStore.loadAnalysis(file.getHashId());
-	    ParserTree parserTree = analysis.getParserTree();
-	    SLOCMetric metric = new SLOCMetric(getAnalysisRun(),
-		    ProgrammingLanguages.findByName(analysis.getLanguageName(),
-			    analysis.getLanguageVersion()), new CodeRange("",
-			    CodeRangeType.FILE, parserTree));
-	    metric.schedule();
-	    metric.join();
-	    int sloc = metric.getSLOCResult().getProLOC();
-	    addCodeRangeCoCoMo(file, sloc);
+	    StopWatch watch = new StopWatch();
+	    watch.start();
+	    int sloc = scanFile(file);
+	    watch.stop();
+	    CoCoMoValueSet valueSet = new CoCoMoValueSet(CoCoMo.NAME,
+		    watch.getStartTime(), watch.getMilliseconds());
+	    valueSet.setSloc(sloc);
+	    valueSet.setComplexity(cocomoValues.getComplexity());
+	    valueSet.setAverageSalary(cocomoValues.getAverageSalary(),
+		    cocomoValues.getCurrency());
+	    fileCoCoMoValues.put(file, valueSet);
 	    return sloc;
 	} catch (FileStoreException e) {
 	    logger.error(e.getMessage(), e);
@@ -116,13 +122,18 @@ public class CoCoMo extends AbstractEvaluator {
 	}
     }
 
-    private void addCodeRangeCoCoMo(AnalyzedFile file, int sloc) {
-	CoCoMoValueSet valueSet = new CoCoMoValueSet();
-	valueSet.setSloc(sloc);
-	valueSet.setComplexity(cocomoValues.getComplexity());
-	valueSet.setAverageSalary(cocomoValues.getAverageSalary(),
-		cocomoValues.getCurrency());
-	fileCoCoMoValues.put(file, valueSet);
+    private int scanFile(AnalyzedFile file) throws FileStoreException,
+	    InterruptedException {
+	FileAnalysis analysis = fileStore.loadAnalysis(file.getHashId());
+	ParserTree parserTree = analysis.getParserTree();
+	SLOCMetric metric = new SLOCMetric(getAnalysisRun(),
+		ProgrammingLanguages.findByName(analysis.getLanguageName(),
+			analysis.getLanguageVersion()), new CodeRange("",
+			CodeRangeType.FILE, parserTree));
+	metric.schedule();
+	metric.join();
+	int sloc = metric.getSLOCResult().getProLOC();
+	return sloc;
     }
 
     public void setComplexity(Complexity complexity) {
@@ -167,8 +178,8 @@ public class CoCoMo extends AbstractEvaluator {
     }
 
     @Override
-    public List<Result> getResults() {
-	return cocomoValues.getResults();
+    public CoCoMoValueSet getResults() {
+	return cocomoValues;
     }
 
     @Override
