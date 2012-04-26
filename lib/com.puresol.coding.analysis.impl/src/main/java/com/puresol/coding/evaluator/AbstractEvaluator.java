@@ -21,12 +21,12 @@ import com.puresol.coding.analysis.api.FileStoreFactory;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.evaluation.api.Evaluator;
 import com.puresol.coding.evaluation.api.EvaluatorInformation;
-import com.puresol.coding.evaluation.api.EvaluatorResults;
 import com.puresol.coding.quality.api.SourceCodeQuality;
 import com.puresol.trees.TreeUtils;
 import com.puresol.trees.TreeVisitor;
 import com.puresol.trees.TreeWalker;
 import com.puresol.trees.WalkingAction;
+import com.puresol.utils.StopWatch;
 
 /**
  * This interface is the main interface for all evaluators and the general
@@ -37,8 +37,8 @@ import com.puresol.trees.WalkingAction;
  * @author Rick-Rainer Ludwig
  * 
  */
-public abstract class AbstractEvaluator<T extends EvaluatorResults> extends Job
-	implements Serializable, Evaluator<T> {
+public abstract class AbstractEvaluator extends Job implements Serializable,
+	Evaluator {
 
     private static final long serialVersionUID = -497819792461488182L;
 
@@ -177,6 +177,10 @@ public abstract class AbstractEvaluator<T extends EvaluatorResults> extends Job
 
     @Override
     public IStatus run(IProgressMonitor monitor) {
+	// Start time measurement
+	StopWatch watch = new StopWatch();
+	watch.start();
+
 	qualities.clear();
 	HashIdFileTree fileTree = getAnalysisRun().getFileTree();
 	int nodeCount = TreeUtils.countNodes(fileTree);
@@ -186,8 +190,12 @@ public abstract class AbstractEvaluator<T extends EvaluatorResults> extends Job
 		fileTree);
 	EvaluationVisitor treeVisitor = new EvaluationVisitor(monitor);
 	treeWalker.walkBackward(treeVisitor);
-
 	projectQuality = treeVisitor.getQuality();
+
+	// Stop time measurement
+	watch.stop();
+	timeOfRun = watch.getMilliseconds();
+
 	monitor.done();
 	return Status.OK_STATUS;
     }

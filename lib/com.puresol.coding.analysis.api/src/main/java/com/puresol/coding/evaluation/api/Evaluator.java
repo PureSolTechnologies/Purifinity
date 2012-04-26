@@ -58,7 +58,7 @@ public interface Evaluator<T extends EvaluatorResults> extends TimeAwareness {
     public List<QualityCharacteristic> getEvaluatedQualityCharacteristics();
 
     /**
-     * This method starts the actual evaluation.
+     * This method starts the actual evaluation. This method runs synchronous!
      * 
      * @throws InterruptedException
      */
