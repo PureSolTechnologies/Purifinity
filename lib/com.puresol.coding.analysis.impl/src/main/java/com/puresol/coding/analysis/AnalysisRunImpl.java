@@ -384,7 +384,7 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
 	    if (fileStore.isAvailable(hashId) && fileStore.wasAnalyzed(hashId)) {
 		FileAnalysis analysis = fileStore.loadAnalysis(hashId);
 		analyzedFiles.add(new AnalyzedFile(hashId, file, analysis
-			.getTimeStamp(), analysis.getTimeOfRun(), analysis
+			.getTime(), analysis.getTimeOfRun(), analysis
 			.getLanguageName(), analysis.getLanguageVersion()));
 	    } else {
 		FileAnalyzerImpl fileAnalyzer = new FileAnalyzerImpl(

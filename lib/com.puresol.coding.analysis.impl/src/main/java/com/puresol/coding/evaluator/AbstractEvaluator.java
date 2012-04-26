@@ -12,6 +12,8 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
 import com.puresol.coding.analysis.api.AnalysisRun;
+import com.puresol.coding.analysis.api.DirectoryStore;
+import com.puresol.coding.analysis.api.DirectoryStoreFactory;
 import com.puresol.coding.analysis.api.FileAnalysis;
 import com.puresol.coding.analysis.api.FileStore;
 import com.puresol.coding.analysis.api.FileStoreException;
@@ -68,7 +70,7 @@ public abstract class AbstractEvaluator<T extends EvaluatorResults> extends Job
     }
 
     @Override
-    public final Date getTimeStamp() {
+    public final Date getTime() {
 	return timeStamp;
     }
 
@@ -94,6 +96,11 @@ public abstract class AbstractEvaluator<T extends EvaluatorResults> extends Job
     abstract protected Map<String, SourceCodeQuality> processFile(
 	    FileAnalysis analysis) throws InterruptedException;
 
+    abstract protected void processDirectory(HashIdFileTree directory)
+	    throws InterruptedException;
+
+    abstract protected void processProject() throws InterruptedException;
+
     @Override
     public final void runEvaluation() throws InterruptedException {
 	schedule();
@@ -106,6 +113,8 @@ public abstract class AbstractEvaluator<T extends EvaluatorResults> extends Job
 	private int qualCount = 0;
 
 	private final FileStore fileStore = FileStoreFactory.getInstance();
+	private final DirectoryStore directoryStore = DirectoryStoreFactory
+		.getInstance();
 	private final IProgressMonitor monitor;
 
 	private EvaluationVisitor(IProgressMonitor monitor) {
@@ -122,6 +131,8 @@ public abstract class AbstractEvaluator<T extends EvaluatorResults> extends Job
 		}
 		if (tree.isFile()) {
 		    processAsFile(tree);
+		} else {
+		    processAsDirectory(tree);
 		}
 		monitor.worked(1);
 		return WalkingAction.PROCEED;
@@ -147,6 +158,13 @@ public abstract class AbstractEvaluator<T extends EvaluatorResults> extends Job
 			qualCount++;
 		    }
 		}
+	    }
+	}
+
+	private void processAsDirectory(HashIdFileTree tree)
+		throws FileStoreException, InterruptedException {
+	    if (directoryStore.isAvailable(tree.getHashId())) {
+		processDirectory(tree);
 	    }
 	}
 

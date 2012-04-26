@@ -5,7 +5,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.puresol.coding.analysis.api.CodeRange;
+import com.puresol.coding.evaluation.api.DirectoryResult;
 import com.puresol.coding.evaluation.api.EvaluatorResults;
+import com.puresol.coding.evaluation.api.FileResult;
+import com.puresol.coding.evaluation.api.ProjectResult;
 import com.puresol.utils.HashId;
 
 public class SLOCEvaluatorResult implements EvaluatorResults {
@@ -52,6 +55,24 @@ public class SLOCEvaluatorResult implements EvaluatorResults {
     @Override
     public long getTimeOfRun() {
 	return timeOfRun;
+    }
+
+    @Override
+    public FileResult getFileResult(HashId hashId) {
+	// TODO Auto-generated method stub
+	return null;
+    }
+
+    @Override
+    public DirectoryResult getDirectoryResult(HashId hashId) {
+	// TODO Auto-generated method stub
+	return null;
+    }
+
+    @Override
+    public ProjectResult getProjectResult() {
+	// TODO Auto-generated method stub
+	return null;
     }
 
 }

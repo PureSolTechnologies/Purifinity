@@ -1,4 +1,4 @@
-package com.puresol.coding.metrics.normmaint;
+package com.puresol.coding.metrics.cocomo;
 
 import java.util.Date;
 
@@ -8,13 +8,9 @@ import com.puresol.coding.evaluation.api.FileResult;
 import com.puresol.coding.evaluation.api.ProjectResult;
 import com.puresol.utils.HashId;
 
-public class NormalizedMaintainabilityIndexEvaluatorResults implements
-	EvaluatorResults {
+public class CoCoMoEvaluatorResults implements EvaluatorResults {
 
-    /**
-     * 
-     */
-    private static final long serialVersionUID = -1934870257264872806L;
+    private static final long serialVersionUID = -5532684337311126787L;
 
     @Override
     public String getEvaluatorName() {

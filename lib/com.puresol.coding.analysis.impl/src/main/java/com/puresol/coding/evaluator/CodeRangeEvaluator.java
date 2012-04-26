@@ -20,8 +20,6 @@ import com.puresol.coding.quality.api.SourceCodeQuality;
  */
 public abstract class CodeRangeEvaluator extends Job {
 
-    private static final long serialVersionUID = 342860258552477405L;
-
     private final Date timeStamp;
 
     public CodeRangeEvaluator(String name) {

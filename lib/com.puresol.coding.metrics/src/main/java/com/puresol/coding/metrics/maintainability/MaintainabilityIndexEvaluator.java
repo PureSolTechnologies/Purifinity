@@ -19,6 +19,7 @@ import com.puresol.coding.analysis.api.FileAnalysis;
 import com.puresol.coding.analysis.api.FileStore;
 import com.puresol.coding.analysis.api.FileStoreException;
 import com.puresol.coding.analysis.api.FileStoreFactory;
+import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.analysis.api.ProgrammingLanguage;
 import com.puresol.coding.evaluation.api.EvaluatorInformation;
 import com.puresol.coding.evaluation.api.Result;
@@ -127,5 +128,18 @@ public class MaintainabilityIndexEvaluator extends
     @Override
     public SourceCodeQuality getQuality() {
 	return projectQuality;
+    }
+
+    @Override
+    protected void processDirectory(HashIdFileTree directory)
+	    throws InterruptedException {
+	// TODO Auto-generated method stub
+
+    }
+
+    @Override
+    protected void processProject() throws InterruptedException {
+	// TODO Auto-generated method stub
+
     }
 }

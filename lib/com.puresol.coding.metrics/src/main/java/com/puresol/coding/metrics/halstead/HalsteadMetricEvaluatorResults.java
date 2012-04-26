@@ -2,7 +2,11 @@ package com.puresol.coding.metrics.halstead;
 
 import java.util.Date;
 
+import com.puresol.coding.evaluation.api.DirectoryResult;
 import com.puresol.coding.evaluation.api.EvaluatorResults;
+import com.puresol.coding.evaluation.api.FileResult;
+import com.puresol.coding.evaluation.api.ProjectResult;
+import com.puresol.utils.HashId;
 
 public class HalsteadMetricEvaluatorResults implements EvaluatorResults {
 
@@ -27,6 +31,24 @@ public class HalsteadMetricEvaluatorResults implements EvaluatorResults {
     public long getTimeOfRun() {
 	// TODO Auto-generated method stub
 	return 0;
+    }
+
+    @Override
+    public FileResult getFileResult(HashId hashId) {
+	// TODO Auto-generated method stub
+	return null;
+    }
+
+    @Override
+    public DirectoryResult getDirectoryResult(HashId hashId) {
+	// TODO Auto-generated method stub
+	return null;
+    }
+
+    @Override
+    public ProjectResult getProjectResult() {
+	// TODO Auto-generated method stub
+	return null;
     }
 
 }

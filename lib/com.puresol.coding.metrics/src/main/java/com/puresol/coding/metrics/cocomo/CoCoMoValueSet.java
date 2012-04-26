@@ -1,15 +1,11 @@
 package com.puresol.coding.metrics.cocomo;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import com.puresol.coding.evaluation.api.EvaluatorResults;
 import com.puresol.coding.evaluation.api.Result;
 
-public class CoCoMoValueSet implements EvaluatorResults {
-
-    private static final long serialVersionUID = -6007918694918476936L;
+public class CoCoMoValueSet {
 
     private int sloc;
     private double ksloc;
@@ -28,14 +24,7 @@ public class CoCoMoValueSet implements EvaluatorResults {
 
     private final List<Result> results = new ArrayList<Result>();
 
-    private final String evaluatorName;
-    private final Date time;
-    private final long timeOfRun;
-
-    public CoCoMoValueSet(String evaluatorName, Date time, long timeOfRun) {
-	this.evaluatorName = evaluatorName;
-	this.time = time;
-	this.timeOfRun = timeOfRun;
+    public CoCoMoValueSet() {
 	setComplexity(Complexity.LOW);
 	setAverageSalary(56286, "$");
     }
@@ -245,20 +234,5 @@ public class CoCoMoValueSet implements EvaluatorResults {
 
     public List<Result> getResults() {
 	return results;
-    }
-
-    @Override
-    public String getEvaluatorName() {
-	return evaluatorName;
-    }
-
-    @Override
-    public Date getTime() {
-	return time;
-    }
-
-    @Override
-    public long getTimeOfRun() {
-	return timeOfRun;
     }
 }

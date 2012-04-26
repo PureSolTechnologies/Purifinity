@@ -8,6 +8,7 @@ import com.puresol.coding.ProgrammingLanguages;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.CodeRange;
 import com.puresol.coding.analysis.api.FileAnalysis;
+import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.analysis.api.ProgrammingLanguage;
 import com.puresol.coding.evaluation.api.EvaluatorInformation;
 import com.puresol.coding.evaluator.AbstractEvaluator;
@@ -52,5 +53,18 @@ public class NormalizedMaintainabilityIndexEvaluator extends
     @Override
     public NormalizedMaintainabilityIndexEvaluatorResults getResults() {
 	return null;
+    }
+
+    @Override
+    protected void processDirectory(HashIdFileTree directory)
+	    throws InterruptedException {
+	// TODO Auto-generated method stub
+
+    }
+
+    @Override
+    protected void processProject() throws InterruptedException {
+	// TODO Auto-generated method stub
+
     }
 }

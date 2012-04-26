@@ -23,5 +23,14 @@ public interface DirectoryStore {
      *         equal due to the same hash id.
      * @throws DirectoryStoreException
      */
-    boolean createDirectory(HashId hashId) throws DirectoryStoreException;
+    public boolean createDirectory(HashId hashId)
+	    throws DirectoryStoreException;
+
+    /**
+     * This method checks whether a directory is already present or not.
+     * 
+     * @param hashId
+     * @return
+     */
+    public boolean isAvailable(HashId hashId);
 }

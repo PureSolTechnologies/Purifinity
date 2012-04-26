@@ -10,7 +10,8 @@ import java.util.UUID;
  * @author Rick-Rainer Ludwig
  * 
  */
-public final class AnalysisRunInformation implements Serializable {
+public final class AnalysisRunInformation implements Serializable,
+	TimeAwareness {
 
     private static final long serialVersionUID = -2618256066434770094L;
 
@@ -55,6 +56,7 @@ public final class AnalysisRunInformation implements Serializable {
      * 
      * @return A Date object is returned.
      */
+    @Override
     public final Date getTime() {
 	return time;
     }
@@ -64,6 +66,7 @@ public final class AnalysisRunInformation implements Serializable {
      * 
      * @return Returns the time effort in milliseconds.
      */
+    @Override
     public final long getTimeOfRun() {
 	return timeOfRun;
     }

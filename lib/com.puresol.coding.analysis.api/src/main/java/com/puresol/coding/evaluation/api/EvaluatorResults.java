@@ -1,7 +1,9 @@
 package com.puresol.coding.evaluation.api;
 
 import java.io.Serializable;
-import java.util.Date;
+
+import com.puresol.coding.analysis.api.TimeAwareness;
+import com.puresol.utils.HashId;
 
 /**
  * This is the central interface for evaluator results. Each evaluator
@@ -11,7 +13,7 @@ import java.util.Date;
  * @author Rick-Rainer Ludwig
  * 
  */
-public interface EvaluatorResults extends Serializable {
+public interface EvaluatorResults extends Serializable, TimeAwareness {
 
     /**
      * This method returns the name of the evaluator which was used to generate
@@ -22,17 +24,27 @@ public interface EvaluatorResults extends Serializable {
     public String getEvaluatorName();
 
     /**
-     * This method returns the start time of the evaluation.
+     * This method looks the result for a single file up and returns it.
      * 
+     * @param hashId
      * @return
      */
-    public Date getTime();
+    public FileResult getFileResult(HashId hashId);
 
     /**
-     * This method returns the time of the run in milliseconds.
+     * This method looks for the result of a directory and returns the result
+     * for it.
+     * 
+     * @param hashId
+     * @return
+     */
+    public DirectoryResult getDirectoryResult(HashId hashId);
+
+    /**
+     * This method returns the project results.
      * 
      * @return
      */
-    public long getTimeOfRun();
+    public ProjectResult getProjectResult();
 
 }

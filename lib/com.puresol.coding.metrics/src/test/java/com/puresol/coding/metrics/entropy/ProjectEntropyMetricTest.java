@@ -49,7 +49,7 @@ public class ProjectEntropyMetricTest {
 	assertNotNull(metric.getInformation());
 	assertEquals(SourceCodeQuality.UNSPECIFIED, metric.getQuality());
 	assertNotNull(metric.getResults());
-	assertNotNull(metric.getTimeStamp());
+	assertNotNull(metric.getTime());
     }
 
 }

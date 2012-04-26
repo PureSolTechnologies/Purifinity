@@ -20,7 +20,7 @@ public class DirectoryStoreImpl implements DirectoryStore {
 	    throws DirectoryStoreException {
 	File directory = getDirectoryStoreDirectory(directoryStoreDirectory,
 		hashId);
-	if (!directory.exists()) {
+	if (!isAvailable(hashId)) {
 	    if (!directory.mkdirs()) {
 		throw new DirectoryStoreException(
 			"Could not create directory with hash '" + hashId + "'");
@@ -28,6 +28,13 @@ public class DirectoryStoreImpl implements DirectoryStore {
 	    return true;
 	}
 	return false;
+    }
+
+    @Override
+    public boolean isAvailable(HashId hashId) {
+	File directory = getDirectoryStoreDirectory(directoryStoreDirectory,
+		hashId);
+	return directory.exists();
     }
 
     static File getDirectoryStoreDirectory(File directoryStoreDirectory,

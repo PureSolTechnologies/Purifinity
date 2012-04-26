@@ -30,13 +30,13 @@ import com.puresol.coding.analysis.api.FileAnalysis;
 import com.puresol.coding.analysis.api.FileStore;
 import com.puresol.coding.analysis.api.FileStoreException;
 import com.puresol.coding.analysis.api.FileStoreFactory;
+import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.evaluation.api.EvaluatorInformation;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.metrics.sloc.SLOCMetric;
 import com.puresol.coding.quality.api.QualityCharacteristic;
 import com.puresol.coding.quality.api.SourceCodeQuality;
 import com.puresol.uhura.parser.ParserTree;
-import com.puresol.utils.StopWatch;
 
 /**
  * This class calculates the CoCoMo for a set number of sloc and a given average
@@ -45,7 +45,7 @@ import com.puresol.utils.StopWatch;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class CoCoMo extends AbstractEvaluator<CoCoMoValueSet> {
+public class CoCoMo extends AbstractEvaluator<CoCoMoEvaluatorResults> {
 
     private static final long serialVersionUID = 5098378023541671490L;
 
@@ -73,8 +73,6 @@ public class CoCoMo extends AbstractEvaluator<CoCoMoValueSet> {
     @Override
     public IStatus run(IProgressMonitor monitor) {
 	try {
-	    StopWatch watch = new StopWatch();
-	    watch.start();
 	    List<AnalyzedFile> files = getAnalysisRun().getAnalyzedFiles();
 	    monitor.beginTask(NAME, files.size());
 	    int sloc = 0;
@@ -88,9 +86,7 @@ public class CoCoMo extends AbstractEvaluator<CoCoMoValueSet> {
 		monitor.worked(count);
 		sloc += getFileSLOC(file);
 	    }
-	    watch.stop();
-	    cocomoValues = new CoCoMoValueSet(CoCoMo.NAME,
-		    watch.getStartTime(), watch.getMilliseconds());
+	    cocomoValues = new CoCoMoValueSet();
 	    cocomoValues.setSloc(sloc);
 	    monitor.done();
 	    return Status.OK_STATUS;
@@ -103,12 +99,8 @@ public class CoCoMo extends AbstractEvaluator<CoCoMoValueSet> {
 
     private int getFileSLOC(AnalyzedFile file) throws InterruptedException {
 	try {
-	    StopWatch watch = new StopWatch();
-	    watch.start();
 	    int sloc = scanFile(file);
-	    watch.stop();
-	    CoCoMoValueSet valueSet = new CoCoMoValueSet(CoCoMo.NAME,
-		    watch.getStartTime(), watch.getMilliseconds());
+	    CoCoMoValueSet valueSet = new CoCoMoValueSet();
 	    valueSet.setSloc(sloc);
 	    valueSet.setComplexity(cocomoValues.getComplexity());
 	    valueSet.setAverageSalary(cocomoValues.getAverageSalary(),
@@ -178,14 +170,26 @@ public class CoCoMo extends AbstractEvaluator<CoCoMoValueSet> {
     }
 
     @Override
-    public CoCoMoValueSet getResults() {
-	return cocomoValues;
+    public CoCoMoEvaluatorResults getResults() {
+	return null;
     }
 
     @Override
     protected Map<String, SourceCodeQuality> processFile(FileAnalysis analysis) {
 	// intentionally left blank
 	return null;
+    }
+
+    @Override
+    protected void processDirectory(HashIdFileTree directory)
+	    throws InterruptedException {
+	// TODO Auto-generated method stub
+
+    }
+
+    @Override
+    protected void processProject() throws InterruptedException {
+	// TODO Auto-generated method stub
     }
 
 }

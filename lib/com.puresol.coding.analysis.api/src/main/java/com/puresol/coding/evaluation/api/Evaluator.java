@@ -1,9 +1,9 @@
 package com.puresol.coding.evaluation.api;
 
-import java.util.Date;
 import java.util.List;
 
 import com.puresol.coding.analysis.api.AnalysisRun;
+import com.puresol.coding.analysis.api.TimeAwareness;
 import com.puresol.coding.quality.api.QualityCharacteristic;
 import com.puresol.coding.quality.api.SourceCodeQuality;
 
@@ -15,7 +15,7 @@ import com.puresol.coding.quality.api.SourceCodeQuality;
  * @author Rick-Rainer Ludwig
  * 
  */
-public interface Evaluator<T extends EvaluatorResults> {
+public interface Evaluator<T extends EvaluatorResults> extends TimeAwareness {
 
     /**
      * This method returns the evaluator meta data which describes the evaluator
@@ -24,21 +24,6 @@ public interface Evaluator<T extends EvaluatorResults> {
      * @return
      */
     public EvaluatorInformation getInformation();
-
-    /**
-     * This method returns the name of the time stamp of the evaluation. This is
-     * used to track the need for a re-evaluation.
-     * 
-     * @return
-     */
-    public Date getTimeStamp();
-
-    /**
-     * This method returns the time effort which was needed for analysis.
-     * 
-     * @return Returns the time effort in milliseconds.
-     */
-    public long getTimeOfRun();
 
     /**
      * This method returns the analysis run which is the foundation of the

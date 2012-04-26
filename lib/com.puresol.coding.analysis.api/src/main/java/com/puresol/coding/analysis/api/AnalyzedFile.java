@@ -15,7 +15,7 @@ import com.puresol.utils.HashId;
  * 
  */
 public final class AnalyzedFile implements Comparable<AnalyzedFile>,
-	Serializable {
+	Serializable, TimeAwareness {
 
     private static final long serialVersionUID = 2030120585873480183L;
 
@@ -45,10 +45,12 @@ public final class AnalyzedFile implements Comparable<AnalyzedFile>,
 	return file;
     }
 
+    @Override
     public final Date getTime() {
 	return time;
     }
 
+    @Override
     public final long getTimeOfRun() {
 	return timeOfRun;
     }

@@ -49,6 +49,6 @@ public class ProjectMcCabeMetricTest {
 	assertNotNull(metric.getEvaluatedQualityCharacteristics());
 	assertEquals(SourceCodeQuality.UNSPECIFIED, metric.getQuality());
 	assertNotNull(metric.getResults());
-	assertNotNull(metric.getTimeStamp());
+	assertNotNull(metric.getTime());
     }
 }
