@@ -152,24 +152,33 @@ public abstract class AbstractEvaluator<T extends EvaluatorResults> extends Job
 
     @Override
     public IStatus run(IProgressMonitor monitor) {
-	// Start time measurement
-	StopWatch watch = new StopWatch();
-	watch.start();
+	try {
+	    // Start time measurement
+	    StopWatch watch = new StopWatch();
+	    watch.start();
+	    // check the files to evaluate and calculate amount of work!
+	    HashIdFileTree fileTree = getAnalysisRun().getFileTree();
+	    int nodeCount = TreeUtils.countNodes(fileTree);
+	    monitor.beginTask(getName(), nodeCount + 1); // + 1 for the project
+	    // process files and directories
+	    TreeWalker<HashIdFileTree> treeWalker = new TreeWalker<HashIdFileTree>(
+		    fileTree);
+	    EvaluationVisitor treeVisitor = new EvaluationVisitor(monitor);
+	    treeWalker.walkBackward(treeVisitor);
+	    // process project as whole
+	    processProject();
+	    // Stop time measurement
+	    watch.stop();
+	    timeOfRun = watch.getMilliseconds();
 
-	HashIdFileTree fileTree = getAnalysisRun().getFileTree();
-	int nodeCount = TreeUtils.countNodes(fileTree);
-	monitor.beginTask(getName(), nodeCount);
-
-	TreeWalker<HashIdFileTree> treeWalker = new TreeWalker<HashIdFileTree>(
-		fileTree);
-	EvaluationVisitor treeVisitor = new EvaluationVisitor(monitor);
-	treeWalker.walkBackward(treeVisitor);
-
-	// Stop time measurement
-	watch.stop();
-	timeOfRun = watch.getMilliseconds();
-
-	monitor.done();
+	    monitor.done();
+	} catch (InterruptedException e) {
+	    /*
+	     * XXX This exception is silly, but we need to introduce
+	     * InterruptedException into TreeWalker to get a real interrupted
+	     * handling!
+	     */
+	}
 	return Status.OK_STATUS;
     }
 
