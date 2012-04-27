@@ -29,7 +29,7 @@ public class NormalizedMaintainabilityActivator implements BundleActivator {
     }
 
     private void registerFactory(BundleContext context) {
-	NormalizedMaintainabilityIndexServiceFactory normalizedMaintainabilityIndexFactory = new NormalizedMaintainabilityIndexServiceFactory();
+	NormalizedMaintainabilityIndexEvaluatorFactory normalizedMaintainabilityIndexFactory = new NormalizedMaintainabilityIndexEvaluatorFactory();
 	Dictionary<String, String> headers = context.getBundle().getHeaders();
 
 	ServiceRegistration<?> registration = context.registerService(

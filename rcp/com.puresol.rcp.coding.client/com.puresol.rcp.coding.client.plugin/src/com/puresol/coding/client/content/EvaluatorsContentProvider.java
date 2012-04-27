@@ -10,7 +10,7 @@ import com.puresol.coding.evaluation.api.Evaluator;
 
 public class EvaluatorsContentProvider implements IStructuredContentProvider {
 
-    private final List<Evaluator> factories = new ArrayList<Evaluator>();
+    private final List<Evaluator<?>> factories = new ArrayList<Evaluator<?>>();
 
     @Override
     public void dispose() {
@@ -22,7 +22,7 @@ public class EvaluatorsContentProvider implements IStructuredContentProvider {
 	factories.clear();
 	if (newInput != null) {
 	    @SuppressWarnings("unchecked")
-	    List<Evaluator> factoryList = (List<Evaluator>) newInput;
+	    List<Evaluator<?>> factoryList = (List<Evaluator<?>>) newInput;
 	    factories.addAll(factoryList);
 	}
     }

@@ -29,7 +29,7 @@ public class MaintainabilityActivator implements BundleActivator {
     }
 
     private void registerFactory(BundleContext context) {
-	MaintainabilityIndexServiceFactory maintainabilityIndexFactory = new MaintainabilityIndexServiceFactory();
+	MaintainabilityIndexEvaluatorFactory maintainabilityIndexFactory = new MaintainabilityIndexEvaluatorFactory();
 	Dictionary<String, String> headers = context.getBundle().getHeaders();
 
 	ServiceRegistration<?> registration = context.registerService(

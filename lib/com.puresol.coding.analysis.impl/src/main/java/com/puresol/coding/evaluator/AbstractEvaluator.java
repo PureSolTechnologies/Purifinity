@@ -21,6 +21,7 @@ import com.puresol.coding.analysis.api.FileStoreFactory;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.evaluation.api.Evaluator;
 import com.puresol.coding.evaluation.api.EvaluatorInformation;
+import com.puresol.coding.evaluation.api.EvaluatorResults;
 import com.puresol.coding.quality.api.SourceCodeQuality;
 import com.puresol.trees.TreeUtils;
 import com.puresol.trees.TreeVisitor;
@@ -37,8 +38,8 @@ import com.puresol.utils.StopWatch;
  * @author Rick-Rainer Ludwig
  * 
  */
-public abstract class AbstractEvaluator extends Job implements Serializable,
-	Evaluator {
+public abstract class AbstractEvaluator<T extends EvaluatorResults> extends Job
+	implements Serializable, Evaluator<T> {
 
     private static final long serialVersionUID = -497819792461488182L;
 

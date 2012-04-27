@@ -1,9 +1,12 @@
 package com.puresol.coding.metrics.halstead;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.puresol.coding.analysis.api.AnalysisRun;
+import com.puresol.coding.evaluation.api.Evaluator;
 import com.puresol.coding.evaluation.api.EvaluatorFactory;
+import com.puresol.coding.evaluation.api.EvaluatorResults;
 import com.puresol.coding.quality.api.QualityCharacteristic;
 
 public class HalsteadMetricServiceFactory implements EvaluatorFactory {
@@ -28,4 +31,8 @@ public class HalsteadMetricServiceFactory implements EvaluatorFactory {
 	return new HalsteadMetricEvaluator(analysisRun);
     }
 
+    @Override
+    public List<Class<? extends Evaluator<? extends EvaluatorResults>>> getDependencies() {
+	return new ArrayList<Class<? extends Evaluator<? extends EvaluatorResults>>>();
+    }
 }

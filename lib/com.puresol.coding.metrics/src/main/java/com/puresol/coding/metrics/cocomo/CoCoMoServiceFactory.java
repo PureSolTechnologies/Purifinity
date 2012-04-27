@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.puresol.coding.analysis.api.AnalysisRun;
+import com.puresol.coding.evaluation.api.Evaluator;
 import com.puresol.coding.evaluation.api.EvaluatorFactory;
+import com.puresol.coding.evaluation.api.EvaluatorResults;
+import com.puresol.coding.metrics.sloc.SLOCEvaluator;
 import com.puresol.coding.quality.api.QualityCharacteristic;
 
 public class CoCoMoServiceFactory implements EvaluatorFactory {
@@ -35,4 +38,10 @@ public class CoCoMoServiceFactory implements EvaluatorFactory {
 	return new CoCoMo(analysisRun);
     }
 
+    @Override
+    public List<Class<? extends Evaluator<? extends EvaluatorResults>>> getDependencies() {
+	List<Class<? extends Evaluator<? extends EvaluatorResults>>> dependencies = new ArrayList<Class<? extends Evaluator<? extends EvaluatorResults>>>();
+	dependencies.add(SLOCEvaluator.class);
+	return dependencies;
+    }
 }

@@ -46,4 +46,12 @@ public interface EvaluatorFactory {
      * @return
      */
     public Evaluator<?> create(AnalysisRun analysisRun);
+
+    /**
+     * This method returns a list of Evaluator classes which are needed to be
+     * evaluated before the evaluator created by this factory can be run.
+     * 
+     * @return
+     */
+    public List<Class<? extends Evaluator<? extends EvaluatorResults>>> getDependencies();
 }
