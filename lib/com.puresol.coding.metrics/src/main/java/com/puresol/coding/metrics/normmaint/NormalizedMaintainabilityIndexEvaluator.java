@@ -1,8 +1,6 @@
 package com.puresol.coding.metrics.normmaint;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.puresol.coding.ProgrammingLanguages;
 import com.puresol.coding.analysis.api.AnalysisRun;
@@ -13,7 +11,6 @@ import com.puresol.coding.analysis.api.ProgrammingLanguage;
 import com.puresol.coding.evaluation.api.EvaluatorInformation;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.quality.api.QualityCharacteristic;
-import com.puresol.coding.quality.api.SourceCodeQuality;
 
 public class NormalizedMaintainabilityIndexEvaluator extends
 	AbstractEvaluator<NormalizedMaintainabilityIndexEvaluatorResults> {
@@ -26,9 +23,9 @@ public class NormalizedMaintainabilityIndexEvaluator extends
     }
 
     @Override
-    protected Map<String, SourceCodeQuality> processFile(FileAnalysis analysis)
-	    throws InterruptedException {
-	Map<String, SourceCodeQuality> results = new HashMap<String, SourceCodeQuality>();
+    protected NormalizedMaintainabilityIndexFileResult processFile(
+	    FileAnalysis analysis) throws InterruptedException {
+	NormalizedMaintainabilityIndexFileResult results = new NormalizedMaintainabilityIndexFileResult();
 	ProgrammingLanguage language = ProgrammingLanguages.findByName(
 		analysis.getLanguageName(), analysis.getLanguageVersion());
 

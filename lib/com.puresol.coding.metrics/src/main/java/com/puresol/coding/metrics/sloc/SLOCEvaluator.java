@@ -1,8 +1,6 @@
 package com.puresol.coding.metrics.sloc;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.puresol.coding.ProgrammingLanguages;
 import com.puresol.coding.analysis.api.AnalysisRun;
@@ -13,7 +11,6 @@ import com.puresol.coding.analysis.api.ProgrammingLanguage;
 import com.puresol.coding.evaluation.api.EvaluatorInformation;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.quality.api.QualityCharacteristic;
-import com.puresol.coding.quality.api.SourceCodeQuality;
 
 public class SLOCEvaluator extends AbstractEvaluator<SLOCEvaluatorResult> {
 
@@ -26,9 +23,9 @@ public class SLOCEvaluator extends AbstractEvaluator<SLOCEvaluatorResult> {
     }
 
     @Override
-    protected Map<String, SourceCodeQuality> processFile(FileAnalysis analysis)
+    protected SLOCFileResult processFile(FileAnalysis analysis)
 	    throws InterruptedException {
-	Map<String, SourceCodeQuality> results = new HashMap<String, SourceCodeQuality>();
+	SLOCFileResult results = new SLOCFileResult();
 	ProgrammingLanguage language = ProgrammingLanguages.findByName(
 		analysis.getLanguageName(), analysis.getLanguageVersion());
 

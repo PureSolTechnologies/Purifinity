@@ -5,7 +5,6 @@ import java.util.List;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.TimeAwareness;
 import com.puresol.coding.quality.api.QualityCharacteristic;
-import com.puresol.coding.quality.api.SourceCodeQuality;
 
 /**
  * This is the central interface for an evaluator. An evaluator is responsible
@@ -41,13 +40,6 @@ public interface Evaluator<T extends EvaluatorResults> extends TimeAwareness {
      * @return
      */
     public T getResults();
-
-    /**
-     * This method returns the quality level after an evalutation was performed.
-     * 
-     * @return
-     */
-    public SourceCodeQuality getQuality();
 
     /**
      * This method returns a list with quality characteristics which might be

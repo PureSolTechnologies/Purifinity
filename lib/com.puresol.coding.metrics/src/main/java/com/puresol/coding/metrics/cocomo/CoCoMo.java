@@ -12,7 +12,6 @@ package com.puresol.coding.metrics.cocomo;
 
 import java.util.Hashtable;
 import java.util.List;
-import java.util.Map;
 import java.util.Vector;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -32,10 +31,10 @@ import com.puresol.coding.analysis.api.FileStoreException;
 import com.puresol.coding.analysis.api.FileStoreFactory;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.evaluation.api.EvaluatorInformation;
+import com.puresol.coding.evaluation.api.FileResult;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.metrics.sloc.SLOCMetric;
 import com.puresol.coding.quality.api.QualityCharacteristic;
-import com.puresol.coding.quality.api.SourceCodeQuality;
 import com.puresol.uhura.parser.ParserTree;
 
 /**
@@ -157,14 +156,6 @@ public class CoCoMo extends AbstractEvaluator<CoCoMoEvaluatorResults> {
      * {@inheritDoc}
      */
     @Override
-    public SourceCodeQuality getQuality() {
-	return SourceCodeQuality.UNSPECIFIED;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
 	return EVALUATED_QUALITY_CHARACTERISTICS;
     }
@@ -175,7 +166,7 @@ public class CoCoMo extends AbstractEvaluator<CoCoMoEvaluatorResults> {
     }
 
     @Override
-    protected Map<String, SourceCodeQuality> processFile(FileAnalysis analysis) {
+    protected FileResult processFile(FileAnalysis analysis) {
 	// intentionally left blank
 	return null;
     }

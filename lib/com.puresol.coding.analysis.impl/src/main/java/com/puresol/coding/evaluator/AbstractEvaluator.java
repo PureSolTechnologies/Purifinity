@@ -3,8 +3,6 @@ package com.puresol.coding.evaluator;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -22,7 +20,7 @@ import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.evaluation.api.Evaluator;
 import com.puresol.coding.evaluation.api.EvaluatorInformation;
 import com.puresol.coding.evaluation.api.EvaluatorResults;
-import com.puresol.coding.quality.api.SourceCodeQuality;
+import com.puresol.coding.evaluation.api.FileResult;
 import com.puresol.trees.TreeUtils;
 import com.puresol.trees.TreeVisitor;
 import com.puresol.trees.TreeWalker;
@@ -43,9 +41,6 @@ public abstract class AbstractEvaluator<T extends EvaluatorResults> extends Job
 
     private static final long serialVersionUID = -497819792461488182L;
 
-    private final Map<String, SourceCodeQuality> qualities = new HashMap<String, SourceCodeQuality>();
-    private SourceCodeQuality projectQuality;
-
     private final AnalysisRun analysisRun;
     private final EvaluatorInformation information;
     private final Date timeStamp;
@@ -56,7 +51,6 @@ public abstract class AbstractEvaluator<T extends EvaluatorResults> extends Job
 	super(information.getName());
 	this.information = information;
 	this.analysisRun = analysisRun;
-	projectQuality = SourceCodeQuality.UNSPECIFIED;
 	timeStamp = new Date();
     }
 
@@ -80,11 +74,6 @@ public abstract class AbstractEvaluator<T extends EvaluatorResults> extends Job
 	return timeOfRun;
     }
 
-    @Override
-    public SourceCodeQuality getQuality() {
-	return projectQuality;
-    }
-
     /**
      * This method is used to run an evaluation of an analyzed file. This method
      * is called by the run method.
@@ -94,8 +83,8 @@ public abstract class AbstractEvaluator<T extends EvaluatorResults> extends Job
      * @throws IOException
      * @throws FileStoreException
      */
-    abstract protected Map<String, SourceCodeQuality> processFile(
-	    FileAnalysis analysis) throws InterruptedException;
+    abstract protected FileResult processFile(FileAnalysis analysis)
+	    throws InterruptedException;
 
     abstract protected void processDirectory(HashIdFileTree directory)
 	    throws InterruptedException;
@@ -109,9 +98,6 @@ public abstract class AbstractEvaluator<T extends EvaluatorResults> extends Job
     }
 
     private class EvaluationVisitor implements TreeVisitor<HashIdFileTree> {
-
-	private int sum = 0;
-	private int qualCount = 0;
 
 	private final FileStore fileStore = FileStoreFactory.getInstance();
 	private final DirectoryStore directoryStore = DirectoryStoreFactory
@@ -151,14 +137,8 @@ public abstract class AbstractEvaluator<T extends EvaluatorResults> extends Job
 	    if (fileStore.wasAnalyzed(tree.getHashId())) {
 		FileAnalysis fileAnalysis = fileStore.loadAnalysis(tree
 			.getHashId());
-		Map<String, SourceCodeQuality> levels = processFile(fileAnalysis);
-		qualities.putAll(levels);
-		for (SourceCodeQuality level : levels.values()) {
-		    if (level != SourceCodeQuality.UNSPECIFIED) {
-			sum += level.getLevel();
-			qualCount++;
-		    }
-		}
+		FileResult levels = processFile(fileAnalysis);
+		// save result...
 	    }
 	}
 
@@ -168,12 +148,6 @@ public abstract class AbstractEvaluator<T extends EvaluatorResults> extends Job
 		processDirectory(tree);
 	    }
 	}
-
-	public SourceCodeQuality getQuality() {
-	    int result = (int) Math.round((double) sum / (double) qualCount);
-	    return SourceCodeQuality.fromLevel(result);
-	}
-
     }
 
     @Override
@@ -182,7 +156,6 @@ public abstract class AbstractEvaluator<T extends EvaluatorResults> extends Job
 	StopWatch watch = new StopWatch();
 	watch.start();
 
-	qualities.clear();
 	HashIdFileTree fileTree = getAnalysisRun().getFileTree();
 	int nodeCount = TreeUtils.countNodes(fileTree);
 	monitor.beginTask(getName(), nodeCount);
@@ -191,7 +164,6 @@ public abstract class AbstractEvaluator<T extends EvaluatorResults> extends Job
 		fileTree);
 	EvaluationVisitor treeVisitor = new EvaluationVisitor(monitor);
 	treeWalker.walkBackward(treeVisitor);
-	projectQuality = treeVisitor.getQuality();
 
 	// Stop time measurement
 	watch.stop();

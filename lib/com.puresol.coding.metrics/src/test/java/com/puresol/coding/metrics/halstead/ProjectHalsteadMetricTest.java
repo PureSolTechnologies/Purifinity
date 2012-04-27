@@ -1,6 +1,5 @@
 package com.puresol.coding.metrics.halstead;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
@@ -17,7 +16,6 @@ import com.puresol.coding.analysis.AnalysisRunImpl;
 import com.puresol.coding.analysis.api.AnalysisInformation;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.DirectoryStoreException;
-import com.puresol.coding.quality.api.SourceCodeQuality;
 import com.puresol.utils.FileSearchConfiguration;
 
 @Ignore
@@ -47,7 +45,6 @@ public class ProjectHalsteadMetricTest {
 	assertFalse(metric.getName().isEmpty());
 	assertNotNull(metric.getInformation());
 	assertNotNull(metric.getEvaluatedQualityCharacteristics());
-	assertEquals(SourceCodeQuality.UNSPECIFIED, metric.getQuality());
 	assertNotNull(metric.getResults());
 	assertNotNull(metric.getTime());
     }

@@ -25,7 +25,6 @@ import com.puresol.coding.evaluation.api.EvaluatorInformation;
 import com.puresol.coding.evaluation.api.Result;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.quality.api.QualityCharacteristic;
-import com.puresol.coding.quality.api.SourceCodeQuality;
 
 public class MaintainabilityIndexEvaluator extends
 	AbstractEvaluator<MaintainabilityIndexEvaluatorResults> {
@@ -35,13 +34,9 @@ public class MaintainabilityIndexEvaluator extends
     private static final Logger logger = LoggerFactory
 	    .getLogger(MaintainabilityIndexEvaluator.class);
 
-    private final Map<String, SourceCodeQuality> qualities = new HashMap<String, SourceCodeQuality>();
+    private final MaintainabilityIndexFileResult qualities = new MaintainabilityIndexFileResult();
     private final Map<String, List<Result>> evaluatorResults = new HashMap<String, List<Result>>();
     private final FileStore fileStore = FileStoreFactory.getInstance();
-
-    private SourceCodeQuality projectQuality = SourceCodeQuality.UNSPECIFIED;
-    private int qualitySum = 0;
-    private int qualityCount = 0;
 
     public MaintainabilityIndexEvaluator(AnalysisRun analysisRun) {
 	super(new EvaluatorInformation(MaintainabilityIndex.NAME,
@@ -52,8 +47,6 @@ public class MaintainabilityIndexEvaluator extends
     public IStatus run(IProgressMonitor monitor) {
 	try {
 	    qualities.clear();
-	    qualitySum = 0;
-	    qualityCount = 0;
 	    List<AnalyzedFile> files = getAnalysisRun().getAnalyzedFiles();
 	    monitor.beginTask(getName(), files.size());
 	    int count = 0;
@@ -69,9 +62,6 @@ public class MaintainabilityIndexEvaluator extends
 			.loadAnalysis(file.getHashId());
 		processFile(analysis);
 	    }
-	    int result = (int) Math.round((double) qualitySum
-		    / (double) qualityCount);
-	    projectQuality = SourceCodeQuality.fromLevel(result);
 	    monitor.done();
 	    return Status.OK_STATUS;
 	} catch (FileStoreException e) {
@@ -88,7 +78,7 @@ public class MaintainabilityIndexEvaluator extends
     }
 
     @Override
-    protected Map<String, SourceCodeQuality> processFile(FileAnalysis analysis)
+    protected MaintainabilityIndexFileResult processFile(FileAnalysis analysis)
 	    throws InterruptedException {
 	ProgrammingLanguage language = ProgrammingLanguages.findByName(
 		analysis.getLanguageName(), analysis.getLanguageVersion());
@@ -103,16 +93,8 @@ public class MaintainabilityIndexEvaluator extends
 		    + codeRange.getName() + "'";
 	    qualities.put(identifier, metric.getQuality());
 	    evaluatorResults.put(identifier, metric.getResults());
-	    addProjectQualityPart(metric.getQuality());
 	}
 	return qualities;
-    }
-
-    private void addProjectQualityPart(SourceCodeQuality level) {
-	if (level != SourceCodeQuality.UNSPECIFIED) {
-	    qualitySum += level.getLevel();
-	    qualityCount++;
-	}
     }
 
     @Override
@@ -123,11 +105,6 @@ public class MaintainabilityIndexEvaluator extends
     @Override
     public MaintainabilityIndexEvaluatorResults getResults() {
 	return null;
-    }
-
-    @Override
-    public SourceCodeQuality getQuality() {
-	return projectQuality;
     }
 
     @Override
