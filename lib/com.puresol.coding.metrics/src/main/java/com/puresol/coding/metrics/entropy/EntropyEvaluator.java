@@ -8,7 +8,6 @@ import com.puresol.coding.analysis.api.CodeRange;
 import com.puresol.coding.analysis.api.FileAnalysis;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.analysis.api.ProgrammingLanguage;
-import com.puresol.coding.evaluation.api.EvaluatorInformation;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.quality.api.QualityCharacteristic;
 
@@ -18,12 +17,11 @@ public class EntropyEvaluator extends
     private static final long serialVersionUID = -5093217611195212999L;
 
     public EntropyEvaluator(AnalysisRun analysisRun) {
-	super(new EvaluatorInformation(EntropyMetric.NAME,
-		EntropyMetric.DESCRIPTION), analysisRun);
+	super(EntropyMetric.NAME, EntropyMetric.DESCRIPTION, analysisRun);
     }
 
     @Override
-    protected EntropyFileResult processFile(FileAnalysis analysis)
+    protected void processFile(FileAnalysis analysis)
 	    throws InterruptedException {
 	EntropyFileResult results = new EntropyFileResult();
 	ProgrammingLanguage language = ProgrammingLanguages.findByName(
@@ -39,7 +37,6 @@ public class EntropyEvaluator extends
 			    + codeRange.getType().getName() + " '"
 			    + codeRange.getName() + "'", metric.getQuality());
 	}
-	return results;
     }
 
     @Override

@@ -20,7 +20,6 @@ import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.evaluation.api.Evaluator;
 import com.puresol.coding.evaluation.api.EvaluatorInformation;
 import com.puresol.coding.evaluation.api.EvaluatorResults;
-import com.puresol.coding.evaluation.api.FileResult;
 import com.puresol.trees.TreeUtils;
 import com.puresol.trees.TreeVisitor;
 import com.puresol.trees.TreeWalker;
@@ -46,10 +45,10 @@ public abstract class AbstractEvaluator<T extends EvaluatorResults> extends Job
     private final Date timeStamp;
     private long timeOfRun;
 
-    public AbstractEvaluator(EvaluatorInformation information,
+    public AbstractEvaluator(String name, String description,
 	    AnalysisRun analysisRun) {
-	super(information.getName());
-	this.information = information;
+	super(name);
+	this.information = new EvaluatorInformation(name, description);
 	this.analysisRun = analysisRun;
 	timeStamp = new Date();
     }
@@ -83,7 +82,7 @@ public abstract class AbstractEvaluator<T extends EvaluatorResults> extends Job
      * @throws IOException
      * @throws FileStoreException
      */
-    abstract protected FileResult processFile(FileAnalysis analysis)
+    abstract protected void processFile(FileAnalysis analysis)
 	    throws InterruptedException;
 
     abstract protected void processDirectory(HashIdFileTree directory)
@@ -137,8 +136,7 @@ public abstract class AbstractEvaluator<T extends EvaluatorResults> extends Job
 	    if (fileStore.wasAnalyzed(tree.getHashId())) {
 		FileAnalysis fileAnalysis = fileStore.loadAnalysis(tree
 			.getHashId());
-		FileResult levels = processFile(fileAnalysis);
-		// save result...
+		processFile(fileAnalysis);
 	    }
 	}
 

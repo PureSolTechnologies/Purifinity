@@ -13,17 +13,17 @@ public class SLOCMetricServiceFactory implements EvaluatorFactory {
 
     @Override
     public String getDescription() {
-	return SLOCMetric.DESCRIPTION;
+	return SLOCMetricCalculator.DESCRIPTION;
     }
 
     @Override
     public String getName() {
-	return SLOCMetric.NAME;
+	return SLOCMetricCalculator.NAME;
     }
 
     @Override
     public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
-	return SLOCMetric.EVALUATED_QUALITY_CHARACTERISTICS;
+	return SLOCMetricCalculator.EVALUATED_QUALITY_CHARACTERISTICS;
     }
 
     @Override

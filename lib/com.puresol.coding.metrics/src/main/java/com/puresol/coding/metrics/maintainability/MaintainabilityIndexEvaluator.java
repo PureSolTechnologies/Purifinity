@@ -21,7 +21,6 @@ import com.puresol.coding.analysis.api.FileStoreException;
 import com.puresol.coding.analysis.api.FileStoreFactory;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.analysis.api.ProgrammingLanguage;
-import com.puresol.coding.evaluation.api.EvaluatorInformation;
 import com.puresol.coding.evaluation.api.Result;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.quality.api.QualityCharacteristic;
@@ -39,8 +38,8 @@ public class MaintainabilityIndexEvaluator extends
     private final FileStore fileStore = FileStoreFactory.getInstance();
 
     public MaintainabilityIndexEvaluator(AnalysisRun analysisRun) {
-	super(new EvaluatorInformation(MaintainabilityIndex.NAME,
-		MaintainabilityIndex.DESCRIPTION), analysisRun);
+	super(MaintainabilityIndex.NAME, MaintainabilityIndex.DESCRIPTION,
+		analysisRun);
     }
 
     @Override
@@ -78,7 +77,7 @@ public class MaintainabilityIndexEvaluator extends
     }
 
     @Override
-    protected MaintainabilityIndexFileResult processFile(FileAnalysis analysis)
+    protected void processFile(FileAnalysis analysis)
 	    throws InterruptedException {
 	ProgrammingLanguage language = ProgrammingLanguages.findByName(
 		analysis.getLanguageName(), analysis.getLanguageVersion());
@@ -94,7 +93,6 @@ public class MaintainabilityIndexEvaluator extends
 	    qualities.put(identifier, metric.getQuality());
 	    evaluatorResults.put(identifier, metric.getResults());
 	}
-	return qualities;
     }
 
     @Override

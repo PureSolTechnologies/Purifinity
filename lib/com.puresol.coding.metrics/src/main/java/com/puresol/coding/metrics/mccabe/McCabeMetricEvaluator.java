@@ -8,7 +8,6 @@ import com.puresol.coding.analysis.api.CodeRange;
 import com.puresol.coding.analysis.api.FileAnalysis;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.analysis.api.ProgrammingLanguage;
-import com.puresol.coding.evaluation.api.EvaluatorInformation;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.quality.api.QualityCharacteristic;
 
@@ -18,12 +17,11 @@ public class McCabeMetricEvaluator extends
     private static final long serialVersionUID = -5093217611195212999L;
 
     public McCabeMetricEvaluator(AnalysisRun analysisRun) {
-	super(new EvaluatorInformation(McCabeMetric.NAME,
-		McCabeMetric.DESCRIPTION), analysisRun);
+	super(McCabeMetric.NAME, McCabeMetric.DESCRIPTION, analysisRun);
     }
 
     @Override
-    protected McCabeMetricFileResult processFile(FileAnalysis analysis)
+    protected void processFile(FileAnalysis analysis)
 	    throws InterruptedException {
 	McCabeMetricFileResult results = new McCabeMetricFileResult();
 	ProgrammingLanguage language = ProgrammingLanguages.findByName(
@@ -39,7 +37,6 @@ public class McCabeMetricEvaluator extends
 			    + codeRange.getType().getName() + " '"
 			    + codeRange.getName() + "'", metric.getQuality());
 	}
-	return results;
     }
 
     @Override

@@ -8,7 +8,6 @@ import com.puresol.coding.analysis.api.CodeRange;
 import com.puresol.coding.analysis.api.FileAnalysis;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.analysis.api.ProgrammingLanguage;
-import com.puresol.coding.evaluation.api.EvaluatorInformation;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.quality.api.QualityCharacteristic;
 
@@ -18,12 +17,11 @@ public class CodeDepthEvaluator extends
     private static final long serialVersionUID = -5093217611195212999L;
 
     public CodeDepthEvaluator(AnalysisRun analysisRun) {
-	super(new EvaluatorInformation(CodeDepthMetric.NAME,
-		CodeDepthMetric.DESCRIPTION), analysisRun);
+	super(CodeDepthMetric.NAME, CodeDepthMetric.DESCRIPTION, analysisRun);
     }
 
     @Override
-    protected CodeDepthFileResult processFile(FileAnalysis analysis)
+    protected void processFile(FileAnalysis analysis)
 	    throws InterruptedException {
 	CodeDepthFileResult results = new CodeDepthFileResult();
 	ProgrammingLanguage language = ProgrammingLanguages.findByName(
@@ -38,7 +36,6 @@ public class CodeDepthEvaluator extends
 			    + codeRange.getType().getName() + " '"
 			    + codeRange.getName() + "'", metric.getQuality());
 	}
-	return results;
     }
 
     @Override

@@ -39,7 +39,7 @@ import com.puresol.uhura.parser.ParserTree;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class SLOCMetric extends CodeRangeEvaluator {
+public class SLOCMetricCalculator extends CodeRangeEvaluator {
 
     public static final String NAME = "SLOC Metric";
 
@@ -97,7 +97,7 @@ public class SLOCMetric extends CodeRangeEvaluator {
     private final CodeRange codeRange;
     private final LanguageDependedSLOCMetric langDepended;
 
-    public SLOCMetric(AnalysisRun analysisRun, ProgrammingLanguage language,
+    public SLOCMetricCalculator(AnalysisRun analysisRun, ProgrammingLanguage language,
 	    CodeRange codeRange) {
 	super(NAME);
 	this.analysisRun = analysisRun;

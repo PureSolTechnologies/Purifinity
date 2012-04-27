@@ -30,10 +30,8 @@ import com.puresol.coding.analysis.api.FileStore;
 import com.puresol.coding.analysis.api.FileStoreException;
 import com.puresol.coding.analysis.api.FileStoreFactory;
 import com.puresol.coding.analysis.api.HashIdFileTree;
-import com.puresol.coding.evaluation.api.EvaluatorInformation;
-import com.puresol.coding.evaluation.api.FileResult;
 import com.puresol.coding.evaluator.AbstractEvaluator;
-import com.puresol.coding.metrics.sloc.SLOCMetric;
+import com.puresol.coding.metrics.sloc.SLOCMetricCalculator;
 import com.puresol.coding.quality.api.QualityCharacteristic;
 import com.puresol.uhura.parser.ParserTree;
 
@@ -63,7 +61,7 @@ public class CoCoMo extends AbstractEvaluator<CoCoMoEvaluatorResults> {
     private final Hashtable<AnalyzedFile, CoCoMoValueSet> fileCoCoMoValues = new Hashtable<AnalyzedFile, CoCoMoValueSet>();
 
     public CoCoMo(AnalysisRun analysisRun) {
-	super(new EvaluatorInformation(NAME, DESCRIPTION), analysisRun);
+	super(NAME, DESCRIPTION, analysisRun);
     }
 
     /**
@@ -117,8 +115,9 @@ public class CoCoMo extends AbstractEvaluator<CoCoMoEvaluatorResults> {
 	    InterruptedException {
 	FileAnalysis analysis = fileStore.loadAnalysis(file.getHashId());
 	ParserTree parserTree = analysis.getParserTree();
-	SLOCMetric metric = new SLOCMetric(getAnalysisRun(),
-		ProgrammingLanguages.findByName(analysis.getLanguageName(),
+	SLOCMetricCalculator metric = new SLOCMetricCalculator(
+		getAnalysisRun(), ProgrammingLanguages.findByName(
+			analysis.getLanguageName(),
 			analysis.getLanguageVersion()), new CodeRange("",
 			CodeRangeType.FILE, parserTree));
 	metric.schedule();
@@ -166,16 +165,14 @@ public class CoCoMo extends AbstractEvaluator<CoCoMoEvaluatorResults> {
     }
 
     @Override
-    protected FileResult processFile(FileAnalysis analysis) {
-	// intentionally left blank
-	return null;
+    protected void processFile(FileAnalysis analysis) {
+	// TODO Auto-generated method stub
     }
 
     @Override
     protected void processDirectory(HashIdFileTree directory)
 	    throws InterruptedException {
 	// TODO Auto-generated method stub
-
     }
 
     @Override

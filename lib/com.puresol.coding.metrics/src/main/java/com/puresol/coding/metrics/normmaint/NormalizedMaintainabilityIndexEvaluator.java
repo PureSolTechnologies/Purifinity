@@ -8,7 +8,6 @@ import com.puresol.coding.analysis.api.CodeRange;
 import com.puresol.coding.analysis.api.FileAnalysis;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.analysis.api.ProgrammingLanguage;
-import com.puresol.coding.evaluation.api.EvaluatorInformation;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.quality.api.QualityCharacteristic;
 
@@ -18,13 +17,13 @@ public class NormalizedMaintainabilityIndexEvaluator extends
     private static final long serialVersionUID = -5093217611195212999L;
 
     public NormalizedMaintainabilityIndexEvaluator(AnalysisRun analysisRun) {
-	super(new EvaluatorInformation(NormalizedMaintainabilityIndex.NAME,
-		NormalizedMaintainabilityIndex.DESCRIPTION), analysisRun);
+	super(NormalizedMaintainabilityIndex.NAME,
+		NormalizedMaintainabilityIndex.DESCRIPTION, analysisRun);
     }
 
     @Override
-    protected NormalizedMaintainabilityIndexFileResult processFile(
-	    FileAnalysis analysis) throws InterruptedException {
+    protected void processFile(FileAnalysis analysis)
+	    throws InterruptedException {
 	NormalizedMaintainabilityIndexFileResult results = new NormalizedMaintainabilityIndexFileResult();
 	ProgrammingLanguage language = ProgrammingLanguages.findByName(
 		analysis.getLanguageName(), analysis.getLanguageVersion());
@@ -39,7 +38,6 @@ public class NormalizedMaintainabilityIndexEvaluator extends
 			    + codeRange.getType().getName() + " '"
 			    + codeRange.getName() + "'", metric.getQuality());
 	}
-	return results;
     }
 
     @Override

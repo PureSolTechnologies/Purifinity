@@ -8,7 +8,6 @@ import com.puresol.coding.analysis.api.CodeRange;
 import com.puresol.coding.analysis.api.FileAnalysis;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.analysis.api.ProgrammingLanguage;
-import com.puresol.coding.evaluation.api.EvaluatorInformation;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.quality.api.QualityCharacteristic;
 
@@ -18,12 +17,11 @@ public class HalsteadMetricEvaluator extends
     private static final long serialVersionUID = -5093217611195212999L;
 
     public HalsteadMetricEvaluator(AnalysisRun analysisRun) {
-	super(new EvaluatorInformation(HalsteadMetric.NAME,
-		HalsteadMetric.DESCRIPTION), analysisRun);
+	super(HalsteadMetric.NAME, HalsteadMetric.DESCRIPTION, analysisRun);
     }
 
     @Override
-    protected HalsteadMetricFileResult processFile(FileAnalysis analysis)
+    protected void processFile(FileAnalysis analysis)
 	    throws InterruptedException {
 	HalsteadMetricFileResult results = new HalsteadMetricFileResult();
 	ProgrammingLanguage language = ProgrammingLanguages.findByName(
@@ -39,7 +37,6 @@ public class HalsteadMetricEvaluator extends
 			    + codeRange.getType().getName() + " '"
 			    + codeRange.getName() + "'", metric.getQuality());
 	}
-	return results;
     }
 
     @Override

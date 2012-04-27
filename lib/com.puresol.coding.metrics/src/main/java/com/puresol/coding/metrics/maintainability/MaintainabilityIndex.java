@@ -24,7 +24,7 @@ import com.puresol.coding.evaluation.api.Result;
 import com.puresol.coding.evaluator.CodeRangeEvaluator;
 import com.puresol.coding.metrics.halstead.HalsteadMetric;
 import com.puresol.coding.metrics.mccabe.McCabeMetric;
-import com.puresol.coding.metrics.sloc.SLOCMetric;
+import com.puresol.coding.metrics.sloc.SLOCMetricCalculator;
 import com.puresol.coding.metrics.sloc.SLOCResult;
 import com.puresol.coding.quality.api.QualityCharacteristic;
 import com.puresol.coding.quality.api.SourceCodeQuality;
@@ -45,7 +45,7 @@ public class MaintainabilityIndex extends CodeRangeEvaluator {
 
     private final AnalysisRun analysisRun;
     private final CodeRange codeRange;
-    private final SLOCMetric slocMetric;
+    private final SLOCMetricCalculator slocMetric;
     private final McCabeMetric mcCabeMetric;
     private final HalsteadMetric halsteadMetric;
     private MaintainabilityIndexResult result;
@@ -55,7 +55,7 @@ public class MaintainabilityIndex extends CodeRangeEvaluator {
 	super(NAME);
 	this.analysisRun = analysisRun;
 	this.codeRange = codeRange;
-	slocMetric = new SLOCMetric(analysisRun, language, getCodeRange());
+	slocMetric = new SLOCMetricCalculator(analysisRun, language, getCodeRange());
 	mcCabeMetric = new McCabeMetric(analysisRun, language, getCodeRange());
 	halsteadMetric = new HalsteadMetric(analysisRun, language,
 		getCodeRange());
