@@ -21,7 +21,6 @@ public class Activator implements BundleActivator {
     public void start(BundleContext context) throws Exception {
 	logger.info("Staring bundle " + getClass().getPackage().getName()
 		+ "...");
-	System.out.println("Hello World!!");
     }
 
     /*

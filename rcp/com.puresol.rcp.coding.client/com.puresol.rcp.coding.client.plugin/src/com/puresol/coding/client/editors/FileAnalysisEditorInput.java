@@ -4,18 +4,19 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
 
-import com.puresol.coding.analysis.api.Analysis;
+import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalyzedFile;
 
 public class FileAnalysisEditorInput implements IEditorInput {
 
     private final AnalyzedFile analyzedFile;
-    private final Analysis analysis;
+    private final AnalysisRun analysisRun;
 
-    public FileAnalysisEditorInput(AnalyzedFile analyzedFile, Analysis analysis) {
+    public FileAnalysisEditorInput(AnalyzedFile analyzedFile,
+	    AnalysisRun analysisRun) {
 	super();
 	this.analyzedFile = analyzedFile;
-	this.analysis = analysis;
+	this.analysisRun = analysisRun;
     }
 
     @Override
@@ -52,8 +53,8 @@ public class FileAnalysisEditorInput implements IEditorInput {
 	return analyzedFile;
     }
 
-    public final Analysis getAnalysis() {
-	return analysis;
+    public final AnalysisRun getAnalysisRun() {
+	return analysisRun;
     }
 
 }

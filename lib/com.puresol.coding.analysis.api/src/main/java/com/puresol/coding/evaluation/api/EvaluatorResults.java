@@ -29,7 +29,7 @@ public interface EvaluatorResults extends Serializable, TimeAwareness {
      * @param hashId
      * @return
      */
-    public FileResult getFileResult(HashId hashId);
+    public FileResults getFileResult(HashId hashId);
 
     /**
      * This method looks for the result of a directory and returns the result
@@ -38,13 +38,13 @@ public interface EvaluatorResults extends Serializable, TimeAwareness {
      * @param hashId
      * @return
      */
-    public DirectoryResult getDirectoryResult(HashId hashId);
+    public DirectoryResults getDirectoryResult(HashId hashId);
 
     /**
      * This method returns the project results.
      * 
      * @return
      */
-    public ProjectResult getProjectResult();
+    public ProjectResults getProjectResult();
 
 }

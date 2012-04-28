@@ -6,17 +6,17 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
 
-import com.puresol.coding.analysis.api.Analysis;
+import com.puresol.coding.analysis.api.AnalysisRun;
 
 public class DirectoryAnalysisEditorInput implements IEditorInput {
 
     private final File directory;
-    private final Analysis analysis;
+    private final AnalysisRun analysisRun;
 
-    public DirectoryAnalysisEditorInput(File directory, Analysis analysis) {
+    public DirectoryAnalysisEditorInput(File directory, AnalysisRun analysisRun) {
 	super();
 	this.directory = directory;
-	this.analysis = analysis;
+	this.analysisRun = analysisRun;
     }
 
     @Override
@@ -53,7 +53,7 @@ public class DirectoryAnalysisEditorInput implements IEditorInput {
 	return directory;
     }
 
-    public final Analysis getAnalysis() {
-	return analysis;
+    public final AnalysisRun getAnalysisRun() {
+	return analysisRun;
     }
 }

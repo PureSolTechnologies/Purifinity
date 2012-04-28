@@ -15,23 +15,19 @@ import com.puresol.coding.analysis.api.FileStoreException;
 import com.puresol.utils.FileUtilities;
 import com.puresol.utils.HashId;
 
-public class FileStoreImpl implements FileStore {
+public final class FileStoreImpl implements FileStore {
 
     private static final String CONTENT_FILE = "content.txt";
     private static final String PARSER_TREE_FILE = "parser_tree.persist";
 
-    private final File fileStoreDirectory;
-
-    public FileStoreImpl() {
-	fileStoreDirectory = new File(AnalysisStoreImpl.getStorageDirectory(),
-		"files");
-    }
+    private static final File fileStoreDirectory = new File(
+	    AnalysisStoreImpl.getStorageDirectory(), "files");
 
     @Override
     public boolean storeFile(HashId hashId, InputStream conent)
 	    throws FileStoreException {
 	try {
-	    File targetDirectory = getFileDirectory(fileStoreDirectory, hashId);
+	    File targetDirectory = getFileDirectory(hashId);
 	    if (!targetDirectory.exists()) {
 		if (!targetDirectory.mkdirs()) {
 		    throw new IOException("Could not create directory '"
@@ -55,7 +51,7 @@ public class FileStoreImpl implements FileStore {
     @Override
     public FileAnalysis loadAnalysis(HashId hashId) throws FileStoreException {
 	try {
-	    File fileDirectory = getFileDirectory(fileStoreDirectory, hashId);
+	    File fileDirectory = getFileDirectory(hashId);
 	    File parserTreeFile = new File(fileDirectory, PARSER_TREE_FILE);
 	    ObjectInputStream inStream = new ObjectInputStream(
 		    new FileInputStream(parserTreeFile));
@@ -76,10 +72,10 @@ public class FileStoreImpl implements FileStore {
     }
 
     @Override
-    public void storeAnalysis(HashId hashId, FileAnalysis fileAnalysis)
+    public final void storeAnalysis(HashId hashId, FileAnalysis fileAnalysis)
 	    throws FileStoreException {
 	try {
-	    File fileDirectory = getFileDirectory(fileStoreDirectory, hashId);
+	    File fileDirectory = getFileDirectory(hashId);
 	    File parserTreeFile = new File(fileDirectory, PARSER_TREE_FILE);
 	    ObjectOutputStream outStream = new ObjectOutputStream(
 		    new FileOutputStream(parserTreeFile));
@@ -96,15 +92,15 @@ public class FileStoreImpl implements FileStore {
     }
 
     @Override
-    public boolean isAvailable(HashId hashId) {
-	return getFileDirectory(fileStoreDirectory, hashId).exists();
+    public final boolean isAvailable(HashId hashId) {
+	return getFileDirectory(hashId).exists();
     }
 
     @Override
-    public InputStream loadContent(HashId hashId) throws FileStoreException {
+    public final InputStream loadContent(HashId hashId)
+	    throws FileStoreException {
 	try {
-	    File file = FileStoreImpl.getFileDirectory(fileStoreDirectory,
-		    hashId);
+	    File file = FileStoreImpl.getFileDirectory(hashId);
 	    return new FileInputStream(new File(file, CONTENT_FILE));
 	} catch (FileNotFoundException e) {
 	    throw new FileStoreException("Could not load file with id '"
@@ -112,7 +108,7 @@ public class FileStoreImpl implements FileStore {
 	}
     }
 
-    static File getFileDirectory(File fileStoreDirectory, HashId hashId) {
+    public static File getFileDirectory(HashId hashId) {
 	String hash = hashId.getHash();
 	String subDir1 = hash.substring(0, 2);
 	String subDir2 = hash.substring(2, 4);
@@ -123,8 +119,8 @@ public class FileStoreImpl implements FileStore {
     }
 
     @Override
-    public boolean wasAnalyzed(HashId hashId) {
-	File fileDirectory = getFileDirectory(fileStoreDirectory, hashId);
+    public final boolean wasAnalyzed(HashId hashId) {
+	File fileDirectory = getFileDirectory(hashId);
 	File parserTreeFile = new File(fileDirectory, PARSER_TREE_FILE);
 	return parserTreeFile.exists();
     }

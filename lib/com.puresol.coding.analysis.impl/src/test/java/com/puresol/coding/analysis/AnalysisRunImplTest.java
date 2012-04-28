@@ -53,8 +53,8 @@ public class AnalysisRunImplTest {
 
     @Test
     public void testGetFileStoreDirectory() {
-	File fileStoreDirectory = FileStoreImpl.getFileDirectory(new File(
-		"test/test2"), new HashId(HashAlgorithm.SHA256, "1234567890"));
+	File fileStoreDirectory = FileStoreImpl.getFileDirectory(new HashId(
+		HashAlgorithm.SHA256, "1234567890"));
 	assertEquals("test/test2/12/34/567890", fileStoreDirectory.getPath());
     }
 

@@ -10,7 +10,7 @@ import org.eclipse.swt.widgets.Tree;
 
 import swing2swt.layout.BorderLayout;
 
-import com.puresol.coding.analysis.api.Analysis;
+import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalyzedFile;
 import com.puresol.coding.analysis.api.FileAnalysis;
 import com.puresol.coding.analysis.api.FileStore;
@@ -55,12 +55,13 @@ public class ParserTreeControl extends Composite {
      * @throws FileStoreException
      */
     public void setContentAndUpdateContent(AnalyzedFile analyzedFile,
-	    Analysis analysis) throws IOException, FileStoreException {
+	    AnalysisRun analysisRun) throws IOException, FileStoreException {
 	FileAnalysis fileAnalysis = fileStore.loadAnalysis(analyzedFile
 		.getHashId());
 	if (fileAnalysis != null) {
-	    lblNewLabel.setText(analysis.getInformation().getName() + ": "
-		    + analyzedFile.getFile());
+	    lblNewLabel.setText(analysisRun.getInformation()
+		    .getAnalysisInformation().getName()
+		    + ": " + analyzedFile.getFile());
 	    treeViewer.setInput(fileAnalysis.getParserTree());
 	} else {
 	    lblNewLabel.setText("");

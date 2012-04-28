@@ -98,14 +98,14 @@ public class AnalysisRunContentBrowserView extends ViewPart implements
 			.findAnalyzedFile(firstElement.getPathFile(false));
 		if (analyzedFile != null) {
 		    FileAnalysisEditorInput fileAnalysisEditorInput = new FileAnalysisEditorInput(
-			    analyzedFile, analysis);
+			    analyzedFile, analysisRun);
 		    getSite().getPage().openEditor(fileAnalysisEditorInput,
 			    FileAnalysisEditor.ID);
 		} else {
 		    if (!analysisRun.getFailedFiles().contains(
 			    firstElement.getPathFile(false))) {
 			DirectoryAnalysisEditorInput directoryAnalysisEditorInput = new DirectoryAnalysisEditorInput(
-				firstElement.getPathFile(false), analysis);
+				firstElement.getPathFile(false), analysisRun);
 			getSite().getPage().openEditor(
 				directoryAnalysisEditorInput,
 				DirectoryAnalysisEditor.ID);

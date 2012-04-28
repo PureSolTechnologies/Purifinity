@@ -8,12 +8,12 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 
-import com.puresol.coding.client.controls.MetricsControl;
+import com.puresol.coding.client.controls.DirectoryMetricsControl;
 
 public class DirectoryAnalysisEditor extends EditorPart {
 
     public static final String ID = "com.puresol.coding.client.DirectoryAnalysisEditor";
-    private MetricsControl metricsControl;
+    private DirectoryMetricsControl metricsControl;
 
     public DirectoryAnalysisEditor() {
 	super();
@@ -22,13 +22,11 @@ public class DirectoryAnalysisEditor extends EditorPart {
     @Override
     public void doSave(IProgressMonitor monitor) {
 	// TODO Auto-generated method stub
-
     }
 
     @Override
     public void doSaveAs() {
 	// TODO Auto-generated method stub
-
     }
 
     @Override
@@ -51,7 +49,9 @@ public class DirectoryAnalysisEditor extends EditorPart {
 
     @Override
     public void createPartControl(Composite parent) {
-	metricsControl = new MetricsControl(parent, SWT.NONE);
+	DirectoryAnalysisEditorInput editorInput = (DirectoryAnalysisEditorInput) getEditorInput();
+	metricsControl = new DirectoryMetricsControl(parent, SWT.NONE,
+		editorInput.getAnalysisRun(), editorInput.getDirectory());
     }
 
     @Override

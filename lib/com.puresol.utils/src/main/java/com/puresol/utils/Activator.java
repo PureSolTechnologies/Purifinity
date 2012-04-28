@@ -20,7 +20,6 @@ public class Activator implements BundleActivator {
     @Override
     public void start(BundleContext context) throws Exception {
 	logger.info("Starting PureSol Technologies utilities...");
-	System.out.println("Hello World!!");
     }
 
     /*

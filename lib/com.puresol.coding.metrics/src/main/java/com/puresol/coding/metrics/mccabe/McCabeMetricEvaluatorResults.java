@@ -2,10 +2,10 @@ package com.puresol.coding.metrics.mccabe;
 
 import java.util.Date;
 
-import com.puresol.coding.evaluation.api.DirectoryResult;
+import com.puresol.coding.evaluation.api.DirectoryResults;
 import com.puresol.coding.evaluation.api.EvaluatorResults;
-import com.puresol.coding.evaluation.api.FileResult;
-import com.puresol.coding.evaluation.api.ProjectResult;
+import com.puresol.coding.evaluation.api.FileResults;
+import com.puresol.coding.evaluation.api.ProjectResults;
 import com.puresol.utils.HashId;
 
 public class McCabeMetricEvaluatorResults implements EvaluatorResults {
@@ -34,19 +34,19 @@ public class McCabeMetricEvaluatorResults implements EvaluatorResults {
     }
 
     @Override
-    public FileResult getFileResult(HashId hashId) {
+    public FileResults getFileResult(HashId hashId) {
 	// TODO Auto-generated method stub
 	return null;
     }
 
     @Override
-    public DirectoryResult getDirectoryResult(HashId hashId) {
+    public DirectoryResults getDirectoryResult(HashId hashId) {
 	// TODO Auto-generated method stub
 	return null;
     }
 
     @Override
-    public ProjectResult getProjectResult() {
+    public ProjectResults getProjectResult() {
 	// TODO Auto-generated method stub
 	return null;
     }

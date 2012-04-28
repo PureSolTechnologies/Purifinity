@@ -179,5 +179,4 @@ public abstract class AbstractEvaluator<T extends EvaluatorResults> extends Job
 	}
 	return Status.OK_STATUS;
     }
-
 }

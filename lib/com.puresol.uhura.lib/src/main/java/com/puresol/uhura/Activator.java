@@ -20,7 +20,6 @@ public class Activator implements BundleActivator {
     @Override
     public void start(BundleContext context) throws Exception {
 	logger.info("Starting Uhura library...");
-	System.out.println("Hello World!!");
     }
 
     /*
@@ -32,7 +31,6 @@ public class Activator implements BundleActivator {
     @Override
     public void stop(BundleContext context) throws Exception {
 	logger.info("Stopping Uhura library...");
-	System.out.println("Goodbye World!!");
     }
 
 }

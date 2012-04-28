@@ -2,6 +2,6 @@ package com.puresol.coding.evaluation.api;
 
 import java.io.Serializable;
 
-public interface DirectoryResult extends Serializable {
+public interface DirectoryResults extends Serializable {
 
 }

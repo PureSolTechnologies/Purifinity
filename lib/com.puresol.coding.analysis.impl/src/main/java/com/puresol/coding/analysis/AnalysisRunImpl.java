@@ -51,8 +51,18 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
     private static final Logger logger = LoggerFactory
 	    .getLogger(AnalysisRunImpl.class);
 
-    public static boolean isAnalysisDirectory(File directory) {
-	return new File(directory, DIRECTORY_FLAG).exists();
+    /**
+     * This method returns the storage directory of the given analysis run.
+     * 
+     * @param analysisRun
+     * @return
+     */
+    public static File getStorageDirectory(AnalysisRun analysisRun) {
+	File analysisStorageDirectory = AnalysisStoreImpl
+		.getStorageDirectory(analysisRun.getInformation()
+			.getAnalysisInformation().getUUID());
+	return new File(analysisStorageDirectory, analysisRun.getInformation()
+		.getUUID().toString());
     }
 
     /**

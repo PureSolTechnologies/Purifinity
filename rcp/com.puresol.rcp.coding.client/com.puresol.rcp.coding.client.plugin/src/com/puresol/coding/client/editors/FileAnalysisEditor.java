@@ -23,7 +23,7 @@ import com.puresol.coding.analysis.api.FileStore;
 import com.puresol.coding.analysis.api.FileStoreException;
 import com.puresol.coding.analysis.api.FileStoreFactory;
 import com.puresol.coding.client.Activator;
-import com.puresol.coding.client.controls.MetricsControl;
+import com.puresol.coding.client.controls.FileMetricsControl;
 import com.puresol.coding.client.controls.ParserTreeControl;
 import com.puresol.coding.client.controls.ScrollableFileViewer;
 import com.puresol.utils.HashId;
@@ -36,7 +36,7 @@ public class FileAnalysisEditor extends EditorPart {
 
     private ScrollableFileViewer fileViewer;
     private ParserTreeControl treeViewer;
-    private MetricsControl metricsControl;
+    private FileMetricsControl metricsControl;
 
     public FileAnalysisEditor() {
 	super();
@@ -101,10 +101,12 @@ public class FileAnalysisEditor extends EditorPart {
 	    TabItem metricsViewerTab = new TabItem(tabFolder, SWT.NONE);
 	    metricsViewerTab.setText("Metrics");
 
-	    metricsControl = new MetricsControl(tabFolder, SWT.NONE);
+	    FileAnalysisEditorInput editorInput = (FileAnalysisEditorInput) getEditorInput();
+
+	    metricsControl = new FileMetricsControl(tabFolder, SWT.NONE,
+		    editorInput.getAnalysisRun(), editorInput.getAnalysisFile());
 	    metricsViewerTab.setControl(metricsControl);
 
-	    FileAnalysisEditorInput editorInput = (FileAnalysisEditorInput) getEditorInput();
 	    HashId hashId = editorInput.getAnalysisFile().getHashId();
 	    FileStore fileStore = FileStoreFactory.getInstance();
 	    InputStream inputStream = fileStore.loadContent(hashId);
@@ -112,7 +114,7 @@ public class FileAnalysisEditor extends EditorPart {
 		fileViewer.setStreamAndUpdateContent(inputStream);
 		treeViewer.setContentAndUpdateContent(
 			editorInput.getAnalysisFile(),
-			editorInput.getAnalysis());
+			editorInput.getAnalysisRun());
 	    } finally {
 		inputStream.close();
 	    }

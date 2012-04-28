@@ -8,18 +8,13 @@ import com.puresol.utils.HashId;
 
 public class DirectoryStoreImpl implements DirectoryStore {
 
-    private final File directoryStoreDirectory;
-
-    public DirectoryStoreImpl() {
-	directoryStoreDirectory = new File(
-		AnalysisStoreImpl.getStorageDirectory(), "dirs");
-    }
+    private static final File directoryStoreDirectory = new File(
+	    AnalysisStoreImpl.getStorageDirectory(), "dirs");
 
     @Override
     public boolean createDirectory(HashId hashId)
 	    throws DirectoryStoreException {
-	File directory = getDirectoryStoreDirectory(directoryStoreDirectory,
-		hashId);
+	File directory = getDirectoryStoreDirectory(hashId);
 	if (!isAvailable(hashId)) {
 	    if (!directory.mkdirs()) {
 		throw new DirectoryStoreException(
@@ -32,13 +27,11 @@ public class DirectoryStoreImpl implements DirectoryStore {
 
     @Override
     public boolean isAvailable(HashId hashId) {
-	File directory = getDirectoryStoreDirectory(directoryStoreDirectory,
-		hashId);
+	File directory = getDirectoryStoreDirectory(hashId);
 	return directory.exists();
     }
 
-    static File getDirectoryStoreDirectory(File directoryStoreDirectory,
-	    HashId hashId) {
+    public static File getDirectoryStoreDirectory(HashId hashId) {
 	String hash = hashId.getHash();
 	String subDir1 = hash.substring(0, 2);
 	String subDir2 = hash.substring(2, 4);
