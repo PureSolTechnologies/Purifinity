@@ -1,28 +1,7 @@
 Manifest-Version: 1.0
-Export-Package: com.puresol.coding.lang.fortran;
-  uses:="com.puresol.coding,
-   org.osgi.framework,
-   org.slf4j,
-   com.puresol.utils,
-   com.puresol.coding.analysis,
-   com.puresol.uhura.parser,
-   com.puresol.trees,
-   com.puresol.uhura.lexer,
-   com.puresol.coding.lang.fortran.grammar,
-   com.puresol.uhura.grammar.token",
- com.puresol.coding.lang.fortran.grammar;
-  uses:="com.puresol.utils,
-   com.puresol.uhura.parser,
-   com.puresol.uhura.lexer,
-   com.puresol.uhura.grammar",
- utils;
-  uses:="com.puresol.utils,
-   com.puresol.packages,
-   com.puresol.uhura.parser,
-   com.puresol.uhura.lexer,
-   com.puresol.uhura.grammar,
-   org.slf4j,
-   com.puresol.coding.lang.fortran.grammar"
+Export-Package: com.puresol.coding.lang.fortran,
+ com.puresol.coding.lang.fortran.grammar,
+ com.puresol.coding.lang.fortran.metrics
 Built-By: ludwig
 Tool: Bnd-0.0.357
 Bundle-Name: com.puresol.coding.lang.fortran
@@ -38,7 +17,17 @@ Originally-Created-By: Apache Maven Bundle Plugin
 Bundle-Activator: com.puresol.coding.lang.fortran.Activator
 Import-Package: com.puresol.coding;version="0.1.0",
  com.puresol.coding.analysis.api;version="0.1.0",
+ com.puresol.coding.metrics.codedepth;version="0.1.0",
+ com.puresol.coding.metrics.halstead;version="0.1.0",
+ com.puresol.coding.metrics.mccabe;version="0.1.0",
+ com.puresol.coding.metrics.sloc;version="0.1.0",
+ com.puresol.packages;version="0.1.0",
  com.puresol.trees;version="0.1.0",
  com.puresol.uhura.grammar;version="0.1.0",
+ com.puresol.uhura.grammar.production;version="0.1.0",
+ com.puresol.uhura.grammar.token;version="0.1.0",
+ com.puresol.uhura.lexer;version="0.1.0",
+ com.puresol.uhura.parser;version="0.1.0",
+ com.puresol.utils;version="0.1.0",
  org.osgi.framework;version="0.0.0",
  org.slf4j;version="1.6.1"

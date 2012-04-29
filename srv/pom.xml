@@ -17,7 +17,6 @@
 	<modules>
 		<module>database</module>
 		<module>jboss</module>
-		<module>osgi</module>
 	</modules>
 
 	<repositories>

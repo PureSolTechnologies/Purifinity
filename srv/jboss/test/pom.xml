@@ -29,5 +29,23 @@
 		</dependency>
 	</dependencies>
 
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.cargo</groupId>
+				<artifactId>cargo-maven2-plugin</artifactId>
+				<configuration>
+					<deployer>
+						<deployables>
+							<deplayable>
+								<groupId>com.puresol</groupId>
+								<artifactId>trees</artifactId>
+							</deplayable>
+						</deployables>
+					</deployer>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 
 </project>

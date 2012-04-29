@@ -1,6 +1,6 @@
 package com.puresol.coding.lang.fortran;
 
-import java.util.Dictionary;
+import java.util.Hashtable;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -31,10 +31,9 @@ public class Activator implements BundleActivator {
 	Fortran fortran = Fortran.getInstance();
 	fortran.setBundleContext(context);
 
-	Dictionary<?, ?> headers = context.getBundle().getHeaders();
-
 	registration = context.registerService(
-		ProgrammingLanguage.class.getName(), fortran, headers);
+		ProgrammingLanguage.class.getName(), fortran,
+		new Hashtable<String, String>());
 
 	logger.info("Started.");
     }

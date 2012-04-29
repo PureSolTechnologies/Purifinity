@@ -1,6 +1,6 @@
 package com.puresol.coding.lang.java;
 
-import java.util.Dictionary;
+import java.util.Hashtable;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -35,9 +35,9 @@ public class Activator implements BundleActivator {
 	Activator.bundleContext = context;
 	logger.info("Starting Java Language Pack...");
 	Java java = Java.getInstance();
-	Dictionary<?, ?> headers = context.getBundle().getHeaders();
 	registration = context.registerService(
-		ProgrammingLanguage.class.getName(), java, headers);
+		ProgrammingLanguage.class.getName(), java,
+		new Hashtable<String, String>());
 
 	logger.info("Started.");
     }
