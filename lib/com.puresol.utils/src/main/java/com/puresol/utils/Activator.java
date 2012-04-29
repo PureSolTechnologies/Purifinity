@@ -31,7 +31,6 @@ public class Activator implements BundleActivator {
     @Override
     public void stop(BundleContext context) throws Exception {
 	logger.info("Stopping PureSol Technologies utilities...");
-	System.out.println("Goodbye World!!");
     }
 
 }
