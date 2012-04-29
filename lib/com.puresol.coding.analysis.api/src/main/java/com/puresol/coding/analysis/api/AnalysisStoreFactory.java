@@ -23,10 +23,11 @@ public class AnalysisStoreFactory {
     private static synchronized void createInstance() {
 	if (analysisStore == null) {
 	    BundleContext bundleContext = Activator.getBundleContext();
-	    ServiceReference<AnalysisStore> serviceReference = bundleContext
-		    .getServiceReference(AnalysisStore.class);
+	    ServiceReference serviceReference = bundleContext
+		    .getServiceReference(AnalysisStore.class.getName());
 	    if (serviceReference != null) {
-		analysisStore = bundleContext.getService(serviceReference);
+		analysisStore = (AnalysisStore) bundleContext
+			.getService(serviceReference);
 	    }
 	}
     }

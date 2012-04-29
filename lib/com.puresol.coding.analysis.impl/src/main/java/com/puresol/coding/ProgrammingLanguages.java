@@ -1,7 +1,6 @@
 package com.puresol.coding;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.osgi.framework.BundleContext;
@@ -34,11 +33,13 @@ public class ProgrammingLanguages {
     public static List<ProgrammingLanguage> getAll() {
 	try {
 	    BundleContext context = Activator.getBundleContext();
-	    Collection<ServiceReference<ProgrammingLanguage>> serviceReferences = context
-		    .getServiceReferences(ProgrammingLanguage.class, null);
+	    ServiceReference[] serviceReferences = context
+		    .getServiceReferences(ProgrammingLanguage.class.getName(),
+			    null);
 	    List<ProgrammingLanguage> services = new ArrayList<ProgrammingLanguage>();
-	    for (ServiceReference<ProgrammingLanguage> serviceReference : serviceReferences) {
-		services.add(context.getService(serviceReference));
+	    for (ServiceReference serviceReference : serviceReferences) {
+		services.add((ProgrammingLanguage) context
+			.getService(serviceReference));
 	    }
 	    return services;
 	} catch (InvalidSyntaxException e) {

@@ -1,7 +1,5 @@
 package com.puresol.coding.evaluator;
 
-import java.util.Collection;
-
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
@@ -22,15 +20,13 @@ public class EvaluationResultsStoreImpl implements EvaluationResultsStore {
 	    Class<? extends Evaluator<? extends EvaluatorResults>> evaluator) {
 	try {
 	    BundleContext bundleContext = Activator.getBundleContext();
-	    @SuppressWarnings("rawtypes")
-	    Collection<ServiceReference<EvaluatorStore>> serviceReferences = bundleContext
-		    .getServiceReferences(EvaluatorStore.class, "(evaluator="
-			    + evaluator.getClass().getName() + ")");
-	    @SuppressWarnings("rawtypes")
-	    ServiceReference<EvaluatorStore> serviceReference = serviceReferences
-		    .iterator().next();
+	    ServiceReference[] serviceReferences = bundleContext
+		    .getServiceReferences(EvaluatorStore.class.getName(),
+			    "(evaluator=" + evaluator.getClass().getName()
+				    + ")");
+	    ServiceReference serviceReference = serviceReferences[0];
 	    @SuppressWarnings("unchecked")
-	    EvaluatorStore<FileResults, DirectoryResults, ProjectResults> store = bundleContext
+	    EvaluatorStore<FileResults, DirectoryResults, ProjectResults> store = (EvaluatorStore<FileResults, DirectoryResults, ProjectResults>) bundleContext
 		    .getService(serviceReference);
 	    return store;
 	} catch (InvalidSyntaxException e) {

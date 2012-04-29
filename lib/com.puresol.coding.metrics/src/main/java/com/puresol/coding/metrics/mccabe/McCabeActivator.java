@@ -17,7 +17,7 @@ public class McCabeActivator implements BundleActivator {
     private static final Logger logger = LoggerFactory
 	    .getLogger(McCabeActivator.class);
 
-    private final List<ServiceRegistration<?>> serviceRegistrations = new ArrayList<ServiceRegistration<?>>();
+    private final List<ServiceRegistration> serviceRegistrations = new ArrayList<ServiceRegistration>();
 
     @Override
     public void start(BundleContext context) throws Exception {
@@ -30,10 +30,10 @@ public class McCabeActivator implements BundleActivator {
 
     private void registerFactory(BundleContext context) {
 	McCabeMetricServiceFactory mcCabeMetricFactory = new McCabeMetricServiceFactory();
-	Dictionary<String, String> headers = context.getBundle().getHeaders();
+	Dictionary<?, ?> headers = context.getBundle().getHeaders();
 
-	ServiceRegistration<?> registration = context.registerService(
-		EvaluatorFactory.class, mcCabeMetricFactory, headers);
+	ServiceRegistration registration = context.registerService(
+		EvaluatorFactory.class.getName(), mcCabeMetricFactory, headers);
 	serviceRegistrations.add(registration);
     }
 
@@ -41,7 +41,7 @@ public class McCabeActivator implements BundleActivator {
     public void stop(BundleContext context) throws Exception {
 	logger.info("Stopping McCabe...");
 
-	for (ServiceRegistration<?> registration : serviceRegistrations) {
+	for (ServiceRegistration registration : serviceRegistrations) {
 	    registration.unregister();
 	}
 	serviceRegistrations.clear();

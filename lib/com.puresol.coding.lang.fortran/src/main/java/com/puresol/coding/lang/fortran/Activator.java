@@ -22,7 +22,7 @@ public class Activator implements BundleActivator {
     private static final Logger logger = LoggerFactory
 	    .getLogger(Activator.class);
 
-    private ServiceRegistration<?> registration = null;
+    private ServiceRegistration registration = null;
 
     @Override
     public void start(BundleContext context) throws Exception {
@@ -31,10 +31,10 @@ public class Activator implements BundleActivator {
 	Fortran fortran = Fortran.getInstance();
 	fortran.setBundleContext(context);
 
-	Dictionary<String, String> headers = context.getBundle().getHeaders();
+	Dictionary<?, ?> headers = context.getBundle().getHeaders();
 
-	registration = context.registerService(ProgrammingLanguage.class,
-		fortran, headers);
+	registration = context.registerService(
+		ProgrammingLanguage.class.getName(), fortran, headers);
 
 	logger.info("Started.");
     }

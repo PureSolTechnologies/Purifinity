@@ -17,7 +17,7 @@ public class EntropyActivator implements BundleActivator {
     private static final Logger logger = LoggerFactory
 	    .getLogger(EntropyActivator.class);
 
-    private final List<ServiceRegistration<?>> serviceRegistrations = new ArrayList<ServiceRegistration<?>>();
+    private final List<ServiceRegistration> serviceRegistrations = new ArrayList<ServiceRegistration>();
 
     @Override
     public void start(BundleContext context) throws Exception {
@@ -30,10 +30,11 @@ public class EntropyActivator implements BundleActivator {
 
     private void registerFactory(BundleContext context) {
 	EntropyMetricServiceFactory entropyMetricFactory = new EntropyMetricServiceFactory();
-	Dictionary<String, String> headers = context.getBundle().getHeaders();
+	Dictionary<?, ?> headers = context.getBundle().getHeaders();
 
-	ServiceRegistration<?> registration = context.registerService(
-		EvaluatorFactory.class, entropyMetricFactory, headers);
+	ServiceRegistration registration = context
+		.registerService(EvaluatorFactory.class.getName(),
+			entropyMetricFactory, headers);
 	serviceRegistrations.add(registration);
     }
 
@@ -41,7 +42,7 @@ public class EntropyActivator implements BundleActivator {
     public void stop(BundleContext context) throws Exception {
 	logger.info("Stopping Entropy...");
 
-	for (ServiceRegistration<?> registration : serviceRegistrations) {
+	for (ServiceRegistration registration : serviceRegistrations) {
 	    registration.unregister();
 	}
 	serviceRegistrations.clear();

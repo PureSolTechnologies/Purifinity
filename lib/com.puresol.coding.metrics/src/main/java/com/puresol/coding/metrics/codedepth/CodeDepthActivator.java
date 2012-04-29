@@ -17,7 +17,7 @@ public class CodeDepthActivator implements BundleActivator {
     private static final Logger logger = LoggerFactory
 	    .getLogger(CodeDepthActivator.class);
 
-    private final List<ServiceRegistration<?>> serviceRegistrations = new ArrayList<ServiceRegistration<?>>();
+    private final List<ServiceRegistration> serviceRegistrations = new ArrayList<ServiceRegistration>();
 
     @Override
     public void start(BundleContext context) throws Exception {
@@ -31,8 +31,8 @@ public class CodeDepthActivator implements BundleActivator {
 	CodeDepthMetricServiceFactory codeDepthFactory = new CodeDepthMetricServiceFactory();
 	Dictionary<String, String> headers = context.getBundle().getHeaders();
 
-	ServiceRegistration<?> registration = context.registerService(
-		EvaluatorFactory.class, codeDepthFactory, headers);
+	ServiceRegistration registration = context.registerService(
+		EvaluatorFactory.class.getName(), codeDepthFactory, headers);
 	serviceRegistrations.add(registration);
     }
 
@@ -40,7 +40,7 @@ public class CodeDepthActivator implements BundleActivator {
     public void stop(BundleContext context) throws Exception {
 	logger.info("Stopping CodeDepth...");
 
-	for (ServiceRegistration<?> registration : serviceRegistrations) {
+	for (ServiceRegistration registration : serviceRegistrations) {
 	    registration.unregister();
 	}
 	serviceRegistrations.clear();

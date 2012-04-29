@@ -1,23 +1,12 @@
 Manifest-Version: 1.0
-Export-Package: com.puresol.coding.analysis;uses:="com.puresol.utils,o
- rg.slf4j,org.osgi.framework,com.puresol.coding,com.puresol.uhura.pars
- er,org.eclipse.core.runtime.jobs,org.eclipse.core.runtime",com.pureso
- l.coding.evaluator;uses:="org.eclipse.core.runtime.jobs,com.puresol.c
- oding.quality,com.puresol.coding,com.puresol.coding.analysis,org.osgi
- .framework,org.slf4j,org.eclipse.core.runtime",com.puresol.coding.qua
- lity;uses:="com.puresol.utils,org.slf4j",com.puresol.coding;uses:="co
- m.puresol.utils,com.puresol.uhura.parser,com.puresol.coding.analysis,
- org.osgi.framework,org.slf4j"
+Export-Package: com.puresol.coding,
+ com.puresol.coding.analysis,
+ com.puresol.coding.evaluator
 Built-By: ludwig
 Tool: Bnd-0.0.357
 Bundle-Name: com.puresol.coding.analysis.impl
 Created-By: Apache Maven Bundle Plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Require-Bundle: org.slf4j.api;bundle-version="1.6.1",
- org.eclipse.core.jobs;bundle-version="3.5.101",
- com.puresol.trees;bundle-version="0.1.0",
- com.puresol.uhura.lib;bundle-version="0.1.0",
- com.puresol.coding.analysis.api;bundle-version="0.1.0"
 Bundle-Vendor: PureSol Technologies
 Build-Jdk: 1.6.0_22
 Bundle-Version: 0.1.0.SNAPSHOT
@@ -27,4 +16,17 @@ Bundle-ManifestVersion: 2
 Bundle-SymbolicName: com.puresol.coding.analysis.impl
 Originally-Created-By: Apache Maven Bundle Plugin
 Bundle-ActivationPolicy: lazy
+Import-Package: com.puresol.coding.analysis.api;version="0.1.0",
+ com.puresol.coding.evaluation.api;version="0.1.0",
+ com.puresol.coding.quality.api;version="0.1.0",
+ com.puresol.data;version="0.1.0",
+ com.puresol.trees;version="0.1.0",
+ com.puresol.uhura.grammar.token;version="0.1.0",
+ com.puresol.uhura.lexer;version="0.1.0",
+ com.puresol.uhura.parser;version="0.1.0",
+ com.puresol.utils;version="0.1.0",
+ org.eclipse.core.runtime;version="3.4.0";resolution:=optional,
+ org.eclipse.core.runtime.jobs;resolution:=optional,
+ org.osgi.framework;version="0.0.0",
+ org.slf4j;version="1.6.1"
 

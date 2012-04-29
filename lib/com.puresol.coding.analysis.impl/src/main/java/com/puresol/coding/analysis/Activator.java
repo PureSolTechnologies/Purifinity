@@ -15,10 +15,10 @@ import com.puresol.coding.evaluator.EvaluationResultsStoreImpl;
 public class Activator implements BundleActivator {
 
     private static BundleContext context = null;
-    private ServiceRegistration<AnalysisStore> analysisStoreService;
-    private ServiceRegistration<FileStore> fileStoreService;
-    private ServiceRegistration<DirectoryStore> directoryStoreService;
-    private ServiceRegistration<EvaluationResultsStore> evaluationResultsStoreService;
+    private ServiceRegistration analysisStoreService;
+    private ServiceRegistration fileStoreService;
+    private ServiceRegistration directoryStoreService;
+    private ServiceRegistration evaluationResultsStoreService;
 
     /*
      * (non-Javadoc)
@@ -34,14 +34,17 @@ public class Activator implements BundleActivator {
 		    + " was already activated!");
 	}
 	Activator.context = context;
-	analysisStoreService = context.registerService(AnalysisStore.class,
-		new AnalysisStoreImpl(), new Hashtable<String, Object>());
-	fileStoreService = context.registerService(FileStore.class,
+	analysisStoreService = context.registerService(
+		AnalysisStore.class.getName(), new AnalysisStoreImpl(),
+		new Hashtable<String, Object>());
+	fileStoreService = context.registerService(FileStore.class.getName(),
 		new FileStoreImpl(), new Hashtable<String, Object>());
-	directoryStoreService = context.registerService(DirectoryStore.class,
-		new DirectoryStoreImpl(), new Hashtable<String, Object>());
+	directoryStoreService = context.registerService(
+		DirectoryStore.class.getName(), new DirectoryStoreImpl(),
+		new Hashtable<String, Object>());
 	evaluationResultsStoreService = context.registerService(
-		EvaluationResultsStore.class, new EvaluationResultsStoreImpl(),
+		EvaluationResultsStore.class.getName(),
+		new EvaluationResultsStoreImpl(),
 		new Hashtable<String, Object>());
     }
 

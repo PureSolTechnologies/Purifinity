@@ -24,7 +24,7 @@ public class Activator implements BundleActivator {
 
     private static BundleContext bundleContext;
 
-    private ServiceRegistration<?> registration;
+    private ServiceRegistration registration;
 
     @Override
     public void start(BundleContext context) throws Exception {
@@ -35,9 +35,9 @@ public class Activator implements BundleActivator {
 	Activator.bundleContext = context;
 	logger.info("Starting Java Language Pack...");
 	Java java = Java.getInstance();
-	Dictionary<String, String> headers = context.getBundle().getHeaders();
-	registration = context.registerService(ProgrammingLanguage.class, java,
-		headers);
+	Dictionary<?, ?> headers = context.getBundle().getHeaders();
+	registration = context.registerService(
+		ProgrammingLanguage.class.getName(), java, headers);
 
 	logger.info("Started.");
     }

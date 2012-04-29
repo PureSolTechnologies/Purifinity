@@ -17,7 +17,7 @@ public class NormalizedMaintainabilityActivator implements BundleActivator {
     private static final Logger logger = LoggerFactory
 	    .getLogger(NormalizedMaintainabilityActivator.class);
 
-    private final List<ServiceRegistration<?>> serviceRegistrations = new ArrayList<ServiceRegistration<?>>();
+    private final List<ServiceRegistration> serviceRegistrations = new ArrayList<ServiceRegistration>();
 
     @Override
     public void start(BundleContext context) throws Exception {
@@ -30,11 +30,11 @@ public class NormalizedMaintainabilityActivator implements BundleActivator {
 
     private void registerFactory(BundleContext context) {
 	NormalizedMaintainabilityIndexEvaluatorFactory normalizedMaintainabilityIndexFactory = new NormalizedMaintainabilityIndexEvaluatorFactory();
-	Dictionary<String, String> headers = context.getBundle().getHeaders();
+	Dictionary<?, ?> headers = context.getBundle().getHeaders();
 
-	ServiceRegistration<?> registration = context.registerService(
-		EvaluatorFactory.class, normalizedMaintainabilityIndexFactory,
-		headers);
+	ServiceRegistration registration = context.registerService(
+		EvaluatorFactory.class.getName(),
+		normalizedMaintainabilityIndexFactory, headers);
 	serviceRegistrations.add(registration);
     }
 
@@ -42,7 +42,7 @@ public class NormalizedMaintainabilityActivator implements BundleActivator {
     public void stop(BundleContext context) throws Exception {
 	logger.info("Stopping Normalized Maintainability Index...");
 
-	for (ServiceRegistration<?> registration : serviceRegistrations) {
+	for (ServiceRegistration registration : serviceRegistrations) {
 	    registration.unregister();
 	}
 	serviceRegistrations.clear();

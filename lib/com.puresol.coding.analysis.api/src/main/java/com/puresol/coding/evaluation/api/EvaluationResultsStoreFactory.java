@@ -19,10 +19,11 @@ public class EvaluationResultsStoreFactory {
     private static synchronized void createInstance() {
 	if (resultsStore == null) {
 	    BundleContext bundleContext = Activator.getBundleContext();
-	    ServiceReference<EvaluationResultsStore> serviceReference = bundleContext
-		    .getServiceReference(EvaluationResultsStore.class);
+	    ServiceReference serviceReference = bundleContext
+		    .getServiceReference(EvaluationResultsStore.class.getName());
 	    if (serviceReference != null) {
-		resultsStore = bundleContext.getService(serviceReference);
+		resultsStore = (EvaluationResultsStore) bundleContext
+			.getService(serviceReference);
 	    }
 	}
     }
