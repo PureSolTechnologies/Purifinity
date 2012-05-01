@@ -1,7 +1,6 @@
 package com.puresol.coding.evaluator;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.Date;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -39,8 +38,7 @@ import com.puresol.utils.StopWatch;
  * @author Rick-Rainer Ludwig
  * 
  */
-public abstract class AbstractEvaluator extends Job implements Serializable,
-	Evaluator {
+public abstract class AbstractEvaluator extends Job implements Evaluator {
 
     private static final long serialVersionUID = -497819792461488182L;
 
@@ -196,6 +194,14 @@ public abstract class AbstractEvaluator extends Job implements Serializable,
 	    ServiceReference[] serviceReferences = bundleContext
 		    .getServiceReferences(EvaluatorStore.class.getName(),
 			    "(evaluator=" + clazz.getName() + ")");
+	    if (serviceReferences.length == 0) {
+		return null;
+	    }
+	    if (serviceReferences.length > 1) {
+		throw new RuntimeException(
+			"More than one evaluator store was registered for '"
+				+ clazz.getName() + "'!");
+	    }
 	    ServiceReference serviceReference = serviceReferences[0];
 	    EvaluatorStore store = (EvaluatorStore) bundleContext
 		    .getService(serviceReference);

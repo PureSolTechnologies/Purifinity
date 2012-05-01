@@ -13,12 +13,12 @@ public class CoCoMoServiceFactory implements EvaluatorFactory {
 
     @Override
     public String getDescription() {
-	return CoCoMo.DESCRIPTION;
+	return CoCoMoEvaluator.DESCRIPTION;
     }
 
     @Override
     public String getName() {
-	return CoCoMo.NAME;
+	return CoCoMoEvaluator.NAME;
     }
 
     /**
@@ -33,8 +33,8 @@ public class CoCoMoServiceFactory implements EvaluatorFactory {
     }
 
     @Override
-    public CoCoMo create(AnalysisRun analysisRun) {
-	return new CoCoMo(analysisRun);
+    public CoCoMoEvaluator create(AnalysisRun analysisRun) {
+	return new CoCoMoEvaluator(analysisRun);
     }
 
     @Override
