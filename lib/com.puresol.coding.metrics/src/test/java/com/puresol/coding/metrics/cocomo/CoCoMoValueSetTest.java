@@ -30,7 +30,7 @@ public class CoCoMoValueSetTest {
 	assertEquals(12345.67, set.getAverageSalary(), 1e-8);
 	assertEquals("EUR", set.getCurrency());
 	assertEquals(Complexity.HIGH, set.getComplexity());
-	assertEquals(1234567, set.getSloc());
+	assertEquals(1234567, set.getPhyLOC());
     }
 
     @Test
@@ -62,7 +62,7 @@ public class CoCoMoValueSetTest {
 	assertEquals(50000.0, set.getAverageSalary(), 1e-8);
 	assertEquals("$", set.getCurrency());
 	assertEquals(Complexity.LOW, set.getComplexity());
-	assertEquals(100000, set.getSloc());
+	assertEquals(100000, set.getPhyLOC());
 
 	assertEquals(3021.6, set.getEstimatedCosts(), 1e-8);
 	assertEquals(100.0, set.getKsloc(), 1e-8);

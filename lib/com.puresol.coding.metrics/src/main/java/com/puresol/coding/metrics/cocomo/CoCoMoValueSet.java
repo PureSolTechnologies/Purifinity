@@ -13,7 +13,7 @@ public class CoCoMoValueSet implements ProjectResults, DirectoryResults,
 
     private static final long serialVersionUID = 4950771316767641215L;
 
-    private int sloc;
+    private int phyLOC;
     private double ksloc;
     private double personMonth;
     private double personYears;
@@ -38,8 +38,8 @@ public class CoCoMoValueSet implements ProjectResults, DirectoryResults,
     /**
      * @return the sloc
      */
-    public int getSloc() {
-	return sloc;
+    public int getPhyLOC() {
+	return phyLOC;
     }
 
     /**
@@ -47,7 +47,7 @@ public class CoCoMoValueSet implements ProjectResults, DirectoryResults,
      *            the sloc to set
      */
     public void setSloc(int sloc) {
-	this.sloc = sloc;
+	this.phyLOC = sloc;
 	refresh();
     }
 
@@ -180,7 +180,7 @@ public class CoCoMoValueSet implements ProjectResults, DirectoryResults,
     }
 
     private void calculate() {
-	ksloc = sloc / 1000.0;
+	ksloc = phyLOC / 1000.0;
 	personMonth = Math.round(c1 * Math.exp(c2 * Math.log(ksloc)) * 100.0) / 100.0;
 	personYears = Math.round(personMonth / 12.0 * 100.0) / 100.0;
 	scheduledMonth = Math
@@ -218,7 +218,7 @@ public class CoCoMoValueSet implements ProjectResults, DirectoryResults,
     @Override
     public String toString() {
 	String text = "Total Physical Source Lines of Code (SLOC)"
-		+ "                = " + sloc + "\n";
+		+ "                = " + phyLOC + "\n";
 	text += "Calculation for a " + complexity.getIdentifier()
 		+ " complexity project.\n";
 	text += "Development Effort Estimate, Person-Years (Person-Months) = "
