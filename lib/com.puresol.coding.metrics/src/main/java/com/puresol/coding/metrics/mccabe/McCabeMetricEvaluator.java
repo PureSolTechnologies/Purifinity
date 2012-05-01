@@ -5,24 +5,30 @@ import java.util.List;
 import com.puresol.coding.ProgrammingLanguages;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.CodeRange;
+import com.puresol.coding.analysis.api.CodeRangeType;
 import com.puresol.coding.analysis.api.FileAnalysis;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.analysis.api.ProgrammingLanguage;
+import com.puresol.coding.evaluation.api.EvaluatorStore;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.quality.api.QualityCharacteristic;
+import com.puresol.utils.HashId;
 
 public class McCabeMetricEvaluator extends AbstractEvaluator {
 
     private static final long serialVersionUID = -5093217611195212999L;
 
+    private final EvaluatorStore store;
+
     public McCabeMetricEvaluator(AnalysisRun analysisRun) {
 	super(McCabeMetric.NAME, McCabeMetric.DESCRIPTION, analysisRun);
+	store = getEvaluatorStore();
     }
 
     @Override
     protected void processFile(FileAnalysis analysis)
 	    throws InterruptedException {
-	McCabeMetricFileResult results = new McCabeMetricFileResult();
+	McCabeMetricFileResults results = new McCabeMetricFileResults();
 	ProgrammingLanguage language = ProgrammingLanguages.findByName(
 		analysis.getLanguageName(), analysis.getLanguageVersion());
 
@@ -31,11 +37,12 @@ public class McCabeMetricEvaluator extends AbstractEvaluator {
 		    codeRange);
 	    metric.schedule();
 	    metric.join();
-	    results.put(
-		    analysis.getAnalyzedFile().getFile().getPath() + ": "
-			    + codeRange.getType().getName() + " '"
-			    + codeRange.getName() + "'", metric.getQuality());
+	    results.add(new McCabeMetricFileResult(analysis.getAnalyzedFile()
+		    .getFile().getPath(), codeRange.getType(), codeRange
+		    .getName(), metric.getCyclomaticNumber(), metric
+		    .getQuality()));
 	}
+	store.storeFileResults(analysis.getAnalyzedFile().getHashId(), results);
     }
 
     @Override
@@ -46,8 +53,35 @@ public class McCabeMetricEvaluator extends AbstractEvaluator {
     @Override
     protected void processDirectory(HashIdFileTree directory)
 	    throws InterruptedException {
-	// TODO Auto-generated method stub
-
+	McCabeMetricDirectoryResults finalResults = new McCabeMetricDirectoryResults();
+	for (HashIdFileTree child : directory.getChildren()) {
+	    HashId hashId = child.getHashId();
+	    if (child.isFile()) {
+		if (store.hasFileResults(hashId)) {
+		    McCabeMetricFileResults fileResults = (McCabeMetricFileResults) store
+			    .readFileResults(hashId);
+		    for (McCabeMetricFileResult results : fileResults) {
+			if (results.getCodeRangeType() == CodeRangeType.FILE) {
+			    finalResults.add(new McCabeMetricDirectoryResult(
+				    results.getFile(), results
+					    .getCyclomaticComplexity()));
+			}
+		    }
+		}
+	    } else {
+		if (store.hasDirectoryResults(hashId)) {
+		    McCabeMetricDirectoryResults directoryResults = (McCabeMetricDirectoryResults) store
+			    .readDirectoryResults(hashId);
+		    int cyclomaticComplexity = 0;
+		    for (McCabeMetricDirectoryResult result : directoryResults) {
+			cyclomaticComplexity += result.getvG();
+		    }
+		    finalResults.add(new McCabeMetricDirectoryResult(child
+			    .getName(), cyclomaticComplexity));
+		}
+	    }
+	}
+	store.storeDirectoryResults(directory.getHashId(), finalResults);
     }
 
     @Override

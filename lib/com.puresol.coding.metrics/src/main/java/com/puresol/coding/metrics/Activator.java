@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.puresol.coding.metrics.cocomo.CoCoMoActivator;
+import com.puresol.coding.metrics.mccabe.McCabeActivator;
 import com.puresol.coding.metrics.sloc.SLOCActivator;
 
 /**
@@ -46,7 +47,7 @@ public class Activator implements BundleActivator {
 	// TODO bundleActivators.add(new EntropyActivator());
 	// TODO bundleActivators.add(new HalsteadActivator());
 	// TODO bundleActivators.add(new MaintainabilityActivator());
-	// TODO bundleActivators.add(new McCabeActivator());
+	bundleActivators.add(new McCabeActivator());
 	// TODO bundleActivators.add(new NormalizedMaintainabilityActivator());
 	bundleActivators.add(new SLOCActivator());
 	for (BundleActivator activator : bundleActivators) {
