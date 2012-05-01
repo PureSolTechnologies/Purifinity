@@ -8,6 +8,7 @@ import com.puresol.coding.analysis.api.CodeRange;
 import com.puresol.coding.analysis.api.FileAnalysis;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.analysis.api.ProgrammingLanguage;
+import com.puresol.coding.evaluation.api.EvaluatorStore;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.quality.api.QualityCharacteristic;
 
@@ -15,8 +16,11 @@ public class CodeDepthEvaluator extends AbstractEvaluator {
 
     private static final long serialVersionUID = -5093217611195212999L;
 
+    private final EvaluatorStore store;
+
     public CodeDepthEvaluator(AnalysisRun analysisRun) {
 	super(CodeDepthMetric.NAME, CodeDepthMetric.DESCRIPTION, analysisRun);
+	store = getEvaluatorStore();
     }
 
     @Override
@@ -34,6 +38,7 @@ public class CodeDepthEvaluator extends AbstractEvaluator {
 		    .getFile().getPath(), codeRange.getType(), codeRange
 		    .getName(), metric.getMaxDepth(), metric.getQuality()));
 	}
+	store.storeFileResults(analysis.getAnalyzedFile().getHashId(), results);
     }
 
     @Override

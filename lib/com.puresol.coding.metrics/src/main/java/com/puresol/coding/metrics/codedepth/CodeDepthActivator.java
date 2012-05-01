@@ -1,7 +1,7 @@
 package com.puresol.coding.metrics.codedepth;
 
 import java.util.ArrayList;
-import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.List;
 
 import org.osgi.framework.BundleActivator;
@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.puresol.coding.evaluation.api.EvaluatorFactory;
+import com.puresol.coding.evaluation.api.EvaluatorStore;
 
 public class CodeDepthActivator implements BundleActivator {
 
@@ -29,10 +30,16 @@ public class CodeDepthActivator implements BundleActivator {
 
     private void registerFactory(BundleContext context) {
 	CodeDepthMetricEvaluatorFactory codeDepthFactory = new CodeDepthMetricEvaluatorFactory();
-	Dictionary<String, String> headers = context.getBundle().getHeaders();
 
 	ServiceRegistration registration = context.registerService(
-		EvaluatorFactory.class.getName(), codeDepthFactory, headers);
+		EvaluatorFactory.class.getName(), codeDepthFactory,
+		new Hashtable<String, String>());
+	serviceRegistrations.add(registration);
+
+	Hashtable<String, String> properties = new Hashtable<String, String>();
+	properties.put("evaluator", CodeDepthEvaluator.class.getName());
+	registration = context.registerService(EvaluatorStore.class.getName(),
+		new CodeDepthEvaluatorStore(), properties);
 	serviceRegistrations.add(registration);
     }
 

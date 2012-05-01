@@ -1,7 +1,7 @@
 package com.puresol.coding.metrics.halstead;
 
 import java.util.ArrayList;
-import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.List;
 
 import org.osgi.framework.BundleActivator;
@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.puresol.coding.evaluation.api.EvaluatorFactory;
+import com.puresol.coding.evaluation.api.EvaluatorStore;
 
 public class HalsteadActivator implements BundleActivator {
 
@@ -30,11 +31,16 @@ public class HalsteadActivator implements BundleActivator {
 
     private void registerFactory(BundleContext context) {
 	HalsteadMetricEvaluatorFactory halsteadMetricFactory = new HalsteadMetricEvaluatorFactory();
-	Dictionary<?, ?> headers = context.getBundle().getHeaders();
 
 	ServiceRegistration registration = context.registerService(
 		EvaluatorFactory.class.getName(), halsteadMetricFactory,
-		headers);
+		new Hashtable<String, String>());
+	serviceRegistrations.add(registration);
+
+	Hashtable<String, String> properties = new Hashtable<String, String>();
+	properties.put("evaluator", HalsteadMetricEvaluator.class.getName());
+	registration = context.registerService(EvaluatorStore.class.getName(),
+		new HalsteadMetricEvaluatorStore(), properties);
 	serviceRegistrations.add(registration);
     }
 
