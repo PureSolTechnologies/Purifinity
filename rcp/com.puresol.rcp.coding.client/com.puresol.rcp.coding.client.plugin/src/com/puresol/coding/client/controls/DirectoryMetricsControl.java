@@ -34,6 +34,7 @@ import com.puresol.coding.evaluation.api.EvaluatorFactory;
 public class DirectoryMetricsControl extends Composite implements
 	ISelectionChangedListener {
 
+    private Composite centralComposite = null;
     private final EvaluatorComboViewer comboViewer;
     private final Text metricDescriptionLabel;
     private final AnalysisRun analysisRun;
@@ -91,10 +92,12 @@ public class DirectoryMetricsControl extends Composite implements
 	    if (iterator.hasNext()) {
 		EvaluatorGUIFactory service = bundleContext.getService(iterator
 			.next());
-		Composite directoryResultComponent = service
-			.createDirectoryResultComponent(this, analysisRun,
-				directory);
-		directoryResultComponent.setLayoutData(BorderLayout.CENTER);
+		if (centralComposite != null) {
+		    centralComposite.dispose();
+		}
+		centralComposite = service.createDirectoryResultComponent(this,
+			analysisRun, directory);
+		centralComposite.setLayoutData(BorderLayout.CENTER);
 		layout();
 	    }
 	} catch (InvalidSyntaxException e) {

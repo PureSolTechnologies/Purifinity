@@ -1,7 +1,6 @@
 package com.puresol.coding.client;
 
 import java.util.Dictionary;
-import java.util.Enumeration;
 import java.util.Hashtable;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -10,7 +9,9 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 import com.puresol.coding.client.controls.EvaluatorGUIFactory;
+import com.puresol.coding.client.evaluation.cocomo.CoCoMoEvaluatorGUIFactory;
 import com.puresol.coding.client.evaluation.sloc.SLOCEvaluatorGUIFactory;
+import com.puresol.coding.metrics.cocomo.CoCoMoEvaluator;
 import com.puresol.coding.metrics.sloc.SLOCEvaluator;
 
 /**
@@ -28,15 +29,15 @@ public class Activator extends AbstractUIPlugin {
     public void start(BundleContext context) throws Exception {
 	super.start(context);
 	Dictionary<String, String> dictionary = new Hashtable<String, String>();
-	Dictionary<String, String> headers = context.getBundle().getHeaders();
-	Enumeration<String> keys = headers.keys();
-	while (keys.hasMoreElements()) {
-	    String key = keys.nextElement();
-	    dictionary.put(key, headers.get(key));
-	}
 	dictionary.put("evaluator", SLOCEvaluator.class.getName());
 	context.registerService(EvaluatorGUIFactory.class,
 		new SLOCEvaluatorGUIFactory(), dictionary);
+
+	dictionary = new Hashtable<String, String>();
+	dictionary.put("evaluator", CoCoMoEvaluator.class.getName());
+	context.registerService(EvaluatorGUIFactory.class,
+		new CoCoMoEvaluatorGUIFactory(), dictionary);
+
 	if (plugin != null) {
 	    throw new RuntimeException("A " + getClass().getName()
 		    + " plugin was already started!");

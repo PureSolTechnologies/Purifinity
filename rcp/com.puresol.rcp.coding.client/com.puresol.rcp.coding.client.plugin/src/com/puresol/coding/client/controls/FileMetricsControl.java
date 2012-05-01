@@ -39,6 +39,8 @@ public class FileMetricsControl extends Composite implements
     private final AnalysisRun analysisRun;
     private final AnalyzedFile analyzedFile;
 
+    private Composite centerComposite = null;
+
     public FileMetricsControl(Composite parent, int style,
 	    AnalysisRun analysisRun, AnalyzedFile analyzedFile) {
 	super(parent, style);
@@ -95,10 +97,12 @@ public class FileMetricsControl extends Composite implements
 	    if (iterator.hasNext()) {
 		EvaluatorGUIFactory service = bundleContext.getService(iterator
 			.next());
-		Composite fileResultComponent = service
-			.createFileResultComponent(this, analysisRun,
-				analyzedFile);
-		fileResultComponent.setLayoutData(BorderLayout.CENTER);
+		if (centerComposite != null) {
+		    centerComposite.dispose();
+		}
+		centerComposite = service.createFileResultComponent(this,
+			analysisRun, analyzedFile);
+		centerComposite.setLayoutData(BorderLayout.CENTER);
 		layout();
 	    }
 	} catch (InvalidSyntaxException e) {
