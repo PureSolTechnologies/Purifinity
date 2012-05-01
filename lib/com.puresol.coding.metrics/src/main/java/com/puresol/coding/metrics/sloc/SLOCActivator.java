@@ -30,7 +30,7 @@ public class SLOCActivator implements BundleActivator {
     }
 
     private void registerFactory(BundleContext context) {
-	SLOCMetricServiceFactory slocMetricFactory = new SLOCMetricServiceFactory();
+	SLOCEvaluatorFactory slocMetricFactory = new SLOCEvaluatorFactory();
 
 	ServiceRegistration registration = context.registerService(
 		EvaluatorFactory.class.getName(), slocMetricFactory,
