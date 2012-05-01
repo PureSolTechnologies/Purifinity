@@ -52,12 +52,8 @@ public class HalsteadMetric extends CodeRangeEvaluator {
 	super(NAME);
 	this.analysisRun = analysisRun;
 	this.codeRange = codeRange;
-	langDepended = null;
-	// langDepended = language
-	// .getImplementation(LanguageDependedHalsteadMetric.class);
-	if (langDepended == null) {
-	    throw new RuntimeException("No language depdend part found!");
-	}
+	langDepended = language
+		.getImplementation(LanguageDependedHalsteadMetric.class);
     }
 
     @Override
@@ -130,6 +126,10 @@ public class HalsteadMetric extends CodeRangeEvaluator {
 	}
 	result = new HalsteadResult(differentOperators, differentOperands,
 		totalOperators, totalOperands);
+    }
+
+    public HalsteadResult getHalsteadResults() {
+	return result;
     }
 
     public Hashtable<String, Integer> getOperators() {

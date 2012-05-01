@@ -29,7 +29,7 @@ public class HalsteadActivator implements BundleActivator {
     }
 
     private void registerFactory(BundleContext context) {
-	HalsteadMetricServiceFactory halsteadMetricFactory = new HalsteadMetricServiceFactory();
+	HalsteadMetricEvaluatorFactory halsteadMetricFactory = new HalsteadMetricEvaluatorFactory();
 	Dictionary<?, ?> headers = context.getBundle().getHeaders();
 
 	ServiceRegistration registration = context.registerService(

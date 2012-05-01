@@ -22,7 +22,7 @@ public class HalsteadMetricEvaluator extends AbstractEvaluator {
     @Override
     protected void processFile(FileAnalysis analysis)
 	    throws InterruptedException {
-	HalsteadMetricFileResult results = new HalsteadMetricFileResult();
+	HalsteadMetricFileResults results = new HalsteadMetricFileResults();
 	ProgrammingLanguage language = ProgrammingLanguages.findByName(
 		analysis.getLanguageName(), analysis.getLanguageVersion());
 
@@ -31,10 +31,10 @@ public class HalsteadMetricEvaluator extends AbstractEvaluator {
 		    language, codeRange);
 	    metric.schedule();
 	    metric.join();
-	    results.put(
-		    analysis.getAnalyzedFile().getFile().getPath() + ": "
-			    + codeRange.getType().getName() + " '"
-			    + codeRange.getName() + "'", metric.getQuality());
+	    results.add(new HalsteadMetricFileResult(analysis.getAnalyzedFile()
+		    .getFile().getPath(), codeRange.getType(), codeRange
+		    .getName(), metric.getHalsteadResults(), metric
+		    .getQuality()));
 	}
     }
 
