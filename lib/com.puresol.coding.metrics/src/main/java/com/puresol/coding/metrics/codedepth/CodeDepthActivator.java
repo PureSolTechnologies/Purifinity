@@ -28,7 +28,7 @@ public class CodeDepthActivator implements BundleActivator {
     }
 
     private void registerFactory(BundleContext context) {
-	CodeDepthMetricServiceFactory codeDepthFactory = new CodeDepthMetricServiceFactory();
+	CodeDepthMetricEvaluatorFactory codeDepthFactory = new CodeDepthMetricEvaluatorFactory();
 	Dictionary<String, String> headers = context.getBundle().getHeaders();
 
 	ServiceRegistration registration = context.registerService(

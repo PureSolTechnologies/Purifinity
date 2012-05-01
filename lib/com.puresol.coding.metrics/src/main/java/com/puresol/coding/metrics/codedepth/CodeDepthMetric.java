@@ -50,12 +50,8 @@ public class CodeDepthMetric extends CodeRangeEvaluator {
 	super(NAME);
 	this.analysisRun = analysisRun;
 	this.codeRange = codeRange;
-	langDepended = null;
-	// langDepended = language
-	// .getImplementation(LanguageDependedCodeDepthMetric.class);
-	if (langDepended == null) {
-	    throw new RuntimeException();
-	}
+	langDepended = language
+		.getImplementation(LanguageDependedCodeDepthMetric.class);
     }
 
     @Override
