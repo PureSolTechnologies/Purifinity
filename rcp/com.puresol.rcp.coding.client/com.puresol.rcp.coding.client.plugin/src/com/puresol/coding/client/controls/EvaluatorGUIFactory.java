@@ -4,6 +4,7 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalyzedFile;
+import com.puresol.coding.analysis.api.HashIdFileTree;
 
 /**
  * This interface is used to register factories which produce file result
@@ -27,5 +28,8 @@ public interface EvaluatorGUIFactory {
      */
     public Composite createFileResultComponent(Composite parent,
 	    AnalysisRun analysisRun, AnalyzedFile analyzedFile);
+
+    public Composite createDirectoryResultComponent(Composite parent,
+	    AnalysisRun analysisRun, HashIdFileTree directory);
 
 }

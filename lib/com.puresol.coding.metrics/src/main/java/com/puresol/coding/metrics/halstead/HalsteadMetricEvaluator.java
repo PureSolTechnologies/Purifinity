@@ -44,11 +44,6 @@ public class HalsteadMetricEvaluator extends AbstractEvaluator {
     }
 
     @Override
-    public HalsteadMetricEvaluatorResults getResults() {
-	return null;
-    }
-
-    @Override
     protected void processDirectory(HashIdFileTree directory)
 	    throws InterruptedException {
 	// TODO Auto-generated method stub

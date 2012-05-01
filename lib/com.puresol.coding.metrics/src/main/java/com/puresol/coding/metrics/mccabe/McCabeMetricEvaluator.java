@@ -44,12 +44,6 @@ public class McCabeMetricEvaluator extends AbstractEvaluator {
     }
 
     @Override
-    public McCabeMetricEvaluatorResults getResults() {
-	// TODO Auto-generated method stub
-	return null;
-    }
-
-    @Override
     protected void processDirectory(HashIdFileTree directory)
 	    throws InterruptedException {
 	// TODO Auto-generated method stub

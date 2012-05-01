@@ -45,7 +45,6 @@ public class ProjectEntropyMetricTest {
 	assertFalse(metric.getName().isEmpty());
 	assertNotNull(metric.getEvaluatedQualityCharacteristics());
 	assertNotNull(metric.getInformation());
-	assertNotNull(metric.getResults());
 	assertNotNull(metric.getTime());
     }
 

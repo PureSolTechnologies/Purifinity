@@ -33,15 +33,6 @@ public interface Evaluator extends TimeAwareness {
     public AnalysisRun getAnalysisRun();
 
     /**
-     * This method returns a list of results from the evaluator. This values are
-     * used for creating a report and for storing and tracking them over a
-     * longer time (SPC).
-     * 
-     * @return
-     */
-    public EvaluatorResults getResults();
-
-    /**
      * This method returns a list with quality characteristics which might be
      * evaluated by the evaluator.
      * 

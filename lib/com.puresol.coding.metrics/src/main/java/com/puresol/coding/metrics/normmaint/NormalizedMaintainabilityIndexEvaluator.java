@@ -45,11 +45,6 @@ public class NormalizedMaintainabilityIndexEvaluator extends AbstractEvaluator {
     }
 
     @Override
-    public NormalizedMaintainabilityIndexEvaluatorResults getResults() {
-	return null;
-    }
-
-    @Override
     protected void processDirectory(HashIdFileTree directory)
 	    throws InterruptedException {
 	// TODO Auto-generated method stub

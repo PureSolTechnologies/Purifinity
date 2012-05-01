@@ -160,11 +160,6 @@ public class CoCoMo extends AbstractEvaluator {
     }
 
     @Override
-    public CoCoMoEvaluatorResults getResults() {
-	return null;
-    }
-
-    @Override
     protected void processFile(FileAnalysis analysis) {
 	// TODO Auto-generated method stub
     }

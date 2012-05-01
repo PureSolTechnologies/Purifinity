@@ -90,35 +90,43 @@ public class AnalysisRunContentBrowserView extends ViewPart implements
 	    if (event.getSource() == fileTreeViewer) {
 		TreeSelection selection = (TreeSelection) fileTreeViewer
 			.getSelection();
-		HashIdFileTree firstElement = (HashIdFileTree) selection
-			.getFirstElement();
-		fileAnalysis = new FileAnalysisSelection(analysis, analysisRun,
-			firstElement.getPathFile(false));
-		AnalyzedFile analyzedFile = analysisRun
-			.findAnalyzedFile(firstElement.getPathFile(false));
-		if (analyzedFile != null) {
-		    FileAnalysisEditorInput fileAnalysisEditorInput = new FileAnalysisEditorInput(
-			    analyzedFile, analysisRun);
-		    getSite().getPage().openEditor(fileAnalysisEditorInput,
-			    FileAnalysisEditor.ID);
+		if (selection.getFirstElement().getClass().equals(String.class)) {
+
 		} else {
-		    if (!analysisRun.getFailedFiles().contains(
-			    firstElement.getPathFile(false))) {
-			DirectoryAnalysisEditorInput directoryAnalysisEditorInput = new DirectoryAnalysisEditorInput(
-				firstElement.getPathFile(false), analysisRun);
-			getSite().getPage().openEditor(
-				directoryAnalysisEditorInput,
-				DirectoryAnalysisEditor.ID);
-		    } else {
-			NotAnalyzedEditorInput notAnalyzedEditorInput = new NotAnalyzedEditorInput(
-				firstElement.getPathFile(false), analysisRun);
-			getSite().getPage().openEditor(notAnalyzedEditorInput,
-				NotAnalyzedEditor.ID);
-		    }
+		    processDoubleClickOnFileTree(selection);
 		}
 	    }
 	} catch (PartInitException e) {
 	    throw new RuntimeException(e);
+	}
+    }
+
+    private void processDoubleClickOnFileTree(TreeSelection selection)
+	    throws PartInitException {
+	HashIdFileTree firstElement = (HashIdFileTree) selection
+		.getFirstElement();
+	fileAnalysis = new FileAnalysisSelection(analysis, analysisRun,
+		firstElement.getPathFile(false));
+	AnalyzedFile analyzedFile = analysisRun.findAnalyzedFile(firstElement
+		.getPathFile(false));
+	if (analyzedFile != null) {
+	    FileAnalysisEditorInput fileAnalysisEditorInput = new FileAnalysisEditorInput(
+		    analyzedFile, analysisRun);
+	    getSite().getPage().openEditor(fileAnalysisEditorInput,
+		    FileAnalysisEditor.ID);
+	} else {
+	    if (!analysisRun.getFailedFiles().contains(
+		    firstElement.getPathFile(false))) {
+		DirectoryAnalysisEditorInput directoryAnalysisEditorInput = new DirectoryAnalysisEditorInput(
+			firstElement, analysisRun);
+		getSite().getPage().openEditor(directoryAnalysisEditorInput,
+			DirectoryAnalysisEditor.ID);
+	    } else {
+		NotAnalyzedEditorInput notAnalyzedEditorInput = new NotAnalyzedEditorInput(
+			firstElement.getPathFile(false), analysisRun);
+		getSite().getPage().openEditor(notAnalyzedEditorInput,
+			NotAnalyzedEditor.ID);
+	    }
 	}
     }
 

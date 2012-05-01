@@ -1,19 +1,19 @@
 package com.puresol.coding.client.editors;
 
-import java.io.File;
-
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
 
 import com.puresol.coding.analysis.api.AnalysisRun;
+import com.puresol.coding.analysis.api.HashIdFileTree;
 
 public class DirectoryAnalysisEditorInput implements IEditorInput {
 
-    private final File directory;
+    private final HashIdFileTree directory;
     private final AnalysisRun analysisRun;
 
-    public DirectoryAnalysisEditorInput(File directory, AnalysisRun analysisRun) {
+    public DirectoryAnalysisEditorInput(HashIdFileTree directory,
+	    AnalysisRun analysisRun) {
 	super();
 	this.directory = directory;
 	this.analysisRun = analysisRun;
@@ -46,10 +46,10 @@ public class DirectoryAnalysisEditorInput implements IEditorInput {
 
     @Override
     public String getToolTipText() {
-	return directory.getPath();
+	return directory.getPathFile(false).getPath();
     }
 
-    public final File getDirectory() {
+    public final HashIdFileTree getDirectory() {
 	return directory;
     }
 

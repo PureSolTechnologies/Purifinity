@@ -11,9 +11,9 @@ public class SLOCEvaluatorResults implements EvaluatorResults {
 
     private static final long serialVersionUID = 6440199089142251237L;
 
-    private final Map<HashId, SLOCFileResult> fileResults = new HashMap<HashId, SLOCFileResult>();
-    private final Map<HashId, SLOCDirectoryResult> directoryResults = new HashMap<HashId, SLOCDirectoryResult>();
-    private SLOCProjectResult projectResult;
+    private final Map<HashId, SLOCFileResults> fileResults = new HashMap<HashId, SLOCFileResults>();
+    private final Map<HashId, SLOCDirectoryResults> directoryResults = new HashMap<HashId, SLOCDirectoryResults>();
+    private SLOCProjectResults projectResult;
 
     private final String evaluatorName;
     private final Date time;
@@ -26,15 +26,15 @@ public class SLOCEvaluatorResults implements EvaluatorResults {
 	this.timeOfRun = timeOfRun;
     }
 
-    void addFileQuality(HashId hashId, SLOCFileResult fileResult) {
+    void addFileQuality(HashId hashId, SLOCFileResults fileResult) {
 	fileResults.put(hashId, fileResult);
     }
 
-    void addDirectoryQuality(HashId hashId, SLOCDirectoryResult directoryResult) {
+    void addDirectoryQuality(HashId hashId, SLOCDirectoryResults directoryResult) {
 	directoryResults.put(hashId, directoryResult);
     }
 
-    void setProjectResult(SLOCProjectResult projectResult) {
+    void setProjectResult(SLOCProjectResults projectResult) {
 	this.projectResult = projectResult;
     }
 
@@ -54,17 +54,17 @@ public class SLOCEvaluatorResults implements EvaluatorResults {
     }
 
     @Override
-    public SLOCFileResult getFileResult(HashId hashId) {
+    public SLOCFileResults getFileResult(HashId hashId) {
 	return fileResults.get(hashId);
     }
 
     @Override
-    public SLOCDirectoryResult getDirectoryResult(HashId hashId) {
+    public SLOCDirectoryResults getDirectoryResult(HashId hashId) {
 	return directoryResults.get(hashId);
     }
 
     @Override
-    public SLOCProjectResult getProjectResult() {
+    public SLOCProjectResults getProjectResult() {
 	return projectResult;
     }
 

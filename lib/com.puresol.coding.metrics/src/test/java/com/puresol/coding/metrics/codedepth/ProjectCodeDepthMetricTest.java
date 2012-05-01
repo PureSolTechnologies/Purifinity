@@ -45,7 +45,6 @@ public class ProjectCodeDepthMetricTest {
 	assertFalse(metric.getName().isEmpty());
 	assertNotNull(metric.getInformation());
 	assertNotNull(metric.getEvaluatedQualityCharacteristics());
-	assertNotNull(metric.getResults());
 	assertNotNull(metric.getTime());
     }
 }

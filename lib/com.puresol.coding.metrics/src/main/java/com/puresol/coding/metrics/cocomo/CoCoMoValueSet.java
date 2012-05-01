@@ -3,9 +3,15 @@ package com.puresol.coding.metrics.cocomo;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.puresol.coding.evaluation.api.DirectoryResults;
+import com.puresol.coding.evaluation.api.FileResults;
+import com.puresol.coding.evaluation.api.ProjectResults;
 import com.puresol.coding.evaluation.api.Result;
 
-public class CoCoMoValueSet {
+public class CoCoMoValueSet implements ProjectResults, DirectoryResults,
+	FileResults {
+
+    private static final long serialVersionUID = 4950771316767641215L;
 
     private int sloc;
     private double ksloc;
@@ -235,4 +241,5 @@ public class CoCoMoValueSet {
     public List<Result> getResults() {
 	return results;
     }
+
 }

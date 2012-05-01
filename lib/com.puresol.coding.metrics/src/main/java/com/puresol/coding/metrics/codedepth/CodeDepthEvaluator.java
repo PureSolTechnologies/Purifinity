@@ -43,11 +43,6 @@ public class CodeDepthEvaluator extends AbstractEvaluator {
     }
 
     @Override
-    public CodeDepthEvaluatorResults getResults() {
-	return null;
-    }
-
-    @Override
     protected void processDirectory(HashIdFileTree directory)
 	    throws InterruptedException {
 	// TODO Auto-generated method stub

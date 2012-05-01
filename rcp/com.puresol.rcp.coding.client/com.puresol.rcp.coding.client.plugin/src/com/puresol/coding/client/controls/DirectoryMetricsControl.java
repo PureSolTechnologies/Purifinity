@@ -1,7 +1,7 @@
 package com.puresol.coding.client.controls;
 
-import java.io.File;
 import java.util.Collection;
+import java.util.Iterator;
 
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -19,6 +19,7 @@ import org.osgi.framework.ServiceReference;
 import swing2swt.layout.BorderLayout;
 
 import com.puresol.coding.analysis.api.AnalysisRun;
+import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.client.Activator;
 import com.puresol.coding.client.content.EvaluatorComboViewer;
 import com.puresol.coding.evaluation.api.Evaluator;
@@ -36,10 +37,10 @@ public class DirectoryMetricsControl extends Composite implements
     private final EvaluatorComboViewer comboViewer;
     private final Text metricDescriptionLabel;
     private final AnalysisRun analysisRun;
-    private final File directory;
+    private final HashIdFileTree directory;
 
     public DirectoryMetricsControl(Composite parent, int style,
-	    AnalysisRun analysisRun, File directory) {
+	    AnalysisRun analysisRun, HashIdFileTree directory) {
 	super(parent, style);
 	this.analysisRun = analysisRun;
 	this.directory = directory;
@@ -60,9 +61,6 @@ public class DirectoryMetricsControl extends Composite implements
 	metricDescriptionLabel.setText("");
 	metricDescriptionLabel.setLayoutData(new RowData(SWT.DEFAULT,
 		SWT.DEFAULT));
-
-	Text metric = new Text(this, SWT.BORDER);
-	metric.setLayoutData(BorderLayout.CENTER);
     }
 
     @Override
@@ -82,12 +80,23 @@ public class DirectoryMetricsControl extends Composite implements
 	    metricDescriptionLabel.setSize(metricDescriptionLabel.computeSize(
 		    SWT.DEFAULT, SWT.DEFAULT));
 	    Evaluator evaluator = evaluatorFactory.create(analysisRun);
-	    String evaluatorName = evaluator.getInformation().getName();
 	    BundleContext bundleContext = Activator.getDefault().getBundle()
 		    .getBundleContext();
+	    String filter = "(evaluator=" + evaluator.getClass().getName()
+		    + ")";
 	    Collection<ServiceReference<EvaluatorGUIFactory>> serviceReferences = bundleContext
-		    .getServiceReferences(EvaluatorGUIFactory.class,
-			    "(evaluator=" + evaluatorName + ")");
+		    .getServiceReferences(EvaluatorGUIFactory.class, filter);
+	    Iterator<ServiceReference<EvaluatorGUIFactory>> iterator = serviceReferences
+		    .iterator();
+	    if (iterator.hasNext()) {
+		EvaluatorGUIFactory service = bundleContext.getService(iterator
+			.next());
+		Composite directoryResultComponent = service
+			.createDirectoryResultComponent(this, analysisRun,
+				directory);
+		directoryResultComponent.setLayoutData(BorderLayout.CENTER);
+		layout();
+	    }
 	} catch (InvalidSyntaxException e) {
 	    throw new RuntimeException(
 		    "Could not lookup for evalutor result view!", e);
