@@ -45,7 +45,7 @@ public interface EvaluatorFactory {
      * @param analysisRun
      * @return
      */
-    public Evaluator<?> create(AnalysisRun analysisRun);
+    public Evaluator create(AnalysisRun analysisRun);
 
     /**
      * This method returns a list of Evaluator classes which are needed to be
@@ -53,5 +53,5 @@ public interface EvaluatorFactory {
      * 
      * @return
      */
-    public List<Class<? extends Evaluator<? extends EvaluatorResults>>> getDependencies();
+    public List<Class<? extends Evaluator>> getDependencies();
 }

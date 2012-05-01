@@ -25,8 +25,7 @@ import com.puresol.coding.evaluation.api.Result;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.quality.api.QualityCharacteristic;
 
-public class MaintainabilityIndexEvaluator extends
-	AbstractEvaluator<MaintainabilityIndexEvaluatorResults> {
+public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 
     private static final long serialVersionUID = -5093217611195212999L;
 

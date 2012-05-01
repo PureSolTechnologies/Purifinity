@@ -8,21 +8,20 @@ import com.puresol.coding.analysis.api.CodeRange;
 import com.puresol.coding.analysis.api.FileAnalysis;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.analysis.api.ProgrammingLanguage;
-import com.puresol.coding.evaluation.api.EvaluationResultsStore;
-import com.puresol.coding.evaluation.api.EvaluationResultsStoreFactory;
+import com.puresol.coding.evaluation.api.EvaluatorStore;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.quality.api.QualityCharacteristic;
 
-public class SLOCEvaluator extends AbstractEvaluator<SLOCEvaluatorResults> {
+public class SLOCEvaluator extends AbstractEvaluator {
 
     private static final long serialVersionUID = -5093217611195212999L;
 
-    private final EvaluationResultsStore store = EvaluationResultsStoreFactory
-	    .getInstance();
+    private final EvaluatorStore store;
 
     public SLOCEvaluator(AnalysisRun analysisRun) {
 	super(SLOCMetricCalculator.NAME, SLOCMetricCalculator.DESCRIPTION,
 		analysisRun);
+	store = getEvaluatorStore();
     }
 
     @Override
@@ -42,8 +41,7 @@ public class SLOCEvaluator extends AbstractEvaluator<SLOCEvaluatorResults> {
 			    + codeRange.getType().getName() + " '"
 			    + codeRange.getName() + "'", metric.getQuality());
 	}
-	store.createEvaluatorStore(SLOCEvaluator.class).storeFileResults(
-		analysis.getAnalyzedFile().getHashId(), results);
+	store.storeFileResults(analysis.getAnalyzedFile().getHashId(), results);
     }
 
     @Override

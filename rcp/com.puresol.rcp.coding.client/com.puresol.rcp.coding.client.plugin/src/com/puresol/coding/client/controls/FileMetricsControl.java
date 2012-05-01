@@ -82,7 +82,7 @@ public class FileMetricsControl extends Composite implements
 	    metricDescriptionLabel.setText(evaluatorFactory.getDescription());
 	    metricDescriptionLabel.setSize(metricDescriptionLabel.computeSize(
 		    SWT.DEFAULT, SWT.DEFAULT));
-	    Evaluator<?> evaluator = evaluatorFactory.create(analysisRun);
+	    Evaluator evaluator = evaluatorFactory.create(analysisRun);
 	    BundleContext bundleContext = Activator.getDefault().getBundle()
 		    .getBundleContext();
 	    String filter = "(evaluator=" + evaluator.getClass().getName()

@@ -11,8 +11,7 @@ import com.puresol.coding.analysis.api.ProgrammingLanguage;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.quality.api.QualityCharacteristic;
 
-public class HalsteadMetricEvaluator extends
-	AbstractEvaluator<HalsteadMetricEvaluatorResults> {
+public class HalsteadMetricEvaluator extends AbstractEvaluator {
 
     private static final long serialVersionUID = -5093217611195212999L;
 

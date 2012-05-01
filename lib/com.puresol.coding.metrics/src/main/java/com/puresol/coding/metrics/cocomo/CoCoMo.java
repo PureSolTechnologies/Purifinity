@@ -42,7 +42,7 @@ import com.puresol.uhura.parser.ParserTree;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class CoCoMo extends AbstractEvaluator<CoCoMoEvaluatorResults> {
+public class CoCoMo extends AbstractEvaluator {
 
     private static final long serialVersionUID = 5098378023541671490L;
 

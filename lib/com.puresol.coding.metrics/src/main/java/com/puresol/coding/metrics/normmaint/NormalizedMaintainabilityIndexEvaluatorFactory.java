@@ -6,7 +6,6 @@ import java.util.List;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.evaluation.api.Evaluator;
 import com.puresol.coding.evaluation.api.EvaluatorFactory;
-import com.puresol.coding.evaluation.api.EvaluatorResults;
 import com.puresol.coding.metrics.halstead.HalsteadMetricEvaluator;
 import com.puresol.coding.metrics.mccabe.McCabeMetricEvaluator;
 import com.puresol.coding.metrics.sloc.SLOCEvaluator;
@@ -37,8 +36,8 @@ public class NormalizedMaintainabilityIndexEvaluatorFactory implements
     }
 
     @Override
-    public List<Class<? extends Evaluator<? extends EvaluatorResults>>> getDependencies() {
-	List<Class<? extends Evaluator<? extends EvaluatorResults>>> dependencies = new ArrayList<Class<? extends Evaluator<? extends EvaluatorResults>>>();
+    public List<Class<? extends Evaluator>> getDependencies() {
+	List<Class<? extends Evaluator>> dependencies = new ArrayList<Class<? extends Evaluator>>();
 	dependencies.add(SLOCEvaluator.class);
 	dependencies.add(McCabeMetricEvaluator.class);
 	dependencies.add(HalsteadMetricEvaluator.class);

@@ -81,7 +81,7 @@ public class DirectoryMetricsControl extends Composite implements
 	    metricDescriptionLabel.setText(evaluatorFactory.getDescription());
 	    metricDescriptionLabel.setSize(metricDescriptionLabel.computeSize(
 		    SWT.DEFAULT, SWT.DEFAULT));
-	    Evaluator<?> evaluator = evaluatorFactory.create(analysisRun);
+	    Evaluator evaluator = evaluatorFactory.create(analysisRun);
 	    String evaluatorName = evaluator.getInformation().getName();
 	    BundleContext bundleContext = Activator.getDefault().getBundle()
 		    .getBundleContext();

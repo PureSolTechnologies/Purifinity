@@ -8,7 +8,11 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceReference;
 
+import com.puresol.coding.analysis.Activator;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.DirectoryStore;
 import com.puresol.coding.analysis.api.DirectoryStoreFactory;
@@ -19,7 +23,7 @@ import com.puresol.coding.analysis.api.FileStoreFactory;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.evaluation.api.Evaluator;
 import com.puresol.coding.evaluation.api.EvaluatorInformation;
-import com.puresol.coding.evaluation.api.EvaluatorResults;
+import com.puresol.coding.evaluation.api.EvaluatorStore;
 import com.puresol.trees.TreeUtils;
 import com.puresol.trees.TreeVisitor;
 import com.puresol.trees.TreeWalker;
@@ -35,8 +39,8 @@ import com.puresol.utils.StopWatch;
  * @author Rick-Rainer Ludwig
  * 
  */
-public abstract class AbstractEvaluator<T extends EvaluatorResults> extends Job
-	implements Serializable, Evaluator<T> {
+public abstract class AbstractEvaluator extends Job implements Serializable,
+	Evaluator {
 
     private static final long serialVersionUID = -497819792461488182L;
 
@@ -178,5 +182,27 @@ public abstract class AbstractEvaluator<T extends EvaluatorResults> extends Job
 	     */
 	}
 	return Status.OK_STATUS;
+    }
+
+    @Override
+    public EvaluatorStore getEvaluatorStore() {
+	return createEvaluatorStore(getClass());
+    }
+
+    public static EvaluatorStore createEvaluatorStore(
+	    Class<? extends Evaluator> clazz) {
+	try {
+	    BundleContext bundleContext = Activator.getBundleContext();
+	    ServiceReference[] serviceReferences = bundleContext
+		    .getServiceReferences(EvaluatorStore.class.getName(),
+			    "(evaluator=" + clazz.getName() + ")");
+	    ServiceReference serviceReference = serviceReferences[0];
+	    EvaluatorStore store = (EvaluatorStore) bundleContext
+		    .getService(serviceReference);
+	    return store;
+	} catch (InvalidSyntaxException e) {
+	    throw new RuntimeException("Could not find store for evaluator '"
+		    + clazz.getName() + "'!", e);
+	}
     }
 }

@@ -14,7 +14,7 @@ import com.puresol.coding.quality.api.QualityCharacteristic;
  * @author Rick-Rainer Ludwig
  * 
  */
-public interface Evaluator<T extends EvaluatorResults> extends TimeAwareness {
+public interface Evaluator extends TimeAwareness {
 
     /**
      * This method returns the evaluator meta data which describes the evaluator
@@ -39,7 +39,7 @@ public interface Evaluator<T extends EvaluatorResults> extends TimeAwareness {
      * 
      * @return
      */
-    public T getResults();
+    public EvaluatorResults getResults();
 
     /**
      * This method returns a list with quality characteristics which might be
@@ -55,4 +55,6 @@ public interface Evaluator<T extends EvaluatorResults> extends TimeAwareness {
      * @throws InterruptedException
      */
     public void runEvaluation() throws InterruptedException;
+
+    public EvaluatorStore getEvaluatorStore();
 }
