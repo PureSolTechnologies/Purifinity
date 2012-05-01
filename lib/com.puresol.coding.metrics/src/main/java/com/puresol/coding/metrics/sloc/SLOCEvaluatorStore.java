@@ -11,14 +11,16 @@ import com.puresol.coding.analysis.AnalysisRunImpl;
 import com.puresol.coding.analysis.DirectoryStoreImpl;
 import com.puresol.coding.analysis.FileStoreImpl;
 import com.puresol.coding.analysis.api.AnalysisRun;
+import com.puresol.coding.evaluation.api.DirectoryResults;
 import com.puresol.coding.evaluation.api.EvaluatorStore;
+import com.puresol.coding.evaluation.api.FileResults;
+import com.puresol.coding.evaluation.api.ProjectResults;
 import com.puresol.utils.HashId;
 
-public class SLOCEvaluatorStore implements
-	EvaluatorStore<SLOCFileResult, SLOCDirectoryResult, SLOCProjectResult> {
+public class SLOCEvaluatorStore implements EvaluatorStore {
 
     @Override
-    public void storeFileResults(HashId hashId, SLOCFileResult results) {
+    public void storeFileResults(HashId hashId, FileResults results) {
 	File directory = FileStoreImpl.getFileDirectory(hashId);
 	String fileName = SLOCFileResult.class.getName();
 	File file = new File(directory, fileName);
@@ -26,7 +28,7 @@ public class SLOCEvaluatorStore implements
     }
 
     @Override
-    public void storeDirectoryResults(HashId hashId, SLOCDirectoryResult results) {
+    public void storeDirectoryResults(HashId hashId, DirectoryResults results) {
 	File directory = DirectoryStoreImpl.getDirectoryStoreDirectory(hashId);
 	String fileName = SLOCDirectoryResult.class.getName();
 	File file = new File(directory, fileName);
@@ -35,7 +37,7 @@ public class SLOCEvaluatorStore implements
 
     @Override
     public void storeProjectResults(AnalysisRun analysisRun,
-	    SLOCProjectResult results) {
+	    ProjectResults results) {
 	File directory = AnalysisRunImpl.getStorageDirectory(analysisRun);
 	String fileName = SLOCProjectResult.class.getName();
 	File file = new File(directory, fileName);
@@ -43,7 +45,7 @@ public class SLOCEvaluatorStore implements
     }
 
     @Override
-    public SLOCFileResult readFileResults(HashId hashId) {
+    public FileResults readFileResults(HashId hashId) {
 	File directory = FileStoreImpl.getFileDirectory(hashId);
 	String fileName = SLOCFileResult.class.getName();
 	File file = new File(directory, fileName);
@@ -51,7 +53,7 @@ public class SLOCEvaluatorStore implements
     }
 
     @Override
-    public SLOCDirectoryResult readDirectoryResults(HashId hashId) {
+    public DirectoryResults readDirectoryResults(HashId hashId) {
 	File directory = DirectoryStoreImpl.getDirectoryStoreDirectory(hashId);
 	String fileName = SLOCDirectoryResult.class.getName();
 	File file = new File(directory, fileName);
@@ -59,7 +61,7 @@ public class SLOCEvaluatorStore implements
     }
 
     @Override
-    public SLOCProjectResult readProjectResults(AnalysisRun analysisRun) {
+    public ProjectResults readProjectResults(AnalysisRun analysisRun) {
 	File directory = AnalysisRunImpl.getStorageDirectory(analysisRun);
 	String fileName = SLOCProjectResult.class.getName();
 	File file = new File(directory, fileName);

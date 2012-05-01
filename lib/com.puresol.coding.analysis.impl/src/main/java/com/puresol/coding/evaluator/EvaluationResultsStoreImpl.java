@@ -5,18 +5,15 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 
 import com.puresol.coding.analysis.Activator;
-import com.puresol.coding.evaluation.api.DirectoryResults;
 import com.puresol.coding.evaluation.api.EvaluationResultsStore;
 import com.puresol.coding.evaluation.api.Evaluator;
 import com.puresol.coding.evaluation.api.EvaluatorResults;
 import com.puresol.coding.evaluation.api.EvaluatorStore;
-import com.puresol.coding.evaluation.api.FileResults;
-import com.puresol.coding.evaluation.api.ProjectResults;
 
 public class EvaluationResultsStoreImpl implements EvaluationResultsStore {
 
     @Override
-    public EvaluatorStore<FileResults, DirectoryResults, ProjectResults> createEvaluatorStore(
+    public EvaluatorStore createEvaluatorStore(
 	    Class<? extends Evaluator<? extends EvaluatorResults>> evaluator) {
 	try {
 	    BundleContext bundleContext = Activator.getBundleContext();
@@ -25,8 +22,7 @@ public class EvaluationResultsStoreImpl implements EvaluationResultsStore {
 			    "(evaluator=" + evaluator.getClass().getName()
 				    + ")");
 	    ServiceReference serviceReference = serviceReferences[0];
-	    @SuppressWarnings("unchecked")
-	    EvaluatorStore<FileResults, DirectoryResults, ProjectResults> store = (EvaluatorStore<FileResults, DirectoryResults, ProjectResults>) bundleContext
+	    EvaluatorStore store = (EvaluatorStore) bundleContext
 		    .getService(serviceReference);
 	    return store;
 	} catch (InvalidSyntaxException e) {

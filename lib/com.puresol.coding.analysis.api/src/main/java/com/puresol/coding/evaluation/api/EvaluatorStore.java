@@ -10,18 +10,19 @@ import com.puresol.utils.HashId;
  * @author Rick-Rainer Ludwig
  * 
  */
-public interface EvaluatorStore<F extends FileResults, D extends DirectoryResults, P extends ProjectResults> {
+public interface EvaluatorStore {
 
-    public void storeFileResults(HashId hashId, F results);
+    public void storeFileResults(HashId hashId, FileResults results);
 
-    public void storeDirectoryResults(HashId hashId, D results);
+    public void storeDirectoryResults(HashId hashId, DirectoryResults results);
 
-    public void storeProjectResults(AnalysisRun analysisRun, P results);
+    public void storeProjectResults(AnalysisRun analysisRun,
+	    ProjectResults results);
 
-    public F readFileResults(HashId hashId);
+    public FileResults readFileResults(HashId hashId);
 
-    public D readDirectoryResults(HashId hashId);
+    public DirectoryResults readDirectoryResults(HashId hashId);
 
-    public P readProjectResults(AnalysisRun analysisRun);
+    public ProjectResults readProjectResults(AnalysisRun analysisRun);
 
 }
