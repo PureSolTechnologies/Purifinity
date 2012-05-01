@@ -22,7 +22,7 @@ public class CodeDepthEvaluator extends AbstractEvaluator {
     @Override
     protected void processFile(FileAnalysis analysis)
 	    throws InterruptedException {
-	CodeDepthFileResult results = new CodeDepthFileResult();
+	CodeDepthFileResults results = new CodeDepthFileResults();
 	ProgrammingLanguage language = ProgrammingLanguages.findByName(
 		analysis.getLanguageName(), analysis.getLanguageVersion());
 	for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
@@ -30,10 +30,9 @@ public class CodeDepthEvaluator extends AbstractEvaluator {
 		    language, codeRange);
 	    metric.schedule();
 	    metric.join();
-	    results.put(
-		    analysis.getAnalyzedFile().getFile().getPath() + ": "
-			    + codeRange.getType().getName() + " '"
-			    + codeRange.getName() + "'", metric.getQuality());
+	    results.add(new CodeDepthFileResult(analysis.getAnalyzedFile()
+		    .getFile().getPath(), codeRange.getType(), codeRange
+		    .getName(), metric.getMaxDepth(), metric.getQuality()));
 	}
     }
 
@@ -45,13 +44,11 @@ public class CodeDepthEvaluator extends AbstractEvaluator {
     @Override
     protected void processDirectory(HashIdFileTree directory)
 	    throws InterruptedException {
-	// TODO Auto-generated method stub
-
+	// intentionally left blank
     }
 
     @Override
     protected void processProject() throws InterruptedException {
-	// TODO Auto-generated method stub
-
+	// intentionally left blank
     }
 }
