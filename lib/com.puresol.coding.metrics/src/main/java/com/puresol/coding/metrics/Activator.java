@@ -8,6 +8,7 @@ import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.puresol.coding.metrics.cocomo.CoCoMoActivator;
 import com.puresol.coding.metrics.sloc.SLOCActivator;
 
 /**
@@ -40,7 +41,7 @@ public class Activator implements BundleActivator {
 	    throw new RuntimeException("Context should be not set already!");
 	}
 
-	// TODO bundleActivators.add(new CoCoMoActivator());
+	bundleActivators.add(new CoCoMoActivator());
 	// TODO bundleActivators.add(new CodeDepthActivator());
 	// TODO bundleActivators.add(new EntropyActivator());
 	// TODO bundleActivators.add(new HalsteadActivator());
