@@ -194,7 +194,7 @@ public abstract class AbstractEvaluator extends Job implements Evaluator {
 	    ServiceReference[] serviceReferences = bundleContext
 		    .getServiceReferences(EvaluatorStore.class.getName(),
 			    "(evaluator=" + clazz.getName() + ")");
-	    if (serviceReferences.length == 0) {
+	    if ((serviceReferences == null) || (serviceReferences.length == 0)) {
 		return null;
 	    }
 	    if (serviceReferences.length > 1) {

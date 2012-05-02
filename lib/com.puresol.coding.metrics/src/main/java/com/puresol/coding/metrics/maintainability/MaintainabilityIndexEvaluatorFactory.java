@@ -15,17 +15,17 @@ public class MaintainabilityIndexEvaluatorFactory implements EvaluatorFactory {
 
     @Override
     public String getDescription() {
-	return MaintainabilityIndex.DESCRIPTION;
+	return MaintainabilityIndexEvaluator.DESCRIPTION;
     }
 
     @Override
     public String getName() {
-	return MaintainabilityIndex.NAME;
+	return MaintainabilityIndexEvaluator.NAME;
     }
 
     @Override
     public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
-	return MaintainabilityIndex.EVALUATED_QUALITY_CHARACTERISTICS;
+	return MaintainabilityIndexEvaluator.EVALUATED_QUALITY_CHARACTERISTICS;
     }
 
     @Override

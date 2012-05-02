@@ -1,7 +1,7 @@
 package com.puresol.coding.metrics.maintainability;
 
 import java.util.ArrayList;
-import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.List;
 
 import org.osgi.framework.BundleActivator;
@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.puresol.coding.evaluation.api.EvaluatorFactory;
+import com.puresol.coding.evaluation.api.EvaluatorStore;
 
 public class MaintainabilityActivator implements BundleActivator {
 
@@ -30,11 +31,17 @@ public class MaintainabilityActivator implements BundleActivator {
 
     private void registerFactory(BundleContext context) {
 	MaintainabilityIndexEvaluatorFactory maintainabilityIndexFactory = new MaintainabilityIndexEvaluatorFactory();
-	Dictionary<?, ?> headers = context.getBundle().getHeaders();
 
 	ServiceRegistration registration = context.registerService(
 		EvaluatorFactory.class.getName(), maintainabilityIndexFactory,
-		headers);
+		new Hashtable<String, String>());
+	serviceRegistrations.add(registration);
+
+	Hashtable<String, String> properties = new Hashtable<String, String>();
+	properties.put("evaluator",
+		MaintainabilityIndexEvaluator.class.getName());
+	registration = context.registerService(EvaluatorStore.class.getName(),
+		new MaintainabilityIndexEvaluatorStore(), properties);
 	serviceRegistrations.add(registration);
     }
 
