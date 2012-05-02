@@ -1,41 +1,91 @@
 package com.puresol.coding.metrics.entropy;
 
 import java.util.List;
+import java.util.Map;
 
-import com.puresol.coding.ProgrammingLanguages;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.CodeRange;
 import com.puresol.coding.analysis.api.FileAnalysis;
 import com.puresol.coding.analysis.api.HashIdFileTree;
-import com.puresol.coding.analysis.api.ProgrammingLanguage;
+import com.puresol.coding.evaluation.api.EvaluatorStore;
 import com.puresol.coding.evaluator.AbstractEvaluator;
+import com.puresol.coding.metrics.halstead.HalsteadMetricEvaluator;
+import com.puresol.coding.metrics.halstead.HalsteadMetricFileResult;
+import com.puresol.coding.metrics.halstead.HalsteadMetricFileResults;
+import com.puresol.coding.metrics.halstead.HalsteadResult;
 import com.puresol.coding.quality.api.QualityCharacteristic;
+import com.puresol.utils.HashId;
 
 public class EntropyEvaluator extends AbstractEvaluator {
 
     private static final long serialVersionUID = -5093217611195212999L;
 
+    private final EvaluatorStore store;
+    private final EvaluatorStore halsteadStore;
+
     public EntropyEvaluator(AnalysisRun analysisRun) {
 	super(EntropyMetric.NAME, EntropyMetric.DESCRIPTION, analysisRun);
+	store = getEvaluatorStore();
+	halsteadStore = AbstractEvaluator
+		.createEvaluatorStore(HalsteadMetricEvaluator.class);
     }
 
     @Override
     protected void processFile(FileAnalysis analysis)
 	    throws InterruptedException {
-	EntropyFileResult results = new EntropyFileResult();
-	ProgrammingLanguage language = ProgrammingLanguages.findByName(
-		analysis.getLanguageName(), analysis.getLanguageVersion());
+	HashId hashId = analysis.getAnalyzedFile().getHashId();
+	HalsteadMetricFileResults halsteadFileResults = (HalsteadMetricFileResults) halsteadStore
+		.readFileResults(hashId);
+
+	EntropyFileResults results = new EntropyFileResults();
 
 	for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
-	    EntropyMetric metric = new EntropyMetric(getAnalysisRun(),
-		    language, codeRange);
-	    metric.schedule();
-	    metric.join();
-	    results.put(
-		    analysis.getAnalyzedFile().getFile().getPath() + ": "
-			    + codeRange.getType().getName() + " '"
-			    + codeRange.getName() + "'", metric.getQuality());
+	    HalsteadMetricFileResult halsteadFileResult = findFileResult(
+		    halsteadFileResults, codeRange);
+	    HalsteadResult halstead = halsteadFileResult.getHalsteadResult();
+
+	    Map<String, Integer> operands = halstead.getOperands();
+
+	    double maxEntropy = Math.log(halstead.getDifferentOperands())
+		    / Math.log(2.0);
+	    double entropy = 0.0;
+	    for (String operant : operands.keySet()) {
+		int count = operands.get(operant);
+		entropy += (double) count
+			/ (double) halstead.getTotalOperands()
+			* Math.log((double) count
+				/ (double) halstead.getTotalOperands())
+			/ Math.log(2.0);
+	    }
+	    entropy *= -1.0;
+	    double normEntropy = entropy / maxEntropy;
+	    double entropyRedundancy = maxEntropy - entropy;
+	    double redundancy = entropyRedundancy
+		    * halstead.getDifferentOperands() / maxEntropy;
+	    double normalizedRedundancy = redundancy
+		    / halstead.getDifferentOperands();
+	    EntropyResult result = new EntropyResult(
+		    halstead.getVocabularySize(), halstead.getProgramLength(),
+		    entropy, maxEntropy, normEntropy, entropyRedundancy,
+		    redundancy, normalizedRedundancy);
+
+	    results.add(new EntropyFileResult(analysis.getAnalyzedFile()
+		    .getFile().getPath(), codeRange.getType(), codeRange
+		    .getName(), result, EntropyQuality.get(codeRange.getType(),
+		    result)));
 	}
+	store.storeFileResults(hashId, results);
+    }
+
+    private HalsteadMetricFileResult findFileResult(
+	    HalsteadMetricFileResults halsteadFileResults, CodeRange codeRange) {
+	for (HalsteadMetricFileResult t : halsteadFileResults) {
+	    if ((t.getCodeRangeType() == codeRange.getType())
+		    && (t.getCodeRangeName().equals(codeRange.getName()))) {
+		return t;
+	    }
+	}
+	return null;
     }
 
     @Override

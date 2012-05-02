@@ -124,8 +124,8 @@ public class HalsteadMetric extends CodeRangeEvaluator {
 	for (String key : operants.keySet()) {
 	    totalOperands += operants.get(key);
 	}
-	result = new HalsteadResult(differentOperators, differentOperands,
-		totalOperators, totalOperands);
+	result = new HalsteadResult(operants, operators, differentOperators,
+		differentOperands, totalOperators, totalOperands);
     }
 
     public HalsteadResult getHalsteadResults() {

@@ -3,6 +3,7 @@ package com.puresol.coding.metrics.halstead;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.puresol.coding.evaluation.api.Result;
 
@@ -62,11 +63,17 @@ public class HalsteadResult implements Serializable {
      * Estimated Bugs
      */
     private final double estimatedBugs;
+    private final Map<String, Integer> operands;
+    private final Map<String, Integer> opertors;
+
     private final List<Result> results = new ArrayList<Result>();
 
-    public HalsteadResult(int differentOperators, int differentOperands,
-	    int totalOperators, int totalOperands) {
+    public HalsteadResult(Map<String, Integer> operands,
+	    Map<String, Integer> opertors, int differentOperators,
+	    int differentOperands, int totalOperators, int totalOperands) {
 	super();
+	this.operands = operands;
+	this.opertors = opertors;
 	this.differentOperators = differentOperators;
 	this.differentOperands = differentOperands;
 	this.totalOperators = totalOperators;
@@ -119,6 +126,14 @@ public class HalsteadResult implements Serializable {
 
 	results.add(new Result("B", "Number of delivered bugs", estimatedBugs,
 		""));
+    }
+
+    public Map<String, Integer> getOperands() {
+	return operands;
+    }
+
+    public Map<String, Integer> getOpertors() {
+	return opertors;
     }
 
     public int getDifferentOperators() {
