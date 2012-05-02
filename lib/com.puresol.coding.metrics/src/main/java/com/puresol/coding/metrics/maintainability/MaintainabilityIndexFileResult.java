@@ -15,8 +15,8 @@ public class MaintainabilityIndexFileResult implements Serializable {
     private final MaintainabilityIndexResult maintainabilityIndexResult;
     private final SourceCodeQuality quality;
 
-    public MaintainabilityIndexFileResult(String file, CodeRangeType codeRangeType,
-	    String codeRangeName,
+    public MaintainabilityIndexFileResult(String file,
+	    CodeRangeType codeRangeType, String codeRangeName,
 	    MaintainabilityIndexResult maintainabilityIndexResult,
 	    SourceCodeQuality quality) {
 	super();
@@ -39,7 +39,7 @@ public class MaintainabilityIndexFileResult implements Serializable {
 	return codeRangeName;
     }
 
-    public MaintainabilityIndexResult getHalsteadResult() {
+    public MaintainabilityIndexResult getMaintainabilityIndexResult() {
 	return maintainabilityIndexResult;
     }
 

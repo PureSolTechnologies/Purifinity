@@ -13,6 +13,7 @@ import com.puresol.coding.metrics.codedepth.CodeDepthActivator;
 import com.puresol.coding.metrics.halstead.HalsteadActivator;
 import com.puresol.coding.metrics.maintainability.MaintainabilityActivator;
 import com.puresol.coding.metrics.mccabe.McCabeActivator;
+import com.puresol.coding.metrics.normmaint.NormalizedMaintainabilityActivator;
 import com.puresol.coding.metrics.sloc.SLOCActivator;
 
 /**
@@ -51,7 +52,7 @@ public class Activator implements BundleActivator {
 	bundleActivators.add(new HalsteadActivator());
 	bundleActivators.add(new MaintainabilityActivator());
 	bundleActivators.add(new McCabeActivator());
-	// TODO bundleActivators.add(new NormalizedMaintainabilityActivator());
+	bundleActivators.add(new NormalizedMaintainabilityActivator());
 	bundleActivators.add(new SLOCActivator());
 	for (BundleActivator activator : bundleActivators) {
 	    activator.start(context);

@@ -14,17 +14,17 @@ public class NormalizedMaintainabilityIndexEvaluatorFactory implements
 
     @Override
     public String getDescription() {
-	return NormalizedMaintainabilityIndex.DESCRIPTION;
+	return NormalizedMaintainabilityIndexEvaluator.DESCRIPTION;
     }
 
     @Override
     public String getName() {
-	return NormalizedMaintainabilityIndex.NAME;
+	return NormalizedMaintainabilityIndexEvaluator.NAME;
     }
 
     @Override
     public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
-	return NormalizedMaintainabilityIndex.EVALUATED_QUALITY_CHARACTERISTICS;
+	return NormalizedMaintainabilityIndexEvaluator.EVALUATED_QUALITY_CHARACTERISTICS;
     }
 
     @Override

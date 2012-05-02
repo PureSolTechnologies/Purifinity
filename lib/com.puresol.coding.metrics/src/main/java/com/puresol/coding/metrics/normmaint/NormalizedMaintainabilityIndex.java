@@ -10,7 +10,6 @@
 
 package com.puresol.coding.metrics.normmaint;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -31,19 +30,6 @@ import com.puresol.coding.quality.api.SourceCodeQuality;
 
 public class NormalizedMaintainabilityIndex extends CodeRangeEvaluator {
 
-    public static final String NAME = "Normalized Maintainability Index";
-    public static final String DESCRIPTION = "Normalized Maintainability Index calculation.";
-
-    public static final List<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new ArrayList<QualityCharacteristic>();
-    static {
-	EVALUATED_QUALITY_CHARACTERISTICS
-		.add(QualityCharacteristic.ANALYSABILITY);
-	EVALUATED_QUALITY_CHARACTERISTICS
-		.add(QualityCharacteristic.CHANGEABILITY);
-	EVALUATED_QUALITY_CHARACTERISTICS
-		.add(QualityCharacteristic.TESTABILITY);
-    }
-
     private final AnalysisRun analysisRun;
     private final CodeRange codeRange;
     private final SLOCMetricCalculator slocMetric;
@@ -53,10 +39,11 @@ public class NormalizedMaintainabilityIndex extends CodeRangeEvaluator {
 
     public NormalizedMaintainabilityIndex(AnalysisRun analysisRun,
 	    ProgrammingLanguage language, CodeRange codeRange) {
-	super(NAME);
+	super(NormalizedMaintainabilityIndexEvaluator.NAME);
 	this.analysisRun = analysisRun;
 	this.codeRange = codeRange;
-	slocMetric = new SLOCMetricCalculator(analysisRun, language, getCodeRange());
+	slocMetric = new SLOCMetricCalculator(analysisRun, language,
+		getCodeRange());
 	mcCabeMetric = new McCabeMetric(analysisRun, language, getCodeRange());
 	halsteadMetric = new HalsteadMetric(analysisRun, language,
 		getCodeRange());
@@ -96,7 +83,7 @@ public class NormalizedMaintainabilityIndex extends CodeRangeEvaluator {
      */
     @Override
     public IStatus run(IProgressMonitor monitor) {
-	monitor.beginTask(NAME, 4);
+	monitor.beginTask(NormalizedMaintainabilityIndexEvaluator.NAME, 4);
 
 	checkInput();
 
@@ -170,7 +157,7 @@ public class NormalizedMaintainabilityIndex extends CodeRangeEvaluator {
      */
     @Override
     public String getDescription() {
-	return DESCRIPTION;
+	return NormalizedMaintainabilityIndexEvaluator.DESCRIPTION;
     }
 
     /**
@@ -180,7 +167,7 @@ public class NormalizedMaintainabilityIndex extends CodeRangeEvaluator {
      */
     @Override
     public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
-	return EVALUATED_QUALITY_CHARACTERISTICS;
+	return NormalizedMaintainabilityIndexEvaluator.EVALUATED_QUALITY_CHARACTERISTICS;
     }
 
     @Override
