@@ -96,13 +96,11 @@ public class EntropyEvaluator extends AbstractEvaluator {
     @Override
     protected void processDirectory(HashIdFileTree directory)
 	    throws InterruptedException {
-	// TODO Auto-generated method stub
-
+	// intentionally left blank
     }
 
     @Override
     protected void processProject() throws InterruptedException {
-	// TODO Auto-generated method stub
-
+	// intentionally left blank
     }
 }

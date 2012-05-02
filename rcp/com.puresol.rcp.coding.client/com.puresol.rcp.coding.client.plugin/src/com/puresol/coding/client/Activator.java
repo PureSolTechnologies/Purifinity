@@ -10,8 +10,10 @@ import org.osgi.framework.BundleContext;
 
 import com.puresol.coding.client.controls.EvaluatorGUIFactory;
 import com.puresol.coding.client.evaluation.cocomo.CoCoMoEvaluatorGUIFactory;
+import com.puresol.coding.client.evaluation.maintainability.MaintainabilityIndexEvaluatorGUIFactory;
 import com.puresol.coding.client.evaluation.sloc.SLOCEvaluatorGUIFactory;
 import com.puresol.coding.metrics.cocomo.CoCoMoEvaluator;
+import com.puresol.coding.metrics.maintainability.MaintainabilityIndexEvaluator;
 import com.puresol.coding.metrics.sloc.SLOCEvaluator;
 
 /**
@@ -37,6 +39,12 @@ public class Activator extends AbstractUIPlugin {
 	dictionary.put("evaluator", CoCoMoEvaluator.class.getName());
 	context.registerService(EvaluatorGUIFactory.class,
 		new CoCoMoEvaluatorGUIFactory(), dictionary);
+
+	dictionary = new Hashtable<String, String>();
+	dictionary.put("evaluator",
+		MaintainabilityIndexEvaluator.class.getName());
+	context.registerService(EvaluatorGUIFactory.class,
+		new MaintainabilityIndexEvaluatorGUIFactory(), dictionary);
 
 	if (plugin != null) {
 	    throw new RuntimeException("A " + getClass().getName()

@@ -97,8 +97,10 @@ public class DirectoryMetricsControl extends Composite implements
 		}
 		centralComposite = service.createDirectoryResultComponent(this,
 			analysisRun, directory);
-		centralComposite.setLayoutData(BorderLayout.CENTER);
-		layout();
+		if (centralComposite != null) {
+		    centralComposite.setLayoutData(BorderLayout.CENTER);
+		    layout();
+		}
 	    }
 	} catch (InvalidSyntaxException e) {
 	    throw new RuntimeException(

@@ -58,4 +58,18 @@ public class MaintainabilityIndexResult implements Serializable {
 	return results;
     }
 
+    @Override
+    public String toString() {
+	StringBuilder builder = new StringBuilder();
+	builder.append("MI     \t");
+	builder.append(mi);
+	builder.append("\n");
+	builder.append("MIwoc\t");
+	builder.append(miwoc);
+	builder.append("\n");
+	builder.append("MIcw \t");
+	builder.append(micw);
+	return builder.toString();
+    }
+
 }
