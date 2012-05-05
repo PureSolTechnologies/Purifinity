@@ -1,0 +1,44 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<changeSet id="1" author="Rick-Rainer Ludwig">
+		<createTable tableName="AnalysisRuns">
+			<column name="Id" type="int">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="Time" type="datetime" />
+			<column name="Project" type="varchar(255)" />
+			<column name="RunTime" type="int" />
+		</createTable>
+		<createTable tableName="FileStore">
+			<column name="FileKey" type="char(64)">
+				<constraints primaryKey="true"  />
+			</column>
+			<column name="FileContent" type="blob" />
+		</createTable>
+		<createTable tableName="AnalysisStore">
+			<column name="ParserTreeKey" type="char(64)">
+				<constraints primaryKey="true" foreignKeyName="AnalysisStoreToFileStoreFK"/>
+			</column>
+			<column name="Language" type="varchar(256)" />
+			<column name="Time" type="datetime" />
+			<column name="RunTime" type="int" />
+			<column name="ParserTree" type="clob" />
+		</createTable>
+		<addForeignKeyConstraint constraintName="AnalysisStoreToFileStoreFK"
+			referencedTableName="FileStore" baseColumnNames="ParserTreeKey"
+			baseTableName="AnalysisStore" referencedColumnNames="FileKey" />
+		<rollback>
+			<dropTable tableName="AnalysisRuns" />
+			<dropTable tableName="FileStore" />
+			<dropTable tableName="AnalysisStore" />
+		</rollback>
+		<modifySql dbms="mysql">
+			<append value=" engine innodb" />
+		</modifySql>
+	</changeSet>
+
+</databaseChangeLog>
+
