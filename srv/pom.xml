@@ -58,12 +58,17 @@
 			<!-- SHARED -->
 			<dependency>
 				<groupId>com.puresol</groupId>
-				<artifactId>database.utils</artifactId>
+				<artifactId>database.mongodb.utils</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.puresol</groupId>
-				<artifactId>database.setup</artifactId>
+				<artifactId>database.postgresql.utils</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresol</groupId>
+				<artifactId>database.postgresql.setup</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
@@ -112,6 +117,12 @@
 				<groupId>org.liquibase</groupId>
 				<artifactId>liquibase-core</artifactId>
 				<version>2.0.3</version>
+			</dependency>
+			<!-- MongoDB -->
+			<dependency>
+				<groupId>org.mongodb</groupId>
+				<artifactId>mongo-java-driver</artifactId>
+				<version>2.7.3</version>
 			</dependency>
 			<!-- Testing -->
 			<dependency>

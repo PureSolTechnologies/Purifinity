@@ -1,9 +1,0 @@
-Do as user postgres:
-
-createuser liquibase -P
-
-(put 2x password liquibase!)
-
-createdb CODEANALYSIS
-
- 

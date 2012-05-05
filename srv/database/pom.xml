@@ -9,12 +9,12 @@
 	</parent>
 
 	<artifactId>database</artifactId>
+	<name>${project.groupId}.${project.artifactId}</name>
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>setup</module>
-		<module>utils</module>
-		<module>test</module>
+		<module>mongodb</module>
+		<module>postgresql</module>
 	</modules>
 
 </project>
