@@ -29,9 +29,11 @@ public class Evaluators {
 		    .getServiceReferences(EvaluatorFactory.class.getName(),
 			    null);
 	    List<EvaluatorFactory> evaluatorFactories = new ArrayList<EvaluatorFactory>();
-	    for (ServiceReference serviceReference : serviceReferences) {
-		evaluatorFactories.add((EvaluatorFactory) bundleContext
-			.getService(serviceReference));
+	    if (serviceReferences != null) {
+		for (ServiceReference serviceReference : serviceReferences) {
+		    evaluatorFactories.add((EvaluatorFactory) bundleContext
+			    .getService(serviceReference));
+		}
 	    }
 	    return evaluatorFactories;
 	} catch (InvalidSyntaxException e) {

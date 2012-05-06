@@ -8,18 +8,21 @@ import com.puresol.coding.analysis.api.AnalyzedFile;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.client.controls.EvaluatorGUIFactory;
 
-public class MaintainabilityIndexEvaluatorGUIFactory implements EvaluatorGUIFactory {
+public class MaintainabilityIndexEvaluatorGUIFactory implements
+	EvaluatorGUIFactory {
 
     @Override
     public Composite createFileResultComponent(Composite parent,
 	    AnalysisRun analysisRun, AnalyzedFile analyzedFile) {
-	return new MaintainabilityIndexFileResultComponent(parent, SWT.NONE, analyzedFile);
+	return new MaintainabilityIndexFileResultComponent(parent, SWT.NONE,
+		analyzedFile);
     }
 
     @Override
     public Composite createDirectoryResultComponent(Composite parent,
 	    AnalysisRun analysisRun, HashIdFileTree directory) {
-	return null;
+	return new MaintainabilityIndexDirectoryResultComponent(parent,
+		SWT.NONE, analysisRun, directory);
     }
 
 }
