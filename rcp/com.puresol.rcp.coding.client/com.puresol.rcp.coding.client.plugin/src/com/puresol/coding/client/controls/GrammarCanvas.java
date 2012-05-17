@@ -8,6 +8,7 @@ import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.RGB;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
@@ -61,7 +62,10 @@ public class GrammarCanvas extends Canvas implements PaintListener {
 	    } finally {
 		whiteColor.dispose();
 	    }
-	    renderer.render(context, 0, 0, getSize().x - 1, getSize().y - 1);
+	    Rectangle clientArea = getClientArea();
+	    renderer.render(context, clientArea.x, clientArea.y, clientArea.x
+		    + clientArea.width - 1, clientArea.y + clientArea.height
+		    - 1);
 	    // } finally {
 	    // gc.dispose();
 	    // }

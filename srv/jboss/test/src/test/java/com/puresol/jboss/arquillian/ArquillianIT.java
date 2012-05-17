@@ -13,5 +13,4 @@ public class ArquillianIT {
     public void test() {
 	System.out.println("Test!");
     }
-
 }

@@ -17,6 +17,10 @@ import org.swtchart.ISeries.SeriesType;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.CodeRangeType;
 import com.puresol.coding.analysis.api.HashIdFileTree;
+import com.puresol.coding.client.charting.Chart2D;
+import com.puresol.coding.client.charting.Legend;
+import com.puresol.coding.client.charting.LegendPosition;
+import com.puresol.coding.client.charting.rendering.Chart2DCanvas;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.metrics.maintainability.MaintainabilityIndexEvaluator;
 import com.puresol.coding.metrics.maintainability.MaintainabilityIndexEvaluatorStore;
@@ -94,5 +98,17 @@ public class MaintainabilityIndexDirectoryResultComponent extends Composite {
 	IAxis yAxis = axisSet.getYAxis(0);
 	yAxis.getTitle().setText("Maintainability");
 	yAxis.adjustRange();
+
+	Chart2DCanvas chart2dCanvas = new Chart2DCanvas(this, SWT.NONE);
+	Chart2D chart2d = new Chart2D();
+	chart2d.addLegend(new Legend(LegendPosition.NORTH));
+	chart2d.addLegend(new Legend(LegendPosition.EAST));
+	chart2d.addLegend(new Legend(LegendPosition.SOUTH));
+	chart2d.addLegend(new Legend(LegendPosition.WEST));
+	chart2d.addLegend(new Legend(LegendPosition.NORTH));
+	// chart2d.addLegend(new Legend(LegendPosition.EAST));
+	// chart2d.addLegend(new Legend(LegendPosition.SOUTH));
+	// chart2d.addLegend(new Legend(LegendPosition.WEST));
+	chart2dCanvas.setChart2D(chart2d);
     }
 }
