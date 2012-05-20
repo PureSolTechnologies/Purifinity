@@ -8,9 +8,9 @@ package com.puresol.coding.client.charting;
  */
 public class Legend {
 
-    private final LegendPosition position;
+    private final BorderPosition position;
 
-    public Legend(LegendPosition position) {
+    public Legend(BorderPosition position) {
 	super();
 	this.position = position;
     }
@@ -21,7 +21,7 @@ public class Legend {
      * 
      * @return
      */
-    public LegendPosition getPosition() {
+    public BorderPosition getPosition() {
 	return position;
     }
 

@@ -1,6 +1,5 @@
 package com.puresol.coding.client.charting;
 
-
 /**
  * This is a base class for 2D charts.
  * 

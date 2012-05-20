@@ -15,6 +15,7 @@ public abstract class AbstractChart {
     private final List<XAxis> xAxes = new ArrayList<XAxis>();
     private final List<YAxis> yAxes = new ArrayList<YAxis>();
     private final List<Legend> legends = new ArrayList<Legend>();
+    private final List<Title> titles = new ArrayList<Title>();
 
     public final void addXAxis(XAxis axis) {
 	xAxes.add(axis);
@@ -40,4 +41,11 @@ public abstract class AbstractChart {
 	return legends;
     }
 
+    public final void addTitle(Title title) {
+	titles.add(title);
+    }
+
+    public final List<Title> getTitles() {
+	return titles;
+    }
 }

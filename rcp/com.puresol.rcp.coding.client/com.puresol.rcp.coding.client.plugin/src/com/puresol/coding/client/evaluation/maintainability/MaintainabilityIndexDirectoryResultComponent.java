@@ -17,9 +17,12 @@ import org.swtchart.ISeries.SeriesType;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.CodeRangeType;
 import com.puresol.coding.analysis.api.HashIdFileTree;
+import com.puresol.coding.client.charting.BorderPosition;
 import com.puresol.coding.client.charting.Chart2D;
 import com.puresol.coding.client.charting.Legend;
-import com.puresol.coding.client.charting.LegendPosition;
+import com.puresol.coding.client.charting.Title;
+import com.puresol.coding.client.charting.XAxis;
+import com.puresol.coding.client.charting.YAxis;
 import com.puresol.coding.client.charting.rendering.Chart2DCanvas;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.metrics.maintainability.MaintainabilityIndexEvaluator;
@@ -101,14 +104,17 @@ public class MaintainabilityIndexDirectoryResultComponent extends Composite {
 
 	Chart2DCanvas chart2dCanvas = new Chart2DCanvas(this, SWT.NONE);
 	Chart2D chart2d = new Chart2D();
-	chart2d.addLegend(new Legend(LegendPosition.NORTH));
-	chart2d.addLegend(new Legend(LegendPosition.EAST));
-	chart2d.addLegend(new Legend(LegendPosition.SOUTH));
-	chart2d.addLegend(new Legend(LegendPosition.WEST));
-	chart2d.addLegend(new Legend(LegendPosition.NORTH));
-	// chart2d.addLegend(new Legend(LegendPosition.EAST));
-	// chart2d.addLegend(new Legend(LegendPosition.SOUTH));
-	// chart2d.addLegend(new Legend(LegendPosition.WEST));
+	chart2d.addTitle(new Title(BorderPosition.NORTH, "Title"));
+	chart2d.addLegend(new Legend(BorderPosition.EAST));
+	chart2d.addLegend(new Legend(BorderPosition.SOUTH));
+	chart2d.addLegend(new Legend(BorderPosition.WEST));
+	chart2d.addLegend(new Legend(BorderPosition.NORTH));
+	chart2d.addLegend(new Legend(BorderPosition.EAST));
+	chart2d.addLegend(new Legend(BorderPosition.SOUTH));
+	chart2d.addLegend(new Legend(BorderPosition.WEST));
+	chart2d.addLegend(new Legend(BorderPosition.NORTH));
+	chart2d.addXAxis(new XAxis());
+	chart2d.addYAxis(new YAxis());
 	chart2dCanvas.setChart2D(chart2d);
     }
 }

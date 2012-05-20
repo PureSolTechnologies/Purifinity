@@ -1,12 +1,12 @@
 package com.puresol.coding.client.charting;
 
 /**
- * This enum tells where the title needs to be put.
+ * This enum tells where the legend needs to be put.
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public enum TitlePosition {
+public enum BorderPosition {
 
     EAST, WEST, NORTH, SOUTH;
 

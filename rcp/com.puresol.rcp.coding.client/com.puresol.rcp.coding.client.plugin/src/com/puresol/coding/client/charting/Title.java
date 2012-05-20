@@ -6,33 +6,67 @@ package com.puresol.coding.client.charting;
  * @author Rick-Rainer Ludwig
  * 
  */
-public interface Title {
+public class Title {
+
+    private final BorderPosition position;
+    private String text = "";
+    private int size = 12;
+
+    public Title(BorderPosition position) {
+	super();
+	this.position = position;
+    }
+
+    public Title(BorderPosition position, String text) {
+	super();
+	this.position = position;
+	this.text = text;
+    }
+
+    public Title(BorderPosition position, String text, int size) {
+	super();
+	this.position = position;
+	this.text = text;
+	this.size = size;
+    }
 
     /**
      * This method set the text for the title.
      * 
      * @param text
      */
-    public void setText(String text);
+    public void setText(String text) {
+	this.text = text;
+    }
 
     /**
      * This method returns the title's text.
      * 
      * @return
      */
-    public String getText();
+    public String getText() {
+	return text;
+    }
 
     /**
      * This method sets the size of the title to be drawn.
      * 
      * @param size
      */
-    public void setSize(int size);
+    public void setSize(int size) {
+	this.size = size;
+    }
 
     /**
      * This method returns the size of the title font.
      * 
      * @return
      */
-    public int getSize();
+    public int getSize() {
+	return size;
+    }
+
+    public BorderPosition getPosition() {
+	return position;
+    }
 }

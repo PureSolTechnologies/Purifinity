@@ -4,15 +4,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontMetrics;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Display;
 
 import com.puresol.coding.client.charting.AxisDirection;
+import com.puresol.coding.client.charting.BorderPosition;
 import com.puresol.coding.client.charting.Chart2D;
 import com.puresol.coding.client.charting.Legend;
-import com.puresol.coding.client.charting.LegendPosition;
-import com.puresol.coding.client.charting.XAxis;
+import com.puresol.coding.client.charting.Title;
 
 /**
  * This is a simple {@link Chart2D} renderer.
@@ -22,12 +25,9 @@ import com.puresol.coding.client.charting.XAxis;
  */
 public class Chart2DRenderer {
 
-    private final AxisRenderer axisRenderer = new AxisRenderer();
-
-    private final Map<LegendPosition, Integer> legendCount = new HashMap<LegendPosition, Integer>();
+    private final BorderPositionCounter titleCount = new BorderPositionCounter();
+    private final BorderPositionCounter legendCount = new BorderPositionCounter();
     private final Map<AxisDirection, Map<AxisPosition, Integer>> axisCount = new HashMap<AxisDirection, Map<AxisPosition, Integer>>();
-
-    private final AxisType axisType = AxisType.SINGLE;
 
     private GC gc;
     private Rectangle clientArea;
@@ -41,47 +41,71 @@ public class Chart2DRenderer {
 	this.display = display;
 	this.chart2D = chart2D;
 
-	drawLegends();
+	Rectangle titleCenterArea = drawTitles();
+	Rectangle legendCenterArea = drawLegends(titleCenterArea);
+	new Graph2DRenderer().render(gc, chart2D, legendCenterArea);
+    }
 
-	drawCross(gc, clientArea);
-
-	if (axisType == AxisType.SINGLE) {
-	    List<XAxis> xAxes = chart2D.getXAxes();
-
+    private Rectangle drawTitles() {
+	// init fields and variables...
+	titleCount.clear();
+	Map<BorderPosition, Integer> nums = new HashMap<BorderPosition, Integer>();
+	for (BorderPosition position : BorderPosition.values()) {
+	    nums.put(position, 0);
+	}
+	// render
+	List<Title> titles = chart2D.getTitles();
+	for (Title title : titles) {
+	    titleCount.add(title.getPosition());
+	}
+	BorderPositionCalculator positionCalculator = new BorderPositionCalculator(
+		clientArea, titleCount, 0.05);
+	Font font = new Font(gc.getDevice(), "Times",
+		(int) (clientArea.height * 0.05 * 0.95), SWT.BOLD);
+	try {
+	    gc.setFont(font);
+	    FontMetrics fontMetrics = gc.getFontMetrics();
+	    int fontHeight = fontMetrics.getHeight();
+	    int averageCharWidth = fontMetrics.getAverageCharWidth();
+	    for (Title title : titles) {
+		Integer num = nums.get(title.getPosition());
+		Rectangle titleArea = positionCalculator.getPosition(
+			title.getPosition(), num,
+			titleCount.get(title.getPosition()));
+		String titleText = title.getText();
+		gc.drawText(titleText, titleArea.x + titleArea.width / 2
+			- titleText.length() * averageCharWidth / 2,
+			titleArea.y + titleArea.height / 2 - fontHeight / 2);
+		nums.put(title.getPosition(), num + 1);
+	    }
+	    return positionCalculator.getCenterArea();
+	} finally {
+	    font.dispose();
 	}
     }
 
-    private void drawLegends() {
+    private Rectangle drawLegends(Rectangle titleCenterArea) {
 	// init fields and variables...
 	legendCount.clear();
-	Map<LegendPosition, Integer> nums = new HashMap<LegendPosition, Integer>();
-	for (LegendPosition position : LegendPosition.values()) {
-	    legendCount.put(position, 0);
+	Map<BorderPosition, Integer> nums = new HashMap<BorderPosition, Integer>();
+	for (BorderPosition position : BorderPosition.values()) {
 	    nums.put(position, 0);
 	}
 	// render
 	List<Legend> legends = chart2D.getLegends();
 	for (Legend legend : legends) {
-	    LegendPosition position = legend.getPosition();
-	    Integer count = legendCount.get(position);
-	    legendCount.put(position, count + 1);
+	    legendCount.add(legend.getPosition());
 	}
+	BorderPositionCalculator positionCalculator = new BorderPositionCalculator(
+		titleCenterArea, legendCount, 0.2);
 	for (Legend legend : legends) {
 	    Integer num = nums.get(legend.getPosition());
-	    Rectangle legendArea = LegendPositionCalculator.getPosition(
-		    legend.getPosition(), num, legendCount, clientArea);
+	    Rectangle legendArea = positionCalculator.getPosition(
+		    legend.getPosition(), num,
+		    legendCount.get(legend.getPosition()));
 	    RendererUtils.drawCrossedBox(gc, legendArea);
 	    nums.put(legend.getPosition(), num + 1);
 	}
-    }
-
-    /**
-     * For debugging purpose only to see the position of the graph!
-     * 
-     * @param gc
-     * @param clientArea
-     */
-    private void drawCross(GC gc, Rectangle clientArea) {
-	RendererUtils.drawCrossedBox(gc, clientArea);
+	return positionCalculator.getCenterArea();
     }
 }
