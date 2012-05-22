@@ -8,24 +8,24 @@ package com.puresol.coding.client.charting;
  */
 public class Title {
 
-    private final BorderPosition position;
+    private final TitleType type;
     private String text = "";
     private int size = 12;
 
-    public Title(BorderPosition position) {
+    public Title(TitleType position) {
 	super();
-	this.position = position;
+	this.type = position;
     }
 
-    public Title(BorderPosition position, String text) {
+    public Title(TitleType position, String text) {
 	super();
-	this.position = position;
+	this.type = position;
 	this.text = text;
     }
 
-    public Title(BorderPosition position, String text, int size) {
+    public Title(TitleType position, String text, int size) {
 	super();
-	this.position = position;
+	this.type = position;
 	this.text = text;
 	this.size = size;
     }
@@ -66,7 +66,7 @@ public class Title {
 	return size;
     }
 
-    public BorderPosition getPosition() {
-	return position;
+    public TitleType getType() {
+	return type;
     }
 }

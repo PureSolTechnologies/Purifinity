@@ -21,6 +21,7 @@ import com.puresol.coding.client.charting.BorderPosition;
 import com.puresol.coding.client.charting.Chart2D;
 import com.puresol.coding.client.charting.Legend;
 import com.puresol.coding.client.charting.Title;
+import com.puresol.coding.client.charting.TitleType;
 import com.puresol.coding.client.charting.XAxis;
 import com.puresol.coding.client.charting.YAxis;
 import com.puresol.coding.client.charting.rendering.Chart2DCanvas;
@@ -104,7 +105,10 @@ public class MaintainabilityIndexDirectoryResultComponent extends Composite {
 
 	Chart2DCanvas chart2dCanvas = new Chart2DCanvas(this, SWT.NONE);
 	Chart2D chart2d = new Chart2D();
-	chart2d.addTitle(new Title(BorderPosition.NORTH, "Title"));
+	chart2d.addTitle(new Title(TitleType.TITLE, "Title"));
+	chart2d.addTitle(new Title(TitleType.SUB_TITLE, "SubTitle"));
+	chart2d.addTitle(new Title(TitleType.CAPTION, "Caption"));
+	chart2d.addTitle(new Title(TitleType.TEXT, "Text"));
 	chart2d.addLegend(new Legend(BorderPosition.EAST));
 	chart2d.addLegend(new Legend(BorderPosition.SOUTH));
 	chart2d.addLegend(new Legend(BorderPosition.WEST));
