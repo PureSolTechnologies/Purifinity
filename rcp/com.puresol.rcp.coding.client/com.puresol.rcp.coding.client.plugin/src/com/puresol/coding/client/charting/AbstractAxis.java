@@ -8,9 +8,9 @@ package com.puresol.coding.client.charting;
  */
 public abstract class AbstractAxis implements Axis {
 
-    private double minimum = 0.0;
-    private double maximum = 0.0;
-    private int numMainTicks = 2;
+    private double minimum = -1.0;
+    private double maximum = 1.0;
+    private int numMainTicks = 3;
     private int numSubTicks = 9;
     private boolean logarithmic = false;
     private boolean twoSided = false;

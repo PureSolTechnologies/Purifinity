@@ -24,7 +24,7 @@ import com.puresol.coding.client.charting.Title;
 import com.puresol.coding.client.charting.TitleType;
 import com.puresol.coding.client.charting.XAxis;
 import com.puresol.coding.client.charting.YAxis;
-import com.puresol.coding.client.charting.rendering.Chart2DCanvas;
+import com.puresol.coding.client.charting.rendering.Chart2DComposite;
 import com.puresol.coding.evaluator.AbstractEvaluator;
 import com.puresol.coding.metrics.maintainability.MaintainabilityIndexEvaluator;
 import com.puresol.coding.metrics.maintainability.MaintainabilityIndexEvaluatorStore;
@@ -103,7 +103,7 @@ public class MaintainabilityIndexDirectoryResultComponent extends Composite {
 	yAxis.getTitle().setText("Maintainability");
 	yAxis.adjustRange();
 
-	Chart2DCanvas chart2dCanvas = new Chart2DCanvas(this, SWT.NONE);
+	Chart2DComposite chart2dCanvas = new Chart2DComposite(this, SWT.NONE);
 	Chart2D chart2d = new Chart2D();
 	chart2d.addTitle(new Title(TitleType.TITLE, "Title"));
 	chart2d.addTitle(new Title(TitleType.SUB_TITLE, "SubTitle"));

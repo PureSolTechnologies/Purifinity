@@ -21,8 +21,7 @@ public class Graph2DRenderer {
 	this.gc = gc;
 	this.chart = chart;
 	Rectangle axesCenterArea = drawSingleAxes(area);
-	RendererUtils.drawCrossedBox(gc, axesCenterArea);
-
+	// RendererUtils.drawCrossedBox(gc, axesCenterArea);
     }
 
     private Rectangle drawSingleAxes(Rectangle legendCenterArea) {
