@@ -141,6 +141,17 @@ public class BorderPositionCalculator {
 	return horizontalAreas;
     }
 
+    /**
+     * Returns a rectangle with the position of the border area.
+     * 
+     * @param position
+     *            is the border position.
+     * @param num
+     *            is the number of the layer.
+     * @param total
+     *            is the total number of layers.
+     * @return
+     */
     public Rectangle getPosition(BorderPosition position, int num, int total) {
 	switch (position) {
 	case EAST:

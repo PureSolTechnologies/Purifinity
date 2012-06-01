@@ -90,7 +90,7 @@ public class Chart2DComposite extends Composite {
 	addGraphCanvas();
 
 	addTitles();
-	addLegends();
+	addLegend();
 
 	this.pack();
     }
@@ -209,33 +209,29 @@ public class Chart2DComposite extends Composite {
 	}
     }
 
-    private void addLegends() {
+    private void addLegend() {
 	if (chart2D == null)
 	    return;
-	List<Legend> legends = chart2D.getLegends();
-	if (legends == null)
-	    return;
-	for (Legend legend : legends) {
-	    switch (legend.getPosition()) {
-	    case NORTH:
-		Label northLabel = new Label(northLegendsArea, SWT.CENTER);
-		northLabel.setText("North Legend");
-		break;
-	    case EAST:
-		VerticalLabel eastLabel = new VerticalLabel(eastLegendsArea,
-			SWT.NONE);
-		eastLabel.setText("East Legend");
-		break;
-	    case SOUTH:
-		Label southLabel = new Label(southLegendsArea, SWT.CENTER);
-		southLabel.setText("South Legend");
-		break;
-	    case WEST:
-		VerticalLabel westLabel = new VerticalLabel(westLegendsArea,
-			SWT.NONE);
-		westLabel.setText("West Legend");
-		break;
-	    }
+	Legend legend = chart2D.getLegend();
+	switch (legend.getPosition()) {
+	case NORTH:
+	    Label northLabel = new Label(northLegendsArea, SWT.CENTER);
+	    northLabel.setText("North Legend");
+	    break;
+	case EAST:
+	    VerticalLabel eastLabel = new VerticalLabel(eastLegendsArea,
+		    SWT.NONE);
+	    eastLabel.setText("East Legend");
+	    break;
+	case SOUTH:
+	    Label southLabel = new Label(southLegendsArea, SWT.CENTER);
+	    southLabel.setText("South Legend");
+	    break;
+	case WEST:
+	    VerticalLabel westLabel = new VerticalLabel(westLegendsArea,
+		    SWT.NONE);
+	    westLabel.setText("West Legend");
+	    break;
 	}
     }
 
@@ -253,7 +249,7 @@ public class Chart2DComposite extends Composite {
 	addTitleComposite();
 	addLegendComposite();
 	addTitles();
-	addLegends();
+	addLegend();
 	pack();
     }
 }

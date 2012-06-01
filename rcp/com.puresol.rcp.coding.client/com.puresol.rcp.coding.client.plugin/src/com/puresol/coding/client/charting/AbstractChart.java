@@ -12,33 +12,33 @@ import java.util.List;
  */
 public abstract class AbstractChart {
 
-    private final List<XAxis> xAxes = new ArrayList<XAxis>();
-    private final List<YAxis> yAxes = new ArrayList<YAxis>();
-    private final List<Legend> legends = new ArrayList<Legend>();
+    private XAxis xAxis = new XAxis();
+    private YAxis yAxis = new YAxis();
+    private Legend legend = new Legend(BorderPosition.EAST);
     private final List<Title> titles = new ArrayList<Title>();
 
-    public final void addXAxis(XAxis axis) {
-	xAxes.add(axis);
+    public final void setXAxis(XAxis axis) {
+	xAxis = axis;
     }
 
-    public final void addYAxis(YAxis axis) {
-	yAxes.add(axis);
+    public final void setYAxis(YAxis axis) {
+	yAxis = axis;
     }
 
-    public final List<XAxis> getXAxes() {
-	return xAxes;
+    public final XAxis getXAxis() {
+	return xAxis;
     }
 
-    public final List<YAxis> getYAxes() {
-	return yAxes;
+    public final YAxis getYAxis() {
+	return yAxis;
     }
 
-    public final void addLegend(Legend legend) {
-	legends.add(legend);
+    public final void setLegend(Legend legend) {
+	this.legend = legend;
     }
 
-    public final List<Legend> getLegends() {
-	return legends;
+    public final Legend getLegend() {
+	return legend;
     }
 
     public final void addTitle(Title title) {

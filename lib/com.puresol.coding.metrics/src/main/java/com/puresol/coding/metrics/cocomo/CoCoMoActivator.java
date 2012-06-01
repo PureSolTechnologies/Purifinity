@@ -32,7 +32,7 @@ public class CoCoMoActivator implements BundleActivator {
 
     private void registerProjectFactory(BundleContext context) {
 	CoCoMoServiceFactory cocomoFactory = new CoCoMoServiceFactory();
-	Dictionary<?, ?> headers = context.getBundle().getHeaders();
+	Dictionary<String, ?> headers = context.getBundle().getHeaders();
 
 	ServiceRegistration registration = context.registerService(
 		EvaluatorFactory.class.getName(), cocomoFactory, headers);

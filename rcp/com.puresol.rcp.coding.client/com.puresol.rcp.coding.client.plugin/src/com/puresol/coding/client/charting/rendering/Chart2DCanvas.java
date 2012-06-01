@@ -3,13 +3,14 @@ package com.puresol.coding.client.charting.rendering;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.GC;
-import org.eclipse.swt.graphics.LineAttributes;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.graphics.Transform;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 
 import com.puresol.coding.client.charting.Chart2D;
+import com.puresol.coding.client.charting.XAxis;
+import com.puresol.coding.client.charting.YAxis;
 
 /**
  * This is a simple {@link Chart2D} renderer.
@@ -44,25 +45,30 @@ public class Chart2DCanvas extends Canvas implements PaintListener {
     public void paintControl(PaintEvent e) {
 	GC gc = e.gc;
 	Rectangle clientArea = getClientArea();
-	Transform transform = createNormalizedGraphTransform(clientArea);
+	/*
+	 * Due to the missing fractional pixel drawing facilities in Eclipse we
+	 * need to transform everything on our own.
+	 */
+	Transform transform = new Transform(gc.getDevice(), 1.0f, 0.0f, 0.0f,
+		-1.0f, 0.0f, 0.0f);
+	transform.translate(clientArea.width / 2, -clientArea.height / 2);
 	gc.setTransform(transform);
 
-	gc.setLineAttributes(new LineAttributes((float) 1.0
-		/ Math.min(clientArea.width, clientArea.height) * 2));
+	gc.drawLine(-10, -10, 10, 10);
+	gc.drawLine(-10, 10, 10, -10);
+
+	TransformationMatrix2D transformMatrix2d = new TransformationMatrix2D();
+	XAxis xAxis = chart2D.getXAxis();
+	double rangeX = xAxis.getMaximum() - xAxis.getMinimum();
+	double scaleX = clientArea.width / rangeX * 0.95;
+	YAxis yAxis = chart2D.getYAxis();
+	double rangeY = yAxis.getMaximum() - yAxis.getMinimum();
+	double scaleY = clientArea.height / rangeY * 0.95;
+	transformMatrix2d.scale(scaleX, scaleY);
 
 	if (chart2D != null) {
-	    new Graph2DRenderer().render(gc, chart2D, clientArea);
+	    new Graph2DRenderer().render(gc, chart2D, clientArea,
+		    transformMatrix2d);
 	}
-    }
-
-    private Transform createNormalizedGraphTransform(Rectangle clientArea) {
-	Transform transform = new Transform(getDisplay(), (float) 1.0,
-		(float) 0.0, (float) 0.0, (float) -1.0, (float) 1.0,
-		(float) 1.0);
-	transform.translate(clientArea.width / 2, -clientArea.height / 2);
-	transform.multiply(new Transform(getDisplay(), clientArea.width
-		/ (float) 2.0, (float) 0.0, (float) 0.0, clientArea.height
-		/ (float) 2.0, (float) 1.0, (float) 1.0));
-	return transform;
     }
 }

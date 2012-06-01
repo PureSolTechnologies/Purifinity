@@ -97,6 +97,7 @@
 				<artifactId>coding.metrics</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+			<!-- JOGAMP -->
 			<!-- OSGi -->
 			<dependency>
 				<groupId>org.osgi</groupId>

@@ -32,7 +32,7 @@ public class McCabeActivator implements BundleActivator {
 
     private void registerFactory(BundleContext context) {
 	McCabeMetricServiceFactory mcCabeMetricFactory = new McCabeMetricServiceFactory();
-	Dictionary<?, ?> headers = context.getBundle().getHeaders();
+	Dictionary<String, ?> headers = context.getBundle().getHeaders();
 
 	ServiceRegistration registration = context.registerService(
 		EvaluatorFactory.class.getName(), mcCabeMetricFactory, headers);

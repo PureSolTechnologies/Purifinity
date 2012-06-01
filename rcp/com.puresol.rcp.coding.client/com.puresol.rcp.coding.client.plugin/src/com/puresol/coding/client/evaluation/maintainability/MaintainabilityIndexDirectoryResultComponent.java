@@ -109,16 +109,9 @@ public class MaintainabilityIndexDirectoryResultComponent extends Composite {
 	chart2d.addTitle(new Title(TitleType.SUB_TITLE, "SubTitle"));
 	chart2d.addTitle(new Title(TitleType.CAPTION, "Caption"));
 	chart2d.addTitle(new Title(TitleType.TEXT, "Text"));
-	chart2d.addLegend(new Legend(BorderPosition.EAST));
-	chart2d.addLegend(new Legend(BorderPosition.SOUTH));
-	chart2d.addLegend(new Legend(BorderPosition.WEST));
-	chart2d.addLegend(new Legend(BorderPosition.NORTH));
-	chart2d.addLegend(new Legend(BorderPosition.EAST));
-	chart2d.addLegend(new Legend(BorderPosition.SOUTH));
-	chart2d.addLegend(new Legend(BorderPosition.WEST));
-	chart2d.addLegend(new Legend(BorderPosition.NORTH));
-	chart2d.addXAxis(new XAxis());
-	chart2d.addYAxis(new YAxis());
+	chart2d.setLegend(new Legend(BorderPosition.EAST));
+	chart2d.setXAxis(new XAxis());
+	chart2d.setYAxis(new YAxis());
 	chart2dCanvas.setChart2D(chart2d);
     }
 }
