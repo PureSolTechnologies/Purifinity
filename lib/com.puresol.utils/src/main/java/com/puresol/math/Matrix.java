@@ -91,6 +91,16 @@ public class Matrix {
 	set(elements);
     }
 
+    /**
+     * Creates a Matrix with dimension m x n.
+     * 
+     * @param matrix
+     *            is the matrix what elements are to be used as initial values.
+     */
+    public Matrix(Matrix matrix) {
+	this(matrix.m, matrix.n, matrix.elements);
+    }
+
     public int getM() {
 	return m;
     }
@@ -101,6 +111,10 @@ public class Matrix {
 
     public double get(int row, int col) {
 	return elements[row][col];
+    }
+
+    protected double[][] getElements() {
+	return elements;
     }
 
     /**
@@ -145,4 +159,71 @@ public class Matrix {
 	elements[row][col] = value;
     }
 
+    public void multiplyFromRight(Matrix rightSide) {
+	if (n != rightSide.m) {
+	    throw new IllegalArgumentException(
+		    "The dimenstions A.m and B.n are not equal! Matrix multiplication is not possible!");
+	}
+	Matrix matrix = new Matrix(m, rightSide.n);
+	for (int i = 0; i < m; i++) {
+	    for (int j = 0; j < n; j++) {
+		for (int k = 0; k < rightSide.n; k++) {
+		    matrix.elements[i][k] += elements[i][j]
+			    * rightSide.elements[j][k];
+		}
+	    }
+	}
+	set(matrix.elements);
+    }
+
+    public void multiplyFromLeft(Matrix leftSide) {
+	if (leftSide.n != m) {
+	    throw new IllegalArgumentException(
+		    "The dimenstions A.m and B.n are not equal! Matrix multiplication is not possible!");
+	}
+	Matrix matrix = new Matrix(leftSide.m, n);
+	for (int i = 0; i < leftSide.m; i++) {
+	    for (int k = 0; k < n; k++) {
+		for (int j = 0; j < leftSide.n; j++) {
+		    matrix.elements[i][k] += leftSide.elements[i][j]
+			    * elements[j][k];
+		}
+	    }
+	}
+	set(matrix.elements);
+    }
+
+    @Override
+    public String toString() {
+	StringBuilder builder = new StringBuilder();
+	for (int row = 0; row < m; row++) {
+	    if (row == 0) {
+		if (m == 0) {
+		    builder.append("(");
+		} else {
+		    builder.append("/");
+		}
+	    } else if (row == m - 1) {
+		builder.append("\\");
+	    } else {
+		builder.append("|");
+	    }
+	    for (int col = 0; col < n; col++) {
+		builder.append(" " + String.valueOf(get(row, col)));
+	    }
+	    if (row == 0) {
+		if (m == 0) {
+		    builder.append(")");
+		} else {
+		    builder.append("\\");
+		}
+	    } else if (row == m - 1) {
+		builder.append("/");
+	    } else {
+		builder.append("|");
+	    }
+	    builder.append("\n");
+	}
+	return builder.toString();
+    }
 }

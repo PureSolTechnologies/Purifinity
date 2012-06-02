@@ -22,6 +22,13 @@ public class Graph2DRenderer {
 	this.chart = chart;
 	this.transformation = transformation;
 	drawSingleAxes(area);
+	for (double x = chart.getXAxis().getMinimum(); x <= chart.getXAxis()
+		.getMaximum(); x += 0.001) {
+	    double y = Math.sin(x);
+	    Point2D point = new Point2D(x, y);
+	    point = transformation.transform(point);
+	    gc.drawPoint((int) point.getX(), (int) point.getY());
+	}
     }
 
     private void drawSingleAxes(Rectangle legendCenterArea) {

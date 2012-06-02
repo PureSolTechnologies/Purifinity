@@ -15,6 +15,26 @@ public abstract class AbstractAxis implements Axis {
     private boolean logarithmic = false;
     private boolean twoSided = false;
 
+    public AbstractAxis() {
+	super();
+    }
+
+    public AbstractAxis(double min, double max) {
+	super();
+	setMinimum(min);
+	setMaximum(max);
+    }
+
+    public AbstractAxis(double min, double max, int mainTicks) {
+	this(min, max);
+	setMainTicks(mainTicks);
+    }
+
+    public AbstractAxis(double min, double max, int mainTicks, int subTicks) {
+	this(min, max, mainTicks);
+	setSubTicks(subTicks);
+    }
+
     @Override
     public final void setMinimum(double minimum) {
 	this.minimum = minimum;

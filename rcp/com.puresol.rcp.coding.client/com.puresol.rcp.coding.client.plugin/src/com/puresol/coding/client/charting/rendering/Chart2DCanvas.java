@@ -4,10 +4,10 @@ import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.graphics.Transform;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 
+import com.puresol.coding.client.charting.AxisDirection;
 import com.puresol.coding.client.charting.Chart2D;
 import com.puresol.coding.client.charting.XAxis;
 import com.puresol.coding.client.charting.YAxis;
@@ -49,20 +49,18 @@ public class Chart2DCanvas extends Canvas implements PaintListener {
 	 * Due to the missing fractional pixel drawing facilities in Eclipse we
 	 * need to transform everything on our own.
 	 */
-	Transform transform = new Transform(gc.getDevice(), 1.0f, 0.0f, 0.0f,
-		-1.0f, 0.0f, 0.0f);
-	transform.translate(clientArea.width / 2, -clientArea.height / 2);
-	gc.setTransform(transform);
-
-	gc.drawLine(-10, -10, 10, 10);
-	gc.drawLine(-10, 10, 10, -10);
-
 	TransformationMatrix2D transformMatrix2d = new TransformationMatrix2D();
+	transformMatrix2d.mirror(AxisDirection.X);
+	transformMatrix2d.translate(clientArea.width / 2,
+		-clientArea.height / 2);
+
 	XAxis xAxis = chart2D.getXAxis();
-	double rangeX = xAxis.getMaximum() - xAxis.getMinimum();
-	double scaleX = clientArea.width / rangeX * 0.95;
 	YAxis yAxis = chart2D.getYAxis();
+
+	double rangeX = xAxis.getMaximum() - xAxis.getMinimum();
 	double rangeY = yAxis.getMaximum() - yAxis.getMinimum();
+
+	double scaleX = clientArea.width / rangeX * 0.95;
 	double scaleY = clientArea.height / rangeY * 0.95;
 	transformMatrix2d.scale(scaleX, scaleY);
 
