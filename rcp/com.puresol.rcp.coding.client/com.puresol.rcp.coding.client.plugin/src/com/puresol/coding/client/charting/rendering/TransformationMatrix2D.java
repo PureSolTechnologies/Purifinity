@@ -64,4 +64,15 @@ public class TransformationMatrix2D extends Matrix {
 	    set(i, 2, get(i, 0) * x + get(i, 1) * y + get(i, 2));
 	}
     }
+
+    public void rotateDeg(double deg) {
+	rotateRad(deg / 180.0 * Math.PI);
+    }
+
+    public void rotateRad(double rad) {
+	Matrix rotationMatrix = new Matrix(3, 3, new double[][] {
+		{ Math.cos(rad), -Math.sin(rad), 0.0 },
+		{ Math.sin(rad), Math.cos(rad), 0.0 }, { 0.0, 0.0, 1.0 } });
+	multiplyFromRight(rotationMatrix);
+    }
 }

@@ -1,7 +1,6 @@
 package com.puresol.coding.client.charting.rendering;
 
 import org.eclipse.swt.graphics.GC;
-import org.eclipse.swt.graphics.Rectangle;
 
 import com.puresol.coding.client.charting.BorderPosition;
 import com.puresol.coding.client.charting.Chart2D;
@@ -16,12 +15,12 @@ public class Graph2DRenderer {
     private Chart2D chart;
     private TransformationMatrix2D transformation;
 
-    public void render(GC gc, Chart2D chart, Rectangle area,
+    public void render(GC gc, Chart2D chart,
 	    TransformationMatrix2D transformation) {
 	this.gc = gc;
 	this.chart = chart;
 	this.transformation = transformation;
-	drawSingleAxes(area);
+	drawSingleAxes();
 	for (double x = chart.getXAxis().getMinimum(); x <= chart.getXAxis()
 		.getMaximum(); x += 0.001) {
 	    double y = Math.sin(x);
@@ -31,7 +30,7 @@ public class Graph2DRenderer {
 	}
     }
 
-    private void drawSingleAxes(Rectangle legendCenterArea) {
+    private void drawSingleAxes() {
 	XAxis xAxis = chart.getXAxis();
 	YAxis yAxis = chart.getYAxis();
 	BorderPositionCounter counter = new BorderPositionCounter();

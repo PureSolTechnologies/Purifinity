@@ -65,8 +65,7 @@ public class Chart2DCanvas extends Canvas implements PaintListener {
 	transformMatrix2d.scale(scaleX, scaleY);
 
 	if (chart2D != null) {
-	    new Graph2DRenderer().render(gc, chart2D, clientArea,
-		    transformMatrix2d);
+	    new Graph2DRenderer().render(gc, chart2D, transformMatrix2d);
 	}
     }
 }

@@ -65,12 +65,14 @@ public class AxisRenderer {
 		    (int) pos.getX(), (int) pos.getY() + 10);
 	    gc.drawText(String.valueOf(x), (int) pos.getX() + 3,
 		    (int) pos.getY() + 3, true);
-	    for (int subTick = 0; subTick < subTicks; subTick++) {
-		double subX = x + subRange / (subTicks + 1) * (subTick + 1);
-		Point2D subPos = new Point2D(subX, 0.0);
-		subPos = transformation.transform(subPos);
-		gc.drawLine((int) subPos.getX(), (int) subPos.getY() - 2,
-			(int) subPos.getX(), (int) subPos.getY() + 2);
+	    if (mainTick < mainTicks - 1) {
+		for (int subTick = 0; subTick < subTicks; subTick++) {
+		    double subX = x + subRange / (subTicks + 1) * (subTick + 1);
+		    Point2D subPos = new Point2D(subX, 0.0);
+		    subPos = transformation.transform(subPos);
+		    gc.drawLine((int) subPos.getX(), (int) subPos.getY() - 2,
+			    (int) subPos.getX(), (int) subPos.getY() + 2);
+		}
 	    }
 	}
     }
@@ -91,12 +93,14 @@ public class AxisRenderer {
 		    (int) pos.getX() + 10, (int) pos.getY());
 	    gc.drawText(String.valueOf(y), (int) pos.getX() + 3,
 		    (int) pos.getY() + 3, true);
-	    for (int subTick = 0; subTick < subTicks; subTick++) {
-		double subY = y + subRange / (subTicks + 1) * (subTick + 1);
-		Point2D subPos = new Point2D(0.0, subY);
-		subPos = transformation.transform(subPos);
-		gc.drawLine((int) subPos.getX() - 2, (int) subPos.getY(),
-			(int) subPos.getX() + 2, (int) subPos.getY());
+	    if (mainTick < mainTicks - 1) {
+		for (int subTick = 0; subTick < subTicks; subTick++) {
+		    double subY = y + subRange / (subTicks + 1) * (subTick + 1);
+		    Point2D subPos = new Point2D(0.0, subY);
+		    subPos = transformation.transform(subPos);
+		    gc.drawLine((int) subPos.getX() - 2, (int) subPos.getY(),
+			    (int) subPos.getX() + 2, (int) subPos.getY());
+		}
 	    }
 	}
     }
