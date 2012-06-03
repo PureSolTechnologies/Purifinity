@@ -59,7 +59,7 @@ public class TransformationMatrix2D extends Matrix {
 	}
     }
 
-    public void translate(int x, int y) {
+    public void translate(double x, double y) {
 	for (int i = 0; i < DIMENSIONS; i++) {
 	    set(i, 2, get(i, 0) * x + get(i, 1) * y + get(i, 2));
 	}

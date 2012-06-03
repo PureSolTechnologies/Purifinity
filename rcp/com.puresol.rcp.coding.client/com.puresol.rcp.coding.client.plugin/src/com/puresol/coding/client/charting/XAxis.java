@@ -28,5 +28,4 @@ public class XAxis extends AbstractAxis {
     public AxisDirection getDirection() {
 	return AxisDirection.X;
     }
-
 }

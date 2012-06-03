@@ -1,5 +1,7 @@
 package com.puresol.coding.client.charting;
 
+import java.util.List;
+
 /**
  * This interface represents a single axis. It is the data about the axis itself
  * which is added to a chart and where a dataset can be bound to. The interface
@@ -9,6 +11,28 @@ package com.puresol.coding.client.charting;
  * 
  */
 public interface Axis {
+
+    /**
+     * Adds a new category.
+     * 
+     * @param category
+     *            is the name of the category to be added.
+     */
+    public void addCategory(String category);
+
+    /**
+     * Returns whether this axis is of type category or not.
+     * 
+     * @return True is returned in case of a category axis. False otherwise.
+     */
+    public boolean isCategoryAxis();
+
+    /**
+     * Returns the list of categories.
+     * 
+     * @return
+     */
+    public List<String> getCategories();
 
     /**
      * This method returns the direction of the axis.
@@ -120,4 +144,5 @@ public interface Axis {
      * @return
      */
     public boolean isTwoSidedLogarithmic();
+
 }

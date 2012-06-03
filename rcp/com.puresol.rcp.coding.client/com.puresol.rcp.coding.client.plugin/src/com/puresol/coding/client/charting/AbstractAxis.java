@@ -1,5 +1,8 @@
 package com.puresol.coding.client.charting;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * This is an abstract axis implementation.
  * 
@@ -7,6 +10,8 @@ package com.puresol.coding.client.charting;
  * 
  */
 public abstract class AbstractAxis implements Axis {
+
+    private final List<String> categories = new ArrayList<String>();
 
     private double minimum = -1.0;
     private double maximum = 1.0;
@@ -36,63 +41,82 @@ public abstract class AbstractAxis implements Axis {
     }
 
     @Override
-    public final void setMinimum(double minimum) {
+    public void addCategory(String category) {
+	categories.add(category);
+	setMinimum(0.0);
+	setMaximum(categories.size());
+	setMainTicks(categories.size() + 1);
+	setSubTicks(0);
+    }
+
+    @Override
+    public boolean isCategoryAxis() {
+	return categories.size() > 0;
+    }
+
+    @Override
+    public List<String> getCategories() {
+	return categories;
+    }
+
+    @Override
+    public void setMinimum(double minimum) {
 	this.minimum = minimum;
     }
 
     @Override
-    public final double getMinimum() {
+    public double getMinimum() {
 	return minimum;
     }
 
     @Override
-    public final void setMaximum(double maximum) {
+    public void setMaximum(double maximum) {
 	this.maximum = maximum;
     }
 
     @Override
-    public final double getMaximum() {
+    public double getMaximum() {
 	return maximum;
     }
 
     @Override
-    public final void setMainTicks(int number) {
+    public void setMainTicks(int number) {
 	this.numMainTicks = number;
     }
 
     @Override
-    public final int getMainTicks() {
+    public int getMainTicks() {
 	return numMainTicks;
     }
 
     @Override
-    public final void setSubTicks(int number) {
+    public void setSubTicks(int number) {
 	this.numSubTicks = number;
     }
 
     @Override
-    public final int getSubTicks() {
+    public int getSubTicks() {
 	return numSubTicks;
     }
 
     @Override
-    public final void setLogarithmic(boolean logarithmic) {
+    public void setLogarithmic(boolean logarithmic) {
 	this.logarithmic = logarithmic;
     }
 
     @Override
-    public final void setLogarithmic(boolean logarithmic, boolean twoSided) {
+    public void setLogarithmic(boolean logarithmic, boolean twoSided) {
 	this.logarithmic = logarithmic;
 	this.twoSided = twoSided;
     }
 
     @Override
-    public final boolean isLogarithmic() {
+    public boolean isLogarithmic() {
 	return logarithmic;
     }
 
     @Override
-    public final boolean isTwoSidedLogarithmic() {
+    public boolean isTwoSidedLogarithmic() {
 	return twoSided;
     }
 

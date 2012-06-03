@@ -3,6 +3,7 @@ package com.puresol.coding.client.charting.rendering;
 import org.eclipse.swt.graphics.GC;
 
 import com.puresol.coding.client.charting.Axis;
+import com.puresol.coding.client.charting.AxisDirection;
 
 public class AxisRenderer {
 
@@ -39,70 +40,63 @@ public class AxisRenderer {
 
     private void drawTicks(GC gc, Axis axis,
 	    TransformationMatrix2D transformation) {
-	switch (axis.getDirection()) {
+	double min = axis.getMinimum();
+	double max = axis.getMaximum();
+	double range = max - min;
+	int mainTicks = axis.getMainTicks();
+	int subTicks = axis.getSubTicks();
+	double subRange = range / (mainTicks - 1.0);
+	for (int mainTick = 0; mainTick < mainTicks; mainTick++) {
+	    double position = min + range / (mainTicks - 1.0) * mainTick;
+	    drawTick(gc, transformation, position, axis.getDirection(), 0.2);
+	    drawTickLabel(gc, transformation, position, position, axis.getDirection());
+	    if (mainTick < mainTicks - 1) {
+		for (int subTick = 0; subTick < subTicks; subTick++) {
+		    double subY = position + subRange / (subTicks + 1) * (subTick + 1);
+		    drawTick(gc, transformation, subY, axis.getDirection(),
+			    0.05);
+		}
+	    }
+	}
+    }
+
+    private void drawTick(GC gc, TransformationMatrix2D transformation,
+	    double position, AxisDirection direction, double length) {
+	Point2D subPos1 = new Point2D();
+	Point2D subPos2 = new Point2D();
+	switch (direction) {
 	case X:
-	    drawTicksX(gc, axis, transformation);
+	    subPos1 = new Point2D(position, -length);
+	    subPos2 = new Point2D(position, length);
 	    break;
 	case Y:
-	    drawTicksY(gc, axis, transformation);
+	    subPos1 = new Point2D(-length, position);
+	    subPos2 = new Point2D(length, position);
 	    break;
+	default:
+	    throw new IllegalArgumentException("Direction '" + direction.name()
+		    + "' is not supported in 2D!");
 	}
+	RendererUtils.drawLine(gc, transformation, subPos1, subPos2);
     }
 
-    private void drawTicksX(GC gc, Axis axis,
-	    TransformationMatrix2D transformation) {
-	double min = axis.getMinimum();
-	double max = axis.getMaximum();
-	double range = max - min;
-	int mainTicks = axis.getMainTicks();
-	int subTicks = axis.getSubTicks();
-	double subRange = range / (mainTicks - 1.0);
-	for (int mainTick = 0; mainTick < mainTicks; mainTick++) {
-	    double x = min + subRange * mainTick;
-	    Point2D pos = new Point2D(x, 0.0);
-	    pos = transformation.transform(pos);
-	    gc.drawLine((int) pos.getX(), (int) pos.getY() - 10,
-		    (int) pos.getX(), (int) pos.getY() + 10);
-	    gc.drawText(String.valueOf(x), (int) pos.getX() + 3,
-		    (int) pos.getY() + 3, true);
-	    if (mainTick < mainTicks - 1) {
-		for (int subTick = 0; subTick < subTicks; subTick++) {
-		    double subX = x + subRange / (subTicks + 1) * (subTick + 1);
-		    Point2D subPos = new Point2D(subX, 0.0);
-		    subPos = transformation.transform(subPos);
-		    gc.drawLine((int) subPos.getX(), (int) subPos.getY() - 2,
-			    (int) subPos.getX(), (int) subPos.getY() + 2);
-		}
-	    }
+    private void drawTickLabel(GC gc, TransformationMatrix2D transformation,
+	    double value, double position, AxisDirection direction) {
+	Point2D pos = new Point2D();
+	switch (direction) {
+	case X:
+	    pos = new Point2D(position, 0);
+	    break;
+	case Y:
+	    pos = new Point2D(0.0, position);
+	    break;
+	default:
+	    throw new IllegalArgumentException("Direction '" + direction.name()
+		    + "' is not supported in 2D!");
 	}
-    }
-
-    private void drawTicksY(GC gc, Axis axis,
-	    TransformationMatrix2D transformation) {
-	double min = axis.getMinimum();
-	double max = axis.getMaximum();
-	double range = max - min;
-	int mainTicks = axis.getMainTicks();
-	int subTicks = axis.getSubTicks();
-	double subRange = range / (mainTicks - 1.0);
-	for (int mainTick = 0; mainTick < mainTicks; mainTick++) {
-	    double y = min + range / (mainTicks - 1.0) * mainTick;
-	    Point2D pos = new Point2D(0.0, y);
-	    pos = transformation.transform(pos);
-	    gc.drawLine((int) pos.getX() - 10, (int) pos.getY(),
-		    (int) pos.getX() + 10, (int) pos.getY());
-	    gc.drawText(String.valueOf(y), (int) pos.getX() + 3,
-		    (int) pos.getY() + 3, true);
-	    if (mainTick < mainTicks - 1) {
-		for (int subTick = 0; subTick < subTicks; subTick++) {
-		    double subY = y + subRange / (subTicks + 1) * (subTick + 1);
-		    Point2D subPos = new Point2D(0.0, subY);
-		    subPos = transformation.transform(subPos);
-		    gc.drawLine((int) subPos.getX() - 2, (int) subPos.getY(),
-			    (int) subPos.getX() + 2, (int) subPos.getY());
-		}
-	    }
-	}
+	pos = transformation.transform(pos);
+	gc.drawText(String.valueOf(value), (int) pos.getX() + 3,
+		(int) pos.getY() + 3, true);
     }
 
 }
