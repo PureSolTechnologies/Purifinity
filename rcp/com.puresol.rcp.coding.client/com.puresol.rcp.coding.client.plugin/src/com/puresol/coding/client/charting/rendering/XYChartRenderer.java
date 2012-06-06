@@ -3,19 +3,19 @@ package com.puresol.coding.client.charting.rendering;
 import org.eclipse.swt.graphics.GC;
 
 import com.puresol.coding.client.charting.BorderPosition;
-import com.puresol.coding.client.charting.Chart2D;
+import com.puresol.coding.client.charting.XYChart;
 import com.puresol.coding.client.charting.XAxis;
 import com.puresol.coding.client.charting.YAxis;
 
-public class Graph2DRenderer {
+public class XYChartRenderer {
 
     private final AxisRenderer renderer = new AxisRenderer();
 
     private GC gc;
-    private Chart2D chart;
+    private XYChart chart;
     private TransformationMatrix2D transformation;
 
-    public void render(GC gc, Chart2D chart,
+    public void render(GC gc, XYChart chart,
 	    TransformationMatrix2D transformation) {
 	this.gc = gc;
 	this.chart = chart;

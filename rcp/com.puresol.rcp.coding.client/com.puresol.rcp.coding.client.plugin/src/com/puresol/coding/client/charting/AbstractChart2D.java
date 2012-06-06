@@ -10,28 +10,10 @@ import java.util.List;
  * @author Rick-Rainer Ludwig
  * 
  */
-public abstract class AbstractChart {
+public abstract class AbstractChart2D implements Chart2D {
 
-    private XAxis xAxis = new XAxis();
-    private YAxis yAxis = new YAxis();
     private Legend legend = new Legend(BorderPosition.EAST);
     private final List<Title> titles = new ArrayList<Title>();
-
-    public final void setXAxis(XAxis axis) {
-	xAxis = axis;
-    }
-
-    public final void setYAxis(YAxis axis) {
-	yAxis = axis;
-    }
-
-    public final XAxis getXAxis() {
-	return xAxis;
-    }
-
-    public final YAxis getYAxis() {
-	return yAxis;
-    }
 
     public final void setLegend(Legend legend) {
 	this.legend = legend;

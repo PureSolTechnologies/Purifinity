@@ -4,7 +4,7 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Display;
 
-import com.puresol.coding.client.charting.Chart2D;
+import com.puresol.coding.client.charting.XYChart;
 import com.puresol.coding.client.charting.Legend;
 
 /**
@@ -17,7 +17,7 @@ import com.puresol.coding.client.charting.Legend;
 public class LegendRenderer {
 
     public void render(GC gc, Rectangle clientArea, Display display,
-	    Chart2D chart2D, Legend legend) {
+	    XYChart chart2D, Legend legend) {
 
     }
 

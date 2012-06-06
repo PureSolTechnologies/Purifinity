@@ -1,11 +1,27 @@
 package com.puresol.coding.client.charting;
 
+import java.util.List;
+
 /**
- * This is a base class for 2D charts.
+ * This is a general interface for a 2D chart. There are several different
+ * charts which implement this interface.
  * 
  * @author Rick-Rainer Ludwig
- * 
  */
-public class Chart2D extends AbstractChart {
+public interface Chart2D {
+
+    /**
+     * This method returns all titles of the graph.
+     * 
+     * @return A list of Title is returned containing the titles.
+     */
+    public List<Title> getTitles();
+
+    /**
+     * This method returns the legend of the chart.
+     * 
+     * @return
+     */
+    public Legend getLegend();
 
 }

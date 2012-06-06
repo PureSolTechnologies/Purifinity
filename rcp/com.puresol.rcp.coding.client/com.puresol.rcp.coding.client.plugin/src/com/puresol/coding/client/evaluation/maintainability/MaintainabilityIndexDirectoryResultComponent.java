@@ -18,11 +18,13 @@ import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.CodeRangeType;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.client.charting.BorderPosition;
-import com.puresol.coding.client.charting.Chart2D;
+import com.puresol.coding.client.charting.CategoryChart;
+import com.puresol.coding.client.charting.CategoryValuePair;
 import com.puresol.coding.client.charting.Legend;
 import com.puresol.coding.client.charting.Title;
 import com.puresol.coding.client.charting.TitleType;
 import com.puresol.coding.client.charting.XAxis;
+import com.puresol.coding.client.charting.XYChart;
 import com.puresol.coding.client.charting.YAxis;
 import com.puresol.coding.client.charting.rendering.Chart2DComposite;
 import com.puresol.coding.evaluator.AbstractEvaluator;
@@ -103,13 +105,31 @@ public class MaintainabilityIndexDirectoryResultComponent extends Composite {
 	yAxis.getTitle().setText("Maintainability");
 	yAxis.adjustRange();
 
+	drawXYChart();
+	drawCategoryChart();
+    }
+
+    private void drawXYChart() {
 	Chart2DComposite chart2dCanvas = new Chart2DComposite(this, SWT.NONE);
-	Chart2D chart2d = new Chart2D();
-	chart2d.addTitle(new Title(TitleType.TITLE, "Title"));
-	chart2d.addTitle(new Title(TitleType.SUB_TITLE, "SubTitle"));
-	chart2d.addTitle(new Title(TitleType.CAPTION, "Caption"));
-	chart2d.addTitle(new Title(TitleType.TEXT, "Text"));
-	chart2d.setLegend(new Legend(BorderPosition.EAST));
+	XYChart xyChart = new XYChart();
+	xyChart.addTitle(new Title(TitleType.TITLE, "Title"));
+	xyChart.addTitle(new Title(TitleType.SUB_TITLE, "SubTitle"));
+	xyChart.addTitle(new Title(TitleType.CAPTION, "Caption"));
+	xyChart.addTitle(new Title(TitleType.TEXT, "Text"));
+	xyChart.setLegend(new Legend(BorderPosition.EAST));
+	xyChart.setXAxis(new XAxis(-10, 10, 11, 1));
+	xyChart.setYAxis(new YAxis(-3.0, 3.0, 7, 1));
+	chart2dCanvas.setChart2D(xyChart);
+    }
+
+    private void drawCategoryChart() {
+	Chart2DComposite chart2dCanvas = new Chart2DComposite(this, SWT.NONE);
+	CategoryChart categoryChart = new CategoryChart();
+	categoryChart.addTitle(new Title(TitleType.TITLE, "Title"));
+	categoryChart.addTitle(new Title(TitleType.SUB_TITLE, "SubTitle"));
+	categoryChart.addTitle(new Title(TitleType.CAPTION, "Caption"));
+	categoryChart.addTitle(new Title(TitleType.TEXT, "Text"));
+	categoryChart.setLegend(new Legend(BorderPosition.EAST));
 	XAxis axis = new XAxis();
 	axis.addCategory("Cat1");
 	axis.addCategory("Cat2");
@@ -121,8 +141,17 @@ public class MaintainabilityIndexDirectoryResultComponent extends Composite {
 	axis.addCategory("Cat8");
 	axis.addCategory("Cat9");
 	axis.addCategory("Cat10");
-	chart2d.setXAxis(axis);
-	chart2d.setYAxis(new YAxis(-3.0, 3.0, 7, 1));
-	chart2dCanvas.setChart2D(chart2d);
+	categoryChart.setXAxis(axis);
+	categoryChart.setYAxis(new YAxis(-3.0, 3.0, 7, 1));
+	categoryChart.addData(new CategoryValuePair("Cat1", 2.0));
+	categoryChart.addData(new CategoryValuePair("Cat2", 1.5));
+	categoryChart.addData(new CategoryValuePair("Cat3", 0.5));
+	categoryChart.addData(new CategoryValuePair("Cat4", 2.0));
+	categoryChart.addData(new CategoryValuePair("Cat5", 1.5));
+	categoryChart.addData(new CategoryValuePair("Cat6", 0.5));
+	categoryChart.addData(new CategoryValuePair("Cat7", 2.0));
+	categoryChart.addData(new CategoryValuePair("Cat8", 1.5));
+	categoryChart.addData(new CategoryValuePair("Cat9", 0.5));
+	chart2dCanvas.setChart2D(categoryChart);
     }
 }

@@ -1,5 +1,8 @@
 package com.puresol.coding.client.charting.rendering;
 
+import java.util.List;
+
+import org.eclipse.swt.graphics.FontMetrics;
 import org.eclipse.swt.graphics.GC;
 
 import com.puresol.coding.client.charting.Axis;
@@ -46,13 +49,24 @@ public class AxisRenderer {
 	int mainTicks = axis.getMainTicks();
 	int subTicks = axis.getSubTicks();
 	double subRange = range / (mainTicks - 1.0);
+	List<String> categories = axis.getCategories();
 	for (int mainTick = 0; mainTick < mainTicks; mainTick++) {
-	    double position = min + range / (mainTicks - 1.0) * mainTick;
+	    double position = min + subRange * mainTick;
 	    drawTick(gc, transformation, position, axis.getDirection(), 0.2);
-	    drawTickLabel(gc, transformation, position, position, axis.getDirection());
+	    if (axis.isCategoryAxis()) {
+		if (mainTick < mainTicks - 1) {
+		    String categoryName = categories.get(mainTick);
+		    position += subRange / 2.0;
+		    drawCategoryLabel(gc, transformation, categoryName,
+			    position, axis.getDirection());
+		}
+	    } else {
+		drawTickLabel(gc, transformation, position, axis.getDirection());
+	    }
 	    if (mainTick < mainTicks - 1) {
 		for (int subTick = 0; subTick < subTicks; subTick++) {
-		    double subY = position + subRange / (subTicks + 1) * (subTick + 1);
+		    double subY = position + subRange / (subTicks + 1)
+			    * (subTick + 1);
 		    drawTick(gc, transformation, subY, axis.getDirection(),
 			    0.05);
 		}
@@ -81,7 +95,7 @@ public class AxisRenderer {
     }
 
     private void drawTickLabel(GC gc, TransformationMatrix2D transformation,
-	    double value, double position, AxisDirection direction) {
+	    double position, AxisDirection direction) {
 	Point2D pos = new Point2D();
 	switch (direction) {
 	case X:
@@ -95,8 +109,34 @@ public class AxisRenderer {
 		    + "' is not supported in 2D!");
 	}
 	pos = transformation.transform(pos);
-	gc.drawText(String.valueOf(value), (int) pos.getX() + 3,
+	gc.drawText(String.valueOf(position), (int) pos.getX() + 3,
 		(int) pos.getY() + 3, true);
+    }
+
+    private void drawCategoryLabel(GC gc,
+	    TransformationMatrix2D transformation, String categoryName,
+	    double position, AxisDirection direction) {
+	FontMetrics fontMetrics = gc.getFontMetrics();
+	int averageCharWidth = fontMetrics.getAverageCharWidth();
+	Point2D pos = new Point2D();
+	switch (direction) {
+	case X:
+	    pos = new Point2D(position, 0);
+	    pos = transformation.transform(pos);
+	    pos = new Point2D(pos.getX()
+		    - (categoryName.length() * averageCharWidth) / 2.0,
+		    pos.getY());
+	    break;
+	case Y:
+	    pos = new Point2D(0.0, position);
+	    pos = transformation.transform(pos);
+	    break;
+	default:
+	    throw new IllegalArgumentException("Direction '" + direction.name()
+		    + "' is not supported in 2D!");
+	}
+	gc.drawText(categoryName, (int) pos.getX() + 3, (int) pos.getY() + 3,
+		true);
     }
 
 }

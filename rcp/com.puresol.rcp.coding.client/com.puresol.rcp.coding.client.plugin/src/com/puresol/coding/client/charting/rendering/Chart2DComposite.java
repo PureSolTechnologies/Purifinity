@@ -16,6 +16,7 @@ import swing2swt.layout.BorderLayout;
 import com.puresol.coding.client.charting.Chart2D;
 import com.puresol.coding.client.charting.Legend;
 import com.puresol.coding.client.charting.Title;
+import com.puresol.coding.client.charting.XYChart;
 import com.puresol.coding.client.controls.VerticalLabel;
 
 /**
@@ -69,7 +70,7 @@ public class Chart2DComposite extends Composite {
 	initGUI();
     }
 
-    public Chart2DComposite(Composite parent, int style, Chart2D chart2D) {
+    public Chart2DComposite(Composite parent, int style, XYChart chart2D) {
 	super(parent, style);
 	this.chart2D = chart2D;
 	initGUI();
