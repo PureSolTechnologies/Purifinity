@@ -3,7 +3,8 @@
       id="com.puresol.e4.coding.client.feature"
       label="Source Code Analysis Feature"
       version="0.1.0.qualifier"
-      plugin="com.puresol.coding.client.plugin"
+      provider-name="PureSol Technologies"
+      plugin="com.puresol.e4.coding.client.plugin"
       os="linux,macosx,win32"
       ws="carbon,cocoa,gtk,win32"
       arch="x86,x86_64">
