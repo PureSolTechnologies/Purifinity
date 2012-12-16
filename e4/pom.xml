@@ -63,20 +63,6 @@
 				<version>${tycho.version}</version>
 				<extensions>true</extensions>
 			</plugin>
-			<!-- <plugin> <groupId>org.eclipse.tycho</groupId> <artifactId>tycho-p2-director-plugin</artifactId> 
-				<version>${tycho.version}</version> <executions> <execution> <id>materialize-products</id> 
-				<goals> <goal>materialize-products</goal> </goals> </execution> <execution> 
-				<id>archive-products</id> <goals> <goal>archive-products</goal> </goals> 
-				</execution> </executions> </plugin> <plugin> <groupId>org.eclipse.tycho</groupId> 
-				<artifactId>target-platform-configuration</artifactId> <version>${tycho.version}</version> 
-				<configuration> <resolver>p2</resolver> <pomDependencies>consider</pomDependencies> 
-				<target> <groupId>com.puresol</groupId> <artifactId>com.puresol.rcp.coding.client.target</artifactId> 
-				<version>${project.version}</version> <classifier>juno</classifier> </target> 
-				<environments> <environment> <os>linux</os> <ws>gtk</ws> <arch>x86_64</arch> 
-				</environment> <environment> <os>linux</os> <ws>gtk</ws> <arch>x86</arch> 
-				</environment> <environment> <os>win32</os> <ws>win32</ws> <arch>x86</arch> 
-				</environment> <environment> <os>win32</os> <ws>win32</ws> <arch>x86_64</arch> 
-				</environment> </environments> </configuration> </plugin> -->
 		</plugins>
 	</build>
 
