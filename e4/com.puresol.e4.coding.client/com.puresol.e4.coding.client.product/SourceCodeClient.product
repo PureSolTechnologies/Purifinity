@@ -68,7 +68,7 @@
 
    <features>
       <feature id="com.puresol.e4.coding.client.feature" version="0.1.0.qualifier"/>
-      <feature id="org.eclipse.rcp" version="4.2.1.v20120814-120134-7IAPA8BrHQicS-rjP0GbqK780kMy"/>
+      <feature id="org.eclipse.rcp"/>
       <feature id="org.eclipse.e4.rcp"/>
    </features>
 
