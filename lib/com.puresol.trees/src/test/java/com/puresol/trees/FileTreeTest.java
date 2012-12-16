@@ -42,7 +42,6 @@ public class FileTreeTest {
     @Test
     public void testInstance() {
 	assertNotNull(new FileTree(null, "/"));
-
     }
 
     @Test

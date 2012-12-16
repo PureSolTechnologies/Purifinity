@@ -8,11 +8,6 @@ import java.util.Map;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.swtchart.Chart;
-import org.swtchart.IAxis;
-import org.swtchart.IAxisSet;
-import org.swtchart.ISeries;
-import org.swtchart.ISeries.SeriesType;
 
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.CodeRangeType;
@@ -59,16 +54,6 @@ public class MaintainabilityIndexDirectoryResultComponent extends Composite {
 	    }
 	}
 
-	// http://www.swtchart.org/doc/index.html
-	Chart chart = new Chart(this, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
-	chart.getTitle().setText("Paredo Chart");
-	IAxisSet axisSet = chart.getAxisSet();
-
-	double max = Double.MIN_VALUE;
-	double min = Double.MAX_VALUE;
-	ISeries series = chart.getSeriesSet().createSeries(SeriesType.BAR,
-		"Maintainability");
-
 	String[] categorySeries = new String[maintainability.size()];
 	double[] ySeries = new double[maintainability.size()];
 	int i = 0;
@@ -81,29 +66,6 @@ public class MaintainabilityIndexDirectoryResultComponent extends Composite {
 		return d2.compareTo(d1);
 	    }
 	});
-
-	for (Double d : keySet) {
-	    ySeries[i] = d;
-	    categorySeries[i] = maintainability.get(d);
-	    if (d > max) {
-		max = d;
-	    }
-	    if (d < min) {
-		min = d;
-	    }
-	    i++;
-	}
-	series.setYSeries(ySeries);
-
-	IAxis xAxis = axisSet.getXAxis(0);
-	xAxis.getTitle().setText("Source File");
-	xAxis.enableCategory(true);
-	xAxis.setCategorySeries(categorySeries);
-	xAxis.adjustRange();
-
-	IAxis yAxis = axisSet.getYAxis(0);
-	yAxis.getTitle().setText("Maintainability");
-	yAxis.adjustRange();
 
 	drawXYChart();
 	drawCategoryChart();

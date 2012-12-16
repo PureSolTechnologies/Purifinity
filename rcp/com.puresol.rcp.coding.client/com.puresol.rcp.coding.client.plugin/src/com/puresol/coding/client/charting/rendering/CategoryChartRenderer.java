@@ -2,7 +2,9 @@ package com.puresol.coding.client.charting.rendering;
 
 import java.util.List;
 
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.RGB;
 
 import com.puresol.coding.client.charting.BorderPosition;
 import com.puresol.coding.client.charting.CategoryChart;
@@ -36,7 +38,11 @@ public class CategoryChartRenderer {
 		    Point2D point2 = new Point2D(i + 1.0 - 0.1, value);
 		    point1 = transformation.transform(point1);
 		    point2 = transformation.transform(point2);
-		    gc.drawRectangle((int) point1.getX(), (int) point1.getY(),
+		    gc.setForeground(new Color(gc.getDevice(), new RGB(255, 0,
+			    0)));
+		    gc.setBackground(new Color(gc.getDevice(), new RGB(255, 0,
+			    0)));
+		    gc.fillRectangle((int) point1.getX(), (int) point1.getY(),
 			    (int) (point2.getX() - point1.getX()),
 			    (int) (point2.getY() - point1.getY()));
 		}

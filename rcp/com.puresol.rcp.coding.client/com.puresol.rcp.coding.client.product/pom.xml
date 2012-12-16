@@ -10,6 +10,6 @@
 
 	<artifactId>com.puresol.rcp.coding.client.product</artifactId>
 
-	<packaging>eclipse-application</packaging>
+	<packaging>eclipse-repository</packaging>
 
 </project>

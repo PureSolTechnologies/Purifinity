@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.eclipse.swt.graphics.FontMetrics;
 import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Transform;
 
 import com.puresol.coding.client.charting.Axis;
 import com.puresol.coding.client.charting.AxisDirection;
@@ -121,11 +122,11 @@ public class AxisRenderer {
 	Point2D pos = new Point2D();
 	switch (direction) {
 	case X:
-	    pos = new Point2D(position, 0);
+	    pos = new Point2D(position, 0.0);
 	    pos = transformation.transform(pos);
-	    pos = new Point2D(pos.getX()
-		    - (categoryName.length() * averageCharWidth) / 2.0,
-		    pos.getY());
+	    pos = new Point2D(pos.getX() - gc.getFontMetrics().getHeight()
+		    / 2.0, pos.getY()
+		    + (categoryName.length() * averageCharWidth) + 10);
 	    break;
 	case Y:
 	    pos = new Point2D(0.0, position);
@@ -135,8 +136,18 @@ public class AxisRenderer {
 	    throw new IllegalArgumentException("Direction '" + direction.name()
 		    + "' is not supported in 2D!");
 	}
-	gc.drawText(categoryName, (int) pos.getX() + 3, (int) pos.getY() + 3,
-		true);
-    }
+	Transform oldTransform = new Transform(gc.getDevice());
+	gc.getTransform(oldTransform);
+	Transform newTransform = new Transform(gc.getDevice());
+	newTransform.translate((float) pos.getX() + 3.0f,
+		(float) pos.getY() + 3.0f);
+	newTransform.rotate(-90);
+	gc.setTransform(newTransform);
+	gc.drawText(categoryName, 0, 0, true);
 
+	gc.setTransform(oldTransform);
+	oldTransform.dispose();
+	newTransform.dispose();
+
+    }
 }

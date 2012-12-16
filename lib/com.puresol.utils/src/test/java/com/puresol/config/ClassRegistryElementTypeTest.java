@@ -18,38 +18,33 @@
 
 package com.puresol.config;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
 public class ClassRegistryElementTypeTest {
 
-	@Test
-	public void testFrom() {
-		assertEquals(ClassRegistryElementType.CLONED,
-				ClassRegistryElementType.from("cloned"));
-		assertEquals(ClassRegistryElementType.CLONED,
-				ClassRegistryElementType.from("CLONED"));
+    @Test
+    public void testFrom() {
+	assertEquals(ClassRegistryElementType.CLONED,
+		ClassRegistryElementType.from("cloned"));
+	assertEquals(ClassRegistryElementType.CLONED,
+		ClassRegistryElementType.from("CLONED"));
 
-		assertEquals(ClassRegistryElementType.FACTORY,
-				ClassRegistryElementType.from("factory"));
-		assertEquals(ClassRegistryElementType.FACTORY,
-				ClassRegistryElementType.from("FACTORY"));
+	assertEquals(ClassRegistryElementType.FACTORY,
+		ClassRegistryElementType.from("factory"));
+	assertEquals(ClassRegistryElementType.FACTORY,
+		ClassRegistryElementType.from("FACTORY"));
 
-		assertEquals(ClassRegistryElementType.SINGLETON,
-				ClassRegistryElementType.from("singleton"));
-		assertEquals(ClassRegistryElementType.SINGLETON,
-				ClassRegistryElementType.from("SINGLETON"));
-	}
+	assertEquals(ClassRegistryElementType.SINGLETON,
+		ClassRegistryElementType.from("singleton"));
+	assertEquals(ClassRegistryElementType.SINGLETON,
+		ClassRegistryElementType.from("SINGLETON"));
+    }
 
-	@Test
-	public void testInvalidName() {
-		try {
-			ClassRegistryElementType.from("INVALID");
-			fail("IllegalArgumentException was expected!");
-		} catch (IllegalArgumentException e) {
-			// nothing to catch, because it was expected...
-		}
-	}
+    @Test(expected = IllegalArgumentException.class)
+    public void testInvalidName() {
+	ClassRegistryElementType.from("INVALID");
+    }
 
 }

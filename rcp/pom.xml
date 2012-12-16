@@ -8,7 +8,8 @@
 	<packaging>pom</packaging>
 
 	<properties>
-		<tycho.version>0.14.1</tycho.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<tycho.version>0.16.0</tycho.version>
 	</properties>
 
 	<modules>
@@ -17,9 +18,9 @@
 
 	<repositories>
 		<repository>
-			<id>indigo</id>
+			<id>juno</id>
 			<layout>p2</layout>
-			<url>http://download.eclipse.org/releases/indigo</url>
+			<url>http://download.eclipse.org/releases/juno</url>
 		</repository>
 		<repository>
 			<snapshots>
@@ -116,6 +117,25 @@
 			</plugin>
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-p2-director-plugin</artifactId>
+				<version>${tycho.version}</version>
+				<executions>
+					<execution>
+						<id>materialize-products</id>
+						<goals>
+							<goal>materialize-products</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>archive-products</id>
+						<goals>
+							<goal>archive-products</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>target-platform-configuration</artifactId>
 				<version>${tycho.version}</version>
 				<configuration>
@@ -125,7 +145,7 @@
 						<groupId>com.puresol</groupId>
 						<artifactId>com.puresol.rcp.coding.client.target</artifactId>
 						<version>${project.version}</version>
-						<classifier>indigo</classifier>
+						<classifier>juno</classifier>
 					</target>
 					<environments>
 						<environment>

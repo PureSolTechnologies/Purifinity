@@ -18,7 +18,7 @@
 
 package com.puresol.config;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.util.List;
@@ -27,20 +27,20 @@ import org.junit.Test;
 
 public class ConfigFileTest {
 
-	@Test
-	public void testGetPotentialConfigFiles() {
-		List<File> files = ConfigFile.getPotentialConfigFiles("test/config");
-		assertTrue(files.contains(new File("/etc/test/config")));
-		assertTrue(files.contains(new File(System.getProperty("user.home"),
-				"test/config")));
-		assertTrue(files.contains(new File(System.getProperty("user.home"),
-				".test/config")));
-		assertTrue(files.contains(new File(System.getProperty("user.dir"),
-				"test/config")));
-		assertTrue(files.contains(new File(System.getProperty("user.dir"),
-				".test/config")));
-		for (File file : files) {
-			System.out.println(file);
-		}
+    @Test
+    public void testGetPotentialConfigFiles() {
+	List<File> files = ConfigFile.getPotentialConfigFiles("test/config");
+	assertTrue(files.contains(new File("/etc/test/config")));
+	assertTrue(files.contains(new File(System.getProperty("user.home"),
+		"test/config")));
+	assertTrue(files.contains(new File(System.getProperty("user.home"),
+		".test/config")));
+	assertTrue(files.contains(new File(System.getProperty("user.dir"),
+		"test/config")));
+	assertTrue(files.contains(new File(System.getProperty("user.dir"),
+		".test/config")));
+	for (File file : files) {
+	    System.out.println(file);
 	}
+    }
 }

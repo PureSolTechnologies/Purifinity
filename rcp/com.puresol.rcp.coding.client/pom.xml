@@ -14,9 +14,9 @@
 
 	<modules>
 		<module>com.puresol.rcp.coding.client.plugin</module>
-		<module>com.puresol.rcp.coding.client.product</module>
 		<module>com.puresol.rcp.coding.client.feature</module>
-		<module>com.puresol.rcp.coding.client.target</module>
+		<!-- module>com.puresol.rcp.coding.client.product</module -->
+		<!-- module>com.puresol.rcp.coding.client.target</module -->
 	</modules>
 
 </project>

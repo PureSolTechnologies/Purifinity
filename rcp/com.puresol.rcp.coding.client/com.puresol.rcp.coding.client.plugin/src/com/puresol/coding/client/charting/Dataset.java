@@ -1,7 +1,5 @@
 package com.puresol.coding.client.charting;
 
-import org.swtchart.Chart;
-
 /**
  * This interface represents a single dataset which is used to be put onto a
  * {@link Chart}.

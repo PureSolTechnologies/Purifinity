@@ -8,18 +8,19 @@ package com.puresol.utils;
  */
 public class ObjectUtilities {
 
+    private static final int PRIME = 31;
+
     /**
-     * This method can be used to caluclate a constant hash code for value
+     * This method can be used to calculate a constant hash code for value
      * objects.
      * 
      * @param fields
      * @return
      */
     public static int calculateConstantHashCode(Object... fields) {
-	final int prime = 31;
 	int result = 1;
 	for (Object field : fields) {
-	    result = prime * result + ((field == null) ? 0 : field.hashCode());
+	    result = PRIME * result + ((field == null) ? 0 : field.hashCode());
 	}
 	return result;
     }
