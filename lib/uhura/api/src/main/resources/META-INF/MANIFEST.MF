@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Built-By: ludwig
+Tool: Bnd-0.0.357
+Bundle-Name: com.puresol.uhura.api
+Created-By: Apache Maven Bundle Plugin
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-Vendor: PureSol Technologies
+Build-Jdk: 1.6.0_22
+Bundle-Version: 0.1.0.SNAPSHOT
+Bnd-LastModified: 1331319581390
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: com.puresol.uhura.api
+Originally-Created-By: Apache Maven Bundle Plugin
+Import-Package: com.puresol.trees;version="0.1.0"

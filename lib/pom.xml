@@ -13,16 +13,16 @@
 
 	<modules>
 		<module>org.jfree.rcp.jfreechart</module>
-		<module>com.puresol.trees</module>
-		<module>com.puresol.utils</module>
-		<module>com.puresol.uhura.lib</module>
-		<module>com.puresol.uhura.test</module>
-		<module>com.puresol.coding.analysis.api</module>
-		<module>com.puresol.coding.analysis.impl</module>
-		<module>com.puresol.coding.analysis.test</module>
-		<module>com.puresol.coding.metrics</module>
-		<module>com.puresol.coding.lang.java</module>
-		<module>com.puresol.coding.lang.fortran</module>
+		<module>trees</module>
+		<module>utils</module>
+		<module>uhura</module>
+		<module>coding.analysis.api</module>
+		<module>coding.analysis.impl</module>
+		<module>coding.analysis.test</module>
+		<module>coding.metrics</module>
+		<module>coding.lang.cpp</module>
+		<module>coding.lang.java</module>
+		<module>coding.lang.fortran</module>
 	</modules>
 
 	<repositories>
