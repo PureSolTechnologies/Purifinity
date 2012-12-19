@@ -50,10 +50,14 @@ public class GrammarConverter {
      * @throws GrammarException
      * @throws IOException
      */
-    public GrammarConverter(ParserTree ast) throws TreeException,
-	    GrammarException {
-	this.ast = ast;
-	convert();
+    public GrammarConverter(ParserTree ast) throws GrammarException {
+	try {
+	    this.ast = ast;
+	    convert();
+	} catch (TreeException e) {
+	    throw new GrammarException(
+		    "The syntax tree of the grammar is not consistent!", e);
+	}
     }
 
     /**

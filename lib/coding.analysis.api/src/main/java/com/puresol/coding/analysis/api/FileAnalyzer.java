@@ -1,3 +1,5 @@
+package com.puresol.coding.analysis.api;
+
 /***************************************************************************
  *
  *   Analyser.java
@@ -7,8 +9,6 @@
  *   email                : ludwig@puresol-technologies.com
  *
  ***************************************************************************/
-
-package com.puresol.coding.analysis.api;
 
 import java.io.File;
 import java.io.IOException;

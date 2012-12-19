@@ -11,7 +11,7 @@ OPTIONS
 	lexer.case_sensitive=true;
 	
 	// parser is the class to be used for parsing
-	parser="com.puresol.uhura.parser.LR1Parser";
+	parser="com.puresol.uhura.parser.lr.LR1Parser";
 	parser.backtracking=true;
 
 /*

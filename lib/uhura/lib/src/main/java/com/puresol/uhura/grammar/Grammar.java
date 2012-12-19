@@ -2,6 +2,7 @@ package com.puresol.uhura.grammar;
 
 import java.io.InputStream;
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Properties;
 
@@ -11,6 +12,9 @@ import com.puresol.uhura.grammar.production.ProductionSet;
 import com.puresol.uhura.grammar.production.Terminal;
 import com.puresol.uhura.grammar.token.TokenDefinition;
 import com.puresol.uhura.grammar.token.TokenDefinitionSet;
+import com.puresol.uhura.lexer.Lexer;
+import com.puresol.uhura.parser.Parser;
+import com.puresol.uhura.preprocessor.Preprocessor;
 
 /**
  * This class keeps the complete information about a single grammar including
@@ -27,6 +31,10 @@ public class Grammar implements Serializable {
     private final Properties options;
     private final TokenDefinitionSet tokenDefinitions;
     private final ProductionSet productions;
+    private final Class<? extends Preprocessor> preProcessorClass;
+    private final Class<? extends Lexer> lexerClass;
+    private final Class<? extends Parser> parserClass;
+    private final boolean usesPreProcessor;
     private final boolean ignoreCase;
 
     public Grammar(Properties options, TokenDefinitionSet tokenDefinitions,
@@ -38,7 +46,37 @@ public class Grammar implements Serializable {
 	this.productions = productions;
 	this.ignoreCase = Boolean.valueOf(options
 		.getProperty("grammar.ignore-case"));
+
+	usesPreProcessor = Boolean.valueOf(options
+		.getProperty("preprocessor.use"));
+	if (usesPreProcessor) {
+	    this.preProcessorClass = getClass(Preprocessor.class,
+		    "preprocessor");
+	} else {
+	    this.preProcessorClass = null;
+	}
+	this.lexerClass = getClass(Lexer.class, "lexer");
+	this.parserClass = getClass(Parser.class, "parser");
+
 	checkConsistencyIfConfigured();
+    }
+
+    private <T> Class<? extends T> getClass(Class<T> ifce, String propertyName)
+	    throws GrammarException {
+	String className = options.getProperty(propertyName);
+	if (className == null) {
+	    throw new GrammarException("No class name for property '"
+		    + propertyName + "' was specified!");
+	}
+	try {
+	    @SuppressWarnings("unchecked")
+	    Class<? extends T> clazz = (Class<? extends T>) Class
+		    .forName(className);
+	    return clazz;
+	} catch (ClassNotFoundException e) {
+	    throw new GrammarException("Cannot instantiate '" + className
+		    + "' for '" + propertyName + "'!", e);
+	}
     }
 
     private void checkConsistencyIfConfigured() throws GrammarException {
@@ -100,6 +138,72 @@ public class Grammar implements Serializable {
 
     public final boolean isIgnoreCase() {
 	return ignoreCase;
+    }
+
+    public Preprocessor createPreprocessor() throws GrammarException {
+	try {
+	    return preProcessorClass.newInstance();
+	} catch (InstantiationException e) {
+	    throw new GrammarException(
+		    "Cannot instantiate preprocessor with class'"
+			    + preProcessorClass.getName() + "'!", e);
+	} catch (IllegalAccessException e) {
+	    throw new GrammarException(
+		    "Cannot instantiate preprocessor with class'"
+			    + preProcessorClass.getName() + "'!", e);
+	}
+    }
+
+    public Lexer createLexer() throws GrammarException {
+	try {
+	    return lexerClass.getConstructor(Grammar.class).newInstance(this);
+	} catch (InstantiationException e) {
+	    throw new GrammarException("Cannot instantiate lexer with class'"
+		    + lexerClass.getName() + "'!", e);
+	} catch (IllegalAccessException e) {
+	    throw new GrammarException("Cannot instantiate lexer with class'"
+		    + lexerClass.getName() + "'!", e);
+	} catch (IllegalArgumentException e) {
+	    throw new GrammarException("Cannot instantiate lexer with class'"
+		    + lexerClass.getName() + "'!", e);
+	} catch (SecurityException e) {
+	    throw new GrammarException("Cannot instantiate lexer with class'"
+		    + lexerClass.getName() + "'!", e);
+	} catch (InvocationTargetException e) {
+	    throw new GrammarException("Cannot instantiate lexer with class'"
+		    + lexerClass.getName() + "'!", e);
+	} catch (NoSuchMethodException e) {
+	    throw new GrammarException("Cannot instantiate lexer with class'"
+		    + lexerClass.getName() + "'!", e);
+	}
+    }
+
+    public Parser createParser() throws GrammarException {
+	try {
+	    return parserClass.getConstructor(Grammar.class).newInstance(this);
+	} catch (InstantiationException e) {
+	    throw new GrammarException("Cannot instantiate parser with class'"
+		    + parserClass.getName() + "'!", e);
+	} catch (IllegalAccessException e) {
+	    throw new GrammarException("Cannot instantiate parser with class'"
+		    + parserClass.getName() + "'!", e);
+	} catch (IllegalArgumentException e) {
+	    throw new GrammarException("Cannot instantiate parser with class'"
+		    + parserClass.getName() + "'!", e);
+	} catch (SecurityException e) {
+	    throw new GrammarException("Cannot instantiate parser with class'"
+		    + parserClass.getName() + "'!", e);
+	} catch (InvocationTargetException e) {
+	    throw new GrammarException("Cannot instantiate parser with class'"
+		    + parserClass.getName() + "'!", e);
+	} catch (NoSuchMethodException e) {
+	    throw new GrammarException("Cannot instantiate parser with class'"
+		    + parserClass.getName() + "'!", e);
+	}
+    }
+
+    public boolean usesPreProcessor() {
+	return usesPreProcessor;
     }
 
     @Override

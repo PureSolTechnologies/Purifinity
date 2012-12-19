@@ -14,8 +14,9 @@ import com.puresol.uhura.lexer.SourceCode;
  * @author Rick-Rainer Ludwig
  * 
  */
-public interface PreProcessor {
+public interface Preprocessor {
 
-    public SourceCode process(SourceCode sourceCode);
+    public SourceCode process(SourceCode sourceCode)
+	    throws PreprocessorException;
 
 }

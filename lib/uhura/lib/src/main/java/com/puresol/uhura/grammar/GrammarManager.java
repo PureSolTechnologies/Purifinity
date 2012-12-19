@@ -106,13 +106,17 @@ public class GrammarManager {
 			    .lastModified())) {
 		inputStream = grammarURL.openStream();
 		GrammarReader reader = new GrammarReader(inputStream);
-		grammar = reader.getGrammar();
-		ObjectOutputStream objectOutputStream = new ObjectOutputStream(
-			new FileOutputStream(grammarPersistencePath));
 		try {
-		    objectOutputStream.writeObject(grammar);
+		    grammar = reader.getGrammar();
+		    ObjectOutputStream objectOutputStream = new ObjectOutputStream(
+			    new FileOutputStream(grammarPersistencePath));
+		    try {
+			objectOutputStream.writeObject(grammar);
+		    } finally {
+			objectOutputStream.close();
+		    }
 		} finally {
-		    objectOutputStream.close();
+		    reader.close();
 		}
 	    }
 	} finally {

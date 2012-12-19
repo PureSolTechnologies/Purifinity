@@ -33,22 +33,28 @@ public class PreparePackageResources {
 	    GrammarReader grammarReader = new GrammarReader(
 		    JavaGrammar.class
 			    .getResourceAsStream(JavaGrammar.GRAMMAR_RESOURCE));
-	    Grammar grammar = grammarReader.getGrammar();
-	    PackageBuilderUtils.persistObject(PackageDirectory.RES, new File(
-		    JavaGrammar.PERSISTED_GRAMMAR_RESOURCE), grammar);
-	    logger.info("done.");
+	    try {
+		Grammar grammar = grammarReader.getGrammar();
+		PackageBuilderUtils.persistObject(PackageDirectory.RES,
+			new File(JavaGrammar.PERSISTED_GRAMMAR_RESOURCE),
+			grammar);
+		logger.info("done.");
 
-	    logger.info("Creating lexer...");
-	    Lexer lexer = LexerFactory.create(grammar);
-	    PackageBuilderUtils.persistObject(PackageDirectory.RES, new File(
-		    JavaGrammar.PERSISTED_LEXER_RESOURCE), lexer);
-	    logger.info("done.");
+		logger.info("Creating lexer...");
+		Lexer lexer = LexerFactory.create(grammar);
+		PackageBuilderUtils.persistObject(PackageDirectory.RES,
+			new File(JavaGrammar.PERSISTED_LEXER_RESOURCE), lexer);
+		logger.info("done.");
 
-	    logger.info("Creating parser...");
-	    Parser parser = ParserFactory.create(grammar);
-	    PackageBuilderUtils.persistObject(PackageDirectory.RES, new File(
-		    JavaGrammar.PERSISTED_PARSER_RESOURCE), parser);
-	    logger.info("done.");
+		logger.info("Creating parser...");
+		Parser parser = ParserFactory.create(grammar);
+		PackageBuilderUtils
+			.persistObject(PackageDirectory.RES, new File(
+				JavaGrammar.PERSISTED_PARSER_RESOURCE), parser);
+		logger.info("done.");
+	    } finally {
+		grammarReader.close();
+	    }
 	} catch (GrammarException e) {
 	    e.printStackTrace();
 	} catch (IOException e) {

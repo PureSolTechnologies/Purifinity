@@ -1,5 +1,6 @@
 package com.puresol.uhura.grammar;
 
+import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,7 +28,7 @@ import com.puresol.uhura.parser.lr.SLR1Parser;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class GrammarFile {
+public class GrammarFile implements Closeable {
 
     private static final Logger logger = LoggerFactory
 	    .getLogger(GrammarFile.class);
@@ -111,5 +112,10 @@ public class GrammarFile {
 	    logger.error(e.getMessage(), e);
 	    throw new RuntimeException("UhuraGrammar is broken!!!");
 	}
+    }
+
+    @Override
+    public void close() throws IOException {
+	reader.close();
     }
 }

@@ -29,15 +29,19 @@ public class PackratParserExtTest {
 	assertNotNull(inputStream);
 	try {
 	    GrammarFile grammarFile = new GrammarFile(inputStream);
-	    Grammar grammar = new GrammarConverter(grammarFile.getAST())
-		    .getGrammar();
-	    assertNotNull(grammar);
-	    PackratParser parser = new PackratParser(grammar);
-	    ParserTree parseTree = parser.parse(text, "TEXT_PARSE");
-	    assertNotNull(parseTree);
-	    TreePrinter printer = new TreePrinter(System.out);
-	    printer.println(parseTree);
-	    return parseTree;
+	    try {
+		Grammar grammar = new GrammarConverter(grammarFile.getAST())
+			.getGrammar();
+		assertNotNull(grammar);
+		PackratParser parser = new PackratParser(grammar);
+		ParserTree parseTree = parser.parse(text, "TEXT_PARSE");
+		assertNotNull(parseTree);
+		TreePrinter printer = new TreePrinter(System.out);
+		printer.println(parseTree);
+		return parseTree;
+	    } finally {
+		grammarFile.close();
+	    }
 	} finally {
 	    inputStream.close();
 	}

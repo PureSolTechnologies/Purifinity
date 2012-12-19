@@ -38,15 +38,19 @@ public class PackratParserTest {
 	assertNotNull(inputStream);
 	try {
 	    GrammarFile grammarFile = new GrammarFile(inputStream);
-	    Grammar grammar = new GrammarConverter(grammarFile.getAST())
-		    .getGrammar();
-	    assertNotNull(grammar);
-	    PackratParser parser = new PackratParser(grammar);
-	    ParserTree parseTree = parser.parse(text, "TEXT_PARSE");
-	    assertNotNull(parseTree);
-	    TreePrinter printer = new TreePrinter(System.out);
-	    printer.println(parseTree);
-	    return parseTree;
+	    try {
+		Grammar grammar = new GrammarConverter(grammarFile.getAST())
+			.getGrammar();
+		assertNotNull(grammar);
+		PackratParser parser = new PackratParser(grammar);
+		ParserTree parseTree = parser.parse(text, "TEXT_PARSE");
+		assertNotNull(parseTree);
+		TreePrinter printer = new TreePrinter(System.out);
+		printer.println(parseTree);
+		return parseTree;
+	    } finally {
+		grammarFile.close();
+	    }
 	} finally {
 	    inputStream.close();
 	}
@@ -59,8 +63,12 @@ public class PackratParserTest {
 	assertNotNull(inStream);
 	try {
 	    GrammarFile file = new GrammarFile(inStream);
-	    directRecursionGrammar = new GrammarConverter(file.getAST())
-		    .getGrammar();
+	    try {
+		directRecursionGrammar = new GrammarConverter(file.getAST())
+			.getGrammar();
+	    } finally {
+		file.close();
+	    }
 	} finally {
 	    inStream.close();
 	}
@@ -70,8 +78,12 @@ public class PackratParserTest {
 	assertNotNull(inStream);
 	try {
 	    GrammarFile file = new GrammarFile(inStream);
-	    directRecursionGrammarZero = new GrammarConverter(file.getAST())
-		    .getGrammar();
+	    try {
+		directRecursionGrammarZero = new GrammarConverter(file.getAST())
+			.getGrammar();
+	    } finally {
+		file.close();
+	    }
 	} finally {
 	    inStream.close();
 	}
@@ -81,8 +93,12 @@ public class PackratParserTest {
 	assertNotNull(inStream);
 	try {
 	    GrammarFile file = new GrammarFile(inStream);
-	    indirectRecursionGrammar = new GrammarConverter(file.getAST())
-		    .getGrammar();
+	    try {
+		indirectRecursionGrammar = new GrammarConverter(file.getAST())
+			.getGrammar();
+	    } finally {
+		file.close();
+	    }
 	} finally {
 	    inStream.close();
 	}
@@ -92,8 +108,12 @@ public class PackratParserTest {
 	assertNotNull(inStream);
 	try {
 	    GrammarFile file = new GrammarFile(inStream);
-	    nestedRecursionsGrammar = new GrammarConverter(file.getAST())
-		    .getGrammar();
+	    try {
+		nestedRecursionsGrammar = new GrammarConverter(file.getAST())
+			.getGrammar();
+	    } finally {
+		file.close();
+	    }
 	} finally {
 	    inStream.close();
 	}
