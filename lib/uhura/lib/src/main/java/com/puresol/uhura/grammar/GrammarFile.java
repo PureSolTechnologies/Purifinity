@@ -44,7 +44,10 @@ public class GrammarFile implements Closeable {
      * @param inputStream
      */
     public GrammarFile(InputStream inputStream) {
-	this(new InputStreamReader(inputStream));
+	if (inputStream == null) {
+	    throw new IllegalArgumentException("Input stream is null!");
+	}
+	reader = new InputStreamReader(inputStream);
     }
 
     /**
@@ -53,6 +56,9 @@ public class GrammarFile implements Closeable {
      * @param reader
      */
     public GrammarFile(Reader reader) {
+	if (reader == null) {
+	    throw new IllegalArgumentException("Reader stream is null!");
+	}
 	this.reader = reader;
     }
 

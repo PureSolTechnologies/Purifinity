@@ -1,5 +1,6 @@
 package com.puresol.coding.lang.cpp;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -9,15 +10,24 @@ import java.util.NoSuchElementException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.puresol.trees.TreeVisitor;
+import com.puresol.trees.TreeWalker;
+import com.puresol.trees.WalkingAction;
 import com.puresol.uhura.analyzer.Analyzer;
 import com.puresol.uhura.analyzer.AnalyzerFactory;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarConverter;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.GrammarFile;
+import com.puresol.uhura.grammar.token.Visibility;
 import com.puresol.uhura.lexer.LexerException;
+import com.puresol.uhura.lexer.LexerResult;
 import com.puresol.uhura.lexer.SourceCode;
 import com.puresol.uhura.lexer.SourceCodeLine;
+import com.puresol.uhura.lexer.Token;
+import com.puresol.uhura.lexer.TokenMetaData;
+import com.puresol.uhura.lexer.TokenStream;
+import com.puresol.uhura.parser.Parser;
 import com.puresol.uhura.parser.ParserException;
 import com.puresol.uhura.parser.ParserTree;
 import com.puresol.uhura.preprocessor.Preprocessor;
@@ -26,6 +36,21 @@ import com.puresol.uhura.preprocessor.PreprocessorException;
 /**
  * This class implements a C Preprocessor.
  * 
+ * The implementation works in multiple steps:
+ * 
+ * 1) The Source Code is scanned and all lines starting with a sharp '#' are put
+ * into the 'CPP-tokenizer' grammar to scan for a valid preprocessor statement.
+ * If the first line does not match, we add the next lines until it fits (a
+ * pass) or we run out of code (a fail). In case of a pass the tokens of the
+ * part are taken and put into a TokenStream. Lines which are no preprocessor
+ * statements are added into the {@link TokenStream} as ignored
+ * "SourceCodeLine".
+ * 
+ * 2) The newly produced {@link TokenStream} is put into an analyzer of CPP
+ * grammar to get the correct syntax tree.
+ * 
+ * 3) The syntax tree is processed than and the new source code is created.
+ * 
  * This class is not thread-safe due to handling of macro definitions!
  * 
  * @author Rick-Rainer Ludwig
@@ -33,15 +58,39 @@ import com.puresol.uhura.preprocessor.PreprocessorException;
  */
 public class CPreprocessor implements Preprocessor {
 
+    private static final String CPP_TOKENIZER_GRAMMAR_FILE = "CPP-tokenizer.g";
+    private static final String CPP_GRAMMAR_FILE = "CPP.g";
+
     private static final Pattern pattern = Pattern.compile("^s*#");
 
     private final Map<String, String> definedMacros = new HashMap<String, String>();
+
+    private static final Grammar tokenizerGrammar;
+    static {
+	try {
+	    GrammarFile file = new GrammarFile(
+		    CPreprocessor.class
+			    .getResourceAsStream(CPP_TOKENIZER_GRAMMAR_FILE));
+	    try {
+		tokenizerGrammar = new GrammarConverter(file.getAST())
+			.getGrammar();
+	    } finally {
+		file.close();
+	    }
+	} catch (IOException e) {
+	    throw new RuntimeException(
+		    "Could not initialize C Preprocessor tokenizer grammar!", e);
+	} catch (GrammarException e) {
+	    throw new RuntimeException(
+		    "Could not initialize C Preprocessor tokenizer grammar!", e);
+	}
+    }
 
     private static final Grammar grammar;
     static {
 	try {
 	    GrammarFile file = new GrammarFile(
-		    CPreprocessor.class.getResourceAsStream("CPP.g"));
+		    CPreprocessor.class.getResourceAsStream(CPP_GRAMMAR_FILE));
 	    try {
 		grammar = new GrammarConverter(file.getAST()).getGrammar();
 	    } finally {
@@ -56,25 +105,36 @@ public class CPreprocessor implements Preprocessor {
 	}
     }
 
-    private static final AnalyzerFactory analyzerFactory;
+    private static final AnalyzerFactory tokenizerAnalyzerFactory;
     static {
 	try {
-	    analyzerFactory = AnalyzerFactory.createFactory(grammar);
+	    tokenizerAnalyzerFactory = AnalyzerFactory
+		    .createFactory(tokenizerGrammar);
 	} catch (GrammarException e) {
 	    throw new RuntimeException(
-		    "Could not initialize C Preprocessor AnalyzerFactory!", e);
+		    "Could not initialize C Preprocessor tokenizerAnalyzerFactory!",
+		    e);
 	}
     }
 
     @Override
     public SourceCode process(SourceCode sourceCode)
 	    throws PreprocessorException {
+	resetDefinedMacros();
+	TokenStream tokenStream = tokenize(sourceCode);
+	ParserTree ast = parse(tokenStream);
+	SourceCode preProcessedSourceCode = process(ast);
+	return preProcessedSourceCode;
+    }
+
+    private TokenStream tokenize(SourceCode sourceCode)
+	    throws PreprocessorException {
 	try {
-	    resetDefinedMacros();
-
-	    Analyzer analyzer = analyzerFactory.createAnalyzer();
-
-	    SourceCode preProcessedSourceCode = new SourceCode();
+	    TokenStream tokenStream = new TokenStream(
+		    "TokenizedProprocessorStatement");
+	    int tokenId = 0;
+	    int position = 0;
+	    Analyzer analyzer = tokenizerAnalyzerFactory.createAnalyzer();
 	    List<SourceCodeLine> source = sourceCode.getSource();
 
 	    Iterator<SourceCodeLine> sourceIterator = source.iterator();
@@ -82,27 +142,34 @@ public class CPreprocessor implements Preprocessor {
 		SourceCodeLine line = sourceIterator.next();
 		Matcher matcher = pattern.matcher(line.getLine());
 		if (matcher.find()) {
-		    ParserTree ast = parse(analyzer, sourceIterator, line);
-		    SourceCode newCode = process(ast);
-		    preProcessedSourceCode.addSourceCode(newCode);
+		    TokenStream tokens = tokenize(analyzer, sourceIterator,
+			    line);
+		    tokenStream.addAll(tokens);
 		} else {
-		    preProcessedSourceCode.addSourceCodeLine(line);
+		    TokenMetaData metaData = new TokenMetaData(line.getFile()
+			    .getPath(), tokenId, position,
+			    line.getLineNumber(), 1);
+		    Token token = new Token("SourceCodeLine", line.getLine(),
+			    Visibility.IGNORED, metaData);
+		    tokenStream.add(token);
 		}
 	    }
-	    return preProcessedSourceCode;
+	    return tokenStream;
 	} catch (GrammarException e) {
-	    throw new PreprocessorException(
-		    "Could not pre-process source code!", e);
+	    throw new PreprocessorException("Could not tokenize source code!",
+		    e);
 	}
     }
 
-    private ParserTree parse(Analyzer analyzer,
+    private TokenStream tokenize(Analyzer analyzer,
 	    Iterator<SourceCodeLine> sourceIterator, SourceCodeLine line)
 	    throws PreprocessorException {
-	ParserTree ast = null;
+	final TokenStream tokenStream = new TokenStream(
+		"PreprocessorStatementTokens");
 	SourceCode preprocessorCode = new SourceCode();
 	preprocessorCode.addSourceCodeLine(line);
 	try {
+	    ParserTree ast = null;
 	    while (ast == null) {
 		try {
 		    ast = analyzer.analyze(preprocessorCode, line.getFile()
@@ -113,18 +180,78 @@ public class CPreprocessor implements Preprocessor {
 		    preprocessorCode.addSourceCodeLine(sourceIterator.next());
 		}
 	    }
+	    TreeWalker<ParserTree> walker = new TreeWalker<ParserTree>(ast);
+	    walker.walk(new TreeVisitor<ParserTree>() {
+		@Override
+		public WalkingAction visit(ParserTree tree) {
+		    if (!tree.isNode()) {
+			tokenStream.add(tree.getToken());
+		    }
+		    return WalkingAction.PROCEED;
+		}
+	    });
+	    return tokenStream;
 	} catch (NoSuchElementException e) {
 	    throw new PreprocessorException(
 		    "Could not pre-process source code due parsing issues in line "
 			    + line.getFile() + ":" + line.getLineNumber()
 			    + " \"" + line.getLine() + "\"!", e);
 	}
-	return ast;
+    }
+
+    private ParserTree parse(TokenStream tokenStream)
+	    throws PreprocessorException {
+	try {
+	    Parser parser = grammar.createParser();
+	    return parser.parse(new LexerResult(tokenStream));
+	} catch (GrammarException e) {
+	    throw new PreprocessorException(
+		    "Cannot create parser for C preprocessor!", e);
+	} catch (ParserException e) {
+	    throw new PreprocessorException(
+		    "Cannot create parse C preprocessor statement!", e);
+	}
     }
 
     private SourceCode process(ParserTree ast) {
-	SourceCode code = new SourceCode();
-	// TODO Auto-generated method stub
+	final SourceCode code = new SourceCode();
+	TreeWalker<ParserTree> walker = new TreeWalker<ParserTree>(ast);
+	walker.walk(new TreeVisitor<ParserTree>() {
+
+	    @Override
+	    public WalkingAction visit(ParserTree tree) {
+		if (tree.isNode()) {
+		    /*
+		     * TODO we need to implement the interpretation of the pre
+		     * processor productions here...
+		     */
+		} else {
+		    Token token = tree.getToken();
+		    if ("SourceCodeLine".equals(token.getName())) {
+			TokenMetaData metaData = token.getMetaData();
+			SourceCodeLine sourceCodeLine = new SourceCodeLine(
+				new File(metaData.getSourceName()), metaData
+					.getLine(), token.getText());
+			code.addSourceCodeLine(sourceCodeLine);
+		    } else {
+			/*
+			 * We should not come here. A token is either a line of
+			 * source code which is handled above, or we interpret
+			 * the preprocessor statement into something else by
+			 * node handling. But we should not run into a case
+			 * where we need to process a token from a preprocessor
+			 * statement singularly!
+			 * 
+			 * We can just abort now...
+			 */
+			return WalkingAction.ABORT;
+		    }
+
+		}
+		return WalkingAction.PROCEED;
+	    }
+	});
+	// TODO we need to add a check here how the walker finished its job...
 	return code;
     }
 

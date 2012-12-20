@@ -24,7 +24,7 @@ public class TreeWalkerTest {
     public void testCompleteWalk() {
 	TreeImpl tree = TreeImpl.getSampleTree();
 	TreeWalker<TreeImpl> walker = new TreeWalker<TreeImpl>(tree);
-	TreeVisitorImpl visitor = new TreeVisitorImpl();
+	TreeVisitorTestImpl visitor = new TreeVisitorTestImpl();
 	walker.walk(visitor);
 	assertEquals("rootn1n11n12n13n2n21n22n23n3n31n32n33",
 		visitor.getNodeString());
@@ -34,7 +34,7 @@ public class TreeWalkerTest {
     public void testAbortWalk() {
 	TreeImpl tree = TreeImpl.getSampleTree();
 	TreeWalker<TreeImpl> walker = new TreeWalker<TreeImpl>(tree);
-	TreeVisitorImpl visitor = new TreeVisitorImpl();
+	TreeVisitorTestImpl visitor = new TreeVisitorTestImpl();
 	visitor.addAction("n2", WalkingAction.ABORT);
 	walker.walk(visitor);
 	assertEquals("rootn1n11n12n13n2", visitor.getNodeString());
@@ -44,7 +44,7 @@ public class TreeWalkerTest {
     public void testLeaveBranchWalk() {
 	TreeImpl tree = TreeImpl.getSampleTree();
 	TreeWalker<TreeImpl> walker = new TreeWalker<TreeImpl>(tree);
-	TreeVisitorImpl visitor = new TreeVisitorImpl();
+	TreeVisitorTestImpl visitor = new TreeVisitorTestImpl();
 	visitor.addAction("n2", WalkingAction.LEAVE_BRANCH);
 	walker.walk(visitor);
 	assertEquals("rootn1n11n12n13n2n3n31n32n33", visitor.getNodeString());
@@ -54,7 +54,7 @@ public class TreeWalkerTest {
     public void testCompleteWalkBackward() {
 	TreeImpl tree = TreeImpl.getSampleTree();
 	TreeWalker<TreeImpl> walker = new TreeWalker<TreeImpl>(tree);
-	TreeVisitorImpl visitor = new TreeVisitorImpl();
+	TreeVisitorTestImpl visitor = new TreeVisitorTestImpl();
 	walker.walkBackward(visitor);
 	assertEquals("n33n32n31n3n23n22n21n2n13n12n11n1root",
 		visitor.getNodeString());
@@ -64,7 +64,7 @@ public class TreeWalkerTest {
     public void testAbortWalkBackward() {
 	TreeImpl tree = TreeImpl.getSampleTree();
 	TreeWalker<TreeImpl> walker = new TreeWalker<TreeImpl>(tree);
-	TreeVisitorImpl visitor = new TreeVisitorImpl();
+	TreeVisitorTestImpl visitor = new TreeVisitorTestImpl();
 	visitor.addAction("n2", WalkingAction.ABORT);
 	walker.walkBackward(visitor);
 	assertEquals("n33n32n31n3n23n22n21n2", visitor.getNodeString());
@@ -74,7 +74,7 @@ public class TreeWalkerTest {
     public void testLeaveBranchWalkBackward() {
 	TreeImpl tree = TreeImpl.getSampleTree();
 	TreeWalker<TreeImpl> walker = new TreeWalker<TreeImpl>(tree);
-	TreeVisitorImpl visitor = new TreeVisitorImpl();
+	TreeVisitorTestImpl visitor = new TreeVisitorTestImpl();
 	visitor.addAction("n23", WalkingAction.LEAVE_BRANCH);
 	walker.walkBackward(visitor);
 	assertEquals("n33n32n31n3n23n13n12n11n1root", visitor.getNodeString());

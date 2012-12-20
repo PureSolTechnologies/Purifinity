@@ -22,7 +22,7 @@ import com.puresol.uhura.lexer.SourceCodeLine;
 import com.puresol.uhura.parser.ParserException;
 import com.puresol.uhura.preprocessor.PreprocessorException;
 
-public class CPPGrammarTest {
+public class CPPTokenizerGrammarTest {
 
     private static Grammar grammar;
     private static AnalyzerFactory analyzerFactory;
@@ -30,7 +30,7 @@ public class CPPGrammarTest {
     @BeforeClass
     public static void initialize() throws IOException, GrammarException {
 	GrammarFile grammarFile = new GrammarFile(
-		CPPGrammarTest.class.getResourceAsStream("CPP.g"));
+		CPPTokenizerGrammarTest.class.getResourceAsStream("CPP-tokenizer.g"));
 	try {
 
 	    GrammarConverter grammarConverter = new GrammarConverter(

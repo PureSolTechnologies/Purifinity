@@ -10,7 +10,7 @@ import java.util.Map;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class TreeVisitorImpl implements TreeVisitor<TreeImpl> {
+public class TreeVisitorTestImpl implements TreeVisitor<TreeImpl> {
 
 	private String nodeString = "";
 
