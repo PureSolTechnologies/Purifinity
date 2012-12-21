@@ -220,13 +220,13 @@ public class CPreprocessor implements Preprocessor {
 
 	    @Override
 	    public WalkingAction visit(ParserTree tree) {
-		if (tree.isNode()) {
+		Token token = tree.getToken();
+		if (token == null) {
 		    /*
 		     * TODO we need to implement the interpretation of the pre
 		     * processor productions here...
 		     */
 		} else {
-		    Token token = tree.getToken();
 		    if ("SourceCodeLine".equals(token.getName())) {
 			TokenMetaData metaData = token.getMetaData();
 			SourceCodeLine sourceCodeLine = new SourceCodeLine(
