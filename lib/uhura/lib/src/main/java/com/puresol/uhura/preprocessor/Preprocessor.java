@@ -1,5 +1,7 @@
 package com.puresol.uhura.preprocessor;
 
+import java.io.File;
+
 import com.puresol.uhura.lexer.SourceCode;
 
 /**
@@ -16,7 +18,7 @@ import com.puresol.uhura.lexer.SourceCode;
  */
 public interface Preprocessor {
 
-    public SourceCode process(SourceCode sourceCode)
+    public SourceCode process(File fileDirectory, SourceCode sourceCode)
 	    throws PreprocessorException;
 
 }

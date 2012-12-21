@@ -10,6 +10,10 @@ import java.util.NoSuchElementException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.puresol.trees.TreeException;
 import com.puresol.trees.TreeVisitor;
 import com.puresol.trees.TreeWalker;
 import com.puresol.trees.WalkingAction;
@@ -58,10 +62,16 @@ import com.puresol.uhura.preprocessor.PreprocessorException;
  */
 public class CPreprocessor implements Preprocessor {
 
+    private static final Logger logger = LoggerFactory
+	    .getLogger(CPreprocessor.class);
+
     private static final String CPP_TOKENIZER_GRAMMAR_FILE = "CPP-tokenizer.g";
     private static final String CPP_GRAMMAR_FILE = "CPP.g";
 
     private static final Pattern pattern = Pattern.compile("^s*#");
+
+    private static final IncludeDirectories includeDirectories = IncludeDirectories
+	    .getInstance();
 
     private final Map<String, String> definedMacros = new HashMap<String, String>();
 
@@ -118,12 +128,12 @@ public class CPreprocessor implements Preprocessor {
     }
 
     @Override
-    public SourceCode process(SourceCode sourceCode)
+    public SourceCode process(File fileDirectory, SourceCode sourceCode)
 	    throws PreprocessorException {
 	resetDefinedMacros();
 	TokenStream tokenStream = tokenize(sourceCode);
 	ParserTree ast = parse(tokenStream);
-	SourceCode preProcessedSourceCode = process(ast);
+	SourceCode preProcessedSourceCode = process(fileDirectory, ast);
 	return preProcessedSourceCode;
     }
 
@@ -184,8 +194,9 @@ public class CPreprocessor implements Preprocessor {
 	    walker.walk(new TreeVisitor<ParserTree>() {
 		@Override
 		public WalkingAction visit(ParserTree tree) {
-		    if (!tree.isNode()) {
-			tokenStream.add(tree.getToken());
+		    Token token = tree.getToken();
+		    if (token != null) {
+			tokenStream.add(token);
 		    }
 		    return WalkingAction.PROCEED;
 		}
@@ -213,7 +224,7 @@ public class CPreprocessor implements Preprocessor {
 	}
     }
 
-    private SourceCode process(ParserTree ast) {
+    private SourceCode process(final File fileDirectory, ParserTree ast) {
 	final SourceCode code = new SourceCode();
 	TreeWalker<ParserTree> walker = new TreeWalker<ParserTree>(ast);
 	walker.walk(new TreeVisitor<ParserTree>() {
@@ -222,6 +233,27 @@ public class CPreprocessor implements Preprocessor {
 	    public WalkingAction visit(ParserTree tree) {
 		Token token = tree.getToken();
 		if (token == null) {
+		    if ("IncludeMacro".equals(tree.getName())) {
+			ParserTree includeString;
+			try {
+			    includeString = tree.getChild("StringLiteral");
+			} catch (TreeException e) {
+			    try {
+				includeString = tree
+					.getChild("FileIncludeLiteral");
+			    } catch (TreeException e2) {
+				throw new RuntimeException(
+					"The IncludeMacro whether contains a StringLiteral nor a FileIncludeLiteral. The grammar or the implementation might be wrong!");
+			    }
+			}
+			String includeFile = includeString.getToken().getText();
+			try {
+			    include(fileDirectory, code, includeFile);
+			} catch (PreprocessorException e) {
+			    logger.warn("Abort preprocessing of file!", e);
+			    return WalkingAction.ABORT;
+			}
+		    }
 		    /*
 		     * TODO we need to implement the interpretation of the pre
 		     * processor productions here...
@@ -258,5 +290,29 @@ public class CPreprocessor implements Preprocessor {
     private void resetDefinedMacros() {
 	definedMacros.clear();
 
+    }
+
+    private void include(File fileDirectory, SourceCode code, String includeFile)
+	    throws PreprocessorException {
+	boolean includeFileDirectory = false;
+	if (includeFile.startsWith("\"") && includeFile.endsWith("\"")) {
+	    includeFileDirectory = true;
+	}
+	includeFile = includeFile.substring(1, includeFile.length() - 1);
+	if (includeFileDirectory) {
+	    File file = new File(fileDirectory, includeFile);
+	    if (file.exists()) {
+		try {
+		    SourceCode sourceCode = SourceCode.read(file);
+		    code.addSourceCode(sourceCode);
+		} catch (IOException e) {
+		    throw new PreprocessorException("Could not include file '"
+			    + file + "'!", e);
+		}
+	    }
+	}
+	for (File directory : includeDirectories.getDirectories()) {
+
+	}
     }
 }

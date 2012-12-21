@@ -3,6 +3,7 @@ package com.puresol.coding.lang.cpp;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,7 +30,10 @@ public class CPreProcessorTest {
 	    SourceCode sourceCode = SourceCode.read(sample, new File(
 		    "files/FileWithoutMacros.txt"));
 	    SourceCode preProcessedSourceCode = new CPreprocessor()
-		    .process(sourceCode);
+		    .process(
+			    new File(
+				    "src/test/resources/com/puresol/coding/lang/cpp/files"),
+			    sourceCode);
 	    assertEquals(sourceCode, preProcessedSourceCode);
 	    assertNotSame(sourceCode, preProcessedSourceCode);
 	} finally {
@@ -45,12 +49,14 @@ public class CPreProcessorTest {
 	    InputStream includedFile = CPreprocessor.class
 		    .getResourceAsStream("files/FileWithoutMacros.txt");
 	    try {
+		File directory = new File(
+			"src/test/resources/com/puresol/coding/lang/cpp/files");
 		SourceCode sourceCode = SourceCode.read(sample, new File(
-			"files/SingleIncludeMacro.txt"));
+			directory, "SingleIncludeMacro.txt"));
 		SourceCode includedSourceCode = SourceCode.read(includedFile,
-			new File("files/FileWithoutMacros.txt"));
+			new File(directory, "FileWithoutMacros.txt"));
 		SourceCode preProcessedSourceCode = new CPreprocessor()
-			.process(sourceCode);
+			.process(directory, sourceCode);
 		assertEquals(includedSourceCode, preProcessedSourceCode);
 	    } finally {
 		includedFile.close();
@@ -58,5 +64,17 @@ public class CPreProcessorTest {
 	} finally {
 	    sample.close();
 	}
+    }
+
+    @Test
+    public void testMultipleIncludes() throws IOException,
+	    PreprocessorException {
+	fail("Not implemented, yet!");
+    }
+
+    @Test
+    public void testMultipleRecursiveIncludes() throws IOException,
+	    PreprocessorException {
+	fail("Not implemented, yet!");
     }
 }
