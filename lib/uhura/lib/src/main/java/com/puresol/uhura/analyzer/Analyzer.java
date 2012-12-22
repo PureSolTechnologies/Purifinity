@@ -39,11 +39,7 @@ public class Analyzer {
 	    throws LexerException, ParserException, PreprocessorException {
 	SourceCode preProcessedSourceCode;
 	if (preprocessor != null) {
-	    preProcessedSourceCode = preprocessor.process(sourceCode
-		    .getSource().get(0).getFile(), sourceCode); // FIXME The
-								// get(0) needs
-								// to go out
-								// here!!!
+	    preProcessedSourceCode = preprocessor.process(sourceCode);
 	} else {
 	    preProcessedSourceCode = sourceCode;
 	}

@@ -7,7 +7,6 @@ import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 
 import org.junit.Test;
 
@@ -24,46 +23,25 @@ public class CPreProcessorTest {
     @Test
     public void testImmutabilityWithoutMacros() throws IOException,
 	    PreprocessorException {
-	InputStream sample = CPreprocessor.class
-		.getResourceAsStream("files/FileWithoutMacros.txt");
-	try {
-	    SourceCode sourceCode = SourceCode.read(sample, new File(
-		    "files/FileWithoutMacros.txt"));
-	    SourceCode preProcessedSourceCode = new CPreprocessor()
-		    .process(
-			    new File(
-				    "src/test/resources/com/puresol/coding/lang/cpp/files"),
-			    sourceCode);
-	    assertEquals(sourceCode, preProcessedSourceCode);
-	    assertNotSame(sourceCode, preProcessedSourceCode);
-	} finally {
-	    sample.close();
-	}
+	SourceCode sourceCode = SourceCode.read(new File(
+		"files/FileWithoutMacros.txt"));
+	SourceCode preProcessedSourceCode = new CPreprocessor()
+		.process(sourceCode);
+	assertEquals(sourceCode, preProcessedSourceCode);
+	assertNotSame(sourceCode, preProcessedSourceCode);
     }
 
     @Test
     public void testSingleInclude() throws IOException, PreprocessorException {
-	InputStream sample = CPreprocessor.class
-		.getResourceAsStream("files/SingleIncludeMacro.txt");
-	try {
-	    InputStream includedFile = CPreprocessor.class
-		    .getResourceAsStream("files/FileWithoutMacros.txt");
-	    try {
-		File directory = new File(
-			"src/test/resources/com/puresol/coding/lang/cpp/files");
-		SourceCode sourceCode = SourceCode.read(sample, new File(
-			directory, "SingleIncludeMacro.txt"));
-		SourceCode includedSourceCode = SourceCode.read(includedFile,
-			new File(directory, "FileWithoutMacros.txt"));
-		SourceCode preProcessedSourceCode = new CPreprocessor()
-			.process(directory, sourceCode);
-		assertEquals(includedSourceCode, preProcessedSourceCode);
-	    } finally {
-		includedFile.close();
-	    }
-	} finally {
-	    sample.close();
-	}
+	File directory = new File(
+		"src/test/resources/com/puresol/coding/lang/cpp/files");
+	SourceCode sourceCode = SourceCode.read(new File(directory,
+		"SingleIncludeMacro.txt"));
+	SourceCode includedSourceCode = SourceCode.read(new File(directory,
+		"FileWithoutMacros.txt"));
+	SourceCode preProcessedSourceCode = new CPreprocessor()
+		.process(sourceCode);
+	assertEquals(includedSourceCode, preProcessedSourceCode);
     }
 
     @Test

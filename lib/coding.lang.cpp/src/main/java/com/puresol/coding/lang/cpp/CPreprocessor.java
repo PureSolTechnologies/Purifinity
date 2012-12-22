@@ -128,25 +128,25 @@ public class CPreprocessor implements Preprocessor {
     }
 
     @Override
-    public SourceCode process(File fileDirectory, SourceCode sourceCode)
+    public SourceCode process(SourceCode sourceCode)
 	    throws PreprocessorException {
 	resetDefinedMacros();
 	TokenStream tokenStream = tokenize(sourceCode);
 	ParserTree ast = parse(tokenStream);
-	SourceCode preProcessedSourceCode = process(fileDirectory, ast);
+	SourceCode preProcessedSourceCode = process(ast);
 	return preProcessedSourceCode;
     }
 
     private TokenStream tokenize(SourceCode sourceCode)
 	    throws PreprocessorException {
 	try {
-	    TokenStream tokenStream = new TokenStream(
-		    "TokenizedProprocessorStatement");
+	    TokenStream tokenStream = new TokenStream("");
 	    int tokenId = 0;
 	    int position = 0;
 	    Analyzer analyzer = tokenizerAnalyzerFactory.createAnalyzer();
 	    List<SourceCodeLine> source = sourceCode.getSource();
 
+	    File currentFile = new File("");
 	    Iterator<SourceCodeLine> sourceIterator = source.iterator();
 	    while (sourceIterator.hasNext()) {
 		SourceCodeLine line = sourceIterator.next();
@@ -154,6 +154,15 @@ public class CPreprocessor implements Preprocessor {
 		if (matcher.find()) {
 		    TokenStream tokens = tokenize(analyzer, sourceIterator,
 			    line);
+		    if (currentFile.getPath().equals("")) {
+			currentFile = new File(tokens.getName());
+		    } else if (!currentFile.getPath().equals(tokens.getName())) {
+			throw new RuntimeException(
+				"We found two different macros from two different files (first: "
+					+ currentFile + "; second:"
+					+ tokens.getName()
+					+ ")! This is not allowed!");
+		    }
 		    tokenStream.addAll(tokens);
 		} else {
 		    TokenMetaData metaData = new TokenMetaData(line.getFile()
@@ -164,7 +173,9 @@ public class CPreprocessor implements Preprocessor {
 		    tokenStream.add(token);
 		}
 	    }
-	    return tokenStream;
+	    TokenStream resultStream = new TokenStream(currentFile.getPath());
+	    resultStream.addAll(tokenStream);
+	    return resultStream;
 	} catch (GrammarException e) {
 	    throw new PreprocessorException("Could not tokenize source code!",
 		    e);
@@ -174,22 +185,34 @@ public class CPreprocessor implements Preprocessor {
     private TokenStream tokenize(Analyzer analyzer,
 	    Iterator<SourceCodeLine> sourceIterator, SourceCodeLine line)
 	    throws PreprocessorException {
-	final TokenStream tokenStream = new TokenStream(
-		"PreprocessorStatementTokens");
 	SourceCode preprocessorCode = new SourceCode();
 	preprocessorCode.addSourceCodeLine(line);
+	File currentFile = null;
 	try {
 	    ParserTree ast = null;
 	    while (ast == null) {
 		try {
-		    ast = analyzer.analyze(preprocessorCode, line.getFile()
-			    .getName());
+		    File file = line.getFile();
+		    if (currentFile == null) {
+			currentFile = file;
+		    } else if (!currentFile.equals(file)) {
+			throw new RuntimeException(
+				"We found two different macros from two different files (first: "
+					+ currentFile + "; second:" + file
+					+ ")! This is not allowed!");
+		    }
+		    ast = analyzer.analyze(preprocessorCode, file.getPath());
 		} catch (LexerException e) {
 		    preprocessorCode.addSourceCodeLine(sourceIterator.next());
 		} catch (ParserException e) {
 		    preprocessorCode.addSourceCodeLine(sourceIterator.next());
 		}
 	    }
+	    if (currentFile == null) {
+		return new TokenStream("No macro found!");
+	    }
+	    final TokenStream tokenStream = new TokenStream(
+		    currentFile.getPath());
 	    TreeWalker<ParserTree> walker = new TreeWalker<ParserTree>(ast);
 	    walker.walk(new TreeVisitor<ParserTree>() {
 		@Override
@@ -224,7 +247,7 @@ public class CPreprocessor implements Preprocessor {
 	}
     }
 
-    private SourceCode process(final File fileDirectory, ParserTree ast) {
+    private SourceCode process(ParserTree ast) {
 	final SourceCode code = new SourceCode();
 	TreeWalker<ParserTree> walker = new TreeWalker<ParserTree>(ast);
 	walker.walk(new TreeVisitor<ParserTree>() {
@@ -248,7 +271,10 @@ public class CPreprocessor implements Preprocessor {
 			}
 			String includeFile = includeString.getToken().getText();
 			try {
-			    include(fileDirectory, code, includeFile);
+			    String sourceName = tree.getMetaData()
+				    .getSourceName();
+			    include(new File(sourceName).getParentFile(), code,
+				    includeFile);
 			} catch (PreprocessorException e) {
 			    logger.warn("Abort preprocessing of file!", e);
 			    return WalkingAction.ABORT;

@@ -1,0 +1,6 @@
+#include "FileWithoutMacros.txt"
+
+#include "FileWithoutMacros.txt"
+// This is a non empty line
+#include "FileWithoutMacros2.txt"
+<end of file>

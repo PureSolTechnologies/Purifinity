@@ -9,7 +9,7 @@ import java.util.List;
 
 import org.junit.Test;
 
-public class FileUtilitiesTest {
+public class FileTreeConverterTest {
 
     @Test
     public void testConvertFileListToTree() {
