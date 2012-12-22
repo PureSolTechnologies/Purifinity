@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.puresol.coding.lang.cpp.internal.TokenCollector;
 import com.puresol.trees.TreeException;
 import com.puresol.trees.TreeVisitor;
 import com.puresol.trees.TreeWalker;
@@ -200,20 +201,7 @@ public class CPreprocessor implements Preprocessor {
 	    if (currentFile == null) {
 		return new TokenStream("No macro found!");
 	    }
-	    final TokenStream tokenStream = new TokenStream(
-		    currentFile.getPath());
-	    TreeWalker<ParserTree> walker = new TreeWalker<ParserTree>(ast);
-	    walker.walk(new TreeVisitor<ParserTree>() {
-		@Override
-		public WalkingAction visit(ParserTree tree) {
-		    Token token = tree.getToken();
-		    if (token != null) {
-			tokenStream.add(token);
-		    }
-		    return WalkingAction.PROCEED;
-		}
-	    });
-	    return tokenStream;
+	    return TokenCollector.collect(ast, currentFile.getPath());
 	} catch (NoSuchElementException e) {
 	    throw new PreprocessorException(
 		    "Could not pre-process source code due parsing issues in line "
@@ -315,8 +303,14 @@ public class CPreprocessor implements Preprocessor {
 	    File file = new File(fileDirectory, includeFile);
 	    if (file.exists()) {
 		try {
+		    // read to be included source...
 		    SourceCode sourceCode = SourceCode.read(file);
-		    code.addSourceCode(sourceCode);
+		    // we need to process this source, too, before we can
+		    // include it...
+		    SourceCode processedSourceCode = new CPreprocessor()
+			    .process(sourceCode);
+		    // we actually do the including...
+		    code.addSourceCode(processedSourceCode);
 		} catch (IOException e) {
 		    throw new PreprocessorException("Could not include file '"
 			    + file + "'!", e);

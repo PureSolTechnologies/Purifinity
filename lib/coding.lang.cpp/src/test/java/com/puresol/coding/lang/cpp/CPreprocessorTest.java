@@ -13,7 +13,7 @@ import org.junit.Test;
 import com.puresol.uhura.lexer.SourceCode;
 import com.puresol.uhura.preprocessor.PreprocessorException;
 
-public class CPreProcessorTest {
+public class CPreprocessorTest {
 
     @Test
     public void testInstantiation() {
