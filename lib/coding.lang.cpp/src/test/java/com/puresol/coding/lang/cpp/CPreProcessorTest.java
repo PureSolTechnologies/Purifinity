@@ -23,8 +23,10 @@ public class CPreProcessorTest {
     @Test
     public void testImmutabilityWithoutMacros() throws IOException,
 	    PreprocessorException {
-	SourceCode sourceCode = SourceCode.read(new File(
-		"files/FileWithoutMacros.txt"));
+	File directory = new File(
+		"src/test/resources/com/puresol/coding/lang/cpp/files");
+	SourceCode sourceCode = SourceCode.read(new File(directory,
+		"FileWithoutMacros.txt"));
 	SourceCode preProcessedSourceCode = new CPreprocessor()
 		.process(sourceCode);
 	assertEquals(sourceCode, preProcessedSourceCode);

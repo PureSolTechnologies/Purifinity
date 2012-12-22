@@ -65,7 +65,6 @@ public class CPreprocessor implements Preprocessor {
     private static final Logger logger = LoggerFactory
 	    .getLogger(CPreprocessor.class);
 
-    private static final String CPP_TOKENIZER_GRAMMAR_FILE = "CPP-tokenizer.g";
     private static final String CPP_GRAMMAR_FILE = "CPP.g";
 
     private static final Pattern pattern = Pattern.compile("^s*#");
@@ -74,27 +73,6 @@ public class CPreprocessor implements Preprocessor {
 	    .getInstance();
 
     private final Map<String, String> definedMacros = new HashMap<String, String>();
-
-    private static final Grammar tokenizerGrammar;
-    static {
-	try {
-	    GrammarFile file = new GrammarFile(
-		    CPreprocessor.class
-			    .getResourceAsStream(CPP_TOKENIZER_GRAMMAR_FILE));
-	    try {
-		tokenizerGrammar = new GrammarConverter(file.getAST())
-			.getGrammar();
-	    } finally {
-		file.close();
-	    }
-	} catch (IOException e) {
-	    throw new RuntimeException(
-		    "Could not initialize C Preprocessor tokenizer grammar!", e);
-	} catch (GrammarException e) {
-	    throw new RuntimeException(
-		    "Could not initialize C Preprocessor tokenizer grammar!", e);
-	}
-    }
 
     private static final Grammar grammar;
     static {
@@ -112,6 +90,17 @@ public class CPreprocessor implements Preprocessor {
 	} catch (GrammarException e) {
 	    throw new RuntimeException(
 		    "Could not initialize C Preprocessor grammar!", e);
+	}
+    }
+
+    private static final Grammar tokenizerGrammar;
+    static {
+	try {
+	    tokenizerGrammar = grammar.createWithNewStartProduction("Macro");
+	} catch (GrammarException e) {
+	    throw new RuntimeException(
+		    "Could not initialize C Preprocessor tokenizer grammar from C preprocessor grammar!",
+		    e);
 	}
     }
 

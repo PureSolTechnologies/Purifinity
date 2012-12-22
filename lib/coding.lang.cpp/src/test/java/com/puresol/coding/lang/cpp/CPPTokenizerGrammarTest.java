@@ -30,7 +30,7 @@ public class CPPTokenizerGrammarTest {
     @BeforeClass
     public static void initialize() throws IOException, GrammarException {
 	GrammarFile grammarFile = new GrammarFile(
-		CPPTokenizerGrammarTest.class.getResourceAsStream("CPP-tokenizer.g"));
+		CPPTokenizerGrammarTest.class.getResourceAsStream("CPP.g"));
 	try {
 
 	    GrammarConverter grammarConverter = new GrammarConverter(
