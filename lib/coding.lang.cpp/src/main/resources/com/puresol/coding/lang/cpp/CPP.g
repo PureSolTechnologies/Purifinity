@@ -387,7 +387,10 @@ HELPER
  	;
  	
  	IncludeMacro :
- 	    SHARP WhiteSpace* INCLUDE FileIncludeLiteral 
- 	|	SHARP WhiteSpace* INCLUDE StringLiteral 
+ 	    SHARP INCLUDE IncludeFile 
  	;
  
+ 	IncludeFile :
+ 		FileIncludeLiteral 
+ 	|	StringLiteral
+ 	;

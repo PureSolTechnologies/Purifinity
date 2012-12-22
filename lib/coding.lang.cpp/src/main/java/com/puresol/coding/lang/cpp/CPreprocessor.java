@@ -259,17 +259,18 @@ public class CPreprocessor implements Preprocessor {
 		    if ("IncludeMacro".equals(tree.getName())) {
 			ParserTree includeString;
 			try {
-			    includeString = tree.getChild("StringLiteral");
+			    includeString = tree.getChild("IncludeFile");
 			} catch (TreeException e) {
-			    try {
-				includeString = tree
-					.getChild("FileIncludeLiteral");
-			    } catch (TreeException e2) {
-				throw new RuntimeException(
-					"The IncludeMacro whether contains a StringLiteral nor a FileIncludeLiteral. The grammar or the implementation might be wrong!");
-			    }
+			    throw new RuntimeException(
+				    "The IncludeMacro whether contains a StringLiteral nor a FileIncludeLiteral. The grammar or the implementation might be wrong!");
 			}
-			String includeFile = includeString.getToken().getText();
+			String includeFile = includeString.getText();
+			/*
+			 * We need to trim next due to we have looked for the
+			 * production "IncludeFile" which may carry some white
+			 * spaces.
+			 */
+			includeFile = includeFile.trim();
 			try {
 			    String sourceName = tree.getMetaData()
 				    .getSourceName();
@@ -280,10 +281,6 @@ public class CPreprocessor implements Preprocessor {
 			    return WalkingAction.ABORT;
 			}
 		    }
-		    /*
-		     * TODO we need to implement the interpretation of the pre
-		     * processor productions here...
-		     */
 		} else {
 		    if ("SourceCodeLine".equals(token.getName())) {
 			TokenMetaData metaData = token.getMetaData();
