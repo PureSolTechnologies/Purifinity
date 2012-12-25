@@ -11,6 +11,7 @@ import java.io.IOException;
 import org.junit.Test;
 
 import com.puresol.uhura.lexer.SourceCode;
+import com.puresol.uhura.lexer.SourceCodeLine;
 import com.puresol.uhura.preprocessor.PreprocessorException;
 
 public class CPreprocessorTest {
@@ -49,7 +50,29 @@ public class CPreprocessorTest {
     @Test
     public void testMultipleIncludes() throws IOException,
 	    PreprocessorException {
-	fail("Not implemented, yet!");
+	File directory = new File(
+		"src/test/resources/com/puresol/coding/lang/cpp/files");
+	File sourceFile = new File(directory, "MultipleIncludeMacros.txt");
+	SourceCode sourceCode = SourceCode.read(sourceFile);
+	SourceCode preProcessedSourceCode = new CPreprocessor()
+		.process(sourceCode);
+
+	SourceCode sourceWithoutMacros = SourceCode.read(new File(directory,
+		"FileWithoutMacros.txt"));
+	SourceCode sourceWithoutMacros2 = SourceCode.read(new File(directory,
+		"FileWithoutMacros2.txt"));
+
+	SourceCode expected = new SourceCode();
+	expected.addSourceCode(sourceWithoutMacros);
+	expected.addSourceCodeLine(new SourceCodeLine(sourceFile, 2, "\n"));
+	expected.addSourceCode(sourceWithoutMacros);
+	expected.addSourceCodeLine(new SourceCodeLine(sourceFile, 4,
+		"// This is a non empty line\n"));
+	expected.addSourceCode(sourceWithoutMacros2);
+	expected.addSourceCodeLine(new SourceCodeLine(sourceFile, 6,
+		"<end of file>"));
+
+	assertEquals(expected, preProcessedSourceCode);
     }
 
     @Test

@@ -147,4 +147,18 @@ public class SourceCode implements Serializable, Cloneable {
 	    throw new RuntimeException(e);
 	}
     }
+
+    @Override
+    public String toString() {
+	StringBuffer buffer = new StringBuffer();
+	for (SourceCodeLine line : source) {
+	    buffer.append(line.getFile());
+	    buffer.append(":");
+	    buffer.append(line.getLineNumber());
+	    buffer.append("\t");
+	    buffer.append(line.getLine().replaceAll("\\n", "\\\\n"));
+	    buffer.append("\n");
+	}
+	return buffer.toString();
+    }
 }

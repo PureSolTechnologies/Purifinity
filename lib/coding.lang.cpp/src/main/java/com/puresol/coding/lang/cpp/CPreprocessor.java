@@ -73,8 +73,6 @@ public class CPreprocessor implements Preprocessor {
     private static final IncludeDirectories includeDirectories = IncludeDirectories
 	    .getInstance();
 
-    private final Map<String, String> definedMacros = new HashMap<String, String>();
-
     private static final Grammar grammar;
     static {
 	try {
@@ -116,6 +114,8 @@ public class CPreprocessor implements Preprocessor {
 		    e);
 	}
     }
+
+    private final Map<String, String> definedMacros = new HashMap<String, String>();
 
     @Override
     public SourceCode process(SourceCode sourceCode)
@@ -159,7 +159,7 @@ public class CPreprocessor implements Preprocessor {
 			    .getPath(), tokenId, position,
 			    line.getLineNumber(), 1);
 		    Token token = new Token("SourceCodeLine", line.getLine(),
-			    Visibility.IGNORED, metaData);
+			    Visibility.VISIBLE, metaData);
 		    tokenStream.add(token);
 		}
 	    }
@@ -231,56 +231,66 @@ public class CPreprocessor implements Preprocessor {
 
 	    @Override
 	    public WalkingAction visit(ParserTree tree) {
-		Token token = tree.getToken();
-		if (token == null) {
-		    if ("IncludeMacro".equals(tree.getName())) {
-			ParserTree includeString;
-			try {
-			    includeString = tree.getChild("IncludeFile");
-			} catch (TreeException e) {
-			    throw new RuntimeException(
-				    "The IncludeMacro whether contains a StringLiteral nor a FileIncludeLiteral. The grammar or the implementation might be wrong!");
+		try {
+		    Token token = tree.getToken();
+		    if (token == null) {
+			if ("IncludeMacro".equals(tree.getName())) {
+			    ParserTree includeString = tree
+				    .getChild("IncludeFile");
+			    String includeFile = includeString.getText();
+			    /*
+			     * We need to trim next due to we have looked for
+			     * the production "IncludeFile" which may carry some
+			     * white spaces.
+			     */
+			    includeFile = includeFile.trim();
+			    logger.debug("Include file '" + includeFile + "',");
+			    try {
+				String sourceName = tree.getMetaData()
+					.getSourceName();
+				include(new File(sourceName).getParentFile(),
+					code, includeFile);
+			    } catch (PreprocessorException e) {
+				logger.warn("Abort preprocessing of file!", e);
+				return WalkingAction.ABORT;
+			    }
+			    return WalkingAction.LEAVE_BRANCH;
 			}
-			String includeFile = includeString.getText();
-			/*
-			 * We need to trim next due to we have looked for the
-			 * production "IncludeFile" which may carry some white
-			 * spaces.
-			 */
-			includeFile = includeFile.trim();
-			try {
-			    String sourceName = tree.getMetaData()
-				    .getSourceName();
-			    include(new File(sourceName).getParentFile(), code,
-				    includeFile);
-			} catch (PreprocessorException e) {
-			    logger.warn("Abort preprocessing of file!", e);
-			    return WalkingAction.ABORT;
-			}
-		    }
-		} else {
-		    if ("SourceCodeLine".equals(token.getName())) {
-			TokenMetaData metaData = token.getMetaData();
-			SourceCodeLine sourceCodeLine = new SourceCodeLine(
-				new File(metaData.getSourceName()), metaData
-					.getLine(), token.getText());
-			code.addSourceCodeLine(sourceCodeLine);
 		    } else {
-			/*
-			 * We should not come here. A token is either a line of
-			 * source code which is handled above, or we interpret
-			 * the preprocessor statement into something else by
-			 * node handling. But we should not run into a case
-			 * where we need to process a token from a preprocessor
-			 * statement singularly!
-			 * 
-			 * We can just abort now...
-			 */
-			return WalkingAction.ABORT;
-		    }
+			if ("SourceCodeLine".equals(token.getName())) {
+			    TokenMetaData metaData = token.getMetaData();
+			    SourceCodeLine sourceCodeLine = new SourceCodeLine(
+				    new File(metaData.getSourceName()),
+				    metaData.getLine(), token.getText());
+			    code.addSourceCodeLine(sourceCodeLine);
+			} else if ("LineTerminator".equals(token.getName())) {
+			    /*
+			     * LineTerminators are used to separate macros. The
+			     * macros are processed and the remaining line
+			     * terminators must be neglected.
+			     */
+			} else {
+			    /*
+			     * We should not come here. A token is either a line
+			     * of source code which is handled above, or we
+			     * interpret the preprocessor statement into
+			     * something else by node handling. But we should
+			     * not run into a case where we need to process a
+			     * token from a preprocessor statement singularly!
+			     * 
+			     * We can just abort now...
+			     */
+			    throw new RuntimeException("Should not happen!");
+			    // return WalkingAction.ABORT;
+			}
 
+		    }
+		    return WalkingAction.PROCEED;
+		} catch (TreeException e) {
+		    throw new RuntimeException(
+			    "The grammar or the implementation might be wrong!",
+			    e);
 		}
-		return WalkingAction.PROCEED;
 	    }
 	});
 	// TODO we need to add a check here how the walker finished its job...
@@ -318,7 +328,7 @@ public class CPreprocessor implements Preprocessor {
 	    }
 	}
 	for (File directory : includeDirectories.getDirectories()) {
-
+	    // TODO check the other directories if not successful, yet...
 	}
     }
 }
