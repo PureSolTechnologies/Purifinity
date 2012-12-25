@@ -3,7 +3,6 @@ package com.puresol.coding.lang.cpp;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
@@ -78,6 +77,24 @@ public class CPreprocessorTest {
     @Test
     public void testMultipleRecursiveIncludes() throws IOException,
 	    PreprocessorException {
-	fail("Not implemented, yet!");
+	File directory = new File(
+		"src/test/resources/com/puresol/coding/lang/cpp/files");
+	File sourceFile = new File(directory, "RecursiveIncludeMacros1.txt");
+	SourceCode sourceCode = SourceCode.read(sourceFile);
+	SourceCode preProcessedSourceCode = new CPreprocessor()
+		.process(sourceCode);
+
+	SourceCode sourceWithoutMacros = SourceCode.read(new File(directory,
+		"FileWithoutMacros.txt"));
+	SourceCode sourceWithoutMacros2 = SourceCode.read(new File(directory,
+		"FileWithoutMacros2.txt"));
+
+	SourceCode expected = new SourceCode();
+	expected.addSourceCodeLine(new SourceCodeLine(new File(directory,
+		"RecursiveIncludeMacros3.txt"), 1, "<end of file>"));
+	expected.addSourceCode(sourceWithoutMacros2);
+	expected.addSourceCode(sourceWithoutMacros);
+
+	assertEquals(expected, preProcessedSourceCode);
     }
 }
