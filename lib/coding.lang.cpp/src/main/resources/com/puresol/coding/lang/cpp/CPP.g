@@ -285,6 +285,7 @@ HELPER
 	UNDEF   : "undef(?!\\w)" ;
 	IF      : "if(?!\\w)" ;
 	IFDEF   : "ifdef(?!\\w)" ;
+	IFNDEF  : "ifndef(?!\\w)" ;
 	ELSE    : "else(?!\\w)" ;
 	ELIF    : "elif(?!\\w)" ;
 	ENDIF   : "endif(?!\\w)" ;
@@ -385,6 +386,10 @@ HELPER
 
  	Macro :
  	    IncludeMacro
+// 	|   MacroDefinition
+//  |   ConditionDirective
+//  |   Pragma
+    |   ErrorMacro
  	;
  	
  	IncludeMacro :
@@ -395,3 +400,68 @@ HELPER
  		FileIncludeLiteral 
  	|	StringLiteral
  	;
+ 	
+ 	MacroDefinition :
+ 	    DefineMacro
+ 	|   UndefineMacro
+ 	;
+ 	
+ 	DefineMacro :
+ 	    DefineObjectLikeMacro
+ 	|   DefineFunctionLikeMacro
+ 	;
+ 	
+ 	
+ 	DefineObjectLikeMacro :
+ 	    SHARP DEFINE Identifier // TODO Declaration
+ 	;
+ 	
+ 	DefineFunctionLikeMacro :
+ 	    SHARP DEFINE Identifier // TODO Function Arguments and Declaration
+ 	;
+
+    UndefineMacro :
+        SHARP UNDEF Identifier
+    ;
+ 
+ 	ConditionDirective :
+        IfDirective
+ 	|   IfDefDirective
+ 	|   IfNDefDirective
+ 	|   ElseDirective
+ 	|   ElIfDirective
+ 	|   EndIfDirective
+ 	;
+
+ 	IfDirective :
+ 	    SHARP IF // TODO Condition
+ 	;
+ 	 
+ 	IfDefDirective :
+ 	    SHARP IFDEF // TODO Condition
+ 	;
+ 	 
+ 	IfNDefDirective :
+ 	    SHARP IFNDEF // TODO Condition
+ 	;
+ 	 
+ 	ElseDirective :
+        SHARP ELSE
+ 	;
+ 	 
+ 	ElIfDirective :
+        SHARP ELIF // TODO Condition
+ 	;
+ 	 
+ 	EndIfDirective :
+        SHARP ENDIF
+ 	;
+ 	
+ 	Pragma :
+ 	    SHARP PRAGMA
+ 	;
+ 	
+ 	ErrorMacro :
+ 	    SHARP ERROR StringLiteral
+ 	;
+ 	

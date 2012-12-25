@@ -2,22 +2,15 @@ package com.puresol.coding.lang.cpp;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import com.puresol.coding.lang.cpp.internal.DefinedMacros;
 import com.puresol.coding.lang.cpp.internal.TokenCollector;
-import com.puresol.trees.TreeException;
-import com.puresol.trees.TreeVisitor;
-import com.puresol.trees.TreeWalker;
-import com.puresol.trees.WalkingAction;
+import com.puresol.coding.lang.cpp.internal.TreeMacroProcessor;
 import com.puresol.uhura.analyzer.Analyzer;
 import com.puresol.uhura.analyzer.AnalyzerFactory;
 import com.puresol.uhura.grammar.Grammar;
@@ -39,17 +32,18 @@ import com.puresol.uhura.preprocessor.Preprocessor;
 import com.puresol.uhura.preprocessor.PreprocessorException;
 
 /**
- * This class implements a C Preprocessor.
+ * This class implements a C Preprocessor. The reference implementation to test
+ * agains is the GNU general-purpose preprocessor (GPP).
  * 
  * The implementation works in multiple steps:
  * 
  * 1) The Source Code is scanned and all lines starting with a sharp '#' are put
- * into the 'CPP-tokenizer' grammar to scan for a valid preprocessor statement.
- * If the first line does not match, we add the next lines until it fits (a
- * pass) or we run out of code (a fail). In case of a pass the tokens of the
- * part are taken and put into a TokenStream. Lines which are no preprocessor
- * statements are added into the {@link TokenStream} as ignored
- * "SourceCodeLine".
+ * into the 'CPP.g' grammar to scan for a valid preprocessor statement. Only the
+ * Macro production is used to parse the single line. If the first line does not
+ * match, we add the next lines until it fits (a pass) or we run out of code (a
+ * fail). In case of a pass the tokens of the part are taken and put into a
+ * TokenStream. Lines which are no preprocessor statements are added into the
+ * {@link TokenStream} as ignored "SourceCodeLine".
  * 
  * 2) The newly produced {@link TokenStream} is put into an analyzer of CPP
  * grammar to get the correct syntax tree.
@@ -63,16 +57,13 @@ import com.puresol.uhura.preprocessor.PreprocessorException;
  */
 public class CPreprocessor implements Preprocessor {
 
-    private static final Logger logger = LoggerFactory
-	    .getLogger(CPreprocessor.class);
-
     private static final String CPP_GRAMMAR_FILE = "CPP.g";
 
     private static final Pattern pattern = Pattern.compile("^s*#");
 
-    private static final IncludeDirectories includeDirectories = IncludeDirectories
-	    .getInstance();
-
+    /**
+     * This field contains the read grammar for the CPP.
+     */
     private static final Grammar grammar;
     static {
 	try {
@@ -92,6 +83,10 @@ public class CPreprocessor implements Preprocessor {
 	}
     }
 
+    /**
+     * This field contains the tokenizer grammar, which is just a part of the
+     * CPP grammar for parsing a single macro.
+     */
     private static final Grammar tokenizerGrammar;
     static {
 	try {
@@ -115,7 +110,7 @@ public class CPreprocessor implements Preprocessor {
 	}
     }
 
-    private final Map<String, String> definedMacros = new HashMap<String, String>();
+    private final DefinedMacros definedMacros = new DefinedMacros();
 
     @Override
     public SourceCode process(SourceCode sourceCode)
@@ -225,110 +220,13 @@ public class CPreprocessor implements Preprocessor {
     }
 
     private SourceCode process(ParserTree ast) {
-	final SourceCode code = new SourceCode();
-	TreeWalker<ParserTree> walker = new TreeWalker<ParserTree>(ast);
-	walker.walk(new TreeVisitor<ParserTree>() {
-
-	    @Override
-	    public WalkingAction visit(ParserTree tree) {
-		try {
-		    Token token = tree.getToken();
-		    if (token == null) {
-			if ("IncludeMacro".equals(tree.getName())) {
-			    ParserTree includeString = tree
-				    .getChild("IncludeFile");
-			    String includeFile = includeString.getText();
-			    /*
-			     * We need to trim next due to we have looked for
-			     * the production "IncludeFile" which may carry some
-			     * white spaces.
-			     */
-			    includeFile = includeFile.trim();
-			    logger.debug("Include file '" + includeFile + "',");
-			    try {
-				String sourceName = tree.getMetaData()
-					.getSourceName();
-				include(new File(sourceName).getParentFile(),
-					code, includeFile);
-			    } catch (PreprocessorException e) {
-				logger.warn("Abort preprocessing of file!", e);
-				return WalkingAction.ABORT;
-			    }
-			    return WalkingAction.LEAVE_BRANCH;
-			}
-		    } else {
-			if ("SourceCodeLine".equals(token.getName())) {
-			    TokenMetaData metaData = token.getMetaData();
-			    SourceCodeLine sourceCodeLine = new SourceCodeLine(
-				    new File(metaData.getSourceName()),
-				    metaData.getLine(), token.getText());
-			    code.addSourceCodeLine(sourceCodeLine);
-			} else if ("LineTerminator".equals(token.getName())) {
-			    /*
-			     * LineTerminators are used to separate macros. The
-			     * macros are processed and the remaining line
-			     * terminators must be neglected.
-			     */
-			} else {
-			    /*
-			     * We should not come here. A token is either a line
-			     * of source code which is handled above, or we
-			     * interpret the preprocessor statement into
-			     * something else by node handling. But we should
-			     * not run into a case where we need to process a
-			     * token from a preprocessor statement singularly!
-			     * 
-			     * We can just abort now...
-			     */
-			    throw new RuntimeException("Should not happen!");
-			    // return WalkingAction.ABORT;
-			}
-
-		    }
-		    return WalkingAction.PROCEED;
-		} catch (TreeException e) {
-		    throw new RuntimeException(
-			    "The grammar or the implementation might be wrong!",
-			    e);
-		}
-	    }
-	});
-	// TODO we need to add a check here how the walker finished its job...
-	return code;
+	TreeMacroProcessor processor = new TreeMacroProcessor(ast);
+	processor.process();
+	return processor.getCode();
     }
 
     private void resetDefinedMacros() {
-	definedMacros.clear();
-
+	definedMacros.reset();
     }
 
-    private void include(File fileDirectory, SourceCode code, String includeFile)
-	    throws PreprocessorException {
-	boolean includeFileDirectory = false;
-	if (includeFile.startsWith("\"") && includeFile.endsWith("\"")) {
-	    includeFileDirectory = true;
-	}
-	includeFile = includeFile.substring(1, includeFile.length() - 1);
-	if (includeFileDirectory) {
-	    File file = new File(fileDirectory, includeFile);
-	    if (file.exists()) {
-		try {
-		    // read to be included source...
-		    SourceCode sourceCode = SourceCode.read(file);
-		    // we need to process this source, too, before we can
-		    // include it...
-		    SourceCode processedSourceCode = new CPreprocessor()
-			    .process(sourceCode);
-		    // we actually do the including...
-		    code.addSourceCode(processedSourceCode);
-		} catch (IOException e) {
-		    throw new PreprocessorException("Could not include file '"
-			    + file + "'!", e);
-		}
-	    }
-	}
-	for (File directory : includeDirectories.getDirectories()) {
-	    // TODO check the other directories if not successful, yet...
-	}
-    }
 }
