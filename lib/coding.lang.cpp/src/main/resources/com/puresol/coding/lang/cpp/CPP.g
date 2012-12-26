@@ -96,38 +96,6 @@ HELPER
 
 	/* 3.10.1 Integer Literals */
 	
-	DecimalIntegerLiteral:
-		DecimalNumeral IntegerTypeSuffix "?"
-	;
-	
-	HexIntegerLiteral:
-		HexNumeral IntegerTypeSuffix "?"
-	;
-	
-	OctalIntegerLiteral:
-		OctalNumeral IntegerTypeSuffix "?"
-	;
-	
-	IntegerTypeSuffix:
-		"[lL]"
-	;
-	
-	DecimalNumeral:
-		"(0|" NonZeroDigit "(" Digits ")?)"
-	;
-	
-	Digits:
-		Digit "+"
-	;
-	
-	Digit:
-		"[0-9]"
-	;
-	
-	NonZeroDigit:
-		"[1-9]"
-	;
-
 	HexNumeral:
 		"0[xX]" HexDigits
 	;
@@ -153,64 +121,12 @@ HELPER
 		"[0-7]"
 	;
 		
-	/* 3.10.2 Floating-Point Literals */
-
-	DecimalFloatingPointLiteral:
-	"("	Digits "\\.(" Digits ")?(" ExponentPart ")?(" FloatTypeSuffix ")?"
-	"|"	"\\." Digits "(" ExponentPart ")?(" FloatTypeSuffix ")?"
-	"|"	Digits ExponentPart "(" FloatTypeSuffix ")?"
-	"|"	Digits "(" ExponentPart ")?" FloatTypeSuffix
-	")"
-	;
-	
-	ExponentPart:
-		ExponentIndicator SignedInteger
-	;
-	
-	ExponentIndicator:
-		"[eE]"
-	;
-	
-	SignedInteger:
-		Sign "?" Digits
-	;
-	
-	Sign:
-		"[+-]"
-	;
-	
-	FloatTypeSuffix:
-		"[fFdD]"
-	;
-	
-	HexadecimalFloatingPointLiteral:
-		HexSignificand BinaryExponent FloatTypeSuffix "?"
-	;
-	
 	HexSignificand:
 	"("	HexNumeral
 	"|"	HexNumeral "\\."
 	"|"	"0[xX](" HexDigits ")?\\." HexDigits
 	")"
 	;
-	
-	BinaryExponent:
-		BinaryExponentIndicator SignedInteger
-	;
-	
-	BinaryExponentIndicator:
-		"[pP]"
-	;
-
-	/* 3.10.3 Boolean Literals */
-
-	/* 3.10.4 Character Literals */
-	
-	SingleCharacter:
-		"[^\\'\\\\]"
-	;
-
-	/* 3.10.5 String Literals */
 	
 	StringCharacters:
 		StringCharacter "+"
@@ -249,16 +165,6 @@ HELPER
 		"[0-3]"
 	;
 		
-	/* 3.10.7 The Null Literal */
-
-	/*************** 
-	 3.11 Separators
-	 ***************/
-	Separator:
-		"[(){}\\[\\];,\\.]"
-	;
-
-		
  /****************************************************************************
  * T O K E N S
  ****************************************************************************/ 
@@ -291,26 +197,11 @@ HELPER
 	ENDIF   : "endif(?!\\w)" ;
 	PRAGMA  : "pragma(?!\\w)" ;
 	ERROR   : "error(?!\\w)" ;
+	VA_ARGS : "__VA_ARGS__(?!\\w)" ;
 
 	/*************
-	 3.10 Literals
+	 Literals
 	 *************/
-	IntegerLiteral:
-		"(" DecimalIntegerLiteral "|" HexIntegerLiteral "|" OctalIntegerLiteral ")(?!\\w)"
-	;
-
-	FloatingPointLiteral:
-		"(" DecimalFloatingPointLiteral "|" HexadecimalFloatingPointLiteral ")(?!\\w)"
-	;
-	
-	BooleanLiteral:
-		"(true|false)(?!\\w)"
-	;
-
-	CharacterLiteral:
-		"\\'(" SingleCharacter "|" EscapeSequence "|" UnicodeEscape ")\\'"
-	;
-	
 	StringLiteral:		
 		"\"(" StringCharacters ")?\""
 	;
@@ -320,7 +211,7 @@ HELPER
 	;
 	
 	SourceCodeLine:
-	    ".*\\\\n" // This is a place holder! This token will be added by the PreprocessorTokenizer...
+	    ".*\\\\n" // This is a place holder! This token will be added by the PreprocessorTokenizer..,
 	;
 	
 	/**************
@@ -386,9 +277,9 @@ HELPER
 
  	Macro :
  	    IncludeMacro
-// 	|   MacroDefinition
-//  |   ConditionDirective
-//  |   Pragma
+ 	|   MacroDefinition
+    |   ConditionDirective
+    |   Pragma
     |   ErrorMacro
  	;
  	
@@ -402,8 +293,8 @@ HELPER
  	;
  	
  	MacroDefinition :
- 	    DefineMacro
- 	|   UndefineMacro
+        DefineMacro
+    |   UndefineMacro
  	;
  	
  	DefineMacro :
@@ -413,12 +304,33 @@ HELPER
  	
  	
  	DefineObjectLikeMacro :
- 	    SHARP DEFINE Identifier // TODO Declaration
+ 	    SHARP DEFINE Identifier 
+ 	|   SHARP DEFINE Identifier ReplacementList
  	;
  	
  	DefineFunctionLikeMacro :
- 	    SHARP DEFINE Identifier // TODO Function Arguments and Declaration
+ 	    SHARP DEFINE Identifier LPAREN ParameterList RPAREN ReplacementList
  	;
+
+	ReplacementList :
+	    Identifier ReplacementList
+	|   Identifier
+	;
+	
+	ParameterList :
+	    Replacement COMMA ParameterList
+	|   Replacement COMMA OptionalParameters
+	|   OptionalParameters
+	|   Replacement
+	;
+
+    Replacement:
+        Identifier
+    ;
+
+	OptionalParameters :
+	    DOT DOT DOT
+	;
 
     UndefineMacro :
         SHARP UNDEF Identifier
@@ -429,7 +341,7 @@ HELPER
  	|   IfDefDirective
  	|   IfNDefDirective
  	|   ElseDirective
- 	|   ElIfDirective
+	|   ElIfDirective
  	|   EndIfDirective
  	;
 
@@ -458,7 +370,7 @@ HELPER
  	;
  	
  	Pragma :
- 	    SHARP PRAGMA
+ 	    SHARP PRAGMA // TODO put in here the pragma content
  	;
  	
  	ErrorMacro :

@@ -9,7 +9,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.puresol.trees.TreeException;
 import com.puresol.uhura.analyzer.Analyzer;
 import com.puresol.uhura.analyzer.AnalyzerFactory;
 import com.puresol.uhura.grammar.Grammar;
@@ -20,6 +19,7 @@ import com.puresol.uhura.lexer.LexerException;
 import com.puresol.uhura.lexer.SourceCode;
 import com.puresol.uhura.lexer.SourceCodeLine;
 import com.puresol.uhura.parser.ParserException;
+import com.puresol.uhura.parser.ParserTree;
 import com.puresol.uhura.preprocessor.PreprocessorException;
 
 public class CPPTokenizerGrammarTest {
@@ -50,24 +50,100 @@ public class CPPTokenizerGrammarTest {
 	analyzer = analyzerFactory.createAnalyzer();
     }
 
-    @Test
-    public void testInclude() throws IOException, TreeException,
-	    GrammarException, LexerException, ParserException,
-	    PreprocessorException {
+    private ParserTree checkParser(String... lines) throws LexerException,
+	    ParserException, PreprocessorException {
 	SourceCode sourceCode = new SourceCode();
-	sourceCode.addSourceCodeLine(new SourceCodeLine(new File("Test"), 1,
-		"#include <include.txt>"));
-	assertNotNull(analyzer.analyze(sourceCode, "Test"));
+	int lineNum = 0;
+	for (String line : lines) {
+	    lineNum++;
+	    sourceCode.addSourceCodeLine(new SourceCodeLine(new File("Test"),
+		    lineNum, line));
+	}
+	ParserTree tree = analyzer.analyze(sourceCode, "Test");
+	assertNotNull(tree);
+	return tree;
     }
 
     @Test
-    public void testLocalInclude() throws IOException, TreeException,
-	    GrammarException, LexerException, ParserException,
-	    PreprocessorException {
-	SourceCode sourceCode = new SourceCode();
-	sourceCode.addSourceCodeLine(new SourceCodeLine(new File("Test"), 1,
-		"#include \"include.txt\""));
-	assertNotNull(analyzer.analyze(sourceCode, "Test"));
+    public void testError() throws Exception {
+	checkParser("#error \"This is an error message!\"");
     }
 
+    @Test
+    public void testInclude() throws Exception {
+	checkParser("#include <include.txt>");
+    }
+
+    @Test
+    public void testLocalInclude() throws Exception {
+	checkParser("#include \"include.txt\"");
+    }
+
+    @Test
+    public void testElse() throws Exception {
+	checkParser("#else");
+    }
+
+    @Test
+    public void testEndIff() throws Exception {
+	checkParser("#endif");
+    }
+
+    @Test
+    public void testDefineMacroOnlyWithName() throws Exception {
+	checkParser("#define NAME");
+    }
+
+    @Test
+    public void testDefineObjectLikeMacroWithOneReplacement() throws Exception {
+	checkParser("#define NAME replacement");
+    }
+
+    @Test
+    public void testDefineObjectLikeMacroWithMultipleReplacements()
+	    throws Exception {
+	checkParser("#define NAME replacement1 replacement2 replacement3 replacement4");
+    }
+
+    @Test
+    public void testDefineFunctionLikeMacroWithOneParameterAndWithOneReplacement()
+	    throws Exception {
+	checkParser("#define NAME(x) replacement1");
+    }
+
+    @Test
+    public void testDefineFunctionLikeMacroWithOneParameterAndWithMultipleReplacements()
+	    throws Exception {
+	checkParser("#define NAME(x) replacement1 replacement2 replacement3 replacement4");
+    }
+
+    @Test
+    public void testDefineFunctionLikeMacroWithMultipleParametersAndWithOneReplacement()
+	    throws Exception {
+	checkParser("#define NAME(x, y, z) replacement1");
+    }
+
+    @Test
+    public void testDefineFunctionLikeMacroWithMultipleParametersAndWithMultipleReplacements()
+	    throws Exception {
+	checkParser("#define NAME(x, y, z) replacement1 replacement2 replacement3 replacement4");
+    }
+
+    @Test
+    public void testDefineFunctionLikeMacroWithOptionalParametersOnly()
+	    throws Exception {
+	checkParser("#define NAME(...) replacement1");
+    }
+
+    @Test
+    public void testDefineFunctionLikeMacroWithOneParameterAndOptionalParameters()
+	    throws Exception {
+	checkParser("#define NAME(x, ...) replacement1");
+    }
+
+    @Test
+    public void testDefineFunctionLikeMacroWithMultipleParametersAndOptionalParameters()
+	    throws Exception {
+	checkParser("#define NAME(x, y, z, ...) replacement1");
+    }
 }
