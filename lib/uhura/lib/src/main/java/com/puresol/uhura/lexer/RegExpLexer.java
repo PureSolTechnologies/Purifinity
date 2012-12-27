@@ -1,5 +1,6 @@
 package com.puresol.uhura.lexer;
 
+import java.util.Iterator;
 import java.util.regex.Matcher;
 
 import org.slf4j.Logger;
@@ -8,6 +9,9 @@ import org.slf4j.LoggerFactory;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.token.TokenDefinition;
 import com.puresol.uhura.grammar.token.Visibility;
+import com.puresol.uhura.source.Source;
+import com.puresol.uhura.source.SourceCode;
+import com.puresol.uhura.source.SourceCodeLine;
 
 /**
  * This is a basic Lexer based on Java's regular expression engine.
@@ -56,39 +60,50 @@ public class RegExpLexer implements Lexer {
 	int pos = 0;
 	int id = 0;
 	int line = 1;
-	StringBuffer text = new StringBuffer();
-	for (SourceCodeLine sourceCodeLine : sourceCode.getSource()) {
-	    text.append(sourceCodeLine.getLine());
-	}
-	while (text.length() > 0) {
-	    Token token = findNextToken(text, id, pos, line);
-	    if ((token == null) || (token.getText().length() == 0)) {
-		String exceptionText;
-		if (text.length() <= 12) {
-		    exceptionText = text.toString();
-		} else {
-		    exceptionText = text.substring(0, 12) + "...";
+	Iterator<SourceCodeLine> sourceIterator = sourceCode.getSource()
+		.iterator();
+	while (sourceIterator.hasNext()) {
+	    SourceCodeLine sourceCodeLine = sourceIterator.next();
+	    StringBuffer text = new StringBuffer(sourceCodeLine.getLine());
+	    while (text.length() > 0) {
+		Token token = findNextToken(text, sourceCodeLine.getSource(),
+			id, pos, line);
+		if ((token == null) || (token.getText().length() == 0)) {
+		    String exceptionText;
+		    if (text.length() <= 12) {
+			exceptionText = text.toString();
+		    } else {
+			exceptionText = text.substring(0, 12) + "...";
 
+		    }
+		    if (sourceIterator.hasNext()) {
+			sourceCodeLine = sourceIterator.next();
+			text.append(sourceCodeLine.getLine());
+			continue;
+		    } else {
+			throw new LexerException("No token found for '"
+				+ exceptionText + "' in line " + line
+				+ " at position " + pos + ".");
+		    }
 		}
-		throw new LexerException("No token found for '" + exceptionText
-			+ "' in line " + line + " at position " + pos + ".");
+		if (logger.isTraceEnabled()) {
+		    logger.trace("Found token: " + token + " / "
+			    + token.getMetaData());
+		}
+		if (token.getVisibility() != Visibility.HIDDEN) {
+		    tokenStream.add(token);
+		}
+		id++;
+		pos += token.getText().length();
+		line += token.getMetaData().getLineNum() - 1;
+		text = text.delete(0, token.getText().length());
 	    }
-	    if (logger.isTraceEnabled()) {
-		logger.trace("Found token: " + token + " / "
-			+ token.getMetaData());
-	    }
-	    if (token.getVisibility() != Visibility.HIDDEN) {
-		tokenStream.add(token);
-	    }
-	    id++;
-	    pos += token.getText().length();
-	    line += token.getMetaData().getLineNum() - 1;
-	    text = text.delete(0, token.getText().length());
 	}
 	return tokenStream;
     }
 
-    private Token findNextToken(StringBuffer text, int id, int pos, int line) {
+    private Token findNextToken(StringBuffer text, Source source, int id,
+	    int pos, int line) {
 	Token nextToken = null;
 	for (TokenDefinition definition : grammar.getTokenDefinitions()
 		.getDefinitions()) {
@@ -105,8 +120,8 @@ public class RegExpLexer implements Lexer {
 			lineCounter++;
 		    }
 		}
-		TokenMetaData metaData = new TokenMetaData(
-			tokenStream.getName(), id, pos, line, lineCounter);
+		TokenMetaData metaData = new TokenMetaData(source, id, pos,
+			line, lineCounter);
 		nextToken = new Token(definition.getName(), tokenText,
 			definition.getVisibility(), metaData);
 	    }

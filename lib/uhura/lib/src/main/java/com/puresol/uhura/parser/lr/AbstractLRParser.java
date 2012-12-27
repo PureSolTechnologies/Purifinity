@@ -209,57 +209,69 @@ public abstract class AbstractLRParser extends AbstractParser {
      */
     private final ParserTree parse() throws ParserException {
 	try {
-	    boolean accepted = false;
-	    do {
-		checkTimeout();
-		stepCounter++;
-		if (logger.isTraceEnabled()) {
-		    logger.trace(toString());
-		}
-		if (streamPosition > maxPosition) {
-		    maxPosition = streamPosition;
-		}
-		final ParserActionSet actionSet;
-		final Token token;
-		if (streamPosition < getTokenStream().size()) {
-		    token = getTokenStream().get(streamPosition);
-		    actionSet = parserTable.getActionSet(stateStack.peek(),
-			    new Terminal(token.getName(), token.getText()));
-		} else {
-		    token = null;
-		    actionSet = parserTable.getActionSet(stateStack.peek(),
-			    FinishTerminal.getInstance());
-		}
-		if (logger.isTraceEnabled()) {
-		    logger.trace(actionSet.toString());
-		}
-		final ParserAction action = getAction(actionSet);
-		switch (action.getAction()) {
-		case SHIFT:
-		    shift(action);
-		    break;
-		case REDUCE:
-		    reduce(action);
-		    break;
-		case ACCEPT:
-		    accepted = accept(action);
-		    break;
-		case ERROR:
-		    error();
-		    break;
-		default:
-		    throw new ParserException("Invalid action '" + action
-			    + "'for parser near '"
-			    + getTokenStream().getCodeSample(maxPosition)
-			    + "'!");
-		}
-	    } while (!accepted);
+	    createActionStack();
 	    return LRTokenStreamConverter.convert(getTokenStream(),
 		    getGrammar(), actionStack);
 	} catch (GrammarException e) {
 	    logger.error(e.getMessage(), e);
 	    throw new ParserException(e.getMessage());
 	}
+    }
+
+    /**
+     * This method is the actual parsing. The parser creates an action stack
+     * which can be later convertered with a {@link LRTokenStreamConverter} into
+     * a {@link ParserTree}.
+     * 
+     * @throws ParserException
+     * @throws GrammarException
+     */
+    private void createActionStack() throws ParserException, GrammarException {
+	boolean accepted = false;
+	do {
+	    checkTimeout();
+	    stepCounter++;
+	    if (logger.isTraceEnabled()) {
+		logger.trace(toString());
+	    }
+	    if (streamPosition > maxPosition) {
+		maxPosition = streamPosition;
+	    }
+	    final ParserActionSet actionSet;
+	    final Token token;
+	    if (streamPosition < getTokenStream().size()) {
+		token = getTokenStream().get(streamPosition);
+		actionSet = parserTable.getActionSet(stateStack.peek(),
+			new Terminal(token.getName(), token.getText()));
+	    } else {
+		token = null;
+		actionSet = parserTable.getActionSet(stateStack.peek(),
+			FinishTerminal.getInstance());
+	    }
+	    if (logger.isTraceEnabled()) {
+		logger.trace(actionSet.toString());
+	    }
+	    final ParserAction action = getAction(actionSet);
+	    switch (action.getAction()) {
+	    case SHIFT:
+		shift(action);
+		break;
+	    case REDUCE:
+		reduce(action);
+		break;
+	    case ACCEPT:
+		accept(action);
+		accepted = true;
+		break;
+	    case ERROR:
+		error();
+		break;
+	    default:
+		throw new ParserException("Invalid action '" + action
+			+ "'for parser near '"
+			+ getTokenStream().getCodeSample(maxPosition) + "'!");
+	    }
+	} while (!accepted);
     }
 
     /**
@@ -417,13 +429,10 @@ public abstract class AbstractLRParser extends AbstractParser {
      * tree) and the state stack only contains the current state and the zero
      * state for the start element.
      * 
-     * @return True is returned if all conditions are met for finishing the
-     *         parser.
      * @throws ParserException
      */
-    private final boolean accept(ParserAction action) throws ParserException {
+    private final void accept(ParserAction action) throws ParserException {
 	actionStack.add(action);
-	return true;
     }
 
     /**

@@ -197,6 +197,8 @@ HELPER
 	ENDIF   : "endif(?!\\w)" ;
 	PRAGMA  : "pragma(?!\\w)" ;
 	ERROR   : "error(?!\\w)" ;
+	FILE    : "__FILE__(?!\\w)" ;
+	LINE    : "__LINE__(?!\\w)" ;
 	VA_ARGS : "__VA_ARGS__(?!\\w)" ;
 
 	/*************

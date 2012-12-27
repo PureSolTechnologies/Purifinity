@@ -20,6 +20,9 @@ import com.puresol.uhura.lexer.Token;
 import com.puresol.uhura.lexer.TokenMetaData;
 import com.puresol.uhura.parser.ParserException;
 import com.puresol.uhura.parser.ParserTree;
+import com.puresol.uhura.source.Source;
+import com.puresol.uhura.source.SourceCode;
+import com.puresol.uhura.source.SourceCodeLine;
 import com.puresol.utils.TextUtils;
 
 /**
@@ -78,9 +81,10 @@ public class PackratParser implements Serializable {
     private String text = "";
 
     /**
-     * This is the name of the object to be parsed.
+     * This field contains the original source code which is used to extract
+     * meta information.
      */
-    private String name = "";
+    private SourceCode sourceCode = null;
 
     /**
      * This is a field for tracking the maximum position of the parsing process.
@@ -127,8 +131,8 @@ public class PackratParser implements Serializable {
      * @return
      * @throws ParserException
      */
-    public ParserTree parse(String text, String name) throws ParserException {
-	return parse(text, "_START_", name);
+    public ParserTree parse(SourceCode sourceCode) throws ParserException {
+	return parse(sourceCode, "_START_");
     }
 
     /**
@@ -136,13 +140,18 @@ public class PackratParser implements Serializable {
      * name to start the parsing process afterwards.
      * 
      * @param text
+     * 
      * @param name
      */
-    private void initialize(String text, String name) {
+    private void initialize(SourceCode sourceCode) {
+	this.sourceCode = sourceCode;
+	StringBuffer buffer = new StringBuffer();
+	for (SourceCodeLine line : sourceCode.getSource()) {
+	    buffer.append(line.getLine());
+	}
+	this.text = buffer.toString();
 	memo.clear();
 	ruleInvocationStack = null;
-	this.text = text;
-	this.name = name;
 	maxPosition = 0;
     }
 
@@ -155,10 +164,10 @@ public class PackratParser implements Serializable {
      * @return
      * @throws ParserException
      */
-    public ParserTree parse(String text, String production, String name)
+    public ParserTree parse(SourceCode sourceCode, String production)
 	    throws ParserException {
 	try {
-	    initialize(text, name);
+	    initialize(sourceCode);
 	    MemoEntry progress = applyRule(production, 0, 0, 1);
 	    if (progress.getDeltaPosition() != text.length()) {
 		throw new ParserException(getParserErrorMessage());
@@ -648,9 +657,11 @@ public class PackratParser implements Serializable {
 	}
 	String match = matcher.group();
 	int lineBreakNum = TextUtils.countLineBreaks(match);
+	Source source = sourceCode.getSource().get(line - 1).getSource();
+	TokenMetaData metaData = new TokenMetaData(source, id, position, line,
+		lineBreakNum + 1);
 	Token token = new Token(tokenDefinition.getName(), match,
-		tokenDefinition.getVisibility(), new TokenMetaData(name, id,
-			position, line, lineBreakNum + 1));
+		tokenDefinition.getVisibility(), metaData);
 	ParserTree myTree = new ParserTree(token);
 	node.addChild(myTree);
 	if (maxPosition < position + match.length()) {

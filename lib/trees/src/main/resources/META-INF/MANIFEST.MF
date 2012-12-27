@@ -10,10 +10,9 @@ Bundle-SymbolicName: com.puresol.trees
 Bundle-Vendor: PureSol Technologies
 Bundle-Version: 0.1.0.qualifier
 Created-By: Apache Maven Bundle Plugin
-Export-Package: com.puresol.trees;uses:="org.osgi.framework,org.slf4j";v
- ersion="0.1.0.SNAPSHOT"
+Export-Package: com.puresol.trees;version="0.1.0.SNAPSHOT";uses:="org.osgi.framework,org.slf4j"
 Originally-Created-By: Apache Maven Bundle Plugin
 Tool: Bnd-1.50.0
 Bundle-ActivationPolicy: lazy
 Import-Package: org.osgi.framework;version="0.0.0",
- org.slf4j;version="1.6.1"
+ org.slf4j;version="1.7.2"

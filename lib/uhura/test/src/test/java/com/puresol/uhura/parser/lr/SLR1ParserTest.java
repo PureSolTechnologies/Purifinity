@@ -1,6 +1,5 @@
 package com.puresol.uhura.parser.lr;
 
-import java.io.File;
 import java.io.StringReader;
 
 import org.junit.Test;
@@ -10,9 +9,10 @@ import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.TestGrammars;
 import com.puresol.uhura.lexer.Lexer;
 import com.puresol.uhura.lexer.RegExpLexer;
-import com.puresol.uhura.lexer.SourceCode;
 import com.puresol.uhura.parser.Parser;
 import com.puresol.uhura.parser.ParserTree;
+import com.puresol.uhura.source.SourceCode;
+import com.puresol.uhura.source.UnspecifiedSource;
 
 public class SLR1ParserTest {
 
@@ -22,7 +22,7 @@ public class SLR1ParserTest {
 	Parser parser = new SLR1Parser(grammar);
 	Lexer lexer = new RegExpLexer(grammar);
 	ParserTree syntaxTree = parser.parse(lexer.lex(SourceCode.read(
-		new StringReader("1*2+3"), new File("SampleString")),
+		new StringReader("1*2+3"), new UnspecifiedSource()),
 		"SampleString"));
 	new TreePrinter(System.out).println(syntaxTree);
     }
@@ -33,8 +33,8 @@ public class SLR1ParserTest {
 	Parser parser = new SLR1Parser(grammar);
 	Lexer lexer = new RegExpLexer(grammar);
 	ParserTree syntaxTree = parser.parse(lexer.lex(SourceCode.read(
-		new StringReader("((1*(2+3)+4*5)+6)*7"), new File(
-			"SampleString")), "SampleString"));
+		new StringReader("((1*(2+3)+4*5)+6)*7"),
+		new UnspecifiedSource()), "SampleString"));
 	new TreePrinter(System.out).println(syntaxTree);
     }
 

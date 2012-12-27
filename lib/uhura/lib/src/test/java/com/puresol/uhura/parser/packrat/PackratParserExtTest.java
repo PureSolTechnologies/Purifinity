@@ -11,6 +11,8 @@ import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarConverter;
 import com.puresol.uhura.grammar.GrammarFile;
 import com.puresol.uhura.parser.ParserTree;
+import com.puresol.uhura.source.BuiltinSource;
+import com.puresol.uhura.source.Source;
 
 /**
  * This tests are taken from the paper 'Packrat Parsers Can Support Left
@@ -22,7 +24,7 @@ import com.puresol.uhura.parser.ParserTree;
  */
 public class PackratParserExtTest {
 
-    private ParserTree parseText(String text) throws Throwable {
+    private ParserTree parseText(Source source) throws Throwable {
 	InputStream inputStream = getClass()
 		.getResourceAsStream(
 			"/com/puresol/uhura/grammar/TestGrammarForJavaPrimaryExpressions.g");
@@ -34,7 +36,7 @@ public class PackratParserExtTest {
 			.getGrammar();
 		assertNotNull(grammar);
 		PackratParser parser = new PackratParser(grammar);
-		ParserTree parseTree = parser.parse(text, "TEXT_PARSE");
+		ParserTree parseTree = parser.parse(source.load());
 		assertNotNull(parseTree);
 		TreePrinter printer = new TreePrinter(System.out);
 		printer.println(parseTree);
@@ -49,26 +51,26 @@ public class PackratParserExtTest {
 
     @Test
     public void test1() throws Throwable {
-	parseText("this");
+	parseText(new BuiltinSource("this"));
     }
 
     @Test
     public void test2() throws Throwable {
-	parseText("this.x");
+	parseText(new BuiltinSource("this.x"));
     }
 
     @Test
     public void test3() throws Throwable {
-	parseText("this.x.y");
+	parseText(new BuiltinSource("this.x.y"));
     }
 
     @Test
     public void test4() throws Throwable {
-	parseText("this.x.m()");
+	parseText(new BuiltinSource("this.x.m()"));
     }
 
     @Test
     public void test5() throws Throwable {
-	parseText("x[i][j].y");
+	parseText(new BuiltinSource("x[i][j].y"));
     }
 }

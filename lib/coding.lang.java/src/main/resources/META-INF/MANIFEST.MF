@@ -1,29 +1,4 @@
 Manifest-Version: 1.0
-Export-Package: com.puresol.coding.lang.java;
-  uses:="com.puresol.coding,
-   org.osgi.framework,
-   org.slf4j,
-   com.puresol.utils,
-   com.puresol.coding.analysis,
-   com.puresol.coding.lang.java.grammar.parts,
-   com.puresol.uhura.parser,
-   com.puresol.trees,
-   com.puresol.uhura.lexer,
-   com.puresol.coding.lang.java.grammar",
- com.puresol.coding.lang.java.grammar;
-  uses:="com.puresol.utils,
-   com.puresol.uhura.parser,
-   com.puresol.uhura.lexer,
-   com.puresol.uhura.grammar",
- com.puresol.coding.lang.java.grammar.parts;uses:="com.puresol.coding,com.puresol.uhura.parser,com.puresol.trees",
- utils;
-  uses:="com.puresol.utils,
-   com.puresol.packages,
-   com.puresol.uhura.parser,
-   com.puresol.uhura.lexer,
-   com.puresol.uhura.grammar,
-   org.slf4j,
-   com.puresol.coding.lang.java.grammar"
 Built-By: ludwig
 Tool: Bnd-0.0.357
 Bundle-Name: com.puresol.coding.lang.java
@@ -50,8 +25,11 @@ Import-Package: com.puresol.coding;version="0.1.0",
  com.puresol.uhura.grammar.token;version="0.1.0",
  com.puresol.uhura.lexer;version="0.1.0",
  com.puresol.uhura.parser;version="0.1.0",
- com.puresol.uhura.parser.lr;version="0.1.0",
- com.puresol.uhura.parser.parsetable;version="0.1.0",
+ com.puresol.uhura.parser.packrat;version="0.1.0",
+ com.puresol.uhura.source;version="0.1.0",
  com.puresol.utils;version="0.1.0",
  org.osgi.framework;version="0.0.0",
  org.slf4j;version="1.6.1"
+Export-Package: com.puresol.coding.lang.java,
+ com.puresol.coding.lang.java.grammar,
+ com.puresol.coding.lang.java.metrics

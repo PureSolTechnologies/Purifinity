@@ -38,6 +38,7 @@ import com.puresol.uhura.lexer.TokenStream;
 import com.puresol.uhura.parser.Parser;
 import com.puresol.uhura.parser.ParserException;
 import com.puresol.uhura.parser.ParserTree;
+import com.puresol.uhura.source.FileSource;
 import com.puresol.utils.FileUtilities;
 import com.puresol.utils.HashAlgorithm;
 import com.puresol.utils.HashId;
@@ -99,7 +100,8 @@ public class FortranAnalyzer implements FileAnalyzer {
     private LexerResult preConditioningAndLexing() throws AnalyzerException {
 	try {
 	    FortranPreConditioner preconditioner = new FortranPreConditioner(
-		    new File(sourceDirectory, file.getPath()));
+		    new FileSource(new File(sourceDirectory, file.getPath()))
+			    .load());
 	    TokenStream tokenStream = preconditioner.scan(grammar.getLexer());
 	    return new LexerResult(tokenStream);
 	} catch (IOException e) {

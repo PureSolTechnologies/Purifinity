@@ -12,12 +12,13 @@ import com.puresol.trees.TreeException;
 import com.puresol.trees.TreeVisitor;
 import com.puresol.trees.TreeWalker;
 import com.puresol.trees.WalkingAction;
-import com.puresol.uhura.lexer.SourceCode;
-import com.puresol.uhura.lexer.SourceCodeLine;
 import com.puresol.uhura.lexer.Token;
 import com.puresol.uhura.lexer.TokenMetaData;
 import com.puresol.uhura.parser.ParserTree;
 import com.puresol.uhura.preprocessor.PreprocessorException;
+import com.puresol.uhura.source.Source;
+import com.puresol.uhura.source.SourceCode;
+import com.puresol.uhura.source.SourceCodeLine;
 
 public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 
@@ -51,9 +52,8 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 		    includeFile = includeFile.trim();
 		    logger.debug("Include file '" + includeFile + "',");
 		    try {
-			String sourceName = tree.getMetaData().getSourceName();
-			include(new File(sourceName).getParentFile(), code,
-				includeFile);
+			Source source = getIncludeSource(tree);
+			include(source, code, includeFile);
 		    } catch (PreprocessorException e) {
 			logger.warn("Abort preprocessing of file!", e);
 			return WalkingAction.ABORT;
@@ -64,8 +64,8 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 		if ("SourceCodeLine".equals(token.getName())) {
 		    TokenMetaData metaData = token.getMetaData();
 		    SourceCodeLine sourceCodeLine = new SourceCodeLine(
-			    new File(metaData.getSourceName()),
-			    metaData.getLine(), token.getText());
+			    metaData.getSource(), metaData.getLine(),
+			    token.getText());
 		    code.addSourceCodeLine(sourceCodeLine);
 		} else if ("LineTerminator".equals(token.getName())) {
 		    /*
@@ -96,7 +96,16 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 	}
     }
 
-    private void include(File fileDirectory, SourceCode code, String includeFile)
+    private Source getIncludeSource(ParserTree tree) throws TreeException {
+	ParserTree includeFile = tree.getChild("IncludeFile");
+	ParserTree node = includeFile.getChild("StringLiteral");
+	if (node == null) {
+	    node = includeFile.getChild("FileIncludeLiteral");
+	}
+	return node.getMetaData().getSource();
+    }
+
+    private void include(Source source, SourceCode code, String includeFile)
 	    throws PreprocessorException {
 	boolean includeFileDirectory = false;
 	if (includeFile.startsWith("\"") && includeFile.endsWith("\"")) {
@@ -104,21 +113,21 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 	}
 	includeFile = includeFile.substring(1, includeFile.length() - 1);
 	if (includeFileDirectory) {
-	    File file = new File(fileDirectory, includeFile);
-	    if (file.exists()) {
-		try {
-		    // read to be included source...
-		    SourceCode sourceCode = SourceCode.read(file);
-		    // we need to process this source, too, before we can
-		    // include it...
-		    SourceCode processedSourceCode = new CPreprocessor()
-			    .process(sourceCode);
-		    // we actually do the including...
-		    code.addSourceCode(processedSourceCode);
-		} catch (IOException e) {
-		    throw new PreprocessorException("Could not include file '"
-			    + file + "'!", e);
-		}
+	    Source includeSource = source.newRelativeSource(includeFile);
+	    try {
+		// read to be included source...
+		SourceCode sourceCode = includeSource.load();
+		// we need to process this source, too, before we can
+		// include it...
+		SourceCode processedSourceCode = new CPreprocessor()
+			.process(sourceCode);
+		// we actually do the including...
+		code.addSourceCode(processedSourceCode);
+	    } catch (IOException e) {
+		throw new PreprocessorException(
+			"Could not include file '"
+				+ includeSource.getHumanReadableLocationString()
+				+ "'!", e);
 	    }
 	}
 	for (File directory : includeDirectories.getDirectories()) {

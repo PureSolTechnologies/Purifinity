@@ -9,6 +9,9 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.puresol.uhura.source.FileSource;
+import com.puresol.uhura.source.SourceCode;
+import com.puresol.uhura.source.SourceCodeLine;
 import com.puresol.utils.FileUtilities;
 import com.puresol.utils.PathUtils;
 
@@ -24,7 +27,8 @@ public class SourceCodeTest {
 	File file = new File("src/test/java", PathUtils
 		.classToRelativePackagePath(SourceCodeTest.class).getPath());
 	assertTrue(file.exists());
-	SourceCode sourceCode = SourceCode.read(file);
+	FileSource fileSource = new FileSource(file);
+	SourceCode sourceCode = fileSource.load();
 	assertNotNull(sourceCode);
 	List<SourceCodeLine> lines = sourceCode.getSource();
 	String sourceString = FileUtilities.readFileToString(file);
@@ -33,7 +37,7 @@ public class SourceCodeTest {
 	for (SourceCodeLine line : lines) {
 	    lineNumber++;
 	    assertEquals(lineNumber, line.getLineNumber());
-	    assertEquals(file, line.getFile());
+	    assertEquals(fileSource, line.getSource());
 	    buffer.append(line.getLine());
 	}
 	assertEquals(sourceString, buffer.toString());

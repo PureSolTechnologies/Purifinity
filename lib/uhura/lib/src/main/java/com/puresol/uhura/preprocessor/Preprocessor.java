@@ -1,6 +1,6 @@
 package com.puresol.uhura.preprocessor;
 
-import com.puresol.uhura.lexer.SourceCode;
+import com.puresol.uhura.source.SourceCode;
 
 /**
  * This is an interface for PreProcessor implementations. A PreProcessor is

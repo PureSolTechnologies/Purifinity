@@ -2,6 +2,7 @@ package com.puresol.uhura.parser;
 
 import java.io.Serializable;
 
+import com.puresol.uhura.source.Source;
 import com.puresol.utils.ObjectUtilities;
 
 /**
@@ -14,23 +15,23 @@ public class ParserTreeMetaData implements Serializable, Cloneable {
 
     private static final long serialVersionUID = 7846977139079079374L;
 
-    private final String sourceName;
+    private final Source source;
     private final int line;
     private final int lineNum;
     private final int hashcode;
 
-    public ParserTreeMetaData(String sourceName, int line, int lineNum) {
+    public ParserTreeMetaData(Source source, int line, int lineNum) {
 	super();
-	this.sourceName = sourceName;
+	this.source = source;
 	this.line = line;
 	this.lineNum = lineNum;
 
-	hashcode = ObjectUtilities.calculateConstantHashCode(sourceName, line,
+	hashcode = ObjectUtilities.calculateConstantHashCode(source, line,
 		lineNum);
     }
 
-    public String getSourceName() {
-	return sourceName;
+    public Source getSource() {
+	return source;
     }
 
     public int getLine() {
@@ -55,10 +56,10 @@ public class ParserTreeMetaData implements Serializable, Cloneable {
 	if (getClass() != obj.getClass())
 	    return false;
 	ParserTreeMetaData other = (ParserTreeMetaData) obj;
-	if (sourceName == null) {
-	    if (other.sourceName != null)
+	if (source == null) {
+	    if (other.source != null)
 		return false;
-	} else if (!sourceName.equals(other.sourceName))
+	} else if (!source.equals(other.source))
 	    return false;
 	if (line != other.line)
 	    return false;
@@ -69,7 +70,7 @@ public class ParserTreeMetaData implements Serializable, Cloneable {
 
     @Override
     public String toString() {
-	String string = sourceName.toString() + ": " + line;
+	String string = source.toString() + ": " + line;
 	if (lineNum > 1) {
 	    string += " - " + (line + lineNum - 1);
 	}
@@ -78,6 +79,6 @@ public class ParserTreeMetaData implements Serializable, Cloneable {
 
     @Override
     public ParserTreeMetaData clone() {
-	return new ParserTreeMetaData(sourceName, line, lineNum);
+	return new ParserTreeMetaData(source, line, lineNum);
     }
 }

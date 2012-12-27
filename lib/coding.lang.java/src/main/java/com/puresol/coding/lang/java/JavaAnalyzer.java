@@ -42,10 +42,10 @@ import com.puresol.trees.WalkingAction;
 import com.puresol.uhura.lexer.Lexer;
 import com.puresol.uhura.lexer.LexerException;
 import com.puresol.uhura.lexer.LexerResult;
-import com.puresol.uhura.lexer.SourceCode;
 import com.puresol.uhura.parser.Parser;
 import com.puresol.uhura.parser.ParserException;
 import com.puresol.uhura.parser.ParserTree;
+import com.puresol.uhura.source.FileSource;
 import com.puresol.utils.FileUtilities;
 import com.puresol.utils.HashAlgorithm;
 import com.puresol.utils.HashId;
@@ -83,9 +83,8 @@ public class JavaAnalyzer implements FileAnalyzer {
 		    sourceDirectory, file.getPath()), HashAlgorithm.SHA256);
 	    watch.start();
 	    Lexer lexer = grammar.getLexer();
-	    LexerResult lexerResult = lexer.lex(
-		    SourceCode.read(new File(sourceDirectory, file.getPath())),
-		    file.toString());
+	    LexerResult lexerResult = lexer.lex(new FileSource(new File(
+		    sourceDirectory, file.getPath())).load(), file.toString());
 	    Parser parser = grammar.getParser();
 	    ParserTree parserTree = parser.parse(lexerResult);
 	    watch.stop();

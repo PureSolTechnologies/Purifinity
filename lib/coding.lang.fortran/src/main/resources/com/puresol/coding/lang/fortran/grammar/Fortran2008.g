@@ -17,7 +17,7 @@
 	grammar.ignore-case=true;						// is grammar case-insensitive?
 	grammar.normalize_to_bnf=false;					// defines whether the grammar needs to be normalized to BNF
 	preprocessor.use=true;							// usage of preprocessor required? 
-	preprocessor="com.puresol.coding.preprocessor.c";	// usage of preprocessor required? 
+	preprocessor="com.puresol.coding.lang.cpp.CPreprocessor";	// usage of preprocessor required? 
 	lexer="com.puresol.uhura.lexer.RegExpLexer";	// use this lexer
 	parser="com.puresol.uhura.parser.lr.LR1Parser";	// use this parser
 	parser.backtracking=true;						// backtracking switched on?

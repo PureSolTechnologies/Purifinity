@@ -2,6 +2,8 @@ package com.puresol.uhura.lexer;
 
 import java.io.Serializable;
 
+import com.puresol.uhura.source.SourceCode;
+
 /**
  * This is the primary lexer interace. The lexer read
  * 

@@ -20,9 +20,10 @@ import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.parser.ParserException;
 import com.puresol.uhura.parser.ParserTree;
 import com.puresol.uhura.parser.packrat.PackratParser;
+import com.puresol.uhura.source.FileSource;
+import com.puresol.uhura.source.Source;
 import com.puresol.utils.ConsoleUtils;
 import com.puresol.utils.FileSearch;
-import com.puresol.utils.FileUtilities;
 import com.puresol.utils.StopWatch;
 
 /**
@@ -63,10 +64,10 @@ public class JavaSourceCodeDistributionTest {
 	assertTrue(file.exists());
 	Grammar grammar = JavaGrammar.getInstance();
 	PackratParser parser = new PackratParser(grammar);
-	String text = FileUtilities.readFileToString(file);
+	Source source = new FileSource(file);
 	StopWatch watch = new StopWatch();
 	watch.start();
-	ParserTree ast = parser.parse(text, file.getName());
+	ParserTree ast = parser.parse(source.load());
 	watch.stop();
 	assertNotNull(ast);
 	// new TreePrinter(System.out).println(ast);
@@ -146,8 +147,7 @@ public class JavaSourceCodeDistributionTest {
 	    // analyser.parse();
 	    // analyser = null;
 	    PackratParser parser = new PackratParser(javaGrammar);
-	    String text = FileUtilities.readFileToString(file);
-	    parser.parse(text, file.getName());
+	    parser.parse(new FileSource(file).load());
 	    return true;
 	    // } catch (AnalyzerException e) {
 	    // e.printStackTrace();

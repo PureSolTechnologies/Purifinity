@@ -2,9 +2,7 @@ package com.puresol.uhura.grammar;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
 import java.io.PrintStream;
-import java.io.StringReader;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,13 +14,13 @@ import com.puresol.uhura.lexer.LexerFactory;
 import com.puresol.uhura.lexer.LexerFactoryException;
 import com.puresol.uhura.lexer.LexerResult;
 import com.puresol.uhura.lexer.RegExpLexer;
-import com.puresol.uhura.lexer.SourceCode;
 import com.puresol.uhura.parser.Parser;
 import com.puresol.uhura.parser.ParserException;
 import com.puresol.uhura.parser.ParserFactory;
 import com.puresol.uhura.parser.ParserFactoryException;
 import com.puresol.uhura.parser.ParserManager;
 import com.puresol.uhura.parser.ParserTree;
+import com.puresol.uhura.source.SourceCode;
 import com.puresol.utils.StopWatch;
 
 /**
@@ -39,17 +37,17 @@ public class GrammarPartTester {
     private static final Logger logger = LoggerFactory
 	    .getLogger(GrammarPartTester.class);
 
-    public static boolean test(Grammar grammar, String production, String text) {
+    public static boolean test(Grammar grammar, String production,
+	    String... lines) {
 	try {
 	    if (logger.isDebugEnabled()) {
 		logger.debug("Testing production '" + production
-			+ "' with text '" + text + "' ...");
+			+ "' with text '" + lines + "' ...");
 	    }
 	    grammar = grammar.createWithNewStartProduction(production);
 	    Lexer lexer = LexerFactory.create(grammar);
-	    LexerResult lexerResult = lexer.lex(SourceCode.read(
-		    new StringReader(text), new File("SampleString")),
-		    "SampleString");
+	    LexerResult lexerResult = lexer.lex(
+		    SourceCode.fromStringArray(lines), "SampleString");
 
 	    Parser parser = ParserFactory.create(grammar);
 	    ParserTree ast = parser.parse(lexerResult);
@@ -75,26 +73,22 @@ public class GrammarPartTester {
 	} catch (LexerFactoryException e) {
 	    e.printStackTrace();
 	    return false;
-	} catch (IOException e) {
-	    e.printStackTrace();
-	    return false;
 	}
     }
 
     public static boolean test(File parserDirectory, String parserName,
-	    Grammar grammar, String production, String text) {
+	    Grammar grammar, String production, String... lines) {
 	try {
 	    if (logger.isDebugEnabled()) {
 		logger.debug("Testing text '" + production + "' with text '"
-			+ text + "' ...");
+			+ lines + "' ...");
 	    }
 	    grammar = grammar.createWithNewStartProduction(production);
 	    StopWatch watch = new StopWatch();
 	    Lexer lexer = new RegExpLexer(grammar);
 	    watch.start();
-	    LexerResult lexerResult = lexer.lex(SourceCode.read(
-		    new StringReader(text), new File("SampleString")),
-		    "SampleString");
+	    LexerResult lexerResult = lexer.lex(
+		    SourceCode.fromStringArray(lines), "SampleString");
 	    watch.stop();
 	    logger.debug("Lexer time: " + watch);
 
@@ -118,9 +112,6 @@ public class GrammarPartTester {
 	    e.printStackTrace();
 	    return false;
 	} catch (LexerException e) {
-	    e.printStackTrace();
-	    return false;
-	} catch (IOException e) {
 	    e.printStackTrace();
 	    return false;
 	}

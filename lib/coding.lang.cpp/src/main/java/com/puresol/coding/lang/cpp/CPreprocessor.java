@@ -20,8 +20,6 @@ import com.puresol.uhura.grammar.GrammarFile;
 import com.puresol.uhura.grammar.token.Visibility;
 import com.puresol.uhura.lexer.LexerException;
 import com.puresol.uhura.lexer.LexerResult;
-import com.puresol.uhura.lexer.SourceCode;
-import com.puresol.uhura.lexer.SourceCodeLine;
 import com.puresol.uhura.lexer.Token;
 import com.puresol.uhura.lexer.TokenMetaData;
 import com.puresol.uhura.lexer.TokenStream;
@@ -30,6 +28,9 @@ import com.puresol.uhura.parser.ParserException;
 import com.puresol.uhura.parser.ParserTree;
 import com.puresol.uhura.preprocessor.Preprocessor;
 import com.puresol.uhura.preprocessor.PreprocessorException;
+import com.puresol.uhura.source.Source;
+import com.puresol.uhura.source.SourceCode;
+import com.puresol.uhura.source.SourceCodeLine;
 
 /**
  * This class implements a C Preprocessor. The reference implementation to test
@@ -150,8 +151,8 @@ public class CPreprocessor implements Preprocessor {
 		    }
 		    tokenStream.addAll(tokens);
 		} else {
-		    TokenMetaData metaData = new TokenMetaData(line.getFile()
-			    .getPath(), tokenId, position,
+		    TokenMetaData metaData = new TokenMetaData(
+			    line.getSource(), tokenId, position,
 			    line.getLineNumber(), 1);
 		    Token token = new Token("SourceCodeLine", line.getLine(),
 			    Visibility.VISIBLE, metaData);
@@ -172,35 +173,37 @@ public class CPreprocessor implements Preprocessor {
 	    throws PreprocessorException {
 	SourceCode preprocessorCode = new SourceCode();
 	preprocessorCode.addSourceCodeLine(line);
-	File currentFile = null;
+	Source currentSource = null;
 	try {
 	    ParserTree ast = null;
 	    while (ast == null) {
 		try {
-		    File file = line.getFile();
-		    if (currentFile == null) {
-			currentFile = file;
-		    } else if (!currentFile.equals(file)) {
+		    Source source = line.getSource();
+		    if (currentSource == null) {
+			currentSource = source;
+		    } else if (!currentSource.equals(source)) {
 			throw new RuntimeException(
 				"We found two different macros from two different files (first: "
-					+ currentFile + "; second:" + file
+					+ currentSource + "; second:" + source
 					+ ")! This is not allowed!");
 		    }
-		    ast = analyzer.analyze(preprocessorCode, file.getPath());
+		    ast = analyzer.analyze(preprocessorCode,
+			    source.getHumanReadableLocationString());
 		} catch (LexerException e) {
 		    preprocessorCode.addSourceCodeLine(sourceIterator.next());
 		} catch (ParserException e) {
 		    preprocessorCode.addSourceCodeLine(sourceIterator.next());
 		}
 	    }
-	    if (currentFile == null) {
+	    if (currentSource == null) {
 		return new TokenStream("No macro found!");
 	    }
-	    return TokenCollector.collect(ast, currentFile.getPath());
+	    return TokenCollector.collect(ast,
+		    currentSource.getHumanReadableLocationString());
 	} catch (NoSuchElementException e) {
 	    throw new PreprocessorException(
 		    "Could not pre-process source code due parsing issues in line "
-			    + line.getFile() + ":" + line.getLineNumber()
+			    + line.getSource() + ":" + line.getLineNumber()
 			    + " \"" + line.getLine() + "\"!", e);
 	}
     }

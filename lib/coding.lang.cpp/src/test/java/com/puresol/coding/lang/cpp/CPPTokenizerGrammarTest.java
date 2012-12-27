@@ -2,7 +2,6 @@ package com.puresol.coding.lang.cpp;
 
 import static org.junit.Assert.assertNotNull;
 
-import java.io.File;
 import java.io.IOException;
 
 import org.junit.Before;
@@ -16,11 +15,10 @@ import com.puresol.uhura.grammar.GrammarConverter;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.GrammarFile;
 import com.puresol.uhura.lexer.LexerException;
-import com.puresol.uhura.lexer.SourceCode;
-import com.puresol.uhura.lexer.SourceCodeLine;
 import com.puresol.uhura.parser.ParserException;
 import com.puresol.uhura.parser.ParserTree;
 import com.puresol.uhura.preprocessor.PreprocessorException;
+import com.puresol.uhura.source.SourceCode;
 
 public class CPPTokenizerGrammarTest {
 
@@ -52,13 +50,7 @@ public class CPPTokenizerGrammarTest {
 
     private ParserTree checkParser(String... lines) throws LexerException,
 	    ParserException, PreprocessorException {
-	SourceCode sourceCode = new SourceCode();
-	int lineNum = 0;
-	for (String line : lines) {
-	    lineNum++;
-	    sourceCode.addSourceCodeLine(new SourceCodeLine(new File("Test"),
-		    lineNum, line));
-	}
+	SourceCode sourceCode = SourceCode.fromStringArray(lines);
 	ParserTree tree = analyzer.analyze(sourceCode, "Test");
 	assertNotNull(tree);
 	return tree;
@@ -145,5 +137,11 @@ public class CPPTokenizerGrammarTest {
     public void testDefineFunctionLikeMacroWithMultipleParametersAndOptionalParameters()
 	    throws Exception {
 	checkParser("#define NAME(x, y, z, ...) replacement1");
+    }
+
+    @Test
+    public void testDefineFunctionLikeMacroWithMultipleParametersOptionalParametersAndComplexReplacement()
+	    throws Exception {
+	checkParser("#define NAME(x, y, z, ...) fprintf(\"Hello x, y, z\"");
     }
 }

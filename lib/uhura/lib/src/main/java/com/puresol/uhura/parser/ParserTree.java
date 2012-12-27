@@ -158,8 +158,15 @@ public class ParserTree implements Tree<ParserTree>, Serializable, Cloneable {
     }
 
     /**
-     * @return the children
+     * This method returns the child with the given name from this node.
+     * 
+     * It is used to extract exactly one child from this node. To get more
+     * children, use {@link #getChildren()} for that purpose.
+     * 
+     * @return The child is returned if found. Otherwise null is returned.
      * @throws TreeException
+     *             is thrown if there is more than one child with the given
+     *             name.
      */
     public ParserTree getChild(String name) throws TreeException {
 	ParserTree result = null;

@@ -94,6 +94,11 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresol</groupId>
+				<artifactId>coding.lang.cpp</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresol</groupId>
 				<artifactId>coding.metrics</artifactId>
 				<version>${project.version}</version>
 			</dependency>
@@ -158,6 +163,7 @@
 					<configuration>
 						<instructions>
 							<_include>src/main/resources/META-INF/MANIFEST.MF</_include>
+							<Export-Package>com.puresol.*</Export-Package>
 						</instructions>
 					</configuration>
 				</plugin>

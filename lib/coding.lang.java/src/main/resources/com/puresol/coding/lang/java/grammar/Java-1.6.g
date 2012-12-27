@@ -65,7 +65,7 @@ HELPER
 	;
 		
 	CommentTail:
-		"(" NotStar "+|\\*+(?!/))*\\*/"
+		"(" NotStar "|\\*(?!/))*\\*/"
 	;
 		
 	NotStar:

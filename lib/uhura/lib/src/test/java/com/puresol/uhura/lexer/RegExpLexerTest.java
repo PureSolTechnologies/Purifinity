@@ -3,7 +3,6 @@ package com.puresol.uhura.lexer;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import java.io.File;
 import java.io.StringReader;
 import java.util.Properties;
 
@@ -14,6 +13,8 @@ import com.puresol.uhura.grammar.production.ProductionSet;
 import com.puresol.uhura.grammar.token.TokenDefinition;
 import com.puresol.uhura.grammar.token.TokenDefinitionSet;
 import com.puresol.uhura.parser.lr.LR0Parser;
+import com.puresol.uhura.source.SourceCode;
+import com.puresol.uhura.source.UnspecifiedSource;
 
 public class RegExpLexerTest {
 
@@ -28,8 +29,8 @@ public class RegExpLexerTest {
 	Grammar grammar = new Grammar(options, rules, new ProductionSet());
 	Lexer lexer = new RegExpLexer(grammar);
 	LexerResult result = lexer.lex(SourceCode.read(new StringReader(
-		"0 1\t2 \t3 \t4 \t5\t 6 7 8 9 10 11 12 13 14 15"), new File(
-		"SampleString")), "SampleString");
+		"0 1\t2 \t3 \t4 \t5\t 6 7 8 9 10 11 12 13 14 15"),
+		new UnspecifiedSource()), "SampleString");
 	TokenStream tokenStream = result.getTokenStream();
 	assertNotNull(tokenStream);
 	assertEquals(31, tokenStream.size());
@@ -57,7 +58,7 @@ public class RegExpLexerTest {
 	Grammar grammar = new Grammar(options, rules, new ProductionSet());
 	Lexer lexer = new RegExpLexer(grammar);
 	lexer.lex(SourceCode.read(new StringReader(
-		"\"String without trailing double quote!"), new File(
-		"SampleString")), "SampleString");
+		"\"String without trailing double quote!"),
+		new UnspecifiedSource()), "SampleString");
     }
 }

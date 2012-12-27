@@ -9,9 +9,11 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-import com.puresol.uhura.lexer.SourceCode;
-import com.puresol.uhura.lexer.SourceCodeLine;
 import com.puresol.uhura.preprocessor.PreprocessorException;
+import com.puresol.uhura.source.FileSource;
+import com.puresol.uhura.source.Source;
+import com.puresol.uhura.source.SourceCode;
+import com.puresol.uhura.source.SourceCodeLine;
 
 public class CPreprocessorTest {
 
@@ -25,8 +27,8 @@ public class CPreprocessorTest {
 	    PreprocessorException {
 	File directory = new File(
 		"src/test/resources/com/puresol/coding/lang/cpp/files");
-	SourceCode sourceCode = SourceCode.read(new File(directory,
-		"FileWithoutMacros.txt"));
+	SourceCode sourceCode = new FileSource(new File(directory,
+		"FileWithoutMacros.txt")).load();
 	SourceCode preProcessedSourceCode = new CPreprocessor()
 		.process(sourceCode);
 	assertEquals(sourceCode, preProcessedSourceCode);
@@ -37,10 +39,10 @@ public class CPreprocessorTest {
     public void testSingleInclude() throws IOException, PreprocessorException {
 	File directory = new File(
 		"src/test/resources/com/puresol/coding/lang/cpp/files");
-	SourceCode sourceCode = SourceCode.read(new File(directory,
-		"SingleIncludeMacro.txt"));
-	SourceCode includedSourceCode = SourceCode.read(new File(directory,
-		"FileWithoutMacros.txt"));
+	SourceCode sourceCode = new FileSource(new File(directory,
+		"SingleIncludeMacro.txt")).load();
+	SourceCode includedSourceCode = new FileSource(new File(directory,
+		"FileWithoutMacros.txt")).load();
 	SourceCode preProcessedSourceCode = new CPreprocessor()
 		.process(sourceCode);
 	assertEquals(includedSourceCode, preProcessedSourceCode);
@@ -51,24 +53,25 @@ public class CPreprocessorTest {
 	    PreprocessorException {
 	File directory = new File(
 		"src/test/resources/com/puresol/coding/lang/cpp/files");
-	File sourceFile = new File(directory, "MultipleIncludeMacros.txt");
-	SourceCode sourceCode = SourceCode.read(sourceFile);
+	Source source = new FileSource(new File(directory,
+		"MultipleIncludeMacros.txt"));
+	SourceCode sourceCode = source.load();
 	SourceCode preProcessedSourceCode = new CPreprocessor()
 		.process(sourceCode);
 
-	SourceCode sourceWithoutMacros = SourceCode.read(new File(directory,
-		"FileWithoutMacros.txt"));
-	SourceCode sourceWithoutMacros2 = SourceCode.read(new File(directory,
-		"FileWithoutMacros2.txt"));
+	SourceCode sourceWithoutMacros = new FileSource(new File(directory,
+		"FileWithoutMacros.txt")).load();
+	SourceCode sourceWithoutMacros2 = new FileSource(new File(directory,
+		"FileWithoutMacros2.txt")).load();
 
 	SourceCode expected = new SourceCode();
 	expected.addSourceCode(sourceWithoutMacros);
-	expected.addSourceCodeLine(new SourceCodeLine(sourceFile, 2, "\n"));
+	expected.addSourceCodeLine(new SourceCodeLine(source, 2, "\n"));
 	expected.addSourceCode(sourceWithoutMacros);
-	expected.addSourceCodeLine(new SourceCodeLine(sourceFile, 4,
+	expected.addSourceCodeLine(new SourceCodeLine(source, 4,
 		"// This is a non empty line\n"));
 	expected.addSourceCode(sourceWithoutMacros2);
-	expected.addSourceCodeLine(new SourceCodeLine(sourceFile, 6,
+	expected.addSourceCodeLine(new SourceCodeLine(source, 6,
 		"<end of file>"));
 
 	assertEquals(expected, preProcessedSourceCode);
@@ -80,18 +83,19 @@ public class CPreprocessorTest {
 	File directory = new File(
 		"src/test/resources/com/puresol/coding/lang/cpp/files");
 	File sourceFile = new File(directory, "RecursiveIncludeMacros1.txt");
-	SourceCode sourceCode = SourceCode.read(sourceFile);
+	SourceCode sourceCode = new FileSource(sourceFile).load();
 	SourceCode preProcessedSourceCode = new CPreprocessor()
 		.process(sourceCode);
 
-	SourceCode sourceWithoutMacros = SourceCode.read(new File(directory,
-		"FileWithoutMacros.txt"));
-	SourceCode sourceWithoutMacros2 = SourceCode.read(new File(directory,
-		"FileWithoutMacros2.txt"));
+	SourceCode sourceWithoutMacros = new FileSource(new File(directory,
+		"FileWithoutMacros.txt")).load();
+	SourceCode sourceWithoutMacros2 = new FileSource(new File(directory,
+		"FileWithoutMacros2.txt")).load();
 
 	SourceCode expected = new SourceCode();
-	expected.addSourceCodeLine(new SourceCodeLine(new File(directory,
-		"RecursiveIncludeMacros3.txt"), 1, "<end of file>"));
+	File file = new File(directory, "RecursiveIncludeMacros3.txt");
+	expected.addSourceCodeLine(new SourceCodeLine(new FileSource(file), 1,
+		"<end of file>"));
 	expected.addSourceCode(sourceWithoutMacros2);
 	expected.addSourceCode(sourceWithoutMacros);
 

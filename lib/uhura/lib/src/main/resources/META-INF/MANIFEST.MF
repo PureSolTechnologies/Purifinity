@@ -13,30 +13,36 @@ Bundle-ManifestVersion: 2
 Bundle-SymbolicName: com.puresol.uhura.lib
 Originally-Created-By: Apache Maven Bundle Plugin
 Bundle-ActivationPolicy: lazy
-Import-Package: com.puresol.data;version="0.1.0",
- com.puresol.trees;version="0.1.0",
+Import-Package: com.puresol.trees;version="0.1.0",
  com.puresol.utils;version="0.1.0",
  org.osgi.framework;version="0.0.0",
- org.slf4j;version="1.6.1"
+ org.slf4j;version="1.7.2"
 Export-Package: com.puresol.uhura,
+ com.puresol.uhura.analyzer;
+  uses:="com.puresol.uhura.parser,
+   com.puresol.uhura.lexer,
+   com.puresol.uhura.source,
+   com.puresol.uhura.preprocessor,
+   com.puresol.uhura.grammar",
  com.puresol.uhura.grammar,
  com.puresol.uhura.grammar.production,
  com.puresol.uhura.grammar.token,
  com.puresol.uhura.grammar.uhura,
  com.puresol.uhura.lexer,
  com.puresol.uhura.parser,
- com.puresol.uhura.parser.functions,
- com.puresol.uhura.parser.items,
+ com.puresol.uhura.parser.functions;uses:="com.puresol.uhura.parser.items,com.puresol.uhura.grammar.production,com.puresol.uhura.grammar",
+ com.puresol.uhura.parser.items;uses:="com.puresol.uhura.grammar.production",
  com.puresol.uhura.parser.lr,
  com.puresol.uhura.parser.packrat,
  com.puresol.uhura.parser.parsetable,
- com.puresol.uhura.preprocessor,
- com.puresol.uhura.ust,
- com.puresol.uhura.ust.comments,
- com.puresol.uhura.ust.expressions,
- com.puresol.uhura.ust.facilities,
- com.puresol.uhura.ust.literals,
- com.puresol.uhura.ust.modifiers,
- com.puresol.uhura.ust.packages,
- com.puresol.uhura.ust.types
+ com.puresol.uhura.preprocessor;uses:="com.puresol.uhura.source",
+ com.puresol.uhura.source,
+ com.puresol.uhura.ust;uses:="com.puresol.trees,com.puresol.uhura.ust.facilities",
+ com.puresol.uhura.ust.comments;uses:="com.puresol.uhura.ust.facilities",
+ com.puresol.uhura.ust.expressions;uses:="com.puresol.uhura.ust.facilities",
+ com.puresol.uhura.ust.facilities;uses:="com.puresol.uhura.ust",
+ com.puresol.uhura.ust.literals;uses:="com.puresol.uhura.ust.facilities",
+ com.puresol.uhura.ust.modifiers;uses:="com.puresol.uhura.ust.facilities",
+ com.puresol.uhura.ust.packages;uses:="com.puresol.uhura.ust.facilities",
+ com.puresol.uhura.ust.types;uses:="com.puresol.uhura.ust.facilities"
 

@@ -17,6 +17,7 @@ import com.puresol.uhura.parser.ParserException;
 import com.puresol.uhura.parser.ParserTree;
 import com.puresol.uhura.parser.ParserTreeMetaData;
 import com.puresol.uhura.parser.parsetable.ParserAction;
+import com.puresol.uhura.source.UnspecifiedSource;
 
 /**
  * This class is used to convert a token stream into a parser tree. For this
@@ -79,8 +80,7 @@ public class LRTokenStreamConverter {
 	}
     }
 
-    private void process(ParserAction action) throws ParserException,
-	    TreeException {
+    private void process(ParserAction action) throws TreeException {
 	if (logger.isTraceEnabled()) {
 	    logger.trace("Action: " + action + "; stack size: "
 		    + treeStack.size());
@@ -96,7 +96,7 @@ public class LRTokenStreamConverter {
 	case ACCEPT:
 	    break;
 	default:
-	    throw new ParserException(
+	    throw new RuntimeException(
 		    "Invalid parser action within action list!");
 	}
     }
@@ -194,14 +194,13 @@ public class LRTokenStreamConverter {
     private ParserTree addMetaData(ParserTree tree) {
 	TreeIterator<ParserTree> iterator = new TreeIterator<ParserTree>(tree);
 	int line = 1;
-	final String sourceName = tokenStream.getName();
 	do {
 	    final ParserTree currentNode = iterator.getCurrentNode();
 	    final Token token = currentNode.getToken();
 	    if (token != null) {
 		final int lineNum = token.getMetaData().getLineNum();
-		currentNode.setMetaData(new ParserTreeMetaData(sourceName,
-			line, lineNum));
+		currentNode.setMetaData(new ParserTreeMetaData(token
+			.getMetaData().getSource(), line, lineNum));
 		line += lineNum - 1;
 	    }
 	} while (iterator.goForward());
@@ -214,17 +213,17 @@ public class LRTokenStreamConverter {
 	    } else {
 		List<ParserTree> children = currentNode.getChildren();
 		if (children.size() == 0) {
-		    currentNode.setMetaData(new ParserTreeMetaData(sourceName,
-			    line, 1));
+		    currentNode.setMetaData(new ParserTreeMetaData(
+			    new UnspecifiedSource(), line, 1));
 
 		} else {
 		    final ParserTreeMetaData metaDataLeft = children.get(0)
 			    .getMetaData();
 		    final ParserTreeMetaData metaDataRight = children.get(
 			    children.size() - 1).getMetaData();
-		    currentNode.setMetaData(new ParserTreeMetaData(sourceName,
-			    metaDataLeft.getLine(), metaDataRight.getLine()
-				    - metaDataLeft.getLine()
+		    currentNode.setMetaData(new ParserTreeMetaData(
+			    new UnspecifiedSource(), metaDataLeft.getLine(),
+			    metaDataRight.getLine() - metaDataLeft.getLine()
 				    + metaDataRight.getLineNum()));
 		}
 	    }

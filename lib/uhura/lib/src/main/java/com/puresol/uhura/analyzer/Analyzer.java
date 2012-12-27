@@ -5,12 +5,12 @@ import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.lexer.Lexer;
 import com.puresol.uhura.lexer.LexerException;
 import com.puresol.uhura.lexer.LexerResult;
-import com.puresol.uhura.lexer.SourceCode;
 import com.puresol.uhura.parser.Parser;
 import com.puresol.uhura.parser.ParserException;
 import com.puresol.uhura.parser.ParserTree;
 import com.puresol.uhura.preprocessor.Preprocessor;
 import com.puresol.uhura.preprocessor.PreprocessorException;
+import com.puresol.uhura.source.SourceCode;
 
 /**
  * This analyzer class bundles the functionality of an optional preprocessor, a

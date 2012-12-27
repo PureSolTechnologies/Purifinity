@@ -1,7 +1,6 @@
 package com.puresol.uhura.grammar;
 
 import java.io.Closeable;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -15,11 +14,12 @@ import com.puresol.uhura.lexer.Lexer;
 import com.puresol.uhura.lexer.LexerException;
 import com.puresol.uhura.lexer.LexerResult;
 import com.puresol.uhura.lexer.RegExpLexer;
-import com.puresol.uhura.lexer.SourceCode;
 import com.puresol.uhura.parser.Parser;
 import com.puresol.uhura.parser.ParserException;
 import com.puresol.uhura.parser.ParserTree;
 import com.puresol.uhura.parser.lr.SLR1Parser;
+import com.puresol.uhura.source.SourceCode;
+import com.puresol.uhura.source.UnspecifiedSource;
 
 /**
  * This class is for reading Nyota Uhura grammar files. The grammar file is read
@@ -90,17 +90,17 @@ public class GrammarFile implements Closeable {
 	    logger.debug("Starting lexer...");
 	    Lexer lexer = new RegExpLexer(uhuraGrammar);
 	    LexerResult lexerResult = lexer.lex(
-		    SourceCode.read(reader, new File("UhuraGrammar")),
+		    SourceCode.read(reader, new UnspecifiedSource()),
 		    "UhuraGrammar");
 	    logger.debug("Starting parser...");
 	    parse(lexerResult);
 	    logger.debug("done.");
 	} catch (LexerException e) {
 	    logger.error(e.getMessage(), e);
-	    throw new IOException(e.getMessage());
+	    throw new IOException(e.getMessage(), e);
 	} catch (ParserException e) {
 	    logger.error(e.getMessage(), e);
-	    throw new IOException(e.getMessage());
+	    throw new IOException(e.getMessage(), e);
 	}
     }
 
