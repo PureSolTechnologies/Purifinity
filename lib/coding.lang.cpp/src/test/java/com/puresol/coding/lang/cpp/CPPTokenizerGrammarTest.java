@@ -51,7 +51,7 @@ public class CPPTokenizerGrammarTest {
     private ParserTree checkParser(String... lines) throws LexerException,
 	    ParserException, PreprocessorException {
 	SourceCode sourceCode = SourceCode.fromStringArray(lines);
-	ParserTree tree = analyzer.analyze(sourceCode, "Test");
+	ParserTree tree = analyzer.analyze(sourceCode);
 	assertNotNull(tree);
 	return tree;
     }

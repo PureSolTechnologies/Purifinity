@@ -35,15 +35,15 @@ public class Analyzer {
 	parser = grammar.createParser();
     }
 
-    public ParserTree analyze(SourceCode sourceCode, String name)
-	    throws LexerException, ParserException, PreprocessorException {
+    public ParserTree analyze(SourceCode sourceCode) throws LexerException,
+	    ParserException, PreprocessorException {
 	SourceCode preProcessedSourceCode;
 	if (preprocessor != null) {
 	    preProcessedSourceCode = preprocessor.process(sourceCode);
 	} else {
 	    preProcessedSourceCode = sourceCode;
 	}
-	LexerResult lexerResult = lexer.lex(preProcessedSourceCode, name);
+	LexerResult lexerResult = lexer.lex(preProcessedSourceCode);
 	return parser.parse(lexerResult);
     }
 

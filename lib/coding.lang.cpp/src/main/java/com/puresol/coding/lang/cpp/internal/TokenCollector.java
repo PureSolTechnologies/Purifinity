@@ -9,8 +9,8 @@ import com.puresol.uhura.parser.ParserTree;
 
 public class TokenCollector implements TreeVisitor<ParserTree> {
 
-    public static TokenStream collect(ParserTree tree, String name) {
-	TokenCollector visitor = new TokenCollector(name);
+    public static TokenStream collect(ParserTree tree) {
+	TokenCollector visitor = new TokenCollector();
 	TreeWalker<ParserTree> walker = new TreeWalker<ParserTree>(tree);
 	walker.walk(visitor);
 	return visitor.tokenStream;
@@ -18,8 +18,8 @@ public class TokenCollector implements TreeVisitor<ParserTree> {
 
     private final TokenStream tokenStream;
 
-    private TokenCollector(String name) {
-	tokenStream = new TokenStream(name);
+    private TokenCollector() {
+	tokenStream = new TokenStream();
     }
 
     @Override

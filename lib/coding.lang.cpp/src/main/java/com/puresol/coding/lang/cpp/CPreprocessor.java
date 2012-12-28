@@ -1,6 +1,5 @@
 package com.puresol.coding.lang.cpp;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
@@ -126,13 +125,12 @@ public class CPreprocessor implements Preprocessor {
     private TokenStream tokenize(SourceCode sourceCode)
 	    throws PreprocessorException {
 	try {
-	    TokenStream tokenStream = new TokenStream("");
+	    TokenStream tokenStream = new TokenStream();
 	    int tokenId = 0;
 	    int position = 0;
 	    Analyzer analyzer = tokenizerAnalyzerFactory.createAnalyzer();
 	    List<SourceCodeLine> source = sourceCode.getSource();
 
-	    File currentFile = new File("");
 	    Iterator<SourceCodeLine> sourceIterator = source.iterator();
 	    while (sourceIterator.hasNext()) {
 		SourceCodeLine line = sourceIterator.next();
@@ -140,15 +138,6 @@ public class CPreprocessor implements Preprocessor {
 		if (matcher.find()) {
 		    TokenStream tokens = tokenize(analyzer, sourceIterator,
 			    line);
-		    if (currentFile.getPath().equals("")) {
-			currentFile = new File(tokens.getName());
-		    } else if (!currentFile.getPath().equals(tokens.getName())) {
-			throw new RuntimeException(
-				"We found two different macros from two different files (first: "
-					+ currentFile + "; second:"
-					+ tokens.getName()
-					+ ")! This is not allowed!");
-		    }
 		    tokenStream.addAll(tokens);
 		} else {
 		    TokenMetaData metaData = new TokenMetaData(
@@ -159,7 +148,7 @@ public class CPreprocessor implements Preprocessor {
 		    tokenStream.add(token);
 		}
 	    }
-	    TokenStream resultStream = new TokenStream(currentFile.getPath());
+	    TokenStream resultStream = new TokenStream();
 	    resultStream.addAll(tokenStream);
 	    return resultStream;
 	} catch (GrammarException e) {
@@ -187,8 +176,7 @@ public class CPreprocessor implements Preprocessor {
 					+ currentSource + "; second:" + source
 					+ ")! This is not allowed!");
 		    }
-		    ast = analyzer.analyze(preprocessorCode,
-			    source.getHumanReadableLocationString());
+		    ast = analyzer.analyze(preprocessorCode);
 		} catch (LexerException e) {
 		    preprocessorCode.addSourceCodeLine(sourceIterator.next());
 		} catch (ParserException e) {
@@ -196,10 +184,9 @@ public class CPreprocessor implements Preprocessor {
 		}
 	    }
 	    if (currentSource == null) {
-		return new TokenStream("No macro found!");
+		return new TokenStream();
 	    }
-	    return TokenCollector.collect(ast,
-		    currentSource.getHumanReadableLocationString());
+	    return TokenCollector.collect(ast);
 	} catch (NoSuchElementException e) {
 	    throw new PreprocessorException(
 		    "Could not pre-process source code due parsing issues in line "

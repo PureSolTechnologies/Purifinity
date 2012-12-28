@@ -30,7 +30,7 @@ public class RegExpLexerTest {
 	Lexer lexer = new RegExpLexer(grammar);
 	LexerResult result = lexer.lex(SourceCode.read(new StringReader(
 		"0 1\t2 \t3 \t4 \t5\t 6 7 8 9 10 11 12 13 14 15"),
-		new UnspecifiedSource()), "SampleString");
+		new UnspecifiedSource()));
 	TokenStream tokenStream = result.getTokenStream();
 	assertNotNull(tokenStream);
 	assertEquals(31, tokenStream.size());
@@ -59,6 +59,6 @@ public class RegExpLexerTest {
 	Lexer lexer = new RegExpLexer(grammar);
 	lexer.lex(SourceCode.read(new StringReader(
 		"\"String without trailing double quote!"),
-		new UnspecifiedSource()), "SampleString");
+		new UnspecifiedSource()));
     }
 }

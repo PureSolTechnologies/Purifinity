@@ -22,8 +22,7 @@ public class LALR1ParserTest {
 	Parser parser = new LALR1Parser(grammar);
 	Lexer lexer = new RegExpLexer(grammar);
 	ParserTree syntaxTree = parser.parse(lexer.lex(SourceCode.read(
-		new StringReader("id=*id"), new UnspecifiedSource()),
-		"SampleString"));
+		new StringReader("id=*id"), new UnspecifiedSource())));
 	new TreePrinter(System.out).println(syntaxTree);
     }
 

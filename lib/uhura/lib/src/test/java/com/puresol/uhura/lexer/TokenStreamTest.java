@@ -1,21 +1,21 @@
 package com.puresol.uhura.lexer;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
 public class TokenStreamTest {
 
-	@Test
-	public void testInstance() {
-		assertNotNull(new TokenStream("test.java"));
-	}
+    @Test
+    public void testInstance() {
+	assertNotNull(new TokenStream());
+    }
 
-	@Test
-	public void testInitValues() {
-		TokenStream stream = new TokenStream("test.java");
-		assertEquals("test.java", stream.getName());
-		assertEquals(0, stream.size());
-	}
+    @Test
+    public void testInitValues() {
+	TokenStream stream = new TokenStream();
+	assertEquals(0, stream.size());
+    }
 
 }

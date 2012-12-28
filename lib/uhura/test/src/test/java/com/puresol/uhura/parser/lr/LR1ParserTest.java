@@ -25,8 +25,7 @@ public class LR1ParserTest {
 	Parser parser = new LR1Parser(grammar);
 	Lexer lexer = new RegExpLexer(grammar);
 	ParserTree syntaxTree = parser.parse(lexer.lex(SourceCode.read(
-		new StringReader("1*2+3"), new UnspecifiedSource()),
-		"SampleString"));
+		new StringReader("1*2+3"), new UnspecifiedSource())));
 	assertNotNull(syntaxTree);
     }
 
@@ -38,7 +37,7 @@ public class LR1ParserTest {
 	Parser parser = new LR1Parser(grammar);
 	ParserTree syntaxTree = parser.parse(lexer.lex(SourceCode.read(
 		new StringReader("((1*(2+3)+4*5)+6)*7"),
-		new UnspecifiedSource()), "SampleString"));
+		new UnspecifiedSource())));
 	assertNotNull(syntaxTree);
 	// new TreePrinter(System.out).println(syntaxTree);
     }

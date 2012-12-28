@@ -12,9 +12,8 @@ import com.puresol.uhura.source.SourceCode;
  */
 public interface Lexer extends Serializable, Cloneable {
 
-	public LexerResult lex(SourceCode sourceCode, String name)
-			throws LexerException;
+    public LexerResult lex(SourceCode sourceCode) throws LexerException;
 
-	public Lexer clone();
+    public Lexer clone();
 
 }

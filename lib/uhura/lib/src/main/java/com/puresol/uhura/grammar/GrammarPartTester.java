@@ -46,8 +46,8 @@ public class GrammarPartTester {
 	    }
 	    grammar = grammar.createWithNewStartProduction(production);
 	    Lexer lexer = LexerFactory.create(grammar);
-	    LexerResult lexerResult = lexer.lex(
-		    SourceCode.fromStringArray(lines), "SampleString");
+	    LexerResult lexerResult = lexer.lex(SourceCode
+		    .fromStringArray(lines));
 
 	    Parser parser = ParserFactory.create(grammar);
 	    ParserTree ast = parser.parse(lexerResult);
@@ -87,8 +87,8 @@ public class GrammarPartTester {
 	    StopWatch watch = new StopWatch();
 	    Lexer lexer = new RegExpLexer(grammar);
 	    watch.start();
-	    LexerResult lexerResult = lexer.lex(
-		    SourceCode.fromStringArray(lines), "SampleString");
+	    LexerResult lexerResult = lexer.lex(SourceCode
+		    .fromStringArray(lines));
 	    watch.stop();
 	    logger.debug("Lexer time: " + watch);
 

@@ -84,7 +84,7 @@ public class JavaAnalyzer implements FileAnalyzer {
 	    watch.start();
 	    Lexer lexer = grammar.getLexer();
 	    LexerResult lexerResult = lexer.lex(new FileSource(new File(
-		    sourceDirectory, file.getPath())).load(), file.toString());
+		    sourceDirectory, file.getPath())).load());
 	    Parser parser = grammar.getParser();
 	    ParserTree parserTree = parser.parse(lexerResult);
 	    watch.stop();

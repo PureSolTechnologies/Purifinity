@@ -120,7 +120,7 @@ public class FortranPreConditioner {
     public FortranPreConditioner(SourceCode sourceCode) throws IOException {
 	super();
 	this.sourceCode = sourceCode;
-	tokenStream = new TokenStream("PreprocessedTokenStream");
+	tokenStream = new TokenStream();
 	validFixedForm = validateFixedForm();
     }
 
@@ -194,8 +194,7 @@ public class FortranPreConditioner {
 		    && (!FREE_FORM_CONTINUATION_PATTERN.matcher(line).find())) {
 		lexerSubResult = processEmptyPattern(lexer, sourceLine);
 	    } else if (FIXED_FORM_COMMENT_PATTERN.matcher(line).find()) {
-		lexerSubResult = new LexerResult(new TokenStream(
-			sourceCode.toString()));
+		lexerSubResult = new LexerResult(new TokenStream());
 		processCommentPattern(sourceLine);
 	    } else if (FIXED_FORM_LABEL_PATTERN.matcher(line).find()) {
 		lexerSubResult = processLabelPattern(lexer, sourceLine);
@@ -320,8 +319,7 @@ public class FortranPreConditioner {
     private LexerResult processBrokenCharacterLiteral(Lexer lexer, String line)
 	    throws LexerException, IOException {
 	if (currentBrokenCharacterMode == BROKEN_CHARACTER_LITERAL_NONE) {
-	    return lexer.lex(new BuiltinSource(line).load(),
-		    "BrokenCharacterLiteral");
+	    return lexer.lex(new BuiltinSource(line).load());
 	}
 	final Matcher matcher;
 	if (currentBrokenCharacterMode == BROKEN_CHARACTER_LITERAL_SINGLE_QUOTE) {
@@ -335,16 +333,15 @@ public class FortranPreConditioner {
 	if (!matcher.find()) {
 	    tokenStream.add(new Token("CHAR_LITERAL_CONSTANT", line,
 		    Visibility.VISIBLE, getCurrentMetaData(1)));
-	    return new LexerResult(new TokenStream(sourceCode.toString()));
+	    return new LexerResult(new TokenStream());
 	}
 	tokenStream.add(new Token("CHAR_LITERAL_CONSTANT", matcher.group(),
 		Visibility.VISIBLE, getCurrentMetaData(1)));
 	currentBrokenCharacterMode = BROKEN_CHARACTER_LITERAL_NONE;
 	id++;
 	pos += matcher.group().length();
-	return lexer.lex(
-		new BuiltinSource(line.substring(matcher.group().length()))
-			.load(), sourceCode.toString());
+	return lexer.lex(new BuiltinSource(line.substring(matcher.group()
+		.length())).load());
     }
 
     private void processSubTokenStream(LexerResult lexerSubResult)

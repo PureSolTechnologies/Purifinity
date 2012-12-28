@@ -89,9 +89,8 @@ public class GrammarFile implements Closeable {
 	    logger.debug("Read grammar file:");
 	    logger.debug("Starting lexer...");
 	    Lexer lexer = new RegExpLexer(uhuraGrammar);
-	    LexerResult lexerResult = lexer.lex(
-		    SourceCode.read(reader, new UnspecifiedSource()),
-		    "UhuraGrammar");
+	    LexerResult lexerResult = lexer.lex(SourceCode.read(reader,
+		    new UnspecifiedSource()));
 	    logger.debug("Starting parser...");
 	    parse(lexerResult);
 	    logger.debug("done.");

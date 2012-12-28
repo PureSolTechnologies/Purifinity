@@ -49,14 +49,13 @@ public class RegExpLexer implements Lexer {
      */
 
     @Override
-    public LexerResult lex(SourceCode sourceCode, String name)
-	    throws LexerException {
+    public LexerResult lex(SourceCode sourceCode) throws LexerException {
 	this.sourceCode = sourceCode;
-	return new LexerResult(scan(name));
+	return new LexerResult(scan());
     }
 
-    private TokenStream scan(String name) throws LexerException {
-	tokenStream = new TokenStream(name);
+    private TokenStream scan() throws LexerException {
+	tokenStream = new TokenStream();
 	int pos = 0;
 	int id = 0;
 	int line = 1;
