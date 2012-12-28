@@ -186,17 +186,17 @@ HELPER
 	 Keywords
 	 **************/
 
-	INCLUDE : "include(?!\\w)" ;
-	DEFINE  : "define(?!\\w)" ;
-	UNDEF   : "undef(?!\\w)" ;
-	IF      : "if(?!\\w)" ;
-	IFDEF   : "ifdef(?!\\w)" ;
-	IFNDEF  : "ifndef(?!\\w)" ;
-	ELSE    : "else(?!\\w)" ;
-	ELIF    : "elif(?!\\w)" ;
-	ENDIF   : "endif(?!\\w)" ;
-	PRAGMA  : "pragma(?!\\w)" ;
-	ERROR   : "error(?!\\w)" ;
+	INCLUDE : SHARP "include(?!\\w)" ;
+	DEFINE  : SHARP "define(?!\\w)" ;
+	UNDEF   : SHARP "undef(?!\\w)" ;
+	IF      : SHARP "if(?!\\w)" ;
+	IFDEF   : SHARP "ifdef(?!\\w)" ;
+	IFNDEF  : SHARP "ifndef(?!\\w)" ;
+	ELSE    : SHARP "else(?!\\w)" ;
+	ELIF    : SHARP "elif(?!\\w)" ;
+	ENDIF   : SHARP "endif(?!\\w)" ;
+	PRAGMA  : SHARP "pragma(?!\\w)" ;
+	ERROR   : SHARP "error(?!\\w)" ;
 	FILE    : "__FILE__(?!\\w)" ;
 	LINE    : "__LINE__(?!\\w)" ;
 	VA_ARGS : "__VA_ARGS__(?!\\w)" ;
@@ -246,6 +246,9 @@ HELPER
 	TILDE : "~" ;
 	VERTICAL_BAR : "\\|" ;
 	SHARP : "\\#" ;
+	DOUBLE_SHARP : SHARP SHARP ;
+	SINGLE_QUOTE : "\\'" ;
+	DOUBLE_QUOTE : "\\\"" ;
 	
 	/***************		
 	 3.8 Identifiers
@@ -257,7 +260,6 @@ HELPER
 	Identifier:
 		IdentifierChars
 	;
-
 
 /****************************************************************************
  * P R O D U C T I O N S
@@ -286,7 +288,7 @@ HELPER
  	;
  	
  	IncludeMacro :
- 	    SHARP INCLUDE IncludeFile 
+ 	    INCLUDE IncludeFile 
  	;
  
  	IncludeFile :
@@ -306,29 +308,72 @@ HELPER
  	
  	
  	DefineObjectLikeMacro :
- 	    SHARP DEFINE Identifier 
- 	|   SHARP DEFINE Identifier ReplacementList
+ 	    DEFINE Identifier 
+ 	|   DEFINE Identifier ReplacementList
  	;
  	
  	DefineFunctionLikeMacro :
- 	    SHARP DEFINE Identifier LPAREN ParameterList RPAREN ReplacementList
+ 	    DEFINE Identifier LPAREN ParameterList RPAREN ReplacementList
  	;
 
 	ReplacementList :
-	    Identifier ReplacementList
-	|   Identifier
-	;
-	
-	ParameterList :
-	    Replacement COMMA ParameterList
-	|   Replacement COMMA OptionalParameters
-	|   OptionalParameters
+	    Replacement ReplacementList
 	|   Replacement
 	;
-
+	
     Replacement:
         Identifier
+    |   StringLiteral
+    |   FileIncludeLiteral
+    |   Operator
+    |   Keyword
     ;
+
+    Operator :
+    	EQUALS
+	|   LESS_THAN
+	|	GREATER_THAN
+	|	LPAREN
+	|	RPAREN
+	|	LCURLY
+	|	RCURLY
+	|	LRECTANGULAR
+	|	RRECTANGULAR
+	|	DOT
+	|	COMMA
+	|	COLON
+	|	SEMICOLON
+	|	DOLLAR
+	|	CARET
+	|	STAR
+	|	SLASH
+	|	PERCENT
+	|	PLUS
+	|	MINUS
+	|	AMPERSAND
+    |   AT
+    |   EXCLAMATION_MARK
+    |   QUESTION_MARK
+    |   TILDE
+    |   VERTICAL_BAR
+    |   SHARP
+    |	DOUBLE_SHARP
+    |   SINGLE_QUOTE
+    |   DOUBLE_QUOTE
+    ;
+
+    Keyword :
+		FILE
+	|	LINE
+	|	VA_ARGS
+    ;
+
+	ParameterList :
+	    Identifier COMMA ParameterList
+	|   Identifier COMMA OptionalParameters
+	|   OptionalParameters
+	|   Identifier
+	;
 
 	OptionalParameters :
 	    DOT DOT DOT
@@ -348,34 +393,34 @@ HELPER
  	;
 
  	IfDirective :
- 	    SHARP IF // TODO Condition
+ 	    IF // TODO Condition
  	;
  	 
  	IfDefDirective :
- 	    SHARP IFDEF // TODO Condition
+ 	    IFDEF // TODO Condition
  	;
  	 
  	IfNDefDirective :
- 	    SHARP IFNDEF // TODO Condition
+ 	    IFNDEF // TODO Condition
  	;
  	 
  	ElseDirective :
-        SHARP ELSE
+        ELSE
  	;
  	 
  	ElIfDirective :
-        SHARP ELIF // TODO Condition
+        ELIF // TODO Condition
  	;
  	 
  	EndIfDirective :
-        SHARP ENDIF
+        ENDIF
  	;
  	
  	Pragma :
- 	    SHARP PRAGMA // TODO put in here the pragma content
+ 	    PRAGMA // TODO put in here the pragma content
  	;
  	
  	ErrorMacro :
- 	    SHARP ERROR StringLiteral
+ 	    ERROR StringLiteral
  	;
  	

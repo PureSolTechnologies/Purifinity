@@ -1,5 +1,6 @@
 package com.puresol.coding.lang.cpp.internal;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -83,5 +84,9 @@ public class DefinedMacros {
 
     public void reset() {
 	macros.clear();
+    }
+
+    public Collection<Macro> getMacros() {
+	return macros.values();
     }
 }

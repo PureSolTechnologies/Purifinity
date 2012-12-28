@@ -101,4 +101,19 @@ public class CPreprocessorTest {
 
 	assertEquals(expected, preProcessedSourceCode);
     }
+
+    @Test
+    public void testSimpleDefine() throws IOException, PreprocessorException {
+	File directory = new File(
+		"src/test/resources/com/puresol/coding/lang/cpp/files");
+	File sourceFile = new File(directory, "SimpleDefineTest.txt");
+	SourceCode sourceCode = new FileSource(sourceFile).load();
+	SourceCode preProcessedSourceCode = new CPreprocessor()
+		.process(sourceCode);
+
+	SourceCode expected = new SourceCode();
+	expected.addSourceCodeLine(new SourceCodeLine(
+		new FileSource(sourceFile), 2, "\"Hello, world!\"\n"));
+	assertEquals(expected, preProcessedSourceCode);
+    }
 }

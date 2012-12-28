@@ -210,7 +210,8 @@ public class CPreprocessor implements Preprocessor {
     }
 
     private SourceCode process(ParserTree ast) {
-	TreeMacroProcessor processor = new TreeMacroProcessor(ast);
+	TreeMacroProcessor processor = new TreeMacroProcessor(ast,
+		definedMacros);
 	processor.process();
 	return processor.getCode();
     }
