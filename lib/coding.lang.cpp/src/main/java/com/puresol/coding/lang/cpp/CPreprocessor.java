@@ -110,7 +110,40 @@ public class CPreprocessor implements Preprocessor {
 	}
     }
 
+    private static int nestingLimit = 16;
+
+    /**
+     * This is the setter for the {@link #nestingLimit} which controls the
+     * maximum #include nesting depth.
+     * 
+     * @param nestingLimit
+     *            is the number of allowed nested #include directives.
+     */
+    public static void setNestingLimit(int nestingLimit) {
+	CPreprocessor.nestingLimit = nestingLimit;
+    }
+
+    /**
+     * This is the getter for the {@link #nestingLimit} which controls the
+     * maximum #include nesting depth.
+     * 
+     * @return The number of allowed nested #include directives is returned.
+     */
+    public static int getNestingLimit() {
+	return nestingLimit;
+    }
+
     private final DefinedMacros definedMacros = new DefinedMacros();
+
+    private final int nestingDepth;
+
+    public CPreprocessor() {
+	this.nestingDepth = 0;
+    }
+
+    public CPreprocessor(int nestingDepth) {
+	this.nestingDepth = nestingDepth;
+    }
 
     @Override
     public SourceCode process(SourceCode sourceCode)
@@ -211,7 +244,7 @@ public class CPreprocessor implements Preprocessor {
 
     private SourceCode process(ParserTree ast) {
 	TreeMacroProcessor processor = new TreeMacroProcessor(ast,
-		definedMacros);
+		definedMacros, nestingDepth);
 	processor.process();
 	return processor.getCode();
     }

@@ -35,11 +35,14 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
     private final DefinedMacros definedMacros;
     private final SourceCode code = new SourceCode();
     private final ParserTree tree;
+    private final int nestingDepth;
 
-    public TreeMacroProcessor(ParserTree tree, DefinedMacros definedMacros) {
+    public TreeMacroProcessor(ParserTree tree, DefinedMacros definedMacros,
+	    int nestingDepth) {
 	super();
 	this.tree = tree;
 	this.definedMacros = definedMacros;
+	this.nestingDepth = nestingDepth;
     }
 
     public void process() {
@@ -71,11 +74,11 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 	    throws TreeException {
 	try {
 	    if ("IncludeMacro".equals(tree.getName())) {
-		return processInclude(tree);
+		return include(tree);
 	    } else if ("DefineObjectLikeMacro".equals(tree.getName())) {
-		return processDefineObjectLikeMacro(tree);
+		return defineObjectLikeMacro(tree);
 	    } else if ("DefineFunctionLikeMacro".equals(tree.getName())) {
-		return processDefineFunctionLikeMacro(tree);
+		return defineFunctionLikeMacro(tree);
 	    } else {
 		return WalkingAction.PROCEED;
 	    }
@@ -85,7 +88,7 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 	}
     }
 
-    private WalkingAction processInclude(ParserTree tree) throws TreeException,
+    private WalkingAction include(ParserTree tree) throws TreeException,
 	    PreprocessorException {
 	ParserTree includeString = tree.getChild("IncludeFile");
 	String includeFile = includeString.getText();
@@ -96,11 +99,11 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 	includeFile = includeFile.trim();
 	logger.debug("Include file '" + includeFile + "',");
 	Source source = getIncludeSource(tree);
-	include(source, includeFile);
+	performInclude(source, includeFile);
 	return WalkingAction.LEAVE_BRANCH;
     }
 
-    private WalkingAction processDefineObjectLikeMacro(ParserTree tree)
+    private WalkingAction defineObjectLikeMacro(ParserTree tree)
 	    throws TreeException {
 	String macroName = tree.getChild("Identifier").getText();
 	ParserTree replacementList = tree.getChild("ReplacementList");
@@ -113,7 +116,7 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 	return WalkingAction.LEAVE_BRANCH;
     }
 
-    private WalkingAction processDefineFunctionLikeMacro(ParserTree tree)
+    private WalkingAction defineFunctionLikeMacro(ParserTree tree)
 	    throws TreeException {
 	String macroName = tree.getChild("Identifier").getText();
 	final List<String> parameters = new ArrayList<String>();
@@ -185,7 +188,7 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 	     */
 	    TokenMetaData metaData = token.getMetaData();
 	    String text = token.getText();
-	    text = replaceMacros(text);
+	    text = applyMacros(text);
 	    SourceCodeLine sourceCodeLine = new SourceCodeLine(
 		    metaData.getSource(), metaData.getLine(), text);
 	    code.addSourceCodeLine(sourceCodeLine);
@@ -214,18 +217,18 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
      * @param text
      * @return
      */
-    private String replaceMacros(String text) {
+    private String applyMacros(String text) {
 	for (Macro macro : definedMacros.getMacros()) {
 	    if (macro.getParameters().size() == 0) {
-		text = replaceObjectLikeMacros(text, macro);
+		text = applyObjectLikeMacros(text, macro);
 	    } else {
-		text = replaceFunctionLikeMacros(text, macro);
+		text = applyFunctionLikeMacros(text, macro);
 	    }
 	}
 	return text;
     }
 
-    private String replaceObjectLikeMacros(String text, Macro macro) {
+    private String applyObjectLikeMacros(String text, Macro macro) {
 	Pattern pattern1 = Pattern.compile("^" + macro.getName() + "$");
 	text = processReplacement(pattern1, text, macro);
 	Pattern pattern2 = Pattern.compile("^" + macro.getName() + "\\s");
@@ -237,7 +240,7 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 	return text;
     }
 
-    private String replaceFunctionLikeMacros(String text, Macro macro) {
+    private String applyFunctionLikeMacros(String text, Macro macro) {
 	// TODO Perform replacement...
 	return text;
     }
@@ -282,8 +285,12 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
      * @param includeFile
      * @throws PreprocessorException
      */
-    private void include(Source source, String includeFile)
+    private void performInclude(Source source, String includeFile)
 	    throws PreprocessorException {
+	if (nestingDepth == CPreprocessor.getNestingLimit()) {
+	    throw new PreprocessorException("Nesting limit for #include of "
+		    + CPreprocessor.getNestingLimit() + "is not sufficient!");
+	}
 	boolean includeFileDirectory = false;
 	if (includeFile.startsWith("\"") && includeFile.endsWith("\"")) {
 	    includeFileDirectory = true;
@@ -296,8 +303,8 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 		SourceCode sourceCode = includeSource.load();
 		// we need to process this source, too, before we can
 		// include it...
-		SourceCode processedSourceCode = new CPreprocessor()
-			.process(sourceCode);
+		SourceCode processedSourceCode = new CPreprocessor(
+			nestingDepth + 1).process(sourceCode);
 		// we actually do the including...
 		code.addSourceCode(processedSourceCode);
 	    } catch (IOException e) {
