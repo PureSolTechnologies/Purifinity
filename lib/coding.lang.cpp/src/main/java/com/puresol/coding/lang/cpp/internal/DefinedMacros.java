@@ -48,8 +48,8 @@ public class DefinedMacros {
      * @param name
      * @param declaration
      */
-    public void define(String name, Macro macro) {
-	macros.put(name, macro);
+    public void define(Macro macro) {
+	macros.put(macro.getName(), macro);
     }
 
     /**

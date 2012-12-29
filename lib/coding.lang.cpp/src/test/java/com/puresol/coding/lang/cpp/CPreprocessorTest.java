@@ -113,7 +113,44 @@ public class CPreprocessorTest {
 
 	SourceCode expected = new SourceCode();
 	expected.addSourceCodeLine(new SourceCodeLine(
-		new FileSource(sourceFile), 2, "\"Hello, world!\"\n"));
+		new FileSource(sourceFile), 2, "1\n"));
+	expected.addSourceCodeLine(new SourceCodeLine(
+		new FileSource(sourceFile), 4, "\"Hello, world!\"\n"));
 	assertEquals(expected, preProcessedSourceCode);
     }
+
+    @Test
+    public void testObjectLikeDefine() throws IOException,
+	    PreprocessorException {
+	File directory = new File(
+		"src/test/resources/com/puresol/coding/lang/cpp/files");
+	File sourceFile = new File(directory, "ObjectLikeDefineTest.txt");
+	SourceCode sourceCode = new FileSource(sourceFile).load();
+	SourceCode preProcessedSourceCode = new CPreprocessor()
+		.process(sourceCode);
+
+	SourceCode expected = new SourceCode();
+	expected.addSourceCodeLine(new SourceCodeLine(
+		new FileSource(sourceFile), 2,
+		"Call the printf(\"This is a simple object macro!\"); macro now...\n"));
+	assertEquals(expected, preProcessedSourceCode);
+    }
+
+    @Test
+    public void testFunctionLikeDefine() throws IOException,
+	    PreprocessorException {
+	File directory = new File(
+		"src/test/resources/com/puresol/coding/lang/cpp/files");
+	File sourceFile = new File(directory, "FunctionLikeDefineTest.txt");
+	SourceCode sourceCode = new FileSource(sourceFile).load();
+	SourceCode preProcessedSourceCode = new CPreprocessor()
+		.process(sourceCode);
+
+	SourceCode expected = new SourceCode();
+	expected.addSourceCodeLine(new SourceCodeLine(
+		new FileSource(sourceFile), 2,
+		"fprintf(stderr, \"%s\n\", \"Error message!\");\n"));
+	assertEquals(expected, preProcessedSourceCode);
+    }
+
 }

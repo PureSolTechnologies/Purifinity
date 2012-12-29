@@ -213,7 +213,7 @@ HELPER
 	;
 	
 	SourceCodeLine:
-	    ".*\\\\n" // This is a place holder! This token will be added by the PreprocessorTokenizer..,
+	    "SourceCodeLine\\\\n" // This is a place holder! This token will be added by the PreprocessorTokenizer..,
 	;
 	
 	/**************

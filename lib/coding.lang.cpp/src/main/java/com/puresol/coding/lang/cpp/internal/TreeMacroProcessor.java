@@ -2,6 +2,8 @@ package com.puresol.coding.lang.cpp.internal;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -100,34 +102,71 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 
     private WalkingAction processDefineObjectLikeMacro(ParserTree tree)
 	    throws TreeException {
-	String identifier = tree.getChild("Identifier").getText();
+	String macroName = tree.getChild("Identifier").getText();
 	ParserTree replacementList = tree.getChild("ReplacementList");
 	if (replacementList != null) {
-	    final StringBuffer replacement = new StringBuffer();
-	    TreeVisitor<ParserTree> visitor = new TreeVisitor<ParserTree>() {
-		@Override
-		public WalkingAction visit(ParserTree tree) {
-		    Token token = tree.getToken();
-		    if (token != null) {
-			if ((!"WhiteSpace".equals(token.getName()))
-				|| (replacement.length() > 0)) {
-			    replacement.append(token.getText());
-			}
-		    }
-		    return WalkingAction.PROCEED;
-		}
-	    };
-	    new TreeWalker<ParserTree>(replacementList).walk(visitor);
-	    definedMacros.define(identifier, replacement.toString());
+	    String replacement = createReplacement(replacementList);
+	    definedMacros.define(macroName, replacement);
 	} else {
-	    definedMacros.define(identifier);
+	    definedMacros.define(macroName);
 	}
 	return WalkingAction.LEAVE_BRANCH;
     }
 
-    private WalkingAction processDefineFunctionLikeMacro(ParserTree tree) {
-	// TODO Auto-generated method stub
+    private WalkingAction processDefineFunctionLikeMacro(ParserTree tree)
+	    throws TreeException {
+	String macroName = tree.getChild("Identifier").getText();
+	final List<String> parameters = new ArrayList<String>();
+	ParserTree parameterList = tree.getChild("ParameterList");
+	TreeVisitor<ParserTree> visitor = new TreeVisitor<ParserTree>() {
+	    @Override
+	    public WalkingAction visit(ParserTree tree) {
+		Token token = tree.getToken();
+		if (token != null) {
+		    if ("Identifier".equals(token.getName())) {
+			parameters.add(token.getText());
+		    } else if ("OptionalParameters".equals(token.getName())) {
+			parameters.add("...");
+		    }
+		}
+		return null;
+	    }
+
+	};
+	new TreeWalker<ParserTree>(parameterList).walk(visitor);
+	boolean optionalParameters = parameters.contains("...");
+	if (optionalParameters) {
+	    parameters.remove("...");
+	}
+	ParserTree replacementList = tree.getChild("ReplacementList");
+	if (replacementList != null) {
+	    String replacement = createReplacement(replacementList);
+	    definedMacros.define(new Macro(macroName, replacement, parameters,
+		    optionalParameters));
+	} else {
+	    definedMacros.define(new Macro(macroName, "", parameters,
+		    optionalParameters));
+	}
 	return WalkingAction.LEAVE_BRANCH;
+    }
+
+    private String createReplacement(ParserTree replacementList) {
+	final StringBuffer replacement = new StringBuffer();
+	TreeVisitor<ParserTree> visitor = new TreeVisitor<ParserTree>() {
+	    @Override
+	    public WalkingAction visit(ParserTree tree) {
+		Token token = tree.getToken();
+		if (token != null) {
+		    if ((!"WhiteSpace".equals(token.getName()))
+			    || (replacement.length() > 0)) {
+			replacement.append(token.getText());
+		    }
+		}
+		return WalkingAction.PROCEED;
+	    }
+	};
+	new TreeWalker<ParserTree>(replacementList).walk(visitor);
+	return replacement.toString();
     }
 
     /**
@@ -146,7 +185,7 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 	     */
 	    TokenMetaData metaData = token.getMetaData();
 	    String text = token.getText();
-	    text = performMacroReplacement(text);
+	    text = replaceMacros(text);
 	    SourceCodeLine sourceCodeLine = new SourceCodeLine(
 		    metaData.getSource(), metaData.getLine(), text);
 	    code.addSourceCodeLine(sourceCodeLine);
@@ -169,24 +208,52 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 	}
     }
 
-    private String performMacroReplacement(String text) {
+    /**
+     * This method replaces the macros in a given
+     * 
+     * @param text
+     * @return
+     */
+    private String replaceMacros(String text) {
 	for (Macro macro : definedMacros.getMacros()) {
-	    Pattern pattern1 = Pattern.compile("^" + macro.getName() + "$");
-	    text = processReplacement(pattern1, text, macro);
-	    Pattern pattern2 = Pattern.compile("^" + macro.getName() + "\\s");
-	    text = processReplacement(pattern2, text, macro);
-	    Pattern pattern3 = Pattern.compile("\\s" + macro.getName() + "\\s");
-	    text = processReplacement(pattern3, text, macro);
-	    Pattern pattern4 = Pattern.compile("\\s" + macro.getName() + "$");
-	    text = processReplacement(pattern4, text, macro);
+	    if (macro.getParameters().size() == 0) {
+		text = replaceObjectLikeMacros(text, macro);
+	    } else {
+		text = replaceFunctionLikeMacros(text, macro);
+	    }
 	}
+	return text;
+    }
+
+    private String replaceObjectLikeMacros(String text, Macro macro) {
+	Pattern pattern1 = Pattern.compile("^" + macro.getName() + "$");
+	text = processReplacement(pattern1, text, macro);
+	Pattern pattern2 = Pattern.compile("^" + macro.getName() + "\\s");
+	text = processReplacement(pattern2, text, macro);
+	Pattern pattern3 = Pattern.compile("\\s" + macro.getName() + "\\s");
+	text = processReplacement(pattern3, text, macro);
+	Pattern pattern4 = Pattern.compile("\\s" + macro.getName() + "$");
+	text = processReplacement(pattern4, text, macro);
+	return text;
+    }
+
+    private String replaceFunctionLikeMacros(String text, Macro macro) {
+	// TODO Perform replacement...
 	return text;
     }
 
     private String processReplacement(Pattern pattern, String text, Macro macro) {
 	Matcher matcher = pattern.matcher(text);
 	while (matcher.find()) {
-	    text = text.replace(matcher.group(), macro.getReplacement());
+	    String group = matcher.group();
+	    /*
+	     * Next we perform the actual replacement on the group and replace
+	     * the original group with the groupReplacement afterwards. We keep
+	     * the white spaces that way.
+	     */
+	    String groupReplacement = group.replace(macro.getName(),
+		    macro.getReplacement());
+	    text = text.replace(group, groupReplacement);
 	}
 	return text;
     }

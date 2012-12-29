@@ -31,7 +31,7 @@ public class Macro {
 	    boolean optionalParameters) {
 	this.name = name;
 	this.replacement = replacement;
-	parameters.addAll(parameters);
+	this.parameters.addAll(parameters);
 	this.optionalParameters = optionalParameters;
     }
 
@@ -93,4 +93,30 @@ public class Macro {
 	return true;
     }
 
+    @Override
+    public String toString() {
+	StringBuffer buffer = new StringBuffer(name);
+	if ((parameters.size() > 0) || (optionalParameters)) {
+	    buffer.append("(");
+	    boolean first = true;
+	    for (String parameter : parameters) {
+		if (first) {
+		    first = false;
+		} else {
+		    buffer.append(",");
+		}
+		buffer.append(parameter);
+	    }
+	    if (optionalParameters) {
+		if (!first) {
+		    buffer.append(",");
+		}
+		buffer.append("...");
+	    }
+	    buffer.append(")");
+	}
+	buffer.append(":\n");
+	buffer.append(replacement);
+	return buffer.toString();
+    }
 }
