@@ -1,4 +1,4 @@
-package com.puresol.coding.lang.fortran.grammar;
+package com.puresol.coding.lang.c11.grammar;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,11 +11,11 @@ import com.puresol.uhura.grammar.GrammarReader;
 import com.puresol.uhura.lexer.Lexer;
 import com.puresol.uhura.parser.Parser;
 
-public class FortranGrammar extends Grammar {
+public class C11Grammar extends Grammar {
 
     private static final long serialVersionUID = -8286230838527909083L;
 
-    public static final String GRAMMAR_RESOURCE = "/com/puresol/coding/lang/fortran/grammar/Fortran2008.g";
+    public static final String GRAMMAR_RESOURCE = "/com/puresol/coding/lang/c11/grammar/C11.g";
     public static final String PERSISTED_GRAMMAR_RESOURCE = GrammarManager
 	    .getPersistedGrammarPath(GRAMMAR_RESOURCE);
     public static final String PERSISTED_LEXER_RESOURCE = GrammarManager
@@ -23,11 +23,11 @@ public class FortranGrammar extends Grammar {
     public static final String PERSISTED_PARSER_RESOURCE = GrammarManager
 	    .getPersistedParserPath(GRAMMAR_RESOURCE);
 
-    private static FortranGrammar instance = null;
+    private static C11Grammar instance = null;
     private static Lexer lexer = null;
     private static Parser parser = null;
 
-    public static FortranGrammar getInstance() {
+    public static C11Grammar getInstance() {
 	if (instance == null) {
 	    createInstance();
 	}
@@ -37,10 +37,10 @@ public class FortranGrammar extends Grammar {
     private static synchronized void createInstance() {
 	try {
 	    if (instance == null) {
-		instance = new FortranGrammar();
+		instance = new C11Grammar();
 	    }
 	} catch (GrammarException e) {
-	    throw new RuntimeException("Fortran Grammar is invalid!", e);
+	    throw new RuntimeException("C11 Grammar is invalid!", e);
 	}
     }
 
@@ -56,10 +56,10 @@ public class FortranGrammar extends Grammar {
     private static synchronized void initializeGrammar() {
 	try {
 	    try {
-		grammar = restore(FortranGrammar.class
+		grammar = restore(C11Grammar.class
 			.getResourceAsStream(PERSISTED_GRAMMAR_RESOURCE));
 	    } catch (IOException e) {
-		InputStream stream = FortranGrammar.class
+		InputStream stream = C11Grammar.class
 			.getResourceAsStream(GRAMMAR_RESOURCE);
 		try {
 		    GrammarReader reader = new GrammarReader(stream);
@@ -81,7 +81,7 @@ public class FortranGrammar extends Grammar {
 	}
     }
 
-    private FortranGrammar() throws GrammarException {
+    private C11Grammar() throws GrammarException {
 	super(getGrammar().getOptions(), getGrammar().getTokenDefinitions(),
 		getGrammar().getProductions());
     }

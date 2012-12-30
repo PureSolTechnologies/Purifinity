@@ -13,6 +13,7 @@
 	<packaging>pom</packaging>
 
 	<modules>
+		<module>common</module>
 		<module>java</module>
 		<module>c11</module>
 		<module>cpp11</module>

@@ -58,12 +58,42 @@
 			<!-- SHARED -->
 			<dependency>
 				<groupId>com.puresol</groupId>
+				<artifactId>coding.analysis.api</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresol</groupId>
+				<artifactId>coding.analysis.impl</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresol</groupId>
+				<artifactId>coding.lang.c11</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresol</groupId>
+				<artifactId>coding.lang.common</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresol</groupId>
+				<artifactId>coding.lang.cpp</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresol</groupId>
+				<artifactId>coding.metrics</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresol</groupId>
 				<artifactId>trees</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.puresol</groupId>
-				<artifactId>utils</artifactId>
+				<artifactId>uhura.api</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
@@ -78,25 +108,9 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresol</groupId>
-				<artifactId>coding.analysis.api</artifactId>
+				<artifactId>utils</artifactId>
 				<version>${project.version}</version>
 			</dependency>
-			<dependency>
-				<groupId>com.puresol</groupId>
-				<artifactId>coding.analysis.impl</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresol</groupId>
-				<artifactId>coding.lang.cpp</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresol</groupId>
-				<artifactId>coding.metrics</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<!-- JOGAMP -->
 			<!-- OSGi -->
 			<dependency>
 				<groupId>org.osgi</groupId>

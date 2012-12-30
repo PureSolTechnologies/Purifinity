@@ -8,6 +8,7 @@ import java.io.ObjectInputStream;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.GrammarManager;
+import com.puresol.uhura.grammar.GrammarReader;
 import com.puresol.uhura.lexer.Lexer;
 import com.puresol.uhura.parser.Parser;
 
@@ -51,13 +52,40 @@ public class TestLanguageGrammar extends Grammar {
 	}
     }
 
-    private static final Grammar grammar;
-    static {
+    private static Grammar grammar = null;
+
+    public static Grammar getGrammar() {
+	if (grammar == null) {
+	    initializeGrammar();
+	}
+	return grammar;
+    }
+
+    private static synchronized void initializeGrammar() {
 	try {
-	    grammar = (Grammar) restore(TestLanguageGrammar.class
-		    .getResourceAsStream(PERSISTED_GRAMMAR_RESOURCE));
+	    try {
+		grammar = restore(TestLanguageGrammar.class
+			.getResourceAsStream(PERSISTED_GRAMMAR_RESOURCE));
+	    } catch (IOException e) {
+		InputStream stream = TestLanguageGrammar.class
+			.getResourceAsStream(GRAMMAR_RESOURCE);
+		try {
+		    GrammarReader reader = new GrammarReader(stream);
+		    try {
+			grammar = reader.getGrammar();
+		    } finally {
+			reader.close();
+		    }
+		} finally {
+		    stream.close();
+		}
+	    }
 	} catch (IOException e) {
-	    throw new RuntimeException("Could not load grammar.", e);
+	    throw new RuntimeException(
+		    "Could neither read persisted grammar nor grammar itself.",
+		    e);
+	} catch (GrammarException e) {
+	    throw new RuntimeException("Grammar is not valid.", e);
 	}
     }
 

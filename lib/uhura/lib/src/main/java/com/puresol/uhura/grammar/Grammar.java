@@ -1,6 +1,5 @@
 package com.puresol.uhura.grammar;
 
-import java.io.InputStream;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
@@ -301,9 +300,5 @@ public class Grammar implements Serializable {
 	} else if (!tokenDefinitions.equals(other.tokenDefinitions))
 	    return false;
 	return true;
-    }
-
-    public InputStream getGrammarDefinition() {
-	return null;
     }
 }
