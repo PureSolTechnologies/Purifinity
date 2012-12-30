@@ -2,11 +2,21 @@ package com.puresol.coding.lang.fortran.grammar;
 
 import static org.junit.Assert.assertNotNull;
 
+import java.net.URL;
+
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.puresol.uhura.grammar.Grammar;
 
 public class FortranGrammarTest {
+
+    @BeforeClass
+    public static void initialize() {
+	URL url = FortranGrammar.class
+		.getResource(FortranGrammar.GRAMMAR_RESOURCE);
+	assertNotNull(url);
+    }
 
     @Test
     public void testInstance() {

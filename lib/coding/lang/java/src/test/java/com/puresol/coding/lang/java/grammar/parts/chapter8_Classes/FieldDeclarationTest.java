@@ -1,0 +1,20 @@
+package com.puresol.coding.lang.java.grammar.parts.chapter8_Classes;
+
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Test;
+
+import com.puresol.coding.lang.java.grammar.JavaGrammarPartTester;
+
+public class FieldDeclarationTest {
+
+    @Test
+    public void testWithoutInitializer() throws Exception {
+	assertTrue(JavaGrammarPartTester.test("FieldDeclaration", "int a;"));
+    }
+
+    @Test
+    public void testWithInitializer() throws Exception {
+	assertTrue(JavaGrammarPartTester.test("FieldDeclaration", "int a = 0;"));
+    }
+}

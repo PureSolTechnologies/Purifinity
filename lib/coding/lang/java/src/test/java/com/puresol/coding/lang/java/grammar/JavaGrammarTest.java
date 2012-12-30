@@ -6,7 +6,9 @@ import static org.junit.Assert.fail;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.puresol.uhura.grammar.Grammar;
@@ -14,6 +16,12 @@ import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.GrammarReader;
 
 public class JavaGrammarTest {
+
+    @BeforeClass
+    public static void initialize() {
+	URL url = JavaGrammar.class.getResource(JavaGrammar.GRAMMAR_RESOURCE);
+	assertNotNull(url);
+    }
 
     @Test
     public void testGetGrammarStream() {

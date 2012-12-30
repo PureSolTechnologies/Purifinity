@@ -1,20 +1,20 @@
 package com.puresol.coding;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
+
 import org.junit.Test;
 
 import com.puresol.coding.lang.test.TestLanguage;
 
-import junit.framework.Assert;
-import junit.framework.TestCase;
-
-public class ProgrammingLanguageTest extends TestCase {
+public class ProgrammingLanguageTest {
 
     @Test
     public void testGetInstance() {
 	TestLanguage pl1 = TestLanguage.getInstance();
-	Assert.assertNotNull(pl1);
+	assertNotNull(pl1);
 	TestLanguage pl2 = TestLanguage.getInstance();
-	Assert.assertNotNull(pl2);
-	Assert.assertSame(pl1, pl2);
+	assertNotNull(pl2);
+	assertSame(pl1, pl2);
     }
 }

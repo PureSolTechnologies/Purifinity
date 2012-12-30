@@ -5,8 +5,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 
 import org.junit.Test;
 
@@ -20,24 +18,6 @@ import com.puresol.uhura.source.FileSource;
 import com.puresol.uhura.source.Source;
 
 public class JavaPackratParserTest {
-
-    private String readToString(InputStream inputStream) throws Throwable {
-	StringBuffer stringBuffer = new StringBuffer();
-	InputStreamReader reader = new InputStreamReader(inputStream);
-	try {
-	    char[] buffer = new char[4096];
-	    int length;
-	    do {
-		length = reader.read(buffer);
-		if (length > 0) {
-		    stringBuffer.append(buffer, 0, length);
-		}
-	    } while (length == buffer.length);
-	} finally {
-	    reader.close();
-	}
-	return stringBuffer.toString();
-    }
 
     private PackratParser createParser() {
 	Grammar grammar = JavaGrammar.getInstance();
