@@ -192,10 +192,11 @@ public class GrammarConverter {
 	    Map<String, ParserTree> tokens) throws GrammarException,
 	    TreeException {
 	tokenDefinitions = new TokenDefinitionSet();
-	for (ParserTree tokenDefinition : ast.getChild("Tokens")
+	for (ParserTree tokenDefinitionAST : ast.getChild("Tokens")
 		.getChild("TokenDefinitions").getChildren("TokenDefinition")) {
-	    tokenDefinitions.addDefinition(getTokenDefinition(tokenDefinition,
-		    helpers, tokens));
+	    TokenDefinition convertedTokenDefinition = getTokenDefinition(
+		    tokenDefinitionAST, helpers, tokens);
+	    tokenDefinitions.addDefinition(convertedTokenDefinition);
 	}
     }
 
@@ -213,10 +214,29 @@ public class GrammarConverter {
 	    Map<String, ParserTree> helpers, Map<String, ParserTree> tokens)
 	    throws GrammarException, TreeException {
 	String tokenName = tokenDefinition.getChild("IDENTIFIER").getText();
+	String pattern = createTokenDefinitionPattern(tokenDefinition, helpers,
+		tokens);
+	boolean ignoreCase = Boolean.valueOf((String) options
+		.get("grammar.ignore-case"));
+	if (tokenVisibility.get(tokenName) != null) {
+	    return new TokenDefinition(tokenName, pattern,
+		    tokenVisibility.get(tokenName), ignoreCase);
+	} else {
+	    return new TokenDefinition(tokenName, pattern, ignoreCase);
+	}
+    }
+
+    private String createTokenDefinitionPattern(ParserTree tokenDefinition,
+	    Map<String, ParserTree> helpers, Map<String, ParserTree> tokens)
+	    throws TreeException, GrammarException {
 	StringBuffer pattern = new StringBuffer();
 	boolean firstConstruction = true;
-	for (ParserTree tokenConstruction : tokenDefinition.getChild(
-		"TokenConstructions").getChildren("TokenConstruction")) {
+	List<ParserTree> children = tokenDefinition.getChild(
+		"TokenConstructions").getChildren("TokenConstruction");
+	if (children.size() > 1) {
+	    pattern.append("(");
+	}
+	for (ParserTree tokenConstruction : children) {
 	    if (firstConstruction) {
 		firstConstruction = false;
 	    } else {
@@ -225,15 +245,10 @@ public class GrammarConverter {
 	    pattern.append(getTokenDefinitionPattern(tokenConstruction,
 		    helpers, tokens));
 	}
-	boolean ignoreCase = Boolean.valueOf((String) options
-		.get("grammar.ignore-case"));
-	if (tokenVisibility.get(tokenName) != null) {
-	    return new TokenDefinition(tokenName, pattern.toString(),
-		    tokenVisibility.get(tokenName), ignoreCase);
-	} else {
-	    return new TokenDefinition(tokenName, pattern.toString(),
-		    ignoreCase);
+	if (children.size() > 1) {
+	    pattern.append(")");
 	}
+	return pattern.toString();
     }
 
     private StringBuffer getTokenDefinitionPattern(

@@ -4,6 +4,11 @@
  * Author: Rick-Rainer Ludwig
  ****************************************************************************/ 
 
+/*
+ * This grammar was extracted from the OpenStd.org's document n1570.pdf which
+ * contains the draft for C11.
+ */
+
 /****************************************************************************
  * O P T I O N S
  ****************************************************************************/ 
@@ -16,7 +21,7 @@ OPTIONS
 	preprocessor.use=false;							// usage of preprocessor required? 
 	//preprocessor="com.puresol.coding.lang.cpp.CPreprocessor";								// usage of preprocessor required? 
 	lexer="com.puresol.uhura.lexer.RegExpLexer";
-	parser="com.puresol.uhura.parser.lr.SLR1Parser";
+	parser="com.puresol.uhura.parser.packrat.PackratParser";
 	parser.backtracking=true;
 
 /****************************************************************************
@@ -24,242 +29,286 @@ OPTIONS
  ****************************************************************************/ 
 HELPER
 
-	/*******************
-	 3.3 Unicode Escapes
-	 *******************/
-	 
-	UnicodeInputCharacter:
-		"(" UnicodeEscape "|" RawInputCharacter ")"
-	;
-		
-	UnicodeEscape:
-		"\\\\" UnicodeMarker HexDigit HexDigit HexDigit HexDigit
-	;
-		
-	UnicodeMarker:
-		"(u+)"
-	;
-		
-	RawInputCharacter:
-		"\\w"
-	;
-		
-	HexDigit:
-		"[0-9a-fA-F]"
-	;
-	
-	/************	
-	 3.7 Comments
-	 ************/
-		
-	TraditionalComment:
-		"/\\*" CommentTail
-	;
-		
-	EndOfLineComment:
-		"//" CharactersInLine LineTerminator  
-	;
-		
-	CommentTail:
-		"(" NotStar "+|\\*+(?!/))*\\*/"
-	;
-		
-	NotStar:
-		"[^*]"
-	;
-		
-	CharactersInLine:
-		InputCharacter "*"
-	;
-	
-	InputCharacter: "([^\\n\\r]|" UnicodeEscape ")" ;
+    /*
+     * 6.4.2 Identifiers
+     */
+    identifier-nondigit:
+        nondigit
+    |   universal-character-name
+    // |   other implementation-defined characters
+    ;
+    
+    nondigit:
+		"[_a-zA-Z]"
+    ;
 
-	/***************		
-	 3.8 Identifiers
-	 ***************/
-	
-	IdentifierChars:
-		Letter LetterOrDigit "*"
-	;
-		
-	Letter:
-		"[a-zA-Z_]"
-	;
-		
-	LetterOrDigit:
-		"[a-zA-Z0-9_]"
-	;
+    digit:
+        "[0-9]" 
+    ;
 
-	/*************
-	 3.10 Literals
-	 *************/
+    /*
+     * 6.4.3 Universal character names
+     */
+    universal-character-name:
+        "\\\\u" hex-quad
+    |   "\\\\U" hex-quad hex-quad
+    ;
+    
+    hex-quad:
+        hexadecimal-digit hexadecimal-digit hexadecimal-digit hexadecimal-digit
+    ;
 
-	/* 3.10.1 Integer Literals */
-	
-	HexNumeral:
-		"0[xX]" HexDigits
-	;
-	
-	HexDigits:
-		HexDigit "+"
-	;
+    /*
+     * 6.4.4.1 Integer constants
+     */
+    decimal-constant:
+        nonzero-digit digit*
+    ;
 
-	/* already defined...
-	HexDigit: one of
-		0 1 2 3 4 5 6 7 8 9 a b c d e f A B C D E F
-	*/
-	
-	OctalNumeral:
-		"0" OctalDigits
-	;
-	
-	OctalDigits:
-		OctalDigit "+"
-	;
-	
-	OctalDigit:
-		"[0-7]"
-	;
-		
-	HexSignificand:
-	"("	HexNumeral
-	"|"	HexNumeral "\\."
-	"|"	"0[xX](" HexDigits ")?\\." HexDigits
-	")"
-	;
-	
-	StringCharacters:
-		StringCharacter "+"
-	;
-	
-	StringCharacter:
-		'([^\\n\\r\\\"]|' UnicodeEscape "|" EscapeSequence ")"
-	;
+    octal-constant:
+        '0' octal-digit*
+    ;
+    
+    hexadecimal-constant:
+        hexadecimal-prefix hexadecimal-digit+
+    ;
+    
+    hexadecimal-prefix: "0[xX]";
+    nonzero-digit: "[1-9]";
+    octal-digit: "[0-7]";
+	hexadecimal-digit: "[0-9a-fA-F]";
 
-	/* 3.10.6 Escape Sequences for Character and String Literals */
-	EscapeSequence:
-	"("	"\\\\b" /* \u0008: backspace BS */
-	"|"	"\\\\t" /* \u0009: horizontal tab HT */
-	"|"	"\\\\n" /* \u000a: linefeed LF */
-	"|"	"\\\\f" /* \u000c: form feed FF */
-	"|"	"\\\\r" /* \u000d: carriage return CR */
-	"|"	"\\\\\"" /* \u0022: double quote " */
-	"|"	"\\\\'" /* \u0027: single quote ' */
-	"|"	"\\\\\\\\" /* \u005c: backslash \ */
-	"|"	OctalEscape /* \u0000 to \u00ff: from octal value */
-	")"
-	;
-	
-	OctalEscape:
-	"("	"\\\\" OctalDigit
-	"|"	"\\\\" OctalDigit OctalDigit
-	"|"	"\\\\" ZeroToThree OctalDigit OctalDigit
-	")"
-	;
-	
-	OctalDigit:
-		"[0-7]"
-	;
-	
-	ZeroToThree:
-		"[0-3]"
-	;
-		
+    integer-suffix:
+        unsigned-suffix long-suffix?
+    |   unsigned-suffix long-long-suffix
+    |   long-suffix unsigned-suffix?
+    |   long-long-suffix unsigned-suffix?
+    ;
+    
+    unsigned-suffix: "[uU]";
+    long-suffix: "[lL]";
+    long-long-suffix: "(ll|LL)";
+
+    /*
+     * 6.4.4.2 Floating constants
+     */
+    decimal-floating-constant:
+        fractional-constant exponent-part? floating-suffix?
+    |   digit-sequence exponent-part floating-suffix?
+    ;
+    
+    hexadecimal-floating-constant:
+        hexadecimal-prefix hexadecimal-fractional-constant binary-exponent-part floating-suffix?
+    |   hexadecimal-prefix hexadecimal-digit-sequence binary-exponent-part floating-suffix?
+    ;
+    
+    fractional-constant:
+        digit-sequence? '.' digit-sequence
+    |   digit-sequence '.'
+    ;
+    
+    exponent-part:
+        "[eE]" sign? digit-sequence
+    ;
+
+    sign: "[+-]";
+    digit-sequence:
+        digit+
+    ;
+    
+    hexadecimal-fractional-constant:
+        hexadecimal-digit-sequence? '.' hexadecimal-digit-sequence
+    |   hexadecimal-digit-sequence '.'
+    ;
+    
+    binary-exponent-part:
+        "[pP]" sign? digit-sequence
+    ;
+    
+    hexadecimal-digit-sequence:
+        hexadecimal-digit+
+    ;
+    
+    floating-suffix: "[flFL]";
+   
+    /*
+     * 6.4.4.4 Character constants
+     */
+    c-char-sequence:
+        c-char+
+    ;
+    
+    c-char:
+        "[^'\\\\\\n]"
+    |   escape-sequence
+    ;
+    
+    escape-sequence:
+        simple-escape-sequence
+    |   octal-escape-sequence
+    |   hexadecimal-escape-sequence
+    |   universal-character-name
+    ;
+    
+    simple-escape-sequence: "\\\\['\\\\\"?\\\\abfnrtv]";
+
+    octal-escape-sequence:
+        "\\\\" octal-digit
+    |   "\\\\" octal-digit octal-digit
+    |   "\\\\" octal-digit octal-digit octal-digit
+    ;
+    
+    hexadecimal-escape-sequence:
+        "\\\\x" hexadecimal-digit+
+    ;
+
+    /*
+     * 6.4.5 String literals
+     */
+    encoding-prefix: "(u8|[uUL])";
+
+    s-char-sequence:
+        s-char+
+    ;
+    
+    s-char:
+        "[^\\\\\"\\\\\\\\n]"
+    |   escape-sequence
+    ;
+
  /****************************************************************************
  * T O K E N S
  ****************************************************************************/ 
  TOKENS
-
-	LineTerminator:
-		"(\\n|\\r|\\r\\n)" [ignore]
-	;
-
-	WhiteSpace:
+ 
+ 	WhiteSpace:
 		"( |\\t|\\f)" [ignore]
 	;
-	
-	Comment:
-		"(" TraditionalComment "|" EndOfLineComment ")" [ignore]
-	;
-
-	/**************
-	 Keywords
-	 **************/
-
-	INCLUDE : SHARP "include(?!\\w)" ;
-	DEFINE  : SHARP "define(?!\\w)" ;
-	UNDEF   : SHARP "undef(?!\\w)" ;
-	IF      : SHARP "if(?!\\w)" ;
-	IFDEF   : SHARP "ifdef(?!\\w)" ;
-	IFNDEF  : SHARP "ifndef(?!\\w)" ;
-	ELSE    : SHARP "else(?!\\w)" ;
-	ELIF    : SHARP "elif(?!\\w)" ;
-	ENDIF   : SHARP "endif(?!\\w)" ;
-	PRAGMA  : SHARP "pragma(?!\\w)" ;
-	ERROR   : SHARP "error(?!\\w)" ;
-	FILE    : "__FILE__(?!\\w)" ;
-	LINE    : "__LINE__(?!\\w)" ;
-	VA_ARGS : "__VA_ARGS__(?!\\w)" ;
-
-	/*************
-	 Literals
-	 *************/
-	StringLiteral:		
-		"\"(" StringCharacters ")?\""
-	;
-
-	FileIncludeLiteral:		
-		"\\<" StringCharacters "\\>"
-	;
-	
-	SourceCodeLine:
-	    "SourceCodeLine\\\\n" // This is a place holder! This token will be added by the PreprocessorTokenizer..,
-	;
-	
-	/**************
-	 3.12 Operators
-	 **************/
-	EQUALS: "=" ;
-	LESS_THAN: "<" ;
-	GREATER_THAN: ">" ;
+ 
+ 	/*
+	 * 6.4.6 Punctuators
+	 */
+	LRECTANGULAR: "\\[" ;
+	RRECTANGULAR: "\\]" ;
 	LPAREN: "\\(" ;
 	RPAREN: "\\)" ;
 	LCURLY: "\\{" ;
 	RCURLY: "\\}" ;
-	LRECTANGULAR: "\\[" ;
-	RRECTANGULAR: "\\]" ;
 	DOT: "\\." ;
-	COMMA: "," ;
-	COLON: ":" ;
-	SEMICOLON: ";" ;
-	DOLLAR: "\\$" ;
-	CARET: "\\^" ;
+	AMPERSAND: "&" ;
 	STAR: "\\*" ;
-	SLASH: "/" ;
-	PERCENT: "%";
 	PLUS: "\\+" ;
 	MINUS: "-";
-	AMPERSAND: "&" ;
-	AT: "@" ;
-	EXCLAMATION_MARK: "!" ;
-	QUESTION_MARK : "\\?" ;
 	TILDE : "~" ;
+	EXCLAMATION_MARK: "!" ;
+	SLASH: "/" ;
+	PERCENT: "%";
+	LESS_THAN: "<" ;
+	GREATER_THAN: ">" ;
+	CARET: "\\^" ;
 	VERTICAL_BAR : "\\|" ;
-	SHARP : "\\#" ;
-	DOUBLE_SHARP : SHARP SHARP ;
-	SINGLE_QUOTE : "\\'" ;
-	DOUBLE_QUOTE : "\\\"" ;
-	
-	/***************		
-	 3.8 Identifiers
-	 ***************/
+	QUESTION_MARK : "\\?" ;
+	COLON: ":" ;
+	SEMICOLON: ";" ;
+	EQUALS: "=" ;
+	COMMA: "," ;
+	SHARP: "#" ;
+ 
+    /*
+     * 6.4.1 Keywords
+     */
+    AUTO           : "auto(?!\\w)" ;
+    BREAK          : "break(?!\\w)" ;
+    CASE           : "case(?!\\w)" ;
+    CHAR           : "char(?!\\w)" ;
+    CONST          : "const(?!\\w)" ;
+    CONTINUE       : "continue(?!\\w)" ;
+    DEFAULT        : "default(?!\\w)" ;
+    DO             : "do(?!\\w)" ;
+    DOUBLE         : "double(?!\\w)" ;
+    ELSE           : "else(?!\\w)" ;
+    ENUM           : "enum(?!\\w)" ;
+    EXTERN         : "extern(?!\\w)" ;
+    FLOAT          : "float(?!\\w)" ;
+    FOR            : "for(?!\\w)" ;
+    GOTO           : "goto(?!\\w)" ;
+    IF             : "if(?!\\w)" ;
+    INLINE         : "inline(?!\\w)" ;
+    INT            : "int(?!\\w)" ;
+    LONG           : "long(?!\\w)" ;
+    REGISTER       : "register(?!\\w)" ;
+    RESTRICT       : "restrict(?!\\w)" ;
+    RETURN         : "return(?!\\w)" ;
+    SHORT          : "short(?!\\w)" ;
+    SIGNED         : "signed(?!\\w)" ;
+    SIZEOF         : "sizeof(?!\\w)" ;
+    STATIC         : "static(?!\\w)" ;
+    STRUCT         : "struct(?!\\w)" ;
+    SWITCH         : "switch(?!\\w)" ;
+    TYPEDEF        : "typedef(?!\\w)" ;
+    UNION          : "union(?!\\w)" ;
+    UNSIGNED       : "unsigned(?!\\w)" ;
+    VOID           : "void(?!\\w)" ;
+    VOLATILE       : "volatile(?!\\w)" ;
+    WHILE          : "while(?!\\w)" ;
+    _ALIGNAS       : "_Alignas(?!\\w)" ;
+    _ALIGNOF       : "_Alignof(?!\\w)" ;
+    _ATOMIC        : "_Atomic(?!\\w)" ;
+    _BOOL          : "_Bool(?!\\w)" ;
+    _COMPLEX       : "_Complex(?!\\w)" ;
+    _GENERIC       : "_Generic(?!\\w)" ;
+    _IMAGINARY     : "_Imaginary(?!\\w)" ;
+    _NORETURN      : "_Noreturn(?!\\w)" ;
+    _STATIC_ASSERT : "_Static_assert(?!\\w)" ;
+    _THREAD_LOCAL  : "_Thread_local(?!\\w)" ;
 
-	/*
-	 * The identifier needs to be first, otherwise keywords are caught by this definition...
-	 */	
-	Identifier:
-		IdentifierChars
-	;
+    /*
+     * 6.4.4.1 Integer constants
+     */
+    integer-constant:
+        decimal-constant integer-suffix?
+    |   octal-constant integer-suffix?
+    |   hexadecimal-constant integer-suffix?
+    ;
+    
+    /*
+     * 6.4.4.2 Floating constants
+     */
+    floating-constant:
+        decimal-floating-constant
+    |   hexadecimal-floating-constant
+    ;
+    
+    /*
+     * 6.4.4.3 Enumeration constants
+     */
+    enumeration-constant:
+        identifier
+    ;
+    
+    /*
+     * 6.4.4.4 Character constants
+     */
+    character-constant:
+        "'" c-char-sequence "'"
+    |   "L'" c-char-sequence "'"
+    |   "u'" c-char-sequence "'"
+    |   "U'" c-char-sequence "'"
+    ;
+
+    /*
+     * 6.4.5 String literals
+     */
+    string-literal:
+        encoding-prefix? "\\\"" s-char-sequence? "\\\""
+    ;
+
+    /*
+     * 6.4.2 Identifiers
+     */
+    identifier :
+        identifier-nondigit "(" identifier-nondigit "|" digit ")*"
+    ;
 
 /****************************************************************************
  * P R O D U C T I O N S
@@ -267,160 +316,105 @@ HELPER
  PRODUCTIONS
  
  	_START_ : 
- 		SourceFile 
+ 		// TODO 
  	;
 
-	SourceFile : 
-		SourceLine *
+    /*
+     * 6.4 Lexical elements
+     */
+    
+    token :
+        keyword
+	|	identifier
+	|	constant
+	|	string-literal
+	|	punctuator
 	;
 
-	SourceLine :
-	    SourceCodeLine 
-	|   Macro
-	;
-
- 	Macro :
- 	    IncludeMacro
- 	|   MacroDefinition
-    |   ConditionDirective
-    |   Pragma
-    |   ErrorMacro
- 	;
- 	
- 	IncludeMacro :
- 	    INCLUDE IncludeFile 
- 	;
- 
- 	IncludeFile :
- 		FileIncludeLiteral 
- 	|	StringLiteral
- 	;
- 	
- 	MacroDefinition :
-        DefineMacro
-    |   UndefineMacro
- 	;
- 	
- 	DefineMacro :
- 	    DefineObjectLikeMacro
- 	|   DefineFunctionLikeMacro
- 	;
- 	
- 	
- 	DefineObjectLikeMacro :
- 	    DEFINE Identifier 
- 	|   DEFINE Identifier ReplacementList
- 	;
- 	
- 	DefineFunctionLikeMacro :
- 	    DEFINE Identifier LPAREN ParameterList RPAREN ReplacementList
- 	;
-
-	ReplacementList :
-	    Replacement ReplacementList
-	|   Replacement
-	;
-	
-    Replacement:
-        Identifier
-    |   StringLiteral
-    |   FileIncludeLiteral
-    |   Operator
-    |   Keyword
+    punctuator :
+        LRECTANGULAR
+    |	RRECTANGULAR
+    |	LPAREN
+    |	RPAREN
+    |	LCURLY
+    |	RCURLY
+    |	DOT
+    |	AMPERSAND
+    |	STAR
+    |	PLUS
+    |	MINUS
+    |	TILDE
+    |	EXCLAMATION_MARK
+    |	SLASH
+    |	PERCENT
+    |	LESS_THAN
+    |	GREATER_THAN
+    |	CARET
+    |	VERTICAL_BAR
+    |	QUESTION_MARK
+    |	COLON
+    |	SEMICOLON
+    |	EQUALS
+    |	COMMA
+    |	SHARP
+   ;
+    
+    /*
+     * 6.4.1 Keywords
+     */
+    keyword :
+        AUTO
+    |   BREAK
+    |   CASE
+    |   CHAR
+    |   CONST
+    |   CONTINUE
+    |   DEFAULT
+    |   DO
+    |   DOUBLE
+    |   ELSE
+    |   ENUM
+    |   EXTERN
+    |   FLOAT
+    |   FOR
+    |   GOTO
+    |   IF
+    |   INLINE
+    |   INT
+    |   LONG
+    |   REGISTER
+    |   RESTRICT
+    |   RETURN
+    |   SHORT
+    |   SIGNED
+    |   SIZEOF
+    |   STATIC
+    |   STRUCT
+    |   SWITCH
+    |   TYPEDEF
+    |   UNION
+    |   UNSIGNED
+    |   VOID
+    |   VOLATILE
+    |   WHILE
+    |   _ALIGNAS
+    |   _ALIGNOF
+    |   _ATOMIC
+    |   _BOOL
+    |   _COMPLEX
+    |   _GENERIC
+    |   _IMAGINARY
+    |   _NORETURN
+    |   _STATIC_ASSERT
+    |   _THREAD_LOCAL
     ;
-
-    Operator :
-    	EQUALS
-	|   LESS_THAN
-	|	GREATER_THAN
-	|	LPAREN
-	|	RPAREN
-	|	LCURLY
-	|	RCURLY
-	|	LRECTANGULAR
-	|	RRECTANGULAR
-	|	DOT
-	|	COMMA
-	|	COLON
-	|	SEMICOLON
-	|	DOLLAR
-	|	CARET
-	|	STAR
-	|	SLASH
-	|	PERCENT
-	|	PLUS
-	|	MINUS
-	|	AMPERSAND
-    |   AT
-    |   EXCLAMATION_MARK
-    |   QUESTION_MARK
-    |   TILDE
-    |   VERTICAL_BAR
-    |   SHARP
-    |	DOUBLE_SHARP
-    |   SINGLE_QUOTE
-    |   DOUBLE_QUOTE
+    
+    /*
+     * 6.4.4 Constants
+     */
+    constant:
+        integer-constant
+    |   floating-constant
+    |   enumeration-constant
+    |   character-constant
     ;
-
-    Keyword :
-		FILE
-	|	LINE
-	|	VA_ARGS
-    ;
-
-	ParameterList :
-	    Identifier COMMA ParameterList
-	|   Identifier COMMA OptionalParameters
-	|   OptionalParameters
-	|   Identifier
-	;
-
-	OptionalParameters :
-	    DOT DOT DOT
-	;
-
-    UndefineMacro :
-        SHARP UNDEF Identifier
-    ;
- 
- 	ConditionDirective :
-        IfDirective
- 	|   IfDefDirective
- 	|   IfNDefDirective
- 	|   ElseDirective
-	|   ElIfDirective
- 	|   EndIfDirective
- 	;
-
- 	IfDirective :
- 	    IF // TODO Condition
- 	;
- 	 
- 	IfDefDirective :
- 	    IFDEF // TODO Condition
- 	;
- 	 
- 	IfNDefDirective :
- 	    IFNDEF // TODO Condition
- 	;
- 	 
- 	ElseDirective :
-        ELSE
- 	;
- 	 
- 	ElIfDirective :
-        ELIF // TODO Condition
- 	;
- 	 
- 	EndIfDirective :
-        ENDIF
- 	;
- 	
- 	Pragma :
- 	    PRAGMA // TODO put in here the pragma content
- 	;
- 	
- 	ErrorMacro :
- 	    ERROR StringLiteral
- 	;
- 	
