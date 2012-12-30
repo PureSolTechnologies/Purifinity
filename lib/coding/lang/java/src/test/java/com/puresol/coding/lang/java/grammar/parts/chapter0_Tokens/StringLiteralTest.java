@@ -6,7 +6,6 @@ import org.junit.Test;
 
 import com.puresol.coding.lang.java.grammar.JavaGrammar;
 import com.puresol.uhura.lexer.Lexer;
-import com.puresol.uhura.lexer.LexerResult;
 import com.puresol.uhura.lexer.TokenStream;
 import com.puresol.uhura.source.BuiltinSource;
 
@@ -15,9 +14,8 @@ public class StringLiteralTest {
     @Test
     public void test() throws Exception {
 	Lexer lexer = JavaGrammar.getInstance().getLexer();
-	LexerResult lexerResult = lexer.lex(new BuiltinSource("\"String\"")
+	TokenStream tokenStream = lexer.lex(new BuiltinSource("\"String\"")
 		.load());
-	TokenStream tokenStream = lexerResult.getTokenStream();
 	assertEquals(1, tokenStream.size());
 	assertEquals("StringLiteral", tokenStream.get(0).getName());
     }
@@ -25,9 +23,8 @@ public class StringLiteralTest {
     @Test
     public void test2() throws Exception {
 	Lexer lexer = JavaGrammar.getInstance().getLexer();
-	LexerResult lexerResult = lexer.lex(new BuiltinSource(
+	TokenStream tokenStream = lexer.lex(new BuiltinSource(
 		"\"Test \\\"String\\\" Test\"").load());
-	TokenStream tokenStream = lexerResult.getTokenStream();
 	assertEquals(1, tokenStream.size());
 	assertEquals("StringLiteral", tokenStream.get(0).getName());
     }
@@ -35,9 +32,8 @@ public class StringLiteralTest {
     @Test
     public void test3() throws Exception {
 	Lexer lexer = JavaGrammar.getInstance().getLexer();
-	LexerResult lexerResult = lexer.lex(new BuiltinSource(
+	TokenStream tokenStream = lexer.lex(new BuiltinSource(
 		"\"Test \\\"String\\\" Test\" \"2. String\"").load());
-	TokenStream tokenStream = lexerResult.getTokenStream();
 	assertEquals(3, tokenStream.size());
 	assertEquals("StringLiteral", tokenStream.get(0).getName());
 	assertEquals("WhiteSpace", tokenStream.get(1).getName());

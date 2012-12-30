@@ -49,9 +49,9 @@ public class RegExpLexer implements Lexer {
      */
 
     @Override
-    public LexerResult lex(SourceCode sourceCode) throws LexerException {
+    public TokenStream lex(SourceCode sourceCode) throws LexerException {
 	this.sourceCode = sourceCode;
-	return new LexerResult(scan());
+	return scan();
     }
 
     private TokenStream scan() throws LexerException {

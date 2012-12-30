@@ -31,7 +31,7 @@ import com.puresol.coding.analysis.api.ProgrammingLanguage;
 import com.puresol.coding.lang.test.grammar.TestLanguageGrammar;
 import com.puresol.uhura.lexer.Lexer;
 import com.puresol.uhura.lexer.LexerException;
-import com.puresol.uhura.lexer.LexerResult;
+import com.puresol.uhura.lexer.TokenStream;
 import com.puresol.uhura.parser.Parser;
 import com.puresol.uhura.parser.ParserException;
 import com.puresol.uhura.parser.ParserTree;
@@ -73,10 +73,10 @@ public class TestLanguageAnalyser implements FileAnalyzer {
 	    HashId hashId = FileUtilities.createHashId(new File(
 		    sourceDirectory, file.getPath()), HashAlgorithm.SHA256);
 	    Lexer lexer = grammar.getLexer();
-	    LexerResult lexerResult = lexer.lex(new FileSource(new File(
+	    TokenStream tokenStream = lexer.lex(new FileSource(new File(
 		    sourceDirectory, file.getPath())).load());
 	    Parser parser = grammar.getParser();
-	    ParserTree parserTree = parser.parse(lexerResult);
+	    ParserTree parserTree = parser.parse(tokenStream);
 	    watch.stop();
 	    long timeEffort = Math.round(watch.getSeconds() * 1000.0);
 	    TestLanguage language = TestLanguage.getInstance();

@@ -18,7 +18,6 @@ import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.GrammarFile;
 import com.puresol.uhura.grammar.token.Visibility;
 import com.puresol.uhura.lexer.LexerException;
-import com.puresol.uhura.lexer.LexerResult;
 import com.puresol.uhura.lexer.Token;
 import com.puresol.uhura.lexer.TokenMetaData;
 import com.puresol.uhura.lexer.TokenStream;
@@ -232,7 +231,7 @@ public class CPreprocessor implements Preprocessor {
 	    throws PreprocessorException {
 	try {
 	    Parser parser = grammar.createParser();
-	    return parser.parse(new LexerResult(tokenStream));
+	    return parser.parse(tokenStream);
 	} catch (GrammarException e) {
 	    throw new PreprocessorException(
 		    "Cannot create parser for C preprocessor!", e);

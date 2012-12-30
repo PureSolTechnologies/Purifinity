@@ -41,7 +41,7 @@ import com.puresol.trees.TreeWalker;
 import com.puresol.trees.WalkingAction;
 import com.puresol.uhura.lexer.Lexer;
 import com.puresol.uhura.lexer.LexerException;
-import com.puresol.uhura.lexer.LexerResult;
+import com.puresol.uhura.lexer.TokenStream;
 import com.puresol.uhura.parser.Parser;
 import com.puresol.uhura.parser.ParserException;
 import com.puresol.uhura.parser.ParserTree;
@@ -83,10 +83,10 @@ public class JavaAnalyzer implements FileAnalyzer {
 		    sourceDirectory, file.getPath()), HashAlgorithm.SHA256);
 	    watch.start();
 	    Lexer lexer = grammar.getLexer();
-	    LexerResult lexerResult = lexer.lex(new FileSource(new File(
+	    TokenStream tokenStream = lexer.lex(new FileSource(new File(
 		    sourceDirectory, file.getPath())).load());
 	    Parser parser = grammar.getParser();
-	    ParserTree parserTree = parser.parse(lexerResult);
+	    ParserTree parserTree = parser.parse(tokenStream);
 	    watch.stop();
 	    long timeEffort = Math.round(watch.getSeconds() * 1000.0);
 	    Java java = Java.getInstance();

@@ -9,7 +9,6 @@ import java.util.regex.Pattern;
 import com.puresol.uhura.grammar.token.Visibility;
 import com.puresol.uhura.lexer.Lexer;
 import com.puresol.uhura.lexer.LexerException;
-import com.puresol.uhura.lexer.LexerResult;
 import com.puresol.uhura.lexer.Token;
 import com.puresol.uhura.lexer.TokenMetaData;
 import com.puresol.uhura.lexer.TokenStream;
@@ -189,21 +188,21 @@ public class FortranPreConditioner {
 	reset();
 	for (SourceCodeLine sourceLine : sourceCode.getSource()) {
 	    String line = sourceLine.getLine();
-	    LexerResult lexerSubResult = null;
+	    TokenStream subTokenStream = null;
 	    if (FIXED_FORM_EMPTY_PATTERN.matcher(line).find()
 		    && (!FREE_FORM_CONTINUATION_PATTERN.matcher(line).find())) {
-		lexerSubResult = processEmptyPattern(lexer, sourceLine);
+		subTokenStream = processEmptyPattern(lexer, sourceLine);
 	    } else if (FIXED_FORM_COMMENT_PATTERN.matcher(line).find()) {
-		lexerSubResult = new LexerResult(new TokenStream());
+		subTokenStream = new TokenStream();
 		processCommentPattern(sourceLine);
 	    } else if (FIXED_FORM_LABEL_PATTERN.matcher(line).find()) {
-		lexerSubResult = processLabelPattern(lexer, sourceLine);
+		subTokenStream = processLabelPattern(lexer, sourceLine);
 	    } else if (FIXED_FORM_CONTINUATION_PATTERN.matcher(line).find()) {
-		lexerSubResult = processContinuationPattern(lexer, sourceLine);
+		subTokenStream = processContinuationPattern(lexer, sourceLine);
 	    } else {
-		lexerSubResult = processFreeForm(lexer, sourceLine);
+		subTokenStream = processFreeForm(lexer, sourceLine);
 	    }
-	    processSubTokenStream(lexerSubResult);
+	    processSubTokenStream(subTokenStream);
 	}
 	return tokenStream;
     }
@@ -220,7 +219,7 @@ public class FortranPreConditioner {
 	currentBrokenCharacterMode = BROKEN_CHARACTER_LITERAL_NONE;
     }
 
-    private LexerResult processEmptyPattern(Lexer lexer,
+    private TokenStream processEmptyPattern(Lexer lexer,
 	    SourceCodeLine sourceLine) throws LexerException, IOException {
 	if (currentBrokenCharacterMode != BROKEN_CHARACTER_LITERAL_NONE) {
 	    throw new LexerException(
@@ -247,7 +246,7 @@ public class FortranPreConditioner {
 	lineId++;
     }
 
-    private LexerResult processLabelPattern(Lexer lexer,
+    private TokenStream processLabelPattern(Lexer lexer,
 	    SourceCodeLine sourceLine) throws LexerException, IOException {
 	if (currentBrokenCharacterMode != BROKEN_CHARACTER_LITERAL_NONE) {
 	    throw new LexerException(
@@ -264,7 +263,7 @@ public class FortranPreConditioner {
 	return processBrokenCharacterLiteral(lexer, line.substring(6));
     }
 
-    private LexerResult processContinuationPattern(Lexer lexer,
+    private TokenStream processContinuationPattern(Lexer lexer,
 	    SourceCodeLine sourceLine) throws LexerException, IOException {
 	ignoreLastLineTerminator(tokenStream);
 	String line = sourceLine.getLine();
@@ -278,7 +277,7 @@ public class FortranPreConditioner {
 	return processBrokenCharacterLiteral(lexer, line.substring(6));
     }
 
-    private LexerResult processFreeForm(Lexer lexer, SourceCodeLine sourceLine)
+    private TokenStream processFreeForm(Lexer lexer, SourceCodeLine sourceLine)
 	    throws LexerException, IOException {
 	String line = sourceLine.getLine();
 	Matcher matcher = FREE_FORM_CONTINUATION_PATTERN.matcher(line);
@@ -316,7 +315,7 @@ public class FortranPreConditioner {
 	return processBrokenCharacterLiteral(lexer, line);
     }
 
-    private LexerResult processBrokenCharacterLiteral(Lexer lexer, String line)
+    private TokenStream processBrokenCharacterLiteral(Lexer lexer, String line)
 	    throws LexerException, IOException {
 	if (currentBrokenCharacterMode == BROKEN_CHARACTER_LITERAL_NONE) {
 	    return lexer.lex(new BuiltinSource(line).load());
@@ -333,7 +332,7 @@ public class FortranPreConditioner {
 	if (!matcher.find()) {
 	    tokenStream.add(new Token("CHAR_LITERAL_CONSTANT", line,
 		    Visibility.VISIBLE, getCurrentMetaData(1)));
-	    return new LexerResult(new TokenStream());
+	    return new TokenStream();
 	}
 	tokenStream.add(new Token("CHAR_LITERAL_CONSTANT", matcher.group(),
 		Visibility.VISIBLE, getCurrentMetaData(1)));
@@ -344,9 +343,9 @@ public class FortranPreConditioner {
 		.length())).load());
     }
 
-    private void processSubTokenStream(LexerResult lexerSubResult)
+    private void processSubTokenStream(TokenStream tokenStream)
 	    throws IOException {
-	for (Token token : lexerSubResult.getTokenStream()) {
+	for (Token token : tokenStream) {
 	    if ("CHAR_LITERAL_CONSTANT_SINGLE_QUOTE_START".equals(token
 		    .getName())) {
 		currentBrokenCharacterMode = BROKEN_CHARACTER_LITERAL_SINGLE_QUOTE;

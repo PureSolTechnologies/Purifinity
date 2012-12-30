@@ -15,7 +15,6 @@ import com.puresol.uhura.grammar.production.NonTerminal;
 import com.puresol.uhura.grammar.production.Production;
 import com.puresol.uhura.grammar.production.Terminal;
 import com.puresol.uhura.grammar.token.Visibility;
-import com.puresol.uhura.lexer.LexerResult;
 import com.puresol.uhura.lexer.Token;
 import com.puresol.uhura.lexer.TokenStream;
 import com.puresol.uhura.parser.AbstractParser;
@@ -159,10 +158,10 @@ public abstract class AbstractLRParser extends AbstractParser {
      * {@inheritDoc}
      */
     @Override
-    public final ParserTree parse(LexerResult lexerResult)
+    public final ParserTree parse(TokenStream tokenStream)
 	    throws ParserException {
 	startTime = System.currentTimeMillis();
-	setTokenStream(lexerResult.getTokenStream());
+	setTokenStream(tokenStream);
 	reset();
 	return parse();
     }

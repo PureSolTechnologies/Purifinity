@@ -4,7 +4,7 @@ import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.lexer.Lexer;
 import com.puresol.uhura.lexer.LexerException;
-import com.puresol.uhura.lexer.LexerResult;
+import com.puresol.uhura.lexer.TokenStream;
 import com.puresol.uhura.parser.Parser;
 import com.puresol.uhura.parser.ParserException;
 import com.puresol.uhura.parser.ParserTree;
@@ -43,8 +43,8 @@ public class Analyzer {
 	} else {
 	    preProcessedSourceCode = sourceCode;
 	}
-	LexerResult lexerResult = lexer.lex(preProcessedSourceCode);
-	return parser.parse(lexerResult);
+	TokenStream tokenStream = lexer.lex(preProcessedSourceCode);
+	return parser.parse(tokenStream);
     }
 
 }

@@ -12,8 +12,8 @@ import com.puresol.uhura.lexer.Lexer;
 import com.puresol.uhura.lexer.LexerException;
 import com.puresol.uhura.lexer.LexerFactory;
 import com.puresol.uhura.lexer.LexerFactoryException;
-import com.puresol.uhura.lexer.LexerResult;
 import com.puresol.uhura.lexer.RegExpLexer;
+import com.puresol.uhura.lexer.TokenStream;
 import com.puresol.uhura.parser.Parser;
 import com.puresol.uhura.parser.ParserException;
 import com.puresol.uhura.parser.ParserFactory;
@@ -46,11 +46,11 @@ public class GrammarPartTester {
 	    }
 	    grammar = grammar.createWithNewStartProduction(production);
 	    Lexer lexer = LexerFactory.create(grammar);
-	    LexerResult lexerResult = lexer.lex(SourceCode
+	    TokenStream tokenStream = lexer.lex(SourceCode
 		    .fromStringArray(lines));
 
 	    Parser parser = ParserFactory.create(grammar);
-	    ParserTree ast = parser.parse(lexerResult);
+	    ParserTree ast = parser.parse(tokenStream);
 	    if (logger.isTraceEnabled()) {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		new TreePrinter(new PrintStream(out)).println(ast);
@@ -87,7 +87,7 @@ public class GrammarPartTester {
 	    StopWatch watch = new StopWatch();
 	    Lexer lexer = new RegExpLexer(grammar);
 	    watch.start();
-	    LexerResult lexerResult = lexer.lex(SourceCode
+	    TokenStream tokenStream = lexer.lex(SourceCode
 		    .fromStringArray(lines));
 	    watch.stop();
 	    logger.debug("Lexer time: " + watch);
@@ -95,7 +95,7 @@ public class GrammarPartTester {
 	    Parser parser = ParserManager.getManagerParser(parserDirectory,
 		    parserName, grammar);
 	    watch.start();
-	    ParserTree ast = parser.parse(lexerResult);
+	    ParserTree ast = parser.parse(tokenStream);
 	    watch.stop();
 	    logger.debug("Parser time: " + watch);
 	    if (logger.isTraceEnabled()) {

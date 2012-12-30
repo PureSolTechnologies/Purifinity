@@ -9,7 +9,7 @@ import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.lexer.Lexer;
 import com.puresol.uhura.lexer.LexerException;
-import com.puresol.uhura.lexer.LexerResult;
+import com.puresol.uhura.lexer.TokenStream;
 import com.puresol.uhura.parser.Parser;
 import com.puresol.uhura.parser.ParserException;
 import com.puresol.uhura.source.BuiltinSource;
@@ -42,8 +42,8 @@ public class FortranGrammarPartTester {
 	if (parsers.get(production) == null) {
 	    initializeParser(production);
 	}
-	LexerResult lexerResult = lexer.lex(source.load());
-	parsers.get(production).parse(lexerResult);
+	TokenStream tokenStream = lexer.lex(source.load());
+	parsers.get(production).parse(tokenStream);
 	return true;
     }
 

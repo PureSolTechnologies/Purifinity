@@ -12,7 +12,6 @@ import com.puresol.coding.lang.fortran.grammar.FortranGrammar;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.lexer.Lexer;
 import com.puresol.uhura.lexer.LexerException;
-import com.puresol.uhura.lexer.LexerResult;
 import com.puresol.uhura.lexer.RegExpLexer;
 import com.puresol.uhura.lexer.TokenStream;
 import com.puresol.uhura.source.BuiltinSource;
@@ -25,15 +24,14 @@ public class FortranLexerTest {
 	    Grammar grammar = FortranGrammar.getInstance();
 	    assertNotNull(grammar);
 	    Lexer lexer = new RegExpLexer(grammar);
-	    LexerResult result = lexer.lex(new BuiltinSource("2.0 - 3.0")
+	    TokenStream tokenStream = lexer.lex(new BuiltinSource("2.0 - 3.0")
 		    .load());
-	    TokenStream stream = result.getTokenStream();
-	    assertEquals(5, stream.size());
-	    assertEquals("REAL_LITERAL_CONSTANT", stream.get(0).getName());
-	    assertEquals("WHITESPACE", stream.get(1).getName());
-	    assertEquals("MINUS", stream.get(2).getName());
-	    assertEquals("WHITESPACE", stream.get(3).getName());
-	    assertEquals("REAL_LITERAL_CONSTANT", stream.get(4).getName());
+	    assertEquals(5, tokenStream.size());
+	    assertEquals("REAL_LITERAL_CONSTANT", tokenStream.get(0).getName());
+	    assertEquals("WHITESPACE", tokenStream.get(1).getName());
+	    assertEquals("MINUS", tokenStream.get(2).getName());
+	    assertEquals("WHITESPACE", tokenStream.get(3).getName());
+	    assertEquals("REAL_LITERAL_CONSTANT", tokenStream.get(4).getName());
 	} catch (IOException e) {
 	    e.printStackTrace();
 	    fail("No exception was expected!");
@@ -49,12 +47,11 @@ public class FortranLexerTest {
 	    Grammar grammar = FortranGrammar.getInstance();
 	    assertNotNull(grammar);
 	    Lexer lexer = new RegExpLexer(grammar);
-	    LexerResult result = lexer.lex(new BuiltinSource("3.OR.4").load());
-	    TokenStream stream = result.getTokenStream();
-	    assertEquals(3, stream.size());
-	    assertEquals("INT_LITERAL_CONSTANT", stream.get(0).getName());
-	    assertEquals("OR", stream.get(1).getName());
-	    assertEquals("INT_LITERAL_CONSTANT", stream.get(2).getName());
+	    TokenStream tokenStream = lexer.lex(new BuiltinSource("3.OR.4").load());
+	    assertEquals(3, tokenStream.size());
+	    assertEquals("INT_LITERAL_CONSTANT", tokenStream.get(0).getName());
+	    assertEquals("OR", tokenStream.get(1).getName());
+	    assertEquals("INT_LITERAL_CONSTANT", tokenStream.get(2).getName());
 	} catch (IOException e) {
 	    e.printStackTrace();
 	    fail("No exception was expected!");
