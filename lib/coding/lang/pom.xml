@@ -16,7 +16,7 @@
 		<module>common</module>
 		<module>java</module>
 		<module>c11</module>
-		<module>cpp11</module>
+		<module>cpp</module>
 		<module>fortran</module>
 	</modules>
 
