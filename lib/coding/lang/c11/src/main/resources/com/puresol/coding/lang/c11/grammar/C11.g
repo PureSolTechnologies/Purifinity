@@ -29,6 +29,32 @@ OPTIONS
  ****************************************************************************/ 
 HELPER
 
+	/*
+	 * 6.4.9 Comments
+	 */
+		
+	TraditionalComment:
+		"/\\*" CommentTail
+	;
+		
+	EndOfLineComment:
+		"//" CharactersInLine LineTerminator  
+	;
+		
+	CommentTail:
+		"(" NotStar "|\\*(?!/))*\\*/"
+	;
+		
+	NotStar:
+		"[^*]"
+	;
+		
+	CharactersInLine:
+		InputCharacter "*"
+	;
+	
+	InputCharacter: "[^\\n\\r]" ;
+
     /*
      * 6.4.2 Identifiers
      */
@@ -168,13 +194,28 @@ HELPER
     encoding-prefix: "(u8|[uUL])";
 
     s-char-sequence:
-        s-char+
+        s-char*
     ;
     
     s-char:
-        "[^\\\\\"\\\\\\\\n]"
+        "[^\"\\\\\\n]"
     |   escape-sequence
     ;
+
+    /*
+     * 6.4.7 Header names
+     */
+    h-char-sequence:
+        h-char+
+    ;
+    
+    h-char: "[^\\n>]";
+    
+    q-char-sequence:
+        q-char+
+    ;
+    
+    q-char: "[^\\n\"]";
 
  /****************************************************************************
  * T O K E N S
@@ -183,6 +224,17 @@ HELPER
  
  	WhiteSpace:
 		"( |\\t|\\f)" [ignore]
+	;
+ 
+    LineTerminator:
+        "(\\n|\\r\\n|\\r)"
+    ;
+ 
+    /*
+ 	 * 6.4.9 Comments
+ 	 */
+ 	Comment:
+		"(" TraditionalComment "|" EndOfLineComment ")" [ignore]
 	;
  
  	/*
@@ -300,7 +352,22 @@ HELPER
      * 6.4.5 String literals
      */
     string-literal:
-        encoding-prefix? "\\\"" s-char-sequence? "\\\""
+        encoding-prefix? "\"" s-char-sequence "\""
+    ;
+
+    /*
+     * 6.4.7 Header names
+     */
+    header-name:
+        "<" h-char-sequence ">"
+    |   "\"" q-char-sequence "\""
+    ;
+
+    /*
+     * 6.4.8 Preprocessing numbers
+     */
+    pp-number:
+        "(" digit "|\\." digit ")" "(" digit "|" identifier-nondigit "|[eEpP]" sign "|\\.)*"
     ;
 
     /*
@@ -319,9 +386,9 @@ HELPER
  		// TODO 
  	;
 
-    /*
+    /**********************
      * 6.4 Lexical elements
-     */
+     **********************/
     
     token :
         keyword
@@ -417,4 +484,388 @@ HELPER
     |   floating-constant
     |   enumeration-constant
     |   character-constant
+    ;
+
+    /*****************
+     * 6.5 Expressions
+     *****************/
+     
+    primary-expression:
+        identifier
+    |   constant
+    |   string-literal
+    |   LPAREN expression RPAREN
+    |   generic-selection
+    ;
+
+    generic-selection:
+        _GENERIC LPAREN assignment-expression COMMA generic-assoc-list RPAREN
+    ;
+    
+    generic-assoc-list:
+        generic-association
+    |   generic-assoc-list COMMA generic-association
+    ;
+    
+    generic-association:
+        type-name COLON assignment-expression
+    |   DEFAULT COLON assignment-expression
+    ;
+    
+    postfix-expression:
+        primary-expression
+    |   postfix-expression LRECTANGULAR expression RRECTANGULAR
+    |   postfix-expression LPAREN argument-expression-list? RPAREN
+    |   postfix-expression COMMA identifier
+    |   postfix-expression MINUS GREATER_THAN identifier
+    |   postfix-expression PLUS PLUS
+    |   postfix-expression MINUS MINUS
+    |   LPAREN type-name RPAREN LCURLY initializer-list RCURLY
+    |   LPAREN type-name RPAREN LCURLY initializer-list COMMA RCURLY
+    ;
+    
+    argument-expression-list:
+        assignment-expression
+    |   argument-expression-list COMMA assignment-expression
+    ;
+    
+    unary-expression:
+        postfix-expression
+    |   PLUS PLUS unary-expression
+    |   MINUS MINUS unary-expression
+    |   unary-operator cast-expression
+    |   SIZEOF unary-expression
+    |   LPAREN type-name RPAREN
+    |   _ALIGNOF LPAREN type-name RPAREN
+    ;
+        
+    unary-operator: 
+        AMPERSAND
+    |   STAR
+    |   PLUS
+    |   MINUS
+    |   TILDE
+    |   EXCLAMATION_MARK
+    ;
+    
+    cast-expression:
+        unary-expression
+    |   LPAREN type-name RPAREN cast-expression
+    ;
+    
+    multiplicative-expression:
+        cast-expression
+    |   multiplicative-expression STAR cast-expression
+    |   multiplicative-expression SLASH cast-expression
+    |   multiplicative-expression PERCENT cast-expression
+    ;
+    
+    additive-expression:
+        multiplicative-expression
+    |   additive-expression PLUS multiplicative-expression
+    |   additive-expression MINUS multiplicative-expression
+    ;
+    
+    shift-expression:
+        additive-expression
+    |   shift-expression LESS_THAN LESS_THAN additive-expression
+    |   shift-expression GREATER_THAN GREATER_THAN additive-expression
+    ;
+    
+    relational-expression:
+        shift-expression
+    |   relational-expression LESS_THAN shift-expression
+    |   relational-expression GREATER_THAN shift-expression
+    |   relational-expression LESS_THAN EQUALS shift-expression
+    |   relational-expression GREATER_THAN EQUALS shift-expression
+    ;
+    
+    equality-expression:
+        relational-expression
+    |   equality-expression EQUALS EQUALS relational-expression
+    |   equality-expression EXCLAMATION_MARK EQUALS relational-expression
+    ;
+    
+    AND-expression:
+        equality-expression
+    |   AND-expression AMPERSAND equality-expression
+    ;
+    
+    exclusive-OR-expression:
+        AND-expression
+    |   exclusive-OR-expression CARET AND-expression
+    ;
+    
+    inclusive-OR-expression:
+        exclusive-OR-expression
+    |   inclusive-OR-expression VERTICAL_BAR exclusive-OR-expression
+    ;
+    
+    logical-AND-expression:
+        inclusive-OR-expression
+    |   logical-AND-expression AMPERSAND AMPERSAND inclusive-OR-expression
+    ;
+
+    logical-OR-expression:
+        logical-AND-expression
+    |   logical-OR-expression VERTICAL_BAR VERTICAL_BAR logical-AND-expression
+    ;
+    
+    conditional-expression:
+        logical-OR-expression
+    |   logical-OR-expression QUESTION_MARK expression COLON conditional-expression
+    ;
+    
+    assignment-expression:
+        conditional-expression
+    |   unary-expression assignment-operator assignment-expression
+    ;
+    
+    assignment-operator: 
+        EQUALS
+    |   STAR EQUALS
+	|   SLASH EQUALS
+	|   PERCENT EQUALS
+	|   PLUS EQUALS
+    |   MINUS EQUALS
+    |   LESS_THAN LESS_THAN EQUALS
+    |   GREATER_THAN GREATER_THAN EQUALS
+    |   AMPERSAND EQUALS
+    |   CARET EQUALS
+    |   VERTICAL_BAR EQUALS
+    ;
+    
+    expression:
+        assignment-expression
+    |   expression COMMA assignment-expression
+    ;
+    
+    /**************************
+     * 6.6 Constant expressions
+     **************************/
+    
+    constant-expression:
+        conditional-expression
+    ;
+    
+    /******************
+     * 6.7 Declarations
+     ******************/
+     
+     declaration:
+          declaration-specifiers init-declarator-list? SEMICOLON
+     |    static_assert-declaration
+     ;
+     
+     declaration-specifiers:
+          storage-class-specifier declaration-specifiers?
+     |    type-specifier declaration-specifiers?
+     |    type-qualifier declaration-specifiers?
+     |    function-specifier declaration-specifiers?
+     |    alignment-specifier declaration-specifiers?
+     ;
+     
+     init-declarator-list:
+          init-declarator
+     |    init-declarator-list COMMA init-declarator
+     ;
+     
+     init-declarator:
+          declarator
+     |    declarator EQUALS initializer
+     ;
+     
+     storage-class-specifier:
+          TYPEDEF
+     |    EXTERN
+     |    STATIC
+     |    _THREAD_LOCAL
+     |    AUTO
+     |    REGISTER
+     ;
+    
+    type-specifier:
+        VOID
+    |   CHAR
+    |   SHORT
+    |   INT
+    |   LONG
+    |   FLOAT
+    |   DOUBLE
+    |   SIGNED
+    |   UNSIGNED
+    |   _BOOL
+    |   _COMPLEX
+    |   atomic-type-specifier
+    |   struct-or-union-specifier
+    |   enum-specifier
+    |   typedef-name
+    ;
+    
+    struct-or-union-specifier:
+        struct-or-union identifier? LCURLY struct-declaration-list RCURLY
+    |   struct-or-union identifier
+    ;
+
+    struct-or-union:
+        STRUCT
+    |   UNION
+    ;
+    
+    struct-declaration-list:
+        struct-declaration
+    |   struct-declaration-list struct-declaration
+    ;
+    
+    struct-declaration:
+        specifier-qualifier-list struct-declarator-list? SEMICOLON
+    |   static_assert-declaration
+    ;
+    
+    specifier-qualifier-list:
+        type-specifier specifier-qualifier-list?
+    |   type-qualifier specifier-qualifier-list?
+    ;
+    
+    struct-declarator-list:
+        struct-declarator
+    |   struct-declarator-list COMMA struct-declarator
+    ;
+    
+    struct-declarator:
+        declarator
+        declarator? COLON constant-expression
+    ;
+    
+    enum-specifier:
+        ENUM identifier? LCURLY enumerator-list RCURLY
+    |   ENUM identifier? LCURLY enumerator-list COMMA RCURLY
+    |   ENUM identifier
+    ;
+    
+    enumerator-list:
+        enumerator
+    |   enumerator-list COMMA enumerator
+    ;
+    
+    enumerator:
+        enumeration-constant
+    |   enumeration-constant EQUALS constant-expression
+    ;
+    
+    atomic-type-specifier:
+        _ATOMIC LPAREN type-name RPAREN
+    ;
+    
+    type-qualifier:
+        CONST
+    |   RESTRICT
+    |   VOLATILE
+    |   _ATOMIC
+    ;
+    
+    function-specifier:
+        INLINE
+    |   _NORETURN
+    ;
+    
+    alignment-specifier:
+        _ALIGNAS LPAREN type-name RPAREN
+    |   _ALIGNAS LPAREN constant-expression RPAREN
+    ;
+    
+    declarator:
+        pointer? direct-declarator
+    ;
+    
+    direct-declarator:
+        identifier
+    |   LPAREN declarator RPAREN
+    |   direct-declarator LRECTANGULAR type-qualifier-list? assignment-expression? RRECTANGULAR
+    |   direct-declarator LRECTANGULAR STATIC type-qualifier-list? assignment-expression RRECTANGULAR
+    |   direct-declarator LRECTANGULAR type-qualifier-list STATIC assignment-expression RRECTANGULAR
+    |   direct-declarator LRECTANGULAR type-qualifier-list? STAR RRECTANGULAR
+    |   direct-declarator LPAREN parameter-type-list RPAREN
+    |   direct-declarator LPAREN identifier-list? RPAREN
+    ;
+    
+    pointer:
+        STAR type-qualifier-list?
+    |   STAR type-qualifier-list? pointer
+    ;
+    
+    type-qualifier-list:
+        type-qualifier
+    |   type-qualifier-list type-qualifier
+    ;
+    
+    parameter-type-list:
+        parameter-list
+    |   parameter-list COMMA DOT DOT DOT
+    ;
+    
+    parameter-list:
+        parameter-declaration
+    |   parameter-list COMMA parameter-declaration
+    ;
+       
+    parameter-declaration:
+        declaration-specifiers declarator
+    |   declaration-specifiers abstract-declarator?
+    ;
+    
+    identifier-list:
+        identifier
+    |   identifier-list COMMA identifier
+    ;
+    
+    type-name:
+        specifier-qualifier-list abstract-declarator?
+    ;
+    
+    abstract-declarator:
+        pointer
+    |   pointer? direct-abstract-declarator
+    ;
+    
+    direct-abstract-declarator:
+        LPAREN abstract-declarator RPAREN
+    |   direct-abstract-declarator? LRECTANGULAR type-qualifier-list? assignment-expression? RRECTANGULAR
+    |   direct-abstract-declarator? LRECTANGULAR STATIC type-qualifier-list? assignment-expression RRECTANGULAR
+    |   direct-abstract-declarator? LRECTANGULAR type-qualifier-list STATIC assignment-expression RRECTANGULAR
+    |   direct-abstract-declarator? LRECTANGULAR STAR RRECTANGULAR
+    |   direct-abstract-declarator? LPAREN parameter-type-list? RPAREN
+    ;
+    
+    typedef-name:
+        identifier
+    ;
+    
+    initializer:
+        assignment-expression
+    |   LCURLY initializer-list RCURLY
+    |   LCURLY initializer-list COMMA RCURLY
+    ;
+    
+    initializer-list:
+        designation? initializer
+    |   initializer-list COMMA designation? initializer
+    ;
+    
+    designation:
+        designator-list EQUALS
+    ;
+    
+    designator-list:
+        designator
+    |   designator-list designator
+    ;
+    
+    designator:
+        LRECTANGULAR constant-expression RRECTANGULAR
+    |   DOT identifier
+    ;
+    
+    static_assert-declaration:
+        _STATIC_ASSERT LPAREN constant-expression COMMA string-literal RPAREN SEMICOLON
     ;
