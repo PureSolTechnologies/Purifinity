@@ -1,0 +1,18 @@
+Manifest-Version: 1.0
+Built-By: ludwig
+Tool: Bnd-0.0.357
+Bundle-Name: com.puresol.coding.lang.cpp11
+Created-By: Apache Maven Bundle Plugin
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-Vendor: PureSol Technologies
+Build-Jdk: 1.6.0_22
+Bundle-Version: 0.1.0.quantifier
+Bnd-LastModified: 1331319581687
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: com.puresol.coding.lang.cpp11
+Originally-Created-By: Apache Maven Bundle Plugin
+Import-Package: com.puresol.uhura.parser.items;version="0.1.0",
+ com.puresol.uhura.parser.packrat;version="0.1.0",
+ com.puresol.utils;version="0.1.0",
+ org.osgi.framework;version="0.0.0",
+ org.slf4j;version="1.6.1"

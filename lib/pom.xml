@@ -16,13 +16,7 @@
 		<module>trees</module>
 		<module>utils</module>
 		<module>uhura</module>
-		<module>coding.analysis.api</module>
-		<module>coding.analysis.impl</module>
-		<module>coding.analysis.test</module>
-		<module>coding.metrics</module>
-		<module>coding.lang.cpp</module>
-		<module>coding.lang.java</module>
-		<module>coding.lang.fortran</module>
+		<module>coding</module>
 	</modules>
 
 	<repositories>

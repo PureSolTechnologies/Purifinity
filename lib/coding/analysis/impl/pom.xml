@@ -4,15 +4,19 @@
 
 	<parent>
 		<groupId>com.puresol</groupId>
-		<artifactId>lib</artifactId>
+		<artifactId>coding.analysis</artifactId>
 		<version>0.1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>utils</artifactId>
+	<artifactId>coding.analysis.impl</artifactId>
 	<name>${project.groupId}.${project.artifactId}</name>
 	<packaging>bundle</packaging>
 
 	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.osgi</groupId>
 			<artifactId>org.osgi.core</artifactId>
@@ -21,27 +25,42 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.jfree</groupId>
-			<artifactId>jcommon</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.jfree</groupId>
-			<artifactId>jfreechart</artifactId>
-			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.puresol</groupId>
 			<artifactId>trees</artifactId>
 			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.puresol</groupId>
+			<artifactId>utils</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.puresol</groupId>
+			<artifactId>uhura.lib</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.puresol</groupId>
+			<artifactId>coding.analysis.api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jibx.config.3rdparty.org.eclipse</groupId>
+			<artifactId>org.eclipse.core.jobs</artifactId>
+			<version>3.5.100.v20110404</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jibx.config.3rdparty.org.eclipse</groupId>
+			<artifactId>org.eclipse.core.runtime</artifactId>
+			<version>3.7.0.v20110110</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jibx.config.3rdparty.org.eclipse</groupId>
+			<artifactId>org.eclipse.equinox.common</artifactId>
+			<version>3.6.0.v20110523</version>
 		</dependency>
 	</dependencies>
 

@@ -4,11 +4,11 @@
 
 	<parent>
 		<groupId>com.puresol</groupId>
-		<artifactId>lib</artifactId>
+		<artifactId>coding.lang</artifactId>
 		<version>0.1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>uhura.api</artifactId>
+	<artifactId>coding.lang.c11</artifactId>
 	<name>${project.groupId}.${project.artifactId}</name>
 	<packaging>bundle</packaging>
 
@@ -17,6 +17,31 @@
 			<groupId>com.puresol</groupId>
 			<artifactId>trees</artifactId>
 			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.puresol</groupId>
+			<artifactId>uhura.lib</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.osgi</groupId>
+			<artifactId>org.osgi.core</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
@@ -28,4 +53,5 @@
 			</plugin>
 		</plugins>
 	</build>
+
 </project>

@@ -4,38 +4,42 @@
 
 	<parent>
 		<groupId>com.puresol</groupId>
-		<artifactId>lib</artifactId>
+		<artifactId>coding.analysis</artifactId>
 		<version>0.1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>uhura.test</artifactId>
+	<artifactId>coding.analysis.test</artifactId>
 	<name>${project.groupId}.${project.artifactId}</name>
 
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<scope>provided</scope>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.puresol</groupId>
-			<artifactId>trees</artifactId>
-			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.puresol</groupId>
 			<artifactId>uhura.lib</artifactId>
-			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.puresol</groupId>
+			<artifactId>trees</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresol</groupId>
 			<artifactId>utils</artifactId>
-			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.puresol</groupId>
+			<artifactId>coding.analysis.api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresol</groupId>
+			<artifactId>coding.analysis.impl</artifactId>
 		</dependency>
 	</dependencies>
 
