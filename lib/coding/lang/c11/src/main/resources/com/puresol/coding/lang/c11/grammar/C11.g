@@ -314,6 +314,19 @@ HELPER
     _STATIC_ASSERT : "_Static_assert(?!\\w)" ;
     _THREAD_LOCAL  : "_Thread_local(?!\\w)" ;
 
+    PP_IF : "#\\s*if(?!\\w)";
+    PP_IFDEF : "#\\s*ifdef(?!\\w)";
+    PP_IFNDEF : "#\\s*ifndef(?!\\w)";
+    PP_ELIF : "#\\s*elif(?!\\w)";
+    PP_ELSE : "#\\s*else(?!\\w)";
+    PP_ENDIF : "#\\s*endif(?!\\w)";
+    PP_INCLUDE : "#\\s*include(?!\\w)";
+    PP_DEFINE : "#\\s*define(?!\\w)";
+    PP_UNDEF : "#\\s*undef(?!\\w)";
+    PP_LINE : "#\\s*line(?!\\w)";
+    PP_ERROR : "#\\s*error(?!\\w)";
+    PP_PRAGMA : "#\\s*pragma(?!\\w)";
+    
     /*
      * 6.4.4.1 Integer constants
      */
@@ -390,13 +403,23 @@ HELPER
      * 6.4 Lexical elements
      **********************/
     
-    token :
+    token:
         keyword
 	|	identifier
 	|	constant
 	|	string-literal
 	|	punctuator
 	;
+
+	preprocessing-token:
+		header-name
+	|	identifier
+	|	pp-number
+	|	character-constant
+	|	string-literal
+	|	punctuator
+	|	"."
+    ;
 
     punctuator :
         LRECTANGULAR
@@ -869,3 +892,165 @@ HELPER
     static_assert-declaration:
         _STATIC_ASSERT LPAREN constant-expression COMMA string-literal RPAREN SEMICOLON
     ;
+    
+    /***************************
+     * 6.8 Statements and blocks
+     ***************************/
+    
+    statement:
+        labeled-statement
+    |   compound-statement
+    |   expression-statement
+    |   selection-statement
+    |   iteration-statement
+    |   jump-statement
+    ;
+    
+    labeled-statement:
+        identifier COLON statement
+    |   CASE constant-expression COLON statement
+    |   statement
+    ;
+    
+    compound-statement:
+        LCURLY block-item-list? RCURLY
+    ;
+    
+    block-item-list:
+        block-item
+    |   block-item-list block-item
+    ;
+    
+    block-item:
+        declaration
+    |   statement
+    ;
+    
+    expression-statement:
+        expression? SEMICOLON
+    ;
+    
+    selection-statement:
+        IF LPAREN expression RPAREN statement
+    |   IF LPAREN expression RPAREN statement ELSE statement
+    |   SWITCH LPAREN expression RPAREN statement
+    ;
+    
+    iteration-statement:
+        WHILE LPAREN expression RPAREN statement
+    |   DO statement WHILE LPAREN expression RPAREN SEMICOLON
+    |   FOR LPAREN expression? SEMICOLON expression? SEMICOLON expression? RPAREN statement
+    |   FOR LPAREN declaration expression SEMICOLON expression RPAREN statement
+    ;
+    
+    jump-statement:
+        GOTO identifier SEMICOLON
+    |   CONTINUE SEMICOLON
+    |   BREAK SEMICOLON
+    |   RETURN expression? SEMICOLON
+    ;
+
+    /**************************
+     * 6.9 External definitions
+     **************************/
+    
+    translation-unit:
+        external-declaration
+    |   translation-unit external-declaration
+    ;
+    
+    external-declaration:
+        function-definition
+    |   declaration
+    ;
+    
+    function-definition:
+        declaration-specifiers declarator declaration-list? compound-statement
+    ;
+    
+    declaration-list:
+        declaration
+    |   declaration-list declaration
+    ;
+    
+    /*******************************
+     * 6.10 Preprocessing directives
+     *******************************/
+    
+    preprocessing-file:
+        group?
+    ;
+    
+    group:
+        group-part
+    |   group group-part
+    ;
+    
+    group-part:
+        if-section
+    |   control-line
+    |   text-line
+    |   SHARP non-directive
+    ;
+    
+    if-section:
+        if-group elif-groups? else-group? endif-line
+    ;
+    
+    if-group:
+        PP_IF constant-expression new-line group?
+    |   PP_IFDEF identifier new-line group?
+    |   PP_IFNDEF identifier new-line group?
+    ;
+    
+    elif-groups:
+        elif-group
+    |   elif-groups elif-group
+    ;
+    
+    elif-group:
+        PP_ELIF constant-expression new-line group?
+    ;
+    
+    else-group:
+        PP_ELSE new-line group?
+    ;
+    
+    endif-line:
+        PP_ENDIF new-line
+    ;
+    
+    control-line:
+        PP_INCLUDE pp-tokens new-line
+    |   PP_DEFINE identifier replacement-list new-line
+    |   PP_DEFINE identifier LPAREN identifier-list? RPAREN replacement-list new-line
+    |   PP_DEFINE identifier LPAREN DOT DOT DOT RPAREN replacement-list new-line
+    |   PP_DEFINE identifier LPAREN identifier-list COMMA DOT DOT DOT RPAREN replacement-list new-line
+    |   PP_UNDEF identifier new-line
+    |   PP_LINE pp-tokens new-line
+    |   PP_ERROR pp-tokens? new-line
+    |   PP_PRAGMA pp-tokens? new-line
+    |   SHARP new-line
+    ;
+    
+    text-line:
+        pp-tokens? new-line
+    ;
+    
+    non-directive:
+        pp-tokens new-line
+    ;
+    
+    replacement-list:
+        pp-tokens?
+    ;
+    
+    pp-tokens:
+        preprocessing-token
+    |   pp-tokens preprocessing-token
+    ;
+    
+    new-line:
+        LineTerminator
+    ;
+    
