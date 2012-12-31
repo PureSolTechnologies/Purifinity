@@ -91,8 +91,8 @@ public class TestLanguageGrammar extends LanguageGrammar {
     }
 
     private TestLanguageGrammar() throws GrammarException {
-	super(grammar.getOptions(), grammar.getTokenDefinitions(), grammar
-		.getProductions());
+	super(getGrammar().getOptions(), getGrammar().getTokenDefinitions(),
+		getGrammar().getProductions());
     }
 
     public Lexer getLexer() throws IOException {

@@ -32,4 +32,32 @@ public class DirectoryRepositoryLocation extends AbstractRepositoryLocation {
 	return locations;
     }
 
+    @Override
+    public int hashCode() {
+	final int prime = 31;
+	int result = super.hashCode();
+	result = prime
+		* result
+		+ ((repositoryDirectory == null) ? 0 : repositoryDirectory
+			.hashCode());
+	return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+	if (this == obj)
+	    return true;
+	if (!super.equals(obj))
+	    return false;
+	if (getClass() != obj.getClass())
+	    return false;
+	DirectoryRepositoryLocation other = (DirectoryRepositoryLocation) obj;
+	if (repositoryDirectory == null) {
+	    if (other.repositoryDirectory != null)
+		return false;
+	} else if (!repositoryDirectory.equals(other.repositoryDirectory))
+	    return false;
+	return true;
+    }
+
 }

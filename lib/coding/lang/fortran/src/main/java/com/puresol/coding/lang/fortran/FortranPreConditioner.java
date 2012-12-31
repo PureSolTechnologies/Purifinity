@@ -134,7 +134,7 @@ public class FortranPreConditioner {
     private boolean validateFixedForm() throws IOException {
 	boolean isFixedForm = true;
 	int lineId = 0;
-	for (SourceCodeLine sourceLine : sourceCode.getSource()) {
+	for (SourceCodeLine sourceLine : sourceCode.getLines()) {
 	    String line = sourceLine.getLine();
 	    lineId++;
 	    if (line.isEmpty()) {
@@ -172,7 +172,7 @@ public class FortranPreConditioner {
     }
 
     private TokenMetaData getCurrentMetaData(int lineNum) {
-	return new TokenMetaData(sourceCode.getSource().get(lineNum - 1)
+	return new TokenMetaData(sourceCode.getLines().get(lineNum - 1)
 		.getSource(), id, pos, lineId, lineNum);
     }
 
@@ -186,21 +186,21 @@ public class FortranPreConditioner {
      */
     public TokenStream scan(Lexer lexer) throws IOException, LexerException {
 	reset();
-	for (SourceCodeLine sourceLine : sourceCode.getSource()) {
-	    String line = sourceLine.getLine();
+	for (SourceCodeLine line : sourceCode.getLines()) {
+	    String text = line.getLine();
 	    TokenStream subTokenStream = null;
-	    if (FIXED_FORM_EMPTY_PATTERN.matcher(line).find()
-		    && (!FREE_FORM_CONTINUATION_PATTERN.matcher(line).find())) {
-		subTokenStream = processEmptyPattern(lexer, sourceLine);
-	    } else if (FIXED_FORM_COMMENT_PATTERN.matcher(line).find()) {
+	    if (FIXED_FORM_EMPTY_PATTERN.matcher(text).find()
+		    && (!FREE_FORM_CONTINUATION_PATTERN.matcher(text).find())) {
+		subTokenStream = processEmptyPattern(lexer, line);
+	    } else if (FIXED_FORM_COMMENT_PATTERN.matcher(text).find()) {
 		subTokenStream = new TokenStream();
-		processCommentPattern(sourceLine);
-	    } else if (FIXED_FORM_LABEL_PATTERN.matcher(line).find()) {
-		subTokenStream = processLabelPattern(lexer, sourceLine);
-	    } else if (FIXED_FORM_CONTINUATION_PATTERN.matcher(line).find()) {
-		subTokenStream = processContinuationPattern(lexer, sourceLine);
+		processCommentPattern(line);
+	    } else if (FIXED_FORM_LABEL_PATTERN.matcher(text).find()) {
+		subTokenStream = processLabelPattern(lexer, line);
+	    } else if (FIXED_FORM_CONTINUATION_PATTERN.matcher(text).find()) {
+		subTokenStream = processContinuationPattern(lexer, line);
 	    } else {
-		subTokenStream = processFreeForm(lexer, sourceLine);
+		subTokenStream = processFreeForm(lexer, line);
 	    }
 	    processSubTokenStream(subTokenStream);
 	}

@@ -146,7 +146,7 @@ public class PackratParser implements Serializable {
     private void initialize(SourceCode sourceCode) {
 	this.sourceCode = sourceCode;
 	StringBuffer buffer = new StringBuffer();
-	for (SourceCodeLine line : sourceCode.getSource()) {
+	for (SourceCodeLine line : sourceCode.getLines()) {
 	    buffer.append(line.getLine());
 	}
 	this.text = buffer.toString();
@@ -657,7 +657,7 @@ public class PackratParser implements Serializable {
 	}
 	String match = matcher.group();
 	int lineBreakNum = TextUtils.countLineBreaks(match);
-	CodeLocation source = sourceCode.getSource().get(line - 1).getSource();
+	CodeLocation source = sourceCode.getLines().get(line - 1).getSource();
 	TokenMetaData metaData = new TokenMetaData(source, id, position, line,
 		lineBreakNum + 1);
 	Token token = new Token(tokenDefinition.getName(), match,

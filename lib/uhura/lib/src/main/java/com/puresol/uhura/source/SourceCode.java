@@ -102,7 +102,7 @@ public class SourceCode implements Serializable, Cloneable {
 	super();
     }
 
-    public List<SourceCodeLine> getSource() {
+    public List<SourceCodeLine> getLines() {
 	return source;
     }
 
@@ -111,7 +111,7 @@ public class SourceCode implements Serializable, Cloneable {
     }
 
     public void addSourceCode(SourceCode newCode) {
-	for (SourceCodeLine line : newCode.getSource()) {
+	for (SourceCodeLine line : newCode.getLines()) {
 	    addSourceCodeLine(line);
 	}
     }
@@ -127,7 +127,7 @@ public class SourceCode implements Serializable, Cloneable {
     private synchronized void generateHashId() {
 	if (hashId == null) {
 	    StringBuffer buffer = new StringBuffer();
-	    for (SourceCodeLine line : getSource()) {
+	    for (SourceCodeLine line : getLines()) {
 		buffer.append(line.getLine());
 	    }
 	    hashId = new HashId(HashAlgorithm.SHA256, HashCodeGenerator.get(

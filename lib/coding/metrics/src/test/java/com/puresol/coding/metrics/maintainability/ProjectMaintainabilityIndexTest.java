@@ -19,7 +19,7 @@ import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.ModuleStoreException;
 import com.puresol.utils.CodeSearchConfiguration;
 
-@Ignore
+@Ignore("We do not have a bundle context during test!")
 public class ProjectMaintainabilityIndexTest {
 
     private AnalysisRun analyzer = null;

@@ -161,7 +161,7 @@ public class CPreprocessor implements Preprocessor {
 	    int tokenId = 0;
 	    int position = 0;
 	    Analyzer analyzer = tokenizerAnalyzerFactory.createAnalyzer();
-	    List<SourceCodeLine> source = sourceCode.getSource();
+	    List<SourceCodeLine> source = sourceCode.getLines();
 
 	    Iterator<SourceCodeLine> sourceIterator = source.iterator();
 	    while (sourceIterator.hasNext()) {

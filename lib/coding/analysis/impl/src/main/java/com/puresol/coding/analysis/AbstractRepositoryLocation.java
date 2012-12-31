@@ -40,4 +40,40 @@ public abstract class AbstractRepositoryLocation implements RepositoryLocation {
 	    CodeSearchConfiguration codeSearchConfiguration) {
 	this.codeSearchConfiguration = codeSearchConfiguration.clone();
     }
+
+    @Override
+    public int hashCode() {
+	final int prime = 31;
+	int result = 1;
+	result = prime
+		* result
+		+ ((codeSearchConfiguration == null) ? 0
+			: codeSearchConfiguration.hashCode());
+	result = prime * result + ((name == null) ? 0 : name.hashCode());
+	return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+	if (this == obj)
+	    return true;
+	if (obj == null)
+	    return false;
+	if (getClass() != obj.getClass())
+	    return false;
+	AbstractRepositoryLocation other = (AbstractRepositoryLocation) obj;
+	if (codeSearchConfiguration == null) {
+	    if (other.codeSearchConfiguration != null)
+		return false;
+	} else if (!codeSearchConfiguration
+		.equals(other.codeSearchConfiguration))
+	    return false;
+	if (name == null) {
+	    if (other.name != null)
+		return false;
+	} else if (!name.equals(other.name))
+	    return false;
+	return true;
+    }
+
 }

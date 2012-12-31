@@ -30,7 +30,7 @@ public class SourceCodeTest {
 	SourceFileLocation fileSource = new SourceFileLocation(file);
 	SourceCode sourceCode = fileSource.load();
 	assertNotNull(sourceCode);
-	List<SourceCodeLine> lines = sourceCode.getSource();
+	List<SourceCodeLine> lines = sourceCode.getLines();
 	String sourceString = FileUtilities.readFileToString(file);
 	StringBuffer buffer = new StringBuffer();
 	int lineNumber = 0;

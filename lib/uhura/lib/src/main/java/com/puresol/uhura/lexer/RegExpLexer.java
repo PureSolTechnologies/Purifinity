@@ -59,7 +59,7 @@ public class RegExpLexer implements Lexer {
 	int pos = 0;
 	int id = 0;
 	int line = 1;
-	Iterator<SourceCodeLine> sourceIterator = sourceCode.getSource()
+	Iterator<SourceCodeLine> sourceIterator = sourceCode.getLines()
 		.iterator();
 	while (sourceIterator.hasNext()) {
 	    SourceCodeLine sourceCodeLine = sourceIterator.next();
