@@ -2,7 +2,7 @@ package com.puresol.uhura.source;
 
 import java.io.IOException;
 
-public class UnspecifiedSourceCodeLocation extends AbstractSourceCodeLocation {
+public class UnspecifiedSourceCodeLocation extends AbstractCodeLocation {
 
     private static final long serialVersionUID = 5446070531559019716L;
 
@@ -39,7 +39,7 @@ public class UnspecifiedSourceCodeLocation extends AbstractSourceCodeLocation {
     }
 
     @Override
-    public String getLocation() {
+    public String getInternalLocation() {
 	return "";
     }
 }

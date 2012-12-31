@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
-public class URLSourceCodeLocation extends AbstractSourceCodeLocation {
+public class URLSourceCodeLocation extends AbstractCodeLocation {
 
     private static final long serialVersionUID = 7938452623238399125L;
 
@@ -67,7 +67,7 @@ public class URLSourceCodeLocation extends AbstractSourceCodeLocation {
     }
 
     @Override
-    public String getLocation() {
+    public String getInternalLocation() {
 	return new File(url.getPath()).getParent();
     }
 

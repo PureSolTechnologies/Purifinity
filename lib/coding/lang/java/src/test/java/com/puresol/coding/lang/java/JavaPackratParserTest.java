@@ -13,7 +13,7 @@ import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.parser.ParserException;
 import com.puresol.uhura.parser.ParserTree;
 import com.puresol.uhura.parser.packrat.PackratParser;
-import com.puresol.uhura.source.FixedSourceCodeLocation;
+import com.puresol.uhura.source.FixedCodeLocation;
 import com.puresol.uhura.source.SourceFileLocation;
 import com.puresol.uhura.source.CodeLocation;
 
@@ -27,14 +27,14 @@ public class JavaPackratParserTest {
     }
 
     private void check(String... text) throws ParserException, IOException {
-	CodeLocation source = new FixedSourceCodeLocation(text);
+	CodeLocation source = new FixedCodeLocation(text);
 	PackratParser parser = createParser();
 	assertNotNull(parser.parse(source.load()));
     }
 
     private void check(String text, String production) throws ParserException,
 	    IOException {
-	CodeLocation source = new FixedSourceCodeLocation(text);
+	CodeLocation source = new FixedCodeLocation(text);
 	PackratParser parser = createParser();
 	assertNotNull(parser.parse(source.load(), production));
     }

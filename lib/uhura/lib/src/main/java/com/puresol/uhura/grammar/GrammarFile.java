@@ -9,7 +9,7 @@ import java.io.Reader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresol.uhura.grammar.uhura.UhuraGrammar;
+import com.puresol.uhura.grammar.internal.UhuraGrammar;
 import com.puresol.uhura.lexer.Lexer;
 import com.puresol.uhura.lexer.LexerException;
 import com.puresol.uhura.lexer.RegExpLexer;

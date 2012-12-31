@@ -12,17 +12,17 @@ import com.puresol.uhura.lexer.TokenStream;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class FixedSourceCodeLocation extends AbstractSourceCodeLocation {
+public class FixedCodeLocation extends AbstractCodeLocation {
 
     private static final long serialVersionUID = -694681290095697777L;
 
     private final SourceCode sourceCode;
 
-    public FixedSourceCodeLocation(SourceCode sourceCode) {
+    public FixedCodeLocation(SourceCode sourceCode) {
 	this.sourceCode = sourceCode;
     }
 
-    public FixedSourceCodeLocation(String... lines) {
+    public FixedCodeLocation(String... lines) {
 	SourceCode sourceCode = new SourceCode();
 	int lineNum = 0;
 	for (String line : lines) {
@@ -60,7 +60,7 @@ public class FixedSourceCodeLocation extends AbstractSourceCodeLocation {
 	    return false;
 	if (getClass() != obj.getClass())
 	    return false;
-	FixedSourceCodeLocation other = (FixedSourceCodeLocation) obj;
+	FixedCodeLocation other = (FixedCodeLocation) obj;
 	if (sourceCode == null) {
 	    if (other.sourceCode != null)
 		return false;
@@ -81,7 +81,7 @@ public class FixedSourceCodeLocation extends AbstractSourceCodeLocation {
     }
 
     @Override
-    public String getLocation() {
+    public String getInternalLocation() {
 	return "";
     }
 }

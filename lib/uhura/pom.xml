@@ -13,7 +13,6 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>api</module>
 		<module>lib</module>
 		<module>test</module>
 	</modules>

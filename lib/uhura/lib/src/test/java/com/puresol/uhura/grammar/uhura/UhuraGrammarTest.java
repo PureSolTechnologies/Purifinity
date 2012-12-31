@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
+import com.puresol.uhura.grammar.internal.UhuraGrammar;
 import com.puresol.uhura.parser.functions.Closure0;
 import com.puresol.uhura.parser.functions.Closure1;
 import com.puresol.uhura.parser.functions.First;

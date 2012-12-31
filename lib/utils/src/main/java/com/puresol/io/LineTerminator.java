@@ -16,16 +16,24 @@
  *
  ***************************************************************************/
 
-package com.puresol.data;
+package com.puresol.io;
 
+/**
+ * This is an enumeration for line terminators.
+ * 
+ * @author ludwig
+ * 
+ */
+public enum LineTerminator {
+    WINDOWS("\r\n"), UNIX("\n");
 
-public class Encrypter {
-	static public String encryptPassword(String password) {
-		/**
-		 * A combination of MD5 and SHA is used to overcome the weakness of MD5
-		 * and SHA. In combination it should be strong enough!
-		 */
-		return HashCodeGenerator.getSHA(HashCodeGenerator.getMD5(password));
-	}
+    private String string;
 
+    private LineTerminator(String string) {
+	this.string = string;
+    }
+
+    public String getCRString() {
+	return string;
+    }
 }

@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-public class SourceFileLocation extends AbstractSourceCodeLocation {
+public class SourceFileLocation extends AbstractCodeLocation {
 
     private static final long serialVersionUID = -4803348905641081874L;
 
@@ -65,7 +65,7 @@ public class SourceFileLocation extends AbstractSourceCodeLocation {
     }
 
     @Override
-    public String getLocation() {
+    public String getInternalLocation() {
 	return file.getParent();
     }
 }

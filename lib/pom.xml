@@ -93,11 +93,6 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresol</groupId>
-				<artifactId>uhura.api</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresol</groupId>
 				<artifactId>uhura.lib</artifactId>
 				<version>${project.version}</version>
 			</dependency>

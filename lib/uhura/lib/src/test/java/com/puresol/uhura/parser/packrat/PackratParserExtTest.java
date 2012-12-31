@@ -11,7 +11,7 @@ import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarConverter;
 import com.puresol.uhura.grammar.GrammarFile;
 import com.puresol.uhura.parser.ParserTree;
-import com.puresol.uhura.source.FixedSourceCodeLocation;
+import com.puresol.uhura.source.FixedCodeLocation;
 import com.puresol.uhura.source.CodeLocation;
 
 /**
@@ -51,26 +51,26 @@ public class PackratParserExtTest {
 
     @Test
     public void test1() throws Throwable {
-	parseText(new FixedSourceCodeLocation("this"));
+	parseText(new FixedCodeLocation("this"));
     }
 
     @Test
     public void test2() throws Throwable {
-	parseText(new FixedSourceCodeLocation("this.x"));
+	parseText(new FixedCodeLocation("this.x"));
     }
 
     @Test
     public void test3() throws Throwable {
-	parseText(new FixedSourceCodeLocation("this.x.y"));
+	parseText(new FixedCodeLocation("this.x.y"));
     }
 
     @Test
     public void test4() throws Throwable {
-	parseText(new FixedSourceCodeLocation("this.x.m()"));
+	parseText(new FixedCodeLocation("this.x.m()"));
     }
 
     @Test
     public void test5() throws Throwable {
-	parseText(new FixedSourceCodeLocation("x[i][j].y"));
+	parseText(new FixedCodeLocation("x[i][j].y"));
     }
 }

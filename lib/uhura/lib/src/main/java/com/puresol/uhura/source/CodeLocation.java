@@ -8,7 +8,7 @@ import java.net.URL;
 import com.puresol.uhura.lexer.Token;
 
 /**
- * This is a central interface for storing the source of source code in
+ * This is a central interface for storing the location of source code in
  * {@link SourceCode}, {@link Token} and other places where the source is needed
  * for tracking and user feedback to locate issues.
  * 
@@ -20,24 +20,25 @@ public interface CodeLocation extends Serializable {
      * This method returns the name of the returned source code. This might be a
      * file name or another name of a compilation unit or piece of source code.
      * 
-     * @return
+     * @return Returns a name of the location.
      */
     public String getName();
 
     /**
-     * This method returns a logical location which can be used to group the
-     * different source code pieces for statistics and UI. A natural location
-     * might be the relative path of a file system within the project folder. It
-     * also be a path within a SCM code repository or something similar.
+     * This method returns a logical internal location which can be used to
+     * group the different source code pieces for statistics and UI. A natural
+     * location might be the relative path of a file system within the project
+     * folder. It also be a path within a SCM code repository or something
+     * similar.
      * 
-     * @return
+     * @return Returns a logicatl
      */
-    public String getLocation();
+    public String getInternalLocation();
 
     /**
      * This method generates a human readable string where the source comes
      * from. For {@link File} and {@link URL}, the normal toString()
-     * implementations might be sufficient. For {@link DatabaseSource} for
+     * implementations might be sufficient. For {@link DatabaseCodeLocation} for
      * example, the string might be something else. This String is generated
      * here.
      * 

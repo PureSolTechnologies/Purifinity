@@ -7,14 +7,14 @@ import org.junit.Test;
 import com.puresol.coding.lang.java.grammar.JavaGrammar;
 import com.puresol.uhura.lexer.Lexer;
 import com.puresol.uhura.lexer.TokenStream;
-import com.puresol.uhura.source.FixedSourceCodeLocation;
+import com.puresol.uhura.source.FixedCodeLocation;
 
 public class IdentifierTest {
 
     @Test
     public void testIdentifier() throws Exception {
 	Lexer lexer = JavaGrammar.getInstance().getLexer();
-	TokenStream tokenStream = lexer.lex(new FixedSourceCodeLocation("identifier")
+	TokenStream tokenStream = lexer.lex(new FixedCodeLocation("identifier")
 		.load());
 	assertEquals(1, tokenStream.size());
 	assertEquals("Identifier", tokenStream.get(0).getName());

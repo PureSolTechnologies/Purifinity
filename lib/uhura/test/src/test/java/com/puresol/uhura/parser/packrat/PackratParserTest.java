@@ -23,7 +23,7 @@ import com.puresol.uhura.grammar.token.TokenDefinitionSet;
 import com.puresol.uhura.grammar.token.Visibility;
 import com.puresol.uhura.lexer.Token;
 import com.puresol.uhura.parser.ParserTree;
-import com.puresol.uhura.source.FixedSourceCodeLocation;
+import com.puresol.uhura.source.FixedCodeLocation;
 import com.puresol.utils.IntrospectionUtilities;
 
 public class PackratParserTest {
@@ -44,7 +44,7 @@ public class PackratParserTest {
 			.getGrammar();
 		assertNotNull(grammar);
 		PackratParser parser = new PackratParser(grammar);
-		ParserTree parseTree = parser.parse(new FixedSourceCodeLocation(text)
+		ParserTree parseTree = parser.parse(new FixedCodeLocation(text)
 			.load());
 		assertNotNull(parseTree);
 		TreePrinter printer = new TreePrinter(System.out);
@@ -147,7 +147,7 @@ public class PackratParserTest {
 
 	IntrospectionUtilities.setField(parser, "text", " \t ");
 	IntrospectionUtilities.setField(parser, "sourceCode",
-		new FixedSourceCodeLocation(" \t ").load());
+		new FixedCodeLocation(" \t ").load());
 	/*
 	 * process some white spaces...
 	 */
@@ -186,7 +186,7 @@ public class PackratParserTest {
 	production.addConstruction(new NonTerminal("E"));
 	grammar.getProductions().add(production);
 	PackratParser parser = new PackratParser(grammar);
-	ParserTree parseTree = parser.parse(new FixedSourceCodeLocation("(1+2)*3+4*5")
+	ParserTree parseTree = parser.parse(new FixedCodeLocation("(1+2)*3+4*5")
 		.load());
 	assertNotNull(parseTree);
 	TreePrinter printer = new TreePrinter(System.out);
@@ -196,43 +196,43 @@ public class PackratParserTest {
     @Test
     public void testDirectRecursion() throws Throwable {
 	PackratParser parser = new PackratParser(directRecursionGrammar);
-	parser.parse(new FixedSourceCodeLocation("i").load());
-	parser.parse(new FixedSourceCodeLocation("ii").load());
-	parser.parse(new FixedSourceCodeLocation("iii").load());
+	parser.parse(new FixedCodeLocation("i").load());
+	parser.parse(new FixedCodeLocation("ii").load());
+	parser.parse(new FixedCodeLocation("iii").load());
     }
 
     @Test
     public void testDirectRecursionWithEmpty() throws Throwable {
 	PackratParser parser = new PackratParser(directRecursionGrammarZero);
-	parser.parse(new FixedSourceCodeLocation("i").load());
-	parser.parse(new FixedSourceCodeLocation("ii").load());
-	parser.parse(new FixedSourceCodeLocation("iii").load());
+	parser.parse(new FixedCodeLocation("i").load());
+	parser.parse(new FixedCodeLocation("ii").load());
+	parser.parse(new FixedCodeLocation("iii").load());
     }
 
     @Test
     public void testIndirectRecursion() throws Throwable {
 	PackratParser parser = new PackratParser(indirectRecursionGrammar);
-	parser.parse(new FixedSourceCodeLocation("i").load());
-	parser.parse(new FixedSourceCodeLocation("ii").load());
-	parser.parse(new FixedSourceCodeLocation("iii").load());
+	parser.parse(new FixedCodeLocation("i").load());
+	parser.parse(new FixedCodeLocation("ii").load());
+	parser.parse(new FixedCodeLocation("iii").load());
     }
 
     @Test
     public void testNestedRecursions() throws Throwable {
 	PackratParser parser = new PackratParser(nestedRecursionsGrammar);
-	parser.parse(new FixedSourceCodeLocation("i").load());
-	parser.parse(new FixedSourceCodeLocation("ii").load());
-	parser.parse(new FixedSourceCodeLocation("iii").load());
-	parser.parse(new FixedSourceCodeLocation("j").load());
-	parser.parse(new FixedSourceCodeLocation("jj").load());
-	parser.parse(new FixedSourceCodeLocation("jjj").load());
-	parser.parse(new FixedSourceCodeLocation("k").load());
-	parser.parse(new FixedSourceCodeLocation("kk").load());
-	parser.parse(new FixedSourceCodeLocation("kkk").load());
+	parser.parse(new FixedCodeLocation("i").load());
+	parser.parse(new FixedCodeLocation("ii").load());
+	parser.parse(new FixedCodeLocation("iii").load());
+	parser.parse(new FixedCodeLocation("j").load());
+	parser.parse(new FixedCodeLocation("jj").load());
+	parser.parse(new FixedCodeLocation("jjj").load());
+	parser.parse(new FixedCodeLocation("k").load());
+	parser.parse(new FixedCodeLocation("kk").load());
+	parser.parse(new FixedCodeLocation("kkk").load());
 
-	parser.parse(new FixedSourceCodeLocation("ijk").load());
-	parser.parse(new FixedSourceCodeLocation("ijkijk").load());
-	parser.parse(new FixedSourceCodeLocation("iijjkkiijjkk").load());
+	parser.parse(new FixedCodeLocation("ijk").load());
+	parser.parse(new FixedCodeLocation("ijkijk").load());
+	parser.parse(new FixedCodeLocation("iijjkkiijjkk").load());
     }
 
     @Test

@@ -1,4 +1,4 @@
-package com.puresol.uhura.grammar.uhura;
+package com.puresol.uhura.grammar.internal;
 
 /**
  * This class is a collection of public final strings which specified regular

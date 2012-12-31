@@ -1,4 +1,4 @@
-package com.puresol.uhura.grammar.uhura;
+package com.puresol.uhura.grammar.internal;
 
 import java.util.Properties;
 

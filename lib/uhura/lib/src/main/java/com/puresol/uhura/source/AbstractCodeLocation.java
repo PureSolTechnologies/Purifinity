@@ -7,12 +7,12 @@ package com.puresol.uhura.source;
  * @author Rick-Rainer Ludwig
  * 
  */
-public abstract class AbstractSourceCodeLocation implements CodeLocation {
+public abstract class AbstractCodeLocation implements CodeLocation {
 
     private static final long serialVersionUID = 5092730926716733775L;
 
     @Override
-    public String toString() {
+    public final String toString() {
 	return getHumanReadableLocationString();
     }
 
@@ -21,4 +21,5 @@ public abstract class AbstractSourceCodeLocation implements CodeLocation {
 
     @Override
     public abstract int hashCode();
+
 }

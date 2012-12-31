@@ -12,7 +12,7 @@ import com.puresol.uhura.lexer.LexerException;
 import com.puresol.uhura.lexer.TokenStream;
 import com.puresol.uhura.parser.Parser;
 import com.puresol.uhura.parser.ParserException;
-import com.puresol.uhura.source.FixedSourceCodeLocation;
+import com.puresol.uhura.source.FixedCodeLocation;
 import com.puresol.uhura.source.CodeLocation;
 
 public class FortranGrammarPartTester {
@@ -27,7 +27,7 @@ public class FortranGrammarPartTester {
     public static boolean test(String production, String text)
 	    throws GrammarException, LexerException, IOException,
 	    ParserException {
-	return test(production, new FixedSourceCodeLocation(text));
+	return test(production, new FixedCodeLocation(text));
     }
 
     public static boolean test(String production, CodeLocation source)
