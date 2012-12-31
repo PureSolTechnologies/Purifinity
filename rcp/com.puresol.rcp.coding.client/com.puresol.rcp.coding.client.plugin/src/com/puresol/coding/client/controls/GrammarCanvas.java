@@ -86,14 +86,18 @@ public class GrammarCanvas extends Canvas implements PaintListener {
 	    }
 	    GrammarReader grammarReader = new GrammarReader(
 		    grammar.getGrammarDefinition());
-	    ParserTree ast = grammarReader.getAST();
-	    synchronized (renderer) {
-		renderer.setGrammar(ast);
-		preferredSize = renderer.getPreferredSize();
-		// preferredSize.height *= 0.7;
-		// preferredSize.width *= 0.7;
-		setSize(preferredSize.width, preferredSize.height);
-		getParent().redraw();
+	    try {
+		ParserTree ast = grammarReader.getAST();
+		synchronized (renderer) {
+		    renderer.setGrammar(ast);
+		    preferredSize = renderer.getPreferredSize();
+		    // preferredSize.height *= 0.7;
+		    // preferredSize.width *= 0.7;
+		    setSize(preferredSize.width, preferredSize.height);
+		    getParent().redraw();
+		}
+	    } finally {
+		grammarReader.close();
 	    }
 	}
     }

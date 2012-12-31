@@ -20,7 +20,7 @@ public class FileSearchTest {
     @Test
     public void testFileSearch() {
 	FileTree fileTree = FileSearch.getFileTree(new File("."),
-		new FileSearchConfiguration());
+		new CodeSearchConfiguration());
 
 	final List<File> fileList = FileSearch.find(new File("."), "*");
 

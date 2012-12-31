@@ -6,22 +6,22 @@ package com.puresol.coding.analysis.api;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class FileStoreException extends Exception {
+public class ModuleStoreException extends Exception {
 
     private static final long serialVersionUID = -5082132187888243921L;
 
-    public FileStoreException() {
+    public ModuleStoreException() {
     }
 
-    public FileStoreException(String message) {
+    public ModuleStoreException(String message) {
 	super(message);
     }
 
-    public FileStoreException(Throwable cause) {
+    public ModuleStoreException(Throwable cause) {
 	super(cause);
     }
 
-    public FileStoreException(String message, Throwable cause) {
+    public ModuleStoreException(String message, Throwable cause) {
 	super(message, cause);
     }
 

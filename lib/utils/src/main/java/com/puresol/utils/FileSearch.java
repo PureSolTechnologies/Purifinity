@@ -111,12 +111,12 @@ public class FileSearch {
     }
 
     public static FileTree getFileTree(File directory,
-	    FileSearchConfiguration configuration) {
+	    CodeSearchConfiguration configuration) {
 
 	List<Pattern> dirIncludePatterns = convertStringListToPatternList(configuration
-		.getDirectoryIncludes());
+		.getLocationIncludes());
 	List<Pattern> dirExcludePatterns = convertStringListToPatternList(configuration
-		.getDirectoryExcludes());
+		.getLocationExcludes());
 	List<Pattern> fileIncludePatterns = convertStringListToPatternList(configuration
 		.getFileIncludes());
 	List<Pattern> fileExcludePatterns = convertStringListToPatternList(configuration

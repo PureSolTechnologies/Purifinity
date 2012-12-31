@@ -6,22 +6,22 @@ package com.puresol.coding.analysis.api;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class DirectoryStoreException extends Exception {
+public class CodeStoreException extends Exception {
 
     private static final long serialVersionUID = -5082132187888243921L;
 
-    public DirectoryStoreException() {
+    public CodeStoreException() {
     }
 
-    public DirectoryStoreException(String message) {
+    public CodeStoreException(String message) {
 	super(message);
     }
 
-    public DirectoryStoreException(Throwable cause) {
+    public CodeStoreException(Throwable cause) {
 	super(cause);
     }
 
-    public DirectoryStoreException(String message, Throwable cause) {
+    public CodeStoreException(String message, Throwable cause) {
 	super(message, cause);
     }
 

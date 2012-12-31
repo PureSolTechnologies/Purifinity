@@ -11,7 +11,7 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 
-import com.puresol.coding.analysis.api.AnalyzedFile;
+import com.puresol.coding.analysis.api.AnalyzedCode;
 import com.puresol.coding.client.utils.ColorUtils;
 import com.puresol.coding.evaluation.api.EvaluatorStore;
 import com.puresol.coding.evaluator.AbstractEvaluator;
@@ -23,7 +23,7 @@ import com.puresol.coding.quality.api.SourceCodeQuality;
 public class MaintainabilityIndexFileResultComponent extends Composite {
 
     public MaintainabilityIndexFileResultComponent(Composite parent, int style,
-	    AnalyzedFile analyzedFile) {
+	    AnalyzedCode analyzedCode) {
 	super(parent, style);
 
 	setLayout(new FillLayout());
@@ -32,7 +32,7 @@ public class MaintainabilityIndexFileResultComponent extends Composite {
 		.createEvaluatorStore(MaintainabilityIndexEvaluator.class);
 
 	MaintainabilityIndexFileResults fileResults = (MaintainabilityIndexFileResults) evaluatorStore
-		.readFileResults(analyzedFile.getHashId());
+		.readFileResults(analyzedCode.getHashId());
 
 	Table table = new Table(this, SWT.BORDER | SWT.V_SCROLL
 		| SWT.FULL_SELECTION);

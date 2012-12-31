@@ -6,20 +6,20 @@ import static org.junit.Assert.assertNotSame;
 
 import org.junit.Test;
 
-import com.puresol.uhura.source.UnspecifiedSource;
+import com.puresol.uhura.source.UnspecifiedSourceCodeLocation;
 
 public class TokenMetaDataTest {
 
     @Test
     public void testInstance() {
-	assertNotNull(new TokenMetaData(new UnspecifiedSource(), 1, 2, 3, 4));
+	assertNotNull(new TokenMetaData(new UnspecifiedSourceCodeLocation(), 1, 2, 3, 4));
     }
 
     @Test
     public void testInitValues() {
-	TokenMetaData metaData = new TokenMetaData(new UnspecifiedSource(), 1,
+	TokenMetaData metaData = new TokenMetaData(new UnspecifiedSourceCodeLocation(), 1,
 		2, 3, 4);
-	assertEquals(new UnspecifiedSource().getHumanReadableLocationString(),
+	assertEquals(new UnspecifiedSourceCodeLocation().getHumanReadableLocationString(),
 		metaData.getSource().getHumanReadableLocationString());
 	assertEquals(1, metaData.getId());
 	assertEquals(2, metaData.getPos());
@@ -29,7 +29,7 @@ public class TokenMetaDataTest {
 
     @Test
     public void testClone() {
-	TokenMetaData metaData = new TokenMetaData(new UnspecifiedSource(), 1,
+	TokenMetaData metaData = new TokenMetaData(new UnspecifiedSourceCodeLocation(), 1,
 		2, 3, 4);
 	TokenMetaData cloned = metaData.clone();
 	assertNotSame(metaData, cloned);

@@ -4,30 +4,31 @@ import java.io.Serializable;
 
 import com.puresol.coding.analysis.api.CodeRangeType;
 import com.puresol.coding.quality.api.SourceCodeQuality;
+import com.puresol.uhura.source.CodeLocation;
 
 public class HalsteadMetricFileResult implements Serializable {
 
     private static final long serialVersionUID = 2302225864694571092L;
 
-    private final String file;
+    private final CodeLocation sourceCodeLocation;
     private final CodeRangeType codeRangeType;
     private final String codeRangeName;
     private final HalsteadResult halsteadResult;
     private final SourceCodeQuality quality;
 
-    public HalsteadMetricFileResult(String file, CodeRangeType codeRangeType,
-	    String codeRangeName, HalsteadResult halsteadResult,
-	    SourceCodeQuality quality) {
+    public HalsteadMetricFileResult(CodeLocation sourceCodeLocation,
+	    CodeRangeType codeRangeType, String codeRangeName,
+	    HalsteadResult halsteadResult, SourceCodeQuality quality) {
 	super();
-	this.file = file;
+	this.sourceCodeLocation = sourceCodeLocation;
 	this.codeRangeType = codeRangeType;
 	this.codeRangeName = codeRangeName;
 	this.halsteadResult = halsteadResult;
 	this.quality = quality;
     }
 
-    public String getFile() {
-	return file;
+    public CodeLocation getSourceCodeLocation() {
+	return sourceCodeLocation;
     }
 
     public CodeRangeType getCodeRangeType() {

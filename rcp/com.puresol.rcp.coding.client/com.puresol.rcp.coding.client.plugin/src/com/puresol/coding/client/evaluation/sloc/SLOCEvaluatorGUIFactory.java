@@ -4,7 +4,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
 import com.puresol.coding.analysis.api.AnalysisRun;
-import com.puresol.coding.analysis.api.AnalyzedFile;
+import com.puresol.coding.analysis.api.AnalyzedCode;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.client.controls.EvaluatorGUIFactory;
 
@@ -12,9 +12,9 @@ public class SLOCEvaluatorGUIFactory implements EvaluatorGUIFactory {
 
     @Override
     public Composite createFileResultComponent(Composite parent,
-	    AnalysisRun analysisRun, AnalyzedFile analyzedFile) {
+	    AnalysisRun analysisRun, AnalyzedCode analyzedCode) {
 	return new SLOCFileResultComponent(parent, SWT.NONE, analysisRun,
-		analyzedFile);
+		analyzedCode);
     }
 
     @Override

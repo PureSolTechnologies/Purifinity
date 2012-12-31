@@ -4,7 +4,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
 import com.puresol.coding.analysis.api.AnalysisRun;
-import com.puresol.coding.analysis.api.AnalyzedFile;
+import com.puresol.coding.analysis.api.AnalyzedCode;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.client.controls.EvaluatorGUIFactory;
 
@@ -12,8 +12,9 @@ public class CoCoMoEvaluatorGUIFactory implements EvaluatorGUIFactory {
 
     @Override
     public Composite createFileResultComponent(Composite parent,
-	    AnalysisRun analysisRun, AnalyzedFile analyzedFile) {
-	return new CoCoMoFileResultComponent(parent, SWT.NONE, analyzedFile);
+	    AnalysisRun analysisRun, AnalyzedCode analyzedSourceCode) {
+	return new CoCoMoFileResultComponent(parent, SWT.NONE,
+		analyzedSourceCode);
     }
 
     @Override

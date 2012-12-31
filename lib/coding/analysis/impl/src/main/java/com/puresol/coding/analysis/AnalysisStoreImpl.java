@@ -10,7 +10,7 @@ import com.puresol.coding.analysis.api.Analysis;
 import com.puresol.coding.analysis.api.AnalysisInformation;
 import com.puresol.coding.analysis.api.AnalysisSettings;
 import com.puresol.coding.analysis.api.AnalysisStore;
-import com.puresol.coding.analysis.api.DirectoryStoreException;
+import com.puresol.coding.analysis.api.ModuleStoreException;
 import com.puresol.utils.FileUtilities;
 
 public class AnalysisStoreImpl implements AnalysisStore {
@@ -55,7 +55,7 @@ public class AnalysisStoreImpl implements AnalysisStore {
 
     @Override
     public List<AnalysisInformation> getAllAnalysisInformation()
-	    throws DirectoryStoreException {
+	    throws ModuleStoreException {
 	List<AnalysisInformation> analysisInformation = new ArrayList<AnalysisInformation>();
 	File[] files = storageDirectory.listFiles();
 	for (File analysisDirectory : files) {
@@ -68,26 +68,26 @@ public class AnalysisStoreImpl implements AnalysisStore {
     }
 
     @Override
-    public Analysis loadAnalysis(UUID uuid) throws DirectoryStoreException {
+    public Analysis loadAnalysis(UUID uuid) throws ModuleStoreException {
 	File analysisDirectory = new File(storageDirectory, uuid.toString());
 	return AnalysisImpl.open(analysisDirectory);
     }
 
     @Override
     public Analysis createAnalysis(AnalysisSettings settings)
-	    throws DirectoryStoreException {
+	    throws ModuleStoreException {
 	UUID uuid = UUID.randomUUID();
 	return AnalysisImpl.create(new File(storageDirectory, uuid.toString()),
 		uuid, settings);
     }
 
     @Override
-    public void removeAnalysis(UUID uuid) throws DirectoryStoreException {
+    public void removeAnalysis(UUID uuid) throws ModuleStoreException {
 	try {
 	    File analysisDirectory = new File(storageDirectory, uuid.toString());
 	    FileUtilities.deleteFileOrDir(analysisDirectory);
 	} catch (IOException e) {
-	    throw new DirectoryStoreException(
+	    throw new ModuleStoreException(
 		    "Could not delete analysis with UUID '" + uuid.toString()
 			    + "'!", e);
 	}

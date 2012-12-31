@@ -19,7 +19,7 @@ import com.puresol.uhura.parser.ParserException;
 import com.puresol.uhura.parser.ParserTree;
 import com.puresol.uhura.parser.lr.SLR1Parser;
 import com.puresol.uhura.source.SourceCode;
-import com.puresol.uhura.source.UnspecifiedSource;
+import com.puresol.uhura.source.UnspecifiedSourceCodeLocation;
 
 /**
  * This class is for reading Nyota Uhura grammar files. The grammar file is read
@@ -90,7 +90,7 @@ public class GrammarFile implements Closeable {
 	    logger.debug("Starting lexer...");
 	    Lexer lexer = new RegExpLexer(uhuraGrammar);
 	    TokenStream tokenStream = lexer.lex(SourceCode.read(reader,
-		    new UnspecifiedSource()));
+		    new UnspecifiedSourceCodeLocation()));
 	    logger.debug("Starting parser...");
 	    parse(tokenStream);
 	    logger.debug("done.");

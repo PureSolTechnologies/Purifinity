@@ -10,9 +10,10 @@ import java.util.ServiceLoader;
 import org.osgi.framework.BundleContext;
 
 import com.puresol.coding.AbstractProgrammingLanguage;
-import com.puresol.coding.analysis.api.FileAnalyzer;
+import com.puresol.coding.analysis.api.CodeAnalyzer;
+import com.puresol.coding.lang.common.LanguageGrammar;
 import com.puresol.coding.lang.fortran.grammar.FortranGrammar;
-import com.puresol.uhura.grammar.Grammar;
+import com.puresol.uhura.source.CodeLocation;
 
 public class Fortran extends AbstractProgrammingLanguage {
 
@@ -55,12 +56,12 @@ public class Fortran extends AbstractProgrammingLanguage {
     }
 
     @Override
-    public FileAnalyzer restoreAnalyzer(File file) throws IOException {
+    public CodeAnalyzer restoreAnalyzer(File file) throws IOException {
 	try {
 	    ObjectInputStream ois = new ObjectInputStream(new FileInputStream(
 		    file));
 	    try {
-		return (FileAnalyzer) ois.readObject();
+		return (CodeAnalyzer) ois.readObject();
 	    } finally {
 		ois.close();
 	    }
@@ -74,8 +75,8 @@ public class Fortran extends AbstractProgrammingLanguage {
     }
 
     @Override
-    public FileAnalyzer createAnalyser(File sourceDirectory, File file) {
-	return new FortranAnalyzer(sourceDirectory, file);
+    public CodeAnalyzer createAnalyser(CodeLocation sourceCodeLocation) {
+	return new FortranAnalyzer(sourceCodeLocation);
     }
 
     public void setSourceForm(SourceForm sourceForm) {
@@ -87,7 +88,7 @@ public class Fortran extends AbstractProgrammingLanguage {
     }
 
     @Override
-    public Grammar getGrammar() {
+    public LanguageGrammar getGrammar() {
 	return FortranGrammar.getInstance();
     }
 

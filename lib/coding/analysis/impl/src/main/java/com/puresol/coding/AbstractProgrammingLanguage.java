@@ -1,8 +1,7 @@
 package com.puresol.coding;
 
-import java.io.File;
-
 import com.puresol.coding.analysis.api.ProgrammingLanguage;
+import com.puresol.uhura.source.CodeLocation;
 
 public abstract class AbstractProgrammingLanguage implements
 	ProgrammingLanguage {
@@ -39,8 +38,8 @@ public abstract class AbstractProgrammingLanguage implements
      * {@inheritDoc}
      */
     @Override
-    public boolean isSuitable(File file) {
-	String name = file.getName();
+    public boolean isSuitable(CodeLocation source) {
+	String name = source.getHumanReadableLocationString();
 	for (String suffix : getValidFileSuffixes()) {
 	    if (name.endsWith(suffix)) {
 		return true;
@@ -48,5 +47,4 @@ public abstract class AbstractProgrammingLanguage implements
 	}
 	return false;
     }
-
 }

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 
+import com.puresol.coding.lang.common.LanguageGrammar;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.GrammarManager;
@@ -18,7 +19,7 @@ import com.puresol.uhura.parser.Parser;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class TestLanguageGrammar extends Grammar {
+public class TestLanguageGrammar extends LanguageGrammar {
 
     private static final long serialVersionUID = 8411042156803619382L;
 
@@ -135,4 +136,8 @@ public class TestLanguageGrammar extends Grammar {
 	}
     }
 
+    @Override
+    public InputStream getGrammarDefinition() {
+	return getClass().getResourceAsStream(GRAMMAR_RESOURCE);
+    }
 }

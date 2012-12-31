@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 
+import com.puresol.coding.lang.common.LanguageGrammar;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.GrammarManager;
@@ -11,7 +12,7 @@ import com.puresol.uhura.grammar.GrammarReader;
 import com.puresol.uhura.lexer.Lexer;
 import com.puresol.uhura.parser.Parser;
 
-public class FortranGrammar extends Grammar {
+public class FortranGrammar extends LanguageGrammar {
 
     private static final long serialVersionUID = -8286230838527909083L;
 
@@ -128,5 +129,10 @@ public class FortranGrammar extends Grammar {
 	    throw new RuntimeException(
 		    "Could not restore class from input stream!", e);
 	}
+    }
+
+    @Override
+    public InputStream getGrammarDefinition() {
+	return getClass().getResourceAsStream(GRAMMAR_RESOURCE);
     }
 }

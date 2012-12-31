@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.puresol.coding.analysis.api.AnalysisRun;
-import com.puresol.coding.analysis.api.AnalyzedFile;
+import com.puresol.coding.analysis.api.AnalyzedCode;
+import com.puresol.coding.analysis.api.CodeAnalysis;
 import com.puresol.coding.analysis.api.CodeRange;
-import com.puresol.coding.analysis.api.FileAnalysis;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.evaluation.api.EvaluatorStore;
 import com.puresol.coding.evaluator.AbstractEvaluator;
@@ -56,11 +56,11 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
     }
 
     @Override
-    protected void processFile(FileAnalysis analysis)
+    protected void processFile(CodeAnalysis analysis)
 	    throws InterruptedException {
 	MaintainabilityIndexFileResults results = new MaintainabilityIndexFileResults();
 
-	AnalyzedFile analyzedFile = analysis.getAnalyzedFile();
+	AnalyzedCode analyzedFile = analysis.getAnalyzedFile();
 	HashId hashId = analyzedFile.getHashId();
 	SLOCFileResults slocFileResults = (SLOCFileResults) slocStore
 		.readFileResults(hashId);
@@ -89,9 +89,9 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 	    MaintainabilityIndexResult result = new MaintainabilityIndexResult(
 		    MIwoc, MIcw);
 	    results.add(new MaintainabilityIndexFileResult(analyzedFile
-		    .getFile().getPath(), codeRange.getType(), codeRange
-		    .getName(), result, MaintainabilityQuality.get(
-		    codeRange.getType(), result)));
+		    .getLocation(), codeRange.getType(), codeRange.getName(),
+		    result, MaintainabilityQuality.get(codeRange.getType(),
+			    result)));
 	}
 	store.storeFileResults(hashId, results);
     }

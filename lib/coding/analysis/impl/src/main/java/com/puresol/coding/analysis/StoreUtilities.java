@@ -1,25 +1,23 @@
 package com.puresol.coding.analysis;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.puresol.coding.analysis.api.DirectoryStore;
-import com.puresol.coding.analysis.api.DirectoryStoreException;
-import com.puresol.coding.analysis.api.DirectoryStoreFactory;
-import com.puresol.coding.analysis.api.FileStore;
-import com.puresol.coding.analysis.api.FileStoreException;
-import com.puresol.coding.analysis.api.FileStoreFactory;
+import com.puresol.coding.analysis.api.CodeStoreException;
+import com.puresol.coding.analysis.api.CodeStoreFactory;
 import com.puresol.coding.analysis.api.HashIdFileTree;
+import com.puresol.coding.analysis.api.CodeStore;
 import com.puresol.data.HashCodeGenerator;
 import com.puresol.trees.FileTree;
 import com.puresol.trees.TreeVisitor;
 import com.puresol.trees.TreeWalker;
 import com.puresol.trees.WalkingAction;
+import com.puresol.uhura.source.SourceCode;
+import com.puresol.uhura.source.CodeLocation;
 import com.puresol.utils.FileUtilities;
 import com.puresol.utils.HashAlgorithm;
 import com.puresol.utils.HashId;
@@ -101,38 +99,21 @@ public class StoreUtilities {
 	return hashIdFileTree;
     }
 
-    public static void storeFiles(HashIdFileTree hashIdFileTree) {
-	final FileStore fileStore = FileStoreFactory.getInstance();
-	final DirectoryStore directoryStore = DirectoryStoreFactory
-		.getInstance();
-	TreeVisitor<HashIdFileTree> visitor = new TreeVisitor<HashIdFileTree>() {
-	    @Override
-	    public WalkingAction visit(HashIdFileTree tree) {
-		try {
-		    if (tree.isFile()) {
-			FileInputStream content = new FileInputStream(
-				tree.getPathFile(true));
-			try {
-			    fileStore.storeFile(tree.getHashId(), content);
-			} finally {
-			    content.close();
-			}
-		    } else {
-			directoryStore.createDirectory(tree.getHashId());
-		    }
-		    return WalkingAction.PROCEED;
-		} catch (IOException e) {
-		    return WalkingAction.ABORT;
-		} catch (FileStoreException e) {
-		    return WalkingAction.ABORT;
-		} catch (DirectoryStoreException e) {
-		    return WalkingAction.ABORT;
-		}
+    public static void storeFiles(List<CodeLocation> sourceCodeLocations)
+	    throws CodeStoreException {
+	try {
+	    final CodeStore codeStore = CodeStoreFactory.getInstance();
+	    // final ModuleStore moduleStore = ModuleStoreFactory.getInstance();
+	    // moduleStore.createPackage(hashId);
+	    // TODO Module store needs to be put in here...
+
+	    for (CodeLocation location : sourceCodeLocations) {
+		SourceCode source = location.load();
+		codeStore.storeCode(source);
 	    }
-	};
-	TreeWalker<HashIdFileTree> walker = new TreeWalker<HashIdFileTree>(
-		hashIdFileTree);
-	walker.walk(visitor);
+	} catch (IOException e) {
+	    throw new CodeStoreException(e);
+	}
     }
 
     public static void restoreFile(HashIdFileTree hashIdFileTree) {

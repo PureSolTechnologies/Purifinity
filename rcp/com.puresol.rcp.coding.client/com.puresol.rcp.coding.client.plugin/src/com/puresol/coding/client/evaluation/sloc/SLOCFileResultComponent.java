@@ -12,7 +12,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 
 import com.puresol.coding.analysis.api.AnalysisRun;
-import com.puresol.coding.analysis.api.AnalyzedFile;
+import com.puresol.coding.analysis.api.AnalyzedCode;
 import com.puresol.coding.client.utils.ColorUtils;
 import com.puresol.coding.evaluation.api.EvaluatorStore;
 import com.puresol.coding.evaluator.AbstractEvaluator;
@@ -24,14 +24,14 @@ import com.puresol.coding.quality.api.SourceCodeQuality;
 public class SLOCFileResultComponent extends Composite {
 
     private final AnalysisRun analysisRun;
-    private final AnalyzedFile analyzedFile;
+    private final AnalyzedCode analyzedCode;
 
     public SLOCFileResultComponent(Composite parent, int style,
-	    AnalysisRun analysisRun, AnalyzedFile analyzedFile) {
+	    AnalysisRun analysisRun, AnalyzedCode analyzedCode) {
 	super(parent, style);
 
 	this.analysisRun = analysisRun;
-	this.analyzedFile = analyzedFile;
+	this.analyzedCode = analyzedCode;
 
 	setLayout(new FillLayout());
 
@@ -39,7 +39,7 @@ public class SLOCFileResultComponent extends Composite {
 		.createEvaluatorStore(SLOCEvaluator.class);
 
 	SLOCFileResults fileResults = (SLOCFileResults) evaluatorStore
-		.readFileResults(analyzedFile.getHashId());
+		.readFileResults(analyzedCode.getHashId());
 
 	Table table = new Table(this, SWT.BORDER | SWT.V_SCROLL
 		| SWT.FULL_SELECTION);

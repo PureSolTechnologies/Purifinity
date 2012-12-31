@@ -7,27 +7,26 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.puresol.coding.analysis.api.AnalyzerException;
-import com.puresol.coding.analysis.api.FileAnalysis;
-import com.puresol.coding.analysis.api.FileAnalyzer;
+import com.puresol.coding.analysis.api.CodeAnalysis;
+import com.puresol.coding.analysis.api.CodeAnalyzer;
 import com.puresol.coding.analysis.api.ProgrammingLanguage;
+import com.puresol.uhura.source.CodeLocation;
 import com.puresol.utils.HashId;
 
-public class FileAnalyzerImpl implements FileAnalyzer {
+public class CodeAnalyzerImpl implements CodeAnalyzer {
 
     private static final Logger logger = LoggerFactory
-	    .getLogger(FileAnalyzerImpl.class);
+	    .getLogger(CodeAnalyzerImpl.class);
 
-    private final File sourceDirectory;
-    private final File file;
-    private FileAnalyzer analyzer = null;
+    private final CodeLocation source;
+    private CodeAnalyzer analyzer = null;
     private boolean analyzed = false;
     private long timeOfRun;
 
-    public FileAnalyzerImpl(File sourceDirectory, File file, HashId hashId)
+    public CodeAnalyzerImpl(CodeLocation source, HashId hashId)
 	    throws AnalyzerException {
 	super();
-	this.sourceDirectory = sourceDirectory;
-	this.file = file;
+	this.source = source;
     }
 
     @Override
@@ -39,7 +38,7 @@ public class FileAnalyzerImpl implements FileAnalyzer {
 	    analyzed = true;
 	    timeOfRun = System.currentTimeMillis() - timeOfRun;
 	} catch (LanguageNotSupportedException e) {
-	    logger.debug("File '" + file.getPath()
+	    logger.debug("File '" + source.getHumanReadableLocationString()
 		    + "' could not be analyzed due to contents in a "
 		    + "non-supported language.");
 	}
@@ -47,8 +46,7 @@ public class FileAnalyzerImpl implements FileAnalyzer {
 
     private void analyzeFile() throws IOException, AnalyzerException,
 	    LanguageNotSupportedException {
-	analyzer = FileAnalysisFactory.createFactory().create(sourceDirectory,
-		file);
+	analyzer = FileAnalysisFactory.createFactory().create(source);
 	analyzer.analyze();
     }
 
@@ -56,12 +54,12 @@ public class FileAnalyzerImpl implements FileAnalyzer {
 	return analyzed;
     }
 
-    public FileAnalyzer getAnalyzer() {
+    public CodeAnalyzer getAnalyzer() {
 	return analyzer;
     }
 
     @Override
-    public FileAnalysis getAnalysis() {
+    public CodeAnalysis getAnalysis() {
 	return analyzer.getAnalysis();
     }
 
@@ -76,8 +74,8 @@ public class FileAnalyzerImpl implements FileAnalyzer {
     }
 
     @Override
-    public File getFile() {
-	return file;
+    public CodeLocation getSource() {
+	return source;
     }
 
 }

@@ -12,8 +12,8 @@ import com.puresol.uhura.lexer.LexerException;
 import com.puresol.uhura.lexer.TokenStream;
 import com.puresol.uhura.parser.Parser;
 import com.puresol.uhura.parser.ParserException;
-import com.puresol.uhura.source.BuiltinSource;
-import com.puresol.uhura.source.Source;
+import com.puresol.uhura.source.FixedSourceCodeLocation;
+import com.puresol.uhura.source.CodeLocation;
 
 public class JavaGrammarPartTester {
 
@@ -27,10 +27,10 @@ public class JavaGrammarPartTester {
     public static boolean test(String production, String text)
 	    throws GrammarException, LexerException, IOException,
 	    ParserException {
-	return test(production, new BuiltinSource(text));
+	return test(production, new FixedSourceCodeLocation(text));
     }
 
-    public static boolean test(String production, Source source)
+    public static boolean test(String production, CodeLocation source)
 	    throws GrammarException, LexerException, IOException,
 	    ParserException {
 	if (parsers.get(production) == null) {

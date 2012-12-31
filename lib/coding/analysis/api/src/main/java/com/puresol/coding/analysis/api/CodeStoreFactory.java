@@ -4,29 +4,30 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
 /**
- * This is the central factory for a file store.
+ * This is the central factory for a code store. It creates {@link CodeStore}
+ * objects.
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class DirectoryStoreFactory {
+public class CodeStoreFactory {
 
-    private static DirectoryStore directoryStore = null;
+    private static CodeStore codeStore = null;
 
-    public static DirectoryStore getInstance() {
-	if (directoryStore == null) {
+    public static CodeStore getInstance() {
+	if (codeStore == null) {
 	    createInstance();
 	}
-	return directoryStore;
+	return codeStore;
     }
 
     private static synchronized void createInstance() {
-	if (directoryStore == null) {
+	if (codeStore == null) {
 	    BundleContext bundleContext = Activator.getBundleContext();
 	    ServiceReference serviceReference = bundleContext
-		    .getServiceReference(DirectoryStore.class.getName());
+		    .getServiceReference(CodeStore.class.getName());
 	    if (serviceReference != null) {
-		directoryStore = (DirectoryStore) bundleContext
+		codeStore = (CodeStore) bundleContext
 			.getService(serviceReference);
 	    }
 	}

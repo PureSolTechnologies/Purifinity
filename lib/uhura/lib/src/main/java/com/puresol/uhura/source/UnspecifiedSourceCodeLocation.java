@@ -2,7 +2,7 @@ package com.puresol.uhura.source;
 
 import java.io.IOException;
 
-public class UnspecifiedSource extends AbstractSource {
+public class UnspecifiedSourceCodeLocation extends AbstractSourceCodeLocation {
 
     private static final long serialVersionUID = 5446070531559019716L;
 
@@ -28,8 +28,18 @@ public class UnspecifiedSource extends AbstractSource {
     }
 
     @Override
-    public Source newRelativeSource(String relativePath) {
+    public CodeLocation newRelativeSource(String relativePath) {
 	throw new IllegalStateException(
 		"Cannot provide a new relative source to an unspecified source!");
+    }
+
+    @Override
+    public String getName() {
+	return "unspecified source";
+    }
+
+    @Override
+    public String getLocation() {
+	return "";
     }
 }

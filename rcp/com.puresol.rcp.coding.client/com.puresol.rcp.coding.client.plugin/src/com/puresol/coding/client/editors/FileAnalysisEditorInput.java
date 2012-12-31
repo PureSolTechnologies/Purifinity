@@ -5,17 +5,17 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
 
 import com.puresol.coding.analysis.api.AnalysisRun;
-import com.puresol.coding.analysis.api.AnalyzedFile;
+import com.puresol.coding.analysis.api.AnalyzedCode;
 
 public class FileAnalysisEditorInput implements IEditorInput {
 
-    private final AnalyzedFile analyzedFile;
+    private final AnalyzedCode analyzedCode;
     private final AnalysisRun analysisRun;
 
-    public FileAnalysisEditorInput(AnalyzedFile analyzedFile,
+    public FileAnalysisEditorInput(AnalyzedCode analyzedCode,
 	    AnalysisRun analysisRun) {
 	super();
-	this.analyzedFile = analyzedFile;
+	this.analyzedCode = analyzedCode;
 	this.analysisRun = analysisRun;
     }
 
@@ -36,7 +36,7 @@ public class FileAnalysisEditorInput implements IEditorInput {
 
     @Override
     public String getName() {
-	return analyzedFile.getFile().getName();
+	return analyzedCode.getLocation().getName();
     }
 
     @Override
@@ -46,11 +46,11 @@ public class FileAnalysisEditorInput implements IEditorInput {
 
     @Override
     public String getToolTipText() {
-	return analyzedFile.getFile().getPath();
+	return analyzedCode.getLocation().getHumanReadableLocationString();
     }
 
-    public final AnalyzedFile getAnalysisFile() {
-	return analyzedFile;
+    public final AnalyzedCode getAnalyzedCode() {
+	return analyzedCode;
     }
 
     public final AnalysisRun getAnalysisRun() {

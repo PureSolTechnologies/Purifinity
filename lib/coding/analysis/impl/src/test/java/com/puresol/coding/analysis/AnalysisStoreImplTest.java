@@ -14,12 +14,12 @@ import com.puresol.coding.analysis.api.Analysis;
 import com.puresol.coding.analysis.api.AnalysisInformation;
 import com.puresol.coding.analysis.api.AnalysisSettings;
 import com.puresol.coding.analysis.api.AnalysisStore;
-import com.puresol.coding.analysis.api.DirectoryStoreException;
+import com.puresol.coding.analysis.api.ModuleStoreException;
 
 public class AnalysisStoreImplTest {
 
     @Test
-    public void testGetAllAnalysisInformation() throws DirectoryStoreException {
+    public void testGetAllAnalysisInformation() throws ModuleStoreException {
 	AnalysisStore store = new AnalysisStoreImpl();
 	List<AnalysisInformation> allAnalysisInformation = store
 		.getAllAnalysisInformation();
@@ -31,12 +31,12 @@ public class AnalysisStoreImplTest {
     }
 
     @Test
-    public void testCreateAndDeleteAnalysis() throws DirectoryStoreException {
+    public void testCreateAndDeleteAnalysis() throws ModuleStoreException {
 	AnalysisStore store = new AnalysisStoreImpl();
 	File sourceDirectory = new File(".");
 	Analysis analysis = store.createAnalysis(new AnalysisSettings("Name",
 		"Description", new TestFileSearchConfiguration(),
-		sourceDirectory));
+		new DirectoryRepositoryLocation("name", sourceDirectory)));
 
 	AnalysisInformation information = analysis.getInformation();
 	assertNotNull(information.getUUID());
@@ -56,12 +56,12 @@ public class AnalysisStoreImplTest {
 
     @Test
     public void testCreateAndOpenAndDeleteAnalysis()
-	    throws DirectoryStoreException {
+	    throws ModuleStoreException {
 	AnalysisStore store = new AnalysisStoreImpl();
 	File sourceDirectory = new File(System.getProperty("user.dir"));
 	Analysis analysis = store.createAnalysis(new AnalysisSettings("Name",
 		"Description", new TestFileSearchConfiguration(),
-		sourceDirectory));
+		new DirectoryRepositoryLocation("name", sourceDirectory)));
 
 	AnalysisInformation information = analysis.getInformation();
 	assertNotNull(information.getUUID());

@@ -3,7 +3,7 @@ package com.puresol.coding.client.controls;
 import org.eclipse.swt.widgets.Composite;
 
 import com.puresol.coding.analysis.api.AnalysisRun;
-import com.puresol.coding.analysis.api.AnalyzedFile;
+import com.puresol.coding.analysis.api.AnalyzedCode;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 
 /**
@@ -27,7 +27,7 @@ public interface EvaluatorGUIFactory {
      * @return
      */
     public Composite createFileResultComponent(Composite parent,
-	    AnalysisRun analysisRun, AnalyzedFile analyzedFile);
+	    AnalysisRun analysisRun, AnalyzedCode analyzedSourceCode);
 
     public Composite createDirectoryResultComponent(Composite parent,
 	    AnalysisRun analysisRun, HashIdFileTree directory);

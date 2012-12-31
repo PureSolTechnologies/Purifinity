@@ -13,10 +13,11 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import com.puresol.coding.analysis.AnalysisRunImpl;
+import com.puresol.coding.analysis.DirectoryRepositoryLocation;
 import com.puresol.coding.analysis.api.AnalysisInformation;
 import com.puresol.coding.analysis.api.AnalysisRun;
-import com.puresol.coding.analysis.api.DirectoryStoreException;
-import com.puresol.utils.FileSearchConfiguration;
+import com.puresol.coding.analysis.api.ModuleStoreException;
+import com.puresol.utils.CodeSearchConfiguration;
 
 @Ignore
 public class ProjectSLOCMetricTest {
@@ -24,13 +25,14 @@ public class ProjectSLOCMetricTest {
     private AnalysisRun analyzer = null;
 
     @Before
-    public void setup() throws DirectoryStoreException {
+    public void setup() throws ModuleStoreException {
 	File runDirectory = new File("test/analysis");
 	AnalysisInformation analysisInformation = new AnalysisInformation(
 		UUID.randomUUID(), "ProjectAnalyzer", "description", new Date());
 	analyzer = AnalysisRunImpl.create(runDirectory, analysisInformation,
-		UUID.randomUUID(), new File("src/main/java"),
-		new FileSearchConfiguration());
+		UUID.randomUUID(), new DirectoryRepositoryLocation(
+			"ProjectSLOCMetricTest", new File("src/main/java")),
+		new CodeSearchConfiguration());
     }
 
     @Test
@@ -45,6 +47,6 @@ public class ProjectSLOCMetricTest {
 	assertFalse(metric.getName().isEmpty());
 	assertNotNull(metric.getInformation());
 	assertNotNull(metric.getEvaluatedQualityCharacteristics());
-	assertNotNull(metric.getTime());
+	assertNotNull(metric.getStartTime());
     }
 }

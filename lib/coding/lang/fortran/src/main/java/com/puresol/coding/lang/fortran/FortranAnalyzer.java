@@ -21,12 +21,12 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresol.coding.analysis.api.AnalyzedFile;
+import com.puresol.coding.analysis.api.AnalyzedCode;
 import com.puresol.coding.analysis.api.AnalyzerException;
+import com.puresol.coding.analysis.api.CodeAnalysis;
+import com.puresol.coding.analysis.api.CodeAnalyzer;
 import com.puresol.coding.analysis.api.CodeRange;
 import com.puresol.coding.analysis.api.CodeRangeType;
-import com.puresol.coding.analysis.api.FileAnalysis;
-import com.puresol.coding.analysis.api.FileAnalyzer;
 import com.puresol.coding.lang.fortran.grammar.FortranGrammar;
 import com.puresol.trees.TreeException;
 import com.puresol.trees.TreeVisitor;
@@ -37,10 +37,8 @@ import com.puresol.uhura.lexer.TokenStream;
 import com.puresol.uhura.parser.Parser;
 import com.puresol.uhura.parser.ParserException;
 import com.puresol.uhura.parser.ParserTree;
-import com.puresol.uhura.source.FileSource;
-import com.puresol.utils.FileUtilities;
-import com.puresol.utils.HashAlgorithm;
-import com.puresol.utils.HashId;
+import com.puresol.uhura.source.SourceCode;
+import com.puresol.uhura.source.CodeLocation;
 import com.puresol.utils.StopWatch;
 
 /**
@@ -50,20 +48,18 @@ import com.puresol.utils.StopWatch;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class FortranAnalyzer implements FileAnalyzer {
+public class FortranAnalyzer implements CodeAnalyzer {
 
     private static final Logger logger = LoggerFactory
 	    .getLogger(FortranAnalyzer.class);
 
-    private final File sourceDirectory;
-    private final File file;
+    private final CodeLocation sourceCodeLocation;
     private final transient FortranGrammar grammar;
-    private FileAnalysis fileAnalysis;
+    private CodeAnalysis fileAnalysis;
 
-    public FortranAnalyzer(File sourceDirectory, File file) {
+    public FortranAnalyzer(CodeLocation sourceCodeLocation) {
 	super();
-	this.sourceDirectory = sourceDirectory;
-	this.file = file;
+	this.sourceCodeLocation = sourceCodeLocation;
 	grammar = FortranGrammar.getInstance();
     }
 
@@ -74,17 +70,17 @@ public class FortranAnalyzer implements FileAnalyzer {
 	    Date date = new Date();
 	    StopWatch watch = new StopWatch();
 	    watch.start();
-	    HashId hashId = FileUtilities.createHashId(new File(
-		    sourceDirectory, file.getPath()), HashAlgorithm.SHA256);
-	    TokenStream tokenStream = preConditioningAndLexing();
+	    SourceCode sourceCode = sourceCodeLocation.load();
+	    TokenStream tokenStream = preConditioningAndLexing(sourceCode);
 	    Parser parser = grammar.getParser();
 	    ParserTree parserTree = parser.parse(tokenStream);
 	    watch.stop();
 	    long timeEffort = Math.round(watch.getSeconds() * 1000.0);
 	    Fortran fortran = Fortran.getInstance();
-	    AnalyzedFile analyzedFile = new AnalyzedFile(hashId, file, date,
+	    AnalyzedCode analyzedFile = new AnalyzedCode(
+		    sourceCode.getHashId(), sourceCodeLocation, date,
 		    timeEffort, fortran.getName(), fortran.getVersion());
-	    fileAnalysis = new FileAnalysis(date, timeEffort,
+	    fileAnalysis = new CodeAnalysis(date, timeEffort,
 		    fortran.getName(), fortran.getVersion(), analyzedFile,
 		    parserTree, getAnalyzableCodeRanges(parserTree));
 	} catch (IOException e) {
@@ -96,11 +92,11 @@ public class FortranAnalyzer implements FileAnalyzer {
 	}
     }
 
-    private TokenStream preConditioningAndLexing() throws AnalyzerException {
+    private TokenStream preConditioningAndLexing(SourceCode sourceCode)
+	    throws AnalyzerException {
 	try {
 	    FortranPreConditioner preconditioner = new FortranPreConditioner(
-		    new FileSource(new File(sourceDirectory, file.getPath()))
-			    .load());
+		    sourceCode);
 	    return preconditioner.scan(grammar.getLexer());
 	} catch (IOException e) {
 	    logger.error(e.getMessage(), e);
@@ -180,12 +176,12 @@ public class FortranAnalyzer implements FileAnalyzer {
     }
 
     @Override
-    public File getFile() {
-	return file;
+    public CodeLocation getSource() {
+	return sourceCodeLocation;
     }
 
     @Override
-    public FileAnalysis getAnalysis() {
+    public CodeAnalysis getAnalysis() {
 	return fileAnalysis;
     }
 

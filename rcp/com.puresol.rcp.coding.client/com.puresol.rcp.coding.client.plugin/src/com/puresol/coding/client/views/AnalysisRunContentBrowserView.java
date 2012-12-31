@@ -23,7 +23,7 @@ import swing2swt.layout.BorderLayout;
 
 import com.puresol.coding.analysis.api.Analysis;
 import com.puresol.coding.analysis.api.AnalysisRun;
-import com.puresol.coding.analysis.api.AnalyzedFile;
+import com.puresol.coding.analysis.api.AnalyzedCode;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.client.content.AnalysisContentTreeContentProvider;
 import com.puresol.coding.client.content.AnalysisContentTreeLabelProvider;
@@ -107,15 +107,15 @@ public class AnalysisRunContentBrowserView extends ViewPart implements
 		.getFirstElement();
 	fileAnalysis = new FileAnalysisSelection(analysis, analysisRun,
 		firstElement.getPathFile(false));
-	AnalyzedFile analyzedFile = analysisRun.findAnalyzedFile(firstElement
+	AnalyzedCode analyzedCode = analysisRun.findAnalyzedCode(firstElement
 		.getPathFile(false));
-	if (analyzedFile != null) {
+	if (analyzedCode != null) {
 	    FileAnalysisEditorInput fileAnalysisEditorInput = new FileAnalysisEditorInput(
-		    analyzedFile, analysisRun);
+		    analyzedCode, analysisRun);
 	    getSite().getPage().openEditor(fileAnalysisEditorInput,
 		    FileAnalysisEditor.ID);
 	} else {
-	    if (!analysisRun.getFailedFiles().contains(
+	    if (!analysisRun.getFailedCodeLocations().contains(
 		    firstElement.getPathFile(false))) {
 		DirectoryAnalysisEditorInput directoryAnalysisEditorInput = new DirectoryAnalysisEditorInput(
 			firstElement, analysisRun);

@@ -12,17 +12,17 @@ import com.puresol.uhura.lexer.TokenStream;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class BuiltinSource extends AbstractSource {
+public class FixedSourceCodeLocation extends AbstractSourceCodeLocation {
 
     private static final long serialVersionUID = -694681290095697777L;
 
     private final SourceCode sourceCode;
 
-    public BuiltinSource(SourceCode sourceCode) {
+    public FixedSourceCodeLocation(SourceCode sourceCode) {
 	this.sourceCode = sourceCode;
     }
 
-    public BuiltinSource(String... lines) {
+    public FixedSourceCodeLocation(String... lines) {
 	SourceCode sourceCode = new SourceCode();
 	int lineNum = 0;
 	for (String line : lines) {
@@ -60,7 +60,7 @@ public class BuiltinSource extends AbstractSource {
 	    return false;
 	if (getClass() != obj.getClass())
 	    return false;
-	BuiltinSource other = (BuiltinSource) obj;
+	FixedSourceCodeLocation other = (FixedSourceCodeLocation) obj;
 	if (sourceCode == null) {
 	    if (other.sourceCode != null)
 		return false;
@@ -70,8 +70,18 @@ public class BuiltinSource extends AbstractSource {
     }
 
     @Override
-    public Source newRelativeSource(String relativePath) {
+    public CodeLocation newRelativeSource(String relativePath) {
 	throw new IllegalStateException(
 		"Cannot provide a new relative source to a built-in source!");
+    }
+
+    @Override
+    public String getName() {
+	return "built-in source";
+    }
+
+    @Override
+    public String getLocation() {
+	return "";
     }
 }

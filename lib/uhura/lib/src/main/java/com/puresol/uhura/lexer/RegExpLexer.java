@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.token.TokenDefinition;
 import com.puresol.uhura.grammar.token.Visibility;
-import com.puresol.uhura.source.Source;
+import com.puresol.uhura.source.CodeLocation;
 import com.puresol.uhura.source.SourceCode;
 import com.puresol.uhura.source.SourceCodeLine;
 
@@ -101,7 +101,7 @@ public class RegExpLexer implements Lexer {
 	return tokenStream;
     }
 
-    private Token findNextToken(StringBuffer text, Source source, int id,
+    private Token findNextToken(StringBuffer text, CodeLocation source, int id,
 	    int pos, int line) {
 	Token nextToken = null;
 	for (TokenDefinition definition : grammar.getTokenDefinitions()

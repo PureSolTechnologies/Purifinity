@@ -21,12 +21,12 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresol.coding.analysis.api.AnalyzedFile;
+import com.puresol.coding.analysis.api.AnalyzedCode;
 import com.puresol.coding.analysis.api.AnalyzerException;
+import com.puresol.coding.analysis.api.CodeAnalysis;
+import com.puresol.coding.analysis.api.CodeAnalyzer;
 import com.puresol.coding.analysis.api.CodeRange;
 import com.puresol.coding.analysis.api.CodeRangeType;
-import com.puresol.coding.analysis.api.FileAnalysis;
-import com.puresol.coding.analysis.api.FileAnalyzer;
 import com.puresol.coding.analysis.api.ProgrammingLanguage;
 import com.puresol.coding.lang.test.grammar.TestLanguageGrammar;
 import com.puresol.uhura.lexer.Lexer;
@@ -35,10 +35,8 @@ import com.puresol.uhura.lexer.TokenStream;
 import com.puresol.uhura.parser.Parser;
 import com.puresol.uhura.parser.ParserException;
 import com.puresol.uhura.parser.ParserTree;
-import com.puresol.uhura.source.FileSource;
-import com.puresol.utils.FileUtilities;
-import com.puresol.utils.HashAlgorithm;
-import com.puresol.utils.HashId;
+import com.puresol.uhura.source.SourceCode;
+import com.puresol.uhura.source.CodeLocation;
 import com.puresol.utils.StopWatch;
 
 /**
@@ -46,20 +44,18 @@ import com.puresol.utils.StopWatch;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class TestLanguageAnalyser implements FileAnalyzer {
+public class TestLanguageAnalyser implements CodeAnalyzer {
 
     private static final Logger logger = LoggerFactory
 	    .getLogger(TestLanguageAnalyser.class);
 
-    private final File sourceDirectory;
-    private final File file;
+    private final CodeLocation sourceCodeLocation;
     private final transient TestLanguageGrammar grammar;
-    private FileAnalysis fileAnalysis;
+    private CodeAnalysis fileAnalysis;
 
-    public TestLanguageAnalyser(File sourceDirectory, File file) {
+    public TestLanguageAnalyser(CodeLocation sourceCodeLocation) {
 	super();
-	this.sourceDirectory = sourceDirectory;
-	this.file = file;
+	this.sourceCodeLocation = sourceCodeLocation;
 	grammar = TestLanguageGrammar.getInstance();
     }
 
@@ -70,20 +66,19 @@ public class TestLanguageAnalyser implements FileAnalyzer {
 	    Date date = new Date();
 	    StopWatch watch = new StopWatch();
 	    watch.start();
-	    HashId hashId = FileUtilities.createHashId(new File(
-		    sourceDirectory, file.getPath()), HashAlgorithm.SHA256);
+	    SourceCode sourceCode = sourceCodeLocation.load();
 	    Lexer lexer = grammar.getLexer();
-	    TokenStream tokenStream = lexer.lex(new FileSource(new File(
-		    sourceDirectory, file.getPath())).load());
+	    TokenStream tokenStream = lexer.lex(sourceCode);
 	    Parser parser = grammar.getParser();
 	    ParserTree parserTree = parser.parse(tokenStream);
 	    watch.stop();
 	    long timeEffort = Math.round(watch.getSeconds() * 1000.0);
 	    TestLanguage language = TestLanguage.getInstance();
-	    fileAnalysis = new FileAnalysis(date, timeEffort,
+	    fileAnalysis = new CodeAnalysis(date, timeEffort,
 		    language.getName(), language.getVersion(),
-		    new AnalyzedFile(hashId, file, date, timeEffort, language
-			    .getName(), language.getVersion()),
+		    new AnalyzedCode(sourceCode.getHashId(),
+			    sourceCodeLocation, date, timeEffort, language
+				    .getName(), language.getVersion()),
 		    parserTree, getAnalyzableCodeRanges(parserTree));
 
 	} catch (ParserException e) {
@@ -132,12 +127,12 @@ public class TestLanguageAnalyser implements FileAnalyzer {
     }
 
     @Override
-    public File getFile() {
-	return file;
+    public CodeLocation getSource() {
+	return sourceCodeLocation;
     }
 
     @Override
-    public FileAnalysis getAnalysis() {
+    public CodeAnalysis getAnalysis() {
 	return fileAnalysis;
     }
 

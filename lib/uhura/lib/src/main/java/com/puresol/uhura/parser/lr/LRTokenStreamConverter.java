@@ -17,7 +17,7 @@ import com.puresol.uhura.parser.ParserException;
 import com.puresol.uhura.parser.ParserTree;
 import com.puresol.uhura.parser.ParserTreeMetaData;
 import com.puresol.uhura.parser.parsetable.ParserAction;
-import com.puresol.uhura.source.UnspecifiedSource;
+import com.puresol.uhura.source.UnspecifiedSourceCodeLocation;
 
 /**
  * This class is used to convert a token stream into a parser tree. For this
@@ -214,7 +214,7 @@ public class LRTokenStreamConverter {
 		List<ParserTree> children = currentNode.getChildren();
 		if (children.size() == 0) {
 		    currentNode.setMetaData(new ParserTreeMetaData(
-			    new UnspecifiedSource(), line, 1));
+			    new UnspecifiedSourceCodeLocation(), line, 1));
 
 		} else {
 		    final ParserTreeMetaData metaDataLeft = children.get(0)
@@ -222,7 +222,7 @@ public class LRTokenStreamConverter {
 		    final ParserTreeMetaData metaDataRight = children.get(
 			    children.size() - 1).getMetaData();
 		    currentNode.setMetaData(new ParserTreeMetaData(
-			    new UnspecifiedSource(), metaDataLeft.getLine(),
+			    new UnspecifiedSourceCodeLocation(), metaDataLeft.getLine(),
 			    metaDataRight.getLine() - metaDataLeft.getLine()
 				    + metaDataRight.getLineNum()));
 		}

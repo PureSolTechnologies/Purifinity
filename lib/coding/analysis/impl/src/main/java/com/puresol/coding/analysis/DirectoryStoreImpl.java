@@ -2,22 +2,22 @@ package com.puresol.coding.analysis;
 
 import java.io.File;
 
-import com.puresol.coding.analysis.api.DirectoryStore;
-import com.puresol.coding.analysis.api.DirectoryStoreException;
+import com.puresol.coding.analysis.api.ModuleStore;
+import com.puresol.coding.analysis.api.ModuleStoreException;
 import com.puresol.utils.HashId;
 
-public class DirectoryStoreImpl implements DirectoryStore {
+public class DirectoryStoreImpl implements ModuleStore {
 
     private static final File directoryStoreDirectory = new File(
 	    AnalysisStoreImpl.getStorageDirectory(), "dirs");
 
     @Override
-    public boolean createDirectory(HashId hashId)
-	    throws DirectoryStoreException {
+    public boolean createPackage(HashId hashId)
+	    throws ModuleStoreException {
 	File directory = getDirectoryStoreDirectory(hashId);
 	if (!isAvailable(hashId)) {
 	    if (!directory.mkdirs()) {
-		throw new DirectoryStoreException(
+		throw new ModuleStoreException(
 			"Could not create directory with hash '" + hashId + "'");
 	    }
 	    return true;

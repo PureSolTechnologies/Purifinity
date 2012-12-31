@@ -13,7 +13,9 @@ Bundle-ManifestVersion: 2
 Bundle-SymbolicName: com.puresol.uhura.lib
 Originally-Created-By: Apache Maven Bundle Plugin
 Bundle-ActivationPolicy: lazy
-Import-Package: com.puresol.trees;version="0.1.0",
+Import-Package: com.puresol.data;version="0.1.0",
+ com.puresol.trees;version="0.1.0",
+ com.puresol.uhura.source;version="0.1.0",
  com.puresol.utils;version="0.1.0",
  org.osgi.framework;version="0.0.0",
  org.slf4j;version="1.7.2"

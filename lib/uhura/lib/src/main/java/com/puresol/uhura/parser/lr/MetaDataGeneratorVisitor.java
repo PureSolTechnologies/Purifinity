@@ -5,7 +5,7 @@ import com.puresol.trees.WalkingAction;
 import com.puresol.uhura.lexer.Token;
 import com.puresol.uhura.parser.ParserTree;
 import com.puresol.uhura.parser.ParserTreeMetaData;
-import com.puresol.uhura.source.UnspecifiedSource;
+import com.puresol.uhura.source.UnspecifiedSourceCodeLocation;
 
 public class MetaDataGeneratorVisitor implements TreeVisitor<ParserTree> {
 
@@ -29,7 +29,7 @@ public class MetaDataGeneratorVisitor implements TreeVisitor<ParserTree> {
 			.getSource(), token.getMetaData().getLine(), token
 			.getMetaData().getLineNum());
 	    } else {
-		metaData = new ParserTreeMetaData(new UnspecifiedSource(), 0, 0);
+		metaData = new ParserTreeMetaData(new UnspecifiedSourceCodeLocation(), 0, 0);
 	    }
 	}
 	tree.setMetaData(metaData);

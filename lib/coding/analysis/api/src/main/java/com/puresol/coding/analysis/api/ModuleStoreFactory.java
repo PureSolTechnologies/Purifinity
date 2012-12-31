@@ -9,24 +9,24 @@ import org.osgi.framework.ServiceReference;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class FileStoreFactory {
+public class ModuleStoreFactory {
 
-    private static FileStore fileStore = null;
+    private static ModuleStore directoryStore = null;
 
-    public static FileStore getInstance() {
-	if (fileStore == null) {
+    public static ModuleStore getInstance() {
+	if (directoryStore == null) {
 	    createInstance();
 	}
-	return fileStore;
+	return directoryStore;
     }
 
     private static synchronized void createInstance() {
-	if (fileStore == null) {
+	if (directoryStore == null) {
 	    BundleContext bundleContext = Activator.getBundleContext();
 	    ServiceReference serviceReference = bundleContext
-		    .getServiceReference(FileStore.class.getName());
+		    .getServiceReference(ModuleStore.class.getName());
 	    if (serviceReference != null) {
-		fileStore = (FileStore) bundleContext
+		directoryStore = (ModuleStore) bundleContext
 			.getService(serviceReference);
 	    }
 	}

@@ -29,7 +29,7 @@ import swing2swt.layout.BorderLayout;
 import com.puresol.coding.analysis.api.Analysis;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalysisRunInformation;
-import com.puresol.coding.analysis.api.DirectoryStoreException;
+import com.puresol.coding.analysis.api.ModuleStoreException;
 import com.puresol.coding.client.Activator;
 import com.puresol.coding.client.ClientImages;
 import com.puresol.coding.client.content.AnalysisRunListContentProvider;
@@ -167,7 +167,7 @@ public class AnalysisRunsView extends ViewPart implements SelectionListener,
 	    EvaluationJob evaluationJob = new EvaluationJob(analysisRun);
 	    evaluationJob.schedule();
 	    refreshAnalysisRunList();
-	} catch (DirectoryStoreException e) {
+	} catch (ModuleStoreException e) {
 	    logger.log(new Status(Status.ERROR, AnalysisRunsView.class
 		    .getName(), "Could not start new analysis run!", e));
 	} catch (InterruptedException e) {
@@ -191,11 +191,11 @@ public class AnalysisRunsView extends ViewPart implements SelectionListener,
 		    getSite().getShell(),
 		    "Delete?",
 		    "Do you really want to delete analysis '"
-			    + information.getTime() + "'?")) {
+			    + information.getStartTime() + "'?")) {
 		analysis.removeAnalysisRun(information.getUUID());
 		refreshAnalysisRunList();
 	    }
-	} catch (DirectoryStoreException e) {
+	} catch (ModuleStoreException e) {
 	    logger.log(new Status(Status.ERROR, ParserTreeControl.class
 		    .getName(), "Can not read analysis runs from store!", e));
 	}
@@ -204,7 +204,7 @@ public class AnalysisRunsView extends ViewPart implements SelectionListener,
     private void refreshAnalysisRunList() {
 	try {
 	    analysisRunsViewer.setInput(analysis.getAllRunInformation());
-	} catch (DirectoryStoreException e) {
+	} catch (ModuleStoreException e) {
 	    logger.log(new Status(Status.ERROR, ParserTreeControl.class
 		    .getName(), "Can not read analysis runs from store!", e));
 	}
@@ -219,7 +219,7 @@ public class AnalysisRunsView extends ViewPart implements SelectionListener,
 	    AnalysisRun analysisRun = analysis.loadAnalysisRun(information
 		    .getUUID());
 	    setSelection(new AnalysisRunSelection(analysisRun));
-	} catch (DirectoryStoreException e) {
+	} catch (ModuleStoreException e) {
 	    logger.log(new Status(Status.ERROR, ParserTreeControl.class
 		    .getName(), "Can not read analysis runs from store!", e));
 	}
@@ -242,7 +242,7 @@ public class AnalysisRunsView extends ViewPart implements SelectionListener,
 	    AnalysisSelection analysisSelection = (AnalysisSelection) selection;
 	    analysis = analysisSelection.getAnalysis();
 	    analysisRunsViewer.setInput(analysis.getAllRunInformation());
-	} catch (DirectoryStoreException e) {
+	} catch (ModuleStoreException e) {
 	    logger.log(new Status(Status.ERROR, ParserTreeControl.class
 		    .getName(), "Can not read analysis store!", e));
 	}

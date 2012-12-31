@@ -1,6 +1,5 @@
 package com.puresol.coding.client.views;
 
-import java.io.File;
 import java.util.List;
 
 import org.eclipse.core.runtime.ILog;
@@ -25,10 +24,11 @@ import org.eclipse.wb.swt.SWTResourceManager;
 
 import com.puresol.coding.analysis.api.Analysis;
 import com.puresol.coding.analysis.api.AnalysisRun;
-import com.puresol.coding.analysis.api.DirectoryStoreException;
-import com.puresol.coding.analysis.api.AnalyzedFile;
+import com.puresol.coding.analysis.api.AnalyzedCode;
+import com.puresol.coding.analysis.api.ModuleStoreException;
 import com.puresol.coding.client.Activator;
 import com.puresol.coding.client.controls.ParserTreeControl;
+import com.puresol.uhura.source.CodeLocation;
 
 public class AnalysisReport extends ViewPart implements ISelectionListener {
 
@@ -120,14 +120,15 @@ public class AnalysisReport extends ViewPart implements ISelectionListener {
 		Analysis analysis = analysisSelection.getAnalysis();
 		name.setText(analysis.getInformation().getName());
 		AnalysisRun lastAnalysisRun = analysis.loadLastAnalysisRun();
-		java.util.List<AnalyzedFile> analyzedFiles = lastAnalysisRun
-			.getAnalyzedFiles();
+		java.util.List<AnalyzedCode> analyzedFiles = lastAnalysisRun
+			.getAnalyzedCodes();
 		numAnalyzedFiles.setText(String.valueOf(analyzedFiles.size()));
-		List<File> failedFiles = lastAnalysisRun.getFailedFiles();
+		List<CodeLocation> failedFiles = lastAnalysisRun
+			.getFailedCodeLocations();
 		numFailedFiles.setText(String.valueOf(String
 			.valueOf(failedFiles.size())));
 	    }
-	} catch (DirectoryStoreException e) {
+	} catch (ModuleStoreException e) {
 	    logger.log(new Status(Status.ERROR, ParserTreeControl.class
 		    .getName(), "Can not read analysis store!", e));
 	}

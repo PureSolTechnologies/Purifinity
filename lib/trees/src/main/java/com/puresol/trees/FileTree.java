@@ -1,6 +1,8 @@
 package com.puresol.trees;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This is a special implementation of a tree for files. This tree can be used
@@ -11,6 +13,18 @@ import java.io.File;
  */
 public class FileTree extends AbstractTreeImpl<FileTree> implements
 	Comparable<FileTree> {
+
+    public static List<File> getFileListFromFileTree(File baseDirectory,
+	    FileTree fileTree) {
+	List<File> files = new ArrayList<File>();
+	for (FileTree fileTreeNode : fileTree) {
+	    File file = fileTreeNode.getPathFile(false);
+	    if (new File(baseDirectory, file.getPath()).isFile()) {
+		files.add(file);
+	    }
+	}
+	return files;
+    }
 
     /**
      * This is the initial value constructor.

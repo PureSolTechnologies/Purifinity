@@ -2,7 +2,7 @@ package com.puresol.uhura.parser;
 
 import java.io.Serializable;
 
-import com.puresol.uhura.source.Source;
+import com.puresol.uhura.source.CodeLocation;
 import com.puresol.utils.ObjectUtilities;
 
 /**
@@ -15,12 +15,12 @@ public class ParserTreeMetaData implements Serializable, Cloneable {
 
     private static final long serialVersionUID = 7846977139079079374L;
 
-    private final Source source;
+    private final CodeLocation source;
     private final int line;
     private final int lineNum;
     private final int hashcode;
 
-    public ParserTreeMetaData(Source source, int line, int lineNum) {
+    public ParserTreeMetaData(CodeLocation source, int line, int lineNum) {
 	super();
 	this.source = source;
 	this.line = line;
@@ -30,7 +30,7 @@ public class ParserTreeMetaData implements Serializable, Cloneable {
 		lineNum);
     }
 
-    public Source getSource() {
+    public CodeLocation getSource() {
 	return source;
     }
 

@@ -11,11 +11,11 @@ import org.eclipse.swt.widgets.Tree;
 import swing2swt.layout.BorderLayout;
 
 import com.puresol.coding.analysis.api.AnalysisRun;
-import com.puresol.coding.analysis.api.AnalyzedFile;
-import com.puresol.coding.analysis.api.FileAnalysis;
-import com.puresol.coding.analysis.api.FileStore;
-import com.puresol.coding.analysis.api.FileStoreException;
-import com.puresol.coding.analysis.api.FileStoreFactory;
+import com.puresol.coding.analysis.api.AnalyzedCode;
+import com.puresol.coding.analysis.api.CodeAnalysis;
+import com.puresol.coding.analysis.api.CodeStore;
+import com.puresol.coding.analysis.api.CodeStoreException;
+import com.puresol.coding.analysis.api.CodeStoreFactory;
 import com.puresol.coding.client.content.ParserTreeContentProvider;
 import com.puresol.coding.client.content.ParserTreeLabelProvider;
 
@@ -27,7 +27,7 @@ import com.puresol.coding.client.content.ParserTreeLabelProvider;
  */
 public class ParserTreeControl extends Composite {
 
-    private final FileStore fileStore = FileStoreFactory.getInstance();
+    private final CodeStore codeStore = CodeStoreFactory.getInstance();
 
     private final Label lblNewLabel;
     private final Tree tree;
@@ -54,15 +54,17 @@ public class ParserTreeControl extends Composite {
      * @throws IOException
      * @throws FileStoreException
      */
-    public void setContentAndUpdateContent(AnalyzedFile analyzedFile,
-	    AnalysisRun analysisRun) throws IOException, FileStoreException {
-	FileAnalysis fileAnalysis = fileStore.loadAnalysis(analyzedFile
+    public void setContentAndUpdateContent(AnalyzedCode analyzedCode,
+	    AnalysisRun analysisRun) throws IOException, CodeStoreException {
+	CodeAnalysis codeAnalysis = codeStore.loadAnalysis(analyzedCode
 		.getHashId());
-	if (fileAnalysis != null) {
+	if (codeAnalysis != null) {
 	    lblNewLabel.setText(analysisRun.getInformation()
 		    .getAnalysisInformation().getName()
-		    + ": " + analyzedFile.getFile());
-	    treeViewer.setInput(fileAnalysis.getParserTree());
+		    + ": "
+		    + analyzedCode.getLocation()
+			    .getHumanReadableLocationString());
+	    treeViewer.setInput(codeAnalysis.getParserTree());
 	} else {
 	    lblNewLabel.setText("");
 	    treeViewer.setInput(null);

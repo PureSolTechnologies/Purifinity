@@ -2,20 +2,18 @@ package com.puresol.coding.analysis;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import com.puresol.coding.analysis.api.FileAnalysis;
-import com.puresol.coding.analysis.api.FileStore;
-import com.puresol.coding.analysis.api.FileStoreException;
-import com.puresol.utils.FileUtilities;
+import com.puresol.coding.analysis.api.CodeAnalysis;
+import com.puresol.coding.analysis.api.CodeStoreException;
+import com.puresol.coding.analysis.api.CodeStore;
+import com.puresol.uhura.source.SourceCode;
 import com.puresol.utils.HashId;
 
-public final class FileStoreImpl implements FileStore {
+public final class FileStoreImpl implements CodeStore {
 
     private static final String CONTENT_FILE = "content.txt";
     private static final String PARSER_TREE_FILE = "parser_tree.persist";
@@ -24,56 +22,50 @@ public final class FileStoreImpl implements FileStore {
 	    AnalysisStoreImpl.getStorageDirectory(), "files");
 
     @Override
-    public boolean storeFile(HashId hashId, InputStream conent)
-	    throws FileStoreException {
+    public boolean storeCode(SourceCode sourceCode) throws CodeStoreException {
 	try {
-	    File targetDirectory = getFileDirectory(hashId);
+	    File targetDirectory = getFileDirectory(sourceCode.getHashId());
 	    if (!targetDirectory.exists()) {
 		if (!targetDirectory.mkdirs()) {
 		    throw new IOException("Could not create directory '"
 			    + targetDirectory + "'");
 		}
 	    }
-	    FileOutputStream target = new FileOutputStream(new File(
-		    targetDirectory, CONTENT_FILE));
-	    try {
-		FileUtilities.copy(conent, target);
-	    } finally {
-		target.close();
-	    }
-	    return false;
+	    File targetFile = new File(targetDirectory, CONTENT_FILE);
+	    PersistenceUtils.store(targetFile, sourceCode);
+	    return true;
 	} catch (IOException e) {
-	    throw new FileStoreException("Could not store file with hash '"
-		    + hashId + "'", e);
+	    throw new CodeStoreException("Could not store file with hash '"
+		    + sourceCode.getHashId() + "'", e);
 	}
     }
 
     @Override
-    public FileAnalysis loadAnalysis(HashId hashId) throws FileStoreException {
+    public CodeAnalysis loadAnalysis(HashId hashId) throws CodeStoreException {
 	try {
 	    File fileDirectory = getFileDirectory(hashId);
 	    File parserTreeFile = new File(fileDirectory, PARSER_TREE_FILE);
 	    ObjectInputStream inStream = new ObjectInputStream(
 		    new FileInputStream(parserTreeFile));
 	    try {
-		return (FileAnalysis) inStream.readObject();
+		return (CodeAnalysis) inStream.readObject();
 	    } finally {
 		inStream.close();
 	    }
 	} catch (ClassNotFoundException e) {
-	    throw new FileStoreException(
+	    throw new CodeStoreException(
 		    "Could not load analysis for file with hash '" + hashId
 			    + "'", e);
 	} catch (IOException e) {
-	    throw new FileStoreException(
+	    throw new CodeStoreException(
 		    "Could not load analysis for file with hash '" + hashId
 			    + "'", e);
 	}
     }
 
     @Override
-    public final void storeAnalysis(HashId hashId, FileAnalysis fileAnalysis)
-	    throws FileStoreException {
+    public final void storeAnalysis(HashId hashId, CodeAnalysis fileAnalysis)
+	    throws CodeStoreException {
 	try {
 	    File fileDirectory = getFileDirectory(hashId);
 	    File parserTreeFile = new File(fileDirectory, PARSER_TREE_FILE);
@@ -85,7 +77,7 @@ public final class FileStoreImpl implements FileStore {
 		outStream.close();
 	    }
 	} catch (IOException e) {
-	    throw new FileStoreException(
+	    throw new CodeStoreException(
 		    "Could not store analysis for file with hash '" + hashId
 			    + "'", e);
 	}
@@ -97,13 +89,14 @@ public final class FileStoreImpl implements FileStore {
     }
 
     @Override
-    public final InputStream loadContent(HashId hashId)
-	    throws FileStoreException {
+    public final SourceCode loadContent(HashId hashId)
+	    throws CodeStoreException {
 	try {
 	    File file = FileStoreImpl.getFileDirectory(hashId);
-	    return new FileInputStream(new File(file, CONTENT_FILE));
-	} catch (FileNotFoundException e) {
-	    throw new FileStoreException("Could not load file with id '"
+	    SourceCode sourceCode = PersistenceUtils.restore(file);
+	    return sourceCode;
+	} catch (IOException e) {
+	    throw new CodeStoreException("Could not load file with id '"
 		    + hashId.toString() + "'!", e);
 	}
     }

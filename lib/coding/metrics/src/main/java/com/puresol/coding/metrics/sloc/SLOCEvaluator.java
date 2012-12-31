@@ -4,9 +4,9 @@ import java.util.List;
 
 import com.puresol.coding.ProgrammingLanguages;
 import com.puresol.coding.analysis.api.AnalysisRun;
+import com.puresol.coding.analysis.api.CodeAnalysis;
 import com.puresol.coding.analysis.api.CodeRange;
 import com.puresol.coding.analysis.api.CodeRangeType;
-import com.puresol.coding.analysis.api.FileAnalysis;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.analysis.api.ProgrammingLanguage;
 import com.puresol.coding.evaluation.api.EvaluatorStore;
@@ -26,7 +26,7 @@ public class SLOCEvaluator extends AbstractEvaluator {
     }
 
     @Override
-    protected void processFile(FileAnalysis analysis)
+    protected void processFile(CodeAnalysis analysis)
 	    throws InterruptedException {
 	SLOCFileResults results = new SLOCFileResults();
 	ProgrammingLanguage language = ProgrammingLanguages.findByName(
@@ -37,8 +37,8 @@ public class SLOCEvaluator extends AbstractEvaluator {
 		    getAnalysisRun(), language, codeRange);
 	    metric.schedule();
 	    metric.join();
-	    results.add(new SLOCFileResult(analysis.getAnalyzedFile().getFile()
-		    .getPath(), codeRange.getType(), codeRange.getName(),
+	    results.add(new SLOCFileResult(analysis.getAnalyzedFile()
+		    .getLocation(), codeRange.getType(), codeRange.getName(),
 		    metric.getSLOCResult(), metric.getQuality()));
 	}
 	store.storeFileResults(analysis.getAnalyzedFile().getHashId(), results);
@@ -70,8 +70,8 @@ public class SLOCEvaluator extends AbstractEvaluator {
 		    .readFileResults(child.getHashId());
 	    for (SLOCFileResult results : fileResults) {
 		if (results.getCodeRangeType() == CodeRangeType.FILE) {
-		    finalResults.add(new SLOCDirectoryResult(results.getFile(),
-			    results.getSLOCResult()));
+		    finalResults.add(new SLOCDirectoryResult(results
+			    .getSourceCodeLocation(), results.getSLOCResult()));
 		    break;
 		}
 	    }
@@ -80,19 +80,20 @@ public class SLOCEvaluator extends AbstractEvaluator {
 
     private void addDirectorySLOC(SLOCDirectoryResults finalResults,
 	    HashIdFileTree child) {
-	if (store.hasDirectoryResults(child.getHashId())) {
-	    SLOCDirectoryResults directoryResults = (SLOCDirectoryResults) store
-		    .readDirectoryResults(child.getHashId());
-	    SLOCResult combinedSLOC = new SLOCResult(0, 0, 0, 0, null);
-	    for (SLOCDirectoryResult results : directoryResults) {
-		SLOCResult slocResult = results.getSLOCResult();
-		if (slocResult != null) {
-		    combinedSLOC = SLOCResult.combine(combinedSLOC, slocResult);
-		}
-	    }
-	    finalResults.add(new SLOCDirectoryResult(child.getName(),
-		    combinedSLOC));
-	}
+	throw new RuntimeException("Not implemented, yet!");
+	// if (store.hasDirectoryResults(child.getHashId())) {
+	// SLOCDirectoryResults directoryResults = (SLOCDirectoryResults) store
+	// .readDirectoryResults(child.getHashId());
+	// SLOCResult combinedSLOC = new SLOCResult(0, 0, 0, 0, null);
+	// for (SLOCDirectoryResult results : directoryResults) {
+	// SLOCResult slocResult = results.getSLOCResult();
+	// if (slocResult != null) {
+	// combinedSLOC = SLOCResult.combine(combinedSLOC, slocResult);
+	// }
+	// }
+	// finalResults.add(new SLOCDirectoryResult(child.getName(),
+	// combinedSLOC));
+	// }
     }
 
     @Override

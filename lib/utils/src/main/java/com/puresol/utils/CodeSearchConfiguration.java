@@ -1,6 +1,7 @@
 package com.puresol.utils;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class FileSearchConfiguration implements Serializable {
+public class CodeSearchConfiguration implements Serializable, Cloneable {
 
     private static final long serialVersionUID = 4724648711481875290L;
 
@@ -20,13 +21,13 @@ public class FileSearchConfiguration implements Serializable {
      * Contains FS patterns which specify directory names which are to be
      * included no matter what is specified in directoryExcludes.
      */
-    private final List<String> dirIncludes = new ArrayList<String>();
+    private final List<String> locationIncludes = new ArrayList<String>();
     /**
      * These list contains FS pattern for directories which are to be ignored.
      * An exception is the definition within directoryIncludes which overrides
      * the excludes list.
      */
-    private final List<String> dirExcludes = new ArrayList<String>();
+    private final List<String> locationExcludes = new ArrayList<String>();
     /**
      * Contains FS patterns which specify file names which are to be included no
      * matter what is specified in fileExcludes.
@@ -49,7 +50,7 @@ public class FileSearchConfiguration implements Serializable {
      * This is the default constructor. No includes and excludes are defined and
      * ignoreHidden is set to true.
      */
-    public FileSearchConfiguration() {
+    public CodeSearchConfiguration() {
 	super();
     }
 
@@ -62,33 +63,33 @@ public class FileSearchConfiguration implements Serializable {
      * @param fileExcludes
      * @param ignoreHidden
      */
-    public FileSearchConfiguration(List<String> dirIncludes,
+    public CodeSearchConfiguration(List<String> dirIncludes,
 	    List<String> dirExcludes, List<String> fileIncludes,
 	    List<String> fileExcludes, boolean ignoreHidden) {
 	super();
-	setDirectoryIncludes(dirIncludes);
-	setDirectoryExcludes(dirExcludes);
+	setLocationIncludes(dirIncludes);
+	setLocationExcludes(dirExcludes);
 	setFileIncludes(fileIncludes);
 	setFileExcludes(fileExcludes);
 	setIgnoreHidden(ignoreHidden);
     }
 
-    public final void setDirectoryIncludes(List<String> dirIncludes) {
-	this.dirIncludes.clear();
-	this.dirIncludes.addAll(dirIncludes);
+    public final void setLocationIncludes(List<String> locationIncludes) {
+	this.locationIncludes.clear();
+	this.locationIncludes.addAll(locationIncludes);
     }
 
-    public final List<String> getDirectoryIncludes() {
-	return dirIncludes;
+    public final List<String> getLocationIncludes() {
+	return locationIncludes;
     }
 
-    public final void setDirectoryExcludes(List<String> dirExcludes) {
-	this.dirExcludes.clear();
-	this.dirExcludes.addAll(dirExcludes);
+    public final void setLocationExcludes(List<String> locationExcludes) {
+	this.locationExcludes.clear();
+	this.locationExcludes.addAll(locationExcludes);
     }
 
-    public final List<String> getDirectoryExcludes() {
-	return dirExcludes;
+    public final List<String> getLocationExcludes() {
+	return locationExcludes;
     }
 
     public final void setFileIncludes(List<String> fileIncludes) {
@@ -121,10 +122,12 @@ public class FileSearchConfiguration implements Serializable {
     public int hashCode() {
 	final int prime = 31;
 	int result = 1;
-	result = prime * result
-		+ ((dirExcludes == null) ? 0 : dirExcludes.hashCode());
-	result = prime * result
-		+ ((dirIncludes == null) ? 0 : dirIncludes.hashCode());
+	result = prime
+		* result
+		+ ((locationExcludes == null) ? 0 : locationExcludes.hashCode());
+	result = prime
+		* result
+		+ ((locationIncludes == null) ? 0 : locationIncludes.hashCode());
 	result = prime * result
 		+ ((fileExcludes == null) ? 0 : fileExcludes.hashCode());
 	result = prime * result
@@ -141,16 +144,16 @@ public class FileSearchConfiguration implements Serializable {
 	    return false;
 	if (getClass() != obj.getClass())
 	    return false;
-	FileSearchConfiguration other = (FileSearchConfiguration) obj;
-	if (dirExcludes == null) {
-	    if (other.dirExcludes != null)
+	CodeSearchConfiguration other = (CodeSearchConfiguration) obj;
+	if (locationExcludes == null) {
+	    if (other.locationExcludes != null)
 		return false;
-	} else if (!dirExcludes.equals(other.dirExcludes))
+	} else if (!locationExcludes.equals(other.locationExcludes))
 	    return false;
-	if (dirIncludes == null) {
-	    if (other.dirIncludes != null)
+	if (locationIncludes == null) {
+	    if (other.locationIncludes != null)
 		return false;
-	} else if (!dirIncludes.equals(other.dirIncludes))
+	} else if (!locationIncludes.equals(other.locationIncludes))
 	    return false;
 	if (fileExcludes == null) {
 	    if (other.fileExcludes != null)
@@ -167,4 +170,38 @@ public class FileSearchConfiguration implements Serializable {
 	return true;
     }
 
+    @Override
+    public CodeSearchConfiguration clone() {
+	try {
+	    CodeSearchConfiguration cloned = (CodeSearchConfiguration) super
+		    .clone();
+
+	    cloned.ignoreHidden = ignoreHidden;
+	    setFinal(cloned, "locationIncludes", locationIncludes);
+	    setFinal(cloned, "locationExcludes", locationExcludes);
+	    setFinal(cloned, "fileIncludes", fileIncludes);
+	    setFinal(cloned, "fileExcludes", fileExcludes);
+
+	    return cloned;
+	} catch (CloneNotSupportedException e) {
+	    throw new RuntimeException(e);
+	} catch (SecurityException e) {
+	    throw new RuntimeException(e);
+	} catch (IllegalArgumentException e) {
+	    throw new RuntimeException(e);
+	} catch (NoSuchFieldException e) {
+	    throw new RuntimeException(e);
+	} catch (IllegalAccessException e) {
+	    throw new RuntimeException(e);
+	}
+    }
+
+    private <T> void setFinal(CodeSearchConfiguration cloned, String fieldName,
+	    T value) throws SecurityException, NoSuchFieldException,
+	    IllegalArgumentException, IllegalAccessException {
+	Field field = cloned.getClass().getField(fieldName);
+	field.setAccessible(true);
+	field.set(cloned, value);
+	field.setAccessible(false);
+    }
 }

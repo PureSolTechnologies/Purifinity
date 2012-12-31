@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.puresol.coding.analysis.api.AnalysisRun;
+import com.puresol.coding.analysis.api.CodeAnalysis;
 import com.puresol.coding.analysis.api.CodeRange;
-import com.puresol.coding.analysis.api.FileAnalysis;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.evaluation.api.EvaluatorStore;
 import com.puresol.coding.evaluator.AbstractEvaluator;
@@ -31,7 +31,7 @@ public class EntropyEvaluator extends AbstractEvaluator {
     }
 
     @Override
-    protected void processFile(FileAnalysis analysis)
+    protected void processFile(CodeAnalysis analysis)
 	    throws InterruptedException {
 	HashId hashId = analysis.getAnalyzedFile().getHashId();
 	HalsteadMetricFileResults halsteadFileResults = (HalsteadMetricFileResults) halsteadStore
@@ -70,9 +70,8 @@ public class EntropyEvaluator extends AbstractEvaluator {
 		    redundancy, normalizedRedundancy);
 
 	    results.add(new EntropyFileResult(analysis.getAnalyzedFile()
-		    .getFile().getPath(), codeRange.getType(), codeRange
-		    .getName(), result, EntropyQuality.get(codeRange.getType(),
-		    result)));
+		    .getLocation(), codeRange.getType(), codeRange.getName(),
+		    result, EntropyQuality.get(codeRange.getType(), result)));
 	}
 	store.storeFileResults(hashId, results);
     }

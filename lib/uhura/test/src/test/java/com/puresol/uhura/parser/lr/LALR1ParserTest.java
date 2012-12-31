@@ -12,7 +12,7 @@ import com.puresol.uhura.lexer.RegExpLexer;
 import com.puresol.uhura.parser.Parser;
 import com.puresol.uhura.parser.ParserTree;
 import com.puresol.uhura.source.SourceCode;
-import com.puresol.uhura.source.UnspecifiedSource;
+import com.puresol.uhura.source.UnspecifiedSourceCodeLocation;
 
 public class LALR1ParserTest {
 
@@ -22,7 +22,7 @@ public class LALR1ParserTest {
 	Parser parser = new LALR1Parser(grammar);
 	Lexer lexer = new RegExpLexer(grammar);
 	ParserTree syntaxTree = parser.parse(lexer.lex(SourceCode.read(
-		new StringReader("id=*id"), new UnspecifiedSource())));
+		new StringReader("id=*id"), new UnspecifiedSourceCodeLocation())));
 	new TreePrinter(System.out).println(syntaxTree);
     }
 

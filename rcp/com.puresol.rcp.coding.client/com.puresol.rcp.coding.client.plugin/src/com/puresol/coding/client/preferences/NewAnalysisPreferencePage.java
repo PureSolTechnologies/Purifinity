@@ -19,8 +19,8 @@ import com.puresol.coding.client.Activator;
 public class NewAnalysisPreferencePage extends PreferencePage implements
 	IWorkbenchPreferencePage {
 
-    public static final String DIRECTORY_INCLUDES = "NewAnalysis.directory.includes";
-    public static final String DIRECTORY_EXCLUDES = "NewAnalysis.directory.excludes";
+    public static final String LOCATION_INCLUDES = "NewAnalysis.directory.includes";
+    public static final String LOCATION_EXCLUDES = "NewAnalysis.directory.excludes";
     public static final String FILE_INCLUDES = "NewAnalysis.file.includes";
     public static final String FILE_EXCLUDES = "NewAnalysis.file.excludes";
     public static final String IGNORE_HIDDEN = "NewAnalysis.ignore_hidden";
@@ -57,9 +57,9 @@ public class NewAnalysisPreferencePage extends PreferencePage implements
 
     public static void setDefaultValuesToPreferencesStore(
 	    IPreferenceStore preferenceStore) {
-	preferenceStore.setDefault(DIRECTORY_INCLUDES,
+	preferenceStore.setDefault(LOCATION_INCLUDES,
 		DIRECTORY_INCLUDES_DEFAULT);
-	preferenceStore.setDefault(DIRECTORY_EXCLUDES,
+	preferenceStore.setDefault(LOCATION_EXCLUDES,
 		DIRECTORY_EXCLUDES_DEFAULT);
 	preferenceStore.setDefault(FILE_INCLUDES, FILE_INCLUDES_DEFAULT);
 	preferenceStore.setDefault(FILE_EXCLUDES, FILE_EXCLUDES_DEFAULT);
@@ -79,9 +79,9 @@ public class NewAnalysisPreferencePage extends PreferencePage implements
     @Override
     public boolean performOk() {
 	IPreferenceStore preferenceStore = getPreferenceStore();
-	preferenceStore.setValue(DIRECTORY_INCLUDES,
+	preferenceStore.setValue(LOCATION_INCLUDES,
 		directoryIncludes.getText());
-	preferenceStore.setValue(DIRECTORY_EXCLUDES,
+	preferenceStore.setValue(LOCATION_EXCLUDES,
 		directoryExcludes.getText());
 	preferenceStore.setValue(FILE_INCLUDES, fileIncludes.getText());
 	preferenceStore.setValue(FILE_EXCLUDES, fileExcludes.getText());
@@ -173,9 +173,9 @@ public class NewAnalysisPreferencePage extends PreferencePage implements
     private void setCurrentValues() {
 	IPreferenceStore preferenceStore = getPreferenceStore();
 	directoryIncludes.setText(preferenceStore
-		.getString(NewAnalysisPreferencePage.DIRECTORY_INCLUDES));
+		.getString(NewAnalysisPreferencePage.LOCATION_INCLUDES));
 	directoryExcludes.setText(preferenceStore
-		.getString(NewAnalysisPreferencePage.DIRECTORY_EXCLUDES));
+		.getString(NewAnalysisPreferencePage.LOCATION_EXCLUDES));
 	fileIncludes.setText(preferenceStore
 		.getString(NewAnalysisPreferencePage.FILE_INCLUDES));
 	fileExcludes.setText(preferenceStore

@@ -26,7 +26,7 @@ import com.puresol.uhura.parser.ParserException;
 import com.puresol.uhura.parser.ParserTree;
 import com.puresol.uhura.preprocessor.Preprocessor;
 import com.puresol.uhura.preprocessor.PreprocessorException;
-import com.puresol.uhura.source.Source;
+import com.puresol.uhura.source.CodeLocation;
 import com.puresol.uhura.source.SourceCode;
 import com.puresol.uhura.source.SourceCodeLine;
 
@@ -194,12 +194,12 @@ public class CPreprocessor implements Preprocessor {
 	    throws PreprocessorException {
 	SourceCode preprocessorCode = new SourceCode();
 	preprocessorCode.addSourceCodeLine(line);
-	Source currentSource = null;
+	CodeLocation currentSource = null;
 	try {
 	    ParserTree ast = null;
 	    while (ast == null) {
 		try {
-		    Source source = line.getSource();
+		    CodeLocation source = line.getSource();
 		    if (currentSource == null) {
 			currentSource = source;
 		    } else if (!currentSource.equals(source)) {

@@ -4,6 +4,7 @@ import java.io.File;
 
 import org.eclipse.jface.wizard.Wizard;
 
+import com.puresol.coding.analysis.DirectoryRepositoryLocation;
 import com.puresol.coding.client.jobs.NewAnalysisJob;
 
 public class NewAnalysisWizard extends Wizard {
@@ -21,8 +22,10 @@ public class NewAnalysisWizard extends Wizard {
 	String name = generalSettingsPage.getProjectName();
 	String description = generalSettingsPage.getProjectDescription();
 	String sourceDirectory = generalSettingsPage.getSourceDirectory();
-	NewAnalysisJob job = new NewAnalysisJob(name, description, new File(
-		sourceDirectory));
+	NewAnalysisJob job = new NewAnalysisJob(
+		name,
+		description,
+		new DirectoryRepositoryLocation(name, new File(sourceDirectory)));
 	job.schedule();
 	return true;
     }

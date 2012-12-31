@@ -8,9 +8,10 @@ import java.util.Iterator;
 import java.util.ServiceLoader;
 
 import com.puresol.coding.AbstractProgrammingLanguage;
-import com.puresol.coding.analysis.api.FileAnalyzer;
+import com.puresol.coding.analysis.api.CodeAnalyzer;
+import com.puresol.coding.lang.common.LanguageGrammar;
 import com.puresol.coding.lang.java.grammar.JavaGrammar;
-import com.puresol.uhura.grammar.Grammar;
+import com.puresol.uhura.source.CodeLocation;
 
 /**
  * This is the base class for Java Programming Language. The lexical and
@@ -52,12 +53,12 @@ public class Java extends AbstractProgrammingLanguage {
     }
 
     @Override
-    public FileAnalyzer restoreAnalyzer(File file) throws IOException {
+    public CodeAnalyzer restoreAnalyzer(File file) throws IOException {
 	try {
 	    ObjectInputStream ois = new ObjectInputStream(new FileInputStream(
 		    file));
 	    try {
-		return (FileAnalyzer) ois.readObject();
+		return (CodeAnalyzer) ois.readObject();
 	    } finally {
 		ois.close();
 	    }
@@ -71,12 +72,12 @@ public class Java extends AbstractProgrammingLanguage {
     }
 
     @Override
-    public FileAnalyzer createAnalyser(File sourceDirectory, File file) {
-	return new JavaAnalyzer(sourceDirectory, file);
+    public CodeAnalyzer createAnalyser(CodeLocation sourceCodeLocation) {
+	return new JavaAnalyzer(sourceCodeLocation);
     }
 
     @Override
-    public Grammar getGrammar() {
+    public LanguageGrammar getGrammar() {
 	return JavaGrammar.getInstance();
     }
 

@@ -6,9 +6,10 @@ import java.util.Iterator;
 import java.util.ServiceLoader;
 
 import com.puresol.coding.AbstractProgrammingLanguage;
-import com.puresol.coding.analysis.api.FileAnalyzer;
+import com.puresol.coding.analysis.api.CodeAnalyzer;
+import com.puresol.coding.lang.common.LanguageGrammar;
 import com.puresol.coding.lang.test.grammar.TestLanguageGrammar;
-import com.puresol.uhura.grammar.Grammar;
+import com.puresol.uhura.source.CodeLocation;
 
 /**
  * This is a test programming languages which is used as a mock up for real
@@ -48,18 +49,18 @@ public class TestLanguage extends AbstractProgrammingLanguage {
     }
 
     @Override
-    public FileAnalyzer restoreAnalyzer(File file) throws IOException {
+    public CodeAnalyzer restoreAnalyzer(File file) throws IOException {
 	throw new IOException(
 		"Persistence not implemented in TestProgrammingLanguage!");
     }
 
     @Override
-    public FileAnalyzer createAnalyser(File sourceDirectory, File file) {
-	return new TestLanguageAnalyser(sourceDirectory, file);
+    public CodeAnalyzer createAnalyser(CodeLocation sourceCodeLocation) {
+	return new TestLanguageAnalyser(sourceCodeLocation);
     }
 
     @Override
-    public Grammar getGrammar() {
+    public LanguageGrammar getGrammar() {
 	return TestLanguageGrammar.getInstance();
     }
 

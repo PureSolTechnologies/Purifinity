@@ -2,7 +2,7 @@ package com.puresol.uhura.lexer;
 
 import java.io.Serializable;
 
-import com.puresol.uhura.source.Source;
+import com.puresol.uhura.source.CodeLocation;
 import com.puresol.utils.ObjectUtilities;
 
 /**
@@ -22,14 +22,14 @@ public class TokenMetaData implements Serializable, Cloneable {
 
     private static final long serialVersionUID = 6478412339837934971L;
 
-    private final Source source;
+    private final CodeLocation source;
     private final int id;
     private final int pos;
     private final int line;
     private final int lineNum;
     private final int hashcode;
 
-    public TokenMetaData(Source source, int id, int pos, int line, int lineNum) {
+    public TokenMetaData(CodeLocation source, int id, int pos, int line, int lineNum) {
 	super();
 	this.source = source;
 	this.id = id;
@@ -40,7 +40,7 @@ public class TokenMetaData implements Serializable, Cloneable {
 		line, lineNum);
     }
 
-    public Source getSource() {
+    public CodeLocation getSource() {
 	return source;
     }
 

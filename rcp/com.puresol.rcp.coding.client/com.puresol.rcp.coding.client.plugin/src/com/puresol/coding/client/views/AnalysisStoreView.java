@@ -23,8 +23,8 @@ import com.puresol.coding.analysis.api.AnalysisInformation;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalysisRunInformation;
 import com.puresol.coding.analysis.api.AnalysisStore;
-import com.puresol.coding.analysis.api.DirectoryStoreException;
 import com.puresol.coding.analysis.api.AnalysisStoreFactory;
+import com.puresol.coding.analysis.api.ModuleStoreException;
 import com.puresol.coding.client.Activator;
 import com.puresol.coding.client.content.AnalysisListContentProvider;
 import com.puresol.coding.client.content.AnalysisListLabelProvider;
@@ -170,7 +170,7 @@ public class AnalysisStoreView extends ViewPart implements SelectionListener {
 	    selectedAnalysis = null;
 	    updateAnalysisRunList(null);
 	    analysisViewer.setInput(analysisStore.getAllAnalysisInformation());
-	} catch (DirectoryStoreException e) {
+	} catch (ModuleStoreException e) {
 	    logger.log(new Status(
 		    Status.ERROR,
 		    AnalyzesView.class.getName(),
@@ -193,7 +193,7 @@ public class AnalysisStoreView extends ViewPart implements SelectionListener {
 		selectedAnalysis = null;
 		analysisRunList.removeAll();
 	    }
-	} catch (DirectoryStoreException e) {
+	} catch (ModuleStoreException e) {
 	    logger.log(new Status(
 		    Status.ERROR,
 		    AnalyzesView.class.getName(),
@@ -215,7 +215,7 @@ public class AnalysisStoreView extends ViewPart implements SelectionListener {
 		runName.setText("");
 		runDescription.setText("");
 	    }
-	} catch (DirectoryStoreException e) {
+	} catch (ModuleStoreException e) {
 	    logger.log(new Status(
 		    Status.ERROR,
 		    AnalyzesView.class.getName(),

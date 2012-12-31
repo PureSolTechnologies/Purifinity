@@ -8,19 +8,19 @@ import static org.junit.Assert.assertSame;
 import org.junit.Test;
 
 import com.puresol.uhura.grammar.token.Visibility;
-import com.puresol.uhura.source.UnspecifiedSource;
+import com.puresol.uhura.source.UnspecifiedSourceCodeLocation;
 
 public class TokenTest {
 
     @Test
     public void testInstance() {
 	assertNotNull(new Token("Name", "Text", Visibility.VISIBLE,
-		new TokenMetaData(new UnspecifiedSource(), 1, 2, 3, 4)));
+		new TokenMetaData(new UnspecifiedSourceCodeLocation(), 1, 2, 3, 4)));
     }
 
     @Test
     public void testInitialValues() {
-	TokenMetaData metaData = new TokenMetaData(new UnspecifiedSource(), 1,
+	TokenMetaData metaData = new TokenMetaData(new UnspecifiedSourceCodeLocation(), 1,
 		2, 3, 4);
 	Token token = new Token("Name", "Text", Visibility.VISIBLE, metaData);
 	assertEquals("Name", token.getName());
@@ -32,7 +32,7 @@ public class TokenTest {
     @Test
     public void testClone() {
 	Token token = new Token("Name", "Text", Visibility.VISIBLE,
-		new TokenMetaData(new UnspecifiedSource(), 1, 2, 3, 4));
+		new TokenMetaData(new UnspecifiedSourceCodeLocation(), 1, 2, 3, 4));
 	Token cloned = token.clone();
 	assertNotSame(token, cloned);
 	assertEquals(token, cloned);

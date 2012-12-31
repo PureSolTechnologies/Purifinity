@@ -19,7 +19,7 @@ import org.osgi.framework.ServiceReference;
 import swing2swt.layout.BorderLayout;
 
 import com.puresol.coding.analysis.api.AnalysisRun;
-import com.puresol.coding.analysis.api.AnalyzedFile;
+import com.puresol.coding.analysis.api.AnalyzedCode;
 import com.puresol.coding.client.Activator;
 import com.puresol.coding.client.content.EvaluatorComboViewer;
 import com.puresol.coding.evaluation.api.Evaluator;
@@ -37,15 +37,15 @@ public class FileMetricsControl extends Composite implements
     private final EvaluatorComboViewer comboViewer;
     private final Text metricDescriptionLabel;
     private final AnalysisRun analysisRun;
-    private final AnalyzedFile analyzedFile;
+    private final AnalyzedCode analyzedCode;
 
     private Composite centerComposite = null;
 
     public FileMetricsControl(Composite parent, int style,
-	    AnalysisRun analysisRun, AnalyzedFile analyzedFile) {
+	    AnalysisRun analysisRun, AnalyzedCode analyzedCode) {
 	super(parent, style);
 	this.analysisRun = analysisRun;
-	this.analyzedFile = analyzedFile;
+	this.analyzedCode = analyzedCode;
 
 	setLayout(new BorderLayout());
 
@@ -101,7 +101,7 @@ public class FileMetricsControl extends Composite implements
 		    centerComposite.dispose();
 		}
 		centerComposite = service.createFileResultComponent(this,
-			analysisRun, analyzedFile);
+			analysisRun, analyzedCode);
 		centerComposite.setLayoutData(BorderLayout.CENTER);
 		layout();
 	    }

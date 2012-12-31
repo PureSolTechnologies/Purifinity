@@ -19,11 +19,11 @@ public interface AnalysisStore {
      * 
      * @return A {@link List} of {@link AnalysisInformation} is returned
      *         containing all available analysis.
-     * @throws DirectoryStoreException
+     * @throws ModuleStoreException
      *             is thrown in cases of issues.
      */
     public List<AnalysisInformation> getAllAnalysisInformation()
-	    throws DirectoryStoreException;
+	    throws ModuleStoreException;
 
     /**
      * This method is used to load a single Analysis by {@link UUID}.
@@ -31,10 +31,10 @@ public interface AnalysisStore {
      * @param uuid
      *            is the {@link UUID} of the analysis to be loaded.
      * @return An {@link Analysis} is returned which was loaded.
-     * @throws DirectoryStoreException
+     * @throws ModuleStoreException
      *             is thrown for unexpected issues.
      */
-    public Analysis loadAnalysis(UUID uuid) throws DirectoryStoreException;
+    public Analysis loadAnalysis(UUID uuid) throws ModuleStoreException;
 
     /**
      * This method creates a new Analysis which is specified by
@@ -44,19 +44,19 @@ public interface AnalysisStore {
      *            are the settings to be used for a new analysis.
      * @return An {@link Analysis} is returned containing the analysis created
      *         before.
-     * @throws DirectoryStoreException
+     * @throws ModuleStoreException
      *             is thrown for unexpected issues.
      */
     public Analysis createAnalysis(AnalysisSettings settings)
-	    throws DirectoryStoreException;
+	    throws ModuleStoreException;
 
     /**
      * This method deletes an analysis from the store.
      * 
      * @param uuid
      *            is the identifier of the analysis to be deleted.
-     * @throws DirectoryStoreException
+     * @throws ModuleStoreException
      *             is thrown in cases of issues.
      */
-    public void removeAnalysis(UUID uuid) throws DirectoryStoreException;
+    public void removeAnalysis(UUID uuid) throws ModuleStoreException;
 }

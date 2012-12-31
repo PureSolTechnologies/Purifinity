@@ -14,7 +14,7 @@ import org.junit.Test;
 import com.puresol.coding.lang.fortran.grammar.FortranGrammar;
 import com.puresol.uhura.lexer.Token;
 import com.puresol.uhura.lexer.TokenStream;
-import com.puresol.uhura.source.FileSource;
+import com.puresol.uhura.source.SourceFileLocation;
 
 public class FortranPreConditionerTest {
 
@@ -121,7 +121,7 @@ public class FortranPreConditionerTest {
 		"src/test/resources/com/puresol/coding/lang/fortran/samples/FixedFormSample.f");
 	assertTrue(file.exists());
 	FortranPreConditioner fixedFormFile = new FortranPreConditioner(
-		new FileSource(file).load());
+		new SourceFileLocation(file).load());
 	assertTrue(fixedFormFile.isValidFixedForm());
     }
 
@@ -131,7 +131,7 @@ public class FortranPreConditionerTest {
 		"src/test/resources/com/puresol/coding/lang/fortran/samples/FixedFormSample.f");
 	assertTrue(file.exists());
 	FortranPreConditioner fixedFormFile = new FortranPreConditioner(
-		new FileSource(file).load());
+		new SourceFileLocation(file).load());
 	TokenStream tokenStream = fixedFormFile.scan(FortranGrammar
 		.getInstance().getLexer());
 	for (Token token : tokenStream) {

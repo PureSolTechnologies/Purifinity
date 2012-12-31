@@ -2,12 +2,12 @@ package com.puresol.uhura.source;
 
 /**
  * This class is an abstract helper class for providing basic functionality of
- * source reading to {@link Source} interface implementations.
+ * source reading to {@link CodeLocation} interface implementations.
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public abstract class AbstractSource implements Source {
+public abstract class AbstractSourceCodeLocation implements CodeLocation {
 
     private static final long serialVersionUID = 5092730926716733775L;
 

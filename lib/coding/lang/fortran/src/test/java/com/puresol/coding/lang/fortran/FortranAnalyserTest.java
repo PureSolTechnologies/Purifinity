@@ -11,6 +11,8 @@ import java.io.File;
 
 import org.junit.Test;
 
+import com.puresol.uhura.source.SourceFileLocation;
+
 /**
  * This test checks the JavaAnalyser.
  * 
@@ -21,19 +23,20 @@ public class FortranAnalyserTest {
 
     @Test
     public void testInstance() {
-	assertNotNull(new FortranAnalyzer(new File(""), new File("")));
+	assertNotNull(new FortranAnalyzer(new SourceFileLocation(new File(""))));
     }
 
     @Test
     public void testInitValues() {
-	FortranAnalyzer analyser = new FortranAnalyzer(new File("src/test"),
-		new File("TestFile.f"));
+	FortranAnalyzer analyser = new FortranAnalyzer(new SourceFileLocation(
+		new File("src/test/TestFile.f")));
 	assertNull(analyser.getAnalysis());
 	assertSame(Fortran.getInstance(), analyser.getLanguage());
     }
 
     private void test(File sourceDirectory, File file) throws Throwable {
-	FortranAnalyzer analyser = new FortranAnalyzer(sourceDirectory, file);
+	FortranAnalyzer analyser = new FortranAnalyzer(new SourceFileLocation(
+		new File(sourceDirectory, file.getPath())));
 	analyser.analyze();
     }
 

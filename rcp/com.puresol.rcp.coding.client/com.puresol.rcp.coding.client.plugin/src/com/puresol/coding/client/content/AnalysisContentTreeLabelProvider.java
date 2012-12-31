@@ -11,12 +11,12 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
 import com.puresol.coding.analysis.api.AnalysisRun;
-import com.puresol.coding.analysis.api.AnalyzedFile;
-import com.puresol.coding.analysis.api.FileAnalysis;
-import com.puresol.coding.analysis.api.FileStore;
-import com.puresol.coding.analysis.api.FileStoreException;
-import com.puresol.coding.analysis.api.FileStoreFactory;
+import com.puresol.coding.analysis.api.AnalyzedCode;
+import com.puresol.coding.analysis.api.CodeAnalysis;
+import com.puresol.coding.analysis.api.CodeStoreException;
 import com.puresol.coding.analysis.api.HashIdFileTree;
+import com.puresol.coding.analysis.api.CodeStore;
+import com.puresol.coding.analysis.api.CodeStoreFactory;
 import com.puresol.coding.client.Activator;
 import com.puresol.coding.client.ClientImages;
 
@@ -33,7 +33,8 @@ public class AnalysisContentTreeLabelProvider extends LabelProvider {
 	    .getWorkbench().getSharedImages()
 	    .getImageDescriptor(ISharedImages.IMG_DEC_FIELD_ERROR);
 
-    private final FileStore fileStore = FileStoreFactory.getInstance();
+    private final CodeStore fileStore = CodeStoreFactory
+	    .getInstance();
 
     private AnalysisRun analysisRun;
 
@@ -49,14 +50,14 @@ public class AnalysisContentTreeLabelProvider extends LabelProvider {
 	HashIdFileTree input = (HashIdFileTree) element;
 	String text = input.getName();
 	File path = input.getPathFile(false);
-	AnalyzedFile analyzedFile = analysisRun.findAnalyzedFile(path);
+	AnalyzedCode analyzedFile = analysisRun.findAnalyzedCode(path);
 	if (analyzedFile != null) {
 	    try {
-		FileAnalysis analysisResult = fileStore
+		CodeAnalysis analysisResult = fileStore
 			.loadAnalysis(analyzedFile.getHashId());
 		text += " (" + analysisResult.getLanguageName() + " "
 			+ analysisResult.getLanguageVersion() + ")";
-	    } catch (FileStoreException e) {
+	    } catch (CodeStoreException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	    }
@@ -71,11 +72,11 @@ public class AnalysisContentTreeLabelProvider extends LabelProvider {
 	}
 	HashIdFileTree input = (HashIdFileTree) element;
 	File path = input.getPathFile(false);
-	AnalyzedFile analyzedFile = analysisRun.findAnalyzedFile(path);
+	AnalyzedCode analyzedFile = analysisRun.findAnalyzedCode(path);
 	if (analyzedFile != null) {
 	    return documentImage;
 	}
-	if (analysisRun.getFailedFiles().contains(path)) {
+	if (analysisRun.getFailedCodeLocations().contains(path)) {
 	    return new DecorationOverlayIcon(documentImage,
 		    errorDecoratorImage, IDecoration.TOP_LEFT).createImage();
 	}

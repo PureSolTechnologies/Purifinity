@@ -13,6 +13,8 @@ package com.puresol.coding.analysis.api;
 import java.io.File;
 import java.io.IOException;
 
+import com.puresol.uhura.source.CodeLocation;
+
 /**
  * This is a interface to a analyzer. It's used to implement a language
  * independent way to access a single analyzer.
@@ -20,14 +22,14 @@ import java.io.IOException;
  * @author Rick-Rainer Ludwig
  * 
  */
-public interface FileAnalyzer {
+public interface CodeAnalyzer {
 
     /**
-     * This method returns the file which is to be analyzed.
+     * This method returns the source which is to be analyzed.
      * 
      * @return
      */
-    public File getFile();
+    public CodeLocation getSource();
 
     /**
      * This method returns from the implemented parser the supported programming
@@ -57,5 +59,5 @@ public interface FileAnalyzer {
      * 
      * @return
      */
-    public FileAnalysis getAnalysis();
+    public CodeAnalysis getAnalysis();
 }

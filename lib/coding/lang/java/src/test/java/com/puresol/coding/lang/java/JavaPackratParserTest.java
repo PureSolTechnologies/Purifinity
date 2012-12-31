@@ -13,9 +13,9 @@ import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.parser.ParserException;
 import com.puresol.uhura.parser.ParserTree;
 import com.puresol.uhura.parser.packrat.PackratParser;
-import com.puresol.uhura.source.BuiltinSource;
-import com.puresol.uhura.source.FileSource;
-import com.puresol.uhura.source.Source;
+import com.puresol.uhura.source.FixedSourceCodeLocation;
+import com.puresol.uhura.source.SourceFileLocation;
+import com.puresol.uhura.source.CodeLocation;
 
 public class JavaPackratParserTest {
 
@@ -27,14 +27,14 @@ public class JavaPackratParserTest {
     }
 
     private void check(String... text) throws ParserException, IOException {
-	Source source = new BuiltinSource(text);
+	CodeLocation source = new FixedSourceCodeLocation(text);
 	PackratParser parser = createParser();
 	assertNotNull(parser.parse(source.load()));
     }
 
     private void check(String text, String production) throws ParserException,
 	    IOException {
-	Source source = new BuiltinSource(text);
+	CodeLocation source = new FixedSourceCodeLocation(text);
 	PackratParser parser = createParser();
 	assertNotNull(parser.parse(source.load(), production));
     }
@@ -115,7 +115,7 @@ public class JavaPackratParserTest {
 		"src/test/java/com/puresol/coding/lang/java/JavaPackratParserTest.java");
 	assertTrue(file.exists());
 	PackratParser parser = createParser();
-	ParserTree tree = parser.parse(new FileSource(file).load());
+	ParserTree tree = parser.parse(new SourceFileLocation(file).load());
 	assertNotNull(tree);
     }
 }

@@ -16,12 +16,12 @@ public class SourceCodeLine implements Serializable, Cloneable {
 
     private static final long serialVersionUID = -3788483766559761026L;
 
-    private final Source source;
+    private final CodeLocation source;
     private final int lineNumber;
     private final String line;
     private final int hashCode;
 
-    public SourceCodeLine(Source source, int lineNumber, String line) {
+    public SourceCodeLine(CodeLocation source, int lineNumber, String line) {
 	super();
 	this.source = source;
 	this.lineNumber = lineNumber;
@@ -30,7 +30,7 @@ public class SourceCodeLine implements Serializable, Cloneable {
 		lineNumber, line);
     }
 
-    public Source getSource() {
+    public CodeLocation getSource() {
 	return source;
     }
 

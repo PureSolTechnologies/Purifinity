@@ -11,8 +11,8 @@ import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarConverter;
 import com.puresol.uhura.grammar.GrammarFile;
 import com.puresol.uhura.parser.ParserTree;
-import com.puresol.uhura.source.BuiltinSource;
-import com.puresol.uhura.source.Source;
+import com.puresol.uhura.source.FixedSourceCodeLocation;
+import com.puresol.uhura.source.CodeLocation;
 
 /**
  * This tests are taken from the paper 'Packrat Parsers Can Support Left
@@ -24,7 +24,7 @@ import com.puresol.uhura.source.Source;
  */
 public class PackratParserExtTest {
 
-    private ParserTree parseText(Source source) throws Throwable {
+    private ParserTree parseText(CodeLocation source) throws Throwable {
 	InputStream inputStream = getClass()
 		.getResourceAsStream(
 			"/com/puresol/uhura/grammar/TestGrammarForJavaPrimaryExpressions.g");
@@ -51,26 +51,26 @@ public class PackratParserExtTest {
 
     @Test
     public void test1() throws Throwable {
-	parseText(new BuiltinSource("this"));
+	parseText(new FixedSourceCodeLocation("this"));
     }
 
     @Test
     public void test2() throws Throwable {
-	parseText(new BuiltinSource("this.x"));
+	parseText(new FixedSourceCodeLocation("this.x"));
     }
 
     @Test
     public void test3() throws Throwable {
-	parseText(new BuiltinSource("this.x.y"));
+	parseText(new FixedSourceCodeLocation("this.x.y"));
     }
 
     @Test
     public void test4() throws Throwable {
-	parseText(new BuiltinSource("this.x.m()"));
+	parseText(new FixedSourceCodeLocation("this.x.m()"));
     }
 
     @Test
     public void test5() throws Throwable {
-	parseText(new BuiltinSource("x[i][j].y"));
+	parseText(new FixedSourceCodeLocation("x[i][j].y"));
     }
 }

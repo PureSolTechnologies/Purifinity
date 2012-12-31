@@ -14,7 +14,25 @@ import com.puresol.uhura.lexer.Token;
  * 
  * @author Rick-Rainer Ludwig
  */
-public interface Source extends Serializable {
+public interface CodeLocation extends Serializable {
+
+    /**
+     * This method returns the name of the returned source code. This might be a
+     * file name or another name of a compilation unit or piece of source code.
+     * 
+     * @return
+     */
+    public String getName();
+
+    /**
+     * This method returns a logical location which can be used to group the
+     * different source code pieces for statistics and UI. A natural location
+     * might be the relative path of a file system within the project folder. It
+     * also be a path within a SCM code repository or something similar.
+     * 
+     * @return
+     */
+    public String getLocation();
 
     /**
      * This method generates a human readable string where the source comes
@@ -42,7 +60,7 @@ public interface Source extends Serializable {
     public SourceCode load() throws IOException;
 
     /**
-     * This method returns a new {@link Source} which is pointing to a new
+     * This method returns a new {@link CodeLocation} which is pointing to a new
      * location specified by a relative path/location provided as parameter.
      * 
      * This is used for preprocessor #include actions.
@@ -50,6 +68,6 @@ public interface Source extends Serializable {
      * @param relativePath
      * @return
      */
-    public Source newRelativeSource(String relativePath);
+    public CodeLocation newRelativeSource(String relativePath);
 
 }

@@ -13,12 +13,12 @@ import org.osgi.framework.ServiceReference;
 
 import com.puresol.coding.analysis.Activator;
 import com.puresol.coding.analysis.api.AnalysisRun;
-import com.puresol.coding.analysis.api.DirectoryStore;
-import com.puresol.coding.analysis.api.DirectoryStoreFactory;
-import com.puresol.coding.analysis.api.FileAnalysis;
-import com.puresol.coding.analysis.api.FileStore;
-import com.puresol.coding.analysis.api.FileStoreException;
-import com.puresol.coding.analysis.api.FileStoreFactory;
+import com.puresol.coding.analysis.api.ModuleStore;
+import com.puresol.coding.analysis.api.ModuleStoreFactory;
+import com.puresol.coding.analysis.api.CodeAnalysis;
+import com.puresol.coding.analysis.api.CodeStore;
+import com.puresol.coding.analysis.api.CodeStoreException;
+import com.puresol.coding.analysis.api.CodeStoreFactory;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.evaluation.api.Evaluator;
 import com.puresol.coding.evaluation.api.EvaluatorInformation;
@@ -66,12 +66,12 @@ public abstract class AbstractEvaluator extends Job implements Evaluator {
     }
 
     @Override
-    public final Date getTime() {
+    public final Date getStartTime() {
 	return timeStamp;
     }
 
     @Override
-    public long getTimeOfRun() {
+    public long getDuration() {
 	return timeOfRun;
     }
 
@@ -82,9 +82,9 @@ public abstract class AbstractEvaluator extends Job implements Evaluator {
      * @param file
      * @return
      * @throws IOException
-     * @throws FileStoreException
+     * @throws CodeStoreException
      */
-    abstract protected void processFile(FileAnalysis analysis)
+    abstract protected void processFile(CodeAnalysis analysis)
 	    throws InterruptedException;
 
     abstract protected void processDirectory(HashIdFileTree directory)
@@ -100,8 +100,8 @@ public abstract class AbstractEvaluator extends Job implements Evaluator {
 
     private class EvaluationVisitor implements TreeVisitor<HashIdFileTree> {
 
-	private final FileStore fileStore = FileStoreFactory.getInstance();
-	private final DirectoryStore directoryStore = DirectoryStoreFactory
+	private final CodeStore fileStore = CodeStoreFactory.getInstance();
+	private final ModuleStore directoryStore = ModuleStoreFactory
 		.getInstance();
 	private final IProgressMonitor monitor;
 
@@ -124,7 +124,7 @@ public abstract class AbstractEvaluator extends Job implements Evaluator {
 		}
 		monitor.worked(1);
 		return WalkingAction.PROCEED;
-	    } catch (FileStoreException e) {
+	    } catch (CodeStoreException e) {
 		e.printStackTrace();
 		return WalkingAction.ABORT;
 	    } catch (InterruptedException e) {
@@ -134,16 +134,16 @@ public abstract class AbstractEvaluator extends Job implements Evaluator {
 	}
 
 	private void processAsFile(HashIdFileTree tree)
-		throws FileStoreException, InterruptedException {
+		throws CodeStoreException, InterruptedException {
 	    if (fileStore.wasAnalyzed(tree.getHashId())) {
-		FileAnalysis fileAnalysis = fileStore.loadAnalysis(tree
+		CodeAnalysis fileAnalysis = fileStore.loadAnalysis(tree
 			.getHashId());
 		processFile(fileAnalysis);
 	    }
 	}
 
 	private void processAsDirectory(HashIdFileTree tree)
-		throws FileStoreException, InterruptedException {
+		throws CodeStoreException, InterruptedException {
 	    if (directoryStore.isAvailable(tree.getHashId())) {
 		processDirectory(tree);
 	    }

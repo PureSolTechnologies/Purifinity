@@ -14,7 +14,7 @@ import com.puresol.uhura.lexer.Lexer;
 import com.puresol.uhura.lexer.LexerException;
 import com.puresol.uhura.lexer.RegExpLexer;
 import com.puresol.uhura.lexer.TokenStream;
-import com.puresol.uhura.source.BuiltinSource;
+import com.puresol.uhura.source.FixedSourceCodeLocation;
 
 public class FortranLexerTest {
 
@@ -24,7 +24,7 @@ public class FortranLexerTest {
 	    Grammar grammar = FortranGrammar.getInstance();
 	    assertNotNull(grammar);
 	    Lexer lexer = new RegExpLexer(grammar);
-	    TokenStream tokenStream = lexer.lex(new BuiltinSource("2.0 - 3.0")
+	    TokenStream tokenStream = lexer.lex(new FixedSourceCodeLocation("2.0 - 3.0")
 		    .load());
 	    assertEquals(5, tokenStream.size());
 	    assertEquals("REAL_LITERAL_CONSTANT", tokenStream.get(0).getName());
@@ -47,7 +47,7 @@ public class FortranLexerTest {
 	    Grammar grammar = FortranGrammar.getInstance();
 	    assertNotNull(grammar);
 	    Lexer lexer = new RegExpLexer(grammar);
-	    TokenStream tokenStream = lexer.lex(new BuiltinSource("3.OR.4").load());
+	    TokenStream tokenStream = lexer.lex(new FixedSourceCodeLocation("3.OR.4").load());
 	    assertEquals(3, tokenStream.size());
 	    assertEquals("INT_LITERAL_CONSTANT", tokenStream.get(0).getName());
 	    assertEquals("OR", tokenStream.get(1).getName());

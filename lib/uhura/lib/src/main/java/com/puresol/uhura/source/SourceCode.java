@@ -8,6 +8,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.puresol.data.HashCodeGenerator;
+import com.puresol.utils.HashAlgorithm;
+import com.puresol.utils.HashId;
+
 /**
  * This class represents a whole source code from a file and additional later
  * changes through a preprocessor.
@@ -21,15 +25,15 @@ public class SourceCode implements Serializable, Cloneable {
 
     public static SourceCode fromStringArray(String... lines) {
 	try {
-	    return new BuiltinSource(lines).load();
+	    return new FixedSourceCodeLocation(lines).load();
 	} catch (IOException e) {
 	    throw new RuntimeException(
 		    "A build-in source has no IO traffic normally. So this should not happen.");
 	}
     }
 
-    public static SourceCode read(InputStream inputStream, Source source)
-	    throws IOException {
+    public static SourceCode read(InputStream inputStream,
+	    CodeLocation source) throws IOException {
 	Reader reader = new InputStreamReader(inputStream);
 	try {
 	    return read(reader, source);
@@ -38,7 +42,7 @@ public class SourceCode implements Serializable, Cloneable {
 	}
     }
 
-    public static SourceCode read(Reader reader, Source source)
+    public static SourceCode read(Reader reader, CodeLocation source)
 	    throws IOException {
 	char[] buffer = new char[4096];
 	SourceCode code = new SourceCode();
@@ -92,6 +96,7 @@ public class SourceCode implements Serializable, Cloneable {
     }
 
     private final List<SourceCodeLine> source = new ArrayList<SourceCodeLine>();
+    private HashId hashId = null;
 
     public SourceCode() {
 	super();
@@ -109,6 +114,32 @@ public class SourceCode implements Serializable, Cloneable {
 	for (SourceCodeLine line : newCode.getSource()) {
 	    addSourceCodeLine(line);
 	}
+    }
+
+    /**
+     * Generated a hash id for the sourceCode provided. This hash code may be
+     * used as key to find the source code, an analysis or something else
+     * related to the source code later on in a file store.
+     * 
+     * @param sourceCode
+     * @return
+     */
+    private synchronized void generateHashId() {
+	if (hashId == null) {
+	    StringBuffer buffer = new StringBuffer();
+	    for (SourceCodeLine line : getSource()) {
+		buffer.append(line.getLine());
+	    }
+	    hashId = new HashId(HashAlgorithm.SHA256, HashCodeGenerator.get(
+		    HashAlgorithm.SHA256, buffer.toString()));
+	}
+    }
+
+    public HashId getHashId() {
+	if (hashId == null) {
+	    generateHashId();
+	}
+	return hashId;
     }
 
     @Override
@@ -160,4 +191,5 @@ public class SourceCode implements Serializable, Cloneable {
 	}
 	return buffer.toString();
     }
+
 }

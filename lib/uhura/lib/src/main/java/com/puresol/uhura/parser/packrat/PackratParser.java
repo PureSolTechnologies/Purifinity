@@ -20,7 +20,7 @@ import com.puresol.uhura.lexer.Token;
 import com.puresol.uhura.lexer.TokenMetaData;
 import com.puresol.uhura.parser.ParserException;
 import com.puresol.uhura.parser.ParserTree;
-import com.puresol.uhura.source.Source;
+import com.puresol.uhura.source.CodeLocation;
 import com.puresol.uhura.source.SourceCode;
 import com.puresol.uhura.source.SourceCodeLine;
 import com.puresol.utils.TextUtils;
@@ -657,7 +657,7 @@ public class PackratParser implements Serializable {
 	}
 	String match = matcher.group();
 	int lineBreakNum = TextUtils.countLineBreaks(match);
-	Source source = sourceCode.getSource().get(line - 1).getSource();
+	CodeLocation source = sourceCode.getSource().get(line - 1).getSource();
 	TokenMetaData metaData = new TokenMetaData(source, id, position, line,
 		lineBreakNum + 1);
 	Token token = new Token(tokenDefinition.getName(), match,

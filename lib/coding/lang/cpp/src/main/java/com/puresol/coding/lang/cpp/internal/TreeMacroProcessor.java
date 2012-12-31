@@ -20,7 +20,7 @@ import com.puresol.uhura.lexer.Token;
 import com.puresol.uhura.lexer.TokenMetaData;
 import com.puresol.uhura.parser.ParserTree;
 import com.puresol.uhura.preprocessor.PreprocessorException;
-import com.puresol.uhura.source.Source;
+import com.puresol.uhura.source.CodeLocation;
 import com.puresol.uhura.source.SourceCode;
 import com.puresol.uhura.source.SourceCodeLine;
 
@@ -98,7 +98,7 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 	 */
 	includeFile = includeFile.trim();
 	logger.debug("Include file '" + includeFile + "',");
-	Source source = getIncludeSource(tree);
+	CodeLocation source = getIncludeSource(tree);
 	performInclude(source, includeFile);
 	return WalkingAction.LEAVE_BRANCH;
     }
@@ -269,7 +269,7 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
      * @return
      * @throws TreeException
      */
-    private Source getIncludeSource(ParserTree tree) throws TreeException {
+    private CodeLocation getIncludeSource(ParserTree tree) throws TreeException {
 	ParserTree includeFile = tree.getChild("IncludeFile");
 	ParserTree node = includeFile.getChild("StringLiteral");
 	if (node == null) {
@@ -285,7 +285,7 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
      * @param includeFile
      * @throws PreprocessorException
      */
-    private void performInclude(Source source, String includeFile)
+    private void performInclude(CodeLocation source, String includeFile)
 	    throws PreprocessorException {
 	if (nestingDepth == CPreprocessor.getNestingLimit()) {
 	    throw new PreprocessorException("Nesting limit for #include of "
@@ -297,7 +297,7 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 	}
 	includeFile = includeFile.substring(1, includeFile.length() - 1);
 	if (includeFileDirectory) {
-	    Source includeSource = source.newRelativeSource(includeFile);
+	    CodeLocation includeSource = source.newRelativeSource(includeFile);
 	    try {
 		// read to be included source...
 		SourceCode sourceCode = includeSource.load();

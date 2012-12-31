@@ -15,7 +15,7 @@ import java.util.Vector;
 
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.CodeRangeType;
-import com.puresol.coding.analysis.api.FileAnalysis;
+import com.puresol.coding.analysis.api.CodeAnalysis;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.evaluation.api.EvaluatorStore;
 import com.puresol.coding.evaluator.AbstractEvaluator;
@@ -74,7 +74,7 @@ public class CoCoMoEvaluator extends AbstractEvaluator {
     }
 
     @Override
-    protected void processFile(FileAnalysis analysis) {
+    protected void processFile(CodeAnalysis analysis) {
 	HashId hashId = analysis.getAnalyzedFile().getHashId();
 	if (slocStore.hasFileResults(hashId)) {
 	    SLOCFileResults slocFileResults = (SLOCFileResults) slocStore

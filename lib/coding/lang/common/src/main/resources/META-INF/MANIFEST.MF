@@ -11,3 +11,4 @@ Bnd-LastModified: 1331319581687
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: com.puresol.coding.lang.common
 Originally-Created-By: Apache Maven Bundle Plugin
+Export-Package: com.puresol.coding.lang.common

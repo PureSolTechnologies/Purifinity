@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 
+import com.puresol.coding.lang.common.LanguageGrammar;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.GrammarManager;
@@ -17,7 +18,7 @@ import com.puresol.uhura.parser.Parser;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class JavaGrammar extends Grammar {
+public class JavaGrammar extends LanguageGrammar {
 
     private static final long serialVersionUID = 7320197893887717979L;
 
@@ -134,5 +135,10 @@ public class JavaGrammar extends Grammar {
 	    throw new RuntimeException("Could not restore from input stream!",
 		    e);
 	}
+    }
+
+    @Override
+    public InputStream getGrammarDefinition() {
+	return getClass().getResourceAsStream(GRAMMAR_RESOURCE);
     }
 }

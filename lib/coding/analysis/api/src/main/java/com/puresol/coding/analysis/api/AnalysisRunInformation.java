@@ -57,7 +57,7 @@ public final class AnalysisRunInformation implements Serializable,
      * @return A Date object is returned.
      */
     @Override
-    public final Date getTime() {
+    public final Date getStartTime() {
 	return time;
     }
 
@@ -67,7 +67,7 @@ public final class AnalysisRunInformation implements Serializable,
      * @return Returns the time effort in milliseconds.
      */
     @Override
-    public final long getTimeOfRun() {
+    public final long getDuration() {
 	return timeOfRun;
     }
 

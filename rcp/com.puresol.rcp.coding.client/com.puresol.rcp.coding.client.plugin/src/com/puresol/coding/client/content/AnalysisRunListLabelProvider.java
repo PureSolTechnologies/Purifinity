@@ -24,7 +24,7 @@ public class AnalysisRunListLabelProvider extends LabelProvider {
     public String getText(Object element) {
 	AnalysisRunInformation information = (AnalysisRunInformation) element;
 	SimpleDateFormat format = new SimpleDateFormat();
-	return format.format(information.getTime());
+	return format.format(information.getStartTime());
     }
 
     @Override

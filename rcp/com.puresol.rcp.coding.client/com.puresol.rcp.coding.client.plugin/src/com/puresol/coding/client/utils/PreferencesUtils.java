@@ -6,24 +6,24 @@ import java.util.List;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 import com.puresol.coding.client.preferences.NewAnalysisPreferencePage;
-import com.puresol.utils.FileSearchConfiguration;
+import com.puresol.utils.CodeSearchConfiguration;
 
 public class PreferencesUtils {
 
-    public static FileSearchConfiguration getFileSearchConfiguration(
+    public static CodeSearchConfiguration getFileSearchConfiguration(
 	    IPreferenceStore preferenceStore) {
-	List<String> dirIncludes = Arrays.asList(preferenceStore.getString(
-		NewAnalysisPreferencePage.DIRECTORY_INCLUDES).split("\n"));
-	List<String> dirExcludes = Arrays.asList(preferenceStore.getString(
-		NewAnalysisPreferencePage.DIRECTORY_EXCLUDES).split("\n"));
+	List<String> locationIncludes = Arrays.asList(preferenceStore.getString(
+		NewAnalysisPreferencePage.LOCATION_INCLUDES).split("\n"));
+	List<String> locationExcludes = Arrays.asList(preferenceStore.getString(
+		NewAnalysisPreferencePage.LOCATION_EXCLUDES).split("\n"));
 	List<String> fileIncludes = Arrays.asList(preferenceStore.getString(
 		NewAnalysisPreferencePage.FILE_INCLUDES).split("\n"));
 	List<String> fileExcludes = Arrays.asList(preferenceStore.getString(
 		NewAnalysisPreferencePage.FILE_EXCLUDES).split("\n"));
 	boolean ignoreHidden = preferenceStore
 		.getBoolean(NewAnalysisPreferencePage.IGNORE_HIDDEN);
-	FileSearchConfiguration searchConfiguration = new FileSearchConfiguration(
-		dirIncludes, dirExcludes, fileIncludes, fileExcludes,
+	CodeSearchConfiguration searchConfiguration = new CodeSearchConfiguration(
+		locationIncludes, locationExcludes, fileIncludes, fileExcludes,
 		ignoreHidden);
 	return searchConfiguration;
     }

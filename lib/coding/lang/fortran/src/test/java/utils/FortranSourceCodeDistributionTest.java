@@ -19,10 +19,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.puresol.coding.analysis.api.AnalyzerException;
-import com.puresol.coding.analysis.api.FileAnalyzer;
+import com.puresol.coding.analysis.api.CodeAnalyzer;
 import com.puresol.coding.lang.fortran.Fortran;
 import com.puresol.trees.TreePrinter;
 import com.puresol.uhura.parser.ParserTree;
+import com.puresol.uhura.source.SourceFileLocation;
 import com.puresol.utils.ConsoleUtils;
 import com.puresol.utils.FileSearch;
 import com.puresol.utils.StopWatch;
@@ -50,8 +51,9 @@ public class FortranSourceCodeDistributionTest {
 	    Fortran fortran = Fortran.getInstance();
 	    StopWatch watch = new StopWatch();
 	    watch.start();
-	    FileAnalyzer analyser = fortran.createAnalyser(
-		    new File("src/fort"), file);
+	    CodeAnalyzer analyser = fortran
+		    .createAnalyser(new SourceFileLocation(new File("src/fort",
+			    file.getPath())));
 	    analyser.analyze();
 	    watch.stop();
 	    ParserTree ast = analyser.getAnalysis().getParserTree();
@@ -137,8 +139,9 @@ public class FortranSourceCodeDistributionTest {
     private static boolean parseFile(File sourceDirectory, File file) {
 	try {
 	    Fortran fortran = Fortran.getInstance();
-	    FileAnalyzer analyser = fortran.createAnalyser(sourceDirectory,
-		    file);
+	    CodeAnalyzer analyser = fortran
+		    .createAnalyser(new SourceFileLocation(new File(
+			    sourceDirectory, file.getPath())));
 	    analyser.analyze();
 	    analyser = null;
 	    return true;

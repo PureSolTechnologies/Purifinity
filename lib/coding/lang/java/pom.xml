@@ -6,7 +6,6 @@
 		<groupId>com.puresol</groupId>
 		<artifactId>coding.lang</artifactId>
 		<version>0.1.0-SNAPSHOT</version>
-		<relativePath>..</relativePath>
 	</parent>
 
 	<artifactId>coding.lang.java</artifactId>
@@ -15,19 +14,24 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.osgi</groupId>
-			<artifactId>org.osgi.core</artifactId>
+			<groupId>com.puresol</groupId>
+			<artifactId>coding.analysis.api</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
+			<groupId>com.puresol</groupId>
+			<artifactId>coding.analysis.impl</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
+			<groupId>com.puresol</groupId>
+			<artifactId>coding.lang.common</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.puresol</groupId>
+			<artifactId>coding.metrics</artifactId>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.puresol</groupId>
@@ -45,19 +49,19 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol</groupId>
-			<artifactId>coding.analysis.api</artifactId>
+			<groupId>org.osgi</groupId>
+			<artifactId>org.osgi.core</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol</groupId>
-			<artifactId>coding.analysis.impl</artifactId>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol</groupId>
-			<artifactId>coding.metrics</artifactId>
-			<scope>provided</scope>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.jibx.config.3rdparty.org.eclipse</groupId>

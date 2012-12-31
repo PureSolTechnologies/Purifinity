@@ -11,8 +11,8 @@ import org.junit.Test;
 
 import com.puresol.coding.lang.cpp.CPreprocessor;
 import com.puresol.uhura.preprocessor.PreprocessorException;
-import com.puresol.uhura.source.FileSource;
-import com.puresol.uhura.source.Source;
+import com.puresol.uhura.source.SourceFileLocation;
+import com.puresol.uhura.source.CodeLocation;
 import com.puresol.uhura.source.SourceCode;
 import com.puresol.uhura.source.SourceCodeLine;
 
@@ -28,7 +28,7 @@ public class CPreprocessorTest {
 	    PreprocessorException {
 	File directory = new File(
 		"src/test/resources/com/puresol/coding/lang/cpp/files");
-	SourceCode sourceCode = new FileSource(new File(directory,
+	SourceCode sourceCode = new SourceFileLocation(new File(directory,
 		"FileWithoutMacros.txt")).load();
 	SourceCode preProcessedSourceCode = new CPreprocessor()
 		.process(sourceCode);
@@ -40,9 +40,9 @@ public class CPreprocessorTest {
     public void testSingleInclude() throws IOException, PreprocessorException {
 	File directory = new File(
 		"src/test/resources/com/puresol/coding/lang/cpp/files");
-	SourceCode sourceCode = new FileSource(new File(directory,
+	SourceCode sourceCode = new SourceFileLocation(new File(directory,
 		"SingleIncludeMacro.txt")).load();
-	SourceCode includedSourceCode = new FileSource(new File(directory,
+	SourceCode includedSourceCode = new SourceFileLocation(new File(directory,
 		"FileWithoutMacros.txt")).load();
 	SourceCode preProcessedSourceCode = new CPreprocessor()
 		.process(sourceCode);
@@ -54,15 +54,15 @@ public class CPreprocessorTest {
 	    PreprocessorException {
 	File directory = new File(
 		"src/test/resources/com/puresol/coding/lang/cpp/files");
-	Source source = new FileSource(new File(directory,
+	CodeLocation source = new SourceFileLocation(new File(directory,
 		"MultipleIncludeMacros.txt"));
 	SourceCode sourceCode = source.load();
 	SourceCode preProcessedSourceCode = new CPreprocessor()
 		.process(sourceCode);
 
-	SourceCode sourceWithoutMacros = new FileSource(new File(directory,
+	SourceCode sourceWithoutMacros = new SourceFileLocation(new File(directory,
 		"FileWithoutMacros.txt")).load();
-	SourceCode sourceWithoutMacros2 = new FileSource(new File(directory,
+	SourceCode sourceWithoutMacros2 = new SourceFileLocation(new File(directory,
 		"FileWithoutMacros2.txt")).load();
 
 	SourceCode expected = new SourceCode();
@@ -84,18 +84,18 @@ public class CPreprocessorTest {
 	File directory = new File(
 		"src/test/resources/com/puresol/coding/lang/cpp/files");
 	File sourceFile = new File(directory, "RecursiveIncludeMacros1.txt");
-	SourceCode sourceCode = new FileSource(sourceFile).load();
+	SourceCode sourceCode = new SourceFileLocation(sourceFile).load();
 	SourceCode preProcessedSourceCode = new CPreprocessor()
 		.process(sourceCode);
 
-	SourceCode sourceWithoutMacros = new FileSource(new File(directory,
+	SourceCode sourceWithoutMacros = new SourceFileLocation(new File(directory,
 		"FileWithoutMacros.txt")).load();
-	SourceCode sourceWithoutMacros2 = new FileSource(new File(directory,
+	SourceCode sourceWithoutMacros2 = new SourceFileLocation(new File(directory,
 		"FileWithoutMacros2.txt")).load();
 
 	SourceCode expected = new SourceCode();
 	File file = new File(directory, "RecursiveIncludeMacros3.txt");
-	expected.addSourceCodeLine(new SourceCodeLine(new FileSource(file), 1,
+	expected.addSourceCodeLine(new SourceCodeLine(new SourceFileLocation(file), 1,
 		"<end of file>"));
 	expected.addSourceCode(sourceWithoutMacros2);
 	expected.addSourceCode(sourceWithoutMacros);
@@ -108,15 +108,15 @@ public class CPreprocessorTest {
 	File directory = new File(
 		"src/test/resources/com/puresol/coding/lang/cpp/files");
 	File sourceFile = new File(directory, "SimpleDefineTest.txt");
-	SourceCode sourceCode = new FileSource(sourceFile).load();
+	SourceCode sourceCode = new SourceFileLocation(sourceFile).load();
 	SourceCode preProcessedSourceCode = new CPreprocessor()
 		.process(sourceCode);
 
 	SourceCode expected = new SourceCode();
 	expected.addSourceCodeLine(new SourceCodeLine(
-		new FileSource(sourceFile), 2, "1\n"));
+		new SourceFileLocation(sourceFile), 2, "1\n"));
 	expected.addSourceCodeLine(new SourceCodeLine(
-		new FileSource(sourceFile), 4, "\"Hello, world!\"\n"));
+		new SourceFileLocation(sourceFile), 4, "\"Hello, world!\"\n"));
 	assertEquals(expected, preProcessedSourceCode);
     }
 
@@ -126,13 +126,13 @@ public class CPreprocessorTest {
 	File directory = new File(
 		"src/test/resources/com/puresol/coding/lang/cpp/files");
 	File sourceFile = new File(directory, "ObjectLikeDefineTest.txt");
-	SourceCode sourceCode = new FileSource(sourceFile).load();
+	SourceCode sourceCode = new SourceFileLocation(sourceFile).load();
 	SourceCode preProcessedSourceCode = new CPreprocessor()
 		.process(sourceCode);
 
 	SourceCode expected = new SourceCode();
 	expected.addSourceCodeLine(new SourceCodeLine(
-		new FileSource(sourceFile), 2,
+		new SourceFileLocation(sourceFile), 2,
 		"Call the printf(\"This is a simple object macro!\"); macro now...\n"));
 	assertEquals(expected, preProcessedSourceCode);
     }
@@ -143,13 +143,13 @@ public class CPreprocessorTest {
 	File directory = new File(
 		"src/test/resources/com/puresol/coding/lang/cpp/files");
 	File sourceFile = new File(directory, "FunctionLikeDefineTest.txt");
-	SourceCode sourceCode = new FileSource(sourceFile).load();
+	SourceCode sourceCode = new SourceFileLocation(sourceFile).load();
 	SourceCode preProcessedSourceCode = new CPreprocessor()
 		.process(sourceCode);
 
 	SourceCode expected = new SourceCode();
 	expected.addSourceCodeLine(new SourceCodeLine(
-		new FileSource(sourceFile), 2,
+		new SourceFileLocation(sourceFile), 2,
 		"fprintf(stderr, \"%s\n\", \"Error message!\");\n"));
 	assertEquals(expected, preProcessedSourceCode);
     }

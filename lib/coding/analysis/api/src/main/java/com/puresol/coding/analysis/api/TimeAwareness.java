@@ -16,12 +16,13 @@ public interface TimeAwareness extends Serializable {
      * 
      * @return
      */
-    public Date getTime();
+    public Date getStartTime();
 
     /**
      * This method returns the time duration of the run in milliseconds.
      * 
-     * @return
+     * @return A long is returned containing the duration of the run in
+     *         milliseconds.
      */
-    public long getTimeOfRun();
+    public long getDuration();
 }

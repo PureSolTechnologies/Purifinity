@@ -23,6 +23,7 @@ Originally-Created-By: Apache Maven Bundle Plugin
 Bundle-Activator: com.puresol.coding.lang.fortran.Activator
 Import-Package: com.puresol.coding;version="0.1.0",
  com.puresol.coding.analysis.api;version="0.1.0",
+ com.puresol.coding.lang.common;version="0.1.0",
  com.puresol.coding.lang.cpp;version="0.1.0",
  com.puresol.coding.metrics.codedepth;version="0.1.0",
  com.puresol.coding.metrics.halstead;version="0.1.0",

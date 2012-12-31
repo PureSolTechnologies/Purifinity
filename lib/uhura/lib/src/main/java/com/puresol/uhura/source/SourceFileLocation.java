@@ -4,13 +4,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-public class FileSource extends AbstractSource {
+public class SourceFileLocation extends AbstractSourceCodeLocation {
 
     private static final long serialVersionUID = -4803348905641081874L;
 
     private final File file;
 
-    public FileSource(File file) {
+    public SourceFileLocation(File file) {
 	this.file = file;
     }
 
@@ -45,7 +45,7 @@ public class FileSource extends AbstractSource {
 	    return false;
 	if (getClass() != obj.getClass())
 	    return false;
-	FileSource other = (FileSource) obj;
+	SourceFileLocation other = (SourceFileLocation) obj;
 	if (file == null) {
 	    if (other.file != null)
 		return false;
@@ -55,7 +55,17 @@ public class FileSource extends AbstractSource {
     }
 
     @Override
-    public Source newRelativeSource(String relativePath) {
-	return new FileSource(new File(file.getParentFile(), relativePath));
+    public CodeLocation newRelativeSource(String relativePath) {
+	return new SourceFileLocation(new File(file.getParentFile(), relativePath));
+    }
+
+    @Override
+    public String getName() {
+	return file.getName();
+    }
+
+    @Override
+    public String getLocation() {
+	return file.getParent();
     }
 }

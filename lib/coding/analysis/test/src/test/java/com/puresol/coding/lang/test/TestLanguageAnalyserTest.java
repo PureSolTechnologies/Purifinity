@@ -7,18 +7,21 @@ import java.io.File;
 
 import org.junit.Test;
 
+import com.puresol.uhura.source.SourceFileLocation;
+
 public class TestLanguageAnalyserTest {
 
     @Test
     public void test() {
-	assertNotNull(new TestLanguageAnalyser(new File(""), new File("")));
+	assertNotNull(new TestLanguageAnalyser(new SourceFileLocation(new File(""))));
     }
 
     @Test
     public void testInitValues() {
-	TestLanguageAnalyser analyser = new TestLanguageAnalyser(new File("."),
-		new File("TestFile.test"));
-	assertEquals(new File("TestFile.test"), analyser.getFile());
+	TestLanguageAnalyser analyser = new TestLanguageAnalyser(
+		new SourceFileLocation(new File(".", "TestFile.test")));
+	assertEquals(new SourceFileLocation(new File(".", "TestFile.test")),
+		analyser.getSource());
 
     }
 }

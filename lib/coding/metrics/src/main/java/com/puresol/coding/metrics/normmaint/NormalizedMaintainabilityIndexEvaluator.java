@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.puresol.coding.analysis.api.AnalysisRun;
+import com.puresol.coding.analysis.api.CodeAnalysis;
 import com.puresol.coding.analysis.api.CodeRange;
-import com.puresol.coding.analysis.api.FileAnalysis;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.evaluation.api.EvaluatorStore;
 import com.puresol.coding.evaluator.AbstractEvaluator;
@@ -44,7 +44,7 @@ public class NormalizedMaintainabilityIndexEvaluator extends AbstractEvaluator {
     }
 
     @Override
-    protected void processFile(FileAnalysis analysis)
+    protected void processFile(CodeAnalysis analysis)
 	    throws InterruptedException {
 	NormalizedMaintainabilityIndexFileResults results = new NormalizedMaintainabilityIndexFileResults();
 
@@ -64,8 +64,8 @@ public class NormalizedMaintainabilityIndexEvaluator extends AbstractEvaluator {
 		    maintainabilityIndex.getMIcw());
 
 	    results.add(new NormalizedMaintainabilityIndexFileResult(analysis
-		    .getAnalyzedFile().getFile().getPath(),
-		    codeRange.getType(), codeRange.getName(), result,
+		    .getAnalyzedFile().getLocation(), codeRange.getType(),
+		    codeRange.getName(), result,
 		    NormalizedMaintainabilityQuality.get(codeRange.getType(),
 			    result)));
 	}

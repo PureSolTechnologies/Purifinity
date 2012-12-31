@@ -13,15 +13,15 @@ import java.util.List;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.puresol.coding.analysis.api.FileAnalyzer;
+import com.puresol.coding.analysis.api.CodeAnalyzer;
 import com.puresol.coding.lang.java.Java;
 import com.puresol.coding.lang.java.grammar.JavaGrammar;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.parser.ParserException;
 import com.puresol.uhura.parser.ParserTree;
 import com.puresol.uhura.parser.packrat.PackratParser;
-import com.puresol.uhura.source.FileSource;
-import com.puresol.uhura.source.Source;
+import com.puresol.uhura.source.CodeLocation;
+import com.puresol.uhura.source.SourceFileLocation;
 import com.puresol.utils.ConsoleUtils;
 import com.puresol.utils.FileSearch;
 import com.puresol.utils.StopWatch;
@@ -44,12 +44,11 @@ public class JavaSourceCodeDistributionTest {
     @Test
     @Ignore("Takes too long...")
     public void test() throws Throwable {
-	assertTrue(file.exists());
 	Java java = Java.getInstance();
 	StopWatch watch = new StopWatch();
 	watch.start();
-	FileAnalyzer analyser = java.createAnalyser(
-		new File(INSTALL_DIRECTORY), file);
+	CodeAnalyzer analyser = java.createAnalyser(new SourceFileLocation(
+		new File(INSTALL_DIRECTORY, file.getPath())));
 	analyser.analyze();
 	watch.stop();
 	ParserTree ast = analyser.getAnalysis().getParserTree();
@@ -64,7 +63,7 @@ public class JavaSourceCodeDistributionTest {
 	assertTrue(file.exists());
 	Grammar grammar = JavaGrammar.getInstance();
 	PackratParser parser = new PackratParser(grammar);
-	Source source = new FileSource(file);
+	CodeLocation source = new SourceFileLocation(file);
 	StopWatch watch = new StopWatch();
 	watch.start();
 	ParserTree ast = parser.parse(source.load());
@@ -147,7 +146,7 @@ public class JavaSourceCodeDistributionTest {
 	    // analyser.parse();
 	    // analyser = null;
 	    PackratParser parser = new PackratParser(javaGrammar);
-	    parser.parse(new FileSource(file).load());
+	    parser.parse(new SourceFileLocation(file).load());
 	    return true;
 	    // } catch (AnalyzerException e) {
 	    // e.printStackTrace();

@@ -15,7 +15,7 @@ import com.puresol.coding.analysis.api.AnalysisInformation;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalysisRunInformation;
 import com.puresol.coding.analysis.api.AnalysisSettings;
-import com.puresol.coding.analysis.api.DirectoryStoreException;
+import com.puresol.coding.analysis.api.ModuleStoreException;
 import com.puresol.utils.FileUtilities;
 
 public class AnalysisImpl implements Analysis {
@@ -28,14 +28,14 @@ public class AnalysisImpl implements Analysis {
     }
 
     public static Analysis open(File analysisDirectory)
-	    throws DirectoryStoreException {
+	    throws ModuleStoreException {
 	AnalysisImpl analysis = new AnalysisImpl(analysisDirectory);
 	analysis.open();
 	return analysis;
     }
 
     public static Analysis create(File analysisDirectory, UUID uuid,
-	    AnalysisSettings settings) throws DirectoryStoreException {
+	    AnalysisSettings settings) throws ModuleStoreException {
 	AnalysisImpl analysis = new AnalysisImpl(analysisDirectory);
 	analysis.create(uuid, settings);
 	return analysis;
@@ -52,13 +52,13 @@ public class AnalysisImpl implements Analysis {
 	this.analysisDirectory = analysisDirectory;
     }
 
-    private void open() throws DirectoryStoreException {
+    private void open() throws ModuleStoreException {
 	try {
 	    settings = PersistenceUtils.restore(new File(analysisDirectory,
 		    SETTINGS_FILE));
 	    loadProperties();
 	} catch (IOException e) {
-	    throw new DirectoryStoreException("Could not open the analysis!", e);
+	    throw new ModuleStoreException("Could not open the analysis!", e);
 	}
 
     }
@@ -78,7 +78,7 @@ public class AnalysisImpl implements Analysis {
     }
 
     private void create(UUID uuid, AnalysisSettings settings)
-	    throws DirectoryStoreException {
+	    throws ModuleStoreException {
 	try {
 	    this.uuid = uuid;
 	    this.settings = settings;
@@ -91,7 +91,7 @@ public class AnalysisImpl implements Analysis {
 		    settings);
 	    saveProperties();
 	} catch (IOException e) {
-	    throw new DirectoryStoreException(
+	    throw new ModuleStoreException(
 		    "Could not store files for analysis!", e);
 	}
     }
@@ -117,7 +117,7 @@ public class AnalysisImpl implements Analysis {
 
     @Override
     public List<AnalysisRunInformation> getAllRunInformation()
-	    throws DirectoryStoreException {
+	    throws ModuleStoreException {
 	List<AnalysisRunInformation> analysisInformation = new ArrayList<AnalysisRunInformation>();
 	File[] files = analysisDirectory.listFiles();
 	if (files != null) {
@@ -141,31 +141,31 @@ public class AnalysisImpl implements Analysis {
 
     @Override
     public void updateSettings(AnalysisSettings settings)
-	    throws DirectoryStoreException {
+	    throws ModuleStoreException {
 	try {
 	    this.settings = settings;
 	    PersistenceUtils.store(new File(analysisDirectory, SETTINGS_FILE),
 		    settings);
 	} catch (IOException e) {
-	    throw new DirectoryStoreException("Could not store new settings!",
+	    throw new ModuleStoreException("Could not store new settings!",
 		    e);
 	}
     }
 
     @Override
     public AnalysisRun loadAnalysisRun(UUID uuid)
-	    throws DirectoryStoreException {
+	    throws ModuleStoreException {
 	File runDir = new File(analysisDirectory, uuid.toString());
 	return AnalysisRunImpl.open(runDir);
     }
 
     @Override
-    public AnalysisRun runAnalysis() throws DirectoryStoreException,
+    public AnalysisRun runAnalysis() throws ModuleStoreException,
 	    InterruptedException {
 	UUID uuid = UUID.randomUUID();
 	AnalysisRunImpl run = (AnalysisRunImpl) AnalysisRunImpl.create(
 		new File(analysisDirectory, uuid.toString()), getInformation(),
-		uuid, getSettings().getSourceDirectory(), getSettings()
+		uuid, getSettings().getRepositoryLocation(), getSettings()
 			.getFileSearchConfiguration());
 	run.schedule();
 	run.join();
@@ -173,15 +173,15 @@ public class AnalysisImpl implements Analysis {
     }
 
     @Override
-    public AnalysisRun loadLastAnalysisRun() throws DirectoryStoreException {
+    public AnalysisRun loadLastAnalysisRun() throws ModuleStoreException {
 	List<AnalysisRunInformation> allRunInformation = getAllRunInformation();
 	UUID uuid = null;
 	Date time = null;
 	for (AnalysisRunInformation runInformation : allRunInformation) {
 	    if ((uuid == null)
-		    || (runInformation.getTime().compareTo(time) < 0)) {
+		    || (runInformation.getStartTime().compareTo(time) < 0)) {
 		uuid = runInformation.getUUID();
-		time = runInformation.getTime();
+		time = runInformation.getStartTime();
 	    }
 	}
 	if (uuid != null) {
@@ -192,13 +192,13 @@ public class AnalysisImpl implements Analysis {
     }
 
     @Override
-    public void removeAnalysisRun(UUID uuid) throws DirectoryStoreException {
+    public void removeAnalysisRun(UUID uuid) throws ModuleStoreException {
 	try {
 	    File analysisRunDirectory = new File(analysisDirectory,
 		    uuid.toString());
 	    FileUtilities.deleteFileOrDir(analysisRunDirectory);
 	} catch (IOException e) {
-	    throw new DirectoryStoreException(
+	    throw new ModuleStoreException(
 		    "Could not delete analysis run with UUID '"
 			    + uuid.toString() + "' for analysis with UUID '"
 			    + this.uuid.toString() + "'!", e);

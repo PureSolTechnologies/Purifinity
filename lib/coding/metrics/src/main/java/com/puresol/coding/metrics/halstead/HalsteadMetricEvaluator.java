@@ -4,8 +4,8 @@ import java.util.List;
 
 import com.puresol.coding.ProgrammingLanguages;
 import com.puresol.coding.analysis.api.AnalysisRun;
+import com.puresol.coding.analysis.api.CodeAnalysis;
 import com.puresol.coding.analysis.api.CodeRange;
-import com.puresol.coding.analysis.api.FileAnalysis;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.analysis.api.ProgrammingLanguage;
 import com.puresol.coding.evaluation.api.EvaluatorStore;
@@ -24,7 +24,7 @@ public class HalsteadMetricEvaluator extends AbstractEvaluator {
     }
 
     @Override
-    protected void processFile(FileAnalysis analysis)
+    protected void processFile(CodeAnalysis analysis)
 	    throws InterruptedException {
 	HalsteadMetricFileResults results = new HalsteadMetricFileResults();
 	ProgrammingLanguage language = ProgrammingLanguages.findByName(
@@ -36,9 +36,8 @@ public class HalsteadMetricEvaluator extends AbstractEvaluator {
 	    metric.schedule();
 	    metric.join();
 	    results.add(new HalsteadMetricFileResult(analysis.getAnalyzedFile()
-		    .getFile().getPath(), codeRange.getType(), codeRange
-		    .getName(), metric.getHalsteadResults(), metric
-		    .getQuality()));
+		    .getLocation(), codeRange.getType(), codeRange.getName(),
+		    metric.getHalsteadResults(), metric.getQuality()));
 	}
 	store.storeFileResults(analysis.getAnalyzedFile().getHashId(), results);
     }

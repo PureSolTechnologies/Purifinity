@@ -10,7 +10,7 @@ import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.token.TokenDefinition;
 import com.puresol.uhura.grammar.token.TokenDefinitionSet;
 import com.puresol.uhura.lexer.Lexer;
-import com.puresol.uhura.source.BuiltinSource;
+import com.puresol.uhura.source.FixedSourceCodeLocation;
 
 public class LexerTest {
 
@@ -25,9 +25,9 @@ public class LexerTest {
 
     @Test
     public void testFloat() throws Exception {
-	lexer.lex(new BuiltinSource("1.234E+56").load());
-	lexer.lex(new BuiltinSource("1234.E+56").load());
-	lexer.lex(new BuiltinSource(".1234E+56").load());
+	lexer.lex(new FixedSourceCodeLocation("1.234E+56").load());
+	lexer.lex(new FixedSourceCodeLocation("1234.E+56").load());
+	lexer.lex(new FixedSourceCodeLocation(".1234E+56").load());
     }
 
     @Test

@@ -7,6 +7,11 @@ import java.util.List;
  * also all children. It's designed as generic to be useful in all kinds of
  * trees.
  * 
+ * The interface just provides methods for an immutable tree to get a
+ * thread-safe variant of trees. The tree creation should be finished as soon as
+ * this interface is exposed. All other threads using this interface can access
+ * in a thread-safe way.
+ * 
  * @author Rick-Rainer Ludwig
  * 
  * @param <T>

@@ -8,7 +8,7 @@ import com.puresol.coding.lang.java.grammar.JavaGrammar;
 import com.puresol.uhura.grammar.token.Visibility;
 import com.puresol.uhura.lexer.Lexer;
 import com.puresol.uhura.lexer.TokenStream;
-import com.puresol.uhura.source.BuiltinSource;
+import com.puresol.uhura.source.FixedSourceCodeLocation;
 
 public class CommentTest {
 
@@ -16,7 +16,7 @@ public class CommentTest {
     public void testTraditionalComment() throws Exception {
 	Lexer lexer = JavaGrammar.getInstance().getLexer();
 
-	TokenStream tokenStream = lexer.lex(new BuiltinSource(
+	TokenStream tokenStream = lexer.lex(new FixedSourceCodeLocation(
 		"/* This is a traditional comment... */").load());
 	assertEquals(1, tokenStream.size());
 	assertEquals(Visibility.IGNORED, tokenStream.get(0).getVisibility());
@@ -26,7 +26,7 @@ public class CommentTest {
     public void testTraditionalComment2() throws Exception {
 	Lexer lexer = JavaGrammar.getInstance().getLexer();
 
-	TokenStream tokenStream = lexer.lex(new BuiltinSource(
+	TokenStream tokenStream = lexer.lex(new FixedSourceCodeLocation(
 		"/* to select the \"client\" VM */").load());
 	assertEquals(1, tokenStream.size());
 	assertEquals(Visibility.IGNORED, tokenStream.get(0).getVisibility());
@@ -37,7 +37,7 @@ public class CommentTest {
 	Lexer lexer = JavaGrammar.getInstance().getLexer();
 
 	TokenStream tokenStream = lexer
-		.lex(new BuiltinSource(
+		.lex(new FixedSourceCodeLocation(
 			"/*\n"
 				+ "* @(#)Activation.java  1.78 10/03/23\n"
 				+ "*\n"

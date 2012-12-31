@@ -1,7 +1,6 @@
 package com.puresol.coding.client.editors;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -19,13 +18,14 @@ import org.eclipse.ui.part.EditorPart;
 
 import swing2swt.layout.BorderLayout;
 
-import com.puresol.coding.analysis.api.FileStore;
-import com.puresol.coding.analysis.api.FileStoreException;
-import com.puresol.coding.analysis.api.FileStoreFactory;
+import com.puresol.coding.analysis.api.CodeStore;
+import com.puresol.coding.analysis.api.CodeStoreException;
+import com.puresol.coding.analysis.api.CodeStoreFactory;
 import com.puresol.coding.client.Activator;
 import com.puresol.coding.client.controls.FileMetricsControl;
 import com.puresol.coding.client.controls.ParserTreeControl;
 import com.puresol.coding.client.controls.ScrollableFileViewer;
+import com.puresol.uhura.source.SourceCode;
 import com.puresol.utils.HashId;
 
 public class FileAnalysisEditor extends EditorPart {
@@ -104,24 +104,20 @@ public class FileAnalysisEditor extends EditorPart {
 	    FileAnalysisEditorInput editorInput = (FileAnalysisEditorInput) getEditorInput();
 
 	    metricsControl = new FileMetricsControl(tabFolder, SWT.NONE,
-		    editorInput.getAnalysisRun(), editorInput.getAnalysisFile());
+		    editorInput.getAnalysisRun(), editorInput.getAnalyzedCode());
 	    metricsViewerTab.setControl(metricsControl);
 
-	    HashId hashId = editorInput.getAnalysisFile().getHashId();
-	    FileStore fileStore = FileStoreFactory.getInstance();
-	    InputStream inputStream = fileStore.loadContent(hashId);
-	    try {
-		fileViewer.setStreamAndUpdateContent(inputStream);
-		treeViewer.setContentAndUpdateContent(
-			editorInput.getAnalysisFile(),
-			editorInput.getAnalysisRun());
-	    } finally {
-		inputStream.close();
-	    }
+	    HashId hashId = editorInput.getAnalyzedCode().getHashId();
+	    CodeStore codeStore = CodeStoreFactory.getInstance();
+	    SourceCode sourceCode = codeStore.loadContent(hashId);
+	    fileViewer.setStreamAndUpdateContent(sourceCode);
+	    treeViewer
+		    .setContentAndUpdateContent(editorInput.getAnalyzedCode(),
+			    editorInput.getAnalysisRun());
 	} catch (IOException e) {
 	    logger.log(new Status(Status.ERROR, FileAnalysisEditor.class
 		    .getName(), e.getMessage(), e));
-	} catch (FileStoreException e) {
+	} catch (CodeStoreException e) {
 	    logger.log(new Status(Status.ERROR, FileAnalysisEditor.class
 		    .getName(), e.getMessage(), e));
 	}

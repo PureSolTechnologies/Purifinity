@@ -18,8 +18,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.puresol.coding.ProgrammingLanguages;
-import com.puresol.coding.analysis.api.FileAnalyzer;
+import com.puresol.coding.analysis.api.CodeAnalyzer;
 import com.puresol.coding.analysis.api.ProgrammingLanguage;
+import com.puresol.uhura.source.CodeLocation;
 
 /**
  * This factory creates an Analyser class for a given File in dependence for its
@@ -52,47 +53,39 @@ public class FileAnalysisFactory {
 	// needs to be private...
     }
 
-    public FileAnalyzer create(File sourceDirectory, File file)
+    public CodeAnalyzer create(CodeLocation source)
 	    throws LanguageNotSupportedException, FileNotFoundException {
-	logger.debug("Create analyser for file '" + file.getPath() + "'...");
-	checkFile(new File(sourceDirectory, file.getPath()));
-	return createAnalyser(sourceDirectory, file);
+	logger.debug("Create analyser for file '"
+		+ source.getHumanReadableLocationString() + "'...");
+	return createAnalyser(source);
     }
 
-    private void checkFile(File file) throws FileNotFoundException {
-	if (!file.exists()) {
-	    logger.warn("File '" + file.getPath() + "' is not existing!");
-	    throw new FileNotFoundException("File '" + file.getPath()
-		    + "' is not existing!");
-	}
-    }
-
-    private FileAnalyzer createAnalyser(File sourceDirectory, File file)
+    private CodeAnalyzer createAnalyser(CodeLocation source)
 	    throws LanguageNotSupportedException {
 	for (ProgrammingLanguage language : ProgrammingLanguages.getAll()) {
-	    FileAnalyzer analyser = checkAndCreate(language, sourceDirectory,
-		    file);
+	    CodeAnalyzer analyser = checkAndCreate(language, source);
 	    if (analyser != null) {
 		return analyser;
 	    }
 	}
-	logger.debug("No analyser for file '" + file.getPath() + "' found!");
+	logger.debug("No analyser for file '"
+		+ source.getHumanReadableLocationString() + "' found!");
 	throw new LanguageNotSupportedException(
-		"No coding language found for file " + file.getPath());
+		"No coding language found for file "
+			+ source.getHumanReadableLocationString());
     }
 
-    private FileAnalyzer checkAndCreate(ProgrammingLanguage clazz,
-	    File sourceDirectory, File file) {
-	if (!clazz.isSuitable(file)) {
+    private CodeAnalyzer checkAndCreate(ProgrammingLanguage clazz, CodeLocation source) {
+	if (!clazz.isSuitable(source)) {
 	    return null;
 	}
-	return clazz.createAnalyser(sourceDirectory, file);
+	return clazz.createAnalyser(source);
     }
 
-    public FileAnalyzer restore(File persistFile) {
+    public CodeAnalyzer restore(File persistFile) {
 	try {
 	    for (ProgrammingLanguage language : ProgrammingLanguages.getAll()) {
-		FileAnalyzer analyzer = language.restoreAnalyzer(persistFile);
+		CodeAnalyzer analyzer = language.restoreAnalyzer(persistFile);
 		if (analyzer != null) {
 		    return analyzer;
 		}

@@ -10,10 +10,12 @@ Bundle-ActivationPolicy: lazy
 Export-Package: com.puresol.coding.analysis.api,
  com.puresol.coding.evaluation.api,
  com.puresol.coding.quality.api
-Import-Package: com.puresol.data;version="0.1.0",
+Import-Package: com.puresol.coding.lang.common;version="0.1.0",
+ com.puresol.data;version="0.1.0",
  com.puresol.trees;version="0.1.0",
  com.puresol.uhura.grammar;version="0.1.0",
  com.puresol.uhura.parser;version="0.1.0",
+ com.puresol.uhura.source;version="0.1.0",
  com.puresol.utils;version="0.1.0",
  org.osgi.framework;version="0.0.0",
  org.slf4j;version="1.6.1"

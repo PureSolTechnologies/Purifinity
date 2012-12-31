@@ -14,7 +14,7 @@ import com.puresol.uhura.grammar.token.TokenDefinition;
 import com.puresol.uhura.grammar.token.TokenDefinitionSet;
 import com.puresol.uhura.parser.lr.LR0Parser;
 import com.puresol.uhura.source.SourceCode;
-import com.puresol.uhura.source.UnspecifiedSource;
+import com.puresol.uhura.source.UnspecifiedSourceCodeLocation;
 
 public class RegExpLexerTest {
 
@@ -30,7 +30,7 @@ public class RegExpLexerTest {
 	Lexer lexer = new RegExpLexer(grammar);
 	TokenStream tokenStream = lexer.lex(SourceCode.read(new StringReader(
 		"0 1\t2 \t3 \t4 \t5\t 6 7 8 9 10 11 12 13 14 15"),
-		new UnspecifiedSource()));
+		new UnspecifiedSourceCodeLocation()));
 	assertNotNull(tokenStream);
 	assertEquals(31, tokenStream.size());
 	assertEquals("NUMBER", tokenStream.get(0).getName());
@@ -58,6 +58,6 @@ public class RegExpLexerTest {
 	Lexer lexer = new RegExpLexer(grammar);
 	lexer.lex(SourceCode.read(new StringReader(
 		"\"String without trailing double quote!"),
-		new UnspecifiedSource()));
+		new UnspecifiedSourceCodeLocation()));
     }
 }

@@ -14,13 +14,8 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.osgi</groupId>
-			<artifactId>org.osgi.core</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
+			<groupId>com.puresol</groupId>
+			<artifactId>coding.lang.common</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresol</groupId>
@@ -33,6 +28,15 @@
 		<dependency>
 			<groupId>com.puresol</groupId>
 			<artifactId>utils</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.osgi</groupId>
+			<artifactId>org.osgi.core</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
 		</dependency>
 	</dependencies>
 

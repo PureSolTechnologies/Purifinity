@@ -6,7 +6,6 @@
 		<groupId>com.puresol</groupId>
 		<artifactId>lib</artifactId>
 		<version>0.1.0-SNAPSHOT</version>
-		<relativePath>..</relativePath>
 	</parent>
 
 	<artifactId>license</artifactId>

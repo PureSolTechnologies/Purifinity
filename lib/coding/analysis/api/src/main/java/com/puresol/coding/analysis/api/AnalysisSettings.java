@@ -3,7 +3,7 @@ package com.puresol.coding.analysis.api;
 import java.io.File;
 import java.io.Serializable;
 
-import com.puresol.utils.FileSearchConfiguration;
+import com.puresol.utils.CodeSearchConfiguration;
 
 /**
  * This immutable value object contains the settings of an analysis.
@@ -29,13 +29,13 @@ public final class AnalysisSettings implements Serializable {
      * This field contains the settings for the file search for a new analysis
      * run.
      */
-    private final FileSearchConfiguration fileSearchConfiguration;
+    private final CodeSearchConfiguration fileSearchConfiguration;
 
     /**
      * This is the original source directory which is searched for files for
      * analysis.
      */
-    private final File sourceDirectory;
+    private final RepositoryLocation repositoryLocation;
 
     /**
      * This is the initial value constructor for this object to set all
@@ -47,17 +47,17 @@ public final class AnalysisSettings implements Serializable {
      *            is a description to be shown in UI for users.
      * @param fileSearchConfiguration
      *            is the search configuration for file search for analysis.
-     * @param sourceDirectory
+     * @param repositoryLocation
      *            is the source directory to be search for analysis.
      */
     public AnalysisSettings(String name, String description,
-	    FileSearchConfiguration fileSearchConfiguration,
-	    File sourceDirectory) {
+	    CodeSearchConfiguration fileSearchConfiguration,
+	    RepositoryLocation repositoryLocation) {
 	super();
 	this.name = name;
 	this.description = description;
 	this.fileSearchConfiguration = fileSearchConfiguration;
-	this.sourceDirectory = sourceDirectory;
+	this.repositoryLocation = repositoryLocation;
     }
 
     /**
@@ -81,9 +81,9 @@ public final class AnalysisSettings implements Serializable {
     /**
      * This method returns the file search configuration.
      * 
-     * @return A {@link FileSearchConfiguration} is returned.
+     * @return A {@link CodeSearchConfiguration} is returned.
      */
-    public final FileSearchConfiguration getFileSearchConfiguration() {
+    public final CodeSearchConfiguration getFileSearchConfiguration() {
 	return fileSearchConfiguration;
     }
 
@@ -92,8 +92,8 @@ public final class AnalysisSettings implements Serializable {
      * 
      * @return A {@link File} is returned.
      */
-    public final File getSourceDirectory() {
-	return sourceDirectory;
+    public final RepositoryLocation getRepositoryLocation() {
+	return repositoryLocation;
     }
 
     @Override
@@ -107,8 +107,10 @@ public final class AnalysisSettings implements Serializable {
 		+ ((fileSearchConfiguration == null) ? 0
 			: fileSearchConfiguration.hashCode());
 	result = prime * result + ((name == null) ? 0 : name.hashCode());
-	result = prime * result
-		+ ((sourceDirectory == null) ? 0 : sourceDirectory.hashCode());
+	result = prime
+		* result
+		+ ((repositoryLocation == null) ? 0 : repositoryLocation
+			.hashCode());
 	return result;
     }
 
@@ -137,10 +139,10 @@ public final class AnalysisSettings implements Serializable {
 		return false;
 	} else if (!name.equals(other.name))
 	    return false;
-	if (sourceDirectory == null) {
-	    if (other.sourceDirectory != null)
+	if (repositoryLocation == null) {
+	    if (other.repositoryLocation != null)
 		return false;
-	} else if (!sourceDirectory.equals(other.sourceDirectory))
+	} else if (!repositoryLocation.equals(other.repositoryLocation))
 	    return false;
 	return true;
     }

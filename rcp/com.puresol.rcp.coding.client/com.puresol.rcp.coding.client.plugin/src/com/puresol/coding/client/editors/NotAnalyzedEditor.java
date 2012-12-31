@@ -1,9 +1,5 @@
 package com.puresol.coding.client.editors;
 
-import java.io.IOException;
-import java.io.InputStream;
-
-import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
@@ -13,16 +9,14 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 
-import com.puresol.coding.analysis.api.FileStore;
-import com.puresol.coding.analysis.api.FileStoreException;
-import com.puresol.coding.analysis.api.FileStoreFactory;
+import com.puresol.coding.analysis.api.CodeStore;
+import com.puresol.coding.analysis.api.CodeStoreException;
+import com.puresol.coding.analysis.api.CodeStoreFactory;
 import com.puresol.coding.analysis.api.HashIdFileTree;
-import com.puresol.coding.client.Activator;
 import com.puresol.coding.client.controls.ScrollableFileViewer;
+import com.puresol.uhura.source.SourceCode;
 
 public class NotAnalyzedEditor extends EditorPart {
-
-    private static final ILog logger = Activator.getDefault().getLog();
 
     public static final String ID = "com.puresol.coding.client.NotAnalyzedEditor";
 
@@ -67,18 +61,12 @@ public class NotAnalyzedEditor extends EditorPart {
 	NotAnalyzedEditorInput editorInput = (NotAnalyzedEditorInput) getEditorInput();
 	HashIdFileTree hashIdFile = editorInput.getAnalysisRun().getFileTree()
 		.findFile(editorInput.getFile());
-	FileStore fileStore = FileStoreFactory.getInstance();
+	CodeStore fileStore = CodeStoreFactory.getInstance();
 	try {
-	    InputStream inputStream = fileStore.loadContent(hashIdFile
+	    SourceCode sourceCode = fileStore.loadContent(hashIdFile
 		    .getHashId());
-	    try {
-		text.setStreamAndUpdateContent(inputStream);
-	    } finally {
-		inputStream.close();
-	    }
-	} catch (IOException e) {
-	    // TODO
-	} catch (FileStoreException e) {
+	    text.setStreamAndUpdateContent(sourceCode);
+	} catch (CodeStoreException e) {
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}

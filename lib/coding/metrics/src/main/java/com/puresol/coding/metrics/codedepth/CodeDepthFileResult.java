@@ -4,29 +4,31 @@ import java.io.Serializable;
 
 import com.puresol.coding.analysis.api.CodeRangeType;
 import com.puresol.coding.quality.api.SourceCodeQuality;
+import com.puresol.uhura.source.CodeLocation;
 
 public class CodeDepthFileResult implements Serializable {
 
     private static final long serialVersionUID = -2731668647369978957L;
 
-    private final String file;
+    private final CodeLocation sourceCodeLocation;
     private final CodeRangeType codeRangeType;
     private final String codeRangeName;
     private final int maxDepth;
     private final SourceCodeQuality quality;
 
-    public CodeDepthFileResult(String file, CodeRangeType codeRangeType,
-	    String codeRangeName, int maxDepth, SourceCodeQuality quality) {
+    public CodeDepthFileResult(CodeLocation sourceCodeLocation,
+	    CodeRangeType codeRangeType, String codeRangeName, int maxDepth,
+	    SourceCodeQuality quality) {
 	super();
-	this.file = file;
+	this.sourceCodeLocation = sourceCodeLocation;
 	this.codeRangeType = codeRangeType;
 	this.codeRangeName = codeRangeName;
 	this.maxDepth = maxDepth;
 	this.quality = quality;
     }
 
-    public String getFile() {
-	return file;
+    public CodeLocation getSourceLocation() {
+	return sourceCodeLocation;
     }
 
     public CodeRangeType getCodeRangeType() {

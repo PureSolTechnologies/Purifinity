@@ -1,16 +1,17 @@
 package com.puresol.uhura.source;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
-public class URLSource extends AbstractSource {
+public class URLSourceCodeLocation extends AbstractSourceCodeLocation {
 
     private static final long serialVersionUID = 7938452623238399125L;
 
     private final URL url;
 
-    public URLSource(URL url) {
+    public URLSourceCodeLocation(URL url) {
 	this.url = url;
     }
 
@@ -45,7 +46,7 @@ public class URLSource extends AbstractSource {
 	    return false;
 	if (getClass() != obj.getClass())
 	    return false;
-	URLSource other = (URLSource) obj;
+	URLSourceCodeLocation other = (URLSourceCodeLocation) obj;
 	if (url == null) {
 	    if (other.url != null)
 		return false;
@@ -55,9 +56,19 @@ public class URLSource extends AbstractSource {
     }
 
     @Override
-    public Source newRelativeSource(String relativePath) {
+    public CodeLocation newRelativeSource(String relativePath) {
 	throw new IllegalStateException(
 		"This functionality is not implemented, yet!");
+    }
+
+    @Override
+    public String getName() {
+	return new File(url.getPath()).getName();
+    }
+
+    @Override
+    public String getLocation() {
+	return new File(url.getPath()).getParent();
     }
 
 }

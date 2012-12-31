@@ -4,30 +4,31 @@ import java.io.Serializable;
 
 import com.puresol.coding.analysis.api.CodeRangeType;
 import com.puresol.coding.quality.api.SourceCodeQuality;
+import com.puresol.uhura.source.CodeLocation;
 
 public class SLOCFileResult implements Serializable {
 
     private static final long serialVersionUID = 2302225864694571092L;
 
-    private final String file;
+    private final CodeLocation sourceCodeLocation;
     private final CodeRangeType codeRangeType;
     private final String codeRangeName;
     private final SLOCResult slocResult;
     private final SourceCodeQuality quality;
 
-    public SLOCFileResult(String file, CodeRangeType codeRangeType,
-	    String codeRangeName, SLOCResult slocResult,
-	    SourceCodeQuality quality) {
+    public SLOCFileResult(CodeLocation sourceCodeLocation,
+	    CodeRangeType codeRangeType, String codeRangeName,
+	    SLOCResult slocResult, SourceCodeQuality quality) {
 	super();
-	this.file = file;
+	this.sourceCodeLocation = sourceCodeLocation;
 	this.codeRangeType = codeRangeType;
 	this.codeRangeName = codeRangeName;
 	this.slocResult = slocResult;
 	this.quality = quality;
     }
 
-    public String getFile() {
-	return file;
+    public CodeLocation getSourceCodeLocation() {
+	return sourceCodeLocation;
     }
 
     public CodeRangeType getCodeRangeType() {

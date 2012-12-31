@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import com.puresol.trees.FileTree;
+import com.puresol.uhura.source.CodeLocation;
 
 /**
  * This is the general interface for a single project analysis. This analysis
@@ -29,13 +30,13 @@ public interface AnalysisRun extends Serializable {
      * This method returns all analyzed file as a simple list.
      * 
      * @return A {@link List} is returned containing the files as
-     *         {@link AnalyzedFile}.
+     *         {@link AnalyzedCode}.
      */
-    public List<AnalyzedFile> getAnalyzedFiles();
+    public List<AnalyzedCode> getAnalyzedCodes();
 
     /**
-     * This method returns the whole file tree as a {@link FileTree}. This tree
-     * can be used for user output.
+     * This method returns the whole source code tree as a {@link FileTree}.
+     * This tree can be used for user output.
      * 
      * @return A {@link FileTree} object is returned.
      */
@@ -47,7 +48,7 @@ public interface AnalysisRun extends Serializable {
      * 
      * @return A {@link List} of {@link File} is returned.
      */
-    public List<File> getFailedFiles();
+    public List<CodeLocation> getFailedCodeLocations();
 
     /**
      * This method performs a lookup of the file provided and find the
@@ -58,9 +59,9 @@ public interface AnalysisRun extends Serializable {
      * @param file
      *            is the relative path of a file within the original project
      *            directory to lookup.
-     * @return {@link AnalyzedFile} is returned for file. If no analyzed file
-     *         was found, null is returned.
+     * @return {@link AnalyzedCode} is returned for file. If no analyzed
+     *         file was found, null is returned.
      */
-    public AnalyzedFile findAnalyzedFile(File file);
+    public AnalyzedCode findAnalyzedCode(File file);
 
 }

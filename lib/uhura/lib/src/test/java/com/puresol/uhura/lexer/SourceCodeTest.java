@@ -9,7 +9,7 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.puresol.uhura.source.FileSource;
+import com.puresol.uhura.source.SourceFileLocation;
 import com.puresol.uhura.source.SourceCode;
 import com.puresol.uhura.source.SourceCodeLine;
 import com.puresol.utils.FileUtilities;
@@ -27,7 +27,7 @@ public class SourceCodeTest {
 	File file = new File("src/test/java", PathUtils
 		.classToRelativePackagePath(SourceCodeTest.class).getPath());
 	assertTrue(file.exists());
-	FileSource fileSource = new FileSource(file);
+	SourceFileLocation fileSource = new SourceFileLocation(file);
 	SourceCode sourceCode = fileSource.load();
 	assertNotNull(sourceCode);
 	List<SourceCodeLine> lines = sourceCode.getSource();

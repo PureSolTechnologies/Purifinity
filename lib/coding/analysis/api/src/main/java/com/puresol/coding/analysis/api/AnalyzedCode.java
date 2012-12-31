@@ -1,9 +1,9 @@
 package com.puresol.coding.analysis.api;
 
-import java.io.File;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.puresol.uhura.source.CodeLocation;
 import com.puresol.utils.HashId;
 
 /**
@@ -14,23 +14,23 @@ import com.puresol.utils.HashId;
  * @author Rick-Rainer Ludwig
  * 
  */
-public final class AnalyzedFile implements Comparable<AnalyzedFile>,
+public final class AnalyzedCode implements Comparable<AnalyzedCode>,
 	Serializable, TimeAwareness {
 
     private static final long serialVersionUID = 2030120585873480183L;
 
     private final HashId hashId;
-    private final File file;
+    private final CodeLocation source;
     private final Date time;
     private final long timeOfRun;
     private final String languageName;
     private final String languageVersion;
 
-    public AnalyzedFile(HashId hashId, File file, Date time, long timeOfRun,
-	    String languageName, String languageVersion) {
+    public AnalyzedCode(HashId hashId, CodeLocation source, Date time,
+	    long timeOfRun, String languageName, String languageVersion) {
 	super();
 	this.hashId = hashId;
-	this.file = file;
+	this.source = source;
 	this.time = time;
 	this.timeOfRun = timeOfRun;
 	this.languageName = languageName;
@@ -41,17 +41,17 @@ public final class AnalyzedFile implements Comparable<AnalyzedFile>,
 	return hashId;
     }
 
-    public final File getFile() {
-	return file;
+    public final CodeLocation getLocation() {
+	return source;
     }
 
     @Override
-    public final Date getTime() {
+    public final Date getStartTime() {
 	return time;
     }
 
     @Override
-    public final long getTimeOfRun() {
+    public final long getDuration() {
 	return timeOfRun;
     }
 
@@ -67,7 +67,7 @@ public final class AnalyzedFile implements Comparable<AnalyzedFile>,
     public int hashCode() {
 	final int prime = 31;
 	int result = 1;
-	result = prime * result + ((file == null) ? 0 : file.hashCode());
+	result = prime * result + ((source == null) ? 0 : source.hashCode());
 	result = prime * result + ((hashId == null) ? 0 : hashId.hashCode());
 	result = prime * result
 		+ ((languageName == null) ? 0 : languageName.hashCode());
@@ -86,11 +86,11 @@ public final class AnalyzedFile implements Comparable<AnalyzedFile>,
 	    return false;
 	if (getClass() != obj.getClass())
 	    return false;
-	AnalyzedFile other = (AnalyzedFile) obj;
-	if (file == null) {
-	    if (other.file != null)
+	AnalyzedCode other = (AnalyzedCode) obj;
+	if (source == null) {
+	    if (other.source != null)
 		return false;
-	} else if (!file.equals(other.file))
+	} else if (!source.equals(other.source))
 	    return false;
 	if (hashId == null) {
 	    if (other.hashId != null)
@@ -118,7 +118,8 @@ public final class AnalyzedFile implements Comparable<AnalyzedFile>,
     }
 
     @Override
-    public int compareTo(AnalyzedFile other) {
-	return this.file.compareTo(other.file);
+    public int compareTo(AnalyzedCode other) {
+	return this.source.getHumanReadableLocationString().compareTo(
+		other.source.getHumanReadableLocationString());
     }
 }

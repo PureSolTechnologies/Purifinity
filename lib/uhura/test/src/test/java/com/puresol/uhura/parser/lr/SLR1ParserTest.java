@@ -12,7 +12,7 @@ import com.puresol.uhura.lexer.RegExpLexer;
 import com.puresol.uhura.parser.Parser;
 import com.puresol.uhura.parser.ParserTree;
 import com.puresol.uhura.source.SourceCode;
-import com.puresol.uhura.source.UnspecifiedSource;
+import com.puresol.uhura.source.UnspecifiedSourceCodeLocation;
 
 public class SLR1ParserTest {
 
@@ -22,7 +22,7 @@ public class SLR1ParserTest {
 	Parser parser = new SLR1Parser(grammar);
 	Lexer lexer = new RegExpLexer(grammar);
 	ParserTree syntaxTree = parser.parse(lexer.lex(SourceCode.read(
-		new StringReader("1*2+3"), new UnspecifiedSource())));
+		new StringReader("1*2+3"), new UnspecifiedSourceCodeLocation())));
 	new TreePrinter(System.out).println(syntaxTree);
     }
 
@@ -33,7 +33,7 @@ public class SLR1ParserTest {
 	Lexer lexer = new RegExpLexer(grammar);
 	ParserTree syntaxTree = parser.parse(lexer.lex(SourceCode.read(
 		new StringReader("((1*(2+3)+4*5)+6)*7"),
-		new UnspecifiedSource())));
+		new UnspecifiedSourceCodeLocation())));
 	new TreePrinter(System.out).println(syntaxTree);
     }
 

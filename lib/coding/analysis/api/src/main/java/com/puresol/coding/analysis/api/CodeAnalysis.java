@@ -24,7 +24,7 @@ import com.puresol.uhura.parser.ParserTree;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class FileAnalysis implements Serializable, TimeAwareness {
+public class CodeAnalysis implements Serializable, TimeAwareness {
 
     private static final long serialVersionUID = 4670045857614462051L;
 
@@ -32,12 +32,12 @@ public class FileAnalysis implements Serializable, TimeAwareness {
     private final long timeOfRun;
     private final String languageName;
     private final String languageVersion;
-    private final AnalyzedFile analyzedFile;
+    private final AnalyzedCode analyzedFile;
     private final ParserTree parserTree;
     private final List<CodeRange> analyzableCodeRanges;
 
-    public FileAnalysis(Date time, long timeOfRun, String languageName,
-	    String languageVersion, AnalyzedFile analyzedFile,
+    public CodeAnalysis(Date time, long timeOfRun, String languageName,
+	    String languageVersion, AnalyzedCode analyzedFile,
 	    ParserTree parserTree, List<CodeRange> analyzableCodeRanges) {
 	super();
 	this.time = time;
@@ -57,7 +57,7 @@ public class FileAnalysis implements Serializable, TimeAwareness {
      * @throws IOException
      */
     @Override
-    public Date getTime() {
+    public Date getStartTime() {
 	return time;
     }
 
@@ -68,7 +68,7 @@ public class FileAnalysis implements Serializable, TimeAwareness {
      * @throws IOException
      */
     @Override
-    public long getTimeOfRun() {
+    public long getDuration() {
 	return timeOfRun;
     }
 
@@ -96,7 +96,7 @@ public class FileAnalysis implements Serializable, TimeAwareness {
      * 
      * @return The analyzed file is returned.
      */
-    public AnalyzedFile getAnalyzedFile() {
+    public AnalyzedCode getAnalyzedFile() {
 	return analyzedFile;
     }
 

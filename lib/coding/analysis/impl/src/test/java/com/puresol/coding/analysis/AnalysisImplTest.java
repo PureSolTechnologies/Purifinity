@@ -18,36 +18,35 @@ import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalysisRunInformation;
 import com.puresol.coding.analysis.api.AnalysisSettings;
 import com.puresol.coding.analysis.api.AnalysisStore;
-import com.puresol.coding.analysis.api.DirectoryStoreException;
+import com.puresol.coding.analysis.api.ModuleStoreException;
 
-@Ignore
 public class AnalysisImplTest {
 
     private static AnalysisStore analysisStore;
     private static Analysis analysis;
 
     @BeforeClass
-    public static void initialize() throws DirectoryStoreException {
+    public static void initialize() throws ModuleStoreException {
 	analysisStore = new AnalysisStoreImpl();
-	analysis = analysisStore
-		.createAnalysis(new AnalysisSettings("Name", "Description",
-			new TestFileSearchConfiguration(), new File(".")));
+	analysis = analysisStore.createAnalysis(new AnalysisSettings("Name",
+		"Description", new TestFileSearchConfiguration(),
+		new DirectoryRepositoryLocation(".", new File("."))));
 	assertNotNull(analysis);
     }
 
     @Test
-    public void test() throws DirectoryStoreException {
+    public void test() throws ModuleStoreException {
 	List<AnalysisRunInformation> allRunInformation = analysis
 		.getAllRunInformation();
 	assertNotNull(allRunInformation);
     }
 
     @Test
-    public void testUpdateSettings() throws DirectoryStoreException {
+    public void testUpdateSettings() throws ModuleStoreException {
 	AnalysisInformation oldInformation = analysis.getInformation();
 	AnalysisSettings settingsForUpdate = new AnalysisSettings("Name2",
 		"Description2", new TestFileSearchConfiguration(),
-		new File("/"));
+		new DirectoryRepositoryLocation("/", new File("/")));
 
 	analysis.updateSettings(settingsForUpdate);
 
@@ -65,10 +64,11 @@ public class AnalysisImplTest {
 
 	assertEquals("Name2", newSettings.getName());
 	assertEquals("Description2", newSettings.getDescription());
-	assertEquals("/", newSettings.getSourceDirectory().getPath());
+	assertEquals("/", newSettings.getRepositoryLocation().getName());
     }
 
     @Test
+    @Ignore("For tests, we do not have a bundle context!")
     public void testCreateRun() throws Exception {
 	AnalysisRun analysisRun = analysis.runAnalysis();
 	assertNotNull(analysisRun);
@@ -77,7 +77,7 @@ public class AnalysisImplTest {
     }
 
     @AfterClass
-    public static void destroy() throws DirectoryStoreException {
+    public static void destroy() throws ModuleStoreException {
 	assertNotNull(analysisStore);
 	assertNotNull(analysis);
 	analysisStore.removeAnalysis(analysis.getInformation().getUUID());

@@ -7,8 +7,8 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
 import com.puresol.coding.analysis.api.AnalysisStore;
-import com.puresol.coding.analysis.api.DirectoryStore;
-import com.puresol.coding.analysis.api.FileStore;
+import com.puresol.coding.analysis.api.ModuleStore;
+import com.puresol.coding.analysis.api.CodeStore;
 
 public class Activator implements BundleActivator {
 
@@ -34,10 +34,10 @@ public class Activator implements BundleActivator {
 	analysisStoreService = context.registerService(
 		AnalysisStore.class.getName(), new AnalysisStoreImpl(),
 		new Hashtable<String, Object>());
-	fileStoreService = context.registerService(FileStore.class.getName(),
+	fileStoreService = context.registerService(CodeStore.class.getName(),
 		new FileStoreImpl(), new Hashtable<String, Object>());
 	directoryStoreService = context.registerService(
-		DirectoryStore.class.getName(), new DirectoryStoreImpl(),
+		ModuleStore.class.getName(), new DirectoryStoreImpl(),
 		new Hashtable<String, Object>());
     }
 

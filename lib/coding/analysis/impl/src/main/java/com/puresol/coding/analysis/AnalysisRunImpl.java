@@ -28,18 +28,18 @@ import org.slf4j.LoggerFactory;
 import com.puresol.coding.analysis.api.AnalysisInformation;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalysisRunInformation;
-import com.puresol.coding.analysis.api.AnalyzedFile;
-import com.puresol.coding.analysis.api.DirectoryStoreException;
-import com.puresol.coding.analysis.api.FileAnalysis;
-import com.puresol.coding.analysis.api.FileStore;
-import com.puresol.coding.analysis.api.FileStoreFactory;
+import com.puresol.coding.analysis.api.AnalyzedCode;
+import com.puresol.coding.analysis.api.CodeAnalysis;
+import com.puresol.coding.analysis.api.CodeStoreException;
+import com.puresol.coding.analysis.api.CodeStoreFactory;
 import com.puresol.coding.analysis.api.HashIdFileTree;
-import com.puresol.trees.FileTree;
+import com.puresol.coding.analysis.api.ModuleStoreException;
+import com.puresol.coding.analysis.api.RepositoryLocation;
+import com.puresol.coding.analysis.api.CodeStore;
+import com.puresol.uhura.source.SourceCode;
+import com.puresol.uhura.source.CodeLocation;
+import com.puresol.utils.CodeSearchConfiguration;
 import com.puresol.utils.DirectoryUtilities;
-import com.puresol.utils.FileSearch;
-import com.puresol.utils.FileSearchConfiguration;
-import com.puresol.utils.FileUtilities;
-import com.puresol.utils.HashAlgorithm;
 import com.puresol.utils.HashId;
 
 public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
@@ -72,10 +72,10 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
      * @param runDirectory
      *            is the directory where the persisted results can be found.
      * @return
-     * @throws DirectoryStoreException
+     * @throws ModuleStoreException
      */
     public static AnalysisRun open(File runDirectory)
-	    throws DirectoryStoreException {
+	    throws ModuleStoreException {
 	AnalysisRunImpl projectAnalyser = new AnalysisRunImpl(runDirectory);
 	projectAnalyser.open();
 	return projectAnalyser;
@@ -90,20 +90,19 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
      *            analyzed.
      * @param runDirectory
      *            is the directory to put the persisted results to.
-     * @throws DirectoryStoreException
+     * @throws ModuleStoreException
      * @throws IOException
      */
     public static AnalysisRun create(File runDirectory,
 	    AnalysisInformation analysisInformation, UUID uuid,
-	    File sourceDirectory, FileSearchConfiguration searchConfiguration)
-	    throws DirectoryStoreException {
+	    RepositoryLocation repositorySource,
+	    CodeSearchConfiguration searchConfiguration)
+	    throws ModuleStoreException {
 	AnalysisRunImpl projectAnalyser = new AnalysisRunImpl(runDirectory);
-	projectAnalyser.create(sourceDirectory, analysisInformation, uuid,
+	projectAnalyser.create(repositorySource, analysisInformation, uuid,
 		searchConfiguration);
 	return projectAnalyser;
     }
-
-    private static final String SOURCE_DIRECTORY_KEY = "ProjectAnalyzer.projectDirectory";
 
     private static final String ANALYZED_FILES_FILE = "analyzed_files.persist";
     private static final String FAILED_FILES_FILE = "failed_files.persist";
@@ -111,21 +110,22 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
     private static final String ANALYSIS_RUN_PROPERTIES_FILE = "analysis_run.properties";
     private static final String ANALYSIS_INFORMATION_FILE = "analysis_information.persist";
     private static final String FILE_TREE = "file_tree.persist";
+    private static final String REPOSITORY_LOCATION__FILE = "repository_location.persist";
 
     private final File runDirectory;
 
-    private final List<AnalyzedFile> analyzedFiles = new ArrayList<AnalyzedFile>();
-    private final List<File> failedFiles = new ArrayList<File>();
-    private final FileStore fileStore = FileStoreFactory.getInstance();
+    private final List<AnalyzedCode> analyzedFiles = new ArrayList<AnalyzedCode>();
+    private final List<CodeLocation> failedSources = new ArrayList<CodeLocation>();
+    private final CodeStore fileStore = CodeStoreFactory.getInstance();
 
     private HashIdFileTree hashIdFileTree = null;
-    private FileSearchConfiguration searchConfig;
+    private CodeSearchConfiguration searchConfig;
 
     private AnalysisInformation analysisInformation;
     private UUID uuid;
     private Date creationTime;
     private long timeOfRun;
-    private File sourceDirectory;
+    private RepositoryLocation repositoryLocation;
 
     /**
      * This constructor is used to create a new analysis run. All setup
@@ -143,19 +143,20 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
     /**
      * This methods creates a new project directory.
      * 
-     * @param sourceDirectory
+     * @param repositorySource
      * @param searchConfiguration
      * @param name
      * @param uuid2
      * @return
-     * @throws DirectoryStoreException
+     * @throws ModuleStoreException
      * @throws IOException
      */
-    void create(File sourceDirectory, AnalysisInformation analysisInformation,
-	    UUID uuid, FileSearchConfiguration searchConfiguration)
-	    throws DirectoryStoreException {
+    void create(RepositoryLocation repositorySource,
+	    AnalysisInformation analysisInformation, UUID uuid,
+	    CodeSearchConfiguration searchConfiguration)
+	    throws ModuleStoreException {
 	try {
-	    this.sourceDirectory = sourceDirectory;
+	    this.repositoryLocation = repositorySource;
 	    this.analysisInformation = analysisInformation;
 	    this.uuid = uuid;
 	    this.searchConfig = searchConfiguration;
@@ -167,8 +168,7 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
 	    writeSearchConfiguration();
 	    storeProjectInformation();
 	} catch (IOException e) {
-	    throw new DirectoryStoreException("Could not create analysis run!",
-		    e);
+	    throw new ModuleStoreException("Could not create analysis run!", e);
 	}
     }
 
@@ -179,7 +179,6 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
 	properties.put("run.time", String.valueOf(timeOfRun));
 	properties.put(AnalysisRunImpl.class.getSimpleName() + ".name",
 		getName());
-	properties.put(SOURCE_DIRECTORY_KEY, sourceDirectory.toString());
 	FileWriter writer = new FileWriter(new File(runDirectory,
 		ANALYSIS_RUN_PROPERTIES_FILE));
 	try {
@@ -209,9 +208,9 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
      * This method opens the project directory and loads all information files.
      * 
      * @return
-     * @throws DirectoryStoreException
+     * @throws ModuleStoreException
      */
-    void open() throws DirectoryStoreException {
+    void open() throws ModuleStoreException {
 	try {
 	    if (!runDirectory.exists()) {
 		throw new IOException("Analysis run directory '" + runDirectory
@@ -221,7 +220,7 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
 	    readSearchConfiguration();
 	    loadProjectInformation();
 	} catch (IOException e) {
-	    throw new DirectoryStoreException("Could not open analysis run!", e);
+	    throw new ModuleStoreException("Could not open analysis run!", e);
 	}
     }
 
@@ -235,8 +234,6 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
 	    creationTime = new Date(Long.valueOf(properties
 		    .get("creation.time").toString()));
 	    timeOfRun = Long.valueOf(properties.get("run.time").toString());
-	    sourceDirectory = new File(
-		    properties.getProperty(SOURCE_DIRECTORY_KEY));
 	    setName(properties.getProperty(
 		    AnalysisRunImpl.class.getSimpleName() + ".name", "unnamed"));
 	} finally {
@@ -246,19 +243,19 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
 
     private void readSearchConfiguration() throws IOException {
 	try {
-	    searchConfig = new FileSearchConfiguration();
+	    searchConfig = new CodeSearchConfiguration();
 	    FileInputStream fileInputStream = new FileInputStream(new File(
 		    runDirectory, SEARCH_CONFIGURATION_FILE));
 	    try {
 		ObjectInputStream objectOutputStream = new ObjectInputStream(
 			fileInputStream);
 		try {
-		    FileSearchConfiguration config = (FileSearchConfiguration) objectOutputStream
+		    CodeSearchConfiguration config = (CodeSearchConfiguration) objectOutputStream
 			    .readObject();
-		    searchConfig.setDirectoryExcludes(config
-			    .getDirectoryExcludes());
-		    searchConfig.setDirectoryIncludes(config
-			    .getDirectoryIncludes());
+		    searchConfig.setLocationExcludes(config
+			    .getLocationExcludes());
+		    searchConfig.setLocationIncludes(config
+			    .getLocationIncludes());
 		    searchConfig.setFileExcludes(config.getFileExcludes());
 		    searchConfig.setFileIncludes(config.getFileIncludes());
 		} finally {
@@ -274,24 +271,29 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
 
     private void loadProjectInformation() throws IOException {
 	@SuppressWarnings("unchecked")
-	List<AnalyzedFile> analyzed = (List<AnalyzedFile>) restore(new File(
+	List<AnalyzedCode> analyzed = (List<AnalyzedCode>) restore(new File(
 		runDirectory, ANALYZED_FILES_FILE));
 	analyzedFiles.addAll(analyzed);
 	@SuppressWarnings("unchecked")
-	List<File> failed = (List<File>) restore(new File(runDirectory,
-		FAILED_FILES_FILE));
-	failedFiles.addAll(failed);
+	List<CodeLocation> failed = (List<CodeLocation>) restore(new File(
+		runDirectory, FAILED_FILES_FILE));
+	failedSources.addAll(failed);
 	analysisInformation = restore(new File(runDirectory,
 		ANALYSIS_INFORMATION_FILE));
 	hashIdFileTree = restore(new File(runDirectory, FILE_TREE));
+
+	repositoryLocation = restore(new File(runDirectory,
+		REPOSITORY_LOCATION__FILE));
     }
 
     private void storeProjectInformation() {
 	try {
+	    persist(repositoryLocation, new File(runDirectory,
+		    REPOSITORY_LOCATION__FILE));
 	    persist(analysisInformation, new File(runDirectory,
 		    ANALYSIS_INFORMATION_FILE));
 	    persist(analyzedFiles, new File(runDirectory, ANALYZED_FILES_FILE));
-	    persist(failedFiles, new File(runDirectory, FAILED_FILES_FILE));
+	    persist(failedSources, new File(runDirectory, FAILED_FILES_FILE));
 	} catch (IOException e) {
 	    logger.error(e.getMessage(), e);
 	}
@@ -310,6 +312,9 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
 	} catch (IOException e) {
 	    return new Status(IStatus.ERROR, AnalysisRunImpl.class.getName(),
 		    "Could not finish analysis run!", e);
+	} catch (CodeStoreException e) {
+	    return new Status(IStatus.ERROR, AnalysisRunImpl.class.getName(),
+		    "Could not store the source code!", e);
 	}
     }
 
@@ -318,27 +323,26 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
      */
     private void reset() {
 	analyzedFiles.clear();
-	failedFiles.clear();
+	failedSources.clear();
     }
 
-    private IStatus analyzeFiles(final IProgressMonitor monitor) {
-	FileTree fileTree = FileSearch.getFileTree(sourceDirectory,
-		searchConfig);
-	hashIdFileTree = StoreUtilities.createHashIdFileTree(fileTree);
-	StoreUtilities.storeFiles(hashIdFileTree);
+    private IStatus analyzeFiles(final IProgressMonitor monitor)
+	    throws CodeStoreException {
+	repositoryLocation.setCodeSearchConfiguration(searchConfig);
+	List<CodeLocation> sources = repositoryLocation.getSourceCodes();
+	StoreUtilities.storeFiles(sources);
 
-	List<File> files = getFileListFromFileTree(fileTree);
 	int processors = Runtime.getRuntime().availableProcessors();
 	ExecutorService threadPool = Executors.newFixedThreadPool(processors);
-	monitor.beginTask("Analyze files", files.size());
-	for (int index = 0; index < files.size(); index++) {
-	    final File file = files.get(index);
+	monitor.beginTask("Analyze files", sources.size());
+	for (int index = 0; index < sources.size(); index++) {
+	    final CodeLocation source = sources.get(index);
 	    Runnable callable = new Runnable() {
 
 		@Override
 		public void run() {
-		    analyzeFile(file);
-		    logger.info("Finsihed " + file);
+		    analyzeCode(source);
+		    logger.info("Finsihed " + source);
 		    monitor.worked(1);
 		}
 	    };
@@ -362,17 +366,6 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
 	return Status.OK_STATUS;
     }
 
-    private List<File> getFileListFromFileTree(FileTree fileTree) {
-	List<File> files = new ArrayList<File>();
-	for (FileTree fileTreeNode : fileTree) {
-	    File file = fileTreeNode.getPathFile(false);
-	    if (new File(sourceDirectory, file.getPath()).isFile()) {
-		files.add(file);
-	    }
-	}
-	return files;
-    }
-
     /**
      * This method analyzes a single file. The file is added to faildFiles if
      * there was a analyzer found, but the analyzer had issues to analyze the
@@ -387,38 +380,41 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
      * @param file
      *            is the file to be analyzed.
      */
-    private void analyzeFile(File file) {
+    private void analyzeCode(CodeLocation source) {
 	try {
-	    HashId hashId = FileUtilities.createHashId(new File(
-		    sourceDirectory, file.getPath()), HashAlgorithm.SHA256);
+	    SourceCode sourceCode = source.load();
+	    HashId hashId = sourceCode.getHashId();
 	    if (fileStore.isAvailable(hashId) && fileStore.wasAnalyzed(hashId)) {
-		FileAnalysis analysis = fileStore.loadAnalysis(hashId);
-		analyzedFiles.add(new AnalyzedFile(hashId, file, analysis
-			.getTime(), analysis.getTimeOfRun(), analysis
-			.getLanguageName(), analysis.getLanguageVersion()));
+		CodeAnalysis analysis = fileStore.loadAnalysis(hashId);
+		analyzedFiles.add(new AnalyzedCode(hashId, source,
+			analysis.getStartTime(), analysis.getDuration(),
+			analysis.getLanguageName(), analysis
+				.getLanguageVersion()));
 	    } else {
-		FileAnalyzerImpl fileAnalyzer = new FileAnalyzerImpl(
-			sourceDirectory, file, hashId);
+		CodeAnalyzerImpl fileAnalyzer = new CodeAnalyzerImpl(source,
+			hashId);
 		fileAnalyzer.analyze();
 		if (fileAnalyzer.isAnalyzed()) {
 		    fileStore.storeAnalysis(hashId, fileAnalyzer.getAnalyzer()
 			    .getAnalysis());
-		    AnalyzedFile analyzedFile = fileAnalyzer.getAnalysis()
-			    .getAnalyzedFile();
+		    AnalyzedCode analyzedFile = fileAnalyzer
+			    .getAnalysis().getAnalyzedFile();
 		    analyzedFiles.add(analyzedFile);
 		} else {
-		    failedFiles.add(file);
-		    logger.warn("File " + file + " could be analyzed.");
+		    failedSources.add(source);
+		    logger.warn("File "
+			    + source.getHumanReadableLocationString()
+			    + " could be analyzed.");
 		}
 	    }
 	} catch (Exception e) {
-	    failedFiles.add(file);
+	    failedSources.add(source);
 	    logger.error(e.getMessage(), e);
 	}
     }
 
     @Override
-    public List<AnalyzedFile> getAnalyzedFiles() {
+    public List<AnalyzedCode> getAnalyzedCodes() {
 	return analyzedFiles;
     }
 
@@ -428,14 +424,14 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
     }
 
     @Override
-    public List<File> getFailedFiles() {
-	return failedFiles;
+    public List<CodeLocation> getFailedCodeLocations() {
+	return failedSources;
     }
 
     @Override
-    public AnalyzedFile findAnalyzedFile(File file) {
-	for (AnalyzedFile analyzedFile : analyzedFiles) {
-	    if (analyzedFile.getFile().equals(file)) {
+    public AnalyzedCode findAnalyzedCode(File file) {
+	for (AnalyzedCode analyzedFile : analyzedFiles) {
+	    if (analyzedFile.getLocation().equals(file)) {
 		return analyzedFile;
 	    }
 	}

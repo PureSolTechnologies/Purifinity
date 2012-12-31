@@ -12,7 +12,7 @@ import com.puresol.uhura.lexer.LexerException;
 import com.puresol.uhura.lexer.Token;
 import com.puresol.uhura.lexer.TokenMetaData;
 import com.puresol.uhura.lexer.TokenStream;
-import com.puresol.uhura.source.BuiltinSource;
+import com.puresol.uhura.source.FixedSourceCodeLocation;
 import com.puresol.uhura.source.SourceCode;
 import com.puresol.uhura.source.SourceCodeLine;
 
@@ -318,7 +318,7 @@ public class FortranPreConditioner {
     private TokenStream processBrokenCharacterLiteral(Lexer lexer, String line)
 	    throws LexerException, IOException {
 	if (currentBrokenCharacterMode == BROKEN_CHARACTER_LITERAL_NONE) {
-	    return lexer.lex(new BuiltinSource(line).load());
+	    return lexer.lex(new FixedSourceCodeLocation(line).load());
 	}
 	final Matcher matcher;
 	if (currentBrokenCharacterMode == BROKEN_CHARACTER_LITERAL_SINGLE_QUOTE) {
@@ -339,7 +339,7 @@ public class FortranPreConditioner {
 	currentBrokenCharacterMode = BROKEN_CHARACTER_LITERAL_NONE;
 	id++;
 	pos += matcher.group().length();
-	return lexer.lex(new BuiltinSource(line.substring(matcher.group()
+	return lexer.lex(new FixedSourceCodeLocation(line.substring(matcher.group()
 		.length())).load());
     }
 
