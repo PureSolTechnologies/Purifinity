@@ -109,7 +109,7 @@ public class CPreprocessor implements Preprocessor {
 	}
     }
 
-    private static int nestingLimit = 16;
+    private static int nestingLimit = 63;
 
     /**
      * This is the setter for the {@link #nestingLimit} which controls the

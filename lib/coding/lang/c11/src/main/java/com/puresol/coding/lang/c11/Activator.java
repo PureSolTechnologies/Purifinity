@@ -33,10 +33,10 @@ public class Activator implements BundleActivator {
 
 	}
 	Activator.bundleContext = context;
-	logger.info("Starting Java Language Pack...");
-	C11 java = C11.getInstance();
+	logger.info("Starting C 11 Pack...");
+	C11 c11 = C11.getInstance();
 	registration = context.registerService(
-		ProgrammingLanguage.class.getName(), java,
+		ProgrammingLanguage.class.getName(), c11,
 		new Hashtable<String, String>());
 
 	logger.info("Started.");
@@ -48,7 +48,7 @@ public class Activator implements BundleActivator {
 	    throw new RuntimeException("Bundle was never started!");
 
 	}
-	logger.info("Stopping Java Language Pack...");
+	logger.info("Stopping C 11 Pack...");
 	registration.unregister();
 	registration = null;
 	Activator.bundleContext = null;

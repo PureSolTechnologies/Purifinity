@@ -27,14 +27,11 @@ import com.puresol.coding.analysis.api.CodeAnalyzer;
 import com.puresol.coding.analysis.api.CodeRange;
 import com.puresol.coding.analysis.api.ProgrammingLanguage;
 import com.puresol.coding.lang.c11.grammar.C11Grammar;
-import com.puresol.uhura.lexer.Lexer;
-import com.puresol.uhura.lexer.LexerException;
-import com.puresol.uhura.lexer.TokenStream;
-import com.puresol.uhura.parser.Parser;
 import com.puresol.uhura.parser.ParserException;
 import com.puresol.uhura.parser.ParserTree;
-import com.puresol.uhura.source.SourceCode;
+import com.puresol.uhura.parser.packrat.PackratParser;
 import com.puresol.uhura.source.CodeLocation;
+import com.puresol.uhura.source.SourceCode;
 import com.puresol.utils.StopWatch;
 
 /**
@@ -65,10 +62,8 @@ public class C11Analyzer implements CodeAnalyzer {
 	    StopWatch watch = new StopWatch();
 	    SourceCode sourceCode = sourceCodeLocation.load();
 	    watch.start();
-	    Lexer lexer = grammar.getLexer();
-	    TokenStream tokenStream = lexer.lex(sourceCode);
-	    Parser parser = grammar.getParser();
-	    ParserTree parserTree = parser.parse(tokenStream);
+	    PackratParser packratParser = new PackratParser(grammar);
+	    ParserTree parserTree = packratParser.parse(sourceCode);
 	    watch.stop();
 	    long timeEffort = Math.round(watch.getSeconds() * 1000.0);
 	    C11 c11 = C11.getInstance();
@@ -82,9 +77,6 @@ public class C11Analyzer implements CodeAnalyzer {
 	    logger.error(e.getMessage(), e);
 	    throw new AnalyzerException(this);
 	} catch (IOException e) {
-	    logger.error(e.getMessage(), e);
-	    throw new AnalyzerException(this);
-	} catch (LexerException e) {
 	    logger.error(e.getMessage(), e);
 	    throw new AnalyzerException(this);
 	}
