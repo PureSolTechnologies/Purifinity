@@ -15,32 +15,44 @@ import com.puresol.trees.TreeVisitor;
 import com.puresol.trees.TreeWalker;
 import com.puresol.trees.WalkingAction;
 import com.puresol.uhura.lexer.Token;
+import com.puresol.uhura.lexer.TokenMetaData;
 import com.puresol.uhura.lexer.TokenStream;
 import com.puresol.uhura.parser.ParserTree;
 import com.puresol.uhura.preprocessor.PreprocessorException;
 import com.puresol.uhura.source.CodeLocation;
 import com.puresol.uhura.source.SourceCode;
+import com.puresol.uhura.source.SourceCodeLine;
 
 /**
+ * <pre>
  * This class processes a preprocessor AST and returns new source code for
  * compilation.
+ * 
+ * This object is not thread-safe due to a changing internal state during
+ * processing.
+ * 
+ * An instance of this object is only called once meaningfully!
+ * 
+ * </pre>
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
 public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 
-    private static final String DEFINE_FUNCTION_LIKE_MACRO_PRODUCTION_NAME = "DefineFunctionLikeMacro";
-
-    private static final String DEFINE_OBJECT_LIKE_MACRO_PRODUCTION_NAME = "DefineObjectLikeMacro";
-
-    private static final String INCLUDE_MACRO_PRODUCTION_NAME = "IncludeMacro";
-
     private static final String LINE_TERMINATOR_TOKEN_NAME = "LineTerminator";
+
+    private static final String IDENTIFIER_TOKEN_NAME = "Identifier";
+
+    private static final String INCLUDE_FILE_PRODUCTION_NAME = "IncludeFile";
 
     private static final Logger logger = LoggerFactory
 	    .getLogger(TreeMacroProcessor.class);
 
+    /**
+     * This {@link IncludeDirectories} object contains the include directories
+     * to be used with #include statements.
+     */
     private final IncludeDirectories includeDirectories;
 
     /**
@@ -98,8 +110,6 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
      * {@link #getSourceCode()}.
      */
     public void process() {
-	tokenStream.clear();
-	sourceCode.clear();
 	new TreeWalker<ParserTree>(tree).walk(this);
     }
 
@@ -145,21 +155,39 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
      */
     private WalkingAction processProduction(ParserTree tree)
 	    throws TreeException {
+	if ("control-line".equals(tree.getName())) {
+	    return processControlLine(tree);
+	} else {
+	    return WalkingAction.PROCEED;
+	}
+    }
+
+    private WalkingAction processControlLine(ParserTree tree)
+	    throws TreeException {
 	try {
-	    if (INCLUDE_MACRO_PRODUCTION_NAME.equals(tree.getName())) {
+	    List<ParserTree> children = tree.getChildren();
+	    ParserTree controlCommand = children.get(0);
+	    if (controlCommand.getText().equals("#include")) {
 		return include(tree);
-	    } else if (DEFINE_OBJECT_LIKE_MACRO_PRODUCTION_NAME.equals(tree
-		    .getName())) {
-		return defineObjectLikeMacro(tree);
-	    } else if (DEFINE_FUNCTION_LIKE_MACRO_PRODUCTION_NAME.equals(tree
-		    .getName())) {
-		return defineFunctionLikeMacro(tree);
+	    } else if (controlCommand.getText().equals("#define")) {
+		return define(tree);
 	    } else {
 		return WalkingAction.PROCEED;
 	    }
 	} catch (PreprocessorException e) {
 	    logger.warn("Abort preprocessing of file!", e);
 	    return WalkingAction.ABORT;
+	}
+    }
+
+    private WalkingAction define(ParserTree tree) throws TreeException {
+	List<ParserTree> children = tree.getChildren();
+	if ((children.size() >= 4)
+		&& (children.get(3).getName().equals("LPAREN"))) {
+	    return defineFunctionLikeMacro(tree);
+
+	} else {
+	    return defineObjectLikeMacro(tree);
 	}
     }
 
@@ -173,22 +201,23 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
      */
     private WalkingAction include(ParserTree tree) throws TreeException,
 	    PreprocessorException {
-	ParserTree includeString = tree.getChild("IncludeFile");
-	String includeFile = includeString.getText();
+	ParserTree headerName = tree.getChild("pp-tokens")
+		.getChild("preprocessing-token").getChild("header-name");
+	String includeFile = headerName.getText();
 	/*
 	 * We need to trim next due to we have looked for the production
 	 * "IncludeFile" which may carry some white spaces.
 	 */
 	includeFile = includeFile.trim();
 	logger.debug("Include file '" + includeFile + "',");
-	CodeLocation source = getIncludeSource(tree);
-	performInclude(source, includeFile);
+	performInclude(headerName.getToken().getMetaData().getSource(),
+		includeFile);
 	return WalkingAction.LEAVE_BRANCH;
     }
 
     private WalkingAction defineObjectLikeMacro(ParserTree tree)
 	    throws TreeException {
-	String macroName = tree.getChild("Identifier").getText();
+	String macroName = tree.getChild(IDENTIFIER_TOKEN_NAME).getText();
 	ParserTree replacementList = tree.getChild("ReplacementList");
 	if (replacementList != null) {
 	    TokenStream replacement = createReplacement(replacementList);
@@ -201,7 +230,7 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 
     private WalkingAction defineFunctionLikeMacro(ParserTree tree)
 	    throws TreeException {
-	String macroName = tree.getChild("Identifier").getText();
+	String macroName = tree.getChild(IDENTIFIER_TOKEN_NAME).getText();
 	final List<String> parameters = new ArrayList<String>();
 	ParserTree parameterList = tree.getChild("ParameterList");
 	TreeVisitor<ParserTree> visitor = new TreeVisitor<ParserTree>() {
@@ -209,7 +238,7 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 	    public WalkingAction visit(ParserTree tree) {
 		Token token = tree.getToken();
 		if (token != null) {
-		    if ("Identifier".equals(token.getName())) {
+		    if (IDENTIFIER_TOKEN_NAME.equals(token.getName())) {
 			parameters.add(token.getText());
 		    } else if ("OptionalParameters".equals(token.getName())) {
 			parameters.add("...");
@@ -259,19 +288,35 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
      *            is the token to be processed.
      */
     private void processToken(Token token) {
-	if ("Identifier".equals(token.getName())) {
+	if (IDENTIFIER_TOKEN_NAME.equals(token.getName())) {
 	    TokenStream tokenStream = replaceMactroAsNeeded(token);
 	    tokenStream.addAll(tokenStream);
 	} else {
-	    if ("LineTerminator".equals(token.getName())) {
-		createNewSourceLine(token);
-	    }
 	    tokenStream.add(token);
+	    if (LINE_TERMINATOR_TOKEN_NAME.equals(token.getName())) {
+		createNewSourceLine();
+	    }
 	}
     }
 
-    private void createNewSourceLine(Token token) {
-	// FIXME !!! The implementation is missing!
+    /**
+     * This method create a next new source code line after finding a new line
+     * terminator during processing.
+     * 
+     * The current tokens of the {@link #tokenStream} are used to create a new
+     * source code line and the token stream is cleared afterwards.
+     */
+    private void createNewSourceLine() {
+	StringBuffer buffer = new StringBuffer();
+	for (Token token : tokenStream) {
+	    buffer.append(token.getText());
+	}
+	Token firstToken = tokenStream.get(0);
+	TokenMetaData metaData = firstToken.getMetaData();
+	SourceCodeLine newLine = new SourceCodeLine(metaData.getSource(),
+		metaData.getLine(), buffer.toString());
+	sourceCode.addSourceCodeLine(newLine);
+	tokenStream.clear();
     }
 
     /**
@@ -319,23 +364,6 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
     }
 
     /**
-     * Determines the source of the include statement. This is used later on to
-     * calculate the position for later relative include file positions.
-     * 
-     * @param tree
-     * @return
-     * @throws TreeException
-     */
-    private CodeLocation getIncludeSource(ParserTree tree) throws TreeException {
-	ParserTree includeFile = tree.getChild("IncludeFile");
-	ParserTree node = includeFile.getChild("StringLiteral");
-	if (node == null) {
-	    node = includeFile.getChild("FileIncludeLiteral");
-	}
-	return node.getMetaData().getSource();
-    }
-
-    /**
      * This method performs the actual include.
      * 
      * @param source
@@ -364,7 +392,7 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 			includeDirectories, definedMacros, nestingDepth + 1)
 			.process(sourceCode);
 		// we actually do the including...
-		sourceCode.addSourceCode(processedSourceCode);
+		this.sourceCode.addSourceCode(processedSourceCode);
 	    } catch (IOException e) {
 		throw new PreprocessorException(
 			"Could not include file '"

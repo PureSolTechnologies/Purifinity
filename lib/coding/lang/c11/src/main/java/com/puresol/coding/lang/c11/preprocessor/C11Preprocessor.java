@@ -20,6 +20,10 @@ import com.puresol.uhura.source.SourceCode;
 /**
  * This is a C preprocessor on basis on C11 grammar.
  * 
+ * Due to its changing internal state during run is this implementation not
+ * thread-safe! Additionally, an instance of this object can only be called once
+ * meaningfully due to a change to {@link #definedMacros}!
+ * 
  * @author Rick-Rainer Ludwig
  */
 public class C11Preprocessor implements Preprocessor {
@@ -134,7 +138,15 @@ public class C11Preprocessor implements Preprocessor {
     }
 
     private final IncludeDirectories includeDirectories;
+    /**
+     * This field contains the currently defined macros. <b>Attention: This
+     * parameter is altered during a processor run by adding the newly defined
+     * macros and removing the undefined.</b>
+     */
     private final DefinedMacros definedMacros;
+    /**
+     * This field contains the current nesting depth.
+     */
     private final int nestingDepth;
 
     /**
@@ -152,12 +164,36 @@ public class C11Preprocessor implements Preprocessor {
      * compiling time, the {@link #definedMacros} are set by the caller as it is
      * also done by the build system and the {@link #nestingDepth} is set to 0
      * as starting condition.
+     * 
+     * @param includeDirectories
+     *            is the {@link IncludeDirectories} object which contains the
+     *            directories for the #include statement.
+     * @param definedMacros
+     *            is the {@link DefinedMacros} object which contains the
+     *            predefined macros. <b>Attention: This parameter is altered
+     *            during a processor run by adding the newly defined macros and
+     *            removing the undefined.</b>
      */
     public C11Preprocessor(IncludeDirectories includeDirectories,
 	    DefinedMacros definedMacros) {
 	this(includeDirectories, definedMacros, 0);
     }
 
+    /**
+     * This constructor is mainly used internally. The nestingDepth is set to
+     * track the current nesting depth to avoid recursive infinite loops.
+     * 
+     * @param includeDirectories
+     *            is the {@link IncludeDirectories} object which contains the
+     *            directories for the #include statement.
+     * @param definedMacros
+     *            is the {@link DefinedMacros} object which contains the
+     *            predefined macros. <b>Attention: This parameter is altered
+     *            during a processor run by adding the newly defined macros and
+     *            removing the undefined.</b>
+     * @param nestingDepth
+     *            is the current nesting depth.
+     */
     public C11Preprocessor(IncludeDirectories includeDirectories,
 	    DefinedMacros definedMacros, int nestingDepth) {
 	this.nestingDepth = nestingDepth;
@@ -165,38 +201,48 @@ public class C11Preprocessor implements Preprocessor {
 	this.definedMacros = definedMacros;
     }
 
+    /**
+     * <pre>
+     * This method overrides {@link Preprocessor#process(SourceCode)}.
+     * 
+     * Here we have three things to do:
+     * <ol>
+     * <li>We assure the presence of a line terminator in the last line of the source code.</li>
+     * <li>The processing of the source code with a {@link TreeMacroProcessor} is started.</li>
+     * <li>If a line terminator was added before, we remove the line terminator again to reset to the original code.</li>
+     * </ol>
+     */
     @Override
     public SourceCode process(SourceCode sourceCode)
 	    throws PreprocessorException {
+	boolean added = sourceCode.assureLineTerminatorAtLastLine();
+	SourceCode preProcessedSourceCode = performPreprocessing(sourceCode);
+	if (added) {
+	    sourceCode.removeLineTerminatorAtLastLine();
+	}
+	return preProcessedSourceCode;
+    }
+
+    /**
+     * This method performs the actual processing by using a
+     * {@link TreeMacroProcessor} object.
+     * 
+     * @param sourceCode
+     * @return
+     * @throws PreprocessorException
+     */
+    private SourceCode performPreprocessing(SourceCode sourceCode)
+	    throws PreprocessorException {
 	try {
-	    resetDefinedMacros();
-	    boolean added = sourceCode.assureLineTerminatorAtLastLine();
-	    ParserTree ast = parseSourceCode(sourceCode);
-	    SourceCode preProcessedSourceCode = process(ast);
-	    if (added) {
-		sourceCode.removeLineTerminatorAtLastLine();
-	    }
-	    return preProcessedSourceCode;
+	    PackratParser parser = new PackratParser(preprocessorGrammar);
+	    ParserTree ast = parser.parse(sourceCode);
+	    TreeMacroProcessor processor = new TreeMacroProcessor(ast,
+		    includeDirectories, definedMacros, nestingDepth);
+	    processor.process();
+	    return processor.getSourceCode();
 	} catch (ParserException e) {
 	    throw new PreprocessorException(
 		    "Could not preprocess source code!", e);
 	}
-    }
-
-    private ParserTree parseSourceCode(SourceCode sourceCode)
-	    throws ParserException {
-	PackratParser parser = new PackratParser(preprocessorGrammar);
-	return parser.parse(sourceCode);
-    }
-
-    private SourceCode process(ParserTree ast) {
-	TreeMacroProcessor processor = new TreeMacroProcessor(ast,
-		includeDirectories, definedMacros, nestingDepth);
-	processor.process();
-	return processor.getSourceCode();
-    }
-
-    private void resetDefinedMacros() {
-	definedMacros.reset();
     }
 }
