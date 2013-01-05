@@ -12,25 +12,27 @@ public class TokenMetaDataTest {
 
     @Test
     public void testInstance() {
-	assertNotNull(new TokenMetaData(new UnspecifiedSourceCodeLocation(), 1, 2, 3, 4));
+	assertNotNull(new TokenMetaData(new UnspecifiedSourceCodeLocation(), 1,
+		2, 3));
     }
 
     @Test
     public void testInitValues() {
-	TokenMetaData metaData = new TokenMetaData(new UnspecifiedSourceCodeLocation(), 1,
-		2, 3, 4);
-	assertEquals(new UnspecifiedSourceCodeLocation().getHumanReadableLocationString(),
+	TokenMetaData metaData = new TokenMetaData(
+		new UnspecifiedSourceCodeLocation(), 1, 2, 3);
+	assertEquals(
+		new UnspecifiedSourceCodeLocation()
+			.getHumanReadableLocationString(),
 		metaData.getSource().getHumanReadableLocationString());
-	assertEquals(1, metaData.getId());
+	assertEquals(1, metaData.getLine());
 	assertEquals(2, metaData.getPos());
-	assertEquals(3, metaData.getLine());
-	assertEquals(4, metaData.getLineNum());
+	assertEquals(3, metaData.getLineNum());
     }
 
     @Test
     public void testClone() {
-	TokenMetaData metaData = new TokenMetaData(new UnspecifiedSourceCodeLocation(), 1,
-		2, 3, 4);
+	TokenMetaData metaData = new TokenMetaData(
+		new UnspecifiedSourceCodeLocation(), 1, 2, 3);
 	TokenMetaData cloned = metaData.clone();
 	assertNotSame(metaData, cloned);
 	assertEquals(metaData, cloned);

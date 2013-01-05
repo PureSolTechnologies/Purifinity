@@ -158,7 +158,6 @@ public class CPreprocessor implements Preprocessor {
 	    throws PreprocessorException {
 	try {
 	    TokenStream tokenStream = new TokenStream();
-	    int tokenId = 0;
 	    int position = 0;
 	    Analyzer analyzer = tokenizerAnalyzerFactory.createAnalyzer();
 	    List<SourceCodeLine> source = sourceCode.getLines();
@@ -173,8 +172,7 @@ public class CPreprocessor implements Preprocessor {
 		    tokenStream.addAll(tokens);
 		} else {
 		    TokenMetaData metaData = new TokenMetaData(
-			    line.getSource(), tokenId, position,
-			    line.getLineNumber(), 1);
+			    line.getSource(), line.getLineNumber(), position, 1);
 		    Token token = new Token("SourceCodeLine", line.getLine(),
 			    Visibility.VISIBLE, metaData);
 		    tokenStream.add(token);

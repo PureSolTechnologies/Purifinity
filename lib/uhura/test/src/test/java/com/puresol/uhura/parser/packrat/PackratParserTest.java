@@ -152,7 +152,7 @@ public class PackratParserTest {
 	 * process some white spaces...
 	 */
 	ParserTree parserTree = new ParserTree("ROOT");
-	MemoEntry memoEntry = parser.processIgnoredTokens(parserTree, 0, 0, 1);
+	MemoEntry memoEntry = parser.processIgnoredTokens(parserTree, 0, 1);
 
 	assertEquals(3, memoEntry.getDeltaPosition());
 
@@ -164,10 +164,6 @@ public class PackratParserTest {
 	assertEquals("Space", token0.getName());
 	assertEquals("Tab", token1.getName());
 	assertEquals("Space", token2.getName());
-
-	assertEquals(0, token0.getMetaData().getId());
-	assertEquals(1, token1.getMetaData().getId());
-	assertEquals(2, token2.getMetaData().getId());
 
 	assertEquals(0, token0.getMetaData().getPos());
 	assertEquals(1, token1.getMetaData().getPos());
@@ -186,8 +182,8 @@ public class PackratParserTest {
 	production.addConstruction(new NonTerminal("E"));
 	grammar.getProductions().add(production);
 	PackratParser parser = new PackratParser(grammar);
-	ParserTree parseTree = parser.parse(new FixedCodeLocation("(1+2)*3+4*5")
-		.load());
+	ParserTree parseTree = parser
+		.parse(new FixedCodeLocation("(1+2)*3+4*5").load());
 	assertNotNull(parseTree);
 	TreePrinter printer = new TreePrinter(System.out);
 	printer.println(parseTree);

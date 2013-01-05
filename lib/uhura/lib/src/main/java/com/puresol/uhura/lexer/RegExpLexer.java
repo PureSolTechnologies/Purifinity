@@ -57,7 +57,6 @@ public class RegExpLexer implements Lexer {
     private TokenStream scan() throws LexerException {
 	tokenStream = new TokenStream();
 	int pos = 0;
-	int id = 0;
 	int line = 1;
 	Iterator<SourceCodeLine> sourceIterator = sourceCode.getLines()
 		.iterator();
@@ -66,7 +65,7 @@ public class RegExpLexer implements Lexer {
 	    StringBuffer text = new StringBuffer(sourceCodeLine.getLine());
 	    while (text.length() > 0) {
 		Token token = findNextToken(text, sourceCodeLine.getSource(),
-			id, pos, line);
+			pos, line);
 		if ((token == null) || (token.getText().length() == 0)) {
 		    String exceptionText;
 		    if (text.length() <= 12) {
@@ -92,7 +91,6 @@ public class RegExpLexer implements Lexer {
 		if (token.getVisibility() != Visibility.HIDDEN) {
 		    tokenStream.add(token);
 		}
-		id++;
 		pos += token.getText().length();
 		line += token.getMetaData().getLineNum() - 1;
 		text = text.delete(0, token.getText().length());
@@ -101,7 +99,7 @@ public class RegExpLexer implements Lexer {
 	return tokenStream;
     }
 
-    private Token findNextToken(StringBuffer text, CodeLocation source, int id,
+    private Token findNextToken(StringBuffer text, CodeLocation source,
 	    int pos, int line) {
 	Token nextToken = null;
 	for (TokenDefinition definition : grammar.getTokenDefinitions()
@@ -119,8 +117,8 @@ public class RegExpLexer implements Lexer {
 			lineCounter++;
 		    }
 		}
-		TokenMetaData metaData = new TokenMetaData(source, id, pos,
-			line, lineCounter);
+		TokenMetaData metaData = new TokenMetaData(source, line, pos,
+			lineCounter);
 		nextToken = new Token(definition.getName(), tokenText,
 			definition.getVisibility(), metaData);
 	    }

@@ -14,6 +14,7 @@ Bundle-SymbolicName: com.puresol.uhura.lib
 Originally-Created-By: Apache Maven Bundle Plugin
 Bundle-ActivationPolicy: lazy
 Import-Package: com.puresol.data;version="0.1.0",
+ com.puresol.io;version="0.1.0",
  com.puresol.trees;version="0.1.0",
  com.puresol.uhura.source;version="0.1.0",
  com.puresol.utils;version="0.1.0",

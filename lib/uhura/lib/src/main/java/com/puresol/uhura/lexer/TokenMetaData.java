@@ -22,33 +22,48 @@ public class TokenMetaData implements Serializable, Cloneable {
 
     private static final long serialVersionUID = 6478412339837934971L;
 
+    /**
+     * This is the location of the token. This needs to point to a file or
+     * document, where the token is in. See {@link CodeLocation} for more
+     * information.
+     */
     private final CodeLocation source;
-    private final int id;
-    private final int pos;
+    /**
+     * This is the line number within the containing document.
+     * 
+     * <b>Attention: This line numbers start with 1!</b>
+     */
     private final int line;
+    /**
+     * This is the position of the token within the line. The index is the index
+     * of the first character of the token.
+     * 
+     * <b>Attention: This line position starts with 1!</b>
+     */
+    private final int pos;
+    /**
+     * This contains the number of lines which the token overspans. This is
+     * normally the number of line terminators plus 1.
+     */
     private final int lineNum;
+    /**
+     * This is a constant hash code for {@link #hashCode()}. It is calculated in
+     * the constructor for fast access.
+     */
     private final int hashcode;
 
-    public TokenMetaData(CodeLocation source, int id, int pos, int line, int lineNum) {
+    public TokenMetaData(CodeLocation source, int line, int pos, int lineNum) {
 	super();
 	this.source = source;
-	this.id = id;
-	this.pos = pos;
 	this.line = line;
+	this.pos = pos;
 	this.lineNum = lineNum;
-	hashcode = ObjectUtilities.calculateConstantHashCode(source, id, pos,
-		line, lineNum);
+	hashcode = ObjectUtilities.calculateConstantHashCode(source, pos, line,
+		lineNum);
     }
 
     public CodeLocation getSource() {
 	return source;
-    }
-
-    /**
-     * @return the id
-     */
-    public int getId() {
-	return id;
     }
 
     /**
@@ -74,8 +89,7 @@ public class TokenMetaData implements Serializable, Cloneable {
 
     @Override
     public String toString() {
-	String result = "id: " + id + ", ";
-	result += "pos: " + pos + ", ";
+	String result = "pos: " + pos + ", ";
 	if (lineNum == 1) {
 	    result += "line: " + line;
 	} else {
@@ -100,8 +114,6 @@ public class TokenMetaData implements Serializable, Cloneable {
 	TokenMetaData other = (TokenMetaData) obj;
 	if (hashcode != other.hashcode)
 	    return false;
-	if (id != other.id)
-	    return false;
 	if (line != other.line)
 	    return false;
 	if (lineNum != other.lineNum)
@@ -118,6 +130,6 @@ public class TokenMetaData implements Serializable, Cloneable {
 
     @Override
     public TokenMetaData clone() {
-	return new TokenMetaData(source, id, pos, line, lineNum);
+	return new TokenMetaData(source, line, pos, lineNum);
     }
 }

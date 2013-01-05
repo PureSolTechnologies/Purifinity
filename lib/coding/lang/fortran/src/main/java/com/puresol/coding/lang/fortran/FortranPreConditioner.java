@@ -104,7 +104,6 @@ public class FortranPreConditioner {
     private final boolean validFixedForm;
     private final List<Integer> invalidLines = new ArrayList<Integer>();
     private final TokenStream tokenStream;
-    private int id = 0;
     private int pos = 0;
     private int lineId = 1;
     private byte currentBrokenCharacterMode = BROKEN_CHARACTER_LITERAL_NONE;
@@ -173,7 +172,7 @@ public class FortranPreConditioner {
 
     private TokenMetaData getCurrentMetaData(int lineNum) {
 	return new TokenMetaData(sourceCode.getLines().get(lineNum - 1)
-		.getSource(), id, pos, lineId, lineNum);
+		.getSource(), lineId, pos, lineNum);
     }
 
     /**
@@ -213,7 +212,6 @@ public class FortranPreConditioner {
      */
     private void reset() {
 	tokenStream.clear();
-	id = 0;
 	pos = 0;
 	lineId = 1;
 	currentBrokenCharacterMode = BROKEN_CHARACTER_LITERAL_NONE;
@@ -231,8 +229,7 @@ public class FortranPreConditioner {
 	matcher.find();
 	tokenStream.add(new Token("WHITESPACE", matcher.group(),
 		Visibility.IGNORED, new TokenMetaData(sourceLine.getSource(),
-			id, pos, lineId, 1)));
-	id++;
+			lineId, pos, 1)));
 	pos += 6;
 	return processBrokenCharacterLiteral(lexer, line.substring(6));
     }
@@ -240,8 +237,7 @@ public class FortranPreConditioner {
     private void processCommentPattern(SourceCodeLine sourceLine) {
 	String line = sourceLine.getLine();
 	tokenStream.add(new Token("COMMENT_LINE", line, Visibility.IGNORED,
-		new TokenMetaData(sourceLine.getSource(), id, pos, lineId, 2)));
-	id++;
+		new TokenMetaData(sourceLine.getSource(), lineId, pos, 2)));
 	pos += line.length();
 	lineId++;
     }
@@ -257,8 +253,7 @@ public class FortranPreConditioner {
 	Matcher matcher = FIXED_FORM_LABEL_PATTERN.matcher(line);
 	matcher.find();
 	tokenStream.add(new Token("LABEL", matcher.group(), Visibility.IGNORED,
-		new TokenMetaData(sourceLine.getSource(), id, pos, lineId, 1)));
-	id++;
+		new TokenMetaData(sourceLine.getSource(), lineId, pos, 1)));
 	pos += 6;
 	return processBrokenCharacterLiteral(lexer, line.substring(6));
     }
@@ -271,8 +266,7 @@ public class FortranPreConditioner {
 	matcher.find();
 	tokenStream.add(new Token("LINE_CONCATATION", matcher.group(),
 		Visibility.IGNORED, new TokenMetaData(sourceLine.getSource(),
-			id, pos, lineId, 1)));
-	id++;
+			lineId, pos, 1)));
 	pos += 6;
 	return processBrokenCharacterLiteral(lexer, line.substring(6));
     }
@@ -286,7 +280,6 @@ public class FortranPreConditioner {
 	    continuation = true;
 	    tokenStream.add(new Token("CONTINUATION", matcher.group(),
 		    Visibility.IGNORED, getCurrentMetaData(1)));
-	    id++;
 	    pos += matcher.group().length();
 	    line = line.substring(matcher.group().length());
 	}
@@ -337,7 +330,6 @@ public class FortranPreConditioner {
 	tokenStream.add(new Token("CHAR_LITERAL_CONSTANT", matcher.group(),
 		Visibility.VISIBLE, getCurrentMetaData(1)));
 	currentBrokenCharacterMode = BROKEN_CHARACTER_LITERAL_NONE;
-	id++;
 	pos += matcher.group().length();
 	return lexer.lex(new FixedCodeLocation(line.substring(matcher.group()
 		.length())).load());
@@ -359,7 +351,6 @@ public class FortranPreConditioner {
 		    token.getVisibility(),
 		    getCurrentMetaData(metaData.getLineNum()));
 	    tokenStream.add(newToken);
-	    id++;
 	    pos += newToken.getText().length();
 	    lineId += metaData.getLineNum() - 1;
 	}

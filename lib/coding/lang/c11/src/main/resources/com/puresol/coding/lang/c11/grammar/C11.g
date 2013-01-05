@@ -227,7 +227,7 @@ HELPER
 	;
  
     LineTerminator:
-        "(\\n|\\r\\n|\\r)"
+        "(\\n|\\r\\n|\\r)" [ignore]
     ;
  
     /*
