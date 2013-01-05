@@ -247,7 +247,7 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 	if (optionalParameters) {
 	    parameters.remove("...");
 	}
-	ParserTree replacementList = tree.getChild("ReplacementList");
+	ParserTree replacementList = tree.getChild("replacement-list");
 	TokenStream replacement = createReplacement(replacementList);
 	definedMacros.define(new Macro(macroName, replacement, parameters,
 		optionalParameters));

@@ -1022,10 +1022,11 @@ HELPER
     
     control-line:
         PP_INCLUDE pp-tokens new-line
-    |   PP_DEFINE identifier replacement-list new-line
-    |   PP_DEFINE identifier LPAREN identifier-list? RPAREN replacement-list new-line
+    |   PP_DEFINE identifier LPAREN RPAREN replacement-list new-line
+    |   PP_DEFINE identifier LPAREN identifier-list RPAREN replacement-list new-line
     |   PP_DEFINE identifier LPAREN DOT DOT DOT RPAREN replacement-list new-line
     |   PP_DEFINE identifier LPAREN identifier-list COMMA DOT DOT DOT RPAREN replacement-list new-line
+    |   PP_DEFINE identifier replacement-list new-line
     |   PP_UNDEF identifier new-line
     |   PP_LINE pp-tokens new-line
     |   PP_ERROR pp-tokens? new-line
