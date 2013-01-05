@@ -41,7 +41,7 @@ public class ScrollableFileViewer extends Composite {
 	    try {
 		StringBuilder builder = new StringBuilder();
 		text.setForeground(black);
-		for (SourceCodeLine line : sourceCode.getSource()) {
+		for (SourceCodeLine line : sourceCode.getLines()) {
 		    builder.append(line.getLine());
 		}
 		text.setText(builder.toString());

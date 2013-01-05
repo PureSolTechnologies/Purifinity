@@ -66,7 +66,8 @@ public class SLOCDirectoryResultComponent extends Composite {
 	    @Override
 	    public String getText(Object element) {
 		SLOCDirectoryResult result = (SLOCDirectoryResult) element;
-		return result.getCodeLocation().getLocation();
+		return result.getCodeLocation()
+			.getHumanReadableLocationString();
 	    }
 	});
     }

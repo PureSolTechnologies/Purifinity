@@ -16,7 +16,7 @@ import org.eclipse.swt.widgets.Composite;
 import com.puresol.coding.analysis.api.ProgrammingLanguage;
 import com.puresol.coding.client.grammar.GrammarRenderer;
 import com.puresol.coding.client.grammar.RenderException;
-import com.puresol.uhura.grammar.Grammar;
+import com.puresol.coding.lang.common.LanguageGrammar;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.GrammarReader;
 import com.puresol.uhura.parser.ParserTree;
@@ -80,7 +80,7 @@ public class GrammarCanvas extends Canvas implements PaintListener {
 	    throws GrammarException, IOException, RenderException {
 	language = programmingLanguage;
 	if (language != null) {
-	    Grammar grammar = language.getGrammar();
+	    LanguageGrammar grammar = language.getGrammar();
 	    if (grammar == null) {
 		return;
 	    }
