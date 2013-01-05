@@ -1,4 +1,0 @@
-#define DEFAULT_MACRO
-DEFAULT_MACRO
-#define HELLO_WORLD "Hello, world!"
-HELLO_WORLD

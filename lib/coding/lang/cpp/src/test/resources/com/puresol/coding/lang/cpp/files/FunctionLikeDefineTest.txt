@@ -1,3 +1,0 @@
-#define DEBUG(_message_) fprintf(stderr, "%s\\n", _message_)
-DEBUG(
-"Error message!");

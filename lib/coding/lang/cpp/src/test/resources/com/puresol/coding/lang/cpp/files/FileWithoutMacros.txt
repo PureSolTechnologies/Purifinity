@@ -1,4 +1,0 @@
-This is a simple file which does not contain any valid macro like a #include,
-a #pragma and something else. The macros included in this text should not be
-taken into account due to they do not appear at the beginning of the line.
-Only whitespaces are allowed before any macro like #if, #ifdef, #else, ...
