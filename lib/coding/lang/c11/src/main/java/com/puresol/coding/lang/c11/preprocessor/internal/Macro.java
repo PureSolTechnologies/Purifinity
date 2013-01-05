@@ -24,16 +24,16 @@ public class Macro {
     public Macro(String name) {
 	this.name = name;
 	this.replacement = new TokenStream();
-	TokenMetaData metaData = new TokenMetaData(
-		new UnspecifiedSourceCodeLocation(), 1, 1, 1);
-	this.replacement.add(new Token("integer-constant", "1",
-		Visibility.VISIBLE, metaData));
+	this.replacement.add(createDefaultReplacementToken());
 	optionalParameters = false;
     }
 
     public Macro(String name, TokenStream replacement) {
 	this.name = name;
 	this.replacement = replacement;
+	if (this.replacement.size() == 0) {
+	    replacement.add(createDefaultReplacementToken());
+	}
 	optionalParameters = false;
     }
 
@@ -41,8 +41,19 @@ public class Macro {
 	    boolean optionalParameters) {
 	this.name = name;
 	this.replacement = replacement;
+	if (this.replacement.size() == 0) {
+	    replacement.add(createDefaultReplacementToken());
+	}
 	this.parameters.addAll(parameters);
 	this.optionalParameters = optionalParameters;
+    }
+
+    private Token createDefaultReplacementToken() {
+	TokenMetaData metaData = new TokenMetaData(
+		new UnspecifiedSourceCodeLocation(), 1, 1, 1);
+	Token defaultReplacementToken = new Token("integer-constant", "1",
+		Visibility.VISIBLE, metaData);
+	return defaultReplacementToken;
     }
 
     public String getName() {

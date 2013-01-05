@@ -42,9 +42,7 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 
     private static final String LINE_TERMINATOR_TOKEN_NAME = "LineTerminator";
 
-    private static final String IDENTIFIER_TOKEN_NAME = "Identifier";
-
-    private static final String INCLUDE_FILE_PRODUCTION_NAME = "IncludeFile";
+    private static final String IDENTIFIER_TOKEN_NAME = "identifier";
 
     private static final Logger logger = LoggerFactory
 	    .getLogger(TreeMacroProcessor.class);
@@ -218,13 +216,9 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
     private WalkingAction defineObjectLikeMacro(ParserTree tree)
 	    throws TreeException {
 	String macroName = tree.getChild(IDENTIFIER_TOKEN_NAME).getText();
-	ParserTree replacementList = tree.getChild("ReplacementList");
-	if (replacementList != null) {
-	    TokenStream replacement = createReplacement(replacementList);
-	    definedMacros.define(macroName, replacement);
-	} else {
-	    definedMacros.define(macroName);
-	}
+	ParserTree replacementList = tree.getChild("replacement-list");
+	TokenStream replacement = createReplacement(replacementList);
+	definedMacros.define(macroName, replacement);
 	return WalkingAction.LEAVE_BRANCH;
     }
 
@@ -232,7 +226,7 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 	    throws TreeException {
 	String macroName = tree.getChild(IDENTIFIER_TOKEN_NAME).getText();
 	final List<String> parameters = new ArrayList<String>();
-	ParserTree parameterList = tree.getChild("ParameterList");
+	ParserTree parameterList = tree.getChild("identifier-list");
 	TreeVisitor<ParserTree> visitor = new TreeVisitor<ParserTree>() {
 	    @Override
 	    public WalkingAction visit(ParserTree tree) {
@@ -290,7 +284,7 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
     private void processToken(Token token) {
 	if (IDENTIFIER_TOKEN_NAME.equals(token.getName())) {
 	    TokenStream tokenStream = replaceMactroAsNeeded(token);
-	    tokenStream.addAll(tokenStream);
+	    this.tokenStream.addAll(tokenStream);
 	} else if ("Comment".equals(token.getName())) {
 	    TokenMetaData metaData = token.getMetaData();
 	    String lines[] = token.getText().split("\\\n");
@@ -351,7 +345,7 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
      */
     private TokenStream replaceMactroAsNeeded(Token token) {
 	for (Macro macro : definedMacros.getMacros()) {
-	    if (macro.getName().equals(token.getName())) {
+	    if (macro.getName().equals(token.getText())) {
 		/*
 		 * We found a matching macro.
 		 */
@@ -378,7 +372,15 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
     }
 
     private TokenStream applyObjectLikeMacros(Token token, Macro macro) {
-	return macro.getReplacement();
+	TokenStream definition = macro.getReplacement();
+	TokenStream replacement = new TokenStream();
+	for (Token defToken : definition) {
+	    Token replacementToken = new Token(defToken.getName(),
+		    defToken.getText(), defToken.getVisibility(),
+		    token.getMetaData());
+	    replacement.add(replacementToken);
+	}
+	return replacement;
     }
 
     private TokenStream applyFunctionLikeMacros(Token token, Macro macro) {
