@@ -1,10 +1,13 @@
 package com.puresol.coding.lang.c11.preprocessor;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
 
 import com.puresol.coding.lang.c11.C11;
 import com.puresol.coding.lang.c11.preprocessor.internal.DefinedMacros;
 import com.puresol.coding.lang.c11.preprocessor.internal.TreeMacroProcessor;
+import com.puresol.io.LineTerminator;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.token.TokenDefinition;
@@ -16,6 +19,7 @@ import com.puresol.uhura.parser.packrat.PackratParser;
 import com.puresol.uhura.preprocessor.Preprocessor;
 import com.puresol.uhura.preprocessor.PreprocessorException;
 import com.puresol.uhura.source.SourceCode;
+import com.puresol.uhura.source.SourceCodeLine;
 
 /**
  * This is a C preprocessor on basis on C11 grammar.
@@ -215,12 +219,50 @@ public class C11Preprocessor implements Preprocessor {
     @Override
     public SourceCode process(SourceCode sourceCode)
 	    throws PreprocessorException {
-	boolean added = sourceCode.assureLineTerminatorAtLastLine();
+	boolean added = assureLineTerminatorAtLastLine(sourceCode);
 	SourceCode preProcessedSourceCode = performPreprocessing(sourceCode);
 	if (added) {
-	    sourceCode.removeLineTerminatorAtLastLine();
+	    preProcessedSourceCode.removeLineTerminatorAtLastLine();
 	}
 	return preProcessedSourceCode;
+    }
+
+    /**
+     * This method checks the last line of code for the presence of a line
+     * terminator. If no line terminator is found, the last line is replaced by
+     * a copy with an added Unix-LineTerminator. Otherwise, the this object is
+     * not altered.
+     * 
+     * This functionality is used for source codes where the last line has to
+     * have a line terminator for parsing, e.g. for the C preprocessor.
+     * 
+     * @return True is returned in case a line terminator was added. This return
+     *         value is used to control the call to
+     *         {@link #removeLineTerminatorAtLastLine()}.
+     */
+    public boolean assureLineTerminatorAtLastLine(SourceCode sourceCode) {
+	List<SourceCodeLine> lines = sourceCode.getLines();
+	if (lines.size() == 0) {
+	    throw new IllegalStateException(
+		    "The source code must have at least on line of code!");
+	}
+	SourceCodeLine lastLine = lines.get(lines.size() - 1);
+	String text = lastLine.getLine();
+	for (LineTerminator terminator : LineTerminator.values()) {
+	    if (text.endsWith(terminator.getCRString())) {
+		return false;
+	    }
+	}
+	lines.remove(lastLine);
+	lastLine = new SourceCodeLine(lastLine.getSource(),
+		lastLine.getLineNumber(), text + "\n");
+	lines.add(lastLine);
+	/*
+	 * We only need to remove the added terminator if the effected line is
+	 * not a preprocessor line!
+	 */
+	boolean removeAddedTerminator = !Pattern.matches("^\\s*#.*", text);
+	return removeAddedTerminator;
     }
 
     /**

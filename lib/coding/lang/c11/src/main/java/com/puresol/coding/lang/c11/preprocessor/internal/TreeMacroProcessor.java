@@ -291,6 +291,30 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 	if (IDENTIFIER_TOKEN_NAME.equals(token.getName())) {
 	    TokenStream tokenStream = replaceMactroAsNeeded(token);
 	    tokenStream.addAll(tokenStream);
+	} else if ("Comment".equals(token.getName())) {
+	    TokenMetaData metaData = token.getMetaData();
+	    String lines[] = token.getText().split("\\\n");
+	    for (int i = 0; i < lines.length; i++) {
+		String line = lines[i];
+		TokenMetaData newMetaData;
+		if (i == 0) {
+		    newMetaData = new TokenMetaData(metaData.getSource(),
+			    metaData.getLine() + i, metaData.getPos(), 1);
+		} else {
+		    newMetaData = new TokenMetaData(metaData.getSource(),
+			    metaData.getLine() + i, 0, 1);
+		}
+		Token newToken = new Token(token.getName(), line,
+			token.getVisibility(), newMetaData);
+		tokenStream.add(newToken);
+		newMetaData = new TokenMetaData(metaData.getSource(),
+			metaData.getLine() + i, newMetaData.getPos()
+				+ line.length(), 2);
+		newToken = new Token("LineTerminator", "\n",
+			token.getVisibility(), newMetaData);
+		tokenStream.add(newToken);
+		createNewSourceLine();
+	    }
 	} else {
 	    tokenStream.add(token);
 	    if (LINE_TERMINATOR_TOKEN_NAME.equals(token.getName())) {
