@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -12,6 +13,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.puresol.trees.TreePrinter;
+import com.puresol.trees.TreeVisitor;
+import com.puresol.trees.TreeWalker;
+import com.puresol.trees.WalkingAction;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarConverter;
 import com.puresol.uhura.grammar.GrammarFile;
@@ -24,6 +28,7 @@ import com.puresol.uhura.grammar.token.Visibility;
 import com.puresol.uhura.lexer.Token;
 import com.puresol.uhura.parser.ParserTree;
 import com.puresol.uhura.source.FixedCodeLocation;
+import com.puresol.uhura.source.SourceCode;
 import com.puresol.utils.IntrospectionUtilities;
 
 public class PackratParserTest {
@@ -32,87 +37,87 @@ public class PackratParserTest {
     private static Grammar directRecursionGrammarZero;
     private static Grammar indirectRecursionGrammar;
     private static Grammar nestedRecursionsGrammar;
+    private static Grammar testGrammar;
 
-    private ParserTree parseText(String text) throws Throwable {
-	InputStream inputStream = getClass().getResourceAsStream(
-		"/com/puresol/uhura/grammar/TestGrammar.g");
-	assertNotNull(inputStream);
-	try {
-	    GrammarFile grammarFile = new GrammarFile(inputStream);
-	    try {
-		Grammar grammar = new GrammarConverter(grammarFile.getAST())
-			.getGrammar();
-		assertNotNull(grammar);
-		PackratParser parser = new PackratParser(grammar);
-		ParserTree parseTree = parser.parse(new FixedCodeLocation(text)
-			.load());
-		assertNotNull(parseTree);
-		TreePrinter printer = new TreePrinter(System.out);
-		printer.println(parseTree);
-		return parseTree;
-	    } finally {
-		grammarFile.close();
+    private ParserTree parseText(Grammar grammar, String text) throws Exception {
+	PackratParser parser = new PackratParser(grammar);
+	FixedCodeLocation codeLocation = new FixedCodeLocation(text);
+	SourceCode sourceCode = codeLocation.load();
+	ParserTree parseTree = parser.parse(sourceCode);
+	assertNotNull(parseTree);
+	checkForCorrectParents(parseTree);
+	TreePrinter printer = new TreePrinter(System.out);
+	printer.println(parseTree);
+	return parseTree;
+    }
+
+    /**
+     * <p>
+     * <b>This test is essential! Do not delete without clarification of the
+     * original author!</b>
+     * </p>
+     * <p>
+     * This test was added after finding issues of parent entries in child
+     * nodes. During packrat parsing memoization is used to speed up the parsing
+     * process up to linear speed behavior. For that sub results are stored and
+     * reused. During the reuse a sub tree is added several time to different
+     * nodes and therefore the parent is set several times. The final result is
+     * not necessarily the last parent entry! For that a normalization step was
+     * introduced.
+     * </p>
+     * <p>
+     * This test checks now for the correct set parents in child nodes. If the
+     * normalization is disabled, this test in this test class shows also the
+     * issue.
+     * </p>
+     * 
+     * @param parseTree
+     * @throws Exception
+     */
+    private void checkForCorrectParents(ParserTree parseTree) throws Exception {
+	final Field parentField = ParserTree.class.getDeclaredField("parent");
+	parentField.setAccessible(true);
+	TreeVisitor<ParserTree> visitor = new TreeVisitor<ParserTree>() {
+
+	    @Override
+	    public WalkingAction visit(ParserTree tree) {
+		try {
+		    for (ParserTree child : tree.getChildren()) {
+			assertEquals("Parent entry in child is not correct!",
+				tree, parentField.get(child));
+		    }
+		} catch (IllegalArgumentException e) {
+		    throw new IllegalStateException(e);
+		} catch (IllegalAccessException e) {
+		    throw new IllegalStateException(e);
+		}
+		return WalkingAction.PROCEED;
 	    }
-	} finally {
-	    inputStream.close();
-	}
+	};
+	new TreeWalker<ParserTree>(parseTree).walk(visitor);
+	parentField.setAccessible(false);
     }
 
     @BeforeClass
-    public static void setup() throws Throwable {
+    public static void initialize() throws Throwable {
+	directRecursionGrammar = readGrammar("/com/puresol/uhura/grammar/DirectRecursiveTestGrammar.g");
+	directRecursionGrammarZero = readGrammar("/com/puresol/uhura/grammar/DirectRecursiveTestGrammarZero.g");
+	indirectRecursionGrammar = readGrammar("/com/puresol/uhura/grammar/IndirectRecursiveTestGrammar.g");
+	nestedRecursionsGrammar = readGrammar("/com/puresol/uhura/grammar/NestedRecursionTestGrammar.g");
+	testGrammar = readGrammar("/com/puresol/uhura/grammar/TestGrammar.g");
+    }
+
+    private static Grammar readGrammar(String resource) throws Throwable {
 	InputStream inStream = PackratParserTest.class
-		.getResourceAsStream("/com/puresol/uhura/grammar/DirectRecursiveTestGrammar.g");
+		.getResourceAsStream(resource);
 	assertNotNull(inStream);
 	try {
 	    GrammarFile file = new GrammarFile(inStream);
 	    try {
-		directRecursionGrammar = new GrammarConverter(file.getAST())
+		Grammar grammar = new GrammarConverter(file.getAST())
 			.getGrammar();
-	    } finally {
-		file.close();
-	    }
-	} finally {
-	    inStream.close();
-	}
-
-	inStream = PackratParserTest.class
-		.getResourceAsStream("/com/puresol/uhura/grammar/DirectRecursiveTestGrammarZero.g");
-	assertNotNull(inStream);
-	try {
-	    GrammarFile file = new GrammarFile(inStream);
-	    try {
-		directRecursionGrammarZero = new GrammarConverter(file.getAST())
-			.getGrammar();
-	    } finally {
-		file.close();
-	    }
-	} finally {
-	    inStream.close();
-	}
-
-	inStream = PackratParserTest.class
-		.getResourceAsStream("/com/puresol/uhura/grammar/IndirectRecursiveTestGrammar.g");
-	assertNotNull(inStream);
-	try {
-	    GrammarFile file = new GrammarFile(inStream);
-	    try {
-		indirectRecursionGrammar = new GrammarConverter(file.getAST())
-			.getGrammar();
-	    } finally {
-		file.close();
-	    }
-	} finally {
-	    inStream.close();
-	}
-
-	inStream = PackratParserTest.class
-		.getResourceAsStream("/com/puresol/uhura/grammar/NestedRecursionTestGrammar.g");
-	assertNotNull(inStream);
-	try {
-	    GrammarFile file = new GrammarFile(inStream);
-	    try {
-		nestedRecursionsGrammar = new GrammarConverter(file.getAST())
-			.getGrammar();
+		assertNotNull(grammar);
+		return grammar;
 	    } finally {
 		file.close();
 	    }
@@ -181,69 +186,61 @@ public class PackratParserTest {
 	Production production = new Production("_START_");
 	production.addConstruction(new NonTerminal("E"));
 	grammar.getProductions().add(production);
-	PackratParser parser = new PackratParser(grammar);
-	ParserTree parseTree = parser
-		.parse(new FixedCodeLocation("(1+2)*3+4*5").load());
-	assertNotNull(parseTree);
-	TreePrinter printer = new TreePrinter(System.out);
-	printer.println(parseTree);
+
+	parseText(grammar, "(1+2)*3+4*5");
     }
 
     @Test
     public void testDirectRecursion() throws Throwable {
-	PackratParser parser = new PackratParser(directRecursionGrammar);
-	parser.parse(new FixedCodeLocation("i").load());
-	parser.parse(new FixedCodeLocation("ii").load());
-	parser.parse(new FixedCodeLocation("iii").load());
+	parseText(directRecursionGrammar, "i");
+	parseText(directRecursionGrammar, "ii");
+	parseText(directRecursionGrammar, "iii");
     }
 
     @Test
     public void testDirectRecursionWithEmpty() throws Throwable {
-	PackratParser parser = new PackratParser(directRecursionGrammarZero);
-	parser.parse(new FixedCodeLocation("i").load());
-	parser.parse(new FixedCodeLocation("ii").load());
-	parser.parse(new FixedCodeLocation("iii").load());
+	parseText(directRecursionGrammarZero, "i");
+	parseText(directRecursionGrammarZero, "ii");
+	parseText(directRecursionGrammarZero, "iii");
     }
 
     @Test
     public void testIndirectRecursion() throws Throwable {
-	PackratParser parser = new PackratParser(indirectRecursionGrammar);
-	parser.parse(new FixedCodeLocation("i").load());
-	parser.parse(new FixedCodeLocation("ii").load());
-	parser.parse(new FixedCodeLocation("iii").load());
+	parseText(indirectRecursionGrammar, "i");
+	parseText(indirectRecursionGrammar, "ii");
+	parseText(indirectRecursionGrammar, "iii");
     }
 
     @Test
     public void testNestedRecursions() throws Throwable {
-	PackratParser parser = new PackratParser(nestedRecursionsGrammar);
-	parser.parse(new FixedCodeLocation("i").load());
-	parser.parse(new FixedCodeLocation("ii").load());
-	parser.parse(new FixedCodeLocation("iii").load());
-	parser.parse(new FixedCodeLocation("j").load());
-	parser.parse(new FixedCodeLocation("jj").load());
-	parser.parse(new FixedCodeLocation("jjj").load());
-	parser.parse(new FixedCodeLocation("k").load());
-	parser.parse(new FixedCodeLocation("kk").load());
-	parser.parse(new FixedCodeLocation("kkk").load());
+	parseText(nestedRecursionsGrammar, "i");
+	parseText(nestedRecursionsGrammar, "ii");
+	parseText(nestedRecursionsGrammar, "iii");
+	parseText(nestedRecursionsGrammar, "j");
+	parseText(nestedRecursionsGrammar, "jj");
+	parseText(nestedRecursionsGrammar, "jjj");
+	parseText(nestedRecursionsGrammar, "k");
+	parseText(nestedRecursionsGrammar, "kk");
+	parseText(nestedRecursionsGrammar, "kkk");
 
-	parser.parse(new FixedCodeLocation("ijk").load());
-	parser.parse(new FixedCodeLocation("ijkijk").load());
-	parser.parse(new FixedCodeLocation("iijjkkiijjkk").load());
+	parseText(nestedRecursionsGrammar, "ijk");
+	parseText(nestedRecursionsGrammar, "ijkijk");
+	parseText(nestedRecursionsGrammar, "iijjkkiijjkk");
     }
 
     @Test
     public void testEquation() throws Throwable {
-	parseText("1");
-	parseText("(1)");
-	parseText("1+2");
-	parseText("(1+2)");
-	parseText("1*2");
-	parseText("(1*2)");
+	parseText(testGrammar, "1");
+	parseText(testGrammar, "(1)");
+	parseText(testGrammar, "1+2");
+	parseText(testGrammar, "(1+2)");
+	parseText(testGrammar, "1*2");
+	parseText(testGrammar, "(1*2)");
     }
 
     @Test
     public void testEquation2() throws Throwable {
-	parseText("1 * 2 + 3 * 4 + 5 * (6 + 7 * 	 (8 + 9))");
-	parseText("1 - 2 - 3");
+	parseText(testGrammar, "1 * 2 + 3 * 4 + 5 * (6 + 7 * 	 (8 + 9))");
+	parseText(testGrammar, "1 - 2 - 3");
     }
 }

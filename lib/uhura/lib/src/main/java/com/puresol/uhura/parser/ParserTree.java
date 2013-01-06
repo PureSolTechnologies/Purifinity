@@ -119,6 +119,14 @@ public class ParserTree implements Tree<ParserTree>, Serializable, Cloneable {
 	return parent;
     }
 
+    public ParserTree getRoot() {
+	ParserTree root = this;
+	while (root.getParent() != null) {
+	    root = root.getParent();
+	}
+	return root;
+    }
+
     @Override
     public boolean hasChildren() {
 	return !children.isEmpty();

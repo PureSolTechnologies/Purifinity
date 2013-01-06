@@ -1,6 +1,7 @@
 package com.puresol.uhura.parser.packrat;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -9,6 +10,9 @@ import java.util.Set;
 import java.util.regex.Matcher;
 
 import com.puresol.trees.TreeException;
+import com.puresol.trees.TreeVisitor;
+import com.puresol.trees.TreeWalker;
+import com.puresol.trees.WalkingAction;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.production.Construction;
 import com.puresol.uhura.grammar.production.Production;
@@ -172,7 +176,9 @@ public class PackratParser implements Serializable {
 	    if (progress.getDeltaPosition() != text.length()) {
 		throw new ParserException(getParserErrorMessage());
 	    }
-	    return (ParserTree) progress.getAnswer();
+	    ParserTree parserTree = (ParserTree) progress.getAnswer();
+	    normalizeParents(parserTree);
+	    return parserTree;
 	} catch (TreeException e) {
 	    throw new ParserException(e);
 	}
@@ -565,6 +571,27 @@ public class PackratParser implements Serializable {
 	}
     }
 
+    /**
+     * <p>
+     * This method reads all hidden and ignored tokens from the text and puts
+     * them into the node as children.
+     * </p>
+     * <p>
+     * This is the non-recursive part of the procedure to be called by the
+     * packrat parser. The procedure itself is implemented recursively in
+     * {@link #processIgnoredTrailingTokens(ParserTree, int, int, MemoEntry)}.
+     * </p>
+     * <p>
+     * Attention: This method is package private for testing purposes!
+     * </p>
+     * 
+     * @param node
+     *            is the current node in the {@link ParserTree}
+     * @param position
+     *            is the current parsing position.
+     * @throws TreeException
+     * @throws ParserException
+     */
     private void processIgnoredTokens(ParserTree node, int position, int line,
 	    MemoEntry progress) throws TreeException, ParserException {
 	MemoEntry newProgress = processIgnoredTokens(node,
@@ -603,10 +630,17 @@ public class PackratParser implements Serializable {
     }
 
     /**
+     * <p>
      * This class reads all hidden and ignored tokens from the text and puts
      * them into the node as children.
-     * 
+     * </p>
+     * <p>
+     * This is the recursive part of the procedure.
+     * </p>
+     * <p>
      * Attention: This method is package private for testing purposes!
+     * </p>
+     * <p>
      * 
      * @param node
      * @param position
@@ -663,5 +697,57 @@ public class PackratParser implements Serializable {
 	    maxPosition = position + match.length();
 	}
 	return MemoEntry.success(match.length(), lineBreakNum, myTree);
+    }
+
+    /**
+     * <p>
+     * This method walks the whole tree and normalizes all children to point to
+     * their new parents. This is needed due to continuous changes of subtrees
+     * during packrat parsing. The answers from the memoization are added
+     * several times to different nodes. So the parent gets set to the latest
+     * parent, but this is not necessarily the right.
+     * </p>
+     * <p>
+     * For the parsing process itself it is not a big deal due to it is always
+     * looked from the parent to the child, but not upward. For later tree
+     * processing we need this normalization.
+     * </p>
+     * 
+     * @param tree
+     *            is the tree to be normalized.
+     * @throws ParserException
+     */
+    private void normalizeParents(ParserTree tree) throws ParserException {
+	try {
+	    final Field parentField = ParserTree.class
+		    .getDeclaredField("parent");
+	    parentField.setAccessible(true);
+	    TreeVisitor<ParserTree> visitor = new TreeVisitor<ParserTree>() {
+
+		@Override
+		public WalkingAction visit(ParserTree tree) {
+		    try {
+			for (ParserTree child : tree.getChildren()) {
+			    parentField.set(child, tree);
+			}
+			return WalkingAction.PROCEED;
+		    } catch (IllegalArgumentException e) {
+			throw new IllegalStateException(
+				"Could not set new parent!", e);
+		    } catch (IllegalAccessException e) {
+			throw new IllegalStateException(
+				"Could not set new parent!", e);
+		    }
+		}
+	    };
+	    new TreeWalker<ParserTree>(tree).walk(visitor);
+	    parentField.setAccessible(false);
+	} catch (SecurityException e) {
+	    throw new ParserException("Could not normalize the parser tree.", e);
+	} catch (NoSuchFieldException e) {
+	    throw new ParserException("Could not normalize the parser tree.", e);
+	} catch (IllegalStateException e) {
+	    throw new ParserException("Could not normalize the parser tree.", e);
+	}
     }
 }

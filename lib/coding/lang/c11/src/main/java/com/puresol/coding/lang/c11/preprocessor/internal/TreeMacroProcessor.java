@@ -75,6 +75,13 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
      * for the maximum nesting depth to avoid recursive endless loops.
      */
     private final int nestingDepth;
+    /**
+     * This field contains the counter for tokens which are to be skipped. This
+     * is needed in cases of function like macro replacement, where a macro
+     * replaces several tokens like the identifier, the parenthesis and the
+     * function parameters (and the whitespaces).
+     */
+    private int skipTokens = 0;
 
     /**
      * This is the normal constructor to be used to process preprocessor source
@@ -133,7 +140,7 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 	    if (token == null) {
 		return processProduction(tree);
 	    } else {
-		processToken(token);
+		processToken(tree);
 	    }
 	    return WalkingAction.PROCEED;
 	} catch (TreeException e) {
@@ -249,8 +256,9 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 	}
 	ParserTree replacementList = tree.getChild("replacement-list");
 	TokenStream replacement = createReplacement(replacementList);
-	definedMacros.define(new Macro(macroName, replacement, parameters,
-		optionalParameters));
+	Macro macro = new Macro(macroName, replacement, parameters,
+		optionalParameters);
+	definedMacros.define(macro);
 	return WalkingAction.LEAVE_BRANCH;
     }
 
@@ -281,9 +289,14 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
      * @param token
      *            is the token to be processed.
      */
-    private void processToken(Token token) {
+    private void processToken(ParserTree tree) {
+	if (skipTokens > 0) {
+	    skipTokens--;
+	    return;
+	}
+	Token token = tree.getToken();
 	if (IDENTIFIER_TOKEN_NAME.equals(token.getName())) {
-	    TokenStream tokenStream = replaceMactroAsNeeded(token);
+	    TokenStream tokenStream = replaceMacroAsNeeded(tree);
 	    this.tokenStream.addAll(tokenStream);
 	} else if ("Comment".equals(token.getName())) {
 	    TokenMetaData metaData = token.getMetaData();
@@ -343,9 +356,11 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
      * @param text
      * @return
      */
-    private TokenStream replaceMactroAsNeeded(Token token) {
+    private TokenStream replaceMacroAsNeeded(ParserTree tree) {
+	Token token = tree.getToken();
+	String tokenText = token.getText();
 	for (Macro macro : definedMacros.getMacros()) {
-	    if (macro.getName().equals(token.getText())) {
+	    if (macro.getName().equals(tokenText)) {
 		/*
 		 * We found a matching macro.
 		 */
@@ -353,17 +368,17 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 		    /*
 		     * Process an object like macro.
 		     */
-		    return applyObjectLikeMacros(token, macro);
+		    return applyObjectLikeMacro(token, macro);
 		} else {
 		    /*
 		     * Process an function like macro.
 		     */
-		    return applyFunctionLikeMacros(token, macro);
+		    return applyFunctionLikeMacro(tree, macro);
 		}
 	    }
 	}
 	/*
-	 * We did not find a matching macro, so we put in here the original
+	 * We did not find a matching macro, so we return here the original
 	 * token and proceed.
 	 */
 	TokenStream tokenStream = new TokenStream();
@@ -371,7 +386,7 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 	return tokenStream;
     }
 
-    private TokenStream applyObjectLikeMacros(Token token, Macro macro) {
+    private TokenStream applyObjectLikeMacro(Token token, Macro macro) {
 	TokenStream definition = macro.getReplacement();
 	TokenStream replacement = new TokenStream();
 	for (Token defToken : definition) {
@@ -383,7 +398,10 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 	return replacement;
     }
 
-    private TokenStream applyFunctionLikeMacros(Token token, Macro macro) {
+    private TokenStream applyFunctionLikeMacro(ParserTree tree, Macro macro) {
+	TreeWalker<ParserTree> walker = new TreeWalker<ParserTree>(
+		tree.getRoot());
+	Token token = tree.getToken();
 	TokenStream tokenStream = new TokenStream();
 	tokenStream.add(token);
 	return tokenStream;
