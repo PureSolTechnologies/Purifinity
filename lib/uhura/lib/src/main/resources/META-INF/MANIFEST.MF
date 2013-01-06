@@ -48,4 +48,3 @@ Export-Package: com.puresol.uhura,
  com.puresol.uhura.ust.modifiers;uses:="com.puresol.uhura.ust.facilities",
  com.puresol.uhura.ust.packages;uses:="com.puresol.uhura.ust.facilities",
  com.puresol.uhura.ust.types;uses:="com.puresol.uhura.ust.facilities"
-
