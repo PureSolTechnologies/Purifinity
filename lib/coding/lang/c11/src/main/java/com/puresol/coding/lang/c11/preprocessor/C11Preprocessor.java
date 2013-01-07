@@ -41,6 +41,10 @@ public class C11Preprocessor implements Preprocessor {
      */
     private static final int DEFAULT_NESTING_LIMIT = 63;
 
+    /**
+     * This field contains the preprocessor grammar which is prepared for
+     * parsing the preprocessor file.
+     */
     private static final Grammar preprocessorGrammar = preparePreProcessorGrammar();
 
     /**

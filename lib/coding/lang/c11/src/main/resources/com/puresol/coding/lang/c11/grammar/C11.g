@@ -990,7 +990,7 @@ HELPER
         if-section
     |   control-line
     |   text-line
-    |   SHARP non-directive
+    |   non-directive-line // added for better separation of group parts
     ;
     
     if-section:
@@ -1036,6 +1036,10 @@ HELPER
     
     text-line:
         pp-tokens? new-line
+    ;
+    
+    non-directive-line :
+        SHARP non-directive
     ;
     
     non-directive:

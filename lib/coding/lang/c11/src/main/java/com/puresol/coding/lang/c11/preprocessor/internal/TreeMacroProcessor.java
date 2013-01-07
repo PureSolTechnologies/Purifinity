@@ -40,8 +40,6 @@ import com.puresol.uhura.source.SourceCodeLine;
  */
 public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 
-    private static final String LINE_TERMINATOR_TOKEN_NAME = "LineTerminator";
-
     private static final String IDENTIFIER_TOKEN_NAME = "identifier";
 
     private static final Logger logger = LoggerFactory
@@ -57,10 +55,6 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
      * This field contains the information about the defined macros.
      */
     private final DefinedMacros definedMacros;
-    /**
-     * This is the token stream which is used and filled during processing.
-     */
-    private final TokenStream tokenStream = new TokenStream();
     /**
      * This field contains after processing the new source code.
      */
@@ -81,7 +75,7 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
      * replaces several tokens like the identifier, the parenthesis and the
      * function parameters (and the whitespaces).
      */
-    private int skipTokens = 0;
+    private final int skipTokens = 0;
 
     /**
      * This is the normal constructor to be used to process preprocessor source
@@ -139,10 +133,12 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 	    Token token = tree.getToken();
 	    if (token == null) {
 		return processProduction(tree);
+	    } else if (token.getName().equals("Comment")) {
+		return processTextLine(tree);
 	    } else {
-		processToken(tree);
+		throw new RuntimeException(
+			"An unprocessed token was found. This should not be possible!");
 	    }
-	    return WalkingAction.PROCEED;
 	} catch (TreeException e) {
 	    throw new RuntimeException(
 		    "The grammar or the implementation might be wrong!", e);
@@ -162,6 +158,12 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 	    throws TreeException {
 	if ("control-line".equals(tree.getName())) {
 	    return processControlLine(tree);
+	} else if ("text-line".equals(tree.getName())) {
+	    return processTextLine(tree);
+	} else if ("if-section".equals(tree.getName())) {
+	    return processIfSection(tree);
+	} else if ("non-directive-line".equals(tree.getName())) {
+	    return processNonDirectiveLine(tree);
 	} else {
 	    return WalkingAction.PROCEED;
 	}
@@ -177,12 +179,52 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 	    } else if (controlCommand.getText().equals("#define")) {
 		return define(tree);
 	    } else {
-		return WalkingAction.PROCEED;
+		return WalkingAction.LEAVE_BRANCH;
 	    }
 	} catch (PreprocessorException e) {
 	    logger.warn("Abort preprocessing of file!", e);
 	    return WalkingAction.ABORT;
 	}
+    }
+
+    /**
+     * This method processes a single text-line.
+     * 
+     * @param tree
+     * @return
+     */
+    private WalkingAction processTextLine(ParserTree tree) {
+	final TokenStream tokenStream = new TokenStream();
+	final StringBuffer stringBuffer = new StringBuffer();
+	TreeVisitor<ParserTree> visitor = new TreeVisitor<ParserTree>() {
+
+	    @Override
+	    public WalkingAction visit(ParserTree tree) {
+		Token token = tree.getToken();
+		if (token != null) {
+		    tokenStream.add(token);
+		    stringBuffer.append(token.getText());
+		}
+		return WalkingAction.PROCEED;
+	    }
+	};
+	new TreeWalker<ParserTree>(tree).walk(visitor);
+	TokenMetaData metaData = tokenStream.get(0).getMetaData();
+	SourceCodeLine sourceCodeLine = new SourceCodeLine(
+		metaData.getSource(), metaData.getLine(),
+		stringBuffer.toString());
+	sourceCode.addSourceCodeLine(sourceCodeLine);
+	return WalkingAction.LEAVE_BRANCH;
+    }
+
+    private WalkingAction processIfSection(ParserTree tree) {
+	// TODO Auto-generated method stub
+	return WalkingAction.LEAVE_BRANCH;
+    }
+
+    private WalkingAction processNonDirectiveLine(ParserTree tree) {
+	// TODO Auto-generated method stub
+	return WalkingAction.LEAVE_BRANCH;
     }
 
     private WalkingAction define(ParserTree tree) throws TreeException {
@@ -282,72 +324,45 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
     }
 
     /**
-     * This method deals with the tokens in the tree. All tokens which are found
-     * here are to be put into the ouput token stream. Exception are found macro
-     * names which are replaced by there definitions.
+     * This method performs the actual include.
      * 
-     * @param token
-     *            is the token to be processed.
+     * @param source
+     * @param includeFile
+     * @throws PreprocessorException
      */
-    private void processToken(ParserTree tree) {
-	if (skipTokens > 0) {
-	    skipTokens--;
-	    return;
+    private void performInclude(CodeLocation source, String includeFile)
+	    throws PreprocessorException {
+	if (nestingDepth == C11Preprocessor.getNestingLimit()) {
+	    throw new PreprocessorException("Nesting limit for #include of "
+		    + C11Preprocessor.getNestingLimit() + "is not sufficient!");
 	}
-	Token token = tree.getToken();
-	if (IDENTIFIER_TOKEN_NAME.equals(token.getName())) {
-	    TokenStream tokenStream = replaceMacroAsNeeded(tree);
-	    this.tokenStream.addAll(tokenStream);
-	} else if ("Comment".equals(token.getName())) {
-	    TokenMetaData metaData = token.getMetaData();
-	    String lines[] = token.getText().split("\\\n");
-	    for (int i = 0; i < lines.length; i++) {
-		String line = lines[i];
-		TokenMetaData newMetaData;
-		if (i == 0) {
-		    newMetaData = new TokenMetaData(metaData.getSource(),
-			    metaData.getLine() + i, metaData.getPos(), 1);
-		} else {
-		    newMetaData = new TokenMetaData(metaData.getSource(),
-			    metaData.getLine() + i, 0, 1);
-		}
-		Token newToken = new Token(token.getName(), line,
-			token.getVisibility(), newMetaData);
-		tokenStream.add(newToken);
-		newMetaData = new TokenMetaData(metaData.getSource(),
-			metaData.getLine() + i, newMetaData.getPos()
-				+ line.length(), 2);
-		newToken = new Token("LineTerminator", "\n",
-			token.getVisibility(), newMetaData);
-		tokenStream.add(newToken);
-		createNewSourceLine();
-	    }
-	} else {
-	    tokenStream.add(token);
-	    if (LINE_TERMINATOR_TOKEN_NAME.equals(token.getName())) {
-		createNewSourceLine();
+	boolean includeFileDirectory = false;
+	if (includeFile.startsWith("\"") && includeFile.endsWith("\"")) {
+	    includeFileDirectory = true;
+	}
+	includeFile = includeFile.substring(1, includeFile.length() - 1);
+	if (includeFileDirectory) {
+	    CodeLocation includeSource = source.newRelativeSource(includeFile);
+	    try {
+		// read to be included source...
+		SourceCode sourceCode = includeSource.load();
+		// we need to process this source, too, before we can
+		// include it...
+		SourceCode processedSourceCode = new C11Preprocessor(
+			includeDirectories, definedMacros, nestingDepth + 1)
+			.process(sourceCode);
+		// we actually do the including...
+		this.sourceCode.addSourceCode(processedSourceCode);
+	    } catch (IOException e) {
+		throw new PreprocessorException(
+			"Could not include file '"
+				+ includeSource.getHumanReadableLocationString()
+				+ "'!", e);
 	    }
 	}
-    }
-
-    /**
-     * This method create a next new source code line after finding a new line
-     * terminator during processing.
-     * 
-     * The current tokens of the {@link #tokenStream} are used to create a new
-     * source code line and the token stream is cleared afterwards.
-     */
-    private void createNewSourceLine() {
-	StringBuffer buffer = new StringBuffer();
-	for (Token token : tokenStream) {
-	    buffer.append(token.getText());
+	for (File directory : includeDirectories.getDirectories()) {
+	    // TODO check the other directories if not successful, yet...
 	}
-	Token firstToken = tokenStream.get(0);
-	TokenMetaData metaData = firstToken.getMetaData();
-	SourceCodeLine newLine = new SourceCodeLine(metaData.getSource(),
-		metaData.getLine(), buffer.toString());
-	sourceCode.addSourceCodeLine(newLine);
-	tokenStream.clear();
     }
 
     /**
@@ -405,48 +420,6 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 	TokenStream tokenStream = new TokenStream();
 	tokenStream.add(token);
 	return tokenStream;
-    }
-
-    /**
-     * This method performs the actual include.
-     * 
-     * @param source
-     * @param includeFile
-     * @throws PreprocessorException
-     */
-    private void performInclude(CodeLocation source, String includeFile)
-	    throws PreprocessorException {
-	if (nestingDepth == C11Preprocessor.getNestingLimit()) {
-	    throw new PreprocessorException("Nesting limit for #include of "
-		    + C11Preprocessor.getNestingLimit() + "is not sufficient!");
-	}
-	boolean includeFileDirectory = false;
-	if (includeFile.startsWith("\"") && includeFile.endsWith("\"")) {
-	    includeFileDirectory = true;
-	}
-	includeFile = includeFile.substring(1, includeFile.length() - 1);
-	if (includeFileDirectory) {
-	    CodeLocation includeSource = source.newRelativeSource(includeFile);
-	    try {
-		// read to be included source...
-		SourceCode sourceCode = includeSource.load();
-		// we need to process this source, too, before we can
-		// include it...
-		SourceCode processedSourceCode = new C11Preprocessor(
-			includeDirectories, definedMacros, nestingDepth + 1)
-			.process(sourceCode);
-		// we actually do the including...
-		this.sourceCode.addSourceCode(processedSourceCode);
-	    } catch (IOException e) {
-		throw new PreprocessorException(
-			"Could not include file '"
-				+ includeSource.getHumanReadableLocationString()
-				+ "'!", e);
-	    }
-	}
-	for (File directory : includeDirectories.getDirectories()) {
-	    // TODO check the other directories if not successful, yet...
-	}
     }
 
 }
