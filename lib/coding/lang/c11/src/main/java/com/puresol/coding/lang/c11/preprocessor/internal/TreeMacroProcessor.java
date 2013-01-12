@@ -194,36 +194,23 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
      * @return
      */
     private WalkingAction processTextLine(ParserTree tree) {
-	final TokenStream tokenStream = new TokenStream();
-	final StringBuffer stringBuffer = new StringBuffer();
-	TreeVisitor<ParserTree> visitor = new TreeVisitor<ParserTree>() {
-
-	    @Override
-	    public WalkingAction visit(ParserTree tree) {
-		Token token = tree.getToken();
-		if (token != null) {
-		    tokenStream.add(token);
-		    stringBuffer.append(token.getText());
-		}
-		return WalkingAction.PROCEED;
-	    }
-	};
-	new TreeWalker<ParserTree>(tree).walk(visitor);
-	TokenMetaData metaData = tokenStream.get(0).getMetaData();
+	TokenCollector visitor = new TokenCollector();
+	TreeWalker.walk(visitor, tree);
+	TokenMetaData metaData = visitor.getTokenStream().get(0).getMetaData();
 	SourceCodeLine sourceCodeLine = new SourceCodeLine(
-		metaData.getSource(), metaData.getLine(),
-		stringBuffer.toString());
+		metaData.getSource(), metaData.getLine(), visitor
+			.getStringBuffer().toString());
 	sourceCode.addSourceCodeLine(sourceCodeLine);
 	return WalkingAction.LEAVE_BRANCH;
     }
 
     private WalkingAction processIfSection(ParserTree tree) {
-	// TODO Auto-generated method stub
+	// TODO Implement recursive processing of if-sections...
 	return WalkingAction.LEAVE_BRANCH;
     }
 
     private WalkingAction processNonDirectiveLine(ParserTree tree) {
-	// TODO Auto-generated method stub
+	// TODO Check what a non-directive line is and what to implement here...
 	return WalkingAction.LEAVE_BRANCH;
     }
 
@@ -232,7 +219,6 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 	if ((children.size() >= 4)
 		&& (children.get(3).getName().equals("LPAREN"))) {
 	    return defineFunctionLikeMacro(tree);
-
 	} else {
 	    return defineObjectLikeMacro(tree);
 	}
@@ -291,7 +277,7 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 	    }
 
 	};
-	new TreeWalker<ParserTree>(parameterList).walk(visitor);
+	TreeWalker.walk(visitor, parameterList);
 	boolean optionalParameters = parameters.contains("...");
 	if (optionalParameters) {
 	    parameters.remove("...");
@@ -319,7 +305,7 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 		return WalkingAction.PROCEED;
 	    }
 	};
-	new TreeWalker<ParserTree>(replacementList).walk(visitor);
+	TreeWalker.walk(visitor, replacementList);
 	return replacement;
     }
 
@@ -414,8 +400,6 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
     }
 
     private TokenStream applyFunctionLikeMacro(ParserTree tree, Macro macro) {
-	TreeWalker<ParserTree> walker = new TreeWalker<ParserTree>(
-		tree.getRoot());
 	Token token = tree.getToken();
 	TokenStream tokenStream = new TokenStream();
 	tokenStream.add(token);

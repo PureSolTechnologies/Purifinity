@@ -1,7 +1,6 @@
 package com.puresol.coding.lang.c11.preprocessor.internal;
 
 import com.puresol.trees.TreeVisitor;
-import com.puresol.trees.TreeWalker;
 import com.puresol.trees.WalkingAction;
 import com.puresol.uhura.lexer.Token;
 import com.puresol.uhura.lexer.TokenStream;
@@ -9,17 +8,15 @@ import com.puresol.uhura.parser.ParserTree;
 
 public class TokenCollector implements TreeVisitor<ParserTree> {
 
-    public static TokenStream collect(ParserTree tree) {
-	TokenCollector visitor = new TokenCollector();
-	TreeWalker<ParserTree> walker = new TreeWalker<ParserTree>(tree);
-	walker.walk(visitor);
-	return visitor.tokenStream;
+    private final TokenStream tokenStream = new TokenStream();
+    private final StringBuffer stringBuffer = new StringBuffer();
+
+    public TokenStream getTokenStream() {
+	return tokenStream;
     }
 
-    private final TokenStream tokenStream;
-
-    private TokenCollector() {
-	tokenStream = new TokenStream();
+    public StringBuffer getStringBuffer() {
+	return stringBuffer;
     }
 
     @Override
@@ -27,6 +24,7 @@ public class TokenCollector implements TreeVisitor<ParserTree> {
 	Token token = tree.getToken();
 	if (token != null) {
 	    tokenStream.add(token);
+	    stringBuffer.append(token.getText());
 	}
 	return WalkingAction.PROCEED;
     }
