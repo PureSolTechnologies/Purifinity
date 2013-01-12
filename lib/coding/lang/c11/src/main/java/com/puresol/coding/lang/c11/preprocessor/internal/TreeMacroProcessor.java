@@ -22,6 +22,7 @@ import com.puresol.uhura.preprocessor.PreprocessorException;
 import com.puresol.uhura.source.CodeLocation;
 import com.puresol.uhura.source.SourceCode;
 import com.puresol.uhura.source.SourceCodeLine;
+import com.puresol.uhura.source.SourceFileLocation;
 
 /**
  * <pre>
@@ -69,13 +70,6 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
      * for the maximum nesting depth to avoid recursive endless loops.
      */
     private final int nestingDepth;
-    /**
-     * This field contains the counter for tokens which are to be skipped. This
-     * is needed in cases of function like macro replacement, where a macro
-     * replaces several tokens like the identifier, the parenthesis and the
-     * function parameters (and the whitespaces).
-     */
-    private final int skipTokens = 0;
 
     /**
      * This is the normal constructor to be used to process preprocessor source
@@ -322,33 +316,64 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 	    throw new PreprocessorException("Nesting limit for #include of "
 		    + C11Preprocessor.getNestingLimit() + "is not sufficient!");
 	}
-	boolean includeFileDirectory = false;
-	if (includeFile.startsWith("\"") && includeFile.endsWith("\"")) {
-	    includeFileDirectory = true;
-	}
+	boolean includeFileDirectory = isFileDirectoryInclude(includeFile);
 	includeFile = includeFile.substring(1, includeFile.length() - 1);
 	if (includeFileDirectory) {
 	    CodeLocation includeSource = source.newRelativeSource(includeFile);
-	    try {
-		// read to be included source...
-		SourceCode sourceCode = includeSource.load();
-		// we need to process this source, too, before we can
-		// include it...
-		SourceCode processedSourceCode = new C11Preprocessor(
-			includeDirectories, definedMacros, nestingDepth + 1)
-			.process(sourceCode);
-		// we actually do the including...
-		this.sourceCode.addSourceCode(processedSourceCode);
-	    } catch (IOException e) {
-		throw new PreprocessorException(
-			"Could not include file '"
-				+ includeSource.getHumanReadableLocationString()
-				+ "'!", e);
+	    if (includeFile(includeSource)) {
+		return;
 	    }
 	}
 	for (File directory : includeDirectories.getDirectories()) {
-	    // TODO check the other directories if not successful, yet...
+	    File file = new File(directory, includeFile);
+	    if (includeFile(new SourceFileLocation(file))) {
+		return;
+	    }
 	}
+    }
+
+    /**
+     * Performs an include for a given source.
+     * 
+     * @param includeSource
+     * @throws PreprocessorException
+     */
+    private boolean includeFile(CodeLocation includeSource)
+	    throws PreprocessorException {
+	try {
+	    if (!includeSource.isAvailable()) {
+		return false;
+	    }
+	    // read to be included source...
+	    SourceCode sourceCode = includeSource.load();
+	    // we need to process this source, too, before we can
+	    // include it...
+	    SourceCode processedSourceCode = new C11Preprocessor(
+		    includeDirectories, definedMacros, nestingDepth + 1)
+		    .process(sourceCode);
+	    // we actually do the including...
+	    this.sourceCode.addSourceCode(processedSourceCode);
+	    return true;
+	} catch (IOException e) {
+	    throw new PreprocessorException("Could not include file '"
+		    + includeSource.getHumanReadableLocationString() + "'!", e);
+	}
+    }
+
+    /**
+     * Checks whether an include file is a local directory include or a system
+     * include.
+     * 
+     * @param includeFile
+     *            is the file string with greater and smaller than signs or
+     *            double quotes. It is checked for the delimiting signs.
+     * @return True is returned if it is a local include file.
+     */
+    private boolean isFileDirectoryInclude(String includeFile) {
+	if (includeFile.startsWith("\"") && includeFile.endsWith("\"")) {
+	    return true;
+	}
+	return false;
     }
 
     /**

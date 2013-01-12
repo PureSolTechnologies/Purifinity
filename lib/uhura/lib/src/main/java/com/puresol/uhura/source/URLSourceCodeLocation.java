@@ -71,4 +71,18 @@ public class URLSourceCodeLocation extends AbstractCodeLocation {
 	return new File(url.getPath()).getParent();
     }
 
+    @Override
+    public boolean isAvailable() {
+	try {
+	    InputStream stream = url.openStream();
+	    try {
+		return stream != null;
+	    } finally {
+		stream.close();
+	    }
+	} catch (IOException e) {
+	    return false;
+	}
+    }
+
 }

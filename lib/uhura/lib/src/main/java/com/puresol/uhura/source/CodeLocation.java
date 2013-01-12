@@ -71,4 +71,13 @@ public interface CodeLocation extends Serializable {
      */
     public CodeLocation newRelativeSource(String relativePath);
 
+    /**
+     * This method checks whether this source is available or not. This is
+     * needed to check for the presence of some specified sources like include
+     * files.
+     * 
+     * @return True is returned if the source is available. False is returned
+     *         otherwise.
+     */
+    public boolean isAvailable();
 }

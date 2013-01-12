@@ -84,4 +84,9 @@ public class FixedCodeLocation extends AbstractCodeLocation {
     public String getInternalLocation() {
 	return "";
     }
+
+    @Override
+    public boolean isAvailable() {
+	return true;
+    }
 }

@@ -42,4 +42,9 @@ public class UnspecifiedSourceCodeLocation extends AbstractCodeLocation {
     public String getInternalLocation() {
 	return "";
     }
+
+    @Override
+    public boolean isAvailable() {
+	return false;
+    }
 }

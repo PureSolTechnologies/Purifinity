@@ -56,7 +56,8 @@ public class SourceFileLocation extends AbstractCodeLocation {
 
     @Override
     public CodeLocation newRelativeSource(String relativePath) {
-	return new SourceFileLocation(new File(file.getParentFile(), relativePath));
+	return new SourceFileLocation(new File(file.getParentFile(),
+		relativePath));
     }
 
     @Override
@@ -67,5 +68,10 @@ public class SourceFileLocation extends AbstractCodeLocation {
     @Override
     public String getInternalLocation() {
 	return file.getParent();
+    }
+
+    @Override
+    public boolean isAvailable() {
+	return file.exists();
     }
 }
