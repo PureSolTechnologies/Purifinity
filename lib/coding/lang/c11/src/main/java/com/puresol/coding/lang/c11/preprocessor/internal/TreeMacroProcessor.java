@@ -147,6 +147,7 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
      * @return A {@link WalkingAction} is returned specifying the next action
      *         during tree walk.
      * @throws TreeException
+     * @throws PreprocessorException
      */
     private WalkingAction processProduction(ParserTree tree)
 	    throws TreeException {
@@ -199,12 +200,23 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
     }
 
     private WalkingAction processIfSection(ParserTree tree) {
-	// TODO Implement recursive processing of if-sections...
 	return WalkingAction.LEAVE_BRANCH;
     }
 
-    private WalkingAction processNonDirectiveLine(ParserTree tree) {
-	// TODO Check what a non-directive line is and what to implement here...
+    private WalkingAction processNonDirectiveLine(ParserTree tree)
+	    throws TreeException {
+	ParserTree nonDirective;
+	nonDirective = tree.getChild("non-directive");
+	TokenCollector visitor = new TokenCollector();
+	TreeWalker.walk(visitor, nonDirective);
+	TokenMetaData metaData = visitor.getTokenStream().get(0).getMetaData();
+	SourceCodeLine sourceCodeLine = new SourceCodeLine(
+		metaData.getSource(), metaData.getLine(), visitor
+			.getStringBuffer().toString());
+	sourceCode.addSourceCodeLine(sourceCodeLine); // TODO Implement
+						      // recursive
+						      // processing of
+						      // if-sections...
 	return WalkingAction.LEAVE_BRANCH;
     }
 
