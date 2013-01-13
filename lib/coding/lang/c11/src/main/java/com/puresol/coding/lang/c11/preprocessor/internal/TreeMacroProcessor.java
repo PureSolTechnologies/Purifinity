@@ -191,32 +191,35 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
     private WalkingAction processTextLine(ParserTree tree) {
 	TokenCollector visitor = new TokenCollector();
 	TreeWalker.walk(visitor, tree);
-	TokenMetaData metaData = visitor.getTokenStream().get(0).getMetaData();
+	TokenStream tokenStream = visitor.getTokenStream();
+	while (replaceMacroAsNeeded(tokenStream))
+	    ;
+	TokenMetaData metaData = tokenStream.get(0).getMetaData();
+	StringBuffer buffer = new StringBuffer();
+	for (Token token : tokenStream) {
+	    buffer.append(token.getText());
+	}
 	SourceCodeLine sourceCodeLine = new SourceCodeLine(
-		metaData.getSource(), metaData.getLine(), visitor
-			.getStringBuffer().toString());
+		metaData.getSource(), metaData.getLine(), buffer.toString());
 	sourceCode.addSourceCodeLine(sourceCodeLine);
 	return WalkingAction.LEAVE_BRANCH;
     }
 
     private WalkingAction processIfSection(ParserTree tree) {
+	// TODO Implement recursive processing of if-sections...
 	return WalkingAction.LEAVE_BRANCH;
     }
 
     private WalkingAction processNonDirectiveLine(ParserTree tree)
 	    throws TreeException {
-	ParserTree nonDirective;
-	nonDirective = tree.getChild("non-directive");
+	ParserTree nonDirective = tree.getChild("non-directive");
 	TokenCollector visitor = new TokenCollector();
 	TreeWalker.walk(visitor, nonDirective);
 	TokenMetaData metaData = visitor.getTokenStream().get(0).getMetaData();
 	SourceCodeLine sourceCodeLine = new SourceCodeLine(
 		metaData.getSource(), metaData.getLine(), visitor
 			.getStringBuffer().toString());
-	sourceCode.addSourceCodeLine(sourceCodeLine); // TODO Implement
-						      // recursive
-						      // processing of
-						      // if-sections...
+	sourceCode.addSourceCodeLine(sourceCodeLine);
 	return WalkingAction.LEAVE_BRANCH;
     }
 
@@ -394,53 +397,61 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
      * @param text
      * @return
      */
-    private TokenStream replaceMacroAsNeeded(ParserTree tree) {
-	Token token = tree.getToken();
-	String tokenText = token.getText();
-	for (Macro macro : definedMacros.getMacros()) {
-	    if (macro.getName().equals(tokenText)) {
-		/*
-		 * We found a matching macro.
-		 */
-		if (macro.getParameters().size() == 0) {
+    private boolean replaceMacroAsNeeded(TokenStream tokenStream) {
+	for (int i = 0; i < tokenStream.size(); i++) {
+	    Token token = tokenStream.get(i);
+	    String tokenText = token.getText();
+	    for (Macro macro : definedMacros.getMacros()) {
+		if (macro.getName().equals(tokenText)) {
 		    /*
-		     * Process an object like macro.
+		     * We found a matching macro.
 		     */
-		    return applyObjectLikeMacro(token, macro);
-		} else {
-		    /*
-		     * Process an function like macro.
-		     */
-		    return applyFunctionLikeMacro(tree, macro);
+		    if (macro.getParameters().size() == 0) {
+			/*
+			 * Process an object like macro.
+			 */
+			applyObjectLikeMacro(tokenStream, i, macro);
+			return true;
+		    } else {
+			/*
+			 * Process an function like macro.
+			 */
+			applyFunctionLikeMacro(tokenStream, i, macro);
+			return false;
+		    }
 		}
 	    }
 	}
-	/*
-	 * We did not find a matching macro, so we return here the original
-	 * token and proceed.
-	 */
-	TokenStream tokenStream = new TokenStream();
-	tokenStream.add(token);
-	return tokenStream;
+	return false;
     }
 
-    private TokenStream applyObjectLikeMacro(Token token, Macro macro) {
+    private void applyObjectLikeMacro(TokenStream tokenStream, int tokenId,
+	    Macro macro) {
+	Token token = tokenStream.get(tokenId);
 	TokenStream definition = macro.getReplacement();
 	TokenStream replacement = new TokenStream();
+	// Add all tokens before macro
+	for (int i = 0; i < tokenId; i++) {
+
+	    replacement.add(tokenStream.get(i));
+	}
+	// Add replacement instead of macro name
 	for (Token defToken : definition) {
 	    Token replacementToken = new Token(defToken.getName(),
 		    defToken.getText(), defToken.getVisibility(),
 		    token.getMetaData());
 	    replacement.add(replacementToken);
 	}
-	return replacement;
+	// Add all tokens behind macro
+	for (int i = tokenId + 1; i < tokenStream.size(); i++) {
+	    replacement.add(tokenStream.get(i));
+	}
+	tokenStream.clear();
+	tokenStream.addAll(replacement);
     }
 
-    private TokenStream applyFunctionLikeMacro(ParserTree tree, Macro macro) {
-	Token token = tree.getToken();
-	TokenStream tokenStream = new TokenStream();
-	tokenStream.add(token);
-	return tokenStream;
+    private void applyFunctionLikeMacro(TokenStream tokenStream, int tokenId,
+	    Macro macro) {
     }
 
 }
