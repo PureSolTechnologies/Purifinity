@@ -14,6 +14,7 @@ import com.puresol.trees.TreeException;
 import com.puresol.trees.TreeVisitor;
 import com.puresol.trees.TreeWalker;
 import com.puresol.trees.WalkingAction;
+import com.puresol.uhura.grammar.token.Visibility;
 import com.puresol.uhura.lexer.Token;
 import com.puresol.uhura.lexer.TokenMetaData;
 import com.puresol.uhura.lexer.TokenStream;
@@ -71,6 +72,11 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
      */
     private final int nestingDepth;
 
+    private PreprocessorException walkingResult = null;
+
+    private boolean functionMacroMode = false;
+    private final TokenStream functionMacroTokenStream = new TokenStream();
+
     /**
      * This is the normal constructor to be used to process preprocessor source
      * trees.
@@ -101,9 +107,15 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
     /**
      * Runs the processor. The result of the process can be got by
      * {@link #getSourceCode()}.
+     * 
+     * @throws PreprocessorException
      */
-    public void process() {
+    public void process() throws PreprocessorException {
+	walkingResult = null;
 	new TreeWalker<ParserTree>(tree).walk(this);
+	if (walkingResult != null) {
+	    throw walkingResult;
+	}
     }
 
     /**
@@ -136,6 +148,9 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 	} catch (TreeException e) {
 	    throw new RuntimeException(
 		    "The grammar or the implementation might be wrong!", e);
+	} catch (PreprocessorException e) {
+	    walkingResult = e;
+	    return WalkingAction.ABORT;
 	}
     }
 
@@ -150,7 +165,7 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
      * @throws PreprocessorException
      */
     private WalkingAction processProduction(ParserTree tree)
-	    throws TreeException {
+	    throws TreeException, PreprocessorException {
 	if ("control-line".equals(tree.getName())) {
 	    return processControlLine(tree);
 	} else if ("text-line".equals(tree.getName())) {
@@ -158,7 +173,12 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 	} else if ("if-section".equals(tree.getName())) {
 	    return processIfSection(tree);
 	} else if ("non-directive-line".equals(tree.getName())) {
-	    return processNonDirectiveLine(tree);
+	    /*
+	     * As long as we do not know here what we need to do with this kind
+	     * of line, we handle it as normal text-line. It is done so, too, by
+	     * gpp.
+	     */
+	    return processTextLine(tree);
 	} else {
 	    return WalkingAction.PROCEED;
 	}
@@ -187,39 +207,48 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
      * 
      * @param tree
      * @return
+     * @throws PreprocessorException
      */
-    private WalkingAction processTextLine(ParserTree tree) {
-	TokenCollector visitor = new TokenCollector();
-	TreeWalker.walk(visitor, tree);
-	TokenStream tokenStream = visitor.getTokenStream();
-	while (replaceMacroAsNeeded(tokenStream))
-	    ;
-	TokenMetaData metaData = tokenStream.get(0).getMetaData();
-	StringBuffer buffer = new StringBuffer();
-	for (Token token : tokenStream) {
-	    buffer.append(token.getText());
+    private WalkingAction processTextLine(ParserTree tree)
+	    throws PreprocessorException {
+	if (!functionMacroMode) {
+	    /*
+	     * We are in normal mode...
+	     */
+	    TokenCollector visitor = new TokenCollector();
+	    TreeWalker.walk(visitor, tree);
+	    TokenStream tokenStream = visitor.getTokenStream();
+	    for (int position = 0; position < tokenStream.size(); position++) {
+		replaceMacroAsNeeded(tokenStream, position);
+	    }
+	    if (!functionMacroMode) {
+		/*
+		 * We found a function like macro replacement, but we are not
+		 * finished, yet. The tokenStream is growing in a field,
+		 * currently.
+		 */
+		TokenMetaData metaData = tokenStream.get(0).getMetaData();
+		StringBuffer buffer = new StringBuffer();
+		for (Token token : tokenStream) {
+		    buffer.append(token.getText());
+		}
+		SourceCodeLine sourceCodeLine = new SourceCodeLine(
+			metaData.getSource(), metaData.getLine(),
+			buffer.toString());
+		sourceCode.addSourceCodeLine(sourceCodeLine);
+	    }
+	} else {
+	    /*
+	     * We are in function like macro replacement mode... We need to
+	     * resume.
+	     */
+	    resumeFunctionLikeMacroReplacement();
 	}
-	SourceCodeLine sourceCodeLine = new SourceCodeLine(
-		metaData.getSource(), metaData.getLine(), buffer.toString());
-	sourceCode.addSourceCodeLine(sourceCodeLine);
 	return WalkingAction.LEAVE_BRANCH;
     }
 
     private WalkingAction processIfSection(ParserTree tree) {
 	// TODO Implement recursive processing of if-sections...
-	return WalkingAction.LEAVE_BRANCH;
-    }
-
-    private WalkingAction processNonDirectiveLine(ParserTree tree)
-	    throws TreeException {
-	ParserTree nonDirective = tree.getChild("non-directive");
-	TokenCollector visitor = new TokenCollector();
-	TreeWalker.walk(visitor, nonDirective);
-	TokenMetaData metaData = visitor.getTokenStream().get(0).getMetaData();
-	SourceCodeLine sourceCodeLine = new SourceCodeLine(
-		metaData.getSource(), metaData.getLine(), visitor
-			.getStringBuffer().toString());
-	sourceCode.addSourceCodeLine(sourceCodeLine);
 	return WalkingAction.LEAVE_BRANCH;
     }
 
@@ -396,36 +425,52 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
      * 
      * @param text
      * @return
+     * @throws PreprocessorException
      */
-    private boolean replaceMacroAsNeeded(TokenStream tokenStream) {
-	for (int i = 0; i < tokenStream.size(); i++) {
+    private boolean replaceMacroAsNeeded(TokenStream tokenStream, int position)
+	    throws PreprocessorException {
+	for (int i = position; i < tokenStream.size(); i++) {
 	    Token token = tokenStream.get(i);
-	    String tokenText = token.getText();
-	    for (Macro macro : definedMacros.getMacros()) {
-		if (macro.getName().equals(tokenText)) {
+	    String text = token.getText();
+	    if (definedMacros.isDefined(text)) {
+		Macro macro = definedMacros.getMacro(text);
+		/*
+		 * We found a matching macro.
+		 */
+		if (macro.getParameters().size() == 0) {
 		    /*
-		     * We found a matching macro.
+		     * Process an object like macro.
 		     */
-		    if (macro.getParameters().size() == 0) {
-			/*
-			 * Process an object like macro.
-			 */
-			applyObjectLikeMacro(tokenStream, i, macro);
-			return true;
-		    } else {
-			/*
-			 * Process an function like macro.
-			 */
-			applyFunctionLikeMacro(tokenStream, i, macro);
-			return false;
-		    }
+		    replaceObjectLikeMacro(tokenStream, i, macro);
+		    return true;
+		} else {
+		    /*
+		     * Process an function like macro.
+		     */
+		    replaceFunctionLikeMacro(tokenStream, i, macro);
+		    return true;
 		}
 	    }
 	}
 	return false;
     }
 
-    private void applyObjectLikeMacro(TokenStream tokenStream, int tokenId,
+    /**
+     * <p>
+     * This replacement is very simple. The actual token of the macro name is
+     * replaced with the replacement list of a macro without parameters. Even if
+     * a parameter list would follow, this is ignored and only the macro name is
+     * relevant.
+     * </p>
+     * <p>
+     * This behavior was checked with gpp.
+     * </p>
+     * 
+     * @param tokenStream
+     * @param tokenId
+     * @param macro
+     */
+    private void replaceObjectLikeMacro(TokenStream tokenStream, int tokenId,
 	    Macro macro) {
 	Token token = tokenStream.get(tokenId);
 	TokenStream definition = macro.getReplacement();
@@ -450,8 +495,95 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 	tokenStream.addAll(replacement);
     }
 
-    private void applyFunctionLikeMacro(TokenStream tokenStream, int tokenId,
-	    Macro macro) {
+    private void replaceFunctionLikeMacro(TokenStream tokenStream, int tokenId,
+	    Macro macro) throws PreprocessorException {
+	List<TokenStream> parameterReplacements = extractParameterReplacements(
+		tokenStream, tokenId);
+	if (parameterReplacements == null) {
+	    functionMacroMode = true;
+	    functionMacroTokenStream.clear();
+	    functionMacroTokenStream.addAll(tokenStream);
+	    return;
+	}
+	Token token = tokenStream.get(tokenId);
+	List<String> parameters = macro.getParameters();
+	TokenStream replacement = macro.getReplacement();
+    }
+
+    /**
+     * This method starts on a given position within a given {@link TokenStream}
+     * and reads the parameters for the function like macro replacement.
+     * 
+     * @param tokenStream
+     * @param tokenId
+     * @return A {@link List} of {@link TokenStream} is returned in case of a
+     *         successful read of the parameters. Null is returned if the search
+     *         was not successful.
+     * @throws PreprocessorException
+     */
+    private static List<TokenStream> extractParameterReplacements(
+	    TokenStream tokenStream, int tokenId) throws PreprocessorException {
+	List<TokenStream> parameters = new ArrayList<TokenStream>();
+	TokenStream currentParameter = null;
+	int parenDepth = 0;
+	/*
+	 * The token at tokenId is the name of the macro. So we need to start
+	 * with the token after it.
+	 */
+	for (int i = tokenId + 1; i < tokenStream.size(); i++) {
+	    Token token = tokenStream.get(i);
+	    if (token.getText().equals("(")) {
+		if (parenDepth == 0) {
+		    /*
+		     * We found our first parameter.
+		     */
+		    currentParameter = new TokenStream();
+		    parameters.add(currentParameter);
+		} else {
+		    currentParameter.add(token);
+		}
+		parenDepth++;
+	    } else if (token.getText().equals(")")) {
+		parenDepth--;
+		if (parenDepth <= 0) {
+		    /*
+		     * We are finished. We either found
+		     */
+		    return parameters;
+		}
+		currentParameter.add(token);
+	    } else if (token.getText().equals(",") && parenDepth == 1) {
+		/*
+		 * We found a new parameter.
+		 */
+		currentParameter = new TokenStream();
+		parameters.add(currentParameter);
+	    } else {
+		if (currentParameter != null) {
+		    currentParameter.add(token);
+		} else if (token.getVisibility() == Visibility.VISIBLE) {
+		    Token startToken = tokenStream.get(tokenId);
+		    throw new PreprocessorException(
+			    "An opening parenthesis was expected after macro name '"
+				    + startToken.getName() + "' in line "
+				    + startToken.getMetaData().getLine()
+				    + ", but was not found!");
+
+		}
+	    }
+	}
+	if (parenDepth > 1) {
+	    /*
+	     * We are not finished and we do not have more to read...
+	     */
+	    return null;
+	}
+	return parameters;
+    }
+
+    private void resumeFunctionLikeMacroReplacement() {
+	// TODO Auto-generated method stub
+
     }
 
 }
