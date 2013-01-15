@@ -103,4 +103,25 @@ public class ReplacementParameterResult {
     public int getTokensToSkip() {
 	return tokensToSkip;
     }
+
+    /**
+     * This method returns the parameter replacement as {@link TokenStream}.
+     * 
+     * @param parameterId
+     *            specifies the parameter id. This id is needs to a positive
+     *            value.
+     * @return The parameter replacement is returned as {@link TokenStream}. If
+     *         the parameter id is larger than the number of parameters found,
+     *         then an empty TokenStream is returned.
+     */
+    public TokenStream getReplacement(int parameterId) {
+	if (parameterId < 0) {
+	    throw new IllegalArgumentException(
+		    "Parameter id must not be negative!");
+	}
+	if (parameterId < parameters.size()) {
+	    return parameters.get(parameterId);
+	}
+	return new TokenStream();
+    }
 }

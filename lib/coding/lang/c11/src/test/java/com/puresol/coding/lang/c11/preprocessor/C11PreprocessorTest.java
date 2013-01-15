@@ -149,7 +149,7 @@ public class C11PreprocessorTest {
 	SourceCode expected = new SourceCode();
 	expected.addSourceCodeLine(new SourceCodeLine(new SourceFileLocation(
 		sourceFile), 2,
-		"fprintf(stderr, \"%s\n\", \"Error message!\");\n"));
+		"fprintf(stderr, \"%s\\\\n\", \"Error message!\");\n"));
 	assertEquals(expected, preProcessedSourceCode);
     }
 
