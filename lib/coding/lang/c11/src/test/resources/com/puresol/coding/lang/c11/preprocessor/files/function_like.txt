@@ -1,0 +1,5 @@
+#define HALLO(param1, param2) Hello, world! 'param1,param2'
+TEST
+HALLO(1,
+#define TEST testing!!!
+HALLO(1,TEST))

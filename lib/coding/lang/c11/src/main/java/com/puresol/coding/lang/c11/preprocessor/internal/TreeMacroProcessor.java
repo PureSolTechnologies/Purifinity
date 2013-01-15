@@ -14,7 +14,6 @@ import com.puresol.trees.TreeException;
 import com.puresol.trees.TreeVisitor;
 import com.puresol.trees.TreeWalker;
 import com.puresol.trees.WalkingAction;
-import com.puresol.uhura.grammar.token.Visibility;
 import com.puresol.uhura.lexer.Token;
 import com.puresol.uhura.lexer.TokenMetaData;
 import com.puresol.uhura.lexer.TokenStream;
@@ -220,6 +219,9 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 	    TokenStream tokenStream = visitor.getTokenStream();
 	    for (int position = 0; position < tokenStream.size(); position++) {
 		replaceMacroAsNeeded(tokenStream, position);
+		if (functionMacroMode) {
+		    break;
+		}
 	    }
 	    if (!functionMacroMode) {
 		/*
@@ -497,8 +499,8 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 
     private void replaceFunctionLikeMacro(TokenStream tokenStream, int tokenId,
 	    Macro macro) throws PreprocessorException {
-	List<TokenStream> parameterReplacements = extractParameterReplacements(
-		tokenStream, tokenId);
+	ReplacementParameterResult parameterReplacements = ReplacementParameterResult
+		.extractParameterReplacements(tokenStream, tokenId);
 	if (parameterReplacements == null) {
 	    functionMacroMode = true;
 	    functionMacroTokenStream.clear();
@@ -507,78 +509,26 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 	}
 	Token token = tokenStream.get(tokenId);
 	List<String> parameters = macro.getParameters();
-	TokenStream replacement = macro.getReplacement();
-    }
-
-    /**
-     * This method starts on a given position within a given {@link TokenStream}
-     * and reads the parameters for the function like macro replacement.
-     * 
-     * @param tokenStream
-     * @param tokenId
-     * @return A {@link List} of {@link TokenStream} is returned in case of a
-     *         successful read of the parameters. Null is returned if the search
-     *         was not successful.
-     * @throws PreprocessorException
-     */
-    private static List<TokenStream> extractParameterReplacements(
-	    TokenStream tokenStream, int tokenId) throws PreprocessorException {
-	List<TokenStream> parameters = new ArrayList<TokenStream>();
-	TokenStream currentParameter = null;
-	int parenDepth = 0;
-	/*
-	 * The token at tokenId is the name of the macro. So we need to start
-	 * with the token after it.
-	 */
-	for (int i = tokenId + 1; i < tokenStream.size(); i++) {
-	    Token token = tokenStream.get(i);
-	    if (token.getText().equals("(")) {
-		if (parenDepth == 0) {
-		    /*
-		     * We found our first parameter.
-		     */
-		    currentParameter = new TokenStream();
-		    parameters.add(currentParameter);
-		} else {
-		    currentParameter.add(token);
-		}
-		parenDepth++;
-	    } else if (token.getText().equals(")")) {
-		parenDepth--;
-		if (parenDepth <= 0) {
-		    /*
-		     * We are finished. We either found
-		     */
-		    return parameters;
-		}
-		currentParameter.add(token);
-	    } else if (token.getText().equals(",") && parenDepth == 1) {
-		/*
-		 * We found a new parameter.
-		 */
-		currentParameter = new TokenStream();
-		parameters.add(currentParameter);
-	    } else {
-		if (currentParameter != null) {
-		    currentParameter.add(token);
-		} else if (token.getVisibility() == Visibility.VISIBLE) {
-		    Token startToken = tokenStream.get(tokenId);
-		    throw new PreprocessorException(
-			    "An opening parenthesis was expected after macro name '"
-				    + startToken.getName() + "' in line "
-				    + startToken.getMetaData().getLine()
-				    + ", but was not found!");
-
-		}
-	    }
+	TokenStream replacementDefinition = macro.getReplacement();
+	TokenStream replacement = new TokenStream();
+	// Add all tokens before macro
+	for (int i = 0; i < tokenId; i++) {
+	    replacement.add(tokenStream.get(i));
 	}
-	if (parenDepth > 1) {
-	    /*
-	     * We are not finished and we do not have more to read...
-	     */
-	    return null;
+	// Add replacement instead of macro name
+	for (Token defToken : replacementDefinition) {
+	    Token replacementToken = new Token(defToken.getName(),
+		    defToken.getText(), defToken.getVisibility(),
+		    token.getMetaData());
+	    replacement.add(replacementToken);
 	}
-	return parameters;
+	// Add all tokens behind macro
+	for (int i = tokenId + parameterReplacements.getTokensToSkip() + 1; i < tokenStream
+		.size(); i++) {
+	    replacement.add(tokenStream.get(i));
+	}
+	tokenStream.clear();
+	tokenStream.addAll(replacement);
     }
 
     private void resumeFunctionLikeMacroReplacement() {
