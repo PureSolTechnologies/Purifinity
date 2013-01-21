@@ -2,6 +2,7 @@ package com.puresol.coding.lang.c11.preprocessor.internal;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 
@@ -13,20 +14,13 @@ import com.puresol.uhura.source.UnspecifiedSourceCodeLocation;
 
 public class ReplacementParameterResultTest {
 
-    private static ReplacementParameterResult invokeExtractParameterReplacements(
-	    TokenStream tokenStream, int tokenId) throws Exception {
-	ReplacementParameterResult parameters = ReplacementParameterResult
-		.extractParameterReplacements(tokenStream, tokenId);
-	return parameters;
-    }
-
     @Test
     public void testExtractParameterReplacementsEmpty() throws Exception {
 	TokenStream stream = new TokenStream();
 	stream.add(new Token("name", "name", Visibility.VISIBLE,
 		new TokenMetaData(new UnspecifiedSourceCodeLocation(), 1, 1)));
-	ReplacementParameterResult parameters = invokeExtractParameterReplacements(
-		stream, 0);
+	ReplacementParameterResult parameters = ReplacementParameterResult
+		.extractParameterReplacements(stream, 0);
 	assertNotNull(parameters);
 	assertEquals(0, parameters.getTokensToSkip());
     }
@@ -42,8 +36,8 @@ public class ReplacementParameterResultTest {
 		new TokenMetaData(new UnspecifiedSourceCodeLocation(), 1, 1)));
 	stream.add(new Token("name", ")", Visibility.VISIBLE,
 		new TokenMetaData(new UnspecifiedSourceCodeLocation(), 1, 1)));
-	ReplacementParameterResult parameters = invokeExtractParameterReplacements(
-		stream, 0);
+	ReplacementParameterResult parameters = ReplacementParameterResult
+		.extractParameterReplacements(stream, 0);
 	assertNotNull(parameters);
 	assertEquals(1, parameters.getNumberOfParameters());
 	TokenStream parameterStream = parameters.getReplacement(0);
@@ -73,8 +67,8 @@ public class ReplacementParameterResultTest {
 		new TokenMetaData(new UnspecifiedSourceCodeLocation(), 1, 1)));
 	stream.add(new Token("name", ")", Visibility.VISIBLE,
 		new TokenMetaData(new UnspecifiedSourceCodeLocation(), 1, 1)));
-	ReplacementParameterResult parameters = invokeExtractParameterReplacements(
-		stream, 0);
+	ReplacementParameterResult parameters = ReplacementParameterResult
+		.extractParameterReplacements(stream, 0);
 	assertNotNull(parameters);
 	assertEquals(4, parameters.getNumberOfParameters());
 	TokenStream parameterStream = parameters.getReplacement(0);
@@ -126,8 +120,8 @@ public class ReplacementParameterResultTest {
 		new TokenMetaData(new UnspecifiedSourceCodeLocation(), 1, 1)));
 	stream.add(new Token("name", ")", Visibility.VISIBLE,
 		new TokenMetaData(new UnspecifiedSourceCodeLocation(), 1, 1)));
-	ReplacementParameterResult parameters = invokeExtractParameterReplacements(
-		stream, 0);
+	ReplacementParameterResult parameters = ReplacementParameterResult
+		.extractParameterReplacements(stream, 0);
 	assertNotNull(parameters);
 	assertEquals(4, parameters.getNumberOfParameters());
 	TokenStream parameterStream = parameters.getReplacement(0);
@@ -138,6 +132,18 @@ public class ReplacementParameterResultTest {
 	assertEquals(1, parameterStream.size());
 	parameterStream = parameters.getReplacement(3);
 	assertEquals(5, parameterStream.size());
+    }
+
+    @Test
+    public void testExtractParameterReplacementsInvalid() throws Exception {
+	TokenStream stream = new TokenStream();
+	stream.add(new Token("name", "name", Visibility.VISIBLE,
+		new TokenMetaData(new UnspecifiedSourceCodeLocation(), 1, 1)));
+	stream.add(new Token("name", "(", Visibility.VISIBLE,
+		new TokenMetaData(new UnspecifiedSourceCodeLocation(), 1, 1)));
+	ReplacementParameterResult parameters = ReplacementParameterResult
+		.extractParameterReplacements(stream, 0);
+	assertNull(parameters);
     }
 
 }

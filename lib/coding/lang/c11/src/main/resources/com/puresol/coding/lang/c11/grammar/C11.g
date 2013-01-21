@@ -229,6 +229,10 @@ HELPER
     LineTerminator:
         "(\\n|\\r\\n|\\r)" [ignore]
     ;
+
+    LineConcatention:
+        BACKSLASH LineTerminator [ignore]
+    ;
  
     /*
  	 * 6.4.9 Comments
@@ -265,6 +269,7 @@ HELPER
 	EQUALS: "=" ;
 	COMMA: "," ;
 	SHARP: "#" ;
+	BACKSLASH: "\\\\" ;
  
     /*
      * 6.4.1 Keywords

@@ -1,0 +1,8 @@
+#define DEBUG(_message_) \
+    fprintf(stderr, "%s\\n", _message_)
+DEBUG(
+// This is a comment
+"Error message!"
+/* This is another comment
+   with multiple lines! */
+);

@@ -137,11 +137,30 @@ public class C11PreprocessorTest {
     }
 
     @Test
-    public void testFunctionLikeDefine() throws IOException,
+    public void testSimpleFunctionLikeDefine() throws IOException,
 	    PreprocessorException {
 	File directory = new File(
 		"src/test/resources/com/puresol/coding/lang/c11/preprocessor/files");
-	File sourceFile = new File(directory, "FunctionLikeDefineTest.txt");
+	File sourceFile = new File(directory,
+		"SimpleFunctionLikeDefineTest.txt");
+	SourceCode sourceCode = new SourceFileLocation(sourceFile).load();
+	SourceCode preProcessedSourceCode = new C11Preprocessor()
+		.process(sourceCode);
+
+	SourceCode expected = new SourceCode();
+	expected.addSourceCodeLine(new SourceCodeLine(new SourceFileLocation(
+		sourceFile), 2,
+		"fprintf(stderr, \"%s\\\\n\", \"Error message!\");\n"));
+	assertEquals(expected, preProcessedSourceCode);
+    }
+
+    @Test
+    public void testFunctionLikeDefineTestWithMultipleLinesAndComment()
+	    throws IOException, PreprocessorException {
+	File directory = new File(
+		"src/test/resources/com/puresol/coding/lang/c11/preprocessor/files");
+	File sourceFile = new File(directory,
+		"FunctionLikeDefineTestWithMultipleLinesAndComment.txt");
 	SourceCode sourceCode = new SourceFileLocation(sourceFile).load();
 	SourceCode preProcessedSourceCode = new C11Preprocessor()
 		.process(sourceCode);

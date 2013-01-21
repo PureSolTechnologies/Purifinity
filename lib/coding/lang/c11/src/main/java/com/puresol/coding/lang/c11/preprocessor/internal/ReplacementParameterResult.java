@@ -70,12 +70,16 @@ public class ReplacementParameterResult {
 		}
 	    }
 	}
-	if (parenDepth > 1) {
+	if (parenDepth > 0) {
 	    /*
 	     * We are not finished and we do not have more to read...
 	     */
 	    return null;
 	}
+	/*
+	 * If we end up here, then we did not find any parenthesis and therefore
+	 * no parameters.
+	 */
 	return parameters;
     }
 
