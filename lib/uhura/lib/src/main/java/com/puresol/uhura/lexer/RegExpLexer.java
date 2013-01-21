@@ -117,7 +117,7 @@ public class RegExpLexer implements Lexer {
 			lineCounter++;
 		    }
 		}
-		TokenMetaData metaData = new TokenMetaData(source, line, pos,
+		TokenMetaData metaData = new TokenMetaData(source, line,
 			lineCounter);
 		nextToken = new Token(definition.getName(), tokenText,
 			definition.getVisibility(), metaData);

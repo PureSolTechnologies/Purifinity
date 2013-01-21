@@ -35,7 +35,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresol</groupId>
-			<artifactId>coding.lang.cpp</artifactId>
+			<artifactId>coding.lang.c11</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>

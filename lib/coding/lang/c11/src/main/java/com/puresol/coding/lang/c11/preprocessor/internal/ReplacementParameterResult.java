@@ -124,4 +124,13 @@ public class ReplacementParameterResult {
 	}
 	return new TokenStream();
     }
+
+    /**
+     * This method returns the number of currently defined parameters.
+     * 
+     * @return An int is returned containing the number of parameters.
+     */
+    public int getNumberOfParameters() {
+	return parameters.size();
+    }
 }

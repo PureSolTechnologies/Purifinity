@@ -35,13 +35,6 @@ public class TokenMetaData implements Serializable, Cloneable {
      */
     private final int line;
     /**
-     * This is the position of the token within the line. The index is the index
-     * of the first character of the token.
-     * 
-     * <b>Attention: This line position starts with 1!</b>
-     */
-    private final int pos;
-    /**
      * This contains the number of lines which the token overspans. This is
      * normally the number of line terminators plus 1.
      */
@@ -52,25 +45,17 @@ public class TokenMetaData implements Serializable, Cloneable {
      */
     private final int hashcode;
 
-    public TokenMetaData(CodeLocation source, int line, int pos, int lineNum) {
+    public TokenMetaData(CodeLocation source, int line, int lineNum) {
 	super();
 	this.source = source;
 	this.line = line;
-	this.pos = pos;
 	this.lineNum = lineNum;
-	hashcode = ObjectUtilities.calculateConstantHashCode(source, pos, line,
+	hashcode = ObjectUtilities.calculateConstantHashCode(source, line,
 		lineNum);
     }
 
     public CodeLocation getSource() {
 	return source;
-    }
-
-    /**
-     * @return the pos
-     */
-    public int getPos() {
-	return pos;
     }
 
     /**
@@ -89,7 +74,7 @@ public class TokenMetaData implements Serializable, Cloneable {
 
     @Override
     public String toString() {
-	String result = "pos: " + pos + ", ";
+	String result = "";
 	if (lineNum == 1) {
 	    result += "line: " + line;
 	} else {
@@ -118,8 +103,6 @@ public class TokenMetaData implements Serializable, Cloneable {
 	    return false;
 	if (lineNum != other.lineNum)
 	    return false;
-	if (pos != other.pos)
-	    return false;
 	if (source == null) {
 	    if (other.source != null)
 		return false;
@@ -130,6 +113,6 @@ public class TokenMetaData implements Serializable, Cloneable {
 
     @Override
     public TokenMetaData clone() {
-	return new TokenMetaData(source, line, pos, lineNum);
+	return new TokenMetaData(source, line, lineNum);
     }
 }

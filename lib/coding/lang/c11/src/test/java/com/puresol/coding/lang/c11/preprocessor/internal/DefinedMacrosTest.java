@@ -19,7 +19,7 @@ public class DefinedMacrosTest {
 	assertFalse(macros.isDefined("Test"));
 	TokenStream tokenStream = new TokenStream();
 	tokenStream.add(new Token("Identifier", "Hallo", Visibility.VISIBLE,
-		new TokenMetaData(new FixedCodeLocation("Hallo"), 1, 1, 1)));
+		new TokenMetaData(new FixedCodeLocation("Hallo"), 1, 1)));
 	macros.define("Test", tokenStream);
 	assertTrue(macros.isDefined("Test"));
 	assertTrue(macros.undefine("Test"));

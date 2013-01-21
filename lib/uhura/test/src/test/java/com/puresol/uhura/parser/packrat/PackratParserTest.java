@@ -170,10 +170,6 @@ public class PackratParserTest {
 	assertEquals("Tab", token1.getName());
 	assertEquals("Space", token2.getName());
 
-	assertEquals(0, token0.getMetaData().getPos());
-	assertEquals(1, token1.getMetaData().getPos());
-	assertEquals(2, token2.getMetaData().getPos());
-
 	assertEquals(1, token0.getMetaData().getLine());
 	assertEquals(1, token1.getMetaData().getLine());
 	assertEquals(1, token2.getMetaData().getLine());

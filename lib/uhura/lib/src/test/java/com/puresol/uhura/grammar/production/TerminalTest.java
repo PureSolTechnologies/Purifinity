@@ -43,15 +43,15 @@ public class TerminalTest {
 	Terminal terminal = new Terminal("TEST", null);
 	assertTrue(terminal.matches(new Token("TEST", "anything",
 		Visibility.VISIBLE, new TokenMetaData(
-			new UnspecifiedSourceCodeLocation(), 1, 1, 1))));
+			new UnspecifiedSourceCodeLocation(), 1, 1))));
 	terminal = new Terminal("TEST", "");
 	assertTrue(terminal.matches(new Token("TEST", "anything",
 		Visibility.VISIBLE, new TokenMetaData(
-			new UnspecifiedSourceCodeLocation(), 1, 1, 1))));
+			new UnspecifiedSourceCodeLocation(), 1, 1))));
 	terminal = new Terminal("TEST", "anything");
 	assertTrue(terminal.matches(new Token("TEST", "anything",
 		Visibility.VISIBLE, new TokenMetaData(
-			new UnspecifiedSourceCodeLocation(), 1, 1, 1))));
+			new UnspecifiedSourceCodeLocation(), 1, 1))));
     }
 
 }

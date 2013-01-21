@@ -50,7 +50,7 @@ public class Macro {
 
     private Token createDefaultReplacementToken() {
 	TokenMetaData metaData = new TokenMetaData(
-		new UnspecifiedSourceCodeLocation(), 1, 1, 1);
+		new UnspecifiedSourceCodeLocation(), 1, 1);
 	Token defaultReplacementToken = new Token("integer-constant", "1",
 		Visibility.VISIBLE, metaData);
 	return defaultReplacementToken;
