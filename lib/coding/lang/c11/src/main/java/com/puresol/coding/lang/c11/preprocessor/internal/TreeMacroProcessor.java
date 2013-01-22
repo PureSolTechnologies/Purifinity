@@ -78,7 +78,7 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
      * function-like macro replace which cannot be performed, yet due to its
      * spread of multiple lines.
      */
-    private final TokenStream functionMacroTokenStream = new TokenStream();
+    private final TokenStream macroReplacementTokenStream = new TokenStream();
 
     /**
      * This is the normal constructor to be used to process preprocessor source
@@ -216,23 +216,30 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 	    throws PreprocessorException {
 	TokenCollector visitor = new TokenCollector();
 	TreeWalker.walk(visitor, tree);
-	functionMacroTokenStream.addAll(visitor.getTokenStream());
+	macroReplacementTokenStream.addAll(visitor.getTokenStream());
 	/*
 	 * We are in normal mode...
 	 */
-	if (replaceAllMacros(functionMacroTokenStream)) {
-	    TokenMetaData metaData = functionMacroTokenStream.get(0)
+	if (replaceAllMacros(macroReplacementTokenStream)) {
+	    TokenMetaData metaData = macroReplacementTokenStream.get(0)
 		    .getMetaData();
 	    StringBuffer buffer = new StringBuffer();
-	    for (Token token : functionMacroTokenStream) {
+	    for (Token token : macroReplacementTokenStream) {
 		buffer.append(token.getText());
 	    }
-	    // XXX We need to create multiple source lines here depending on the
-	    // line breaks found!
-	    SourceCodeLine sourceCodeLine = new SourceCodeLine(
-		    metaData.getSource(), metaData.getLine(), buffer.toString());
-	    sourceCode.addSourceCodeLine(sourceCodeLine);
-	    functionMacroTokenStream.clear();
+	    int lineNum = 0;
+	    int pos = 0;
+	    while (pos < buffer.length()) {
+		int index = buffer.indexOf("\n", pos);
+		String line = buffer.substring(pos, index + 1);
+		SourceCodeLine sourceCodeLine = new SourceCodeLine(
+			metaData.getSource(), metaData.getLine() + lineNum,
+			line);
+		sourceCode.addSourceCodeLine(sourceCodeLine);
+		lineNum++;
+		pos += line.length();
+	    }
+	    macroReplacementTokenStream.clear();
 	}
 	return WalkingAction.LEAVE_BRANCH;
     }
@@ -477,7 +484,6 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 	TokenStream replacement = new TokenStream();
 	// Add all tokens before macro
 	for (int i = 0; i < tokenId; i++) {
-
 	    replacement.add(tokenStream.get(i));
 	}
 	// Add replacement instead of macro name
