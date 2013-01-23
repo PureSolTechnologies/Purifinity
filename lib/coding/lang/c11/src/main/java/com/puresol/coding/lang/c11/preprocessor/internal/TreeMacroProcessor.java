@@ -14,6 +14,7 @@ import com.puresol.trees.TreeException;
 import com.puresol.trees.TreeVisitor;
 import com.puresol.trees.TreeWalker;
 import com.puresol.trees.WalkingAction;
+import com.puresol.uhura.grammar.token.Visibility;
 import com.puresol.uhura.lexer.Token;
 import com.puresol.uhura.lexer.TokenMetaData;
 import com.puresol.uhura.lexer.TokenStream;
@@ -296,8 +297,7 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
     private WalkingAction defineObjectLikeMacro(ParserTree tree)
 	    throws TreeException {
 	String macroName = tree.getChild(IDENTIFIER_TOKEN_NAME).getText();
-	ParserTree replacementList = tree.getChild("replacement-list");
-	TokenStream replacement = createReplacement(replacementList);
+	TokenStream replacement = createReplacement(tree);
 	definedMacros.define(macroName, replacement);
 	return WalkingAction.LEAVE_BRANCH;
     }
@@ -327,16 +327,53 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 	if (optionalParameters) {
 	    parameters.remove("...");
 	}
-	ParserTree replacementList = tree.getChild("replacement-list");
-	TokenStream replacement = createReplacement(replacementList);
+	TokenStream replacement = createReplacement(tree);
 	Macro macro = new Macro(macroName, replacement, parameters,
 		optionalParameters);
 	definedMacros.define(macro);
 	return WalkingAction.LEAVE_BRANCH;
     }
 
-    private TokenStream createReplacement(ParserTree replacementList) {
+    private TokenStream createReplacement(ParserTree defineStatement)
+	    throws TreeException {
 	final TokenStream replacement = new TokenStream();
+	/*
+	 * Check for relevant white spaces...
+	 */
+	List<ParserTree> defineChildren = defineStatement.getChildren();
+	int startIndex;
+	if (defineStatement.hasChild("RPAREN")) {
+	    ParserTree rparenToken = defineStatement.getChild("RPAREN");
+	    startIndex = defineChildren.indexOf(rparenToken) + 1;
+	} else {
+	    ParserTree identifierToken = defineStatement
+		    .getChild(IDENTIFIER_TOKEN_NAME);
+	    startIndex = defineChildren.indexOf(identifierToken) + 1;
+	}
+	boolean skipedWhiteSpace = false;
+	for (int i = startIndex; i < defineChildren.size(); i++) {
+	    ParserTree child = defineChildren.get(i);
+	    if (child.getName().equals("replacement-list")) {
+		break;
+	    }
+	    Token token = child.getToken();
+	    if (token.getName().equals("LineTerminator")) {
+		break;
+	    }
+	    if (token.getName().equals("WhiteSpace") && (!skipedWhiteSpace)) {
+		skipedWhiteSpace = true;
+		continue;
+	    }
+	    if (token.getName().equals("LineConcatenation")) {
+		replacement.add(new Token("LineTerminator", "\n",
+			Visibility.HIDDEN, token.getMetaData()));
+	    } else {
+		replacement.add(token);
+	    }
+	}
+	/*
+	 * Get replacement list.
+	 */
 	TreeVisitor<ParserTree> visitor = new TreeVisitor<ParserTree>() {
 	    @Override
 	    public WalkingAction visit(ParserTree tree) {
@@ -350,6 +387,8 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 		return WalkingAction.PROCEED;
 	    }
 	};
+	ParserTree replacementList = defineStatement
+		.getChild("replacement-list");
 	TreeWalker.walk(visitor, replacementList);
 	return replacement;
     }

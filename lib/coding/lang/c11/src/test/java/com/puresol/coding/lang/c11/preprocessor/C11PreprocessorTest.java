@@ -169,7 +169,7 @@ public class C11PreprocessorTest {
 	expected.addSourceCodeLine(new SourceCodeLine(new SourceFileLocation(
 		sourceFile), 2, "\n"));
 	expected.addSourceCodeLine(new SourceCodeLine(new SourceFileLocation(
-		sourceFile), 2, "    fprintf(stderr, \"%s\n\",\n"));
+		sourceFile), 2, "    fprintf(stderr, \"%s\\\\n\", \n"));
 	expected.addSourceCodeLine(new SourceCodeLine(new SourceFileLocation(
 		sourceFile), 2, "// This is a comment\n"));
 	expected.addSourceCodeLine(new SourceCodeLine(new SourceFileLocation(

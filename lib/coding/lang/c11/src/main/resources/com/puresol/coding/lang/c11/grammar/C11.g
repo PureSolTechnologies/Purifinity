@@ -230,7 +230,7 @@ HELPER
         "(\\n|\\r\\n|\\r)" [ignore]
     ;
 
-    LineConcatention:
+    LineConcatenation:
         BACKSLASH LineTerminator [ignore]
     ;
  
