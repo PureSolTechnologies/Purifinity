@@ -183,4 +183,25 @@ public class C11PreprocessorTest {
 	assertEquals(expected, preProcessedSourceCode);
     }
 
+    @Test
+    public void testSimpleIf() throws IOException, PreprocessorException {
+	File directory = new File(
+		"src/test/resources/com/puresol/coding/lang/c11/preprocessor/files");
+	File sourceFile = new File(directory, "SimpleIfTest.txt");
+	SourceCode sourceCode = new SourceFileLocation(sourceFile).load();
+	SourceCode preProcessedSourceCode = new C11Preprocessor()
+		.process(sourceCode);
+
+	SourceCode expected = new SourceCode();
+	expected.addSourceCodeLine(new SourceCodeLine(new SourceFileLocation(
+		sourceFile), 4, "Else shown...\n"));
+	expected.addSourceCodeLine(new SourceCodeLine(new SourceFileLocation(
+		sourceFile), 7, "Shown...\n"));
+	expected.addSourceCodeLine(new SourceCodeLine(new SourceFileLocation(
+		sourceFile), 13, "Shown...\n"));
+	expected.addSourceCodeLine(new SourceCodeLine(new SourceFileLocation(
+		sourceFile), 20, "Else shown...\n"));
+	assertEquals(expected, preProcessedSourceCode);
+    }
+
 }

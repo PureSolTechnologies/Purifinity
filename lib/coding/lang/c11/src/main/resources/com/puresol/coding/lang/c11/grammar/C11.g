@@ -452,7 +452,7 @@ HELPER
     |	EQUALS
     |	COMMA
     |	SHARP
-   ;
+    ;
     
     /*
      * 6.4.1 Keywords
@@ -994,18 +994,18 @@ HELPER
     group-part:
         if-section
     |   control-line
+//    |   non-directive-line // added for better separation of group parts
     |   text-line
-    |   non-directive-line // added for better separation of group parts
     ;
     
     if-section:
-        if-group elif-groups? else-group? endif-line
+        if-group elif-groups ? else-group ? endif-line
     ;
     
     if-group:
-        PP_IF constant-expression new-line group?
-    |   PP_IFDEF identifier new-line group?
-    |   PP_IFNDEF identifier new-line group?
+        PP_IF constant-expression new-line group ?
+    |   PP_IFDEF identifier new-line group ?
+    |   PP_IFNDEF identifier new-line group ?
     ;
     
     elif-groups:

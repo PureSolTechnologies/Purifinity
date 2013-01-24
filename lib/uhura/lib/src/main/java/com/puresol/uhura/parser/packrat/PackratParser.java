@@ -211,8 +211,8 @@ public class PackratParser implements Serializable {
     }
 
     private void printMessage(String text, int position, int line) {
-	// indentLine();
-	// System.out.println(position + " " + id + " " + line + " : " + text);
+	indentLine();
+	System.out.println(position + " " + line + " : " + text);
     }
 
     /**

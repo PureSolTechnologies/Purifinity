@@ -1,29 +1,25 @@
 package com.puresol.coding.lang.c11.preprocessor;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
-import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.puresol.coding.lang.c11.grammar.C11Grammar;
+import com.puresol.trees.SearchVisitor;
+import com.puresol.trees.TreeSearchCriterion;
+import com.puresol.trees.TreeWalker;
 import com.puresol.uhura.grammar.Grammar;
-import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.parser.ParserTree;
 import com.puresol.uhura.parser.packrat.PackratParser;
 import com.puresol.uhura.source.SourceCode;
 
 public class C11PreprocessorTokenizerGrammarTest {
 
-    private static C11Preprocessor preprocessor = null;
-
-    @BeforeClass
-    public static void initialize() throws IOException, GrammarException {
-	preprocessor = new C11Preprocessor();
-    }
-
-    private void checkParser(String... lines) throws Exception {
+    private ParserTree checkParser(String... lines) throws Exception {
 	SourceCode sourceCode = SourceCode.fromStringArray(lines);
 
 	Field preprocessorGrammar = C11Preprocessor.class
@@ -35,6 +31,39 @@ public class C11PreprocessorTokenizerGrammarTest {
 	ParserTree ast = parser.parse(sourceCode);
 
 	assertNotNull(ast);
+	return ast;
+    }
+
+    private void checkRule(String productionName, String... lines)
+	    throws Exception {
+	Grammar production = C11Grammar.getGrammar()
+		.createWithNewStartProduction(productionName);
+	Method setLineTerminatorToVisible = C11Preprocessor.class
+		.getDeclaredMethod("setLineTerminatorToVisible", Grammar.class);
+	setLineTerminatorToVisible.setAccessible(true);
+	setLineTerminatorToVisible.invoke(null, production);
+	setLineTerminatorToVisible.setAccessible(false);
+	System.out.println(production.toString());
+	PackratParser parser = new PackratParser(production);
+	ParserTree ast = parser.parse(SourceCode.fromStringArray(lines));
+	assertContainsNode(productionName, ast);
+    }
+
+    private void assertContainsNode(final String nodeName, ParserTree tree) {
+	TreeSearchCriterion<ParserTree> criterion = new TreeSearchCriterion<ParserTree>() {
+
+	    @Override
+	    public boolean accepted(ParserTree node) {
+		if (node.getName().equals(nodeName)) {
+		    return true;
+		}
+		return false;
+	    }
+	};
+	SearchVisitor<ParserTree> searchVisitor = new SearchVisitor<ParserTree>(
+		criterion);
+	TreeWalker.walk(searchVisitor, tree);
+	assertEquals(1, searchVisitor.getSearchResult().size());
     }
 
     @Test
@@ -140,4 +169,68 @@ public class C11PreprocessorTokenizerGrammarTest {
 	    throws Exception {
 	checkParser("#define NAME(x, y, z, ...) fprintf(\"Hello x, y, z\"\n");
     }
+
+    @Test
+    public void testIfGroup() throws Exception {
+	checkRule("if-group", "#ifdef TEST\n");
+	checkRule("if-group", "#ifndef TEST\n");
+	checkRule("if-group", "#if (a == 3)\n");
+	checkRule("if-group", "#ifdef TEST\n", "line\n");
+	checkRule("if-group", "#ifndef TEST\n", "line\n");
+	checkRule("if-group", "#if (a == 3)\n", "line\n");
+    }
+
+    @Test
+    public void testElIfGroup() throws Exception {
+	checkRule("elif-group", "#elif (a==3)\n");
+	checkRule("elif-group", "#elif (a==3)\n", "line\n");
+    }
+
+    @Test
+    public void testElseGroup() throws Exception {
+	checkRule("else-group", "#else\n");
+	checkRule("else-group", "#else\n", "line\n");
+    }
+
+    @Test
+    public void testEndIfLine() throws Exception {
+	checkRule("endif-line", "#endif\n");
+    }
+
+    @Test
+    public void testIfSection() throws Exception {
+	checkRule("if-section", "#ifdef TEST\n", "#endif\n");
+    }
+
+    @Test
+    public void testSimpleEmptyIfDef() throws Exception {
+	ParserTree tree = checkParser("#ifdef TEST\n", "#endif\n");
+	assertContainsNode("if-section", tree);
+    }
+
+    @Test
+    public void testSimpleIfDef() throws Exception {
+	checkParser("#ifdef TEST\n", "Hallo\n", "#endif\n");
+    }
+
+    @Test
+    public void testSimpleIfDefElse() throws Exception {
+	checkParser("#ifdef TEST\n", "Hallo\n", "#else\n", "#endif\n");
+    }
+
+    @Test
+    public void testSimpleEmptyIfNDef() throws Exception {
+	checkParser("#ifndef TEST\n", "#endif\n");
+    }
+
+    @Test
+    public void testSimpleIfNDef() throws Exception {
+	checkParser("#ifndef TEST\n", "Hallo\n", "#endif\n");
+    }
+
+    @Test
+    public void testSimpleIfNDefElse() throws Exception {
+	checkParser("#ifndef TEST\n", "Hallo\n", "#else\n", "#endif\n");
+    }
+
 }
