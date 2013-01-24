@@ -167,19 +167,19 @@ public class C11PreprocessorTest {
 
 	SourceCode expected = new SourceCode();
 	expected.addSourceCodeLine(new SourceCodeLine(new SourceFileLocation(
-		sourceFile), 2, "\n"));
+		sourceFile), 3, "\n"));
 	expected.addSourceCodeLine(new SourceCodeLine(new SourceFileLocation(
-		sourceFile), 2, "    fprintf(stderr, \"%s\\\\n\", \n"));
+		sourceFile), 4, "    fprintf(stderr, \"%s\\\\n\", \n"));
 	expected.addSourceCodeLine(new SourceCodeLine(new SourceFileLocation(
-		sourceFile), 2, "// This is a comment\n"));
+		sourceFile), 5, "// This is a comment\n"));
 	expected.addSourceCodeLine(new SourceCodeLine(new SourceFileLocation(
-		sourceFile), 2, "\"Error message!\"\n"));
+		sourceFile), 6, "\"Error message!\"\n"));
 	expected.addSourceCodeLine(new SourceCodeLine(new SourceFileLocation(
-		sourceFile), 2, "/* This is another comment\n"));
+		sourceFile), 7, "/* This is another comment\n"));
 	expected.addSourceCodeLine(new SourceCodeLine(new SourceFileLocation(
-		sourceFile), 2, "   with multiple lines! */\n"));
+		sourceFile), 8, "   with multiple lines! */\n"));
 	expected.addSourceCodeLine(new SourceCodeLine(new SourceFileLocation(
-		sourceFile), 2, ");\n"));
+		sourceFile), 9, ");\n"));
 	assertEquals(expected, preProcessedSourceCode);
     }
 

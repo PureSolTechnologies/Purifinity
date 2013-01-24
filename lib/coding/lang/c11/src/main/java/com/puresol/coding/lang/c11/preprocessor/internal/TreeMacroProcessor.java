@@ -217,7 +217,8 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 	    throws PreprocessorException {
 	TokenCollector visitor = new TokenCollector();
 	TreeWalker.walk(visitor, tree);
-	macroReplacementTokenStream.addAll(visitor.getTokenStream());
+	TokenStream tokenStream = visitor.getTokenStream();
+	macroReplacementTokenStream.addAll(tokenStream);
 	/*
 	 * We are in normal mode...
 	 */
