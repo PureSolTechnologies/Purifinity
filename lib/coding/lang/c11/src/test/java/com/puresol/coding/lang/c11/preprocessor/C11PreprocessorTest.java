@@ -206,4 +206,25 @@ public class C11PreprocessorTest {
 	assertEquals(expected, preProcessedSourceCode);
     }
 
+    @Test
+    public void testComplexIf() throws IOException, PreprocessorException {
+	File directory = new File(
+		"src/test/resources/com/puresol/coding/lang/c11/preprocessor/files");
+	File sourceFile = new File(directory, "ComplexIfTest.txt");
+	SourceCode sourceCode = new SourceFileLocation(sourceFile).load();
+	SourceCode preProcessedSourceCode = new C11Preprocessor()
+		.process(sourceCode);
+
+	SourceCode expected = new SourceCode();
+	expected.addSourceCodeLine(new SourceCodeLine(new SourceFileLocation(
+		sourceFile), 5, "Calculation valid.\n"));
+	expected.addSourceCodeLine(new SourceCodeLine(new SourceFileLocation(
+		sourceFile), 8, "Calculation valid.\n"));
+	expected.addSourceCodeLine(new SourceCodeLine(new SourceFileLocation(
+		sourceFile), 12, "Calculation invalid.\n"));
+	expected.addSourceCodeLine(new SourceCodeLine(new SourceFileLocation(
+		sourceFile), 15, "Calculation valid.\n"));
+	assertEquals(expected, preProcessedSourceCode);
+    }
+
 }

@@ -1,10 +1,10 @@
-package com.puresol.coding.lang.c11.preprocessor.internal;
+package com.puresol.coding.lang.c11.preprocessor;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.puresol.coding.lang.c11.preprocessor.C11Preprocessor;
+import com.puresol.coding.lang.c11.preprocessor.internal.Macro;
 import com.puresol.uhura.lexer.TokenStream;
 
 /**

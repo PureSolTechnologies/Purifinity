@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import com.puresol.coding.lang.c11.preprocessor.internal.C11PreprocessorParser;
-import com.puresol.coding.lang.c11.preprocessor.internal.DefinedMacros;
 import com.puresol.coding.lang.c11.preprocessor.internal.TreeMacroProcessor;
 import com.puresol.io.LineTerminator;
 import com.puresol.trees.TreeException;

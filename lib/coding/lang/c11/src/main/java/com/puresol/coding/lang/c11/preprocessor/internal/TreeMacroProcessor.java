@@ -8,7 +8,10 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.puresol.coding.lang.c11.C11ExpressionEvaluator;
+import com.puresol.coding.lang.c11.EvaluationException;
 import com.puresol.coding.lang.c11.preprocessor.C11Preprocessor;
+import com.puresol.coding.lang.c11.preprocessor.DefinedMacros;
 import com.puresol.coding.lang.c11.preprocessor.IncludeDirectories;
 import com.puresol.trees.TreeException;
 import com.puresol.trees.TreeVisitor;
@@ -292,7 +295,7 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
     }
 
     private boolean evaluateValidity(ParserTree evaluation)
-	    throws TreeException {
+	    throws TreeException, PreprocessorException {
 	if (evaluation.hasChild("PP_IFDEF")) {
 	    ParserTree identifier = evaluation.getChild("identifier");
 	    if (definedMacros.isDefined(identifier.getText())) {
@@ -303,12 +306,20 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 	    if (!definedMacros.isDefined(identifier.getText())) {
 		return true;
 	    }
-	} else if (evaluation.hasChild("PP_ELIF")) {
-	    // #elif
-	    throw new RuntimeException("Not implemented, yet!");
-	} else if (evaluation.hasChild("PP_IF")) {
-	    // #if
-	    throw new RuntimeException("Not implemented, yet!");
+	} else if (evaluation.hasChild("PP_IF")
+		|| evaluation.hasChild("PP_ELIF")) {
+	    // #if and #elif
+	    ParserTree expression = evaluation.getChild("constant-expression");
+	    C11ExpressionEvaluator evaluator = new C11ExpressionEvaluator(
+		    expression);
+	    try {
+		evaluator.evaluate();
+		return evaluator.getResult().getBooleanValue();
+	    } catch (EvaluationException e) {
+		throw new PreprocessorException(
+			"Could not evaluate expression '"
+				+ expression.toString() + "'.", e);
+	    }
 	} else {
 	    throw new RuntimeException("Illegal evaluation production found!");
 	}
