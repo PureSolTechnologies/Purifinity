@@ -56,8 +56,6 @@ public class RegExpLexer implements Lexer {
 
     private TokenStream scan() throws LexerException {
 	tokenStream = new TokenStream();
-	int pos = 0;
-	int line = 1;
 	Iterator<SourceCodeLine> sourceIterator = sourceCode.getLines()
 		.iterator();
 	while (sourceIterator.hasNext()) {
@@ -65,7 +63,7 @@ public class RegExpLexer implements Lexer {
 	    StringBuffer text = new StringBuffer(sourceCodeLine.getLine());
 	    while (text.length() > 0) {
 		Token token = findNextToken(text, sourceCodeLine.getSource(),
-			pos, line);
+			sourceCodeLine.getLineNumber());
 		if ((token == null) || (token.getText().length() == 0)) {
 		    String exceptionText;
 		    if (text.length() <= 12) {
@@ -80,8 +78,11 @@ public class RegExpLexer implements Lexer {
 			continue;
 		    } else {
 			throw new LexerException("No token found for '"
-				+ exceptionText + "' in line " + line
-				+ " at position " + pos + ".");
+				+ exceptionText
+				+ "' in line "
+				+ sourceCodeLine.getSource()
+					.getHumanReadableLocationString() + ":"
+				+ sourceCodeLine.getLineNumber() + ".");
 		    }
 		}
 		if (logger.isTraceEnabled()) {
@@ -91,16 +92,13 @@ public class RegExpLexer implements Lexer {
 		if (token.getVisibility() != Visibility.HIDDEN) {
 		    tokenStream.add(token);
 		}
-		pos += token.getText().length();
-		line += token.getMetaData().getLineNum() - 1;
 		text = text.delete(0, token.getText().length());
 	    }
 	}
 	return tokenStream;
     }
 
-    private Token findNextToken(StringBuffer text, CodeLocation source,
-	    int pos, int line) {
+    private Token findNextToken(StringBuffer text, CodeLocation source, int line) {
 	Token nextToken = null;
 	for (TokenDefinition definition : grammar.getTokenDefinitions()
 		.getDefinitions()) {

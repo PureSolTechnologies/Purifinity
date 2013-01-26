@@ -14,6 +14,11 @@ import com.puresol.uhura.grammar.GrammarReader;
 import com.puresol.uhura.grammar.token.TokenDefinition;
 import com.puresol.uhura.grammar.token.TokenDefinitionSet;
 import com.puresol.uhura.grammar.token.Visibility;
+import com.puresol.uhura.lexer.Lexer;
+import com.puresol.uhura.lexer.LexerException;
+import com.puresol.uhura.lexer.RegExpLexer;
+import com.puresol.uhura.lexer.Token;
+import com.puresol.uhura.lexer.TokenStream;
 import com.puresol.uhura.parser.ParserException;
 import com.puresol.uhura.parser.ParserTree;
 import com.puresol.uhura.parser.packrat.PackratParser;
@@ -59,7 +64,12 @@ public class C11PreprocessorParser {
     }
 
     private final Grammar grammar = readGrammar();
-    private final PackratParser textLineParser;
+    /**
+     * This field actually contains the group production, but it is only used
+     * within groups of pure text-lines. This is done to catch also comment
+     * blocks.
+     */
+    private final PackratParser textGroupParser;
     private final PackratParser controlLineParser;
     private final PackratParser nonDirectiveLineParser;
 
@@ -71,8 +81,8 @@ public class C11PreprocessorParser {
     public C11PreprocessorParser() {
 	super();
 	try {
-	    textLineParser = new PackratParser(
-		    grammar.createWithNewStartProduction("text-line"));
+	    textGroupParser = new PackratParser(
+		    grammar.createWithNewStartProduction("group"));
 	    controlLineParser = new PackratParser(
 		    grammar.createWithNewStartProduction("control-line"));
 	    nonDirectiveLineParser = new PackratParser(
@@ -139,7 +149,7 @@ public class C11PreprocessorParser {
 		    count = parseNonDirectiveLine(tree, sourceCode, lineNum);
 		}
 	    } else {
-		count = parseLine(tree, sourceCode, lineNum);
+		count = parseTextLine(tree, sourceCode, lineNum);
 	    }
 	    if (count == 0) {
 		break;
@@ -155,7 +165,7 @@ public class C11PreprocessorParser {
 	ParserTree ifSection = new ParserTree("if-section");
 	tree.addChild(ifSection);
 	int lineCount = 0;
-	parse(ifGroup, ifSection, sourceCode, lineNum);
+	parseNonTextLine(ifGroup, ifSection, sourceCode, lineNum);
 	ParserTree ifGroupTree = ifSection.getChild("if-group");
 	lineCount++;
 	// parse group
@@ -191,36 +201,73 @@ public class C11PreprocessorParser {
 		lineCount += lines;
 	    }
 	}
-	parse(endifLineParser, ifGroupTree, sourceCode, lineNum + lineCount);
+	parseNonTextLine(endifLineParser, ifGroupTree, sourceCode, lineNum
+		+ lineCount);
 	lineCount++;
 	return lineCount;
     }
 
     private int parseContolLine(ParserTree tree, SourceCode sourceCode,
 	    int lineNum) throws TreeException, ParserException {
-	return parse(controlLineParser, tree, sourceCode, lineNum);
+	return parseNonTextLine(controlLineParser, tree, sourceCode, lineNum);
     }
 
     private int parseNonDirectiveLine(ParserTree tree, SourceCode sourceCode,
 	    int lineNum) throws TreeException, ParserException {
-	return parse(nonDirectiveLineParser, tree, sourceCode, lineNum);
+	return parseNonTextLine(nonDirectiveLineParser, tree, sourceCode,
+		lineNum);
     }
 
-    private int parseLine(ParserTree tree, SourceCode sourceCode, int lineNum)
-	    throws TreeException, ParserException {
-	return parse(textLineParser, tree, sourceCode, lineNum);
+    private int parseTextLine(ParserTree tree, SourceCode sourceCode,
+	    int lineNum) throws TreeException, ParserException {
+
+	List<SourceCodeLine> lines = sourceCode.getLines();
+	if (lineNum >= lines.size()) {
+	    throw new IllegalArgumentException("Line number '" + lineNum
+		    + "' is not present.");
+	}
+	SourceCode codeToParse = new SourceCode();
+	SourceCodeLine line;
+	int lineCount = 0;
+	SourceCodeLine nextLine;
+	do {
+	    line = lines.get(lineNum + lineCount);
+	    codeToParse.addSourceCodeLine(line);
+	    lineCount++;
+	    if (lineNum + lineCount >= lines.size()) {
+		break;
+	    }
+	    nextLine = lines.get(lineNum + lineCount);
+	} while (line.getLine().endsWith("\\\n")
+		|| (!DIRECTIVE_LINE_START.matcher(nextLine.getLine()).find()));
+	/*
+	 * Next we check for an empty line which might not get parsed by the
+	 * grammar.
+	 */
+	if (!hasVisibleTokens(codeToParse)) {
+	    ParserTree textLine = new ParserTree("text-line");
+	    TokenStream tokenStream = tokenize(codeToParse);
+	    for (Token token : tokenStream) {
+		textLine.addChild(new ParserTree(token));
+	    }
+	    tree.addChild(textLine);
+	    return lineCount;
+	}
+	ParserTree parserTree = textGroupParser.parse(codeToParse);
+	tree.addChildren(parserTree.getChildren());
+	return lineCount;
     }
 
     private int parseOptional(PackratParser parser, ParserTree tree,
 	    SourceCode sourceCode, int lineNum) throws TreeException {
 	try {
-	    return parse(parser, tree, sourceCode, lineNum);
+	    return parseNonTextLine(parser, tree, sourceCode, lineNum);
 	} catch (ParserException e) {
 	    return 0;
 	}
     }
 
-    private int parse(PackratParser parser, ParserTree tree,
+    private int parseNonTextLine(PackratParser parser, ParserTree tree,
 	    SourceCode sourceCode, int lineNum) throws TreeException,
 	    ParserException {
 	List<SourceCodeLine> lines = sourceCode.getLines();
@@ -228,11 +275,35 @@ public class C11PreprocessorParser {
 	    throw new IllegalArgumentException("Line number '" + lineNum
 		    + "' is not present.");
 	}
-	SourceCodeLine line = lines.get(lineNum);
-	SourceCode textLine = new SourceCode();
-	textLine.addSourceCodeLine(line);
-	ParserTree parserTree = parser.parse(textLine);
+	SourceCode codeToParse = new SourceCode();
+	SourceCodeLine line;
+	int lineCount = 0;
+	do {
+	    line = lines.get(lineNum + lineCount);
+	    codeToParse.addSourceCodeLine(line);
+	    lineCount++;
+	} while (line.getLine().endsWith("\\\n"));
+	ParserTree parserTree = parser.parse(codeToParse);
 	tree.addChildren(parserTree.getChildren());
-	return 1;
+	return lineCount;
+    }
+
+    private boolean hasVisibleTokens(SourceCode codeToParse)
+	    throws ParserException {
+	for (Token token : tokenize(codeToParse)) {
+	    if (token.getVisibility() == Visibility.VISIBLE) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
+    private TokenStream tokenize(SourceCode codeToParse) throws ParserException {
+	try {
+	    Lexer lexer = new RegExpLexer(C11Grammar.getGrammar());
+	    return lexer.lex(codeToParse);
+	} catch (LexerException e) {
+	    throw new ParserException("Could not lex the source code.", e);
+	}
     }
 }
