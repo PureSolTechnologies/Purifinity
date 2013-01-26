@@ -172,18 +172,21 @@ public class C11PreprocessorParser {
 	ParserTree group = new ParserTree("group");
 	int lines = parse(group, sourceCode, lineNum + 1);
 	if (lines > 0) {
-	    ifGroupTree.addChildren(group.getChildren());
+	    ifGroupTree.addChild(group);
 	    lineCount += lines;
 	}
 	do {
 	    if (parseOptional(elifGroupParser, ifSection, sourceCode, lineNum
 		    + lineCount) > 0) {
+		List<ParserTree> elifGroups = ifSection
+			.getChildren("elif-group");
+		ParserTree elifGroup = elifGroups.get(elifGroups.size() - 1);
 		lineCount++;
 		// parse group
 		group = new ParserTree("group");
 		lines = parse(group, sourceCode, lineNum + 1);
 		if (lines > 0) {
-		    ifGroupTree.addChild(group);
+		    elifGroup.addChild(group);
 		    lineCount += lines;
 		}
 	    } else {
@@ -192,12 +195,13 @@ public class C11PreprocessorParser {
 	} while (true);
 	if (parseOptional(elseGroupParser, ifSection, sourceCode, lineNum
 		+ lineCount) > 0) {
+	    ParserTree elseGroup = ifSection.getChild("else-group");
 	    lineCount++;
 	    // parse group
 	    group = new ParserTree("group");
 	    lines = parse(group, sourceCode, lineNum + lineCount);
 	    if (lines > 0) {
-		ifGroupTree.addChild(group);
+		elseGroup.addChild(group);
 		lineCount += lines;
 	    }
 	}

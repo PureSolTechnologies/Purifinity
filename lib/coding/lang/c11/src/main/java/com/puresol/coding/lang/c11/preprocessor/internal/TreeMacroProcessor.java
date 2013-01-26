@@ -256,9 +256,56 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 	return true;
     }
 
-    private WalkingAction processIfSection(ParserTree tree) {
-	// TODO Implement recursive processing of if-sections...
+    private WalkingAction processIfSection(ParserTree ifSection)
+	    throws TreeException, PreprocessorException {
+	ParserTree ifGroup = ifSection.getChild("if-group");
+	boolean valid = evaluateValidity(ifGroup);
+	if (valid) {
+	    TreeMacroProcessor processor = new TreeMacroProcessor(
+		    ifGroup.getChild("group"), includeDirectories,
+		    definedMacros, nestingDepth);
+	    processor.process();
+	    sourceCode.addSourceCode(processor.sourceCode);
+	    return WalkingAction.LEAVE_BRANCH;
+	}
+	List<ParserTree> elifGroups = ifSection.getChildren("elif-group");
+	for (ParserTree elifGroup : elifGroups) {
+	    // TODO Check and process and leave with:
+	    // return WalkingAction.LEAVE_BRANCH;
+	}
+	ParserTree elseGroup = ifSection.getChild("else-group");
+	if (elseGroup != null) {
+	    TreeMacroProcessor processor = new TreeMacroProcessor(
+		    elseGroup.getChild("group"), includeDirectories,
+		    definedMacros, nestingDepth);
+	    processor.process();
+	    sourceCode.addSourceCode(processor.sourceCode);
+	}
 	return WalkingAction.LEAVE_BRANCH;
+    }
+
+    private boolean evaluateValidity(ParserTree evaluation)
+	    throws TreeException {
+	if (evaluation.hasChild("PP_IFDEF")) {
+	    ParserTree identifier = evaluation.getChild("identifier");
+	    if (definedMacros.isDefined(identifier.getText())) {
+		return true;
+	    }
+	} else if (evaluation.hasChild("PP_IFNDEF")) {
+	    ParserTree identifier = evaluation.getChild("identifier");
+	    if (!definedMacros.isDefined(identifier.getText())) {
+		return true;
+	    }
+	} else if (evaluation.hasChild("PP_ELIF")) {
+	    // #elif
+	    throw new RuntimeException("Not implemented, yet!");
+	} else if (evaluation.hasChild("PP_IF")) {
+	    // #if
+	    throw new RuntimeException("Not implemented, yet!");
+	} else {
+	    throw new RuntimeException("Illegal evaluation production found!");
+	}
+	return false;
     }
 
     private WalkingAction define(ParserTree tree) throws TreeException {
@@ -321,7 +368,6 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 		}
 		return null;
 	    }
-
 	};
 	TreeWalker.walk(visitor, parameterList);
 	boolean optionalParameters = parameters.contains("...");
