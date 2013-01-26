@@ -29,6 +29,7 @@ import com.puresol.uhura.lexer.Token;
 import com.puresol.uhura.parser.ParserTree;
 import com.puresol.uhura.source.FixedCodeLocation;
 import com.puresol.uhura.source.SourceCode;
+import com.puresol.uhura.source.SourceCodeLine;
 import com.puresol.utils.IntrospectionUtilities;
 
 public class PackratParserTest {
@@ -150,9 +151,15 @@ public class PackratParserTest {
 		Visibility.IGNORED));
 	PackratParser parser = new PackratParser(grammar);
 
-	IntrospectionUtilities.setField(parser, "text", " \t ");
+	final String sampleText = " \t ";
+	IntrospectionUtilities.setField(parser, "text", sampleText);
+	SourceCodeLine line = new SourceCodeLine(new FixedCodeLocation(
+		sampleText), 1, sampleText);
+	SourceCodeLine references[] = { line, line, line };
+	IntrospectionUtilities.setField(parser, "sourceLineReferences",
+		references);
 	IntrospectionUtilities.setField(parser, "sourceCode",
-		new FixedCodeLocation(" \t ").load());
+		new FixedCodeLocation(sampleText).load());
 	/*
 	 * process some white spaces...
 	 */

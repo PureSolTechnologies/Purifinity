@@ -1,10 +1,7 @@
-package com.puresol.coding.lang.c11.preprocessor;
+package com.puresol.coding.lang.c11.preprocessor.internal;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 
 import org.junit.Test;
 
@@ -17,17 +14,12 @@ import com.puresol.uhura.parser.ParserTree;
 import com.puresol.uhura.parser.packrat.PackratParser;
 import com.puresol.uhura.source.SourceCode;
 
-public class C11PreprocessorTokenizerGrammarTest {
+public class C11PreprocessorParserTest {
 
     private ParserTree checkParser(String... lines) throws Exception {
 	SourceCode sourceCode = SourceCode.fromStringArray(lines);
 
-	Field preprocessorGrammar = C11Preprocessor.class
-		.getDeclaredField("preprocessorGrammar");
-	preprocessorGrammar.setAccessible(true);
-
-	PackratParser parser = new PackratParser(
-		(Grammar) preprocessorGrammar.get(null));
+	C11PreprocessorParser parser = new C11PreprocessorParser();
 	ParserTree ast = parser.parse(sourceCode);
 
 	assertNotNull(ast);
@@ -38,11 +30,7 @@ public class C11PreprocessorTokenizerGrammarTest {
 	    throws Exception {
 	Grammar production = C11Grammar.getGrammar()
 		.createWithNewStartProduction(productionName);
-	Method setLineTerminatorToVisible = C11Preprocessor.class
-		.getDeclaredMethod("setLineTerminatorToVisible", Grammar.class);
-	setLineTerminatorToVisible.setAccessible(true);
-	setLineTerminatorToVisible.invoke(null, production);
-	setLineTerminatorToVisible.setAccessible(false);
+	C11PreprocessorParser.setLineTerminatorToVisible(production);
 	System.out.println(production.toString());
 	PackratParser parser = new PackratParser(production);
 	ParserTree ast = parser.parse(SourceCode.fromStringArray(lines));
@@ -94,16 +82,6 @@ public class C11PreprocessorTokenizerGrammarTest {
     @Test
     public void testLocalInclude() throws Exception {
 	checkParser("#include \"include.txt\"\n");
-    }
-
-    @Test
-    public void testElse() throws Exception {
-	checkParser("#else\n");
-    }
-
-    @Test
-    public void testEndIff() throws Exception {
-	checkParser("#endif\n");
     }
 
     @Test
@@ -199,7 +177,7 @@ public class C11PreprocessorTokenizerGrammarTest {
 
     @Test
     public void testIfSection() throws Exception {
-	checkRule("if-section", "#ifdef TEST\n", "#endif\n");
+	checkParser("#ifdef TEST\n", "#endif\n");
     }
 
     @Test

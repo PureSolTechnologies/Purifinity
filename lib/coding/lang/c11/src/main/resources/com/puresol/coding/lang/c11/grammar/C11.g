@@ -994,7 +994,7 @@ HELPER
     group-part:
         if-section
     |   control-line
-//    |   non-directive-line // added for better separation of group parts
+    |   non-directive-line // added for better separation of group parts
     |   text-line
     ;
     

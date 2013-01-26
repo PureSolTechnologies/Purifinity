@@ -26,9 +26,11 @@ public class FixedCodeLocation extends AbstractCodeLocation {
 	SourceCode sourceCode = new SourceCode();
 	int lineNum = 0;
 	for (String line : lines) {
-	    lineNum++;
-	    sourceCode
-		    .addSourceCodeLine(new SourceCodeLine(this, lineNum, line));
+	    if ((line != null) && (!line.isEmpty())) {
+		lineNum++;
+		sourceCode.addSourceCodeLine(new SourceCodeLine(this, lineNum,
+			line));
+	    }
 	}
 	this.sourceCode = sourceCode;
     }

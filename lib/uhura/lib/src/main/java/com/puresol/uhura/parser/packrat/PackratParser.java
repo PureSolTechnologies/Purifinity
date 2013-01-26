@@ -85,6 +85,14 @@ public class PackratParser implements Serializable {
     private String text = "";
 
     /**
+     * This array contains after initialization an array of
+     * {@link SourceCodeLine} references. This array is used to map each
+     * position in the input text to original {@link SourceCodeLine} to get the
+     * correct meta information for creating the tokens.
+     */
+    private SourceCodeLine[] sourceLineReferences = null;
+
+    /**
      * This field contains the original source code which is used to extract
      * meta information.
      */
@@ -154,6 +162,16 @@ public class PackratParser implements Serializable {
 	    buffer.append(line.getLine());
 	}
 	this.text = buffer.toString();
+
+	sourceLineReferences = new SourceCodeLine[text.length()];
+	int position = 0;
+	for (SourceCodeLine line : sourceCode.getLines()) {
+	    for (int i = 0; i < line.getLine().length(); i++) {
+		sourceLineReferences[position] = line;
+		position++;
+	    }
+	}
+
 	memo.clear();
 	ruleInvocationStack = null;
 	maxPosition = 0;
@@ -176,7 +194,20 @@ public class PackratParser implements Serializable {
 	    if (progress.getDeltaPosition() != text.length()) {
 		throw new ParserException(getParserErrorMessage());
 	    }
-	    ParserTree parserTree = (ParserTree) progress.getAnswer();
+	    Object answer = progress.getAnswer();
+	    if (answer instanceof Status) {
+		Status status = (Status) answer;
+		switch (status) {
+		case FAILED:
+		    throw new ParserException(
+			    "Parser returned status 'FAILED'.");
+		default:
+		    throw new RuntimeException("A status '" + status.toString()
+			    + "' is not expected here.");
+		}
+
+	    }
+	    ParserTree parserTree = (ParserTree) answer;
 	    normalizeParents(parserTree);
 	    return parserTree;
 	} catch (TreeException e) {
@@ -687,8 +718,9 @@ public class PackratParser implements Serializable {
 	String match = matcher.group();
 	int lineBreakNum = TextUtils.countLineBreaks(match);
 	CodeLocation source = sourceCode.getLines().get(line - 1).getSource();
-	TokenMetaData metaData = new TokenMetaData(source, line,
-		lineBreakNum + 1);
+	SourceCodeLine originalLine = sourceLineReferences[position];
+	TokenMetaData metaData = new TokenMetaData(source,
+		originalLine.getLineNumber(), lineBreakNum + 1);
 	Token token = new Token(tokenDefinition.getName(), match,
 		tokenDefinition.getVisibility(), metaData);
 	ParserTree myTree = new ParserTree(token);
