@@ -261,8 +261,7 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
     private WalkingAction processIfSection(ParserTree ifSection)
 	    throws TreeException, PreprocessorException {
 	ParserTree ifGroup = ifSection.getChild("if-group");
-	boolean valid = evaluateValidity(ifGroup);
-	if (valid) {
+	if (evaluateValidity(ifGroup)) {
 	    TreeMacroProcessor processor = new TreeMacroProcessor(
 		    ifGroup.getChild("group"), includeDirectories,
 		    definedMacros, nestingDepth);
@@ -272,8 +271,14 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 	}
 	List<ParserTree> elifGroups = ifSection.getChildren("elif-group");
 	for (ParserTree elifGroup : elifGroups) {
-	    // TODO Check and process and leave with:
-	    // return WalkingAction.LEAVE_BRANCH;
+	    if (evaluateValidity(elifGroup)) {
+		TreeMacroProcessor processor = new TreeMacroProcessor(
+			elifGroup.getChild("group"), includeDirectories,
+			definedMacros, nestingDepth);
+		processor.process();
+		sourceCode.addSourceCode(processor.sourceCode);
+		return WalkingAction.LEAVE_BRANCH;
+	    }
 	}
 	ParserTree elseGroup = ifSection.getChild("else-group");
 	if (elseGroup != null) {
