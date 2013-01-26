@@ -197,6 +197,8 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 		return include(tree);
 	    } else if (controlCommand.getText().equals("#define")) {
 		return define(tree);
+	    } else if (controlCommand.getText().equals("#undef")) {
+		return undefine(tree);
 	    } else {
 		return WalkingAction.LEAVE_BRANCH;
 	    }
@@ -316,6 +318,12 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 	} else {
 	    return defineObjectLikeMacro(tree);
 	}
+    }
+
+    private WalkingAction undefine(ParserTree tree) throws TreeException {
+	ParserTree identifier = tree.getChild("identifier");
+	definedMacros.undefine(identifier.getText());
+	return WalkingAction.LEAVE_BRANCH;
     }
 
     /**

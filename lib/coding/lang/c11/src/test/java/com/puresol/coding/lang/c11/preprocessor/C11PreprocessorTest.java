@@ -116,6 +116,8 @@ public class C11PreprocessorTest {
 		sourceFile), 2, "1\n"));
 	expected.addSourceCodeLine(new SourceCodeLine(new SourceFileLocation(
 		sourceFile), 4, "\"Hello, world!\"\n"));
+	expected.addSourceCodeLine(new SourceCodeLine(new SourceFileLocation(
+		sourceFile), 6, "HELLO_WORLD\n"));
 	assertEquals(expected, preProcessedSourceCode);
     }
 

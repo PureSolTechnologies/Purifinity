@@ -2,3 +2,5 @@
 DEFAULT_MACRO
 #define HELLO_WORLD "Hello, world!"
 HELLO_WORLD
+#undef HELLO_WORLD
+HELLO_WORLD
