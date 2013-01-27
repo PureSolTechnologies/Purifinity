@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.puresol.coding.lang.c11.C11ExpressionEvaluator;
-import com.puresol.coding.lang.c11.EvaluationException;
 import com.puresol.coding.lang.c11.preprocessor.C11Preprocessor;
 import com.puresol.coding.lang.c11.preprocessor.DefinedMacros;
 import com.puresol.coding.lang.c11.preprocessor.IncludeDirectories;
@@ -27,6 +26,8 @@ import com.puresol.uhura.source.CodeLocation;
 import com.puresol.uhura.source.SourceCode;
 import com.puresol.uhura.source.SourceCodeLine;
 import com.puresol.uhura.source.SourceFileLocation;
+import com.puresol.uhura.ust.eval.EvaluationException;
+import com.puresol.uhura.ust.eval.ValueTypeException;
 
 /**
  * <pre>
@@ -316,6 +317,10 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 		evaluator.evaluate();
 		return evaluator.getResult().getBooleanValue();
 	    } catch (EvaluationException e) {
+		throw new PreprocessorException(
+			"Could not evaluate expression '"
+				+ expression.toString() + "'.", e);
+	    } catch (ValueTypeException e) {
 		throw new PreprocessorException(
 			"Could not evaluate expression '"
 				+ expression.toString() + "'.", e);

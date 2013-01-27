@@ -1,4 +1,4 @@
-package com.puresol.coding.lang.c11;
+package com.puresol.uhura.ust.eval;
 
 public class EvaluationException extends Exception {
 
