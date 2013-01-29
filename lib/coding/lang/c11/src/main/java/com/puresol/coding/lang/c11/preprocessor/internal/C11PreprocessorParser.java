@@ -170,7 +170,7 @@ public class C11PreprocessorParser {
 	lineCount++;
 	// parse group
 	ParserTree group = new ParserTree("group");
-	int lines = parse(group, sourceCode, lineNum + 1);
+	int lines = parse(group, sourceCode, lineNum + lineCount);
 	if (lines > 0) {
 	    ifGroupTree.addChild(group);
 	    lineCount += lines;
@@ -184,7 +184,7 @@ public class C11PreprocessorParser {
 		lineCount++;
 		// parse group
 		group = new ParserTree("group");
-		lines = parse(group, sourceCode, lineNum + 1);
+		lines = parse(group, sourceCode, lineNum + lineCount);
 		if (lines > 0) {
 		    elifGroup.addChild(group);
 		    lineCount += lines;

@@ -224,6 +224,10 @@ public class C11PreprocessorTest {
 		sourceFile), 12, "Calculation invalid.\n"));
 	expected.addSourceCodeLine(new SourceCodeLine(new SourceFileLocation(
 		sourceFile), 15, "Calculation valid.\n"));
+	expected.addSourceCodeLine(new SourceCodeLine(new SourceFileLocation(
+		sourceFile), 19, "Calculation valid.\n"));
+	expected.addSourceCodeLine(new SourceCodeLine(new SourceFileLocation(
+		sourceFile), 25, "Calculation valid.\n"));
 	assertEquals(expected, preProcessedSourceCode);
     }
 

@@ -14,3 +14,14 @@ Calculation invalid.
 #if (B == C)
 Calculation valid.
 #endif
+#if (A > B)
+#elif (B == C)
+Calculation valid.
+#else
+#endif
+#if (A > B)
+#elif (A > C)
+#elif (B == C)
+Calculation valid.
+#else
+#endif
