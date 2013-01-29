@@ -1,19 +1,24 @@
 package com.puresol.coding.lang.c11;
 
+import com.puresol.coding.lang.c11.preprocessor.DefinedMacros;
+import com.puresol.coding.lang.c11.preprocessor.internal.Macro;
 import com.puresol.trees.TreeException;
 import com.puresol.uhura.parser.ParserTree;
 import com.puresol.uhura.ust.eval.EvaluationException;
 import com.puresol.uhura.ust.eval.Value;
 import com.puresol.uhura.ust.eval.ValueTypeException;
 
-public class C11ExpressionEvaluator {
+public class C11PreprocessorExpressionEvaluator {
 
     private final ParserTree expression;
 
+    private final DefinedMacros definedMacros;
     private Value result;
 
-    public C11ExpressionEvaluator(ParserTree expression) {
+    public C11PreprocessorExpressionEvaluator(ParserTree expression,
+	    DefinedMacros definedMacros) {
 	this.expression = expression;
+	this.definedMacros = definedMacros;
     }
 
     public Value getResult() {
@@ -27,7 +32,11 @@ public class C11ExpressionEvaluator {
     private Value evaluate(ParserTree expression) throws EvaluationException,
 	    TreeException {
 	String nodeName = expression.getName();
-	if ("constant-expression".equals(nodeName)) {
+	if ("expression".equals(nodeName)) {
+	    return evaluateExpression(expression);
+	} else if ("assignment-expression".equals(nodeName)) {
+	    return evaluateAssignmentExpression(expression);
+	} else if ("constant-expression".equals(nodeName)) {
 	    return evaluateConstantExpression(expression);
 	} else if ("conditional-expression".equals(nodeName)) {
 	    return evaluateConditionalExpression(expression);
@@ -51,9 +60,84 @@ public class C11ExpressionEvaluator {
 	    return evaluateAdditiveExpression(expression);
 	} else if ("multiplicative-expression".equals(nodeName)) {
 	    return evaluateMultiplicativeExpression(expression);
+	} else if ("cast-expression".equals(nodeName)) {
+	    return evaluateCastExpression(expression);
+	} else if ("unary-expression".equals(nodeName)) {
+	    return evaluateUnaryExpression(expression);
+	} else if ("postfix-expression".equals(nodeName)) {
+	    return evaluatePostfixExpression(expression);
+	} else if ("primary-expression".equals(nodeName)) {
+	    return evaluatePrimaryExpression(expression);
+	} else if ("constant".equals(nodeName)) {
+	    return evaluateConstant(expression);
 	} else {
 	    throw new EvaluationException("Unknown expression type '"
 		    + nodeName + "' (" + expression.toString() + ")");
+	}
+    }
+
+    private Value evaluateConstant(ParserTree expression)
+	    throws NumberFormatException, TreeException {
+	if (expression.hasChild("integer-constant")) {
+	    return new Value("int", Integer.valueOf(expression.getChild(
+		    "integer-constant").getText()));
+	} else if (expression.hasChild("floating-constant")) {
+	    return new Value("double", Double.valueOf(expression.getChild(
+		    "floating-constant").getText()));
+	} else {
+	    throw new RuntimeException("Constants like '"
+		    + expression.toString() + "' are not implemented, yet!");
+	}
+    }
+
+    private Value evaluatePrimaryExpression(ParserTree expression)
+	    throws TreeException, EvaluationException {
+	if (expression.hasChild("identifier")) {
+	    ParserTree identifier = expression.getChild("identifier");
+	    String identifierName = identifier.getText();
+	    if (definedMacros.isDefined(identifierName)) {
+		Value value = generateValue(identifierName);
+		return value;
+	    } else {
+		return new Value("int", 0);
+	    }
+	} else if (expression.hasChild("constant")) {
+	    return evaluate(expression.getChild("constant"));
+	} else if (expression.hasChild("expression")) {
+	    return evaluate(expression.getChild("expression"));
+	} else {
+	    throw new RuntimeException("Primary expressions like '"
+		    + expression.toString() + "' are not implemented, yet!");
+	}
+    }
+
+    private Value evaluatePostfixExpression(ParserTree expression)
+	    throws EvaluationException, TreeException {
+	if (expression.hasChild("primary-expression")) {
+	    return evaluate(expression.getChild("primary-expression"));
+	} else {
+	    throw new RuntimeException(
+		    "Cast expressions are not implemented, yet!");
+	}
+    }
+
+    private Value evaluateUnaryExpression(ParserTree expression)
+	    throws EvaluationException, TreeException {
+	if (expression.hasChild("postfix-expression")) {
+	    return evaluate(expression.getChild("postfix-expression"));
+	} else {
+	    throw new RuntimeException(
+		    "Cast expressions are not implemented, yet!");
+	}
+    }
+
+    private Value evaluateCastExpression(ParserTree expression)
+	    throws EvaluationException, TreeException {
+	if (expression.hasChild("unary-expression")) {
+	    return evaluate(expression.getChild("unary-expression"));
+	} else {
+	    throw new RuntimeException("Cast expressions like '"
+		    + expression.toString() + "' are not implemented, yet!");
 	}
     }
 
@@ -227,4 +311,55 @@ public class C11ExpressionEvaluator {
 	    throws EvaluationException, TreeException {
 	return evaluate(expression.getChild("conditional-expression"));
     }
+
+    private Value evaluateAssignmentExpression(ParserTree expression)
+	    throws EvaluationException, TreeException {
+	if (expression.hasChild("conditional-expression")) {
+	    return evaluate(expression.getChild("conditional-expression"));
+	} else {
+	    throw new RuntimeException("Assignment expressions like '"
+		    + expression.toString() + "' are not implemented, yet!");
+	}
+    }
+
+    private Value evaluateExpression(ParserTree expression)
+	    throws EvaluationException, TreeException {
+	if (expression.hasChild("assignment-expression")) {
+	    return evaluate(expression.getChild("assignment-expression"));
+	} else {
+	    throw new RuntimeException("Expressions like '"
+		    + expression.toString() + "' are not implemented, yet!");
+	}
+    }
+
+    private Value generateValue(String identifierName)
+	    throws EvaluationException {
+	Macro macro = definedMacros.getMacro(identifierName);
+	if ((macro.getParameters().size() > 0)
+		|| (macro.isOptionalParameters())) {
+	    throw new EvaluationException("Macro '" + identifierName
+		    + "' is a function like macro. This is not supported.");
+	}
+	if (macro.getReplacement().size() > 1) {
+	    throw new EvaluationException("Macro '" + identifierName
+		    + "' has the complex replacement '"
+		    + macro.getReplacement().toString()
+		    + "'. This is not supported.");
+	}
+	if (macro.getReplacement().size() == 0) {
+	    return new Value("int", 1);
+	}
+	String macroString = definedMacros.getMacro(identifierName)
+		.getReplacement().get(0).getText();
+	try {
+	    return new Value("int", Integer.valueOf(macroString));
+	} catch (NumberFormatException e) {
+	    try {
+		return new Value("double", Double.valueOf(macroString));
+	    } catch (NumberFormatException e1) {
+		return new Value("String", macroString);
+	    }
+	}
+    }
+
 }

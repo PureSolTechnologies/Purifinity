@@ -8,7 +8,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresol.coding.lang.c11.C11ExpressionEvaluator;
+import com.puresol.coding.lang.c11.C11PreprocessorExpressionEvaluator;
 import com.puresol.coding.lang.c11.preprocessor.C11Preprocessor;
 import com.puresol.coding.lang.c11.preprocessor.DefinedMacros;
 import com.puresol.coding.lang.c11.preprocessor.IncludeDirectories;
@@ -311,8 +311,8 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 		|| evaluation.hasChild("PP_ELIF")) {
 	    // #if and #elif
 	    ParserTree expression = evaluation.getChild("constant-expression");
-	    C11ExpressionEvaluator evaluator = new C11ExpressionEvaluator(
-		    expression);
+	    C11PreprocessorExpressionEvaluator evaluator = new C11PreprocessorExpressionEvaluator(
+		    expression, definedMacros);
 	    try {
 		evaluator.evaluate();
 		return evaluator.getResult().getBooleanValue();
