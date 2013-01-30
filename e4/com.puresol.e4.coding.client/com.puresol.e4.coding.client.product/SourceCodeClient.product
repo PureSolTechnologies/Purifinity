@@ -10,6 +10,16 @@
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
    </launcherArgs>
 
+   <launcher>
+      <solaris/>
+      <win useIco="false">
+         <bmp/>
+      </win>
+   </launcher>
+
+   <vm>
+   </vm>
+
    <plugins>
       <plugin id="com.ibm.icu"/>
       <plugin id="javax.annotation"/>
@@ -67,10 +77,17 @@
    </plugins>
 
    <features>
-      <feature id="com.puresol.e4.coding.client.feature" version="0.1.0.qualifier"/>
       <feature id="org.eclipse.rcp"/>
       <feature id="org.eclipse.e4.rcp"/>
+      <feature id="com.puresol.e4.coding.client.feature" version="0.1.0.qualifier"/>
+      <feature id="org.eclipse.emf.ecore"/>
+      <feature id="org.eclipse.emf.common"/>
    </features>
 
+   <configurations>
+      <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="0" />
+      <plugin id="org.eclipse.equinox.common" autoStart="true" startLevel="2" />
+      <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="1" />
+   </configurations>
 
 </product>

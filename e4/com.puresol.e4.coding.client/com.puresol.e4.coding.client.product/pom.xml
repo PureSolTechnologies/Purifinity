@@ -31,6 +31,17 @@
 						</goals>
 					</execution>
 				</executions>
+				<configuration>
+					<products>
+						<product>
+							<id>com.puresol.e4.coding.client.product</id>
+						</product>
+					</products>
+					<formats>
+						<win32>zip</win32>
+						<linux>tar.gz</linux>
+					</formats>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
@@ -41,7 +52,7 @@
 					<pomDependencies>consider</pomDependencies>
 					<target>
 						<groupId>com.puresol</groupId>
-						<artifactId>com.puresol.rcp.coding.client.target</artifactId>
+						<artifactId>com.puresol.e4.coding.client.target</artifactId>
 						<version>${project.version}</version>
 						<classifier>juno</classifier>
 					</target>
