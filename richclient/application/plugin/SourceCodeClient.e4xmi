@@ -21,7 +21,7 @@
         <children xsi:type="menu:Menu" xmi:id="_Txc9YG1fEeK4xswhlhRqxQ" elementId="com.puresol.coding.richclient.application.plugin.menu.File.New" label="New" mnemonics="N">
           <children xsi:type="menu:HandledMenuItem" xmi:id="_igJmcG1fEeK4xswhlhRqxQ" elementId="com.puresol.coding.richclient.application.plugin.handledmenuitem.0" label="Other..." mnemonics="O"/>
         </children>
-        <children xsi:type="menu:Menu" xmi:id="_S78vEEfLEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.menu.File.Open" label="Open" mnemonics="O">
+        <children xsi:type="menu:Menu" xmi:id="_S78vEEfLEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.menu.File.Open" label="Open" iconURI="platform:/plugin/com.puresol.coding.richclient.application.plugin/icons/16x16/folder.png" mnemonics="O">
           <children xsi:type="menu:HandledMenuItem" xmi:id="_ah2wgEfLEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.handledmenuitem.File.Open.Project" label="Project..." tooltip="Opens an existing project." mnemonics="P"/>
           <children xsi:type="menu:HandledMenuItem" xmi:id="_oxKyEEfPEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.handledmenuitem.File.Open.Other" label="Other..." mnemonics="O" command="_plH-kEfPEeKSzLsdKrQ7vg"/>
         </children>
@@ -29,41 +29,41 @@
         <children xsi:type="menu:HandledMenuItem" xmi:id="_qxWnoG1fEeK4xswhlhRqxQ" elementId="com.puresol.coding.richclient.application.plugin.menu.File.Close" label="Close" mnemonics="C"/>
         <children xsi:type="menu:HandledMenuItem" xmi:id="_rNGIcG1fEeK4xswhlhRqxQ" elementId="com.puresol.coding.richclient.application.plugin.menu.File.CloseAll" label="Close All" mnemonics="A"/>
         <children xsi:type="menu:MenuSeparator" xmi:id="_r1EucG1fEeK4xswhlhRqxQ" elementId="com.puresol.coding.richclient.application.plugin.menuseparator.0"/>
-        <children xsi:type="menu:HandledMenuItem" xmi:id="_sOtWcG1fEeK4xswhlhRqxQ" elementId="com.puresol.coding.richclient.application.plugin.menu.File.Refresh" label="Refresh" mnemonics="f"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_sOtWcG1fEeK4xswhlhRqxQ" elementId="com.puresol.coding.richclient.application.plugin.menu.File.Refresh" label="Refresh" iconURI="platform:/plugin/com.puresol.coding.richclient.application.plugin/icons/16x16/arrow_refresh.png" mnemonics="f"/>
         <children xsi:type="menu:MenuSeparator" xmi:id="_s2VXIG1fEeK4xswhlhRqxQ" elementId="com.puresol.coding.richclient.application.plugin.menuseparator.0"/>
-        <children xsi:type="menu:HandledMenuItem" xmi:id="_tc2kkG1fEeK4xswhlhRqxQ" elementId="com.puresol.coding.richclient.application.plugin.menu.File.SwitchWorkspace" label="Switch Workspace..." mnemonics="W"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_tc2kkG1fEeK4xswhlhRqxQ" elementId="com.puresol.coding.richclient.application.plugin.menu.File.SwitchWorkspace" label="Switch Workspace..." iconURI="platform:/plugin/com.puresol.coding.richclient.application.plugin/icons/16x16/arrow_switch.png" mnemonics="W"/>
         <children xsi:type="menu:HandledMenuItem" xmi:id="_uHGbcG1fEeK4xswhlhRqxQ" elementId="com.puresol.coding.richclient.application.plugin.menu.File.Restart" label="Restart"/>
         <children xsi:type="menu:MenuSeparator" xmi:id="_ufg7cG1fEeK4xswhlhRqxQ" elementId="com.puresol.coding.richclient.application.plugin.menuseparator.0"/>
-        <children xsi:type="menu:HandledMenuItem" xmi:id="_wBq9gEfKEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.handledmenuitem.File.Exit" label="Exit" tooltip="Exits the application." mnemonics="x" command="_QdgMIEfKEeKSzLsdKrQ7vg"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_wBq9gEfKEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.handledmenuitem.File.Exit" label="Exit" iconURI="platform:/plugin/com.puresol.coding.richclient.application.plugin/icons/16x16/door_out.png" tooltip="Exits the application." mnemonics="x" command="_QdgMIEfKEeKSzLsdKrQ7vg"/>
       </children>
       <children xsi:type="menu:Menu" xmi:id="_F1xjAEfLEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.menu.Project" label="Project" mnemonics="P">
         <children xsi:type="menu:HandledMenuItem" xmi:id="_K68GAEfLEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.handledmenuitem.Project.NewAnalysisProject" label="New Analysis Project..." tooltip="Creates a new analysis project," mnemonics="N" command="_kg9WkEfOEeKSzLsdKrQ7vg"/>
         <children xsi:type="menu:HandledMenuItem" xmi:id="_FrawUEfPEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.handledmenuitem.Project.NewAnalysis" label="New Analysis" mnemonics="A" command="_IJTvEEfPEeKSzLsdKrQ7vg"/>
       </children>
       <children xsi:type="menu:Menu" xmi:id="_CMiWAEfMEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.menu.Window" label="Window" mnemonics="W">
-        <children xsi:type="menu:HandledMenuItem" xmi:id="_IT44cG1gEeK4xswhlhRqxQ" elementId="com.puresol.coding.richclient.application.plugin.handledmenuitem.Window.NewWindow" label="New Window" mnemonics="N"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_IT44cG1gEeK4xswhlhRqxQ" elementId="com.puresol.coding.richclient.application.plugin.handledmenuitem.Window.NewWindow" label="New Window" iconURI="platform:/plugin/com.puresol.coding.richclient.application.plugin/icons/16x16/application_add.png" mnemonics="N"/>
         <children xsi:type="menu:MenuSeparator" xmi:id="_LxmVcG1gEeK4xswhlhRqxQ" elementId="com.puresol.coding.richclient.application.plugin.menuseparator.0"/>
-        <children xsi:type="menu:HandledMenuItem" xmi:id="_OGS78G1gEeK4xswhlhRqxQ" elementId="com.puresol.coding.richclient.application.plugin.handledmenuitem.Window.OpenPerspective" label="Open Perspective..." mnemonics="O"/>
-        <children xsi:type="menu:HandledMenuItem" xmi:id="_OW7Y8G1gEeK4xswhlhRqxQ" elementId="com.puresol.coding.richclient.application.plugin.handledmenuitem.Window.ShowView" label="Show View..." mnemonics="V"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_OGS78G1gEeK4xswhlhRqxQ" elementId="com.puresol.coding.richclient.application.plugin.handledmenuitem.Window.OpenPerspective" label="Open Perspective..." iconURI="platform:/plugin/com.puresol.coding.richclient.application.plugin/icons/16x16/layout.png" mnemonics="O"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_OW7Y8G1gEeK4xswhlhRqxQ" elementId="com.puresol.coding.richclient.application.plugin.handledmenuitem.Window.ShowView" label="Show View..." iconURI="platform:/plugin/com.puresol.coding.richclient.application.plugin/icons/16x16/layout_content.png" mnemonics="V"/>
         <children xsi:type="menu:MenuSeparator" xmi:id="_FGbd8G1gEeK4xswhlhRqxQ" elementId="com.puresol.coding.richclient.application.plugin.menuseparator.0"/>
-        <children xsi:type="menu:HandledMenuItem" xmi:id="_bS3q8G1gEeK4xswhlhRqxQ" elementId="com.puresol.coding.richclient.application.plugin.handledmenuitem.Window.SavePerspectiveAs" label="Save Perspective As..." mnemonics="A"/>
-        <children xsi:type="menu:HandledMenuItem" xmi:id="_btjSIEfMEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.handledmenuitem.Window.ResetPerspective" label="Reset Perspective..." mnemonics="R"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_bS3q8G1gEeK4xswhlhRqxQ" elementId="com.puresol.coding.richclient.application.plugin.handledmenuitem.Window.SavePerspectiveAs" label="Save Perspective As..." iconURI="platform:/plugin/com.puresol.coding.richclient.application.plugin/icons/16x16/save_as.png" mnemonics="A"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_btjSIEfMEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.handledmenuitem.Window.ResetPerspective" label="Reset Perspective..." iconURI="platform:/plugin/com.puresol.coding.richclient.application.plugin/icons/16x16/layout_error.png" mnemonics="R"/>
         <children xsi:type="menu:HandledMenuItem" xmi:id="_b6nncG1gEeK4xswhlhRqxQ" elementId="com.puresol.coding.richclient.application.plugin.handledmenuitem.Window.ClosePerspective" label="Close Perspective..." mnemonics="C"/>
         <children xsi:type="menu:HandledMenuItem" xmi:id="_cHqk8G1gEeK4xswhlhRqxQ" elementId="com.puresol.coding.richclient.application.plugin.handledmenuitem.Window.CloseAllPerspectives" label="Close All Perspectives..." mnemonics="l"/>
         <children xsi:type="menu:MenuSeparator" xmi:id="_IDJVcG1aEeK4xswhlhRqxQ" elementId="com.puresol.coding.richclient.application.plugin.menuseparator.0"/>
-        <children xsi:type="menu:HandledMenuItem" xmi:id="_HcnvkEfMEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.handledmenuitem.Window.Preferences" label="Preferences..." mnemonics="P"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_HcnvkEfMEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.handledmenuitem.Window.Preferences" label="Preferences..." iconURI="platform:/plugin/com.puresol.coding.richclient.application.plugin/icons/16x16/wrench.png" mnemonics="P"/>
       </children>
       <children xsi:type="menu:Menu" xmi:id="_85uOAEfKEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.menu.Help" label="Help" mnemonics="H">
-        <children xsi:type="menu:HandledMenuItem" xmi:id="_vn6RcG1gEeK4xswhlhRqxQ" elementId="com.puresol.coding.richclient.application.plugin.handledmenuitem.Help.Welcome" label="Welcome" mnemonics="W"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_vn6RcG1gEeK4xswhlhRqxQ" elementId="com.puresol.coding.richclient.application.plugin.handledmenuitem.Help.Welcome" label="Welcome" iconURI="platform:/plugin/com.puresol.coding.richclient.application.plugin/icons/16x16/flower.png" mnemonics="W"/>
         <children xsi:type="menu:MenuSeparator" xmi:id="_uavTsG1gEeK4xswhlhRqxQ" elementId="com.puresol.coding.richclient.application.plugin.menuseparator.0"/>
         <children xsi:type="menu:HandledMenuItem" xmi:id="_zpoacG1gEeK4xswhlhRqxQ" elementId="com.puresol.coding.richclient.application.plugin.handledmenuitem.Help.InstallNewSoftware" label="Install New Software..." mnemonics="S"/>
         <children xsi:type="menu:MenuSeparator" xmi:id="_u0G18G1gEeK4xswhlhRqxQ" elementId="com.puresol.coding.richclient.application.plugin.menuseparator.0"/>
-        <children xsi:type="menu:HandledMenuItem" xmi:id="_-3_4kEfKEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.handledmenuitem.Help.About" label="About" mnemonics="A"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_-3_4kEfKEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.handledmenuitem.Help.About" label="About" iconURI="platform:/plugin/com.puresol.coding.richclient.application.plugin/icons/16x16/information.png" mnemonics="A"/>
       </children>
     </mainMenu>
     <trimBars xmi:id="_UqoT4EfKEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.trimbar.0">
       <children xsi:type="menu:ToolBar" xmi:id="_VE5OAEfKEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.toolbar.0">
-        <children xsi:type="menu:HandledToolItem" xmi:id="_Ws0OEEfKEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.handledtoolitem.0" accessibilityPhrase="Exit" label="Exit" tooltip="Exits the application" command="_QdgMIEfKEeKSzLsdKrQ7vg"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_Ws0OEEfKEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.handledtoolitem.0" accessibilityPhrase="Exit" label="Exit" iconURI="platform:/plugin/com.puresol.coding.richclient.application.plugin/icons/32x32/door_out.png" tooltip="Exits the application" command="_QdgMIEfKEeKSzLsdKrQ7vg"/>
       </children>
     </trimBars>
   </children>
