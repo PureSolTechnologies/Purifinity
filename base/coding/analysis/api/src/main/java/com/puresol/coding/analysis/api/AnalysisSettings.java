@@ -3,7 +3,7 @@ package com.puresol.coding.analysis.api;
 import java.io.File;
 import java.io.Serializable;
 
-import com.puresol.utils.CodeSearchConfiguration;
+import com.puresol.utils.FileSearchConfiguration;
 
 /**
  * This immutable value object contains the settings of an analysis.
@@ -29,7 +29,7 @@ public final class AnalysisSettings implements Serializable {
      * This field contains the settings for the file search for a new analysis
      * run.
      */
-    private final CodeSearchConfiguration fileSearchConfiguration;
+    private final FileSearchConfiguration fileSearchConfiguration;
 
     /**
      * This is the original source directory which is searched for files for
@@ -51,7 +51,7 @@ public final class AnalysisSettings implements Serializable {
      *            is the source directory to be search for analysis.
      */
     public AnalysisSettings(String name, String description,
-	    CodeSearchConfiguration fileSearchConfiguration,
+	    FileSearchConfiguration fileSearchConfiguration,
 	    RepositoryLocation repositoryLocation) {
 	super();
 	this.name = name;
@@ -81,9 +81,9 @@ public final class AnalysisSettings implements Serializable {
     /**
      * This method returns the file search configuration.
      * 
-     * @return A {@link CodeSearchConfiguration} is returned.
+     * @return A {@link FileSearchConfiguration} is returned.
      */
-    public final CodeSearchConfiguration getFileSearchConfiguration() {
+    public final FileSearchConfiguration getFileSearchConfiguration() {
 	return fileSearchConfiguration;
     }
 

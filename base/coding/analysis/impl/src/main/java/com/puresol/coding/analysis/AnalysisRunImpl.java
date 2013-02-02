@@ -38,7 +38,7 @@ import com.puresol.coding.analysis.api.RepositoryLocation;
 import com.puresol.coding.analysis.api.CodeStore;
 import com.puresol.uhura.source.SourceCode;
 import com.puresol.uhura.source.CodeLocation;
-import com.puresol.utils.CodeSearchConfiguration;
+import com.puresol.utils.FileSearchConfiguration;
 import com.puresol.utils.DirectoryUtilities;
 import com.puresol.utils.HashId;
 
@@ -96,7 +96,7 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
     public static AnalysisRun create(File runDirectory,
 	    AnalysisInformation analysisInformation, UUID uuid,
 	    RepositoryLocation repositorySource,
-	    CodeSearchConfiguration searchConfiguration)
+	    FileSearchConfiguration searchConfiguration)
 	    throws ModuleStoreException {
 	AnalysisRunImpl projectAnalyser = new AnalysisRunImpl(runDirectory);
 	projectAnalyser.create(repositorySource, analysisInformation, uuid,
@@ -119,7 +119,7 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
     private final CodeStore fileStore = CodeStoreFactory.getInstance();
 
     private HashIdFileTree hashIdFileTree = null;
-    private CodeSearchConfiguration searchConfig;
+    private FileSearchConfiguration searchConfig;
 
     private AnalysisInformation analysisInformation;
     private UUID uuid;
@@ -153,7 +153,7 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
      */
     void create(RepositoryLocation repositorySource,
 	    AnalysisInformation analysisInformation, UUID uuid,
-	    CodeSearchConfiguration searchConfiguration)
+	    FileSearchConfiguration searchConfiguration)
 	    throws ModuleStoreException {
 	try {
 	    this.repositoryLocation = repositorySource;
@@ -243,14 +243,14 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
 
     private void readSearchConfiguration() throws IOException {
 	try {
-	    searchConfig = new CodeSearchConfiguration();
+	    searchConfig = new FileSearchConfiguration();
 	    FileInputStream fileInputStream = new FileInputStream(new File(
 		    runDirectory, SEARCH_CONFIGURATION_FILE));
 	    try {
 		ObjectInputStream objectOutputStream = new ObjectInputStream(
 			fileInputStream);
 		try {
-		    CodeSearchConfiguration config = (CodeSearchConfiguration) objectOutputStream
+		    FileSearchConfiguration config = (FileSearchConfiguration) objectOutputStream
 			    .readObject();
 		    searchConfig.setLocationExcludes(config
 			    .getLocationExcludes());

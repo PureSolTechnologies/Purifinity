@@ -17,7 +17,7 @@ import com.puresol.coding.analysis.DirectoryRepositoryLocation;
 import com.puresol.coding.analysis.api.AnalysisInformation;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.ModuleStoreException;
-import com.puresol.utils.CodeSearchConfiguration;
+import com.puresol.utils.FileSearchConfiguration;
 
 @Ignore
 public class ProjectMcCabeMetricTest {
@@ -32,7 +32,7 @@ public class ProjectMcCabeMetricTest {
 	analyzer = AnalysisRunImpl.create(runDirectory, analysisInformation,
 		UUID.randomUUID(), new DirectoryRepositoryLocation(
 			"ProjectMcCabeMetricTest", new File("src/main/java")),
-		new CodeSearchConfiguration());
+		new FileSearchConfiguration());
     }
 
     @Test

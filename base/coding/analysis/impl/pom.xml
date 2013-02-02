@@ -28,12 +28,12 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresol</groupId>
-			<artifactId>trees</artifactId>
+			<artifactId>trees.lib</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.puresol</groupId>
-			<artifactId>utils</artifactId>
+			<artifactId>utils.lib</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>

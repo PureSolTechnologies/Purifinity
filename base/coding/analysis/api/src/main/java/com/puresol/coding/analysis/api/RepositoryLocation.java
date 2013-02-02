@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import com.puresol.uhura.source.CodeLocation;
-import com.puresol.utils.CodeSearchConfiguration;
+import com.puresol.utils.FileSearchConfiguration;
 
 /**
  * This is an interface for a repository source. The actual implementation may
@@ -35,17 +35,17 @@ public interface RepositoryLocation extends Serializable {
     public List<CodeLocation> getSourceCodes();
 
     /**
-     * This method returns the set {@link CodeSearchConfiguration}.
+     * This method returns the set {@link FileSearchConfiguration}.
      * 
-     * @return An object of {@link CodeSearchConfiguration} is returned.
+     * @return An object of {@link FileSearchConfiguration} is returned.
      */
-    public CodeSearchConfiguration getCodeSearchConfiguration();
+    public FileSearchConfiguration getCodeSearchConfiguration();
 
     /**
-     * This method sets a new {@link CodeSearchConfiguration}.
+     * This method sets a new {@link FileSearchConfiguration}.
      * 
      * @param codeSearchConfiguration
      */
     public void setCodeSearchConfiguration(
-	    CodeSearchConfiguration codeSearchConfiguration);
+	    FileSearchConfiguration codeSearchConfiguration);
 }

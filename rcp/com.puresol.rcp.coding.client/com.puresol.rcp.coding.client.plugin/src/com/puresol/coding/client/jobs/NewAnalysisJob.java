@@ -17,13 +17,13 @@ import com.puresol.coding.analysis.api.ModuleStoreException;
 import com.puresol.coding.analysis.api.RepositoryLocation;
 import com.puresol.coding.client.Activator;
 import com.puresol.coding.client.utils.PreferencesUtils;
-import com.puresol.utils.CodeSearchConfiguration;
+import com.puresol.utils.FileSearchConfiguration;
 
 public class NewAnalysisJob extends Job {
 
     private static final ILog logger = Activator.getDefault().getLog();
 
-    private final CodeSearchConfiguration searchConfiguration;
+    private final FileSearchConfiguration searchConfiguration;
     private final RepositoryLocation repositoryLocation;
     private final String description;
     private Analysis analysis = null;
