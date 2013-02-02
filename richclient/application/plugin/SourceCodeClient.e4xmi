@@ -1,58 +1,57 @@
 <?xml version="1.0" encoding="ASCII"?>
-<application:Application xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:advanced="http://www.eclipse.org/ui/2010/UIModel/application/ui/advanced" xmlns:application="http://www.eclipse.org/ui/2010/UIModel/application" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_LubUEEetEeKSzLsdKrQ7vg" elementId="com.puresol.e4.coding.client.plugin.application">
-  <children xsi:type="basic:TrimmedWindow" xmi:id="_Q_FVYEetEeKSzLsdKrQ7vg" elementId="com.puresol.e4.coding.client.plugin.trimmedwindow.0" label="Source Code Analysis" width="800" height="600">
-    <children xsi:type="advanced:PerspectiveStack" xmi:id="_mk8EsEfHEeKSzLsdKrQ7vg" elementId="com.puresol.e4.coding.client.plugin.perspectivestack.0">
-      <children xsi:type="advanced:Perspective" xmi:id="_nuBzsEfHEeKSzLsdKrQ7vg" elementId="com.puresol.e4.coding.client.plugin.perspective.AnalysisPerspective" accessibilityPhrase="Analysis Perspective" label="Analysis Perspective" tooltip="Shows a perspective optimized for inspection of analyzes.">
-        <children xsi:type="basic:PartSashContainer" xmi:id="_8mZwwEfHEeKSzLsdKrQ7vg" elementId="com.puresol.e4.coding.client.plugin.partsashcontainer.AnalysisPerspectiveMainSash" accessibilityPhrase="Analysis Perspective Main Sash" selectedElement="_E1XWQEfIEeKSzLsdKrQ7vg" horizontal="true">
-          <children xsi:type="basic:PartSashContainer" xmi:id="_E1XWQEfIEeKSzLsdKrQ7vg" elementId="com.puresol.e4.coding.client.plugin.partsashcontainer.NavigationSash" accessibilityPhrase="Navigation Sash" selectedElement="_HCdf8EfIEeKSzLsdKrQ7vg">
-            <children xsi:type="basic:Part" xmi:id="_HCdf8EfIEeKSzLsdKrQ7vg" elementId="com.puresol.e4.coding.client.plugin.parts.ProjectPart" accessibilityPhrase="Project Part" contributionURI="bundleclass://com.puresol.e4.coding.client.plugin/main.java.com.puresol.e4.coding.client.parts.ProjectsPart" label="Project Part" tooltip="Shows a list of open analysis projects.">
-              <toolbar xmi:id="_Tm5bcEfJEeKSzLsdKrQ7vg" elementId="com.puresol.e4.coding.client.plugin.toolbar.0"/>
+<application:Application xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:advanced="http://www.eclipse.org/ui/2010/UIModel/application/ui/advanced" xmlns:application="http://www.eclipse.org/ui/2010/UIModel/application" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_LubUEEetEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.application">
+  <children xsi:type="basic:TrimmedWindow" xmi:id="_Q_FVYEetEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.trimmedwindow.0" label="Source Code Analysis" width="800" height="600">
+    <children xsi:type="advanced:PerspectiveStack" xmi:id="_mk8EsEfHEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.perspectivestack.0">
+      <children xsi:type="advanced:Perspective" xmi:id="_nuBzsEfHEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.perspective.AnalysisPerspective" accessibilityPhrase="Analysis Perspective" label="Analysis Perspective" tooltip="Shows a perspective optimized for inspection of analyzes.">
+        <children xsi:type="basic:PartSashContainer" xmi:id="_8mZwwEfHEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.partsashcontainer.AnalysisPerspectiveMainSash" accessibilityPhrase="Analysis Perspective Main Sash" selectedElement="_E1XWQEfIEeKSzLsdKrQ7vg" horizontal="true">
+          <children xsi:type="basic:PartSashContainer" xmi:id="_E1XWQEfIEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.partsashcontainer.NavigationSash" accessibilityPhrase="Navigation Sash" selectedElement="_HCdf8EfIEeKSzLsdKrQ7vg">
+            <children xsi:type="basic:Part" xmi:id="_HCdf8EfIEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.parts.ProjectPart" accessibilityPhrase="Project Part" contributionURI="bundleclass://com.puresol.coding.richclient.application.plugin/com.puresol.coding.richclient.application.parts.ProjectsPart" label="Project Part" tooltip="Shows a list of open analysis projects.">
+              <toolbar xmi:id="_Tm5bcEfJEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.toolbar.0"/>
             </children>
-            <children xsi:type="basic:Part" xmi:id="_JK0TkEfIEeKSzLsdKrQ7vg" elementId="com.puresol.e4.coding.client.plugin.parts.ProjectContentsPart" accessibilityPhrase="Project Contents" contributionURI="bundleclass://com.puresol.e4.coding.client.plugin/main.java.com.puresol.e4.coding.client.parts.ProjectContentsPart" label="Project Contents" tooltip="Shows the contents of an analysis project">
-              <toolbar xmi:id="_T6a0YEfJEeKSzLsdKrQ7vg" elementId="com.puresol.e4.coding.client.plugin.toolbar.0"/>
+            <children xsi:type="basic:Part" xmi:id="_JK0TkEfIEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.parts.ProjectContentsPart" accessibilityPhrase="Project Contents" contributionURI="bundleclass://com.puresol.coding.richclient.application.plugin/com.puresol.coding.richclient.application.parts.ProjectContentsPart" label="Project Contents" tooltip="Shows the contents of an analysis project">
+              <toolbar xmi:id="_T6a0YEfJEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.toolbar.0"/>
             </children>
           </children>
         </children>
       </children>
-      <children xsi:type="advanced:Perspective" xmi:id="_2ZuzIEfHEeKSzLsdKrQ7vg" elementId="com.puresol.e4.coding.client.plugin.perspective.EvaluationPerspective" accessibilityPhrase="Evaluation Perspective" label="Evaluation Perspective" tooltip="This perspective is optimized for code quality analysis."/>
+      <children xsi:type="advanced:Perspective" xmi:id="_2ZuzIEfHEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.perspective.EvaluationPerspective" accessibilityPhrase="Evaluation Perspective" label="Evaluation Perspective" tooltip="This perspective is optimized for code quality analysis."/>
     </children>
-    <mainMenu xmi:id="_rkoxgEfKEeKSzLsdKrQ7vg" elementId="com.puresol.e4.coding.client.plugin.menu.0">
-      <children xsi:type="menu:Menu" xmi:id="_s0cMgEfKEeKSzLsdKrQ7vg" elementId="com.puresol.e4.coding.client.plugin.menu.File" label="File" mnemonics="F">
-        <children xsi:type="menu:Menu" xmi:id="_S78vEEfLEeKSzLsdKrQ7vg" elementId="com.puresol.e4.coding.client.plugin.menu.0" label="Open" mnemonics="O">
-          <children xsi:type="menu:HandledMenuItem" xmi:id="_ah2wgEfLEeKSzLsdKrQ7vg" elementId="com.puresol.e4.coding.client.plugin.handledmenuitem.0" label="Project..." tooltip="Opens an existing project." mnemonics="P"/>
-          <children xsi:type="menu:HandledMenuItem" xmi:id="_oxKyEEfPEeKSzLsdKrQ7vg" elementId="com.puresol.e4.coding.client.plugin.handledmenuitem.0" label="Other..." mnemonics="O" command="_plH-kEfPEeKSzLsdKrQ7vg"/>
+    <mainMenu xmi:id="_rkoxgEfKEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.menu.0">
+      <children xsi:type="menu:Menu" xmi:id="_s0cMgEfKEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.menu.File" label="File" mnemonics="F">
+        <children xsi:type="menu:Menu" xmi:id="_S78vEEfLEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.menu.File.Open" label="Open" mnemonics="O">
+          <children xsi:type="menu:HandledMenuItem" xmi:id="_ah2wgEfLEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.handledmenuitem.File.Open.Project" label="Project..." tooltip="Opens an existing project." mnemonics="P"/>
+          <children xsi:type="menu:HandledMenuItem" xmi:id="_oxKyEEfPEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.handledmenuitem.File.Open.Other" label="Other..." mnemonics="O" command="_plH-kEfPEeKSzLsdKrQ7vg"/>
         </children>
-        <children xsi:type="menu:MenuSeparator" xmi:id="_SnzEAEfLEeKSzLsdKrQ7vg" elementId="com.puresol.e4.coding.client.plugin.menuseparator.0"/>
-        <children xsi:type="menu:HandledMenuItem" xmi:id="_wBq9gEfKEeKSzLsdKrQ7vg" elementId="com.puresol.e4.coding.client.plugin.handledmenuitem.Exit" label="Exit" tooltip="Exits the application." mnemonics="x" command="_QdgMIEfKEeKSzLsdKrQ7vg"/>
+        <children xsi:type="menu:MenuSeparator" xmi:id="_SnzEAEfLEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.menuseparator.0"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_wBq9gEfKEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.handledmenuitem.File.Exit" label="Exit" tooltip="Exits the application." mnemonics="x" command="_QdgMIEfKEeKSzLsdKrQ7vg"/>
       </children>
-      <children xsi:type="menu:Menu" xmi:id="_F1xjAEfLEeKSzLsdKrQ7vg" elementId="com.puresol.e4.coding.client.plugin.menu.Project" label="Project" mnemonics="P">
-        <children xsi:type="menu:HandledMenuItem" xmi:id="_K68GAEfLEeKSzLsdKrQ7vg" elementId="com.puresol.e4.coding.client.plugin.handledmenuitem.0" label="New Analysis Project..." tooltip="Creates a new analysis project," mnemonics="N" command="_kg9WkEfOEeKSzLsdKrQ7vg"/>
-        <children xsi:type="menu:HandledMenuItem" xmi:id="_FrawUEfPEeKSzLsdKrQ7vg" elementId="com.puresol.e4.coding.client.plugin.handledmenuitem.0" label="New Analysis" mnemonics="A" command="_IJTvEEfPEeKSzLsdKrQ7vg"/>
+      <children xsi:type="menu:Menu" xmi:id="_F1xjAEfLEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.menu.Project" label="Project" mnemonics="P">
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_K68GAEfLEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.handledmenuitem.Project.NewAnalysisProject" label="New Analysis Project..." tooltip="Creates a new analysis project," mnemonics="N" command="_kg9WkEfOEeKSzLsdKrQ7vg"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_FrawUEfPEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.handledmenuitem.Project.NewAnalysis" label="New Analysis" mnemonics="A" command="_IJTvEEfPEeKSzLsdKrQ7vg"/>
       </children>
-      <children xsi:type="menu:Menu" xmi:id="__Ac0gEfLEeKSzLsdKrQ7vg" elementId="com.puresol.e4.coding.client.plugin.menu.Options" label="Options" mnemonics="O">
-        <children xsi:type="menu:HandledMenuItem" xmi:id="_HcnvkEfMEeKSzLsdKrQ7vg" elementId="com.puresol.e4.coding.client.plugin.handledmenuitem.Preferences" label="Preferences..." mnemonics="P"/>
+      <children xsi:type="menu:Menu" xmi:id="_CMiWAEfMEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.menu.Window" label="Window" mnemonics="W">
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_btjSIEfMEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.handledmenuitem.Window.ResetPerspective" label="Reset Perspective..." mnemonics="R"/>
+        <children xsi:type="menu:MenuSeparator" xmi:id="_IDJVcG1aEeK4xswhlhRqxQ" elementId="com.puresol.coding.richclient.application.plugin.menuseparator.0"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_HcnvkEfMEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.handledmenuitem.Window.Preferences" label="Preferences..." mnemonics="P"/>
       </children>
-      <children xsi:type="menu:Menu" xmi:id="_CMiWAEfMEeKSzLsdKrQ7vg" elementId="com.puresol.e4.coding.client.plugin.menu.Window" label="Window" mnemonics="W">
-        <children xsi:type="menu:HandledMenuItem" xmi:id="_btjSIEfMEeKSzLsdKrQ7vg" elementId="com.puresol.e4.coding.client.plugin.handledmenuitem.0" label="Reset Perspective..." mnemonics="R"/>
-      </children>
-      <children xsi:type="menu:Menu" xmi:id="_85uOAEfKEeKSzLsdKrQ7vg" elementId="com.puresol.e4.coding.client.plugin.menu.Help" label="Help" mnemonics="H">
-        <children xsi:type="menu:HandledMenuItem" xmi:id="_-3_4kEfKEeKSzLsdKrQ7vg" elementId="com.puresol.e4.coding.client.plugin.handledmenuitem.About" label="About" mnemonics="A"/>
+      <children xsi:type="menu:Menu" xmi:id="_85uOAEfKEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.menu.Help" label="Help" mnemonics="H">
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_-3_4kEfKEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.handledmenuitem.Help.About" label="About" mnemonics="A"/>
       </children>
     </mainMenu>
-    <trimBars xmi:id="_UqoT4EfKEeKSzLsdKrQ7vg" elementId="com.puresol.e4.coding.client.plugin.trimbar.0">
-      <children xsi:type="menu:ToolBar" xmi:id="_VE5OAEfKEeKSzLsdKrQ7vg" elementId="com.puresol.e4.coding.client.plugin.toolbar.0">
-        <children xsi:type="menu:HandledToolItem" xmi:id="_Ws0OEEfKEeKSzLsdKrQ7vg" elementId="com.puresol.e4.coding.client.plugin.handledtoolitem.0" accessibilityPhrase="Exit" label="Exit" tooltip="Exits the application" command="_QdgMIEfKEeKSzLsdKrQ7vg"/>
+    <trimBars xmi:id="_UqoT4EfKEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.trimbar.0">
+      <children xsi:type="menu:ToolBar" xmi:id="_VE5OAEfKEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.toolbar.0">
+        <children xsi:type="menu:HandledToolItem" xmi:id="_Ws0OEEfKEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.handledtoolitem.0" accessibilityPhrase="Exit" label="Exit" tooltip="Exits the application" command="_QdgMIEfKEeKSzLsdKrQ7vg"/>
       </children>
     </trimBars>
   </children>
-  <handlers xmi:id="_O0JBoEfKEeKSzLsdKrQ7vg" elementId="com.puresol.e4.coding.client.plugin.handler.0" contributionURI="bundleclass://com.puresol.e4.coding.client.plugin/main.java.com.puresol.e4.coding.client.handlers.ExitHandler" command="_QdgMIEfKEeKSzLsdKrQ7vg"/>
-  <handlers xmi:id="_i-oBIEfOEeKSzLsdKrQ7vg" elementId="com.puresol.e4.coding.client.plugin.handler.0" contributionURI="bundleclass://com.puresol.e4.coding.client.plugin/main.java.com.puresol.e4.coding.client.handlers.NewProjectHandler" command="_kg9WkEfOEeKSzLsdKrQ7vg"/>
-  <handlers xmi:id="_LaJNsEfPEeKSzLsdKrQ7vg" elementId="com.puresol.e4.coding.client.plugin.handler.0" contributionURI="bundleclass://com.puresol.e4.coding.client.plugin/main.java.com.puresol.e4.coding.client.handlers.NewAnalysisHandler" command="_IJTvEEfPEeKSzLsdKrQ7vg"/>
-  <handlers xmi:id="_F0NDcEfQEeKSzLsdKrQ7vg" elementId="com.puresol.e4.coding.client.plugin.handler.0" contributionURI="bundleclass://com.puresol.e4.coding.client.plugin/main.java.com.puresol.e4.coding.client.handlers.OpenOtherHandler" command="_plH-kEfPEeKSzLsdKrQ7vg"/>
-  <commands xmi:id="_QdgMIEfKEeKSzLsdKrQ7vg" elementId="com.puresol.e4.coding.client.plugin.command.ExitCommand" commandName="Exit Command" description="Exits the application."/>
-  <commands xmi:id="_kg9WkEfOEeKSzLsdKrQ7vg" elementId="com.puresol.e4.coding.client.plugin.command.NewProject" commandName="New Project" description="Creates a new project."/>
-  <commands xmi:id="_IJTvEEfPEeKSzLsdKrQ7vg" elementId="com.puresol.e4.coding.client.plugin.command.0" commandName="New Analysis" description="Runs a new analysis on an already created project."/>
-  <commands xmi:id="_plH-kEfPEeKSzLsdKrQ7vg" elementId="com.puresol.e4.coding.client.plugin.command.0" commandName="Open Other" description="Opens another type of file."/>
+  <handlers xmi:id="_O0JBoEfKEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.handler.ExitCommand" contributionURI="bundleclass://com.puresol.coding.richclient.application.plugin/com.puresol.coding.richclient.application.handlers.ExitHandler" command="_QdgMIEfKEeKSzLsdKrQ7vg"/>
+  <handlers xmi:id="_i-oBIEfOEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.handler.NewProject" contributionURI="bundleclass://com.puresol.coding.richclient.application.plugin/com.puresol.coding.richclient.application.handlers.NewProjectHandlerHandlerHandlerHandlereKSzLsdKrQ7vg"/>
+  <handlers xmi:id="_LaJNsEfPEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.handler.NewAnalysis" contributionURI="bundleclass://com.puresol.coding.richclient.application.plugin/com.puresol.coding.richclient.application.handlers.NewAnalysisHandlerHandlerHandlerHandlereKSzLsdKrQ7vg"/>
+  <handlers xmi:id="_F0NDcEfQEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.handler.OpenOther" contributionURI="bundleclass://com.puresol.coding.richclient.application.plugin/com.puresol.coding.richclient.application.handlers.OpenOtherHandler" command="_plH-kEfPEeKSzLsdKrQ7vg"/>
+  <commands xmi:id="_QdgMIEfKEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.command.ExitCommand" commandName="Exit Command" description="Exits the application."/>
+  <commands xmi:id="_kg9WkEfOEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.command.NewProject" commandName="New Project" description="Creates a new project."/>
+  <commands xmi:id="_IJTvEEfPEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.command.NewAnalysis" commandName="New Analysis" description="Runs a new analysis on an already created project."/>
+  <commands xmi:id="_plH-kEfPEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.command.OpenOther" commandName="Open Other" description="Opens another type of file."/>
   <addons xmi:id="_LubUEUetEeKSzLsdKrQ7vg" elementId="org.eclipse.e4.core.commands.service" contributionURI="bundleclass://org.eclipse.e4.core.commands/org.eclipse.e4.core.commands.CommandServiceAddon"/>
   <addons xmi:id="_LubUEketEeKSzLsdKrQ7vg" elementId="org.eclipse.e4.ui.contexts.service" contributionURI="bundleclass://org.eclipse.e4.ui.services/org.eclipse.e4.ui.services.ContextServiceAddon"/>
   <addons xmi:id="_LubUE0etEeKSzLsdKrQ7vg" elementId="org.eclipse.e4.ui.bindings.service" contributionURI="bundleclass://org.eclipse.e4.ui.bindings/org.eclipse.e4.ui.bindings.BindingServiceAddon"/>

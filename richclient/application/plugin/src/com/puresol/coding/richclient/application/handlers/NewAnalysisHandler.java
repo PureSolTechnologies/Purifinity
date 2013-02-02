@@ -1,4 +1,4 @@
-package main.java.com.puresol.e4.coding.client.handlers;
+package com.puresol.coding.richclient.application.handlers;
 
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.swt.SWT;
@@ -6,7 +6,7 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
 @SuppressWarnings("restriction")
-public class PreferencesHandler {
+public class NewAnalysisHandler {
 
 	@Execute
 	public void execute(Shell shell) {
@@ -15,4 +15,5 @@ public class PreferencesHandler {
 		messageBox.setMessage("This functionality is not implemented, yet!");
 		messageBox.open();
 	}
+
 }

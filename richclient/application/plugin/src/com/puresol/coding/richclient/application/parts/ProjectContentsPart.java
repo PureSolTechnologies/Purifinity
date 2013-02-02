@@ -1,4 +1,4 @@
-package main.java.com.puresol.e4.coding.client.parts;
+package com.puresol.coding.richclient.application.parts;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -10,15 +10,15 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
 /**
- * This part shows the analysis projects. In a simple list.
+ * This part shows the contents of an analysis project. The content is spit into
+ * directories and source files.
  * 
  * @author Rick-Rainer Ludwig
- * 
  */
-public class ProjectsPart {
+public class ProjectContentsPart {
 
     @Inject
-    public ProjectsPart(Composite parent) {
+    public ProjectContentsPart(Composite parent) {
 	Composite composite = new Composite(parent, SWT.BORDER);
 	composite.setLayout(new RowLayout(SWT.HORIZONTAL));
 	Label label = new Label(composite, SWT.BORDER);

@@ -11,4 +11,8 @@
 	<artifactId>com.puresol.coding.richclient.application.plugin</artifactId>
 	<packaging>eclipse-plugin</packaging>
 
+	<build>
+		<sourceDirectory>src</sourceDirectory>
+	</build>
+
 </project>

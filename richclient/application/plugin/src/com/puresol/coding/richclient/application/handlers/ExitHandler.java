@@ -1,4 +1,4 @@
-package main.java.com.puresol.e4.coding.client.handlers;
+package com.puresol.coding.richclient.application.handlers;
 
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.ui.workbench.IWorkbench;
