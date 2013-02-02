@@ -7,10 +7,10 @@
          point="org.eclipse.core.runtime.products">
       <product
             application="org.eclipse.e4.ui.workbench.swt.E4Application"
-            name="Source Code Client">
+            name="com.puresol.coding.richclient.application.product">
          <property
                name="appName"
-               value="Source Code Client">
+               value="com.puresol.coding.richclient.application.product">
          </property>
          <property
                name="applicationXMI"

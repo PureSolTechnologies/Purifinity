@@ -31,6 +31,7 @@
       <import plugin="org.eclipse.swt" version="3.100.1" match="greaterOrEqual"/>
       <import plugin="org.eclipse.e4.core.di"/>
       <import plugin="org.eclipse.e4.ui.workbench" version="0.10.3" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.e4.ui.services" version="0.10.2" match="greaterOrEqual"/>
    </requires>
 
    <plugin

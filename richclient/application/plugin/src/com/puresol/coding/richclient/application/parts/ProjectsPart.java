@@ -17,23 +17,23 @@ import org.eclipse.swt.widgets.Label;
  */
 public class ProjectsPart {
 
-    @Inject
-    public ProjectsPart(Composite parent) {
-	Composite composite = new Composite(parent, SWT.BORDER);
-	composite.setLayout(new RowLayout(SWT.HORIZONTAL));
-	Label label = new Label(composite, SWT.BORDER);
-	label.setText(getClass().getName());
-	label.setVisible(true);
-    }
+	@Inject
+	public ProjectsPart(Composite parent) {
+		Composite composite = new Composite(parent, SWT.NONE);
+		composite.setLayout(new RowLayout(SWT.HORIZONTAL));
+		Label label = new Label(composite, SWT.BORDER);
+		label.setText(getClass().getName());
+		label.setVisible(true);
+	}
 
-    @PostConstruct
-    public void postConstruct() {
-	// TODO Your code here
-    }
+	@PostConstruct
+	public void postConstruct() {
+		// TODO Your code here
+	}
 
-    @PreDestroy
-    public void preDestroy() {
-	// TODO Your code here
-    }
+	@PreDestroy
+	public void preDestroy() {
+		// TODO Your code here
+	}
 
 }

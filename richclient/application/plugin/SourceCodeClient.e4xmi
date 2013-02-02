@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="ASCII"?>
 <application:Application xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:advanced="http://www.eclipse.org/ui/2010/UIModel/application/ui/advanced" xmlns:application="http://www.eclipse.org/ui/2010/UIModel/application" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_LubUEEetEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.application">
   <children xsi:type="basic:TrimmedWindow" xmi:id="_Q_FVYEetEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.trimmedwindow.0" label="Source Code Analysis" width="800" height="600">
-    <children xsi:type="advanced:PerspectiveStack" xmi:id="_mk8EsEfHEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.perspectivestack.0">
-      <children xsi:type="advanced:Perspective" xmi:id="_nuBzsEfHEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.perspective.AnalysisPerspective" accessibilityPhrase="Analysis Perspective" label="Analysis Perspective" tooltip="Shows a perspective optimized for inspection of analyzes.">
+    <children xsi:type="advanced:PerspectiveStack" xmi:id="_mk8EsEfHEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.perspectivestack.0" selectedElement="_nuBzsEfHEeKSzLsdKrQ7vg">
+      <children xsi:type="advanced:Perspective" xmi:id="_nuBzsEfHEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.perspective.AnalysisPerspective" accessibilityPhrase="Analysis Perspective" selectedElement="_8mZwwEfHEeKSzLsdKrQ7vg" label="Analysis Perspective" tooltip="Shows a perspective optimized for inspection of analyzes.">
         <children xsi:type="basic:PartSashContainer" xmi:id="_8mZwwEfHEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.partsashcontainer.AnalysisPerspectiveMainSash" accessibilityPhrase="Analysis Perspective Main Sash" selectedElement="_E1XWQEfIEeKSzLsdKrQ7vg" horizontal="true">
-          <children xsi:type="basic:PartSashContainer" xmi:id="_E1XWQEfIEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.partsashcontainer.NavigationSash" accessibilityPhrase="Navigation Sash" selectedElement="_HCdf8EfIEeKSzLsdKrQ7vg">
-            <children xsi:type="basic:Part" xmi:id="_HCdf8EfIEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.parts.ProjectPart" accessibilityPhrase="Project Part" contributionURI="bundleclass://com.puresol.coding.richclient.application.plugin/com.puresol.coding.richclient.application.parts.ProjectsPart" label="Project Part" tooltip="Shows a list of open analysis projects.">
-              <toolbar xmi:id="_Tm5bcEfJEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.toolbar.0"/>
+          <children xsi:type="basic:PartSashContainer" xmi:id="_E1XWQEfIEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.partsashcontainer.NavigationSash" accessibilityPhrase="Navigation Sash">
+            <children xsi:type="basic:PartStack" xmi:id="_-YzoMG2HEeKeqro3vSb1RA" elementId="com.puresol.coding.richclient.application.plugin.partstack.0">
+              <children xsi:type="basic:Part" xmi:id="_HCdf8EfIEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.parts.ProjectPart" accessibilityPhrase="Project Part" contributionURI="bundleclass://com.puresol.coding.richclient.application.plugin/com.puresol.coding.richclient.application.parts.ProjectsPart" label="Project Part" tooltip="Shows a list of open analysis projects." closeable="true">
+                <toolbar xmi:id="_Tm5bcEfJEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.toolbar.0"/>
+              </children>
             </children>
-            <children xsi:type="basic:Part" xmi:id="_JK0TkEfIEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.parts.ProjectContentsPart" accessibilityPhrase="Project Contents" contributionURI="bundleclass://com.puresol.coding.richclient.application.plugin/com.puresol.coding.richclient.application.parts.ProjectContentsPart" label="Project Contents" tooltip="Shows the contents of an analysis project">
-              <toolbar xmi:id="_T6a0YEfJEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.toolbar.0"/>
+            <children xsi:type="basic:PartStack" xmi:id="__6UeQG2HEeKeqro3vSb1RA" elementId="com.puresol.coding.richclient.application.plugin.partstack.0">
+              <children xsi:type="basic:Part" xmi:id="_JK0TkEfIEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.parts.ProjectContentsPart" accessibilityPhrase="Project Contents" contributionURI="bundleclass://com.puresol.coding.richclient.application.plugin/com.puresol.coding.richclient.application.parts.ProjectContentsPart" label="Project Contents" tooltip="Shows the contents of an analysis project" closeable="true">
+                <toolbar xmi:id="_T6a0YEfJEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.toolbar.0"/>
+              </children>
             </children>
           </children>
         </children>
