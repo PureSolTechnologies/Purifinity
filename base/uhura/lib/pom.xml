@@ -10,22 +10,16 @@
 
 	<artifactId>uhura.lib</artifactId>
 	<name>${project.groupId}.${project.artifactId}</name>
-	<packaging>bundle</packaging>
 
 	<dependencies>
 		<dependency>
 			<groupId>com.puresol</groupId>
-			<artifactId>trees</artifactId>
+			<artifactId>trees.lib</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.puresol</groupId>
-			<artifactId>utils</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.osgi</groupId>
-			<artifactId>org.osgi.core</artifactId>
+			<artifactId>utils.lib</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -39,13 +33,4 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.felix</groupId>
-				<artifactId>maven-bundle-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
 </project>

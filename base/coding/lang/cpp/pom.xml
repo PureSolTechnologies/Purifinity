@@ -15,7 +15,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.puresol</groupId>
-			<artifactId>trees</artifactId>
+			<artifactId>trees.lib</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>

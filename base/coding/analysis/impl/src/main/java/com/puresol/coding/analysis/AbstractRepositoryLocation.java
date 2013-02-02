@@ -1,14 +1,14 @@
 package com.puresol.coding.analysis;
 
 import com.puresol.coding.analysis.api.RepositoryLocation;
-import com.puresol.utils.CodeSearchConfiguration;
+import com.puresol.utils.FileSearchConfiguration;
 
 public abstract class AbstractRepositoryLocation implements RepositoryLocation {
 
     private static final long serialVersionUID = -3692883413027085776L;
 
     private final String name;
-    private CodeSearchConfiguration codeSearchConfiguration = new CodeSearchConfiguration();
+    private FileSearchConfiguration codeSearchConfiguration = new FileSearchConfiguration();
 
     public AbstractRepositoryLocation(String name) {
 	super();
@@ -21,23 +21,23 @@ public abstract class AbstractRepositoryLocation implements RepositoryLocation {
     }
 
     /**
-     * This method returns the set {@link CodeSearchConfiguration}.
+     * This method returns the set {@link FileSearchConfiguration}.
      * 
-     * @return An object of {@link CodeSearchConfiguration} is returned.
+     * @return An object of {@link FileSearchConfiguration} is returned.
      */
     @Override
-    public CodeSearchConfiguration getCodeSearchConfiguration() {
+    public FileSearchConfiguration getCodeSearchConfiguration() {
 	return codeSearchConfiguration.clone();
     }
 
     /**
-     * This method sets a new {@link CodeSearchConfiguration}.
+     * This method sets a new {@link FileSearchConfiguration}.
      * 
      * @param codeSearchConfiguration
      */
     @Override
     public void setCodeSearchConfiguration(
-	    CodeSearchConfiguration codeSearchConfiguration) {
+	    FileSearchConfiguration codeSearchConfiguration) {
 	this.codeSearchConfiguration = codeSearchConfiguration.clone();
     }
 

@@ -10,14 +10,14 @@ import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.trees.FileTree;
 import com.puresol.trees.TreePrinter;
 import com.puresol.utils.FileSearch;
-import com.puresol.utils.CodeSearchConfiguration;
+import com.puresol.utils.FileSearchConfiguration;
 
 public class StoreUtilitiesTest {
 
     @Test
     public void testCreateHashIdFileTree() {
 	FileTree fileTree = FileSearch.getFileTree(new File("src"),
-		new CodeSearchConfiguration());
+		new FileSearchConfiguration());
 	assertNotNull(fileTree);
 	HashIdFileTree hashIdFileTree = StoreUtilities
 		.createHashIdFileTree(fileTree);

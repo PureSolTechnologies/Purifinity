@@ -6,11 +6,11 @@ import java.util.List;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 import com.puresol.coding.client.preferences.NewAnalysisPreferencePage;
-import com.puresol.utils.CodeSearchConfiguration;
+import com.puresol.utils.FileSearchConfiguration;
 
 public class PreferencesUtils {
 
-    public static CodeSearchConfiguration getFileSearchConfiguration(
+    public static FileSearchConfiguration getFileSearchConfiguration(
 	    IPreferenceStore preferenceStore) {
 	List<String> locationIncludes = Arrays.asList(preferenceStore.getString(
 		NewAnalysisPreferencePage.LOCATION_INCLUDES).split("\n"));
@@ -22,7 +22,7 @@ public class PreferencesUtils {
 		NewAnalysisPreferencePage.FILE_EXCLUDES).split("\n"));
 	boolean ignoreHidden = preferenceStore
 		.getBoolean(NewAnalysisPreferencePage.IGNORE_HIDDEN);
-	CodeSearchConfiguration searchConfiguration = new CodeSearchConfiguration(
+	FileSearchConfiguration searchConfiguration = new FileSearchConfiguration(
 		locationIncludes, locationExcludes, fileIncludes, fileExcludes,
 		ignoreHidden);
 	return searchConfiguration;

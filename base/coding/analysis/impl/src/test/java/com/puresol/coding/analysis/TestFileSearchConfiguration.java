@@ -3,9 +3,9 @@ package com.puresol.coding.analysis;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.puresol.utils.CodeSearchConfiguration;
+import com.puresol.utils.FileSearchConfiguration;
 
-public class TestFileSearchConfiguration extends CodeSearchConfiguration {
+public class TestFileSearchConfiguration extends FileSearchConfiguration {
 
     private static final long serialVersionUID = 54040518365270602L;
 

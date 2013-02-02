@@ -10,7 +10,6 @@
 
 package com.puresol.coding.metrics.cocomo;
 
-import com.puresol.data.Identifiable;
 
 /**
  * This enumeration stands for a complexity. This was derived from the
@@ -20,11 +19,7 @@ import com.puresol.data.Identifiable;
  * @author Rick-Rainer Ludwig
  * 
  */
-public enum SoftwareComplexity implements Identifiable {
-    LOW, MEDIUM, HIGH;
+public enum SoftwareComplexity {
+	LOW, MEDIUM, HIGH;
 
-    @Override
-    public String getIdentifier() {
-	return name().toLowerCase();
-    }
 }

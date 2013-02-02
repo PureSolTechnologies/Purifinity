@@ -18,11 +18,11 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresol</groupId>
-			<artifactId>trees</artifactId>
+			<artifactId>trees.lib</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresol</groupId>
-			<artifactId>utils</artifactId>
+			<artifactId>utils.lib</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresol</groupId>
