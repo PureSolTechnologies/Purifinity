@@ -34,6 +34,7 @@
       <import plugin="org.eclipse.e4.ui.services" version="0.10.2" match="greaterOrEqual"/>
       <import plugin="org.eclipse.jface" version="3.8.101" match="greaterOrEqual"/>
       <import plugin="org.slf4j.api"/>
+      <import plugin="com.puresol.trees.bundle"/>
    </requires>
 
    <plugin
