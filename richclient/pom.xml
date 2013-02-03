@@ -55,6 +55,14 @@
 		</pluginRepository>
 	</pluginRepositories>
 
+	<dependencies>
+		<dependency>
+			<groupId>com.puresol</groupId>
+			<artifactId>trees.bundle</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+
 	<build>
 		<plugins>
 			<plugin>

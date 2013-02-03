@@ -4,37 +4,29 @@
 
 	<parent>
 		<groupId>com.puresol</groupId>
-		<artifactId>utils</artifactId>
+		<artifactId>trees</artifactId>
 		<version>0.1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>utils.lib</artifactId>
+	<artifactId>trees.test</artifactId>
 	<name>${project.groupId}.${project.artifactId}</name>
 
 	<dependencies>
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<scope>provided</scope>
+			<groupId>com.puresol</groupId>
+			<artifactId>commons.test</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresol</groupId>
+			<artifactId>trees.bundle</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.jfree</groupId>
-			<artifactId>jcommon</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.jfree</groupId>
-			<artifactId>jfreechart</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.puresol</groupId>
-			<artifactId>trees.lib</artifactId>
-			<scope>provided</scope>
+			<groupId>org.apache.felix</groupId>
+			<artifactId>org.apache.felix.framework</artifactId>
 		</dependency>
 	</dependencies>
 

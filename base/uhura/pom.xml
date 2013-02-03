@@ -15,7 +15,7 @@
 	<modules>
 		<module>lib</module>
 		<module>test</module>
-		<module>osgi</module>
+		<module>bundle</module>
 	</modules>
 
 </project>

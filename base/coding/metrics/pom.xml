@@ -26,7 +26,6 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.mockito</groupId>
@@ -65,8 +64,6 @@
 		<dependency>
 			<groupId>com.puresol</groupId>
 			<artifactId>coding.analysis.test</artifactId>
-			<version>0.1.0-SNAPSHOT</version>
-			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.jibx.config.3rdparty.org.eclipse</groupId>
