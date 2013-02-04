@@ -18,8 +18,8 @@ Import-Package: com.puresol.data;version="0.1.0",
  com.puresol.trees;version="0.1.0",
  com.puresol.uhura.source;version="0.1.0",
  com.puresol.utils;version="0.1.0",
- org.osgi.framework;version="0.0.0",
- org.slf4j;version="1.7.2"
+ org.osgi.framework,
+ org.slf4j;version="1.6.4"
 Export-Package: com.puresol.uhura.analyzer;
   uses:="com.puresol.uhura.parser,
    com.puresol.uhura.lexer,

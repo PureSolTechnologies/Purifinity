@@ -22,6 +22,16 @@
 			<artifactId>trees.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.puresol</groupId>
+			<artifactId>utils.bundle</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.puresol</groupId>
+			<artifactId>uhura.bundle</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 
 	<repositories>

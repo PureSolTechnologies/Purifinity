@@ -22,5 +22,5 @@ Export-Package: com.puresol,
 Originally-Created-By: Apache Maven Bundle Plugin
 Tool: Bnd-1.50.0
 Import-Package: com.puresol.trees;version="0.1.0",
- org.osgi.framework;version="0.0.0",
- org.slf4j;version="1.7.2"
+ org.osgi.framework,
+ org.slf4j;version="1.6.4"
