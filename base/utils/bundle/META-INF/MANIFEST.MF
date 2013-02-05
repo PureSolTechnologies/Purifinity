@@ -25,4 +25,4 @@ Import-Package: com.puresol.trees;version="0.1.0",
  org.osgi.framework;version="0.0.0",
  org.slf4j;version="1.6.4"
 Bundle-ClassPath: .,
- ../lib/utils.lib.jar
+ lib/utils.lib.jar
