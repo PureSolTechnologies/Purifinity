@@ -35,13 +35,8 @@
       <import plugin="org.eclipse.jface" version="3.8.101" match="greaterOrEqual"/>
       <import plugin="com.puresol.trees.bundle" version="0.1.0" match="greaterOrEqual"/>
       <import plugin="org.slf4j.api"/>
-<<<<<<< HEAD
-      <import plugin="com.puresol.uhura.bundle" version="0.1.0" match="greaterOrEqual"/>
-      <import plugin="com.puresol.utils.bundle" version="0.1.0" match="greaterOrEqual"/>
-=======
       <import plugin="com.puresol.utils.bundle" version="0.1.0" match="greaterOrEqual"/>
       <import plugin="com.puresol.uhura.bundle" version="0.1.0" match="greaterOrEqual"/>
->>>>>>> origin/master
    </requires>
 
    <plugin
