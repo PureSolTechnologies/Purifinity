@@ -189,13 +189,18 @@
 		<pluginManagement>
 			<plugins>
 				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>2.3.2</version>
+				</plugin>
+				<plugin>
 					<groupId>org.apache.felix</groupId>
 					<artifactId>maven-bundle-plugin</artifactId>
 					<version>2.3.7</version>
 					<extensions>true</extensions>
 					<configuration>
 						<instructions>
-							<_include>src/main/resources/META-INF/MANIFEST.MF</_include>
+							<_include>META-INF/MANIFEST.MF</_include>
 						</instructions>
 					</configuration>
 				</plugin>
@@ -204,13 +209,44 @@
 					<artifactId>maven-surefire-plugin</artifactId>
 					<version>2.12</version>
 				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-dependency-plugin</artifactId>
+					<version>2.6</version>
+					<inherited>false</inherited>
+					<executions>
+						<execution>
+							<id>copy-jar-to-bundle</id>
+							<phase>install</phase>
+							<inherited>true</inherited>
+							<goals>
+								<goal>copy</goal>
+							</goals>
+							<configuration>
+								<artifactItems>
+									<artifactItem>
+										<groupId>${project.groupId}</groupId>
+										<artifactId>${project.artifactId}</artifactId>
+										<version>${project.version}</version>
+										<type>jar</type>
+										<overWrite>true</overWrite>
+										<destFileName>${project.artifactId}.jar</destFileName>
+									</artifactItem>
+								</artifactItems>
+								<outputDirectory>${project.build.directory}/../../bundle/lib</outputDirectory>
+								<!-- outputDirectory>${project.build.directory}/wars</outputDirectory -->
+								<overWriteReleases>false</overWriteReleases>
+								<overWriteSnapshots>true</overWriteSnapshots>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.3.2</version>
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>

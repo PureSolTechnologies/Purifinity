@@ -36,6 +36,7 @@
       <import plugin="com.puresol.trees.bundle" version="0.1.0" match="greaterOrEqual"/>
       <import plugin="org.slf4j.api"/>
       <import plugin="com.puresol.utils.bundle" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="com.puresol.uhura.bundle" version="0.1.0" match="greaterOrEqual"/>
    </requires>
 
    <plugin

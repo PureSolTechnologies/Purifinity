@@ -1,4 +1,5 @@
 .settings
+.classpath
 bin
 target
 felix-cache

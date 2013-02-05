@@ -30,6 +30,16 @@
 	</dependencies>
 
 	<build>
+		<outputDirectory>bin</outputDirectory>
+		<sourceDirectory>src</sourceDirectory>
+		<resources>
+			<resource>
+				<directory>.</directory>
+				<includes>
+					<include>lib/**</include>
+				</includes>
+			</resource>
+		</resources>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.felix</groupId>
