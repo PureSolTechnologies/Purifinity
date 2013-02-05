@@ -6,7 +6,7 @@ Created-By: Apache Maven Bundle Plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Vendor: PureSol Technologies
 Build-Jdk: 1.6.0_22
-Bundle-Version: 0.1.0.qualifier
+Bundle-Version: 0.1.0
 Bnd-LastModified: 1331319581390
 Bundle-Activator: com.puresol.uhura.Activator
 Bundle-ManifestVersion: 2
@@ -19,7 +19,7 @@ Import-Package: com.puresol.data;version="0.1.0",
  com.puresol.uhura.source;version="0.1.0",
  com.puresol.utils;version="0.1.0",
  org.osgi.framework;version="0.0.0",
- org.slf4j;version="1.7.2"
+ org.slf4j;version="1.6.4"
 Export-Package: com.puresol.uhura.analyzer;
   uses:="com.puresol.uhura.parser,
    com.puresol.uhura.lexer,
