@@ -11,7 +11,6 @@
 <booleanAttribute key="clearwslog" value="false"/>
 <stringAttribute key="configLocation" value="${workspace_loc}/.metadata/.plugins/org.eclipse.pde.core/RichClient"/>
 <booleanAttribute key="default" value="false"/>
-<stringAttribute key="deselected_workspace_plugins" value="com.puresol.coding.analysis.api,com.puresol.coding.analysis.impl,com.puresol.coding.lang.c11,com.puresol.coding.lang.common,com.puresol.coding.lang.cpp11,com.puresol.coding.lang.fortran,com.puresol.coding.lang.java,com.puresol.coding.metrics"/>
 <booleanAttribute key="includeOptional" value="false"/>
 <stringAttribute key="location" value="${workspace_loc}/../runtime-RichClient"/>
 <booleanAttribute key="org.eclipse.debug.core.capture_output" value="false"/>
