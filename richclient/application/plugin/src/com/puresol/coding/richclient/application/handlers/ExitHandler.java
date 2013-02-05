@@ -5,6 +5,9 @@ import org.eclipse.e4.ui.workbench.IWorkbench;
 
 import com.puresol.trees.FileTree;
 import com.puresol.trees.Tree;
+import com.puresol.uhura.lexer.TokenMetaData;
+import com.puresol.uhura.source.FixedCodeLocation;
+import com.puresol.utils.HashAlgorithm;
 
 @SuppressWarnings("restriction")
 public class ExitHandler {
