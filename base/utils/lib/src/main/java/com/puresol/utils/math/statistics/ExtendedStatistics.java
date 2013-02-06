@@ -1,4 +1,4 @@
-package com.puresol.math.statistics;
+package com.puresol.utils.math.statistics;
 
 import java.util.Collections;
 import java.util.List;

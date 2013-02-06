@@ -16,7 +16,7 @@
  *
  ***************************************************************************/
 
-package com.puresol.data;
+package com.puresol.utils.data;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;

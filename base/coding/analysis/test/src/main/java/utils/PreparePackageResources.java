@@ -7,8 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.puresol.coding.lang.test.grammar.TestLanguageGrammar;
-import com.puresol.packages.PackageBuilderUtils;
-import com.puresol.packages.PackageDirectory;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.GrammarReader;
@@ -18,6 +16,8 @@ import com.puresol.uhura.lexer.LexerFactoryException;
 import com.puresol.uhura.parser.Parser;
 import com.puresol.uhura.parser.ParserFactory;
 import com.puresol.uhura.parser.ParserFactoryException;
+import com.puresol.utils.packages.PackageBuilderUtils;
+import com.puresol.utils.packages.PackageDirectory;
 
 public class PreparePackageResources {
 

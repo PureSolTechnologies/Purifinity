@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.puresol.coding.evaluation.api.Result;
-import com.puresol.math.statistics.Statistics;
+import com.puresol.utils.math.statistics.Statistics;
 
 public class SLOCResult implements Serializable {
 

@@ -1,4 +1,4 @@
-package com.puresol.math;
+package com.puresol.utils.math;
 
 public class Vector extends Matrix {
 

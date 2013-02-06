@@ -16,7 +16,7 @@
  *
  ***************************************************************************/
 
-package com.puresol.io;
+package com.puresol.utils.io;
 
 public enum VerticalDataFileFormat {
 	COMMA_SEPARATED, TAB_SEPARATED;

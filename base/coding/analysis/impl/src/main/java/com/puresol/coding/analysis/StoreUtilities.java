@@ -11,7 +11,6 @@ import com.puresol.coding.analysis.api.CodeStoreException;
 import com.puresol.coding.analysis.api.CodeStoreFactory;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.analysis.api.CodeStore;
-import com.puresol.data.HashCodeGenerator;
 import com.puresol.trees.FileTree;
 import com.puresol.trees.TreeVisitor;
 import com.puresol.trees.TreeWalker;
@@ -21,6 +20,7 @@ import com.puresol.uhura.source.CodeLocation;
 import com.puresol.utils.FileUtilities;
 import com.puresol.utils.HashAlgorithm;
 import com.puresol.utils.HashId;
+import com.puresol.utils.data.HashCodeGenerator;
 
 /**
  * This class provides some utilities for the analysis store.

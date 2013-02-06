@@ -9,7 +9,7 @@ import org.junit.Test;
 
 import com.puresol.coding.analysis.api.CodeRangeType;
 import com.puresol.coding.quality.api.SourceCodeQuality;
-import com.puresol.math.statistics.Statistics;
+import com.puresol.utils.math.statistics.Statistics;
 
 public class SLOCQualityTest {
 

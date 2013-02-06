@@ -14,10 +14,6 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.puresol</groupId>
-			<artifactId>uhura.lib</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.osgi</groupId>
 			<artifactId>org.osgi.core</artifactId>
 			<scope>provided</scope>

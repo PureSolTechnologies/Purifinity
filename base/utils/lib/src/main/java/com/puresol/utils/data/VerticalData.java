@@ -16,7 +16,7 @@
  *
  ***************************************************************************/
 
-package com.puresol.data;
+package com.puresol.utils.data;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -27,7 +27,7 @@ import java.util.Date;
 import java.util.Hashtable;
 import java.util.Vector;
 
-import com.puresol.io.ValueType;
+import com.puresol.utils.io.ValueType;
 
 /**
  * This class keeps the complete data of a vertical table. A vertical table

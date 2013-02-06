@@ -8,7 +8,7 @@
  *
  ***************************************************************************/
 
-package com.puresol.math.statistics;
+package com.puresol.utils.math.statistics;
 
 import java.io.Serializable;
 import java.util.Collections;

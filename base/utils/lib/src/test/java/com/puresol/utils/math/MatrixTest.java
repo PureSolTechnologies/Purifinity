@@ -1,8 +1,10 @@
-package com.puresol.math;
+package com.puresol.utils.math;
 
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
+
+import com.puresol.utils.math.Matrix;
 
 public class MatrixTest {
 

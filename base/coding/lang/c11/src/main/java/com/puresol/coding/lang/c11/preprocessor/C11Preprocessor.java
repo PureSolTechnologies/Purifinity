@@ -5,7 +5,6 @@ import java.util.regex.Pattern;
 
 import com.puresol.coding.lang.c11.preprocessor.internal.C11PreprocessorParser;
 import com.puresol.coding.lang.c11.preprocessor.internal.TreeMacroProcessor;
-import com.puresol.io.LineTerminator;
 import com.puresol.trees.TreeException;
 import com.puresol.uhura.parser.ParserException;
 import com.puresol.uhura.parser.ParserTree;
@@ -13,6 +12,7 @@ import com.puresol.uhura.preprocessor.Preprocessor;
 import com.puresol.uhura.preprocessor.PreprocessorException;
 import com.puresol.uhura.source.SourceCode;
 import com.puresol.uhura.source.SourceCodeLine;
+import com.puresol.utils.io.LineTerminator;
 
 /**
  * This is a C preprocessor on basis on C11 grammar.

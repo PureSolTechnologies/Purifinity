@@ -1,4 +1,4 @@
-package com.puresol.data;
+package com.puresol.utils.data;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -7,6 +7,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import org.junit.Test;
+
+import com.puresol.utils.data.HashCodeGenerator;
 
 public class HashCodeGeneratorTest {
 

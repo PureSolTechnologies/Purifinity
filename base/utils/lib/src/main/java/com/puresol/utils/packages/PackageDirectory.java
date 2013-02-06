@@ -1,4 +1,4 @@
-package com.puresol.packages;
+package com.puresol.utils.packages;
 
 public enum PackageDirectory {
 

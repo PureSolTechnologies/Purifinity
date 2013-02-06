@@ -12,7 +12,7 @@ import java.io.RandomAccessFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresol.data.HashCodeGenerator;
+import com.puresol.utils.data.HashCodeGenerator;
 
 /**
  * This class contains several static methods for easier access to standard

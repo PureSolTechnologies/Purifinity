@@ -16,7 +16,7 @@
  *
  ***************************************************************************/
 
-package com.puresol.io;
+package com.puresol.utils.io;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -30,8 +30,8 @@ import java.util.Locale;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresol.data.TypeWrapper;
-import com.puresol.data.VerticalData;
+import com.puresol.utils.data.TypeWrapper;
+import com.puresol.utils.data.VerticalData;
 
 public class VerticalDataFile {
 

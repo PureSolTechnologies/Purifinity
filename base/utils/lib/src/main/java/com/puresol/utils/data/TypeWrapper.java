@@ -16,7 +16,7 @@
  *
  ***************************************************************************/
 
-package com.puresol.data;
+package com.puresol.utils.data;
 
 import java.util.Hashtable;
 

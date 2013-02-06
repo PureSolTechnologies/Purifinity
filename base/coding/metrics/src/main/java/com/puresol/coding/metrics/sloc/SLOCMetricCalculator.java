@@ -25,11 +25,11 @@ import com.puresol.coding.evaluation.api.Result;
 import com.puresol.coding.evaluator.CodeRangeEvaluator;
 import com.puresol.coding.quality.api.QualityCharacteristic;
 import com.puresol.coding.quality.api.SourceCodeQuality;
-import com.puresol.math.statistics.Statistics;
 import com.puresol.trees.TreeIterator;
 import com.puresol.uhura.lexer.Token;
 import com.puresol.uhura.lexer.TokenMetaData;
 import com.puresol.uhura.parser.ParserTree;
+import com.puresol.utils.math.statistics.Statistics;
 
 /**
  * This class calculates a small statistics for a source code for source lines

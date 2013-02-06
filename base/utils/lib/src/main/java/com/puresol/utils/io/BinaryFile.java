@@ -1,4 +1,4 @@
-package com.puresol.io;
+package com.puresol.utils.io;
 
 import java.io.File;
 import java.io.FileNotFoundException;

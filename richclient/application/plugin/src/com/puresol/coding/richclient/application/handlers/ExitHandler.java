@@ -3,12 +3,12 @@ package com.puresol.coding.richclient.application.handlers;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.ui.workbench.IWorkbench;
 
-import com.puresol.data.HashCodeGenerator;
 import com.puresol.trees.FileTree;
 import com.puresol.trees.Tree;
 import com.puresol.uhura.lexer.TokenMetaData;
 import com.puresol.uhura.source.FixedCodeLocation;
 import com.puresol.utils.HashAlgorithm;
+import com.puresol.utils.data.HashCodeGenerator;
 
 @SuppressWarnings("restriction")
 public class ExitHandler {

@@ -1,4 +1,4 @@
-package com.puresol.math;
+package com.puresol.utils.math;
 
 /**
  * This is an implementation of a mathematical matrix for matrix calculations.
