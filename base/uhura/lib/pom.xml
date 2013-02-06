@@ -15,17 +15,14 @@
 		<dependency>
 			<groupId>com.puresol</groupId>
 			<artifactId>trees.lib</artifactId>
-			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.puresol</groupId>
 			<artifactId>utils.lib</artifactId>
-			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
