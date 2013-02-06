@@ -101,7 +101,6 @@
 				<groupId>com.puresol</groupId>
 				<artifactId>trees.bundle</artifactId>
 				<version>${project.version}</version>
-				<scope>provided</scope>
 			</dependency>
 			<dependency>
 				<groupId>com.puresol</groupId>
@@ -168,6 +167,19 @@
 				<artifactId>org.apache.felix.framework</artifactId>
 				<version>4.0.3</version>
 				<scope>test</scope>
+			</dependency>
+			<!-- JFreeChart -->
+			<dependency>
+				<groupId>org.jfree</groupId>
+				<artifactId>jcommon</artifactId>
+				<version>1.0.17</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.jfree</groupId>
+				<artifactId>jfreechart</artifactId>
+				<version>1.0.14</version>
+				<scope>provided</scope>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

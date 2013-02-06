@@ -8,7 +8,6 @@ import com.puresol.trees.Tree;
 import com.puresol.uhura.lexer.TokenMetaData;
 import com.puresol.uhura.source.FixedCodeLocation;
 import com.puresol.utils.HashAlgorithm;
-import com.puresol.utils.data.HashCodeGenerator;
 
 @SuppressWarnings("restriction")
 public class ExitHandler {

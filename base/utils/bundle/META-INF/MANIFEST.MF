@@ -1,3 +1,7 @@
+Manifest-Version: 1.0
+Bnd-LastModified: 1331417325110
+Build-Jdk: 1.6.0_22
+Built-By: ludwig
 Bundle-Activator: com.puresol.utils.Activator
 Bundle-ManifestVersion: 2
 Bundle-Name: com.puresol.utils.bundle
@@ -5,12 +9,18 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-SymbolicName: com.puresol.utils.bundle
 Bundle-Vendor: PureSol Technologies
 Bundle-Version: 0.1.0
-Export-Package: com.puresol.utils,
- com.puresol.utils.data,
- com.puresol.utils.io,
- com.puresol.utils.math,
- com.puresol.utils.math.statistics,
- com.puresol.utils.packages
+Created-By: Apache Maven Bundle Plugin
+Export-Package: com.puresol,
+ com.puresol.config,
+ com.puresol.data,
+ com.puresol.io,
+ com.puresol.math,
+ com.puresol.math.statistics,
+ com.puresol.packages,
+ com.puresol.progress,
+ com.puresol.utils
+Originally-Created-By: Apache Maven Bundle Plugin
+Tool: Bnd-1.50.0
 Import-Package: com.puresol.trees;version="0.1.0",
  org.osgi.framework;version="0.0.0",
  org.slf4j;version="1.6.4"
