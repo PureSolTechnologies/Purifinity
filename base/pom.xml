@@ -101,6 +101,7 @@
 				<groupId>com.puresol</groupId>
 				<artifactId>trees.bundle</artifactId>
 				<version>${project.version}</version>
+				<scope>provided</scope>
 			</dependency>
 			<dependency>
 				<groupId>com.puresol</groupId>
@@ -134,7 +135,7 @@
 			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-api</artifactId>
-				<version>1.7.2</version>
+				<version>1.6.4</version>
 				<scope>provided</scope>
 			</dependency>
 			<dependency>
@@ -168,19 +169,6 @@
 				<version>4.0.3</version>
 				<scope>test</scope>
 			</dependency>
-			<!-- JFreeChart -->
-			<dependency>
-				<groupId>org.jfree</groupId>
-				<artifactId>jcommon</artifactId>
-				<version>1.0.17</version>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.jfree</groupId>
-				<artifactId>jfreechart</artifactId>
-				<version>1.0.14</version>
-				<scope>provided</scope>
-			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -198,8 +186,20 @@
 					<version>2.3.7</version>
 					<extensions>true</extensions>
 					<configuration>
+						<manifestLocation>META-INF</manifestLocation>
 						<instructions>
-							<_include>META-INF/MANIFEST.MF</_include>
+							<Bundle-SymbolicName>${bundle.symbolicName}</Bundle-SymbolicName>
+							<Bundle-Version>${project.version}}</Bundle-Version>
+							<!-- assume public classes are in the top package, and private classes 
+								are under ".internal" -->
+							<Export-Package>!${bundle.namespace}.internal.*,${bundle.namespace}.*;version="${project.version}"</Export-Package>
+							<Private-Package>${bundle.namespace}.internal.*</Private-Package>
+							<Bundle-Activator>${bundle.namespace}.Activator</Bundle-Activator>
+							<!-- embed compile/runtime dependencies using path that matches the 
+								copied dependency folder -->
+							<Embed-Dependency>*;scope=compile|runtime;inline=false</Embed-Dependency>
+							<Embed-Directory>target/dependency</Embed-Directory>
+							<Embed-StripGroup>true</Embed-StripGroup>
 						</instructions>
 					</configuration>
 				</plugin>
@@ -207,38 +207,6 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-surefire-plugin</artifactId>
 					<version>2.12</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-dependency-plugin</artifactId>
-					<version>2.6</version>
-					<inherited>false</inherited>
-					<executions>
-						<execution>
-							<id>copy-jar-to-bundle</id>
-							<phase>install</phase>
-							<inherited>true</inherited>
-							<goals>
-								<goal>copy</goal>
-							</goals>
-							<configuration>
-								<artifactItems>
-									<artifactItem>
-										<groupId>${project.groupId}</groupId>
-										<artifactId>${project.artifactId}</artifactId>
-										<version>${project.version}</version>
-										<type>jar</type>
-										<overWrite>true</overWrite>
-										<destFileName>${project.artifactId}.jar</destFileName>
-									</artifactItem>
-								</artifactItems>
-								<outputDirectory>${project.build.directory}/../../bundle/lib</outputDirectory>
-								<!-- outputDirectory>${project.build.directory}/wars</outputDirectory -->
-								<overWriteReleases>false</overWriteReleases>
-								<overWriteSnapshots>true</overWriteSnapshots>
-							</configuration>
-						</execution>
-					</executions>
 				</plugin>
 			</plugins>
 		</pluginManagement>
