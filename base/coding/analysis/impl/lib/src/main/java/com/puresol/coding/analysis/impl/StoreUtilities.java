@@ -7,10 +7,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.puresol.coding.analysis.api.CodeStore;
 import com.puresol.coding.analysis.api.CodeStoreException;
 import com.puresol.coding.analysis.api.CodeStoreFactory;
 import com.puresol.coding.analysis.api.HashIdFileTree;
-import com.puresol.coding.analysis.api.CodeStore;
 import com.puresol.trees.FileTree;
 import com.puresol.trees.TreeVisitor;
 import com.puresol.trees.TreeWalker;

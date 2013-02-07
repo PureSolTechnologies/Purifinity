@@ -3,10 +3,10 @@ package com.puresol.coding.metrics.sloc;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.puresol.coding.analysis.api.AnalysisRun;
-import com.puresol.coding.analysis.api.evaluation.Evaluator;
-import com.puresol.coding.analysis.api.evaluation.EvaluatorFactory;
-import com.puresol.coding.analysis.api.quality.QualityCharacteristic;
+import com.puresol.coding.analysis.impl.AnalysisRun;
+import com.puresol.coding.analysis.impl.evaluation.Evaluator;
+import com.puresol.coding.analysis.impl.evaluation.EvaluatorFactory;
+import com.puresol.coding.analysis.impl.quality.QualityCharacteristic;
 
 public class SLOCEvaluatorFactory implements EvaluatorFactory {
 

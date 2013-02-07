@@ -11,8 +11,8 @@ import org.osgi.framework.ServiceRegistration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresol.coding.analysis.api.evaluation.EvaluatorFactory;
-import com.puresol.coding.analysis.api.evaluation.EvaluatorStore;
+import com.puresol.coding.analysis.impl.evaluation.EvaluatorFactory;
+import com.puresol.coding.analysis.impl.evaluation.EvaluatorStore;
 
 public class NormalizedMaintainabilityActivator implements BundleActivator {
 

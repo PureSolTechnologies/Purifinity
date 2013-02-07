@@ -17,8 +17,8 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresol.coding.analysis.api.CodeAnalyzer;
 import com.puresol.coding.analysis.api.ProgrammingLanguage;
+import com.puresol.coding.analysis.api.ProgrammingLanguages;
 import com.puresol.uhura.source.CodeLocation;
 
 /**

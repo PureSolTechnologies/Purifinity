@@ -2,7 +2,7 @@ package com.puresol.coding.metrics.codedepth;
 
 import java.util.ArrayList;
 
-import com.puresol.coding.analysis.api.evaluation.FileResults;
+import com.puresol.coding.analysis.impl.evaluation.FileResults;
 
 public class CodeDepthFileResults extends ArrayList<CodeDepthFileResult>
 	implements FileResults {

@@ -13,9 +13,9 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>metrics</module>
-		<module>lang</module>
 		<module>analysis</module>
+		<!-- module>metrics</module -->
+		<module>lang</module>
 	</modules>
 
 </project>

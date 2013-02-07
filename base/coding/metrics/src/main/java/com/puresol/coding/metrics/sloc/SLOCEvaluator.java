@@ -2,16 +2,16 @@ package com.puresol.coding.metrics.sloc;
 
 import java.util.List;
 
-import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.CodeAnalysis;
 import com.puresol.coding.analysis.api.CodeRange;
 import com.puresol.coding.analysis.api.CodeRangeType;
 import com.puresol.coding.analysis.api.HashIdFileTree;
-import com.puresol.coding.analysis.api.ProgrammingLanguage;
-import com.puresol.coding.analysis.api.evaluation.EvaluatorStore;
-import com.puresol.coding.analysis.api.quality.QualityCharacteristic;
+import com.puresol.coding.analysis.impl.AnalysisRun;
+import com.puresol.coding.analysis.impl.ProgrammingLanguage;
 import com.puresol.coding.analysis.impl.ProgrammingLanguages;
-import com.puresol.coding.analysis.impl.evaluator.AbstractEvaluator;
+import com.puresol.coding.analysis.impl.evaluation.AbstractEvaluator;
+import com.puresol.coding.analysis.impl.evaluation.EvaluatorStore;
+import com.puresol.coding.analysis.impl.quality.QualityCharacteristic;
 
 public class SLOCEvaluator extends AbstractEvaluator {
 

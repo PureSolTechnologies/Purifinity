@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.puresol.coding.analysis.api.evaluation.Result;
+import com.puresol.coding.analysis.impl.evaluation.Result;
 
 public class EntropyResult implements Serializable {
 

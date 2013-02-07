@@ -2,7 +2,6 @@ package com.puresol.coding.analysis.impl;
 
 import java.io.File;
 
-import com.puresol.coding.analysis.api.ModuleStore;
 import com.puresol.coding.analysis.api.ModuleStoreException;
 import com.puresol.utils.HashId;
 

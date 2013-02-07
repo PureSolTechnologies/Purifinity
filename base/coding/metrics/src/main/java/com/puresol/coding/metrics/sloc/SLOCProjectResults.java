@@ -1,6 +1,6 @@
 package com.puresol.coding.metrics.sloc;
 
-import com.puresol.coding.analysis.api.evaluation.ProjectResults;
+import com.puresol.coding.analysis.impl.evaluation.ProjectResults;
 
 public class SLOCProjectResults implements ProjectResults {
 

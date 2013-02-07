@@ -3,6 +3,7 @@ package com.puresol.coding.analysis.api;
 import java.io.File;
 import java.io.IOException;
 
+import com.puresol.coding.analysis.impl.CodeAnalyzer;
 import com.puresol.uhura.source.CodeLocation;
 
 /**

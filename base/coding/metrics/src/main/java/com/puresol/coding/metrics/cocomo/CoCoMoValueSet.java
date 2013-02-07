@@ -3,10 +3,10 @@ package com.puresol.coding.metrics.cocomo;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.puresol.coding.analysis.api.evaluation.DirectoryResults;
-import com.puresol.coding.analysis.api.evaluation.FileResults;
-import com.puresol.coding.analysis.api.evaluation.ProjectResults;
-import com.puresol.coding.analysis.api.evaluation.Result;
+import com.puresol.coding.analysis.impl.evaluation.DirectoryResults;
+import com.puresol.coding.analysis.impl.evaluation.FileResults;
+import com.puresol.coding.analysis.impl.evaluation.ProjectResults;
+import com.puresol.coding.analysis.impl.evaluation.Result;
 
 public class CoCoMoValueSet implements ProjectResults, DirectoryResults,
 		FileResults {

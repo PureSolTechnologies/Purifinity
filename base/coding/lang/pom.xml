@@ -13,12 +13,11 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>api</module>
 		<module>commons</module>
-		<module>java</module>
-		<module>c11</module>
-		<module>cpp</module>
-		<module>fortran</module>
+		<!-- module>java</module -->
+		<!-- module>c11</module -->
+		<!-- module>cpp</module -->
+		<!-- module>fortran</module -->
 	</modules>
 
 </project>

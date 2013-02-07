@@ -18,13 +18,13 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
-import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.CodeRange;
-import com.puresol.coding.analysis.api.ProgrammingLanguage;
-import com.puresol.coding.analysis.api.evaluation.Result;
-import com.puresol.coding.analysis.api.quality.QualityCharacteristic;
-import com.puresol.coding.analysis.api.quality.SourceCodeQuality;
-import com.puresol.coding.analysis.impl.evaluator.CodeRangeEvaluator;
+import com.puresol.coding.analysis.impl.AnalysisRun;
+import com.puresol.coding.analysis.impl.ProgrammingLanguage;
+import com.puresol.coding.analysis.impl.evaluation.CodeRangeEvaluator;
+import com.puresol.coding.analysis.impl.evaluation.Result;
+import com.puresol.coding.analysis.impl.quality.QualityCharacteristic;
+import com.puresol.coding.analysis.impl.quality.SourceCodeQuality;
 import com.puresol.coding.metrics.halstead.HalsteadMetric;
 
 /**

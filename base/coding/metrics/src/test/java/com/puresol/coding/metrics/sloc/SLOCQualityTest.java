@@ -8,7 +8,7 @@ import java.util.List;
 import org.junit.Test;
 
 import com.puresol.coding.analysis.api.CodeRangeType;
-import com.puresol.coding.analysis.api.quality.SourceCodeQuality;
+import com.puresol.coding.analysis.impl.quality.SourceCodeQuality;
 import com.puresol.utils.math.statistics.Statistics;
 
 public class SLOCQualityTest {

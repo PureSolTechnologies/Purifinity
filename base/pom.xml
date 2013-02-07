@@ -7,6 +7,12 @@
 	<packaging>pom</packaging>
 	<name>Library parent module</name>
 
+	<organization>
+		<name>PureSol Technologies</name>
+		<url>http://puresol-technologies.com</url>
+	</organization>
+	<inceptionYear>2009</inceptionYear>
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
@@ -189,6 +195,7 @@
 						<instructions>
 							<Bundle-SymbolicName>${bundle.symbolicName}</Bundle-SymbolicName>
 							<Bundle-Version>${project.version}}</Bundle-Version>
+							<Bundle-Vendor>${project.organization.name}</Bundle-Vendor>
 							<!-- assume public classes are in the top package, and private classes 
 								are under ".internal" -->
 							<Export-Package>!${bundle.namespace}.internal.*,${bundle.namespace}.*;version="${project.version}"</Export-Package>

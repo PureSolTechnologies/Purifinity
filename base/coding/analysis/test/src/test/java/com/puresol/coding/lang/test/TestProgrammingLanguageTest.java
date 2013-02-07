@@ -6,7 +6,7 @@ import static org.junit.Assert.assertSame;
 
 import org.junit.Test;
 
-import com.puresol.coding.analysis.api.ProgrammingLanguage;
+import com.puresol.coding.analysis.impl.ProgrammingLanguage;
 
 public class TestProgrammingLanguageTest {
 

@@ -1,7 +1,7 @@
 package com.puresol.coding.metrics.maintainability;
 
 import com.puresol.coding.analysis.api.CodeRangeType;
-import com.puresol.coding.analysis.api.quality.SourceCodeQuality;
+import com.puresol.coding.analysis.impl.quality.SourceCodeQuality;
 
 public class MaintainabilityQuality {
 

@@ -1,8 +1,8 @@
 package com.puresol.coding.lang.commons;
 
-import java.io.InputStream;
 import java.util.Properties;
 
+import com.puresol.coding.analysis.api.LanguageGrammar;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.production.ProductionSet;
@@ -16,7 +16,8 @@ import com.puresol.uhura.grammar.token.TokenDefinitionSet;
  * @author Rick-Rainer Ludwig
  * 
  */
-public abstract class AbstractLanguageGrammar extends Grammar implements LanGr {
+public abstract class AbstractLanguageGrammar extends Grammar implements
+		LanguageGrammar {
 
 	private static final long serialVersionUID = 3959164848195264441L;
 
@@ -25,7 +26,5 @@ public abstract class AbstractLanguageGrammar extends Grammar implements LanGr {
 			throws GrammarException {
 		super(options, tokenDefinitions, productions);
 	}
-
-	public abstract InputStream getGrammarDefinition();
 
 }

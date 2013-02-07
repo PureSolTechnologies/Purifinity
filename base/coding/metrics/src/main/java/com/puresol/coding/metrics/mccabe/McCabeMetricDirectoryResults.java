@@ -2,7 +2,7 @@ package com.puresol.coding.metrics.mccabe;
 
 import java.util.ArrayList;
 
-import com.puresol.coding.analysis.api.evaluation.DirectoryResults;
+import com.puresol.coding.analysis.impl.evaluation.DirectoryResults;
 
 public class McCabeMetricDirectoryResults extends
 	ArrayList<McCabeMetricDirectoryResult> implements DirectoryResults {

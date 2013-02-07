@@ -3,7 +3,7 @@ package com.puresol.coding.metrics.maintainability;
 import java.io.Serializable;
 
 import com.puresol.coding.analysis.api.CodeRangeType;
-import com.puresol.coding.analysis.api.quality.SourceCodeQuality;
+import com.puresol.coding.analysis.impl.quality.SourceCodeQuality;
 import com.puresol.uhura.source.CodeLocation;
 
 public class MaintainabilityIndexFileResult implements Serializable {

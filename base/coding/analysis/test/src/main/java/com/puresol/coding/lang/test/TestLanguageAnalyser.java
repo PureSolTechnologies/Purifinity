@@ -22,12 +22,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.puresol.coding.analysis.api.AnalyzedCode;
-import com.puresol.coding.analysis.api.AnalyzerException;
 import com.puresol.coding.analysis.api.CodeAnalysis;
-import com.puresol.coding.analysis.api.CodeAnalyzer;
 import com.puresol.coding.analysis.api.CodeRange;
 import com.puresol.coding.analysis.api.CodeRangeType;
-import com.puresol.coding.analysis.api.ProgrammingLanguage;
+import com.puresol.coding.analysis.impl.AnalyzerException;
+import com.puresol.coding.analysis.impl.CodeAnalyzer;
+import com.puresol.coding.analysis.impl.ProgrammingLanguage;
 import com.puresol.coding.lang.test.grammar.TestLanguageGrammar;
 import com.puresol.uhura.lexer.Lexer;
 import com.puresol.uhura.lexer.LexerException;

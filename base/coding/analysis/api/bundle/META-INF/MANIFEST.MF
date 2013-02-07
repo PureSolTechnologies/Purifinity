@@ -1,13 +1,15 @@
 Manifest-Version: 1.0
-Bnd-LastModified: 1360261570374
+Bnd-LastModified: 1360266274725
 Build-Jdk: 1.6.0_24
 Built-By: ludwig
 Bundle-Activator: com.puresol.coding.analysis.api.Activator
 Bundle-ClassPath: .,target/dependency/coding.analysis.api.lib-0.1.0-SNAP
  SHOT.jar,target/dependency/commons.osgi-0.1.0-SNAPSHOT.jar
+Bundle-DocURL: http://puresol-technologies.com
 Bundle-ManifestVersion: 2
 Bundle-Name: com.puresol.coding.analysis.api.bundle
 Bundle-SymbolicName: com.puresol.coding.analysis.api
+Bundle-Vendor: PureSol Technologies
 Bundle-Version: 0.1.0.SNAPSHOT
 Created-By: Apache Maven Bundle Plugin
 Embed-Dependency: *;scope=compile|runtime;inline=false
@@ -18,9 +20,14 @@ Embedded-Artifacts: target/dependency/coding.analysis.api.lib-0.1.0-SNAP
  ,target/dependency/commons.osgi-0.1.0-SNAPSHOT.jar;g="com.puresol";a="c
  ommons.osgi";v="0.1.0-SNAPSHOT"
 Export-Package: com.puresol.coding.analysis.api;uses:="com.puresol.uhura
- .source,com.puresol.utils,com.puresol.uhura.parser,com.puresol.trees";v
- ersion="0.1.0.SNAPSHOT"
-Import-Package: com.puresol.trees,com.puresol.uhura.parser,com.puresol.u
- hura.source,com.puresol.utils,org.osgi.framework;version="[1.5,2)",org.
- slf4j;version="[1.6,2)"
+ .source,com.puresol.utils,org.osgi.framework,com.puresol.uhura.parser,c
+ om.puresol.trees";version="0.1.0.SNAPSHOT",com.puresol.coding.analysis.
+ api.evaluation;uses:="com.puresol.coding.analysis.api,com.puresol.codin
+ g.analysis.api.quality,com.puresol.utils,org.osgi.framework";version="0
+ .1.0.SNAPSHOT",com.puresol.coding.analysis.api.quality;uses:="com.pures
+ ol.utils,org.slf4j";version="0.1.0.SNAPSHOT"
+Import-Package: com.puresol.coding.analysis.api.evaluation;version="[0.1
+ ,1)",com.puresol.coding.analysis.api.quality;version="[0.1,1)",com.pure
+ sol.trees,com.puresol.uhura.parser,com.puresol.uhura.source,com.puresol
+ .utils,org.osgi.framework;version="[1.5,2)",org.slf4j;version="[1.6,2)"
 Tool: Bnd-1.50.0

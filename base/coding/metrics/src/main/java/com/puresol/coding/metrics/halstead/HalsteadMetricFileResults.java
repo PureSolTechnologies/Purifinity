@@ -2,7 +2,7 @@ package com.puresol.coding.metrics.halstead;
 
 import java.util.ArrayList;
 
-import com.puresol.coding.analysis.api.evaluation.FileResults;
+import com.puresol.coding.analysis.impl.evaluation.FileResults;
 
 public class HalsteadMetricFileResults extends
 	ArrayList<HalsteadMetricFileResult> implements FileResults {

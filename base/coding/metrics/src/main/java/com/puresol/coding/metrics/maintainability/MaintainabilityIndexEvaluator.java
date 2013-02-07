@@ -3,14 +3,14 @@ package com.puresol.coding.metrics.maintainability;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalyzedCode;
 import com.puresol.coding.analysis.api.CodeAnalysis;
 import com.puresol.coding.analysis.api.CodeRange;
 import com.puresol.coding.analysis.api.HashIdFileTree;
-import com.puresol.coding.analysis.api.evaluation.EvaluatorStore;
-import com.puresol.coding.analysis.api.quality.QualityCharacteristic;
-import com.puresol.coding.analysis.impl.evaluator.AbstractEvaluator;
+import com.puresol.coding.analysis.impl.AnalysisRun;
+import com.puresol.coding.analysis.impl.evaluation.AbstractEvaluator;
+import com.puresol.coding.analysis.impl.evaluation.EvaluatorStore;
+import com.puresol.coding.analysis.impl.quality.QualityCharacteristic;
 import com.puresol.coding.metrics.halstead.HalsteadMetricEvaluator;
 import com.puresol.coding.metrics.halstead.HalsteadMetricFileResult;
 import com.puresol.coding.metrics.halstead.HalsteadMetricFileResults;

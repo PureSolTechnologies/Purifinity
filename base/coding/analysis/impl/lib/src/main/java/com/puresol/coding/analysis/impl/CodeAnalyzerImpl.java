@@ -6,9 +6,7 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresol.coding.analysis.api.AnalyzerException;
 import com.puresol.coding.analysis.api.CodeAnalysis;
-import com.puresol.coding.analysis.api.CodeAnalyzer;
 import com.puresol.coding.analysis.api.ProgrammingLanguage;
 import com.puresol.uhura.source.CodeLocation;
 import com.puresol.utils.HashId;

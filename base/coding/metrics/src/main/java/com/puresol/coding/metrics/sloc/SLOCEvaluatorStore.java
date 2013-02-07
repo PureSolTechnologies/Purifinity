@@ -2,10 +2,10 @@ package com.puresol.coding.metrics.sloc;
 
 import java.io.File;
 
-import com.puresol.coding.analysis.api.AnalysisRun;
-import com.puresol.coding.analysis.api.evaluation.DirectoryResults;
-import com.puresol.coding.analysis.api.evaluation.FileResults;
-import com.puresol.coding.analysis.api.evaluation.ProjectResults;
+import com.puresol.coding.analysis.impl.AnalysisRun;
+import com.puresol.coding.analysis.impl.evaluation.DirectoryResults;
+import com.puresol.coding.analysis.impl.evaluation.FileResults;
+import com.puresol.coding.analysis.impl.evaluation.ProjectResults;
 import com.puresol.coding.metrics.AbstractEvaluatorStore;
 import com.puresol.utils.HashId;
 

@@ -3,6 +3,7 @@ package com.puresol.coding.analysis.api;
 import java.util.List;
 import java.util.UUID;
 
+
 /**
  * This is the central interface for a project analyzer. This analyzer handles a
  * whole software project. It is responsible for storing and loading the

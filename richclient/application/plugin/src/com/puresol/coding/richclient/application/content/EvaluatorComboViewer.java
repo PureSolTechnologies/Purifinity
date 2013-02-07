@@ -1,0 +1,24 @@
+package com.puresol.coding.richclient.application.content;
+
+import org.eclipse.jface.viewers.ComboViewer;
+import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.swt.widgets.Combo;
+
+import com.puresol.coding.analysis.api.evaluation.EvaluatorFactory;
+import com.puresol.coding.analysis.api.evaluation.Evaluators;
+
+public class EvaluatorComboViewer extends ComboViewer {
+
+	public EvaluatorComboViewer(Combo list) {
+		super(list);
+		setContentProvider(new EvaluatorsContentProvider());
+		setLabelProvider(new LabelProvider() {
+			@Override
+			public String getText(Object element) {
+				EvaluatorFactory evaluator = (EvaluatorFactory) element;
+				return evaluator.getName();
+			}
+		});
+		setInput(Evaluators.getAllFactories());
+	}
+}
