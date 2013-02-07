@@ -10,47 +10,11 @@
 
 	<artifactId>coding.analysis.api</artifactId>
 	<name>${project.groupId}.${project.artifactId}</name>
-	<packaging>bundle</packaging>
+	<packaging>pom</packaging>
 
-	<dependencies>
-		<dependency>
-			<groupId>com.puresol</groupId>
-			<artifactId>coding.lang.common</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.puresol</groupId>
-			<artifactId>trees.lib</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.puresol</groupId>
-			<artifactId>uhura.lib</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.puresol</groupId>
-			<artifactId>utils.lib</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.osgi</groupId>
-			<artifactId>org.osgi.core</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-		</dependency>
-	</dependencies>
-
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.felix</groupId>
-				<artifactId>maven-bundle-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
+	<modules>
+		<module>lib</module>
+		<module>bundle</module>
+	</modules>
 
 </project>

@@ -17,10 +17,6 @@
 			<artifactId>commons.test</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol</groupId>
-			<artifactId>trees.bundle</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 		</dependency>

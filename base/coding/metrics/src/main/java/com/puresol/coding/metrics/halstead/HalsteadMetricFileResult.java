@@ -3,7 +3,7 @@ package com.puresol.coding.metrics.halstead;
 import java.io.Serializable;
 
 import com.puresol.coding.analysis.api.CodeRangeType;
-import com.puresol.coding.quality.api.SourceCodeQuality;
+import com.puresol.coding.analysis.api.quality.SourceCodeQuality;
 import com.puresol.uhura.source.CodeLocation;
 
 public class HalsteadMetricFileResult implements Serializable {

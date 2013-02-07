@@ -2,15 +2,15 @@ package com.puresol.coding.metrics.mccabe;
 
 import java.util.List;
 
-import com.puresol.coding.ProgrammingLanguages;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.CodeAnalysis;
 import com.puresol.coding.analysis.api.CodeRange;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.analysis.api.ProgrammingLanguage;
-import com.puresol.coding.evaluation.api.EvaluatorStore;
-import com.puresol.coding.evaluator.AbstractEvaluator;
-import com.puresol.coding.quality.api.QualityCharacteristic;
+import com.puresol.coding.analysis.api.evaluation.EvaluatorStore;
+import com.puresol.coding.analysis.api.quality.QualityCharacteristic;
+import com.puresol.coding.analysis.impl.ProgrammingLanguages;
+import com.puresol.coding.analysis.impl.evaluator.AbstractEvaluator;
 
 public class McCabeMetricEvaluator extends AbstractEvaluator {
 

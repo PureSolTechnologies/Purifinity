@@ -1,6 +1,6 @@
 package com.puresol.coding.metrics.mccabe;
 
-import com.puresol.coding.evaluation.api.DirectoryResults;
+import com.puresol.coding.analysis.api.evaluation.DirectoryResults;
 import com.puresol.uhura.source.CodeLocation;
 
 public class McCabeMetricDirectoryResult implements DirectoryResults {

@@ -5,9 +5,9 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.ServiceLoader;
 
-import com.puresol.coding.AbstractProgrammingLanguage;
 import com.puresol.coding.analysis.api.CodeAnalyzer;
-import com.puresol.coding.lang.common.LanguageGrammar;
+import com.puresol.coding.analysis.impl.AbstractProgrammingLanguage;
+import com.puresol.coding.analysis.test.analysis.impl.lang.common.LanguageGrammar;
 import com.puresol.coding.lang.test.grammar.TestLanguageGrammar;
 import com.puresol.uhura.source.CodeLocation;
 

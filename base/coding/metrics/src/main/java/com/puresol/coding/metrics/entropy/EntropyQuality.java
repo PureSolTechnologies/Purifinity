@@ -1,7 +1,7 @@
 package com.puresol.coding.metrics.entropy;
 
 import com.puresol.coding.analysis.api.CodeRangeType;
-import com.puresol.coding.quality.api.SourceCodeQuality;
+import com.puresol.coding.analysis.api.quality.SourceCodeQuality;
 
 public class EntropyQuality {
 

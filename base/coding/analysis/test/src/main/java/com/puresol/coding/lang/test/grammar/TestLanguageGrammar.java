@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 
-import com.puresol.coding.lang.common.LanguageGrammar;
+import com.puresol.coding.analysis.test.analysis.impl.lang.common.LanguageGrammar;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.GrammarManager;

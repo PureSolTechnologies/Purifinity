@@ -7,13 +7,13 @@ import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.CodeAnalysis;
 import com.puresol.coding.analysis.api.CodeRange;
 import com.puresol.coding.analysis.api.HashIdFileTree;
-import com.puresol.coding.evaluation.api.EvaluatorStore;
-import com.puresol.coding.evaluator.AbstractEvaluator;
+import com.puresol.coding.analysis.api.evaluation.EvaluatorStore;
+import com.puresol.coding.analysis.api.quality.QualityCharacteristic;
+import com.puresol.coding.analysis.impl.evaluator.AbstractEvaluator;
 import com.puresol.coding.metrics.maintainability.MaintainabilityIndexEvaluator;
 import com.puresol.coding.metrics.maintainability.MaintainabilityIndexFileResult;
 import com.puresol.coding.metrics.maintainability.MaintainabilityIndexFileResults;
 import com.puresol.coding.metrics.maintainability.MaintainabilityIndexResult;
-import com.puresol.coding.quality.api.QualityCharacteristic;
 import com.puresol.utils.HashId;
 
 public class NormalizedMaintainabilityIndexEvaluator extends AbstractEvaluator {

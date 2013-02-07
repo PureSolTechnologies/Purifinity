@@ -2,7 +2,7 @@ package com.puresol.coding.metrics.maintainability;
 
 import java.util.ArrayList;
 
-import com.puresol.coding.evaluation.api.FileResults;
+import com.puresol.coding.analysis.api.evaluation.FileResults;
 
 public class MaintainabilityIndexFileResults extends
 	ArrayList<MaintainabilityIndexFileResult> implements FileResults {

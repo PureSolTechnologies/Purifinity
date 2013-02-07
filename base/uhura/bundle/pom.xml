@@ -15,6 +15,10 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.puresol</groupId>
+			<artifactId>commons.osgi</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresol</groupId>
 			<artifactId>uhura.lib</artifactId>
 		</dependency>
 		<dependency>

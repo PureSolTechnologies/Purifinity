@@ -14,7 +14,15 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.puresol</groupId>
-			<artifactId>uhura.lib</artifactId>
+			<artifactId>coding.analysis.api.lib</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresol</groupId>
+			<artifactId>coding.analysis.impl.lib</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresol</groupId>
+			<artifactId>coding.lang.commons.lib</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresol</groupId>
@@ -22,19 +30,11 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresol</groupId>
+			<artifactId>uhura.lib</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresol</groupId>
 			<artifactId>utils.lib</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.puresol</groupId>
-			<artifactId>coding.analysis.api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.puresol</groupId>
-			<artifactId>coding.analysis.impl</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.puresol</groupId>
-			<artifactId>coding.lang.common</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

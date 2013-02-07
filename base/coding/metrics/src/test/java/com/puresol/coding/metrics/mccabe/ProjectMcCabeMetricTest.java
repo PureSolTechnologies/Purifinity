@@ -12,11 +12,11 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.puresol.coding.analysis.AnalysisRunImpl;
-import com.puresol.coding.analysis.DirectoryRepositoryLocation;
 import com.puresol.coding.analysis.api.AnalysisInformation;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.ModuleStoreException;
+import com.puresol.coding.analysis.impl.AnalysisRunImpl;
+import com.puresol.coding.analysis.impl.DirectoryRepositoryLocation;
 import com.puresol.utils.FileSearchConfiguration;
 
 @Ignore

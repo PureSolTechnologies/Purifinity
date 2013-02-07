@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.puresol.coding.evaluation.api.Result;
+import com.puresol.coding.analysis.api.evaluation.Result;
 
 public class NormalizedMaintainabilityIndexResult implements Serializable {
 

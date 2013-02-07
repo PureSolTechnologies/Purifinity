@@ -10,7 +10,6 @@
 
 	<artifactId>coding.lang.java</artifactId>
 	<name>${project.groupId}.${project.artifactId}</name>
-	<packaging>bundle</packaging>
 
 	<dependencies>
 		<dependency>
@@ -81,14 +80,5 @@
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
-
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.felix</groupId>
-				<artifactId>maven-bundle-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
 
 </project>

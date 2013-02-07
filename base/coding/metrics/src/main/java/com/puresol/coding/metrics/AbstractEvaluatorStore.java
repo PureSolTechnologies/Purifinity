@@ -7,11 +7,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import com.puresol.coding.analysis.AnalysisRunImpl;
-import com.puresol.coding.analysis.DirectoryStoreImpl;
-import com.puresol.coding.analysis.FileStoreImpl;
 import com.puresol.coding.analysis.api.AnalysisRun;
-import com.puresol.coding.evaluation.api.EvaluatorStore;
+import com.puresol.coding.analysis.api.evaluation.EvaluatorStore;
+import com.puresol.coding.analysis.impl.AnalysisRunImpl;
+import com.puresol.coding.analysis.impl.DirectoryStoreImpl;
+import com.puresol.coding.analysis.impl.FileStoreImpl;
 import com.puresol.utils.HashId;
 
 public abstract class AbstractEvaluatorStore implements EvaluatorStore {
