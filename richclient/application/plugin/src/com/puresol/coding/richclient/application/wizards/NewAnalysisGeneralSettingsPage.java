@@ -25,12 +25,16 @@ import org.osgi.service.prefs.Preferences;
 
 import com.puresol.coding.richclient.application.Activator;
 
+@SuppressWarnings("restriction")
 public class NewAnalysisGeneralSettingsPage extends WizardPage {
 
 	public static final String LAST_NEW_ANALYSIS_SOURCE_DIRECTORY = "lastNewAnalysisSourceDirectory";
 
 	@Inject
 	private ILog log;
+
+	@Inject
+	private Shell shell;
 
 	private Text textSourceDirectory;
 	private Text textProjectName;
@@ -90,8 +94,6 @@ public class NewAnalysisGeneralSettingsPage extends WizardPage {
 	}
 
 	private void browse() {
-		Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
-				.getShell();
 		DirectoryDialog dialog = new DirectoryDialog(shell);
 
 		String directory = getLastSourceDirectory();

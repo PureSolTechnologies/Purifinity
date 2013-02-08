@@ -4,18 +4,15 @@
 
 	<parent>
 		<groupId>com.puresol</groupId>
-		<artifactId>coding</artifactId>
+		<artifactId>com.puresol.coding.richclient.application</artifactId>
 		<version>0.1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>coding.analysis</artifactId>
-	<name>${project.groupId}.${project.artifactId}</name>
-	<packaging>pom</packaging>
+	<artifactId>com.puresol.coding.richclient.application.test</artifactId>
+	<packaging>eclipse-test-plugin</packaging>
 
-	<modules>
-		<module>api</module>
-		<module>impl</module>
-		<module>test</module>
-	</modules>
+	<build>
+		<sourceDirectory>src</sourceDirectory>
+	</build>
 
 </project>

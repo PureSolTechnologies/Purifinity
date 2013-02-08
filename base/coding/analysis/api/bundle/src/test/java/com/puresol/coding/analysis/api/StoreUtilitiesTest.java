@@ -1,0 +1,29 @@
+package com.puresol.coding.analysis.api;
+
+import static org.junit.Assert.assertNotNull;
+
+import java.io.File;
+
+import org.junit.Test;
+
+import com.puresol.trees.FileTree;
+import com.puresol.trees.TreePrinter;
+import com.puresol.utils.FileSearch;
+import com.puresol.utils.FileSearchConfiguration;
+
+public class StoreUtilitiesTest {
+
+	@Test
+	public void testCreateHashIdFileTree() {
+		FileTree fileTree = FileSearch.getFileTree(new File("src"),
+				new FileSearchConfiguration());
+		assertNotNull(fileTree);
+		HashIdFileTree hashIdFileTree = StoreUtilities
+				.createHashIdFileTree(fileTree);
+		assertNotNull(hashIdFileTree);
+		TreePrinter treePrinter = new TreePrinter(System.out);
+		treePrinter.println(fileTree);
+		treePrinter.println(hashIdFileTree);
+	}
+
+}

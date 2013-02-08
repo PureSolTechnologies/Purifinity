@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Bnd-LastModified: 1360265493130
+Bnd-LastModified: 1360352244152
 Build-Jdk: 1.6.0_24
 Built-By: ludwig
 Bundle-Activator: com.puresol.coding.analysis.impl.lib.Activator
@@ -22,7 +22,7 @@ Embedded-Artifacts: target/dependency/coding.analysis.impl.lib-0.1.0-SNA
 Import-Package: com.puresol.coding.analysis.api,com.puresol.coding.analy
  sis.api.evaluation,com.puresol.coding.analysis.api.quality,com.puresol.
  coding.analysis.impl.lib,com.puresol.trees,com.puresol.uhura.source,com
- .puresol.utils,com.puresol.utils.data,org.eclipse.core.runtime;version=
- "[3.4,4)",org.eclipse.core.runtime.jobs,org.osgi.framework;version="[1.
- 5,2)",org.slf4j;version="[1.6,2)"
+ .puresol.utils,org.eclipse.core.runtime;version="[3.4,4)",org.eclipse.c
+ ore.runtime.jobs,org.osgi.framework;version="[1.5,2)",org.slf4j;version
+ ="[1.6,2)"
 Tool: Bnd-1.50.0

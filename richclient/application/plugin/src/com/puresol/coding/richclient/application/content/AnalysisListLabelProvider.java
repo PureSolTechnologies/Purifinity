@@ -2,10 +2,14 @@ package com.puresol.coding.richclient.application.content;
 
 import java.text.SimpleDateFormat;
 
+import javax.inject.Inject;
+
+import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 
 import com.puresol.coding.analysis.api.AnalysisInformation;
+import com.puresol.coding.richclient.application.ClientImages;
 
 /**
  * This is a simple label provider for AnalysisInformation list controls.
@@ -15,8 +19,10 @@ import com.puresol.coding.analysis.api.AnalysisInformation;
  */
 public class AnalysisListLabelProvider extends LabelProvider {
 
-	private final Image analysisImage = Activator.getDefault()
-			.getImageRegistry().get(ClientImages.ANALYSIS_16x16);
+	@Inject
+	private ImageRegistry imageRegistry;
+	private final Image analysisImage = imageRegistry
+			.get(ClientImages.ANALYSIS_16x16);
 
 	@Override
 	public String getText(Object element) {
