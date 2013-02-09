@@ -14,23 +14,19 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.puresol</groupId>
-			<artifactId>coding.analysis.api</artifactId>
-			<scope>provided</scope>
+			<artifactId>coding.analysis.api.lib</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresol</groupId>
-			<artifactId>coding.analysis.impl</artifactId>
-			<scope>provided</scope>
+			<artifactId>coding.analysis.impl.lib</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresol</groupId>
 			<artifactId>coding.metrics</artifactId>
-			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.puresol</groupId>
-			<artifactId>coding.lang.common</artifactId>
-			<scope>provided</scope>
+			<artifactId>coding.lang.commons.lib</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresol</groupId>

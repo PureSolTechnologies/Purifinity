@@ -14,7 +14,7 @@
 
 	<modules>
 		<module>analysis</module>
-		<!-- module>metrics</module -->
+		<module>metrics</module>
 		<module>lang</module>
 	</modules>
 
