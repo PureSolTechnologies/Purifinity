@@ -10,71 +10,11 @@
 
 	<artifactId>coding.lang.fortran</artifactId>
 	<name>${project.groupId}.${project.artifactId}</name>
+	<packaging>pom</packaging>
 
-	<dependencies>
-		<dependency>
-			<groupId>com.puresol</groupId>
-			<artifactId>coding.analysis.api.lib</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.puresol</groupId>
-			<artifactId>coding.analysis.impl.lib</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.puresol</groupId>
-			<artifactId>coding.metrics</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.puresol</groupId>
-			<artifactId>coding.lang.commons.lib</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.puresol</groupId>
-			<artifactId>coding.lang.c11</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.puresol</groupId>
-			<artifactId>trees.lib</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.puresol</groupId>
-			<artifactId>uhura.lib</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.puresol</groupId>
-			<artifactId>utils.lib</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.jibx.config.3rdparty.org.eclipse</groupId>
-			<artifactId>org.eclipse.core.jobs</artifactId>
-			<version>3.5.100.v20110404</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.jibx.config.3rdparty.org.eclipse</groupId>
-			<artifactId>org.eclipse.core.runtime</artifactId>
-			<version>3.7.0.v20110110</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.jibx.config.3rdparty.org.eclipse</groupId>
-			<artifactId>org.eclipse.equinox.common</artifactId>
-			<version>3.6.0.v20110523</version>
-			<scope>provided</scope>
-		</dependency>
-	</dependencies>
+	<modules>
+		<module>lib</module>
+		<module>bundle</module>
+	</modules>
 
 </project>

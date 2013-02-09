@@ -24,7 +24,7 @@ import com.puresol.uhura.parser.ParserTree;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class CodeAnalysis implements Serializable, TimeAwareness {
+public final class CodeAnalysis implements Serializable, TimeAwareness {
 
 	private static final long serialVersionUID = 4670045857614462051L;
 

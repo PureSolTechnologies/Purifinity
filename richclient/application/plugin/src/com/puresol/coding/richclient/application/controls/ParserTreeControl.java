@@ -13,9 +13,9 @@ import org.eclipse.swt.widgets.Tree;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalyzedCode;
 import com.puresol.coding.analysis.api.CodeAnalysis;
-import com.puresol.coding.analysis.api.CodeStore;
-import com.puresol.coding.analysis.api.CodeStoreException;
-import com.puresol.coding.analysis.api.CodeStoreFactory;
+import com.puresol.coding.analysis.api.storage.CodeStore;
+import com.puresol.coding.analysis.api.storage.CodeStoreException;
+import com.puresol.coding.analysis.api.storage.CodeStoreFactory;
 import com.puresol.coding.richclient.application.content.ParserTreeContentProvider;
 import com.puresol.coding.richclient.application.content.ParserTreeLabelProvider;
 

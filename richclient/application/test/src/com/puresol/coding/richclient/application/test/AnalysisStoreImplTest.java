@@ -13,10 +13,10 @@ import org.junit.Test;
 import com.puresol.coding.analysis.api.Analysis;
 import com.puresol.coding.analysis.api.AnalysisInformation;
 import com.puresol.coding.analysis.api.AnalysisSettings;
-import com.puresol.coding.analysis.api.AnalysisStore;
-import com.puresol.coding.analysis.api.DirectoryRepositoryLocation;
-import com.puresol.coding.analysis.api.ModuleStoreException;
 import com.puresol.coding.analysis.api.TestFileSearchConfiguration;
+import com.puresol.coding.analysis.api.storage.AnalysisStore;
+import com.puresol.coding.analysis.api.storage.ModuleStoreException;
+import com.puresol.coding.analysis.impl.DirectoryRepositoryLocation;
 import com.puresol.coding.richclient.application.analysis.AnalysisStoreImpl;
 
 public class AnalysisStoreImplTest {

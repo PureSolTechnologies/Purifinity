@@ -3,6 +3,8 @@ package com.puresol.coding.analysis.api;
 import java.util.List;
 import java.util.UUID;
 
+import com.puresol.coding.analysis.api.storage.ModuleStoreException;
+
 
 /**
  * This is the central interface for a project analyzer. This analyzer handles a

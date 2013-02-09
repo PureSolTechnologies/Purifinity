@@ -15,8 +15,8 @@ import com.puresol.coding.analysis.api.AnalysisInformation;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalysisRunInformation;
 import com.puresol.coding.analysis.api.AnalysisSettings;
-import com.puresol.coding.analysis.api.ModuleStoreException;
-import com.puresol.coding.analysis.api.PersistenceUtils;
+import com.puresol.coding.analysis.api.storage.ModuleStoreException;
+import com.puresol.coding.analysis.impl.PersistenceUtils;
 import com.puresol.utils.FileUtilities;
 
 public class AnalysisImpl implements Analysis {

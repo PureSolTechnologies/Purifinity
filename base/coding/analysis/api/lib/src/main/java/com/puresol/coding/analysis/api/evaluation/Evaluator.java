@@ -1,10 +1,12 @@
 package com.puresol.coding.analysis.api.evaluation;
 
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.TimeAwareness;
 import com.puresol.coding.analysis.api.quality.QualityCharacteristic;
+import com.puresol.coding.analysis.api.storage.EvaluatorStore;
 
 /**
  * This is the central interface for an evaluator. An evaluator is responsible
@@ -14,7 +16,7 @@ import com.puresol.coding.analysis.api.quality.QualityCharacteristic;
  * @author Rick-Rainer Ludwig
  * 
  */
-public interface Evaluator extends TimeAwareness {
+public interface Evaluator extends Callable<Boolean>, TimeAwareness {
 
 	/**
 	 * This method returns the evaluator meta data which describes the evaluator
@@ -39,13 +41,6 @@ public interface Evaluator extends TimeAwareness {
 	 * @return
 	 */
 	public List<QualityCharacteristic> getEvaluatedQualityCharacteristics();
-
-	/**
-	 * This method starts the actual evaluation. This method runs synchronous!
-	 * 
-	 * @throws InterruptedException
-	 */
-	public void runEvaluation() throws InterruptedException;
 
 	public EvaluatorStore getEvaluatorStore();
 }

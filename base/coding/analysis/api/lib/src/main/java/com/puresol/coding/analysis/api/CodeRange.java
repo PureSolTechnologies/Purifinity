@@ -12,7 +12,7 @@ import com.puresol.utils.ObjectUtilities;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class CodeRange implements Serializable, Comparable<CodeRange> {
+public final class CodeRange implements Serializable, Comparable<CodeRange> {
 
 	private static final long serialVersionUID = -2262393596463952399L;
 

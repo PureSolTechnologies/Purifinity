@@ -10,44 +10,11 @@
 
 	<artifactId>coding.lang.c11</artifactId>
 	<name>${project.groupId}.${project.artifactId}</name>
+	<packaging>pom</packaging>
 
-	<dependencies>
-		<dependency>
-			<groupId>com.puresol</groupId>
-			<artifactId>coding.analysis.api.lib</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.puresol</groupId>
-			<artifactId>coding.analysis.impl.lib</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.puresol</groupId>
-			<artifactId>coding.lang.commons.lib</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.puresol</groupId>
-			<artifactId>trees.lib</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.puresol</groupId>
-			<artifactId>uhura.lib</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.puresol</groupId>
-			<artifactId>utils.lib</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-		</dependency>
-	</dependencies>
+	<modules>
+		<module>lib</module>
+		<module>bundle</module>
+	</modules>
 
 </project>

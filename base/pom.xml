@@ -79,7 +79,7 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresol</groupId>
-				<artifactId>coding.lang.c11</artifactId>
+				<artifactId>coding.lang.c11.lib</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
@@ -89,12 +89,22 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresol</groupId>
-				<artifactId>coding.lang.cpp</artifactId>
+				<artifactId>coding.lang.cpp.lib</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.puresol</groupId>
-				<artifactId>coding.metrics</artifactId>
+				<artifactId>coding.lang.fortran.lib</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresol</groupId>
+				<artifactId>coding.lang.java.lib</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresol</groupId>
+				<artifactId>coding.metrics.lib</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>

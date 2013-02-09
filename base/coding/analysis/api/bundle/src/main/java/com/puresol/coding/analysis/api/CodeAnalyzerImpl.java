@@ -47,7 +47,7 @@ public class CodeAnalyzerImpl implements CodeAnalyzer {
 
     private void analyzeFile() throws IOException, AnalyzerException,
 	    LanguageNotSupportedException {
-	analyzer = FileAnalysisFactory.createFactory().create(source);
+	analyzer = CodeAnalyzerFactory.createFactory().create(source);
 	analyzer.analyze();
     }
 
