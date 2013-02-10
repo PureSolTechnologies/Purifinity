@@ -9,7 +9,7 @@ import org.osgi.framework.ServiceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresol.coding.lang.commons.ProgrammingLanguage;
+import com.puresol.coding.lang.api.ProgrammingLanguage;
 
 /**
  * This class is used to manage the ProgrammingLanguage services. This is the
@@ -29,15 +29,15 @@ public class ProgrammingLanguages {
 	 * 
 	 * @return
 	 */
-	public static List<ProgrammingLanguage> getAll() {
+	public static List<AnalyzableProgrammingLanguage> getAll() {
 		try {
 			BundleContext context = Activator.getBundleContext();
 			ServiceReference[] serviceReferences = context
 					.getServiceReferences(ProgrammingLanguage.class.getName(),
 							null);
-			List<ProgrammingLanguage> services = new ArrayList<ProgrammingLanguage>();
+			List<AnalyzableProgrammingLanguage> services = new ArrayList<AnalyzableProgrammingLanguage>();
 			for (ServiceReference serviceReference : serviceReferences) {
-				services.add((ProgrammingLanguage) context
+				services.add((AnalyzableProgrammingLanguage) context
 						.getService(serviceReference));
 			}
 			return services;

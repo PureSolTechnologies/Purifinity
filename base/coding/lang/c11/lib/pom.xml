@@ -14,6 +14,10 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.puresol</groupId>
+			<artifactId>coding.analysis.api.lib</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresol</groupId>
 			<artifactId>coding.lang.commons.lib</artifactId>
 		</dependency>
 		<dependency>
