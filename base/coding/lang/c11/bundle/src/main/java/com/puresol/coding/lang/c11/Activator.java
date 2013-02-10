@@ -8,6 +8,8 @@ import org.osgi.framework.ServiceRegistration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.puresol.coding.lang.api.ProgrammingLanguage;
+
 /**
  * This class is used as OSGi bundle activator. This class only registers and
  * unregisters itself int the central ProgrammingLanguages object.

@@ -5,9 +5,10 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.ServiceLoader;
 
+import com.puresol.coding.analysis.api.AnalyzerStore;
 import com.puresol.coding.analysis.api.CodeAnalyzer;
-import com.puresol.coding.analysis.impl.AbstractProgrammingLanguage;
 import com.puresol.coding.lang.api.LanguageGrammar;
+import com.puresol.coding.lang.commons.AbstractProgrammingLanguage;
 import com.puresol.coding.lang.test.grammar.TestLanguageGrammar;
 import com.puresol.uhura.source.CodeLocation;
 
@@ -20,7 +21,8 @@ import com.puresol.uhura.source.CodeLocation;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class TestLanguage extends AbstractProgrammingLanguage {
+public class TestLanguage extends AbstractProgrammingLanguage implements
+		AnalyzerStore {
 
 	private static final String[] FILE_SUFFIXES = { ".d" };
 

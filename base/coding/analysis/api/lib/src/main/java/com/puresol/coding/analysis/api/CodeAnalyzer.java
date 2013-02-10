@@ -13,7 +13,7 @@ package com.puresol.coding.analysis.api;
 import java.io.File;
 import java.io.IOException;
 
-import com.puresol.coding.lang.commons.ProgrammingLanguage;
+import com.puresol.coding.lang.api.ProgrammingLanguage;
 import com.puresol.uhura.source.CodeLocation;
 
 /**
