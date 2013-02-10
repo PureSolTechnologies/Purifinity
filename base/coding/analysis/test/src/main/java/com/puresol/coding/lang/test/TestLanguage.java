@@ -6,8 +6,8 @@ import java.util.Iterator;
 import java.util.ServiceLoader;
 
 import com.puresol.coding.analysis.api.CodeAnalyzer;
-import com.puresol.coding.analysis.api.LanguageGrammar;
 import com.puresol.coding.analysis.impl.AbstractProgrammingLanguage;
+import com.puresol.coding.lang.api.LanguageGrammar;
 import com.puresol.coding.lang.test.grammar.TestLanguageGrammar;
 import com.puresol.uhura.source.CodeLocation;
 

@@ -1,4 +1,4 @@
-package com.puresol.coding.analysis.api;
+package com.puresol.coding.lang.api;
 
 import java.io.File;
 import java.io.IOException;
@@ -47,7 +47,7 @@ public interface ProgrammingLanguage { // do not Serialize!
 	public LanguageGrammar getGrammar();
 
 	/**
-	 * This method is a factory method for analyser objects for the programming
+	 * This method is a factory method for analyzer objects for the programming
 	 * language for a specified file within a specified project directory.
 	 * 
 	 * @param source

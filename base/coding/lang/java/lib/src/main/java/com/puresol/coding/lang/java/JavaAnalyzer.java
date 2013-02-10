@@ -27,7 +27,7 @@ import com.puresol.coding.analysis.api.CodeAnalysis;
 import com.puresol.coding.analysis.api.CodeAnalyzer;
 import com.puresol.coding.analysis.api.CodeRange;
 import com.puresol.coding.analysis.api.CodeRangeType;
-import com.puresol.coding.analysis.api.ProgrammingLanguage;
+import com.puresol.coding.lang.api.ProgrammingLanguage;
 import com.puresol.coding.lang.java.grammar.JavaGrammar;
 import com.puresol.coding.lang.java.grammar.parts.AnnotationTypeDeclaration;
 import com.puresol.coding.lang.java.grammar.parts.ConstructorDeclaration;

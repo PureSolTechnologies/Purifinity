@@ -13,8 +13,8 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 
-import com.puresol.coding.analysis.api.LanguageGrammar;
-import com.puresol.coding.analysis.api.ProgrammingLanguage;
+import com.puresol.coding.lang.commons.LanguageGrammar;
+import com.puresol.coding.lang.commons.ProgrammingLanguage;
 import com.puresol.coding.richclient.application.grammar.GrammarRenderer;
 import com.puresol.coding.richclient.application.grammar.RenderException;
 import com.puresol.uhura.grammar.GrammarException;

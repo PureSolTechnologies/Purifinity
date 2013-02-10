@@ -2,7 +2,7 @@ package com.puresol.coding.lang.commons;
 
 import java.util.Properties;
 
-import com.puresol.coding.analysis.api.LanguageGrammar;
+import com.puresol.coding.lang.api.LanguageGrammar;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.grammar.production.ProductionSet;

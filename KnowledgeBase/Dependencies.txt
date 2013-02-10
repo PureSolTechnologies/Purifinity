@@ -1,0 +1,15 @@
+Trees				*.trees							(simple lib)
+Utils				*.utils.*						(simple lib)
+Uhura				*.uhura.*						(simple lib)
+Languages			*.coding.lang.xxx.*				(simple lib)
+  - Java			*.coding.lang.java.*
+  - Fortran			*.coding.lang.fortran.*
+  - C11				*.coding.lang.c11.*
+  - C++11			*.coding.lang.cpp.*
+Analysis			*.coding.analysis.*				(api + impl)
+Language Analyzers	*.coding.analysis.lang.xxx.*	(simple libs)
+	- Java			*.coding.analysis.java.*
+	- Fortran		*.coding.analysis.fortran.*
+	- C11			*.coding.analysis.c11.*
+	- C++11			*.coding.analysis.cpp.*
+Evaluation			*.coding.evaluation.*			(api + impl)

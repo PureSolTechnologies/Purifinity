@@ -18,11 +18,11 @@ import org.eclipse.core.runtime.Status;
 
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.CodeRange;
-import com.puresol.coding.analysis.api.ProgrammingLanguage;
 import com.puresol.coding.analysis.api.quality.QualityCharacteristic;
 import com.puresol.coding.analysis.api.quality.SourceCodeQuality;
 import com.puresol.coding.analysis.impl.evaluation.CodeRangeEvaluator;
 import com.puresol.coding.analysis.impl.evaluation.Result;
+import com.puresol.coding.lang.commons.ProgrammingLanguage;
 import com.puresol.coding.metrics.halstead.HalsteadMetric;
 import com.puresol.coding.metrics.mccabe.McCabeMetric;
 import com.puresol.coding.metrics.sloc.SLOCMetricCalculator;

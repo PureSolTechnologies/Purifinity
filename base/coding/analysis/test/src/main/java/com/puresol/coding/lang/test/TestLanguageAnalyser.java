@@ -27,7 +27,7 @@ import com.puresol.coding.analysis.api.CodeAnalysis;
 import com.puresol.coding.analysis.api.CodeAnalyzer;
 import com.puresol.coding.analysis.api.CodeRange;
 import com.puresol.coding.analysis.api.CodeRangeType;
-import com.puresol.coding.analysis.api.ProgrammingLanguage;
+import com.puresol.coding.lang.api.ProgrammingLanguage;
 import com.puresol.coding.lang.test.grammar.TestLanguageGrammar;
 import com.puresol.uhura.lexer.Lexer;
 import com.puresol.uhura.lexer.LexerException;

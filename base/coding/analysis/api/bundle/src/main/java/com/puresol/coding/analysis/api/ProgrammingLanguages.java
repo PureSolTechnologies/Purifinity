@@ -9,6 +9,8 @@ import org.osgi.framework.ServiceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.puresol.coding.lang.commons.ProgrammingLanguage;
+
 /**
  * This class is used to manage the ProgrammingLanguage services. This is the
  * central registry for all services to register themself to.

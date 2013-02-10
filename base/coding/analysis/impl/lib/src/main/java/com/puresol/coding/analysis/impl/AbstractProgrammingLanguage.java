@@ -1,6 +1,6 @@
 package com.puresol.coding.analysis.impl;
 
-import com.puresol.coding.analysis.api.ProgrammingLanguage;
+import com.puresol.coding.lang.commons.ProgrammingLanguage;
 import com.puresol.uhura.source.CodeLocation;
 
 public abstract class AbstractProgrammingLanguage implements

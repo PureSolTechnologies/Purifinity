@@ -79,6 +79,21 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresol</groupId>
+				<artifactId>coding.evaluation.api.lib</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresol</groupId>
+				<artifactId>coding.evaluation.impl.lib</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresol</groupId>
+				<artifactId>coding.lang.api.lib</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresol</groupId>
 				<artifactId>coding.lang.c11.lib</artifactId>
 				<version>${project.version}</version>
 			</dependency>

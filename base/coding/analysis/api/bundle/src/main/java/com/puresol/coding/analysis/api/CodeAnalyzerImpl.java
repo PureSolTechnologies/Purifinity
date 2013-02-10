@@ -10,7 +10,7 @@ import com.puresol.coding.analysis.api.AnalyzerException;
 import com.puresol.coding.analysis.api.CodeAnalysis;
 import com.puresol.coding.analysis.api.CodeAnalyzer;
 import com.puresol.coding.analysis.api.LanguageNotSupportedException;
-import com.puresol.coding.analysis.api.ProgrammingLanguage;
+import com.puresol.coding.lang.commons.ProgrammingLanguage;
 import com.puresol.uhura.source.CodeLocation;
 import com.puresol.utils.HashId;
 
