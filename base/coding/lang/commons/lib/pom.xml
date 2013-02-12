@@ -14,7 +14,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.puresol</groupId>
-			<artifactId>coding.analysis.api.lib</artifactId>
+			<artifactId>coding.lang.api.lib</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresol</groupId>

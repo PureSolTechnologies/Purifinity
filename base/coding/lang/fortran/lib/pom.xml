@@ -18,19 +18,15 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresol</groupId>
-			<artifactId>coding.analysis.impl.lib</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.puresol</groupId>
-			<artifactId>coding.metrics.lib</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.puresol</groupId>
 			<artifactId>coding.lang.commons.lib</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresol</groupId>
 			<artifactId>coding.lang.c11.lib</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresol</groupId>
+			<artifactId>coding.metrics.lib</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresol</groupId>

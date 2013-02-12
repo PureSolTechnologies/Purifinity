@@ -1,7 +1,4 @@
-package com.puresol.coding.analysis.api;
-
-import java.io.File;
-import java.io.IOException;
+package com.puresol.coding.lang.api;
 
 import com.puresol.uhura.source.CodeLocation;
 
@@ -45,17 +42,6 @@ public interface ProgrammingLanguage { // do not Serialize!
 	 * @return
 	 */
 	public LanguageGrammar getGrammar();
-
-	/**
-	 * This method is a factory method for analyser objects for the programming
-	 * language for a specified file within a specified project directory.
-	 * 
-	 * @param source
-	 * @return
-	 */
-	public CodeAnalyzer createAnalyser(CodeLocation source);
-
-	public CodeAnalyzer restoreAnalyzer(File file) throws IOException;
 
 	/**
 	 * This is a current workaround to get language specifics working for

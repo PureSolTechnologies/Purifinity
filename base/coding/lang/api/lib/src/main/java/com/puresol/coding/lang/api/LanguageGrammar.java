@@ -1,4 +1,4 @@
-package com.puresol.coding.analysis.api;
+package com.puresol.coding.lang.api;
 
 import java.io.InputStream;
 

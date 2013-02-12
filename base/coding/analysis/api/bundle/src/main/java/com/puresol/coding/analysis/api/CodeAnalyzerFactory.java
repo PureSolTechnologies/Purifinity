@@ -59,7 +59,8 @@ public class CodeAnalyzerFactory {
 
 	private CodeAnalyzer createAnalyser(CodeLocation source)
 			throws LanguageNotSupportedException {
-		for (ProgrammingLanguage language : ProgrammingLanguages.getAll()) {
+		for (AnalyzableProgrammingLanguage language : ProgrammingLanguages
+				.getAll()) {
 			CodeAnalyzer analyser = checkAndCreate(language, source);
 			if (analyser != null) {
 				return analyser;
@@ -72,7 +73,7 @@ public class CodeAnalyzerFactory {
 						+ source.getHumanReadableLocationString());
 	}
 
-	private CodeAnalyzer checkAndCreate(ProgrammingLanguage clazz,
+	private CodeAnalyzer checkAndCreate(AnalyzableProgrammingLanguage clazz,
 			CodeLocation source) {
 		if (!clazz.isSuitable(source)) {
 			return null;
@@ -82,7 +83,8 @@ public class CodeAnalyzerFactory {
 
 	public CodeAnalyzer restore(File persistFile) {
 		try {
-			for (ProgrammingLanguage language : ProgrammingLanguages.getAll()) {
+			for (AnalyzableProgrammingLanguage language : ProgrammingLanguages
+					.getAll()) {
 				CodeAnalyzer analyzer = language.restoreAnalyzer(persistFile);
 				if (analyzer != null) {
 					return analyzer;

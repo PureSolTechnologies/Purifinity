@@ -7,10 +7,11 @@ import java.io.ObjectInputStream;
 import java.util.Iterator;
 import java.util.ServiceLoader;
 
+import com.puresol.coding.analysis.api.AnalyzableProgrammingLanguage;
 import com.puresol.coding.analysis.api.CodeAnalyzer;
-import com.puresol.coding.analysis.api.LanguageGrammar;
-import com.puresol.coding.analysis.impl.AbstractProgrammingLanguage;
+import com.puresol.coding.lang.api.LanguageGrammar;
 import com.puresol.coding.lang.c11.grammar.C11Grammar;
+import com.puresol.coding.lang.commons.AbstractProgrammingLanguage;
 import com.puresol.uhura.source.CodeLocation;
 
 /**
@@ -21,7 +22,8 @@ import com.puresol.uhura.source.CodeLocation;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class C11 extends AbstractProgrammingLanguage {
+public class C11 extends AbstractProgrammingLanguage implements
+		AnalyzableProgrammingLanguage {
 
 	private static final String[] FILE_SUFFIXES = { ".java" };
 

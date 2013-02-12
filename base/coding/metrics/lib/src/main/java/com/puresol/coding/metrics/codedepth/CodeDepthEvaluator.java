@@ -6,9 +6,9 @@ import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.CodeAnalysis;
 import com.puresol.coding.analysis.api.CodeRange;
 import com.puresol.coding.analysis.api.HashIdFileTree;
-import com.puresol.coding.analysis.api.ProgrammingLanguage;
 import com.puresol.coding.analysis.api.quality.QualityCharacteristic;
 import com.puresol.coding.analysis.api.storage.EvaluatorStore;
+import com.puresol.coding.lang.api.ProgrammingLanguage;
 
 public class CodeDepthEvaluator extends AbstractEvaluator {
 
