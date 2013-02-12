@@ -51,10 +51,9 @@ public class EntropyEvaluator extends AbstractEvaluator {
 			double entropy = 0.0;
 			for (String operant : operands.keySet()) {
 				int count = operands.get(operant);
-				entropy += (double) count
+				entropy += count
 						/ (double) halstead.getTotalOperands()
-						* Math.log((double) count
-								/ (double) halstead.getTotalOperands())
+						* Math.log(count / (double) halstead.getTotalOperands())
 						/ Math.log(2.0);
 			}
 			entropy *= -1.0;
