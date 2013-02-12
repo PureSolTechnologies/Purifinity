@@ -8,9 +8,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import com.puresol.coding.analysis.api.CodeAnalysis;
-import com.puresol.coding.analysis.api.storage.CodeStore;
-import com.puresol.coding.analysis.api.storage.CodeStoreException;
-import com.puresol.coding.analysis.impl.PersistenceUtils;
+import com.puresol.coding.analysis.api.CodeStore;
+import com.puresol.coding.analysis.api.CodeStoreException;
 import com.puresol.uhura.source.SourceCode;
 import com.puresol.utils.HashId;
 

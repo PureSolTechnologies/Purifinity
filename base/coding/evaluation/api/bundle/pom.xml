@@ -38,8 +38,8 @@
 	</dependencies>
 
 	<properties>
-		<bundle.symbolicName>com.puresol.coding.analysis.api</bundle.symbolicName>
-		<bundle.namespace>com.puresol.coding.analysis.api</bundle.namespace>
+		<bundle.symbolicName>com.puresol.coding.evaluation.api</bundle.symbolicName>
+		<bundle.namespace>com.puresol.coding.evaluation.api</bundle.namespace>
 	</properties>
 
 	<build>

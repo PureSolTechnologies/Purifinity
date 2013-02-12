@@ -7,9 +7,9 @@ import com.puresol.coding.analysis.api.CodeAnalysis;
 import com.puresol.coding.analysis.api.CodeRange;
 import com.puresol.coding.analysis.api.CodeRangeType;
 import com.puresol.coding.analysis.api.HashIdFileTree;
-import com.puresol.coding.analysis.api.quality.QualityCharacteristic;
-import com.puresol.coding.analysis.api.storage.EvaluatorStore;
-import com.puresol.coding.analysis.impl.evaluation.AbstractEvaluator;
+import com.puresol.coding.evaluation.api.EvaluatorStore;
+import com.puresol.coding.evaluation.api.QualityCharacteristic;
+import com.puresol.coding.evaluation.impl.AbstractEvaluator;
 import com.puresol.coding.lang.api.ProgrammingLanguage;
 
 public class SLOCEvaluator extends AbstractEvaluator {

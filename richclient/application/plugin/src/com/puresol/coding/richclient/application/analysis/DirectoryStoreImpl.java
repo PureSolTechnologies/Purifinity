@@ -2,8 +2,8 @@ package com.puresol.coding.richclient.application.analysis;
 
 import java.io.File;
 
-import com.puresol.coding.analysis.api.storage.ModuleStore;
-import com.puresol.coding.analysis.api.storage.ModuleStoreException;
+import com.puresol.coding.analysis.api.ModuleStore;
+import com.puresol.coding.analysis.api.ModuleStoreException;
 import com.puresol.utils.HashId;
 
 public class DirectoryStoreImpl implements ModuleStore {

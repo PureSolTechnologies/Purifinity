@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.puresol.coding.analysis.api.AnalysisRun;
-import com.puresol.coding.analysis.api.evaluation.Evaluator;
-import com.puresol.coding.analysis.api.evaluation.EvaluatorFactory;
-import com.puresol.coding.analysis.api.quality.QualityCharacteristic;
+import com.puresol.coding.evaluation.api.Evaluator;
+import com.puresol.coding.evaluation.api.EvaluatorFactory;
+import com.puresol.coding.evaluation.api.QualityCharacteristic;
 import com.puresol.coding.metrics.halstead.HalsteadMetricEvaluator;
 import com.puresol.coding.metrics.mccabe.McCabeMetricEvaluator;
 import com.puresol.coding.metrics.sloc.SLOCEvaluator;

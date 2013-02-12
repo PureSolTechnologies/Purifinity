@@ -17,10 +17,9 @@ import com.puresol.coding.analysis.api.AnalysisInformation;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalysisRunInformation;
 import com.puresol.coding.analysis.api.AnalysisSettings;
+import com.puresol.coding.analysis.api.AnalysisStore;
+import com.puresol.coding.analysis.api.ModuleStoreException;
 import com.puresol.coding.analysis.api.TestFileSearchConfiguration;
-import com.puresol.coding.analysis.api.storage.AnalysisStore;
-import com.puresol.coding.analysis.api.storage.ModuleStoreException;
-import com.puresol.coding.analysis.impl.DirectoryRepositoryLocation;
 import com.puresol.coding.richclient.application.analysis.AnalysisStoreImpl;
 
 public class AnalysisImplTest {

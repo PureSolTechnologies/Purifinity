@@ -1,6 +1,6 @@
 package com.puresol.coding.metrics.sloc;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,7 @@ import java.util.List;
 import org.junit.Test;
 
 import com.puresol.coding.analysis.api.CodeRangeType;
-import com.puresol.coding.analysis.impl.quality.SourceCodeQuality;
+import com.puresol.coding.evaluation.api.SourceCodeQuality;
 import com.puresol.utils.math.statistics.Statistics;
 
 public class SLOCQualityTest {

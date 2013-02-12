@@ -20,8 +20,8 @@ import org.osgi.framework.ServiceReference;
 
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalyzedCode;
-import com.puresol.coding.analysis.api.evaluation.Evaluator;
-import com.puresol.coding.analysis.api.evaluation.EvaluatorFactory;
+import com.puresol.coding.evaluation.api.Evaluator;
+import com.puresol.coding.evaluation.api.EvaluatorFactory;
 import com.puresol.coding.richclient.application.Activator;
 import com.puresol.coding.richclient.application.content.EvaluatorComboViewer;
 

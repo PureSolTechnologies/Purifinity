@@ -4,8 +4,8 @@ import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.widgets.Combo;
 
-import com.puresol.coding.analysis.api.evaluation.EvaluatorFactory;
-import com.puresol.coding.analysis.api.evaluation.Evaluators;
+import com.puresol.coding.evaluation.api.EvaluatorFactory;
+import com.puresol.coding.evaluation.api.Evaluators;
 
 public class EvaluatorComboViewer extends ComboViewer {
 

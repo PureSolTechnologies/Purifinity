@@ -2,7 +2,7 @@ package com.puresol.coding.metrics.normmaint;
 
 import java.util.ArrayList;
 
-import com.puresol.coding.analysis.api.evaluation.FileResults;
+import com.puresol.coding.evaluation.api.FileResults;
 
 public class NormalizedMaintainabilityIndexFileResults extends
 		ArrayList<NormalizedMaintainabilityIndexFileResult> implements

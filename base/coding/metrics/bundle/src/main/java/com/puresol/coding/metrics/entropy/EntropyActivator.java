@@ -10,50 +10,50 @@ import org.osgi.framework.ServiceRegistration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresol.coding.analysis.impl.evaluation.EvaluatorFactory;
-import com.puresol.coding.analysis.impl.evaluation.EvaluatorStore;
+import com.puresol.coding.evaluation.api.EvaluatorFactory;
+import com.puresol.coding.evaluation.api.EvaluatorStore;
 
 public class EntropyActivator implements BundleActivator {
 
-    private static final Logger logger = LoggerFactory
-	    .getLogger(EntropyActivator.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(EntropyActivator.class);
 
-    private final List<ServiceRegistration> serviceRegistrations = new ArrayList<ServiceRegistration>();
+	private final List<ServiceRegistration> serviceRegistrations = new ArrayList<ServiceRegistration>();
 
-    @Override
-    public void start(BundleContext context) throws Exception {
-	logger.info("Starting Entropy...");
+	@Override
+	public void start(BundleContext context) throws Exception {
+		logger.info("Starting Entropy...");
 
-	registerFactory(context);
+		registerFactory(context);
 
-	logger.info("Started.");
-    }
-
-    private void registerFactory(BundleContext context) {
-	EntropyMetricServiceFactory entropyMetricFactory = new EntropyMetricServiceFactory();
-
-	ServiceRegistration registration = context.registerService(
-		EvaluatorFactory.class.getName(), entropyMetricFactory,
-		new Hashtable<String, String>());
-	serviceRegistrations.add(registration);
-
-	Hashtable<String, String> properties = new Hashtable<String, String>();
-	properties.put("evaluator", EntropyEvaluator.class.getName());
-	registration = context.registerService(EvaluatorStore.class.getName(),
-		new EntropyEvaluatorStore(), properties);
-	serviceRegistrations.add(registration);
-    }
-
-    @Override
-    public void stop(BundleContext context) throws Exception {
-	logger.info("Stopping Entropy...");
-
-	for (ServiceRegistration registration : serviceRegistrations) {
-	    registration.unregister();
+		logger.info("Started.");
 	}
-	serviceRegistrations.clear();
 
-	logger.info("Stopped.");
-    }
+	private void registerFactory(BundleContext context) {
+		EntropyMetricServiceFactory entropyMetricFactory = new EntropyMetricServiceFactory();
+
+		ServiceRegistration registration = context.registerService(
+				EvaluatorFactory.class.getName(), entropyMetricFactory,
+				new Hashtable<String, String>());
+		serviceRegistrations.add(registration);
+
+		Hashtable<String, String> properties = new Hashtable<String, String>();
+		properties.put("evaluator", EntropyEvaluator.class.getName());
+		registration = context.registerService(EvaluatorStore.class.getName(),
+				new EntropyEvaluatorStore(), properties);
+		serviceRegistrations.add(registration);
+	}
+
+	@Override
+	public void stop(BundleContext context) throws Exception {
+		logger.info("Stopping Entropy...");
+
+		for (ServiceRegistration registration : serviceRegistrations) {
+			registration.unregister();
+		}
+		serviceRegistrations.clear();
+
+		logger.info("Stopped.");
+	}
 
 }

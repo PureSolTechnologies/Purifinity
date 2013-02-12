@@ -5,7 +5,7 @@ import static org.junit.Assert.fail;
 import org.junit.Test;
 
 import com.puresol.coding.analysis.api.CodeRangeType;
-import com.puresol.coding.analysis.impl.quality.SourceCodeQuality;
+import com.puresol.coding.evaluation.api.SourceCodeQuality;
 
 public class CodeDepthQualityTest {
 

@@ -26,6 +26,18 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresol</groupId>
+			<artifactId>coding.evaluation.api.lib</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresol</groupId>
+			<artifactId>coding.evaluation.impl.lib</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresol</groupId>
+			<artifactId>coding.lang.api.lib</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresol</groupId>
 			<artifactId>trees.lib</artifactId>
 		</dependency>
 		<dependency>
@@ -33,7 +45,7 @@
 			<artifactId>uhura.lib</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol</groupId>
+			<groupId>com.puresol</groupId> 
 			<artifactId>uhura.test</artifactId>
 		</dependency>
 		<dependency>

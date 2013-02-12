@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.puresol.coding.analysis.impl.evaluation.Result;
+import com.puresol.coding.evaluation.impl.Result;
 
 public class HalsteadResult implements Serializable {
 

@@ -8,6 +8,7 @@ Require-Bundle: com.puresol.utils;bundle-version="0.1.0",
  com.puresol.uhura;bundle-version="0.1.0",
  com.puresol.coding.analysis.api;bundle-version="0.1.0",
  com.puresol.coding.richclient.application.plugin;bundle-version="0.1.0",
- org.junit4;bundle-version="4.8.1"
+ org.junit4;bundle-version="4.8.1",
+ com.puresol.coding.analysis.impl.lib;bundle-version="0.1.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: com.puresol.coding.richclient.application.test

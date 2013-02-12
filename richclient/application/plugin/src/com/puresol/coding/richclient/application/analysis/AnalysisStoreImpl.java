@@ -9,8 +9,8 @@ import java.util.UUID;
 import com.puresol.coding.analysis.api.Analysis;
 import com.puresol.coding.analysis.api.AnalysisInformation;
 import com.puresol.coding.analysis.api.AnalysisSettings;
-import com.puresol.coding.analysis.api.storage.AnalysisStore;
-import com.puresol.coding.analysis.api.storage.ModuleStoreException;
+import com.puresol.coding.analysis.api.AnalysisStore;
+import com.puresol.coding.analysis.api.ModuleStoreException;
 import com.puresol.utils.FileUtilities;
 
 public class AnalysisStoreImpl implements AnalysisStore {

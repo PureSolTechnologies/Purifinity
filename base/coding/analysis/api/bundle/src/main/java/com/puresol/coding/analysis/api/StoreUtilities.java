@@ -7,9 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.puresol.coding.analysis.api.storage.CodeStore;
-import com.puresol.coding.analysis.api.storage.CodeStoreException;
-import com.puresol.coding.analysis.api.storage.CodeStoreFactory;
 import com.puresol.trees.FileTree;
 import com.puresol.trees.TreeVisitor;
 import com.puresol.trees.TreeWalker;

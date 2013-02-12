@@ -10,8 +10,8 @@ import org.osgi.framework.ServiceRegistration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresol.coding.analysis.api.evaluation.EvaluatorFactory;
-import com.puresol.coding.analysis.api.storage.EvaluatorStore;
+import com.puresol.coding.evaluation.api.EvaluatorFactory;
+import com.puresol.coding.evaluation.api.EvaluatorStore;
 
 public class SLOCActivator implements BundleActivator {
 

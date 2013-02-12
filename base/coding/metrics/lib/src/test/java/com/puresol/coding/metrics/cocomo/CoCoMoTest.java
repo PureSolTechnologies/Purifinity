@@ -14,7 +14,7 @@ import org.junit.Test;
 
 import com.puresol.coding.analysis.api.AnalysisInformation;
 import com.puresol.coding.analysis.api.AnalysisRun;
-import com.puresol.coding.analysis.api.storage.ModuleStoreException;
+import com.puresol.coding.analysis.api.ModuleStoreException;
 import com.puresol.coding.analysis.impl.DirectoryRepositoryLocation;
 import com.puresol.utils.FileSearchConfiguration;
 

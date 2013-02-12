@@ -2,7 +2,7 @@ package com.puresol.coding.metrics.sloc;
 
 import java.util.ArrayList;
 
-import com.puresol.coding.analysis.api.evaluation.FileResults;
+import com.puresol.coding.evaluation.api.FileResults;
 
 public class SLOCFileResults extends ArrayList<SLOCFileResult> implements
 		FileResults {
