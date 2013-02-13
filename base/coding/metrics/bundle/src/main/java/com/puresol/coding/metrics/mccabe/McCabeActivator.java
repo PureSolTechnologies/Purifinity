@@ -2,7 +2,6 @@ package com.puresol.coding.metrics.mccabe;
 
 import java.util.ArrayList;
 import java.util.Dictionary;
-import java.util.Hashtable;
 import java.util.List;
 
 import org.osgi.framework.BundleActivator;
@@ -12,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.puresol.coding.evaluation.api.EvaluatorFactory;
-import com.puresol.coding.evaluation.api.EvaluatorStore;
 
 public class McCabeActivator implements BundleActivator {
 
@@ -36,12 +34,6 @@ public class McCabeActivator implements BundleActivator {
 
 		ServiceRegistration registration = context.registerService(
 				EvaluatorFactory.class.getName(), mcCabeMetricFactory, headers);
-		serviceRegistrations.add(registration);
-
-		Hashtable<String, String> properties = new Hashtable<String, String>();
-		properties.put("evaluator", McCabeMetricEvaluator.class.getName());
-		registration = context.registerService(EvaluatorStore.class.getName(),
-				new McCabeMetricEvaluatorStore(), properties);
 		serviceRegistrations.add(registration);
 	}
 

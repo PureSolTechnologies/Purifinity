@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.puresol.coding.evaluation.api.EvaluatorFactory;
-import com.puresol.coding.evaluation.api.EvaluatorStore;
 
 public class SLOCActivator implements BundleActivator {
 
@@ -35,12 +34,6 @@ public class SLOCActivator implements BundleActivator {
 		ServiceRegistration registration = context.registerService(
 				EvaluatorFactory.class.getName(), slocMetricFactory,
 				new Hashtable<String, String>());
-		serviceRegistrations.add(registration);
-
-		Hashtable<String, String> properties = new Hashtable<String, String>();
-		properties.put("evaluator", SLOCEvaluator.class.getName());
-		registration = context.registerService(EvaluatorStore.class.getName(),
-				new SLOCEvaluatorStore(), properties);
 		serviceRegistrations.add(registration);
 	}
 

@@ -7,10 +7,12 @@ import com.puresol.coding.analysis.api.CodeAnalysis;
 import com.puresol.coding.analysis.api.CodeRange;
 import com.puresol.coding.analysis.api.CodeRangeType;
 import com.puresol.coding.analysis.api.HashIdFileTree;
+import com.puresol.coding.analysis.api.ProgrammingLanguages;
 import com.puresol.coding.evaluation.api.EvaluatorStore;
 import com.puresol.coding.evaluation.api.QualityCharacteristic;
 import com.puresol.coding.evaluation.impl.AbstractEvaluator;
 import com.puresol.coding.lang.api.ProgrammingLanguage;
+import com.puresol.uhura.ust.eval.EvaluationException;
 
 public class SLOCEvaluator extends AbstractEvaluator {
 
@@ -26,16 +28,16 @@ public class SLOCEvaluator extends AbstractEvaluator {
 
 	@Override
 	protected void processFile(CodeAnalysis analysis)
-			throws InterruptedException {
+			throws InterruptedException, EvaluationException {
 		SLOCFileResults results = new SLOCFileResults();
-		ProgrammingLanguage language = ProgrammingLanguages.findByName(
-				analysis.getLanguageName(), analysis.getLanguageVersion());
+		ProgrammingLanguage language = ProgrammingLanguages.getInstance()
+				.findByName(analysis.getLanguageName(),
+						analysis.getLanguageVersion());
 
 		for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
 			SLOCMetricCalculator metric = new SLOCMetricCalculator(
 					getAnalysisRun(), language, codeRange);
-			metric.schedule();
-			metric.join();
+			execute(metric);
 			results.add(new SLOCFileResult(analysis.getAnalyzedFile()
 					.getLocation(), codeRange.getType(), codeRange.getName(),
 					metric.getSLOCResult(), metric.getQuality()));

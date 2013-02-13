@@ -17,6 +17,7 @@
 		<module>analysis</module>
 		<module>evaluation</module>
 		<module>metrics</module>
+		<module>store</module>
 	</modules>
 
 </project>

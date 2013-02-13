@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.puresol.coding.evaluation.api.EvaluatorFactory;
-import com.puresol.coding.evaluation.api.EvaluatorStore;
 
 public class MaintainabilityActivator implements BundleActivator {
 
@@ -35,13 +34,6 @@ public class MaintainabilityActivator implements BundleActivator {
 		ServiceRegistration registration = context.registerService(
 				EvaluatorFactory.class.getName(), maintainabilityIndexFactory,
 				new Hashtable<String, String>());
-		serviceRegistrations.add(registration);
-
-		Hashtable<String, String> properties = new Hashtable<String, String>();
-		properties.put("evaluator",
-				MaintainabilityIndexEvaluator.class.getName());
-		registration = context.registerService(EvaluatorStore.class.getName(),
-				new MaintainabilityIndexEvaluatorStore(), properties);
 		serviceRegistrations.add(registration);
 	}
 

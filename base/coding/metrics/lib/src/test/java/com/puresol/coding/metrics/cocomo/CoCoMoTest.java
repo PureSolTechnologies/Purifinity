@@ -1,6 +1,5 @@
 package com.puresol.coding.metrics.cocomo;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 
@@ -14,8 +13,9 @@ import org.junit.Test;
 
 import com.puresol.coding.analysis.api.AnalysisInformation;
 import com.puresol.coding.analysis.api.AnalysisRun;
+import com.puresol.coding.analysis.api.AnalysisRunFactory;
+import com.puresol.coding.analysis.api.DirectoryRepositoryLocation;
 import com.puresol.coding.analysis.api.ModuleStoreException;
-import com.puresol.coding.analysis.impl.DirectoryRepositoryLocation;
 import com.puresol.utils.FileSearchConfiguration;
 
 @Ignore
@@ -28,10 +28,12 @@ public class CoCoMoTest {
 		File runDirectory = new File("test/analysis");
 		AnalysisInformation analysisInformation = new AnalysisInformation(
 				UUID.randomUUID(), "ProjectAnalyzer", "description", new Date());
-		analyzer = AnalysisRunImpl.create(runDirectory, analysisInformation,
-				UUID.randomUUID(), new DirectoryRepositoryLocation(
-						"CoCoMoTest", new File("src/main/java")),
-				new FileSearchConfiguration());
+		analyzer = AnalysisRunFactory.getInstance().create(
+				runDirectory,
+				analysisInformation,
+				UUID.randomUUID(),
+				new DirectoryRepositoryLocation("CoCoMoTest", new File(
+						"src/main/java")), new FileSearchConfiguration());
 	}
 
 	@Test
@@ -43,7 +45,6 @@ public class CoCoMoTest {
 	public void testInitValues() {
 		CoCoMoEvaluator metric = new CoCoMoEvaluator(analyzer);
 		assertSame(analyzer, metric.getAnalysisRun());
-		assertFalse(metric.getName().isEmpty());
 		assertNotNull(metric.getInformation());
 		assertNotNull(metric.getEvaluatedQualityCharacteristics());
 		assertNotNull(metric.getStartTime());

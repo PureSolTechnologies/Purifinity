@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.puresol.trees.FileTree;
 import com.puresol.uhura.source.CodeLocation;
+import com.puresol.utils.progress.ProgressObservable;
 
 /**
  * This is the general interface for a single project analysis. This analysis
@@ -16,7 +17,8 @@ import com.puresol.uhura.source.CodeLocation;
  * @author Rick-Rainer Ludwig
  * 
  */
-public interface AnalysisRun extends Serializable {
+public interface AnalysisRun extends Serializable,
+		ProgressObservable<AnalysisRun> {
 
 	/**
 	 * This method returns the information about the run.

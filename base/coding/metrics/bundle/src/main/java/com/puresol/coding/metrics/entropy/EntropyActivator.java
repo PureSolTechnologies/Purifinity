@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.puresol.coding.evaluation.api.EvaluatorFactory;
-import com.puresol.coding.evaluation.api.EvaluatorStore;
 
 public class EntropyActivator implements BundleActivator {
 
@@ -35,12 +34,6 @@ public class EntropyActivator implements BundleActivator {
 		ServiceRegistration registration = context.registerService(
 				EvaluatorFactory.class.getName(), entropyMetricFactory,
 				new Hashtable<String, String>());
-		serviceRegistrations.add(registration);
-
-		Hashtable<String, String> properties = new Hashtable<String, String>();
-		properties.put("evaluator", EntropyEvaluator.class.getName());
-		registration = context.registerService(EvaluatorStore.class.getName(),
-				new EntropyEvaluatorStore(), properties);
 		serviceRegistrations.add(registration);
 	}
 

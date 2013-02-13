@@ -9,6 +9,7 @@ import com.puresol.coding.analysis.api.CodeAnalysis;
 import com.puresol.coding.analysis.api.CodeRange;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.evaluation.api.EvaluatorStore;
+import com.puresol.coding.evaluation.api.EvaluatorStoreFactory;
 import com.puresol.coding.evaluation.api.QualityCharacteristic;
 import com.puresol.coding.evaluation.impl.AbstractEvaluator;
 import com.puresol.coding.metrics.halstead.HalsteadMetricEvaluator;
@@ -48,11 +49,10 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 	public MaintainabilityIndexEvaluator(AnalysisRun analysisRun) {
 		super(NAME, DESCRIPTION, analysisRun);
 		store = getEvaluatorStore();
-		slocStore = AbstractEvaluator.createEvaluatorStore(SLOCEvaluator.class);
-		mcCabeStore = AbstractEvaluator
-				.createEvaluatorStore(McCabeMetricEvaluator.class);
-		halsteadStore = AbstractEvaluator
-				.createEvaluatorStore(HalsteadMetricEvaluator.class);
+		EvaluatorStoreFactory factory = EvaluatorStoreFactory.getFactory();
+		slocStore = factory.createInstance(SLOCEvaluator.class);
+		mcCabeStore = factory.createInstance(McCabeMetricEvaluator.class);
+		halsteadStore = factory.createInstance(HalsteadMetricEvaluator.class);
 	}
 
 	@Override

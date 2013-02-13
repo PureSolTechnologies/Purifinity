@@ -11,6 +11,7 @@ import com.puresol.coding.evaluation.api.EvaluatorStore;
 import com.puresol.coding.evaluation.api.QualityCharacteristic;
 import com.puresol.coding.evaluation.impl.AbstractEvaluator;
 import com.puresol.coding.lang.api.ProgrammingLanguage;
+import com.puresol.uhura.ust.eval.EvaluationException;
 
 public class CodeDepthEvaluator extends AbstractEvaluator {
 
@@ -25,7 +26,7 @@ public class CodeDepthEvaluator extends AbstractEvaluator {
 
 	@Override
 	protected void processFile(CodeAnalysis analysis)
-			throws InterruptedException {
+			throws InterruptedException, EvaluationException {
 		CodeDepthFileResults results = new CodeDepthFileResults();
 		ProgrammingLanguage language = ProgrammingLanguages.getInstance()
 				.findByName(analysis.getLanguageName(),
@@ -33,8 +34,7 @@ public class CodeDepthEvaluator extends AbstractEvaluator {
 		for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
 			CodeDepthMetric metric = new CodeDepthMetric(getAnalysisRun(),
 					language, codeRange);
-			metric.schedule();
-			metric.join();
+			execute(metric);
 			results.add(new CodeDepthFileResult(analysis.getAnalyzedFile()
 					.getLocation(), codeRange.getType(), codeRange.getName(),
 					metric.getMaxDepth(), metric.getQuality()));

@@ -8,6 +8,7 @@ import com.puresol.coding.analysis.api.CodeAnalysis;
 import com.puresol.coding.analysis.api.CodeRange;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.evaluation.api.EvaluatorStore;
+import com.puresol.coding.evaluation.api.EvaluatorStoreFactory;
 import com.puresol.coding.evaluation.api.QualityCharacteristic;
 import com.puresol.coding.evaluation.impl.AbstractEvaluator;
 import com.puresol.coding.metrics.halstead.HalsteadMetricEvaluator;
@@ -26,8 +27,8 @@ public class EntropyEvaluator extends AbstractEvaluator {
 	public EntropyEvaluator(AnalysisRun analysisRun) {
 		super(EntropyMetric.NAME, EntropyMetric.DESCRIPTION, analysisRun);
 		store = getEvaluatorStore();
-		halsteadStore = AbstractEvaluator
-				.createEvaluatorStore(HalsteadMetricEvaluator.class);
+		halsteadStore = EvaluatorStoreFactory.getFactory().createInstance(
+				HalsteadMetricEvaluator.class);
 	}
 
 	@Override

@@ -1,6 +1,5 @@
 package com.puresol.coding.metrics.normmaint;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 
@@ -14,8 +13,9 @@ import org.junit.Test;
 
 import com.puresol.coding.analysis.api.AnalysisInformation;
 import com.puresol.coding.analysis.api.AnalysisRun;
+import com.puresol.coding.analysis.api.AnalysisRunFactory;
+import com.puresol.coding.analysis.api.DirectoryRepositoryLocation;
 import com.puresol.coding.analysis.api.ModuleStoreException;
-import com.puresol.coding.analysis.impl.DirectoryRepositoryLocation;
 import com.puresol.utils.FileSearchConfiguration;
 
 @Ignore
@@ -28,8 +28,11 @@ public class ProjectNormalizedMaintainabilityIndexTest {
 		File runDirectory = new File("test/analysis");
 		AnalysisInformation analysisInformation = new AnalysisInformation(
 				UUID.randomUUID(), "ProjectAnalyzer", "description", new Date());
-		analyzer = AnalysisRunImpl.create(runDirectory, analysisInformation,
-				UUID.randomUUID(), new DirectoryRepositoryLocation(
+		analyzer = AnalysisRunFactory.getInstance().create(
+				runDirectory,
+				analysisInformation,
+				UUID.randomUUID(),
+				new DirectoryRepositoryLocation(
 						"ProjectNormalizedMaintainabilityIndexTest", new File(
 								"src/main/java")),
 				new FileSearchConfiguration());
@@ -45,7 +48,6 @@ public class ProjectNormalizedMaintainabilityIndexTest {
 		NormalizedMaintainabilityIndexEvaluator metric = new NormalizedMaintainabilityIndexEvaluator(
 				analyzer);
 		assertSame(analyzer, metric.getAnalysisRun());
-		assertFalse(metric.getName().isEmpty());
 		assertNotNull(metric.getInformation());
 		assertNotNull(metric.getEvaluatedQualityCharacteristics());
 		assertNotNull(metric.getStartTime());

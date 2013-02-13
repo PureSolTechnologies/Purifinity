@@ -69,12 +69,12 @@ public class HalsteadMetric extends CodeRangeEvaluator {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public IStatus run(IProgressMonitor monitor) {
-		monitor.beginTask(NAME, 1);
+	public Boolean call() {
+		fireStarted("Start evaluation.", 1);
 		createHashtables();
 		calculateValues();
-		monitor.done();
-		return Status.OK_STATUS;
+		fireDone("Finished evaluation.", true);
+		return true;
 	}
 
 	private void createHashtables() {

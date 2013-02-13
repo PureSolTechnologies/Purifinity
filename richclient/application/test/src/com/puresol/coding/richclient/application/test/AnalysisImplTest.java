@@ -20,7 +20,7 @@ import com.puresol.coding.analysis.api.AnalysisSettings;
 import com.puresol.coding.analysis.api.AnalysisStore;
 import com.puresol.coding.analysis.api.ModuleStoreException;
 import com.puresol.coding.analysis.api.TestFileSearchConfiguration;
-import com.puresol.coding.richclient.application.analysis.AnalysisStoreImpl;
+import com.puresol.coding.analysis.filestore.AnalysisStoreImpl;
 
 public class AnalysisImplTest {
 

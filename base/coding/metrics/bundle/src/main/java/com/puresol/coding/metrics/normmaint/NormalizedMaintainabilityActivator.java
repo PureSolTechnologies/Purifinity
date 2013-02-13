@@ -2,7 +2,6 @@ package com.puresol.coding.metrics.normmaint;
 
 import java.util.ArrayList;
 import java.util.Dictionary;
-import java.util.Hashtable;
 import java.util.List;
 
 import org.osgi.framework.BundleActivator;
@@ -12,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.puresol.coding.evaluation.api.EvaluatorFactory;
-import com.puresol.coding.evaluation.api.EvaluatorStore;
 
 public class NormalizedMaintainabilityActivator implements BundleActivator {
 
@@ -37,13 +35,6 @@ public class NormalizedMaintainabilityActivator implements BundleActivator {
 		ServiceRegistration registration = context.registerService(
 				EvaluatorFactory.class.getName(),
 				normalizedMaintainabilityIndexFactory, headers);
-		serviceRegistrations.add(registration);
-
-		Hashtable<String, String> properties = new Hashtable<String, String>();
-		properties.put("evaluator",
-				NormalizedMaintainabilityIndexEvaluator.class.getName());
-		registration = context.registerService(EvaluatorStore.class.getName(),
-				new NormalizedMaintainabilityIndexEvaluatorStore(), properties);
 		serviceRegistrations.add(registration);
 	}
 

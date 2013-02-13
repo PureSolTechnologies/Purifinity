@@ -8,6 +8,7 @@ import com.puresol.coding.analysis.api.CodeAnalysis;
 import com.puresol.coding.analysis.api.CodeRange;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.evaluation.api.EvaluatorStore;
+import com.puresol.coding.evaluation.api.EvaluatorStoreFactory;
 import com.puresol.coding.evaluation.api.QualityCharacteristic;
 import com.puresol.coding.evaluation.impl.AbstractEvaluator;
 import com.puresol.coding.metrics.maintainability.MaintainabilityIndexEvaluator;
@@ -39,8 +40,9 @@ public class NormalizedMaintainabilityIndexEvaluator extends AbstractEvaluator {
 	public NormalizedMaintainabilityIndexEvaluator(AnalysisRun analysisRun) {
 		super(NAME, DESCRIPTION, analysisRun);
 		store = getEvaluatorStore();
-		maintainabilityStore = AbstractEvaluator
-				.createEvaluatorStore(MaintainabilityIndexEvaluator.class);
+
+		maintainabilityStore = EvaluatorStoreFactory.getFactory()
+				.createInstance(MaintainabilityIndexEvaluator.class);
 	}
 
 	@Override

@@ -13,6 +13,12 @@ package com.puresol.coding.metrics.entropy;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.CodeRange;
@@ -42,6 +48,9 @@ public class EntropyMetric extends CodeRangeEvaluator {
 		EVALUATED_QUALITY_CHARACTERISTICS
 				.add(QualityCharacteristic.ANALYSABILITY);
 	}
+
+	private static final Logger logger = LoggerFactory
+			.getLogger(EntropyMetric.class);
 
 	private final AnalysisRun analysisRun;
 	private final CodeRange codeRange;
@@ -73,42 +82,53 @@ public class EntropyMetric extends CodeRangeEvaluator {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public IStatus run(IProgressMonitor monitor) {
-		IStatus retVal = calculate(monitor);
+	public Boolean call() {
+		boolean retVal = calculate();
 		recreateResultsList();
 		return retVal;
 	}
 
-	private IStatus calculate(IProgressMonitor monitor) {
-		monitor.beginTask(NAME, 2);
-		halstead.schedule();
-		monitor.worked(1);
+	private boolean calculate() {
+		try {
+			fireStarted("Start evaluation.", 2);
 
-		Hashtable<String, Integer> operands = halstead.getOperands();
+			ExecutorService executor = Executors.newSingleThreadExecutor();
+			executor.submit(halstead);
+			executor.shutdown();
+			executor.awaitTermination(30, TimeUnit.SECONDS);
+			fireUpdateWork("Finished Halstead metric.", 1);
 
-		double maxEntropy = Math.log(halstead.getDifferentOperands())
-				/ Math.log(2.0);
-		double entropy = 0.0;
-		for (String operant : operands.keySet()) {
-			int count = operands.get(operant);
-			entropy += (double) count
-					/ (double) halstead.getTotalOperands()
-					* Math.log((double) count
-							/ (double) halstead.getTotalOperands())
+			Hashtable<String, Integer> operands = halstead.getOperands();
+
+			double maxEntropy = Math.log(halstead.getDifferentOperands())
 					/ Math.log(2.0);
+			double entropy = 0.0;
+			for (String operant : operands.keySet()) {
+				int count = operands.get(operant);
+				entropy += (double) count
+						/ (double) halstead.getTotalOperands()
+						* Math.log((double) count
+								/ (double) halstead.getTotalOperands())
+						/ Math.log(2.0);
+			}
+			entropy *= -1.0;
+			double normEntropy = entropy / maxEntropy;
+			double entropyRedundancy = maxEntropy - entropy;
+			double redundancy = entropyRedundancy
+					* halstead.getDifferentOperands() / maxEntropy;
+			double normalizedRedundancy = redundancy
+					/ halstead.getDifferentOperands();
+			result = new EntropyResult(halstead.getVocabularySize(),
+					halstead.getProgramLength(), entropy, maxEntropy,
+					normEntropy, entropyRedundancy, redundancy,
+					normalizedRedundancy);
+			fireDone("Evaluation finished.", true);
+			return true;
+		} catch (InterruptedException e) {
+			logger.warn("Evaluation was interrupted.", e);
+			fireDone("Evaluation was interrupted.", false);
+			return false;
 		}
-		entropy *= -1.0;
-		double normEntropy = entropy / maxEntropy;
-		double entropyRedundancy = maxEntropy - entropy;
-		double redundancy = entropyRedundancy * halstead.getDifferentOperands()
-				/ maxEntropy;
-		double normalizedRedundancy = redundancy
-				/ halstead.getDifferentOperands();
-		result = new EntropyResult(halstead.getVocabularySize(),
-				halstead.getProgramLength(), entropy, maxEntropy, normEntropy,
-				entropyRedundancy, redundancy, normalizedRedundancy);
-		monitor.done();
-		return Status.OK_STATUS;
 	}
 
 	private void recreateResultsList() {

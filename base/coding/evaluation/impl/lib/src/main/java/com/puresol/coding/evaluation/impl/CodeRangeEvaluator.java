@@ -2,11 +2,14 @@ package com.puresol.coding.evaluation.impl;
 
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.CodeRange;
+import com.puresol.coding.evaluation.api.Evaluator;
 import com.puresol.coding.evaluation.api.QualityCharacteristic;
 import com.puresol.coding.evaluation.api.SourceCodeQuality;
+import com.puresol.utils.progress.AbstractProgressObservable;
 
 /**
  * This interface is meant for evaluators which perform operations on ASTs or in
@@ -15,7 +18,8 @@ import com.puresol.coding.evaluation.api.SourceCodeQuality;
  * @author Rick-Rainer Ludwig
  * 
  */
-public abstract class CodeRangeEvaluator {
+public abstract class CodeRangeEvaluator extends
+		AbstractProgressObservable<Evaluator> implements Callable<Boolean> {
 
 	private final Date timeStamp;
 	private final String name;

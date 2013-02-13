@@ -69,14 +69,14 @@ public class McCabeMetric extends CodeRangeEvaluator {
 	}
 
 	@Override
-	public IStatus run(IProgressMonitor monitor) {
-		IStatus retVal = calculate(monitor);
+	public Boolean call() {
+		boolean retVal = calculate();
 		createResultsList();
 		return retVal;
 	}
 
-	private IStatus calculate(IProgressMonitor monitor) {
-		monitor.beginTask(NAME, 1);
+	private boolean calculate() {
+		fireStarted("Evaluation started.", 1);
 		cyclomaticNumber = 1;
 		TreeIterator<ParserTree> iterator = new TreeIterator<ParserTree>(
 				codeRange.getParserTree());
@@ -84,8 +84,8 @@ public class McCabeMetric extends CodeRangeEvaluator {
 			cyclomaticNumber += langDepended
 					.increasesCyclomaticComplexityBy(iterator.getCurrentNode());
 		} while (iterator.goForward());
-		monitor.done();
-		return Status.OK_STATUS;
+		fireDone("Evaluation finished.", true);
+		return true;
 	}
 
 	private void createResultsList() {

@@ -64,15 +64,15 @@ public class CodeDepthMetric extends CodeRangeEvaluator {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public IStatus run(IProgressMonitor monitor) {
-		IStatus retVal = calculate(monitor);
+	public Boolean call() {
+		boolean retVal = calculate();
 		recreateResultsList();
-		monitor.done();
+		fireDone("Evaluation finished.", retVal);
 		return retVal;
 	}
 
-	private IStatus calculate(IProgressMonitor monitor) {
-		monitor.beginTask(NAME, 1);
+	private boolean calculate() {
+		fireStarted("Starting evaluation.", 1);
 		maxDepth = 0;
 		TreeIterator<ParserTree> iterator = new TreeIterator<ParserTree>(
 				getCodeRange().getParserTree());
@@ -94,7 +94,7 @@ public class CodeDepthMetric extends CodeRangeEvaluator {
 				}
 			}
 		} while (iterator.goForward());
-		return Status.OK_STATUS;
+		return true;
 	}
 
 	private void recreateResultsList() {

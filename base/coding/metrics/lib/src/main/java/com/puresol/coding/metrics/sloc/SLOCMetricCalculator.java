@@ -122,12 +122,12 @@ public class SLOCMetricCalculator extends CodeRangeEvaluator {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public IStatus run(IProgressMonitor monitor) {
-		monitor.beginTask(NAME, 1);
+	public Boolean call() {
+		fireStarted("Evaluation started.", 1);
 		setup();
 		count();
-		monitor.done();
-		return Status.OK_STATUS;
+		fireDone("Finished evaluation.", true);
+		return true;
 	}
 
 	private void setup() {

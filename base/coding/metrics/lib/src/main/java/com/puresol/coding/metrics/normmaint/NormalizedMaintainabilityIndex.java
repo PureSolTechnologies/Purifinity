@@ -11,6 +11,16 @@
 package com.puresol.coding.metrics.normmaint;
 
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.CodeRange;
@@ -23,8 +33,12 @@ import com.puresol.coding.metrics.halstead.HalsteadMetric;
 import com.puresol.coding.metrics.mccabe.McCabeMetric;
 import com.puresol.coding.metrics.sloc.SLOCMetricCalculator;
 import com.puresol.coding.metrics.sloc.SLOCResult;
+import com.puresol.uhura.ust.eval.EvaluationException;
 
 public class NormalizedMaintainabilityIndex extends CodeRangeEvaluator {
+
+	private static final Logger logger = LoggerFactory
+			.getLogger(NormalizedMaintainabilityIndex.class);
 
 	private final AnalysisRun analysisRun;
 	private final CodeRange codeRange;
@@ -78,28 +92,38 @@ public class NormalizedMaintainabilityIndex extends CodeRangeEvaluator {
 	 * @return
 	 */
 	@Override
-	public IStatus run(IProgressMonitor monitor) {
-		monitor.beginTask(NormalizedMaintainabilityIndexEvaluator.NAME, 4);
+	public Boolean call() {
+		try {
+			fireStarted("Start evaluation.", 4);
 
-		checkInput();
+			checkInput();
 
-		slocMetric.schedule();
-		monitor.worked(1);
-		mcCabeMetric.schedule();
-		monitor.worked(2);
-		halsteadMetric.schedule();
-		monitor.worked(3);
+			execute(slocMetric);
+			fireUpdateWork("Finished SLOC.", 1);
+			execute(mcCabeMetric);
+			fireUpdateWork("Finished McCabe metric.", 1);
+			execute(halsteadMetric);
+			fireUpdateWork("Finished Halstead metric.", 1);
 
-		SLOCResult sloc = slocMetric.getSLOCResult();
-		double MIwoc = 171.0 - 5.2
-				* Math.log(halsteadMetric.getHalsteadVolume()) - 0.23
-				* mcCabeMetric.getCyclomaticNumber() - 16.2
-				* Math.log(sloc.getPhyLOC() * 100.0 / 171.0);
-		double MIcw = 50 * Math.sin(Math.sqrt(2.4 * sloc.getComLOC()
-				/ sloc.getPhyLOC()));
-		result = new NormalizedMaintainabilityIndexResult(MIwoc, MIcw);
-		monitor.done();
-		return Status.OK_STATUS;
+			SLOCResult sloc = slocMetric.getSLOCResult();
+			double MIwoc = 171.0 - 5.2
+					* Math.log(halsteadMetric.getHalsteadVolume()) - 0.23
+					* mcCabeMetric.getCyclomaticNumber() - 16.2
+					* Math.log(sloc.getPhyLOC() * 100.0 / 171.0);
+			double MIcw = 50 * Math.sin(Math.sqrt(2.4 * sloc.getComLOC()
+					/ sloc.getPhyLOC()));
+			result = new NormalizedMaintainabilityIndexResult(MIwoc, MIcw);
+			fireDone("Finished evaluation.", true);
+			return true;
+		} catch (InterruptedException e) {
+			logger.warn("Evaluation was interrupted.", e);
+			fireDone("Evaluation was interrupted.", false);
+			return false;
+		} catch (EvaluationException e) {
+			logger.warn("Evaluation failed.", e);
+			fireDone("Evaluation failed.", false);
+			return false;
+		}
 	}
 
 	public void print() {
@@ -169,6 +193,30 @@ public class NormalizedMaintainabilityIndex extends CodeRangeEvaluator {
 	@Override
 	public List<Result> getResults() {
 		return result.getResults();
+	}
+
+	/**
+	 * This method is used to start evaluations.
+	 * 
+	 * @param evaluator
+	 * @return
+	 * @throws InterruptedException
+	 * @throws EvaluationException
+	 */
+	private <T> T execute(Callable<T> evaluator) throws InterruptedException,
+			EvaluationException {
+		try {
+			ExecutorService executor = Executors.newSingleThreadExecutor();
+			Future<T> future = executor.submit(evaluator);
+			executor.shutdown();
+			return future.get(30, TimeUnit.SECONDS);
+		} catch (ExecutionException e) {
+			fireDone(e.getMessage(), false);
+			throw new EvaluationException(e);
+		} catch (TimeoutException e) {
+			fireDone(e.getMessage(), false);
+			throw new EvaluationException(e);
+		}
 	}
 
 }

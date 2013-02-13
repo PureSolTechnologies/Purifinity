@@ -14,15 +14,15 @@ import com.puresol.coding.analysis.api.Analysis;
 import com.puresol.coding.analysis.api.AnalysisInformation;
 import com.puresol.coding.analysis.api.AnalysisSettings;
 import com.puresol.coding.analysis.api.AnalysisStore;
+import com.puresol.coding.analysis.api.AnalysisStoreFactory;
 import com.puresol.coding.analysis.api.ModuleStoreException;
 import com.puresol.coding.analysis.api.TestFileSearchConfiguration;
-import com.puresol.coding.richclient.application.analysis.AnalysisStoreImpl;
 
 public class AnalysisStoreImplTest {
 
 	@Test
 	public void testGetAllAnalysisInformation() throws ModuleStoreException {
-		AnalysisStore store = new AnalysisStoreImpl();
+		AnalysisStore store = AnalysisStoreFactory.getFactory().getInstance();
 		List<AnalysisInformation> allAnalysisInformation = store
 				.getAllAnalysisInformation();
 		assertNotNull(allAnalysisInformation);
@@ -34,7 +34,7 @@ public class AnalysisStoreImplTest {
 
 	@Test
 	public void testCreateAndDeleteAnalysis() throws ModuleStoreException {
-		AnalysisStore store = new AnalysisStoreImpl();
+		AnalysisStore store = AnalysisStoreFactory.getFactory().getInstance();
 		File sourceDirectory = new File(".");
 		Analysis analysis = store.createAnalysis(new AnalysisSettings("Name",
 				"Description", new TestFileSearchConfiguration(),
@@ -59,7 +59,7 @@ public class AnalysisStoreImplTest {
 	@Test
 	public void testCreateAndOpenAndDeleteAnalysis()
 			throws ModuleStoreException {
-		AnalysisStore store = new AnalysisStoreImpl();
+		AnalysisStore store = AnalysisStoreFactory.getFactory().getInstance();
 		File sourceDirectory = new File(System.getProperty("user.dir"));
 		Analysis analysis = store.createAnalysis(new AnalysisSettings("Name",
 				"Description", new TestFileSearchConfiguration(),

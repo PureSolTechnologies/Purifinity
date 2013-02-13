@@ -6,10 +6,12 @@ import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.CodeAnalysis;
 import com.puresol.coding.analysis.api.CodeRange;
 import com.puresol.coding.analysis.api.HashIdFileTree;
+import com.puresol.coding.analysis.api.ProgrammingLanguages;
 import com.puresol.coding.evaluation.api.EvaluatorStore;
 import com.puresol.coding.evaluation.api.QualityCharacteristic;
 import com.puresol.coding.evaluation.impl.AbstractEvaluator;
 import com.puresol.coding.lang.api.ProgrammingLanguage;
+import com.puresol.uhura.ust.eval.EvaluationException;
 
 public class McCabeMetricEvaluator extends AbstractEvaluator {
 
@@ -24,16 +26,16 @@ public class McCabeMetricEvaluator extends AbstractEvaluator {
 
 	@Override
 	protected void processFile(CodeAnalysis analysis)
-			throws InterruptedException {
+			throws InterruptedException, EvaluationException {
 		McCabeMetricFileResults results = new McCabeMetricFileResults();
-		ProgrammingLanguage language = ProgrammingLanguages.findByName(
-				analysis.getLanguageName(), analysis.getLanguageVersion());
+		ProgrammingLanguage language = ProgrammingLanguages.getInstance()
+				.findByName(analysis.getLanguageName(),
+						analysis.getLanguageVersion());
 
 		for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
 			McCabeMetric metric = new McCabeMetric(getAnalysisRun(), language,
 					codeRange);
-			metric.schedule();
-			metric.join();
+			execute(metric);
 			results.add(new McCabeMetricFileResult(analysis.getAnalyzedFile()
 					.getLocation(), codeRange.getType(), codeRange.getName(),
 					metric.getCyclomaticNumber(), metric.getQuality()));
