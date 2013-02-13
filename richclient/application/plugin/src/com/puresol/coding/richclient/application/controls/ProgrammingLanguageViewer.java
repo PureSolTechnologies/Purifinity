@@ -7,7 +7,7 @@ import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
-import com.puresol.coding.analysis.api.ProgrammingLanguages;
+import com.puresol.coding.analysis.api.ProgrammingLanguagesImpl;
 import com.puresol.coding.lang.api.ProgrammingLanguage;
 
 /**
@@ -48,7 +48,7 @@ public class ProgrammingLanguageViewer extends ComboViewer {
 				return ((ProgrammingLanguage) element).getName();
 			}
 		});
-		setInput(ProgrammingLanguages.getAll());
+		setInput(ProgrammingLanguagesImpl.getAll());
 	}
 
 }

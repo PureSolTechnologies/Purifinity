@@ -21,7 +21,7 @@ import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.analysis.api.ModuleStoreException;
 import com.puresol.coding.analysis.api.TestFileSearchConfiguration;
 import com.puresol.coding.richclient.application.analysis.AnalysisStoreImpl;
-import com.puresol.coding.richclient.application.analysis.FileStoreImpl;
+import com.puresol.coding.richclient.application.analysis.CodeStoreImpl;
 import com.puresol.uhura.source.CodeLocation;
 import com.puresol.utils.HashAlgorithm;
 import com.puresol.utils.HashId;
@@ -57,7 +57,7 @@ public class AnalysisRunImplTest {
 
 	@Test
 	public void testGetFileStoreDirectory() {
-		File fileStoreDirectory = FileStoreImpl.getFileDirectory(new HashId(
+		File fileStoreDirectory = CodeStoreImpl.getFileDirectory(new HashId(
 				HashAlgorithm.SHA256, "1234567890"));
 		assertTrue(fileStoreDirectory.getPath().endsWith("/12/34/567890"));
 	}

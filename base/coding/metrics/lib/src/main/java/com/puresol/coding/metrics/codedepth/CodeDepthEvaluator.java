@@ -6,6 +6,7 @@ import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.CodeAnalysis;
 import com.puresol.coding.analysis.api.CodeRange;
 import com.puresol.coding.analysis.api.HashIdFileTree;
+import com.puresol.coding.analysis.api.ProgrammingLanguages;
 import com.puresol.coding.evaluation.api.EvaluatorStore;
 import com.puresol.coding.evaluation.api.QualityCharacteristic;
 import com.puresol.coding.evaluation.impl.AbstractEvaluator;
@@ -26,8 +27,9 @@ public class CodeDepthEvaluator extends AbstractEvaluator {
 	protected void processFile(CodeAnalysis analysis)
 			throws InterruptedException {
 		CodeDepthFileResults results = new CodeDepthFileResults();
-		ProgrammingLanguage language = ProgrammingLanguages.findByName(
-				analysis.getLanguageName(), analysis.getLanguageVersion());
+		ProgrammingLanguage language = ProgrammingLanguages.getInstance()
+				.findByName(analysis.getLanguageName(),
+						analysis.getLanguageVersion());
 		for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
 			CodeDepthMetric metric = new CodeDepthMetric(getAnalysisRun(),
 					language, codeRange);

@@ -1,4 +1,4 @@
-package com.puresol.coding.metrics;
+package com.puresol.coding.evaluation.impl;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -8,6 +8,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import com.puresol.coding.analysis.api.AnalysisRun;
+import com.puresol.coding.analysis.api.CodeStore;
+import com.puresol.coding.analysis.api.CodeStoreFactory;
+import com.puresol.coding.analysis.api.ModuleStore;
+import com.puresol.coding.analysis.api.ModuleStoreFactory;
 import com.puresol.coding.evaluation.api.EvaluatorStore;
 import com.puresol.utils.HashId;
 
@@ -16,7 +20,8 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 	protected abstract File getFileResultsFile(HashId hashId);
 
 	protected final File getFileResultsFile(HashId hashId, Class<?> clazz) {
-		File directory = FileStoreImpl.getFileDirectory(hashId);
+		CodeStore store = CodeStoreFactory.getFactory().getInstance();
+		File directory = store.getFileDirectory(hashId);
 		String fileName = clazz.getName();
 		File file = new File(directory, fileName);
 		return file;
@@ -25,7 +30,8 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 	protected abstract File getDirectoryResultsFile(HashId hashId);
 
 	protected final File getDirectoryResultsFile(HashId hashId, Class<?> clazz) {
-		File directory = DirectoryStoreImpl.getDirectoryStoreDirectory(hashId);
+		ModuleStore store = ModuleStoreFactory.getFactory().getInstance();
+		File directory = store.getDirectoryStoreDirectory(hashId);
 		String fileName = clazz.getName();
 		File file = new File(directory, fileName);
 		return file;

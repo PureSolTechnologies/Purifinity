@@ -6,7 +6,7 @@ import com.puresol.coding.analysis.api.ModuleStore;
 import com.puresol.coding.analysis.api.ModuleStoreException;
 import com.puresol.utils.HashId;
 
-public class DirectoryStoreImpl implements ModuleStore {
+public class ModuleStoreImpl implements ModuleStore {
 
 	private static final File directoryStoreDirectory = new File(
 			AnalysisStoreImpl.getStorageDirectory(), "dirs");

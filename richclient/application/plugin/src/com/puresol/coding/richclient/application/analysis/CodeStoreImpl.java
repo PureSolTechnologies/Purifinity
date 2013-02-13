@@ -13,7 +13,7 @@ import com.puresol.coding.analysis.api.CodeStoreException;
 import com.puresol.uhura.source.SourceCode;
 import com.puresol.utils.HashId;
 
-public final class FileStoreImpl implements CodeStore {
+public final class CodeStoreImpl implements CodeStore {
 
 	private static final String CONTENT_FILE = "content.txt";
 	private static final String PARSER_TREE_FILE = "parser_tree.persist";
@@ -92,7 +92,7 @@ public final class FileStoreImpl implements CodeStore {
 	public final SourceCode loadContent(HashId hashId)
 			throws CodeStoreException {
 		try {
-			File file = FileStoreImpl.getFileDirectory(hashId);
+			File file = CodeStoreImpl.getFileDirectory(hashId);
 			SourceCode sourceCode = PersistenceUtils.restore(file);
 			return sourceCode;
 		} catch (IOException e) {

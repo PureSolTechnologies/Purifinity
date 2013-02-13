@@ -30,12 +30,14 @@ import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalysisRunInformation;
 import com.puresol.coding.analysis.api.AnalyzedCode;
 import com.puresol.coding.analysis.api.CodeAnalysis;
+import com.puresol.coding.analysis.api.CodeAnalyzerImpl;
 import com.puresol.coding.analysis.api.CodeStore;
 import com.puresol.coding.analysis.api.CodeStoreException;
 import com.puresol.coding.analysis.api.CodeStoreFactory;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.analysis.api.ModuleStoreException;
 import com.puresol.coding.analysis.api.RepositoryLocation;
+import com.puresol.coding.analysis.api.StoreUtilities;
 import com.puresol.uhura.source.CodeLocation;
 import com.puresol.uhura.source.SourceCode;
 import com.puresol.utils.DirectoryUtilities;
@@ -116,7 +118,8 @@ public class AnalysisRunImpl extends Job implements Serializable, AnalysisRun {
 
 	private final List<AnalyzedCode> analyzedFiles = new ArrayList<AnalyzedCode>();
 	private final List<CodeLocation> failedSources = new ArrayList<CodeLocation>();
-	private final CodeStore fileStore = CodeStoreFactory.getInstance();
+	private final CodeStore fileStore = CodeStoreFactory.getFactory()
+			.getInstance();
 
 	private HashIdFileTree hashIdFileTree = null;
 	private FileSearchConfiguration searchConfig;

@@ -18,10 +18,10 @@ import com.puresol.coding.lang.api.ProgrammingLanguage;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class ProgrammingLanguages {
+public class ProgrammingLanguagesImpl extends ProgrammingLanguages {
 
 	private static final Logger logger = LoggerFactory
-			.getLogger(ProgrammingLanguages.class);
+			.getLogger(ProgrammingLanguagesImpl.class);
 
 	/**
 	 * This method looks into the bundle context and returns all available
@@ -29,7 +29,8 @@ public class ProgrammingLanguages {
 	 * 
 	 * @return
 	 */
-	public static List<AnalyzableProgrammingLanguage> getAll() {
+	@Override
+	public List<AnalyzableProgrammingLanguage> getAll() {
 		try {
 			BundleContext context = Activator.getBundleContext();
 			ServiceReference[] serviceReferences = context
@@ -56,7 +57,8 @@ public class ProgrammingLanguages {
 	 * @return The programming language is returned. If the language was not
 	 *         found null is returned.
 	 */
-	public static ProgrammingLanguage findByName(String name, String version) {
+	@Override
+	public ProgrammingLanguage findByName(String name, String version) {
 		for (ProgrammingLanguage language : getAll()) {
 			if ((language.getName().equals(name))
 					&& (language.getVersion().equals(version))) {

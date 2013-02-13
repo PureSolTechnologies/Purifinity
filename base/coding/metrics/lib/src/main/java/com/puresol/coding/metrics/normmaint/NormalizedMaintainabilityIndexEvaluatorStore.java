@@ -6,7 +6,7 @@ import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.evaluation.api.DirectoryResults;
 import com.puresol.coding.evaluation.api.FileResults;
 import com.puresol.coding.evaluation.api.ProjectResults;
-import com.puresol.coding.metrics.AbstractEvaluatorStore;
+import com.puresol.coding.evaluation.impl.AbstractEvaluatorStore;
 import com.puresol.utils.HashId;
 
 public class NormalizedMaintainabilityIndexEvaluatorStore extends
