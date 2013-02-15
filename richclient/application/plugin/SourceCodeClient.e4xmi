@@ -5,15 +5,23 @@
       <children xsi:type="advanced:Perspective" xmi:id="_nuBzsEfHEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.perspective.AnalysisPerspective" accessibilityPhrase="Analysis Perspective" selectedElement="_8mZwwEfHEeKSzLsdKrQ7vg" label="Analysis Perspective" tooltip="Shows a perspective optimized for inspection of analyzes.">
         <children xsi:type="basic:PartSashContainer" xmi:id="_8mZwwEfHEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.partsashcontainer.AnalysisPerspectiveMainSash" accessibilityPhrase="Analysis Perspective Main Sash" selectedElement="_E1XWQEfIEeKSzLsdKrQ7vg" horizontal="true">
           <children xsi:type="basic:PartSashContainer" xmi:id="_E1XWQEfIEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.partsashcontainer.NavigationSash" accessibilityPhrase="Navigation Sash">
+            <children xsi:type="basic:PartStack" xmi:id="__6UeQG2HEeKeqro3vSb1RA" elementId="com.puresol.coding.richclient.application.plugin.partstack.0">
+              <children xsi:type="basic:Part" xmi:id="_JK0TkEfIEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.parts.AnalysisProjectsPart" accessibilityPhrase="Analysis Projects" contributionURI="bundleclass://com.puresol.coding.richclient.application.plugin/com.puresol.coding.richclient.application.parts.AnalysisProjectsPart" label="Analysis Projects" iconURI="platform:/plugin/com.puresol.coding.richclient.application.plugin/icons/16x16/analyzes_view.png" tooltip="Shows a list of all setup analysis projects.">
+                <toolbar xmi:id="_T6a0YEfJEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.toolbar.0"/>
+              </children>
+            </children>
             <children xsi:type="basic:PartStack" xmi:id="_-YzoMG2HEeKeqro3vSb1RA" elementId="com.puresol.coding.richclient.application.plugin.partstack.0">
-              <children xsi:type="basic:Part" xmi:id="_HCdf8EfIEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.parts.ProjectPart" accessibilityPhrase="Project Part" contributionURI="bundleclass://com.puresol.coding.richclient.application.plugin/com.puresol.coding.richclient.application.parts.AnalysisRunsPart" label="Project Part" tooltip="Shows a list of open analysis projects." closeable="true">
+              <children xsi:type="basic:Part" xmi:id="_HCdf8EfIEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.parts.AnalysisRunsPart" accessibilityPhrase="Analysis Runs" contributionURI="bundleclass://com.puresol.coding.richclient.application.plugin/com.puresol.coding.richclient.application.parts.AnalysisRunsPart" label="Analysis Runs" iconURI="platform:/plugin/com.puresol.coding.richclient.application.plugin/icons/16x16/analysis_runs_view.png" tooltip="Shows a list of all analysis runs which were performed for a setup analysis.">
                 <toolbar xmi:id="_Tm5bcEfJEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.toolbar.0"/>
               </children>
             </children>
-            <children xsi:type="basic:PartStack" xmi:id="__6UeQG2HEeKeqro3vSb1RA" elementId="com.puresol.coding.richclient.application.plugin.partstack.0">
-              <children xsi:type="basic:Part" xmi:id="_JK0TkEfIEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.parts.ProjectContentsPart" accessibilityPhrase="Project Contents" contributionURI="bundleclass://com.puresol.coding.richclient.application.plugin/com.puresol.coding.richclient.application.parts.ProjectContentsPart" label="Project Contents" tooltip="Shows the contents of an analysis project" closeable="true">
-                <toolbar xmi:id="_T6a0YEfJEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.toolbar.0"/>
-              </children>
+          </children>
+          <children xsi:type="basic:PartSashContainer" xmi:id="_aJM7oHe9EeKHMac9zo7UIQ" elementId="com.puresol.coding.richclient.application.plugin.partsashcontainer.0" horizontal="true">
+            <children xsi:type="basic:PartStack" xmi:id="_cJk38He9EeKHMac9zo7UIQ" elementId="com.puresol.coding.richclient.application.plugin.partstack.0">
+              <children xsi:type="basic:Part" xmi:id="_db2YIHe9EeKHMac9zo7UIQ" elementId="com.puresol.coding.richclient.application.plugin.parts.AnalysisRunContentPart" accessibilityPhrase="Analysis Run Content" contributionURI="bundleclass://com.puresol.coding.richclient.application.plugin/com.puresol.coding.richclient.application.parts.AnalysisRunContentPart" label="Analysis Run Content" iconURI="platform:/plugin/com.puresol.coding.richclient.application.plugin/icons/16x16/folders_explorer.png" tooltip="Analysis Run Content"/>
+            </children>
+            <children xsi:type="basic:PartStack" xmi:id="_c9j5oHe9EeKHMac9zo7UIQ" elementId="com.puresol.coding.richclient.application.plugin.partstack.0">
+              <children xsi:type="basic:Part" xmi:id="_J4TqkHe-EeKHMac9zo7UIQ" elementId="com.puresol.coding.richclient.application.plugin.parts.AnalysisSummaryPart" accessibilityPhrase="Analysis Summary" contributionURI="bundleclass://com.puresol.coding.richclient.application.plugin/com.puresol.coding.richclient.application.parts.AnalysisSummeryPart" label="Analysis Summary" iconURI="platform:/plugin/com.puresol.coding.richclient.application.plugin/icons/16x16/report.png" tooltip="Analysis Summary"/>
             </children>
           </children>
         </children>
