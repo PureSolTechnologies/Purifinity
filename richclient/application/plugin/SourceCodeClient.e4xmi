@@ -6,7 +6,7 @@
         <children xsi:type="basic:PartSashContainer" xmi:id="_8mZwwEfHEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.partsashcontainer.AnalysisPerspectiveMainSash" accessibilityPhrase="Analysis Perspective Main Sash" selectedElement="_E1XWQEfIEeKSzLsdKrQ7vg" horizontal="true">
           <children xsi:type="basic:PartSashContainer" xmi:id="_E1XWQEfIEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.partsashcontainer.NavigationSash" accessibilityPhrase="Navigation Sash">
             <children xsi:type="basic:PartStack" xmi:id="_-YzoMG2HEeKeqro3vSb1RA" elementId="com.puresol.coding.richclient.application.plugin.partstack.0">
-              <children xsi:type="basic:Part" xmi:id="_HCdf8EfIEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.parts.ProjectPart" accessibilityPhrase="Project Part" contributionURI="bundleclass://com.puresol.coding.richclient.application.plugin/com.puresol.coding.richclient.application.parts.ProjectsPart" label="Project Part" tooltip="Shows a list of open analysis projects." closeable="true">
+              <children xsi:type="basic:Part" xmi:id="_HCdf8EfIEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.parts.ProjectPart" accessibilityPhrase="Project Part" contributionURI="bundleclass://com.puresol.coding.richclient.application.plugin/com.puresol.coding.richclient.application.parts.AnalysisRunsPart" label="Project Part" tooltip="Shows a list of open analysis projects." closeable="true">
                 <toolbar xmi:id="_Tm5bcEfJEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.toolbar.0"/>
               </children>
             </children>
