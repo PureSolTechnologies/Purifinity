@@ -4,6 +4,8 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 
+import com.puresol.coding.evaluation.api.SourceCodeQuality;
+
 /**
  * This is a collection of utilities which are used to calculate colors for
  * output.

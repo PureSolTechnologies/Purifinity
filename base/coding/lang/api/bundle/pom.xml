@@ -15,11 +15,11 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.puresol</groupId>
-			<artifactId>coding.lang.api.lib</artifactId>
+			<artifactId>commons.osgi</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresol</groupId>
-			<artifactId>commons.osgi</artifactId>
+			<artifactId>coding.lang.api.lib</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.osgi</groupId>
@@ -34,7 +34,6 @@
 	</dependencies>
 
 	<properties>
-		<bundle.symbolicName>com.puresol.coding.lang.api</bundle.symbolicName>
 		<bundle.namespace>com.puresol.coding.lang.api</bundle.namespace>
 	</properties>
 
@@ -43,6 +42,15 @@
 			<plugin>
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-clean-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>CleanManifest</id>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

@@ -4,11 +4,6 @@ Bundle-Name: com.puresol.coding.richclient.application.test
 Bundle-SymbolicName: com.puresol.coding.richclient.application.test;singleton:=true
 Bundle-Version: 0.1.0.qualifier
 Bundle-Vendor: PureSol Technologies
-Require-Bundle: com.puresol.utils;bundle-version="0.1.0",
- com.puresol.uhura;bundle-version="0.1.0",
- com.puresol.coding.analysis.api;bundle-version="0.1.0",
- com.puresol.coding.richclient.application.plugin;bundle-version="0.1.0",
- org.junit4;bundle-version="4.8.1",
- com.puresol.coding.analysis.impl.lib;bundle-version="0.1.0"
+Require-Bundle: com.puresol.coding.richclient.application.plugin;bundle-version="0.1.0",
+ org.junit4;bundle-version="4.8.1"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Export-Package: com.puresol.coding.richclient.application.test

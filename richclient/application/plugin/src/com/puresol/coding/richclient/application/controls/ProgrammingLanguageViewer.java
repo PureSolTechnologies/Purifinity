@@ -48,7 +48,7 @@ public class ProgrammingLanguageViewer extends ComboViewer {
 				return ((ProgrammingLanguage) element).getName();
 			}
 		});
-		setInput(ProgrammingLanguagesImpl.getAll());
+		setInput(ProgrammingLanguagesImpl.getInstance().getAll());
 	}
 
 }

@@ -19,6 +19,9 @@ import com.puresol.coding.analysis.api.CodeStoreFactory;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.analysis.api.ModuleStore;
 import com.puresol.coding.analysis.api.ModuleStoreFactory;
+import com.puresol.coding.evaluation.api.Evaluator;
+import com.puresol.coding.evaluation.api.EvaluatorInformation;
+import com.puresol.coding.evaluation.api.EvaluatorStore;
 import com.puresol.coding.richclient.application.Activator;
 import com.puresol.trees.TreeUtils;
 import com.puresol.trees.TreeVisitor;
@@ -90,16 +93,18 @@ public abstract class AbstractRCPEvaluator extends Job implements Evaluator {
 	abstract protected void processProject() throws InterruptedException;
 
 	@Override
-	public final void runEvaluation() throws InterruptedException {
+	public final Boolean call() throws InterruptedException {
 		schedule();
 		join();
+		return true;
 	}
 
 	private class EvaluationVisitor implements TreeVisitor<HashIdFileTree> {
 
-		private final CodeStore fileStore = CodeStoreFactory.getInstance();
-		private final ModuleStore directoryStore = ModuleStoreFactory
+		private final CodeStore fileStore = CodeStoreFactory.getFactory()
 				.getInstance();
+		private final ModuleStore directoryStore = ModuleStoreFactory
+				.getFactory().getInstance();
 		private final IProgressMonitor monitor;
 
 		private EvaluationVisitor(IProgressMonitor monitor) {

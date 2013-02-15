@@ -1,4 +1,4 @@
-package coding.evaluation.impl;
+package com.puresol.coding.evaluation.impl;
 
 import com.puresol.commons.osgi.AbstractActivator;
 

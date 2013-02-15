@@ -27,7 +27,8 @@ import com.puresol.coding.richclient.application.content.ParserTreeLabelProvider
  */
 public class ParserTreeControl extends Composite {
 
-	private final CodeStore codeStore = CodeStoreFactory.getInstance();
+	private final CodeStore codeStore = CodeStoreFactory.getFactory()
+			.getInstance();
 
 	private final Label lblNewLabel;
 	private final Tree tree;

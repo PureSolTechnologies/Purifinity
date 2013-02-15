@@ -48,8 +48,9 @@ public class EvaluationJob extends Job {
 				}
 				Evaluator evaluator = factory.create(analysisRun);
 				if (!finished.contains(evaluator.getClass())) {
+					evaluated = false;
 					try {
-						evaluator.runEvaluation();
+						evaluated = evaluator.call();
 						finished.add(evaluator.getClass());
 						monitor.worked(1);
 					} catch (InterruptedException e) {
@@ -57,8 +58,12 @@ public class EvaluationJob extends Job {
 								.getName(), "Could not run evaluation '"
 								+ evaluator.getInformation().getName() + "'!",
 								e));
+					} catch (Exception e) {
+						logger.log(new Status(Status.ERROR, EvaluationJob.class
+								.getName(), "Could not run evaluation '"
+								+ evaluator.getInformation().getName() + "'!",
+								e));
 					}
-					evaluated = true;
 				}
 			}
 		}
