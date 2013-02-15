@@ -22,6 +22,10 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresol</groupId>
+			<artifactId>coding.analysis.test</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresol</groupId>
 			<artifactId>coding.evaluation.api.lib</artifactId>
 		</dependency>
 		<dependency>

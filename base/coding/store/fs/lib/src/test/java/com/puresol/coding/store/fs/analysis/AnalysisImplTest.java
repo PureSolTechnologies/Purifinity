@@ -1,4 +1,4 @@
-package com.puresol.coding.richclient.application.test;
+package com.puresol.coding.store.fs.analysis;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -18,9 +18,9 @@ import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalysisRunInformation;
 import com.puresol.coding.analysis.api.AnalysisSettings;
 import com.puresol.coding.analysis.api.AnalysisStore;
+import com.puresol.coding.analysis.api.DirectoryRepositoryLocation;
 import com.puresol.coding.analysis.api.ModuleStoreException;
-import com.puresol.coding.analysis.api.TestFileSearchConfiguration;
-import com.puresol.coding.analysis.filestore.AnalysisStoreImpl;
+import com.puresol.coding.analysis.test.TestFileSearchConfiguration;
 
 public class AnalysisImplTest {
 

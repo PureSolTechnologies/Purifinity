@@ -1,4 +1,4 @@
-package com.puresol.coding.analysis.api;
+package com.puresol.coding.analysis.test;
 
 import java.util.ArrayList;
 import java.util.List;

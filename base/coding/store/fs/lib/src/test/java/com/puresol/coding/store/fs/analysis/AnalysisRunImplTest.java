@@ -1,4 +1,4 @@
-package com.puresol.coding.richclient.application.test;
+package com.puresol.coding.store.fs.analysis;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -16,12 +16,12 @@ import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalysisRunInformation;
 import com.puresol.coding.analysis.api.AnalysisSettings;
 import com.puresol.coding.analysis.api.AnalysisStore;
+import com.puresol.coding.analysis.api.AnalysisStoreFactory;
 import com.puresol.coding.analysis.api.AnalyzedCode;
+import com.puresol.coding.analysis.api.DirectoryRepositoryLocation;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.analysis.api.ModuleStoreException;
-import com.puresol.coding.analysis.api.TestFileSearchConfiguration;
-import com.puresol.coding.analysis.filestore.AnalysisStoreImpl;
-import com.puresol.coding.analysis.filestore.CodeStoreImpl;
+import com.puresol.coding.analysis.test.TestFileSearchConfiguration;
 import com.puresol.uhura.source.CodeLocation;
 import com.puresol.utils.HashAlgorithm;
 import com.puresol.utils.HashId;
@@ -33,7 +33,7 @@ public class AnalysisRunImplTest {
 
 	@BeforeClass
 	public static void initialize() throws ModuleStoreException {
-		analysisStore = new AnalysisStoreImpl();
+		analysisStore = AnalysisStoreFactory.getFactory().getInstance();
 		analysis = analysisStore.createAnalysis(new AnalysisSettings("Name",
 				"Description", new TestFileSearchConfiguration(),
 				new DirectoryRepositoryLocation("src", new File("src"))));

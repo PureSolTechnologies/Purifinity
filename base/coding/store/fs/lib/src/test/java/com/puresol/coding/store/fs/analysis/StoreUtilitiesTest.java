@@ -1,4 +1,4 @@
-package com.puresol.coding.analysis.filestore;
+package com.puresol.coding.store.fs.analysis;
 
 import static org.junit.Assert.assertNotNull;
 
