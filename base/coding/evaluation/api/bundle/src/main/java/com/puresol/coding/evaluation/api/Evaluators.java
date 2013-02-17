@@ -1,6 +1,7 @@
 package com.puresol.coding.evaluation.api;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.osgi.framework.BundleContext;
@@ -23,13 +24,12 @@ public class Evaluators {
 	public static List<EvaluatorFactory> getAllFactories() {
 		try {
 			BundleContext bundleContext = Activator.getBundleContext();
-			ServiceReference[] serviceReferences = bundleContext
-					.getServiceReferences(EvaluatorFactory.class.getName(),
-							null);
+			Collection<ServiceReference<EvaluatorFactory>> serviceReferences = bundleContext
+					.getServiceReferences(EvaluatorFactory.class, null);
 			List<EvaluatorFactory> evaluatorFactories = new ArrayList<EvaluatorFactory>();
 			if (serviceReferences != null) {
-				for (ServiceReference serviceReference : serviceReferences) {
-					evaluatorFactories.add((EvaluatorFactory) bundleContext
+				for (ServiceReference<EvaluatorFactory> serviceReference : serviceReferences) {
+					evaluatorFactories.add(bundleContext
 							.getService(serviceReference));
 				}
 			}

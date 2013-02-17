@@ -27,11 +27,10 @@ public class ModuleStoreFactoryOSGI extends ModuleStoreFactory {
 	private synchronized void createInstance() {
 		if (moduleStore == null) {
 			BundleContext bundleContext = Activator.getBundleContext();
-			ServiceReference serviceReference = bundleContext
-					.getServiceReference(ModuleStore.class.getName());
+			ServiceReference<ModuleStore> serviceReference = bundleContext
+					.getServiceReference(ModuleStore.class);
 			if (serviceReference != null) {
-				moduleStore = (ModuleStore) bundleContext
-						.getService(serviceReference);
+				moduleStore = bundleContext.getService(serviceReference);
 			}
 		}
 	}

@@ -1,6 +1,7 @@
 package com.puresol.coding.richclient.application.analysis;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Date;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -193,20 +194,20 @@ public abstract class AbstractRCPEvaluator extends Job implements Evaluator {
 			Class<? extends Evaluator> clazz) {
 		try {
 			BundleContext bundleContext = Activator.getBundleContext();
-			ServiceReference[] serviceReferences = bundleContext
-					.getServiceReferences(EvaluatorStore.class.getName(),
-							"(evaluator=" + clazz.getName() + ")");
-			if ((serviceReferences == null) || (serviceReferences.length == 0)) {
+			Collection<ServiceReference<EvaluatorStore>> serviceReferences = bundleContext
+					.getServiceReferences(EvaluatorStore.class, "(evaluator="
+							+ clazz.getName() + ")");
+			if ((serviceReferences == null) || (serviceReferences.size() == 0)) {
 				return null;
 			}
-			if (serviceReferences.length > 1) {
+			if (serviceReferences.size() > 1) {
 				throw new RuntimeException(
 						"More than one evaluator store was registered for '"
 								+ clazz.getName() + "'!");
 			}
-			ServiceReference serviceReference = serviceReferences[0];
-			EvaluatorStore store = (EvaluatorStore) bundleContext
-					.getService(serviceReference);
+			ServiceReference<EvaluatorStore> serviceReference = serviceReferences
+					.iterator().next();
+			EvaluatorStore store = bundleContext.getService(serviceReference);
 			return store;
 		} catch (InvalidSyntaxException e) {
 			throw new RuntimeException("Could not find store for evaluator '"

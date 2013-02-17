@@ -19,8 +19,7 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 	protected abstract File getFileResultsFile(HashId hashId);
 
 	protected final File getFileResultsFile(HashId hashId, Class<?> clazz) {
-		CodeStoreImpl store = new CodeStoreImpl();
-		File directory = store.getFileDirectory(hashId);
+		File directory = CodeStoreImpl.getFileDirectory(hashId);
 		String fileName = clazz.getName();
 		File file = new File(directory, fileName);
 		return file;
@@ -29,8 +28,7 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 	protected abstract File getDirectoryResultsFile(HashId hashId);
 
 	protected final File getDirectoryResultsFile(HashId hashId, Class<?> clazz) {
-		ModuleStoreImpl store = new ModuleStoreImpl();
-		File directory = store.getDirectoryStoreDirectory(hashId);
+		File directory = ModuleStoreImpl.getDirectoryStoreDirectory(hashId);
 		String fileName = clazz.getName();
 		File file = new File(directory, fileName);
 		return file;
