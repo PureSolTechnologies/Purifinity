@@ -3,8 +3,6 @@ package com.puresol.coding.analysis.api;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
-import com.puresol.coding.analysis.api.AnalysisStoreFactory;
-
 /**
  * This is the central factory for a analysis store.
  * 
@@ -15,6 +13,7 @@ public class AnalysisStoreFactoryOSGI extends AnalysisStoreFactory {
 
 	private AnalysisStore analysisStore = null;
 
+	@Override
 	public AnalysisStore getInstance() {
 		if (analysisStore == null) {
 			createInstance();
@@ -25,11 +24,10 @@ public class AnalysisStoreFactoryOSGI extends AnalysisStoreFactory {
 	private synchronized void createInstance() {
 		if (analysisStore == null) {
 			BundleContext bundleContext = Activator.getBundleContext();
-			ServiceReference serviceReference = bundleContext
-					.getServiceReference(AnalysisStore.class.getName());
+			ServiceReference<AnalysisStore> serviceReference = bundleContext
+					.getServiceReference(AnalysisStore.class);
 			if (serviceReference != null) {
-				analysisStore = (AnalysisStore) bundleContext
-						.getService(serviceReference);
+				analysisStore = bundleContext.getService(serviceReference);
 			}
 		}
 	}

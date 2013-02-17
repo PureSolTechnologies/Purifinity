@@ -10,25 +10,25 @@ import org.osgi.framework.ServiceReference;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class CodeStoreFactoryOSGI extends CodeStoreFactory {
+public class ModuleStoreFactoryOSGI extends ModuleStoreFactory {
 
-	private CodeStore codeStore = null;
+	private ModuleStore moduleStore = null;
 
 	@Override
-	public CodeStore getInstance() {
-		if (codeStore == null) {
+	public ModuleStore getInstance() {
+		if (moduleStore == null) {
 			createInstance();
 		}
-		return codeStore;
+		return moduleStore;
 	}
 
 	private synchronized void createInstance() {
-		if (codeStore == null) {
+		if (moduleStore == null) {
 			BundleContext bundleContext = Activator.getBundleContext();
-			ServiceReference<CodeStore> serviceReference = bundleContext
-					.getServiceReference(CodeStore.class);
+			ServiceReference<ModuleStore> serviceReference = bundleContext
+					.getServiceReference(ModuleStore.class);
 			if (serviceReference != null) {
-				codeStore = bundleContext.getService(serviceReference);
+				moduleStore = bundleContext.getService(serviceReference);
 			}
 		}
 	}

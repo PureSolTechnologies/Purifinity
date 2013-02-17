@@ -1,6 +1,7 @@
 package com.puresol.coding.analysis.api;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.osgi.framework.BundleContext;
@@ -33,16 +34,15 @@ public class ProgrammingLanguagesOSGI extends ProgrammingLanguages {
 	public List<AnalyzableProgrammingLanguage> getAll() {
 		try {
 			BundleContext context = Activator.getBundleContext();
-			ServiceReference[] serviceReferences = context
-					.getServiceReferences(
-							AnalyzableProgrammingLanguage.class.getName(), null);
+			Collection<ServiceReference<AnalyzableProgrammingLanguage>> serviceReferences = context
+					.getServiceReferences(AnalyzableProgrammingLanguage.class,
+							null);
 			if (serviceReferences == null) {
 				return new ArrayList<AnalyzableProgrammingLanguage>();
 			}
 			List<AnalyzableProgrammingLanguage> services = new ArrayList<AnalyzableProgrammingLanguage>();
-			for (ServiceReference serviceReference : serviceReferences) {
-				services.add((AnalyzableProgrammingLanguage) context
-						.getService(serviceReference));
+			for (ServiceReference<AnalyzableProgrammingLanguage> serviceReference : serviceReferences) {
+				services.add(context.getService(serviceReference));
 			}
 			return services;
 		} catch (InvalidSyntaxException e) {
