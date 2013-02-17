@@ -27,47 +27,48 @@ import com.puresol.coding.client.content.ParserTreeLabelProvider;
  */
 public class ParserTreeControl extends Composite {
 
-    private final CodeStore codeStore = CodeStoreFactory.getInstance();
+	private final CodeStore codeStore = CodeStoreFactory.getFactory()
+			.getInstance();
 
-    private final Label lblNewLabel;
-    private final Tree tree;
-    private final TreeViewer treeViewer;
+	private final Label lblNewLabel;
+	private final Tree tree;
+	private final TreeViewer treeViewer;
 
-    public ParserTreeControl(Composite parent) {
-	super(parent, SWT.NONE);
+	public ParserTreeControl(Composite parent) {
+		super(parent, SWT.NONE);
 
-	setLayout(new BorderLayout(0, 0));
-	lblNewLabel = new Label(this, SWT.NONE);
-	lblNewLabel.setLayoutData(BorderLayout.NORTH);
+		setLayout(new BorderLayout(0, 0));
+		lblNewLabel = new Label(this, SWT.NONE);
+		lblNewLabel.setLayoutData(BorderLayout.NORTH);
 
-	tree = new Tree(this, SWT.BORDER);
-	tree.setLayoutData(BorderLayout.CENTER);
-	treeViewer = new TreeViewer(tree);
-	treeViewer.setContentProvider(new ParserTreeContentProvider());
-	treeViewer.setLabelProvider(new ParserTreeLabelProvider());
-    }
-
-    /**
-     * This method sets a new file and updates the content.
-     * 
-     * @param file
-     * @throws IOException
-     * @throws FileStoreException
-     */
-    public void setContentAndUpdateContent(AnalyzedCode analyzedCode,
-	    AnalysisRun analysisRun) throws IOException, CodeStoreException {
-	CodeAnalysis codeAnalysis = codeStore.loadAnalysis(analyzedCode
-		.getHashId());
-	if (codeAnalysis != null) {
-	    lblNewLabel.setText(analysisRun.getInformation()
-		    .getAnalysisInformation().getName()
-		    + ": "
-		    + analyzedCode.getLocation()
-			    .getHumanReadableLocationString());
-	    treeViewer.setInput(codeAnalysis.getParserTree());
-	} else {
-	    lblNewLabel.setText("");
-	    treeViewer.setInput(null);
+		tree = new Tree(this, SWT.BORDER);
+		tree.setLayoutData(BorderLayout.CENTER);
+		treeViewer = new TreeViewer(tree);
+		treeViewer.setContentProvider(new ParserTreeContentProvider());
+		treeViewer.setLabelProvider(new ParserTreeLabelProvider());
 	}
-    }
+
+	/**
+	 * This method sets a new file and updates the content.
+	 * 
+	 * @param file
+	 * @throws IOException
+	 * @throws FileStoreException
+	 */
+	public void setContentAndUpdateContent(AnalyzedCode analyzedCode,
+			AnalysisRun analysisRun) throws IOException, CodeStoreException {
+		CodeAnalysis codeAnalysis = codeStore.loadAnalysis(analyzedCode
+				.getHashId());
+		if (codeAnalysis != null) {
+			lblNewLabel.setText(analysisRun.getInformation()
+					.getAnalysisInformation().getName()
+					+ ": "
+					+ analyzedCode.getLocation()
+							.getHumanReadableLocationString());
+			treeViewer.setInput(codeAnalysis.getParserTree());
+		} else {
+			lblNewLabel.setText("");
+			treeViewer.setInput(null);
+		}
+	}
 }

@@ -67,6 +67,26 @@
 			<artifactId>coding.metrics.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.puresol</groupId>
+			<artifactId>coding.lang.c11.bundle</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.puresol</groupId>
+			<artifactId>coding.lang.cpp.bundle</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.puresol</groupId>
+			<artifactId>coding.lang.fortran.bundle</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.puresol</groupId>
+			<artifactId>coding.lang.java.bundle</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 
 	<repositories>

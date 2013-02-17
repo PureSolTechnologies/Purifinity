@@ -7,7 +7,7 @@ import org.osgi.framework.ServiceRegistration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresol.coding.lang.api.ProgrammingLanguage;
+import com.puresol.coding.analysis.api.AnalyzableProgrammingLanguage;
 import com.puresol.commons.osgi.AbstractActivator;
 
 /**
@@ -26,20 +26,17 @@ public class Activator extends AbstractActivator {
 
 	@Override
 	public void start(BundleContext context) throws Exception {
-		logger.info("Starting FortranLanguagePack...");
-
+		super.start(context);
 		Fortran fortran = Fortran.getInstance();
-
 		registration = context.registerService(
-				ProgrammingLanguage.class.getName(), fortran,
+				AnalyzableProgrammingLanguage.class.getName(), fortran,
 				new Hashtable<String, String>());
-
 		logger.info("Started.");
 	}
 
 	@Override
 	public void stop(BundleContext context) throws Exception {
-		logger.info("Stopping FortranLanguagePack...");
+		super.stop(context);
 		registration.unregister();
 		registration = null;
 		logger.info("Stopped.");

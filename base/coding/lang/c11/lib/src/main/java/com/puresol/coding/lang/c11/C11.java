@@ -43,7 +43,7 @@ public class C11 extends AbstractProgrammingLanguage implements
 	}
 
 	public C11() {
-		super("Java", "1.6");
+		super("C", "11");
 	}
 
 	/**

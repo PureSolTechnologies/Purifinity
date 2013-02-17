@@ -38,13 +38,17 @@
       <import plugin="com.puresol.utils.bundle" version="0.1.0" match="greaterOrEqual"/>
       <import plugin="com.puresol.uhura.bundle" version="0.1.0" match="greaterOrEqual"/>
       <import plugin="com.puresol.coding.lang.api.bundle" version="0.1.0" match="greaterOrEqual"/>
-      <import plugin="org.slf4j.api"/>
       <import plugin="com.puresol.coding.lang.commons.bundle" version="0.1.0" match="greaterOrEqual"/>
       <import plugin="com.puresol.coding.analysis.api.bundle" version="0.1.0" match="greaterOrEqual"/>
       <import plugin="com.puresol.coding.analysis.impl.bundle" version="0.1.0" match="greaterOrEqual"/>
       <import plugin="com.puresol.coding.evaluation.api.bundle" version="0.1.0" match="greaterOrEqual"/>
       <import plugin="com.puresol.coding.evaluation.impl.bundle" version="0.1.0" match="greaterOrEqual"/>
       <import plugin="com.puresol.coding.metrics.bundle" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="com.puresol.coding.lang.java.bundle" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="com.puresol.coding.lang.fortran.bundle" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="com.puresol.coding.lang.c11.bundle" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="org.slf4j.api" version="1.6.4" match="greaterOrEqual"/>
+      <import plugin="com.puresol.coding.lang.cpp.bundle" version="0.1.0" match="greaterOrEqual"/>
    </requires>
 
    <plugin

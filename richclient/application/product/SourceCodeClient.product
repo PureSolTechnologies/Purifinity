@@ -3,12 +3,16 @@
 
 <product name="com.puresol.coding.richclient.application.product" uid="com.puresol.coding.richclient.application.product" id="com.puresol.coding.richclient.application.plugin.SourceCodeClient" application="org.eclipse.e4.ui.workbench.swt.E4Application" version="0.1.0.qualifier" useFeatures="true" includeLaunchers="true">
 
+
    <configIni use="default">
    </configIni>
 
    <launcherArgs>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
    </launcherArgs>
+
+   <windowImages/>
+
 
    <launcher>
       <solaris/>
@@ -17,8 +21,13 @@
       </win>
    </launcher>
 
+
    <vm>
    </vm>
+
+   <license>
+        <url>http://puresol-technologies.com</url>
+   </license>
 
    <plugins>
       <plugin id="com.ibm.icu"/>
@@ -88,6 +97,11 @@
       <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="0" />
       <plugin id="org.eclipse.equinox.common" autoStart="true" startLevel="2" />
       <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="1" />
+      <plugin id="com.puresol.coding.analysis.api.bundle" autoStart="true" startLevel="3" />
+      <plugin id="com.puresol.coding.lang.c11.bundle" autoStart="true" startLevel="3" />
+      <plugin id="com.puresol.coding.lang.cpp.bundle" autoStart="true" startLevel="3" />
+      <plugin id="com.puresol.coding.lang.fortran.bundle" autoStart="true" startLevel="3" />
+      <plugin id="com.puresol.coding.lang.java.bundle" autoStart="true" startLevel="3" />
    </configurations>
 
 </product>

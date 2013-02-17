@@ -57,48 +57,73 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.jfree</groupId>
-			<artifactId>rcp.jfreechart</artifactId>
-			<version>1.0.14</version>
-		</dependency>
-		<dependency>
 			<groupId>com.puresol</groupId>
-			<artifactId>trees.osgi</artifactId>
+			<artifactId>trees.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.puresol</groupId>
-			<artifactId>utils</artifactId>
+			<artifactId>utils.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.puresol</groupId>
-			<artifactId>uhura.lib</artifactId>
+			<artifactId>uhura.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.puresol</groupId>
-			<artifactId>coding.analysis.api</artifactId>
+			<artifactId>coding.analysis.api.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.puresol</groupId>
-			<artifactId>coding.analysis.impl</artifactId>
+			<artifactId>coding.analysis.impl.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.puresol</groupId>
-			<artifactId>coding.metrics</artifactId>
+			<artifactId>coding.evaluation.api.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.puresol</groupId>
-			<artifactId>coding.lang.java</artifactId>
+			<artifactId>coding.evaluation.impl.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.puresol</groupId>
-			<artifactId>coding.lang.fortran</artifactId>
+			<artifactId>coding.lang.api.bundle</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.puresol</groupId>
+			<artifactId>coding.lang.commons.bundle</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.puresol</groupId>
+			<artifactId>coding.lang.c11.bundle</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.puresol</groupId>
+			<artifactId>coding.lang.cpp.bundle</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.puresol</groupId>
+			<artifactId>coding.lang.java.bundle</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.puresol</groupId>
+			<artifactId>coding.lang.fortran.bundle</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.puresol</groupId>
+			<artifactId>coding.metrics.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>

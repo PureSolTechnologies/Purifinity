@@ -34,8 +34,11 @@ public class ProgrammingLanguagesImpl extends ProgrammingLanguages {
 		try {
 			BundleContext context = Activator.getBundleContext();
 			ServiceReference[] serviceReferences = context
-					.getServiceReferences(ProgrammingLanguage.class.getName(),
-							null);
+					.getServiceReferences(
+							AnalyzableProgrammingLanguage.class.getName(), null);
+			if (serviceReferences == null) {
+				return new ArrayList<AnalyzableProgrammingLanguage>();
+			}
 			List<AnalyzableProgrammingLanguage> services = new ArrayList<AnalyzableProgrammingLanguage>();
 			for (ServiceReference serviceReference : serviceReferences) {
 				services.add((AnalyzableProgrammingLanguage) context

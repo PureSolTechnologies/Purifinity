@@ -16,12 +16,17 @@
               </children>
             </children>
           </children>
-          <children xsi:type="basic:PartSashContainer" xmi:id="_aJM7oHe9EeKHMac9zo7UIQ" elementId="com.puresol.coding.richclient.application.plugin.partsashcontainer.0" horizontal="true">
-            <children xsi:type="basic:PartStack" xmi:id="_cJk38He9EeKHMac9zo7UIQ" elementId="com.puresol.coding.richclient.application.plugin.partstack.0">
-              <children xsi:type="basic:Part" xmi:id="_db2YIHe9EeKHMac9zo7UIQ" elementId="com.puresol.coding.richclient.application.plugin.parts.AnalysisRunContentPart" accessibilityPhrase="Analysis Run Content" contributionURI="bundleclass://com.puresol.coding.richclient.application.plugin/com.puresol.coding.richclient.application.parts.AnalysisRunContentPart" label="Analysis Run Content" iconURI="platform:/plugin/com.puresol.coding.richclient.application.plugin/icons/16x16/folders_explorer.png" tooltip="Analysis Run Content"/>
+          <children xsi:type="basic:PartSashContainer" xmi:id="_5QI2kHj-EeKjx8QsiAxJaw" elementId="com.puresol.coding.richclient.application.plugin.partsashcontainer.0">
+            <children xsi:type="basic:PartSashContainer" xmi:id="_aJM7oHe9EeKHMac9zo7UIQ" elementId="com.puresol.coding.richclient.application.plugin.partsashcontainer.0" horizontal="true">
+              <children xsi:type="basic:PartStack" xmi:id="_cJk38He9EeKHMac9zo7UIQ" elementId="com.puresol.coding.richclient.application.plugin.partstack.0">
+                <children xsi:type="basic:Part" xmi:id="_db2YIHe9EeKHMac9zo7UIQ" elementId="com.puresol.coding.richclient.application.plugin.parts.AnalysisRunContentPart" accessibilityPhrase="Analysis Run Content" contributionURI="bundleclass://com.puresol.coding.richclient.application.plugin/com.puresol.coding.richclient.application.parts.AnalysisRunContentPart" label="Analysis Run Content" iconURI="platform:/plugin/com.puresol.coding.richclient.application.plugin/icons/16x16/folders_explorer.png" tooltip="Analysis Run Content"/>
+              </children>
+              <children xsi:type="basic:PartStack" xmi:id="_c9j5oHe9EeKHMac9zo7UIQ" elementId="com.puresol.coding.richclient.application.plugin.partstack.0">
+                <children xsi:type="basic:Part" xmi:id="_J4TqkHe-EeKHMac9zo7UIQ" elementId="com.puresol.coding.richclient.application.plugin.parts.AnalysisSummaryPart" accessibilityPhrase="Analysis Summary" contributionURI="bundleclass://com.puresol.coding.richclient.application.plugin/com.puresol.coding.richclient.application.parts.AnalysisSummeryPart" label="Analysis Summary" iconURI="platform:/plugin/com.puresol.coding.richclient.application.plugin/icons/16x16/report.png" tooltip="Analysis Summary"/>
+              </children>
             </children>
-            <children xsi:type="basic:PartStack" xmi:id="_c9j5oHe9EeKHMac9zo7UIQ" elementId="com.puresol.coding.richclient.application.plugin.partstack.0">
-              <children xsi:type="basic:Part" xmi:id="_J4TqkHe-EeKHMac9zo7UIQ" elementId="com.puresol.coding.richclient.application.plugin.parts.AnalysisSummaryPart" accessibilityPhrase="Analysis Summary" contributionURI="bundleclass://com.puresol.coding.richclient.application.plugin/com.puresol.coding.richclient.application.parts.AnalysisSummeryPart" label="Analysis Summary" iconURI="platform:/plugin/com.puresol.coding.richclient.application.plugin/icons/16x16/report.png" tooltip="Analysis Summary"/>
+            <children xsi:type="basic:PartStack" xmi:id="_7hKeAHj-EeKjx8QsiAxJaw" elementId="com.puresol.coding.richclient.application.plugin.partstack.0">
+              <children xsi:type="basic:Part" xmi:id="_ipuN4Hj_EeKjx8QsiAxJaw" elementId="com.puresol.coding.richclient.application.plugin.parts.SupportedLanguagesPart" accessibilityPhrase="Supported Languages" contributionURI="bundleclass://com.puresol.coding.richclient.application.plugin/com.puresol.coding.richclient.application.parts.SupportedLanguagesPart" label="Supported Languages" tooltip="Shows all supported languages."/>
             </children>
           </children>
         </children>
@@ -85,6 +90,7 @@
   <handlers xmi:id="_F0NDcEfQEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.handler.OpenOther" contributionURI="bundleclass://com.puresol.coding.richclient.application.plugin/com.puresol.coding.richclient.application.handlers.OpenOtherHandler" command="_plH-kEfPEeKSzLsdKrQ7vg"/>
   <handlers xmi:id="_gev18G2MEeKeqro3vSb1RA" elementId="com.puresol.coding.richclient.application.plugin.handler.NewWindow" contributionURI="bundleclass://com.puresol.coding.richclient.application.plugin/com.puresol.coding.richclient.application.handlers.NewWindowHandler" command="_oWv7gG1hEeK4xswhlhRqxQ"/>
   <handlers xmi:id="_1XHhEG2OEeKeqro3vSb1RA" elementId="com.puresol.coding.richclient.application.plugin.handler.0" contributionURI="bundleclass://com.puresol.coding.richclient.application.plugin/com.puresol.coding.richclient.application.handlers.SwitchWorkspaceHandler" command="_iOEtEG1hEeK4xswhlhRqxQ"/>
+  <descriptors xmi:id="_M3epkHj_EeKjx8QsiAxJaw" elementId="com.puresol.coding.richclient.application.plugin.parts.SupportedLanguagesPart" label="Supported Languages" tooltip="Show all supported languages." closeable="true" contributionURI="bundleclass://com.puresol.coding.richclient.application.plugin/com.puresol.coding.richclient.application.parts.SupportedLanguagesPart"/>
   <commands xmi:id="_QdgMIEfKEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.command.ExitCommand" commandName="Exit Command" description="Exits the application."/>
   <commands xmi:id="_kg9WkEfOEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.command.NewProject" commandName="New Project" description="Creates a new project."/>
   <commands xmi:id="_IJTvEEfPEeKSzLsdKrQ7vg" elementId="com.puresol.coding.richclient.application.plugin.command.NewAnalysis" commandName="New Analysis" description="Runs a new analysis on an already created project."/>

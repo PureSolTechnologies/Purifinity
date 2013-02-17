@@ -1,4 +1,4 @@
-package com.puresol.coding.client.utils;
+package com.puresol.coding.client.evaluation;
 
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;

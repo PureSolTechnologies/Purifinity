@@ -7,7 +7,7 @@ import org.osgi.framework.ServiceRegistration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresol.coding.lang.api.ProgrammingLanguage;
+import com.puresol.coding.analysis.api.AnalyzableProgrammingLanguage;
 import com.puresol.commons.osgi.AbstractActivator;
 
 /**
@@ -22,36 +22,23 @@ public class Activator extends AbstractActivator {
 	private static final Logger logger = LoggerFactory
 			.getLogger(Activator.class);
 
-	private static BundleContext bundleContext;
-
-	private ServiceRegistration registration;
+	private ServiceRegistration registration = null;
 
 	@Override
 	public void start(BundleContext context) throws Exception {
-		if (Activator.bundleContext != null) {
-			throw new RuntimeException("Bundle was already started!");
-
-		}
-		Activator.bundleContext = context;
-		logger.info("Starting Java Language Pack...");
+		super.start(context);
 		Java java = Java.getInstance();
 		registration = context.registerService(
-				ProgrammingLanguage.class.getName(), java,
+				AnalyzableProgrammingLanguage.class.getName(), java,
 				new Hashtable<String, String>());
-
 		logger.info("Started.");
 	}
 
 	@Override
 	public void stop(BundleContext context) throws Exception {
-		if (Activator.bundleContext == null) {
-			throw new RuntimeException("Bundle was never started!");
-
-		}
-		logger.info("Stopping Java Language Pack...");
+		super.stop(context);
 		registration.unregister();
 		registration = null;
-		Activator.bundleContext = null;
 		logger.info("Stopped.");
 	}
 

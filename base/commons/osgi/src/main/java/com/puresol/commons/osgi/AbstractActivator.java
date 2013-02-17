@@ -29,6 +29,10 @@ public abstract class AbstractActivator implements BundleActivator {
 	public void start(BundleContext context) throws Exception {
 		logger.info("Staring bundle " + getClass().getPackage().getName()
 				+ "...");
+		if (AbstractActivator.context != null) {
+			throw new RuntimeException("Bundle was already started!");
+
+		}
 		AbstractActivator.context = context;
 	}
 
@@ -36,6 +40,9 @@ public abstract class AbstractActivator implements BundleActivator {
 	public void stop(BundleContext context) throws Exception {
 		logger.info("Stopping bundle " + getClass().getPackage().getName()
 				+ "...");
+		if (AbstractActivator.context == null) {
+			throw new RuntimeException("Bundle was never started!");
+		}
 		AbstractActivator.context = null;
 	}
 
@@ -48,6 +55,9 @@ public abstract class AbstractActivator implements BundleActivator {
 	 *         started, the return value is null.
 	 */
 	public static final BundleContext getBundleContext() {
+		if (context == null) {
+			throw new RuntimeException("Bundle was not activated!");
+		}
 		return context;
 	}
 }
