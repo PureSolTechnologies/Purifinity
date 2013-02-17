@@ -1,7 +1,14 @@
 package com.puresol.commons.osgi;
 
+import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
+
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,6 +32,8 @@ public abstract class AbstractActivator implements BundleActivator {
 	 */
 	private static BundleContext context = null;
 
+	private final List<ServiceRegistration<?>> serviceRegistrations = new ArrayList<ServiceRegistration<?>>();
+
 	@Override
 	public void start(BundleContext context) throws Exception {
 		logger.info("Staring bundle " + getClass().getPackage().getName()
@@ -44,6 +53,13 @@ public abstract class AbstractActivator implements BundleActivator {
 			throw new RuntimeException("Bundle was never started!");
 		}
 		AbstractActivator.context = null;
+		Iterator<ServiceRegistration<?>> serviceIterator = serviceRegistrations
+				.iterator();
+		while (serviceIterator.hasNext()) {
+			ServiceRegistration<?> serviceReference = serviceIterator.next();
+			serviceReference.unregister();
+			serviceRegistrations.remove(serviceIterator);
+		}
 	}
 
 	/**
@@ -59,5 +75,18 @@ public abstract class AbstractActivator implements BundleActivator {
 			throw new RuntimeException("Bundle was not activated!");
 		}
 		return context;
+	}
+
+	public <T> ServiceRegistration<T> registerService(Class<T> iface, T instance) {
+		Hashtable<String, String> properties = new Hashtable<String, String>();
+		return registerService(iface, instance, properties);
+	}
+
+	public <T> ServiceRegistration<T> registerService(Class<T> iface,
+			T instance, Dictionary<String, String> dictionary) {
+		ServiceRegistration<T> serviceRegistration = context.registerService(
+				iface, instance, dictionary);
+		serviceRegistrations.add(serviceRegistration);
+		return serviceRegistration;
 	}
 }

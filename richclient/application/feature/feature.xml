@@ -47,8 +47,10 @@
       <import plugin="com.puresol.coding.lang.java.bundle" version="0.1.0" match="greaterOrEqual"/>
       <import plugin="com.puresol.coding.lang.fortran.bundle" version="0.1.0" match="greaterOrEqual"/>
       <import plugin="com.puresol.coding.lang.c11.bundle" version="0.1.0" match="greaterOrEqual"/>
-      <import plugin="org.slf4j.api" version="1.6.4" match="greaterOrEqual"/>
       <import plugin="com.puresol.coding.lang.cpp.bundle" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="org.slf4j.api" version="1.6.4" match="greaterOrEqual"/>
+      <import plugin="com.puresol.coding.store.fs.bundle" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui" version="3.103.0" match="greaterOrEqual"/>
    </requires>
 
    <plugin

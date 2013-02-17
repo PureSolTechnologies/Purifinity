@@ -1,11 +1,6 @@
 package com.puresol.coding.lang.java;
 
-import java.util.Hashtable;
-
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceRegistration;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.puresol.coding.analysis.api.AnalyzableProgrammingLanguage;
 import com.puresol.commons.osgi.AbstractActivator;
@@ -19,27 +14,11 @@ import com.puresol.commons.osgi.AbstractActivator;
  */
 public class Activator extends AbstractActivator {
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(Activator.class);
-
-	private ServiceRegistration registration = null;
-
 	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		Java java = Java.getInstance();
-		registration = context.registerService(
-				AnalyzableProgrammingLanguage.class.getName(), java,
-				new Hashtable<String, String>());
-		logger.info("Started.");
-	}
-
-	@Override
-	public void stop(BundleContext context) throws Exception {
-		super.stop(context);
-		registration.unregister();
-		registration = null;
-		logger.info("Stopped.");
+		registerService(AnalyzableProgrammingLanguage.class, java);
 	}
 
 }

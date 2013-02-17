@@ -1,4 +1,4 @@
-package com.puresol.coding.store.fs.metrics;
+package com.puresol.coding.store.fs.analysis;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -11,37 +11,36 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.puresol.coding.evaluation.api.EvaluatorStore;
-import com.puresol.coding.metrics.maintainability.MaintainabilityIndexEvaluator;
+import com.puresol.coding.metrics.cocomo.CoCoMoEvaluator;
 
-public class MaintainabilityActivator implements BundleActivator {
+public class CoCoMoActivator implements BundleActivator {
 
 	private static final Logger logger = LoggerFactory
-			.getLogger(MaintainabilityActivator.class);
+			.getLogger(CoCoMoActivator.class);
 
 	private final List<ServiceRegistration> serviceRegistrations = new ArrayList<ServiceRegistration>();
 
 	@Override
 	public void start(BundleContext context) throws Exception {
-		logger.info("Starting Maintainability Index...");
+		logger.info("Starting CoCoMo...");
 
-		registerFactory(context);
+		registerProjectFactory(context);
 
 		logger.info("Started.");
 	}
 
-	private void registerFactory(BundleContext context) {
+	private void registerProjectFactory(BundleContext context) {
 		Hashtable<String, String> properties = new Hashtable<String, String>();
-		properties.put("evaluator",
-				MaintainabilityIndexEvaluator.class.getName());
+		properties.put("evaluator", CoCoMoEvaluator.class.getName());
 		ServiceRegistration registration = context.registerService(
-				EvaluatorStore.class.getName(),
-				new MaintainabilityIndexEvaluatorStore(), properties);
+				EvaluatorStore.class.getName(), new CoCoMoEvaluatorStore(),
+				properties);
 		serviceRegistrations.add(registration);
 	}
 
 	@Override
 	public void stop(BundleContext context) throws Exception {
-		logger.info("Stopping Maintainability Index...");
+		logger.info("Stopping CoCoMo...");
 
 		for (ServiceRegistration registration : serviceRegistrations) {
 			registration.unregister();
