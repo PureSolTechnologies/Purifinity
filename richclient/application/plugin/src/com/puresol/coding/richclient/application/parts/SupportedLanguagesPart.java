@@ -55,7 +55,7 @@ public class SupportedLanguagesPart implements SelectionListener {
 		list.removeAll();
 		ProgrammingLanguages languages = ProgrammingLanguages.getInstance();
 		for (AnalyzableProgrammingLanguage language : languages.getAll()) {
-			list.add(language.getName());
+			list.add(language.getName() + " " + language.getVersion());
 		}
 	}
 
