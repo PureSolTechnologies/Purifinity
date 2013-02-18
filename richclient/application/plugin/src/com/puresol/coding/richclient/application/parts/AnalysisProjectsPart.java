@@ -2,12 +2,7 @@ package com.puresol.coding.richclient.application.parts;
 
 import javax.inject.Inject;
 
-import org.eclipse.core.commands.Command;
-import org.eclipse.core.commands.ExecutionEvent;
-import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.commands.NotEnabledException;
-import org.eclipse.core.commands.NotHandledException;
-import org.eclipse.core.commands.common.NotDefinedException;
+import org.eclipse.core.commands.ParameterizedCommand;
 import org.eclipse.e4.core.commands.ECommandService;
 import org.eclipse.e4.core.commands.EHandlerService;
 import org.eclipse.e4.core.services.log.Logger;
@@ -29,6 +24,7 @@ import com.puresol.coding.analysis.api.AnalysisStoreFactory;
 import com.puresol.coding.analysis.api.ModuleStoreException;
 import com.puresol.coding.richclient.application.content.AnalysisListContentProvider;
 import com.puresol.coding.richclient.application.content.AnalysisListLabelProvider;
+import com.puresol.coding.richclient.application.handlers.NewAnalysisHandler;
 
 /**
  * This part shows the contents of an analysis project. The content is spit into
@@ -144,19 +140,9 @@ public class AnalysisProjectsPart implements SelectionListener {
 	}
 
 	private void addAnalysis() {
-		Command command = commandService
-				.getCommand("com.puresol.coding.richclient.application.plugin.command.OpenPerspective");
-		ExecutionEvent event = new ExecutionEvent();
-		try {
-			command.executeWithChecks(event);
-		} catch (ExecutionException e) {
-			logger.error(e);
-		} catch (NotDefinedException e) {
-			logger.error(e);
-		} catch (NotEnabledException e) {
-			logger.error(e);
-		} catch (NotHandledException e) {
-			logger.error(e);
-		}
+		handlerService.activateHandler("commandid", new NewAnalysisHandler());
+		ParameterizedCommand createdCommand = commandService.createCommand(
+				"commandid", null);
+		handlerService.executeHandler(createdCommand);
 	}
 }

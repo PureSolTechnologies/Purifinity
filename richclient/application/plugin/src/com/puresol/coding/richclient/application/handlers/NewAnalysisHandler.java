@@ -1,19 +1,19 @@
 package com.puresol.coding.richclient.application.handlers;
 
 import org.eclipse.e4.core.di.annotations.Execute;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Shell;
+
+import com.puresol.coding.richclient.application.wizards.NewAnalysisWizard;
 
 @SuppressWarnings("restriction")
 public class NewAnalysisHandler {
 
 	@Execute
 	public void execute(Shell shell) {
-		MessageBox messageBox = new MessageBox(shell, SWT.ICON_INFORMATION
-				| SWT.OK);
-		messageBox.setMessage("This functionality is not implemented, yet!");
-		messageBox.open();
+		WizardDialog wizardDialog = new WizardDialog(shell,
+				new NewAnalysisWizard());
+		wizardDialog.open();
 	}
 
 }

@@ -102,6 +102,7 @@
       <plugin id="com.puresol.coding.lang.cpp.bundle" autoStart="true" startLevel="3" />
       <plugin id="com.puresol.coding.lang.fortran.bundle" autoStart="true" startLevel="3" />
       <plugin id="com.puresol.coding.lang.java.bundle" autoStart="true" startLevel="3" />
+      <plugin id="com.puresol.coding.store.fs.bundle" autoStart="true" startLevel="3" />
    </configurations>
 
 </product>

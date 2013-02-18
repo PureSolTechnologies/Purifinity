@@ -1,14 +1,13 @@
 package com.puresol.coding.richclient.application.jobs;
 
-import javax.inject.Inject;
-
-import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.e4.core.services.log.Logger;
+import org.eclipse.ui.internal.Workbench;
 
 import com.puresol.coding.analysis.api.Analysis;
 import com.puresol.coding.analysis.api.AnalysisRun;
@@ -20,33 +19,33 @@ import com.puresol.coding.analysis.api.RepositoryLocation;
 import com.puresol.coding.richclient.application.utils.PreferencesUtils;
 import com.puresol.utils.FileSearchConfiguration;
 
+@SuppressWarnings("restriction")
 public class NewAnalysisJob extends Job {
 
-	@Inject
-	private ILog logger;
+	private final Logger logger;
 
 	private final FileSearchConfiguration searchConfiguration;
 	private final RepositoryLocation repositoryLocation;
 	private final String description;
 	private Analysis analysis = null;
 
-	@Inject
-	private IPreferenceStore preferenceStore;
-
 	public NewAnalysisJob(String name, String description,
 			RepositoryLocation repositoryLocation) {
 		super(name);
+		logger = (Logger) Workbench.getInstance().getService(Logger.class);
 		this.repositoryLocation = repositoryLocation;
 		this.description = description;
 		searchConfiguration = PreferencesUtils
-				.getFileSearchConfiguration(preferenceStore);
+				.getFileSearchConfiguration(InstanceScope.INSTANCE
+						.getNode("/analysis"));
 	}
 
 	@Override
 	protected IStatus run(IProgressMonitor monitor) {
 		try {
 			monitor.beginTask("Analysis of '" + getName() + "'", 1);
-			AnalysisStore analysisStore = AnalysisStoreFactory.getInstance();
+			AnalysisStore analysisStore = AnalysisStoreFactory.getFactory()
+					.getInstance();
 			AnalysisSettings analysisSettings = new AnalysisSettings(getName(),
 					description, searchConfiguration, repositoryLocation);
 			analysis = analysisStore.createAnalysis(analysisSettings);
@@ -56,16 +55,13 @@ public class NewAnalysisJob extends Job {
 			job.schedule();
 			return Status.OK_STATUS;
 		} catch (OperationCanceledException e) {
-			logger.log(new Status(Status.INFO, NewAnalysisJob.class.getName(),
-					"Analysis was cancelled!", e));
+			logger.error("Analysis was cancelled!", e);
 			return Status.CANCEL_STATUS;
 		} catch (ModuleStoreException e) {
-			logger.log(new Status(Status.ERROR, NewAnalysisJob.class.getName(),
-					"Error in directory store!", e));
+			logger.error("Error in directory store!", e);
 			return Status.CANCEL_STATUS;
 		} catch (InterruptedException e) {
-			logger.log(new Status(Status.ERROR, NewAnalysisJob.class.getName(),
-					"Analysis was interrupted!", e));
+			logger.error("Analysis was interrupted!", e);
 			return Status.CANCEL_STATUS;
 		}
 	}

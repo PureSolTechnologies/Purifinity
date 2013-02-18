@@ -1,12 +1,10 @@
 package com.puresol.coding.richclient.application.wizards;
 
-import javax.inject.Inject;
-
-import org.eclipse.core.runtime.ILog;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.preferences.ConfigurationScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.e4.core.services.log.Logger;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -23,18 +21,14 @@ import org.eclipse.swt.widgets.Text;
 import org.osgi.service.prefs.BackingStoreException;
 import org.osgi.service.prefs.Preferences;
 
-import com.puresol.coding.richclient.application.Activator;
-
 @SuppressWarnings("restriction")
 public class NewAnalysisGeneralSettingsPage extends WizardPage {
 
 	public static final String LAST_NEW_ANALYSIS_SOURCE_DIRECTORY = "lastNewAnalysisSourceDirectory";
 
-	@Inject
-	private ILog log;
+	private final Logger log;
 
-	@Inject
-	private Shell shell;
+	private final Shell shell;
 
 	private Text textSourceDirectory;
 	private Text textProjectName;
@@ -42,6 +36,9 @@ public class NewAnalysisGeneralSettingsPage extends WizardPage {
 
 	protected NewAnalysisGeneralSettingsPage() {
 		super("Source Directory");
+		IWorkspace workbench = ResourcesPlugin.getWorkspace();
+		log = (Logger) workbench.getAdapter(Logger.class);
+		shell = (Shell) workbench.getAdapter(Shell.class);
 		setTitle("General Settings");
 		setMessage("Provide the general settings for the new analysis.");
 	}
@@ -123,8 +120,7 @@ public class NewAnalysisGeneralSettingsPage extends WizardPage {
 			newAnalysisNode.put(LAST_NEW_ANALYSIS_SOURCE_DIRECTORY, directory);
 			preferences.flush();
 		} catch (BackingStoreException e) {
-			log.log(new Status(IStatus.ERROR, Activator.getBundleContext()
-					.getBundle().getSymbolicName(), e.getMessage(), e));
+			log.error(e.getMessage(), e);
 		}
 	}
 
