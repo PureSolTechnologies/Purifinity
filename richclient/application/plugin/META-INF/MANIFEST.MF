@@ -41,7 +41,12 @@ Require-Bundle: org.eclipse.equinox.event;bundle-version="1.2.200",
  com.puresol.coding.lang.cpp.bundle;bundle-version="0.1.0",
  com.puresol.coding.store.fs.bundle;bundle-version="0.1.0",
  org.slf4j.api;bundle-version="1.6.4",
- org.eclipse.ui;bundle-version="3.103.0"
+ org.eclipse.ui;bundle-version="3.103.0",
+ org.eclipse.e4.core.commands;bundle-version="0.10.1",
+ org.eclipse.e4.ui.di;bundle-version="0.10.1",
+ org.eclipse.e4.core.contexts;bundle-version="1.1.0",
+ org.eclipse.e4.core.di.extensions;bundle-version="0.11.0",
+ org.eclipse.e4.core.services;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: org.slf4j;version="1.6.4"
 Export-Package: com.puresol.coding.richclient.application.analysis;

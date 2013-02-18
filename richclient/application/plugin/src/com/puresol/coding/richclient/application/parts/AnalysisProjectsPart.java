@@ -2,6 +2,15 @@ package com.puresol.coding.richclient.application.parts;
 
 import javax.inject.Inject;
 
+import org.eclipse.core.commands.Command;
+import org.eclipse.core.commands.ExecutionEvent;
+import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.commands.NotEnabledException;
+import org.eclipse.core.commands.NotHandledException;
+import org.eclipse.core.commands.common.NotDefinedException;
+import org.eclipse.e4.core.commands.ECommandService;
+import org.eclipse.e4.core.commands.EHandlerService;
+import org.eclipse.e4.core.services.log.Logger;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -14,7 +23,6 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.wb.swt.ResourceManager;
-import org.osgi.service.log.LogService;
 
 import com.puresol.coding.analysis.api.AnalysisStore;
 import com.puresol.coding.analysis.api.AnalysisStoreFactory;
@@ -28,15 +36,29 @@ import com.puresol.coding.richclient.application.content.AnalysisListLabelProvid
  * 
  * @author Rick-Rainer Ludwig
  */
+@SuppressWarnings("restriction")
 public class AnalysisProjectsPart implements SelectionListener {
 
-	@Inject
-	private LogService logger;
-	private final Table table;
-	private final TableViewer tableViewer;
+	private final Logger logger;
+
+	private final EHandlerService handlerService;
+
+	private final ECommandService commandService;
+
+	private final Table projectsTable;
+	private final TableViewer projectTableViewer;
+	private final ToolItem refreshProjectsItem;
+	private final ToolItem addAnalysisItem;
+	private final ToolItem editAnalysisItem;
+	private final ToolItem deleteAnalysisItem;
 
 	@Inject
-	public AnalysisProjectsPart(Composite parent) {
+	public AnalysisProjectsPart(Composite parent, Logger logger,
+			EHandlerService handlerService, ECommandService commandService) {
+		this.logger = logger;
+		this.handlerService = handlerService;
+		this.commandService = commandService;
+
 		Composite composite = new Composite(parent, SWT.BORDER);
 		composite.setLayout(new FormLayout());
 
@@ -47,57 +69,58 @@ public class AnalysisProjectsPart implements SelectionListener {
 		fd_toolBar.left = new FormAttachment(0, 10);
 		toolBar.setLayoutData(fd_toolBar);
 
-		ToolItem tltmNewItem = new ToolItem(toolBar, SWT.NONE);
-		tltmNewItem.setImage(ResourceManager.getPluginImage(
+		refreshProjectsItem = new ToolItem(toolBar, SWT.NONE);
+		refreshProjectsItem.setImage(ResourceManager.getPluginImage(
 				"com.puresol.coding.richclient.application.plugin",
 				"icons/16x16/arrow_refresh.png"));
-		tltmNewItem.setText("Refresh");
-		tltmNewItem.addSelectionListener(this);
+		refreshProjectsItem.setText("Refresh");
+		refreshProjectsItem.addSelectionListener(this);
 
-		ToolItem tltmNewItem_1 = new ToolItem(toolBar, SWT.NONE);
-		tltmNewItem_1.setImage(ResourceManager.getPluginImage(
+		addAnalysisItem = new ToolItem(toolBar, SWT.NONE);
+		addAnalysisItem.setImage(ResourceManager.getPluginImage(
 				"com.puresol.coding.richclient.application.plugin",
 				"icons/16x16/analysis_add.png"));
-		tltmNewItem_1.setText("Add...");
+		addAnalysisItem.setText("Add...");
+		addAnalysisItem.addSelectionListener(this);
 
-		ToolItem tltmNewItem_2 = new ToolItem(toolBar, SWT.NONE);
-		tltmNewItem_2.setImage(ResourceManager.getPluginImage(
+		editAnalysisItem = new ToolItem(toolBar, SWT.NONE);
+		editAnalysisItem.setImage(ResourceManager.getPluginImage(
 				"com.puresol.coding.richclient.application.plugin",
 				"icons/16x16/analysis_edit.png"));
-		tltmNewItem_2.setText("Edit...");
+		editAnalysisItem.setText("Edit...");
+		editAnalysisItem.addSelectionListener(this);
 
-		ToolItem tltmDelete = new ToolItem(toolBar, SWT.NONE);
-		tltmDelete.setImage(ResourceManager.getPluginImage(
+		deleteAnalysisItem = new ToolItem(toolBar, SWT.NONE);
+		deleteAnalysisItem.setImage(ResourceManager.getPluginImage(
 				"com.puresol.coding.richclient.application.plugin",
 				"icons/16x16/analysis_delete.png"));
-		tltmDelete.setText("Delete...");
+		deleteAnalysisItem.setText("Delete...");
+		deleteAnalysisItem.addSelectionListener(this);
 
-		table = new Table(composite, SWT.BORDER | SWT.FULL_SELECTION);
+		projectsTable = new Table(composite, SWT.BORDER | SWT.FULL_SELECTION);
 		FormData fd_table = new FormData();
 		fd_table.right = new FormAttachment(100, -10);
 		fd_table.bottom = new FormAttachment(100, -10);
 		fd_table.top = new FormAttachment(toolBar, 6);
 		fd_table.left = new FormAttachment(toolBar, 0, SWT.LEFT);
-		table.setLayoutData(fd_table);
-		table.setHeaderVisible(true);
-		table.setLinesVisible(true);
+		projectsTable.setLayoutData(fd_table);
+		projectsTable.setHeaderVisible(true);
+		projectsTable.setLinesVisible(true);
 
-		tableViewer = new TableViewer(table);
-		tableViewer.setContentProvider(new AnalysisListContentProvider());
-		tableViewer.setLabelProvider(new AnalysisListLabelProvider());
+		projectTableViewer = new TableViewer(projectsTable);
+		projectTableViewer
+				.setContentProvider(new AnalysisListContentProvider());
+		projectTableViewer.setLabelProvider(new AnalysisListLabelProvider());
 	}
 
 	@Override
 	public void widgetSelected(SelectionEvent event) {
 		try {
-			AnalysisStore store = AnalysisStoreFactory.getFactory()
-					.getInstance();
-			if (store == null) {
-				// logger.log(LogService.LOG_ERROR,
-				// "Could not read analysis projects. No store implementation was found.");
-				return;
+			if (event.getSource() == refreshProjectsItem) {
+				refreshAnalysisProjectsList();
+			} else if (event.getSource() == addAnalysisItem) {
+				addAnalysis();
 			}
-			tableViewer.setInput(store.getAllAnalysisInformation());
 		} catch (ModuleStoreException e) {
 			e.printStackTrace();
 			// logger.log(LogService.LOG_ERROR,
@@ -105,8 +128,35 @@ public class AnalysisProjectsPart implements SelectionListener {
 		}
 	}
 
+	private void refreshAnalysisProjectsList() throws ModuleStoreException {
+		AnalysisStore store = AnalysisStoreFactory.getFactory().getInstance();
+		if (store == null) {
+			// logger.log(LogService.LOG_ERROR,
+			// "Could not read analysis projects. No store implementation was found.");
+			return;
+		}
+		projectTableViewer.setInput(store.getAllAnalysisInformation());
+	}
+
 	@Override
 	public void widgetDefaultSelected(SelectionEvent event) {
 		widgetSelected(event);
+	}
+
+	private void addAnalysis() {
+		Command command = commandService
+				.getCommand("com.puresol.coding.richclient.application.plugin.command.OpenPerspective");
+		ExecutionEvent event = new ExecutionEvent();
+		try {
+			command.executeWithChecks(event);
+		} catch (ExecutionException e) {
+			logger.error(e);
+		} catch (NotDefinedException e) {
+			logger.error(e);
+		} catch (NotEnabledException e) {
+			logger.error(e);
+		} catch (NotHandledException e) {
+			logger.error(e);
+		}
 	}
 }

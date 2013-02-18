@@ -58,10 +58,12 @@ public class AnalysisStoreImpl implements AnalysisStore {
 			throws ModuleStoreException {
 		List<AnalysisInformation> analysisInformation = new ArrayList<AnalysisInformation>();
 		File[] files = storageDirectory.listFiles();
-		for (File analysisDirectory : files) {
-			if (AnalysisImpl.isAnalysisDirectory(analysisDirectory)) {
-				Analysis analysis = AnalysisImpl.open(analysisDirectory);
-				analysisInformation.add(analysis.getInformation());
+		if (files != null) {
+			for (File analysisDirectory : files) {
+				if (AnalysisImpl.isAnalysisDirectory(analysisDirectory)) {
+					Analysis analysis = AnalysisImpl.open(analysisDirectory);
+					analysisInformation.add(analysis.getInformation());
+				}
 			}
 		}
 		return analysisInformation;
