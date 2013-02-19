@@ -1,18 +1,23 @@
 package com.puresol.coding.richclient.application.parts;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.inject.Inject;
+import javax.inject.Named;
 
+import org.eclipse.e4.core.di.annotations.Optional;
+import org.eclipse.e4.ui.services.IServiceConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.wb.swt.ResourceManager;
+
+import com.puresol.coding.analysis.api.AnalysisInformation;
 
 /**
  * This part shows the analysis projects. In a simple list.
@@ -20,11 +25,16 @@ import org.eclipse.wb.swt.ResourceManager;
  * @author Rick-Rainer Ludwig
  * 
  */
+@SuppressWarnings("restriction")
 public class AnalysisRunsPart {
 	private final Table table;
 
+	private final Shell shell;
+
 	@Inject
-	public AnalysisRunsPart(Composite parent) {
+	public AnalysisRunsPart(Composite parent, Shell shell) {
+		this.shell = shell;
+
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new FormLayout());
 
@@ -70,14 +80,11 @@ public class AnalysisRunsPart {
 		table.setLinesVisible(true);
 	}
 
-	@PostConstruct
-	public void postConstruct() {
-		// TODO Your code here
+	@Inject
+	public void setSelection(
+			@Named(IServiceConstants.ACTIVE_SELECTION) @Optional AnalysisInformation information) {
+		new MessageDialog(shell, "Selection received", null,
+				information.getName() + "/" + information.getCreationTime(),
+				MessageDialog.INFORMATION, new String[] { "OK" }, 0).open();
 	}
-
-	@PreDestroy
-	public void preDestroy() {
-		// TODO Your code here
-	}
-
 }
