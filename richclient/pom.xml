@@ -87,6 +87,11 @@
 			<artifactId>coding.lang.java.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.puresol</groupId>
+			<artifactId>coding.store.fs.bundle</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 
 	<repositories>

@@ -1,9 +1,11 @@
 package com.puresol.coding.store.fs.analysis;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -58,8 +60,23 @@ public class AnalysisImpl implements Analysis {
 
 	private void open() throws ModuleStoreException {
 		try {
-			settings = PersistenceUtils.restore(new File(analysisDirectory,
-					SETTINGS_FILE));
+			FileInputStream fileInputStream = new FileInputStream(new File(
+					analysisDirectory, SETTINGS_FILE));
+			try {
+				ObjectInputStream objectInputStream = new ObjectInputStream(
+						fileInputStream);
+				try {
+					settings = (AnalysisSettings) objectInputStream
+							.readObject();
+				} catch (ClassNotFoundException e) {
+					throw new RuntimeException(e);
+				} finally {
+					objectInputStream.close();
+				}
+			} finally {
+				fileInputStream.close();
+			}
+
 			loadProperties();
 		} catch (IOException e) {
 			throw new ModuleStoreException("Could not open the analysis!", e);

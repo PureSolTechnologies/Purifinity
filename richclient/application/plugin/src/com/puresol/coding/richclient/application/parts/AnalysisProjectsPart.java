@@ -127,8 +127,7 @@ public class AnalysisProjectsPart implements SelectionListener {
 	private void refreshAnalysisProjectsList() throws ModuleStoreException {
 		AnalysisStore store = AnalysisStoreFactory.getFactory().getInstance();
 		if (store == null) {
-			// logger.log(LogService.LOG_ERROR,
-			// "Could not read analysis projects. No store implementation was found.");
+			logger.error("Could not read analysis projects. No store implementation was found.");
 			return;
 		}
 		projectTableViewer.setInput(store.getAllAnalysisInformation());

@@ -9,11 +9,12 @@ import com.puresol.coding.richclient.application.jobs.NewAnalysisJob;
 
 public class NewAnalysisWizard extends Wizard {
 
-	private final NewAnalysisGeneralSettingsPage generalSettingsPage = new NewAnalysisGeneralSettingsPage();
+	private final NewAnalysisGeneralSettingsPage generalSettingsPage;
 
 	public NewAnalysisWizard() {
 		super();
 		setWindowTitle("New Analysis");
+		generalSettingsPage = new NewAnalysisGeneralSettingsPage();
 		addPage(generalSettingsPage);
 	}
 

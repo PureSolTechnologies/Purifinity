@@ -16,7 +16,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.osgi.service.prefs.BackingStoreException;
 import org.osgi.service.prefs.Preferences;
@@ -28,8 +27,6 @@ public class NewAnalysisGeneralSettingsPage extends WizardPage {
 
 	private final Logger log;
 
-	private final Shell shell;
-
 	private Text textSourceDirectory;
 	private Text textProjectName;
 	private Text textDescription;
@@ -38,7 +35,6 @@ public class NewAnalysisGeneralSettingsPage extends WizardPage {
 		super("Source Directory");
 		IWorkspace workbench = ResourcesPlugin.getWorkspace();
 		log = (Logger) workbench.getAdapter(Logger.class);
-		shell = (Shell) workbench.getAdapter(Shell.class);
 		setTitle("General Settings");
 		setMessage("Provide the general settings for the new analysis.");
 	}
@@ -91,7 +87,7 @@ public class NewAnalysisGeneralSettingsPage extends WizardPage {
 	}
 
 	private void browse() {
-		DirectoryDialog dialog = new DirectoryDialog(shell);
+		DirectoryDialog dialog = new DirectoryDialog(getShell());
 
 		String directory = getLastSourceDirectory();
 		dialog.setFilterPath(directory);

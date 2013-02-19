@@ -2,11 +2,9 @@ package com.puresol.coding.richclient.application.content;
 
 import java.text.SimpleDateFormat;
 
-import javax.inject.Inject;
-
-import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.wb.swt.ResourceManager;
 
 import com.puresol.coding.analysis.api.AnalysisInformation;
 import com.puresol.coding.richclient.application.ClientImages;
@@ -19,10 +17,9 @@ import com.puresol.coding.richclient.application.ClientImages;
  */
 public class AnalysisListLabelProvider extends LabelProvider {
 
-	@Inject
-	private ImageRegistry imageRegistry;
-	private final Image analysisImage = imageRegistry
-			.get(ClientImages.ANALYSIS_16x16);
+	private static final Image analysisImage = ResourceManager.getPluginImage(
+			"com.puresol.coding.richclient.application.plugin",
+			ClientImages.ANALYSIS_16x16);
 
 	@Override
 	public String getText(Object element) {
@@ -35,6 +32,5 @@ public class AnalysisListLabelProvider extends LabelProvider {
 	@Override
 	public Image getImage(Object element) {
 		return analysisImage;
-
 	}
 }

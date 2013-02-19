@@ -7,7 +7,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.e4.core.services.log.Logger;
-import org.eclipse.ui.internal.Workbench;
+import org.eclipse.e4.ui.internal.workbench.WorkbenchLogger;
 
 import com.puresol.coding.analysis.api.Analysis;
 import com.puresol.coding.analysis.api.AnalysisRun;
@@ -22,7 +22,8 @@ import com.puresol.utils.FileSearchConfiguration;
 @SuppressWarnings("restriction")
 public class NewAnalysisJob extends Job {
 
-	private final Logger logger;
+	private final Logger logger = new WorkbenchLogger(
+			NewAnalysisJob.class.getName());
 
 	private final FileSearchConfiguration searchConfiguration;
 	private final RepositoryLocation repositoryLocation;
@@ -32,7 +33,7 @@ public class NewAnalysisJob extends Job {
 	public NewAnalysisJob(String name, String description,
 			RepositoryLocation repositoryLocation) {
 		super(name);
-		logger = (Logger) Workbench.getInstance().getService(Logger.class);
+
 		this.repositoryLocation = repositoryLocation;
 		this.description = description;
 		searchConfiguration = PreferencesUtils
