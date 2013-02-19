@@ -1,11 +1,22 @@
 package com.puresol.coding.richclient.application.parts;
 
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import javax.inject.Inject;
 
 import org.eclipse.core.commands.ParameterizedCommand;
 import org.eclipse.e4.core.commands.ECommandService;
 import org.eclipse.e4.core.commands.EHandlerService;
 import org.eclipse.e4.core.services.log.Logger;
+import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -24,6 +35,8 @@ import com.puresol.coding.analysis.api.AnalysisStoreFactory;
 import com.puresol.coding.analysis.api.ModuleStoreException;
 import com.puresol.coding.richclient.application.content.AnalysisListContentProvider;
 import com.puresol.coding.richclient.application.content.AnalysisListLabelProvider;
+import com.puresol.coding.richclient.application.handlers.DeleteAnalysisHandler;
+import com.puresol.coding.richclient.application.handlers.EditAnalysisHandler;
 import com.puresol.coding.richclient.application.handlers.NewAnalysisHandler;
 
 /**
@@ -33,13 +46,15 @@ import com.puresol.coding.richclient.application.handlers.NewAnalysisHandler;
  * @author Rick-Rainer Ludwig
  */
 @SuppressWarnings("restriction")
-public class AnalysisProjectsPart implements SelectionListener {
+public class AnalysisProjectsPart implements SelectionListener,
+		ISelectionProvider, ISelectionChangedListener {
 
 	private final Logger logger;
 
 	private final EHandlerService handlerService;
 
 	private final ECommandService commandService;
+	private final ESelectionService selectionService;
 
 	private final Table projectsTable;
 	private final TableViewer projectTableViewer;
@@ -48,12 +63,18 @@ public class AnalysisProjectsPart implements SelectionListener {
 	private final ToolItem editAnalysisItem;
 	private final ToolItem deleteAnalysisItem;
 
+	private final List<WeakReference<ISelectionChangedListener>> listeners = new ArrayList<WeakReference<ISelectionChangedListener>>();
+
+	private ISelection selection = null;
+
 	@Inject
 	public AnalysisProjectsPart(Composite parent, Logger logger,
-			EHandlerService handlerService, ECommandService commandService) {
+			EHandlerService handlerService, ECommandService commandService,
+			ESelectionService selectionService) {
 		this.logger = logger;
 		this.handlerService = handlerService;
 		this.commandService = commandService;
+		this.selectionService = selectionService;
 
 		Composite composite = new Composite(parent, SWT.BORDER);
 		composite.setLayout(new FormLayout());
@@ -107,6 +128,8 @@ public class AnalysisProjectsPart implements SelectionListener {
 		projectTableViewer
 				.setContentProvider(new AnalysisListContentProvider());
 		projectTableViewer.setLabelProvider(new AnalysisListLabelProvider());
+		projectTableViewer.addSelectionChangedListener(this);
+
 	}
 
 	@Override
@@ -116,6 +139,10 @@ public class AnalysisProjectsPart implements SelectionListener {
 				refreshAnalysisProjectsList();
 			} else if (event.getSource() == addAnalysisItem) {
 				addAnalysis();
+			} else if (event.getSource() == editAnalysisItem) {
+				editAnalysis();
+			} else if (event.getSource() == deleteAnalysisItem) {
+				deleteAnalysis();
 			}
 		} catch (ModuleStoreException e) {
 			e.printStackTrace();
@@ -139,9 +166,84 @@ public class AnalysisProjectsPart implements SelectionListener {
 	}
 
 	private void addAnalysis() {
-		handlerService.activateHandler("commandid", new NewAnalysisHandler());
+		handlerService.activateHandler(NewAnalysisHandler.class.getName(),
+				new NewAnalysisHandler());
+		ParameterizedCommand createdCommand = commandService.createCommand(
+				NewAnalysisHandler.class.getName(), null);
+		handlerService.executeHandler(createdCommand);
+	}
+
+	private void editAnalysis() {
+		handlerService.activateHandler("commandid", new EditAnalysisHandler());
 		ParameterizedCommand createdCommand = commandService.createCommand(
 				"commandid", null);
 		handlerService.executeHandler(createdCommand);
 	}
+
+	private void deleteAnalysis() {
+		handlerService.activateHandler(DeleteAnalysisHandler.class.getName(),
+				new DeleteAnalysisHandler());
+		ParameterizedCommand createdCommand = commandService.createCommand(
+				DeleteAnalysisHandler.class.getName(), null);
+		handlerService.executeHandler(createdCommand);
+	}
+
+	@Override
+	public void addSelectionChangedListener(ISelectionChangedListener listener) {
+		removeDeadListeners();
+		listeners.add(new WeakReference<ISelectionChangedListener>(listener));
+	}
+
+	@Override
+	public ISelection getSelection() {
+		return selection;
+	}
+
+	@Override
+	public void removeSelectionChangedListener(
+			ISelectionChangedListener listener) {
+		Iterator<WeakReference<ISelectionChangedListener>> iterator = listeners
+				.iterator();
+		while (iterator.hasNext()) {
+			WeakReference<ISelectionChangedListener> next = iterator.next();
+			if (next.get() == listener) {
+				listeners.remove(listener);
+			}
+		}
+		removeDeadListeners();
+	}
+
+	@Override
+	public void setSelection(ISelection selection) {
+		this.selection = selection;
+		removeDeadListeners();
+		for (WeakReference<ISelectionChangedListener> listener : listeners) {
+			ISelectionChangedListener listenerObject = listener.get();
+			if (listenerObject != null) {
+				listenerObject.selectionChanged(new SelectionChangedEvent(this,
+						getSelection()));
+			}
+		}
+	}
+
+	private void removeDeadListeners() {
+		Iterator<WeakReference<ISelectionChangedListener>> iterator = listeners
+				.iterator();
+		while (iterator.hasNext()) {
+			WeakReference<ISelectionChangedListener> next = iterator.next();
+			if (next.get() == null) {
+				listeners.remove(next);
+			}
+		}
+	}
+
+	@Override
+	public void selectionChanged(SelectionChangedEvent event) {
+		if (event.getSource() == projectTableViewer) {
+			Object selection = ((IStructuredSelection) event.getSelection())
+					.getFirstElement();
+			selectionService.setSelection(selection);
+		}
+	}
+
 }
