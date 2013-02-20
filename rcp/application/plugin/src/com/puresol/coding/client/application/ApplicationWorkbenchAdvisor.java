@@ -5,7 +5,7 @@ import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchAdvisor;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
 
-import com.puresol.coding.client.application.perspectives.PerspectiveIds;
+import com.puresol.coding.client.application.perspectives.AnalysisPerspective;
 
 public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 
@@ -23,6 +23,6 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 
     @Override
     public String getInitialWindowPerspectiveId() {
-	return PerspectiveIds.ANALYSIS_PERSPECTIVE;
+	return AnalysisPerspective.class.getName();
     }
 }

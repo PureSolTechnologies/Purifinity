@@ -24,8 +24,6 @@ import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.ViewPart;
 
-import swing2swt.layout.BorderLayout;
-
 import com.puresol.coding.analysis.api.Analysis;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalysisRunInformation;
@@ -41,8 +39,6 @@ public class AnalysisRunsView extends ViewPart implements SelectionListener,
 	ISelectionProvider, ISelectionListener {
 
     private static final ILog logger = Activator.getDefault().getLog();
-
-    public static final String ID = "com.puresol.coding.client.AnalysisRunsView";
 
     private final ImageRegistry imageRegistry = Activator.getDefault()
 	    .getImageRegistry();
@@ -72,7 +68,6 @@ public class AnalysisRunsView extends ViewPart implements SelectionListener,
 
     @Override
     public void createPartControl(Composite parent) {
-	parent.setLayout(new BorderLayout(0, 0));
 
 	analysisRunsList = new Table(parent, SWT.BORDER);
 	analysisRunsList
@@ -81,7 +76,6 @@ public class AnalysisRunsView extends ViewPart implements SelectionListener,
 
 	ToolBar toolBar = new ToolBar(parent, SWT.FLAT | SWT.RIGHT);
 	toolBar.setToolTipText("Refreshs the analysis runs for the currently selected analysis from the analysis store.");
-	toolBar.setLayoutData(BorderLayout.NORTH);
 
 	refresh = new ToolItem(toolBar, SWT.NONE);
 	refresh.setToolTipText("Refreshs the analysis runs for the selected analysis from the analysis store.");

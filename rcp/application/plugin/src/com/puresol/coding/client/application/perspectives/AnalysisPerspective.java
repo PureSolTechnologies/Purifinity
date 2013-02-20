@@ -13,13 +13,13 @@ public class AnalysisPerspective implements IPerspectiveFactory {
     @Override
     public void createInitialLayout(IPageLayout layout) {
 	layout.setEditorAreaVisible(true);
-	layout.addView(AnalysisRunContentBrowserView.ID, IPageLayout.LEFT,
-		0.45f, layout.getEditorArea());
-	layout.addView(AnalysisReport.ID, IPageLayout.BOTTOM, 0.66f,
-		layout.getEditorArea());
-	layout.addView(AnalyzesView.ID, IPageLayout.LEFT, 0.3f,
-		AnalysisRunContentBrowserView.ID);
-	layout.addView(AnalysisRunsView.ID, IPageLayout.BOTTOM, 0.33f,
-		AnalyzesView.ID);
+	layout.addView(AnalysisRunContentBrowserView.class.getName(),
+		IPageLayout.LEFT, 0.45f, layout.getEditorArea());
+	layout.addView(AnalysisReport.class.getName(), IPageLayout.BOTTOM,
+		0.66f, layout.getEditorArea());
+	layout.addView(AnalyzesView.class.getName(), IPageLayout.LEFT, 0.3f,
+		AnalysisRunContentBrowserView.class.getName());
+	layout.addView(AnalysisRunsView.class.getName(), IPageLayout.BOTTOM,
+		0.33f, AnalyzesView.class.getName());
     }
 }

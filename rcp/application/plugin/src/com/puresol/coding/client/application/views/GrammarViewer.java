@@ -13,8 +13,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.part.ViewPart;
 
-import swing2swt.layout.BorderLayout;
-
 import com.puresol.coding.client.application.controls.GrammarCanvas;
 import com.puresol.coding.client.application.controls.ProgrammingLanguageViewer;
 import com.puresol.coding.client.application.grammar.RenderException;
@@ -40,10 +38,8 @@ public class GrammarViewer extends ViewPart implements
 
 	@Override
 	public void createPartControl(Composite parent) {
-		parent.setLayout(new BorderLayout(0, 0));
 
 		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setLayoutData(BorderLayout.NORTH);
 		composite.setLayout(new FillLayout(SWT.HORIZONTAL));
 
 		Label lblLanguage = new Label(composite, SWT.NONE);
@@ -57,7 +53,6 @@ public class GrammarViewer extends ViewPart implements
 		ScrolledComposite scrolledComposite = new ScrolledComposite(parent,
 				SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		scrolledComposite.setAlwaysShowScrollBars(true);
-		scrolledComposite.setLayoutData(BorderLayout.CENTER);
 
 		grammarCanvas = new GrammarCanvas(scrolledComposite, SWT.NONE);
 

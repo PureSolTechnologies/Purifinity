@@ -1,4 +1,4 @@
-package com.puresol.coding.client.application.commands;
+package com.puresol.coding.client.application.handler;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -12,7 +12,7 @@ import org.eclipse.ui.PlatformUI;
 
 import com.puresol.coding.client.application.wizards.NewAnalysisWizard;
 
-public class NewAnalysis extends AbstractHandler implements IHandler {
+public class NewAnalysisHandler extends AbstractHandler implements IHandler {
 
     public static final String ID = "com.puresol.ui.file.newAnalysis";
     private final ListenerList listeners = new ListenerList();

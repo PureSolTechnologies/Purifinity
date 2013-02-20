@@ -1,4 +1,4 @@
-package com.puresol.coding.client.application.commands;
+package com.puresol.coding.client.application.handler;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -8,7 +8,7 @@ import org.eclipse.ui.PlatformUI;
 
 import com.puresol.coding.client.application.dialogs.PickWorkspaceDialog;
 
-public class SwitchWorkspace implements IHandler {
+public class SwitchWorkspaceHandler implements IHandler {
 
     @Override
     public void addHandlerListener(IHandlerListener handlerListener) {

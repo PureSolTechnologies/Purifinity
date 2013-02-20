@@ -16,11 +16,11 @@
       <perspective
             name="Analysis Perspective"
             class="com.puresol.coding.client.application.perspectives.AnalysisPerspective"
-            id="com.puresol.coding.client.AnalysisPerspective">
+            id="com.puresol.coding.client.application.perspectives.AnalysisPerspective">
       </perspective>
       <perspective
             class="com.puresol.coding.client.application.perspectives.EvaluationPerspective"
-            id="com.puresol.coding.client.EvaluationPerspective"
+            id="com.puresol.coding.client.application.perspectives.EvaluationPerspective"
             name="Evaluation Perspective">
       </perspective>
    </extension>
@@ -34,7 +34,7 @@
                label="File"
                mnemonic="F">
             <command
-                  commandId="com.puresol.ui.file.newAnalysis"
+                  commandId="com.puresol.coding.client.application.handler.NewAnalysisHandler"
                   id="newAnalysis"
                   label="New Analysis..."
                   mnemonic="N"
@@ -56,7 +56,7 @@
                   visible="true">
             </separator>
             <command
-                  commandId="com.puresol.ui.file.switchWorkspace"
+                  commandId="com.puresol.coding.client.application.handler.SwitchWorkspaceHandler"
                   id="switchWorkspace"
                   label="Switch Workspace..."
                   mnemonic="W"
@@ -188,73 +188,73 @@
    <extension
          point="org.eclipse.ui.views">
       <view
-            category="com.puresol.coding.Analysis"
+            category="com.puresol.coding.application.AnalysisCategory"
             class="com.puresol.coding.client.application.views.AnalyzesView"
             icon="icons/16x16/analyzes_view.png"
-            id="com.puresol.coding.client.AnalyzesView"
+            id="com.puresol.coding.client.application.AnalyzesView"
             name="Analyzes"
             restorable="true">
       </view>
       <view
             allowMultiple="false"
-            category="com.puresol.coding.Analysis"
+            category="com.puresol.coding.application.AnalysisCategory"
             class="com.puresol.coding.client.application.views.AnalysisRunsView"
             icon="icons/16x16/analysis_runs_view.png"
-            id="com.puresol.coding.client.AnalysisRunsView"
+            id="com.puresol.coding.client.application.views.AnalysisRunsView"
             name="Analysis Runs"
             restorable="true">
       </view>
       <view
-            category="com.puresol.coding.Analysis"
+            category="com.puresol.coding.application.AnalysisCategory"
             class="com.puresol.coding.client.application.views.AnalysisRunContentBrowserView"
             icon="icons/16x16/folders_explorer.png"
-            id="com.puresol.coding.client.AnalysisRunContentBrowserView"
+            id="com.puresol.coding.client.application.views.AnalysisRunContentBrowserView"
             name="Analysis Run Content Explorer"
             restorable="true">
       </view>
       <view
-            category="com.puresol.coding.Analysis"
+            category="com.puresol.coding.application.AnalysisCategory"
             class="com.puresol.coding.client.application.views.AnalysisReport"
-            id="com.puresol.coding.client.AnalysisReport"
+            id="com.puresol.coding.client.application.views.AnalysisReport"
             name="Analysis Report"
             restorable="true">
       </view>
       <view
             category="org.eclipse.debug.ui"
             class="com.puresol.coding.client.application.views.OsgiDebug"
-            id="com.puresol.coding.client.OsgiDebug"
+            id="com.puresol.coding.client.application.views.OsgiDebug"
             name="OSGI Debug"
             restorable="true">
       </view>
       <view
-            category="com.puresol.coding.Analysis"
+            category="com.puresol.coding.application.AnalysisCategory"
             class="com.puresol.coding.client.application.views.SupportedLanguages"
-            id="com.puresol.coding.client.SupportedLanguages"
+            id="com.puresol.coding.client.application.views.SupportedLanguages"
             name="Supported Languages"
             restorable="true">
       </view>
       <category
-            id="com.puresol.coding.Analysis"
+            id="com.puresol.coding.application.AnalysisCategory"
             name="Code Analysis">
       </category>
       <view
-            category="com.puresol.coding.Analysis"
+            category="com.puresol.coding.application.AnalysisCategory"
             class="com.puresol.coding.client.application.views.ParserTreeView"
-            id="com.puresol.coding.client.ParserTreeViewer"
+            id="com.puresol.coding.client.application.views.ParserTreeView"
             name="Parser Tree Viewer"
             restorable="true">
       </view>
       <view
-            category="com.puresol.coding.Analysis"
+            category="com.puresol.coding.application.AnalysisCategory"
             class="com.puresol.coding.client.application.views.GrammarViewer"
-            id="com.puresol.coding.client.GrammarViewer"
+            id="com.puresol.coding.client.application.views.GrammarViewer"
             name="Grammar Viewer"
             restorable="true">
       </view>
       <view
-            category="com.puresol.coding.Analysis"
+            category="com.puresol.coding.application.AnalysisCategory"
             class="com.puresol.coding.client.application.views.AnalysisStoreView"
-            id="com.puresol.coding.client.AnalysisStore"
+            id="com.puresol.coding.client.application.views.AnalysisStoreView"
             name="Analysis Store"
             restorable="true">
       </view>
@@ -262,21 +262,21 @@
    <extension
          point="org.eclipse.ui.commands">
       <command
-            defaultHandler="com.puresol.coding.client.application.commands.NewAnalysis"
-            id="com.puresol.ui.file.newAnalysis"
-            name="newAnalysis">
+            defaultHandler="com.puresol.coding.client.application.handler.NewAnalysisHandler"
+            id="com.puresol.coding.client.application.handler.NewAnalysisHandler"
+            name="New Analysis">
       </command>
       <command
-            defaultHandler="com.puresol.coding.client.application.commands.SwitchWorkspace"
-            id="com.puresol.ui.file.switchWorkspace"
-            name="switchWorkspace">
+            defaultHandler="com.puresol.coding.client.application.handler.SwitchWorkspaceHandler"
+            id="com.puresol.coding.client.application.handler.SwitchWorkspaceHandler"
+            name="Switch Workspace">
       </command>
    </extension>
    <extension
          id="product"
          point="org.eclipse.core.runtime.products">
       <product
-            application="com.puresol.rcp.coding.client.plugin.application"
+            application="com.puresol.coding.client.application"
             name="Source Code Analysis">
          <property
                name="appName"
@@ -287,14 +287,13 @@
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
-            category="com.puresol.coding.client.CodeAnalysisPreferences"
             class="com.puresol.coding.client.application.preferences.NewAnalysisPreferencePage"
-            id="com.puresol.coding.client.NewAnalysisPreferences"
+            id="com.puresol.coding.client.application.preferences.NewAnalysisPreferencePage"
             name="New Analysis">
       </page>
       <page
             class="com.puresol.coding.client.application.preferences.CodeAnalysisPreferencePage"
-            id="com.puresol.coding.client.CodeAnalysisPreferences"
+            id="com.puresol.coding.client.application.preferences.CodeAnalysisPreferencePage"
             name="Code Analysis">
       </page>
    </extension>
@@ -324,18 +323,6 @@
             id="com.puresol.coding.client.NotAnalyzedEditor"
             name="Not Analyzed">
       </editor>
-   </extension>
-   <extension
-         id="SourceCodeClient"
-         point="org.eclipse.core.runtime.products">
-      <product
-            application="com.puresol.coding.client.application.plugin.application"
-            name="Source Code Analysis">
-         <property
-               name="appName"
-               value="Source Code Analysis">
-         </property>
-      </product>
    </extension>
 
 </plugin>

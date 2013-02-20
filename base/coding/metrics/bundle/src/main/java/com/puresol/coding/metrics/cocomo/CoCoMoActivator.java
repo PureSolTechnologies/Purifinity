@@ -14,39 +14,39 @@ import com.puresol.coding.evaluation.api.EvaluatorFactory;
 
 public class CoCoMoActivator implements BundleActivator {
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(CoCoMoActivator.class);
+    private static final Logger logger = LoggerFactory
+	    .getLogger(CoCoMoActivator.class);
 
-	private final List<ServiceRegistration> serviceRegistrations = new ArrayList<ServiceRegistration>();
+    private final List<ServiceRegistration<?>> serviceRegistrations = new ArrayList<ServiceRegistration<?>>();
 
-	@Override
-	public void start(BundleContext context) throws Exception {
-		logger.info("Starting CoCoMo...");
+    @Override
+    public void start(BundleContext context) throws Exception {
+	logger.info("Starting CoCoMo...");
 
-		registerProjectFactory(context);
+	registerProjectFactory(context);
 
-		logger.info("Started.");
+	logger.info("Started.");
+    }
+
+    private void registerProjectFactory(BundleContext context) {
+	CoCoMoServiceFactory cocomoFactory = new CoCoMoServiceFactory();
+	Dictionary<String, ?> headers = context.getBundle().getHeaders();
+
+	ServiceRegistration<?> registration = context.registerService(
+		EvaluatorFactory.class.getName(), cocomoFactory, headers);
+	serviceRegistrations.add(registration);
+    }
+
+    @Override
+    public void stop(BundleContext context) throws Exception {
+	logger.info("Stopping CoCoMo...");
+
+	for (ServiceRegistration<?> registration : serviceRegistrations) {
+	    registration.unregister();
 	}
+	serviceRegistrations.clear();
 
-	private void registerProjectFactory(BundleContext context) {
-		CoCoMoServiceFactory cocomoFactory = new CoCoMoServiceFactory();
-		Dictionary<String, ?> headers = context.getBundle().getHeaders();
-
-		ServiceRegistration registration = context.registerService(
-				EvaluatorFactory.class.getName(), cocomoFactory, headers);
-		serviceRegistrations.add(registration);
-	}
-
-	@Override
-	public void stop(BundleContext context) throws Exception {
-		logger.info("Stopping CoCoMo...");
-
-		for (ServiceRegistration registration : serviceRegistrations) {
-			registration.unregister();
-		}
-		serviceRegistrations.clear();
-
-		logger.info("Stopped.");
-	}
+	logger.info("Stopped.");
+    }
 
 }

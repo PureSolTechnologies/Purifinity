@@ -8,8 +8,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Tree;
 
-import swing2swt.layout.BorderLayout;
-
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalyzedCode;
 import com.puresol.coding.analysis.api.CodeAnalysis;
@@ -37,12 +35,9 @@ public class ParserTreeControl extends Composite {
 	public ParserTreeControl(Composite parent) {
 		super(parent, SWT.NONE);
 
-		setLayout(new BorderLayout(0, 0));
 		lblNewLabel = new Label(this, SWT.NONE);
-		lblNewLabel.setLayoutData(BorderLayout.NORTH);
 
 		tree = new Tree(this, SWT.BORDER);
-		tree.setLayoutData(BorderLayout.CENTER);
 		treeViewer = new TreeViewer(tree);
 		treeViewer.setContentProvider(new ParserTreeContentProvider());
 		treeViewer.setLabelProvider(new ParserTreeLabelProvider());

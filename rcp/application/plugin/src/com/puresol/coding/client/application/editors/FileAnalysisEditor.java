@@ -16,8 +16,6 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 
-import swing2swt.layout.BorderLayout;
-
 import com.puresol.coding.analysis.api.CodeStore;
 import com.puresol.coding.analysis.api.CodeStoreException;
 import com.puresol.coding.analysis.api.CodeStoreFactory;
@@ -74,17 +72,13 @@ public class FileAnalysisEditor extends EditorPart {
 	@Override
 	public void createPartControl(Composite parent) {
 		try {
-			parent.setLayout(new BorderLayout(0, 0));
-
 			Composite buttonArea = new Composite(parent, SWT.NONE);
-			buttonArea.setLayoutData(BorderLayout.NORTH);
 			buttonArea.setLayout(new FillLayout(SWT.HORIZONTAL));
 
 			Button refreshButton = new Button(buttonArea, SWT.NONE);
 			refreshButton.setText("Refresh");
 
 			TabFolder tabFolder = new TabFolder(parent, SWT.NONE);
-			tabFolder.setLayoutData(BorderLayout.CENTER);
 
 			TabItem fileViewerTab = new TabItem(tabFolder, SWT.NONE);
 			fileViewerTab.setText("Original File");

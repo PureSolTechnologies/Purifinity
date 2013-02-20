@@ -19,8 +19,6 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
 
-import swing2swt.layout.BorderLayout;
-
 import com.puresol.coding.analysis.api.Analysis;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalyzedCode;
@@ -37,7 +35,6 @@ import com.puresol.coding.client.application.editors.NotAnalyzedEditorInput;
 public class AnalysisRunContentBrowserView extends ViewPart implements
 	ISelectionListener, IDoubleClickListener, ISelectionProvider {
 
-    public static final String ID = "com.puresol.coding.client.AnalysisRunContentBrowserView";
     private Analysis analysis;
     private AnalysisRun analysisRun;
     private Tree fileTree;
@@ -51,8 +48,6 @@ public class AnalysisRunContentBrowserView extends ViewPart implements
 
     @Override
     public void createPartControl(Composite parent) {
-	parent.setLayout(new BorderLayout(0, 0));
-
 	fileTree = new Tree(parent, SWT.BORDER);
 	fileTreeViewer = new TreeViewer(fileTree);
 	fileTreeViewer

@@ -9,8 +9,8 @@ public class EvaluationPerspective implements IPerspectiveFactory {
 
     @Override
     public void createInitialLayout(IPageLayout layout) {
-	layout.addView(AnalysisReport.ID, IPageLayout.BOTTOM, 0.8f,
-		layout.getEditorArea());
+	layout.addView(AnalysisReport.class.getName(), IPageLayout.BOTTOM,
+		0.8f, layout.getEditorArea());
     }
 
 }

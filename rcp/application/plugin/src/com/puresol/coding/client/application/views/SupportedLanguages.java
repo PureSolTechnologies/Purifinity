@@ -14,8 +14,6 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 
-import swing2swt.layout.BorderLayout;
-
 import com.puresol.coding.client.application.Activator;
 import com.puresol.coding.lang.api.ProgrammingLanguage;
 
@@ -25,14 +23,11 @@ public class SupportedLanguages extends ViewPart implements SelectionListener {
 
 	@Override
 	public void createPartControl(Composite parent) {
-		parent.setLayout(new BorderLayout(0, 0));
-
 		text = new Text(parent, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL
 				| SWT.CANCEL | SWT.MULTI);
 		text.setEditable(false);
 
 		Button btnRefresh = new Button(parent, SWT.NONE);
-		btnRefresh.setLayoutData(BorderLayout.NORTH);
 		btnRefresh.setText("Refresh");
 		btnRefresh.addSelectionListener(this);
 	}
