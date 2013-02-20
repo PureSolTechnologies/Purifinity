@@ -7,7 +7,7 @@
          point="org.eclipse.core.runtime.applications">
       <application>
          <run
-               class="com.puresol.coding.client.SourceCodeAnalysis">
+               class="com.puresol.coding.client.application.SourceCodeAnalysis">
          </run>
       </application>
    </extension>
@@ -15,11 +15,11 @@
          point="org.eclipse.ui.perspectives">
       <perspective
             name="Analysis Perspective"
-            class="com.puresol.coding.client.perspectives.AnalysisPerspective"
+            class="com.puresol.coding.client.application.perspectives.AnalysisPerspective"
             id="com.puresol.coding.client.AnalysisPerspective">
       </perspective>
       <perspective
-            class="com.puresol.coding.client.perspectives.EvaluationPerspective"
+            class="com.puresol.coding.client.application.perspectives.EvaluationPerspective"
             id="com.puresol.coding.client.EvaluationPerspective"
             name="Evaluation Perspective">
       </perspective>
@@ -189,7 +189,7 @@
          point="org.eclipse.ui.views">
       <view
             category="com.puresol.coding.Analysis"
-            class="com.puresol.coding.client.views.AnalyzesView"
+            class="com.puresol.coding.client.application.views.AnalyzesView"
             icon="icons/16x16/analyzes_view.png"
             id="com.puresol.coding.client.AnalyzesView"
             name="Analyzes"
@@ -198,7 +198,7 @@
       <view
             allowMultiple="false"
             category="com.puresol.coding.Analysis"
-            class="com.puresol.coding.client.views.AnalysisRunsView"
+            class="com.puresol.coding.client.application.views.AnalysisRunsView"
             icon="icons/16x16/analysis_runs_view.png"
             id="com.puresol.coding.client.AnalysisRunsView"
             name="Analysis Runs"
@@ -206,7 +206,7 @@
       </view>
       <view
             category="com.puresol.coding.Analysis"
-            class="com.puresol.coding.client.views.AnalysisRunContentBrowserView"
+            class="com.puresol.coding.client.application.views.AnalysisRunContentBrowserView"
             icon="icons/16x16/folders_explorer.png"
             id="com.puresol.coding.client.AnalysisRunContentBrowserView"
             name="Analysis Run Content Explorer"
@@ -214,21 +214,21 @@
       </view>
       <view
             category="com.puresol.coding.Analysis"
-            class="com.puresol.coding.client.views.AnalysisReport"
+            class="com.puresol.coding.client.application.views.AnalysisReport"
             id="com.puresol.coding.client.AnalysisReport"
             name="Analysis Report"
             restorable="true">
       </view>
       <view
             category="org.eclipse.debug.ui"
-            class="com.puresol.coding.client.views.OsgiDebug"
+            class="com.puresol.coding.client.application.views.OsgiDebug"
             id="com.puresol.coding.client.OsgiDebug"
             name="OSGI Debug"
             restorable="true">
       </view>
       <view
             category="com.puresol.coding.Analysis"
-            class="com.puresol.coding.client.views.SupportedLanguages"
+            class="com.puresol.coding.client.application.views.SupportedLanguages"
             id="com.puresol.coding.client.SupportedLanguages"
             name="Supported Languages"
             restorable="true">
@@ -239,21 +239,21 @@
       </category>
       <view
             category="com.puresol.coding.Analysis"
-            class="com.puresol.coding.client.views.ParserTreeView"
+            class="com.puresol.coding.client.application.views.ParserTreeView"
             id="com.puresol.coding.client.ParserTreeViewer"
             name="Parser Tree Viewer"
             restorable="true">
       </view>
       <view
             category="com.puresol.coding.Analysis"
-            class="com.puresol.coding.client.views.GrammarViewer"
+            class="com.puresol.coding.client.application.views.GrammarViewer"
             id="com.puresol.coding.client.GrammarViewer"
             name="Grammar Viewer"
             restorable="true">
       </view>
       <view
             category="com.puresol.coding.Analysis"
-            class="com.puresol.coding.client.views.AnalysisStoreView"
+            class="com.puresol.coding.client.application.views.AnalysisStoreView"
             id="com.puresol.coding.client.AnalysisStore"
             name="Analysis Store"
             restorable="true">
@@ -262,12 +262,12 @@
    <extension
          point="org.eclipse.ui.commands">
       <command
-            defaultHandler="com.puresol.coding.client.commands.NewAnalysis"
+            defaultHandler="com.puresol.coding.client.application.commands.NewAnalysis"
             id="com.puresol.ui.file.newAnalysis"
             name="newAnalysis">
       </command>
       <command
-            defaultHandler="com.puresol.coding.client.commands.SwitchWorkspace"
+            defaultHandler="com.puresol.coding.client.application.commands.SwitchWorkspace"
             id="com.puresol.ui.file.switchWorkspace"
             name="switchWorkspace">
       </command>
@@ -288,12 +288,12 @@
          point="org.eclipse.ui.preferencePages">
       <page
             category="com.puresol.coding.client.CodeAnalysisPreferences"
-            class="com.puresol.coding.client.preferences.NewAnalysisPreferencePage"
+            class="com.puresol.coding.client.application.preferences.NewAnalysisPreferencePage"
             id="com.puresol.coding.client.NewAnalysisPreferences"
             name="New Analysis">
       </page>
       <page
-            class="com.puresol.coding.client.preferences.CodeAnalysisPreferencePage"
+            class="com.puresol.coding.client.application.preferences.CodeAnalysisPreferencePage"
             id="com.puresol.coding.client.CodeAnalysisPreferences"
             name="Code Analysis">
       </page>
@@ -301,25 +301,25 @@
    <extension
          point="org.eclipse.core.runtime.preferences">
       <initializer
-            class="com.puresol.coding.client.preferences.PreferenceInitializer">
+            class="com.puresol.coding.client.application.preferences.PreferenceInitializer">
       </initializer>
    </extension>
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            class="com.puresol.coding.client.editors.FileAnalysisEditor"
+            class="com.puresol.coding.client.application.editors.FileAnalysisEditor"
             default="false"
             id="com.puresol.coding.client.FileAnalysisEditor"
             name="File Analysis">
       </editor>
       <editor
-            class="com.puresol.coding.client.editors.DirectoryAnalysisEditor"
+            class="com.puresol.coding.client.application.editors.DirectoryAnalysisEditor"
             default="false"
             id="com.puresol.coding.client.DirectoryAnalysisEditor"
             name="Directory Analysis">
       </editor>
       <editor
-            class="com.puresol.coding.client.editors.NotAnalyzedEditor"
+            class="com.puresol.coding.client.application.editors.NotAnalyzedEditor"
             default="false"
             id="com.puresol.coding.client.NotAnalyzedEditor"
             name="Not Analyzed">
