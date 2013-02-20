@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin
+   id="com.puresol.coding.richclient.features.contrib.plugin"
+   name="com.puresol.coding.richclient.features.contrib.plugin"
+   version="0.1.0.qualifier"
+   provider-name="PureSol Techologies">
+   <requires>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.equinox.app"/>
+   </requires>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="menu:com.puresol.coding.richclient.application.plugin.menu.0">
+            <menu
+                  id="test"
+                  label="Test"
+                  mnemonic="T">
+               <command
+                     commandId="org.eclipse.ui.perspectives.showPerspective"
+                     id="showPerspectiveOld"
+                     label="Show Perspective (old)..."
+                     mnemonic="P"
+                     style="push">
+               </command>
+            </menu>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="com.puresol.coding.richclient.application.plugin.perspective.AnalysisPerspective">
+         <view
+               id="org.eclipse.pde.runtime.LogView"
+               minimized="false"
+               relationship="stack"
+               relative="com.puresol.coding.richclient.application.plugin.parts.AnalysisProjectsPart">
+         </view>
+      </perspectiveExtension>
+   </extension>
+
+
+</plugin>

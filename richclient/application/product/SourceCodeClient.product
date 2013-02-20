@@ -3,7 +3,6 @@
 
 <product name="com.puresol.coding.richclient.application.product" uid="com.puresol.coding.richclient.application.product" id="com.puresol.coding.richclient.application.plugin.SourceCodeClient" application="org.eclipse.e4.ui.workbench.swt.E4Application" version="0.1.0.qualifier" useFeatures="true" includeLaunchers="true">
 
-
    <configIni use="default">
    </configIni>
 
@@ -13,14 +12,12 @@
 
    <windowImages/>
 
-
    <launcher>
       <solaris/>
       <win useIco="false">
          <bmp/>
       </win>
    </launcher>
-
 
    <vm>
    </vm>
@@ -87,6 +84,7 @@
 
    <features>
       <feature id="com.puresol.coding.richclient.application.feature" version="0.1.0.qualifier"/>
+      <feature id="com.puresol.coding.richclient.features.contrib.feature" version="0.1.0.qualifier"/>
       <feature id="org.eclipse.rcp" version="4.2.1.v20120814-120134-7IAPA8BrHQicS-rjP0GbqK780kMy"/>
       <feature id="org.eclipse.e4.rcp" version="1.1.0.v20120521-2329-8yFTIGIbGGduEZ6-7-jLx41nXj"/>
       <feature id="org.eclipse.emf.ecore" version="2.8.1.v20120911-0500"/>
@@ -94,15 +92,15 @@
    </features>
 
    <configurations>
-      <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="0" />
-      <plugin id="org.eclipse.equinox.common" autoStart="true" startLevel="2" />
-      <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="1" />
       <plugin id="com.puresol.coding.analysis.api.bundle" autoStart="true" startLevel="3" />
       <plugin id="com.puresol.coding.lang.c11.bundle" autoStart="true" startLevel="3" />
       <plugin id="com.puresol.coding.lang.cpp.bundle" autoStart="true" startLevel="3" />
       <plugin id="com.puresol.coding.lang.fortran.bundle" autoStart="true" startLevel="3" />
       <plugin id="com.puresol.coding.lang.java.bundle" autoStart="true" startLevel="3" />
       <plugin id="com.puresol.coding.store.fs.bundle" autoStart="true" startLevel="3" />
+      <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="0" />
+      <plugin id="org.eclipse.equinox.common" autoStart="true" startLevel="2" />
+      <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="1" />
    </configurations>
 
 </product>

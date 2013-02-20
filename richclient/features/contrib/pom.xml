@@ -4,15 +4,16 @@
 
 	<parent>
 		<groupId>com.puresol</groupId>
-		<artifactId>com.puresol.coding.richclient</artifactId>
+		<artifactId>com.puresol.coding.richclient.features</artifactId>
 		<version>0.1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>com.puresol.coding.richclient.features</artifactId>
+	<artifactId>com.puresol.coding.richclient.features.contrib</artifactId>
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>contrib</module>
+		<module>plugin</module>
+		<module>feature</module>
 	</modules>
 
 </project>
