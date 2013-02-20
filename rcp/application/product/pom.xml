@@ -3,11 +3,11 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.puresol</groupId>
-		<artifactId>com.puresol.coding.richclient.application</artifactId>
+		<artifactId>com.puresol.coding.client.application</artifactId>
 		<version>0.1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>com.puresol.coding.richclient.application.product</artifactId>
+	<artifactId>com.puresol.coding.client.application.product</artifactId>
 	<packaging>eclipse-repository</packaging>
 
 	<build>
@@ -33,7 +33,7 @@
 				<configuration>
 					<products>
 						<product>
-							<id>com.puresol.coding.richclient.application.product</id>
+							<id>com.puresol.coding.client.application.product</id>
 						</product>
 					</products>
 					<formats>
@@ -44,4 +44,5 @@
 			</plugin>
 		</plugins>
 	</build>
+
 </project>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="Source Code Analysis" uid="com.puresol.rcp.coding.client.product" id="com.puresol.rcp.coding.client.plugin.product" application="com.puresol.rcp.coding.client.plugin.application" version="0.1.0.qualifier" useFeatures="true" includeLaunchers="true">
+<product name="Source Code Analysis" uid="com.puresol.coding.client.application.product" id="com.puresol.coding.client.application.plugin.SourceCodeClient" application="com.puresol.coding.client.application.plugin.application" version="0.1.0.qualifier" useFeatures="true" includeLaunchers="true">
 
    <configIni use="default">
    </configIni>
@@ -29,7 +29,7 @@
    </plugins>
 
    <features>
-      <feature id="com.puresol.rcp.coding.client.feature" version="0.1.0.qualifier"/>
+      <feature id="com.puresol.coding.client.application.feature" version="0.1.0.qualifier"/>
    </features>
 
    <configurations>

@@ -325,5 +325,17 @@
             name="Not Analyzed">
       </editor>
    </extension>
+   <extension
+         id="SourceCodeClient"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="com.puresol.coding.client.application.plugin.application"
+            name="Source Code Analysis">
+         <property
+               name="appName"
+               value="Source Code Analysis">
+         </property>
+      </product>
+   </extension>
 
 </plugin>

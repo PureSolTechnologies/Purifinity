@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.puresol</groupId>
-	<artifactId>rcp</artifactId>
+	<artifactId>com.puresol.coding.client</artifactId>
 	<version>0.1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
@@ -13,14 +13,14 @@
 	</properties>
 
 	<modules>
-		<module>com.puresol.rcp.coding.client</module>
+		<module>application</module>
 	</modules>
 
 	<repositories>
 		<repository>
-			<id>juno</id>
+			<id>indigo</id>
 			<layout>p2</layout>
-			<url>http://download.eclipse.org/releases/juno</url>
+			<url>http://download.eclipse.org/releases/indigo</url>
 		</repository>
 		<repository>
 			<snapshots>
@@ -126,13 +126,14 @@
 			<artifactId>coding.metrics.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.puresol</groupId>
+			<artifactId>coding.store.fs.bundle</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>
-
-		<sourceDirectory>src</sourceDirectory>
-		<testSourceDirectory>test</testSourceDirectory>
-
 		<plugins>
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
@@ -142,36 +143,11 @@
 			</plugin>
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>tycho-p2-director-plugin</artifactId>
-				<version>${tycho.version}</version>
-				<executions>
-					<execution>
-						<id>materialize-products</id>
-						<goals>
-							<goal>materialize-products</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>archive-products</id>
-						<goals>
-							<goal>archive-products</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>target-platform-configuration</artifactId>
 				<version>${tycho.version}</version>
 				<configuration>
 					<resolver>p2</resolver>
 					<pomDependencies>consider</pomDependencies>
-					<target>
-						<groupId>com.puresol</groupId>
-						<artifactId>com.puresol.rcp.coding.client.target</artifactId>
-						<version>${project.version}</version>
-						<classifier>juno</classifier>
-					</target>
 					<environments>
 						<environment>
 							<os>linux</os>
@@ -183,10 +159,6 @@
 							<ws>gtk</ws>
 							<arch>x86</arch>
 						</environment>
-						<!-- environment> <os>macosx</os> <ws>carbon</ws> <arch>x86</arch> 
-							</environment> <environment> <os>macosx</os> <ws>cocoa</ws> <arch>x86</arch> 
-							</environment> <environment> <os>macosx</os> <ws>cocoa</ws> <arch>x86_64</arch> 
-							</environment -->
 						<environment>
 							<os>win32</os>
 							<ws>win32</ws>

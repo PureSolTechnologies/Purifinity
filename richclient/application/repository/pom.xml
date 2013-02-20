@@ -8,7 +8,6 @@
 	</parent>
 
 	<artifactId>com.puresol.coding.richclient.application.repository</artifactId>
-
 	<packaging>eclipse-repository</packaging>
 
 </project>
