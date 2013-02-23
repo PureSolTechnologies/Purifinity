@@ -9,7 +9,7 @@ import org.osgi.framework.ServiceReference;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class AnalysisStoreFactoryOSGI extends AnalysisStoreFactory {
+public class AnalysisStoreFactoryOSGi extends AnalysisStoreFactory {
 
 	private AnalysisStore analysisStore = null;
 

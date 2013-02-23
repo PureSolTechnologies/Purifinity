@@ -5,7 +5,7 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.widgets.Combo;
 
 import com.puresol.coding.evaluation.api.EvaluatorFactory;
-import com.puresol.coding.evaluation.api.Evaluators;
+import com.puresol.coding.evaluation.api.EvaluatorsOSGi;
 
 public class EvaluatorComboViewer extends ComboViewer {
 
@@ -19,6 +19,6 @@ public class EvaluatorComboViewer extends ComboViewer {
 		return evaluator.getName();
 	    }
 	});
-	setInput(Evaluators.getAllFactories());
+	setInput(EvaluatorsOSGi.getInstance().getAll());
     }
 }

@@ -12,7 +12,7 @@ import org.osgi.framework.ServiceReference;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class EvaluatorStoreFactoryOSGI extends EvaluatorStoreFactory {
+public class EvaluatorStoreFactoryOSGi extends EvaluatorStoreFactory {
 
 	@Override
 	public EvaluatorStore createInstance(Class<? extends Evaluator> clazz) {

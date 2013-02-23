@@ -19,10 +19,10 @@ import com.puresol.coding.lang.api.ProgrammingLanguage;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class ProgrammingLanguagesOSGI extends ProgrammingLanguages {
+public class ProgrammingLanguagesOSGi extends ProgrammingLanguages {
 
 	private static final Logger logger = LoggerFactory
-			.getLogger(ProgrammingLanguagesOSGI.class);
+			.getLogger(ProgrammingLanguagesOSGi.class);
 
 	/**
 	 * This method looks into the bundle context and returns all available
