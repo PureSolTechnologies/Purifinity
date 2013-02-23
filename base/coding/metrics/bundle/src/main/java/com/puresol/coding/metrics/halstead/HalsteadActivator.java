@@ -14,39 +14,39 @@ import com.puresol.coding.evaluation.api.EvaluatorFactory;
 
 public class HalsteadActivator implements BundleActivator {
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(HalsteadActivator.class);
+    private static final Logger logger = LoggerFactory
+	    .getLogger(HalsteadActivator.class);
 
-	private final List<ServiceRegistration> serviceRegistrations = new ArrayList<ServiceRegistration>();
+    private final List<ServiceRegistration<?>> serviceRegistrations = new ArrayList<ServiceRegistration<?>>();
 
-	@Override
-	public void start(BundleContext context) throws Exception {
-		logger.info("Starting Halstead...");
+    @Override
+    public void start(BundleContext context) throws Exception {
+	logger.info("Starting Halstead...");
 
-		registerFactory(context);
+	registerFactory(context);
 
-		logger.info("Started.");
+	logger.info("Started.");
+    }
+
+    private void registerFactory(BundleContext context) {
+	HalsteadMetricEvaluatorFactory halsteadMetricFactory = new HalsteadMetricEvaluatorFactory();
+
+	ServiceRegistration<?> registration = context.registerService(
+		EvaluatorFactory.class, halsteadMetricFactory,
+		new Hashtable<String, String>());
+	serviceRegistrations.add(registration);
+    }
+
+    @Override
+    public void stop(BundleContext context) throws Exception {
+	logger.info("Stopping Halstead...");
+
+	for (ServiceRegistration<?> registration : serviceRegistrations) {
+	    registration.unregister();
 	}
+	serviceRegistrations.clear();
 
-	private void registerFactory(BundleContext context) {
-		HalsteadMetricEvaluatorFactory halsteadMetricFactory = new HalsteadMetricEvaluatorFactory();
-
-		ServiceRegistration registration = context.registerService(
-				EvaluatorFactory.class.getName(), halsteadMetricFactory,
-				new Hashtable<String, String>());
-		serviceRegistrations.add(registration);
-	}
-
-	@Override
-	public void stop(BundleContext context) throws Exception {
-		logger.info("Stopping Halstead...");
-
-		for (ServiceRegistration registration : serviceRegistrations) {
-			registration.unregister();
-		}
-		serviceRegistrations.clear();
-
-		logger.info("Stopped.");
-	}
+	logger.info("Stopped.");
+    }
 
 }

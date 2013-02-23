@@ -14,39 +14,39 @@ import com.puresol.coding.evaluation.api.EvaluatorFactory;
 
 public class MaintainabilityActivator implements BundleActivator {
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(MaintainabilityActivator.class);
+    private static final Logger logger = LoggerFactory
+	    .getLogger(MaintainabilityActivator.class);
 
-	private final List<ServiceRegistration> serviceRegistrations = new ArrayList<ServiceRegistration>();
+    private final List<ServiceRegistration<?>> serviceRegistrations = new ArrayList<ServiceRegistration<?>>();
 
-	@Override
-	public void start(BundleContext context) throws Exception {
-		logger.info("Starting Maintainability Index...");
+    @Override
+    public void start(BundleContext context) throws Exception {
+	logger.info("Starting Maintainability Index...");
 
-		registerFactory(context);
+	registerFactory(context);
 
-		logger.info("Started.");
+	logger.info("Started.");
+    }
+
+    private void registerFactory(BundleContext context) {
+	MaintainabilityIndexEvaluatorFactory maintainabilityIndexFactory = new MaintainabilityIndexEvaluatorFactory();
+
+	ServiceRegistration<?> registration = context.registerService(
+		EvaluatorFactory.class, maintainabilityIndexFactory,
+		new Hashtable<String, String>());
+	serviceRegistrations.add(registration);
+    }
+
+    @Override
+    public void stop(BundleContext context) throws Exception {
+	logger.info("Stopping Maintainability Index...");
+
+	for (ServiceRegistration<?> registration : serviceRegistrations) {
+	    registration.unregister();
 	}
+	serviceRegistrations.clear();
 
-	private void registerFactory(BundleContext context) {
-		MaintainabilityIndexEvaluatorFactory maintainabilityIndexFactory = new MaintainabilityIndexEvaluatorFactory();
-
-		ServiceRegistration registration = context.registerService(
-				EvaluatorFactory.class.getName(), maintainabilityIndexFactory,
-				new Hashtable<String, String>());
-		serviceRegistrations.add(registration);
-	}
-
-	@Override
-	public void stop(BundleContext context) throws Exception {
-		logger.info("Stopping Maintainability Index...");
-
-		for (ServiceRegistration registration : serviceRegistrations) {
-			registration.unregister();
-		}
-		serviceRegistrations.clear();
-
-		logger.info("Stopped.");
-	}
+	logger.info("Stopped.");
+    }
 
 }

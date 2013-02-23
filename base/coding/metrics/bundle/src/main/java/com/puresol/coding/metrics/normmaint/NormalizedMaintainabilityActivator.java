@@ -14,40 +14,40 @@ import com.puresol.coding.evaluation.api.EvaluatorFactory;
 
 public class NormalizedMaintainabilityActivator implements BundleActivator {
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(NormalizedMaintainabilityActivator.class);
+    private static final Logger logger = LoggerFactory
+	    .getLogger(NormalizedMaintainabilityActivator.class);
 
-	private final List<ServiceRegistration> serviceRegistrations = new ArrayList<ServiceRegistration>();
+    private final List<ServiceRegistration<?>> serviceRegistrations = new ArrayList<ServiceRegistration<?>>();
 
-	@Override
-	public void start(BundleContext context) throws Exception {
-		logger.info("Starting Normalized Maintainability Index...");
+    @Override
+    public void start(BundleContext context) throws Exception {
+	logger.info("Starting Normalized Maintainability Index...");
 
-		registerFactory(context);
+	registerFactory(context);
 
-		logger.info("Started.");
+	logger.info("Started.");
+    }
+
+    private void registerFactory(BundleContext context) {
+	NormalizedMaintainabilityIndexEvaluatorFactory normalizedMaintainabilityIndexFactory = new NormalizedMaintainabilityIndexEvaluatorFactory();
+	Dictionary<String, ?> headers = context.getBundle().getHeaders();
+
+	ServiceRegistration<?> registration = context.registerService(
+		EvaluatorFactory.class, normalizedMaintainabilityIndexFactory,
+		headers);
+	serviceRegistrations.add(registration);
+    }
+
+    @Override
+    public void stop(BundleContext context) throws Exception {
+	logger.info("Stopping Normalized Maintainability Index...");
+
+	for (ServiceRegistration<?> registration : serviceRegistrations) {
+	    registration.unregister();
 	}
+	serviceRegistrations.clear();
 
-	private void registerFactory(BundleContext context) {
-		NormalizedMaintainabilityIndexEvaluatorFactory normalizedMaintainabilityIndexFactory = new NormalizedMaintainabilityIndexEvaluatorFactory();
-		Dictionary<String, ?> headers = context.getBundle().getHeaders();
-
-		ServiceRegistration registration = context.registerService(
-				EvaluatorFactory.class.getName(),
-				normalizedMaintainabilityIndexFactory, headers);
-		serviceRegistrations.add(registration);
-	}
-
-	@Override
-	public void stop(BundleContext context) throws Exception {
-		logger.info("Stopping Normalized Maintainability Index...");
-
-		for (ServiceRegistration registration : serviceRegistrations) {
-			registration.unregister();
-		}
-		serviceRegistrations.clear();
-
-		logger.info("Stopped.");
-	}
+	logger.info("Stopped.");
+    }
 
 }

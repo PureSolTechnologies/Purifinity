@@ -108,19 +108,19 @@ public class AnalysisRunContentBrowserView extends ViewPart implements
 	    FileAnalysisEditorInput fileAnalysisEditorInput = new FileAnalysisEditorInput(
 		    analyzedCode, analysisRun);
 	    getSite().getPage().openEditor(fileAnalysisEditorInput,
-		    FileAnalysisEditor.ID);
+		    FileAnalysisEditor.class.getName());
 	} else {
 	    if (!analysisRun.getFailedCodeLocations().contains(
 		    firstElement.getPathFile(false))) {
 		DirectoryAnalysisEditorInput directoryAnalysisEditorInput = new DirectoryAnalysisEditorInput(
 			firstElement, analysisRun);
 		getSite().getPage().openEditor(directoryAnalysisEditorInput,
-			DirectoryAnalysisEditor.ID);
+			DirectoryAnalysisEditor.class.getName());
 	    } else {
 		NotAnalyzedEditorInput notAnalyzedEditorInput = new NotAnalyzedEditorInput(
 			firstElement.getPathFile(false), analysisRun);
 		getSite().getPage().openEditor(notAnalyzedEditorInput,
-			NotAnalyzedEditor.ID);
+			NotAnalyzedEditor.class.getName());
 	    }
 	}
     }

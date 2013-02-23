@@ -12,7 +12,6 @@ import com.puresol.coding.client.application.controls.DirectoryMetricsControl;
 
 public class DirectoryAnalysisEditor extends EditorPart {
 
-    public static final String ID = "com.puresol.coding.client.DirectoryAnalysisEditor";
     private DirectoryMetricsControl metricsControl;
 
     public DirectoryAnalysisEditor() {

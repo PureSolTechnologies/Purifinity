@@ -14,7 +14,6 @@ import com.puresol.coding.client.application.wizards.NewAnalysisWizard;
 
 public class NewAnalysisHandler extends AbstractHandler implements IHandler {
 
-    public static final String ID = "com.puresol.ui.file.newAnalysis";
     private final ListenerList listeners = new ListenerList();
 
     @Override

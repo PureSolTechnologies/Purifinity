@@ -191,7 +191,7 @@
             category="com.puresol.coding.application.AnalysisCategory"
             class="com.puresol.coding.client.application.views.AnalyzesView"
             icon="icons/16x16/analyzes_view.png"
-            id="com.puresol.coding.client.application.AnalyzesView"
+            id="com.puresol.coding.client.application.views.AnalyzesView"
             name="Analyzes"
             restorable="true">
       </view>

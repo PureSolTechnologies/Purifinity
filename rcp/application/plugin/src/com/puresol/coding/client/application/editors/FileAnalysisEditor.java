@@ -28,98 +28,96 @@ import com.puresol.utils.HashId;
 
 public class FileAnalysisEditor extends EditorPart {
 
-	private static final ILog logger = Activator.getDefault().getLog();
+    private static final ILog logger = Activator.getDefault().getLog();
 
-	public static final String ID = "com.puresol.coding.client.FileAnalysisEditor";
+    private ScrollableFileViewer fileViewer;
+    private ParserTreeControl treeViewer;
+    private FileMetricsControl metricsControl;
 
-	private ScrollableFileViewer fileViewer;
-	private ParserTreeControl treeViewer;
-	private FileMetricsControl metricsControl;
+    public FileAnalysisEditor() {
+	super();
+    }
 
-	public FileAnalysisEditor() {
-		super();
+    @Override
+    public void doSave(IProgressMonitor monitor) {
+	// TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void doSaveAs() {
+	// TODO Auto-generated method stub
+    }
+
+    @Override
+    public void init(IEditorSite site, IEditorInput input)
+	    throws PartInitException {
+	setSite(site);
+	setInput(input);
+	setPartName(input.getName());
+    }
+
+    @Override
+    public boolean isDirty() {
+	return false;
+    }
+
+    @Override
+    public boolean isSaveAsAllowed() {
+	return false;
+    }
+
+    @Override
+    public void createPartControl(Composite parent) {
+	try {
+	    Composite buttonArea = new Composite(parent, SWT.NONE);
+	    buttonArea.setLayout(new FillLayout(SWT.HORIZONTAL));
+
+	    Button refreshButton = new Button(buttonArea, SWT.NONE);
+	    refreshButton.setText("Refresh");
+
+	    TabFolder tabFolder = new TabFolder(parent, SWT.NONE);
+
+	    TabItem fileViewerTab = new TabItem(tabFolder, SWT.NONE);
+	    fileViewerTab.setText("Original File");
+
+	    fileViewer = new ScrollableFileViewer(tabFolder);
+	    fileViewerTab.setControl(fileViewer);
+
+	    TabItem treeViewerTab = new TabItem(tabFolder, SWT.NONE);
+	    treeViewerTab.setText("Parser Tree");
+
+	    treeViewer = new ParserTreeControl(tabFolder);
+	    treeViewerTab.setControl(treeViewer);
+
+	    TabItem metricsViewerTab = new TabItem(tabFolder, SWT.NONE);
+	    metricsViewerTab.setText("Metrics");
+
+	    FileAnalysisEditorInput editorInput = (FileAnalysisEditorInput) getEditorInput();
+
+	    metricsControl = new FileMetricsControl(tabFolder, SWT.NONE,
+		    editorInput.getAnalysisRun(), editorInput.getAnalyzedCode());
+	    metricsViewerTab.setControl(metricsControl);
+
+	    HashId hashId = editorInput.getAnalyzedCode().getHashId();
+	    CodeStore codeStore = CodeStoreFactory.getFactory().getInstance();
+	    SourceCode sourceCode = codeStore.loadContent(hashId);
+	    fileViewer.setStreamAndUpdateContent(sourceCode);
+	    treeViewer
+		    .setContentAndUpdateContent(editorInput.getAnalyzedCode(),
+			    editorInput.getAnalysisRun());
+	} catch (IOException e) {
+	    logger.log(new Status(Status.ERROR, FileAnalysisEditor.class
+		    .getName(), e.getMessage(), e));
+	} catch (CodeStoreException e) {
+	    logger.log(new Status(Status.ERROR, FileAnalysisEditor.class
+		    .getName(), e.getMessage(), e));
 	}
+    }
 
-	@Override
-	public void doSave(IProgressMonitor monitor) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void doSaveAs() {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void init(IEditorSite site, IEditorInput input)
-			throws PartInitException {
-		setSite(site);
-		setInput(input);
-		setPartName(input.getName());
-	}
-
-	@Override
-	public boolean isDirty() {
-		return false;
-	}
-
-	@Override
-	public boolean isSaveAsAllowed() {
-		return false;
-	}
-
-	@Override
-	public void createPartControl(Composite parent) {
-		try {
-			Composite buttonArea = new Composite(parent, SWT.NONE);
-			buttonArea.setLayout(new FillLayout(SWT.HORIZONTAL));
-
-			Button refreshButton = new Button(buttonArea, SWT.NONE);
-			refreshButton.setText("Refresh");
-
-			TabFolder tabFolder = new TabFolder(parent, SWT.NONE);
-
-			TabItem fileViewerTab = new TabItem(tabFolder, SWT.NONE);
-			fileViewerTab.setText("Original File");
-
-			fileViewer = new ScrollableFileViewer(tabFolder);
-			fileViewerTab.setControl(fileViewer);
-
-			TabItem treeViewerTab = new TabItem(tabFolder, SWT.NONE);
-			treeViewerTab.setText("Parser Tree");
-
-			treeViewer = new ParserTreeControl(tabFolder);
-			treeViewerTab.setControl(treeViewer);
-
-			TabItem metricsViewerTab = new TabItem(tabFolder, SWT.NONE);
-			metricsViewerTab.setText("Metrics");
-
-			FileAnalysisEditorInput editorInput = (FileAnalysisEditorInput) getEditorInput();
-
-			metricsControl = new FileMetricsControl(tabFolder, SWT.NONE,
-					editorInput.getAnalysisRun(), editorInput.getAnalyzedCode());
-			metricsViewerTab.setControl(metricsControl);
-
-			HashId hashId = editorInput.getAnalyzedCode().getHashId();
-			CodeStore codeStore = CodeStoreFactory.getFactory().getInstance();
-			SourceCode sourceCode = codeStore.loadContent(hashId);
-			fileViewer.setStreamAndUpdateContent(sourceCode);
-			treeViewer
-					.setContentAndUpdateContent(editorInput.getAnalyzedCode(),
-							editorInput.getAnalysisRun());
-		} catch (IOException e) {
-			logger.log(new Status(Status.ERROR, FileAnalysisEditor.class
-					.getName(), e.getMessage(), e));
-		} catch (CodeStoreException e) {
-			logger.log(new Status(Status.ERROR, FileAnalysisEditor.class
-					.getName(), e.getMessage(), e));
-		}
-	}
-
-	@Override
-	public void setFocus() {
-		fileViewer.setFocus();
-	}
+    @Override
+    public void setFocus() {
+	fileViewer.setFocus();
+    }
 
 }

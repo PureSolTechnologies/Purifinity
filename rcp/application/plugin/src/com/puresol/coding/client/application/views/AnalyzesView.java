@@ -25,6 +25,9 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.FormAttachment;
+import org.eclipse.swt.layout.FormData;
+import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.ToolBar;
@@ -85,10 +88,23 @@ public class AnalyzesView extends ViewPart implements IJobChangeListener,
 
     @Override
     public void createPartControl(Composite parent) {
+	parent.setLayout(new FormLayout());
 	analyzesList = new Table(parent, SWT.BORDER);
+	FormData fd_analyzesList = new FormData();
+	fd_analyzesList.bottom = new FormAttachment(100);
+	fd_analyzesList.left = new FormAttachment(0);
+	analyzesList.setLayoutData(fd_analyzesList);
 	analyzesViewer = new TableViewer(analyzesList);
 
 	ToolBar toolBar = new ToolBar(parent, SWT.FLAT | SWT.RIGHT);
+	fd_analyzesList.top = new FormAttachment(toolBar, 6);
+	fd_analyzesList.right = new FormAttachment(toolBar, 0, SWT.RIGHT);
+	FormData fd_toolBar = new FormData();
+	fd_toolBar.left = new FormAttachment(0);
+	fd_toolBar.right = new FormAttachment(100);
+	fd_toolBar.bottom = new FormAttachment(0, 24);
+	fd_toolBar.top = new FormAttachment(0);
+	toolBar.setLayoutData(fd_toolBar);
 	toolBar.setToolTipText("Refreshs the list of available analyzes.");
 
 	refresh = new ToolItem(toolBar, SWT.NONE);
@@ -221,7 +237,8 @@ public class AnalyzesView extends ViewPart implements IJobChangeListener,
 	try {
 	    IHandlerService handlerService = (IHandlerService) getSite()
 		    .getService(IHandlerService.class);
-	    handlerService.executeCommand(NewAnalysisHandler.ID, null);
+	    handlerService.executeCommand(NewAnalysisHandler.class.getName(),
+		    null);
 	} catch (ExecutionException e) {
 	    logger.log(new Status(Status.ERROR, AnalyzesView.class.getName(),
 		    "Could not run new analysis!", e));

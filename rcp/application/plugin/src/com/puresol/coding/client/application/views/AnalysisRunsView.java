@@ -16,6 +16,9 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.FormAttachment;
+import org.eclipse.swt.layout.FormData;
+import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.ToolBar;
@@ -68,13 +71,26 @@ public class AnalysisRunsView extends ViewPart implements SelectionListener,
 
     @Override
     public void createPartControl(Composite parent) {
+	parent.setLayout(new FormLayout());
 
 	analysisRunsList = new Table(parent, SWT.BORDER);
+	FormData fd_analysisRunsList = new FormData();
+	fd_analysisRunsList.bottom = new FormAttachment(100);
+	fd_analysisRunsList.left = new FormAttachment(0);
+	analysisRunsList.setLayoutData(fd_analysisRunsList);
 	analysisRunsList
 		.setToolTipText("Refreshs the analysis runs for the currently selected analysis from the analysis store.");
 	analysisRunsViewer = new TableViewer(analysisRunsList);
 
 	ToolBar toolBar = new ToolBar(parent, SWT.FLAT | SWT.RIGHT);
+	fd_analysisRunsList.top = new FormAttachment(toolBar, 6);
+	fd_analysisRunsList.right = new FormAttachment(toolBar, 0, SWT.RIGHT);
+	FormData fd_toolBar = new FormData();
+	fd_toolBar.left = new FormAttachment(0);
+	fd_toolBar.right = new FormAttachment(100);
+	fd_toolBar.bottom = new FormAttachment(0, 24);
+	fd_toolBar.top = new FormAttachment(0);
+	toolBar.setLayoutData(fd_toolBar);
 	toolBar.setToolTipText("Refreshs the analysis runs for the currently selected analysis from the analysis store.");
 
 	refresh = new ToolItem(toolBar, SWT.NONE);
