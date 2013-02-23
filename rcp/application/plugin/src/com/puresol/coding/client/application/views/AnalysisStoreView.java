@@ -18,7 +18,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.part.ViewPart;
 
-import com.puresol.coding.analysis.api.Analysis;
+import com.puresol.coding.analysis.api.AnalysisProject;
 import com.puresol.coding.analysis.api.AnalysisInformation;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalysisRunInformation;
@@ -54,7 +54,7 @@ public class AnalysisStoreView extends ViewPart implements SelectionListener {
 	private Label runName;
 	private Tree parserTree;
 
-	private Analysis selectedAnalysis = null;
+	private AnalysisProject selectedAnalysis = null;
 	private AnalysisRun selectedAnalysisRun = null;
 
 	public AnalysisStoreView() {
@@ -186,7 +186,7 @@ public class AnalysisStoreView extends ViewPart implements SelectionListener {
 				selectedAnalysis = analysisStore.loadAnalysis(information
 						.getUUID());
 				selectedAnalysisRun = null;
-				Analysis analysis = analysisStore.loadAnalysis(information
+				AnalysisProject analysis = analysisStore.loadAnalysis(information
 						.getUUID());
 				analysisRunViewer.setInput(analysis.getAllRunInformation());
 			} else {

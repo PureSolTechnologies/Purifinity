@@ -11,7 +11,7 @@ import java.util.UUID;
  * @author Rick-Rainer Ludwig
  * 
  */
-public interface Analysis {
+public interface AnalysisProject {
 
     /**
      * This method returns detailed information about the analysis.

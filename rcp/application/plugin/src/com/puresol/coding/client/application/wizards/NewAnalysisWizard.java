@@ -7,7 +7,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.wizard.Wizard;
 
-import com.puresol.coding.analysis.api.Analysis;
+import com.puresol.coding.analysis.api.AnalysisProject;
 import com.puresol.coding.analysis.api.AnalysisSettings;
 import com.puresol.coding.analysis.api.AnalysisStore;
 import com.puresol.coding.analysis.api.AnalysisStoreFactory;
@@ -47,7 +47,7 @@ public class NewAnalysisWizard extends Wizard {
 		    projectName, description, searchConfiguration,
 		    new DirectoryRepositoryLocation(projectName,
 			    sourceDirectory));
-	    Analysis analysis = analysisStore.createAnalysis(analysisSettings);
+	    AnalysisProject analysis = analysisStore.createAnalysis(analysisSettings);
 
 	    AnalysisJob job = new AnalysisJob(analysis);
 	    job.schedule();

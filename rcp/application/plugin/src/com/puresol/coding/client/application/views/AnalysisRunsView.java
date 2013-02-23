@@ -27,7 +27,7 @@ import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.ViewPart;
 
-import com.puresol.coding.analysis.api.Analysis;
+import com.puresol.coding.analysis.api.AnalysisProject;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalysisRunInformation;
 import com.puresol.coding.analysis.api.ModuleStoreException;
@@ -54,7 +54,7 @@ public class AnalysisRunsView extends ViewPart implements SelectionListener,
     private final Image analysisRunDeleteImage = imageRegistry
 	    .get(ClientImages.ANALYSIS_RUN_DELETE_16x16);
 
-    private Analysis analysis;
+    private AnalysisProject analysis;
     private Table analysisRunsList;
     private TableViewer analysisRunsViewer;
     private ToolItem refresh;

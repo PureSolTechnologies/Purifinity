@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import com.puresol.coding.analysis.api.Analysis;
+import com.puresol.coding.analysis.api.AnalysisProject;
 import com.puresol.coding.analysis.api.AnalysisInformation;
 import com.puresol.coding.analysis.api.AnalysisSettings;
 import com.puresol.coding.analysis.api.AnalysisStore;
@@ -60,8 +60,8 @@ public class AnalysisStoreImpl implements AnalysisStore {
 		File[] files = storageDirectory.listFiles();
 		if (files != null) {
 			for (File analysisDirectory : files) {
-				if (AnalysisImpl.isAnalysisDirectory(analysisDirectory)) {
-					Analysis analysis = AnalysisImpl.open(analysisDirectory);
+				if (AnalysisProjectImpl.isAnalysisDirectory(analysisDirectory)) {
+					AnalysisProject analysis = AnalysisProjectImpl.open(analysisDirectory);
 					analysisInformation.add(analysis.getInformation());
 				}
 			}
@@ -70,16 +70,16 @@ public class AnalysisStoreImpl implements AnalysisStore {
 	}
 
 	@Override
-	public Analysis loadAnalysis(UUID uuid) throws ModuleStoreException {
+	public AnalysisProject loadAnalysis(UUID uuid) throws ModuleStoreException {
 		File analysisDirectory = new File(storageDirectory, uuid.toString());
-		return AnalysisImpl.open(analysisDirectory);
+		return AnalysisProjectImpl.open(analysisDirectory);
 	}
 
 	@Override
-	public Analysis createAnalysis(AnalysisSettings settings)
+	public AnalysisProject createAnalysis(AnalysisSettings settings)
 			throws ModuleStoreException {
 		UUID uuid = UUID.randomUUID();
-		return AnalysisImpl.create(new File(storageDirectory, uuid.toString()),
+		return AnalysisProjectImpl.create(new File(storageDirectory, uuid.toString()),
 				uuid, settings);
 	}
 

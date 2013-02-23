@@ -7,16 +7,16 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
-import com.puresol.coding.analysis.api.Analysis;
+import com.puresol.coding.analysis.api.AnalysisProject;
 import com.puresol.coding.client.application.Activator;
 
 public class AnalysisJob extends Job {
 
     private static final ILog logger = Activator.getDefault().getLog();
 
-    private final Analysis analysis = null;
+    private final AnalysisProject analysis = null;
 
-    public AnalysisJob(Analysis analysis) {
+    public AnalysisJob(AnalysisProject analysis) {
 	super(analysis.getInformation().getName());
     }
 
@@ -47,7 +47,7 @@ public class AnalysisJob extends Job {
 	}
     }
 
-    public Analysis getAnalysis() {
+    public AnalysisProject getAnalysis() {
 	return analysis;
     }
 }

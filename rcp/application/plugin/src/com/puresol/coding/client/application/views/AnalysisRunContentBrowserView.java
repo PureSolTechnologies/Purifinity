@@ -19,7 +19,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
 
-import com.puresol.coding.analysis.api.Analysis;
+import com.puresol.coding.analysis.api.AnalysisProject;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalyzedCode;
 import com.puresol.coding.analysis.api.HashIdFileTree;
@@ -35,7 +35,7 @@ import com.puresol.coding.client.application.editors.NotAnalyzedEditorInput;
 public class AnalysisRunContentBrowserView extends ViewPart implements
 	ISelectionListener, IDoubleClickListener, ISelectionProvider {
 
-    private Analysis analysis;
+    private AnalysisProject analysis;
     private AnalysisRun analysisRun;
     private Tree fileTree;
     private TreeViewer fileTreeViewer;

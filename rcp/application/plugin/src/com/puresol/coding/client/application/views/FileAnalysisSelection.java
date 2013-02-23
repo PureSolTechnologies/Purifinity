@@ -4,7 +4,7 @@ import java.io.File;
 
 import org.eclipse.jface.viewers.ISelection;
 
-import com.puresol.coding.analysis.api.Analysis;
+import com.puresol.coding.analysis.api.AnalysisProject;
 import com.puresol.coding.analysis.api.AnalysisRun;
 
 /**
@@ -16,11 +16,11 @@ import com.puresol.coding.analysis.api.AnalysisRun;
  */
 public class FileAnalysisSelection implements ISelection {
 
-    private final Analysis analysis;
+    private final AnalysisProject analysis;
     private final AnalysisRun analysisRun;
     private final File file;
 
-    public FileAnalysisSelection(Analysis analysis, AnalysisRun analysisRun,
+    public FileAnalysisSelection(AnalysisProject analysis, AnalysisRun analysisRun,
 	    File file) {
 	super();
 	this.analysis = analysis;
@@ -28,7 +28,7 @@ public class FileAnalysisSelection implements ISelection {
 	this.file = file;
     }
 
-    public Analysis getAnalysis() {
+    public AnalysisProject getAnalysis() {
 	return analysis;
     }
 

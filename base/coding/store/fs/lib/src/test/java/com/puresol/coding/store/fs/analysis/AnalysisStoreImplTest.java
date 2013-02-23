@@ -10,7 +10,7 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.puresol.coding.analysis.api.Analysis;
+import com.puresol.coding.analysis.api.AnalysisProject;
 import com.puresol.coding.analysis.api.AnalysisInformation;
 import com.puresol.coding.analysis.api.AnalysisSettings;
 import com.puresol.coding.analysis.api.AnalysisStore;
@@ -37,7 +37,7 @@ public class AnalysisStoreImplTest {
 	public void testCreateAndDeleteAnalysis() throws ModuleStoreException {
 		AnalysisStore store = AnalysisStoreFactory.getFactory().getInstance();
 		File sourceDirectory = new File(".");
-		Analysis analysis = store.createAnalysis(new AnalysisSettings("Name",
+		AnalysisProject analysis = store.createAnalysis(new AnalysisSettings("Name",
 				"Description", new TestFileSearchConfiguration(),
 				new DirectoryRepositoryLocation("name", sourceDirectory)));
 
@@ -62,7 +62,7 @@ public class AnalysisStoreImplTest {
 			throws ModuleStoreException {
 		AnalysisStore store = AnalysisStoreFactory.getFactory().getInstance();
 		File sourceDirectory = new File(System.getProperty("user.dir"));
-		Analysis analysis = store.createAnalysis(new AnalysisSettings("Name",
+		AnalysisProject analysis = store.createAnalysis(new AnalysisSettings("Name",
 				"Description", new TestFileSearchConfiguration(),
 				new DirectoryRepositoryLocation("name", sourceDirectory)));
 
@@ -77,7 +77,7 @@ public class AnalysisStoreImplTest {
 		assertTrue(analysisDir.exists());
 		assertTrue(analysisDir.isDirectory());
 
-		Analysis loadedAnalysis = store.loadAnalysis(information.getUUID());
+		AnalysisProject loadedAnalysis = store.loadAnalysis(information.getUUID());
 
 		assertEquals(analysis.getInformation(), loadedAnalysis.getInformation());
 		assertEquals(analysis.getSettings(), loadedAnalysis.getSettings());

@@ -12,7 +12,7 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.puresol.coding.analysis.api.Analysis;
+import com.puresol.coding.analysis.api.AnalysisProject;
 import com.puresol.coding.analysis.api.AnalysisInformation;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalysisRunInformation;
@@ -25,7 +25,7 @@ import com.puresol.coding.analysis.test.TestFileSearchConfiguration;
 public class AnalysisImplTest {
 
 	private static AnalysisStore analysisStore;
-	private static Analysis analysis;
+	private static AnalysisProject analysis;
 
 	@BeforeClass
 	public static void initialize() throws ModuleStoreException {

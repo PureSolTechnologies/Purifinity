@@ -15,7 +15,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import com.puresol.coding.analysis.api.Analysis;
+import com.puresol.coding.analysis.api.AnalysisProject;
 import com.puresol.coding.analysis.api.AnalysisInformation;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalysisRunInformation;
@@ -24,7 +24,7 @@ import com.puresol.coding.analysis.api.ModuleStoreException;
 import com.puresol.coding.analysis.impl.PersistenceUtils;
 import com.puresol.utils.FileUtilities;
 
-public class AnalysisImpl implements Analysis {
+public class AnalysisProjectImpl implements AnalysisProject {
 
 	private static final String DIRECTORY_FLAG = ".analysis";
 	private static final String SETTINGS_FILE = "analysis_settings.persist";
@@ -33,16 +33,16 @@ public class AnalysisImpl implements Analysis {
 		return new File(directory, DIRECTORY_FLAG).exists();
 	}
 
-	public static Analysis open(File analysisDirectory)
+	public static AnalysisProject open(File analysisDirectory)
 			throws ModuleStoreException {
-		AnalysisImpl analysis = new AnalysisImpl(analysisDirectory);
+		AnalysisProjectImpl analysis = new AnalysisProjectImpl(analysisDirectory);
 		analysis.open();
 		return analysis;
 	}
 
-	public static Analysis create(File analysisDirectory, UUID uuid,
+	public static AnalysisProject create(File analysisDirectory, UUID uuid,
 			AnalysisSettings settings) throws ModuleStoreException {
-		AnalysisImpl analysis = new AnalysisImpl(analysisDirectory);
+		AnalysisProjectImpl analysis = new AnalysisProjectImpl(analysisDirectory);
 		analysis.create(uuid, settings);
 		return analysis;
 	}
@@ -53,7 +53,7 @@ public class AnalysisImpl implements Analysis {
 
 	private final File analysisDirectory;
 
-	private AnalysisImpl(File analysisDirectory) {
+	private AnalysisProjectImpl(File analysisDirectory) {
 		super();
 		this.analysisDirectory = analysisDirectory;
 	}

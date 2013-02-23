@@ -33,11 +33,11 @@ public interface AnalysisStore {
      * 
      * @param uuid
      *            is the {@link UUID} of the analysis to be loaded.
-     * @return An {@link Analysis} is returned which was loaded.
+     * @return An {@link AnalysisProject} is returned which was loaded.
      * @throws ModuleStoreException
      *             is thrown for unexpected issues.
      */
-    public Analysis loadAnalysis(UUID uuid) throws ModuleStoreException;
+    public AnalysisProject loadAnalysis(UUID uuid) throws ModuleStoreException;
 
     /**
      * This method creates a new Analysis which is specified by
@@ -45,12 +45,12 @@ public interface AnalysisStore {
      * 
      * @param settings
      *            are the settings to be used for a new analysis.
-     * @return An {@link Analysis} is returned containing the analysis created
+     * @return An {@link AnalysisProject} is returned containing the analysis created
      *         before.
      * @throws ModuleStoreException
      *             is thrown for unexpected issues.
      */
-    public Analysis createAnalysis(AnalysisSettings settings)
+    public AnalysisProject createAnalysis(AnalysisSettings settings)
 	    throws ModuleStoreException;
 
     /**

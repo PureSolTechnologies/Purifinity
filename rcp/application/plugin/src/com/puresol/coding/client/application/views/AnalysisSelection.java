@@ -2,24 +2,24 @@ package com.puresol.coding.client.application.views;
 
 import org.eclipse.jface.viewers.ISelection;
 
-import com.puresol.coding.analysis.api.Analysis;
+import com.puresol.coding.analysis.api.AnalysisProject;
 
 /**
- * This class contains the selection of an {@link Analysis}.
+ * This class contains the selection of an {@link AnalysisProject}.
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
 public class AnalysisSelection implements ISelection {
 
-    private final Analysis analysis;
+    private final AnalysisProject analysis;
 
-    public AnalysisSelection(Analysis analysis) {
+    public AnalysisSelection(AnalysisProject analysis) {
 	super();
 	this.analysis = analysis;
     }
 
-    public Analysis getAnalysis() {
+    public AnalysisProject getAnalysis() {
 	return analysis;
     }
 

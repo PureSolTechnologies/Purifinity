@@ -21,7 +21,7 @@ import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.ViewPart;
 
-import com.puresol.coding.analysis.api.Analysis;
+import com.puresol.coding.analysis.api.AnalysisProject;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalyzedCode;
 import com.puresol.coding.analysis.api.ModuleStoreException;
@@ -113,16 +113,19 @@ public class AnalysisReport extends ViewPart implements ISelectionListener {
 	try {
 	    if (selection instanceof AnalysisSelection) {
 		AnalysisSelection analysisSelection = (AnalysisSelection) selection;
-		Analysis analysis = analysisSelection.getAnalysis();
+		AnalysisProject analysis = analysisSelection.getAnalysis();
 		name.setText(analysis.getInformation().getName());
 		AnalysisRun lastAnalysisRun = analysis.loadLastAnalysisRun();
-		java.util.List<AnalyzedCode> analyzedFiles = lastAnalysisRun
-			.getAnalyzedCodes();
-		numAnalyzedFiles.setText(String.valueOf(analyzedFiles.size()));
-		List<CodeLocation> failedFiles = lastAnalysisRun
-			.getFailedCodeLocations();
-		numFailedFiles.setText(String.valueOf(String
-			.valueOf(failedFiles.size())));
+		if (lastAnalysisRun != null) {
+		    java.util.List<AnalyzedCode> analyzedFiles = lastAnalysisRun
+			    .getAnalyzedCodes();
+		    numAnalyzedFiles.setText(String.valueOf(analyzedFiles
+			    .size()));
+		    List<CodeLocation> failedFiles = lastAnalysisRun
+			    .getFailedCodeLocations();
+		    numFailedFiles.setText(String.valueOf(String
+			    .valueOf(failedFiles.size())));
+		}
 	    }
 	} catch (ModuleStoreException e) {
 	    logger.log(new Status(Status.ERROR, ParserTreeControl.class
