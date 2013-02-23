@@ -78,7 +78,7 @@ public interface AnalysisProject {
      *             is thrown in cases of issues.
      * @throws InterruptedException
      */
-    public AnalysisRun runAnalysis() throws ModuleStoreException,
+    public AnalysisRun createAnalysisRun() throws ModuleStoreException,
 	    InterruptedException;
 
     /**

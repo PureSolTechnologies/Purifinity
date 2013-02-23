@@ -72,7 +72,7 @@ public class AnalysisImplTest {
 	@Test
 	@Ignore("For tests, we do not have a bundle context!")
 	public void testCreateRun() throws Exception {
-		AnalysisRun analysisRun = analysis.runAnalysis();
+		AnalysisRun analysisRun = analysis.createAnalysisRun();
 		assertNotNull(analysisRun);
 		AnalysisRun run = analysis.loadLastAnalysisRun();
 		assertNotNull(run);

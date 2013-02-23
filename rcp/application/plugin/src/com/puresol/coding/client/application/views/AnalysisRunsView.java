@@ -36,7 +36,7 @@ import com.puresol.coding.client.application.ClientImages;
 import com.puresol.coding.client.application.content.AnalysisRunListContentProvider;
 import com.puresol.coding.client.application.content.AnalysisRunListLabelProvider;
 import com.puresol.coding.client.application.controls.ParserTreeControl;
-import com.puresol.coding.client.application.jobs.EvaluationJob;
+import com.puresol.coding.client.application.jobs.AnalysisJob;
 
 public class AnalysisRunsView extends ViewPart implements SelectionListener,
 	ISelectionProvider, ISelectionListener {
@@ -172,18 +172,8 @@ public class AnalysisRunsView extends ViewPart implements SelectionListener,
     }
 
     private void addAnalysisRun() {
-	try {
-	    AnalysisRun analysisRun = analysis.runAnalysis();
-	    EvaluationJob evaluationJob = new EvaluationJob(analysisRun);
-	    evaluationJob.schedule();
-	    refreshAnalysisRunList();
-	} catch (ModuleStoreException e) {
-	    logger.log(new Status(Status.ERROR, AnalysisRunsView.class
-		    .getName(), "Could not start new analysis run!", e));
-	} catch (InterruptedException e) {
-	    logger.log(new Status(Status.ERROR, AnalysisRunsView.class
-		    .getName(), "Analysis was interrupted!", e));
-	}
+	AnalysisJob job = new AnalysisJob(analysis);
+	job.schedule();
     }
 
     private void editAnalysisRun() {
