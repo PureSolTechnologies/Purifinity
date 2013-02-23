@@ -46,6 +46,7 @@
             </separator>
             <command
                   commandId="org.eclipse.ui.file.print"
+                  icon="icons/16x16/printer.png"
                   id="print"
                   label="Print..."
                   mnemonic="P"
@@ -57,6 +58,7 @@
             </separator>
             <command
                   commandId="com.puresol.coding.client.application.handler.SwitchWorkspaceHandler"
+                  icon="icons/16x16/arrow_switch.png"
                   id="switchWorkspace"
                   label="Switch Workspace..."
                   mnemonic="W"
@@ -64,6 +66,7 @@
             </command>
             <command
                   commandId="org.eclipse.ui.file.restartWorkbench"
+                  icon="icons/16x16/arrow_refresh.png"
                   id="restart"
                   label="Restart"
                   style="push">
@@ -85,6 +88,7 @@
             </separator>
             <command
                   commandId="org.eclipse.ui.file.exit"
+                  icon="icons/16x16/door_out.png"
                   id="Exit"
                   label="Exit"
                   mnemonic="x"
@@ -189,10 +193,10 @@
          point="org.eclipse.ui.views">
       <view
             category="com.puresol.coding.application.AnalysisCategory"
-            class="com.puresol.coding.client.application.views.AnalyzesView"
+            class="com.puresol.coding.client.application.views.AnalysisProjectsView"
             icon="icons/16x16/analyzes_view.png"
-            id="com.puresol.coding.client.application.views.AnalyzesView"
-            name="Analyzes"
+            id="com.puresol.coding.client.application.views.AnalysisProjectsView"
+            name="Analysis Projects"
             restorable="true">
       </view>
       <view
@@ -269,8 +273,8 @@
    <extension
          point="org.eclipse.ui.commands">
       <command
-            defaultHandler="com.puresol.coding.client.application.handler.NewAnalysisHandler"
-            id="com.puresol.coding.client.application.handler.NewAnalysisHandler"
+            defaultHandler="com.puresol.coding.client.application.handler.NewAnalysisProjectHandler"
+            id="com.puresol.coding.client.application.handler.NewAnalysisProjectHandler"
             name="New Analysis">
       </command>
       <command

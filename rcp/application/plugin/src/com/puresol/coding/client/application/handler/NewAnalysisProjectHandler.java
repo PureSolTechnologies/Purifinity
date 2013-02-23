@@ -12,7 +12,8 @@ import org.eclipse.ui.PlatformUI;
 
 import com.puresol.coding.client.application.wizards.NewAnalysisWizard;
 
-public class NewAnalysisHandler extends AbstractHandler implements IHandler {
+public class NewAnalysisProjectHandler extends AbstractHandler implements
+	IHandler {
 
     private final ListenerList listeners = new ListenerList();
 
@@ -30,8 +31,8 @@ public class NewAnalysisHandler extends AbstractHandler implements IHandler {
     public Object execute(ExecutionEvent event) throws ExecutionException {
 	Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
 		.getShell();
-	WizardDialog wizardDialog = new WizardDialog(shell,
-		new NewAnalysisWizard());
+	NewAnalysisWizard wizard = new NewAnalysisWizard();
+	WizardDialog wizardDialog = new WizardDialog(shell, wizard);
 	wizardDialog.open();
 	return null;
     }

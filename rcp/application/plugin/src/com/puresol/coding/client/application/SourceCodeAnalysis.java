@@ -1,5 +1,6 @@
 package com.puresol.coding.client.application;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -44,9 +45,18 @@ public class SourceCodeAnalysis implements IApplication {
     }
 
     private boolean changeWorkspace() throws IOException, MalformedURLException {
+	boolean needNewLocation = false;
 	Location location = Platform.getInstanceLocation();
 	String savedLocation = PickWorkspaceDialog.getWorkspaceLocation();
 	if (savedLocation == null) {
+	    needNewLocation = true;
+	} else {
+	    File directory = new File(savedLocation);
+	    if ((!directory.exists()) || (!directory.isDirectory())) {
+		needNewLocation = true;
+	    }
+	}
+	if (needNewLocation) {
 	    PickWorkspaceDialog dialog = new PickWorkspaceDialog(false);
 	    if (dialog.open() == PickWorkspaceDialog.CANCEL) {
 		return false;

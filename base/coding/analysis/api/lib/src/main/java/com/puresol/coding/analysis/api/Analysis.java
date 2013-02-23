@@ -3,10 +3,8 @@ package com.puresol.coding.analysis.api;
 import java.util.List;
 import java.util.UUID;
 
-
-
 /**
- * This is the central interface for a project analyzer. This analyzer handles a
+ * This is the central interface for a analysis project. This analyzer handles a
  * whole software project. It is responsible for storing and loading the
  * different analysis runs.
  * 
@@ -65,8 +63,7 @@ public interface Analysis {
      * @throws ModuleStoreException
      *             is thrown in cases of issues.
      */
-    public AnalysisRun loadAnalysisRun(UUID uuid)
-	    throws ModuleStoreException;
+    public AnalysisRun loadAnalysisRun(UUID uuid) throws ModuleStoreException;
 
     /**
      * A new analysis is run with this method. After the run a new

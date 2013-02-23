@@ -173,7 +173,7 @@ public class AnalysisStoreView extends ViewPart implements SelectionListener {
 		} catch (ModuleStoreException e) {
 			logger.log(new Status(
 					Status.ERROR,
-					AnalyzesView.class.getName(),
+					AnalysisProjectsView.class.getName(),
 					"Could not retrieve available analyzes from analysis store!",
 					e));
 		}
@@ -196,7 +196,7 @@ public class AnalysisStoreView extends ViewPart implements SelectionListener {
 		} catch (ModuleStoreException e) {
 			logger.log(new Status(
 					Status.ERROR,
-					AnalyzesView.class.getName(),
+					AnalysisProjectsView.class.getName(),
 					"Could not retrieve available analysis runs from analysis store!",
 					e));
 		}
@@ -218,7 +218,7 @@ public class AnalysisStoreView extends ViewPart implements SelectionListener {
 		} catch (ModuleStoreException e) {
 			logger.log(new Status(
 					Status.ERROR,
-					AnalyzesView.class.getName(),
+					AnalysisProjectsView.class.getName(),
 					"Could not retrieve available analysis runs from analysis store!",
 					e));
 		}

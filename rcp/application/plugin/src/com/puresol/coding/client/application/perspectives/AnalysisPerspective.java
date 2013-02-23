@@ -6,7 +6,7 @@ import org.eclipse.ui.IPerspectiveFactory;
 import com.puresol.coding.client.application.views.AnalysisReport;
 import com.puresol.coding.client.application.views.AnalysisRunContentBrowserView;
 import com.puresol.coding.client.application.views.AnalysisRunsView;
-import com.puresol.coding.client.application.views.AnalyzesView;
+import com.puresol.coding.client.application.views.AnalysisProjectsView;
 
 public class AnalysisPerspective implements IPerspectiveFactory {
 
@@ -17,9 +17,9 @@ public class AnalysisPerspective implements IPerspectiveFactory {
 		IPageLayout.LEFT, 0.45f, layout.getEditorArea());
 	layout.addView(AnalysisReport.class.getName(), IPageLayout.BOTTOM,
 		0.66f, layout.getEditorArea());
-	layout.addView(AnalyzesView.class.getName(), IPageLayout.LEFT, 0.3f,
+	layout.addView(AnalysisProjectsView.class.getName(), IPageLayout.LEFT, 0.3f,
 		AnalysisRunContentBrowserView.class.getName());
 	layout.addView(AnalysisRunsView.class.getName(), IPageLayout.BOTTOM,
-		0.33f, AnalyzesView.class.getName());
+		0.33f, AnalysisProjectsView.class.getName());
     }
 }

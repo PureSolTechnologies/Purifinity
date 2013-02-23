@@ -44,8 +44,8 @@ import com.puresol.coding.client.application.Activator;
 import com.puresol.coding.client.application.ClientImages;
 import com.puresol.coding.client.application.content.AnalysisListContentProvider;
 import com.puresol.coding.client.application.content.AnalysisListLabelProvider;
-import com.puresol.coding.client.application.handler.NewAnalysisHandler;
-import com.puresol.coding.client.application.jobs.NewAnalysisJob;
+import com.puresol.coding.client.application.handler.NewAnalysisProjectHandler;
+import com.puresol.coding.client.application.jobs.AnalysisJob;
 
 /**
  * This view shows a list of all analysis which are opened and the tree of files
@@ -54,7 +54,7 @@ import com.puresol.coding.client.application.jobs.NewAnalysisJob;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class AnalyzesView extends ViewPart implements IJobChangeListener,
+public class AnalysisProjectsView extends ViewPart implements IJobChangeListener,
 	ISelectionProvider, SelectionListener {
 
     private static final ILog logger = Activator.getDefault().getLog();
@@ -72,7 +72,7 @@ public class AnalyzesView extends ViewPart implements IJobChangeListener,
     private final AnalysisStore store = AnalysisStoreFactory.getFactory()
 	    .getInstance();
 
-    public AnalyzesView() {
+    public AnalysisProjectsView() {
 	super();
     }
 
@@ -157,7 +157,7 @@ public class AnalyzesView extends ViewPart implements IJobChangeListener,
     @Override
     public void done(IJobChangeEvent event) {
 	Job job = event.getJob();
-	if (job.getClass().equals(NewAnalysisJob.class)) {
+	if (job.getClass().equals(AnalysisJob.class)) {
 	    updateAnalysisList();
 	}
     }
@@ -237,19 +237,19 @@ public class AnalyzesView extends ViewPart implements IJobChangeListener,
 	try {
 	    IHandlerService handlerService = (IHandlerService) getSite()
 		    .getService(IHandlerService.class);
-	    handlerService.executeCommand(NewAnalysisHandler.class.getName(),
+	    handlerService.executeCommand(NewAnalysisProjectHandler.class.getName(),
 		    null);
 	} catch (ExecutionException e) {
-	    logger.log(new Status(Status.ERROR, AnalyzesView.class.getName(),
+	    logger.log(new Status(Status.ERROR, AnalysisProjectsView.class.getName(),
 		    "Could not run new analysis!", e));
 	} catch (NotDefinedException e) {
-	    logger.log(new Status(Status.ERROR, AnalyzesView.class.getName(),
+	    logger.log(new Status(Status.ERROR, AnalysisProjectsView.class.getName(),
 		    "Could not run new analysis!", e));
 	} catch (NotEnabledException e) {
-	    logger.log(new Status(Status.ERROR, AnalyzesView.class.getName(),
+	    logger.log(new Status(Status.ERROR, AnalysisProjectsView.class.getName(),
 		    "Could not run new analysis!", e));
 	} catch (NotHandledException e) {
-	    logger.log(new Status(Status.ERROR, AnalyzesView.class.getName(),
+	    logger.log(new Status(Status.ERROR, AnalysisProjectsView.class.getName(),
 		    "Could not run new analysis!", e));
 	}
     }
@@ -269,7 +269,7 @@ public class AnalyzesView extends ViewPart implements IJobChangeListener,
 		refreshAnalysisList();
 	    }
 	} catch (ModuleStoreException e) {
-	    logger.log(new Status(Status.ERROR, AnalyzesView.class.getName(),
+	    logger.log(new Status(Status.ERROR, AnalysisProjectsView.class.getName(),
 		    "Could not retrieve analysis from analysis store!", e));
 	}
     }
@@ -280,7 +280,7 @@ public class AnalyzesView extends ViewPart implements IJobChangeListener,
 		analyzesViewer.setInput(store.getAllAnalysisInformation());
 	    }
 	} catch (ModuleStoreException e) {
-	    logger.log(new Status(Status.ERROR, AnalyzesView.class.getName(),
+	    logger.log(new Status(Status.ERROR, AnalysisProjectsView.class.getName(),
 		    "Could not retrieve list of analyzes from analysis store!",
 		    e));
 	}
@@ -295,7 +295,7 @@ public class AnalyzesView extends ViewPart implements IJobChangeListener,
 	    setSelection(new AnalysisSelection(store.loadAnalysis(information
 		    .getUUID())));
 	} catch (ModuleStoreException e) {
-	    logger.log(new Status(Status.ERROR, AnalyzesView.class.getName(),
+	    logger.log(new Status(Status.ERROR, AnalysisProjectsView.class.getName(),
 		    "Could not retrieve analysis from analysis store!", e));
 	}
     }
