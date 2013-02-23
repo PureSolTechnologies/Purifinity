@@ -18,6 +18,9 @@ public class TreeUtils {
      */
     public static <T extends Tree<T>> int countNodes(T tree) {
 	int result = 0;
+	if (tree == null) {
+	    return result;
+	}
 	List<T> children = tree.getChildren();
 	for (T node : children) {
 	    result += countNodes(node);

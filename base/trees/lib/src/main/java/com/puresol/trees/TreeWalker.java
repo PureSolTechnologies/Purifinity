@@ -40,7 +40,9 @@ public class TreeWalker<T extends Tree<T>> {
      * @param treeVisitor
      */
     public void walk(TreeVisitor<T> treeVisitor) {
-	walk(tree, treeVisitor);
+	if (tree != null) {
+	    walk(tree, treeVisitor);
+	}
     }
 
     /**
@@ -72,7 +74,9 @@ public class TreeWalker<T extends Tree<T>> {
      * @param treeVisitor
      */
     public void walkBackward(TreeVisitor<T> treeVisitor) {
-	walkBackward(tree, treeVisitor);
+	if (tree != null) {
+	    walkBackward(tree, treeVisitor);
+	}
     }
 
     private WalkingAction walkBackward(T tree, TreeVisitor<T> walkerClient) {

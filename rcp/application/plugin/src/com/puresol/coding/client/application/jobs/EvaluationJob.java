@@ -55,11 +55,15 @@ public class EvaluationJob extends Job {
 				.getName(), "Could not run evaluation '"
 				+ evaluator.getInformation().getName() + "'!",
 				e));
+			monitor.done();
+			return Status.CANCEL_STATUS;
 		    } catch (Exception e) {
 			logger.log(new Status(Status.ERROR, EvaluationJob.class
 				.getName(), "Could not run evaluation '"
 				+ evaluator.getInformation().getName() + "'!",
 				e));
+			monitor.done();
+			return Status.CANCEL_STATUS;
 		    }
 		    evaluated = true;
 		}
