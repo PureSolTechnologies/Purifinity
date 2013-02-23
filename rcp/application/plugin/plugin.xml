@@ -228,9 +228,16 @@
       </view>
       <view
             category="com.puresol.coding.application.AnalysisCategory"
-            class="com.puresol.coding.client.application.views.SupportedLanguages"
-            id="com.puresol.coding.client.application.views.SupportedLanguages"
-            name="Supported Languages"
+            class="com.puresol.coding.client.application.views.AvailableLanguagesView"
+            id="com.puresol.coding.client.application.views.AvailableLanguagesView"
+            name="Available Languages"
+            restorable="true">
+      </view>
+      <view
+            category="com.puresol.coding.application.AnalysisCategory"
+            class="com.puresol.coding.client.application.views.AvailableEvaluatorsView"
+            id="com.puresol.coding.client.application.views.AvailableEvaluatorsView"
+            name="Available Evaluators"
             restorable="true">
       </view>
       <category
