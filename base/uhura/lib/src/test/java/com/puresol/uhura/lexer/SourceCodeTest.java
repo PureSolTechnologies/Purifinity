@@ -28,7 +28,7 @@ public class SourceCodeTest {
 		.classToRelativePackagePath(SourceCodeTest.class).getPath());
 	assertTrue(file.exists());
 	SourceFileLocation fileSource = new SourceFileLocation(file);
-	SourceCode sourceCode = fileSource.load();
+	SourceCode sourceCode = fileSource.loadSourceCode();
 	assertNotNull(sourceCode);
 	List<SourceCodeLine> lines = sourceCode.getLines();
 	String sourceString = FileUtilities.readFileToString(file);

@@ -70,7 +70,7 @@ public class FortranAnalyzer implements CodeAnalyzer {
 	    Date date = new Date();
 	    StopWatch watch = new StopWatch();
 	    watch.start();
-	    SourceCode sourceCode = sourceCodeLocation.load();
+	    SourceCode sourceCode = sourceCodeLocation.loadSourceCode();
 	    TokenStream tokenStream = preConditioningAndLexing(sourceCode);
 	    Parser parser = grammar.getParser();
 	    ParserTree parserTree = parser.parse(tokenStream);

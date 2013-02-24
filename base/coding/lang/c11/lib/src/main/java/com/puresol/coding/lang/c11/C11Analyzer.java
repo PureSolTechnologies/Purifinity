@@ -60,7 +60,7 @@ public class C11Analyzer implements CodeAnalyzer {
 			fileAnalysis = null;
 			Date date = new Date();
 			StopWatch watch = new StopWatch();
-			SourceCode sourceCode = sourceCodeLocation.load();
+			SourceCode sourceCode = sourceCodeLocation.loadSourceCode();
 			watch.start();
 			PackratParser packratParser = new PackratParser(grammar);
 			ParserTree parserTree = packratParser.parse(sourceCode);

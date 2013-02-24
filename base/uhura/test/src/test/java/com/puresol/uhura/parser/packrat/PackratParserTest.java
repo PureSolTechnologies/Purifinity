@@ -43,7 +43,7 @@ public class PackratParserTest {
     private ParserTree parseText(Grammar grammar, String text) throws Exception {
 	PackratParser parser = new PackratParser(grammar);
 	FixedCodeLocation codeLocation = new FixedCodeLocation(text);
-	SourceCode sourceCode = codeLocation.load();
+	SourceCode sourceCode = codeLocation.loadSourceCode();
 	ParserTree parseTree = parser.parse(sourceCode);
 	assertNotNull(parseTree);
 	checkForCorrectParents(parseTree);
@@ -159,7 +159,7 @@ public class PackratParserTest {
 	IntrospectionUtilities.setField(parser, "sourceLineReferences",
 		references);
 	IntrospectionUtilities.setField(parser, "sourceCode",
-		new FixedCodeLocation(sampleText).load());
+		new FixedCodeLocation(sampleText).loadSourceCode());
 	/*
 	 * process some white spaces...
 	 */

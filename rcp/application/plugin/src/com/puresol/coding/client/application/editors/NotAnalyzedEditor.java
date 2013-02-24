@@ -61,7 +61,7 @@ public class NotAnalyzedEditor extends EditorPart {
 		.findFile(editorInput.getFile());
 	CodeStore fileStore = CodeStoreFactory.getFactory().getInstance();
 	try {
-	    SourceCode sourceCode = fileStore.loadContent(hashIdFile
+	    SourceCode sourceCode = fileStore.readSourceCode(hashIdFile
 		    .getHashId());
 	    text.setStreamAndUpdateContent(sourceCode);
 	} catch (CodeStoreException e) {

@@ -3,9 +3,6 @@ package com.puresol.coding.analysis.api;
 import java.util.List;
 import java.util.UUID;
 
-
-
-
 /**
  * This is the central interface to access the delivered analysis store. The
  * analysis store might be an implementation of a simple file system base store,
@@ -22,11 +19,11 @@ public interface AnalysisStore {
      * 
      * @return A {@link List} of {@link AnalysisInformation} is returned
      *         containing all available analysis.
-     * @throws ModuleStoreException
+     * @throws AnalysisStoreException
      *             is thrown in cases of issues.
      */
     public List<AnalysisInformation> getAllAnalysisInformation()
-	    throws ModuleStoreException;
+	    throws AnalysisStoreException;
 
     /**
      * This method is used to load a single Analysis by {@link UUID}.
@@ -34,10 +31,11 @@ public interface AnalysisStore {
      * @param uuid
      *            is the {@link UUID} of the analysis to be loaded.
      * @return An {@link AnalysisProject} is returned which was loaded.
-     * @throws ModuleStoreException
+     * @throws AnalysisStoreException
      *             is thrown for unexpected issues.
      */
-    public AnalysisProject loadAnalysis(UUID uuid) throws ModuleStoreException;
+    public AnalysisProject loadAnalysis(UUID uuid)
+	    throws AnalysisStoreException;
 
     /**
      * This method creates a new Analysis which is specified by
@@ -45,21 +43,21 @@ public interface AnalysisStore {
      * 
      * @param settings
      *            are the settings to be used for a new analysis.
-     * @return An {@link AnalysisProject} is returned containing the analysis created
-     *         before.
-     * @throws ModuleStoreException
+     * @return An {@link AnalysisProject} is returned containing the analysis
+     *         created before.
+     * @throws AnalysisStoreException
      *             is thrown for unexpected issues.
      */
     public AnalysisProject createAnalysis(AnalysisSettings settings)
-	    throws ModuleStoreException;
+	    throws AnalysisStoreException;
 
     /**
      * This method deletes an analysis from the store.
      * 
      * @param uuid
      *            is the identifier of the analysis to be deleted.
-     * @throws ModuleStoreException
+     * @throws AnalysisStoreException
      *             is thrown in cases of issues.
      */
-    public void removeAnalysis(UUID uuid) throws ModuleStoreException;
+    public void removeAnalysis(UUID uuid) throws AnalysisStoreException;
 }

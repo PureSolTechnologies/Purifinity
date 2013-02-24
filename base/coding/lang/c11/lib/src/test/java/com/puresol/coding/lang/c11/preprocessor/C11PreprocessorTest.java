@@ -28,7 +28,7 @@ public class C11PreprocessorTest {
 	File directory = new File(
 		"src/test/resources/com/puresol/coding/lang/c11/preprocessor/files");
 	SourceCode sourceCode = new SourceFileLocation(new File(directory,
-		"FileWithoutMacros.txt")).load();
+		"FileWithoutMacros.txt")).loadSourceCode();
 	SourceCode preProcessedSourceCode = new C11Preprocessor()
 		.process(sourceCode);
 	assertEquals(sourceCode, preProcessedSourceCode);
@@ -40,9 +40,9 @@ public class C11PreprocessorTest {
 	File directory = new File(
 		"src/test/resources/com/puresol/coding/lang/c11/preprocessor/files");
 	SourceCode sourceCode = new SourceFileLocation(new File(directory,
-		"SingleIncludeMacro.txt")).load();
+		"SingleIncludeMacro.txt")).loadSourceCode();
 	SourceCode includedSourceCode = new SourceFileLocation(new File(
-		directory, "FileWithoutMacros.txt")).load();
+		directory, "FileWithoutMacros.txt")).loadSourceCode();
 	SourceCode preProcessedSourceCode = new C11Preprocessor()
 		.process(sourceCode);
 	assertEquals(includedSourceCode, preProcessedSourceCode);
@@ -55,14 +55,14 @@ public class C11PreprocessorTest {
 		"src/test/resources/com/puresol/coding/lang/c11/preprocessor/files");
 	CodeLocation source = new SourceFileLocation(new File(directory,
 		"MultipleIncludeMacros.txt"));
-	SourceCode sourceCode = source.load();
+	SourceCode sourceCode = source.loadSourceCode();
 	SourceCode preProcessedSourceCode = new C11Preprocessor()
 		.process(sourceCode);
 
 	SourceCode sourceWithoutMacros = new SourceFileLocation(new File(
-		directory, "FileWithoutMacros.txt")).load();
+		directory, "FileWithoutMacros.txt")).loadSourceCode();
 	SourceCode sourceWithoutMacros2 = new SourceFileLocation(new File(
-		directory, "FileWithoutMacros2.txt")).load();
+		directory, "FileWithoutMacros2.txt")).loadSourceCode();
 
 	SourceCode expected = new SourceCode();
 	expected.addSourceCode(sourceWithoutMacros);
@@ -83,14 +83,14 @@ public class C11PreprocessorTest {
 	File directory = new File(
 		"src/test/resources/com/puresol/coding/lang/c11/preprocessor/files");
 	File sourceFile = new File(directory, "RecursiveIncludeMacros1.txt");
-	SourceCode sourceCode = new SourceFileLocation(sourceFile).load();
+	SourceCode sourceCode = new SourceFileLocation(sourceFile).loadSourceCode();
 	SourceCode preProcessedSourceCode = new C11Preprocessor()
 		.process(sourceCode);
 
 	SourceCode sourceWithoutMacros = new SourceFileLocation(new File(
-		directory, "FileWithoutMacros.txt")).load();
+		directory, "FileWithoutMacros.txt")).loadSourceCode();
 	SourceCode sourceWithoutMacros2 = new SourceFileLocation(new File(
-		directory, "FileWithoutMacros2.txt")).load();
+		directory, "FileWithoutMacros2.txt")).loadSourceCode();
 
 	SourceCode expected = new SourceCode();
 	File file = new File(directory, "RecursiveIncludeMacros3.txt");
@@ -107,7 +107,7 @@ public class C11PreprocessorTest {
 	File directory = new File(
 		"src/test/resources/com/puresol/coding/lang/c11/preprocessor/files");
 	File sourceFile = new File(directory, "SimpleDefineTest.txt");
-	SourceCode sourceCode = new SourceFileLocation(sourceFile).load();
+	SourceCode sourceCode = new SourceFileLocation(sourceFile).loadSourceCode();
 	SourceCode preProcessedSourceCode = new C11Preprocessor()
 		.process(sourceCode);
 
@@ -127,7 +127,7 @@ public class C11PreprocessorTest {
 	File directory = new File(
 		"src/test/resources/com/puresol/coding/lang/c11/preprocessor/files");
 	File sourceFile = new File(directory, "ObjectLikeDefineTest.txt");
-	SourceCode sourceCode = new SourceFileLocation(sourceFile).load();
+	SourceCode sourceCode = new SourceFileLocation(sourceFile).loadSourceCode();
 	SourceCode preProcessedSourceCode = new C11Preprocessor()
 		.process(sourceCode);
 
@@ -145,7 +145,7 @@ public class C11PreprocessorTest {
 		"src/test/resources/com/puresol/coding/lang/c11/preprocessor/files");
 	File sourceFile = new File(directory,
 		"SimpleFunctionLikeDefineTest.txt");
-	SourceCode sourceCode = new SourceFileLocation(sourceFile).load();
+	SourceCode sourceCode = new SourceFileLocation(sourceFile).loadSourceCode();
 	SourceCode preProcessedSourceCode = new C11Preprocessor()
 		.process(sourceCode);
 
@@ -163,7 +163,7 @@ public class C11PreprocessorTest {
 		"src/test/resources/com/puresol/coding/lang/c11/preprocessor/files");
 	File sourceFile = new File(directory,
 		"FunctionLikeDefineTestWithMultipleLinesAndComment.txt");
-	SourceCode sourceCode = new SourceFileLocation(sourceFile).load();
+	SourceCode sourceCode = new SourceFileLocation(sourceFile).loadSourceCode();
 	SourceCode preProcessedSourceCode = new C11Preprocessor()
 		.process(sourceCode);
 
@@ -190,7 +190,7 @@ public class C11PreprocessorTest {
 	File directory = new File(
 		"src/test/resources/com/puresol/coding/lang/c11/preprocessor/files");
 	File sourceFile = new File(directory, "SimpleIfTest.txt");
-	SourceCode sourceCode = new SourceFileLocation(sourceFile).load();
+	SourceCode sourceCode = new SourceFileLocation(sourceFile).loadSourceCode();
 	SourceCode preProcessedSourceCode = new C11Preprocessor()
 		.process(sourceCode);
 
@@ -211,7 +211,7 @@ public class C11PreprocessorTest {
 	File directory = new File(
 		"src/test/resources/com/puresol/coding/lang/c11/preprocessor/files");
 	File sourceFile = new File(directory, "ComplexIfTest.txt");
-	SourceCode sourceCode = new SourceFileLocation(sourceFile).load();
+	SourceCode sourceCode = new SourceFileLocation(sourceFile).loadSourceCode();
 	SourceCode preProcessedSourceCode = new C11Preprocessor()
 		.process(sourceCode);
 

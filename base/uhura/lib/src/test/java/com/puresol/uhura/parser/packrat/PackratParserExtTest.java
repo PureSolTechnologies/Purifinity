@@ -36,7 +36,7 @@ public class PackratParserExtTest {
 			.getGrammar();
 		assertNotNull(grammar);
 		PackratParser parser = new PackratParser(grammar);
-		ParserTree parseTree = parser.parse(source.load());
+		ParserTree parseTree = parser.parse(source.loadSourceCode());
 		assertNotNull(parseTree);
 		TreePrinter printer = new TreePrinter(System.out);
 		printer.println(parseTree);

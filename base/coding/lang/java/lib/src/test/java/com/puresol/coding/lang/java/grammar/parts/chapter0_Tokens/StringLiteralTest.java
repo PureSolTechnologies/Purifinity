@@ -15,7 +15,7 @@ public class StringLiteralTest {
     public void test() throws Exception {
 	Lexer lexer = JavaGrammar.getInstance().getLexer();
 	TokenStream tokenStream = lexer.lex(new FixedCodeLocation("\"String\"")
-		.load());
+		.loadSourceCode());
 	assertEquals(1, tokenStream.size());
 	assertEquals("StringLiteral", tokenStream.get(0).getName());
     }
@@ -24,7 +24,7 @@ public class StringLiteralTest {
     public void test2() throws Exception {
 	Lexer lexer = JavaGrammar.getInstance().getLexer();
 	TokenStream tokenStream = lexer.lex(new FixedCodeLocation(
-		"\"Test \\\"String\\\" Test\"").load());
+		"\"Test \\\"String\\\" Test\"").loadSourceCode());
 	assertEquals(1, tokenStream.size());
 	assertEquals("StringLiteral", tokenStream.get(0).getName());
     }
@@ -33,7 +33,7 @@ public class StringLiteralTest {
     public void test3() throws Exception {
 	Lexer lexer = JavaGrammar.getInstance().getLexer();
 	TokenStream tokenStream = lexer.lex(new FixedCodeLocation(
-		"\"Test \\\"String\\\" Test\" \"2. String\"").load());
+		"\"Test \\\"String\\\" Test\" \"2. String\"").loadSourceCode());
 	assertEquals(3, tokenStream.size());
 	assertEquals("StringLiteral", tokenStream.get(0).getName());
 	assertEquals("WhiteSpace", tokenStream.get(1).getName());

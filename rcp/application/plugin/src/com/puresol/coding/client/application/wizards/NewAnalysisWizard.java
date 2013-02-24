@@ -10,9 +10,9 @@ import org.eclipse.jface.wizard.Wizard;
 import com.puresol.coding.analysis.api.AnalysisProject;
 import com.puresol.coding.analysis.api.AnalysisSettings;
 import com.puresol.coding.analysis.api.AnalysisStore;
+import com.puresol.coding.analysis.api.AnalysisStoreException;
 import com.puresol.coding.analysis.api.AnalysisStoreFactory;
 import com.puresol.coding.analysis.api.DirectoryRepositoryLocation;
-import com.puresol.coding.analysis.api.ModuleStoreException;
 import com.puresol.coding.client.application.Activator;
 import com.puresol.coding.client.application.jobs.AnalysisJob;
 import com.puresol.coding.client.application.utils.PreferencesUtils;
@@ -47,12 +47,13 @@ public class NewAnalysisWizard extends Wizard {
 		    projectName, description, searchConfiguration,
 		    new DirectoryRepositoryLocation(projectName,
 			    sourceDirectory));
-	    AnalysisProject analysis = analysisStore.createAnalysis(analysisSettings);
+	    AnalysisProject analysis = analysisStore
+		    .createAnalysis(analysisSettings);
 
 	    AnalysisJob job = new AnalysisJob(analysis);
 	    job.schedule();
 	    return true;
-	} catch (ModuleStoreException e) {
+	} catch (AnalysisStoreException e) {
 	    logger.log(new Status(Status.ERROR, Activator.getDefault()
 		    .getBundle().getSymbolicName(),
 		    "Could not create new analysis project.", e));

@@ -121,7 +121,7 @@ public class FortranPreConditionerTest {
 		"src/test/resources/com/puresol/coding/lang/fortran/samples/FixedFormSample.f");
 	assertTrue(file.exists());
 	FortranPreConditioner fixedFormFile = new FortranPreConditioner(
-		new SourceFileLocation(file).load());
+		new SourceFileLocation(file).loadSourceCode());
 	assertTrue(fixedFormFile.isValidFixedForm());
     }
 
@@ -131,7 +131,7 @@ public class FortranPreConditionerTest {
 		"src/test/resources/com/puresol/coding/lang/fortran/samples/FixedFormSample.f");
 	assertTrue(file.exists());
 	FortranPreConditioner fixedFormFile = new FortranPreConditioner(
-		new SourceFileLocation(file).load());
+		new SourceFileLocation(file).loadSourceCode());
 	TokenStream tokenStream = fixedFormFile.scan(FortranGrammar
 		.getInstance().getLexer());
 	for (Token token : tokenStream) {

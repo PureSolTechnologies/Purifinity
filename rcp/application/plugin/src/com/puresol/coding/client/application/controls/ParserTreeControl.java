@@ -58,7 +58,7 @@ public class ParserTreeControl extends Composite {
 			lblNewLabel.setText(analysisRun.getInformation()
 					.getAnalysisInformation().getName()
 					+ ": "
-					+ analyzedCode.getLocation()
+					+ analyzedCode.getSourceLocation()
 							.getHumanReadableLocationString());
 			treeViewer.setInput(codeAnalysis.getParserTree());
 		} else {

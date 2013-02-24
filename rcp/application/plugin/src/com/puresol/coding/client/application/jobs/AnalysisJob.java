@@ -13,7 +13,7 @@ import org.eclipse.core.runtime.jobs.Job;
 
 import com.puresol.coding.analysis.api.AnalysisProject;
 import com.puresol.coding.analysis.api.AnalysisRun;
-import com.puresol.coding.analysis.api.ModuleStoreException;
+import com.puresol.coding.analysis.api.AnalysisStoreException;
 import com.puresol.coding.client.application.Activator;
 import com.puresol.utils.progress.ProgressObserver;
 
@@ -49,7 +49,7 @@ public class AnalysisJob extends Job implements ProgressObserver<AnalysisRun> {
 	    logger.log(new Status(Status.INFO, AnalysisJob.class.getName(),
 		    "Analysis was cancelled!", e));
 	    return Status.CANCEL_STATUS;
-	} catch (ModuleStoreException e) {
+	} catch (AnalysisStoreException e) {
 	    logger.log(new Status(Status.ERROR, AnalysisJob.class.getName(),
 		    "Error in directory store!", e));
 	    return Status.CANCEL_STATUS;

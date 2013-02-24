@@ -23,8 +23,8 @@ import org.eclipse.ui.part.ViewPart;
 
 import com.puresol.coding.analysis.api.AnalysisProject;
 import com.puresol.coding.analysis.api.AnalysisRun;
+import com.puresol.coding.analysis.api.AnalysisStoreException;
 import com.puresol.coding.analysis.api.AnalyzedCode;
-import com.puresol.coding.analysis.api.ModuleStoreException;
 import com.puresol.coding.client.application.Activator;
 import com.puresol.coding.client.application.controls.ParserTreeControl;
 import com.puresol.uhura.source.CodeLocation;
@@ -127,7 +127,7 @@ public class AnalysisReport extends ViewPart implements ISelectionListener {
 			    .valueOf(failedFiles.size())));
 		}
 	    }
-	} catch (ModuleStoreException e) {
+	} catch (AnalysisStoreException e) {
 	    logger.log(new Status(Status.ERROR, ParserTreeControl.class
 		    .getName(), "Can not read analysis store!", e));
 	}

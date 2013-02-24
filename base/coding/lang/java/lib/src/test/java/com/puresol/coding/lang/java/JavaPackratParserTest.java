@@ -29,14 +29,14 @@ public class JavaPackratParserTest {
     private void check(String... text) throws ParserException, IOException {
 	CodeLocation source = new FixedCodeLocation(text);
 	PackratParser parser = createParser();
-	assertNotNull(parser.parse(source.load()));
+	assertNotNull(parser.parse(source.loadSourceCode()));
     }
 
     private void check(String text, String production) throws ParserException,
 	    IOException {
 	CodeLocation source = new FixedCodeLocation(text);
 	PackratParser parser = createParser();
-	assertNotNull(parser.parse(source.load(), production));
+	assertNotNull(parser.parse(source.loadSourceCode(), production));
     }
 
     @Test
@@ -115,7 +115,7 @@ public class JavaPackratParserTest {
 		"src/test/java/com/puresol/coding/lang/java/JavaPackratParserTest.java");
 	assertTrue(file.exists());
 	PackratParser parser = createParser();
-	ParserTree tree = parser.parse(new SourceFileLocation(file).load());
+	ParserTree tree = parser.parse(new SourceFileLocation(file).loadSourceCode());
 	assertNotNull(tree);
     }
 }

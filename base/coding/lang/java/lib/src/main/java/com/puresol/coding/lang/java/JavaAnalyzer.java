@@ -76,7 +76,7 @@ public class JavaAnalyzer implements CodeAnalyzer {
 	    Date date = new Date();
 	    StopWatch watch = new StopWatch();
 	    watch.start();
-	    SourceCode sourceCode = sourceCodeLocation.load();
+	    SourceCode sourceCode = sourceCodeLocation.loadSourceCode();
 	    Lexer lexer = grammar.getLexer();
 	    TokenStream tokenStream = lexer.lex(sourceCode);
 	    Parser parser = grammar.getParser();

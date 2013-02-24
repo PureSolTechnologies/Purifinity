@@ -26,7 +26,7 @@ public class SourceCode implements Serializable, Cloneable {
 
     public static SourceCode fromStringArray(String... lines) {
 	try {
-	    return new FixedCodeLocation(lines).load();
+	    return new FixedCodeLocation(lines).loadSourceCode();
 	} catch (IOException e) {
 	    throw new RuntimeException(
 		    "A build-in source has no IO traffic normally. So this should not happen.");

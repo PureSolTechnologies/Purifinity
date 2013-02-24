@@ -27,11 +27,11 @@ public interface AnalysisProject {
      * 
      * @return A {@link AnalysisRunInformation} object is returned containing
      *         the information.
-     * @throws ModuleStoreException
+     * @throws AnalysisStoreException
      *             is thrown in cases of issues.
      */
     public List<AnalysisRunInformation> getAllRunInformation()
-	    throws ModuleStoreException;
+	    throws AnalysisStoreException;
 
     /**
      * This method returns the settings of the analysis.
@@ -46,11 +46,11 @@ public interface AnalysisProject {
      * 
      * @param settings
      *            is a {@link AnalysisSettings} object containing the settings.
-     * @throws ModuleStoreException
+     * @throws AnalysisStoreException
      *             is thrown in cases of issues.
      */
     public void updateSettings(AnalysisSettings settings)
-	    throws ModuleStoreException;
+	    throws AnalysisStoreException;
 
     /**
      * This method returns the analysis run defined by the uuid.
@@ -60,10 +60,10 @@ public interface AnalysisProject {
      *            load.
      * @return An {@link AnalysisRun} object is returned containing the analysis
      *         run.
-     * @throws ModuleStoreException
+     * @throws AnalysisStoreException
      *             is thrown in cases of issues.
      */
-    public AnalysisRun loadAnalysisRun(UUID uuid) throws ModuleStoreException;
+    public AnalysisRun loadAnalysisRun(UUID uuid) throws AnalysisStoreException;
 
     /**
      * A new analysis is run with this method. After the run a new
@@ -74,11 +74,11 @@ public interface AnalysisProject {
      * 
      * @return A {@link AnalysisRun} object is returned containing the
      *         information and results about the run.
-     * @throws ModuleStoreException
+     * @throws AnalysisStoreException
      *             is thrown in cases of issues.
      * @throws InterruptedException
      */
-    public AnalysisRun createAnalysisRun() throws ModuleStoreException,
+    public AnalysisRun createAnalysisRun() throws AnalysisStoreException,
 	    InterruptedException;
 
     /**
@@ -86,18 +86,18 @@ public interface AnalysisProject {
      * up-to-date analysis.
      * 
      * @return An {@link AnalysisRun} is returned.
-     * @throws ModuleStoreException
+     * @throws AnalysisStoreException
      *             is thrown in cases of issues.
      */
-    public AnalysisRun loadLastAnalysisRun() throws ModuleStoreException;
+    public AnalysisRun loadLastAnalysisRun() throws AnalysisStoreException;
 
     /**
      * This method deletes an analysis run from the store.
      * 
      * @param uuid
      *            is the uuid of the run to be deleted.
-     * @throws ModuleStoreException
+     * @throws AnalysisStoreException
      *             is thrown in events of issues.
      */
-    public void removeAnalysisRun(UUID uuid) throws ModuleStoreException;
+    public void removeAnalysisRun(UUID uuid) throws AnalysisStoreException;
 }

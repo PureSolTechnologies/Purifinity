@@ -2,6 +2,7 @@ package com.puresol.uhura.source;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.net.URL;
 
@@ -48,6 +49,21 @@ public interface CodeLocation extends Serializable {
     public String getHumanReadableLocationString();
 
     /**
+     * This method opens an input stream to the source file. This stream can be
+     * used for generic processing.
+     * <p>
+     * <b>Attention(!):</b> The caller is responsible for closing the stream!
+     * 
+     * @return An {@link InputStream} object is returned.
+     * @throws IOException
+     *             is thrown in any case of IO issues. For loading the source
+     *             code from the original location a IO process is needed some
+     *             how. Any issue should be translated into an
+     *             {@link IOException}.
+     */
+    public InputStream openStream() throws IOException;
+
+    /**
      * This method loads the source code from the source specified in the object
      * declaring this interface.
      * 
@@ -58,7 +74,7 @@ public interface CodeLocation extends Serializable {
      *             how. Any issue should be translated into an
      *             {@link IOException}.
      */
-    public SourceCode load() throws IOException;
+    public SourceCode loadSourceCode() throws IOException;
 
     /**
      * This method returns a new {@link CodeLocation} which is pointing to a new

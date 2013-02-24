@@ -41,7 +41,7 @@ public final class AnalyzedCode implements Comparable<AnalyzedCode>,
 	return hashId;
     }
 
-    public final CodeLocation getLocation() {
+    public final CodeLocation getSourceLocation() {
 	return source;
     }
 

@@ -89,7 +89,7 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 			MaintainabilityIndexResult result = new MaintainabilityIndexResult(
 					MIwoc, MIcw);
 			results.add(new MaintainabilityIndexFileResult(analyzedFile
-					.getLocation(), codeRange.getType(), codeRange.getName(),
+					.getSourceLocation(), codeRange.getType(), codeRange.getName(),
 					result, MaintainabilityQuality.get(codeRange.getType(),
 							result)));
 		}

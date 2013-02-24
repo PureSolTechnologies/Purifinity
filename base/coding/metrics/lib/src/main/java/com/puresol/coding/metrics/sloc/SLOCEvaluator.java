@@ -39,7 +39,7 @@ public class SLOCEvaluator extends AbstractEvaluator {
 					getAnalysisRun(), language, codeRange);
 			execute(metric);
 			results.add(new SLOCFileResult(analysis.getAnalyzedFile()
-					.getLocation(), codeRange.getType(), codeRange.getName(),
+					.getSourceLocation(), codeRange.getType(), codeRange.getName(),
 					metric.getSLOCResult(), metric.getQuality()));
 		}
 		store.storeFileResults(analysis.getAnalyzedFile().getHashId(), results);

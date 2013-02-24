@@ -42,7 +42,7 @@ public class FortranGrammarPartTester {
 	if (parsers.get(production) == null) {
 	    initializeParser(production);
 	}
-	TokenStream tokenStream = lexer.lex(source.load());
+	TokenStream tokenStream = lexer.lex(source.loadSourceCode());
 	parsers.get(production).parse(tokenStream);
 	return true;
     }

@@ -1,6 +1,8 @@
 package com.puresol.uhura.source;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import com.puresol.uhura.lexer.TokenStream;
 
@@ -36,7 +38,16 @@ public class FixedCodeLocation extends AbstractCodeLocation {
     }
 
     @Override
-    public SourceCode load() throws IOException {
+    public InputStream openStream() throws IOException {
+	StringBuilder builder = new StringBuilder();
+	for (SourceCodeLine line : sourceCode.getLines()) {
+	    builder.append(line.getLine());
+	}
+	return new ByteArrayInputStream(builder.toString().getBytes());
+    }
+
+    @Override
+    public SourceCode loadSourceCode() throws IOException {
 	return sourceCode;
     }
 

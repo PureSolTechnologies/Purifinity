@@ -1,4 +1,4 @@
-package com.puresol.coding.analysis.impl;
+package com.puresol.coding.analysis.api;
 
 public class AnalysisStoreException extends Exception {
 

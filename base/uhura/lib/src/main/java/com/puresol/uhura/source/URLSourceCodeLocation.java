@@ -16,7 +16,12 @@ public class URLSourceCodeLocation extends AbstractCodeLocation {
     }
 
     @Override
-    public SourceCode load() throws IOException {
+    public InputStream openStream() throws IOException {
+	return url.openStream();
+    }
+
+    @Override
+    public SourceCode loadSourceCode() throws IOException {
 	InputStream stream = url.openStream();
 	try {
 	    return SourceCode.read(stream, this);

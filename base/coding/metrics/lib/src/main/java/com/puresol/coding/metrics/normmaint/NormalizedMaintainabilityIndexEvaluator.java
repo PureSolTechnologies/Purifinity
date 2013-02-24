@@ -66,7 +66,7 @@ public class NormalizedMaintainabilityIndexEvaluator extends AbstractEvaluator {
 					maintainabilityIndex.getMIcw());
 
 			results.add(new NormalizedMaintainabilityIndexFileResult(analysis
-					.getAnalyzedFile().getLocation(), codeRange.getType(),
+					.getAnalyzedFile().getSourceLocation(), codeRange.getType(),
 					codeRange.getName(), result,
 					NormalizedMaintainabilityQuality.get(codeRange.getType(),
 							result)));

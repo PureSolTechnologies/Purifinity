@@ -36,7 +36,7 @@ public class FileAnalysisEditorInput implements IEditorInput {
 
     @Override
     public String getName() {
-	return analyzedCode.getLocation().getName();
+	return analyzedCode.getSourceLocation().getName();
     }
 
     @Override
@@ -46,7 +46,7 @@ public class FileAnalysisEditorInput implements IEditorInput {
 
     @Override
     public String getToolTipText() {
-	return analyzedCode.getLocation().getHumanReadableLocationString();
+	return analyzedCode.getSourceLocation().getHumanReadableLocationString();
     }
 
     public final AnalyzedCode getAnalyzedCode() {

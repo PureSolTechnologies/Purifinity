@@ -1,6 +1,7 @@
 package com.puresol.uhura.source;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 public class UnspecifiedSourceCodeLocation extends AbstractCodeLocation {
 
@@ -12,7 +13,13 @@ public class UnspecifiedSourceCodeLocation extends AbstractCodeLocation {
     }
 
     @Override
-    public SourceCode load() throws IOException {
+    public InputStream openStream() throws IOException {
+	throw new IOException(
+		"This is an unspecified source. There is not source information available where the source can be loaded from.");
+    }
+
+    @Override
+    public SourceCode loadSourceCode() throws IOException {
 	throw new IOException(
 		"This is an unspecified source. There is not source information available where the source can be loaded from.");
     }

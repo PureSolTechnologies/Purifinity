@@ -1,5 +1,7 @@
 package com.puresol.coding.analysis.api;
 
+import java.io.InputStream;
+
 import com.puresol.uhura.source.SourceCode;
 import com.puresol.utils.HashId;
 
@@ -14,62 +16,80 @@ import com.puresol.utils.HashId;
  */
 public interface CodeStore {
 
-	/**
-	 * Stores the file in the store.
-	 * 
-	 * @param hashId
-	 *            is the unique id of the code to be stored.
-	 * @param content
-	 *            is the content to be stored.
-	 * @return True is returned in case of a successful storage. False is
-	 *         returned in case of an already stored file. In this case the new
-	 *         file is not stored and the already stored file is assumed to be
-	 *         equal due to the same hash id.
-	 * @throws CodeStoreException
-	 */
-	boolean storeCode(SourceCode sourceCode) throws CodeStoreException;
+    /**
+     * Stores the file in the store in raw format. This means we just copy it
+     * from the original directory into the store. There is not manipulation on
+     * the file. So we have a byte equal copy.
+     * 
+     * Additionally, this method generates the {@link HashId} of the file for
+     * later use.
+     * 
+     * @param rawStream
+     *            is the {@link InputStream} to be stored.
+     * @return A {@link HashId} is returned which can be used for later access
+     *         to the file.
+     * @throws CodeStoreException
+     *             is thrown in cases of issues.
+     */
+    HashId storeRawFile(InputStream rawStream) throws CodeStoreException;
 
-	/**
-	 * This method loads a single analysis.
-	 * 
-	 * @param hashId
-	 * @return
-	 * @throws CodeStoreException
-	 */
-	public CodeAnalysis loadAnalysis(HashId hashId) throws CodeStoreException;
+    /**
+     * Stores the file in the store in raw format. This means we just copy it
+     * from the original directory into the store. There is not manipulation on
+     * the file. So we have a byte equal copy.
+     * 
+     * Additionally, this method generates the {@link HashId} of the file for
+     * later use.
+     * 
+     * @param hashId
+     *            is the unique id of the file to be read.
+     * @return An {@link InputStream} is returned for access of the file.
+     * @throws CodeStoreException
+     *             is thrown in cases of issues.
+     */
+    InputStream readRawFile(HashId hashId) throws CodeStoreException;
 
-	/**
-	 * This method stores a single analysis for a file.
-	 * 
-	 * @param hashId
-	 * @param analysis
-	 * @throws CodeStoreException
-	 */
-	void storeAnalysis(HashId hashId, CodeAnalysis analysis)
-			throws CodeStoreException;
+    /**
+     * Checks whether a file is available or not.
+     * 
+     * @param hashId
+     * @return
+     */
+    public boolean isAvailable(HashId hashId);
 
-	/**
-	 * Checks whether a file is available or not.
-	 * 
-	 * @param hashId
-	 * @return
-	 */
-	public boolean isAvailable(HashId hashId);
+    /**
+     * This method
+     * 
+     * @param hashId
+     * @return
+     * @throws CodeStoreException
+     */
+    public SourceCode readSourceCode(HashId hashId) throws CodeStoreException;
 
-	/**
-	 * This method
-	 * 
-	 * @param hashId
-	 * @return
-	 * @throws CodeStoreException
-	 */
-	public SourceCode loadContent(HashId hashId) throws CodeStoreException;
+    /**
+     * This method loads a single analysis.
+     * 
+     * @param hashId
+     * @return
+     * @throws CodeStoreException
+     */
+    public CodeAnalysis loadAnalysis(HashId hashId) throws CodeStoreException;
 
-	/**
-	 * Checks whether a code with a given id was analyzed or not.
-	 * 
-	 * @param hashId
-	 * @return
-	 */
-	public boolean wasAnalyzed(HashId hashId);
+    /**
+     * This method stores a single analysis for a file.
+     * 
+     * @param hashId
+     * @param analysis
+     * @throws CodeStoreException
+     */
+    void storeAnalysis(HashId hashId, CodeAnalysis analysis)
+	    throws CodeStoreException;
+
+    /**
+     * Checks whether a code with a given id was analyzed or not.
+     * 
+     * @param hashId
+     * @return
+     */
+    public boolean wasAnalyzed(HashId hashId);
 }

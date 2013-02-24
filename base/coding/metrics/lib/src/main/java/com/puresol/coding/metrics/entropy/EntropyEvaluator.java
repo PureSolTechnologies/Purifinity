@@ -70,7 +70,7 @@ public class EntropyEvaluator extends AbstractEvaluator {
 					redundancy, normalizedRedundancy);
 
 			results.add(new EntropyFileResult(analysis.getAnalyzedFile()
-					.getLocation(), codeRange.getType(), codeRange.getName(),
+					.getSourceLocation(), codeRange.getType(), codeRange.getName(),
 					result, EntropyQuality.get(codeRange.getType(), result)));
 		}
 		store.storeFileResults(hashId, results);

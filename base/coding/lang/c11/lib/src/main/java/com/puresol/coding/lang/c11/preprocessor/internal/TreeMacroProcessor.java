@@ -511,7 +511,7 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 		return false;
 	    }
 	    // read to be included source...
-	    SourceCode sourceCode = includeSource.load();
+	    SourceCode sourceCode = includeSource.loadSourceCode();
 	    // we need to process this source, too, before we can
 	    // include it...
 	    SourceCode processedSourceCode = new C11Preprocessor(

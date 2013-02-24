@@ -10,12 +10,16 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.Future;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,19 +27,15 @@ import org.slf4j.LoggerFactory;
 import com.puresol.coding.analysis.api.AnalysisInformation;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalysisRunInformation;
+import com.puresol.coding.analysis.api.AnalysisStoreException;
 import com.puresol.coding.analysis.api.AnalyzedCode;
-import com.puresol.coding.analysis.api.CodeAnalysis;
-import com.puresol.coding.analysis.api.CodeStore;
 import com.puresol.coding.analysis.api.CodeStoreException;
-import com.puresol.coding.analysis.api.CodeStoreFactory;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.analysis.api.ModuleStoreException;
 import com.puresol.coding.analysis.api.RepositoryLocation;
 import com.puresol.uhura.source.CodeLocation;
-import com.puresol.uhura.source.SourceCode;
 import com.puresol.utils.DirectoryUtilities;
 import com.puresol.utils.FileSearchConfiguration;
-import com.puresol.utils.HashId;
 import com.puresol.utils.progress.AbstractProgressObservable;
 
 public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
@@ -72,7 +72,7 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
      * @throws ModuleStoreException
      */
     public static AnalysisRun open(File runDirectory)
-	    throws ModuleStoreException {
+	    throws AnalysisStoreException {
 	AnalysisRunImpl projectAnalyser = new AnalysisRunImpl(runDirectory);
 	projectAnalyser.open();
 	return projectAnalyser;
@@ -87,14 +87,14 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
      *            analyzed.
      * @param runDirectory
      *            is the directory to put the persisted results to.
-     * @throws ModuleStoreException
+     * @throws AnalysisStoreException
      * @throws IOException
      */
     public static AnalysisRun create(File runDirectory,
 	    AnalysisInformation analysisInformation, UUID uuid,
 	    RepositoryLocation repositorySource,
 	    FileSearchConfiguration searchConfiguration)
-	    throws ModuleStoreException {
+	    throws AnalysisStoreException {
 	AnalysisRunImpl projectAnalyser = new AnalysisRunImpl(runDirectory);
 	projectAnalyser.create(repositorySource, analysisInformation, uuid,
 		searchConfiguration);
@@ -113,13 +113,11 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
 
     private final List<AnalyzedCode> analyzedFiles = new ArrayList<AnalyzedCode>();
     private final List<CodeLocation> failedSources = new ArrayList<CodeLocation>();
-    private final CodeStore fileStore = CodeStoreFactory.getFactory()
-	    .getInstance();
 
-    private HashIdFileTree hashIdFileTree = null;
+    private final HashIdFileTree hashIdFileTree = null;
     private FileSearchConfiguration searchConfig;
 
-    private AnalysisInformation analysisInformation;
+    private AnalysisInformation analysisRunInformation;
     private UUID uuid;
     private Date creationTime;
     private long timeOfRun;
@@ -142,61 +140,31 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
      * This methods creates a new project directory.
      * 
      * @param repositorySource
+     * @param analysisInformation
+     * @param uuid
      * @param searchConfiguration
-     * @param name
-     * @param uuid2
      * @return
-     * @throws ModuleStoreException
-     * @throws IOException
+     * @throws AnalysisStoreException
      */
     void create(RepositoryLocation repositorySource,
 	    AnalysisInformation analysisInformation, UUID uuid,
 	    FileSearchConfiguration searchConfiguration)
-	    throws ModuleStoreException {
+	    throws AnalysisStoreException {
 	try {
 	    this.repositoryLocation = repositorySource;
-	    this.analysisInformation = analysisInformation;
+	    this.analysisRunInformation = analysisInformation;
 	    this.uuid = uuid;
 	    this.searchConfig = searchConfiguration;
 	    this.creationTime = new Date();
 	    this.timeOfRun = 0;
 	    DirectoryUtilities.checkAndCreateDirectory(runDirectory);
 	    new File(runDirectory, DIRECTORY_FLAG).createNewFile();
-	    saveProperties();
+	    saveAnalysisRunInformation();
 	    writeSearchConfiguration();
-	    storeProjectInformation();
+	    storeAnalysisResultInformation();
 	} catch (IOException e) {
-	    throw new ModuleStoreException("Could not create analysis run!", e);
-	}
-    }
-
-    private void saveProperties() throws IOException {
-	Properties properties = new Properties();
-	properties.put("uuid", uuid.toString());
-	properties.put("creation.time", String.valueOf(creationTime.getTime()));
-	properties.put("run.time", String.valueOf(timeOfRun));
-	FileWriter writer = new FileWriter(new File(runDirectory,
-		ANALYSIS_RUN_PROPERTIES_FILE));
-	try {
-	    properties.store(writer, "");
-	} finally {
-	    writer.close();
-	}
-    }
-
-    private void writeSearchConfiguration() throws IOException {
-	FileOutputStream fileOutputStream = new FileOutputStream(new File(
-		runDirectory, SEARCH_CONFIGURATION_FILE));
-	try {
-	    ObjectOutputStream objectOutputStream = new ObjectOutputStream(
-		    fileOutputStream);
-	    try {
-		objectOutputStream.writeObject(searchConfig);
-	    } finally {
-		objectOutputStream.close();
-	    }
-	} finally {
-	    fileOutputStream.close();
+	    throw new AnalysisStoreException("Could not create analysis run!",
+		    e);
 	}
     }
 
@@ -206,32 +174,17 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
      * @return
      * @throws ModuleStoreException
      */
-    void open() throws ModuleStoreException {
+    void open() throws AnalysisStoreException {
 	try {
 	    if (!runDirectory.exists()) {
 		throw new IOException("Analysis run directory '" + runDirectory
 			+ "' does not exist!");
 	    }
-	    loadProperties();
+	    loadAnalysisRunInformation();
 	    readSearchConfiguration();
-	    loadProjectInformation();
+	    loadAnalysisResultInformation();
 	} catch (IOException e) {
-	    throw new ModuleStoreException("Could not open analysis run!", e);
-	}
-    }
-
-    private void loadProperties() throws IOException {
-	Properties properties = new Properties();
-	FileReader reader = new FileReader(new File(runDirectory,
-		ANALYSIS_RUN_PROPERTIES_FILE));
-	try {
-	    properties.load(reader);
-	    uuid = UUID.fromString(properties.get("uuid").toString());
-	    creationTime = new Date(Long.valueOf(properties
-		    .get("creation.time").toString()));
-	    timeOfRun = Long.valueOf(properties.get("run.time").toString());
-	} finally {
-	    reader.close();
+	    throw new AnalysisStoreException("Could not open analysis run!", e);
 	}
     }
 
@@ -263,7 +216,61 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
 	}
     }
 
-    private void loadProjectInformation() throws IOException {
+    private void writeSearchConfiguration() throws IOException {
+	FileOutputStream fileOutputStream = new FileOutputStream(new File(
+		runDirectory, SEARCH_CONFIGURATION_FILE));
+	try {
+	    ObjectOutputStream objectOutputStream = new ObjectOutputStream(
+		    fileOutputStream);
+	    try {
+		objectOutputStream.writeObject(searchConfig);
+	    } finally {
+		objectOutputStream.close();
+	    }
+	} finally {
+	    fileOutputStream.close();
+	}
+    }
+
+    private void loadAnalysisRunInformation() throws IOException {
+	Properties properties = new Properties();
+	FileReader reader = new FileReader(new File(runDirectory,
+		ANALYSIS_RUN_PROPERTIES_FILE));
+	try {
+	    properties.load(reader);
+	    uuid = UUID.fromString(properties.get("uuid").toString());
+	    creationTime = new Date(Long.valueOf(properties
+		    .get("creation.time").toString()));
+	    timeOfRun = Long.valueOf(properties.get("run.time").toString());
+	} finally {
+	    reader.close();
+	}
+	analysisRunInformation = restore(new File(runDirectory,
+		ANALYSIS_INFORMATION_FILE));
+	repositoryLocation = restore(new File(runDirectory,
+		REPOSITORY_LOCATION__FILE));
+    }
+
+    private void saveAnalysisRunInformation() throws IOException {
+	Properties properties = new Properties();
+	properties.put("uuid", uuid.toString());
+	properties.put("creation.time", String.valueOf(creationTime.getTime()));
+	properties.put("run.time", String.valueOf(timeOfRun));
+	File propertiesFile = new File(runDirectory,
+		ANALYSIS_RUN_PROPERTIES_FILE);
+	FileWriter writer = new FileWriter(propertiesFile);
+	try {
+	    properties.store(writer, "Analysis run properties");
+	} finally {
+	    writer.close();
+	}
+	persist(repositoryLocation, new File(runDirectory,
+		REPOSITORY_LOCATION__FILE));
+	persist(analysisRunInformation, new File(runDirectory,
+		ANALYSIS_INFORMATION_FILE));
+    }
+
+    private void loadAnalysisResultInformation() throws IOException {
 	@SuppressWarnings("unchecked")
 	List<AnalyzedCode> analyzed = (List<AnalyzedCode>) restore(new File(
 		runDirectory, ANALYZED_FILES_FILE));
@@ -272,20 +279,12 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
 	List<CodeLocation> failed = (List<CodeLocation>) restore(new File(
 		runDirectory, FAILED_FILES_FILE));
 	failedSources.addAll(failed);
-	analysisInformation = restore(new File(runDirectory,
-		ANALYSIS_INFORMATION_FILE));
-	hashIdFileTree = restore(new File(runDirectory, FILE_TREE));
+	// hashIdFileTree = restore(new File(runDirectory, FILE_TREE));
 
-	repositoryLocation = restore(new File(runDirectory,
-		REPOSITORY_LOCATION__FILE));
     }
 
-    private void storeProjectInformation() {
+    private void storeAnalysisResultInformation() {
 	try {
-	    persist(repositoryLocation, new File(runDirectory,
-		    REPOSITORY_LOCATION__FILE));
-	    persist(analysisInformation, new File(runDirectory,
-		    ANALYSIS_INFORMATION_FILE));
 	    persist(analyzedFiles, new File(runDirectory, ANALYZED_FILES_FILE));
 	    persist(failedSources, new File(runDirectory, FAILED_FILES_FILE));
 	} catch (IOException e) {
@@ -297,9 +296,9 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
     public Boolean call() throws Exception {
 	try {
 	    reset();
+	    saveAnalysisRunInformation();
 	    boolean retVal = analyzeFiles();
-	    saveProperties();
-	    storeProjectInformation();
+	    storeAnalysisResultInformation();
 	    persist(hashIdFileTree, new File(runDirectory, FILE_TREE));
 	    fireDone("Finished successfully.", retVal);
 	    return retVal;
@@ -318,87 +317,63 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
     }
 
     private boolean analyzeFiles() throws CodeStoreException {
-	repositoryLocation.setCodeSearchConfiguration(searchConfig);
-	List<CodeLocation> sources = repositoryLocation.getSourceCodes();
-	StoreUtilities.storeFiles(sources);
-
-	int processors = Runtime.getRuntime().availableProcessors();
-	ExecutorService threadPool = Executors.newFixedThreadPool(processors);
-	fireStarted("Analyze files", sources.size());
-	for (int index = 0; index < sources.size(); index++) {
-	    final CodeLocation source = sources.get(index);
-	    Runnable callable = new Runnable() {
-
-		@Override
-		public void run() {
-		    analyzeCode(source);
-		    logger.info("Finsihed " + source);
-		    fireUpdateWork("Finished '" + source.getName() + "'.", 1);
-		}
-	    };
-	    threadPool.execute(callable);
-	    if (Thread.interrupted()) {
-		threadPool.shutdownNow();
-		try {
-		    while (!threadPool.awaitTermination(10, TimeUnit.SECONDS)) {
-		    }
-		} catch (InterruptedException e) {
-		}
-		return false;
-	    }
-	}
-	threadPool.shutdown();
-	try {
-	    while (!threadPool.awaitTermination(10, TimeUnit.SECONDS)) {
-	    }
-	} catch (InterruptedException e) {
-	}
+	List<Future<AnalyzedCode>> futures = startAllAnalysisThreads();
+	waitForAnalysisThreads(futures);
 	return true;
     }
 
-    /**
-     * This method analyzes a single file. The file is added to faildFiles if
-     * there was a analyzer found, but the analyzer had issues to analyze the
-     * file, which might have two reasons:
-     * 
-     * 1) The file is not valid.
-     * 
-     * 2) The analyzer is buggy.
-     * 
-     * In either way, these files needs to be tracked and recorded.
-     * 
-     * @param file
-     *            is the file to be analyzed.
-     */
-    private void analyzeCode(CodeLocation source) {
-	try {
-	    SourceCode sourceCode = source.load();
-	    HashId hashId = sourceCode.getHashId();
-	    if (fileStore.isAvailable(hashId) && fileStore.wasAnalyzed(hashId)) {
-		CodeAnalysis analysis = fileStore.loadAnalysis(hashId);
-		analyzedFiles.add(new AnalyzedCode(hashId, source, analysis
-			.getStartTime(), analysis.getDuration(), analysis
-			.getLanguageName(), analysis.getLanguageVersion()));
-	    } else {
-		CodeAnalyzerImpl fileAnalyzer = new CodeAnalyzerImpl(source,
-			hashId);
-		fileAnalyzer.analyze();
-		if (fileAnalyzer.isAnalyzed()) {
-		    fileStore.storeAnalysis(hashId, fileAnalyzer.getAnalyzer()
-			    .getAnalysis());
-		    AnalyzedCode analyzedFile = fileAnalyzer.getAnalysis()
-			    .getAnalyzedFile();
-		    analyzedFiles.add(analyzedFile);
-		} else {
-		    failedSources.add(source);
-		    logger.warn("File "
-			    + source.getHumanReadableLocationString()
-			    + " could be analyzed.");
+    private List<Future<AnalyzedCode>> startAllAnalysisThreads() {
+	repositoryLocation.setCodeSearchConfiguration(searchConfig);
+	List<CodeLocation> sourceFiles = repositoryLocation.getSourceCodes();
+
+	int processors = Runtime.getRuntime().availableProcessors();
+	ExecutorService threadPool = Executors.newFixedThreadPool(processors);
+	fireStarted("Analyze files", sourceFiles.size());
+	List<Future<AnalyzedCode>> futures = new ArrayList<Future<AnalyzedCode>>();
+	for (int index = 0; index < sourceFiles.size(); index++) {
+	    final CodeLocation sourceFile = sourceFiles.get(index);
+	    Callable<AnalyzedCode> callable = new AnalysisRunCallable(
+		    sourceFile);
+	    futures.add(threadPool.submit(callable));
+	}
+	threadPool.shutdown();
+	return futures;
+    }
+
+    private void waitForAnalysisThreads(List<Future<AnalyzedCode>> futures) {
+	while (futures.size() > 0) {
+	    Iterator<Future<AnalyzedCode>> iterator = futures.iterator();
+	    while (iterator.hasNext()) {
+		Future<AnalyzedCode> future = iterator.next();
+		if (future.isDone()) {
+		    futures.remove(future);
+		    fireUpdateWork("Finished a file.", 1);
+		    try {
+			AnalyzedCode result = future.get();
+			fireUpdateWork("Finished '"
+				+ result.getSourceLocation()
+					.getHumanReadableLocationString()
+				+ "'.", 0);
+			if (result.getStartTime() != null) {
+			    analyzedFiles.add(result);
+			} else {
+			    failedSources.add(result.getSourceLocation());
+			}
+		    } catch (CancellationException e) {
+			logger.debug("Job was cancelled.", e);
+		    } catch (InterruptedException e) {
+			logger.warn("Job was interrupted.", e);
+		    } catch (ExecutionException e) {
+			logger.error(
+				"Job was aborted with execution exception.", e);
+		    }
 		}
 	    }
-	} catch (Exception e) {
-	    failedSources.add(source);
-	    logger.error(e.getMessage(), e);
+	    try {
+		Thread.sleep(1000);
+	    } catch (InterruptedException e) {
+		// intentionally left blank
+	    }
 	}
     }
 
@@ -420,7 +395,7 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
     @Override
     public AnalyzedCode findAnalyzedCode(File file) {
 	for (AnalyzedCode analyzedFile : analyzedFiles) {
-	    if (analyzedFile.getLocation().equals(file)) {
+	    if (analyzedFile.getSourceLocation().equals(file)) {
 		return analyzedFile;
 	    }
 	}
@@ -454,7 +429,7 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
 
     @Override
     public AnalysisRunInformation getInformation() {
-	return new AnalysisRunInformation(analysisInformation, uuid,
+	return new AnalysisRunInformation(analysisRunInformation, uuid,
 		creationTime, timeOfRun, "<Not implemented, yet!>");
     }
 

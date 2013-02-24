@@ -38,8 +38,8 @@ import org.eclipse.ui.progress.UIJob;
 
 import com.puresol.coding.analysis.api.AnalysisInformation;
 import com.puresol.coding.analysis.api.AnalysisStore;
+import com.puresol.coding.analysis.api.AnalysisStoreException;
 import com.puresol.coding.analysis.api.AnalysisStoreFactory;
-import com.puresol.coding.analysis.api.ModuleStoreException;
 import com.puresol.coding.client.application.Activator;
 import com.puresol.coding.client.application.ClientImages;
 import com.puresol.coding.client.application.content.AnalysisListContentProvider;
@@ -54,8 +54,8 @@ import com.puresol.coding.client.application.jobs.AnalysisJob;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class AnalysisProjectsView extends ViewPart implements IJobChangeListener,
-	ISelectionProvider, SelectionListener {
+public class AnalysisProjectsView extends ViewPart implements
+	IJobChangeListener, ISelectionProvider, SelectionListener {
 
     private static final ILog logger = Activator.getDefault().getLog();
 
@@ -237,20 +237,20 @@ public class AnalysisProjectsView extends ViewPart implements IJobChangeListener
 	try {
 	    IHandlerService handlerService = (IHandlerService) getSite()
 		    .getService(IHandlerService.class);
-	    handlerService.executeCommand(NewAnalysisProjectHandler.class.getName(),
-		    null);
+	    handlerService.executeCommand(
+		    NewAnalysisProjectHandler.class.getName(), null);
 	} catch (ExecutionException e) {
-	    logger.log(new Status(Status.ERROR, AnalysisProjectsView.class.getName(),
-		    "Could not run new analysis!", e));
+	    logger.log(new Status(Status.ERROR, AnalysisProjectsView.class
+		    .getName(), "Could not run new analysis!", e));
 	} catch (NotDefinedException e) {
-	    logger.log(new Status(Status.ERROR, AnalysisProjectsView.class.getName(),
-		    "Could not run new analysis!", e));
+	    logger.log(new Status(Status.ERROR, AnalysisProjectsView.class
+		    .getName(), "Could not run new analysis!", e));
 	} catch (NotEnabledException e) {
-	    logger.log(new Status(Status.ERROR, AnalysisProjectsView.class.getName(),
-		    "Could not run new analysis!", e));
+	    logger.log(new Status(Status.ERROR, AnalysisProjectsView.class
+		    .getName(), "Could not run new analysis!", e));
 	} catch (NotHandledException e) {
-	    logger.log(new Status(Status.ERROR, AnalysisProjectsView.class.getName(),
-		    "Could not run new analysis!", e));
+	    logger.log(new Status(Status.ERROR, AnalysisProjectsView.class
+		    .getName(), "Could not run new analysis!", e));
 	}
     }
 
@@ -268,8 +268,9 @@ public class AnalysisProjectsView extends ViewPart implements IJobChangeListener
 		store.removeAnalysis(information.getUUID());
 		refreshAnalysisList();
 	    }
-	} catch (ModuleStoreException e) {
-	    logger.log(new Status(Status.ERROR, AnalysisProjectsView.class.getName(),
+	} catch (AnalysisStoreException e) {
+	    logger.log(new Status(Status.ERROR, AnalysisProjectsView.class
+		    .getName(),
 		    "Could not retrieve analysis from analysis store!", e));
 	}
     }
@@ -279,8 +280,9 @@ public class AnalysisProjectsView extends ViewPart implements IJobChangeListener
 	    if (!analyzesList.isDisposed()) {
 		analyzesViewer.setInput(store.getAllAnalysisInformation());
 	    }
-	} catch (ModuleStoreException e) {
-	    logger.log(new Status(Status.ERROR, AnalysisProjectsView.class.getName(),
+	} catch (AnalysisStoreException e) {
+	    logger.log(new Status(Status.ERROR, AnalysisProjectsView.class
+		    .getName(),
 		    "Could not retrieve list of analyzes from analysis store!",
 		    e));
 	}
@@ -294,8 +296,9 @@ public class AnalysisProjectsView extends ViewPart implements IJobChangeListener
 		    .getFirstElement();
 	    setSelection(new AnalysisSelection(store.loadAnalysis(information
 		    .getUUID())));
-	} catch (ModuleStoreException e) {
-	    logger.log(new Status(Status.ERROR, AnalysisProjectsView.class.getName(),
+	} catch (AnalysisStoreException e) {
+	    logger.log(new Status(Status.ERROR, AnalysisProjectsView.class
+		    .getName(),
 		    "Could not retrieve analysis from analysis store!", e));
 	}
     }

@@ -1,6 +1,7 @@
 package com.puresol.coding.client.application.views;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.Status;
@@ -30,7 +31,7 @@ import org.eclipse.ui.part.ViewPart;
 import com.puresol.coding.analysis.api.AnalysisProject;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalysisRunInformation;
-import com.puresol.coding.analysis.api.ModuleStoreException;
+import com.puresol.coding.analysis.api.AnalysisStoreException;
 import com.puresol.coding.client.application.Activator;
 import com.puresol.coding.client.application.ClientImages;
 import com.puresol.coding.client.application.content.AnalysisRunListContentProvider;
@@ -97,6 +98,7 @@ public class AnalysisRunsView extends ViewPart implements SelectionListener,
 	refresh.setToolTipText("Refreshs the analysis runs for the selected analysis from the analysis store.");
 	refresh.setText("Refresh");
 	refresh.setImage(databaseRefreshImage);
+	refresh.addSelectionListener(this);
 
 	addAnalysisRun = new ToolItem(toolBar, SWT.NONE);
 	addAnalysisRun.setText("Add...");
@@ -187,15 +189,17 @@ public class AnalysisRunsView extends ViewPart implements SelectionListener,
 		    .getSelection();
 	    AnalysisRunInformation information = (AnalysisRunInformation) selection
 		    .getFirstElement();
-	    if (MessageDialog.openQuestion(
-		    getSite().getShell(),
-		    "Delete?",
-		    "Do you really want to delete analysis '"
-			    + information.getStartTime() + "'?")) {
-		analysis.removeAnalysisRun(information.getUUID());
-		refreshAnalysisRunList();
+	    if (information != null) {
+		if (MessageDialog.openQuestion(
+			getSite().getShell(),
+			"Delete?",
+			"Do you really want to delete analysis '"
+				+ information.getStartTime() + "'?")) {
+		    analysis.removeAnalysisRun(information.getUUID());
+		    refreshAnalysisRunList();
+		}
 	    }
-	} catch (ModuleStoreException e) {
+	} catch (AnalysisStoreException e) {
 	    logger.log(new Status(Status.ERROR, ParserTreeControl.class
 		    .getName(), "Can not read analysis runs from store!", e));
 	}
@@ -203,8 +207,10 @@ public class AnalysisRunsView extends ViewPart implements SelectionListener,
 
     private void refreshAnalysisRunList() {
 	try {
-	    analysisRunsViewer.setInput(analysis.getAllRunInformation());
-	} catch (ModuleStoreException e) {
+	    List<AnalysisRunInformation> allRunInformation = analysis
+		    .getAllRunInformation();
+	    analysisRunsViewer.setInput(allRunInformation);
+	} catch (AnalysisStoreException e) {
 	    logger.log(new Status(Status.ERROR, ParserTreeControl.class
 		    .getName(), "Can not read analysis runs from store!", e));
 	}
@@ -219,7 +225,7 @@ public class AnalysisRunsView extends ViewPart implements SelectionListener,
 	    AnalysisRun analysisRun = analysis.loadAnalysisRun(information
 		    .getUUID());
 	    setSelection(new AnalysisRunSelection(analysisRun));
-	} catch (ModuleStoreException e) {
+	} catch (AnalysisStoreException e) {
 	    logger.log(new Status(Status.ERROR, ParserTreeControl.class
 		    .getName(), "Can not read analysis runs from store!", e));
 	}
@@ -242,7 +248,7 @@ public class AnalysisRunsView extends ViewPart implements SelectionListener,
 	    AnalysisSelection analysisSelection = (AnalysisSelection) selection;
 	    analysis = analysisSelection.getAnalysis();
 	    analysisRunsViewer.setInput(analysis.getAllRunInformation());
-	} catch (ModuleStoreException e) {
+	} catch (AnalysisStoreException e) {
 	    logger.log(new Status(Status.ERROR, ParserTreeControl.class
 		    .getName(), "Can not read analysis store!", e));
 	}

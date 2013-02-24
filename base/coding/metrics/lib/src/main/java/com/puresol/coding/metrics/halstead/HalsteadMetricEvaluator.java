@@ -37,7 +37,7 @@ public class HalsteadMetricEvaluator extends AbstractEvaluator {
 					language, codeRange);
 			execute(metric);
 			results.add(new HalsteadMetricFileResult(analysis.getAnalyzedFile()
-					.getLocation(), codeRange.getType(), codeRange.getName(),
+					.getSourceLocation(), codeRange.getType(), codeRange.getName(),
 					metric.getHalsteadResults(), metric.getQuality()));
 		}
 		store.storeFileResults(analysis.getAnalyzedFile().getHashId(), results);

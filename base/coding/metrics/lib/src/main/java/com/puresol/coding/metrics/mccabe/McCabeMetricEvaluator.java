@@ -37,7 +37,7 @@ public class McCabeMetricEvaluator extends AbstractEvaluator {
 					codeRange);
 			execute(metric);
 			results.add(new McCabeMetricFileResult(analysis.getAnalyzedFile()
-					.getLocation(), codeRange.getType(), codeRange.getName(),
+					.getSourceLocation(), codeRange.getType(), codeRange.getName(),
 					metric.getCyclomaticNumber(), metric.getQuality()));
 		}
 		store.storeFileResults(analysis.getAnalyzedFile().getHashId(), results);

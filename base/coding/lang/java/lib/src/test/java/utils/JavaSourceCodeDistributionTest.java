@@ -66,7 +66,7 @@ public class JavaSourceCodeDistributionTest {
 	CodeLocation source = new SourceFileLocation(file);
 	StopWatch watch = new StopWatch();
 	watch.start();
-	ParserTree ast = parser.parse(source.load());
+	ParserTree ast = parser.parse(source.loadSourceCode());
 	watch.stop();
 	assertNotNull(ast);
 	// new TreePrinter(System.out).println(ast);
@@ -146,7 +146,7 @@ public class JavaSourceCodeDistributionTest {
 	    // analyser.parse();
 	    // analyser = null;
 	    PackratParser parser = new PackratParser(javaGrammar);
-	    parser.parse(new SourceFileLocation(file).load());
+	    parser.parse(new SourceFileLocation(file).loadSourceCode());
 	    return true;
 	    // } catch (AnalyzerException e) {
 	    // e.printStackTrace();

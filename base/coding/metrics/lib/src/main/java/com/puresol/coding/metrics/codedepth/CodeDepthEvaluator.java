@@ -36,7 +36,7 @@ public class CodeDepthEvaluator extends AbstractEvaluator {
 					language, codeRange);
 			execute(metric);
 			results.add(new CodeDepthFileResult(analysis.getAnalyzedFile()
-					.getLocation(), codeRange.getType(), codeRange.getName(),
+					.getSourceLocation(), codeRange.getType(), codeRange.getName(),
 					metric.getMaxDepth(), metric.getQuality()));
 		}
 		store.storeFileResults(analysis.getAnalyzedFile().getHashId(), results);

@@ -17,7 +17,7 @@ public class CommentTest {
 	Lexer lexer = JavaGrammar.getInstance().getLexer();
 
 	TokenStream tokenStream = lexer.lex(new FixedCodeLocation(
-		"/* This is a traditional comment... */").load());
+		"/* This is a traditional comment... */").loadSourceCode());
 	assertEquals(1, tokenStream.size());
 	assertEquals(Visibility.IGNORED, tokenStream.get(0).getVisibility());
     }
@@ -27,7 +27,7 @@ public class CommentTest {
 	Lexer lexer = JavaGrammar.getInstance().getLexer();
 
 	TokenStream tokenStream = lexer.lex(new FixedCodeLocation(
-		"/* to select the \"client\" VM */").load());
+		"/* to select the \"client\" VM */").loadSourceCode());
 	assertEquals(1, tokenStream.size());
 	assertEquals(Visibility.IGNORED, tokenStream.get(0).getVisibility());
     }
@@ -43,7 +43,7 @@ public class CommentTest {
 				+ "*\n"
 				+ "* Copyright (c) 2006, Oracle and/or its affiliates. All rights reserved.\n"
 				+ "* ORACLE PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.\n"
-				+ "*/").load());
+				+ "*/").loadSourceCode());
 	assertEquals(1, tokenStream.size());
 	assertEquals(Visibility.IGNORED, tokenStream.get(0).getVisibility());
     }

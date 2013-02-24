@@ -101,7 +101,7 @@ public class FileAnalysisEditor extends EditorPart {
 
 	    HashId hashId = editorInput.getAnalyzedCode().getHashId();
 	    CodeStore codeStore = CodeStoreFactory.getFactory().getInstance();
-	    SourceCode sourceCode = codeStore.loadContent(hashId);
+	    SourceCode sourceCode = codeStore.readSourceCode(hashId);
 	    fileViewer.setStreamAndUpdateContent(sourceCode);
 	    treeViewer
 		    .setContentAndUpdateContent(editorInput.getAnalyzedCode(),

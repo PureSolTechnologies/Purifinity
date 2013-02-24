@@ -3,6 +3,7 @@ package com.puresol.uhura.source;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 public class SourceFileLocation extends AbstractCodeLocation {
 
@@ -15,7 +16,12 @@ public class SourceFileLocation extends AbstractCodeLocation {
     }
 
     @Override
-    public SourceCode load() throws IOException {
+    public InputStream openStream() throws IOException {
+	return new FileInputStream(file);
+    }
+
+    @Override
+    public SourceCode loadSourceCode() throws IOException {
 	FileInputStream stream = new FileInputStream(file);
 	try {
 	    return SourceCode.read(stream, this);

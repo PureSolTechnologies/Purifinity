@@ -46,6 +46,11 @@
 			<plugin>
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>
+				<configuration>
+					<instructions>
+						<Import-Package>*,com.puresol.uhura.parser,com.puresol.uhura.lexer,com.puresol.uhura.grammar.token</Import-Package>
+					</instructions>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

@@ -17,67 +17,67 @@ import com.puresol.utils.HashId;
 
 public class CodeAnalyzerImpl implements CodeAnalyzer {
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(CodeAnalyzerImpl.class);
+    private static final Logger logger = LoggerFactory
+	    .getLogger(CodeAnalyzerImpl.class);
 
-	private final CodeLocation source;
-	private CodeAnalyzer analyzer = null;
-	private boolean analyzed = false;
-	private long timeOfRun;
+    private final CodeLocation source;
+    private CodeAnalyzer analyzer = null;
+    private boolean analyzed = false;
+    private long timeOfRun;
 
-	public CodeAnalyzerImpl(CodeLocation source, HashId hashId)
-			throws AnalyzerException {
-		super();
-		this.source = source;
+    public CodeAnalyzerImpl(CodeLocation source, HashId hashId)
+	    throws AnalyzerException {
+	super();
+	this.source = source;
+    }
+
+    @Override
+    public void analyze() throws AnalyzerException, IOException {
+	try {
+	    analyzed = false;
+	    timeOfRun = System.currentTimeMillis();
+	    analyzeFile();
+	    analyzed = true;
+	    timeOfRun = System.currentTimeMillis() - timeOfRun;
+	} catch (LanguageNotSupportedException e) {
+	    logger.debug("File '" + source.getHumanReadableLocationString()
+		    + "' could not be analyzed due to contents in a "
+		    + "non-supported language.");
 	}
+    }
 
-	@Override
-	public void analyze() throws AnalyzerException, IOException {
-		try {
-			analyzed = false;
-			timeOfRun = System.currentTimeMillis();
-			analyzeFile();
-			analyzed = true;
-			timeOfRun = System.currentTimeMillis() - timeOfRun;
-		} catch (LanguageNotSupportedException e) {
-			logger.debug("File '" + source.getHumanReadableLocationString()
-					+ "' could not be analyzed due to contents in a "
-					+ "non-supported language.");
-		}
-	}
+    private void analyzeFile() throws IOException, AnalyzerException,
+	    LanguageNotSupportedException {
+	analyzer = CodeAnalyzerFactory.createFactory().create(source);
+	analyzer.analyze();
+    }
 
-	private void analyzeFile() throws IOException, AnalyzerException,
-			LanguageNotSupportedException {
-		analyzer = CodeAnalyzerFactory.createFactory().create(source);
-		analyzer.analyze();
-	}
+    public boolean isAnalyzed() {
+	return analyzed;
+    }
 
-	public boolean isAnalyzed() {
-		return analyzed;
-	}
+    public CodeAnalyzer getAnalyzer() {
+	return analyzer;
+    }
 
-	public CodeAnalyzer getAnalyzer() {
-		return analyzer;
-	}
+    @Override
+    public CodeAnalysis getAnalysis() {
+	return analyzer.getAnalysis();
+    }
 
-	@Override
-	public CodeAnalysis getAnalysis() {
-		return analyzer.getAnalysis();
-	}
+    @Override
+    public ProgrammingLanguage getLanguage() {
+	return analyzer.getLanguage();
+    }
 
-	@Override
-	public ProgrammingLanguage getLanguage() {
-		return analyzer.getLanguage();
-	}
+    @Override
+    public boolean persist(File file) {
+	return false;
+    }
 
-	@Override
-	public boolean persist(File file) {
-		return false;
-	}
-
-	@Override
-	public CodeLocation getSource() {
-		return source;
-	}
+    @Override
+    public CodeLocation getSource() {
+	return source;
+    }
 
 }

@@ -25,7 +25,7 @@ public class FortranLexerTest {
 	    assertNotNull(grammar);
 	    Lexer lexer = new RegExpLexer(grammar);
 	    TokenStream tokenStream = lexer.lex(new FixedCodeLocation("2.0 - 3.0")
-		    .load());
+		    .loadSourceCode());
 	    assertEquals(5, tokenStream.size());
 	    assertEquals("REAL_LITERAL_CONSTANT", tokenStream.get(0).getName());
 	    assertEquals("WHITESPACE", tokenStream.get(1).getName());
@@ -47,7 +47,7 @@ public class FortranLexerTest {
 	    Grammar grammar = FortranGrammar.getInstance();
 	    assertNotNull(grammar);
 	    Lexer lexer = new RegExpLexer(grammar);
-	    TokenStream tokenStream = lexer.lex(new FixedCodeLocation("3.OR.4").load());
+	    TokenStream tokenStream = lexer.lex(new FixedCodeLocation("3.OR.4").loadSourceCode());
 	    assertEquals(3, tokenStream.size());
 	    assertEquals("INT_LITERAL_CONSTANT", tokenStream.get(0).getName());
 	    assertEquals("OR", tokenStream.get(1).getName());
