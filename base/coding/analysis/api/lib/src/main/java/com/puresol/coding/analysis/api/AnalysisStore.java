@@ -15,17 +15,6 @@ import java.util.UUID;
 public interface AnalysisStore {
 
     /**
-     * This method returns a list of all available analysis.
-     * 
-     * @return A {@link List} of {@link AnalysisInformation} is returned
-     *         containing all available analysis.
-     * @throws AnalysisStoreException
-     *             is thrown in cases of issues.
-     */
-    public List<AnalysisInformation> getAllAnalysisInformation()
-	    throws AnalysisStoreException;
-
-    /**
      * This method is used to load a single Analysis by {@link UUID}.
      * 
      * @param uuid
@@ -39,7 +28,7 @@ public interface AnalysisStore {
 
     /**
      * This method creates a new Analysis which is specified by
-     * {@link AnalysisSettings}.
+     * {@link AnalysisProjectSettings}.
      * 
      * @param settings
      *            are the settings to be used for a new analysis.
@@ -48,7 +37,7 @@ public interface AnalysisStore {
      * @throws AnalysisStoreException
      *             is thrown for unexpected issues.
      */
-    public AnalysisProject createAnalysis(AnalysisSettings settings)
+    public AnalysisProject createAnalysis(AnalysisProjectSettings settings)
 	    throws AnalysisStoreException;
 
     /**
@@ -60,4 +49,17 @@ public interface AnalysisStore {
      *             is thrown in cases of issues.
      */
     public void removeAnalysis(UUID uuid) throws AnalysisStoreException;
+
+    /**
+     * This method returns a list of all {@link AnalysisProject}s. Additionally
+     * to {@link #getAllAnalysisInformation()}, other information is included
+     * like repository location.
+     * 
+     * @throws AnalysisStoreException
+     *             is thrown in cases of issues.
+     * 
+     * @return A {@link List} of {@link AnalysisProject} is returned.
+     */
+    public List<AnalysisProject> getAnalysisProjects()
+	    throws AnalysisStoreException;
 }

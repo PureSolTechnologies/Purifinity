@@ -1,6 +1,7 @@
 package com.puresol.coding.client.application.views;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.NotEnabledException;
@@ -36,14 +37,14 @@ import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.progress.UIJob;
 
-import com.puresol.coding.analysis.api.AnalysisInformation;
+import com.puresol.coding.analysis.api.AnalysisProject;
+import com.puresol.coding.analysis.api.AnalysisProjectInformation;
 import com.puresol.coding.analysis.api.AnalysisStore;
 import com.puresol.coding.analysis.api.AnalysisStoreException;
 import com.puresol.coding.analysis.api.AnalysisStoreFactory;
 import com.puresol.coding.client.application.Activator;
 import com.puresol.coding.client.application.ClientImages;
-import com.puresol.coding.client.application.content.AnalysisListContentProvider;
-import com.puresol.coding.client.application.content.AnalysisListLabelProvider;
+import com.puresol.coding.client.application.content.AnalysisProjectsTableViewer;
 import com.puresol.coding.client.application.handler.NewAnalysisProjectHandler;
 import com.puresol.coding.client.application.jobs.AnalysisJob;
 
@@ -76,8 +77,8 @@ public class AnalysisProjectsView extends ViewPart implements
 	super();
     }
 
-    private Table analyzesList;
-    private TableViewer analyzesViewer;
+    private Table analysisProjectsTable;
+    private TableViewer analysisProjectsViewer;
     private ISelection selection = null;
     private ToolItem refresh;
     private ToolItem addAnalysis;
@@ -89,12 +90,15 @@ public class AnalysisProjectsView extends ViewPart implements
     @Override
     public void createPartControl(Composite parent) {
 	parent.setLayout(new FormLayout());
-	analyzesList = new Table(parent, SWT.BORDER);
+	analysisProjectsTable = new Table(parent, SWT.BORDER);
 	FormData fd_analyzesList = new FormData();
 	fd_analyzesList.bottom = new FormAttachment(100);
 	fd_analyzesList.left = new FormAttachment(0);
-	analyzesList.setLayoutData(fd_analyzesList);
-	analyzesViewer = new TableViewer(analyzesList);
+	analysisProjectsTable.setLayoutData(fd_analyzesList);
+	analysisProjectsTable.setHeaderVisible(true);
+	analysisProjectsTable.setLinesVisible(true);
+	analysisProjectsViewer = new AnalysisProjectsTableViewer(
+		analysisProjectsTable);
 
 	ToolBar toolBar = new ToolBar(parent, SWT.FLAT | SWT.RIGHT);
 	fd_analyzesList.top = new FormAttachment(toolBar, 6);
@@ -109,11 +113,7 @@ public class AnalysisProjectsView extends ViewPart implements
 
 	refresh = new ToolItem(toolBar, SWT.NONE);
 	refresh.setText("Refresh");
-	analyzesViewer.setContentProvider(new AnalysisListContentProvider());
-	analyzesViewer.setLabelProvider(new AnalysisListLabelProvider());
-	analyzesList.redraw();
-	analyzesViewer.refresh();
-	analyzesList.addSelectionListener(this);
+	analysisProjectsTable.addSelectionListener(this);
 
 	updateAnalysisList();
 	refresh.addSelectionListener(this);
@@ -141,7 +141,7 @@ public class AnalysisProjectsView extends ViewPart implements
 
     @Override
     public void setFocus() {
-	analyzesList.setFocus();
+	analysisProjectsTable.setFocus();
     }
 
     @Override
@@ -166,7 +166,7 @@ public class AnalysisProjectsView extends ViewPart implements
 	UIJob uiJob = new UIJob("Update Analysis Navigator") {
 	    @Override
 	    public IStatus runInUIThread(IProgressMonitor monitor) {
-		refreshAnalysisList();
+		refreshAnalysisProjectList();
 		return Status.OK_STATUS;
 	    }
 	};
@@ -215,25 +215,25 @@ public class AnalysisProjectsView extends ViewPart implements
 
     @Override
     public void widgetSelected(SelectionEvent event) {
-	if (event.getSource() == analyzesList) {
-	    processAnalysisSelection();
+	if (event.getSource() == analysisProjectsTable) {
+	    processAnalysisProjectSelection();
 	} else if (event.getSource() == refresh) {
-	    refreshAnalysisList();
+	    refreshAnalysisProjectList();
 	} else if (event.getSource() == addAnalysis) {
-	    addAnalysis();
+	    addAnalysisProject();
 	} else if (event.getSource() == editAnalysis) {
-	    editAnalysis();
+	    editAnalysisProject();
 	} else if (event.getSource() == deleteAnalysis) {
-	    deleteAnalysis();
+	    deleteAnalysisProject();
 	}
     }
 
-    private void editAnalysis() {
+    private void editAnalysisProject() {
 	MessageDialog.openInformation(getSite().getShell(), "Not implemented",
 		"This functionality is not implemented, yet!");
     }
 
-    private void addAnalysis() {
+    private void addAnalysisProject() {
 	try {
 	    IHandlerService handlerService = (IHandlerService) getSite()
 		    .getService(IHandlerService.class);
@@ -254,19 +254,20 @@ public class AnalysisProjectsView extends ViewPart implements
 	}
     }
 
-    private void deleteAnalysis() {
+    private void deleteAnalysisProject() {
 	try {
-	    StructuredSelection selection = (StructuredSelection) analyzesViewer
+	    StructuredSelection selection = (StructuredSelection) analysisProjectsViewer
 		    .getSelection();
-	    AnalysisInformation information = (AnalysisInformation) selection
-		    .getFirstElement();
-	    if (MessageDialog.openQuestion(
-		    getSite().getShell(),
-		    "Delete?",
-		    "Do you really want to delete analysis '"
-			    + information.getName() + "'?")) {
-		store.removeAnalysis(information.getUUID());
-		refreshAnalysisList();
+	    if (MessageDialog
+		    .openQuestion(getSite().getShell(), "Delete?",
+			    "Do you really want to delete analysis the selected analysis project(s)?")) {
+		Iterator<?> iterator = selection.iterator();
+		while (iterator.hasNext()) {
+		    AnalysisProjectInformation information = (AnalysisProjectInformation) iterator
+			    .next();
+		    store.removeAnalysis(information.getUUID());
+		    refreshAnalysisProjectList();
+		}
 	    }
 	} catch (AnalysisStoreException e) {
 	    logger.log(new Status(Status.ERROR, AnalysisProjectsView.class
@@ -275,10 +276,10 @@ public class AnalysisProjectsView extends ViewPart implements
 	}
     }
 
-    private void refreshAnalysisList() {
+    private void refreshAnalysisProjectList() {
 	try {
-	    if (!analyzesList.isDisposed()) {
-		analyzesViewer.setInput(store.getAllAnalysisInformation());
+	    if (!analysisProjectsTable.isDisposed()) {
+		analysisProjectsViewer.setInput(store.getAnalysisProjects());
 	    }
 	} catch (AnalysisStoreException e) {
 	    logger.log(new Status(Status.ERROR, AnalysisProjectsView.class
@@ -288,19 +289,12 @@ public class AnalysisProjectsView extends ViewPart implements
 	}
     }
 
-    private void processAnalysisSelection() {
-	try {
-	    StructuredSelection selection = (StructuredSelection) analyzesViewer
-		    .getSelection();
-	    AnalysisInformation information = (AnalysisInformation) selection
-		    .getFirstElement();
-	    setSelection(new AnalysisSelection(store.loadAnalysis(information
-		    .getUUID())));
-	} catch (AnalysisStoreException e) {
-	    logger.log(new Status(Status.ERROR, AnalysisProjectsView.class
-		    .getName(),
-		    "Could not retrieve analysis from analysis store!", e));
-	}
+    private void processAnalysisProjectSelection() {
+	StructuredSelection selection = (StructuredSelection) analysisProjectsViewer
+		.getSelection();
+	AnalysisProject analysisProject = (AnalysisProject) selection
+		.getFirstElement();
+	setSelection(new AnalysisProjectSelection(analysisProject));
     }
 
     @Override

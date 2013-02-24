@@ -18,8 +18,8 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.part.ViewPart;
 
-import com.puresol.coding.analysis.api.AnalysisInformation;
 import com.puresol.coding.analysis.api.AnalysisProject;
+import com.puresol.coding.analysis.api.AnalysisProjectInformation;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalysisRunInformation;
 import com.puresol.coding.analysis.api.AnalysisStore;
@@ -149,13 +149,13 @@ public class AnalysisStoreView extends ViewPart implements SelectionListener {
 	} else if (event.getSource() == analysisList) {
 	    StructuredSelection selection = (StructuredSelection) analysisViewer
 		    .getSelection();
-	    AnalysisInformation analysisInformation = (AnalysisInformation) selection
+	    AnalysisProjectInformation analysisInformation = (AnalysisProjectInformation) selection
 		    .getFirstElement();
 	    updateAnalysisRunList(analysisInformation);
 	} else if (event.getSource() == analysisRunList) {
 	    StructuredSelection analysisSelection = (StructuredSelection) analysisViewer
 		    .getSelection();
-	    AnalysisInformation analysisInformation = (AnalysisInformation) analysisSelection
+	    AnalysisProjectInformation analysisInformation = (AnalysisProjectInformation) analysisSelection
 		    .getFirstElement();
 	    StructuredSelection analysisRunSelection = (StructuredSelection) analysisRunViewer
 		    .getSelection();
@@ -169,7 +169,7 @@ public class AnalysisStoreView extends ViewPart implements SelectionListener {
 	try {
 	    selectedAnalysis = null;
 	    updateAnalysisRunList(null);
-	    analysisViewer.setInput(analysisStore.getAllAnalysisInformation());
+	    analysisViewer.setInput(analysisStore.getAnalysisProjects());
 	} catch (AnalysisStoreException e) {
 	    logger.log(new Status(
 		    Status.ERROR,
@@ -179,7 +179,7 @@ public class AnalysisStoreView extends ViewPart implements SelectionListener {
 	}
     }
 
-    private void updateAnalysisRunList(AnalysisInformation information) {
+    private void updateAnalysisRunList(AnalysisProjectInformation information) {
 	try {
 	    updateRunInformation(null);
 	    if (information != null) {
@@ -208,7 +208,7 @@ public class AnalysisStoreView extends ViewPart implements SelectionListener {
 	    if (analysisRunInformation != null) {
 		selectedAnalysisRun = selectedAnalysis
 			.loadAnalysisRun(analysisRunInformation.getUUID());
-		runName.setText(selectedAnalysis.getInformation().getName());
+		runName.setText(selectedAnalysis.getSettings().getName());
 		runDescription.setText(analysisRunInformation.getDescription());
 	    } else {
 		selectedAnalysisRun = null;

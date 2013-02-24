@@ -1,5 +1,6 @@
 package com.puresol.coding.analysis.api;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
@@ -11,15 +12,15 @@ import java.util.UUID;
  * @author Rick-Rainer Ludwig
  * 
  */
-public interface AnalysisProject {
+public interface AnalysisProject extends Serializable {
 
     /**
      * This method returns detailed information about the analysis.
      * 
-     * @return An {@link AnalysisInformation} object is returned containing the
-     *         information.
+     * @return An {@link AnalysisProjectInformation} object is returned
+     *         containing the information.
      */
-    public AnalysisInformation getInformation();
+    public AnalysisProjectInformation getInformation();
 
     /**
      * This method returns all relevant meta information for the analysis for
@@ -36,20 +37,21 @@ public interface AnalysisProject {
     /**
      * This method returns the settings of the analysis.
      * 
-     * @return A {@link AnalysisSettings} object is returned containing the
-     *         settings.
+     * @return A {@link AnalysisProjectSettings} object is returned containing
+     *         the settings.
      */
-    public AnalysisSettings getSettings();
+    public AnalysisProjectSettings getSettings();
 
     /**
      * This method updates the settings of the analysis.
      * 
      * @param settings
-     *            is a {@link AnalysisSettings} object containing the settings.
+     *            is a {@link AnalysisProjectSettings} object containing the
+     *            settings.
      * @throws AnalysisStoreException
      *             is thrown in cases of issues.
      */
-    public void updateSettings(AnalysisSettings settings)
+    public void updateSettings(AnalysisProjectSettings settings)
 	    throws AnalysisStoreException;
 
     /**

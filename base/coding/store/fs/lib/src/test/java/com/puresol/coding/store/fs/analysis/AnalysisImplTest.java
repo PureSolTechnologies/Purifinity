@@ -12,11 +12,11 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.puresol.coding.analysis.api.AnalysisInformation;
 import com.puresol.coding.analysis.api.AnalysisProject;
+import com.puresol.coding.analysis.api.AnalysisProjectInformation;
+import com.puresol.coding.analysis.api.AnalysisProjectSettings;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalysisRunInformation;
-import com.puresol.coding.analysis.api.AnalysisSettings;
 import com.puresol.coding.analysis.api.AnalysisStore;
 import com.puresol.coding.analysis.api.AnalysisStoreException;
 import com.puresol.coding.analysis.api.DirectoryRepositoryLocation;
@@ -30,8 +30,8 @@ public class AnalysisImplTest {
     @BeforeClass
     public static void initialize() throws AnalysisStoreException {
 	analysisStore = new AnalysisStoreImpl();
-	analysis = analysisStore.createAnalysis(new AnalysisSettings("Name",
-		"Description", new TestFileSearchConfiguration(),
+	analysis = analysisStore.createAnalysis(new AnalysisProjectSettings(
+		"Name", "Description", new TestFileSearchConfiguration(),
 		new DirectoryRepositoryLocation(".", new File("."))));
 	assertNotNull(analysis);
     }
@@ -45,15 +45,15 @@ public class AnalysisImplTest {
 
     @Test
     public void testUpdateSettings() throws AnalysisStoreException {
-	AnalysisInformation oldInformation = analysis.getInformation();
-	AnalysisSettings settingsForUpdate = new AnalysisSettings("Name2",
-		"Description2", new TestFileSearchConfiguration(),
+	AnalysisProjectInformation oldInformation = analysis.getInformation();
+	AnalysisProjectSettings settingsForUpdate = new AnalysisProjectSettings(
+		"Name2", "Description2", new TestFileSearchConfiguration(),
 		new DirectoryRepositoryLocation("/", new File("/")));
 
 	analysis.updateSettings(settingsForUpdate);
 
-	AnalysisInformation newInformation = analysis.getInformation();
-	AnalysisSettings newSettings = analysis.getSettings();
+	AnalysisProjectInformation newInformation = analysis.getInformation();
+	AnalysisProjectSettings newSettings = analysis.getSettings();
 
 	/* UUID and creation time must not to be changed! */
 	assertNotSame(oldInformation, newInformation);
@@ -61,8 +61,6 @@ public class AnalysisImplTest {
 	assertEquals(oldInformation.getCreationTime(),
 		newInformation.getCreationTime());
 	/* name and description are updated */
-	assertEquals("Name2", newInformation.getName());
-	assertEquals("Description2", newInformation.getDescription());
 
 	assertEquals("Name2", newSettings.getName());
 	assertEquals("Description2", newSettings.getDescription());

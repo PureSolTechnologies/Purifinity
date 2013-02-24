@@ -19,7 +19,7 @@ import com.puresol.coding.client.application.grammar.RenderException;
 import com.puresol.coding.lang.api.ProgrammingLanguage;
 import com.puresol.uhura.grammar.GrammarException;
 
-public class GrammarViewer extends ViewPart implements
+public class GrammarView extends ViewPart implements
 		ISelectionChangedListener {
 
 	private Combo languageCombo;
@@ -27,7 +27,7 @@ public class GrammarViewer extends ViewPart implements
 	private ProgrammingLanguage selectedProgrammingLanguage;
 	private GrammarCanvas grammarCanvas;
 
-	public GrammarViewer() {
+	public GrammarView() {
 		super();
 	}
 

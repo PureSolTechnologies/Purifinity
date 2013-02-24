@@ -8,7 +8,7 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.wizard.Wizard;
 
 import com.puresol.coding.analysis.api.AnalysisProject;
-import com.puresol.coding.analysis.api.AnalysisSettings;
+import com.puresol.coding.analysis.api.AnalysisProjectSettings;
 import com.puresol.coding.analysis.api.AnalysisStore;
 import com.puresol.coding.analysis.api.AnalysisStoreException;
 import com.puresol.coding.analysis.api.AnalysisStoreFactory;
@@ -34,7 +34,7 @@ public class NewAnalysisWizard extends Wizard {
     public boolean performFinish() {
 	try {
 	    String projectName = getProjectName();
-	    String description = getDescription();
+	    String description = getProjectDescription();
 	    File sourceDirectory = getSourceDirectory();
 
 	    IPreferenceStore preferenceStore = Activator.getDefault()
@@ -43,7 +43,7 @@ public class NewAnalysisWizard extends Wizard {
 		    .getFileSearchConfiguration(preferenceStore);
 	    AnalysisStore analysisStore = AnalysisStoreFactory.getFactory()
 		    .getInstance();
-	    AnalysisSettings analysisSettings = new AnalysisSettings(
+	    AnalysisProjectSettings analysisSettings = new AnalysisProjectSettings(
 		    projectName, description, searchConfiguration,
 		    new DirectoryRepositoryLocation(projectName,
 			    sourceDirectory));
@@ -65,8 +65,8 @@ public class NewAnalysisWizard extends Wizard {
 	return generalSettingsPage.getProjectName();
     }
 
-    public String getDescription() {
-	return generalSettingsPage.getDescription();
+    public String getProjectDescription() {
+	return generalSettingsPage.getProjectDescription();
     }
 
     public File getSourceDirectory() {

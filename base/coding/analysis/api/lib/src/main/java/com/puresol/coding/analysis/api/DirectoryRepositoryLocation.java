@@ -26,6 +26,11 @@ public class DirectoryRepositoryLocation extends AbstractRepositoryLocation {
     }
 
     @Override
+    public String getHumanReadableLocationString() {
+	return "Directory: " + repositoryDirectory.getPath();
+    }
+
+    @Override
     public List<CodeLocation> getSourceCodes() {
 	FileTree fileTree = FileSearch.getFileTree(repositoryDirectory,
 		getCodeSearchConfiguration());

@@ -10,9 +10,9 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.puresol.coding.analysis.api.AnalysisInformation;
 import com.puresol.coding.analysis.api.AnalysisProject;
-import com.puresol.coding.analysis.api.AnalysisSettings;
+import com.puresol.coding.analysis.api.AnalysisProjectInformation;
+import com.puresol.coding.analysis.api.AnalysisProjectSettings;
 import com.puresol.coding.analysis.api.AnalysisStore;
 import com.puresol.coding.analysis.api.AnalysisStoreException;
 import com.puresol.coding.analysis.api.AnalysisStoreFactory;
@@ -24,8 +24,8 @@ public class AnalysisStoreImplTest {
     @Test
     public void testGetAllAnalysisInformation() throws AnalysisStoreException {
 	AnalysisStore store = AnalysisStoreFactory.getFactory().getInstance();
-	List<AnalysisInformation> allAnalysisInformation = store
-		.getAllAnalysisInformation();
+	List<AnalysisProject> allAnalysisInformation = store
+		.getAnalysisProjects();
 	assertNotNull(allAnalysisInformation);
 	File storeDir = new File(System.getProperty("user.home"),
 		".code.analysis.store");
@@ -37,15 +37,18 @@ public class AnalysisStoreImplTest {
     public void testCreateAndDeleteAnalysis() throws AnalysisStoreException {
 	AnalysisStore store = AnalysisStoreFactory.getFactory().getInstance();
 	File sourceDirectory = new File(".");
-	AnalysisProject analysis = store.createAnalysis(new AnalysisSettings(
-		"Name", "Description", new TestFileSearchConfiguration(),
-		new DirectoryRepositoryLocation("name", sourceDirectory)));
+	AnalysisProject analysis = store
+		.createAnalysis(new AnalysisProjectSettings(
+			"Name",
+			"Description",
+			new TestFileSearchConfiguration(),
+			new DirectoryRepositoryLocation("name", sourceDirectory)));
 
-	AnalysisInformation information = analysis.getInformation();
+	AnalysisProjectInformation information = analysis.getInformation();
 	assertNotNull(information.getUUID());
 	assertNotNull(information.getCreationTime());
-	assertEquals("Name", information.getName());
-	assertEquals("Description", information.getDescription());
+	assertEquals("Name", analysis.getSettings().getName());
+	assertEquals("Description", analysis.getSettings().getDescription());
 
 	File analysisDir = new File(new File(System.getProperty("user.home"),
 		".code.analysis.store"), information.getUUID().toString());
@@ -62,15 +65,18 @@ public class AnalysisStoreImplTest {
 	    throws AnalysisStoreException {
 	AnalysisStore store = AnalysisStoreFactory.getFactory().getInstance();
 	File sourceDirectory = new File(System.getProperty("user.dir"));
-	AnalysisProject analysis = store.createAnalysis(new AnalysisSettings(
-		"Name", "Description", new TestFileSearchConfiguration(),
-		new DirectoryRepositoryLocation("name", sourceDirectory)));
+	AnalysisProject analysis = store
+		.createAnalysis(new AnalysisProjectSettings(
+			"Name",
+			"Description",
+			new TestFileSearchConfiguration(),
+			new DirectoryRepositoryLocation("name", sourceDirectory)));
 
-	AnalysisInformation information = analysis.getInformation();
+	AnalysisProjectInformation information = analysis.getInformation();
 	assertNotNull(information.getUUID());
 	assertNotNull(information.getCreationTime());
-	assertEquals("Name", information.getName());
-	assertEquals("Description", information.getDescription());
+	assertEquals("Name", analysis.getSettings().getName());
+	assertEquals("Description", analysis.getSettings().getDescription());
 
 	File analysisDir = new File(new File(System.getProperty("user.home"),
 		".code.analysis.store"), information.getUUID().toString());

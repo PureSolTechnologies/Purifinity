@@ -24,7 +24,7 @@ import java.util.concurrent.Future;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresol.coding.analysis.api.AnalysisInformation;
+import com.puresol.coding.analysis.api.AnalysisProject;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalysisRunInformation;
 import com.puresol.coding.analysis.api.AnalysisStoreException;
@@ -57,7 +57,7 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
     public static File getStorageDirectory(AnalysisRun analysisRun) {
 	File analysisStorageDirectory = AnalysisStoreImpl
 		.getStorageDirectory(analysisRun.getInformation()
-			.getAnalysisInformation().getUUID());
+			.getAnalysisProject().getInformation().getUUID());
 	return new File(analysisStorageDirectory, analysisRun.getInformation()
 		.getUUID().toString());
     }
@@ -91,12 +91,12 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
      * @throws IOException
      */
     public static AnalysisRun create(File runDirectory,
-	    AnalysisInformation analysisInformation, UUID uuid,
+	    AnalysisProject analysisProject, UUID uuid,
 	    RepositoryLocation repositorySource,
 	    FileSearchConfiguration searchConfiguration)
 	    throws AnalysisStoreException {
 	AnalysisRunImpl projectAnalyser = new AnalysisRunImpl(runDirectory);
-	projectAnalyser.create(repositorySource, analysisInformation, uuid,
+	projectAnalyser.create(repositorySource, analysisProject, uuid,
 		searchConfiguration);
 	return projectAnalyser;
     }
@@ -106,7 +106,6 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
     private static final String SEARCH_CONFIGURATION_FILE = "search_configuration.persist";
     private static final String ANALYSIS_RUN_PROPERTIES_FILE = "analysis_run.properties";
     private static final String ANALYSIS_INFORMATION_FILE = "analysis_information.persist";
-    private static final String FILE_TREE = "file_tree.persist";
     private static final String REPOSITORY_LOCATION__FILE = "repository_location.persist";
 
     private final File runDirectory;
@@ -114,10 +113,9 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
     private final List<AnalyzedCode> analyzedFiles = new ArrayList<AnalyzedCode>();
     private final List<CodeLocation> failedSources = new ArrayList<CodeLocation>();
 
-    private final HashIdFileTree hashIdFileTree = null;
     private FileSearchConfiguration searchConfig;
 
-    private AnalysisInformation analysisRunInformation;
+    private AnalysisProject analysisProject;
     private UUID uuid;
     private Date creationTime;
     private long timeOfRun;
@@ -140,19 +138,19 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
      * This methods creates a new project directory.
      * 
      * @param repositorySource
-     * @param analysisInformation
+     * @param analysisProject
      * @param uuid
      * @param searchConfiguration
      * @return
      * @throws AnalysisStoreException
      */
     void create(RepositoryLocation repositorySource,
-	    AnalysisInformation analysisInformation, UUID uuid,
+	    AnalysisProject analysisProject, UUID uuid,
 	    FileSearchConfiguration searchConfiguration)
 	    throws AnalysisStoreException {
 	try {
 	    this.repositoryLocation = repositorySource;
-	    this.analysisRunInformation = analysisInformation;
+	    this.analysisProject = analysisProject;
 	    this.uuid = uuid;
 	    this.searchConfig = searchConfiguration;
 	    this.creationTime = new Date();
@@ -245,7 +243,7 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
 	} finally {
 	    reader.close();
 	}
-	analysisRunInformation = restore(new File(runDirectory,
+	analysisProject = restore(new File(runDirectory,
 		ANALYSIS_INFORMATION_FILE));
 	repositoryLocation = restore(new File(runDirectory,
 		REPOSITORY_LOCATION__FILE));
@@ -266,7 +264,7 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
 	}
 	persist(repositoryLocation, new File(runDirectory,
 		REPOSITORY_LOCATION__FILE));
-	persist(analysisRunInformation, new File(runDirectory,
+	persist(analysisProject, new File(runDirectory,
 		ANALYSIS_INFORMATION_FILE));
     }
 
@@ -299,7 +297,6 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
 	    saveAnalysisRunInformation();
 	    boolean retVal = analyzeFiles();
 	    storeAnalysisResultInformation();
-	    persist(hashIdFileTree, new File(runDirectory, FILE_TREE));
 	    fireDone("Finished successfully.", retVal);
 	    return retVal;
 	} catch (Exception e) {
@@ -350,15 +347,15 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
 		    fireUpdateWork("Finished a file.", 1);
 		    try {
 			AnalyzedCode result = future.get();
-			fireUpdateWork("Finished '"
-				+ result.getSourceLocation()
-					.getHumanReadableLocationString()
-				+ "'.", 0);
 			if (result.getStartTime() != null) {
 			    analyzedFiles.add(result);
 			} else {
 			    failedSources.add(result.getSourceLocation());
 			}
+			fireUpdateWork("Finished '"
+				+ result.getSourceLocation()
+					.getHumanReadableLocationString()
+				+ "'.", 0);
 		    } catch (CancellationException e) {
 			logger.debug("Job was cancelled.", e);
 		    } catch (InterruptedException e) {
@@ -384,7 +381,7 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
 
     @Override
     public HashIdFileTree getFileTree() {
-	return hashIdFileTree;
+	return null;
     }
 
     @Override
@@ -429,8 +426,8 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
 
     @Override
     public AnalysisRunInformation getInformation() {
-	return new AnalysisRunInformation(analysisRunInformation, uuid,
-		creationTime, timeOfRun, "<Not implemented, yet!>");
+	return new AnalysisRunInformation(analysisProject, uuid, creationTime,
+		timeOfRun, "<Not implemented, yet!>");
     }
 
     public static boolean isAnalysisRunDirectory(File runDirectory) {

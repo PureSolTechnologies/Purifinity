@@ -24,8 +24,8 @@ public class EvaluationJob extends Job {
 
     public EvaluationJob(AnalysisRun analysisRun) {
 	super("Evalutions of '"
-		+ analysisRun.getInformation().getAnalysisInformation()
-			.getName() + "'");
+		+ analysisRun.getInformation().getAnalysisProject()
+			.getSettings().getName() + "'");
 	this.analysisRun = analysisRun;
     }
 

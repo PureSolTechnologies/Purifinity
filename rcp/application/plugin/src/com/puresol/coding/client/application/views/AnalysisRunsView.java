@@ -238,15 +238,15 @@ public class AnalysisRunsView extends ViewPart implements SelectionListener,
 
     @Override
     public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-	if (selection instanceof AnalysisSelection) {
+	if (selection instanceof AnalysisProjectSelection) {
 	    processGlobalAnalysisSelection(selection);
 	}
     }
 
     private void processGlobalAnalysisSelection(ISelection selection) {
 	try {
-	    AnalysisSelection analysisSelection = (AnalysisSelection) selection;
-	    analysis = analysisSelection.getAnalysis();
+	    AnalysisProjectSelection analysisSelection = (AnalysisProjectSelection) selection;
+	    analysis = analysisSelection.getAnalysisProject();
 	    analysisRunsViewer.setInput(analysis.getAllRunInformation());
 	} catch (AnalysisStoreException e) {
 	    logger.log(new Status(Status.ERROR, ParserTreeControl.class

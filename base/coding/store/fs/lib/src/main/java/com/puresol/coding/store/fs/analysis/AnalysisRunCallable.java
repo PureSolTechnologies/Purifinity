@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.puresol.coding.analysis.api.AnalyzedCode;
+import com.puresol.coding.analysis.api.AnalyzerException;
 import com.puresol.coding.analysis.api.CodeAnalysis;
 import com.puresol.coding.analysis.api.CodeStore;
 import com.puresol.coding.analysis.api.CodeStoreException;
@@ -34,16 +35,27 @@ public class AnalysisRunCallable implements Callable<AnalyzedCode> {
     @Override
     public AnalyzedCode call() throws IOException, CodeStoreException {
 	logger.info("Starting analysis for '" + sourceFile + "'...");
-	InputStream stream = sourceFile.openStream();
-	HashId hashId;
-	try {
-	    hashId = codeStore.storeRawFile(stream);
-	} finally {
-	    stream.close();
-	}
+	HashId hashId = storeRawFile();
 	AnalyzedCode result = analyzeCode(hashId, sourceFile);
 	logger.info("Finished analysis for '" + sourceFile + "'.");
 	return result;
+    }
+
+    /**
+     * This method stores the raw file within the code store for later
+     * reference.
+     * 
+     * @return A {@link HashId} is returned as reference to the stored file.
+     * @throws IOException
+     * @throws CodeStoreException
+     */
+    private HashId storeRawFile() throws IOException, CodeStoreException {
+	InputStream stream = sourceFile.openStream();
+	try {
+	    return codeStore.storeRawFile(stream);
+	} finally {
+	    stream.close();
+	}
     }
 
     /**
@@ -62,32 +74,58 @@ public class AnalysisRunCallable implements Callable<AnalyzedCode> {
      */
     private AnalyzedCode analyzeCode(HashId hashId, CodeLocation sourceFile) {
 	try {
-	    if (codeStore.isAvailable(hashId) && codeStore.wasAnalyzed(hashId)) {
-		CodeAnalysis analysis = codeStore.loadAnalysis(hashId);
-		return new AnalyzedCode(hashId, sourceFile,
-			analysis.getStartTime(), analysis.getDuration(),
-			analysis.getLanguageName(),
-			analysis.getLanguageVersion());
+	    if (codeStore.wasAnalyzed(hashId)) {
+		return loadAnalysis(hashId, sourceFile);
 	    } else {
-		CodeAnalyzerImpl fileAnalyzer = new CodeAnalyzerImpl(
-			sourceFile, hashId);
-		fileAnalyzer.analyze();
-		if (fileAnalyzer.isAnalyzed()) {
-		    codeStore.storeAnalysis(hashId, fileAnalyzer.getAnalyzer()
-			    .getAnalysis());
-		    return fileAnalyzer.getAnalysis().getAnalyzedFile();
-		} else {
-		    logger.warn("File "
-			    + sourceFile.getHumanReadableLocationString()
-			    + " could be analyzed.");
-		    return new AnalyzedCode(hashId, sourceFile, null, 0, null,
-			    null);
-		}
+		return createNewAnalysis(hashId, sourceFile);
 	    }
 	} catch (Exception e) {
 	    logger.error(e.getMessage(), e);
 	    return new AnalyzedCode(hashId, sourceFile, null, 0, null, null);
 	}
+    }
+
+    /**
+     * This method creates a new analysis.
+     * 
+     * @param hashId
+     * @param sourceFile
+     * @return
+     * @throws AnalyzerException
+     * @throws IOException
+     * @throws CodeStoreException
+     */
+    private AnalyzedCode createNewAnalysis(HashId hashId,
+	    CodeLocation sourceFile) throws AnalyzerException, IOException,
+	    CodeStoreException {
+	CodeAnalyzerImpl fileAnalyzer = new CodeAnalyzerImpl(sourceFile, hashId);
+	fileAnalyzer.analyze();
+	if (fileAnalyzer.isAnalyzed()) {
+	    codeStore.storeAnalysis(hashId, fileAnalyzer.getAnalyzer()
+		    .getAnalysis());
+	    return fileAnalyzer.getAnalysis().getAnalyzedFile();
+	} else {
+	    logger.warn("File " + sourceFile.getHumanReadableLocationString()
+		    + " could be analyzed.");
+	    return new AnalyzedCode(hashId, sourceFile, null, 0, null, null);
+	}
+    }
+
+    /**
+     * This method loads an already existing analysis.
+     * 
+     * @param hashId
+     * @param sourceFile
+     * @return
+     * @throws CodeStoreException
+     */
+    private AnalyzedCode loadAnalysis(HashId hashId, CodeLocation sourceFile)
+	    throws CodeStoreException {
+	CodeAnalysis analysis = codeStore.loadAnalysis(hashId);
+	AnalyzedCode analyzedCode = new AnalyzedCode(hashId, sourceFile,
+		analysis.getStartTime(), analysis.getDuration(),
+		analysis.getLanguageName(), analysis.getLanguageVersion());
+	return analyzedCode;
     }
 
 }

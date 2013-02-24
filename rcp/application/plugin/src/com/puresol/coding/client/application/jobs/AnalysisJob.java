@@ -25,7 +25,7 @@ public class AnalysisJob extends Job implements ProgressObserver<AnalysisRun> {
     private IProgressMonitor monitor = null;
 
     public AnalysisJob(AnalysisProject analysisProject) {
-	super(analysisProject.getInformation().getName());
+	super(analysisProject.getSettings().getName());
 	this.analysisProject = analysisProject;
     }
 
@@ -66,8 +66,7 @@ public class AnalysisJob extends Job implements ProgressObserver<AnalysisRun> {
 
     @Override
     public void started(AnalysisRun observable, String message, long total) {
-	monitor.beginTask(analysisProject.getInformation().getName(),
-		(int) total);
+	monitor.beginTask(analysisProject.getSettings().getName(), (int) total);
 	monitor.subTask(message);
     }
 

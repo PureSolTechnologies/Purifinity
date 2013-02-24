@@ -23,76 +23,76 @@ import com.puresol.uhura.source.CodeLocation;
  * 
  */
 public class Java extends AbstractProgrammingLanguage implements
-		AnalyzableProgrammingLanguage {
+	AnalyzableProgrammingLanguage {
 
-	private static final String[] FILE_SUFFIXES = { ".java" };
+    private static final String[] FILE_SUFFIXES = { ".java" };
 
-	private static Java instance = null;
+    private static Java instance = null;
 
-	public static Java getInstance() {
-		if (instance == null) {
-			createInstance();
-		}
-		return instance;
+    public static Java getInstance() {
+	if (instance == null) {
+	    createInstance();
 	}
+	return instance;
+    }
 
-	private static synchronized void createInstance() {
-		if (instance == null) {
-			instance = new Java();
-		}
+    private static synchronized void createInstance() {
+	if (instance == null) {
+	    instance = new Java();
 	}
+    }
 
-	public Java() {
-		super("Java", "1.6");
-	}
+    public Java() {
+	super("Java", "1.6");
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected String[] getValidFileSuffixes() {
-		return FILE_SUFFIXES;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected String[] getValidFileSuffixes() {
+	return FILE_SUFFIXES;
+    }
 
-	@Override
-	public CodeAnalyzer restoreAnalyzer(File file) throws IOException {
-		try {
-			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(
-					file));
-			try {
-				return (CodeAnalyzer) ois.readObject();
-			} finally {
-				ois.close();
-			}
-		} catch (ClassNotFoundException e) {
-			/*
-			 * XXX This needs to be null to go on with the language try out...
-			 * :-(
-			 */
-			return null;
-		}
+    @Override
+    public CodeAnalyzer restoreAnalyzer(File file) throws IOException {
+	try {
+	    ObjectInputStream ois = new ObjectInputStream(new FileInputStream(
+		    file));
+	    try {
+		return (CodeAnalyzer) ois.readObject();
+	    } finally {
+		ois.close();
+	    }
+	} catch (ClassNotFoundException e) {
+	    /*
+	     * XXX This needs to be null to go on with the language try out...
+	     * :-(
+	     */
+	    return null;
 	}
+    }
 
-	@Override
-	public CodeAnalyzer createAnalyser(CodeLocation sourceCodeLocation) {
-		return new JavaAnalyzer(sourceCodeLocation);
-	}
+    @Override
+    public CodeAnalyzer createAnalyser(CodeLocation sourceCodeLocation) {
+	return new JavaAnalyzer(sourceCodeLocation);
+    }
 
-	@Override
-	public LanguageGrammar getGrammar() {
-		return JavaGrammar.getInstance();
-	}
+    @Override
+    public LanguageGrammar getGrammar() {
+	return JavaGrammar.getInstance();
+    }
 
-	@Override
-	public <T> T getImplementation(Class<T> clazz) {
-		ServiceLoader<T> service = ServiceLoader.load(clazz);
-		Iterator<T> iterator = service.iterator();
-		T result = iterator.next();
-		if (iterator.hasNext()) {
-			throw new RuntimeException(
-					"There is more than one implementation available for '"
-							+ clazz.getName() + "'!");
-		}
-		return result;
+    @Override
+    public <T> T getImplementation(Class<T> clazz) {
+	ServiceLoader<T> service = ServiceLoader.load(clazz);
+	Iterator<T> iterator = service.iterator();
+	T result = iterator.next();
+	if (iterator.hasNext()) {
+	    throw new RuntimeException(
+		    "There is more than one implementation available for '"
+			    + clazz.getName() + "'!");
 	}
+	return result;
+    }
 }

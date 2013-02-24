@@ -10,21 +10,16 @@ import java.util.UUID;
  * @author Rick-Rainer Ludwig
  * 
  */
-public final class AnalysisInformation implements Serializable {
+public final class AnalysisProjectInformation implements Serializable {
 
     private static final long serialVersionUID = 1130436909310501842L;
 
     private final UUID uuid;
-    private final String name;
-    private final String description;
     private final Date creationTime;
 
-    public AnalysisInformation(UUID uuid, String name, String description,
-	    Date creationTime) {
+    public AnalysisProjectInformation(UUID uuid, Date creationTime) {
 	super();
 	this.uuid = uuid;
-	this.name = name;
-	this.description = description;
 	this.creationTime = creationTime;
     }
 
@@ -36,24 +31,6 @@ public final class AnalysisInformation implements Serializable {
      */
     public final UUID getUUID() {
 	return uuid;
-    }
-
-    /**
-     * This method returns a user readable name of the analysis.
-     * 
-     * @return A name is returned as String.
-     */
-    public final String getName() {
-	return name;
-    }
-
-    /**
-     * This method returns a user readable description.
-     * 
-     * @return A description is returned as String.
-     */
-    public final String getDescription() {
-	return description;
     }
 
     /**
@@ -72,9 +49,6 @@ public final class AnalysisInformation implements Serializable {
 	int result = 1;
 	result = prime * result
 		+ ((creationTime == null) ? 0 : creationTime.hashCode());
-	result = prime * result
-		+ ((description == null) ? 0 : description.hashCode());
-	result = prime * result + ((name == null) ? 0 : name.hashCode());
 	result = prime * result + ((uuid == null) ? 0 : uuid.hashCode());
 	return result;
     }
@@ -87,21 +61,11 @@ public final class AnalysisInformation implements Serializable {
 	    return false;
 	if (getClass() != obj.getClass())
 	    return false;
-	AnalysisInformation other = (AnalysisInformation) obj;
+	AnalysisProjectInformation other = (AnalysisProjectInformation) obj;
 	if (creationTime == null) {
 	    if (other.creationTime != null)
 		return false;
 	} else if (!creationTime.equals(other.creationTime))
-	    return false;
-	if (description == null) {
-	    if (other.description != null)
-		return false;
-	} else if (!description.equals(other.description))
-	    return false;
-	if (name == null) {
-	    if (other.name != null)
-		return false;
-	} else if (!name.equals(other.name))
 	    return false;
 	if (uuid == null) {
 	    if (other.uuid != null)

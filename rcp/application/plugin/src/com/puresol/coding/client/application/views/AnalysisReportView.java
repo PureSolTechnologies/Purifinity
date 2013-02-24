@@ -29,7 +29,7 @@ import com.puresol.coding.client.application.Activator;
 import com.puresol.coding.client.application.controls.ParserTreeControl;
 import com.puresol.uhura.source.CodeLocation;
 
-public class AnalysisReport extends ViewPart implements ISelectionListener {
+public class AnalysisReportView extends ViewPart implements ISelectionListener {
 
     private static final ILog logger = Activator.getDefault().getLog();
 
@@ -38,7 +38,7 @@ public class AnalysisReport extends ViewPart implements ISelectionListener {
     private Text numFailedFiles;
     private Table table;
 
-    public AnalysisReport() {
+    public AnalysisReportView() {
     }
 
     @Override
@@ -111,10 +111,10 @@ public class AnalysisReport extends ViewPart implements ISelectionListener {
     @Override
     public void selectionChanged(IWorkbenchPart part, ISelection selection) {
 	try {
-	    if (selection instanceof AnalysisSelection) {
-		AnalysisSelection analysisSelection = (AnalysisSelection) selection;
-		AnalysisProject analysis = analysisSelection.getAnalysis();
-		name.setText(analysis.getInformation().getName());
+	    if (selection instanceof AnalysisProjectSelection) {
+		AnalysisProjectSelection analysisSelection = (AnalysisProjectSelection) selection;
+		AnalysisProject analysis = analysisSelection.getAnalysisProject();
+		name.setText(analysis.getSettings().getName());
 		AnalysisRun lastAnalysisRun = analysis.loadLastAnalysisRun();
 		if (lastAnalysisRun != null) {
 		    java.util.List<AnalyzedCode> analyzedFiles = lastAnalysisRun

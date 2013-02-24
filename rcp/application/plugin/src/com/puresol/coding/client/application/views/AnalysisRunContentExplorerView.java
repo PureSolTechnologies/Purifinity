@@ -32,18 +32,18 @@ import com.puresol.coding.client.application.editors.FileAnalysisEditorInput;
 import com.puresol.coding.client.application.editors.NotAnalyzedEditor;
 import com.puresol.coding.client.application.editors.NotAnalyzedEditorInput;
 
-public class AnalysisRunContentBrowserView extends ViewPart implements
+public class AnalysisRunContentExplorerView extends ViewPart implements
 	ISelectionListener, IDoubleClickListener, ISelectionProvider {
 
     private AnalysisProject analysis;
     private AnalysisRun analysisRun;
     private Tree fileTree;
     private TreeViewer fileTreeViewer;
-    private FileAnalysisSelection fileAnalysis;
+    private FileAnalysisSelection fileAnalysisSelection;
     private AnalysisContentTreeLabelProvider labelProvider;
     private final List<ISelectionChangedListener> selectionChangedListener = new ArrayList<ISelectionChangedListener>();
 
-    public AnalysisRunContentBrowserView() {
+    public AnalysisRunContentExplorerView() {
     }
 
     @Override
@@ -68,9 +68,9 @@ public class AnalysisRunContentBrowserView extends ViewPart implements
 
     @Override
     public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-	if (selection instanceof AnalysisSelection) {
-	    AnalysisSelection analysisSelection = (AnalysisSelection) selection;
-	    analysis = analysisSelection.getAnalysis();
+	if (selection instanceof AnalysisProjectSelection) {
+	    AnalysisProjectSelection analysisSelection = (AnalysisProjectSelection) selection;
+	    analysis = analysisSelection.getAnalysisProject();
 	} else if (selection instanceof AnalysisRunSelection) {
 	    AnalysisRunSelection analysisRunSelection = (AnalysisRunSelection) selection;
 	    analysisRun = analysisRunSelection.getAnalysisRun();
@@ -100,7 +100,7 @@ public class AnalysisRunContentBrowserView extends ViewPart implements
 	    throws PartInitException {
 	HashIdFileTree firstElement = (HashIdFileTree) selection
 		.getFirstElement();
-	fileAnalysis = new FileAnalysisSelection(analysis, analysisRun,
+	fileAnalysisSelection = new FileAnalysisSelection(analysis, analysisRun,
 		firstElement.getPathFile(false));
 	AnalyzedCode analyzedCode = analysisRun.findAnalyzedCode(firstElement
 		.getPathFile(false));
@@ -132,7 +132,7 @@ public class AnalysisRunContentBrowserView extends ViewPart implements
 
     @Override
     public ISelection getSelection() {
-	return fileAnalysis;
+	return fileAnalysisSelection;
     }
 
     @Override
@@ -143,10 +143,10 @@ public class AnalysisRunContentBrowserView extends ViewPart implements
 
     @Override
     public void setSelection(ISelection selection) {
-	fileAnalysis = (FileAnalysisSelection) selection;
+	fileAnalysisSelection = (FileAnalysisSelection) selection;
 	for (ISelectionChangedListener listener : selectionChangedListener) {
 	    listener.selectionChanged(new SelectionChangedEvent(this,
-		    fileAnalysis));
+		    fileAnalysisSelection));
 	}
     }
 

@@ -14,7 +14,7 @@ import org.junit.Test;
 import com.puresol.coding.analysis.api.AnalysisProject;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalysisRunInformation;
-import com.puresol.coding.analysis.api.AnalysisSettings;
+import com.puresol.coding.analysis.api.AnalysisProjectSettings;
 import com.puresol.coding.analysis.api.AnalysisStore;
 import com.puresol.coding.analysis.api.AnalysisStoreException;
 import com.puresol.coding.analysis.api.AnalysisStoreFactory;
@@ -34,7 +34,7 @@ public class AnalysisRunImplTest {
     @BeforeClass
     public static void initialize() throws AnalysisStoreException {
 	analysisStore = AnalysisStoreFactory.getFactory().getInstance();
-	analysis = analysisStore.createAnalysis(new AnalysisSettings("Name",
+	analysis = analysisStore.createAnalysis(new AnalysisProjectSettings("Name",
 		"Description", new TestFileSearchConfiguration(),
 		new DirectoryRepositoryLocation("src", new File("src"))));
 	assertNotNull(analysis);

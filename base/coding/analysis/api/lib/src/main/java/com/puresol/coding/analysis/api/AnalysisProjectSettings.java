@@ -10,7 +10,7 @@ import com.puresol.utils.FileSearchConfiguration;
  * 
  * @author Rick-Rainer Ludwig
  */
-public final class AnalysisSettings implements Serializable {
+public final class AnalysisProjectSettings implements Serializable {
 
 	private static final long serialVersionUID = -1358261012685866713L;
 
@@ -50,7 +50,7 @@ public final class AnalysisSettings implements Serializable {
 	 * @param repositoryLocation
 	 *            is the source directory to be search for analysis.
 	 */
-	public AnalysisSettings(String name, String description,
+	public AnalysisProjectSettings(String name, String description,
 			FileSearchConfiguration fileSearchConfiguration,
 			RepositoryLocation repositoryLocation) {
 		super();
@@ -122,7 +122,7 @@ public final class AnalysisSettings implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		AnalysisSettings other = (AnalysisSettings) obj;
+		AnalysisProjectSettings other = (AnalysisProjectSettings) obj;
 		if (description == null) {
 			if (other.description != null)
 				return false;

@@ -15,7 +15,7 @@ import org.osgi.framework.ServiceReference;
 
 import com.puresol.coding.client.application.Activator;
 
-public class OsgiDebug extends ViewPart implements SelectionListener {
+public class OsgiDebugView extends ViewPart implements SelectionListener {
 	private Text text;
 
 	@Override

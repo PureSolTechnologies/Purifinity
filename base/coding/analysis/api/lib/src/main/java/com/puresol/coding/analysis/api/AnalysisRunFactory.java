@@ -36,7 +36,7 @@ public abstract class AnalysisRunFactory {
 	}
 
 	public abstract AnalysisRun create(File runDirectory,
-			AnalysisInformation analysisInformation, UUID randomUUID,
+			AnalysisProjectInformation analysisInformation, UUID randomUUID,
 			RepositoryLocation directoryRepositoryLocation,
 			FileSearchConfiguration fileSearchConfiguration);
 

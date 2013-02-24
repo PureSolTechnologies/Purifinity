@@ -12,16 +12,18 @@ import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
 
-import com.puresol.coding.analysis.api.AnalysisInformation;
 import com.puresol.coding.analysis.api.AnalysisProject;
+import com.puresol.coding.analysis.api.AnalysisProjectInformation;
+import com.puresol.coding.analysis.api.AnalysisProjectSettings;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalysisRunInformation;
-import com.puresol.coding.analysis.api.AnalysisSettings;
 import com.puresol.coding.analysis.api.AnalysisStoreException;
 import com.puresol.coding.analysis.impl.PersistenceUtils;
 import com.puresol.utils.FileUtilities;
 
 public class AnalysisProjectImpl implements AnalysisProject {
+
+    private static final long serialVersionUID = 461507961936256914L;
 
     private static final String DIRECTORY_FLAG = ".analysis";
     private static final String SETTINGS_FILE = "analysis_settings.persist";
@@ -39,14 +41,14 @@ public class AnalysisProjectImpl implements AnalysisProject {
     }
 
     public static AnalysisProject create(File analysisDirectory, UUID uuid,
-	    AnalysisSettings settings) throws AnalysisStoreException {
+	    AnalysisProjectSettings settings) throws AnalysisStoreException {
 	AnalysisProjectImpl analysis = new AnalysisProjectImpl(
 		analysisDirectory);
 	analysis.create(uuid, settings);
 	return analysis;
     }
 
-    private AnalysisSettings settings;
+    private AnalysisProjectSettings settings;
     private UUID uuid;
     private Date creationTime;
 
@@ -65,7 +67,7 @@ public class AnalysisProjectImpl implements AnalysisProject {
 		ObjectInputStream objectInputStream = new ObjectInputStream(
 			fileInputStream);
 		try {
-		    settings = (AnalysisSettings) objectInputStream
+		    settings = (AnalysisProjectSettings) objectInputStream
 			    .readObject();
 		} catch (ClassNotFoundException e) {
 		    throw new RuntimeException(e);
@@ -97,7 +99,7 @@ public class AnalysisProjectImpl implements AnalysisProject {
 	}
     }
 
-    private void create(UUID uuid, AnalysisSettings settings)
+    private void create(UUID uuid, AnalysisProjectSettings settings)
 	    throws AnalysisStoreException {
 	try {
 	    this.uuid = uuid;
@@ -130,9 +132,8 @@ public class AnalysisProjectImpl implements AnalysisProject {
     }
 
     @Override
-    public AnalysisInformation getInformation() {
-	return new AnalysisInformation(uuid, settings.getName(),
-		settings.getDescription(), creationTime);
+    public AnalysisProjectInformation getInformation() {
+	return new AnalysisProjectInformation(uuid, creationTime);
     }
 
     @Override
@@ -155,12 +156,12 @@ public class AnalysisProjectImpl implements AnalysisProject {
     }
 
     @Override
-    public AnalysisSettings getSettings() {
+    public AnalysisProjectSettings getSettings() {
 	return settings;
     }
 
     @Override
-    public void updateSettings(AnalysisSettings settings)
+    public void updateSettings(AnalysisProjectSettings settings)
 	    throws AnalysisStoreException {
 	try {
 	    this.settings = settings;
@@ -182,8 +183,8 @@ public class AnalysisProjectImpl implements AnalysisProject {
 	    InterruptedException {
 	UUID uuid = UUID.randomUUID();
 	AnalysisRunImpl run = (AnalysisRunImpl) AnalysisRunImpl.create(
-		new File(analysisDirectory, uuid.toString()), getInformation(),
-		uuid, getSettings().getRepositoryLocation(), getSettings()
+		new File(analysisDirectory, uuid.toString()), this, uuid,
+		getSettings().getRepositoryLocation(), getSettings()
 			.getFileSearchConfiguration());
 	return run;
     }

@@ -210,23 +210,23 @@
       </view>
       <view
             category="com.puresol.coding.application.AnalysisCategory"
-            class="com.puresol.coding.client.application.views.AnalysisRunContentBrowserView"
+            class="com.puresol.coding.client.application.views.AnalysisRunContentExplorerView"
             icon="icons/16x16/folders_explorer.png"
-            id="com.puresol.coding.client.application.views.AnalysisRunContentBrowserView"
+            id="com.puresol.coding.client.application.views.AnalysisRunContentExplorerView"
             name="Analysis Run Content Explorer"
             restorable="true">
       </view>
       <view
             category="com.puresol.coding.application.AnalysisCategory"
-            class="com.puresol.coding.client.application.views.AnalysisReport"
-            id="com.puresol.coding.client.application.views.AnalysisReport"
+            class="com.puresol.coding.client.application.views.AnalysisReportView"
+            id="com.puresol.coding.client.application.views.AnalysisReportView"
             name="Analysis Report"
             restorable="true">
       </view>
       <view
             category="org.eclipse.debug.ui"
-            class="com.puresol.coding.client.application.views.OsgiDebug"
-            id="com.puresol.coding.client.application.views.OsgiDebug"
+            class="com.puresol.coding.client.application.views.OsgiDebugView"
+            id="com.puresol.coding.client.application.views.OsgiDebugView"
             name="OSGI Debug"
             restorable="true">
       </view>
@@ -257,8 +257,8 @@
       </view>
       <view
             category="com.puresol.coding.application.AnalysisCategory"
-            class="com.puresol.coding.client.application.views.GrammarViewer"
-            id="com.puresol.coding.client.application.views.GrammarViewer"
+            class="com.puresol.coding.client.application.views.GrammarView"
+            id="com.puresol.coding.client.application.views.GrammarView"
             name="Grammar Viewer"
             restorable="true">
       </view>

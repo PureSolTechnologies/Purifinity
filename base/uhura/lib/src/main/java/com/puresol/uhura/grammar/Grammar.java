@@ -68,9 +68,12 @@ public class Grammar implements Serializable {
 		    + propertyName + "' was specified!");
 	}
 	try {
+	    // @SuppressWarnings("unchecked")
+	    // Class<? extends T> clazz = (Class<? extends T>) Class
+	    // .forName(className);
 	    @SuppressWarnings("unchecked")
-	    Class<? extends T> clazz = (Class<? extends T>) Class
-		    .forName(className);
+	    Class<? extends T> clazz = (Class<? extends T>) ClassLoader
+		    .getSystemClassLoader().loadClass(className);
 	    return clazz;
 	} catch (ClassNotFoundException e) {
 	    throw new GrammarException("Cannot instantiate '" + className

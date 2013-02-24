@@ -10,16 +10,16 @@ import com.puresol.coding.analysis.api.AnalysisProject;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class AnalysisSelection implements ISelection {
+public class AnalysisProjectSelection implements ISelection {
 
     private final AnalysisProject analysis;
 
-    public AnalysisSelection(AnalysisProject analysis) {
+    public AnalysisProjectSelection(AnalysisProject analysis) {
 	super();
 	this.analysis = analysis;
     }
 
-    public AnalysisProject getAnalysis() {
+    public AnalysisProject getAnalysisProject() {
 	return analysis;
     }
 

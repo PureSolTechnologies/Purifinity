@@ -6,9 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import com.puresol.coding.analysis.api.AnalysisInformation;
 import com.puresol.coding.analysis.api.AnalysisProject;
-import com.puresol.coding.analysis.api.AnalysisSettings;
+import com.puresol.coding.analysis.api.AnalysisProjectSettings;
 import com.puresol.coding.analysis.api.AnalysisStore;
 import com.puresol.coding.analysis.api.AnalysisStoreException;
 import com.puresol.utils.FileUtilities;
@@ -54,20 +53,20 @@ public class AnalysisStoreImpl implements AnalysisStore {
     }
 
     @Override
-    public List<AnalysisInformation> getAllAnalysisInformation()
+    public List<AnalysisProject> getAnalysisProjects()
 	    throws AnalysisStoreException {
-	List<AnalysisInformation> analysisInformation = new ArrayList<AnalysisInformation>();
+	List<AnalysisProject> projects = new ArrayList<AnalysisProject>();
 	File[] files = storageDirectory.listFiles();
 	if (files != null) {
 	    for (File analysisDirectory : files) {
 		if (AnalysisProjectImpl.isAnalysisDirectory(analysisDirectory)) {
 		    AnalysisProject analysis = AnalysisProjectImpl
 			    .open(analysisDirectory);
-		    analysisInformation.add(analysis.getInformation());
+		    projects.add(analysis);
 		}
 	    }
 	}
-	return analysisInformation;
+	return projects;
     }
 
     @Override
@@ -78,7 +77,7 @@ public class AnalysisStoreImpl implements AnalysisStore {
     }
 
     @Override
-    public AnalysisProject createAnalysis(AnalysisSettings settings)
+    public AnalysisProject createAnalysis(AnalysisProjectSettings settings)
 	    throws AnalysisStoreException {
 	UUID uuid = UUID.randomUUID();
 	return AnalysisProjectImpl.create(

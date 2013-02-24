@@ -6,7 +6,7 @@ import java.util.List;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
-import com.puresol.coding.analysis.api.AnalysisInformation;
+import com.puresol.coding.analysis.api.AnalysisProject;
 import com.puresol.coding.analysis.api.AnalysisStoreFactory;
 
 /**
@@ -20,7 +20,7 @@ import com.puresol.coding.analysis.api.AnalysisStoreFactory;
  */
 public class AnalysisListContentProvider implements IStructuredContentProvider {
 
-    private final List<AnalysisInformation> allAnalyzes = new ArrayList<AnalysisInformation>();
+    private final List<AnalysisProject> allAnalyzes = new ArrayList<AnalysisProject>();
 
     @Override
     public void dispose() {
@@ -32,13 +32,13 @@ public class AnalysisListContentProvider implements IStructuredContentProvider {
 	allAnalyzes.clear();
 	if (newInput != null) {
 	    @SuppressWarnings("unchecked")
-	    List<AnalysisInformation> allAnalysisInformation = (List<AnalysisInformation>) newInput;
+	    List<AnalysisProject> allAnalysisInformation = (List<AnalysisProject>) newInput;
 	    allAnalyzes.addAll(allAnalysisInformation);
 	}
     }
 
     @Override
-    public Object[] getElements(Object inputElement) {
-	return allAnalyzes.toArray();
+    public AnalysisProject[] getElements(Object inputElement) {
+	return allAnalyzes.toArray(new AnalysisProject[allAnalyzes.size()]);
     }
 }

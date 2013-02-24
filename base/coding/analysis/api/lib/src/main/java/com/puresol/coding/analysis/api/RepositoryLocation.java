@@ -1,6 +1,8 @@
 package com.puresol.coding.analysis.api;
 
+import java.io.File;
 import java.io.Serializable;
+import java.net.URL;
 import java.util.List;
 
 import com.puresol.uhura.source.CodeLocation;
@@ -26,11 +28,23 @@ public interface RepositoryLocation extends Serializable {
     public String getName();
 
     /**
-     * This method returns a list of {@link CodeLocation} from all source
-     * codes which are available within the specified repository.
+     * This method generates a human readable string where the source comes
+     * from. For {@link File} and {@link URL}, the normal toString()
+     * implementations might be sufficient. For {@link DatabaseCodeLocation} for
+     * example, the string might be something else. This String is generated
+     * here.
      * 
-     * @return A {@link List} of {@link CodeLocation} is returned
-     *         containing all locations.
+     * @return A {@link String} is returned telling the original location in
+     *         human readable way.
+     */
+    public String getHumanReadableLocationString();
+
+    /**
+     * This method returns a list of {@link CodeLocation} from all source codes
+     * which are available within the specified repository.
+     * 
+     * @return A {@link List} of {@link CodeLocation} is returned containing all
+     *         locations.
      */
     public List<CodeLocation> getSourceCodes();
 

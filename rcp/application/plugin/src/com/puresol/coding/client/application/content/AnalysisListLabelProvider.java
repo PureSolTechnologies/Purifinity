@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 
-import com.puresol.coding.analysis.api.AnalysisInformation;
+import com.puresol.coding.analysis.api.AnalysisProject;
 import com.puresol.coding.client.application.Activator;
 import com.puresol.coding.client.application.ClientImages;
 
@@ -17,15 +17,16 @@ import com.puresol.coding.client.application.ClientImages;
  */
 public class AnalysisListLabelProvider extends LabelProvider {
 
-    private final Image analysisImage = Activator.getDefault().getImageRegistry()
-	    .get(ClientImages.ANALYSIS_16x16);
+    private final Image analysisImage = Activator.getDefault()
+	    .getImageRegistry().get(ClientImages.ANALYSIS_16x16);
 
     @Override
     public String getText(Object element) {
-	AnalysisInformation information = (AnalysisInformation) element;
+	AnalysisProject project = (AnalysisProject) element;
 	SimpleDateFormat format = new SimpleDateFormat();
-	return information.getName() + " ("
-		+ format.format(information.getCreationTime()) + ")";
+	return project.getSettings().getName() + " ("
+		+ format.format(project.getInformation().getCreationTime())
+		+ ")";
     }
 
     @Override
