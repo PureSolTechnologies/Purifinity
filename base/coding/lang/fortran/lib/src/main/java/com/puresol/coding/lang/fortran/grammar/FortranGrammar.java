@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 
+import com.puresol.coding.lang.c11.preprocessor.C11Preprocessor;
 import com.puresol.coding.lang.commons.AbstractLanguageGrammar;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
@@ -39,6 +40,8 @@ public class FortranGrammar extends AbstractLanguageGrammar {
 	try {
 	    if (instance == null) {
 		instance = new FortranGrammar();
+		Class<?> clazz = C11Preprocessor.class;
+		clazz.getName();
 	    }
 	} catch (GrammarException e) {
 	    throw new RuntimeException("Fortran Grammar is invalid!", e);

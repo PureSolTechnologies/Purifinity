@@ -25,14 +25,15 @@ public class Analyzer {
     private final Lexer lexer;
     private final Parser parser;
 
-    public Analyzer(Grammar grammar) throws GrammarException {
+    public Analyzer(Grammar grammar, ClassLoader classLoader)
+	    throws GrammarException {
 	if (grammar.usesPreProcessor()) {
-	    preprocessor = grammar.createPreprocessor();
+	    preprocessor = grammar.createPreprocessor(classLoader);
 	} else {
 	    preprocessor = null;
 	}
-	lexer = grammar.createLexer();
-	parser = grammar.createParser();
+	lexer = grammar.createLexer(classLoader);
+	parser = grammar.createParser(classLoader);
     }
 
     public ParserTree analyze(SourceCode sourceCode) throws LexerException,

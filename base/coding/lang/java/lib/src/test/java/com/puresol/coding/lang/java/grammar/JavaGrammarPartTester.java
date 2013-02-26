@@ -12,8 +12,8 @@ import com.puresol.uhura.lexer.LexerException;
 import com.puresol.uhura.lexer.TokenStream;
 import com.puresol.uhura.parser.Parser;
 import com.puresol.uhura.parser.ParserException;
-import com.puresol.uhura.source.FixedCodeLocation;
 import com.puresol.uhura.source.CodeLocation;
+import com.puresol.uhura.source.FixedCodeLocation;
 
 public class JavaGrammarPartTester {
 
@@ -63,7 +63,8 @@ public class JavaGrammarPartTester {
 
     private static synchronized void initializeLexer() throws GrammarException {
 	if (lexer == null) {
-	    lexer = getGrammar().createLexer();
+	    lexer = getGrammar().createLexer(
+		    JavaGrammarPartTester.class.getClassLoader());
 	}
     }
 
@@ -71,7 +72,8 @@ public class JavaGrammarPartTester {
 	    throws GrammarException {
 	if (parsers.get(production) == null) {
 	    Parser parser = getGrammar().createWithNewStartProduction(
-		    production).createParser();
+		    production).createParser(
+		    JavaGrammarPartTester.class.getClassLoader());
 	    parsers.put(production, parser);
 	}
     }

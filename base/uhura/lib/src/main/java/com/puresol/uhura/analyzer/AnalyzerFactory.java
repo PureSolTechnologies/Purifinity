@@ -19,19 +19,19 @@ import com.puresol.uhura.preprocessor.Preprocessor;
  */
 public class AnalyzerFactory {
 
-    public static AnalyzerFactory createFactory(Grammar grammar)
-	    throws GrammarException {
-	return new AnalyzerFactory(grammar);
+    public static AnalyzerFactory createFactory(Grammar grammar,
+	    ClassLoader classLoader) throws GrammarException {
+	return new AnalyzerFactory(grammar, classLoader);
     }
 
-    public static AnalyzerFactory createFactory(URL grammarURL)
-	    throws GrammarException, IOException {
+    public static AnalyzerFactory createFactory(URL grammarURL,
+	    ClassLoader classLoader) throws GrammarException, IOException {
 	InputStream stream = grammarURL.openStream();
 	try {
 	    GrammarReader reader = new GrammarReader(stream);
 	    try {
 		Grammar grammar = reader.getGrammar();
-		return new AnalyzerFactory(grammar);
+		return new AnalyzerFactory(grammar, classLoader);
 	    } finally {
 		reader.close();
 	    }
@@ -40,11 +40,14 @@ public class AnalyzerFactory {
 	}
     }
 
+    private final ClassLoader classLoader;
     private final Grammar grammar;
 
-    public AnalyzerFactory(Grammar grammar) throws GrammarException {
+    public AnalyzerFactory(Grammar grammar, ClassLoader classLoader)
+	    throws GrammarException {
 	super();
 	this.grammar = grammar;
+	this.classLoader = classLoader;
     }
 
     public Grammar getGrammar() {
@@ -52,18 +55,18 @@ public class AnalyzerFactory {
     }
 
     public Preprocessor createPreProcessore() throws GrammarException {
-	return grammar.createPreprocessor();
+	return grammar.createPreprocessor(classLoader);
     }
 
     public Lexer createLexer() throws GrammarException {
-	return grammar.createLexer();
+	return grammar.createLexer(classLoader);
     }
 
     public Parser createParser() throws GrammarException {
-	return grammar.createParser();
+	return grammar.createParser(classLoader);
     }
 
     public Analyzer createAnalyzer() throws GrammarException {
-	return new Analyzer(grammar);
+	return new Analyzer(grammar, classLoader);
     }
 }

@@ -12,8 +12,8 @@ import com.puresol.uhura.lexer.LexerException;
 import com.puresol.uhura.lexer.TokenStream;
 import com.puresol.uhura.parser.Parser;
 import com.puresol.uhura.parser.ParserException;
-import com.puresol.uhura.source.FixedCodeLocation;
 import com.puresol.uhura.source.CodeLocation;
+import com.puresol.uhura.source.FixedCodeLocation;
 
 public class FortranGrammarPartTester {
 
@@ -55,7 +55,8 @@ public class FortranGrammarPartTester {
 
     private static synchronized void initializeLexer() throws GrammarException {
 	if (lexer == null) {
-	    lexer = grammar.createLexer();
+	    lexer = grammar.createLexer(FortranGrammarPartTester.class
+		    .getClassLoader());
 	}
     }
 
@@ -63,7 +64,8 @@ public class FortranGrammarPartTester {
 	    throws GrammarException {
 	if (parsers.get(production) == null) {
 	    Parser parser = grammar.createWithNewStartProduction(production)
-		    .createParser();
+		    .createParser(
+			    FortranGrammarPartTester.class.getClassLoader());
 	    parsers.put(production, parser);
 	}
     }

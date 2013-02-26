@@ -20,7 +20,7 @@ public class LexerTest {
     @BeforeClass
     public static void initialize() throws Exception {
 	grammar = C11Grammar.getGrammar();
-	lexer = grammar.createLexer();
+	lexer = grammar.createLexer(LexerTest.class.getClassLoader());
     }
 
     @Test

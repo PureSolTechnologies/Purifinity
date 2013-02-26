@@ -20,35 +20,39 @@ import com.puresol.coding.lang.api.ProgrammingLanguage;
  */
 public class ProgrammingLanguageViewer extends ComboViewer {
 
-	public ProgrammingLanguageViewer(CCombo list) {
-		super(list);
-		init();
-	}
+    public ProgrammingLanguageViewer(CCombo list) {
+	super(list);
+	init();
+    }
 
-	public ProgrammingLanguageViewer(Combo list) {
-		super(list);
-		init();
-	}
+    public ProgrammingLanguageViewer(Combo list) {
+	super(list);
+	init();
+    }
 
-	public ProgrammingLanguageViewer(Composite parent) {
-		super(parent);
-		init();
-	}
+    public ProgrammingLanguageViewer(Composite parent) {
+	super(parent);
+	init();
+    }
 
-	public ProgrammingLanguageViewer(Composite parent, int style) {
-		super(parent, style);
-		init();
-	}
+    public ProgrammingLanguageViewer(Composite parent, int style) {
+	super(parent, style);
+	init();
+    }
 
-	private void init() {
-		setContentProvider(ArrayContentProvider.getInstance());
-		setLabelProvider(new LabelProvider() {
-			@Override
-			public String getText(Object element) {
-				return ((ProgrammingLanguage) element).getName();
-			}
-		});
-		setInput(ProgrammingLanguages.getInstance().getAll());
-	}
+    private void init() {
+	setContentProvider(ArrayContentProvider.getInstance());
+	setLabelProvider(new LabelProvider() {
+	    @Override
+	    public String getText(Object element) {
+		return ((ProgrammingLanguage) element).getName();
+	    }
+	});
+    }
 
+    @Override
+    public void refresh() {
+	super.refresh();
+	setInput(ProgrammingLanguages.getInstance().getAll());
+    }
 }

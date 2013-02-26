@@ -30,9 +30,9 @@ public class Grammar implements Serializable {
     private final Properties options;
     private final TokenDefinitionSet tokenDefinitions;
     private final ProductionSet productions;
-    private final Class<? extends Preprocessor> preProcessorClass;
-    private final Class<? extends Lexer> lexerClass;
-    private final Class<? extends Parser> parserClass;
+    private final String preProcessorClassName;
+    private final String lexerClassName;
+    private final String parserClassName;
     private final boolean usesPreProcessor;
     private final boolean ignoreCase;
 
@@ -49,13 +49,12 @@ public class Grammar implements Serializable {
 	usesPreProcessor = Boolean.valueOf(options
 		.getProperty("preprocessor.use"));
 	if (usesPreProcessor) {
-	    this.preProcessorClass = getClass(Preprocessor.class,
-		    "preprocessor");
+	    this.preProcessorClassName = options.getProperty("preprocessor");
 	} else {
-	    this.preProcessorClass = null;
+	    this.preProcessorClassName = null;
 	}
-	this.lexerClass = getClass(Lexer.class, "lexer");
-	this.parserClass = getClass(Parser.class, "parser");
+	this.lexerClassName = options.getProperty("lexer");
+	this.parserClassName = options.getProperty("parser");
 
 	checkConsistencyIfConfigured();
     }
@@ -68,12 +67,9 @@ public class Grammar implements Serializable {
 		    + propertyName + "' was specified!");
 	}
 	try {
-	    // @SuppressWarnings("unchecked")
-	    // Class<? extends T> clazz = (Class<? extends T>) Class
-	    // .forName(className);
 	    @SuppressWarnings("unchecked")
-	    Class<? extends T> clazz = (Class<? extends T>) ClassLoader
-		    .getSystemClassLoader().loadClass(className);
+	    Class<? extends T> clazz = (Class<? extends T>) Class
+		    .forName(className);
 	    return clazz;
 	} catch (ClassNotFoundException e) {
 	    throw new GrammarException("Cannot instantiate '" + className
@@ -142,65 +138,85 @@ public class Grammar implements Serializable {
 	return ignoreCase;
     }
 
-    public Preprocessor createPreprocessor() throws GrammarException {
+    public Preprocessor createPreprocessor(ClassLoader classLoader)
+	    throws GrammarException {
 	try {
-	    return preProcessorClass.newInstance();
+	    @SuppressWarnings("unchecked")
+	    Class<? extends Preprocessor> clazz = (Class<? extends Preprocessor>) classLoader
+		    .loadClass(preProcessorClassName);
+	    return clazz.newInstance();
 	} catch (InstantiationException e) {
 	    throw new GrammarException(
 		    "Cannot instantiate preprocessor with class'"
-			    + preProcessorClass.getName() + "'!", e);
+			    + preProcessorClassName + "'!", e);
 	} catch (IllegalAccessException e) {
 	    throw new GrammarException(
 		    "Cannot instantiate preprocessor with class'"
-			    + preProcessorClass.getName() + "'!", e);
+			    + preProcessorClassName + "'!", e);
+	} catch (ClassNotFoundException e) {
+	    throw new GrammarException(
+		    "Cannot instantiate preprocessor with class'"
+			    + preProcessorClassName + "'!", e);
 	}
     }
 
-    public Lexer createLexer() throws GrammarException {
+    public Lexer createLexer(ClassLoader classLoader) throws GrammarException {
 	try {
-	    return lexerClass.getConstructor(Grammar.class).newInstance(this);
+	    @SuppressWarnings("unchecked")
+	    Class<? extends Lexer> clazz = (Class<? extends Lexer>) classLoader
+		    .loadClass(lexerClassName);
+	    return clazz.getConstructor(Grammar.class).newInstance(this);
 	} catch (InstantiationException e) {
 	    throw new GrammarException("Cannot instantiate lexer with class'"
-		    + lexerClass.getName() + "'!", e);
+		    + lexerClassName + "'!", e);
 	} catch (IllegalAccessException e) {
 	    throw new GrammarException("Cannot instantiate lexer with class'"
-		    + lexerClass.getName() + "'!", e);
+		    + lexerClassName + "'!", e);
 	} catch (IllegalArgumentException e) {
 	    throw new GrammarException("Cannot instantiate lexer with class'"
-		    + lexerClass.getName() + "'!", e);
+		    + lexerClassName + "'!", e);
 	} catch (SecurityException e) {
 	    throw new GrammarException("Cannot instantiate lexer with class'"
-		    + lexerClass.getName() + "'!", e);
+		    + lexerClassName + "'!", e);
 	} catch (InvocationTargetException e) {
 	    throw new GrammarException("Cannot instantiate lexer with class'"
-		    + lexerClass.getName() + "'!", e);
+		    + lexerClassName + "'!", e);
 	} catch (NoSuchMethodException e) {
 	    throw new GrammarException("Cannot instantiate lexer with class'"
-		    + lexerClass.getName() + "'!", e);
+		    + lexerClassName + "'!", e);
+	} catch (ClassNotFoundException e) {
+	    throw new GrammarException("Cannot instantiate lexer with class'"
+		    + lexerClassName + "'!", e);
 	}
     }
 
-    public Parser createParser() throws GrammarException {
+    public Parser createParser(ClassLoader classLoader) throws GrammarException {
 	try {
-	    return parserClass.getConstructor(Grammar.class).newInstance(this);
+	    @SuppressWarnings("unchecked")
+	    Class<? extends Parser> clazz = (Class<? extends Parser>) classLoader
+		    .loadClass(lexerClassName);
+	    return clazz.getConstructor(Grammar.class).newInstance(this);
 	} catch (InstantiationException e) {
 	    throw new GrammarException("Cannot instantiate parser with class'"
-		    + parserClass.getName() + "'!", e);
+		    + parserClassName + "'!", e);
 	} catch (IllegalAccessException e) {
 	    throw new GrammarException("Cannot instantiate parser with class'"
-		    + parserClass.getName() + "'!", e);
+		    + parserClassName + "'!", e);
 	} catch (IllegalArgumentException e) {
 	    throw new GrammarException("Cannot instantiate parser with class'"
-		    + parserClass.getName() + "'!", e);
+		    + parserClassName + "'!", e);
 	} catch (SecurityException e) {
 	    throw new GrammarException("Cannot instantiate parser with class'"
-		    + parserClass.getName() + "'!", e);
+		    + parserClassName + "'!", e);
 	} catch (InvocationTargetException e) {
 	    throw new GrammarException("Cannot instantiate parser with class'"
-		    + parserClass.getName() + "'!", e);
+		    + parserClassName + "'!", e);
 	} catch (NoSuchMethodException e) {
 	    throw new GrammarException("Cannot instantiate parser with class'"
-		    + parserClass.getName() + "'!", e);
+		    + parserClassName + "'!", e);
+	} catch (ClassNotFoundException e) {
+	    throw new GrammarException("Cannot instantiate parser with class'"
+		    + parserClassName + "'!", e);
 	}
     }
 
