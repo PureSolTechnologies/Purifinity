@@ -40,7 +40,7 @@ public final class CodeStoreImpl implements CodeStore {
 		try {
 		    FileWriter tempFileWriter = new FileWriter(tempFile);
 		    try {
-			IOUtils.copy(rawStream, tempFileWriter);
+			IOUtils.copy(digestInputStream, tempFileWriter);
 		    } finally {
 			tempFileWriter.close();
 		    }

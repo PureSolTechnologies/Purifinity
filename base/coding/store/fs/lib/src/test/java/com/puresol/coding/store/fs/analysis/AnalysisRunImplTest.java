@@ -12,9 +12,9 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import com.puresol.coding.analysis.api.AnalysisProject;
+import com.puresol.coding.analysis.api.AnalysisProjectSettings;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalysisRunInformation;
-import com.puresol.coding.analysis.api.AnalysisProjectSettings;
 import com.puresol.coding.analysis.api.AnalysisStore;
 import com.puresol.coding.analysis.api.AnalysisStoreException;
 import com.puresol.coding.analysis.api.AnalysisStoreFactory;
@@ -22,7 +22,6 @@ import com.puresol.coding.analysis.api.AnalyzedCode;
 import com.puresol.coding.analysis.api.DirectoryRepositoryLocation;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.analysis.test.TestFileSearchConfiguration;
-import com.puresol.uhura.source.CodeLocation;
 import com.puresol.utils.HashAlgorithm;
 import com.puresol.utils.HashId;
 
@@ -34,8 +33,8 @@ public class AnalysisRunImplTest {
     @BeforeClass
     public static void initialize() throws AnalysisStoreException {
 	analysisStore = AnalysisStoreFactory.getFactory().getInstance();
-	analysis = analysisStore.createAnalysis(new AnalysisProjectSettings("Name",
-		"Description", new TestFileSearchConfiguration(),
+	analysis = analysisStore.createAnalysis(new AnalysisProjectSettings(
+		"Name", "Description", new TestFileSearchConfiguration(),
 		new DirectoryRepositoryLocation("src", new File("src"))));
 	assertNotNull(analysis);
     }
@@ -47,7 +46,7 @@ public class AnalysisRunImplTest {
 	assertNotNull(analysisRun);
 	List<AnalyzedCode> analyzedFiles = analysisRun.getAnalyzedCodes();
 	assertNotNull(analyzedFiles);
-	List<CodeLocation> failedFiles = analysisRun.getFailedCodeLocations();
+	List<AnalyzedCode> failedFiles = analysisRun.getFailedCodes();
 	assertNotNull(failedFiles);
 	HashIdFileTree fileTree = analysisRun.getFileTree();
 	assertNotNull(fileTree);

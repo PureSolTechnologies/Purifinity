@@ -21,8 +21,8 @@ public final class AnalysisRunInformation implements Serializable,
     private final long timeOfRun;
     private final String description;
 
-    public AnalysisRunInformation(AnalysisProject analysisProject,
-	    UUID uuid, Date time, long timeOfRun, String description) {
+    public AnalysisRunInformation(AnalysisProject analysisProject, UUID uuid,
+	    Date time, long timeOfRun, String description) {
 	super();
 	this.analysisProject = analysisProject;
 	this.uuid = uuid;

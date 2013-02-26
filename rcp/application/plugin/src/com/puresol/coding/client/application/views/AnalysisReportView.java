@@ -27,7 +27,6 @@ import com.puresol.coding.analysis.api.AnalysisStoreException;
 import com.puresol.coding.analysis.api.AnalyzedCode;
 import com.puresol.coding.client.application.Activator;
 import com.puresol.coding.client.application.controls.ParserTreeControl;
-import com.puresol.uhura.source.CodeLocation;
 
 public class AnalysisReportView extends ViewPart implements ISelectionListener {
 
@@ -113,7 +112,8 @@ public class AnalysisReportView extends ViewPart implements ISelectionListener {
 	try {
 	    if (selection instanceof AnalysisProjectSelection) {
 		AnalysisProjectSelection analysisSelection = (AnalysisProjectSelection) selection;
-		AnalysisProject analysis = analysisSelection.getAnalysisProject();
+		AnalysisProject analysis = analysisSelection
+			.getAnalysisProject();
 		name.setText(analysis.getSettings().getName());
 		AnalysisRun lastAnalysisRun = analysis.loadLastAnalysisRun();
 		if (lastAnalysisRun != null) {
@@ -121,8 +121,8 @@ public class AnalysisReportView extends ViewPart implements ISelectionListener {
 			    .getAnalyzedCodes();
 		    numAnalyzedFiles.setText(String.valueOf(analyzedFiles
 			    .size()));
-		    List<CodeLocation> failedFiles = lastAnalysisRun
-			    .getFailedCodeLocations();
+		    List<AnalyzedCode> failedFiles = lastAnalysisRun
+			    .getFailedCodes();
 		    numFailedFiles.setText(String.valueOf(String
 			    .valueOf(failedFiles.size())));
 		}

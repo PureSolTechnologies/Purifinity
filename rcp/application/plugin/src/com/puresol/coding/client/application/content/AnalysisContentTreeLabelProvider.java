@@ -76,7 +76,7 @@ public class AnalysisContentTreeLabelProvider extends LabelProvider {
 		if (analyzedFile != null) {
 			return documentImage;
 		}
-		if (analysisRun.getFailedCodeLocations().contains(path)) {
+		if (analysisRun.getFailedCodes().contains(path)) {
 			return new DecorationOverlayIcon(documentImage,
 					errorDecoratorImage, IDecoration.TOP_LEFT).createImage();
 		}

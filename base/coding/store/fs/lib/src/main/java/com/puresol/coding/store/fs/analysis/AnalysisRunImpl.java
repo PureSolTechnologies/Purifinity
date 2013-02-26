@@ -9,9 +9,12 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
 import java.util.concurrent.Callable;
@@ -33,9 +36,15 @@ import com.puresol.coding.analysis.api.CodeStoreException;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.analysis.api.ModuleStoreException;
 import com.puresol.coding.analysis.api.RepositoryLocation;
+import com.puresol.trees.TreeVisitor;
+import com.puresol.trees.TreeWalker;
+import com.puresol.trees.WalkingAction;
 import com.puresol.uhura.source.CodeLocation;
 import com.puresol.utils.DirectoryUtilities;
 import com.puresol.utils.FileSearchConfiguration;
+import com.puresol.utils.HashAlgorithm;
+import com.puresol.utils.HashId;
+import com.puresol.utils.data.HashCodeGenerator;
 import com.puresol.utils.progress.AbstractProgressObservable;
 
 public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
@@ -103,6 +112,7 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
 
     private static final String ANALYZED_FILES_FILE = "analyzed_files.persist";
     private static final String FAILED_FILES_FILE = "failed_files.persist";
+    private static final String TREE_FILE = "code_tree.persist";
     private static final String SEARCH_CONFIGURATION_FILE = "search_configuration.persist";
     private static final String ANALYSIS_RUN_PROPERTIES_FILE = "analysis_run.properties";
     private static final String ANALYSIS_INFORMATION_FILE = "analysis_information.persist";
@@ -111,7 +121,9 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
     private final File runDirectory;
 
     private final List<AnalyzedCode> analyzedFiles = new ArrayList<AnalyzedCode>();
-    private final List<CodeLocation> failedSources = new ArrayList<CodeLocation>();
+    private final List<AnalyzedCode> failedSources = new ArrayList<AnalyzedCode>();
+
+    private HashIdFileTree codeTree;
 
     private FileSearchConfiguration searchConfig;
 
@@ -274,17 +286,18 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
 		runDirectory, ANALYZED_FILES_FILE));
 	analyzedFiles.addAll(analyzed);
 	@SuppressWarnings("unchecked")
-	List<CodeLocation> failed = (List<CodeLocation>) restore(new File(
+	List<AnalyzedCode> failed = (List<AnalyzedCode>) restore(new File(
 		runDirectory, FAILED_FILES_FILE));
 	failedSources.addAll(failed);
-	// hashIdFileTree = restore(new File(runDirectory, FILE_TREE));
-
+	codeTree = (HashIdFileTree) restore(new File(runDirectory, TREE_FILE));
+	failedSources.addAll(failed);
     }
 
     private void storeAnalysisResultInformation() {
 	try {
 	    persist(analyzedFiles, new File(runDirectory, ANALYZED_FILES_FILE));
 	    persist(failedSources, new File(runDirectory, FAILED_FILES_FILE));
+	    persist(codeTree, new File(runDirectory, TREE_FILE));
 	} catch (IOException e) {
 	    logger.error(e.getMessage(), e);
 	}
@@ -296,6 +309,7 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
 	    reset();
 	    saveAnalysisRunInformation();
 	    boolean retVal = analyzeFiles();
+	    buildCodeLocationTree();
 	    storeAnalysisResultInformation();
 	    fireDone("Finished successfully.", retVal);
 	    return retVal;
@@ -347,11 +361,7 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
 		    fireUpdateWork("Finished a file.", 1);
 		    try {
 			AnalyzedCode result = future.get();
-			if (result.getStartTime() != null) {
-			    analyzedFiles.add(result);
-			} else {
-			    failedSources.add(result.getSourceLocation());
-			}
+			analyzedFiles.add(result);
 			fireUpdateWork("Finished '"
 				+ result.getSourceLocation()
 					.getHumanReadableLocationString()
@@ -374,6 +384,108 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
 	}
     }
 
+    private void buildCodeLocationTree() {
+	HashIdFileTree intermediate = createIntermediateTree();
+	createFinalTree(intermediate);
+    }
+
+    /**
+     * This method creates an intermediate tree with {@link HashId} objects as
+     * present and a classification of file or directory. From this intermediate
+     * tree the final tree can be generated.
+     */
+    private HashIdFileTree createIntermediateTree() {
+	HashIdFileTree intermediate = new HashIdFileTree(null,
+		repositoryLocation.getHumanReadableLocationString(), null,
+		false);
+	for (AnalyzedCode analyzedFile : analyzedFiles) {
+	    addToTree(intermediate, analyzedFile.getSourceLocation(),
+		    analyzedFile.getHashId());
+	}
+	for (AnalyzedCode failedFile : failedSources) {
+	    addToTree(intermediate, failedFile.getSourceLocation(),
+		    failedFile.getHashId());
+	}
+	return intermediate;
+    }
+
+    private void addToTree(HashIdFileTree intermediate, CodeLocation location,
+	    HashId hashId) {
+	String internalLocation = location.getInternalLocation();
+	HashIdFileTree node = intermediate;
+	String[] directories = internalLocation.split("/");
+	for (int i = 0; i < directories.length; i++) {
+	    String directory = directories[i];
+	    HashIdFileTree child = node.getChild(directory);
+	    if (child == null) {
+		boolean isFile = (i == directories.length);
+		child = new HashIdFileTree(node, directory, hashId, isFile);
+	    }
+	    node = child;
+	}
+    }
+
+    private void createFinalTree(HashIdFileTree intermediate) {
+	Map<File, HashId> hashes = generateModuleHashes(intermediate);
+	codeTree = new HashIdFileTree(null, intermediate.getName(),
+		hashes.get(intermediate.getPathFile(false)), false);
+	for (HashIdFileTree child : intermediate.getChildren()) {
+	    addChildToFinalTree(codeTree, child, hashes);
+	}
+    }
+
+    private void addChildToFinalTree(HashIdFileTree parentNode,
+	    HashIdFileTree refNode, Map<File, HashId> hashes) {
+	HashIdFileTree newNode = new HashIdFileTree(parentNode,
+		refNode.getName(), hashes.get(refNode.getPathFile(false)),
+		refNode.isFile());
+	for (HashIdFileTree child : refNode.getChildren()) {
+	    addChildToFinalTree(newNode, child, hashes);
+	}
+    }
+
+    /**
+     * This method runs the intermediate tree backwards and generates module
+     * hashes.
+     * 
+     * @param intermediate
+     * @return
+     */
+    private Map<File, HashId> generateModuleHashes(HashIdFileTree intermediate) {
+	final Map<File, HashId> hashes = new HashMap<File, HashId>();
+	TreeVisitor<HashIdFileTree> visitor = new TreeVisitor<HashIdFileTree>() {
+
+	    @Override
+	    public WalkingAction visit(HashIdFileTree tree) {
+		if (tree.getHashId() != null) {
+		    hashes.put(tree.getPathFile(false), tree.getHashId());
+		} else {
+		    List<String> hashList = new ArrayList<String>();
+		    for (HashIdFileTree child : tree.getChildren()) {
+			hashList.add(child.getHashId().getHash());
+		    }
+		    Collections.sort(hashList);
+		    StringBuilder joinedHash = new StringBuilder();
+		    for (String hash : hashList) {
+			if (joinedHash.length() > 0) {
+			    joinedHash.append(',');
+			}
+			joinedHash.append(hash);
+		    }
+		    HashAlgorithm algorithm = StoreUtilities
+			    .getDefaultMessageDigestAlgorithm();
+		    String hash = HashCodeGenerator.get(algorithm,
+			    joinedHash.toString());
+		    hashes.put(tree.getPathFile(false), new HashId(algorithm,
+			    hash));
+		}
+		return WalkingAction.PROCEED;
+	    }
+	};
+	TreeWalker.walkBackward(visitor, intermediate);
+	return hashes;
+    }
+
     @Override
     public List<AnalyzedCode> getAnalyzedCodes() {
 	return analyzedFiles;
@@ -385,7 +497,7 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
     }
 
     @Override
-    public List<CodeLocation> getFailedCodeLocations() {
+    public List<AnalyzedCode> getFailedCodes() {
 	return failedSources;
     }
 

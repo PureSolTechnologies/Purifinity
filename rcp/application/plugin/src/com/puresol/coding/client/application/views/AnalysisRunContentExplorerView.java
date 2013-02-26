@@ -110,7 +110,7 @@ public class AnalysisRunContentExplorerView extends ViewPart implements
 	    getSite().getPage().openEditor(fileAnalysisEditorInput,
 		    FileAnalysisEditor.class.getName());
 	} else {
-	    if (!analysisRun.getFailedCodeLocations().contains(
+	    if (!analysisRun.getFailedCodes().contains(
 		    firstElement.getPathFile(false))) {
 		DirectoryAnalysisEditorInput directoryAnalysisEditorInput = new DirectoryAnalysisEditorInput(
 			firstElement, analysisRun);

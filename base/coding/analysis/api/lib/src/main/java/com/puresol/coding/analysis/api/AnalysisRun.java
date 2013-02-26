@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 import com.puresol.trees.FileTree;
-import com.puresol.uhura.source.CodeLocation;
 import com.puresol.utils.progress.ProgressObservable;
 
 /**
@@ -51,7 +50,7 @@ public interface AnalysisRun extends Serializable,
      * 
      * @return A {@link List} of {@link File} is returned.
      */
-    public List<CodeLocation> getFailedCodeLocations();
+    public List<AnalyzedCode> getFailedCodes();
 
     /**
      * This method performs a lookup of the file provided and find the
