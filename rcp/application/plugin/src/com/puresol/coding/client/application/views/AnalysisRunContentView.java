@@ -12,10 +12,12 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
 
@@ -32,7 +34,7 @@ import com.puresol.coding.client.application.editors.FileAnalysisEditorInput;
 import com.puresol.coding.client.application.editors.NotAnalyzedEditor;
 import com.puresol.coding.client.application.editors.NotAnalyzedEditorInput;
 
-public class AnalysisRunContentExplorerView extends ViewPart implements
+public class AnalysisRunContentView extends ViewPart implements
 	ISelectionListener, IDoubleClickListener, ISelectionProvider {
 
     private AnalysisProject analysis;
@@ -43,21 +45,29 @@ public class AnalysisRunContentExplorerView extends ViewPart implements
     private AnalysisContentTreeLabelProvider labelProvider;
     private final List<ISelectionChangedListener> selectionChangedListener = new ArrayList<ISelectionChangedListener>();
 
-    public AnalysisRunContentExplorerView() {
+    public AnalysisRunContentView() {
+	super();
     }
 
     @Override
     public void createPartControl(Composite parent) {
-	fileTree = new Tree(parent, SWT.BORDER);
+	Composite composite = new Composite(parent, SWT.NONE);
+	composite.setLayout(new FillLayout());
+
+	fileTree = new Tree(composite, SWT.BORDER);
 	fileTreeViewer = new TreeViewer(fileTree);
 	fileTreeViewer
 		.setContentProvider(new AnalysisContentTreeContentProvider());
 	labelProvider = new AnalysisContentTreeLabelProvider();
 	fileTreeViewer.setLabelProvider(labelProvider);
+	fileTree.setHeaderVisible(true);
+	fileTree.setEnabled(true);
+	fileTree.setVisible(true);
 
-	getSite().getWorkbenchWindow().getSelectionService()
+	IWorkbenchPartSite site = getSite();
+	site.getWorkbenchWindow().getSelectionService()
 		.addSelectionListener(this);
-	getSite().setSelectionProvider(this);
+	site.setSelectionProvider(this);
 	fileTreeViewer.addDoubleClickListener(this);
     }
 
@@ -76,6 +86,8 @@ public class AnalysisRunContentExplorerView extends ViewPart implements
 	    analysisRun = analysisRunSelection.getAnalysisRun();
 	    labelProvider.setAnalysisRun(analysisRun);
 	    fileTreeViewer.setInput(analysisRun.getFileTree());
+	    fileTree.redraw();
+	    fileTreeViewer.refresh();
 	}
     }
 
@@ -100,8 +112,8 @@ public class AnalysisRunContentExplorerView extends ViewPart implements
 	    throws PartInitException {
 	HashIdFileTree firstElement = (HashIdFileTree) selection
 		.getFirstElement();
-	fileAnalysisSelection = new FileAnalysisSelection(analysis, analysisRun,
-		firstElement.getPathFile(false));
+	fileAnalysisSelection = new FileAnalysisSelection(analysis,
+		analysisRun, firstElement.getPathFile(false));
 	AnalyzedCode analyzedCode = analysisRun.findAnalyzedCode(firstElement
 		.getPathFile(false));
 	if (analyzedCode != null) {

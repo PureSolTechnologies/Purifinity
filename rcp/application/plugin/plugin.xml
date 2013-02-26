@@ -210,10 +210,10 @@
       </view>
       <view
             category="com.puresol.coding.application.AnalysisCategory"
-            class="com.puresol.coding.client.application.views.AnalysisRunContentExplorerView"
+            class="com.puresol.coding.client.application.views.AnalysisRunContentView"
             icon="icons/16x16/folders_explorer.png"
-            id="com.puresol.coding.client.application.views.AnalysisRunContentExplorerView"
-            name="Analysis Run Content Explorer"
+            id="com.puresol.coding.client.application.views.AnalysisRunContentView"
+            name="Analysis Run Content"
             restorable="true">
       </view>
       <view

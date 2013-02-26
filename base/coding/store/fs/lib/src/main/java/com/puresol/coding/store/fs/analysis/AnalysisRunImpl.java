@@ -123,7 +123,7 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
     private final List<AnalyzedCode> analyzedFiles = new ArrayList<AnalyzedCode>();
     private final List<AnalyzedCode> failedSources = new ArrayList<AnalyzedCode>();
 
-    private HashIdFileTree codeTree;
+    private HashIdFileTree fileTree;
 
     private FileSearchConfiguration searchConfig;
 
@@ -289,7 +289,7 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
 	List<AnalyzedCode> failed = (List<AnalyzedCode>) restore(new File(
 		runDirectory, FAILED_FILES_FILE));
 	failedSources.addAll(failed);
-	codeTree = (HashIdFileTree) restore(new File(runDirectory, TREE_FILE));
+	fileTree = (HashIdFileTree) restore(new File(runDirectory, TREE_FILE));
 	failedSources.addAll(failed);
     }
 
@@ -297,7 +297,7 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
 	try {
 	    persist(analyzedFiles, new File(runDirectory, ANALYZED_FILES_FILE));
 	    persist(failedSources, new File(runDirectory, FAILED_FILES_FILE));
-	    persist(codeTree, new File(runDirectory, TREE_FILE));
+	    persist(fileTree, new File(runDirectory, TREE_FILE));
 	} catch (IOException e) {
 	    logger.error(e.getMessage(), e);
 	}
@@ -427,10 +427,10 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
 
     private void createFinalTree(HashIdFileTree intermediate) {
 	Map<File, HashId> hashes = generateModuleHashes(intermediate);
-	codeTree = new HashIdFileTree(null, intermediate.getName(),
+	fileTree = new HashIdFileTree(null, intermediate.getName(),
 		hashes.get(intermediate.getPathFile(false)), false);
 	for (HashIdFileTree child : intermediate.getChildren()) {
-	    addChildToFinalTree(codeTree, child, hashes);
+	    addChildToFinalTree(fileTree, child, hashes);
 	}
     }
 
@@ -493,7 +493,7 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
 
     @Override
     public HashIdFileTree getFileTree() {
-	return null;
+	return fileTree;
     }
 
     @Override
