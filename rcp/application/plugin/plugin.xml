@@ -4,8 +4,11 @@
 
    <extension
          id="application"
+         name="Purifinity"
          point="org.eclipse.core.runtime.applications">
-      <application>
+      <application
+            icon="icons/alt_window_16.gif"
+            visible="true">
          <run
                class="com.puresol.coding.client.application.SourceCodeAnalysis">
          </run>
@@ -181,6 +184,13 @@
                label="Help"
                mnemonic="H">
             <command
+                  commandId="org.eclipse.ui.help.quickStartAction"
+                  id="welcome"
+                  label="Welcome"
+                  mnemonic="W"
+                  style="push">
+            </command>
+            <command
                   commandId="org.eclipse.ui.help.aboutAction"
                   id="about"
                   label="About Source Code Analysis..."
@@ -285,13 +295,14 @@
    </extension>
    <extension
          id="product"
+         name="Purifinity"
          point="org.eclipse.core.runtime.products">
       <product
             application="com.puresol.coding.client.application"
-            name="Source Code Analysis">
+            name="Purifinity">
          <property
                name="appName"
-               value="Source Code Analysis">
+               value="Purifinity">
          </property>
       </product>
    </extension>
@@ -334,6 +345,48 @@
             id="com.puresol.coding.client.NotAnalyzedEditor"
             name="Not Analyzed">
       </editor>
+   </extension>
+   <extension
+         id="SourceCodeClient"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="com.puresol.coding.client.application.plugin.application"
+            name="Source Code Analysis">
+      </product>
+   </extension>
+   <extension
+         point="org.eclipse.ui.intro">
+      <intro
+            class="org.eclipse.ui.intro.config.CustomizableIntroPart"
+            id="com.puresol.coding.client.application.plugin.intro">
+      </intro>
+      <introProductBinding
+            introId="com.puresol.coding.client.application.plugin.intro"
+            productId="com.puresol.coding.client.application.plugin.SourceCodeClient">
+      </introProductBinding>
+   </extension>
+   <extension
+         point="org.eclipse.ui.intro.config">
+      <config
+            content="introContent.xml"
+            id="com.puresol.coding.client.application.plugin.introConfigId"
+            introId="com.puresol.coding.client.application.plugin.intro">
+         <presentation
+               home-page-id="root">
+            <implementation
+                  kind="html"
+                  os="win32,linux,macosx"
+                  style="content/shared.css">
+            </implementation>
+         </presentation>
+      </config>
+   </extension>
+   <extension
+         point="org.eclipse.ui.intro">
+      <intro
+            class="com.puresol.coding.client.application.PurifinityIntroPart"
+            id="com.puresol.coding.client.application.plugin.intro">
+      </intro>
    </extension>
 
 </plugin>
