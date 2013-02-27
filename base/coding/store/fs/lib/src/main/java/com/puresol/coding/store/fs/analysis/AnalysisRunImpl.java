@@ -399,17 +399,17 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
 		repositoryLocation.getHumanReadableLocationString(), null,
 		false);
 	for (AnalyzedCode analyzedFile : analyzedFiles) {
-	    addToTree(intermediate, analyzedFile.getSourceLocation(),
+	    addToIntermediateTree(intermediate, analyzedFile.getSourceLocation(),
 		    analyzedFile.getHashId());
 	}
 	for (AnalyzedCode failedFile : failedSources) {
-	    addToTree(intermediate, failedFile.getSourceLocation(),
+	    addToIntermediateTree(intermediate, failedFile.getSourceLocation(),
 		    failedFile.getHashId());
 	}
 	return intermediate;
     }
 
-    private void addToTree(HashIdFileTree intermediate, CodeLocation location,
+    private void addToIntermediateTree(HashIdFileTree intermediate, CodeLocation location,
 	    HashId hashId) {
 	String internalLocation = location.getInternalLocation();
 	String[] directories = internalLocation.split("/");
@@ -418,7 +418,7 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
 	    String directory = directories[i];
 	    HashIdFileTree child = node.getChild(directory);
 	    if (child == null) {
-		boolean isFile = (i == directories.length);
+		boolean isFile = (i == directories.length - 1);
 		child = new HashIdFileTree(node, directory, hashId, isFile);
 	    }
 	    node = child;
@@ -430,17 +430,17 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
 	fileTree = new HashIdFileTree(null, intermediate.getName(),
 		hashes.get(intermediate.getPathFile(false)), false);
 	for (HashIdFileTree child : intermediate.getChildren()) {
-	    addChildToFinalTree(fileTree, child, hashes);
+	    addToFinalTree(fileTree, child, hashes);
 	}
     }
 
-    private void addChildToFinalTree(HashIdFileTree parentNode,
+    private void addToFinalTree(HashIdFileTree parentNode,
 	    HashIdFileTree refNode, Map<File, HashId> hashes) {
 	HashIdFileTree newNode = new HashIdFileTree(parentNode,
 		refNode.getName(), hashes.get(refNode.getPathFile(false)),
 		refNode.isFile());
 	for (HashIdFileTree child : refNode.getChildren()) {
-	    addChildToFinalTree(newNode, child, hashes);
+	    addToFinalTree(newNode, child, hashes);
 	}
     }
 

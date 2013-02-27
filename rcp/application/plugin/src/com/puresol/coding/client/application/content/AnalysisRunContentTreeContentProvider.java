@@ -7,7 +7,7 @@ import org.eclipse.jface.viewers.Viewer;
 
 import com.puresol.coding.analysis.api.HashIdFileTree;
 
-public class AnalysisContentTreeContentProvider implements ITreeContentProvider {
+public class AnalysisRunContentTreeContentProvider implements ITreeContentProvider {
 
     private HashIdFileTree fileTree;
 

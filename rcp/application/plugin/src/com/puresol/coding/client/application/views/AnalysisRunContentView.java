@@ -25,8 +25,8 @@ import com.puresol.coding.analysis.api.AnalysisProject;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalyzedCode;
 import com.puresol.coding.analysis.api.HashIdFileTree;
-import com.puresol.coding.client.application.content.AnalysisContentTreeContentProvider;
-import com.puresol.coding.client.application.content.AnalysisContentTreeLabelProvider;
+import com.puresol.coding.client.application.content.AnalysisRunContentTreeContentProvider;
+import com.puresol.coding.client.application.content.AnalysisRunContentTreeLabelProvider;
 import com.puresol.coding.client.application.editors.DirectoryAnalysisEditor;
 import com.puresol.coding.client.application.editors.DirectoryAnalysisEditorInput;
 import com.puresol.coding.client.application.editors.FileAnalysisEditor;
@@ -42,7 +42,7 @@ public class AnalysisRunContentView extends ViewPart implements
     private Tree fileTree;
     private TreeViewer fileTreeViewer;
     private FileAnalysisSelection fileAnalysisSelection;
-    private AnalysisContentTreeLabelProvider labelProvider;
+    private AnalysisRunContentTreeLabelProvider labelProvider;
     private final List<ISelectionChangedListener> selectionChangedListener = new ArrayList<ISelectionChangedListener>();
 
     public AnalysisRunContentView() {
@@ -57,8 +57,8 @@ public class AnalysisRunContentView extends ViewPart implements
 	fileTree = new Tree(composite, SWT.BORDER);
 	fileTreeViewer = new TreeViewer(fileTree);
 	fileTreeViewer
-		.setContentProvider(new AnalysisContentTreeContentProvider());
-	labelProvider = new AnalysisContentTreeLabelProvider();
+		.setContentProvider(new AnalysisRunContentTreeContentProvider());
+	labelProvider = new AnalysisRunContentTreeLabelProvider();
 	fileTreeViewer.setLabelProvider(labelProvider);
 	fileTree.setHeaderVisible(true);
 	fileTree.setEnabled(true);
