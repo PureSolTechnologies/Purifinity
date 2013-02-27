@@ -1,6 +1,7 @@
 package com.puresol.coding.client.application.views;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.core.runtime.ILog;
@@ -74,13 +75,15 @@ public class AnalysisRunsView extends ViewPart implements SelectionListener,
     public void createPartControl(Composite parent) {
 	parent.setLayout(new FormLayout());
 
-	analysisRunsList = new Table(parent, SWT.BORDER);
+	analysisRunsList = new Table(parent, SWT.BORDER | SWT.MULTI);
 	FormData fd_analysisRunsList = new FormData();
 	fd_analysisRunsList.bottom = new FormAttachment(100);
 	fd_analysisRunsList.left = new FormAttachment(0);
 	analysisRunsList.setLayoutData(fd_analysisRunsList);
 	analysisRunsList
 		.setToolTipText("Refreshs the analysis runs for the currently selected analysis from the analysis store.");
+	analysisRunsList.setLinesVisible(true);
+	analysisRunsList.setHeaderVisible(true);
 	analysisRunsViewer = new TableViewer(analysisRunsList);
 
 	ToolBar toolBar = new ToolBar(parent, SWT.FLAT | SWT.RIGHT);
@@ -187,15 +190,17 @@ public class AnalysisRunsView extends ViewPart implements SelectionListener,
 	try {
 	    StructuredSelection selection = (StructuredSelection) analysisRunsViewer
 		    .getSelection();
-	    AnalysisRunInformation information = (AnalysisRunInformation) selection
-		    .getFirstElement();
-	    if (information != null) {
-		if (MessageDialog.openQuestion(
-			getSite().getShell(),
-			"Delete?",
-			"Do you really want to delete analysis '"
-				+ information.getStartTime() + "'?")) {
-		    analysis.removeAnalysisRun(information.getUUID());
+	    if (!selection.isEmpty()) {
+		if (MessageDialog
+			.openQuestion(getSite().getShell(), "Delete?",
+				"Do you really want to delete the selected analysis run(s)?")) {
+		    @SuppressWarnings("unchecked")
+		    Iterator<AnalysisRunInformation> iterator = selection
+			    .iterator();
+		    while (iterator.hasNext()) {
+			AnalysisRunInformation analysisRun = iterator.next();
+			analysis.removeAnalysisRun(analysisRun.getUUID());
+		    }
 		    refreshAnalysisRunList();
 		}
 	    }

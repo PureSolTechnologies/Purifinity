@@ -357,7 +357,7 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
 	    while (iterator.hasNext()) {
 		Future<AnalyzedCode> future = iterator.next();
 		if (future.isDone()) {
-		    futures.remove(future);
+		    iterator.remove();
 		    fireUpdateWork("Finished a file.", 1);
 		    try {
 			AnalyzedCode result = future.get();
