@@ -2,7 +2,6 @@ package com.puresol.uhura.lexer;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.util.List;
@@ -26,8 +25,8 @@ public class SourceCodeTest {
     public void testRead() throws Throwable {
 	File file = new File("src/test/java", PathUtils
 		.classToRelativePackagePath(SourceCodeTest.class).getPath());
-	assertTrue(file.exists());
-	SourceFileLocation fileSource = new SourceFileLocation(file);
+	SourceFileLocation fileSource = new SourceFileLocation("",
+		file.getPath());
 	SourceCode sourceCode = fileSource.loadSourceCode();
 	assertNotNull(sourceCode);
 	List<SourceCodeLine> lines = sourceCode.getLines();

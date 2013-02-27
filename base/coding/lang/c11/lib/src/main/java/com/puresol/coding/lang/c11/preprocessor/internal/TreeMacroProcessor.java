@@ -491,8 +491,7 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 	    }
 	}
 	for (File directory : includeDirectories.getDirectories()) {
-	    File file = new File(directory, includeFile);
-	    if (includeFile(new SourceFileLocation(file))) {
+	    if (includeFile(new SourceFileLocation(directory, includeFile))) {
 		return;
 	    }
 	}

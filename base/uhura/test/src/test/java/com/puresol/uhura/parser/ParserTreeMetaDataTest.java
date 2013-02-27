@@ -3,8 +3,6 @@ package com.puresol.uhura.parser;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import java.io.File;
-
 import org.junit.Test;
 
 import com.puresol.uhura.source.SourceFileLocation;
@@ -14,14 +12,17 @@ public class ParserTreeMetaDataTest {
 
     @Test
     public void testInstance() {
-	assertNotNull(new ParserTreeMetaData(new UnspecifiedSourceCodeLocation(), 1, 2));
+	assertNotNull(new ParserTreeMetaData(
+		new UnspecifiedSourceCodeLocation(), 1, 2));
     }
 
     @Test
     public void testInitValues() {
 	ParserTreeMetaData metaData = new ParserTreeMetaData(
 		new UnspecifiedSourceCodeLocation(), 1, 2);
-	assertEquals(new UnspecifiedSourceCodeLocation().getHumanReadableLocationString(),
+	assertEquals(
+		new UnspecifiedSourceCodeLocation()
+			.getHumanReadableLocationString(),
 		metaData.getSource().getHumanReadableLocationString());
 	assertEquals(1, metaData.getLine());
 	assertEquals(2, metaData.getLineNum());
@@ -29,9 +30,9 @@ public class ParserTreeMetaDataTest {
 
     @Test
     public void testEquals() {
-	assertEquals(new ParserTreeMetaData(new SourceFileLocation(new File("Test")),
-		1, 1), new ParserTreeMetaData(new SourceFileLocation(new File("Test")),
-		1, 1));
+	assertEquals(new ParserTreeMetaData(new SourceFileLocation("", "Test"),
+		1, 1), new ParserTreeMetaData(
+		new SourceFileLocation("", "Test"), 1, 1));
     }
 
     @Test
@@ -40,7 +41,8 @@ public class ParserTreeMetaDataTest {
 		new UnspecifiedSourceCodeLocation(), 1, 1);
 	assertEquals("unspecified source: 1", metaData.toString());
 
-	metaData = new ParserTreeMetaData(new UnspecifiedSourceCodeLocation(), 1, 2);
+	metaData = new ParserTreeMetaData(new UnspecifiedSourceCodeLocation(),
+		1, 2);
 	assertEquals("unspecified source: 1 - 2", metaData.toString());
     }
 }

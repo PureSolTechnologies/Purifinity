@@ -412,8 +412,8 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
     private void addToTree(HashIdFileTree intermediate, CodeLocation location,
 	    HashId hashId) {
 	String internalLocation = location.getInternalLocation();
-	HashIdFileTree node = intermediate;
 	String[] directories = internalLocation.split("/");
+	HashIdFileTree node = intermediate;
 	for (int i = 0; i < directories.length; i++) {
 	    String directory = directories[i];
 	    HashIdFileTree child = node.getChild(directory);

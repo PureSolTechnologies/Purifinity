@@ -36,9 +36,10 @@ public class DirectoryRepositoryLocation extends AbstractRepositoryLocation {
 		getCodeSearchConfiguration());
 	List<CodeLocation> locations = new ArrayList<CodeLocation>();
 	for (FileTree fileNode : fileTree) {
-	    File file = fileNode.getPathFile(true);
-	    if (file.isFile()) {
-		locations.add(new SourceFileLocation(file));
+	    File file = fileNode.getPathFile(false);
+	    if (new File(repositoryDirectory, file.getPath()).isFile()) {
+		locations
+			.add(new SourceFileLocation(repositoryDirectory, file));
 	    }
 	}
 	return locations;

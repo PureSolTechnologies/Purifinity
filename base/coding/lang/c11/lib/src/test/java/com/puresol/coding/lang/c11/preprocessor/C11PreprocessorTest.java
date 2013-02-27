@@ -27,8 +27,8 @@ public class C11PreprocessorTest {
 	    PreprocessorException {
 	File directory = new File(
 		"src/test/resources/com/puresol/coding/lang/c11/preprocessor/files");
-	SourceCode sourceCode = new SourceFileLocation(new File(directory,
-		"FileWithoutMacros.txt")).loadSourceCode();
+	SourceCode sourceCode = new SourceFileLocation(directory,
+		"FileWithoutMacros.txt").loadSourceCode();
 	SourceCode preProcessedSourceCode = new C11Preprocessor()
 		.process(sourceCode);
 	assertEquals(sourceCode, preProcessedSourceCode);
@@ -39,10 +39,10 @@ public class C11PreprocessorTest {
     public void testSingleInclude() throws IOException, PreprocessorException {
 	File directory = new File(
 		"src/test/resources/com/puresol/coding/lang/c11/preprocessor/files");
-	SourceCode sourceCode = new SourceFileLocation(new File(directory,
-		"SingleIncludeMacro.txt")).loadSourceCode();
-	SourceCode includedSourceCode = new SourceFileLocation(new File(
-		directory, "FileWithoutMacros.txt")).loadSourceCode();
+	SourceCode sourceCode = new SourceFileLocation(directory,
+		"SingleIncludeMacro.txt").loadSourceCode();
+	SourceCode includedSourceCode = new SourceFileLocation(directory,
+		"FileWithoutMacros.txt").loadSourceCode();
 	SourceCode preProcessedSourceCode = new C11Preprocessor()
 		.process(sourceCode);
 	assertEquals(includedSourceCode, preProcessedSourceCode);
@@ -53,16 +53,16 @@ public class C11PreprocessorTest {
 	    PreprocessorException {
 	File directory = new File(
 		"src/test/resources/com/puresol/coding/lang/c11/preprocessor/files");
-	CodeLocation source = new SourceFileLocation(new File(directory,
-		"MultipleIncludeMacros.txt"));
+	CodeLocation source = new SourceFileLocation(directory,
+		"MultipleIncludeMacros.txt");
 	SourceCode sourceCode = source.loadSourceCode();
 	SourceCode preProcessedSourceCode = new C11Preprocessor()
 		.process(sourceCode);
 
-	SourceCode sourceWithoutMacros = new SourceFileLocation(new File(
-		directory, "FileWithoutMacros.txt")).loadSourceCode();
-	SourceCode sourceWithoutMacros2 = new SourceFileLocation(new File(
-		directory, "FileWithoutMacros2.txt")).loadSourceCode();
+	SourceCode sourceWithoutMacros = new SourceFileLocation(directory,
+		"FileWithoutMacros.txt").loadSourceCode();
+	SourceCode sourceWithoutMacros2 = new SourceFileLocation(directory,
+		"FileWithoutMacros2.txt").loadSourceCode();
 
 	SourceCode expected = new SourceCode();
 	expected.addSourceCode(sourceWithoutMacros);
@@ -82,20 +82,19 @@ public class C11PreprocessorTest {
 	    PreprocessorException {
 	File directory = new File(
 		"src/test/resources/com/puresol/coding/lang/c11/preprocessor/files");
-	File sourceFile = new File(directory, "RecursiveIncludeMacros1.txt");
-	SourceCode sourceCode = new SourceFileLocation(sourceFile).loadSourceCode();
+	SourceCode sourceCode = new SourceFileLocation(directory,
+		"RecursiveIncludeMacros1.txt").loadSourceCode();
 	SourceCode preProcessedSourceCode = new C11Preprocessor()
 		.process(sourceCode);
 
-	SourceCode sourceWithoutMacros = new SourceFileLocation(new File(
-		directory, "FileWithoutMacros.txt")).loadSourceCode();
-	SourceCode sourceWithoutMacros2 = new SourceFileLocation(new File(
-		directory, "FileWithoutMacros2.txt")).loadSourceCode();
+	SourceCode sourceWithoutMacros = new SourceFileLocation(directory,
+		"FileWithoutMacros.txt").loadSourceCode();
+	SourceCode sourceWithoutMacros2 = new SourceFileLocation(directory,
+		"FileWithoutMacros2.txt").loadSourceCode();
 
 	SourceCode expected = new SourceCode();
-	File file = new File(directory, "RecursiveIncludeMacros3.txt");
 	expected.addSourceCodeLine(new SourceCodeLine(new SourceFileLocation(
-		file), 1, "<end of file>"));
+		directory, "RecursiveIncludeMacros3.txt"), 1, "<end of file>"));
 	expected.addSourceCode(sourceWithoutMacros2);
 	expected.addSourceCode(sourceWithoutMacros);
 
@@ -106,18 +105,18 @@ public class C11PreprocessorTest {
     public void testSimpleDefine() throws IOException, PreprocessorException {
 	File directory = new File(
 		"src/test/resources/com/puresol/coding/lang/c11/preprocessor/files");
-	File sourceFile = new File(directory, "SimpleDefineTest.txt");
-	SourceCode sourceCode = new SourceFileLocation(sourceFile).loadSourceCode();
+	SourceFileLocation sourceLocation = new SourceFileLocation(directory,
+		"SimpleDefineTest.txt");
+	SourceCode sourceCode = sourceLocation.loadSourceCode();
 	SourceCode preProcessedSourceCode = new C11Preprocessor()
 		.process(sourceCode);
 
 	SourceCode expected = new SourceCode();
-	expected.addSourceCodeLine(new SourceCodeLine(new SourceFileLocation(
-		sourceFile), 2, "1\n"));
-	expected.addSourceCodeLine(new SourceCodeLine(new SourceFileLocation(
-		sourceFile), 4, "\"Hello, world!\"\n"));
-	expected.addSourceCodeLine(new SourceCodeLine(new SourceFileLocation(
-		sourceFile), 6, "HELLO_WORLD\n"));
+	expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 2, "1\n"));
+	expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 4,
+		"\"Hello, world!\"\n"));
+	expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 6,
+		"HELLO_WORLD\n"));
 	assertEquals(expected, preProcessedSourceCode);
     }
 
@@ -126,14 +125,14 @@ public class C11PreprocessorTest {
 	    PreprocessorException {
 	File directory = new File(
 		"src/test/resources/com/puresol/coding/lang/c11/preprocessor/files");
-	File sourceFile = new File(directory, "ObjectLikeDefineTest.txt");
-	SourceCode sourceCode = new SourceFileLocation(sourceFile).loadSourceCode();
+	SourceFileLocation sourceLocation = new SourceFileLocation(directory,
+		"ObjectLikeDefineTest.txt");
+	SourceCode sourceCode = sourceLocation.loadSourceCode();
 	SourceCode preProcessedSourceCode = new C11Preprocessor()
 		.process(sourceCode);
 
 	SourceCode expected = new SourceCode();
-	expected.addSourceCodeLine(new SourceCodeLine(new SourceFileLocation(
-		sourceFile), 2,
+	expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 2,
 		"Call the printf(\"This is a simple object macro!\"); macro now...\n"));
 	assertEquals(expected, preProcessedSourceCode);
     }
@@ -143,15 +142,14 @@ public class C11PreprocessorTest {
 	    PreprocessorException {
 	File directory = new File(
 		"src/test/resources/com/puresol/coding/lang/c11/preprocessor/files");
-	File sourceFile = new File(directory,
+	SourceFileLocation sourceLocation = new SourceFileLocation(directory,
 		"SimpleFunctionLikeDefineTest.txt");
-	SourceCode sourceCode = new SourceFileLocation(sourceFile).loadSourceCode();
+	SourceCode sourceCode = sourceLocation.loadSourceCode();
 	SourceCode preProcessedSourceCode = new C11Preprocessor()
 		.process(sourceCode);
 
 	SourceCode expected = new SourceCode();
-	expected.addSourceCodeLine(new SourceCodeLine(new SourceFileLocation(
-		sourceFile), 2,
+	expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 2,
 		"fprintf(stderr, \"%s\\\\n\", \"Error message!\");\n"));
 	assertEquals(expected, preProcessedSourceCode);
     }
@@ -161,27 +159,25 @@ public class C11PreprocessorTest {
 	    throws IOException, PreprocessorException {
 	File directory = new File(
 		"src/test/resources/com/puresol/coding/lang/c11/preprocessor/files");
-	File sourceFile = new File(directory,
+	SourceFileLocation sourceLocation = new SourceFileLocation(directory,
 		"FunctionLikeDefineTestWithMultipleLinesAndComment.txt");
-	SourceCode sourceCode = new SourceFileLocation(sourceFile).loadSourceCode();
+	SourceCode sourceCode = sourceLocation.loadSourceCode();
 	SourceCode preProcessedSourceCode = new C11Preprocessor()
 		.process(sourceCode);
 
 	SourceCode expected = new SourceCode();
-	expected.addSourceCodeLine(new SourceCodeLine(new SourceFileLocation(
-		sourceFile), 3, "\n"));
-	expected.addSourceCodeLine(new SourceCodeLine(new SourceFileLocation(
-		sourceFile), 4, "    fprintf(stderr, \"%s\\\\n\", \n"));
-	expected.addSourceCodeLine(new SourceCodeLine(new SourceFileLocation(
-		sourceFile), 5, "// This is a comment\n"));
-	expected.addSourceCodeLine(new SourceCodeLine(new SourceFileLocation(
-		sourceFile), 6, "\"Error message!\"\n"));
-	expected.addSourceCodeLine(new SourceCodeLine(new SourceFileLocation(
-		sourceFile), 7, "/* This is another comment\n"));
-	expected.addSourceCodeLine(new SourceCodeLine(new SourceFileLocation(
-		sourceFile), 8, "   with multiple lines! */\n"));
-	expected.addSourceCodeLine(new SourceCodeLine(new SourceFileLocation(
-		sourceFile), 9, ");\n"));
+	expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 3, "\n"));
+	expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 4,
+		"    fprintf(stderr, \"%s\\\\n\", \n"));
+	expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 5,
+		"// This is a comment\n"));
+	expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 6,
+		"\"Error message!\"\n"));
+	expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 7,
+		"/* This is another comment\n"));
+	expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 8,
+		"   with multiple lines! */\n"));
+	expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 9, ");\n"));
 	assertEquals(expected, preProcessedSourceCode);
     }
 
@@ -189,20 +185,21 @@ public class C11PreprocessorTest {
     public void testSimpleIf() throws IOException, PreprocessorException {
 	File directory = new File(
 		"src/test/resources/com/puresol/coding/lang/c11/preprocessor/files");
-	File sourceFile = new File(directory, "SimpleIfTest.txt");
-	SourceCode sourceCode = new SourceFileLocation(sourceFile).loadSourceCode();
+	SourceFileLocation sourceLocation = new SourceFileLocation(directory,
+		"SimpleIfTest.txt");
+	SourceCode sourceCode = sourceLocation.loadSourceCode();
 	SourceCode preProcessedSourceCode = new C11Preprocessor()
 		.process(sourceCode);
 
 	SourceCode expected = new SourceCode();
-	expected.addSourceCodeLine(new SourceCodeLine(new SourceFileLocation(
-		sourceFile), 4, "Else shown...\n"));
-	expected.addSourceCodeLine(new SourceCodeLine(new SourceFileLocation(
-		sourceFile), 7, "Shown...\n"));
-	expected.addSourceCodeLine(new SourceCodeLine(new SourceFileLocation(
-		sourceFile), 13, "Shown...\n"));
-	expected.addSourceCodeLine(new SourceCodeLine(new SourceFileLocation(
-		sourceFile), 20, "Else shown...\n"));
+	expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 4,
+		"Else shown...\n"));
+	expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 7,
+		"Shown...\n"));
+	expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 13,
+		"Shown...\n"));
+	expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 20,
+		"Else shown...\n"));
 	assertEquals(expected, preProcessedSourceCode);
     }
 
@@ -210,24 +207,25 @@ public class C11PreprocessorTest {
     public void testComplexIf() throws IOException, PreprocessorException {
 	File directory = new File(
 		"src/test/resources/com/puresol/coding/lang/c11/preprocessor/files");
-	File sourceFile = new File(directory, "ComplexIfTest.txt");
-	SourceCode sourceCode = new SourceFileLocation(sourceFile).loadSourceCode();
+	SourceFileLocation sourceLocation = new SourceFileLocation(directory,
+		"ComplexIfTest.txt");
+	SourceCode sourceCode = sourceLocation.loadSourceCode();
 	SourceCode preProcessedSourceCode = new C11Preprocessor()
 		.process(sourceCode);
 
 	SourceCode expected = new SourceCode();
-	expected.addSourceCodeLine(new SourceCodeLine(new SourceFileLocation(
-		sourceFile), 5, "Calculation valid.\n"));
-	expected.addSourceCodeLine(new SourceCodeLine(new SourceFileLocation(
-		sourceFile), 8, "Calculation valid.\n"));
-	expected.addSourceCodeLine(new SourceCodeLine(new SourceFileLocation(
-		sourceFile), 12, "Calculation invalid.\n"));
-	expected.addSourceCodeLine(new SourceCodeLine(new SourceFileLocation(
-		sourceFile), 15, "Calculation valid.\n"));
-	expected.addSourceCodeLine(new SourceCodeLine(new SourceFileLocation(
-		sourceFile), 19, "Calculation valid.\n"));
-	expected.addSourceCodeLine(new SourceCodeLine(new SourceFileLocation(
-		sourceFile), 25, "Calculation valid.\n"));
+	expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 5,
+		"Calculation valid.\n"));
+	expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 8,
+		"Calculation valid.\n"));
+	expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 12,
+		"Calculation invalid.\n"));
+	expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 15,
+		"Calculation valid.\n"));
+	expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 19,
+		"Calculation valid.\n"));
+	expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 25,
+		"Calculation valid.\n"));
 	assertEquals(expected, preProcessedSourceCode);
     }
 

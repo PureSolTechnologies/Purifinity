@@ -48,7 +48,7 @@ public class JavaSourceCodeDistributionTest {
 	StopWatch watch = new StopWatch();
 	watch.start();
 	CodeAnalyzer analyser = java.createAnalyser(new SourceFileLocation(
-		new File(INSTALL_DIRECTORY, file.getPath())));
+		INSTALL_DIRECTORY, file.getPath()));
 	analyser.analyze();
 	watch.stop();
 	ParserTree ast = analyser.getAnalysis().getParserTree();
@@ -63,7 +63,7 @@ public class JavaSourceCodeDistributionTest {
 	assertTrue(file.exists());
 	Grammar grammar = JavaGrammar.getInstance();
 	PackratParser parser = new PackratParser(grammar);
-	CodeLocation source = new SourceFileLocation(file);
+	CodeLocation source = new SourceFileLocation("", file.getPath());
 	StopWatch watch = new StopWatch();
 	watch.start();
 	ParserTree ast = parser.parse(source.loadSourceCode());
@@ -146,7 +146,8 @@ public class JavaSourceCodeDistributionTest {
 	    // analyser.parse();
 	    // analyser = null;
 	    PackratParser parser = new PackratParser(javaGrammar);
-	    parser.parse(new SourceFileLocation(file).loadSourceCode());
+	    parser.parse(new SourceFileLocation("", file.getPath())
+		    .loadSourceCode());
 	    return true;
 	    // } catch (AnalyzerException e) {
 	    // e.printStackTrace();

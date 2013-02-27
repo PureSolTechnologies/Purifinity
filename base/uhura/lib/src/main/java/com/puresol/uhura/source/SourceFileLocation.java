@@ -9,10 +9,26 @@ public class SourceFileLocation extends AbstractCodeLocation {
 
     private static final long serialVersionUID = -4803348905641081874L;
 
+    private final File repositoryDirectory;
+    private final String internalPath;
     private final File file;
 
-    public SourceFileLocation(File file) {
-	this.file = file;
+    public SourceFileLocation(String repositoryDirectory, String internalPath) {
+	this.repositoryDirectory = new File(repositoryDirectory);
+	this.internalPath = internalPath;
+	file = new File(repositoryDirectory, internalPath);
+    }
+
+    public SourceFileLocation(File repositoryDirectory, String internalPath) {
+	this.repositoryDirectory = repositoryDirectory;
+	this.internalPath = internalPath;
+	file = new File(repositoryDirectory, internalPath);
+    }
+
+    public SourceFileLocation(File repositoryDirectory, File internalPath) {
+	this.repositoryDirectory = repositoryDirectory;
+	this.internalPath = internalPath.getPath();
+	file = new File(repositoryDirectory, this.internalPath);
     }
 
     @Override
@@ -32,14 +48,15 @@ public class SourceFileLocation extends AbstractCodeLocation {
 
     @Override
     public String getHumanReadableLocationString() {
-	return file.toString();
+	return internalPath;
     }
 
     @Override
     public int hashCode() {
 	final int prime = 31;
 	int result = 1;
-	result = prime * result + ((file == null) ? 0 : file.hashCode());
+	result = prime * result
+		+ ((internalPath == null) ? 0 : internalPath.hashCode());
 	return result;
     }
 
@@ -52,28 +69,37 @@ public class SourceFileLocation extends AbstractCodeLocation {
 	if (getClass() != obj.getClass())
 	    return false;
 	SourceFileLocation other = (SourceFileLocation) obj;
-	if (file == null) {
-	    if (other.file != null)
+	if (internalPath == null) {
+	    if (other.internalPath != null)
 		return false;
-	} else if (!file.equals(other.file))
+	} else if (!internalPath.equals(other.internalPath))
 	    return false;
 	return true;
     }
 
     @Override
     public CodeLocation newRelativeSource(String relativePath) {
-	return new SourceFileLocation(new File(file.getParentFile(),
-		relativePath));
+	File internalFile = new File(internalPath);
+	File internalParentFile = internalFile.getParentFile();
+	File newInternalPath;
+	if (internalParentFile == null) {
+	    newInternalPath = new File(relativePath);
+	} else {
+	    newInternalPath = new File(internalParentFile.getPath(),
+		    relativePath);
+	}
+	return new SourceFileLocation(repositoryDirectory,
+		newInternalPath.getPath());
     }
 
     @Override
     public String getName() {
-	return file.getName();
+	return internalPath;
     }
 
     @Override
     public String getInternalLocation() {
-	return file.getParent();
+	return internalPath;
     }
 
     @Override

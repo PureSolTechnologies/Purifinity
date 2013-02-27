@@ -52,8 +52,8 @@ public class FortranSourceCodeDistributionTest {
 	    StopWatch watch = new StopWatch();
 	    watch.start();
 	    CodeAnalyzer analyser = fortran
-		    .createAnalyser(new SourceFileLocation(new File("src/fort",
-			    file.getPath())));
+		    .createAnalyser(new SourceFileLocation("src/fort", file
+			    .getPath()));
 	    analyser.analyze();
 	    watch.stop();
 	    ParserTree ast = analyser.getAnalysis().getParserTree();
@@ -140,8 +140,8 @@ public class FortranSourceCodeDistributionTest {
 	try {
 	    Fortran fortran = Fortran.getInstance();
 	    CodeAnalyzer analyser = fortran
-		    .createAnalyser(new SourceFileLocation(new File(
-			    sourceDirectory, file.getPath())));
+		    .createAnalyser(new SourceFileLocation(sourceDirectory,
+			    file));
 	    analyser.analyze();
 	    analyser = null;
 	    return true;

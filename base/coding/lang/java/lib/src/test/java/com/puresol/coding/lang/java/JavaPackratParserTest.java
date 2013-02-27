@@ -1,9 +1,7 @@
 package com.puresol.coding.lang.java;
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
-import java.io.File;
 import java.io.IOException;
 
 import org.junit.Test;
@@ -13,9 +11,9 @@ import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.parser.ParserException;
 import com.puresol.uhura.parser.ParserTree;
 import com.puresol.uhura.parser.packrat.PackratParser;
+import com.puresol.uhura.source.CodeLocation;
 import com.puresol.uhura.source.FixedCodeLocation;
 import com.puresol.uhura.source.SourceFileLocation;
-import com.puresol.uhura.source.CodeLocation;
 
 public class JavaPackratParserTest {
 
@@ -111,11 +109,10 @@ public class JavaPackratParserTest {
 
     @Test
     public void testJavaFile() throws Throwable {
-	File file = new File(
-		"src/test/java/com/puresol/coding/lang/java/JavaPackratParserTest.java");
-	assertTrue(file.exists());
 	PackratParser parser = createParser();
-	ParserTree tree = parser.parse(new SourceFileLocation(file).loadSourceCode());
+	ParserTree tree = parser.parse(new SourceFileLocation(
+		"src/test/java/com/puresol/coding/lang/java",
+		"JavaPackratParserTest.java").loadSourceCode());
 	assertNotNull(tree);
     }
 }

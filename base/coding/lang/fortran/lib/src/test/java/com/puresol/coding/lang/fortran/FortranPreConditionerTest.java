@@ -5,7 +5,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.io.File;
 import java.lang.reflect.Field;
 import java.util.regex.Pattern;
 
@@ -117,21 +116,19 @@ public class FortranPreConditionerTest {
 
     @Test
     public void testIsFixedForm() throws Exception {
-	File file = new File(
-		"src/test/resources/com/puresol/coding/lang/fortran/samples/FixedFormSample.f");
-	assertTrue(file.exists());
 	FortranPreConditioner fixedFormFile = new FortranPreConditioner(
-		new SourceFileLocation(file).loadSourceCode());
+		new SourceFileLocation(
+			"src/test/resources/com/puresol/coding/lang/fortran/samples",
+			"FixedFormSample.f").loadSourceCode());
 	assertTrue(fixedFormFile.isValidFixedForm());
     }
 
     @Test
     public void testScan() throws Exception {
-	File file = new File(
-		"src/test/resources/com/puresol/coding/lang/fortran/samples/FixedFormSample.f");
-	assertTrue(file.exists());
 	FortranPreConditioner fixedFormFile = new FortranPreConditioner(
-		new SourceFileLocation(file).loadSourceCode());
+		new SourceFileLocation(
+			"src/test/resources/com/puresol/coding/lang/fortran/samples",
+			"FixedFormSample.f").loadSourceCode());
 	TokenStream tokenStream = fixedFormFile.scan(FortranGrammar
 		.getInstance().getLexer());
 	for (Token token : tokenStream) {

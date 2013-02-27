@@ -23,20 +23,20 @@ public class FortranAnalyserTest {
 
     @Test
     public void testInstance() {
-	assertNotNull(new FortranAnalyzer(new SourceFileLocation(new File(""))));
+	assertNotNull(new FortranAnalyzer(new SourceFileLocation("", "")));
     }
 
     @Test
     public void testInitValues() {
 	FortranAnalyzer analyser = new FortranAnalyzer(new SourceFileLocation(
-		new File("src/test/TestFile.f")));
+		"src/test", "TestFile.f"));
 	assertNull(analyser.getAnalysis());
 	assertSame(Fortran.getInstance(), analyser.getLanguage());
     }
 
     private void test(File sourceDirectory, File file) throws Throwable {
 	FortranAnalyzer analyser = new FortranAnalyzer(new SourceFileLocation(
-		new File(sourceDirectory, file.getPath())));
+		sourceDirectory, file));
 	analyser.analyze();
     }
 

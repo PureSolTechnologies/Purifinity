@@ -4,8 +4,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 
-import java.io.File;
-
 import org.junit.Test;
 
 import com.puresol.uhura.parser.ParserTree;
@@ -16,14 +14,14 @@ public class JavaAnalyserTest {
 
     @Test
     public void testInstance() {
-	assertNotNull(new JavaAnalyzer(new SourceFileLocation(new File(""))));
+	assertNotNull(new JavaAnalyzer(new SourceFileLocation("", "")));
     }
 
     @Test
     public void testInitValues() {
 	JavaAnalyzer analyser = new JavaAnalyzer(new SourceFileLocation(
-		new File("src/test/java", PathUtils.classToRelativePackagePath(
-			this.getClass()).getPath())));
+		"src/test/java", PathUtils.classToRelativePackagePath(
+			this.getClass()).getPath()));
 	assertNull(analyser.getAnalysis());
 	assertSame(Java.getInstance(), analyser.getLanguage());
     }
@@ -31,8 +29,8 @@ public class JavaAnalyserTest {
     @Test
     public void testParse() throws Throwable {
 	JavaAnalyzer analyser = new JavaAnalyzer(new SourceFileLocation(
-		new File("src/test/java", PathUtils.classToRelativePackagePath(
-			this.getClass()).getPath())));
+		"src/test/java", PathUtils.classToRelativePackagePath(
+			this.getClass()).getPath()));
 	analyser.analyze();
 	ParserTree tree = analyser.getAnalysis().getParserTree();
 	assertNotNull(tree);
