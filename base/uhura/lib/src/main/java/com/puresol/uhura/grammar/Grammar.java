@@ -176,7 +176,7 @@ public class Grammar implements Serializable {
 		try {
 			@SuppressWarnings("unchecked")
 			Class<? extends Parser> clazz = (Class<? extends Parser>) classLoader
-					.loadClass(lexerClassName);
+					.loadClass(parserClassName);
 			return clazz.getConstructor(Grammar.class).newInstance(this);
 		} catch (InstantiationException e) {
 			throw new GrammarException("Cannot instantiate parser with class'"
