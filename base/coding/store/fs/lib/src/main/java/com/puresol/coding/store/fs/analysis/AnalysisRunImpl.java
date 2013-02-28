@@ -506,9 +506,10 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
 	}
 
 	@Override
-	public AnalyzedCode findAnalyzedCode(File file) {
+	public AnalyzedCode findAnalyzedCode(String internalPath) {
 		for (AnalyzedCode analyzedFile : analyzedFiles) {
-			if (analyzedFile.getSourceLocation().equals(file)) {
+			if (analyzedFile.getSourceLocation().getInternalLocation()
+					.equals(internalPath)) {
 				return analyzedFile;
 			}
 		}

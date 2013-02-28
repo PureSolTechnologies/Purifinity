@@ -52,6 +52,8 @@
       <import plugin="org.eclipse.equinox.ds" version="1.4.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.equinox.event" version="1.2.200" match="greaterOrEqual"/>
       <import plugin="org.eclipse.equinox.util" version="1.0.400" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.intro"/>
+      <import plugin="org.eclipse.e4.tools" version="0.12.0" match="greaterOrEqual"/>
    </requires>
 
    <plugin

@@ -18,7 +18,10 @@
    <windowImages/>
 
    <splash
-      location="com.puresol.coding.client.plugin" />
+      location="com.puresol.coding.client.plugin"
+      startupProgressRect="50,100,445,32"
+      startupMessageRect="28,252,445,20"
+      startupForegroundColor="000000" />
    <launcher name="purifinity">
       <solaris/>
       <win useIco="false">

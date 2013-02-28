@@ -330,19 +330,19 @@
       <editor
             class="com.puresol.coding.client.application.editors.FileAnalysisEditor"
             default="false"
-            id="com.puresol.coding.client.FileAnalysisEditor"
+            id="com.puresol.coding.client.application.editors.FileAnalysisEditor"
             name="File Analysis">
       </editor>
       <editor
             class="com.puresol.coding.client.application.editors.DirectoryAnalysisEditor"
             default="false"
-            id="com.puresol.coding.client.DirectoryAnalysisEditor"
+            id="com.puresol.coding.client.application.editors.DirectoryAnalysisEditor"
             name="Directory Analysis">
       </editor>
       <editor
             class="com.puresol.coding.client.application.editors.NotAnalyzedEditor"
             default="false"
-            id="com.puresol.coding.client.NotAnalyzedEditor"
+            id="com.puresol.coding.client.application.editors.NotAnalyzedEditor"
             name="Not Analyzed">
       </editor>
    </extension>
@@ -357,7 +357,7 @@
    <extension
          point="org.eclipse.ui.intro">
       <intro
-            class="org.eclipse.ui.intro.config.CustomizableIntroPart"
+            class="com.puresol.coding.client.application.PurifinityIntroPart"
             id="com.puresol.coding.client.application.plugin.intro">
       </intro>
       <introProductBinding
@@ -374,7 +374,7 @@
          <presentation
                home-page-id="root">
             <implementation
-                  kind="html"
+                  kind="swt"
                   os="win32,linux,macosx"
                   style="content/shared.css">
             </implementation>

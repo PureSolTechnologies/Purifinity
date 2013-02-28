@@ -199,9 +199,14 @@ public class FileSearchConfiguration implements Serializable, Cloneable {
 	private <T> void setFinal(FileSearchConfiguration cloned, String fieldName,
 			T value) throws SecurityException, NoSuchFieldException,
 			IllegalArgumentException, IllegalAccessException {
-		Field field = FileSearchConfiguration.class.getDeclaredField(fieldName);
-		field.setAccessible(true);
-		field.set(cloned, value);
-		field.setAccessible(false);
+		Class<FileSearchConfiguration> clazz = FileSearchConfiguration.class;
+		for (Field field : clazz.getDeclaredFields()) {
+			System.out.println(field.toString());
+			if (field.getName().equals(fieldName)) {
+				field.setAccessible(true);
+				field.set(cloned, value);
+				field.setAccessible(false);
+			}
+		}
 	}
 }
