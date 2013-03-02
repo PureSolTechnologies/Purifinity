@@ -6,15 +6,22 @@ import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.FormAttachment;
+import org.eclipse.swt.layout.FormData;
+import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
+import org.eclipse.wb.swt.ResourceManager;
 
 import com.puresol.coding.analysis.api.CodeStore;
 import com.puresol.coding.analysis.api.CodeStoreException;
@@ -33,6 +40,7 @@ public class FileAnalysisEditor extends EditorPart {
     private ScrollableFileViewer fileViewer;
     private ParserTreeControl treeViewer;
     private FileMetricsControl metricsControl;
+    private Text text;
 
     public FileAnalysisEditor() {
 	super();
@@ -41,7 +49,6 @@ public class FileAnalysisEditor extends EditorPart {
     @Override
     public void doSave(IProgressMonitor monitor) {
 	// TODO Auto-generated method stub
-
     }
 
     @Override
@@ -70,13 +77,36 @@ public class FileAnalysisEditor extends EditorPart {
     @Override
     public void createPartControl(Composite parent) {
 	try {
-	    Composite buttonArea = new Composite(parent, SWT.NONE);
+	    Composite composite = new Composite(parent, SWT.NONE);
+	    composite.setLayout(new FormLayout());
+
+	    Composite buttonArea = new Composite(composite, SWT.NONE);
+	    FormData fd_buttonArea = new FormData();
+	    fd_buttonArea.top = new FormAttachment(0, 10);
+	    fd_buttonArea.left = new FormAttachment(0, 10);
+	    fd_buttonArea.bottom = new FormAttachment(0, 36);
+	    fd_buttonArea.right = new FormAttachment(0, 105);
+	    buttonArea.setLayoutData(fd_buttonArea);
 	    buttonArea.setLayout(new FillLayout(SWT.HORIZONTAL));
 
 	    Button refreshButton = new Button(buttonArea, SWT.NONE);
+	    refreshButton.setImage(ResourceManager.getPluginImage(
+		    "com.puresol.coding.client.application.plugin",
+		    "icons/16x16/arrow_refresh.png"));
+	    refreshButton.addSelectionListener(new SelectionAdapter() {
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+		}
+	    });
 	    refreshButton.setText("Refresh");
 
-	    TabFolder tabFolder = new TabFolder(parent, SWT.NONE);
+	    TabFolder tabFolder = new TabFolder(composite, SWT.NONE);
+	    FormData fd_tabFolder = new FormData();
+	    fd_tabFolder.top = new FormAttachment(buttonArea, 6);
+	    fd_tabFolder.bottom = new FormAttachment(100);
+	    fd_tabFolder.right = new FormAttachment(100);
+	    fd_tabFolder.left = new FormAttachment(0);
+	    tabFolder.setLayoutData(fd_tabFolder);
 
 	    TabItem fileViewerTab = new TabItem(tabFolder, SWT.NONE);
 	    fileViewerTab.setText("Original File");
@@ -87,13 +117,28 @@ public class FileAnalysisEditor extends EditorPart {
 	    TabItem treeViewerTab = new TabItem(tabFolder, SWT.NONE);
 	    treeViewerTab.setText("Parser Tree");
 
-	    treeViewer = new ParserTreeControl(tabFolder);
-	    treeViewerTab.setControl(treeViewer);
+	    Composite composite_2 = new Composite(tabFolder, SWT.NONE);
+	    treeViewerTab.setControl(composite_2);
+	    composite_2.setLayout(new FormLayout());
+
+	    text = new Text(composite_2, SWT.BORDER);
+	    text.setLayoutData(new FormData());
+
+	    treeViewer = new ParserTreeControl(composite_2);
+	    FormData fd_treeViewer = new FormData();
+	    fd_treeViewer.bottom = new FormAttachment(0, 397);
+	    fd_treeViewer.right = new FormAttachment(0, 590);
+	    fd_treeViewer.top = new FormAttachment(0, 33);
+	    fd_treeViewer.left = new FormAttachment(0);
+	    FileAnalysisEditorInput editorInput = (FileAnalysisEditorInput) getEditorInput();
+	    treeViewer.setLayoutData(fd_treeViewer);
+	    treeViewer.setLayout(null);
+	    treeViewer
+		    .setContentAndUpdateContent(editorInput.getAnalyzedCode(),
+			    editorInput.getAnalysisRun());
 
 	    TabItem metricsViewerTab = new TabItem(tabFolder, SWT.NONE);
 	    metricsViewerTab.setText("Metrics");
-
-	    FileAnalysisEditorInput editorInput = (FileAnalysisEditorInput) getEditorInput();
 
 	    metricsControl = new FileMetricsControl(tabFolder, SWT.NONE,
 		    editorInput.getAnalysisRun(), editorInput.getAnalyzedCode());
@@ -103,9 +148,6 @@ public class FileAnalysisEditor extends EditorPart {
 	    CodeStore codeStore = CodeStoreFactory.getFactory().getInstance();
 	    SourceCode sourceCode = codeStore.readSourceCode(hashId);
 	    fileViewer.setStreamAndUpdateContent(sourceCode);
-	    treeViewer
-		    .setContentAndUpdateContent(editorInput.getAnalyzedCode(),
-			    editorInput.getAnalysisRun());
 	} catch (IOException e) {
 	    logger.log(new Status(Status.ERROR, FileAnalysisEditor.class
 		    .getName(), e.getMessage(), e));
