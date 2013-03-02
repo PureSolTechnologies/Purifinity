@@ -1355,9 +1355,9 @@ HELPER
 	|	Type DOT CLASS
 	|	Name DOT THIS
 	|	ClassInstanceCreationExpression
-	|	FieldAccess
 	|	MethodInvocation
 	|	ArrayAccess
+	|	FieldAccess
 	;	
 	
 	Literal:
@@ -1424,8 +1424,8 @@ HELPER
 		SUPER DOT NonWildTypeArguments ? Identifier Arguments
 	|	Name DOT SUPER DOT NonWildTypeArguments ? Identifier Arguments
 	|	Name DOT NonWildTypeArguments Identifier Arguments
-	|	Name Arguments
 	|	Primary DOT NonWildTypeArguments ? Identifier Arguments
+	|	Name Arguments
 	;
 
 /* 15.13 Array Access Expressions */

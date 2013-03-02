@@ -60,10 +60,25 @@ public class Grammar implements Serializable {
 	}
 
 	private void checkConsistencyIfConfigured() throws GrammarException {
-		if (!Boolean.valueOf(options.getProperty("grammar.checks"))) {
-			return;
+		String checkGrammarProperty = options.getProperty("grammar.checks");
+		if (checkGrammarProperty != null) {
+			Boolean checkGrammar = Boolean.valueOf(checkGrammarProperty);
+			if (!Boolean.valueOf(checkGrammar)) {
+				return;
+			}
 		}
-		for (Production production : productions.getList()) {
+		List<TokenDefinition> tokenDefinitionsList = tokenDefinitions
+				.getDefinitions();
+		if (tokenDefinitionsList.size() == 0) {
+			throw new GrammarException(
+					"There are not tokens specified which can be applied.");
+		}
+		List<Production> productionList = productions.getList();
+		if (productionList.size() == 0) {
+			throw new GrammarException(
+					"There are no productions for this grammar.");
+		}
+		for (Production production : productionList) {
 			for (Construction construction : production.getConstructions()) {
 				if (construction.isTerminal()) {
 					if (!construction.getClass().equals(Terminal.class)) {

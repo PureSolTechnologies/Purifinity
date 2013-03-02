@@ -21,122 +21,122 @@ import com.puresol.uhura.source.SourceCodeLine;
  */
 public class RegExpLexer implements Lexer {
 
-    private static final long serialVersionUID = -6858518460147748314L;
+	private static final long serialVersionUID = -6858518460147748314L;
 
-    private static final Logger logger = LoggerFactory
-	    .getLogger(RegExpLexer.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(RegExpLexer.class);
 
-    private final Grammar grammar;
+	private final Grammar grammar;
 
-    private TokenStream tokenStream = null;
-    private SourceCode sourceCode = null;
+	private TokenStream tokenStream = null;
+	private SourceCode sourceCode = null;
 
-    public RegExpLexer(Grammar grammar) {
-	this.grammar = grammar;
-    }
-
-    /**
-     * @return the grammar
-     */
-    public Grammar getGrammar() {
-	return grammar;
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @throws LexerException
-     */
-
-    @Override
-    public TokenStream lex(SourceCode sourceCode) throws LexerException {
-	this.sourceCode = sourceCode;
-	return scan();
-    }
-
-    private TokenStream scan() throws LexerException {
-	tokenStream = new TokenStream();
-	Iterator<SourceCodeLine> sourceIterator = sourceCode.getLines()
-		.iterator();
-	while (sourceIterator.hasNext()) {
-	    SourceCodeLine sourceCodeLine = sourceIterator.next();
-	    StringBuffer text = new StringBuffer(sourceCodeLine.getLine());
-	    while (text.length() > 0) {
-		Token token = findNextToken(text, sourceCodeLine.getSource(),
-			sourceCodeLine.getLineNumber());
-		if ((token == null) || (token.getText().length() == 0)) {
-		    String exceptionText;
-		    if (text.length() <= 12) {
-			exceptionText = text.toString();
-		    } else {
-			exceptionText = text.substring(0, 12) + "...";
-
-		    }
-		    if (sourceIterator.hasNext()) {
-			sourceCodeLine = sourceIterator.next();
-			text.append(sourceCodeLine.getLine());
-			continue;
-		    } else {
-			throw new LexerException("No token found for '"
-				+ exceptionText
-				+ "' in line "
-				+ sourceCodeLine.getSource()
-					.getHumanReadableLocationString() + ":"
-				+ sourceCodeLine.getLineNumber() + ".");
-		    }
-		}
-		if (logger.isTraceEnabled()) {
-		    logger.trace("Found token: " + token + " / "
-			    + token.getMetaData());
-		}
-		if (token.getVisibility() != Visibility.HIDDEN) {
-		    tokenStream.add(token);
-		}
-		text = text.delete(0, token.getText().length());
-	    }
+	public RegExpLexer(Grammar grammar) {
+		this.grammar = grammar;
 	}
-	return tokenStream;
-    }
 
-    private Token findNextToken(StringBuffer text, CodeLocation source, int line) {
-	Token nextToken = null;
-	for (TokenDefinition definition : grammar.getTokenDefinitions()
-		.getDefinitions()) {
-	    Matcher matcher = definition.getPattern().matcher(text);
-	    if (!matcher.find()) {
-		continue;
-	    }
-	    String tokenText = matcher.group(0);
-	    if ((nextToken == null)
-		    || (tokenText.length() > nextToken.getText().length())) {
-		int lineCounter = 1;
-		for (char c : tokenText.toCharArray()) {
-		    if (c == '\n') {
-			lineCounter++;
-		    }
+	/**
+	 * @return the grammar
+	 */
+	public Grammar getGrammar() {
+		return grammar;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @throws LexerException
+	 */
+
+	@Override
+	public TokenStream lex(SourceCode sourceCode) throws LexerException {
+		this.sourceCode = sourceCode;
+		return scan();
+	}
+
+	private TokenStream scan() throws LexerException {
+		tokenStream = new TokenStream();
+		Iterator<SourceCodeLine> sourceIterator = sourceCode.getLines()
+				.iterator();
+		while (sourceIterator.hasNext()) {
+			SourceCodeLine sourceCodeLine = sourceIterator.next();
+			StringBuffer text = new StringBuffer(sourceCodeLine.getLine());
+			while (text.length() > 0) {
+				Token token = findNextToken(text, sourceCodeLine.getSource(),
+						sourceCodeLine.getLineNumber());
+				if ((token == null) || (token.getText().length() == 0)) {
+					String exceptionText;
+					if (text.length() <= 12) {
+						exceptionText = text.toString();
+					} else {
+						exceptionText = text.substring(0, 12) + "...";
+
+					}
+					if (sourceIterator.hasNext()) {
+						sourceCodeLine = sourceIterator.next();
+						text.append(sourceCodeLine.getLine());
+						continue;
+					} else {
+						throw new LexerException("No token found for '"
+								+ exceptionText
+								+ "' in line "
+								+ sourceCodeLine.getSource()
+										.getHumanReadableLocationString() + ":"
+								+ sourceCodeLine.getLineNumber() + ".");
+					}
+				}
+				if (logger.isTraceEnabled()) {
+					logger.trace("Found token: " + token + " / "
+							+ token.getMetaData());
+				}
+				if (token.getVisibility() != Visibility.HIDDEN) {
+					tokenStream.add(token);
+				}
+				text = text.delete(0, token.getText().length());
+			}
 		}
-		TokenMetaData metaData = new TokenMetaData(source, line,
-			lineCounter);
-		nextToken = new Token(definition.getName(), tokenText,
-			definition.getVisibility(), metaData);
-	    }
+		return tokenStream;
 	}
-	return nextToken;
-    }
 
-    @Override
-    public Lexer clone() {
-	RegExpLexer cloned = new RegExpLexer(grammar);
-	if (this.tokenStream != null) {
-	    cloned.tokenStream = (TokenStream) this.tokenStream.clone();
-	} else {
-	    cloned.tokenStream = null;
+	private Token findNextToken(StringBuffer text, CodeLocation source, int line) {
+		Token nextToken = null;
+		for (TokenDefinition definition : grammar.getTokenDefinitions()
+				.getDefinitions()) {
+			Matcher matcher = definition.getPattern().matcher(text);
+			if (!matcher.find()) {
+				continue;
+			}
+			String tokenText = matcher.group(0);
+			if ((nextToken == null)
+					|| (tokenText.length() > nextToken.getText().length())) {
+				int lineCounter = 1;
+				for (char c : tokenText.toCharArray()) {
+					if (c == '\n') {
+						lineCounter++;
+					}
+				}
+				TokenMetaData metaData = new TokenMetaData(source, line,
+						lineCounter);
+				nextToken = new Token(definition.getName(), tokenText,
+						definition.getVisibility(), metaData);
+			}
+		}
+		return nextToken;
 	}
-	if (this.sourceCode != null) {
-	    cloned.sourceCode = this.sourceCode.clone();
-	} else {
-	    cloned.sourceCode = null;
+
+	@Override
+	public Lexer clone() {
+		RegExpLexer cloned = new RegExpLexer(grammar);
+		if (this.tokenStream != null) {
+			cloned.tokenStream = (TokenStream) this.tokenStream.clone();
+		} else {
+			cloned.tokenStream = null;
+		}
+		if (this.sourceCode != null) {
+			cloned.sourceCode = this.sourceCode.clone();
+		} else {
+			cloned.sourceCode = null;
+		}
+		return cloned;
 	}
-	return cloned;
-    }
 }

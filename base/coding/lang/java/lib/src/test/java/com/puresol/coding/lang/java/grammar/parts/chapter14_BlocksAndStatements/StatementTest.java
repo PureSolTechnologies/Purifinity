@@ -8,14 +8,20 @@ import com.puresol.coding.lang.java.grammar.JavaGrammarPartTester;
 
 public class StatementTest {
 
-    @Test
-    public void test1() throws Exception {
-	assertTrue(JavaGrammarPartTester.test("Statement", "a = b;"));
-    }
+	@Test
+	public void test1() throws Exception {
+		assertTrue(JavaGrammarPartTester.test("Statement", "a = b;"));
+	}
 
-    @Test
-    public void test2() throws Exception {
-	assertTrue(JavaGrammarPartTester.test("Statement",
-		"function(LayoutPathImpl.SegmentPath.this);"));
-    }
+	@Test
+	public void test2() throws Exception {
+		assertTrue(JavaGrammarPartTester.test("Statement",
+				"function(LayoutPathImpl.SegmentPath.this);"));
+	}
+
+	@Test
+	public void test3() throws Exception {
+		assertTrue(JavaGrammarPartTester.test("Statement",
+				"getParent().redraw();"));
+	}
 }
