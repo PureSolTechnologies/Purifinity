@@ -34,7 +34,9 @@ import com.puresol.coding.analysis.api.AnalysisStoreException;
 import com.puresol.coding.analysis.api.AnalyzedCode;
 import com.puresol.coding.analysis.api.CodeStoreException;
 import com.puresol.coding.analysis.api.HashIdFileTree;
+import com.puresol.coding.analysis.api.ModuleStore;
 import com.puresol.coding.analysis.api.ModuleStoreException;
+import com.puresol.coding.analysis.api.ModuleStoreFactory;
 import com.puresol.coding.analysis.api.RepositoryLocation;
 import com.puresol.trees.TreeVisitor;
 import com.puresol.trees.TreeWalker;
@@ -311,6 +313,7 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
 			boolean retVal = analyzeFiles();
 			buildCodeLocationTree();
 			storeAnalysisResultInformation();
+			storeModules();
 			fireDone("Finished successfully.", retVal);
 			return retVal;
 		} catch (RuntimeException e) {
@@ -391,6 +394,28 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
 	private void buildCodeLocationTree() {
 		HashIdFileTree intermediate = createIntermediateTree();
 		createFinalTree(intermediate);
+	}
+
+	private void storeModules() {
+		ModuleStoreFactory moduleStoreFactory = ModuleStoreFactory.getFactory();
+		final ModuleStore moduleStore = moduleStoreFactory.getInstance();
+		TreeVisitor<HashIdFileTree> visitor = new TreeVisitor<HashIdFileTree>() {
+
+			@Override
+			public WalkingAction visit(HashIdFileTree tree) {
+				try {
+					if (!moduleStore.isAvailable(tree.getHashId())) {
+						moduleStore.createPackage(tree.getHashId());
+					}
+					return WalkingAction.PROCEED;
+				} catch (ModuleStoreException e) {
+					logger.error("Could not create module store entry for '"
+							+ tree.getHashId() + "'.");
+					return WalkingAction.ABORT;
+				}
+			}
+		};
+		TreeWalker.walk(visitor, fileTree);
 	}
 
 	/**
