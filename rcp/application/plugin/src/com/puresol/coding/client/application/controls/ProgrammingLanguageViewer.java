@@ -1,5 +1,6 @@
 package com.puresol.coding.client.application.controls;
 
+import org.apache.commons.io.IOUtils;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -53,6 +54,12 @@ public class ProgrammingLanguageViewer extends ComboViewer {
     @Override
     public void refresh() {
 	super.refresh();
-	setInput(ProgrammingLanguages.getInstance().getAll());
+	ProgrammingLanguages programmingLanguages = ProgrammingLanguages
+		.createInstance();
+	try {
+	    setInput(programmingLanguages.getAll());
+	} finally {
+	    IOUtils.closeQuietly(programmingLanguages);
+	}
     }
 }

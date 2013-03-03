@@ -45,12 +45,16 @@
 			<artifactId>uhura.lib</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol</groupId> 
+			<groupId>com.puresol</groupId>
 			<artifactId>uhura.test</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresol</groupId>
 			<artifactId>utils.lib</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>

@@ -1,5 +1,6 @@
 package com.puresol.coding.evaluation.api;
 
+import java.io.Closeable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ServiceLoader;
@@ -10,29 +11,21 @@ import java.util.ServiceLoader;
  * 
  * @author Rick-Rainer Ludwig
  */
-public abstract class Evaluators {
+public abstract class Evaluators implements Closeable {
 
-    private static Evaluators instance = null;
-
-    public static Evaluators getInstance() {
-	if (instance == null) {
-	    loadInstance();
-	}
-	return instance;
-    }
-
-    private static synchronized void loadInstance() {
+    public static Evaluators createInstance() {
 	ServiceLoader<Evaluators> loader = ServiceLoader.load(Evaluators.class);
 	Iterator<Evaluators> iterator = loader.iterator();
 	if (!iterator.hasNext()) {
 	    throw new IllegalStateException("No implementation for '"
 		    + Evaluators.class.getName() + "' found.");
 	}
-	instance = iterator.next();
+	Evaluators instance = iterator.next();
 	if (iterator.hasNext()) {
 	    throw new IllegalStateException("Too many implementations for '"
 		    + Evaluators.class.getName() + "' found.");
 	}
+	return instance;
     }
 
     /**

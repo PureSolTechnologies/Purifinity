@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.io.IOUtils;
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -31,46 +32,52 @@ public class EvaluationJob extends Job {
 
     @Override
     protected IStatus run(IProgressMonitor monitor) {
-	Set<Class<? extends Evaluator>> finished = new HashSet<Class<? extends Evaluator>>();
-	List<EvaluatorFactory> evaluatorFactories = Evaluators.getInstance()
-		.getAll();
-	monitor.beginTask("Running evaluations for '" + getName() + "'",
-		evaluatorFactories.size());
-	boolean evaluated = true;
-	while (evaluated) {
-	    evaluated = false;
-	    for (EvaluatorFactory factory : evaluatorFactories) {
-		boolean canRun = checkDepdencies(finished, factory);
-		if (!canRun) {
-		    continue;
-		}
-		Evaluator evaluator = factory.create(analysisRun);
-		if (!finished.contains(evaluator.getClass())) {
-		    try {
-			evaluator.call();
-			finished.add(evaluator.getClass());
-			monitor.worked(1);
-		    } catch (InterruptedException e) {
-			logger.log(new Status(Status.ERROR, EvaluationJob.class
-				.getName(), "Could not run evaluation '"
-				+ evaluator.getInformation().getName() + "'!",
-				e));
-			monitor.done();
-			return Status.CANCEL_STATUS;
-		    } catch (Exception e) {
-			logger.log(new Status(Status.ERROR, EvaluationJob.class
-				.getName(), "Could not run evaluation '"
-				+ evaluator.getInformation().getName() + "'!",
-				e));
-			monitor.done();
-			return Status.CANCEL_STATUS;
+	Evaluators evaluators = Evaluators.createInstance();
+	try {
+	    Set<Class<? extends Evaluator>> finished = new HashSet<Class<? extends Evaluator>>();
+	    List<EvaluatorFactory> evaluatorFactories = evaluators.getAll();
+	    monitor.beginTask("Running evaluations for '" + getName() + "'",
+		    evaluatorFactories.size());
+	    boolean evaluated = true;
+	    while (evaluated) {
+		evaluated = false;
+		for (EvaluatorFactory factory : evaluatorFactories) {
+		    boolean canRun = checkDepdencies(finished, factory);
+		    if (!canRun) {
+			continue;
 		    }
-		    evaluated = true;
+		    Evaluator evaluator = factory.create(analysisRun);
+		    if (!finished.contains(evaluator.getClass())) {
+			try {
+			    evaluator.call();
+			    finished.add(evaluator.getClass());
+			    monitor.worked(1);
+			} catch (InterruptedException e) {
+			    logger.log(new Status(Status.ERROR,
+				    EvaluationJob.class.getName(),
+				    "Could not run evaluation '"
+					    + evaluator.getInformation()
+						    .getName() + "'!", e));
+			    monitor.done();
+			    return Status.CANCEL_STATUS;
+			} catch (Exception e) {
+			    logger.log(new Status(Status.ERROR,
+				    EvaluationJob.class.getName(),
+				    "Could not run evaluation '"
+					    + evaluator.getInformation()
+						    .getName() + "'!", e));
+			    monitor.done();
+			    return Status.CANCEL_STATUS;
+			}
+			evaluated = true;
+		    }
 		}
 	    }
+	    monitor.done();
+	    return Status.OK_STATUS;
+	} finally {
+	    IOUtils.closeQuietly(evaluators);
 	}
-	monitor.done();
-	return Status.OK_STATUS;
     }
 
     private boolean checkDepdencies(Set<Class<? extends Evaluator>> finished,

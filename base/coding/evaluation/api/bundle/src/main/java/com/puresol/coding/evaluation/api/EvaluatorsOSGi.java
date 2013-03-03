@@ -16,6 +16,22 @@ import org.osgi.framework.ServiceReference;
  */
 public class EvaluatorsOSGi extends Evaluators {
 
+    private static final BundleContext bundleContext = Activator
+	    .getBundleContext();
+
+    private final Collection<ServiceReference<EvaluatorFactory>> serviceReferences;
+
+    public EvaluatorsOSGi() {
+	super();
+	try {
+	    serviceReferences = bundleContext.getServiceReferences(
+		    EvaluatorFactory.class, null);
+	} catch (InvalidSyntaxException e) {
+	    throw new RuntimeException(
+		    "Could not retrieve the project evaluators!", e);
+	}
+    }
+
     /**
      * This method returns a list of all project evaluators available.
      * 
@@ -23,21 +39,17 @@ public class EvaluatorsOSGi extends Evaluators {
      */
     @Override
     public List<EvaluatorFactory> getAll() {
-	try {
-	    BundleContext bundleContext = Activator.getBundleContext();
-	    Collection<ServiceReference<EvaluatorFactory>> serviceReferences = bundleContext
-		    .getServiceReferences(EvaluatorFactory.class, null);
-	    List<EvaluatorFactory> evaluatorFactories = new ArrayList<EvaluatorFactory>();
-	    if (serviceReferences != null) {
-		for (ServiceReference<EvaluatorFactory> serviceReference : serviceReferences) {
-		    evaluatorFactories.add(bundleContext
-			    .getService(serviceReference));
-		}
-	    }
-	    return evaluatorFactories;
-	} catch (InvalidSyntaxException e) {
-	    throw new RuntimeException(
-		    "Could not retrieve the project evaluators!", e);
+	List<EvaluatorFactory> evaluatorFactories = new ArrayList<EvaluatorFactory>();
+	for (ServiceReference<EvaluatorFactory> serviceReference : serviceReferences) {
+	    evaluatorFactories.add(bundleContext.getService(serviceReference));
+	}
+	return evaluatorFactories;
+    }
+
+    @Override
+    public void close() {
+	for (ServiceReference<EvaluatorFactory> serviceReference : serviceReferences) {
+	    bundleContext.ungetService(serviceReference);
 	}
     }
 }

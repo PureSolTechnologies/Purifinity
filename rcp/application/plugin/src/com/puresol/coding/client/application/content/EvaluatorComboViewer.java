@@ -1,13 +1,16 @@
 package com.puresol.coding.client.application.content;
 
+import org.apache.commons.io.IOUtils;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.widgets.Combo;
 
 import com.puresol.coding.evaluation.api.EvaluatorFactory;
-import com.puresol.coding.evaluation.api.EvaluatorsOSGi;
+import com.puresol.coding.evaluation.api.Evaluators;
 
 public class EvaluatorComboViewer extends ComboViewer {
+
+    private final Evaluators evaluators;
 
     public EvaluatorComboViewer(Combo list) {
 	super(list);
@@ -19,6 +22,11 @@ public class EvaluatorComboViewer extends ComboViewer {
 		return evaluator.getName();
 	    }
 	});
-	setInput(EvaluatorsOSGi.getInstance().getAll());
+	evaluators = Evaluators.createInstance();
+	setInput(evaluators.getAll());
+    }
+
+    public void dispose() {
+	IOUtils.closeQuietly(evaluators);
     }
 }
