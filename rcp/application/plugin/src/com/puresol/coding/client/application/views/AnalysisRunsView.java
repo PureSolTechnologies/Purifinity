@@ -5,7 +5,12 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.core.runtime.ILog;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.IJobChangeEvent;
+import org.eclipse.core.runtime.jobs.IJobChangeListener;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.viewers.ISelection;
@@ -28,6 +33,7 @@ import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.ViewPart;
+import org.eclipse.ui.progress.UIJob;
 
 import com.puresol.coding.analysis.api.AnalysisProject;
 import com.puresol.coding.analysis.api.AnalysisRun;
@@ -41,7 +47,7 @@ import com.puresol.coding.client.application.controls.ParserTreeControl;
 import com.puresol.coding.client.application.jobs.AnalysisJob;
 
 public class AnalysisRunsView extends ViewPart implements SelectionListener,
-	ISelectionProvider, ISelectionListener {
+	ISelectionProvider, ISelectionListener, IJobChangeListener {
 
     private static final ILog logger = Activator.getDefault().getLog();
 
@@ -129,6 +135,7 @@ public class AnalysisRunsView extends ViewPart implements SelectionListener,
 	getSite().getWorkbenchWindow().getSelectionService()
 		.addSelectionListener(this);
 	setContentDescription("All available analysis runs for the selected analysis");
+	Job.getJobManager().addJobChangeListener(this);
     }
 
     @Override
@@ -257,5 +264,49 @@ public class AnalysisRunsView extends ViewPart implements SelectionListener,
 	    logger.log(new Status(Status.ERROR, ParserTreeControl.class
 		    .getName(), "Can not read analysis store!", e));
 	}
+    }
+
+    @Override
+    public void aboutToRun(IJobChangeEvent event) {
+	// intentionally left empty
+    }
+
+    @Override
+    public void awake(IJobChangeEvent event) {
+	// intentionally left empty
+    }
+
+    @Override
+    public void done(IJobChangeEvent event) {
+	Job job = event.getJob();
+	if (job.getClass().equals(AnalysisJob.class)) {
+	    updateAnalysisRunList();
+	}
+    }
+
+    private void updateAnalysisRunList() {
+	UIJob uiJob = new UIJob("Update Analysis Runs") {
+	    @Override
+	    public IStatus runInUIThread(IProgressMonitor monitor) {
+		refreshAnalysisRunList();
+		return Status.OK_STATUS;
+	    }
+	};
+	uiJob.schedule();
+    }
+
+    @Override
+    public void running(IJobChangeEvent event) {
+	// intentionally left empty
+    }
+
+    @Override
+    public void scheduled(IJobChangeEvent event) {
+	// intentionally left empty
+    }
+
+    @Override
+    public void sleeping(IJobChangeEvent event) {
+	// intentionally left empty
     }
 }

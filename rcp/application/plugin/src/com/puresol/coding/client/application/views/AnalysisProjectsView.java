@@ -163,7 +163,7 @@ public class AnalysisProjectsView extends ViewPart implements
     }
 
     private void updateAnalysisList() {
-	UIJob uiJob = new UIJob("Update Analysis Navigator") {
+	UIJob uiJob = new UIJob("Update Analysis Projects") {
 	    @Override
 	    public IStatus runInUIThread(IProgressMonitor monitor) {
 		refreshAnalysisProjectList();
