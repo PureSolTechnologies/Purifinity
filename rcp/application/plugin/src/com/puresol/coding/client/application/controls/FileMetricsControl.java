@@ -8,8 +8,9 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.RowData;
-import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.swt.layout.FormAttachment;
+import org.eclipse.swt.layout.FormData;
+import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
@@ -46,19 +47,27 @@ public class FileMetricsControl extends Composite implements
 	this.analysisRun = analysisRun;
 	this.analyzedCode = analyzedCode;
 
-	Composite selection = new Composite(this, SWT.NONE);
-	selection.setLayout(new RowLayout());
+	setLayout(new FormLayout());
 
-	Combo combo = new Combo(selection, SWT.READ_ONLY);
-	combo.setLayoutData(new RowData(SWT.DEFAULT, SWT.DEFAULT));
+	Combo combo = new Combo(this, SWT.READ_ONLY);
+	FormData fd_combo = new FormData();
+	fd_combo.top = new FormAttachment(0, 10);
+	fd_combo.right = new FormAttachment(100, -10);
+	fd_combo.bottom = new FormAttachment(0, 10);
+	fd_combo.left = new FormAttachment(0, 10);
+	combo.setLayoutData(fd_combo);
 
 	comboViewer = new EvaluatorComboViewer(combo);
 	comboViewer.addSelectionChangedListener(this);
 
-	metricDescriptionLabel = new Text(selection, SWT.MULTI);
+	metricDescriptionLabel = new Text(this, SWT.MULTI);
+	FormData fd_metricDescriptionLabel = new FormData();
+	fd_metricDescriptionLabel.top = new FormAttachment(combo, 33);
+	fd_metricDescriptionLabel.bottom = new FormAttachment(100, -10);
+	fd_metricDescriptionLabel.left = new FormAttachment(0, 10);
+	fd_metricDescriptionLabel.right = new FormAttachment(100, -10);
+	metricDescriptionLabel.setLayoutData(fd_metricDescriptionLabel);
 	metricDescriptionLabel.setText("");
-	metricDescriptionLabel.setLayoutData(new RowData(SWT.DEFAULT,
-		SWT.DEFAULT));
     }
 
     @Override

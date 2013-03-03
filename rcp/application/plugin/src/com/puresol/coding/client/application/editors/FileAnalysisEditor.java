@@ -61,7 +61,9 @@ public class FileAnalysisEditor extends EditorPart {
 	    throws PartInitException {
 	setSite(site);
 	setInput(input);
-	setPartName(input.getName());
+	FileAnalysisEditorInput fileAnalysisInput = (FileAnalysisEditorInput) input;
+	setPartName(fileAnalysisInput.getAnalyzedCode().getSourceLocation()
+		.getName());
     }
 
     @Override
@@ -117,14 +119,8 @@ public class FileAnalysisEditor extends EditorPart {
 	    TabItem treeViewerTab = new TabItem(tabFolder, SWT.NONE);
 	    treeViewerTab.setText("Parser Tree");
 
-	    Composite composite_2 = new Composite(tabFolder, SWT.NONE);
-	    treeViewerTab.setControl(composite_2);
-	    composite_2.setLayout(new FormLayout());
-
-	    text = new Text(composite_2, SWT.BORDER);
-	    text.setLayoutData(new FormData());
-
-	    treeViewer = new ParserTreeControl(composite_2);
+	    treeViewer = new ParserTreeControl(tabFolder);
+	    treeViewerTab.setControl(treeViewer);
 	    FormData fd_treeViewer = new FormData();
 	    fd_treeViewer.bottom = new FormAttachment(0, 397);
 	    fd_treeViewer.right = new FormAttachment(0, 590);
@@ -132,7 +128,6 @@ public class FileAnalysisEditor extends EditorPart {
 	    fd_treeViewer.left = new FormAttachment(0);
 	    FileAnalysisEditorInput editorInput = (FileAnalysisEditorInput) getEditorInput();
 	    treeViewer.setLayoutData(fd_treeViewer);
-	    treeViewer.setLayout(null);
 	    treeViewer
 		    .setContentAndUpdateContent(editorInput.getAnalyzedCode(),
 			    editorInput.getAnalysisRun());

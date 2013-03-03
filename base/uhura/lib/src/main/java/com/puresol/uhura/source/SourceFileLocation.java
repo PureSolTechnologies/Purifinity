@@ -94,7 +94,7 @@ public class SourceFileLocation extends AbstractCodeLocation {
 
     @Override
     public String getName() {
-	return internalPath;
+	return file.getName();
     }
 
     @Override

@@ -4,6 +4,9 @@ import java.io.IOException;
 
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.FormAttachment;
+import org.eclipse.swt.layout.FormData;
+import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Tree;
@@ -34,10 +37,23 @@ public class ParserTreeControl extends Composite {
 
     public ParserTreeControl(Composite parent) {
 	super(parent, SWT.NONE);
+	setLayout(new FormLayout());
 
-	lblNewLabel = new Label(this, SWT.NONE);
+	lblNewLabel = new Label(this, SWT.BORDER);
+	FormData fd_lblNewLabel = new FormData();
+	fd_lblNewLabel.top = new FormAttachment(0, 10);
+	fd_lblNewLabel.left = new FormAttachment(0, 10);
+	fd_lblNewLabel.right = new FormAttachment(100, -10);
+	fd_lblNewLabel.bottom = new FormAttachment(0, 28);
+	lblNewLabel.setLayoutData(fd_lblNewLabel);
 
 	tree = new Tree(this, SWT.BORDER);
+	FormData fd_tree = new FormData();
+	fd_tree.top = new FormAttachment(lblNewLabel, 6);
+	fd_tree.bottom = new FormAttachment(100, -10);
+	fd_tree.left = new FormAttachment(0, 10);
+	fd_tree.right = new FormAttachment(100, -10);
+	tree.setLayoutData(fd_tree);
 	treeViewer = new TreeViewer(tree);
 	treeViewer.setContentProvider(new ParserTreeContentProvider());
 	treeViewer.setLabelProvider(new ParserTreeLabelProvider());
