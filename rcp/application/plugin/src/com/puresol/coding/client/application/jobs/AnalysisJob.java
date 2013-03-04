@@ -19,67 +19,67 @@ import com.puresol.utils.progress.ProgressObserver;
 
 public class AnalysisJob extends Job implements ProgressObserver<AnalysisRun> {
 
-    private static final ILog logger = Activator.getDefault().getLog();
+	private static final ILog logger = Activator.getDefault().getLog();
 
-    private final AnalysisProject analysisProject;
-    private IProgressMonitor monitor = null;
+	private final AnalysisProject analysisProject;
+	private IProgressMonitor monitor = null;
 
-    public AnalysisJob(AnalysisProject analysisProject) {
-	super(analysisProject.getSettings().getName());
-	this.analysisProject = analysisProject;
-    }
-
-    @Override
-    protected IStatus run(IProgressMonitor monitor) {
-	try {
-	    this.monitor = monitor;
-
-	    AnalysisRun analysisRun = analysisProject.createAnalysisRun();
-	    analysisRun.addObservable(this);
-
-	    ExecutorService executor = Executors.newSingleThreadExecutor();
-	    executor.submit(analysisRun);
-	    executor.shutdown();
-	    executor.awaitTermination(1, TimeUnit.HOURS);
-
-	    // EvaluationJob job = new EvaluationJob(analysisRun);
-	    // job.schedule();
-	    return Status.OK_STATUS;
-	} catch (OperationCanceledException e) {
-	    logger.log(new Status(Status.INFO, AnalysisJob.class.getName(),
-		    "Analysis was cancelled!", e));
-	    return Status.CANCEL_STATUS;
-	} catch (AnalysisStoreException e) {
-	    logger.log(new Status(Status.ERROR, AnalysisJob.class.getName(),
-		    "Error in directory store!", e));
-	    return Status.CANCEL_STATUS;
-	} catch (InterruptedException e) {
-	    logger.log(new Status(Status.ERROR, AnalysisJob.class.getName(),
-		    "Analysis was interrupted!", e));
-	    return Status.CANCEL_STATUS;
+	public AnalysisJob(AnalysisProject analysisProject) {
+		super(analysisProject.getSettings().getName());
+		this.analysisProject = analysisProject;
 	}
-    }
 
-    public AnalysisProject getAnalysis() {
-	return analysisProject;
-    }
+	@Override
+	protected IStatus run(IProgressMonitor monitor) {
+		try {
+			this.monitor = monitor;
 
-    @Override
-    public void started(AnalysisRun observable, String message, long total) {
-	monitor.beginTask(analysisProject.getSettings().getName(), (int) total);
-	monitor.subTask(message);
-    }
+			AnalysisRun analysisRun = analysisProject.createAnalysisRun();
+			analysisRun.addObservable(this);
 
-    @Override
-    public void done(AnalysisRun observable, String message, boolean successful) {
-	monitor.subTask(message);
-	monitor.setCanceled(successful);
-	monitor.done();
-    }
+			ExecutorService executor = Executors.newSingleThreadExecutor();
+			executor.submit(analysisRun);
+			executor.shutdown();
+			executor.awaitTermination(1, TimeUnit.HOURS);
 
-    @Override
-    public void updateWork(AnalysisRun observable, String message, long finished) {
-	monitor.subTask(message);
-	monitor.worked((int) finished);
-    }
+			EvaluationJob job = new EvaluationJob(analysisRun);
+			job.schedule();
+			return Status.OK_STATUS;
+		} catch (OperationCanceledException e) {
+			logger.log(new Status(Status.INFO, AnalysisJob.class.getName(),
+					"Analysis was cancelled!", e));
+			return Status.CANCEL_STATUS;
+		} catch (AnalysisStoreException e) {
+			logger.log(new Status(Status.ERROR, AnalysisJob.class.getName(),
+					"Error in directory store!", e));
+			return Status.CANCEL_STATUS;
+		} catch (InterruptedException e) {
+			logger.log(new Status(Status.ERROR, AnalysisJob.class.getName(),
+					"Analysis was interrupted!", e));
+			return Status.CANCEL_STATUS;
+		}
+	}
+
+	public AnalysisProject getAnalysis() {
+		return analysisProject;
+	}
+
+	@Override
+	public void started(AnalysisRun observable, String message, long total) {
+		monitor.beginTask(analysisProject.getSettings().getName(), (int) total);
+		monitor.subTask(message);
+	}
+
+	@Override
+	public void done(AnalysisRun observable, String message, boolean successful) {
+		monitor.subTask(message);
+		monitor.setCanceled(successful);
+		monitor.done();
+	}
+
+	@Override
+	public void updateWork(AnalysisRun observable, String message, long finished) {
+		monitor.subTask(message);
+		monitor.worked((int) finished);
+	}
 }

@@ -1,21 +1,17 @@
 package com.puresol.coding.metrics;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import com.puresol.coding.metrics.cocomo.CoCoMoActivator;
-import com.puresol.coding.metrics.codedepth.CodeDepthActivator;
-import com.puresol.coding.metrics.entropy.EntropyActivator;
-import com.puresol.coding.metrics.halstead.HalsteadActivator;
-import com.puresol.coding.metrics.maintainability.MaintainabilityActivator;
-import com.puresol.coding.metrics.mccabe.McCabeActivator;
-import com.puresol.coding.metrics.normmaint.NormalizedMaintainabilityActivator;
-import com.puresol.coding.metrics.sloc.SLOCActivator;
+import com.puresol.coding.evaluation.api.EvaluatorFactory;
+import com.puresol.coding.metrics.cocomo.CoCoMoServiceFactory;
+import com.puresol.coding.metrics.codedepth.CodeDepthMetricEvaluatorFactory;
+import com.puresol.coding.metrics.entropy.EntropyMetricServiceFactory;
+import com.puresol.coding.metrics.halstead.HalsteadMetricEvaluatorFactory;
+import com.puresol.coding.metrics.maintainability.MaintainabilityIndexEvaluatorFactory;
+import com.puresol.coding.metrics.mccabe.McCabeMetricServiceFactory;
+import com.puresol.coding.metrics.normmaint.NormalizedMaintainabilityIndexEvaluatorFactory;
+import com.puresol.coding.metrics.sloc.SLOCEvaluatorFactory;
+import com.puresol.commons.osgi.AbstractActivator;
 
 /**
  * This class is used as OSGi bundle activator. This class only registers and
@@ -24,60 +20,25 @@ import com.puresol.coding.metrics.sloc.SLOCActivator;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class Activator implements BundleActivator {
+public class Activator extends AbstractActivator {
 
-    private static final Logger logger = LoggerFactory
-	    .getLogger(Activator.class);
+	@Override
+	public void start(BundleContext context) throws Exception {
+		super.start(context);
 
-    private static BundleContext bundleContext = null;
-
-    public static BundleContext getBundleContext() {
-	return bundleContext;
-    }
-
-    private final List<BundleActivator> bundleActivators = new ArrayList<BundleActivator>();
-
-    @Override
-    public void start(BundleContext context) throws Exception {
-	logger.info("Starting Metrics Base Package...");
-
-	if (Activator.bundleContext == null) {
-	    Activator.bundleContext = context;
-	} else {
-	    throw new RuntimeException("Context should be not set already!");
+		registerService(EvaluatorFactory.class, new CoCoMoServiceFactory());
+		registerService(EvaluatorFactory.class,
+				new CodeDepthMetricEvaluatorFactory());
+		registerService(EvaluatorFactory.class,
+				new EntropyMetricServiceFactory());
+		registerService(EvaluatorFactory.class,
+				new HalsteadMetricEvaluatorFactory());
+		registerService(EvaluatorFactory.class,
+				new MaintainabilityIndexEvaluatorFactory());
+		registerService(EvaluatorFactory.class,
+				new McCabeMetricServiceFactory());
+		registerService(EvaluatorFactory.class,
+				new NormalizedMaintainabilityIndexEvaluatorFactory());
+		registerService(EvaluatorFactory.class, new SLOCEvaluatorFactory());
 	}
-
-	bundleActivators.add(new CoCoMoActivator());
-	bundleActivators.add(new CodeDepthActivator());
-	bundleActivators.add(new EntropyActivator());
-	bundleActivators.add(new HalsteadActivator());
-	bundleActivators.add(new MaintainabilityActivator());
-	bundleActivators.add(new McCabeActivator());
-	bundleActivators.add(new NormalizedMaintainabilityActivator());
-	bundleActivators.add(new SLOCActivator());
-	for (BundleActivator activator : bundleActivators) {
-	    activator.start(context);
-	}
-
-	logger.info("Started.");
-    }
-
-    @Override
-    public void stop(BundleContext context) throws Exception {
-	logger.info("Stopping Metrics Base Package...");
-
-	for (BundleActivator activator : bundleActivators) {
-	    activator.stop(context);
-	}
-	bundleActivators.clear();
-
-	if (Activator.bundleContext != null) {
-	    Activator.bundleContext = null;
-	} else {
-	    throw new RuntimeException("Context should be set already!");
-	}
-
-	logger.info("Stopped.");
-    }
-
 }

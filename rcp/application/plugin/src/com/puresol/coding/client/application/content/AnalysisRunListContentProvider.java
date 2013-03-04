@@ -1,6 +1,7 @@
 package com.puresol.coding.client.application.content;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -20,30 +21,32 @@ import com.puresol.coding.analysis.api.AnalysisStoreFactory;
  * 
  */
 public class AnalysisRunListContentProvider implements
-	IStructuredContentProvider {
+		IStructuredContentProvider {
 
-    private final List<AnalysisRunInformation> allRuns = new ArrayList<AnalysisRunInformation>();
+	private final List<AnalysisRunInformation> allRuns = new ArrayList<AnalysisRunInformation>();
 
-    @Override
-    public void dispose() {
-	// Intentionally left blank
-    }
-
-    @Override
-    public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-	allRuns.clear();
-	if (newInput != null) {
-	    @SuppressWarnings("unchecked")
-	    List<AnalysisRunInformation> runInformation = (List<AnalysisRunInformation>) newInput;
-	    allRuns.addAll(runInformation);
+	@Override
+	public void dispose() {
+		// Intentionally left blank
 	}
-    }
 
-    @Override
-    public Object[] getElements(Object inputElement) {
-	if (allRuns != null) {
-	    return allRuns.toArray();
+	@Override
+	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+		allRuns.clear();
+		if (newInput != null) {
+			@SuppressWarnings("unchecked")
+			List<AnalysisRunInformation> runInformation = (List<AnalysisRunInformation>) newInput;
+			allRuns.addAll(runInformation);
+			Collections.sort(allRuns);
+			Collections.reverse(allRuns);
+		}
 	}
-	return new AnalysisRunInformation[0];
-    }
+
+	@Override
+	public Object[] getElements(Object inputElement) {
+		if (allRuns != null) {
+			return allRuns.toArray();
+		}
+		return new AnalysisRunInformation[0];
+	}
 }
