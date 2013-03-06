@@ -15,15 +15,16 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.puresol</groupId>
-			<artifactId>coding.evaluation.api.lib</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.puresol</groupId>
 			<artifactId>coding.store.fs.lib</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresol</groupId>
 			<artifactId>commons.osgi</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresol</groupId>
+			<artifactId>coding.evaluation.api.lib</artifactId>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.osgi</groupId>
