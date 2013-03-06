@@ -1,15 +1,38 @@
 package com.puresol.utils;
 
 import java.io.Serializable;
+import java.util.IllegalFormatException;
 
 /**
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class HashId implements Serializable {
+public class HashId implements Serializable, Comparable<HashId> {
 
     private static final long serialVersionUID = 1219606473615058203L;
+
+    public static final HashId fromString(String hashIdString)
+	    throws IllegalFormatException {
+	String[] splits = hashIdString.split(":");
+	if (splits.length != 2) {
+	    throw new IllegalArgumentException(
+		    "Could not convert string '"
+			    + hashIdString
+			    + "' into a valid hash id. There should be a colon ':' separator.");
+	}
+	String algorithmName = splits[0];
+	String hash = splits[1];
+	HashAlgorithm algorithm = HashAlgorithm
+		.fromAlgorithmName(algorithmName);
+	if (algorithm == null) {
+	    throw new IllegalArgumentException(
+		    "Could not convert string '"
+			    + hashIdString
+			    + "' into a valid hash id. The algorithm specified by the name is not recognized.");
+	}
+	return new HashId(algorithm, hash);
+    }
 
     /**
      * This is the name of the algorithm used to calculate the hash.
@@ -44,7 +67,7 @@ public class HashId implements Serializable {
     }
 
     @Override
-    public String toString() {
+    public final String toString() {
 	return algorithm.getAlgorithmName() + ":" + hash;
     }
 
@@ -75,6 +98,11 @@ public class HashId implements Serializable {
 	} else if (!hash.equals(other.hash))
 	    return false;
 	return true;
+    }
+
+    @Override
+    public int compareTo(HashId other) {
+	return toString().compareTo(other.toString());
     }
 
 }

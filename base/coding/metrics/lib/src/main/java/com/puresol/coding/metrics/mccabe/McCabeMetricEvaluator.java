@@ -59,7 +59,6 @@ public class McCabeMetricEvaluator extends AbstractEvaluator {
     @Override
     protected void processDirectory(HashIdFileTree directory)
 	    throws InterruptedException {
-	throw new RuntimeException("Not implemented, yet!");
 	// McCabeMetricDirectoryResults finalResults = new
 	// McCabeMetricDirectoryResults();
 	// for (HashIdFileTree child : directory.getChildren()) {

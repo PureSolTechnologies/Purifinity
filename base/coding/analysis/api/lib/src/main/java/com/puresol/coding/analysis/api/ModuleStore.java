@@ -1,5 +1,7 @@
 package com.puresol.coding.analysis.api;
 
+import java.util.List;
+
 import com.puresol.utils.HashId;
 
 /**
@@ -26,7 +28,8 @@ public interface ModuleStore {
      *         equal due to the same hash id.
      * @throws ModuleStoreException
      */
-    public boolean createPackage(HashId hashId) throws ModuleStoreException;
+    public boolean createPackage(HashId hashId, List<HashId> files,
+	    List<HashId> directories) throws ModuleStoreException;
 
     /**
      * This method checks whether a directory is already present or not.
@@ -35,4 +38,27 @@ public interface ModuleStore {
      * @return
      */
     public boolean isAvailable(HashId hashId);
+
+    /**
+     * This method returns a list of hashes of the files contained in the
+     * module.
+     * 
+     * @param hashId
+     *            is the {@link HashId} of the module.
+     * @return A {@link List} of {@link HashId} is returned containing the
+     *         relevant file information.
+     */
+    public List<HashId> getFiles(HashId hashId) throws ModuleStoreException;
+
+    /**
+     * This method returns a list of hashes of the modules contained in the
+     * module.
+     * 
+     * @param hashId
+     *            is the {@link HashId} of the module.
+     * @return A {@link List} of {@link HashId} is returned containing the
+     *         relevant file information.
+     */
+    public List<HashId> getDirectories(HashId hashId)
+	    throws ModuleStoreException;
 }
