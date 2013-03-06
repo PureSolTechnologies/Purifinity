@@ -1,14 +1,23 @@
 package com.puresol.coding.store.fs;
 
-import java.util.Collection;
+import java.util.Dictionary;
+import java.util.Hashtable;
 
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
 
 import com.puresol.coding.analysis.api.AnalysisStore;
 import com.puresol.coding.analysis.api.CodeStore;
 import com.puresol.coding.analysis.api.ModuleStore;
+import com.puresol.coding.evaluation.api.Evaluator;
 import com.puresol.coding.evaluation.api.EvaluatorStore;
+import com.puresol.coding.metrics.cocomo.CoCoMoEvaluator;
+import com.puresol.coding.metrics.codedepth.CodeDepthEvaluator;
+import com.puresol.coding.metrics.entropy.EntropyEvaluator;
+import com.puresol.coding.metrics.halstead.HalsteadMetricEvaluator;
+import com.puresol.coding.metrics.maintainability.MaintainabilityIndexEvaluator;
+import com.puresol.coding.metrics.mccabe.McCabeMetricEvaluator;
+import com.puresol.coding.metrics.normmaint.NormalizedMaintainabilityIndexEvaluator;
+import com.puresol.coding.metrics.sloc.SLOCEvaluator;
 import com.puresol.coding.store.fs.analysis.AnalysisStoreImpl;
 import com.puresol.coding.store.fs.analysis.CodeStoreImpl;
 import com.puresol.coding.store.fs.analysis.ModuleStoreImpl;
@@ -32,20 +41,28 @@ public class Activator extends AbstractActivator {
 	registerService(ModuleStore.class, new ModuleStoreImpl());
 	registerService(CodeStore.class, new CodeStoreImpl());
 
-	registerService(EvaluatorStore.class, new CoCoMoEvaluatorStore());
-	registerService(EvaluatorStore.class, new CodeDepthEvaluatorStore());
-	registerService(EvaluatorStore.class, new EntropyEvaluatorStore());
-	registerService(EvaluatorStore.class,
-		new HalsteadMetricEvaluatorStore());
-	registerService(EvaluatorStore.class,
-		new MaintainabilityIndexEvaluatorStore());
-	registerService(EvaluatorStore.class, new McCabeMetricEvaluatorStore());
-	registerService(EvaluatorStore.class,
-		new NormalizedMaintainabilityIndexEvaluatorStore());
-	registerService(EvaluatorStore.class, new SLOCEvaluatorStore());
+	registerEvaluatorStore(new CoCoMoEvaluatorStore(),
+		CoCoMoEvaluator.class);
+	registerEvaluatorStore(new CodeDepthEvaluatorStore(),
+		CodeDepthEvaluator.class);
+	registerEvaluatorStore(new EntropyEvaluatorStore(),
+		EntropyEvaluator.class);
+	registerEvaluatorStore(new HalsteadMetricEvaluatorStore(),
+		HalsteadMetricEvaluator.class);
+	registerEvaluatorStore(new MaintainabilityIndexEvaluatorStore(),
+		MaintainabilityIndexEvaluator.class);
+	registerEvaluatorStore(new McCabeMetricEvaluatorStore(),
+		McCabeMetricEvaluator.class);
+	registerEvaluatorStore(
+		new NormalizedMaintainabilityIndexEvaluatorStore(),
+		NormalizedMaintainabilityIndexEvaluator.class);
+	registerEvaluatorStore(new SLOCEvaluatorStore(), SLOCEvaluator.class);
+    }
 
-	Collection<ServiceReference<EvaluatorStore>> serviceReferences = context
-		.getServiceReferences(EvaluatorStore.class, null);
-	serviceReferences.size();
+    private <T extends EvaluatorStore> void registerEvaluatorStore(T instance,
+	    Class<? extends Evaluator> evaluator) {
+	Dictionary<String, String> dictionary = new Hashtable<String, String>();
+	dictionary.put("evaluator", evaluator.getName());
+	registerService(EvaluatorStore.class, instance, dictionary);
     }
 }

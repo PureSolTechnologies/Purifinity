@@ -22,7 +22,8 @@ public class EvaluatorStoreFactoryOSGi extends EvaluatorStoreFactory {
     public EvaluatorStore createInstance(Class<? extends Evaluator> clazz) {
 	try {
 	    Collection<ServiceReference<EvaluatorStore>> serviceReferences = bundleContext
-		    .getServiceReferences(EvaluatorStore.class, null);
+		    .getServiceReferences(EvaluatorStore.class, "(evaluator="
+			    + clazz.getName() + ")");
 	    Iterator<ServiceReference<EvaluatorStore>> iterator = serviceReferences
 		    .iterator();
 	    if (!iterator.hasNext()) {
