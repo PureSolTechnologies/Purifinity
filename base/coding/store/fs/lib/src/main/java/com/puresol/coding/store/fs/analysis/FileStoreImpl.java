@@ -15,14 +15,14 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
 import com.puresol.coding.analysis.api.CodeAnalysis;
-import com.puresol.coding.analysis.api.CodeStore;
-import com.puresol.coding.analysis.api.CodeStoreException;
+import com.puresol.coding.analysis.api.FileStore;
+import com.puresol.coding.analysis.api.FileStoreException;
 import com.puresol.uhura.source.SourceCode;
 import com.puresol.uhura.source.UnspecifiedSourceCodeLocation;
 import com.puresol.utils.HashId;
 import com.puresol.utils.data.HashCodeGenerator;
 
-public final class CodeStoreImpl implements CodeStore {
+public final class FileStoreImpl implements FileStore {
 
     private static final String RAW_FILE = "raw";
     private static final String PARSER_TREE_FILE = "parser_tree.persist";
@@ -31,7 +31,7 @@ public final class CodeStoreImpl implements CodeStore {
 	    AnalysisStoreImpl.getStorageDirectory(), "files");
 
     @Override
-    public HashId storeRawFile(InputStream rawStream) throws CodeStoreException {
+    public HashId storeRawFile(InputStream rawStream) throws FileStoreException {
 	try {
 	    File tempFile = File.createTempFile(getClass().getName(), ".raw");
 	    try {
@@ -60,7 +60,7 @@ public final class CodeStoreImpl implements CodeStore {
 		tempFile.delete();
 	    }
 	} catch (IOException e) {
-	    throw new CodeStoreException("Could not store raw file.", e);
+	    throw new FileStoreException("Could not store raw file.", e);
 	}
     }
 
@@ -75,19 +75,19 @@ public final class CodeStoreImpl implements CodeStore {
     }
 
     @Override
-    public InputStream readRawFile(HashId hashId) throws CodeStoreException {
+    public InputStream readRawFile(HashId hashId) throws FileStoreException {
 	try {
 	    File fileDirectory = getFileDirectory(hashId);
 	    File rawFile = new File(fileDirectory, RAW_FILE);
 	    return new FileInputStream(rawFile);
 	} catch (FileNotFoundException e) {
-	    throw new CodeStoreException("Could not find file with hash id '"
+	    throw new FileStoreException("Could not find file with hash id '"
 		    + hashId + "'.", e);
 	}
     }
 
     @Override
-    public CodeAnalysis loadAnalysis(HashId hashId) throws CodeStoreException {
+    public CodeAnalysis loadAnalysis(HashId hashId) throws FileStoreException {
 	try {
 	    File fileDirectory = getFileDirectory(hashId);
 	    File parserTreeFile = new File(fileDirectory, PARSER_TREE_FILE);
@@ -99,11 +99,11 @@ public final class CodeStoreImpl implements CodeStore {
 		inStream.close();
 	    }
 	} catch (ClassNotFoundException e) {
-	    throw new CodeStoreException(
+	    throw new FileStoreException(
 		    "Could not load analysis for file with hash '" + hashId
 			    + "'", e);
 	} catch (IOException e) {
-	    throw new CodeStoreException(
+	    throw new FileStoreException(
 		    "Could not load analysis for file with hash '" + hashId
 			    + "'", e);
 	}
@@ -111,7 +111,7 @@ public final class CodeStoreImpl implements CodeStore {
 
     @Override
     public final void storeAnalysis(HashId hashId, CodeAnalysis fileAnalysis)
-	    throws CodeStoreException {
+	    throws FileStoreException {
 	try {
 	    File fileDirectory = getFileDirectory(hashId);
 	    File parserTreeFile = new File(fileDirectory, PARSER_TREE_FILE);
@@ -123,7 +123,7 @@ public final class CodeStoreImpl implements CodeStore {
 		outStream.close();
 	    }
 	} catch (IOException e) {
-	    throw new CodeStoreException(
+	    throw new FileStoreException(
 		    "Could not store analysis for file with hash '" + hashId
 			    + "'", e);
 	}
@@ -136,7 +136,7 @@ public final class CodeStoreImpl implements CodeStore {
 
     @Override
     public final SourceCode readSourceCode(HashId hashId)
-	    throws CodeStoreException {
+	    throws FileStoreException {
 	try {
 	    InputStream inputStream = readRawFile(hashId);
 	    try {
@@ -146,7 +146,7 @@ public final class CodeStoreImpl implements CodeStore {
 		inputStream.close();
 	    }
 	} catch (IOException e) {
-	    throw new CodeStoreException("Could not load file with id '"
+	    throw new FileStoreException("Could not load file with id '"
 		    + hashId.toString() + "'!", e);
 	}
     }

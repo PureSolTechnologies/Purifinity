@@ -15,7 +15,7 @@ import com.puresol.coding.analysis.api.AnalysisProjectInformation;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalysisRunFactory;
 import com.puresol.coding.analysis.api.DirectoryRepositoryLocation;
-import com.puresol.coding.analysis.api.ModuleStoreException;
+import com.puresol.coding.analysis.api.DirectoryStoreException;
 import com.puresol.utils.FileSearchConfiguration;
 
 @Ignore
@@ -24,7 +24,7 @@ public class ProjectCodeDepthMetricTest {
     private AnalysisRun analyzer = null;
 
     @Before
-    public void setup() throws ModuleStoreException {
+    public void setup() throws DirectoryStoreException {
 	File runDirectory = new File("test/analysis");
 	AnalysisProjectInformation analysisInformation = new AnalysisProjectInformation(
 		UUID.randomUUID(), new Date());

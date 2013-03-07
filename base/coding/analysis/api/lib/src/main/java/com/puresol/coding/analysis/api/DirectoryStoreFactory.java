@@ -9,11 +9,11 @@ import java.util.ServiceLoader;
  * @author Rick-Rainer Ludwig
  * 
  */
-public abstract class ModuleStoreFactory {
+public abstract class DirectoryStoreFactory {
 
-	private static ModuleStoreFactory instance;
+	private static DirectoryStoreFactory instance;
 
-	public static ModuleStoreFactory getFactory() {
+	public static DirectoryStoreFactory getFactory() {
 		if (instance == null) {
 			createInstance();
 		}
@@ -22,23 +22,23 @@ public abstract class ModuleStoreFactory {
 
 	private static synchronized void createInstance() {
 		if (instance == null) {
-			ServiceLoader<ModuleStoreFactory> serviceLoader = ServiceLoader
-					.load(ModuleStoreFactory.class);
-			Iterator<ModuleStoreFactory> iterator = serviceLoader.iterator();
+			ServiceLoader<DirectoryStoreFactory> serviceLoader = ServiceLoader
+					.load(DirectoryStoreFactory.class);
+			Iterator<DirectoryStoreFactory> iterator = serviceLoader.iterator();
 			if (!iterator.hasNext()) {
 				throw new IllegalStateException("No implementation for '"
-						+ ModuleStoreFactory.class.getName() + "' was found!");
+						+ DirectoryStoreFactory.class.getName() + "' was found!");
 			}
 			instance = iterator.next();
 			if (iterator.hasNext()) {
 				throw new IllegalStateException(
 						"Too many implementations for '"
-								+ ModuleStoreFactory.class.getName()
+								+ DirectoryStoreFactory.class.getName()
 								+ "' were found!");
 			}
 		}
 	}
 
-	public abstract ModuleStore getInstance();
+	public abstract DirectoryStore getInstance();
 
 }

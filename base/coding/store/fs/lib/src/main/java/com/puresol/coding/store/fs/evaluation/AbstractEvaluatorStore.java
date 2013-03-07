@@ -10,8 +10,8 @@ import java.io.ObjectOutputStream;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.evaluation.api.EvaluatorStore;
 import com.puresol.coding.store.fs.analysis.AnalysisRunImpl;
-import com.puresol.coding.store.fs.analysis.CodeStoreImpl;
-import com.puresol.coding.store.fs.analysis.ModuleStoreImpl;
+import com.puresol.coding.store.fs.analysis.FileStoreImpl;
+import com.puresol.coding.store.fs.analysis.DirectoryStoreImpl;
 import com.puresol.utils.HashId;
 
 public abstract class AbstractEvaluatorStore implements EvaluatorStore {
@@ -19,7 +19,7 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
     protected abstract File getFileResultsFile(HashId hashId);
 
     protected final File getFileResultsFile(HashId hashId, Class<?> clazz) {
-	File directory = CodeStoreImpl.getFileDirectory(hashId);
+	File directory = FileStoreImpl.getFileDirectory(hashId);
 	String fileName = clazz.getName();
 	File file = new File(directory, fileName);
 	return file;
@@ -28,7 +28,7 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
     protected abstract File getDirectoryResultsFile(HashId hashId);
 
     protected final File getDirectoryResultsFile(HashId hashId, Class<?> clazz) {
-	File directory = ModuleStoreImpl.getDirectoryStoreDirectory(hashId);
+	File directory = DirectoryStoreImpl.getDirectoryStoreDirectory(hashId);
 	String fileName = clazz.getName();
 	File file = new File(directory, fileName);
 	return file;

@@ -14,9 +14,9 @@ import org.eclipse.swt.widgets.Tree;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalyzedCode;
 import com.puresol.coding.analysis.api.CodeAnalysis;
-import com.puresol.coding.analysis.api.CodeStore;
-import com.puresol.coding.analysis.api.CodeStoreException;
-import com.puresol.coding.analysis.api.CodeStoreFactory;
+import com.puresol.coding.analysis.api.FileStore;
+import com.puresol.coding.analysis.api.FileStoreException;
+import com.puresol.coding.analysis.api.FileStoreFactory;
 import com.puresol.coding.client.application.content.ParserTreeContentProvider;
 import com.puresol.coding.client.application.content.ParserTreeLabelProvider;
 
@@ -28,7 +28,7 @@ import com.puresol.coding.client.application.content.ParserTreeLabelProvider;
  */
 public class ParserTreeControl extends Composite {
 
-    private final CodeStore codeStore = CodeStoreFactory.getFactory()
+    private final FileStore codeStore = FileStoreFactory.getFactory()
 	    .getInstance();
 
     private final Label lblNewLabel;
@@ -67,7 +67,7 @@ public class ParserTreeControl extends Composite {
      * @throws FileStoreException
      */
     public void setContentAndUpdateContent(AnalyzedCode analyzedCode,
-	    AnalysisRun analysisRun) throws IOException, CodeStoreException {
+	    AnalysisRun analysisRun) throws IOException, FileStoreException {
 	CodeAnalysis codeAnalysis = codeStore.loadAnalysis(analyzedCode
 		.getHashId());
 	if (codeAnalysis != null) {

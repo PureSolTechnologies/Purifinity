@@ -15,12 +15,12 @@ import org.slf4j.LoggerFactory;
 
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.CodeAnalysis;
-import com.puresol.coding.analysis.api.CodeStore;
-import com.puresol.coding.analysis.api.CodeStoreException;
-import com.puresol.coding.analysis.api.CodeStoreFactory;
+import com.puresol.coding.analysis.api.FileStore;
+import com.puresol.coding.analysis.api.FileStoreException;
+import com.puresol.coding.analysis.api.FileStoreFactory;
 import com.puresol.coding.analysis.api.HashIdFileTree;
-import com.puresol.coding.analysis.api.ModuleStore;
-import com.puresol.coding.analysis.api.ModuleStoreFactory;
+import com.puresol.coding.analysis.api.DirectoryStore;
+import com.puresol.coding.analysis.api.DirectoryStoreFactory;
 import com.puresol.coding.evaluation.api.Evaluator;
 import com.puresol.coding.evaluation.api.EvaluatorInformation;
 import com.puresol.coding.evaluation.api.EvaluatorStore;
@@ -94,7 +94,7 @@ public abstract class AbstractEvaluator extends
 	 * @return
 	 * @throws EvaluationException
 	 * @throws IOException
-	 * @throws CodeStoreException
+	 * @throws FileStoreException
 	 */
 	abstract protected void processFile(CodeAnalysis analysis)
 			throws InterruptedException, EvaluationException;
@@ -106,9 +106,9 @@ public abstract class AbstractEvaluator extends
 
 	private class EvaluationVisitor implements TreeVisitor<HashIdFileTree> {
 
-		private final CodeStore fileStore = CodeStoreFactory.getFactory()
+		private final FileStore fileStore = FileStoreFactory.getFactory()
 				.getInstance();
-		private final ModuleStore directoryStore = ModuleStoreFactory
+		private final DirectoryStore directoryStore = DirectoryStoreFactory
 				.getFactory().getInstance();
 
 		private EvaluationVisitor() {
@@ -129,7 +129,7 @@ public abstract class AbstractEvaluator extends
 				}
 				fireUpdateWork("Evaluated '" + tree.getName() + "'.", 1);
 				return WalkingAction.PROCEED;
-			} catch (CodeStoreException e) {
+			} catch (FileStoreException e) {
 				logger.error("Evaluation result could not be stored.", e);
 				return WalkingAction.ABORT;
 			} catch (InterruptedException e) {
@@ -142,7 +142,7 @@ public abstract class AbstractEvaluator extends
 		}
 
 		private void processAsFile(HashIdFileTree tree)
-				throws CodeStoreException, InterruptedException,
+				throws FileStoreException, InterruptedException,
 				EvaluationException {
 			if (fileStore.wasAnalyzed(tree.getHashId())) {
 				CodeAnalysis fileAnalysis = fileStore.loadAnalysis(tree
@@ -152,7 +152,7 @@ public abstract class AbstractEvaluator extends
 		}
 
 		private void processAsDirectory(HashIdFileTree tree)
-				throws CodeStoreException, InterruptedException {
+				throws FileStoreException, InterruptedException {
 			if (directoryStore.isAvailable(tree.getHashId())) {
 				processDirectory(tree);
 			}

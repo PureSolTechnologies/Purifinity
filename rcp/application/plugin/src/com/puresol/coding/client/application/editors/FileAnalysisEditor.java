@@ -23,9 +23,9 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.wb.swt.ResourceManager;
 
-import com.puresol.coding.analysis.api.CodeStore;
-import com.puresol.coding.analysis.api.CodeStoreException;
-import com.puresol.coding.analysis.api.CodeStoreFactory;
+import com.puresol.coding.analysis.api.FileStore;
+import com.puresol.coding.analysis.api.FileStoreException;
+import com.puresol.coding.analysis.api.FileStoreFactory;
 import com.puresol.coding.client.application.Activator;
 import com.puresol.coding.client.application.controls.FileMetricsControl;
 import com.puresol.coding.client.application.controls.ParserTreeControl;
@@ -140,13 +140,13 @@ public class FileAnalysisEditor extends EditorPart {
 	    metricsViewerTab.setControl(metricsControl);
 
 	    HashId hashId = editorInput.getAnalyzedCode().getHashId();
-	    CodeStore codeStore = CodeStoreFactory.getFactory().getInstance();
+	    FileStore codeStore = FileStoreFactory.getFactory().getInstance();
 	    SourceCode sourceCode = codeStore.readSourceCode(hashId);
 	    fileViewer.setStreamAndUpdateContent(sourceCode);
 	} catch (IOException e) {
 	    logger.log(new Status(Status.ERROR, FileAnalysisEditor.class
 		    .getName(), e.getMessage(), e));
-	} catch (CodeStoreException e) {
+	} catch (FileStoreException e) {
 	    logger.log(new Status(Status.ERROR, FileAnalysisEditor.class
 		    .getName(), e.getMessage(), e));
 	}

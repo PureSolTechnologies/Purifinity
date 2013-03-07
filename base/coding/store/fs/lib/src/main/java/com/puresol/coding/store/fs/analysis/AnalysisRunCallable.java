@@ -10,9 +10,9 @@ import org.slf4j.LoggerFactory;
 import com.puresol.coding.analysis.api.AnalyzedCode;
 import com.puresol.coding.analysis.api.AnalyzerException;
 import com.puresol.coding.analysis.api.CodeAnalysis;
-import com.puresol.coding.analysis.api.CodeStore;
-import com.puresol.coding.analysis.api.CodeStoreException;
-import com.puresol.coding.analysis.api.CodeStoreFactory;
+import com.puresol.coding.analysis.api.FileStore;
+import com.puresol.coding.analysis.api.FileStoreException;
+import com.puresol.coding.analysis.api.FileStoreFactory;
 import com.puresol.uhura.source.CodeLocation;
 import com.puresol.utils.HashId;
 
@@ -21,11 +21,11 @@ public class AnalysisRunCallable implements Callable<AnalyzedCode> {
     private final Logger logger = LoggerFactory
 	    .getLogger(AnalysisRunCallable.class);
 
-    private static final CodeStoreFactory codeStoreFactory = CodeStoreFactory
+    private static final FileStoreFactory codeStoreFactory = FileStoreFactory
 	    .getFactory();
 
     private final CodeLocation sourceFile;
-    private final CodeStore codeStore = codeStoreFactory.getInstance();
+    private final FileStore codeStore = codeStoreFactory.getInstance();
 
     public AnalysisRunCallable(CodeLocation sourceFile) {
 	super();
@@ -33,7 +33,7 @@ public class AnalysisRunCallable implements Callable<AnalyzedCode> {
     }
 
     @Override
-    public AnalyzedCode call() throws IOException, CodeStoreException {
+    public AnalyzedCode call() throws IOException, FileStoreException {
 	logger.info("Starting analysis for '" + sourceFile + "'...");
 	HashId hashId = storeRawFile();
 	AnalyzedCode result = analyzeCode(hashId, sourceFile);
@@ -47,9 +47,9 @@ public class AnalysisRunCallable implements Callable<AnalyzedCode> {
      * 
      * @return A {@link HashId} is returned as reference to the stored file.
      * @throws IOException
-     * @throws CodeStoreException
+     * @throws FileStoreException
      */
-    private HashId storeRawFile() throws IOException, CodeStoreException {
+    private HashId storeRawFile() throws IOException, FileStoreException {
 	InputStream stream = sourceFile.openStream();
 	try {
 	    return codeStore.storeRawFile(stream);
@@ -93,11 +93,11 @@ public class AnalysisRunCallable implements Callable<AnalyzedCode> {
      * @return
      * @throws AnalyzerException
      * @throws IOException
-     * @throws CodeStoreException
+     * @throws FileStoreException
      */
     private AnalyzedCode createNewAnalysis(HashId hashId,
 	    CodeLocation sourceFile) throws AnalyzerException, IOException,
-	    CodeStoreException {
+	    FileStoreException {
 	CodeAnalyzerImpl fileAnalyzer = new CodeAnalyzerImpl(sourceFile, hashId);
 	fileAnalyzer.analyze();
 	if (fileAnalyzer.isAnalyzed()) {
@@ -117,10 +117,10 @@ public class AnalysisRunCallable implements Callable<AnalyzedCode> {
      * @param hashId
      * @param sourceFile
      * @return
-     * @throws CodeStoreException
+     * @throws FileStoreException
      */
     private AnalyzedCode loadAnalysis(HashId hashId, CodeLocation sourceFile)
-	    throws CodeStoreException {
+	    throws FileStoreException {
 	CodeAnalysis analysis = codeStore.loadAnalysis(hashId);
 	AnalyzedCode analyzedCode = new AnalyzedCode(hashId, sourceFile,
 		analysis.getStartTime(), analysis.getDuration(),

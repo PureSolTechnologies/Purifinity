@@ -8,11 +8,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.List;
 
-import com.puresol.coding.analysis.api.ModuleStore;
-import com.puresol.coding.analysis.api.ModuleStoreException;
+import com.puresol.coding.analysis.api.DirectoryStore;
+import com.puresol.coding.analysis.api.DirectoryStoreException;
 import com.puresol.utils.HashId;
 
-public class ModuleStoreImpl implements ModuleStore {
+public class DirectoryStoreImpl implements DirectoryStore {
 
     private static final String FILES_FILE = "files.persist";
     private static final String DIRECTORIES_FILE = "directories.persist";
@@ -31,13 +31,13 @@ public class ModuleStoreImpl implements ModuleStore {
 
     @Override
     public boolean createPackage(HashId hashId, List<HashId> files,
-	    List<HashId> directories) throws ModuleStoreException {
+	    List<HashId> directories) throws DirectoryStoreException {
 	File directory = getDirectoryStoreDirectory(hashId);
 	if (isAvailable(hashId)) {
 	    return false;
 	}
 	if (!directory.mkdirs()) {
-	    throw new ModuleStoreException(
+	    throw new DirectoryStoreException(
 		    "Could not create directory with hash '" + hashId + "'");
 	}
 	store(files, new File(getDirectoryStoreDirectory(hashId), FILES_FILE));
@@ -53,19 +53,19 @@ public class ModuleStoreImpl implements ModuleStore {
     }
 
     @Override
-    public List<HashId> getFiles(HashId hashId) throws ModuleStoreException {
+    public List<HashId> getFiles(HashId hashId) throws DirectoryStoreException {
 	return restore(new File(getDirectoryStoreDirectory(hashId), FILES_FILE));
     }
 
     @Override
     public List<HashId> getDirectories(HashId hashId)
-	    throws ModuleStoreException {
+	    throws DirectoryStoreException {
 	return restore(new File(getDirectoryStoreDirectory(hashId),
 		DIRECTORIES_FILE));
     }
 
     private void store(List<HashId> files, File file)
-	    throws ModuleStoreException {
+	    throws DirectoryStoreException {
 	try {
 	    FileOutputStream outputStream = new FileOutputStream(file);
 	    try {
@@ -80,12 +80,12 @@ public class ModuleStoreImpl implements ModuleStore {
 		outputStream.close();
 	    }
 	} catch (IOException e) {
-	    throw new ModuleStoreException(
-		    "Could not store module contents to '" + file + "'.", e);
+	    throw new DirectoryStoreException(
+		    "Could not store directory contents to '" + file + "'.", e);
 	}
     }
 
-    private List<HashId> restore(File file) throws ModuleStoreException {
+    private List<HashId> restore(File file) throws DirectoryStoreException {
 	try {
 	    FileInputStream outputStream = new FileInputStream(file);
 	    try {
@@ -103,11 +103,11 @@ public class ModuleStoreImpl implements ModuleStore {
 		outputStream.close();
 	    }
 	} catch (ClassNotFoundException e) {
-	    throw new ModuleStoreException(
-		    "Could not read module contents to '" + file + "'.", e);
+	    throw new DirectoryStoreException(
+		    "Could not read directory contents to '" + file + "'.", e);
 	} catch (IOException e) {
-	    throw new ModuleStoreException(
-		    "Could not read module contents to '" + file + "'.", e);
+	    throw new DirectoryStoreException(
+		    "Could not read directory contents to '" + file + "'.", e);
 	}
     }
 }

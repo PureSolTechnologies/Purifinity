@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.puresol.coding.analysis.api.CodeStoreException;
+import com.puresol.coding.analysis.api.FileStoreException;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.trees.FileTree;
 import com.puresol.trees.TreeVisitor;
@@ -35,12 +35,12 @@ public class StoreUtilities {
     }
 
     public static MessageDigest getDefaultMessageDigest()
-	    throws CodeStoreException {
+	    throws FileStoreException {
 	try {
 	    return MessageDigest.getInstance(DEFAULT_MESSAGE_DIGEST_ALGORITHM
 		    .getAlgorithmName());
 	} catch (NoSuchAlgorithmException e) {
-	    throw new CodeStoreException("Default message digest algorithm '"
+	    throw new FileStoreException("Default message digest algorithm '"
 		    + DEFAULT_MESSAGE_DIGEST_ALGORITHM.getAlgorithmName()
 		    + "' is not available.");
 	}

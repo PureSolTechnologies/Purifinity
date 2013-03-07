@@ -15,9 +15,9 @@ import org.slf4j.LoggerFactory;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalyzedCode;
 import com.puresol.coding.analysis.api.CodeAnalysis;
-import com.puresol.coding.analysis.api.CodeStore;
-import com.puresol.coding.analysis.api.CodeStoreException;
-import com.puresol.coding.analysis.api.CodeStoreFactory;
+import com.puresol.coding.analysis.api.FileStore;
+import com.puresol.coding.analysis.api.FileStoreException;
+import com.puresol.coding.analysis.api.FileStoreFactory;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.client.application.Activator;
 import com.puresol.coding.client.application.ClientImages;
@@ -41,7 +41,7 @@ public class AnalysisRunContentTreeLabelProvider extends LabelProvider {
     private final ImageDescriptor questionDecoratorImage = shareImageManager
 	    .getImageDescriptor(ISharedImages.IMG_DEC_FIELD_WARNING);
 
-    private final CodeStore fileStore = CodeStoreFactory.getFactory()
+    private final FileStore fileStore = FileStoreFactory.getFactory()
 	    .getInstance();
 
     private AnalysisRun analysisRun;
@@ -67,7 +67,7 @@ public class AnalysisRunContentTreeLabelProvider extends LabelProvider {
 			    .loadAnalysis(analyzedFile.getHashId());
 		    text += " (" + analysisResult.getLanguageName() + " "
 			    + analysisResult.getLanguageVersion() + ")";
-		} catch (CodeStoreException e) {
+		} catch (FileStoreException e) {
 		    logger.warn(
 			    "Could not load the analysis which was offered by the store.",
 			    e);

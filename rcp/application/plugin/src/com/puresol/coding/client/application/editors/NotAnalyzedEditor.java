@@ -9,9 +9,9 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 
-import com.puresol.coding.analysis.api.CodeStore;
-import com.puresol.coding.analysis.api.CodeStoreException;
-import com.puresol.coding.analysis.api.CodeStoreFactory;
+import com.puresol.coding.analysis.api.FileStore;
+import com.puresol.coding.analysis.api.FileStoreException;
+import com.puresol.coding.analysis.api.FileStoreFactory;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.client.application.controls.ScrollableFileViewer;
 import com.puresol.uhura.source.SourceCode;
@@ -59,12 +59,12 @@ public class NotAnalyzedEditor extends EditorPart {
 	NotAnalyzedEditorInput editorInput = (NotAnalyzedEditorInput) getEditorInput();
 	HashIdFileTree hashIdFile = editorInput.getAnalysisRun().getFileTree()
 		.findFile(editorInput.getFile());
-	CodeStore fileStore = CodeStoreFactory.getFactory().getInstance();
+	FileStore fileStore = FileStoreFactory.getFactory().getInstance();
 	try {
 	    SourceCode sourceCode = fileStore.readSourceCode(hashIdFile
 		    .getHashId());
 	    text.setStreamAndUpdateContent(sourceCode);
-	} catch (CodeStoreException e) {
+	} catch (FileStoreException e) {
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}

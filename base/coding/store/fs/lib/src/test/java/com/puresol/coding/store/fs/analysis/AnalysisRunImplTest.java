@@ -56,7 +56,7 @@ public class AnalysisRunImplTest {
 
     @Test
     public void testGetFileStoreDirectory() {
-	File fileStoreDirectory = CodeStoreImpl.getFileDirectory(new HashId(
+	File fileStoreDirectory = FileStoreImpl.getFileDirectory(new HashId(
 		HashAlgorithm.SHA256, "1234567890"));
 	assertTrue(fileStoreDirectory.getPath().endsWith("/12/34/567890"));
     }

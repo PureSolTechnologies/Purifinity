@@ -6,8 +6,8 @@ import java.util.Hashtable;
 import org.osgi.framework.BundleContext;
 
 import com.puresol.coding.analysis.api.AnalysisStore;
-import com.puresol.coding.analysis.api.CodeStore;
-import com.puresol.coding.analysis.api.ModuleStore;
+import com.puresol.coding.analysis.api.FileStore;
+import com.puresol.coding.analysis.api.DirectoryStore;
 import com.puresol.coding.evaluation.api.Evaluator;
 import com.puresol.coding.evaluation.api.EvaluatorStore;
 import com.puresol.coding.metrics.cocomo.CoCoMoEvaluator;
@@ -19,8 +19,8 @@ import com.puresol.coding.metrics.mccabe.McCabeMetricEvaluator;
 import com.puresol.coding.metrics.normmaint.NormalizedMaintainabilityIndexEvaluator;
 import com.puresol.coding.metrics.sloc.SLOCEvaluator;
 import com.puresol.coding.store.fs.analysis.AnalysisStoreImpl;
-import com.puresol.coding.store.fs.analysis.CodeStoreImpl;
-import com.puresol.coding.store.fs.analysis.ModuleStoreImpl;
+import com.puresol.coding.store.fs.analysis.FileStoreImpl;
+import com.puresol.coding.store.fs.analysis.DirectoryStoreImpl;
 import com.puresol.coding.store.fs.metrics.CoCoMoEvaluatorStore;
 import com.puresol.coding.store.fs.metrics.CodeDepthEvaluatorStore;
 import com.puresol.coding.store.fs.metrics.EntropyEvaluatorStore;
@@ -38,8 +38,8 @@ public class Activator extends AbstractActivator {
 	super.start(context);
 
 	registerService(AnalysisStore.class, new AnalysisStoreImpl());
-	registerService(ModuleStore.class, new ModuleStoreImpl());
-	registerService(CodeStore.class, new CodeStoreImpl());
+	registerService(DirectoryStore.class, new DirectoryStoreImpl());
+	registerService(FileStore.class, new FileStoreImpl());
 
 	registerEvaluatorStore(new CoCoMoEvaluatorStore(),
 		CoCoMoEvaluator.class);

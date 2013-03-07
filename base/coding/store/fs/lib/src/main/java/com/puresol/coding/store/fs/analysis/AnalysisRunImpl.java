@@ -32,11 +32,11 @@ import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalysisRunInformation;
 import com.puresol.coding.analysis.api.AnalysisStoreException;
 import com.puresol.coding.analysis.api.AnalyzedCode;
-import com.puresol.coding.analysis.api.CodeStoreException;
+import com.puresol.coding.analysis.api.FileStoreException;
 import com.puresol.coding.analysis.api.HashIdFileTree;
-import com.puresol.coding.analysis.api.ModuleStore;
-import com.puresol.coding.analysis.api.ModuleStoreException;
-import com.puresol.coding.analysis.api.ModuleStoreFactory;
+import com.puresol.coding.analysis.api.DirectoryStore;
+import com.puresol.coding.analysis.api.DirectoryStoreException;
+import com.puresol.coding.analysis.api.DirectoryStoreFactory;
 import com.puresol.coding.analysis.api.RepositoryLocation;
 import com.puresol.trees.TreeVisitor;
 import com.puresol.trees.TreeWalker;
@@ -80,7 +80,7 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
      * @param runDirectory
      *            is the directory where the persisted results can be found.
      * @return
-     * @throws ModuleStoreException
+     * @throws DirectoryStoreException
      */
     public static AnalysisRun open(File runDirectory)
 	    throws AnalysisStoreException {
@@ -184,7 +184,7 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
      * This method opens the project directory and loads all information files.
      * 
      * @return
-     * @throws ModuleStoreException
+     * @throws DirectoryStoreException
      */
     void open() throws AnalysisStoreException {
 	try {
@@ -334,7 +334,7 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
 	failedSources.clear();
     }
 
-    private boolean analyzeFiles() throws CodeStoreException {
+    private boolean analyzeFiles() throws FileStoreException {
 	List<Future<AnalyzedCode>> futures = startAllAnalysisThreads();
 	waitForAnalysisThreads(futures);
 	return true;
@@ -397,8 +397,8 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
     }
 
     private void storeModules() {
-	ModuleStoreFactory moduleStoreFactory = ModuleStoreFactory.getFactory();
-	final ModuleStore moduleStore = moduleStoreFactory.getInstance();
+	DirectoryStoreFactory moduleStoreFactory = DirectoryStoreFactory.getFactory();
+	final DirectoryStore moduleStore = moduleStoreFactory.getInstance();
 	TreeVisitor<HashIdFileTree> visitor = new TreeVisitor<HashIdFileTree>() {
 
 	    @Override
@@ -420,7 +420,7 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
 				directories);
 		    }
 		    return WalkingAction.PROCEED;
-		} catch (ModuleStoreException e) {
+		} catch (DirectoryStoreException e) {
 		    logger.error("Could not create module store entry for '"
 			    + tree.getHashId() + "'.");
 		    return WalkingAction.ABORT;
