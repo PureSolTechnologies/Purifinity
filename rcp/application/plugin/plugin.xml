@@ -17,14 +17,19 @@
    <extension
          point="org.eclipse.ui.perspectives">
       <perspective
-            name="Analysis Perspective"
+            name="Code Analysis"
             class="com.puresol.coding.client.application.perspectives.AnalysisPerspective"
             id="com.puresol.coding.client.application.perspectives.AnalysisPerspective">
       </perspective>
       <perspective
             class="com.puresol.coding.client.application.perspectives.EvaluationPerspective"
             id="com.puresol.coding.client.application.perspectives.EvaluationPerspective"
-            name="Evaluation Perspective">
+            name="Code Evaluation ">
+      </perspective>
+      <perspective
+            class="com.puresol.coding.client.application.perspectives.MetricsPerspective"
+            id="com.puresol.coding.client.application.perspectives.MetricsPerspective"
+            name="Code Metrics">
       </perspective>
    </extension>
    <extension

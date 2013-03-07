@@ -4,19 +4,20 @@ import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
 
 import com.puresol.coding.client.application.views.AnalysisProjectsView;
-import com.puresol.coding.client.application.views.AnalysisReportView;
+import com.puresol.coding.client.application.views.AnalysisRunContentView;
 import com.puresol.coding.client.application.views.AnalysisRunsView;
 
-public class AnalysisPerspective implements IPerspectiveFactory {
+public class MetricsPerspective implements IPerspectiveFactory {
 
 	@Override
 	public void createInitialLayout(IPageLayout layout) {
-		layout.setEditorAreaVisible(false);
-		layout.addView(AnalysisReportView.class.getName(), IPageLayout.RIGHT,
-				0.5f, layout.getEditorArea());
+		layout.setEditorAreaVisible(true);
+		layout.addView(AnalysisRunContentView.class.getName(),
+				IPageLayout.LEFT, 0.45f, layout.getEditorArea());
 		layout.addView(AnalysisProjectsView.class.getName(), IPageLayout.LEFT,
-				0.5f, layout.getEditorArea());
+				0.3f, AnalysisRunContentView.class.getName());
 		layout.addView(AnalysisRunsView.class.getName(), IPageLayout.BOTTOM,
-				0.5f, AnalysisProjectsView.class.getName());
+				0.33f, AnalysisProjectsView.class.getName());
 	}
+
 }
