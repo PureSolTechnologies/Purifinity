@@ -17,67 +17,67 @@ import com.puresol.utils.HashId;
 
 public class CodeAnalyzerImpl implements CodeAnalyzer {
 
-    private static final Logger logger = LoggerFactory
-	    .getLogger(CodeAnalyzerImpl.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(CodeAnalyzerImpl.class);
 
-    private final CodeLocation source;
-    private CodeAnalyzer analyzer = null;
-    private boolean analyzed = false;
-    private long timeOfRun;
+	private final CodeLocation source;
+	private CodeAnalyzer analyzer = null;
+	private boolean analyzed = false;
+	private long timeOfRun;
 
-    public CodeAnalyzerImpl(CodeLocation source, HashId hashId)
-	    throws AnalyzerException {
-	super();
-	this.source = source;
-    }
-
-    @Override
-    public void analyze() throws AnalyzerException, IOException {
-	try {
-	    analyzed = false;
-	    timeOfRun = System.currentTimeMillis();
-	    analyzeFile();
-	    analyzed = true;
-	    timeOfRun = System.currentTimeMillis() - timeOfRun;
-	} catch (LanguageNotSupportedException e) {
-	    logger.debug("File '" + source.getHumanReadableLocationString()
-		    + "' could not be analyzed due to contents in a "
-		    + "non-supported language.");
+	public CodeAnalyzerImpl(CodeLocation source, HashId hashId)
+			throws AnalyzerException {
+		super();
+		this.source = source;
 	}
-    }
 
-    private void analyzeFile() throws IOException, AnalyzerException,
-	    LanguageNotSupportedException {
-	analyzer = CodeAnalyzerFactory.createFactory().create(source);
-	analyzer.analyze();
-    }
+	@Override
+	public void analyze() throws AnalyzerException, IOException {
+		try {
+			analyzed = false;
+			timeOfRun = System.currentTimeMillis();
+			analyzeFile();
+			analyzed = true;
+			timeOfRun = System.currentTimeMillis() - timeOfRun;
+		} catch (LanguageNotSupportedException e) {
+			logger.debug("File '" + source.getHumanReadableLocationString()
+					+ "' could not be analyzed due to contents in a "
+					+ "non-supported language.");
+		}
+	}
 
-    public boolean isAnalyzed() {
-	return analyzed;
-    }
+	private void analyzeFile() throws IOException, AnalyzerException,
+			LanguageNotSupportedException {
+		analyzer = CodeAnalyzerFactory.createFactory().create(source);
+		analyzer.analyze();
+	}
 
-    public CodeAnalyzer getAnalyzer() {
-	return analyzer;
-    }
+	public boolean isAnalyzed() {
+		return analyzed;
+	}
 
-    @Override
-    public CodeAnalysis getAnalysis() {
-	return analyzer.getAnalysis();
-    }
+	public CodeAnalyzer getAnalyzer() {
+		return analyzer;
+	}
 
-    @Override
-    public ProgrammingLanguage getLanguage() {
-	return analyzer.getLanguage();
-    }
+	@Override
+	public CodeAnalysis getAnalysis() {
+		return analyzer.getAnalysis();
+	}
 
-    @Override
-    public boolean persist(File file) {
-	return false;
-    }
+	@Override
+	public ProgrammingLanguage getLanguage() {
+		return analyzer.getLanguage();
+	}
 
-    @Override
-    public CodeLocation getSource() {
-	return source;
-    }
+	@Override
+	public boolean persist(File file) {
+		return false;
+	}
+
+	@Override
+	public CodeLocation getSource() {
+		return source;
+	}
 
 }

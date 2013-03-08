@@ -12,44 +12,44 @@ import java.util.Date;
  */
 public class StopWatch implements Serializable {
 
-    private static final long serialVersionUID = -8824942249939423671L;
+	private static final long serialVersionUID = -8824942249939423671L;
 
-    private Date startTime;
-    private Date stopTime;
-    private long start = 0;
-    private long stop = 0;
+	private Date startTime;
+	private Date stopTime;
+	private long start = 0;
+	private long stop = 0;
 
-    public void start() {
-	stop = 0;
-	start = System.nanoTime();
-    }
-
-    public void stop() {
-	stop = System.nanoTime();
-
-    }
-
-    public double getSeconds() {
-	if (stop == 0) {
-	    stop();
+	public void start() {
+		stop = 0;
+		start = System.nanoTime();
 	}
-	return (stop - start) / 1000000000;
-    }
 
-    public Date getStartTime() {
-	return startTime;
-    }
+	public void stop() {
+		stop = System.nanoTime();
 
-    public Date getStopTime() {
-	return stopTime;
-    }
+	}
 
-    public long getMilliseconds() {
-	return ((stop - start) / 1000000);
-    }
+	public double getSeconds() {
+		if (stop == 0) {
+			stop();
+		}
+		return (stop - start) / 1000000000.0;
+	}
 
-    @Override
-    public String toString() {
-	return getSeconds() + "s";
-    }
+	public Date getStartTime() {
+		return startTime;
+	}
+
+	public Date getStopTime() {
+		return stopTime;
+	}
+
+	public long getMilliseconds() {
+		return ((stop - start) / 1000000);
+	}
+
+	@Override
+	public String toString() {
+		return getSeconds() + "s";
+	}
 }

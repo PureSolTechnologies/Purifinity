@@ -1,7 +1,5 @@
 package com.puresol.coding.client.application.views;
 
-import java.util.List;
-
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.ISelection;
@@ -10,11 +8,9 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
-import org.eclipse.swt.layout.RowData;
-import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.TabFolder;
+import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.ISelectionListener;
@@ -24,8 +20,9 @@ import org.eclipse.ui.part.ViewPart;
 import com.puresol.coding.analysis.api.AnalysisProject;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalysisStoreException;
-import com.puresol.coding.analysis.api.AnalyzedCode;
 import com.puresol.coding.client.application.Activator;
+import com.puresol.coding.client.application.content.AnalyzedFilesTableViewer;
+import com.puresol.coding.client.application.content.FailedFilesTableViewer;
 import com.puresol.coding.client.application.controls.ParserTreeControl;
 
 public class AnalysisReportView extends ViewPart implements ISelectionListener {
@@ -33,9 +30,10 @@ public class AnalysisReportView extends ViewPart implements ISelectionListener {
 	private static final ILog logger = Activator.getDefault().getLog();
 
 	private Text name;
-	private Text numAnalyzedFiles;
-	private Text numFailedFiles;
-	private Table table;
+	private Table analyzedTable;
+	private AnalyzedFilesTableViewer analyzedTableViewer;
+	private FailedFilesTableViewer failedTableViewer;
+	private Table failedTable;
 
 	public AnalysisReportView() {
 	}
@@ -54,51 +52,39 @@ public class AnalysisReportView extends ViewPart implements ISelectionListener {
 		name.setLayoutData(fd_text);
 		name.setEditable(false);
 
-		Group grpAnalyzedFiles = new Group(composite, SWT.NONE);
-		FormData fd_grpAnalyzedFiles = new FormData();
-		fd_grpAnalyzedFiles.top = new FormAttachment(name, 6);
-		fd_grpAnalyzedFiles.left = new FormAttachment(name, 0, SWT.LEFT);
-		fd_grpAnalyzedFiles.right = new FormAttachment(100, -301);
-		grpAnalyzedFiles.setLayoutData(fd_grpAnalyzedFiles);
-		grpAnalyzedFiles.setText("Analyzed Files");
-		grpAnalyzedFiles.setLayout(new RowLayout(SWT.HORIZONTAL));
+		TabFolder tabFolder = new TabFolder(composite, SWT.NONE);
+		FormData fd_tabFolder = new FormData();
+		fd_tabFolder.top = new FormAttachment(name, 6);
+		fd_tabFolder.bottom = new FormAttachment(100, -10);
+		fd_tabFolder.right = new FormAttachment(name, 0, SWT.RIGHT);
+		fd_tabFolder.left = new FormAttachment(name, 0, SWT.LEFT);
+		tabFolder.setLayoutData(fd_tabFolder);
 
-		numAnalyzedFiles = new Text(grpAnalyzedFiles, SWT.BORDER);
-		numAnalyzedFiles.setLayoutData(new RowData(50, 20));
-		numAnalyzedFiles.setEditable(false);
+		TabItem analyzedTab = new TabItem(tabFolder, SWT.NONE);
+		analyzedTab.setText("Analyzed Files");
 
-		Label lblAnalyzedFiles = new Label(grpAnalyzedFiles, SWT.NONE);
-		lblAnalyzedFiles.setText("Files");
+		Composite analyzedComposite = new Composite(tabFolder, SWT.NONE);
+		analyzedTab.setControl(analyzedComposite);
+		analyzedComposite.setLayout(new FillLayout(SWT.HORIZONTAL));
 
-		Group grpFailedFiles = new Group(composite, SWT.NONE);
-		FormData fd_grpFailedFiles = new FormData();
-		fd_grpFailedFiles.left = new FormAttachment(grpAnalyzedFiles, 6);
-		fd_grpFailedFiles.right = new FormAttachment(100, -10);
-		fd_grpFailedFiles.top = new FormAttachment(name, 6);
-		grpFailedFiles.setLayoutData(fd_grpFailedFiles);
-		grpFailedFiles.setText("Failed Files");
-		grpFailedFiles.setLayout(new RowLayout(SWT.HORIZONTAL));
+		analyzedTable = new Table(analyzedComposite, SWT.BORDER
+				| SWT.FULL_SELECTION);
+		analyzedTable.setHeaderVisible(true);
+		analyzedTable.setLinesVisible(true);
+		analyzedTableViewer = new AnalyzedFilesTableViewer(analyzedTable);
 
-		numFailedFiles = new Text(grpFailedFiles, SWT.BORDER);
-		numFailedFiles.setEditable(false);
-		numFailedFiles.setLayoutData(new RowData(50, 20));
+		TabItem failedTab = new TabItem(tabFolder, SWT.NONE);
+		failedTab.setText("Files without Analysis");
 
-		Label lblFiles = new Label(grpFailedFiles, SWT.NONE);
-		lblFiles.setText("Files");
+		Composite failedTabComposite = new Composite(tabFolder, SWT.NONE);
+		failedTab.setControl(failedTabComposite);
+		failedTabComposite.setLayout(new FillLayout(SWT.HORIZONTAL));
 
-		Group grpAnalyzedFiles_1 = new Group(composite, SWT.NONE);
-		grpAnalyzedFiles_1.setText("Analyzed Files");
-		grpAnalyzedFiles_1.setLayout(new FillLayout(SWT.HORIZONTAL));
-		FormData fd_grpAnalyzedFiles_1 = new FormData();
-		fd_grpAnalyzedFiles_1.top = new FormAttachment(grpAnalyzedFiles, 6);
-		fd_grpAnalyzedFiles_1.bottom = new FormAttachment(100, -10);
-		fd_grpAnalyzedFiles_1.left = new FormAttachment(0, 10);
-		fd_grpAnalyzedFiles_1.right = new FormAttachment(100, -10);
-		grpAnalyzedFiles_1.setLayoutData(fd_grpAnalyzedFiles_1);
-
-		table = new Table(grpAnalyzedFiles_1, SWT.BORDER | SWT.FULL_SELECTION);
-		table.setHeaderVisible(true);
-		table.setLinesVisible(true);
+		failedTable = new Table(failedTabComposite, SWT.BORDER
+				| SWT.FULL_SELECTION);
+		failedTable.setHeaderVisible(true);
+		failedTable.setLinesVisible(true);
+		failedTableViewer = new FailedFilesTableViewer(failedTable);
 
 		getSite().getWorkbenchWindow().getSelectionService()
 				.addSelectionListener(this);
@@ -112,37 +98,21 @@ public class AnalysisReportView extends ViewPart implements ISelectionListener {
 	@Override
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
 		try {
+			AnalysisRun analysisRun = null;
+			AnalysisProject analysis = null;
 			if (selection instanceof AnalysisProjectSelection) {
 				AnalysisProjectSelection analysisSelection = (AnalysisProjectSelection) selection;
-				AnalysisProject analysis = analysisSelection
-						.getAnalysisProject();
-				name.setText(analysis.getSettings().getName());
-				AnalysisRun lastAnalysisRun = analysis.loadLastAnalysisRun();
-				if (lastAnalysisRun != null) {
-					java.util.List<AnalyzedCode> analyzedFiles = lastAnalysisRun
-							.getAnalyzedCodes();
-					numAnalyzedFiles.setText(String.valueOf(analyzedFiles
-							.size()));
-					List<AnalyzedCode> failedFiles = lastAnalysisRun
-							.getFailedCodes();
-					numFailedFiles.setText(String.valueOf(String
-							.valueOf(failedFiles.size())));
-				}
+				analysis = analysisSelection.getAnalysisProject();
+				analysisRun = analysis.loadLastAnalysisRun();
 			} else if (selection instanceof AnalysisRunSelection) {
 				AnalysisRunSelection analysisRunSelection = (AnalysisRunSelection) selection;
-				AnalysisRun analysisRun = analysisRunSelection.getAnalysisRun();
-				name.setText(analysisRun.getInformation().getAnalysisProject()
-						.getSettings().getName());
-				if (analysisRun != null) {
-					java.util.List<AnalyzedCode> analyzedFiles = analysisRun
-							.getAnalyzedCodes();
-					numAnalyzedFiles.setText(String.valueOf(analyzedFiles
-							.size()));
-					List<AnalyzedCode> failedFiles = analysisRun
-							.getFailedCodes();
-					numFailedFiles.setText(String.valueOf(String
-							.valueOf(failedFiles.size())));
-				}
+				analysisRun = analysisRunSelection.getAnalysisRun();
+				analysis = analysisRun.getInformation().getAnalysisProject();
+			}
+			name.setText(analysis.getSettings().getName());
+			if (analysisRun != null) {
+				analyzedTableViewer.setInput(analysisRun.getAnalyzedCodes());
+				failedTableViewer.setInput(analysisRun.getFailedCodes());
 			}
 		} catch (AnalysisStoreException e) {
 			logger.log(new Status(Status.ERROR, ParserTreeControl.class
