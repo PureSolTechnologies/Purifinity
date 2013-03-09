@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin
+   id="com.puresol.coding.client.features.java.plugin"
+   name="com.puresol.coding.client.features.java.plugin"
+   version="0.1.0.qualifier"
+>
+   <requires>
+      <import plugin="org.eclipse.ui"/>
+   </requires>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="menu:org.eclipse.ui.main.menu">
+         <command
+               commandId="com.puresol.coding.client.features.java.plugin.command2"
+               id="java"
+               label="Java"
+               mnemonic="J"
+               style="push">
+         </command>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+   </extension>
+
+
+</plugin>

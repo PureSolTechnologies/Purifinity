@@ -4,15 +4,15 @@
 
 	<parent>
 		<groupId>com.puresol</groupId>
-		<artifactId>com.puresol.coding.client</artifactId>
+		<artifactId>com.puresol.coding.client.features.java</artifactId>
 		<version>0.1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>com.puresol.coding.client.features</artifactId>
-	<packaging>pom</packaging>
+	<artifactId>com.puresol.coding.client.features.java.plugin</artifactId>
+	<packaging>eclipse-plugin</packaging>
 
-	<modules>
-		<module>java</module>
-	</modules>
+	<build>
+		<sourceDirectory>src</sourceDirectory>
+	</build>
 
 </project>
