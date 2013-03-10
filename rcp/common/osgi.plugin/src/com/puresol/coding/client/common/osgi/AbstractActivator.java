@@ -21,8 +21,7 @@ import org.slf4j.LoggerFactory;
  * @author Rick-Rainer Ludwig
  * 
  */
-public abstract class AbstractActivator extends AbstractUIPlugin implements
-	BundleActivator {
+public abstract class AbstractActivator extends AbstractUIPlugin {
 
     private static final Logger logger = LoggerFactory
 	    .getLogger(AbstractActivator.class);
@@ -38,6 +37,7 @@ public abstract class AbstractActivator extends AbstractUIPlugin implements
 
     @Override
     public void start(BundleContext context) throws Exception {
+	super.start(context);
 	logger.info("Staring bundle " + getClass().getPackage().getName()
 		+ "...");
 	if (this.context != null) {
@@ -62,6 +62,7 @@ public abstract class AbstractActivator extends AbstractUIPlugin implements
 	    serviceReference.unregister();
 	    serviceRegistrations.remove(serviceIterator);
 	}
+	super.stop(context);
     }
 
     /**
