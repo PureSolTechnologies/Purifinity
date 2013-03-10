@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: com.puresol.coding.client.lang.java.plugin
-Bundle-SymbolicName: com.puresol.coding.client.lang.java.plugin;singleton:=true
+Bundle-Name: com.puresol.coding.client.lang.java6.plugin
+Bundle-SymbolicName: com.puresol.coding.client.lang.java6.plugin;singleton:=true
 Bundle-Version: 0.1.0.qualifier
-Bundle-Activator: com.puresol.coding.client.lang.java.Activator
+Bundle-Activator: com.puresol.coding.client.lang.java6.Activator
 Require-Bundle: com.puresol.coding.analysis.api.bundle;bundle-version="0.1.0",
  com.puresol.coding.lang.commons.bundle;bundle-version="0.1.0",
  com.puresol.coding.lang.java.bundle;bundle-version="0.1.0",
@@ -13,3 +13,4 @@ Require-Bundle: com.puresol.coding.analysis.api.bundle;bundle-version="0.1.0",
  org.slf4j.api;bundle-version="1.6.4"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Vendor: PureSol Technologies
+Bundle-ClassPath: .

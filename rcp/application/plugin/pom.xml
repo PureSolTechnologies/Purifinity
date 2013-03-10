@@ -12,7 +12,7 @@
 	<packaging>eclipse-plugin</packaging>
 
 	<build>
-		<sourceDirectory>src</sourceDirectory>
+		<sourceDirectory>${basedir}/src</sourceDirectory>
 	</build>
 
 </project>

@@ -1,4 +1,4 @@
-package com.puresol.coding.client.lang.java;
+package com.puresol.coding.client.lang.java6;
 
 import org.osgi.framework.BundleContext;
 

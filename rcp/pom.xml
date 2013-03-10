@@ -15,15 +15,14 @@
 	<modules>
 		<module>application</module>
 		<module>common</module>
-		<module>features</module>
+		<module>lang</module>
 	</modules>
 
 	<repositories>
 		<repository>
 			<id>juno</id>
 			<layout>p2</layout>
-			<!-- url>http://download.eclipse.org/releases/juno</url -->
-			<url>file:///home/ludwig/eclipse/juno-p2</url>
+			<url>http://download.eclipse.org/releases/juno</url>
 		</repository>
 		<repository>
 			<snapshots>

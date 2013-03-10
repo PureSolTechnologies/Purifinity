@@ -12,7 +12,7 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>java</module>
+		<module>java6</module>
 	</modules>
 
 </project>

@@ -31,3 +31,4 @@ Require-Bundle: com.puresol.trees.bundle;bundle-version="0.1.0",
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Vendor: PureSol Technologies
 Bundle-ActivationPolicy: lazy
+Bundle-ClassPath: .

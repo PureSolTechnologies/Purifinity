@@ -49,7 +49,7 @@
    <features>
       <feature id="com.puresol.coding.client.application.feature" version="0.1.0.qualifier"/>
       <feature id="com.puresol.coding.client.common.feature" version="0.1.0.qualifier"/>
-      <feature id="com.puresol.coding.client.lang.java.feature" version="0.1.0.qualifier"/>
+      <feature id="com.puresol.coding.client.lang.java6.feature" version="0.1.0.qualifier"/>
       <feature id="org.eclipse.emf.ecore"/>
       <feature id="org.eclipse.e4.rcp"/>
       <feature id="org.eclipse.equinox.p2.core.feature"/>
