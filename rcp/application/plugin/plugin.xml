@@ -285,6 +285,7 @@
             restorable="true">
       </view>
       <view
+            category="com.puresol.coding.application.AnalysisCategory"
             class="com.puresol.coding.client.application.views.MetricSelectorView"
             id="com.puresol.coding.client.application.views.MetricSelectorView"
             name="Metric Selector">
