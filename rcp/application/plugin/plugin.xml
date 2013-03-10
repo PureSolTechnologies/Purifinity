@@ -362,7 +362,31 @@
          point="org.eclipse.core.runtime.products">
       <product
             application="com.puresol.coding.client.application.plugin.application"
-            name="Source Code Analysis">
+            name="Purifinity">
+         <property
+               name="appName"
+               value="Purifinity">
+         </property>
+         <property
+               name="aboutImage"
+               value="icons/alt_about.gif">
+         </property>
+         <property
+               name="startupForegroundColor"
+               value="000000">
+         </property>
+         <property
+               name="startupMessageRect"
+               value="28,252,445,20">
+         </property>
+         <property
+               name="startupProgressRect"
+               value="50,100,445,32">
+         </property>
+         <property
+               name="preferenceCustomization"
+               value="plugin_customization.ini">
+         </property>
       </product>
    </extension>
    <extension

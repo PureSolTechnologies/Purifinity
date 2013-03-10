@@ -17,7 +17,6 @@ Require-Bundle: com.puresol.trees.bundle;bundle-version="0.1.0",
  com.puresol.coding.lang.c11.bundle;bundle-version="0.1.0",
  com.puresol.coding.lang.cpp.bundle;bundle-version="0.1.0",
  com.puresol.coding.lang.fortran.bundle;bundle-version="0.1.0",
- com.puresol.coding.lang.java.bundle;bundle-version="0.1.0",
  com.puresol.coding.store.fs.bundle;bundle-version="0.1.0",
  org.apache.commons.io;bundle-version="2.0.1",
  org.slf4j.api;bundle-version="1.6.4",
@@ -30,7 +29,5 @@ Require-Bundle: com.puresol.trees.bundle;bundle-version="0.1.0",
  org.eclipse.e4.ui.workbench.addons.swt;bundle-version="0.10.0";resolution:=optional,
  org.eclipse.ui.intro
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Bundle-ClassPath: .,
- swing2swt.jar
 Bundle-Vendor: PureSol Technologies
 Bundle-ActivationPolicy: lazy
