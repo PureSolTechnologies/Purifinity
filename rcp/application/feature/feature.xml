@@ -36,11 +36,9 @@
       <import plugin="com.puresol.coding.lang.commons.bundle" version="0.1.0" match="greaterOrEqual"/>
       <import plugin="com.puresol.coding.analysis.api.bundle" version="0.1.0" match="greaterOrEqual"/>
       <import plugin="com.puresol.coding.analysis.impl.bundle" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="com.puresol.coding.evaluation.api.bundle" version="0.1.0" match="greaterOrEqual"/>
       <import plugin="com.puresol.coding.evaluation.impl.bundle" version="0.1.0" match="greaterOrEqual"/>
       <import plugin="com.puresol.coding.metrics.bundle" version="0.1.0" match="greaterOrEqual"/>
-      <import plugin="com.puresol.coding.lang.c11.bundle" version="0.1.0" match="greaterOrEqual"/>
-      <import plugin="com.puresol.coding.lang.cpp.bundle" version="0.1.0" match="greaterOrEqual"/>
-      <import plugin="com.puresol.coding.lang.fortran.bundle" version="0.1.0" match="greaterOrEqual"/>
       <import plugin="com.puresol.coding.store.fs.bundle" version="0.1.0" match="greaterOrEqual"/>
       <import plugin="org.apache.commons.io" version="2.0.1" match="greaterOrEqual"/>
       <import plugin="org.slf4j.api" version="1.6.4" match="greaterOrEqual"/>
@@ -51,7 +49,6 @@
       <import plugin="org.eclipse.equinox.event" version="1.2.200" match="greaterOrEqual"/>
       <import plugin="org.eclipse.equinox.util" version="1.0.400" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui.intro"/>
-      <import plugin="com.puresol.coding.evaluation.api.bundle" version="0.1.0" match="greaterOrEqual"/>
    </requires>
 
    <plugin

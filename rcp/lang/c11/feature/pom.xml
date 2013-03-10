@@ -1,21 +1,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-
 	<parent>
 		<groupId>com.puresol</groupId>
-		<artifactId>com.puresol.coding.client</artifactId>
+		<artifactId>com.puresol.coding.client.lang.c11</artifactId>
 		<version>0.1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>com.puresol.coding.client.lang</artifactId>
-	<packaging>pom</packaging>
-
-	<modules>
-		<module>java6</module>
-		<module>c11</module>
-		<module>cpp11</module>
-		<module>fortran2008</module>
-	</modules>
+	<artifactId>com.puresol.coding.client.lang.c11.feature</artifactId>
+	<packaging>eclipse-feature</packaging>
 
 </project>

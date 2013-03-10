@@ -50,6 +50,9 @@
       <feature id="com.puresol.coding.client.application.feature" version="0.1.0.qualifier"/>
       <feature id="com.puresol.coding.client.common.feature" version="0.1.0.qualifier"/>
       <feature id="com.puresol.coding.client.lang.java6.feature" version="0.1.0.qualifier"/>
+      <feature id="com.puresol.coding.client.lang.c11.feature" version="0.1.0.qualifier"/>
+      <feature id="com.puresol.coding.client.lang.cpp11.feature" version="0.1.0.qualifier"/>
+      <feature id="com.puresol.coding.client.lang.fortran2008.feature" version="0.1.0.qualifier"/>
       <feature id="org.eclipse.emf.ecore"/>
       <feature id="org.eclipse.e4.rcp"/>
       <feature id="org.eclipse.equinox.p2.core.feature"/>
@@ -61,9 +64,6 @@
    <configurations>
       <plugin id="com.puresol.coding.analysis.api.bundle" autoStart="true" startLevel="3" />
       <plugin id="com.puresol.coding.evaluation.api.bundle" autoStart="true" startLevel="3" />
-      <plugin id="com.puresol.coding.lang.c11.bundle" autoStart="true" startLevel="3" />
-      <plugin id="com.puresol.coding.lang.cpp.bundle" autoStart="true" startLevel="3" />
-      <plugin id="com.puresol.coding.lang.fortran.bundle" autoStart="true" startLevel="3" />
       <plugin id="com.puresol.coding.metrics.bundle" autoStart="true" startLevel="3" />
       <plugin id="com.puresol.coding.store.fs.bundle" autoStart="true" startLevel="3" />
       <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="2" />

@@ -1,8 +1,5 @@
 package com.puresol.coding.lang.c11;
 
-import org.osgi.framework.BundleContext;
-
-import com.puresol.coding.analysis.api.AnalyzableProgrammingLanguage;
 import com.puresol.commons.osgi.AbstractActivator;
 
 /**
@@ -13,11 +10,4 @@ import com.puresol.commons.osgi.AbstractActivator;
  * 
  */
 public class Activator extends AbstractActivator {
-
-	@Override
-	public void start(BundleContext context) throws Exception {
-		super.start(context);
-		C11 c11 = C11.getInstance();
-		registerService(AnalyzableProgrammingLanguage.class, c11);
-	}
 }
