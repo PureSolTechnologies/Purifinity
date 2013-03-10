@@ -284,6 +284,11 @@
             name="Analysis Store"
             restorable="true">
       </view>
+      <view
+            class="com.puresol.coding.client.application.views.MetricSelectorView"
+            id="com.puresol.coding.client.application.views.MetricSelectorView"
+            name="Metric Selector">
+      </view>
    </extension>
    <extension
          point="org.eclipse.ui.commands">
