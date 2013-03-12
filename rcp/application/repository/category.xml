@@ -3,5 +3,32 @@
    <description name="Source Code Analysis Repository">
       
    </description>
-   <feature url="features/com.puresol.coding.client.application.feature_0.1.0.qualifier.jar" id="com.puresol.coding.client.application.feature" version="0.1.0.qualifier" os="linux,macosx,win32" ws="carbon,cocoa,gtk,win32" arch="x86,x86_64"/>
+   <feature url="features/com.puresol.coding.client.application.feature_0.1.0.qualifier.jar" id="com.puresol.coding.client.application.feature" version="0.1.0.qualifier" os="linux,macosx,win32" ws="carbon,cocoa,gtk,win32" arch="x86,x86_64">
+      <category name="com.puresol.coding.client.application"/>
+   </feature>
+   <feature url="features/com.puresol.coding.client.lang.c11.feature_0.1.0.qualifier.jar" id="com.puresol.coding.client.lang.c11.feature" version="0.1.0.qualifier" os="linux,macosx,win32" ws="carbon,cocoa,gtk,win32" arch="x86,x86_64">
+      <category name="com.puresol.coding.client.lang"/>
+   </feature>
+   <feature url="features/com.puresol.coding.client.lang.cpp11.feature_0.1.0.qualifier.jar" id="com.puresol.coding.client.lang.cpp11.feature" version="0.1.0.qualifier" os="linux,macosx,win32" ws="carbon,cocoa,gtk,win32" arch="x86,x86_64">
+      <category name="com.puresol.coding.client.lang"/>
+   </feature>
+   <feature url="features/com.puresol.coding.client.lang.fortran2008.feature_0.1.0.qualifier.jar" id="com.puresol.coding.client.lang.fortran2008.feature" version="0.1.0.qualifier" os="linux,macosx,win32" ws="carbon,cocoa,gtk,win32" arch="x86,x86_64">
+      <category name="com.puresol.coding.client.lang"/>
+   </feature>
+   <feature url="features/com.puresol.coding.client.lang.java6.feature_0.1.0.qualifier.jar" id="com.puresol.coding.client.lang.java6.feature" version="0.1.0.qualifier" os="linux,macosx,win32" ws="carbon,cocoa,gtk,win32" arch="x86,x86_64">
+      <category name="com.puresol.coding.client.lang"/>
+   </feature>
+   <feature url="features/com.puresol.coding.client.common.feature_0.1.0.qualifier.jar" id="com.puresol.coding.client.common.feature" version="0.1.0.qualifier" os="linux,macosx,win32" ws="carbon,cocoa,gtk,win32" arch="x86,x86_64">
+      <category name="com.puresol.coding.client.application"/>
+   </feature>
+   <category-def name="com.puresol.coding.client.application" label="Purifinity">
+      <description>
+         Contains the basic features for Purifinity.
+      </description>
+   </category-def>
+   <category-def name="com.puresol.coding.client.lang" label="Languages">
+      <description>
+         Contains several language features for the client.
+      </description>
+   </category-def>
 </site>
