@@ -239,6 +239,7 @@
 							<Embed-Dependency>*;scope=compile|runtime;inline=false</Embed-Dependency>
 							<Embed-Directory>target/dependency</Embed-Directory>
 							<Embed-StripGroup>true</Embed-StripGroup>
+							<Bundle-ActivationPolicy>lazy</Bundle-ActivationPolicy>
 						</instructions>
 					</configuration>
 				</plugin>
