@@ -17,6 +17,12 @@
    <extension
          point="org.eclipse.ui.commands">
    </extension>
+   <extension
+         point="org.eclipse.ui.startup">
+      <startup
+            class="com.puresol.coding.client.lang.c11.C11Startup">
+      </startup>
+   </extension>
 
 
 </plugin>
