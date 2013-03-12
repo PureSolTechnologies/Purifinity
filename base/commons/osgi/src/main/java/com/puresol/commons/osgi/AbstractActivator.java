@@ -36,13 +36,17 @@ public abstract class AbstractActivator implements BundleActivator {
 
     public AbstractActivator() {
 	super();
+	System.err.println("Activator " + getClass().getPackage().getName()
+		+ " was instantiated.");
 	logger.debug("Activator " + getClass().getPackage().getName()
 		+ " was instantiated.");
     }
 
     @Override
     public void start(BundleContext context) throws Exception {
-	logger.info("Staring bundle " + getClass().getPackage().getName()
+	System.err.println("Starting bundle "
+		+ getClass().getPackage().getName() + "...");
+	logger.info("Starting bundle " + getClass().getPackage().getName()
 		+ "...");
 	if (AbstractActivator.context != null) {
 	    throw new RuntimeException("Bundle was already started!");
@@ -53,6 +57,8 @@ public abstract class AbstractActivator implements BundleActivator {
 
     @Override
     public void stop(BundleContext context) throws Exception {
+	System.err.println("Stopping bundle "
+		+ getClass().getPackage().getName() + "...");
 	logger.info("Stopping bundle " + getClass().getPackage().getName()
 		+ "...");
 	if (AbstractActivator.context == null) {
