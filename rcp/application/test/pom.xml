@@ -8,7 +8,7 @@
 	</parent>
 
 	<artifactId>com.puresol.coding.client.application.test</artifactId>
-	<packaging>eclipse-repository</packaging>
+	<packaging>eclipse-test-plugin</packaging>
 
 	<build>
 		<plugins>

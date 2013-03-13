@@ -15,7 +15,7 @@
 		<module>plugin</module>
 		<module>feature</module>
 		<module>product</module>
-		<module>repository</module>
+		<module>test</module>
 	</modules>
 
 </project>
