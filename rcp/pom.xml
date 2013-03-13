@@ -26,6 +26,11 @@
 			<url>http://download.eclipse.org/releases/juno</url>
 		</repository>
 		<repository>
+			<id>SWTbot</id>
+			<layout>p2</layout>
+			<url>http://download.eclipse.org/technology/swtbot/helios/dev-build/update-site</url>
+		</repository>
+		<repository>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>

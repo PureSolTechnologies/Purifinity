@@ -11,6 +11,7 @@
 	<packaging>eclipse-test-plugin</packaging>
 
 	<build>
+		<sourceDirectory>src</sourceDirectory>
 		<plugins>
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
@@ -19,8 +20,8 @@
 				<configuration>
 					<useUIHarness>true</useUIHarness>
 					<useUIThread>false</useUIThread>
-					<product>org.eclipse.sdk.ide</product>
-					<application>org.eclipse.ui.ide.workbench</application>
+					<product>com.puresol.coding.client.application.plugin.SourceCodeClient</product>
+					<application>com.puresol.coding.client.application.plugin.application</application>
 				</configuration>
 			</plugin>
 		</plugins>
