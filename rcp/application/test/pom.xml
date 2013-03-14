@@ -20,8 +20,10 @@
 				<configuration>
 					<useUIHarness>true</useUIHarness>
 					<useUIThread>false</useUIThread>
+					<!-- product>org.eclipse.sdk.ide</product> <application>org.eclipse.ui.ide.workbench</application -->
 					<product>com.puresol.coding.client.application.plugin.SourceCodeClient</product>
 					<application>com.puresol.coding.client.application.plugin.application</application>
+					<argLine>-Dpurifinity.ui.test=true</argLine>
 				</configuration>
 			</plugin>
 		</plugins>

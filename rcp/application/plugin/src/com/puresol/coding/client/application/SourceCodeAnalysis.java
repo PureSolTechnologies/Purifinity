@@ -46,6 +46,12 @@ public class SourceCodeAnalysis implements IApplication {
 
     private boolean changeWorkspace() throws IOException, MalformedURLException {
 	boolean needNewLocation = false;
+	String purifinityUITestProperty = System
+		.getProperty("purifinity.ui.test");
+	if ((purifinityUITestProperty != null)
+		&& (purifinityUITestProperty.equals("true"))) {
+	    return false;
+	}
 	Location location = Platform.getInstanceLocation();
 	String savedLocation = PickWorkspaceDialog.getWorkspaceLocation();
 	if (savedLocation == null) {
