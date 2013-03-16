@@ -33,4 +33,18 @@
          version="0.0.0"
          unpack="false"/>
 
+   <plugin
+         id="com.puresol.coding.client.common.analysis.plugin"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.puresol.coding.client.common.evaluation.plugin"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
 </feature>
