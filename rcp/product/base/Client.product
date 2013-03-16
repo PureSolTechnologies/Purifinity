@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?pde version="3.5"?>
+
+<product name="Purifinity" uid="com.puresol.coding.client.product.base" id="com.puresol.coding.client.application.plugin.BasePurifinity" application="com.puresol.coding.client.application.plugin.application" version="0.1.0.qualifier" useFeatures="true" includeLaunchers="true">
+
+   <aboutInfo>
+      <image path="/com.puresol.coding.client.application.plugin/icons/alt_about.gif"/>
+   </aboutInfo>
+
+   <configIni use="default">
+   </configIni>
+
+   <launcherArgs>
+      <programArgs>-data @noDefault</programArgs>
+      <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
+   </launcherArgs>
+
+   <windowImages/>
+
+   <splash
+      location="com.puresol.coding.client.application.plugin"
+      startupProgressRect="50,100,445,32"
+      startupMessageRect="28,252,445,20"
+      startupForegroundColor="000000" />
+   <launcher name="purifinity">
+      <solaris/>
+      <win useIco="false">
+         <bmp/>
+      </win>
+   </launcher>
+
+   <intro introId="com.puresol.coding.client.application.plugin.intro"/>
+
+   <vm>
+   </vm>
+
+   <license>
+        <url>http://puresol-technologies.com/license</url>
+        <text>
+   PureSol Technologies End User License Agreement (EULA)
+
+...
+         </text>
+   </license>
+
+   <plugins>
+   </plugins>
+
+   <features>
+      <feature id="com.puresol.coding.client.application.feature" version="0.1.0.qualifier"/>
+      <feature id="com.puresol.coding.client.common.feature" version="0.1.0.qualifier"/>
+      <feature id="org.eclipse.emf.ecore"/>
+      <feature id="org.eclipse.e4.rcp"/>
+      <feature id="org.eclipse.equinox.p2.core.feature"/>
+      <feature id="org.eclipse.emf.common"/>
+      <feature id="org.eclipse.equinox.p2.rcp.feature"/>
+      <feature id="org.eclipse.rcp"/>
+   </features>
+
+   <configurations>
+      <plugin id="com.puresol.coding.analysis.api.bundle" autoStart="true" startLevel="3" />
+      <plugin id="com.puresol.coding.evaluation.api.bundle" autoStart="true" startLevel="3" />
+      <plugin id="com.puresol.coding.metrics.bundle" autoStart="true" startLevel="3" />
+      <plugin id="com.puresol.coding.store.fs.bundle" autoStart="true" startLevel="3" />
+      <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="2" />
+      <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="3" />
+   </configurations>
+
+</product>

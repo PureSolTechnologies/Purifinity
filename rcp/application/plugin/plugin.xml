@@ -305,19 +305,6 @@
       </command>
    </extension>
    <extension
-         id="product"
-         name="Purifinity"
-         point="org.eclipse.core.runtime.products">
-      <product
-            application="com.puresol.coding.client.application"
-            name="Purifinity">
-         <property
-               name="appName"
-               value="Purifinity">
-         </property>
-      </product>
-   </extension>
-   <extension
          point="org.eclipse.ui.preferencePages">
       <page
             class="com.puresol.coding.client.application.preferences.NewAnalysisPreferencePage"
@@ -358,38 +345,6 @@
       </editor>
    </extension>
    <extension
-         id="SourceCodeClient"
-         point="org.eclipse.core.runtime.products">
-      <product
-            application="com.puresol.coding.client.application.plugin.application"
-            name="Purifinity">
-         <property
-               name="appName"
-               value="Purifinity">
-         </property>
-         <property
-               name="aboutImage"
-               value="icons/alt_about.gif">
-         </property>
-         <property
-               name="startupForegroundColor"
-               value="000000">
-         </property>
-         <property
-               name="startupMessageRect"
-               value="28,252,445,20">
-         </property>
-         <property
-               name="startupProgressRect"
-               value="50,100,445,32">
-         </property>
-         <property
-               name="preferenceCustomization"
-               value="plugin_customization.ini">
-         </property>
-      </product>
-   </extension>
-   <extension
          point="org.eclipse.ui.intro">
       <intro
             class="com.puresol.coding.client.application.PurifinityIntroPart"
@@ -415,6 +370,102 @@
             </implementation>
          </presentation>
       </config>
+   </extension>
+   <extension
+         id="BasePurifinity"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="com.puresol.coding.client.application.plugin.application"
+            name="Purifinity">
+         <property
+               name="appName"
+               value="Purifinity">
+         </property>
+         <property
+               name="aboutImage"
+               value="icons/alt_about.gif">
+         </property>
+         <property
+               name="startupForegroundColor"
+               value="000000">
+         </property>
+         <property
+               name="startupProgressRect"
+               value="50,100,445,32">
+         </property>
+         <property
+               name="startupMessageRect"
+               value="28,252,445,20">
+         </property>
+         <property
+               name="preferenceCustomization"
+               value="plugin_customization.ini">
+         </property>
+      </product>
+   </extension>
+   <extension
+         id="FullPurifinity"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="com.puresol.coding.client.application.plugin.application"
+            name="Purifinity">
+         <property
+               name="appName"
+               value="Purifinity">
+         </property>
+         <property
+               name="aboutImage"
+               value="icons/alt_about.gif">
+         </property>
+         <property
+               name="startupForegroundColor"
+               value="000000">
+         </property>
+         <property
+               name="startupProgressRect"
+               value="50,100,445,32">
+         </property>
+         <property
+               name="startupMessageRect"
+               value="28,252,445,20">
+         </property>
+         <property
+               name="preferenceCustomization"
+               value="plugin_customization.ini">
+         </property>
+      </product>
+   </extension>
+   <extension
+         id="MinimalPurifinity"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="com.puresol.coding.client.application.plugin.application"
+            name="Purifinity">
+         <property
+               name="appName"
+               value="Purifinity">
+         </property>
+         <property
+               name="aboutImage"
+               value="icons/alt_about.gif">
+         </property>
+         <property
+               name="startupForegroundColor"
+               value="000000">
+         </property>
+         <property
+               name="startupProgressRect"
+               value="50,100,445,32">
+         </property>
+         <property
+               name="startupMessageRect"
+               value="28,252,445,20">
+         </property>
+         <property
+               name="preferenceCustomization"
+               value="plugin_customization.ini">
+         </property>
+      </product>
    </extension>
 
 </plugin>

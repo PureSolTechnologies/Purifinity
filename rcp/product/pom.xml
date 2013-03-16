@@ -8,13 +8,13 @@
 		<version>0.1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>com.puresol.coding.client.application</artifactId>
+	<artifactId>com.puresol.coding.client.product</artifactId>
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>plugin</module>
-		<module>feature</module>
-		<module>test</module>
+		<module>minimal</module>
+		<module>base</module>
+		<module>full</module>
 	</modules>
 
 </project>

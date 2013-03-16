@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="Purifinity" uid="com.puresol.coding.client.application.product" id="com.puresol.coding.client.application.plugin.SourceCodeClient" application="com.puresol.coding.client.application.plugin.application" version="0.1.0.qualifier" useFeatures="true" includeLaunchers="true">
+<product name="Purifinity" uid="com.puresol.coding.client.product.minimal" id="com.puresol.coding.client.application.plugin.MinimalPurifinity" application="com.puresol.coding.client.application.plugin.application" version="0.1.0.qualifier" useFeatures="true" includeLaunchers="true">
 
    <aboutInfo>
       <image path="/com.puresol.coding.client.application.plugin/icons/alt_about.gif"/>
@@ -18,7 +18,7 @@
    <windowImages/>
 
    <splash
-      location="com.puresol.coding.client.plugin"
+      location="com.puresol.coding.client.application.plugin"
       startupProgressRect="50,100,445,32"
       startupMessageRect="28,252,445,20"
       startupForegroundColor="000000" />
@@ -48,7 +48,6 @@
 
    <features>
       <feature id="com.puresol.coding.client.application.feature" version="0.1.0.qualifier"/>
-      <feature id="com.puresol.coding.client.common.feature" version="0.1.0.qualifier"/>
       <feature id="org.eclipse.emf.ecore"/>
       <feature id="org.eclipse.e4.rcp"/>
       <feature id="org.eclipse.equinox.p2.core.feature"/>
@@ -58,10 +57,6 @@
    </features>
 
    <configurations>
-      <plugin id="com.puresol.coding.analysis.api.bundle" autoStart="true" startLevel="3" />
-      <plugin id="com.puresol.coding.evaluation.api.bundle" autoStart="true" startLevel="3" />
-      <plugin id="com.puresol.coding.metrics.bundle" autoStart="true" startLevel="3" />
-      <plugin id="com.puresol.coding.store.fs.bundle" autoStart="true" startLevel="3" />
       <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="2" />
       <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="3" />
    </configurations>
