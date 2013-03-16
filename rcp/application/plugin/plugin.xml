@@ -416,12 +416,5 @@
          </presentation>
       </config>
    </extension>
-   <extension
-         point="org.eclipse.ui.intro">
-      <intro
-            class="com.puresol.coding.client.application.PurifinityIntroPart"
-            id="com.puresol.coding.client.application.plugin.intro">
-      </intro>
-   </extension>
 
 </plugin>
