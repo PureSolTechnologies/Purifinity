@@ -10,5 +10,58 @@
             class="com.puresol.coding.client.common.analysis.CommonAnalysisImplStartup">
       </startup>
    </extension>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            class="com.puresol.coding.client.common.analysis.perspectives.AnalysisPerspective"
+            id="com.puresol.coding.client.common.analysis.perspectives.AnalysisPerspective"
+            name="Analysis">
+      </perspective>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="com.puresol.coding.client.common.analysis.editors.FileAnalysisEditor"
+            default="false"
+            id="com.puresol.coding.client.common.analysis.editors.FileAnalysisEditor"
+            name="File Analysis">
+      </editor>
+      <editor
+            class="com.puresol.coding.client.common.analysis.editors.DirectoryAnalysisEditor"
+            default="false"
+            id="com.puresol.coding.client.common.analysis.editors.DirectoryAnalysisEditor"
+            name="Directory Analysis">
+      </editor>
+      <editor
+            class="com.puresol.coding.client.common.analysis.editors.NotAnalyzedEditor"
+            default="false"
+            id="com.puresol.coding.client.common.analysis.editors.NotAnalyzedEditor"
+            name="Not Analyzed">
+      </editor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="com.puresol.coding.client.common.analysis.preferences.NewAnalysisPreferencePage"
+            id="com.puresol.coding.client.common.analysis.preferences.NewAnalysisPreferencePage"
+            name="New Analysis">
+      </page>
+      <page
+            class="com.puresol.coding.client.common.analysis.preferences.CodeAnalysisPreferencePage"
+            id="com.puresol.coding.client.common.analysis.preferences.CodeAnalysisPreferencePage"
+            name="Code Analysis">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="com.puresol.coding.client.application.handler.NewAnalysisProjectHandler"
+            id="com.puresol.coding.client.application.handler.NewAnalysisProjectHandler"
+            name="New Analysis">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+   </extension>
 
 </plugin>

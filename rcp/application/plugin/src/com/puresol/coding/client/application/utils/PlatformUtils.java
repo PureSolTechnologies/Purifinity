@@ -15,19 +15,19 @@ import org.eclipse.osgi.service.datalocation.Location;
  */
 public class PlatformUtils {
 
-    /**
-     * This method returns the current workspace directory.
-     * 
-     * @return A File is returned representing the current workspace directory.
-     */
-    public static File getWorkspaceDirectory() {
-	Location instanceLocation = Platform.getInstanceLocation();
-	URL locationURL = instanceLocation.getURL();
-	if (locationURL == null) {
-	    throw new IllegalStateException(
-		    "The location URL can not be retrieved!");
+	/**
+	 * This method returns the current workspace directory.
+	 * 
+	 * @return A File is returned representing the current workspace directory.
+	 */
+	public static File getWorkspaceDirectory() {
+		Location instanceLocation = Platform.getInstanceLocation();
+		URL locationURL = instanceLocation.getURL();
+		if (locationURL == null) {
+			throw new IllegalStateException(
+					"The location URL can not be retrieved!");
+		}
+		return new File(locationURL.getPath());
 	}
-	return new File(locationURL.getPath());
-    }
 
 }

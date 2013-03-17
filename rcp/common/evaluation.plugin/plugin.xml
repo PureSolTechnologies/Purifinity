@@ -10,5 +10,18 @@
             class="com.puresol.coding.client.common.evaluation.CommonEvaluationImplStartup">
       </startup>
    </extension>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            class="com.puresol.coding.client.common.evaluation.perspectives.EvaluationPerspective"
+            id="com.puresol.coding.client.common.evaluation.perspectives.EvaluationPerspective"
+            name="Code Evaluation">
+      </perspective>
+      <perspective
+            class="com.puresol.coding.client.common.evaluation.perspectives.MetricsPerspective"
+            id="com.puresol.coding.client.common.evaluation.perspectives.MetricsPerspective"
+            name="Code Metrics">
+      </perspective>
+   </extension>
 
 </plugin>

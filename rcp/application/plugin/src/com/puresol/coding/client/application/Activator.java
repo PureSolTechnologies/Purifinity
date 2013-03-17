@@ -1,7 +1,6 @@
 package com.puresol.coding.client.application;
 
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -9,9 +8,6 @@ import org.osgi.framework.BundleContext;
  * The activator class controls the plug-in life cycle
  */
 public class Activator extends AbstractUIPlugin {
-
-	// The plug-in ID
-	public static final String PLUGIN_ID = "com.puresol.coding.client.plugin"; //$NON-NLS-1$
 
 	// The shared instance
 	private static Activator plugin = null;
@@ -36,38 +32,6 @@ public class Activator extends AbstractUIPlugin {
 		plugin = null;
 	}
 
-	@Override
-	protected void initializeImageRegistry(ImageRegistry reg) {
-		super.initializeImageRegistry(reg);
-		add(reg, ClientImages.DATABASE_REFRESH_16x16);
-
-		add(reg, ClientImages.FOLDER_16x16);
-		add(reg, ClientImages.FOLDERS_16x16);
-		add(reg, ClientImages.FOLDERS_EXPLORER_16x16);
-		add(reg, ClientImages.FOLDER_ADD_16x16);
-		add(reg, ClientImages.FOLDER_EDIT_16x16);
-		add(reg, ClientImages.FOLDER_DELETE_16x16);
-		add(reg, ClientImages.DATABASE_FOLDER_16x16);
-		add(reg, ClientImages.DOCUMENT_EMPTY_16x16);
-
-		add(reg, ClientImages.ANALYSIS_16x16);
-		add(reg, ClientImages.ANALYZES_VIEW_16x16);
-		add(reg, ClientImages.ANALYSIS_ADD_16x16);
-		add(reg, ClientImages.ANALYSIS_EDIT_16x16);
-		add(reg, ClientImages.ANALYSIS_DELETE_16x16);
-
-		add(reg, ClientImages.ANALYSIS_RUN_16x16);
-		add(reg, ClientImages.ANALYSIS_RUNS_VIEW_16x16);
-		add(reg, ClientImages.ANALYSIS_RUN_ADD_16x16);
-		add(reg, ClientImages.ANALYSIS_RUN_EDIT_16x16);
-		add(reg, ClientImages.ANALYSIS_RUN_DELETE_16x16);
-	}
-
-	private void add(ImageRegistry reg, String keyAndPath) {
-		reg.put(keyAndPath, ImageDescriptor.createFromURL(Activator.class
-				.getResource(keyAndPath)));
-	}
-
 	/**
 	 * Returns the shared instance
 	 * 
@@ -90,6 +54,7 @@ public class Activator extends AbstractUIPlugin {
 	 * @return the image descriptor
 	 */
 	public static ImageDescriptor getImageDescriptor(String path) {
-		return imageDescriptorFromPlugin(PLUGIN_ID, path);
+		return imageDescriptorFromPlugin(
+				Activator.class.getPackage().getName(), path);
 	}
 }

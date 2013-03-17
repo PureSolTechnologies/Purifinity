@@ -10,27 +10,9 @@
             icon="icons/alt_window_16.gif"
             visible="true">
          <run
-               class="com.puresol.coding.client.application.SourceCodeAnalysis">
+               class="com.puresol.coding.client.application.Purifinity">
          </run>
       </application>
-   </extension>
-   <extension
-         point="org.eclipse.ui.perspectives">
-      <perspective
-            name="Code Analysis"
-            class="com.puresol.coding.client.application.perspectives.AnalysisPerspective"
-            id="com.puresol.coding.client.application.perspectives.AnalysisPerspective">
-      </perspective>
-      <perspective
-            class="com.puresol.coding.client.application.perspectives.EvaluationPerspective"
-            id="com.puresol.coding.client.application.perspectives.EvaluationPerspective"
-            name="Code Evaluation ">
-      </perspective>
-      <perspective
-            class="com.puresol.coding.client.application.perspectives.MetricsPerspective"
-            id="com.puresol.coding.client.application.perspectives.MetricsPerspective"
-            name="Code Metrics">
-      </perspective>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -294,55 +276,16 @@
    <extension
          point="org.eclipse.ui.commands">
       <command
-            defaultHandler="com.puresol.coding.client.application.handler.NewAnalysisProjectHandler"
-            id="com.puresol.coding.client.application.handler.NewAnalysisProjectHandler"
-            name="New Analysis">
-      </command>
-      <command
             defaultHandler="com.puresol.coding.client.application.handler.SwitchWorkspaceHandler"
             id="com.puresol.coding.client.application.handler.SwitchWorkspaceHandler"
             name="Switch Workspace">
       </command>
    </extension>
    <extension
-         point="org.eclipse.ui.preferencePages">
-      <page
-            class="com.puresol.coding.client.application.preferences.NewAnalysisPreferencePage"
-            id="com.puresol.coding.client.application.preferences.NewAnalysisPreferencePage"
-            name="New Analysis">
-      </page>
-      <page
-            class="com.puresol.coding.client.application.preferences.CodeAnalysisPreferencePage"
-            id="com.puresol.coding.client.application.preferences.CodeAnalysisPreferencePage"
-            name="Code Analysis">
-      </page>
-   </extension>
-   <extension
          point="org.eclipse.core.runtime.preferences">
       <initializer
             class="com.puresol.coding.client.application.preferences.PreferenceInitializer">
       </initializer>
-   </extension>
-   <extension
-         point="org.eclipse.ui.editors">
-      <editor
-            class="com.puresol.coding.client.application.editors.FileAnalysisEditor"
-            default="false"
-            id="com.puresol.coding.client.application.editors.FileAnalysisEditor"
-            name="File Analysis">
-      </editor>
-      <editor
-            class="com.puresol.coding.client.application.editors.DirectoryAnalysisEditor"
-            default="false"
-            id="com.puresol.coding.client.application.editors.DirectoryAnalysisEditor"
-            name="Directory Analysis">
-      </editor>
-      <editor
-            class="com.puresol.coding.client.application.editors.NotAnalyzedEditor"
-            default="false"
-            id="com.puresol.coding.client.application.editors.NotAnalyzedEditor"
-            name="Not Analyzed">
-      </editor>
    </extension>
    <extension
          point="org.eclipse.ui.intro">
