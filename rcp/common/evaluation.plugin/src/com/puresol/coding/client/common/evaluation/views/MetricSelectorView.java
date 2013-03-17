@@ -15,59 +15,59 @@ import com.puresol.coding.evaluation.api.Evaluators;
 
 public class MetricSelectorView extends ViewPart implements Refreshable {
 
-	public static final String ID = "com.puresol.coding.client.application.views.MetricSelectorView"; //$NON-NLS-1$
-	private Table table;
-	private AvailableEvaluatorsTableViewer viewer;
+    public static final String ID = "com.puresol.coding.client.application.views.MetricSelectorView"; //$NON-NLS-1$
+    private Table table;
+    private AvailableEvaluatorsTableViewer viewer;
 
-	public MetricSelectorView() {
-	}
+    public MetricSelectorView() {
+    }
 
-	/**
-	 * Create contents of the view part.
-	 * 
-	 * @param parent
-	 */
-	@Override
-	public void createPartControl(Composite parent) {
-		Composite container = new Composite(parent, SWT.NONE);
-		container.setLayout(new FillLayout(SWT.HORIZONTAL));
+    /**
+     * Create contents of the view part.
+     * 
+     * @param parent
+     */
+    @Override
+    public void createPartControl(Composite parent) {
+	Composite container = new Composite(parent, SWT.NONE);
+	container.setLayout(new FillLayout(SWT.HORIZONTAL));
 
-		table = new Table(container, SWT.BORDER | SWT.FULL_SELECTION);
-		table.setHeaderVisible(true);
-		table.setLinesVisible(true);
+	table = new Table(container, SWT.BORDER | SWT.FULL_SELECTION);
+	table.setHeaderVisible(true);
+	table.setLinesVisible(true);
 
-		viewer = new AvailableEvaluatorsTableViewer(table);
+	viewer = new AvailableEvaluatorsTableViewer(table);
 
-		initializeToolBar();
-		initializeMenu();
+	initializeToolBar();
+	initializeMenu();
 
-		refresh();
-	}
+	refresh();
+    }
 
-	/**
-	 * Initialize the toolbar.
-	 */
-	private void initializeToolBar() {
-		IToolBarManager toolbarManager = getViewSite().getActionBars()
-				.getToolBarManager();
-		toolbarManager.add(new RefreshAction(this));
-	}
+    /**
+     * Initialize the toolbar.
+     */
+    private void initializeToolBar() {
+	IToolBarManager toolbarManager = getViewSite().getActionBars()
+		.getToolBarManager();
+	toolbarManager.add(new RefreshAction(this));
+    }
 
-	/**
-	 * Initialize the menu.
-	 */
-	private void initializeMenu() {
-		IMenuManager menuManager = getViewSite().getActionBars()
-				.getMenuManager();
-	}
+    /**
+     * Initialize the menu.
+     */
+    private void initializeMenu() {
+	IMenuManager menuManager = getViewSite().getActionBars()
+		.getMenuManager();
+    }
 
-	@Override
-	public void setFocus() {
-		// Set the focus
-	}
+    @Override
+    public void setFocus() {
+	// Set the focus
+    }
 
-	@Override
-	public void refresh() {
-		viewer.setInput(Evaluators.createInstance().getAll());
-	}
+    @Override
+    public void refresh() {
+	viewer.setInput(Evaluators.createInstance().getAll());
+    }
 }

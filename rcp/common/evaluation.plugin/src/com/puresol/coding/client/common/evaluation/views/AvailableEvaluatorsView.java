@@ -15,10 +15,10 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 
-import com.puresol.coding.client.application.Activator;
-import com.puresol.coding.client.application.actions.RefreshAction;
-import com.puresol.coding.client.application.actions.Refreshable;
-import com.puresol.coding.client.application.content.AvailableEvaluatorsTableViewer;
+import com.puresol.coding.client.common.evaluation.Activator;
+import com.puresol.coding.client.common.evaluation.contents.AvailableEvaluatorsTableViewer;
+import com.puresol.coding.client.common.ui.actions.RefreshAction;
+import com.puresol.coding.client.common.ui.actions.Refreshable;
 import com.puresol.coding.evaluation.api.EvaluatorFactory;
 
 public class AvailableEvaluatorsView extends ViewPart implements Refreshable {

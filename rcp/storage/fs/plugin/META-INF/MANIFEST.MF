@@ -3,7 +3,6 @@ Bundle-ManifestVersion: 2
 Bundle-Name: com.puresol.coding.client.storage.fs.plugin
 Bundle-SymbolicName: com.puresol.coding.client.storage.fs.plugin;singleton:=true
 Bundle-Version: 0.1.0.qualifier
-Bundle-Activator: com.puresol.coding.client.storage.fs.Activator
 Require-Bundle: com.puresol.coding.analysis.api.bundle;bundle-version="0.1.0",
  com.puresol.coding.lang.commons.bundle;bundle-version="0.1.0",
  com.puresol.coding.client.common.osgi.plugin;bundle-version="0.1.0",
@@ -14,3 +13,4 @@ Require-Bundle: com.puresol.coding.analysis.api.bundle;bundle-version="0.1.0",
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Vendor: PureSol Technologies
 Bundle-ClassPath: .
+Bundle-ActivationPolicy: lazy

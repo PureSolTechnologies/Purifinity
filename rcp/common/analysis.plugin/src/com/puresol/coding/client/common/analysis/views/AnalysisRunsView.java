@@ -12,7 +12,6 @@ import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.IJobChangeListener;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -22,7 +21,6 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
@@ -44,269 +42,262 @@ import com.puresol.coding.client.common.analysis.contents.AnalysisRunListContent
 import com.puresol.coding.client.common.analysis.contents.AnalysisRunListLabelProvider;
 import com.puresol.coding.client.common.analysis.controls.ParserTreeControl;
 import com.puresol.coding.client.common.analysis.jobs.AnalysisJob;
-import com.puresol.coding.client.common.ui.ClientImages;
+import com.puresol.coding.client.common.branding.ClientImages;
 
 public class AnalysisRunsView extends ViewPart implements SelectionListener,
-		ISelectionProvider, ISelectionListener, IJobChangeListener {
+	ISelectionProvider, ISelectionListener, IJobChangeListener {
 
-	private static final ILog logger = Activator.getDefault().getLog();
+    private static final ILog logger = Activator.getDefault().getLog();
 
-	private final ImageRegistry imageRegistry = Activator.getDefault()
-			.getImageRegistry();
-	private final Image databaseRefreshImage = imageRegistry
-			.get(ClientImages.DATABASE_REFRESH_16x16);
-	private final Image analysisRunAddImage = imageRegistry
-			.get(ClientImages.ANALYSIS_RUN_ADD_16x16);
-	private final Image analysisRunEditImage = imageRegistry
-			.get(ClientImages.ANALYSIS_RUN_EDIT_16x16);
-	private final Image analysisRunDeleteImage = imageRegistry
-			.get(ClientImages.ANALYSIS_RUN_DELETE_16x16);
+    private AnalysisProject analysis;
+    private Table analysisRunsList;
+    private TableViewer analysisRunsViewer;
+    private ToolItem refresh;
+    private ToolItem addAnalysisRun;
+    private ToolItem editAnalysisRun;
+    private ToolItem deleteAnalysisRun;
 
-	private AnalysisProject analysis;
-	private Table analysisRunsList;
-	private TableViewer analysisRunsViewer;
-	private ToolItem refresh;
-	private ToolItem addAnalysisRun;
-	private ToolItem editAnalysisRun;
-	private ToolItem deleteAnalysisRun;
+    private ISelection selection = null;
 
-	private ISelection selection = null;
+    private final java.util.List<ISelectionChangedListener> listeners = new ArrayList<ISelectionChangedListener>();
 
-	private final java.util.List<ISelectionChangedListener> listeners = new ArrayList<ISelectionChangedListener>();
+    public AnalysisRunsView() {
+    }
 
-	public AnalysisRunsView() {
+    @Override
+    public void createPartControl(Composite parent) {
+	parent.setLayout(new FormLayout());
+
+	analysisRunsList = new Table(parent, SWT.BORDER | SWT.MULTI);
+	FormData fd_analysisRunsList = new FormData();
+	fd_analysisRunsList.bottom = new FormAttachment(100);
+	fd_analysisRunsList.left = new FormAttachment(0);
+	analysisRunsList.setLayoutData(fd_analysisRunsList);
+	analysisRunsList
+		.setToolTipText("Refreshs the analysis runs for the currently selected analysis from the analysis store.");
+	analysisRunsList.setLinesVisible(true);
+	analysisRunsList.setHeaderVisible(true);
+	analysisRunsViewer = new TableViewer(analysisRunsList);
+
+	ToolBar toolBar = new ToolBar(parent, SWT.FLAT | SWT.RIGHT);
+	fd_analysisRunsList.top = new FormAttachment(toolBar, 6);
+	fd_analysisRunsList.right = new FormAttachment(toolBar, 0, SWT.RIGHT);
+	FormData fd_toolBar = new FormData();
+	fd_toolBar.left = new FormAttachment(0);
+	fd_toolBar.right = new FormAttachment(100);
+	fd_toolBar.bottom = new FormAttachment(0, 24);
+	fd_toolBar.top = new FormAttachment(0);
+	toolBar.setLayoutData(fd_toolBar);
+	toolBar.setToolTipText("Refreshs the analysis runs for the currently selected analysis from the analysis store.");
+
+	refresh = new ToolItem(toolBar, SWT.NONE);
+	refresh.setToolTipText("Refreshs the analysis runs for the selected analysis from the analysis store.");
+	refresh.setText("Refresh");
+	refresh.setImage(ClientImages
+		.getImage(ClientImages.DATABASE_REFRESH_16x16));
+	refresh.addSelectionListener(this);
+
+	addAnalysisRun = new ToolItem(toolBar, SWT.NONE);
+	addAnalysisRun.setText("Add...");
+	addAnalysisRun.setImage(ClientImages
+		.getImage(ClientImages.ANALYSIS_RUN_ADD_16x16));
+	addAnalysisRun.addSelectionListener(this);
+
+	editAnalysisRun = new ToolItem(toolBar, SWT.NONE);
+	editAnalysisRun.setText("Edit...");
+	editAnalysisRun.setImage(ClientImages
+		.getImage(ClientImages.ANALYSIS_RUN_EDIT_16x16));
+	editAnalysisRun.addSelectionListener(this);
+
+	deleteAnalysisRun = new ToolItem(toolBar, SWT.NONE);
+	deleteAnalysisRun.setText("Delete...");
+	deleteAnalysisRun.setImage(ClientImages
+		.getImage(ClientImages.ANALYSIS_RUN_DELETE_16x16));
+	deleteAnalysisRun.addSelectionListener(this);
+
+	analysisRunsViewer
+		.setContentProvider(new AnalysisRunListContentProvider());
+	analysisRunsViewer.setLabelProvider(new AnalysisRunListLabelProvider());
+	analysisRunsList.redraw();
+	analysisRunsViewer.refresh();
+	analysisRunsList.addSelectionListener(this);
+
+	getSite().setSelectionProvider(this);
+	getSite().getWorkbenchWindow().getSelectionService()
+		.addSelectionListener(this);
+	setContentDescription("All available analysis runs for the selected analysis");
+	Job.getJobManager().addJobChangeListener(this);
+    }
+
+    @Override
+    public void setFocus() {
+	analysisRunsList.setFocus();
+    }
+
+    @Override
+    public void addSelectionChangedListener(ISelectionChangedListener listener) {
+	listeners.add(listener);
+    }
+
+    @Override
+    public ISelection getSelection() {
+	return selection;
+    }
+
+    @Override
+    public void removeSelectionChangedListener(
+	    ISelectionChangedListener listener) {
+	listeners.remove(listener);
+    }
+
+    @Override
+    public void setSelection(ISelection selection) {
+	this.selection = selection;
+	for (ISelectionChangedListener listener : listeners) {
+	    listener.selectionChanged(new SelectionChangedEvent(this,
+		    getSelection()));
 	}
+    }
 
-	@Override
-	public void createPartControl(Composite parent) {
-		parent.setLayout(new FormLayout());
-
-		analysisRunsList = new Table(parent, SWT.BORDER | SWT.MULTI);
-		FormData fd_analysisRunsList = new FormData();
-		fd_analysisRunsList.bottom = new FormAttachment(100);
-		fd_analysisRunsList.left = new FormAttachment(0);
-		analysisRunsList.setLayoutData(fd_analysisRunsList);
-		analysisRunsList
-				.setToolTipText("Refreshs the analysis runs for the currently selected analysis from the analysis store.");
-		analysisRunsList.setLinesVisible(true);
-		analysisRunsList.setHeaderVisible(true);
-		analysisRunsViewer = new TableViewer(analysisRunsList);
-
-		ToolBar toolBar = new ToolBar(parent, SWT.FLAT | SWT.RIGHT);
-		fd_analysisRunsList.top = new FormAttachment(toolBar, 6);
-		fd_analysisRunsList.right = new FormAttachment(toolBar, 0, SWT.RIGHT);
-		FormData fd_toolBar = new FormData();
-		fd_toolBar.left = new FormAttachment(0);
-		fd_toolBar.right = new FormAttachment(100);
-		fd_toolBar.bottom = new FormAttachment(0, 24);
-		fd_toolBar.top = new FormAttachment(0);
-		toolBar.setLayoutData(fd_toolBar);
-		toolBar.setToolTipText("Refreshs the analysis runs for the currently selected analysis from the analysis store.");
-
-		refresh = new ToolItem(toolBar, SWT.NONE);
-		refresh.setToolTipText("Refreshs the analysis runs for the selected analysis from the analysis store.");
-		refresh.setText("Refresh");
-		refresh.setImage(databaseRefreshImage);
-		refresh.addSelectionListener(this);
-
-		addAnalysisRun = new ToolItem(toolBar, SWT.NONE);
-		addAnalysisRun.setText("Add...");
-		addAnalysisRun.setImage(analysisRunAddImage);
-		addAnalysisRun.addSelectionListener(this);
-
-		editAnalysisRun = new ToolItem(toolBar, SWT.NONE);
-		editAnalysisRun.setText("Edit...");
-		editAnalysisRun.setImage(analysisRunEditImage);
-		editAnalysisRun.addSelectionListener(this);
-
-		deleteAnalysisRun = new ToolItem(toolBar, SWT.NONE);
-		deleteAnalysisRun.setText("Delete...");
-		deleteAnalysisRun.setImage(analysisRunDeleteImage);
-		deleteAnalysisRun.addSelectionListener(this);
-
-		analysisRunsViewer
-				.setContentProvider(new AnalysisRunListContentProvider());
-		analysisRunsViewer.setLabelProvider(new AnalysisRunListLabelProvider());
-		analysisRunsList.redraw();
-		analysisRunsViewer.refresh();
-		analysisRunsList.addSelectionListener(this);
-
-		getSite().setSelectionProvider(this);
-		getSite().getWorkbenchWindow().getSelectionService()
-				.addSelectionListener(this);
-		setContentDescription("All available analysis runs for the selected analysis");
-		Job.getJobManager().addJobChangeListener(this);
+    @Override
+    public void widgetSelected(SelectionEvent event) {
+	if (event.getSource() == analysisRunsList) {
+	    processAnalysisRunSelection();
+	} else if (event.getSource() == refresh) {
+	    refreshAnalysisRunList();
+	} else if (event.getSource() == addAnalysisRun) {
+	    addAnalysisRun();
+	} else if (event.getSource() == editAnalysisRun) {
+	    editAnalysisRun();
+	} else if (event.getSource() == deleteAnalysisRun) {
+	    deleteAnalysisRun();
 	}
+    }
 
-	@Override
-	public void setFocus() {
-		analysisRunsList.setFocus();
-	}
+    private void addAnalysisRun() {
+	AnalysisJob job = new AnalysisJob(analysis);
+	job.schedule();
+    }
 
-	@Override
-	public void addSelectionChangedListener(ISelectionChangedListener listener) {
-		listeners.add(listener);
-	}
+    private void editAnalysisRun() {
+	MessageDialog.openInformation(getSite().getShell(), "Not implemented",
+		"This functionality is not implemented, yet!");
+    }
 
-	@Override
-	public ISelection getSelection() {
-		return selection;
-	}
-
-	@Override
-	public void removeSelectionChangedListener(
-			ISelectionChangedListener listener) {
-		listeners.remove(listener);
-	}
-
-	@Override
-	public void setSelection(ISelection selection) {
-		this.selection = selection;
-		for (ISelectionChangedListener listener : listeners) {
-			listener.selectionChanged(new SelectionChangedEvent(this,
-					getSelection()));
+    private void deleteAnalysisRun() {
+	try {
+	    StructuredSelection selection = (StructuredSelection) analysisRunsViewer
+		    .getSelection();
+	    if (!selection.isEmpty()) {
+		if (MessageDialog
+			.openQuestion(getSite().getShell(), "Delete?",
+				"Do you really want to delete the selected analysis run(s)?")) {
+		    @SuppressWarnings("unchecked")
+		    Iterator<AnalysisRunInformation> iterator = selection
+			    .iterator();
+		    while (iterator.hasNext()) {
+			AnalysisRunInformation analysisRun = iterator.next();
+			analysis.removeAnalysisRun(analysisRun.getUUID());
+		    }
+		    refreshAnalysisRunList();
 		}
+	    }
+	} catch (AnalysisStoreException e) {
+	    logger.log(new Status(Status.ERROR, ParserTreeControl.class
+		    .getName(), "Can not read analysis runs from store!", e));
 	}
+    }
 
-	@Override
-	public void widgetSelected(SelectionEvent event) {
-		if (event.getSource() == analysisRunsList) {
-			processAnalysisRunSelection();
-		} else if (event.getSource() == refresh) {
-			refreshAnalysisRunList();
-		} else if (event.getSource() == addAnalysisRun) {
-			addAnalysisRun();
-		} else if (event.getSource() == editAnalysisRun) {
-			editAnalysisRun();
-		} else if (event.getSource() == deleteAnalysisRun) {
-			deleteAnalysisRun();
-		}
+    private void refreshAnalysisRunList() {
+	try {
+	    List<AnalysisRunInformation> allRunInformation = analysis
+		    .getAllRunInformation();
+	    analysisRunsViewer.setInput(allRunInformation);
+	} catch (AnalysisStoreException e) {
+	    logger.log(new Status(Status.ERROR, ParserTreeControl.class
+		    .getName(), "Can not read analysis runs from store!", e));
 	}
+    }
 
-	private void addAnalysisRun() {
-		AnalysisJob job = new AnalysisJob(analysis);
-		job.schedule();
+    private void processAnalysisRunSelection() {
+	try {
+	    StructuredSelection selection = (StructuredSelection) analysisRunsViewer
+		    .getSelection();
+	    AnalysisRunInformation information = (AnalysisRunInformation) selection
+		    .getFirstElement();
+	    AnalysisRun analysisRun = analysis.loadAnalysisRun(information
+		    .getUUID());
+	    setSelection(new AnalysisRunSelection(analysisRun));
+	} catch (AnalysisStoreException e) {
+	    logger.log(new Status(Status.ERROR, ParserTreeControl.class
+		    .getName(), "Can not read analysis runs from store!", e));
 	}
+    }
 
-	private void editAnalysisRun() {
-		MessageDialog.openInformation(getSite().getShell(), "Not implemented",
-				"This functionality is not implemented, yet!");
-	}
+    @Override
+    public void widgetDefaultSelected(SelectionEvent e) {
+	// intentionally left blank.
+    }
 
-	private void deleteAnalysisRun() {
-		try {
-			StructuredSelection selection = (StructuredSelection) analysisRunsViewer
-					.getSelection();
-			if (!selection.isEmpty()) {
-				if (MessageDialog
-						.openQuestion(getSite().getShell(), "Delete?",
-								"Do you really want to delete the selected analysis run(s)?")) {
-					@SuppressWarnings("unchecked")
-					Iterator<AnalysisRunInformation> iterator = selection
-							.iterator();
-					while (iterator.hasNext()) {
-						AnalysisRunInformation analysisRun = iterator.next();
-						analysis.removeAnalysisRun(analysisRun.getUUID());
-					}
-					refreshAnalysisRunList();
-				}
-			}
-		} catch (AnalysisStoreException e) {
-			logger.log(new Status(Status.ERROR, ParserTreeControl.class
-					.getName(), "Can not read analysis runs from store!", e));
-		}
+    @Override
+    public void selectionChanged(IWorkbenchPart part, ISelection selection) {
+	if (selection instanceof AnalysisProjectSelection) {
+	    processGlobalAnalysisSelection(selection);
 	}
+    }
 
-	private void refreshAnalysisRunList() {
-		try {
-			List<AnalysisRunInformation> allRunInformation = analysis
-					.getAllRunInformation();
-			analysisRunsViewer.setInput(allRunInformation);
-		} catch (AnalysisStoreException e) {
-			logger.log(new Status(Status.ERROR, ParserTreeControl.class
-					.getName(), "Can not read analysis runs from store!", e));
-		}
+    private void processGlobalAnalysisSelection(ISelection selection) {
+	try {
+	    AnalysisProjectSelection analysisSelection = (AnalysisProjectSelection) selection;
+	    analysis = analysisSelection.getAnalysisProject();
+	    analysisRunsViewer.setInput(analysis.getAllRunInformation());
+	} catch (AnalysisStoreException e) {
+	    logger.log(new Status(Status.ERROR, ParserTreeControl.class
+		    .getName(), "Can not read analysis store!", e));
 	}
+    }
 
-	private void processAnalysisRunSelection() {
-		try {
-			StructuredSelection selection = (StructuredSelection) analysisRunsViewer
-					.getSelection();
-			AnalysisRunInformation information = (AnalysisRunInformation) selection
-					.getFirstElement();
-			AnalysisRun analysisRun = analysis.loadAnalysisRun(information
-					.getUUID());
-			setSelection(new AnalysisRunSelection(analysisRun));
-		} catch (AnalysisStoreException e) {
-			logger.log(new Status(Status.ERROR, ParserTreeControl.class
-					.getName(), "Can not read analysis runs from store!", e));
-		}
-	}
+    @Override
+    public void aboutToRun(IJobChangeEvent event) {
+	// intentionally left empty
+    }
 
-	@Override
-	public void widgetDefaultSelected(SelectionEvent e) {
-		// intentionally left blank.
-	}
+    @Override
+    public void awake(IJobChangeEvent event) {
+	// intentionally left empty
+    }
 
-	@Override
-	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-		if (selection instanceof AnalysisProjectSelection) {
-			processGlobalAnalysisSelection(selection);
-		}
+    @Override
+    public void done(IJobChangeEvent event) {
+	Job job = event.getJob();
+	if (job.getClass().equals(AnalysisJob.class)) {
+	    updateAnalysisRunList();
 	}
+    }
 
-	private void processGlobalAnalysisSelection(ISelection selection) {
-		try {
-			AnalysisProjectSelection analysisSelection = (AnalysisProjectSelection) selection;
-			analysis = analysisSelection.getAnalysisProject();
-			analysisRunsViewer.setInput(analysis.getAllRunInformation());
-		} catch (AnalysisStoreException e) {
-			logger.log(new Status(Status.ERROR, ParserTreeControl.class
-					.getName(), "Can not read analysis store!", e));
-		}
-	}
+    private void updateAnalysisRunList() {
+	UIJob uiJob = new UIJob("Update Analysis Runs") {
+	    @Override
+	    public IStatus runInUIThread(IProgressMonitor monitor) {
+		refreshAnalysisRunList();
+		return Status.OK_STATUS;
+	    }
+	};
+	uiJob.schedule();
+    }
 
-	@Override
-	public void aboutToRun(IJobChangeEvent event) {
-		// intentionally left empty
-	}
+    @Override
+    public void running(IJobChangeEvent event) {
+	// intentionally left empty
+    }
 
-	@Override
-	public void awake(IJobChangeEvent event) {
-		// intentionally left empty
-	}
+    @Override
+    public void scheduled(IJobChangeEvent event) {
+	// intentionally left empty
+    }
 
-	@Override
-	public void done(IJobChangeEvent event) {
-		Job job = event.getJob();
-		if (job.getClass().equals(AnalysisJob.class)) {
-			updateAnalysisRunList();
-		}
-	}
-
-	private void updateAnalysisRunList() {
-		UIJob uiJob = new UIJob("Update Analysis Runs") {
-			@Override
-			public IStatus runInUIThread(IProgressMonitor monitor) {
-				refreshAnalysisRunList();
-				return Status.OK_STATUS;
-			}
-		};
-		uiJob.schedule();
-	}
-
-	@Override
-	public void running(IJobChangeEvent event) {
-		// intentionally left empty
-	}
-
-	@Override
-	public void scheduled(IJobChangeEvent event) {
-		// intentionally left empty
-	}
-
-	@Override
-	public void sleeping(IJobChangeEvent event) {
-		// intentionally left empty
-	}
+    @Override
+    public void sleeping(IJobChangeEvent event) {
+	// intentionally left empty
+    }
 }

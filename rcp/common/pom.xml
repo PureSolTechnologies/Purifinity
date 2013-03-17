@@ -13,6 +13,7 @@
 
 	<modules>
 		<module>osgi.plugin</module>
+		<module>branding.plugin</module>
 		<module>ui.plugin</module>
 		<module>analysis.plugin</module>
 		<module>evaluation.plugin</module>

@@ -4,7 +4,7 @@
 <product name="Purifinity" uid="com.puresol.coding.client.product.base" id="com.puresol.coding.client.application.plugin.BasePurifinity" application="com.puresol.coding.client.application.plugin.application" version="0.1.0.qualifier" useFeatures="true" includeLaunchers="true">
 
    <aboutInfo>
-      <image path="/com.puresol.coding.client.application.plugin/icons/alt_about.gif"/>
+      <image path="/com.puresol.coding.client.common.branding.plugin/icons/alt_about.gif"/>
    </aboutInfo>
 
    <configIni use="default">
@@ -18,7 +18,7 @@
    <windowImages/>
 
    <splash
-      location="com.puresol.coding.client.application.plugin"
+      location="com.puresol.coding.client.common.branding.plugin"
       startupProgressRect="50,100,445,32"
       startupMessageRect="28,252,445,20"
       startupForegroundColor="000000" />

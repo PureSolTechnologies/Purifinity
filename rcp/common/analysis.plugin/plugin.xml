@@ -4,10 +4,7 @@
    <extension
          point="org.eclipse.ui.startup">
       <startup
-            class="com.puresol.coding.client.common.analysis.CommonAnalysisAPIStartup">
-      </startup>
-      <startup
-            class="com.puresol.coding.client.common.analysis.CommonAnalysisImplStartup">
+            class="com.puresol.coding.client.common.analysis.AnalysisAPIStartup">
       </startup>
    </extension>
    <extension
@@ -55,13 +52,80 @@
    <extension
          point="org.eclipse.ui.commands">
       <command
-            defaultHandler="com.puresol.coding.client.application.handler.NewAnalysisProjectHandler"
-            id="com.puresol.coding.client.application.handler.NewAnalysisProjectHandler"
+            defaultHandler="com.puresol.coding.client.common.analysis.handlers.NewAnalysisProjectHandler"
+            id="com.puresol.coding.client.common.analysis.handlers.NewAnalysisProjectHandler"
             name="New Analysis">
       </command>
    </extension>
    <extension
-         point="org.eclipse.ui.menus">
+         point="org.eclipse.ui.views">
+      <category
+            id="com.puresol.coding.client.common.analysis.AnalysisCategory"
+            name="Code Analysis">
+      </category>
+      <view
+            category="com.puresol.coding.client.common.analysis.AnalysisCategory"
+            class="com.puresol.coding.client.common.analysis.views.AnalysisProjectsView"
+            id="com.puresol.coding.client.common.analysis.views.AnalysisProjectsView"
+            name="Analysis Projects"
+            restorable="true">
+      </view>
+      <view
+            category="com.puresol.coding.client.common.analysis.AnalysisCategory"
+            class="com.puresol.coding.client.common.analysis.views.AnalysisRunContentView"
+            id="com.puresol.coding.client.common.analysis.views.AnalysisRunContentView"
+            name="Analysis Run Content"
+            restorable="true">
+      </view>
+      <view
+            allowMultiple="false"
+            category="com.puresol.coding.client.common.analysis.AnalysisCategory"
+            class="com.puresol.coding.client.common.analysis.views.AnalysisRunsView"
+            id="com.puresol.coding.client.common.analysis.views.AnalysisRunsView"
+            name="Analysis Runs"
+            restorable="true">
+      </view>
+      <view
+            category="com.puresol.coding.client.common.analysis.AnalysisCategory"
+            class="com.puresol.coding.client.common.analysis.views.AnalysisReportView"
+            id="com.puresol.coding.client.common.analysis.views.AnalysisReportView"
+            name="Analysis Report"
+            restorable="true">
+      </view>
+      <view
+            category="com.puresol.coding.client.common.analysis.AnalysisCategory"
+            class="com.puresol.coding.client.common.analysis.views.AnalysisStoreView"
+            id="com.puresol.coding.client.common.analysis.views.AnalysisStoreView"
+            name="Analysis Store"
+            restorable="true">
+      </view>
+      <view
+            category="com.puresol.coding.client.common.analysis.AnalysisCategory"
+            class="com.puresol.coding.client.common.analysis.views.AvailableLanguagesView"
+            id="com.puresol.coding.client.common.analysis.views.AvailableLanguagesView"
+            name="Available Languages"
+            restorable="true">
+      </view>
+      <view
+            category="com.puresol.coding.client.common.analysis.AnalysisCategory"
+            class="com.puresol.coding.client.common.analysis.views.GrammarView"
+            id="com.puresol.coding.client.common.analysis.views.GrammarView"
+            name="Grammar Viewer"
+            restorable="true">
+      </view>
+      <view
+            category="com.puresol.coding.client.common.analysis.AnalysisCategory"
+            class="com.puresol.coding.client.common.analysis.views.ParserTreeView"
+            id="com.puresol.coding.client.common.analysis.views.ParserTreeView"
+            name="Parser Tree Viewer"
+            restorable="true">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="com.puresol.coding.client.common.analysis.preferences.PreferenceInitializer">
+      </initializer>
    </extension>
 
 </plugin>

@@ -4,6 +4,7 @@
       label="com.puresol.coding.client.lang.c11.feature"
       version="0.1.0.qualifier"
       provider-name="PureSol Techologies"
+      plugin="com.puresol.coding.client.common.branding.plugin"
       os="linux,macosx,win32"
       ws="carbon,cocoa,gtk,win32"
       arch="x86,x86_64">

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.eclipse.pde.ui.RuntimeWorkbench">
+<setAttribute key="additional_plugins"/>
+<booleanAttribute key="append.args" value="true"/>
+<stringAttribute key="application" value="com.puresol.coding.client.application.plugin.application"/>
+<booleanAttribute key="askclear" value="true"/>
+<booleanAttribute key="automaticAdd" value="true"/>
+<booleanAttribute key="automaticValidate" value="false"/>
+<stringAttribute key="bootstrap" value=""/>
+<stringAttribute key="checked" value="[NONE]"/>
+<booleanAttribute key="clearConfig" value="false"/>
+<booleanAttribute key="clearws" value="true"/>
+<booleanAttribute key="clearwslog" value="false"/>
+<stringAttribute key="configLocation" value="${workspace_loc}/.metadata/.plugins/org.eclipse.pde.core/Base Client"/>
+<booleanAttribute key="default" value="false"/>
+<stringAttribute key="deselected_workspace_plugins" value="com.puresol.coding.analysis.api.bundle,com.puresol.coding.analysis.impl.bundle,com.puresol.coding.client.application.plugin,com.puresol.coding.client.application.test,com.puresol.coding.client.common.analysis.plugin,com.puresol.coding.client.common.branding.plugin,com.puresol.coding.client.common.evaluation.plugin,com.puresol.coding.client.common.osgi.plugin,com.puresol.coding.client.common.ui.plugin,com.puresol.coding.client.lang.c11.plugin,com.puresol.coding.client.lang.cpp11.plugin,com.puresol.coding.client.lang.fortran2008.plugin,com.puresol.coding.client.lang.java6.plugin,com.puresol.coding.client.storage.fs.plugin,com.puresol.coding.evaluation.api.bundle,com.puresol.coding.evaluation.impl.bundle,com.puresol.coding.lang.api.bundle,com.puresol.coding.lang.c11.bundle,com.puresol.coding.lang.commons.bundle,com.puresol.coding.lang.cpp.bundle,com.puresol.coding.lang.fortran.bundle,com.puresol.coding.lang.java.bundle,com.puresol.coding.metrics.bundle,com.puresol.coding.store.fs.bundle,com.puresol.trees.bundle,com.puresol.uhura.bundle,com.puresol.utils.bundle*0.1.0.SNAPSHOT"/>
+<stringAttribute key="featureDefaultLocation" value="workspace"/>
+<stringAttribute key="featurePluginResolution" value="workspace"/>
+<booleanAttribute key="includeOptional" value="true"/>
+<stringAttribute key="location" value="${workspace_loc}/../runtime-MinimalClient"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-os ${target.os} -ws ${target.ws} -arch ${target.arch} -nl ${target.nl} -consoleLog -data @noDefault"/>
+<stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.pde.ui.workbenchClasspathProvider"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Dosgi.requiredJavaVersion=1.5 -Dhelp.lucene.tokenizer=standard -Xms40m -Xmx512m -XX:MaxPermSize=256m"/>
+<stringAttribute key="pde.version" value="3.3"/>
+<stringAttribute key="product" value="org.eclipse.platform.ide"/>
+<setAttribute key="selected_features">
+<setEntry value="com.puresol.coding.client.application.feature:default"/>
+<setEntry value="com.puresol.coding.client.common.feature:default"/>
+<setEntry value="org.eclipse.e4.rcp:default"/>
+<setEntry value="org.eclipse.emf.common:default"/>
+<setEntry value="org.eclipse.emf.ecore:default"/>
+<setEntry value="org.eclipse.equinox.p2.core.feature:default"/>
+<setEntry value="org.eclipse.equinox.p2.rcp.feature:default"/>
+<setEntry value="org.eclipse.rcp:default"/>
+</setAttribute>
+<booleanAttribute key="show_selected_only" value="false"/>
+<stringAttribute key="templateConfig" value="${target_home}/configuration/config.ini"/>
+<booleanAttribute key="tracing" value="false"/>
+<booleanAttribute key="useCustomFeatures" value="true"/>
+<booleanAttribute key="useDefaultConfig" value="true"/>
+<booleanAttribute key="useDefaultConfigArea" value="true"/>
+<booleanAttribute key="useProduct" value="false"/>
+</launchConfiguration>

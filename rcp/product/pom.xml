@@ -12,7 +12,6 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>minimal</module>
 		<module>base</module>
 		<module>full</module>
 	</modules>

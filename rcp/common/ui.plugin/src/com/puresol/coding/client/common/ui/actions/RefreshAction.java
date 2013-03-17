@@ -1,7 +1,8 @@
 package com.puresol.coding.client.common.ui.actions;
 
 import org.eclipse.jface.action.Action;
-import org.eclipse.wb.swt.ResourceManager;
+
+import com.puresol.coding.client.common.branding.ClientImages;
 
 /**
  * This action is used to refresh a part. The part using this action needs to
@@ -12,14 +13,11 @@ import org.eclipse.wb.swt.ResourceManager;
  */
 public class RefreshAction extends Action {
 
-    private static final String RESOURCE_PLUGIN = "com.puresol.coding.client.application.plugin";
-    private static final String ICON_RESOURCE = "icons/16x16/arrow_refresh.png";
-
     private final Refreshable refreshable;
 
     public RefreshAction(Refreshable refreshable) {
-	super("Refresh", ResourceManager.getPluginImageDescriptor(
-		RESOURCE_PLUGIN, ICON_RESOURCE));
+	super("Refresh", ClientImages
+		.getImageDescriptor(ClientImages.ARROW_REFRESH_16x16));
 	this.refreshable = refreshable;
     }
 

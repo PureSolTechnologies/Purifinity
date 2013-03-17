@@ -7,7 +7,6 @@
          name="Purifinity"
          point="org.eclipse.core.runtime.applications">
       <application
-            icon="icons/alt_window_16.gif"
             visible="true">
          <run
                class="com.puresol.coding.client.application.Purifinity">
@@ -24,19 +23,7 @@
                label="File"
                mnemonic="F">
             <command
-                  commandId="com.puresol.coding.client.application.handler.NewAnalysisHandler"
-                  id="newAnalysis"
-                  label="New Analysis..."
-                  mnemonic="N"
-                  style="push">
-            </command>
-            <separator
-                  name="coding.client.plugin.separator1"
-                  visible="true">
-            </separator>
-            <command
                   commandId="org.eclipse.ui.file.print"
-                  icon="icons/16x16/printer.png"
                   id="print"
                   label="Print..."
                   mnemonic="P"
@@ -48,7 +35,6 @@
             </separator>
             <command
                   commandId="com.puresol.coding.client.application.handler.SwitchWorkspaceHandler"
-                  icon="icons/16x16/arrow_switch.png"
                   id="switchWorkspace"
                   label="Switch Workspace..."
                   mnemonic="W"
@@ -56,7 +42,6 @@
             </command>
             <command
                   commandId="org.eclipse.ui.file.restartWorkbench"
-                  icon="icons/16x16/arrow_refresh.png"
                   id="restart"
                   label="Restart"
                   style="push">
@@ -78,7 +63,6 @@
             </separator>
             <command
                   commandId="org.eclipse.ui.file.exit"
-                  icon="icons/16x16/door_out.png"
                   id="Exit"
                   label="Exit"
                   mnemonic="x"
@@ -180,7 +164,7 @@
             <command
                   commandId="org.eclipse.ui.help.aboutAction"
                   id="about"
-                  label="About Source Code Analysis..."
+                  label="About..."
                   style="push">
             </command>
          </menu>
@@ -189,88 +173,11 @@
    <extension
          point="org.eclipse.ui.views">
       <view
-            category="com.puresol.coding.application.AnalysisCategory"
-            class="com.puresol.coding.client.application.views.AnalysisProjectsView"
-            icon="icons/16x16/analyzes_view.png"
-            id="com.puresol.coding.client.application.views.AnalysisProjectsView"
-            name="Analysis Projects"
-            restorable="true">
-      </view>
-      <view
-            allowMultiple="false"
-            category="com.puresol.coding.application.AnalysisCategory"
-            class="com.puresol.coding.client.application.views.AnalysisRunsView"
-            icon="icons/16x16/analysis_runs_view.png"
-            id="com.puresol.coding.client.application.views.AnalysisRunsView"
-            name="Analysis Runs"
-            restorable="true">
-      </view>
-      <view
-            category="com.puresol.coding.application.AnalysisCategory"
-            class="com.puresol.coding.client.application.views.AnalysisRunContentView"
-            icon="icons/16x16/folders_explorer.png"
-            id="com.puresol.coding.client.application.views.AnalysisRunContentView"
-            name="Analysis Run Content"
-            restorable="true">
-      </view>
-      <view
-            category="com.puresol.coding.application.AnalysisCategory"
-            class="com.puresol.coding.client.application.views.AnalysisReportView"
-            id="com.puresol.coding.client.application.views.AnalysisReportView"
-            name="Analysis Report"
-            restorable="true">
-      </view>
-      <view
             category="org.eclipse.debug.ui"
             class="com.puresol.coding.client.application.views.OsgiDebugView"
             id="com.puresol.coding.client.application.views.OsgiDebugView"
             name="OSGI Debug"
             restorable="true">
-      </view>
-      <view
-            category="com.puresol.coding.application.AnalysisCategory"
-            class="com.puresol.coding.client.application.views.AvailableLanguagesView"
-            id="com.puresol.coding.client.application.views.AvailableLanguagesView"
-            name="Available Languages"
-            restorable="true">
-      </view>
-      <view
-            category="com.puresol.coding.application.AnalysisCategory"
-            class="com.puresol.coding.client.application.views.AvailableEvaluatorsView"
-            id="com.puresol.coding.client.application.views.AvailableEvaluatorsView"
-            name="Available Evaluators"
-            restorable="true">
-      </view>
-      <category
-            id="com.puresol.coding.application.AnalysisCategory"
-            name="Code Analysis">
-      </category>
-      <view
-            category="com.puresol.coding.application.AnalysisCategory"
-            class="com.puresol.coding.client.application.views.ParserTreeView"
-            id="com.puresol.coding.client.application.views.ParserTreeView"
-            name="Parser Tree Viewer"
-            restorable="true">
-      </view>
-      <view
-            category="com.puresol.coding.application.AnalysisCategory"
-            class="com.puresol.coding.client.application.views.GrammarView"
-            id="com.puresol.coding.client.application.views.GrammarView"
-            name="Grammar Viewer"
-            restorable="true">
-      </view>
-      <view
-            category="com.puresol.coding.application.AnalysisCategory"
-            class="com.puresol.coding.client.application.views.AnalysisStoreView"
-            id="com.puresol.coding.client.application.views.AnalysisStoreView"
-            name="Analysis Store"
-            restorable="true">
-      </view>
-      <view
-            category="com.puresol.coding.application.AnalysisCategory"
-            class="com.puresol.coding.client.application.views.MetricSelectorView"
-            id="com.puresol.coding.client.application.views.MetricSelectorView"
-            name="Metric Selector">
       </view>
    </extension>
    <extension
@@ -280,12 +187,6 @@
             id="com.puresol.coding.client.application.handler.SwitchWorkspaceHandler"
             name="Switch Workspace">
       </command>
-   </extension>
-   <extension
-         point="org.eclipse.core.runtime.preferences">
-      <initializer
-            class="com.puresol.coding.client.application.preferences.PreferenceInitializer">
-      </initializer>
    </extension>
    <extension
          point="org.eclipse.ui.intro">

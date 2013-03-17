@@ -6,11 +6,11 @@ Bundle-Version: 0.1.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ClassPath: .
 Bundle-Vendor: PureSol Technologies
-Bundle-ActivationPolicy: lazy
 Require-Bundle: com.puresol.coding.client.common.osgi.plugin;bundle-version="0.1.0",
  com.puresol.trees.bundle;bundle-version="0.1.0",
  com.puresol.utils.bundle;bundle-version="0.1.0",
  com.puresol.uhura.bundle;bundle-version="0.1.0",
+ com.puresol.coding.client.common.branding.plugin;bundle-version="0.1.0",
  com.puresol.coding.lang.api.bundle;bundle-version="0.1.0",
  com.puresol.coding.analysis.api.bundle;bundle-version="0.1.0",
  com.puresol.coding.analysis.impl.bundle;bundle-version="0.1.0",
@@ -19,4 +19,19 @@ Require-Bundle: com.puresol.coding.client.common.osgi.plugin;bundle-version="0.1
  org.eclipse.ui;bundle-version="3.104.0",
  org.eclipse.core.runtime;bundle-version="3.8.0",
  org.slf4j.api;bundle-version="1.6.4",
- org.apache.commons.io;bundle-version="2.0.1"
+ org.apache.commons.io;bundle-version="2.0.1",
+ org.eclipse.e4.ui.workbench;bundle-version="0.11.0"
+Export-Package: com.puresol.coding.client.common.analysis,
+ com.puresol.coding.client.common.analysis.contents,
+ com.puresol.coding.client.common.analysis.controls,
+ com.puresol.coding.client.common.analysis.editors,
+ com.puresol.coding.client.common.analysis.grammar,
+ com.puresol.coding.client.common.analysis.handlers,
+ com.puresol.coding.client.common.analysis.jobs,
+ com.puresol.coding.client.common.analysis.perspectives,
+ com.puresol.coding.client.common.analysis.preferences,
+ com.puresol.coding.client.common.analysis.utils,
+ com.puresol.coding.client.common.analysis.views,
+ com.puresol.coding.client.common.analysis.wizards
+Bundle-Activator: com.puresol.coding.client.common.analysis.Activator
+Bundle-ActivationPolicy: lazy
