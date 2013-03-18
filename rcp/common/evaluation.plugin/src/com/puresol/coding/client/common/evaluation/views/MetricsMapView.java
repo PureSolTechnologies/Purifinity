@@ -5,20 +5,14 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Table;
 import org.eclipse.ui.part.ViewPart;
 
-import com.puresol.coding.client.common.evaluation.contents.AvailableEvaluatorsTableViewer;
 import com.puresol.coding.client.common.ui.actions.RefreshAction;
 import com.puresol.coding.client.common.ui.actions.Refreshable;
-import com.puresol.coding.evaluation.api.Evaluators;
 
-public class MetricSelectorView extends ViewPart implements Refreshable {
+public class MetricsMapView extends ViewPart implements Refreshable {
 
-    private Table table;
-    private AvailableEvaluatorsTableViewer viewer;
-
-    public MetricSelectorView() {
+    public MetricsMapView() {
     }
 
     /**
@@ -31,16 +25,8 @@ public class MetricSelectorView extends ViewPart implements Refreshable {
 	Composite container = new Composite(parent, SWT.NONE);
 	container.setLayout(new FillLayout(SWT.HORIZONTAL));
 
-	table = new Table(container, SWT.BORDER | SWT.FULL_SELECTION);
-	table.setHeaderVisible(true);
-	table.setLinesVisible(true);
-
-	viewer = new AvailableEvaluatorsTableViewer(table);
-
 	initializeToolBar();
 	initializeMenu();
-
-	refresh();
     }
 
     /**
@@ -67,6 +53,5 @@ public class MetricSelectorView extends ViewPart implements Refreshable {
 
     @Override
     public void refresh() {
-	viewer.setInput(Evaluators.createInstance().getAll());
     }
 }

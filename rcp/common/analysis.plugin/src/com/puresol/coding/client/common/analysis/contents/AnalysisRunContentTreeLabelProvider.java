@@ -33,9 +33,6 @@ public class AnalysisRunContentTreeLabelProvider extends LabelProvider {
     private final ImageDescriptor questionDecoratorImage = shareImageManager
 	    .getImageDescriptor(ISharedImages.IMG_DEC_FIELD_WARNING);
 
-    private final FileStore fileStore = FileStoreFactory.getFactory()
-	    .getInstance();
-
     private AnalysisRun analysisRun;
 
     public void setAnalysisRun(AnalysisRun analysisRun) {
@@ -52,17 +49,20 @@ public class AnalysisRunContentTreeLabelProvider extends LabelProvider {
 	File path = input.getPathFile(false);
 	AnalyzedCode analyzedFile = analysisRun
 		.findAnalyzedCode(path.getPath());
-	if (analyzedFile != null) {
-	    if (fileStore.wasAnalyzed(analyzedFile.getHashId())) {
-		try {
-		    CodeAnalysis analysisResult = fileStore
-			    .loadAnalysis(analyzedFile.getHashId());
-		    text += " (" + analysisResult.getLanguageName() + " "
-			    + analysisResult.getLanguageVersion() + ")";
-		} catch (FileStoreException e) {
-		    logger.warn(
-			    "Could not load the analysis which was offered by the store.",
-			    e);
+	FileStore fileStore = FileStoreFactory.getFactory().getInstance();
+	if (fileStore != null) {
+	    if (analyzedFile != null) {
+		if (fileStore.wasAnalyzed(analyzedFile.getHashId())) {
+		    try {
+			CodeAnalysis analysisResult = fileStore
+				.loadAnalysis(analyzedFile.getHashId());
+			text += " (" + analysisResult.getLanguageName() + " "
+				+ analysisResult.getLanguageVersion() + ")";
+		    } catch (FileStoreException e) {
+			logger.warn(
+				"Could not load the analysis which was offered by the store.",
+				e);
+		    }
 		}
 	    }
 	}

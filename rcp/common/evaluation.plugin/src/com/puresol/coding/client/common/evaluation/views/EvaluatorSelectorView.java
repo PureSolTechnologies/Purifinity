@@ -13,12 +13,12 @@ import com.puresol.coding.client.common.ui.actions.RefreshAction;
 import com.puresol.coding.client.common.ui.actions.Refreshable;
 import com.puresol.coding.evaluation.api.Evaluators;
 
-public class MetricSelectorView extends ViewPart implements Refreshable {
+public class EvaluatorSelectorView extends ViewPart implements Refreshable {
 
     private Table table;
     private AvailableEvaluatorsTableViewer viewer;
 
-    public MetricSelectorView() {
+    public EvaluatorSelectorView() {
     }
 
     /**

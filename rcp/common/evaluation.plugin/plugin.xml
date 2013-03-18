@@ -39,6 +39,27 @@
             id="com.puresol.coding.client.common.evaluation.views.MetricSelectorView"
             name="Metric Selector">
       </view>
+      <view
+            category="com.puresol.coding.client.common.evaluation.Evaluation"
+            class="com.puresol.coding.client.common.evaluation.views.EvaluatorSelectorView"
+            id="com.puresol.coding.client.common.evaluation.views.EvaluatorSelectorView"
+            name="Evaluator Selector"
+            restorable="true">
+      </view>
+      <view
+            category="com.puresol.coding.client.common.evaluation.Evaluation"
+            class="com.puresol.coding.client.common.evaluation.views.MetricsMapView"
+            id="com.puresol.coding.client.common.evaluation.views.MetricsMapView"
+            name="Metrics Map"
+            restorable="true">
+      </view>
+      <view
+            category="com.puresol.coding.client.common.evaluation.Evaluation"
+            class="com.puresol.coding.client.common.evaluation.views.DefectDensityMapView"
+            id="com.puresol.coding.client.common.evaluation.views.DefectDensityMapView"
+            name="Defect Density Map"
+            restorable="true">
+      </view>
    </extension>
 
 </plugin>
