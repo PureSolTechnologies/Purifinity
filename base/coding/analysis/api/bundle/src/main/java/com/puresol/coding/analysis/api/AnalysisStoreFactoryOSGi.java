@@ -11,24 +11,24 @@ import org.osgi.framework.ServiceReference;
  */
 public class AnalysisStoreFactoryOSGi extends AnalysisStoreFactory {
 
-	private AnalysisStore analysisStore = null;
+    private AnalysisStore analysisStore = null;
 
-	@Override
-	public AnalysisStore getInstance() {
-		if (analysisStore == null) {
-			createInstance();
-		}
-		return analysisStore;
+    @Override
+    public AnalysisStore getInstance() {
+	if (analysisStore == null) {
+	    createInstance();
 	}
+	return analysisStore;
+    }
 
-	private synchronized void createInstance() {
-		if (analysisStore == null) {
-			BundleContext bundleContext = Activator.getBundleContext();
-			ServiceReference<AnalysisStore> serviceReference = bundleContext
-					.getServiceReference(AnalysisStore.class);
-			if (serviceReference != null) {
-				analysisStore = bundleContext.getService(serviceReference);
-			}
-		}
+    private synchronized void createInstance() {
+	if (analysisStore == null) {
+	    BundleContext bundleContext = Activator.getBundleContext();
+	    ServiceReference<AnalysisStore> serviceReference = bundleContext
+		    .getServiceReference(AnalysisStore.class);
+	    if (serviceReference != null) {
+		analysisStore = bundleContext.getService(serviceReference);
+	    }
 	}
+    }
 }

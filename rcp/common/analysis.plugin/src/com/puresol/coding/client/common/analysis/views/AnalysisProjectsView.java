@@ -58,9 +58,6 @@ public class AnalysisProjectsView extends ViewPart implements
 
     private static final ILog logger = Activator.getDefault().getLog();
 
-    private final AnalysisStore store = AnalysisStoreFactory.getFactory()
-	    .getInstance();
-
     public AnalysisProjectsView() {
 	super();
     }
@@ -257,8 +254,12 @@ public class AnalysisProjectsView extends ViewPart implements
 		while (iterator.hasNext()) {
 		    AnalysisProjectInformation information = (AnalysisProjectInformation) iterator
 			    .next();
-		    store.removeAnalysis(information.getUUID());
-		    refreshAnalysisProjectList();
+		    AnalysisStore store = AnalysisStoreFactory.getFactory()
+			    .getInstance();
+		    if (store != null) {
+			store.removeAnalysis(information.getUUID());
+			refreshAnalysisProjectList();
+		    }
 		}
 	    }
 	} catch (AnalysisStoreException e) {
@@ -271,7 +272,12 @@ public class AnalysisProjectsView extends ViewPart implements
     private void refreshAnalysisProjectList() {
 	try {
 	    if (!analysisProjectsTable.isDisposed()) {
-		analysisProjectsViewer.setInput(store.getAnalysisProjects());
+		AnalysisStore store = AnalysisStoreFactory.getFactory()
+			.getInstance();
+		if (store != null) {
+		    analysisProjectsViewer
+			    .setInput(store.getAnalysisProjects());
+		}
 	    }
 	} catch (AnalysisStoreException e) {
 	    logger.log(new Status(Status.ERROR, AnalysisProjectsView.class
