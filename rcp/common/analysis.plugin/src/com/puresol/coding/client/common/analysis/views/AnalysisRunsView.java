@@ -210,9 +210,11 @@ public class AnalysisRunsView extends ViewPart implements SelectionListener,
 
     private void refreshAnalysisRunList() {
 	try {
-	    List<AnalysisRunInformation> allRunInformation = analysis
-		    .getAllRunInformation();
-	    analysisRunsViewer.setInput(allRunInformation);
+	    if (analysis != null) {
+		List<AnalysisRunInformation> allRunInformation = analysis
+			.getAllRunInformation();
+		analysisRunsViewer.setInput(allRunInformation);
+	    }
 	} catch (AnalysisStoreException e) {
 	    logger.log(new Status(Status.ERROR, ParserTreeControl.class
 		    .getName(), "Can not read analysis runs from store!", e));
