@@ -24,6 +24,7 @@
                mnemonic="F">
             <command
                   commandId="org.eclipse.ui.file.print"
+                  icon="icons/16x16/printer.png"
                   id="print"
                   label="Print..."
                   mnemonic="P"
@@ -35,6 +36,7 @@
             </separator>
             <command
                   commandId="com.puresol.coding.client.application.handler.SwitchWorkspaceHandler"
+                  icon="icons/16x16/arrow_switch.png"
                   id="switchWorkspace"
                   label="Switch Workspace..."
                   mnemonic="W"
@@ -42,6 +44,7 @@
             </command>
             <command
                   commandId="org.eclipse.ui.file.restartWorkbench"
+                  icon="icons/16x16/arrow_refresh.png"
                   id="restart"
                   label="Restart"
                   style="push">
@@ -52,6 +55,7 @@
             </separator>
             <command
                   commandId="org.eclipse.ui.file.export"
+                  icon="icons/16x16/document_export.png"
                   id="export"
                   label="Export..."
                   mnemonic="E"
@@ -63,6 +67,7 @@
             </separator>
             <command
                   commandId="org.eclipse.ui.file.exit"
+                  icon="icons/16x16/door_out.png"
                   id="Exit"
                   label="Exit"
                   mnemonic="x"
@@ -75,6 +80,7 @@
                mnemonic="O">
             <command
                   commandId="org.eclipse.ui.window.preferences"
+                  icon="icons/16x16/wrench_orange.png"
                   id="preferences"
                   label="Preferences..."
                   mnemonic="P"
@@ -87,6 +93,7 @@
                mnemonic="W">
             <command
                   commandId="org.eclipse.ui.window.newWindow"
+                  icon="icons/16x16/application.png"
                   id="newWindow"
                   label="New Window"
                   mnemonic="N"
@@ -98,6 +105,7 @@
             </separator>
             <command
                   commandId="org.eclipse.ui.views.showView"
+                  icon="icons/16x16/layout_content.png"
                   id="showView"
                   label="Show View..."
                   mnemonic="V"
@@ -105,6 +113,7 @@
             </command>
             <command
                   commandId="org.eclipse.ui.perspectives.showPerspective"
+                  icon="icons/16x16/layout.png"
                   id="showPerspective"
                   label="Show Perspective..."
                   mnemonic="P"
@@ -116,6 +125,7 @@
             </separator>
             <command
                   commandId="org.eclipse.ui.window.customizePerspective"
+                  icon="icons/16x16/layout_edit.png"
                   id="customizePerspectiveAs"
                   label="Customize Perspective..."
                   mnemonic="A"
@@ -123,6 +133,7 @@
             </command>
             <command
                   commandId="org.eclipse.ui.window.savePerspective"
+                  icon="icons/16x16/disk.png"
                   id="savePerspective"
                   label="Save Perspective As..."
                   mnemonic="A"
@@ -130,6 +141,7 @@
             </command>
             <command
                   commandId="org.eclipse.ui.window.resetPerspective"
+                  icon="icons/16x16/layout_error.png"
                   id="resetPerspective"
                   label="Reset Perspective..."
                   mnemonic="R"
@@ -137,6 +149,7 @@
             </command>
             <command
                   commandId="org.eclipse.ui.window.closePerspective"
+                  icon="icons/16x16/layout_delete.png"
                   id="closePerspective"
                   label="Close Perspective"
                   mnemonic="C"
@@ -144,6 +157,7 @@
             </command>
             <command
                   commandId="org.eclipse.ui.window.closeAllPerspectives"
+                  icon="icons/16x16/cross.png"
                   id="closeAllPerspectives"
                   label="Close All Perspectives"
                   mnemonic="l"
@@ -156,6 +170,7 @@
                mnemonic="H">
             <command
                   commandId="org.eclipse.ui.help.quickStartAction"
+                  icon="icons/16x16/flower.png"
                   id="welcome"
                   label="Welcome"
                   mnemonic="W"
@@ -164,7 +179,7 @@
             <command
                   commandId="org.eclipse.ui.help.aboutAction"
                   id="about"
-                  label="About..."
+                  label="About Purifinity..."
                   style="push">
             </command>
          </menu>
