@@ -19,6 +19,11 @@
             id="com.puresol.coding.client.common.evaluation.perspectives.MetricsPerspective"
             name="Code Metrics">
       </perspective>
+      <perspective
+            class="com.puresol.coding.client.common.evaluation.perspectives.QualityDashboardPerspective"
+            id="com.puresol.coding.client.common.evaluation.perspectives.QualityDashboardPerspective"
+            name="Quality Dashboard">
+      </perspective>
    </extension>
    <extension
          point="org.eclipse.ui.views">
