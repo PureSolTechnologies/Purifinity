@@ -31,7 +31,7 @@ public enum ClientImages {
     ANALYSIS_RUN_DELETE_16x16("/icons/16x16/analysis_run_delete.png");//
 
     private static final String PLUGIN_ID = ClientImages.class.getPackage()
-	    .getName();
+	    .getName() + ".plugin";
 
     private final String path;
 
