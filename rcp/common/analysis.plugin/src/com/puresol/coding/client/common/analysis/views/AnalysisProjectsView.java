@@ -14,6 +14,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.IJobChangeListener;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -45,6 +46,8 @@ import com.puresol.coding.client.common.analysis.contents.AnalysisProjectsTableV
 import com.puresol.coding.client.common.analysis.handlers.NewAnalysisProjectHandler;
 import com.puresol.coding.client.common.analysis.jobs.AnalysisJob;
 import com.puresol.coding.client.common.branding.ClientImages;
+import com.puresol.coding.client.common.ui.actions.RefreshAction;
+import com.puresol.coding.client.common.ui.actions.Refreshable;
 
 /**
  * This view shows a list of all analysis which are opened and the tree of files
@@ -54,7 +57,7 @@ import com.puresol.coding.client.common.branding.ClientImages;
  * 
  */
 public class AnalysisProjectsView extends ViewPart implements
-	IJobChangeListener, ISelectionProvider, SelectionListener {
+	IJobChangeListener, ISelectionProvider, SelectionListener, Refreshable {
 
     private static final ILog logger = Activator.getDefault().getLog();
 
@@ -65,7 +68,6 @@ public class AnalysisProjectsView extends ViewPart implements
     private Table analysisProjectsTable;
     private TableViewer analysisProjectsViewer;
     private ISelection selection = null;
-    private ToolItem refresh;
     private ToolItem addAnalysis;
     private ToolItem editAnalysis;
     private ToolItem deleteAnalysis;
@@ -76,6 +78,7 @@ public class AnalysisProjectsView extends ViewPart implements
     public void createPartControl(Composite parent) {
 	parent.setLayout(new FormLayout());
 	analysisProjectsTable = new Table(parent, SWT.BORDER);
+	analysisProjectsTable.addSelectionListener(this);
 	FormData fd_analyzesList = new FormData();
 	fd_analyzesList.bottom = new FormAttachment(100);
 	fd_analyzesList.left = new FormAttachment(0);
@@ -95,15 +98,6 @@ public class AnalysisProjectsView extends ViewPart implements
 	fd_toolBar.top = new FormAttachment(0);
 	toolBar.setLayoutData(fd_toolBar);
 	toolBar.setToolTipText("Refreshs the list of available analyzes.");
-
-	refresh = new ToolItem(toolBar, SWT.NONE);
-	refresh.setText("Refresh");
-	analysisProjectsTable.addSelectionListener(this);
-
-	updateAnalysisList();
-	refresh.addSelectionListener(this);
-	refresh.setImage(ClientImages
-		.getImage(ClientImages.DATABASE_REFRESH_16x16));
 
 	addAnalysis = new ToolItem(toolBar, SWT.NONE);
 	addAnalysis.setText("Add...");
@@ -126,6 +120,19 @@ public class AnalysisProjectsView extends ViewPart implements
 	Job.getJobManager().addJobChangeListener(this);
 	getSite().setSelectionProvider(this);
 	setContentDescription("All available analyzes from analysis store");
+
+	initializeToolBar();
+
+	refresh();
+    }
+
+    /**
+     * Initialize the toolbar.
+     */
+    private void initializeToolBar() {
+	IToolBarManager toolbarManager = getViewSite().getActionBars()
+		.getToolBarManager();
+	toolbarManager.add(new RefreshAction(this));
     }
 
     @Override
@@ -147,11 +154,12 @@ public class AnalysisProjectsView extends ViewPart implements
     public void done(IJobChangeEvent event) {
 	Job job = event.getJob();
 	if (job.getClass().equals(AnalysisJob.class)) {
-	    updateAnalysisList();
+	    refresh();
 	}
     }
 
-    private void updateAnalysisList() {
+    @Override
+    public void refresh() {
 	UIJob uiJob = new UIJob("Update Analysis Projects") {
 	    @Override
 	    public IStatus runInUIThread(IProgressMonitor monitor) {
@@ -206,8 +214,6 @@ public class AnalysisProjectsView extends ViewPart implements
     public void widgetSelected(SelectionEvent event) {
 	if (event.getSource() == analysisProjectsTable) {
 	    processAnalysisProjectSelection();
-	} else if (event.getSource() == refresh) {
-	    refreshAnalysisProjectList();
 	} else if (event.getSource() == addAnalysis) {
 	    addAnalysisProject();
 	} else if (event.getSource() == editAnalysis) {

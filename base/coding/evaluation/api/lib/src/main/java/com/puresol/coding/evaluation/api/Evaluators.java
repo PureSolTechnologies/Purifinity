@@ -29,11 +29,27 @@ public abstract class Evaluators implements Closeable {
     }
 
     /**
-     * This method looks into the bundle context and returns all available
-     * programming languages.
+     * This method returns all available evaluators.
      * 
-     * @return
+     * @return A {@link List} of {@link EvaluatorFactory} is returned for all
+     *         available evaluators.
      */
     public abstract List<EvaluatorFactory> getAll();
+
+    /**
+     * This method returns all available metrics.
+     * 
+     * @return A {@link List} of {@link EvaluatorFactory} is returned for all
+     *         available metrics.
+     */
+    public abstract List<EvaluatorFactory> getAllMetrics();
+
+    /**
+     * This method returns all available evaluators which are not metrics.
+     * 
+     * @return A {@link List} of {@link EvaluatorFactory} is returned for all
+     *         available evaluators which are not metrics.
+     */
+    public abstract List<EvaluatorFactory> getAllNonMetrics();
 
 }

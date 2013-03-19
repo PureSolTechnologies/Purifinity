@@ -1,5 +1,7 @@
 package com.puresol.coding.client.common.evaluation.views;
 
+import java.util.List;
+
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
@@ -11,6 +13,7 @@ import org.eclipse.ui.part.ViewPart;
 import com.puresol.coding.client.common.evaluation.contents.AvailableEvaluatorsTableViewer;
 import com.puresol.coding.client.common.ui.actions.RefreshAction;
 import com.puresol.coding.client.common.ui.actions.Refreshable;
+import com.puresol.coding.evaluation.api.EvaluatorFactory;
 import com.puresol.coding.evaluation.api.Evaluators;
 
 public class EvaluatorSelectorView extends ViewPart implements Refreshable {
@@ -67,6 +70,11 @@ public class EvaluatorSelectorView extends ViewPart implements Refreshable {
 
     @Override
     public void refresh() {
-	viewer.setInput(Evaluators.createInstance().getAll());
+	List<EvaluatorFactory> evaluators = Evaluators.createInstance()
+		.getAllNonMetrics();
+	viewer.setInput(evaluators);
+	if (evaluators.size() > 0) {
+	    table.select(0);
+	}
     }
 }

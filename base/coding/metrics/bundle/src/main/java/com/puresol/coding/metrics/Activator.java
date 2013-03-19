@@ -1,5 +1,7 @@
 package com.puresol.coding.metrics;
 
+import java.util.Hashtable;
+
 import org.osgi.framework.BundleContext;
 
 import com.puresol.coding.evaluation.api.EvaluatorFactory;
@@ -22,23 +24,29 @@ import com.puresol.commons.osgi.AbstractActivator;
  */
 public class Activator extends AbstractActivator {
 
-	@Override
-	public void start(BundleContext context) throws Exception {
-		super.start(context);
+    @Override
+    public void start(BundleContext context) throws Exception {
+	super.start(context);
 
-		registerService(EvaluatorFactory.class, new CoCoMoServiceFactory());
-		registerService(EvaluatorFactory.class,
-				new CodeDepthMetricEvaluatorFactory());
-		registerService(EvaluatorFactory.class,
-				new EntropyMetricServiceFactory());
-		registerService(EvaluatorFactory.class,
-				new HalsteadMetricEvaluatorFactory());
-		registerService(EvaluatorFactory.class,
-				new MaintainabilityIndexEvaluatorFactory());
-		registerService(EvaluatorFactory.class,
-				new McCabeMetricServiceFactory());
-		registerService(EvaluatorFactory.class,
-				new NormalizedMaintainabilityIndexEvaluatorFactory());
-		registerService(EvaluatorFactory.class, new SLOCEvaluatorFactory());
-	}
+	Hashtable<String, String> properties = new Hashtable<String, String>();
+	properties.put("metric", "true");
+
+	registerService(EvaluatorFactory.class, new CoCoMoServiceFactory(),
+		properties);
+	registerService(EvaluatorFactory.class,
+		new CodeDepthMetricEvaluatorFactory(), properties);
+	registerService(EvaluatorFactory.class,
+		new EntropyMetricServiceFactory(), properties);
+	registerService(EvaluatorFactory.class,
+		new HalsteadMetricEvaluatorFactory(), properties);
+	registerService(EvaluatorFactory.class,
+		new MaintainabilityIndexEvaluatorFactory(), properties);
+	registerService(EvaluatorFactory.class,
+		new McCabeMetricServiceFactory(), properties);
+	registerService(EvaluatorFactory.class,
+		new NormalizedMaintainabilityIndexEvaluatorFactory(),
+		properties);
+	registerService(EvaluatorFactory.class, new SLOCEvaluatorFactory(),
+		properties);
+    }
 }

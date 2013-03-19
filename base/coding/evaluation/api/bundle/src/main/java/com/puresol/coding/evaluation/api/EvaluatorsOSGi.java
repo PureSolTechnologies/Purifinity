@@ -20,12 +20,18 @@ public class EvaluatorsOSGi extends Evaluators {
 	    .getBundleContext();
 
     private final Collection<ServiceReference<EvaluatorFactory>> serviceReferences;
+    private final Collection<ServiceReference<EvaluatorFactory>> metricServiceReferences;
+    private final Collection<ServiceReference<EvaluatorFactory>> nonMetricServiceReferences;
 
     public EvaluatorsOSGi() {
 	super();
 	try {
 	    serviceReferences = bundleContext.getServiceReferences(
 		    EvaluatorFactory.class, null);
+	    metricServiceReferences = bundleContext.getServiceReferences(
+		    EvaluatorFactory.class, "(metric=true)");
+	    nonMetricServiceReferences = bundleContext.getServiceReferences(
+		    EvaluatorFactory.class, "(metric=false)");
 	} catch (InvalidSyntaxException e) {
 	    throw new RuntimeException(
 		    "Could not retrieve the project evaluators!", e);
@@ -47,9 +53,38 @@ public class EvaluatorsOSGi extends Evaluators {
     }
 
     @Override
+    public List<EvaluatorFactory> getAllMetrics() {
+	List<EvaluatorFactory> metricFactories = new ArrayList<EvaluatorFactory>();
+	for (ServiceReference<EvaluatorFactory> metricServiceReference : metricServiceReferences) {
+	    metricFactories.add(bundleContext
+		    .getService(metricServiceReference));
+	}
+	return metricFactories;
+    }
+
+    @Override
+    public List<EvaluatorFactory> getAllNonMetrics() {
+	List<EvaluatorFactory> metricFactories = new ArrayList<EvaluatorFactory>();
+	for (ServiceReference<EvaluatorFactory> nonMetricServiceReference : nonMetricServiceReferences) {
+	    metricFactories.add(bundleContext
+		    .getService(nonMetricServiceReference));
+	}
+	return metricFactories;
+    }
+
+    @Override
     public void close() {
 	for (ServiceReference<EvaluatorFactory> serviceReference : serviceReferences) {
 	    bundleContext.ungetService(serviceReference);
 	}
+	serviceReferences.clear();
+	for (ServiceReference<EvaluatorFactory> metricServiceReference : metricServiceReferences) {
+	    bundleContext.ungetService(metricServiceReference);
+	}
+	metricServiceReferences.clear();
+	for (ServiceReference<EvaluatorFactory> nonMetricServiceReference : nonMetricServiceReferences) {
+	    bundleContext.ungetService(nonMetricServiceReference);
+	}
+	nonMetricServiceReferences.clear();
     }
 }

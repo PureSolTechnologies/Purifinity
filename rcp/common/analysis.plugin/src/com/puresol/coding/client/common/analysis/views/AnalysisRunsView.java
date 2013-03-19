@@ -11,6 +11,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.IJobChangeListener;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -43,16 +44,17 @@ import com.puresol.coding.client.common.analysis.contents.AnalysisRunListLabelPr
 import com.puresol.coding.client.common.analysis.controls.ParserTreeControl;
 import com.puresol.coding.client.common.analysis.jobs.AnalysisJob;
 import com.puresol.coding.client.common.branding.ClientImages;
+import com.puresol.coding.client.common.ui.actions.RefreshAction;
+import com.puresol.coding.client.common.ui.actions.Refreshable;
 
 public class AnalysisRunsView extends ViewPart implements SelectionListener,
-	ISelectionProvider, ISelectionListener, IJobChangeListener {
+	ISelectionProvider, ISelectionListener, IJobChangeListener, Refreshable {
 
     private static final ILog logger = Activator.getDefault().getLog();
 
     private AnalysisProject analysis;
     private Table analysisRunsList;
     private TableViewer analysisRunsViewer;
-    private ToolItem refresh;
     private ToolItem addAnalysisRun;
     private ToolItem editAnalysisRun;
     private ToolItem deleteAnalysisRun;
@@ -90,13 +92,6 @@ public class AnalysisRunsView extends ViewPart implements SelectionListener,
 	toolBar.setLayoutData(fd_toolBar);
 	toolBar.setToolTipText("Refreshs the analysis runs for the currently selected analysis from the analysis store.");
 
-	refresh = new ToolItem(toolBar, SWT.NONE);
-	refresh.setToolTipText("Refreshs the analysis runs for the selected analysis from the analysis store.");
-	refresh.setText("Refresh");
-	refresh.setImage(ClientImages
-		.getImage(ClientImages.DATABASE_REFRESH_16x16));
-	refresh.addSelectionListener(this);
-
 	addAnalysisRun = new ToolItem(toolBar, SWT.NONE);
 	addAnalysisRun.setText("Add...");
 	addAnalysisRun.setImage(ClientImages
@@ -127,6 +122,17 @@ public class AnalysisRunsView extends ViewPart implements SelectionListener,
 		.addSelectionListener(this);
 	setContentDescription("All available analysis runs for the selected analysis");
 	Job.getJobManager().addJobChangeListener(this);
+
+	initializeToolBar();
+    }
+
+    /**
+     * Initialize the toolbar.
+     */
+    private void initializeToolBar() {
+	IToolBarManager toolbarManager = getViewSite().getActionBars()
+		.getToolBarManager();
+	toolbarManager.add(new RefreshAction(this));
     }
 
     @Override
@@ -163,8 +169,6 @@ public class AnalysisRunsView extends ViewPart implements SelectionListener,
     public void widgetSelected(SelectionEvent event) {
 	if (event.getSource() == analysisRunsList) {
 	    processAnalysisRunSelection();
-	} else if (event.getSource() == refresh) {
-	    refreshAnalysisRunList();
 	} else if (event.getSource() == addAnalysisRun) {
 	    addAnalysisRun();
 	} else if (event.getSource() == editAnalysisRun) {
@@ -273,11 +277,12 @@ public class AnalysisRunsView extends ViewPart implements SelectionListener,
     public void done(IJobChangeEvent event) {
 	Job job = event.getJob();
 	if (job.getClass().equals(AnalysisJob.class)) {
-	    updateAnalysisRunList();
+	    refresh();
 	}
     }
 
-    private void updateAnalysisRunList() {
+    @Override
+    public void refresh() {
 	UIJob uiJob = new UIJob("Update Analysis Runs") {
 	    @Override
 	    public IStatus runInUIThread(IProgressMonitor monitor) {
