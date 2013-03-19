@@ -7,7 +7,8 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ClassPath: .
 Bundle-Vendor: PureSol Technologies
 Bundle-ActivationPolicy: lazy
-Require-Bundle: com.puresol.uhura.bundle;bundle-version="0.1.0",
+Require-Bundle: com.puresol.utils.bundle;bundle-version="0.1.0",
+ com.puresol.uhura.bundle;bundle-version="0.1.0",
  com.puresol.coding.analysis.api.bundle;bundle-version="0.1.0",
  com.puresol.coding.evaluation.api.bundle;bundle-version="0.1.0",
  org.apache.commons.io;bundle-version="2.0.1",
@@ -21,3 +22,4 @@ Require-Bundle: com.puresol.uhura.bundle;bundle-version="0.1.0",
  com.puresol.coding.metrics.bundle;bundle-version="0.1.0",
  com.puresol.coding.evaluation.impl.bundle;bundle-version="0.1.0"
 Bundle-Activator: com.puresol.coding.client.common.evaluation.Activator
+Import-Package: com.puresol.utils
