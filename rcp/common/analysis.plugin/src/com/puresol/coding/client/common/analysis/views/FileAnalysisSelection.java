@@ -1,11 +1,10 @@
 package com.puresol.coding.client.common.analysis.views;
 
-import java.io.File;
-
 import org.eclipse.jface.viewers.ISelection;
 
 import com.puresol.coding.analysis.api.AnalysisProject;
 import com.puresol.coding.analysis.api.AnalysisRun;
+import com.puresol.coding.analysis.api.HashIdFileTree;
 
 /**
  * This class represents a global file analysis selection. This selection is
@@ -18,10 +17,10 @@ public class FileAnalysisSelection implements ISelection {
 
     private final AnalysisProject analysis;
     private final AnalysisRun analysisRun;
-    private final File file;
+    private final HashIdFileTree file;
 
-    public FileAnalysisSelection(AnalysisProject analysis, AnalysisRun analysisRun,
-	    File file) {
+    public FileAnalysisSelection(AnalysisProject analysis,
+	    AnalysisRun analysisRun, HashIdFileTree file) {
 	super();
 	this.analysis = analysis;
 	this.analysisRun = analysisRun;
@@ -36,7 +35,7 @@ public class FileAnalysisSelection implements ISelection {
 	return analysisRun;
     }
 
-    public File getFile() {
+    public HashIdFileTree getHashIdFile() {
 	return file;
     }
 
