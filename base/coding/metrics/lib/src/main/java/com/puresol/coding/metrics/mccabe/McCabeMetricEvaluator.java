@@ -21,8 +21,8 @@ public class McCabeMetricEvaluator extends AbstractEvaluator {
 
     private final EvaluatorStore store;
 
-    public McCabeMetricEvaluator(AnalysisRun analysisRun) {
-	super(McCabeMetric.NAME, McCabeMetric.DESCRIPTION, analysisRun);
+    public McCabeMetricEvaluator(AnalysisRun analysisRun, HashIdFileTree path) {
+	super(McCabeMetric.NAME, McCabeMetric.DESCRIPTION, analysisRun, path);
 	store = getEvaluatorStore();
     }
 

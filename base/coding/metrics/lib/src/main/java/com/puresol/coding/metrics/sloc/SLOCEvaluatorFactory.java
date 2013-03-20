@@ -4,34 +4,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.puresol.coding.analysis.api.AnalysisRun;
+import com.puresol.coding.analysis.api.HashIdFileTree;
+import com.puresol.coding.evaluation.api.AbstractEvaluatorFactory;
 import com.puresol.coding.evaluation.api.Evaluator;
-import com.puresol.coding.evaluation.api.EvaluatorFactory;
 import com.puresol.coding.evaluation.api.QualityCharacteristic;
 
-public class SLOCEvaluatorFactory implements EvaluatorFactory {
+public class SLOCEvaluatorFactory extends AbstractEvaluatorFactory {
 
-	@Override
-	public String getDescription() {
-		return SLOCMetricCalculator.DESCRIPTION;
-	}
+    @Override
+    public String getDescription() {
+	return SLOCMetricCalculator.DESCRIPTION;
+    }
 
-	@Override
-	public String getName() {
-		return SLOCMetricCalculator.NAME;
-	}
+    @Override
+    public String getName() {
+	return SLOCMetricCalculator.NAME;
+    }
 
-	@Override
-	public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
-		return SLOCMetricCalculator.EVALUATED_QUALITY_CHARACTERISTICS;
-	}
+    @Override
+    public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
+	return SLOCMetricCalculator.EVALUATED_QUALITY_CHARACTERISTICS;
+    }
 
-	@Override
-	public SLOCEvaluator create(AnalysisRun analysisRun) {
-		return new SLOCEvaluator(analysisRun);
-	}
+    @Override
+    public SLOCEvaluator create(AnalysisRun analysisRun, HashIdFileTree path) {
+	return new SLOCEvaluator(analysisRun, path);
+    }
 
-	@Override
-	public List<Class<? extends Evaluator>> getDependencies() {
-		return new ArrayList<Class<? extends Evaluator>>();
-	}
+    @Override
+    public List<Class<? extends Evaluator>> getDependencies() {
+	return new ArrayList<Class<? extends Evaluator>>();
+    }
 }

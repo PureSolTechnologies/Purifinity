@@ -40,13 +40,13 @@ public class ProjectMaintainabilityIndexTest {
 
     @Test
     public void testInstance() {
-	assertNotNull(new MaintainabilityIndexEvaluator(analyzer));
+	assertNotNull(new MaintainabilityIndexEvaluator(analyzer, null));
     }
 
     @Test
     public void testInitValues() {
 	MaintainabilityIndexEvaluator metric = new MaintainabilityIndexEvaluator(
-		analyzer);
+		analyzer, null);
 	assertSame(analyzer, metric.getAnalysisRun());
 	assertNotNull(metric.getInformation());
 	assertNotNull(metric.getEvaluatedQualityCharacteristics());

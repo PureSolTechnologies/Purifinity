@@ -15,12 +15,12 @@ import org.slf4j.LoggerFactory;
 
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.CodeAnalysis;
+import com.puresol.coding.analysis.api.DirectoryStore;
+import com.puresol.coding.analysis.api.DirectoryStoreFactory;
 import com.puresol.coding.analysis.api.FileStore;
 import com.puresol.coding.analysis.api.FileStoreException;
 import com.puresol.coding.analysis.api.FileStoreFactory;
 import com.puresol.coding.analysis.api.HashIdFileTree;
-import com.puresol.coding.analysis.api.DirectoryStore;
-import com.puresol.coding.analysis.api.DirectoryStoreFactory;
 import com.puresol.coding.evaluation.api.Evaluator;
 import com.puresol.coding.evaluation.api.EvaluatorInformation;
 import com.puresol.coding.evaluation.api.EvaluatorStore;
@@ -43,184 +43,185 @@ import com.puresol.utils.progress.AbstractProgressObservable;
  * 
  */
 public abstract class AbstractEvaluator extends
-		AbstractProgressObservable<Evaluator> implements Evaluator {
+	AbstractProgressObservable<Evaluator> implements Evaluator {
 
-	private static final long serialVersionUID = -497819792461488182L;
+    private static final long serialVersionUID = -497819792461488182L;
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(AbstractEvaluator.class);
+    private static final Logger logger = LoggerFactory
+	    .getLogger(AbstractEvaluator.class);
 
-	private final AnalysisRun analysisRun;
-	private final EvaluatorInformation information;
-	private final Date timeStamp;
-	private final EvaluatorStoreFactory evaluatorStoreFactory = EvaluatorStoreFactory
-			.getFactory();
+    private final EvaluatorInformation information;
+    private final AnalysisRun analysisRun;
+    private final HashIdFileTree path;
+    private final Date timeStamp;
+    private final EvaluatorStoreFactory evaluatorStoreFactory = EvaluatorStoreFactory
+	    .getFactory();
 
-	private long timeOfRun;
+    private long timeOfRun;
 
-	public AbstractEvaluator(String name, String description,
-			AnalysisRun analysisRun) {
-		super();
-		this.information = new EvaluatorInformation(name, description);
-		this.analysisRun = analysisRun;
-		timeStamp = new Date();
+    public AbstractEvaluator(String name, String description,
+	    AnalysisRun analysisRun, HashIdFileTree path) {
+	super();
+	this.information = new EvaluatorInformation(name, description);
+	this.analysisRun = analysisRun;
+	this.path = path;
+	timeStamp = new Date();
+    }
+
+    @Override
+    public final EvaluatorInformation getInformation() {
+	return information;
+    }
+
+    @Override
+    public final AnalysisRun getAnalysisRun() {
+	return analysisRun;
+    }
+
+    @Override
+    public final Date getStartTime() {
+	return timeStamp;
+    }
+
+    @Override
+    public long getDuration() {
+	return timeOfRun;
+    }
+
+    /**
+     * This method is used to run an evaluation of an analyzed file. This method
+     * is called by the run method.
+     * 
+     * @param file
+     * @return
+     * @throws EvaluationException
+     * @throws IOException
+     * @throws FileStoreException
+     */
+    abstract protected void processFile(CodeAnalysis analysis)
+	    throws InterruptedException, EvaluationException;
+
+    abstract protected void processDirectory(HashIdFileTree directory)
+	    throws InterruptedException;
+
+    abstract protected void processProject() throws InterruptedException;
+
+    private class EvaluationVisitor implements TreeVisitor<HashIdFileTree> {
+
+	private final FileStore fileStore = FileStoreFactory.getFactory()
+		.getInstance();
+	private final DirectoryStore directoryStore = DirectoryStoreFactory
+		.getFactory().getInstance();
+
+	private EvaluationVisitor() {
+	    super();
 	}
 
 	@Override
-	public final EvaluatorInformation getInformation() {
-		return information;
-	}
-
-	@Override
-	public final AnalysisRun getAnalysisRun() {
-		return analysisRun;
-	}
-
-	@Override
-	public final Date getStartTime() {
-		return timeStamp;
-	}
-
-	@Override
-	public long getDuration() {
-		return timeOfRun;
-	}
-
-	/**
-	 * This method is used to run an evaluation of an analyzed file. This method
-	 * is called by the run method.
-	 * 
-	 * @param file
-	 * @return
-	 * @throws EvaluationException
-	 * @throws IOException
-	 * @throws FileStoreException
-	 */
-	abstract protected void processFile(CodeAnalysis analysis)
-			throws InterruptedException, EvaluationException;
-
-	abstract protected void processDirectory(HashIdFileTree directory)
-			throws InterruptedException;
-
-	abstract protected void processProject() throws InterruptedException;
-
-	private class EvaluationVisitor implements TreeVisitor<HashIdFileTree> {
-
-		private final FileStore fileStore = FileStoreFactory.getFactory()
-				.getInstance();
-		private final DirectoryStore directoryStore = DirectoryStoreFactory
-				.getFactory().getInstance();
-
-		private EvaluationVisitor() {
-			super();
+	public WalkingAction visit(HashIdFileTree tree) {
+	    try {
+		if (Thread.interrupted()) {
+		    fireDone("Work was cancelled.", true);
+		    return WalkingAction.ABORT;
 		}
-
-		@Override
-		public WalkingAction visit(HashIdFileTree tree) {
-			try {
-				if (Thread.interrupted()) {
-					fireDone("Work was cancelled.", true);
-					return WalkingAction.ABORT;
-				}
-				if (tree.isFile()) {
-					processAsFile(tree);
-				} else {
-					processAsDirectory(tree);
-				}
-				fireUpdateWork("Evaluated '" + tree.getName() + "'.", 1);
-				return WalkingAction.PROCEED;
-			} catch (FileStoreException e) {
-				logger.error("Evaluation result could not be stored.", e);
-				return WalkingAction.ABORT;
-			} catch (InterruptedException e) {
-				logger.error("Evaluation was interrupted.", e);
-				return WalkingAction.ABORT;
-			} catch (EvaluationException e) {
-				logger.error("Evaluation failed.", e);
-				return WalkingAction.ABORT;
-			}
+		if (tree.isFile()) {
+		    processAsFile(tree);
+		} else {
+		    processAsDirectory(tree);
 		}
-
-		private void processAsFile(HashIdFileTree tree)
-				throws FileStoreException, InterruptedException,
-				EvaluationException {
-			if (fileStore.wasAnalyzed(tree.getHashId())) {
-				CodeAnalysis fileAnalysis = fileStore.loadAnalysis(tree
-						.getHashId());
-				processFile(fileAnalysis);
-			}
-		}
-
-		private void processAsDirectory(HashIdFileTree tree)
-				throws FileStoreException, InterruptedException {
-			if (directoryStore.isAvailable(tree.getHashId())) {
-				processDirectory(tree);
-			}
-		}
+		fireUpdateWork("Evaluated '" + tree.getName() + "'.", 1);
+		return WalkingAction.PROCEED;
+	    } catch (FileStoreException e) {
+		logger.error("Evaluation result could not be stored.", e);
+		return WalkingAction.ABORT;
+	    } catch (InterruptedException e) {
+		logger.error("Evaluation was interrupted.", e);
+		return WalkingAction.ABORT;
+	    } catch (EvaluationException e) {
+		logger.error("Evaluation failed.", e);
+		return WalkingAction.ABORT;
+	    }
 	}
 
-	@Override
-	public Boolean call() {
-		try {
-			// Start time measurement
-			StopWatch watch = new StopWatch();
-			watch.start();
-			// check the files to evaluate and calculate amount of work!
-			HashIdFileTree fileTree = getAnalysisRun().getFileTree();
-			if (fileTree != null) {
-				int nodeCount = TreeUtils.countNodes(fileTree);
-				fireStarted("Beginning evaluation...", nodeCount + 1);
-			} else {
-				fireStarted("Beginning evaluation...", 0);
-			}
-			// process files and directories
-			TreeWalker<HashIdFileTree> treeWalker = new TreeWalker<HashIdFileTree>(
-					fileTree);
-			EvaluationVisitor treeVisitor = new EvaluationVisitor();
-			treeWalker.walkBackward(treeVisitor);
-			// process project as whole
-			processProject();
-			// Stop time measurement
-			watch.stop();
-			timeOfRun = watch.getMilliseconds();
-			fireDone("Evaluation finished.", true);
-		} catch (InterruptedException e) {
-			/*
-			 * XXX This exception is silly, but we need to introduce
-			 * InterruptedException into TreeWalker to get a real interrupted
-			 * handling!
-			 */
-		}
-		return true;
+	private void processAsFile(HashIdFileTree tree)
+		throws FileStoreException, InterruptedException,
+		EvaluationException {
+	    if (fileStore.wasAnalyzed(tree.getHashId())) {
+		CodeAnalysis fileAnalysis = fileStore.loadAnalysis(tree
+			.getHashId());
+		processFile(fileAnalysis);
+	    }
 	}
 
-	@Override
-	public EvaluatorStore getEvaluatorStore() {
-		return evaluatorStoreFactory.createInstance(getClass());
+	private void processAsDirectory(HashIdFileTree tree)
+		throws FileStoreException, InterruptedException {
+	    if (directoryStore.isAvailable(tree.getHashId())) {
+		processDirectory(tree);
+	    }
 	}
+    }
 
-	/**
-	 * This method is used to start evaluations.
-	 * 
-	 * @param evaluator
-	 * @return
-	 * @throws InterruptedException
-	 * @throws EvaluationException
-	 */
-	protected <T> T execute(Callable<T> evaluator) throws InterruptedException,
-			EvaluationException {
-		try {
-			ExecutorService executor = Executors.newSingleThreadExecutor();
-			Future<T> future = executor.submit(evaluator);
-			executor.shutdown();
-			return future.get(30, TimeUnit.SECONDS);
-		} catch (ExecutionException e) {
-			fireDone(e.getMessage(), false);
-			throw new EvaluationException(e);
-		} catch (TimeoutException e) {
-			fireDone(e.getMessage(), false);
-			throw new EvaluationException(e);
-		}
+    @Override
+    public final Boolean call() {
+	try {
+	    // Start time measurement
+	    StopWatch watch = new StopWatch();
+	    watch.start();
+	    // check the files to evaluate and calculate amount of work!
+	    if (path != null) {
+		int nodeCount = TreeUtils.countNodes(path);
+		fireStarted("Beginning evaluation...", nodeCount + 1);
+	    } else {
+		fireStarted("Beginning evaluation...", 0);
+	    }
+	    // process files and directories
+	    TreeWalker<HashIdFileTree> treeWalker = new TreeWalker<HashIdFileTree>(
+		    path);
+	    EvaluationVisitor treeVisitor = new EvaluationVisitor();
+	    treeWalker.walkBackward(treeVisitor);
+	    // process project as whole
+	    processProject();
+	    // Stop time measurement
+	    watch.stop();
+	    timeOfRun = watch.getMilliseconds();
+	    fireDone("Evaluation finished.", true);
+	} catch (InterruptedException e) {
+	    /*
+	     * XXX This exception is silly, but we need to introduce
+	     * InterruptedException into TreeWalker to get a real interrupted
+	     * handling!
+	     */
 	}
+	return true;
+    }
+
+    @Override
+    public EvaluatorStore getEvaluatorStore() {
+	return evaluatorStoreFactory.createInstance(getClass());
+    }
+
+    /**
+     * This method is used to start evaluations.
+     * 
+     * @param evaluator
+     * @return
+     * @throws InterruptedException
+     * @throws EvaluationException
+     */
+    protected <T> T execute(Callable<T> evaluator) throws InterruptedException,
+	    EvaluationException {
+	try {
+	    ExecutorService executor = Executors.newSingleThreadExecutor();
+	    Future<T> future = executor.submit(evaluator);
+	    executor.shutdown();
+	    return future.get(30, TimeUnit.SECONDS);
+	} catch (ExecutionException e) {
+	    fireDone(e.getMessage(), false);
+	    throw new EvaluationException(e);
+	} catch (TimeoutException e) {
+	    fireDone(e.getMessage(), false);
+	    throw new EvaluationException(e);
+	}
+    }
 
 }

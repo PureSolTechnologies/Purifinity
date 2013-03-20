@@ -39,12 +39,12 @@ public class ProjectCodeDepthMetricTest {
 
     @Test
     public void testInstance() {
-	assertNotNull(new CodeDepthEvaluator(analyzer));
+	assertNotNull(new CodeDepthEvaluator(analyzer, null));
     }
 
     @Test
     public void testInitValues() {
-	CodeDepthEvaluator metric = new CodeDepthEvaluator(analyzer);
+	CodeDepthEvaluator metric = new CodeDepthEvaluator(analyzer, null);
 	assertSame(analyzer, metric.getAnalysisRun());
 	assertNotNull(metric.getInformation());
 	assertNotNull(metric.getEvaluatedQualityCharacteristics());

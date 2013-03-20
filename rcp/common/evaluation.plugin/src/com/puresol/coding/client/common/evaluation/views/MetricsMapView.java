@@ -14,21 +14,28 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.part.ViewPart;
 
+import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.client.common.analysis.views.FileAnalysisSelection;
-import com.puresol.coding.client.common.evaluation.jobs.EvaluationJob;
+import com.puresol.coding.client.common.evaluation.utils.EvaluationTool;
+import com.puresol.coding.client.common.evaluation.utils.EvaluationsTarget;
 import com.puresol.coding.client.common.ui.actions.RefreshAction;
 import com.puresol.coding.client.common.ui.actions.Refreshable;
+import com.puresol.coding.client.common.ui.components.AreaMapComponent;
+import com.puresol.coding.client.common.ui.components.AreaMapData;
+import com.puresol.coding.evaluation.api.EvaluatorFactory;
 import com.puresol.coding.evaluation.api.EvaluatorStore;
 import com.puresol.coding.evaluation.api.EvaluatorStoreFactory;
+import com.puresol.coding.evaluation.api.Evaluators;
 import com.puresol.coding.metrics.sloc.SLOCEvaluator;
 import com.puresol.utils.HashId;
 
 public class MetricsMapView extends ViewPart implements Refreshable,
-	ISelectionListener, IJobChangeListener {
+	ISelectionListener, IJobChangeListener, EvaluationsTarget {
 
     private FileAnalysisSelection analysisSelection;
     private Text text;
+    private AreaMapComponent areaMap;
 
     public MetricsMapView() {
     }
@@ -50,6 +57,24 @@ public class MetricsMapView extends ViewPart implements Refreshable,
 	IWorkbenchPartSite site = getSite();
 	site.getWorkbenchWindow().getSelectionService()
 		.addSelectionListener(this);
+
+	areaMap = new AreaMapComponent(container, SWT.NONE);
+
+	AreaMapData c11 = new AreaMapData("Child11", 1.0);
+	AreaMapData c12 = new AreaMapData("Child12", 5.0);
+
+	AreaMapData c1 = new AreaMapData("Child1", 1.0, c11, c12);
+
+	AreaMapData c21 = new AreaMapData("Child21", 1.0);
+	AreaMapData c22 = new AreaMapData("Child22", 2.0);
+	AreaMapData c23 = new AreaMapData("Child23", 3.0);
+	AreaMapData c24 = new AreaMapData("Child24", 5.0);
+	AreaMapData c25 = new AreaMapData("Child25", 8.0);
+
+	AreaMapData c2 = new AreaMapData("Child2", 2.0, c21, c22, c23, c24, c25);
+	AreaMapData c3 = new AreaMapData("Child3", 3.0);
+	AreaMapData root = new AreaMapData("Parent", 6.0, c1, c2, c3);
+	areaMap.setData(root);
 
 	initializeToolBar();
 	initializeMenu();
@@ -85,25 +110,31 @@ public class MetricsMapView extends ViewPart implements Refreshable,
     public void selectionChanged(IWorkbenchPart part, ISelection selection) {
 	if (selection instanceof FileAnalysisSelection) {
 	    analysisSelection = (FileAnalysisSelection) selection;
+	    AnalysisRun analysisRun = analysisSelection.getAnalysisRun();
 	    HashIdFileTree path = analysisSelection.getHashIdFile();
 	    HashId hashId = path.getHashId();
+
+	    EvaluatorFactory evaluatorFactory = Evaluators.createInstance()
+		    .getAllMetrics().get(0);
 
 	    EvaluatorStoreFactory factory = EvaluatorStoreFactory.getFactory();
 	    EvaluatorStore store = factory.createInstance(SLOCEvaluator.class);
 	    if (path.isFile()) {
-		if (!store.hasFileResults(hashId)) {
-		    runEvaluation(analysisSelection);
-		} else {
-		    HashIdFileTree directory = path.getParent();
-		    if (directory != null) {
-			show(directory);
+		HashIdFileTree directory = path.getParent();
+		if (directory != null) {
+		    if (!store.hasFileResults(directory.getHashId())) {
+			EvaluationTool.putAsynchronous(this, evaluatorFactory,
+				analysisRun, directory);
 		    } else {
-			show(null);
+			show(directory);
 		    }
+		} else {
+		    show(null);
 		}
 	    } else {
 		if (!store.hasDirectoryResults(hashId)) {
-		    runEvaluation(analysisSelection);
+		    EvaluationTool.putAsynchronous(this, evaluatorFactory,
+			    analysisRun, path);
 		} else {
 		    show(path);
 		}
@@ -113,13 +144,6 @@ public class MetricsMapView extends ViewPart implements Refreshable,
 
     private void show(HashIdFileTree directory) {
 	text.setText(directory.getPathFile(true).getPath());
-    }
-
-    private void runEvaluation(FileAnalysisSelection analysisSelection) {
-	EvaluationJob job = new EvaluationJob(
-		analysisSelection.getAnalysisRun());
-	job.addJobChangeListener(this);
-	job.schedule();
     }
 
     @Override
@@ -160,5 +184,10 @@ public class MetricsMapView extends ViewPart implements Refreshable,
     @Override
     public void sleeping(IJobChangeEvent event) {
 	// intentionally left empty
+    }
+
+    @Override
+    public void showEvaluation(HashIdFileTree path) {
+	text.setText(path.getPathFile(false).getPath());
     }
 }

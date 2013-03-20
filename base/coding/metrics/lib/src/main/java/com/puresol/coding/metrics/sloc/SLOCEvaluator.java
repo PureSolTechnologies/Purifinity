@@ -22,9 +22,9 @@ public class SLOCEvaluator extends AbstractEvaluator {
 
     private final EvaluatorStore store;
 
-    public SLOCEvaluator(AnalysisRun analysisRun) {
+    public SLOCEvaluator(AnalysisRun analysisRun, HashIdFileTree path) {
 	super(SLOCMetricCalculator.NAME, SLOCMetricCalculator.DESCRIPTION,
-		analysisRun);
+		analysisRun, path);
 	store = getEvaluatorStore();
     }
 

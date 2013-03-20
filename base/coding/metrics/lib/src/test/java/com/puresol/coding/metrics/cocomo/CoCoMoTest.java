@@ -38,12 +38,12 @@ public class CoCoMoTest {
 
     @Test
     public void testInstance() {
-	assertNotNull(new CoCoMoEvaluator(analyzer));
+	assertNotNull(new CoCoMoEvaluator(analyzer, null));
     }
 
     @Test
     public void testInitValues() {
-	CoCoMoEvaluator metric = new CoCoMoEvaluator(analyzer);
+	CoCoMoEvaluator metric = new CoCoMoEvaluator(analyzer, null);
 	assertSame(analyzer, metric.getAnalysisRun());
 	assertNotNull(metric.getInformation());
 	assertNotNull(metric.getEvaluatedQualityCharacteristics());

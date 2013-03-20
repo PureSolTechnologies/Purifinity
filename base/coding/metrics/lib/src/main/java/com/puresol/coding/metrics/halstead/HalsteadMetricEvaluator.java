@@ -21,8 +21,9 @@ public class HalsteadMetricEvaluator extends AbstractEvaluator {
 
     private final EvaluatorStore store;
 
-    public HalsteadMetricEvaluator(AnalysisRun analysisRun) {
-	super(HalsteadMetric.NAME, HalsteadMetric.DESCRIPTION, analysisRun);
+    public HalsteadMetricEvaluator(AnalysisRun analysisRun, HashIdFileTree path) {
+	super(HalsteadMetric.NAME, HalsteadMetric.DESCRIPTION, analysisRun,
+		path);
 	store = getEvaluatorStore();
     }
 

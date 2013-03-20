@@ -39,12 +39,12 @@ public class ProjectMcCabeMetricTest {
 
     @Test
     public void testInstance() {
-	assertNotNull(new McCabeMetricEvaluator(analyzer));
+	assertNotNull(new McCabeMetricEvaluator(analyzer, null));
     }
 
     @Test
     public void testInitValues() {
-	McCabeMetricEvaluator metric = new McCabeMetricEvaluator(analyzer);
+	McCabeMetricEvaluator metric = new McCabeMetricEvaluator(analyzer, null);
 	assertSame(analyzer, metric.getAnalysisRun());
 	assertNotNull(metric.getInformation());
 	assertNotNull(metric.getEvaluatedQualityCharacteristics());

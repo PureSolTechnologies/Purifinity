@@ -35,96 +35,96 @@ import com.puresol.utils.HashId;
  */
 public class CoCoMoEvaluator extends AbstractEvaluator {
 
-	private static final long serialVersionUID = 5098378023541671490L;
+    private static final long serialVersionUID = 5098378023541671490L;
 
-	public static final String NAME = "COst COnstruction MOdel";
+    public static final String NAME = "COst COnstruction MOdel";
 
-	public static final String DESCRIPTION = "The COst COnstruction MOdel is a simple way "
-			+ "to estimate the construction costs of a "
-			+ "software project by couting the physical lines of code.";
+    public static final String DESCRIPTION = "The COst COnstruction MOdel is a simple way "
+	    + "to estimate the construction costs of a "
+	    + "software project by couting the physical lines of code.";
 
-	public static final List<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new Vector<QualityCharacteristic>();
+    public static final List<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new Vector<QualityCharacteristic>();
 
-	private final EvaluatorStore store;
-	private final EvaluatorStore slocStore;
-	private Complexity complexity = Complexity.LOW;
-	private int averageSalary = 56286;
-	private String currency = "USD";
+    private final EvaluatorStore store;
+    private final EvaluatorStore slocStore;
+    private Complexity complexity = Complexity.LOW;
+    private int averageSalary = 56286;
+    private String currency = "USD";
 
-	public CoCoMoEvaluator(AnalysisRun analysisRun) {
-		super(NAME, DESCRIPTION, analysisRun);
-		store = getEvaluatorStore();
-		slocStore = EvaluatorStoreFactory.getFactory().createInstance(
-				SLOCEvaluator.class);
-	}
+    public CoCoMoEvaluator(AnalysisRun analysisRun, HashIdFileTree path) {
+	super(NAME, DESCRIPTION, analysisRun, path);
+	store = getEvaluatorStore();
+	slocStore = EvaluatorStoreFactory.getFactory().createInstance(
+		SLOCEvaluator.class);
+    }
 
-	public void setComplexity(Complexity complexity) {
-		this.complexity = complexity;
-	}
+    public void setComplexity(Complexity complexity) {
+	this.complexity = complexity;
+    }
 
-	public void setAverageSalary(int averageSalary, String currency) {
-		this.averageSalary = averageSalary;
-		this.currency = currency;
-	}
+    public void setAverageSalary(int averageSalary, String currency) {
+	this.averageSalary = averageSalary;
+	this.currency = currency;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
-		return EVALUATED_QUALITY_CHARACTERISTICS;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
+	return EVALUATED_QUALITY_CHARACTERISTICS;
+    }
 
-	@Override
-	protected void processFile(CodeAnalysis analysis) {
-		HashId hashId = analysis.getAnalyzedFile().getHashId();
-		if (slocStore.hasFileResults(hashId)) {
-			SLOCFileResults slocFileResults = (SLOCFileResults) slocStore
-					.readFileResults(hashId);
-			for (SLOCFileResult results : slocFileResults) {
-				if (results.getCodeRangeType() == CodeRangeType.FILE) {
-					int phyLoc = results.getSLOCResult().getPhyLOC();
-					CoCoMoValueSet fileResults = new CoCoMoValueSet();
-					fileResults.setAverageSalary(averageSalary, currency);
-					fileResults.setComplexity(complexity);
-					fileResults.setSloc(phyLoc);
-					store.storeFileResults(hashId, fileResults);
-					break;
-				}
-			}
+    @Override
+    protected void processFile(CodeAnalysis analysis) {
+	HashId hashId = analysis.getAnalyzedFile().getHashId();
+	if (slocStore.hasFileResults(hashId)) {
+	    SLOCFileResults slocFileResults = (SLOCFileResults) slocStore
+		    .readFileResults(hashId);
+	    for (SLOCFileResult results : slocFileResults) {
+		if (results.getCodeRangeType() == CodeRangeType.FILE) {
+		    int phyLoc = results.getSLOCResult().getPhyLOC();
+		    CoCoMoValueSet fileResults = new CoCoMoValueSet();
+		    fileResults.setAverageSalary(averageSalary, currency);
+		    fileResults.setComplexity(complexity);
+		    fileResults.setSloc(phyLoc);
+		    store.storeFileResults(hashId, fileResults);
+		    break;
 		}
+	    }
 	}
+    }
 
-	@Override
-	protected void processDirectory(HashIdFileTree directory)
-			throws InterruptedException {
-		int phyLoc = 0;
-		for (HashIdFileTree child : directory.getChildren()) {
-			HashId hashId = child.getHashId();
-			if (child.isFile()) {
-				if (store.hasFileResults(hashId)) {
-					CoCoMoValueSet fileResults = (CoCoMoValueSet) store
-							.readFileResults(hashId);
-					phyLoc += fileResults.getPhyLOC();
-				}
-			} else {
-				if (store.hasDirectoryResults(hashId)) {
-					CoCoMoValueSet directoryResults = (CoCoMoValueSet) store
-							.readDirectoryResults(hashId);
-					phyLoc += directoryResults.getPhyLOC();
-				}
-			}
+    @Override
+    protected void processDirectory(HashIdFileTree directory)
+	    throws InterruptedException {
+	int phyLoc = 0;
+	for (HashIdFileTree child : directory.getChildren()) {
+	    HashId hashId = child.getHashId();
+	    if (child.isFile()) {
+		if (store.hasFileResults(hashId)) {
+		    CoCoMoValueSet fileResults = (CoCoMoValueSet) store
+			    .readFileResults(hashId);
+		    phyLoc += fileResults.getPhyLOC();
 		}
-		CoCoMoValueSet directoryResults = new CoCoMoValueSet();
-		directoryResults.setAverageSalary(averageSalary, currency);
-		directoryResults.setComplexity(complexity);
-		directoryResults.setSloc(phyLoc);
-		store.storeDirectoryResults(directory.getHashId(), directoryResults);
+	    } else {
+		if (store.hasDirectoryResults(hashId)) {
+		    CoCoMoValueSet directoryResults = (CoCoMoValueSet) store
+			    .readDirectoryResults(hashId);
+		    phyLoc += directoryResults.getPhyLOC();
+		}
+	    }
 	}
+	CoCoMoValueSet directoryResults = new CoCoMoValueSet();
+	directoryResults.setAverageSalary(averageSalary, currency);
+	directoryResults.setComplexity(complexity);
+	directoryResults.setSloc(phyLoc);
+	store.storeDirectoryResults(directory.getHashId(), directoryResults);
+    }
 
-	@Override
-	protected void processProject() throws InterruptedException {
-		// TODO Auto-generated method stub
-	}
+    @Override
+    protected void processProject() throws InterruptedException {
+	// TODO Auto-generated method stub
+    }
 
 }

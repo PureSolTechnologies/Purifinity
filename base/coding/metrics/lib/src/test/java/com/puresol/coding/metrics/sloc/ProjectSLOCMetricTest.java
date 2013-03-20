@@ -39,12 +39,12 @@ public class ProjectSLOCMetricTest {
 
     @Test
     public void testInstance() {
-	assertNotNull(new SLOCEvaluator(analyzer));
+	assertNotNull(new SLOCEvaluator(analyzer, null));
     }
 
     @Test
     public void testInitValues() {
-	SLOCEvaluator metric = new SLOCEvaluator(analyzer);
+	SLOCEvaluator metric = new SLOCEvaluator(analyzer, null);
 	assertSame(analyzer, metric.getAnalysisRun());
 	assertNotNull(metric.getInformation());
 	assertNotNull(metric.getEvaluatedQualityCharacteristics());
