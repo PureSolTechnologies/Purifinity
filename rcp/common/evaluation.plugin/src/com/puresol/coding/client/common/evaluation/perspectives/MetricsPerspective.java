@@ -10,18 +10,22 @@ import com.puresol.coding.client.common.analysis.views.AnalysisRunsView;
 import com.puresol.coding.client.common.analysis.views.AvailableLanguagesView;
 import com.puresol.coding.client.common.evaluation.views.MetricSelectorView;
 import com.puresol.coding.client.common.evaluation.views.MetricsMapView;
+import com.puresol.coding.client.common.evaluation.views.MetricsTableView;
 
 public class MetricsPerspective implements IPerspectiveFactory {
 
     @Override
     public void createInitialLayout(IPageLayout layout) {
-	layout.setEditorAreaVisible(true);
+	layout.setEditorAreaVisible(false);
 
 	layout.addView(AnalysisRunContentView.class.getName(),
 		IPageLayout.LEFT, 0.4f, layout.getEditorArea());
 
 	layout.addView(MetricSelectorView.class.getName(), IPageLayout.TOP,
 		0.3f, layout.getEditorArea());
+
+	layout.addView(MetricsTableView.class.getName(), IPageLayout.BOTTOM,
+		0.3f, MetricSelectorView.class.getName());
 
 	layout.addView(AnalysisProjectsView.class.getName(), IPageLayout.LEFT,
 		0.5f, AnalysisRunContentView.class.getName());

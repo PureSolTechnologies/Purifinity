@@ -10,6 +10,7 @@ import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
@@ -19,11 +20,11 @@ import org.eclipse.ui.part.ViewPart;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.client.common.analysis.views.FileAnalysisSelection;
+import com.puresol.coding.client.common.evaluation.contents.MetricsTableViewer;
 import com.puresol.coding.client.common.evaluation.utils.EvaluationTool;
 import com.puresol.coding.client.common.evaluation.utils.EvaluationsTarget;
 import com.puresol.coding.client.common.ui.actions.RefreshAction;
 import com.puresol.coding.client.common.ui.actions.Refreshable;
-import com.puresol.coding.client.common.ui.components.AreaMapComponent;
 import com.puresol.coding.client.common.ui.components.AreaMapData;
 import com.puresol.coding.evaluation.api.EvaluatorFactory;
 import com.puresol.coding.evaluation.api.EvaluatorStore;
@@ -32,14 +33,15 @@ import com.puresol.coding.evaluation.api.Evaluators;
 import com.puresol.coding.metrics.sloc.SLOCEvaluator;
 import com.puresol.utils.HashId;
 
-public class MetricsMapView extends ViewPart implements Refreshable,
+public class MetricsTableView extends ViewPart implements Refreshable,
 	ISelectionListener, IJobChangeListener, EvaluationsTarget {
 
     private FileAnalysisSelection analysisSelection;
     private Text text;
-    private AreaMapComponent areaMap;
+    private Table table;
+    private MetricsTableViewer viewer;
 
-    public MetricsMapView() {
+    public MetricsTableView() {
     }
 
     /**
@@ -66,13 +68,15 @@ public class MetricsMapView extends ViewPart implements Refreshable,
 	site.getWorkbenchWindow().getSelectionService()
 		.addSelectionListener(this);
 
-	areaMap = new AreaMapComponent(container, SWT.NONE);
+	table = new Table(container, SWT.NONE);
 	FormData fd_areaMap = new FormData();
 	fd_areaMap.top = new FormAttachment(text, 6);
 	fd_areaMap.left = new FormAttachment(text, 0, SWT.LEFT);
 	fd_areaMap.bottom = new FormAttachment(100, -10);
 	fd_areaMap.right = new FormAttachment(100, -10);
-	areaMap.setLayoutData(fd_areaMap);
+	table.setLayoutData(fd_areaMap);
+
+	viewer = new MetricsTableViewer(table);
 
 	AreaMapData c11 = new AreaMapData("Child11", 1.0);
 	AreaMapData c12 = new AreaMapData("Child12", 5.0);
@@ -88,7 +92,6 @@ public class MetricsMapView extends ViewPart implements Refreshable,
 	AreaMapData c2 = new AreaMapData("Child2", 2.0, c21, c22, c23, c24, c25);
 	AreaMapData c3 = new AreaMapData("Child3", 3.0);
 	AreaMapData root = new AreaMapData("Parent", 6.0, c1, c2, c3);
-	areaMap.setData(root);
 
 	initializeToolBar();
 	initializeMenu();

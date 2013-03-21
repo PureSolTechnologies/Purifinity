@@ -46,6 +46,13 @@
       </view>
       <view
             category="com.puresol.coding.client.common.evaluation.Evaluation"
+            class="com.puresol.coding.client.common.evaluation.views.DefectDensityMapView"
+            id="com.puresol.coding.client.common.evaluation.views.DefectDensityMapView"
+            name="Defect Density Map"
+            restorable="true">
+      </view>
+      <view
+            category="com.puresol.coding.client.common.evaluation.Evaluation"
             class="com.puresol.coding.client.common.evaluation.views.EvaluatorSelectorView"
             id="com.puresol.coding.client.common.evaluation.views.EvaluatorSelectorView"
             name="Evaluator Selector"
@@ -60,9 +67,9 @@
       </view>
       <view
             category="com.puresol.coding.client.common.evaluation.Evaluation"
-            class="com.puresol.coding.client.common.evaluation.views.DefectDensityMapView"
-            id="com.puresol.coding.client.common.evaluation.views.DefectDensityMapView"
-            name="Defect Density Map"
+            class="com.puresol.coding.client.common.evaluation.views.MetricsTableView"
+            id="com.puresol.coding.client.common.evaluation.views.MetricsTableView"
+            name="Metrics Table"
             restorable="true">
       </view>
    </extension>
