@@ -27,138 +27,169 @@ import com.puresol.utils.math.MathUtils;
  */
 public class AreaMapComponent extends Canvas implements PaintListener {
 
-    private static final RGB FRAME_COLOR = new RGB(0, 0, 0);
-    private static final int PADDING = 2;
+	private static final RGB FRAME_COLOR = new RGB(0, 0, 0);
+	private static final int PADDING = 2;
 
-    private AreaMapData data = null;
-    private final Map<Rectangle, AreaMapData> tooltipAreas = new HashMap<Rectangle, AreaMapData>();
+	private AreaMapData data = null;
+	private final Map<Rectangle, AreaMapData> tooltipAreas = new HashMap<Rectangle, AreaMapData>();
 
-    public AreaMapComponent(Composite parent, int style) {
-	super(parent, style);
-	Color color = new Color(getDisplay(), 255, 255, 255);
-	try {
-	    setBackground(color);
-	} finally {
-	    color.dispose();
-	}
-	addPaintListener(this);
-	DefaultToolTip toolTip = new DefaultToolTip(this) {
-	    @Override
-	    protected String getText(Event event) {
-		int x = event.x;
-		int y = event.y;
-		AreaMapData data = null;
-		int size = Integer.MAX_VALUE;
-		for (Rectangle r : tooltipAreas.keySet()) {
-		    if (r.contains(x, y)) {
-			int newSize = r.height * r.width;
-			if (size > newSize) {
-			    data = tooltipAreas.get(r);
-			    size = newSize;
+	public AreaMapComponent(Composite parent, int style) {
+		super(parent, style);
+		Color color = new Color(getDisplay(), 255, 255, 255);
+		try {
+			setBackground(color);
+		} finally {
+			color.dispose();
+		}
+		addPaintListener(this);
+		DefaultToolTip toolTip = new DefaultToolTip(this) {
+			@Override
+			protected String getText(Event event) {
+				int x = event.x;
+				int y = event.y;
+				AreaMapData data = null;
+				int size = Integer.MAX_VALUE;
+				for (Rectangle r : tooltipAreas.keySet()) {
+					if (r.contains(x, y)) {
+						int newSize = r.height * r.width;
+						if (size > newSize) {
+							data = tooltipAreas.get(r);
+							size = newSize;
+						}
+					}
+				}
+				if (data == null) {
+					return super.getText(event);
+				} else {
+					return data.getName();
+				}
 			}
-		    }
+		};
+		toolTip.setHideDelay(0);
+		toolTip.setPopupDelay(0);
+		toolTip.setShift(new Point(10, 10));
+		toolTip.setText("Hello, Purifinity!");
+	}
+
+	public void setData(AreaMapData data) {
+		this.data = data;
+		redraw();
+		update();
+	}
+
+	@Override
+	public void paintControl(PaintEvent event) {
+		GC context = event.gc;
+		Point size = getSize();
+		tooltipAreas.clear();
+		drawAreas(context, data, 0, 0, size.x - 1, size.y - 1);
+	}
+
+	private void drawAreas(GC context, AreaMapData area, int left, int top,
+			int right, int bottom) {
+		registerToolTipArea(area, left, top, right, bottom);
+
+		drawArea(context, left, top, right, bottom);
+
+		List<AreaMapData> areaChildren = area.getChildren();
+		if (areaChildren.size() == 0) {
+			return;
 		}
-		if (data == null) {
-		    return super.getText(event);
+
+		/*
+		 * Adjust internal frame...
+		 */
+		left += PADDING;
+		top += PADDING;
+		right -= PADDING;
+		bottom -= PADDING;
+
+		int width = right - left + 1;
+		int height = bottom - top + 1;
+
+		if (Math.min(width, height) < 3 * PADDING) {
+			// The area is too small to show something meaningful...
+			return;
+		}
+
+		if (width > height) {
+			// horizontal
+			drawHorizontalSplit(context, left, top, bottom, width, areaChildren);
 		} else {
-		    return data.getName();
+			// vertical
+			drawVerticalSplit(context, left, top, right, height, areaChildren);
 		}
-	    }
-	};
-	toolTip.setHideDelay(0);
-	toolTip.setPopupDelay(0);
-	toolTip.setShift(new Point(10, 10));
-	toolTip.setText("Hello, Purifinity!");
-    }
+	}
 
-    public void setData(AreaMapData data) {
-	this.data = data;
-	redraw();
-	update();
-    }
+	private void registerToolTipArea(AreaMapData area, int left, int top,
+			int right, int bottom) {
+		Rectangle rectangle = new Rectangle(left, top, right - left + 1, bottom
+				- top + 1);
+		tooltipAreas.put(rectangle, area);
+	}
 
-    @Override
-    public void paintControl(PaintEvent event) {
-	GC context = event.gc;
-	Point size = getSize();
-	tooltipAreas.clear();
-	drawAreas(context, data, 0, 0, size.x - 1, size.y - 1);
-    }
+	private double[] areaRatios(List<AreaMapData> areaChildren) {
+		double values[] = new double[areaChildren.size()];
+		for (int i = 0; i < areaChildren.size(); i++) {
+			AreaMapData child = areaChildren.get(i);
+			values[i] = child.getValue();
+		}
+		return values;
+	}
 
-    private void drawAreas(GC context, AreaMapData area, int left, int top,
-	    int right, int bottom) {
-	tooltipAreas.put(new Rectangle(left, top, right - left + 1, bottom
-		- top + 1), area);
-	Color color = new Color(context.getDevice(), FRAME_COLOR);
-	try {
-	    context.setForeground(color);
-	    context.drawLine(left, top, right, top);
-	    context.drawLine(right, top, right, bottom);
-	    context.drawLine(left, bottom, right, bottom);
-	    context.drawLine(left, top, left, bottom);
+	private void drawArea(GC context, int left, int top, int right, int bottom) {
+		Color color = new Color(context.getDevice(), FRAME_COLOR);
+		try {
+			context.setForeground(color);
+			context.drawLine(left, top, right, top);
+			context.drawLine(right, top, right, bottom);
+			context.drawLine(left, bottom, right, bottom);
+			context.drawLine(left, top, left, bottom);
+		} finally {
+			color.dispose();
+		}
+	}
 
-	    left += PADDING;
-	    top += PADDING;
-	    right -= PADDING;
-	    bottom -= PADDING;
+	private void drawAreasDouble(GC context, AreaMapData area, double left,
+			double top, double right, double bottom) {
+		drawAreas(context, area, (int) Math.round(left), (int) Math.round(top),
+				(int) Math.round(right), (int) Math.round(bottom));
+	}
 
-	    int width = right - left + 1;
-	    int height = bottom - top + 1;
-
-	    if (Math.min(width, height) < 5) {
-		// The area is too small to show something meaningful...
-		return;
-	    }
-
-	    List<AreaMapData> areaChildren = area.getChildren();
-	    if (areaChildren.size() == 0) {
-		return;
-	    }
-	    double values[] = new double[areaChildren.size()];
-	    for (int i = 0; i < areaChildren.size(); i++) {
-		AreaMapData child = areaChildren.get(i);
-		values[i] = child.getValue();
-	    }
-
-	    if (width > height) {
-		// horizontal
+	private void drawHorizontalSplit(GC context, int left, int top, int bottom,
+			int width, List<AreaMapData> areaChildren) {
+		double[] values = areaRatios(areaChildren);
 		long[] sizes = MathUtils.allocate(width, values);
 		int position = left;
 		for (int i = 0; i < values.length; i++) {
-		    int size = (int) sizes[i];
-		    AreaMapData child = areaChildren.get(i);
-		    drawAreasDouble(context, child, //
-			    position + PADDING,//
-			    top + PADDING, //
-			    position + size - 1 - PADDING,//
-			    bottom - PADDING//
-		    );
-		    position += size;
+			int size = (int) sizes[i];
+			AreaMapData child = areaChildren.get(i);
+			drawAreasDouble(context, child, //
+					position + PADDING,//
+					top + PADDING, //
+					position + size - 1 - PADDING,//
+					bottom - PADDING//
+			);
+			position += size;
 		}
-	    } else {
-		// vertical
+	}
+
+	private void drawVerticalSplit(GC context, int left, int top, int right,
+			int height, List<AreaMapData> areaChildren) {
+		double[] values = areaRatios(areaChildren);
 		long[] sizes = MathUtils.allocate(height, values);
 		int position = top;
 		for (int i = 0; i < values.length; i++) {
-		    AreaMapData child = areaChildren.get(i);
-		    int size = (int) sizes[i];
-		    drawAreasDouble(context, child, //
-			    left + PADDING, //
-			    position + PADDING, //
-			    right - PADDING, //
-			    position + size - 1 - PADDING//
-		    );
-		    position += size;
+			AreaMapData child = areaChildren.get(i);
+			int size = (int) sizes[i];
+			drawAreasDouble(context, child, //
+					left + PADDING, //
+					position + PADDING, //
+					right - PADDING, //
+					position + size - 1 - PADDING//
+			);
+			position += size;
 		}
-	    }
-	} finally {
-	    color.dispose();
 	}
-    }
 
-    private void drawAreasDouble(GC context, AreaMapData area, double left,
-	    double top, double right, double bottom) {
-	drawAreas(context, area, (int) Math.round(left), (int) Math.round(top),
-		(int) Math.round(right), (int) Math.round(bottom));
-    }
 }
