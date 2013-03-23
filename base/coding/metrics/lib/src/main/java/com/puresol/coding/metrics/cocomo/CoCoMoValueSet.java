@@ -5,8 +5,10 @@ import java.util.List;
 
 import com.puresol.coding.evaluation.api.DirectoryResults;
 import com.puresol.coding.evaluation.api.FileResults;
+import com.puresol.coding.evaluation.api.MetricValue;
 import com.puresol.coding.evaluation.api.ProjectResults;
-import com.puresol.coding.evaluation.impl.Result;
+import com.puresol.utils.math.LevelOfMeasurement;
+import com.puresol.utils.math.ParameterWithArbitraryUnit;
 
 public class CoCoMoValueSet implements ProjectResults, DirectoryResults,
 	FileResults {
@@ -28,11 +30,20 @@ public class CoCoMoValueSet implements ProjectResults, DirectoryResults,
     private double averageSalary;
     private String currency;
 
-    private final List<Result> results = new ArrayList<Result>();
+    private final List<MetricValue> results = new ArrayList<MetricValue>();
+
+    private ParameterWithArbitraryUnit<Double> kslocParameter;
+    private ParameterWithArbitraryUnit<Double> personMonthParameter;
+    private ParameterWithArbitraryUnit<Double> personYearsParameter;
+    private ParameterWithArbitraryUnit<Double> scheduledMonthParameter;
+    private ParameterWithArbitraryUnit<Double> scheduledYearsParameter;
+    private ParameterWithArbitraryUnit<Double> teamSizeParameter;
+    private ParameterWithArbitraryUnit<Double> estimatedCostsParameter;
 
     public CoCoMoValueSet() {
 	setComplexity(Complexity.LOW);
 	setAverageSalary(56286, "$");
+	refreshParameters();
     }
 
     /**
@@ -176,6 +187,7 @@ public class CoCoMoValueSet implements ProjectResults, DirectoryResults,
 
     private void refresh() {
 	calculate();
+	refreshParameters();
 	recreateResultsList();
     }
 
@@ -191,28 +203,46 @@ public class CoCoMoValueSet implements ProjectResults, DirectoryResults,
 		* 100.0) / 100.0;
     }
 
-    private void recreateResultsList() {
-	results.clear();
-	results.add(new Result("Total Physical Source Lines of Code",
-		"kSLOC = SLOC / 1000", ksloc, "kSLOC"));
-	results.add(new Result("Development Effort Estimate",
+    private void refreshParameters() {
+	kslocParameter = new ParameterWithArbitraryUnit<Double>(
+		"Total Physical Source Lines of Code", "kSLOC",
+		LevelOfMeasurement.RATIO, "kSLOC = SLOC / 1000", Double.class);
+	personMonthParameter = new ParameterWithArbitraryUnit<Double>(
+		"Development Effort Estimate", "Person-Months",
+		LevelOfMeasurement.RATIO,
 		"Basic COCOMO model, Person-Months = " + c1 + " * (KSLOC**"
 			+ c2 + ") / " + complexity.name() + " complexity",
-		personMonth, "Person-Months"));
-	results.add(new Result("Development Effort Estimate",
-		"Person-Years = Person-Month / 12", personYears, "Person-Years"));
-	results.add(new Result("Schedule Estimate",
+		Double.class);
+	personYearsParameter = new ParameterWithArbitraryUnit<Double>(
+		"Development Effort Estimate", "Person-Years",
+		LevelOfMeasurement.RATIO,
+		"Person-Years = Person-Month / (12 Month / Year)", Double.class);
+	scheduledMonthParameter = new ParameterWithArbitraryUnit<Double>(
+		"Schedule Estimate", "Months", LevelOfMeasurement.RATIO,
 		"Basic COCOMO model, Months = 2.5 * (person-months**" + c3
 			+ ") / " + complexity.name() + " complexity",
-		scheduledMonth, "Months"));
-	results.add(new Result("Schedule Estimate", "Years = Months / 12",
-		scheduledYears, "Years"));
-	results.add(new Result("Estimated Average Number of Developers",
-		"Effort/Schedule", teamSize, ""));
-	results.add(new Result("Total Estimated Cost to Develop",
-		"average salary = " + averageSalary + currency
-			+ "/year, overhead = 2.40", estimatedCosts, "k"
-			+ currency));
+		Double.class);
+	scheduledYearsParameter = new ParameterWithArbitraryUnit<Double>(
+		"Schedule Estimate", "Years", LevelOfMeasurement.RATIO,
+		"Years = Months / 12", Double.class);
+	teamSizeParameter = new ParameterWithArbitraryUnit<Double>(
+		"Estimated Average Number of Developers", "",
+		LevelOfMeasurement.RATIO, "Effort/Schedule", Double.class);
+	estimatedCostsParameter = new ParameterWithArbitraryUnit<Double>(
+		"Total Estimated Cost to Develop", "k" + currency,
+		LevelOfMeasurement.RATIO, "average salary = " + averageSalary
+			+ currency + "/year, overhead = 2.40", Double.class);
+    }
+
+    private void recreateResultsList() {
+	results.clear();
+	results.add(new MetricValue(ksloc, kslocParameter));
+	results.add(new MetricValue(personMonth, personMonthParameter));
+	results.add(new MetricValue(personYears, personYearsParameter));
+	results.add(new MetricValue(scheduledMonth, scheduledMonthParameter));
+	results.add(new MetricValue(scheduledYears, scheduledYearsParameter));
+	results.add(new MetricValue(teamSize, teamSizeParameter));
+	results.add(new MetricValue(estimatedCosts, estimatedCostsParameter));
     }
 
     @Override
@@ -238,7 +268,8 @@ public class CoCoMoValueSet implements ProjectResults, DirectoryResults,
 	return text;
     }
 
-    public List<Result> getResults() {
+    @Override
+    public List<MetricValue> getResults() {
 	return results;
     }
 
