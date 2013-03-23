@@ -21,7 +21,7 @@ import com.puresol.coding.metrics.mccabe.McCabeMetricFileResult;
 import com.puresol.coding.metrics.mccabe.McCabeMetricFileResults;
 import com.puresol.coding.metrics.sloc.SLOCEvaluator;
 import com.puresol.coding.metrics.sloc.SLOCFileResult;
-import com.puresol.coding.metrics.sloc.SLOCFileResults;
+import com.puresol.coding.metrics.sloc.SLOCResults;
 import com.puresol.coding.metrics.sloc.SLOCResult;
 import com.puresol.utils.HashId;
 
@@ -63,7 +63,7 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 
 	AnalyzedCode analyzedFile = analysis.getAnalyzedFile();
 	HashId hashId = analyzedFile.getHashId();
-	SLOCFileResults slocFileResults = (SLOCFileResults) slocStore
+	SLOCResults slocFileResults = (SLOCResults) slocStore
 		.readFileResults(hashId);
 	McCabeMetricFileResults mcCabeFileResults = (McCabeMetricFileResults) mcCabeStore
 		.readFileResults(hashId);
@@ -119,7 +119,7 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 	return null;
     }
 
-    private SLOCFileResult findFileResult(SLOCFileResults slocFileResults,
+    private SLOCFileResult findFileResult(SLOCResults slocFileResults,
 	    CodeRange codeRange) {
 	for (SLOCFileResult t : slocFileResults) {
 	    if ((t.getCodeRangeType() == codeRange.getType())

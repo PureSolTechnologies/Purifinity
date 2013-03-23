@@ -23,7 +23,7 @@ import com.puresol.coding.evaluation.api.QualityCharacteristic;
 import com.puresol.coding.evaluation.impl.AbstractEvaluator;
 import com.puresol.coding.metrics.sloc.SLOCEvaluator;
 import com.puresol.coding.metrics.sloc.SLOCFileResult;
-import com.puresol.coding.metrics.sloc.SLOCFileResults;
+import com.puresol.coding.metrics.sloc.SLOCResults;
 import com.puresol.utils.HashId;
 
 /**
@@ -79,7 +79,7 @@ public class CoCoMoEvaluator extends AbstractEvaluator {
     protected void processFile(CodeAnalysis analysis) {
 	HashId hashId = analysis.getAnalyzedFile().getHashId();
 	if (slocStore.hasFileResults(hashId)) {
-	    SLOCFileResults slocFileResults = (SLOCFileResults) slocStore
+	    SLOCResults slocFileResults = (SLOCResults) slocStore
 		    .readFileResults(hashId);
 	    for (SLOCFileResult results : slocFileResults) {
 		if (results.getCodeRangeType() == CodeRangeType.FILE) {

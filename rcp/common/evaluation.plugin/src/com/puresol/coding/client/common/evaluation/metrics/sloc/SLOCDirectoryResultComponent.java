@@ -15,8 +15,8 @@ import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.evaluation.api.EvaluatorStore;
 import com.puresol.coding.evaluation.api.EvaluatorStoreFactory;
 import com.puresol.coding.metrics.sloc.SLOCDirectoryResult;
-import com.puresol.coding.metrics.sloc.SLOCDirectoryResults;
 import com.puresol.coding.metrics.sloc.SLOCEvaluator;
+import com.puresol.coding.metrics.sloc.SLOCResults;
 
 public class SLOCDirectoryResultComponent extends Composite {
 
@@ -35,7 +35,7 @@ public class SLOCDirectoryResultComponent extends Composite {
 		EvaluatorStore evaluatorStore = EvaluatorStoreFactory.getFactory()
 				.createInstance(SLOCEvaluator.class);
 
-		SLOCDirectoryResults directoryResults = (SLOCDirectoryResults) evaluatorStore
+		SLOCResults directoryResults = (SLOCResults) evaluatorStore
 				.readDirectoryResults(directory.getHashId());
 
 		Table table = new Table(this, SWT.BORDER | SWT.V_SCROLL

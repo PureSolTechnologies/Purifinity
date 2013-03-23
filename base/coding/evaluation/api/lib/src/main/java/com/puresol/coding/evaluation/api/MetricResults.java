@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * @author Rick-Rainer Ludwig
  */
-public interface FileResults extends Serializable {
+public interface MetricResults extends Serializable {
 
     List<MetricValue> getResults();
 

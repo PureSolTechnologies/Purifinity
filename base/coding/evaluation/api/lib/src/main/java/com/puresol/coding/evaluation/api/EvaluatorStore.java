@@ -24,7 +24,7 @@ public interface EvaluatorStore {
 	 * @param hashId
 	 * @param results
 	 */
-	public void storeFileResults(HashId hashId, FileResults results);
+	public void storeFileResults(HashId hashId, MetricResults results);
 
 	/**
 	 * This method stores the results for a single directory.
@@ -32,7 +32,7 @@ public interface EvaluatorStore {
 	 * @param hashId
 	 * @param results
 	 */
-	public void storeDirectoryResults(HashId hashId, DirectoryResults results);
+	public void storeDirectoryResults(HashId hashId, MetricResults results);
 
 	/**
 	 * This method stores the results for a whole project.
@@ -49,7 +49,7 @@ public interface EvaluatorStore {
 	 * @param hashId
 	 * @param results
 	 */
-	public FileResults readFileResults(HashId hashId);
+	public MetricResults readFileResults(HashId hashId);
 
 	/**
 	 * This method reads the results for a single directory.
@@ -57,7 +57,7 @@ public interface EvaluatorStore {
 	 * @param hashId
 	 * @param results
 	 */
-	public DirectoryResults readDirectoryResults(HashId hashId);
+	public MetricResults readDirectoryResults(HashId hashId);
 
 	/**
 	 * This method reads the results for a whole project.
