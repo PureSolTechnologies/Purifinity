@@ -29,7 +29,7 @@ public class McCabeMetricEvaluator extends AbstractEvaluator {
     @Override
     protected void processFile(CodeAnalysis analysis)
 	    throws InterruptedException, EvaluationException {
-	McCabeMetricFileResults results = new McCabeMetricFileResults();
+	McCabeMetricResults results = new McCabeMetricResults();
 	ProgrammingLanguages programmingLanguages = ProgrammingLanguages
 		.createInstance();
 	try {
@@ -40,7 +40,7 @@ public class McCabeMetricEvaluator extends AbstractEvaluator {
 		McCabeMetric metric = new McCabeMetric(getAnalysisRun(),
 			language, codeRange);
 		execute(metric);
-		results.add(new McCabeMetricFileResult(analysis
+		results.add(new McCabeMetricResult(analysis
 			.getAnalyzedFile().getSourceLocation(), codeRange
 			.getType(), codeRange.getName(), metric
 			.getCyclomaticNumber(), metric.getQuality()));

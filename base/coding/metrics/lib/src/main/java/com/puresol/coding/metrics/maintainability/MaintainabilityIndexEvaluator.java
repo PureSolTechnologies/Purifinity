@@ -17,8 +17,8 @@ import com.puresol.coding.metrics.halstead.HalsteadMetricFileResult;
 import com.puresol.coding.metrics.halstead.HalsteadMetricFileResults;
 import com.puresol.coding.metrics.halstead.HalsteadResult;
 import com.puresol.coding.metrics.mccabe.McCabeMetricEvaluator;
-import com.puresol.coding.metrics.mccabe.McCabeMetricFileResult;
-import com.puresol.coding.metrics.mccabe.McCabeMetricFileResults;
+import com.puresol.coding.metrics.mccabe.McCabeMetricResult;
+import com.puresol.coding.metrics.mccabe.McCabeMetricResults;
 import com.puresol.coding.metrics.sloc.SLOCEvaluator;
 import com.puresol.coding.metrics.sloc.SLOCMetric;
 import com.puresol.coding.metrics.sloc.SLOCResult;
@@ -65,7 +65,7 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 		HashId hashId = analyzedFile.getHashId();
 		SLOCResults slocFileResults = (SLOCResults) slocStore
 				.readFileResults(hashId);
-		McCabeMetricFileResults mcCabeFileResults = (McCabeMetricFileResults) mcCabeStore
+		McCabeMetricResults mcCabeFileResults = (McCabeMetricResults) mcCabeStore
 				.readFileResults(hashId);
 		HalsteadMetricFileResults halsteadFileResults = (HalsteadMetricFileResults) halsteadStore
 				.readFileResults(hashId);
@@ -73,7 +73,7 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 		for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
 			SLOCResult slocCodeRangeResult = findFileResult(slocFileResults,
 					codeRange);
-			McCabeMetricFileResult mcCabeCodeRangeResult = findFileResult(
+			McCabeMetricResult mcCabeCodeRangeResult = findFileResult(
 					mcCabeFileResults, codeRange);
 			HalsteadMetricFileResult halsteadCodeRangeResult = findFileResult(
 					halsteadFileResults, codeRange);
@@ -97,9 +97,9 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 		store.storeFileResults(hashId, results);
 	}
 
-	private McCabeMetricFileResult findFileResult(
-			McCabeMetricFileResults mcCabeFileResults, CodeRange codeRange) {
-		for (McCabeMetricFileResult t : mcCabeFileResults) {
+	private McCabeMetricResult findFileResult(
+			McCabeMetricResults mcCabeFileResults, CodeRange codeRange) {
+		for (McCabeMetricResult t : mcCabeFileResults.getResults()) {
 			if ((t.getCodeRangeType() == codeRange.getType())
 					&& (t.getCodeRangeName().equals(codeRange.getName()))) {
 				return t;

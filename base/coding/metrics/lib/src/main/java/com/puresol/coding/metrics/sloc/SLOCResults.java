@@ -6,9 +6,12 @@ import java.util.List;
 import java.util.Map;
 
 import com.puresol.coding.analysis.api.CodeRangeType;
+import com.puresol.coding.evaluation.api.CodeRangeNameParameter;
+import com.puresol.coding.evaluation.api.CodeRangeTypeParameter;
 import com.puresol.coding.evaluation.api.MetricResults;
+import com.puresol.coding.evaluation.api.SourceCodeLocationParameter;
 import com.puresol.coding.evaluation.api.SourceCodeQuality;
-import com.puresol.coding.evaluation.api.SourceCodeQualityValue;
+import com.puresol.coding.evaluation.api.SourceCodeQualityParameter;
 import com.puresol.uhura.source.CodeLocation;
 import com.puresol.utils.math.GeneralValue;
 import com.puresol.utils.math.LevelOfMeasurement;
@@ -23,15 +26,12 @@ public class SLOCResults implements MetricResults {
 
 	private final List<SLOCResult> results = new ArrayList<SLOCResult>();
 
-	private final ParameterWithArbitraryUnit<CodeLocation> sourceCodeLocationParameter = new ParameterWithArbitraryUnit<CodeLocation>(
-			"Location", "", LevelOfMeasurement.NOMINAL,
-			"Location of source code.", CodeLocation.class);
-	private final ParameterWithArbitraryUnit<CodeRangeType> codeRangeTypeParameter = new ParameterWithArbitraryUnit<CodeRangeType>(
-			"Type of Code Range", "", LevelOfMeasurement.NOMINAL,
-			"Type of evaluated code range.", CodeRangeType.class);
-	private final ParameterWithArbitraryUnit<String> codeRangeNameParameter = new ParameterWithArbitraryUnit<String>(
-			"Name of Code Range", "", LevelOfMeasurement.NOMINAL,
-			"The name of the evaluated code range.", String.class);
+	private final ParameterWithArbitraryUnit<CodeLocation> sourceCodeLocationParameter = SourceCodeLocationParameter
+			.getInstance();
+	private final ParameterWithArbitraryUnit<CodeRangeType> codeRangeTypeParameter = CodeRangeTypeParameter
+			.getInstance();
+	private final ParameterWithArbitraryUnit<String> codeRangeNameParameter = CodeRangeNameParameter
+			.getInstance();
 
 	private final ParameterWithArbitraryUnit<Integer> phyLOCParameter = new ParameterWithArbitraryUnit<Integer>(
 			"phyLOC", "", LevelOfMeasurement.RATIO,
@@ -62,7 +62,8 @@ public class SLOCResults implements MetricResults {
 			"stdDevLineLength", "", LevelOfMeasurement.RATIO,
 			"Standard deviation of source code line length.", Double.class);
 
-	private final ParameterWithArbitraryUnit<SourceCodeQuality> qualityParameter = SourceCodeQualityValue.PARAMETER;
+	private final ParameterWithArbitraryUnit<SourceCodeQuality> qualityParameter = SourceCodeQualityParameter
+			.getInstance();
 
 	public void add(SLOCResult result) {
 		results.add(result);

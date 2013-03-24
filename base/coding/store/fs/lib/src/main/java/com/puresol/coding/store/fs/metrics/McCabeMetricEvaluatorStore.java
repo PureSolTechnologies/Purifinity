@@ -5,7 +5,7 @@ import java.io.File;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.evaluation.api.MetricResults;
 import com.puresol.coding.metrics.cocomo.CoCoMoResults;
-import com.puresol.coding.metrics.mccabe.McCabeMetricFileResults;
+import com.puresol.coding.metrics.mccabe.McCabeMetricResults;
 import com.puresol.coding.store.fs.evaluation.AbstractEvaluatorStore;
 import com.puresol.utils.HashId;
 
@@ -13,7 +13,7 @@ public class McCabeMetricEvaluatorStore extends AbstractEvaluatorStore {
 
 	@Override
 	protected File getFileResultsFile(HashId hashId) {
-		return getFileResultsFile(hashId, McCabeMetricFileResults.class);
+		return getFileResultsFile(hashId, McCabeMetricResults.class);
 	}
 
 	@Override

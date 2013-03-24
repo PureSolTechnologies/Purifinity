@@ -6,7 +6,7 @@ import com.puresol.coding.analysis.api.CodeRangeType;
 import com.puresol.coding.evaluation.api.SourceCodeQuality;
 import com.puresol.uhura.source.CodeLocation;
 
-public class McCabeMetricFileResult implements Serializable {
+public class McCabeMetricResult implements Serializable {
 
 	private static final long serialVersionUID = 2302225864694571092L;
 
@@ -16,7 +16,7 @@ public class McCabeMetricFileResult implements Serializable {
 	private final int cyclomaticComplexity;
 	private final SourceCodeQuality quality;
 
-	public McCabeMetricFileResult(CodeLocation sourceCodeLocation,
+	public McCabeMetricResult(CodeLocation sourceCodeLocation,
 			CodeRangeType codeRangeType, String codeRangeName,
 			int cyclomaticComplexity, SourceCodeQuality quality) {
 		super();
