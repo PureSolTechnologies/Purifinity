@@ -4,7 +4,7 @@ import java.io.File;
 
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.evaluation.api.MetricResults;
-import com.puresol.coding.metrics.codedepth.CodeDepthFileResults;
+import com.puresol.coding.metrics.codedepth.CodeDepthResults;
 import com.puresol.coding.store.fs.evaluation.AbstractEvaluatorStore;
 import com.puresol.utils.HashId;
 
@@ -12,7 +12,7 @@ public class CodeDepthEvaluatorStore extends AbstractEvaluatorStore {
 
 	@Override
 	protected File getFileResultsFile(HashId hashId) {
-		return getFileResultsFile(hashId, CodeDepthFileResults.class);
+		return getFileResultsFile(hashId, CodeDepthResults.class);
 	}
 
 	@Override
@@ -43,7 +43,7 @@ public class CodeDepthEvaluatorStore extends AbstractEvaluatorStore {
 	@Override
 	public MetricResults readFileResults(HashId hashId) {
 		File file = getFileResultsFile(hashId);
-		return restore(file, CodeDepthFileResults.class);
+		return restore(file, CodeDepthResults.class);
 	}
 
 	@Override

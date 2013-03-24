@@ -6,7 +6,7 @@ import com.puresol.coding.analysis.api.CodeRangeType;
 import com.puresol.coding.evaluation.api.SourceCodeQuality;
 import com.puresol.uhura.source.CodeLocation;
 
-public class CodeDepthFileResult implements Serializable {
+public class CodeDepthResult implements Serializable {
 
 	private static final long serialVersionUID = -2731668647369978957L;
 
@@ -16,7 +16,7 @@ public class CodeDepthFileResult implements Serializable {
 	private final int maxDepth;
 	private final SourceCodeQuality quality;
 
-	public CodeDepthFileResult(CodeLocation sourceCodeLocation,
+	public CodeDepthResult(CodeLocation sourceCodeLocation,
 			CodeRangeType codeRangeType, String codeRangeName, int maxDepth,
 			SourceCodeQuality quality) {
 		super();
@@ -27,7 +27,7 @@ public class CodeDepthFileResult implements Serializable {
 		this.quality = quality;
 	}
 
-	public CodeLocation getSourceLocation() {
+	public CodeLocation getSourceCodeLocation() {
 		return sourceCodeLocation;
 	}
 

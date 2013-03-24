@@ -30,7 +30,7 @@ public class CodeDepthEvaluator extends AbstractEvaluator {
     @Override
     protected void processFile(CodeAnalysis analysis)
 	    throws InterruptedException, EvaluationException {
-	CodeDepthFileResults results = new CodeDepthFileResults();
+	CodeDepthResults results = new CodeDepthResults();
 	ProgrammingLanguages programmingLanguages = ProgrammingLanguages
 		.createInstance();
 	try {
@@ -40,7 +40,7 @@ public class CodeDepthEvaluator extends AbstractEvaluator {
 		CodeDepthMetric metric = new CodeDepthMetric(getAnalysisRun(),
 			language, codeRange);
 		execute(metric);
-		results.add(new CodeDepthFileResult(analysis.getAnalyzedFile()
+		results.add(new CodeDepthResult(analysis.getAnalyzedFile()
 			.getSourceLocation(), codeRange.getType(), codeRange
 			.getName(), metric.getMaxDepth(), metric.getQuality()));
 	    }

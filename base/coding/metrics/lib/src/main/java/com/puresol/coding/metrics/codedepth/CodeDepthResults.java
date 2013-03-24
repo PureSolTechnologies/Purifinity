@@ -1,4 +1,4 @@
-package com.puresol.coding.metrics.mccabe;
+package com.puresol.coding.metrics.codedepth;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,11 +19,11 @@ import com.puresol.utils.math.Parameter;
 import com.puresol.utils.math.ParameterWithArbitraryUnit;
 import com.puresol.utils.math.Value;
 
-public class McCabeMetricResults implements MetricResults {
+public class CodeDepthResults implements MetricResults {
 
-	private final List<McCabeMetricResult> results = new ArrayList<McCabeMetricResult>();
+	private static final long serialVersionUID = 5885874850811986090L;
 
-	private static final long serialVersionUID = -5992363758018121695L;
+	private final List<CodeDepthResult> results = new ArrayList<CodeDepthResult>();
 
 	private final ParameterWithArbitraryUnit<CodeLocation> sourceCodeLocationParameter = SourceCodeLocationParameter
 			.getInstance();
@@ -31,18 +31,13 @@ public class McCabeMetricResults implements MetricResults {
 			.getInstance();
 	private final ParameterWithArbitraryUnit<String> codeRangeNameParameter = CodeRangeNameParameter
 			.getInstance();
-	private final ParameterWithArbitraryUnit<Integer> vGParameter = new ParameterWithArbitraryUnit<Integer>(
-			"v(G)", "", LevelOfMeasurement.RATIO,
-			"McCabe's cyclomatic complexity for evaluated code range.",
-			Integer.class);
+	private final ParameterWithArbitraryUnit<Integer> maxDepthParameter = new ParameterWithArbitraryUnit<Integer>(
+			"maxDepth", "", LevelOfMeasurement.RATIO,
+			"Maximum nesting depth in evaluated code ranges.", Integer.class);
 	private final ParameterWithArbitraryUnit<SourceCodeQuality> qualityParameter = SourceCodeQualityParameter
 			.getInstance();
 
-	public List<McCabeMetricResult> getResults() {
-		return results;
-	}
-
-	public void add(McCabeMetricResult result) {
+	public void add(CodeDepthResult result) {
 		results.add(result);
 	}
 
@@ -52,7 +47,7 @@ public class McCabeMetricResults implements MetricResults {
 		parameters.add(sourceCodeLocationParameter);
 		parameters.add(codeRangeTypeParameter);
 		parameters.add(codeRangeNameParameter);
-		parameters.add(vGParameter);
+		parameters.add(maxDepthParameter);
 		parameters.add(qualityParameter);
 		return parameters;
 	}
@@ -61,7 +56,7 @@ public class McCabeMetricResults implements MetricResults {
 	public List<Map<String, Value<?>>> getValues() {
 		List<Map<String, Value<?>>> values = new ArrayList<Map<String, Value<?>>>();
 
-		for (McCabeMetricResult result : results) {
+		for (CodeDepthResult result : results) {
 			Map<String, Value<?>> row = new HashMap<String, Value<?>>();
 			row.put(sourceCodeLocationParameter.getName(),
 					new GeneralValue<CodeLocation>(result
@@ -72,9 +67,8 @@ public class McCabeMetricResults implements MetricResults {
 							codeRangeTypeParameter));
 			row.put(codeRangeNameParameter.getName(), new GeneralValue<String>(
 					result.getCodeRangeName(), codeRangeNameParameter));
-			row.put(vGParameter.getName(),
-					new GeneralValue<Integer>(result.getCyclomaticComplexity(),
-							vGParameter));
+			row.put(maxDepthParameter.getName(), new GeneralValue<Integer>(
+					result.getMaxDepth(), maxDepthParameter));
 			row.put(qualityParameter.getName(),
 					new GeneralValue<SourceCodeQuality>(result.getQuality(),
 							qualityParameter));
