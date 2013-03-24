@@ -31,7 +31,8 @@ public class MaintainabilityIndexDirectoryResultComponent extends Composite {
 			if (child.isFile()) {
 				MaintainabilityIndexFileResults childResults = (MaintainabilityIndexFileResults) evaluatorStore
 						.readFileResults(child.getHashId());
-				for (MaintainabilityIndexFileResult result : childResults) {
+				for (MaintainabilityIndexFileResult result : childResults
+						.getResults()) {
 					if (result.getCodeRangeType() == CodeRangeType.FILE) {
 						maintainability.put(result
 								.getMaintainabilityIndexResult().getMI(), child
