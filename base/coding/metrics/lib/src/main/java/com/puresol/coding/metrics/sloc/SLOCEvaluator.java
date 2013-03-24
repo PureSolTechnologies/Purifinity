@@ -7,7 +7,6 @@ import org.apache.commons.io.IOUtils;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.CodeAnalysis;
 import com.puresol.coding.analysis.api.CodeRange;
-import com.puresol.coding.analysis.api.CodeRangeType;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.analysis.api.ProgrammingLanguages;
 import com.puresol.coding.evaluation.api.EvaluatorStore;
@@ -60,46 +59,7 @@ public class SLOCEvaluator extends AbstractEvaluator {
 	@Override
 	protected void processDirectory(HashIdFileTree directory)
 			throws InterruptedException {
-		SLOCResults finalResults = new SLOCResults();
-		for (HashIdFileTree child : directory.getChildren()) {
-			if (child.isFile()) {
-				addFileSLOC(finalResults, child);
-			} else {
-				addDirectorySLOC(finalResults, child);
-			}
-		}
-		store.storeDirectoryResults(directory.getHashId(), finalResults);
-	}
-
-	private void addFileSLOC(SLOCResults finalResults, HashIdFileTree child) {
-		if (store.hasFileResults(child.getHashId())) {
-			SLOCResults fileResults = (SLOCResults) store.readFileResults(child
-					.getHashId());
-			for (SLOCFileResult results : fileResults) {
-				if (results.getCodeRangeType() == CodeRangeType.FILE) {
-					finalResults.add(new SLOCDirectoryResult(results
-							.getSourceCodeLocation(), results.getSLOCResult()));
-					break;
-				}
-			}
-		}
-	}
-
-	private void addDirectorySLOC(SLOCResults finalResults, HashIdFileTree child) {
-		throw new RuntimeException("Not implemented, yet!");
-		// if (store.hasDirectoryResults(child.getHashId())) {
-		// SLOCDirectoryResults directoryResults = (SLOCDirectoryResults) store
-		// .readDirectoryResults(child.getHashId());
-		// SLOCResult combinedSLOC = new SLOCResult(0, 0, 0, 0, null);
-		// for (SLOCDirectoryResult results : directoryResults) {
-		// SLOCResult slocResult = results.getSLOCResult();
-		// if (slocResult != null) {
-		// combinedSLOC = SLOCResult.combine(combinedSLOC, slocResult);
-		// }
-		// }
-		// finalResults.add(new SLOCDirectoryResult(child.getName(),
-		// combinedSLOC));
-		// }
+		// TODO
 	}
 
 	@Override
