@@ -55,7 +55,7 @@ public class EntropyMetric extends CodeRangeEvaluator {
 	private final AnalysisRun analysisRun;
 	private final CodeRange codeRange;
 	private final HalsteadMetric halstead;
-	private EntropyResult result;
+	private EntropyMetricResult result;
 
 	public EntropyMetric(AnalysisRun analysisRun, ProgrammingLanguage language,
 			CodeRange codeRange) {
@@ -118,7 +118,7 @@ public class EntropyMetric extends CodeRangeEvaluator {
 					* halstead.getDifferentOperands() / maxEntropy;
 			double normalizedRedundancy = redundancy
 					/ halstead.getDifferentOperands();
-			result = new EntropyResult(halstead.getVocabularySize(),
+			result = new EntropyMetricResult(halstead.getVocabularySize(),
 					halstead.getProgramLength(), entropy, maxEntropy,
 					normEntropy, entropyRedundancy, redundancy,
 					normalizedRedundancy);

@@ -6,7 +6,7 @@ import com.puresol.coding.evaluation.api.SourceCodeQuality;
 public class EntropyQuality {
 
 	public static SourceCodeQuality get(CodeRangeType codeRangeType,
-			EntropyResult result) {
+			EntropyMetricResult result) {
 
 		if ((codeRangeType == CodeRangeType.FILE)
 				|| (codeRangeType == CodeRangeType.CLASS)

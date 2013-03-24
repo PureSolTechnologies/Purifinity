@@ -4,7 +4,7 @@ import java.io.File;
 
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.evaluation.api.MetricResults;
-import com.puresol.coding.metrics.entropy.EntropyFileResults;
+import com.puresol.coding.metrics.entropy.EntropyResults;
 import com.puresol.coding.store.fs.evaluation.AbstractEvaluatorStore;
 import com.puresol.utils.HashId;
 
@@ -12,7 +12,7 @@ public class EntropyEvaluatorStore extends AbstractEvaluatorStore {
 
 	@Override
 	protected File getFileResultsFile(HashId hashId) {
-		return getFileResultsFile(hashId, EntropyFileResults.class);
+		return getFileResultsFile(hashId, EntropyResults.class);
 	}
 
 	@Override
@@ -43,7 +43,7 @@ public class EntropyEvaluatorStore extends AbstractEvaluatorStore {
 	@Override
 	public MetricResults readFileResults(HashId hashId) {
 		File file = getFileResultsFile(hashId);
-		return restore(file, EntropyFileResults.class);
+		return restore(file, EntropyResults.class);
 	}
 
 	@Override

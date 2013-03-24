@@ -168,7 +168,7 @@ public class HalsteadMetric extends CodeRangeEvaluator {
 		return result.getImplementationTime();
 	}
 
-	public double getProgramLength() {
+	public int getProgramLength() {
 		return result.getProgramLength();
 	}
 
@@ -184,7 +184,7 @@ public class HalsteadMetric extends CodeRangeEvaluator {
 		return result.getTotalOperators();
 	}
 
-	public double getVocabularySize() {
+	public int getVocabularySize() {
 		return result.getVocabularySize();
 	}
 

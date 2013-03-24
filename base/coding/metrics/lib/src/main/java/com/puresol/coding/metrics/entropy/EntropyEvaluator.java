@@ -38,7 +38,7 @@ public class EntropyEvaluator extends AbstractEvaluator {
 	HalsteadMetricFileResults halsteadFileResults = (HalsteadMetricFileResults) halsteadStore
 		.readFileResults(hashId);
 
-	EntropyFileResults results = new EntropyFileResults();
+	EntropyResults results = new EntropyResults();
 
 	for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
 	    HalsteadMetricFileResult halsteadFileResult = findFileResult(
@@ -64,12 +64,12 @@ public class EntropyEvaluator extends AbstractEvaluator {
 		    * halstead.getDifferentOperands() / maxEntropy;
 	    double normalizedRedundancy = redundancy
 		    / halstead.getDifferentOperands();
-	    EntropyResult result = new EntropyResult(
+	    EntropyMetricResult result = new EntropyMetricResult(
 		    halstead.getVocabularySize(), halstead.getProgramLength(),
 		    entropy, maxEntropy, normEntropy, entropyRedundancy,
 		    redundancy, normalizedRedundancy);
 
-	    results.add(new EntropyFileResult(analysis.getAnalyzedFile()
+	    results.add(new EntropyResult(analysis.getAnalyzedFile()
 		    .getSourceLocation(), codeRange.getType(), codeRange
 		    .getName(), result, EntropyQuality.get(codeRange.getType(),
 		    result)));
