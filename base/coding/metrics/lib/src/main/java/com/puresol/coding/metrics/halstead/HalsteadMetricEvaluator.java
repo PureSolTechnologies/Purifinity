@@ -30,7 +30,7 @@ public class HalsteadMetricEvaluator extends AbstractEvaluator {
     @Override
     protected void processFile(CodeAnalysis analysis)
 	    throws InterruptedException, EvaluationException {
-	HalsteadMetricFileResults results = new HalsteadMetricFileResults();
+	HalsteadMetricResults results = new HalsteadMetricResults();
 	ProgrammingLanguages programmingLanguages = ProgrammingLanguages
 		.createInstance();
 	try {
@@ -41,7 +41,7 @@ public class HalsteadMetricEvaluator extends AbstractEvaluator {
 		HalsteadMetric metric = new HalsteadMetric(getAnalysisRun(),
 			language, codeRange);
 		execute(metric);
-		results.add(new HalsteadMetricFileResult(analysis
+		results.add(new HalsteadMetricResult(analysis
 			.getAnalyzedFile().getSourceLocation(), codeRange
 			.getType(), codeRange.getName(), metric
 			.getHalsteadResults(), metric.getQuality()));

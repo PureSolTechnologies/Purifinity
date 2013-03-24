@@ -6,7 +6,7 @@ import com.puresol.coding.analysis.api.CodeRangeType;
 import com.puresol.coding.evaluation.api.SourceCodeQuality;
 import com.puresol.uhura.source.CodeLocation;
 
-public class HalsteadMetricFileResult implements Serializable {
+public class HalsteadMetricResult implements Serializable {
 
 	private static final long serialVersionUID = 2302225864694571092L;
 
@@ -16,7 +16,7 @@ public class HalsteadMetricFileResult implements Serializable {
 	private final HalsteadResult halsteadResult;
 	private final SourceCodeQuality quality;
 
-	public HalsteadMetricFileResult(CodeLocation sourceCodeLocation,
+	public HalsteadMetricResult(CodeLocation sourceCodeLocation,
 			CodeRangeType codeRangeType, String codeRangeName,
 			HalsteadResult halsteadResult, SourceCodeQuality quality) {
 		super();

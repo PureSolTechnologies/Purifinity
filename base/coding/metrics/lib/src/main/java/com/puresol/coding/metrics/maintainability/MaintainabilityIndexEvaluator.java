@@ -13,8 +13,8 @@ import com.puresol.coding.evaluation.api.EvaluatorStoreFactory;
 import com.puresol.coding.evaluation.api.QualityCharacteristic;
 import com.puresol.coding.evaluation.impl.AbstractEvaluator;
 import com.puresol.coding.metrics.halstead.HalsteadMetricEvaluator;
-import com.puresol.coding.metrics.halstead.HalsteadMetricFileResult;
-import com.puresol.coding.metrics.halstead.HalsteadMetricFileResults;
+import com.puresol.coding.metrics.halstead.HalsteadMetricResult;
+import com.puresol.coding.metrics.halstead.HalsteadMetricResults;
 import com.puresol.coding.metrics.halstead.HalsteadResult;
 import com.puresol.coding.metrics.mccabe.McCabeMetricEvaluator;
 import com.puresol.coding.metrics.mccabe.McCabeMetricResult;
@@ -67,7 +67,7 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 				.readFileResults(hashId);
 		McCabeMetricResults mcCabeFileResults = (McCabeMetricResults) mcCabeStore
 				.readFileResults(hashId);
-		HalsteadMetricFileResults halsteadFileResults = (HalsteadMetricFileResults) halsteadStore
+		HalsteadMetricResults halsteadFileResults = (HalsteadMetricResults) halsteadStore
 				.readFileResults(hashId);
 
 		for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
@@ -75,7 +75,7 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 					codeRange);
 			McCabeMetricResult mcCabeCodeRangeResult = findFileResult(
 					mcCabeFileResults, codeRange);
-			HalsteadMetricFileResult halsteadCodeRangeResult = findFileResult(
+			HalsteadMetricResult halsteadCodeRangeResult = findFileResult(
 					halsteadFileResults, codeRange);
 
 			SLOCMetric sloc = slocCodeRangeResult.getSLOCMetric();
@@ -108,9 +108,9 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 		return null;
 	}
 
-	private HalsteadMetricFileResult findFileResult(
-			HalsteadMetricFileResults halsteadFileResults, CodeRange codeRange) {
-		for (HalsteadMetricFileResult t : halsteadFileResults) {
+	private HalsteadMetricResult findFileResult(
+			HalsteadMetricResults halsteadFileResults, CodeRange codeRange) {
+		for (HalsteadMetricResult t : halsteadFileResults.getResults()) {
 			if ((t.getCodeRangeType() == codeRange.getType())
 					&& (t.getCodeRangeName().equals(codeRange.getName()))) {
 				return t;

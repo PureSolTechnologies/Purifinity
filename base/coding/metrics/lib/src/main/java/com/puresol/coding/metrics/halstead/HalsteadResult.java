@@ -132,7 +132,7 @@ public class HalsteadResult implements Serializable {
 		return operands;
 	}
 
-	public Map<String, Integer> getOpertors() {
+	public Map<String, Integer> getOperators() {
 		return opertors;
 	}
 

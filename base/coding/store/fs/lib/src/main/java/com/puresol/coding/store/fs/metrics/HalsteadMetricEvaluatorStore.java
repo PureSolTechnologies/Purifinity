@@ -4,7 +4,7 @@ import java.io.File;
 
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.evaluation.api.MetricResults;
-import com.puresol.coding.metrics.halstead.HalsteadMetricFileResults;
+import com.puresol.coding.metrics.halstead.HalsteadMetricResults;
 import com.puresol.coding.metrics.sloc.SLOCResults;
 import com.puresol.coding.store.fs.evaluation.AbstractEvaluatorStore;
 import com.puresol.utils.HashId;
@@ -13,7 +13,7 @@ public class HalsteadMetricEvaluatorStore extends AbstractEvaluatorStore {
 
 	@Override
 	protected File getFileResultsFile(HashId hashId) {
-		return getFileResultsFile(hashId, HalsteadMetricFileResults.class);
+		return getFileResultsFile(hashId, HalsteadMetricResults.class);
 	}
 
 	@Override
