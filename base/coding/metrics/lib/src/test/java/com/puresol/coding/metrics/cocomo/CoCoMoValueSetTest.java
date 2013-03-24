@@ -9,12 +9,12 @@ public class CoCoMoValueSetTest {
 
     @Test
     public void testInstance() {
-	assertNotNull(new CoCoMoValueSet());
+	assertNotNull(new CoCoMoResults());
     }
 
     @Test
     public void testDefaultValues() {
-	CoCoMoValueSet set = new CoCoMoValueSet();
+	CoCoMoResults set = new CoCoMoResults();
 	assertEquals(56286, set.getAverageSalary(), 1e-8);
 	assertEquals("$", set.getCurrency());
 	assertEquals(Complexity.LOW, set.getComplexity());
@@ -22,7 +22,7 @@ public class CoCoMoValueSetTest {
 
     @Test
     public void testSetterUndGetter() {
-	CoCoMoValueSet set = new CoCoMoValueSet();
+	CoCoMoResults set = new CoCoMoResults();
 	set.setAverageSalary(12345.67, "EUR");
 	set.setComplexity(Complexity.HIGH);
 	set.setSloc(1234567);
@@ -35,7 +35,7 @@ public class CoCoMoValueSetTest {
 
     @Test
     public void testFormalaConstants() {
-	CoCoMoValueSet set = new CoCoMoValueSet();
+	CoCoMoResults set = new CoCoMoResults();
 	set.setComplexity(Complexity.LOW);
 	assertEquals(2.4, set.getC1(), 1e-8);
 	assertEquals(1.05, set.getC2(), 1e-8);
@@ -54,7 +54,7 @@ public class CoCoMoValueSetTest {
 
     @Test
     public void testCalculation() {
-	CoCoMoValueSet set = new CoCoMoValueSet();
+	CoCoMoResults set = new CoCoMoResults();
 	set.setAverageSalary(50000, "$");
 	set.setComplexity(Complexity.LOW);
 	set.setSloc(100000);

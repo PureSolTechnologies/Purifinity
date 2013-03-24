@@ -4,8 +4,7 @@ import java.io.File;
 
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.evaluation.api.MetricResults;
-import com.puresol.coding.evaluation.api.ProjectResults;
-import com.puresol.coding.metrics.cocomo.CoCoMoValueSet;
+import com.puresol.coding.metrics.cocomo.CoCoMoResults;
 import com.puresol.coding.metrics.mccabe.McCabeMetricFileResults;
 import com.puresol.coding.store.fs.evaluation.AbstractEvaluatorStore;
 import com.puresol.utils.HashId;
@@ -19,12 +18,12 @@ public class McCabeMetricEvaluatorStore extends AbstractEvaluatorStore {
 
 	@Override
 	protected File getDirectoryResultsFile(HashId hashId) {
-		return getDirectoryResultsFile(hashId, CoCoMoValueSet.class);
+		return getDirectoryResultsFile(hashId, CoCoMoResults.class);
 	}
 
 	@Override
 	protected File getProjectResultsFile(AnalysisRun analysisRun) {
-		return getProjectResultsFile(analysisRun, CoCoMoValueSet.class);
+		return getProjectResultsFile(analysisRun, CoCoMoResults.class);
 	}
 
 	@Override
@@ -41,7 +40,7 @@ public class McCabeMetricEvaluatorStore extends AbstractEvaluatorStore {
 
 	@Override
 	public void storeProjectResults(AnalysisRun analysisRun,
-			ProjectResults results) {
+			MetricResults results) {
 		File file = getProjectResultsFile(analysisRun);
 		persist(results, file);
 	}
@@ -49,18 +48,18 @@ public class McCabeMetricEvaluatorStore extends AbstractEvaluatorStore {
 	@Override
 	public MetricResults readFileResults(HashId hashId) {
 		File file = getFileResultsFile(hashId);
-		return restore(file, CoCoMoValueSet.class);
+		return restore(file, CoCoMoResults.class);
 	}
 
 	@Override
 	public MetricResults readDirectoryResults(HashId hashId) {
 		File file = getDirectoryResultsFile(hashId);
-		return restore(file, CoCoMoValueSet.class);
+		return restore(file, CoCoMoResults.class);
 	}
 
 	@Override
-	public ProjectResults readProjectResults(AnalysisRun analysisRun) {
+	public MetricResults readProjectResults(AnalysisRun analysisRun) {
 		File file = getProjectResultsFile(analysisRun);
-		return restore(file, CoCoMoValueSet.class);
+		return restore(file, CoCoMoResults.class);
 	}
 }

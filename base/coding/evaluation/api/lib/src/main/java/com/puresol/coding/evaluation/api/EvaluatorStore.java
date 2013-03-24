@@ -41,7 +41,7 @@ public interface EvaluatorStore {
 	 * @param results
 	 */
 	public void storeProjectResults(AnalysisRun analysisRun,
-			ProjectResults results);
+			MetricResults results);
 
 	/**
 	 * This method reads the results for a single file.
@@ -65,6 +65,6 @@ public interface EvaluatorStore {
 	 * @param hashId
 	 * @param results
 	 */
-	public ProjectResults readProjectResults(AnalysisRun analysisRun);
+	public MetricResults readProjectResults(AnalysisRun analysisRun);
 
 }

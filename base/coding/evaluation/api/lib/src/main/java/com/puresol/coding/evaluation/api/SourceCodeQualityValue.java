@@ -5,7 +5,7 @@ import com.puresol.utils.math.Parameter;
 import com.puresol.utils.math.ParameterWithArbitraryUnit;
 import com.puresol.utils.math.Value;
 
-public class QualityValue implements Value<SourceCodeQuality> {
+public class SourceCodeQualityValue implements Value<SourceCodeQuality> {
 
     public static final ParameterWithArbitraryUnit<SourceCodeQuality> PARAMETER = new ParameterWithArbitraryUnit<SourceCodeQuality>(
 	    "source code quality", "", LevelOfMeasurement.ORDINAL,
@@ -14,7 +14,7 @@ public class QualityValue implements Value<SourceCodeQuality> {
 
     private final SourceCodeQuality quality;
 
-    public QualityValue(SourceCodeQuality quality) {
+    public SourceCodeQualityValue(SourceCodeQuality quality) {
 	super();
 	this.quality = quality;
     }

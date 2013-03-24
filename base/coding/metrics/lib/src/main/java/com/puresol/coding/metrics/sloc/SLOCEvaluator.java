@@ -41,7 +41,7 @@ public class SLOCEvaluator extends AbstractEvaluator {
 				SLOCMetricCalculator metric = new SLOCMetricCalculator(
 						getAnalysisRun(), language, codeRange);
 				execute(metric);
-				results.add(new SLOCFileResult(analysis.getAnalyzedFile()
+				results.add(new SLOCResult(analysis.getAnalyzedFile()
 						.getSourceLocation(), codeRange.getType(), codeRange
 						.getName(), metric.getSLOCResult(), metric.getQuality()));
 			}

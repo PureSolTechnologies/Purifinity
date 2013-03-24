@@ -31,7 +31,7 @@ import com.puresol.coding.evaluation.api.EvaluatorFactory;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class FileMetricsControl extends Composite implements
+public class MetricsControl extends Composite implements
 	ISelectionChangedListener {
 
     private final EvaluatorComboViewer comboViewer;
@@ -41,7 +41,7 @@ public class FileMetricsControl extends Composite implements
 
     private Composite centerComposite = null;
 
-    public FileMetricsControl(Composite parent, int style,
+    public MetricsControl(Composite parent, int style,
 	    AnalysisRun analysisRun, AnalyzedCode analyzedCode) {
 	super(parent, style);
 	this.analysisRun = analysisRun;
@@ -105,7 +105,7 @@ public class FileMetricsControl extends Composite implements
 		if (centerComposite != null) {
 		    centerComposite.dispose();
 		}
-		centerComposite = service.createFileResultComponent(this,
+		centerComposite = service.createResultComponent(this,
 			analysisRun, analyzedCode);
 		centerComposite.setLayoutData(BorderLayout.CENTER);
 		layout();

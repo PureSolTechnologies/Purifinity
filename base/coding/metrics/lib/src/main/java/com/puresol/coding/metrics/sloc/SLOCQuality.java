@@ -6,7 +6,7 @@ import com.puresol.coding.evaluation.api.SourceCodeQuality;
 public class SLOCQuality {
 
 	public static SourceCodeQuality get(CodeRangeType codeRangeType,
-			SLOCResult sloc) {
+			SLOCMetric sloc) {
 		SourceCodeQuality levelLineCount = getQualityLevelLineCount(
 				codeRangeType, sloc);
 		SourceCodeQuality levelLineLength = getQualityLevelLineLength(
@@ -15,7 +15,7 @@ public class SLOCQuality {
 	}
 
 	private static SourceCodeQuality getQualityLevelLineCount(
-			CodeRangeType codeRangeType, SLOCResult sloc) {
+			CodeRangeType codeRangeType, SLOCMetric sloc) {
 		if ((codeRangeType == CodeRangeType.FILE)
 				|| (codeRangeType == CodeRangeType.CLASS)
 				|| (codeRangeType == CodeRangeType.INTERFACE)
@@ -46,7 +46,7 @@ public class SLOCQuality {
 	}
 
 	private static SourceCodeQuality getQualityLevelLineLength(
-			CodeRangeType codeRangeType, SLOCResult sloc) {
+			CodeRangeType codeRangeType, SLOCMetric sloc) {
 		if (sloc.getLineStatistics().getAvg() > 70) {
 			return SourceCodeQuality.LOW;
 		}

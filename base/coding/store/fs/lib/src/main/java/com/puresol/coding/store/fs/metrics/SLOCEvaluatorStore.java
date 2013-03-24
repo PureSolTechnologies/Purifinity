@@ -4,8 +4,6 @@ import java.io.File;
 
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.evaluation.api.MetricResults;
-import com.puresol.coding.evaluation.api.ProjectResults;
-import com.puresol.coding.metrics.sloc.SLOCProjectResults;
 import com.puresol.coding.metrics.sloc.SLOCResults;
 import com.puresol.coding.store.fs.evaluation.AbstractEvaluatorStore;
 import com.puresol.utils.HashId;
@@ -24,7 +22,7 @@ public class SLOCEvaluatorStore extends AbstractEvaluatorStore {
 
 	@Override
 	protected File getProjectResultsFile(AnalysisRun analysisRun) {
-		return getProjectResultsFile(analysisRun, SLOCProjectResults.class);
+		return getProjectResultsFile(analysisRun, SLOCResults.class);
 	}
 
 	@Override
@@ -41,7 +39,7 @@ public class SLOCEvaluatorStore extends AbstractEvaluatorStore {
 
 	@Override
 	public void storeProjectResults(AnalysisRun analysisRun,
-			ProjectResults results) {
+			MetricResults results) {
 		File file = getProjectResultsFile(analysisRun);
 		persist(results, file);
 	}
@@ -59,8 +57,8 @@ public class SLOCEvaluatorStore extends AbstractEvaluatorStore {
 	}
 
 	@Override
-	public ProjectResults readProjectResults(AnalysisRun analysisRun) {
+	public MetricResults readProjectResults(AnalysisRun analysisRun) {
 		File file = getProjectResultsFile(analysisRun);
-		return restore(file, SLOCProjectResults.class);
+		return restore(file, SLOCResults.class);
 	}
 }

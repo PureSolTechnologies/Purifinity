@@ -4,7 +4,6 @@ import java.io.File;
 
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.evaluation.api.MetricResults;
-import com.puresol.coding.evaluation.api.ProjectResults;
 import com.puresol.coding.metrics.normmaint.NormalizedMaintainabilityIndexFileResults;
 import com.puresol.coding.store.fs.evaluation.AbstractEvaluatorStore;
 import com.puresol.utils.HashId;
@@ -40,7 +39,7 @@ public class NormalizedMaintainabilityIndexEvaluatorStore extends
 
 	@Override
 	public void storeProjectResults(AnalysisRun analysisRun,
-			ProjectResults results) {
+			MetricResults results) {
 	}
 
 	@Override
@@ -55,7 +54,7 @@ public class NormalizedMaintainabilityIndexEvaluatorStore extends
 	}
 
 	@Override
-	public ProjectResults readProjectResults(AnalysisRun analysisRun) {
+	public MetricResults readProjectResults(AnalysisRun analysisRun) {
 		return null;
 	}
 }

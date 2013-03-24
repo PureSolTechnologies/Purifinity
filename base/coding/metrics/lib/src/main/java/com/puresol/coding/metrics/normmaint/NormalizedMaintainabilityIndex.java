@@ -32,7 +32,7 @@ import com.puresol.coding.lang.api.ProgrammingLanguage;
 import com.puresol.coding.metrics.halstead.HalsteadMetric;
 import com.puresol.coding.metrics.mccabe.McCabeMetric;
 import com.puresol.coding.metrics.sloc.SLOCMetricCalculator;
-import com.puresol.coding.metrics.sloc.SLOCResult;
+import com.puresol.coding.metrics.sloc.SLOCMetric;
 import com.puresol.uhura.ust.eval.EvaluationException;
 
 public class NormalizedMaintainabilityIndex extends CodeRangeEvaluator {
@@ -105,7 +105,7 @@ public class NormalizedMaintainabilityIndex extends CodeRangeEvaluator {
 			execute(halsteadMetric);
 			fireUpdateWork("Finished Halstead metric.", 1);
 
-			SLOCResult sloc = slocMetric.getSLOCResult();
+			SLOCMetric sloc = slocMetric.getSLOCResult();
 			double MIwoc = 171.0 - 5.2
 					* Math.log(halsteadMetric.getHalsteadVolume()) - 0.23
 					* mcCabeMetric.getCyclomaticNumber() - 16.2

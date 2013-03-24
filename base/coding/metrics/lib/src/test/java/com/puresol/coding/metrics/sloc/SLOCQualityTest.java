@@ -19,7 +19,7 @@ public class SLOCQualityTest {
 		list.add(0.0);
 		list.add(10.0);
 		list.add(20.0);
-		SLOCResult result = new SLOCResult(10, 5, 5, 5, new Statistics(list));
+		SLOCMetric result = new SLOCMetric(10, 5, 5, 5, new Statistics(list));
 		for (CodeRangeType type : CodeRangeType.class.getEnumConstants()) {
 			if (SLOCQuality.get(type, result) == SourceCodeQuality.UNSPECIFIED) {
 				fail("No source code quality check for code range type '"

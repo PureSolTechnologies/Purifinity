@@ -87,7 +87,7 @@ public class SLOCMetricCalculator extends CodeRangeEvaluator {
 	}
 
 	private final List<LineResults> lineResults = new ArrayList<LineResults>();
-	private SLOCResult sloc;
+	private SLOCMetric sloc;
 
 	private final AnalysisRun analysisRun;
 	private final CodeRange codeRange;
@@ -184,7 +184,7 @@ public class SLOCMetricCalculator extends CodeRangeEvaluator {
 			phyLOC++;
 			lineLengths.add((double) lineResult.getLength());
 		}
-		sloc = new SLOCResult(phyLOC, proLOC, comLOC, blLOC, new Statistics(
+		sloc = new SLOCMetric(phyLOC, proLOC, comLOC, blLOC, new Statistics(
 				lineLengths));
 	}
 
@@ -195,7 +195,7 @@ public class SLOCMetricCalculator extends CodeRangeEvaluator {
 		System.out.println("blank lines: " + sloc.getBlLOC());
 	}
 
-	public SLOCResult getSLOCResult() {
+	public SLOCMetric getSLOCResult() {
 		return sloc;
 	}
 

@@ -15,7 +15,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-import com.puresol.coding.metrics.cocomo.CoCoMoValueSet;
+import com.puresol.coding.metrics.cocomo.CoCoMoResults;
 import com.puresol.coding.metrics.cocomo.Complexity;
 
 public class CoCoMoResultComponent extends Composite implements ModifyListener,
@@ -27,7 +27,7 @@ public class CoCoMoResultComponent extends Composite implements ModifyListener,
 	private final ComboViewer complexityViewer;
 	private final Text avgSalary;
 	private final Text currency;
-	private CoCoMoValueSet results;
+	private CoCoMoResults results;
 
 	public CoCoMoResultComponent(Composite parent, int style) {
 		super(parent, style);
@@ -64,11 +64,11 @@ public class CoCoMoResultComponent extends Composite implements ModifyListener,
 		font.dispose();
 	}
 
-	public CoCoMoValueSet getResults() {
+	public CoCoMoResults getResults() {
 		return results;
 	}
 
-	public void setResults(CoCoMoValueSet results) {
+	public void setResults(CoCoMoResults results) {
 		this.results = results;
 		String avgSalaray = String.valueOf(results.getAverageSalary());
 		String currency2 = results.getCurrency();

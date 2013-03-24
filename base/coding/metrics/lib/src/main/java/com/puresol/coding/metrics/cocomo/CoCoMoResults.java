@@ -1,15 +1,19 @@
 package com.puresol.coding.metrics.cocomo;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.puresol.coding.evaluation.api.MetricResults;
 import com.puresol.coding.evaluation.api.MetricValue;
-import com.puresol.coding.evaluation.api.ProjectResults;
+import com.puresol.utils.math.GeneralValue;
 import com.puresol.utils.math.LevelOfMeasurement;
+import com.puresol.utils.math.Parameter;
 import com.puresol.utils.math.ParameterWithArbitraryUnit;
+import com.puresol.utils.math.Value;
 
-public class CoCoMoValueSet implements ProjectResults, MetricResults {
+public class CoCoMoResults implements MetricResults {
 
 	private static final long serialVersionUID = 4950771316767641215L;
 
@@ -38,7 +42,7 @@ public class CoCoMoValueSet implements ProjectResults, MetricResults {
 	private ParameterWithArbitraryUnit<Double> teamSizeParameter;
 	private ParameterWithArbitraryUnit<Double> estimatedCostsParameter;
 
-	public CoCoMoValueSet() {
+	public CoCoMoResults() {
 		setComplexity(Complexity.LOW);
 		setAverageSalary(56286, "$");
 		refreshParameters();
@@ -235,6 +239,7 @@ public class CoCoMoValueSet implements ProjectResults, MetricResults {
 	private void recreateResultsList() {
 		results.clear();
 		results.add(new MetricValue(ksloc, kslocParameter));
+		results.add(new MetricValue(ksloc, kslocParameter));
 		results.add(new MetricValue(personMonth, personMonthParameter));
 		results.add(new MetricValue(personYears, personYearsParameter));
 		results.add(new MetricValue(scheduledMonth, scheduledMonthParameter));
@@ -267,8 +272,38 @@ public class CoCoMoValueSet implements ProjectResults, MetricResults {
 	}
 
 	@Override
-	public List<MetricValue> getResults() {
-		return results;
+	public List<Parameter<?>> getParameters() {
+		List<Parameter<?>> parameters = new ArrayList<Parameter<?>>();
+		parameters.add(kslocParameter);
+		parameters.add(personMonthParameter);
+		parameters.add(personYearsParameter);
+		parameters.add(scheduledMonthParameter);
+		parameters.add(scheduledYearsParameter);
+		parameters.add(teamSizeParameter);
+		parameters.add(estimatedCostsParameter);
+		return parameters;
 	}
 
+	@Override
+	public List<Map<String, Value<?>>> getValues() {
+		Map<String, Value<?>> row = new HashMap<String, Value<?>>();
+		row.put(kslocParameter.getName(), new GeneralValue<Double>(ksloc,
+				kslocParameter));
+		row.put(personMonthParameter.getName(), new GeneralValue<Double>(
+				personMonth, personMonthParameter));
+		row.put(personYearsParameter.getName(), new GeneralValue<Double>(
+				personYears, personYearsParameter));
+		row.put(scheduledMonthParameter.getName(), new GeneralValue<Double>(
+				scheduledMonth, scheduledMonthParameter));
+		row.put(scheduledYearsParameter.getName(), new GeneralValue<Double>(
+				scheduledYears, scheduledYearsParameter));
+		row.put(teamSizeParameter.getName(), new GeneralValue<Double>(teamSize,
+				teamSizeParameter));
+		row.put(estimatedCostsParameter.getName(), new GeneralValue<Double>(
+				estimatedCosts, estimatedCostsParameter));
+
+		List<Map<String, Value<?>>> values = new ArrayList<Map<String, Value<?>>>();
+		values.add(row);
+		return values;
+	}
 }
