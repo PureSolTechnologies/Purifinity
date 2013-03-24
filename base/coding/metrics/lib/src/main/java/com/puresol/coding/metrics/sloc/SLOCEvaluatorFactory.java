@@ -11,28 +11,33 @@ import com.puresol.coding.evaluation.api.QualityCharacteristic;
 
 public class SLOCEvaluatorFactory extends AbstractEvaluatorFactory {
 
-    @Override
-    public String getDescription() {
-	return SLOCMetricCalculator.DESCRIPTION;
-    }
+	@Override
+	public String getDescription() {
+		return SLOCMetricCalculator.DESCRIPTION;
+	}
 
-    @Override
-    public String getName() {
-	return SLOCMetricCalculator.NAME;
-    }
+	@Override
+	public String getName() {
+		return SLOCMetricCalculator.NAME;
+	}
 
-    @Override
-    public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
-	return SLOCMetricCalculator.EVALUATED_QUALITY_CHARACTERISTICS;
-    }
+	@Override
+	public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
+		return SLOCMetricCalculator.EVALUATED_QUALITY_CHARACTERISTICS;
+	}
 
-    @Override
-    public SLOCEvaluator create(AnalysisRun analysisRun, HashIdFileTree path) {
-	return new SLOCEvaluator(analysisRun, path);
-    }
+	@Override
+	public SLOCEvaluator create(AnalysisRun analysisRun, HashIdFileTree path) {
+		return new SLOCEvaluator(analysisRun, path);
+	}
 
-    @Override
-    public List<Class<? extends Evaluator>> getDependencies() {
-	return new ArrayList<Class<? extends Evaluator>>();
-    }
+	@Override
+	public List<Class<? extends Evaluator>> getDependencies() {
+		return new ArrayList<Class<? extends Evaluator>>();
+	}
+
+	@Override
+	public Class<? extends Evaluator> getEvaluatorClass() {
+		return SLOCEvaluator.class;
+	}
 }

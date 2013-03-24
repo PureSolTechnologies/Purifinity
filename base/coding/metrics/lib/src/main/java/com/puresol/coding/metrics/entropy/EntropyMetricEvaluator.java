@@ -17,14 +17,14 @@ import com.puresol.coding.metrics.halstead.HalsteadMetricResults;
 import com.puresol.coding.metrics.halstead.HalsteadResult;
 import com.puresol.utils.HashId;
 
-public class EntropyEvaluator extends AbstractEvaluator {
+public class EntropyMetricEvaluator extends AbstractEvaluator {
 
 	private static final long serialVersionUID = -5093217611195212999L;
 
 	private final EvaluatorStore store;
 	private final EvaluatorStore halsteadStore;
 
-	public EntropyEvaluator(AnalysisRun analysisRun, HashIdFileTree path) {
+	public EntropyMetricEvaluator(AnalysisRun analysisRun, HashIdFileTree path) {
 		super(EntropyMetric.NAME, EntropyMetric.DESCRIPTION, analysisRun, path);
 		store = getEvaluatorStore();
 		halsteadStore = EvaluatorStoreFactory.getFactory().createInstance(

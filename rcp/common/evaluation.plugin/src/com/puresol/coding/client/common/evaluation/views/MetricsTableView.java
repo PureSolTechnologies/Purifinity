@@ -25,7 +25,6 @@ import com.puresol.coding.client.common.evaluation.utils.EvaluationTool;
 import com.puresol.coding.client.common.evaluation.utils.EvaluationsTarget;
 import com.puresol.coding.client.common.ui.actions.RefreshAction;
 import com.puresol.coding.client.common.ui.actions.Refreshable;
-import com.puresol.coding.client.common.ui.components.AreaMapData;
 import com.puresol.coding.evaluation.api.EvaluatorFactory;
 import com.puresol.coding.evaluation.api.EvaluatorStore;
 import com.puresol.coding.evaluation.api.EvaluatorStoreFactory;
@@ -78,21 +77,6 @@ public class MetricsTableView extends ViewPart implements Refreshable,
 
 		viewer = new MetricsTableViewer(table);
 
-		AreaMapData c11 = new AreaMapData("Child11", 1.0);
-		AreaMapData c12 = new AreaMapData("Child12", 5.0);
-
-		AreaMapData c1 = new AreaMapData("Child1", 1.0, c11, c12);
-
-		AreaMapData c21 = new AreaMapData("Child21", 1.0);
-		AreaMapData c22 = new AreaMapData("Child22", 2.0);
-		AreaMapData c23 = new AreaMapData("Child23", 3.0);
-		AreaMapData c24 = new AreaMapData("Child24", 5.0);
-		AreaMapData c25 = new AreaMapData("Child25", 8.0);
-
-		AreaMapData c2 = new AreaMapData("Child2", 2.0, c21, c22, c23, c24, c25);
-		AreaMapData c3 = new AreaMapData("Child3", 3.0);
-		AreaMapData root = new AreaMapData("Parent", 6.0, c1, c2, c3);
-
 		initializeToolBar();
 		initializeMenu();
 	}
@@ -143,25 +127,24 @@ public class MetricsTableView extends ViewPart implements Refreshable,
 						EvaluationTool.putAsynchronous(this, evaluatorFactory,
 								analysisRun, directory);
 					} else {
-						show(directory);
+						showEvaluation(directory);
 					}
 				} else {
-					show(null);
+					showEvaluation(null);
 				}
 			} else {
 				if (!store.hasDirectoryResults(hashId)) {
 					EvaluationTool.putAsynchronous(this, evaluatorFactory,
 							analysisRun, path);
 				} else {
-					show(path);
+					showEvaluation(path);
 				}
 			}
+		} else if (selection instanceof MetricSelection) {
+			MetricSelection metricSelection = (MetricSelection) selection;
+			viewer.setMetric(metricSelection.getMetric());
+			viewer.refresh();
 		}
-	}
-
-	private void show(HashIdFileTree directory) {
-		text.setText(directory.getPathFile(true).getPath());
-		viewer.setInput(directory);
 	}
 
 	@Override
@@ -180,12 +163,12 @@ public class MetricsTableView extends ViewPart implements Refreshable,
 		if (path.isFile()) {
 			HashIdFileTree directory = path.getParent();
 			if (directory != null) {
-				show(directory);
+				showEvaluation(directory);
 			} else {
-				show(null);
+				showEvaluation(null);
 			}
 		} else {
-			show(path);
+			showEvaluation(path);
 		}
 	}
 
@@ -207,5 +190,6 @@ public class MetricsTableView extends ViewPart implements Refreshable,
 	@Override
 	public void showEvaluation(HashIdFileTree path) {
 		text.setText(path.getPathFile(false).getPath());
+		viewer.setInput(path);
 	}
 }

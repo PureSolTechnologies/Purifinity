@@ -11,29 +11,34 @@ import com.puresol.coding.evaluation.api.QualityCharacteristic;
 
 public class CodeDepthMetricEvaluatorFactory extends AbstractEvaluatorFactory {
 
-    @Override
-    public String getDescription() {
-	return CodeDepthMetric.DESCRIPTION;
-    }
+	@Override
+	public String getDescription() {
+		return CodeDepthMetric.DESCRIPTION;
+	}
 
-    @Override
-    public String getName() {
-	return CodeDepthMetric.NAME;
-    }
+	@Override
+	public String getName() {
+		return CodeDepthMetric.NAME;
+	}
 
-    @Override
-    public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
-	return CodeDepthMetric.EVALUATED_QUALITY_CHARACTERISTICS;
-    }
+	@Override
+	public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
+		return CodeDepthMetric.EVALUATED_QUALITY_CHARACTERISTICS;
+	}
 
-    @Override
-    public CodeDepthEvaluator create(AnalysisRun analysisRun,
-	    HashIdFileTree path) {
-	return new CodeDepthEvaluator(analysisRun, path);
-    }
+	@Override
+	public CodeDepthMetricEvaluator create(AnalysisRun analysisRun,
+			HashIdFileTree path) {
+		return new CodeDepthMetricEvaluator(analysisRun, path);
+	}
 
-    @Override
-    public List<Class<? extends Evaluator>> getDependencies() {
-	return new ArrayList<Class<? extends Evaluator>>();
-    }
+	@Override
+	public List<Class<? extends Evaluator>> getDependencies() {
+		return new ArrayList<Class<? extends Evaluator>>();
+	}
+
+	@Override
+	public Class<? extends Evaluator> getEvaluatorClass() {
+		return CodeDepthMetricEvaluator.class;
+	}
 }

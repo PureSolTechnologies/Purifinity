@@ -15,13 +15,13 @@ import com.puresol.coding.evaluation.impl.AbstractEvaluator;
 import com.puresol.coding.lang.api.ProgrammingLanguage;
 import com.puresol.uhura.ust.eval.EvaluationException;
 
-public class CodeDepthEvaluator extends AbstractEvaluator {
+public class CodeDepthMetricEvaluator extends AbstractEvaluator {
 
     private static final long serialVersionUID = -5093217611195212999L;
 
     private final EvaluatorStore store;
 
-    public CodeDepthEvaluator(AnalysisRun analysisRun, HashIdFileTree path) {
+    public CodeDepthMetricEvaluator(AnalysisRun analysisRun, HashIdFileTree path) {
 	super(CodeDepthMetric.NAME, CodeDepthMetric.DESCRIPTION, analysisRun,
 		path);
 	store = getEvaluatorStore();

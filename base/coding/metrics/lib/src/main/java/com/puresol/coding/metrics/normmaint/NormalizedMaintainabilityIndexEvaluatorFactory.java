@@ -11,33 +11,38 @@ import com.puresol.coding.evaluation.api.QualityCharacteristic;
 import com.puresol.coding.metrics.maintainability.MaintainabilityIndexEvaluator;
 
 public class NormalizedMaintainabilityIndexEvaluatorFactory extends
-	AbstractEvaluatorFactory {
+		AbstractEvaluatorFactory {
 
-    @Override
-    public String getDescription() {
-	return NormalizedMaintainabilityIndexEvaluator.DESCRIPTION;
-    }
+	@Override
+	public String getDescription() {
+		return NormalizedMaintainabilityIndexEvaluator.DESCRIPTION;
+	}
 
-    @Override
-    public String getName() {
-	return NormalizedMaintainabilityIndexEvaluator.NAME;
-    }
+	@Override
+	public String getName() {
+		return NormalizedMaintainabilityIndexEvaluator.NAME;
+	}
 
-    @Override
-    public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
-	return NormalizedMaintainabilityIndexEvaluator.EVALUATED_QUALITY_CHARACTERISTICS;
-    }
+	@Override
+	public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
+		return NormalizedMaintainabilityIndexEvaluator.EVALUATED_QUALITY_CHARACTERISTICS;
+	}
 
-    @Override
-    public NormalizedMaintainabilityIndexEvaluator create(
-	    AnalysisRun analysisRun, HashIdFileTree path) {
-	return new NormalizedMaintainabilityIndexEvaluator(analysisRun, path);
-    }
+	@Override
+	public NormalizedMaintainabilityIndexEvaluator create(
+			AnalysisRun analysisRun, HashIdFileTree path) {
+		return new NormalizedMaintainabilityIndexEvaluator(analysisRun, path);
+	}
 
-    @Override
-    public List<Class<? extends Evaluator>> getDependencies() {
-	List<Class<? extends Evaluator>> dependencies = new ArrayList<Class<? extends Evaluator>>();
-	dependencies.add(MaintainabilityIndexEvaluator.class);
-	return dependencies;
-    }
+	@Override
+	public List<Class<? extends Evaluator>> getDependencies() {
+		List<Class<? extends Evaluator>> dependencies = new ArrayList<Class<? extends Evaluator>>();
+		dependencies.add(MaintainabilityIndexEvaluator.class);
+		return dependencies;
+	}
+
+	@Override
+	public Class<? extends Evaluator> getEvaluatorClass() {
+		return NormalizedMaintainabilityIndexEvaluator.class;
+	}
 }

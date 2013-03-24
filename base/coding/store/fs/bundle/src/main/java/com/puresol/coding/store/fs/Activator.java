@@ -11,8 +11,8 @@ import com.puresol.coding.analysis.api.DirectoryStore;
 import com.puresol.coding.evaluation.api.Evaluator;
 import com.puresol.coding.evaluation.api.EvaluatorStore;
 import com.puresol.coding.metrics.cocomo.CoCoMoEvaluator;
-import com.puresol.coding.metrics.codedepth.CodeDepthEvaluator;
-import com.puresol.coding.metrics.entropy.EntropyEvaluator;
+import com.puresol.coding.metrics.codedepth.CodeDepthMetricEvaluator;
+import com.puresol.coding.metrics.entropy.EntropyMetricEvaluator;
 import com.puresol.coding.metrics.halstead.HalsteadMetricEvaluator;
 import com.puresol.coding.metrics.maintainability.MaintainabilityIndexEvaluator;
 import com.puresol.coding.metrics.mccabe.McCabeMetricEvaluator;
@@ -44,9 +44,9 @@ public class Activator extends AbstractActivator {
 	registerEvaluatorStore(new CoCoMoEvaluatorStore(),
 		CoCoMoEvaluator.class);
 	registerEvaluatorStore(new CodeDepthEvaluatorStore(),
-		CodeDepthEvaluator.class);
+		CodeDepthMetricEvaluator.class);
 	registerEvaluatorStore(new EntropyEvaluatorStore(),
-		EntropyEvaluator.class);
+		EntropyMetricEvaluator.class);
 	registerEvaluatorStore(new HalsteadMetricEvaluatorStore(),
 		HalsteadMetricEvaluator.class);
 	registerEvaluatorStore(new MaintainabilityIndexEvaluatorStore(),

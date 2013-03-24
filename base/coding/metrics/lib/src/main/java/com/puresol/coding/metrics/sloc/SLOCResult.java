@@ -5,6 +5,7 @@ import java.io.Serializable;
 import com.puresol.coding.analysis.api.CodeRangeType;
 import com.puresol.coding.evaluation.api.SourceCodeQuality;
 import com.puresol.uhura.source.CodeLocation;
+import com.puresol.utils.math.statistics.Statistics;
 
 public class SLOCResult implements Serializable {
 
@@ -47,4 +48,30 @@ public class SLOCResult implements Serializable {
 		return quality;
 	}
 
+	/**
+	 * This method combines two results into one. The information for code
+	 * location, code range type and code range name are taken out of the left
+	 * argument.
+	 * 
+	 * @param left
+	 * @param right
+	 * @return
+	 */
+	public static SLOCResult combine(SLOCResult left, SLOCResult right) {
+		SLOCMetric leftMetric = left.getSLOCMetric();
+		SLOCMetric rightMetric = right.getSLOCMetric();
+		int phyLOC = leftMetric.getPhyLOC() + rightMetric.getPhyLOC();
+		int proLOC = leftMetric.getProLOC() + rightMetric.getProLOC();
+		int comLOC = leftMetric.getComLOC() + rightMetric.getComLOC();
+		int blLOC = leftMetric.getBlLOC() + rightMetric.getBlLOC();
+
+		Statistics lineStatistics = Statistics
+				.combine(leftMetric.getLineStatistics(),
+						rightMetric.getLineStatistics());
+		SourceCodeQuality quality = SourceCodeQuality.getMinLevel(
+				left.getQuality(), right.getQuality());
+		return new SLOCResult(left.sourceCodeLocation, left.codeRangeType,
+				left.codeRangeName, new SLOCMetric(phyLOC, proLOC, comLOC,
+						blLOC, lineStatistics), quality);
+	}
 }

@@ -2,6 +2,12 @@ package com.puresol.coding.analysis.api;
 
 public enum CodeRangeType {
 
+	DIRECTORY {
+		@Override
+		public String getName() {
+			return "directory";
+		}
+	},
 	FILE {
 		@Override
 		public String getName() {

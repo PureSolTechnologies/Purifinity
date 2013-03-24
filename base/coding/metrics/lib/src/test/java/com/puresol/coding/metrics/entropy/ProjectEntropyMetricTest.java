@@ -39,12 +39,12 @@ public class ProjectEntropyMetricTest {
 
     @Test
     public void testInstance() {
-	assertNotNull(new EntropyEvaluator(analyzer, null));
+	assertNotNull(new EntropyMetricEvaluator(analyzer, null));
     }
 
     @Test
     public void testInitValues() {
-	EntropyEvaluator metric = new EntropyEvaluator(analyzer, null);
+	EntropyMetricEvaluator metric = new EntropyMetricEvaluator(analyzer, null);
 	assertSame(analyzer, metric.getAnalysisRun());
 	assertNotNull(metric.getEvaluatedQualityCharacteristics());
 	assertNotNull(metric.getInformation());

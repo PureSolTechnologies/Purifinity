@@ -37,151 +37,151 @@ import com.puresol.coding.client.common.analysis.editors.NotAnalyzedEditor;
 import com.puresol.coding.client.common.analysis.editors.NotAnalyzedEditorInput;
 
 public class AnalysisRunContentView extends ViewPart implements
-	ISelectionListener, IDoubleClickListener, ISelectionProvider,
-	SelectionListener {
+		ISelectionListener, IDoubleClickListener, ISelectionProvider,
+		SelectionListener {
 
-    private AnalysisProject analysis;
-    private AnalysisRun analysisRun;
-    private Tree fileTree;
-    private TreeViewer fileTreeViewer;
-    private FileAnalysisSelection fileAnalysisSelection;
-    private AnalysisRunContentTreeLabelProvider labelProvider;
-    private final List<ISelectionChangedListener> selectionChangedListener = new ArrayList<ISelectionChangedListener>();
+	private AnalysisProject analysis;
+	private AnalysisRun analysisRun;
+	private Tree fileTree;
+	private TreeViewer fileTreeViewer;
+	private FileAnalysisSelection fileAnalysisSelection;
+	private AnalysisRunContentTreeLabelProvider labelProvider;
+	private final List<ISelectionChangedListener> selectionChangedListener = new ArrayList<ISelectionChangedListener>();
 
-    public AnalysisRunContentView() {
-	super();
-    }
-
-    @Override
-    public void createPartControl(Composite parent) {
-	Composite composite = new Composite(parent, SWT.NONE);
-	composite.setLayout(new FillLayout());
-
-	fileTree = new Tree(composite, SWT.BORDER);
-	fileTreeViewer = new TreeViewer(fileTree);
-	fileTreeViewer
-		.setContentProvider(new AnalysisRunContentTreeContentProvider());
-	labelProvider = new AnalysisRunContentTreeLabelProvider();
-	fileTreeViewer.setLabelProvider(labelProvider);
-	fileTree.setHeaderVisible(true);
-	fileTree.setEnabled(true);
-	fileTree.setVisible(true);
-	fileTree.addSelectionListener(this);
-
-	IWorkbenchPartSite site = getSite();
-	site.getWorkbenchWindow().getSelectionService()
-		.addSelectionListener(this);
-	site.setSelectionProvider(this);
-	fileTreeViewer.addDoubleClickListener(this);
-    }
-
-    @Override
-    public void setFocus() {
-	fileTree.setFocus();
-    }
-
-    @Override
-    public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-	if (selection instanceof AnalysisProjectSelection) {
-	    AnalysisProjectSelection analysisSelection = (AnalysisProjectSelection) selection;
-	    analysis = analysisSelection.getAnalysisProject();
-	} else if (selection instanceof AnalysisRunSelection) {
-	    AnalysisRunSelection analysisRunSelection = (AnalysisRunSelection) selection;
-	    analysisRun = analysisRunSelection.getAnalysisRun();
-	    labelProvider.setAnalysisRun(analysisRun);
-	    fileTreeViewer.setInput(analysisRun.getFileTree());
-	    fileTree.redraw();
-	    fileTreeViewer.refresh();
+	public AnalysisRunContentView() {
+		super();
 	}
-    }
 
-    @Override
-    public void doubleClick(DoubleClickEvent event) {
-	try {
-	    if (event.getSource() == fileTreeViewer) {
-		TreeSelection selection = (TreeSelection) fileTreeViewer
-			.getSelection();
-		if (!selection.getFirstElement().getClass()
-			.equals(String.class)) {
-		    processDoubleClickOnFileTree(selection);
+	@Override
+	public void createPartControl(Composite parent) {
+		Composite composite = new Composite(parent, SWT.NONE);
+		composite.setLayout(new FillLayout());
+
+		fileTree = new Tree(composite, SWT.BORDER);
+		fileTreeViewer = new TreeViewer(fileTree);
+		fileTreeViewer
+				.setContentProvider(new AnalysisRunContentTreeContentProvider());
+		labelProvider = new AnalysisRunContentTreeLabelProvider();
+		fileTreeViewer.setLabelProvider(labelProvider);
+		fileTree.setHeaderVisible(true);
+		fileTree.setEnabled(true);
+		fileTree.setVisible(true);
+		fileTree.addSelectionListener(this);
+
+		IWorkbenchPartSite site = getSite();
+		site.getWorkbenchWindow().getSelectionService()
+				.addSelectionListener(this);
+		site.setSelectionProvider(this);
+		fileTreeViewer.addDoubleClickListener(this);
+	}
+
+	@Override
+	public void setFocus() {
+		fileTree.setFocus();
+	}
+
+	@Override
+	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
+		if (selection instanceof AnalysisProjectSelection) {
+			AnalysisProjectSelection analysisSelection = (AnalysisProjectSelection) selection;
+			analysis = analysisSelection.getAnalysisProject();
+		} else if (selection instanceof AnalysisRunSelection) {
+			AnalysisRunSelection analysisRunSelection = (AnalysisRunSelection) selection;
+			analysisRun = analysisRunSelection.getAnalysisRun();
+			labelProvider.setAnalysisRun(analysisRun);
+			fileTreeViewer.setInput(analysisRun.getFileTree());
+			fileTree.redraw();
+			fileTreeViewer.refresh();
 		}
-	    }
-	} catch (PartInitException e) {
-	    throw new RuntimeException(e);
 	}
-    }
 
-    private void processDoubleClickOnFileTree(TreeSelection selection)
-	    throws PartInitException {
-	HashIdFileTree firstElement = (HashIdFileTree) selection
-		.getFirstElement();
-	fileAnalysisSelection = new FileAnalysisSelection(analysis,
-		analysisRun, firstElement);
-	AnalyzedCode analyzedCode = analysisRun.findAnalyzedCode(firstElement
-		.getPathFile(false).getPath());
-	if (analyzedCode != null) {
-	    FileAnalysisEditorInput fileAnalysisEditorInput = new FileAnalysisEditorInput(
-		    analyzedCode, analysisRun);
-	    getSite().getPage().openEditor(fileAnalysisEditorInput,
-		    FileAnalysisEditor.class.getName());
-	} else if (!analysisRun.getFailedCodes().contains(
-		firstElement.getPathFile(false))) {
-	    DirectoryAnalysisEditorInput directoryAnalysisEditorInput = new DirectoryAnalysisEditorInput(
-		    firstElement, analysisRun);
-	    getSite().getPage().openEditor(directoryAnalysisEditorInput,
-		    DirectoryAnalysisEditor.class.getName());
-	} else {
-	    NotAnalyzedEditorInput notAnalyzedEditorInput = new NotAnalyzedEditorInput(
-		    firstElement.getPathFile(false), analysisRun);
-	    getSite().getPage().openEditor(notAnalyzedEditorInput,
-		    NotAnalyzedEditor.class.getName());
+	@Override
+	public void doubleClick(DoubleClickEvent event) {
+		try {
+			if (event.getSource() == fileTreeViewer) {
+				TreeSelection selection = (TreeSelection) fileTreeViewer
+						.getSelection();
+				if (!selection.getFirstElement().getClass()
+						.equals(String.class)) {
+					processDoubleClickOnFileTree(selection);
+				}
+			}
+		} catch (PartInitException e) {
+			throw new RuntimeException(e);
+		}
 	}
-    }
 
-    @Override
-    public void addSelectionChangedListener(ISelectionChangedListener listener) {
-	selectionChangedListener.add(listener);
-    }
-
-    @Override
-    public ISelection getSelection() {
-	return fileAnalysisSelection;
-    }
-
-    @Override
-    public void removeSelectionChangedListener(
-	    ISelectionChangedListener listener) {
-	selectionChangedListener.remove(listener);
-    }
-
-    @Override
-    public void setSelection(ISelection selection) {
-	fileAnalysisSelection = (FileAnalysisSelection) selection;
-	for (ISelectionChangedListener listener : selectionChangedListener) {
-	    listener.selectionChanged(new SelectionChangedEvent(this,
-		    fileAnalysisSelection));
-	}
-    }
-
-    @Override
-    public void widgetSelected(SelectionEvent e) {
-	if (e.getSource() == fileTree) {
-	    TreeSelection selection = (TreeSelection) fileTreeViewer
-		    .getSelection();
-	    if (selection.getFirstElement().getClass()
-		    .equals(HashIdFileTree.class)) {
+	private void processDoubleClickOnFileTree(TreeSelection selection)
+			throws PartInitException {
 		HashIdFileTree firstElement = (HashIdFileTree) selection
-			.getFirstElement();
-		FileAnalysisSelection fileAnalysisSelection = new FileAnalysisSelection(
-			analysis, analysisRun, firstElement);
-		setSelection(fileAnalysisSelection);
-	    }
+				.getFirstElement();
+		fileAnalysisSelection = new FileAnalysisSelection(analysis,
+				analysisRun, firstElement);
+		AnalyzedCode analyzedCode = analysisRun.findAnalyzedCode(firstElement
+				.getPathFile(false).getPath());
+		if (analyzedCode != null) {
+			FileAnalysisEditorInput fileAnalysisEditorInput = new FileAnalysisEditorInput(
+					analyzedCode, analysisRun);
+			getSite().getPage().openEditor(fileAnalysisEditorInput,
+					FileAnalysisEditor.class.getName());
+		} else if (!analysisRun.getFailedCodes().contains(
+				firstElement.getPathFile(false))) {
+			DirectoryAnalysisEditorInput directoryAnalysisEditorInput = new DirectoryAnalysisEditorInput(
+					firstElement, analysisRun);
+			getSite().getPage().openEditor(directoryAnalysisEditorInput,
+					DirectoryAnalysisEditor.class.getName());
+		} else {
+			NotAnalyzedEditorInput notAnalyzedEditorInput = new NotAnalyzedEditorInput(
+					firstElement.getPathFile(false), analysisRun);
+			getSite().getPage().openEditor(notAnalyzedEditorInput,
+					NotAnalyzedEditor.class.getName());
+		}
 	}
-    }
 
-    @Override
-    public void widgetDefaultSelected(SelectionEvent e) {
-	widgetSelected(e);
-    }
+	@Override
+	public void addSelectionChangedListener(ISelectionChangedListener listener) {
+		selectionChangedListener.add(listener);
+	}
+
+	@Override
+	public ISelection getSelection() {
+		return fileAnalysisSelection;
+	}
+
+	@Override
+	public void removeSelectionChangedListener(
+			ISelectionChangedListener listener) {
+		selectionChangedListener.remove(listener);
+	}
+
+	@Override
+	public void setSelection(ISelection selection) {
+		fileAnalysisSelection = (FileAnalysisSelection) selection;
+		for (ISelectionChangedListener listener : selectionChangedListener) {
+			listener.selectionChanged(new SelectionChangedEvent(this,
+					fileAnalysisSelection));
+		}
+	}
+
+	@Override
+	public void widgetSelected(SelectionEvent e) {
+		if (e.getSource() == fileTree) {
+			TreeSelection selection = (TreeSelection) fileTreeViewer
+					.getSelection();
+			if (selection.getFirstElement().getClass()
+					.equals(HashIdFileTree.class)) {
+				HashIdFileTree firstElement = (HashIdFileTree) selection
+						.getFirstElement();
+				FileAnalysisSelection fileAnalysisSelection = new FileAnalysisSelection(
+						analysis, analysisRun, firstElement);
+				setSelection(fileAnalysisSelection);
+			}
+		}
+	}
+
+	@Override
+	public void widgetDefaultSelected(SelectionEvent e) {
+		widgetSelected(e);
+	}
 
 }

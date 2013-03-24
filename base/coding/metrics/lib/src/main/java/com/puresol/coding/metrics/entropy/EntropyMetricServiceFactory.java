@@ -12,31 +12,37 @@ import com.puresol.coding.metrics.halstead.HalsteadMetricEvaluator;
 
 public class EntropyMetricServiceFactory extends AbstractEvaluatorFactory {
 
-    @Override
-    public String getDescription() {
-	return EntropyMetric.DESCRIPTION;
-    }
+	@Override
+	public String getDescription() {
+		return EntropyMetric.DESCRIPTION;
+	}
 
-    @Override
-    public String getName() {
-	return EntropyMetric.NAME;
-    }
+	@Override
+	public String getName() {
+		return EntropyMetric.NAME;
+	}
 
-    @Override
-    public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
-	return EntropyMetric.EVALUATED_QUALITY_CHARACTERISTICS;
-    }
+	@Override
+	public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
+		return EntropyMetric.EVALUATED_QUALITY_CHARACTERISTICS;
+	}
 
-    @Override
-    public EntropyEvaluator create(AnalysisRun analysisRun, HashIdFileTree path) {
-	return new EntropyEvaluator(analysisRun, path);
-    }
+	@Override
+	public EntropyMetricEvaluator create(AnalysisRun analysisRun,
+			HashIdFileTree path) {
+		return new EntropyMetricEvaluator(analysisRun, path);
+	}
 
-    @Override
-    public List<Class<? extends Evaluator>> getDependencies() {
-	List<Class<? extends Evaluator>> dependencies = new ArrayList<Class<? extends Evaluator>>();
-	dependencies.add(HalsteadMetricEvaluator.class);
-	return dependencies;
-    }
+	@Override
+	public List<Class<? extends Evaluator>> getDependencies() {
+		List<Class<? extends Evaluator>> dependencies = new ArrayList<Class<? extends Evaluator>>();
+		dependencies.add(HalsteadMetricEvaluator.class);
+		return dependencies;
+	}
+
+	@Override
+	public Class<? extends Evaluator> getEvaluatorClass() {
+		return EntropyMetricEvaluator.class;
+	}
 
 }

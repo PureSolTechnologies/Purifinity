@@ -12,7 +12,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Table;
 
 import com.puresol.coding.analysis.api.HashIdFileTree;
-import com.puresol.coding.evaluation.api.Evaluator;
 import com.puresol.coding.evaluation.api.EvaluatorFactory;
 import com.puresol.coding.evaluation.api.EvaluatorStore;
 import com.puresol.coding.evaluation.api.EvaluatorStoreFactory;
@@ -23,7 +22,7 @@ public class MetricsTableViewer extends TableViewer implements
 		IStructuredContentProvider {
 
 	private final List<PhysicalValue<Double>> metrics = new ArrayList<PhysicalValue<Double>>();
-	private Class<? extends Evaluator> metric = null;
+	private EvaluatorFactory metric = null;
 
 	public MetricsTableViewer(Table table) {
 		super(table);
@@ -33,7 +32,7 @@ public class MetricsTableViewer extends TableViewer implements
 		setupUnitColumn();
 	}
 
-	public void setMetric(Class<? extends Evaluator> metric) {
+	public void setMetric(EvaluatorFactory metric) {
 		this.metric = metric;
 	}
 
@@ -89,11 +88,15 @@ public class MetricsTableViewer extends TableViewer implements
 		if (newInput == null) {
 			return;
 		}
+		if (metric == null) {
+			return;
+		}
 		if (HashIdFileTree.class.isAssignableFrom(newInput.getClass())) {
 			HashIdFileTree directory = (HashIdFileTree) newInput;
 			if (!directory.isFile()) {
 				EvaluatorStore evaluatorStore = EvaluatorStoreFactory
-						.getFactory().createInstance(metric);
+						.getFactory()
+						.createInstance(metric.getEvaluatorClass());
 				for (HashIdFileTree child : directory.getChildren()) {
 					if (child.isFile()) {
 						// file
