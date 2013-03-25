@@ -1,7 +1,7 @@
 package com.puresol.coding.client.common.evaluation.contents;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -16,13 +16,13 @@ import com.puresol.coding.evaluation.api.EvaluatorFactory;
 import com.puresol.coding.evaluation.api.EvaluatorStore;
 import com.puresol.coding.evaluation.api.EvaluatorStoreFactory;
 import com.puresol.coding.evaluation.api.MetricResults;
-import com.puresol.utils.math.PhysicalValue;
+import com.puresol.utils.math.Value;
 
 public class MetricsTableViewer extends TableViewer implements
 		IStructuredContentProvider {
 
-	private final List<PhysicalValue<Double>> metrics = new ArrayList<PhysicalValue<Double>>();
 	private EvaluatorFactory metric = null;
+	private MetricResults results = null;
 
 	public MetricsTableViewer(Table table) {
 		super(table);
@@ -44,8 +44,8 @@ public class MetricsTableViewer extends TableViewer implements
 			@Override
 			public String getText(Object element) {
 				@SuppressWarnings("unchecked")
-				PhysicalValue<Double> metric = (PhysicalValue<Double>) element;
-				return metric.getParameter().getName();
+				Map<String, Value<?>> metric = (Map<String, Value<?>>) element;
+				return "Metric";
 			}
 		});
 	}
@@ -58,8 +58,8 @@ public class MetricsTableViewer extends TableViewer implements
 			@Override
 			public String getText(Object element) {
 				@SuppressWarnings("unchecked")
-				PhysicalValue<Double> metric = (PhysicalValue<Double>) element;
-				return String.valueOf(metric.getValue());
+				Map<String, Value<?>> metric = (Map<String, Value<?>>) element;
+				return "Value";
 			}
 		});
 	}
@@ -72,8 +72,8 @@ public class MetricsTableViewer extends TableViewer implements
 			@Override
 			public String getText(Object element) {
 				@SuppressWarnings("unchecked")
-				PhysicalValue<Double> metric = (PhysicalValue<Double>) element;
-				return metric.getParameter().getUnit();
+				Map<String, Value<?>> metric = (Map<String, Value<?>>) element;
+				return "Unit";
 			}
 		});
 	}
@@ -84,7 +84,7 @@ public class MetricsTableViewer extends TableViewer implements
 
 	@Override
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-		metrics.clear();
+		results = null;
 		if (newInput == null) {
 			return;
 		}
@@ -93,29 +93,24 @@ public class MetricsTableViewer extends TableViewer implements
 		}
 		if (HashIdFileTree.class.isAssignableFrom(newInput.getClass())) {
 			HashIdFileTree directory = (HashIdFileTree) newInput;
-			if (!directory.isFile()) {
-				EvaluatorStore evaluatorStore = EvaluatorStoreFactory
-						.getFactory()
-						.createInstance(metric.getEvaluatorClass());
-				for (HashIdFileTree child : directory.getChildren()) {
-					if (child.isFile()) {
-						// file
-						MetricResults fileResults = evaluatorStore
-								.readFileResults(child.getHashId());
-					} else {
-						// directory
-						MetricResults directoryResults = evaluatorStore
-								.readDirectoryResults(child.getHashId());
-					}
-				}
+			EvaluatorStore evaluatorStore = EvaluatorStoreFactory.getFactory()
+					.createInstance(metric.getEvaluatorClass());
+			if (directory.isFile()) {
+				results = evaluatorStore.readFileResults(directory.getHashId());
+			} else {
+				results = evaluatorStore.readDirectoryResults(directory
+						.getHashId());
 			}
 		}
 		refresh();
 	}
 
 	@Override
-	public EvaluatorFactory[] getElements(Object inputElement) {
-		return metrics.toArray(new EvaluatorFactory[metrics.size()]);
+	public Map<String, Value<?>>[] getElements(Object inputElement) {
+		List<Map<String, Value<?>>> values = results.getValues();
+		@SuppressWarnings("unchecked")
+		Map<String, Value<?>>[] valueArray = values.toArray(new Map[values
+				.size()]);
+		return valueArray;
 	}
-
 }

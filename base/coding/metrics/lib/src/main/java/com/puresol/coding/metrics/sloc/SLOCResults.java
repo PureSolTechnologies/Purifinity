@@ -126,10 +126,16 @@ public class SLOCResults implements MetricResults {
 					(int) stat.getMax(), maxParameter));
 			row.put(avgParameter.getName(),
 					new GeneralValue<Double>(stat.getAvg(), avgParameter));
-			row.put(medianParameter.getName(), new GeneralValue<Integer>(
-					(int) stat.getMedian(), medianParameter));
-			row.put(stdDevParameter.getName(),
-					new GeneralValue<Double>(stat.getStdDev(), stdDevParameter));
+			Double median = stat.getMedian();
+			if (median != null) {
+				row.put(medianParameter.getName(), new GeneralValue<Integer>(
+						median.intValue(), medianParameter));
+			}
+			Double stdDev = stat.getStdDev();
+			if (stdDev != null) {
+				row.put(stdDevParameter.getName(), new GeneralValue<Double>(
+						stdDev, stdDevParameter));
+			}
 			row.put(qualityParameter.getName(),
 					new GeneralValue<SourceCodeQuality>(result.getQuality(),
 							qualityParameter));

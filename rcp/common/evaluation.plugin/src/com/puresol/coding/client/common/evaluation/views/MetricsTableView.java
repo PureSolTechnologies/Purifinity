@@ -39,6 +39,7 @@ public class MetricsTableView extends ViewPart implements Refreshable,
 	private Text text;
 	private Table table;
 	private MetricsTableViewer viewer;
+	private HashIdFileTree path;
 
 	public MetricsTableView() {
 	}
@@ -68,14 +69,14 @@ public class MetricsTableView extends ViewPart implements Refreshable,
 				.addSelectionListener(this);
 
 		table = new Table(container, SWT.NONE);
+		table.setLinesVisible(true);
+		table.setHeaderVisible(true);
 		FormData fd_areaMap = new FormData();
 		fd_areaMap.top = new FormAttachment(text, 6);
 		fd_areaMap.left = new FormAttachment(text, 0, SWT.LEFT);
 		fd_areaMap.bottom = new FormAttachment(100, -10);
 		fd_areaMap.right = new FormAttachment(100, -10);
 		table.setLayoutData(fd_areaMap);
-
-		viewer = new MetricsTableViewer(table);
 
 		initializeToolBar();
 		initializeMenu();
@@ -142,7 +143,9 @@ public class MetricsTableView extends ViewPart implements Refreshable,
 			}
 		} else if (selection instanceof MetricSelection) {
 			MetricSelection metricSelection = (MetricSelection) selection;
+			viewer = new MetricsTableViewer(table);
 			viewer.setMetric(metricSelection.getMetric());
+			viewer.setInput(path);
 			viewer.refresh();
 		}
 	}
@@ -189,7 +192,10 @@ public class MetricsTableView extends ViewPart implements Refreshable,
 
 	@Override
 	public void showEvaluation(HashIdFileTree path) {
+		this.path = path;
 		text.setText(path.getPathFile(false).getPath());
-		viewer.setInput(path);
+		if (viewer != null) {
+			viewer.setInput(path);
+		}
 	}
 }
