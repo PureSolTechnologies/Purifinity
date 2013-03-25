@@ -32,6 +32,9 @@ public class SLOCEvaluator extends AbstractEvaluator {
 	@Override
 	protected void processFile(CodeAnalysis analysis)
 			throws InterruptedException, EvaluationException {
+		if (store.hasFileResults(analysis.getAnalyzedFile().getHashId())) {
+			return;
+		}
 		SLOCResults results = new SLOCResults();
 		ProgrammingLanguages programmingLanguages = ProgrammingLanguages
 				.createInstance();
@@ -61,6 +64,9 @@ public class SLOCEvaluator extends AbstractEvaluator {
 	@Override
 	protected void processDirectory(HashIdFileTree directory)
 			throws InterruptedException {
+		if (store.hasDirectoryResults(directory.getHashId())) {
+			return;
+		}
 		SLOCResult results = null;
 		for (HashIdFileTree child : directory.getChildren()) {
 			if (child.isFile()) {
@@ -76,8 +82,8 @@ public class SLOCEvaluator extends AbstractEvaluator {
 
 	private SLOCResult processFile(HashIdFileTree directory,
 			SLOCResult results, HashIdFileTree child) {
-		SLOCResults slocResults = (SLOCResults) store
-				.readFileResults(child.getHashId());
+		SLOCResults slocResults = (SLOCResults) store.readFileResults(child
+				.getHashId());
 		for (SLOCResult result : slocResults.getResults()) {
 			if (result.getCodeRangeType() == CodeRangeType.FILE) {
 				results = combine(directory, results, result);
@@ -95,8 +101,7 @@ public class SLOCEvaluator extends AbstractEvaluator {
 			throw new RuntimeException(
 					"A directory should only have one dataset with aggregated SLOC.");
 		}
-		results = combine(directory, results, slocResults.getResults()
-				.get(0));
+		results = combine(directory, results, slocResults.getResults().get(0));
 		return results;
 	}
 

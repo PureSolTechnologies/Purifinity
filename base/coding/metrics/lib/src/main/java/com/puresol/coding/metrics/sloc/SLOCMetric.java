@@ -37,11 +37,16 @@ public class SLOCMetric implements Serializable {
 		if (lineStatistics != null) {
 			results.add(new Result("AvgLL", "Average line length",
 					lineStatistics.getAvg(), ""));
-			results.add(new Result("MedLL", "Median line length",
-					lineStatistics.getMedian(), ""));
-			results.add(new Result("StdDevLL",
-					"Standard deviation line length", lineStatistics
-							.getStdDev(), ""));
+			Double median = lineStatistics.getMedian();
+			if (median != null) {
+				results.add(new Result("MedLL", "Median line length", median,
+						""));
+			}
+			Double stdDev = lineStatistics.getStdDev();
+			if (stdDev != null) {
+				results.add(new Result("StdDevLL",
+						"Standard deviation line length", stdDev, ""));
+			}
 			results.add(new Result("MaxLL", "Maximum line length",
 					lineStatistics.getMax(), ""));
 			results.add(new Result("MinLL", "Minimum line length",

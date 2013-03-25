@@ -33,175 +33,175 @@ import com.puresol.coding.metrics.sloc.SLOCEvaluator;
 import com.puresol.utils.HashId;
 
 public class MetricsMapView extends ViewPart implements Refreshable,
-	ISelectionListener, IJobChangeListener, EvaluationsTarget {
+		ISelectionListener, IJobChangeListener, EvaluationsTarget {
 
-    private FileAnalysisSelection analysisSelection;
-    private Text text;
-    private AreaMapComponent areaMap;
+	private FileAnalysisSelection analysisSelection;
+	private Text text;
+	private AreaMapComponent areaMap;
 
-    public MetricsMapView() {
-    }
-
-    /**
-     * Create contents of the view part.
-     * 
-     * @param parent
-     */
-    @Override
-    public void createPartControl(Composite parent) {
-	Composite container = new Composite(parent, SWT.NONE);
-	container.setLayout(new FormLayout());
-	{
-	    text = new Text(container, SWT.BORDER);
-	    FormData fd_text = new FormData();
-	    fd_text.top = new FormAttachment(0, 10);
-	    fd_text.left = new FormAttachment(0, 10);
-	    fd_text.bottom = new FormAttachment(0, 32);
-	    fd_text.right = new FormAttachment(100, -10);
-	    text.setLayoutData(fd_text);
-	    text.setEditable(false);
+	public MetricsMapView() {
 	}
 
-	IWorkbenchPartSite site = getSite();
-	site.getWorkbenchWindow().getSelectionService()
-		.addSelectionListener(this);
-
-	areaMap = new AreaMapComponent(container, SWT.NONE);
-	FormData fd_areaMap = new FormData();
-	fd_areaMap.top = new FormAttachment(text, 6);
-	fd_areaMap.left = new FormAttachment(text, 0, SWT.LEFT);
-	fd_areaMap.bottom = new FormAttachment(100, -10);
-	fd_areaMap.right = new FormAttachment(100, -10);
-	areaMap.setLayoutData(fd_areaMap);
-
-	AreaMapData c11 = new AreaMapData("Child11", 1.0);
-	AreaMapData c12 = new AreaMapData("Child12", 5.0);
-
-	AreaMapData c1 = new AreaMapData("Child1", 1.0, c11, c12);
-
-	AreaMapData c21 = new AreaMapData("Child21", 1.0);
-	AreaMapData c22 = new AreaMapData("Child22", 2.0);
-	AreaMapData c23 = new AreaMapData("Child23", 3.0);
-	AreaMapData c24 = new AreaMapData("Child24", 5.0);
-	AreaMapData c25 = new AreaMapData("Child25", 8.0);
-
-	AreaMapData c2 = new AreaMapData("Child2", 2.0, c21, c22, c23, c24, c25);
-	AreaMapData c3 = new AreaMapData("Child3", 3.0);
-	AreaMapData root = new AreaMapData("Parent", 6.0, c1, c2, c3);
-	areaMap.setData(root);
-
-	initializeToolBar();
-	initializeMenu();
-    }
-
-    /**
-     * Initialize the toolbar.
-     */
-    private void initializeToolBar() {
-	IToolBarManager toolbarManager = getViewSite().getActionBars()
-		.getToolBarManager();
-	toolbarManager.add(new RefreshAction(this));
-    }
-
-    /**
-     * Initialize the menu.
-     */
-    private void initializeMenu() {
-	IMenuManager menuManager = getViewSite().getActionBars()
-		.getMenuManager();
-    }
-
-    @Override
-    public void setFocus() {
-	// Set the focus
-    }
-
-    @Override
-    public void refresh() {
-    }
-
-    @Override
-    public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-	if (selection instanceof FileAnalysisSelection) {
-	    analysisSelection = (FileAnalysisSelection) selection;
-	    AnalysisRun analysisRun = analysisSelection.getAnalysisRun();
-	    HashIdFileTree path = analysisSelection.getHashIdFile();
-	    HashId hashId = path.getHashId();
-
-	    EvaluatorFactory evaluatorFactory = Evaluators.createInstance()
-		    .getAllMetrics().get(0);
-
-	    EvaluatorStoreFactory factory = EvaluatorStoreFactory.getFactory();
-	    EvaluatorStore store = factory.createInstance(SLOCEvaluator.class);
-	    if (path.isFile()) {
-		HashIdFileTree directory = path.getParent();
-		if (directory != null) {
-		    if (!store.hasFileResults(directory.getHashId())) {
-			EvaluationTool.putAsynchronous(this, evaluatorFactory,
-				analysisRun, directory);
-		    } else {
-			show(directory);
-		    }
-		} else {
-		    show(null);
+	/**
+	 * Create contents of the view part.
+	 * 
+	 * @param parent
+	 */
+	@Override
+	public void createPartControl(Composite parent) {
+		Composite container = new Composite(parent, SWT.NONE);
+		container.setLayout(new FormLayout());
+		{
+			text = new Text(container, SWT.BORDER);
+			FormData fd_text = new FormData();
+			fd_text.top = new FormAttachment(0, 10);
+			fd_text.left = new FormAttachment(0, 10);
+			fd_text.bottom = new FormAttachment(0, 32);
+			fd_text.right = new FormAttachment(100, -10);
+			text.setLayoutData(fd_text);
+			text.setEditable(false);
 		}
-	    } else {
-		if (!store.hasDirectoryResults(hashId)) {
-		    EvaluationTool.putAsynchronous(this, evaluatorFactory,
-			    analysisRun, path);
-		} else {
-		    show(path);
+
+		IWorkbenchPartSite site = getSite();
+		site.getWorkbenchWindow().getSelectionService()
+				.addSelectionListener(this);
+
+		areaMap = new AreaMapComponent(container, SWT.NONE);
+		FormData fd_areaMap = new FormData();
+		fd_areaMap.top = new FormAttachment(text, 6);
+		fd_areaMap.left = new FormAttachment(text, 0, SWT.LEFT);
+		fd_areaMap.bottom = new FormAttachment(100, -10);
+		fd_areaMap.right = new FormAttachment(100, -10);
+		areaMap.setLayoutData(fd_areaMap);
+
+		AreaMapData c11 = new AreaMapData("Child11", 1.0);
+		AreaMapData c12 = new AreaMapData("Child12", 5.0);
+
+		AreaMapData c1 = new AreaMapData("Child1", 1.0, c11, c12);
+
+		AreaMapData c21 = new AreaMapData("Child21", 1.0);
+		AreaMapData c22 = new AreaMapData("Child22", 2.0);
+		AreaMapData c23 = new AreaMapData("Child23", 3.0);
+		AreaMapData c24 = new AreaMapData("Child24", 5.0);
+		AreaMapData c25 = new AreaMapData("Child25", 8.0);
+
+		AreaMapData c2 = new AreaMapData("Child2", 2.0, c21, c22, c23, c24, c25);
+		AreaMapData c3 = new AreaMapData("Child3", 3.0);
+		AreaMapData root = new AreaMapData("Parent", 6.0, c1, c2, c3);
+		areaMap.setData(root);
+
+		initializeToolBar();
+		initializeMenu();
+	}
+
+	/**
+	 * Initialize the toolbar.
+	 */
+	private void initializeToolBar() {
+		IToolBarManager toolbarManager = getViewSite().getActionBars()
+				.getToolBarManager();
+		toolbarManager.add(new RefreshAction(this));
+	}
+
+	/**
+	 * Initialize the menu.
+	 */
+	private void initializeMenu() {
+		IMenuManager menuManager = getViewSite().getActionBars()
+				.getMenuManager();
+	}
+
+	@Override
+	public void setFocus() {
+		// Set the focus
+	}
+
+	@Override
+	public void refresh() {
+	}
+
+	@Override
+	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
+		if (selection instanceof FileAnalysisSelection) {
+			analysisSelection = (FileAnalysisSelection) selection;
+			AnalysisRun analysisRun = analysisSelection.getAnalysisRun();
+			HashIdFileTree path = analysisSelection.getHashIdFile();
+			HashId hashId = path.getHashId();
+
+			EvaluatorFactory evaluatorFactory = Evaluators.createInstance()
+					.getAllMetrics().get(0);
+
+			EvaluatorStoreFactory factory = EvaluatorStoreFactory.getFactory();
+			EvaluatorStore store = factory.createInstance(SLOCEvaluator.class);
+			if (path.isFile()) {
+				HashIdFileTree directory = path.getParent();
+				if (directory != null) {
+					if (!store.hasDirectoryResults(directory.getHashId())) {
+						EvaluationTool.putAsynchronous(this, evaluatorFactory,
+								analysisRun, directory);
+					} else {
+						show(directory);
+					}
+				} else {
+					show(null);
+				}
+			} else {
+				if (!store.hasDirectoryResults(hashId)) {
+					EvaluationTool.putAsynchronous(this, evaluatorFactory,
+							analysisRun, path);
+				} else {
+					show(path);
+				}
+			}
 		}
-	    }
 	}
-    }
 
-    private void show(HashIdFileTree directory) {
-	text.setText(directory.getPathFile(true).getPath());
-    }
-
-    @Override
-    public void aboutToRun(IJobChangeEvent event) {
-	// intentionally left empty
-    }
-
-    @Override
-    public void awake(IJobChangeEvent event) {
-	// intentionally left empty
-    }
-
-    @Override
-    public void done(IJobChangeEvent event) {
-	HashIdFileTree path = analysisSelection.getHashIdFile();
-	if (path.isFile()) {
-	    HashIdFileTree directory = path.getParent();
-	    if (directory != null) {
-		show(directory);
-	    } else {
-		show(null);
-	    }
-	} else {
-	    show(path);
+	private void show(HashIdFileTree directory) {
+		text.setText(directory.getPathFile(true).getPath());
 	}
-    }
 
-    @Override
-    public void running(IJobChangeEvent event) {
-	// intentionally left empty
-    }
+	@Override
+	public void aboutToRun(IJobChangeEvent event) {
+		// intentionally left empty
+	}
 
-    @Override
-    public void scheduled(IJobChangeEvent event) {
-	// intentionally left empty
-    }
+	@Override
+	public void awake(IJobChangeEvent event) {
+		// intentionally left empty
+	}
 
-    @Override
-    public void sleeping(IJobChangeEvent event) {
-	// intentionally left empty
-    }
+	@Override
+	public void done(IJobChangeEvent event) {
+		HashIdFileTree path = analysisSelection.getHashIdFile();
+		if (path.isFile()) {
+			HashIdFileTree directory = path.getParent();
+			if (directory != null) {
+				show(directory);
+			} else {
+				show(null);
+			}
+		} else {
+			show(path);
+		}
+	}
 
-    @Override
-    public void showEvaluation(HashIdFileTree path) {
-	text.setText(path.getPathFile(false).getPath());
-    }
+	@Override
+	public void running(IJobChangeEvent event) {
+		// intentionally left empty
+	}
+
+	@Override
+	public void scheduled(IJobChangeEvent event) {
+		// intentionally left empty
+	}
+
+	@Override
+	public void sleeping(IJobChangeEvent event) {
+		// intentionally left empty
+	}
+
+	@Override
+	public void showEvaluation(HashIdFileTree path) {
+		text.setText(path.getPathFile(false).getPath());
+	}
 }

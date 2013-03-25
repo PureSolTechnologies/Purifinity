@@ -14,7 +14,8 @@ import com.puresol.coding.evaluation.api.EvaluatorFactory;
 
 public class EvaluationTool {
 
-	public static void putAsynchronous(final EvaluationsTarget target,
+	public static synchronized void putAsynchronous(
+			final EvaluationsTarget target,
 			final EvaluatorFactory evaluatorFactory,
 			final AnalysisRun analysisRun, final HashIdFileTree path) {
 		Job job = new Job("Calculate Evaluation...") {

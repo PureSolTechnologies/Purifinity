@@ -94,7 +94,7 @@ public class Statistics implements Serializable {
 		return max;
 	}
 
-	public double getMedian() {
+	public Double getMedian() {
 		return median;
 	}
 
@@ -102,7 +102,7 @@ public class Statistics implements Serializable {
 		return avg;
 	}
 
-	public double getStdDev() {
+	public Double getStdDev() {
 		return stdDev;
 	}
 

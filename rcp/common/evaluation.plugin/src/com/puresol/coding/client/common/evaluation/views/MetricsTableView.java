@@ -123,7 +123,7 @@ public class MetricsTableView extends ViewPart implements Refreshable,
 			if (path.isFile()) {
 				HashIdFileTree directory = path.getParent();
 				if (directory != null) {
-					if (!store.hasFileResults(directory.getHashId())) {
+					if (!store.hasDirectoryResults(directory.getHashId())) {
 						EvaluationTool.putAsynchronous(this, evaluatorFactory,
 								analysisRun, directory);
 					} else {
