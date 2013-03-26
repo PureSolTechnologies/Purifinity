@@ -28,174 +28,171 @@ import com.puresol.coding.client.common.ui.actions.Refreshable;
 import com.puresol.coding.evaluation.api.EvaluatorFactory;
 import com.puresol.coding.evaluation.api.EvaluatorStore;
 import com.puresol.coding.evaluation.api.EvaluatorStoreFactory;
-import com.puresol.coding.evaluation.api.Evaluators;
 import com.puresol.coding.metrics.sloc.SLOCEvaluator;
 import com.puresol.utils.HashId;
 
 public class MetricsTableView extends ViewPart implements Refreshable,
-		ISelectionListener, IJobChangeListener, EvaluationsTarget {
+	ISelectionListener, IJobChangeListener, EvaluationsTarget {
 
-	private FileAnalysisSelection analysisSelection;
-	private Text text;
-	private Table table;
-	private MetricsTableViewer viewer;
-	private HashIdFileTree path;
+    private FileAnalysisSelection analysisSelection;
+    private Text text;
+    private Table table;
+    private MetricsTableViewer viewer;
+    private HashIdFileTree path;
+    private EvaluatorFactory metric;
 
-	public MetricsTableView() {
+    public MetricsTableView() {
+    }
+
+    /**
+     * Create contents of the view part.
+     * 
+     * @param parent
+     */
+    @Override
+    public void createPartControl(Composite parent) {
+	Composite container = new Composite(parent, SWT.NONE);
+	container.setLayout(new FormLayout());
+	{
+	    text = new Text(container, SWT.BORDER);
+	    FormData fd_text = new FormData();
+	    fd_text.top = new FormAttachment(0, 10);
+	    fd_text.left = new FormAttachment(0, 10);
+	    fd_text.bottom = new FormAttachment(0, 32);
+	    fd_text.right = new FormAttachment(100, -10);
+	    text.setLayoutData(fd_text);
+	    text.setEditable(false);
 	}
 
-	/**
-	 * Create contents of the view part.
-	 * 
-	 * @param parent
-	 */
-	@Override
-	public void createPartControl(Composite parent) {
-		Composite container = new Composite(parent, SWT.NONE);
-		container.setLayout(new FormLayout());
-		{
-			text = new Text(container, SWT.BORDER);
-			FormData fd_text = new FormData();
-			fd_text.top = new FormAttachment(0, 10);
-			fd_text.left = new FormAttachment(0, 10);
-			fd_text.bottom = new FormAttachment(0, 32);
-			fd_text.right = new FormAttachment(100, -10);
-			text.setLayoutData(fd_text);
-			text.setEditable(false);
-		}
+	IWorkbenchPartSite site = getSite();
+	site.getWorkbenchWindow().getSelectionService()
+		.addSelectionListener(this);
 
-		IWorkbenchPartSite site = getSite();
-		site.getWorkbenchWindow().getSelectionService()
-				.addSelectionListener(this);
+	table = new Table(container, SWT.NONE);
+	table.setLinesVisible(true);
+	table.setHeaderVisible(true);
+	FormData fd_areaMap = new FormData();
+	fd_areaMap.top = new FormAttachment(text, 6);
+	fd_areaMap.left = new FormAttachment(text, 0, SWT.LEFT);
+	fd_areaMap.bottom = new FormAttachment(100, -10);
+	fd_areaMap.right = new FormAttachment(100, -10);
+	table.setLayoutData(fd_areaMap);
 
-		table = new Table(container, SWT.NONE);
-		table.setLinesVisible(true);
-		table.setHeaderVisible(true);
-		FormData fd_areaMap = new FormData();
-		fd_areaMap.top = new FormAttachment(text, 6);
-		fd_areaMap.left = new FormAttachment(text, 0, SWT.LEFT);
-		fd_areaMap.bottom = new FormAttachment(100, -10);
-		fd_areaMap.right = new FormAttachment(100, -10);
-		table.setLayoutData(fd_areaMap);
+	createNewViewer();
 
-		initializeToolBar();
-		initializeMenu();
-	}
+	initializeToolBar();
+	initializeMenu();
+    }
 
-	/**
-	 * Initialize the toolbar.
-	 */
-	private void initializeToolBar() {
-		IToolBarManager toolbarManager = getViewSite().getActionBars()
-				.getToolBarManager();
-		toolbarManager.add(new RefreshAction(this));
-	}
+    /**
+     * Initialize the toolbar.
+     */
+    private void initializeToolBar() {
+	IToolBarManager toolbarManager = getViewSite().getActionBars()
+		.getToolBarManager();
+	toolbarManager.add(new RefreshAction(this));
+    }
 
-	/**
-	 * Initialize the menu.
-	 */
-	private void initializeMenu() {
-		IMenuManager menuManager = getViewSite().getActionBars()
-				.getMenuManager();
-	}
+    /**
+     * Initialize the menu.
+     */
+    private void initializeMenu() {
+	IMenuManager menuManager = getViewSite().getActionBars()
+		.getMenuManager();
+    }
 
-	@Override
-	public void setFocus() {
-		// Set the focus
-	}
+    @Override
+    public void setFocus() {
+	// Set the focus
+    }
 
-	@Override
-	public void refresh() {
-	}
+    @Override
+    public void refresh() {
+    }
 
-	@Override
-	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-		if (selection instanceof FileAnalysisSelection) {
-			analysisSelection = (FileAnalysisSelection) selection;
-			AnalysisRun analysisRun = analysisSelection.getAnalysisRun();
-			HashIdFileTree path = analysisSelection.getHashIdFile();
-			HashId hashId = path.getHashId();
+    @Override
+    public void selectionChanged(IWorkbenchPart part, ISelection selection) {
+	if (selection instanceof FileAnalysisSelection) {
+	    analysisSelection = (FileAnalysisSelection) selection;
+	    AnalysisRun analysisRun = analysisSelection.getAnalysisRun();
+	    HashIdFileTree path = analysisSelection.getHashIdFile();
+	    HashId hashId = path.getHashId();
 
-			EvaluatorFactory evaluatorFactory = Evaluators.createInstance()
-					.getAllMetrics().get(0);
-
-			EvaluatorStoreFactory factory = EvaluatorStoreFactory.getFactory();
-			EvaluatorStore store = factory.createInstance(SLOCEvaluator.class);
-			if (path.isFile()) {
-				HashIdFileTree directory = path.getParent();
-				if (directory != null) {
-					if (!store.hasDirectoryResults(directory.getHashId())) {
-						EvaluationTool.putAsynchronous(this, evaluatorFactory,
-								analysisRun, directory);
-					} else {
-						showEvaluation(directory);
-					}
-				} else {
-					showEvaluation(null);
-				}
-			} else {
-				if (!store.hasDirectoryResults(hashId)) {
-					EvaluationTool.putAsynchronous(this, evaluatorFactory,
-							analysisRun, path);
-				} else {
-					showEvaluation(path);
-				}
-			}
-		} else if (selection instanceof MetricSelection) {
-			MetricSelection metricSelection = (MetricSelection) selection;
-			viewer = new MetricsTableViewer(table);
-			viewer.setMetric(metricSelection.getMetric());
-			viewer.setInput(path);
-			viewer.refresh();
-		}
-	}
-
-	@Override
-	public void aboutToRun(IJobChangeEvent event) {
-		// intentionally left empty
-	}
-
-	@Override
-	public void awake(IJobChangeEvent event) {
-		// intentionally left empty
-	}
-
-	@Override
-	public void done(IJobChangeEvent event) {
-		HashIdFileTree path = analysisSelection.getHashIdFile();
-		if (path.isFile()) {
-			HashIdFileTree directory = path.getParent();
-			if (directory != null) {
-				showEvaluation(directory);
-			} else {
-				showEvaluation(null);
-			}
+	    EvaluatorStoreFactory factory = EvaluatorStoreFactory.getFactory();
+	    EvaluatorStore store = factory.createInstance(SLOCEvaluator.class);
+	    if (path.isFile()) {
+		if (!store.hasFileResults(hashId)) {
+		    EvaluationTool.putAsynchronous(this, metric, analysisRun,
+			    path);
 		} else {
-			showEvaluation(path);
+		    showEvaluation(path);
 		}
-	}
-
-	@Override
-	public void running(IJobChangeEvent event) {
-		// intentionally left empty
-	}
-
-	@Override
-	public void scheduled(IJobChangeEvent event) {
-		// intentionally left empty
-	}
-
-	@Override
-	public void sleeping(IJobChangeEvent event) {
-		// intentionally left empty
-	}
-
-	@Override
-	public void showEvaluation(HashIdFileTree path) {
-		this.path = path;
-		text.setText(path.getPathFile(false).getPath());
-		if (viewer != null) {
-			viewer.setInput(path);
+	    } else {
+		if (!store.hasDirectoryResults(hashId)) {
+		    EvaluationTool.putAsynchronous(this, metric, analysisRun,
+			    path);
+		} else {
+		    showEvaluation(path);
 		}
+	    }
+	} else if (selection instanceof MetricSelection) {
+	    MetricSelection metricSelection = (MetricSelection) selection;
+	    metric = metricSelection.getMetric();
+	    createNewViewer();
 	}
+    }
+
+    private void createNewViewer() {
+	viewer = new MetricsTableViewer(table, metric);
+	viewer.setInput(path);
+	viewer.refresh();
+	table.update();
+    }
+
+    @Override
+    public void aboutToRun(IJobChangeEvent event) {
+	// intentionally left empty
+    }
+
+    @Override
+    public void awake(IJobChangeEvent event) {
+	// intentionally left empty
+    }
+
+    @Override
+    public void done(IJobChangeEvent event) {
+	HashIdFileTree path = analysisSelection.getHashIdFile();
+	if (path.isFile()) {
+	    HashIdFileTree directory = path.getParent();
+	    if (directory != null) {
+		showEvaluation(directory);
+	    } else {
+		showEvaluation(null);
+	    }
+	} else {
+	    showEvaluation(path);
+	}
+    }
+
+    @Override
+    public void running(IJobChangeEvent event) {
+	// intentionally left empty
+    }
+
+    @Override
+    public void scheduled(IJobChangeEvent event) {
+	// intentionally left empty
+    }
+
+    @Override
+    public void sleeping(IJobChangeEvent event) {
+	// intentionally left empty
+    }
+
+    @Override
+    public void showEvaluation(HashIdFileTree path) {
+	this.path = path;
+	text.setText(path.getPathFile(false).getPath());
+	createNewViewer();
+    }
 }

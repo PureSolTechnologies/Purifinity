@@ -10,36 +10,35 @@ import java.io.ObjectOutputStream;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.evaluation.api.EvaluatorStore;
 import com.puresol.coding.store.fs.analysis.AnalysisRunImpl;
-import com.puresol.coding.store.fs.analysis.FileStoreImpl;
 import com.puresol.coding.store.fs.analysis.DirectoryStoreImpl;
+import com.puresol.coding.store.fs.analysis.FileStoreImpl;
 import com.puresol.utils.HashId;
 
 public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 
-    protected abstract File getFileResultsFile(HashId hashId);
+    protected abstract Class<?> getFileResultClass();
 
-    protected final File getFileResultsFile(HashId hashId, Class<?> clazz) {
+    protected abstract Class<?> getDirectoryResultClass();
+
+    protected abstract Class<?> getProjectResultClass();
+
+    protected final File getFileResultsFile(HashId hashId) {
 	File directory = FileStoreImpl.getFileDirectory(hashId);
-	String fileName = clazz.getName();
+	String fileName = getFileResultClass().getName();
 	File file = new File(directory, fileName);
 	return file;
     }
 
-    protected abstract File getDirectoryResultsFile(HashId hashId);
-
-    protected final File getDirectoryResultsFile(HashId hashId, Class<?> clazz) {
+    protected final File getDirectoryResultsFile(HashId hashId) {
 	File directory = DirectoryStoreImpl.getDirectoryStoreDirectory(hashId);
-	String fileName = clazz.getName();
+	String fileName = getDirectoryResultClass().getName();
 	File file = new File(directory, fileName);
 	return file;
     }
 
-    protected abstract File getProjectResultsFile(AnalysisRun analysisRun);
-
-    protected final File getProjectResultsFile(AnalysisRun analysisRun,
-	    Class<?> clazz) {
+    protected final File getProjectResultsFile(AnalysisRun analysisRun) {
 	File directory = AnalysisRunImpl.getStorageDirectory(analysisRun);
-	String fileName = clazz.getName();
+	String fileName = getProjectResultClass().getName();
 	File file = new File(directory, fileName);
 	return file;
     }

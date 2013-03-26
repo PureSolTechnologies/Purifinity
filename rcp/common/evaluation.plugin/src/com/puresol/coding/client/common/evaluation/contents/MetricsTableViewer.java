@@ -10,107 +10,98 @@ import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
 
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.evaluation.api.EvaluatorFactory;
 import com.puresol.coding.evaluation.api.EvaluatorStore;
 import com.puresol.coding.evaluation.api.EvaluatorStoreFactory;
 import com.puresol.coding.evaluation.api.MetricResults;
+import com.puresol.utils.HashId;
+import com.puresol.utils.math.Parameter;
 import com.puresol.utils.math.Value;
 
 public class MetricsTableViewer extends TableViewer implements
-		IStructuredContentProvider {
+	IStructuredContentProvider {
 
-	private EvaluatorFactory metric = null;
-	private MetricResults results = null;
+    private final EvaluatorFactory metric;
+    private MetricResults results = null;
 
-	public MetricsTableViewer(Table table) {
-		super(table);
-		setContentProvider(this);
-		setupNameColumn();
-		setupValueColumn();
-		setupUnitColumn();
+    public MetricsTableViewer(Table table, EvaluatorFactory metric) {
+	super(table);
+	setContentProvider(this);
+	this.metric = metric;
+    }
+
+    @Override
+    public void dispose() {
+    }
+
+    @Override
+    public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+	results = null;
+	for (TableColumn column : getTable().getColumns()) {
+	    column.dispose();
 	}
-
-	public void setMetric(EvaluatorFactory metric) {
-		this.metric = metric;
+	if (newInput == null) {
+	    return;
 	}
-
-	private void setupNameColumn() {
-		TableViewerColumn nameColumn = new TableViewerColumn(this, SWT.NONE);
-		nameColumn.getColumn().setText("Metric");
-		nameColumn.getColumn().setWidth(100);
-		nameColumn.setLabelProvider(new ColumnLabelProvider() {
-			@Override
-			public String getText(Object element) {
-				@SuppressWarnings("unchecked")
-				Map<String, Value<?>> metric = (Map<String, Value<?>>) element;
-				return "Metric";
-			}
-		});
+	if (metric == null) {
+	    return;
 	}
-
-	private void setupValueColumn() {
-		TableViewerColumn nameColumn = new TableViewerColumn(this, SWT.NONE);
-		nameColumn.getColumn().setText("Value");
-		nameColumn.getColumn().setWidth(100);
-		nameColumn.setLabelProvider(new ColumnLabelProvider() {
-			@Override
-			public String getText(Object element) {
-				@SuppressWarnings("unchecked")
-				Map<String, Value<?>> metric = (Map<String, Value<?>>) element;
-				return "Value";
-			}
-		});
-	}
-
-	private void setupUnitColumn() {
-		TableViewerColumn unitColumn = new TableViewerColumn(this, SWT.NONE);
-		unitColumn.getColumn().setText("Unit");
-		unitColumn.getColumn().setWidth(100);
-		unitColumn.setLabelProvider(new ColumnLabelProvider() {
-			@Override
-			public String getText(Object element) {
-				@SuppressWarnings("unchecked")
-				Map<String, Value<?>> metric = (Map<String, Value<?>>) element;
-				return "Unit";
-			}
-		});
-	}
-
-	@Override
-	public void dispose() {
-	}
-
-	@Override
-	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-		results = null;
-		if (newInput == null) {
-			return;
+	if (HashIdFileTree.class.isAssignableFrom(newInput.getClass())) {
+	    HashIdFileTree path = (HashIdFileTree) newInput;
+	    HashId hashId = path.getHashId();
+	    EvaluatorStore evaluatorStore = EvaluatorStoreFactory.getFactory()
+		    .createInstance(metric.getEvaluatorClass());
+	    if (path.isFile()) {
+		if (evaluatorStore.hasFileResults(hashId)) {
+		    results = evaluatorStore.readFileResults(hashId);
 		}
-		if (metric == null) {
-			return;
+	    } else {
+		if (evaluatorStore.hasDirectoryResults(hashId)) {
+		    results = evaluatorStore.readDirectoryResults(hashId);
 		}
-		if (HashIdFileTree.class.isAssignableFrom(newInput.getClass())) {
-			HashIdFileTree directory = (HashIdFileTree) newInput;
-			EvaluatorStore evaluatorStore = EvaluatorStoreFactory.getFactory()
-					.createInstance(metric.getEvaluatorClass());
-			if (directory.isFile()) {
-				results = evaluatorStore.readFileResults(directory.getHashId());
-			} else {
-				results = evaluatorStore.readDirectoryResults(directory
-						.getHashId());
-			}
-		}
-		refresh();
+	    }
+	    if (results != null) {
+		setResults(results);
+	    }
 	}
+	refresh();
+    }
 
-	@Override
-	public Map<String, Value<?>>[] getElements(Object inputElement) {
-		List<Map<String, Value<?>>> values = results.getValues();
-		@SuppressWarnings("unchecked")
-		Map<String, Value<?>>[] valueArray = values.toArray(new Map[values
-				.size()]);
-		return valueArray;
+    private void setResults(MetricResults results) {
+	for (Parameter<?> parameter : results.getParameters()) {
+	    TableViewerColumn nameColumn = new TableViewerColumn(this, SWT.NONE);
+	    final String name = parameter.getName();
+	    nameColumn.getColumn().setText(name);
+	    nameColumn.getColumn().setWidth(100);
+	    nameColumn.setLabelProvider(new ColumnLabelProvider() {
+		@Override
+		public String getText(Object element) {
+		    @SuppressWarnings("unchecked")
+		    Map<String, Value<?>> values = (Map<String, Value<?>>) element;
+		    Value<?> value = values.get(name);
+		    if (value == null) {
+			return "";
+		    }
+		    return value.getValue().toString();
+		}
+	    });
 	}
+    }
+
+    @Override
+    public Map<String, Value<?>>[] getElements(Object inputElement) {
+	if (results == null) {
+	    @SuppressWarnings("unchecked")
+	    Map<String, Value<?>>[] emptyResult = new Map[0];
+	    return emptyResult;
+	}
+	List<Map<String, Value<?>>> values = results.getValues();
+	@SuppressWarnings("unchecked")
+	Map<String, Value<?>>[] valueArray = values.toArray(new Map[values
+		.size()]);
+	return valueArray;
+    }
 }
