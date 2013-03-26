@@ -40,11 +40,6 @@ public class EvaluationTool {
 					}
 				};
 				uiJob.schedule();
-				try {
-					uiJob.join();
-				} catch (InterruptedException e) {
-					return Status.CANCEL_STATUS;
-				}
 				return Status.OK_STATUS;
 			}
 		};

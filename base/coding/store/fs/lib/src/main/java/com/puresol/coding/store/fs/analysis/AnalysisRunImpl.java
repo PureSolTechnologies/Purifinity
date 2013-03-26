@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -38,6 +39,7 @@ import com.puresol.coding.analysis.api.DirectoryStoreFactory;
 import com.puresol.coding.analysis.api.FileStoreException;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.analysis.api.RepositoryLocation;
+import com.puresol.trees.TreePrinter;
 import com.puresol.trees.TreeVisitor;
 import com.puresol.trees.TreeWalker;
 import com.puresol.trees.WalkingAction;
@@ -301,6 +303,16 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
 			persist(analyzedFiles, new File(runDirectory, ANALYZED_FILES_FILE));
 			persist(failedSources, new File(runDirectory, FAILED_FILES_FILE));
 			persist(fileTree, new File(runDirectory, TREE_FILE));
+			if (fileTree != null) {
+				File contentFile = new File(runDirectory, "content.txt");
+				PrintStream stream = new PrintStream(contentFile);
+				try {
+					TreePrinter printer = new TreePrinter(stream);
+					printer.println(fileTree);
+				} finally {
+					stream.close();
+				}
+			}
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
 		}
