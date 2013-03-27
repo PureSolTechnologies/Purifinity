@@ -483,7 +483,11 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
 			HashIdFileTree child = node.getChild(directory);
 			if (child == null) {
 				boolean isFile = (i == directories.length - 1);
-				child = new HashIdFileTree(node, directory, hashId, isFile);
+				if (isFile) {
+					child = new HashIdFileTree(node, directory, hashId, isFile);
+				} else {
+					child = new HashIdFileTree(node, directory, null, isFile);
+				}
 			}
 			node = child;
 		}
@@ -526,7 +530,8 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
 				} else {
 					List<String> hashList = new ArrayList<String>();
 					for (HashIdFileTree child : tree.getChildren()) {
-						hashList.add(child.getHashId().toString());
+						hashList.add(hashes.get(child.getPathFile(false))
+								.toString());
 					}
 					Collections.sort(hashList);
 					StringBuilder joinedHash = new StringBuilder();
