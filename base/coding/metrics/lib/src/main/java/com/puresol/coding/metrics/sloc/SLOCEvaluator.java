@@ -82,12 +82,14 @@ public class SLOCEvaluator extends AbstractEvaluator {
 
 	private SLOCResult processFile(HashIdFileTree directory,
 			SLOCResult results, HashIdFileTree child) {
-		SLOCResults slocResults = (SLOCResults) store.readFileResults(child
-				.getHashId());
-		for (SLOCResult result : slocResults.getResults()) {
-			if (result.getCodeRangeType() == CodeRangeType.FILE) {
-				results = combine(directory, results, result);
-				break;
+		if (store.hasFileResults(child.getHashId())) {
+			SLOCResults slocResults = (SLOCResults) store.readFileResults(child
+					.getHashId());
+			for (SLOCResult result : slocResults.getResults()) {
+				if (result.getCodeRangeType() == CodeRangeType.FILE) {
+					results = combine(directory, results, result);
+					break;
+				}
 			}
 		}
 		return results;
@@ -95,13 +97,16 @@ public class SLOCEvaluator extends AbstractEvaluator {
 
 	private SLOCResult processSubDirectory(HashIdFileTree directory,
 			SLOCResult results, HashIdFileTree child) {
-		SLOCResults slocResults = (SLOCResults) store
-				.readDirectoryResults(child.getHashId());
-		if (slocResults.getResults().size() != 1) {
-			throw new RuntimeException(
-					"A directory should only have one dataset with aggregated SLOC.");
+		if (store.hasDirectoryResults(child.getHashId())) {
+			SLOCResults slocResults = (SLOCResults) store
+					.readDirectoryResults(child.getHashId());
+			if (slocResults.getResults().size() != 1) {
+				throw new RuntimeException(
+						"A directory should only have one dataset with aggregated SLOC.");
+			}
+			results = combine(directory, results,
+					slocResults.getResults().get(0));
 		}
-		results = combine(directory, results, slocResults.getResults().get(0));
 		return results;
 	}
 

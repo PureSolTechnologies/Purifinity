@@ -44,14 +44,17 @@ public final class FileStoreImpl implements FileStore {
 					} finally {
 						tempFileWriter.close();
 					}
-					byte[] hash = digestInputStream.getMessageDigest().digest();
+					byte[] hashBytes = digestInputStream.getMessageDigest().digest();
+					String hashString = HashCodeGenerator.convertByteArrayToString(hashBytes);
 					HashId hashId = new HashId(
 							StoreUtilities.getDefaultMessageDigestAlgorithm(),
-							HashCodeGenerator.convertByteArrayToString(hash));
+							hashString);
 					File targetDirectory = getFileDirectory(hashId);
-					checkAndCreateDirectory(targetDirectory);
 					File targetFile = new File(targetDirectory, RAW_FILE);
-					FileUtils.copyFile(tempFile, targetFile);
+					if (!targetFile.exists()) {
+						checkAndCreateDirectory(targetDirectory);
+						FileUtils.copyFile(tempFile, targetFile);
+					}
 					return hashId;
 				} finally {
 					digestInputStream.close();
