@@ -61,7 +61,7 @@ public class AreaMapComponent extends Canvas implements PaintListener {
 		if (data == null) {
 		    return super.getText(event);
 		} else {
-		    return data.getName();
+		    return data.getName() + " (" + data.getValue() + ")";
 		}
 	    }
 	};

@@ -1,14 +1,21 @@
 package com.puresol.coding.client.common.evaluation.views;
 
-import org.eclipse.core.runtime.jobs.IJobChangeEvent;
-import org.eclipse.core.runtime.jobs.IJobChangeListener;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.ISelectionListener;
@@ -19,6 +26,7 @@ import org.eclipse.ui.part.ViewPart;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.client.common.analysis.views.FileAnalysisSelection;
+import com.puresol.coding.client.common.evaluation.contents.ParameterComboViewer;
 import com.puresol.coding.client.common.evaluation.utils.EvaluationTool;
 import com.puresol.coding.client.common.evaluation.utils.EvaluationsTarget;
 import com.puresol.coding.client.common.ui.actions.RefreshAction;
@@ -26,16 +34,29 @@ import com.puresol.coding.client.common.ui.actions.Refreshable;
 import com.puresol.coding.client.common.ui.components.AreaMapComponent;
 import com.puresol.coding.client.common.ui.components.AreaMapData;
 import com.puresol.coding.evaluation.api.EvaluatorFactory;
+import com.puresol.coding.evaluation.api.EvaluatorStore;
+import com.puresol.coding.evaluation.api.EvaluatorStoreFactory;
 import com.puresol.coding.evaluation.api.Evaluators;
+import com.puresol.coding.evaluation.api.MetricResults;
+import com.puresol.utils.math.LevelOfMeasurement;
+import com.puresol.utils.math.Parameter;
+import com.puresol.utils.math.Value;
 
 public class MetricsMapView extends ViewPart implements Refreshable,
-	ISelectionListener, IJobChangeListener, EvaluationsTarget {
+	ISelectionListener, EvaluationsTarget, SelectionListener {
 
     private FileAnalysisSelection analysisSelection;
     private EvaluatorFactory metricSelection;
+    private Parameter<?> parameterSelection;
 
     private Text text;
+    private Combo combo;
     private AreaMapComponent areaMap;
+    private ParameterComboViewer viewer;
+    private HashIdFileTree path;
+
+    private final List<Parameter<?>> parameterList = new ArrayList<Parameter<?>>();
+    private HashIdFileTree lastSelection;
 
     public MetricsMapView() {
     }
@@ -66,11 +87,21 @@ public class MetricsMapView extends ViewPart implements Refreshable,
 
 	areaMap = new AreaMapComponent(container, SWT.NONE);
 	FormData fd_areaMap = new FormData();
-	fd_areaMap.top = new FormAttachment(text, 6);
 	fd_areaMap.left = new FormAttachment(text, 0, SWT.LEFT);
 	fd_areaMap.bottom = new FormAttachment(100, -10);
 	fd_areaMap.right = new FormAttachment(100, -10);
 	areaMap.setLayoutData(fd_areaMap);
+
+	combo = new Combo(container, SWT.NONE);
+	fd_areaMap.top = new FormAttachment(combo, 6);
+	FormData fd_combo = new FormData();
+	fd_combo.left = new FormAttachment(text, 0, SWT.LEFT);
+	fd_combo.top = new FormAttachment(text, 6);
+	fd_combo.right = new FormAttachment(100, -10);
+	combo.setLayoutData(fd_combo);
+	combo.addSelectionListener(this);
+
+	viewer = new ParameterComboViewer(combo);
 
 	initializeToolBar();
 	initializeMenu();
@@ -106,98 +137,101 @@ public class MetricsMapView extends ViewPart implements Refreshable,
     public void selectionChanged(IWorkbenchPart part, ISelection selection) {
 	if (selection instanceof FileAnalysisSelection) {
 	    analysisSelection = (FileAnalysisSelection) selection;
-	    if (metricSelection != null) {
-		updateEvaluation();
-	    }
+	    updateEvaluation();
 	} else if (selection instanceof MetricSelection) {
 	    metricSelection = ((MetricSelection) selection).getMetric();
-	    if (analysisSelection != null) {
-		updateEvaluation();
-	    }
+	    updateEvaluation();
 	}
     }
 
     private void updateEvaluation() {
-	AnalysisRun analysisRun = analysisSelection.getAnalysisRun();
-	HashIdFileTree path = analysisSelection.getHashIdFile();
+	if ((analysisSelection != null) && (metricSelection != null)) {
+	    AnalysisRun analysisRun = analysisSelection.getAnalysisRun();
+	    HashIdFileTree path = analysisSelection.getHashIdFile();
 
-	EvaluatorFactory evaluatorFactory = Evaluators.createInstance()
-		.getAllMetrics().get(0);
+	    EvaluatorFactory evaluatorFactory = Evaluators.createInstance()
+		    .getAllMetrics().get(0);
 
-	if (path.isFile()) {
-	    path = path.getParent();
-	}
-	EvaluationTool.showEvaluationAsynchronous(this, evaluatorFactory,
-		analysisRun, path);
-    }
-
-    private void show(HashIdFileTree directory) {
-	text.setText(directory.getPathFile(true).getPath());
-    }
-
-    @Override
-    public void aboutToRun(IJobChangeEvent event) {
-	// intentionally left empty
-    }
-
-    @Override
-    public void awake(IJobChangeEvent event) {
-	// intentionally left empty
-    }
-
-    @Override
-    public void done(IJobChangeEvent event) {
-	HashIdFileTree path = analysisSelection.getHashIdFile();
-	if (path.isFile()) {
-	    HashIdFileTree directory = path.getParent();
-	    if (directory != null) {
-		show(directory);
-	    } else {
-		show(null);
+	    if (path.isFile()) {
+		path = path.getParent();
 	    }
-	} else {
-	    show(path);
+	    if (!path.equals(lastSelection)) {
+		lastSelection = path;
+		EvaluationTool.showEvaluationAsynchronous(this,
+			evaluatorFactory, analysisRun, path);
+	    }
 	}
-    }
-
-    @Override
-    public void running(IJobChangeEvent event) {
-	// intentionally left empty
-    }
-
-    @Override
-    public void scheduled(IJobChangeEvent event) {
-	// intentionally left empty
-    }
-
-    @Override
-    public void sleeping(IJobChangeEvent event) {
-	// intentionally left empty
     }
 
     @Override
     public void showEvaluation(HashIdFileTree path) {
+	this.path = path;
 	text.setText(path.getPathFile(false).getPath());
-	AreaMapData data = calculateMapData(path);
+	AreaMapData data = calculateMapDataAndParameterList(path);
+	viewer.setInput(parameterList);
+	combo.select(0);
 	areaMap.setData(data);
     }
 
-    private AreaMapData calculateMapData(HashIdFileTree path) {
-	AreaMapData c11 = new AreaMapData("Child11", 1.0);
-	AreaMapData c12 = new AreaMapData("Child12", 5.0);
+    private AreaMapData calculateMapDataAndParameterList(HashIdFileTree path) {
+	parameterList.clear();
+	EvaluatorStore store = EvaluatorStoreFactory.getFactory()
+		.createInstance(metricSelection.getEvaluatorClass());
+	AreaMapData areaData = getAreaData(store, path);
+	viewer.setInput(parameterList);
+	return areaData;
+    }
 
-	AreaMapData c1 = new AreaMapData("Child1", 1.0, c11, c12);
+    private AreaMapData getAreaData(EvaluatorStore store, HashIdFileTree path) {
+	List<HashIdFileTree> children = path.getChildren();
+	AreaMapData childAreas[] = new AreaMapData[children.size()];
+	for (int i = 0; i < childAreas.length; i++) {
+	    childAreas[i] = getAreaData(store, children.get(i));
+	}
+	Arrays.sort(childAreas);
+	MetricResults results;
+	if (path.isFile()) {
+	    results = store.readFileResults(path.getHashId());
+	} else {
+	    results = store.readDirectoryResults(path.getHashId());
+	}
+	for (Parameter<?> parameter : results.getParameters()) {
+	    if (parameter.getLevelOfMeasurement() == LevelOfMeasurement.RATIO) {
+		if (!parameterList.contains(parameter)) {
+		    parameterList.add(parameter);
+		}
+	    }
+	}
+	if (parameterSelection == null) {
+	    parameterSelection = parameterList.get(0);
+	}
+	List<Map<String, Value<?>>> values = results.getValues();
+	Map<String, Value<?>> value = values.get(0);
+	double sum = 0.0;
+	if (parameterSelection.getType().equals(Double.class)) {
+	    sum = (Double) value.get(parameterSelection.getName()).getValue();
+	} else if (parameterSelection.getType().equals(Integer.class)) {
+	    sum = (Integer) value.get(parameterSelection.getName()).getValue();
+	}
+	return new AreaMapData(path.getPathFile(false).toString(), sum,
+		childAreas);
+    }
 
-	AreaMapData c21 = new AreaMapData("Child21", 1.0);
-	AreaMapData c22 = new AreaMapData("Child22", 2.0);
-	AreaMapData c23 = new AreaMapData("Child23", 3.0);
-	AreaMapData c24 = new AreaMapData("Child24", 5.0);
-	AreaMapData c25 = new AreaMapData("Child25", 8.0);
+    @Override
+    public void widgetSelected(SelectionEvent e) {
+	if (e.getSource() == combo) {
+	    StructuredSelection selection = (StructuredSelection) viewer
+		    .getSelection();
+	    parameterSelection = (Parameter<?>) selection.getFirstElement();
+	    EvaluatorStore store = EvaluatorStoreFactory.getFactory()
+		    .createInstance(metricSelection.getEvaluatorClass());
+	    AreaMapData areaData = getAreaData(store, path);
+	    areaMap.setData(areaData);
+	}
+    }
 
-	AreaMapData c2 = new AreaMapData("Child2", 2.0, c21, c22, c23, c24, c25);
-	AreaMapData c3 = new AreaMapData("Child3", 3.0);
-	AreaMapData root = new AreaMapData("Parent", 6.0, c1, c2, c3);
-
-	return root;
+    @Override
+    public void widgetDefaultSelected(SelectionEvent e) {
+	widgetSelected(e);
     }
 }
