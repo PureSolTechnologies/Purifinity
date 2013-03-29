@@ -26,20 +26,15 @@ import com.puresol.coding.client.common.evaluation.utils.EvaluationsTarget;
 import com.puresol.coding.client.common.ui.actions.RefreshAction;
 import com.puresol.coding.client.common.ui.actions.Refreshable;
 import com.puresol.coding.evaluation.api.EvaluatorFactory;
-import com.puresol.coding.evaluation.api.EvaluatorStore;
-import com.puresol.coding.evaluation.api.EvaluatorStoreFactory;
-import com.puresol.coding.metrics.sloc.SLOCEvaluator;
-import com.puresol.utils.HashId;
 
 public class MetricsTableView extends ViewPart implements Refreshable,
 	ISelectionListener, IJobChangeListener, EvaluationsTarget {
 
     private FileAnalysisSelection analysisSelection;
+    private EvaluatorFactory metricSelection;
+
     private Text text;
-    private Table table;
     private MetricsTableViewer viewer;
-    private HashIdFileTree path;
-    private EvaluatorFactory metric;
 
     public MetricsTableView() {
     }
@@ -68,7 +63,7 @@ public class MetricsTableView extends ViewPart implements Refreshable,
 	site.getWorkbenchWindow().getSelectionService()
 		.addSelectionListener(this);
 
-	table = new Table(container, SWT.NONE);
+	Table table = new Table(container, SWT.NONE);
 	table.setLinesVisible(true);
 	table.setHeaderVisible(true);
 	FormData fd_areaMap = new FormData();
@@ -78,7 +73,7 @@ public class MetricsTableView extends ViewPart implements Refreshable,
 	fd_areaMap.right = new FormAttachment(100, -10);
 	table.setLayoutData(fd_areaMap);
 
-	createNewViewer();
+	viewer = new MetricsTableViewer(table);
 
 	initializeToolBar();
 	initializeMenu();
@@ -114,39 +109,23 @@ public class MetricsTableView extends ViewPart implements Refreshable,
     public void selectionChanged(IWorkbenchPart part, ISelection selection) {
 	if (selection instanceof FileAnalysisSelection) {
 	    analysisSelection = (FileAnalysisSelection) selection;
-	    AnalysisRun analysisRun = analysisSelection.getAnalysisRun();
-	    HashIdFileTree path = analysisSelection.getHashIdFile();
-	    HashId hashId = path.getHashId();
-
-	    EvaluatorStoreFactory factory = EvaluatorStoreFactory.getFactory();
-	    EvaluatorStore store = factory.createInstance(SLOCEvaluator.class);
-	    if (path.isFile()) {
-		if (!store.hasFileResults(hashId)) {
-		    EvaluationTool.putAsynchronous(this, metric, analysisRun,
-			    path);
-		} else {
-		    showEvaluation(path);
-		}
-	    } else {
-		if (!store.hasDirectoryResults(hashId)) {
-		    EvaluationTool.putAsynchronous(this, metric, analysisRun,
-			    path);
-		} else {
-		    showEvaluation(path);
-		}
+	    if (metricSelection != null) {
+		updateEvaluation();
 	    }
 	} else if (selection instanceof MetricSelection) {
-	    MetricSelection metricSelection = (MetricSelection) selection;
-	    metric = metricSelection.getMetric();
-	    createNewViewer();
+	    metricSelection = ((MetricSelection) selection).getMetric();
+	    viewer.setMetric(metricSelection);
+	    if (analysisSelection != null) {
+		updateEvaluation();
+	    }
 	}
     }
 
-    private void createNewViewer() {
-	viewer = new MetricsTableViewer(table, metric);
-	viewer.setInput(path);
-	viewer.refresh();
-	table.update();
+    private void updateEvaluation() {
+	AnalysisRun analysisRun = analysisSelection.getAnalysisRun();
+	HashIdFileTree path = analysisSelection.getHashIdFile();
+	EvaluationTool.showEvaluationAsynchronous(this, metricSelection,
+		analysisRun, path);
     }
 
     @Override
@@ -191,8 +170,7 @@ public class MetricsTableView extends ViewPart implements Refreshable,
 
     @Override
     public void showEvaluation(HashIdFileTree path) {
-	this.path = path;
 	text.setText(path.getPathFile(false).getPath());
-	createNewViewer();
+	viewer.setInput(path);
     }
 }

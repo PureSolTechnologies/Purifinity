@@ -24,12 +24,15 @@ import com.puresol.utils.math.Value;
 public class MetricsTableViewer extends TableViewer implements
 	IStructuredContentProvider {
 
-    private final EvaluatorFactory metric;
+    private EvaluatorFactory metric;
     private MetricResults results = null;
 
-    public MetricsTableViewer(Table table, EvaluatorFactory metric) {
+    public MetricsTableViewer(Table table) {
 	super(table);
 	setContentProvider(this);
+    }
+
+    public void setMetric(EvaluatorFactory metric) {
 	this.metric = metric;
     }
 
