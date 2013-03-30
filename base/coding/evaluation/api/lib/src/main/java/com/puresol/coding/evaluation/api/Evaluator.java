@@ -41,5 +41,5 @@ public interface Evaluator extends
      */
     public List<QualityCharacteristic> getEvaluatedQualityCharacteristics();
 
-    public EvaluatorStore getEvaluatorStore();
+    public EvaluatorStore createEvaluatorStore();
 }

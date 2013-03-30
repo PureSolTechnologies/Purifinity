@@ -19,111 +19,113 @@ import com.puresol.uhura.ust.eval.EvaluationException;
 
 public class SLOCEvaluator extends AbstractEvaluator {
 
-	private static final long serialVersionUID = -5093217611195212999L;
+    private static final long serialVersionUID = -5093217611195212999L;
 
-	private final EvaluatorStore store;
+    private final EvaluatorStore store;
 
-	public SLOCEvaluator(AnalysisRun analysisRun, HashIdFileTree path) {
-		super(SLOCMetricCalculator.NAME, SLOCMetricCalculator.DESCRIPTION,
-				analysisRun, path);
-		store = getEvaluatorStore();
+    public SLOCEvaluator(AnalysisRun analysisRun, HashIdFileTree path) {
+	super(SLOCMetricCalculator.NAME, SLOCMetricCalculator.DESCRIPTION,
+		analysisRun, path);
+	store = createEvaluatorStore();
+    }
+
+    @Override
+    protected void processFile(CodeAnalysis analysis)
+	    throws InterruptedException, EvaluationException {
+	if (store.hasFileResults(analysis.getAnalyzedFile().getHashId())) {
+	    return;
 	}
+	SLOCResults results = new SLOCResults();
+	ProgrammingLanguages programmingLanguages = ProgrammingLanguages
+		.createInstance();
+	try {
+	    ProgrammingLanguage language = programmingLanguages.findByName(
+		    analysis.getLanguageName(), analysis.getLanguageVersion());
 
-	@Override
-	protected void processFile(CodeAnalysis analysis)
-			throws InterruptedException, EvaluationException {
-		if (store.hasFileResults(analysis.getAnalyzedFile().getHashId())) {
-			return;
+	    for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
+		SLOCMetricCalculator metric = new SLOCMetricCalculator(
+			getAnalysisRun(), language, codeRange);
+		execute(metric);
+		results.add(new SLOCResult(analysis.getAnalyzedFile()
+			.getSourceLocation(), codeRange.getType(), codeRange
+			.getName(), metric.getSLOCResult(), metric.getQuality()));
+	    }
+	} finally {
+	    IOUtils.closeQuietly(programmingLanguages);
+	}
+	store.storeFileResults(analysis.getAnalyzedFile().getHashId(), results);
+    }
+
+    @Override
+    public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
+	return SLOCMetricCalculator.EVALUATED_QUALITY_CHARACTERISTICS;
+    }
+
+    @Override
+    protected void processDirectory(HashIdFileTree directory)
+	    throws InterruptedException {
+	if (store.hasDirectoryResults(directory.getHashId())) {
+	    return;
+	}
+	SLOCResult results = null;
+	for (HashIdFileTree child : directory.getChildren()) {
+	    if (child.isFile()) {
+		results = processFile(directory, results, child);
+	    } else {
+		results = processSubDirectory(directory, results, child);
+	    }
+	}
+	SLOCResults finalResults = new SLOCResults();
+	if (results != null) {
+	    finalResults.add(results);
+	}
+	store.storeDirectoryResults(directory.getHashId(), finalResults);
+    }
+
+    private SLOCResult processFile(HashIdFileTree directory,
+	    SLOCResult results, HashIdFileTree child) {
+	if (store.hasFileResults(child.getHashId())) {
+	    SLOCResults slocResults = (SLOCResults) store.readFileResults(child
+		    .getHashId());
+	    for (SLOCResult result : slocResults.getResults()) {
+		if (result.getCodeRangeType() == CodeRangeType.FILE) {
+		    results = combine(directory, results, result);
+		    break;
 		}
-		SLOCResults results = new SLOCResults();
-		ProgrammingLanguages programmingLanguages = ProgrammingLanguages
-				.createInstance();
-		try {
-			ProgrammingLanguage language = programmingLanguages.findByName(
-					analysis.getLanguageName(), analysis.getLanguageVersion());
-
-			for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
-				SLOCMetricCalculator metric = new SLOCMetricCalculator(
-						getAnalysisRun(), language, codeRange);
-				execute(metric);
-				results.add(new SLOCResult(analysis.getAnalyzedFile()
-						.getSourceLocation(), codeRange.getType(), codeRange
-						.getName(), metric.getSLOCResult(), metric.getQuality()));
-			}
-		} finally {
-			IOUtils.closeQuietly(programmingLanguages);
-		}
-		store.storeFileResults(analysis.getAnalyzedFile().getHashId(), results);
+	    }
 	}
+	return results;
+    }
 
-	@Override
-	public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
-		return SLOCMetricCalculator.EVALUATED_QUALITY_CHARACTERISTICS;
+    private SLOCResult processSubDirectory(HashIdFileTree directory,
+	    SLOCResult results, HashIdFileTree child) {
+	if (store.hasDirectoryResults(child.getHashId())) {
+	    SLOCResults slocResults = (SLOCResults) store
+		    .readDirectoryResults(child.getHashId());
+	    if (slocResults.getResults().size() != 1) {
+		throw new RuntimeException(
+			"A directory should only have one dataset with aggregated SLOC.");
+	    }
+	    results = combine(directory, results,
+		    slocResults.getResults().get(0));
 	}
+	return results;
+    }
 
-	@Override
-	protected void processDirectory(HashIdFileTree directory)
-			throws InterruptedException {
-		if (store.hasDirectoryResults(directory.getHashId())) {
-			return;
-		}
-		SLOCResult results = null;
-		for (HashIdFileTree child : directory.getChildren()) {
-			if (child.isFile()) {
-				results = processFile(directory, results, child);
-			} else {
-				results = processSubDirectory(directory, results, child);
-			}
-		}
-		SLOCResults finalResults = new SLOCResults();
-		finalResults.add(results);
-		store.storeDirectoryResults(directory.getHashId(), finalResults);
+    private SLOCResult combine(HashIdFileTree directory, SLOCResult results,
+	    SLOCResult result) {
+	if (results == null) {
+	    results = new SLOCResult(new UnspecifiedSourceCodeLocation(),
+		    CodeRangeType.DIRECTORY, directory.getName(),
+		    result.getSLOCMetric(), result.getQuality());
+	} else {
+	    results = SLOCResult.combine(results, result);
 	}
+	return results;
+    }
 
-	private SLOCResult processFile(HashIdFileTree directory,
-			SLOCResult results, HashIdFileTree child) {
-		if (store.hasFileResults(child.getHashId())) {
-			SLOCResults slocResults = (SLOCResults) store.readFileResults(child
-					.getHashId());
-			for (SLOCResult result : slocResults.getResults()) {
-				if (result.getCodeRangeType() == CodeRangeType.FILE) {
-					results = combine(directory, results, result);
-					break;
-				}
-			}
-		}
-		return results;
-	}
-
-	private SLOCResult processSubDirectory(HashIdFileTree directory,
-			SLOCResult results, HashIdFileTree child) {
-		if (store.hasDirectoryResults(child.getHashId())) {
-			SLOCResults slocResults = (SLOCResults) store
-					.readDirectoryResults(child.getHashId());
-			if (slocResults.getResults().size() != 1) {
-				throw new RuntimeException(
-						"A directory should only have one dataset with aggregated SLOC.");
-			}
-			results = combine(directory, results,
-					slocResults.getResults().get(0));
-		}
-		return results;
-	}
-
-	private SLOCResult combine(HashIdFileTree directory, SLOCResult results,
-			SLOCResult result) {
-		if (results == null) {
-			results = new SLOCResult(new UnspecifiedSourceCodeLocation(),
-					CodeRangeType.DIRECTORY, directory.getName(),
-					result.getSLOCMetric(), result.getQuality());
-		} else {
-			results = SLOCResult.combine(results, result);
-		}
-		return results;
-	}
-
-	@Override
-	protected void processProject() throws InterruptedException {
-		// TODO Auto-generated method stub
-	}
+    @Override
+    protected void processProject() throws InterruptedException {
+	// TODO Auto-generated method stub
+    }
 }

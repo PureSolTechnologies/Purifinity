@@ -45,6 +45,7 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 
     @Override
     public final boolean hasFileResults(HashId hashId) {
+
 	return getFileResultsFile(hashId).exists();
     }
 

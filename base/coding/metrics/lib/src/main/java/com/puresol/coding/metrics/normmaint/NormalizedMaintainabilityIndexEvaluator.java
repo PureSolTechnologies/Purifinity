@@ -40,7 +40,7 @@ public class NormalizedMaintainabilityIndexEvaluator extends AbstractEvaluator {
 	public NormalizedMaintainabilityIndexEvaluator(AnalysisRun analysisRun,
 			HashIdFileTree path) {
 		super(NAME, DESCRIPTION, analysisRun, path);
-		store = getEvaluatorStore();
+		store = createEvaluatorStore();
 
 		maintainabilityStore = EvaluatorStoreFactory.getFactory()
 				.createInstance(MaintainabilityIndexEvaluator.class);

@@ -23,7 +23,7 @@ public class McCabeMetricEvaluator extends AbstractEvaluator {
 
     public McCabeMetricEvaluator(AnalysisRun analysisRun, HashIdFileTree path) {
 	super(McCabeMetric.NAME, McCabeMetric.DESCRIPTION, analysisRun, path);
-	store = getEvaluatorStore();
+	store = createEvaluatorStore();
     }
 
     @Override

@@ -26,7 +26,7 @@ public class EntropyMetricEvaluator extends AbstractEvaluator {
 
 	public EntropyMetricEvaluator(AnalysisRun analysisRun, HashIdFileTree path) {
 		super(EntropyMetric.NAME, EntropyMetric.DESCRIPTION, analysisRun, path);
-		store = getEvaluatorStore();
+		store = createEvaluatorStore();
 		halsteadStore = EvaluatorStoreFactory.getFactory().createInstance(
 				HalsteadMetricEvaluator.class);
 	}

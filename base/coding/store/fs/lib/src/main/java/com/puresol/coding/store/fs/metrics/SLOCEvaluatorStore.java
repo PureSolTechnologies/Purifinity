@@ -46,14 +46,22 @@ public class SLOCEvaluatorStore extends AbstractEvaluatorStore {
 
     @Override
     public MetricResults readFileResults(HashId hashId) {
-	File file = getFileResultsFile(hashId);
-	return restore(file, SLOCResults.class);
+	if (hasFileResults(hashId)) {
+	    File file = getFileResultsFile(hashId);
+	    return restore(file, SLOCResults.class);
+	} else {
+	    return null;
+	}
     }
 
     @Override
     public MetricResults readDirectoryResults(HashId hashId) {
-	File file = getDirectoryResultsFile(hashId);
-	return restore(file, SLOCResults.class);
+	if (hasDirectoryResults(hashId)) {
+	    File file = getDirectoryResultsFile(hashId);
+	    return restore(file, SLOCResults.class);
+	} else {
+	    return null;
+	}
     }
 
     @Override

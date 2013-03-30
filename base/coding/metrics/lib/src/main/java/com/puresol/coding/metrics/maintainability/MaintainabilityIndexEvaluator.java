@@ -49,7 +49,7 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 	public MaintainabilityIndexEvaluator(AnalysisRun analysisRun,
 			HashIdFileTree path) {
 		super(NAME, DESCRIPTION, analysisRun, path);
-		store = getEvaluatorStore();
+		store = createEvaluatorStore();
 		EvaluatorStoreFactory factory = EvaluatorStoreFactory.getFactory();
 		slocStore = factory.createInstance(SLOCEvaluator.class);
 		mcCabeStore = factory.createInstance(McCabeMetricEvaluator.class);

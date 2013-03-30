@@ -1,7 +1,7 @@
 package com.puresol.coding.client.common.evaluation.views;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -184,16 +184,23 @@ public class MetricsMapView extends ViewPart implements Refreshable,
 
     private AreaMapData getAreaData(EvaluatorStore store, HashIdFileTree path) {
 	List<HashIdFileTree> children = path.getChildren();
-	AreaMapData childAreas[] = new AreaMapData[children.size()];
-	for (int i = 0; i < childAreas.length; i++) {
-	    childAreas[i] = getAreaData(store, children.get(i));
+	List<AreaMapData> childAreas = new ArrayList<AreaMapData>();
+	for (int i = 0; i < children.size(); i++) {
+	    AreaMapData areaData = getAreaData(store, children.get(i));
+	    if (areaData != null) {
+		childAreas.add(areaData);
+	    }
 	}
-	Arrays.sort(childAreas);
+	Collections.sort(childAreas);
 	MetricResults results;
 	if (path.isFile()) {
 	    results = store.readFileResults(path.getHashId());
 	} else {
 	    results = store.readDirectoryResults(path.getHashId());
+	}
+	if ((results == null) || (results.getValues().size() == 0)) {
+	    return processAreaWithoutOwnValues(path,
+		    childAreas.toArray(new AreaMapData[childAreas.size()]));
 	}
 	for (Parameter<?> parameter : results.getParameters()) {
 	    if (parameter.getLevelOfMeasurement() == LevelOfMeasurement.RATIO) {
@@ -214,7 +221,21 @@ public class MetricsMapView extends ViewPart implements Refreshable,
 	    sum = (Integer) value.get(parameterSelection.getName()).getValue();
 	}
 	return new AreaMapData(path.getPathFile(false).toString(), sum,
-		childAreas);
+		childAreas.toArray(new AreaMapData[childAreas.size()]));
+    }
+
+    private AreaMapData processAreaWithoutOwnValues(HashIdFileTree path,
+	    AreaMapData[] childAreas) {
+	double sum = 0.0;
+	for (AreaMapData childArea : childAreas) {
+	    sum += childArea.getValue();
+	}
+	if (sum > 0.0) {
+	    return new AreaMapData(path.getPathFile(false).toString(), sum,
+		    childAreas);
+	} else {
+	    return null;
+	}
     }
 
     @Override

@@ -24,7 +24,7 @@ public class CodeDepthMetricEvaluator extends AbstractEvaluator {
     public CodeDepthMetricEvaluator(AnalysisRun analysisRun, HashIdFileTree path) {
 	super(CodeDepthMetric.NAME, CodeDepthMetric.DESCRIPTION, analysisRun,
 		path);
-	store = getEvaluatorStore();
+	store = createEvaluatorStore();
     }
 
     @Override

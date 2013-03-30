@@ -24,7 +24,7 @@ public class HalsteadMetricEvaluator extends AbstractEvaluator {
     public HalsteadMetricEvaluator(AnalysisRun analysisRun, HashIdFileTree path) {
 	super(HalsteadMetric.NAME, HalsteadMetric.DESCRIPTION, analysisRun,
 		path);
-	store = getEvaluatorStore();
+	store = createEvaluatorStore();
     }
 
     @Override
