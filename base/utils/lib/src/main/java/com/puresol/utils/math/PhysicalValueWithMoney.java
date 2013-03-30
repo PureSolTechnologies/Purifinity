@@ -2,6 +2,8 @@ package com.puresol.utils.math;
 
 public class PhysicalValueWithMoney<T> implements Value<T> {
 
+    private static final long serialVersionUID = -7173959637653740015L;
+
     private final T value;
     private final PhysicalParameterWithMoney<T> property;
 

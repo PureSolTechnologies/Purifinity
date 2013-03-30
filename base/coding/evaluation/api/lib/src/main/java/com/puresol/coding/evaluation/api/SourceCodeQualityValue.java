@@ -6,24 +6,26 @@ import com.puresol.utils.math.Value;
 
 public class SourceCodeQualityValue implements Value<SourceCodeQuality> {
 
-	private static final ParameterWithArbitraryUnit<SourceCodeQuality> PARAMETER = SourceCodeQualityParameter
-			.getInstance();
+    private static final long serialVersionUID = 5054283728836837150L;
 
-	private final SourceCodeQuality quality;
+    private static final ParameterWithArbitraryUnit<SourceCodeQuality> PARAMETER = SourceCodeQualityParameter
+	    .getInstance();
 
-	public SourceCodeQualityValue(SourceCodeQuality quality) {
-		super();
-		this.quality = quality;
-	}
+    private final SourceCodeQuality quality;
 
-	@Override
-	public SourceCodeQuality getValue() {
-		return quality;
-	}
+    public SourceCodeQualityValue(SourceCodeQuality quality) {
+	super();
+	this.quality = quality;
+    }
 
-	@Override
-	public Parameter<SourceCodeQuality> getParameter() {
-		return PARAMETER;
-	}
+    @Override
+    public SourceCodeQuality getValue() {
+	return quality;
+    }
+
+    @Override
+    public Parameter<SourceCodeQuality> getParameter() {
+	return PARAMETER;
+    }
 
 }

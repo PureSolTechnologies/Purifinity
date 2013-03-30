@@ -5,7 +5,6 @@ import java.io.File;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.evaluation.api.MetricResults;
 import com.puresol.coding.metrics.cocomo.CoCoMoResults;
-import com.puresol.coding.metrics.sloc.SLOCResults;
 import com.puresol.coding.store.fs.evaluation.AbstractEvaluatorStore;
 import com.puresol.utils.HashId;
 
@@ -13,17 +12,17 @@ public class CoCoMoEvaluatorStore extends AbstractEvaluatorStore {
 
     @Override
     protected Class<?> getFileResultClass() {
-	return SLOCResults.class;
+	return CoCoMoResults.class;
     }
 
     @Override
     protected Class<?> getDirectoryResultClass() {
-	return SLOCResults.class;
+	return CoCoMoResults.class;
     }
 
     @Override
     protected Class<?> getProjectResultClass() {
-	return SLOCResults.class;
+	return CoCoMoResults.class;
     }
 
     @Override
@@ -47,14 +46,22 @@ public class CoCoMoEvaluatorStore extends AbstractEvaluatorStore {
 
     @Override
     public MetricResults readFileResults(HashId hashId) {
-	File file = getFileResultsFile(hashId);
-	return restore(file, CoCoMoResults.class);
+	if (hasFileResults(hashId)) {
+	    File file = getFileResultsFile(hashId);
+	    return restore(file, CoCoMoResults.class);
+	} else {
+	    return null;
+	}
     }
 
     @Override
     public MetricResults readDirectoryResults(HashId hashId) {
-	File file = getDirectoryResultsFile(hashId);
-	return restore(file, CoCoMoResults.class);
+	if (hasDirectoryResults(hashId)) {
+	    File file = getDirectoryResultsFile(hashId);
+	    return restore(file, CoCoMoResults.class);
+	} else {
+	    return null;
+	}
     }
 
     @Override

@@ -1,6 +1,8 @@
 package com.puresol.utils.math;
 
-public interface Value<T> {
+import java.io.Serializable;
+
+public interface Value<T> extends Serializable {
 
     public T getValue();
 
