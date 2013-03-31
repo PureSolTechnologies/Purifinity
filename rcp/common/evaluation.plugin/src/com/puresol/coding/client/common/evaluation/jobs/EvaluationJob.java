@@ -16,12 +16,14 @@ import com.puresol.coding.client.common.evaluation.Activator;
 import com.puresol.coding.evaluation.api.Evaluator;
 import com.puresol.coding.evaluation.api.EvaluatorFactory;
 import com.puresol.coding.evaluation.api.Evaluators;
+import com.puresol.utils.progress.ProgressObserver;
 
-public class EvaluationJob extends Job {
+public class EvaluationJob extends Job implements ProgressObserver<Evaluator> {
 
     private static final ILog logger = Activator.getDefault().getLog();
 
     private final AnalysisRun analysisRun;
+    private IProgressMonitor monitor = null;
 
     public EvaluationJob(AnalysisRun analysisRun) {
 	super("Evalutions of '"
@@ -32,6 +34,8 @@ public class EvaluationJob extends Job {
 
     @Override
     protected IStatus run(IProgressMonitor monitor) {
+	this.monitor = monitor;
+
 	Evaluators evaluators = Evaluators.createInstance();
 	try {
 	    Set<Class<? extends Evaluator>> finished = new HashSet<Class<? extends Evaluator>>();
@@ -47,6 +51,7 @@ public class EvaluationJob extends Job {
 			continue;
 		    }
 		    Evaluator evaluator = factory.create(analysisRun);
+		    evaluator.addObservable(this);
 		    if (!finished.contains(evaluator.getClass())) {
 			try {
 			    evaluator.call();
@@ -90,5 +95,24 @@ public class EvaluationJob extends Job {
 	    }
 	}
 	return dependenciesResolved;
+    }
+
+    @Override
+    public void started(Evaluator observable, String message, long total) {
+	monitor.beginTask(observable.getInformation().getName(), (int) total);
+	monitor.subTask(message);
+    }
+
+    @Override
+    public void done(Evaluator observable, String message, boolean successful) {
+	monitor.subTask(message);
+	monitor.setCanceled(successful);
+	monitor.done();
+    }
+
+    @Override
+    public void updateWork(Evaluator observable, String message, long finished) {
+	monitor.subTask(message);
+	monitor.worked((int) finished);
     }
 }

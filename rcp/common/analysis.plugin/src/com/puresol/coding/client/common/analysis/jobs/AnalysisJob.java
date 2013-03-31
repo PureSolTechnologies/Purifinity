@@ -30,6 +30,16 @@ public class AnalysisJob extends Job implements ProgressObserver<AnalysisRun> {
 	this.analysisProject = analysisProject;
     }
 
+    /**
+     * This method returns the newly create {@link AnalysisRun} object. This can
+     * be used to trigger upstream calculation like evaluators.
+     * 
+     * @return An {@link AnalysisRun} object is returned.
+     */
+    public AnalysisRun getAnalysisRun() {
+	return analysisRun;
+    }
+
     @Override
     protected IStatus run(IProgressMonitor monitor) {
 	try {
@@ -81,13 +91,4 @@ public class AnalysisJob extends Job implements ProgressObserver<AnalysisRun> {
 	monitor.worked((int) finished);
     }
 
-    /**
-     * This method returns the newly create {@link AnalysisRun} object. This can
-     * be used to trigger upstream calculation like evaluators.
-     * 
-     * @return An {@link AnalysisRun} object is returned.
-     */
-    public AnalysisRun getAnalysisRun() {
-	return analysisRun;
-    }
 }
