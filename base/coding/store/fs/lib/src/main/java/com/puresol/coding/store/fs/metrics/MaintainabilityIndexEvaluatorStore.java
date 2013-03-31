@@ -5,7 +5,6 @@ import java.io.File;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.evaluation.api.MetricResults;
 import com.puresol.coding.metrics.maintainability.MaintainabilityIndexFileResults;
-import com.puresol.coding.metrics.sloc.SLOCResults;
 import com.puresol.coding.store.fs.evaluation.AbstractEvaluatorStore;
 import com.puresol.utils.HashId;
 
@@ -13,17 +12,17 @@ public class MaintainabilityIndexEvaluatorStore extends AbstractEvaluatorStore {
 
     @Override
     protected Class<?> getFileResultClass() {
-	return SLOCResults.class;
+	return MaintainabilityIndexFileResults.class;
     }
 
     @Override
     protected Class<?> getDirectoryResultClass() {
-	return SLOCResults.class;
+	return MaintainabilityIndexFileResults.class;
     }
 
     @Override
     protected Class<?> getProjectResultClass() {
-	return SLOCResults.class;
+	return MaintainabilityIndexFileResults.class;
     }
 
     @Override

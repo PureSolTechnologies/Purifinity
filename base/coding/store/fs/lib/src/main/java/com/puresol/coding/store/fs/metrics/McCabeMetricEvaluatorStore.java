@@ -5,7 +5,7 @@ import java.io.File;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.evaluation.api.MetricResults;
 import com.puresol.coding.metrics.cocomo.CoCoMoResults;
-import com.puresol.coding.metrics.sloc.SLOCResults;
+import com.puresol.coding.metrics.mccabe.McCabeMetricResults;
 import com.puresol.coding.store.fs.evaluation.AbstractEvaluatorStore;
 import com.puresol.utils.HashId;
 
@@ -13,17 +13,17 @@ public class McCabeMetricEvaluatorStore extends AbstractEvaluatorStore {
 
     @Override
     protected Class<?> getFileResultClass() {
-	return SLOCResults.class;
+	return McCabeMetricResults.class;
     }
 
     @Override
     protected Class<?> getDirectoryResultClass() {
-	return SLOCResults.class;
+	return McCabeMetricResults.class;
     }
 
     @Override
     protected Class<?> getProjectResultClass() {
-	return SLOCResults.class;
+	return McCabeMetricResults.class;
     }
 
     @Override

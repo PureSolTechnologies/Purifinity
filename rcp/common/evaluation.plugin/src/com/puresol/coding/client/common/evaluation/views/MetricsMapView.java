@@ -213,12 +213,16 @@ public class MetricsMapView extends ViewPart implements Refreshable,
 	    parameterSelection = parameterList.get(0);
 	}
 	List<Map<String, Value<?>>> values = results.getValues();
-	Map<String, Value<?>> value = values.get(0);
+	Map<String, Value<?>> valueMap = values.get(0);
 	double sum = 0.0;
 	if (parameterSelection.getType().equals(Double.class)) {
-	    sum = (Double) value.get(parameterSelection.getName()).getValue();
+	    sum = (Double) valueMap.get(parameterSelection.getName())
+		    .getValue();
 	} else if (parameterSelection.getType().equals(Integer.class)) {
-	    sum = (Integer) value.get(parameterSelection.getName()).getValue();
+	    Value<?> value = valueMap.get(parameterSelection.getName());
+	    if (value != null) {
+		sum = (Integer) value.getValue();
+	    }
 	}
 	return new AreaMapData(path.getPathFile(false).toString(), sum,
 		childAreas.toArray(new AreaMapData[childAreas.size()]));
