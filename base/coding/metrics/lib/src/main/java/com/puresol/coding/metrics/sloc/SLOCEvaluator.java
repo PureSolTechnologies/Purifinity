@@ -102,12 +102,13 @@ public class SLOCEvaluator extends AbstractEvaluator {
 	if (store.hasDirectoryResults(child.getHashId())) {
 	    SLOCResults slocResults = (SLOCResults) store
 		    .readDirectoryResults(child.getHashId());
-	    if (slocResults.getResults().size() != 1) {
+	    if (slocResults.getResults().size() == 1) {
+		results = combine(directory, results, slocResults.getResults()
+			.get(0));
+	    } else if (slocResults.getResults().size() > 1) {
 		throw new RuntimeException(
 			"A directory should only have one dataset with aggregated SLOC.");
 	    }
-	    results = combine(directory, results,
-		    slocResults.getResults().get(0));
 	}
 	return results;
     }
