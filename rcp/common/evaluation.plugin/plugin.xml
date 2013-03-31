@@ -6,6 +6,9 @@
       <startup
             class="com.puresol.coding.client.common.evaluation.EvaluationAPIStartup">
       </startup>
+      <startup
+            class="com.puresol.coding.client.common.evaluation.EvaluationImplStartup">
+      </startup>
    </extension>
    <extension
          point="org.eclipse.ui.perspectives">
