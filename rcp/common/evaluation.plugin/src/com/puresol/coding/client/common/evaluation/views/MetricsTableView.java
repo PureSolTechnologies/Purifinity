@@ -17,11 +17,9 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.part.ViewPart;
 
-import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.client.common.analysis.views.FileAnalysisSelection;
 import com.puresol.coding.client.common.evaluation.contents.MetricsTableViewer;
-import com.puresol.coding.client.common.evaluation.utils.EvaluationTool;
 import com.puresol.coding.client.common.evaluation.utils.EvaluationsTarget;
 import com.puresol.coding.client.common.ui.actions.RefreshAction;
 import com.puresol.coding.client.common.ui.actions.Refreshable;
@@ -122,10 +120,8 @@ public class MetricsTableView extends ViewPart implements Refreshable,
     }
 
     private void updateEvaluation() {
-	AnalysisRun analysisRun = analysisSelection.getAnalysisRun();
 	HashIdFileTree path = analysisSelection.getHashIdFile();
-	EvaluationTool.showEvaluationAsynchronous(this, metricSelection,
-		analysisRun, path);
+	showEvaluation(path);
     }
 
     @Override

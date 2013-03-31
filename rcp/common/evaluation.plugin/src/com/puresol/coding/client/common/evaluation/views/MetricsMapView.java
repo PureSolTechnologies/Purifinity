@@ -23,11 +23,9 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.part.ViewPart;
 
-import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.client.common.analysis.views.FileAnalysisSelection;
 import com.puresol.coding.client.common.evaluation.contents.ParameterComboViewer;
-import com.puresol.coding.client.common.evaluation.utils.EvaluationTool;
 import com.puresol.coding.client.common.evaluation.utils.EvaluationsTarget;
 import com.puresol.coding.client.common.ui.actions.RefreshAction;
 import com.puresol.coding.client.common.ui.actions.Refreshable;
@@ -36,7 +34,6 @@ import com.puresol.coding.client.common.ui.components.AreaMapData;
 import com.puresol.coding.evaluation.api.EvaluatorFactory;
 import com.puresol.coding.evaluation.api.EvaluatorStore;
 import com.puresol.coding.evaluation.api.EvaluatorStoreFactory;
-import com.puresol.coding.evaluation.api.Evaluators;
 import com.puresol.coding.evaluation.api.MetricResults;
 import com.puresol.utils.math.LevelOfMeasurement;
 import com.puresol.utils.math.Parameter;
@@ -146,19 +143,14 @@ public class MetricsMapView extends ViewPart implements Refreshable,
 
     private void updateEvaluation() {
 	if ((analysisSelection != null) && (metricSelection != null)) {
-	    AnalysisRun analysisRun = analysisSelection.getAnalysisRun();
 	    HashIdFileTree path = analysisSelection.getHashIdFile();
-
-	    EvaluatorFactory evaluatorFactory = Evaluators.createInstance()
-		    .getAllMetrics().get(0);
 
 	    if (path.isFile()) {
 		path = path.getParent();
 	    }
 	    if (!path.equals(lastSelection)) {
 		lastSelection = path;
-		EvaluationTool.showEvaluationAsynchronous(this,
-			evaluatorFactory, analysisRun, path);
+		showEvaluation(path);
 	    }
 	}
     }
