@@ -18,35 +18,33 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class AbstractStartup implements IStartup {
 
-    /**
-     * Is the logger used to log.
-     */
-    private static final Logger logger = LoggerFactory
-	    .getLogger(AbstractStartup.class);
+	/**
+	 * Is the logger used to log.
+	 */
+	private static final Logger logger = LoggerFactory
+			.getLogger(AbstractStartup.class);
 
-    /**
-     * Contains the activator class which is touched to trigger the lazy
-     * activation of the bundle.
-     */
-    private final Class<? extends BundleActivator> activatorClass;
+	/**
+	 * Contains the activator class which is touched to trigger the lazy
+	 * activation of the bundle.
+	 */
+	private final Class<? extends BundleActivator> activatorClass;
 
-    /**
-     * This is the constructor to be used by the implementing class to set the
-     * activator class to be touch for activation trigging.
-     * 
-     * @param activatorClass
-     *            is the activator class to be touched. This class need to
-     *            implement the {@link BundleActivator} interface.
-     */
-    protected AbstractStartup(Class<? extends BundleActivator> activatorClass) {
-	this.activatorClass = activatorClass;
-    }
+	/**
+	 * This is the constructor to be used by the implementing class to set the
+	 * activator class to be touch for activation trigging.
+	 * 
+	 * @param activatorClass
+	 *            is the activator class to be touched. This class need to
+	 *            implement the {@link BundleActivator} interface.
+	 */
+	protected AbstractStartup(Class<? extends BundleActivator> activatorClass) {
+		this.activatorClass = activatorClass;
+	}
 
-    @Override
-    public final void earlyStartup() {
-	System.err.println("Trigger activation of '"
-		+ activatorClass.getPackage().getName() + "'...");
-	logger.debug("Trigger activation of '"
-		+ activatorClass.getPackage().getName() + "'...");
-    }
+	@Override
+	public final void earlyStartup() {
+		logger.debug("Trigger activation of '"
+				+ activatorClass.getPackage().getName() + "'...");
+	}
 }

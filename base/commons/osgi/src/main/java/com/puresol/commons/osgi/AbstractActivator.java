@@ -22,83 +22,77 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class AbstractActivator implements BundleActivator {
 
-    private static final Logger logger = LoggerFactory
-	    .getLogger(AbstractActivator.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(AbstractActivator.class);
 
-    /**
-     * This field holds the current bundle context. This field is static due to
-     * the fact that the {@link BundleActivator} is treaded like a singleton and
-     * is only called once per state.
-     */
-    private static BundleContext context = null;
+	/**
+	 * This field holds the current bundle context. This field is static due to
+	 * the fact that the {@link BundleActivator} is treaded like a singleton and
+	 * is only called once per state.
+	 */
+	private static BundleContext context = null;
 
-    private final List<ServiceRegistration<?>> serviceRegistrations = new ArrayList<ServiceRegistration<?>>();
+	private final List<ServiceRegistration<?>> serviceRegistrations = new ArrayList<ServiceRegistration<?>>();
 
-    public AbstractActivator() {
-	super();
-	System.err.println("Activator " + getClass().getPackage().getName()
-		+ " was instantiated.");
-	logger.debug("Activator " + getClass().getPackage().getName()
-		+ " was instantiated.");
-    }
-
-    @Override
-    public void start(BundleContext context) throws Exception {
-	System.err.println("Starting bundle "
-		+ getClass().getPackage().getName() + "...");
-	logger.info("Starting bundle " + getClass().getPackage().getName()
-		+ "...");
-	if (AbstractActivator.context != null) {
-	    throw new RuntimeException("Bundle was already started!");
-
+	public AbstractActivator() {
+		super();
+		logger.debug("Activator " + getClass().getPackage().getName()
+				+ " was instantiated.");
 	}
-	AbstractActivator.context = context;
-    }
 
-    @Override
-    public void stop(BundleContext context) throws Exception {
-	System.err.println("Stopping bundle "
-		+ getClass().getPackage().getName() + "...");
-	logger.info("Stopping bundle " + getClass().getPackage().getName()
-		+ "...");
-	if (AbstractActivator.context == null) {
-	    throw new RuntimeException("Bundle was never started!");
+	@Override
+	public void start(BundleContext context) throws Exception {
+		logger.info("Starting bundle " + getClass().getPackage().getName()
+				+ "...");
+		if (AbstractActivator.context != null) {
+			throw new RuntimeException("Bundle was already started!");
+
+		}
+		AbstractActivator.context = context;
 	}
-	AbstractActivator.context = null;
-	Iterator<ServiceRegistration<?>> serviceIterator = serviceRegistrations
-		.iterator();
-	while (serviceIterator.hasNext()) {
-	    ServiceRegistration<?> serviceReference = serviceIterator.next();
-	    serviceReference.unregister();
-	    serviceRegistrations.remove(serviceIterator);
+
+	@Override
+	public void stop(BundleContext context) throws Exception {
+		logger.info("Stopping bundle " + getClass().getPackage().getName()
+				+ "...");
+		if (AbstractActivator.context == null) {
+			throw new RuntimeException("Bundle was never started!");
+		}
+		AbstractActivator.context = null;
+		Iterator<ServiceRegistration<?>> serviceIterator = serviceRegistrations
+				.iterator();
+		while (serviceIterator.hasNext()) {
+			ServiceRegistration<?> serviceReference = serviceIterator.next();
+			serviceReference.unregister();
+			serviceRegistrations.remove(serviceIterator);
+		}
 	}
-    }
 
-    /**
-     * This method returns the current bundle context.
-     * 
-     * @return A {@link BundleContext} is returned containing the current
-     *         context. The return value is expected to be not null due to this
-     *         class is called during bundle startup. If the bundle was not
-     *         started, the return value is null.
-     */
-    public static final BundleContext getBundleContext() {
-	if (context == null) {
-	    throw new RuntimeException("Bundle was not activated!");
+	/**
+	 * This method returns the current bundle context.
+	 * 
+	 * @return A {@link BundleContext} is returned containing the current
+	 *         context. The return value is expected to be not null due to this
+	 *         class is called during bundle startup. If the bundle was not
+	 *         started, the return value is null.
+	 */
+	public static final BundleContext getBundleContext() {
+		if (context == null) {
+			throw new RuntimeException("Bundle was not activated!");
+		}
+		return context;
 	}
-	return context;
-    }
 
-    public <T> ServiceRegistration<T> registerService(Class<T> iface, T instance) {
-	Hashtable<String, String> properties = new Hashtable<String, String>();
-	return registerService(iface, instance, properties);
-    }
+	public <T> ServiceRegistration<T> registerService(Class<T> iface, T instance) {
+		Hashtable<String, String> properties = new Hashtable<String, String>();
+		return registerService(iface, instance, properties);
+	}
 
-    public <T> ServiceRegistration<T> registerService(Class<T> iface,
-	    T instance, Dictionary<String, String> dictionary) {
-	ServiceRegistration<T> serviceRegistration = context.registerService(
-		iface, instance, dictionary);
-	serviceRegistrations.add(serviceRegistration);
-	return serviceRegistration;
-    }
+	public <T> ServiceRegistration<T> registerService(Class<T> iface,
+			T instance, Dictionary<String, String> dictionary) {
+		ServiceRegistration<T> serviceRegistration = context.registerService(
+				iface, instance, dictionary);
+		serviceRegistrations.add(serviceRegistration);
+		return serviceRegistration;
+	}
 }
