@@ -79,7 +79,13 @@ public class MetricsTableViewer extends TableViewer implements
 	    final String name = parameter.getName();
 	    nameColumn.getColumn().setText(name);
 	    nameColumn.getColumn().setWidth(100);
-	    nameColumn.setLabelProvider(new ColumnLabelProvider() {
+	    ColumnLabelProvider labelProvider = new ColumnLabelProvider() {
+
+		@Override
+		public int getToolTipDisplayDelayTime(Object object) {
+		    return 100;
+		}
+
 		@Override
 		public String getText(Object element) {
 		    @SuppressWarnings("unchecked")
@@ -90,7 +96,19 @@ public class MetricsTableViewer extends TableViewer implements
 		    }
 		    return value.getValue().toString();
 		}
-	    });
+
+		@Override
+		public String getToolTipText(Object element) {
+		    @SuppressWarnings("unchecked")
+		    Map<String, Value<?>> values = (Map<String, Value<?>>) element;
+		    Value<?> value = values.get(name);
+		    if (value == null) {
+			return "";
+		    }
+		    return value.getParameter().getDescription();
+		}
+	    };
+	    nameColumn.setLabelProvider(labelProvider);
 	}
     }
 
