@@ -33,13 +33,19 @@ public class EvaluationJob extends Job implements ProgressObserver<Evaluator> {
     }
 
     @Override
+    protected void canceling() {
+	super.canceling();
+    }
+
+    @Override
     protected IStatus run(IProgressMonitor monitor) {
 	this.monitor = monitor;
 
 	Evaluators evaluators = Evaluators.createInstance();
 	try {
 	    Set<Class<? extends Evaluator>> finished = new HashSet<Class<? extends Evaluator>>();
-	    List<EvaluatorFactory> evaluatorFactories = evaluators.getAll();
+	    List<EvaluatorFactory> evaluatorFactories = evaluators
+		    .getAllSortedByDependency();
 	    monitor.beginTask("Running evaluations for '" + getName() + "'",
 		    evaluatorFactories.size());
 	    boolean evaluated = true;

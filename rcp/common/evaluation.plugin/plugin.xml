@@ -76,5 +76,33 @@
             restorable="true">
       </view>
    </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="menu:org.eclipse.ui.main.menu?after=analysis">
+         <menu
+               id="Evaluation"
+               label="Evaluation"
+               mnemonic="E">
+            <command
+                  commandId="com.puresol.coding.client.common.evaluation.handler.ReEvaluateHandler"
+                  id="Re-evaluate"
+                  label="Re-evaluate"
+                  mnemonic="R"
+                  style="push">
+            </command>
+         </menu>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="com.puresol.coding.client.common.evaluation.handler.ReEvaluateHandler"
+            description="Reevaluates the current analysis run."
+            id="com.puresol.coding.client.common.evaluation.handler.ReEvaluateHandler"
+            name="Re-evaluate">
+      </command>
+   </extension>
 
 </plugin>

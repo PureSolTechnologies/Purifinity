@@ -56,6 +56,12 @@
             id="com.puresol.coding.client.common.analysis.handlers.NewAnalysisProjectHandler"
             name="New Analysis">
       </command>
+      <command
+            defaultHandler="com.puresol.coding.client.common.analysis.handlers.ReAnalyzeHandler"
+            description="Re-analyzes the currently selected analysis run."
+            id="com.puresol.coding.client.common.analysis.handlers.ReAnalyzeHandler"
+            name="Re-analyze">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.views">
@@ -126,6 +132,25 @@
       <initializer
             class="com.puresol.coding.client.common.analysis.preferences.PreferenceInitializer">
       </initializer>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="menu:org.eclipse.ui.main.menu?after=file">
+         <menu
+               id="analysis"
+               label="Analysis"
+               mnemonic="A">
+            <command
+                  commandId="com.puresol.coding.client.common.analysis.handlers.ReAnalyzeHandler"
+                  id="Re-analyze"
+                  label="Re-analyze"
+                  mnemonic="R"
+                  style="push">
+            </command>
+         </menu>
+      </menuContribution>
    </extension>
 
 </plugin>
