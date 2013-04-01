@@ -26,9 +26,6 @@ import com.puresol.coding.evaluation.api.EvaluatorInformation;
 import com.puresol.coding.evaluation.api.EvaluatorStore;
 import com.puresol.coding.evaluation.api.EvaluatorStoreFactory;
 import com.puresol.trees.TreeUtils;
-import com.puresol.trees.TreeVisitor;
-import com.puresol.trees.TreeWalker;
-import com.puresol.trees.WalkingAction;
 import com.puresol.uhura.ust.eval.EvaluationException;
 import com.puresol.utils.StopWatch;
 import com.puresol.utils.progress.AbstractProgressObservable;
@@ -50,12 +47,19 @@ public abstract class AbstractEvaluator extends
     private static final Logger logger = LoggerFactory
 	    .getLogger(AbstractEvaluator.class);
 
+    private final FileStore fileStore = FileStoreFactory.getFactory()
+	    .getInstance();
+    private final DirectoryStore directoryStore = DirectoryStoreFactory
+	    .getFactory().getInstance();
+    private final EvaluatorStoreFactory evaluatorStoreFactory = EvaluatorStoreFactory
+	    .getFactory();
+
+    private final EvaluatorStore evaluatorStore;
+
     private final EvaluatorInformation information;
     private final AnalysisRun analysisRun;
     private final HashIdFileTree path;
     private final Date timeStamp;
-    private final EvaluatorStoreFactory evaluatorStoreFactory = EvaluatorStoreFactory
-	    .getFactory();
 
     private long timeOfRun;
 
@@ -66,6 +70,7 @@ public abstract class AbstractEvaluator extends
 	this.analysisRun = analysisRun;
 	this.path = path;
 	timeStamp = new Date();
+	evaluatorStore = createEvaluatorStore();
     }
 
     @Override
@@ -106,61 +111,6 @@ public abstract class AbstractEvaluator extends
 
     abstract protected void processProject() throws InterruptedException;
 
-    private class EvaluationVisitor implements TreeVisitor<HashIdFileTree> {
-
-	private final FileStore fileStore = FileStoreFactory.getFactory()
-		.getInstance();
-	private final DirectoryStore directoryStore = DirectoryStoreFactory
-		.getFactory().getInstance();
-
-	private EvaluationVisitor() {
-	    super();
-	}
-
-	@Override
-	public WalkingAction visit(HashIdFileTree tree) {
-	    try {
-		if (Thread.interrupted()) {
-		    fireDone("Work was cancelled.", true);
-		    return WalkingAction.ABORT;
-		}
-		if (tree.isFile()) {
-		    processAsFile(tree);
-		} else {
-		    processAsDirectory(tree);
-		}
-		fireUpdateWork("Evaluated '" + tree.getName() + "'.", 1);
-		return WalkingAction.PROCEED;
-	    } catch (FileStoreException e) {
-		logger.error("Evaluation result could not be stored.", e);
-		return WalkingAction.ABORT;
-	    } catch (InterruptedException e) {
-		logger.error("Evaluation was interrupted.", e);
-		return WalkingAction.ABORT;
-	    } catch (EvaluationException e) {
-		logger.error("Evaluation failed.", e);
-		return WalkingAction.ABORT;
-	    }
-	}
-
-	private void processAsFile(HashIdFileTree tree)
-		throws FileStoreException, InterruptedException,
-		EvaluationException {
-	    if (fileStore.wasAnalyzed(tree.getHashId())) {
-		CodeAnalysis fileAnalysis = fileStore.loadAnalysis(tree
-			.getHashId());
-		processFile(fileAnalysis);
-	    }
-	}
-
-	private void processAsDirectory(HashIdFileTree tree)
-		throws FileStoreException, InterruptedException {
-	    if (directoryStore.isAvailable(tree.getHashId())) {
-		processDirectory(tree);
-	    }
-	}
-    }
-
     @Override
     public final Boolean call() {
 	try {
@@ -175,10 +125,7 @@ public abstract class AbstractEvaluator extends
 		fireStarted("Beginning evaluation...", 0);
 	    }
 	    // process files and directories
-	    TreeWalker<HashIdFileTree> treeWalker = new TreeWalker<HashIdFileTree>(
-		    path);
-	    EvaluationVisitor treeVisitor = new EvaluationVisitor();
-	    treeWalker.walkBackward(treeVisitor);
+	    processTree(path);
 	    // process project as whole
 	    processProject();
 	    // Stop time measurement
@@ -193,6 +140,53 @@ public abstract class AbstractEvaluator extends
 	     */
 	}
 	return true;
+    }
+
+    public void processTree(HashIdFileTree tree) {
+	try {
+	    processNode(tree);
+	} catch (FileStoreException e) {
+	    logger.error("Evaluation result could not be stored.", e);
+	} catch (InterruptedException e) {
+	    logger.error("Evaluation was interrupted.", e);
+	} catch (EvaluationException e) {
+	    logger.error("Evaluation failed.", e);
+	}
+    }
+
+    public void processNode(HashIdFileTree node) throws FileStoreException,
+	    InterruptedException, EvaluationException {
+	if (node.isFile()) {
+	    processAsFile(node);
+	} else {
+	    processAsDirectory(node);
+	}
+	fireUpdateWork("Evaluated '" + node.getName() + "'.", 1);
+    }
+
+    private void processAsFile(HashIdFileTree fileNode)
+	    throws FileStoreException, InterruptedException,
+	    EvaluationException {
+	if (fileStore.wasAnalyzed(fileNode.getHashId())) {
+	    if (!evaluatorStore.hasFileResults(fileNode.getHashId())) {
+		CodeAnalysis fileAnalysis = fileStore.loadAnalysis(fileNode
+			.getHashId());
+		processFile(fileAnalysis);
+	    }
+	}
+    }
+
+    private void processAsDirectory(HashIdFileTree directoryNode)
+	    throws FileStoreException, InterruptedException,
+	    EvaluationException {
+	if (directoryStore.isAvailable(directoryNode.getHashId())) {
+	    if (!evaluatorStore.hasDirectoryResults(directoryNode.getHashId())) {
+		for (HashIdFileTree child : directoryNode.getChildren()) {
+		    processNode(child);
+		}
+		processDirectory(directoryNode);
+	    }
+	}
     }
 
     @Override
