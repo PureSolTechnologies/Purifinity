@@ -1,8 +1,6 @@
 package com.puresol.coding.client.common.evaluation.jobs;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
 import org.eclipse.core.runtime.ILog;
@@ -11,25 +9,28 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
+import com.puresol.coding.analysis.api.AnalysisProject;
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.client.common.evaluation.Activator;
+import com.puresol.coding.client.common.ui.jobs.ObservedJob;
 import com.puresol.coding.evaluation.api.Evaluator;
 import com.puresol.coding.evaluation.api.EvaluatorFactory;
 import com.puresol.coding.evaluation.api.Evaluators;
-import com.puresol.utils.progress.ProgressObserver;
 
-public class EvaluationJob extends Job implements ProgressObserver<Evaluator> {
+public class EvaluationJob extends Job {
 
     private static final ILog logger = Activator.getDefault().getLog();
 
+    private final AnalysisProject analysisProject;
+    private final String projectName;
     private final AnalysisRun analysisRun;
-    private IProgressMonitor monitor = null;
 
     public EvaluationJob(AnalysisRun analysisRun) {
-	super("Evalutions of '"
-		+ analysisRun.getInformation().getAnalysisProject()
-			.getSettings().getName() + "'");
+	super("");
 	this.analysisRun = analysisRun;
+	analysisProject = analysisRun.getInformation().getAnalysisProject();
+	projectName = analysisProject.getSettings().getName();
+	setName("Evaluation of project '" + projectName + "'");
     }
 
     @Override
@@ -39,86 +40,46 @@ public class EvaluationJob extends Job implements ProgressObserver<Evaluator> {
 
     @Override
     protected IStatus run(IProgressMonitor monitor) {
-	this.monitor = monitor;
-
 	Evaluators evaluators = Evaluators.createInstance();
 	try {
-	    Set<Class<? extends Evaluator>> finished = new HashSet<Class<? extends Evaluator>>();
-	    List<EvaluatorFactory> evaluatorFactories = evaluators
-		    .getAllSortedByDependency();
-	    monitor.beginTask("Running evaluations for '" + getName() + "'",
-		    evaluatorFactories.size());
-	    boolean evaluated = true;
-	    while (evaluated) {
-		evaluated = false;
-		for (EvaluatorFactory factory : evaluatorFactories) {
-		    boolean canRun = checkDepdencies(finished, factory);
-		    if (!canRun) {
-			continue;
-		    }
-		    Evaluator evaluator = factory.create(analysisRun);
-		    evaluator.addObservable(this);
-		    if (!finished.contains(evaluator.getClass())) {
-			try {
-			    evaluator.call();
-			    finished.add(evaluator.getClass());
-			    monitor.worked(1);
-			} catch (InterruptedException e) {
-			    logger.log(new Status(Status.ERROR,
-				    EvaluationJob.class.getName(),
-				    "Could not run evaluation '"
-					    + evaluator.getInformation()
-						    .getName() + "'!", e));
-			    monitor.done();
-			    return Status.CANCEL_STATUS;
-			} catch (Exception e) {
-			    logger.log(new Status(Status.ERROR,
-				    EvaluationJob.class.getName(),
-				    "Could not run evaluation '"
-					    + evaluator.getInformation()
-						    .getName() + "'!", e));
-			    monitor.done();
-			    return Status.CANCEL_STATUS;
-			}
-			evaluated = true;
-		    }
-		}
-	    }
-	    monitor.done();
-	    return Status.OK_STATUS;
+	    return runEvaluators(monitor, evaluators);
 	} finally {
 	    IOUtils.closeQuietly(evaluators);
 	}
     }
 
-    private boolean checkDepdencies(Set<Class<? extends Evaluator>> finished,
-	    EvaluatorFactory factory) {
-	boolean dependenciesResolved = true;
-	for (Class<? extends Evaluator> dependsOn : factory.getDependencies()) {
-	    if (!finished.contains(dependsOn)) {
-		dependenciesResolved = false;
-		break;
+    private IStatus runEvaluators(IProgressMonitor monitor,
+	    Evaluators evaluators) {
+	List<EvaluatorFactory> evaluatorFactories = evaluators
+		.getAllSortedByDependency();
+	try {
+	    monitor.beginTask("Running " + evaluatorFactories.size()
+		    + " evaluation(s)", evaluatorFactories.size());
+	    for (EvaluatorFactory factory : evaluatorFactories) {
+		monitor.subTask("'" + factory.getName() + "' running");
+		Evaluator evaluator = factory.create(analysisRun);
+		ObservedJob<Evaluator, Boolean> observedJob = new ObservedJob<Evaluator, Boolean>(
+			factory.getName(), evaluator);
+		observedJob.schedule();
+		observedJob.join();
+		boolean successful = observedJob.getRunResult();
+		if (!successful) {
+		    monitor.setCanceled(true);
+		    monitor.done();
+		    return new Status(Status.ERROR, getClass().getName(),
+			    "Run of evaluator '" + factory.getName()
+				    + "' was not successful.");
+		}
+		monitor.worked(1);
 	    }
+	    monitor.done();
+	    return Status.OK_STATUS;
+	} catch (InterruptedException e) {
+	    logger.log(new Status(Status.WARNING, getClass().getName(),
+		    "Evaluation was aborted.", e));
+	    monitor.setCanceled(true);
+	    monitor.done();
+	    return Status.CANCEL_STATUS;
 	}
-	return dependenciesResolved;
-    }
-
-    @Override
-    public void started(Evaluator observable, String message, long total) {
-	monitor.beginTask(observable.getInformation().getName(), (int) total);
-	monitor.subTask(message);
-    }
-
-    @Override
-    public void done(Evaluator observable, String message, boolean successful) {
-	monitor.subTask(message);
-	monitor.setCanceled(successful);
-	monitor.done();
-    }
-
-    @Override
-    public void updateWork(Evaluator observable, String message, long finished) {
-	monitor.subTask(message);
-	monitor.worked((int) finished);
     }
 }

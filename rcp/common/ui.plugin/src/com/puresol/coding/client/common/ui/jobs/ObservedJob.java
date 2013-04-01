@@ -1,7 +1,9 @@
 package com.puresol.coding.client.common.ui.jobs;
 
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 import org.eclipse.core.runtime.ILog;
@@ -22,11 +24,24 @@ public class ObservedJob<Observable, Return> extends Job implements
 
     private final CallableProgressObservable<Observable, Return> observable;
     private IProgressMonitor monitor = null;
+    private Future<Return> future;
 
     public ObservedJob(String name,
 	    CallableProgressObservable<Observable, Return> observable) {
 	super(name);
 	this.observable = observable;
+    }
+
+    public Return getRunResult() {
+	try {
+	    return future.get();
+	} catch (InterruptedException e) {
+	    logger.log(new Status(IStatus.WARNING, getClass().getName(),
+		    "Job was interrupted.", e));
+	    return null;
+	} catch (ExecutionException e) {
+	    throw new RuntimeException("Job was aborted with an exception.", e);
+	}
     }
 
     @Override
@@ -37,7 +52,7 @@ public class ObservedJob<Observable, Return> extends Job implements
 	    observable.addObservable(this);
 
 	    ExecutorService executor = Executors.newSingleThreadExecutor();
-	    executor.submit(observable);
+	    future = executor.submit(observable);
 	    executor.shutdown();
 	    executor.awaitTermination(1, TimeUnit.HOURS);
 	    return Status.OK_STATUS;
