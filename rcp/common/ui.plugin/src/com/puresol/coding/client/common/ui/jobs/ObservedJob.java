@@ -32,12 +32,14 @@ public class ObservedJob<Observable, Return> extends Job implements
 	this.observable = observable;
     }
 
-    public Return getRunResult() {
+    public Return getRunResult() throws InterruptedException {
 	try {
-	    return future.get();
-	} catch (InterruptedException e) {
-	    logger.log(new Status(IStatus.WARNING, getClass().getName(),
-		    "Job was interrupted.", e));
+	    if (future.isDone()) {
+		if (future.isCancelled()) {
+		    throw new InterruptedException("Job was interrupted.");
+		}
+		return future.get();
+	    }
 	    return null;
 	} catch (ExecutionException e) {
 	    throw new RuntimeException("Job was aborted with an exception.", e);
@@ -49,7 +51,7 @@ public class ObservedJob<Observable, Return> extends Job implements
 	try {
 	    this.monitor = monitor;
 
-	    observable.addObservable(this);
+	    observable.addObserver(this);
 
 	    ExecutorService executor = Executors.newSingleThreadExecutor();
 	    future = executor.submit(observable);
@@ -68,6 +70,14 @@ public class ObservedJob<Observable, Return> extends Job implements
     }
 
     @Override
+    protected void canceling() {
+	super.canceling();
+	if (future != null) {
+	    future.cancel(true);
+	}
+    }
+
+    @Override
     public void started(Observable observable, String message, long total) {
 	monitor.beginTask(getName(), (int) total);
 	monitor.subTask(message);
@@ -76,7 +86,7 @@ public class ObservedJob<Observable, Return> extends Job implements
     @Override
     public void done(Observable observable, String message, boolean successful) {
 	monitor.subTask(message);
-	monitor.setCanceled(successful);
+	monitor.setCanceled(!successful);
 	monitor.done();
     }
 

@@ -24,10 +24,18 @@ public class EvaluationJob extends Job {
     private final AnalysisProject analysisProject;
     private final String projectName;
     private final AnalysisRun analysisRun;
+    private final boolean reEvaluation;
+
+    private ObservedJob<Evaluator, Boolean> currentJob = null;
 
     public EvaluationJob(AnalysisRun analysisRun) {
+	this(analysisRun, false);
+    }
+
+    public EvaluationJob(AnalysisRun analysisRun, boolean reEvaluation) {
 	super("");
 	this.analysisRun = analysisRun;
+	this.reEvaluation = reEvaluation;
 	analysisProject = analysisRun.getInformation().getAnalysisProject();
 	projectName = analysisProject.getSettings().getName();
 	setName("Evaluation of project '" + projectName + "'");
@@ -36,6 +44,9 @@ public class EvaluationJob extends Job {
     @Override
     protected void canceling() {
 	super.canceling();
+	if (currentJob != null) {
+	    currentJob.cancel();
+	}
     }
 
     @Override
@@ -58,12 +69,13 @@ public class EvaluationJob extends Job {
 	    for (EvaluatorFactory factory : evaluatorFactories) {
 		monitor.subTask("'" + factory.getName() + "' running");
 		Evaluator evaluator = factory.create(analysisRun);
-		ObservedJob<Evaluator, Boolean> observedJob = new ObservedJob<Evaluator, Boolean>(
+		evaluator.setReEvaluation(reEvaluation);
+		currentJob = new ObservedJob<Evaluator, Boolean>(
 			factory.getName(), evaluator);
-		observedJob.schedule();
-		observedJob.join();
-		boolean successful = observedJob.getRunResult();
-		if (!successful) {
+		currentJob.schedule();
+		currentJob.join();
+		Boolean successful = currentJob.getRunResult();
+		if ((successful == null) || (!successful)) {
 		    monitor.setCanceled(true);
 		    monitor.done();
 		    return new Status(Status.ERROR, getClass().getName(),

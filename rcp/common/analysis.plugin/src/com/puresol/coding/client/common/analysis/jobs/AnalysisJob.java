@@ -54,7 +54,7 @@ public class AnalysisJob extends Job implements ProgressObserver<AnalysisRun> {
 			this.monitor = monitor;
 
 			analysisRun = analysisProject.createAnalysisRun();
-			analysisRun.addObservable(this);
+			analysisRun.addObserver(this);
 
 			future = executor.submit(analysisRun);
 			executor.shutdown();

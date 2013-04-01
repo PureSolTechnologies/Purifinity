@@ -25,7 +25,7 @@ public class AbstractProgressObservable<Observable> implements
     private final Observable observable = (Observable) this;
 
     @Override
-    public final void addObservable(ProgressObserver<Observable> observer) {
+    public final void addObserver(ProgressObserver<Observable> observer) {
 	if (started) {
 	    observer.started(observable, "Work is already started.",
 		    totalAmount);

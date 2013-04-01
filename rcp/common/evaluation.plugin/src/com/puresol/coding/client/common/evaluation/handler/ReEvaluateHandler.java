@@ -25,7 +25,8 @@ public class ReEvaluateHandler extends AbstractHandler {
 	AnalysisRunSelection selection = (AnalysisRunSelection) analysisRunView
 		.getSelection();
 	if (selection != null) {
-	    EvaluationJob job = new EvaluationJob(selection.getAnalysisRun());
+	    EvaluationJob job = new EvaluationJob(selection.getAnalysisRun(),
+		    true);
 	    job.schedule();
 	} else {
 	    MessageDialog dialog = new MessageDialog(

@@ -16,7 +16,7 @@ public interface ProgressObservable<Observable> {
 	 * @param observer
 	 *            is the observer do be added.
 	 */
-	public void addObservable(ProgressObserver<Observable> observer);
+	public void addObserver(ProgressObserver<Observable> observer);
 
 	/**
 	 * This method is used to remove an already added observer. If the observer

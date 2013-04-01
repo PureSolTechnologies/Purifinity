@@ -42,4 +42,22 @@ public interface Evaluator extends
     public List<QualityCharacteristic> getEvaluatedQualityCharacteristics();
 
     public EvaluatorStore createEvaluatorStore();
+
+    /**
+     * This method set whether or not a re-evaluation is needed. If
+     * re-evaluation is set to true, an evaluation is performed even if results
+     * are available.
+     * 
+     * @param reEvaluation
+     */
+    public void setReEvaluation(boolean reEvaluation);
+
+    /**
+     * This method returns whether this evaluator is used to re-evaluate former
+     * results or not.
+     * 
+     * @return
+     */
+    public boolean isReEvaluation();
+
 }

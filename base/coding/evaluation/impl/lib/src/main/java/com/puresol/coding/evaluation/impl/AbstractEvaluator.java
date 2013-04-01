@@ -63,6 +63,8 @@ public abstract class AbstractEvaluator extends
 
     private long timeOfRun;
 
+    private boolean reEvaluation = false;
+
     public AbstractEvaluator(String name, String description,
 	    AnalysisRun analysisRun, HashIdFileTree path) {
 	super();
@@ -93,6 +95,16 @@ public abstract class AbstractEvaluator extends
 	return timeOfRun;
     }
 
+    @Override
+    public final void setReEvaluation(boolean reEvaluation) {
+	this.reEvaluation = reEvaluation;
+    }
+
+    @Override
+    public final boolean isReEvaluation() {
+	return reEvaluation;
+    }
+
     /**
      * This method is used to run an evaluation of an analyzed file. This method
      * is called by the run method.
@@ -112,50 +124,43 @@ public abstract class AbstractEvaluator extends
     abstract protected void processProject() throws InterruptedException;
 
     @Override
-    public final Boolean call() {
-	try {
-	    // Start time measurement
-	    StopWatch watch = new StopWatch();
-	    watch.start();
-	    // check the files to evaluate and calculate amount of work!
-	    if (path != null) {
-		int nodeCount = TreeUtils.countNodes(path);
-		fireStarted("Beginning evaluation...", nodeCount + 1);
-	    } else {
-		fireStarted("Beginning evaluation...", 0);
-	    }
-	    // process files and directories
-	    processTree(path);
-	    // process project as whole
-	    processProject();
-	    // Stop time measurement
-	    watch.stop();
-	    timeOfRun = watch.getMilliseconds();
-	    fireDone("Evaluation finished.", true);
-	} catch (InterruptedException e) {
-	    /*
-	     * XXX This exception is silly, but we need to introduce
-	     * InterruptedException into TreeWalker to get a real interrupted
-	     * handling!
-	     */
+    public final Boolean call() throws InterruptedException {
+	// Start time measurement
+	StopWatch watch = new StopWatch();
+	watch.start();
+	// check the files to evaluate and calculate amount of work!
+	if (path != null) {
+	    int nodeCount = TreeUtils.countNodes(path);
+	    fireStarted("Beginning evaluation...", nodeCount + 1);
+	} else {
+	    fireStarted("Beginning evaluation...", 0);
 	}
+	// process files and directories
+	processTree(path);
+	// process project as whole
+	processProject();
+	// Stop time measurement
+	watch.stop();
+	timeOfRun = watch.getMilliseconds();
+	fireDone("Evaluation finished.", true);
 	return true;
     }
 
-    public void processTree(HashIdFileTree tree) {
+    private void processTree(HashIdFileTree tree) throws InterruptedException {
 	try {
 	    processNode(tree);
 	} catch (FileStoreException e) {
 	    logger.error("Evaluation result could not be stored.", e);
-	} catch (InterruptedException e) {
-	    logger.error("Evaluation was interrupted.", e);
 	} catch (EvaluationException e) {
 	    logger.error("Evaluation failed.", e);
 	}
     }
 
-    public void processNode(HashIdFileTree node) throws FileStoreException,
+    private void processNode(HashIdFileTree node) throws FileStoreException,
 	    InterruptedException, EvaluationException {
+	if (Thread.currentThread().isInterrupted()) {
+	    throw new InterruptedException();
+	}
 	if (node.isFile()) {
 	    processAsFile(node);
 	} else {
@@ -168,7 +173,8 @@ public abstract class AbstractEvaluator extends
 	    throws FileStoreException, InterruptedException,
 	    EvaluationException {
 	if (fileStore.wasAnalyzed(fileNode.getHashId())) {
-	    if (!evaluatorStore.hasFileResults(fileNode.getHashId())) {
+	    if ((!evaluatorStore.hasFileResults(fileNode.getHashId()))
+		    || (reEvaluation)) {
 		CodeAnalysis fileAnalysis = fileStore.loadAnalysis(fileNode
 			.getHashId());
 		processFile(fileAnalysis);
@@ -180,7 +186,8 @@ public abstract class AbstractEvaluator extends
 	    throws FileStoreException, InterruptedException,
 	    EvaluationException {
 	if (directoryStore.isAvailable(directoryNode.getHashId())) {
-	    if (!evaluatorStore.hasDirectoryResults(directoryNode.getHashId())) {
+	    if ((!evaluatorStore.hasDirectoryResults(directoryNode.getHashId()))
+		    || (reEvaluation)) {
 		for (HashIdFileTree child : directoryNode.getChildren()) {
 		    processNode(child);
 		}
