@@ -206,13 +206,14 @@ public class CoCoMoResults implements MetricResults {
 	}
 
 	private void refreshParameters() {
-		kslocParameter = new ParameterWithArbitraryUnit<Double>(
-				"Total Physical Source Lines of Code", "kSLOC",
-				LevelOfMeasurement.RATIO, "kSLOC = SLOC / 1000", Double.class);
+		kslocParameter = new ParameterWithArbitraryUnit<Double>("kPhyLOC",
+				"kSLOC", LevelOfMeasurement.RATIO,
+				"Total Physical Source Lines of Code:\n"
+						+ "kPhyLOC = phyLOC / 1000", Double.class);
 		personMonthParameter = new ParameterWithArbitraryUnit<Double>(
 				"Development Effort Estimate in Month", "Person-Months",
 				LevelOfMeasurement.RATIO,
-				"Basic COCOMO model, Person-Months = " + c1 + " * (KSLOC ^ "
+				"Basic COCOMO model, Person-Months = " + c1 + " * (kPhyLOC ^ "
 						+ c2 + ") for " + complexity.name() + " complexity",
 				Double.class);
 		personYearsParameter = new ParameterWithArbitraryUnit<Double>(
@@ -222,7 +223,7 @@ public class CoCoMoResults implements MetricResults {
 		scheduledMonthParameter = new ParameterWithArbitraryUnit<Double>(
 				"Schedule Estimate in Months", "Months",
 				LevelOfMeasurement.RATIO,
-				"Basic COCOMO model, Months = 2.5 * (person-months ^ " + c3
+				"Basic COCOMO model, Months = 2.5 * (Person-Months ^ " + c3
 						+ ") for " + complexity.name() + " complexity",
 				Double.class);
 		scheduledYearsParameter = new ParameterWithArbitraryUnit<Double>(

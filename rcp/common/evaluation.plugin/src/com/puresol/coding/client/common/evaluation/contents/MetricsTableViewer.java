@@ -95,6 +95,16 @@ public class MetricsTableViewer extends TableViewer implements
 			ColumnLabelProvider labelProvider = new ColumnLabelProvider() {
 
 				@Override
+				public int getToolTipDisplayDelayTime(Object object) {
+					return 100;
+				}
+
+				@Override
+				public int getToolTipTimeDisplayed(Object object) {
+					return 5000;
+				}
+
+				@Override
 				public String getToolTipText(Object element) {
 					@SuppressWarnings("unchecked")
 					Map<String, Value<?>> values = (Map<String, Value<?>>) element;
