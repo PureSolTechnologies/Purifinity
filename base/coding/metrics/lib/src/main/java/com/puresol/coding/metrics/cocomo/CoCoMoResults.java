@@ -210,30 +210,32 @@ public class CoCoMoResults implements MetricResults {
 				"Total Physical Source Lines of Code", "kSLOC",
 				LevelOfMeasurement.RATIO, "kSLOC = SLOC / 1000", Double.class);
 		personMonthParameter = new ParameterWithArbitraryUnit<Double>(
-				"Development Effort Estimate", "Person-Months",
+				"Development Effort Estimate in Month", "Person-Months",
 				LevelOfMeasurement.RATIO,
-				"Basic COCOMO model, Person-Months = " + c1 + " * (KSLOC**"
-						+ c2 + ") / " + complexity.name() + " complexity",
+				"Basic COCOMO model, Person-Months = " + c1 + " * (KSLOC ^ "
+						+ c2 + ") for " + complexity.name() + " complexity",
 				Double.class);
 		personYearsParameter = new ParameterWithArbitraryUnit<Double>(
-				"Development Effort Estimate", "Person-Years",
+				"Development Effort Estimate in Years", "Person-Years",
 				LevelOfMeasurement.RATIO,
 				"Person-Years = Person-Month / (12 Month / Year)", Double.class);
 		scheduledMonthParameter = new ParameterWithArbitraryUnit<Double>(
-				"Schedule Estimate", "Months", LevelOfMeasurement.RATIO,
-				"Basic COCOMO model, Months = 2.5 * (person-months**" + c3
-						+ ") / " + complexity.name() + " complexity",
+				"Schedule Estimate in Months", "Months",
+				LevelOfMeasurement.RATIO,
+				"Basic COCOMO model, Months = 2.5 * (person-months ^ " + c3
+						+ ") for " + complexity.name() + " complexity",
 				Double.class);
 		scheduledYearsParameter = new ParameterWithArbitraryUnit<Double>(
-				"Schedule Estimate", "Years", LevelOfMeasurement.RATIO,
-				"Years = Months / 12", Double.class);
+				"Schedule Estimate in Years", "Years",
+				LevelOfMeasurement.RATIO, "Years = Months / 12", Double.class);
 		teamSizeParameter = new ParameterWithArbitraryUnit<Double>(
 				"Estimated Average Number of Developers", "",
-				LevelOfMeasurement.RATIO, "Effort/Schedule", Double.class);
+				LevelOfMeasurement.RATIO, "Effort / Schedule", Double.class);
 		estimatedCostsParameter = new ParameterWithArbitraryUnit<Double>(
 				"Total Estimated Cost to Develop", "k" + currency,
-				LevelOfMeasurement.RATIO, "average salary = " + averageSalary
-						+ currency + "/year, overhead = 2.40", Double.class);
+				LevelOfMeasurement.RATIO,
+				"cost = Schedule * Number of Developers * 2.4 / 1000.0 with average salary = "
+						+ averageSalary + currency + "/year", Double.class);
 	}
 
 	private void recreateResultsList() {
@@ -256,11 +258,11 @@ public class CoCoMoResults implements MetricResults {
 				+ " complexity project.\n";
 		text += "Development Effort Estimate, Person-Years (Person-Months) = "
 				+ personYears + " (" + personMonth + ")\n";
-		text += " (Basic COCOMO model, Person-Months = " + c1 + " * (KSLOC**"
+		text += " (Basic COCOMO model, Person-Months = " + c1 + " * (KSLOC^"
 				+ c2 + ")) / " + complexity.name() + " complexity\n";
 		text += "Schedule Estimate, Years (Months)                         = "
 				+ scheduledYears + " (" + scheduledMonth + ")\n";
-		text += " (Basic COCOMO model, Months = 2.5 * (person-months**" + c3
+		text += " (Basic COCOMO model, Months = 2.5 * (person-months^" + c3
 				+ ")) / " + complexity.name() + " complexity\n";
 		text += "Estimated Average Number of Developers (Effort/Schedule)  = "
 				+ teamSize + "\n";
