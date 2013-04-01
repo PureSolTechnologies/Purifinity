@@ -14,7 +14,7 @@
 	<modules>
 		<module>plugin</module>
 		<module>feature</module>
-		<module>test</module>
+		<!-- module>test</module -->
 	</modules>
 
 </project>
