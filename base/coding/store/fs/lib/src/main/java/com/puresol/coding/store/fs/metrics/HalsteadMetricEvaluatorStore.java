@@ -43,8 +43,12 @@ public class HalsteadMetricEvaluatorStore extends AbstractEvaluatorStore {
 
     @Override
     public MetricResults readFileResults(HashId hashId) {
-	File file = getFileResultsFile(hashId);
-	return restore(file, SLOCResults.class);
+	if (hasFileResults(hashId)) {
+	    File file = getFileResultsFile(hashId);
+	    return restore(file, SLOCResults.class);
+	} else {
+	    return null;
+	}
     }
 
     @Override

@@ -82,16 +82,18 @@ public class AreaMapComponent extends Canvas implements PaintListener {
 	GC context = event.gc;
 	Point size = getSize();
 	tooltipAreas.clear();
-	if (data != null) {
-	    drawAreas(context, data, 0, 0, size.x - 1, size.y - 1);
-	}
+	drawAreas(context, data, 0, 0, size.x - 1, size.y - 1);
     }
 
     private void drawAreas(GC context, AreaMapData area, int left, int top,
 	    int right, int bottom) {
-	registerToolTipArea(area, left, top, right, bottom);
-
 	drawArea(context, left, top, right, bottom);
+
+	if (area == null) {
+	    return;
+	}
+
+	registerToolTipArea(area, left, top, right, bottom);
 
 	List<AreaMapData> areaChildren = area.getChildren();
 	if (areaChildren.size() == 0) {

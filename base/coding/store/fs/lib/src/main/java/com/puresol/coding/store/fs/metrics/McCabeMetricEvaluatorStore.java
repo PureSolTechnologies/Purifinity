@@ -47,14 +47,22 @@ public class McCabeMetricEvaluatorStore extends AbstractEvaluatorStore {
 
     @Override
     public MetricResults readFileResults(HashId hashId) {
-	File file = getFileResultsFile(hashId);
-	return restore(file, CoCoMoResults.class);
+	if (hasFileResults(hashId)) {
+	    File file = getFileResultsFile(hashId);
+	    return restore(file, CoCoMoResults.class);
+	} else {
+	    return null;
+	}
     }
 
     @Override
     public MetricResults readDirectoryResults(HashId hashId) {
-	File file = getDirectoryResultsFile(hashId);
-	return restore(file, CoCoMoResults.class);
+	if (hasDirectoryResults(hashId)) {
+	    File file = getDirectoryResultsFile(hashId);
+	    return restore(file, CoCoMoResults.class);
+	} else {
+	    return null;
+	}
     }
 
     @Override

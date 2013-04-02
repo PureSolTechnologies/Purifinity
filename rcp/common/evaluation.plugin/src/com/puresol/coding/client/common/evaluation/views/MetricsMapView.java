@@ -53,7 +53,8 @@ public class MetricsMapView extends ViewPart implements Refreshable,
     private HashIdFileTree path;
 
     private final List<Parameter<?>> parameterList = new ArrayList<Parameter<?>>();
-    private HashIdFileTree lastSelection;
+    private HashIdFileTree lastPathSelection;
+    private EvaluatorFactory lastMetricSelection;
 
     public MetricsMapView() {
     }
@@ -148,8 +149,10 @@ public class MetricsMapView extends ViewPart implements Refreshable,
 	    if (path.isFile()) {
 		path = path.getParent();
 	    }
-	    if (!path.equals(lastSelection)) {
-		lastSelection = path;
+	    if ((!path.equals(lastPathSelection))
+		    || (!metricSelection.equals(lastMetricSelection))) {
+		lastPathSelection = path;
+		lastMetricSelection = metricSelection;
 		showEvaluation(path);
 	    }
 	}
@@ -169,9 +172,7 @@ public class MetricsMapView extends ViewPart implements Refreshable,
 	parameterList.clear();
 	EvaluatorStore store = EvaluatorStoreFactory.getFactory()
 		.createInstance(metricSelection.getEvaluatorClass());
-	AreaMapData areaData = getAreaData(store, path);
-	viewer.setInput(parameterList);
-	return areaData;
+	return getAreaData(store, path);
     }
 
     private AreaMapData getAreaData(EvaluatorStore store, HashIdFileTree path) {
@@ -208,8 +209,8 @@ public class MetricsMapView extends ViewPart implements Refreshable,
 	Map<String, Value<?>> valueMap = values.get(0);
 	double sum = 0.0;
 	if (parameterSelection.getType().equals(Double.class)) {
-	    sum = (Double) valueMap.get(parameterSelection.getName())
-		    .getValue();
+	    Value<?> valueObject = valueMap.get(parameterSelection.getName());
+	    sum = (Double) valueObject.getValue();
 	} else if (parameterSelection.getType().equals(Integer.class)) {
 	    Value<?> value = valueMap.get(parameterSelection.getName());
 	    if (value != null) {
