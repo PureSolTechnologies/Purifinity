@@ -31,6 +31,7 @@ public class AreaMapComponent extends Canvas implements PaintListener {
     private static final int PADDING = 2;
 
     private AreaMapData data = null;
+    private String unit = null;
     private final Map<Rectangle, AreaMapData> tooltipAreas = new HashMap<Rectangle, AreaMapData>();
 
     public AreaMapComponent(Composite parent, int style) {
@@ -61,18 +62,27 @@ public class AreaMapComponent extends Canvas implements PaintListener {
 		if (data == null) {
 		    return super.getText(event);
 		} else {
-		    return data.getName() + " (" + data.getValue() + ")";
+		    if (unit != null) {
+			return data.getName() + " (" + data.getValue() + unit
+				+ ")";
+		    } else {
+			return data.getName() + " (" + data.getValue() + ")";
+		    }
 		}
 	    }
 	};
 	toolTip.setHideDelay(0);
 	toolTip.setPopupDelay(0);
 	toolTip.setShift(new Point(10, 10));
-	toolTip.setText("Hello, Purifinity!");
     }
 
     public void setData(AreaMapData data) {
+	setData(data, "");
+    }
+
+    public void setData(AreaMapData data, String unit) {
 	this.data = data;
+	this.unit = unit;
 	redraw();
 	update();
     }
@@ -111,7 +121,8 @@ public class AreaMapComponent extends Canvas implements PaintListener {
 	int width = right - left + 1;
 	int height = bottom - top + 1;
 
-	if (Math.min(width, height) < 3 * PADDING) {
+	if ((width < 0) || (height < 0)
+		|| (Math.min(width, height) < 2 * PADDING)) {
 	    // The area is too small to show something meaningful...
 	    return;
 	}
@@ -142,6 +153,14 @@ public class AreaMapComponent extends Canvas implements PaintListener {
     }
 
     private void drawArea(GC context, int left, int top, int right, int bottom) {
+	int width = right - left + 1;
+	int height = bottom - top + 1;
+
+	if ((width < 0) || (height < 0)
+		|| (Math.min(width, height) < 2 * PADDING)) {
+	    // The area is too small to show something meaningful...
+	    return;
+	}
 	Color color = new Color(context.getDevice(), FRAME_COLOR);
 	try {
 	    context.setForeground(color);

@@ -165,7 +165,11 @@ public class MetricsMapView extends ViewPart implements Refreshable,
 	AreaMapData data = calculateMapDataAndParameterList(path);
 	viewer.setInput(parameterList);
 	combo.select(0);
-	areaMap.setData(data);
+	if (parameterList.size() > 0) {
+	    areaMap.setData(data, parameterList.get(0).getUnit());
+	} else {
+	    areaMap.setData(data, "");
+	}
     }
 
     private AreaMapData calculateMapDataAndParameterList(HashIdFileTree path) {
@@ -244,7 +248,7 @@ public class MetricsMapView extends ViewPart implements Refreshable,
 	    EvaluatorStore store = EvaluatorStoreFactory.getFactory()
 		    .createInstance(metricSelection.getEvaluatorClass());
 	    AreaMapData areaData = getAreaData(store, path);
-	    areaMap.setData(areaData);
+	    areaMap.setData(areaData, parameterSelection.getUnit());
 	}
     }
 
