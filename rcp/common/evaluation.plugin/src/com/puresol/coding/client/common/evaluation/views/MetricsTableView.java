@@ -10,8 +10,8 @@ import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartSite;
@@ -23,15 +23,13 @@ import com.puresol.coding.client.common.evaluation.contents.MetricsTableViewer;
 import com.puresol.coding.client.common.evaluation.utils.EvaluationsTarget;
 import com.puresol.coding.client.common.ui.actions.RefreshAction;
 import com.puresol.coding.client.common.ui.actions.Refreshable;
-import com.puresol.coding.evaluation.api.EvaluatorFactory;
 
 public class MetricsTableView extends ViewPart implements Refreshable,
 	ISelectionListener, IJobChangeListener, EvaluationsTarget {
 
     private FileAnalysisSelection analysisSelection;
-    private EvaluatorFactory metricSelection;
 
-    private Text text;
+    private Label label;
     private MetricsTableViewer viewer;
 
     public MetricsTableView() {
@@ -47,14 +45,13 @@ public class MetricsTableView extends ViewPart implements Refreshable,
 	Composite container = new Composite(parent, SWT.NONE);
 	container.setLayout(new FormLayout());
 	{
-	    text = new Text(container, SWT.BORDER);
+	    label = new Label(container, SWT.BORDER);
 	    FormData fd_text = new FormData();
 	    fd_text.top = new FormAttachment(0, 10);
 	    fd_text.left = new FormAttachment(0, 10);
 	    fd_text.bottom = new FormAttachment(0, 32);
 	    fd_text.right = new FormAttachment(100, -10);
-	    text.setLayoutData(fd_text);
-	    text.setEditable(false);
+	    label.setLayoutData(fd_text);
 	}
 
 	IWorkbenchPartSite site = getSite();
@@ -65,8 +62,8 @@ public class MetricsTableView extends ViewPart implements Refreshable,
 	table.setLinesVisible(true);
 	table.setHeaderVisible(true);
 	FormData fd_areaMap = new FormData();
-	fd_areaMap.top = new FormAttachment(text, 6);
-	fd_areaMap.left = new FormAttachment(text, 0, SWT.LEFT);
+	fd_areaMap.top = new FormAttachment(label, 6);
+	fd_areaMap.left = new FormAttachment(label, 0, SWT.LEFT);
 	fd_areaMap.bottom = new FormAttachment(100, -10);
 	fd_areaMap.right = new FormAttachment(100, -10);
 	table.setLayoutData(fd_areaMap);
@@ -107,15 +104,7 @@ public class MetricsTableView extends ViewPart implements Refreshable,
     public void selectionChanged(IWorkbenchPart part, ISelection selection) {
 	if (selection instanceof FileAnalysisSelection) {
 	    analysisSelection = (FileAnalysisSelection) selection;
-	    if (metricSelection != null) {
-		updateEvaluation();
-	    }
-	} else if (selection instanceof MetricSelection) {
-	    metricSelection = ((MetricSelection) selection).getMetric();
-	    viewer.setMetric(metricSelection);
-	    if (analysisSelection != null) {
-		updateEvaluation();
-	    }
+	    updateEvaluation();
 	}
     }
 
@@ -166,7 +155,7 @@ public class MetricsTableView extends ViewPart implements Refreshable,
 
     @Override
     public void showEvaluation(HashIdFileTree path) {
-	text.setText(path.getPathFile(false).getPath());
+	label.setText(path.getPathFile(false).getPath());
 	viewer.setInput(path);
     }
 }

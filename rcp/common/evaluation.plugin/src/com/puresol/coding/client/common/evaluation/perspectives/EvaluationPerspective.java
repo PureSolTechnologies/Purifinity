@@ -9,7 +9,6 @@ import com.puresol.coding.client.common.analysis.views.AnalysisRunContentView;
 import com.puresol.coding.client.common.analysis.views.AnalysisRunsView;
 import com.puresol.coding.client.common.analysis.views.AvailableLanguagesView;
 import com.puresol.coding.client.common.evaluation.views.DefectDensityMapView;
-import com.puresol.coding.client.common.evaluation.views.EvaluatorSelectorView;
 
 public class EvaluationPerspective implements IPerspectiveFactory {
 
@@ -19,9 +18,6 @@ public class EvaluationPerspective implements IPerspectiveFactory {
 
 	layout.addView(AnalysisRunContentView.class.getName(),
 		IPageLayout.LEFT, 0.4f, layout.getEditorArea());
-
-	layout.addView(EvaluatorSelectorView.class.getName(), IPageLayout.TOP,
-		0.3f, layout.getEditorArea());
 
 	layout.addView(AnalysisProjectsView.class.getName(), IPageLayout.LEFT,
 		0.5f, AnalysisRunContentView.class.getName());

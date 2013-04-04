@@ -12,12 +12,14 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartSite;
@@ -25,6 +27,7 @@ import org.eclipse.ui.part.ViewPart;
 
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.client.common.analysis.views.FileAnalysisSelection;
+import com.puresol.coding.client.common.evaluation.contents.MetricComboViewer;
 import com.puresol.coding.client.common.evaluation.contents.ParameterComboViewer;
 import com.puresol.coding.client.common.evaluation.utils.EvaluationsTarget;
 import com.puresol.coding.client.common.ui.actions.RefreshAction;
@@ -34,6 +37,7 @@ import com.puresol.coding.client.common.ui.components.AreaMapData;
 import com.puresol.coding.evaluation.api.EvaluatorFactory;
 import com.puresol.coding.evaluation.api.EvaluatorStore;
 import com.puresol.coding.evaluation.api.EvaluatorStoreFactory;
+import com.puresol.coding.evaluation.api.Evaluators;
 import com.puresol.coding.evaluation.api.MetricResults;
 import com.puresol.utils.math.LevelOfMeasurement;
 import com.puresol.utils.math.Parameter;
@@ -46,10 +50,19 @@ public class MetricsMapView extends ViewPart implements Refreshable,
     private EvaluatorFactory metricSelection;
     private Parameter<?> parameterSelection;
 
-    private Text text;
-    private Combo combo;
+    private Label label;
+    private Combo mapMetricCombo;
+    private Combo mapValueCombo;
+    private Combo colorMetricCombo;
+    private Combo colorValueCombo;
+
     private AreaMapComponent areaMap;
-    private ParameterComboViewer viewer;
+
+    private ParameterComboViewer mapValueComboViewer;
+    private ParameterComboViewer colorValueComboViewer;
+    private MetricComboViewer mapMetricComboViewer;
+    private MetricComboViewer colorMetricComboViewer;
+
     private HashIdFileTree path;
 
     private final List<Parameter<?>> parameterList = new ArrayList<Parameter<?>>();
@@ -66,43 +79,120 @@ public class MetricsMapView extends ViewPart implements Refreshable,
      */
     @Override
     public void createPartControl(Composite parent) {
-	Composite container = new Composite(parent, SWT.NONE);
+	Composite container = new Composite(parent, SWT.BORDER);
 	container.setLayout(new FormLayout());
+
+	label = new Label(container, SWT.BORDER);
 	{
-	    text = new Text(container, SWT.BORDER);
-	    FormData fd_text = new FormData();
-	    fd_text.top = new FormAttachment(0, 10);
-	    fd_text.left = new FormAttachment(0, 10);
-	    fd_text.bottom = new FormAttachment(0, 32);
-	    fd_text.right = new FormAttachment(100, -10);
-	    text.setLayoutData(fd_text);
-	    text.setEditable(false);
+	    FormData fd_label = new FormData();
+	    fd_label.left = new FormAttachment(0, 10);
+	    fd_label.right = new FormAttachment(100, -10);
+	    fd_label.top = new FormAttachment(0, 10);
+	    label.setLayoutData(fd_label);
+	}
+
+	Composite settings = new Composite(container, SWT.NONE);
+	{
+	    settings.setLayout(new FillLayout(SWT.HORIZONTAL));
+	    FormData fd_settings = new FormData();
+	    fd_settings.left = new FormAttachment(label, 0, SWT.LEFT);
+	    fd_settings.right = new FormAttachment(label, 0, SWT.RIGHT);
+	    fd_settings.top = new FormAttachment(label, 10);
+	    settings.setLayoutData(fd_settings);
+	}
+
+	areaMap = new AreaMapComponent(container, SWT.NONE);
+	{
+	    FormData fd_areaMap = new FormData();
+	    fd_areaMap.left = new FormAttachment(label, 0, SWT.LEFT);
+	    fd_areaMap.right = new FormAttachment(label, 0, SWT.RIGHT);
+	    fd_areaMap.top = new FormAttachment(settings, 10);
+	    fd_areaMap.bottom = new FormAttachment(100, -10);
+	    areaMap.setLayoutData(fd_areaMap);
+	}
+
+	Group mapSettingsGroup = new Group(settings, SWT.NONE);
+	{
+	    mapSettingsGroup.setText("Map Settings");
+	    mapSettingsGroup.setLayout(new FormLayout());
+
+	    mapMetricCombo = new Combo(mapSettingsGroup, SWT.NONE);
+	    {
+		FormData fd_mapMetricsCombo = new FormData();
+		fd_mapMetricsCombo.left = new FormAttachment(0, 10);
+		fd_mapMetricsCombo.right = new FormAttachment(100, -10);
+		fd_mapMetricsCombo.top = new FormAttachment(0, 10);
+		mapMetricCombo.setLayoutData(fd_mapMetricsCombo);
+		mapMetricCombo.setEnabled(true);
+		mapMetricCombo.addSelectionListener(this);
+		mapMetricComboViewer = new MetricComboViewer(mapMetricCombo);
+	    }
+
+	    mapValueCombo = new Combo(mapSettingsGroup, SWT.NONE);
+	    {
+		FormData fd_mapValueCombo = new FormData();
+		fd_mapValueCombo.left = new FormAttachment(mapMetricCombo, 0,
+			SWT.LEFT);
+		fd_mapValueCombo.right = new FormAttachment(mapMetricCombo, 0,
+			SWT.RIGHT);
+		fd_mapValueCombo.top = new FormAttachment(mapMetricCombo, 10);
+		fd_mapValueCombo.bottom = new FormAttachment(100, -10);
+		mapValueCombo.setLayoutData(fd_mapValueCombo);
+		mapValueCombo.setEnabled(true);
+		mapValueCombo.addSelectionListener(this);
+		mapValueComboViewer = new ParameterComboViewer(mapValueCombo);
+	    }
+
+	    Group colorSettingsGroup = new Group(settings, SWT.NONE);
+	    {
+		colorSettingsGroup.setText("Color Settings");
+		colorSettingsGroup.setLayout(new FormLayout());
+	    }
+
+	    colorMetricCombo = new Combo(colorSettingsGroup, SWT.NONE);
+	    {
+		FormData fd_colorMetricCombo = new FormData();
+		fd_colorMetricCombo.left = new FormAttachment(0, 10);
+		fd_colorMetricCombo.right = new FormAttachment(100, -10);
+		fd_colorMetricCombo.top = new FormAttachment(0, 10);
+		colorMetricCombo.setLayoutData(fd_colorMetricCombo);
+		colorMetricCombo.setEnabled(true);
+		colorMetricCombo.addSelectionListener(this);
+		colorMetricComboViewer = new MetricComboViewer(colorMetricCombo);
+	    }
+
+	    colorValueCombo = new Combo(colorSettingsGroup, SWT.NONE);
+	    {
+		FormData fd_colorValueCombo = new FormData();
+		fd_colorValueCombo.left = new FormAttachment(colorMetricCombo,
+			0, SWT.LEFT);
+		fd_colorValueCombo.right = new FormAttachment(colorMetricCombo,
+			0, SWT.RIGHT);
+		fd_colorValueCombo.top = new FormAttachment(colorMetricCombo,
+			10);
+		fd_colorValueCombo.bottom = new FormAttachment(100, -10);
+		colorValueCombo.setLayoutData(fd_colorValueCombo);
+		colorValueCombo.setEnabled(true);
+		colorValueCombo.addSelectionListener(this);
+		colorValueComboViewer = new ParameterComboViewer(
+			colorValueCombo);
+	    }
 	}
 
 	IWorkbenchPartSite site = getSite();
 	site.getWorkbenchWindow().getSelectionService()
 		.addSelectionListener(this);
 
-	areaMap = new AreaMapComponent(container, SWT.NONE);
-	FormData fd_areaMap = new FormData();
-	fd_areaMap.left = new FormAttachment(text, 0, SWT.LEFT);
-	fd_areaMap.bottom = new FormAttachment(100, -10);
-	fd_areaMap.right = new FormAttachment(100, -10);
-	areaMap.setLayoutData(fd_areaMap);
-
-	combo = new Combo(container, SWT.NONE);
-	fd_areaMap.top = new FormAttachment(combo, 6);
-	FormData fd_combo = new FormData();
-	fd_combo.left = new FormAttachment(text, 0, SWT.LEFT);
-	fd_combo.top = new FormAttachment(text, 6);
-	fd_combo.right = new FormAttachment(100, -10);
-	combo.setLayoutData(fd_combo);
-	combo.addSelectionListener(this);
-
-	viewer = new ParameterComboViewer(combo);
-
 	initializeToolBar();
 	initializeMenu();
+	populateCombos();
+    }
+
+    private void populateCombos() {
+	List<EvaluatorFactory> allMetrics = Evaluators.createInstance()
+		.getAllMetrics();
+	mapMetricComboViewer.setInput(allMetrics);
+	colorMetricComboViewer.setInput(allMetrics);
     }
 
     /**
@@ -129,15 +219,13 @@ public class MetricsMapView extends ViewPart implements Refreshable,
 
     @Override
     public void refresh() {
+	populateCombos();
     }
 
     @Override
     public void selectionChanged(IWorkbenchPart part, ISelection selection) {
 	if (selection instanceof FileAnalysisSelection) {
 	    analysisSelection = (FileAnalysisSelection) selection;
-	    updateEvaluation();
-	} else if (selection instanceof MetricSelection) {
-	    metricSelection = ((MetricSelection) selection).getMetric();
 	    updateEvaluation();
 	}
     }
@@ -161,10 +249,10 @@ public class MetricsMapView extends ViewPart implements Refreshable,
     @Override
     public void showEvaluation(HashIdFileTree path) {
 	this.path = path;
-	text.setText(path.getPathFile(false).getPath());
+	label.setText(path.getPathFile(false).getPath());
 	AreaMapData data = calculateMapDataAndParameterList(path);
-	viewer.setInput(parameterList);
-	combo.select(0);
+	mapValueComboViewer.setInput(parameterList);
+	mapValueCombo.select(0);
 	if (parameterList.size() > 0) {
 	    areaMap.setData(data, parameterList.get(0).getUnit());
 	} else {
@@ -241,8 +329,8 @@ public class MetricsMapView extends ViewPart implements Refreshable,
 
     @Override
     public void widgetSelected(SelectionEvent e) {
-	if (e.getSource() == combo) {
-	    StructuredSelection selection = (StructuredSelection) viewer
+	if (e.getSource() == mapMetricCombo) {
+	    StructuredSelection selection = (StructuredSelection) mapMetricComboViewer
 		    .getSelection();
 	    parameterSelection = (Parameter<?>) selection.getFirstElement();
 	    EvaluatorStore store = EvaluatorStoreFactory.getFactory()
