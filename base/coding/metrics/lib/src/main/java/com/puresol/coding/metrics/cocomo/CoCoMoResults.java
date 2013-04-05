@@ -9,6 +9,7 @@ import com.puresol.coding.evaluation.api.MetricResults;
 import com.puresol.coding.evaluation.api.MetricValue;
 import com.puresol.utils.math.GeneralValue;
 import com.puresol.utils.math.LevelOfMeasurement;
+import com.puresol.utils.math.Money;
 import com.puresol.utils.math.Parameter;
 import com.puresol.utils.math.ParameterWithArbitraryUnit;
 import com.puresol.utils.math.Value;
@@ -34,13 +35,57 @@ public class CoCoMoResults implements MetricResults {
 
 	private final List<MetricValue> results = new ArrayList<MetricValue>();
 
-	private ParameterWithArbitraryUnit<Double> kslocParameter;
-	private ParameterWithArbitraryUnit<Double> personMonthParameter;
-	private ParameterWithArbitraryUnit<Double> personYearsParameter;
-	private ParameterWithArbitraryUnit<Double> scheduledMonthParameter;
-	private ParameterWithArbitraryUnit<Double> scheduledYearsParameter;
-	private ParameterWithArbitraryUnit<Double> teamSizeParameter;
-	private ParameterWithArbitraryUnit<Double> estimatedCostsParameter;
+	private final ParameterWithArbitraryUnit<Double> kslocParameter = new ParameterWithArbitraryUnit<Double>(
+			"kPhyLOC",
+			"kSLOC",
+			LevelOfMeasurement.RATIO,
+			"Total Physical Source Lines Of Code in thousands:\nkPhyLOC = phyLOC / 1000",
+			Double.class);
+	private final ParameterWithArbitraryUnit<Double> personMonthParameter = new ParameterWithArbitraryUnit<Double>(
+			"Development Effort Estimate in Month", "Person-Months",
+			LevelOfMeasurement.RATIO,
+			"Basic COCOMO model, Person-Months = c1 * (kPhyLOC ^ c2)",
+			Double.class);
+	private final ParameterWithArbitraryUnit<Double> personYearsParameter = new ParameterWithArbitraryUnit<Double>(
+			"Development Effort Estimate in Years", "Person-Years",
+			LevelOfMeasurement.RATIO,
+			"Person-Years = Person-Month / (12 Month / Year)", Double.class);
+	private final ParameterWithArbitraryUnit<Double> scheduledMonthParameter = new ParameterWithArbitraryUnit<Double>(
+			"Schedule Estimate in Months", "Months", LevelOfMeasurement.RATIO,
+			"Basic COCOMO model, Months = 2.5 * (Person-Months ^ c3)",
+			Double.class);
+	private final ParameterWithArbitraryUnit<Double> scheduledYearsParameter = new ParameterWithArbitraryUnit<Double>(
+			"Schedule Estimate in Years", "Years", LevelOfMeasurement.RATIO,
+			"Years = Months / 12", Double.class);
+	private final ParameterWithArbitraryUnit<Double> teamSizeParameter = new ParameterWithArbitraryUnit<Double>(
+			"Estimated Average Number of Developers", "",
+			LevelOfMeasurement.RATIO, "Effort / Schedule", Double.class);
+	private final ParameterWithArbitraryUnit<Double> estimatedCostsParameter = new ParameterWithArbitraryUnit<Double>(
+			"Total Estimated Cost to Develop", "kMoney",
+			LevelOfMeasurement.RATIO,
+			"cost = Schedule * Number of Developers * 2.4 / 1000.0 * Salary",
+			Double.class);
+	private final ParameterWithArbitraryUnit<Money> salaryParameter = new ParameterWithArbitraryUnit<Money>(
+			"Salary", currency, LevelOfMeasurement.RATIO,
+			"Average developer salary.", Money.class);
+	private final ParameterWithArbitraryUnit<Complexity> complexityParameter = new ParameterWithArbitraryUnit<Complexity>(
+			"complexity",
+			"",
+			LevelOfMeasurement.ORDINAL,
+			"Complexity of the project. This complexity specifies the CoCoMo equation constants c1, c2 and c3",
+			Complexity.class);
+	private final ParameterWithArbitraryUnit<Double> c1Parameter = new ParameterWithArbitraryUnit<Double>(
+			"c1", "", LevelOfMeasurement.RATIO,
+			"CoCoMo equation constant. This constant is set by complexity.",
+			Double.class);
+	private final ParameterWithArbitraryUnit<Double> c2Parameter = new ParameterWithArbitraryUnit<Double>(
+			"c2", "", LevelOfMeasurement.RATIO,
+			"CoCoMo equation constant. This constant is set by complexity.",
+			Double.class);
+	private final ParameterWithArbitraryUnit<Double> c3Parameter = new ParameterWithArbitraryUnit<Double>(
+			"c3", "", LevelOfMeasurement.RATIO,
+			"CoCoMo equation constant. This constant is set by complexity.",
+			Double.class);
 
 	public CoCoMoResults() {
 		setComplexity(Complexity.LOW);
@@ -206,37 +251,6 @@ public class CoCoMoResults implements MetricResults {
 	}
 
 	private void refreshParameters() {
-		kslocParameter = new ParameterWithArbitraryUnit<Double>("kPhyLOC",
-				"kSLOC", LevelOfMeasurement.RATIO,
-				"Total Physical Source Lines of Code:\n"
-						+ "kPhyLOC = phyLOC / 1000", Double.class);
-		personMonthParameter = new ParameterWithArbitraryUnit<Double>(
-				"Development Effort Estimate in Month", "Person-Months",
-				LevelOfMeasurement.RATIO,
-				"Basic COCOMO model, Person-Months = " + c1 + " * (kPhyLOC ^ "
-						+ c2 + ") for " + complexity.name() + " complexity",
-				Double.class);
-		personYearsParameter = new ParameterWithArbitraryUnit<Double>(
-				"Development Effort Estimate in Years", "Person-Years",
-				LevelOfMeasurement.RATIO,
-				"Person-Years = Person-Month / (12 Month / Year)", Double.class);
-		scheduledMonthParameter = new ParameterWithArbitraryUnit<Double>(
-				"Schedule Estimate in Months", "Months",
-				LevelOfMeasurement.RATIO,
-				"Basic COCOMO model, Months = 2.5 * (Person-Months ^ " + c3
-						+ ") for " + complexity.name() + " complexity",
-				Double.class);
-		scheduledYearsParameter = new ParameterWithArbitraryUnit<Double>(
-				"Schedule Estimate in Years", "Years",
-				LevelOfMeasurement.RATIO, "Years = Months / 12", Double.class);
-		teamSizeParameter = new ParameterWithArbitraryUnit<Double>(
-				"Estimated Average Number of Developers", "",
-				LevelOfMeasurement.RATIO, "Effort / Schedule", Double.class);
-		estimatedCostsParameter = new ParameterWithArbitraryUnit<Double>(
-				"Total Estimated Cost to Develop", "k" + currency,
-				LevelOfMeasurement.RATIO,
-				"cost = Schedule * Number of Developers * 2.4 / 1000.0 with average salary = "
-						+ averageSalary + currency + "/year", Double.class);
 	}
 
 	private void recreateResultsList() {
@@ -304,6 +318,18 @@ public class CoCoMoResults implements MetricResults {
 				teamSizeParameter));
 		row.put(estimatedCostsParameter.getName(), new GeneralValue<Double>(
 				estimatedCosts, estimatedCostsParameter));
+
+		row.put(salaryParameter.getName(), new GeneralValue<Money>(new Money(
+				currency, 100, Math.round(averageSalary * 100)),
+				salaryParameter));
+		row.put(complexityParameter.getName(), new GeneralValue<Complexity>(
+				complexity, complexityParameter));
+		row.put(c1Parameter.getName(), new GeneralValue<Double>(estimatedCosts,
+				c1Parameter));
+		row.put(c2Parameter.getName(), new GeneralValue<Double>(estimatedCosts,
+				c2Parameter));
+		row.put(c3Parameter.getName(), new GeneralValue<Double>(estimatedCosts,
+				c3Parameter));
 
 		List<Map<String, Value<?>>> values = new ArrayList<Map<String, Value<?>>>();
 		values.add(row);
