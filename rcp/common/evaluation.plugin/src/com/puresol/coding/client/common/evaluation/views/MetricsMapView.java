@@ -37,194 +37,196 @@ import com.puresol.utils.math.Parameter;
 import com.puresol.utils.math.Value;
 
 public class MetricsMapView extends ViewPart implements Refreshable,
-		ISelectionListener, EvaluationsTarget, PartSettingsCapability {
+	ISelectionListener, EvaluationsTarget, PartSettingsCapability {
 
-	private FileAnalysisSelection analysisSelection;
+    private FileAnalysisSelection analysisSelection;
 
-	private Label label;
+    private Label label;
 
-	private Composite container;
-	private AreaMapComponent areaMap;
+    private Composite container;
+    private AreaMapComponent areaMap;
 
-	private MetricsMapViewSettingsDialog settingsDialog;
+    private MetricsMapViewSettingsDialog settingsDialog;
 
-	private EvaluatorFactory mapMetricSelection;
-	private Parameter<?> mapValueSelection;
-	private EvaluatorFactory colorMetricSelection = null;
-	private Parameter<?> colorValueSelection = null;
+    private EvaluatorFactory mapMetricSelection;
+    private Parameter<?> mapValueSelection;
+    private EvaluatorFactory colorMetricSelection = null;
+    private Parameter<?> colorValueSelection = null;
 
-	public MetricsMapView() {
+    public MetricsMapView() {
+    }
+
+    /**
+     * Create contents of the view part.
+     * 
+     * @param parent
+     */
+    @Override
+    public void createPartControl(Composite parent) {
+	container = new Composite(parent, SWT.BORDER);
+	container.setLayout(new FormLayout());
+
+	label = new Label(container, SWT.BORDER);
+	{
+	    FormData fd_label = new FormData();
+	    fd_label.left = new FormAttachment(0, 10);
+	    fd_label.right = new FormAttachment(100, -10);
+	    fd_label.top = new FormAttachment(0, 10);
+	    label.setLayoutData(fd_label);
 	}
 
-	/**
-	 * Create contents of the view part.
-	 * 
-	 * @param parent
-	 */
-	@Override
-	public void createPartControl(Composite parent) {
-		container = new Composite(parent, SWT.BORDER);
-		container.setLayout(new FormLayout());
-
-		label = new Label(container, SWT.BORDER);
-		{
-			FormData fd_label = new FormData();
-			fd_label.left = new FormAttachment(0, 10);
-			fd_label.right = new FormAttachment(100, -10);
-			fd_label.top = new FormAttachment(0, 10);
-			label.setLayoutData(fd_label);
-		}
-
-		areaMap = new AreaMapComponent(container, SWT.NONE);
-		{
-			FormData fd_areaMap = new FormData();
-			fd_areaMap.left = new FormAttachment(label, 0, SWT.LEFT);
-			fd_areaMap.right = new FormAttachment(label, 0, SWT.RIGHT);
-			fd_areaMap.top = new FormAttachment(label, 10);
-			fd_areaMap.bottom = new FormAttachment(100, -10);
-			areaMap.setLayoutData(fd_areaMap);
-		}
-
-		IWorkbenchPartSite site = getSite();
-		site.getWorkbenchWindow().getSelectionService()
-				.addSelectionListener(this);
-
-		initializeToolBar();
-		initializeMenu();
+	areaMap = new AreaMapComponent(container, SWT.NONE);
+	{
+	    FormData fd_areaMap = new FormData();
+	    fd_areaMap.left = new FormAttachment(label, 0, SWT.LEFT);
+	    fd_areaMap.right = new FormAttachment(label, 0, SWT.RIGHT);
+	    fd_areaMap.top = new FormAttachment(label, 10);
+	    fd_areaMap.bottom = new FormAttachment(100, -10);
+	    areaMap.setLayoutData(fd_areaMap);
 	}
 
-	/**
-	 * Initialize the toolbar.
-	 */
-	private void initializeToolBar() {
-		IToolBarManager toolbarManager = getViewSite().getActionBars()
-				.getToolBarManager();
-		toolbarManager.add(new ShowSettingsAction(this));
-		toolbarManager.add(new RefreshAction(this));
-	}
+	IWorkbenchPartSite site = getSite();
+	site.getWorkbenchWindow().getSelectionService()
+		.addSelectionListener(this);
 
-	/**
-	 * Initialize the menu.
-	 */
-	private void initializeMenu() {
-		IMenuManager menuManager = getViewSite().getActionBars()
-				.getMenuManager();
-	}
+	initializeToolBar();
+	initializeMenu();
+    }
 
-	@Override
-	public void setFocus() {
-		// Set the focus
-	}
+    /**
+     * Initialize the toolbar.
+     */
+    private void initializeToolBar() {
+	IToolBarManager toolbarManager = getViewSite().getActionBars()
+		.getToolBarManager();
+	toolbarManager.add(new ShowSettingsAction(this));
+	toolbarManager.add(new RefreshAction(this));
+    }
 
-	@Override
-	public void refresh() {
-		// TODO
-	}
+    /**
+     * Initialize the menu.
+     */
+    private void initializeMenu() {
+	IMenuManager menuManager = getViewSite().getActionBars()
+		.getMenuManager();
+    }
 
-	@Override
-	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-		if (selection instanceof FileAnalysisSelection) {
-			analysisSelection = (FileAnalysisSelection) selection;
-			updateEvaluation();
-		}
-	}
+    @Override
+    public void setFocus() {
+	// Set the focus
+    }
 
-	private void updateEvaluation() {
-		if ((analysisSelection != null) && (mapMetricSelection != null)
-				&& (mapValueSelection != null)) {
-			HashIdFileTree path = analysisSelection.getHashIdFile();
-			if (path.isFile()) {
-				path = path.getParent();
-			}
-			showEvaluation(path);
-		}
-	}
+    @Override
+    public void refresh() {
+	// TODO
+    }
 
-	@Override
-	public void showEvaluation(HashIdFileTree path) {
-		label.setText(path.getPathFile(false).getPath());
-		AreaMapData data = calculateMapDataAndParameterList(path);
-		areaMap.setData(data, mapValueSelection.getUnit());
+    @Override
+    public void selectionChanged(IWorkbenchPart part, ISelection selection) {
+	if (selection instanceof FileAnalysisSelection) {
+	    analysisSelection = (FileAnalysisSelection) selection;
+	    updateEvaluation();
 	}
+    }
 
-	private AreaMapData calculateMapDataAndParameterList(HashIdFileTree path) {
-		EvaluatorStore store = EvaluatorStoreFactory.getFactory()
-				.createInstance(mapMetricSelection.getEvaluatorClass());
-		return getAreaData(store, path);
+    private void updateEvaluation() {
+	if ((analysisSelection != null) && (mapMetricSelection != null)
+		&& (mapValueSelection != null)) {
+	    HashIdFileTree path = analysisSelection.getHashIdFile();
+	    if (path.isFile()) {
+		path = path.getParent();
+	    }
+	    showEvaluation(path);
 	}
+    }
 
-	private AreaMapData getAreaData(EvaluatorStore store, HashIdFileTree path) {
-		List<HashIdFileTree> children = path.getChildren();
-		List<AreaMapData> childAreas = new ArrayList<AreaMapData>();
-		for (int i = 0; i < children.size(); i++) {
-			AreaMapData areaData = getAreaData(store, children.get(i));
-			if (areaData != null) {
-				childAreas.add(areaData);
-			}
-		}
-		Collections.sort(childAreas);
-		MetricResults results;
-		if (path.isFile()) {
-			results = store.readFileResults(path.getHashId());
-		} else {
-			results = store.readDirectoryResults(path.getHashId());
-		}
-		if ((results == null) || (results.getValues().size() == 0)) {
-			return processAreaWithoutOwnValues(path,
-					childAreas.toArray(new AreaMapData[childAreas.size()]));
-		}
-		List<Map<String, Value<?>>> values = results.getValues();
-		Map<String, Value<?>> valueMap = values.get(0);
-		double sum = 0.0;
-		if (mapValueSelection.getType().equals(Double.class)) {
-			Value<?> valueObject = valueMap.get(mapValueSelection.getName());
-			sum = (Double) valueObject.getValue();
-		} else if (mapValueSelection.getType().equals(Integer.class)) {
-			Value<?> value = valueMap.get(mapValueSelection.getName());
-			if (value != null) {
-				sum = (Integer) value.getValue();
-			}
-		}
-		return new AreaMapData(path.getPathFile(false).toString(), sum,
-				childAreas.toArray(new AreaMapData[childAreas.size()]));
-	}
+    @Override
+    public void showEvaluation(HashIdFileTree path) {
+	label.setText(path.getPathFile(false).getPath());
+	AreaMapData data = calculateMapDataAndParameterList(path);
+	areaMap.setData(data, mapValueSelection.getUnit());
+    }
 
-	private AreaMapData processAreaWithoutOwnValues(HashIdFileTree path,
-			AreaMapData[] childAreas) {
-		double sum = 0.0;
-		for (AreaMapData childArea : childAreas) {
-			sum += childArea.getValue();
-		}
-		if (sum > 0.0) {
-			return new AreaMapData(path.getPathFile(false).toString(), sum,
-					childAreas);
-		} else {
-			return null;
-		}
-	}
+    private AreaMapData calculateMapDataAndParameterList(HashIdFileTree path) {
+	EvaluatorStore store = EvaluatorStoreFactory.getFactory()
+		.createInstance(mapMetricSelection.getEvaluatorClass());
+	return getAreaData(store, path);
+    }
 
-	@Override
-	public void showSettings() {
-		if (settingsDialog == null) {
-			settingsDialog = new MetricsMapViewSettingsDialog(this);
-			settingsDialog.open();
-		} else {
-			settingsDialog.close();
-			settingsDialog = null;
-		}
+    private AreaMapData getAreaData(EvaluatorStore store, HashIdFileTree path) {
+	List<HashIdFileTree> children = path.getChildren();
+	List<AreaMapData> childAreas = new ArrayList<AreaMapData>();
+	for (int i = 0; i < children.size(); i++) {
+	    AreaMapData areaData = getAreaData(store, children.get(i));
+	    if (areaData != null) {
+		childAreas.add(areaData);
+	    }
 	}
+	Collections.sort(childAreas);
+	MetricResults results;
+	if (path.isFile()) {
+	    results = store.readFileResults(path.getHashId());
+	} else {
+	    results = store.readDirectoryResults(path.getHashId());
+	}
+	if ((results == null) || (results.getValues().size() == 0)) {
+	    return processAreaWithoutOwnValues(path,
+		    childAreas.toArray(new AreaMapData[childAreas.size()]));
+	}
+	List<Map<String, Value<?>>> values = results.getValues();
+	Map<String, Value<?>> valueMap = values.get(0);
+	double sum = 0.0;
+	if (mapValueSelection.getType().equals(Double.class)) {
+	    Value<?> valueObject = valueMap.get(mapValueSelection.getName());
+	    sum = (Double) valueObject.getValue();
+	} else if (mapValueSelection.getType().equals(Integer.class)) {
+	    Value<?> value = valueMap.get(mapValueSelection.getName());
+	    if (value != null) {
+		sum = (Integer) value.getValue();
+	    }
+	}
+	return new AreaMapData(path.getPathFile(false).toString(), sum,
+		childAreas.toArray(new AreaMapData[childAreas.size()]));
+    }
 
-	@Override
-	public void closeSettings() {
-		settingsDialog = null;
+    private AreaMapData processAreaWithoutOwnValues(HashIdFileTree path,
+	    AreaMapData[] childAreas) {
+	double sum = 0.0;
+	for (AreaMapData childArea : childAreas) {
+	    sum += childArea.getValue();
 	}
+	if (sum > 0.0) {
+	    return new AreaMapData(path.getPathFile(false).toString(), sum,
+		    childAreas);
+	} else {
+	    return null;
+	}
+    }
 
-	@Override
-	public void applySettings() {
-		mapMetricSelection = settingsDialog.getMapMetric();
-		mapValueSelection = settingsDialog.getMapValue();
-		colorMetricSelection = settingsDialog.getColorMetric();
-		colorValueSelection = settingsDialog.getColorValue();
-		updateEvaluation();
+    @Override
+    public void showSettings() {
+	if (settingsDialog == null) {
+	    settingsDialog = new MetricsMapViewSettingsDialog(this,
+		    mapMetricSelection, mapValueSelection,
+		    colorMetricSelection, colorValueSelection);
+	    settingsDialog.open();
+	} else {
+	    settingsDialog.close();
+	    settingsDialog = null;
 	}
+    }
+
+    @Override
+    public void closeSettings() {
+	settingsDialog = null;
+    }
+
+    @Override
+    public void applySettings() {
+	mapMetricSelection = settingsDialog.getMapMetric();
+	mapValueSelection = settingsDialog.getMapValue();
+	colorMetricSelection = settingsDialog.getColorMetric();
+	colorValueSelection = settingsDialog.getColorValue();
+	updateEvaluation();
+    }
 }
