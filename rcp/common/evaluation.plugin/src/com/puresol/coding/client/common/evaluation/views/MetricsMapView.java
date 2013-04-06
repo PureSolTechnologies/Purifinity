@@ -203,7 +203,9 @@ public class MetricsMapView extends ViewPart implements Refreshable,
 
     @Override
     public void refresh() {
-	settingsDialog.refresh();
+	if (settingsDialog != null) {
+	    settingsDialog.refresh();
+	}
     }
 
     @Override
