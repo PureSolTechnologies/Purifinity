@@ -1,22 +1,23 @@
 package com.puresol.coding.metrics.codedepth;
 
+import static com.puresol.coding.metrics.codedepth.CodeDepthMetricEvaluatorParameter.CODE_RANGE_NAME;
+import static com.puresol.coding.metrics.codedepth.CodeDepthMetricEvaluatorParameter.CODE_RANGE_TYPE;
+import static com.puresol.coding.metrics.codedepth.CodeDepthMetricEvaluatorParameter.MAX_DEPTH;
+import static com.puresol.coding.metrics.codedepth.CodeDepthMetricEvaluatorParameter.PARAMETERS;
+import static com.puresol.coding.metrics.codedepth.CodeDepthMetricEvaluatorParameter.QUALITY;
+import static com.puresol.coding.metrics.codedepth.CodeDepthMetricEvaluatorParameter.SOURCE_CODE_LOCATION;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.puresol.coding.analysis.api.CodeRangeType;
-import com.puresol.coding.evaluation.api.CodeRangeNameParameter;
-import com.puresol.coding.evaluation.api.CodeRangeTypeParameter;
 import com.puresol.coding.evaluation.api.MetricResults;
-import com.puresol.coding.evaluation.api.SourceCodeLocationParameter;
 import com.puresol.coding.evaluation.api.SourceCodeQuality;
-import com.puresol.coding.evaluation.api.SourceCodeQualityParameter;
 import com.puresol.uhura.source.CodeLocation;
 import com.puresol.utils.math.GeneralValue;
-import com.puresol.utils.math.LevelOfMeasurement;
 import com.puresol.utils.math.Parameter;
-import com.puresol.utils.math.ParameterWithArbitraryUnit;
 import com.puresol.utils.math.Value;
 
 public class CodeDepthResults implements MetricResults {
@@ -25,31 +26,13 @@ public class CodeDepthResults implements MetricResults {
 
 	private final List<CodeDepthResult> results = new ArrayList<CodeDepthResult>();
 
-	private final ParameterWithArbitraryUnit<CodeLocation> sourceCodeLocationParameter = SourceCodeLocationParameter
-			.getInstance();
-	private final ParameterWithArbitraryUnit<CodeRangeType> codeRangeTypeParameter = CodeRangeTypeParameter
-			.getInstance();
-	private final ParameterWithArbitraryUnit<String> codeRangeNameParameter = CodeRangeNameParameter
-			.getInstance();
-	private final ParameterWithArbitraryUnit<Integer> maxDepthParameter = new ParameterWithArbitraryUnit<Integer>(
-			"maxDepth", "", LevelOfMeasurement.RATIO,
-			"Maximum nesting depth in evaluated code ranges.", Integer.class);
-	private final ParameterWithArbitraryUnit<SourceCodeQuality> qualityParameter = SourceCodeQualityParameter
-			.getInstance();
-
 	public void add(CodeDepthResult result) {
 		results.add(result);
 	}
 
 	@Override
 	public List<Parameter<?>> getParameters() {
-		List<Parameter<?>> parameters = new ArrayList<Parameter<?>>();
-		parameters.add(sourceCodeLocationParameter);
-		parameters.add(codeRangeTypeParameter);
-		parameters.add(codeRangeNameParameter);
-		parameters.add(maxDepthParameter);
-		parameters.add(qualityParameter);
-		return parameters;
+		return PARAMETERS;
 	}
 
 	@Override
@@ -58,20 +41,20 @@ public class CodeDepthResults implements MetricResults {
 
 		for (CodeDepthResult result : results) {
 			Map<String, Value<?>> row = new HashMap<String, Value<?>>();
-			row.put(sourceCodeLocationParameter.getName(),
+			row.put(SOURCE_CODE_LOCATION.getName(),
 					new GeneralValue<CodeLocation>(result
 							.getSourceCodeLocation(),
-							sourceCodeLocationParameter));
-			row.put(codeRangeTypeParameter.getName(),
+							SOURCE_CODE_LOCATION));
+			row.put(CODE_RANGE_TYPE.getName(),
 					new GeneralValue<CodeRangeType>(result.getCodeRangeType(),
-							codeRangeTypeParameter));
-			row.put(codeRangeNameParameter.getName(), new GeneralValue<String>(
-					result.getCodeRangeName(), codeRangeNameParameter));
-			row.put(maxDepthParameter.getName(), new GeneralValue<Integer>(
-					result.getMaxDepth(), maxDepthParameter));
-			row.put(qualityParameter.getName(),
+							CODE_RANGE_TYPE));
+			row.put(CODE_RANGE_NAME.getName(), new GeneralValue<String>(
+					result.getCodeRangeName(), CODE_RANGE_NAME));
+			row.put(MAX_DEPTH.getName(), new GeneralValue<Integer>(
+					result.getMaxDepth(), MAX_DEPTH));
+			row.put(QUALITY.getName(),
 					new GeneralValue<SourceCodeQuality>(result.getQuality(),
-							qualityParameter));
+							QUALITY));
 			values.add(row);
 		}
 

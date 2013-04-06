@@ -1,22 +1,25 @@
 package com.puresol.coding.metrics.maintainability;
 
+import static com.puresol.coding.metrics.maintainability.MaintainabilityIndexEvaluatorParameter.CODE_RANGE_NAME;
+import static com.puresol.coding.metrics.maintainability.MaintainabilityIndexEvaluatorParameter.CODE_RANGE_TYPE;
+import static com.puresol.coding.metrics.maintainability.MaintainabilityIndexEvaluatorParameter.MI;
+import static com.puresol.coding.metrics.maintainability.MaintainabilityIndexEvaluatorParameter.MI_CW;
+import static com.puresol.coding.metrics.maintainability.MaintainabilityIndexEvaluatorParameter.MI_WOC;
+import static com.puresol.coding.metrics.maintainability.MaintainabilityIndexEvaluatorParameter.ALL;
+import static com.puresol.coding.metrics.maintainability.MaintainabilityIndexEvaluatorParameter.QUALITY;
+import static com.puresol.coding.metrics.maintainability.MaintainabilityIndexEvaluatorParameter.SOURCE_CODE_LOCATION;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.puresol.coding.analysis.api.CodeRangeType;
-import com.puresol.coding.evaluation.api.CodeRangeNameParameter;
-import com.puresol.coding.evaluation.api.CodeRangeTypeParameter;
 import com.puresol.coding.evaluation.api.MetricResults;
-import com.puresol.coding.evaluation.api.SourceCodeLocationParameter;
 import com.puresol.coding.evaluation.api.SourceCodeQuality;
-import com.puresol.coding.evaluation.api.SourceCodeQualityParameter;
 import com.puresol.uhura.source.CodeLocation;
 import com.puresol.utils.math.GeneralValue;
-import com.puresol.utils.math.LevelOfMeasurement;
 import com.puresol.utils.math.Parameter;
-import com.puresol.utils.math.ParameterWithArbitraryUnit;
 import com.puresol.utils.math.Value;
 
 public class MaintainabilityIndexFileResults implements MetricResults {
@@ -24,24 +27,6 @@ public class MaintainabilityIndexFileResults implements MetricResults {
 	private static final long serialVersionUID = -5901342878584699006L;
 
 	private final List<MaintainabilityIndexFileResult> results = new ArrayList<MaintainabilityIndexFileResult>();
-
-	private final ParameterWithArbitraryUnit<CodeLocation> sourceCodeLocationParameter = SourceCodeLocationParameter
-			.getInstance();
-	private final ParameterWithArbitraryUnit<CodeRangeType> codeRangeTypeParameter = CodeRangeTypeParameter
-			.getInstance();
-	private final ParameterWithArbitraryUnit<String> codeRangeNameParameter = CodeRangeNameParameter
-			.getInstance();
-	private final ParameterWithArbitraryUnit<Double> miwocParameter = new ParameterWithArbitraryUnit<Double>(
-			"MIwoc", "", LevelOfMeasurement.ORDINAL,
-			"Maintainability index without comments", Double.class);
-	private final ParameterWithArbitraryUnit<Double> micwParameter = new ParameterWithArbitraryUnit<Double>(
-			"MIcw", "", LevelOfMeasurement.ORDINAL,
-			"Maintainability index comment weight", Double.class);
-	private final ParameterWithArbitraryUnit<Double> miParameter = new ParameterWithArbitraryUnit<Double>(
-			"MI", "", LevelOfMeasurement.ORDINAL,
-			"Maintainability index including comments", Double.class);
-	private final ParameterWithArbitraryUnit<SourceCodeQuality> qualityParameter = SourceCodeQualityParameter
-			.getInstance();
 
 	public void add(MaintainabilityIndexFileResult result) {
 		results.add(result);
@@ -53,15 +38,7 @@ public class MaintainabilityIndexFileResults implements MetricResults {
 
 	@Override
 	public List<Parameter<?>> getParameters() {
-		List<Parameter<?>> parameters = new ArrayList<Parameter<?>>();
-		parameters.add(sourceCodeLocationParameter);
-		parameters.add(codeRangeTypeParameter);
-		parameters.add(codeRangeNameParameter);
-		parameters.add(miwocParameter);
-		parameters.add(micwParameter);
-		parameters.add(miParameter);
-		parameters.add(qualityParameter);
-		return parameters;
+		return ALL;
 	}
 
 	@Override
@@ -72,24 +49,24 @@ public class MaintainabilityIndexFileResults implements MetricResults {
 			MaintainabilityIndexResult mi = result
 					.getMaintainabilityIndexResult();
 			Map<String, Value<?>> row = new HashMap<String, Value<?>>();
-			row.put(sourceCodeLocationParameter.getName(),
+			row.put(SOURCE_CODE_LOCATION.getName(),
 					new GeneralValue<CodeLocation>(result
 							.getSourceCodeLocation(),
-							sourceCodeLocationParameter));
-			row.put(codeRangeTypeParameter.getName(),
+							SOURCE_CODE_LOCATION));
+			row.put(CODE_RANGE_TYPE.getName(),
 					new GeneralValue<CodeRangeType>(result.getCodeRangeType(),
-							codeRangeTypeParameter));
-			row.put(codeRangeNameParameter.getName(), new GeneralValue<String>(
-					result.getCodeRangeName(), codeRangeNameParameter));
-			row.put(miwocParameter.getName(),
-					new GeneralValue<Double>(mi.getMIwoc(), miwocParameter));
-			row.put(micwParameter.getName(),
-					new GeneralValue<Double>(mi.getMIcw(), micwParameter));
-			row.put(miParameter.getName(), new GeneralValue<Double>(mi.getMI(),
-					miParameter));
-			row.put(qualityParameter.getName(),
+							CODE_RANGE_TYPE));
+			row.put(CODE_RANGE_NAME.getName(), new GeneralValue<String>(
+					result.getCodeRangeName(), CODE_RANGE_NAME));
+			row.put(MI_WOC.getName(),
+					new GeneralValue<Double>(mi.getMIwoc(), MI_WOC));
+			row.put(MI_CW.getName(),
+					new GeneralValue<Double>(mi.getMIcw(), MI_CW));
+			row.put(MI.getName(), new GeneralValue<Double>(mi.getMI(),
+					MI));
+			row.put(QUALITY.getName(),
 					new GeneralValue<SourceCodeQuality>(result.getQuality(),
-							qualityParameter));
+							QUALITY));
 			values.add(row);
 		}
 

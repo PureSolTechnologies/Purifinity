@@ -1,5 +1,7 @@
 package com.puresol.coding.metrics.normmaint;
 
+import static com.puresol.coding.metrics.normmaint.NormalizedMaintainabilityIndexEvaluatorParameter.ALL;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -49,15 +51,7 @@ public class NormalizedMaintainabilityIndexFileResults implements MetricResults 
 
 	@Override
 	public List<Parameter<?>> getParameters() {
-		List<Parameter<?>> parameters = new ArrayList<Parameter<?>>();
-		parameters.add(sourceCodeLocationParameter);
-		parameters.add(codeRangeTypeParameter);
-		parameters.add(codeRangeNameParameter);
-		parameters.add(nMiwocParameter);
-		parameters.add(nMicwParameter);
-		parameters.add(nMiParameter);
-		parameters.add(qualityParameter);
-		return parameters;
+		return ALL;
 	}
 
 	@Override

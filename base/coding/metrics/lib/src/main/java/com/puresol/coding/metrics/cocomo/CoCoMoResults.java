@@ -1,5 +1,19 @@
 package com.puresol.coding.metrics.cocomo;
 
+import static com.puresol.coding.metrics.cocomo.CoCoMoEvaluatorParameter.ALL;
+import static com.puresol.coding.metrics.cocomo.CoCoMoEvaluatorParameter.C1;
+import static com.puresol.coding.metrics.cocomo.CoCoMoEvaluatorParameter.C2;
+import static com.puresol.coding.metrics.cocomo.CoCoMoEvaluatorParameter.C3;
+import static com.puresol.coding.metrics.cocomo.CoCoMoEvaluatorParameter.COMPLEXITY;
+import static com.puresol.coding.metrics.cocomo.CoCoMoEvaluatorParameter.COSTS;
+import static com.puresol.coding.metrics.cocomo.CoCoMoEvaluatorParameter.KSLOC;
+import static com.puresol.coding.metrics.cocomo.CoCoMoEvaluatorParameter.PERSON_MONTH;
+import static com.puresol.coding.metrics.cocomo.CoCoMoEvaluatorParameter.PERSON_YEARS;
+import static com.puresol.coding.metrics.cocomo.CoCoMoEvaluatorParameter.SALARY;
+import static com.puresol.coding.metrics.cocomo.CoCoMoEvaluatorParameter.SCHEDULED_MONTH;
+import static com.puresol.coding.metrics.cocomo.CoCoMoEvaluatorParameter.SCHEDULED_YEARS;
+import static com.puresol.coding.metrics.cocomo.CoCoMoEvaluatorParameter.TEAM_SIZE;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,10 +22,8 @@ import java.util.Map;
 import com.puresol.coding.evaluation.api.MetricResults;
 import com.puresol.coding.evaluation.api.MetricValue;
 import com.puresol.utils.math.GeneralValue;
-import com.puresol.utils.math.LevelOfMeasurement;
 import com.puresol.utils.math.Money;
 import com.puresol.utils.math.Parameter;
-import com.puresol.utils.math.ParameterWithArbitraryUnit;
 import com.puresol.utils.math.Value;
 
 public class CoCoMoResults implements MetricResults {
@@ -34,58 +46,6 @@ public class CoCoMoResults implements MetricResults {
 	private String currency;
 
 	private final List<MetricValue> results = new ArrayList<MetricValue>();
-
-	private final ParameterWithArbitraryUnit<Double> kslocParameter = new ParameterWithArbitraryUnit<Double>(
-			"kPhyLOC",
-			"kSLOC",
-			LevelOfMeasurement.RATIO,
-			"Total Physical Source Lines Of Code in thousands:\nkPhyLOC = phyLOC / 1000",
-			Double.class);
-	private final ParameterWithArbitraryUnit<Double> personMonthParameter = new ParameterWithArbitraryUnit<Double>(
-			"Development Effort Estimate in Month", "Person-Months",
-			LevelOfMeasurement.RATIO,
-			"Basic COCOMO model, Person-Months = c1 * (kPhyLOC ^ c2)",
-			Double.class);
-	private final ParameterWithArbitraryUnit<Double> personYearsParameter = new ParameterWithArbitraryUnit<Double>(
-			"Development Effort Estimate in Years", "Person-Years",
-			LevelOfMeasurement.RATIO,
-			"Person-Years = Person-Month / (12 Month / Year)", Double.class);
-	private final ParameterWithArbitraryUnit<Double> scheduledMonthParameter = new ParameterWithArbitraryUnit<Double>(
-			"Schedule Estimate in Months", "Months", LevelOfMeasurement.RATIO,
-			"Basic COCOMO model, Months = 2.5 * (Person-Months ^ c3)",
-			Double.class);
-	private final ParameterWithArbitraryUnit<Double> scheduledYearsParameter = new ParameterWithArbitraryUnit<Double>(
-			"Schedule Estimate in Years", "Years", LevelOfMeasurement.RATIO,
-			"Years = Months / 12", Double.class);
-	private final ParameterWithArbitraryUnit<Double> teamSizeParameter = new ParameterWithArbitraryUnit<Double>(
-			"Estimated Average Number of Developers", "",
-			LevelOfMeasurement.RATIO, "Effort / Schedule", Double.class);
-	private final ParameterWithArbitraryUnit<Double> estimatedCostsParameter = new ParameterWithArbitraryUnit<Double>(
-			"Total Estimated Cost to Develop", "kMoney",
-			LevelOfMeasurement.RATIO,
-			"cost = Schedule * Number of Developers * 2.4 / 1000.0 * Salary",
-			Double.class);
-	private final ParameterWithArbitraryUnit<Money> salaryParameter = new ParameterWithArbitraryUnit<Money>(
-			"Salary", currency, LevelOfMeasurement.RATIO,
-			"Average developer salary.", Money.class);
-	private final ParameterWithArbitraryUnit<Complexity> complexityParameter = new ParameterWithArbitraryUnit<Complexity>(
-			"complexity",
-			"",
-			LevelOfMeasurement.ORDINAL,
-			"Complexity of the project. This complexity specifies the CoCoMo equation constants c1, c2 and c3",
-			Complexity.class);
-	private final ParameterWithArbitraryUnit<Double> c1Parameter = new ParameterWithArbitraryUnit<Double>(
-			"c1", "", LevelOfMeasurement.RATIO,
-			"CoCoMo equation constant. This constant is set by complexity.",
-			Double.class);
-	private final ParameterWithArbitraryUnit<Double> c2Parameter = new ParameterWithArbitraryUnit<Double>(
-			"c2", "", LevelOfMeasurement.RATIO,
-			"CoCoMo equation constant. This constant is set by complexity.",
-			Double.class);
-	private final ParameterWithArbitraryUnit<Double> c3Parameter = new ParameterWithArbitraryUnit<Double>(
-			"c3", "", LevelOfMeasurement.RATIO,
-			"CoCoMo equation constant. This constant is set by complexity.",
-			Double.class);
 
 	public CoCoMoResults() {
 		setComplexity(Complexity.LOW);
@@ -255,14 +215,14 @@ public class CoCoMoResults implements MetricResults {
 
 	private void recreateResultsList() {
 		results.clear();
-		results.add(new MetricValue(ksloc, kslocParameter));
-		results.add(new MetricValue(ksloc, kslocParameter));
-		results.add(new MetricValue(personMonth, personMonthParameter));
-		results.add(new MetricValue(personYears, personYearsParameter));
-		results.add(new MetricValue(scheduledMonth, scheduledMonthParameter));
-		results.add(new MetricValue(scheduledYears, scheduledYearsParameter));
-		results.add(new MetricValue(teamSize, teamSizeParameter));
-		results.add(new MetricValue(estimatedCosts, estimatedCostsParameter));
+		results.add(new MetricValue(ksloc, KSLOC));
+		results.add(new MetricValue(ksloc, KSLOC));
+		results.add(new MetricValue(personMonth, PERSON_MONTH));
+		results.add(new MetricValue(personYears, PERSON_YEARS));
+		results.add(new MetricValue(scheduledMonth, SCHEDULED_MONTH));
+		results.add(new MetricValue(scheduledYears, SCHEDULED_YEARS));
+		results.add(new MetricValue(teamSize, TEAM_SIZE));
+		results.add(new MetricValue(estimatedCosts, COSTS));
 	}
 
 	@Override
@@ -290,49 +250,39 @@ public class CoCoMoResults implements MetricResults {
 
 	@Override
 	public List<Parameter<?>> getParameters() {
-		List<Parameter<?>> parameters = new ArrayList<Parameter<?>>();
-		parameters.add(kslocParameter);
-		parameters.add(personMonthParameter);
-		parameters.add(personYearsParameter);
-		parameters.add(scheduledMonthParameter);
-		parameters.add(scheduledYearsParameter);
-		parameters.add(teamSizeParameter);
-		parameters.add(estimatedCostsParameter);
-		return parameters;
+		return ALL;
 	}
 
 	@Override
 	public List<Map<String, Value<?>>> getValues() {
 		Map<String, Value<?>> row = new HashMap<String, Value<?>>();
-		row.put(kslocParameter.getName(), new GeneralValue<Double>(ksloc,
-				kslocParameter));
-		row.put(personMonthParameter.getName(), new GeneralValue<Double>(
-				personMonth, personMonthParameter));
-		row.put(personYearsParameter.getName(), new GeneralValue<Double>(
-				personYears, personYearsParameter));
-		row.put(scheduledMonthParameter.getName(), new GeneralValue<Double>(
-				scheduledMonth, scheduledMonthParameter));
-		row.put(scheduledYearsParameter.getName(), new GeneralValue<Double>(
-				scheduledYears, scheduledYearsParameter));
-		row.put(teamSizeParameter.getName(), new GeneralValue<Double>(teamSize,
-				teamSizeParameter));
-		row.put(estimatedCostsParameter.getName(), new GeneralValue<Double>(
-				estimatedCosts, estimatedCostsParameter));
+		row.put(KSLOC.getName(), new GeneralValue<Double>(ksloc, KSLOC));
+		row.put(PERSON_MONTH.getName(), new GeneralValue<Double>(personMonth,
+				PERSON_MONTH));
+		row.put(PERSON_YEARS.getName(), new GeneralValue<Double>(personYears,
+				PERSON_YEARS));
+		row.put(SCHEDULED_MONTH.getName(), new GeneralValue<Double>(
+				scheduledMonth, SCHEDULED_MONTH));
+		row.put(SCHEDULED_YEARS.getName(), new GeneralValue<Double>(
+				scheduledYears, SCHEDULED_YEARS));
+		row.put(TEAM_SIZE.getName(), new GeneralValue<Double>(teamSize,
+				TEAM_SIZE));
+		row.put(COSTS.getName(),
+				new GeneralValue<Double>(estimatedCosts, COSTS));
 
-		row.put(salaryParameter.getName(), new GeneralValue<Money>(new Money(
-				currency, 100, Math.round(averageSalary * 100)),
-				salaryParameter));
-		row.put(complexityParameter.getName(), new GeneralValue<Complexity>(
-				complexity, complexityParameter));
-		row.put(c1Parameter.getName(), new GeneralValue<Double>(estimatedCosts,
-				c1Parameter));
-		row.put(c2Parameter.getName(), new GeneralValue<Double>(estimatedCosts,
-				c2Parameter));
-		row.put(c3Parameter.getName(), new GeneralValue<Double>(estimatedCosts,
-				c3Parameter));
+		row.put(SALARY.getName(), new GeneralValue<Money>(getMoney(), SALARY));
+		row.put(COMPLEXITY.getName(), new GeneralValue<Complexity>(complexity,
+				COMPLEXITY));
+		row.put(C1.getName(), new GeneralValue<Double>(c1, C1));
+		row.put(C2.getName(), new GeneralValue<Double>(c2, C2));
+		row.put(C3.getName(), new GeneralValue<Double>(c3, C3));
 
 		List<Map<String, Value<?>>> values = new ArrayList<Map<String, Value<?>>>();
 		values.add(row);
 		return values;
+	}
+
+	private Money getMoney() {
+		return new Money(currency, 100, Math.round(averageSalary * 100));
 	}
 }
