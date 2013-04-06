@@ -1,5 +1,6 @@
 package com.puresol.coding.client.common.evaluation;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -21,6 +22,7 @@ import com.puresol.coding.client.common.evaluation.views.MetricsMapView;
 import com.puresol.coding.client.common.ui.actions.AbstractPartSettingsDialog;
 import com.puresol.coding.evaluation.api.EvaluatorFactory;
 import com.puresol.coding.evaluation.api.Evaluators;
+import com.puresol.utils.math.LevelOfMeasurement;
 import com.puresol.utils.math.Parameter;
 
 public class MetricsMapViewSettingsDialog extends AbstractPartSettingsDialog
@@ -134,23 +136,56 @@ public class MetricsMapViewSettingsDialog extends AbstractPartSettingsDialog
 	@Override
 	public void widgetSelected(SelectionEvent e) {
 		if (e.getSource() == mapMetricCombo) {
-			StructuredSelection selection = (StructuredSelection) mapMetricComboViewer
-					.getSelection();
-			mapMetricSelection = (EvaluatorFactory) selection.getFirstElement();
+			mapMetricChanged();
 		} else if (e.getSource() == mapValueCombo) {
-			StructuredSelection selection = (StructuredSelection) mapValueComboViewer
-					.getSelection();
-			mapValueSelection = (Parameter<?>) selection.getFirstElement();
+			mapValueChanged();
 		} else if (e.getSource() == colorMetricCombo) {
-			StructuredSelection selection = (StructuredSelection) colorMetricComboViewer
-					.getSelection();
-			colorMetricSelection = (EvaluatorFactory) selection
-					.getFirstElement();
+			colorMetricChanged();
 		} else if (e.getSource() == colorValueCombo) {
-			StructuredSelection selection = (StructuredSelection) colorValueComboViewer
-					.getSelection();
-			colorValueSelection = (Parameter<?>) selection.getFirstElement();
+			colorValueChange();
 		}
+	}
+
+	private void mapMetricChanged() {
+		StructuredSelection selection = (StructuredSelection) mapMetricComboViewer
+				.getSelection();
+		mapMetricSelection = (EvaluatorFactory) selection.getFirstElement();
+		List<Parameter<?>> allParameters = mapMetricSelection.getParameters();
+		List<Parameter<?>> comboParameters = new ArrayList<Parameter<?>>();
+		for (Parameter<?> parameter : allParameters) {
+			if (parameter.getLevelOfMeasurement() == LevelOfMeasurement.RATIO) {
+				comboParameters.add(parameter);
+			}
+		}
+		mapValueComboViewer.setInput(comboParameters);
+	}
+
+	private void mapValueChanged() {
+		StructuredSelection selection = (StructuredSelection) mapValueComboViewer
+				.getSelection();
+		mapValueSelection = (Parameter<?>) selection.getFirstElement();
+	}
+
+	private void colorMetricChanged() {
+		StructuredSelection selection = (StructuredSelection) colorMetricComboViewer
+				.getSelection();
+		colorMetricSelection = (EvaluatorFactory) selection.getFirstElement();
+		List<Parameter<?>> allParameters = colorMetricSelection.getParameters();
+		List<Parameter<?>> comboParameters = new ArrayList<Parameter<?>>();
+		for (Parameter<?> parameter : allParameters) {
+			if ((parameter.getLevelOfMeasurement() == LevelOfMeasurement.ORDINAL)
+					|| (parameter.getLevelOfMeasurement() == LevelOfMeasurement.INTERVAL)
+					|| (parameter.getLevelOfMeasurement() == LevelOfMeasurement.RATIO)) {
+				comboParameters.add(parameter);
+			}
+		}
+		colorValueComboViewer.setInput(comboParameters);
+	}
+
+	private void colorValueChange() {
+		StructuredSelection selection = (StructuredSelection) colorValueComboViewer
+				.getSelection();
+		colorValueSelection = (Parameter<?>) selection.getFirstElement();
 	}
 
 	@Override

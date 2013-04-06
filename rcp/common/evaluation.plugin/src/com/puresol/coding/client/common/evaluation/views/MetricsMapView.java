@@ -33,7 +33,6 @@ import com.puresol.coding.evaluation.api.EvaluatorFactory;
 import com.puresol.coding.evaluation.api.EvaluatorStore;
 import com.puresol.coding.evaluation.api.EvaluatorStoreFactory;
 import com.puresol.coding.evaluation.api.MetricResults;
-import com.puresol.utils.math.LevelOfMeasurement;
 import com.puresol.utils.math.Parameter;
 import com.puresol.utils.math.Value;
 
@@ -41,21 +40,18 @@ public class MetricsMapView extends ViewPart implements Refreshable,
 		ISelectionListener, EvaluationsTarget, PartSettingsCapability {
 
 	private FileAnalysisSelection analysisSelection;
-	private EvaluatorFactory metricSelection;
-	private Parameter<?> parameterSelection;
 
 	private Label label;
 
 	private Composite container;
 	private AreaMapComponent areaMap;
 
-	private HashIdFileTree path;
-
 	private MetricsMapViewSettingsDialog settingsDialog;
 
-	private final List<Parameter<?>> parameterList = new ArrayList<Parameter<?>>();
-	private HashIdFileTree lastPathSelection;
-	private EvaluatorFactory lastMetricSelection;
+	private EvaluatorFactory mapMetricSelection;
+	private Parameter<?> mapValueSelection;
+	private EvaluatorFactory colorMetricSelection = null;
+	private Parameter<?> colorValueSelection = null;
 
 	public MetricsMapView() {
 	}
@@ -134,37 +130,26 @@ public class MetricsMapView extends ViewPart implements Refreshable,
 	}
 
 	private void updateEvaluation() {
-		if ((analysisSelection != null) && (metricSelection != null)) {
+		if ((analysisSelection != null) && (mapMetricSelection != null)
+				&& (mapValueSelection != null)) {
 			HashIdFileTree path = analysisSelection.getHashIdFile();
-
 			if (path.isFile()) {
 				path = path.getParent();
 			}
-			if ((!path.equals(lastPathSelection))
-					|| (!metricSelection.equals(lastMetricSelection))) {
-				lastPathSelection = path;
-				lastMetricSelection = metricSelection;
-				showEvaluation(path);
-			}
+			showEvaluation(path);
 		}
 	}
 
 	@Override
 	public void showEvaluation(HashIdFileTree path) {
-		this.path = path;
 		label.setText(path.getPathFile(false).getPath());
 		AreaMapData data = calculateMapDataAndParameterList(path);
-		if (parameterList.size() > 0) {
-			areaMap.setData(data, parameterList.get(0).getUnit());
-		} else {
-			areaMap.setData(data, "");
-		}
+		areaMap.setData(data, mapValueSelection.getUnit());
 	}
 
 	private AreaMapData calculateMapDataAndParameterList(HashIdFileTree path) {
-		parameterList.clear();
 		EvaluatorStore store = EvaluatorStoreFactory.getFactory()
-				.createInstance(metricSelection.getEvaluatorClass());
+				.createInstance(mapMetricSelection.getEvaluatorClass());
 		return getAreaData(store, path);
 	}
 
@@ -188,24 +173,14 @@ public class MetricsMapView extends ViewPart implements Refreshable,
 			return processAreaWithoutOwnValues(path,
 					childAreas.toArray(new AreaMapData[childAreas.size()]));
 		}
-		for (Parameter<?> parameter : results.getParameters()) {
-			if (parameter.getLevelOfMeasurement() == LevelOfMeasurement.RATIO) {
-				if (!parameterList.contains(parameter)) {
-					parameterList.add(parameter);
-				}
-			}
-		}
-		if (parameterSelection == null) {
-			parameterSelection = parameterList.get(0);
-		}
 		List<Map<String, Value<?>>> values = results.getValues();
 		Map<String, Value<?>> valueMap = values.get(0);
 		double sum = 0.0;
-		if (parameterSelection.getType().equals(Double.class)) {
-			Value<?> valueObject = valueMap.get(parameterSelection.getName());
+		if (mapValueSelection.getType().equals(Double.class)) {
+			Value<?> valueObject = valueMap.get(mapValueSelection.getName());
 			sum = (Double) valueObject.getValue();
-		} else if (parameterSelection.getType().equals(Integer.class)) {
-			Value<?> value = valueMap.get(parameterSelection.getName());
+		} else if (mapValueSelection.getType().equals(Integer.class)) {
+			Value<?> value = valueMap.get(mapValueSelection.getName());
 			if (value != null) {
 				sum = (Integer) value.getValue();
 			}
@@ -246,6 +221,10 @@ public class MetricsMapView extends ViewPart implements Refreshable,
 
 	@Override
 	public void applySettings() {
-		// TODO Auto-generated method stub
+		mapMetricSelection = settingsDialog.getMapMetric();
+		mapValueSelection = settingsDialog.getMapValue();
+		colorMetricSelection = settingsDialog.getColorMetric();
+		colorValueSelection = settingsDialog.getColorValue();
+		updateEvaluation();
 	}
 }
