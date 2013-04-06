@@ -30,7 +30,9 @@ import com.puresol.coding.client.common.evaluation.utils.EvaluationsTarget;
 import com.puresol.coding.client.common.ui.actions.PartSettingsCapability;
 import com.puresol.coding.client.common.ui.actions.RefreshAction;
 import com.puresol.coding.client.common.ui.actions.Refreshable;
+import com.puresol.coding.client.common.ui.actions.Reproducable;
 import com.puresol.coding.client.common.ui.actions.ShowSettingsAction;
+import com.puresol.coding.client.common.ui.actions.ViewReproductionAction;
 import com.puresol.coding.client.common.ui.components.AreaMapComponent;
 import com.puresol.coding.client.common.ui.components.AreaMapData;
 import com.puresol.coding.evaluation.api.CodeRangeTypeParameter;
@@ -43,7 +45,8 @@ import com.puresol.utils.math.Parameter;
 import com.puresol.utils.math.Value;
 
 public class MetricsMapView extends ViewPart implements Refreshable,
-	ISelectionListener, EvaluationsTarget, PartSettingsCapability {
+	Reproducable, ISelectionListener, EvaluationsTarget,
+	PartSettingsCapability {
 
     private FileAnalysisSelection analysisSelection;
 
@@ -107,6 +110,7 @@ public class MetricsMapView extends ViewPart implements Refreshable,
 	IToolBarManager toolbarManager = getViewSite().getActionBars()
 		.getToolBarManager();
 	toolbarManager.add(new ShowSettingsAction(this));
+	toolbarManager.add(new ViewReproductionAction(this));
 	toolbarManager.add(new RefreshAction(this));
     }
 
@@ -121,7 +125,9 @@ public class MetricsMapView extends ViewPart implements Refreshable,
     @Override
     public void init(IViewSite site, IMemento memento) throws PartInitException {
 	super.init(site, memento);
-
+	if (memento == null) {
+	    return;
+	}
 	// touch old classes to get the plugins activated... :-(
 	String mapMeticClass = memento.getString("map.metric.class");
 	if (mapMeticClass != null) {
