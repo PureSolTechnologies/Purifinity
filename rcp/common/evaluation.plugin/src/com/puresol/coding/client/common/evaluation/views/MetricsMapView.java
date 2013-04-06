@@ -19,6 +19,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.part.ViewPart;
 
+import com.puresol.coding.analysis.api.CodeRangeType;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.client.common.analysis.views.FileAnalysisSelection;
 import com.puresol.coding.client.common.evaluation.MetricsMapViewSettingsDialog;
@@ -29,6 +30,7 @@ import com.puresol.coding.client.common.ui.actions.Refreshable;
 import com.puresol.coding.client.common.ui.actions.ShowSettingsAction;
 import com.puresol.coding.client.common.ui.components.AreaMapComponent;
 import com.puresol.coding.client.common.ui.components.AreaMapData;
+import com.puresol.coding.evaluation.api.CodeRangeTypeParameter;
 import com.puresol.coding.evaluation.api.EvaluatorFactory;
 import com.puresol.coding.evaluation.api.EvaluatorStore;
 import com.puresol.coding.evaluation.api.EvaluatorStoreFactory;
@@ -54,6 +56,7 @@ public class MetricsMapView extends ViewPart implements Refreshable,
     private Parameter<?> colorValueSelection = null;
 
     public MetricsMapView() {
+	super();
     }
 
     /**
@@ -113,12 +116,12 @@ public class MetricsMapView extends ViewPart implements Refreshable,
 
     @Override
     public void setFocus() {
-	// Set the focus
+	areaMap.setFocus();
     }
 
     @Override
     public void refresh() {
-	// TODO
+	settingsDialog.refresh();
     }
 
     @Override
@@ -143,17 +146,71 @@ public class MetricsMapView extends ViewPart implements Refreshable,
     @Override
     public void showEvaluation(HashIdFileTree path) {
 	label.setText(path.getPathFile(false).getPath());
-	AreaMapData data = calculateMapDataAndParameterList(path);
+	EvaluatorStore mapStore = EvaluatorStoreFactory.getFactory()
+		.createInstance(mapMetricSelection.getEvaluatorClass());
+	AreaMapData data = getAreaData(mapStore, path);
 	areaMap.setData(data, mapValueSelection.getUnit());
     }
 
-    private AreaMapData calculateMapDataAndParameterList(HashIdFileTree path) {
-	EvaluatorStore store = EvaluatorStoreFactory.getFactory()
-		.createInstance(mapMetricSelection.getEvaluatorClass());
-	return getAreaData(store, path);
+    private AreaMapData getAreaData(EvaluatorStore mapStore, HashIdFileTree path) {
+	List<AreaMapData> childAreas = calculateChildAreaMaps(mapStore, path);
+	MetricResults results;
+	if (path.isFile()) {
+	    results = mapStore.readFileResults(path.getHashId());
+	} else {
+	    results = mapStore.readDirectoryResults(path.getHashId());
+	}
+	if ((results == null) || (results.getValues().size() == 0)) {
+	    return processAreaWithoutOwnValues(path,
+		    childAreas.toArray(new AreaMapData[childAreas.size()]));
+	}
+	List<Map<String, Value<?>>> values = results.getValues();
+	Map<String, Value<?>> valueMap = null;
+	if (path.isFile()) {
+	    String codeRangeTypeParameterName = CodeRangeTypeParameter
+		    .getInstance().getName();
+	    if (values.size() == 1) {
+		valueMap = values.get(0);
+	    } else {
+		for (Map<String, Value<?>> value : values) {
+		    if (value.get(codeRangeTypeParameterName).getValue()
+			    .equals(CodeRangeType.FILE)) {
+			valueMap = value;
+			break;
+		    }
+		}
+		if (valueMap == null) {
+		    throw new RuntimeException("File '"
+			    + path.getPathFile(false)
+			    + "' contains no FILE result for evaluator '"
+			    + mapMetricSelection.getName()
+			    + "' and contains multiple values!");
+		}
+	    }
+	} else {
+	    if (values.size() != 1) {
+		throw new RuntimeException("Directory '"
+			+ path.getPathFile(false)
+			+ "' contains more than one result for evaluator '"
+			+ mapMetricSelection.getName() + "'!");
+	    }
+	    valueMap = values.get(0);
+	}
+	double sum = 0.0;
+	Value<?> value = valueMap.get(mapValueSelection.getName());
+	if (Number.class.isAssignableFrom(mapValueSelection.getType())) {
+	    sum = ((Number) value.getValue()).doubleValue();
+	} else {
+	    throw new RuntimeException("Value '" + value
+		    + "' is not a number for '" + path.getPathFile(false)
+		    + "'!");
+	}
+	return new AreaMapData(path.getPathFile(false).toString(), sum,
+		childAreas.toArray(new AreaMapData[childAreas.size()]));
     }
 
-    private AreaMapData getAreaData(EvaluatorStore store, HashIdFileTree path) {
+    private List<AreaMapData> calculateChildAreaMaps(EvaluatorStore store,
+	    HashIdFileTree path) {
 	List<HashIdFileTree> children = path.getChildren();
 	List<AreaMapData> childAreas = new ArrayList<AreaMapData>();
 	for (int i = 0; i < children.size(); i++) {
@@ -163,30 +220,7 @@ public class MetricsMapView extends ViewPart implements Refreshable,
 	    }
 	}
 	Collections.sort(childAreas);
-	MetricResults results;
-	if (path.isFile()) {
-	    results = store.readFileResults(path.getHashId());
-	} else {
-	    results = store.readDirectoryResults(path.getHashId());
-	}
-	if ((results == null) || (results.getValues().size() == 0)) {
-	    return processAreaWithoutOwnValues(path,
-		    childAreas.toArray(new AreaMapData[childAreas.size()]));
-	}
-	List<Map<String, Value<?>>> values = results.getValues();
-	Map<String, Value<?>> valueMap = values.get(0);
-	double sum = 0.0;
-	if (mapValueSelection.getType().equals(Double.class)) {
-	    Value<?> valueObject = valueMap.get(mapValueSelection.getName());
-	    sum = (Double) valueObject.getValue();
-	} else if (mapValueSelection.getType().equals(Integer.class)) {
-	    Value<?> value = valueMap.get(mapValueSelection.getName());
-	    if (value != null) {
-		sum = (Integer) value.getValue();
-	    }
-	}
-	return new AreaMapData(path.getPathFile(false).toString(), sum,
-		childAreas.toArray(new AreaMapData[childAreas.size()]));
+	return childAreas;
     }
 
     private AreaMapData processAreaWithoutOwnValues(HashIdFileTree path,

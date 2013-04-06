@@ -52,4 +52,10 @@ public abstract class AbstractPartSettingsDialog extends Dialog {
      * @return
      */
     abstract protected boolean canApply();
+
+    /**
+     * This method can be called by the view if the settings dialog needs to
+     * refresh some settings.
+     */
+    abstract public void refresh();
 }

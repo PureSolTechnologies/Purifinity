@@ -254,4 +254,9 @@ public class MetricsMapViewSettingsDialog extends AbstractPartSettingsDialog
 	}
 	return true;
     }
+
+    @Override
+    public void refresh() {
+	populateCombos();
+    }
 }
