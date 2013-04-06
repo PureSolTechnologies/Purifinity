@@ -26,13 +26,18 @@ import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.client.common.analysis.views.FileAnalysisSelection;
 import com.puresol.coding.client.common.evaluation.contents.MetricsTableViewer;
 import com.puresol.coding.client.common.evaluation.utils.EvaluationsTarget;
+import com.puresol.coding.client.common.ui.actions.PartSettingsCapability;
 import com.puresol.coding.client.common.ui.actions.RefreshAction;
 import com.puresol.coding.client.common.ui.actions.Refreshable;
+import com.puresol.coding.client.common.ui.actions.Reproducable;
+import com.puresol.coding.client.common.ui.actions.ShowSettingsAction;
+import com.puresol.coding.client.common.ui.actions.ViewReproductionAction;
 import com.puresol.coding.evaluation.api.EvaluatorFactory;
 import com.puresol.coding.evaluation.api.Evaluators;
 
 public class MetricsTableView extends ViewPart implements Refreshable,
-	ISelectionListener, EvaluationsTarget {
+	ISelectionListener, EvaluationsTarget, PartSettingsCapability,
+	Reproducable {
 
     private FileAnalysisSelection analysisSelection;
 
@@ -40,6 +45,9 @@ public class MetricsTableView extends ViewPart implements Refreshable,
     private ScrolledComposite scrolledComposite;
     private Composite container;
     private Label label;
+
+    private Font headerFont;
+    private Font sectionFont;
 
     private final List<Label> labels = new ArrayList<Label>();
     private final List<Table> tables = new ArrayList<Table>();
@@ -51,6 +59,8 @@ public class MetricsTableView extends ViewPart implements Refreshable,
     @Override
     public void dispose() {
 	backgroundColor.dispose();
+	headerFont.dispose();
+	sectionFont.dispose();
 	super.dispose();
     }
 
@@ -76,9 +86,14 @@ public class MetricsTableView extends ViewPart implements Refreshable,
 	label.setBackground(backgroundColor);
 	Font font = label.getFont();
 	FontData[] fontData = font.getFontData();
-	label.setFont(new Font(label.getDisplay(), fontData[0].getName(),
+	headerFont = new Font(label.getDisplay(), fontData[0].getName(),
 		(int) (fontData[0].getHeight() * 1.5), fontData[0].getStyle()
-			| SWT.BOLD | SWT.UNDERLINE_SINGLE | SWT.ITALIC));
+			| SWT.BOLD | SWT.UNDERLINE_SINGLE | SWT.ITALIC);
+	label.setFont(headerFont);
+
+	sectionFont = new Font(label.getDisplay(), fontData[0].getName(),
+		(int) (fontData[0].getHeight() * 1.2), fontData[0].getStyle()
+			| SWT.BOLD | SWT.UNDERLINE_SINGLE | SWT.ITALIC);
 
 	IWorkbenchPartSite site = getSite();
 	site.getWorkbenchWindow().getSelectionService()
@@ -98,6 +113,8 @@ public class MetricsTableView extends ViewPart implements Refreshable,
     private void initializeToolBar() {
 	IToolBarManager toolbarManager = getViewSite().getActionBars()
 		.getToolBarManager();
+	toolbarManager.add(new ShowSettingsAction(this));
+	toolbarManager.add(new ViewReproductionAction(this));
 	toolbarManager.add(new RefreshAction(this));
     }
 
@@ -157,11 +174,7 @@ public class MetricsTableView extends ViewPart implements Refreshable,
 	    Label label = new Label(container, SWT.NONE);
 	    label.setBackground(backgroundColor);
 	    label.setText(metric.getName());
-	    Font font = label.getFont();
-	    FontData[] fontData = font.getFontData();
-	    label.setFont(new Font(label.getDisplay(), fontData[0].getName(),
-		    (int) (fontData[0].getHeight() * 1.2), fontData[0]
-			    .getStyle() | SWT.BOLD));
+	    label.setFont(sectionFont);
 	    labels.add(label);
 
 	    Table table = new Table(container, SWT.BORDER);
@@ -177,5 +190,20 @@ public class MetricsTableView extends ViewPart implements Refreshable,
 	container.layout(true, true);
 	container.setSize(container.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 	scrolledComposite.layout(true, true);
+    }
+
+    @Override
+    public void showSettings() {
+	// TODO Auto-generated method stub
+    }
+
+    @Override
+    public void applySettings() {
+	// TODO Auto-generated method stub
+    }
+
+    @Override
+    public void closeSettings() {
+	// TODO Auto-generated method stub
     }
 }

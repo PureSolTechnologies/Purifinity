@@ -23,7 +23,7 @@ public class ViewReproductionAction extends Action {
 
     public ViewReproductionAction(Reproducable reproducable) {
 	super("Reproduce", ClientImages
-		.getImageDescriptor(ClientImages.ARROW_REFRESH_16x16));
+		.getImageDescriptor(ClientImages.TAB_ADD_16x16));
 	this.reproducable = reproducable;
     }
 

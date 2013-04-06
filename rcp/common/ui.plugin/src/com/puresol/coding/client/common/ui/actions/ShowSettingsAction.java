@@ -13,18 +13,18 @@ import com.puresol.coding.client.common.branding.ClientImages;
  */
 public class ShowSettingsAction extends Action {
 
-	private final PartSettingsCapability component;
+    private final PartSettingsCapability component;
 
-	public ShowSettingsAction(PartSettingsCapability component) {
-		super("Settings...", ClientImages
-				.getImageDescriptor(ClientImages.WRENCH_ORANGE_16x16));
-		setToolTipText("Shows the part's settings dialog.");
-		this.component = component;
-	}
+    public ShowSettingsAction(PartSettingsCapability component) {
+	super("Settings...", ClientImages
+		.getImageDescriptor(ClientImages.TAB_EDIT_16x16));
+	setToolTipText("Shows the part's settings dialog.");
+	this.component = component;
+    }
 
-	@Override
-	public void run() {
-		super.run();
-		component.showSettings();
-	}
+    @Override
+    public void run() {
+	super.run();
+	component.showSettings();
+    }
 }
