@@ -1,14 +1,19 @@
 package com.puresol.coding.client.common.evaluation.views;
 
-import org.eclipse.core.runtime.jobs.IJobChangeEvent;
-import org.eclipse.core.runtime.jobs.IJobChangeListener;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.FormAttachment;
-import org.eclipse.swt.layout.FormData;
-import org.eclipse.swt.layout.FormLayout;
+import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
+import org.eclipse.swt.graphics.RGB;
+import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
@@ -23,16 +28,30 @@ import com.puresol.coding.client.common.evaluation.contents.MetricsTableViewer;
 import com.puresol.coding.client.common.evaluation.utils.EvaluationsTarget;
 import com.puresol.coding.client.common.ui.actions.RefreshAction;
 import com.puresol.coding.client.common.ui.actions.Refreshable;
+import com.puresol.coding.evaluation.api.EvaluatorFactory;
+import com.puresol.coding.evaluation.api.Evaluators;
 
 public class MetricsTableView extends ViewPart implements Refreshable,
-	ISelectionListener, IJobChangeListener, EvaluationsTarget {
+	ISelectionListener, EvaluationsTarget {
 
     private FileAnalysisSelection analysisSelection;
 
+    private Color backgroundColor;
+    private ScrolledComposite scrolledComposite;
+    private Composite container;
     private Label label;
-    private MetricsTableViewer viewer;
+
+    private final List<Label> labels = new ArrayList<Label>();
+    private final List<Table> tables = new ArrayList<Table>();
+    private final List<MetricsTableViewer> viewers = new ArrayList<MetricsTableViewer>();
 
     public MetricsTableView() {
+    }
+
+    @Override
+    public void dispose() {
+	backgroundColor.dispose();
+	super.dispose();
     }
 
     /**
@@ -42,33 +61,32 @@ public class MetricsTableView extends ViewPart implements Refreshable,
      */
     @Override
     public void createPartControl(Composite parent) {
-	Composite container = new Composite(parent, SWT.NONE);
-	container.setLayout(new FormLayout());
-	{
-	    label = new Label(container, SWT.BORDER);
-	    FormData fd_text = new FormData();
-	    fd_text.top = new FormAttachment(0, 10);
-	    fd_text.left = new FormAttachment(0, 10);
-	    fd_text.bottom = new FormAttachment(0, 32);
-	    fd_text.right = new FormAttachment(100, -10);
-	    label.setLayoutData(fd_text);
-	}
+	scrolledComposite = new ScrolledComposite(parent, SWT.H_SCROLL
+		| SWT.V_SCROLL | SWT.BORDER);
+
+	container = new Composite(scrolledComposite, SWT.BORDER);
+	backgroundColor = new Color(container.getDisplay(), new RGB(255, 255,
+		255));
+	container.setBackground(backgroundColor);
+
+	RowLayout layout = new RowLayout(SWT.VERTICAL);
+	layout.wrap = false;
+	container.setLayout(layout);
+	label = new Label(container, SWT.NONE);
+	label.setBackground(backgroundColor);
+	Font font = label.getFont();
+	FontData[] fontData = font.getFontData();
+	label.setFont(new Font(label.getDisplay(), fontData[0].getName(),
+		(int) (fontData[0].getHeight() * 1.5), fontData[0].getStyle()
+			| SWT.BOLD | SWT.UNDERLINE_SINGLE | SWT.ITALIC));
 
 	IWorkbenchPartSite site = getSite();
 	site.getWorkbenchWindow().getSelectionService()
 		.addSelectionListener(this);
 
-	Table table = new Table(container, SWT.NONE);
-	table.setLinesVisible(true);
-	table.setHeaderVisible(true);
-	FormData fd_areaMap = new FormData();
-	fd_areaMap.top = new FormAttachment(label, 6);
-	fd_areaMap.left = new FormAttachment(label, 0, SWT.LEFT);
-	fd_areaMap.bottom = new FormAttachment(100, -10);
-	fd_areaMap.right = new FormAttachment(100, -10);
-	table.setLayoutData(fd_areaMap);
+	container.setSize(container.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 
-	viewer = new MetricsTableViewer(table);
+	scrolledComposite.setContent(container);
 
 	initializeToolBar();
 	initializeMenu();
@@ -114,48 +132,50 @@ public class MetricsTableView extends ViewPart implements Refreshable,
     }
 
     @Override
-    public void aboutToRun(IJobChangeEvent event) {
-	// intentionally left empty
-    }
-
-    @Override
-    public void awake(IJobChangeEvent event) {
-	// intentionally left empty
-    }
-
-    @Override
-    public void done(IJobChangeEvent event) {
-	HashIdFileTree path = analysisSelection.getHashIdFile();
-	if (path.isFile()) {
-	    HashIdFileTree directory = path.getParent();
-	    if (directory != null) {
-		showEvaluation(directory);
-	    } else {
-		showEvaluation(null);
-	    }
-	} else {
-	    showEvaluation(path);
-	}
-    }
-
-    @Override
-    public void running(IJobChangeEvent event) {
-	// intentionally left empty
-    }
-
-    @Override
-    public void scheduled(IJobChangeEvent event) {
-	// intentionally left empty
-    }
-
-    @Override
-    public void sleeping(IJobChangeEvent event) {
-	// intentionally left empty
-    }
-
-    @Override
     public void showEvaluation(HashIdFileTree path) {
-	label.setText(path.getPathFile(false).getPath());
-	viewer.setInput(path);
+	label.setText("Metrics for: " + path.getPathFile(false).getPath());
+
+	Iterator<Label> labelIterator = labels.iterator();
+	while (labelIterator.hasNext()) {
+	    labelIterator.next().dispose();
+	    labelIterator.remove();
+	}
+	Iterator<MetricsTableViewer> viewerIterator = viewers.iterator();
+	while (viewerIterator.hasNext()) {
+	    viewerIterator.next().dispose();
+	    viewerIterator.remove();
+	}
+	Iterator<Table> tableIterator = tables.iterator();
+	while (tableIterator.hasNext()) {
+	    tableIterator.next().dispose();
+	    tableIterator.remove();
+	}
+
+	Evaluators evaluators = Evaluators.createInstance();
+	List<EvaluatorFactory> allMetrics = evaluators.getAllMetrics();
+	for (EvaluatorFactory metric : allMetrics) {
+	    Label label = new Label(container, SWT.NONE);
+	    label.setBackground(backgroundColor);
+	    label.setText(metric.getName());
+	    Font font = label.getFont();
+	    FontData[] fontData = font.getFontData();
+	    label.setFont(new Font(label.getDisplay(), fontData[0].getName(),
+		    (int) (fontData[0].getHeight() * 1.2), fontData[0]
+			    .getStyle() | SWT.BOLD));
+	    labels.add(label);
+
+	    Table table = new Table(container, SWT.BORDER);
+	    table.setLinesVisible(true);
+	    table.setHeaderVisible(true);
+	    table.setVisible(true);
+	    tables.add(table);
+
+	    MetricsTableViewer viewer = new MetricsTableViewer(table, metric);
+	    viewer.setInput(path);
+	    viewers.add(viewer);
+	}
+	container.layout(true, true);
+	container.setSize(container.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+	scrolledComposite.layout(true, true);
     }
 }
