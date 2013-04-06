@@ -14,9 +14,12 @@ import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.ui.IMemento;
 import org.eclipse.ui.ISelectionListener;
+import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartSite;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
 
 import com.puresol.coding.analysis.api.CodeRangeType;
@@ -34,6 +37,7 @@ import com.puresol.coding.evaluation.api.CodeRangeTypeParameter;
 import com.puresol.coding.evaluation.api.EvaluatorFactory;
 import com.puresol.coding.evaluation.api.EvaluatorStore;
 import com.puresol.coding.evaluation.api.EvaluatorStoreFactory;
+import com.puresol.coding.evaluation.api.Evaluators;
 import com.puresol.coding.evaluation.api.MetricResults;
 import com.puresol.utils.math.Parameter;
 import com.puresol.utils.math.Value;
@@ -50,8 +54,8 @@ public class MetricsMapView extends ViewPart implements Refreshable,
 
     private MetricsMapViewSettingsDialog settingsDialog;
 
-    private EvaluatorFactory mapMetricSelection;
-    private Parameter<?> mapValueSelection;
+    private EvaluatorFactory mapMetricSelection = null;
+    private Parameter<?> mapValueSelection = null;
     private EvaluatorFactory colorMetricSelection = null;
     private Parameter<?> colorValueSelection = null;
 
@@ -112,6 +116,78 @@ public class MetricsMapView extends ViewPart implements Refreshable,
     private void initializeMenu() {
 	IMenuManager menuManager = getViewSite().getActionBars()
 		.getMenuManager();
+    }
+
+    @Override
+    public void init(IViewSite site, IMemento memento) throws PartInitException {
+	super.init(site, memento);
+
+	// touch old classes to get the plugins activated... :-(
+	String mapMeticClass = memento.getString("map.metric.class");
+	if (mapMeticClass != null) {
+	    try {
+		Class.forName(mapMeticClass);
+	    } catch (ClassNotFoundException e) {
+	    }
+	}
+	String colorMeticClass = memento.getString("color.metric.class");
+	if (colorMeticClass != null) {
+	    try {
+		Class.forName(colorMeticClass);
+	    } catch (ClassNotFoundException e) {
+	    }
+	}
+
+	List<EvaluatorFactory> allMetrics = Evaluators.createInstance()
+		.getAllMetrics();
+	String mapMetricSelectionName = memento.getString("map.metric");
+	String mapValueSelectionName = memento.getString("map.value");
+	for (EvaluatorFactory metric : allMetrics) {
+	    if (metric.getName().equals(mapMetricSelectionName)) {
+		mapMetricSelection = metric;
+		if (mapValueSelectionName != null) {
+		    for (Parameter<?> parameter : mapMetricSelection
+			    .getParameters()) {
+			if (parameter.getName().equals(mapValueSelectionName)) {
+			    mapValueSelection = parameter;
+			    break;
+			}
+		    }
+		}
+		break;
+	    }
+	}
+	String colorMetricSelectionName = memento.getString("color.metric");
+	String colorValueSelectionName = memento.getString("color.value");
+	for (EvaluatorFactory metric : allMetrics) {
+	    if (metric.getName().equals(colorMetricSelectionName)) {
+		colorMetricSelection = metric;
+		if (colorValueSelectionName != null) {
+		    for (Parameter<?> parameter : colorMetricSelection
+			    .getParameters()) {
+			if (parameter.getName().equals(colorValueSelectionName)) {
+			    colorValueSelection = parameter;
+			    break;
+			}
+		    }
+		}
+		break;
+	    }
+	}
+    }
+
+    @Override
+    public void saveState(IMemento memento) {
+	memento.putString("map.metric.class", mapMetricSelection.getClass()
+		.getName());
+	memento.putString("map.metric", mapMetricSelection.getName());
+	memento.putString("map.value", mapValueSelection.getName());
+	memento.putString("color.metric.class", colorMetricSelection.getClass()
+		.getName());
+	memento.putString("color.metric", colorMetricSelection.getName());
+	memento.putString("color.value", colorValueSelection.getName());
+
+	super.saveState(memento);
     }
 
     @Override

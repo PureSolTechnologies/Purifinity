@@ -9,6 +9,9 @@
       <startup
             class="com.puresol.coding.client.common.evaluation.EvaluationImplStartup">
       </startup>
+      <startup
+            class="com.puresol.coding.client.common.evaluation.MetricsStartup">
+      </startup>
    </extension>
    <extension
          point="org.eclipse.ui.perspectives">
@@ -62,6 +65,7 @@
             restorable="true">
       </view>
       <view
+            allowMultiple="true"
             category="com.puresol.coding.client.common.evaluation.Evaluation"
             class="com.puresol.coding.client.common.evaluation.views.MetricsMapView"
             id="com.puresol.coding.client.common.evaluation.views.MetricsMapView"
@@ -69,6 +73,7 @@
             restorable="true">
       </view>
       <view
+            allowMultiple="true"
             category="com.puresol.coding.client.common.evaluation.Evaluation"
             class="com.puresol.coding.client.common.evaluation.views.MetricsTableView"
             id="com.puresol.coding.client.common.evaluation.views.MetricsTableView"
