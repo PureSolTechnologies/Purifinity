@@ -14,7 +14,7 @@ import com.puresol.utils.math.LevelOfMeasurement;
 import com.puresol.utils.math.Parameter;
 import com.puresol.utils.math.ParameterWithArbitraryUnit;
 
-public class SLOCEvaluatorParameters {
+public class SLOCEvaluatorParameter {
 
 	public static final ParameterWithArbitraryUnit<CodeLocation> SOURCE_CODE_LOCATION = SourceCodeLocationParameter
 			.getInstance();
@@ -75,7 +75,7 @@ public class SLOCEvaluatorParameters {
 	/**
 	 * Private constructor to avoid instantiation.
 	 */
-	private SLOCEvaluatorParameters() {
+	private SLOCEvaluatorParameter() {
 	}
 
 }

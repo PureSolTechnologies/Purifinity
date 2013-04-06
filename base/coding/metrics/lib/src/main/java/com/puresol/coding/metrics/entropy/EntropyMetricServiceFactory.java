@@ -9,6 +9,7 @@ import com.puresol.coding.evaluation.api.AbstractEvaluatorFactory;
 import com.puresol.coding.evaluation.api.Evaluator;
 import com.puresol.coding.evaluation.api.QualityCharacteristic;
 import com.puresol.coding.metrics.halstead.HalsteadMetricEvaluator;
+import com.puresol.utils.math.Parameter;
 
 public class EntropyMetricServiceFactory extends AbstractEvaluatorFactory {
 
@@ -45,4 +46,8 @@ public class EntropyMetricServiceFactory extends AbstractEvaluatorFactory {
 		return EntropyMetricEvaluator.class;
 	}
 
+	@Override
+	public List<Parameter<?>> getParameters() {
+		return EntropyMetricEvaluatorParameter.ALL;
+	}
 }

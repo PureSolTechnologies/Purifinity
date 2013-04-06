@@ -9,6 +9,7 @@ import com.puresol.coding.evaluation.api.AbstractEvaluatorFactory;
 import com.puresol.coding.evaluation.api.Evaluator;
 import com.puresol.coding.evaluation.api.QualityCharacteristic;
 import com.puresol.coding.metrics.sloc.SLOCEvaluator;
+import com.puresol.utils.math.Parameter;
 
 public class CoCoMoServiceFactory extends AbstractEvaluatorFactory {
 
@@ -48,5 +49,10 @@ public class CoCoMoServiceFactory extends AbstractEvaluatorFactory {
 	@Override
 	public Class<? extends Evaluator> getEvaluatorClass() {
 		return CoCoMoEvaluator.class;
+	}
+
+	@Override
+	public List<Parameter<?>> getParameters() {
+		return CoCoMoEvaluatorParameter.ALL;
 	}
 }

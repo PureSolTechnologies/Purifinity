@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.HashIdFileTree;
+import com.puresol.utils.math.Parameter;
 
 /**
  * This interface is the central interface for all factories for evaluators. The
@@ -38,6 +39,21 @@ public interface EvaluatorFactory {
 	 * @return
 	 */
 	public List<QualityCharacteristic> getEvaluatedQualityCharacteristics();
+
+	/**
+	 * <p>
+	 * This method returns which parameter will be supported by the evaluator
+	 * this factory creates.
+	 * </p>
+	 * <p>
+	 * Important(!): It is not needed that all parameters are always calculated
+	 * by the evaluator. It is the sum of all parameter which may be contained
+	 * in the results list.
+	 * </p>
+	 * 
+	 * @return
+	 */
+	public List<Parameter<?>> getParameters();
 
 	/**
 	 * This method actually creates the evaluator.

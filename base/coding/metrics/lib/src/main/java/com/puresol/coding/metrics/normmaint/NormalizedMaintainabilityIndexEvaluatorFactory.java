@@ -9,6 +9,7 @@ import com.puresol.coding.evaluation.api.AbstractEvaluatorFactory;
 import com.puresol.coding.evaluation.api.Evaluator;
 import com.puresol.coding.evaluation.api.QualityCharacteristic;
 import com.puresol.coding.metrics.maintainability.MaintainabilityIndexEvaluator;
+import com.puresol.utils.math.Parameter;
 
 public class NormalizedMaintainabilityIndexEvaluatorFactory extends
 		AbstractEvaluatorFactory {
@@ -44,5 +45,10 @@ public class NormalizedMaintainabilityIndexEvaluatorFactory extends
 	@Override
 	public Class<? extends Evaluator> getEvaluatorClass() {
 		return NormalizedMaintainabilityIndexEvaluator.class;
+	}
+
+	@Override
+	public List<Parameter<?>> getParameters() {
+		return NormalizedMaintainabilityIndexEvaluatorParameter.ALL;
 	}
 }

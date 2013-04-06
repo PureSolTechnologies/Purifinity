@@ -11,6 +11,7 @@ import com.puresol.coding.evaluation.api.QualityCharacteristic;
 import com.puresol.coding.metrics.halstead.HalsteadMetricEvaluator;
 import com.puresol.coding.metrics.mccabe.McCabeMetricEvaluator;
 import com.puresol.coding.metrics.sloc.SLOCEvaluator;
+import com.puresol.utils.math.Parameter;
 
 public class MaintainabilityIndexEvaluatorFactory extends
 		AbstractEvaluatorFactory {
@@ -50,4 +51,8 @@ public class MaintainabilityIndexEvaluatorFactory extends
 		return MaintainabilityIndexEvaluator.class;
 	}
 
+	@Override
+	public List<Parameter<?>> getParameters() {
+		return MaintainabilityIndexEvaluatorParameter.ALL;
+	}
 }

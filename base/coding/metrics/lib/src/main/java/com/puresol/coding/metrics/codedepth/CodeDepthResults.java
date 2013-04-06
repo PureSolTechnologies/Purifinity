@@ -3,7 +3,7 @@ package com.puresol.coding.metrics.codedepth;
 import static com.puresol.coding.metrics.codedepth.CodeDepthMetricEvaluatorParameter.CODE_RANGE_NAME;
 import static com.puresol.coding.metrics.codedepth.CodeDepthMetricEvaluatorParameter.CODE_RANGE_TYPE;
 import static com.puresol.coding.metrics.codedepth.CodeDepthMetricEvaluatorParameter.MAX_DEPTH;
-import static com.puresol.coding.metrics.codedepth.CodeDepthMetricEvaluatorParameter.PARAMETERS;
+import static com.puresol.coding.metrics.codedepth.CodeDepthMetricEvaluatorParameter.ALL;
 import static com.puresol.coding.metrics.codedepth.CodeDepthMetricEvaluatorParameter.QUALITY;
 import static com.puresol.coding.metrics.codedepth.CodeDepthMetricEvaluatorParameter.SOURCE_CODE_LOCATION;
 
@@ -32,7 +32,7 @@ public class CodeDepthResults implements MetricResults {
 
 	@Override
 	public List<Parameter<?>> getParameters() {
-		return PARAMETERS;
+		return ALL;
 	}
 
 	@Override

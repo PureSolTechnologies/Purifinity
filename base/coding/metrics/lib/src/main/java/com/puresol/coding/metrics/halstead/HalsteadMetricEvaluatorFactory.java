@@ -8,6 +8,7 @@ import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.evaluation.api.AbstractEvaluatorFactory;
 import com.puresol.coding.evaluation.api.Evaluator;
 import com.puresol.coding.evaluation.api.QualityCharacteristic;
+import com.puresol.utils.math.Parameter;
 
 public class HalsteadMetricEvaluatorFactory extends AbstractEvaluatorFactory {
 
@@ -40,5 +41,10 @@ public class HalsteadMetricEvaluatorFactory extends AbstractEvaluatorFactory {
 	@Override
 	public Class<? extends Evaluator> getEvaluatorClass() {
 		return HalsteadMetricEvaluator.class;
+	}
+
+	@Override
+	public List<Parameter<?>> getParameters() {
+		return HalsteadMetricEvaluatorParameter.ALL;
 	}
 }

@@ -1,19 +1,19 @@
 package com.puresol.coding.metrics.sloc;
 
-import static com.puresol.coding.metrics.sloc.SLOCEvaluatorParameters.ALL;
-import static com.puresol.coding.metrics.sloc.SLOCEvaluatorParameters.AVG;
-import static com.puresol.coding.metrics.sloc.SLOCEvaluatorParameters.BL_LOC;
-import static com.puresol.coding.metrics.sloc.SLOCEvaluatorParameters.CODE_RANGE_NAME;
-import static com.puresol.coding.metrics.sloc.SLOCEvaluatorParameters.CODE_RANGE_TYPE;
-import static com.puresol.coding.metrics.sloc.SLOCEvaluatorParameters.COM_LOC;
-import static com.puresol.coding.metrics.sloc.SLOCEvaluatorParameters.MAX;
-import static com.puresol.coding.metrics.sloc.SLOCEvaluatorParameters.MEDIAN;
-import static com.puresol.coding.metrics.sloc.SLOCEvaluatorParameters.MIN;
-import static com.puresol.coding.metrics.sloc.SLOCEvaluatorParameters.PHY_LOC;
-import static com.puresol.coding.metrics.sloc.SLOCEvaluatorParameters.PRO_LOC;
-import static com.puresol.coding.metrics.sloc.SLOCEvaluatorParameters.QUALITY;
-import static com.puresol.coding.metrics.sloc.SLOCEvaluatorParameters.SOURCE_CODE_LOCATION;
-import static com.puresol.coding.metrics.sloc.SLOCEvaluatorParameters.STD_DEV;
+import static com.puresol.coding.metrics.sloc.SLOCEvaluatorParameter.ALL;
+import static com.puresol.coding.metrics.sloc.SLOCEvaluatorParameter.AVG;
+import static com.puresol.coding.metrics.sloc.SLOCEvaluatorParameter.BL_LOC;
+import static com.puresol.coding.metrics.sloc.SLOCEvaluatorParameter.CODE_RANGE_NAME;
+import static com.puresol.coding.metrics.sloc.SLOCEvaluatorParameter.CODE_RANGE_TYPE;
+import static com.puresol.coding.metrics.sloc.SLOCEvaluatorParameter.COM_LOC;
+import static com.puresol.coding.metrics.sloc.SLOCEvaluatorParameter.MAX;
+import static com.puresol.coding.metrics.sloc.SLOCEvaluatorParameter.MEDIAN;
+import static com.puresol.coding.metrics.sloc.SLOCEvaluatorParameter.MIN;
+import static com.puresol.coding.metrics.sloc.SLOCEvaluatorParameter.PHY_LOC;
+import static com.puresol.coding.metrics.sloc.SLOCEvaluatorParameter.PRO_LOC;
+import static com.puresol.coding.metrics.sloc.SLOCEvaluatorParameter.QUALITY;
+import static com.puresol.coding.metrics.sloc.SLOCEvaluatorParameter.SOURCE_CODE_LOCATION;
+import static com.puresol.coding.metrics.sloc.SLOCEvaluatorParameter.STD_DEV;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -28,12 +28,12 @@ public class CodeDepthMetricEvaluatorParameter {
 	public static final ParameterWithArbitraryUnit<SourceCodeQuality> QUALITY = SourceCodeQualityParameter
 			.getInstance();
 
-	public static final List<Parameter<?>> PARAMETERS = new ArrayList<Parameter<?>>();
+	public static final List<Parameter<?>> ALL = new ArrayList<Parameter<?>>();
 	static {
-		PARAMETERS.add(SOURCE_CODE_LOCATION);
-		PARAMETERS.add(CODE_RANGE_TYPE);
-		PARAMETERS.add(CODE_RANGE_NAME);
-		PARAMETERS.add(MAX_DEPTH);
-		PARAMETERS.add(QUALITY);
+		ALL.add(SOURCE_CODE_LOCATION);
+		ALL.add(CODE_RANGE_TYPE);
+		ALL.add(CODE_RANGE_NAME);
+		ALL.add(MAX_DEPTH);
+		ALL.add(QUALITY);
 	}
 }

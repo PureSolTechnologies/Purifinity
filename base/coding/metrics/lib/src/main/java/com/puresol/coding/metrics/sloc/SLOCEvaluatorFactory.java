@@ -8,6 +8,7 @@ import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.evaluation.api.AbstractEvaluatorFactory;
 import com.puresol.coding.evaluation.api.Evaluator;
 import com.puresol.coding.evaluation.api.QualityCharacteristic;
+import com.puresol.utils.math.Parameter;
 
 public class SLOCEvaluatorFactory extends AbstractEvaluatorFactory {
 
@@ -39,5 +40,10 @@ public class SLOCEvaluatorFactory extends AbstractEvaluatorFactory {
 	@Override
 	public Class<? extends Evaluator> getEvaluatorClass() {
 		return SLOCEvaluator.class;
+	}
+
+	@Override
+	public List<Parameter<?>> getParameters() {
+		return SLOCEvaluatorParameter.ALL;
 	}
 }
