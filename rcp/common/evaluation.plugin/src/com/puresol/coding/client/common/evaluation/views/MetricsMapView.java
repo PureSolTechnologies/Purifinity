@@ -29,6 +29,7 @@ import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.client.common.analysis.views.FileAnalysisSelection;
 import com.puresol.coding.client.common.evaluation.MetricsMapViewSettingsDialog;
 import com.puresol.coding.client.common.evaluation.utils.EvaluationsTarget;
+import com.puresol.coding.client.common.evaluation.utils.SourceCodeQualityColorProvider;
 import com.puresol.coding.client.common.ui.actions.PartSettingsCapability;
 import com.puresol.coding.client.common.ui.actions.RefreshAction;
 import com.puresol.coding.client.common.ui.actions.Refreshable;
@@ -43,6 +44,7 @@ import com.puresol.coding.evaluation.api.EvaluatorStore;
 import com.puresol.coding.evaluation.api.EvaluatorStoreFactory;
 import com.puresol.coding.evaluation.api.Evaluators;
 import com.puresol.coding.evaluation.api.MetricResults;
+import com.puresol.coding.evaluation.api.SourceCodeQuality;
 import com.puresol.utils.math.Parameter;
 import com.puresol.utils.math.Value;
 
@@ -246,6 +248,11 @@ public class MetricsMapView extends ViewPart implements Refreshable,
 		EvaluatorStore colorStore = EvaluatorStoreFactory.getFactory()
 				.createInstance(colorMetricSelection.getEvaluatorClass());
 		AreaMapData data = calculateAreaData(mapStore, colorStore, path);
+		if (colorValueSelection.getType().equals(SourceCodeQuality.class)) {
+			areaMap.setColorProvider(new SourceCodeQualityColorProvider());
+		} else {
+			areaMap.setColorProvider(null);
+		}
 		areaMap.setData(data, mapValueSelection.getUnit());
 	}
 
