@@ -243,11 +243,11 @@ public class MetricsMapView extends ViewPart implements Refreshable,
 		label.setText(path.getPathFile(false).getPath());
 		EvaluatorStore mapStore = EvaluatorStoreFactory.getFactory()
 				.createInstance(mapMetricSelection.getEvaluatorClass());
-		AreaMapData data = getAreaData(mapStore, path);
+		AreaMapData data = calculateAreaData(mapStore, path);
 		areaMap.setData(data, mapValueSelection.getUnit());
 	}
 
-	private AreaMapData getAreaData(EvaluatorStore mapStore, HashIdFileTree path) {
+	private AreaMapData calculateAreaData(EvaluatorStore mapStore, HashIdFileTree path) {
 		List<AreaMapData> childAreas = calculateChildAreaMaps(mapStore, path);
 		MetricResults results;
 		if (path.isFile()) {
@@ -309,7 +309,7 @@ public class MetricsMapView extends ViewPart implements Refreshable,
 		List<HashIdFileTree> children = path.getChildren();
 		List<AreaMapData> childAreas = new ArrayList<AreaMapData>();
 		for (int i = 0; i < children.size(); i++) {
-			AreaMapData areaData = getAreaData(store, children.get(i));
+			AreaMapData areaData = calculateAreaData(store, children.get(i));
 			if (areaData != null) {
 				childAreas.add(areaData);
 			}
