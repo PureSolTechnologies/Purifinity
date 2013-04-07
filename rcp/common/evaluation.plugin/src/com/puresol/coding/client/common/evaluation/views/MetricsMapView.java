@@ -243,7 +243,9 @@ public class MetricsMapView extends ViewPart implements Refreshable,
 	label.setText(path.getPathFile(false).getPath());
 	EvaluatorStore mapStore = EvaluatorStoreFactory.getFactory()
 		.createInstance(mapMetricSelection.getEvaluatorClass());
-	AreaMapData data = calculateAreaData(mapStore, path);
+	EvaluatorStore colorStore = EvaluatorStoreFactory.getFactory()
+		.createInstance(colorMetricSelection.getEvaluatorClass());
+	AreaMapData data = calculateAreaData(mapStore, colorStore, path);
 	areaMap.setData(data, mapValueSelection.getUnit());
     }
 
@@ -260,20 +262,29 @@ public class MetricsMapView extends ViewPart implements Refreshable,
      * @return
      */
     private AreaMapData calculateAreaData(EvaluatorStore mapStore,
-	    HashIdFileTree path) {
-	List<AreaMapData> childAreas = calculateChildAreaMaps(mapStore, path);
-	MetricResults results;
+	    EvaluatorStore colorStore, HashIdFileTree path) {
+	List<AreaMapData> childAreas = calculateChildAreaMaps(mapStore,
+		colorStore, path);
+	MetricResults mapResults;
+	MetricResults colorResults;
 	if (path.isFile()) {
-	    results = mapStore.readFileResults(path.getHashId());
+	    mapResults = mapStore.readFileResults(path.getHashId());
+	    colorResults = colorStore.readFileResults(path.getHashId());
 	} else {
-	    results = mapStore.readDirectoryResults(path.getHashId());
+	    mapResults = mapStore.readDirectoryResults(path.getHashId());
+	    colorResults = colorStore.readDirectoryResults(path.getHashId());
 	}
-	if ((results == null) || (results.getValues().size() == 0)) {
+	if ((mapResults == null) || (mapResults.getValues().size() == 0)) {
 	    return processAreaWithoutOwnValues(path,
 		    childAreas.toArray(new AreaMapData[childAreas.size()]));
 	}
-	double sum = findSuitableValue(path, results);
-	return new AreaMapData(path.getPathFile(false).toString(), sum,
+	double sum = findSuitableValue(path, mapResults);
+	Double secondaryValue = null;
+	if ((colorResults != null) && (colorResults.getValues().size() > 0)) {
+	    secondaryValue = findSuitableValue(path, colorResults);
+	}
+	return new AreaMapData(path.getPathFile(false).toString(),
+		secondaryValue, sum,
 		childAreas.toArray(new AreaMapData[childAreas.size()]));
     }
 
@@ -331,16 +342,18 @@ public class MetricsMapView extends ViewPart implements Refreshable,
      * This method calculates the values for all {@link HashIdFileTree}'s
      * children.
      * 
-     * @param store
+     * @param mapStore
+     * @param colorStore
      * @param path
      * @return
      */
-    private List<AreaMapData> calculateChildAreaMaps(EvaluatorStore store,
-	    HashIdFileTree path) {
+    private List<AreaMapData> calculateChildAreaMaps(EvaluatorStore mapStore,
+	    EvaluatorStore colorStore, HashIdFileTree path) {
 	List<HashIdFileTree> children = path.getChildren();
 	List<AreaMapData> childAreas = new ArrayList<AreaMapData>();
 	for (int i = 0; i < children.size(); i++) {
-	    AreaMapData areaData = calculateAreaData(store, children.get(i));
+	    AreaMapData areaData = calculateAreaData(mapStore, colorStore,
+		    children.get(i));
 	    if (areaData != null) {
 		childAreas.add(areaData);
 	    }
