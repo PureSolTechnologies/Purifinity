@@ -1,7 +1,8 @@
 package com.puresol.coding.metrics.maintainability;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.HashIdFileTree;
@@ -38,8 +39,8 @@ public class MaintainabilityIndexEvaluatorFactory extends
 	}
 
 	@Override
-	public List<Class<? extends Evaluator>> getDependencies() {
-		List<Class<? extends Evaluator>> dependencies = new ArrayList<Class<? extends Evaluator>>();
+	public Set<Class<? extends Evaluator>> getDependencies() {
+		Set<Class<? extends Evaluator>> dependencies = new HashSet<Class<? extends Evaluator>>();
 		dependencies.add(SLOCEvaluator.class);
 		dependencies.add(McCabeMetricEvaluator.class);
 		dependencies.add(HalsteadMetricEvaluator.class);
@@ -52,7 +53,7 @@ public class MaintainabilityIndexEvaluatorFactory extends
 	}
 
 	@Override
-	public List<Parameter<?>> getParameters() {
+	public Set<Parameter<?>> getParameters() {
 		return MaintainabilityIndexEvaluatorParameter.ALL;
 	}
 }

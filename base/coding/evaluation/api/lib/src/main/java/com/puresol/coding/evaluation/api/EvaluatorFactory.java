@@ -1,6 +1,7 @@
 package com.puresol.coding.evaluation.api;
 
 import java.util.List;
+import java.util.Set;
 
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.HashIdFileTree;
@@ -53,7 +54,7 @@ public interface EvaluatorFactory {
 	 * 
 	 * @return
 	 */
-	public List<Parameter<?>> getParameters();
+	public Set<Parameter<?>> getParameters();
 
 	/**
 	 * This method actually creates the evaluator.
@@ -84,7 +85,7 @@ public interface EvaluatorFactory {
 	 * 
 	 * @return
 	 */
-	public List<Class<? extends Evaluator>> getDependencies();
+	public Set<Class<? extends Evaluator>> getDependencies();
 
 	/**
 	 * This method returns the implementing class of the evaluators produced

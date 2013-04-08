@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.puresol.coding.analysis.api.CodeRangeType;
 import com.puresol.coding.evaluation.api.MetricResults;
@@ -44,7 +45,7 @@ public class SLOCResults implements MetricResults {
 	}
 
 	@Override
-	public List<Parameter<?>> getParameters() {
+	public Set<Parameter<?>> getParameters() {
 		return ALL;
 	}
 

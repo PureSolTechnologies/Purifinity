@@ -1,19 +1,19 @@
 package com.puresol.coding.metrics.halstead;
 
 import static com.puresol.coding.metrics.halstead.HalsteadMetricEvaluatorParameter.ALL;
-import static com.puresol.coding.metrics.halstead.HalsteadMetricEvaluatorParameter.DIFFICULTY;
-import static com.puresol.coding.metrics.halstead.HalsteadMetricEvaluatorParameter.ESTIMATED_BUGS;
-import static com.puresol.coding.metrics.halstead.HalsteadMetricEvaluatorParameter.HALSTEAD_VOLUMNE;
-import static com.puresol.coding.metrics.halstead.HalsteadMetricEvaluatorParameter.IMPLEMENTATION_EFFORT;
-import static com.puresol.coding.metrics.halstead.HalsteadMetricEvaluatorParameter.IMPLEMENTATION_TIME;
-import static com.puresol.coding.metrics.halstead.HalsteadMetricEvaluatorParameter.PROGRAM_LEVEL;
-import static com.puresol.coding.metrics.halstead.HalsteadMetricEvaluatorParameter.QUALITY;
 import static com.puresol.coding.metrics.halstead.HalsteadMetricEvaluatorParameter.CODE_RANGE_NAME;
 import static com.puresol.coding.metrics.halstead.HalsteadMetricEvaluatorParameter.CODE_RANGE_TYPE;
 import static com.puresol.coding.metrics.halstead.HalsteadMetricEvaluatorParameter.DIFFERENT_OPERANDS;
 import static com.puresol.coding.metrics.halstead.HalsteadMetricEvaluatorParameter.DIFFERENT_OPERATORS;
+import static com.puresol.coding.metrics.halstead.HalsteadMetricEvaluatorParameter.DIFFICULTY;
+import static com.puresol.coding.metrics.halstead.HalsteadMetricEvaluatorParameter.ESTIMATED_BUGS;
 import static com.puresol.coding.metrics.halstead.HalsteadMetricEvaluatorParameter.HALSTEAD_LENGTH;
+import static com.puresol.coding.metrics.halstead.HalsteadMetricEvaluatorParameter.HALSTEAD_VOLUMNE;
+import static com.puresol.coding.metrics.halstead.HalsteadMetricEvaluatorParameter.IMPLEMENTATION_EFFORT;
+import static com.puresol.coding.metrics.halstead.HalsteadMetricEvaluatorParameter.IMPLEMENTATION_TIME;
 import static com.puresol.coding.metrics.halstead.HalsteadMetricEvaluatorParameter.PROGRAM_LENGTH;
+import static com.puresol.coding.metrics.halstead.HalsteadMetricEvaluatorParameter.PROGRAM_LEVEL;
+import static com.puresol.coding.metrics.halstead.HalsteadMetricEvaluatorParameter.QUALITY;
 import static com.puresol.coding.metrics.halstead.HalsteadMetricEvaluatorParameter.SOURCE_CODE_LOCATION;
 import static com.puresol.coding.metrics.halstead.HalsteadMetricEvaluatorParameter.TOTAL_OPERANDS;
 import static com.puresol.coding.metrics.halstead.HalsteadMetricEvaluatorParameter.TOTAL_OPERATORS;
@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.puresol.coding.analysis.api.CodeRangeType;
 import com.puresol.coding.evaluation.api.MetricResults;
@@ -47,7 +48,7 @@ public class HalsteadMetricResults implements MetricResults {
 	}
 
 	@Override
-	public List<Parameter<?>> getParameters() {
+	public Set<Parameter<?>> getParameters() {
 		return ALL;
 	}
 
@@ -60,34 +61,26 @@ public class HalsteadMetricResults implements MetricResults {
 			Map<String, Value<?>> row = new HashMap<String, Value<?>>();
 			row.put(SOURCE_CODE_LOCATION.getName(),
 					new GeneralValue<CodeLocation>(result
-							.getSourceCodeLocation(),
-							SOURCE_CODE_LOCATION));
-			row.put(CODE_RANGE_TYPE.getName(),
-					new GeneralValue<CodeRangeType>(result.getCodeRangeType(),
-							CODE_RANGE_TYPE));
-			row.put(CODE_RANGE_NAME.getName(), new GeneralValue<String>(
-					result.getCodeRangeName(), CODE_RANGE_NAME));
-			row.put(DIFFERENT_OPERATORS.getName(),
-					new GeneralValue<Integer>(halstead.getDifferentOperators(),
-							DIFFERENT_OPERATORS));
-			row.put(DIFFERENT_OPERANDS.getName(),
-					new GeneralValue<Integer>(halstead.getDifferentOperands(),
-							DIFFERENT_OPERANDS));
-			row.put(TOTAL_OPERATORS.getName(),
-					new GeneralValue<Integer>(halstead.getTotalOperators(),
-							TOTAL_OPERATORS));
-			row.put(TOTAL_OPERANDS.getName(),
-					new GeneralValue<Integer>(halstead.getTotalOperands(),
-							TOTAL_OPERANDS));
-			row.put(VOCABULARY_SIZE.getName(),
-					new GeneralValue<Integer>(halstead.getVocabularySize(),
-							VOCABULARY_SIZE));
-			row.put(PROGRAM_LENGTH.getName(),
-					new GeneralValue<Integer>(halstead.getProgramLength(),
-							PROGRAM_LENGTH));
-			row.put(HALSTEAD_LENGTH.getName(),
-					new GeneralValue<Double>(halstead.getHalsteadLength(),
-							HALSTEAD_LENGTH));
+							.getSourceCodeLocation(), SOURCE_CODE_LOCATION));
+			row.put(CODE_RANGE_TYPE.getName(), new GeneralValue<CodeRangeType>(
+					result.getCodeRangeType(), CODE_RANGE_TYPE));
+			row.put(CODE_RANGE_NAME.getName(),
+					new GeneralValue<String>(result.getCodeRangeName(),
+							CODE_RANGE_NAME));
+			row.put(DIFFERENT_OPERATORS.getName(), new GeneralValue<Integer>(
+					halstead.getDifferentOperators(), DIFFERENT_OPERATORS));
+			row.put(DIFFERENT_OPERANDS.getName(), new GeneralValue<Integer>(
+					halstead.getDifferentOperands(), DIFFERENT_OPERANDS));
+			row.put(TOTAL_OPERATORS.getName(), new GeneralValue<Integer>(
+					halstead.getTotalOperators(), TOTAL_OPERATORS));
+			row.put(TOTAL_OPERANDS.getName(), new GeneralValue<Integer>(
+					halstead.getTotalOperands(), TOTAL_OPERANDS));
+			row.put(VOCABULARY_SIZE.getName(), new GeneralValue<Integer>(
+					halstead.getVocabularySize(), VOCABULARY_SIZE));
+			row.put(PROGRAM_LENGTH.getName(), new GeneralValue<Integer>(
+					halstead.getProgramLength(), PROGRAM_LENGTH));
+			row.put(HALSTEAD_LENGTH.getName(), new GeneralValue<Double>(
+					halstead.getHalsteadLength(), HALSTEAD_LENGTH));
 			row.put(HALSTEAD_VOLUMNE.getName(), new GeneralValue<Double>(
 					halstead.getHalsteadVolume(), HALSTEAD_VOLUMNE));
 			row.put(DIFFICULTY.getName(),

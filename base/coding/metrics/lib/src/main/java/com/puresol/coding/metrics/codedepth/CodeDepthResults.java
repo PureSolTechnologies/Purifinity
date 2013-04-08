@@ -1,9 +1,9 @@
 package com.puresol.coding.metrics.codedepth;
 
+import static com.puresol.coding.metrics.codedepth.CodeDepthMetricEvaluatorParameter.ALL;
 import static com.puresol.coding.metrics.codedepth.CodeDepthMetricEvaluatorParameter.CODE_RANGE_NAME;
 import static com.puresol.coding.metrics.codedepth.CodeDepthMetricEvaluatorParameter.CODE_RANGE_TYPE;
 import static com.puresol.coding.metrics.codedepth.CodeDepthMetricEvaluatorParameter.MAX_DEPTH;
-import static com.puresol.coding.metrics.codedepth.CodeDepthMetricEvaluatorParameter.ALL;
 import static com.puresol.coding.metrics.codedepth.CodeDepthMetricEvaluatorParameter.QUALITY;
 import static com.puresol.coding.metrics.codedepth.CodeDepthMetricEvaluatorParameter.SOURCE_CODE_LOCATION;
 
@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.puresol.coding.analysis.api.CodeRangeType;
 import com.puresol.coding.evaluation.api.MetricResults;
@@ -31,7 +32,7 @@ public class CodeDepthResults implements MetricResults {
 	}
 
 	@Override
-	public List<Parameter<?>> getParameters() {
+	public Set<Parameter<?>> getParameters() {
 		return ALL;
 	}
 
@@ -43,18 +44,16 @@ public class CodeDepthResults implements MetricResults {
 			Map<String, Value<?>> row = new HashMap<String, Value<?>>();
 			row.put(SOURCE_CODE_LOCATION.getName(),
 					new GeneralValue<CodeLocation>(result
-							.getSourceCodeLocation(),
-							SOURCE_CODE_LOCATION));
-			row.put(CODE_RANGE_TYPE.getName(),
-					new GeneralValue<CodeRangeType>(result.getCodeRangeType(),
-							CODE_RANGE_TYPE));
-			row.put(CODE_RANGE_NAME.getName(), new GeneralValue<String>(
-					result.getCodeRangeName(), CODE_RANGE_NAME));
-			row.put(MAX_DEPTH.getName(), new GeneralValue<Integer>(
-					result.getMaxDepth(), MAX_DEPTH));
-			row.put(QUALITY.getName(),
-					new GeneralValue<SourceCodeQuality>(result.getQuality(),
-							QUALITY));
+							.getSourceCodeLocation(), SOURCE_CODE_LOCATION));
+			row.put(CODE_RANGE_TYPE.getName(), new GeneralValue<CodeRangeType>(
+					result.getCodeRangeType(), CODE_RANGE_TYPE));
+			row.put(CODE_RANGE_NAME.getName(),
+					new GeneralValue<String>(result.getCodeRangeName(),
+							CODE_RANGE_NAME));
+			row.put(MAX_DEPTH.getName(),
+					new GeneralValue<Integer>(result.getMaxDepth(), MAX_DEPTH));
+			row.put(QUALITY.getName(), new GeneralValue<SourceCodeQuality>(
+					result.getQuality(), QUALITY));
 			values.add(row);
 		}
 

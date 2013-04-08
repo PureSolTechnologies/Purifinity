@@ -1,8 +1,8 @@
 package com.puresol.coding.metrics.mccabe;
 
+import static com.puresol.coding.metrics.mccabe.McCabeMetricEvaluatorParameter.ALL;
 import static com.puresol.coding.metrics.mccabe.McCabeMetricEvaluatorParameter.CODE_RANGE_NAME;
 import static com.puresol.coding.metrics.mccabe.McCabeMetricEvaluatorParameter.CODE_RANGE_TYPE;
-import static com.puresol.coding.metrics.mccabe.McCabeMetricEvaluatorParameter.ALL;
 import static com.puresol.coding.metrics.mccabe.McCabeMetricEvaluatorParameter.QUALITY;
 import static com.puresol.coding.metrics.mccabe.McCabeMetricEvaluatorParameter.SOURCE_CODE_LOCATION;
 import static com.puresol.coding.metrics.mccabe.McCabeMetricEvaluatorParameter.VG;
@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.puresol.coding.analysis.api.CodeRangeType;
 import com.puresol.coding.evaluation.api.MetricResults;
@@ -35,7 +36,7 @@ public class McCabeMetricResults implements MetricResults {
 	}
 
 	@Override
-	public List<Parameter<?>> getParameters() {
+	public Set<Parameter<?>> getParameters() {
 		return ALL;
 	}
 
@@ -47,19 +48,17 @@ public class McCabeMetricResults implements MetricResults {
 			Map<String, Value<?>> row = new HashMap<String, Value<?>>();
 			row.put(SOURCE_CODE_LOCATION.getName(),
 					new GeneralValue<CodeLocation>(result
-							.getSourceCodeLocation(),
-							SOURCE_CODE_LOCATION));
-			row.put(CODE_RANGE_TYPE.getName(),
-					new GeneralValue<CodeRangeType>(result.getCodeRangeType(),
-							CODE_RANGE_TYPE));
-			row.put(CODE_RANGE_NAME.getName(), new GeneralValue<String>(
-					result.getCodeRangeName(), CODE_RANGE_NAME));
+							.getSourceCodeLocation(), SOURCE_CODE_LOCATION));
+			row.put(CODE_RANGE_TYPE.getName(), new GeneralValue<CodeRangeType>(
+					result.getCodeRangeType(), CODE_RANGE_TYPE));
+			row.put(CODE_RANGE_NAME.getName(),
+					new GeneralValue<String>(result.getCodeRangeName(),
+							CODE_RANGE_NAME));
 			row.put(VG.getName(),
 					new GeneralValue<Integer>(result.getCyclomaticComplexity(),
 							VG));
-			row.put(QUALITY.getName(),
-					new GeneralValue<SourceCodeQuality>(result.getQuality(),
-							QUALITY));
+			row.put(QUALITY.getName(), new GeneralValue<SourceCodeQuality>(
+					result.getQuality(), QUALITY));
 			values.add(row);
 		}
 

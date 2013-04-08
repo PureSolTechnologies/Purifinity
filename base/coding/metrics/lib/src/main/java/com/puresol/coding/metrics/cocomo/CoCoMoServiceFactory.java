@@ -1,7 +1,9 @@
 package com.puresol.coding.metrics.cocomo;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.HashIdFileTree;
@@ -40,8 +42,8 @@ public class CoCoMoServiceFactory extends AbstractEvaluatorFactory {
 	}
 
 	@Override
-	public List<Class<? extends Evaluator>> getDependencies() {
-		List<Class<? extends Evaluator>> dependencies = new ArrayList<Class<? extends Evaluator>>();
+	public Set<Class<? extends Evaluator>> getDependencies() {
+		Set<Class<? extends Evaluator>> dependencies = new HashSet<Class<? extends Evaluator>>();
 		dependencies.add(SLOCEvaluator.class);
 		return dependencies;
 	}
@@ -52,7 +54,7 @@ public class CoCoMoServiceFactory extends AbstractEvaluatorFactory {
 	}
 
 	@Override
-	public List<Parameter<?>> getParameters() {
+	public Set<Parameter<?>> getParameters() {
 		return CoCoMoEvaluatorParameter.ALL;
 	}
 }

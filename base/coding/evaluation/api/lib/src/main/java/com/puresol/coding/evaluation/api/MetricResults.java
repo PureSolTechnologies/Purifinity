@@ -3,6 +3,7 @@ package com.puresol.coding.evaluation.api;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.puresol.utils.math.Parameter;
 import com.puresol.utils.math.Value;
@@ -20,7 +21,7 @@ public interface MetricResults extends Serializable {
 	 * @return A {@link List} of {@link Parameter} is returned containing the
 	 *         definitions.
 	 */
-	public List<Parameter<?>> getParameters();
+	public Set<Parameter<?>> getParameters();
 
 	/**
 	 * <p>

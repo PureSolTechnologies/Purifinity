@@ -1,7 +1,7 @@
 package com.puresol.coding.metrics.mccabe;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.puresol.coding.analysis.api.CodeRangeType;
 import com.puresol.coding.evaluation.api.CodeRangeNameParameter;
@@ -29,7 +29,7 @@ public class McCabeMetricEvaluatorParameter {
 	public static final ParameterWithArbitraryUnit<SourceCodeQuality> QUALITY = SourceCodeQualityParameter
 			.getInstance();
 
-	public static final List<Parameter<?>> ALL = new ArrayList<Parameter<?>>();
+	public static final Set<Parameter<?>> ALL = new HashSet<Parameter<?>>();
 	static {
 		ALL.add(SOURCE_CODE_LOCATION);
 		ALL.add(CODE_RANGE_TYPE);

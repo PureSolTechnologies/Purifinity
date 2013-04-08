@@ -1,7 +1,8 @@
 package com.puresol.coding.metrics.codedepth;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.HashIdFileTree;
@@ -34,8 +35,8 @@ public class CodeDepthMetricEvaluatorFactory extends AbstractEvaluatorFactory {
 	}
 
 	@Override
-	public List<Class<? extends Evaluator>> getDependencies() {
-		return new ArrayList<Class<? extends Evaluator>>();
+	public Set<Class<? extends Evaluator>> getDependencies() {
+		return new HashSet<Class<? extends Evaluator>>();
 	}
 
 	@Override
@@ -44,7 +45,7 @@ public class CodeDepthMetricEvaluatorFactory extends AbstractEvaluatorFactory {
 	}
 
 	@Override
-	public List<Parameter<?>> getParameters() {
+	public Set<Parameter<?>> getParameters() {
 		return CodeDepthMetricEvaluatorParameter.ALL;
 	}
 }

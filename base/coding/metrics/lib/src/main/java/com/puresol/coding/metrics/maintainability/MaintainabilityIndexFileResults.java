@@ -1,11 +1,11 @@
 package com.puresol.coding.metrics.maintainability;
 
+import static com.puresol.coding.metrics.maintainability.MaintainabilityIndexEvaluatorParameter.ALL;
 import static com.puresol.coding.metrics.maintainability.MaintainabilityIndexEvaluatorParameter.CODE_RANGE_NAME;
 import static com.puresol.coding.metrics.maintainability.MaintainabilityIndexEvaluatorParameter.CODE_RANGE_TYPE;
 import static com.puresol.coding.metrics.maintainability.MaintainabilityIndexEvaluatorParameter.MI;
 import static com.puresol.coding.metrics.maintainability.MaintainabilityIndexEvaluatorParameter.MI_CW;
 import static com.puresol.coding.metrics.maintainability.MaintainabilityIndexEvaluatorParameter.MI_WOC;
-import static com.puresol.coding.metrics.maintainability.MaintainabilityIndexEvaluatorParameter.ALL;
 import static com.puresol.coding.metrics.maintainability.MaintainabilityIndexEvaluatorParameter.QUALITY;
 import static com.puresol.coding.metrics.maintainability.MaintainabilityIndexEvaluatorParameter.SOURCE_CODE_LOCATION;
 
@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.puresol.coding.analysis.api.CodeRangeType;
 import com.puresol.coding.evaluation.api.MetricResults;
@@ -37,7 +38,7 @@ public class MaintainabilityIndexFileResults implements MetricResults {
 	}
 
 	@Override
-	public List<Parameter<?>> getParameters() {
+	public Set<Parameter<?>> getParameters() {
 		return ALL;
 	}
 
@@ -51,22 +52,19 @@ public class MaintainabilityIndexFileResults implements MetricResults {
 			Map<String, Value<?>> row = new HashMap<String, Value<?>>();
 			row.put(SOURCE_CODE_LOCATION.getName(),
 					new GeneralValue<CodeLocation>(result
-							.getSourceCodeLocation(),
-							SOURCE_CODE_LOCATION));
-			row.put(CODE_RANGE_TYPE.getName(),
-					new GeneralValue<CodeRangeType>(result.getCodeRangeType(),
-							CODE_RANGE_TYPE));
-			row.put(CODE_RANGE_NAME.getName(), new GeneralValue<String>(
-					result.getCodeRangeName(), CODE_RANGE_NAME));
-			row.put(MI_WOC.getName(),
-					new GeneralValue<Double>(mi.getMIwoc(), MI_WOC));
-			row.put(MI_CW.getName(),
-					new GeneralValue<Double>(mi.getMIcw(), MI_CW));
-			row.put(MI.getName(), new GeneralValue<Double>(mi.getMI(),
-					MI));
-			row.put(QUALITY.getName(),
-					new GeneralValue<SourceCodeQuality>(result.getQuality(),
-							QUALITY));
+							.getSourceCodeLocation(), SOURCE_CODE_LOCATION));
+			row.put(CODE_RANGE_TYPE.getName(), new GeneralValue<CodeRangeType>(
+					result.getCodeRangeType(), CODE_RANGE_TYPE));
+			row.put(CODE_RANGE_NAME.getName(),
+					new GeneralValue<String>(result.getCodeRangeName(),
+							CODE_RANGE_NAME));
+			row.put(MI_WOC.getName(), new GeneralValue<Double>(mi.getMIwoc(),
+					MI_WOC));
+			row.put(MI_CW.getName(), new GeneralValue<Double>(mi.getMIcw(),
+					MI_CW));
+			row.put(MI.getName(), new GeneralValue<Double>(mi.getMI(), MI));
+			row.put(QUALITY.getName(), new GeneralValue<SourceCodeQuality>(
+					result.getQuality(), QUALITY));
 			values.add(row);
 		}
 

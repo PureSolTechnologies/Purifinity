@@ -1,7 +1,7 @@
 package com.puresol.coding.metrics.cocomo;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.puresol.utils.math.LevelOfMeasurement;
 import com.puresol.utils.math.Money;
@@ -60,7 +60,7 @@ public class CoCoMoEvaluatorParameter {
 			"CoCoMo equation constant. This constant is set by complexity.",
 			Double.class);
 
-	public static final List<Parameter<?>> ALL = new ArrayList<Parameter<?>>();
+	public static final Set<Parameter<?>> ALL = new HashSet<Parameter<?>>();
 	static {
 		ALL.add(KSLOC);
 		ALL.add(PERSON_MONTH);
