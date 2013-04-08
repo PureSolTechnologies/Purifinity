@@ -1,7 +1,16 @@
 package com.puresol.coding.client.common.evaluation;
 
+import java.util.Dictionary;
+import java.util.Hashtable;
+
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
+
+import com.puresol.coding.client.common.evaluation.metrics.SourceCodeQualityColorProvider;
+import com.puresol.coding.client.common.evaluation.metrics.maintainability.MIColorProvider;
+import com.puresol.coding.client.common.ui.components.AreaMapColorProvider;
+import com.puresol.coding.evaluation.api.SourceCodeQualityParameter;
+import com.puresol.coding.metrics.maintainability.MaintainabilityIndexEvaluatorParameter;
 
 public class Activator extends AbstractUIPlugin {
 	// The shared instance
@@ -15,6 +24,18 @@ public class Activator extends AbstractUIPlugin {
 					+ " plugin was already started!");
 		}
 		plugin = this;
+		registerColorProvider(new SourceCodeQualityColorProvider(),
+				SourceCodeQualityParameter.NAME);
+		registerColorProvider(new MIColorProvider(),
+				MaintainabilityIndexEvaluatorParameter.MI.getName());
+	}
+
+	public void registerColorProvider(AreaMapColorProvider provider,
+			String paramterName) {
+		Dictionary<String, Object> dictionary = new Hashtable<String, Object>();
+		dictionary.put("parameterName", paramterName);
+		getBundle().getBundleContext().registerService(
+				AreaMapColorProvider.class, provider, dictionary);
 	}
 
 	@Override

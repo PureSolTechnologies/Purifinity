@@ -1,6 +1,7 @@
 package com.puresol.coding.client.common.evaluation.views;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -23,19 +24,23 @@ import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceReference;
 
 import com.puresol.coding.analysis.api.CodeRangeType;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.client.common.analysis.views.FileAnalysisSelection;
+import com.puresol.coding.client.common.evaluation.Activator;
 import com.puresol.coding.client.common.evaluation.MetricsMapViewSettingsDialog;
 import com.puresol.coding.client.common.evaluation.utils.EvaluationsTarget;
-import com.puresol.coding.client.common.evaluation.utils.SourceCodeQualityColorProvider;
 import com.puresol.coding.client.common.ui.actions.PartSettingsCapability;
 import com.puresol.coding.client.common.ui.actions.RefreshAction;
 import com.puresol.coding.client.common.ui.actions.Refreshable;
 import com.puresol.coding.client.common.ui.actions.Reproducable;
 import com.puresol.coding.client.common.ui.actions.ShowSettingsAction;
 import com.puresol.coding.client.common.ui.actions.ViewReproductionAction;
+import com.puresol.coding.client.common.ui.components.AreaMapColorProvider;
 import com.puresol.coding.client.common.ui.components.AreaMapComponent;
 import com.puresol.coding.client.common.ui.components.AreaMapData;
 import com.puresol.coding.evaluation.api.CodeRangeTypeParameter;
@@ -44,7 +49,6 @@ import com.puresol.coding.evaluation.api.EvaluatorStore;
 import com.puresol.coding.evaluation.api.EvaluatorStoreFactory;
 import com.puresol.coding.evaluation.api.Evaluators;
 import com.puresol.coding.evaluation.api.MetricResults;
-import com.puresol.coding.evaluation.api.SourceCodeQuality;
 import com.puresol.utils.math.Parameter;
 import com.puresol.utils.math.Value;
 
@@ -248,12 +252,34 @@ public class MetricsMapView extends ViewPart implements Refreshable,
 		EvaluatorStore colorStore = EvaluatorStoreFactory.getFactory()
 				.createInstance(colorMetricSelection.getEvaluatorClass());
 		AreaMapData data = calculateAreaData(mapStore, colorStore, path);
-		if (colorValueSelection.getType().equals(SourceCodeQuality.class)) {
-			areaMap.setColorProvider(new SourceCodeQualityColorProvider());
-		} else {
-			areaMap.setColorProvider(null);
-		}
+		setColorProvider();
 		areaMap.setData(data, mapValueSelection.getUnit());
+	}
+
+	private void setColorProvider() {
+		try {
+			BundleContext bundleContext = Activator.getDefault().getBundle()
+					.getBundleContext();
+			String parameterName = colorValueSelection.getName();
+			String filter = "(parameterName=" + parameterName + ")";
+			Collection<ServiceReference<AreaMapColorProvider>> serviceReferences = bundleContext
+					.getServiceReferences(AreaMapColorProvider.class, filter);
+			if (!serviceReferences.isEmpty()) {
+				ServiceReference<AreaMapColorProvider> serviceReference = serviceReferences
+						.iterator().next();
+				try {
+					AreaMapColorProvider provider = bundleContext
+							.getService(serviceReference);
+					areaMap.setColorProvider(provider);
+				} finally {
+					bundleContext.ungetService(serviceReference);
+				}
+			} else {
+				areaMap.setColorProvider(null);
+			}
+		} catch (InvalidSyntaxException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	/**

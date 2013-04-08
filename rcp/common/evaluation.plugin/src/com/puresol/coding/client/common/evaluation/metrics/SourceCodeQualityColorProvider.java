@@ -1,4 +1,4 @@
-package com.puresol.coding.client.common.evaluation.utils;
+package com.puresol.coding.client.common.evaluation.metrics;
 
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Device;
