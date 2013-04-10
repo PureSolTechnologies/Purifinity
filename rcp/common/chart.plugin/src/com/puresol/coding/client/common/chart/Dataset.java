@@ -1,4 +1,4 @@
-package com.puresol.coding.client.common.chart.old;
+package com.puresol.coding.client.common.chart;
 
 /**
  * This interface represents a single dataset which is used to be put onto a

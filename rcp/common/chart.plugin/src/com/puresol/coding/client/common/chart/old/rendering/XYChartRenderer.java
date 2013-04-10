@@ -2,7 +2,8 @@ package com.puresol.coding.client.common.chart.old.rendering;
 
 import org.eclipse.swt.graphics.GC;
 
-import com.puresol.coding.client.common.chart.old.BorderPosition;
+import com.puresol.coding.client.common.chart.math.Point2D;
+import com.puresol.coding.client.common.chart.math.TransformationMatrix2D;
 import com.puresol.coding.client.common.chart.old.XAxis;
 import com.puresol.coding.client.common.chart.old.XYChart;
 import com.puresol.coding.client.common.chart.old.YAxis;
@@ -33,9 +34,6 @@ public class XYChartRenderer {
 	private void drawSingleAxes() {
 		XAxis xAxis = chart.getXAxis();
 		YAxis yAxis = chart.getYAxis();
-		BorderPositionCounter counter = new BorderPositionCounter();
-		counter.add(BorderPosition.SOUTH);
-		counter.add(BorderPosition.WEST);
 		renderer.render(gc, xAxis, transformation);
 		renderer.render(gc, yAxis, transformation);
 	}

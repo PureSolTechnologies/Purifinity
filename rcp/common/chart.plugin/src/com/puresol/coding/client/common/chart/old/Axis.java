@@ -2,6 +2,8 @@ package com.puresol.coding.client.common.chart.old;
 
 import java.util.List;
 
+import com.puresol.coding.client.common.chart.AxisDirection;
+
 /**
  * This interface represents a single axis. It is the data about the axis itself
  * which is added to a chart and where a dataset can be bound to. The interface

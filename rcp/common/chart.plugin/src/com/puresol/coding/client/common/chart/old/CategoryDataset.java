@@ -1,5 +1,7 @@
 package com.puresol.coding.client.common.chart.old;
 
+import com.puresol.coding.client.common.chart.Dataset;
+
 /**
  * This is an interface for a category dataset. The X axis is hereby a category
  * and the Y value is the value for the point to be drawn.

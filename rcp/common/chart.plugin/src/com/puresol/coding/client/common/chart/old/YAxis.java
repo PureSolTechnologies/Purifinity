@@ -1,5 +1,7 @@
 package com.puresol.coding.client.common.chart.old;
 
+import com.puresol.coding.client.common.chart.AxisDirection;
+
 
 /**
  * This is the class for an YAxis.

@@ -5,8 +5,11 @@ import java.util.List;
 import org.eclipse.swt.graphics.FontMetrics;
 import org.eclipse.swt.graphics.GC;
 
+import com.puresol.coding.client.common.chart.AxisDirection;
+import com.puresol.coding.client.common.chart.math.Point2D;
+import com.puresol.coding.client.common.chart.math.TransformationMatrix2D;
 import com.puresol.coding.client.common.chart.old.Axis;
-import com.puresol.coding.client.common.chart.old.AxisDirection;
+import com.puresol.coding.client.common.chart.renderer.RendererUtils;
 
 public class AxisRenderer {
 
@@ -24,8 +27,6 @@ public class AxisRenderer {
 		case Y:
 			drawYAxis(gc, axis, transformation);
 			break;
-		case Z:
-			throw new RuntimeException("Z-Axis is not supported, yet.");
 		}
 	}
 

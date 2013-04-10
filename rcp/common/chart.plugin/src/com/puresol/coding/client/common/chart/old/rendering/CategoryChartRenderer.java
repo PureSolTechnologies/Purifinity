@@ -4,7 +4,8 @@ import java.util.List;
 
 import org.eclipse.swt.graphics.GC;
 
-import com.puresol.coding.client.common.chart.old.BorderPosition;
+import com.puresol.coding.client.common.chart.math.Point2D;
+import com.puresol.coding.client.common.chart.math.TransformationMatrix2D;
 import com.puresol.coding.client.common.chart.old.CategoryChart;
 import com.puresol.coding.client.common.chart.old.CategoryValuePair;
 import com.puresol.coding.client.common.chart.old.XAxis;
@@ -47,9 +48,6 @@ public class CategoryChartRenderer {
 	private void drawSingleAxes() {
 		XAxis xAxis = chart.getXAxis();
 		YAxis yAxis = chart.getYAxis();
-		BorderPositionCounter counter = new BorderPositionCounter();
-		counter.add(BorderPosition.SOUTH);
-		counter.add(BorderPosition.WEST);
 		renderer.render(gc, xAxis, transformation);
 		renderer.render(gc, yAxis, transformation);
 	}

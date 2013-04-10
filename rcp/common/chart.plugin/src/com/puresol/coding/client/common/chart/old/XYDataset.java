@@ -1,5 +1,7 @@
 package com.puresol.coding.client.common.chart.old;
 
+import com.puresol.coding.client.common.chart.Dataset;
+
 /**
  * This is a dataset for X-Y-data.
  * 

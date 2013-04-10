@@ -3,7 +3,7 @@ package com.puresol.coding.client.common.chart.old;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.puresol.coding.client.common.chart.old.rendering.Point2D;
+import com.puresol.coding.client.common.chart.math.Point2D;
 
 /**
  * This is a base class for 2D charts.
@@ -11,7 +11,7 @@ import com.puresol.coding.client.common.chart.old.rendering.Point2D;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class XYChart extends AbstractChart2D {
+public class XYChart extends Chart2D {
 
 	private final List<Point2D> xyData = new ArrayList<Point2D>();
 	private XAxis xAxis = new XAxis();

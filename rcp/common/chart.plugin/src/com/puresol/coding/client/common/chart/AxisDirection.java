@@ -1,4 +1,4 @@
-package com.puresol.coding.client.common.chart.old;
+package com.puresol.coding.client.common.chart;
 
 /**
  * This enum specifies the axis direction.
@@ -8,6 +8,6 @@ package com.puresol.coding.client.common.chart.old;
  */
 public enum AxisDirection {
 
-	X, Y, Z;
+	X, Y;
 
 }

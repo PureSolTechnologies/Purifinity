@@ -1,6 +1,6 @@
-package com.puresol.coding.client.common.chart.old.rendering;
+package com.puresol.coding.client.common.chart.math;
 
-import com.puresol.coding.client.common.chart.old.AxisDirection;
+import com.puresol.coding.client.common.chart.AxisDirection;
 import com.puresol.utils.math.Matrix;
 
 /**

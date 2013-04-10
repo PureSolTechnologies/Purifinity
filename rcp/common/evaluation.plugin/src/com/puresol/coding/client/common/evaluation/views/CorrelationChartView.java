@@ -9,6 +9,7 @@ import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.ViewPart;
 
+import com.puresol.coding.client.common.chart.Chart2D;
 import com.puresol.coding.client.common.chart.ChartCanvas;
 import com.puresol.coding.client.common.ui.actions.PartSettingsCapability;
 import com.puresol.coding.client.common.ui.actions.RefreshAction;
@@ -26,6 +27,10 @@ public class CorrelationChartView extends ViewPart implements Refreshable,
 	public void createPartControl(Composite parent) {
 		parent.setLayout(new FillLayout());
 		chartCanvas = new ChartCanvas(parent, SWT.NONE);
+		Chart2D chart = new Chart2D();
+		chart.setTitle("Metrics Correlation");
+		chart.setSubTitle("SLOC <-> Maintainability Index");
+		chartCanvas.setChart2D(chart);
 		// TODO Auto-generated method stub
 		initializeToolBar();
 	}

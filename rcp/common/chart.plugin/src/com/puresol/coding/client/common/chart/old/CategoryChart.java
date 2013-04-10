@@ -9,7 +9,7 @@ import java.util.List;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class CategoryChart extends AbstractChart2D {
+public class CategoryChart extends Chart2D {
 
 	private final List<CategoryValuePair> categoryData = new ArrayList<CategoryValuePair>();
 	private XAxis xAxis = new XAxis();
