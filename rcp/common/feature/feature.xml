@@ -37,12 +37,16 @@
       <import plugin="org.eclipse.osgi" version="3.8.2" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui" version="3.104.0" match="greaterOrEqual"/>
       <import plugin="org.apache.commons.io" version="2.0.1" match="greaterOrEqual"/>
-      <import plugin="com.puresol.coding.evaluation.api.bundle" version="0.1.0" match="greaterOrEqual"/>
-      <import plugin="com.puresol.coding.metrics.bundle" version="0.1.0" match="greaterOrEqual"/>
-      <import plugin="com.puresol.coding.evaluation.impl.bundle" version="0.1.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.e4.ui.workbench" version="0.11.0" match="greaterOrEqual"/>
+      <import plugin="com.puresol.coding.evaluation.api.bundle" version="0.1.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.core.jobs" version="3.5.300" match="greaterOrEqual"/>
       <import plugin="com.puresol.coding.client.common.analysis.plugin" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="com.puresol.coding.metrics.bundle" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="com.puresol.coding.evaluation.impl.bundle" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.birt.chart.engine" version="4.2.2" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.birt.chart.device.swt" version="4.2.2" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.birt.chart.device.extension" version="4.2.2" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.birt.chart.engine.extension" version="4.2.2" match="greaterOrEqual"/>
    </requires>
 
    <plugin

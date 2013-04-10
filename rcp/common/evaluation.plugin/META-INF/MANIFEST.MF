@@ -21,6 +21,7 @@ Require-Bundle: com.puresol.utils.bundle;bundle-version="0.1.0",
  com.puresol.coding.client.common.ui.plugin;bundle-version="0.1.0",
  com.puresol.coding.metrics.bundle;bundle-version="0.1.0",
  com.puresol.coding.evaluation.impl.bundle;bundle-version="0.1.0",
- org.slf4j.api;bundle-version="1.6.4"
+ org.slf4j.api;bundle-version="1.6.4",
+ org.eclipse.birt.chart.engine;bundle-version="4.2.2"
 Bundle-Activator: com.puresol.coding.client.common.evaluation.Activator
 Import-Package: com.puresol.utils
