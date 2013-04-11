@@ -9,7 +9,10 @@ public class Axis<T> {
 
 	private final AxisDirection direction;
 	private final Parameter<T> parameter;
-	private final List<T> ticks = new ArrayList<T>();
+	private final List<Tick<T>> ticks = new ArrayList<Tick<T>>();
+
+	private double minimum = 0.0;
+	private double maximum = 1.0;
 
 	public Axis(AxisDirection direction, Parameter<T> parameter) {
 		super();
@@ -25,8 +28,28 @@ public class Axis<T> {
 		return direction;
 	}
 
-	public void addTick(T tick) {
+	public void addTick(Tick<T> tick) {
 		ticks.add(tick);
+	}
+
+	public List<Tick<T>> getTicks() {
+		return ticks;
+	}
+
+	public double getMinimum() {
+		return minimum;
+	}
+
+	public void setMinimum(double minimum) {
+		this.minimum = minimum;
+	}
+
+	public double getMaximum() {
+		return maximum;
+	}
+
+	public void setMaximum(double maximum) {
+		this.maximum = maximum;
 	}
 
 }

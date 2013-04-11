@@ -17,7 +17,7 @@ public class ChartCanvas {
 
 	private final Label title;
 	private final Label subTitle;
-	private final Canvas plot;
+	private final PlotCanvas plot;
 	private final Canvas legende;
 	private final Font titleFont;
 	private final Font subTitleFont;
@@ -44,7 +44,7 @@ public class ChartCanvas {
 				(int) (defaultFont.getFontData()[0].getHeight() * 1.2),
 				defaultFont.getFontData()[0].getStyle() | SWT.BOLD);
 		subTitle.setFont(subTitleFont);
-		plot = new Canvas(canvas, SWT.BORDER);
+		plot = new PlotCanvas(canvas, SWT.BORDER);
 		plot.setLayoutData(ChartElement.PLOT);
 		legende = new Canvas(canvas, SWT.BORDER);
 		legende.setLayoutData(ChartElement.LEGENDE);
@@ -58,6 +58,7 @@ public class ChartCanvas {
 		this.chart2D = chart2D;
 		title.setText(chart2D.getTitle());
 		subTitle.setText(chart2D.getSubTitle());
+		plot.setChart(chart2D);
 	}
 
 }

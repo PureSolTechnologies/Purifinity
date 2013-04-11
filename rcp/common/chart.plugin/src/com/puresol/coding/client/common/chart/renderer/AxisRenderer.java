@@ -1,24 +1,25 @@
-package com.puresol.coding.client.common.chart.old.rendering;
+package com.puresol.coding.client.common.chart.renderer;
 
 import java.util.List;
 
 import org.eclipse.swt.graphics.FontMetrics;
 import org.eclipse.swt.graphics.GC;
 
+import com.puresol.coding.client.common.chart.Axis;
 import com.puresol.coding.client.common.chart.AxisDirection;
+import com.puresol.coding.client.common.chart.Tick;
 import com.puresol.coding.client.common.chart.math.Point2D;
 import com.puresol.coding.client.common.chart.math.TransformationMatrix2D;
-import com.puresol.coding.client.common.chart.old.Axis;
-import com.puresol.coding.client.common.chart.renderer.RendererUtils;
 
 public class AxisRenderer {
 
-	public void render(GC gc, Axis axis, TransformationMatrix2D transformation) {
+	public void render(GC gc, Axis<?> axis,
+			TransformationMatrix2D transformation, double thickLength) {
 		drawAxes(gc, axis, transformation);
-		drawTicks(gc, axis, transformation);
+		drawTicks(gc, axis, transformation, thickLength);
 	}
 
-	private void drawAxes(GC gc, Axis axis,
+	private void drawAxes(GC gc, Axis<?> axis,
 			TransformationMatrix2D transformation) {
 		switch (axis.getDirection()) {
 		case X:
@@ -30,49 +31,45 @@ public class AxisRenderer {
 		}
 	}
 
-	private void drawXAxis(GC gc, Axis axis,
+	private void drawXAxis(GC gc, Axis<?> axis,
 			TransformationMatrix2D transformation) {
 		Point2D point1 = new Point2D(axis.getMinimum(), 0.0);
 		Point2D point2 = new Point2D(axis.getMaximum(), 0.0);
 		RendererUtils.drawLine(gc, transformation, point1, point2);
 	}
 
-	private void drawYAxis(GC gc, Axis axis,
+	private void drawYAxis(GC gc, Axis<?> axis,
 			TransformationMatrix2D transformation) {
 		Point2D point1 = new Point2D(0.0, axis.getMinimum());
 		Point2D point2 = new Point2D(0.0, axis.getMaximum());
 		RendererUtils.drawLine(gc, transformation, point1, point2);
 	}
 
-	private void drawTicks(GC gc, Axis axis,
-			TransformationMatrix2D transformation) {
-		double min = axis.getMinimum();
-		double max = axis.getMaximum();
-		double range = max - min;
-		int mainTicks = axis.getMainTicks();
-		int subTicks = axis.getSubTicks();
-		double subRange = range / (mainTicks - 1.0);
-		List<String> categories = axis.getCategories();
-		for (int mainTick = 0; mainTick < mainTicks; mainTick++) {
-			double position = min + subRange * mainTick;
-			drawTick(gc, transformation, position, axis.getDirection(), 0.2);
-			if (axis.isCategoryAxis()) {
-				if (mainTick < mainTicks - 1) {
-					String categoryName = categories.get(mainTick);
-					position += subRange / 2.0;
-					drawCategoryLabel(gc, transformation, categoryName,
+	private void drawTicks(GC gc, Axis<?> axis,
+			TransformationMatrix2D transformation, double thickLength) {
+		List<?> ticks = axis.getTicks();
+		for (Object tickObject : ticks) {
+			Tick<?> tick = (Tick<?>) tickObject;
+			double position = tick.getPosition();
+			switch (tick.getType()) {
+			case MAJOR:
+				drawTick(gc, transformation, position, axis.getDirection(),
+						thickLength);
+				if (Number.class.isAssignableFrom(tick.getValue().getClass())) {
+					drawTickLabel(gc, transformation, tick.getLabel(),
+							position, axis.getDirection());
+				} else {
+					drawCategoryLabel(gc, transformation, tick.getLabel(),
 							position, axis.getDirection());
 				}
-			} else {
-				drawTickLabel(gc, transformation, position, axis.getDirection());
-			}
-			if (mainTick < mainTicks - 1) {
-				for (int subTick = 0; subTick < subTicks; subTick++) {
-					double subY = position + subRange / (subTicks + 1)
-							* (subTick + 1);
-					drawTick(gc, transformation, subY, axis.getDirection(),
-							0.05);
-				}
+				break;
+			case MINOR:
+				drawTick(gc, transformation, position, axis.getDirection(),
+						thickLength / 2.0);
+				break;
+			default:
+				throw new RuntimeException("Wrong tick type '"
+						+ tick.getType().name() + "'.");
 			}
 		}
 	}
@@ -98,7 +95,7 @@ public class AxisRenderer {
 	}
 
 	private void drawTickLabel(GC gc, TransformationMatrix2D transformation,
-			double position, AxisDirection direction) {
+			String label, double position, AxisDirection direction) {
 		Point2D pos = new Point2D();
 		switch (direction) {
 		case X:
@@ -112,8 +109,7 @@ public class AxisRenderer {
 					+ "' is not supported in 2D!");
 		}
 		pos = transformation.transform(pos);
-		gc.drawText(String.valueOf(position), (int) pos.getX() + 3,
-				(int) pos.getY() + 3, true);
+		gc.drawText(label, (int) pos.getX() + 3, (int) pos.getY() + 3, true);
 	}
 
 	private void drawCategoryLabel(GC gc,
