@@ -13,38 +13,54 @@ import com.puresol.coding.client.common.chart.math.Point2D;
 import com.puresol.coding.client.common.chart.math.TransformationMatrix2D;
 import com.puresol.utils.math.Parameter;
 
+/**
+ * This is a central renderer for {@link Axis} object.
+ * 
+ * Due to the changes made on {@link GC}, <b<this class is not thread-safe.</b>
+ * This should not be a problem due to it is run on the UI thread.
+ * 
+ * @author Rick-Rainer Ludwig
+ */
 public class AxisRenderer {
 
 	private static final int SUB_TICK_LENGTH = 1;
 	private static final int MAIN_TICK_LENGTH = 3;
 
-	public void render(GC gc, Axis<?> axis,
-			TransformationMatrix2D transformation) {
-		drawAxes(gc, axis, transformation);
-		int maxLength = drawTicks(gc, axis, transformation);
-		drawNameAndUnit(gc, axis, transformation, maxLength);
+	private final GC gc;
+	private final Axis<?> axis;
+	private final double drawingPosition;
+
+	public AxisRenderer(GC gc, Axis<?> axis, double drawingPosition) {
+		this.gc = gc;
+		this.axis = axis;
+		this.drawingPosition = drawingPosition;
 	}
 
-	private void drawNameAndUnit(GC gc, Axis<?> axis,
-			TransformationMatrix2D transformation, int maxLength) {
+	public void render(TransformationMatrix2D transformation) {
+		drawAxes(transformation);
+		int maxLength = drawTicks(transformation);
+		drawNameAndUnit(transformation, maxLength);
+	}
+
+	private void drawNameAndUnit(TransformationMatrix2D transformation,
+			int maxLength) {
 		switch (axis.getDirection()) {
 		case X:
-			drawXAxisNameAndUnit(gc, axis, transformation);
+			drawXAxisNameAndUnit(transformation);
 			break;
 		case Y:
-			drawYAxisNameAndUnit(gc, axis, transformation, maxLength);
+			drawYAxisNameAndUnit(transformation, maxLength);
 			break;
 		}
 	}
 
-	private void drawXAxisNameAndUnit(GC gc, Axis<?> axis,
-			TransformationMatrix2D transformation) {
+	private void drawXAxisNameAndUnit(TransformationMatrix2D transformation) {
 		String text = getAxisText(axis);
 		FontMetrics fontMetrics = gc.getFontMetrics();
 		int averageCharWidth = fontMetrics.getAverageCharWidth();
 		int height = fontMetrics.getHeight();
 		double xPos = (axis.getMaximum() + axis.getMinimum()) / 2.0;
-		Point2D pos = new Point2D(xPos, 0.0);
+		Point2D pos = new Point2D(xPos, drawingPosition);
 		pos = transformation.transform(pos);
 		pos = new Point2D(
 				pos.getX() - (text.length() * averageCharWidth) / 2.0,
@@ -53,8 +69,8 @@ public class AxisRenderer {
 				(int) (pos.getY() + 2 * MAIN_TICK_LENGTH), true);
 	}
 
-	private void drawYAxisNameAndUnit(GC gc, Axis<?> axis,
-			TransformationMatrix2D transformation, int maxLength) {
+	private void drawYAxisNameAndUnit(TransformationMatrix2D transformation,
+			int maxLength) {
 		/*
 		 * Let's save the current transformation on GC to reset it later on.
 		 */
@@ -89,7 +105,7 @@ public class AxisRenderer {
 			int averageCharWidth = fontMetrics.getAverageCharWidth();
 			int height = fontMetrics.getHeight();
 			double yPos = (axis.getMaximum() + axis.getMinimum()) / 2.0;
-			Point2D pos = new Point2D(0.0, yPos);
+			Point2D pos = new Point2D(drawingPosition, yPos);
 			pos = t.transform(pos);
 			pos = new Point2D(pos.getX() + (text.length() * averageCharWidth)
 					/ 2.0, pos.getY() - maxLength - MAIN_TICK_LENGTH - height);
@@ -109,34 +125,30 @@ public class AxisRenderer {
 		return text;
 	}
 
-	private void drawAxes(GC gc, Axis<?> axis,
-			TransformationMatrix2D transformation) {
+	private void drawAxes(TransformationMatrix2D transformation) {
 		switch (axis.getDirection()) {
 		case X:
-			drawXAxis(gc, axis, transformation);
+			drawXAxis(transformation);
 			break;
 		case Y:
-			drawYAxis(gc, axis, transformation);
+			drawYAxis(transformation);
 			break;
 		}
 	}
 
-	private void drawXAxis(GC gc, Axis<?> axis,
-			TransformationMatrix2D transformation) {
-		Point2D point1 = new Point2D(axis.getMinimum(), 0.0);
-		Point2D point2 = new Point2D(axis.getMaximum(), 0.0);
+	private void drawXAxis(TransformationMatrix2D transformation) {
+		Point2D point1 = new Point2D(axis.getMinimum(), drawingPosition);
+		Point2D point2 = new Point2D(axis.getMaximum(), drawingPosition);
 		RendererUtils.drawLine(gc, transformation, point1, point2);
 	}
 
-	private void drawYAxis(GC gc, Axis<?> axis,
-			TransformationMatrix2D transformation) {
-		Point2D point1 = new Point2D(0.0, axis.getMinimum());
-		Point2D point2 = new Point2D(0.0, axis.getMaximum());
+	private void drawYAxis(TransformationMatrix2D transformation) {
+		Point2D point1 = new Point2D(drawingPosition, axis.getMinimum());
+		Point2D point2 = new Point2D(drawingPosition, axis.getMaximum());
 		RendererUtils.drawLine(gc, transformation, point1, point2);
 	}
 
-	private int drawTicks(GC gc, Axis<?> axis,
-			TransformationMatrix2D transformation) {
+	private int drawTicks(TransformationMatrix2D transformation) {
 		int maxLength = 0;
 		List<?> ticks = axis.getTicks();
 		for (Object tickObject : ticks) {
@@ -144,20 +156,20 @@ public class AxisRenderer {
 			double position = tick.getPosition();
 			switch (tick.getType()) {
 			case MAJOR:
-				drawTick(gc, transformation, position, axis.getDirection(),
+				drawTick(transformation, position, axis.getDirection(),
 						MAIN_TICK_LENGTH);
 				if (Number.class.isAssignableFrom(tick.getValue().getClass())) {
 					maxLength = Math.max(
 							maxLength,
-							drawTickLabel(gc, transformation, tick.getLabel(),
+							drawTickLabel(transformation, tick.getLabel(),
 									position, axis.getDirection()));
 				} else {
-					drawCategoryLabel(gc, transformation, tick.getLabel(),
+					drawCategoryLabel(transformation, tick.getLabel(),
 							position, axis.getDirection());
 				}
 				break;
 			case MINOR:
-				drawTick(gc, transformation, position, axis.getDirection(),
+				drawTick(transformation, position, axis.getDirection(),
 						SUB_TICK_LENGTH);
 				break;
 			default:
@@ -168,17 +180,17 @@ public class AxisRenderer {
 		return maxLength;
 	}
 
-	private void drawTick(GC gc, TransformationMatrix2D transformation,
+	private void drawTick(TransformationMatrix2D transformation,
 			double position, AxisDirection direction, int length) {
 		switch (direction) {
 		case X:
-			Point2D subPos = new Point2D(position, 0);
+			Point2D subPos = new Point2D(position, drawingPosition);
 			subPos = transformation.transform(subPos);
 			gc.drawLine((int) subPos.getX(), (int) subPos.getY() - length,
 					(int) subPos.getX(), (int) subPos.getY() + length);
 			break;
 		case Y:
-			subPos = new Point2D(0, position);
+			subPos = new Point2D(drawingPosition, position);
 			subPos = transformation.transform(subPos);
 			gc.drawLine((int) subPos.getX() - length, (int) subPos.getY(),
 					(int) subPos.getX() + length, (int) subPos.getY());
@@ -189,20 +201,20 @@ public class AxisRenderer {
 		}
 	}
 
-	private int drawTickLabel(GC gc, TransformationMatrix2D transformation,
+	private int drawTickLabel(TransformationMatrix2D transformation,
 			String label, double position, AxisDirection direction) {
 		Point2D pos = new Point2D();
 		FontMetrics fontMetrics = gc.getFontMetrics();
 		int labelLength = fontMetrics.getAverageCharWidth() * label.length();
 		switch (direction) {
 		case X:
-			pos = new Point2D(position, 0);
+			pos = new Point2D(position, drawingPosition);
 			pos = transformation.transform(pos);
 			gc.drawText(label, (int) pos.getX() - labelLength / 2,
 					(int) (pos.getY() + MAIN_TICK_LENGTH), true);
 			break;
 		case Y:
-			pos = new Point2D(0.0, position);
+			pos = new Point2D(drawingPosition, position);
 			pos = transformation.transform(pos);
 			gc.drawText(label,
 					(int) (pos.getX() - labelLength - MAIN_TICK_LENGTH),
@@ -215,22 +227,21 @@ public class AxisRenderer {
 		return labelLength;
 	}
 
-	private void drawCategoryLabel(GC gc,
-			TransformationMatrix2D transformation, String categoryName,
-			double position, AxisDirection direction) {
+	private void drawCategoryLabel(TransformationMatrix2D transformation,
+			String categoryName, double position, AxisDirection direction) {
 		FontMetrics fontMetrics = gc.getFontMetrics();
 		int averageCharWidth = fontMetrics.getAverageCharWidth();
 		Point2D pos = new Point2D();
 		switch (direction) {
 		case X:
-			pos = new Point2D(position, 0);
+			pos = new Point2D(position, drawingPosition);
 			pos = transformation.transform(pos);
 			pos = new Point2D(pos.getX()
 					- (categoryName.length() * averageCharWidth) / 2.0,
 					pos.getY());
 			break;
 		case Y:
-			pos = new Point2D(0.0, position);
+			pos = new Point2D(drawingPosition, position);
 			pos = transformation.transform(pos);
 			break;
 		default:
@@ -241,4 +252,30 @@ public class AxisRenderer {
 				true);
 	}
 
+	public int getWidth() {
+		int width = 1; // axis width
+		width += MAIN_TICK_LENGTH; // space for ticks
+		FontMetrics fontMetrics = gc.getFontMetrics();
+		AxisDirection direction = axis.getDirection();
+		switch (direction) {
+		case X:
+			width += fontMetrics.getHeight(); // tick label
+			width += fontMetrics.getHeight(); // axis label
+			break;
+		case Y:
+			width += fontMetrics.getHeight(); // axis label
+			int averageCharWidth = fontMetrics.getAverageCharWidth();
+			int labelWidth = 0;
+			for (Tick<?> tick : axis.getTicks()) {
+				int w = tick.getLabel().length() * averageCharWidth;
+				labelWidth = Math.max(labelWidth, w);
+			}
+			width += labelWidth; // tick label
+			break;
+		default:
+			throw new IllegalArgumentException("Direction '" + direction.name()
+					+ "' is not supported in 2D!");
+		}
+		return width;
+	}
 }

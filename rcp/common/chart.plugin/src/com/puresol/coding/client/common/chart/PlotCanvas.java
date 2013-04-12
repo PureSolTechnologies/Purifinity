@@ -38,6 +38,17 @@ public class PlotCanvas extends Canvas implements PaintListener {
 		clientArea.width -= 2 * PADDING;
 		clientArea.height -= 2 * PADDING;
 
+		// Initialize renderer objects...
+		AxisRenderer xAxisRenderer = new AxisRenderer(gc, chart2D.getXAxis(),
+				chart2D.getYAxis().getMinimum());
+		AxisRenderer yAxisRenderer = new AxisRenderer(gc, chart2D.getYAxis(),
+				chart2D.getXAxis().getMinimum());
+		int yAxisWidth = yAxisRenderer.getWidth();
+		clientArea.x += yAxisWidth;
+		clientArea.width -= yAxisWidth;
+		int xAxisWidth = xAxisRenderer.getWidth();
+		clientArea.height -= xAxisWidth;
+
 		// create transform matrix
 		Transform transform = new Transform(gc.getDevice());
 		// move origin to canvas center
@@ -61,8 +72,8 @@ public class PlotCanvas extends Canvas implements PaintListener {
 		double rangeY = yAxis.getMaximum() - yAxis.getMinimum();
 
 		// scale to use the values from dataset to paint
-		double scaleX = clientArea.width / rangeX * 0.95;
-		double scaleY = clientArea.height / rangeY * 0.95;
+		double scaleX = clientArea.width / rangeX;
+		double scaleY = clientArea.height / rangeY;
 		transformMatrix2d.scale(scaleX, scaleY);
 
 		// move the center of axes to center of canvas
@@ -70,9 +81,8 @@ public class PlotCanvas extends Canvas implements PaintListener {
 		double centerY = (yAxis.getMinimum() + yAxis.getMaximum()) / 2.0;
 		transformMatrix2d.translate(-centerX, -centerY);
 
-		AxisRenderer axisRenderer = new AxisRenderer();
-		axisRenderer.render(gc, chart2D.getXAxis(), transformMatrix2d);
-		axisRenderer.render(gc, chart2D.getYAxis(), transformMatrix2d);
+		xAxisRenderer.render(transformMatrix2d);
+		yAxisRenderer.render(transformMatrix2d);
 	}
 
 	public void setChart(Chart2D chart2D) {
