@@ -13,9 +13,9 @@ public class AxisFactory {
 		for (double tick = min; tick <= max; tick += tickWidth) {
 			axis.addTick(new Tick<Double>(TickType.MAJOR, tick, tick, String
 					.valueOf(tick)));
-			if (numSubTicks > 0) {
+			if ((numSubTicks > 0) && (tick < max)) {
 				double subTickWidth = tickWidth / (numSubTicks + 1);
-				for (int i = 0; i < numSubTicks; i++) {
+				for (int i = 1; i <= numSubTicks; i++) {
 					double position = tick + i * subTickWidth;
 					axis.addTick(new Tick<Double>(TickType.MINOR, position,
 							position, String.valueOf(position)));
@@ -34,9 +34,9 @@ public class AxisFactory {
 		for (int tick = min; tick <= max; tick += tickWidth) {
 			axis.addTick(new Tick<Integer>(TickType.MAJOR, tick, tick, String
 					.valueOf(tick)));
-			if (numSubTicks > 0) {
+			if ((numSubTicks > 0) && (tick < max)) {
 				double subTickWidth = (double) tickWidth / (numSubTicks + 1);
-				for (int i = 0; i < numSubTicks; i++) {
+				for (int i = 1; i <= numSubTicks; i++) {
 					Integer position = (int) (tick + i * subTickWidth);
 					axis.addTick(new Tick<Integer>(TickType.MINOR, position,
 							position, String.valueOf(position)));

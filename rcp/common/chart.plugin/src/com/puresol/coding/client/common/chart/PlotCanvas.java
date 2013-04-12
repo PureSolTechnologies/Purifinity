@@ -71,10 +71,8 @@ public class PlotCanvas extends Canvas implements PaintListener {
 		transformMatrix2d.translate(-centerX, -centerY);
 
 		AxisRenderer axisRenderer = new AxisRenderer();
-		axisRenderer.render(gc, chart2D.getXAxis(), transformMatrix2d,
-				10.0 / scaleY);
-		axisRenderer.render(gc, chart2D.getYAxis(), transformMatrix2d,
-				10.0 / scaleX);
+		axisRenderer.render(gc, chart2D.getXAxis(), transformMatrix2d);
+		axisRenderer.render(gc, chart2D.getYAxis(), transformMatrix2d);
 	}
 
 	public void setChart(Chart2D chart2D) {

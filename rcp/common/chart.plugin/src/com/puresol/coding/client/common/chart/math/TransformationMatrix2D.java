@@ -11,6 +11,18 @@ import com.puresol.utils.math.Matrix;
  */
 public class TransformationMatrix2D extends Matrix {
 
+	public static TransformationMatrix2D createRotationMatrixRad(double rad) {
+		TransformationMatrix2D transform = new TransformationMatrix2D();
+		transform.rotateDeg(rad);
+		return transform;
+	}
+
+	public static TransformationMatrix2D createRotationMatrixDeg(double deg) {
+		TransformationMatrix2D transform = new TransformationMatrix2D();
+		transform.rotateDeg(deg);
+		return transform;
+	}
+
 	private static final int DIMENSIONS = 3;
 
 	/**
@@ -20,6 +32,14 @@ public class TransformationMatrix2D extends Matrix {
 	public TransformationMatrix2D() {
 		super(DIMENSIONS, DIMENSIONS);
 		setIdentity();
+	}
+
+	/**
+	 * This is the initial constructor which takes another
+	 * {@link TransformationMatrix2D} as initial value.
+	 */
+	public TransformationMatrix2D(TransformationMatrix2D transform) {
+		super(transform);
 	}
 
 	/**
