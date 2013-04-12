@@ -44,13 +44,17 @@ public class AxisRenderer {
 
 	private void drawNameAndUnit(TransformationMatrix2D transformation,
 			int maxLength) {
-		switch (axis.getDirection()) {
+		AxisDirection direction = axis.getDirection();
+		switch (direction) {
 		case X:
 			drawXAxisNameAndUnit(transformation);
 			break;
 		case Y:
 			drawYAxisNameAndUnit(transformation, maxLength);
 			break;
+		default:
+			throw new IllegalArgumentException("Direction '" + direction.name()
+					+ "' is not supported in 2D!");
 		}
 	}
 
@@ -126,13 +130,18 @@ public class AxisRenderer {
 	}
 
 	private void drawAxes(TransformationMatrix2D transformation) {
-		switch (axis.getDirection()) {
+		AxisDirection direction = axis.getDirection();
+		switch (direction) {
 		case X:
 			drawXAxis(transformation);
 			break;
 		case Y:
 			drawYAxis(transformation);
 			break;
+		default:
+			throw new IllegalArgumentException("Direction '" + direction.name()
+					+ "' is not supported in 2D!");
+
 		}
 	}
 

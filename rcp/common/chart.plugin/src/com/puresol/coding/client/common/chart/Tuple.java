@@ -1,21 +1,21 @@
 package com.puresol.coding.client.common.chart;
 
-public class Tuple<TX, TY> {
+public class Tuple {
 
-	private final TX x;
-	private final TX y;
+	private final double x;
+	private final double y;
 
-	public Tuple(TX x, TX y) {
+	public Tuple(double x, double y) {
 		super();
 		this.x = x;
 		this.y = y;
 	}
 
-	public TX getX() {
+	public double getX() {
 		return x;
 	}
 
-	public TX getY() {
+	public double getY() {
 		return y;
 	}
 

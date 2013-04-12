@@ -13,11 +13,11 @@ import java.util.List;
 public class Plot<TX, TY> {
 
 	private final Axis<TX> xAxis;
-	private final Axis<TX> yAxis;
+	private final Axis<TY> yAxis;
 	private final String name;
-	private final List<Tuple<TX, TY>> tuples = new ArrayList<Tuple<TX, TY>>();
+	private final List<Tuple> tuples = new ArrayList<Tuple>();
 
-	public Plot(Axis<TX> xAxis, Axis<TX> yAxis, String name) {
+	public Plot(Axis<TX> xAxis, Axis<TY> yAxis, String name) {
 		super();
 		this.xAxis = xAxis;
 		this.yAxis = yAxis;
@@ -28,7 +28,7 @@ public class Plot<TX, TY> {
 		return xAxis;
 	}
 
-	public Axis<TX> getYAxis() {
+	public Axis<TY> getYAxis() {
 		return yAxis;
 	}
 
@@ -36,11 +36,11 @@ public class Plot<TX, TY> {
 		return name;
 	}
 
-	public void add(Tuple<TX, TY> tuple) {
+	public void add(Tuple tuple) {
 		tuples.add(tuple);
 	}
 
-	public List<Tuple<TX, TY>> getTuples() {
+	public List<Tuple> getTuples() {
 		return tuples;
 	}
 }

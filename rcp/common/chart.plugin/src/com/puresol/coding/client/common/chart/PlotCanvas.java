@@ -10,6 +10,7 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.puresol.coding.client.common.chart.math.TransformationMatrix2D;
 import com.puresol.coding.client.common.chart.renderer.AxisRenderer;
+import com.puresol.coding.client.common.chart.renderer.PlotRenderer;
 
 public class PlotCanvas extends Canvas implements PaintListener {
 
@@ -83,6 +84,11 @@ public class PlotCanvas extends Canvas implements PaintListener {
 
 		xAxisRenderer.render(transformMatrix2d);
 		yAxisRenderer.render(transformMatrix2d);
+
+		for (Plot<?, ?> plot : chart2D.getPlots()) {
+			PlotRenderer plotRenderer = new PlotRenderer(gc, plot);
+			plotRenderer.render(transformMatrix2d);
+		}
 	}
 
 	public void setChart(Chart2D chart2D) {

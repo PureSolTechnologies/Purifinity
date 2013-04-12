@@ -1,5 +1,8 @@
 package com.puresol.coding.client.common.chart;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Chart2D {
 
 	private String title;
@@ -9,7 +12,7 @@ public class Chart2D {
 	private Axis<?> yAxis;
 	private Axis<?> alternateXAxis;
 	private Axis<?> alternateYAxis;
-	private Plot<?, ?> plot;
+	private final List<Plot<?, ?>> plots = new ArrayList<Plot<?, ?>>();
 
 	public Chart2D() {
 		super();
@@ -63,11 +66,11 @@ public class Chart2D {
 		this.alternateYAxis = alternateYAxis;
 	}
 
-	public Plot<?, ?> getPlot() {
-		return plot;
+	public List<Plot<?, ?>> getPlots() {
+		return plots;
 	}
 
-	public void setPlot(Plot<?, ?> plot) {
+	public void addPlot(Plot<?, ?> plot) {
 		if ((!plot.getXAxis().equals(xAxis))
 				&& (!plot.getXAxis().equals(alternateXAxis))) {
 			throw new IllegalArgumentException(
@@ -78,7 +81,7 @@ public class Chart2D {
 			throw new IllegalArgumentException(
 					"Y axis of plot does not match set y axes.");
 		}
-		this.plot = plot;
+		plots.add(plot);
 	}
 
 }
