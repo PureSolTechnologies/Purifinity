@@ -1,6 +1,6 @@
 package com.puresol.coding.client.common.evaluation;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -181,7 +181,7 @@ public class MetricsMapViewSettingsDialog extends AbstractPartSettingsDialog
 				.getSelection();
 		mapMetricSelection = (EvaluatorFactory) selection.getFirstElement();
 		Set<Parameter<?>> allParameters = mapMetricSelection.getParameters();
-		List<Parameter<?>> comboParameters = new ArrayList<Parameter<?>>();
+		Set<Parameter<?>> comboParameters = new HashSet<Parameter<?>>();
 		for (Parameter<?> parameter : allParameters) {
 			if (parameter.getLevelOfMeasurement() == LevelOfMeasurement.RATIO) {
 				comboParameters.add(parameter);
@@ -201,7 +201,7 @@ public class MetricsMapViewSettingsDialog extends AbstractPartSettingsDialog
 				.getSelection();
 		colorMetricSelection = (EvaluatorFactory) selection.getFirstElement();
 		Set<Parameter<?>> allParameters = colorMetricSelection.getParameters();
-		List<Parameter<?>> comboParameters = new ArrayList<Parameter<?>>();
+		Set<Parameter<?>> comboParameters = new HashSet<Parameter<?>>();
 		for (Parameter<?> parameter : allParameters) {
 			if ((parameter.getLevelOfMeasurement() == LevelOfMeasurement.ORDINAL)
 					|| (parameter.getLevelOfMeasurement() == LevelOfMeasurement.INTERVAL)
