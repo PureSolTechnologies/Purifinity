@@ -91,9 +91,6 @@ public class PlotCanvas extends Canvas implements PaintListener {
 		double centerY = (yAxis.getMinimum() + yAxis.getMaximum()) / 2.0;
 		transformMatrix2d.translate(-centerX, -centerY);
 
-		xAxisRenderer.render(transformMatrix2d);
-		yAxisRenderer.render(transformMatrix2d);
-
 		for (Plot<?, ?> plot : chart2D.getPlots()) {
 			PlotRenderer plotRenderer = new PlotRenderer(gc, plot);
 			MarkRenderer markRenderer = markRenderers.get(plot);
@@ -106,6 +103,9 @@ public class PlotCanvas extends Canvas implements PaintListener {
 			}
 			plotRenderer.render(transformMatrix2d);
 		}
+
+		xAxisRenderer.render(transformMatrix2d);
+		yAxisRenderer.render(transformMatrix2d);
 	}
 
 	public void setChart(Chart2D chart2D) {
