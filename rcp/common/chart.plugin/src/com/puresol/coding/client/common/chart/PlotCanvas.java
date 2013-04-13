@@ -10,6 +10,7 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.puresol.coding.client.common.chart.math.TransformationMatrix2D;
 import com.puresol.coding.client.common.chart.renderer.AxisRenderer;
+import com.puresol.coding.client.common.chart.renderer.CircleMarkRenderer;
 import com.puresol.coding.client.common.chart.renderer.PlotRenderer;
 
 public class PlotCanvas extends Canvas implements PaintListener {
@@ -87,6 +88,7 @@ public class PlotCanvas extends Canvas implements PaintListener {
 
 		for (Plot<?, ?> plot : chart2D.getPlots()) {
 			PlotRenderer plotRenderer = new PlotRenderer(gc, plot);
+			plotRenderer.setMarkRenderer(new CircleMarkRenderer(gc));
 			plotRenderer.render(transformMatrix2d);
 		}
 	}
