@@ -1,6 +1,8 @@
 package com.puresol.coding.client.common.chart.renderer;
 
-import com.puresol.coding.client.common.chart.math.Point2D;
+import org.eclipse.swt.graphics.GC;
+
+import com.puresol.coding.client.common.chart.DataPoint2D;
 import com.puresol.coding.client.common.chart.math.TransformationMatrix2D;
 
 /**
@@ -12,6 +14,20 @@ import com.puresol.coding.client.common.chart.math.TransformationMatrix2D;
  */
 public interface MarkRenderer {
 
-	public void render(TransformationMatrix2D transformation, Point2D point);
+	/**
+	 * This method will paint the actual mark.
+	 * 
+	 * <b>Attention(!):</b> The colors must no be reset! The foreground and
+	 * background color is set from the {@link PlotRenderer} with its
+	 * {@link ColorProvider}.
+	 * 
+	 * @param transformation
+	 *            is the transformation matrix to be used to calculate the
+	 *            positions.
+	 * @param point
+	 *            is the data point to be drawn.
+	 */
+	public void render(GC gc, TransformationMatrix2D transformation,
+			DataPoint2D point);
 
 }

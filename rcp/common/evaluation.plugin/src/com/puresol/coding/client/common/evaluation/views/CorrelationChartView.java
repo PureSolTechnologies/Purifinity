@@ -14,8 +14,9 @@ import com.puresol.coding.client.common.chart.AxisDirection;
 import com.puresol.coding.client.common.chart.AxisFactory;
 import com.puresol.coding.client.common.chart.Chart2D;
 import com.puresol.coding.client.common.chart.ChartCanvas;
+import com.puresol.coding.client.common.chart.DataPoint2D;
 import com.puresol.coding.client.common.chart.Plot;
-import com.puresol.coding.client.common.chart.DataPoint;
+import com.puresol.coding.client.common.chart.math.Point2D;
 import com.puresol.coding.client.common.ui.actions.PartSettingsCapability;
 import com.puresol.coding.client.common.ui.actions.RefreshAction;
 import com.puresol.coding.client.common.ui.actions.Refreshable;
@@ -49,9 +50,9 @@ public class CorrelationChartView extends ViewPart implements Refreshable,
 
 		Plot<Integer, Double> plot = new Plot<Integer, Double>(xAxis, yAxis,
 				"Correlation");
-		plot.add(new DataPoint(10, 100));
-		plot.add(new DataPoint(20, 50));
-		plot.add(new DataPoint(30, 10));
+		plot.add(new DataPoint2D(new Point2D(10, 100)));
+		plot.add(new DataPoint2D(new Point2D(20, 50)));
+		plot.add(new DataPoint2D(new Point2D(30, 10)));
 		chart.addPlot(plot);
 
 		chartCanvas.setChart2D(chart);

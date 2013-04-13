@@ -1,5 +1,8 @@
 package com.puresol.coding.client.common.chart;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.GC;
@@ -10,7 +13,9 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.puresol.coding.client.common.chart.math.TransformationMatrix2D;
 import com.puresol.coding.client.common.chart.renderer.AxisRenderer;
-import com.puresol.coding.client.common.chart.renderer.CircleMarkRenderer;
+import com.puresol.coding.client.common.chart.renderer.ColorProvider;
+import com.puresol.coding.client.common.chart.renderer.ConstantColorProvider;
+import com.puresol.coding.client.common.chart.renderer.MarkRenderer;
 import com.puresol.coding.client.common.chart.renderer.PlotRenderer;
 
 public class PlotCanvas extends Canvas implements PaintListener {
@@ -18,6 +23,9 @@ public class PlotCanvas extends Canvas implements PaintListener {
 	private static final int PADDING = 5;
 
 	private Chart2D chart2D = null;
+
+	private final Map<Plot<?, ?>, MarkRenderer> markRenderers = new HashMap<Plot<?, ?>, MarkRenderer>();
+	private final Map<Plot<?, ?>, ColorProvider> colorProviders = new HashMap<Plot<?, ?>, ColorProvider>();
 
 	public PlotCanvas(Composite parent, int style) {
 		super(parent, style);
@@ -88,13 +96,29 @@ public class PlotCanvas extends Canvas implements PaintListener {
 
 		for (Plot<?, ?> plot : chart2D.getPlots()) {
 			PlotRenderer plotRenderer = new PlotRenderer(gc, plot);
-			plotRenderer.setMarkRenderer(new CircleMarkRenderer(gc));
+			MarkRenderer markRenderer = markRenderers.get(plot);
+			if (markRenderer != null) {
+				plotRenderer.setMarkRenderer(markRenderer);
+			}
+			ColorProvider colorProvider = colorProviders.get(plot);
+			if (colorProvider != null) {
+				plotRenderer.setColorProvider(colorProvider);
+			}
 			plotRenderer.render(transformMatrix2d);
 		}
 	}
 
 	public void setChart(Chart2D chart2D) {
 		this.chart2D = chart2D;
+	}
+
+	public void setMarkRenderer(Plot<?, ?> plot, MarkRenderer markRenderer) {
+		markRenderers.put(plot, markRenderer);
+	}
+
+	public void setColorProvider(Plot<String, Double> plot,
+			ConstantColorProvider colorProvider) {
+		colorProviders.put(plot, colorProvider);
 	}
 
 }

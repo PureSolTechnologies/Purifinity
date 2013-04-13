@@ -15,7 +15,7 @@ public class Plot<TX, TY> {
 	private final Axis<TX> xAxis;
 	private final Axis<TY> yAxis;
 	private final String name;
-	private final List<DataPoint> tuples = new ArrayList<DataPoint>();
+	private final List<DataPoint2D> tuples = new ArrayList<DataPoint2D>();
 
 	public Plot(Axis<TX> xAxis, Axis<TY> yAxis, String name) {
 		super();
@@ -36,11 +36,11 @@ public class Plot<TX, TY> {
 		return name;
 	}
 
-	public void add(DataPoint tuple) {
+	public void add(DataPoint2D tuple) {
 		tuples.add(tuple);
 	}
 
-	public List<DataPoint> getTuples() {
+	public List<DataPoint2D> getDataPoints() {
 		return tuples;
 	}
 }

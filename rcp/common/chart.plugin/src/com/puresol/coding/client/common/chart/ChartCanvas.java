@@ -6,6 +6,9 @@ import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
+import com.puresol.coding.client.common.chart.renderer.ConstantColorProvider;
+import com.puresol.coding.client.common.chart.renderer.MarkRenderer;
+
 /**
  * This is the central canvas class for interactive charting.
  * 
@@ -56,9 +59,22 @@ public class ChartCanvas {
 
 	public void setChart2D(Chart2D chart2D) {
 		this.chart2D = chart2D;
-		title.setText(chart2D.getTitle());
-		subTitle.setText(chart2D.getSubTitle());
+		if (chart2D.getTitle() != null) {
+			title.setText(chart2D.getTitle());
+		}
+		if (chart2D.getSubTitle() != null) {
+			subTitle.setText(chart2D.getSubTitle());
+		}
 		plot.setChart(chart2D);
+	}
+
+	public void setMarkRenderer(Plot<?, ?> plot, MarkRenderer markRenderer) {
+		this.plot.setMarkRenderer(plot, markRenderer);
+	}
+
+	public void setColorProvider(Plot<String, Double> plot,
+			ConstantColorProvider colorProvider) {
+		this.plot.setColorProvider(plot, colorProvider);
 	}
 
 }

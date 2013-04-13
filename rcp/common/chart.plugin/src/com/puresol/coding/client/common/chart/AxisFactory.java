@@ -45,4 +45,16 @@ public class AxisFactory {
 		}
 		return axis;
 	}
+
+	public static Axis<String> createCategoryAxis(AxisDirection direction,
+			Parameter<String> parameter, String... categories) {
+		Axis<String> axis = new Axis<String>(direction, parameter);
+		axis.setMinimum(0);
+		axis.setMaximum(categories.length);
+		for (int tick = 0; tick < categories.length; tick += 1) {
+			axis.addTick(new Tick<String>(TickType.MAJOR, categories[tick],
+					tick + 0.5, categories[tick]));
+		}
+		return axis;
+	}
 }
