@@ -49,16 +49,16 @@ public class HistorgramChartView extends ViewPart implements Refreshable,
 		chart.setxAxis(xAxis);
 
 		Axis<Double> yAxis = AxisFactory.createDoubleValueAxis(AxisDirection.Y,
-				MaintainabilityIndexEvaluatorParameter.MI, -20, 200, 20, 3);
+				MaintainabilityIndexEvaluatorParameter.MI, 0, 200, 20, 3);
 		chart.setyAxis(yAxis);
 
 		Plot<String, Double> plot = new Plot<String, Double>(xAxis, yAxis,
 				"Correlation");
-		plot.add(new DataPoint2D(new Point2D(0.5, 5)));
-		plot.add(new DataPoint2D(new Point2D(1.5, 25)));
-		plot.add(new DataPoint2D(new Point2D(2.5, 50)));
-		plot.add(new DataPoint2D(new Point2D(3.5, 20)));
-		plot.add(new DataPoint2D(new Point2D(4.5, 10)));
+		plot.add(new DataPoint2D(new Point2D(0.0, 5)));
+		plot.add(new DataPoint2D(new Point2D(1.0, 25)));
+		plot.add(new DataPoint2D(new Point2D(2.0, 50)));
+		plot.add(new DataPoint2D(new Point2D(3.0, 20)));
+		plot.add(new DataPoint2D(new Point2D(4.0, 10)));
 		chart.addPlot(plot);
 
 		chartCanvas.setChart2D(chart);
