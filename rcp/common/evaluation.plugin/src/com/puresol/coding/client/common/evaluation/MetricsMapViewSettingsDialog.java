@@ -203,9 +203,8 @@ public class MetricsMapViewSettingsDialog extends AbstractPartSettingsDialog
 		Set<Parameter<?>> allParameters = colorMetricSelection.getParameters();
 		Set<Parameter<?>> comboParameters = new HashSet<Parameter<?>>();
 		for (Parameter<?> parameter : allParameters) {
-			if ((parameter.getLevelOfMeasurement() == LevelOfMeasurement.ORDINAL)
-					|| (parameter.getLevelOfMeasurement() == LevelOfMeasurement.INTERVAL)
-					|| (parameter.getLevelOfMeasurement() == LevelOfMeasurement.RATIO)) {
+			if (parameter.getLevelOfMeasurement().isAtLeast(
+					LevelOfMeasurement.ORDINAL)) {
 				comboParameters.add(parameter);
 			}
 		}

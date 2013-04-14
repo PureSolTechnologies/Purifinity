@@ -119,13 +119,11 @@ public class ParetoChartViewSettingsDialog extends AbstractPartSettingsDialog
 		Set<Parameter<?>> allParameters = metricSelection.getParameters();
 		Set<Parameter<?>> comboParameters = new HashSet<Parameter<?>>();
 		for (Parameter<?> parameter : allParameters) {
-			if ((parameter.getLevelOfMeasurement() == LevelOfMeasurement.ORDINAL)) {
+			if (parameter.getLevelOfMeasurement().isAtLeast(
+					LevelOfMeasurement.ORDINAL)) {
 				if (Number.class.isAssignableFrom(parameter.getType())) {
 					comboParameters.add(parameter);
 				}
-			} else if ((parameter.getLevelOfMeasurement() == LevelOfMeasurement.INTERVAL)
-					|| (parameter.getLevelOfMeasurement() == LevelOfMeasurement.RATIO)) {
-				comboParameters.add(parameter);
 			}
 		}
 		parameterComboViewer.setInput(comboParameters);
