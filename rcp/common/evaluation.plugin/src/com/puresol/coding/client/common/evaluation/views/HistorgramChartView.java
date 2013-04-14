@@ -1,15 +1,12 @@
 package com.puresol.coding.client.common.evaluation.views;
 
 import org.eclipse.jface.action.IToolBarManager;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.ISelectionListener;
-import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.part.ViewPart;
 
+import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.client.common.chart.Axis;
 import com.puresol.coding.client.common.chart.AxisDirection;
 import com.puresol.coding.client.common.chart.AxisFactory;
@@ -20,18 +17,14 @@ import com.puresol.coding.client.common.chart.Plot;
 import com.puresol.coding.client.common.chart.math.Point2D;
 import com.puresol.coding.client.common.chart.renderer.BarMarkRenderer;
 import com.puresol.coding.client.common.chart.renderer.ConstantColorProvider;
-import com.puresol.coding.client.common.ui.actions.PartSettingsCapability;
 import com.puresol.coding.client.common.ui.actions.RefreshAction;
-import com.puresol.coding.client.common.ui.actions.Refreshable;
-import com.puresol.coding.client.common.ui.actions.Reproducable;
 import com.puresol.coding.client.common.ui.actions.ShowSettingsAction;
 import com.puresol.coding.client.common.ui.actions.ViewReproductionAction;
 import com.puresol.coding.metrics.maintainability.MaintainabilityIndexEvaluatorParameter;
 import com.puresol.utils.math.LevelOfMeasurement;
 import com.puresol.utils.math.ParameterWithArbitraryUnit;
 
-public class HistorgramChartView extends ViewPart implements Refreshable,
-		Reproducable, ISelectionListener, PartSettingsCapability {
+public class HistorgramChartView extends AbstractMetricViewPart {
 
 	private ChartCanvas chartCanvas;
 
@@ -68,6 +61,7 @@ public class HistorgramChartView extends ViewPart implements Refreshable,
 
 		// TODO Auto-generated method stub
 		initializeToolBar();
+		super.createPartControl(parent);
 	}
 
 	/**
@@ -106,13 +100,19 @@ public class HistorgramChartView extends ViewPart implements Refreshable,
 	}
 
 	@Override
-	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
+	public void refresh() {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void refresh() {
+	public void showEvaluation(HashIdFileTree path) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	protected void updateEvaluation() {
 		// TODO Auto-generated method stub
 
 	}

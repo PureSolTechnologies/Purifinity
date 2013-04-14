@@ -30,19 +30,19 @@ public class ParetoChartViewSettingsDialog extends AbstractPartSettingsDialog
 		implements SelectionListener {
 
 	private Combo metricCombo;
-	private Combo valueCombo;
+	private Combo parameterCombo;
 
 	private MetricComboViewer metricComboViewer;
-	private ParameterComboViewer valueComboViewer;
+	private ParameterComboViewer parameterComboViewer;
 
 	private EvaluatorFactory metricSelection = null;
-	private Parameter<?> valueSelection = null;
+	private Parameter<?> parameterSelection = null;
 
 	public ParetoChartViewSettingsDialog(ParetoChartView view,
-			EvaluatorFactory metricSelection, Parameter<?> valueSelection) {
+			EvaluatorFactory metricSelection, Parameter<?> parameterSelection) {
 		super(view);
 		this.metricSelection = metricSelection;
-		this.valueSelection = valueSelection;
+		this.parameterSelection = parameterSelection;
 	}
 
 	@Override
@@ -67,19 +67,19 @@ public class ParetoChartViewSettingsDialog extends AbstractPartSettingsDialog
 				metricComboViewer = new MetricComboViewer(metricCombo);
 			}
 
-			valueCombo = new Combo(settingsGroup, SWT.READ_ONLY);
+			parameterCombo = new Combo(settingsGroup, SWT.READ_ONLY);
 			{
-				FormData fd_valueCombo = new FormData();
-				fd_valueCombo.left = new FormAttachment(metricCombo, 0,
+				FormData fd_parameterCombo = new FormData();
+				fd_parameterCombo.left = new FormAttachment(metricCombo, 0,
 						SWT.LEFT);
-				fd_valueCombo.right = new FormAttachment(metricCombo, 0,
+				fd_parameterCombo.right = new FormAttachment(metricCombo, 0,
 						SWT.RIGHT);
-				fd_valueCombo.top = new FormAttachment(metricCombo, 10);
-				fd_valueCombo.bottom = new FormAttachment(100, -10);
-				valueCombo.setLayoutData(fd_valueCombo);
-				valueCombo.setEnabled(true);
-				valueCombo.addSelectionListener(this);
-				valueComboViewer = new ParameterComboViewer(valueCombo);
+				fd_parameterCombo.top = new FormAttachment(metricCombo, 10);
+				fd_parameterCombo.bottom = new FormAttachment(100, -10);
+				parameterCombo.setLayoutData(fd_parameterCombo);
+				parameterCombo.setEnabled(true);
+				parameterCombo.addSelectionListener(this);
+				parameterComboViewer = new ParameterComboViewer(parameterCombo);
 			}
 		}
 		populateCombos();
@@ -91,15 +91,15 @@ public class ParetoChartViewSettingsDialog extends AbstractPartSettingsDialog
 				.getAllMetrics();
 		metricComboViewer.setInput(allMetrics);
 		if (metricSelection != null) {
-			valueComboViewer.setInput(metricSelection.getParameters());
+			parameterComboViewer.setInput(metricSelection.getParameters());
 			metricComboViewer.setSelection(new StructuredSelection(
 					metricSelection));
-			if (valueSelection != null) {
-				valueComboViewer.setSelection(new StructuredSelection(
-						valueSelection));
+			if (parameterSelection != null) {
+				parameterComboViewer.setSelection(new StructuredSelection(
+						parameterSelection));
 			}
 		} else {
-			valueComboViewer.setInput(null);
+			parameterComboViewer.setInput(null);
 		}
 	}
 
@@ -107,8 +107,8 @@ public class ParetoChartViewSettingsDialog extends AbstractPartSettingsDialog
 	public void widgetSelected(SelectionEvent e) {
 		if (e.getSource() == metricCombo) {
 			metricChanged();
-		} else if (e.getSource() == valueCombo) {
-			valueChanged();
+		} else if (e.getSource() == parameterCombo) {
+			parameterChanged();
 		}
 	}
 
@@ -128,13 +128,13 @@ public class ParetoChartViewSettingsDialog extends AbstractPartSettingsDialog
 				comboParameters.add(parameter);
 			}
 		}
-		valueComboViewer.setInput(comboParameters);
+		parameterComboViewer.setInput(comboParameters);
 	}
 
-	private void valueChanged() {
-		StructuredSelection selection = (StructuredSelection) valueComboViewer
+	private void parameterChanged() {
+		StructuredSelection selection = (StructuredSelection) parameterComboViewer
 				.getSelection();
-		valueSelection = (Parameter<?>) selection.getFirstElement();
+		parameterSelection = (Parameter<?>) selection.getFirstElement();
 	}
 
 	@Override
@@ -147,7 +147,7 @@ public class ParetoChartViewSettingsDialog extends AbstractPartSettingsDialog
 	}
 
 	public Parameter<?> getParameter() {
-		return valueSelection;
+		return parameterSelection;
 	}
 
 	@Override
@@ -155,7 +155,7 @@ public class ParetoChartViewSettingsDialog extends AbstractPartSettingsDialog
 		if (metricSelection == null) {
 			return false;
 		}
-		if (valueSelection == null) {
+		if (parameterSelection == null) {
 			return false;
 		}
 		return true;

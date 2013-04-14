@@ -3,22 +3,19 @@ package com.puresol.coding.client.common.evaluation.views;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.jface.action.IToolBarManager;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.ISelectionListener;
+import org.eclipse.ui.IMemento;
 import org.eclipse.ui.ISelectionService;
-import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.part.ViewPart;
+import org.eclipse.ui.PartInitException;
 
-import com.puresol.coding.analysis.api.CodeRangeType;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.client.common.analysis.views.FileAnalysisSelection;
 import com.puresol.coding.client.common.chart.Axis;
@@ -34,16 +31,13 @@ import com.puresol.coding.client.common.chart.renderer.BarMarkRenderer;
 import com.puresol.coding.client.common.chart.renderer.ConstantColorProvider;
 import com.puresol.coding.client.common.evaluation.ParetoChartViewSettingsDialog;
 import com.puresol.coding.client.common.evaluation.utils.EvaluationsTarget;
-import com.puresol.coding.client.common.ui.actions.PartSettingsCapability;
 import com.puresol.coding.client.common.ui.actions.RefreshAction;
-import com.puresol.coding.client.common.ui.actions.Refreshable;
-import com.puresol.coding.client.common.ui.actions.Reproducable;
 import com.puresol.coding.client.common.ui.actions.ShowSettingsAction;
 import com.puresol.coding.client.common.ui.actions.ViewReproductionAction;
-import com.puresol.coding.evaluation.api.CodeRangeTypeParameter;
 import com.puresol.coding.evaluation.api.EvaluatorFactory;
 import com.puresol.coding.evaluation.api.EvaluatorStore;
 import com.puresol.coding.evaluation.api.EvaluatorStoreFactory;
+import com.puresol.coding.evaluation.api.Evaluators;
 import com.puresol.coding.evaluation.api.MetricResults;
 import com.puresol.coding.metrics.maintainability.MaintainabilityIndexEvaluatorParameter;
 import com.puresol.trees.TreeVisitor;
@@ -53,22 +47,63 @@ import com.puresol.utils.HashId;
 import com.puresol.utils.math.LevelOfMeasurement;
 import com.puresol.utils.math.Parameter;
 import com.puresol.utils.math.ParameterWithArbitraryUnit;
-import com.puresol.utils.math.Value;
 
-public class ParetoChartView extends ViewPart implements Refreshable,
-		Reproducable, ISelectionListener, PartSettingsCapability,
+public class ParetoChartView extends AbstractMetricViewPart implements
 		EvaluationsTarget {
 
 	private ISelectionService selectionService;
 
 	private ParetoChartViewSettingsDialog settingsDialog;
 
-	private FileAnalysisSelection analysisSelection;
 	private EvaluatorFactory metricSelection = null;
-	private Parameter<?> valueSelection = null;
+	private Parameter<?> parameterSelection = null;
 
 	private Chart2D chart;
 	private ChartCanvas chartCanvas;
+
+	@Override
+	public void init(IViewSite site, IMemento memento) throws PartInitException {
+		super.init(site, memento);
+		if (memento == null) {
+			return;
+		}
+		// touch old classes to get the plugins activated... :-(
+		String mapMeticClass = memento.getString("metric.class");
+		if (mapMeticClass != null) {
+			try {
+				Class.forName(mapMeticClass);
+			} catch (ClassNotFoundException e) {
+			}
+		}
+		List<EvaluatorFactory> allMetrics = Evaluators.createInstance()
+				.getAllMetrics();
+		String metricSelectionName = memento.getString("metric");
+		String parameterSelectionName = memento.getString("parameter");
+		for (EvaluatorFactory metric : allMetrics) {
+			if (metric.getName().equals(metricSelectionName)) {
+				metricSelection = metric;
+				if (parameterSelectionName != null) {
+					for (Parameter<?> parameter : metricSelection
+							.getParameters()) {
+						if (parameter.getName().equals(parameterSelectionName)) {
+							parameterSelection = parameter;
+							break;
+						}
+					}
+				}
+				break;
+			}
+		}
+	}
+
+	@Override
+	public void saveState(IMemento memento) {
+		memento.putString("metric.class", metricSelection.getClass().getName());
+		memento.putString("metric", metricSelection.getName());
+		memento.putString("parameter", parameterSelection.getName());
+
+		super.saveState(memento);
+	}
 
 	@Override
 	public void dispose() {
@@ -90,6 +125,7 @@ public class ParetoChartView extends ViewPart implements Refreshable,
 		selectionService.addSelectionListener(this);
 
 		initializeToolBar();
+		super.createPartControl(parent);
 	}
 
 	/**
@@ -113,7 +149,7 @@ public class ParetoChartView extends ViewPart implements Refreshable,
 	public void showSettings() {
 		if (settingsDialog == null) {
 			settingsDialog = new ParetoChartViewSettingsDialog(this,
-					metricSelection, valueSelection);
+					metricSelection, parameterSelection);
 			settingsDialog.open();
 		} else {
 			settingsDialog.close();
@@ -124,7 +160,7 @@ public class ParetoChartView extends ViewPart implements Refreshable,
 	@Override
 	public void applySettings() {
 		metricSelection = settingsDialog.getMetric();
-		valueSelection = settingsDialog.getParameter();
+		parameterSelection = settingsDialog.getParameter();
 		updateEvaluation();
 	}
 
@@ -134,23 +170,17 @@ public class ParetoChartView extends ViewPart implements Refreshable,
 	}
 
 	@Override
-	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-		if (selection instanceof FileAnalysisSelection) {
-			analysisSelection = (FileAnalysisSelection) selection;
-			updateEvaluation();
-		}
-	}
-
-	@Override
 	public void refresh() {
 		if (settingsDialog != null) {
 			settingsDialog.refresh();
 		}
 	}
 
-	private void updateEvaluation() {
+	@Override
+	protected void updateEvaluation() {
+		FileAnalysisSelection analysisSelection = getAnalysisSelection();
 		if ((analysisSelection != null) && (metricSelection != null)
-				&& (valueSelection != null)) {
+				&& (parameterSelection != null)) {
 			HashIdFileTree path = analysisSelection.getHashIdFile();
 			if (path.isFile()) {
 				path = path.getParent();
@@ -164,8 +194,6 @@ public class ParetoChartView extends ViewPart implements Refreshable,
 		final EvaluatorStore store = EvaluatorStoreFactory.getFactory()
 				.createInstance(metricSelection.getEvaluatorClass());
 		final List<ParetoValue<String, Double>> paretoValues = new ArrayList<ParetoValue<String, Double>>();
-		final String coreRangeTypeParameterName = CodeRangeTypeParameter
-				.getInstance().getName();
 		TreeVisitor<HashIdFileTree> visitor = new TreeVisitor<HashIdFileTree>() {
 			@Override
 			public WalkingAction visit(HashIdFileTree node) {
@@ -177,16 +205,10 @@ public class ParetoChartView extends ViewPart implements Refreshable,
 				if (results == null) {
 					return WalkingAction.PROCEED;
 				}
-				List<Map<String, Value<?>>> values = results.getValues();
-				for (Map<String, Value<?>> valueMap : values) {
-					if (CodeRangeType.FILE.equals(valueMap.get(
-							coreRangeTypeParameterName).getValue())) {
-						double value = convertToDouble(node, valueMap,
-								valueSelection);
-						paretoValues.add(new ParetoValue<String, Double>(node
-								.getPathFile(false).getPath(), value));
-					}
-				}
+				double value = findSuitableValue(node, results,
+						parameterSelection);
+				paretoValues.add(new ParetoValue<String, Double>(node
+						.getPathFile(false).getPath(), value));
 				return WalkingAction.PROCEED;
 			}
 		};
@@ -195,7 +217,7 @@ public class ParetoChartView extends ViewPart implements Refreshable,
 		chart.removeAllPlots();
 
 		chart.setTitle("Pareto Chart for " + metricSelection.getName());
-		chart.setSubTitle(valueSelection.getName());
+		chart.setSubTitle(parameterSelection.getName());
 
 		Collections.sort(paretoValues);
 		Collections.reverse(paretoValues);
@@ -238,22 +260,6 @@ public class ParetoChartView extends ViewPart implements Refreshable,
 		chartCanvas.setColorProvider(plot, new ConstantColorProvider(new RGB(
 				255, 0, 0), new RGB(0, 0, 255)));
 		chartCanvas.refresh();
-	}
-
-	private double convertToDouble(HashIdFileTree path,
-			Map<String, Value<?>> valueMap, Parameter<?> parameter) {
-		double sum = 0.0;
-		Value<?> value = valueMap.get(parameter.getName());
-		if ((value != null)
-				&& (Number.class.isAssignableFrom(parameter.getType()))) {
-			Number number = (Number) value.getValue();
-			sum = number.doubleValue();
-		} else {
-			throw new RuntimeException("Value '" + value
-					+ "' is not a number for '" + path.getPathFile(false)
-					+ "'!");
-		}
-		return sum;
 	}
 
 }
