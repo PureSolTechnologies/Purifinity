@@ -6,7 +6,7 @@ import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
-import com.puresol.coding.client.common.chart.renderer.ConstantColorProvider;
+import com.puresol.coding.client.common.chart.renderer.ColorProvider;
 import com.puresol.coding.client.common.chart.renderer.MarkRenderer;
 
 /**
@@ -68,7 +68,7 @@ public class ChartCanvas {
 	}
 
 	public void setColorProvider(Plot<String, Double> plot,
-			ConstantColorProvider colorProvider) {
+			ColorProvider colorProvider) {
 		this.plot.setColorProvider(plot, colorProvider);
 	}
 

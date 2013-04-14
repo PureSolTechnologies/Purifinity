@@ -1,12 +1,12 @@
 package com.puresol.coding.client.common.evaluation.views;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IMemento;
@@ -15,6 +15,9 @@ import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceReference;
 
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.client.common.analysis.views.FileAnalysisSelection;
@@ -28,8 +31,10 @@ import com.puresol.coding.client.common.chart.Plot;
 import com.puresol.coding.client.common.chart.math.ParetoValue;
 import com.puresol.coding.client.common.chart.math.Point2D;
 import com.puresol.coding.client.common.chart.renderer.BarMarkRenderer;
-import com.puresol.coding.client.common.chart.renderer.ConstantColorProvider;
+import com.puresol.coding.client.common.evaluation.Activator;
 import com.puresol.coding.client.common.evaluation.ParetoChartViewSettingsDialog;
+import com.puresol.coding.client.common.evaluation.metrics.DefaultParetoChartConfigProvider;
+import com.puresol.coding.client.common.evaluation.metrics.ParetoChartConfigProvider;
 import com.puresol.coding.client.common.evaluation.utils.EvaluationsTarget;
 import com.puresol.coding.client.common.ui.actions.RefreshAction;
 import com.puresol.coding.client.common.ui.actions.ShowSettingsAction;
@@ -214,6 +219,10 @@ public class ParetoChartView extends AbstractMetricViewPart implements
 		};
 		TreeWalker.walk(visitor, path);
 
+		setupChart(paretoValues);
+	}
+
+	private void setupChart(final List<ParetoValue<String, Double>> paretoValues) {
 		chart.removeAllPlots();
 
 		chart.setTitle("Pareto Chart for " + metricSelection.getName());
@@ -223,8 +232,8 @@ public class ParetoChartView extends AbstractMetricViewPart implements
 		Collections.reverse(paretoValues);
 
 		List<String> categories = new ArrayList<String>();
-		double min = Double.MAX_VALUE;
-		double max = Double.MIN_VALUE;
+		double min = 0.0;
+		double max = 0.0;
 		for (ParetoValue<String, Double> value : paretoValues) {
 			categories.add(value.getCategory());
 			min = Math.min(min, value.getValue());
@@ -236,13 +245,6 @@ public class ParetoChartView extends AbstractMetricViewPart implements
 						LevelOfMeasurement.NOMINAL, "", String.class),
 				categories.toArray(new String[categories.size()]));
 		chart.setxAxis(xAxis);
-
-		if (min > 0.0) {
-			min = 0.0;
-		}
-		if (max < 0.0) {
-			max = 0.0;
-		}
 
 		Axis<Double> yAxis = AxisFactory.createDoubleValueAxis(AxisDirection.Y,
 				MaintainabilityIndexEvaluatorParameter.MI, min, max,
@@ -257,9 +259,36 @@ public class ParetoChartView extends AbstractMetricViewPart implements
 		}
 		chart.addPlot(plot);
 		chartCanvas.setMarkRenderer(plot, new BarMarkRenderer(1.0));
-		chartCanvas.setColorProvider(plot, new ConstantColorProvider(new RGB(
-				255, 0, 0), new RGB(0, 0, 255)));
+
+		ParetoChartConfigProvider configProvider = getConfigProvider();
+
+		chartCanvas.setColorProvider(plot, configProvider.getColorProvider());
 		chartCanvas.refresh();
+	}
+
+	private ParetoChartConfigProvider getConfigProvider() {
+		try {
+			BundleContext bundleContext = Activator.getDefault().getBundle()
+					.getBundleContext();
+			String parameterName = parameterSelection.getName();
+			String filter = "(parameterName=" + parameterName + ")";
+			Collection<ServiceReference<ParetoChartConfigProvider>> serviceReferences = bundleContext
+					.getServiceReferences(ParetoChartConfigProvider.class,
+							filter);
+			if (!serviceReferences.isEmpty()) {
+				ServiceReference<ParetoChartConfigProvider> serviceReference = serviceReferences
+						.iterator().next();
+				try {
+					return bundleContext.getService(serviceReference);
+				} finally {
+					bundleContext.ungetService(serviceReference);
+				}
+			} else {
+				return new DefaultParetoChartConfigProvider();
+			}
+		} catch (InvalidSyntaxException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 }

@@ -14,7 +14,6 @@ import org.eclipse.swt.widgets.Composite;
 import com.puresol.coding.client.common.chart.math.TransformationMatrix2D;
 import com.puresol.coding.client.common.chart.renderer.AxisRenderer;
 import com.puresol.coding.client.common.chart.renderer.ColorProvider;
-import com.puresol.coding.client.common.chart.renderer.ConstantColorProvider;
 import com.puresol.coding.client.common.chart.renderer.MarkRenderer;
 import com.puresol.coding.client.common.chart.renderer.PlotRenderer;
 
@@ -118,7 +117,7 @@ public class PlotCanvas extends Canvas implements PaintListener {
 	}
 
 	public void setColorProvider(Plot<String, Double> plot,
-			ConstantColorProvider colorProvider) {
+			ColorProvider colorProvider) {
 		colorProviders.put(plot, colorProvider);
 	}
 
