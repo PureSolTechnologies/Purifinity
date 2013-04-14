@@ -34,7 +34,8 @@ public class PlotCanvas extends Canvas implements PaintListener {
 
 	@Override
 	public void paintControl(PaintEvent e) {
-		if (chart2D == null) {
+		if ((chart2D == null) || (chart2D.getXAxis() == null)
+				|| (chart2D.getYAxis() == null)) {
 			return;
 		}
 		GC gc = e.gc;

@@ -1,0 +1,168 @@
+package com.puresol.coding.client.common.evaluation;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.FormAttachment;
+import org.eclipse.swt.layout.FormData;
+import org.eclipse.swt.layout.FormLayout;
+import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Group;
+
+import com.puresol.coding.client.common.evaluation.contents.MetricComboViewer;
+import com.puresol.coding.client.common.evaluation.contents.ParameterComboViewer;
+import com.puresol.coding.client.common.evaluation.views.ParetoChartView;
+import com.puresol.coding.client.common.ui.actions.AbstractPartSettingsDialog;
+import com.puresol.coding.evaluation.api.EvaluatorFactory;
+import com.puresol.coding.evaluation.api.Evaluators;
+import com.puresol.utils.math.LevelOfMeasurement;
+import com.puresol.utils.math.Parameter;
+
+public class ParetoChartViewSettingsDialog extends AbstractPartSettingsDialog
+		implements SelectionListener {
+
+	private Combo metricCombo;
+	private Combo valueCombo;
+
+	private MetricComboViewer metricComboViewer;
+	private ParameterComboViewer valueComboViewer;
+
+	private EvaluatorFactory metricSelection = null;
+	private Parameter<?> valueSelection = null;
+
+	public ParetoChartViewSettingsDialog(ParetoChartView view,
+			EvaluatorFactory metricSelection, Parameter<?> valueSelection) {
+		super(view);
+		this.metricSelection = metricSelection;
+		this.valueSelection = valueSelection;
+	}
+
+	@Override
+	protected Control createDialogArea(Composite parent) {
+		Composite container = new Composite(parent, SWT.NONE);
+		container.setLayout(new FillLayout());
+
+		Group settingsGroup = new Group(container, SWT.NONE);
+		{
+			settingsGroup.setText("Settings");
+			settingsGroup.setLayout(new FormLayout());
+
+			metricCombo = new Combo(settingsGroup, SWT.READ_ONLY);
+			{
+				FormData fd_metricsCombo = new FormData();
+				fd_metricsCombo.left = new FormAttachment(0, 10);
+				fd_metricsCombo.right = new FormAttachment(100, -10);
+				fd_metricsCombo.top = new FormAttachment(0, 10);
+				metricCombo.setLayoutData(fd_metricsCombo);
+				metricCombo.setEnabled(true);
+				metricCombo.addSelectionListener(this);
+				metricComboViewer = new MetricComboViewer(metricCombo);
+			}
+
+			valueCombo = new Combo(settingsGroup, SWT.READ_ONLY);
+			{
+				FormData fd_valueCombo = new FormData();
+				fd_valueCombo.left = new FormAttachment(metricCombo, 0,
+						SWT.LEFT);
+				fd_valueCombo.right = new FormAttachment(metricCombo, 0,
+						SWT.RIGHT);
+				fd_valueCombo.top = new FormAttachment(metricCombo, 10);
+				fd_valueCombo.bottom = new FormAttachment(100, -10);
+				valueCombo.setLayoutData(fd_valueCombo);
+				valueCombo.setEnabled(true);
+				valueCombo.addSelectionListener(this);
+				valueComboViewer = new ParameterComboViewer(valueCombo);
+			}
+		}
+		populateCombos();
+		return container;
+	}
+
+	private void populateCombos() {
+		List<EvaluatorFactory> allMetrics = Evaluators.createInstance()
+				.getAllMetrics();
+		metricComboViewer.setInput(allMetrics);
+		if (metricSelection != null) {
+			valueComboViewer.setInput(metricSelection.getParameters());
+			metricComboViewer.setSelection(new StructuredSelection(
+					metricSelection));
+			if (valueSelection != null) {
+				valueComboViewer.setSelection(new StructuredSelection(
+						valueSelection));
+			}
+		} else {
+			valueComboViewer.setInput(null);
+		}
+	}
+
+	@Override
+	public void widgetSelected(SelectionEvent e) {
+		if (e.getSource() == metricCombo) {
+			metricChanged();
+		} else if (e.getSource() == valueCombo) {
+			valueChanged();
+		}
+	}
+
+	private void metricChanged() {
+		StructuredSelection selection = (StructuredSelection) metricComboViewer
+				.getSelection();
+		metricSelection = (EvaluatorFactory) selection.getFirstElement();
+		Set<Parameter<?>> allParameters = metricSelection.getParameters();
+		Set<Parameter<?>> comboParameters = new HashSet<Parameter<?>>();
+		for (Parameter<?> parameter : allParameters) {
+			if ((parameter.getLevelOfMeasurement() == LevelOfMeasurement.ORDINAL)) {
+				if (Number.class.isAssignableFrom(parameter.getType())) {
+					comboParameters.add(parameter);
+				}
+			} else if ((parameter.getLevelOfMeasurement() == LevelOfMeasurement.INTERVAL)
+					|| (parameter.getLevelOfMeasurement() == LevelOfMeasurement.RATIO)) {
+				comboParameters.add(parameter);
+			}
+		}
+		valueComboViewer.setInput(comboParameters);
+	}
+
+	private void valueChanged() {
+		StructuredSelection selection = (StructuredSelection) valueComboViewer
+				.getSelection();
+		valueSelection = (Parameter<?>) selection.getFirstElement();
+	}
+
+	@Override
+	public void widgetDefaultSelected(SelectionEvent e) {
+		populateCombos();
+	}
+
+	public EvaluatorFactory getMetric() {
+		return metricSelection;
+	}
+
+	public Parameter<?> getParameter() {
+		return valueSelection;
+	}
+
+	@Override
+	protected boolean canApply() {
+		if (metricSelection == null) {
+			return false;
+		}
+		if (valueSelection == null) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public void refresh() {
+		populateCombos();
+	}
+}

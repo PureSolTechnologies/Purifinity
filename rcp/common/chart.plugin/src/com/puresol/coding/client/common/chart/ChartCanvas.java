@@ -59,13 +59,8 @@ public class ChartCanvas {
 
 	public void setChart2D(Chart2D chart2D) {
 		this.chart2D = chart2D;
-		if (chart2D.getTitle() != null) {
-			title.setText(chart2D.getTitle());
-		}
-		if (chart2D.getSubTitle() != null) {
-			subTitle.setText(chart2D.getSubTitle());
-		}
 		plot.setChart(chart2D);
+		refresh();
 	}
 
 	public void setMarkRenderer(Plot<?, ?> plot, MarkRenderer markRenderer) {
@@ -75,6 +70,18 @@ public class ChartCanvas {
 	public void setColorProvider(Plot<String, Double> plot,
 			ConstantColorProvider colorProvider) {
 		this.plot.setColorProvider(plot, colorProvider);
+	}
+
+	public void refresh() {
+		if (chart2D.getTitle() != null) {
+			title.setText(chart2D.getTitle());
+		}
+		if (chart2D.getSubTitle() != null) {
+			subTitle.setText(chart2D.getSubTitle());
+		}
+		plot.redraw();
+		canvas.redraw();
+		canvas.update();
 	}
 
 }

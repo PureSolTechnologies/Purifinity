@@ -84,4 +84,8 @@ public class Chart2D {
 		plots.add(plot);
 	}
 
+	public void removeAllPlots() {
+		plots.clear();
+	}
+
 }
