@@ -43,10 +43,8 @@
       <import plugin="com.puresol.coding.client.common.analysis.plugin" version="0.1.0" match="greaterOrEqual"/>
       <import plugin="com.puresol.coding.metrics.bundle" version="0.1.0" match="greaterOrEqual"/>
       <import plugin="com.puresol.coding.evaluation.impl.bundle" version="0.1.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.birt.chart.engine" version="4.2.2" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.birt.chart.device.swt" version="4.2.2" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.birt.chart.device.extension" version="4.2.2" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.birt.chart.engine.extension" version="4.2.2" match="greaterOrEqual"/>
+      <import plugin="com.puresol.coding.client.common.chart.plugin" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.swt" version="3.100.1" match="greaterOrEqual"/>
    </requires>
 
    <plugin
