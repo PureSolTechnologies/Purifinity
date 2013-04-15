@@ -14,23 +14,23 @@ import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.evaluation.api.CodeRangeTypeParameter;
 import com.puresol.coding.evaluation.api.EvaluatorStore;
 import com.puresol.coding.evaluation.api.EvaluatorStoreFactory;
-import com.puresol.coding.evaluation.api.GenericMetricResults;
-import com.puresol.coding.evaluation.api.MetricResults;
+import com.puresol.coding.evaluation.api.GenericMetricDirectoryResults;
+import com.puresol.coding.evaluation.api.MetricFileResults;
 import com.puresol.coding.evaluation.api.QualityCharacteristic;
 import com.puresol.coding.evaluation.api.SourceCodeQuality;
 import com.puresol.coding.evaluation.api.SourceCodeQualityParameter;
 import com.puresol.coding.evaluation.impl.AbstractEvaluator;
 import com.puresol.coding.metrics.halstead.HalsteadMetricEvaluator;
+import com.puresol.coding.metrics.halstead.HalsteadMetricFileResults;
 import com.puresol.coding.metrics.halstead.HalsteadMetricResult;
-import com.puresol.coding.metrics.halstead.HalsteadMetricResults;
 import com.puresol.coding.metrics.halstead.HalsteadResult;
 import com.puresol.coding.metrics.mccabe.McCabeMetricEvaluator;
+import com.puresol.coding.metrics.mccabe.McCabeMetricFileResults;
 import com.puresol.coding.metrics.mccabe.McCabeMetricResult;
-import com.puresol.coding.metrics.mccabe.McCabeMetricResults;
 import com.puresol.coding.metrics.sloc.SLOCEvaluator;
+import com.puresol.coding.metrics.sloc.SLOCFileResults;
 import com.puresol.coding.metrics.sloc.SLOCMetric;
 import com.puresol.coding.metrics.sloc.SLOCResult;
-import com.puresol.coding.metrics.sloc.SLOCResults;
 import com.puresol.trees.TreeVisitor;
 import com.puresol.trees.TreeWalker;
 import com.puresol.trees.WalkingAction;
@@ -75,11 +75,11 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 
 		AnalyzedCode analyzedFile = analysis.getAnalyzedFile();
 		HashId hashId = analyzedFile.getHashId();
-		SLOCResults slocFileResults = (SLOCResults) slocStore
+		SLOCFileResults slocFileResults = (SLOCFileResults) slocStore
 				.readFileResults(hashId);
-		McCabeMetricResults mcCabeFileResults = (McCabeMetricResults) mcCabeStore
+		McCabeMetricFileResults mcCabeFileResults = (McCabeMetricFileResults) mcCabeStore
 				.readFileResults(hashId);
-		HalsteadMetricResults halsteadFileResults = (HalsteadMetricResults) halsteadStore
+		HalsteadMetricFileResults halsteadFileResults = (HalsteadMetricFileResults) halsteadStore
 				.readFileResults(hashId);
 
 		for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
@@ -110,7 +110,7 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 	}
 
 	private McCabeMetricResult findFileResult(
-			McCabeMetricResults mcCabeFileResults, CodeRange codeRange) {
+			McCabeMetricFileResults mcCabeFileResults, CodeRange codeRange) {
 		for (McCabeMetricResult t : mcCabeFileResults.getResults()) {
 			if ((t.getCodeRangeType() == codeRange.getType())
 					&& (t.getCodeRangeName().equals(codeRange.getName()))) {
@@ -121,7 +121,7 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 	}
 
 	private HalsteadMetricResult findFileResult(
-			HalsteadMetricResults halsteadFileResults, CodeRange codeRange) {
+			HalsteadMetricFileResults halsteadFileResults, CodeRange codeRange) {
 		for (HalsteadMetricResult t : halsteadFileResults.getResults()) {
 			if ((t.getCodeRangeType() == codeRange.getType())
 					&& (t.getCodeRangeName().equals(codeRange.getName()))) {
@@ -131,7 +131,7 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 		return null;
 	}
 
-	private SLOCResult findFileResult(SLOCResults slocFileResults,
+	private SLOCResult findFileResult(SLOCFileResults slocFileResults,
 			CodeRange codeRange) {
 		for (SLOCResult t : slocFileResults.getResults()) {
 			if ((t.getCodeRangeType() == codeRange.getType())
@@ -158,17 +158,18 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 			@Override
 			public WalkingAction visit(HashIdFileTree tree) {
 				if (tree.isFile()) {
-					MetricResults results = store.readFileResults(tree
+					MetricFileResults results = store.readFileResults(tree
 							.getHashId());
-					for (Map<String, Value<?>> result : results.getValues()) {
-						@SuppressWarnings("unchecked")
-						Value<CodeRangeType> value = (Value<CodeRangeType>) result
-								.get(codeRangeTypeParameter.getName());
-						if (value.getValue() == CodeRangeType.FILE) {
-							qualities
-									.add((SourceCodeQuality) result.get(
-											SourceCodeQualityParameter.NAME)
-											.getValue());
+					if (results != null) {
+						for (Map<String, Value<?>> result : results.getValues()) {
+							@SuppressWarnings("unchecked")
+							Value<CodeRangeType> value = (Value<CodeRangeType>) result
+									.get(codeRangeTypeParameter.getName());
+							if (value.getValue() == CodeRangeType.FILE) {
+								qualities.add((SourceCodeQuality) result.get(
+										SourceCodeQualityParameter.NAME)
+										.getValue());
+							}
 						}
 					}
 				}
@@ -178,16 +179,16 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 		};
 		TreeWalker.walk(visitor, directory);
 		Collections.sort(qualities);
-		int length = qualities.size();
-		SourceCodeQuality directoryQuality;
-		if (length % 2 == 1) {
-			// get the median
-			directoryQuality = qualities.get(length / 2 + 1);
-		} else {
-			// get the element worse than the median (left to median)
-			directoryQuality = qualities.get(length / 2);
-		}
-		GenericMetricResults results = new GenericMetricResults();
+		// int length = qualities.size();
+		// SourceCodeQuality directoryQuality;
+		// if (length % 2 == 1) {
+		// // get the median
+		// directoryQuality = qualities.get(length / 2 + 1);
+		// } else {
+		// // get the element worse than the median (left to median)
+		// directoryQuality = qualities.get(length / 2);
+		// }
+		GenericMetricDirectoryResults results = new GenericMetricDirectoryResults();
 		// TODO
 		store.storeDirectoryResults(directory.getHashId(), results);
 	}

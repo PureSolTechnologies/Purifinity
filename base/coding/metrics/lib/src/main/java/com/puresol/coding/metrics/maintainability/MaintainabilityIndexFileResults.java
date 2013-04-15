@@ -16,14 +16,14 @@ import java.util.Map;
 import java.util.Set;
 
 import com.puresol.coding.analysis.api.CodeRangeType;
-import com.puresol.coding.evaluation.api.MetricResults;
+import com.puresol.coding.evaluation.api.MetricFileResults;
 import com.puresol.coding.evaluation.api.SourceCodeQuality;
 import com.puresol.uhura.source.CodeLocation;
 import com.puresol.utils.math.GeneralValue;
 import com.puresol.utils.math.Parameter;
 import com.puresol.utils.math.Value;
 
-public class MaintainabilityIndexFileResults implements MetricResults {
+public class MaintainabilityIndexFileResults implements MetricFileResults {
 
 	private static final long serialVersionUID = -5901342878584699006L;
 

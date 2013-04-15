@@ -20,7 +20,8 @@ import com.puresol.coding.client.common.ui.actions.PartSettingsCapability;
 import com.puresol.coding.client.common.ui.actions.Refreshable;
 import com.puresol.coding.client.common.ui.actions.Reproducable;
 import com.puresol.coding.evaluation.api.CodeRangeTypeParameter;
-import com.puresol.coding.evaluation.api.MetricResults;
+import com.puresol.coding.evaluation.api.MetricDirectoryResults;
+import com.puresol.coding.evaluation.api.MetricFileResults;
 import com.puresol.utils.math.Parameter;
 import com.puresol.utils.math.Value;
 
@@ -64,14 +65,14 @@ public abstract class AbstractMetricViewPart extends ViewPart implements
 	}
 
 	protected final double findSuitableValue(HashIdFileTree path,
-			MetricResults results, Parameter<?> parameter) {
+			MetricFileResults results, Parameter<?> parameter) {
 		Map<String, Value<?>> valueMap = findSuitableValueMap(path, results,
 				parameter);
 		return convertToDouble(path, valueMap, parameter);
 	}
 
 	protected final Object findSuitableSecondaryValue(HashIdFileTree path,
-			MetricResults results, Parameter<?> parameter) {
+			MetricFileResults results, Parameter<?> parameter) {
 		Map<String, Value<?>> valueMap = findSuitableValueMap(path, results,
 				parameter);
 		Value<?> value = valueMap.get(parameter.getName());
@@ -79,7 +80,7 @@ public abstract class AbstractMetricViewPart extends ViewPart implements
 	}
 
 	private Map<String, Value<?>> findSuitableValueMap(HashIdFileTree path,
-			MetricResults results, Parameter<?> parameter) {
+			MetricFileResults results, Parameter<?> parameter) {
 		Map<String, Value<?>> valueMap = null;
 		List<Map<String, Value<?>>> values = results.getValues();
 		if (path.isFile()) {
@@ -113,6 +114,19 @@ public abstract class AbstractMetricViewPart extends ViewPart implements
 			valueMap = values.get(0);
 		}
 		return valueMap;
+	}
+
+	protected final double findSuitableValue(HashIdFileTree path,
+			MetricDirectoryResults results, Parameter<?> parameter) {
+		Map<String, Value<?>> valueMap = results.getValues();
+		return convertToDouble(path, valueMap, parameter);
+	}
+
+	protected final Object findSuitableSecondaryValue(HashIdFileTree path,
+			MetricDirectoryResults results, Parameter<?> parameter) {
+		Map<String, Value<?>> valueMap = results.getValues();
+		Value<?> value = valueMap.get(parameter.getName());
+		return value.getValue();
 	}
 
 	private double convertToDouble(HashIdFileTree path,

@@ -34,7 +34,8 @@ import com.puresol.coding.evaluation.api.EvaluatorFactory;
 import com.puresol.coding.evaluation.api.EvaluatorStore;
 import com.puresol.coding.evaluation.api.EvaluatorStoreFactory;
 import com.puresol.coding.evaluation.api.Evaluators;
-import com.puresol.coding.evaluation.api.MetricResults;
+import com.puresol.coding.evaluation.api.MetricDirectoryResults;
+import com.puresol.coding.evaluation.api.MetricFileResults;
 import com.puresol.utils.math.Parameter;
 
 public class MetricsMapView extends AbstractMetricViewPart {
@@ -262,24 +263,36 @@ public class MetricsMapView extends AbstractMetricViewPart {
 			EvaluatorStore colorStore, HashIdFileTree path) {
 		List<AreaMapData> childAreas = calculateChildAreaMaps(mapStore,
 				colorStore, path);
-		MetricResults mapResults;
-		MetricResults colorResults;
-		if (path.isFile()) {
-			mapResults = mapStore.readFileResults(path.getHashId());
-			colorResults = colorStore.readFileResults(path.getHashId());
-		} else {
-			mapResults = mapStore.readDirectoryResults(path.getHashId());
-			colorResults = colorStore.readDirectoryResults(path.getHashId());
-		}
-		if ((mapResults == null) || (mapResults.getValues().size() == 0)) {
-			return processAreaWithoutOwnValues(path,
-					childAreas.toArray(new AreaMapData[childAreas.size()]));
-		}
-		double sum = findSuitableValue(path, mapResults, mapValueSelection);
 		Object secondaryValue = null;
-		if ((colorResults != null) && (colorResults.getValues().size() > 0)) {
-			secondaryValue = findSuitableSecondaryValue(path, colorResults,
-					colorValueSelection);
+		double sum;
+		if (path.isFile()) {
+			MetricFileResults mapResults = mapStore.readFileResults(path
+					.getHashId());
+			MetricFileResults colorResults = colorStore.readFileResults(path
+					.getHashId());
+			if ((mapResults == null) || (mapResults.getValues().size() == 0)) {
+				return processAreaWithoutOwnValues(path,
+						childAreas.toArray(new AreaMapData[childAreas.size()]));
+			}
+			sum = findSuitableValue(path, mapResults, mapValueSelection);
+			if ((colorResults != null) && (colorResults.getValues().size() > 0)) {
+				secondaryValue = findSuitableSecondaryValue(path, colorResults,
+						colorValueSelection);
+			}
+		} else {
+			MetricDirectoryResults mapResults = mapStore
+					.readDirectoryResults(path.getHashId());
+			MetricDirectoryResults colorResults = colorStore
+					.readDirectoryResults(path.getHashId());
+			if ((mapResults == null) || (mapResults.getValues().size() == 0)) {
+				return processAreaWithoutOwnValues(path,
+						childAreas.toArray(new AreaMapData[childAreas.size()]));
+			}
+			sum = findSuitableValue(path, mapResults, mapValueSelection);
+			if ((colorResults != null) && (colorResults.getValues().size() > 0)) {
+				secondaryValue = findSuitableSecondaryValue(path, colorResults,
+						colorValueSelection);
+			}
 		}
 		return new AreaMapData(path.getPathFile(false).toString(), sum,
 				secondaryValue, childAreas.toArray(new AreaMapData[childAreas

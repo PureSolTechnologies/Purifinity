@@ -22,8 +22,8 @@ import com.puresol.coding.evaluation.api.EvaluatorStoreFactory;
 import com.puresol.coding.evaluation.api.QualityCharacteristic;
 import com.puresol.coding.evaluation.impl.AbstractEvaluator;
 import com.puresol.coding.metrics.sloc.SLOCEvaluator;
+import com.puresol.coding.metrics.sloc.SLOCFileResults;
 import com.puresol.coding.metrics.sloc.SLOCResult;
-import com.puresol.coding.metrics.sloc.SLOCResults;
 import com.puresol.utils.HashId;
 
 /**
@@ -79,12 +79,12 @@ public class CoCoMoEvaluator extends AbstractEvaluator {
 	protected void processFile(CodeAnalysis analysis) {
 		HashId hashId = analysis.getAnalyzedFile().getHashId();
 		if (slocStore.hasFileResults(hashId)) {
-			SLOCResults slocResults = (SLOCResults) slocStore
+			SLOCFileResults slocResults = (SLOCFileResults) slocStore
 					.readFileResults(hashId);
 			for (SLOCResult results : slocResults.getResults()) {
 				if (results.getCodeRangeType() == CodeRangeType.FILE) {
 					int phyLoc = results.getSLOCMetric().getPhyLOC();
-					CoCoMoResults fileResults = new CoCoMoResults();
+					CoCoMoFileResults fileResults = new CoCoMoFileResults();
 					fileResults.setAverageSalary(averageSalary, currency);
 					fileResults.setComplexity(complexity);
 					fileResults.setSloc(phyLoc);
@@ -109,13 +109,13 @@ public class CoCoMoEvaluator extends AbstractEvaluator {
 				}
 			} else {
 				if (store.hasDirectoryResults(hashId)) {
-					CoCoMoResults directoryResults = (CoCoMoResults) store
+					CoCoMoDirectoryResults directoryResults = (CoCoMoDirectoryResults) store
 							.readDirectoryResults(hashId);
 					phyLoc += directoryResults.getPhyLOC();
 				}
 			}
 		}
-		CoCoMoResults directoryResults = new CoCoMoResults();
+		CoCoMoDirectoryResults directoryResults = new CoCoMoDirectoryResults();
 		directoryResults.setAverageSalary(averageSalary, currency);
 		directoryResults.setComplexity(complexity);
 		directoryResults.setSloc(phyLoc);

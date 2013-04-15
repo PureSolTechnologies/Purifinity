@@ -5,13 +5,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.puresol.coding.analysis.api.CodeRangeType;
 import com.puresol.utils.math.Parameter;
 import com.puresol.utils.math.Value;
 
 /**
+ * This is the central interface for all directory metric results classes. The
+ * main difference to {@link MetricFileResults} is that this class does not
+ * support different code ranges and {@link CodeRangeType}s.
+ * 
  * @author Rick-Rainer Ludwig
  */
-public interface MetricResults extends Serializable {
+public interface MetricDirectoryResults extends Serializable {
 
 	/**
 	 * This method returns a {@link List} of {@link Parameter} which contains
@@ -42,6 +47,6 @@ public interface MetricResults extends Serializable {
 	 * @return The values of result are returned. A detailed description can be
 	 *         found in the documentation of this method.
 	 */
-	public List<Map<String, Value<?>>> getValues();
+	public Map<String, Value<?>> getValues();
 
 }

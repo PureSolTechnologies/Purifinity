@@ -11,7 +11,7 @@ import java.util.Set;
 import com.puresol.coding.analysis.api.CodeRangeType;
 import com.puresol.coding.evaluation.api.CodeRangeNameParameter;
 import com.puresol.coding.evaluation.api.CodeRangeTypeParameter;
-import com.puresol.coding.evaluation.api.MetricResults;
+import com.puresol.coding.evaluation.api.MetricFileResults;
 import com.puresol.coding.evaluation.api.SourceCodeLocationParameter;
 import com.puresol.coding.evaluation.api.SourceCodeQuality;
 import com.puresol.coding.evaluation.api.SourceCodeQualityParameter;
@@ -22,7 +22,7 @@ import com.puresol.utils.math.Parameter;
 import com.puresol.utils.math.ParameterWithArbitraryUnit;
 import com.puresol.utils.math.Value;
 
-public class NormalizedMaintainabilityIndexFileResults implements MetricResults {
+public class NormalizedMaintainabilityIndexFileResults implements MetricFileResults {
 
 	private static final long serialVersionUID = 7667134885288322378L;
 

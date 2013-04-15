@@ -30,7 +30,7 @@ public class CodeDepthMetricEvaluator extends AbstractEvaluator {
     @Override
     protected void processFile(CodeAnalysis analysis)
 	    throws InterruptedException, EvaluationException {
-	CodeDepthResults results = new CodeDepthResults();
+	CodeDepthFileResults results = new CodeDepthFileResults();
 	ProgrammingLanguages programmingLanguages = ProgrammingLanguages
 		.createInstance();
 	try {

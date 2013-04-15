@@ -43,7 +43,7 @@ import com.puresol.coding.evaluation.api.EvaluatorFactory;
 import com.puresol.coding.evaluation.api.EvaluatorStore;
 import com.puresol.coding.evaluation.api.EvaluatorStoreFactory;
 import com.puresol.coding.evaluation.api.Evaluators;
-import com.puresol.coding.evaluation.api.MetricResults;
+import com.puresol.coding.evaluation.api.MetricFileResults;
 import com.puresol.coding.metrics.maintainability.MaintainabilityIndexEvaluatorParameter;
 import com.puresol.trees.TreeVisitor;
 import com.puresol.trees.TreeWalker;
@@ -206,7 +206,7 @@ public class ParetoChartView extends AbstractMetricViewPart implements
 					return WalkingAction.PROCEED;
 				}
 				HashId hashId = node.getHashId();
-				MetricResults results = store.readFileResults(hashId);
+				MetricFileResults results = store.readFileResults(hashId);
 				if (results == null) {
 					return WalkingAction.PROCEED;
 				}

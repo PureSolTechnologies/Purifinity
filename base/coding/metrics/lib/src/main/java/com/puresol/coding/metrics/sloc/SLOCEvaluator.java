@@ -35,7 +35,7 @@ public class SLOCEvaluator extends AbstractEvaluator {
 		if (store.hasFileResults(analysis.getAnalyzedFile().getHashId())) {
 			return;
 		}
-		SLOCResults results = new SLOCResults();
+		SLOCFileResults results = new SLOCFileResults();
 		ProgrammingLanguages programmingLanguages = ProgrammingLanguages
 				.createInstance();
 		try {
@@ -75,18 +75,15 @@ public class SLOCEvaluator extends AbstractEvaluator {
 				results = processSubDirectory(directory, results, child);
 			}
 		}
-		SLOCResults finalResults = new SLOCResults();
-		if (results != null) {
-			finalResults.add(results);
-		}
+		SLOCDirectoryResults finalResults = new SLOCDirectoryResults(results);
 		store.storeDirectoryResults(directory.getHashId(), finalResults);
 	}
 
 	private SLOCResult processFile(HashIdFileTree directory,
 			SLOCResult results, HashIdFileTree child) {
 		if (store.hasFileResults(child.getHashId())) {
-			SLOCResults slocResults = (SLOCResults) store.readFileResults(child
-					.getHashId());
+			SLOCFileResults slocResults = (SLOCFileResults) store
+					.readFileResults(child.getHashId());
 			for (SLOCResult result : slocResults.getResults()) {
 				if (result.getCodeRangeType() == CodeRangeType.FILE) {
 					results = combine(directory, results, result);
@@ -100,27 +97,23 @@ public class SLOCEvaluator extends AbstractEvaluator {
 	private SLOCResult processSubDirectory(HashIdFileTree directory,
 			SLOCResult results, HashIdFileTree child) {
 		if (store.hasDirectoryResults(child.getHashId())) {
-			SLOCResults slocResults = (SLOCResults) store
+			SLOCDirectoryResults slocResults = (SLOCDirectoryResults) store
 					.readDirectoryResults(child.getHashId());
-			if (slocResults.getResults().size() == 1) {
-				results = combine(directory, results, slocResults.getResults()
-						.get(0));
-			} else if (slocResults.getResults().size() > 1) {
-				throw new RuntimeException(
-						"A directory should only have one dataset with aggregated SLOC.");
-			}
+			results = combine(directory, results, slocResults.getResult());
 		}
 		return results;
 	}
 
 	private SLOCResult combine(HashIdFileTree directory, SLOCResult results,
 			SLOCResult result) {
-		if (results == null) {
-			results = new SLOCResult(new UnspecifiedSourceCodeLocation(),
-					CodeRangeType.DIRECTORY, directory.getName(),
-					result.getSLOCMetric(), result.getQuality());
-		} else {
-			results = SLOCResult.combine(results, result);
+		if (result != null) {
+			if (results == null) {
+				results = new SLOCResult(new UnspecifiedSourceCodeLocation(),
+						CodeRangeType.DIRECTORY, directory.getName(),
+						result.getSLOCMetric(), result.getQuality());
+			} else {
+				results = SLOCResult.combine(results, result);
+			}
 		}
 		return results;
 	}

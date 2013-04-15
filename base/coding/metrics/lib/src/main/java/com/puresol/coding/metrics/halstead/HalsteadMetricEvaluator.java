@@ -30,7 +30,7 @@ public class HalsteadMetricEvaluator extends AbstractEvaluator {
     @Override
     protected void processFile(CodeAnalysis analysis)
 	    throws InterruptedException, EvaluationException {
-	HalsteadMetricResults results = new HalsteadMetricResults();
+	HalsteadMetricFileResults results = new HalsteadMetricFileResults();
 	ProgrammingLanguages programmingLanguages = ProgrammingLanguages
 		.createInstance();
 	try {

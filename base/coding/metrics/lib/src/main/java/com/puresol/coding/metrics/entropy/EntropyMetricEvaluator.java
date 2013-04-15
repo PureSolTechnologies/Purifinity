@@ -13,7 +13,7 @@ import com.puresol.coding.evaluation.api.QualityCharacteristic;
 import com.puresol.coding.evaluation.impl.AbstractEvaluator;
 import com.puresol.coding.metrics.halstead.HalsteadMetricEvaluator;
 import com.puresol.coding.metrics.halstead.HalsteadMetricResult;
-import com.puresol.coding.metrics.halstead.HalsteadMetricResults;
+import com.puresol.coding.metrics.halstead.HalsteadMetricFileResults;
 import com.puresol.coding.metrics.halstead.HalsteadResult;
 import com.puresol.utils.HashId;
 
@@ -35,10 +35,10 @@ public class EntropyMetricEvaluator extends AbstractEvaluator {
 	protected void processFile(CodeAnalysis analysis)
 			throws InterruptedException {
 		HashId hashId = analysis.getAnalyzedFile().getHashId();
-		HalsteadMetricResults halsteadFileResults = (HalsteadMetricResults) halsteadStore
+		HalsteadMetricFileResults halsteadFileResults = (HalsteadMetricFileResults) halsteadStore
 				.readFileResults(hashId);
 
-		EntropyResults results = new EntropyResults();
+		EntropyFileResults results = new EntropyFileResults();
 
 		for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
 			HalsteadMetricResult halsteadFileResult = findFileResult(
@@ -78,7 +78,7 @@ public class EntropyMetricEvaluator extends AbstractEvaluator {
 	}
 
 	private HalsteadMetricResult findFileResult(
-			HalsteadMetricResults halsteadFileResults, CodeRange codeRange) {
+			HalsteadMetricFileResults halsteadFileResults, CodeRange codeRange) {
 		for (HalsteadMetricResult t : halsteadFileResults.getResults()) {
 			if ((t.getCodeRangeType() == codeRange.getType())
 					&& (t.getCodeRangeName().equals(codeRange.getName()))) {

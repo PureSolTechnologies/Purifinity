@@ -1,35 +1,23 @@
 package com.puresol.coding.metrics.cocomo;
 
-import static com.puresol.coding.metrics.cocomo.CoCoMoEvaluatorParameter.ALL;
-import static com.puresol.coding.metrics.cocomo.CoCoMoEvaluatorParameter.C1;
-import static com.puresol.coding.metrics.cocomo.CoCoMoEvaluatorParameter.C2;
-import static com.puresol.coding.metrics.cocomo.CoCoMoEvaluatorParameter.C3;
-import static com.puresol.coding.metrics.cocomo.CoCoMoEvaluatorParameter.COMPLEXITY;
 import static com.puresol.coding.metrics.cocomo.CoCoMoEvaluatorParameter.COSTS;
 import static com.puresol.coding.metrics.cocomo.CoCoMoEvaluatorParameter.KSLOC;
 import static com.puresol.coding.metrics.cocomo.CoCoMoEvaluatorParameter.PERSON_MONTH;
 import static com.puresol.coding.metrics.cocomo.CoCoMoEvaluatorParameter.PERSON_YEARS;
-import static com.puresol.coding.metrics.cocomo.CoCoMoEvaluatorParameter.SALARY;
 import static com.puresol.coding.metrics.cocomo.CoCoMoEvaluatorParameter.SCHEDULED_MONTH;
 import static com.puresol.coding.metrics.cocomo.CoCoMoEvaluatorParameter.SCHEDULED_YEARS;
 import static com.puresol.coding.metrics.cocomo.CoCoMoEvaluatorParameter.TEAM_SIZE;
 
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
-import com.puresol.coding.evaluation.api.MetricResults;
 import com.puresol.coding.evaluation.api.MetricValue;
-import com.puresol.utils.math.GeneralValue;
 import com.puresol.utils.math.Money;
-import com.puresol.utils.math.Parameter;
-import com.puresol.utils.math.Value;
 
-public class CoCoMoResults implements MetricResults {
+public abstract class CoCoMoResults implements Serializable {
 
-	private static final long serialVersionUID = 4950771316767641215L;
+	private static final long serialVersionUID = 9107629880981197874L;
 
 	private int phyLOC;
 	private double ksloc;
@@ -249,41 +237,7 @@ public class CoCoMoResults implements MetricResults {
 		return text;
 	}
 
-	@Override
-	public Set<Parameter<?>> getParameters() {
-		return ALL;
-	}
-
-	@Override
-	public List<Map<String, Value<?>>> getValues() {
-		Map<String, Value<?>> row = new HashMap<String, Value<?>>();
-		row.put(KSLOC.getName(), new GeneralValue<Double>(ksloc, KSLOC));
-		row.put(PERSON_MONTH.getName(), new GeneralValue<Double>(personMonth,
-				PERSON_MONTH));
-		row.put(PERSON_YEARS.getName(), new GeneralValue<Double>(personYears,
-				PERSON_YEARS));
-		row.put(SCHEDULED_MONTH.getName(), new GeneralValue<Double>(
-				scheduledMonth, SCHEDULED_MONTH));
-		row.put(SCHEDULED_YEARS.getName(), new GeneralValue<Double>(
-				scheduledYears, SCHEDULED_YEARS));
-		row.put(TEAM_SIZE.getName(), new GeneralValue<Double>(teamSize,
-				TEAM_SIZE));
-		row.put(COSTS.getName(),
-				new GeneralValue<Double>(estimatedCosts, COSTS));
-
-		row.put(SALARY.getName(), new GeneralValue<Money>(getMoney(), SALARY));
-		row.put(COMPLEXITY.getName(), new GeneralValue<Complexity>(complexity,
-				COMPLEXITY));
-		row.put(C1.getName(), new GeneralValue<Double>(c1, C1));
-		row.put(C2.getName(), new GeneralValue<Double>(c2, C2));
-		row.put(C3.getName(), new GeneralValue<Double>(c3, C3));
-
-		List<Map<String, Value<?>>> values = new ArrayList<Map<String, Value<?>>>();
-		values.add(row);
-		return values;
-	}
-
-	private Money getMoney() {
+	public Money getMoney() {
 		return new Money(currency, 100, Math.round(averageSalary * 100));
 	}
 }

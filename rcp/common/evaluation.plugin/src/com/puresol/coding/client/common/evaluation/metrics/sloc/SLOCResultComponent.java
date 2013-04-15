@@ -19,7 +19,7 @@ import com.puresol.coding.evaluation.api.EvaluatorStoreFactory;
 import com.puresol.coding.evaluation.api.SourceCodeQuality;
 import com.puresol.coding.metrics.sloc.SLOCEvaluator;
 import com.puresol.coding.metrics.sloc.SLOCResult;
-import com.puresol.coding.metrics.sloc.SLOCResults;
+import com.puresol.coding.metrics.sloc.SLOCFileResults;
 
 public class SLOCResultComponent extends Composite {
 
@@ -38,7 +38,7 @@ public class SLOCResultComponent extends Composite {
 		EvaluatorStore evaluatorStore = EvaluatorStoreFactory.getFactory()
 				.createInstance(SLOCEvaluator.class);
 
-		SLOCResults fileResults = (SLOCResults) evaluatorStore
+		SLOCFileResults fileResults = (SLOCFileResults) evaluatorStore
 				.readFileResults(analyzedCode.getHashId());
 
 		Table table = new Table(this, SWT.BORDER | SWT.V_SCROLL
