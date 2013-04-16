@@ -13,7 +13,10 @@ public class MIColorProvider implements ColorProvider {
 
 	@Override
 	public Color provideForegroundColor(Device device, DataPoint2D dataPoint) {
-		return new Color(device, new RGB(0, 0, 0));
+		Color color = provideBackgroundColor(device, dataPoint);
+		RGB rgb = color.getRGB();
+		return new Color(device, new RGB(rgb.red / 2, rgb.green / 2,
+				rgb.blue / 2));
 	}
 
 	@Override

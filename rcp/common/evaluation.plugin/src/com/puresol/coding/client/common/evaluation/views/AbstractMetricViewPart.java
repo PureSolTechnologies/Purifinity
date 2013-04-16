@@ -79,7 +79,7 @@ public abstract class AbstractMetricViewPart extends ViewPart implements
 		return value.getValue();
 	}
 
-	private Map<String, Value<?>> findSuitableValueMap(HashIdFileTree path,
+	protected Map<String, Value<?>> findSuitableValueMap(HashIdFileTree path,
 			MetricFileResults results, Parameter<?> parameter) {
 		Map<String, Value<?>> valueMap = null;
 		List<Map<String, Value<?>>> values = results.getValues();

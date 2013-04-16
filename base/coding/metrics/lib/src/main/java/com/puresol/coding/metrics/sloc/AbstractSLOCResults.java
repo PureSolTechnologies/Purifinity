@@ -30,9 +30,12 @@ public class AbstractSLOCResults implements Serializable {
 	private static final long serialVersionUID = -7340562001522028390L;
 
 	protected Map<String, Value<?>> convertToRow(SLOCResult result) {
+		Map<String, Value<?>> row = new HashMap<String, Value<?>>();
+		if (result == null) {
+			return row;
+		}
 		SLOCMetric metric = result.getSLOCMetric();
 		Statistics stat = metric.getLineStatistics();
-		Map<String, Value<?>> row = new HashMap<String, Value<?>>();
 		row.put(SOURCE_CODE_LOCATION.getName(), new GeneralValue<CodeLocation>(
 				result.getSourceCodeLocation(), SOURCE_CODE_LOCATION));
 		row.put(CODE_RANGE_TYPE.getName(), new GeneralValue<CodeRangeType>(
