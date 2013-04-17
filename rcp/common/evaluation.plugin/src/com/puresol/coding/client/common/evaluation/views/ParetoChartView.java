@@ -44,7 +44,6 @@ import com.puresol.coding.evaluation.api.EvaluatorStore;
 import com.puresol.coding.evaluation.api.EvaluatorStoreFactory;
 import com.puresol.coding.evaluation.api.Evaluators;
 import com.puresol.coding.evaluation.api.MetricFileResults;
-import com.puresol.coding.metrics.maintainability.MaintainabilityIndexEvaluatorParameter;
 import com.puresol.trees.TreeVisitor;
 import com.puresol.trees.TreeWalker;
 import com.puresol.trees.WalkingAction;
@@ -247,7 +246,7 @@ public class ParetoChartView extends AbstractMetricViewPart implements
 		chart.setxAxis(xAxis);
 
 		Axis<Double> yAxis = AxisFactory.createDoubleValueAxis(AxisDirection.Y,
-				MaintainabilityIndexEvaluatorParameter.MI, min, max,
+				(Parameter<Double>) parameterSelection, min, max,
 				(max - min) / 10.0, 1);
 		chart.setyAxis(yAxis);
 

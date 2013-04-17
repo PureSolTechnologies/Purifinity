@@ -116,8 +116,7 @@ public class PlotCanvas extends Canvas implements PaintListener {
 		markRenderers.put(plot, markRenderer);
 	}
 
-	public void setColorProvider(Plot<String, Double> plot,
-			ColorProvider colorProvider) {
+	public void setColorProvider(Plot<?, ?> plot, ColorProvider colorProvider) {
 		colorProviders.put(plot, colorProvider);
 	}
 

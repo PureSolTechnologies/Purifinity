@@ -11,6 +11,7 @@ import java.util.Set;
 
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
@@ -25,6 +26,7 @@ import com.puresol.coding.client.common.chart.DataPoint2D;
 import com.puresol.coding.client.common.chart.Plot;
 import com.puresol.coding.client.common.chart.math.Point2D;
 import com.puresol.coding.client.common.chart.renderer.BarMarkRenderer;
+import com.puresol.coding.client.common.chart.renderer.ConstantColorProvider;
 import com.puresol.coding.client.common.evaluation.HistogramChartViewSettingsDialog;
 import com.puresol.coding.client.common.ui.actions.RefreshAction;
 import com.puresol.coding.client.common.ui.actions.ShowSettingsAction;
@@ -33,7 +35,6 @@ import com.puresol.coding.evaluation.api.EvaluatorFactory;
 import com.puresol.coding.evaluation.api.EvaluatorStore;
 import com.puresol.coding.evaluation.api.EvaluatorStoreFactory;
 import com.puresol.coding.evaluation.api.MetricFileResults;
-import com.puresol.coding.metrics.maintainability.MaintainabilityIndexEvaluatorParameter;
 import com.puresol.trees.TreeVisitor;
 import com.puresol.trees.TreeWalker;
 import com.puresol.trees.WalkingAction;
@@ -218,6 +219,8 @@ public class HistorgramChartView extends AbstractMetricViewPart {
 		}
 		chart.addPlot(plot);
 		chartCanvas.setMarkRenderer(plot, new BarMarkRenderer(1.0));
+		chartCanvas.setColorProvider(plot, new ConstantColorProvider(new RGB(0,
+				0, 0), new RGB(192, 0, 0)));
 
 		chartCanvas.refresh();
 	}
@@ -248,8 +251,9 @@ public class HistorgramChartView extends AbstractMetricViewPart {
 		chart.setxAxis(xAxis);
 
 		Axis<Double> yAxis = AxisFactory.createDoubleValueAxis(AxisDirection.Y,
-				MaintainabilityIndexEvaluatorParameter.MI, 0, max, max / 10.0,
-				1);
+				new ParameterWithArbitraryUnit<Double>("Count", "",
+						LevelOfMeasurement.RATIO, "", Double.class), 0, max,
+				max / 10.0, 1);
 		chart.setyAxis(yAxis);
 
 		Plot<String, Double> plot = new Plot<String, Double>(xAxis, yAxis,

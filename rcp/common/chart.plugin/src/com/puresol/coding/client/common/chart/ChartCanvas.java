@@ -67,8 +67,7 @@ public class ChartCanvas {
 		this.plot.setMarkRenderer(plot, markRenderer);
 	}
 
-	public void setColorProvider(Plot<String, Double> plot,
-			ColorProvider colorProvider) {
+	public void setColorProvider(Plot<?, ?> plot, ColorProvider colorProvider) {
 		this.plot.setColorProvider(plot, colorProvider);
 	}
 

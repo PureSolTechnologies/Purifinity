@@ -40,6 +40,18 @@ public abstract class AbstractParameter<T> implements Parameter<T> {
 	}
 
 	@Override
+	public boolean isNumeric() {
+		return Number.class.isAssignableFrom(type);
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder(name);
+		builder.append(" [").append(type.getSimpleName() + "]");
+		return builder.toString();
+	}
+
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -62,10 +74,5 @@ public abstract class AbstractParameter<T> implements Parameter<T> {
 		} else if (!name.equals(other.name))
 			return false;
 		return true;
-	}
-
-	@Override
-	public boolean isNumeric() {
-		return Number.class.isAssignableFrom(type);
 	}
 }

@@ -133,16 +133,14 @@ public abstract class AbstractMetricViewPart extends ViewPart implements
 			Map<String, Value<?>> valueMap, Parameter<?> parameter) {
 		double sum = 0.0;
 		Value<?> value = valueMap.get(parameter.getName());
-		if ((value != null)
-				&& (Number.class.isAssignableFrom(parameter.getType()))) {
+		if ((value != null) && (parameter.isNumeric())) {
 			Number number = (Number) value.getValue();
 			sum = number.doubleValue();
 		} else {
-			throw new RuntimeException("Value '" + value
-					+ "' is not a number for '" + path.getPathFile(false)
-					+ "'!");
+			throw new RuntimeException("Value '" + value + "' (parameter="
+					+ parameter + ") is not a number for '"
+					+ path.getPathFile(false) + "'!");
 		}
 		return sum;
 	}
-
 }
