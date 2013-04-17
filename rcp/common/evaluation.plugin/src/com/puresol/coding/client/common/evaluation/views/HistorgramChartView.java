@@ -1,8 +1,8 @@
 package com.puresol.coding.client.common.evaluation.views;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -44,6 +44,8 @@ import com.puresol.utils.math.ParameterWithArbitraryUnit;
 import com.puresol.utils.math.Value;
 
 public class HistorgramChartView extends AbstractMetricViewPart {
+
+	private static final int NUMBER_OF_NUMERICAL_CATEGORIES = 10;
 
 	private HistogramChartViewSettingsDialog settingsDialog;
 
@@ -156,7 +158,7 @@ public class HistorgramChartView extends AbstractMetricViewPart {
 		chart.setTitle("Pareto Chart for " + metricSelection.getName());
 		chart.setSubTitle(parameterSelection.getName());
 
-		if (Number.class.isAssignableFrom(parameterSelection.getType())) {
+		if (parameterSelection.isNumeric()) {
 			createNumericalHistogram(histogramValues);
 		} else {
 			createCategoryHistogram(histogramValues);
@@ -164,16 +166,60 @@ public class HistorgramChartView extends AbstractMetricViewPart {
 	}
 
 	private void createNumericalHistogram(List<Value<?>> histogramValues) {
-		Collections.sort(histogramValues, new Comparator<Value<?>>() {
-			@Override
-			public int compare(Value<?> o1, Value<?> o2) {
-				Number n1 = (Number) o1;
-				Number n2 = (Number) o2;
-				return Double.valueOf(n2.doubleValue()).compareTo(
-						n1.doubleValue());
+		if (histogramValues.size() == 0) {
+			chart.removeAllPlots();
+			chartCanvas.refresh();
+			return;
+		}
+		List<Double> values = new ArrayList<Double>();
+		for (Value<?> value : histogramValues) {
+			double d = ((Number) value.getValue()).doubleValue();
+			values.add(d);
+		}
+		Collections.sort(values);
+		double minValue = values.get(0);
+		double maxValue = values.get(values.size() - 1);
+		double maxDifference = maxValue - minValue;
+		int sums[] = new int[NUMBER_OF_NUMERICAL_CATEGORIES];
+		Arrays.fill(sums, 0);
+		int max = 0;
+		for (double value : values) {
+			double difference = value - minValue;
+			double ratio = difference / maxDifference;
+			int cat = (int) (ratio * NUMBER_OF_NUMERICAL_CATEGORIES);
+			if (cat == NUMBER_OF_NUMERICAL_CATEGORIES) {
+				cat--;
 			}
-		});
+			sums[cat]++;
+			max = Math.max(max, sums[cat]);
+		}
+		String[] categoryArray = new String[NUMBER_OF_NUMERICAL_CATEGORIES + 1];
+		for (int i = 0; i <= NUMBER_OF_NUMERICAL_CATEGORIES; i++) {
+			categoryArray[i] = String.valueOf(minValue + maxDifference
+					/ NUMBER_OF_NUMERICAL_CATEGORIES * i);
+		}
 
+		Axis<String> xAxis = AxisFactory.createCategoryAxis(AxisDirection.X,
+				new ParameterWithArbitraryUnit<String>("Intervals", "",
+						LevelOfMeasurement.INTERVAL, "", String.class),
+				categoryArray);
+		chart.setxAxis(xAxis);
+
+		Axis<Integer> yAxis = AxisFactory.createIntegerValueAxis(
+				AxisDirection.Y, new ParameterWithArbitraryUnit<Integer>(
+						"Count", "", LevelOfMeasurement.RATIO, "",
+						Integer.class), 0, max, Math.max(max / 10, 1), 1);
+		chart.setyAxis(yAxis);
+
+		Plot<String, Integer> plot = new Plot<String, Integer>(xAxis, yAxis,
+				"Histogram Plot");
+		for (int i = 0; i < sums.length; i++) {
+			plot.add(new DataPoint2D(new Point2D(i, sums[i])));
+		}
+		chart.addPlot(plot);
+		chartCanvas.setMarkRenderer(plot, new BarMarkRenderer(1.0));
+
+		chartCanvas.refresh();
 	}
 
 	private void createCategoryHistogram(List<Value<?>> histogramValues) {
