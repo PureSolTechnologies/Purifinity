@@ -6,7 +6,7 @@ import com.puresol.coding.client.common.chart.renderer.ColorProvider;
 import com.puresol.coding.client.common.chart.renderer.ConstantColorProvider;
 
 public class DefaultParetoChartConfigProvider implements
-		ParetoChartConfigProvider {
+		ChartConfigProvider {
 
 	@Override
 	public ColorProvider getColorProvider() {

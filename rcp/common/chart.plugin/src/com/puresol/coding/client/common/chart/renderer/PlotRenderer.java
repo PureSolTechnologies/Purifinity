@@ -2,9 +2,11 @@ package com.puresol.coding.client.common.chart.renderer;
 
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.RGB;
 
 import com.puresol.coding.client.common.chart.DataPoint2D;
 import com.puresol.coding.client.common.chart.Plot;
+import com.puresol.coding.client.common.chart.math.Point2D;
 import com.puresol.coding.client.common.chart.math.TransformationMatrix2D;
 
 public class PlotRenderer {
@@ -42,12 +44,19 @@ public class PlotRenderer {
 			Color foreground = null;
 			Color background = null;
 			if (colorProvider != null) {
-				foreground = colorProvider.provideForegroundColor(
-						gc.getDevice(), dataPoint);
-				gc.setForeground(foreground);
-				background = colorProvider.provideBackgroundColor(
-						gc.getDevice(), dataPoint);
-				gc.setBackground(background);
+				Point2D point2D = dataPoint.getPoint();
+				RGB foregroundRGB = colorProvider.getForegroundColor(point2D
+						.getY());
+				if (foregroundRGB != null) {
+					foreground = new Color(gc.getDevice(), foregroundRGB);
+					gc.setForeground(foreground);
+				}
+				RGB backgroundRGB = colorProvider.getBackgroundColor(point2D
+						.getY());
+				if (backgroundRGB != null) {
+					background = new Color(gc.getDevice(), backgroundRGB);
+					gc.setBackground(background);
+				}
 
 			}
 			markRenderer.render(gc, transformation, dataPoint);

@@ -19,7 +19,7 @@ import org.eclipse.swt.widgets.Group;
 
 import com.puresol.coding.client.common.evaluation.contents.MetricComboViewer;
 import com.puresol.coding.client.common.evaluation.contents.ParameterComboViewer;
-import com.puresol.coding.client.common.evaluation.views.HistorgramChartView;
+import com.puresol.coding.client.common.evaluation.views.HistogramChartView;
 import com.puresol.coding.client.common.ui.actions.AbstractPartSettingsDialog;
 import com.puresol.coding.evaluation.api.EvaluatorFactory;
 import com.puresol.coding.evaluation.api.Evaluators;
@@ -37,7 +37,7 @@ public class HistogramChartViewSettingsDialog extends
 	private EvaluatorFactory metricSelection = null;
 	private Parameter<?> parameterSelection = null;
 
-	public HistogramChartViewSettingsDialog(HistorgramChartView view,
+	public HistogramChartViewSettingsDialog(HistogramChartView view,
 			EvaluatorFactory metricSelection, Parameter<?> parameterSelection) {
 		super(view);
 		this.metricSelection = metricSelection;

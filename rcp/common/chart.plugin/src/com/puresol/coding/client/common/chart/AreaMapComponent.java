@@ -1,4 +1,4 @@
-package com.puresol.coding.client.common.ui.components;
+package com.puresol.coding.client.common.chart;
 
 import java.util.HashMap;
 import java.util.List;
@@ -16,6 +16,7 @@ import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 
+import com.puresol.coding.client.common.chart.renderer.ColorProvider;
 import com.puresol.trees.Tree;
 import com.puresol.utils.math.MathUtils;
 
@@ -27,13 +28,13 @@ import com.puresol.utils.math.MathUtils;
  */
 public class AreaMapComponent extends Canvas implements PaintListener {
 
-	private static final RGB FRAME_COLOR = new RGB(0, 0, 0);
+	private static final RGB DEFAULT_FRAME_COLOR = new RGB(0, 0, 0);
 	private static final int PADDING = 2;
 
 	private AreaMapData data = null;
 	private String unit = null;
 	private final Map<Rectangle, AreaMapData> tooltipAreas = new HashMap<Rectangle, AreaMapData>();
-	private AreaMapColorProvider colorProvider;
+	private ColorProvider colorProvider;
 
 	public AreaMapComponent(Composite parent, int style) {
 		super(parent, style);
@@ -88,11 +89,11 @@ public class AreaMapComponent extends Canvas implements PaintListener {
 		update();
 	}
 
-	public AreaMapColorProvider getColorProvider() {
+	public ColorProvider getColorProvider() {
 		return colorProvider;
 	}
 
-	public void setColorProvider(AreaMapColorProvider colorProvider) {
+	public void setColorProvider(ColorProvider colorProvider) {
 		this.colorProvider = colorProvider;
 	}
 
@@ -122,16 +123,11 @@ public class AreaMapComponent extends Canvas implements PaintListener {
 		/*
 		 * Adjust internal frame...
 		 */
-		left += PADDING;
-		top += PADDING;
-		right -= PADDING;
-		bottom -= PADDING;
 
-		int width = right - left + 1;
-		int height = bottom - top + 1;
+		int width = right - left;
+		int height = bottom - top;
 
-		if ((width < 0) || (height < 0)
-				|| (Math.min(width, height) < 2 * PADDING)) {
+		if ((width < 1) || (height < 1)) {
 			// The area is too small to show something meaningful...
 			return;
 		}
@@ -166,30 +162,34 @@ public class AreaMapComponent extends Canvas implements PaintListener {
 		int width = right - left + 1;
 		int height = bottom - top + 1;
 
-		if ((width < 0) || (height < 0)
-				|| (Math.min(width, height) < 2 * PADDING)) {
+		if ((width < 0) || (height < 0)) {
 			// The area is too small to show something meaningful...
 			return;
 		}
 
+		RGB frameRGB = DEFAULT_FRAME_COLOR;
 		if (colorProvider != null) {
-			Color color = colorProvider.createColor(getDisplay(),
-					secondaryValue);
-			if (color != null) {
+			RGB fillRGB = colorProvider.getForegroundColor(secondaryValue);
+			if (fillRGB != null) {
+				Color fillColor = new Color(getDisplay(), fillRGB);
 				try {
-					context.setBackground(color);
-					context.fillRectangle(left, top, right - left, bottom - top);
+					context.setBackground(fillColor);
+					context.fillRectangle(left, top, width, height);
 				} finally {
-					color.dispose();
+					fillColor.dispose();
 				}
 			}
+			RGB rgb = colorProvider.getBackgroundColor(secondaryValue);
+			if (rgb != null) {
+				frameRGB = rgb;
+			}
 		}
-		Color color = new Color(context.getDevice(), FRAME_COLOR);
+		Color frameColor = new Color(context.getDevice(), frameRGB);
 		try {
-			context.setForeground(color);
-			context.drawRectangle(left, top, right - left, bottom - top);
+			context.setForeground(frameColor);
+			context.drawRectangle(left, top, width, height);
 		} finally {
-			color.dispose();
+			frameColor.dispose();
 		}
 	}
 
@@ -210,7 +210,7 @@ public class AreaMapComponent extends Canvas implements PaintListener {
 			drawAreasDouble(context, child, //
 					position + PADDING,//
 					top + PADDING, //
-					position + size - 1 - PADDING,//
+					position + size - PADDING,//
 					bottom - PADDING,//
 					child.getSecondaryValue());
 			position += size;
@@ -229,7 +229,7 @@ public class AreaMapComponent extends Canvas implements PaintListener {
 					left + PADDING, //
 					position + PADDING, //
 					right - PADDING, //
-					position + size - 1 - PADDING, //
+					position + size - PADDING, //
 					child.getSecondaryValue()//
 			);
 			position += size;

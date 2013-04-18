@@ -1,4 +1,4 @@
-package com.puresol.coding.client.common.ui.components;
+package com.puresol.coding.client.common.chart;
 
 import java.util.ArrayList;
 import java.util.Arrays;

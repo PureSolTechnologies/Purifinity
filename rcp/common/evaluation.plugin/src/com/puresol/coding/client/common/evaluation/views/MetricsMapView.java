@@ -22,14 +22,14 @@ import org.osgi.framework.ServiceReference;
 
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.client.common.analysis.views.FileAnalysisSelection;
+import com.puresol.coding.client.common.chart.AreaMapComponent;
+import com.puresol.coding.client.common.chart.AreaMapData;
+import com.puresol.coding.client.common.chart.renderer.ColorProvider;
 import com.puresol.coding.client.common.evaluation.Activator;
 import com.puresol.coding.client.common.evaluation.MetricsMapViewSettingsDialog;
 import com.puresol.coding.client.common.ui.actions.RefreshAction;
 import com.puresol.coding.client.common.ui.actions.ShowSettingsAction;
 import com.puresol.coding.client.common.ui.actions.ViewReproductionAction;
-import com.puresol.coding.client.common.ui.components.AreaMapColorProvider;
-import com.puresol.coding.client.common.ui.components.AreaMapComponent;
-import com.puresol.coding.client.common.ui.components.AreaMapData;
 import com.puresol.coding.evaluation.api.EvaluatorFactory;
 import com.puresol.coding.evaluation.api.EvaluatorStore;
 import com.puresol.coding.evaluation.api.EvaluatorStoreFactory;
@@ -227,13 +227,13 @@ public class MetricsMapView extends AbstractMetricViewPart {
 					.getBundleContext();
 			String parameterName = colorValueSelection.getName();
 			String filter = "(parameterName=" + parameterName + ")";
-			Collection<ServiceReference<AreaMapColorProvider>> serviceReferences = bundleContext
-					.getServiceReferences(AreaMapColorProvider.class, filter);
+			Collection<ServiceReference<ColorProvider>> serviceReferences = bundleContext
+					.getServiceReferences(ColorProvider.class, filter);
 			if (!serviceReferences.isEmpty()) {
-				ServiceReference<AreaMapColorProvider> serviceReference = serviceReferences
+				ServiceReference<ColorProvider> serviceReference = serviceReferences
 						.iterator().next();
 				try {
-					AreaMapColorProvider provider = bundleContext
+					ColorProvider provider = bundleContext
 							.getService(serviceReference);
 					areaMap.setColorProvider(provider);
 				} finally {

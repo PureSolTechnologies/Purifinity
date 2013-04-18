@@ -44,7 +44,7 @@ import com.puresol.utils.math.Parameter;
 import com.puresol.utils.math.ParameterWithArbitraryUnit;
 import com.puresol.utils.math.Value;
 
-public class HistorgramChartView extends AbstractMetricViewPart {
+public class HistogramChartView extends AbstractMetricViewPart {
 
 	private static final int NUMBER_OF_NUMERICAL_CATEGORIES = 10;
 
@@ -156,7 +156,7 @@ public class HistorgramChartView extends AbstractMetricViewPart {
 	private void setupChart(List<Value<?>> histogramValues) {
 		chart.removeAllPlots();
 
-		chart.setTitle("Pareto Chart for " + metricSelection.getName());
+		chart.setTitle("Histogram Chart for " + metricSelection.getName());
 		chart.setSubTitle(parameterSelection.getName());
 
 		if (parameterSelection.isNumeric()) {
@@ -264,6 +264,8 @@ public class HistorgramChartView extends AbstractMetricViewPart {
 		}
 		chart.addPlot(plot);
 		chartCanvas.setMarkRenderer(plot, new BarMarkRenderer(1.0));
+		chartCanvas.setColorProvider(plot, new ConstantColorProvider(new RGB(0,
+				0, 0), new RGB(192, 0, 0)));
 
 		chartCanvas.refresh();
 	}

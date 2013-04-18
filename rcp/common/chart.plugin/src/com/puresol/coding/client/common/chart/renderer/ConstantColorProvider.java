@@ -1,10 +1,6 @@
 package com.puresol.coding.client.common.chart.renderer;
 
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.graphics.RGB;
-
-import com.puresol.coding.client.common.chart.DataPoint2D;
 
 public class ConstantColorProvider implements ColorProvider {
 
@@ -21,13 +17,13 @@ public class ConstantColorProvider implements ColorProvider {
 	}
 
 	@Override
-	public Color provideForegroundColor(Device device, DataPoint2D dataPoint) {
-		return new Color(device, foregroundRGB);
+	public RGB getForegroundColor(Object value) {
+		return foregroundRGB;
 	}
 
 	@Override
-	public Color provideBackgroundColor(Device device, DataPoint2D dataPoint) {
-		return new Color(device, backgroundRGB);
+	public RGB getBackgroundColor(Object value) {
+		return backgroundRGB;
 	}
 
 }

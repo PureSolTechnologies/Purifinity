@@ -6,11 +6,11 @@ import java.util.Hashtable;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
-import com.puresol.coding.client.common.evaluation.metrics.ParetoChartConfigProvider;
+import com.puresol.coding.client.common.chart.renderer.ColorProvider;
+import com.puresol.coding.client.common.evaluation.metrics.ChartConfigProvider;
 import com.puresol.coding.client.common.evaluation.metrics.SourceCodeQualityColorProvider;
-import com.puresol.coding.client.common.evaluation.metrics.maintainability.MIAreaMapColorProvider;
+import com.puresol.coding.client.common.evaluation.metrics.maintainability.MIColorProvider;
 import com.puresol.coding.client.common.evaluation.metrics.maintainability.MIParetoChartConfigProvider;
-import com.puresol.coding.client.common.ui.components.AreaMapColorProvider;
 import com.puresol.coding.evaluation.api.SourceCodeQualityParameter;
 import com.puresol.coding.metrics.maintainability.MaintainabilityIndexEvaluatorParameter;
 
@@ -28,26 +28,26 @@ public class Activator extends AbstractUIPlugin {
 		plugin = this;
 		registerColorProvider(new SourceCodeQualityColorProvider(),
 				SourceCodeQualityParameter.NAME);
-		registerColorProvider(new MIAreaMapColorProvider(),
+		registerColorProvider(new MIColorProvider(),
 				MaintainabilityIndexEvaluatorParameter.MI.getName());
 		registerParetoChartConfigProvider(new MIParetoChartConfigProvider(),
 				MaintainabilityIndexEvaluatorParameter.MI.getName());
 	}
 
-	public void registerColorProvider(AreaMapColorProvider provider,
+	public void registerColorProvider(ColorProvider provider,
 			String parameterName) {
 		Dictionary<String, Object> dictionary = new Hashtable<String, Object>();
 		dictionary.put("parameterName", parameterName);
-		getBundle().getBundleContext().registerService(
-				AreaMapColorProvider.class, provider, dictionary);
+		getBundle().getBundleContext().registerService(ColorProvider.class,
+				provider, dictionary);
 	}
 
 	public void registerParetoChartConfigProvider(
-			ParetoChartConfigProvider provider, String parameterName) {
+			ChartConfigProvider provider, String parameterName) {
 		Dictionary<String, Object> dictionary = new Hashtable<String, Object>();
 		dictionary.put("parameterName", parameterName);
 		getBundle().getBundleContext().registerService(
-				ParetoChartConfigProvider.class, provider, dictionary);
+				ChartConfigProvider.class, provider, dictionary);
 	}
 
 	@Override

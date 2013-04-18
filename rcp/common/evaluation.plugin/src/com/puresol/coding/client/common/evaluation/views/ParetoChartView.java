@@ -33,8 +33,8 @@ import com.puresol.coding.client.common.chart.math.Point2D;
 import com.puresol.coding.client.common.chart.renderer.BarMarkRenderer;
 import com.puresol.coding.client.common.evaluation.Activator;
 import com.puresol.coding.client.common.evaluation.ParetoChartViewSettingsDialog;
+import com.puresol.coding.client.common.evaluation.metrics.ChartConfigProvider;
 import com.puresol.coding.client.common.evaluation.metrics.DefaultParetoChartConfigProvider;
-import com.puresol.coding.client.common.evaluation.metrics.ParetoChartConfigProvider;
 import com.puresol.coding.client.common.evaluation.utils.EvaluationsTarget;
 import com.puresol.coding.client.common.ui.actions.RefreshAction;
 import com.puresol.coding.client.common.ui.actions.ShowSettingsAction;
@@ -245,9 +245,10 @@ public class ParetoChartView extends AbstractMetricViewPart implements
 				categories.toArray(new String[categories.size()]));
 		chart.setxAxis(xAxis);
 
+		@SuppressWarnings("unchecked")
+		Parameter<Double> yAxisParameter = (Parameter<Double>) parameterSelection;
 		Axis<Double> yAxis = AxisFactory.createDoubleValueAxis(AxisDirection.Y,
-				(Parameter<Double>) parameterSelection, min, max,
-				(max - min) / 10.0, 1);
+				yAxisParameter, min, max, (max - min) / 10.0, 1);
 		chart.setyAxis(yAxis);
 
 		Plot<String, Double> plot = new Plot<String, Double>(xAxis, yAxis,
@@ -259,23 +260,22 @@ public class ParetoChartView extends AbstractMetricViewPart implements
 		chart.addPlot(plot);
 		chartCanvas.setMarkRenderer(plot, new BarMarkRenderer(1.0));
 
-		ParetoChartConfigProvider configProvider = getConfigProvider();
+		ChartConfigProvider configProvider = getConfigProvider();
 
 		chartCanvas.setColorProvider(plot, configProvider.getColorProvider());
 		chartCanvas.refresh();
 	}
 
-	private ParetoChartConfigProvider getConfigProvider() {
+	private ChartConfigProvider getConfigProvider() {
 		try {
 			BundleContext bundleContext = Activator.getDefault().getBundle()
 					.getBundleContext();
 			String parameterName = parameterSelection.getName();
 			String filter = "(parameterName=" + parameterName + ")";
-			Collection<ServiceReference<ParetoChartConfigProvider>> serviceReferences = bundleContext
-					.getServiceReferences(ParetoChartConfigProvider.class,
-							filter);
+			Collection<ServiceReference<ChartConfigProvider>> serviceReferences = bundleContext
+					.getServiceReferences(ChartConfigProvider.class, filter);
 			if (!serviceReferences.isEmpty()) {
-				ServiceReference<ParetoChartConfigProvider> serviceReference = serviceReferences
+				ServiceReference<ChartConfigProvider> serviceReference = serviceReferences
 						.iterator().next();
 				try {
 					return bundleContext.getService(serviceReference);
