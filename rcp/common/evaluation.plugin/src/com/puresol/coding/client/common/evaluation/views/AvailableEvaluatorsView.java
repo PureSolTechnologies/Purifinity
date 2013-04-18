@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
@@ -17,62 +18,73 @@ import org.osgi.framework.ServiceReference;
 
 import com.puresol.coding.client.common.evaluation.Activator;
 import com.puresol.coding.client.common.evaluation.contents.AvailableEvaluatorsTableViewer;
+import com.puresol.coding.client.common.ui.actions.InformationAction;
+import com.puresol.coding.client.common.ui.actions.InformationProvider;
 import com.puresol.coding.client.common.ui.actions.RefreshAction;
 import com.puresol.coding.client.common.ui.actions.Refreshable;
 import com.puresol.coding.evaluation.api.EvaluatorFactory;
 
-public class AvailableEvaluatorsView extends ViewPart implements Refreshable {
+public class AvailableEvaluatorsView extends ViewPart implements Refreshable,
+		InformationProvider {
 
-    public AvailableEvaluatorsView() {
-    }
-
-    private Table table;
-    private TableViewer viewer;
-
-    @Override
-    public void createPartControl(Composite parent) {
-	parent.setLayout(new FillLayout());
-	table = new Table(parent, SWT.NONE);
-	table.setHeaderVisible(true);
-	viewer = new AvailableEvaluatorsTableViewer(table);
-
-	initializeToolBar();
-
-	refresh();
-    }
-
-    /**
-     * Initialize the toolbar.
-     */
-    private void initializeToolBar() {
-	IToolBarManager toolbarManager = getViewSite().getActionBars()
-		.getToolBarManager();
-	toolbarManager.add(new RefreshAction(this));
-    }
-
-    @Override
-    public void setFocus() {
-	table.setFocus();
-    }
-
-    @Override
-    public void refresh() {
-	try {
-	    BundleContext bundleContext = Activator.getDefault().getBundle()
-		    .getBundleContext();
-	    Collection<ServiceReference<EvaluatorFactory>> allServiceReferences = bundleContext
-		    .getServiceReferences(EvaluatorFactory.class, null);
-	    List<EvaluatorFactory> languages = new ArrayList<EvaluatorFactory>();
-	    for (ServiceReference<EvaluatorFactory> serviceReference : allServiceReferences) {
-		EvaluatorFactory service = bundleContext
-			.getService(serviceReference);
-		languages.add(service);
-		bundleContext.ungetService(serviceReference);
-	    }
-	    viewer.setInput(languages);
-	} catch (InvalidSyntaxException e1) {
-	    viewer.setInput(new ArrayList<EvaluatorFactory>());
+	public AvailableEvaluatorsView() {
 	}
-    }
+
+	private Table table;
+	private TableViewer viewer;
+
+	@Override
+	public void createPartControl(Composite parent) {
+		parent.setLayout(new FillLayout());
+		table = new Table(parent, SWT.NONE);
+		table.setHeaderVisible(true);
+		viewer = new AvailableEvaluatorsTableViewer(table);
+
+		initializeToolBar();
+
+		refresh();
+	}
+
+	/**
+	 * Initialize the toolbar.
+	 */
+	private void initializeToolBar() {
+		IToolBarManager toolbarManager = getViewSite().getActionBars()
+				.getToolBarManager();
+		toolbarManager.add(new InformationAction(this));
+		toolbarManager.add(new RefreshAction(this));
+	}
+
+	@Override
+	public void setFocus() {
+		table.setFocus();
+	}
+
+	@Override
+	public void refresh() {
+		try {
+			BundleContext bundleContext = Activator.getDefault().getBundle()
+					.getBundleContext();
+			Collection<ServiceReference<EvaluatorFactory>> allServiceReferences = bundleContext
+					.getServiceReferences(EvaluatorFactory.class, null);
+			List<EvaluatorFactory> languages = new ArrayList<EvaluatorFactory>();
+			for (ServiceReference<EvaluatorFactory> serviceReference : allServiceReferences) {
+				EvaluatorFactory service = bundleContext
+						.getService(serviceReference);
+				languages.add(service);
+				bundleContext.ungetService(serviceReference);
+			}
+			viewer.setInput(languages);
+		} catch (InvalidSyntaxException e1) {
+			viewer.setInput(new ArrayList<EvaluatorFactory>());
+		}
+	}
+
+	@Override
+	public void showInformation() {
+		MessageDialog
+				.openInformation(getSite().getShell(), "Not implemented",
+						"The currently triggered functionality is not implemented, yet.");
+	}
 
 }
