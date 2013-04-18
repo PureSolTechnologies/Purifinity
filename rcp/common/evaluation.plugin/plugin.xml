@@ -87,7 +87,7 @@
             allowMultiple="true"
             category="com.puresol.coding.client.common.evaluation.Evaluation"
             class="com.puresol.coding.client.common.evaluation.views.HistogramChartView"
-            id="com.puresol.coding.client.common.evaluation.views.HistorgramChartView"
+            id="com.puresol.coding.client.common.evaluation.views.HistogramChartView"
             name="Histogram Chart"
             restorable="true">
       </view>
