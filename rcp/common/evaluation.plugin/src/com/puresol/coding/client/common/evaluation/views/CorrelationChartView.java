@@ -14,13 +14,23 @@ import com.puresol.coding.client.common.chart.ChartCanvas;
 import com.puresol.coding.client.common.chart.DataPoint2D;
 import com.puresol.coding.client.common.chart.Plot;
 import com.puresol.coding.client.common.chart.math.Point2D;
+import com.puresol.coding.client.common.evaluation.CorrelationChartViewSettingsDialog;
 import com.puresol.coding.client.common.ui.actions.RefreshAction;
 import com.puresol.coding.client.common.ui.actions.ShowSettingsAction;
 import com.puresol.coding.client.common.ui.actions.ViewReproductionAction;
+import com.puresol.coding.evaluation.api.EvaluatorFactory;
 import com.puresol.coding.metrics.maintainability.MaintainabilityIndexEvaluatorParameter;
 import com.puresol.coding.metrics.sloc.SLOCEvaluatorParameter;
+import com.puresol.utils.math.Parameter;
 
 public class CorrelationChartView extends AbstractMetricViewPart {
+
+	private CorrelationChartViewSettingsDialog settingsDialog = null;
+
+	private EvaluatorFactory xMetricSelection = null;
+	private Parameter<?> xParameterSelection = null;
+	private EvaluatorFactory yMetricSelection = null;
+	private Parameter<?> yParameterSelection = null;
 
 	private ChartCanvas chartCanvas;
 
@@ -74,26 +84,36 @@ public class CorrelationChartView extends AbstractMetricViewPart {
 
 	@Override
 	public void showSettings() {
-		// TODO Auto-generated method stub
-
+		if (settingsDialog == null) {
+			settingsDialog = new CorrelationChartViewSettingsDialog(this,
+					xMetricSelection, xParameterSelection, yMetricSelection,
+					yParameterSelection);
+			settingsDialog.open();
+		} else {
+			settingsDialog.close();
+			settingsDialog = null;
+		}
 	}
 
 	@Override
 	public void applySettings() {
-		// TODO Auto-generated method stub
-
+		xMetricSelection = settingsDialog.getXMetric();
+		xParameterSelection = settingsDialog.getXParameter();
+		yMetricSelection = settingsDialog.getYMetric();
+		yParameterSelection = settingsDialog.getYParameter();
+		updateEvaluation();
 	}
 
 	@Override
 	public void closeSettings() {
-		// TODO Auto-generated method stub
-
+		settingsDialog = null;
 	}
 
 	@Override
 	public void refresh() {
-		// TODO Auto-generated method stub
-
+		if (settingsDialog != null) {
+			settingsDialog.refresh();
+		}
 	}
 
 	@Override
