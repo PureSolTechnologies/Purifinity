@@ -27,8 +27,6 @@ import com.puresol.coding.evaluation.api.EvaluatorFactory;
 import com.puresol.coding.evaluation.api.EvaluatorStore;
 import com.puresol.coding.evaluation.api.EvaluatorStoreFactory;
 import com.puresol.coding.evaluation.api.MetricFileResults;
-import com.puresol.coding.metrics.maintainability.MaintainabilityIndexEvaluatorParameter;
-import com.puresol.coding.metrics.sloc.SLOCEvaluatorParameter;
 import com.puresol.trees.TreeVisitor;
 import com.puresol.trees.TreeWalker;
 import com.puresol.trees.WalkingAction;
@@ -52,28 +50,8 @@ public class CorrelationChartView extends AbstractMetricViewPart {
 		parent.setLayout(new FillLayout());
 		chartCanvas = new ChartCanvas(parent, SWT.NONE);
 		chart = new Chart2D();
-		chart.setTitle("Metrics Correlation");
-		chart.setSubTitle("SLOC <-> Maintainability Index");
-
-		Axis<Integer> xAxis = AxisFactory.createIntegerValueAxis(
-				AxisDirection.X, SLOCEvaluatorParameter.PHY_LOC, 0, 1000, 100,
-				9);
-		chart.setxAxis(xAxis);
-
-		Axis<Double> yAxis = AxisFactory.createDoubleValueAxis(AxisDirection.Y,
-				MaintainabilityIndexEvaluatorParameter.MI, -20, 200, 20, 3);
-		chart.setyAxis(yAxis);
-
-		Plot<Integer, Double> plot = new Plot<Integer, Double>(xAxis, yAxis,
-				"Correlation");
-		plot.add(new DataPoint2D(new Point2D(10, 100)));
-		plot.add(new DataPoint2D(new Point2D(20, 50)));
-		plot.add(new DataPoint2D(new Point2D(30, 10)));
-		chart.addPlot(plot);
-
 		chartCanvas.setChart2D(chart);
 
-		// TODO Auto-generated method stub
 		initializeToolBar();
 		super.createPartControl(parent);
 	}
