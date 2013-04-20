@@ -6,7 +6,6 @@ import org.eclipse.swt.graphics.RGB;
 
 import com.puresol.coding.client.common.chart.DataPoint2D;
 import com.puresol.coding.client.common.chart.Plot;
-import com.puresol.coding.client.common.chart.math.Point2D;
 import com.puresol.coding.client.common.chart.math.TransformationMatrix2D;
 
 public class PlotRenderer {
@@ -40,26 +39,25 @@ public class PlotRenderer {
 	public void render(TransformationMatrix2D transformation) {
 		Color currentForeground = gc.getForeground();
 		Color currentBackground = gc.getBackground();
-		for (DataPoint2D dataPoint : plot.getDataPoints()) {
+		for (DataPoint2D<?, ?> dataPoint : plot.getDataPoints()) {
 			Color foreground = null;
 			Color background = null;
 			if (colorProvider != null) {
-				Point2D point2D = dataPoint.getPoint();
-				RGB foregroundRGB = colorProvider.getForegroundColor(point2D
-						.getY());
+				Object y = dataPoint.getY();
+				RGB foregroundRGB = colorProvider.getForegroundColor(y);
 				if (foregroundRGB != null) {
 					foreground = new Color(gc.getDevice(), foregroundRGB);
 					gc.setForeground(foreground);
 				}
-				RGB backgroundRGB = colorProvider.getBackgroundColor(point2D
-						.getY());
+				RGB backgroundRGB = colorProvider.getBackgroundColor(y);
 				if (backgroundRGB != null) {
 					background = new Color(gc.getDevice(), backgroundRGB);
 					gc.setBackground(background);
 				}
 
 			}
-			markRenderer.render(gc, transformation, dataPoint);
+			markRenderer.render(gc, transformation, plot, dataPoint.getX(),
+					dataPoint.getY());
 			if (foreground != null) {
 				foreground.dispose();
 			}
@@ -70,5 +68,4 @@ public class PlotRenderer {
 		gc.setForeground(currentForeground);
 		gc.setBackground(currentBackground);
 	}
-
 }

@@ -17,7 +17,6 @@ import com.puresol.coding.client.common.chart.Chart2D;
 import com.puresol.coding.client.common.chart.ChartCanvas;
 import com.puresol.coding.client.common.chart.DataPoint2D;
 import com.puresol.coding.client.common.chart.Plot;
-import com.puresol.coding.client.common.chart.math.Point2D;
 import com.puresol.coding.client.common.chart.renderer.CircleMarkRenderer;
 import com.puresol.coding.client.common.evaluation.CorrelationChartViewSettingsDialog;
 import com.puresol.coding.client.common.ui.actions.RefreshAction;
@@ -193,7 +192,8 @@ public class CorrelationChartView extends AbstractMetricViewPart {
 		Plot<Double, Double> plot = new Plot<Double, Double>(xAxis, yAxis,
 				"Correlation Plot");
 		for (Double x : correlationValues.keySet()) {
-			plot.add(new DataPoint2D(new Point2D(x, correlationValues.get(x))));
+			plot.add(new DataPoint2D<Double, Double>(x, correlationValues
+					.get(x)));
 		}
 		chart.addPlot(plot);
 		chartCanvas.setMarkRenderer(plot, new CircleMarkRenderer());

@@ -2,7 +2,7 @@ package com.puresol.coding.client.common.chart.renderer;
 
 import org.eclipse.swt.graphics.GC;
 
-import com.puresol.coding.client.common.chart.DataPoint2D;
+import com.puresol.coding.client.common.chart.Plot;
 import com.puresol.coding.client.common.chart.math.TransformationMatrix2D;
 
 /**
@@ -24,10 +24,15 @@ public interface MarkRenderer {
 	 * @param transformation
 	 *            is the transformation matrix to be used to calculate the
 	 *            positions.
-	 * @param point
-	 *            is the data point to be drawn.
+	 * @param plot
+	 *            is the {@link Plot} to be rendered. Some information of this
+	 *            object is used for rendering.
+	 * @param x
+	 *            is the x value to be rendered.
+	 * @param y
+	 *            is the y value to be rendered.
 	 */
 	public void render(GC gc, TransformationMatrix2D transformation,
-			DataPoint2D point);
+			Plot<?, ?> plot, Object x, Object y);
 
 }

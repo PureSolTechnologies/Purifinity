@@ -2,7 +2,8 @@ package com.puresol.coding.client.common.chart.renderer;
 
 import org.eclipse.swt.graphics.GC;
 
-import com.puresol.coding.client.common.chart.DataPoint2D;
+import com.puresol.coding.client.common.chart.Axis;
+import com.puresol.coding.client.common.chart.Plot;
 import com.puresol.coding.client.common.chart.math.Point2D;
 import com.puresol.coding.client.common.chart.math.TransformationMatrix2D;
 
@@ -24,8 +25,10 @@ public class BarMarkRenderer implements MarkRenderer {
 
 	@Override
 	public void render(GC gc, TransformationMatrix2D transformation,
-			DataPoint2D dataPoint) {
-		Point2D point = dataPoint.getPoint();
+			Plot<?, ?> plot, Object x, Object y) {
+		Axis<?> xAxis = plot.getXAxis();
+		Axis<?> yAxis = plot.getYAxis();
+		Point2D point = new Point2D(xAxis.getPosition(x), yAxis.getPosition(y));
 		Point2D point1 = new Point2D(point.getX(), 0.0);
 		Point2D point2 = new Point2D(point.getX() + width, point.getY());
 		point1 = transformation.transform(point1);

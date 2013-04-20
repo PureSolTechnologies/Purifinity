@@ -24,7 +24,6 @@ import com.puresol.coding.client.common.chart.Chart2D;
 import com.puresol.coding.client.common.chart.ChartCanvas;
 import com.puresol.coding.client.common.chart.DataPoint2D;
 import com.puresol.coding.client.common.chart.Plot;
-import com.puresol.coding.client.common.chart.math.Point2D;
 import com.puresol.coding.client.common.chart.renderer.BarMarkRenderer;
 import com.puresol.coding.client.common.chart.renderer.ConstantColorProvider;
 import com.puresol.coding.client.common.evaluation.HistogramChartViewSettingsDialog;
@@ -215,7 +214,7 @@ public class HistogramChartView extends AbstractMetricViewPart {
 		Plot<String, Integer> plot = new Plot<String, Integer>(xAxis, yAxis,
 				"Histogram Plot");
 		for (int i = 0; i < sums.length; i++) {
-			plot.add(new DataPoint2D(new Point2D(i, sums[i])));
+			plot.add(new DataPoint2D<String, Integer>(categoryArray[i], sums[i]));
 		}
 		chart.addPlot(plot);
 		chartCanvas.setMarkRenderer(plot, new BarMarkRenderer(1.0));
@@ -260,7 +259,8 @@ public class HistogramChartView extends AbstractMetricViewPart {
 				"Pareto Plot");
 		for (int i = 0; i < sums.size(); i++) {
 			String category = categoryArray[i];
-			plot.add(new DataPoint2D(new Point2D(i, sums.get(category))));
+			plot.add(new DataPoint2D<String, Integer>(category, sums
+					.get(category)));
 		}
 		chart.addPlot(plot);
 		chartCanvas.setMarkRenderer(plot, new BarMarkRenderer(1.0));

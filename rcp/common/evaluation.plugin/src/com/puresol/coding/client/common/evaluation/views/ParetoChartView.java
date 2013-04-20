@@ -29,7 +29,6 @@ import com.puresol.coding.client.common.chart.ChartCanvas;
 import com.puresol.coding.client.common.chart.DataPoint2D;
 import com.puresol.coding.client.common.chart.Plot;
 import com.puresol.coding.client.common.chart.math.ParetoValue;
-import com.puresol.coding.client.common.chart.math.Point2D;
 import com.puresol.coding.client.common.chart.renderer.BarMarkRenderer;
 import com.puresol.coding.client.common.evaluation.Activator;
 import com.puresol.coding.client.common.evaluation.ParetoChartViewSettingsDialog;
@@ -253,9 +252,9 @@ public class ParetoChartView extends AbstractMetricViewPart implements
 
 		Plot<String, Double> plot = new Plot<String, Double>(xAxis, yAxis,
 				"Pareto Plot");
-		for (int i = 0; i < paretoValues.size(); i++) {
-			plot.add(new DataPoint2D(new Point2D(i, paretoValues.get(i)
-					.getValue())));
+		for (ParetoValue<String, Double> paretoValue : paretoValues) {
+			plot.add(new DataPoint2D<String, Double>(paretoValue.getCategory(),
+					paretoValue.getValue()));
 		}
 		chart.addPlot(plot);
 		chartCanvas.setMarkRenderer(plot, new BarMarkRenderer(1.0));

@@ -1,7 +1,5 @@
 package com.puresol.coding.client.common.chart;
 
-import com.puresol.coding.client.common.chart.math.Point2D;
-
 /**
  * This class represents a single 2D data point. A 2D data point always consists
  * of an x and y value. Additionally, a size and a remark can be applied, if
@@ -11,33 +9,39 @@ import com.puresol.coding.client.common.chart.math.Point2D;
  * 
  * @author Rick-Rainer Ludwig
  */
-public class DataPoint2D {
+public class DataPoint2D<TX, TY> {
 
-	private final Point2D point;
+	private final TX x;
+	private final TY y;
 	private final Double size;
 	private final String remark;
 
-	public DataPoint2D(Point2D point) {
-		this(point, null, null);
+	public DataPoint2D(TX x, TY y) {
+		this(x, y, null, null);
 	}
 
-	public DataPoint2D(Point2D point, Double size) {
-		this(point, size, null);
+	public DataPoint2D(TX x, TY y, Double size) {
+		this(x, y, size, null);
 	}
 
-	public DataPoint2D(Point2D point, String remark) {
-		this(point, null, remark);
+	public DataPoint2D(TX x, TY y, String remark) {
+		this(x, y, null, remark);
 	}
 
-	public DataPoint2D(Point2D point, Double size, String remark) {
+	public DataPoint2D(TX x, TY y, Double size, String remark) {
 		super();
-		this.point = point;
+		this.x = x;
+		this.y = y;
 		this.size = size;
 		this.remark = remark;
 	}
 
-	public Point2D getPoint() {
-		return point;
+	public TX getX() {
+		return x;
+	}
+
+	public TY getY() {
+		return y;
 	}
 
 	public Double getSize() {

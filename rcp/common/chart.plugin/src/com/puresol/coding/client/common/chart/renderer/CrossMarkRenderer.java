@@ -2,7 +2,8 @@ package com.puresol.coding.client.common.chart.renderer;
 
 import org.eclipse.swt.graphics.GC;
 
-import com.puresol.coding.client.common.chart.DataPoint2D;
+import com.puresol.coding.client.common.chart.Axis;
+import com.puresol.coding.client.common.chart.Plot;
 import com.puresol.coding.client.common.chart.math.Point2D;
 import com.puresol.coding.client.common.chart.math.TransformationMatrix2D;
 
@@ -15,8 +16,11 @@ public class CrossMarkRenderer implements MarkRenderer {
 
 	@Override
 	public void render(GC gc, TransformationMatrix2D transformation,
-			DataPoint2D dataPoint) {
-		Point2D point = transformation.transform(dataPoint.getPoint());
+			Plot<?, ?> plot, Object x, Object y) {
+		Axis<?> xAxis = plot.getXAxis();
+		Axis<?> yAxis = plot.getYAxis();
+		Point2D point = new Point2D(xAxis.getPosition(x), yAxis.getPosition(y));
+		point = transformation.transform(point);
 		gc.drawLine((int) point.getX() - 3, (int) point.getY() - 3,
 				(int) point.getX() + 3, (int) point.getY() + 3);
 		gc.drawLine((int) point.getX() - 3, (int) point.getY() + 3,
