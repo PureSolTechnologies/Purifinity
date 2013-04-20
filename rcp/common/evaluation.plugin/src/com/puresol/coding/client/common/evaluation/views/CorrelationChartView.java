@@ -1,7 +1,7 @@
 package com.puresol.coding.client.common.evaluation.views;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
@@ -17,6 +17,7 @@ import com.puresol.coding.client.common.chart.Chart2D;
 import com.puresol.coding.client.common.chart.ChartCanvas;
 import com.puresol.coding.client.common.chart.DataPoint2D;
 import com.puresol.coding.client.common.chart.Plot;
+import com.puresol.coding.client.common.chart.math.Point2D;
 import com.puresol.coding.client.common.chart.renderer.CircleMarkRenderer;
 import com.puresol.coding.client.common.evaluation.CorrelationChartViewSettingsDialog;
 import com.puresol.coding.client.common.ui.actions.RefreshAction;
@@ -126,7 +127,7 @@ public class CorrelationChartView extends AbstractMetricViewPart {
 				.createInstance(xMetricSelection.getEvaluatorClass());
 		final EvaluatorStore yStore = EvaluatorStoreFactory.getFactory()
 				.createInstance(yMetricSelection.getEvaluatorClass());
-		final Map<Double, Double> correlationValues = new HashMap<Double, Double>();
+		final List<Point2D> correlationValues = new ArrayList<Point2D>();
 		TreeVisitor<HashIdFileTree> visitor = new TreeVisitor<HashIdFileTree>() {
 			@Override
 			public WalkingAction visit(HashIdFileTree node) {
@@ -138,15 +139,16 @@ public class CorrelationChartView extends AbstractMetricViewPart {
 				if (xResults == null) {
 					return WalkingAction.PROCEED;
 				}
-				double xValue = findSuitableValue(node, xResults,
-						xParameterSelection);
 				MetricFileResults yResults = yStore.readFileResults(hashId);
 				if (yResults == null) {
 					return WalkingAction.PROCEED;
 				}
+				double xValue = findSuitableValue(node, xResults,
+						xParameterSelection);
 				double yValue = findSuitableValue(node, yResults,
 						yParameterSelection);
-				correlationValues.put(xValue, yValue);
+				Point2D value = new Point2D(xValue, yValue);
+				correlationValues.add(value);
 				return WalkingAction.PROCEED;
 			}
 		};
@@ -155,7 +157,7 @@ public class CorrelationChartView extends AbstractMetricViewPart {
 		setupChart(correlationValues);
 	}
 
-	private void setupChart(final Map<Double, Double> correlationValues) {
+	private void setupChart(final List<Point2D> correlationValues) {
 		chart.removeAllPlots();
 
 		chart.setTitle("Correlation Chart for " + xMetricSelection.getName()
@@ -165,16 +167,13 @@ public class CorrelationChartView extends AbstractMetricViewPart {
 
 		double xMin = 0.0;
 		double xMax = 0.0;
-		for (Double value : correlationValues.keySet()) {
-			xMin = Math.min(xMin, value);
-			xMax = Math.max(xMax, value);
-		}
-
 		double yMin = 0.0;
 		double yMax = 0.0;
-		for (Double value : correlationValues.values()) {
-			yMin = Math.min(yMin, value);
-			yMax = Math.max(yMax, value);
+		for (Point2D value : correlationValues) {
+			xMin = Math.min(xMin, value.getX());
+			xMax = Math.max(xMax, value.getX());
+			yMin = Math.min(yMin, value.getY());
+			yMax = Math.max(yMax, value.getY());
 		}
 
 		@SuppressWarnings("unchecked")
@@ -191,9 +190,8 @@ public class CorrelationChartView extends AbstractMetricViewPart {
 
 		Plot<Double, Double> plot = new Plot<Double, Double>(xAxis, yAxis,
 				"Correlation Plot");
-		for (Double x : correlationValues.keySet()) {
-			plot.add(new DataPoint2D<Double, Double>(x, correlationValues
-					.get(x)));
+		for (Point2D value : correlationValues) {
+			plot.add(new DataPoint2D<Double, Double>(value.getX(), value.getY()));
 		}
 		chart.addPlot(plot);
 		chartCanvas.setMarkRenderer(plot, new CircleMarkRenderer());

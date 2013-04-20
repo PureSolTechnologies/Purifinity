@@ -111,7 +111,7 @@ public class AxisRenderer {
 			double yPos = (axis.getMaximum() + axis.getMinimum()) / 2.0;
 			Point2D pos = new Point2D(drawingPosition, yPos);
 			pos = t.transform(pos);
-			pos = new Point2D(pos.getX() + (text.length() * averageCharWidth)
+			pos = new Point2D(pos.getX() - (text.length() * averageCharWidth)
 					/ 2.0, pos.getY() - maxLength - MAIN_TICK_LENGTH - height);
 			gc.drawText(text, (int) pos.getX(), (int) pos.getY(), true);
 		} finally {

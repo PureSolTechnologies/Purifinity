@@ -29,8 +29,8 @@ public class BarMarkRenderer implements MarkRenderer {
 		Axis<?> xAxis = plot.getXAxis();
 		Axis<?> yAxis = plot.getYAxis();
 		Point2D point = new Point2D(xAxis.getPosition(x), yAxis.getPosition(y));
-		Point2D point1 = new Point2D(point.getX(), 0.0);
-		Point2D point2 = new Point2D(point.getX() + width, point.getY());
+		Point2D point1 = new Point2D(point.getX() - width / 2.0, 0.0);
+		Point2D point2 = new Point2D(point.getX() + width / 2.0, point.getY());
 		point1 = transformation.transform(point1);
 		point2 = transformation.transform(point2);
 		int pixelWidth = (int) Math.abs(point1.getX() - point2.getX());
