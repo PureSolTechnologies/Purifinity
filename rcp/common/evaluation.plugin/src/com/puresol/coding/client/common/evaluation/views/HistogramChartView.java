@@ -249,14 +249,14 @@ public class HistogramChartView extends AbstractMetricViewPart {
 				categoryArray);
 		chart.setxAxis(xAxis);
 
-		Axis<Double> yAxis = AxisFactory.createDoubleValueAxis(AxisDirection.Y,
-				new ParameterWithArbitraryUnit<Double>("Count", "",
-						LevelOfMeasurement.RATIO, "", Double.class), 0, max,
-				max / 10.0, 1);
+		Axis<Integer> yAxis = AxisFactory.createIntegerValueAxis(
+				AxisDirection.Y, new ParameterWithArbitraryUnit<Integer>(
+						"Count", "", LevelOfMeasurement.RATIO, "",
+						Integer.class), 0, max, Math.max(1, max / 10), 1);
 		chart.setyAxis(yAxis);
 
-		Plot<String, Double> plot = new Plot<String, Double>(xAxis, yAxis,
-				"Pareto Plot");
+		Plot<String, Integer> plot = new Plot<String, Integer>(xAxis, yAxis,
+				"Histogram Plot");
 		for (int i = 0; i < sums.size(); i++) {
 			String category = categoryArray[i];
 			plot.add(new DataPoint2D<String, Integer>(category, sums

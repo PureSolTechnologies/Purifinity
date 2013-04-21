@@ -1,10 +1,15 @@
 package com.puresol.coding.client.common.chart.renderer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.RGB;
+import org.eclipse.swt.graphics.Rectangle;
 
 import com.puresol.coding.client.common.chart.DataPoint2D;
+import com.puresol.coding.client.common.chart.MarkPosition;
 import com.puresol.coding.client.common.chart.Plot;
 import com.puresol.coding.client.common.chart.math.TransformationMatrix2D;
 
@@ -36,10 +41,13 @@ public class PlotRenderer {
 		this.colorProvider = colorProvider;
 	}
 
-	public void render(TransformationMatrix2D transformation) {
+	public List<MarkPosition> render(TransformationMatrix2D transformation) {
 		Color currentForeground = gc.getForeground();
 		Color currentBackground = gc.getBackground();
-		for (DataPoint2D<?, ?> dataPoint : plot.getDataPoints()) {
+		List<MarkPosition> markPositions = new ArrayList<MarkPosition>();
+		List<?> dataPoints = plot.getDataPoints();
+		for (int i = 0; i < dataPoints.size(); i++) {
+			DataPoint2D<?, ?> dataPoint = (DataPoint2D<?, ?>) dataPoints.get(i);
 			Color foreground = null;
 			Color background = null;
 			if (colorProvider != null) {
@@ -56,8 +64,9 @@ public class PlotRenderer {
 				}
 
 			}
-			markRenderer.render(gc, transformation, plot, dataPoint.getX(),
-					dataPoint.getY());
+			Rectangle markPosition = markRenderer.render(gc, transformation,
+					plot, dataPoint.getX(), dataPoint.getY());
+			markPositions.add(new MarkPosition(plot, i, markPosition));
 			if (foreground != null) {
 				foreground.dispose();
 			}
@@ -67,5 +76,7 @@ public class PlotRenderer {
 		}
 		gc.setForeground(currentForeground);
 		gc.setBackground(currentBackground);
+		return markPositions;
 	}
+
 }

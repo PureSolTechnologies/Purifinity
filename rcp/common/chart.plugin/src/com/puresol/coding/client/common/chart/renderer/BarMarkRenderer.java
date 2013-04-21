@@ -1,6 +1,7 @@
 package com.puresol.coding.client.common.chart.renderer;
 
 import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Rectangle;
 
 import com.puresol.coding.client.common.chart.Axis;
 import com.puresol.coding.client.common.chart.Plot;
@@ -24,7 +25,7 @@ public class BarMarkRenderer implements MarkRenderer {
 	}
 
 	@Override
-	public void render(GC gc, TransformationMatrix2D transformation,
+	public Rectangle render(GC gc, TransformationMatrix2D transformation,
 			Plot<?, ?> plot, Object x, Object y) {
 		Axis<?> xAxis = plot.getXAxis();
 		Axis<?> yAxis = plot.getYAxis();
@@ -44,5 +45,6 @@ public class BarMarkRenderer implements MarkRenderer {
 		}
 		gc.fillRectangle(pixelX, pixelY, pixelWidth, pixelHeight);
 		gc.drawRectangle(pixelX, pixelY, pixelWidth, pixelHeight);
+		return new Rectangle(pixelX, pixelY, pixelWidth, pixelHeight);
 	}
 }

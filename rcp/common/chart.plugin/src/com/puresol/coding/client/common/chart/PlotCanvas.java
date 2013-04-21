@@ -1,15 +1,18 @@
 package com.puresol.coding.client.common.chart;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jface.window.DefaultToolTip;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.graphics.Transform;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
 
 import com.puresol.coding.client.common.chart.math.TransformationMatrix2D;
 import com.puresol.coding.client.common.chart.renderer.AxisRenderer;
@@ -23,16 +26,33 @@ public class PlotCanvas extends Canvas implements PaintListener {
 
 	private Chart2D chart2D = null;
 
+	private final Map<Plot<?, ?>, List<MarkPosition>> markPositions = new HashMap<Plot<?, ?>, List<MarkPosition>>();
+
 	private final Map<Plot<?, ?>, MarkRenderer> markRenderers = new HashMap<Plot<?, ?>, MarkRenderer>();
 	private final Map<Plot<?, ?>, ColorProvider> colorProviders = new HashMap<Plot<?, ?>, ColorProvider>();
 
 	public PlotCanvas(Composite parent, int style) {
 		super(parent, style);
 		addPaintListener(this);
+		DefaultToolTip toolTip = new DefaultToolTip(this) {
+			@Override
+			protected String getText(Event event) {
+				return getTooltipText(event.x, event.y);
+			}
+
+			@Override
+			protected boolean shouldCreateToolTip(Event event) {
+				return getTooltipText(event.x, event.y) != null;
+			}
+		};
+		toolTip.setHideDelay(0);
+		toolTip.setPopupDelay(0);
+		toolTip.setShift(new Point(10, 10));
 	}
 
 	@Override
 	public void paintControl(PaintEvent e) {
+		markPositions.clear();
 		if ((chart2D == null) || (chart2D.getXAxis() == null)
 				|| (chart2D.getYAxis() == null)) {
 			return;
@@ -59,19 +79,15 @@ public class PlotCanvas extends Canvas implements PaintListener {
 		int xAxisWidth = xAxisRenderer.getWidth();
 		clientArea.height -= xAxisWidth;
 
-		// create transform matrix
-		Transform transform = new Transform(gc.getDevice());
-		// move origin to canvas center
-		transform.translate(clientArea.x + clientArea.width / 2, clientArea.y
-				+ clientArea.height / 2);
-		// transform.rotate(-15f);
-		gc.setTransform(transform);
 		/*
 		 * Due to the missing fractional pixel drawing facilities in Eclipse we
 		 * need to transform everything on our own. The transformation matrix is
 		 * created to have a mathematical correct drawing.
 		 */
 		TransformationMatrix2D transformMatrix2d = new TransformationMatrix2D();
+		// move origin to canvas center
+		transformMatrix2d.translate(clientArea.x + clientArea.width / 2,
+				clientArea.y + clientArea.height / 2);
 		// let y axis point upright
 		transformMatrix2d.mirror(AxisDirection.X);
 
@@ -101,7 +117,9 @@ public class PlotCanvas extends Canvas implements PaintListener {
 			if (colorProvider != null) {
 				plotRenderer.setColorProvider(colorProvider);
 			}
-			plotRenderer.render(transformMatrix2d);
+			List<MarkPosition> positions = plotRenderer
+					.render(transformMatrix2d);
+			markPositions.put(plot, positions);
 		}
 
 		xAxisRenderer.render(transformMatrix2d);
@@ -120,4 +138,27 @@ public class PlotCanvas extends Canvas implements PaintListener {
 		colorProviders.put(plot, colorProvider);
 	}
 
+	public String getTooltipText(int x, int y) {
+		for (Plot<?, ?> plot : markPositions.keySet()) {
+			for (MarkPosition markPosition : markPositions.get(plot)) {
+				Rectangle position = markPosition.getPosition();
+				if ((x >= position.x) && (y >= position.y)
+						&& (x <= position.x + position.width)
+						&& (y <= position.y + position.height)) {
+					int index = markPosition.getDataPointIndex();
+					DataPoint2D<?, ?> dataPoint2D = plot.getDataPoints().get(
+							index);
+					String text = dataPoint2D.getX().toString() + " : "
+							+ dataPoint2D.getY().toString();
+					String remark = dataPoint2D.getRemark();
+					if ((remark != null)
+							&& (!dataPoint2D.getRemark().isEmpty())) {
+						text += " (" + dataPoint2D.getRemark() + ")";
+					}
+					return text;
+				}
+			}
+		}
+		return null;
+	}
 }

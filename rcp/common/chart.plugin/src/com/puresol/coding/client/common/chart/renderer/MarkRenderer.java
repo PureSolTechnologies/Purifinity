@@ -1,6 +1,7 @@
 package com.puresol.coding.client.common.chart.renderer;
 
 import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Rectangle;
 
 import com.puresol.coding.client.common.chart.Plot;
 import com.puresol.coding.client.common.chart.math.TransformationMatrix2D;
@@ -32,7 +33,7 @@ public interface MarkRenderer {
 	 * @param y
 	 *            is the y value to be rendered.
 	 */
-	public void render(GC gc, TransformationMatrix2D transformation,
+	public Rectangle render(GC gc, TransformationMatrix2D transformation,
 			Plot<?, ?> plot, Object x, Object y);
 
 }
