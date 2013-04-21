@@ -243,8 +243,11 @@ public class HistogramChartView extends AbstractMetricViewPart {
 		}
 		String[] categoryArray = new String[NUMBER_OF_NUMERICAL_CATEGORIES + 1];
 		for (int i = 0; i <= NUMBER_OF_NUMERICAL_CATEGORIES; i++) {
-			categoryArray[i] = String.valueOf(minValue + maxDifference
-					/ NUMBER_OF_NUMERICAL_CATEGORIES * i);
+			double from = minValue + maxDifference
+					/ NUMBER_OF_NUMERICAL_CATEGORIES * i;
+			double to = minValue + maxDifference
+					/ NUMBER_OF_NUMERICAL_CATEGORIES * (i + 1);
+			categoryArray[i] = String.valueOf(from) + "-" + String.valueOf(to);
 		}
 
 		Axis<String> xAxis = AxisFactory.createCategoryAxis(AxisDirection.X,

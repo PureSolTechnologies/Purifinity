@@ -1,6 +1,7 @@
 package com.puresol.coding.client.common.chart;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -38,6 +39,10 @@ public class Plot<TX, TY> {
 
 	public void add(DataPoint2D<TX, TY> tuple) {
 		tuples.add(tuple);
+	}
+
+	public void add(Collection<DataPoint2D<TX, TY>> tuples) {
+		this.tuples.addAll(tuples);
 	}
 
 	public List<DataPoint2D<TX, TY>> getDataPoints() {
