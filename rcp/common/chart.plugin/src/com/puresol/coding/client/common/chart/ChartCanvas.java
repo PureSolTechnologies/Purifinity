@@ -79,6 +79,7 @@ public class ChartCanvas {
 			subTitle.setText(chart2D.getSubTitle());
 		}
 		plot.redraw();
+		canvas.layout();
 		canvas.redraw();
 		canvas.update();
 	}
