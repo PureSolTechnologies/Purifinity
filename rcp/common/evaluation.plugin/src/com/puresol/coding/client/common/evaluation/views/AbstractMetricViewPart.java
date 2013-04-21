@@ -64,23 +64,32 @@ public abstract class AbstractMetricViewPart extends ViewPart implements
 		return analysisSelection;
 	}
 
-	protected final double findSuitableValue(HashIdFileTree path,
-			MetricFileResults results, Parameter<?> parameter) {
+	protected final Double findSuitableValue(HashIdFileTree path,
+			MetricFileResults results, Parameter<?> parameter,
+			CodeRangeType codeRangeType) {
 		Map<String, Value<?>> valueMap = findSuitableValueMap(path, results,
-				parameter);
+				parameter, codeRangeType);
+		if (valueMap == null) {
+			return null;
+		}
 		return convertToDouble(path, valueMap, parameter);
 	}
 
 	protected final Object findSuitableSecondaryValue(HashIdFileTree path,
-			MetricFileResults results, Parameter<?> parameter) {
+			MetricFileResults results, Parameter<?> parameter,
+			CodeRangeType codeRangeType) {
 		Map<String, Value<?>> valueMap = findSuitableValueMap(path, results,
-				parameter);
+				parameter, codeRangeType);
+		if (valueMap == null) {
+			return null;
+		}
 		Value<?> value = valueMap.get(parameter.getName());
 		return value.getValue();
 	}
 
 	protected Map<String, Value<?>> findSuitableValueMap(HashIdFileTree path,
-			MetricFileResults results, Parameter<?> parameter) {
+			MetricFileResults results, Parameter<?> parameter,
+			CodeRangeType codeRangeType) {
 		Map<String, Value<?>> valueMap = null;
 		List<Map<String, Value<?>>> values = results.getValues();
 		if (path.isFile()) {
@@ -90,18 +99,21 @@ public abstract class AbstractMetricViewPart extends ViewPart implements
 				String codeRangeTypeParameterName = CodeRangeTypeParameter
 						.getInstance().getName();
 				for (Map<String, Value<?>> value : values) {
-					if (value.get(codeRangeTypeParameterName).getValue()
-							.equals(CodeRangeType.FILE)) {
+					Object codeRangeTypeValue = value.get(
+							codeRangeTypeParameterName).getValue();
+					if (codeRangeTypeValue.equals(codeRangeType)) {
 						valueMap = value;
 						break;
 					}
 				}
 				if (valueMap == null) {
-					throw new RuntimeException("File '"
-							+ path.getPathFile(false)
-							+ "' contains no FILE result for evaluator '"
-							+ parameter.getName()
-							+ "' and contains multiple values!");
+					return null;
+					// throw new RuntimeException("File '"
+					// + path.getPathFile(false)
+					// +
+					// "' contains no "+codeRangeType.getName()+" result for evaluator '"
+					// + parameter.getName()
+					// + "' and contains multiple values!");
 				}
 			}
 		} else {
@@ -129,7 +141,7 @@ public abstract class AbstractMetricViewPart extends ViewPart implements
 		return value.getValue();
 	}
 
-	private double convertToDouble(HashIdFileTree path,
+	private Double convertToDouble(HashIdFileTree path,
 			Map<String, Value<?>> valueMap, Parameter<?> parameter) {
 		double sum = 0.0;
 		Value<?> value = valueMap.get(parameter.getName());

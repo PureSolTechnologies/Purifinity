@@ -20,6 +20,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 
+import com.puresol.coding.analysis.api.CodeRangeType;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.client.common.analysis.views.FileAnalysisSelection;
 import com.puresol.coding.client.common.chart.AreaMapComponent;
@@ -264,7 +265,7 @@ public class MetricsMapView extends AbstractMetricViewPart {
 		List<AreaMapData> childAreas = calculateChildAreaMaps(mapStore,
 				colorStore, path);
 		Object secondaryValue = null;
-		double sum;
+		Double sum;
 		if (path.isFile()) {
 			MetricFileResults mapResults = mapStore.readFileResults(path
 					.getHashId());
@@ -274,10 +275,11 @@ public class MetricsMapView extends AbstractMetricViewPart {
 				return processAreaWithoutOwnValues(path,
 						childAreas.toArray(new AreaMapData[childAreas.size()]));
 			}
-			sum = findSuitableValue(path, mapResults, mapValueSelection);
+			sum = findSuitableValue(path, mapResults, mapValueSelection,
+					CodeRangeType.FILE);
 			if ((colorResults != null) && (colorResults.getValues().size() > 0)) {
 				secondaryValue = findSuitableSecondaryValue(path, colorResults,
-						colorValueSelection);
+						colorValueSelection, CodeRangeType.FILE);
 			}
 		} else {
 			MetricDirectoryResults mapResults = mapStore
@@ -293,6 +295,9 @@ public class MetricsMapView extends AbstractMetricViewPart {
 				secondaryValue = findSuitableSecondaryValue(path, colorResults,
 						colorValueSelection);
 			}
+		}
+		if (sum == null) {
+			sum = 0.0;
 		}
 		return new AreaMapData(path.getPathFile(false).toString(), sum,
 				secondaryValue, childAreas.toArray(new AreaMapData[childAreas

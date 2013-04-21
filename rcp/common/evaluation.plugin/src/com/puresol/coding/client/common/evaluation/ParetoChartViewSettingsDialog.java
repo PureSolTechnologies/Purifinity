@@ -17,6 +17,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 
+import com.puresol.coding.analysis.api.CodeRangeType;
+import com.puresol.coding.client.common.analysis.controls.CodeRangeTypeComboViewer;
 import com.puresol.coding.client.common.evaluation.contents.MetricComboViewer;
 import com.puresol.coding.client.common.evaluation.contents.ParameterComboViewer;
 import com.puresol.coding.client.common.evaluation.views.ParetoChartView;
@@ -31,18 +33,23 @@ public class ParetoChartViewSettingsDialog extends AbstractPartSettingsDialog
 
 	private Combo metricCombo;
 	private Combo parameterCombo;
+	private Combo codeRangeTypeCombo;
 
 	private MetricComboViewer metricComboViewer;
 	private ParameterComboViewer parameterComboViewer;
+	private CodeRangeTypeComboViewer codeRangeTypeComboViewer;
 
 	private EvaluatorFactory metricSelection = null;
 	private Parameter<?> parameterSelection = null;
+	private CodeRangeType codeRangeTypeSelection = null;
 
 	public ParetoChartViewSettingsDialog(ParetoChartView view,
-			EvaluatorFactory metricSelection, Parameter<?> parameterSelection) {
+			EvaluatorFactory metricSelection, Parameter<?> parameterSelection,
+			CodeRangeType codeRangeTypeSelection) {
 		super(view);
 		this.metricSelection = metricSelection;
 		this.parameterSelection = parameterSelection;
+		this.codeRangeTypeSelection = codeRangeTypeSelection;
 	}
 
 	@Override
@@ -75,11 +82,28 @@ public class ParetoChartViewSettingsDialog extends AbstractPartSettingsDialog
 				fd_parameterCombo.right = new FormAttachment(metricCombo, 0,
 						SWT.RIGHT);
 				fd_parameterCombo.top = new FormAttachment(metricCombo, 10);
-				fd_parameterCombo.bottom = new FormAttachment(100, -10);
+				// fd_parameterCombo.bottom = new FormAttachment(100, -10);
 				parameterCombo.setLayoutData(fd_parameterCombo);
 				parameterCombo.setEnabled(true);
 				parameterCombo.addSelectionListener(this);
 				parameterComboViewer = new ParameterComboViewer(parameterCombo);
+			}
+
+			codeRangeTypeCombo = new Combo(settingsGroup, SWT.READ_ONLY);
+			{
+				FormData fd_codeRangeTypeCombo = new FormData();
+				fd_codeRangeTypeCombo.left = new FormAttachment(parameterCombo,
+						0, SWT.LEFT);
+				fd_codeRangeTypeCombo.right = new FormAttachment(
+						parameterCombo, 0, SWT.RIGHT);
+				fd_codeRangeTypeCombo.top = new FormAttachment(parameterCombo,
+						10);
+				fd_codeRangeTypeCombo.bottom = new FormAttachment(100, -10);
+				codeRangeTypeCombo.setLayoutData(fd_codeRangeTypeCombo);
+				codeRangeTypeCombo.setEnabled(true);
+				codeRangeTypeCombo.addSelectionListener(this);
+				codeRangeTypeComboViewer = new CodeRangeTypeComboViewer(
+						codeRangeTypeCombo);
 			}
 		}
 		populateCombos();
@@ -101,6 +125,8 @@ public class ParetoChartViewSettingsDialog extends AbstractPartSettingsDialog
 		} else {
 			parameterComboViewer.setInput(null);
 		}
+		codeRangeTypeComboViewer.setSelection(new StructuredSelection(
+				codeRangeTypeSelection));
 	}
 
 	@Override
@@ -109,6 +135,8 @@ public class ParetoChartViewSettingsDialog extends AbstractPartSettingsDialog
 			metricChanged();
 		} else if (e.getSource() == parameterCombo) {
 			parameterChanged();
+		} else if (e.getSource() == codeRangeTypeCombo) {
+			codeRangeTypeChanged();
 		}
 	}
 
@@ -134,6 +162,12 @@ public class ParetoChartViewSettingsDialog extends AbstractPartSettingsDialog
 		parameterSelection = (Parameter<?>) selection.getFirstElement();
 	}
 
+	private void codeRangeTypeChanged() {
+		StructuredSelection selection = (StructuredSelection) codeRangeTypeComboViewer
+				.getSelection();
+		codeRangeTypeSelection = (CodeRangeType) selection.getFirstElement();
+	}
+
 	@Override
 	public void widgetDefaultSelected(SelectionEvent e) {
 		populateCombos();
@@ -145,6 +179,10 @@ public class ParetoChartViewSettingsDialog extends AbstractPartSettingsDialog
 
 	public Parameter<?> getParameter() {
 		return parameterSelection;
+	}
+
+	public CodeRangeType getCodeRangeType() {
+		return codeRangeTypeSelection;
 	}
 
 	@Override

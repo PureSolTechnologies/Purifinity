@@ -18,6 +18,7 @@ import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 
+import com.puresol.coding.analysis.api.CodeRangeType;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.client.common.analysis.views.FileAnalysisSelection;
 import com.puresol.coding.client.common.chart.Axis;
@@ -191,7 +192,7 @@ public class HistogramChartView extends AbstractMetricViewPart {
 					return WalkingAction.PROCEED;
 				}
 				Map<String, Value<?>> value = findSuitableValueMap(node,
-						results, parameterSelection);
+						results, parameterSelection, CodeRangeType.FILE);
 				histogramValues.add(value.get(parameterSelection.getName()));
 				return WalkingAction.PROCEED;
 			}

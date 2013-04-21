@@ -10,15 +10,17 @@ public class AxisFactory {
 		Axis<Double> axis = new Axis<Double>(direction, parameter);
 		axis.setMinimum(min);
 		axis.setMaximum(max);
-		for (double tick = min; tick <= max; tick += tickWidth) {
-			axis.addTick(new Tick<Double>(TickType.MAJOR, tick, tick, String
-					.valueOf(tick)));
-			if ((numSubTicks > 0) && (tick < max)) {
-				double subTickWidth = tickWidth / (numSubTicks + 1);
-				for (int i = 1; i <= numSubTicks; i++) {
-					double position = tick + i * subTickWidth;
-					axis.addTick(new Tick<Double>(TickType.MINOR, position,
-							position, String.valueOf(position)));
+		if (tickWidth > 0) {
+			for (double tick = min; tick <= max; tick += tickWidth) {
+				axis.addTick(new Tick<Double>(TickType.MAJOR, tick, tick,
+						String.valueOf(tick)));
+				if ((numSubTicks > 0) && (tick < max)) {
+					double subTickWidth = tickWidth / (numSubTicks + 1);
+					for (int i = 1; i <= numSubTicks; i++) {
+						double position = tick + i * subTickWidth;
+						axis.addTick(new Tick<Double>(TickType.MINOR, position,
+								position, String.valueOf(position)));
+					}
 				}
 			}
 		}

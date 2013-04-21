@@ -11,6 +11,7 @@ import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 
+import com.puresol.coding.analysis.api.CodeRangeType;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.client.common.analysis.views.FileAnalysisSelection;
 import com.puresol.coding.client.common.chart.Axis;
@@ -222,13 +223,15 @@ public class CorrelationChartView extends AbstractMetricViewPart {
 				if (yResults == null) {
 					return WalkingAction.PROCEED;
 				}
-				double xValue = findSuitableValue(node, xResults,
-						xParameterSelection);
-				double yValue = findSuitableValue(node, yResults,
-						yParameterSelection);
-				DataPoint2D<Double, Double> value = new DataPoint2D<Double, Double>(
-						xValue, yValue, node.getPathFile(false).toString());
-				correlationValues.add(value);
+				Double xValue = findSuitableValue(node, xResults,
+						xParameterSelection, CodeRangeType.FILE);
+				Double yValue = findSuitableValue(node, yResults,
+						yParameterSelection, CodeRangeType.FILE);
+				if ((xValue != null) && (yValue != null)) {
+					DataPoint2D<Double, Double> value = new DataPoint2D<Double, Double>(
+							xValue, yValue, node.getPathFile(false).toString());
+					correlationValues.add(value);
+				}
 				return WalkingAction.PROCEED;
 			}
 		};

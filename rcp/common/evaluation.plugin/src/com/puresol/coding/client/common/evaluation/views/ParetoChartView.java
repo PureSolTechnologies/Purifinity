@@ -3,7 +3,9 @@ package com.puresol.coding.client.common.evaluation.views;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
@@ -16,6 +18,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 
+import com.puresol.coding.analysis.api.CodeRangeType;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.client.common.analysis.views.FileAnalysisSelection;
 import com.puresol.coding.client.common.chart.Axis;
@@ -25,7 +28,6 @@ import com.puresol.coding.client.common.chart.Chart2D;
 import com.puresol.coding.client.common.chart.ChartCanvas;
 import com.puresol.coding.client.common.chart.DataPoint2D;
 import com.puresol.coding.client.common.chart.Plot;
-import com.puresol.coding.client.common.chart.math.ParetoValue;
 import com.puresol.coding.client.common.chart.renderer.BarMarkRenderer;
 import com.puresol.coding.client.common.evaluation.Activator;
 import com.puresol.coding.client.common.evaluation.ParetoChartViewSettingsDialog;
@@ -35,6 +37,7 @@ import com.puresol.coding.client.common.evaluation.utils.EvaluationsTarget;
 import com.puresol.coding.client.common.ui.actions.RefreshAction;
 import com.puresol.coding.client.common.ui.actions.ShowSettingsAction;
 import com.puresol.coding.client.common.ui.actions.ViewReproductionAction;
+import com.puresol.coding.evaluation.api.CodeRangeNameParameter;
 import com.puresol.coding.evaluation.api.EvaluatorFactory;
 import com.puresol.coding.evaluation.api.EvaluatorStore;
 import com.puresol.coding.evaluation.api.EvaluatorStoreFactory;
@@ -47,6 +50,7 @@ import com.puresol.utils.HashId;
 import com.puresol.utils.math.LevelOfMeasurement;
 import com.puresol.utils.math.Parameter;
 import com.puresol.utils.math.ParameterWithArbitraryUnit;
+import com.puresol.utils.math.Value;
 
 public class ParetoChartView extends AbstractMetricViewPart implements
 		EvaluationsTarget {
@@ -55,6 +59,7 @@ public class ParetoChartView extends AbstractMetricViewPart implements
 
 	private EvaluatorFactory metricSelection = null;
 	private Parameter<?> parameterSelection = null;
+	private CodeRangeType codeRangeTypeSelection = CodeRangeType.FILE;
 
 	private Chart2D chart;
 	private ChartCanvas chartCanvas;
@@ -92,6 +97,11 @@ public class ParetoChartView extends AbstractMetricViewPart implements
 				break;
 			}
 		}
+		String codeRangeTypeSelectionName = memento.getString("coderangetype");
+		if (codeRangeTypeSelectionName != null) {
+			codeRangeTypeSelection = CodeRangeType.valueOf(CodeRangeType.class,
+					codeRangeTypeSelectionName);
+		}
 	}
 
 	@Override
@@ -99,6 +109,7 @@ public class ParetoChartView extends AbstractMetricViewPart implements
 		memento.putString("metric.class", metricSelection.getClass().getName());
 		memento.putString("metric", metricSelection.getName());
 		memento.putString("parameter", parameterSelection.getName());
+		memento.putString("coderangetype", codeRangeTypeSelection.name());
 
 		super.saveState(memento);
 	}
@@ -136,7 +147,7 @@ public class ParetoChartView extends AbstractMetricViewPart implements
 	public void showSettings() {
 		if (settingsDialog == null) {
 			settingsDialog = new ParetoChartViewSettingsDialog(this,
-					metricSelection, parameterSelection);
+					metricSelection, parameterSelection, codeRangeTypeSelection);
 			settingsDialog.open();
 		} else {
 			settingsDialog.close();
@@ -148,6 +159,7 @@ public class ParetoChartView extends AbstractMetricViewPart implements
 	public void applySettings() {
 		metricSelection = settingsDialog.getMetric();
 		parameterSelection = settingsDialog.getParameter();
+		codeRangeTypeSelection = settingsDialog.getCodeRangeType();
 		updateEvaluation();
 	}
 
@@ -180,7 +192,7 @@ public class ParetoChartView extends AbstractMetricViewPart implements
 	public void showEvaluation(HashIdFileTree path) {
 		final EvaluatorStore store = EvaluatorStoreFactory.getFactory()
 				.createInstance(metricSelection.getEvaluatorClass());
-		final List<ParetoValue<String, Double>> paretoValues = new ArrayList<ParetoValue<String, Double>>();
+		final List<DataPoint2D<String, Double>> paretoValues = new ArrayList<DataPoint2D<String, Double>>();
 		TreeVisitor<HashIdFileTree> visitor = new TreeVisitor<HashIdFileTree>() {
 			@Override
 			public WalkingAction visit(HashIdFileTree node) {
@@ -192,10 +204,23 @@ public class ParetoChartView extends AbstractMetricViewPart implements
 				if (results == null) {
 					return WalkingAction.PROCEED;
 				}
-				double value = findSuitableValue(node, results,
-						parameterSelection);
-				paretoValues.add(new ParetoValue<String, Double>(node
-						.getPathFile(false).getPath(), value));
+				Map<String, Value<?>> valueMap = findSuitableValueMap(node,
+						results, parameterSelection, codeRangeTypeSelection);
+				if (valueMap != null) {
+					String codeRangeName = (String) valueMap.get(
+							CodeRangeNameParameter.getInstance().getName())
+							.getValue();
+					Double value = ((Number) valueMap.get(
+							parameterSelection.getName()).getValue())
+							.doubleValue();
+					if (value != null) {
+						paretoValues.add(new DataPoint2D<String, Double>(node
+								.getPathFile(false).getPath()
+								+ "."
+								+ codeRangeName, value, codeRangeTypeSelection
+								.getName() + " " + codeRangeName));
+					}
+				}
 				return WalkingAction.PROCEED;
 			}
 		};
@@ -204,22 +229,28 @@ public class ParetoChartView extends AbstractMetricViewPart implements
 		setupChart(paretoValues);
 	}
 
-	private void setupChart(final List<ParetoValue<String, Double>> paretoValues) {
+	private void setupChart(final List<DataPoint2D<String, Double>> paretoValues) {
 		chart.removeAllPlots();
 
 		chart.setTitle("Pareto Chart for " + metricSelection.getName());
 		chart.setSubTitle(parameterSelection.getName());
 
-		Collections.sort(paretoValues);
-		Collections.reverse(paretoValues);
+		Collections.sort(paretoValues,
+				new Comparator<DataPoint2D<String, Double>>() {
+					@Override
+					public int compare(DataPoint2D<String, Double> o1,
+							DataPoint2D<String, Double> o2) {
+						return o2.getY().compareTo(o1.getY());
+					}
+				});
 
 		List<String> categories = new ArrayList<String>();
 		double min = 0.0;
 		double max = 0.0;
-		for (ParetoValue<String, Double> value : paretoValues) {
-			categories.add(value.getCategory());
-			min = Math.min(min, value.getValue());
-			max = Math.max(max, value.getValue());
+		for (DataPoint2D<String, Double> value : paretoValues) {
+			categories.add(value.getX());
+			min = Math.min(min, value.getY());
+			max = Math.max(max, value.getY());
 		}
 
 		max = Axis.suggestMax(max);
@@ -238,10 +269,7 @@ public class ParetoChartView extends AbstractMetricViewPart implements
 
 		Plot<String, Double> plot = new Plot<String, Double>(xAxis, yAxis,
 				"Pareto Plot");
-		for (ParetoValue<String, Double> paretoValue : paretoValues) {
-			plot.add(new DataPoint2D<String, Double>(paretoValue.getCategory(),
-					paretoValue.getValue()));
-		}
+		plot.add(paretoValues);
 		chart.addPlot(plot);
 		chartCanvas.setMarkRenderer(plot, new BarMarkRenderer(1.0));
 
