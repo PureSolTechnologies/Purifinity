@@ -14,6 +14,9 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IMemento;
+import org.eclipse.ui.IViewSite;
+import org.eclipse.ui.PartInitException;
 
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.client.common.analysis.views.FileAnalysisSelection;
@@ -33,6 +36,7 @@ import com.puresol.coding.client.common.ui.actions.ViewReproductionAction;
 import com.puresol.coding.evaluation.api.EvaluatorFactory;
 import com.puresol.coding.evaluation.api.EvaluatorStore;
 import com.puresol.coding.evaluation.api.EvaluatorStoreFactory;
+import com.puresol.coding.evaluation.api.Evaluators;
 import com.puresol.coding.evaluation.api.MetricFileResults;
 import com.puresol.trees.TreeVisitor;
 import com.puresol.trees.TreeWalker;
@@ -54,6 +58,50 @@ public class HistogramChartView extends AbstractMetricViewPart {
 
 	private ChartCanvas chartCanvas;
 	private Chart2D chart;
+
+	@Override
+	public void init(IViewSite site, IMemento memento) throws PartInitException {
+		super.init(site, memento);
+		if (memento == null) {
+			return;
+		}
+		// touch old classes to get the plugins activated... :-(
+		String mapMeticClass = memento.getString("metric.class");
+		if (mapMeticClass != null) {
+			try {
+				Class.forName(mapMeticClass);
+			} catch (ClassNotFoundException e) {
+			}
+		}
+		List<EvaluatorFactory> allMetrics = Evaluators.createInstance()
+				.getAllMetrics();
+		String metricSelectionName = memento.getString("metric");
+		String parameterSelectionName = memento.getString("parameter");
+		for (EvaluatorFactory metric : allMetrics) {
+			if (metric.getName().equals(metricSelectionName)) {
+				metricSelection = metric;
+				if (parameterSelectionName != null) {
+					for (Parameter<?> parameter : metricSelection
+							.getParameters()) {
+						if (parameter.getName().equals(parameterSelectionName)) {
+							parameterSelection = parameter;
+							break;
+						}
+					}
+				}
+				break;
+			}
+		}
+	}
+
+	@Override
+	public void saveState(IMemento memento) {
+		memento.putString("metric.class", metricSelection.getClass().getName());
+		memento.putString("metric", metricSelection.getName());
+		memento.putString("parameter", parameterSelection.getName());
+
+		super.saveState(memento);
+	}
 
 	@Override
 	public void createPartControl(Composite parent) {

@@ -10,10 +10,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IMemento;
-import org.eclipse.ui.ISelectionService;
 import org.eclipse.ui.IViewSite;
-import org.eclipse.ui.IWorkbenchPartSite;
-import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
@@ -53,8 +50,6 @@ import com.puresol.utils.math.ParameterWithArbitraryUnit;
 
 public class ParetoChartView extends AbstractMetricViewPart implements
 		EvaluationsTarget {
-
-	private ISelectionService selectionService;
 
 	private ParetoChartViewSettingsDialog settingsDialog;
 
@@ -109,23 +104,12 @@ public class ParetoChartView extends AbstractMetricViewPart implements
 	}
 
 	@Override
-	public void dispose() {
-		selectionService.removeSelectionListener(this);
-		super.dispose();
-	}
-
-	@Override
 	public void createPartControl(Composite parent) {
 		parent.setLayout(new FillLayout());
 		chartCanvas = new ChartCanvas(parent, SWT.NONE);
 		chart = new Chart2D();
 
 		chartCanvas.setChart2D(chart);
-
-		IWorkbenchPartSite site = getSite();
-		IWorkbenchWindow workbenchWindow = site.getWorkbenchWindow();
-		selectionService = workbenchWindow.getSelectionService();
-		selectionService.addSelectionListener(this);
 
 		initializeToolBar();
 		super.createPartControl(parent);

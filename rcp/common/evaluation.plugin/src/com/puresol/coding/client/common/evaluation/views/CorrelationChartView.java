@@ -7,6 +7,9 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IMemento;
+import org.eclipse.ui.IViewSite;
+import org.eclipse.ui.PartInitException;
 
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.client.common.analysis.views.FileAnalysisSelection;
@@ -26,6 +29,7 @@ import com.puresol.coding.client.common.ui.actions.ViewReproductionAction;
 import com.puresol.coding.evaluation.api.EvaluatorFactory;
 import com.puresol.coding.evaluation.api.EvaluatorStore;
 import com.puresol.coding.evaluation.api.EvaluatorStoreFactory;
+import com.puresol.coding.evaluation.api.Evaluators;
 import com.puresol.coding.evaluation.api.MetricFileResults;
 import com.puresol.trees.TreeVisitor;
 import com.puresol.trees.TreeWalker;
@@ -44,6 +48,82 @@ public class CorrelationChartView extends AbstractMetricViewPart {
 
 	private Chart2D chart;
 	private ChartCanvas chartCanvas;
+
+	@Override
+	public void init(IViewSite site, IMemento memento) throws PartInitException {
+		super.init(site, memento);
+		if (memento == null) {
+			return;
+		}
+		// touch old classes to get the plugins activated... :-(
+		String xMetricClass = memento.getString("x.metric.class");
+		if (xMetricClass != null) {
+			try {
+				Class.forName(xMetricClass);
+			} catch (ClassNotFoundException e) {
+			}
+		}
+		String yMetricClass = memento.getString("y.metric.class");
+		if (yMetricClass != null) {
+			try {
+				Class.forName(yMetricClass);
+			} catch (ClassNotFoundException e) {
+			}
+		}
+
+		List<EvaluatorFactory> allMetrics = Evaluators.createInstance()
+				.getAllMetrics();
+		String xMetricSelectionName = memento.getString("x.metric");
+		String xParameterSelectionName = memento.getString("x.parameter");
+		for (EvaluatorFactory metric : allMetrics) {
+			if (metric.getName().equals(xMetricSelectionName)) {
+				xMetricSelection = metric;
+				if (xParameterSelectionName != null) {
+					for (Parameter<?> parameter : xMetricSelection
+							.getParameters()) {
+						if (parameter.getName().equals(xParameterSelectionName)) {
+							xParameterSelection = parameter;
+							break;
+						}
+					}
+				}
+				break;
+			}
+		}
+
+		String yMetricSelectionName = memento.getString("y.metric");
+		String yParameterSelectionName = memento.getString("y.parameter");
+		for (EvaluatorFactory metric : allMetrics) {
+			if (metric.getName().equals(yMetricSelectionName)) {
+				yMetricSelection = metric;
+				if (yParameterSelectionName != null) {
+					for (Parameter<?> parameter : yMetricSelection
+							.getParameters()) {
+						if (parameter.getName().equals(yParameterSelectionName)) {
+							yParameterSelection = parameter;
+							break;
+						}
+					}
+				}
+				break;
+			}
+		}
+	}
+
+	@Override
+	public void saveState(IMemento memento) {
+		memento.putString("x.metric.class", xMetricSelection.getClass()
+				.getName());
+		memento.putString("x.metric", xMetricSelection.getName());
+		memento.putString("x.parameter", xParameterSelection.getName());
+
+		memento.putString("y.metric.class", yMetricSelection.getClass()
+				.getName());
+		memento.putString("y.metric", yMetricSelection.getName());
+		memento.putString("y.parameter", yParameterSelection.getName());
+
+		super.saveState(memento);
+	}
 
 	@Override
 	public void createPartControl(Composite parent) {
