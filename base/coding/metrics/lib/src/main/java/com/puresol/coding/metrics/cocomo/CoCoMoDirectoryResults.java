@@ -4,6 +4,8 @@ import static com.puresol.coding.metrics.cocomo.CoCoMoEvaluatorParameter.ALL;
 import static com.puresol.coding.metrics.cocomo.CoCoMoEvaluatorParameter.C1;
 import static com.puresol.coding.metrics.cocomo.CoCoMoEvaluatorParameter.C2;
 import static com.puresol.coding.metrics.cocomo.CoCoMoEvaluatorParameter.C3;
+import static com.puresol.coding.metrics.cocomo.CoCoMoEvaluatorParameter.CODE_RANGE_NAME;
+import static com.puresol.coding.metrics.cocomo.CoCoMoEvaluatorParameter.CODE_RANGE_TYPE;
 import static com.puresol.coding.metrics.cocomo.CoCoMoEvaluatorParameter.COMPLEXITY;
 import static com.puresol.coding.metrics.cocomo.CoCoMoEvaluatorParameter.COSTS;
 import static com.puresol.coding.metrics.cocomo.CoCoMoEvaluatorParameter.KSLOC;
@@ -12,13 +14,16 @@ import static com.puresol.coding.metrics.cocomo.CoCoMoEvaluatorParameter.PERSON_
 import static com.puresol.coding.metrics.cocomo.CoCoMoEvaluatorParameter.SALARY;
 import static com.puresol.coding.metrics.cocomo.CoCoMoEvaluatorParameter.SCHEDULED_MONTH;
 import static com.puresol.coding.metrics.cocomo.CoCoMoEvaluatorParameter.SCHEDULED_YEARS;
+import static com.puresol.coding.metrics.cocomo.CoCoMoEvaluatorParameter.SOURCE_CODE_LOCATION;
 import static com.puresol.coding.metrics.cocomo.CoCoMoEvaluatorParameter.TEAM_SIZE;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import com.puresol.coding.analysis.api.CodeRangeType;
 import com.puresol.coding.evaluation.api.MetricDirectoryResults;
+import com.puresol.uhura.source.CodeLocation;
 import com.puresol.utils.math.GeneralValue;
 import com.puresol.utils.math.Money;
 import com.puresol.utils.math.Parameter;
@@ -29,8 +34,11 @@ public class CoCoMoDirectoryResults extends CoCoMoResults implements
 
 	private static final long serialVersionUID = 7272355142441159285L;
 
-	public CoCoMoDirectoryResults() {
+	private final CodeLocation codeLocation;
+
+	public CoCoMoDirectoryResults(CodeLocation codeLocation) {
 		super();
+		this.codeLocation = codeLocation;
 	}
 
 	@Override
@@ -41,6 +49,14 @@ public class CoCoMoDirectoryResults extends CoCoMoResults implements
 	@Override
 	public Map<String, Value<?>> getValues() {
 		Map<String, Value<?>> row = new HashMap<String, Value<?>>();
+
+		row.put(SOURCE_CODE_LOCATION.getName(), new GeneralValue<CodeLocation>(
+				codeLocation, SOURCE_CODE_LOCATION));
+		row.put(CODE_RANGE_TYPE.getName(), new GeneralValue<CodeRangeType>(
+				CodeRangeType.FILE, CODE_RANGE_TYPE));
+		row.put(CODE_RANGE_NAME.getName(), new GeneralValue<String>(
+				codeLocation.getName(), CODE_RANGE_NAME));
+
 		row.put(KSLOC.getName(), new GeneralValue<Double>(getKsloc(), KSLOC));
 		row.put(PERSON_MONTH.getName(), new GeneralValue<Double>(
 				getPersonMonth(), PERSON_MONTH));

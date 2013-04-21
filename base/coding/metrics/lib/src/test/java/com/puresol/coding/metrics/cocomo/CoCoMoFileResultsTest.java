@@ -5,16 +5,19 @@ import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
+import com.puresol.uhura.source.UnspecifiedSourceCodeLocation;
+
 public class CoCoMoFileResultsTest {
 
 	@Test
 	public void testInstance() {
-		assertNotNull(new CoCoMoFileResults());
+		assertNotNull(new CoCoMoFileResults(new UnspecifiedSourceCodeLocation()));
 	}
 
 	@Test
 	public void testDefaultValues() {
-		CoCoMoFileResults set = new CoCoMoFileResults();
+		CoCoMoFileResults set = new CoCoMoFileResults(
+				new UnspecifiedSourceCodeLocation());
 		assertEquals(56286, set.getAverageSalary(), 1e-8);
 		assertEquals("$", set.getCurrency());
 		assertEquals(Complexity.LOW, set.getComplexity());
@@ -22,7 +25,8 @@ public class CoCoMoFileResultsTest {
 
 	@Test
 	public void testSetterUndGetter() {
-		CoCoMoFileResults set = new CoCoMoFileResults();
+		CoCoMoFileResults set = new CoCoMoFileResults(
+				new UnspecifiedSourceCodeLocation());
 		set.setAverageSalary(12345.67, "EUR");
 		set.setComplexity(Complexity.HIGH);
 		set.setSloc(1234567);
@@ -35,7 +39,8 @@ public class CoCoMoFileResultsTest {
 
 	@Test
 	public void testFormalaConstants() {
-		CoCoMoFileResults set = new CoCoMoFileResults();
+		CoCoMoFileResults set = new CoCoMoFileResults(
+				new UnspecifiedSourceCodeLocation());
 		set.setComplexity(Complexity.LOW);
 		assertEquals(2.4, set.getC1(), 1e-8);
 		assertEquals(1.05, set.getC2(), 1e-8);
@@ -54,7 +59,8 @@ public class CoCoMoFileResultsTest {
 
 	@Test
 	public void testCalculation() {
-		CoCoMoFileResults set = new CoCoMoFileResults();
+		CoCoMoFileResults set = new CoCoMoFileResults(
+				new UnspecifiedSourceCodeLocation());
 		set.setAverageSalary(50000, "$");
 		set.setComplexity(Complexity.LOW);
 		set.setSloc(100000);

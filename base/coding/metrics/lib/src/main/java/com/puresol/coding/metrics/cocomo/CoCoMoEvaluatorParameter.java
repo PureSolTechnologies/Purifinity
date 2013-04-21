@@ -3,12 +3,24 @@ package com.puresol.coding.metrics.cocomo;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.puresol.coding.analysis.api.CodeRangeType;
+import com.puresol.coding.evaluation.api.CodeRangeNameParameter;
+import com.puresol.coding.evaluation.api.CodeRangeTypeParameter;
+import com.puresol.coding.evaluation.api.SourceCodeLocationParameter;
+import com.puresol.uhura.source.CodeLocation;
 import com.puresol.utils.math.LevelOfMeasurement;
 import com.puresol.utils.math.Money;
 import com.puresol.utils.math.Parameter;
 import com.puresol.utils.math.ParameterWithArbitraryUnit;
 
 public class CoCoMoEvaluatorParameter {
+
+	public static final ParameterWithArbitraryUnit<CodeLocation> SOURCE_CODE_LOCATION = SourceCodeLocationParameter
+			.getInstance();
+	public static final ParameterWithArbitraryUnit<CodeRangeType> CODE_RANGE_TYPE = CodeRangeTypeParameter
+			.getInstance();
+	public static final ParameterWithArbitraryUnit<String> CODE_RANGE_NAME = CodeRangeNameParameter
+			.getInstance();
 
 	public static final ParameterWithArbitraryUnit<Double> KSLOC = new ParameterWithArbitraryUnit<Double>(
 			"kPhyLOC",
@@ -62,6 +74,9 @@ public class CoCoMoEvaluatorParameter {
 
 	public static final Set<Parameter<?>> ALL = new HashSet<Parameter<?>>();
 	static {
+		ALL.add(SOURCE_CODE_LOCATION);
+		ALL.add(CODE_RANGE_TYPE);
+		ALL.add(CODE_RANGE_NAME);
 		ALL.add(KSLOC);
 		ALL.add(PERSON_MONTH);
 		ALL.add(PERSON_YEARS);

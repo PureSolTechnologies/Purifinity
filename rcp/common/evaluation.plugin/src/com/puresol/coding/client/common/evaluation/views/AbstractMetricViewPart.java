@@ -67,12 +67,17 @@ public abstract class AbstractMetricViewPart extends ViewPart implements
 	protected final Double findSuitableValue(HashIdFileTree path,
 			MetricFileResults results, Parameter<?> parameter,
 			CodeRangeType codeRangeType) {
-		Map<String, Value<?>> valueMap = findSuitableValueMap(path, results,
-				parameter, codeRangeType);
-		if (valueMap == null) {
-			return null;
+		try {
+			Map<String, Value<?>> valueMap = findSuitableValueMap(path,
+					results, parameter, codeRangeType);
+			if (valueMap == null) {
+				return null;
+			}
+			return convertToDouble(valueMap, parameter);
+		} catch (IllegalArgumentException e) {
+			throw new RuntimeException("Could not find a suitable value for '"
+					+ path.getPathFile(false).toString() + "'.", e);
 		}
-		return convertToDouble(path, valueMap, parameter);
 	}
 
 	protected final Object findSuitableSecondaryValue(HashIdFileTree path,
@@ -128,10 +133,14 @@ public abstract class AbstractMetricViewPart extends ViewPart implements
 		return valueMap;
 	}
 
-	protected final double findSuitableValue(HashIdFileTree path,
-			MetricDirectoryResults results, Parameter<?> parameter) {
-		Map<String, Value<?>> valueMap = results.getValues();
-		return convertToDouble(path, valueMap, parameter);
+	protected final double findSuitableValue(MetricDirectoryResults results,
+			Parameter<?> parameter) {
+		try {
+			Map<String, Value<?>> valueMap = results.getValues();
+			return convertToDouble(valueMap, parameter);
+		} catch (IllegalArgumentException e) {
+			throw new RuntimeException("Could not find a suitable value.", e);
+		}
 	}
 
 	protected final Object findSuitableSecondaryValue(HashIdFileTree path,
@@ -141,18 +150,24 @@ public abstract class AbstractMetricViewPart extends ViewPart implements
 		return value.getValue();
 	}
 
-	private Double convertToDouble(HashIdFileTree path,
-			Map<String, Value<?>> valueMap, Parameter<?> parameter) {
-		double sum = 0.0;
+	/**
+	 * This method converts a valueMap into a Double value.
+	 * 
+	 * @param valueMap
+	 * @param parameter
+	 * @return
+	 */
+	protected double convertToDouble(Map<String, Value<?>> valueMap,
+			Parameter<?> parameter) throws IllegalArgumentException {
 		Value<?> value = valueMap.get(parameter.getName());
 		if ((value != null) && (parameter.isNumeric())) {
+			double sum = 0.0;
 			Number number = (Number) value.getValue();
 			sum = number.doubleValue();
+			return sum;
 		} else {
-			throw new RuntimeException("Value '" + value + "' (parameter="
-					+ parameter + ") is not a number for '"
-					+ path.getPathFile(false) + "'!");
+			throw new IllegalArgumentException("Value '" + value
+					+ "' (parameter=" + parameter + ") is not a number!");
 		}
-		return sum;
 	}
 }

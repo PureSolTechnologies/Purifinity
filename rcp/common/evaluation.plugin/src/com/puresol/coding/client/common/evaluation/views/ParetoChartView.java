@@ -210,16 +210,12 @@ public class ParetoChartView extends AbstractMetricViewPart implements
 					String codeRangeName = (String) valueMap.get(
 							CodeRangeNameParameter.getInstance().getName())
 							.getValue();
-					Double value = ((Number) valueMap.get(
-							parameterSelection.getName()).getValue())
-							.doubleValue();
-					if (value != null) {
-						paretoValues.add(new DataPoint2D<String, Double>(node
-								.getPathFile(false).getPath()
-								+ "."
-								+ codeRangeName, value, codeRangeTypeSelection
-								.getName() + " " + codeRangeName));
-					}
+					double value = convertToDouble(valueMap, parameterSelection);
+					paretoValues.add(new DataPoint2D<String, Double>(
+							node.getPathFile(false).getPath() + "."
+									+ codeRangeName, value,
+							codeRangeTypeSelection.getName() + " "
+									+ codeRangeName));
 				}
 				return WalkingAction.PROCEED;
 			}

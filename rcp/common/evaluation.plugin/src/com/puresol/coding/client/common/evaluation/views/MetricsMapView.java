@@ -290,7 +290,7 @@ public class MetricsMapView extends AbstractMetricViewPart {
 				return processAreaWithoutOwnValues(path,
 						childAreas.toArray(new AreaMapData[childAreas.size()]));
 			}
-			sum = findSuitableValue(path, mapResults, mapValueSelection);
+			sum = findSuitableValue(mapResults, mapValueSelection);
 			if ((colorResults != null) && (colorResults.getValues().size() > 0)) {
 				secondaryValue = findSuitableSecondaryValue(path, colorResults,
 						colorValueSelection);

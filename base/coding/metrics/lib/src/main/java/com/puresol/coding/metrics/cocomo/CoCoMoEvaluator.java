@@ -10,6 +10,7 @@
 
 package com.puresol.coding.metrics.cocomo;
 
+import java.io.File;
 import java.util.List;
 import java.util.Vector;
 
@@ -24,6 +25,7 @@ import com.puresol.coding.evaluation.impl.AbstractEvaluator;
 import com.puresol.coding.metrics.sloc.SLOCEvaluator;
 import com.puresol.coding.metrics.sloc.SLOCFileResults;
 import com.puresol.coding.metrics.sloc.SLOCResult;
+import com.puresol.uhura.source.SourceFileLocation;
 import com.puresol.utils.HashId;
 
 /**
@@ -84,7 +86,8 @@ public class CoCoMoEvaluator extends AbstractEvaluator {
 			for (SLOCResult results : slocResults.getResults()) {
 				if (results.getCodeRangeType() == CodeRangeType.FILE) {
 					int phyLoc = results.getSLOCMetric().getPhyLOC();
-					CoCoMoFileResults fileResults = new CoCoMoFileResults();
+					CoCoMoFileResults fileResults = new CoCoMoFileResults(
+							analysis.getAnalyzedFile().getSourceLocation());
 					fileResults.setAverageSalary(averageSalary, currency);
 					fileResults.setComplexity(complexity);
 					fileResults.setSloc(phyLoc);
@@ -115,7 +118,9 @@ public class CoCoMoEvaluator extends AbstractEvaluator {
 				}
 			}
 		}
-		CoCoMoDirectoryResults directoryResults = new CoCoMoDirectoryResults();
+		CoCoMoDirectoryResults directoryResults = new CoCoMoDirectoryResults(
+				new SourceFileLocation(new File(""),
+						directory.getPathFile(false)));
 		directoryResults.setAverageSalary(averageSalary, currency);
 		directoryResults.setComplexity(complexity);
 		directoryResults.setSloc(phyLoc);
