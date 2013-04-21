@@ -165,16 +165,21 @@ public class CorrelationChartView extends AbstractMetricViewPart {
 		chart.setSubTitle(xParameterSelection.getName() + "<->"
 				+ yParameterSelection.getName());
 
-		double xMin = 0.0;
-		double xMax = 0.0;
-		double yMin = 0.0;
-		double yMax = 0.0;
+		double xMin = Double.POSITIVE_INFINITY;
+		double xMax = Double.NEGATIVE_INFINITY;
+		double yMin = Double.POSITIVE_INFINITY;
+		double yMax = Double.NEGATIVE_INFINITY;
 		for (Point2D value : correlationValues) {
 			xMin = Math.min(xMin, value.getX());
 			xMax = Math.max(xMax, value.getX());
 			yMin = Math.min(yMin, value.getY());
 			yMax = Math.max(yMax, value.getY());
 		}
+
+		xMin = Axis.suggestMin(xMin);
+		xMax = Axis.suggestMax(xMax);
+		yMin = Axis.suggestMin(yMin);
+		yMax = Axis.suggestMax(yMax);
 
 		@SuppressWarnings("unchecked")
 		Parameter<Double> xAxisParameter = (Parameter<Double>) xParameterSelection;

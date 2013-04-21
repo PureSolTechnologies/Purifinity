@@ -238,6 +238,8 @@ public class ParetoChartView extends AbstractMetricViewPart implements
 			max = Math.max(max, value.getValue());
 		}
 
+		max = Axis.suggestMax(max);
+
 		Axis<String> xAxis = AxisFactory.createCategoryAxis(AxisDirection.X,
 				new ParameterWithArbitraryUnit<String>("File", "",
 						LevelOfMeasurement.NOMINAL, "", String.class),

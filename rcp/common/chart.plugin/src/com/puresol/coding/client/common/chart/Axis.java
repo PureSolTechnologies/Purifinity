@@ -81,4 +81,36 @@ public class Axis<T> {
 		throw new IllegalArgumentException("Value '" + value
 				+ "' is not suitable for this axis.");
 	}
+
+	public static double suggestMin(double min) {
+		if (min == 0.0) {
+			return 0.0;
+		}
+		double minSignum = Math.signum(min);
+		min = Math.abs(min);
+		double magnitute = Math.log10(min);
+		int m = (int) (Math.signum(magnitute) * Math.ceil(Math.abs(magnitute)));
+		double interval = Math.pow(10.0, m);
+		double newMin = interval;
+		while (newMin > min) {
+			newMin -= interval / 2.0;
+		}
+		return minSignum * newMin;
+	}
+
+	public static double suggestMax(double max) {
+		if (max == 0.0) {
+			return 0.0;
+		}
+		double maxSignum = Math.signum(max);
+		max = Math.abs(max);
+		double magnitute = Math.log10(max);
+		int m = (int) (Math.signum(magnitute) * Math.floor(Math.abs(magnitute)));
+		double interval = Math.pow(10.0, m);
+		double newMax = interval;
+		while (newMax < max) {
+			newMax += interval / 2.0;
+		}
+		return maxSignum * newMax;
+	}
 }
