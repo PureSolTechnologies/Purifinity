@@ -91,6 +91,14 @@
             name="Histogram Chart"
             restorable="true">
       </view>
+      <view
+            allowMultiple="true"
+            category="com.puresol.coding.client.common.evaluation.Evaluation"
+            class="com.puresol.coding.client.common.evaluation.metrics.maintainability.MaintainabilityChartView"
+            id="com.puresol.coding.client.common.evaluation.metrics.maintainability.MaintainabilityChartView"
+            name="Maintainability Chart"
+            restorable="true">
+      </view>
    </extension>
    <extension
          point="org.eclipse.ui.menus">

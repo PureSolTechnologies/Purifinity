@@ -140,7 +140,6 @@ public class ParetoChartView extends AbstractMetricViewPart implements
 	@Override
 	public void setFocus() {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
