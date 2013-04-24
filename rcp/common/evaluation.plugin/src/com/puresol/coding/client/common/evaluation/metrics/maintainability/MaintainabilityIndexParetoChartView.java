@@ -47,7 +47,7 @@ import com.puresol.utils.math.LevelOfMeasurement;
 import com.puresol.utils.math.ParameterWithArbitraryUnit;
 import com.puresol.utils.math.Value;
 
-public class MaintainabilityChartView extends AbstractMetricViewPart {
+public class MaintainabilityIndexParetoChartView extends AbstractMetricViewPart {
 
 	private final CodeRangeType codeRangeTypeSelection = CodeRangeType.FILE;
 	private Chart2D chart;

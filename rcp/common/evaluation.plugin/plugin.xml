@@ -94,9 +94,17 @@
       <view
             allowMultiple="true"
             category="com.puresol.coding.client.common.evaluation.Evaluation"
-            class="com.puresol.coding.client.common.evaluation.metrics.maintainability.MaintainabilityChartView"
-            id="com.puresol.coding.client.common.evaluation.metrics.maintainability.MaintainabilityChartView"
-            name="Maintainability Chart"
+            class="com.puresol.coding.client.common.evaluation.metrics.maintainability.MaintainabilityIndexParetoChartView"
+            id="com.puresol.coding.client.common.evaluation.metrics.maintainability.MaintainabilityIndexParetoChartView"
+            name="Maintainability Index Pareto Chart"
+            restorable="true">
+      </view>
+      <view
+            allowMultiple="true"
+            category="com.puresol.coding.client.common.evaluation.Evaluation"
+            class="com.puresol.coding.client.common.evaluation.metrics.maintainability.MaintainabilityIndexCumulativeDistributionChartView"
+            id="com.puresol.coding.client.common.evaluation.metrics.maintainability.MaintainabilityIndexCumulativeDistributionChartView"
+            name="Maintainability Index Cumulative Distribution Chart"
             restorable="true">
       </view>
    </extension>
