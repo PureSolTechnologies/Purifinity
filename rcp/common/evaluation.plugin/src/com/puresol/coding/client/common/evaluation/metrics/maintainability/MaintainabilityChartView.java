@@ -26,6 +26,7 @@ import com.puresol.coding.client.common.chart.AxisFactory;
 import com.puresol.coding.client.common.chart.Chart2D;
 import com.puresol.coding.client.common.chart.ChartCanvas;
 import com.puresol.coding.client.common.chart.DataPoint2D;
+import com.puresol.coding.client.common.chart.HorizontalColoredArea;
 import com.puresol.coding.client.common.chart.Plot;
 import com.puresol.coding.client.common.chart.renderer.CircleMarkRenderer;
 import com.puresol.coding.client.common.chart.renderer.ConstantColorProvider;
@@ -168,7 +169,8 @@ public class MaintainabilityChartView extends AbstractMetricViewPart {
 			Map<String, DataPoint2D<String, Double>> paretoValuesMIcw) {
 		chart.removeAllPlots();
 
-		chart.setTitle("Maintainability Chart");
+		chart.setTitle("Maintainability");
+		chart.setSubTitle("Pareto Chart");
 
 		Collections.sort(paretoValuesMI,
 				new Comparator<DataPoint2D<String, Double>>() {
@@ -201,8 +203,14 @@ public class MaintainabilityChartView extends AbstractMetricViewPart {
 		chart.setyAxis(yAxis);
 
 		Plot<String, Double> plotMI = new Plot<String, Double>(xAxis, yAxis,
-				"Pareto Plot MI");
+				"MI");
 		plotMI.add(paretoValuesMI);
+		plotMI.addColoredArea(new HorizontalColoredArea<String, Double>(plotMI,
+				yAxis.getMinimum(), 65, new RGB(255, 210, 210)));
+		plotMI.addColoredArea(new HorizontalColoredArea<String, Double>(plotMI,
+				65, 85, new RGB(255, 255, 210)));
+		plotMI.addColoredArea(new HorizontalColoredArea<String, Double>(plotMI,
+				85, yAxis.getMaximum(), new RGB(210, 255, 210)));
 		chart.addPlot(plotMI);
 
 		List<DataPoint2D<String, Double>> miWoc = new ArrayList<DataPoint2D<String, Double>>();
@@ -213,12 +221,12 @@ public class MaintainabilityChartView extends AbstractMetricViewPart {
 		}
 
 		Plot<String, Double> plotMIwoc = new Plot<String, Double>(xAxis, yAxis,
-				"Pareto Plot MIwoc");
+				"MIwoc");
 		plotMIwoc.add(miWoc);
 		chart.addPlot(plotMIwoc);
 
 		Plot<String, Double> plotMIcw = new Plot<String, Double>(xAxis, yAxis,
-				"Pareto Plot MIcw");
+				"MIcw");
 		plotMIcw.add(miCw);
 		chart.addPlot(plotMIcw);
 

@@ -8,9 +8,11 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.graphics.Rectangle;
 
+import com.puresol.coding.client.common.chart.ColoredArea;
 import com.puresol.coding.client.common.chart.DataPoint2D;
 import com.puresol.coding.client.common.chart.MarkPosition;
 import com.puresol.coding.client.common.chart.Plot;
+import com.puresol.coding.client.common.chart.math.Point2D;
 import com.puresol.coding.client.common.chart.math.TransformationMatrix2D;
 
 public class PlotRenderer {
@@ -42,6 +44,33 @@ public class PlotRenderer {
 	}
 
 	public List<MarkPosition> render(TransformationMatrix2D transformation) {
+		renderColoredAreas(transformation);
+		List<MarkPosition> markPositions = renderMarks(transformation);
+		return markPositions;
+	}
+
+	private void renderColoredAreas(TransformationMatrix2D transformation) {
+		for (ColoredArea<?, ?> coloredArea : plot.getColoredAreas()) {
+			RGB rgb = coloredArea.getColor();
+			Color color = new Color(gc.getDevice(), rgb);
+			try {
+				Point2D pointUL = new Point2D(coloredArea.getMinX(),
+						coloredArea.getMinY());
+				Point2D pointLR = new Point2D(coloredArea.getMaxX(),
+						coloredArea.getMaxY());
+				pointUL = transformation.transform(pointUL);
+				pointLR = transformation.transform(pointLR);
+				gc.setBackground(color);
+				gc.fillRectangle((int) pointUL.getX(), (int) pointUL.getY(),
+						(int) (pointLR.getX() - pointUL.getX()),
+						(int) (pointLR.getY() - pointUL.getY()));
+			} finally {
+				color.dispose();
+			}
+		}
+	}
+
+	private List<MarkPosition> renderMarks(TransformationMatrix2D transformation) {
 		Color currentForeground = gc.getForeground();
 		Color currentBackground = gc.getBackground();
 		List<MarkPosition> markPositions = new ArrayList<MarkPosition>();

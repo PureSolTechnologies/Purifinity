@@ -1,7 +1,10 @@
 package com.puresol.coding.client.common.chart;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.RGB;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
@@ -14,23 +17,27 @@ import com.puresol.coding.client.common.chart.renderer.MarkRenderer;
  * 
  * @author Rick-Rainer Ludwig
  */
-public class ChartCanvas {
-
-	private final Canvas canvas;
+public class ChartCanvas extends Canvas {
 
 	private final Label title;
 	private final Label subTitle;
 	private final PlotCanvas plot;
-	private final Canvas legende;
+	// private final Canvas legende;
 	private final Font titleFont;
 	private final Font subTitleFont;
 
 	private Chart2D chart2D;
 
 	public ChartCanvas(Composite parent, int style) {
-		canvas = new Canvas(parent, style);
-		canvas.setLayout(new ChartLayout());
-		title = new Label(canvas, SWT.NONE);
+		super(parent, style);
+		FillLayout layout = new FillLayout();
+		layout.marginHeight = 0;
+		layout.marginWidth = 0;
+		parent.setLayout(layout);
+
+		setLayout(new ChartLayout());
+		setBackground(new Color(getDisplay(), new RGB(255, 255, 255)));
+		title = new Label(this, SWT.NONE);
 		title.setLayoutData(ChartElement.TITLE);
 		title.setAlignment(SWT.CENTER);
 		Font defaultFont = title.getFont();
@@ -39,7 +46,7 @@ public class ChartCanvas {
 				(int) (defaultFont.getFontData()[0].getHeight() * 1.5),
 				defaultFont.getFontData()[0].getStyle() | SWT.BOLD);
 		title.setFont(titleFont);
-		subTitle = new Label(canvas, SWT.NONE);
+		subTitle = new Label(this, SWT.NONE);
 		subTitle.setLayoutData(ChartElement.SUBTITLE);
 		subTitle.setAlignment(SWT.CENTER);
 		subTitleFont = new Font(title.getDisplay(),
@@ -47,10 +54,10 @@ public class ChartCanvas {
 				(int) (defaultFont.getFontData()[0].getHeight() * 1.2),
 				defaultFont.getFontData()[0].getStyle() | SWT.BOLD);
 		subTitle.setFont(subTitleFont);
-		plot = new PlotCanvas(canvas, SWT.BORDER);
+		plot = new PlotCanvas(this, SWT.BORDER);
 		plot.setLayoutData(ChartElement.PLOT);
-		legende = new Canvas(canvas, SWT.BORDER);
-		legende.setLayoutData(ChartElement.LEGENDE);
+		// legende = new Canvas(canvas, SWT.BORDER);
+		// legende.setLayoutData(ChartElement.LEGENDE);
 	}
 
 	public Chart2D getChart2D() {
@@ -79,9 +86,9 @@ public class ChartCanvas {
 			subTitle.setText(chart2D.getSubTitle());
 		}
 		plot.redraw();
-		canvas.layout();
-		canvas.redraw();
-		canvas.update();
+		layout();
+		redraw();
+		update();
 	}
 
 }
