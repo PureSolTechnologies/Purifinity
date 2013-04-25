@@ -3,7 +3,7 @@ package com.puresol.coding.client.common.chart.renderer;
 import org.eclipse.swt.graphics.RGB;
 
 /**
- * This color provider is used for {@link ChartRenderer} and other plots like
+ * This color provider is used for {@link PlotRenderer} and other plots like
  * area plots to provide color information for each mark. This can be used to
  * apply gradient coloring for histograms for instance.
  * 

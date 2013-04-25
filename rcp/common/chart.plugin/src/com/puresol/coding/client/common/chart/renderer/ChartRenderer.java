@@ -1,110 +1,103 @@
 package com.puresol.coding.client.common.chart.renderer;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
-import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.graphics.Rectangle;
 
-import com.puresol.coding.client.common.chart.ColoredArea;
-import com.puresol.coding.client.common.chart.DataPoint2D;
+import com.puresol.coding.client.common.chart.Axis;
+import com.puresol.coding.client.common.chart.AxisDirection;
+import com.puresol.coding.client.common.chart.Chart2D;
 import com.puresol.coding.client.common.chart.MarkPosition;
 import com.puresol.coding.client.common.chart.Plot;
-import com.puresol.coding.client.common.chart.math.Point2D;
 import com.puresol.coding.client.common.chart.math.TransformationMatrix2D;
 
 public class ChartRenderer {
 
-	private final GC gc;
-	private final Plot<?, ?> plot;
-	private MarkRenderer markRenderer = new CrossMarkRenderer();
-	private ColorProvider colorProvider;
+	private final Map<Plot<?, ?>, List<MarkPosition>> markPositions = new HashMap<Plot<?, ?>, List<MarkPosition>>();
 
-	public ChartRenderer(GC gc, Plot<?, ?> plot) {
-		this.gc = gc;
-		this.plot = plot;
+	private final Map<Plot<?, ?>, MarkRenderer> markRenderers = new HashMap<Plot<?, ?>, MarkRenderer>();
+	private final Map<Plot<?, ?>, ColorProvider> colorProviders = new HashMap<Plot<?, ?>, ColorProvider>();
+
+	private Chart2D chart2D;
+
+	public void setChart2D(Chart2D chart2d) {
+		chart2D = chart2d;
 	}
 
-	public MarkRenderer getMarkRenderer() {
-		return markRenderer;
+	public Chart2D getChart2D() {
+		return chart2D;
 	}
 
-	public void setMarkRenderer(MarkRenderer markRenderer) {
-		this.markRenderer = markRenderer;
+	public void setMarkRenderer(Plot<?, ?> plot, MarkRenderer markRenderer) {
+		markRenderers.put(plot, markRenderer);
 	}
 
-	public ColorProvider getColorProvider() {
-		return colorProvider;
+	public void setColorProvider(Plot<?, ?> plot, ColorProvider colorProvider) {
+		colorProviders.put(plot, colorProvider);
 	}
 
-	public void setColorProvider(ColorProvider colorProvider) {
-		this.colorProvider = colorProvider;
-	}
+	public Map<Plot<?, ?>, List<MarkPosition>> render(GC gc,
+			Rectangle clientArea) {
+		markPositions.clear();
+		// Initialize renderer objects...
+		AxisRenderer xAxisRenderer = new AxisRenderer(gc, chart2D.getXAxis(),
+				chart2D.getYAxis().getMinimum());
+		AxisRenderer yAxisRenderer = new AxisRenderer(gc, chart2D.getYAxis(),
+				chart2D.getXAxis().getMinimum());
+		int yAxisWidth = yAxisRenderer.getWidth();
+		clientArea.x += yAxisWidth;
+		clientArea.width -= yAxisWidth;
+		int xAxisWidth = xAxisRenderer.getWidth();
+		clientArea.height -= xAxisWidth;
 
-	public List<MarkPosition> render(TransformationMatrix2D transformation) {
-		renderColoredAreas(transformation);
-		List<MarkPosition> markPositions = renderMarks(transformation);
-		return markPositions;
-	}
+		/*
+		 * Due to the missing fractional pixel drawing facilities in Eclipse we
+		 * need to transform everything on our own. The transformation matrix is
+		 * created to have a mathematical correct drawing.
+		 */
+		TransformationMatrix2D transformMatrix2d = new TransformationMatrix2D();
+		// move origin to canvas center
+		transformMatrix2d.translate(clientArea.x + clientArea.width / 2,
+				clientArea.y + clientArea.height / 2);
+		// let y axis point upright
+		transformMatrix2d.mirror(AxisDirection.X);
 
-	private void renderColoredAreas(TransformationMatrix2D transformation) {
-		for (ColoredArea<?, ?> coloredArea : plot.getColoredAreas()) {
-			RGB rgb = coloredArea.getColor();
-			Color color = new Color(gc.getDevice(), rgb);
-			try {
-				Point2D pointUL = new Point2D(coloredArea.getMinX(),
-						coloredArea.getMinY());
-				Point2D pointLR = new Point2D(coloredArea.getMaxX(),
-						coloredArea.getMaxY());
-				pointUL = transformation.transform(pointUL);
-				pointLR = transformation.transform(pointLR);
-				gc.setBackground(color);
-				gc.fillRectangle((int) pointUL.getX(), (int) pointUL.getY(),
-						(int) (pointLR.getX() - pointUL.getX()),
-						(int) (pointLR.getY() - pointUL.getY()));
-			} finally {
-				color.dispose();
+		Axis<?> xAxis = chart2D.getXAxis();
+		Axis<?> yAxis = chart2D.getYAxis();
+
+		double rangeX = xAxis.getMaximum() - xAxis.getMinimum();
+		double rangeY = yAxis.getMaximum() - yAxis.getMinimum();
+
+		// scale to use the values from dataset to paint
+		double scaleX = clientArea.width / rangeX;
+		double scaleY = clientArea.height / rangeY;
+		transformMatrix2d.scale(scaleX, scaleY);
+
+		// move the center of axes to center of canvas
+		double centerX = (xAxis.getMinimum() + xAxis.getMaximum()) / 2.0;
+		double centerY = (yAxis.getMinimum() + yAxis.getMaximum()) / 2.0;
+		transformMatrix2d.translate(-centerX, -centerY);
+
+		for (Plot<?, ?> plot : chart2D.getPlots()) {
+			PlotRenderer plotRenderer = new PlotRenderer(gc, plot);
+			MarkRenderer markRenderer = markRenderers.get(plot);
+			if (markRenderer != null) {
+				plotRenderer.setMarkRenderer(markRenderer);
 			}
-		}
-	}
-
-	private List<MarkPosition> renderMarks(TransformationMatrix2D transformation) {
-		Color currentForeground = gc.getForeground();
-		Color currentBackground = gc.getBackground();
-		List<MarkPosition> markPositions = new ArrayList<MarkPosition>();
-		List<?> dataPoints = plot.getDataPoints();
-		for (int i = 0; i < dataPoints.size(); i++) {
-			DataPoint2D<?, ?> dataPoint = (DataPoint2D<?, ?>) dataPoints.get(i);
-			Color foreground = null;
-			Color background = null;
+			ColorProvider colorProvider = colorProviders.get(plot);
 			if (colorProvider != null) {
-				Object y = dataPoint.getY();
-				RGB foregroundRGB = colorProvider.getForegroundColor(y);
-				if (foregroundRGB != null) {
-					foreground = new Color(gc.getDevice(), foregroundRGB);
-					gc.setForeground(foreground);
-				}
-				RGB backgroundRGB = colorProvider.getBackgroundColor(y);
-				if (backgroundRGB != null) {
-					background = new Color(gc.getDevice(), backgroundRGB);
-					gc.setBackground(background);
-				}
-
+				plotRenderer.setColorProvider(colorProvider);
 			}
-			Rectangle markPosition = markRenderer.render(gc, transformation,
-					plot, dataPoint.getX(), dataPoint.getY());
-			markPositions.add(new MarkPosition(plot, i, markPosition));
-			if (foreground != null) {
-				foreground.dispose();
-			}
-			if (background != null) {
-				background.dispose();
-			}
+			List<MarkPosition> positions = plotRenderer
+					.render(transformMatrix2d);
+			markPositions.put(plot, positions);
 		}
-		gc.setForeground(currentForeground);
-		gc.setBackground(currentBackground);
+
+		xAxisRenderer.render(transformMatrix2d);
+		yAxisRenderer.render(transformMatrix2d);
 		return markPositions;
 	}
 

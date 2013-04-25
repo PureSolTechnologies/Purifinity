@@ -19,7 +19,7 @@ public interface MarkRenderer {
 	 * This method will paint the actual mark.
 	 * 
 	 * <b>Attention(!):</b> The colors must no be reset! The foreground and
-	 * background color is set from the {@link ChartRenderer} with its
+	 * background color is set from the {@link PlotRenderer} with its
 	 * {@link ColorProvider}.
 	 * 
 	 * @param transformation
