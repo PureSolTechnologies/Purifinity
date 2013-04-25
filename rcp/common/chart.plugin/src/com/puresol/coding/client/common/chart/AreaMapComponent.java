@@ -29,7 +29,7 @@ import com.puresol.utils.math.MathUtils;
 public class AreaMapComponent extends Canvas implements PaintListener {
 
 	private static final RGB DEFAULT_FRAME_COLOR = new RGB(0, 0, 0);
-	private static final int PADDING = 2;
+	private static final int MARGIN = 2;
 
 	private AreaMapData data = null;
 	private String unit = null;
@@ -208,10 +208,10 @@ public class AreaMapComponent extends Canvas implements PaintListener {
 			int size = (int) sizes[i];
 			AreaMapData child = areaChildren.get(i);
 			drawAreasDouble(context, child, //
-					position + PADDING,//
-					top + PADDING, //
-					position + size - PADDING,//
-					bottom - PADDING,//
+					position + MARGIN,//
+					top + MARGIN, //
+					position + size - MARGIN,//
+					bottom - MARGIN,//
 					child.getSecondaryValue());
 			position += size;
 		}
@@ -226,10 +226,10 @@ public class AreaMapComponent extends Canvas implements PaintListener {
 			AreaMapData child = areaChildren.get(i);
 			int size = (int) sizes[i];
 			drawAreasDouble(context, child, //
-					left + PADDING, //
-					position + PADDING, //
-					right - PADDING, //
-					position + size - PADDING, //
+					left + MARGIN, //
+					position + MARGIN, //
+					right - MARGIN, //
+					position + size - MARGIN, //
 					child.getSecondaryValue()//
 			);
 			position += size;

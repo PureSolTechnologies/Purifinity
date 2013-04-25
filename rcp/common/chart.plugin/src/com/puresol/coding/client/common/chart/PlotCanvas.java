@@ -22,7 +22,7 @@ import com.puresol.coding.client.common.chart.renderer.PlotRenderer;
 
 public class PlotCanvas extends Canvas implements PaintListener {
 
-	private static final int PADDING = 5;
+	private static final int MARGIN = 5;
 
 	private Chart2D chart2D = null;
 
@@ -59,14 +59,14 @@ public class PlotCanvas extends Canvas implements PaintListener {
 		}
 		GC gc = e.gc;
 		Rectangle clientArea = getClientArea();
-		if ((clientArea.width <= 2 * PADDING || (clientArea.height <= 2 * PADDING))) {
+		if ((clientArea.width <= 2 * MARGIN || (clientArea.height <= 2 * MARGIN))) {
 			return;
 		}
 
-		clientArea.x += PADDING;
-		clientArea.y += PADDING;
-		clientArea.width -= 2 * PADDING;
-		clientArea.height -= 2 * PADDING;
+		clientArea.x += MARGIN;
+		clientArea.y += MARGIN;
+		clientArea.width -= 2 * MARGIN;
+		clientArea.height -= 2 * MARGIN;
 
 		// Initialize renderer objects...
 		AxisRenderer xAxisRenderer = new AxisRenderer(gc, chart2D.getXAxis(),
