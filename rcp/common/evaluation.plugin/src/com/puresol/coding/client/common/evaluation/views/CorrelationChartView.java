@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IMemento;
@@ -22,6 +23,7 @@ import com.puresol.coding.client.common.chart.ChartCanvas;
 import com.puresol.coding.client.common.chart.DataPoint2D;
 import com.puresol.coding.client.common.chart.Plot;
 import com.puresol.coding.client.common.chart.renderer.CircleMarkRenderer;
+import com.puresol.coding.client.common.chart.renderer.ConstantColorProvider;
 import com.puresol.coding.client.common.evaluation.CorrelationChartViewSettingsDialog;
 import com.puresol.coding.client.common.ui.actions.RefreshAction;
 import com.puresol.coding.client.common.ui.actions.ShowSettingsAction;
@@ -281,7 +283,10 @@ public class CorrelationChartView extends AbstractMetricViewPart {
 				"Correlation Plot");
 		plot.add(correlationValues);
 		chart.addPlot(plot);
-		chartCanvas.setMarkRenderer(plot, new CircleMarkRenderer());
+		CircleMarkRenderer markRenderer = new CircleMarkRenderer();
+		chartCanvas.setMarkRenderer(plot, markRenderer);
+		chartCanvas.setColorProvider(plot, new ConstantColorProvider(new RGB(0,
+				0, 0), new RGB(192, 0, 0)));
 
 		// ChartConfigProvider configProvider = getConfigProvider();
 		// chartCanvas.setColorProvider(plot,

@@ -27,6 +27,7 @@ public class CircleMarkRenderer implements MarkRenderer {
 		int pixelX = (int) point.getX() - CIRCE_RADIUS;
 		int pixelY = (int) point.getY() - CIRCE_RADIUS;
 		int pixelWidth = 2 * CIRCE_RADIUS;
+		gc.fillOval(pixelX, pixelY, pixelWidth, pixelWidth);
 		gc.drawOval(pixelX, pixelY, pixelWidth, pixelWidth);
 		gc.drawPoint((int) point.getX(), (int) point.getY());
 		return new Rectangle(pixelX, pixelY, pixelWidth, pixelWidth);

@@ -1,9 +1,5 @@
 package com.puresol.coding.client.common.chart;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.eclipse.jface.window.DefaultToolTip;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
@@ -29,7 +25,6 @@ public class ChartCanvas extends Canvas implements PaintListener {
 
 	private static final int MARGIN = 5;
 
-	private final Map<Plot<?, ?>, List<MarkPosition>> markPositions = new HashMap<Plot<?, ?>, List<MarkPosition>>();
 	private final ChartRenderer chartRenderer = new ChartRenderer();
 
 	public ChartCanvas(Composite parent, int style) {
@@ -73,32 +68,21 @@ public class ChartCanvas extends Canvas implements PaintListener {
 	}
 
 	public String getTooltipText(int x, int y) {
-		for (Plot<?, ?> plot : markPositions.keySet()) {
-			for (MarkPosition markPosition : markPositions.get(plot)) {
-				Rectangle position = markPosition.getPosition();
-				if ((x >= position.x) && (y >= position.y)
-						&& (x <= position.x + position.width)
-						&& (y <= position.y + position.height)) {
-					int index = markPosition.getDataPointIndex();
-					DataPoint2D<?, ?> dataPoint2D = plot.getDataPoints().get(
-							index);
-					String text = dataPoint2D.getX().toString() + " : "
-							+ dataPoint2D.getY().toString();
-					String remark = dataPoint2D.getRemark();
-					if ((remark != null)
-							&& (!dataPoint2D.getRemark().isEmpty())) {
-						text += " (" + dataPoint2D.getRemark() + ")";
-					}
-					return text;
-				}
-			}
+		DataPoint2D<?, ?> dataPoint2D = chartRenderer.getDataPointAt(x, y);
+		if (dataPoint2D == null) {
+			return null;
 		}
-		return null;
+		String text = dataPoint2D.getX().toString() + " : "
+				+ dataPoint2D.getY().toString();
+		String remark = dataPoint2D.getRemark();
+		if ((remark != null) && (!dataPoint2D.getRemark().isEmpty())) {
+			text += " (" + dataPoint2D.getRemark() + ")";
+		}
+		return text;
 	}
 
 	@Override
 	public void paintControl(PaintEvent e) {
-		markPositions.clear();
 		if ((getChart2D() == null) || (getChart2D().getXAxis() == null)
 				|| (getChart2D().getYAxis() == null)) {
 			return;
@@ -118,7 +102,6 @@ public class ChartCanvas extends Canvas implements PaintListener {
 	}
 
 	public void refresh() {
-		layout();
 		redraw();
 		update();
 	}

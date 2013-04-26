@@ -10,6 +10,7 @@ import org.eclipse.swt.graphics.Rectangle;
 import com.puresol.coding.client.common.chart.Axis;
 import com.puresol.coding.client.common.chart.AxisDirection;
 import com.puresol.coding.client.common.chart.Chart2D;
+import com.puresol.coding.client.common.chart.DataPoint2D;
 import com.puresol.coding.client.common.chart.MarkPosition;
 import com.puresol.coding.client.common.chart.Plot;
 import com.puresol.coding.client.common.chart.math.TransformationMatrix2D;
@@ -101,4 +102,18 @@ public class ChartRenderer {
 		return markPositions;
 	}
 
+	public DataPoint2D<?, ?> getDataPointAt(int x, int y) {
+		for (Plot<?, ?> plot : markPositions.keySet()) {
+			for (MarkPosition markPosition : markPositions.get(plot)) {
+				Rectangle position = markPosition.getPosition();
+				if ((x >= position.x) && (y >= position.y)
+						&& (x <= position.x + position.width)
+						&& (y <= position.y + position.height)) {
+					int index = markPosition.getDataPointIndex();
+					return plot.getDataPoints().get(index);
+				}
+			}
+		}
+		return null;
+	}
 }
