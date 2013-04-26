@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontMetrics;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Rectangle;
 
@@ -43,15 +46,22 @@ public class ChartRenderer {
 	public Map<Plot<?, ?>, List<MarkPosition>> render(GC gc,
 			Rectangle clientArea) {
 		markPositions.clear();
+
+		configureGC(gc);
+
+		printTitle(gc, clientArea);
+		printSubTitle(gc, clientArea);
+
 		// Initialize renderer objects...
 		AxisRenderer xAxisRenderer = new AxisRenderer(gc, chart2D.getXAxis(),
 				chart2D.getYAxis().getMinimum());
+		int xAxisWidth = xAxisRenderer.getWidth();
 		AxisRenderer yAxisRenderer = new AxisRenderer(gc, chart2D.getYAxis(),
 				chart2D.getXAxis().getMinimum());
 		int yAxisWidth = yAxisRenderer.getWidth();
+
 		clientArea.x += yAxisWidth;
 		clientArea.width -= yAxisWidth;
-		int xAxisWidth = xAxisRenderer.getWidth();
 		clientArea.height -= xAxisWidth;
 
 		/*
@@ -100,6 +110,57 @@ public class ChartRenderer {
 		xAxisRenderer.render(transformMatrix2d);
 		yAxisRenderer.render(transformMatrix2d);
 		return markPositions;
+	}
+
+	private void printTitle(GC gc, Rectangle clientArea) {
+		Font currentFont = gc.getFont();
+		Font font = new Font(gc.getDevice(), "Arial", 12, SWT.BOLD);
+		try {
+			gc.setFont(font);
+			FontMetrics fontMetrics = gc.getFontMetrics();
+			int titleHeight = fontMetrics.getHeight();
+			int averageCharWidth = fontMetrics.getAverageCharWidth();
+
+			String title = chart2D.getTitle();
+			gc.drawText(title,
+					clientArea.x
+							+ (clientArea.width - title.length()
+									* averageCharWidth) / 2, clientArea.y);
+
+			clientArea.y += titleHeight;
+			clientArea.height -= titleHeight;
+		} finally {
+			font.dispose();
+		}
+		gc.setFont(currentFont);
+	}
+
+	private void printSubTitle(GC gc, Rectangle clientArea) {
+		Font currentFont = gc.getFont();
+		Font font = new Font(gc.getDevice(), "Arial", 10, SWT.ITALIC);
+		try {
+			gc.setFont(font);
+			FontMetrics fontMetrics = gc.getFontMetrics();
+			int titleHeight = fontMetrics.getHeight();
+			int averageCharWidth = fontMetrics.getAverageCharWidth();
+
+			String subTitle = chart2D.getSubTitle();
+			gc.drawText(subTitle,
+					clientArea.x
+							+ (clientArea.width - subTitle.length()
+									* averageCharWidth) / 2, clientArea.y);
+
+			clientArea.y += titleHeight;
+			clientArea.height -= titleHeight;
+		} finally {
+			gc.setFont(currentFont);
+			font.dispose();
+		}
+	}
+
+	private void configureGC(GC gc) {
+		gc.setTextAntialias(SWT.ON);
+		gc.setAntialias(SWT.ON);
 	}
 
 	public DataPoint2D<?, ?> getDataPointAt(int x, int y) {

@@ -38,11 +38,12 @@ import com.puresol.coding.evaluation.api.EvaluatorStore;
 import com.puresol.coding.evaluation.api.EvaluatorStoreFactory;
 import com.puresol.coding.evaluation.api.MetricFileResults;
 import com.puresol.coding.metrics.maintainability.MaintainabilityIndexEvaluator;
-import com.puresol.coding.metrics.maintainability.MaintainabilityIndexEvaluatorParameter;
 import com.puresol.trees.TreeVisitor;
 import com.puresol.trees.TreeWalker;
 import com.puresol.trees.WalkingAction;
 import com.puresol.utils.HashId;
+import com.puresol.utils.math.LevelOfMeasurement;
+import com.puresol.utils.math.ParameterWithArbitraryUnit;
 import com.puresol.utils.math.Value;
 
 public class MaintainabilityIndexCumulativeDistributionChartView extends
@@ -216,12 +217,14 @@ public class MaintainabilityIndexCumulativeDistributionChartView extends
 		max = Axis.suggestMax(max);
 
 		Axis<Double> xAxis = AxisFactory.createDoubleValueAxis(AxisDirection.X,
-				MaintainabilityIndexEvaluatorParameter.MI, min, max,
-				(max - min) / 10.0, 1);
+				MI, min, max, (max - min) / 10.0, 1, 2);
 		chart.setxAxis(xAxis);
 
 		Axis<Double> yAxis = AxisFactory.createDoubleValueAxis(AxisDirection.Y,
-				MI, 0.0, 1.0, 0.1, 1);
+				new ParameterWithArbitraryUnit<Double>(
+						"Cumulative Propability", "", LevelOfMeasurement.RATIO,
+						"Cumulative distribution propability", Double.class),
+				0.0, 1.0, 0.1, 1, 2);
 		chart.setyAxis(yAxis);
 
 		List<DataPoint2D<Double, Double>> mi = new ArrayList<DataPoint2D<Double, Double>>();

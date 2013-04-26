@@ -2,6 +2,8 @@ package com.puresol.coding.client.common.chart.renderer;
 
 import java.util.List;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontMetrics;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Transform;
@@ -60,17 +62,24 @@ public class AxisRenderer {
 
 	private void drawXAxisNameAndUnit(TransformationMatrix2D transformation) {
 		String text = getAxisText(axis);
-		FontMetrics fontMetrics = gc.getFontMetrics();
-		int averageCharWidth = fontMetrics.getAverageCharWidth();
-		int height = fontMetrics.getHeight();
-		double xPos = (axis.getMaximum() + axis.getMinimum()) / 2.0;
-		Point2D pos = new Point2D(xPos, drawingPosition);
-		pos = transformation.transform(pos);
-		pos = new Point2D(
-				pos.getX() - (text.length() * averageCharWidth) / 2.0,
-				pos.getY() + height);
-		gc.drawText(text, (int) pos.getX(),
-				(int) (pos.getY() + 2 * MAIN_TICK_LENGTH), true);
+		Font currentFont = gc.getFont();
+		Font font = new Font(gc.getDevice(), "Arial", 10, SWT.BOLD);
+		try {
+			gc.setFont(font);
+			FontMetrics fontMetrics = gc.getFontMetrics();
+			int averageCharWidth = fontMetrics.getAverageCharWidth();
+			int height = fontMetrics.getHeight();
+			double xPos = (axis.getMaximum() + axis.getMinimum()) / 2.0;
+			Point2D pos = new Point2D(xPos, drawingPosition);
+			pos = transformation.transform(pos);
+			pos = new Point2D(pos.getX() - (text.length() * averageCharWidth)
+					/ 2.0, pos.getY() + height);
+			gc.drawText(text, (int) pos.getX(),
+					(int) (pos.getY() + 2 * MAIN_TICK_LENGTH), true);
+		} finally {
+			gc.setFont(currentFont);
+			font.dispose();
+		}
 	}
 
 	private void drawYAxisNameAndUnit(TransformationMatrix2D transformation,
@@ -105,15 +114,24 @@ public class AxisRenderer {
 					.createRotationMatrixDeg(90));
 			// Now we can paint... :-)
 			String text = getAxisText(axis);
-			FontMetrics fontMetrics = gc.getFontMetrics();
-			int averageCharWidth = fontMetrics.getAverageCharWidth();
-			int height = fontMetrics.getHeight();
-			double yPos = (axis.getMaximum() + axis.getMinimum()) / 2.0;
-			Point2D pos = new Point2D(drawingPosition, yPos);
-			pos = t.transform(pos);
-			pos = new Point2D(pos.getX() - (text.length() * averageCharWidth)
-					/ 2.0, pos.getY() - maxLength - MAIN_TICK_LENGTH - height);
-			gc.drawText(text, (int) pos.getX(), (int) pos.getY(), true);
+			Font currentFont = gc.getFont();
+			Font font = new Font(gc.getDevice(), "Arial", 10, SWT.BOLD);
+			try {
+				gc.setFont(font);
+				FontMetrics fontMetrics = gc.getFontMetrics();
+				int averageCharWidth = fontMetrics.getAverageCharWidth();
+				int height = fontMetrics.getHeight();
+				double yPos = (axis.getMaximum() + axis.getMinimum()) / 2.0;
+				Point2D pos = new Point2D(drawingPosition, yPos);
+				pos = t.transform(pos);
+				pos = new Point2D(pos.getX()
+						- (text.length() * averageCharWidth) / 2.0, pos.getY()
+						- maxLength - MAIN_TICK_LENGTH - height);
+				gc.drawText(text, (int) pos.getX(), (int) pos.getY(), true);
+			} finally {
+				gc.setFont(currentFont);
+				font.dispose();
+			}
 		} finally {
 			// Reset the GC transformation...
 			gc.setTransform(origTransform);

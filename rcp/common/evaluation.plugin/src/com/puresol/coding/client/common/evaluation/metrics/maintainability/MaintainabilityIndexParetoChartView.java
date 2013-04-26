@@ -199,7 +199,7 @@ public class MaintainabilityIndexParetoChartView extends AbstractMetricViewPart 
 		chart.setxAxis(xAxis);
 
 		Axis<Double> yAxis = AxisFactory.createDoubleValueAxis(AxisDirection.Y,
-				MI, min, max, (max - min) / 10.0, 1);
+				MI, min, max, (max - min) / 10.0, 1, 2);
 		chart.setyAxis(yAxis);
 
 		Plot<String, Double> plotMI = new Plot<String, Double>(xAxis, yAxis,

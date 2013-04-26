@@ -259,7 +259,7 @@ public class ParetoChartView extends AbstractMetricViewPart implements
 		@SuppressWarnings("unchecked")
 		Parameter<Double> yAxisParameter = (Parameter<Double>) parameterSelection;
 		Axis<Double> yAxis = AxisFactory.createDoubleValueAxis(AxisDirection.Y,
-				yAxisParameter, min, max, (max - min) / 10.0, 1);
+				yAxisParameter, min, max, (max - min) / 10.0, 1, 2);
 		chart.setyAxis(yAxis);
 
 		Plot<String, Double> plot = new Plot<String, Double>(xAxis, yAxis,

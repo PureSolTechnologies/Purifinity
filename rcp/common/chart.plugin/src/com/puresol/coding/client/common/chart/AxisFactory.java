@@ -6,20 +6,22 @@ public class AxisFactory {
 
 	public static Axis<Double> createDoubleValueAxis(AxisDirection direction,
 			Parameter<Double> parameter, double min, double max,
-			double tickWidth, int numSubTicks) {
+			double tickWidth, int numSubTicks, int precision) {
 		Axis<Double> axis = new Axis<Double>(direction, parameter);
 		axis.setMinimum(min);
 		axis.setMaximum(max);
 		if (tickWidth > 0) {
+			String formatString = "%" + (precision) + "." + precision + "f";
 			for (double tick = min; tick <= max; tick += tickWidth) {
-				axis.addTick(new Tick<Double>(TickType.MAJOR, tick, tick,
-						String.valueOf(tick)));
+				String label = String.format(formatString, tick);
+				axis.addTick(new Tick<Double>(TickType.MAJOR, tick, tick, label));
 				if ((numSubTicks > 0) && (tick < max)) {
 					double subTickWidth = tickWidth / (numSubTicks + 1);
 					for (int i = 1; i <= numSubTicks; i++) {
 						double position = tick + i * subTickWidth;
+						String subLabel = String.format(formatString, position);
 						axis.addTick(new Tick<Double>(TickType.MINOR, position,
-								position, String.valueOf(position)));
+								position, subLabel));
 					}
 				}
 			}

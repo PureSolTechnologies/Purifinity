@@ -270,13 +270,13 @@ public class CorrelationChartView extends AbstractMetricViewPart {
 		@SuppressWarnings("unchecked")
 		Parameter<Double> xAxisParameter = (Parameter<Double>) xParameterSelection;
 		Axis<Double> xAxis = AxisFactory.createDoubleValueAxis(AxisDirection.X,
-				xAxisParameter, xMin, xMax, (xMax - xMin) / 10.0, 1);
+				xAxisParameter, xMin, xMax, (xMax - xMin) / 10.0, 1, 2);
 		chart.setxAxis(xAxis);
 
 		@SuppressWarnings("unchecked")
 		Parameter<Double> yAxisParameter = (Parameter<Double>) yParameterSelection;
 		Axis<Double> yAxis = AxisFactory.createDoubleValueAxis(AxisDirection.Y,
-				yAxisParameter, yMin, yMax, (yMax - yMin) / 10.0, 1);
+				yAxisParameter, yMin, yMax, (yMax - yMin) / 10.0, 1, 2);
 		chart.setyAxis(yAxis);
 
 		Plot<Double, Double> plot = new Plot<Double, Double>(xAxis, yAxis,
