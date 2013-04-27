@@ -243,12 +243,6 @@ public class MaintainabilityIndexCumulativeDistributionChartView extends
 		Plot<Double, Double> plotMI = new Plot<Double, Double>(xAxis, yAxis,
 				"MI");
 		plotMI.add(mi);
-		plotMI.addColoredArea(new VerticalColoredArea<Double, Double>(plotMI,
-				xAxis.getMinimum(), 65, new RGB(255, 210, 210)));
-		plotMI.addColoredArea(new VerticalColoredArea<Double, Double>(plotMI,
-				65, 85, new RGB(255, 255, 210)));
-		plotMI.addColoredArea(new VerticalColoredArea<Double, Double>(plotMI,
-				85, xAxis.getMaximum(), new RGB(210, 255, 210)));
 		chart.addPlot(plotMI);
 
 		Plot<Double, Double> plotMIwoc = new Plot<Double, Double>(xAxis, yAxis,
@@ -272,6 +266,14 @@ public class MaintainabilityIndexCumulativeDistributionChartView extends
 		chartCanvas.setMarkRenderer(plotMIcw, new CircleMarkRenderer());
 		chartCanvas.setColorProvider(plotMIcw, new ConstantColorProvider(
 				new RGB(0, 0, 255)));
+
+		chartCanvas.addColoredArea(new VerticalColoredArea<Double, Double>(
+				plotMI, xAxis.getMinimum(), 65, new RGB(255, 210, 210)));
+		chartCanvas.addColoredArea(new VerticalColoredArea<Double, Double>(
+				plotMI, 65, 85, new RGB(255, 255, 210)));
+		chartCanvas.addColoredArea(new VerticalColoredArea<Double, Double>(
+				plotMI, 85, xAxis.getMaximum(), new RGB(210, 255, 210)));
+
 		chartCanvas.refresh();
 	}
 }

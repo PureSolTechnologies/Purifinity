@@ -106,4 +106,8 @@ public class ChartCanvas extends Canvas implements PaintListener {
 		update();
 	}
 
+	public void addColoredArea(ColoredArea<?, ?> coloredArea) {
+		chartRenderer.addColoredArea(coloredArea);
+	}
+
 }

@@ -1,21 +1,26 @@
 package com.puresol.coding.client.common.chart.renderer;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontMetrics;
 import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.graphics.Rectangle;
 
 import com.puresol.coding.client.common.chart.Axis;
 import com.puresol.coding.client.common.chart.AxisDirection;
 import com.puresol.coding.client.common.chart.Chart2D;
+import com.puresol.coding.client.common.chart.ColoredArea;
 import com.puresol.coding.client.common.chart.DataPoint2D;
 import com.puresol.coding.client.common.chart.MarkPosition;
 import com.puresol.coding.client.common.chart.Plot;
+import com.puresol.coding.client.common.chart.math.Point2D;
 import com.puresol.coding.client.common.chart.math.TransformationMatrix2D;
 
 public class ChartRenderer {
@@ -24,6 +29,7 @@ public class ChartRenderer {
 
 	private final Map<Plot<?, ?>, MarkRenderer> markRenderers = new HashMap<Plot<?, ?>, MarkRenderer>();
 	private final Map<Plot<?, ?>, ColorProvider> colorProviders = new HashMap<Plot<?, ?>, ColorProvider>();
+	private final List<ColoredArea<?, ?>> coloredAreas = new ArrayList<ColoredArea<?, ?>>();
 
 	private Chart2D chart2D;
 
@@ -92,6 +98,8 @@ public class ChartRenderer {
 		double centerY = (yAxis.getMinimum() + yAxis.getMaximum()) / 2.0;
 		transformMatrix2d.translate(-centerX, -centerY);
 
+		renderColoredAreas(gc, transformMatrix2d);
+
 		for (Plot<?, ?> plot : chart2D.getPlots()) {
 			PlotRenderer plotRenderer = new PlotRenderer(gc, plot);
 			MarkRenderer markRenderer = markRenderers.get(plot);
@@ -110,6 +118,27 @@ public class ChartRenderer {
 		xAxisRenderer.render(transformMatrix2d);
 		yAxisRenderer.render(transformMatrix2d);
 		return markPositions;
+	}
+
+	private void renderColoredAreas(GC gc, TransformationMatrix2D transformation) {
+		for (ColoredArea<?, ?> coloredArea : coloredAreas) {
+			RGB rgb = coloredArea.getColor();
+			Color color = new Color(gc.getDevice(), rgb);
+			try {
+				Point2D pointUL = new Point2D(coloredArea.getMinX(),
+						coloredArea.getMinY());
+				Point2D pointLR = new Point2D(coloredArea.getMaxX(),
+						coloredArea.getMaxY());
+				pointUL = transformation.transform(pointUL);
+				pointLR = transformation.transform(pointLR);
+				gc.setBackground(color);
+				gc.fillRectangle((int) pointUL.getX(), (int) pointUL.getY(),
+						(int) (pointLR.getX() - pointUL.getX()),
+						(int) (pointLR.getY() - pointUL.getY()));
+			} finally {
+				color.dispose();
+			}
+		}
 	}
 
 	private void printTitle(GC gc, Rectangle clientArea) {
@@ -176,5 +205,13 @@ public class ChartRenderer {
 			}
 		}
 		return null;
+	}
+
+	public void addColoredArea(ColoredArea<?, ?> coloredArea) {
+		coloredAreas.add(coloredArea);
+	}
+
+	public List<ColoredArea<?, ?>> getColoredAreas() {
+		return coloredAreas;
 	}
 }

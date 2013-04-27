@@ -205,12 +205,6 @@ public class MaintainabilityIndexParetoChartView extends AbstractMetricViewPart 
 		Plot<String, Double> plotMI = new Plot<String, Double>(xAxis, yAxis,
 				"MI");
 		plotMI.add(paretoValuesMI);
-		plotMI.addColoredArea(new HorizontalColoredArea<String, Double>(plotMI,
-				yAxis.getMinimum(), 65, new RGB(255, 210, 210)));
-		plotMI.addColoredArea(new HorizontalColoredArea<String, Double>(plotMI,
-				65, 85, new RGB(255, 255, 210)));
-		plotMI.addColoredArea(new HorizontalColoredArea<String, Double>(plotMI,
-				85, yAxis.getMaximum(), new RGB(210, 255, 210)));
 		chart.addPlot(plotMI);
 
 		List<DataPoint2D<String, Double>> miWoc = new ArrayList<DataPoint2D<String, Double>>();
@@ -241,6 +235,14 @@ public class MaintainabilityIndexParetoChartView extends AbstractMetricViewPart 
 		chartCanvas.setMarkRenderer(plotMIcw, new CircleMarkRenderer());
 		chartCanvas.setColorProvider(plotMIcw, new ConstantColorProvider(
 				new RGB(0, 0, 255)));
+
+		chartCanvas.addColoredArea(new HorizontalColoredArea<String, Double>(
+				plotMI, yAxis.getMinimum(), 65, new RGB(255, 210, 210)));
+		chartCanvas.addColoredArea(new HorizontalColoredArea<String, Double>(
+				plotMI, 65, 85, new RGB(255, 255, 210)));
+		chartCanvas.addColoredArea(new HorizontalColoredArea<String, Double>(
+				plotMI, 85, yAxis.getMaximum(), new RGB(210, 255, 210)));
+
 		chartCanvas.refresh();
 	}
 
