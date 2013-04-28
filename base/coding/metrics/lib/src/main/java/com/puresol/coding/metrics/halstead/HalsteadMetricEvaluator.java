@@ -41,10 +41,10 @@ public class HalsteadMetricEvaluator extends AbstractEvaluator {
 		HalsteadMetric metric = new HalsteadMetric(getAnalysisRun(),
 			language, codeRange);
 		execute(metric);
-		results.add(new HalsteadMetricResult(analysis
-			.getAnalyzedFile().getSourceLocation(), codeRange
-			.getType(), codeRange.getName(), metric
-			.getHalsteadResults(), metric.getQuality()));
+		results.add(new HalsteadMetricResult(analysis.getAnalyzedFile()
+			.getSourceLocation(), codeRange.getType(), codeRange
+			.getCanonicalName(), metric.getHalsteadResults(),
+			metric.getQuality()));
 	    }
 	} finally {
 	    IOUtils.closeQuietly(programmingLanguages);

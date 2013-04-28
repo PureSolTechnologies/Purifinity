@@ -14,93 +14,107 @@ import com.puresol.utils.ObjectUtilities;
  */
 public final class CodeRange implements Serializable, Comparable<CodeRange> {
 
-	private static final long serialVersionUID = -2262393596463952399L;
+    private static final long serialVersionUID = -2262393596463952399L;
 
-	/**
-	 * This is a human readable name of the code range.
-	 */
-	private final String name;
+    /**
+     * This name is a simple name like a method name or class name.
+     */
+    private final String simpleName;
 
-	/**
-	 * This is the type of the code range. It might be a whole file, a class
-	 * definition or a subroutine.
-	 */
-	private final CodeRangeType type;
+    /**
+     * This is name is in a canonical form. The issue was overloaded methods
+     * which have the same name. This caused bugs. We have here now a name which
+     * is to be unique for the code range.
+     */
+    private final String canonicalName;
 
-	/**
-	 * This is the actual code which is part of this code range.
-	 */
-	private final ParserTree ast;
+    /**
+     * This is the type of the code range. It might be a whole file, a class
+     * definition or a subroutine.
+     */
+    private final CodeRangeType type;
 
-	private final int hashcode;
+    /**
+     * This is the actual code which is part of this code range.
+     */
+    private final ParserTree ast;
 
-	public CodeRange(String name, CodeRangeType type, ParserTree ast) {
-		super();
-		this.name = name;
-		this.type = type;
-		this.ast = ast;
-		hashcode = ObjectUtilities.calculateConstantHashCode(name, type, ast);
+    private final int hashcode;
+
+    public CodeRange(String simpleName, String canonicalName,
+	    CodeRangeType type, ParserTree ast) {
+	super();
+	this.simpleName = simpleName;
+	this.canonicalName = canonicalName;
+	this.type = type;
+	this.ast = ast;
+	hashcode = ObjectUtilities.calculateConstantHashCode(simpleName, type,
+		ast);
+    }
+
+    public String getSimpleName() {
+	return simpleName;
+    }
+
+    public String getCanonicalName() {
+	return canonicalName;
+    }
+
+    public CodeRangeType getType() {
+	return type;
+    }
+
+    public ParserTree getParserTree() {
+	return ast;
+    }
+
+    @Override
+    public int hashCode() {
+	return hashcode;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+	if (this == obj)
+	    return true;
+	if (obj == null)
+	    return false;
+	if (getClass() != obj.getClass())
+	    return false;
+	CodeRange other = (CodeRange) obj;
+	if (hashcode != other.hashcode) {
+	    return false;
 	}
+	if (ast == null) {
+	    if (other.ast != null)
+		return false;
+	} else if (!ast.equals(other.ast))
+	    return false;
+	if (simpleName == null) {
+	    if (other.simpleName != null)
+		return false;
+	} else if (!simpleName.equals(other.simpleName))
+	    return false;
+	if (type != other.type)
+	    return false;
+	return true;
+    }
 
-	public String getName() {
-		return name;
+    @Override
+    public int compareTo(CodeRange other) {
+	int result = type.compareTo(other.type);
+	if (result != 0) {
+	    return result;
 	}
+	return simpleName.compareTo(other.simpleName);
+    }
 
-	public CodeRangeType getType() {
-		return type;
+    @Override
+    public String toString() {
+	if (simpleName.isEmpty()) {
+	    return type.getName();
 	}
-
-	public ParserTree getParserTree() {
-		return ast;
-	}
-
-	@Override
-	public int hashCode() {
-		return hashcode;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		CodeRange other = (CodeRange) obj;
-		if (hashcode != other.hashcode) {
-			return false;
-		}
-		if (ast == null) {
-			if (other.ast != null)
-				return false;
-		} else if (!ast.equals(other.ast))
-			return false;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		if (type != other.type)
-			return false;
-		return true;
-	}
-
-	@Override
-	public int compareTo(CodeRange other) {
-		int result = type.compareTo(other.type);
-		if (result != 0) {
-			return result;
-		}
-		return name.compareTo(other.name);
-	}
-
-	@Override
-	public String toString() {
-		if (name.isEmpty()) {
-			return type.getName();
-		}
-		return type.getName() + " " + name;
-	}
+	return type.getName() + " " + simpleName;
+    }
 
 }

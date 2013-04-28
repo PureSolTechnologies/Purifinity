@@ -13,12 +13,12 @@ import com.puresol.uhura.parser.ParserTree;
 
 public class McCabeMetricTest {
 
-	@Test
-	public void testInstance() {
-		AnalysisRun analysisRun = Mockito.mock(AnalysisRun.class);
-		assertNotNull(new McCabeMetric(analysisRun, TestLanguage.getInstance(),
-				new CodeRange("FILE", CodeRangeType.FILE,
-						new ParserTree("FILE"))));
-	}
+    @Test
+    public void testInstance() {
+	AnalysisRun analysisRun = Mockito.mock(AnalysisRun.class);
+	assertNotNull(new McCabeMetric(analysisRun, TestLanguage.getInstance(),
+		new CodeRange("FILE", "FILE", CodeRangeType.FILE,
+			new ParserTree("FILE"))));
+    }
 
 }

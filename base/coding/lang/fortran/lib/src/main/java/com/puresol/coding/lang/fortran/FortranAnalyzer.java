@@ -37,8 +37,8 @@ import com.puresol.uhura.lexer.TokenStream;
 import com.puresol.uhura.parser.Parser;
 import com.puresol.uhura.parser.ParserException;
 import com.puresol.uhura.parser.ParserTree;
-import com.puresol.uhura.source.SourceCode;
 import com.puresol.uhura.source.CodeLocation;
+import com.puresol.uhura.source.SourceCode;
 import com.puresol.utils.StopWatch;
 
 /**
@@ -131,7 +131,7 @@ public class FortranAnalyzer implements CodeAnalyzer {
 
     private List<CodeRange> getAnalyzableCodeRanges(ParserTree parserTree) {
 	final List<CodeRange> result = new ArrayList<CodeRange>();
-	result.add(new CodeRange("", CodeRangeType.FILE, parserTree));
+	result.add(new CodeRange("", "", CodeRangeType.FILE, parserTree));
 	TreeWalker<ParserTree> walker = new TreeWalker<ParserTree>(parserTree);
 	walker.walk(new TreeVisitor<ParserTree>() {
 
@@ -141,28 +141,28 @@ public class FortranAnalyzer implements CodeAnalyzer {
 		    if ("main-program".equals(tree.getName())) {
 			String name = tree.getChild("program-stmt")
 				.getChildren("NAME_LITERAL").get(1).getText();
-			result.add(new CodeRange(name, CodeRangeType.PROGRAM,
-				tree));
+			result.add(new CodeRange(name, name,
+				CodeRangeType.PROGRAM, tree));
 		    } else if ("function-subprogram".equals(tree.getName())) {
 			String name = tree.getChild("function-stmt")
 				.getChildren("NAME_LITERAL").get(1).getText();
-			result.add(new CodeRange(name, CodeRangeType.FUNCTION,
-				tree));
+			result.add(new CodeRange(name, name,
+				CodeRangeType.FUNCTION, tree));
 		    } else if ("subroutine-subprogram".equals(tree.getName())) {
 			String name = tree.getChild("subroutine-stmt")
 				.getChildren("NAME_LITERAL").get(1).getText();
-			result.add(new CodeRange(name,
+			result.add(new CodeRange(name, name,
 				CodeRangeType.SUBROUTINE, tree));
 		    } else if ("module".equals(tree.getName())) {
 			String name = tree.getChild("module-stmt")
 				.getChildren("NAME_LITERAL").get(1).getText();
-			result.add(new CodeRange(name, CodeRangeType.MODULE,
-				tree));
+			result.add(new CodeRange(name, name,
+				CodeRangeType.MODULE, tree));
 		    } else if ("submodule".equals(tree.getName())) {
 			String name = tree.getChild("submodule-stmt")
 				.getChildren("NAME_LITERAL").get(1).getText();
-			result.add(new CodeRange(name, CodeRangeType.MODULE,
-				tree));
+			result.add(new CodeRange(name, name,
+				CodeRangeType.MODULE, tree));
 		    }
 		    return WalkingAction.PROCEED;
 		} catch (TreeException e) {

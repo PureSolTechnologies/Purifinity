@@ -42,7 +42,8 @@ public class CodeDepthMetricEvaluator extends AbstractEvaluator {
 		execute(metric);
 		results.add(new CodeDepthResult(analysis.getAnalyzedFile()
 			.getSourceLocation(), codeRange.getType(), codeRange
-			.getName(), metric.getMaxDepth(), metric.getQuality()));
+			.getCanonicalName(), metric.getMaxDepth(), metric
+			.getQuality()));
 	    }
 	} finally {
 	    IOUtils.closeQuietly(programmingLanguages);

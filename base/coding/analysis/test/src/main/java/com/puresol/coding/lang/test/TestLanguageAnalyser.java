@@ -46,94 +46,94 @@ import com.puresol.utils.StopWatch;
  */
 public class TestLanguageAnalyser implements CodeAnalyzer {
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(TestLanguageAnalyser.class);
+    private static final Logger logger = LoggerFactory
+	    .getLogger(TestLanguageAnalyser.class);
 
-	private final CodeLocation sourceCodeLocation;
-	private final transient TestLanguageGrammar grammar;
-	private CodeAnalysis fileAnalysis;
+    private final CodeLocation sourceCodeLocation;
+    private final transient TestLanguageGrammar grammar;
+    private CodeAnalysis fileAnalysis;
 
-	public TestLanguageAnalyser(CodeLocation sourceCodeLocation) {
-		super();
-		this.sourceCodeLocation = sourceCodeLocation;
-		grammar = TestLanguageGrammar.getInstance();
+    public TestLanguageAnalyser(CodeLocation sourceCodeLocation) {
+	super();
+	this.sourceCodeLocation = sourceCodeLocation;
+	grammar = TestLanguageGrammar.getInstance();
+    }
+
+    @Override
+    public void analyze() throws AnalyzerException {
+	try {
+	    fileAnalysis = null;
+	    Date date = new Date();
+	    StopWatch watch = new StopWatch();
+	    watch.start();
+	    SourceCode sourceCode = sourceCodeLocation.loadSourceCode();
+	    Lexer lexer = grammar.getLexer();
+	    TokenStream tokenStream = lexer.lex(sourceCode);
+	    Parser parser = grammar.getParser();
+	    ParserTree parserTree = parser.parse(tokenStream);
+	    watch.stop();
+	    long timeEffort = Math.round(watch.getSeconds() * 1000.0);
+	    TestLanguage language = TestLanguage.getInstance();
+	    fileAnalysis = new CodeAnalysis(date, timeEffort,
+		    language.getName(), language.getVersion(),
+		    new AnalyzedCode(sourceCode.getHashId(),
+			    sourceCodeLocation, date, timeEffort, language
+				    .getName(), language.getVersion()),
+		    parserTree, getAnalyzableCodeRanges(parserTree));
+
+	} catch (ParserException e) {
+	    logger.error(e.getMessage(), e);
+	    throw new AnalyzerException(this);
+	} catch (IOException e) {
+	    logger.error(e.getMessage(), e);
+	    throw new AnalyzerException(this);
+	} catch (LexerException e) {
+	    logger.error(e.getMessage(), e);
+	    throw new AnalyzerException(this);
 	}
+	return;
+    }
 
-	@Override
-	public void analyze() throws AnalyzerException {
-		try {
-			fileAnalysis = null;
-			Date date = new Date();
-			StopWatch watch = new StopWatch();
-			watch.start();
-			SourceCode sourceCode = sourceCodeLocation.loadSourceCode();
-			Lexer lexer = grammar.getLexer();
-			TokenStream tokenStream = lexer.lex(sourceCode);
-			Parser parser = grammar.getParser();
-			ParserTree parserTree = parser.parse(tokenStream);
-			watch.stop();
-			long timeEffort = Math.round(watch.getSeconds() * 1000.0);
-			TestLanguage language = TestLanguage.getInstance();
-			fileAnalysis = new CodeAnalysis(date, timeEffort,
-					language.getName(), language.getVersion(),
-					new AnalyzedCode(sourceCode.getHashId(),
-							sourceCodeLocation, date, timeEffort, language
-									.getName(), language.getVersion()),
-					parserTree, getAnalyzableCodeRanges(parserTree));
+    @Override
+    public ProgrammingLanguage getLanguage() {
+	return TestLanguage.getInstance();
+    }
 
-		} catch (ParserException e) {
-			logger.error(e.getMessage(), e);
-			throw new AnalyzerException(this);
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-			throw new AnalyzerException(this);
-		} catch (LexerException e) {
-			logger.error(e.getMessage(), e);
-			throw new AnalyzerException(this);
-		}
-		return;
+    @Override
+    public boolean persist(File file) {
+	try {
+	    persist(this, file);
+	    return true;
+	} catch (IOException e) {
+	    logger.error(e.getMessage(), e);
+	    return false;
 	}
+    }
 
-	@Override
-	public ProgrammingLanguage getLanguage() {
-		return TestLanguage.getInstance();
-	}
+    private List<CodeRange> getAnalyzableCodeRanges(ParserTree parserTree) {
+	List<CodeRange> result = new ArrayList<CodeRange>();
+	result.add(new CodeRange("", "", CodeRangeType.FILE, parserTree));
+	return result;
+    }
 
-	@Override
-	public boolean persist(File file) {
-		try {
-			persist(this, file);
-			return true;
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-			return false;
-		}
+    private <T> void persist(T object, File file) throws IOException {
+	ObjectOutputStream objectOutputStream = new ObjectOutputStream(
+		new FileOutputStream(file));
+	try {
+	    objectOutputStream.writeObject(object);
+	} finally {
+	    objectOutputStream.close();
 	}
+    }
 
-	private List<CodeRange> getAnalyzableCodeRanges(ParserTree parserTree) {
-		List<CodeRange> result = new ArrayList<CodeRange>();
-		result.add(new CodeRange("", CodeRangeType.FILE, parserTree));
-		return result;
-	}
+    @Override
+    public CodeLocation getSource() {
+	return sourceCodeLocation;
+    }
 
-	private <T> void persist(T object, File file) throws IOException {
-		ObjectOutputStream objectOutputStream = new ObjectOutputStream(
-				new FileOutputStream(file));
-		try {
-			objectOutputStream.writeObject(object);
-		} finally {
-			objectOutputStream.close();
-		}
-	}
-
-	@Override
-	public CodeLocation getSource() {
-		return sourceCodeLocation;
-	}
-
-	@Override
-	public CodeAnalysis getAnalysis() {
-		return fileAnalysis;
-	}
+    @Override
+    public CodeAnalysis getAnalysis() {
+	return fileAnalysis;
+    }
 
 }

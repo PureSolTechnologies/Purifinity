@@ -41,6 +41,13 @@ public interface Evaluator extends
      */
     public List<QualityCharacteristic> getEvaluatedQualityCharacteristics();
 
+    /**
+     * This method creates an {@link EvaluatorStore} object which is responsible
+     * for storing and restoring evaluation results.
+     * 
+     * @return An {@link EvaluatorStore} object is returned containing the
+     *         appropriate evaluator store.
+     */
     public EvaluatorStore createEvaluatorStore();
 
     /**

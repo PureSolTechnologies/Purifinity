@@ -7,26 +7,27 @@ import com.puresol.uhura.parser.ParserTree;
 
 public class NormalClassDeclaration {
 
-	public static boolean is(ParserTree part) {
-		return "NormalClassDeclaration".equals(part.getName());
-	}
+    public static boolean is(ParserTree part) {
+	return "NormalClassDeclaration".equals(part.getName());
+    }
 
-	private final ParserTree part;
+    private final ParserTree part;
 
-	public NormalClassDeclaration(ParserTree part) {
-		super();
-		this.part = part;
-	}
+    public NormalClassDeclaration(ParserTree part) {
+	super();
+	this.part = part;
+    }
 
-	public String getIdentifier() throws TreeException {
-		ParserTree identifier = part.getChild("Identifier");
-		if (identifier == null) {
-			throw new TreeException("No Identifier child found!");
-		}
-		return identifier.getText();
+    public String getIdentifier() throws TreeException {
+	ParserTree identifier = part.getChild("Identifier");
+	if (identifier == null) {
+	    throw new TreeException("No Identifier child found!");
 	}
+	return identifier.getText();
+    }
 
-	public CodeRange getCodeRange() throws TreeException {
-		return new CodeRange(getIdentifier(), CodeRangeType.CLASS, part);
-	}
+    public CodeRange getCodeRange() throws TreeException {
+	return new CodeRange(getIdentifier(), getIdentifier(),
+		CodeRangeType.CLASS, part);
+    }
 }

@@ -1,6 +1,5 @@
 package com.puresol.coding.evaluation.impl;
 
-import java.io.IOException;
 import java.util.Date;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -40,188 +39,236 @@ import com.puresol.utils.progress.AbstractProgressObservable;
  * 
  */
 public abstract class AbstractEvaluator extends
-		AbstractProgressObservable<Evaluator> implements Evaluator {
+	AbstractProgressObservable<Evaluator> implements Evaluator {
 
-	private static final long serialVersionUID = -497819792461488182L;
+    private static final long serialVersionUID = -497819792461488182L;
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(AbstractEvaluator.class);
+    private static final Logger logger = LoggerFactory
+	    .getLogger(AbstractEvaluator.class);
 
-	private final FileStore fileStore = FileStoreFactory.getFactory()
-			.getInstance();
-	private final DirectoryStore directoryStore = DirectoryStoreFactory
-			.getFactory().getInstance();
-	private final EvaluatorStoreFactory evaluatorStoreFactory = EvaluatorStoreFactory
-			.getFactory();
+    private static final int EXECUTION_TIMEOUT_IN_SECONDS = 30;
 
-	private final EvaluatorStore evaluatorStore;
+    private final FileStore fileStore = FileStoreFactory.getFactory()
+	    .getInstance();
+    private final DirectoryStore directoryStore = DirectoryStoreFactory
+	    .getFactory().getInstance();
+    private final EvaluatorStoreFactory evaluatorStoreFactory = EvaluatorStoreFactory
+	    .getFactory();
 
-	private final EvaluatorInformation information;
-	private final AnalysisRun analysisRun;
-	private final HashIdFileTree path;
-	private final Date timeStamp;
+    private final EvaluatorStore evaluatorStore;
 
-	private long timeOfRun;
+    private final EvaluatorInformation information;
+    private final AnalysisRun analysisRun;
+    private final HashIdFileTree path;
+    private final Date timeStamp;
 
-	private boolean reEvaluation = false;
+    private long timeOfRun;
 
-	public AbstractEvaluator(String name, String description,
-			AnalysisRun analysisRun, HashIdFileTree path) {
-		super();
-		this.information = new EvaluatorInformation(name, description);
-		this.analysisRun = analysisRun;
-		this.path = path;
-		timeStamp = new Date();
-		evaluatorStore = createEvaluatorStore();
+    private boolean reEvaluation = false;
+
+    public AbstractEvaluator(String name, String description,
+	    AnalysisRun analysisRun, HashIdFileTree path) {
+	super();
+	this.information = new EvaluatorInformation(name, description);
+	this.analysisRun = analysisRun;
+	this.path = path;
+	timeStamp = new Date();
+	evaluatorStore = createEvaluatorStore();
+    }
+
+    @Override
+    public final EvaluatorInformation getInformation() {
+	return information;
+    }
+
+    @Override
+    public final AnalysisRun getAnalysisRun() {
+	return analysisRun;
+    }
+
+    @Override
+    public final Date getStartTime() {
+	return timeStamp;
+    }
+
+    @Override
+    public long getDuration() {
+	return timeOfRun;
+    }
+
+    @Override
+    public final void setReEvaluation(boolean reEvaluation) {
+	this.reEvaluation = reEvaluation;
+    }
+
+    @Override
+    public final boolean isReEvaluation() {
+	return reEvaluation;
+    }
+
+    /**
+     * This method is used to run an evaluation of an analyzed file. This method
+     * is called by the run method.
+     * 
+     * @param analysis
+     *            is the {@link CodeAnalysis} of the file which is to be
+     *            evaluated.
+     * @throws InterruptedException
+     *             is thrown if the evaluation was interrupted.
+     * @throws EvaluationException
+     *             is thrown if the evaluation was aborted by an exceptional
+     *             event.
+     */
+    abstract protected void processFile(CodeAnalysis analysis)
+	    throws InterruptedException, EvaluationException;
+
+    /**
+     * This method is used to run an evaluation of an entire directory. This
+     * method is called by the run method.
+     * 
+     * @param directory
+     *            is the {@link HashIdFileTree} object of the directory to be
+     *            evaluated.
+     * @throws InterruptedException
+     *             is thrown if the evaluation was interrupted.
+     */
+    abstract protected void processDirectory(HashIdFileTree directory)
+	    throws InterruptedException;
+
+    /**
+     * This method is used to run an evaluation of the entire project. This
+     * method is called by the run method.
+     * 
+     * @throws InterruptedException
+     *             is thrown if the evaluation was interrupted.
+     */
+    abstract protected void processProject() throws InterruptedException;
+
+    @Override
+    public final Boolean call() throws InterruptedException {
+	// Start time measurement
+	StopWatch watch = new StopWatch();
+	watch.start();
+	// check the files to evaluate and calculate amount of work!
+	if (path != null) {
+	    int nodeCount = TreeUtils.countNodes(path);
+	    fireStarted("Beginning evaluation...", nodeCount + 1);
+	} else {
+	    fireStarted("Beginning evaluation...", 0);
 	}
+	// process files and directories
+	processTree(path);
+	// process project as whole
+	processProject();
+	// Stop time measurement
+	watch.stop();
+	timeOfRun = watch.getMilliseconds();
+	fireDone("Evaluation finished.", true);
+	return true;
+    }
 
-	@Override
-	public final EvaluatorInformation getInformation() {
-		return information;
+    private void processTree(HashIdFileTree tree) throws InterruptedException {
+	try {
+	    processNode(tree);
+	} catch (FileStoreException e) {
+	    logger.error("Evaluation result could not be stored.", e);
+	} catch (EvaluationException e) {
+	    logger.error("Evaluation failed.", e);
 	}
+    }
 
-	@Override
-	public final AnalysisRun getAnalysisRun() {
-		return analysisRun;
+    private void processNode(HashIdFileTree node) throws FileStoreException,
+	    InterruptedException, EvaluationException {
+	if (Thread.currentThread().isInterrupted()) {
+	    throw new InterruptedException();
 	}
-
-	@Override
-	public final Date getStartTime() {
-		return timeStamp;
+	if (node.isFile()) {
+	    processAsFile(node);
+	} else {
+	    processAsDirectory(node);
 	}
+	fireUpdateWork("Evaluated '" + node.getName() + "'.", 1);
+    }
 
-	@Override
-	public long getDuration() {
-		return timeOfRun;
+    /**
+     * This method is called on a file node to run the actual evaluation. The
+     * evaluation is delegated to the explicit implementing class.
+     * 
+     * @param fileNode
+     *            is the node of the file with in the project's file tree.
+     * @throws FileStoreException
+     *             is thrown if the file store had an exception.
+     * @throws InterruptedException
+     *             is thrown if the operation was interrupted.
+     * @throws EvaluationException
+     *             is thrown if the evaluation had an exception.
+     */
+    private void processAsFile(HashIdFileTree fileNode)
+	    throws FileStoreException, InterruptedException,
+	    EvaluationException {
+	if (fileStore.wasAnalyzed(fileNode.getHashId())) {
+	    if ((!evaluatorStore.hasFileResults(fileNode.getHashId()))
+		    || (reEvaluation)) {
+		CodeAnalysis fileAnalysis = fileStore.loadAnalysis(fileNode
+			.getHashId());
+		processFile(fileAnalysis);
+	    }
 	}
+    }
 
-	@Override
-	public final void setReEvaluation(boolean reEvaluation) {
-		this.reEvaluation = reEvaluation;
-	}
-
-	@Override
-	public final boolean isReEvaluation() {
-		return reEvaluation;
-	}
-
-	/**
-	 * This method is used to run an evaluation of an analyzed file. This method
-	 * is called by the run method.
-	 * 
-	 * @param file
-	 * @return
-	 * @throws EvaluationException
-	 * @throws IOException
-	 * @throws FileStoreException
-	 */
-	abstract protected void processFile(CodeAnalysis analysis)
-			throws InterruptedException, EvaluationException;
-
-	abstract protected void processDirectory(HashIdFileTree directory)
-			throws InterruptedException;
-
-	abstract protected void processProject() throws InterruptedException;
-
-	@Override
-	public final Boolean call() throws InterruptedException {
-		// Start time measurement
-		StopWatch watch = new StopWatch();
-		watch.start();
-		// check the files to evaluate and calculate amount of work!
-		if (path != null) {
-			int nodeCount = TreeUtils.countNodes(path);
-			fireStarted("Beginning evaluation...", nodeCount + 1);
-		} else {
-			fireStarted("Beginning evaluation...", 0);
+    /**
+     * This method is called on a directory node to run the actual evaluation.
+     * The evaluation is delegated to the explicit implementing class.
+     * 
+     * @param directoryNode
+     *            is the node of the directory with in the project's file tree.
+     * @throws FileStoreException
+     *             is thrown if the file store had an exception.
+     * @throws InterruptedException
+     *             is thrown if the operation was interrupted.
+     * @throws EvaluationException
+     *             is thrown if the evaluation had an exception.
+     */
+    private void processAsDirectory(HashIdFileTree directoryNode)
+	    throws FileStoreException, InterruptedException,
+	    EvaluationException {
+	if (directoryStore.isAvailable(directoryNode.getHashId())) {
+	    if ((!evaluatorStore.hasDirectoryResults(directoryNode.getHashId()))
+		    || (reEvaluation)) {
+		for (HashIdFileTree child : directoryNode.getChildren()) {
+		    processNode(child);
 		}
-		// process files and directories
-		processTree(path);
-		// process project as whole
-		processProject();
-		// Stop time measurement
-		watch.stop();
-		timeOfRun = watch.getMilliseconds();
-		fireDone("Evaluation finished.", true);
-		return true;
+		processDirectory(directoryNode);
+	    }
 	}
+    }
 
-	private void processTree(HashIdFileTree tree) throws InterruptedException {
-		try {
-			processNode(tree);
-		} catch (FileStoreException e) {
-			logger.error("Evaluation result could not be stored.", e);
-		} catch (EvaluationException e) {
-			logger.error("Evaluation failed.", e);
-		}
-	}
+    @Override
+    public EvaluatorStore createEvaluatorStore() {
+	return evaluatorStoreFactory.createInstance(getClass());
+    }
 
-	private void processNode(HashIdFileTree node) throws FileStoreException,
-			InterruptedException, EvaluationException {
-		if (Thread.currentThread().isInterrupted()) {
-			throw new InterruptedException();
-		}
-		if (node.isFile()) {
-			processAsFile(node);
-		} else {
-			processAsDirectory(node);
-		}
-		fireUpdateWork("Evaluated '" + node.getName() + "'.", 1);
+    /**
+     * This method is used to explicitly start evaluations.
+     * 
+     * @param evaluator
+     * @return
+     * @throws InterruptedException
+     * @throws EvaluationException
+     */
+    protected <T> T execute(Callable<T> evaluator) throws InterruptedException,
+	    EvaluationException {
+	try {
+	    ExecutorService executor = Executors.newSingleThreadExecutor();
+	    Future<T> future = executor.submit(evaluator);
+	    executor.shutdown();
+	    return future.get(EXECUTION_TIMEOUT_IN_SECONDS, TimeUnit.SECONDS);
+	} catch (ExecutionException e) {
+	    fireDone(e.getMessage(), false);
+	    throw new EvaluationException(e);
+	} catch (TimeoutException e) {
+	    fireDone(e.getMessage(), false);
+	    throw new EvaluationException(e);
 	}
-
-	private void processAsFile(HashIdFileTree fileNode)
-			throws FileStoreException, InterruptedException,
-			EvaluationException {
-		if (fileStore.wasAnalyzed(fileNode.getHashId())) {
-			if ((!evaluatorStore.hasFileResults(fileNode.getHashId()))
-					|| (reEvaluation)) {
-				CodeAnalysis fileAnalysis = fileStore.loadAnalysis(fileNode
-						.getHashId());
-				processFile(fileAnalysis);
-			}
-		}
-	}
-
-	private void processAsDirectory(HashIdFileTree directoryNode)
-			throws FileStoreException, InterruptedException,
-			EvaluationException {
-		if (directoryStore.isAvailable(directoryNode.getHashId())) {
-			if ((!evaluatorStore.hasDirectoryResults(directoryNode.getHashId()))
-					|| (reEvaluation)) {
-				for (HashIdFileTree child : directoryNode.getChildren()) {
-					processNode(child);
-				}
-				processDirectory(directoryNode);
-			}
-		}
-	}
-
-	@Override
-	public EvaluatorStore createEvaluatorStore() {
-		return evaluatorStoreFactory.createInstance(getClass());
-	}
-
-	/**
-	 * This method is used to start evaluations.
-	 * 
-	 * @param evaluator
-	 * @return
-	 * @throws InterruptedException
-	 * @throws EvaluationException
-	 */
-	protected <T> T execute(Callable<T> evaluator) throws InterruptedException,
-			EvaluationException {
-		try {
-			ExecutorService executor = Executors.newSingleThreadExecutor();
-			Future<T> future = executor.submit(evaluator);
-			executor.shutdown();
-			return future.get(30, TimeUnit.SECONDS);
-		} catch (ExecutionException e) {
-			fireDone(e.getMessage(), false);
-			throw new EvaluationException(e);
-		} catch (TimeoutException e) {
-			fireDone(e.getMessage(), false);
-			throw new EvaluationException(e);
-		}
-	}
+    }
 }
