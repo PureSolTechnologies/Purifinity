@@ -7,9 +7,9 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ClassPath: .
 Bundle-Vendor: PureSol Technologies
 Bundle-ActivationPolicy: lazy
-Require-Bundle: com.puresol.utils.bundle;bundle-version="0.1.0",
+Require-Bundle: com.puresol.trees.bundle;bundle-version="0.1.0",
+ com.puresol.utils.bundle;bundle-version="0.1.0",
  org.eclipse.swt;bundle-version="3.100.1",
- com.puresol.trees.bundle;bundle-version="0.1.0",
  org.eclipse.jface;bundle-version="3.8.102"
 Export-Package: com.puresol.coding.client.common.chart,
  com.puresol.coding.client.common.chart.math,
