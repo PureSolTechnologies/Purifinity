@@ -52,4 +52,16 @@ public class DataPoint2D<TX, TY> {
 		return remark;
 	}
 
+	@Override
+	public String toString() {
+		String string = String.format("%s;%s", x.toString(), y.toString());
+		if (size != null) {
+			string += " / " + size.toString();
+		}
+		if (remark != null) {
+			string += " (" + remark + ")";
+		}
+		return string;
+	}
+
 }

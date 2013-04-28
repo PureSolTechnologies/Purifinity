@@ -39,7 +39,6 @@ public final class CodeRange implements Serializable, Comparable<CodeRange> {
 		this.name = name;
 		this.type = type;
 		this.ast = ast;
-
 		hashcode = ObjectUtilities.calculateConstantHashCode(name, type, ast);
 	}
 

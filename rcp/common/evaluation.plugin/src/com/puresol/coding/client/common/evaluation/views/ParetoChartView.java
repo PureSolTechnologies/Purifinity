@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
@@ -203,18 +205,30 @@ public class ParetoChartView extends AbstractMetricViewPart implements
 				if (results == null) {
 					return WalkingAction.PROCEED;
 				}
-				Map<String, Value<?>> valueMap = findSuitableValueMap(node,
-						results, parameterSelection, codeRangeTypeSelection);
-				if (valueMap != null) {
+				List<Map<String, Value<?>>> valueMaps = findSuitableValueMaps(
+						node, results, parameterSelection,
+						codeRangeTypeSelection);
+				String codeRangeNameParameterName = CodeRangeNameParameter
+						.getInstance().getName();
+				Set<String> usedCategories = new HashSet<String>();
+				for (Map<String, Value<?>> valueMap : valueMaps) {
 					String codeRangeName = (String) valueMap.get(
-							CodeRangeNameParameter.getInstance().getName())
-							.getValue();
+							codeRangeNameParameterName).getValue();
 					double value = convertToDouble(valueMap, parameterSelection);
-					paretoValues.add(new DataPoint2D<String, Double>(
-							node.getPathFile(false).getPath() + "."
-									+ codeRangeName, value,
-							codeRangeTypeSelection.getName() + " "
+					String category = node.getPathFile(false).getPath() + "."
+							+ codeRangeName;
+					if (usedCategories.contains(category)) {
+						int num = 2;
+						do {
+							category = node.getPathFile(false).getPath() + "."
+									+ codeRangeName + num;
+							num++;
+						} while (usedCategories.contains(category));
+					}
+					paretoValues.add(new DataPoint2D<String, Double>(category,
+							value, codeRangeTypeSelection.getName() + " "
 									+ codeRangeName));
+					usedCategories.add(category);
 				}
 				return WalkingAction.PROCEED;
 			}

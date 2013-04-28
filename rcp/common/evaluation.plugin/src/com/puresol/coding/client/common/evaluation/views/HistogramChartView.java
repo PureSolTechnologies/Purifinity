@@ -191,9 +191,13 @@ public class HistogramChartView extends AbstractMetricViewPart {
 				if (results == null) {
 					return WalkingAction.PROCEED;
 				}
-				Map<String, Value<?>> value = findSuitableValueMap(node,
-						results, parameterSelection, CodeRangeType.FILE);
-				histogramValues.add(value.get(parameterSelection.getName()));
+				List<Map<String, Value<?>>> values = findSuitableValueMaps(
+						node, results, parameterSelection, CodeRangeType.FILE);
+				for (Map<String, Value<?>> value : values) {
+					for (String parameterName : value.keySet()) {
+						histogramValues.add(value.get(parameterName));
+					}
+				}
 				return WalkingAction.PROCEED;
 			}
 		};

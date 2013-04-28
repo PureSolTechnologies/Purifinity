@@ -134,9 +134,9 @@ public class MaintainabilityIndexParetoChartView extends AbstractMetricViewPart 
 				if (results == null) {
 					return WalkingAction.PROCEED;
 				}
-				Map<String, Value<?>> valueMap = findSuitableValueMap(node,
-						results, MI, codeRangeTypeSelection);
-				if (valueMap != null) {
+				List<Map<String, Value<?>>> valueMaps = findSuitableValueMaps(
+						node, results, MI, codeRangeTypeSelection);
+				for (Map<String, Value<?>> valueMap : valueMaps) {
 					String codeRangeName = (String) valueMap.get(
 							CodeRangeNameParameter.getInstance().getName())
 							.getValue();

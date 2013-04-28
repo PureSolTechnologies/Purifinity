@@ -1,5 +1,6 @@
 package com.puresol.coding.client.common.evaluation.views;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -68,12 +69,12 @@ public abstract class AbstractMetricViewPart extends ViewPart implements
 			MetricFileResults results, Parameter<?> parameter,
 			CodeRangeType codeRangeType) {
 		try {
-			Map<String, Value<?>> valueMap = findSuitableValueMap(path,
+			List<Map<String, Value<?>>> valueMaps = findSuitableValueMaps(path,
 					results, parameter, codeRangeType);
-			if (valueMap == null) {
+			if ((valueMaps == null) || (valueMaps.size() != 1)) {
 				return null;
 			}
-			return convertToDouble(valueMap, parameter);
+			return convertToDouble(valueMaps.get(0), parameter);
 		} catch (IllegalArgumentException e) {
 			throw new RuntimeException("Could not find a suitable value for '"
 					+ path.getPathFile(false).toString() + "'.", e);
@@ -83,23 +84,23 @@ public abstract class AbstractMetricViewPart extends ViewPart implements
 	protected final Object findSuitableSecondaryValue(HashIdFileTree path,
 			MetricFileResults results, Parameter<?> parameter,
 			CodeRangeType codeRangeType) {
-		Map<String, Value<?>> valueMap = findSuitableValueMap(path, results,
-				parameter, codeRangeType);
-		if (valueMap == null) {
+		List<Map<String, Value<?>>> valueMaps = findSuitableValueMaps(path,
+				results, parameter, codeRangeType);
+		if ((valueMaps == null) || (valueMaps.size() != 1)) {
 			return null;
 		}
-		Value<?> value = valueMap.get(parameter.getName());
+		Value<?> value = valueMaps.get(0).get(parameter.getName());
 		return value.getValue();
 	}
 
-	protected Map<String, Value<?>> findSuitableValueMap(HashIdFileTree path,
-			MetricFileResults results, Parameter<?> parameter,
-			CodeRangeType codeRangeType) {
-		Map<String, Value<?>> valueMap = null;
+	protected List<Map<String, Value<?>>> findSuitableValueMaps(
+			HashIdFileTree path, MetricFileResults results,
+			Parameter<?> parameter, CodeRangeType codeRangeType) {
+		List<Map<String, Value<?>>> valueMap = new ArrayList<Map<String, Value<?>>>();
 		List<Map<String, Value<?>>> values = results.getValues();
 		if (path.isFile()) {
 			if (values.size() == 1) {
-				valueMap = values.get(0);
+				valueMap.add(values.get(0));
 			} else {
 				String codeRangeTypeParameterName = CodeRangeTypeParameter
 						.getInstance().getName();
@@ -107,18 +108,8 @@ public abstract class AbstractMetricViewPart extends ViewPart implements
 					Object codeRangeTypeValue = value.get(
 							codeRangeTypeParameterName).getValue();
 					if (codeRangeTypeValue.equals(codeRangeType)) {
-						valueMap = value;
-						break;
+						valueMap.add(value);
 					}
-				}
-				if (valueMap == null) {
-					return null;
-					// throw new RuntimeException("File '"
-					// + path.getPathFile(false)
-					// +
-					// "' contains no "+codeRangeType.getName()+" result for evaluator '"
-					// + parameter.getName()
-					// + "' and contains multiple values!");
 				}
 			}
 		} else {
@@ -128,7 +119,7 @@ public abstract class AbstractMetricViewPart extends ViewPart implements
 						+ "' contains more than one result for evaluator '"
 						+ parameter.getName() + "'!");
 			}
-			valueMap = values.get(0);
+			valueMap.add(values.get(0));
 		}
 		return valueMap;
 	}
