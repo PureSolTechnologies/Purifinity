@@ -120,7 +120,6 @@ public class AnalysisRunsView extends ViewPart implements SelectionListener,
 	getSite().setSelectionProvider(this);
 	getSite().getWorkbenchWindow().getSelectionService()
 		.addSelectionListener(this);
-	setContentDescription("All available analysis runs for the selected analysis");
 	Job.getJobManager().addJobChangeListener(this);
 
 	initializeToolBar();

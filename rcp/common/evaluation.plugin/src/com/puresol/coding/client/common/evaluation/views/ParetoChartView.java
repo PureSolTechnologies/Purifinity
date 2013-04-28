@@ -288,6 +288,8 @@ public class ParetoChartView extends AbstractMetricViewPart implements
 	    BundleContext bundleContext = Activator.getDefault().getBundle()
 		    .getBundleContext();
 	    String parameterName = parameterSelection.getName();
+	    parameterName = parameterName.replaceAll("\\(", "\\\\(")
+		    .replaceAll("\\)", "\\\\)");
 	    String filter = "(parameterName=" + parameterName + ")";
 	    Collection<ServiceReference<ChartConfigProvider>> serviceReferences = bundleContext
 		    .getServiceReferences(ChartConfigProvider.class, filter);

@@ -119,7 +119,6 @@ public class AnalysisProjectsView extends ViewPart implements
 
 	Job.getJobManager().addJobChangeListener(this);
 	getSite().setSelectionProvider(this);
-	setContentDescription("All available analyzes from analysis store");
 
 	initializeToolBar();
 
