@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -36,6 +37,7 @@ import com.puresol.coding.client.common.evaluation.ParetoChartViewSettingsDialog
 import com.puresol.coding.client.common.evaluation.metrics.ChartConfigProvider;
 import com.puresol.coding.client.common.evaluation.metrics.DefaultParetoChartConfigProvider;
 import com.puresol.coding.client.common.evaluation.utils.EvaluationsTarget;
+import com.puresol.coding.client.common.ui.actions.ExportAction;
 import com.puresol.coding.client.common.ui.actions.RefreshAction;
 import com.puresol.coding.client.common.ui.actions.ShowSettingsAction;
 import com.puresol.coding.client.common.ui.actions.ViewReproductionAction;
@@ -134,6 +136,7 @@ public class ParetoChartView extends AbstractMetricViewPart implements
     private void initializeToolBar() {
 	IToolBarManager toolbarManager = getViewSite().getActionBars()
 		.getToolBarManager();
+	toolbarManager.add(new ExportAction(this));
 	toolbarManager.add(new ShowSettingsAction(this));
 	toolbarManager.add(new ViewReproductionAction(this));
 	toolbarManager.add(new RefreshAction(this));
@@ -302,6 +305,12 @@ public class ParetoChartView extends AbstractMetricViewPart implements
 	} catch (InvalidSyntaxException e) {
 	    throw new RuntimeException(e);
 	}
+    }
+
+    @Override
+    public void export() {
+	MessageDialog.openInformation(getSite().getShell(), "Not implemented",
+		"This functionality is not implemented, yet!");
     }
 
 }

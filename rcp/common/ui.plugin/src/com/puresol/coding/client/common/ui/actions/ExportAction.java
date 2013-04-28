@@ -11,21 +11,21 @@ import com.puresol.coding.client.common.branding.ClientImages;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class RefreshAction extends Action {
+public class ExportAction extends Action {
 
-    private final Refreshable refreshable;
+    private final Exportable exportable;
 
-    public RefreshAction(Refreshable refreshable) {
-	super("Refresh", ClientImages
-		.getImageDescriptor(ClientImages.ARROW_REFRESH_16x16));
-	setToolTipText("Refreshes this view's information.");
-	this.refreshable = refreshable;
+    public ExportAction(Exportable exportable) {
+	super("Export", ClientImages
+		.getImageDescriptor(ClientImages.DOCUMENT_EXPORT_16x16));
+	this.exportable = exportable;
+	setToolTipText("Exports the content of this view into a specified format to a specified location.");
     }
 
     @Override
     public void run() {
 	super.run();
-	refreshable.refresh();
+	exportable.export();
     }
 
 }

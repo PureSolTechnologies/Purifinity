@@ -24,6 +24,7 @@ public class ViewReproductionAction extends Action {
     public ViewReproductionAction(Reproducable reproducable) {
 	super("Reproduce", ClientImages
 		.getImageDescriptor(ClientImages.TAB_ADD_16x16));
+	setToolTipText("Opens another view of this kind. The second view can be customized individually.");
 	this.reproducable = reproducable;
     }
 

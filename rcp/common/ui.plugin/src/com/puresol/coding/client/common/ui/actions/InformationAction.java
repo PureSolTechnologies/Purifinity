@@ -14,18 +14,19 @@ import com.puresol.coding.client.common.branding.ClientImages;
  */
 public class InformationAction extends Action {
 
-	private final InformationProvider infoProvider;
+    private final InformationProvider infoProvider;
 
-	public InformationAction(InformationProvider infoProvider) {
-		super("Refresh", ClientImages
-				.getImageDescriptor(ClientImages.INFORMATION_16x16));
-		this.infoProvider = infoProvider;
-	}
+    public InformationAction(InformationProvider infoProvider) {
+	super("Refresh", ClientImages
+		.getImageDescriptor(ClientImages.INFORMATION_16x16));
+	setToolTipText("Shows additional, detailed information about the view and selection.");
+	this.infoProvider = infoProvider;
+    }
 
-	@Override
-	public void run() {
-		super.run();
-		infoProvider.showInformation();
-	}
+    @Override
+    public void run() {
+	super.run();
+	infoProvider.showInformation();
+    }
 
 }
