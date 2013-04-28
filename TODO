@@ -1,0 +1,7 @@
+=======
+ Bugs:
+=======
+- Java: In enums the constants can have own implementations of methods 
+  (abstract method in enum). For code range analysis, these methods need to
+  have there own canonical names with the enum constant in it.
+  

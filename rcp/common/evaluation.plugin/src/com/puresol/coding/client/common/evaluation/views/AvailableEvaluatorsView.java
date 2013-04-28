@@ -5,7 +5,9 @@ import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.jface.action.IToolBarManager;
-import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
@@ -17,6 +19,7 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 
 import com.puresol.coding.client.common.evaluation.Activator;
+import com.puresol.coding.client.common.evaluation.EvaluatorInformationDialog;
 import com.puresol.coding.client.common.evaluation.contents.AvailableEvaluatorsTableViewer;
 import com.puresol.coding.client.common.ui.actions.InformationAction;
 import com.puresol.coding.client.common.ui.actions.InformationProvider;
@@ -25,13 +28,16 @@ import com.puresol.coding.client.common.ui.actions.Refreshable;
 import com.puresol.coding.evaluation.api.EvaluatorFactory;
 
 public class AvailableEvaluatorsView extends ViewPart implements Refreshable,
-		InformationProvider {
-
-	public AvailableEvaluatorsView() {
-	}
+		InformationProvider, ISelectionChangedListener {
 
 	private Table table;
 	private TableViewer viewer;
+	private EvaluatorInformationDialog evaluatorInformationDialog = null;
+	private EvaluatorFactory evaluatorFactorySelection = null;
+
+	public AvailableEvaluatorsView() {
+		super();
+	}
 
 	@Override
 	public void createPartControl(Composite parent) {
@@ -39,6 +45,7 @@ public class AvailableEvaluatorsView extends ViewPart implements Refreshable,
 		table = new Table(parent, SWT.NONE);
 		table.setHeaderVisible(true);
 		viewer = new AvailableEvaluatorsTableViewer(table);
+		viewer.addSelectionChangedListener(this);
 
 		initializeToolBar();
 
@@ -67,14 +74,14 @@ public class AvailableEvaluatorsView extends ViewPart implements Refreshable,
 					.getBundleContext();
 			Collection<ServiceReference<EvaluatorFactory>> allServiceReferences = bundleContext
 					.getServiceReferences(EvaluatorFactory.class, null);
-			List<EvaluatorFactory> languages = new ArrayList<EvaluatorFactory>();
+			List<EvaluatorFactory> evaluators = new ArrayList<EvaluatorFactory>();
 			for (ServiceReference<EvaluatorFactory> serviceReference : allServiceReferences) {
 				EvaluatorFactory service = bundleContext
 						.getService(serviceReference);
-				languages.add(service);
+				evaluators.add(service);
 				bundleContext.ungetService(serviceReference);
 			}
-			viewer.setInput(languages);
+			viewer.setInput(evaluators);
 		} catch (InvalidSyntaxException e1) {
 			viewer.setInput(new ArrayList<EvaluatorFactory>());
 		}
@@ -82,9 +89,28 @@ public class AvailableEvaluatorsView extends ViewPart implements Refreshable,
 
 	@Override
 	public void showInformation() {
-		MessageDialog
-				.openInformation(getSite().getShell(), "Not implemented",
-						"The currently triggered functionality is not implemented, yet.");
+		if (evaluatorInformationDialog == null) {
+			evaluatorInformationDialog = new EvaluatorInformationDialog(
+					getSite(), evaluatorFactorySelection);
+			evaluatorInformationDialog.open();
+		} else {
+			evaluatorInformationDialog.close();
+			evaluatorInformationDialog = null;
+		}
+	}
+
+	@Override
+	public void selectionChanged(SelectionChangedEvent event) {
+		if (event.getSource() == viewer) {
+			StructuredSelection selection = (StructuredSelection) viewer
+					.getSelection();
+			evaluatorFactorySelection = (EvaluatorFactory) selection
+					.getFirstElement();
+			if (evaluatorInformationDialog != null) {
+				evaluatorInformationDialog
+						.setEvaluatorFactory(evaluatorFactorySelection);
+			}
+		}
 	}
 
 }
