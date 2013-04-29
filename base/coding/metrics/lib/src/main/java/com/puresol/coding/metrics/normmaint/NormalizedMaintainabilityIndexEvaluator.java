@@ -1,7 +1,7 @@
 package com.puresol.coding.metrics.normmaint;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.CodeAnalysis;
@@ -24,7 +24,7 @@ public class NormalizedMaintainabilityIndexEvaluator extends AbstractEvaluator {
     public static final String NAME = "Normalized Maintainability Index";
     public static final String DESCRIPTION = "Normalized Maintainability Index calculation.";
 
-    public static final List<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new ArrayList<QualityCharacteristic>();
+    public static final Set<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new HashSet<QualityCharacteristic>();
     static {
 	EVALUATED_QUALITY_CHARACTERISTICS
 		.add(QualityCharacteristic.ANALYSABILITY);
@@ -90,7 +90,7 @@ public class NormalizedMaintainabilityIndexEvaluator extends AbstractEvaluator {
     }
 
     @Override
-    public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
+    public Set<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
 	return EVALUATED_QUALITY_CHARACTERISTICS;
     }
 

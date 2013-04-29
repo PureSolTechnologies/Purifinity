@@ -1,7 +1,7 @@
 package com.puresol.coding.metrics.entropy;
 
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.CodeAnalysis;
@@ -90,7 +90,7 @@ public class EntropyMetricEvaluator extends AbstractEvaluator {
     }
 
     @Override
-    public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
+    public Set<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
 	return EntropyMetric.EVALUATED_QUALITY_CHARACTERISTICS;
     }
 

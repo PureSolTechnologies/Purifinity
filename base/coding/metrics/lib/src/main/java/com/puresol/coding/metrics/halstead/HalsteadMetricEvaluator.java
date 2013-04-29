@@ -1,6 +1,6 @@
 package com.puresol.coding.metrics.halstead;
 
-import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
 
@@ -53,7 +53,7 @@ public class HalsteadMetricEvaluator extends AbstractEvaluator {
     }
 
     @Override
-    public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
+    public Set<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
 	return HalsteadMetric.EVALUATED_QUALITY_CHARACTERISTICS;
     }
 

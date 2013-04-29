@@ -2,8 +2,10 @@ package com.puresol.coding.metrics.maintainability;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.AnalyzedCode;
@@ -43,7 +45,7 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 
     public static final String NAME = "Maintainability Index";
     public static final String DESCRIPTION = "Maintainability Index calculation.";
-    public static final List<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new ArrayList<QualityCharacteristic>();
+    public static final Set<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new HashSet<QualityCharacteristic>();
     static {
 	EVALUATED_QUALITY_CHARACTERISTICS
 		.add(QualityCharacteristic.ANALYSABILITY);
@@ -146,7 +148,7 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
     }
 
     @Override
-    public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
+    public Set<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
 	return EVALUATED_QUALITY_CHARACTERISTICS;
     }
 

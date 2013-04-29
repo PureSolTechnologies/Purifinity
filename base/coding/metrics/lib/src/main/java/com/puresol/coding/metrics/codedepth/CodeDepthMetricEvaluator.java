@@ -1,6 +1,6 @@
 package com.puresol.coding.metrics.codedepth;
 
-import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
 
@@ -52,7 +52,7 @@ public class CodeDepthMetricEvaluator extends AbstractEvaluator {
     }
 
     @Override
-    public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
+    public Set<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
 	return CodeDepthMetric.EVALUATED_QUALITY_CHARACTERISTICS;
     }
 

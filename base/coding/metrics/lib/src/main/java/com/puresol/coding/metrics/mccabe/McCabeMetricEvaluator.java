@@ -1,6 +1,6 @@
 package com.puresol.coding.metrics.mccabe;
 
-import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
 
@@ -54,7 +54,7 @@ public class McCabeMetricEvaluator extends AbstractEvaluator {
     }
 
     @Override
-    public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
+    public Set<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
 	return McCabeMetric.EVALUATED_QUALITY_CHARACTERISTICS;
     }
 

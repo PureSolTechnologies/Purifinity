@@ -1,6 +1,6 @@
 package com.puresol.coding.evaluation.api;
 
-import java.util.List;
+import java.util.Set;
 
 import com.puresol.coding.analysis.api.AnalysisRun;
 import com.puresol.coding.analysis.api.TimeAwareness;
@@ -39,7 +39,7 @@ public interface Evaluator extends
      * 
      * @return
      */
-    public List<QualityCharacteristic> getEvaluatedQualityCharacteristics();
+    public Set<QualityCharacteristic> getEvaluatedQualityCharacteristics();
 
     /**
      * This method creates an {@link EvaluatorStore} object which is responsible

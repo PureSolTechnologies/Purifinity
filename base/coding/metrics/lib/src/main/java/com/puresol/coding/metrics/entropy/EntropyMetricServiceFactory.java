@@ -1,7 +1,6 @@
 package com.puresol.coding.metrics.entropy;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import com.puresol.coding.analysis.api.AnalysisRun;
@@ -14,41 +13,41 @@ import com.puresol.utils.math.Parameter;
 
 public class EntropyMetricServiceFactory extends AbstractEvaluatorFactory {
 
-	@Override
-	public String getDescription() {
-		return EntropyMetric.DESCRIPTION;
-	}
+    @Override
+    public String getDescription() {
+	return EntropyMetric.DESCRIPTION;
+    }
 
-	@Override
-	public String getName() {
-		return EntropyMetric.NAME;
-	}
+    @Override
+    public String getName() {
+	return EntropyMetric.NAME;
+    }
 
-	@Override
-	public List<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
-		return EntropyMetric.EVALUATED_QUALITY_CHARACTERISTICS;
-	}
+    @Override
+    public Set<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
+	return EntropyMetric.EVALUATED_QUALITY_CHARACTERISTICS;
+    }
 
-	@Override
-	public EntropyMetricEvaluator create(AnalysisRun analysisRun,
-			HashIdFileTree path) {
-		return new EntropyMetricEvaluator(analysisRun, path);
-	}
+    @Override
+    public EntropyMetricEvaluator create(AnalysisRun analysisRun,
+	    HashIdFileTree path) {
+	return new EntropyMetricEvaluator(analysisRun, path);
+    }
 
-	@Override
-	public Set<Class<? extends Evaluator>> getDependencies() {
-		Set<Class<? extends Evaluator>> dependencies = new HashSet<Class<? extends Evaluator>>();
-		dependencies.add(HalsteadMetricEvaluator.class);
-		return dependencies;
-	}
+    @Override
+    public Set<Class<? extends Evaluator>> getDependencies() {
+	Set<Class<? extends Evaluator>> dependencies = new HashSet<Class<? extends Evaluator>>();
+	dependencies.add(HalsteadMetricEvaluator.class);
+	return dependencies;
+    }
 
-	@Override
-	public Class<? extends Evaluator> getEvaluatorClass() {
-		return EntropyMetricEvaluator.class;
-	}
+    @Override
+    public Class<? extends Evaluator> getEvaluatorClass() {
+	return EntropyMetricEvaluator.class;
+    }
 
-	@Override
-	public Set<Parameter<?>> getParameters() {
-		return EntropyMetricEvaluatorParameter.ALL;
-	}
+    @Override
+    public Set<Parameter<?>> getParameters() {
+	return EntropyMetricEvaluatorParameter.ALL;
+    }
 }
