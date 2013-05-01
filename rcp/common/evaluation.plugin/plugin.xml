@@ -117,13 +117,17 @@
                id="Evaluation"
                label="Evaluation"
                mnemonic="E">
-            <command
-                  commandId="com.puresol.coding.client.common.evaluation.handler.ReEvaluateHandler"
-                  id="Re-evaluate"
+            <menu
                   label="Re-evaluate"
-                  mnemonic="R"
-                  style="push">
-            </command>
+                  mnemonic="R">
+               <command
+                     commandId="com.puresol.coding.client.common.evaluation.handler.ReEvaluateHandler"
+                     id="All"
+                     label="All"
+                     mnemonic="A"
+                     style="push">
+               </command>
+            </menu>
          </menu>
       </menuContribution>
    </extension>
