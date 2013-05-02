@@ -29,7 +29,7 @@ import com.puresol.uhura.lexer.Token;
 import com.puresol.uhura.parser.ParserTree;
 import com.puresol.uhura.source.FixedCodeLocation;
 import com.puresol.uhura.source.SourceCode;
-import com.puresol.uhura.source.SourceCodeLine;
+import com.puresol.uhura.source.StringWithLocation;
 import com.puresol.utils.IntrospectionUtilities;
 
 public class PackratParserTest {
@@ -142,7 +142,6 @@ public class PackratParserTest {
 
     @Test
     public void testProcessWhitespaces() throws Throwable {
-
 	Grammar grammar = TestGrammars.getLLGrammarFromDragonBook();
 	TokenDefinitionSet tokenDefinitions = grammar.getTokenDefinitions();
 	tokenDefinitions.addDefinition(new TokenDefinition("Space", " ",
@@ -153,13 +152,12 @@ public class PackratParserTest {
 
 	final String sampleText = " \t ";
 	IntrospectionUtilities.setField(parser, "text", sampleText);
-	SourceCodeLine line = new SourceCodeLine(new FixedCodeLocation(
-		sampleText), 1, sampleText);
-	SourceCodeLine references[] = { line, line, line };
-	IntrospectionUtilities.setField(parser, "sourceLineReferences",
-		references);
-	IntrospectionUtilities.setField(parser, "sourceCode",
-		new FixedCodeLocation(sampleText).loadSourceCode());
+	SourceCode sourceCode = new FixedCodeLocation(sampleText)
+		.loadSourceCode();
+	StringWithLocation textWithSource = new StringWithLocation(sourceCode);
+	IntrospectionUtilities.setField(parser, "textWithSource",
+		textWithSource);
+	IntrospectionUtilities.setField(parser, "sourceCode", sourceCode);
 	/*
 	 * process some white spaces...
 	 */
