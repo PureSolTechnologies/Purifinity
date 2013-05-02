@@ -7,23 +7,32 @@
 	<packaging>pom</packaging>
 	<name>Library parent module</name>
 
+	<inceptionYear>2009</inceptionYear>
 	<organization>
 		<name>PureSol Technologies</name>
 		<url>http://puresol-technologies.com</url>
 	</organization>
-	<inceptionYear>2009</inceptionYear>
+	<scm>
+		<connection>git@server1:SourceCodeAnalysis</connection>
+		<url>http://server1</url>
+	</scm>
+	<ciManagement>
+		<system>Jenkins</system>
+		<url>http://http://server1:8080/jenkins</url>
+	</ciManagement>
+	<developers>
+		<developer>
+			<name>Rick-Rainer Ludwig</name>
+			<email>ludwig@puresol-technologies.com</email>
+			<organization>PureSol Technologies</organization>
+			<organizationUrl>http://puresol-technologies.com</organizationUrl>
+			<url>http://rick-rainer-ludwig.com</url>
+		</developer>
+	</developers>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
-
-	<modules>
-		<module>commons</module>
-		<module>trees</module>
-		<module>utils</module>
-		<module>uhura</module>
-		<module>coding</module>
-	</modules>
 
 	<repositories>
 		<repository>
@@ -58,6 +67,32 @@
 			<url>http://server1:8080/artifactory/plugins-snapshot</url>
 		</pluginRepository>
 	</pluginRepositories>
+
+	<profiles>
+		<profile>
+			<id>it</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-failsafe-plugin</artifactId>
+						<version>2.12</version>
+						<executions>
+							<execution>
+								<goals>
+									<goal>integration-test</goal>
+									<goal>verify</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<forkMode>always</forkMode>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 
 	<dependencyManagement>
 		<dependencies>
@@ -291,5 +326,13 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<modules>
+		<module>commons</module>
+		<module>trees</module>
+		<module>utils</module>
+		<module>uhura</module>
+		<module>coding</module>
+	</modules>
 
 </project>
