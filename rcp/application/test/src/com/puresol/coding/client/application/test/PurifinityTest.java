@@ -12,30 +12,30 @@ import org.junit.runner.RunWith;
 @RunWith(SWTBotJunit4ClassRunner.class)
 public class PurifinityTest {
 
-    private static SWTWorkbenchBot bot;
+	private static SWTWorkbenchBot bot;
 
-    @BeforeClass
-    public static void initialize() {
-	bot = new SWTWorkbenchBot();
-    }
+	@BeforeClass
+	public static void initialize() {
+		bot = new SWTWorkbenchBot();
+	}
 
-    @AfterClass
-    public static void destroy() {
-	bot.sleep(2000);
-    }
+	@AfterClass
+	public static void destroy() {
+		bot.sleep(2000);
+	}
 
-    @Test
-    public void test() throws Exception {
-	Thread.sleep(1000);
+	@Test
+	public void test() throws Exception {
+		Thread.sleep(1000);
 
-	bot.menu("Help").menu("About Source Code Analysis...").click();
+		bot.menu("Help").menu("About Source Code Analysis...").click();
 
-	SWTBotShell aboutDialog = bot.shell("About Purifinity");
-	SWTBot aboutBot = aboutDialog.bot();
-	Thread.sleep(1000);
-	aboutBot.button("OK").click();
+		SWTBotShell aboutDialog = bot.shell("About Purifinity");
+		SWTBot aboutBot = aboutDialog.bot();
+		Thread.sleep(1000);
+		aboutBot.button("OK").click();
 
-	Thread.sleep(1000);
-	bot.menu("File").menu("Exit").click();
-    }
+		Thread.sleep(1000);
+		bot.menu("File").menu("Exit").click();
+	}
 }
