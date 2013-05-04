@@ -327,9 +327,10 @@ public class FortranPreConditioner {
 		.length())).loadSourceCode());
     }
 
-    private void processSubTokenStream(TokenStream tokenStream)
+    private void processSubTokenStream(TokenStream subTokenStream)
 	    throws IOException {
-	for (Token token : tokenStream) {
+	TokenStream appendedTokens = new TokenStream();
+	for (Token token : subTokenStream) {
 	    if ("CHAR_LITERAL_CONSTANT_SINGLE_QUOTE_START".equals(token
 		    .getName())) {
 		currentBrokenCharacterMode = BROKEN_CHARACTER_LITERAL_SINGLE_QUOTE;
@@ -342,9 +343,10 @@ public class FortranPreConditioner {
 	    Token newToken = new Token(token.getName(), token.getText(),
 		    token.getVisibility(),
 		    getCurrentMetaData(metaData.getLineNum()));
-	    tokenStream.add(newToken);
+	    appendedTokens.add(newToken);
 	    lineId += metaData.getLineNum() - 1;
 	}
+	subTokenStream.addAll(appendedTokens);
     }
 
     /**
