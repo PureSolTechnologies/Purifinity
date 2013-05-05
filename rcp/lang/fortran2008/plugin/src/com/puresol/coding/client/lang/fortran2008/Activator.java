@@ -1,4 +1,4 @@
-package com.puresol.coding.client.common.analysis;
+package com.puresol.coding.client.lang.fortran2008;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;

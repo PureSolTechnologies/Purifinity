@@ -1,4 +1,4 @@
-package com.puresol.coding.client.common.analysis;
+package com.puresol.coding.client.lang.cpp11;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
