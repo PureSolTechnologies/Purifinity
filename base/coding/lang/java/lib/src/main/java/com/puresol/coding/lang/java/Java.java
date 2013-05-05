@@ -25,7 +25,7 @@ import com.puresol.uhura.source.CodeLocation;
 public class Java extends AbstractProgrammingLanguage implements
 	AnalyzableProgrammingLanguage {
 
-    private static final String[] FILE_SUFFIXES = { ".java" };
+    public static final String[] FILE_SUFFIXES = { ".java" };
 
     private static Java instance = null;
 

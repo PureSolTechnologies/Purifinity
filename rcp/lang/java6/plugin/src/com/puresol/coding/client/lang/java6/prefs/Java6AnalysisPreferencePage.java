@@ -1,5 +1,6 @@
 package com.puresol.coding.client.lang.java6.prefs;
 
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Composite;
@@ -7,8 +8,17 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
+import com.puresol.coding.client.lang.java6.Activator;
+import com.puresol.coding.lang.java.Java;
+
 public class Java6AnalysisPreferencePage extends PreferencePage implements
 	IWorkbenchPreferencePage {
+
+    private static final String FILES_INCLUDED = "Java6.files.included";
+    private static final String FILES_EXCLUDED = "Java6.files.excluded";
+
+    private static final String[] FILES_INCLUDED_DEFAULTS = Java.FILE_SUFFIXES;
+    private static final String FILES_EXCLUDED_DEFAULTS = "";
 
     public Java6AnalysisPreferencePage() {
 	super();
@@ -24,8 +34,23 @@ public class Java6AnalysisPreferencePage extends PreferencePage implements
 
     @Override
     public void init(IWorkbench workbench) {
-	// TODO Auto-generated method stub
+	IPreferenceStore preferenceStore = Activator.getDefault()
+		.getPreferenceStore();
+	setPreferenceStore(preferenceStore);
+	setDefaultValuesToPreferencesStore(preferenceStore);
+    }
 
+    public static void setDefaultValuesToPreferencesStore(
+	    IPreferenceStore preferenceStore) {
+	StringBuilder builder = new StringBuilder();
+	for (String suffix : FILES_INCLUDED_DEFAULTS) {
+	    if (builder.length() > 0) {
+		builder.append("\n");
+	    }
+	    builder.append("*" + suffix);
+	}
+	preferenceStore.setDefault(FILES_INCLUDED, builder.toString());
+	preferenceStore.setDefault(FILES_EXCLUDED, FILES_EXCLUDED_DEFAULTS);
     }
 
     @Override

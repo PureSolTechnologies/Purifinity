@@ -12,7 +12,8 @@ import com.puresol.uhura.source.CodeLocation;
 public class CPP extends AbstractProgrammingLanguage implements
 	AnalyzableProgrammingLanguage {
 
-    private static final String[] FILE_SUFFIXES = { ".cpp", ".cxx" };
+    public static final String[] FILE_SUFFIXES = { ".hpp", ".hxx", ".cpp",
+	    ".cxx" };
 
     private static CPP instance = null;
 

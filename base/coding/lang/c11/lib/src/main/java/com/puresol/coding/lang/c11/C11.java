@@ -25,7 +25,7 @@ import com.puresol.uhura.source.CodeLocation;
 public class C11 extends AbstractProgrammingLanguage implements
 	AnalyzableProgrammingLanguage {
 
-    private static final String[] FILE_SUFFIXES = { ".c" };
+    public static final String[] FILE_SUFFIXES = { ".h", ".c" };
 
     private static C11 instance = null;
 
