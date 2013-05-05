@@ -52,8 +52,8 @@ public class Fortran2008AnalysisPreferencePage extends PreferencePage implements
 
     public static void setDefaultValuesToPreferencesStore(
 	    IPreferenceStore preferenceStore) {
-	String filesIncludedText = getFilesIncludedDefaultText();
-	preferenceStore.setDefault(FILES_INCLUDED, filesIncludedText);
+	preferenceStore.setDefault(FILES_INCLUDED,
+		getFilesIncludedDefaultText());
 	preferenceStore.setDefault(FILES_EXCLUDED, FILES_EXCLUDED_DEFAULTS);
     }
 

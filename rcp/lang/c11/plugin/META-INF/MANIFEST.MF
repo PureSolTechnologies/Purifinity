@@ -10,7 +10,8 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.8.0",
  com.puresol.coding.client.common.osgi.plugin;bundle-version="0.1.0",
  com.puresol.coding.analysis.api.bundle;bundle-version="0.1.0",
  com.puresol.coding.lang.commons.bundle;bundle-version="0.1.0",
- com.puresol.coding.lang.c11.bundle;bundle-version="0.1.0"
+ com.puresol.coding.lang.c11.bundle;bundle-version="0.1.0",
+ com.puresol.coding.client.common.ui.plugin;bundle-version="0.1.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Vendor: PureSol Technologies
 Bundle-ClassPath: .
