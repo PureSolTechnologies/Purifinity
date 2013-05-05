@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.puresol.coding.lang.fortran.FortranPreConditioner;
 import com.puresol.uhura.grammar.Grammar;
 import com.puresol.uhura.grammar.GrammarException;
 import com.puresol.uhura.lexer.Lexer;
@@ -24,10 +25,10 @@ public class FortranGrammarPartTester {
     private static Lexer lexer = null;
     private static Map<String, Parser> parsers = new HashMap<String, Parser>();
 
-    public static boolean test(String production, String text)
+    public static boolean test(String production, String... lines)
 	    throws GrammarException, LexerException, IOException,
 	    ParserException {
-	return test(production, new FixedCodeLocation(text));
+	return test(production, new FixedCodeLocation(lines));
     }
 
     public static boolean test(String production, CodeLocation source)
@@ -42,7 +43,9 @@ public class FortranGrammarPartTester {
 	if (parsers.get(production) == null) {
 	    initializeParser(production);
 	}
-	TokenStream tokenStream = lexer.lex(source.loadSourceCode());
+	FortranPreConditioner fortranPreConditioner = new FortranPreConditioner(
+		source.loadSourceCode());
+	TokenStream tokenStream = fortranPreConditioner.scan(lexer);
 	parsers.get(production).parse(tokenStream);
 	return true;
     }

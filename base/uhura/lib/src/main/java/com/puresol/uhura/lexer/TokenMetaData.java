@@ -66,6 +66,10 @@ public class TokenMetaData implements Serializable, Cloneable {
     }
 
     /**
+     * Returns the number of lines which are covered by a token. Generally,
+     * tokens will return 1 here, but tokens like line break will return 2 and
+     * multi line comments will return larger numbers.
+     * 
      * @return the lineNum
      */
     public int getLineNum() {
