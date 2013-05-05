@@ -17,10 +17,18 @@ public class FileFilterGroup extends Composite {
     private final Text includes;
 
     public FileFilterGroup(Composite parent, int style) {
+	this(parent, style, true);
+    }
+
+    public FileFilterGroup(Composite parent, int style, boolean isFileFilter) {
 	super(parent, style);
 	setLayout(new FillLayout());
 	group = new Group(this, SWT.NONE);
-	group.setText("File Filter");
+	if (isFileFilter) {
+	    group.setText("File Filter");
+	} else {
+	    group.setText("Directory Filter");
+	}
 	group.setLayout(new FormLayout());
 
 	Label includesLabel = new Label(group, SWT.NONE);
