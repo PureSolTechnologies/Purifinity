@@ -10,11 +10,12 @@ public class R813_DoConstructIT {
 
     @Test
     public void testSubroutine() throws Exception {
-	assertTrue(FortranGrammarPartTester.test("do-construct",
-		"      DO I = 1,M                              \n"
-			+ "      A(I,J) = A(I,J) + X(IX)*TEMP  \n"
-			+ "      IX = IX + INCX                \n"
-			+ "      END DO                        \n"));
+	assertTrue(FortranGrammarPartTester.test("do-construct",//
+		"      DO I = 1,M                    \n",//
+		"      A(I,J) = A(I,J) + X(IX)*TEMP  \n",//
+		"      IX = IX + INCX                \n",//
+		"      END DO                        \n"//
+	));
     }
 
 }

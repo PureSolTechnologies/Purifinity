@@ -10,14 +10,18 @@ public class R801_BlockIT {
 
     @Test
     public void test() throws Exception {
-	assertTrue(FortranGrammarPartTester.test("block", "      A=1\n"
-		+ "      B=2\n"));
+	assertTrue(FortranGrammarPartTester.test("block", //
+		"A=1\n",//
+		"B=2\n"//
+	));
     }
 
     @Test
     public void test2() throws Exception {
-	assertTrue(FortranGrammarPartTester.test("block",
-		"     B = SQRT (A) \n" + "     C = LOG (A) \n"));
+	assertTrue(FortranGrammarPartTester.test("block",//
+		"B = SQRT (A) \n",//
+		"C = LOG (A)  \n"//
+	));
     }
 
 }

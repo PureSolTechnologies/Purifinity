@@ -10,11 +10,12 @@ public class R425_DerivedTypeDefIT {
 
     @Test
     public void test() throws Exception {
-	assertTrue(FortranGrammarPartTester.test("derived-type-def",
-		"      TYPE PERSON                            \n"
-			+ "          INTEGER AGE              \n"
-			+ "          CHARACTER (LEN = 50) NAME\n"
-			+ "      END TYPE PERSON              \n"));
+	assertTrue(FortranGrammarPartTester.test("derived-type-def",//
+		"      TYPE PERSON                  \n", //
+		"          INTEGER AGE              \n", //
+		"          CHARACTER (LEN = 50) NAME\n", //
+		"      END TYPE PERSON              \n"//
+	));
     }
 
 }

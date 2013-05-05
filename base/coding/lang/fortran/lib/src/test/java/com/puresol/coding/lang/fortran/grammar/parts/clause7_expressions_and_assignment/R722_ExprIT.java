@@ -15,7 +15,7 @@ public class R722_ExprIT {
 
     @Test
     public void testExpression2() throws Exception {
-	assertTrue(FortranGrammarPartTester.test("expr", "2 * INOM"));
+	assertTrue(FortranGrammarPartTester.test("expr", "INOM * 2"));
     }
 
     @Test

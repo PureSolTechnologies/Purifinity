@@ -10,9 +10,10 @@ public class R825_DoBodyIT {
 
     @Test
     public void testSubroutine() throws Exception {
-	assertTrue(FortranGrammarPartTester.test("do-body",
-		"      A(I,J) = A(I,J) + X(IX)*TEMP  \n"
-			+ "      IX = IX + INCX      \n"));
+	assertTrue(FortranGrammarPartTester.test("do-body",//
+		"      A(I,J) = A(I,J) + X(IX)*TEMP \n",//
+		"      IX = IX + INCX               \n"//
+	));
     }
 
 }

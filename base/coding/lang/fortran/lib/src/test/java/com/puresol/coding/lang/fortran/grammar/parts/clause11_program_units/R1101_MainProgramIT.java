@@ -10,7 +10,9 @@ public class R1101_MainProgramIT {
 
     @Test
     public void testEmptyMainProgram() throws Exception {
-	assertTrue(FortranGrammarPartTester.test("main-program",
-		"PROGRAM TEST\n" + "      END PROGRAM\n"));
+	assertTrue(FortranGrammarPartTester.test("main-program",//
+		"PROGRAM TEST\n",//
+		"      END PROGRAM\n"//
+	));
     }
 }

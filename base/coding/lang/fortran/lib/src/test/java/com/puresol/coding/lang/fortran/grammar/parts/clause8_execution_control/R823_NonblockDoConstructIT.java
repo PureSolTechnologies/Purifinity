@@ -10,11 +10,12 @@ public class R823_NonblockDoConstructIT {
 
     @Test
     public void testSubroutine() throws Exception {
-	assertTrue(FortranGrammarPartTester.test("nonblock-do-construct",
-		"      DO 30 I = 1,M                         \n"
-			+ "      A(I,J) = A(I,J) + X(IX)*TEMP\n"
-			+ "      IX = IX + INCX              \n"
-			+ "      CONTINUE                    \n"));
+	assertTrue(FortranGrammarPartTester.test("nonblock-do-construct",//
+		"      DO 30 I = 1,M               \n",//
+		"      A(I,J) = A(I,J) + X(IX)*TEMP\n",//
+		"      IX = IX + INCX              \n",//
+		"      CONTINUE                    \n"//
+	));
     }
 
 }

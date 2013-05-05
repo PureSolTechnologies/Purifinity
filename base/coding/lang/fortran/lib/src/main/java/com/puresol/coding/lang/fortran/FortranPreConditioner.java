@@ -170,8 +170,8 @@ public class FortranPreConditioner {
     }
 
     private TokenMetaData getCurrentMetaData(int lineNum) {
-	return new TokenMetaData(sourceCode.getLines().get(lineId - 1)
-		.getSource(), lineId, lineNum);
+	SourceCodeLine sourceCodeLine = sourceCode.getLines().get(lineId - 1);
+	return new TokenMetaData(sourceCodeLine.getSource(), lineId, lineNum);
     }
 
     /**
