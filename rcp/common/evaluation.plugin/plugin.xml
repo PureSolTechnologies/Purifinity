@@ -140,5 +140,67 @@
             name="Re-evaluate">
       </command>
    </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="com.puresol.coding.client.common.evaluation.prefs.CodeEvaluationPreferencePage"
+            id="com.puresol.coding.client.common.evaluation.prefs.CodeEvaluationPreferencePage"
+            name="Code Evaluation">
+      </page>
+      <page
+            category="com.puresol.coding.client.common.evaluation.prefs.CodeEvaluationPreferencePage"
+            class="com.puresol.coding.client.common.evaluation.metrics.CodeMetricsPreferencePage"
+            id="com.puresol.coding.client.common.evaluation.metrics.CodeMetricsPreferencePage"
+            name="Metrics">
+      </page>
+      <page
+            category="com.puresol.coding.client.common.evaluation.metrics.CodeMetricsPreferencePage"
+            class="com.puresol.coding.client.common.evaluation.metrics.maintainability.prefs.MaintainabilityIndexPreferencePage"
+            id="com.puresol.coding.client.common.evaluation.metrics.maintainability.prefs.MaintainabilityIndexPreferencePage"
+            name="Maintainability Index">
+      </page>
+      <page
+            category="com.puresol.coding.client.common.evaluation.metrics.CodeMetricsPreferencePage"
+            class="com.puresol.coding.client.common.evaluation.metrics.cocomo.prefs.CoCoMoPreferencePage"
+            id="com.puresol.coding.client.common.evaluation.metrics.cocomo.prefs.CoCoMoPreferencePage"
+            name="COCOMO">
+      </page>
+      <page
+            category="com.puresol.coding.client.common.evaluation.metrics.CodeMetricsPreferencePage"
+            class="com.puresol.coding.client.common.evaluation.metrics.sloc.prefs.SLOCMetricPreferencePage"
+            id="com.puresol.coding.client.common.evaluation.metrics.sloc.prefs.SLOCMetricPreferencePage"
+            name="SLOC">
+      </page>
+      <page
+            category="com.puresol.coding.client.common.evaluation.metrics.CodeMetricsPreferencePage"
+            class="com.puresol.coding.client.common.evaluation.metrics.entropy.prefs.EntropyMetricPreferencePage"
+            id="com.puresol.coding.client.common.evaluation.metrics.entropy.prefs.EntropyMetricPreferencePage"
+            name="Entropy">
+      </page>
+      <page
+            category="com.puresol.coding.client.common.evaluation.metrics.CodeMetricsPreferencePage"
+            class="com.puresol.coding.client.common.evaluation.metrics.mccabe.prefs.McCabeMetricPreferencePage"
+            id="com.puresol.coding.client.common.evaluation.metrics.mccabe.prefs.McCabeMetricPreferencePage"
+            name="McCabe">
+      </page>
+      <page
+            category="com.puresol.coding.client.common.evaluation.metrics.CodeMetricsPreferencePage"
+            class="com.puresol.coding.client.common.evaluation.metrics.halstead.prefs.HalsteadMetricPreferencePage"
+            id="com.puresol.coding.client.common.evaluation.metrics.halstead.prefs.HalsteadMetricPreferencePage"
+            name="Halstead">
+      </page>
+      <page
+            category="com.puresol.coding.client.common.evaluation.metrics.CodeMetricsPreferencePage"
+            class="com.puresol.coding.client.common.evaluation.metrics.normmaint.prefs.NormalizedMaintainabilityIndexPreferencePage"
+            id="com.puresol.coding.client.common.evaluation.metrics.normmaint.prefs.NormalizedMaintainabilityIndexPreferencePage"
+            name="Normalized Maintainability Index">
+      </page>
+      <page
+            category="com.puresol.coding.client.common.evaluation.metrics.CodeMetricsPreferencePage"
+            class="com.puresol.coding.client.common.evaluation.metrics.codedepth.prefs.CodeDepthPreferencePage"
+            id="com.puresol.coding.client.common.evaluation.metrics.codedepth.prefs.CodeDepthPreferencePage"
+            name="Code Depth">
+      </page>
+   </extension>
 
 </plugin>
