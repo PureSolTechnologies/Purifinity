@@ -39,6 +39,7 @@
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
+            category="com.puresol.coding.client.common.analysis.preferences.CodeAnalysisPreferencePage"
             class="com.puresol.coding.client.common.analysis.preferences.NewAnalysisPreferencePage"
             id="com.puresol.coding.client.common.analysis.preferences.NewAnalysisPreferencePage"
             name="New Analysis">
