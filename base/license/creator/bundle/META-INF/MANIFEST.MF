@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
-Bnd-LastModified: 1367871184397
+Bnd-LastModified: 1367878211528
 Build-Jdk: 1.7.0_21
-Built-By: Rick-Rainer Ludwig
+Built-By: ludwig
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: com.puresol.license.creator.Activator
 Bundle-ClassPath: .,target/dependency/license.creator.lib-0.1.0-SNAPSHOT
@@ -24,5 +24,4 @@ Export-Package: com.puresol.license.creator;uses:="org.osgi.framework";v
  ersion="0.1.0.SNAPSHOT"
 Import-Package: org.osgi.framework;version="[1.6,2)",org.slf4j;version="
  [1.6,2)"
-Originally-Created-By: Apache Maven Bundle Plugin
 Tool: Bnd-1.50.0

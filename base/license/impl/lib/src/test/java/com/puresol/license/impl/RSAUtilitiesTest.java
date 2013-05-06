@@ -10,7 +10,7 @@ import java.security.PublicKey;
 
 import org.junit.Test;
 
-import com.puresol.license.impl.RSAUtilities;
+import com.puresol.license.impl.crypt.RSAUtilities;
 
 public class RSAUtilitiesTest {
 

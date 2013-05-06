@@ -7,7 +7,7 @@ import java.util.Set;
 
 import org.junit.Test;
 
-import com.puresol.security.SecurityUtilities;
+import com.puresol.license.impl.crypt.SecurityUtilities;
 
 public class SecurityUtilitiesTest {
 

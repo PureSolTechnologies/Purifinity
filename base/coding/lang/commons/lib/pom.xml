@@ -18,6 +18,10 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresol</groupId>
+			<artifactId>license.api.lib</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresol</groupId>
 			<artifactId>uhura.lib</artifactId>
 		</dependency>
 	</dependencies>
