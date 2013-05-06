@@ -1,0 +1,28 @@
+Manifest-Version: 1.0
+Bnd-LastModified: 1367871079340
+Build-Jdk: 1.7.0_21
+Built-By: Rick-Rainer Ludwig
+Bundle-ActivationPolicy: lazy
+Bundle-Activator: com.puresol.license.creator.Activator
+Bundle-ClassPath: .,target/dependency/license.creator.lib-0.1.0-SNAPSHOT
+ .jar,target/dependency/commons.osgi-0.1.0-SNAPSHOT.jar
+Bundle-DocURL: http://puresol-technologies.com
+Bundle-ManifestVersion: 2
+Bundle-Name: com.puresol.license.creator.bundle
+Bundle-SymbolicName: com.puresol.license.creator.bundle
+Bundle-Vendor: PureSol Technologies
+Bundle-Version: 0.1.0.SNAPSHOT
+Created-By: Apache Maven Bundle Plugin
+Embed-Dependency: *;scope=compile|runtime;inline=false
+Embed-Directory: target/dependency
+Embed-StripGroup: true
+Embedded-Artifacts: target/dependency/license.creator.lib-0.1.0-SNAPSHOT
+ .jar;g="com.puresol";a="license.creator.lib";v="0.1.0-SNAPSHOT",target/
+ dependency/commons.osgi-0.1.0-SNAPSHOT.jar;g="com.puresol";a="commons.o
+ sgi";v="0.1.0-SNAPSHOT"
+Export-Package: com.puresol.license.creator;uses:="org.osgi.framework";v
+ ersion="0.1.0.SNAPSHOT"
+Import-Package: org.osgi.framework;version="[1.6,2)",org.slf4j;version="
+ [1.6,2)"
+Originally-Created-By: Apache Maven Bundle Plugin
+Tool: Bnd-1.50.0

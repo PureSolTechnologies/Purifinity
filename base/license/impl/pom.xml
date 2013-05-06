@@ -4,19 +4,17 @@
 
 	<parent>
 		<groupId>com.puresol</groupId>
-		<artifactId>base</artifactId>
+		<artifactId>license</artifactId>
 		<version>0.1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>license</artifactId>
+	<artifactId>license.impl</artifactId>
 	<name>${project.groupId}.${project.artifactId}</name>
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>api</module>
-		<module>impl</module>
-		<module>creator</module>
-		<module>test</module>
+		<module>lib</module>
+		<module>bundle</module>
 	</modules>
 
 </project>

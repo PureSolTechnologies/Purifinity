@@ -175,6 +175,21 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresol</groupId>
+				<artifactId>license.api.lib</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresol</groupId>
+				<artifactId>license.creator.lib</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresol</groupId>
+				<artifactId>license.impl.lib</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresol</groupId>
 				<artifactId>trees.lib</artifactId>
 				<version>${project.version}</version>
 			</dependency>
@@ -329,6 +344,7 @@
 
 	<modules>
 		<module>commons</module>
+		<module>license</module>
 		<module>trees</module>
 		<module>utils</module>
 		<module>uhura</module>
