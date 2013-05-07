@@ -190,6 +190,12 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresol</groupId>
+				<artifactId>license.test</artifactId>
+				<version>${project.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.puresol</groupId>
 				<artifactId>trees.lib</artifactId>
 				<version>${project.version}</version>
 			</dependency>

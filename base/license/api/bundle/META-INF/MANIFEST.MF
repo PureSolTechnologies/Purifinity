@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
-Bnd-LastModified: 1367955938975
-Build-Jdk: 1.6.0_27
-Built-By: Rick-Rainer Ludwig
+Bnd-LastModified: 1367963549005
+Build-Jdk: 1.7.0_21
+Built-By: ludwig
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: com.puresol.license.api.Activator
 Bundle-ClassPath: .,target/dependency/license.api.lib-0.1.0-SNAPSHOT.jar
@@ -23,6 +23,6 @@ Embedded-Artifacts: target/dependency/license.api.lib-0.1.0-SNAPSHOT.jar
 Export-Package: com.puresol.license.api.exception;version="0.1.0.SNAPSHO
  T",com.puresol.license.api;uses:="org.osgi.framework,com.puresol.licens
  e.api.exception";version="0.1.0.SNAPSHOT"
-Import-Package: com.puresol.license.api.exception;version="[0.1,1)",org.
- osgi.framework;version="[1.6,2)",org.slf4j;version="[1.6,2)"
+Import-Package: org.osgi.framework;version="[1.6,2)",org.slf4j;version="
+ [1.6,2)"
 Tool: Bnd-1.50.0
