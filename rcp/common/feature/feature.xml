@@ -38,13 +38,15 @@
       <import plugin="org.eclipse.ui" version="3.104.0" match="greaterOrEqual"/>
       <import plugin="org.apache.commons.io" version="2.0.1" match="greaterOrEqual"/>
       <import plugin="org.eclipse.e4.ui.workbench" version="0.11.0" match="greaterOrEqual"/>
-      <import plugin="com.puresol.coding.evaluation.api.bundle" version="0.1.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.core.jobs" version="3.5.300" match="greaterOrEqual"/>
+      <import plugin="com.puresol.coding.evaluation.api.bundle" version="0.1.0" match="greaterOrEqual"/>
       <import plugin="com.puresol.coding.client.common.analysis.plugin" version="0.1.0" match="greaterOrEqual"/>
       <import plugin="com.puresol.coding.metrics.bundle" version="0.1.0" match="greaterOrEqual"/>
       <import plugin="com.puresol.coding.evaluation.impl.bundle" version="0.1.0" match="greaterOrEqual"/>
       <import plugin="com.puresol.coding.client.common.chart.plugin" version="0.1.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.swt" version="3.100.1" match="greaterOrEqual"/>
+      <import plugin="com.puresol.license.api.bundle" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.jface" version="3.8.102" match="greaterOrEqual"/>
    </requires>
 
    <plugin
