@@ -8,7 +8,7 @@ import java.util.GregorianCalendar;
 import com.puresol.license.api.exception.ExpiredLicenseException;
 import com.puresol.license.api.exception.LicenseException;
 
-public class LicenseManagerImpl implements LicenseManager {
+public class LicenseManagerClientImpl implements LicenseManagerClient {
 
 	@Override
 	public void checkIfLicensed(Class<?> clazz) throws LicenseException {

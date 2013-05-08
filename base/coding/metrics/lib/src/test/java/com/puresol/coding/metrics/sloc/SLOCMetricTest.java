@@ -15,11 +15,11 @@ import com.puresol.uhura.parser.ParserTree;
 @Ignore
 public class SLOCMetricTest {
 
-    @Test
-    public void testInstance() {
-	AnalysisRun analysisRun = Mockito.mock(AnalysisRun.class);
-	assertNotNull(new SLOCMetricCalculator(analysisRun,
-		TestLanguage.getInstance(), new CodeRange("FILE", "FILE",
-			CodeRangeType.FILE, new ParserTree("FILE"))));
-    }
+	@Test
+	public void testInstance() {
+		AnalysisRun analysisRun = Mockito.mock(AnalysisRun.class);
+		assertNotNull(new SLOCMetricCalculator(analysisRun,
+				TestLanguage.getInstance(), new CodeRange("FILE", "FILE",
+						CodeRangeType.FILE, new ParserTree("FILE"))));
+	}
 }

@@ -1,10 +1,10 @@
 package com.puresol.license.test;
 import java.io.File;
 
-import com.puresol.license.api.LicenseManager;
+import com.puresol.license.api.LicenseManagerClient;
 import com.puresol.license.api.exception.LicenseException;
 
-public class TestLicenseManager implements LicenseManager {
+public class TestLicenseManagerClient implements LicenseManagerClient {
 
 	@Override
 	public void checkIfLicensed(Class<?> clazz) throws LicenseException {

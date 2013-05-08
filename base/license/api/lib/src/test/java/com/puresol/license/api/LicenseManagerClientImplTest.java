@@ -8,33 +8,36 @@ import org.junit.Test;
 
 import com.puresol.license.api.exception.ExpiredLicenseException;
 
-public class LicenseManagerImplTest {
+public class LicenseManagerClientImplTest {
 
-	private final LicenseManagerImpl licenseManager = new LicenseManagerImpl();
+	private final LicenseManagerClientImpl licenseManagerClient = new LicenseManagerClientImpl();
 
 	@Test
 	public void testCheckExpirationNotExpired() {
-		licenseManager.checkExpiration(new Date());
+		licenseManagerClient.checkExpiration(new Date());
+	}
 
-		Calendar calendar = new GregorianCalendar(2013, 4, 31, 23, 59);
-		licenseManager.checkExpiration(calendar.getTime());
+	@Test
+	public void testCheckExpirationNotExpired2() {
+		Calendar calendar = new GregorianCalendar(2013, 4, 31, 23, 59, 59);
+		licenseManagerClient.checkExpiration(calendar.getTime());
 	}
 
 	@Test(expected = ExpiredLicenseException.class)
 	public void testCheckExpirationExpired() {
 		Calendar calendar = new GregorianCalendar(2013, 5, 1, 0, 0, 0);
-		licenseManager.checkExpiration(calendar.getTime());
+		licenseManagerClient.checkExpiration(calendar.getTime());
 	}
 
 	@Test(expected = ExpiredLicenseException.class)
 	public void testCheckExpirationExpired2() {
 		Calendar calendar = new GregorianCalendar(2013, 5, 1, 0, 1);
-		licenseManager.checkExpiration(calendar.getTime());
+		licenseManagerClient.checkExpiration(calendar.getTime());
 	}
 
 	@Test(expected = ExpiredLicenseException.class)
 	public void testCheckExpirationExpired3() {
 		Calendar calendar = new GregorianCalendar(2013, 5, 1, 1, 0);
-		licenseManager.checkExpiration(calendar.getTime());
+		licenseManagerClient.checkExpiration(calendar.getTime());
 	}
 }

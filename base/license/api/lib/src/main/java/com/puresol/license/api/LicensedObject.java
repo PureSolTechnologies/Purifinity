@@ -8,8 +8,8 @@ package com.puresol.license.api;
 public abstract class LicensedObject {
 
 	public static void checkIfLicensed(Class<?> clazz) {
-		LicenseManagerFactory factory = LicenseManagerFactory.getFactory();
-		LicenseManager licenseManager = factory.createLicenseManager();
+		LicenseManagerClientFactory factory = LicenseManagerClientFactory.getFactory();
+		LicenseManagerClient licenseManager = factory.createLicenseManagerClient();
 		licenseManager.checkIfLicensed(clazz);
 	}
 

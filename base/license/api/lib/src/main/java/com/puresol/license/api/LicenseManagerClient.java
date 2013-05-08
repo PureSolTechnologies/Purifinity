@@ -9,7 +9,7 @@ import com.puresol.license.api.exception.LicenseException;
  * 
  * @author Rick-Rainer Ludwig
  */
-public interface LicenseManager {
+public interface LicenseManagerClient {
 
 	/**
 	 * This method is used to check for a {@link Class} to be licensed.
