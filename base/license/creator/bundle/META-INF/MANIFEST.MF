@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
-Bnd-LastModified: 1367963178913
+Bnd-LastModified: 1368049886859
 Build-Jdk: 1.7.0_21
-Built-By: ludwig
+Built-By: Rick-Rainer Ludwig
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: com.puresol.license.creator.Activator
 Bundle-ClassPath: .,target/dependency/license.creator.lib-0.1.0-SNAPSHOT
