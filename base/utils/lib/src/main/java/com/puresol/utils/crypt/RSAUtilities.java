@@ -1,4 +1,4 @@
-package com.puresol.license.impl.crypt;
+package com.puresol.utils.crypt;
 
 import java.security.InvalidKeyException;
 import java.security.KeyPair;

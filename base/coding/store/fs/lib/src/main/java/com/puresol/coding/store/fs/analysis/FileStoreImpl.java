@@ -21,7 +21,7 @@ import com.puresol.coding.analysis.api.FileStoreException;
 import com.puresol.uhura.source.SourceCode;
 import com.puresol.uhura.source.UnspecifiedSourceCodeLocation;
 import com.puresol.utils.HashId;
-import com.puresol.utils.data.HashCodeGenerator;
+import com.puresol.utils.StringUtils;
 
 public final class FileStoreImpl implements FileStore {
 
@@ -42,7 +42,7 @@ public final class FileStoreImpl implements FileStore {
 		    IOUtils.copy(digestInputStream, buffer);
 		    byte[] hashBytes = digestInputStream.getMessageDigest()
 			    .digest();
-		    String hashString = HashCodeGenerator
+		    String hashString = StringUtils
 			    .convertByteArrayToString(hashBytes);
 		    HashId hashId = new HashId(
 			    StoreUtilities.getDefaultMessageDigestAlgorithm(),

@@ -1,4 +1,4 @@
-package com.puresol.license.impl;
+package com.puresol.utils.crypt;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -10,7 +10,7 @@ import java.security.PublicKey;
 
 import org.junit.Test;
 
-import com.puresol.license.impl.crypt.RSAUtilities;
+import com.puresol.utils.crypt.RSAUtilities;
 
 public class RSAUtilitiesTest {
 

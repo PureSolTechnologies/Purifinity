@@ -1,8 +1,9 @@
 package com.puresol.license.api;
 
+import java.security.PublicKey;
 import java.util.Collections;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 /**
  * This object contains all information for a single license.
@@ -12,39 +13,46 @@ import java.util.List;
  */
 public class License {
 
-	private final Date issueDate;
-	private final Date expirationDate;
-	private final String licenser;
-	private final String licensee;
-	private final List<LicensedClass> licensedClasses;
+    private final PublicKey publicKey;
+    private final Date issueDate;
+    private final Date expirationDate;
+    private final Licenser licenser;
+    private final Licensee licensee;
+    private final Set<LicensedClass> licensedClasses;
 
-	public License(Date issueDate, Date expirationDate, String licenser,
-			String licensee, List<LicensedClass> licensedClasses) {
-		super();
-		this.issueDate = issueDate;
-		this.expirationDate = expirationDate;
-		this.licenser = licenser;
-		this.licensee = licensee;
-		this.licensedClasses = Collections.unmodifiableList(licensedClasses);
-	}
+    public License(PublicKey publicKey, Date issueDate, Date expirationDate,
+	    Licenser licenser, Licensee licensee,
+	    Set<LicensedClass> licensedClasses) {
+	super();
+	this.publicKey = publicKey;
+	this.issueDate = issueDate;
+	this.expirationDate = expirationDate;
+	this.licenser = licenser;
+	this.licensee = licensee;
+	this.licensedClasses = Collections.unmodifiableSet(licensedClasses);
+    }
 
-	public Date getIssueDate() {
-		return issueDate;
-	}
+    public PublicKey getPublicKey() {
+	return publicKey;
+    }
 
-	public Date getExpirationDate() {
-		return expirationDate;
-	}
+    public Date getIssueDate() {
+	return issueDate;
+    }
 
-	public String getLicenser() {
-		return licenser;
-	}
+    public Date getExpirationDate() {
+	return expirationDate;
+    }
 
-	public String getLicensee() {
-		return licensee;
-	}
+    public Licenser getLicenser() {
+	return licenser;
+    }
 
-	public List<LicensedClass> getLicensedClasses() {
-		return licensedClasses;
-	}
+    public Licensee getLicensee() {
+	return licensee;
+    }
+
+    public Set<LicensedClass> getLicensedClasses() {
+	return licensedClasses;
+    }
 }

@@ -27,6 +27,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.puresol.utils.HashAlgorithm;
+import com.puresol.utils.StringUtils;
 
 public class HashCodeGenerator {
 
@@ -83,7 +84,7 @@ public class HashCodeGenerator {
 	    digest.reset();
 	    digest.update(line.getBytes());
 	    byte[] result = digest.digest();
-	    return convertByteArrayToString(result);
+	    return StringUtils.convertByteArrayToString(result);
 	} catch (NoSuchAlgorithmException e) {
 	    throw new RuntimeException("Something strange is going on in "
 		    + algorithm + "module! Is there no " + algorithm
@@ -99,25 +100,12 @@ public class HashCodeGenerator {
 	    digest.reset();
 	    digest.update(bytes);
 	    byte[] result = digest.digest();
-	    return convertByteArrayToString(result);
+	    return StringUtils.convertByteArrayToString(result);
 	} catch (NoSuchAlgorithmException e) {
 	    throw new RuntimeException("Something strange is going on in "
 		    + algorithm + "module! Is there no " + algorithm
 		    + "supported!?", e);
 	}
-    }
-
-    public static String convertByteArrayToString(byte[] result) {
-	StringBuffer hexString = new StringBuffer();
-	for (int i = 0; i < result.length; i++) {
-	    int digit = 0xFF & result[i];
-	    String hexDigits = Integer.toHexString(digit);
-	    if (hexDigits.length() < 2) {
-		hexString.append("0");
-	    }
-	    hexString.append(hexDigits);
-	}
-	return hexString.toString();
     }
 
     public static String getMD5(String line) {

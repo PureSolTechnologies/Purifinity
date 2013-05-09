@@ -1,4 +1,4 @@
-package com.puresol.license.impl;
+package com.puresol.utils.crypt;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -7,7 +7,7 @@ import java.util.Set;
 
 import org.junit.Test;
 
-import com.puresol.license.impl.crypt.SecurityUtilities;
+import com.puresol.utils.crypt.SecurityUtilities;
 
 public class SecurityUtilitiesTest {
 

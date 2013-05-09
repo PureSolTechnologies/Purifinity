@@ -1,4 +1,4 @@
-package com.puresol.license.impl;
+package com.puresol.utils.crypt;
 
 import static org.junit.Assert.assertNotNull;
 

@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Bnd-LastModified: 1368099830956
+Bnd-LastModified: 1368101315554
 Build-Jdk: 1.6.0_27
 Built-By: Rick-Rainer Ludwig
 Bundle-ActivationPolicy: lazy
@@ -21,8 +21,7 @@ Embedded-Artifacts: target/dependency/license.impl.lib-0.1.0-SNAPSHOT.ja
  ency/commons.osgi-0.1.0-SNAPSHOT.jar;g="com.puresol";a="commons.osgi";v
  ="0.1.0-SNAPSHOT"
 Export-Package: com.puresol.license.impl;uses:="org.osgi.framework";vers
- ion="0.1.0.SNAPSHOT",com.puresol.license.impl.crypt;uses:="javax.crypto
- ";version="0.1.0.SNAPSHOT"
-Import-Package: com.puresol.license.impl.crypt;version="[0.1,1)",javax.c
- rypto,org.osgi.framework;version="[1.6,2)",org.slf4j;version="[1.6,2)"
+ ion="0.1.0.SNAPSHOT"
+Import-Package: org.osgi.framework;version="[1.6,2)",org.slf4j;version="
+ [1.6,2)"
 Tool: Bnd-1.50.0
