@@ -56,6 +56,9 @@ public class StringUtils {
      * @return A {@link String} is returned representing the byte array.
      */
     public static String convertByteArrayToString(byte[] byteArray) {
+	if (byteArray == null) {
+	    throw new IllegalArgumentException("Byte array must not be null!");
+	}
 	StringBuffer hexString = new StringBuffer();
 	for (int i = 0; i < byteArray.length; i++) {
 	    int digit = 0xFF & byteArray[i];
@@ -66,6 +69,30 @@ public class StringUtils {
 	    hexString.append(hexDigits);
 	}
 	return hexString.toString();
+    }
+
+    /**
+     * 
+     * @param string
+     * @return
+     */
+    public static byte[] convertStringToByteArray(String string) {
+	if (string == null) {
+	    throw new IllegalArgumentException(
+		    "String argument must not be null!");
+	}
+	if (string.length() % 2 != 0) {
+	    throw new IllegalArgumentException(
+		    "String argument has to have a length which can be divided by 2!");
+	}
+	byte[] bytes = new byte[string.length() / 2];
+	StringBuffer buffer = new StringBuffer(string);
+	for (int i = 0; i < bytes.length; i++) {
+	    String hexByteString = buffer.substring(0, 2);
+	    bytes[i] = Integer.valueOf(hexByteString, 16).byteValue();
+	    buffer.delete(0, 2);
+	}
+	return bytes;
     }
 
 }

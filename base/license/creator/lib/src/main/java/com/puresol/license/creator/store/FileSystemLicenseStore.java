@@ -1,10 +1,17 @@
 package com.puresol.license.creator.store;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
+import java.security.KeyFactory;
 import java.security.KeyPair;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.List;
 import java.util.Properties;
 
@@ -17,17 +24,18 @@ public class FileSystemLicenseStore implements LicenseStore {
     private static final String LICENSEE_FILE_NAME = "licensee.properties";
     private static final String KEY_PAIR_FILE_NAME = "keypair.properties";
 
-    private final File storageDirectory = new File(
-	    "/media/server1/PureSol-Technologies/licenses");
-
     public FileSystemLicenseStore() {
-	if (!storageDirectory.exists()) {
-	    if (!storageDirectory.mkdirs()) {
+	if (!getStorageDirectory().exists()) {
+	    if (!getStorageDirectory().mkdirs()) {
 		throw new RuntimeException(
 			"Cannot create license storage directory '"
-				+ storageDirectory + "'!");
+				+ getStorageDirectory() + "'!");
 	    }
 	}
+    }
+
+    protected File getStorageDirectory() {
+	return new File("/media/server1/PureSol-Technologies/licenses");
     }
 
     @Override
@@ -75,10 +83,17 @@ public class FileSystemLicenseStore implements LicenseStore {
 
     private void storeKeyPair(File licenseeDirectory, KeyPair keyPair)
 	    throws LicenseStoreException {
-	String publicKey = StringUtils.convertByteArrayToString(keyPair
+
+	X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(keyPair
 		.getPublic().getEncoded());
-	String privateKey = StringUtils.convertByteArrayToString(keyPair
+	PKCS8EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(keyPair
 		.getPrivate().getEncoded());
+
+	String publicKey = StringUtils.convertByteArrayToString(publicKeySpec
+		.getEncoded());
+	String privateKey = StringUtils.convertByteArrayToString(privateKeySpec
+		.getEncoded());
+
 	Properties properties = new Properties();
 	properties.put("publicKey", publicKey);
 	properties.put("privateKey", privateKey);
@@ -102,11 +117,11 @@ public class FileSystemLicenseStore implements LicenseStore {
 	Properties properties = new Properties();
 	File keyPairFile = new File(licenseeDirectory, KEY_PAIR_FILE_NAME);
 	try {
-	    OutputStream outStream = new FileOutputStream(keyPairFile);
+	    InputStream inStream = new FileInputStream(keyPairFile);
 	    try {
-		properties.store(outStream, "Licensee information");
+		properties.load(inStream);
 	    } finally {
-		outStream.close();
+		inStream.close();
 	    }
 	} catch (IOException e) {
 	    throw new LicenseStoreException("Could not read key pair from '"
@@ -114,12 +129,31 @@ public class FileSystemLicenseStore implements LicenseStore {
 	}
 	String publicKey = properties.getProperty("publicKey");
 	String privateKey = properties.getProperty("privateKey");
-	// TODO
-	return new KeyPair(null, null);
+	return restoreKeyPair(publicKey, privateKey);
+    }
+
+    private KeyPair restoreKeyPair(String publicKey, String privateKey)
+	    throws LicenseStoreException {
+	byte[] publicEncoded = StringUtils.convertStringToByteArray(publicKey);
+	byte[] privateEncoded = StringUtils
+		.convertStringToByteArray(privateKey);
+	X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(publicEncoded);
+	PKCS8EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(
+		privateEncoded);
+	try {
+	    KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+
+	    return new KeyPair(keyFactory.generatePublic(publicKeySpec),
+		    keyFactory.generatePrivate(privateKeySpec));
+	} catch (InvalidKeySpecException e) {
+	    throw new LicenseStoreException("Could not restore  key pair!", e);
+	} catch (NoSuchAlgorithmException e) {
+	    throw new LicenseStoreException("Could not restore key pair!", e);
+	}
     }
 
     private File getLicenseeFolder(Licensee licensee) {
-	return new File(storageDirectory, licensee.getCustomerId());
+	return new File(getStorageDirectory(), licensee.getCustomerId());
     }
 
 }

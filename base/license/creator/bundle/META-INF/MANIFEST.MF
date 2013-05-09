@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Bnd-LastModified: 1368103493153
+Bnd-LastModified: 1368123000045
 Build-Jdk: 1.6.0_27
 Built-By: Rick-Rainer Ludwig
 Bundle-ActivationPolicy: lazy
@@ -20,12 +20,14 @@ Embedded-Artifacts: target/dependency/license.creator.lib-0.1.0-SNAPSHOT
  .jar;g="com.puresol";a="license.creator.lib";v="0.1.0-SNAPSHOT",target/
  dependency/commons.osgi-0.1.0-SNAPSHOT.jar;g="com.puresol";a="commons.o
  sgi";v="0.1.0-SNAPSHOT"
-Export-Package: com.puresol.license.creator.store;uses:="com.puresol.lic
- ense.creator.exception,com.puresol.license.api";version="0.1.0.SNAPSHOT
- ",com.puresol.license.creator;uses:="org.osgi.framework,com.puresol.lic
- ense.creator.store,com.puresol.license.api";version="0.1.0.SNAPSHOT",co
- m.puresol.license.creator.exception;version="0.1.0.SNAPSHOT"
+Export-Package: com.puresol.license.creator.store;uses:="com.puresol.uti
+ ls,com.puresol.license.creator.exception,com.puresol.license.api";versi
+ on="0.1.0.SNAPSHOT",com.puresol.license.creator;uses:="org.osgi.framewo
+ rk,com.puresol.license.creator.store,com.puresol.license.creator.except
+ ion,com.puresol.license.api,com.puresol.utils.crypt";version="0.1.0.SNA
+ PSHOT",com.puresol.license.creator.exception;version="0.1.0.SNAPSHOT"
 Import-Package: com.puresol.license.api,com.puresol.license.creator.exce
  ption;version="[0.1,1)",com.puresol.license.creator.store;version="[0.1
- ,1)",org.osgi.framework;version="[1.6,2)",org.slf4j;version="[1.6,2)"
+ ,1)",com.puresol.utils,com.puresol.utils.crypt,org.osgi.framework;versi
+ on="[1.6,2)",org.slf4j;version="[1.6,2)"
 Tool: Bnd-1.50.0
