@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="menu:options?before=preferences">
+         <command
+               commandId="com.puresol.coding.client.common.license.command.LicenseManagerCommand"
+               id="licenseManagerItem"
+               label="License Manager..."
+               mnemonic="L"
+               style="push"
+               tooltip="Starts the License Manager.">
+         </command>
+         <separator
+               name="com.puresol.coding.client.common.license.plugin.separator1"
+               visible="true">
+         </separator>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="com.puresol.coding.client.common.license.command.LicenseManagerCommand"
+            description="Starts the License Manager."
+            id="com.puresol.coding.client.common.license.command.LicenseManagerCommand"
+            name="License Manager">
+      </command>
+   </extension>
+
+</plugin>

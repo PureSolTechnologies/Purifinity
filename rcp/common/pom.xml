@@ -16,6 +16,7 @@
 		<module>osgi.plugin</module>
 		<module>branding.plugin</module>
 		<module>ui.plugin</module>
+		<module>license.plugin</module>
 		<module>analysis.plugin</module>
 		<module>evaluation.plugin</module>
 		<module>feature</module>
