@@ -1,6 +1,8 @@
 package com.puresol.license.api;
 
 import java.io.File;
+import java.util.List;
+import java.util.Set;
 
 import com.puresol.license.api.exception.LicenseException;
 
@@ -29,5 +31,13 @@ public interface LicenseManagerClient {
 	 *            added.
 	 */
 	public void addLicenseFile(File licenseFile);
+
+	/**
+	 * This method returns all installed Licenses.
+	 * 
+	 * @return A {@link List} of {@link License} is returned containing all
+	 *         installed licenses.
+	 */
+	public Set<License> getInstalledLicenses();
 
 }

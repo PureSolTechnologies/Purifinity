@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.puresol.license.api.exception.ExpiredLicenseException;
 import com.puresol.license.api.exception.LicenseException;
@@ -27,7 +29,12 @@ public class LicenseManagerClientImpl implements LicenseManagerClient {
 	@Override
 	public void addLicenseFile(File licenseFile) {
 		// TODO Auto-generated method stub
+	}
 
+	@Override
+	public Set<License> getInstalledLicenses() {
+		// TODO Auto-generated method stub
+		return new HashSet<License>();
 	}
 
 }

@@ -5,6 +5,9 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.commands.IHandlerListener;
 
+import com.puresol.coding.client.common.license.Activator;
+import com.puresol.coding.client.common.license.dialog.LicenseManagerDialog;
+
 public class LicenseManagerCommand implements IHandler {
 
 	@Override
@@ -21,20 +24,22 @@ public class LicenseManagerCommand implements IHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		// TODO Auto-generated method stub
+		LicenseManagerDialog dialog = new LicenseManagerDialog(Activator
+				.getDefault().getWorkbench().getActiveWorkbenchWindow()
+				.getShell());
+		dialog.setBlockOnOpen(true);
+		dialog.open();
 		return null;
 	}
 
 	@Override
 	public boolean isEnabled() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean isHandled() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
