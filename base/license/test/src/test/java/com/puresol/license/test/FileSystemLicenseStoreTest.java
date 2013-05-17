@@ -14,7 +14,7 @@ import org.junit.Test;
 import com.puresol.license.api.Licensee;
 import com.puresol.license.creator.exception.LicenseStoreException;
 import com.puresol.utils.DirectoryUtilities;
-import com.puresol.utils.crypt.RSAUtilities;
+import com.puresol.utils.crypt.AESUtilities;
 
 public class FileSystemLicenseStoreTest {
 
@@ -40,7 +40,7 @@ public class FileSystemLicenseStoreTest {
 
     @Test
     public void testAddLicensee() throws LicenseStoreException {
-	KeyPair keyPair = RSAUtilities.generateKeyPair(512);
+	KeyPair keyPair = AESUtilities.generateKeyPair(512);
 	Licensee licensee = new Licensee("me", "PureSol Technologies");
 	licenseStore.addLicensee(licensee, keyPair);
 	File meDirectory = new File(licenseStore.getStorageDirectory(), "me");
@@ -49,7 +49,7 @@ public class FileSystemLicenseStoreTest {
 
     @Test
     public void testGetKeyPair() throws LicenseStoreException {
-	KeyPair keyPair = RSAUtilities.generateKeyPair(512);
+	KeyPair keyPair = AESUtilities.generateKeyPair(512);
 	Licensee licensee = new Licensee("me", "PureSol Technologies");
 	licenseStore.addLicensee(licensee, keyPair);
 	File meDirectory = new File(licenseStore.getStorageDirectory(), "me");
@@ -61,7 +61,7 @@ public class FileSystemLicenseStoreTest {
 
     @Test
     public void testListLicensees() throws LicenseStoreException {
-	KeyPair keyPair = RSAUtilities.generateKeyPair(512);
+	KeyPair keyPair = AESUtilities.generateKeyPair(512);
 	Licensee licensee = new Licensee("me", "PureSol Technologies");
 	licenseStore.addLicensee(licensee, keyPair);
 	licensee = new Licensee("me2", "PureSol Technologies");

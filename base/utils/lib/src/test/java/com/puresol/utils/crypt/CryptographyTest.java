@@ -59,13 +59,17 @@ public class CryptographyTest {
 	public void testListAllCiphers() throws Exception {
 		Provider[] providers = Security.getProviders();
 		for (int providerId = 0; providerId < providers.length; providerId++) {
-			System.out.println("===========");
-			System.out.println("Provider " + providerId);
-			System.out.println("===========");
 			Provider provider = providers[providerId];
+			System.out.println("=================================");
+			System.out.println("Provider " + provider.getName() + " ("
+					+ providerId + ")");
+			System.out.println("=================================");
+
 			Set<Object> keys = provider.keySet();
 			for (Object key : keys) {
-				System.out.println(key + " = " + provider.get(key));
+				Object value = provider.get(key);
+				System.out.println(key + " = " + value + " (" + key.getClass()
+						+ "/" + value.getClass() + ")");
 			}
 		}
 	}

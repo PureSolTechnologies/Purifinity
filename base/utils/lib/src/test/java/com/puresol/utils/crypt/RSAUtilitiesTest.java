@@ -10,8 +10,6 @@ import java.security.PublicKey;
 
 import org.junit.Test;
 
-import com.puresol.utils.crypt.RSAUtilities;
-
 public class RSAUtilitiesTest {
 
 	@Test(expected = InvalidParameterException.class)
@@ -28,7 +26,7 @@ public class RSAUtilitiesTest {
 
 	@Test
 	public void testEncryptAndDecrypt() throws Exception {
-		KeyPair keyPair = RSAUtilities.generateKeyPair(512);
+		KeyPair keyPair = RSAUtilities.generateKeyPair(4096);
 
 		String message = "This is the secret message! ;-)";
 		System.out.println(message);
