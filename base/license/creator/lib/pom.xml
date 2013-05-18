@@ -18,10 +18,6 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresol</groupId>
-			<artifactId>license.test</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.puresol</groupId>
 			<artifactId>utils.lib</artifactId>
 		</dependency>
 		<dependency>

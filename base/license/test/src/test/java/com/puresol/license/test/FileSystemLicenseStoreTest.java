@@ -14,60 +14,60 @@ import org.junit.Test;
 import com.puresol.license.api.Licensee;
 import com.puresol.license.creator.exception.LicenseStoreException;
 import com.puresol.utils.DirectoryUtilities;
-import com.puresol.utils.crypt.AESUtilities;
+import com.puresol.utils.crypt.RSAUtilities;
 
 public class FileSystemLicenseStoreTest {
 
-    private static TestFileSystemLicenseStore licenseStore;
+	private static TestFileSystemLicenseStore licenseStore;
 
-    @BeforeClass
-    public static void initialize() {
-	licenseStore = new TestFileSystemLicenseStore();
-	assertEquals(
-		"The license directory needs to be a test directory for testing!",
-		new File("target/licenses"), licenseStore.getStorageDirectory());
-    }
-
-    @Before
-    public void setup() {
-	File storageDirectory = licenseStore.getStorageDirectory();
-	if (storageDirectory.exists()) {
-	    assertTrue("Could not clean test license directory!",
-		    DirectoryUtilities
-			    .deleteDirectoryRecursivly(storageDirectory));
+	@BeforeClass
+	public static void initialize() {
+		licenseStore = new TestFileSystemLicenseStore();
+		assertEquals(
+				"The license directory needs to be a test directory for testing!",
+				new File("target/licenses"), licenseStore.getStorageDirectory());
 	}
-    }
 
-    @Test
-    public void testAddLicensee() throws LicenseStoreException {
-	KeyPair keyPair = AESUtilities.generateKeyPair(512);
-	Licensee licensee = new Licensee("me", "PureSol Technologies");
-	licenseStore.addLicensee(licensee, keyPair);
-	File meDirectory = new File(licenseStore.getStorageDirectory(), "me");
-	assertTrue(meDirectory.exists());
-    }
+	@Before
+	public void setup() {
+		File storageDirectory = licenseStore.getStorageDirectory();
+		if (storageDirectory.exists()) {
+			assertTrue("Could not clean test license directory!",
+					DirectoryUtilities
+							.deleteDirectoryRecursivly(storageDirectory));
+		}
+	}
 
-    @Test
-    public void testGetKeyPair() throws LicenseStoreException {
-	KeyPair keyPair = AESUtilities.generateKeyPair(512);
-	Licensee licensee = new Licensee("me", "PureSol Technologies");
-	licenseStore.addLicensee(licensee, keyPair);
-	File meDirectory = new File(licenseStore.getStorageDirectory(), "me");
-	assertTrue(meDirectory.exists());
-	KeyPair readKeyPair = licenseStore.getKeyPair(licensee);
-	assertEquals(keyPair.getPublic(), readKeyPair.getPublic());
-	assertEquals(keyPair.getPrivate(), readKeyPair.getPrivate());
-    }
+	@Test
+	public void testAddLicensee() throws LicenseStoreException {
+		KeyPair keyPair = RSAUtilities.generateKeyPair(512);
+		Licensee licensee = new Licensee("me", "PureSol Technologies");
+		licenseStore.addLicensee(licensee, keyPair);
+		File meDirectory = new File(licenseStore.getStorageDirectory(), "me");
+		assertTrue(meDirectory.exists());
+	}
 
-    @Test
-    public void testListLicensees() throws LicenseStoreException {
-	KeyPair keyPair = AESUtilities.generateKeyPair(512);
-	Licensee licensee = new Licensee("me", "PureSol Technologies");
-	licenseStore.addLicensee(licensee, keyPair);
-	licensee = new Licensee("me2", "PureSol Technologies");
-	licenseStore.addLicensee(licensee, keyPair);
-	List<Licensee> licensees = licenseStore.getLicensees();
-	// TODO
-    }
+	@Test
+	public void testGetKeyPair() throws LicenseStoreException {
+		KeyPair keyPair = RSAUtilities.generateKeyPair(512);
+		Licensee licensee = new Licensee("me", "PureSol Technologies");
+		licenseStore.addLicensee(licensee, keyPair);
+		File meDirectory = new File(licenseStore.getStorageDirectory(), "me");
+		assertTrue(meDirectory.exists());
+		KeyPair readKeyPair = licenseStore.getKeyPair(licensee);
+		assertEquals(keyPair.getPublic(), readKeyPair.getPublic());
+		assertEquals(keyPair.getPrivate(), readKeyPair.getPrivate());
+	}
+
+	@Test
+	public void testListLicensees() throws LicenseStoreException {
+		KeyPair keyPair = RSAUtilities.generateKeyPair(512);
+		Licensee licensee = new Licensee("me", "PureSol Technologies");
+		licenseStore.addLicensee(licensee, keyPair);
+		licensee = new Licensee("me2", "PureSol Technologies");
+		licenseStore.addLicensee(licensee, keyPair);
+		List<Licensee> licensees = licenseStore.getLicensees();
+		// TODO
+	}
 
 }

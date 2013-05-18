@@ -16,7 +16,7 @@ import com.puresol.license.api.Product;
 import com.puresol.license.creator.exception.LicenseStoreException;
 import com.puresol.license.creator.store.LicenseStore;
 import com.puresol.license.creator.store.LicenseStoreFactory;
-import com.puresol.utils.crypt.AESUtilities;
+import com.puresol.utils.crypt.RSAUtilities;
 
 public class LicenseManager {
 
@@ -29,7 +29,7 @@ public class LicenseManager {
 	public void createLicensee(String customerId, String name)
 			throws LicenseStoreException {
 		Licensee licensee = new Licensee(customerId, name);
-		KeyPair keyPair = AESUtilities.generateKeyPair(DEFAULT_KEY_SIZE);
+		KeyPair keyPair = RSAUtilities.generateKeyPair(DEFAULT_KEY_SIZE);
 		licenseStore.addLicensee(licensee, keyPair);
 	}
 
