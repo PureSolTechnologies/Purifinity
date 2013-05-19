@@ -1,5 +1,8 @@
 package com.puresol.license.api;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * This value object represents a single licensee.
  * 
@@ -12,7 +15,15 @@ public class Licensee {
 
 	public Licensee(String customerId, String name) {
 		super();
+		if ((customerId == null) || (customerId.isEmpty())) {
+			throw new IllegalArgumentException(
+					"Customer id must not be null or empty.");
+		}
 		this.customerId = customerId;
+		if ((name == null) || (name.isEmpty())) {
+			throw new IllegalArgumentException(
+					"Customer name must not be null or empty.");
+		}
 		this.name = name;
 	}
 
@@ -27,6 +38,18 @@ public class Licensee {
 	@Override
 	public String toString() {
 		return name + " (" + customerId + ")";
+	}
+
+	public static Licensee fromString(String licenseeString) {
+		Pattern pattern = Pattern.compile("^(.+)\\s+\\((\\S+)\\)");
+		Matcher matcher = pattern.matcher(licenseeString);
+		if (!matcher.matches()) {
+			throw new IllegalArgumentException("String '" + licenseeString
+					+ "' is not a valid licensee.");
+		}
+		String name = matcher.group(1);
+		String customerId = matcher.group(2);
+		return new Licensee(customerId, name);
 	}
 
 	@Override

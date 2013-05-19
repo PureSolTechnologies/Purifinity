@@ -1,5 +1,10 @@
 package com.puresol.license.api;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.apache.commons.validator.routines.EmailValidator;
+
 /**
  * This value object represents a single licenser.
  * 
@@ -12,7 +17,20 @@ public class Licenser {
 
 	public Licenser(String name, String email) {
 		super();
+		if ((name == null) || (name.isEmpty())) {
+			throw new IllegalArgumentException(
+					"The name of the licenser must no be null or empty.");
+		}
 		this.name = name;
+		if ((email == null) || (email.isEmpty())) {
+			throw new IllegalArgumentException(
+					"The email of the licenser must no be null or empty.");
+		}
+		EmailValidator emailValidator = EmailValidator.getInstance();
+		if (!emailValidator.isValid(email)) {
+			throw new IllegalArgumentException("The email '" + email
+					+ "' is invalid.");
+		}
 		this.email = email;
 	}
 
@@ -55,4 +73,27 @@ public class Licenser {
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		return name + " (" + email + ")";
+	}
+
+	/**
+	 * This method parses the provided string an created a new {@link Licenser}
+	 * object.
+	 * 
+	 * @param licenserString
+	 * @return A {@link Licenser} object is returned.
+	 */
+	public static Licenser fromString(String licenserString) {
+		Pattern pattern = Pattern.compile("^(.+)\\s+\\((\\S+)\\)");
+		Matcher matcher = pattern.matcher(licenserString);
+		if (!matcher.matches()) {
+			throw new IllegalArgumentException("String '" + licenserString
+					+ "' is not a valid licenser.");
+		}
+		String name = matcher.group(1);
+		String email = matcher.group(2);
+		return new Licenser(name, email);
+	}
 }
