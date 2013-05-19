@@ -1,6 +1,7 @@
 package com.puresol.license.creator;
 
 import java.io.File;
+import java.io.IOException;
 import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
 import java.security.Signature;
@@ -16,6 +17,7 @@ import com.puresol.license.api.Product;
 import com.puresol.license.creator.exception.LicenseStoreException;
 import com.puresol.license.creator.store.LicenseStore;
 import com.puresol.license.creator.store.LicenseStoreFactory;
+import com.puresol.license.impl.lib.LicenseFile;
 import com.puresol.utils.crypt.RSAUtilities;
 
 public class LicenseManager {
@@ -26,11 +28,12 @@ public class LicenseManager {
 	private final LicenseStore licenseStore = LicenseStoreFactory.getFactory()
 			.createLicenseStore();
 
-	public void createLicensee(String customerId, String name)
+	public Licensee createLicensee(String customerId, String name)
 			throws LicenseStoreException {
 		Licensee licensee = new Licensee(customerId, name);
 		KeyPair keyPair = RSAUtilities.generateKeyPair(DEFAULT_KEY_SIZE);
 		licenseStore.addLicensee(licensee, keyPair);
+		return licensee;
 	}
 
 	public Signature createOrLoadSignature() {
@@ -55,7 +58,9 @@ public class LicenseManager {
 				new HashSet<LicensedClass>());
 	}
 
-	public void exportLicenseToFile(License license, File file) {
-
+	public void exportLicenseToFile(License license, File file)
+			throws IOException {
+		LicenseFile licenseFile = new LicenseFile(file);
+		licenseFile.writeLicense(license);
 	}
 }

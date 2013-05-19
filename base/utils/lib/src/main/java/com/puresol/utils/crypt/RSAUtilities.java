@@ -1,16 +1,22 @@
 package com.puresol.utils.crypt;
 
 import java.security.InvalidKeyException;
+import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+
+import com.puresol.utils.StringUtils;
 
 /**
  * This class contains utilities and simplifying helper functions for RSA
@@ -96,4 +102,65 @@ public class RSAUtilities {
 		}
 	}
 
+	/**
+	 * This method converts a public key into a {@link String} representation.
+	 * 
+	 * @param publicKey
+	 *            is a {@link PublicKey} object representing the key to be
+	 *            converted.
+	 * @return A {@link String} is returned.
+	 */
+	public static String convertPublicKeyToString(PublicKey publicKey) {
+		X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(
+				publicKey.getEncoded());
+		return StringUtils.convertByteArrayToString(publicKeySpec.getEncoded());
+	}
+
+	/**
+	 * This method converts a private key into a {@link String} representation.
+	 * 
+	 * @param publicKey
+	 *            is a {@link PrivateKey} object representing the key to be
+	 *            converted.
+	 * @return A {@link String} is returned.
+	 */
+	public static String convertPrivateKeyToString(PrivateKey privateKey) {
+		PKCS8EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(
+				privateKey.getEncoded());
+		return StringUtils
+				.convertByteArrayToString(privateKeySpec.getEncoded());
+	}
+
+	/**
+	 * This method returns a new {@link KeyPair} which is restored from public
+	 * and private key strings. The key string can be retrieved from
+	 * {@link #convertPublicKeyToString(PublicKey)} and
+	 * {@link #convertPrivateKeyToString(PrivateKey)}.
+	 * 
+	 * @param publicKey
+	 *            is a {@link String} representing the public key.
+	 * @param privateKey
+	 *            is a {@link String} representing the private key.
+	 * @return A new {@link KeyPair} is returned.
+	 */
+	public static KeyPair getPublicKeyFromString(String publicKey,
+			String privateKey) {
+		byte[] publicEncoded = StringUtils.convertStringToByteArray(publicKey);
+		byte[] privateEncoded = StringUtils
+				.convertStringToByteArray(privateKey);
+		X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(publicEncoded);
+		PKCS8EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(
+				privateEncoded);
+		try {
+			KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+
+			return new KeyPair(keyFactory.generatePublic(publicKeySpec),
+					keyFactory.generatePrivate(privateKeySpec));
+		} catch (InvalidKeySpecException e) {
+			throw new IllegalArgumentException("Could not restore  key pair!",
+					e);
+		} catch (NoSuchAlgorithmException e) {
+			throw new IllegalArgumentException("Could not restore key pair!", e);
+		}
+	}
 }

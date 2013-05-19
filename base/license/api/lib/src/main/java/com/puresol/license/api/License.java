@@ -61,4 +61,74 @@ public class License {
 	public Set<LicensedClass> getLicensedClasses() {
 		return licensedClasses;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((expirationDate == null) ? 0 : expirationDate.hashCode());
+		result = prime * result
+				+ ((issueDate == null) ? 0 : issueDate.hashCode());
+		result = prime * result
+				+ ((licensedClasses == null) ? 0 : licensedClasses.hashCode());
+		result = prime * result
+				+ ((licensee == null) ? 0 : licensee.hashCode());
+		result = prime * result
+				+ ((licenser == null) ? 0 : licenser.hashCode());
+		result = prime * result + ((product == null) ? 0 : product.hashCode());
+		result = prime
+				* result
+				+ ((publicKey.getEncoded() == null) ? 0 : publicKey
+						.getEncoded().hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		License other = (License) obj;
+		if (expirationDate == null) {
+			if (other.expirationDate != null)
+				return false;
+		} else if (!expirationDate.equals(other.expirationDate))
+			return false;
+		if (issueDate == null) {
+			if (other.issueDate != null)
+				return false;
+		} else if (!issueDate.equals(other.issueDate))
+			return false;
+		if (licensedClasses == null) {
+			if (other.licensedClasses != null)
+				return false;
+		} else if (!licensedClasses.equals(other.licensedClasses))
+			return false;
+		if (licensee == null) {
+			if (other.licensee != null)
+				return false;
+		} else if (!licensee.equals(other.licensee))
+			return false;
+		if (licenser == null) {
+			if (other.licenser != null)
+				return false;
+		} else if (!licenser.equals(other.licenser))
+			return false;
+		if (product == null) {
+			if (other.product != null)
+				return false;
+		} else if (!product.equals(other.product))
+			return false;
+		if (publicKey.getEncoded() == null) {
+			if (other.publicKey.getEncoded() != null)
+				return false;
+		} else if (!publicKey.getEncoded().equals(other.publicKey.getEncoded()))
+			return false;
+		return true;
+	}
+
 }

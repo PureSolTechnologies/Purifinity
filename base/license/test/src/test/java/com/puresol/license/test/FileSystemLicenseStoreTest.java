@@ -8,7 +8,6 @@ import java.security.KeyPair;
 import java.util.List;
 
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.puresol.license.api.Licensee;
@@ -16,20 +15,11 @@ import com.puresol.license.creator.exception.LicenseStoreException;
 import com.puresol.utils.DirectoryUtilities;
 import com.puresol.utils.crypt.RSAUtilities;
 
-public class FileSystemLicenseStoreTest {
-
-	private static TestFileSystemLicenseStore licenseStore;
-
-	@BeforeClass
-	public static void initialize() {
-		licenseStore = new TestFileSystemLicenseStore();
-		assertEquals(
-				"The license directory needs to be a test directory for testing!",
-				new File("target/licenses"), licenseStore.getStorageDirectory());
-	}
+public class FileSystemLicenseStoreTest extends AbstractLicenseFacilityTest {
 
 	@Before
 	public void setup() {
+		TestFileSystemLicenseStore licenseStore = (TestFileSystemLicenseStore) getLicenseStore();
 		File storageDirectory = licenseStore.getStorageDirectory();
 		if (storageDirectory.exists()) {
 			assertTrue("Could not clean test license directory!",
@@ -42,7 +32,8 @@ public class FileSystemLicenseStoreTest {
 	public void testAddLicensee() throws LicenseStoreException {
 		KeyPair keyPair = RSAUtilities.generateKeyPair(512);
 		Licensee licensee = new Licensee("me", "PureSol Technologies");
-		licenseStore.addLicensee(licensee, keyPair);
+		getLicenseStore().addLicensee(licensee, keyPair);
+		TestFileSystemLicenseStore licenseStore = (TestFileSystemLicenseStore) getLicenseStore();
 		File meDirectory = new File(licenseStore.getStorageDirectory(), "me");
 		assertTrue(meDirectory.exists());
 	}
@@ -51,10 +42,11 @@ public class FileSystemLicenseStoreTest {
 	public void testGetKeyPair() throws LicenseStoreException {
 		KeyPair keyPair = RSAUtilities.generateKeyPair(512);
 		Licensee licensee = new Licensee("me", "PureSol Technologies");
-		licenseStore.addLicensee(licensee, keyPair);
+		getLicenseStore().addLicensee(licensee, keyPair);
+		TestFileSystemLicenseStore licenseStore = (TestFileSystemLicenseStore) getLicenseStore();
 		File meDirectory = new File(licenseStore.getStorageDirectory(), "me");
 		assertTrue(meDirectory.exists());
-		KeyPair readKeyPair = licenseStore.getKeyPair(licensee);
+		KeyPair readKeyPair = getLicenseStore().getKeyPair(licensee);
 		assertEquals(keyPair.getPublic(), readKeyPair.getPublic());
 		assertEquals(keyPair.getPrivate(), readKeyPair.getPrivate());
 	}
@@ -63,6 +55,7 @@ public class FileSystemLicenseStoreTest {
 	public void testListLicensees() throws LicenseStoreException {
 		KeyPair keyPair = RSAUtilities.generateKeyPair(512);
 		Licensee licensee = new Licensee("me", "PureSol Technologies");
+		TestFileSystemLicenseStore licenseStore = (TestFileSystemLicenseStore) getLicenseStore();
 		licenseStore.addLicensee(licensee, keyPair);
 		licensee = new Licensee("me2", "PureSol Technologies");
 		licenseStore.addLicensee(licensee, keyPair);

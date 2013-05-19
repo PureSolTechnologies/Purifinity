@@ -20,6 +20,10 @@
             <groupId>com.puresol</groupId>
             <artifactId>license.creator.lib</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.puresol</groupId>
+            <artifactId>license.impl.lib</artifactId>
+        </dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
