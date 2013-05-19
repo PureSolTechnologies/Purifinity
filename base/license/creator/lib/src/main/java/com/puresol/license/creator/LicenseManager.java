@@ -52,7 +52,7 @@ public class LicenseManager {
 	public License createLicense(Product product, Licenser licenser,
 			Licensee licensee, Date expirationDate)
 			throws LicenseStoreException {
-		KeyPair keyPair = licenseStore.getKeyPair(licensee);
+		KeyPair keyPair = licenseStore.getKeyPair(licensee.getCustomerId());
 		return new License(keyPair.getPublic(), product, new Date(),
 				expirationDate, licenser, licensee,
 				new HashSet<LicensedClass>());

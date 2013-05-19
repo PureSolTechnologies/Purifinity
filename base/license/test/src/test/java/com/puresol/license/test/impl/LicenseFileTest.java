@@ -11,6 +11,7 @@ import com.puresol.license.api.License;
 import com.puresol.license.api.Licensee;
 import com.puresol.license.api.Licenser;
 import com.puresol.license.api.Product;
+import com.puresol.license.api.Version;
 import com.puresol.license.creator.LicenseManager;
 import com.puresol.license.creator.exception.LicenseStoreException;
 import com.puresol.license.impl.lib.LicenseFile;
@@ -37,7 +38,7 @@ public class LicenseFileTest extends AbstractLicenseFacilityTest {
 	public void testWriteAndRead() throws Exception {
 		GregorianCalendar expirationDate = new GregorianCalendar(2100, 0, 1);
 		LicenseManager licenseManager = getLicenseManager();
-		Product product = new Product("Purifinity", "0.8.15");
+		Product product = new Product("Purifinity", new Version(0, 8, 15));
 		Licenser licenser = new Licenser("PureSol Technologies",
 				"contact@puresol-technologies.com");
 		License license = licenseManager.createLicense(product, licenser,

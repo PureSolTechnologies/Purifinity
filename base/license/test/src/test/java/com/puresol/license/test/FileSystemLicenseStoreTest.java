@@ -46,7 +46,8 @@ public class FileSystemLicenseStoreTest extends AbstractLicenseFacilityTest {
 		TestFileSystemLicenseStore licenseStore = (TestFileSystemLicenseStore) getLicenseStore();
 		File meDirectory = new File(licenseStore.getStorageDirectory(), "me");
 		assertTrue(meDirectory.exists());
-		KeyPair readKeyPair = getLicenseStore().getKeyPair(licensee);
+		KeyPair readKeyPair = getLicenseStore().getKeyPair(
+				licensee.getCustomerId());
 		assertEquals(keyPair.getPublic(), readKeyPair.getPublic());
 		assertEquals(keyPair.getPrivate(), readKeyPair.getPrivate());
 	}

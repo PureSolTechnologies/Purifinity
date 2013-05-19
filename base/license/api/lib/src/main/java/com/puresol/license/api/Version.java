@@ -1,5 +1,6 @@
 package com.puresol.license.api;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -185,32 +186,38 @@ public class Version implements Comparable<Version> {
 		if (this.patch != other.patch) {
 			return Integer.valueOf(this.patch).compareTo(other.patch);
 		}
-		int preReleaseCompare = compareAdditionals(this.preReleaseIdentifier,
-				other.preReleaseIdentifier);
+		int preReleaseCompare = comparePreReleaseInformation(
+				this.preReleaseIdentifier, other.preReleaseIdentifier);
 		if (preReleaseCompare != 0) {
 			return preReleaseCompare;
 		}
-		int metaDataCompare = compareAdditionals(this.metaData, other.metaData);
-		if (metaDataCompare != 0) {
-			return metaDataCompare;
-		}
+		// Build metadata does not figure into precedence!
 		return 0;
 	}
 
-	private int compareAdditionals(String my, String other) {
-		if ((my == null) && (other == null)) {
+	private int comparePreReleaseInformation(String myPreRelease,
+			String otherPreRelease) {
+		if ((myPreRelease == null) && (otherPreRelease == null)) {
 			return 0;
-		} else if ((my == null) && (other != null)) {
-			return -1;
-		} else if ((my != null) && (other == null)) {
+		} else if ((myPreRelease == null) && (otherPreRelease != null)) {
+			/*
+			 * we do not have pre-release information, so we are an official
+			 * release
+			 */
 			return 1;
+		} else if ((myPreRelease != null) && (otherPreRelease == null)) {
+			/*
+			 * the other does not have pre-release information, so the other is
+			 * an official release
+			 */
+			return -1;
 		}
-		String[] mySplits = my.split("\\.");
-		String[] otherSplits = other.split("\\.");
+		String[] mySplits = myPreRelease.split("\\.");
+		String[] otherSplits = otherPreRelease.split("\\.");
 		for (int i = 0; i < Math.min(mySplits.length, otherSplits.length); i++) {
 			String mySplit = mySplits[i];
 			String otherSplit = otherSplits[i];
-			int compareResult = mySplit.compareTo(otherSplit);
+			int compareResult = comparePreReleaseParts(mySplit, otherSplit);
 			if (compareResult != 0) {
 				return compareResult;
 			}
@@ -223,5 +230,42 @@ public class Version implements Comparable<Version> {
 			}
 		}
 		return 0;
+	}
+
+	private int comparePreReleaseParts(String myPart, String otherPart) {
+		Integer my = null;
+		try {
+			my = Integer.valueOf(myPart);
+		} catch (NumberFormatException e) {
+		}
+		Integer other = null;
+		try {
+			other = Integer.valueOf(otherPart);
+		} catch (NumberFormatException e) {
+		}
+		if ((my == null) && (other == null)) {
+			return myPart.compareTo(otherPart);
+		} else if ((my != null) && (other == null)) {
+			return 1;
+		} else if ((my == null) && (other != null)) {
+			return -1;
+		}
+		return my.compareTo(other);
+	}
+
+	public static Version fromString(String versionString) {
+		Pattern pattern = Pattern
+				.compile("^(\\d+)\\.(\\d+)\\.(\\d+)(-([0-9a-zA-Z.]+))?(\\+([0-9a-zA-Z.]+))?$");
+		Matcher matcher = pattern.matcher(versionString);
+		if (!matcher.matches()) {
+			throw new IllegalArgumentException("The given version string '"
+					+ versionString + "' is not valid.");
+		}
+		int major = Integer.valueOf(matcher.group(1));
+		int minor = Integer.valueOf(matcher.group(2));
+		int patch = Integer.valueOf(matcher.group(3));
+		String preRelease = matcher.group(5);
+		String metaData = matcher.group(7);
+		return new Version(major, minor, patch, preRelease, metaData);
 	}
 }
