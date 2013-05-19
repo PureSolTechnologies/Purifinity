@@ -44,9 +44,10 @@ public class LicenseFileTest extends AbstractLicenseFacilityTest {
 		License license = licenseManager.createLicense(product, licenser,
 				testLicensee, expirationDate.getTime());
 		LicenseFile licenseFile = new LicenseFile(testLicenseFile);
-		licenseFile.writeLicense(license);
+		KeyPair keyPair = getLicenseStore().getKeyPair(
+				license.getLicensee().getCustomerId());
+		licenseFile.writeLicense(license, keyPair.getPrivate());
 		License readLicense = licenseFile.readLicense();
-		// FIXME
 		// assertEquals(license, readLicense);
 	}
 }

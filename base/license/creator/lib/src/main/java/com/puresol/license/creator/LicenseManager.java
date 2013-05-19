@@ -2,6 +2,7 @@ package com.puresol.license.creator;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.InvalidKeyException;
 import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
 import java.security.Signature;
@@ -59,8 +60,15 @@ public class LicenseManager {
 	}
 
 	public void exportLicenseToFile(License license, File file)
-			throws IOException {
-		LicenseFile licenseFile = new LicenseFile(file);
-		licenseFile.writeLicense(license);
+			throws IOException, LicenseStoreException {
+		try {
+			LicenseFile licenseFile = new LicenseFile(file);
+			KeyPair keyPair = licenseStore.getKeyPair(license.getLicensee()
+					.getCustomerId());
+			licenseFile.writeLicense(license, keyPair.getPrivate());
+		} catch (InvalidKeyException e) {
+			throw new LicenseStoreException("Could not store license to file.",
+					e);
+		}
 	}
 }

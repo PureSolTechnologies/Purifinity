@@ -26,7 +26,7 @@ public class RSAUtilitiesTest {
 
 	@Test
 	public void testEncryptAndDecrypt() throws Exception {
-		KeyPair keyPair = RSAUtilities.generateKeyPair(4096);
+		KeyPair keyPair = RSAUtilities.generateKeyPair(1024);
 
 		String message = "This is the secret message! ;-)";
 		System.out.println(message);

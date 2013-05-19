@@ -77,10 +77,36 @@ public class RSAUtilities {
 	}
 
 	/**
+	 * This class encrypts a byte array of data.
+	 * 
+	 * @param privateKey
+	 *            is the public key to be used for encryption.
+	 * @param plainData
+	 *            is the data to be encrypted.
+	 * @return A data byte array is returned containing the encrypted data.
+	 * @throws IllegalBlockSizeException
+	 * @throws InvalidKeyException
+	 */
+	public static byte[] encrypt(PrivateKey privateKey, byte[] plainData)
+			throws IllegalBlockSizeException, InvalidKeyException {
+		try {
+			Cipher cipher = Cipher.getInstance(RSA_ALGORITHM_NAME);
+			cipher.init(Cipher.ENCRYPT_MODE, privateKey);
+			return cipher.doFinal(plainData);
+		} catch (NoSuchAlgorithmException e) {
+			throw new RuntimeException("Could not encrypt data with RSA!", e);
+		} catch (NoSuchPaddingException e) {
+			throw new RuntimeException("Could not encrypt data with RSA!", e);
+		} catch (BadPaddingException e) {
+			throw new RuntimeException("Could not encrypt data with RSA!", e);
+		}
+	}
+
+	/**
 	 * This class de crypts an encrypted byte array of data.
 	 * 
-	 * @param publicKey
-	 *            is the public key to be used for encryption.
+	 * @param privateKey
+	 *            is the private key to be used for encryption.
 	 * @param plainData
 	 *            is the data to be encrypted.
 	 * @return A data byte array is returned containing the encrypted data.
@@ -92,6 +118,32 @@ public class RSAUtilities {
 		try {
 			Cipher cipher = Cipher.getInstance(RSA_ALGORITHM_NAME);
 			cipher.init(Cipher.DECRYPT_MODE, privateKey);
+			return cipher.doFinal(encryptedData);
+		} catch (NoSuchAlgorithmException e) {
+			throw new RuntimeException("Could not decrypt data with RSA!", e);
+		} catch (NoSuchPaddingException e) {
+			throw new RuntimeException("Could not decrypt data with RSA!", e);
+		} catch (BadPaddingException e) {
+			throw new RuntimeException("Could not decrypt data with RSA!", e);
+		}
+	}
+
+	/**
+	 * This class de crypts an encrypted byte array of data.
+	 * 
+	 * @param publicKey
+	 *            is the private key to be used for encryption.
+	 * @param plainData
+	 *            is the data to be encrypted.
+	 * @return A data byte array is returned containing the encrypted data.
+	 * @throws IllegalBlockSizeException
+	 * @throws InvalidKeyException
+	 */
+	public static byte[] decrypt(PublicKey publicKey, byte[] encryptedData)
+			throws IllegalBlockSizeException, InvalidKeyException {
+		try {
+			Cipher cipher = Cipher.getInstance(RSA_ALGORITHM_NAME);
+			cipher.init(Cipher.DECRYPT_MODE, publicKey);
 			return cipher.doFinal(encryptedData);
 		} catch (NoSuchAlgorithmException e) {
 			throw new RuntimeException("Could not decrypt data with RSA!", e);
@@ -143,19 +195,36 @@ public class RSAUtilities {
 	 *            is a {@link String} representing the private key.
 	 * @return A new {@link KeyPair} is returned.
 	 */
-	public static KeyPair getPublicKeyFromString(String publicKey,
+	public static KeyPair getKeyPairFromString(String publicKey,
 			String privateKey) {
-		byte[] publicEncoded = StringUtils.convertStringToByteArray(publicKey);
-		byte[] privateEncoded = StringUtils
-				.convertStringToByteArray(privateKey);
-		X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(publicEncoded);
-		PKCS8EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(
-				privateEncoded);
-		try {
-			KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+		return new KeyPair(getPublicKeyFromString(publicKey),
+				getPrivateKeyFromString(privateKey));
+	}
 
-			return new KeyPair(keyFactory.generatePublic(publicKeySpec),
-					keyFactory.generatePrivate(privateKeySpec));
+	public static PrivateKey getPrivateKeyFromString(String privateKey) {
+		try {
+			byte[] privateEncoded = StringUtils
+					.convertStringToByteArray(privateKey);
+			PKCS8EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(
+					privateEncoded);
+			KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+			return keyFactory.generatePrivate(privateKeySpec);
+		} catch (InvalidKeySpecException e) {
+			throw new IllegalArgumentException("Could not restore  key pair!",
+					e);
+		} catch (NoSuchAlgorithmException e) {
+			throw new IllegalArgumentException("Could not restore key pair!", e);
+		}
+	}
+
+	public static PublicKey getPublicKeyFromString(String publicKey) {
+		try {
+			byte[] publicEncoded = StringUtils
+					.convertStringToByteArray(publicKey);
+			X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(
+					publicEncoded);
+			KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+			return keyFactory.generatePublic(publicKeySpec);
 		} catch (InvalidKeySpecException e) {
 			throw new IllegalArgumentException("Could not restore  key pair!",
 					e);

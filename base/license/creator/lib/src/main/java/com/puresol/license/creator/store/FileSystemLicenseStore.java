@@ -124,7 +124,7 @@ public class FileSystemLicenseStore implements LicenseStore {
 	private KeyPair restoreKeyPair(String publicKey, String privateKey)
 			throws LicenseStoreException {
 		try {
-			return RSAUtilities.getPublicKeyFromString(publicKey, privateKey);
+			return RSAUtilities.getKeyPairFromString(publicKey, privateKey);
 		} catch (IllegalArgumentException e) {
 			throw new LicenseStoreException("Could not restore key pair!", e);
 		}
