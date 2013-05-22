@@ -202,6 +202,11 @@
             id="com.puresol.coding.client.application.handler.SwitchWorkspaceHandler"
             name="Switch Workspace">
       </command>
+      <command
+            defaultHandler="com.puresol.coding.client.application.handler.PrintHandler"
+            id="org.eclipse.ui.file.print"
+            name="Print">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.intro">

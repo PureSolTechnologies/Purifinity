@@ -44,9 +44,10 @@
       <import plugin="com.puresol.coding.metrics.bundle" version="0.1.0" match="greaterOrEqual"/>
       <import plugin="com.puresol.coding.evaluation.impl.bundle" version="0.1.0" match="greaterOrEqual"/>
       <import plugin="com.puresol.coding.client.common.chart.plugin" version="0.1.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.swt" version="3.100.1" match="greaterOrEqual"/>
       <import plugin="com.puresol.license.api.bundle" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.swt" version="3.100.1" match="greaterOrEqual"/>
       <import plugin="org.eclipse.jface" version="3.8.102" match="greaterOrEqual"/>
+      <import plugin="com.puresol.coding.client.application.plugin" version="0.1.0" match="greaterOrEqual"/>
    </requires>
 
    <plugin

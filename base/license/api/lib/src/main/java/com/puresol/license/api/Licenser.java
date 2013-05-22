@@ -3,8 +3,6 @@ package com.puresol.license.api;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.validator.routines.EmailValidator;
-
 /**
  * This value object represents a single licenser.
  * 
@@ -26,11 +24,11 @@ public class Licenser {
 			throw new IllegalArgumentException(
 					"The email of the licenser must no be null or empty.");
 		}
-		EmailValidator emailValidator = EmailValidator.getInstance();
-		if (!emailValidator.isValid(email)) {
-			throw new IllegalArgumentException("The email '" + email
-					+ "' is invalid.");
-		}
+		// EmailValidator emailValidator = EmailValidator.getInstance();
+		// if (!emailValidator.isValid(email)) {
+		// throw new IllegalArgumentException("The email '" + email
+		// + "' is invalid.");
+		// }
 		this.email = email;
 	}
 
