@@ -5,15 +5,13 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.commands.IHandlerListener;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.GC;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.printing.PrintDialog;
 import org.eclipse.swt.printing.Printer;
 import org.eclipse.swt.printing.PrinterData;
-import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IWorkbenchWindow;
 
 import com.puresol.coding.client.application.Activator;
 import com.puresol.coding.client.common.branding.Printable;
@@ -38,38 +36,35 @@ public class PrintHandler implements IHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		Shell shell = Activator.getDefault().getWorkbench()
-				.getActiveWorkbenchWindow().getShell();
-		PrintDialog printDialog = new PrintDialog(shell, SWT.NONE);
-		printDialog.setText("Print");
-		PrinterData printerData = printDialog.open();
-		if (!(printerData == null)) {
-			Printer p = new Printer(printerData);
-			p.startJob("PrintJob");
-			p.startPage();
-			Rectangle trim = p.computeTrim(0, 0, 0, 0);
-			Point dpi = p.getDPI();
-			int leftMargin = dpi.x + trim.x;
-			int topMargin = dpi.y / 2 + trim.y;
-			GC gc = new GC(p);
-			Font font = gc.getFont();
-			String printText = "Hallo!";
-			Point extent = gc.stringExtent(printText);
-			gc.drawString(printText, leftMargin, topMargin
-					+ font.getFontData()[0].getHeight());
-			p.endPage();
-			gc.dispose();
-			p.endJob();
-			p.dispose();
+		IWorkbenchWindow activeWorkbenchWindow = Activator.getDefault()
+				.getWorkbench().getActiveWorkbenchWindow();
+		IWorkbenchPage activePage = activeWorkbenchWindow.getActivePage();
+		IWorkbenchPart part = activePage.getActivePart();
+		if (Printable.class.isAssignableFrom(part.getClass())) {
+			PrintDialog printDialog = new PrintDialog(
+					activeWorkbenchWindow.getShell(), SWT.NONE);
+			printDialog.setText("Print '" + part.getTitle() + "'");
+			PrinterData printerData = printDialog.open();
+			if (printerData != null) {
+				Printer printer = new Printer(printerData);
+				try {
+					Printable printable = (Printable) part;
+					printable.print(printer, "Printing " + part.getTitle());
+				} finally {
+					printer.dispose();
+				}
+			}
 		}
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public boolean isEnabled() {
-		IWorkbenchPart part = Activator.getDefault().getWorkbench()
-				.getActiveWorkbenchWindow().getActivePage().getActivePart();
+		IWorkbench workbench = Activator.getDefault().getWorkbench();
+		IWorkbenchWindow activeWorkbenchWindow = workbench
+				.getActiveWorkbenchWindow();
+		IWorkbenchPage activePage = activeWorkbenchWindow.getActivePage();
+		IWorkbenchPart part = activePage.getActivePart();
 		return Printable.class.isAssignableFrom(part.getClass());
 	}
 

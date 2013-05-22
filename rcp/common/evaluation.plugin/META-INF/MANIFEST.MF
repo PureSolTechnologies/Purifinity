@@ -24,6 +24,7 @@ Require-Bundle: org.apache.commons.io;bundle-version="2.0.1",
  com.puresol.coding.metrics.bundle;bundle-version="0.1.0",
  com.puresol.coding.evaluation.impl.bundle;bundle-version="0.1.0",
  com.puresol.coding.client.common.chart.plugin;bundle-version="0.1.0",
- com.puresol.license.api.bundle;bundle-version="0.1.0"
+ com.puresol.license.api.bundle;bundle-version="0.1.0",
+ com.puresol.coding.client.common.branding.plugin;bundle-version="0.1.0"
 Bundle-Activator: com.puresol.coding.client.common.evaluation.Activator
 Import-Package: com.puresol.utils

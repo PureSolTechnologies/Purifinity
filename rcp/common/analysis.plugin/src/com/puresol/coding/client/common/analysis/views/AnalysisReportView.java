@@ -4,10 +4,15 @@ import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
+import org.eclipse.swt.printing.Printer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
@@ -126,8 +131,27 @@ public class AnalysisReportView extends ViewPart implements ISelectionListener,
 	}
 
 	@Override
-	public void print() {
-		// TODO Auto-generated method stub
-
+	public void print(Printer printer, String printJobName) {
+		printer.startJob("PrintJob");
+		try {
+			GC gc = new GC(printer);
+			try {
+				printer.startPage();
+				Rectangle trim = printer.computeTrim(0, 0, 0, 0);
+				Point dpi = printer.getDPI();
+				int leftMargin = dpi.x + trim.x;
+				int topMargin = dpi.y / 2 + trim.y;
+				Font font = gc.getFont();
+				String printText = "Hallo!";
+				Point extent = gc.stringExtent(printText);
+				gc.drawString(printText, leftMargin,
+						topMargin + font.getFontData()[0].getHeight());
+				printer.endPage();
+			} finally {
+				gc.dispose();
+			}
+		} finally {
+			printer.endJob();
+		}
 	}
 }
