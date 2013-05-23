@@ -29,6 +29,10 @@ public class Licenser {
 		// throw new IllegalArgumentException("The email '" + email
 		// + "' is invalid.");
 		// }
+		if (!Pattern.matches("^\\S+@\\S+\\.\\S+$", email)) {
+			throw new IllegalArgumentException("The email '" + email
+					+ "' is invalid.");
+		}
 		this.email = email;
 	}
 
