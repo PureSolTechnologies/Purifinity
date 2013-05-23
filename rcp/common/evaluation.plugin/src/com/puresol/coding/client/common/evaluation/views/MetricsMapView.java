@@ -31,7 +31,7 @@ import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.client.common.analysis.views.FileAnalysisSelection;
 import com.puresol.coding.client.common.branding.Printable;
 import com.puresol.coding.client.common.chart.AreaMapComponent;
-import com.puresol.coding.client.common.chart.AreaMapData;
+import com.puresol.coding.client.common.chart.renderer.AreaMapData;
 import com.puresol.coding.client.common.chart.renderer.ColorProvider;
 import com.puresol.coding.client.common.evaluation.Activator;
 import com.puresol.coding.client.common.evaluation.MetricsMapViewSettingsDialog;
