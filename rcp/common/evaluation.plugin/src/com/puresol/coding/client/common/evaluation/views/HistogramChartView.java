@@ -49,7 +49,7 @@ import com.puresol.utils.math.Parameter;
 import com.puresol.utils.math.ParameterWithArbitraryUnit;
 import com.puresol.utils.math.Value;
 
-public class HistogramChartView extends AbstractMetricViewPart {
+public class HistogramChartView extends AbstractMetricChartViewPart {
 
 	private static final int NUMBER_OF_NUMERICAL_CATEGORIES = 10;
 
@@ -332,4 +332,8 @@ public class HistogramChartView extends AbstractMetricViewPart {
 				"This functionality is not implemented, yet!");
 	}
 
+	@Override
+	protected ChartCanvas getChartCanvas() {
+		return chartCanvas;
+	}
 }

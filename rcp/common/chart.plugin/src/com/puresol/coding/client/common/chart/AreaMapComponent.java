@@ -79,6 +79,11 @@ public class AreaMapComponent extends Canvas implements PaintListener {
 		setData(data, "");
 	}
 
+	@Override
+	public AreaMapData getData() {
+		return data;
+	}
+
 	public void setData(AreaMapData data, String unit) {
 		this.data = data;
 		this.unit = unit;

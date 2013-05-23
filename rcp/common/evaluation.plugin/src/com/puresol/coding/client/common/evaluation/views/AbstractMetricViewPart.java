@@ -16,6 +16,7 @@ import org.eclipse.ui.part.ViewPart;
 import com.puresol.coding.analysis.api.CodeRangeType;
 import com.puresol.coding.analysis.api.HashIdFileTree;
 import com.puresol.coding.client.common.analysis.views.FileAnalysisSelection;
+import com.puresol.coding.client.common.branding.Printable;
 import com.puresol.coding.client.common.evaluation.utils.EvaluationsTarget;
 import com.puresol.coding.client.common.ui.actions.Exportable;
 import com.puresol.coding.client.common.ui.actions.PartSettingsCapability;
@@ -28,138 +29,138 @@ import com.puresol.utils.math.Parameter;
 import com.puresol.utils.math.Value;
 
 public abstract class AbstractMetricViewPart extends ViewPart implements
-	Refreshable, Reproducable, ISelectionListener, PartSettingsCapability,
-	EvaluationsTarget, Exportable {
+		Refreshable, Reproducable, ISelectionListener, PartSettingsCapability,
+		EvaluationsTarget, Exportable, Printable {
 
-    private ISelectionService selectionService;
-    private FileAnalysisSelection analysisSelection;
+	private ISelectionService selectionService;
+	private FileAnalysisSelection analysisSelection;
 
-    public AbstractMetricViewPart() {
-	super();
-    }
-
-    @Override
-    public void dispose() {
-	selectionService.removeSelectionListener(this);
-	super.dispose();
-    }
-
-    @Override
-    public void createPartControl(Composite parent) {
-	IWorkbenchPartSite site = getSite();
-	IWorkbenchWindow workbenchWindow = site.getWorkbenchWindow();
-	selectionService = workbenchWindow.getSelectionService();
-	selectionService.addSelectionListener(this);
-    }
-
-    @Override
-    public final void selectionChanged(IWorkbenchPart part, ISelection selection) {
-	if (selection instanceof FileAnalysisSelection) {
-	    analysisSelection = (FileAnalysisSelection) selection;
-	    updateEvaluation();
+	public AbstractMetricViewPart() {
+		super();
 	}
-    }
 
-    protected abstract void updateEvaluation();
-
-    protected final FileAnalysisSelection getAnalysisSelection() {
-	return analysisSelection;
-    }
-
-    protected final Double findSuitableValue(HashIdFileTree path,
-	    MetricFileResults results, Parameter<?> parameter,
-	    CodeRangeType codeRangeType) {
-	try {
-	    List<Map<String, Value<?>>> valueMaps = findSuitableValueMaps(path,
-		    results, parameter, codeRangeType);
-	    if ((valueMaps == null) || (valueMaps.size() != 1)) {
-		return null;
-	    }
-	    return convertToDouble(valueMaps.get(0), parameter);
-	} catch (IllegalArgumentException e) {
-	    throw new RuntimeException("Could not find a suitable value for '"
-		    + path.getPathFile(false).toString() + "'.", e);
+	@Override
+	public void dispose() {
+		selectionService.removeSelectionListener(this);
+		super.dispose();
 	}
-    }
 
-    protected final Object findSuitableSecondaryValue(HashIdFileTree path,
-	    MetricFileResults results, Parameter<?> parameter,
-	    CodeRangeType codeRangeType) {
-	List<Map<String, Value<?>>> valueMaps = findSuitableValueMaps(path,
-		results, parameter, codeRangeType);
-	if ((valueMaps == null) || (valueMaps.size() != 1)) {
-	    return null;
+	@Override
+	public void createPartControl(Composite parent) {
+		IWorkbenchPartSite site = getSite();
+		IWorkbenchWindow workbenchWindow = site.getWorkbenchWindow();
+		selectionService = workbenchWindow.getSelectionService();
+		selectionService.addSelectionListener(this);
 	}
-	Value<?> value = valueMaps.get(0).get(parameter.getName());
-	return value.getValue();
-    }
 
-    protected List<Map<String, Value<?>>> findSuitableValueMaps(
-	    HashIdFileTree path, MetricFileResults results,
-	    Parameter<?> parameter, CodeRangeType codeRangeType) {
-	List<Map<String, Value<?>>> valueMap = new ArrayList<Map<String, Value<?>>>();
-	List<Map<String, Value<?>>> values = results.getValues();
-	if (path.isFile()) {
-	    if (values.size() == 1) {
-		valueMap.add(values.get(0));
-	    } else {
-		String codeRangeTypeParameterName = CodeRangeTypeParameter
-			.getInstance().getName();
-		for (Map<String, Value<?>> value : values) {
-		    Object codeRangeTypeValue = value.get(
-			    codeRangeTypeParameterName).getValue();
-		    if (codeRangeTypeValue.equals(codeRangeType)) {
-			valueMap.add(value);
-		    }
+	@Override
+	public final void selectionChanged(IWorkbenchPart part, ISelection selection) {
+		if (selection instanceof FileAnalysisSelection) {
+			analysisSelection = (FileAnalysisSelection) selection;
+			updateEvaluation();
 		}
-	    }
-	} else {
-	    if (values.size() != 1) {
-		throw new RuntimeException("Directory '"
-			+ path.getPathFile(false)
-			+ "' contains more than one result for evaluator '"
-			+ parameter.getName() + "'!");
-	    }
-	    valueMap.add(values.get(0));
 	}
-	return valueMap;
-    }
 
-    protected final double findSuitableValue(MetricDirectoryResults results,
-	    Parameter<?> parameter) {
-	try {
-	    Map<String, Value<?>> valueMap = results.getValues();
-	    return convertToDouble(valueMap, parameter);
-	} catch (IllegalArgumentException e) {
-	    throw new RuntimeException("Could not find a suitable value.", e);
+	protected abstract void updateEvaluation();
+
+	protected final FileAnalysisSelection getAnalysisSelection() {
+		return analysisSelection;
 	}
-    }
 
-    protected final Object findSuitableSecondaryValue(HashIdFileTree path,
-	    MetricDirectoryResults results, Parameter<?> parameter) {
-	Map<String, Value<?>> valueMap = results.getValues();
-	Value<?> value = valueMap.get(parameter.getName());
-	return value.getValue();
-    }
-
-    /**
-     * This method converts a valueMap into a Double value.
-     * 
-     * @param valueMap
-     * @param parameter
-     * @return
-     */
-    protected double convertToDouble(Map<String, Value<?>> valueMap,
-	    Parameter<?> parameter) throws IllegalArgumentException {
-	Value<?> value = valueMap.get(parameter.getName());
-	if ((value != null) && (parameter.isNumeric())) {
-	    double sum = 0.0;
-	    Number number = (Number) value.getValue();
-	    sum = number.doubleValue();
-	    return sum;
-	} else {
-	    throw new IllegalArgumentException("Value '" + value
-		    + "' (parameter=" + parameter + ") is not a number!");
+	protected final Double findSuitableValue(HashIdFileTree path,
+			MetricFileResults results, Parameter<?> parameter,
+			CodeRangeType codeRangeType) {
+		try {
+			List<Map<String, Value<?>>> valueMaps = findSuitableValueMaps(path,
+					results, parameter, codeRangeType);
+			if ((valueMaps == null) || (valueMaps.size() != 1)) {
+				return null;
+			}
+			return convertToDouble(valueMaps.get(0), parameter);
+		} catch (IllegalArgumentException e) {
+			throw new RuntimeException("Could not find a suitable value for '"
+					+ path.getPathFile(false).toString() + "'.", e);
+		}
 	}
-    }
+
+	protected final Object findSuitableSecondaryValue(HashIdFileTree path,
+			MetricFileResults results, Parameter<?> parameter,
+			CodeRangeType codeRangeType) {
+		List<Map<String, Value<?>>> valueMaps = findSuitableValueMaps(path,
+				results, parameter, codeRangeType);
+		if ((valueMaps == null) || (valueMaps.size() != 1)) {
+			return null;
+		}
+		Value<?> value = valueMaps.get(0).get(parameter.getName());
+		return value.getValue();
+	}
+
+	protected List<Map<String, Value<?>>> findSuitableValueMaps(
+			HashIdFileTree path, MetricFileResults results,
+			Parameter<?> parameter, CodeRangeType codeRangeType) {
+		List<Map<String, Value<?>>> valueMap = new ArrayList<Map<String, Value<?>>>();
+		List<Map<String, Value<?>>> values = results.getValues();
+		if (path.isFile()) {
+			if (values.size() == 1) {
+				valueMap.add(values.get(0));
+			} else {
+				String codeRangeTypeParameterName = CodeRangeTypeParameter
+						.getInstance().getName();
+				for (Map<String, Value<?>> value : values) {
+					Object codeRangeTypeValue = value.get(
+							codeRangeTypeParameterName).getValue();
+					if (codeRangeTypeValue.equals(codeRangeType)) {
+						valueMap.add(value);
+					}
+				}
+			}
+		} else {
+			if (values.size() != 1) {
+				throw new RuntimeException("Directory '"
+						+ path.getPathFile(false)
+						+ "' contains more than one result for evaluator '"
+						+ parameter.getName() + "'!");
+			}
+			valueMap.add(values.get(0));
+		}
+		return valueMap;
+	}
+
+	protected final double findSuitableValue(MetricDirectoryResults results,
+			Parameter<?> parameter) {
+		try {
+			Map<String, Value<?>> valueMap = results.getValues();
+			return convertToDouble(valueMap, parameter);
+		} catch (IllegalArgumentException e) {
+			throw new RuntimeException("Could not find a suitable value.", e);
+		}
+	}
+
+	protected final Object findSuitableSecondaryValue(HashIdFileTree path,
+			MetricDirectoryResults results, Parameter<?> parameter) {
+		Map<String, Value<?>> valueMap = results.getValues();
+		Value<?> value = valueMap.get(parameter.getName());
+		return value.getValue();
+	}
+
+	/**
+	 * This method converts a valueMap into a Double value.
+	 * 
+	 * @param valueMap
+	 * @param parameter
+	 * @return
+	 */
+	protected double convertToDouble(Map<String, Value<?>> valueMap,
+			Parameter<?> parameter) throws IllegalArgumentException {
+		Value<?> value = valueMap.get(parameter.getName());
+		if ((value != null) && (parameter.isNumeric())) {
+			double sum = 0.0;
+			Number number = (Number) value.getValue();
+			sum = number.doubleValue();
+			return sum;
+		} else {
+			throw new IllegalArgumentException("Value '" + value
+					+ "' (parameter=" + parameter + ") is not a number!");
+		}
+	}
 }

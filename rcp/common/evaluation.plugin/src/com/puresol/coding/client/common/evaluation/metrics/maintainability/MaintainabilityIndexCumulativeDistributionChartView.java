@@ -30,7 +30,7 @@ import com.puresol.coding.client.common.chart.Plot;
 import com.puresol.coding.client.common.chart.VerticalColoredArea;
 import com.puresol.coding.client.common.chart.renderer.CircleMarkRenderer;
 import com.puresol.coding.client.common.chart.renderer.ConstantColorProvider;
-import com.puresol.coding.client.common.evaluation.views.AbstractMetricViewPart;
+import com.puresol.coding.client.common.evaluation.views.AbstractMetricChartViewPart;
 import com.puresol.coding.client.common.ui.actions.RefreshAction;
 import com.puresol.coding.client.common.ui.actions.ShowSettingsAction;
 import com.puresol.coding.client.common.ui.actions.ViewReproductionAction;
@@ -48,239 +48,244 @@ import com.puresol.utils.math.ParameterWithArbitraryUnit;
 import com.puresol.utils.math.Value;
 
 public class MaintainabilityIndexCumulativeDistributionChartView extends
-	AbstractMetricViewPart {
+		AbstractMetricChartViewPart {
 
-    private final CodeRangeType codeRangeTypeSelection = CodeRangeType.FILE;
-    private Chart2D chart;
-    private ChartCanvas chartCanvas;
+	private final CodeRangeType codeRangeTypeSelection = CodeRangeType.FILE;
+	private Chart2D chart;
+	private ChartCanvas chartCanvas;
 
-    @Override
-    public void createPartControl(Composite parent) {
-	parent.setLayout(new FillLayout());
-	chartCanvas = new ChartCanvas(parent, SWT.NONE);
-	chart = new Chart2D();
+	@Override
+	public void createPartControl(Composite parent) {
+		parent.setLayout(new FillLayout());
+		chartCanvas = new ChartCanvas(parent, SWT.NONE);
+		chart = new Chart2D();
 
-	chartCanvas.setChart2D(chart);
+		chartCanvas.setChart2D(chart);
 
-	initializeToolBar();
-	super.createPartControl(parent);
-    }
-
-    /**
-     * Initialize the toolbar.
-     */
-    private void initializeToolBar() {
-	IToolBarManager toolbarManager = getViewSite().getActionBars()
-		.getToolBarManager();
-	toolbarManager.add(new ShowSettingsAction(this));
-	toolbarManager.add(new ViewReproductionAction(this));
-	toolbarManager.add(new RefreshAction(this));
-    }
-
-    @Override
-    public void refresh() {
-	// TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void showSettings() {
-	// TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void applySettings() {
-	// TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void closeSettings() {
-	// TODO Auto-generated method stub
-    }
-
-    @Override
-    public void setFocus() {
-	// TODO Auto-generated method stub
-    }
-
-    @Override
-    protected void updateEvaluation() {
-	FileAnalysisSelection analysisSelection = getAnalysisSelection();
-	if (analysisSelection != null) {
-	    HashIdFileTree path = analysisSelection.getHashIdFile();
-	    if (path.isFile()) {
-		path = path.getParent();
-	    }
-	    showEvaluation(path);
+		initializeToolBar();
+		super.createPartControl(parent);
 	}
-    }
 
-    @Override
-    public void showEvaluation(HashIdFileTree path) {
-	final EvaluatorStore store = EvaluatorStoreFactory.getFactory()
-		.createInstance(MaintainabilityIndexEvaluator.class);
-	final List<DataPoint2D<String, Double>> paretoValuesMI = new ArrayList<DataPoint2D<String, Double>>();
-	final List<DataPoint2D<String, Double>> paretoValuesMIwoc = new ArrayList<DataPoint2D<String, Double>>();
-	final List<DataPoint2D<String, Double>> paretoValuesMIcw = new ArrayList<DataPoint2D<String, Double>>();
-	TreeVisitor<HashIdFileTree> visitor = new TreeVisitor<HashIdFileTree>() {
-	    @Override
-	    public WalkingAction visit(HashIdFileTree node) {
-		if (!node.isFile()) {
-		    return WalkingAction.PROCEED;
+	/**
+	 * Initialize the toolbar.
+	 */
+	private void initializeToolBar() {
+		IToolBarManager toolbarManager = getViewSite().getActionBars()
+				.getToolBarManager();
+		toolbarManager.add(new ShowSettingsAction(this));
+		toolbarManager.add(new ViewReproductionAction(this));
+		toolbarManager.add(new RefreshAction(this));
+	}
+
+	@Override
+	public void refresh() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void showSettings() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void applySettings() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void closeSettings() {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void setFocus() {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	protected void updateEvaluation() {
+		FileAnalysisSelection analysisSelection = getAnalysisSelection();
+		if (analysisSelection != null) {
+			HashIdFileTree path = analysisSelection.getHashIdFile();
+			if (path.isFile()) {
+				path = path.getParent();
+			}
+			showEvaluation(path);
 		}
-		HashId hashId = node.getHashId();
-		MetricFileResults results = store.readFileResults(hashId);
-		if (results == null) {
-		    return WalkingAction.PROCEED;
+	}
+
+	@Override
+	public void showEvaluation(HashIdFileTree path) {
+		final EvaluatorStore store = EvaluatorStoreFactory.getFactory()
+				.createInstance(MaintainabilityIndexEvaluator.class);
+		final List<DataPoint2D<String, Double>> paretoValuesMI = new ArrayList<DataPoint2D<String, Double>>();
+		final List<DataPoint2D<String, Double>> paretoValuesMIwoc = new ArrayList<DataPoint2D<String, Double>>();
+		final List<DataPoint2D<String, Double>> paretoValuesMIcw = new ArrayList<DataPoint2D<String, Double>>();
+		TreeVisitor<HashIdFileTree> visitor = new TreeVisitor<HashIdFileTree>() {
+			@Override
+			public WalkingAction visit(HashIdFileTree node) {
+				if (!node.isFile()) {
+					return WalkingAction.PROCEED;
+				}
+				HashId hashId = node.getHashId();
+				MetricFileResults results = store.readFileResults(hashId);
+				if (results == null) {
+					return WalkingAction.PROCEED;
+				}
+				List<Map<String, Value<?>>> valueMaps = findSuitableValueMaps(
+						node, results, MI, codeRangeTypeSelection);
+				for (Map<String, Value<?>> valueMap : valueMaps) {
+					String codeRangeName = (String) valueMap.get(
+							CodeRangeNameParameter.getInstance().getName())
+							.getValue();
+					double value = convertToDouble(valueMap, MI);
+					String name = node.getPathFile(false).getPath() + "."
+							+ codeRangeName;
+					paretoValuesMI.add(new DataPoint2D<String, Double>(name,
+							value, codeRangeTypeSelection.getName() + " "
+									+ codeRangeName));
+					value = convertToDouble(valueMap, MI_WOC);
+					paretoValuesMIwoc.add(new DataPoint2D<String, Double>(name,
+							value, codeRangeTypeSelection.getName() + " "
+									+ codeRangeName));
+					value = convertToDouble(valueMap, MI_CW);
+					paretoValuesMIcw.add(new DataPoint2D<String, Double>(name,
+							value, codeRangeTypeSelection.getName() + " "
+									+ codeRangeName));
+				}
+				return WalkingAction.PROCEED;
+			}
+		};
+		TreeWalker.walk(visitor, path);
+
+		setupChart(paretoValuesMI, paretoValuesMIwoc, paretoValuesMIcw);
+	}
+
+	private void setupChart(List<DataPoint2D<String, Double>> paretoValuesMI,
+			List<DataPoint2D<String, Double>> paretoValuesMIwoc,
+			List<DataPoint2D<String, Double>> paretoValuesMIcw) {
+		chart.removeAllPlots();
+
+		chart.setTitle("Maintainability");
+		chart.setSubTitle("Cumulative Distribution Chart");
+
+		Collections.sort(paretoValuesMI,
+				new Comparator<DataPoint2D<String, Double>>() {
+					@Override
+					public int compare(DataPoint2D<String, Double> o1,
+							DataPoint2D<String, Double> o2) {
+						return o1.getY().compareTo(o2.getY());
+					}
+				});
+
+		Collections.sort(paretoValuesMIwoc,
+				new Comparator<DataPoint2D<String, Double>>() {
+					@Override
+					public int compare(DataPoint2D<String, Double> o1,
+							DataPoint2D<String, Double> o2) {
+						return o1.getY().compareTo(o2.getY());
+					}
+				});
+
+		Collections.sort(paretoValuesMIcw,
+				new Comparator<DataPoint2D<String, Double>>() {
+					@Override
+					public int compare(DataPoint2D<String, Double> o1,
+							DataPoint2D<String, Double> o2) {
+						return o1.getY().compareTo(o2.getY());
+					}
+				});
+
+		double min = 0.0;
+		double max = 0.0;
+		for (DataPoint2D<String, Double> value : paretoValuesMI) {
+			min = Math.min(min, value.getY());
+			max = Math.max(max, value.getY());
 		}
-		List<Map<String, Value<?>>> valueMaps = findSuitableValueMaps(
-			node, results, MI, codeRangeTypeSelection);
-		for (Map<String, Value<?>> valueMap : valueMaps) {
-		    String codeRangeName = (String) valueMap.get(
-			    CodeRangeNameParameter.getInstance().getName())
-			    .getValue();
-		    double value = convertToDouble(valueMap, MI);
-		    String name = node.getPathFile(false).getPath() + "."
-			    + codeRangeName;
-		    paretoValuesMI.add(new DataPoint2D<String, Double>(name,
-			    value, codeRangeTypeSelection.getName() + " "
-				    + codeRangeName));
-		    value = convertToDouble(valueMap, MI_WOC);
-		    paretoValuesMIwoc.add(new DataPoint2D<String, Double>(name,
-			    value, codeRangeTypeSelection.getName() + " "
-				    + codeRangeName));
-		    value = convertToDouble(valueMap, MI_CW);
-		    paretoValuesMIcw.add(new DataPoint2D<String, Double>(name,
-			    value, codeRangeTypeSelection.getName() + " "
-				    + codeRangeName));
+		for (DataPoint2D<String, Double> value : paretoValuesMIwoc) {
+			min = Math.min(min, value.getY());
+			max = Math.max(max, value.getY());
 		}
-		return WalkingAction.PROCEED;
-	    }
-	};
-	TreeWalker.walk(visitor, path);
+		for (DataPoint2D<String, Double> value : paretoValuesMIcw) {
+			min = Math.min(min, value.getY());
+			max = Math.max(max, value.getY());
+		}
 
-	setupChart(paretoValuesMI, paretoValuesMIwoc, paretoValuesMIcw);
-    }
+		min = Axis.suggestMin(min);
+		max = Axis.suggestMax(max);
 
-    private void setupChart(List<DataPoint2D<String, Double>> paretoValuesMI,
-	    List<DataPoint2D<String, Double>> paretoValuesMIwoc,
-	    List<DataPoint2D<String, Double>> paretoValuesMIcw) {
-	chart.removeAllPlots();
+		Axis<Double> xAxis = AxisFactory.createDoubleValueAxis(AxisDirection.X,
+				MI, min, max, (max - min) / 10.0, 1, 2);
+		chart.setxAxis(xAxis);
 
-	chart.setTitle("Maintainability");
-	chart.setSubTitle("Cumulative Distribution Chart");
+		Axis<Double> yAxis = AxisFactory.createDoubleValueAxis(AxisDirection.Y,
+				new ParameterWithArbitraryUnit<Double>(
+						"Cumulative Propability", "", LevelOfMeasurement.RATIO,
+						"Cumulative distribution propability", Double.class),
+				0.0, 1.0, 0.1, 1, 2);
+		chart.setyAxis(yAxis);
 
-	Collections.sort(paretoValuesMI,
-		new Comparator<DataPoint2D<String, Double>>() {
-		    @Override
-		    public int compare(DataPoint2D<String, Double> o1,
-			    DataPoint2D<String, Double> o2) {
-			return o1.getY().compareTo(o2.getY());
-		    }
-		});
+		List<DataPoint2D<Double, Double>> mi = new ArrayList<DataPoint2D<Double, Double>>();
+		List<DataPoint2D<Double, Double>> miWoc = new ArrayList<DataPoint2D<Double, Double>>();
+		List<DataPoint2D<Double, Double>> miCw = new ArrayList<DataPoint2D<Double, Double>>();
+		for (int i = 0; i < paretoValuesMI.size(); i++) {
+			mi.add(new DataPoint2D<Double, Double>(
+					paretoValuesMI.get(i).getY(), (double) i
+							/ (double) paretoValuesMI.size()));
+			miWoc.add(new DataPoint2D<Double, Double>(paretoValuesMIwoc.get(i)
+					.getY(), (double) i / (double) paretoValuesMI.size()));
+			miCw.add(new DataPoint2D<Double, Double>(paretoValuesMIcw.get(i)
+					.getY(), (double) i / (double) paretoValuesMIcw.size()));
+		}
 
-	Collections.sort(paretoValuesMIwoc,
-		new Comparator<DataPoint2D<String, Double>>() {
-		    @Override
-		    public int compare(DataPoint2D<String, Double> o1,
-			    DataPoint2D<String, Double> o2) {
-			return o1.getY().compareTo(o2.getY());
-		    }
-		});
+		Plot<Double, Double> plotMI = new Plot<Double, Double>(xAxis, yAxis,
+				"MI");
+		plotMI.add(mi);
+		chart.addPlot(plotMI);
 
-	Collections.sort(paretoValuesMIcw,
-		new Comparator<DataPoint2D<String, Double>>() {
-		    @Override
-		    public int compare(DataPoint2D<String, Double> o1,
-			    DataPoint2D<String, Double> o2) {
-			return o1.getY().compareTo(o2.getY());
-		    }
-		});
+		Plot<Double, Double> plotMIwoc = new Plot<Double, Double>(xAxis, yAxis,
+				"MIwoc");
+		plotMIwoc.add(miWoc);
+		chart.addPlot(plotMIwoc);
 
-	double min = 0.0;
-	double max = 0.0;
-	for (DataPoint2D<String, Double> value : paretoValuesMI) {
-	    min = Math.min(min, value.getY());
-	    max = Math.max(max, value.getY());
-	}
-	for (DataPoint2D<String, Double> value : paretoValuesMIwoc) {
-	    min = Math.min(min, value.getY());
-	    max = Math.max(max, value.getY());
-	}
-	for (DataPoint2D<String, Double> value : paretoValuesMIcw) {
-	    min = Math.min(min, value.getY());
-	    max = Math.max(max, value.getY());
-	}
+		Plot<Double, Double> plotMIcw = new Plot<Double, Double>(xAxis, yAxis,
+				"MIcw");
+		plotMIcw.add(miCw);
+		chart.addPlot(plotMIcw);
 
-	min = Axis.suggestMin(min);
-	max = Axis.suggestMax(max);
+		chartCanvas.setMarkRenderer(plotMI, new CircleMarkRenderer());
+		chartCanvas.setColorProvider(plotMI, new ConstantColorProvider(new RGB(
+				255, 0, 0)));
 
-	Axis<Double> xAxis = AxisFactory.createDoubleValueAxis(AxisDirection.X,
-		MI, min, max, (max - min) / 10.0, 1, 2);
-	chart.setxAxis(xAxis);
+		chartCanvas.setMarkRenderer(plotMIwoc, new CircleMarkRenderer());
+		chartCanvas.setColorProvider(plotMIwoc, new ConstantColorProvider(
+				new RGB(0, 255, 0)));
 
-	Axis<Double> yAxis = AxisFactory.createDoubleValueAxis(AxisDirection.Y,
-		new ParameterWithArbitraryUnit<Double>(
-			"Cumulative Propability", "", LevelOfMeasurement.RATIO,
-			"Cumulative distribution propability", Double.class),
-		0.0, 1.0, 0.1, 1, 2);
-	chart.setyAxis(yAxis);
+		chartCanvas.setMarkRenderer(plotMIcw, new CircleMarkRenderer());
+		chartCanvas.setColorProvider(plotMIcw, new ConstantColorProvider(
+				new RGB(0, 0, 255)));
 
-	List<DataPoint2D<Double, Double>> mi = new ArrayList<DataPoint2D<Double, Double>>();
-	List<DataPoint2D<Double, Double>> miWoc = new ArrayList<DataPoint2D<Double, Double>>();
-	List<DataPoint2D<Double, Double>> miCw = new ArrayList<DataPoint2D<Double, Double>>();
-	for (int i = 0; i < paretoValuesMI.size(); i++) {
-	    mi.add(new DataPoint2D<Double, Double>(
-		    paretoValuesMI.get(i).getY(), (double) i
-			    / (double) paretoValuesMI.size()));
-	    miWoc.add(new DataPoint2D<Double, Double>(paretoValuesMIwoc.get(i)
-		    .getY(), (double) i / (double) paretoValuesMI.size()));
-	    miCw.add(new DataPoint2D<Double, Double>(paretoValuesMIcw.get(i)
-		    .getY(), (double) i / (double) paretoValuesMIcw.size()));
+		chartCanvas.addColoredArea(new VerticalColoredArea<Double, Double>(
+				plotMI, xAxis.getMinimum(), 65, new RGB(255, 210, 210)));
+		chartCanvas.addColoredArea(new VerticalColoredArea<Double, Double>(
+				plotMI, 65, 85, new RGB(255, 255, 210)));
+		chartCanvas.addColoredArea(new VerticalColoredArea<Double, Double>(
+				plotMI, 85, xAxis.getMaximum(), new RGB(210, 255, 210)));
+
+		chartCanvas.refresh();
 	}
 
-	Plot<Double, Double> plotMI = new Plot<Double, Double>(xAxis, yAxis,
-		"MI");
-	plotMI.add(mi);
-	chart.addPlot(plotMI);
+	@Override
+	public void export() {
+		MessageDialog.openInformation(getSite().getShell(), "Not implemented",
+				"This functionality is not implemented, yet!");
+	}
 
-	Plot<Double, Double> plotMIwoc = new Plot<Double, Double>(xAxis, yAxis,
-		"MIwoc");
-	plotMIwoc.add(miWoc);
-	chart.addPlot(plotMIwoc);
-
-	Plot<Double, Double> plotMIcw = new Plot<Double, Double>(xAxis, yAxis,
-		"MIcw");
-	plotMIcw.add(miCw);
-	chart.addPlot(plotMIcw);
-
-	chartCanvas.setMarkRenderer(plotMI, new CircleMarkRenderer());
-	chartCanvas.setColorProvider(plotMI, new ConstantColorProvider(new RGB(
-		255, 0, 0)));
-
-	chartCanvas.setMarkRenderer(plotMIwoc, new CircleMarkRenderer());
-	chartCanvas.setColorProvider(plotMIwoc, new ConstantColorProvider(
-		new RGB(0, 255, 0)));
-
-	chartCanvas.setMarkRenderer(plotMIcw, new CircleMarkRenderer());
-	chartCanvas.setColorProvider(plotMIcw, new ConstantColorProvider(
-		new RGB(0, 0, 255)));
-
-	chartCanvas.addColoredArea(new VerticalColoredArea<Double, Double>(
-		plotMI, xAxis.getMinimum(), 65, new RGB(255, 210, 210)));
-	chartCanvas.addColoredArea(new VerticalColoredArea<Double, Double>(
-		plotMI, 65, 85, new RGB(255, 255, 210)));
-	chartCanvas.addColoredArea(new VerticalColoredArea<Double, Double>(
-		plotMI, 85, xAxis.getMaximum(), new RGB(210, 255, 210)));
-
-	chartCanvas.refresh();
-    }
-
-    @Override
-    public void export() {
-	MessageDialog.openInformation(getSite().getShell(), "Not implemented",
-		"This functionality is not implemented, yet!");
-    }
+	@Override
+	protected ChartCanvas getChartCanvas() {
+		return chartCanvas;
+	}
 }

@@ -9,9 +9,7 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.GC;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
@@ -32,6 +30,7 @@ import com.puresol.coding.client.common.analysis.views.FileAnalysisSelection;
 import com.puresol.coding.client.common.branding.Printable;
 import com.puresol.coding.client.common.chart.AreaMapComponent;
 import com.puresol.coding.client.common.chart.renderer.AreaMapData;
+import com.puresol.coding.client.common.chart.renderer.AreaMapRenderer;
 import com.puresol.coding.client.common.chart.renderer.ColorProvider;
 import com.puresol.coding.client.common.evaluation.Activator;
 import com.puresol.coding.client.common.evaluation.MetricsMapViewSettingsDialog;
@@ -384,20 +383,18 @@ public class MetricsMapView extends AbstractMetricViewPart implements Printable 
 
 	@Override
 	public void print(Printer printer, String printJobName) {
-		printer.startJob("PrintJob");
+		printer.startJob(printJobName);
 		try {
 			GC gc = new GC(printer);
 			try {
 				printer.startPage();
-				Rectangle trim = printer.computeTrim(0, 0, 0, 0);
-				Point dpi = printer.getDPI();
-				int leftMargin = dpi.x + trim.x;
-				int topMargin = dpi.y / 2 + trim.y;
-				Font font = gc.getFont();
-				String printText = "Hallo!";
-				Point extent = gc.stringExtent(printText);
-				gc.drawString(printText, leftMargin,
-						topMargin + font.getFontData()[0].getHeight());
+				Rectangle clientArea = printer.getClientArea();
+				AreaMapData data = areaMap.getData();
+				AreaMapRenderer renderer = new AreaMapRenderer();
+				renderer.setColorProvider(areaMap.getColorProvider());
+				renderer.render(gc, data, clientArea.x, clientArea.y,
+						clientArea.x + clientArea.width - 1, clientArea.y
+								+ clientArea.height - 1);
 				printer.endPage();
 			} finally {
 				gc.dispose();
