@@ -4,16 +4,13 @@ import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.GC;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
-import org.eclipse.swt.printing.Printer;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Table;
@@ -29,10 +26,8 @@ import com.puresol.coding.client.common.analysis.Activator;
 import com.puresol.coding.client.common.analysis.contents.AnalyzedFilesTableViewer;
 import com.puresol.coding.client.common.analysis.contents.FailedFilesTableViewer;
 import com.puresol.coding.client.common.analysis.controls.ParserTreeControl;
-import com.puresol.coding.client.common.branding.Printable;
 
-public class AnalysisReportView extends ViewPart implements ISelectionListener,
-		Printable {
+public class AnalysisReportView extends ViewPart implements ISelectionListener {
 
 	private static final ILog logger = Activator.getDefault().getLog();
 
@@ -41,6 +36,9 @@ public class AnalysisReportView extends ViewPart implements ISelectionListener,
 	private AnalyzedFilesTableViewer analyzedTableViewer;
 	private FailedFilesTableViewer failedTableViewer;
 	private Table failedTable;
+	private Text totalFiles;
+	private Text analyzedFiles;
+	private Text unanalyzedFiles;
 
 	public AnalysisReportView() {
 	}
@@ -59,12 +57,28 @@ public class AnalysisReportView extends ViewPart implements ISelectionListener,
 		name.setLayoutData(fd_text);
 		name.setEditable(false);
 
+		Composite numbers = new Composite(composite, SWT.BORDER);
+		numbers.setLayout(new GridLayout(3, true));
+		FormData fd_numbers = new FormData();
+		fd_numbers.top = new FormAttachment(name, 10);
+		fd_numbers.right = new FormAttachment(name, 0, SWT.RIGHT);
+		fd_numbers.left = new FormAttachment(name, 0, SWT.LEFT);
+		numbers.setLayoutData(fd_numbers);
+
+		new Label(numbers, SWT.NONE).setText("#Total Files");
+		new Label(numbers, SWT.NONE).setText("#Analyzed Files");
+		new Label(numbers, SWT.NONE).setText("#Unanalyzed Files");
+
+		totalFiles = new Text(numbers, SWT.BORDER);
+		analyzedFiles = new Text(numbers, SWT.BORDER);
+		unanalyzedFiles = new Text(numbers, SWT.BORDER);
+
 		TabFolder tabFolder = new TabFolder(composite, SWT.NONE);
 		FormData fd_tabFolder = new FormData();
-		fd_tabFolder.top = new FormAttachment(name, 6);
+		fd_tabFolder.top = new FormAttachment(numbers, 10);
 		fd_tabFolder.bottom = new FormAttachment(100, -10);
-		fd_tabFolder.right = new FormAttachment(name, 0, SWT.RIGHT);
-		fd_tabFolder.left = new FormAttachment(name, 0, SWT.LEFT);
+		fd_tabFolder.right = new FormAttachment(numbers, 0, SWT.RIGHT);
+		fd_tabFolder.left = new FormAttachment(numbers, 0, SWT.LEFT);
 		tabFolder.setLayoutData(fd_tabFolder);
 
 		TabItem analyzedTab = new TabItem(tabFolder, SWT.NONE);
@@ -122,36 +136,18 @@ public class AnalysisReportView extends ViewPart implements ISelectionListener,
 					analyzedTableViewer
 							.setInput(analysisRun.getAnalyzedCodes());
 					failedTableViewer.setInput(analysisRun.getFailedCodes());
+					int analyzedCodesSize = analysisRun.getAnalyzedCodes()
+							.size();
+					int failedCodesSize = analysisRun.getFailedCodes().size();
+					totalFiles.setText(String.valueOf(analyzedCodesSize
+							+ failedCodesSize));
+					analyzedFiles.setText(String.valueOf(analyzedCodesSize));
+					unanalyzedFiles.setText(String.valueOf(failedCodesSize));
 				}
 			}
 		} catch (AnalysisStoreException e) {
 			logger.log(new Status(Status.ERROR, ParserTreeControl.class
 					.getName(), "Can not read analysis store!", e));
-		}
-	}
-
-	@Override
-	public void print(Printer printer, String printJobName) {
-		printer.startJob("PrintJob");
-		try {
-			GC gc = new GC(printer);
-			try {
-				printer.startPage();
-				Rectangle trim = printer.computeTrim(0, 0, 0, 0);
-				Point dpi = printer.getDPI();
-				int leftMargin = dpi.x + trim.x;
-				int topMargin = dpi.y / 2 + trim.y;
-				Font font = gc.getFont();
-				String printText = "Hallo!";
-				Point extent = gc.stringExtent(printText);
-				gc.drawString(printText, leftMargin,
-						topMargin + font.getFontData()[0].getHeight());
-				printer.endPage();
-			} finally {
-				gc.dispose();
-			}
-		} finally {
-			printer.endJob();
 		}
 	}
 }
