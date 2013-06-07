@@ -13,12 +13,12 @@
 		<url>http://puresol-technologies.com</url>
 	</organization>
 	<scm>
-		<connection>git@server1:SourceCodeAnalysis</connection>
+		<connection>git@git:SourceCodeAnalysis</connection>
 		<url>http://server1</url>
 	</scm>
 	<ciManagement>
 		<system>Jenkins</system>
-		<url>http://http://server1:8080/jenkins</url>
+		<url>http://http://ci</url>
 	</ciManagement>
 	<developers>
 		<developer>
@@ -41,13 +41,13 @@
 			</snapshots>
 			<id>central</id>
 			<name>libs-release</name>
-			<url>http://server1:8080/artifactory/libs-release</url>
+			<url>http://repo:8080/artifactory/libs-release</url>
 		</repository>
 		<repository>
 			<snapshots />
 			<id>snapshots</id>
 			<name>libs-snapshot</name>
-			<url>http://server1:8080/artifactory/libs-snapshot</url>
+			<url>http://repo:8080/artifactory/libs-snapshot</url>
 		</repository>
 	</repositories>
 
@@ -58,13 +58,13 @@
 			</snapshots>
 			<id>central</id>
 			<name>plugins-release</name>
-			<url>http://server1:8080/artifactory/plugins-release</url>
+			<url>http://repo:8080/artifactory/plugins-release</url>
 		</pluginRepository>
 		<pluginRepository>
 			<snapshots />
 			<id>snapshots</id>
 			<name>plugins-snapshot</name>
-			<url>http://server1:8080/artifactory/plugins-snapshot</url>
+			<url>http://repo:8080/artifactory/plugins-snapshot</url>
 		</pluginRepository>
 	</pluginRepositories>
 
