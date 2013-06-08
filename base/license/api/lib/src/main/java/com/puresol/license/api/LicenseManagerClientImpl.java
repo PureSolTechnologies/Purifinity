@@ -19,10 +19,10 @@ public class LicenseManagerClientImpl implements LicenseManagerClient {
 	}
 
 	void checkExpiration(Date currentTime) {
-		Calendar expireDate = new GregorianCalendar(2013, 5, 1, 0, 0, 0);
+		Calendar expireDate = new GregorianCalendar(2013, 6, 1, 0, 0, 0);
 		if (expireDate.getTime().getTime() <= currentTime.getTime()) {
 			throw new ExpiredLicenseException(
-					"The license expired 2013-06-01. Please request for a new license.");
+					"The license expired 2013-07-01. Please request for a new license.");
 		}
 	}
 
