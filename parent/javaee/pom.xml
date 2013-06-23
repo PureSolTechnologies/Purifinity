@@ -11,6 +11,86 @@
 	<artifactId>parent.javaee</artifactId>
 	<packaging>pom</packaging>
 
+	<properties>
+		<!-- JBoss -->
+		<jboss.version>7.1.1.Final</jboss.version>
+		<resteasy.version>2.3.4.Final</resteasy.version>
+		<!-- Arquillian -->
+		<arquillian.version>1.0.1.Final</arquillian.version>
+		<arquillian.test.dir>${project.build.directory}/jboss</arquillian.test.dir>
+		<!-- Cargo -->
+		<cargo.dir>${work.dir}/cargo</cargo.dir>
+		<cargo.logging>medium</cargo.logging>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<!-- JavaEE -->
+			<dependency>
+				<groupId>javax</groupId>
+				<artifactId>javaee-api</artifactId>
+				<version>6.0</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>javax.mail</groupId>
+				<artifactId>mail</artifactId>
+				<version>1.4.5</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.primefaces</groupId>
+				<artifactId>primefaces</artifactId>
+				<version>3.5</version>
+			</dependency>
+			<!-- JBoss -->
+			<dependency>
+				<groupId>org.jboss.as</groupId>
+				<artifactId>jboss-as-server</artifactId>
+				<version>${jboss.version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<!-- REST library -->
+			<dependency>
+				<groupId>org.jboss.resteasy</groupId>
+				<artifactId>resteasy-jaxrs</artifactId>
+				<version>${resteasy.version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.resteasy</groupId>
+				<artifactId>jaxrs-api</artifactId>
+				<version>${resteasy.version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<!-- Arquillian -->
+			<dependency>
+				<groupId>org.jboss.arquillian.junit</groupId>
+				<artifactId>arquillian-junit-container</artifactId>
+				<version>${arquillian.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.arquillian.core</groupId>
+				<artifactId>arquillian-core-spi</artifactId>
+				<version>${arquillian.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.arquillian.protocol</groupId>
+				<artifactId>arquillian-protocol-servlet</artifactId>
+				<version>${arquillian.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.as</groupId>
+				<artifactId>jboss-as-arquillian-container-managed</artifactId>
+				<version>${jboss.version}</version>
+				<scope>test</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
 	<build>
 		<pluginManagement>
 			<plugins>
