@@ -10,6 +10,11 @@ import java.util.regex.Pattern;
  */
 public class Licensee {
 
+	/*
+	 * TODO add a list of people of the customer which should be notified when
+	 * the license expires!
+	 */
+
 	private final String customerId;
 	private final String name;
 
