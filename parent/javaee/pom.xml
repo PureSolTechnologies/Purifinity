@@ -180,6 +180,29 @@
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>validate</phase>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+					</execution>
+
+				</executions>
+				<configuration>
+					<rules>
+						<requireProperty>
+							<property>work.dir</property>
+							<message>You must set a work.dir property in ~/.m2/settings.xml!</message>
+							<regex>.+</regex>
+							<regexMessage>The work.dir property must not be empty.</regexMessage>
+						</requireProperty>
+					</rules>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-ear-plugin</artifactId>
 				<configuration>
 					<version>6</version>
