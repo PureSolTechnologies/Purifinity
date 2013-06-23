@@ -13,9 +13,10 @@
 
 	<modules>
 		<module>apache-commons</module>
-		<module>postgresql</module>
 		<module>cassandra</module>
 		<module>neo4j</module>
+		<module>osgi</module>
+		<module>postgresql</module>
 	</modules>
 
 </project>
