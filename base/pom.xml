@@ -1,38 +1,22 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+
+    <properties>
+        <commons.version>0.0.1-SNAPSHOT</commons.version>
+    </properties>
+
+	<parent>
+		<groupId>com.puresol.commons</groupId>
+		<artifactId>parent.java</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+
 	<groupId>com.puresol</groupId>
 	<artifactId>base</artifactId>
 	<version>0.1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Library parent module</name>
-
-	<inceptionYear>2009</inceptionYear>
-	<organization>
-		<name>PureSol Technologies</name>
-		<url>http://puresol-technologies.com</url>
-	</organization>
-	<scm>
-		<connection>git@server1:SourceCodeAnalysis</connection>
-		<url>http://server1</url>
-	</scm>
-	<ciManagement>
-		<system>Jenkins</system>
-		<url>http://http://server1:8080/jenkins</url>
-	</ciManagement>
-	<developers>
-		<developer>
-			<name>Rick-Rainer Ludwig</name>
-			<email>ludwig@puresol-technologies.com</email>
-			<organization>PureSol Technologies</organization>
-			<organizationUrl>http://puresol-technologies.com</organizationUrl>
-			<url>http://rick-rainer-ludwig.com</url>
-		</developer>
-	</developers>
-
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
 
 	<repositories>
 		<repository>
@@ -51,23 +35,6 @@
 		</repository>
 	</repositories>
 
-	<pluginRepositories>
-		<pluginRepository>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-			<id>central</id>
-			<name>plugins-release</name>
-			<url>http://server1:8080/artifactory/plugins-release</url>
-		</pluginRepository>
-		<pluginRepository>
-			<snapshots />
-			<id>snapshots</id>
-			<name>plugins-snapshot</name>
-			<url>http://server1:8080/artifactory/plugins-snapshot</url>
-		</pluginRepository>
-	</pluginRepositories>
-
 	<profiles>
 		<profile>
 			<id>it</id>
@@ -76,7 +43,6 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-failsafe-plugin</artifactId>
-						<version>2.12</version>
 						<executions>
 							<execution>
 								<goals>
@@ -96,6 +62,7 @@
 
 	<dependencyManagement>
 		<dependencies>
+			<!-- Project internal -->
 			<dependency>
 				<groupId>com.puresol</groupId>
 				<artifactId>coding.analysis.api.lib</artifactId>
@@ -215,55 +182,20 @@
 				<artifactId>utils.lib</artifactId>
 				<version>${project.version}</version>
 			</dependency>
-			<!-- OSGi -->
+			<!-- IMPORTS -->
 			<dependency>
-				<groupId>org.osgi</groupId>
-				<artifactId>org.osgi.core</artifactId>
-				<version>4.3.1</version>
-				<scope>provided</scope>
-			</dependency>
-			<!-- LOGGING -->
-			<dependency>
-				<groupId>org.slf4j</groupId>
-				<artifactId>slf4j-api</artifactId>
-				<version>1.6.1</version>
-				<scope>provided</scope>
+				<groupId>com.puresol.commons</groupId>
+				<artifactId>dependency.apache-commons</artifactId>
+				<version>${commons.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
 			</dependency>
 			<dependency>
-				<groupId>org.slf4j</groupId>
-				<artifactId>slf4j-log4j12</artifactId>
-				<version>1.7.2</version>
-				<scope>provided</scope>
-			</dependency>
-			<!-- COMMONS -->
-			<dependency>
-				<groupId>commons-io</groupId>
-				<artifactId>commons-io</artifactId>
-				<version>2.0.1</version>
-			</dependency>
-			<dependency>
-				<groupId>commons-validator</groupId>
-				<artifactId>commons-validator</artifactId>
-				<version>1.4.0</version>
-			</dependency>
-			<!-- TESTING -->
-			<dependency>
-				<groupId>junit</groupId>
-				<artifactId>junit</artifactId>
-				<version>4.10</version>
-				<scope>test</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.mockito</groupId>
-				<artifactId>mockito-all</artifactId>
-				<version>1.9.0</version>
-				<scope>test</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.felix</groupId>
-				<artifactId>org.apache.felix.framework</artifactId>
-				<version>4.0.3</version>
-				<scope>test</scope>
+				<groupId>com.puresol.commons</groupId>
+				<artifactId>dependency.osgi</artifactId>
+				<version>${commons.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -272,14 +204,8 @@
 		<pluginManagement>
 			<plugins>
 				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<version>2.3.2</version>
-				</plugin>
-				<plugin>
 					<groupId>org.apache.felix</groupId>
 					<artifactId>maven-bundle-plugin</artifactId>
-					<version>2.3.7</version>
 					<extensions>true</extensions>
 					<configuration>
 						<manifestLocation>META-INF</manifestLocation>
@@ -306,13 +232,7 @@
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-surefire-plugin</artifactId>
-					<version>2.12</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-clean-plugin</artifactId>
-					<version>2.5</version>
 					<inherited>false</inherited>
 					<executions>
 						<execution>
@@ -334,23 +254,6 @@
 				</plugin>
 			</plugins>
 		</pluginManagement>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<configuration>
-					<forkMode>always</forkMode>
-				</configuration>
-			</plugin>
-		</plugins>
 	</build>
 
 	<modules>
@@ -360,7 +263,7 @@
 		<module>utils</module>
 		<module>uhura</module>
 		<module>coding</module>
-		<!--  module>thirdparty</module -->
+		<!-- module>thirdparty</module -->
 	</modules>
 
 </project>
