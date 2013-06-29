@@ -3,12 +3,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.puresol</groupId>
-		<artifactId>com.puresol.coding.client</artifactId>
+		<groupId>com.puresol.purifinity</groupId>
+		<artifactId>com.puresol.purifinity.coding.client</artifactId>
 		<version>0.1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>com.puresol.coding.client.application</artifactId>
+	<artifactId>com.puresol.purifinity.coding.client.application</artifactId>
 	<packaging>pom</packaging>
 
 	<modules>

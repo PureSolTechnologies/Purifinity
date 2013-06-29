@@ -3,11 +3,11 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.puresol</groupId>
-		<artifactId>com.puresol.coding.richclient.features.contrib</artifactId>
+		<artifactId>com.puresol.purifinity.coding.richclient.features.contrib</artifactId>
 		<version>0.1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>com.puresol.coding.richclient.features.contrib.feature</artifactId>
+	<artifactId>com.puresol.purifinity.coding.richclient.features.contrib.feature</artifactId>
 	<packaging>eclipse-feature</packaging>
 
 </project>

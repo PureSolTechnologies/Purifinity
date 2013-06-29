@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.puresol</groupId>
+		<groupId>com.puresol.purifinity</groupId>
 		<artifactId>coding.lang.commons</artifactId>
 		<version>0.1.0-SNAPSHOT</version>
 	</parent>
@@ -13,15 +13,15 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.puresol</groupId>
+			<groupId>com.puresol.purifinity</groupId>
 			<artifactId>coding.lang.api.lib</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol</groupId>
+			<groupId>com.puresol.purifinity</groupId>
 			<artifactId>license.api.lib</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol</groupId>
+			<groupId>com.puresol.purifinity</groupId>
 			<artifactId>uhura.lib</artifactId>
 		</dependency>
 	</dependencies>

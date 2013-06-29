@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: com.puresol.coding.client.common.evaluation.plugin
-Bundle-SymbolicName: com.puresol.coding.client.common.evaluation.plugin;singleton:=true
+Bundle-SymbolicName: com.puresol.purifinity.coding.client.common.evaluation.plugin;singleton:=true
 Bundle-Version: 0.1.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ClassPath: .
@@ -13,18 +13,18 @@ Require-Bundle: org.apache.commons.io;bundle-version="2.0.1",
  org.eclipse.core.jobs;bundle-version="3.5.300",
  org.eclipse.ui;bundle-version="3.104.0",
  org.slf4j.api;bundle-version="1.6.4",
- com.puresol.trees.bundle;bundle-version="0.1.0",
- com.puresol.utils.bundle;bundle-version="0.1.0",
- com.puresol.uhura.bundle;bundle-version="0.1.0",
- com.puresol.coding.analysis.api.bundle;bundle-version="0.1.0",
- com.puresol.coding.evaluation.api.bundle;bundle-version="0.1.0",
- com.puresol.coding.client.common.analysis.plugin;bundle-version="0.1.0",
- com.puresol.coding.client.common.osgi.plugin;bundle-version="0.1.0",
- com.puresol.coding.client.common.ui.plugin;bundle-version="0.1.0",
- com.puresol.coding.metrics.bundle;bundle-version="0.1.0",
- com.puresol.coding.evaluation.impl.bundle;bundle-version="0.1.0",
- com.puresol.coding.client.common.chart.plugin;bundle-version="0.1.0",
- com.puresol.license.api.bundle;bundle-version="0.1.0",
- com.puresol.coding.client.common.branding.plugin;bundle-version="0.1.0"
+ com.puresol.purifinity.trees.bundle;bundle-version="0.1.0",
+ com.puresol.purifinity.utils.bundle;bundle-version="0.1.0",
+ com.puresol.purifinity.uhura.bundle;bundle-version="0.1.0",
+ com.puresol.purifinity.coding.analysis.api.bundle;bundle-version="0.1.0",
+ com.puresol.purifinity.coding.evaluation.api.bundle;bundle-version="0.1.0",
+ com.puresol.purifinity.coding.client.common.analysis.plugin;bundle-version="0.1.0",
+ com.puresol.purifinity.coding.client.common.osgi.plugin;bundle-version="0.1.0",
+ com.puresol.purifinity.coding.client.common.ui.plugin;bundle-version="0.1.0",
+ com.puresol.purifinity.coding.metrics.bundle;bundle-version="0.1.0",
+ com.puresol.purifinity.coding.evaluation.impl.bundle;bundle-version="0.1.0",
+ com.puresol.purifinity.coding.client.common.chart.plugin;bundle-version="0.1.0",
+ com.puresol.purifinity.license.api.bundle;bundle-version="0.1.0",
+ com.puresol.purifinity.coding.client.common.branding.plugin;bundle-version="0.1.0"
 Bundle-Activator: com.puresol.coding.client.common.evaluation.Activator
 Import-Package: com.puresol.utils

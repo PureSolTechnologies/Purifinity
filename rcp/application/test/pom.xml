@@ -2,12 +2,12 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>com.puresol</groupId>
-		<artifactId>com.puresol.coding.client.application</artifactId>
+		<groupId>com.puresol.purifinity</groupId>
+		<artifactId>com.puresol.purifinity.coding.client.application</artifactId>
 		<version>0.1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>com.puresol.coding.client.application.test</artifactId>
+	<artifactId>com.puresol.purifinity.coding.client.application.test</artifactId>
 	<packaging>eclipse-test-plugin</packaging>
 
 	<build>
@@ -21,8 +21,8 @@
 					<useUIHarness>true</useUIHarness>
 					<useUIThread>false</useUIThread>
 					<!-- product>org.eclipse.sdk.ide</product> <application>org.eclipse.ui.ide.workbench</application -->
-					<product>com.puresol.coding.client.application.plugin.SourceCodeClient</product>
-					<application>com.puresol.coding.client.application.plugin.application</application>
+					<product>com.puresol.purifinity.coding.client.application.plugin.SourceCodeClient</product>
+					<application>com.puresol.purifinity.coding.client.application.plugin.application</application>
 					<argLine>-Dpurifinity.ui.test=true</argLine>
 				</configuration>
 			</plugin>

@@ -12,7 +12,7 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
-	<groupId>com.puresol</groupId>
+	<groupId>com.puresol.purifinity</groupId>
 	<artifactId>base</artifactId>
 	<version>0.1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
@@ -64,121 +64,121 @@
 		<dependencies>
 			<!-- Project internal -->
 			<dependency>
-				<groupId>com.puresol</groupId>
+				<groupId>com.puresol.purifinity</groupId>
 				<artifactId>coding.analysis.api.lib</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.puresol</groupId>
+				<groupId>com.puresol.purifinity</groupId>
 				<artifactId>coding.analysis.impl.lib</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.puresol</groupId>
+				<groupId>com.puresol.purifinity</groupId>
 				<artifactId>coding.analysis.test</artifactId>
 				<version>${project.version}</version>
 				<scope>test</scope>
 			</dependency>
 			<dependency>
-				<groupId>com.puresol</groupId>
+				<groupId>com.puresol.purifinity</groupId>
 				<artifactId>coding.evaluation.api.lib</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.puresol</groupId>
+				<groupId>com.puresol.purifinity</groupId>
 				<artifactId>coding.evaluation.impl.lib</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.puresol</groupId>
+				<groupId>com.puresol.purifinity</groupId>
 				<artifactId>coding.lang.api.lib</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.puresol</groupId>
+				<groupId>com.puresol.purifinity</groupId>
 				<artifactId>coding.lang.c11.lib</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.puresol</groupId>
+				<groupId>com.puresol.purifinity</groupId>
 				<artifactId>coding.lang.commons.lib</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.puresol</groupId>
+				<groupId>com.puresol.purifinity</groupId>
 				<artifactId>coding.lang.cpp.lib</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.puresol</groupId>
+				<groupId>com.puresol.purifinity</groupId>
 				<artifactId>coding.lang.fortran.lib</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.puresol</groupId>
+				<groupId>com.puresol.purifinity</groupId>
 				<artifactId>coding.lang.java.lib</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.puresol</groupId>
+				<groupId>com.puresol.purifinity</groupId>
 				<artifactId>coding.metrics.lib</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.puresol</groupId>
+				<groupId>com.puresol.purifinity</groupId>
 				<artifactId>coding.store.fs.lib</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.puresol</groupId>
+				<groupId>com.puresol.purifinity</groupId>
 				<artifactId>commons.osgi</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.puresol</groupId>
+				<groupId>com.puresol.purifinity</groupId>
 				<artifactId>commons.test</artifactId>
 				<version>${project.version}</version>
 				<scope>test</scope>
 			</dependency>
 			<dependency>
-				<groupId>com.puresol</groupId>
+				<groupId>com.puresol.purifinity</groupId>
 				<artifactId>license.api.lib</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.puresol</groupId>
+				<groupId>com.puresol.purifinity</groupId>
 				<artifactId>license.creator.lib</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.puresol</groupId>
+				<groupId>com.puresol.purifinity</groupId>
 				<artifactId>license.impl.lib</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.puresol</groupId>
+				<groupId>com.puresol.purifinity</groupId>
 				<artifactId>license.test</artifactId>
 				<version>${project.version}</version>
 				<scope>test</scope>
 			</dependency>
 			<dependency>
-				<groupId>com.puresol</groupId>
+				<groupId>com.puresol.purifinity</groupId>
 				<artifactId>trees.lib</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.puresol</groupId>
+				<groupId>com.puresol.purifinity</groupId>
 				<artifactId>uhura.lib</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.puresol</groupId>
+				<groupId>com.puresol.purifinity</groupId>
 				<artifactId>uhura.test</artifactId>
 				<version>${project.version}</version>
 				<scope>test</scope>
 			</dependency>
 			<dependency>
-				<groupId>com.puresol</groupId>
+				<groupId>com.puresol.purifinity</groupId>
 				<artifactId>utils.lib</artifactId>
 				<version>${project.version}</version>
 			</dependency>

@@ -47,18 +47,18 @@
    </plugins>
 
    <features>
-      <feature id="com.puresol.coding.client.application.feature" version="0.1.0.qualifier"/>
-      <feature id="com.puresol.coding.client.common.feature" version="0.1.0.qualifier"/>
+      <feature id="com.puresol.purifinity.coding.client.application.feature" version="0.1.0.qualifier"/>
+      <feature id="com.puresol.purifinity.coding.client.common.feature" version="0.1.0.qualifier"/>
+      <feature id="com.puresol.purifinity.coding.client.lang.c11.feature" version="0.1.0.qualifier"/>
+      <feature id="com.puresol.purifinity.coding.client.lang.cpp11.feature" version="0.1.0.qualifier"/>
+      <feature id="com.puresol.purifinity.coding.client.lang.fortran2008.feature" version="0.1.0.qualifier"/>
+      <feature id="com.puresol.purifinity.coding.client.lang.java6.feature" version="0.1.0.qualifier"/>
       <feature id="org.eclipse.emf.ecore"/>
       <feature id="org.eclipse.e4.rcp"/>
       <feature id="org.eclipse.equinox.p2.core.feature"/>
       <feature id="org.eclipse.emf.common"/>
       <feature id="org.eclipse.equinox.p2.rcp.feature"/>
       <feature id="org.eclipse.rcp"/>
-      <feature id="com.puresol.coding.client.lang.c11.feature" version="0.1.0.qualifier"/>
-      <feature id="com.puresol.coding.client.lang.cpp11.feature" version="0.1.0.qualifier"/>
-      <feature id="com.puresol.coding.client.lang.fortran2008.feature" version="0.1.0.qualifier"/>
-      <feature id="com.puresol.coding.client.lang.java6.feature" version="0.1.0.qualifier"/>
    </features>
 
    <configurations>

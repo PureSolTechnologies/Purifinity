@@ -4,11 +4,11 @@
 
 	<parent>
 		<groupId>com.puresol</groupId>
-		<artifactId>com.puresol.coding.richclient.application</artifactId>
+		<artifactId>com.puresol.purifinity.coding.richclient.application</artifactId>
 		<version>0.1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>com.puresol.coding.richclient.application.test</artifactId>
+	<artifactId>com.puresol.purifinity.coding.richclient.application.test</artifactId>
 	<packaging>eclipse-test-plugin</packaging>
 
 	<build>

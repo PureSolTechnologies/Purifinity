@@ -3,12 +3,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.puresol</groupId>
-		<artifactId>com.puresol.coding.client.common</artifactId>
+		<groupId>com.puresol.purifinity</groupId>
+		<artifactId>com.puresol.purifinity.coding.client.common</artifactId>
 		<version>0.1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>com.puresol.coding.client.common.branding.plugin</artifactId>
+	<artifactId>com.puresol.purifinity.coding.client.common.branding.plugin</artifactId>
 	<packaging>eclipse-plugin</packaging>
 
 	<build>

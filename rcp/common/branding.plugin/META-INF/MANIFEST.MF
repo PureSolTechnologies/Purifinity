@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: com.puresol.coding.client.common.branding.plugin
-Bundle-SymbolicName: com.puresol.coding.client.common.branding.plugin;singleton:=true
+Bundle-Name: com.puresol.purifinity.coding.client.common.branding.plugin
+Bundle-SymbolicName: com.puresol.purifinity.coding.client.common.branding.plugin;singleton:=true
 Bundle-Version: 0.1.0.qualifier
 Bundle-Activator: com.puresol.coding.client.common.branding.Activator
 Require-Bundle: org.slf4j.api;bundle-version="1.6.4",

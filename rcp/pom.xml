@@ -12,8 +12,8 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
-	<groupId>com.puresol</groupId>
-	<artifactId>com.puresol.coding.client</artifactId>
+	<groupId>com.puresol.purifinity</groupId>
+	<artifactId>com.puresol.purifinity.coding.client</artifactId>
 	<version>0.1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
@@ -33,94 +33,94 @@
 			</snapshots>
 			<id>central</id>
 			<name>libs-release</name>
-			<url>http://server1:8080/artifactory/libs-release</url>
+			<url>http://repo/libs-release</url>
 		</repository>
 		<repository>
 			<snapshots />
 			<id>snapshots</id>
 			<name>libs-snapshot</name>
-			<url>http://server1:8080/artifactory/libs-snapshot</url>
+			<url>http://repo/libs-snapshot</url>
 		</repository>
 	</repositories>
 
 	<dependencies>
 		<dependency>
-			<groupId>com.puresol</groupId>
+			<groupId>com.puresol.purifinity</groupId>
 			<artifactId>trees.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol</groupId>
+			<groupId>com.puresol.purifinity</groupId>
 			<artifactId>utils.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol</groupId>
+			<groupId>com.puresol.purifinity</groupId>
 			<artifactId>uhura.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol</groupId>
+			<groupId>com.puresol.purifinity</groupId>
 			<artifactId>coding.analysis.api.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol</groupId>
+			<groupId>com.puresol.purifinity</groupId>
 			<artifactId>coding.analysis.impl.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol</groupId>
+			<groupId>com.puresol.purifinity</groupId>
 			<artifactId>coding.evaluation.api.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol</groupId>
+			<groupId>com.puresol.purifinity</groupId>
 			<artifactId>coding.evaluation.impl.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol</groupId>
+			<groupId>com.puresol.purifinity</groupId>
 			<artifactId>coding.lang.api.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol</groupId>
+			<groupId>com.puresol.purifinity</groupId>
 			<artifactId>coding.lang.commons.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol</groupId>
+			<groupId>com.puresol.purifinity</groupId>
 			<artifactId>coding.lang.c11.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol</groupId>
+			<groupId>com.puresol.purifinity</groupId>
 			<artifactId>coding.lang.cpp.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol</groupId>
+			<groupId>com.puresol.purifinity</groupId>
 			<artifactId>coding.lang.java.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol</groupId>
+			<groupId>com.puresol.purifinity</groupId>
 			<artifactId>coding.lang.fortran.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol</groupId>
+			<groupId>com.puresol.purifinity</groupId>
 			<artifactId>coding.metrics.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol</groupId>
+			<groupId>com.puresol.purifinity</groupId>
 			<artifactId>coding.store.fs.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol</groupId>
+			<groupId>com.puresol.purifinity</groupId>
 			<artifactId>license.api.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
