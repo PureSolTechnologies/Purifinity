@@ -4,126 +4,126 @@
    <extension
          point="org.eclipse.ui.startup">
       <startup
-            class="com.puresol.coding.client.common.analysis.AnalysisAPIStartup">
+            class="com.puresol.purifinity.client.common.analysis.AnalysisAPIStartup">
       </startup>
    </extension>
    <extension
          point="org.eclipse.ui.perspectives">
       <perspective
-            class="com.puresol.coding.client.common.analysis.perspectives.AnalysisPerspective"
-            id="com.puresol.coding.client.common.analysis.perspectives.AnalysisPerspective"
+            class="com.puresol.purifinity.client.common.analysis.perspectives.AnalysisPerspective"
+            id="com.puresol.purifinity.client.common.analysis.perspectives.AnalysisPerspective"
             name="Analysis">
       </perspective>
    </extension>
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            class="com.puresol.coding.client.common.analysis.editors.FileAnalysisEditor"
+            class="com.puresol.purifinity.client.common.analysis.editors.FileAnalysisEditor"
             default="false"
-            id="com.puresol.coding.client.common.analysis.editors.FileAnalysisEditor"
+            id="com.puresol.purifinity.client.common.analysis.editors.FileAnalysisEditor"
             name="File Analysis">
       </editor>
       <editor
-            class="com.puresol.coding.client.common.analysis.editors.DirectoryAnalysisEditor"
+            class="com.puresol.purifinity.client.common.analysis.editors.DirectoryAnalysisEditor"
             default="false"
-            id="com.puresol.coding.client.common.analysis.editors.DirectoryAnalysisEditor"
+            id="com.puresol.purifinity.client.common.analysis.editors.DirectoryAnalysisEditor"
             name="Directory Analysis">
       </editor>
       <editor
-            class="com.puresol.coding.client.common.analysis.editors.NotAnalyzedEditor"
+            class="com.puresol.purifinity.client.common.analysis.editors.NotAnalyzedEditor"
             default="false"
-            id="com.puresol.coding.client.common.analysis.editors.NotAnalyzedEditor"
+            id="com.puresol.purifinity.client.common.analysis.editors.NotAnalyzedEditor"
             name="Not Analyzed">
       </editor>
    </extension>
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
-            category="com.puresol.coding.client.common.analysis.preferences.CodeAnalysisPreferencePage"
-            class="com.puresol.coding.client.common.analysis.preferences.NewAnalysisPreferencePage"
-            id="com.puresol.coding.client.common.analysis.preferences.NewAnalysisPreferencePage"
+            category="com.puresol.purifinity.client.common.analysis.preferences.CodeAnalysisPreferencePage"
+            class="com.puresol.purifinity.client.common.analysis.preferences.NewAnalysisPreferencePage"
+            id="com.puresol.purifinity.client.common.analysis.preferences.NewAnalysisPreferencePage"
             name="New Analysis">
       </page>
       <page
-            class="com.puresol.coding.client.common.analysis.preferences.CodeAnalysisPreferencePage"
-            id="com.puresol.coding.client.common.analysis.preferences.CodeAnalysisPreferencePage"
+            class="com.puresol.purifinity.client.common.analysis.preferences.CodeAnalysisPreferencePage"
+            id="com.puresol.purifinity.client.common.analysis.preferences.CodeAnalysisPreferencePage"
             name="Code Analysis">
       </page>
    </extension>
    <extension
          point="org.eclipse.ui.commands">
       <command
-            defaultHandler="com.puresol.coding.client.common.analysis.handlers.NewAnalysisProjectHandler"
-            id="com.puresol.coding.client.common.analysis.handlers.NewAnalysisProjectHandler"
+            defaultHandler="com.puresol.purifinity.client.common.analysis.handlers.NewAnalysisProjectHandler"
+            id="com.puresol.purifinity.client.common.analysis.handlers.NewAnalysisProjectHandler"
             name="New Analysis">
       </command>
       <command
-            defaultHandler="com.puresol.coding.client.common.analysis.handlers.ReAnalyzeHandler"
+            defaultHandler="com.puresol.purifinity.client.common.analysis.handlers.ReAnalyzeHandler"
             description="Re-analyzes the currently selected analysis run."
-            id="com.puresol.coding.client.common.analysis.handlers.ReAnalyzeHandler"
+            id="com.puresol.purifinity.client.common.analysis.handlers.ReAnalyzeHandler"
             name="Re-analyze">
       </command>
    </extension>
    <extension
          point="org.eclipse.ui.views">
       <category
-            id="com.puresol.coding.client.common.analysis.AnalysisCategory"
+            id="com.puresol.purifinity.client.common.analysis.AnalysisCategory"
             name="Code Analysis">
       </category>
       <view
-            category="com.puresol.coding.client.common.analysis.AnalysisCategory"
-            class="com.puresol.coding.client.common.analysis.views.AnalysisProjectsView"
-            id="com.puresol.coding.client.common.analysis.views.AnalysisProjectsView"
+            category="com.puresol.purifinity.client.common.analysis.AnalysisCategory"
+            class="com.puresol.purifinity.client.common.analysis.views.AnalysisProjectsView"
+            id="com.puresol.purifinity.client.common.analysis.views.AnalysisProjectsView"
             name="Analysis Projects"
             restorable="true">
       </view>
       <view
-            category="com.puresol.coding.client.common.analysis.AnalysisCategory"
-            class="com.puresol.coding.client.common.analysis.views.AnalysisRunContentView"
-            id="com.puresol.coding.client.common.analysis.views.AnalysisRunContentView"
+            category="com.puresol.purifinity.client.common.analysis.AnalysisCategory"
+            class="com.puresol.purifinity.client.common.analysis.views.AnalysisRunContentView"
+            id="com.puresol.purifinity.client.common.analysis.views.AnalysisRunContentView"
             name="Analysis Run Content"
             restorable="true">
       </view>
       <view
             allowMultiple="false"
-            category="com.puresol.coding.client.common.analysis.AnalysisCategory"
-            class="com.puresol.coding.client.common.analysis.views.AnalysisRunsView"
-            id="com.puresol.coding.client.common.analysis.views.AnalysisRunsView"
+            category="com.puresol.purifinity.client.common.analysis.AnalysisCategory"
+            class="com.puresol.purifinity.client.common.analysis.views.AnalysisRunsView"
+            id="com.puresol.purifinity.client.common.analysis.views.AnalysisRunsView"
             name="Analysis Runs"
             restorable="true">
       </view>
       <view
-            category="com.puresol.coding.client.common.analysis.AnalysisCategory"
-            class="com.puresol.coding.client.common.analysis.views.AnalysisReportView"
-            id="com.puresol.coding.client.common.analysis.views.AnalysisReportView"
+            category="com.puresol.purifinity.client.common.analysis.AnalysisCategory"
+            class="com.puresol.purifinity.client.common.analysis.views.AnalysisReportView"
+            id="com.puresol.coding.purifinity.common.analysis.views.AnalysisReportView"
             name="Analysis Report"
             restorable="true">
       </view>
       <view
-            category="com.puresol.coding.client.common.analysis.AnalysisCategory"
-            class="com.puresol.coding.client.common.analysis.views.AnalysisStoreView"
-            id="com.puresol.coding.client.common.analysis.views.AnalysisStoreView"
+            category="com.puresol.purifinity.client.common.analysis.AnalysisCategory"
+            class="com.puresol.purifinity.client.common.analysis.views.AnalysisStoreView"
+            id="com.puresol.coding.purifinity.common.analysis.views.AnalysisStoreView"
             name="Analysis Store"
             restorable="true">
       </view>
       <view
-            category="com.puresol.coding.client.common.analysis.AnalysisCategory"
-            class="com.puresol.coding.client.common.analysis.views.AvailableLanguagesView"
-            id="com.puresol.coding.client.common.analysis.views.AvailableLanguagesView"
+            category="com.puresol.purifinity.client.common.analysis.AnalysisCategory"
+            class="com.puresol.purifinity.client.common.analysis.views.AvailableLanguagesView"
+            id="com.puresol.coding.purifinity.common.analysis.views.AvailableLanguagesView"
             name="Available Languages"
             restorable="true">
       </view>
       <view
-            category="com.puresol.coding.client.common.analysis.AnalysisCategory"
-            class="com.puresol.coding.client.common.analysis.views.GrammarView"
-            id="com.puresol.coding.client.common.analysis.views.GrammarView"
+            category="com.puresol.purifinity.client.common.analysis.AnalysisCategory"
+            class="com.puresol.purifinity.client.common.analysis.views.GrammarView"
+            id="com.puresol.coding.purifinity.common.analysis.views.GrammarView"
             name="Grammar Viewer"
             restorable="true">
       </view>
       <view
-            category="com.puresol.coding.client.common.analysis.AnalysisCategory"
-            class="com.puresol.coding.client.common.analysis.views.ParserTreeView"
-            id="com.puresol.coding.client.common.analysis.views.ParserTreeView"
+            category="com.puresol.purifinity.client.common.analysis.AnalysisCategory"
+            class="com.puresol.purifinity.client.common.analysis.views.ParserTreeView"
+            id="com.puresol.coding.purifinity.common.analysis.views.ParserTreeView"
             name="Parser Tree Viewer"
             restorable="true">
       </view>
@@ -131,7 +131,7 @@
    <extension
          point="org.eclipse.core.runtime.preferences">
       <initializer
-            class="com.puresol.coding.client.common.analysis.preferences.PreferenceInitializer">
+            class="com.puresol.purifinity.client.common.analysis.preferences.PreferenceInitializer">
       </initializer>
    </extension>
    <extension
@@ -144,7 +144,7 @@
                label="Analysis"
                mnemonic="A">
             <command
-                  commandId="com.puresol.coding.client.common.analysis.handlers.ReAnalyzeHandler"
+                  commandId="com.puresol.purifinity.client.common.analysis.handlers.ReAnalyzeHandler"
                   id="Re-analyze"
                   label="Re-analyze"
                   mnemonic="R"

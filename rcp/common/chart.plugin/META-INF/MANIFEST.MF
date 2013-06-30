@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: com.puresol.coding.client.common.chart.plugin
+Bundle-Name: com.puresol.purifinity.client.common.chart.plugin
 Bundle-SymbolicName: com.puresol.purifinity.coding.client.common.chart.plugin
 Bundle-Version: 0.1.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
@@ -11,7 +11,7 @@ Require-Bundle: com.puresol.purifinity.trees.bundle;bundle-version="0.1.0",
  com.puresol.purifinity.utils.bundle;bundle-version="0.1.0",
  org.eclipse.swt;bundle-version="3.100.1",
  org.eclipse.jface;bundle-version="3.8.102",
- com.puresol.purifinity.coding.client.common.branding.plugin;bundle-version="0.1.0"
-Export-Package: com.puresol.coding.client.common.chart,
- com.puresol.coding.client.common.chart.math,
- com.puresol.coding.client.common.chart.renderer
+ com.puresol.purifinity.client.common.branding.plugin;bundle-version="0.1.0"
+Export-Package: com.puresol.purifinity.client.common.chart,
+ com.puresol.purifinity.client.common.chart.math,
+ com.puresol.purifinity.client.common.chart.renderer

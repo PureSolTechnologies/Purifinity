@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="com.puresol.purifinity.coding.client.lang.fortran2008.feature"
-      label="com.puresol.purifinity.coding.client.lang.fortran2008.feature"
+      id="com.puresol.purifinity.client.lang.fortran2008.feature"
+      label="com.puresol.purifinity.client.lang.fortran2008.feature"
       version="0.1.0.qualifier"
       provider-name="PureSol Techologies"
-      plugin="com.puresol.coding.client.common.branding.plugin"
+      plugin="com.puresol.purifinity.client.common.branding.plugin"
       os="linux,macosx,win32"
       ws="carbon,cocoa,gtk,win32"
       arch="x86,x86_64">
@@ -28,8 +28,8 @@
       <import plugin="org.eclipse.osgi"/>
       <import plugin="com.puresol.purifinity.coding.analysis.api.bundle" version="0.1.0" match="greaterOrEqual"/>
       <import plugin="com.puresol.purifinity.coding.lang.commons.bundle" version="0.1.0" match="greaterOrEqual"/>
-      <import plugin="com.puresol.purifinity.coding.client.common.ui.plugin" version="0.1.0" match="greaterOrEqual"/>
-      <import plugin="com.puresol.purifinity.coding.client.common.osgi.plugin" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="com.puresol.purifinity.client.common.ui.plugin" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="com.puresol.purifinity.client.common.osgi.plugin" version="0.1.0" match="greaterOrEqual"/>
       <import plugin="com.puresol.purifinity.coding.lang.fortran.bundle" version="0.1.0" match="greaterOrEqual"/>
       <import plugin="com.puresol.purifinity.coding.lang.api.bundle"/>
       <import plugin="com.puresol.purifinity.coding.lang.c11.bundle"/>
@@ -40,7 +40,7 @@
    </requires>
 
    <plugin
-         id="com.puresol.purifinity.coding.client.lang.fortran2008.plugin"
+         id="com.puresol.purifinity.client.lang.fortran2008.plugin"
          download-size="0"
          install-size="0"
          version="0.0.0"

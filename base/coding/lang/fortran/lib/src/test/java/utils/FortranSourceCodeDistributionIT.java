@@ -18,15 +18,15 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresol.coding.analysis.api.AnalyzerException;
-import com.puresol.coding.analysis.api.CodeAnalyzer;
-import com.puresol.coding.lang.fortran.Fortran;
-import com.puresol.trees.TreePrinter;
-import com.puresol.uhura.parser.ParserTree;
-import com.puresol.uhura.source.SourceFileLocation;
-import com.puresol.utils.ConsoleUtils;
-import com.puresol.utils.FileSearch;
-import com.puresol.utils.StopWatch;
+import com.puresol.purifinity.coding.analysis.api.AnalyzerException;
+import com.puresol.purifinity.coding.analysis.api.CodeAnalyzer;
+import com.puresol.purifinity.coding.lang.fortran.Fortran;
+import com.puresol.purifinity.trees.TreePrinter;
+import com.puresol.purifinity.uhura.parser.ParserTree;
+import com.puresol.purifinity.uhura.source.SourceFileLocation;
+import com.puresol.purifinity.utils.ConsoleUtils;
+import com.puresol.purifinity.utils.FileSearch;
+import com.puresol.purifinity.utils.StopWatch;
 
 /**
  * This is not a real JUnit test, but it's used manually to check the parser

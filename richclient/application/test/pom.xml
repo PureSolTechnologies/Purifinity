@@ -21,8 +21,8 @@
 				<configuration>
 					<useUIHarness>true</useUIHarness>
 					<useUIThread>false</useUIThread>
-					<product>com.puresol.coding.richclient.application.product</product>
-					<application>com.puresol.coding.richclient.application.product</application>
+					<product>com.puresol.purifinity.richclient.application.product</product>
+					<application>com.puresol.purifinity.richclient.application.product</application>
 					<dependencies>
 						<dependency>
 							<type>p2-installable-unit</type>

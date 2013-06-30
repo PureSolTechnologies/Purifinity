@@ -33,7 +33,7 @@
 				<configuration>
 					<products>
 						<product>
-							<id>com.puresol.coding.richclient.application.product</id>
+							<id>com.puresol.purifinity.richclient.application.product</id>
 						</product>
 					</products>
 					<formats>

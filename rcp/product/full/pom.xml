@@ -3,11 +3,11 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.puresol.purifinity</groupId>
-		<artifactId>com.puresol.purifinity.coding.client.product</artifactId>
+		<artifactId>com.puresol.purifinity.client.product</artifactId>
 		<version>0.1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>com.puresol.purifinity.coding.client.product.full</artifactId>
+	<artifactId>com.puresol.purifinity.client.product.full</artifactId>
 	<packaging>eclipse-repository</packaging>
 
 	<build>
@@ -33,7 +33,7 @@
 				<configuration>
 					<products>
 						<product>
-							<id>com.puresol.coding.client.product.full</id>
+							<id>com.puresol.purifinity.client.product.full</id>
 						</product>
 					</products>
 					<formats>

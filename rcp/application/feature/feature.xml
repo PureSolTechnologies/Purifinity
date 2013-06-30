@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="com.puresol.purifinity.coding.client.application.feature"
+      id="com.puresol.purifinity.client.application.feature"
       label="Source Code Analysis Feature"
       version="0.1.0.qualifier"
-      plugin="com.puresol.purifinity.coding.client.application.plugin"
+      plugin="com.puresol.purifinity.client.application.plugin"
       os="linux,macosx,win32"
       ws="carbon,cocoa,gtk,win32"
       arch="x86,x86_64">
@@ -75,7 +75,7 @@
       <import plugin="org.eclipse.jface.text" version="3.2.0" match="compatible"/>
       <import plugin="org.eclipse.equinox.p2.engine" version="2.0.0" match="compatible"/>
       <import plugin="org.eclipse.equinox.p2.metadata" version="2.0.0" match="compatible"/>
-      <import plugin="com.puresol.purifinity.coding.client.common.branding.plugin" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="com.puresol.purifinity.client.common.branding.plugin" version="0.1.0" match="greaterOrEqual"/>
    </requires>
 
    <plugin
@@ -93,7 +93,7 @@
          unpack="false"/>
 
    <plugin
-         id="com.puresol.purifinity.coding.client.application.plugin"
+         id="com.puresol.purifinity.client.application.plugin"
          download-size="0"
          install-size="0"
          version="0.0.0"

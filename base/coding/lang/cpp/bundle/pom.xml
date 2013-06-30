@@ -34,7 +34,7 @@
 	</dependencies>
 
 	<properties>
-		<bundle.namespace>com.puresol.coding.lang.cpp</bundle.namespace>
+		<bundle.namespace>com.puresol.purifinity.coding.lang.cpp</bundle.namespace>
 	</properties>
 
 	<build>

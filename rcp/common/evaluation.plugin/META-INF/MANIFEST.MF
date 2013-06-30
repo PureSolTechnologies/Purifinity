@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: com.puresol.coding.client.common.evaluation.plugin
+Bundle-Name: com.puresol.purifinity.client.common.evaluation.plugin
 Bundle-SymbolicName: com.puresol.purifinity.coding.client.common.evaluation.plugin;singleton:=true
 Bundle-Version: 0.1.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
@@ -25,6 +25,6 @@ Require-Bundle: org.apache.commons.io;bundle-version="2.0.1",
  com.puresol.purifinity.coding.evaluation.impl.bundle;bundle-version="0.1.0",
  com.puresol.purifinity.coding.client.common.chart.plugin;bundle-version="0.1.0",
  com.puresol.purifinity.license.api.bundle;bundle-version="0.1.0",
- com.puresol.purifinity.coding.client.common.branding.plugin;bundle-version="0.1.0"
-Bundle-Activator: com.puresol.coding.client.common.evaluation.Activator
-Import-Package: com.puresol.utils
+ com.puresol.purifinity.client.common.branding.plugin;bundle-version="0.1.0"
+Bundle-Activator: com.puresol.purifinity.client.common.evaluation.Activator
+Import-Package: com.puresol.purifinity.utils

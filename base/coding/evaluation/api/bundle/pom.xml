@@ -38,7 +38,7 @@
 	</dependencies>
 
 	<properties>
-		<bundle.namespace>com.puresol.coding.evaluation.api</bundle.namespace>
+		<bundle.namespace>com.puresol.purifinity.coding.evaluation.api</bundle.namespace>
 	</properties>
 
 	<build>

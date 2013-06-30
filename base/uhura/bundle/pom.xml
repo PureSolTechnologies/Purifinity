@@ -34,7 +34,7 @@
 	</dependencies>
 
 	<properties>
-		<bundle.namespace>com.puresol.uhura</bundle.namespace>
+		<bundle.namespace>com.puresol.purifinity.uhura</bundle.namespace>
 	</properties>
 
 	<build>

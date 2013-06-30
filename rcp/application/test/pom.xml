@@ -3,11 +3,11 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.puresol.purifinity</groupId>
-		<artifactId>com.puresol.purifinity.coding.client.application</artifactId>
+		<artifactId>com.puresol.purifinity.client.application</artifactId>
 		<version>0.1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>com.puresol.purifinity.coding.client.application.test</artifactId>
+	<artifactId>com.puresol.purifinity.client.application.test</artifactId>
 	<packaging>eclipse-test-plugin</packaging>
 
 	<build>
@@ -21,8 +21,8 @@
 					<useUIHarness>true</useUIHarness>
 					<useUIThread>false</useUIThread>
 					<!-- product>org.eclipse.sdk.ide</product> <application>org.eclipse.ui.ide.workbench</application -->
-					<product>com.puresol.purifinity.coding.client.application.plugin.SourceCodeClient</product>
-					<application>com.puresol.purifinity.coding.client.application.plugin.application</application>
+					<product>com.puresol.purifinity.client.application.plugin.SourceCodeClient</product>
+					<application>com.puresol.purifinity.client.application.plugin.application</application>
 					<argLine>-Dpurifinity.ui.test=true</argLine>
 				</configuration>
 			</plugin>

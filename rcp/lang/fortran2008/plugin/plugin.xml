@@ -4,14 +4,14 @@
    <extension
          point="org.eclipse.ui.startup">
       <startup
-            class="com.puresol.coding.client.lang.fortran2008.Fortran2008Startup">
+            class="com.puresol.purifinity.client.lang.fortran2008.Fortran2008Startup">
       </startup>
    </extension>
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
             category="com.puresol.coding.client.common.analysis.preferences.CodeAnalysisPreferencePage"
-            class="com.puresol.coding.client.lang.fortran2008.prefs.Fortran2008AnalysisPreferencePage"
+            class="com.puresol.purifinity.client.lang.fortran2008.prefs.Fortran2008AnalysisPreferencePage"
             id="com.puresol.coding.client.lang.fortran2008.prefs.Fortran2008AnalysisPreferencePage"
             name="Fortran 2008">
       </page>

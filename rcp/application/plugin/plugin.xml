@@ -9,7 +9,7 @@
       <application
             visible="true">
          <run
-               class="com.puresol.coding.client.application.Purifinity">
+               class="com.puresol.purifinity.client.application.Purifinity">
          </run>
       </application>
    </extension>
@@ -35,7 +35,7 @@
                   visible="true">
             </separator>
             <command
-                  commandId="com.puresol.coding.client.application.handler.SwitchWorkspaceHandler"
+                  commandId="com.puresol.purifinity.client.application.handler.SwitchWorkspaceHandler"
                   icon="icons/16x16/arrow_switch.png"
                   id="switchWorkspace"
                   label="Switch Workspace..."
@@ -189,8 +189,8 @@
          point="org.eclipse.ui.views">
       <view
             category="org.eclipse.debug.ui"
-            class="com.puresol.coding.client.application.views.OsgiDebugView"
-            id="com.puresol.coding.client.application.views.OsgiDebugView"
+            class="com.puresol.purifinity.client.application.views.OsgiDebugView"
+            id="com.puresol.purifinity.client.application.views.OsgiDebugView"
             name="OSGI Debug"
             restorable="true">
       </view>
@@ -198,12 +198,12 @@
    <extension
          point="org.eclipse.ui.commands">
       <command
-            defaultHandler="com.puresol.coding.client.application.handler.SwitchWorkspaceHandler"
-            id="com.puresol.coding.client.application.handler.SwitchWorkspaceHandler"
+            defaultHandler="com.puresol.purifinity.client.application.handler.SwitchWorkspaceHandler"
+            id="com.puresol.coding.purifinity.application.handler.SwitchWorkspaceHandler"
             name="Switch Workspace">
       </command>
       <command
-            defaultHandler="com.puresol.coding.client.application.handler.PrintHandler"
+            defaultHandler="com.puresol.purifinity.client.application.handler.PrintHandler"
             id="org.eclipse.ui.file.print"
             name="Print">
       </command>
@@ -211,20 +211,20 @@
    <extension
          point="org.eclipse.ui.intro">
       <intro
-            class="com.puresol.coding.client.application.PurifinityIntroPart"
-            id="com.puresol.coding.client.application.plugin.intro">
+            class="com.puresol.purifinity.client.application.PurifinityIntroPart"
+            id="com.puresol.purifinity.client.application.plugin.intro">
       </intro>
       <introProductBinding
-            introId="com.puresol.coding.client.application.plugin.intro"
-            productId="com.puresol.coding.client.application.plugin.SourceCodeClient">
+            introId="com.puresol.purifinity.client.application.plugin.intro"
+            productId="com.puresol.purifinity.client.application.plugin.SourceCodeClient">
       </introProductBinding>
    </extension>
    <extension
          point="org.eclipse.ui.intro.config">
       <config
             content="introContent.xml"
-            id="com.puresol.coding.client.application.plugin.introConfigId"
-            introId="com.puresol.coding.client.application.plugin.intro">
+            id="com.puresol.purifinity.client.application.plugin.introConfigId"
+            introId="com.puresol.purifinity.client.application.plugin.intro">
          <presentation
                home-page-id="root">
             <implementation
@@ -239,7 +239,7 @@
          id="BasePurifinity"
          point="org.eclipse.core.runtime.products">
       <product
-            application="com.puresol.coding.client.application.plugin.application"
+            application="com.puresol.purifinity.client.application.plugin.application"
             name="Purifinity">
          <property
                name="appName"
@@ -271,7 +271,7 @@
          id="FullPurifinity"
          point="org.eclipse.core.runtime.products">
       <product
-            application="com.puresol.coding.client.application.plugin.application"
+            application="com.puresol.purifinity.client.application.plugin.application"
             name="Purifinity">
          <property
                name="appName"
@@ -303,7 +303,7 @@
          id="MinimalPurifinity"
          point="org.eclipse.core.runtime.products">
       <product
-            application="com.puresol.coding.client.application.plugin.application"
+            application="com.puresol.purifinity.client.application.plugin.application"
             name="Purifinity">
          <property
                name="appName"

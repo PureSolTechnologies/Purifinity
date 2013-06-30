@@ -38,7 +38,7 @@
 	</dependencies>
 
 	<properties>
-		<bundle.namespace>com.puresol.license.creator</bundle.namespace>
+		<bundle.namespace>com.puresol.purifinity.license.creator</bundle.namespace>
 	</properties>
 
 	<build>

@@ -34,7 +34,7 @@
 	</dependencies>
 
 	<properties>
-		<bundle.namespace>com.puresol.trees</bundle.namespace>
+		<bundle.namespace>com.puresol.purifinity.trees</bundle.namespace>
 	</properties>
 
 	<build>

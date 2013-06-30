@@ -52,7 +52,7 @@
 	</dependencies>
 
 	<properties>
-		<bundle.namespace>com.puresol.coding.metrics</bundle.namespace>
+		<bundle.namespace>com.puresol.purifinity.coding.metrics</bundle.namespace>
 	</properties>
 
 	<build>

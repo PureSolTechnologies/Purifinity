@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: com.puresol.coding.client.lang.cpp11.plugin
 Bundle-SymbolicName: com.puresol.purifinity.coding.client.lang.cpp11.plugin;singleton:=true
 Bundle-Version: 0.1.0.qualifier
-Bundle-Activator: com.puresol.coding.client.lang.cpp11.Activator
+Bundle-Activator: com.puresol.purifinity.client.lang.cpp11.Activator
 Require-Bundle: com.puresol.purifinity.coding.analysis.api.bundle;bundle-version="0.1.0",
  com.puresol.purifinity.coding.client.common.osgi.plugin;bundle-version="0.1.0",
  com.puresol.purifinity.coding.lang.commons.bundle;bundle-version="0.1.0",

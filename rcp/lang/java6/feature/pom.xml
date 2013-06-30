@@ -3,11 +3,11 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.puresol.purifinity</groupId>
-		<artifactId>com.puresol.purifinity.coding.client.lang.java6</artifactId>
+		<artifactId>com.puresol.purifinity.client.lang.java6</artifactId>
 		<version>0.1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>com.puresol.purifinity.coding.client.lang.java6.feature</artifactId>
+	<artifactId>com.puresol.purifinity.client.lang.java6.feature</artifactId>
 	<packaging>eclipse-feature</packaging>
 
 </project>

@@ -39,7 +39,7 @@
 	</dependencies>
 
 	<properties>
-		<bundle.namespace>com.puresol.coding.store.fs</bundle.namespace>
+		<bundle.namespace>com.puresol.purifinity.coding.store.fs</bundle.namespace>
 	</properties>
 
 	<build>
@@ -49,7 +49,7 @@
 				<artifactId>maven-bundle-plugin</artifactId>
 				<configuration>
 					<instructions>
-						<Import-Package>*,com.puresol.uhura.parser,com.puresol.uhura.lexer,com.puresol.uhura.grammar.token,com.puresol.utils.math,com.puresol.utils.math.statistics,com.puresol.coding.evaluation.impl</Import-Package>
+						<Import-Package>*,com.puresol.uhura.parser,com.puresol.uhura.lexer,com.puresol.uhura.grammar.token,com.puresol.utils.math,com.puresol.utils.math.statistics,com.puresol.purifinity.coding.evaluation.impl</Import-Package>
 					</instructions>
 				</configuration>
 			</plugin>
