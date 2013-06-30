@@ -2,7 +2,6 @@
 <launchConfiguration type="org.eclipse.pde.ui.RuntimeWorkbench">
 <setAttribute key="additional_plugins"/>
 <booleanAttribute key="append.args" value="true"/>
-<stringAttribute key="application" value="com.puresol.coding.client.application.plugin.application"/>
 <booleanAttribute key="askclear" value="true"/>
 <booleanAttribute key="automaticAdd" value="true"/>
 <booleanAttribute key="automaticValidate" value="false"/>
@@ -31,13 +30,13 @@
 <stringAttribute key="pde.version" value="3.3"/>
 <stringAttribute key="product" value="org.eclipse.epp.package.rcp.product"/>
 <setAttribute key="selected_features">
-<setEntry value="com.puresol.coding.client.application.feature:default"/>
-<setEntry value="com.puresol.coding.client.common.feature:default"/>
-<setEntry value="com.puresol.coding.client.lang.c11.feature:default"/>
-<setEntry value="com.puresol.coding.client.lang.cpp11.feature:default"/>
-<setEntry value="com.puresol.coding.client.lang.fortran2008.feature:default"/>
-<setEntry value="com.puresol.coding.client.lang.java6.feature:default"/>
-<setEntry value="com.puresol.coding.client.storage.fs.feature:default"/>
+<setEntry value="com.puresol.purifinity.client.application.feature:default"/>
+<setEntry value="com.puresol.purifinity.client.common.feature:default"/>
+<setEntry value="com.puresol.purifinity.client.lang.c11.feature:default"/>
+<setEntry value="com.puresol.purifinity.client.lang.cpp11.feature:default"/>
+<setEntry value="com.puresol.purifinity.client.lang.fortran2008.feature:default"/>
+<setEntry value="com.puresol.purifinity.client.lang.java6.feature:default"/>
+<setEntry value="com.puresol.purifinity.client.storage.fs.feature:default"/>
 <setEntry value="org.eclipse.e4.rcp:default"/>
 <setEntry value="org.eclipse.emf.common:default"/>
 <setEntry value="org.eclipse.emf.ecore:default"/>

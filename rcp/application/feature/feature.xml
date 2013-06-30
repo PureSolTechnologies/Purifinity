@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="com.puresol.purifinity.client.application.feature"
-      label="Source Code Analysis Feature"
+      label="Purifinity Application Feature"
       version="0.1.0.qualifier"
       plugin="com.puresol.purifinity.client.application.plugin"
       os="linux,macosx,win32"

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="Purifinity" uid="com.puresol.coding.client.product.base" id="com.puresol.coding.client.application.plugin.BasePurifinity" application="com.puresol.coding.client.application.plugin.application" version="0.1.0.qualifier" useFeatures="true" includeLaunchers="true">
+<product name="Purifinity" uid="com.puresol.coding.client.product.base" id="com.puresol.purifinity.client.application.plugin.BasePurifinity" application="com.puresol.purifinity.client.application.plugin.application" version="0.1.0.qualifier" useFeatures="true" includeLaunchers="true">
 
    <aboutInfo>
       <image path="/com.puresol.coding.client.common.branding.plugin/icons/alt_about.gif"/>

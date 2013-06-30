@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Source Code Analysis
+Bundle-Name: Purifinity
 Bundle-SymbolicName: com.puresol.purifinity.client.application.plugin;singleton:=true
 Bundle-Version: 0.1.0.qualifier
 Bundle-Activator: com.puresol.purifinity.client.application.Activator
