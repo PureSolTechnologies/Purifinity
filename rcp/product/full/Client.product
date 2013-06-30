@@ -62,8 +62,8 @@
    </features>
 
    <configurations>
-      <plugin id="com.puresol.coding.metrics.bundle" autoStart="true" startLevel="3" />
-      <plugin id="com.puresol.coding.store.fs.bundle" autoStart="true" startLevel="3" />
+      <plugin id="com.puresol.purifinity.coding.metrics.bundle" autoStart="true" startLevel="3" />
+      <plugin id="com.puresol.purifinity.coding.store.fs.bundle" autoStart="true" startLevel="3" />
       <plugin id="com.puresol.purifinity.coding.analysis.api.bundle" autoStart="true" startLevel="3" />
       <plugin id="com.puresol.purifinity.coding.evaluation.api.bundle" autoStart="true" startLevel="3" />
       <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="2" />
